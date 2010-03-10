@@ -1120,6 +1120,7 @@ function plugin_getListField_staticpages($fieldname, $fieldvalue, $A, $icon_arr)
                     case '1': $where = $LANG_STATIC['centerblock_top']; break;
                     case '2': $where = $LANG_STATIC['centerblock_feat']; break;
                     case '3': $where = $LANG_STATIC['centerblock_bottom']; break;
+                    case '4': $where = $LANG_STATIC['centerblock_nonews']; break;
                     default:  $where = $LANG_STATIC['centerblock_entire']; break;
                 }
                 $retval = $where;

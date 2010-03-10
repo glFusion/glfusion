@@ -161,7 +161,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         $args['sp_tid'] = 'all';
     }
 
-    if (($args['sp_where'] < 0) || ($args['sp_where'] > 3)) {
+    if (($args['sp_where'] < 0) || ($args['sp_where'] > 4)) {
         $args['sp_where'] = 0;
     }
 
