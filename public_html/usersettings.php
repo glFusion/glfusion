@@ -274,8 +274,7 @@ function confirmAccountDelete ($form_reqid)
     // to change the password, email address, or cookie timeout,
     // we need the user's current password
     $current_password = DB_getItem($_TABLES['users'],'passwd',"uid={$_USER['uid']}");
-    if (empty($_POST['old_passwd']) ||
-            (SEC_encryptPassword($_POST['old_passwd']) != $current_password)) {
+    if (empty($_POST['old_passwd']) || !SEC_check_hash($_POST['old_passwd'],$current_password)) {
          return COM_refresh($_CONF['site_url']
                             . '/usersettings.php?msg=84');
     }
@@ -927,8 +926,7 @@ function saveuser($A)
     if (!empty ($A['passwd']) || ($A['email'] != $_USER['email']) ||
             ($A['cooktime'] != $_USER['cookietimeout'])) {
         $current_password = DB_getItem($_TABLES['users'],'passwd',"uid={$_USER['uid']}");
-        if (empty($A['old_passwd']) ||
-                (SEC_encryptPassword($A['old_passwd']) != $current_password)) {
+        if (empty($A['old_passwd']) || !SEC_check_hash($A['old_passwd'],$current_password) ) {
             return COM_refresh ($_CONF['site_url']
                                 . '/usersettings.php?msg=83');
         }
@@ -1025,8 +1023,7 @@ function saveuser($A)
 
         if (!empty($A['passwd'])) {
             $current_password = DB_getItem($_TABLES['users'],'passwd',"uid={$_USER['uid']}");
-            if (($A['passwd'] == $A['passwd_conf']) &&
-                    (SEC_encryptPassword($A['old_passwd']) == $current_password)) {
+            if (($A['passwd'] == $A['passwd_conf']) && SEC_check_hash($A['old_passwd'],$current_password) ){
                 $passwd = SEC_encryptPassword($A['passwd']);
                 DB_change($_TABLES['users'], 'passwd', addslashes($passwd),
                           "uid", $_USER['uid']);
@@ -1038,7 +1035,7 @@ function saveuser($A)
                 SEC_setCookie($_CONF['cookie_password'], $passwd, time() + $cooktime,
                               $_CONF['cookie_path'], $_CONF['cookiedomain'],
                               $_CONF['cookiesecure'],true);
-            } elseif (SEC_encryptPassword($A['old_passwd']) != $current_password) {
+            } elseif (!SEC_check_hash($A['old_passwd'],$current_password) ) {
                 return COM_refresh ($_CONF['site_url']
                                     . '/usersettings.php?msg=68');
             } elseif ($A['passwd'] != $A['passwd_conf']) {

@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Implemented the Portable PHP password hashing framework (Mark)
+- Enhanced the advanced search screen (Mark)
 - Calendar: If auto tag is not given event id, return original conten (Mark)
 - Forum: Fixed issue where deleting a post did not update last post
   info for the topic properly (Mark)
