@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Fixed issue when enabling a plugin that no longer exists in the
+  directory tree (Mark)
+- Site Tailor: Added new menu element type: topic (Mark)
 - Implemented the Portable PHP password hashing framework (Mark)
 - Enhanced the advanced search screen (Mark)
 - Calendar: If auto tag is not given event id, return original conten (Mark)
