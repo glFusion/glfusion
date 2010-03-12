@@ -97,6 +97,11 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
 
     $cmt_title = stripslashes($title);
     $commentbar->set_var('story_title', $cmt_title);
+    // Article's are pre-escaped.
+    if ($type != 'article') {
+        $cmt_title = htmlspecialchars($cmt_title,ENT_COMPAT,COM_getEncodingt());
+    }
+    $commentbar->set_var('comment_title', $cmt_title);
 
     if( $type == 'article' ) {
         $articleUrl = COM_buildUrl( $_CONF['site_url']
@@ -123,7 +128,7 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
         $cmt_title = htmlspecialchars($cmt_title,ENT_COMPAT,COM_getEncodingt());
     }
     $commentbar->set_var('comment_title', $cmt_title);
-    if( !empty( $_USER['uid'] ) && ( $_USER['uid'] > 1 )) {
+    if (! COM_isAnonUser()) {
         $username = $_USER['username'];
         $fullname = $_USER['fullname'];
     } else {
@@ -138,7 +143,7 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
     $commentbar->set_var( 'user_name', $username );
     $commentbar->set_var( 'user_fullname', $fullname );
 
-    if( !empty( $_USER['username'] )) {
+    if (! COM_isAnonUser()) {
         $author = COM_getDisplayName( $_USER['uid'], $username, $fullname );
         $commentbar->set_var( 'user_nullname', $author );
         $commentbar->set_var( 'author', $author );
@@ -206,7 +211,7 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
 *
 * @param    array    &$comments Database result set of comments to be printed
 * @param    string   $mode      'flat', 'threaded', etc
-* @param    string   $type      Type of item (article, poll, etc.)
+* @param    string   $type      Type of item (article, polls, etc.)
 * @param    string   $order     How to order the comments 'ASC' or 'DESC'
 * @param    boolean  $delete_option   if current user can delete comments
 * @param    boolean  $preview   Preview display (for edit) or not
@@ -367,8 +372,8 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 
         // hide reply link from anonymous users if they can't post replies
         $hidefromanon = false;
-        if( empty( $_USER['username'] ) && (( $_CONF['loginrequired'] == 1 )
-                || ( $_CONF['commentsloginrequired'] == 1 ))) {
+        if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
+                                 ($_CONF['commentsloginrequired'] == 1))) {
             $hidefromanon = true;
         }
 
@@ -457,12 +462,16 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             $template->set_var( 'delete_option', $deloption . $edit);
         } else if ( $edit_option) {
             $template->set_var( 'delete_option', $edit );
-        } else if( !empty( $_USER['username'] )) {
-            $reportthis_link = $_CONF['site_url']
-                . '/comment.php?mode=report&amp;cid=' . $A['cid']
-                . '&amp;type=' . $type;
-            $report_attr = array('title' => $LANG01[110]);
-            $reportthis = COM_createLink($LANG01[109], $reportthis_link, $report_attr) . ' | ';
+        } elseif (! COM_isAnonUser()) {
+            $reportthis = '';
+            if ($A['uid'] != $_USER['uid']) {
+                $reportthis_link = $_CONF['site_url']
+                    . '/comment.php?mode=report&amp;cid=' . $A['cid']
+                    . '&amp;type=' . $type;
+                $report_attr = array('title' => $LANG01[110]);
+                $reportthis = COM_createLink($LANG01[109], $reportthis_link,
+                                             $report_attr) . ' | ';
+            }
             $template->set_var( 'delete_option', $reportthis );
         } else {
             $template->set_var( 'delete_option', '' );
@@ -528,7 +537,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 *
 * @param    string      $sid       ID for item to show comments for
 * @param    string      $title     Title of item
-* @param    string      $type      Type of item (article, poll, etc.)
+* @param    string      $type      Type of item (article, polls, etc.)
 * @param    string      $order     How to order the comments 'ASC' or 'DESC'
 * @param    string      $mode      comment mode (nested, flat, etc.)
 * @param    int         $pid       id of parent comment
@@ -537,8 +546,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 * @param    boolean     $delete_option   if current user can delete comments
 * @param    int         $ccode     Comment code: -1=no comments, 0=allowed, 1=closed
 * @return   string  HTML Formated Comments
-* @see function CMT_commentBar
-* @see function CMT_commentChildren
+* @see CMT_commentBar
 *
 */
 function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $pid = 0, $page = 1, $cid = false, $delete_option = false, $ccode = 0 )
@@ -547,7 +555,7 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
 
     $retval = '';
 
-    if( !empty( $_USER['uid'] ) ) {
+    if (! COM_isAnonUser()) {
         $result = DB_query( "SELECT commentorder,commentmode,commentlimit FROM {$_TABLES['usercomment']} WHERE uid = {$_USER['uid']}" );
         $U = DB_fetchArray( $result );
         if( empty( $order ) ) {
@@ -704,7 +712,7 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
                          COM_printPageNavigation($pLink, $page, $tot_pages,$pageStr));
 
         $template->set_var( 'comments', $thecomments );
-        $retval = $template->parse( 'output', 'commentarea' );
+        $retval = $template->finish($template->parse('output', 'commentarea'));
     }
 
     return $retval;
@@ -827,6 +835,9 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                     } else if (($key == 'title') || ($key == 'comment')) {
                         // these have already been filtered above
                         $A[$key] = $_POST[$key];
+                    } else if ($key == 'username') {
+                        $A[$key] = htmlspecialchars(COM_checkWords(strip_tags(
+                                    COM_stripslashes($_POST[$key]))));
                     } else {
                         $A[$key] = COM_applyFilter($_POST[$key]);
                     }
@@ -1133,6 +1144,7 @@ function CMT_sendNotification ($title, $comment, $uid, $ipaddress, $type, $cid)
     if (preg_match ('/<.*>/', $comment) != 0) {
         $comment = strip_tags ($comment);
     }
+    $comment = str_replace('&nbsp;',' ', $comment);
 
     $author = COM_getDisplayName ($uid);
     if (($uid <= 1) && !empty ($ipaddress)) {
