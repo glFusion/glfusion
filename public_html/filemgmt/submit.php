@@ -136,8 +136,11 @@ function FM_notifyAdmins( $filename,$file_user_id,$description ) {
         $group_id = DB_getItem($_TABLES['groups'],'grp_id','grp_name="filemgmt Admin"');
 
         $groups = FM_getGroupList($group_id);
-        $groupList = implode(',',$groups);
-
+        if ( count ($groups) == 0 ) {
+            $groupList = '1';
+        } else {
+            $groupList = implode(',',$groups);
+        }
 	    $sql = "SELECT DISTINCT {$_TABLES['users']}.uid,username,fullname,email "
 	          ."FROM {$_TABLES['group_assignments']},{$_TABLES['users']} "
 	          ."WHERE {$_TABLES['users']}.uid > 1 "
