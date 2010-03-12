@@ -2,6 +2,17 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- FileMgmt: Fixed SQL error on file submissions when filemgmt Admin group
+  has been renamed (Mark)
+- Forum: Several improvements to the phpBB3 import utility, thanks to wootcat
+  for providing a recent phpBB3 database backup for testing. (Mark)
+    - ability to import bbcode signatures
+    - ability to purge existing glFusion users prior to import
+- Media Gallery: Implemented ribbon attribute for audio auto tag, this allows
+  the MP3 ribbon player to be embedded via auto tag. (Mark)
+- Media Gallery: Updated the MP3 ribbon player to latest version (Mark)
+- FileMgmt: Creating new categories did not properly set the upload
+  permission (Mark)
 - Fixed issue when enabling a plugin that no longer exists in the
   directory tree (Mark)
 - Site Tailor: Added new menu element type: topic (Mark)
