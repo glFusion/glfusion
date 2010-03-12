@@ -708,7 +708,7 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
 * @param        int     $size           Size in pixels of poll results
 * @param        string  $pid            Poll topic ID to show (optional)
 * @param        boolean $showall        Show only the first question or all
-* @param        int     $displaytype    Possible values 0 = Normal, 1 = In Block, 2 = autotag 
+* @param        int     $displaytype    Possible values 0 = Normal, 1 = In Block, 2 = autotag
 * @return       string  HTML formatted string of poll
 * @see function COM_pollVote
 * @see function COM_pollResults
@@ -1404,6 +1404,7 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
             case 'url':
             case 'label':
                 $fields[] = 'pid';
+                $fields[] = 'hideresults';
                 break;
             default:
                 break;
@@ -1458,7 +1459,11 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
                     if (empty($A['pid'])) {
                         $props['url'] = $_CONF['site_url'].'/polls/index.php?pid='.$pid.'&amp;aid=-1';
                     } else {
-                        $props['url'] = $_CONF['site_url'].'/polls/index.php?pid='.$A['pid'].'&amp;aid=-1';
+                        $pollEdit = SEC_hasRights('polls.edit');
+                        // Users who have already voted but cannot see the results cannot view link
+                        if ($pollEdit || (!$pollEdit && !($A['hideresults'] == 1 && (isset($_COOKIE['poll-' . $A['pid']]) || POLLS_ipAlreadyVoted($A['pid']))))) {
+                            $props['url'] = $_CONF['site_url'] . '/polls/index.php?pid=' . $A['pid'];
+                        }
                     }
                     break;
                 case 'label':
