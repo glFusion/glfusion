@@ -722,6 +722,10 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                     $a = explode (':',$part);
                     $target = $a[1];
                     $skip++;
+                } elseif ( substr($part,0,5) == 'type:' ) {
+                    $a = explode (':',$part);
+                    $mp3_type = $a[1];
+                    $skip++;
                 } else {
                     break;
                 }
@@ -1287,7 +1291,11 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                             $playback_options['height'] = 50;;
                             $playback_options['width']  = 300;
                             $V = new Template( MG_getTemplatePath(0) );
-			                $tfile = 'view_mp3_flv.thtml';
+                            if ($mp3_type == 'ribbon' ) {
+                                $tfile = 'mp3_podcast.thtml';
+                            } else {
+    			                $tfile = 'view_mp3_flv.thtml';
+    			            }
 			                $autostart = $autoplay ? 'play' : 'stop';
 
                             if ( $row['media_tn_attached'] == 1 ) {
@@ -1323,6 +1331,7 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                                 'id2'				=> 'mp3' . rand(),
                                 'site_url'			=> $_MG_CONF['site_url'],
                                 'movie'             => $_MG_CONF['mediaobjects_url'] . '/orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'],
+                                'mp3_file'          => $_MG_CONF['mediaobjects_url'] . '/orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'],
                                 'xhtml'             =>  XHTML,
                             ));
                             $V->parse('output','audio');
