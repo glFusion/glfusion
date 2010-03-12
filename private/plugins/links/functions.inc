@@ -1395,6 +1395,9 @@ function links_breadcrumbs($root, $cid)
     if ($root != $cid) {
         while ($pid != $root) {
             $parent = DB_query("SELECT cid,pid,category FROM {$_TABLES['linkcategories']} WHERE cid='{$cat}'");
+            if ( DB_numRows($parent) == 0 ) {
+                break;
+            }
             $A = DB_fetchArray($parent);
             if ($cid != $c) {
                 $content = stripslashes($A['category']);

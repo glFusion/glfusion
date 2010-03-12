@@ -217,6 +217,17 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
     $mytree = new XoopsTree($_DB_name,$_FM_TABLES['filemgmt_cat'],"cid","pid");
     $mytree->setGroupAccessFilter($_GROUPS);
 
+    $groupsql = filemgmt_buildAccessSql();
+    $sql = "SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_cat']} WHERE pid=0 ";
+    $sql .= $groupsql;
+    list($catAccessCnt) = DB_fetchArray( DB_query($sql));
+
+    if ( $catAccessCnt < 1 ) {
+        COM_errorLOG("Submit.php => FileMgmt Plugin Access denied. Attempted user upload of a file, Remote address is:{$_SERVER['REMOTE_ADDR']}");
+        redirect_header($_CONF['site_url']."/index.php",1,_GL_ERRORNOUPLOAD);
+        exit;
+    }
+
     if($_POST['submit']){
 
         if(isset($_USER['uid']) AND $_USER['uid'] > 1 ) {

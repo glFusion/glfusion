@@ -65,8 +65,19 @@ v1.1.9
 - Implemented site upgrade check/reminder (Mark H.)
 - Implemented block-specific styling, eg. block div id=block_name (Mark H.)
 
+v1.1.8.pl5
+----------
+- Links: Accessing an invalid category will cause infinite loop if user has
+  link admin permissions (Mark)
+- Story moderation can cause the group permission to be set to All Users under
+  certain circumstances (Mark)
+
 v1.1.8.pl4
 ----------
+- FileMgmt: Do now allow users access to the upload form if they do not
+  have permission to upload to any categories (Mark)
+- Media Gallery: SWFUpload does not work if Media Gallery directory is
+  changed (Mark)
 - SpamX: Fixed preg compilation error in SpamX plugin (Mark)
 - Media Gallery: Fixed keywords so they now wrap properly (Mark)
 
