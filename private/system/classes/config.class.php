@@ -464,6 +464,21 @@ class config {
             }
         }
 
+        $methods = array('standard', 'openid', '3rdparty');
+        $methods_disabled = 0;
+        foreach ($methods as $m) {
+            if (isset($this->config_array['Core']['user_login_method'][$m]) &&
+                    !$this->config_array['Core']['user_login_method'][$m]) {
+                $methods_disabled++;    
+            }
+        }
+        if ($methods_disabled == count($methods)) {
+            // just to make sure people don't lock themselves out of their site
+            $this->config_array['Core']['user_login_method']['standard'] = true;
+
+            // TBD: ensure that we have a Root user able to log in with the
+            //      enabled login method(s)
+        }
     }
 
     function _get_groups()
@@ -689,7 +704,7 @@ class config {
 
         $blocks = array('delete-button', 'text-element','passwd-element',
                         'placeholder-element','select-element', 'list-element',
-                        'unset-param','keyed-add-button', 'unkeyed-add-button');
+                        'unset-param','keyed-add-button', 'unkeyed-add-button','text-area');
 
         if ( is_array($blocks) ) {
             foreach ($blocks as $block) {
@@ -709,14 +724,23 @@ class config {
         $t->set_var('name', $name);
         $t->set_var('display_name', $display_name);
         if (!is_array($val)) {
-            $t->set_var('value', htmlspecialchars($val));
+            if (is_float($val)) {
+                /**
+                * @todo FIXME: for Locales where the comma is the decimal
+                *              separator, patch output to a decimal point
+                *              to prevent it being cut off by COM_applyFilter
+                */
+                $t->set_var('value', str_replace(',', '.', $val));
+            } else {
+                $t->set_var('value', htmlspecialchars($val));
+            }
         }
         if ($deletable) {
             $t->set_var('delete', $t->parse('output', 'delete-button'));
         } else {
             if ($allow_reset) {
                 $t->set_var('unset_link',
-                        "(<a href='#' onclick='unset(\"{$name}\");' title='"
+                        "(<a href='#' onclick='unset(\"{$name}\");return false;' title='"
                         . $LANG_CONFIG['disable'] . "'>X</a>)");
             }
             if (($a = strrchr($name, '[')) !== FALSE) {
@@ -739,11 +763,21 @@ class config {
             return $t->finish($t->parse('output', 'unset-param'));
         } elseif ($type == "text") {
             return $t->finish($t->parse('output', 'text-element'));
+        } elseif ($type == "textarea") {
+            return $t->finish($t->parse('output', 'text-area'));
         } elseif ($type == "passwd") {
             return $t->finish($t->parse('output', 'passwd-element'));
         } elseif ($type == "placeholder") {
             return $t->finish($t->parse('output', 'placeholder-element'));
         } elseif ($type == 'select') {
+            // if $name is like "blah[0]", separate name and index
+            $n = explode('[', $name);
+            $name = $n[0];
+            $index = null;
+            if (count($n) == 2) {
+                $i = explode(']', $n[1]);
+                $index = $i[0];
+            }
             $type_name = $type . '_' . $name;
             if ($group == 'Core') {
                 $fn = 'configmanager_' . $type_name . '_helper';
@@ -751,7 +785,11 @@ class config {
                 $fn = 'plugin_configmanager_' . $type_name . '_' . $group;
             }
             if (function_exists($fn)) {
-                $selectionArray = $fn();
+                if ($index === null) {
+                    $selectionArray = $fn();
+                } else {
+                    $selectionArray = $fn($index);
+                }
             } else if (is_array($selectionArray)) {
                 // leave sorting to the function otherwise
                 uksort($selectionArray, 'strcasecmp');
@@ -771,6 +809,9 @@ class config {
                     $t->set_var('opt_name', $sName);
                     $t->set_var('selected', ($val == $sVal ? 'selected="selected"' : ''));
                     $t->parse('myoptions', 'select-options', true);
+                }
+	        if ($index == 'placeholder') {
+                    $t->set_var('hide_row', ' style="display:none;"');
                 }
             }
             return $t->parse('output', 'select-element');
@@ -795,6 +836,12 @@ class config {
             $t->set_var('my_add_element_button', $button);
             $result = "";
             if ( is_array($val) ) {
+                if ($type == '%select') {
+                    $result .= config::_UI_get_conf_element($group,
+                                    $name . '[placeholder]', 'placeholder',
+                                    substr($type, 1), 'placeholder', $selectionArray,
+                                    true);
+                }
                 foreach ($val as $valkey => $valval) {
                     $result .= config::_UI_get_conf_element($group,
                                     $name . '[' . $valkey . ']', $valkey,
@@ -864,11 +911,28 @@ class config {
     {
         if (is_array($input_val)) {
             $r = array();
+            $is_num = true;
+            $max_key = -1;
             if ( is_array($input_val) ) {
                 foreach ($input_val as $key => $val) {
                     if ($key !== 'placeholder') {
                         $r[$key] = $this->_validate_input($val);
+                        if (is_numeric($key)) {
+                            if ($key > $max_key) {
+                                $max_key = $key;
+                            }
+                        } else {
+                            $is_num = false;
+                        }
                     }
+                }
+                if ($is_num && ($max_key >= 0) && ($max_key + 1 != count($r))) {
+                    // re-number keys
+                    $r2 = array();
+                    foreach ($r as $val) {
+                        $r2[] = $val;
+                    }
+                    $r = $r2;
                 }
             }
         } else {
@@ -908,7 +972,7 @@ class config {
                 if ($conf_group == $group) {
                     $link = "<div>$group_display</div>";
                 } else {
-                    $link = "<div><a href=\"#\" onclick='open_group(\"$group\")'>$group_display</a></div>";
+                    $link = "<div><a href=\"#\" onclick='open_group(\"$group\");return false;'>$group_display</a></div>";
                 }
 
                 if ($group == 'Core') {
@@ -956,7 +1020,7 @@ class config {
                 if ($i == $sg) {
                     $retval .= "<div>$group_display</div>";
                 } else {
-                    $retval .= "<div><a href=\"#\" onclick='open_subgroup(\"$conf_group\",\"$sgroup\")'>$group_display</a></div>";
+                    $retval .= "<div><a href=\"#\" onclick='open_subgroup(\"$conf_group\",\"$sgroup\");return false;'>$group_display</a></div>";
                 }
                 $i++;
             }

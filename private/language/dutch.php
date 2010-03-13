@@ -588,7 +588,20 @@ $LANG09 = array(
     65 => 'Story',
     66 => 'Comment',
     67 => 'Show %d Results',
-    68 => 'Sort By'
+    68 => 'Sort By',
+    69 => 'Filter by Author',
+    70 => 'Filter by type',
+    71 => 'Filter by date',
+    72 => 'Search Type',
+    73 => 'Display Per Page',
+    74 => 'Your search yielded no results<br/><ul><li>Check if your spelling is correct.</li><li>Change the <strong>Search Type</strong> being used.<em>Any of these</em> will return results if <strong>any</strong> of the search words appear in the text.  <em>All of these</em> will only return results when <strong>all</strong> all of the search words appear, and <em>Exact Match</em> will only return results where the text matches exactly to the search words entered.</li><li>Consider expanding the <strong>Date Filter</strong> or the <strong>Content Type Filter</strong>.</li></ul>',
+    75 => '1 day',
+    76 => '7 days',
+    77 => '2 weeks',
+    78 => '1 month',
+    79 => '3 months',
+    80 => '6 months',
+    81 => '1 year'
 );
 
 ###############################################################################
@@ -1238,7 +1251,8 @@ $LANG33 = array(
     52 => 'Error: existing Filename',
     53 => 'All Frontpage Stories',
     54 => 'Please select the type of feed to create.',
-    55 => 'Articles'
+    55 => 'Articles',
+    56 => 'Do you really want to delete this feed?'
 );
 
 ###############################################################################
@@ -1356,7 +1370,8 @@ $MESSAGE = array(
     508 => 'Email address does not match the confirmation email address.',
     509 => 'Error creating new user account - please check the error log for details.',
     510 => 'Default settings have been applied to all users.',
-    511 => 'Are you sure you want to delete this group?'
+    511 => 'Are you sure you want to delete this group?',
+    512 => 'Username contains invalid characters " < > / \ $ % * are not allowed'
 );
 
 ###############################################################################
@@ -1497,7 +1512,8 @@ $LANG_ACCESS = array(
     'pe_layout' => 'Layout &amp; Language',
     'pe_content' => 'Content',
     'pe_privacy' => 'Privacy',
-    'editusers' => 'Manage'
+    'editusers' => 'Manage',
+    'editinguser' => 'Editing User:'
 );
 
 ###############################################################################

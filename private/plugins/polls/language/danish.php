@@ -62,7 +62,8 @@ $LANG_POLLS = array(
     'editinstructions' => 'Udfyld Poll ID, mindst et spørgsmål og to svar til det.',
     'pollclosed' => 'This poll is closed for voting.',
     'pollhidden' => 'You have already voted. This poll results will only be shown when voting is closed.',
-    'start_poll' => 'Start Afstemning'
+    'start_poll' => 'Start Afstemning',
+    'deny_msg' => 'Access to this poll is denied.  Either the poll has been moved/removed or you do not have sufficient permissions.'
 );
 
 ###############################################################################
@@ -134,7 +135,8 @@ $LANG_confignames['polls'] = array(
     'polladdresstime' => 'Vælgeroplysning IP-adresse er gyldigt for',
     'delete_polls' => 'Slet Meningsmåling med Ejer?',
     'aftersave' => 'Efter gemt meningsmåling',
-    'default_permissions' => 'Meningsmåling Standard Tilladelserne'
+    'default_permissions' => 'Meningsmåling Standard Tilladelserne',
+    'displayblocks' => 'Display glFusion Blocks'
 );
 
 $LANG_configsubgroups['polls'] = array(
@@ -152,7 +154,8 @@ $LANG_configselects['polls'] = array(
     1 => array('True' => true, 'False' => false),
     2 => array('Som Forelagt' => 'submitorder', 'Ved Afstemninger' => 'voteorder'),
     9 => array('Frem Til Afstemning' => 'item', 'Vis Admin List' => 'list', 'Vis Public List' => 'plugin', 'Vis Hjem' => 'home', 'Vis Admin' => 'admin'),
-    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3)
+    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
+    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
 );
 
 ?>

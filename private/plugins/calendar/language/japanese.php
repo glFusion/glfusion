@@ -215,7 +215,8 @@ $LANG_confignames['calendar'] = array(
     'delete_event' => '所有者の削除と共に削除する',
     'aftersave' => 'イベント保存後の画面遷移',
     'default_permissions' => 'パーミッション',
-    'only_admin_submit' => 'Only Allow Admins to Submit'
+    'only_admin_submit' => 'Only Allow Admins to Submit',
+    'displayblocks' => 'Display glFusion Blocks'
 );
 
 $LANG_configsubgroups['calendar'] = array(
@@ -233,7 +234,8 @@ $LANG_configselects['calendar'] = array(
     1 => array('はい' => true, 'いいえ' => false),
     6 => array('12' => 12, '24' => 24),
     9 => array('作成したイベントを表示する' => 'item', 'カレンダ管理を表示する' => 'list', 'カレンダを表示する' => 'plugin', 'Homeを表示する' => 'home', '管理画面TOPを表示する' => 'admin'),
-    12 => array('アクセス不可' => 0, '表示' => 2, '表示・編集' => 3)
+    12 => array('アクセス不可' => 0, '表示' => 2, '表示・編集' => 3),
+    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
 );
 
 ?>
