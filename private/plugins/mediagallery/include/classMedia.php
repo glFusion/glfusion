@@ -561,7 +561,8 @@ class Media {
         	    $L->set_var('hrefdirect',$_MG_CONF['mediaobjects_url'] . '/' . $direct_url);
         	}
     	}
-    	$L->set_var('caption',PLG_replaceTags($this->title));
+
+    	$L->set_var('caption',PLG_replaceTags(str_replace('$','&#36;',$this->title)));
     	$L->set_var('id','id' . rand());
 
     	$L->parse('media_link_start','media_link');

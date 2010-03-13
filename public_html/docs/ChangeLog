@@ -67,6 +67,7 @@ v1.1.9
 
 v1.1.8.pl5
 ----------
+- Media Gallery: Properly encode $ to work in caption with lightbox (Mark)
 - Links: Accessing an invalid category will cause infinite loop if user has
   link admin permissions (Mark)
 - Story moderation can cause the group permission to be set to All Users under
