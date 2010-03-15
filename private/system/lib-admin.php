@@ -105,8 +105,10 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
     $icons_type_arr = array('edit', 'copy', 'delete', 'list', 'addchild', 'blank');
     $icon_arr = array();
     foreach ($icons_type_arr as $icon_type) {
-        $icon_url = "{$_CONF['layout_url']}/images/admin/$icon_type.$_IMAGE_TYPE";
-        $icon_arr[$icon_type] = COM_createImage($icon_url, $LANG_ADMIN[$icon_type]);
+        if ( isset($LANG_ADMIN[$icon_type]) ) {
+            $icon_url = "{$_CONF['layout_url']}/images/admin/$icon_type.$_IMAGE_TYPE";
+            $icon_arr[$icon_type] = COM_createImage($icon_url, $LANG_ADMIN[$icon_type]);
+        }
     }
 
     // Check if the delete checkbox and support for the delete all feature should be displayed
@@ -130,7 +132,7 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
         if (!empty($header_arr[$i]['header_class'])) {
             $admin_templates->set_var('class', $header_arr[$i]['header_class']);
         } else {
-            $class = ($header_arr[$i]['center'] == true) ? 'admin-list-headerfield-centered' : 'admin-list-headerfield';
+            $class = (isset($header_arr[$i]['center']) && $header_arr[$i]['center'] == true) ? 'admin-list-headerfield-centered' : 'admin-list-headerfield';
             $admin_templates->set_var('class', $class);
         }
         $admin_templates->parse('header_row', 'header', true);
@@ -167,7 +169,7 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
                 if (!empty($header_arr[$j]['field_class'])) {
                     $admin_templates->set_var('class', $header_arr[$j]['field_class']);
                 } else {
-                    $class = ($header_arr[$j]['center'] == true) ? 'admin-list-field-centered' : 'admin-list-field';
+                    $class = (isset($header_arr[$j]['center']) && $header_arr[$j]['center'] == true) ? 'admin-list-field-centered' : 'admin-list-field';
                     $admin_templates->set_var('class', $class);
                 }
                 if ($fieldvalue !== false) {
@@ -385,7 +387,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     for ($i=0; $i < count( $header_arr ); $i++) { #iterate through all headers
         $header_text = $header_arr[$i]['text'];
         $th_subtags = '';
-        if ($header_arr[$i]['sort'] != false) { # is this sortable?
+        if (isset($header_arr[$i]['sort']) && $header_arr[$i]['sort'] != false) { # is this sortable?
             if ($order==$header_arr[$i]['field']) { # is this currently sorted?
                 $header_text .= $img_arrow;
             }
