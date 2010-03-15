@@ -113,7 +113,9 @@ function mydownloads() {
 }
 
 function listNewDownloads(){
-    global $_CONF,$_FM_CONF, $_TABLES,$_FM_TABLES,$myts,$eh,$mytree,$filemgmt_FileStoreURL,$filemgmt_FileSnapURL,$LANG_FM02;
+    global $_CONF,$_FM_CONF, $_TABLES,$_FM_TABLES,$myts,$eh,$mytree,
+           $filemgmt_FileStore, $filemgmt_FileStoreURL,$filemgmt_FileSnapURL,$LANG_FM02;
+
 
     // List downloads waiting for validation
     $sql = "SELECT lid, cid, title, url, homepage, version, size, logourl, submitter, comments, platform ";
@@ -1209,7 +1211,7 @@ function approve(){
     }
     $homepage = $_POST['homepage'];
     $version = $_POST['version'];
-    $size = $_POST['size'];
+    $size = (isset($_POST['size']) ? COM_applyFilter($_POST['size'],true) : 0);
     $description = $_POST['description'];
     if (($_POST['url']) || ($_POST['url'] != '')) {
         $name = $myts->makeTboxData4Save($_POST['url']);
@@ -1218,6 +1220,9 @@ function approve(){
     if (($_POST['logourl']) || ($_POST['logourl'] != '')) {
         $shotname = $myts->makeTboxData4Save($_POST['logourl']);
         $logourl = $myts->makeTboxData4Save(rawurlencode($_POST['logourl']));
+    } else {
+        $logourl = '';
+        $shotname = '';
     }
 
     $result = DB_query("SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE url='$url' and status=1");
@@ -1232,7 +1237,7 @@ function approve(){
     $title = $myts->makeTboxData4Save($title);
     $homepage = $myts->makeTboxData4Save($homepage);
     $version = $myts->makeTboxData4Save($_POST['version']);
-    $size = $myts->makeTboxData4Save($_POST['size']);
+    $size = $myts->makeTboxData4Save($size);
     $description = $myts->makeTareaData4Save($description);
     $commentoption = $_POST["commentoption"];
 
@@ -1240,7 +1245,11 @@ function approve(){
     // Now to extract the temporary names for both the file and optional thumbnail. I've used th platform field which I'm not using now for anything.
     $tmpnames = explode(";",DB_getItem($_FM_TABLES['filemgmt_filedetail'],'platform',"lid='$lid'"));
     $tmpfilename = $tmpnames[0];
-    $tmpshotname = $tmpnames[1];
+    if ( isset($tmpnames[1]) ) {
+        $tmpshotname = $tmpnames[1];
+    } else {
+        $tmpshotname = '';
+    }
     $tmp = $filemgmt_FileStore ."tmp/" . $tmpfilename;
     if (file_exists($tmp) && (!is_dir($tmp))) {                      // if this temporary file was really uploaded?
         $newfile = $filemgmt_FileStore .$name;
