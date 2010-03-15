@@ -642,8 +642,10 @@ switch ($action) {
             $msg = COM_applyFilter ($_POST['msg'], true);
         } elseif (isset ($_GET['msg'])) {
             $msg = COM_applyFilter ($_GET['msg'], true);
+        } else {
+            $msg = 0;
         }
-        $display .= ($msg > 0) ? COM_showMessage($msg) : '';
+        $display .= $msg > 0 ? COM_showMessage($msg) : '';
         $display .= listfeeds();
         $display .= COM_siteFooter ();
         break;
