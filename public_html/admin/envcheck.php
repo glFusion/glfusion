@@ -53,6 +53,7 @@ function _checkEnvironment()
            $filemgmt_FileStore, $filemgmt_SnapStore, $filemgmt_SnapCat,
            $CONF_FORUM, $_MG_CONF;
 
+    $retval = '';
     $permError = 0;
 
     $T = new Template($_CONF['path_layout'] . 'admin');
@@ -311,7 +312,7 @@ function _checkEnvironment()
     $feedpath = $_CONF['rdf_file'];
     $pos = strrpos( $feedpath, '/' );
     $feedPath = substr( $feedpath, 0, $pos + 1 );
-    $feedPath .= $feedfile;
+//    $feedPath .= $feedfile;
 
     $file_list = array( $_CONF['path_data'],
                         $_CONF['path_log'].'error.log',
