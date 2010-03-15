@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Added missing article_comment_close_enabled configuration setting (Mark)
 - Forum: Properly clean up attached file to posts that are canceled (Mark)
 - FileMgmt: Fixed SQL error on file submissions when filemgmt Admin group
   has been renamed (Mark)
