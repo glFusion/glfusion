@@ -107,8 +107,6 @@ function editPreferences()
         $selection .= '<option value="' . $langFile . '"';
         if ( $langFile == $_CONF['language'] ) {
             $selection .= ' selected="selected"';
-        } else if ($userlang == $langFile) {
-            $selection .= ' selected="selected"';
         }
         $selection .= '>' . $langName . '</option>' . LB;
     }
