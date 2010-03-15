@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -64,9 +64,8 @@ function gf_check4files($id,$tempfile=false) {
                 $ext = strtolower(substr($uploadfile['name'], $pos));
                 $filename = "{$uploadfilename}.{$ext}";
             }
-
             if ( gf_uploadfile($filename,$uploadfile,$CONF_FORUM['allowablefiletypes'],$_POST[$chk_usefilemgmt]) ) {
-                if (array_key_exists($uploadfile['type'],$CONF_FORUM['inlineimageypes']) AND function_exists('IMG_resizeImage')) {
+                if (array_key_exists($uploadfile['type'],$CONF_FORUM['inlineimageypes'])) {
                     if ($_POST[$chk_usefilemgmt] == 1) {
                         $srcImage = "{$filemgmt_FileStore}{$filename}";
                         $destImage = "{$CONF_FORUM['uploadpath']}/tn/{$filename}";
@@ -112,8 +111,6 @@ function gf_check4files($id,$tempfile=false) {
     }
 
     return $retval;
-//    return $filelinks;
-
 }
 
 
@@ -169,5 +166,23 @@ function gf_uploadfile($filename,&$upload_file,$allowablefiletypes,$use_filemgmt
         return false;
     }
     return false;
+}
+
+function gf_FileCleanup($uniqueid)
+{
+    global $_TABLES,$CONF_FORUM,$filemgmt_FileStore;
+
+    $sql = "SELECT * FROM {$_TABLES['gf_attachments']} WHERE tempfile=1 AND topic_id=".(int)$uniqueid;
+    $result = DB_query($sql);
+    while ($F = DB_fetchArray($result) ) {
+        $filedata = explode(':', $F['filename']);
+        $filename = $filedata[0];
+        $realname = $filedata[1];
+        $filepath = "{$CONF_FORUM['uploadpath']}/$filename";
+        $tnpath   = $CONF_FORUM['uploadpath'].'/tn/'.$filename;
+        @unlink($filepath);
+        @unlink($tnpath);
+        DB_delete($_TABLES['gf_attachments'],'id',$F['id']);
+    }
 }
 ?>

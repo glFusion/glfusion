@@ -57,6 +57,11 @@ $wysiwyg = 0;
 $subject = '';
 
 if (isset($_REQUEST['cancel']) && $_REQUEST['cancel'] == $LANG_GF01['CANCEL']) {
+    if ( isset($_POST['uniqueid']) ) {
+        $uniqueid = COM_applyFilter($_POST['uniqueid'],true);
+        gf_FileCleanup($uniqueid);
+    }
+
     if ( isset($_POST['referer']) ) {
         $referer = $_POST['referer'];
         $sLength = strlen($_CONF['site_url']);
@@ -124,7 +129,11 @@ if ( isset($_POST['referer']) ) {
         $referer = $_CONF['site_url'].'/forum/index.php';
     }
 } else {
-    $referer = $_SERVER['HTTP_REFERER'];
+    if ( isset($_SERVER['HTTP_REFERER'] ) ) {
+        $referer = $_SERVER['HTTP_REFERER'];
+    } else {
+        $referer = '';
+    }
 }
 
 $sLength = strlen($_CONF['site_url']);
@@ -603,15 +612,14 @@ if ($method == 'edit') {
 // PREVIEW TOPIC
 $numAttachments = 0;
 
-if (isset($_REQUEST['preview']) && $_REQUEST['preview'] == $LANG_GF01['PREVIEW']) {
+if (isset($_REQUEST['preview']) )  {  //&& $_REQUEST['preview'] == $LANG_GF01['PREVIEW'])
+    $preview = 'Preview';
     $previewitem = array();
     $previewitem['forum'] = $forum;
     $previewitem['pid']     = COM_applyFilter($_POST['editpid'],true);
     $previewitem['id']      = COM_applyFilter($_POST['id'],true);
     $previewitem['locked']  = 0;
     $previewitem['views']   = 0;
-
-
 
     if ($method == 'edit') {
         $previewitem['uid']  = $edittopic['uid'];
@@ -632,8 +640,9 @@ if (isset($_REQUEST['preview']) && $_REQUEST['preview'] == $LANG_GF01['PREVIEW']
             $previewitem['uid'] = 1;
         }
         /* Check for any uploaded files */
-        gf_check4files($_POST['uniqueid'],true);
-        $numAttachments = DB_count($_TABLES['gf_attachments'],array('topic_id','tempfile'),array(intval($_POST['uniqueid']),1));
+        $uniqueid = COM_applyFilter($_POST['uniqueid'],true);
+        gf_check4files($uniqueid,true);
+        $numAttachments = DB_count($_TABLES['gf_attachments'],array('topic_id','tempfile'),array((int)$uniquei,1));
     }
 
     $status = 0;
@@ -894,7 +903,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     $topicnavbar->parse ('output', 'topicnavbar');
     echo $topicnavbar->finish($topicnavbar->get_var('output'));
 
-    if ($uid < 2) {
+    if (COM_isAnonUser()) {
         $submissionformtop = new Template($_CONF['path'] . 'plugins/forum/templates/');
         $submissionformtop->set_file (array ('submissionformtop'=>'submissionform_anontop.thtml'));
         $submissionformtop->set_var ('layout_url', $_CONF['layout_url']);
@@ -1224,7 +1233,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
         $submissionform_main->set_var('show_filemgmt_option','none');
     }
 
-    if ($uid == 1) {
+    if (COM_isAnonUser()) {
         $submissionform_main->set_var ('hide_notify','none');
     }
     if ( function_exists('plugin_templatesetvars_captcha') ) {
