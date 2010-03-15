@@ -862,7 +862,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
         case '1.1.8' :
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
-
+            $c->add('article_comment_close_enabled',0,'select',4,21,0,1695,TRUE);
             DB_query("ALTER TABLE {$_TABLES['groups']} ADD grp_default tinyint(1) unsigned NOT NULL default '0' AFTER grp_gl_core");
             DB_query("ALTER TABLE {$_TABLES['users']} CHANGE `passwd` `passwd` VARCHAR( 40 ))");
 
