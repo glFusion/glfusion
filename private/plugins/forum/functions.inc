@@ -1107,7 +1107,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         $grouplist = implode(',',$groups);
 
         $sql  = "SELECT a.id, a.forum, a.name, a.date, a.lastupdated, a.last_reply_rec, a.subject, ";
-        $sql .= "a.comment, a.uid, a.name, a.pid, a.replies, a.views, b.forum_name  ";
+        $sql .= "a.comment, a.uid, a.name, a.pid, a.replies, a.views, a.status, b.forum_name  ";
         $sql .= "FROM {$_TABLES['gf_topic']} a ";
         $sql .= "LEFT JOIN {$_TABLES['gf_forums']} b ON a.forum=b.forum_id ";
         $sql .= "WHERE pid=0 AND b.grp_id IN ($grouplist) AND b.no_newposts = 0 ";
