@@ -2092,6 +2092,8 @@ function CALENDAR_siteHeader($title='', $meta='')
 function CALENDAR_siteFooter() {
     global $_CONF, $_CA_CONF;
 
+    $retval = '';
+
     switch( $_CA_CONF['displayblocks'] ) {
         case 0 : // left only
         case 3 : // none
