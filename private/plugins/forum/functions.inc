@@ -876,8 +876,16 @@ function phpblock_forum_newposts() {
         return;
     }
     $post_limit = $CONF_FORUM['sideblock_numposts'];
-    $mode = COM_applyFilter($_GET['mode']);
-    $order = COM_applyFilter($_GET['order']);
+    if ( isset($_GET['mode']) ) {
+        $mode = COM_applyFilter($_GET['mode']);
+    } else {
+        $mode = '';
+    }
+    if ( isset($_GET['order']) ) {
+        $order = COM_applyFilter($_GET['order']);
+    } else {
+        $order = '';
+    }
     if (DB_getItem($_TABLES['plugins'],'pi_enabled', 'pi_name="forum"')) {
         // Check if user has clicked on a sort option in the block
         if ($mode == 'forumblock') {

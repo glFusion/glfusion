@@ -411,6 +411,10 @@ if ($mode != 'preview') {
     $topic_footer->set_var('xhtml',XHTML);
 }
 
+if ( !isset($cat_name) ) {
+    $cat_name = DB_getItem($_TABLES['gf_categories'],"cat_name","id={$viewtopic['forum_cat']}");
+}
+
 $topic_footer->set_var('forum_home',$LANG_GF01['INDEXPAGE']);
 $topic_footer->set_var ('cat_name', $cat_name); // DB_getItem($_TABLES['gf_categories'],"cat_name","id={$viewtopic['forum_cat']}"));
 $topic_footer->set_var ('cat_id',$viewtopic['forum_cat']);

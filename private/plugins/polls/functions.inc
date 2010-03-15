@@ -535,7 +535,7 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
     global $_CONF, $_TABLES, $LANG_POLLS, $LANG01, $_USER, $LANG25, $_IMAGE_TYPE;
     $retval = '';
 
-    $topic = DB_query("SELECT topic,voters,commentcode,is_open,hideresults,owner_id "
+    $result = DB_query("SELECT topic,voters,commentcode,is_open,hideresults,owner_id "
         . ",group_id,perm_owner,perm_group,perm_anon,perm_members "
         . "FROM {$_TABLES['polltopics']} WHERE pid='".addslashes($pid)."'" . COM_getPermSql('AND'));
     $ntopics = DB_numRows($result);

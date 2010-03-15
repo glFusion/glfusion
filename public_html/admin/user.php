@@ -422,6 +422,8 @@ function USER_groupPanel($U, $newuser = 0)
 {
     global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG_ACCESS, $LANG04, $LANG28;
 
+    $form_url = '';
+
     $uid = $U['uid'];
 
     USES_lib_admin();

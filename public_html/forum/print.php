@@ -48,7 +48,7 @@ require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
 require_once $_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php';
 
-function gf_FormatForPrint( $str, $postmode='html', $status ) {
+function gf_FormatForPrint( $str, $postmode='html', $status=0 ) {
     global $CONF_FORUM;
 
     // Handle Pre ver 2.5 quoting and New Line Formatting - consider adding this to a migrate function

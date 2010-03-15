@@ -317,8 +317,10 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     $icons_type_arr = array('edit', 'copy', 'delete', 'list', 'addchild', 'blank');
     $icon_arr = array();
     foreach ($icons_type_arr as $icon_type) {
-        $icon_url = "{$_CONF['layout_url']}/images/admin/$icon_type.$_IMAGE_TYPE";
-        $icon_arr[$icon_type] = COM_createImage($icon_url, $LANG_ADMIN[$icon_type]);
+        if ( isset($LANG_ADMIN[$icon_type]) ) {
+            $icon_url = "{$_CONF['layout_url']}/images/admin/$icon_type.$_IMAGE_TYPE";
+            $icon_arr[$icon_type] = COM_createImage($icon_url, $LANG_ADMIN[$icon_type]);
+        }
     }
 
     $has_extras = '';
@@ -414,7 +416,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         if (!empty($header_arr[$i]['header_class'])) {
             $admin_templates->set_var('class', $header_arr[$i]['header_class']);
         } else {
-            $class = ($header_arr[$i]['center'] == true) ? 'admin-list-headerfield-centered' : 'admin-list-headerfield';
+            $class = (isset($header_arr[$i]['center']) && $header_arr[$i]['center'] == true) ? 'admin-list-headerfield-centered' : 'admin-list-headerfield';
             $admin_templates->set_var('class', $class);
         }
         if (isset($header_arr[$i]['nowrap'])) {
@@ -509,7 +511,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
             if (!empty($header_arr[$j]['field_class'])) {
                 $admin_templates->set_var('class', $header_arr[$j]['field_class']);
             } else {
-                $class = ($header_arr[$j]['center'] == true) ? 'admin-list-field-centered' : 'admin-list-field';
+                $class = (isset($header_arr[$j]['center']) && $header_arr[$j]['center'] == true) ? 'admin-list-field-centered' : 'admin-list-field';
                 $admin_templates->set_var('class', $class);
             }
             if (!empty($header_arr[$j]['nowrap'])) {
@@ -632,6 +634,7 @@ function ADMIN_getListField_blocks($fieldname, $fieldvalue, $A, $icon_arr, $toke
     global $_CONF, $LANG_ADMIN, $LANG21, $_IMAGE_TYPE;
 
     $retval = false;
+    $order = '';
 
     $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
     $enabled = ($A['is_enabled'] == 1) ? true : false;
