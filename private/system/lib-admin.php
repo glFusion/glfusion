@@ -92,7 +92,6 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
     $admin_templates->set_var('layout_url', $_CONF['layout_url']);
     $admin_templates->set_var('form_url', $form_url);
     $admin_templates->set_var('lang_edit', $LANG_ADMIN['edit']);
-    $admin_templates->set_var('lang_deleteall', $LANG01[124]);
     $admin_templates->set_var('lang_delconfirm', $LANG01[125]);
     if (isset($form_arr['top'])) {
         $admin_templates->set_var('formfields_top', $form_arr['top']);
@@ -102,13 +101,13 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
     }
 
     # define icon paths. Those will be transmitted to $fieldfunction.
-    $icons_type_arr = array('edit', 'copy', 'delete', 'list', 'addchild', 'blank');
+    $icons_type_arr = array('edit', 'copy', 'delete', 'list', 'mail', 'group', 'user', 'check', 'cross', 'addchild', 'blank');
     $icon_arr = array();
     foreach ($icons_type_arr as $icon_type) {
-        if ( isset($LANG_ADMIN[$icon_type]) ) {
-            $icon_url = "{$_CONF['layout_url']}/images/admin/$icon_type.$_IMAGE_TYPE";
-            $icon_arr[$icon_type] = COM_createImage($icon_url, $LANG_ADMIN[$icon_type]);
-        }
+        $icon_url = "{$_CONF['layout_url']}/images/admin/$icon_type.$_IMAGE_TYPE";
+        $alt = (isset($LANG_ADMIN[$icon_type])) ? $LANG_ADMIN[$icon_type] : '';
+        $attr['title'] = $alt;
+        $icon_arr[$icon_type] = COM_createImage($icon_url, $alt, $attr);
     }
 
     // Check if the delete checkbox and support for the delete all feature should be displayed
@@ -116,14 +115,11 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
     if (is_array($options) && isset($options['chkminimum'])) {
         $min_data = $options['chkminimum'];
     }
-    if (count($data_arr) > $min_data AND is_array($options) AND $options['chkdelete']) {
+    if (count($data_arr) > $min_data AND is_array($options) AND ($options['chkdelete'] OR $options['chkselect'])) {
         $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form);"' . XHTML . '>');
-        $admin_templates->set_var('class', "admin-list-field");
-        $admin_templates->set_var('show_deleteimage', '');
+        $admin_templates->set_var('class', 'admin-list-field');
+        $admin_templates->set_var('header_column_style', 'style="text-align:center;"'); // always center checkbox
         $admin_templates->parse('header_row', 'header', true);
-        $admin_templates->clear_var('on_click');
-    } else {
-        $admin_templates->set_var('show_deleteimage','display:none;');
     }
 
     # HEADER FIELDS array(text, field, sort)
@@ -132,8 +128,21 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
         if (!empty($header_arr[$i]['header_class'])) {
             $admin_templates->set_var('class', $header_arr[$i]['header_class']);
         } else {
-            $class = (isset($header_arr[$i]['center']) && $header_arr[$i]['center'] == true) ? 'admin-list-headerfield-centered' : 'admin-list-headerfield';
-            $admin_templates->set_var('class', $class);
+            $admin_templates->set_var('class', 'admin-list-headerfield');
+        }
+        $header_column_style = '';
+        if (!empty($header_arr[$i]['align'])) {
+            if ($header_arr[$i]['align'] == 'center') {
+                $header_column_style = 'text-align:center;';
+            } elseif ($header_arr[$i]['align'] == 'right') {
+                $header_column_style = 'text-align:right;';
+            }
+        }
+        $header_column_style .= (isset($header_arr[$i]['nowrap'])) ? ' white-space:nowrap;' : '';
+        if(!empty($header_column_style)) {
+            $admin_templates->set_var('header_column_style', 'style="' . $header_column_style . '"');
+        } else {
+            $admin_templates->clear_var('header_column_style');
         }
         $admin_templates->parse('header_row', 'header', true);
     }
@@ -150,9 +159,10 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
     } else {
         $admin_templates->set_var('show_message', 'display:none;');
         for ($i = 0; $i < count($data_arr); $i++) {
-            if (count($data_arr) > $min_data AND is_array($options) AND $options['chkdelete']) {
+            if (count($data_arr) > $min_data AND is_array($options) AND ($options['chkdelete'] OR $options['chkselect'])) {
                 $admin_templates->set_var('itemtext', '<input type="checkbox" name="delitem[]" value="' . $data_arr[$i][$options['chkfield']].'"' . XHTML . '>');
-                $admin_templates->set_var('class', "admin-list-field");
+                $admin_templates->set_var('class', 'admin-list-field');
+                $admin_templates->set_var('column_style', 'style="text-align:center;"'); // always center checkbox
                 $admin_templates->parse('item_field', 'field', true);
             }
             for ($j = 0; $j < count($header_arr); $j++) {
@@ -169,8 +179,21 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
                 if (!empty($header_arr[$j]['field_class'])) {
                     $admin_templates->set_var('class', $header_arr[$j]['field_class']);
                 } else {
-                    $class = (isset($header_arr[$j]['center']) && $header_arr[$j]['center'] == true) ? 'admin-list-field-centered' : 'admin-list-field';
-                    $admin_templates->set_var('class', $class);
+                    $admin_templates->set_var('class', 'admin-list-field');
+                }
+                $column_style = '';
+                if (!empty($header_arr[$j]['align'])) {
+                    if ($header_arr[$j]['align'] == 'center') {
+                        $column_style = 'text-align:center;';
+                    } elseif ($header_arr[$j]['align'] == 'right') {
+                        $column_style = 'text-align:right;';
+                    }
+                }
+                $column_style .= (isset($header_arr[$j]['nowrap'])) ? ' white-space:nowrap;' : '';
+                if(!empty($column_style)) {
+                    $admin_templates->set_var('column_style', 'style="' . $column_style . '"');
+                } else {
+                    $admin_templates->clear_var('column_style');
                 }
                 if ($fieldvalue !== false) {
                     $admin_templates->set_var('itemtext', $fieldvalue);
@@ -286,7 +309,8 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         'list' => 'list.thtml',
         'header' => 'header.thtml',
         'row' => 'listitem.thtml',
-        'field' => 'field.thtml'
+        'field' => 'field.thtml',
+        'arow' => 'actionrow.thtml'
     ));
 
     # insert std. values into the template
@@ -296,7 +320,6 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     $admin_templates->set_var('layout_url', $_CONF['layout_url']);
     $admin_templates->set_var('form_url', $form_url);
     $admin_templates->set_var('lang_edit', $LANG_ADMIN['edit']);
-    $admin_templates->set_var('lang_deleteall', $LANG01[124]);
     $admin_templates->set_var('lang_delconfirm', $LANG01[125]);
     if (isset($form_arr['top'])) {
         $admin_templates->set_var('formfields_top', $form_arr['top']);
@@ -305,34 +328,37 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $admin_templates->set_var('formfields_bottom', $form_arr['bottom']);
     }
     // Check if the delete checkbox and support for the delete all feature should be displayed
-    if (is_array($options) AND $options['chkdelete']) {
+    if (is_array($options) AND ($options['chkdelete'] OR $options['chkselect'])) {
         $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form);"' . XHTML . '>');
-        $admin_templates->set_var('class', "admin-list-field");
-        $admin_templates->set_var('show_deleteimage', '');
+        $admin_templates->set_var('class', 'admin-list-field');
+        $admin_templates->set_var('header_column_style', 'style="text-align:center;"'); // always center checkbox
         $admin_templates->parse('header_row', 'header', true);
-        $admin_templates->clear_var('on_click');
-    } else {
-        $admin_templates->set_var('show_deleteimage','display:none;');
     }
 
     # define icon paths. Those will be transmitted to $fieldfunction.
-    $icons_type_arr = array('edit', 'copy', 'delete', 'list', 'addchild', 'blank');
+    $icons_type_arr = array('edit', 'copy', 'delete', 'list', 'mail', 'group', 'user', 'check', 'cross', 'addchild', 'blank');
     $icon_arr = array();
     foreach ($icons_type_arr as $icon_type) {
-        if ( isset($LANG_ADMIN[$icon_type]) ) {
-            $icon_url = "{$_CONF['layout_url']}/images/admin/$icon_type.$_IMAGE_TYPE";
-            $icon_arr[$icon_type] = COM_createImage($icon_url, $LANG_ADMIN[$icon_type]);
-        }
+        $icon_url = "{$_CONF['layout_url']}/images/admin/$icon_type.$_IMAGE_TYPE";
+        $alt = (isset($LANG_ADMIN[$icon_type])) ? $LANG_ADMIN[$icon_type] : '';
+        $attr['title'] = $alt;
+        $icon_arr[$icon_type] = COM_createImage($icon_url, $alt, $attr);
     }
 
-    $has_extras = '';
-    if (isset($text_arr['has_extras'])) { # does this one use extras? (search, google paging)
-        $has_extras = $text_arr['has_extras'];
+    // determine what extra options we should use (search, limit, paging)
+    if (isset($text_arr['has_extras']) && $text_arr['has_extras']) { # old option, denotes all
+        $has_search = true;
+        $has_limit = true;
+        $has_paging = true;
+    } else {
+        $has_search = (isset($text_arr['has_search']) && $text_arr['has_search']) ? true : false;
+        $has_limit = (isset($text_arr['has_limit']) && $text_arr['has_limit']) ? true : false;
+        $has_paging = (isset($text_arr['has_paging']) && $text_arr['has_paging']) ? true : false;
     }
-    if ($has_extras) { // show search
+
+    if ($has_search) { // show search
         $admin_templates->set_var('lang_search', $LANG_ADMIN['search']);
         $admin_templates->set_var('lang_submit', $LANG_ADMIN['submit']);
-        $admin_templates->set_var('lang_limit_results', $LANG_ADMIN['limit_results']);
         $admin_templates->set_var('last_query', htmlspecialchars($query));
         $admin_templates->set_var('filter', $filter);
     }
@@ -380,11 +406,13 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     if (!empty ($order_for_query)) { # concat order string
         $order_sql = "ORDER BY $order_for_query $direction";
     }
+
     $th_subtags = ''; // other tags in the th, such as onclick and mouseover
     $header_text = ''; // title as displayed to the user
+    $ncols = count( $header_arr );
     // HEADER FIELDS array(text, field, sort, class)
     // this part defines the contents & format of the header fields
-    for ($i=0; $i < count( $header_arr ); $i++) { #iterate through all headers
+    for ($i=0; $i < $ncols; $i++) { #iterate through all headers
         $header_text = $header_arr[$i]['text'];
         $th_subtags = '';
         if (isset($header_arr[$i]['sort']) && $header_arr[$i]['sort'] != false) { # is this sortable?
@@ -418,11 +446,21 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         if (!empty($header_arr[$i]['header_class'])) {
             $admin_templates->set_var('class', $header_arr[$i]['header_class']);
         } else {
-            $class = (isset($header_arr[$i]['center']) && $header_arr[$i]['center'] == true) ? 'admin-list-headerfield-centered' : 'admin-list-headerfield';
-            $admin_templates->set_var('class', $class);
+            $admin_templates->set_var('class', 'admin-list-headerfield');
         }
-        if (isset($header_arr[$i]['nowrap'])) {
-            $admin_templates->set_var('header_column_style','style="white-space:nowrap;"');
+        $header_column_style = '';
+        if (!empty($header_arr[$i]['align'])) {
+            if ($header_arr[$i]['align'] == 'center') {
+                $header_column_style = 'text-align:center;';
+            } elseif ($header_arr[$i]['align'] == 'right') {
+                $header_column_style = 'text-align:right;';
+            }
+        }
+        $header_column_style .= (isset($header_arr[$i]['nowrap'])) ? ' white-space:nowrap;' : '';
+        if(!empty($header_column_style)) {
+            $admin_templates->set_var('header_column_style', 'style="' . $header_column_style . '"');
+        } else {
+            $admin_templates->clear_var('header_column_style');
         }
         $admin_templates->set_var('header_text', $header_text);
         $admin_templates->set_var('th_subtags', $th_subtags);
@@ -432,7 +470,8 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $admin_templates->clear_var('header_text');
     }
 
-    if ($has_extras) {
+    if ($has_limit) {
+        $admin_templates->set_var('lang_limit_results', $LANG_ADMIN['limit_results']);
         $limit = 50; # default query limit if not other chosen.
                      # maybe this could be a setting from the list?
         if (!empty($query_limit)) {
@@ -474,8 +513,8 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
                                    $LANG_ADMIN['records_found']);
         $admin_templates->set_var ('records_found',
                                    COM_numberFormat ($num_rows));
-        $admin_templates->parse('search_menu', 'search', true);
     }
+    $admin_templates->parse('search_menu', 'search', true);
 
     # SQL
     $sql .= "$filter_str $order_sql $limit;";
@@ -487,12 +526,13 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     for ($i = 0; $i < $nrows; $i++) { # now go through actual data
         $A = DB_fetchArray($result);
         $this_row = false; # as long as no fields are returned, dont print row
-        if (is_array($options) AND $options['chkdelete']) {
-            $admin_templates->set_var('class', "admin-list-field");
+        if (is_array($options) AND ($options['chkdelete'] OR $options['chkselect'])) {
+            $admin_templates->set_var('class', 'admin-list-field');
+            $admin_templates->set_var('column_style', 'style="text-align:center;"'); // always center checkbox
             $admin_templates->set_var('itemtext', '<input type="checkbox" name="delitem[]" value="' . $A[$options['chkfield']].'"' . XHTML . '>');
             $admin_templates->parse('item_field', 'field', true);
         }
-        for ($j = 0; $j < count($header_arr); $j++) {
+        for ($j = 0; $j < $ncols; $j++) {
             $fieldname = $header_arr[$j]['field']; # get field name from headers
             $fieldvalue = '';
             if (!empty($A[$fieldname])) { # is there a field in data like that?
@@ -513,13 +553,21 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
             if (!empty($header_arr[$j]['field_class'])) {
                 $admin_templates->set_var('class', $header_arr[$j]['field_class']);
             } else {
-                $class = (isset($header_arr[$j]['center']) && $header_arr[$j]['center'] == true) ? 'admin-list-field-centered' : 'admin-list-field';
-                $admin_templates->set_var('class', $class);
+                $admin_templates->set_var('class', 'admin-list-field');
             }
-            if (!empty($header_arr[$j]['nowrap'])) {
-                $admin_templates->set_var('column_style',' style="white-space:nowrap;"');
+            $column_style = '';
+            if (!empty($header_arr[$j]['align'])) {
+                if ($header_arr[$j]['align'] == 'center') {
+                    $column_style = 'text-align:center;';
+                } elseif ($header_arr[$j]['align'] == 'right') {
+                    $column_style = 'text-align:right;';
+                }
+            }
+            $column_style .= (isset($header_arr[$j]['nowrap'])) ? ' white-space:nowrap;' : '';
+            if(!empty($column_style)) {
+                $admin_templates->set_var('column_style', 'style="' . $column_style . '"');
             } else {
-                $admin_templates->set_var('column_style','');
+                $admin_templates->clear_var('column_style');
             }
             $admin_templates->set_var('itemtext', $fieldvalue); # write field
             $admin_templates->parse('item_field', 'field', true);
@@ -541,7 +589,22 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $admin_templates->set_var('message', $message);
     }
 
-    if ($has_extras) { # now make google-paging
+    // if we displayed data, and chkselect option is available, display the
+    // actions row for all selected items. provide a delete action as a minimum
+    if (is_array($options) AND ($options['chkdelete'] OR $options['chkselect']) AND $nrows > 0 ) {
+        $actions = '<td style="text-align:center;">'
+            . '<img src="' . $_CONF['layout_url'] . '/images/admin/action.' . $_IMAGE_TYPE . '"></td>';
+        $delete_action = '<input name="delbutton" type="image" src="'
+            . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
+            . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
+            . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
+            . XHTML . '>&nbsp;&nbsp;' . $LANG_ADMIN['delete'];
+        $actions .= '<td colspan="' . $ncols . '">' . $LANG_ADMIN['action'] . '&nbsp;&nbsp;&nbsp;' . $delete_action . $options['actions'] . '</td>';
+        $admin_templates->set_var('actions', $actions);
+        $admin_templates->parse('action_row', 'arow', true);
+    }
+
+    if ($has_paging) { # now make google-paging
         $hasargs = strstr( $form_url, '?' );
         if( $hasargs ) {
             $sep = '&amp;';
@@ -626,257 +689,6 @@ function ADMIN_createMenu($menu_arr, $text, $icon = '')
  *
  */
 
-
-/**
- * used for the list of blocks in admin/block.php
- *
- */
-function ADMIN_getListField_blocks($fieldname, $fieldvalue, $A, $icon_arr, $token)
-{
-    global $_CONF, $LANG_ADMIN, $LANG21, $_IMAGE_TYPE;
-
-    $retval = false;
-    $order = '';
-
-    $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
-    $enabled = ($A['is_enabled'] == 1) ? true : false;
-
-    if (($access > 0) && (hasBlockTopicAccess ($A['tid']) > 0)) {
-        switch($fieldname) {
-            case 'edit':
-                $retval = '';
-                if ($access == 3) {
-                    $attr['title'] = $LANG_ADMIN['edit'];
-                    $retval .= COM_createLink($icon_arr['edit'],
-                        $_CONF['site_admin_url'] . '/block.php?edit=1&amp;bid=' . $A['bid'], $attr);
-                }
-                break;
-            case 'delete':
-                $retval = '';
-                if ($access == 3) {
-                    $attr['title'] = $LANG_ADMIN['delete'];
-                    $attr['onclick'] = "return confirm('" . $LANG21[69] . "');";
-                    $retval .= COM_createLink($icon_arr['delete'],
-                        $_CONF['site_admin_url'] . '/block.php'
-                        . '?delete=1&amp;bid=' . $A['bid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
-                }
-                break;
-            case 'title':
-                $title = stripslashes ($A['title']);
-                if (empty ($title)) {
-                    $title = '(' . $A['name'] . ')';
-                }
-                $retval = ($enabled) ? $title : '<span class="disabledfield">' . $title . '</span>';
-                break;
-            case 'blockorder':
-                $order .= $A['blockorder'];
-                $retval = ($enabled) ? $order : '<span class="disabledfield">' . $order . '</span>';
-                break;
-            case 'is_enabled':
-                if ($access == 3) {
-                    if ($enabled) {
-                        $switch = ' checked="checked"';
-                        $title = 'title="' . $LANG_ADMIN['disable'] . '" ';
-                    } else {
-                        $title = 'title="' . $LANG_ADMIN['enable'] . '" ';
-                        $switch = '';
-                    }
-                    $retval = '<input type="checkbox" name="enabledblocks[' . $A['bid'] . ']" ' . $title
-                        . 'onclick="submit()" value="' . $A['onleft'] . '"' . $switch . XHTML . '>';
-                    $retval .= '<input type="hidden" name="bidarray[' . $A['bid'] . ']" value="' . $A['onleft'] . '"' . XHTML . '>';
-                }
-                break;
-            case 'move':
-                if ($access == 3) {
-                    if ($A['onleft'] == 1) {
-                        $side = $LANG21[40];
-                        $blockcontrol_image = 'block-right.' . $_IMAGE_TYPE;
-                        $moveTitleMsg = $LANG21[59];
-                        $switchside = '1';
-                    } else {
-                        $blockcontrol_image = 'block-left.' . $_IMAGE_TYPE;
-                        $moveTitleMsg = $LANG21[60];
-                        $switchside = '0';
-                    }
-                    $retval.="<img src=\"{$_CONF['layout_url']}/images/admin/$blockcontrol_image\" width=\"45\" height=\"20\" usemap=\"#arrow{$A['bid']}\" alt=\"\"" . XHTML . ">"
-                            ."<map id=\"arrow{$A['bid']}\" name=\"arrow{$A['bid']}\">"
-                            ."<area coords=\"0,0,12,20\"  title=\"{$LANG21[58]}\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=up&amp;".CSRF_TOKEN."={$token}\" alt=\"{$LANG21[58]}\"" . XHTML . ">"
-                            ."<area coords=\"13,0,29,20\" title=\"$moveTitleMsg\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=$switchside&amp;".CSRF_TOKEN."={$token}\" alt=\"$moveTitleMsg\"" . XHTML . ">"
-                            ."<area coords=\"30,0,43,20\" title=\"{$LANG21[57]}\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=dn&amp;".CSRF_TOKEN."={$token}\" alt=\"{$LANG21[57]}\"" . XHTML . ">"
-                            ."</map>";
-                }
-                break;
-            default:
-                $retval = ($enabled) ? $fieldvalue : '<span class="disabledfield">' . $fieldvalue . '</span>';
-                break;
-        }
-    }
-    return $retval;
-}
-
-/**
- * used for the list of groups and in the group editor in admin/group.php
- *
- */
-function ADMIN_getListField_groups($fieldname, $fieldvalue, $A, $icon_arr, $selected = '')
-{
-    global $_CONF, $LANG_ACCESS, $LANG_ADMIN, $MESSAGE, $thisUsersGroups;
-
-    $retval = false;
-
-    if(! is_array($thisUsersGroups)) {
-        $thisUsersGroups = SEC_getUserGroups();
-    }
-
-    $showall = (isset($_REQUEST['chk_showall']) && ($_REQUEST['chk_showall'] == 1));
-
-    if (in_array ($A['grp_id'], $thisUsersGroups ) ||
-        SEC_groupIsRemoteUserAndHaveAccess( $A['grp_id'], $thisUsersGroups )) {
-        switch($fieldname) {
-        case 'edit':
-            $url = $_CONF['site_admin_url'] . '/group.php?edit=1&amp;grp_id=' . $A['grp_id'];
-            $url .= ($showall) ? '&amp;chk_showall=1' : '';
-            $attr['title'] = $LANG_ADMIN['edit'];
-            $retval = COM_createLink($icon_arr['edit'], $url, $attr);
-            break;
-
-        case 'grp_gl_core':
-            $retval = ($A['grp_gl_core'] == 1) ? $LANG_ACCESS['yes'] : $LANG_ACCESS['no'];
-            break;
-
-        case 'grp_default':
-            $retval = ($A['grp_default'] != 0) ? $LANG_ACCESS['yes'] : $LANG_ACCESS['no'];
-            break;
-
-        case 'grp_admin':
-            $retval = ($A['grp_gl_core'] == 1 && $A['grp_name'] != 'All Users' && $A['grp_name'] != 'Logged-in Users') ? $LANG_ACCESS['yes'] : $LANG_ACCESS['no'];
-            break;
-
-        case 'listusers':
-            $url = $_CONF['site_admin_url'] . '/group.php?listusers=1&amp;grp_id=' . $A['grp_id'];
-            $url .= ($showall) ? '&amp;chk_showall=1' : '';
-            $attr['title'] = $LANG_ACCESS['listusers'];
-            $retval = COM_createLink($icon_arr['list'], $url, $attr);
-            break;
-
-        case 'editusers':
-            $retval = '';
-            if (($A['grp_name'] != 'All Users') && ($A['grp_name'] != 'Logged-in Users')) {
-                $url = $_CONF['site_admin_url'] . '/group.php?editusers=1&amp;grp_id=' . $A['grp_id'];
-                $url .= ($showall) ? '&amp;chk_showall=1' : '';
-                $attr['title'] = $LANG_ACCESS['editusers'];
-                $retval .= COM_createLink($icon_arr['edit'], $url, $attr);
-            }
-            break;
-
-        case 'checkbox':
-            $retval = '<input type="checkbox" name="groups[]" value="' . $A['grp_id'] . '"';
-            if (is_array($selected) && in_array($A['grp_id'], $selected)) {
-                $retval .= ' checked="checked"';
-            }
-            $retval .= XHTML . '>';
-            break;
-
-        case 'disabled-checkbox':
-            $retval = '<input type="checkbox" checked="checked" '
-                    . 'disabled="disabled"' . XHTML . '>';
-            break;
-
-        case 'grp_name':
-            $retval = ucwords($fieldvalue);
-            break;
-
-        default:
-            $retval = $fieldvalue;
-            break;
-        }
-    }
-
-    return $retval;
-}
-
-/**
- * used for the list of users in admin/user.php
- *
- */
-function ADMIN_getListField_users($fieldname, $fieldvalue, $A, $icon_arr)
-{
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
-
-    $retval = '';
-
-    switch ($fieldname) {
-        case 'delete':
-            $retval = '<input type="checkbox" name="delitem[]" checked="checked"' . XHTML . '>';
-            break;
-        case 'edit':
-            $retval = COM_createLink($icon_arr['edit'],
-                "{$_CONF['site_admin_url']}/user.php?mode=edit&amp;uid={$A['uid']}");
-            break;
-        case 'username':
-            $photoico = '';
-            if (!empty ($A['photo'])) {
-                $photoico = "&nbsp;<img src=\"{$_CONF['layout_url']}/images/smallcamera."
-                          . $_IMAGE_TYPE . '" alt="{$LANG04[77]}"' . XHTML . '>';
-            } else {
-                $photoico = '';
-            }
-            $retval = COM_createLink($fieldvalue, $_CONF['site_url']
-                    . '/users.php?mode=profile&amp;uid=' .  $A['uid']) . $photoico;
-            break;
-        case 'lastlogin':
-            if ($fieldvalue < 1) {
-                // if the user never logged in, show the registration date
-                $regdate = strftime ($_CONF['shortdate'], strtotime($A['regdate']));
-                $retval = "({$LANG28[36]}, {$LANG28[53]} $regdate)";
-            } else {
-                $retval = strftime ($_CONF['shortdate'], $fieldvalue);
-            }
-            break;
-        case 'lastlogin_short':
-            if ($fieldvalue < 1) {
-                // if the user never logged in, show the registration date
-                $regdate = strftime ($_CONF['shortdate'], strtotime($A['regdate']));
-                $retval = "({$LANG28[36]})";
-            } else {
-                $retval = strftime ($_CONF['shortdate'], $fieldvalue);
-            }
-            break;
-        case 'online_days':
-            if ($fieldvalue < 0){
-                // users that never logged in, would have a negative online days
-                $retval = "N/A";
-            } else {
-                $retval = $fieldvalue;
-            }
-            break;
-        case 'phantom_date':
-        case 'offline_months':
-            $retval = COM_numberFormat(round($fieldvalue / 2592000));
-            break;
-        case 'online_hours':
-            $retval = COM_numberFormat(round($fieldvalue / 3600, 3));
-            break;
-        case 'regdate':
-            $retval = strftime ($_CONF['shortdate'], strtotime($fieldvalue));
-            break;
-        case $_TABLES['users'] . '.uid':
-            $retval = $A['uid'];
-            break;
-        default:
-            $retval = $fieldvalue;
-            break;
-    }
-
-    if (isset($A['status']) && ($A['status'] == USER_ACCOUNT_DISABLED)) {
-        if (($fieldname != 'edit') && ($fieldname != 'username')) {
-            $retval = sprintf ('<span class="strike" title="%s">%s</span>',
-                               $LANG28[42], $retval);
-        }
-    }
-
-    return $retval;
-}
 
 /**
  * used for the list of stories in admin/story.php
@@ -1011,95 +823,6 @@ function ADMIN_getListField_stories($fieldname, $fieldvalue, $A, $icon_arr)
 }
 
 /**
- * used for the list of feeds in admin/syndication.php
- *
- */
-function ADMIN_getListField_syndication($fieldname, $fieldvalue, $A, $icon_arr, $token)
-{
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG33, $_IMAGE_TYPE;
-
-    $retval = '';
-    $enabled = ($A['is_enabled'] == 1) ? true : false;
-
-    switch($fieldname) {
-
-        case 'edit':
-            $attr['title'] = $LANG_ADMIN['edit'];
-            $retval = COM_createLink($icon_arr['edit'],
-                $_CONF['site_admin_url'] . '/syndication.php?edit=1&amp;fid=' . $A['fid'], $attr );
-            break;
-
-        case 'delete':
-            $attr['title'] = $LANG_ADMIN['delete'];
-            $attr['onclick'] = 'return confirm(\'' . $LANG33[56] . '\');"';
-            $retval = COM_createLink($icon_arr['delete'],
-                $_CONF['site_admin_url'] . '/syndication.php?delete=1&amp;fid=' . $A['fid']
-                . '&amp;' . CSRF_TOKEN . '=' . $token, $attr );
-            break;
-
-        case 'type':
-            if ($A['type'] == 'article') {
-                $type = $LANG33[55];
-            } else {
-                $type = ucwords($A['type']);
-            }
-            $retval = ($enabled) ? $type : '<span class="disabledfield">' . $type . '</span>';
-            break;
-
-        case 'format':
-            $format = str_replace ('-' , ' ', ucwords ($A['format']));
-            $retval = ($enabled) ? $format : '<span class="disabledfield">' . $format . '</span>';
-            break;
-
-        case 'updated':
-            $datetime = strftime ($_CONF['daytime'], $A['date']);
-            $retval = ($enabled) ? $datetime : '<span class="disabledfield">' . $datetime . '</span>';
-            break;
-
-        case 'is_enabled':
-            if ($enabled) {
-                $switch = ' checked="checked"';
-                $title = 'title="' . $LANG_ADMIN['disable'] . '" ';
-            } else {
-                $title = 'title="' . $LANG_ADMIN['enable'] . '" ';
-                $switch = '';
-            }
-            $switch = ($enabled) ? ' checked="checked"' : '';
-            $retval = '<input type="checkbox" name="enabledfeeds[' . $A['fid'] . ']" ' . $title
-                . 'onclick="submit()" value="' . $A['fid'] . '"' . $switch . XHTML . '>';
-            $retval .= '<input type="hidden" name="feedarray[' . $A['fid'] . ']" value="1" ' . XHTML . '>';
-            break;
-
-        case 'header_tid':
-            if ($A['header_tid'] == 'all') {
-                $tid = $LANG33[43];
-            } elseif ($A['header_tid'] == 'none') {
-                $tid = $LANG33[44];
-            } else {
-                $tid = DB_getItem ($_TABLES['topics'], 'topic',
-                                      "tid = '".addslashes($A['header_tid'])."'");
-            }
-            $retval = ($enabled) ? $tid : '<span class="disabledfield">' . $tid . '</span>';
-            break;
-
-        case 'filename':
-            if ($enabled) {
-                $url = SYND_getFeedUrl ();
-                $attr['title'] = $A['description'];
-                $retval = COM_createLink($A['filename'], $url . $A['filename'], $attr);
-            } else {
-                $retval = '<span class="disabledfield">' . $A['filename'] . '</span>';
-            }
-            break;
-
-        default:
-            $retval = ($enabled) ? $fieldvalue : '<span class="disabledfield">' . $fieldvalue . '</span>';
-            break;
-    }
-    return $retval;
-}
-
-/**
  * used for the list of plugins in admin/plugins.php
  *
  */
@@ -1156,83 +879,6 @@ function ADMIN_getListField_plugins($fieldname, $fieldvalue, $A, $icon_arr, $tok
 }
 
 /**
- * used for the lists of submissions and draft stories in admin/moderation.php
- *
- */
-function ADMIN_getListField_moderation($fieldname, $fieldvalue, $A, $icon_arr)
-{
-    global $_CONF, $_TABLES, $LANG_ADMIN;
-
-    $retval = '';
-
-    $type = '';
-    if (isset ($A['_moderation_type'])) {
-        $type = $A['_moderation_type'];
-    }
-    switch ($fieldname) {
-    case 'edit':
-        $retval = COM_createLink($icon_arr['edit'], $A['edit']);
-        break;
-
-    case 'delete':
-        $retval = "<input type=\"radio\" name=\"action[{$A['row']}]\" value=\"delete\"" . XHTML . ">";
-        break;
-
-    case 'approve':
-        $retval = "<input type=\"radio\" name=\"action[{$A['row']}]\" value=\"approve\"" . XHTML . ">"
-                 ."<input type=\"hidden\" name=\"id[{$A['row']}]\" value=\"{$A[0]}\"" . XHTML . ">";
-        break;
-
-    case 'day':
-        $retval = strftime($_CONF['daytime'], $A['day']);
-        break;
-
-    case 'tid':
-        $retval = DB_getItem($_TABLES['topics'], 'topic',
-                             "tid = '".addslashes($A['tid'])."'");
-        break;
-
-    case 'uid':
-        $name = '';
-        if ($A['uid'] == 1) {
-            $name = htmlspecialchars(COM_stripslashes(DB_getItem($_TABLES['commentsubmissions'], 'name', "cid = '".addslashes($A['id'])."'")));
-        }
-        if (empty($name)) {
-            $name = DB_getItem($_TABLES['users'], 'username',
-                               "uid = ".intval($A['uid']));
-        }
-        if ($A['uid'] == 1) {
-            $retval = $name;
-        } else {
-            $retval = COM_createLink($name, $_CONF['site_url']
-                            . '/users.php?mode=profile&amp;uid=' . $A['uid']);
-        }
-        break;
-
-    case 'publishfuture':
-        if (!SEC_inGroup('Comment Submitters', $A['uid']) && ($A['uid'] > 1)) {
-            $retval = "<input type=\"checkbox\" name=\"publishfuture[]\" value=\"{$A['uid']}\"" . XHTML . ">";
-        } else {
-            $retval = $LANG_ADMIN['na'];
-        }
-        break;
-
-    default:
-        if (($fieldname == 3) && ($type == 'story')) {
-            $retval = DB_getItem($_TABLES['topics'], 'topic',
-                                  "tid = '".addslashes($A[3])."'");
-        } elseif (($fieldname == 2) && ($type == 'comment')) {
-            $retval = COM_truncate(strip_tags($A['comment']), 40, '...');
-        } else {
-            $retval = COM_makeClickableLinks(stripslashes($fieldvalue));
-        }
-        break;
-    }
-
-    return $retval;
-}
-
-/**
  * used for the list of ping services in admin/trackback.php
  *
  */
@@ -1273,65 +919,6 @@ function ADMIN_getListField_trackback($fieldname, $fieldvalue, $A, $icon_arr, $t
         default:
             $retval = $fieldvalue;
             break;
-    }
-
-    return $retval;
-}
-
-/**
- * used in the user editor in admin/user.php
- *
- */
-function ADMIN_getListField_usergroups($fieldname, $fieldvalue, $A, $icon_arr, $al_selected = '')
-{
-    global $_TABLES, $thisUsersGroups;
-
-    $retval = false;
-
-    if(! is_array($thisUsersGroups)) {
-        $thisUsersGroups = SEC_getUserGroups();
-    }
-    if ( is_array($al_selected) ) {
-        $selected = $al_selected[1];
-        $uid      = (int) $al_selected[0];
-    }
-
-    if (in_array($A['grp_id'], $thisUsersGroups ) ||
-          SEC_groupIsRemoteUserAndHaveAccess($A['grp_id'], $thisUsersGroups)) {
-        switch($fieldname) {
-        case 'checkbox':
-            $checked = '';
-            if (is_array($selected) && in_array($A['grp_id'], $selected)) {
-                $checked = ' checked="checked"';
-                if ( $uid != '' && $uid > 0 ) {
-                    $tresult = DB_query("SELECT COUNT(*) AS count FROM {$_TABLES['group_assignments']} WHERE ug_uid=".$uid." AND ug_main_grp_id=".$A['grp_id']);
-                    list($gcount) = DB_fetchArray($tresult);
-                    if ( $gcount < 1 ) {
-                        $checked = ' checked="checked" disabled="disabled"';
-                    }
-                }
-            }
-            if (($A['grp_name'] == 'All Users') ||
-                ($A['grp_name'] == 'Logged-in Users') ||
-                ($A['grp_name'] == 'Remote Users')) {
-                $retval = '<input type="checkbox" disabled="disabled"'
-                        . $checked . XHTML . '>'
-                        . '<input type="hidden" name="groups[]" value="'
-                        . $A['grp_id'] . '"' . $checked . XHTML . '>';
-            } else {
-                $retval = '<input type="checkbox" name="groups[]" value="'
-                        . $A['grp_id'] . '"' . $checked . XHTML . '>';
-            }
-            break;
-
-        case 'grp_name':
-            $retval = ucwords($fieldvalue);
-            break;
-
-        default:
-            $retval = $fieldvalue;
-            break;
-        }
     }
 
     return $retval;

@@ -142,10 +142,10 @@ function listbackups()
                                 . '<input type="hidden" name="' . CSRF_TOKEN
                                 . '" value="' . $token . '"' . XHTML . '>' . LB;
         }
-        $listoptions = array('chkdelete' => true, 'chkminimum' => 0,
+        $options = array('chkselect' => true, 'chkminimum' => 0,
                              'chkfield' => 'filename');
         $retval .= ADMIN_simpleList('', $header_arr, $text_arr, $data_arr,
-                                    $listoptions, $form_arr);
+                                    $options, $form_arr);
         $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
     } else {
         $retval .= COM_startBlock($LANG08[06], '',

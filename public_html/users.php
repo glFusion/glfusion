@@ -157,7 +157,7 @@ function userprofile($user, $msg = 0, $plugin = '')
         if ($_USER['uid'] == $A['uid']) {
             $edit_url = "{$_CONF['site_url']}/usersettings.php";
         } else {
-            $edit_url = "{$_CONF['site_admin_url']}/user.php?mode=edit&amp;uid={$A['uid']}";
+            $edit_url = "{$_CONF['site_admin_url']}/user.php?edit=x&amp;uid={$A['uid']}";
         }
 
         $edit_link_url = COM_createLink($edit_icon, $edit_url);

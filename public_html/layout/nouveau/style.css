@@ -722,29 +722,13 @@ margin-top:5px;
 text-align:center;
 }
 
-.admin-list-field, .admin-list-field-centered {
+.admin-list-field {
 padding-left:5px;
 padding-right:5px;
 }
 
-.admin-list-field {
-text-align:left;
-}
-
-.admin-list-field-centered {
-text-align:center;
-}
-
-.admin-list-headerfield, .admin-list-headerfield-centered {
-padding:3px 5px;
-}
-
 .admin-list-headerfield {
-text-align:left;
-}
-
-.admin-list-headerfield-centered {
-text-align:center;
+padding:3px 5px;
 }
 
 .gl_user-menu-right {

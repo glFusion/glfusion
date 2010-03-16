@@ -38,7 +38,8 @@
 // +--------------------------------------------------------------------------+
 
 require_once 'lib-common.php';
-require_once $_CONF['path_system'] . 'lib-user.php';
+
+USES_lib_user();
 
 // Set this to true to have this script generate various debug messages in
 // error.log
@@ -325,33 +326,6 @@ function deleteUserAccount ($form_reqid)
     }
 
     return COM_refresh ($_CONF['site_url'] . '/index.php?msg=57');
-}
-
-/**
-* Build a list of all topics the current user has access to
-*
-* @return   string   List of topic IDs, separated by spaces
-*
-*/
-function buildTopicList ()
-{
-    global $_TABLES;
-
-    $topics = '';
-
-    $result = DB_query ("SELECT tid FROM {$_TABLES['topics']}");
-    $numrows = DB_numRows ($result);
-    for ($i = 1; $i <= $numrows; $i++) {
-        $A = DB_fetchArray ($result);
-        if (SEC_hasTopicAccess ($A['tid'])) {
-            if ($i > 1) {
-                $topics .= ' ';
-            }
-            $topics .= $A['tid'];
-        }
-    }
-
-    return $topics;
 }
 
 /**
@@ -672,7 +646,7 @@ function editpreferences()
         $user_etids = DB_getItem ($_TABLES['userindex'], 'etids',
                                   "uid = {$_USER['uid']}");
         if (empty ($user_etids)) { // an empty string now means "all topics"
-            $user_etids = buildTopicList ();
+            $user_etids = USER_buildTopicList ();
         } elseif ($user_etids == '-') { // this means "no topics"
             $user_etids = '';
         }
@@ -1190,7 +1164,7 @@ function userprofile ($user, $msg = 0)
              . '" title="' . $LANG_ADMIN['edit'] . '"' . XHTML . '>';
         $edit_link_url = '<li>' . COM_createLink(
             $edit_icon,
-            "{$_CONF['site_admin_url']}/user.php?mode=edit&amp;uid={$A['uid']}"
+            "{$_CONF['site_admin_url']}/user.php?edit=x&amp;uid={$A['uid']}"
         ) . '</li>';
         $user_templates->set_var ('edit_link', $edit_link_url);
     }
@@ -1410,7 +1384,7 @@ function savepreferences($A)
     $AIDS  = @array_values($A['selauthors']);
     $BOXES = @array_values($A['blocks']);
     $ETIDS = @array_values($A['dgtopics']);
-    $allowed_etids = buildTopicList ();
+    $allowed_etids = USER_buildTopicList ();
     $AETIDS = explode (' ', $allowed_etids);
 
     $tids = '';

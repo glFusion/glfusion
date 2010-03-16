@@ -2,6 +2,36 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Moderation (Submissions): User interface improvements (Mark H.)
+    - Implementation of new 'check all' action row
+- Mail Utility: User interface improvements (Mark H.)
+    - Template tweaked to make better use of vert/horiz space
+    - New feature: Can be invoked from any (authenticated) site source
+    - New feature: Can be invoked from User or Group admin
+    - New feature: User privacy option override conditionally displayed
+- Block Admin: User interface improvements (Mark H.)
+    - Eliminate search/limit/paging options (they didn't work right anyway)
+    - New feature: Delete (w/popup confirmation) direction from list
+    - Disabled blocks displayed as 'greyed-out'
+- Content Syndication: User interface improvement and code scrub (Mark H.)
+    - New feature: Delete (w/popup confirmation) directly from list
+    - Disabled items displayed as 'greyed-out'
+- Group Admin: User interface improvement and code scrub (Mark H.)
+    - Closer integration with User Admin
+    - New feature: Send eMail to Group via Mail Utility or local client
+- User Admin: User interface improvement and code scrub (Mark H.)
+    - Closer integration with Group Admin
+    - New feature: Group filter/select dropdown (used by Group user list)
+    - New feature: Send eMail to User via Mail Utility or local client
+    - Batch Admin: User interface improvement, new eMail links, new action row
+    - Pref Editor: Reformatted column
+- All Admin Utilities: User interface improvements & code scrub (Mark H.)
+    - Improved/added language strings
+    - Reformatted columns, new icons
+    - Allow alignment of columns (left/center/right)
+    - Extend/reformat 'check all' action col/row (eg. see User Batch Admin)
+    - New 'Clear Search' button when search is used
+    - Resubmit when select/checkbox/button is clicked
 - Added missing article_comment_close_enabled configuration setting (Mark)
 - Forum: Properly clean up attached file to posts that are canceled (Mark)
 - FileMgmt: Fixed SQL error on file submissions when filemgmt Admin group

@@ -62,11 +62,11 @@ function editPreferences()
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/user.php',
               'text' => $LANG28[11]),
-        array('url' => $_CONF['site_admin_url'] . '/user.php?mode=edit',
+        array('url' => $_CONF['site_admin_url'] . '/user.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
-        array('url' => $_CONF['site_admin_url'] . '/user.php?mode=importform',
+        array('url' => $_CONF['site_admin_url'] . '/user.php?import=x',
               'text' => $LANG28[23]),
-        array('url' => $_CONF['site_admin_url'] . '/user.php?mode=batchdelete',
+        array('url' => $_CONF['site_admin_url'] . '/user.php?batchadmin=x',
               'text' => $LANG28[54]),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])

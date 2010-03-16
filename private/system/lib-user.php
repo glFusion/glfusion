@@ -807,4 +807,32 @@ function USER_createPassword ($length)
     return($password);
 }
 
+/**
+* Build a list of all topics the current user has access to
+*
+* @return   string   List of topic IDs, separated by spaces
+*
+*/
+function USER_buildTopicList ()
+{
+    global $_TABLES;
+
+    $topics = '';
+
+    $result = DB_query ("SELECT tid FROM {$_TABLES['topics']}");
+    $numrows = DB_numRows ($result);
+    for ($i = 1; $i <= $numrows; $i++) {
+        $A = DB_fetchArray ($result);
+        if (SEC_hasTopicAccess ($A['tid'])) {
+            if ($i > 1) {
+                $topics .= ' ';
+            }
+            $topics .= $A['tid'];
+        }
+    }
+
+    return $topics;
+}
+
+
 ?>

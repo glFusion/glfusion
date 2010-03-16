@@ -1144,7 +1144,7 @@ function PLG_showModerationList($token)
     $retval = '';
 
     foreach ($_PLUGINS as $pi_name) {
-        $retval .= itemlist($pi_name, $token);
+        $retval .= MODERATE_itemList($pi_name, $token);
     }
 
     return $retval;

@@ -17,8 +17,8 @@
     {privacy_panel}
     {plugin_panel}
     <p class="aligncenter" id="save_button">
-      <input type="submit" value="{lang_save}" name="mode"{xhtml}>
-      <input type="submit" value="{lang_cancel}" name="mode"{xhtml}>
+      <input type="submit" value="{lang_save}" name="save"{xhtml}>
+      <input type="submit" value="{lang_cancel}" name="cancel"{xhtml}>
       {delete_option}
       <input type="hidden" name="newuser" value="{newuser}"{xhtml}>
       <input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}>

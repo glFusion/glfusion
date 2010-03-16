@@ -1,0 +1,18 @@
+{# begin {templatelocation} #}
+<form style="display:inline" action="{site_admin_url}/user.php?batchadmin=x" method="post">
+    <div>
+        <div style="margin-top:5px;">
+            <input type="hidden" name="batchadmin" value="x"{xhtml}>
+            <input type="hidden" name="usr_type" value="{usr_type}"{xhtml}>
+            <input type="hidden" name="usr_time[{usr_type}]" value="{usr_time}"{xhtml}>
+            {lang_instruction}
+        </div>
+        <div style="margin-top: 10px;">
+            {options_list}
+        </div>
+        <div style="text-align: right; margin-top: -25px;">
+            <input type="submit" name="button" value="{lang_updatelist}"{xhtml}>&nbsp;
+        </div>
+    </div>
+</form>
+{# end {templatelocation} #}
