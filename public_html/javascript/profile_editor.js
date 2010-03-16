@@ -65,15 +65,16 @@ function showhideProfileEditorDiv(selected, selindex) {
         }
     }
 
-    document.getElementById('pe_preview').style.display = 'none';
+    var preview = document.getElementById('pe_preview');
+    if (preview) document.getElementById('pe_preview').style.display = 'none';
 
     if (selected != 'pe_preview') {
         document.getElementById('save_button').style.display = '';
     } else if (selected == 'pe_preview') {
-        document.getElementById('pe_preview').style.display = '';
+        if (preview) document.getElementById('pe_preview').style.display = '';
         document.getElementById('save_button').style.display = 'none';
     } else {
-        document.getElementById('pe_preview').style.display = '';
+        if (preview) document.getElementById('pe_preview').style.display = '';
         document.getElementById('save_button').style.display = 'none';
     }
 
