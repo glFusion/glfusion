@@ -107,6 +107,17 @@ class ErrorHandler {
             "9999" => "OOPS! God Knows"
         );
 
+        // determine the destination of this request
+        $destination = COM_getCurrentURL();
+
+        // validate the destination is not blank and is part of our site...
+        if ( $destination == '' ) {
+            $destination = $_CONF['site_url'] . '/filemgmt/index.php';
+        }
+        if ( substr($destination, 0,strlen($_CONF['site_url'])) != $_CONF['site_url']) {
+            $destination = $_CONF['site_url'] . '/filemgmt/index.php';
+        }
+
         $errorno = array_keys($errmsg);
         if (!in_array($e_code, $errorno)) {
             $e_code = '9999';
@@ -118,7 +129,7 @@ class ErrorHandler {
         $display .= "<td class=\"pluginAlert\" width=\"50%\" style=\"padding:5px 0px 5px 10px;\">Error Code: $e_code</td></tr>";
         $display .= "<tr><td colspan=\"2\" class=\"pluginInfo\"><b>ERROR:</b> $errmsg[$e_code]</td></tr>";
         $display .= '<tr><td colspan="2" class="pluginInfo" style="text-align:center;padding:10px;">';
-        $display .= "[ <a href='javascript:history.go(-".$pages.")'>Go Back</a> ]</td></tr></table>";
+        $display .= '[ <a href="'.$destination.'">Go Back</a> ]</td></tr></table>';
         $display .= COM_siteFooter();
         echo $display;
         die("");

@@ -35,6 +35,7 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../../../lib-common.php';
+require_once '../../auth.inc.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/xoopstree.php';
