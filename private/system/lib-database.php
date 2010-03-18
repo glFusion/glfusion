@@ -576,4 +576,21 @@ function DB_checkTableExists($table)
     return $exists;
 }
 
+/**
+* escape a string
+*
+* Escapes special characters in the unescaped_string , taking into account
+* the current character set of the connection so that it is safe to place
+* it in a SQL query.
+*
+* @param    string      $str      String to escape
+* @return   void
+*
+*/
+function DB_escapeString($str)
+{
+    global $_DB;
+
+    return $_DB->dbEscapeString($str);
+}
 ?>

@@ -756,6 +756,22 @@ class database {
             $this->_errorlog("\n*** Leaving database->dbUnlockTable ***");
         }
     }
+
+    /**
+    * escape a string
+    *
+    * Escapes special characters in the unescaped_string , taking into account
+    * the current character set of the connection so that it is safe to place
+    * it in a SQL query.
+    *
+    * @param    string      $str      String to escape
+    * @return   void
+    *
+    */
+    function dbEscapeString($str)
+    {
+        return @mysql_real_escape_string($str);
+    }
 }
 
 ?>
