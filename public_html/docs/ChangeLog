@@ -2,6 +2,15 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Administrative function access now requires the user to re-authenticate (Mark)
+- New database function - DB_escapeString(), this should be used instead of
+  addslashes() to escape data prior to using in a SQL query (Mark)
+- Validate block name in blocks editor to ensure no space or other special
+  characters (Mark)
+- If errors during block edit, do not reset form, save data from submission
+  so users do not loose data if an error (Mark)
+- Do not use username as the name of the user's profile photo, use uid
+  instead, this solves issues with various file systems (Mark)
 - All Admin Utilities: User interface improvements & code scrub (Mark H.)
     - Improved/added language strings
     - Reformatted columns, new icons
