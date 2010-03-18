@@ -699,7 +699,7 @@ function USER_uniqueUsername($username)
 
 
 /**
-* Check to see if the username has been taken, or if it is disallowed.
+* Check to see if the username contains invalid characters.
 * Also checks if it includes the " character, which we don't allow in usernames.
 * Used for registering, changing names, and posting anonymously with a username
 *
@@ -712,7 +712,6 @@ function USER_validateUsername($username)
 	global $_CONF, $_TABLES, $_USER;
 
     $regex = '[\x00-\x1F\x7F<>"%&*\/\\\\]';
-
 	// ... fast checks first.
 	if (strpos($username, '&quot;') !== false || strpos($username, '"') !== false ) {
 		return false;
@@ -726,7 +725,7 @@ function USER_validateUsername($username)
 
 
 /**
-* Check to see if the username has been taken, or if it is disallowed.
+* Sanitize a name by removing the disallowed characters.
 * Also checks if it includes the " character, which we don't allow in usernames.
 * Used for registering, changing names, and posting anonymously with a username
 *
@@ -833,6 +832,4 @@ function USER_buildTopicList ()
 
     return $topics;
 }
-
-
 ?>
