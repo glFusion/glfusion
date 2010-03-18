@@ -1275,6 +1275,8 @@ function plugin_autotags_polls($op, $content = '', $autotag = '')
 {
     global $_CONF, $_TABLES;
 
+    $skip = 0;
+
     if ($op == 'tagname' ) {
         return array('poll_vote', 'poll_result', 'poll');
     } elseif ($op == 'parse') {
