@@ -741,8 +741,10 @@ $LANG20 = array(
     3 => 'Invalid password for user',
     4 => 'Username:',
     5 => 'Password:',
-    6 => 'All access to administrative portions of this web site are logged and reviewed.<br' . XHTML . '>This page is for the use of authorized personnel only.',
-    7 => 'login'
+    6 => 'All access to administrative portions of this web site are logged and reviewed. This page is for the use of authorized personnel only.',
+    7 => 'login',
+    8 => 'Session Timeout - Please re-authenticate',
+    9 => 'Access to Administration Features requires re-authentication',
 );
 
 ###############################################################################
@@ -778,7 +780,7 @@ $LANG21 = array(
     27 => 'PHP Block',
     28 => 'PHP Block Options',
     29 => 'Block Function',
-    30 => 'If you would like to have one of your blocks use PHP code, enter the name of the function above.  Your function name must start with the prefix "phpblock_" (e.g. phpblock_getweather).  If it does not have this prefix, your function will NOT be called.  We do this to keep people who may have hacked your glFusion installation from putting arbitrary function calls that may be harmful to your system.  If you include parenthesis "()" after your function name, the function will be called with two parameters. Parameter 1 will be an Array containing the row of data for this block in the gl_blocks table. Parameter 2 will be a string containing whatever text you place between the two parentheses. Finally, it is recommended that you put all your PHP Block code in /path/to/glfusion/system/lib-custom.php.  That will allow the code to stay with you even when you upgrade to a newer version of glFusion.',
+    30 => 'If you would like to have one of your blocks use PHP code, enter the name of the function above.  Your function name must start with the prefix "phpblock_" (e.g. phpblock_getweather).  If it does not have this prefix, your function will NOT be called.  We do this as an additional security precaution.  If you include parenthesis "()" after your function name, the function will be called with two parameters. Parameter 1 will be an Array containing the row of data for this block in the gl_blocks table. Parameter 2 will be a string containing whatever text you place between the two parentheses. Finally, it is recommended that you put all your PHP Block code in /path/to/glfusion/system/lib-custom.php.  That will allow the code to stay with you even when you upgrade to a newer version of glFusion.',
     31 => 'Error in PHP Block.  Function, %s, does not exist.',
     32 => 'Error Missing Field(s)',
     33 => 'You must enter the URL to the syndication feed file for portal blocks',
@@ -817,7 +819,8 @@ $LANG21 = array(
     66 => 'Autotags',
     67 => 'Check to allow autotags',
     68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.',
-    69 => 'Are you sure you want to delete this block?'
+    69 => 'Are you sure you want to delete this block?',
+    70 => 'Block name cannot be blank and cannot contain spaces or the following characters: < > \' " % & * / \\',
 );
 
 ###############################################################################
