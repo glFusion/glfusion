@@ -1364,14 +1364,14 @@ function USER_save($uid)
         if (!empty($email) && !COM_isEmail($email)) {
            return USER_edit($uid, 52);
         }
-        $uname = addslashes ($username);
+        $uname = DB_escapeString ($username);
         if (empty ($uid)) {
             $ucount = DB_getItem ($_TABLES['users'], 'COUNT(*)',
                                   "username = '$uname'");
         } else {
             $uservice = DB_getItem ($_TABLES['users'], 'remoteservice', "uid = $uid");
             if ($uservice != '') {
-                $uservice = addslashes($uservice);
+                $uservice = DB_escapeString($uservice);
                 $ucount = DB_getItem ($_TABLES['users'], 'COUNT(*)',
                             "username = '$uname' AND uid <> $uid AND remoteservice = '$uservice'");
             } else {
@@ -1384,7 +1384,7 @@ function USER_save($uid)
             return USER_edit($uid, 51);
         }
 
-        $emailaddr = addslashes($email);
+        $emailaddr = DB_escapeString($email);
         $exclude_remote = " AND (remoteservice IS NULL OR remoteservice = '')";
         if (empty($uid)) {
             $ucount = DB_getItem($_TABLES['users'], 'COUNT(*)',
@@ -1487,16 +1487,16 @@ function USER_save($uid)
         // update users table
 
         $sql = "UPDATE {$_TABLES['users']} SET ".
-            "username = '".addslashes($username)."',".
-            "fullname = '".addslashes($fullname)."',".
-            "passwd   = '".addslashes($passwd2)."',".
-            "email    = '".addslashes($email)."',".
-            "homepage = '".addslashes($homepage)."',".
-            "sig      = '".addslashes($sig)."',".
-            "photo    = '".addslashes($curphoto)."',".
+            "username = '".DB_escapeString($username)."',".
+            "fullname = '".DB_escapeString($fullname)."',".
+            "passwd   = '".DB_escapeString($passwd2)."',".
+            "email    = '".DB_escapeString($email)."',".
+            "homepage = '".DB_escapeString($homepage)."',".
+            "sig      = '".DB_escapeString($sig)."',".
+            "photo    = '".DB_escapeString($curphoto)."',".
             "cookietimeout = $cooktime,".
-            "theme    = '".addslashes($theme)."',".
-            "language = '".addslashes($language)."',".
+            "theme    = '".DB_escapeString($theme)."',".
+            "language = '".DB_escapeString($language)."',".
             "status   = $userstatus WHERE uid = $uid;";
 
         DB_query($sql);
@@ -1506,21 +1506,21 @@ function USER_save($uid)
         $sql = "UPDATE {$_TABLES['userprefs']} SET ".
             "noicons = $noicons,".
             "dfid    = $dfid,".
-            "tzid    = '".addslashes($tzid)."',".
+            "tzid    = '".DB_escapeString($tzid)."',".
             "emailstories = 0,".
             "emailfromadmin = $emailfromadmin,".
             "emailfromuser  = $emailfromuser,".
             "showonline = $showonline,".
-            "search_result_format = '".addslashes($search_fmt)."' WHERE uid=$uid;";
+            "search_result_format = '".DB_escapeString($search_fmt)."' WHERE uid=$uid;";
 
         DB_query($sql);
 
         // userinfo table
 
         $sql = "UPDATE {$_TABLES['userinfo']} SET ".
-            "about      = '".addslashes($about)."',".
-            "location   = '".addslashes($location)."',".
-            "pgpkey     = '".addslashes($pgpkey)."' WHERE uid=$uid;";
+            "about      = '".DB_escapeString($about)."',".
+            "location   = '".DB_escapeString($location)."',".
+            "pgpkey     = '".DB_escapeString($pgpkey)."' WHERE uid=$uid;";
 
         DB_query($sql);
 
@@ -1534,14 +1534,14 @@ function USER_save($uid)
 
         $tids = '';
         if (sizeof ($TIDS) > 0) {
-            $tids = addslashes (implode (' ', array_intersect ($AETIDS, $TIDS)));
+            $tids = DB_escapeString (implode (' ', array_intersect ($AETIDS, $TIDS)));
         }
         $aids = '';
         if (sizeof ($AIDS) > 0) {
             foreach ($AIDS as $key => $val) {
                 $AIDS[$key] = intval($val);
             }
-            $aids = addslashes (implode (' ', $AIDS));
+            $aids = DB_escapeString (implode (' ', $AIDS));
         }
         $selectedblocks = '';
         $selectedBoxes = array();
@@ -1549,7 +1549,7 @@ function USER_save($uid)
             foreach ($BOXES AS $key => $val) {
                 $BOXES[$key] = intval($val);
             }
-            $boxes = addslashes(implode(',', $BOXES));
+            $boxes = DB_escapeString(implode(',', $BOXES));
 
             $blockresult = DB_query("SELECT bid,name FROM {$_TABLES['blocks']} WHERE bid NOT IN ($boxes)");
 
@@ -1567,7 +1567,7 @@ function USER_save($uid)
 
         $etids = '-';
         if (sizeof ($ETIDS) > 0) {
-            $etids = addslashes (implode (' ', array_intersect ($AETIDS, $ETIDS)));
+            $etids = DB_escapeString (implode (' ', array_intersect ($AETIDS, $ETIDS)));
         } else {
             $etids = '-';
         }
@@ -2086,9 +2086,9 @@ function USER_importExec()
         if (COM_isEmail ($email)) {
             // email is valid form
             $ucount = DB_count ($_TABLES['users'], 'username',
-                                addslashes ($userName));
+                                DB_escapeString ($userName));
             $ecount = DB_count ($_TABLES['users'], 'email',
-                                addslashes ($emailAddr));
+                                DB_escapeString ($emailAddr));
 
             if (($ucount == 0) && ($ecount == 0)) {
                 // user doesn't already exist - pass in optional true for $batchimport parm
