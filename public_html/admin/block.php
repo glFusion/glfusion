@@ -8,6 +8,10 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2010 by the following authors:                             |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Mark Howard            mark AT usable-web DOT com                        |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -180,10 +184,11 @@ function BLOCK_editDefault($A, $access)
 * send it off to BLOCK_editDefault().
 *
 * @param    string  $bid    ID of block to edit
+* @param    array   $B      An array of block fields (optional)
 * @return   string          HTML for block editor
 *
 */
-function BLOCK_edit($bid = '')
+function BLOCK_edit($bid = '', $B = array())
 {
     global $_CONF, $_GROUPS, $_TABLES, $_USER, $LANG01, $LANG21, $LANG24,$LANG_ACCESS,
            $LANG_ADMIN, $LANG_postmodes,$MESSAGE;
@@ -191,11 +196,7 @@ function BLOCK_edit($bid = '')
     $retval = '';
 
     if (!empty($bid)) {
-        $sql['mysql'] = "SELECT * FROM {$_TABLES['blocks']} WHERE bid ='$bid'";
-
-        $sql['mssql'] = "SELECT bid, is_enabled, name, type, title, tid, blockorder, cast(content as text) as content, rdfurl, ";
-        $sql['mssql'] .= "rdfupdated, rdflimit, onleft, phpblockfn, help, owner_id,group_id, ";
-        $sql['mssql'] .= "perm_owner, perm_group, perm_members, perm_anon, allow_autotags FROM {$_TABLES['blocks']} WHERE bid ='$bid'";
+        $sql = "SELECT * FROM {$_TABLES['blocks']} WHERE bid ='$bid'";
 
         $result = DB_query($sql);
         $A = DB_fetchArray($result);
@@ -214,28 +215,39 @@ function BLOCK_edit($bid = '')
             return $retval;
         }
     } else {
-        $A['bid'] = 0;
-        $A['is_enabled'] = 1;
-        $A['name'] = '';
-        $A['type'] = 'normal';
-        $A['title'] = '';
-        $A['tid'] = 'All';
-        $A['blockorder'] = 0;
-        $A['content'] = '';
-        $A['allow_autotags'] = 0;
-        $A['rdfurl'] = '';
-        $A['rdfupdated'] = '';
-        $A['rdflimit'] = 0;
-        $A['onleft'] = 0;
-        $A['phpblockfn'] = '';
-        $A['help'] = '';
-        $A['owner_id'] = $_USER['uid'];
-        if (isset ($_GROUPS['Block Admin'])) {
-            $A['group_id'] = $_GROUPS['Block Admin'];
+        $A['bid'] = isset($B['bid']) ? $B['bid'] : 0;
+        $A['is_enabled'] = isset($B['is_enabled']) ? $B['is_enabled'] : 1;
+        $A['name'] = isset($B['name']) ? $B['name'] : '';
+        $A['type'] = isset($B['type']) ? $B['type'] : 'normal';
+        $A['title'] = isset($B['title']) ? $B['title'] : '';
+        $A['tid'] = isset($B['tid']) ? $B['tid'] : 'All';
+        $A['blockorder'] = isset($B['blockorder']) ? $B['blockorder'] : 0;
+        $A['content'] = isset($B['content']) ? $B['content'] : '';
+        $A['allow_autotags'] = isset($B['allow_autotags']) && $B['allow_autotags'] == 'on' ? 1 : 0;
+        $A['rdfurl'] = isset($B['rdfurl']) ? $B['rdfurl'] : '';
+        $A['rdfupdated'] = isset($B['rdfupdated']) ? $B['rdfupdated'] : '';
+        $A['rdflimit'] = isset($B['rdflimit']) ? $B['rdflimit'] : 0;
+        $A['onleft'] = isset($B['onleft']) ? $B['onleft'] : 0;
+        $A['phpblockfn'] = isset($B['phpblockfn']) ? $B['phpblockfn'] : '';
+        $A['help'] = isset($B['help']) ? $B['help'] : '';
+        $A['owner_id'] = isset($B['owner_id']) ? $B['owner_id'] : $_USER['uid'];
+        if ( isset($B['group_id']) ) {
+            $A['group_id'] = $B['group_id'];
         } else {
-            $A['group_id'] = SEC_getFeatureGroup ('block.edit');
+            if (isset ($_GROUPS['Block Admin'])) {
+                $A['group_id'] = $_GROUPS['Block Admin'];
+            } else {
+                $A['group_id'] = SEC_getFeatureGroup ('block.edit');
+            }
         }
-        SEC_setDefaultPermissions ($A, $_CONF['default_permissions_block']);
+        if ( isset($B['perm_owner']) ) {
+            $A['perm_owner'] = SEC_getPermissionValue($B['perm_owner']);
+            $A['perm_group'] = SEC_getPermissionValue($B['perm_group']);
+            $A['perm_member'] = SEC_getPermissionValue($B['perm_member']);
+            $A['perm_anon'] = SEC_getPermissionValue($B['perm_anon']);
+        } else {
+            SEC_setDefaultPermissions ($A, $_CONF['default_permissions_block']);
+        }
         $access = 3;
     }
 
@@ -592,6 +604,7 @@ function BLOCK_list()
 * Saves a block
 *
 * @param    string  $bid            Block ID
+* @param    string  $name           Block name
 * @param    string  $title          Block title
 * @param    string  $type           Type of block
 * @param    int     $blockorder     Order block appears relative to the others
@@ -609,6 +622,7 @@ function BLOCK_list()
 * @param    array   $perm_members   Permissions the logged in members have
 * @param    array   $perm_anon      Permissinos anonymous users have
 * @param    int     $is_enabled     Flag, indicates if block is enabled or not
+* @param    int     $allow_autotags Flag, indicates if autotags are enabed or not
 * @return   string                  HTML redirect or error message
 *
 */
@@ -618,20 +632,46 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
 
     $retval = '';
 
+    $B['bid']           = (int) $bid;
+    $B['name']          = COM_stripslashes($name);
+    $B['title']         = COM_stripslashes($title);
+    $B['type']          = $type;
+    $B['blockorder']    = $blockorder;
+    $B['content']       = COM_stripslashes($content);
+    $B['tid']           = $tid;
+    $B['rdfurl']        = $rdfurl;
+    $B['rdfupdated']    = $rdfupdated;
+    $B['rdflimit']      = $rdflimit;
+    $B['phpblockfn']    = $phpblockfn;
+    $B['onleft']        = $onleft;
+    $B['owner_id']      = $owner_id;
+    $B['group_id']      = $group_id;
+    $B['perm_owner']    = $perm_owner;
+    $B['perm_group']    = $perm_group;
+    $B['perm_members']  = $perm_members;
+    $B['perm_anon']     = $perm_anon;
+    $B['is_enabled']    = $is_enabled;
+    $B['allow_autotags'] = $allow_autotags;
+
     $bid   = intval($bid);
-    $title = addslashes (COM_stripslashes (strip_tags ($title)));
-    $phpblockfn = addslashes (COM_stripslashes (trim ($phpblockfn)));
-    if (empty($title)) {
+    $title = DB_escapeString (COM_stripslashes (strip_tags ($title)));
+    $phpblockfn = DB_escapeString (COM_stripslashes (trim ($phpblockfn)));
+    $name = COM_stripslashes($name);
+
+    if (empty($title) || !BLOCK_validateName($name)) {
+        if ( empty($title) ) {
+            $msg = $LANG21[64];
+        } else {
+            $msg = $LANG21[70];
+        }
         SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
                         time() + 1200, $_CONF['cookie_path'],
                         $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
         $retval .= COM_siteHeader ('menu', $LANG21[63])
-                . COM_startBlock ($LANG21[63], '',
-                          COM_getBlockTemplate ('_msg_block', 'header'))
-                . $LANG21[64]
-                . COM_endBlock (COM_getBlockTemplate ('_msg_block',
-                                                      'footer'))
-                . BLOCK_edit($bid)
+                . COM_startBlock ($LANG21[63], '', COM_getBlockTemplate ('_msg_block', 'header'))
+                . $msg
+                . COM_endBlock (COM_getBlockTemplate ('_msg_block','footer'))
+                . BLOCK_edit($bid,$B)
                 . COM_siteFooter ();
         return $retval;
     }
@@ -709,7 +749,7 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
                         . $LANG21[38]
                         . COM_endBlock (COM_getBlockTemplate ('_msg_block',
                                                               'footer'))
-                        . BLOCK_edit($bid)
+                        . BLOCK_edit($bid,$B)
                         . COM_siteFooter ();
                 return $retval;
             }
@@ -723,19 +763,19 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
             $rdfupdated = '';
             $rdflimit = 0;
             $phpblockfn = '';
-            $content = addslashes ($content);
+            $content = DB_escapeString ($content);
         }
         if ($rdflimit < 0) {
             $rdflimit = 0;
         }
         if (!empty ($rdfurl)) {
-            $rdfurl = addslashes ($rdfurl);
+            $rdfurl = DB_escapeString ($rdfurl);
         }
         if (empty ($rdfupdated)) {
             $rdfupdated = '0000-00-00 00:00:00';
         }
 
-        $name = addslashes($name);
+        $name = DB_escapeString($name);
 
         if ($bid > 0) {
             DB_save($_TABLES['blocks'],'bid,name,title,help,type,blockorder,content,tid,rdfurl,rdfupdated,rdflimit,phpblockfn,onleft,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon,is_enabled,allow_autotags,rdf_last_modified,rdf_etag',"$bid,'$name','$title','$help','$type','$blockorder','$content','$tid','$rdfurl','$rdfupdated','$rdflimit','$phpblockfn',$onleft,$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon,$is_enabled,$allow_autotags,NULL,NULL");
@@ -776,7 +816,7 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
                         time() + 1200, $_CONF['cookie_path'],
                         $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
         $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
-                . BLOCK_edit($bid)
+                . BLOCK_edit($bid,$B)
                 . COM_siteFooter ();
     }
 
@@ -906,6 +946,29 @@ function BLOCK_delete($bid)
     return COM_refresh ($_CONF['site_admin_url'] . '/block.php?msg=12');
 }
 
+/**
+* Check to see if the block name contains invalid characters.
+*
+* @param string $name   block name
+*
+* @return	boolean     true if OK, false if not
+*/
+function BLOCK_validateName($name)
+{
+    $regex = '[\x00-\x1F\x7F<> \'"%&*\/\\\\]';
+	// ... fast checks first.
+	if ( strlen($name) < 1 ) {
+	    return false;
+	}
+	if (strpos($name, '&quot;') !== false || strpos($name, '"') !== false ) {
+		return false;
+	}
+	if (preg_match('/' . $regex . '/u', $name)) {
+    	return false;
+	}
+	return true;
+}
+
 // MAIN ========================================================================
 
 $action = '';
@@ -983,7 +1046,7 @@ switch ($action) {
             $rdflimit = (isset ($_POST['rdflimit'])) ? COM_applyFilter ($_POST['rdflimit'], true) : 0;
             $phpblockfn = (isset ($_POST['phpblockfn'])) ? $_POST['phpblockfn'] : '';
             $is_enabled = (isset ($_POST['is_enabled'])) ? $_POST['is_enabled'] : '';
-            $allow_autotags = (isset ($_POST['allow_autotags'])) ? $_POST['allow_autotags'] : '';
+            $allow_autotags = (isset ($_POST['allow_autotags']) ) ? 'on' : 0;
 
             $display .= BLOCK_save($bid, $_POST['name'], $_POST['title'],
                             $help, $_POST['type'], $_POST['blockorder'], $content,
