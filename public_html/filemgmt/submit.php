@@ -207,7 +207,11 @@ function FM_getGroupList ($basegroup)
     return $checked;
 }
 
+$display = '';
+
 if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
+
+    $logourl = '';
 
     // Get the number of files in the database and post it in the title.
     $_GROUPS = SEC_getUserGroups( $uid );
@@ -228,7 +232,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         exit;
     }
 
-    if($_POST['submit']){
+    if ( isset($_POST['submit']) ){
 
         if(isset($_USER['uid']) AND $_USER['uid'] > 1 ) {
             $submitter = $_USER['uid'];
@@ -236,7 +240,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
             $submitter = 1;
         }
         // Check if Title entered
-        if ($_POST["title"] == '') {
+        if (!isset($_POST['title']) || $_POST["title"] == '') {
             $eh->show("1001");
         }
         // Check if filename entered
