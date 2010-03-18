@@ -2753,7 +2753,7 @@ function PLG_afterSaveSwitch($target, $item_url, $plugin, $message = '')
         break;
 
     case 'admin':
-        $url = $_CONF['site_admin_url'] . '/moderation.php';
+        $url = $_CONF['site_admin_url'] . '/index.php';
         if (!empty($msg)) {
             $url .= '?' . $msg;
             if (($plugin != 'story') && ($plugin != 'user')) {
