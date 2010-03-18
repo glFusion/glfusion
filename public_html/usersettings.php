@@ -214,7 +214,7 @@ function edituser()
     $A = DB_fetchArray($result);
 
     $reqid = substr (md5 (uniqid (rand (), 1)), 1, 16);
-    DB_change ($_TABLES['users'], 'pwrequestid', addslashes($reqid), 'uid', $_USER['uid']);
+    DB_change ($_TABLES['users'], 'pwrequestid', DB_escapeString($reqid), 'uid', $_USER['uid']);
 
     $preferences->set_var ('about_value', htmlspecialchars ($A['about']));
     $preferences->set_var ('pgpkey_value', htmlspecialchars ($A['pgpkey']));
@@ -267,7 +267,7 @@ function confirmAccountDelete ($form_reqid)
 {
     global $_CONF, $_TABLES, $_USER, $LANG04;
 
-    if (DB_count ($_TABLES['users'], array ('pwrequestid', 'uid'), array (addslashes($form_reqid), $_USER['uid'])) != 1) {
+    if (DB_count ($_TABLES['users'], array ('pwrequestid', 'uid'), array (DB_escapeString($form_reqid), $_USER['uid'])) != 1) {
         // not found - abort
         return COM_refresh ($_CONF['site_url'] . '/index.php');
     }
@@ -316,7 +316,7 @@ function deleteUserAccount ($form_reqid)
     global $_CONF, $_TABLES, $_USER;
 
     if (DB_count ($_TABLES['users'], array ('pwrequestid', 'uid'),
-                  array (addslashes($form_reqid), $_USER['uid'])) != 1) {
+                  array (DB_escapeString($form_reqid), $_USER['uid'])) != 1) {
         // not found - abort
         return COM_refresh ($_CONF['site_url'] . '/index.php');
     }
@@ -620,8 +620,7 @@ function editpreferences()
                 if (in_array (sprintf ('%d', $B['uid']), $authors)) {
                    $selauthors .= ' selected';
                 }
-                $selauthors .= '>' . COM_getDisplayName ($B['uid'], $B['username'],
-                                                         $B['fullname'])
+                $selauthors .= '>' . COM_getDisplayName ($B['uid'], $B['username'],$B['fullname'])
                             . '</option>' . LB;
             }
 
@@ -731,14 +730,14 @@ function emailAddressExists ($email, $uid)
 {
     global $_TABLES;
 
-    $old_email = DB_getItem($_TABLES['users'], 'email', "uid = ".intval($uid));
+    $old_email = DB_getItem($_TABLES['users'], 'email', "uid = ".(int) $uid);
     if ($email == $old_email) {
         // email address didn't change so don't care
         return false;
     }
 
-    $email = addslashes($email);
-    $result = DB_query("SELECT uid FROM {$_TABLES['users']} WHERE email = '$email' AND uid <> ".intval($uid)." AND (remoteservice IS NULL OR remoteservice = '')");
+    $email = DB_escapeString($email);
+    $result = DB_query("SELECT uid FROM {$_TABLES['users']} WHERE email = '$email' AND uid <> ".(int) $uid." AND (remoteservice IS NULL OR remoteservice = '')");
     if (DB_numRows($result) > 0) {
         // email address is already in use for another non-remote account
         return true;
@@ -806,7 +805,6 @@ function handlePhotoUpload ($delete_photo = '')
     if (!empty ($newphoto['name'])) {
         $pos = strrpos ($newphoto['name'], '.') + 1;
         $fextension = substr ($newphoto['name'], $pos);
-//        $filename = $_USER['username'] . '.' . $fextension;
         $filename = $_USER['uid'] . '.' . $fextension;
 
         if (!empty ($curphoto) && ($filename != $curphoto)) {
@@ -873,11 +871,9 @@ function saveuser($A)
         COM_errorLog('**** Inside saveuser in usersettings.php ****', 1);
     }
 
-    $reqid = DB_getItem ($_TABLES['users'], 'pwrequestid',
-                         "uid = {$_USER['uid']}");
+    $reqid = DB_getItem ($_TABLES['users'], 'pwrequestid',"uid = " . (int) $_USER['uid']);
     if ($reqid != $A['uid']) {
-        DB_change ($_TABLES['users'], 'pwrequestid', "NULL",
-                   'uid', $_USER['uid']);
+        DB_change ($_TABLES['users'], 'pwrequestid', "NULL", 'uid', (int) $_USER['uid']);
         COM_accessLog ("An attempt was made to illegally change the account information of user {$_USER['uid']}.");
 
         return COM_refresh ($_CONF['site_url'] . '/index.php');
@@ -891,7 +887,7 @@ function saveuser($A)
     }
     // If empty or invalid - set to user default
     // So code after this does not fail the user password required test
-    if (empty($A['cooktime']) OR $A['cooktime'] < 0) {
+    if ($A['cooktime'] < 0) {
         $A['cooktime'] = $_USER['cookietimeout'];
     }
 
@@ -899,6 +895,7 @@ function saveuser($A)
     // we need the user's current password
     if (!empty ($A['passwd']) || ($A['email'] != $_USER['email']) ||
             ($A['cooktime'] != $_USER['cookietimeout'])) {
+        $A['old_passwd'] = COM_stripslashes($A['old_passwd']);
         $current_password = DB_getItem($_TABLES['users'],'passwd',"uid={$_USER['uid']}");
         if (empty($A['old_passwd']) || !SEC_check_hash($A['old_passwd'],$current_password) ) {
             return COM_refresh ($_CONF['site_url']
@@ -929,36 +926,25 @@ function saveuser($A)
 
     // no need to filter the password as it's encoded anyway
     if ($_CONF['allow_username_change'] == 1) {
-        $A['new_username'] = COM_applyFilter ($A['new_username']);
-        if (!empty ($A['new_username']) &&
+        $A['new_username'] = COM_stripslashes($A['new_username']);
+        if (!empty ($A['new_username']) && USER_validateUsername($A['new_username']) &&
                 ($A['new_username'] != $_USER['username'])) {
-            $A['new_username'] = addslashes ($A['new_username']);
-            if (DB_count ($_TABLES['users'], 'username', addslashes($A['new_username'])) == 0) {
+            $A['new_username'] = DB_escapeString ($A['new_username']);
+            if (DB_count ($_TABLES['users'], 'username', $A['new_username']) == 0) {
                 if ($_CONF['allow_user_photo'] == 1) {
-                    $photo = DB_getItem ($_TABLES['users'], 'photo',
-                                         "uid = {$_USER['uid']}");
-                    if (!empty ($photo)) {
-                        $newphoto = preg_replace ('/' . $_USER['username'] . '/',
-                                    $A['new_username'], $photo, 1);
+                    $photo = DB_getItem ($_TABLES['users'], 'photo',"uid = ".(int)$_USER['uid']);
+                    if (!empty ($photo) && strstr($photo,$_USER['username']) !== false ) {
+                        $newphoto = preg_replace ('/' . $_USER['username'] . '/',$_USER['uid'], $photo, 1);
                         $imgpath = $_CONF['path_images'] . 'userphotos/';
-                        if (rename ($imgpath . $photo,
-                                    $imgpath . $newphoto) === false) {
-                            $display = COM_siteHeader ('menu', $LANG04[21]);
-                            $display .= COM_errorLog ('Could not rename userphoto "' . $photo . '" to "' . $newphoto . '".');
-                            $display .= COM_siteFooter ();
 
-                            return $display;
-                        }
-                        DB_change ($_TABLES['users'], 'photo',
-                               addslashes ($newphoto), "uid", $_USER['uid']);
+                        @rename ($imgpath . $photo, $imgpath . $newphoto);
+                        DB_change ($_TABLES['users'], 'photo',DB_escapeString ($newphoto), "uid", (int) $_USER['uid']);
                     }
                 }
 
-                DB_change ($_TABLES['users'], 'username', addslashes($A['new_username']),
-                           "uid", $_USER['uid']);
+                DB_change ($_TABLES['users'], 'username', $A['new_username'],"uid", (int)$_USER['uid']);
             } else {
-                return COM_refresh ($_CONF['site_url']
-                        . '/usersettings.php?msg=51');
+                return COM_refresh ($_CONF['site_url'].'/usersettings.php?msg=51');
             }
         }
     }
@@ -996,25 +982,16 @@ function saveuser($A)
     } else {
 
         if (!empty($A['passwd'])) {
-            $current_password = DB_getItem($_TABLES['users'],'passwd',"uid={$_USER['uid']}");
+            $A['passwd'] = COM_stripslashes($A['passwd']);
+            $A['passwd_conf'] = COM_stripslashes($A['passwd_conf']);
+            $current_password = DB_getItem($_TABLES['users'],'passwd',"uid=".(int)$_USER['uid']);
             if (($A['passwd'] == $A['passwd_conf']) && SEC_check_hash($A['old_passwd'],$current_password) ){
                 $passwd = SEC_encryptPassword($A['passwd']);
-                DB_change($_TABLES['users'], 'passwd', addslashes($passwd),
-                          "uid", $_USER['uid']);
-                if ($A['cooktime'] > 0) {
-                    $cooktime = $A['cooktime'];
-                } else {
-                    $cooktime = -1000;
-                }
-                SEC_setCookie($_CONF['cookie_password'], $passwd, time() + $cooktime,
-                              $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                              $_CONF['cookiesecure'],true);
+                DB_change($_TABLES['users'], 'passwd', DB_escapeString($passwd),"uid", (int)$_USER['uid']);
             } elseif (!SEC_check_hash($A['old_passwd'],$current_password) ) {
-                return COM_refresh ($_CONF['site_url']
-                                    . '/usersettings.php?msg=68');
+                return COM_refresh ($_CONF['site_url'].'/usersettings.php?msg=68');
             } elseif ($A['passwd'] != $A['passwd_conf']) {
-                return COM_refresh ($_CONF['site_url']
-                                    . '/usersettings.php?msg=67');
+                return COM_refresh ($_CONF['site_url'].'/usersettings.php?msg=67');
             }
         }
 
@@ -1023,15 +1000,20 @@ function saveuser($A)
         }
 
         if ($A['cooktime'] <= 0) {
-            $cooktime = 1000;
-            SEC_setCookie ($_CONF['cookie_name'], $_USER['uid'], time() - $cooktime,
-                           $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                           $_CONF['cookiesecure'],true);
+            $cookie_timemout = 0;
+            $token_ttl = 14400;
         } else {
-            SEC_setCookie ($_CONF['cookie_name'], $_USER['uid'],
-                           time() + $A['cooktime'], $_CONF['cookie_path'],
-                           $_CONF['cookiedomain'], $_CONF['cookiesecure'],true);
+            $cookie_timeout = time() + $A['cooktime'];
+            $token_ttl = $A['cooktime'];
         }
+        SEC_setCookie ($_CONF['cookie_name'], $_USER['uid'], $cookie_timeout,
+                       $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                       $_CONF['cookiesecure'],true);
+
+        $ltToken = SEC_createTokenGeneral('ltc',$token_ttl);
+        SEC_setCookie ($_CONF['cookie_password'], $ltToken, $cookie_timeout,
+                       $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                       $_CONF['cookiesecure'],true);
 
         if ($_CONF['allow_user_photo'] == 1) {
             $delete_photo = '';
@@ -1052,15 +1034,15 @@ function saveuser($A)
                     $A['homepage'] = 'http:' . substr ($A['homepage'], $pos + 1);
                 }
             }
-            $A['homepage'] = addslashes ($A['homepage']);
+            $A['homepage'] = DB_escapeString ($A['homepage']);
         }
 
-        $A['fullname'] = addslashes ($A['fullname']);
-        $A['email'] = addslashes ($A['email']);
-        $A['location'] = addslashes ($A['location']);
-        $A['sig'] = addslashes ($A['sig']);
-        $A['about'] = addslashes ($A['about']);
-        $A['pgpkey'] = addslashes ($A['pgpkey']);
+        $A['fullname'] = DB_escapeString ($A['fullname']);
+        $A['email'] = DB_escapeString ($A['email']);
+        $A['location'] = DB_escapeString ($A['location']);
+        $A['sig'] = DB_escapeString ($A['sig']);
+        $A['about'] = DB_escapeString ($A['about']);
+        $A['pgpkey'] = DB_escapeString ($A['pgpkey']);
 
         if (!empty ($filename)) {
             if (!file_exists ($_CONF['path_images'] . 'userphotos/' . $filename)) {
@@ -1068,15 +1050,15 @@ function saveuser($A)
             }
         }
 
-        DB_query("UPDATE {$_TABLES['users']} SET fullname='{$A['fullname']}',email='{$A['email']}',homepage='{$A['homepage']}',sig='{$A['sig']}',cookietimeout=".intval($A['cooktime']).",photo='".addslashes($filename)."' WHERE uid={$_USER['uid']}");
-        DB_query("UPDATE {$_TABLES['userinfo']} SET pgpkey='{$A['pgpkey']}',about='{$A['about']}',location='{$A['location']}' WHERE uid={$_USER['uid']}");
+        DB_query("UPDATE {$_TABLES['users']} SET fullname='{$A['fullname']}',email='{$A['email']}',homepage='{$A['homepage']}',sig='{$A['sig']}',cookietimeout=".(int) $A['cooktime'].",photo='".DB_escapeString($filename)."' WHERE uid=".(int)$_USER['uid']);
+        DB_query("UPDATE {$_TABLES['userinfo']} SET pgpkey='{$A['pgpkey']}',about='{$A['about']}',location='{$A['location']}' WHERE uid=".(int)$_USER['uid']);
 
         // Call custom registration save function if enabled and exists
         if ($_CONF['custom_registration'] AND (function_exists('CUSTOM_userSave'))) {
             CUSTOM_userSave($_USER['uid']);
         }
 
-        PLG_userInfoChanged ($_USER['uid']);
+        PLG_userInfoChanged ((int)$_USER['uid']);
 
         if ($_US_VERBOSE) {
             COM_errorLog('**** Leaving saveuser in usersettings.php ****', 1);
@@ -1125,7 +1107,7 @@ function userprofile ($user, $msg = 0)
         return $retval;
     }
 
-    $result = DB_query ("SELECT {$_TABLES['users']}.uid,username,fullname,regdate,homepage,about,location,pgpkey,photo,email FROM {$_TABLES['userinfo']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['users']}.uid = ".intval($user));
+    $result = DB_query ("SELECT {$_TABLES['users']}.uid,username,fullname,regdate,homepage,about,location,pgpkey,photo,email FROM {$_TABLES['userinfo']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['users']}.uid = ".(int) $user);
     $nrows = DB_numRows ($result);
     if ($nrows == 0) { // no such user
         return COM_refresh ($_CONF['site_url'] . '/index.php');
@@ -1211,7 +1193,7 @@ function userprofile ($user, $msg = 0)
 
     // list of last 10 stories by this user
     if (sizeof ($tids) > 0) {
-        $sql = "SELECT sid,title,UNIX_TIMESTAMP(date) AS unixdate FROM {$_TABLES['stories']} WHERE (uid = '".intval($user)."') AND (draft_flag = 0) AND (date <= NOW()) AND (tid IN ($topics))" . COM_getPermSQL ('AND');
+        $sql = "SELECT sid,title,UNIX_TIMESTAMP(date) AS unixdate FROM {$_TABLES['stories']} WHERE (uid = '".(int) $user."') AND (draft_flag = 0) AND (date <= NOW()) AND (tid IN ($topics))" . COM_getPermSQL ('AND');
         $sql .= " ORDER BY unixdate DESC LIMIT 10";
         $result = DB_query ($sql);
         $nrows = DB_numRows ($result);
@@ -1258,10 +1240,10 @@ function userprofile ($user, $msg = 0)
     }
 
     $sidList = implode("', '",$sidArray);
-    $sidList = "'".addslashes($sidList)."'";
+    $sidList = "'".DB_escapeString($sidList)."'";
 
     // then, find all comments by the user in those stories
-    $sql = "SELECT sid,title,cid,UNIX_TIMESTAMP(date) AS unixdate FROM {$_TABLES['comments']} WHERE (uid = '".intval($user)."') GROUP BY sid,title,cid,UNIX_TIMESTAMP(date)";
+    $sql = "SELECT sid,title,cid,UNIX_TIMESTAMP(date) AS unixdate FROM {$_TABLES['comments']} WHERE (uid = '".(int) $user."') GROUP BY sid,title,cid,UNIX_TIMESTAMP(date)";
 
     // SQL NOTE:  Using a HAVING clause is usually faster than a where if the
     // field is part of the select
@@ -1300,7 +1282,7 @@ function userprofile ($user, $msg = 0)
 
     // posting stats for this user
     $user_templates->set_var ('lang_number_stories', $LANG04[84]);
-    $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (uid = ".intval($user).") AND (draft_flag = 0) AND (date <= NOW())" . COM_getPermSQL ('AND');
+    $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (uid = ".(int)$user.") AND (draft_flag = 0) AND (date <= NOW())" . COM_getPermSQL ('AND');
     $result = DB_query($sql);
     $N = DB_fetchArray ($result);
     $user_templates->set_var ('number_stories', COM_numberFormat ($N['count']));
@@ -1389,14 +1371,14 @@ function savepreferences($A)
 
     $tids = '';
     if (sizeof ($TIDS) > 0) {
-        $tids = addslashes (implode (' ', array_intersect ($AETIDS, $TIDS)));
+        $tids = DB_escapeString (implode (' ', array_intersect ($AETIDS, $TIDS)));
     }
     $aids = '';
     if (sizeof ($AIDS) > 0) {
         foreach ($AIDS as $key => $val) {
             $AIDS[$key] = intval($val);
         }
-        $aids = addslashes (implode (' ', $AIDS));
+        $aids = DB_escapeString (implode (' ', $AIDS));
     }
     $selectedblocks = '';
     $selectedBoxes = array();
@@ -1404,7 +1386,7 @@ function savepreferences($A)
         foreach ($BOXES AS $key => $val) {
             $BOXES[$key] = intval($val);
         }
-        $boxes = addslashes(implode(',', $BOXES));
+        $boxes = DB_escapeString(implode(',', $BOXES));
 
         $blockresult = DB_query("SELECT bid,name FROM {$_TABLES['blocks']} WHERE bid NOT IN ($boxes)");
 
@@ -1422,7 +1404,7 @@ function savepreferences($A)
 
     $etids = '';
     if (sizeof ($ETIDS) > 0) {
-        $etids = addslashes (implode (' ', array_intersect ($AETIDS, $ETIDS)));
+        $etids = DB_escapeString (implode (' ', array_intersect ($AETIDS, $ETIDS)));
     }
 
     if (isset ($A['tzid'])) {
@@ -1453,8 +1435,8 @@ function savepreferences($A)
 
     // Save theme, when doing so, put in cookie so we can set the user's theme
     // even when they aren't logged in
-    $theme    = addslashes ($A['theme']);
-    $language = addslashes ($A['language']);
+    $theme    = DB_escapeString ($A['theme']);
+    $language = DB_escapeString ($A['language']);
     DB_query("UPDATE {$_TABLES['users']} SET theme='$theme',language='$language' WHERE uid = {$_USER['uid']}");
     SEC_setCookie ($_CONF['cookie_theme'], $A['theme'], time() + 31536000,
                    $_CONF['cookie_path'], $_CONF['cookiedomain'],
@@ -1466,20 +1448,20 @@ function savepreferences($A)
                    $_CONF['cookie_path'], $_CONF['cookiedomain'],
                    $_CONF['cookiesecure'],false);
 
-    $A['dfid'] = intval(COM_applyFilter ($A['dfid'], true));
+    $A['dfid'] = (int)COM_applyFilter ($A['dfid'], true);
 
-    DB_query("UPDATE {$_TABLES['userprefs']} SET search_result_format='".addslashes($A['search_result_format'])."',noicons=".intval($A['noicons']).", willing=".intval($A['willing']).", dfid=".intval($A['dfid']).", tzid='".addslashes($A['tzid'])."', emailfromadmin='".addslashes($A['emailfromadmin'])."', emailfromuser=".intval($A['emailfromuser']).", showonline=".intval($A['showonline'])." WHERE uid={$_USER['uid']}");
+    DB_query("UPDATE {$_TABLES['userprefs']} SET search_result_format='".DB_escapeString($A['search_result_format'])."',noicons=".(int) $A['noicons'].", willing=".(int) $A['willing'].", dfid=".(int) $A['dfid'].", tzid='".DB_escapeString($A['tzid'])."', emailfromadmin='".DB_escapeString($A['emailfromadmin'])."', emailfromuser=".(int) $A['emailfromuser'].", showonline=".(int)$A['showonline']." WHERE uid=".(int)$_USER['uid']);
 
     if (empty ($etids)) {
         $etids = '-';
     }
-    DB_save($_TABLES['userindex'],"uid,tids,aids,boxes,noboxes,maxstories,etids","{$_USER['uid']},'$tids','$aids','$selectedblocks',".intval($A['noboxes']).",".intval($A['maxstories']).",'$etids'");
+    DB_save($_TABLES['userindex'],"uid,tids,aids,boxes,noboxes,maxstories,etids","{$_USER['uid']},'$tids','$aids','$selectedblocks',".(int)$A['noboxes'].",".(int)$A['maxstories'].",'$etids'");
 
     $A['commentmode'] = COM_applyFilter ($A['commentmode']);
     if (empty ($A['commentmode'])) {
         $A['commentmode'] = $_CONF['comment_mode'];
     }
-    $A['commentmode'] = addslashes ($A['commentmode']);
+    $A['commentmode'] = DB_escapeString ($A['commentmode']);
 
     $A['commentorder'] = COM_applyFilter ($A['commentorder']);
     $A['commentorder'] = strtoupper($A['commentorder']) == 'DESC' ? 'DESC' : 'ASC';
@@ -1487,14 +1469,14 @@ function savepreferences($A)
 //    if (empty ($A['commentorder'])) {
 //        $A['commentorder'] = 'ASC';
 //    }
-    $A['commentorder'] = addslashes ($A['commentorder']);
+    $A['commentorder'] = DB_escapeString ($A['commentorder']);
 
     $A['commentlimit'] = COM_applyFilter ($A['commentlimit'], true);
     if ($A['commentlimit'] <= 0) {
         $A['commentlimit'] = $_CONF['comment_limit'];
     }
 
-    DB_save($_TABLES['usercomment'],'uid,commentmode,commentorder,commentlimit',"{$_USER['uid']},'{$A['commentmode']}','{$A['commentorder']}',".intval($A['commentlimit']));
+    DB_save($_TABLES['usercomment'],'uid,commentmode,commentorder,commentlimit',"{$_USER['uid']},'{$A['commentmode']}','{$A['commentorder']}',".(int) $A['commentlimit']);
 
     PLG_userInfoChanged ($_USER['uid']);
 }
