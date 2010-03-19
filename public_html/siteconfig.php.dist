@@ -87,13 +87,6 @@ $_SYSTEM['no_cache_config']  = false;
 $_SYSTEM['admin_session'] = 1200;
 
 // +--------------------------------------------------------------------------+
-// | User session timeout default - the number of seconds a session is valid  |
-// | for users who do not use the remember me setting                         |
-// +--------------------------------------------------------------------------+
-
-$_SYSTEM['session_timeout'] = 3600; // 1 hour
-
-// +--------------------------------------------------------------------------+
 // | Swedish Date Hack - enable special hack to return UTF-8 Swedish          |
 // |                     date / time                                          |
 // |                                                                          |

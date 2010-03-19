@@ -45,10 +45,6 @@ if (!defined ('GVERSION')) {
 *
 */
 
-if ( !isset($_SYSTEM['session_timeout']) ) {
-    $_SYSTEM['session_timeout'] = 3600;
-}
-
 // Turn this on if you want to see various debug messages from this library
 $_SESS_VERBOSE = false;
 
@@ -144,14 +140,34 @@ function SESS_sessionCheck()
                         $rip    = DB_fetchArray($result);
                         $remote_ip = $rip['remote_ip'];
                     }
+                    $ipmatch = false;
                     $remote_ip_array = explode('.',$remote_ip);
                     $server_ip_array = explode('.',$_SERVER['REMOTE_ADDR']);
-                    if ( $remote_ip_array[0] == $server_ip_array[0] &&
-                         $remote_ip_array[1] == $server_ip_array[1] &&
-                         $remote_ip_array[2] == $server_ip_array[2] ) {
-                        $ipmatch = true;
-                    } else {
-                        $ipmatch = false;
+                    switch ( $_CONF['session_ip_check'] ) {
+                        case 1 : // a.b
+                            if ( $remote_ip_array[0] == $server_ip_array[0] &&
+                                 $remote_ip_array[1] == $server_ip_array[1] ) {
+                                $ipmatch = true;
+                            }
+                            break;
+                        case 2 : // a.b.c
+                            if ( $remote_ip_array[0] == $server_ip_array[0] &&
+                                 $remote_ip_array[1] == $server_ip_array[1] &&
+                                 $remote_ip_array[2] == $server_ip_array[2] ) {
+                                $ipmatch = true;
+                            }
+                            break;
+                        case 3 : // all
+                            if ( $remote_ip_array[0] == $server_ip_array[0] &&
+                                 $remote_ip_array[1] == $server_ip_array[1] &&
+                                 $remote_ip_array[2] == $server_ip_array[2] &&
+                                 $remote_ip_array[3] == $server_ip_array[3] ) {
+                                $ipmatch = true;
+                            }
+                            break;
+                        default :
+                            $ipmatch = true;
+                            break;
                     }
                     if ( isset($_SYSTEM['skip_ip_check']) && $_SYSTEM['skip_ip_check'] == 1 ) {
                         $ipmatch = true;
@@ -207,12 +223,32 @@ function SESS_sessionCheck()
                     $cookie_password = $_COOKIE[$_CONF['cookie_password']];
                     $remote_ip_array = explode('.',$remote_ip);
                     $server_ip_array = explode('.',$_SERVER['REMOTE_ADDR']);
-                    if ( $remote_ip_array[0] == $server_ip_array[0] &&
-                         $remote_ip_array[1] == $server_ip_array[1] &&
-                         $remote_ip_array[2] == $server_ip_array[2] ) {
-                        $ipmatch = true;
-                    } else {
-                        $ipmatch = false;
+                    $ipmatch = false;
+                    switch ( $_CONF['session_ip_check'] ) {
+                        case 1 : // a.b
+                            if ( $remote_ip_array[0] == $server_ip_array[0] &&
+                                 $remote_ip_array[1] == $server_ip_array[1] ) {
+                                $ipmatch = true;
+                            }
+                            break;
+                        case 2 : // a.b.c
+                            if ( $remote_ip_array[0] == $server_ip_array[0] &&
+                                 $remote_ip_array[1] == $server_ip_array[1] &&
+                                 $remote_ip_array[2] == $server_ip_array[2] ) {
+                                $ipmatch = true;
+                            }
+                            break;
+                        case 3 : // all
+                            if ( $remote_ip_array[0] == $server_ip_array[0] &&
+                                 $remote_ip_array[1] == $server_ip_array[1] &&
+                                 $remote_ip_array[2] == $server_ip_array[2] &&
+                                 $remote_ip_array[3] == $server_ip_array[3] ) {
+                                $ipmatch = true;
+                            }
+                            break;
+                        default :
+                            $ipmatch = true;
+                            break;
                     }
                 }
                 if ( isset($_SYSTEM['skip_ip_check']) && $_SYSTEM['skip_ip_check'] == 1 ) {
@@ -564,7 +600,7 @@ function SESS_completeLogin($uid)
             $token_ttl = $cooktime;
         } else {
             $cookieTimeout = 0;  // session cookie
-            $token_ttl = $_SYSTEM['session_timeout'];
+            $token_ttl = $_CONF['session_cookie_timeout'];
         }
         // They want their cookie to persist for some amount of time so set it now
         if ($VERBOSE) {

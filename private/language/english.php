@@ -2098,6 +2098,8 @@ $LANG_confignames['Core'] = array(
     'maintenance_mode' => 'Enable Maintenance Mode',
     'rating_enabled' => 'Enable Rating',
     'user_reg_fullname' => 'Full Name option on registration form?',
+    'session_ip_check' => 'Session IP Validation',
+    'article_comment_close_enabled' => 'Automatically close comments (default)',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2183,6 +2185,7 @@ $LANG_configselects['Core'] = array(
     23 => array('Disabled' => 0, 'Enabled (Exact Match)' => 1, 'Enabled (Word Beginning)' => 2, 'Enabled (Word Fragment)' => 3),
     24 => array('Disabled' => 0, 'Logged-in Users' => 1, 'Everyone' => 2),
     25 => array('No' => 0, 'Optional' => 1, 'Required' => 2),
+    26 => array('None' => 0, 'A.B' => 1, 'A.B.C' => 2, 'All' => 3),
 
 );
 

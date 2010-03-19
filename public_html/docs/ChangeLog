@@ -2,6 +2,12 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Removed $_SYSTEM['skip_ip_check'] now use online configuration :
+   Session IP Validation - select how much of the IP to validate or disable
+   completely (Mark)
+- Removed configuration option: default search order, it simply doesn't make
+  sense to allow alternative sort methods with the weighting that goes on
+  with the results. (Mark)
 - Administrative function access now requires the user to re-authenticate (Mark)
 - New database function - DB_escapeString(), this should be used instead of
   addslashes() to escape data prior to using in a SQL query (Mark)

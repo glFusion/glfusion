@@ -1263,7 +1263,6 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
         $tokens = DB_Query($sql);
         $numberOfTokens = DB_numRows($tokens);
         if($numberOfTokens != 1) {
-            COM_errorLog("CheckToken: Token failed - no token found in database.");
             $return = false; // none, or multiple tokens. Both are invalid. (token is unique key...)
         } else {
             $tokendata = DB_fetchArray($tokens);
@@ -1275,7 +1274,6 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
                 COM_errorLog("CheckToken: Token failed - userid does not match token owner id");
                 $return = false;
             } else if($tokendata['expired']) {
-//                COM_errorLog("CheckToken: Token failed - token has expired.");
                 $return = false;
             } else if($tokendata['urlfor'] != $action) {
                 COM_errorLog("CheckToken: Token failed - token action does not match referer action.");

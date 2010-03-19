@@ -108,7 +108,7 @@ function install_config($site_url)
     $c->add('search_no_data','<i>Not available...</i>','text',0,6,NULL,740,TRUE);
     $c->add('search_separator',' &gt; ','text',0,6,NULL,750,TRUE);
     $c->add('search_def_keytype','phrase','select',0,6,19,760,TRUE);
-    $c->add('default_search_order','date','select',0,6,22,770,TRUE);
+//    $c->add('default_search_order','date','select',0,6,22,770,TRUE);
 
     // Subgroup: Stories and Trackback
     $c->add('sg_stories', NULL, 'subgroup', 1, 0, NULL, 0, TRUE);
@@ -221,7 +221,7 @@ function install_config($site_url)
     $c->add('submitloginrequired',0,'select',4,18,0,690,TRUE);
     $c->add('commentsloginrequired',0,'select',4,18,0,700,TRUE);
     $c->add('statsloginrequired',0,'select',4,18,0,710,TRUE);
-    $c->add('searchloginrequired',0,'select',4,18,16,720,TRUE);
+    $c->add('searchloginrequired',0,'select',4,18,0,720,TRUE);
     $c->add('profileloginrequired',0,'select',4,18,0,730,TRUE);
     $c->add('emailuserloginrequired',0,'select',4,18,0,740,TRUE);
     $c->add('emailstoryloginrequired',0,'select',4,18,0,750,TRUE);
@@ -326,6 +326,7 @@ function install_config($site_url)
     $c->add('fs_cookies', NULL, 'fieldset', 7, 30, NULL, 0, TRUE);
     $c->add('cookie_session','glf_session','text',7,30,NULL,530,TRUE);
     $c->add('cookie_name','glfusion','text',7,30,NULL,540,TRUE);
+    $c->add('session_ip_check',1,'select',7,30,26,545,TRUE);
     $c->add('cookie_password','glf_password','text',7,30,NULL,550,TRUE);
     $c->add('cookie_theme','glf_theme','text',7,30,NULL,560,TRUE);
     $c->add('cookie_language','glf_language','text',7,30,NULL,570,TRUE);

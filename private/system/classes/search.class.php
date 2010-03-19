@@ -224,19 +224,10 @@ class Search {
         global $_USER, $_CONF;
 
         if ( COM_isAnonUser() ) {
-            //check if an anonymous user is attempting to illegally access privilege search capabilities
-//            if (($this->_type != 'all') OR !empty($this->_dateStart) OR !empty($this->_dateEnd) OR ($this->_author > 0) OR !empty($this->_topic)) {
-            if (($this->_type != 'all') OR ($this->_author > 0) ) {
-                if (($_CONF['loginrequired'] == 1) OR ($_CONF['searchloginrequired'] >= 1)) {
-                    return false;
-                }
-            } else {
-                if (($_CONF['loginrequired'] == 1) OR ($_CONF['searchloginrequired'] == 2)) {
-                    return false;
-                }
+            if ( $_CONF['loginrequired'] == 1 OR $_CONF['searchloginrequired'] > 0 ) {
+                return false;
             }
         }
-
         return true;
     }
 
@@ -613,12 +604,8 @@ class Search {
             $obj->setField('',          '_html',       true,       false, '</span>');
             $this->_wordlength = 50;
         }
+        $obj->setDefaultSort('date');
 
-        if ( isset($_CONF['default_search_order']) ) {
-            $obj->setDefaultSort($_CONF['default_search_order']);
-        } else {
-            $obj->setDefaultSort('date');
-        }
         $obj->setRowFunction(array($this, 'searchFormatCallBack'));
 
         // Start search timer

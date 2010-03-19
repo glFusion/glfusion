@@ -863,6 +863,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
             $c->add('article_comment_close_enabled',0,'select',4,21,0,1695,TRUE);
+            $c->add('session_ip_check',1,'select',7,30,26,545,TRUE);
+            $c->del('default_search_order','Core');
+            DB_query("UPDATE {$_TABLES['conf_values']} SET selectionArray = '0' WHERE  name='searchloginrequired' AND group_name='Core'");
+
             DB_query("ALTER TABLE {$_TABLES['groups']} ADD grp_default tinyint(1) unsigned NOT NULL default '0' AFTER grp_gl_core");
             DB_query("ALTER TABLE {$_TABLES['users']} CHANGE `passwd` `passwd` VARCHAR( 40 ))");
 
