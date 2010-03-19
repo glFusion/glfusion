@@ -30,6 +30,7 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../../../lib-common.php';
+require_once '../../auth.inc.php';
 require_once $_CONF['path'].'plugins/sitetailor/classes/classMenuElement.php';
 
 USES_lib_admin();

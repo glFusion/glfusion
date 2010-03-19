@@ -34,6 +34,7 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../../../lib-common.php';
+require_once '../../auth.inc.php';
 
 
 // Only let admin users access this page
