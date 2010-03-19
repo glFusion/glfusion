@@ -13,7 +13,7 @@
 <div class="step floatleft">
   <div class="stepfields-envchk">
     <h2 class="top">{lang_php_settings}</h2>
-    <table cellpadding="2">
+    <table cellpadding="2" style="width:98%;">
       <tr>
         <th>{lang_setting}</th>
         <th>{lang_current}</th>
@@ -56,7 +56,7 @@
     <h2>{lang_current_php_settings}</h2>
     <hr />
     <input class="button2" type="button" title="PHP Settings" style="text-decoration: none; width: 150px;" value="Show Full PHP Information" name="toggleV" id="toggleV"/>
-    <div id="phpinfo" style="padding-top:15px;">
+    <div id="phpinfo" style="padding-top:15px;width:600px;">
     {phpinfo}
     </div>
     {!endif}
