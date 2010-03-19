@@ -442,7 +442,8 @@ $LANG04 = array(
     158 => '时区',
     159 => '这电邮是自动产生的。请不要回信。',
     160 => 'Online',
-    161 => 'Password Strength'
+    161 => 'Password Strength',
+    162 => 'The username contains invalid characters ( < > " % & * / \ ) are not allowed'
 );
 
 ###############################################################################
@@ -636,7 +637,8 @@ $LANG10 = array(
     28 => 'No users have logged in.',
     29 => 'Last %d users logged on:',
     30 => '采样数',
-    31 => ''
+    31 => '',
+    32 => 'Total'
 );
 
 ###############################################################################
@@ -742,7 +744,9 @@ $LANG20 = array(
     4 => '用户名：',
     5 => '密码：',
     6 => '这页只供授权人员使用。<br' . XHTML . '>所有存取将被记录和检查。',
-    7 => '登入'
+    7 => '登入',
+    8 => 'Session Timeout - Please re-authenticate',
+    9 => 'Access to Administration Features requires re-authentication'
 );
 
 ###############################################################################
@@ -817,7 +821,8 @@ $LANG21 = array(
     66 => '自动标签',
     67 => '打勾来准许自动标签',
     68 => '这入口组件的新闻馈入太长. 请在组件设定区里设定最多文章数限，或在志乐的全面设定区里设定最多文章数限。',
-    69 => 'Are you sure you want to delete this block?'
+    69 => 'Are you sure you want to delete this block?',
+    70 => 'Block name cannot be blank and cannot contain spaces or the following characters: < > \' " % & * / \'
 );
 
 ###############################################################################
@@ -1050,7 +1055,12 @@ $LANG28 = array(
     95 => 'Global Preference Editor',
     96 => 'Using the <strong>Selected</strong> column, select the items you wish to change for <strong>all</strong> users.  Set the attribute to the desired setting and press Save.',
     97 => 'Comment Display Mode',
-    98 => 'Comment Sort Order'
+    98 => 'Comment Sort Order',
+    99 => 'Send eMail',
+    100 => 'eMail Site Login Reminders to the selected users?',
+    101 => 'Group',
+    102 => 'users',
+    103 => 'Batch User Administration'
 );
 
 ###############################################################################
@@ -1112,7 +1122,11 @@ $LANG31 = array(
     23 => '全部成功 ',
     24 => '全部失败',
     25 => '-- 请选小组 --',
-    26 => '请填写所有表格上的栏位和选择一个小组。'
+    26 => '请填写所有表格上的栏位和选择一个小组。',
+    27 => 'Group',
+    28 => 'Use this panel to send eMail to a specific user on this site.  To send a message to a different user, select the user from the User List panel, the link is above.',
+    29 => 'Warning',
+    30 => 'eMail from Admin Privacy option is set.'
 );
 
 ###############################################################################
@@ -1511,7 +1525,9 @@ $LANG_ACCESS = array(
     'pe_content' => 'Content',
     'pe_privacy' => 'Privacy',
     'editusers' => 'Manage',
-    'editinguser' => 'Editing User:'
+    'sendemail' => 'eMail',
+    'admingroup' => 'Admin',
+    'defaultgroup' => 'Default'
 );
 
 ###############################################################################
@@ -1757,7 +1773,9 @@ $LANG_ADMIN = array(
     'na' => '-',
     'action' => 'Action',
     'enable' => 'Enable',
-    'disable' => 'Disable'
+    'disable' => 'Disable',
+    'admin_users' => 'User Admin',
+    'admin_groups' => 'Group Admin'
 );
 
 ###############################################################################

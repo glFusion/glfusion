@@ -440,7 +440,8 @@ $LANG04 = array(
     158 => 'איזור זמן',
     159 => 'הודעת אימייל זו נוצרה אוטומטית. אנא אל תענו לה.',
     160 => 'Online',
-    161 => 'Password Strength'
+    161 => 'Password Strength',
+    162 => 'The username contains invalid characters ( < > " % & * / \ ) are not allowed'
 );
 
 ###############################################################################
@@ -634,7 +635,8 @@ $LANG10 = array(
     28 => 'No users have logged in.',
     29 => 'Last %d users logged on:',
     30 => 'צפיות',
-    31 => ''
+    31 => '',
+    32 => 'Total'
 );
 
 ###############################################################################
@@ -740,7 +742,9 @@ $LANG20 = array(
     4 => 'שם משתמש',
     5 => 'סיסמה',
     6 => 'כל נסיונות הגישה לאיזורים הניהוליים של אתר זה נרשמים ביומן ונבדקים.<br' . XHTML . '>עמוד זה נועד לשימושם של אנשים מאושרים בלבד.',
-    7 => 'כניסה למערכת'
+    7 => 'כניסה למערכת',
+    8 => 'Session Timeout - Please re-authenticate',
+    9 => 'Access to Administration Features requires re-authentication'
 );
 
 ###############################################################################
@@ -815,7 +819,8 @@ $LANG21 = array(
     66 => 'Autotags',
     67 => 'סמנו כדי לאפשר autotags',
     68 => 'הזנה זו לקוביית מידע זו של פורטל היא ארוכה מדי להצגה. אנא הגדירו מספר מקסימלי של מאמרים כדי לייבא לקוביית המידע במסך ההגדרות של קוביות המידע, או מקסימום גלובלי במסך הכיוון של glFusion.',
-    69 => 'Are you sure you want to delete this block?'
+    69 => 'Are you sure you want to delete this block?',
+    70 => 'Block name cannot be blank and cannot contain spaces or the following characters: < > \' " % & * / \'
 );
 
 ###############################################################################
@@ -1048,7 +1053,12 @@ $LANG28 = array(
     95 => 'Global Preference Editor',
     96 => 'Using the <strong>Selected</strong> column, select the items you wish to change for <strong>all</strong> users.  Set the attribute to the desired setting and press Save.',
     97 => 'Comment Display Mode',
-    98 => 'Comment Sort Order'
+    98 => 'Comment Sort Order',
+    99 => 'Send eMail',
+    100 => 'eMail Site Login Reminders to the selected users?',
+    101 => 'Group',
+    102 => 'users',
+    103 => 'Batch User Administration'
 );
 
 ###############################################################################
@@ -1110,7 +1120,11 @@ $LANG31 = array(
     23 => 'אין כשלונות',
     24 => 'אין הצלחות',
     25 => '-- ביחרו קבוצה --',
-    26 => 'אנא מלאו את כל השדות בטופס וביחרו קבוצת משתמשים מתיבת הבחירה.'
+    26 => 'אנא מלאו את כל השדות בטופס וביחרו קבוצת משתמשים מתיבת הבחירה.',
+    27 => 'Group',
+    28 => 'Use this panel to send eMail to a specific user on this site.  To send a message to a different user, select the user from the User List panel, the link is above.',
+    29 => 'Warning',
+    30 => 'eMail from Admin Privacy option is set.'
 );
 
 ###############################################################################
@@ -1509,7 +1523,9 @@ $LANG_ACCESS = array(
     'pe_content' => 'Content',
     'pe_privacy' => 'Privacy',
     'editusers' => 'Manage',
-    'editinguser' => 'Editing User:'
+    'sendemail' => 'eMail',
+    'admingroup' => 'Admin',
+    'defaultgroup' => 'Default'
 );
 
 ###############################################################################
@@ -1755,7 +1771,9 @@ $LANG_ADMIN = array(
     'na' => '-',
     'action' => 'Action',
     'enable' => 'Enable',
-    'disable' => 'Disable'
+    'disable' => 'Disable',
+    'admin_users' => 'User Admin',
+    'admin_groups' => 'Group Admin'
 );
 
 ###############################################################################

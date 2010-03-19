@@ -445,7 +445,8 @@ $LANG04 = array(
     158 => 'タイムゾーン',
     159 => 'このメールは自動送信されたものです。返信しないでください。',
     160 => 'Online',
-    161 => 'Password Strength'
+    161 => 'Password Strength',
+    162 => 'The username contains invalid characters ( < > " % & * / \ ) are not allowed'
 );
 
 ###############################################################################
@@ -639,7 +640,8 @@ $LANG10 = array(
     28 => 'No users have logged in.',
     29 => 'Last %d users logged on:',
     30 => 'ヒット',
-    31 => ''
+    31 => '',
+    32 => 'Total'
 );
 
 ###############################################################################
@@ -745,7 +747,9 @@ $LANG20 = array(
     4 => 'ユーザ名：',
     5 => 'パスワード：',
     6 => '管理ツールの使用は，すべてが記録されます。<br' . XHTML . '>このページは，管理者のみ使用できます。',
-    7 => 'ログイン'
+    7 => 'ログイン',
+    8 => 'Session Timeout - Please re-authenticate',
+    9 => 'Access to Administration Features requires re-authentication'
 );
 
 ###############################################################################
@@ -820,7 +824,8 @@ $LANG21 = array(
     66 => '自動タグ',
     67 => '自動タグ使用許可',
     68 => 'このポータルブロックのフィードは表示するには長すぎます。ブロック設定画面でブロックに表示する記事の最大数を設定するか，コンフィギュレーションで標準の最大数を設定してください。',
-    69 => 'Are you sure you want to delete this block?'
+    69 => 'Are you sure you want to delete this block?',
+    70 => 'Block name cannot be blank and cannot contain spaces or the following characters: < > \' " % & * / \'
 );
 
 ###############################################################################
@@ -1053,7 +1058,12 @@ $LANG28 = array(
     95 => 'Global Preference Editor',
     96 => 'Using the <strong>Selected</strong> column, select the items you wish to change for <strong>all</strong> users.  Set the attribute to the desired setting and press Save.',
     97 => 'Comment Display Mode',
-    98 => 'Comment Sort Order'
+    98 => 'Comment Sort Order',
+    99 => 'Send eMail',
+    100 => 'eMail Site Login Reminders to the selected users?',
+    101 => 'Group',
+    102 => 'users',
+    103 => 'Batch User Administration'
 );
 
 ###############################################################################
@@ -1115,7 +1125,11 @@ $LANG31 = array(
     23 => '失敗したものはありません',
     24 => '成功したものはありません',
     25 => '-- グループを選択 --',
-    26 => 'すべてのフィールドに入力してください。また，グループはドロップダウンリストで選択してください。'
+    26 => 'すべてのフィールドに入力してください。また，グループはドロップダウンリストで選択してください。',
+    27 => 'Group',
+    28 => 'Use this panel to send eMail to a specific user on this site.  To send a message to a different user, select the user from the User List panel, the link is above.',
+    29 => 'Warning',
+    30 => 'eMail from Admin Privacy option is set.'
 );
 
 ###############################################################################
@@ -1514,7 +1528,9 @@ $LANG_ACCESS = array(
     'pe_content' => 'Content',
     'pe_privacy' => 'Privacy',
     'editusers' => 'Manage',
-    'editinguser' => 'Editing User:'
+    'sendemail' => 'eMail',
+    'admingroup' => 'Admin',
+    'defaultgroup' => 'Default'
 );
 
 ###############################################################################
@@ -1760,7 +1776,9 @@ $LANG_ADMIN = array(
     'na' => '-',
     'action' => 'Action',
     'enable' => 'Enable',
-    'disable' => 'Disable'
+    'disable' => 'Disable',
+    'admin_users' => 'User Admin',
+    'admin_groups' => 'Group Admin'
 );
 
 ###############################################################################
