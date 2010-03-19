@@ -441,6 +441,7 @@ $LANG04 = array(
     159 => 'This eMail was generated automatically. Please do not reply to this eMail.',
     160 => 'Online',
     161 => 'Password Strength',
+    162 => 'The username contains invalid characters ( < > " % & * / \ ) are not allowed',
 );
 
 ###############################################################################
@@ -741,7 +742,7 @@ $LANG20 = array(
     3 => 'Invalid password for user',
     4 => 'Username:',
     5 => 'Password:',
-    6 => 'All access to administrative portions of this web site are logged and reviewed. This page is for the use of authorized personnel only.',
+    6 => 'All access to administrative portions of this web site are logged and reviewed.<br/> This page is for the use of authorized personnel only.',
     7 => 'login',
     8 => 'Session Timeout - Please re-authenticate',
     9 => 'Access to Administration Features requires re-authentication',
