@@ -84,7 +84,11 @@ if ( !isset($CONF_FORUM['enable_user_rating_system']) ) {
 $CONF_FORUM['topic_order'] = 'ASC';
 $CONF_FORUM['allow_wysiwyg_editor'] = $CONF_FORUM['use_wysiwyg_editor'];
 
-if ( !empty($_USER['uid']) && $_USER['uid'] > 1 ) {
+if ( $_CONF['loginrequired'] == 1 ) {
+    $CONF_FORUM['registration_required'] = 1;
+}
+
+if ( !COM_isAnonUser() ) {
     $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} where uid = '{$_USER['uid']}'",1);
     if ( DB_numRows($result) > 0 ) {
         $userprefs = DB_fetchArray($result);

@@ -57,12 +57,11 @@ $cat_id     = isset($_REQUEST['cat_id']) ? COM_applyFilter($_REQUEST['cat_id'],t
 $op         = isset($_REQUEST['op']) ? COM_applyFilter($_REQUEST['op']) : '';
 
 //Check is anonymous users can access
-if ($CONF_FORUM['registration_required'] && $_USER['uid'] < 2) {
-    echo COM_siteHeader();
-    echo COM_startBlock();
-    alertMessage($LANG_GF02['msg01'],$LANG_GF02['msg171']);
-    echo COM_endBlock();
-    echo COM_siteFooter();
+if ($CONF_FORUM['registration_required'] && COM_isAnonUser()) {
+    $display = COM_siteHeader();
+    $display .= SEC_loginRequiredForm();
+    $display .= COM_siteFooter();
+    echo $display;
     exit;
 }
 $canPost = 0;

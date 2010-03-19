@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -81,6 +81,11 @@ $result = DB_query("SELECT * FROM " . $_TABLES['mg_config'],1);
 while ($row = DB_fetchArray($result)) {
     $_MG_CONF[$row['config_name']] = $row['config_value'];
 }
+
+if ( $_CONF['loginrequired'] == 1 ) {
+    $_MG_CONF['loginrequired'] = 1;
+}
+
 $_MG_CONF['up_mp3_player_enabled'] = 0;
 
 $_MG_CONF['dateformat'] = array();
@@ -91,7 +96,7 @@ while ($row = DB_fetchArray($result)) {
 }
 
 // read user prefs, if any...
-if ( isset($_USER['uid']) && $_USER['uid'] > 1 ) {
+if ( !COM_isAnonUser() ) {
     $result = DB_query("SELECT * FROM " . $_TABLES['mg_userprefs'] . " WHERE uid='" . $_USER['uid']."'", 1);
     $nRows  = DB_numRows($result);
     if ( $nRows > 0 ) {

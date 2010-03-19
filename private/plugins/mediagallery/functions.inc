@@ -230,6 +230,10 @@ function plugin_displaycomment_mediagallery($id,$commentid,$title,$order,$format
 function plugin_getmenuitems_mediagallery() {
     global $_CONF, $_USER, $_MG_CONF;
 
+    if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
+        return '';
+    }
+
     $menulabel = $_MG_CONF['menulabel'];
     $menurul   = $_MG_CONF['site_url'] . "/index.php";     // Menu url here
 
@@ -325,6 +329,10 @@ function plugin_whatsnewsupported_mediagallery() {
         return '';
     }
 
+    if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
+        return '';
+    }
+
     $label = sprintf($LANG_MG00['whatsnew_prompt'],$_MG_CONF['whatsnew_time']);
 
     return array($LANG_MG00['whatsnew_title'],$label);
@@ -342,6 +350,10 @@ function plugin_getwhatsnew_mediagallery() {
     }
 
     if ( $mg_installed_version != $_MG_CONF['pi_version'] ) {
+        return;
+    }
+
+    if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
         return;
     }
 
@@ -423,7 +435,7 @@ function plugin_getwhatsnew_mediagallery() {
 function plugin_showstats_mediagallery($showsitestats) {
     global $_CONF, $_MG_CONF, $_TABLES, $LANG_MG00, $MG_albums, $_USER, $glversion;
 
-    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2 ) && $_MG_CONF['loginrequired'] == 1) {
+    if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
         return;
     }
     $previd = -1;
@@ -469,7 +481,6 @@ function plugin_showstats_mediagallery($showsitestats) {
                 }
 
                 $S['title'] = '<a href="' . $_MG_CONF['site_url'] . '/media.php?s=' . $A['media_id'] . '">' . $title . '</a>';
-//                $S['rating']  = $A['media_rating'] / 2  . '/5.00';
                 $S['rating'] = @number_format($A['media_rating']/2,2) . '/5.00';
                 $data_arr[$i] = $S;
             }
@@ -530,7 +541,7 @@ function plugin_showstats_mediagallery($showsitestats) {
 function plugin_statssummary_mediagallery() {
     global $_CONF, $_MG_CONF, $_TABLES, $LANG_MG00, $_USER;
 
-    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $_MG_CONF['loginrequired'] == 1) {
+    if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
         return;
     }
 
@@ -2187,6 +2198,9 @@ function plugin_searchtypes_mediagallery()
     if ( $_MG_CONF['disable_search_integration'] == 1) {
         return '';
     }
+    if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
+        return '';
+    }
 
     $tmp['mediagallery'] = $LANG_MG00['plugin'];
     return $tmp;
@@ -2210,6 +2224,9 @@ function plugin_dopluginsearch_mediagallery($query, $datestart, $dateend, $topic
     global $MG_albums, $_TABLES, $_CONF, $_MG_CONF, $LANG_MG00, $LANG_MG01,$LANG09;
 
     if ( $_MG_CONF['disable_search_integration'] == 1) {
+        return '';
+    }
+    if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
         return '';
     }
 
@@ -2261,6 +2278,9 @@ function plugin_dopluginsearch_comment_mediagallery($query, $datestart, $dateend
     if ( $_MG_CONF['disable_search_integration'] == 1) {
         return '';
     }
+    if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
+        return '';
+    }
 
     $query = trim(DB_escapeString(htmlspecialchars($query)));
 
@@ -2300,6 +2320,10 @@ function plugin_dopluginsearch_comment_mediagallery($query, $datestart, $dateend
 function plugin_getuseroption_mediagallery() {
     global $_CONF, $_MG_CONF, $_USER, $LANG_MG01, $LANG_MG03, $_TABLES;
 
+    if ( COM_isAnonUser() )  {
+        return '';
+    }
+
     if ( $_MG_CONF['up_display_rows_enabled'] == 0 &&
          $_MG_CONF['up_display_columns_enabled'] == 0 &&
          $_MG_CONF['up_mp3_player_enabled'] == 0 &&
@@ -2318,13 +2342,8 @@ function plugin_getuseroption_mediagallery() {
             $A = DB_fetchArray($result);
             $album_id = $A['album_id'];
             return array($LANG_MG03['your_member_album'],$_MG_CONF['site_url'] . '/album.php?aid=' . $album_id,0);
-//            $title .= '</a> <a href="' . $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id . '">' . $LANG_MG03['your_member_album'];
         }
     }
-
-//    if ( isset($_USER['uid']) && $_USER['uid'] > 1) {
-//        return array($title, $_MG_CONF['site_url'] . '/userprefs.php', 0);
-//    }
     return '';
 }
 
@@ -2453,6 +2472,10 @@ function phpblock_mg_randommedia($parm1=array(),$parm2=''){
 
 function phpblock_mg_maenroll(){
     global $_CONF, $_MG_CONF, $_MG_USERPREFS, $_TABLES, $_USER, $LANG_MG03;
+
+    if ( COM_isAnonUser() )  {
+        return;
+    }
 
     if ( $_MG_CONF['member_albums'] != 1 || $_MG_USERPREFS['member_gallery'] == 1 || $_USER['uid'] < 3) {
         return;
@@ -3309,23 +3332,13 @@ function MG_galleryOnly() {
 	    exit;
 	}
 
-	if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $_MG_CONF['loginrequired'] == 1 )  {
-	    $display = MG_siteHeader();
-	    $display .= COM_startBlock ($LANG_LOGIN[1], '',
-	              COM_getBlockTemplate ('_msg_block', 'header'));
-	    $login = new Template($_CONF['path_layout'] . 'submit');
-	    $login->set_file (array ('login'=>'submitloginrequired.thtml'));
-	    $login->set_var ('login_message', $LANG_LOGIN[2]);
-	    $login->set_var ('site_url', $_CONF['site_url']);
-	    $login->set_var ('lang_login', $LANG_LOGIN[3]);
-	    $login->set_var ('lang_newuser', $LANG_LOGIN[4]);
-	    $login->parse ('output', 'login');
-	    $display .= $login->finish ($login->get_var('output'));
-	    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-	    $display .= COM_siteFooter();
-	    echo $display;
-	    exit;
-	}
+    if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
+        $display = MG_siteHeader();
+        $display .= SEC_loginRequiredForm();
+        $display .= COM_siteFooter();
+        echo $display;
+        exit;
+    }
 
 	MG_index();
 }
@@ -3600,6 +3613,10 @@ function plugin_canuserrate_mediagallery($item_id, $uid)
     global $MG_albums, $_TABLES, $_CONF, $_MG_CONF;
 
     $retval = false;
+
+    if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
+        return $retval;
+    }
 
     $result = DB_query("SELECT * FROM {$_TABLES['mg_media']} AS m LEFT JOIN {$_TABLES['mg_media_albums']} AS ma ON m.media_id=ma.media_id WHERE m.media_id='".DB_escapeString($item_id)."'");
     if ( DB_numRows($result) > 0 ) {

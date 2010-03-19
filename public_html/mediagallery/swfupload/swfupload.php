@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2009-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -90,6 +90,10 @@ MG_initAlbums();
 
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
+
+if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
+    exit;
+}
 
 $rc = MG_saveSWFUpload( $aid );
 echo $rc;

@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -166,6 +166,10 @@ function MG_xspf($aid) {
 /*
  * Main processing
  */
+
+if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
+    exit;
+}
 
 if ( isset($_REQUEST['aid']) ) {
     $aid = COM_applyFilter($_REQUEST['aid'],true);
