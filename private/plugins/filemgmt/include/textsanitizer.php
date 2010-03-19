@@ -160,9 +160,9 @@ class MyTextSanitizer {
     /*
     * if magic_quotes_gpc is off, add back slashes
     */
-    function oopsAddSlashes($text) {
+    function oopsDB_escapeString($text) {
         if (!get_magic_quotes_gpc()) {
-            $text = addslashes($text);
+            $text = DB_escapeString($text);
         }
         return $text;
     }
@@ -253,7 +253,7 @@ class MyTextSanitizer {
     */
     function makeTboxData4Save($text){
         //$text = $this->undoHtmlSpecialChars($text);
-        $text = $this->oopsAddSlashes($text);
+        $text = $this->oopsDB_escapeString($text);
         return $text;
     }
 
@@ -299,7 +299,7 @@ class MyTextSanitizer {
     *  data into DB
     */
     function makeTareaData4Save($text){
-        $text = $this->oopsAddSlashes($text);
+        $text = $this->oopsDB_escapeString($text);
         return $text;
     }
 

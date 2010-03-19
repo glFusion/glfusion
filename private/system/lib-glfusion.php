@@ -138,7 +138,7 @@ function phpblock_blogroll ()
 
     if ( function_exists('LINKS_countLinksAndClicks') ) {
 
-        $result = DB_query ("SELECT lid,url,title,description,hits FROM {$_TABLES['links']} WHERE cid = '".addslashes($cat)."'" . COM_getPermSql ('AND') . " ORDER BY $sort");
+        $result = DB_query ("SELECT lid,url,title,description,hits FROM {$_TABLES['links']} WHERE cid = '".DB_escapeString($cat)."'" . COM_getPermSql ('AND') . " ORDER BY $sort");
         $numLinks = DB_numRows ($result);
 
         $links = array ();
@@ -222,7 +222,7 @@ function phpblock_storypicker() {
     $sid = '';
     if (isset($_GET['story'])) {
         $sid = COM_applyFilter($_GET['story']);
-        $stopic = DB_getItem($_TABLES['stories'], 'tid', 'sid = \''.addslashes($sid).'\'');
+        $stopic = DB_getItem($_TABLES['stories'], 'tid', 'sid = \''.DB_escapeString($sid).'\'');
         if (!empty($stopic)) {
             $topic = $stopic;
         } else {
@@ -240,14 +240,14 @@ function phpblock_storypicker() {
         }
     }
     if (!empty($topic)) {
-        $topicsql = " AND tid = '".addslashes($topic)."'";
+        $topicsql = " AND tid = '".DB_escapeString($topic)."'";
     }
     if (empty($topicsql)) {
         $topic = DB_getItem($_TABLES['topics'], 'tid', 'archive_flag = 1');
         if (empty($topic)) {
             $topicsql = '';
         } else {
-            $topicsql = " AND tid <> '".addslashes($topic)."'";
+            $topicsql = " AND tid <> '".DB_escapeString($topic)."'";
         }
     }
     $sql = 'SELECT sid, title FROM ' .$_TABLES['stories']
@@ -367,9 +367,9 @@ function glfRandomFilename() {
 
 }
 function glfPrepareForDB($var) {
-    // Need to call addslashes again as COM_checkHTML stips it out
+    // Need to call DB_escapeString again as COM_checkHTML stips it out
     $var = COM_checkHTML($var);
-    $var = addslashes($var);
+    $var = DB_escapeString($var);
     return $var;
 }
 function glfNavbar ($menuitems, $selected='', $parms='') {

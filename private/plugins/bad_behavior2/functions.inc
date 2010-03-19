@@ -225,7 +225,7 @@ function plugin_dopluginsearch_bad_behavior2($query, $datestart, $dateend, $topi
 {
     global $_CONF, $_TABLES, $LANG_BAD_BEHAVIOR, $LANG_BB2_RESPONSE;
 
-    $query = addslashes(trim($query));
+    $query = DB_escapeString(trim($query));
 
     if (empty($type)) {
         $type = 'all';

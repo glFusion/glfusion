@@ -360,7 +360,7 @@ class ListFactory {
         if ( !$this->array_search_recursive($ord,$this->_fields) ) {
             $order_sql = ' ORDER BY date DESC';
         } else {
-            $order_sql = ' ORDER BY ' . addslashes($ord) . ' ' . addslashes(strtoupper($this->_sort_arr['direction']));
+            $order_sql = ' ORDER BY ' . DB_escapeString($ord) . ' ' . DB_escapeString(strtoupper($this->_sort_arr['direction']));
         }
         if ( isset($_POST['results']) ) {
             $this->_per_page = intval(COM_applyFilter($_POST['results'], true));

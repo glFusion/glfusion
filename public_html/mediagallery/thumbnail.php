@@ -32,7 +32,7 @@
 require_once '../lib-common.php';
 
 $id = COM_applyFilter($_GET['id'],true);
-$aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . addslashes($id) . '"');
+$aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_escapeString($id) . '"');
 
 if ( $MG_albums[$aid]->access == 0 ) {
     COM_errorLog("access was denied to the album");
@@ -41,7 +41,7 @@ if ( $MG_albums[$aid]->access == 0 ) {
 	exit(0);
 }
 
-$sql = "SELECT * FROM {$_TABLES['mg_media']} WHERE media_id='".addslashes($id)."'";
+$sql = "SELECT * FROM {$_TABLES['mg_media']} WHERE media_id='".DB_escapeString($id)."'";
 $result = DB_query( $sql );
 $nRows = DB_numRows( $result );
 if ( $nRows > 0 ) {

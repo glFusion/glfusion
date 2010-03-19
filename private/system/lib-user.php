@@ -275,25 +275,25 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
     global $_CONF, $_TABLES;
 
     $queueUser = false;
-    $username = addslashes ($username);
-    $email = addslashes ($email);
+    $username = DB_escapeString ($username);
+    $email = DB_escapeString ($email);
 
     $regdate = strftime ('%Y-%m-%d %H:%M:%S', time ());
     $fields = 'username,email,regdate,cookietimeout';
     $values = "'$username','$email','$regdate','{$_CONF['default_perm_cookie_timeout']}'";
 
     if (!empty ($passwd)) {
-        $passwd = addslashes ($passwd);
+        $passwd = DB_escapeString ($passwd);
         $fields .= ',passwd';
         $values .= ",'$passwd'";
     }
     if (!empty ($fullname)) {
-        $fullname = addslashes (strip_tags($fullname));
+        $fullname = DB_escapeString (strip_tags($fullname));
         $fields .= ',fullname';
         $values .= ",'$fullname'";
     }
     if (!empty ($homepage)) {
-        $homepage = addslashes ($homepage);
+        $homepage = DB_escapeString ($homepage);
         $fields .= ',homepage';
         $values .= ",'$homepage'";
     }
@@ -311,11 +311,11 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
     } else {
         if (!empty($remoteusername)) {
             $fields .= ',remoteusername';
-            $values .= ",'".addslashes($remoteusername)."'";
+            $values .= ",'".DB_escapeString($remoteusername)."'";
         }
         if (!empty($service)) {
             $fields .= ',remoteservice';
-            $values .= ",'".addslashes($service)."'";
+            $values .= ",'".DB_escapeString($service)."'";
         }
     }
 
@@ -323,7 +323,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
     // Get the uid of the user, possibly given a service:
     if ($remoteusername != '')
     {
-        $uid = DB_getItem ($_TABLES['users'], 'uid', "remoteusername = '".addslashes($remoteusername)."' AND remoteservice='".addslashes($service)."'");
+        $uid = DB_getItem ($_TABLES['users'], 'uid', "remoteusername = '".DB_escapeString($remoteusername)."' AND remoteservice='".DB_escapeString($service)."'");
     } else {
         $uid = DB_getItem ($_TABLES['users'], 'uid', "username = '$username' AND remoteservice IS NULL");
     }
@@ -682,7 +682,7 @@ function USER_uniqueUsername($username)
 
     $try = $username;
     do {
-        $try = addslashes($try);
+        $try = DB_escapeString($try);
         $uid = DB_getItem($_TABLES['users'], 'uid', "username = '".$try."'");
         if (!empty($uid)) {
             $r = rand(2, 9999);

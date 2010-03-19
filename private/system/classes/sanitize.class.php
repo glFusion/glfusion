@@ -98,14 +98,14 @@ class sanitize extends kses {
         if (is_array($data)) {
             # loop through array and apply the filters
             foreach($data as $var)  {
-                $return_data[]  = addslashes($this->filterHTML($var));
+                $return_data[]  = DB_escapeString($this->filterHTML($var));
             }
             return $return_data;
         }
         else
         {
             $data = $this->filterHTML($data);
-            $data = addslashes($data);
+            $data = DB_escapeString($data);
             return $data;
         }
     }

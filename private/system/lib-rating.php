@@ -218,7 +218,7 @@ function RATING_getRating( $type, $item_id )
 {
     global $_TABLES;
 
-    $sql = "SELECT * FROM {$_TABLES['rating']} WHERE type='".addslashes($type)."' AND item_id='".addslashes($item_id)."'";
+    $sql = "SELECT * FROM {$_TABLES['rating']} WHERE type='".DB_escapeString($type)."' AND item_id='".DB_escapeString($item_id)."'";
     $result = DB_query($sql);
     if ( DB_numRows($result) > 0 ) {
         $row            = DB_fetchArray($result);
@@ -254,9 +254,9 @@ function RATING_hasVoted( $type, $item_id, $uid, $ip )
     $voted = 0;
 
     if ( $uid == 1 ) {
-        $sql = "SELECT id FROM {$_TABLES['rating_votes']} WHERE ip_address='".addslashes($ip)."' AND item_id='".addslashes($item_id)."'";
+        $sql = "SELECT id FROM {$_TABLES['rating_votes']} WHERE ip_address='".DB_escapeString($ip)."' AND item_id='".DB_escapeString($item_id)."'";
     } else {
-        $sql = "SELECT id FROM {$_TABLES['rating_votes']} WHERE (uid=$uid OR ip_address='".addslashes($ip)."') AND item_id='".addslashes($item_id)."'";
+        $sql = "SELECT id FROM {$_TABLES['rating_votes']} WHERE (uid=$uid OR ip_address='".DB_escapeString($ip)."') AND item_id='".DB_escapeString($item_id)."'";
     }
     $checkResult = DB_query($sql);
     if ( DB_numRows($checkResult) > 0 ) {
@@ -368,7 +368,7 @@ function RATING_addVote( $type, $item_id, $rating, $uid, $ip )
     $new_rating = @number_format($new_rating,2);
 
     if ( $rating_id != 0 ) {
-        $sql = "UPDATE {$_TABLES['rating']} SET votes=".$votes.", rating='".addslashes($new_rating)."' WHERE id = ".$rating_id;
+        $sql = "UPDATE {$_TABLES['rating']} SET votes=".$votes.", rating='".DB_escapeString($new_rating)."' WHERE id = ".$rating_id;
         DB_query($sql);
     } else {
         $sql = "SELECT MAX(id) + 1 AS newid FROM " . $_TABLES['rating'];
@@ -378,11 +378,11 @@ function RATING_addVote( $type, $item_id, $rating, $uid, $ip )
         if ( $newid < 1 ) {
             $newid = 1;
         }
-        $sql = "INSERT INTO {$_TABLES['rating']} (id,type,item_id,votes,rating) VALUES (" . $newid . ", '". $type . "','" . addslashes($item_id). "'," . $votes . ",'" . addslashes($new_rating) . "' )";
+        $sql = "INSERT INTO {$_TABLES['rating']} (id,type,item_id,votes,rating) VALUES (" . $newid . ", '". $type . "','" . DB_escapeString($item_id). "'," . $votes . ",'" . DB_escapeString($new_rating) . "' )";
         DB_query($sql);
     }
     $sql = "INSERT INTO {$_TABLES['rating_votes']} (type,item_id,rating,uid,ip_address,ratingdate) " .
-           "VALUES ('".addslashes($type)."','".addslashes($item_id)."',".$rating.",".$uid.",'".addslashes($ip)."',".$ratingdate.");";
+           "VALUES ('".DB_escapeString($type)."','".DB_escapeString($item_id)."',".$rating.",".$uid.",'".DB_escapeString($ip)."',".$ratingdate.");";
     DB_query($sql);
     PLG_itemRated( $type, $item_id, $new_rating, $votes );
 
@@ -405,7 +405,7 @@ function RATING_getRatedIds($type)
 {
     global $_TABLES, $_USER;
 
-    $ip     = addslashes($_SERVER['REMOTE_ADDR']);
+    $ip     = DB_escapeString($_SERVER['REMOTE_ADDR']);
     $uid    = isset($_USER['uid']) ? $_USER['uid'] : 1;
 
     $ratedIds = array();

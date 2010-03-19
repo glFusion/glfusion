@@ -86,16 +86,16 @@ function gf_check4files($id,$tempfile=false) {
                 if ($_POST[$chk_usefilemgmt] == 1) {
                     $cid = COM_applyFilter($_POST[$filemgmtcat],true);
                     $sql = "INSERT INTO {$_FM_TABLES['filemgmt_filedetail']} (cid, title, url, size, submitter, status,date ) ";
-                    $sql .= "VALUES ('".addslashes($cid)."', '".addslashes($realfilename)."', '".addslashes($realfilename)."', '".addslashes($uploadfile['size'])."', '{$_USER['uid']}', 1, UNIX_TIMESTAMP())";
+                    $sql .= "VALUES ('".DB_escapeString($cid)."', '".DB_escapeString($realfilename)."', '".DB_escapeString($realfilename)."', '".DB_escapeString($uploadfile['size'])."', '{$_USER['uid']}', 1, UNIX_TIMESTAMP())";
                     DB_query($sql);
                     $newid = DB_insertID();
                     DB_query("INSERT INTO {$_TABLES['gf_attachments']} (topic_id,repository_id,filename,tempfile)
-                        VALUES ('".addslashes($id)."',$newid,'".addslashes($filename)."',$temp)");
+                        VALUES ('".DB_escapeString($id)."',$newid,'".DB_escapeString($filename)."',$temp)");
                     $description = glfPrepareForDB($_POST[$filemgmt_desc]);
                     DB_query("INSERT INTO {$_FM_TABLES['filemgmt_filedesc']} (lid, description) VALUES ($newid, '$description')");
                 } else {
                     DB_query("INSERT INTO {$_TABLES['gf_attachments']} (topic_id,filename,tempfile)
-                        VALUES ('".addslashes($id)."','".addslashes($filename)."',$temp)");
+                        VALUES ('".DB_escapeString($id)."','".DB_escapeString($filename)."',$temp)");
                 }
 
             } else {

@@ -398,11 +398,11 @@ function plugin_moderationapprove_calendar ($id)
 /*    DB_query ("UPDATE {$_TABLES['events']} SET owner_id = {$_USER['uid']},"
              ."group_id = '$group_id',perm_owner = {$A['perm_owner']}, "
              ."perm_group = {$A['perm_group']}, perm_members = {$A['perm_members']},"
-             ."perm_anon = {$A['perm_anon']} WHERE eid = '".addslashes($id)."'"); */
+             ."perm_anon = {$A['perm_anon']} WHERE eid = '".DB_escapeString($id)."'"); */
     DB_query ("UPDATE {$_TABLES['events']} SET "
              ."group_id = '$group_id',perm_owner = {$A['perm_owner']}, "
              ."perm_group = {$A['perm_group']}, perm_members = {$A['perm_members']},"
-             ."perm_anon = {$A['perm_anon']} WHERE eid = '".addslashes($id)."'");
+             ."perm_anon = {$A['perm_anon']} WHERE eid = '".DB_escapeString($id)."'");
 }
 
 /**
@@ -422,7 +422,7 @@ function plugin_moderationdelete_calendar($id)
 
     // these tables should not contain any rows with ml_id = $id
     // this is done 'just in case'
-    DB_delete ($_TABLES['eventsubmission'], 'eid', addslashes($id));
+    DB_delete ($_TABLES['eventsubmission'], 'eid', DB_escapeString($id));
 
     return '';
 }
@@ -526,23 +526,23 @@ function plugin_savesubmission_calendar($A)
         COM_displayMessageAndAbort ($result, 'spamx', 403, 'Forbidden');
     }
 
-    $A['description'] = addslashes (htmlspecialchars (COM_checkWords ($A['description'])));
-    $A['address1'] = addslashes (strip_tags (COM_checkWords ($A['address1'])));
-    $A['address2'] = addslashes (strip_tags (COM_checkWords ($A['address2'])));
-    $A['city'] = addslashes (strip_tags (COM_checkWords ($A['city'])));
-    $A['zipcode'] = addslashes (strip_tags (COM_checkWords ($A['zipcode'])));
-    $A['state'] = addslashes (strip_tags (COM_checkWords ($A['state'])));
-    $A['location'] = addslashes (strip_tags (COM_checkWords ($A['location'])));
-    $A['event_type'] = addslashes (strip_tags (COM_checkWords ($A['event_type'])));
-    $A['title'] = addslashes ($A['title']);
+    $A['description'] = DB_escapeString (htmlspecialchars (COM_checkWords ($A['description'])));
+    $A['address1'] = DB_escapeString (strip_tags (COM_checkWords ($A['address1'])));
+    $A['address2'] = DB_escapeString (strip_tags (COM_checkWords ($A['address2'])));
+    $A['city'] = DB_escapeString (strip_tags (COM_checkWords ($A['city'])));
+    $A['zipcode'] = DB_escapeString (strip_tags (COM_checkWords ($A['zipcode'])));
+    $A['state'] = DB_escapeString (strip_tags (COM_checkWords ($A['state'])));
+    $A['location'] = DB_escapeString (strip_tags (COM_checkWords ($A['location'])));
+    $A['event_type'] = DB_escapeString (strip_tags (COM_checkWords ($A['event_type'])));
+    $A['title'] = DB_escapeString ($A['title']);
 
-    $A['url'] = addslashes(COM_sanitizeUrl($A['url']));
+    $A['url'] = DB_escapeString(COM_sanitizeUrl($A['url']));
 
     if (!empty ($A['eid'])) {
-        $A['eid'] = addslashes (COM_applyFilter ($A['eid']));
+        $A['eid'] = DB_escapeString (COM_applyFilter ($A['eid']));
     }
     if (empty ($A['eid'])) {
-        $A['eid'] = addslashes (COM_makeSid ());
+        $A['eid'] = DB_escapeString (COM_makeSid ());
     }
 
     COM_updateSpeedlimit ('submit');
@@ -1000,7 +1000,7 @@ function CALENDAR_deleteEvent($eid, $type = '')
     global $_CONF, $_TABLES, $_USER;
 
     if (empty($type)) { // delete regular event
-        $result = DB_query("SELECT * FROM {$_TABLES['events']} WHERE eid = '".addslashes($eid)."'");
+        $result = DB_query("SELECT * FROM {$_TABLES['events']} WHERE eid = '".DB_escapeString($eid)."'");
         $A = DB_fetchArray($result);
         $access = SEC_hasAccess($A['owner_id'], $A['group_id'],
                     $A['perm_owner'], $A['perm_group'], $A['perm_members'],
@@ -1011,15 +1011,15 @@ function CALENDAR_deleteEvent($eid, $type = '')
                                . '/plugins/calendar/index.php');
         }
 
-        DB_delete($_TABLES['events'], 'eid', addslashes($eid));
-        DB_delete($_TABLES['personal_events'], 'eid', addslashes($eid));
+        DB_delete($_TABLES['events'], 'eid', DB_escapeString($eid));
+        DB_delete($_TABLES['personal_events'], 'eid', DB_escapeString($eid));
         PLG_itemDeleted($eid, 'calendar');
         COM_rdfUpToDateCheck('calendar', $A['event_type'], $A['eid']);
 
         return COM_refresh($_CONF['site_admin_url'] . '/plugins/calendar/index.php?msg=18');
     } elseif ($type == 'submission') {
         if (plugin_ismoderator_calendar()) {
-            DB_delete($_TABLES['eventsubmission'], 'eid', addslashes($eid));
+            DB_delete($_TABLES['eventsubmission'], 'eid', DB_escapeString($eid));
         } else {
             COM_accessLog("User {$_USER['username']} tried to illegally delete event submission $eid.");
         }
@@ -1289,7 +1289,7 @@ function plugin_autotags_calendar ($op, $content = '', $autotag = '')
         	$url = $_CONF['site_url'] . '/calendar/event.php?eid=' . $eid;
         	if (empty ($autotag['parm2'])) {
             	$linktext = stripslashes (DB_getItem ($_TABLES['events'],
-                	                      'title', "eid = '".addslashes($eid)."'"));
+                	                      'title', "eid = '".DB_escapeString($eid)."'"));
         	} else {
             	$linktext = $autotag['parm2'];
         	}
@@ -1378,7 +1378,7 @@ function plugin_getfeedcontent_calendar( $feed, &$link, &$update, $feedType, $fe
         $update = implode( ',', $eids );
 
     } else {
-        $limit = DB_getItem($_TABLES['syndication'], 'limits', "fid = '".addslashes($feed)."'");
+        $limit = DB_getItem($_TABLES['syndication'], 'limits', "fid = '".DB_escapeString($feed)."'");
 
         $where = '';
         if( !empty( $limit )) {
@@ -1788,7 +1788,7 @@ function plugin_dopluginsearch_calendar($query, $datestart, $dateend, $topic, $t
 
 
     // Make sure the query is SQL safe
-    $query = addslashes(trim(htmlspecialchars($query)));
+    $query = DB_escapeString(trim(htmlspecialchars($query)));
 
     $sql_e = "SELECT eid AS id, title, description, UNIX_TIMESTAMP(datestart) AS date, owner_id AS uid, hits, CONCAT('/calendar/event.php?eid=',eid) AS url ";
     $sql_e .= "FROM {$_TABLES['events']} WHERE 1=1 ";
@@ -1800,7 +1800,7 @@ function plugin_dopluginsearch_calendar($query, $datestart, $dateend, $topic, $t
     $sql = COM_getPermSQL('AND') . ' ';
 
     if (!empty ($author))
-        $sql .= "AND (owner_id = '".addslashes($author)."') ";
+        $sql .= "AND (owner_id = '".DB_escapeString($author)."') ";
 
     // Search the public events
     $search_e = new SearchCriteria('calendar', array($LANG_CAL_1[16],$LANG_CAL_1[24]));
@@ -1957,7 +1957,7 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
         $where = '';
         $permOp = 'WHERE';
     } else {
-        $where = " WHERE eid = '" . addslashes($eid) . "'";
+        $where = " WHERE eid = '" . DB_escapeString($eid) . "'";
         $permOp = 'AND';
     }
     if ($uid > 0) {

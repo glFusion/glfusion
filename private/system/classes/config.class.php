@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -202,9 +202,9 @@ class config {
             $value = $fn($value);
         }
 
-        $escaped_val = addslashes(serialize($value));
-        $escaped_name = addslashes($name);
-        $escaped_grp = addslashes($group);
+        $escaped_val = DB_escapeString(serialize($value));
+        $escaped_name = DB_escapeString($name);
+        $escaped_grp = DB_escapeString($group);
         $sql = "UPDATE {$_TABLES['conf_values']} " .
                "SET value = '{$escaped_val}' WHERE " .
                "name = '{$escaped_name}' AND group_name = '{$escaped_grp}'";
@@ -232,9 +232,9 @@ class config {
     {
         global $_TABLES;
 
-        $escaped_val = addslashes(serialize($value));
-        $escaped_name = addslashes($name);
-        $escaped_grp = addslashes($group);
+        $escaped_val = DB_escapeString(serialize($value));
+        $escaped_name = DB_escapeString($name);
+        $escaped_grp = DB_escapeString($group);
         $sql = "UPDATE {$_TABLES['conf_values']} " .
                "SET default_value = '{$escaped_val}' WHERE " .
                "name = '{$escaped_name}' AND group_name = '{$escaped_grp}'";
@@ -247,15 +247,15 @@ class config {
     {
         global $_TABLES;
 
-        $escaped_name = addslashes($name);
-        $escaped_grp = addslashes($group);
+        $escaped_name = DB_escapeString($name);
+        $escaped_grp = DB_escapeString($group);
 
         $result = DB_query("SELECT value, default_value FROM {$_TABLES['conf_values']} WHERE name = '{$escaped_name}' AND group_name = '{$escaped_grp}'");
         list($value, $default_value) = DB_fetchArray($result);
 
         $sql = "UPDATE {$_TABLES['conf_values']} ";
         if ($value == 'unset') {
-            $default_value = addslashes($default_value);
+            $default_value = DB_escapeString($default_value);
             $sql .= "SET value = '{$default_value}', default_value = 'unset:{$default_value}'";
         } else {
             $sql .= "SET value = default_value";
@@ -270,13 +270,13 @@ class config {
     {
         global $_TABLES;
 
-        $escaped_name = addslashes($name);
-        $escaped_grp = addslashes($group);
+        $escaped_name = DB_escapeString($name);
+        $escaped_grp = DB_escapeString($group);
         $default_value = DB_getItem($_TABLES['conf_values'], 'default_value',
                 "name = '{$escaped_name}' AND group_name = '{$escaped_grp}'");
         $sql = "UPDATE {$_TABLES['conf_values']} SET value = 'unset'";
         if (substr($default_value, 0, 6) == 'unset:') {
-            $default_value = addslashes(substr($default_value, 6));
+            $default_value = DB_escapeString(substr($default_value, 6));
             $sql .= ", default_value = '{$default_value}'";
         }
         $sql .= " WHERE name = '{$escaped_name}' AND group_name = '{$escaped_grp}'";
@@ -331,7 +331,7 @@ class config {
                        $sort,
                        $fieldset,
                        serialize($default_value));
-        $Qargs = array_map('addslashes', $Qargs);
+        $Qargs = array_map('DB_escapeString', $Qargs);
 
         $sql = "DELETE FROM {$_TABLES['conf_values']} WHERE name = '{$Qargs[0]}' AND group_name = '{$Qargs[4]}'";
         $this->_DB_escapedQuery($sql);
@@ -364,7 +364,7 @@ class config {
     {
         DB_delete($GLOBALS['_TABLES']['conf_values'],
                   array('name', 'group_name'),
-                  array(addslashes($param_name), addslashes($group)));
+                  array(DB_escapeString($param_name), DB_escapeString($group)));
         unset($this->config_array[$group][$param_name]);
         $this->_writeIntoCache();
         $this->_purgeCache();
@@ -381,12 +381,12 @@ class config {
         if ( $group == 'Core' ) {
             return;
         }
-        $result = DB_query("SELECT * FROM {$GLOBALS['_TABLES']['conf_values']} WHERE group_name='".addslashes($group)."'");
+        $result = DB_query("SELECT * FROM {$GLOBALS['_TABLES']['conf_values']} WHERE group_name='".DB_escapeString($group)."'");
         while ( $C = DB_fetchArray($result) ) {
             $param_name = $C['name'];
             DB_delete($GLOBALS['_TABLES']['conf_values'],
                       array('name', 'group_name'),
-                      array(addslashes($param_name), addslashes($group)));
+                      array(DB_escapeString($param_name), DB_escapeString($group)));
             unset($this->config_array[$group][$param_name]);
         }
         $this->_purgeCache();
@@ -469,7 +469,7 @@ class config {
         foreach ($methods as $m) {
             if (isset($this->config_array['Core']['user_login_method'][$m]) &&
                     !$this->config_array['Core']['user_login_method'][$m]) {
-                $methods_disabled++;    
+                $methods_disabled++;
             }
         }
         if ($methods_disabled == count($methods)) {

@@ -276,7 +276,7 @@ function savetopic($tid,$topic,$imageurl,$sortnum,$limitnews,$owner_id,$group_id
         if ($imageurl == '/images/topics/') {
             $imageurl = '';
         }
-        $topic = addslashes ($topic);
+        $topic = DB_escapeString ($topic);
 
         if ($is_default == 'on') {
             $is_default = 1;

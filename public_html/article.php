@@ -97,7 +97,7 @@ if ((strcasecmp ($order, 'ASC') != 0) && (strcasecmp ($order, 'DESC') != 0)) {
     $order = '';
 }
 
-$result = DB_query("SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE sid = '".addslashes($sid)."'" . COM_getPermSql ('AND'));
+$result = DB_query("SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE sid = '".DB_escapeString($sid)."'" . COM_getPermSql ('AND'));
 $A = DB_fetchArray($result);
 if ($A['count'] > 0) {
 
@@ -228,7 +228,7 @@ if ($A['count'] > 0) {
                 $display .= COM_showMessage($msg, $plugin);
             }
         }
-        DB_query ("UPDATE {$_TABLES['stories']} SET hits = hits + 1 WHERE (sid = '".addslashes($story->getSid())."') AND (date <= NOW()) AND (draft_flag = 0)");
+        DB_query ("UPDATE {$_TABLES['stories']} SET hits = hits + 1 WHERE (sid = '".DB_escapeString($story->getSid())."') AND (date <= NOW()) AND (draft_flag = 0)");
 
         // Display whats related
 
@@ -263,7 +263,7 @@ if ($A['count'] > 0) {
 
         if ($_CONF['backend'] == 1) {
             $tid = $story->displayElements('tid');
-            $result = DB_query("SELECT filename, title, format FROM {$_TABLES['syndication']} WHERE type = 'article' AND topic = '".addslashes($tid)."' AND is_enabled = 1");
+            $result = DB_query("SELECT filename, title, format FROM {$_TABLES['syndication']} WHERE type = 'article' AND topic = '".DB_escapeString($tid)."' AND is_enabled = 1");
             $feeds = DB_numRows($result);
             for ($i = 0; $i < $feeds; $i++) {
                 list($filename, $title, $format) = DB_fetchArray($result);

@@ -144,7 +144,7 @@ function moderator_banIP($topic_id,$topic_parent_id,$forum_id,$hostip)
 
     $retval = '';
 
-    DB_query("INSERT INTO {$_TABLES['gf_banned_ip']} (host_ip) VALUES ('".addslashes($hostip)."')");
+    DB_query("INSERT INTO {$_TABLES['gf_banned_ip']} (host_ip) VALUES ('".DB_escapeString($hostip)."')");
 
     $link = $_CONF['site_url']."/forum/viewtopic.php?showtopic=$topic_id";
 
@@ -309,7 +309,7 @@ function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_foru
     }
 
     if ($curpostpid == 0 ) {
-        $subject = addslashes(DB_getItem($_TABLES['gf_topic'],'subject','id='.$move_to_topic));
+        $subject = DB_escapeString(DB_getItem($_TABLES['gf_topic'],'subject','id='.$move_to_topic));
         $pidDate = DB_getItem($_TABLES['gf_topic'],'date','id='.$move_to_topic);
         $moveResult = DB_query("SELECT id,date FROM {$_TABLES['gf_topic']} WHERE pid=$topic_id");
         $postCount = DB_numRows($moveResult)+1;  // Need to account for the parent post
@@ -356,7 +356,7 @@ function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_foru
         $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$topic_id";
         $retval .= forum_statusMessage($LANG_GF02['msg163'],$link,$LANG_GF02['msg163'],false,'',true);
     } else {
-        $subject = addslashes(DB_getItem($_TABLES['gf_topic'],'subject','id='.$move_to_topic));
+        $subject = DB_escapeString(DB_getItem($_TABLES['gf_topic'],'subject','id='.$move_to_topic));
 
         $sql  = "UPDATE {$_TABLES['gf_topic']} SET forum=$move_to_forum, pid=$move_to_topic, subject='$subject' WHERE id=$topic_id ";
         DB_query($sql);

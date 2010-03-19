@@ -198,11 +198,11 @@ class mgAlbumCPG {
     	global $mgAlbums, $_USER, $_TABLES, $_MG_CONF;
 
 	    if ($_MG_CONF['htmlallowed'] == 1 ) {
-	        $this->title 		= addslashes(ereg_replace('-',' ', $this->title));
-	        $this->description 	= addslashes($this->description);
+	        $this->title 		= DB_escapeString(ereg_replace('-',' ', $this->title));
+	        $this->description 	= DB_escapeString($this->description);
 	    } else {
-	        $this->title    	= addslashes(htmlspecialchars(strip_tags(COM_checkWords($this->title))));
-	        $this->description  = addslashes(htmlspecialchars(strip_tags(COM_checkWords($this->description))));
+	        $this->title    	= DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords($this->title))));
+	        $this->description  = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords($this->description))));
 	    }
 
 	    // make sure we do not have SQL overflows...
@@ -626,8 +626,8 @@ function MG_importFiles( $album_id, $import_album_id, $configdir, $session_id ) 
 
         $fileList[$counter]['aid']      = $album_id;
         $fileList[$counter]['data']     = $configdir . '/albums/' . $row['filepath'] . $row['filename'];
-        $fileList[$counter]['data3']    = addslashes($row['title']);
-        $fileList[$counter]['data2']    = addslashes(html_entity_decode($row['caption']));
+        $fileList[$counter]['data3']    = DB_escapeString($row['title']);
+        $fileList[$counter]['data2']    = DB_escapeString(html_entity_decode($row['caption']));
         $fileList[$counter]['mid']      = intval($row['hits']);
         $owner_name                     = $row['owner_name'];
         $fileList[$counter]['uid'] = $owner_name;
@@ -641,11 +641,11 @@ function MG_importFiles( $album_id, $import_album_id, $configdir, $session_id ) 
 		$cRows  = @mysql_numrows($Cresult);
     	for ($z=0; $z < $cRows; $z++ ) {
 	    	$cRow = @mysql_fetch_array($Cresult, MYSQL_BOTH);
-	    	$cpgImages[$i]['comments'][$z]['author'] 	= addslashes($cRow['msg_author']);
+	    	$cpgImages[$i]['comments'][$z]['author'] 	= DB_escapeString($cRow['msg_author']);
 	    	$cpgImages[$i]['comments'][$z]['sid'] 		= $new_media_id;
 	    	$cpgImages[$i]['comments'][$z]['date'] 		= $cRow['msg_date'];
 	    	$cpgImages[$i]['comments'][$z]['title'] 	= $row['title'] == '' ? 'Coppermine Comment' : $row['title'];
-	    	$cpgImages[$i]['comments'][$z]['comment'] 	= addslashes($cRow['msg_body']);
+	    	$cpgImages[$i]['comments'][$z]['comment'] 	= DB_escapeString($cRow['msg_body']);
 	    	$cpgImages[$i]['comments'][$z]['ipaddress'] = $cRow['msg_raw_ip'];
 	    	$cpgImages[$i]['comments'][$z]['cmt_date'] 	= $cRow['msg_date'];
 	    	COM_errorLog("MG-CPG Import: Found comment");
@@ -670,7 +670,7 @@ function MG_importFiles( $album_id, $import_album_id, $configdir, $session_id ) 
         $data3    = $fileList[$i]['data3'];
 
         DB_query("INSERT INTO {$_TABLES['mg_session_items']} (session_id,mid,aid,data,data2,data3,status)
-                  VALUES('$session_id','$mid',$aid,'" . addslashes($data) . "','" . addslashes($data2) . "','" . addslashes($data3) . "',0)");
+                  VALUES('$session_id','$mid',$aid,'" . DB_escapeString($data) . "','" . DB_escapeString($data2) . "','" . DB_escapeString($data3) . "',0)");
 
 	    $id = DB_insertId();
 	    if ( $id == 0 ) {

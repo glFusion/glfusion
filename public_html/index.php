@@ -73,7 +73,7 @@ if( $microsummary )
 
     // if a topic was provided only select those stories.
     if (!empty($topic)) {
-        $sql .= " AND s.tid = '".addslashes($topic)."' ";
+        $sql .= " AND s.tid = '".DB_escapeString($topic)."' ";
     } elseif (!$newstories) {
         $sql .= " AND frontpage <> 0 ";
     }
@@ -111,7 +111,7 @@ if( $microsummary )
             else
             {
                 $pagetitle = stripslashes( DB_getItem( $_TABLES['topics'], 'topic',
-                                                       "tid = '".addslashes($topic)."'" ));
+                                                       "tid = '".DB_escapeString($topic)."'" ));
             }
         }
         $pagetitle = $_CONF['site_name'] . ' - ' . $pagetitle;
@@ -203,7 +203,7 @@ if ($U['maxstories'] >= $_CONF['minnews']) {
 }
 if ((!empty ($topic)) && ($maxstories == 0)) {
     $topiclimit = DB_getItem ($_TABLES['topics'], 'limitnews',
-                              "tid = '".addslashes($topic)."'");
+                              "tid = '".DB_escapeString($topic)."'");
     if ($topiclimit >= $_CONF['minnews']) {
         $maxstories = $topiclimit;
     }
@@ -241,15 +241,15 @@ while (list ($sid, $expiretopic, $title, $expire, $statuscode) = DB_fetchArray (
     if ($statuscode == STORY_ARCHIVE_ON_EXPIRE) {
         if (!empty ($archivetid) ) {
             COM_errorLOG("Archive Story: $sid, Topic: $archivetid, Title: $title, Expired: $expire");
-            DB_query ("UPDATE {$_TABLES['stories']} SET tid = '$archivetid', frontpage = '0', featured = '0' WHERE sid='".addslashes($sid)."'");
+            DB_query ("UPDATE {$_TABLES['stories']} SET tid = '$archivetid', frontpage = '0', featured = '0' WHERE sid='".DB_escapeString($sid)."'");
             CACHE_remove_instance('story_'.$sid);
             CACHE_remove_instance('whatsnew');
         }
     } else if ($statuscode == STORY_DELETE_ON_EXPIRE) {
         COM_errorLOG("Delete Story and comments: $sid, Topic: $expiretopic, Title: $title, Expired: $expire");
         STORY_deleteImages ($sid);
-        DB_query("DELETE FROM {$_TABLES['comments']} WHERE sid='".addslashes($sid)."' AND type = 'article'");
-        DB_query("DELETE FROM {$_TABLES['stories']} WHERE sid='".addslashes($sid)."'");
+        DB_query("DELETE FROM {$_TABLES['comments']} WHERE sid='".DB_escapeString($sid)."' AND type = 'article'");
+        DB_query("DELETE FROM {$_TABLES['stories']} WHERE sid='".DB_escapeString($sid)."'");
         CACHE_remove_instance('story_'.$sid);
         CACHE_remove_instance('whatsnew');
     }
@@ -263,7 +263,7 @@ if (empty ($topic)) {
 
 // if a topic was provided only select those stories.
 if (!empty($topic)) {
-    $sql .= " AND s.tid = '".addslashes($topic)."' ";
+    $sql .= " AND s.tid = '".DB_escapeString($topic)."' ";
 } elseif (!$newstories) {
     $sql .= " AND frontpage = 1 ";
 }
@@ -384,7 +384,7 @@ if ( $A = DB_fetchArray( $result ) ) {
                     COM_getBlockTemplate ('_msg_block', 'header')) . $LANG05[2];
             if (!empty ($topic)) {
                 $topicname = DB_getItem ($_TABLES['topics'], 'topic',
-                                         "tid = '".addslashes($topic)."'");
+                                         "tid = '".DB_escapeString($topic)."'");
                 $display .= sprintf ($LANG05[3], $topicname);
             }
             $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));

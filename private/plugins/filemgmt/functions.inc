@@ -190,8 +190,8 @@ function plugin_savecomment_filemgmt($title,$comment,$id,$pid,$postmode) {
                     'filemgmt', $LANG03[14], $postmode)
             . COM_siteFooter();
     } else { // success
-        $comments = DB_count ($_TABLES['comments'], 'sid', addslashes($id));
-        DB_change($_FM_TABLES['filemgmt_filedetail'],'comments', $comments, 'lid',addslashes($id));
+        $comments = DB_count ($_TABLES['comments'], 'sid', DB_escapeString($id));
+        DB_change($_FM_TABLES['filemgmt_filedetail'],'comments', $comments, 'lid',DB_escapeString($id));
         return (COM_refresh (COM_buildUrl ($_CONF['site_url']
             . "/filemgmt/index.php?id=$id")) );
     }
@@ -265,7 +265,7 @@ function plugin_displaycomment_filemgmt($id,$commentid,$title,$order,$format,$pa
 
     $sql = "SELECT $fields FROM {$_FM_TABLES['filemgmt_filedetail']} d, ";
     $sql .= "{$_FM_TABLES['filemgmt_filedesc']} t ";
-    $sql .= "WHERE d.lid='".addslashes($id)."' AND d.lid=t.lid AND status > 0";
+    $sql .= "WHERE d.lid='".DB_escapeString($id)."' AND d.lid=t.lid AND status > 0";
     $result=DB_query($sql);
     list($lid, $cid, $dtitle, $url, $homepage, $version, $size, $logourl, $submitter, $status, $time, $hits, $rating, $votes, $description)=DB_fetchARRAY($result);
 
@@ -435,7 +435,7 @@ function plugin_dopluginsearch_filemgmt($query, $datestart, $dateend, $topic, $t
     if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
         return '';
     }
-    $query = trim(addslashes(htmlspecialchars($query)));
+    $query = trim(DB_escapeString(htmlspecialchars($query)));
 
     $sql  = "SELECT a.lid AS id, a.cid, a.title,submitter AS uid,comments,hits,date,description, CONCAT('/filemgmt/index.php?id=',a.lid) AS url ";
     $sql .= "FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
@@ -475,7 +475,7 @@ function plugin_dopluginsearch_comment_filemgmt($query, $datestart, $dateend, $t
 {
     global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_FM_TABLES, $_CONF, $filemgmt_FileStoreURL, $LANG09;
 
-    $query = trim(addslashes(htmlspecialchars($query)));
+    $query = trim(DB_escapeString(htmlspecialchars($query)));
 
     $sql =  "SELECT c.cid AS id1, a.lid AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
     $sql .= "CONCAT('/filemgmt/index.php?id=',a.lid,'#comments') AS url ";
@@ -869,7 +869,7 @@ function plugin_autotags_filemgmt ($op, $content = '', $autotag = '')
         }
         if ($caption == '' ) {
             $linktext = DB_getItem ($_FM_TABLES['filemgmt_filedetail'],
-                                      'title', "lid = '".addslashes($file_id)."'");
+                                      'title', "lid = '".DB_escapeString($file_id)."'");
         } else {
             $linktext = $caption;
         }
@@ -902,7 +902,7 @@ function plugin_canuserrate_filemgmt($item_id, $uid)
     }
     // Check if Download POSTER is voting (UNLESS Anonymous users allowed to post)
     if ($ratinguser != 0) {
-        $result=DB_query("SELECT submitter FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='".addslashes($item_id)."'");
+        $result=DB_query("SELECT submitter FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='".DB_escapeString($item_id)."'");
         while(list($ratinguserDB)=DB_fetchARRAY($result)) {
             if ($ratinguserDB==$ratinguser) {
                 return false;
@@ -968,7 +968,7 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
         $where = '';
         $permOp = 'WHERE ';
     } else {
-        $where = " WHERE detail.lid = '" . addslashes($id) . "' ";
+        $where = " WHERE detail.lid = '" . DB_escapeString($id) . "' ";
         $permOp = 'AND';
     }
 

@@ -102,7 +102,7 @@ function COM_siteHeaderv1( $what = 'menu', $pagetitle = '', $headercode = '' )
         }
         if( !empty( $sid ))
         {
-            $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='".addslashes($sid)."'" );
+            $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='".DB_escapeString($sid)."'" );
         }
     }
     else
@@ -119,7 +119,7 @@ function COM_siteHeaderv1( $what = 'menu', $pagetitle = '', $headercode = '' )
              . $_TABLES['syndication'] . " WHERE (header_tid = 'all')";
         if( !empty( $topic ))
         {
-            $sql .= " OR (header_tid = '" . addslashes( $topic ) . "')";
+            $sql .= " OR (header_tid = '" . DB_escapeString( $topic ) . "')";
         }
         $result = DB_query( $sql );
         $numRows = DB_numRows( $result );
@@ -190,7 +190,7 @@ function COM_siteHeaderv1( $what = 'menu', $pagetitle = '', $headercode = '' )
         else
         {
             $pagetitle = stripslashes( DB_getItem( $_TABLES['topics'], 'topic',
-                                                   "tid = '".addslashes($topic)."'" ));
+                                                   "tid = '".DB_escapeString($topic)."'" ));
         }
     }
     if( !empty( $pagetitle ))

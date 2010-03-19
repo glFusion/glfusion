@@ -67,7 +67,7 @@ if (!SEC_hasRights('mediagallery.admin')) {
 // only take media ids, we'll build the path
 
 $mid = COM_applyFilter($_REQUEST['mid']);
-$sql = "SELECT * FROM {$_TABLES['mg_media']} WHERE media_id='" . addslashes($mid) . "'";
+$sql = "SELECT * FROM {$_TABLES['mg_media']} WHERE media_id='" . DB_escapeString($mid) . "'";
 $result = DB_query($sql);
 $numRows = DB_numRows($result);
 if ($numRows > 0) {
@@ -396,7 +396,7 @@ function PoweredBygetID3($string='<br><HR NOSHADE><DIV STYLE="font-size: 8pt; fo
 // Unify the contents of GPC,
 // whether magic_quotes_gpc is on or off
 
-function AddStripSlashesArray($input, $addslashes=false) {
+function AddStripSlashesArray($input, $DB_escapeString=false) {
 	if (is_array($input)) {
 
 		$output = $input;
@@ -405,8 +405,8 @@ function AddStripSlashesArray($input, $addslashes=false) {
 		}
 		return $output;
 
-	} elseif ($addslashes) {
-		return addslashes($input);
+	} elseif ($DB_escapeString) {
+		return DB_escapeString($input);
 	}
 	return stripslashes($input);
 }

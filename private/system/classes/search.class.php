@@ -141,7 +141,7 @@ class Search {
             // In case we got a username instead of uid, convert it.  This should
             // make custom themes for search page easier.
             if (!is_numeric($this->_author) && !preg_match('/^([0-9]+)$/', $this->_author) && $this->_author != '')
-                $this->_author = DB_getItem($_TABLES['users'], 'uid', "username='" . addslashes ($this->_author) . "'");
+                $this->_author = DB_getItem($_TABLES['users'], 'uid', "username='" . DB_escapeString ($this->_author) . "'");
 
             if ($this->_author < 1)
                 $this->_author = '';
@@ -446,7 +446,7 @@ class Search {
         global $_TABLES, $_DB_dbms, $LANG09;
 
         // Make sure the query is SQL safe
-        $query = trim(addslashes(htmlspecialchars($this->_query)));
+        $query = trim(DB_escapeString(htmlspecialchars($this->_query)));
 
         $sql = "SELECT s.sid AS id, s.title AS title, s.introtext AS description, UNIX_TIMESTAMP(s.date) AS date, s.uid AS uid, s.hits AS hits, CONCAT('/article.php?story=',s.sid) AS url ";
         $sql .= "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u ";
@@ -486,7 +486,7 @@ class Search {
         global $_CONF, $_TABLES, $_DB_dbms, $LANG09;
 
         // Make sure the query is SQL safe
-        $query = trim(addslashes(htmlspecialchars($this->_query)));
+        $query = trim(DB_escapeString(htmlspecialchars($this->_query)));
 
         $sql = "SELECT c.cid AS id1, s.sid AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
 

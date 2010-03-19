@@ -156,15 +156,15 @@ function prepareStringForDB($message,$postmode="html",$censor=TRUE,$htmlfilter=T
     if($postmode == 'html') {
         if ($htmlfilter) {
             // Need to call addslahes again as COM_checkHTML stips it out
-            $message = addslashes(COM_checkHTML($message));
+            $message = DB_escapeString(COM_checkHTML($message));
         } elseif (!get_magic_quotes_gpc() ) {
-            $message = addslashes($message);
+            $message = DB_escapeString($message);
         }
     } else {
         if(get_magic_quotes_gpc() ) {
             $message = @htmlspecialchars($message,ENT_QUOTES,COM_getEncodingt());
         } else {
-            $message = addslashes(@htmlspecialchars($message,ENT_QUOTES,COM_getEncodingt()));
+            $message = DB_escapeString(@htmlspecialchars($message,ENT_QUOTES,COM_getEncodingt()));
         }
     }
     return $message;

@@ -328,7 +328,7 @@ function plugin_autotags_sitetailor($op,$content='',$autotag='') {
             case 'hmenu' :
                 $menu = '';
                 $menuID = trim($autotag['parm1']);
-                $id = DB_getItem($_TABLES['st_menus'],'id','menu_name="'.addslashes($menuID).'"');
+                $id = DB_getItem($_TABLES['st_menus'],'id','menu_name="'.DB_escapeString($menuID).'"');
                 if ( $id > 0 ) {
                     if ( $stMenu[$id]['menu_type'] == 1 ) {
                         $menu = st_getMenu($menuID,"gl_moomenu","gl_moomenu",'',"parent");

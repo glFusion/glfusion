@@ -64,7 +64,7 @@ function bb2_db_affected_rows() {
 
 // Escape a string for database usage
 function bb2_db_escape($string) {
-    return addslashes($string);
+    return DB_escapeString($string);
 }
 
 // Return the number of rows in a particular query.

@@ -171,7 +171,7 @@ function MG_search($id,$page) {
 
     // pull the query from the search database...
 
-    $result = DB_query("SELECT * FROM {$_TABLES['mg_sort']} WHERE sort_id='" . addslashes($id) . "'");
+    $result = DB_query("SELECT * FROM {$_TABLES['mg_sort']} WHERE sort_id='" . DB_escapeString($id) . "'");
     $nrows  = DB_numRows($result);
     if ( $nrows < 1 ) {
         return(MG_displaySearchBox('<div class="pluginAlert">' . $LANG_MG03['no_search_found'] . '</div>'));
@@ -524,7 +524,7 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
 	            $playback_options['swf_version'] = $_MG_CONF['swf_version'];
 	            $playback_options['flashvars']   = $_MG_CONF['swf_flashvars'];
 
-	            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . addslashes($M['media_id']) . "'");
+	            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . DB_escapeString($M['media_id']) . "'");
 	            while ( $poRow = DB_fetchArray($poResult) ) {
 	                $playback_options[$poRow['option_name']] = $poRow['option_value'];
 	            }
@@ -554,7 +554,7 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
 	                        $resolution_y = $MG_mediaFileInfo['video']['resolution_y'];
 	                    }
 	                    if ( $resolution_x != 0 ) {
-	                        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . $resolution_x . ",media_resolution_y=" . $resolution_y . " WHERE media_id='" . addslashes($M['media_id']) . "'";
+	                        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . $resolution_x . ",media_resolution_y=" . $resolution_y . " WHERE media_id='" . DB_escapeString($M['media_id']) . "'";
 	                        DB_query( $sql,1 );
 	                    }
 	                } else {
@@ -882,7 +882,7 @@ if (($mode == $LANG_MG01['search'] && !empty ($LANG_MG01['search'])) || $mode ==
     // build the query and put into our database...
 
     $sqltmp = " WHERE 1=1 ";
-    $keywords_db = addslashes($keywords);
+    $keywords_db = DB_escapeString($keywords);
     if ( $stype == 'phrase' ) { // search phrase
         switch ( $skeywords ) {
             case 0 :
@@ -909,7 +909,7 @@ if (($mode == $LANG_MG01['search'] && !empty ($LANG_MG01['search'])) || $mode ==
         $tmp = '';
         $mywords = explode( ' ', $keywords );
         foreach( $mywords AS $mysearchitem ) {
-            $mysearchitem = addslashes( $mysearchitem );
+            $mysearchitem = DB_escapeString( $mysearchitem );
             switch ( $skeywords ) {
                 case 0 :
                     $tmp .= "( m.media_title LIKE '%$mysearchitem%' OR m.media_desc LIKE '%$mysearchitem%' OR m.media_keywords LIKE '%$mysearchitem%' OR m.artist LIKE '%$keywords%' OR m.album LIKE '%$keywords%' OR m.genre LIKE '%$keywords%') OR ";
@@ -938,7 +938,7 @@ if (($mode == $LANG_MG01['search'] && !empty ($LANG_MG01['search'])) || $mode ==
         $tmp = '';
         $mywords = explode( ' ', $keywords );
         foreach( $mywords AS $mysearchitem ) {
-            $mysearchitem = addslashes( $mysearchitem );
+            $mysearchitem = DB_escapeString( $mysearchitem );
             switch ( $skeywords ) {
                 case 0 :
                     $tmp .= "( m.media_title LIKE '%$mysearchitem%' OR m.media_desc LIKE '%$mysearchitem%' OR m.media_keywords LIKE '%$mysearchitem%' OR m.artist LIKE '%$keywords%' OR m.album LIKE '%$keywords%' OR m.genre LIKE '%$keywords%') AND ";
@@ -972,7 +972,7 @@ if (($mode == $LANG_MG01['search'] && !empty ($LANG_MG01['search'])) || $mode ==
     if ( $users > 0 ) {
 	    $sqltmp .= " AND m.media_user_id=" . $users;
     }
-    $sqltmp = addslashes($sqltmp);
+    $sqltmp = DB_escapeString($sqltmp);
 
     $sort_id = COM_makesid();
     if ( !isset($_USER['uid']) || $_USER['uid'] < 2 ) {
@@ -982,8 +982,8 @@ if (($mode == $LANG_MG01['search'] && !empty ($LANG_MG01['search'])) || $mode ==
     }
     $sort_datetime = time();
 
-    $referer = addslashes($referer);
-    $keywords = addslashes($keywords);
+    $referer = DB_escapeString($referer);
+    $keywords = DB_escapeString($keywords);
 
     $sql = "INSERT INTO {$_TABLES['mg_sort']} (sort_id,sort_user,sort_query,sort_results,sort_datetime,referer,keywords)
             VALUES ('$sort_id',$sort_user,'$sqltmp',$numresults,$sort_datetime,'$referer','$keywords')";

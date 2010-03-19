@@ -224,7 +224,7 @@ function plugin_user_delete_forum ($uid)
     global $_TABLES;
 
     $username = DB_getItem($_TABLES['users'], "username", "uid=$uid");
-    $username = addslashes($username);
+    $username = DB_escapeString($username);
     DB_query("DELETE FROM {$_TABLES['gf_moderators']} WHERE mod_username='$username'");
     DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid ='$uid'");
     DB_query("DELETE FROM {$_TABLES['gf_userinfo']} WHERE uid ='$uid'");
@@ -434,7 +434,7 @@ function plugin_dopluginsearch_forum($query, $datestart, $dateend, $topic, $type
         return;
     }
 
-    $query = trim(addslashes($query));
+    $query = trim(DB_escapeString($query));
 
     $sql   = "SELECT id,name,forum,date,subject as title,comment as description,views AS hits,uid, CONCAT('/forum/viewtopic.php?showtopic=',id,'&amp;topic=',id,'#',id) AS url ";
     $sql  .= "FROM {$_TABLES['gf_topic']} t ";
@@ -1153,7 +1153,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
 
                 $testText = gf_formatTextBlock($A['comment'],'text','noquote',$A['status']);
                 $testText = strip_tags($testText);
-                $html2txt = new html2text(addslashes($testText),false);
+                $html2txt = new html2text(DB_escapeString($testText),false);
                 $testText = trim($html2txt->get_text());
                 $shortComment = '';
                 $commentArray = explode(' ',$testText);
@@ -1182,7 +1182,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 }
                 $testText = gf_formatTextBlock($B['comment'],'text','noquote',$A['status']);
                 $testText = strip_tags($testText);
-                $html2txt = new html2text(addslashes($testText),false);
+                $html2txt = new html2text(DB_escapeString($testText),false);
                 $testText = trim($html2txt->get_text());
                 $shortComment = '';
                 $commentArray = explode(' ',$testText);
@@ -1281,7 +1281,7 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
         $where = '';
         $permOp = '';
     } else {
-        $where = " WHERE id = '" . addslashes($id) . "'";
+        $where = " WHERE id = '" . DB_escapeString($id) . "'";
         $permOp = ' AND ';
     }
 
@@ -1559,7 +1559,7 @@ function forumPLG_getPMlink($member,$uid=0) {
     if (in_array('pm', $_PLUGINS)) {
         if ( !isset($blockArray[$member]) ) {
             if ( $uid == 0 ) {
-                $uid = DB_getItem($_TABLES['users'],'uid','username="'.addslashes($member).'"');
+                $uid = DB_getItem($_TABLES['users'],'uid','username="'.DB_escapeString($member).'"');
             }
             $block = DB_getItem($_TABLES['pm_userprefs'],'block','uid='.$uid);
             $blockArray[$member] = intval($block);
@@ -1836,7 +1836,7 @@ function plugin_profilesave_forum($uid = 0 )
             // Insert a new blank record. Defaults are set in SQL Defintion for table.
             DB_query("INSERT INTO {$_TABLES['gf_userinfo']} (uid,rating,signature) VALUES ('$uid',0,'')");
         }
-        $sql = "UPDATE {$_TABLES['gf_userinfo']} SET signature='".addslashes($signature)."' WHERE uid=".$uid;
+        $sql = "UPDATE {$_TABLES['gf_userinfo']} SET signature='".DB_escapeString($signature)."' WHERE uid=".$uid;
         DB_query($sql);
     }
 }

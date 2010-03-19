@@ -323,11 +323,11 @@ function MG_usage( $application, $album_title, $media_title, $media_id ) {
 
     $log_time = $now;
     $user_id  = intval($_USER['uid']);
-    $user_ip  = addslashes($REMOTE_ADDR);
-    $user_name = addslashes($_USER['username']);
+    $user_ip  = DB_escapeString($REMOTE_ADDR);
+    $user_name = DB_escapeString($_USER['username']);
 
-    $title  = addslashes($album_title);
-    $ititle = addslashes($media_title);
+    $title  = DB_escapeString($album_title);
+    $ititle = DB_escapeString($media_title);
 
     $sql = "INSERT INTO " . $_TABLES['mg_usage_tracking'] .
             " (time,user_id,user_ip, user_name,application, album_title, media_title,media_id)

@@ -42,8 +42,8 @@ function INSTALLER_install_group($step, &$vars)
     global $_TABLES;
 
     COM_errorLog("AutoInstall: Creating group {$step['group']}...");
-    $grp_name = addslashes($step['group']);
-    $grp_desc = addslashes($step['desc']);
+    $grp_name = DB_escapeString($step['group']);
+    $grp_desc = DB_escapeString($step['desc']);
     DB_query("INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr) VALUES ('$grp_name', '$grp_desc')", 1);
     if (DB_error()) {
         COM_errorLog("AutoInstall: Group creation failed!");
@@ -68,14 +68,14 @@ function INSTALLER_install_addgroup($step, &$vars)
     if (array_key_exists('parent_var',$step)) {
         $parent_grp = $vars[$step['parent_var']];
     } elseif (array_key_exists('parent_grp',$step)) {
-        $parent_grp = DB_getItem($_TABLES['groups'], 'grp_id', "grp_name = '" . addslashes($step['parent_grp']) . "'");
+        $parent_grp = DB_getItem($_TABLES['groups'], 'grp_id', "grp_name = '" . DB_escapeString($step['parent_grp']) . "'");
     } else {
         $parent_grp = 0;
     }
     if (array_key_exists('child_var',$step)) {
         $child_grp = $vars[$step['child_var']];
     } elseif (array_key_exists('child_grp',$step)) {
-        $child_grp = DB_getItem($_TABLES['groups'], 'grp_id', "grp_name = '" . addslashes($step['child_grp']) . "'");
+        $child_grp = DB_getItem($_TABLES['groups'], 'grp_id', "grp_name = '" . DB_escapeString($step['child_grp']) . "'");
     } else {
         $child_grp = 0;
     }
@@ -99,8 +99,8 @@ function INSTALLER_install_feature($step, &$vars)
     global $_TABLES;
 
     COM_errorLog("AutoInstall: Creating feature {$step['feature']}...");
-    $ft_name = addslashes($step['feature']);
-    $ft_desc = addslashes($step['desc']);
+    $ft_name = DB_escapeString($step['feature']);
+    $ft_desc = DB_escapeString($step['desc']);
     DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr) VALUES ('$ft_name', '$ft_desc')", 1);
     if (DB_error()) {
         COM_errorLog("AutoInstall: Feature creation failed!");
@@ -122,7 +122,7 @@ function INSTALLER_install_mapping($step, &$vars)
         COM_errorLog("AutoInstall: Mapping a feature to a group...");
     }
     if (array_key_exists('findgroup', $step)) {
-        $grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = '" . addslashes($step['findgroup']) . "'"));
+        $grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = '" . DB_escapeString($step['findgroup']) . "'"));
 
         if ($grp_id == 0) {
             COM_errorLog("AutoInstall: Could not find existing '{$step['findgroup']}' group!");
@@ -191,12 +191,12 @@ function INSTALLER_install_block($step, &$vars)
     $rdflimit = isset($step['rdflimit']) ? intval($step['rdflimit']) : 0;
     $onleft = isset($step['onleft']) ? intval($step['onleft']) : 0;
     $allow_autotags = isset($step['allow_autotags']) ? intval($step['allow_autotags']) : 0;
-    $name = isset($step['name']) ? addslashes($step['name']) : '';
-    $title = isset($step['title']) ? addslashes($step['title']) : '';
-    $type = isset($step['block_type']) ? addslashes($step['block_type']) : 'unknown';
-    $phpblockfn = isset($step['phpblockfn']) ? addslashes($step['phpblockfn']) : '';
-    $help = isset($step['help']) ? addslashes($step['help']) : '';
-    $content = isset($step['content']) ? addslashes($step['content']) : '';
+    $name = isset($step['name']) ? DB_escapeString($step['name']) : '';
+    $title = isset($step['title']) ? DB_escapeString($step['title']) : '';
+    $type = isset($step['block_type']) ? DB_escapeString($step['block_type']) : 'unknown';
+    $phpblockfn = isset($step['phpblockfn']) ? DB_escapeString($step['phpblockfn']) : '';
+    $help = isset($step['help']) ? DB_escapeString($step['help']) : '';
+    $content = isset($step['content']) ? DB_escapeString($step['content']) : '';
     $blockorder = isset($step['blockorder']) ? intval($step['blockorder']) : 9999;
     $owner_id = isset($_USER['uid']) ? $_USER['uid'] : 2;
     $group_id = isset($vars[$step['group_id']]) ? $vars[$step['group_id']] : 1;
@@ -399,14 +399,14 @@ function INSTALLER_uninstall($A)
     $plugin = Array();
     foreach ($reverse as $step) {
         if ($step['type'] == 'feature') {
-            $ft_name = addslashes($step['feature']);
+            $ft_name = DB_escapeString($step['feature']);
             $ft_id = DB_getItem($_TABLES['features'], 'ft_id', "ft_name = '$ft_name'");
 
             COM_errorLog("AutoInstall: Removing feature {$step['feature']}....");
             DB_query("DELETE FROM {$_TABLES['access']} WHERE acc_ft_id = $ft_id", 1);
             DB_query("DELETE FROM {$_TABLES['features']} WHERE ft_id = $ft_id", 1);
         } else if ($step['type'] == 'group') {
-            $grp_name = addslashes($step['group']);
+            $grp_name = DB_escapeString($step['group']);
             $grp_id = DB_getItem($_TABLES['groups'], 'grp_id', "grp_name = '$grp_name'");
 
             COM_errorLog("AutoInstall: Removing group {$step['group']}....");

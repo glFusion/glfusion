@@ -467,13 +467,13 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
     }
 
     if ($_MG_CONF['htmlallowed'] != 1 ) {
-        $media_desc     = addslashes(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($description)))));
-        $media_caption  = addslashes(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($caption)))));
-        $media_keywords = addslashes(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($keywords)))));
+        $media_desc     = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($description)))));
+        $media_caption  = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($caption)))));
+        $media_keywords = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($keywords)))));
     } else {
-        $media_desc     = addslashes(COM_checkHTML(COM_killJS($description)));
-        $media_caption  = addslashes(COM_checkHTML(COM_killJS($caption)));
-        $media_keywords = addslashes(COM_checkHTML(COM_killJS($keywords)));
+        $media_desc     = DB_escapeString(COM_checkHTML(COM_killJS($description)));
+        $media_caption  = DB_escapeString(COM_checkHTML(COM_killJS($caption)));
+        $media_keywords = DB_escapeString(COM_checkHTML(COM_killJS($keywords)));
     }
 
     // Check and see if moderation is on.  If yes, place in mediasubmission
@@ -513,10 +513,10 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
 	    $resolution_y = 240;
     }
 
-    $remoteURL = addslashes($URL);
+    $remoteURL = DB_escapeString($URL);
 
     $sql = "INSERT INTO " . $tableMedia . " (media_id,media_filename,media_original_filename,media_mime_ext,media_exif,mime_type,media_title,media_desc,media_keywords,media_time,media_views,media_comments,media_votes,media_rating,media_tn_attached,media_tn_image,include_ss,media_user_id,media_user_ip,media_approval,media_type,media_upload_time,media_category,media_watermarked,v100,maint,media_resolution_x,media_resolution_y,remote_media,remote_url)
-            VALUES ('".addslashes($new_media_id)."','".addslashes($media_filename)."','".addslashes($original_filename)."','".addslashes($mimeExt)."','1','".addslashes($mimeType)."','$media_caption','$media_desc','$media_keywords','".addslashes($media_time)."','0','0','0','0.00','".addslashes($attachedThumbnail)."','','1','".intval($media_user_id)."','','0','".addslashes($mediaType)."','".addslashes($media_upload_time)."','".addslashes($category)."','0','0','0',$resolution_x,$resolution_y,1,'$remoteURL');";
+            VALUES ('".DB_escapeString($new_media_id)."','".DB_escapeString($media_filename)."','".DB_escapeString($original_filename)."','".DB_escapeString($mimeExt)."','1','".DB_escapeString($mimeType)."','$media_caption','$media_desc','$media_keywords','".DB_escapeString($media_time)."','0','0','0','0.00','".DB_escapeString($attachedThumbnail)."','','1','".intval($media_user_id)."','','0','".DB_escapeString($mediaType)."','".DB_escapeString($media_upload_time)."','".DB_escapeString($category)."','0','0','0',$resolution_x,$resolution_y,1,'$remoteURL');";
     DB_query( $sql );
 
     if ( $_MG_CONF['verbose'] ) {
@@ -531,7 +531,7 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
         $media_seq = 10;
     }
 
-    $sql = "INSERT INTO " . $tableMediaAlbum . " (media_id, album_id, media_order) VALUES ('".addslashes($new_media_id)."', ".intval($albumId).", $media_seq )";
+    $sql = "INSERT INTO " . $tableMediaAlbum . " (media_id, album_id, media_order) VALUES ('".DB_escapeString($new_media_id)."', ".intval($albumId).", $media_seq )";
     DB_query( $sql );
 
     if ( $mediaType == 1 && $resolution_x > 0 && $resolution_y > 0 ) {

@@ -231,7 +231,7 @@ function applyPreferences()
                         } else {
                             $users_first++;
                         }
-                        $users_sql .= 'language="'.addslashes($language).'" ';
+                        $users_sql .= 'language="'.DB_escapeString($language).'" ';
                     }
                     break;
                 case 'theme' :   // users - theme
@@ -242,7 +242,7 @@ function applyPreferences()
                         } else {
                             $users_first++;
                         }
-                        $users_sql .= 'theme="'.addslashes($theme).'" ';
+                        $users_sql .= 'theme="'.DB_escapeString($theme).'" ';
                     }
                     break;
                 case 'noicons' :    // userprefs - noicons
@@ -290,7 +290,7 @@ function applyPreferences()
                         } else {
                             $prefs_first++;
                         }
-                        $prefs_sql .= 'tzid="'.addslashes($tzid).'"';
+                        $prefs_sql .= 'tzid="'.DB_escapeString($tzid).'"';
                     }
                     break;
                 case 'dfid' :   // userprefs - dfid
@@ -313,7 +313,7 @@ function applyPreferences()
                         } else {
                             $prefs_first++;
                         }
-                        $prefs_sql .= 'search_result_format="'.addslashes($search_result_format).'"';
+                        $prefs_sql .= 'search_result_format="'.DB_escapeString($search_result_format).'"';
                     }
                     break;
                 case 'commentmode' :    //usercomment - commentmode
@@ -324,7 +324,7 @@ function applyPreferences()
                         } else {
                             $comment_first++;
                         }
-                        $comment_sql .= 'commentmode="'.addslashes($commentmode).'"';
+                        $comment_sql .= 'commentmode="'.DB_escapeString($commentmode).'"';
                     }
                     break;
                 case 'commentorder' :   // usercomment - commentorder
@@ -335,7 +335,7 @@ function applyPreferences()
                         } else {
                             $comment_first++;
                         }
-                        $comment_sql .= 'commentorder="'.addslashes($commentorder).'"';
+                        $comment_sql .= 'commentorder="'.DB_escapeString($commentorder).'"';
                     }
                     break;
                 case 'commentlimit' :   // usercomment - commentlimit

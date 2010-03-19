@@ -231,7 +231,7 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
     $content = array ();
     $sids = array();
 
-    if( DB_getItem( $_TABLES['topics'], 'perm_anon', "tid = '".addslashes($tid)."'") >= 2)
+    if( DB_getItem( $_TABLES['topics'], 'perm_anon', "tid = '".DB_escapeString($tid)."'") >= 2)
     {
         $where = '';
         if( !empty( $limit ))
@@ -253,9 +253,9 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
         }
 
         $topic = stripslashes( DB_getItem( $_TABLES['topics'], 'topic',
-                               "tid = '".addslashes($tid)."'" ));
+                               "tid = '".DB_escapeString($tid)."'" ));
 
-        $result = DB_query( "SELECT sid,uid,title,introtext,bodytext,postmode,UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() AND tid = '".addslashes($tid)."' AND perm_anon > 0 ORDER BY date DESC $limitsql" );
+        $result = DB_query( "SELECT sid,uid,title,introtext,bodytext,postmode,UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() AND tid = '".DB_escapeString($tid)."' AND perm_anon > 0 ORDER BY date DESC $limitsql" );
 
         $nrows = DB_numRows( $result );
 
@@ -447,7 +447,7 @@ function SYND_updateFeed( $fid )
 {
     global $_CONF, $_TABLES, $_SYND_DEBUG;
 
-    $result = DB_query( "SELECT * FROM {$_TABLES['syndication']} WHERE fid = '".addslashes($fid)."'");
+    $result = DB_query( "SELECT * FROM {$_TABLES['syndication']} WHERE fid = '".DB_escapeString($fid)."'");
     $A = DB_fetchArray( $result );
     if( $A['is_enabled'] == 1 )
     {
@@ -596,7 +596,7 @@ function SYND_updateFeed( $fid )
             COM_errorLog ("update_info for feed $fid is $data", 1);
         }
 
-        DB_query( "UPDATE {$_TABLES['syndication']} SET updated = NOW(), update_info = $data WHERE fid = '".addslashes($fid)."'");
+        DB_query( "UPDATE {$_TABLES['syndication']} SET updated = NOW(), update_info = $data WHERE fid = '".DB_escapeString($fid)."'");
     }
 }
 

@@ -555,7 +555,7 @@ switch ($_CONF['language']) {
 // Handle Who's Online block
 if (COM_isAnonUser() && isset($_SERVER['REMOTE_ADDR'])) {
     // The following code handles anonymous users so they show up properly
-    DB_delete($_TABLES['sessions'], array('remote_ip', 'uid'),array(addslashes($_SERVER['REMOTE_ADDR']), 1));
+    DB_delete($_TABLES['sessions'], array('remote_ip', 'uid'),array(DB_escapeString($_SERVER['REMOTE_ADDR']), 1));
 
     $tries = 0;
     do
@@ -566,7 +566,7 @@ if (COM_isAnonUser() && isset($_SERVER['REMOTE_ADDR'])) {
         $curtime = time();
 
         // Insert anonymous user session
-        $result = DB_query( "INSERT INTO {$_TABLES['sessions']} (sess_id, start_time, remote_ip, uid) VALUES ('$sess_id', '$curtime', '".addslashes($_SERVER['REMOTE_ADDR'])."', 1)", 1 );
+        $result = DB_query( "INSERT INTO {$_TABLES['sessions']} (sess_id, start_time, remote_ip, uid) VALUES ('$sess_id', '$curtime', '".DB_escapeString($_SERVER['REMOTE_ADDR'])."', 1)", 1 );
         $tries++;
     }
     while(( $result === false) && ( $tries < 5 ));
@@ -1121,7 +1121,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
             $sid = COM_applyFilter( COM_getArgument( 'story' ));
         }
         if( !empty( $sid )) {
-            $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='".addslashes($sid)."'" );
+            $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='".DB_escapeString($sid)."'" );
         }
     } else {
         $topic = COM_applyFilter( $_GET['topic'] );
@@ -1134,7 +1134,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         $sql = 'SELECT format, filename, title, language FROM '
              . $_TABLES['syndication'] . " WHERE (header_tid = 'all')";
         if( !empty( $topic )) {
-            $sql .= " OR (header_tid = '" . addslashes( $topic ) . "')";
+            $sql .= " OR (header_tid = '" . DB_escapeString( $topic ) . "')";
         }
         $result = DB_query( $sql );
         $numRows = DB_numRows( $result );
@@ -1196,7 +1196,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
             $pagetitle = $_CONF['site_slogan'];
         } else {
             $pagetitle = stripslashes(DB_getItem( $_TABLES['topics'], 'topic',
-                                                   "tid = '".addslashes($topic)."'" ));
+                                                   "tid = '".DB_escapeString($topic)."'" ));
         }
     }
     if( !empty( $pagetitle ))
@@ -1406,7 +1406,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
             COM_setArgNames( array( 'story', 'mode' ));
             $sid = COM_applyFilter( COM_getArgument( 'story' ));
         } if( !empty( $sid )) {
-            $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='".addslashes($sid)."'" );
+            $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='".DB_escapeString($sid)."'" );
         }
     } else {
         $topic = COM_applyFilter( $_GET['topic'] );
@@ -3561,7 +3561,7 @@ function COM_olderStuff()
             $daylist = COM_makeList( $oldnews, 'list-older-stories' );
             $daylist = str_replace(array("\015", "\012"), '', $daylist);
             $string .= $daylist;
-            $string = addslashes( $string );
+            $string = DB_escapeString( $string );
 
             DB_query( "UPDATE {$_TABLES['blocks']} SET content = '$string' WHERE name = 'older_stories'" );
         }
@@ -3686,7 +3686,7 @@ function COM_showBlocks( $side, $topic='', $name='all' )
 
     if( !empty( $topic ))
     {
-        $commonsql .= " AND (tid = '".addslashes($topic)."' OR tid = 'all')";
+        $commonsql .= " AND (tid = '".DB_escapeString($topic)."' OR tid = 'all')";
     }
     else
     {
@@ -3974,11 +3974,11 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
         $update = date('Y-m-d H:i:s');
         $last_modified = '';
         if (!empty($factory->lastModified)) {
-            $last_modified = addslashes($factory->lastModified);
+            $last_modified = DB_escapeString($factory->lastModified);
         }
         $etag = '';
         if (!empty($factory->eTag)) {
-            $etag = addslashes($factory->eTag);
+            $etag = DB_escapeString($factory->eTag);
         }
 
         if (empty($last_modified) || empty($etag)) {
@@ -4021,14 +4021,14 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
 
         // Standard theme based function to put it in the block
         $result = DB_change($_TABLES['blocks'], 'content',
-                            addslashes($content), 'bid', intval($bid));
+                            DB_escapeString($content), 'bid', intval($bid));
     } else if ($factory->errorStatus !== false) {
         // failed to aquire info, 0 out the block and log an error
         COM_errorLog("Unable to aquire feed reader for $rdfurl", 1);
         COM_errorLog($factory->errorStatus[0] . ' ' .
                      $factory->errorStatus[1] . ' ' .
                      $factory->errorStatus[2]);
-        $content = addslashes($LANG21[4]);
+        $content = DB_escapeString($LANG21[4]);
         DB_query("UPDATE {$_TABLES['blocks']} SET content = '$content', rdf_last_modified = NULL, rdf_etag = NULL WHERE bid = ".intval($bid));
     }
 }
@@ -4110,7 +4110,7 @@ function COM_getPassword( $loginname )
 {
     global $_TABLES, $LANG01;
 
-    $result = DB_query( "SELECT passwd FROM {$_TABLES['users']} WHERE username='".addslashes($loginname)."'" );
+    $result = DB_query( "SELECT passwd FROM {$_TABLES['users']} WHERE username='".DB_escapeString($loginname)."'" );
     $tmp = DB_error();
     $nrows = DB_numRows( $result );
 
@@ -4432,7 +4432,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         $archsql = '';
         $archivetid = DB_getItem( $_TABLES['topics'], 'tid', "archive_flag=1" );
         if( !empty( $archivetid )) {
-            $archsql = " AND (tid <> '" . addslashes( $archivetid ) . "')";
+            $archsql = " AND (tid <> '" . DB_escapeString( $archivetid ) . "')";
         }
 
         // Find the newest stories
@@ -5416,9 +5416,9 @@ function COM_checkSpeedlimit($type = 'submit', $max = 1, $property = '')
     if (empty($property)) {
         $property = $_SERVER['REMOTE_ADDR'];
     }
-    $property = addslashes($property);
+    $property = DB_escapeString($property);
 
-    $res  = DB_query("SELECT date FROM {$_TABLES['speedlimit']} WHERE (type = '".addslashes($type)."') AND (ipaddress = '$property') ORDER BY date ASC");
+    $res  = DB_query("SELECT date FROM {$_TABLES['speedlimit']} WHERE (type = '".DB_escapeString($type)."') AND (ipaddress = '$property') ORDER BY date ASC");
 
     // If the number of allowed tries has not been reached,
     // return 0 (didn't hit limit)
@@ -5453,8 +5453,8 @@ function COM_updateSpeedlimit($type = 'submit', $property = '')
     if (empty($property)) {
         $property = $_SERVER['REMOTE_ADDR'];
     }
-    $property = addslashes($property);
-    $type     = addslashes($type);
+    $property = DB_escapeString($property);
+    $type     = DB_escapeString($type);
 
     DB_save($_TABLES['speedlimit'], 'ipaddress,date,type',
             "'$property',UNIX_TIMESTAMP(),'$type'");
@@ -5473,7 +5473,7 @@ function COM_clearSpeedlimit($speedlimit = 60, $type = '')
 
     $sql = "DELETE FROM {$_TABLES['speedlimit']} WHERE ";
     if (!empty($type)) {
-        $sql .= "(type = '".addslashes($type)."') AND ";
+        $sql .= "(type = '".DB_escapeString($type)."') AND ";
     }
     $sql .= "(date < UNIX_TIMESTAMP() - $speedlimit)";
     DB_query($sql);
@@ -5493,8 +5493,8 @@ function COM_resetSpeedlimit($type = 'submit', $property = '')
     if (empty($property)) {
         $property = $_SERVER['REMOTE_ADDR'];
     }
-    $property = addslashes($property);
-    $type     = addslashes($type);
+    $property = DB_escapeString($property);
+    $type     = DB_escapeString($type);
 
     DB_delete($_TABLES['speedlimit'], array('type', 'ipaddress'), array($type, $property));
 }
@@ -7117,7 +7117,7 @@ function CMT_updateCommentcodes() {
         $sql = '';
         if ( is_array($allowedcomments) ) {
             foreach ($allowedcomments as $sid) {
-                $sql .= "AND sid <> '".addslashes($sid)."' ";
+                $sql .= "AND sid <> '".DB_escapeString($sid)."' ";
             }
             $sql = "UPDATE {$_TABLES['stories']} SET commentcode = 1 WHERE commentcode = 0 " . $sql;
             $result = DB_query($sql,1);

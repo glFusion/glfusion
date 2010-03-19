@@ -69,7 +69,7 @@ $display = MG_siteHeader();
 if ( isset ($_POST['cancel_button'] ) ) {
     $session_id = COM_applyFilter($_GET['sid']);
     // Pull the session status info
-    $sql = "SELECT * FROM {$_TABLES['mg_sessions']} WHERE session_id='" . addslashes($session_id) . "'";
+    $sql = "SELECT * FROM {$_TABLES['mg_sessions']} WHERE session_id='" . DB_escapeString($session_id) . "'";
     $result = DB_query($sql,1);
     if ( DB_error() ) {
         COM_errorLog("Media Gallery Error - Unable to retrieve batch session data");

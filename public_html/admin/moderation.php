@@ -108,13 +108,13 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr)
 
     case 'tid':
         $retval = DB_getItem($_TABLES['topics'], 'topic',
-                             "tid = '".addslashes($A['tid'])."'");
+                             "tid = '".DB_escapeString($A['tid'])."'");
         break;
 
     case 'uid':
         $name = '';
         if ($A['uid'] == 1) {
-            $name = htmlspecialchars(COM_stripslashes(DB_getItem($_TABLES['commentsubmissions'], 'name', "cid = '".addslashes($A['id'])."'")));
+            $name = htmlspecialchars(COM_stripslashes(DB_getItem($_TABLES['commentsubmissions'], 'name', "cid = '".DB_escapeString($A['id'])."'")));
         }
         if (empty($name)) {
             $name = DB_getItem($_TABLES['users'], 'username',
@@ -139,7 +139,7 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr)
     default:
         if (($fieldname == 3) && ($type == 'story')) {
             $retval = DB_getItem($_TABLES['topics'], 'topic',
-                                  "tid = '".addslashes($A[3])."'");
+                                  "tid = '".DB_escapeString($A[3])."'");
         } elseif (($fieldname == 2) && ($type == 'comment')) {
             $retval = COM_truncate(strip_tags($A['comment']), 40, '...');
         } else {
@@ -449,11 +449,11 @@ function MODERATE_items($mid, $action, $type, $count)
             if ($type == 'story') {
                 $result = DB_query ("SELECT * FROM {$_TABLES['storysubmission']} WHERE sid = '$mid[$i]'");
                 $A = DB_fetchArray ($result);
-                $A['related'] = addslashes (implode ("\n", STORY_extractLinks ($A['introtext'])));
+                $A['related'] = DB_escapeString (implode ("\n", STORY_extractLinks ($A['introtext'])));
                 $A['owner_id'] = $A['uid'];
-                $A['title'] = addslashes ($A['title']);
-                $A['introtext'] = addslashes ($A['introtext']);
-                $A['bodytext'] = addslashes( $A['bodytext'] );
+                $A['title'] = DB_escapeString ($A['title']);
+                $A['introtext'] = DB_escapeString ($A['introtext']);
+                $A['bodytext'] = DB_escapeString( $A['bodytext'] );
                 $result = DB_query ("SELECT group_id,perm_owner,perm_group,perm_members,perm_anon,archive_flag FROM {$_TABLES['topics']} WHERE tid = '{$A['tid']}'");
                 $T = DB_fetchArray ($result);
                 if ($T['archive_flag'] == 1) {

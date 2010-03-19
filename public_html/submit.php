@@ -271,7 +271,7 @@ function sendNotification ($table, $story)
     $introtext = COM_undoSpecialChars( $story->displayElements('introtext') . "\n" . $story->displayElements('bodytext') );
     $storyauthor = COM_getDisplayName( $story->displayelements('uid') );
     $topic = stripslashes(DB_getItem ($_TABLES['topics'], 'topic',
-                                       'tid = \''.addslashes($story->displayElements('tid')).'\''));
+                                       'tid = \''.DB_escapeString($story->displayElements('tid')).'\''));
     $mailbody = "$LANG08[31]: {$title}\n"
               . "$LANG24[7]: {$storyauthor}\n"
               . "$LANG08[32]: " . strftime ($_CONF['date']) . "\n"

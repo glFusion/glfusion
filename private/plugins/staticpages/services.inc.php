@@ -334,9 +334,9 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         $sp_title = strip_tags ($sp_title);
         $sp_label = strip_tags ($sp_label);
 
-        $sp_content = addslashes ($sp_content);
-        $sp_title = addslashes ($sp_title);
-        $sp_label = addslashes ($sp_label);
+        $sp_content = DB_escapeString ($sp_content);
+        $sp_title = DB_escapeString ($sp_title);
+        $sp_label = DB_escapeString ($sp_label);
 
         // If user does not have php edit perms, then set php flag to 0.
         if (($_SP_CONF['allow_php'] != 1) || !SEC_hasRights ('staticpages.PHP')) {
@@ -345,7 +345,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
 
         // make sure there's only one "entire page" static page per topic
         if (($sp_centerblock == 1) && ($sp_where == 0)) {
-            $sql = "UPDATE {$_TABLES['staticpage']} SET sp_centerblock = 0 WHERE sp_centerblock = 1 AND sp_where = 0 AND sp_tid = '".addslashes($sp_tid)."'";
+            $sql = "UPDATE {$_TABLES['staticpage']} SET sp_centerblock = 0 WHERE sp_centerblock = 1 AND sp_where = 0 AND sp_tid = '".DB_escapeString($sp_tid)."'";
 
             // multi-language configuration - allow one entire page
             // centerblock for all or none per language
@@ -355,7 +355,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
                 $ids = explode('_', $sp_id);
                 if (count($ids) > 1) {
                     $lang_id = array_pop($ids);
-                    $sql .= " AND sp_id LIKE '%\\_".addslashes($lang_id)."'";
+                    $sql .= " AND sp_id LIKE '%\\_".DB_escapeString($lang_id)."'";
                 }
             }
             DB_query($sql);
@@ -378,9 +378,9 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
 
         if ($delete_old_page && !empty ($sp_old_id)) {
             DB_delete ($_TABLES['staticpage'], 'sp_id', $sp_old_id);
-            DB_change($_TABLES['comments'], 'sid', addslashes($sp_id),
+            DB_change($_TABLES['comments'], 'sid', DB_escapeString($sp_id),
                       array('sid', 'type'),
-                      array(addslashes($sp_old_id), 'staticpages'));
+                      array(DB_escapeString($sp_old_id), 'staticpages'));
             PLG_itemDeleted($sp_old_id, 'staticpages');
 
         }

@@ -255,9 +255,9 @@ function savelink ($lid, $old_lid, $cid, $categorydd, $url, $description, $title
     }
 
     // clean 'em up
-    $description = addslashes (COM_checkHTML (COM_checkWords ($description)));
-    $title = addslashes (COM_checkHTML (COM_checkWords ($title)));
-    $cid = addslashes ($cid);
+    $description = DB_escapeString (COM_checkHTML (COM_checkWords ($description)));
+    $title = DB_escapeString (COM_checkHTML (COM_checkWords ($title)));
+    $cid = DB_escapeString ($cid);
 
     if (empty ($owner_id)) {
         // this is new link from admin, set default values
@@ -293,7 +293,7 @@ function savelink ($lid, $old_lid, $cid, $categorydd, $url, $description, $title
     }
 
     $access = 0;
-    $old_lid = addslashes ($old_lid);
+    $old_lid = DB_escapeString ($old_lid);
     if (DB_count ($_TABLES['links'], 'lid', $old_lid) > 0) {
         $result = DB_query ("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['links']} WHERE lid = '{$old_lid}'");
         $A = DB_fetchArray ($result);
@@ -317,7 +317,7 @@ function savelink ($lid, $old_lid, $cid, $categorydd, $url, $description, $title
     } elseif (!empty($title) && !empty($description) && !empty($url)) {
 
         if ($categorydd != $LANG_LINKS_ADMIN[7] && !empty($categorydd)) {
-            $cid = addslashes ($categorydd);
+            $cid = DB_escapeString ($categorydd);
         } else if ($categorydd != $LANG_LINKS_ADMIN[7]) {
             echo COM_refresh($_CONF['site_admin_url'] . '/plugins/links/index.php');
         }

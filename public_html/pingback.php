@@ -236,7 +236,7 @@ function PNB_getType ($url)
     } else {
         $parts = explode ('/', $part);
         if (strpos ($parts[0], '?') === false) {
-            $plugin = addslashes ($parts[0]);
+            $plugin = DB_escapeString ($parts[0]);
             if (DB_getItem ($_TABLES['plugins'], 'pi_enabled',
                             "pi_name = '$plugin'") == 1) {
                 $retval = $parts[0];
@@ -282,7 +282,7 @@ function PNB_getSid ($url)
 
     // okay, so we have a SID - but are they allowed to access the story?
     if (!empty ($sid)) {
-        $testsid = addslashes ($sid);
+        $testsid = DB_escapeString ($sid);
         $result = DB_query ("SELECT trackbackcode FROM {$_TABLES['stories']} WHERE sid = '$testsid'" . COM_getPermSql ('AND') . COM_getTopicSql ('AND'));
         if (DB_numRows ($result) == 1) {
             $A = DB_fetchArray ($result);

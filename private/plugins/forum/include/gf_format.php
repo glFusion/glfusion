@@ -448,7 +448,7 @@ function gf_preparefordb($message,$postmode) {
         $message = COM_checkWords($message);
     }
 
-    $message = addslashes($message);
+    $message = DB_escapeString($message);
     return $message;
 }
 
@@ -1266,7 +1266,7 @@ function forum_showBlocks($showblocks)
     }
 
     foreach($showblocks as $block) {
-        $sql = "SELECT bid, name,type,title,content,rdfurl,phpblockfn,help,allow_autotags FROM {$_TABLES['blocks']} WHERE name='".addslashes($block)."'";
+        $sql = "SELECT bid, name,type,title,content,rdfurl,phpblockfn,help,allow_autotags FROM {$_TABLES['blocks']} WHERE name='".DB_escapeString($block)."'";
         $result = DB_query($sql);
         if (DB_numRows($result) == 1) {
             $A = DB_fetchArray($result);

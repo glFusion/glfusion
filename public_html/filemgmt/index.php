@@ -83,10 +83,10 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
 
     $sql = "SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
     $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
-    $sql .= "WHERE a.lid='".addslashes($lid)."' $groupsql AND a.status > 0";
+    $sql .= "WHERE a.lid='".DB_escapeString($lid)."' $groupsql AND a.status > 0";
     list($fileAccessCnt) = DB_fetchArray( DB_query($sql));
 
-    if ($fileAccessCnt > 0 AND DB_count($_FM_TABLES['filemgmt_filedetail'],"lid",addslashes($lid) ) == 1) {
+    if ($fileAccessCnt > 0 AND DB_count($_FM_TABLES['filemgmt_filedetail'],"lid",DB_escapeString($lid) ) == 1) {
 
         $p->set_var('block_header', COM_startBlock("<b>". $LANG_FILEMGMT['plugin_name'] ."</b>"));
         $p->set_var('block_footer', COM_endBlock());
@@ -95,7 +95,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
 
         $sql = "SELECT d.lid, d.cid, d.title, d.url, d.homepage, d.version, d.size, d.logourl, d.submitter, d.status, d.date, ";
         $sql .= "d.hits, d.rating, d.votes, d.comments, t.description FROM {$_FM_TABLES['filemgmt_filedetail']} d, ";
-        $sql .= "{$_FM_TABLES['filemgmt_filedesc']} t WHERE d.lid='".addslashes($lid)."' AND d.lid=t.lid AND status > 0";
+        $sql .= "{$_FM_TABLES['filemgmt_filedesc']} t WHERE d.lid='".DB_escapeString($lid)."' AND d.lid=t.lid AND status > 0";
 
         $result = DB_query($sql);
         list($lid, $cid, $dtitle, $url, $homepage, $version, $size, $logourl, $submitter, $status, $time, $hits, $rating, $votes, $comments, $description) = DB_fetchArray($result);

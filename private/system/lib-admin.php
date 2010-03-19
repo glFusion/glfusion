@@ -363,7 +363,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $admin_templates->set_var('filter', $filter);
     }
 
-    $sql_query = addslashes($query); // replace quotes etc for security
+    $sql_query = DB_escapeString($query); // replace quotes etc for security
     $sql = $query_arr['sql']; // get sql from array that builds data
 
     $order_var = ''; # number that is displayed in URL
@@ -807,7 +807,7 @@ function ADMIN_getListField_stories($fieldname, $fieldvalue, $A, $icon_arr)
         case 'tid':
             if (!isset ($topics[$A['tid']])) {
                 $topics[$A['tid']] = DB_getItem ($_TABLES['topics'], 'topic',
-                                                 "tid = '".addslashes($A['tid'])."'");
+                                                 "tid = '".DB_escapeString($A['tid'])."'");
             }
             $retval = $topics[$A['tid']];
             break;

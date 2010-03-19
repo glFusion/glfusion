@@ -137,7 +137,7 @@ function WIDGET_mootickerRSS($block = 'gl_mootickerRSS', $id = 'gl_mooticker') {
     };
 
     $retval = '';
-    $result = DB_query("SELECT *, rdfupdated as date FROM {$_TABLES['blocks']} WHERE name='" . addslashes($block) . "'");
+    $result = DB_query("SELECT *, rdfupdated as date FROM {$_TABLES['blocks']} WHERE name='" . DB_escapeString($block) . "'");
     $numRows = DB_numRows($result);
     if ( $numRows < 1 || $result == NULL ) {
         return $retval;

@@ -55,7 +55,7 @@ if ( !isset($_USER['uid']) ) {
 $s      = COM_applyFilter($_GET['s'],true);
 $sort   = COM_applyFilter($_GET['sort'],true);
 
-$aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . addslashes($s) . '"');
+$aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_escapeString($s) . '"');
 
 if ( $MG_albums[$aid]->access == 0 ) {
     $display  = MG_siteHeader();

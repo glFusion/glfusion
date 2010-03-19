@@ -313,7 +313,7 @@ function MG_ftpProcess( $album_id ) {
         }
 
         DB_query("INSERT INTO {$_TABLES['mg_session_items']} (session_id,mid,aid,data,data2,data3,status)
-                  VALUES('$session_id','$mid',$aid,'" . addslashes($filename) . "','" . $purgefiles . "','" . addslashes($file) . "',0)");
+                  VALUES('$session_id','$mid',$aid,'" . DB_escapeString($filename) . "','" . $purgefiles . "','" . DB_escapeString($file) . "',0)");
     }
 
     $display  = MG_siteHeader();

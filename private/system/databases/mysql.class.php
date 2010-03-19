@@ -461,9 +461,9 @@ class database {
                 $sql .= ' WHERE ';
                 for ($i = 1; $i <= count($id); $i++) {
                     if ($i == count($id)) {
-                        $sql .= current($id) . " = '" . addslashes(current($value)) . "'";
+                        $sql .= current($id) . " = '" . DB_escapeString(current($value)) . "'";
                     } else {
-                        $sql .= current($id) . " = '" . addslashes(current($value)) . "' AND ";
+                        $sql .= current($id) . " = '" . DB_escapeString(current($value)) . "' AND ";
                     }
                     next($id);
                     next($value);
@@ -475,7 +475,7 @@ class database {
             }
         } else {
             if (!empty($id) && ( isset($value) || $value != "")) {
-                $sql .= " WHERE $id = '".addslashes($value)."'";
+                $sql .= " WHERE $id = '".DB_escapeString($value)."'";
             }
         }
 

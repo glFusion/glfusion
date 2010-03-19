@@ -350,7 +350,7 @@ function CAPTCHA_getSession() {
     $validation = '';
 
     // update the session table
-    DB_save($_TABLES['cp_sessions'],"session_id,cptime,validation,counter","'".addslashes($csid)."','$time','','0'");
+    DB_save($_TABLES['cp_sessions'],"session_id,cptime,validation,counter","'".DB_escapeString($csid)."','$time','','0'");
 
     // return the CAPTCHA session identifier
     return $csid;
@@ -475,7 +475,7 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
     } else {
         $csid = COM_applyFilter($_POST['csid']);
         // check the time
-        $cTime = DB_getItem($_TABLES['cp_sessions'],'cptime',"session_id='" . addslashes($csid) . "'");
+        $cTime = DB_getItem($_TABLES['cp_sessions'],'cptime',"session_id='" . DB_escapeString($csid) . "'");
         $now = time();
         if ( $cTime == '' || $cTime+$_CP_CONF['expire'] < $now ) {
             CAPTCHA_errorLog("CAPTCHA: Detected an attempt to use an expired CAPTCHA in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
@@ -483,7 +483,7 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
             $rc = 0;
             return ( array( $rc, $msg ) );
         }
-        $validationString = DB_getItem($_TABLES['cp_sessions'],'validation',"session_id='" . addslashes($csid) . "'");
+        $validationString = DB_getItem($_TABLES['cp_sessions'],'validation',"session_id='" . DB_escapeString($csid) . "'");
         if ( $validationString == '' ) {
            // no active session was found
             CAPTCHA_errorLog("CAPTCHA: Detected an attempt to use old CAPTCHA Session in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
@@ -499,7 +499,7 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
         }
         if ( $validationString == $response && $response != '' ) {
             // we got it, so delete the record to keep others from using it
-            DB_query("DELETE FROM {$_TABLES['cp_sessions']} WHERE session_id='" . addslashes($csid) . "'",1);
+            DB_query("DELETE FROM {$_TABLES['cp_sessions']} WHERE session_id='" . DB_escapeString($csid) . "'",1);
             $rc = 1;
         }
     }

@@ -132,7 +132,7 @@ function listNewDownloads(){
         $display .= '<table width="100%" border="0" class="plugin">';
         $display .= '<tr><td width="100%" class="pluginHeader" style="padding:5px;">' . _MD_DLSWAITING. "&nbsp;($numrows)</td></tr>";
         while(list($lid, $cid, $title, $url, $homepage, $version, $size, $logourl, $submitter, $comments, $tmpnames) = DB_fetchARRAY($result)) {
-            $result2 = DB_query("SELECT description FROM {$_FM_TABLES['filemgmt_filedesc']} WHERE lid='".addslashes($lid)."'");
+            $result2 = DB_query("SELECT description FROM {$_FM_TABLES['filemgmt_filedesc']} WHERE lid='".DB_escapeString($lid)."'");
             list($description) = DB_fetchARRAY($result2);
             $title = $myts->makeTboxData4Edit($title);
             $url = rawurldecode($myts->makeTboxData4Edit($url));
@@ -332,7 +332,7 @@ function modDownload() {
     global $_CONF,$_FM_TABLES,$_USER,$myts,$eh,$mytree,$filemgmt_SnapStore,$filemgmt_FileSnapURL;
 
     $lid = $_GET['lid'];
-    $result = DB_query("SELECT cid, title, url, homepage, version, size, logourl, comments,submitter FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='".addslashes($lid)."'");
+    $result = DB_query("SELECT cid, title, url, homepage, version, size, logourl, comments,submitter FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='".DB_escapeString($lid)."'");
     $nrows = DB_numROWS($result);
     if ($nrows == 0) {
         redirect_header("index.php",2,_MD_NOMATCH);
@@ -362,7 +362,7 @@ function modDownload() {
     $version = $myts->makeTboxData4Edit($version);
     $size = $myts->makeTboxData4Edit($size);
     $logourl = rawurldecode($myts->makeTboxData4Edit($logourl));
-    $result2 = DB_query("SELECT description FROM {$_FM_TABLES['filemgmt_filedesc']} WHERE lid='".addslashes($lid)."'");
+    $result2 = DB_query("SELECT description FROM {$_FM_TABLES['filemgmt_filedesc']} WHERE lid='".DB_escapeString($lid)."'");
     list($description)=DB_fetchARRAY($result2);
     $description = $myts->makeTareaData4Edit($description);
     $display .= '<tr><td>'._MD_FILEID.'</td><td colspan="2"><b>'.$lid.'</b></td></tr>';
@@ -523,11 +523,11 @@ function listBrokenDownloads() {
         while(list($reportid, $lid, $sender, $ip) = DB_fetchARRAY($result)) {
            $result2 = DB_query("SELECT title, url, submitter FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='$lid'");
            if ($sender != 0) {
-               $result3 = DB_query("SELECT username, email FROM {$_TABLES['users']} WHERE uid='".addslashes($sender)."'");
+               $result3 = DB_query("SELECT username, email FROM {$_TABLES['users']} WHERE uid='".DB_escapeString($sender)."'");
                list($sendername, $email) = DB_fetchARRAY($result3);
             }
             list($title, $url, $owner) = DB_fetchARRAY($result2);
-            $result4 = DB_query("SELECT username, email FROM {$_TABLES['users']} WHERE uid='".addslashes($owner)."'");
+            $result4 = DB_query("SELECT username, email FROM {$_TABLES['users']} WHERE uid='".DB_escapeString($owner)."'");
             list($ownername, $owneremail) = DB_fetchARRAY($result4);
             $display .= '<tr class="pluginRow'.$cssid.'"><td><a href="'.$_CONF['site_url'].'/filemgmt/visit.php?lid='.$lid.'">'.$title.'</a></td>';
 
@@ -566,8 +566,8 @@ function delBrokenDownloads() {
     global $_FM_TABLES,$eh;
 
     $lid = $_POST['lid'];
-    DB_query("DELETE FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='".addslashes($lid)."'");
-    DB_query("DELETE FROM {$_FM_TABLES['filemgmt_filedetail']}  WHERE lid='".addslashes($lid)."'");
+    DB_query("DELETE FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='".DB_escapeString($lid)."'");
+    DB_query("DELETE FROM {$_FM_TABLES['filemgmt_filedetail']}  WHERE lid='".DB_escapeString($lid)."'");
     redirect_header("index.php?op=listBrokenDownloads",1,_MD_FILEDELETED);
     exit();
 }
@@ -576,7 +576,7 @@ function ignoreBrokenDownloads() {
     global $_FM_TABLES,$eh;
 
     $lid = intval($_POST['lid']);
-    DB_query("DELETE FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='".addslashes($lid)."'");
+    DB_query("DELETE FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='".DB_escapeString($lid)."'");
     redirect_header("index.php?op=listBrokenDownloads",1,_MD_BROKENDELETED);
     exit();
 }

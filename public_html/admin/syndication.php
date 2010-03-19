@@ -201,7 +201,7 @@ function FEED_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 $tid = $LANG33[44];
             } else {
                 $tid = DB_getItem ($_TABLES['topics'], 'topic',
-                                      "tid = '".addslashes($A['header_tid'])."'");
+                                      "tid = '".DB_escapeString($A['header_tid'])."'");
             }
             $retval = ($enabled) ? $tid : '<span class="disabledfield">' . $tid . '</span>';
             break;
@@ -612,7 +612,7 @@ function FEED_save($A)
     }
 
     foreach ($A as $name => $value) {
-        $A[$name] = addslashes ($value);
+        $A[$name] = DB_escapeString ($value);
     }
 
     DB_save ($_TABLES['syndication'], 'fid,type,topic,header_tid,format,limits,content_length,title,description,feedlogo,filename,charset,language,is_enabled,updated,update_info',

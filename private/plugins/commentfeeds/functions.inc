@@ -110,7 +110,7 @@ function plugin_getfeedcontent_commentfeeds ($feed, &$link, &$update)
 {
     global $_CONF, $_TABLES, $_CF_CONF;
 
-    $result = DB_query( "SELECT topic,limits,content_length FROM {$_TABLES['syndication']} WHERE fid = '".addslashes($feed)."'" );
+    $result = DB_query( "SELECT topic,limits,content_length FROM {$_TABLES['syndication']} WHERE fid = '".DB_escapeString($feed)."'" );
     $S = DB_fetchArray( $result );
 
     $sql = "SELECT c.cid, c.sid, c.title as title, c.comment, UNIX_TIMESTAMP(c.date) AS modified, "
@@ -201,7 +201,7 @@ function plugin_feedupdatecheck_commentfeeds ($feed, $topic, $update_data, $limi
 
     if( $topic != 'all' )
     {
-        $sql .= " AND topic='".addslashes($topic)."' ";
+        $sql .= " AND topic='".DB_escapeString($topic)."' ";
     }
     $sql .= " ORDER BY modified DESC  LIMIT 0, ".intval($limit)." ";
     $result = DB_query ($sql);

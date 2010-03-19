@@ -69,7 +69,7 @@ if ( $allowed == 0 ) {
 
 $mid = COM_applyFilter($_GET['mid']);
 
-$aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . addslashes($mid) . '"');
+$aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_escapeString($mid) . '"');
 
 if ( $MG_albums[$aid]->access == 0 ) {
     $display  = MG_siteHeader();
@@ -81,7 +81,7 @@ if ( $MG_albums[$aid]->access == 0 ) {
     exit;
 }
 
-$sql = "SELECT * FROM {$_TABLES['mg_media']} WHERE media_id='" . addslashes($mid) . "'";
+$sql = "SELECT * FROM {$_TABLES['mg_media']} WHERE media_id='" . DB_escapeString($mid) . "'";
 $result = DB_query($sql);
 $numRows = DB_numRows($result);
 if ( $numRows > 0 ) {
@@ -106,7 +106,7 @@ if ( $numRows > 0 ) {
     }
     if (!$MG_albums[0]->owner_id) {
         $media_views = $row['media_views'] + 1;
-        DB_query("UPDATE " . $_TABLES['mg_media'] . " SET media_views=" . $media_views . " WHERE media_id='" . addslashes($mid) . "'");
+        DB_query("UPDATE " . $_TABLES['mg_media'] . " SET media_views=" . $media_views . " WHERE media_id='" . DB_escapeString($mid) . "'");
     }
     header("Pragma: public");
     header("Expires: 0");

@@ -152,7 +152,7 @@ function ST_cloneMenu( $menu_id ) {
 function ST_saveCloneMenu( ) {
     global $_CONF, $_TABLES, $LANG_ST00, $_ST_CONF, $stMenu, $_GROUPS;
 
-    $menu_name  = addslashes(COM_applyFilter($_POST['menuname']));
+    $menu_name  = DB_escapeString(COM_applyFilter($_POST['menuname']));
     $menu       = COM_applyFilter($_POST['menu'],true);
 
     $sql = "SELECT * FROM {$_TABLES['st_menus']} WHERE id=".$menu;
@@ -170,7 +170,7 @@ function ST_saveCloneMenu( ) {
         $sql = "SELECT * FROM {$_TABLES['st_menus_config']} WHERE menu_id='".$menu."'";
         $result = DB_query($sql);
         while ($C = DB_fetchArray($result) ) {
-            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'".addslashes($C['conf_name'])."','".addslashes($C['conf_value'])."'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'".DB_escapeString($C['conf_name'])."','".DB_escapeString($C['conf_value'])."'");
         }
 
         $meadmin    = SEC_hasRights('sitetailor.admin');
@@ -267,7 +267,7 @@ function ST_createMenu( ) {
 function ST_saveNewMenu( ) {
     global $_CONF, $_TABLES, $LANG_ST00, $_ST_CONF, $stMenu, $_GROUPS;
 
-    $menuname   = addslashes(COM_applyFilter($_POST['menuname']));
+    $menuname   = DB_escapeString(COM_applyFilter($_POST['menuname']));
     $menutype   = COM_applyFilter($_POST['menutype'],true);
     $menuactive = COM_applyFilter($_POST['menuactive'],true);
     $menugroup  = COM_applyFilter($_POST['group'],true);
@@ -868,7 +868,7 @@ function ST_saveEditMenuElement ( ) {
     $id            = COM_applyFilter($_POST['id'],true);
     $menu_id       = COM_applyFilter($_POST['menu']);
     $pid           = COM_applyFilter($_POST['pid'],true);
-    $label         = addslashes(htmlspecialchars(strip_tags(COM_checkWords(COM_stripslashes($_POST['menulabel'])))));
+    $label         = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_stripslashes($_POST['menulabel'])))));
     $type          = COM_applyFilter($_POST['menutype'],true);
     $target        = COM_applyFilter($_POST['urltarget']);
 
@@ -905,7 +905,7 @@ function ST_saveEditMenuElement ( ) {
             break;
     }
     $active     = COM_applyFilter($_POST['menuactive'],true);
-    $url        = trim(addslashes(COM_applyFilter($_POST['menuurl'])));
+    $url        = trim(DB_escapeString(COM_applyFilter($_POST['menuurl'])));
     if ( strpos($url,"http") !== 0 && strpos($url,"%site") === false && $url[0] != '#' && rtrim($url) != '') {
         $url = 'http://' . $url;
     }
@@ -1290,7 +1290,7 @@ function ST_saveMenuConfig($menu_id=0) {
     $menuactive = COM_applyFilter($_POST['menuactive'],true);
     $menugroup  = COM_applyFilter($_POST['group'],true);
 
-    $menuname   = addslashes($stMenu[$menu_id]['menu_name']);
+    $menuname   = DB_escapeString($stMenu[$menu_id]['menu_name']);
 
     $sqlFieldList  = 'id,menu_name,menu_type,menu_active,group_id';
     $sqlDataValues = "$menu_id,'$menuname',$menutype,$menuactive,$menugroup";
