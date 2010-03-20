@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Added ability for plugins to specify admin group flag and default flag
+  during auto install. (Mark)
+- Updated all bundled plugins to properly set admin group flag. (Mark)
 - Removed $_SYSTEM['skip_ip_check'] now use online configuration :
    Session IP Validation - select how much of the IP to validate or disable
    completely (Mark)
