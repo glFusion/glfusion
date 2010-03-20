@@ -8,9 +8,10 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
+// | Copyright (C) 2009-201- by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Mark Howard            mark AT usable-web DOT com                        |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -747,7 +748,7 @@ function GROUP_getListField($fieldname, $fieldvalue, $A, $icon_arr, $selected = 
             break;
 
         case 'grp_admin':
-            $retval = ($A['grp_gl_core'] == 1 && $A['grp_name'] != 'All Users' && $A['grp_name'] != 'Logged-in Users') ? $icon_arr['check'] : '';
+            $retval = (( $A['grp_gl_core'] == 1  || $A['grp_gl_core'] == 2) && $A['grp_name'] != 'All Users' && $A['grp_name'] != 'Logged-in Users') ? $icon_arr['check'] : '';
             break;
 
         case 'sendemail':
@@ -840,7 +841,7 @@ function GROUP_list($show_all_groups = false)
         );
     }
 
-    $defsort_arr = array('field' => 'grp_gl_core', 'direction' => 'desc');
+    $defsort_arr = array('field' => 'grp_name', 'direction' => 'asc');
 
     $form_url = $_CONF['site_admin_url'] . '/group.php';
     $form_url .= ($show_all_groups) ? '?chk_showall=1' : '';
