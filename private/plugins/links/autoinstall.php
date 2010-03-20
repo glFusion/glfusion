@@ -68,7 +68,7 @@ $INSTALL_plugin['links'] = array(
   array('type' => 'table', 'table' => $_TABLES['linksubmission'], 'sql' => $_SQL['linksubmission']),
 
   array('type' => 'group', 'group' => 'links Admin', 'desc' => 'Users in this group can administer the Links plugin',
-        'variable' => 'admin_group_id', 'addroot' => true),
+        'variable' => 'admin_group_id', 'addroot' => true, 'admin' => true),
 
   array('type' => 'feature', 'feature' => 'links.edit', 'desc' => 'Ability to edit links',
         'variable' => 'edit_feature_id'),
