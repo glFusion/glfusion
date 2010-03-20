@@ -71,7 +71,7 @@ function _checkEnvironment()
     $retval .= ADMIN_createMenu(
         $menu_arr,
         $LANG01['php_warning'],
-        $_CONF['layout_url'] . '/images/icons/versioncheck.png'
+        $_CONF['layout_url'] . '/images/icons/envcheck.png'
     );
 
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
