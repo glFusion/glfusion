@@ -71,7 +71,7 @@ $INSTALL_plugin['mediagallery'] = array(
   array('type' => 'table', 'table' => $_TABLES['mg_exif_tags'], 'sql' => $_SQL['mg_exif_tags']),
 
   array('type' => 'group', 'group' => 'mediagallery Admin', 'desc' => 'Users in this group can administer the Media Gallery plugin',
-        'variable' => 'admin_group_id', 'addroot' => true),
+        'variable' => 'admin_group_id', 'addroot' => true, 'admin' => true),
 
   array('type' => 'feature', 'feature' => 'mediagallery.admin', 'desc' => 'Ability to administer the Media Gallery Plugin',
         'variable' => 'admin_feature_id'),
