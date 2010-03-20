@@ -623,7 +623,7 @@ function plugin_getfeedcontent_forum ($feed, &$link, &$update)
 
         $desc = $preface . $comment;
 
-        $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic={$A['id']}";
+        $link = "{$_CONF['site_url']}/forum/viewtopic.php?topic={$A['id']}#{$A['id']}";
 
         if ($CONF_FORUM['use_censor']) {
             $A['subject'] = COM_checkWords($A['subject']);
