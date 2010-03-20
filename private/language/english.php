@@ -1722,7 +1722,8 @@ $LANG_ADMIN = array(
     'disable' => 'Disable',
     'admin_users' => 'User Admin',
     'admin_groups' => 'Group Admin',
-    'action' => 'Action for all selected:'
+    'action' => 'Action for all selected:',
+    'authenticate' => 'Authenticate',
 );
 
 ###############################################################################
@@ -2175,7 +2176,7 @@ $LANG_configselects['Core'] = array(
     13 => array('Skip' => 0, 'Allow, with speedlimit' => 1, 'Allow, no speedlimit' => 2),
     14 => array('Sunday' => 'Sun', 'Monday' => 'Mon'),
     15 => array('By Number' => 'sortnum', 'Alphabetically' => 'alpha'),
-    16 => array('No Login required' => 0, 'Advanced Search only' => 1, 'Simple + Advanced Search' => 2),
+    16 => array('No Login required' => 0, 'Login Required' => 1),
     17 => array('Comments Enabled' => 0, 'Comments Disabled' => -1),
     18 => array('Google' => 'google', 'Table' => 'table'),
     19 => array('Exact Phrase' => 'phrase', 'All of The Words' => 'all', 'Any of The Words' => 'any'),

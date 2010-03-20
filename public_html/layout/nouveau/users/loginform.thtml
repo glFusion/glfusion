@@ -6,7 +6,7 @@
         <div style="padding:1em; width:30em; margin:auto; background:#f2f2f2; border:1px solid #ccc; font-size:.8em;">
             <img class="floatleft" style="width:128px;" src="{layout_url}/images/lock.png" alt=""{xhtml}>
             <p style="text-align:right;">
-                <b><label for="loginname">{lang_username}:</label></b>&nbsp;&nbsp;<input type="text" size="25" name="loginname" value="" id="loginname" style="width:12em;"{xhtml}><br{xhtml}>
+                <b><label for="loginname">{lang_username}:</label></b>&nbsp;&nbsp;<input type="text" size="25" name="loginname" value="{loginname}" id="loginname" style="width:12em;"{xhtml}><br{xhtml}>
                 {services}
             </p>
             <p style="text-align:right;">
@@ -35,6 +35,6 @@
     {end_block}
 </div>
 <script type="text/javascript">
-document.login.loginname.focus();
+document.login.{focus}.focus();
 </script>
 {# end {templatelocation} #}

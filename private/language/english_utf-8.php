@@ -1722,7 +1722,8 @@ $LANG_ADMIN = array(
     'disable' => 'Disable',
     'admin_users' => 'User Admin',
     'admin_groups' => 'Group Admin',
-    'action' => 'Action for all selected:'
+    'action' => 'Action for all selected:',
+    'authenticate' => 'Authenticate',
 );
 
 ###############################################################################

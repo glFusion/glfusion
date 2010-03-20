@@ -1606,10 +1606,11 @@ function SEC_reauthform($desturl, $message = '',$method = '', $postdata = '', $g
         'newreg_link'     => false,
         'openid_login'    => false,
         'plugin_vars'     => false,
+        'prefill_user'    => true,
         'title'           => $LANG20[1],
-        'message'         => $message, // 'You need to reauth', // $LANG_ADMIN['reauth_msg'],
+        'message'         => $message,
         'footer_message'  => $LANG20[6],
-        'button_text'     => 'Authenticate', // $LANG_ADMIN['authenticate'],
+        'button_text'     => $LANG_ADMIN['authenticate'],
         'form_action'     => $desturl,
         'hidden_fields'   => $hidden
     );
@@ -1650,7 +1651,7 @@ function SEC_loginRequiredForm()
 */
 function SEC_loginForm($use_options = array())
 {
-    global $_CONF, $LANG01, $LANG04;
+    global $_CONF, $_USER, $LANG01, $LANG04;
 
     $retval = '';
 
@@ -1666,6 +1667,7 @@ function SEC_loginForm($use_options = array())
         'openid_login'      => true,    // $_CONF['user_login_method']['openid']
         'newreg_link'       => true,    // $_CONF['disable_new_user_registration']
         'plugin_vars'       => true,    // call PLG_templateSetVars?
+        'prefill_user'      => false,
 
         // default texts
         'title'             => $LANG04[65], // Try Logging in Again
@@ -1766,6 +1768,13 @@ function SEC_loginForm($use_options = array())
         $loginform->set_var('openid_login', '');
     }
 
+    if ($options['prefill_user'] && isset($_USER['username']) && $_USER['username'] != '' ) {
+        $loginform->set_var('loginname',$_USER['username']);
+        $loginform->set_var('focus', 'passwd');
+    } else {
+        $loginform->set_var('loginname','');
+        $loginform->set_var('focus','loginname');
+    }
     if ( $options['plugin_vars'] ) {
         PLG_templateSetVars('loginform', $loginform);
     }
