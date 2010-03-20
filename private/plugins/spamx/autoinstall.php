@@ -59,7 +59,7 @@ $INSTALL_plugin['spamx'] = array(
   array('type' => 'table', 'table' => $_TABLES['spamx'], 'sql' => $_SQL['spamx']),
 
   array('type' => 'group', 'group' => 'spamx Admin', 'desc' => 'Users in this group can administer the Spamx plugin',
-        'variable' => 'admin_group_id', 'addroot' => true),
+        'variable' => 'admin_group_id', 'addroot' => true, 'admin' => true),
 
   array('type' => 'feature', 'feature' => 'spamx.admin', 'desc' => 'Full access to Spam-X plugin',
         'variable' => 'admin_feature_id'),
