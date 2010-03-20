@@ -169,9 +169,6 @@ function SESS_sessionCheck()
                             $ipmatch = true;
                             break;
                     }
-                    if ( isset($_SYSTEM['skip_ip_check']) && $_SYSTEM['skip_ip_check'] == 1 ) {
-                        $ipmatch = true;
-                    }
                     if (empty ($cookie_password) || (!SEC_checkTokenGeneral($cookie_password,'ltc',$userid)) || ($ipmatch == false )) {
                         // User may have modified their UID in cookie, ignore them
                         SEC_setCookie ($_CONF['cookie_name'], '', time() - 10000,
@@ -250,9 +247,6 @@ function SESS_sessionCheck()
                             $ipmatch = true;
                             break;
                     }
-                }
-                if ( isset($_SYSTEM['skip_ip_check']) && $_SYSTEM['skip_ip_check'] == 1 ) {
-                    $ipmatch = true;
                 }
                 if (empty ($cookie_password) || (!SEC_checkTokenGeneral($cookie_password,'ltc',$userid)) || ($ipmatch == false )) {
                     // User could have modified UID in cookie, don't do shit

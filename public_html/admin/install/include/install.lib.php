@@ -635,7 +635,7 @@ function INST_updateDB($_SQL,$use_innodb)
  */
 function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 {
-    global $_TABLES, $_CONF, $_SP_CONF, $_DB, $_DB_dbms, $_DB_table_prefix,
+    global $_TABLES, $_CONF, $_SYSTEM, $_SP_CONF, $_DB, $_DB_dbms, $_DB_table_prefix,
            $dbconfig_path, $siteconfig_path, $html_path,$LANG_INSTALL;
 
     $rc = true;
@@ -863,7 +863,11 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
             $c->add('article_comment_close_enabled',0,'select',4,21,0,1695,TRUE);
-            $c->add('session_ip_check',1,'select',7,30,26,545,TRUE);
+            $session_ip_check = 1;
+            if ( isset($_SYSTEM['skip_ip_check']) && $_SYSTEM['skip_ip_check'] == 1 ) {
+                $session_ip_check = 0;
+            }
+            $c->add('session_ip_check',$session_ip_check,'select',7,30,26,545,TRUE);
             $c->del('default_search_order','Core');
             DB_query("UPDATE {$_TABLES['conf_values']} SET selectionArray = '0' WHERE  name='searchloginrequired' AND group_name='Core'");
 
