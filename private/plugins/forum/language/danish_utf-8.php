@@ -313,6 +313,13 @@ $LANG_GF01 = array(
     'edit_signature' => 'Edit BBcode Signature',
     'signature_preview' => 'Signature Preview',
     'cancel_confirm' => 'Are you sure you want to cancel this post?',
+    /* --- topic features --- */
+    'disable_bbcode' => 'Disable BBCode:',
+    'disable_smilies' => 'Disable Smilies:',
+    'disable_urlparse' => 'Do not parse URLs:',
+    'features' => 'Features:',
+    /* --- rss feature --- */
+    'rss_link' => 'Subscribe to this forum\'s RSS feed.',
 );
 
 $LANG_GF02 = array(

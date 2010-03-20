@@ -994,24 +994,32 @@ if ($forum > 0) {
     }
     $canPost = forum_canPost($category);
     $subscribe = '';
-    if ($_USER['uid'] > 1) {
+    if (!COM_isAnonUser()) {
         // Check for user subscription status
         $sub_check = DB_getITEM($_TABLES['gf_watch'],"id","forum_id='$forum' AND topic_id=0 AND uid='{$_USER['uid']}'");
         if ($sub_check == '') {
-            $subscribelinkimg = '<img src="'.gf_getImage('forumnotify_on').'" border="0" align="middle" alt="'.$LANG_GF01['FORUMSUBSCRIBE'].'" title="'.$LANG_GF01['FORUMSUBSCRIBE'].'" alt=""' . XHTML . '>';
+            $subscribelinkimg = '<img src="'.gf_getImage('forumnotify_on').'" style="vertical-align:middle;" alt="'.$LANG_GF01['FORUMSUBSCRIBE'].'" title="'.$LANG_GF01['FORUMSUBSCRIBE'].'" alt=""' . XHTML . '>';
             $subscribelink = "{$_CONF['site_url']}/forum/index.php?op=subscribe&amp;forum=$forum";
             $topiclisting->set_var ('subscribelink', $subscribelink);
             $topiclisting->set_var ('subscribelinkimg', $subscribelinkimg);
             $topiclisting->set_var ('LANG_subscribe', $LANG_GF01['FORUMSUBSCRIBE']);
             $topiclisting->parse ('subscribe_link','subscribe');
         } else {
-            $subscribelinkimg = '<img src="'.gf_getImage('forumnotify_off').'" border="0" align="middle" alt="'.$LANG_GF01['FORUMUNSUBSCRIBE'].'" title="'.$LANG_GF01['FORUMUNSUBSCRIBE'].'" alt=""' . XHTML . '>';
+            $subscribelinkimg = '<img src="'.gf_getImage('forumnotify_off').'" alt="'.$LANG_GF01['FORUMUNSUBSCRIBE'].'" title="'.$LANG_GF01['FORUMUNSUBSCRIBE'].'" alt="" style="vertical-align:middle;"' . XHTML . '>';
             $subscribelink = "{$_CONF['site_url']}/forum/notify.php?filter=2";
             $topiclisting->set_var ('subscribelink', $subscribelink);
             $topiclisting->set_var ('subscribelinkimg', $subscribelinkimg);
             $topiclisting->set_var ('LANG_subscribe', $LANG_GF01['FORUMUNSUBSCRIBE']);
             $topiclisting->parse ('subscribe_link','subscribe');
         }
+    }
+    $rssFeed = DB_getItem($_TABLES['syndication'],'filename','type="forum" AND topic='.$forum.' AND is_enabled=1');
+    if ( $rssFeed != '' || $rssFeed != NULL ) {
+        $baseurl = SYND_getFeedUrl();
+        $imgurl  = '<img src="'.$_CONF['layout_url'].'/images/rss_small.png" alt="'.$LANG_GF01['rss_link'].'" title="'.$LANG_GF01['rss_link'].'" style="vertical-align:middle;"/>';
+        $topiclisting->set_var('rssfeed','<a href="'.$baseurl.$rssFeed.'">'.$imgurl.'</a>');
+    } else {
+        $topiclisting->set_var('rssfeed','');
     }
 
     $topiclisting->set_var ('cat_name', $category['cat_name']);

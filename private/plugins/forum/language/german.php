@@ -307,6 +307,8 @@ $LANG_GF01 = array(
     'disable_smilies' => 'Disable Smilies:',
     'disable_urlparse' => 'Do not parse URLs:',
     'features' => 'Features:',
+    /* --- rss feature --- */
+    'rss_link' => 'Subscribe to this forum\'s RSS feed.',
 );
 
 $LANG_GF02 = array(

@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Forum: If forum has RSS link, display the RSS subscribe button (Mark)
 - Added ability for plugins to specify admin group flag and default flag
   during auto install. (Mark)
 - Updated all bundled plugins to properly set admin group flag. (Mark)
