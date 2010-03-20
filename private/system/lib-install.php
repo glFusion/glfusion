@@ -8,6 +8,10 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2010 by the following authors:                             |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
 // | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Joe Mucchiello         jmucchiello AT yahoo DOT com                      |
@@ -44,7 +48,17 @@ function INSTALLER_install_group($step, &$vars)
     COM_errorLog("AutoInstall: Creating group {$step['group']}...");
     $grp_name = DB_escapeString($step['group']);
     $grp_desc = DB_escapeString($step['desc']);
-    DB_query("INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr) VALUES ('$grp_name', '$grp_desc')", 1);
+    if (isset($step['admin']) && $step['admin'] == true) {
+        $admin = 2;
+    } else {
+        $admin = 0;
+    }
+    if ( isset($step['default']) && $step['default'] == true ) {
+        $default = 1;
+    } else {
+        $default = 0;
+    }
+    DB_query("INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr,grp_gl_core,grp_default) VALUES ('$grp_name', '$grp_desc',$admin,$default)", 1);
     if (DB_error()) {
         COM_errorLog("AutoInstall: Group creation failed!");
         return 1;
@@ -57,6 +71,9 @@ function INSTALLER_install_group($step, &$vars)
         DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_grp_id) VALUES ($grp_id, 1)", 1);
     }
 
+    if ( isset($step['default']) && $step['default'] == true ) {
+        INSTALLER_applyGroupDefault($grp_id,true);
+    }
     return "DELETE FROM {$_TABLES['groups']} WHERE grp_id = $grp_id";
 }
 
@@ -442,6 +459,52 @@ function INSTALLER_uninstall($A)
 
     COM_errorLog("AutoInstall: Uninstall complete");
     return true;
+}
+
+/**
+* Add or remove a default group to/from all existing accounts
+*
+* @param    int     $grp_id     ID of default group
+* @param    boolean $add        true: add, false: remove
+* @return   void
+*
+*/
+function INSTALLER_applyGroupDefault($grp_id, $add = true)
+{
+    global $_TABLES, $_GROUP_VERBOSE;
+
+    /**
+    * In the "add" case, we have to insert one record for each user. Pack this
+    * many values into one INSERT statement to save some time and bandwidth.
+    */
+    $_values_per_insert = 25;
+
+    if ($_GROUP_VERBOSE) {
+        if ($add) {
+            COM_errorLog("Adding group '$grp_id' to all user accounts");
+        } else {
+            COM_errorLog("Removing group '$grp_id' from all user accounts");
+        }
+    }
+
+    if ($add) {
+        $result = DB_query("SELECT uid FROM {$_TABLES['users']} WHERE uid > 1");
+        $num_users = DB_numRows($result);
+        for ($i = 0; $i < $num_users; $i += $_values_per_insert) {
+            $u = array();
+            for ($j = 0; $j < $_values_per_insert; $j++) {
+                list($uid) = DB_fetchArray($result);
+                $u[] = $uid;
+                if ($i + $j + 1 >= $num_users) {
+                    break;
+                }
+            }
+            $v = "($grp_id," . implode("), ($grp_id,", $u) . ')';
+            DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES " . $v);
+        }
+    } else {
+        DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE (ug_main_grp_id = $grp_id) AND (ug_grp_id IS NULL)");
+    }
 }
 
 } //!defined('INSTALLER_VERSION')
