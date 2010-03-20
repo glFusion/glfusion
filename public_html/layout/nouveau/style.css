@@ -1212,6 +1212,11 @@ background:transparent;
 color:red;
 }
 
+.warningxsmall {
+font-size:x-small;
+background:transparent;
+color:red;
+}
 .welcomeanddate-text {
 border-bottom:1px solid #CCC;
 margin-top:-3px;
