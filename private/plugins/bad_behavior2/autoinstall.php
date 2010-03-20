@@ -49,7 +49,7 @@ $INSTALL_plugin['bad_behavior2'] = array(
         'url' => $_BB2_CONF['pi_url'], 'display' => $_BB2_CONF['pi_display_name']),
 
   array('type' => 'group', 'group' => 'Bad Behavior2 Admin', 'desc' => 'Users in this group can administer the Bad Behavior2 plugin',
-        'variable' => 'admin_group_id', 'addroot' => true),
+        'variable' => 'admin_group_id', 'addroot' => true, 'admin' => true),
 );
 
 
