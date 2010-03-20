@@ -57,8 +57,8 @@ $INSTALL_plugin['sitetailor'] = array(
   array('type' => 'table', 'table' => $_TABLES['st_menus_config'], 'sql' => $_SQL['st_menus_config']),
   array('type' => 'table', 'table' => $_TABLES['st_menu_elements'], 'sql' => $_SQL['st_menu_elements']),
 
-  array('type' => 'group', 'group' => 'sitetailor Admin', 'desc' => 'Users in this group can administer the Site Tailor plugin',
-        'variable' => 'admin_group_id', 'addroot' => true),
+  array('type' => 'group', 'group' => 'sitetailor Admin', 'desc' => 'Users in this group can edit menus and the site logo.',
+        'variable' => 'admin_group_id', 'addroot' => true, 'admin' => true),
 
   array('type' => 'feature', 'feature' => 'sitetailor.admin', 'desc' => 'Ability to manage Site Tailor',
         'variable' => 'admin_feature_id'),
