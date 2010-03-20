@@ -6,9 +6,9 @@
 // |                                                                          |
 // | input / display cleaner                                                  |
 // +--------------------------------------------------------------------------+
-// | $Id:: textsanitizer.php 3155 2008-09-16 02:13:18Z mevans0263            $|
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
