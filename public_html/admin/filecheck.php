@@ -30,79 +30,28 @@
 // +--------------------------------------------------------------------------+
 //
 require_once '../lib-common.php';
+require_once 'auth.inc.php';
+require_once 'filecheck_data.php';
+USES_lib_admin();
+
+$fullIgnore = array('cgi-bin','.','..','.svn','layout_cache','tn','orig','disp','custom');
+
+$display = '';
 
 if (!SEC_inGroup ('Root')) {
-    $display .= COM_siteHeader ('menu');
-    $display .= COM_startBlock ($LANG20[1], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= '<p>' . $LANG20[6] . '</p>';
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-    $display .= COM_siteFooter ();
+    $display .= COM_siteHeader ('menu', $MESSAGE[30])
+        . COM_startBlock ($MESSAGE[30], '',COM_getBlockTemplate ('_msg_block', 'header'))
+        . $MESSAGE[200]
+        . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
+        . COM_siteFooter ();
+    COM_accessLog ("User {$_USER['username']} tried to illegally access the file integrity check screen");
     echo $display;
     exit;
 }
 
-$fullIgnore = array('cgi-bin','.','..','.svn','layout_cache','tn','orig','disp');
-
-require_once 'filecheck_data.php';
-
-/*
- * Main Processing
- */
-
-$mode = '';
-
-if (isset ($_POST['submit'])) {
-    $mode = COM_applyFilter($_POST['submit']);
-}
-
-$rc = '';
-
-if ($mode == 'Cancel') {
-    echo COM_refresh ($_CONF['site_admin_url'] . '/index.php');
-    exit;
-} elseif ($mode == 'Delete') {
-    $rc = fileCheckDelete( );
-}
-
-require_once $_CONF['path_system'] . 'lib-admin.php';
-
-$header_arr = array(
-    array('text' => 'Where', 'field' => 'where'),
-    array('text' => 'Directory',  'field' => 'dir'),
-    array('text' => 'Filename',  'field' => 'filename'),
-    array('text' => 'Delete',    'field' => 'delete')
-);
-$data_arr = array();
-$text_arr = array();
-$form_arr = array();
-
-    $text_arr = array(
-        'has_extras' => true,
-        'title'      => "FileCheck: This list shows files that glFusion does not recognize as files included in the glFusion v".GVERSION." distribution.  This DOES NOT mean you should simple delete the files below, instead use this tool to assist you in removing files that have been removed or moved in the glFusion distribution.",
-        'form_url'   => $_CONF['site_admin_url'] . '/filecheck.php'
-    );
-
-$form_arr = array('bottom' => '<input type="submit" name="submit" value="Delete"' . XHTML . '>&nbsp;&nbsp;<input type="submit" name="submit" value="Cancel"' . XHTML . '>');
-
-getDirectory($_CONF['path'],'private');
-getDirectory($_CONF['path_html'],'public_html');
-
-sort($data_arr);
-
-$retval .= ADMIN_simpleList("ADMIN_getListField_filecheck", $header_arr, $text_arr, $data_arr,NULL,$form_arr);
-
-echo COM_siteHeader();
-if ( $rc != '' ) {
-    echo COM_showMessage('Selected files have been removed.');
-}
-echo $retval;
-echo COM_siteFooter();
-exit;
-
-
-function getDirectory( $path = '.', $where,$level = 0, $prefix=array()){
-    global $glfusionFiles, $glfusionDir,$fullIgnore,$data_arr;
+function FILECHECK_getDirectory( $path = '.', $where,$level = 0, $prefix=array())
+{
+    global $glfusionFiles, $glfusionDir, $fullIgnore, $data_arr;
 
     $ignore = $fullIgnore;
 
@@ -119,7 +68,7 @@ function getDirectory( $path = '.', $where,$level = 0, $prefix=array()){
                 $tdir = str_replace("-","_",$tdir);
                 if ( $glfusionDir[$tdir] == 1 ) {
                     $prefix[] = $file;
-                    getDirectory( "$path/$file", $where,($level+1),$prefix );
+                    FILECHECK_getDirectory( "$path/$file", $where,($level+1),$prefix );
                     array_pop($prefix);
                 }
             } else {
@@ -144,8 +93,7 @@ function getDirectory( $path = '.', $where,$level = 0, $prefix=array()){
     closedir( $dh );
 }
 
-
-function ADMIN_getListField_filecheck($fieldname, $fieldvalue, $A, $icon_arr)
+function FILECHECK_getListField($fieldname, $fieldvalue, $A, $icon_arr)
 {
     global $_CONF;
 
@@ -154,6 +102,9 @@ function ADMIN_getListField_filecheck($fieldname, $fieldvalue, $A, $icon_arr)
     $retval = false;
 
     switch($fieldname) {
+        case 'where':
+            $retval = $fieldvalue . '/';
+            break;
         case 'delete':
             $retval = '<input type="checkbox" name="sel[]" value="' . $counter . '"'.XHTML.'>';
             $retval .= '<input type="hidden" name="dir[' . $counter . ']" value="';
@@ -168,7 +119,60 @@ function ADMIN_getListField_filecheck($fieldname, $fieldvalue, $A, $icon_arr)
     return $retval;
 }
 
-function fileCheckDelete( ) {
+function FILECHECK_list()
+{
+    global $_CONF, $LANG_ADMIN, $LANG_FILECHECK, $LANG01, $data_arr;
+
+    $retval = '';
+
+    $menu_arr = array (
+        array('url'  => $_CONF['site_admin_url'].'/envcheck.php',
+              'text' => $LANG01['env_check']),
+        array('url'  => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
+
+    $retval .= COM_startBlock($LANG_FILECHECK['filecheck'], '',
+                              COM_getBlockTemplate('_admin_block', 'header'));
+    $retval .= ADMIN_createMenu(
+        $menu_arr,
+        sprintf($LANG_FILECHECK['explanation'], GVERSION),
+        $_CONF['layout_url'] . '/images/icons/envcheck.png'
+    );
+
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+
+    $header_arr = array(
+        array('text' => $LANG_ADMIN['delete'],    'field' => 'delete', 'align' => 'center'),
+        array('text' => $LANG_FILECHECK['where'], 'field' => 'where'),
+        array('text' => $LANG_FILECHECK['directory'],  'field' => 'dir'),
+        array('text' => $LANG_FILECHECK['filename'],  'field' => 'filename')
+    );
+    $data_arr = array();
+    $text_arr = array();
+    $form_arr = array();
+
+    $text_arr = array(
+        'form_url'   => $_CONF['site_admin_url'] . '/filecheck.php'
+    );
+
+    $bottom = '<br' . XHTML . '><input type="submit" name="delete" value="' . $LANG_ADMIN['delete'] . '"' . XHTML . '>'
+            . '&nbsp;&nbsp;<input type="submit" name="cancel" value="' . $LANG_ADMIN['cancel'] . '"' . XHTML . '>';
+
+    $form_arr = array('bottom' => $bottom);
+
+    FILECHECK_getDirectory($_CONF['path'],'private');
+    FILECHECK_getDirectory($_CONF['path_html'],'public_html');
+
+    sort($data_arr);
+
+    $retval .= ADMIN_simpleList("FILECHECK_getListField", $header_arr, $text_arr, $data_arr,NULL,$form_arr);
+
+    return $retval;
+}
+
+function FILECHECK_delete( )
+{
     global $_CONF, $_POST;
 
     if ( defined('DEMO_MODE') ) {
@@ -186,4 +190,37 @@ function fileCheckDelete( ) {
     }
     return $rc;
 }
+
+// MAIN ========================================================================
+
+
+$action = '';
+$expected = array('delete','cancel');
+foreach($expected as $provided) {
+    if (isset($_POST[$provided])) {
+        $action = $provided;
+    }
+}
+
+$rc = '';
+switch ($action) {
+
+    case 'cancel':
+        echo COM_refresh ($_CONF['site_admin_url'] . '/index.php');
+        exit;
+        break;
+
+    case 'delete':
+        $rc = FILECHECK_delete( );
+        break;
+}
+
+$display .= COM_siteHeader();
+if (!empty($rc)) {
+    $display .= COM_showMessage($LANG_FILECHECK['removed']);
+}
+$display .= FILECHECK_list() . COM_siteFooter();
+
+echo $display;
+
 ?>

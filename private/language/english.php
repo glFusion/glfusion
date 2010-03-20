@@ -181,8 +181,8 @@ $LANG01 = array(
     503 => 'Maintenance Mode - Non-admin logins disabled',
     504 => 'The database version is: %s<br />The glFusion script version is: %s<br />Please run the <a href="%s">installation script</a> to upgrade the database!',
     505 => 'Your database version is: %s<br />The glFusion script version is: %s<br />Please check the integrity of your site!',
-    'ctl' => 'Clear Cache',
-    'logview' => 'Logview',
+    'ctl'                       => 'Clear Cache',
+    'logview'                   => 'Logview',
     'correct_perms'             => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
     'current'                   => 'Current',
     'current_php_settings'      => 'Current PHP Settings',
@@ -742,7 +742,7 @@ $LANG20 = array(
     3 => 'Invalid password for user',
     4 => 'Username:',
     5 => 'Password:',
-    6 => 'All access to administrative portions of this web site are logged and reviewed.<br/> This page is for the use of authorized personnel only.',
+    6 => 'Access to administrative portions of this web site are logged and reviewed.<br/> This page is for the use of authorized personnel only.',
     7 => 'login',
     8 => 'Session Timeout - Please re-authenticate',
     9 => 'Access to Administration Features requires re-authentication',
@@ -1382,6 +1382,7 @@ $MESSAGE = array(
     98 => 'The plugin was successfully uploaded.',
     99 => 'The plugin already exists.',
     100 => 'The plugin file you uploaded was not a GZip or Zip compressed archive.',
+    200 => 'Sorry, you do not have access to this page.  Please note that all attempts to access unauthorized features are logged.',
     500 => 'The Template Cache has been successfully cleared',
     501 => 'Security Token is Invalid - Possible session timeout.',
     502 => 'Plugin successfully copied, please select Install from the New Plugin list below',
@@ -1844,6 +1845,18 @@ $LANG_BBCODE = array(
     'color_white'       => 'White',
     'color_black'       => 'Black',
     'formatted_code'    => 'Formatted Code',
+);
+
+###############################################################################
+# admin/filecheck.php - distribution integrity checker
+
+$LANG_FILECHECK = array(
+    'filecheck'         => 'File Integrity Check',
+    'explanation'       => 'This is a list of files that are not recognized as being a part of the glFusion v%s distribution.  <b?This DOES NOT mean you should simply delete these files</b>, this tool is intended to assist you in removing files that have been removed or have moved in the glFusion distribution.  <b>Please use this tool with caution.</b>',
+    'where'             => 'Root',
+    'directory'         => 'Directory',
+    'filename'          => 'Filename',
+    'removed'           => 'The specified files were removed.'
 );
 
 ###############################################################################
