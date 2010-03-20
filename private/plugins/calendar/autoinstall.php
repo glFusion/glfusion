@@ -65,7 +65,7 @@ $INSTALL_plugin['calendar'] = array(
   array('type' => 'table', 'table' => $_TABLES['personal_events'], 'sql' => $_SQL['personal_events']),
 
   array('type' => 'group', 'group' => 'calendar Admin', 'desc' => 'Users in this group can administer the Calendar plugin',
-        'variable' => 'admin_group_id', 'addroot' => true),
+        'variable' => 'admin_group_id', 'addroot' => true, 'admin' => true),
 
   array('type' => 'feature', 'feature' => 'calendar.edit', 'desc' => 'Ability to edit Calendar events',
         'variable' => 'edit_feature_id'),
