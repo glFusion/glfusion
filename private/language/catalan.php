@@ -816,7 +816,6 @@ $LANG21 = array(
     67 => 'Check to allow autotags',
     68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.',
     69 => 'Are you sure you want to delete this block?',
-    70 => 'Block name cannot be blank and cannot contain spaces or the following characters: < > \' " % & * / \'
 );
 
 ###############################################################################
@@ -1678,7 +1677,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1734,7 +1733,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1774,7 +1773,7 @@ $LANG_ADMIN = array(
 
 ###############################################################################
 # Widgets - Strings
-# 
+#
 # These are some standard strings used by the widget static pages
 
 $LANG_WIDGETS = array(

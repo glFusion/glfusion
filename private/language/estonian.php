@@ -819,7 +819,6 @@ $LANG21 = array(
     67 => 'Autosiltide lubamiseks tee märge',
     68 => 'See lõim on antud portaalblokis näitamiseks liiga pikk.  Palun määra blokihalduslehel imporditavate  artiklite maksimum kas antud portaalbloki jaoks või  siis üldine glFusioni maksimum.',
     69 => 'Are you sure you want to delete this block?',
-    70 => 'Block name cannot be blank and cannot contain spaces or the following characters: < > \' " % & * / \'
 );
 
 ###############################################################################
@@ -1681,7 +1680,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1737,7 +1736,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1777,7 +1776,7 @@ $LANG_ADMIN = array(
 
 ###############################################################################
 # Widgets - Strings
-# 
+#
 # These are some standard strings used by the widget static pages
 
 $LANG_WIDGETS = array(

@@ -825,7 +825,6 @@ $LANG21 = array(
     67 => '自動タグ使用許可',
     68 => 'このポータルブロックのフィードは表示するには長すぎます。ブロック設定画面でブロックに表示する記事の最大数を設定するか，コンフィギュレーションで標準の最大数を設定してください。',
     69 => 'Are you sure you want to delete this block?',
-    70 => 'Block name cannot be blank and cannot contain spaces or the following characters: < > \' " % & * / \'
 );
 
 ###############################################################################
@@ -1687,7 +1686,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1743,7 +1742,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1783,7 +1782,7 @@ $LANG_ADMIN = array(
 
 ###############################################################################
 # Widgets - Strings
-# 
+#
 # These are some standard strings used by the widget static pages
 
 $LANG_WIDGETS = array(

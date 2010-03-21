@@ -820,7 +820,6 @@ $LANG21 = array(
     67 => 'סמנו כדי לאפשר autotags',
     68 => 'הזנה זו לקוביית מידע זו של פורטל היא ארוכה מדי להצגה. אנא הגדירו מספר מקסימלי של מאמרים כדי לייבא לקוביית המידע במסך ההגדרות של קוביות המידע, או מקסימום גלובלי במסך הכיוון של glFusion.',
     69 => 'Are you sure you want to delete this block?',
-    70 => 'Block name cannot be blank and cannot contain spaces or the following characters: < > \' " % & * / \'
 );
 
 ###############################################################################
@@ -1682,7 +1681,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1738,7 +1737,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1778,7 +1777,7 @@ $LANG_ADMIN = array(
 
 ###############################################################################
 # Widgets - Strings
-# 
+#
 # These are some standard strings used by the widget static pages
 
 $LANG_WIDGETS = array(
