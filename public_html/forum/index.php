@@ -1005,7 +1005,7 @@ if ($forum > 0) {
             $topiclisting->set_var ('LANG_subscribe', $LANG_GF01['FORUMSUBSCRIBE']);
             $topiclisting->parse ('subscribe_link','subscribe');
         } else {
-            $subscribelinkimg = '<img src="'.gf_getImage('forumnotify_off').'" alt="'.$LANG_GF01['FORUMUNSUBSCRIBE'].'" title="'.$LANG_GF01['FORUMUNSUBSCRIBE'].'" alt="" style="vertical-align:middle;"' . XHTML . '>';
+            $subscribelinkimg = '<img src="'.gf_getImage('forumnotify_off').'" alt="'.$LANG_GF01['FORUMUNSUBSCRIBE'].'" title="'.$LANG_GF01['FORUMUNSUBSCRIBE'].'" style="vertical-align:middle;"' . XHTML . '>';
             $subscribelink = "{$_CONF['site_url']}/forum/notify.php?filter=2";
             $topiclisting->set_var ('subscribelink', $subscribelink);
             $topiclisting->set_var ('subscribelinkimg', $subscribelinkimg);
