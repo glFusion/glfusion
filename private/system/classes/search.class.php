@@ -185,26 +185,7 @@ class Search {
      */
     function _getAccessDeniedMessage()
     {
-        global $_CONF, $LANG_LOGIN;
-
-        $retval .= COM_startBlock ($LANG_LOGIN[1], '',
-                        COM_getBlockTemplate ('_msg_block', 'header'));
-        $login = new Template($_CONF['path_layout'] . 'submit');
-        $login->set_file (array ('login'=>'submitloginrequired.thtml'));
-        $login->set_var ( 'xhtml', XHTML );
-        $login->set_var ('login_message', $LANG_LOGIN[2]);
-        $login->set_var ('site_url', $_CONF['site_url']);
-        $login->set_var ('site_admin_url', $_CONF['site_admin_url']);
-        $login->set_var ('layout_url', $_CONF['layout_url']);
-        $login->set_var ('lang_login', $LANG_LOGIN[3]);
-        if ($_CONF['disable_new_user_registration'] != 1) {
-            $login->set_var ('lang_newuser', $LANG_LOGIN[4]);
-        }
-        $login->parse ('output', 'login');
-        $retval .= $login->finish ($login->get_var('output'));
-        $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-
-        return $retval;
+        return (SEC_loginRequiredForm());
     }
 
     /**
