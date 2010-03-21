@@ -772,7 +772,7 @@ class ListFactory {
         $list_templates->set_var('page_url',$page_url);
 
         $search_numbers = @sprintf($LANG09[64],$offset+1, $r+$offset-1, $this->_total_found);
-        $list_top = $list_top . '<p>'.$search_numbers.'<br /><p>';
+        $list_top = $list_top . '<p>'.$search_numbers.'<br /></p>';
         $list_templates->set_var('list_top', $list_top);
         $list_templates->set_var('list_bottom', $list_bottom);
 
