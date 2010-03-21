@@ -49,7 +49,7 @@ if (!SEC_inGroup ('Root')) {
     exit;
 }
 
-function FILECHECK_getDirectory( $path = '.', $where,$level = 0, $prefix=array())
+function FILECHECK_getDirectory( $path = '.', $where, $level = 0, $prefix=array())
 {
     global $glfusionFiles, $glfusionDir, $fullIgnore, $data_arr;
 
@@ -126,6 +126,8 @@ function FILECHECK_list()
     $retval = '';
 
     $menu_arr = array (
+        array('url'  => $_CONF['site_admin_url'].'/filecheck.php',
+              'text' => $LANG_FILECHECK['recheck']),
         array('url'  => $_CONF['site_admin_url'].'/envcheck.php',
               'text' => $LANG01['env_check']),
         array('url'  => $_CONF['site_admin_url'],
@@ -137,7 +139,7 @@ function FILECHECK_list()
     $retval .= ADMIN_createMenu(
         $menu_arr,
         sprintf($LANG_FILECHECK['explanation'], GVERSION),
-        $_CONF['layout_url'] . '/images/icons/envcheck.png'
+        $_CONF['layout_url'] . '/images/icons/filecheck.png'
     );
 
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
@@ -156,7 +158,7 @@ function FILECHECK_list()
         'form_url'   => $_CONF['site_admin_url'] . '/filecheck.php'
     );
 
-    $bottom = '<br' . XHTML . '><input type="submit" name="delete" value="' . $LANG_ADMIN['delete'] . '"' . XHTML . '>'
+    $bottom = '<br' . XHTML . '><input type="submit" onclick="return confirm(\'' . $LANG_FILECHECK['confirm'] . '\');" name="delete" value="' . $LANG_ADMIN['delete'] . '"' . XHTML . '>'
             . '&nbsp;&nbsp;<input type="submit" name="cancel" value="' . $LANG_ADMIN['cancel'] . '"' . XHTML . '>';
 
     $form_arr = array('bottom' => $bottom);
@@ -216,8 +218,10 @@ switch ($action) {
 }
 
 $display .= COM_siteHeader();
+COM_errorLog( 'rc=' . $rc );
 if (!empty($rc)) {
-    $display .= COM_showMessage($LANG_FILECHECK['removed']);
+    // the list of files deleted are in $rc, in the future we will log these
+    $display .= COM_showMessageText($LANG_FILECHECK['removed']);
 }
 $display .= FILECHECK_list() . COM_siteFooter();
 

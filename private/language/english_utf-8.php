@@ -1852,11 +1852,13 @@ $LANG_BBCODE = array(
 
 $LANG_FILECHECK = array(
     'filecheck'         => 'File Integrity Check',
+    'recheck'           => 'Recheck File Integrity',
+    'confirm'           => 'Are you sure you want to deleted the selected file(s)?',
     'explanation'       => 'This is a list of files that are not recognized as being a part of the glFusion v%s distribution.  <b>This DOES NOT mean you should simply delete these files</b>, this tool is intended to assist you in removing files that have been removed or have moved in the glFusion distribution.  <b>Please use this tool with caution.</b>',
     'where'             => 'Root',
     'directory'         => 'Directory',
     'filename'          => 'Filename',
-    'removed'           => 'The specified files were removed.'
+    'removed'           => 'The selected file(s) were deleted.  Your site\'s File Integrity has been rechecked, and the results are shown below.'
 );
 
 ###############################################################################

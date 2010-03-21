@@ -194,11 +194,10 @@ function BLOCK_edit($bid = '', $B = array())
            $LANG_ADMIN, $LANG_postmodes,$MESSAGE;
 
     $retval = '';
+    $A = array();
 
     if (!empty($bid)) {
-        $sql = "SELECT * FROM {$_TABLES['blocks']} WHERE bid ='$bid'";
-
-        $result = DB_query($sql);
+        $result = DB_query("SELECT * FROM {$_TABLES['blocks']} WHERE bid ='$bid'");
         $A = DB_fetchArray($result);
         $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
         if ($access == 2 || $access == 0 || BLOCK_hasTopicAccess($A['tid']) < 3) {
