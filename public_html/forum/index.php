@@ -1016,7 +1016,7 @@ if ($forum > 0) {
     $rssFeed = DB_getItem($_TABLES['syndication'],'filename','type="forum" AND topic='.$forum.' AND is_enabled=1');
     if ( $rssFeed != '' || $rssFeed != NULL ) {
         $baseurl = SYND_getFeedUrl();
-        $imgurl  = '<img src="'.$_CONF['layout_url'].'/images/rss_small.png" alt="'.$LANG_GF01['rss_link'].'" title="'.$LANG_GF01['rss_link'].'" style="vertical-align:middle;"/>';
+        $imgurl  = '<img src="'.gf_getImage('rss_feed').'" alt="'.$LANG_GF01['rss_link'].'" title="'.$LANG_GF01['rss_link'].'" style="vertical-align:middle;"/>';
         $topiclisting->set_var('rssfeed','<a href="'.$baseurl.$rssFeed.'">'.$imgurl.'</a>');
     } else {
         $topiclisting->set_var('rssfeed','');
