@@ -510,6 +510,8 @@ function _checkEnvironment()
         'lang_php_settings' => $LANG01['php_settings'],
         'lang_php_warning'  => $LANG01['php_warning'],
         'lang_current_php_settings' => $LANG01['current_php_settings'],
+        'lang_show_phpinfo' => $LANG01['show_phpinfo'],
+        'lang_hide_phpinfo' => $LANG01['hide_phpinfo'],
         'lang_graphics'     => $LANG01['graphics'],
         'phpinfo'           => _phpinfo(),
     ));
