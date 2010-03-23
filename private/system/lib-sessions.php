@@ -165,11 +165,12 @@ function SESS_sessionCheck()
                                 $ipmatch = true;
                             }
                             break;
-                        default :
+                        default :   // none
                             $ipmatch = true;
                             break;
                     }
-                    if (empty ($cookie_password) || (!SEC_checkTokenGeneral($cookie_password,'ltc',$userid)) || ($ipmatch == false )) {
+                    if (empty ($cookie_password)  || ($ipmatch == false )
+                      || (!SEC_checkTokenGeneral($cookie_password,'ltc',$userid))) {
                         // User may have modified their UID in cookie, ignore them
                         SEC_setCookie ($_CONF['cookie_name'], '', time() - 10000,
                                        $_CONF['cookie_path'], $_CONF['cookiedomain'],
@@ -248,7 +249,8 @@ function SESS_sessionCheck()
                             break;
                     }
                 }
-                if (empty ($cookie_password) || (!SEC_checkTokenGeneral($cookie_password,'ltc',$userid)) || ($ipmatch == false )) {
+                if (empty ($cookie_password)  || ($ipmatch == false )
+                  || (!SEC_checkTokenGeneral($cookie_password,'ltc',$userid))) {
                     // User could have modified UID in cookie, don't do shit
                     SEC_setcookie ($_CONF['cookie_name'], '', time() - 10000,
                                    $_CONF['cookie_path'], $_CONF['cookiedomain'],
