@@ -1302,27 +1302,31 @@ function gf_chknotifications($forumid,$topicid,$userid,$type='topic') {
         return;
     }
 
-    $pid = DB_getItem($_TABLES['gf_topic'],'pid',"id='$topicid'");
-    if ($pid == 0) {
+    $pid = DB_getItem($_TABLES['gf_topic'],'pid','id='.(int) $topicid);
+    if ($pid == 0 || $pid == '') {
       $pid = $topicid;
     }
+    $grp_id = DB_getItem($_TABLES['gf_forums'],'grp_id','forum_id='. (int) $forumid);
+    if ( $grp_id == 0 || $grp_id == '' ) {
+        $grp_id = 1;
+    }
 
-    $sql = "SELECT * FROM {$_TABLES['gf_watch']} WHERE ((topic_id='$pid') OR ((forum_id='$forumid') AND (topic_id='0') )) GROUP BY uid";
+    $sql = "SELECT * FROM {$_TABLES['gf_watch']} WHERE ((topic_id=".(int) $pid.") OR ((forum_id=".(int) $forumid.") AND (topic_id=0) )) GROUP BY uid";
     $sqlresult = DB_query($sql);
     $postername = COM_getDisplayName($userid);
     $nrows = DB_numRows($sqlresult);
 
     $messageBody = '';
     if ( $nrows > 0 ) {
-        $topicrec = DB_query("SELECT subject,name,forum,last_reply_rec FROM {$_TABLES['gf_topic']} WHERE id='$pid'");
+        $topicrec = DB_query("SELECT subject,name,forum,last_reply_rec FROM {$_TABLES['gf_topic']} WHERE id=".(int)$pid);
         $A = DB_fetchArray($topicrec);
-        $forum_name = DB_getItem($_TABLES['gf_forums'],'forum_name',"forum_id=".intval($forumid));
+        $forum_name = DB_getItem($_TABLES['gf_forums'],'forum_name',"forum_id=". (int) $forumid);
         if ($type=='forum') {
             $digestSubject = $forum_name;
             $digestSubject .= ": ";
             $digestSubject .= $A['subject'];
             $messageBody .= sprintf($LANG_GF02['msg23b'],$A['subject'],$A['name'],$forum_name, $_CONF['site_name'],$_CONF['site_url'],$pid);
-            $last_reply_rec = DB_getItem($_TABLES['gf_forums'],'last_post_rec',"forum_id=".intval($forumid));
+            $last_reply_rec = DB_getItem($_TABLES['gf_forums'],'last_post_rec',"forum_id=".(int) $forumid);
         } else {
             if ( $A['last_reply_rec'] != '' && $A['last_reply_rec'] != 0 ) {
                 $last_reply_rec = $A['last_reply_rec'];
@@ -1349,10 +1353,10 @@ function gf_chknotifications($forumid,$topicid,$userid,$type='topic') {
             // if the topic_id is 0 for this record - user has subscribed to complete forum. Check if they have opted out of this forum topic.
             if (DB_count($_TABLES['gf_watch'],array('uid','forum_id','topic_id'),array($N['uid'],$forumid,-$topicid)) == 0) {
                 // Check if user does not want to receive multiple notifications for same topic and already has been notified
-                $userNotifyOnceOption = DB_getItem($_TABLES['gf_userprefs'],'notify_once',"uid='{$N['uid']}'");
+                $userNotifyOnceOption = DB_getItem($_TABLES['gf_userprefs'],'notify_once',"uid=".(int)$N['uid']);
                 // Retrieve the log record for this user if it exists then check if user has viewed this topic yet
                 // The logtime value may be 0 which indicates the user has not yet viewed the topic
-                $lsql = DB_query("SELECT time FROM {$_TABLES['gf_log']} WHERE uid='{$N['uid']}' AND forum='$forumid' AND topic='$topicid'");
+                $lsql = DB_query("SELECT time FROM {$_TABLES['gf_log']} WHERE uid=".(int)$N['uid']." AND forum=".(int)$forumid." AND topic=".(int)$topicid);
                 if (DB_numRows($lsql) == 1) {
                     $nologRecord = false;
                     list ($logtime) = DB_fetchArray($lsql);
@@ -1362,17 +1366,17 @@ function gf_chknotifications($forumid,$topicid,$userid,$type='topic') {
                 }
 
                 if  ($userNotifyOnceOption == 0 OR ($userNotifyOnceOption == 1 AND ($nologRecord OR $logtime != 0)) ) {
-                    $userrec = DB_query("SELECT username,email,status FROM {$_TABLES['users']} WHERE uid='{$N['uid']}'");
+                    $userrec = DB_query("SELECT username,email,status FROM {$_TABLES['users']} WHERE uid=".(int)$N['uid']);
                     $B = DB_fetchArray($userrec);
                     if ($B['status'] == USER_ACCOUNT_ACTIVE) {
                         $subjectline = "{$_CONF['site_name']} {$LANG_GF02['msg22']}";
                         $message  = "{$LANG_GF01['HELLO']} {$B['username']},\n\n" . $messageBody;
                         if ($nologRecord and $userNotifyOnceOption == 1 ) {
-                            DB_query("INSERT INTO {$_TABLES['gf_log']} (uid,forum,topic,time) VALUES ('{$N['uid']}', '$forumid', '$topicid','0') ");
+                            DB_query("INSERT INTO {$_TABLES['gf_log']} (uid,forum,topic,time) VALUES (".(int)$N['uid'].", ".(int) $forumid.", ".(int)$topicid.",'0') ");
                         }
                         $to = array();
                         $to = COM_formatEmailAddress('',$B['email']);
-                        $notifyfull = DB_getItem($_TABLES['gf_userprefs'],'notify_full',"uid={$N['uid']}");
+                        $notifyfull = DB_getItem($_TABLES['gf_userprefs'],'notify_full',"uid=".(int)$N['uid']);
                         if ( $notifyfull ) {
                             COM_mail($to,$digestSubject, $digestMessage,'',true,0,'',$digestMessageText);
                         } else {
