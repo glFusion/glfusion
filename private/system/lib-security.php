@@ -1606,7 +1606,7 @@ function SEC_reauthform($desturl, $message = '',$method = '', $postdata = '', $g
         'newreg_link'     => false,
         'openid_login'    => false,
         'plugin_vars'     => false,
-        'prefill_user'    => true,
+        'prefill_user'    => COM_isAnonUser() ? false : true,
         'title'           => $LANG20[1],
         'message'         => $message,
         'footer_message'  => $LANG20[6],
