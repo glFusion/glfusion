@@ -8,9 +8,10 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Mark Howard            mark AT usable-web DOT com                        |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -218,7 +219,7 @@ switch ($action) {
 }
 
 $display .= COM_siteHeader();
-COM_errorLog( 'rc=' . $rc );
+//COM_errorLog( 'rc=' . $rc );
 if (!empty($rc)) {
     // the list of files deleted are in $rc, in the future we will log these
     $display .= COM_showMessageText($LANG_FILECHECK['removed']);
