@@ -823,7 +823,7 @@ $LANG21 = array(
     67 => 'Check to allow autotags',
     68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.',
     69 => 'Are you sure you want to delete this block?',
-    70 => 'Block name cannot be blank and cannot contain spaces or the following characters: < > \' " % & * \\ /',
+    70 => 'Block name cannot be blank and cannot contain spaces or the following characters: < > \' " % & * / or backslash',
 );
 
 ###############################################################################
@@ -2174,6 +2174,7 @@ $LANG_fs['Core'] = array(
     'fs_perm_block' => 'Block Default Permission',
     'fs_webservices' => 'Webservices',
     'fs_caching' => 'Caching',
+    'fs_mulitlanguage' => 'Multiple Language Support - See <a href="http://www.glfusion.org/wiki/doku.php/glfusion:language#multilingual_sites" target=_blank>Multi-Language Documentation</a>',
 );
 
 $LANG_configselects['Core'] = array(
