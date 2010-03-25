@@ -122,24 +122,45 @@ if ($status == USER_ACCOUNT_ACTIVE) {
         $filedata = urldecode($_POST['token_filedata']);
         $file_array = unserialize($filedata);
     }
+
     if (empty($_FILES) && is_array($file_array) ) {
         foreach ($file_array as $fkey => $file) {
-            foreach($file AS $key => $value) {
-                if ($key == 'tmp_name' ) {
-                    $filename = COM_sanitizeFilename(basename($value), true);
-                    $value = $_CONF['path_data'] . 'temp/'.$filename;
-                    if ( $filename == '' ) {
-                        $value = '';
+            if ( isset($file['name']) && is_array($file['name']) ) {
+                foreach($file AS $key => $data) {
+                    foreach ($data AS $offset => $value) {
+                        if ( $key == 'tmp_name' ) {
+                            $filename = COM_sanitizeFilename(basename($value), true);
+                            $value = $_CONF['path_data'] . 'temp/'.$filename;
+                            if ( $filename == '' ) {
+                                $value = '';
+                            }
+                            $_FILES[$fkey]['_data_dir'][$offset] = true;
+                        }
+                        $_FILES[$fkey][$key][$offset] = $value;
+                        if (! file_exists($_FILES[$fkey]['tmp_name'][$offset])) {
+                            $_FILES[$fkey]['tmp_name'][$offset] = '';
+                            $_FILES[$fkey]['error'][$offset] = 4;
+                        }
                     }
-                    // set _data_dir attribute to key upload class to not use move_uploaded_file()
-                    $_FILES[$fkey]['_data_dir'] = true;
                 }
-                $_FILES[$fkey][$key] = $value;
+            } else {
+                foreach($file AS $key => $value) {
+                    if ($key == 'tmp_name' ) {
+                        $filename = COM_sanitizeFilename(basename($value), true);
+                        $value = $_CONF['path_data'] . 'temp/'.$filename;
+                        if ( $filename == '' ) {
+                            $value = '';
+                        }
+                        // set _data_dir attribute to key upload class to not use move_uploaded_file()
+                        $_FILES[$fkey]['_data_dir'] = true;
+                    }
+                    $_FILES[$fkey][$key] = $value;
 
-            }
-            if (! file_exists($_FILES[$fkey]['tmp_name'])) {
-                $_FILES[$fkey]['tmp_name'] = '';
-                $_FILES[$fkey]['error'] = 4;
+                }
+                if (! file_exists($_FILES[$fkey]['tmp_name'])) {
+                    $_FILES[$fkey]['tmp_name'] = '';
+                    $_FILES[$fkey]['error'] = 4;
+                }
             }
         }
     }
@@ -198,12 +219,23 @@ if ( $_SYSTEM['admin_session'] != 0 ) {
         $postdata = serialize($_POST);
         $getdata  = serialize($_GET);
         $filedata = '';
+
         if (! empty($_FILES)) {
             foreach ($_FILES as $key => $file) {
-                if (! empty($file['name'])) {
-                    $filename = basename($file['tmp_name']);
-                    move_uploaded_file($file['tmp_name'],$_CONF['path_data'] . 'temp/'. $filename);
-                    $_FILES[$key]['tmp_name'] = $filename;
+                if ( is_array($file['name']) ) {
+                    foreach ($file['name'] as $offset => $filename) {
+                        if ( !empty($file['name'][$offset]) ) {
+                            $filename = basename($file['tmp_name'][$offset]);
+                            move_uploaded_file($file['tmp_name'][$offset],$_CONF['path_data'] . 'temp/'. $filename);
+                            $_FILES[$key]['tmp_name'][$offset] = $filename;
+                        }
+                    }
+                } else {
+                    if (! empty($file['name']) && !empty($file['tmp_name'])) {
+                        $filename = basename($file['tmp_name']);
+                        move_uploaded_file($file['tmp_name'],$_CONF['path_data'] . 'temp/'. $filename);
+                        $_FILES[$key]['tmp_name'] = $filename;
+                    }
                 }
             }
             $filedata = serialize($_FILES);
