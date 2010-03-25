@@ -90,8 +90,8 @@ class Search {
         } else {
             $this->_query = '';
         }
-/* --- not using topic at the moment
         $this->_query = preg_replace('/\s\s+/', ' ', $this->_query);
+
         if ( isset($_GET['topic']) ){
             $this->_topic = COM_applyFilter (COM_stripslashes ($_GET['topic']));
         } else if ( isset($_POST['topic']) ) {
@@ -99,7 +99,6 @@ class Search {
         } else {
             $this->_topic = '';
         }
------------ */
         if (isset ($_GET['datestart'])) {
             $this->_dateStart = COM_applyFilter ($_GET['datestart']);
         } else if (isset($_POST['datestart']) ) {
@@ -523,13 +522,13 @@ class Search {
                  (empty($this->_dateStart) || empty($this->_dateEnd))
              ) {
                 $retval = $this->showForm();
-                $retval .= '<hr/><p>' . $LANG09[41] . '</p>' . LB;
+                $retval .= '<div style="margin-bottom:5px;border-bottom:1px solid #ccc;"></div><p>' . $LANG09[41] . '</p>' . LB;
 
                 return $retval;
             }
         } elseif ( strlen($this->_query) < 3 ) {
             $retval = $this->showForm();
-            $retval .= '<hr/><p>' . $LANG09[41] . '</p>' . LB;
+            $retval .= '<div style="margin-bottom:5px;border-bottom:1px solid #ccc;"></div><p>' . $LANG09[41] . '</p>' . LB;
 
             return $retval;
         }
@@ -574,8 +573,8 @@ class Search {
             $this->_wordlength = 7;
         } else if ($style == 'google') {
             $obj->setStyle('inline');
-            $obj->setField('',          ROW_NUMBER,    $show_num,  false, '<span style="font-size:larger; font-weight:bold;">%d.');
-            $obj->setField($LANG09[16], 'title',       true,       true,  '%s</span><br/>');
+            $obj->setField('',          ROW_NUMBER,    $show_num,  false, '<span style="font-size:larger; font-weight:bold;">%d.</span>');
+            $obj->setField($LANG09[16], 'title',       true,       true,  '<span style="font-size:larger; font-weight:bold;">%s</span><br/>');
             $obj->setField('',          'description', true,       false, '%s<br/>');
             $obj->setField('',          '_html',       true,       false, '<span style="color:green;">');
             $obj->setField($LANG09[18], 'uid',         $show_user, true,  $LANG01[104].' %s ');
@@ -722,22 +721,12 @@ class Search {
 
         $searchText = "{$LANG09[25]} $searchQuery. ";
 
-// check to see if any results are found - if not display the form again...
-
         $retval .= $this->showForm();
 
         if (count($results) == 0) {
-
-            $retval .= '<hr/>';
+            $retval .= '<div style="margin-bottom:5px;border-bottom:1px solid #ccc;"></div>';
             $retval .= $LANG09[74];
-
-//            $retval .= '<div>';
-//            $retval .= sprintf($LANG09[24], 0);
-//            $retval = '<p>' . $retval . '</p>' . LB;
-//            $retval .= '<p>' . $LANG09[13] . '</p></div>' . LB;
-//            $retval .= $this->showForm();
         } else {
-//            $retval .= " ($searchtime {$LANG09[27]}). <br />" . COM_createLink($LANG09[61], $url.'refine');
             $retval .= $obj->getFormattedOutput($results, $LANG09[11], $list_top, '');
         }
 
@@ -828,6 +817,20 @@ class Search {
     function _shortenText($keyword, $text, $num_words = 7)
     {
         $text = COM_getTextContent($text);
+
+        // parse some general bbcode / auto tags
+        $bbcode = array(
+            "/\[b\](.*?)\[\/b\]/is" => "$1",
+            "/\[u\](.*?)\[\/u\]/is" => "$1",
+            "/\[i\](.*?)\[\/i\]/is" => "$1",
+            "/\[quote\](.*?)\[\/quote\]/is" => "$1",
+            "/\[code\](.*?)\[\/code\]/is" => " $1 ",
+            "/\[p\](.*?)\[\/p\]/is" => " $1 ",
+            "/\[url\=(.*?)\](.*?)\[\/url\]/is" => "$2",
+            "/\[wiki:(.*?) (.*?)[\]]/is" => "$2"
+        );
+        $text = @preg_replace(array_keys($bbcode), array_values($bbcode), $text);
+
         $words = explode(' ', $text);
         $word_count = count($words);
         if ($word_count <= $num_words) {
@@ -836,19 +839,15 @@ class Search {
 
         $rt = '';
         $pos = $this->_stripos($text, $keyword);
-        if ($pos !== false)
-        {
+        if ($pos !== false) {
             $pos_space = strpos($text, ' ', $pos);
-            if (empty($pos_space))
-            {
+            if (empty($pos_space)) {
                 // Keyword at the end of text
                 $key = $word_count - 1;
                 $start = 0 - $num_words;
                 $end = 0;
                 $rt = '<b>...</b> ';
-            }
-            else
-            {
+            } else {
                 $str = substr($text, $pos, $pos_space - $pos);
                 $m = (int) (($num_words - 1) / 2);
                 $key = $this->_arraySearch($keyword, $words);
@@ -879,89 +878,7 @@ class Search {
                     $rt = '<b>...</b> ';
                 }
             }
-        }
-        else
-        {
-            $key = 0;
-            $start = 0;
-            $end = $num_words - 1;
-        }
-
-        for ($i = $start; $i <= $end; $i++) {
-            $rt .= $words[$key + $i] . ' ';
-        }
-        if ($key + $i != $word_count) {
-            $rt .= ' <b>...</b>';
-        }
-        return stripslashes($rt);
-
-        return stripslashes(COM_highlightQuery($rt, $keyword, 'b'));
-    }
-    function _shortenTextXX($keyword, $text, $num_words = 7)
-    {
-        $text = strip_tags($text);
-        $text = str_replace(array("\011", "\012", "\015"), ' ', trim($text));
-        $text = str_replace('&nbsp;', ' ', $text);
-        if ( $this->_charset == 'utf-8' ) {
-            $text = preg_replace('/\s\s+/u', ' ', $text);
         } else {
-            $text = preg_replace('/\s\s+/', ' ', $text);
-        }
-
-        $words = explode(' ', $text);
-        $word_count = count($words);
-        if ($word_count <= $num_words) {
-            return stripslashes($this->_highlightQuery($text, $keyword, 'b'));
-        }
-
-        $rt = '';
-        $pos = $this->_stripos($text, $keyword);
-        if ($pos !== false)
-        {
-            $pos_space = strpos($text, ' ', $pos);
-            if (empty($pos_space))
-            {
-                // Keyword at the end of text
-                $key = $word_count - 1;
-                $start = 0 - $num_words;
-                $end = 0;
-                $rt = '<b>...</b> ';
-            }
-            else
-            {
-                $str = MBYTE_substr($text, $pos, $pos_space - $pos);
-                $m = (int) (($num_words - 1) / 2);
-                $key = $this->_arraySearch($keyword, $words);
-                if ($key === false) {
-                    // Keyword(s) not found - show start of text
-                    $key = 0;
-                    $start = 0;
-                    $end = $num_words - 1;
-                } elseif ($key <= $m) {
-                    // Keyword at the start of text
-                    $start = 0 - $key;
-                    $end = $num_words - 1;
-                    $end = ($key + $m <= $word_count - 1)
-                         ? $key : $word_count - $m - 1;
-                    $abs_length = abs($start) + abs($end) + 1;
-                    if ($abs_length < $num_words) {
-                        $end += ($num_words - $abs_length);
-                    }
-                } else {
-                    // Keyword in the middle of text
-                    $start = 0 - $m;
-                    $end = ($key + $m <= $word_count - 1)
-                         ? $m : $word_count - $key - 1;
-                    $abs_length = abs($start) + abs($end) + 1;
-                    if ($abs_length < $num_words) {
-                        $start -= ($num_words - $abs_length);
-                    }
-                    $rt = '<b>...</b> ';
-                }
-            }
-        }
-        else
-        {
             $key = 0;
             $start = 0;
             $end = $num_words - 1;
@@ -973,9 +890,7 @@ class Search {
         if ($key + $i != $word_count) {
             $rt .= ' <b>...</b>';
         }
-        $rt .= ' <b>...</b>';
-
-        return stripslashes($this->_highlightQuery($rt, $keyword, 'b'));
+        return stripslashes(COM_highlightQuery($rt, $keyword, 'b'));
     }
 
     /**

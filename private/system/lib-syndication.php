@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2003-2008 by the following authors:                        |
+// | Copyright (C) 2003-2010 by the following authors:                        |
 // |                                                                          |
 // | Authors: Dirk Haun        - dirk AT haun-online DOT de                   |
 // |          Michael Jervis   - mike AT fuckingbrit DOT com                  |
@@ -267,7 +267,7 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
             $storytitle = stripslashes( $row['title'] );
             $fulltext = stripslashes( $row['introtext']."\n".$row['bodytext'] );
             $fulltext = PLG_replaceTags( $fulltext );
-            $storytext = SYND_truncateSummary( $fulltext, $contentLength );
+            $storytext = COM_truncateHTML ( $fulltext, $contentLength, ' ...' );
 
             $fulltext = trim( $fulltext );
             $fulltext = str_replace(array("\015\012", "\015"), "\012", $fulltext);
@@ -388,7 +388,7 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
 
         $fulltext = stripslashes( $row['introtext']."\n".$row['bodytext'] );
         $fulltext = PLG_replaceTags( $fulltext );
-        $storytext = SYND_truncateSummary( $fulltext, $contentLength );
+        $storytext = COM_truncateHTML ( $fulltext, $contentLength, ' ...' );
         $fulltext = trim( $fulltext );
         $fulltext = str_replace(array("\015\012", "\015"), "\012", $fulltext);
 
@@ -491,8 +491,8 @@ function SYND_updateFeed( $fid )
                 if ($A['content_length'] != 1) {
                     $count = count($content);
                     for ($i = 0; $i < $count; $i++ ) {
-                        $content[$i]['summary'] = SYND_truncateSummary(
-                                    $content[$i]['text'], $A['content_length']);
+                        $content[$i]['summary'] = COM_truncateHTML(
+                                    $content[$i]['text'], $A['content_length'],'...');
                     }
                 }
             }
@@ -610,30 +610,7 @@ function SYND_updateFeed( $fid )
 */
 function SYND_truncateSummary( $text, $length )
 {
-    if( $length == 0 )
-    {
-        return '';
-    }
-    else
-    {
-        $text = stripslashes( $text );
-        $text = trim( $text );
-        $text = str_replace(array("\015\012", "\015"), "\012", $text);
-        if(( $length > 3 ) && ( MBYTE_strlen( $text ) > $length ))
-        {
-            $text = substr( $text, 0, $length - 3 ) . '...';
-        }
-
-        // Check if we broke html tag and storytext is now something
-        // like "blah blah <a href= ...". Delete "<*" if so.
-        if( strrpos( $text, '<' ) > strrpos( $text, '>' ))
-        {
-            $text = substr( $text, 0, strrpos( $text, '<' ) - 1 )
-                  . ' ...';
-        }
-
-        return $text;
-    }
+    return COM_truncateHTML ($text, $length, ' ...');
 }
 
 
