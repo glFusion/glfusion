@@ -2,6 +2,10 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Moved Multiple Language configuration options to their own fieldset
+  in hopes this will remove some of the confusion on these fields (Mark)
+- Forum: Fixed issue where users would continue to receive new post
+  notification if their permission to view forum was removed (Mark)
 - Forum: If forum has RSS link, display the RSS subscribe button (Mark)
 - Added ability for plugins to specify admin group flag and default flag
   during auto install. (Mark)
