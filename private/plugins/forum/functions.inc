@@ -138,7 +138,7 @@ function plugin_getmenuitems_forum()
     $menuitems = array();
 
     if ( $CONF_FORUM['registration_required'] == 1 ) {
-        if ($_USER['uid'] > 1) {
+        if (!COM_isAnonUser() ) {
             $menuitems["$LANG_GF00[pluginlabel]"] = "$_CONF[site_url]/forum/index.php";
         } else {
             $menuitems = '';

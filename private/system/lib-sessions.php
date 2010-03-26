@@ -575,7 +575,7 @@ function SESS_getUserDataFromId($userid)
 
 function SESS_completeLogin($uid)
 {
-    global $_TABLES, $_CONF, $_SYSTEM, $_USER;
+    global $_TABLES, $_CONF, $_SYSTEM, $_USER, $_SESS_VERBOSE;
 
     DB_change($_TABLES['users'],'pwrequestid',"NULL",'uid',(int) $uid);
     $userdata = SESS_getUserDataFromId($uid);
@@ -588,7 +588,7 @@ function SESS_completeLogin($uid)
     if (!isset($_COOKIE[$_CONF['cookie_name']]) || !isset($_COOKIE['password'])) {
         // Either their cookie expired or they are new
         $cooktime = COM_getUserCookieTimeout();
-        if ($VERBOSE) {
+        if ($_SESS_VERBOSE) {
             COM_errorLog("Trying to set permanent cookie with time of $cooktime",1);
         }
         if ($cooktime > 0) {
@@ -599,7 +599,7 @@ function SESS_completeLogin($uid)
             $token_ttl = $_CONF['session_cookie_timeout'];
         }
         // They want their cookie to persist for some amount of time so set it now
-        if ($VERBOSE) {
+        if ($_SESS_VERBOSE) {
             COM_errorLog('Trying to set permanent cookie',1);
         }
         SEC_setCookie ($_CONF['cookie_name'], $_USER['uid'],
@@ -618,14 +618,14 @@ function SESS_completeLogin($uid)
         } else {
             $userid = (int) COM_applyFilter ($userid, true);
             if ($userid > 1) {
-                if ($VERBOSE) {
+                if ($_SESS_VERBOSE) {
                     COM_errorLog ('NOW trying to set permanent cookie',1);
                     COM_errorLog ('Received '.$userid.' from perm cookie in users.php',1);
                 }
                 // Create new session
                 $userdata = SESS_getUserDataFromId ($userid);
                 $_USER = $userdata;
-                if ($VERBOSE) {
+                if ($_SESS_VERBOSE) {
                     COM_errorLog ('Received '.$_USER['username'].' for the username in user.php',1);
                 }
             }

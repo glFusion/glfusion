@@ -1028,7 +1028,7 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
 
         $mapped = array();
         foreach ($props as $key => $value) {
-            if ($sp_id == '*') {
+            if ($id == '*') {
                 if ($value != '') {
                     $mapped[$key] = $value;
                 }

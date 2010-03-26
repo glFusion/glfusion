@@ -1596,6 +1596,8 @@ function SEC_reauthform($desturl, $message = '',$method = '', $postdata = '', $g
 {
     global $LANG20, $LANG_ADMIN;
 
+    $hidden = '';
+
     $hidden .= '<input type="hidden" name="token_postdata" value="'.urlencode($postdata).'"/>' . LB;
     $hidden .= '<input type="hidden" name="token_getdata" value="'.urlencode($getdata).'"/>' . LB;
     $hidden .= '<input type="hidden" name="token_filedata" value="'.urlencode($filedata).'"/>' . LB;

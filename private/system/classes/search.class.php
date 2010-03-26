@@ -507,6 +507,8 @@ class Search {
         global $_CONF, $LANG01, $LANG09, $LANG31, $_TABLES, $_USER;
 
         $debug_info = '';
+        $retval = '';
+        $list_top = '';
 
         // Verify current user can perform requested search
         if (!$this->_isSearchAllowed())

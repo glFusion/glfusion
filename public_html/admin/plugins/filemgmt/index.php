@@ -331,6 +331,8 @@ function newfileConfigAdmin(){
 function modDownload() {
     global $_CONF,$_FM_TABLES,$_USER,$myts,$eh,$mytree,$filemgmt_SnapStore,$filemgmt_FileSnapURL;
 
+    $totalvotes = '';
+
     $lid = $_GET['lid'];
     $result = DB_query("SELECT cid, title, url, homepage, version, size, logourl, comments,submitter FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='".DB_escapeString($lid)."'");
     $nrows = DB_numROWS($result);

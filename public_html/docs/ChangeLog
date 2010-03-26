@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- General E_ALL fixes (Mark)
+- Updated FCKeditor to v2.6.6 (Mark)
 - Clean up search results a bit (improve formatting) (Mark)
 - Implemented sort story by option in topics (Mark)
 - Implemented COM_truncateHTML() in feeds - ported from Geeklog (Mark)

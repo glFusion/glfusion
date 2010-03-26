@@ -1129,7 +1129,7 @@ class upload
                     $this->_currentFile['type'] = $this->_filesToUpload["type"][$key];
                     $this->_currentFile['size'] = $this->_filesToUpload["size"][$key];
                     $this->_currentFile['error'] = $this->_filesToUpload["error"][$key];
-                    $this->_currentFile['_data_dir'] = $this->_filesToUpload["_data_dir"][$key];
+                    $this->_currentFile['_data_dir'] = isset($this->_filesToUpload["_data_dir"][$key]) ? $this->_filesToUpload["_data_dir"][$key] : '';
                     $this->_currentFile['localerror'] = array();
 
                     $metaData = IMG_getMediaMetaData( $this->_currentFile['tmp_name'] );
@@ -1173,7 +1173,7 @@ class upload
                 $this->_currentFile['type'] = $this->_filesToUpload["type"];
                 $this->_currentFile['size'] = $this->_filesToUpload["size"];
                 $this->_currentFile['error'] = $this->_filesToUpload["error"];
-                $this->_currentFile['_data_dir'] = $this->_filesToUpload["_data_dir"];
+                $this->_currentFile['_data_dir'] = isset($this->_filesToUpload["_data_dir"]) ? $this->_filesToUpload["_data_dir"] : '' ;
 
                 $metaData = IMG_getMediaMetaData( $this->_currentFile['tmp_name'] );
                 if ( $metaData['mime_type'] != '' ) {
