@@ -952,7 +952,14 @@ $LANG27 = array(
     26 => 'make this the default topic for archived stories. Only one topic allowed.',
     27 => 'Or Upload Topic Icon',
     28 => 'Maximum',
-    29 => 'File Upload Errors'
+    29 => 'File Upload Errors',
+    30 => 'Date',
+    31 => 'Title',
+    32 => 'Story ID',
+    33 => 'Ascending',
+    34 => 'Descending',
+    35 => 'Sort Stories By',
+    36 => 'Sort Stories Direction',
 );
 
 ###############################################################################
@@ -1518,9 +1525,11 @@ $LANG_BUTTONS = array(
 # 404.php
 
 $LANG_404 = array(
-    1 => '404 Error',
-    2 => 'Gee, I\'ve looked everywhere but I can not find <b>%s</b>.',
-    3 => "<p>We're sorry, but the file you have requested does not exist. Please feel free to check the <a href=\"{$_CONF['site_url']}\">main page</a> or the <a href=\"{$_CONF['site_url']}/search.php\">search page</a> to see if you can find what you lost."
+    1 => '404 - URL not found',
+    2 => '<div class="story-body">You may not be able to access this page because of one of the following conditions:<ul><li>an out of date bookmark or favorite</li><li>a search engine that has an out of date listing for this site</li><li>a mistyped address</li></ul></div>',
+    22 => 'I\'ve looked everywhere but I can not find <b>%s</b>.',
+    3 => "<p>Please try one of the following:<ul style=\"margin-left:15px;padding-top:10px;\"><li><a href=\"{$_CONF['site_url']}\">Home Page</a></li><li><a href=\"{$_CONF['site_url']}/search.php\">Search</a></li></ul></p>",
+    33 => "<p>We're sorry, but the file you have requested does not exist. Please feel free to check the <a href=\"{$_CONF['site_url']}\">main page</a> or the <a href=\"{$_CONF['site_url']}/search.php\">search page</a> to see if you can find what you lost."
 );
 
 ###############################################################################

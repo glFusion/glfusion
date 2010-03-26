@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -63,8 +63,7 @@ $archivetid = DB_getItem ($_TABLES['topics'], 'tid', "archive_flag=1");
 
 // Microsummary support:
 // see: http://wiki.mozilla.org/Microsummaries
-if( $microsummary )
-{
+if( $microsummary ) {
     $sql = " (UNIX_TIMESTAMP(s.date) <= NOW()) AND (draft_flag <> 1)";
 
     if (empty ($topic)) {
@@ -98,18 +97,13 @@ if( $microsummary )
     if ( $A = DB_fetchArray( $result ) ) {
         $pagetitle = $_CONF['microsummary_short'].$A['title'];
     } else {
-        if(isset( $_CONF['pagetitle'] ))
-        {
+        if(isset( $_CONF['pagetitle'] )) {
             $pagetitle = $_CONF['pagetitle'];
         }
-        if( empty( $pagetitle ))
-        {
-            if( empty( $topic ))
-            {
+        if( empty( $pagetitle )) {
+            if( empty( $topic )) {
                 $pagetitle = $_CONF['site_slogan'];
-            }
-            else
-            {
+            } else {
                 $pagetitle = stripslashes( DB_getItem( $_TABLES['topics'], 'topic',
                                                        "tid = '".DB_escapeString($topic)."'" ));
             }
@@ -122,7 +116,7 @@ if( $microsummary )
 
 $page = 1;
 if (isset ($_GET['page'])) {
-    $page = intval(COM_applyFilter ($_GET['page'], true));
+    $page = (int) COM_applyFilter ($_GET['page'], true);
     if ($page == 0) {
         $page = 1;
     }
@@ -144,8 +138,7 @@ if ( $_CONF['rating_enabled'] != 0 ) {
     $ratedIds = RATING_getRatedIds('article');
 }
 
-if($topic)
-{
+if($topic) {
     $header = '<link rel="microsummary" href="' . $_CONF['site_url']
             . '/index.php?display=microsummary&amp;topic=' . urlencode($topic)
             . '" title="Microsummary"' . XHTML . '>';
@@ -166,7 +159,6 @@ if (isset ($_GET['msg'])) {
     }
     $display .= COM_showMessage (COM_applyFilter ($_GET['msg'], true), $plugin);
 }
-
 
 // Show any Plugin formatted blocks
 // Requires a plugin to have a function called plugin_centerblock_<plugin_name>
@@ -197,13 +189,22 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
     $U['tids'] = '';
 }
 
+$topiclimit = 0;
+$story_sort = 'date';
+$story_sort_dir = 'DESC';
+
+if ( !empty($topic) ) {
+    $result = DB_query("SELECT limitnews,sort_by,sort_dir FROM {$_TABLES['topics']} WHERE tid='".DB_escapeString($topic)."'");
+    if ( $result ) {
+        list($topiclimit, $story_sort, $story_sort_dir) = DB_fetchArray($result);
+    }
+}
+
 $maxstories = 0;
 if ($U['maxstories'] >= $_CONF['minnews']) {
     $maxstories = $U['maxstories'];
 }
 if ((!empty ($topic)) && ($maxstories == 0)) {
-    $topiclimit = DB_getItem ($_TABLES['topics'], 'limitnews',
-                              "tid = '".DB_escapeString($topic)."'");
     if ($topiclimit >= $_CONF['minnews']) {
         $maxstories = $topiclimit;
     }
@@ -297,23 +298,34 @@ if ($_CONF['allow_user_photo'] == 1) {
     }
 }
 
-if ( isset( $_SYSTEM['sort_story_by'] ) ) {
-    switch ( $_SYSTEM['sort_story_by'] ) {
-        case 0 : // date
-            $orderBy = ' date DESC ';
+if ( !empty($topic) ) {
+    switch ( $story_sort ) {
+        case 0 :    // date
+            $orderBy = ' date ';
             break;
-        case 1 : // title
-            $orderBy = ' title ASC ';
+        case 1 :    // title
+            $orderBy = ' title ';
             break;
-        case 2 : // ID
-            $orderBy = ' sid ASC ';
+        case 2 :    // ID
+            $orderBy = ' sid ';
             break;
         default :
-            $orderBy = ' date DESC ';
+            $orderBy = ' date ';
+            break;
+    }
+    switch ( $story_sort_dir ) {
+        case 'DESC' :
+            $orderBy = $orderBy . ' DESC ';
+            break;
+        case 'ASC' :
+            $orderBy = $orderBy . ' ASC ';
+            break;
+        default :
+            $orderBy = $orderBy . ' DESC ';
             break;
     }
 } else {
-    $orderBy = ' date DESC ';
+    $orderBy = ' date DESC';
 }
 
 $msql = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "

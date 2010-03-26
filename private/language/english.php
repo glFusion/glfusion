@@ -952,7 +952,14 @@ $LANG27 = array(
     26 => 'make this the default topic for archived stories. Only one topic allowed.',
     27 => 'Or Upload Topic Icon',
     28 => 'Maximum',
-    29 => 'File Upload Errors'
+    29 => 'File Upload Errors',
+    30 => 'Date',
+    31 => 'Title',
+    32 => 'Story ID',
+    33 => 'Ascending',
+    34 => 'Descending',
+    35 => 'Sort Stories By',
+    36 => 'Sort Stories Direction',
 );
 
 ###############################################################################

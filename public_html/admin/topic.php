@@ -39,7 +39,7 @@
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
-require_once $_CONF['path_system'] . 'lib-story.php';
+USES_lib_story();
 
 if (!SEC_hasRights('topic.edit')) {
     $display = COM_siteHeader ('menu', $MESSAGE[30]);
@@ -52,11 +52,6 @@ if (!SEC_hasRights('topic.edit')) {
     echo $display;
     exit;
 }
-
-// Uncomment the line below if you need to debug the HTTP variables being passed
-// to the script.  This will sometimes cause errors but it will allow you to see
-// the data being passed in a POST operation
-// echo COM_debug($_POST);
 
 /**
 * Show topic administration form
@@ -137,7 +132,6 @@ function edittopic ($tid = '')
     $topic_templates->set_var('lang_accessrights',$LANG_ACCESS['accessrights']);
     $topic_templates->set_var('lang_owner', $LANG_ACCESS['owner']);
 
-
     $ownername = COM_getDisplayName ($A['owner_id']);
     $topic_templates->set_var('owner_username', DB_getItem ($_TABLES['users'],
                               'username', "uid = {$A['owner_id']}"));
@@ -195,6 +189,22 @@ function edittopic ($tid = '')
         $topic_templates->set_var ('default_checked', '');
     }
 
+    $topic_templates->set_var('lang_sort_story_by',$LANG27[35]);
+    $topic_templates->set_var('lang_sort_story_dir',$LANG27[36]);
+
+    $sortSelect =  '<select name="storysort" id="storysort">'.LB;
+    $sortSelect .= '<option value="0"'.($A['sort_by'] == 0 ? ' selected="selected"' : '') .'>'.$LANG27[30].'</option>'.LB;
+    $sortSelect .= '<option value="1"'.($A['sort_by'] == 1 ? ' selected="selected"' : '') .'>'.$LANG27[31].'</option>'.LB;
+    $sortSelect .= '<option value="2"'.($A['sort_by'] == 2 ? ' selected="selected"' : '') .'>'.$LANG27[32].'</option>'.LB;
+    $sortSelect .= '</select>'.LB;
+    $topic_templates->set_var ('story_sort_select', $sortSelect);
+
+    $sortDir     = '<select name="sortdir" id="sortdir">'.LB;
+    $sortDir    .= '<option value="ASC"'.($A['sort_dir'] == 'ASC' ? ' selected="selected"' : '') .'>'.$LANG27[33].'</option>'.LB;
+    $sortDir    .= '<option value="DESC"'.($A['sort_dir'] == 'DESC' ? ' selected="selected"' : '') .'>'.$LANG27[34].'</option>'.LB;
+    $sortDir    .= '</select>';
+    $topic_templates->set_var ('story_sort_dir', $sortDir);
+
     $topic_templates->set_var ('lang_archivetopic', $LANG27[25]);
     $topic_templates->set_var ('lang_archivetext', $LANG27[26]);
     $topic_templates->set_var ('archive_disabled', '');
@@ -234,7 +244,7 @@ function edittopic ($tid = '')
 * @param    string  $is_archive     'on' if this is the archive topic
 * @return   string                  HTML redirect or error message
 */
-function savetopic($tid,$topic,$imageurl,$sortnum,$limitnews,$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon,$is_default,$is_archive)
+function savetopic($tid,$topic,$imageurl,$sortnum,$limitnews,$storysort,$sortdir,$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon,$is_default,$is_archive)
 {
     global $_CONF, $_TABLES, $LANG27, $MESSAGE;
 
@@ -304,7 +314,7 @@ function savetopic($tid,$topic,$imageurl,$sortnum,$limitnews,$owner_id,$group_id
             }
         }
 
-        DB_save($_TABLES['topics'],'tid, topic, imageurl, sortnum, limitnews, is_default, archive_flag, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon',"'$tid', '$topic', '$imageurl','$sortnum','$limitnews',$is_default,'$is_archive',$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon");
+        DB_save($_TABLES['topics'],'tid, topic, imageurl, sortnum, sort_by, sort_dir, limitnews, is_default, archive_flag, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon',"'$tid', '$topic', '$imageurl','$sortnum',$storysort,'$sortdir','$limitnews',$is_default,'$is_archive',$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon");
 
         // update feed(s) and Older Stories block
         COM_rdfUpToDateCheck ('article', $tid);
@@ -600,10 +610,25 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
     if (isset($_POST['is_archive'])) {
         $is_archive = $_POST['is_archive'];
     }
+    if ( isset($_POST['storysort']) ) {
+        $storysort = COM_applyFilter($_POST['storysort'],true);
+    } else {
+        $storysort = 0;
+    }
+    if ( $storysort < 0 || $storysort > 2 ) {
+        $storysort = 0;
+    }
+    if ( isset($_POST['sortdir']) ) {
+        $sortdir = ($_POST['sortdir'] == 'ASC' ? 'ASC' : 'DESC');
+    } else {
+        $sortdir = 'DESC';
+    }
+
     $display .= savetopic (COM_applyFilter ($_POST['tid']), $_POST['topic'],
                            $imageurl,
                            COM_applyFilter ($_POST['sortnum'], true),
                            COM_applyFilter ($_POST['limitnews'], true),
+                           $storysort,$sortdir,
                            COM_applyFilter ($_POST['owner_id'], true),
                            COM_applyFilter ($_POST['group_id'], true),
                            $_POST['perm_owner'], $_POST['perm_group'],

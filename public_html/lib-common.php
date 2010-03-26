@@ -11,7 +11,7 @@
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2000-2010 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
 // |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net   |
@@ -5985,33 +5985,28 @@ function COM_undoClickableLinks( $text )
 * @return   string          the text with highlighted search words
 *
 */
-function COM_highlightQuery( $text, $query, $class = 'highlight')
+function COM_highlightQuery( $text, $query, $class = 'highlight' )
 {
-    $query = str_replace( '+', ' ', $query );
+    // escape PCRE special characters
+    $query = preg_quote($query, '/');
 
-    // escape all the other PCRE special characters
-    $query = preg_quote( $query );
-
-    // ugly workaround:
-    // Using the /e modifier in preg_replace will cause all double quotes to
-    // be returned as \" - so we replace all \" in the result with unescaped
-    // double quotes. Any actual \" in the original text therefore have to be
-    // turned into \\" first ...
-    $text = str_replace( '\\"', '\\\\"', $text );
-
-    $mywords = explode( ' ', $query );
-    foreach( $mywords as $searchword )
-    {
-        if( !empty( $searchword ))
-        {
-            $searchword = preg_quote( str_replace( "'", "\'", $searchword ));
-            $text = @preg_replace( '/(\>(((?>[^><]+)|(?R))*)\<)/ie', "preg_replace('/(?>$searchword+)/i','<span class=\"$class\">\\\\0</span>','\\0')", '<!-- x -->' . $text . '<!-- x -->' );
+    $mywords = explode(' ', $query);
+    foreach ($mywords as $searchword) {
+        if (!empty($searchword)) {
+            $before = "/(?!(?:[^<]+>|[^>]+<\/a>))\b";
+            $after = "\b/i";
+            if ($searchword <> utf8_encode($searchword)) {
+                 if (@preg_match('/^\pL$/u', urldecode('%C3%B1'))) { // Unicode property support
+                      $before = "/(?<!\p{L})";
+                      $after = "(?!\p{L})/u";
+                 } else {
+                      $before = "/";
+                      $after = "/u";
+                 }
+            }
+            $text = preg_replace($before . $searchword . $after, "<span class=\"$class\">\\0</span>", '<!-- x -->' . $text . '<!-- x -->' );
         }
     }
-
-    // ugly workaround, part 2
-    $text = str_replace( '\\"', '"', $text );
-
     return $text;
 }
 
@@ -6704,6 +6699,72 @@ function COM_switchLocaleSettings()
 }
 
 /**
+* Truncate a string that contains HTML tags.
+*
+* Truncates a string to a max. length and optionally adds a filler string,
+* i.e.; '...', to indicate the truncation.
+*
+* This function is multi-byte string aware. This function is based on a
+* code snippet by pitje at Snipplr.com.
+*
+* NOTE: The truncated string may be shorter or longer than $maxlen characters.
+* Currently any initial HTML tags in the truncated string are taken into account.
+* The $filler string is also taken into account but any HTML tags that are added
+* by this function to close open HTML tags are not.
+*
+* @param    string  $htmltext   the text string which contains HTML tags to truncate
+* @param    int     $maxlen     max. number of characters in the truncated string
+* @param    string  $filler     optional filler string, e.g. '...'
+* @param    int     $endchars   number of characters to show after the filler
+* @return   string              truncated string
+*
+*/
+function COM_truncateHTML ( $htmltext, $maxlen, $filler = '', $endchars = 0 )
+{
+
+    $newlen = $maxlen - MBYTE_strlen($filler);
+    $len = MBYTE_strlen($htmltext);
+    if ($len > $maxlen) {
+        $htmltext = MBYTE_substr($htmltext, 0, $newlen - $endchars);
+
+        // Strip any mangled tags off the end
+        if (MBYTE_strrpos($htmltext, '<' ) > MBYTE_strrpos($htmltext, '>')) {
+            $htmltext = MBYTE_substr($htmltext, 0, MBYTE_strrpos($htmltext, '<'));
+        }
+
+        $htmltext = $htmltext . $filler . MBYTE_substr($htmltext, $len - $endchars, $endchars);
+
+        // put all opened tags into an array
+        preg_match_all ( "#<([a-z]+)( .*)?(?!/)>#iU", $htmltext, $result );
+        $openedtags = $result[1];
+        $openedtags = array_diff($openedtags, array("img", "hr", "br"));
+        $openedtags = array_values($openedtags);
+
+        // put all closed tags into an array
+        preg_match_all ("#</([a-z]+)>#iU", $htmltext, $result);
+        $closedtags = $result[1];
+        $len_opened = count($openedtags);
+
+        // all tags are closed
+        if(count( $closedtags ) == $len_opened) {
+            return $htmltext;
+        }
+        $openedtags = array_reverse ($openedtags);
+
+        // close tags
+        for($i = 0; $i < $len_opened; $i++) {
+            if (!in_array ($openedtags[$i], $closedtags )) {
+                $htmltext .= "</" . $openedtags[$i] . ">";
+            } else {
+                unset ($closedtags[array_search ($openedtags[$i], $closedtags)]);
+            }
+        }
+    }
+
+    return $htmltext;
+}
+
+/**
 * Truncate a string
 *
 * Truncates a string to a max. length and optionally adds a filler string,
@@ -6723,8 +6784,7 @@ function COM_truncate( $text, $maxlen, $filler = '' )
 {
     $newlen = $maxlen - MBYTE_strlen( $filler );
     $len = MBYTE_strlen( $text );
-    if( $len > $maxlen )
-    {
+    if( $len > $maxlen ) {
         $text = MBYTE_substr( $text, 0, $newlen ) . $filler;
     }
 
@@ -7142,13 +7202,15 @@ function CMT_updateCommentcodes() {
  */
 function COM_404()
 {
+    global $LANG_404;
     /*
      * Allow for custom 404 handler
      */
-
     if ( function_exists('CUSTOM_404') ) {
         return CUSTOM_404();
     }
+
+    $url = '';
 
     if (isset ($_SERVER['SCRIPT_URI'])) {
         $url = strip_tags ($_SERVER['SCRIPT_URI']);
@@ -7161,16 +7223,16 @@ function COM_404()
         }
         $url = 'http://' . $_SERVER['HTTP_HOST'] . strip_tags ($request);
     }
-//    header("HTTP/1.0 404 Not Found");
-    echo '
-<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
-<html><head>
-<title>404 Not Found</title>
-</head><body>
-<h1>Not Found</h1>
-<p>The requested URL ' . $url . ' was not found on this server.</p>
-</body></html>';
-exit;
+    header("HTTP/1.0 404 Not Found");
+    $display = COM_siteHeader ('menu', $LANG_404[1]);
+    $display .= COM_startBlock ($LANG_404[1]);
+    $display .= sprintf ($LANG_404[2]);
+    $display .= $LANG_404[3];
+    $display .= '<br/><br/><p><b>' . $url . '</b></p>';
+    $display .= COM_endBlock ();
+    $display .= COM_siteFooter ();
+    echo $display;
+    exit;
 }
 
 /**

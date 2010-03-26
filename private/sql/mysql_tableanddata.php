@@ -435,6 +435,8 @@ CREATE TABLE {$_TABLES['topics']} (
   limitnews tinyint(3) default NULL,
   is_default tinyint(1) unsigned NOT NULL DEFAULT '0',
   archive_flag tinyint(1) unsigned NOT NULL DEFAULT '0',
+  sort_by tinyint(1) unsigned NOT NULL DEFAULT '0',
+  sort_dir char(4) NOT NULL DEFAULT 'DESC',
   owner_id mediumint(8) unsigned NOT NULL default '1',
   group_id mediumint(8) unsigned NOT NULL default '1',
   perm_owner tinyint(1) unsigned NOT NULL default '3',
@@ -709,9 +711,9 @@ $_DATA[] = "INSERT INTO {$_TABLES['statuscodes']} (code, name) VALUES (1,'Refres
 $_DATA[] = "INSERT INTO {$_TABLES['statuscodes']} (code, name) VALUES (0,'Normal') ";
 $_DATA[] = "INSERT INTO {$_TABLES['statuscodes']} (code, name) VALUES (10,'Archive') ";
 
-$_DATA[] = "INSERT INTO {$_TABLES['syndication']} (type, topic, header_tid, format, limits, content_length, title, description, filename, charset, language, is_enabled, updated, update_info) VALUES ('article', '::all', 'all', 'RSS-2.0', 10, 1, 'glFusion Site', 'Fusing Technology with Style', 'glfusion.rss', 'iso-8859-1', 'en-gb', 1, '0000-00-00 00:00:00', NULL)";
+$_DATA[] = "INSERT INTO {$_TABLES['syndication']} (type, topic, header_tid, format, limits, content_length, title, description, filename, charset, language, is_enabled, updated, update_info) VALUES ('article', '::all', 'all', 'RSS-2.0', 10, 1, 'glFusion Site', 'Fusing Technology with Style', 'glfusion.rss', 'utf-8', 'en-gb', 1, '0000-00-00 00:00:00', NULL)";
 
-$_DATA[] = "INSERT INTO {$_TABLES['topics']} (tid, topic, imageurl, sortnum, limitnews, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('General','General News','/images/topics/topic_news.png',1,10,6,2,3,2,2,2)";
+$_DATA[] = "INSERT INTO {$_TABLES['topics']} (tid, topic, imageurl, sortnum, sort_by, sort_dir, limitnews, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('General','General News','/images/topics/topic_news.png',1,0,'DESC',10,6,2,3,2,2,2)";
 
 $_DATA[] = "INSERT INTO {$_TABLES['usercomment']} (uid, commentmode, commentorder, commentlimit) VALUES (1,'nested','ASC',100) ";
 $_DATA[] = "INSERT INTO {$_TABLES['usercomment']} (uid, commentmode, commentorder, commentlimit) VALUES (2,'threaded','ASC',100) ";

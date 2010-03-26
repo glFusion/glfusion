@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Clean up search results a bit (improve formatting) (Mark)
+- Implemented sort story by option in topics (Mark)
+- Implemented COM_truncateHTML() in feeds - ported from Geeklog (Mark)
 - Moved Multiple Language configuration options to their own fieldset
   in hopes this will remove some of the confusion on these fields (Mark)
 - Forum: Fixed issue where users would continue to receive new post
