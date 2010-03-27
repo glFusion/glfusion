@@ -83,7 +83,7 @@ $_ST_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`id`, `pid`, 
 (13, 7, 1, 'moospring', 5, 'gl_moospring', 60, 1, '', '', 2),
 (14, 7, 1, 'mootickerRSS', 5, 'gl_mootickerRSS', 70, 1, '', '', 2),
 (15, 7, 1, 'wrapper', 5, 'wrapper', 80, 1, '', '', 2),
-(16, 0, 1, 'Typography', 5, 'typography', 90, 1, '', '', 2);
+(16, 0, 1, 'Typography', 5, 'typography', 80, 1, '', '', 2);
 ";
 
 // Spamx Default Data
