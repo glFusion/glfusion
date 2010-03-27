@@ -244,8 +244,10 @@ function GROUP_edit($grp_id = '')
         $form_url = $_CONF['site_admin_url'].'/group.php?edit=x&amp;grp_id=' . $grp_id;
 
         $text_arr = array('has_menu' => false,
-                          'title' => '', 'instructions' => '',
-                          'icon' => '', 'form_url' => $form_url );
+                          'has_search' => false,
+                          'title' => '',
+                          'instructions' => '',
+                          'icon' => '' );
 
         $xsql = '';
         if (! empty($grp_id)) {
@@ -302,16 +304,16 @@ function GROUP_getIndirectFeatures($grp_id)
     do {
         $grp = array_pop ($tocheck);
 
-        $result = DB_query ("SELECT ug_main_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $grp AND ug_uid IS NULL");
+        $result = DB_query ("SELECT ug_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $grp AND ug_uid IS NULL");
         $numrows = DB_numRows ($result);
 
         $checked[] = $grp;
 
         for ($j = 0; $j < $numrows; $j++) {
             $A = DB_fetchArray ($result);
-            if (!in_array ($A['ug_main_grp_id'], $checked) &&
-                !in_array ($A['ug_main_grp_id'], $tocheck)) {
-                $tocheck[] = $A['ug_main_grp_id'];
+            if (!in_array ($A['ug_grp_id'], $checked) &&
+                !in_array ($A['ug_grp_id'], $tocheck)) {
+                $tocheck[] = $A['ug_grp_id'];
             }
         }
     }
@@ -1175,9 +1177,10 @@ switch ($action) {
             $grp_applydefault = (isset($_POST['chk_applydefault'])) ? 1 : 0;
             $chk_grpadmin = (isset($_POST['chk_grpadmin'])) ? COM_applyFilter($_POST['chk_grpadmin']) : '';
             $features = array();
-            $features = (isset($_POST['features'])) ? $_POST['features'] : array();
+            $features = (isset($_POST['features']) ? $_POST['features'] : array());
             $groups = array();
-            $groups = (isset($_POST['groups'])) ? $_POST['groups'] : array();
+            $groups = (isset($_POST['groups']) ? $_POST['groups'] : array());
+
             $display .= GROUP_save($grp_id, COM_applyFilter($_POST['grp_name']),
                                   $_POST['grp_descr'], $chk_grpadmin, $grp_gl_core,
                                   $grp_default, $grp_applydefault, $features, $groups);
