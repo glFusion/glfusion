@@ -7429,6 +7429,7 @@ if ( is_array($_PLUGINS) ) {
             unset($_PLUGINS[array_search($pi_name, $_PLUGINS)]);
         }
     }
+    $_PLUGINS = array_values($_PLUGINS);
 }
 
 if ( @file_exists($_CONF['path_language'].'custom') ) {
