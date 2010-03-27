@@ -1483,7 +1483,9 @@ $LANG_ACCESS = array(
     'editusers' => 'Manage',
     'sendemail' => 'eMail',
     'admingroup' => 'Admin',
-    'defaultgroup' => 'Default'
+    'defaultgroup' => 'Default',
+    'editinguser'   => 'Editing User: ',
+    'createnewuser' => 'Creating New Account',
 );
 
 ###############################################################################
