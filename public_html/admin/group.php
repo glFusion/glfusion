@@ -244,7 +244,7 @@ function GROUP_edit($grp_id = '')
         $form_url = $_CONF['site_admin_url'].'/group.php?edit=x&amp;grp_id=' . $grp_id;
 
         $text_arr = array('has_menu' => false,
-                          'has_search' => false,
+                          'has_extras' => false,
                           'title' => '',
                           'instructions' => '',
                           'icon' => '' );
