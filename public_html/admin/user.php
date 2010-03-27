@@ -184,8 +184,22 @@ function USER_edit($uid = '', $msg = '')
         }
     } else {
         $U['uid'] = '';
+        $U['username'] = '';
+        $U['fullname'] = '';
+        $U['email'] = '';
+        $U['homepage'] = '';
+        $U['location'] = '';
+        $U['sig'] = '';
+        $U['about'] = '';
+        $U['pgpkey'] = '';
+        $U['noicons'] = 0;
+        $U['noboxes'] = 0;
+        $U['tids'] = '';
+        $U['etids'] = '-';
+        $U['aids'] = '';
+        $U['boxes'] = '';
         $uid = '';
-        $U['cookietimeout'] = 2678400;
+        $U['cookietimeout'] = $_CONF['session_cookie_timeout'];// 2678400;
         $U['etids'] = '-';
         $U['status'] = USER_ACCOUNT_AWAITING_ACTIVATION;
         $U['emailfromadmin'] = 1;
@@ -203,7 +217,7 @@ function USER_edit($uid = '', $msg = '')
         $U['status'] = USER_ACCOUNT_ACTIVE;
         $newuser = 1;
         $userform->set_var('newuser',1);
-        $menuText = 'Creating New Account';
+        $menuText = $LANG_ACCESS['createnewuser'];
     }
 
     // now let's check to see if any post vars are set in the event we are returning from an error...
@@ -1155,6 +1169,7 @@ function USER_list($grp_id)
     USES_lib_admin();
 
     $retval = '';
+    $group_all = '';
 
     // no grp_id defaults to all users
     if( $grp_id == 0) {
@@ -1296,8 +1311,8 @@ function USER_save($uid)
     $groups         = $_POST['groups'];
     $homepage       = trim(COM_stripslashes($_POST['homepage']));
     $location       = strip_tags(trim(COM_stripslashes($_POST['location'])));
-    $photo          = $_POST['photo'];
-    $delete_photo   = $_POST['delete_photo'] == 'on' ? 1 : 0;
+    $photo          = isset($_POST['photo']) ? $_POST['photo'] : '';
+    $delete_photo   = (isset($_POST['delete_photo']) && $_POST['delete_photo'] == 'on') ? 1 : 0;
     $sig            = trim(COM_stripslashes($_POST['sig']));
     $about          = trim(COM_stripslashes($_POST['about']));
     $pgpkey         = trim(COM_stripslashes($_POST['pgpkey']));
@@ -1307,15 +1322,15 @@ function USER_save($uid)
     $tzid           = COM_applyFilter($_POST['tzid']);
     $dfid           = COM_applyFilter($_POST['dfid'],true);
     $search_fmt     = COM_applyFilter($_POST['search_result_format']);
-    $commentmode    =  COM_applyFilter($_POST['commentmode']);
-    $commentorder   = $_POST['commentorder'] == 'DESC' ? 'DESC' : 'ASC';
+    $commentmode    = COM_applyFilter($_POST['commentmode']);
+    $commentorder   = (isset($_POST['commentorder']) && $_POST['commentorder'] == 'DESC') ? 'DESC' : 'ASC';
     $commentlimit   = COM_applyFilter($_POST['commentlimit'],true);
-    $emailfromuser  = $_POST['emailfromuser'] == 'on' ? 1 : 0;
-    $emailfromadmin = $_POST['emailfromadmin'] == 'on' ? 1 : 0;
-    $noicons        = $_POST['noicons'] == 'on' ? 1 : 0;
-    $noboxes        = $_POST['noboxes'] == 'on' ? 1 : 0;
-    $showonline     = $_POST['showonline'] == 'on' ? 1 : 0;
-    $topic_order    = $_POST['topic_order'] == 'ASC' ? 'ASC' : 'DESC';
+    $emailfromuser  = (isset($_POST['emailfromuser']) && $_POST['emailfromuser'] == 'on') ? 1 : 0;
+    $emailfromadmin = (isset($_POST['emailfromadmin']) && $_POST['emailfromadmin'] == 'on') ? 1 : 0;
+    $noicons        = (isset($_POST['noicons']) && $_POST['noicons'] == 'on') ? 1 : 0;
+    $noboxes        = (isset($_POST['noboxes']) && $_POST['noboxes'] == 'on') ? 1 : 0;
+    $showonline     = (isset($_POST['showonline']) && $_POST['showonline'] == 'on') ? 1 : 0;
+    $topic_order    = (isset($_POST['topic_order']) && $_POST['topic_order'] == 'ASC') ? 'ASC' : 'DESC';
     $maxstories     = COM_applyFilter($_POST['maxstories'],true);
     $newuser        = COM_applyFilter($_POST['newuser'],true);
 
@@ -1526,6 +1541,7 @@ function USER_save($uid)
 
         // userindex table
 
+        $TIDS  = @array_values($_POST['topics']);
         $AIDS  = @array_values($_POST['selauthors']);
         $BOXES = @array_values($_POST['blocks']);
         $ETIDS = @array_values($_POST['dgtopics']);
@@ -2237,13 +2253,20 @@ switch($action) {
             if (!isset ($_POST['userstatus'])) {
                 $_POST['userstatus'] = USER_ACCOUNT_ACTIVE;
             }
+
+            $username = (isset($_POST['username']) ? trim(COM_stripslashes($_POST['username'])) : '');
+            $fullname = (isset($_POST['fullname']) ? COM_stripslashes($_POST['fullname']) : '');
+            $passwd   = (isset($_POST['passwd'])   ? trim(COM_stripslashes($_POST['passwd'])) : '');
+            $passwd_conf = (isset($_POST['passwd_conf']) ? trim(COM_stripslashes($_POST['passwd_conf'])) : '');
+            $email = (isset($_POST['email']) ? trim(COM_stripslashes($_POST['email'])) : '');
+            $regdate = (isset($_POST['regdate']) ? $_POST['regdate'] : '');
+            $homepage = (isset($_POST['homepage']) ? COM_stripSlashes($_POST['homepage']) : '');
+            $groups  = (isset($_POST['groups']) ? $_POST['groups'] : array());
+            $userstatus = (isset($_POST['userstatus']) ? $_POST['userstatus'] : 0);
+            $oldstatus = (isset($_POST['oldstatus']) ? $_POST['oldstatus'] : 0 );
+
             $display = USER_save($uid,
-                    trim(COM_stripslashes($_POST['username'])), COM_stripslashes($_POST['fullname']),
-                    trim(COM_stripslashes($_POST['passwd'])), trim(COM_stripslashes($_POST['passwd_conf'])),
-                    trim(COM_stripslashes($_POST['email'])),
-                    $_POST['regdate'], COM_stripSlashes($_POST['homepage']),
-                    $_POST['groups'],
-                    $delphoto, $_POST['userstatus'], $_POST['oldstatus']);
+                    $username,$fullname,$passwd,$passwd_conf,$email,$regdate,$homepage,$groups,$delphoto,$userstatus,$oldstatus);
             if (!empty($display)) {
                 $tmp = COM_siteHeader('menu', $LANG28[22]);
                 $tmp .= $display;

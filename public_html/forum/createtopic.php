@@ -426,7 +426,8 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
 // END OF A NEW TOPIC...
      } elseif($method == 'postreply') {
         if ( function_exists('plugin_itemPreSave_captcha') ) {
-            $msg = plugin_itemPreSave_captcha('forum',$_POST['captcha']);
+            $captchaString = (isset($_POST['captcha']) ? $_POST['captcha'] : '');
+            $msg = plugin_itemPreSave_captcha('forum',$captchaString);
             if ( $msg != '' ) {
                 $preview = 'Preview';
                 $subject = COM_stripslashes($_POST['subject']);
@@ -439,7 +440,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
         }
         if ( $msg == '' ) {
             //Add Reply
-            if($_POST['aname'] != '') {
+            if(isset($_POST['aname']) && $_POST['aname'] != '') {
                 $name = gf_preparefordb(gf_checkHTML(strip_tags(trim(COM_checkWords(USER_sanitizeName(COM_stripslashes($_POST['aname'])))))),'text');
             } else {
                 $name = gf_preparefordb(gf_checkHTML(strip_tags(COM_checkWords($_POST['name']))),'text');
@@ -642,7 +643,7 @@ if (isset($_REQUEST['preview']) )  {  //&& $_REQUEST['preview'] == $LANG_GF01['P
         /* Check for any uploaded files */
         $uniqueid = COM_applyFilter($_POST['uniqueid'],true);
         gf_check4files($uniqueid,true);
-        $numAttachments = DB_count($_TABLES['gf_attachments'],array('topic_id','tempfile'),array((int)$uniquei,1));
+        $numAttachments = DB_count($_TABLES['gf_attachments'],array('topic_id','tempfile'),array((int)$uniqueid,1));
     }
 
     $status = 0;
@@ -1095,11 +1096,16 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
         // check that this is the parent topic - only able to make it skicky or locked
         if ($editpid == 0) {
             if (!isset($locked_val) and !isset($sticky_val) AND $method == 'edit') {
-                if( (!isset($_POST['locked_switch']) AND $edittopic['locked'] == 1) OR $_POST['locked_switch'] == 1 ) {
+                if( (!isset($_POST['locked_switch']) AND $edittopic['locked'] == 1) OR (isset($_POST['locked_switch']) && $_POST['locked_switch'] == 1) ) {
                     $locked_val = 'checked="checked"';
+                } else {
+                    $locked_val = '';
                 }
-                if( (!isset($_POST['sticky_switch']) AND $edittopic['sticky'] == 1) OR $_POST['sticky_switch'] == 1 ) {
+
+                if( (!isset($_POST['sticky_switch']) AND $edittopic['sticky'] == 1) OR (isset($_POST['sticky_switch']) && $_POST['sticky_switch'] == 1) ) {
                     $sticky_val = 'checked="checked"';
+                } else {
+                    $sticky_val = '';
                 }
             }
             $locked_prompt = $LANG_GF02['msg109']. '<br' . XHTML . '><input type="checkbox" name="locked_switch" ' .$locked_val. ' value="1"' . XHTML . '>';
@@ -1178,7 +1184,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
         $allowedAttachments = $CONF_FORUM['maxattachments'] - $numAttachments;
         $submissionform_main->set_var('fcounter',$allowedAttachments);
     } else {
-        $allowedAttachments = $CONF_FORUM['maxattachments'];
+        $allowedAttachments = $CONF_FORUM['maxattachments'] - $numAttachments;
         $submissionform_main->set_var('fcounter',$allowedAttachments);
         $edit_prompt = '&nbsp;';
         $submissionform_main->set_var('attachments','');
