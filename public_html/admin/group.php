@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-201- by the following authors:                        |
+// | Copyright (C) 2009-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -302,7 +302,7 @@ function GROUP_getIndirectFeatures($grp_id)
     do {
         $grp = array_pop ($tocheck);
 
-        $result = DB_query ("SELECT ug_main_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_grp_id = $grp AND ug_uid IS NULL");
+        $result = DB_query ("SELECT ug_main_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $grp AND ug_uid IS NULL");
         $numrows = DB_numRows ($result);
 
         $checked[] = $grp;
@@ -409,7 +409,7 @@ function GROUP_displayRights($grp_id = '', $core = 0)
     for ($i = 0; $i < $nfeatures; $i++) {
         $A = DB_fetchArray($features);
 
-        if ((empty($grpftarray[$A['ft_name']]) OR ($grpftarray[$A['ft_name']] == 'direct')) AND ($core != 2)) {
+        if ((empty($grpftarray[$A['ft_name']]) OR ($grpftarray[$A['ft_name']] == 'direct')) ) {
             if (($ftcount > 0) && ($ftcount % 3 == 0)) {
                 $retval .= '</tr>' . LB . '<tr>';
             }
@@ -428,19 +428,17 @@ function GROUP_displayRights($grp_id = '', $core = 0)
                     . $A['ft_name'] . '</span></td>';
         } else {
             // either this is an indirect right OR this is a core feature
-            if ((($core == 1) AND (isset($grpftarray[$A['ft_name']]) AND (($grpftarray[$A['ft_name']] == 'indirect') OR ($grpftarray[$A['ft_name']] == 'direct')))) OR ($core != 1)) {
-                if (($ftcount > 0) && ($ftcount % 3 == 0)) {
-                    $retval .= '</tr>' . LB . '<tr>';
-                }
-                $pluginRow = sprintf('pluginRow%d', ($ftcount % 2) + 1);
-                $ftcount++;
-
-                $retval .= '<td class="' . $pluginRow . '">'
-                        . '<input type="checkbox" checked="checked" '
-                        . 'disabled="disabled"' . XHTML . '>'
-                        . '(<i title="' . $A['ft_descr'] . '">' . $A['ft_name']
-                        . '</i>)</td>';
+            if (($ftcount > 0) && ($ftcount % 3 == 0)) {
+                $retval .= '</tr>' . LB . '<tr>';
             }
+            $pluginRow = sprintf('pluginRow%d', ($ftcount % 2) + 1);
+            $ftcount++;
+
+            $retval .= '<td class="' . $pluginRow . '">'
+                    . '<input type="checkbox" checked="checked" '
+                    . 'disabled="disabled"' . XHTML . '>'
+                    . '(<i title="' . $A['ft_descr'] . '">' . $A['ft_name']
+                    . '</i>)</td>';
         }
     }
     if ($ftcount == 0) {
