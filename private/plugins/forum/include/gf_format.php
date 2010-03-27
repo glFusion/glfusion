@@ -1320,7 +1320,7 @@ function gf_FormatForEmail( $str, $postmode='html' ) {
     }
     $CONF_FORUM['use_geshi']     = true;
     $CONF_FORUM['allow_smilies'] = false;
-    $str = gf_formatTextBlock($str,$postmode,'text',$A['status']);
+    $str = gf_formatTextBlock($str,$postmode,'text');
 
     $str = str_replace('<img src="' . $_CONF['site_url'] . '/forum/images/img_quote.gif" alt=""/>','',$str);
 
@@ -1349,7 +1349,7 @@ function gfm_getoutput( $id ) {
     $A['comment'] = gf_FormatForEmail( $A['comment'], $A['postmode'] );
     $notifymsg = sprintf($LANG_GF02['msg27'],"<a href=\"$_CONF[site_url]/forum/notify.php\">$_CONF[site_url]/forum/notify.php</a>");
     $date = strftime('%B %d %Y @ %I:%M %p', $A['date']);
-    if ($A[pid] == '0') {
+    if ($A['pid'] == '0') {
         $postid = $A['id'];
     } else {
         $postid = $A['pid'];
@@ -1384,7 +1384,7 @@ function gfm_getoutput( $id ) {
         'post_comment'  => $A['comment'],
         'notify_msg'    => $notifymsg,
         'site_name'     => $_CONF['site_name'],
-        'online_version' => sprintf($LANG_GF02['view_online'],$_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$postid.'&lastpost=true#'.$topic_id),
+        'online_version' => sprintf($LANG_GF02['view_online'],$_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$postid.'&lastpost=true#'.$A['id']),
     ));
     $T->parse('output','email');
     $msgText = $T->finish($T->get_var('output'));

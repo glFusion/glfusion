@@ -706,12 +706,9 @@ function forum_chkUsercanPost() {
     global $_CONF,$CONF_FORUM,$LANG_GF00, $LANG_GF01, $LANG_GF02, $_TABLES, $_USER;
 
     //Check is anonymous users can post
-    if($CONF_FORUM['registered_to_post'] && $_USER['uid'] < 2){
-        $url = $_CONF['site_url']. '/users.php?mode=new';
-        $display .= COM_startBlock($LANG_GF00['access_denied']);
-        $display .= '<br' . XHTML . '>' .$LANG_GF01['loginreqpost']. '<br' . XHTML . '>';
-        $display .= '<meta http-equiv="refresh" content="3; URL=' .$url. '">';
-        $display .= COM_endBlock();
+    if($CONF_FORUM['registered_to_post'] && COM_isAnonUser() ){
+        $display = COM_siteHeader();
+        $display .= SEC_loginRequiredForm();
         $display .= COM_siteFooter();
         echo $display;
         exit;
@@ -733,11 +730,11 @@ function forum_chkUsercanPost() {
 function forum_chkUsercanAccess($secure=false) {
     global $_CONF, $LANG_GF01, $LANG_GF02, $CONF_FORUM, $_USER;
 
-    if ($CONF_FORUM['registration_required'] && $_USER['uid'] < 2) {
-            echo  '<table width="100%" height="100"><tr><td><center>';
-        printf($LANG_GF01['loginreqview'], '<A HREF="' .$_CONF['site_url']. '/users.php?mode=new">', '<A HREF="' .$_CONF['site_url']. '/users.php">');
-        echo '</center></td></tr></table>';
-        echo COM_siteFooter();
+    if ($CONF_FORUM['registration_required'] && COM_isAnonUser() ) {
+        $display = COM_siteHeader();
+        $display .= SEC_loginRequiredForm();
+        $display .= COM_siteFooter();
+        echo $display;
         exit;
     } elseif($secure AND empty($_USER['uid'])) {
         echo '<br' . XHTML . '>';
@@ -1157,7 +1154,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
 
                 $testText = gf_formatTextBlock($A['comment'],'text','noquote',$A['status']);
                 $testText = strip_tags($testText);
-                $html2txt = new html2text(DB_escapeString($testText),false);
+                $html2txt = new html2text($testText,false);
                 $testText = trim($html2txt->get_text());
                 $shortComment = '';
                 $commentArray = explode(' ',$testText);
@@ -1186,7 +1183,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 }
                 $testText = gf_formatTextBlock($B['comment'],'text','noquote',$A['status']);
                 $testText = strip_tags($testText);
-                $html2txt = new html2text(DB_escapeString($testText),false);
+                $html2txt = new html2text($testText,false);
                 $testText = trim($html2txt->get_text());
                 $shortComment = '';
                 $commentArray = explode(' ',$testText);
