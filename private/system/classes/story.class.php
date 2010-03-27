@@ -948,6 +948,10 @@ class Story
 
         $array = $_POST;
 
+        if ( count($_POST) == 0 ) {
+            return;
+        }
+
         $this->_expire = time();
         $this->_date = time();
         if ($_CONF['article_comment_close_enabled']) {
@@ -958,8 +962,7 @@ class Story
         }
 
         // Handle Magic GPC Garbage:
-        while (list($key, $value) = each($array))
-        {
+        while (list($key, $value) = each($array)) {
             $array[$key] = COM_stripslashes($value);
         }
 
@@ -968,12 +971,12 @@ class Story
         } else {
             $this->_postmode = 'html';
         }
-        $this->_sid = COM_applyFilter($array['sid']);
-        $this->_uid = COM_applyFilter($array['uid'], true);
+        $this->_sid = (isset($array['sid']) ? COM_applyFilter($array['sid']) : '');
+        $this->_uid = (isset($array['uid']) ? COM_applyFilter($array['uid'], true) : 1);
         if ($this->_uid < 1) {
             $this->_uid = 1;
         }
-        $this->_unixdate = COM_applyFilter($array['date'], true);
+        $this->_unixdate = (isset($array['date']) ? COM_applyFilter($array['date'], true) : time());
 
         if (!isset($array['bodytext'])) {
             $array['bodytext'] = '';
