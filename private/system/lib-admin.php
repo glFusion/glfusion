@@ -515,7 +515,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $admin_templates->set_var ('records_found',
                                    COM_numberFormat ($num_rows));
     }
-    if ( $has_search ) {
+    if ( $has_search || $has_limit || $has_paging ) {
         $admin_templates->parse('search_menu', 'search', true);
     } else {
         $admin_templates->set_var('search_menu','');
