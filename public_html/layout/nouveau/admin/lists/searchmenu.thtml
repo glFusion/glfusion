@@ -7,7 +7,9 @@ function clearsearch() {
 }
 </script>
 {!endif}
+{!if form_url}
 <form action="{form_url}" method="post">
+{!endif}
     <div class="admin-list-search">
         {filter}
         {!if lang_search}
@@ -29,5 +31,7 @@ function clearsearch() {
         &nbsp;&nbsp;{lang_records_found}:&nbsp;{records_found}
         {!endif}
     </div>
+{!if form_url}
 </form>
+{!endif}
 {# end {templatelocation} #}
