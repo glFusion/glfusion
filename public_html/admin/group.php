@@ -727,7 +727,7 @@ function GROUP_getListField($fieldname, $fieldvalue, $A, $icon_arr, $selected = 
         $thisUsersGroups = SEC_getUserGroups();
     }
 
-    $showall = (isset($_REQUEST['chk_showall']) && ($_REQUEST['chk_showall'] == 1));
+    $showall = (isset($_REQUEST['chk_showall']) );
 
     if (in_array ($A['grp_id'], $thisUsersGroups ) ||
         SEC_groupIsRemoteUserAndHaveAccess( $A['grp_id'], $thisUsersGroups )) {
