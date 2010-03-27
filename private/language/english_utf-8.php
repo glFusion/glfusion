@@ -594,7 +594,7 @@ $LANG09 = array(
     71 => 'Filter by date',
     72 => 'Search Type',
     73 => 'Display Per Page',
-    74 => 'Your search yielded no results.<br/><ul><li>Check if your spelling is correct.</li><li>Click on <strong>Options</strong> and change the <strong>Search Type</strong> being used: <ul style="list-style-type:none;"><li><em>Any of these</em> will return results if <strong>any</strong> of the search words appear in the text.</li><li><em>All of these</em> will only return results when <strong>all</strong> all of the search words appear.</li><li><em>Exact Match</em> will only return results where the text matches <strong>exactly</strong> to the search words entered.</li></ul></li><li>Consider expanding the <strong>Date Filter</strong> or the <strong>Content Type Filter</strong>.</li></ul>',
+    74 => 'Your search yielded no results. Please try again.<br/><ul><li>Check if your spelling is correct.</li><li>Click on <strong>Advanced Options</strong> and change the <strong>Search Type</strong> being used: <ul style="list-style-type:none;"><li><em>any of these words</em> will return results if <strong>any</strong> of the search words appear in the text.</li><li><em>all of these words</em> will only return results when <strong>all</strong> all of the search words appear.</li><li><em>exact phrase</em> will only return results where the text matches <strong>exactly</strong> to the search words entered.</li></ul></li><li>Consider using other <strong>Filters</strong>.</li></ul>',
     75 => '1 day',
     76 => '7 days',
     77 => '2 weeks',
