@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -808,17 +808,9 @@ function plugin_autotags_filemgmt ($op, $content = '', $autotag = '')
 {
     global $_USER, $mydownloads_publicpriv, $_CONF, $_FM_TABLES;
 
-    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
-        return '';
-    }
-
     if ($op == 'tagname' ) {
         return array('file', 'file_download');
     } else if ($op == 'parse') {
-        if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
-            return $content;
-        }
-
         $target = '';
         $target_window = '';
         $caption = $autotag['parm2'];
