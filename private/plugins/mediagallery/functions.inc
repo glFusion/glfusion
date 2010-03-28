@@ -1428,6 +1428,7 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                 if ( $parm1 == '' || $parm1 == 0 ) {
                     return $content;
                 }
+                $aid = $parm1;
                 if ( !isset($MG_albums[$parm1]->id) || $MG_albums[$parm1]->access == 0 ) {
                     $link = '';
                     $content = str_replace ($autotag['tagstr'], $link, $content);
@@ -1443,7 +1444,7 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                 }
                 // if none of the above, assume height and width both specified.
 
-                if ($caption == '' && $_MG_CONF['autotag_caption'] ) {
+                if ($caption == '' && $_MG_CONF['autotag_caption'] && isset($aid) ) {
                     $caption = $MG_albums[$aid]->title;
                 }
                 $captionHTML = '<br' . XHTML . '><span style="width:' . $width . 'px;font-style:italic;font-size: smaller;text-indent:0;">' . $caption . '</span>' . LB;
