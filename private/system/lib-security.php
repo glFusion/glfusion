@@ -1095,12 +1095,6 @@ function SEC_createToken($ttl = 1200)
 {
     global $_CONF, $_SYSTEM, $_USER, $_TABLES, $_DB_dbms;
 
-    static $last_token;
-
-    if (isset($last_token)) {
-        return $last_token;
-    }
-
     if ( isset($_SYSTEM['token_ip']) && $_SYSTEM['token_ip'] == true ) {
         $pageURL  = $_SERVER['REMOTE_ADDR'];
     } else {
@@ -1130,8 +1124,6 @@ function SEC_createToken($ttl = 1200)
     $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
            . "VALUES ('$token', NOW(), {$_USER['uid']}, '".$pageURL."', '".intval($ttl)."')";
     DB_query($sql);
-
-    $last_token = $token;
 
     /* And return the token to the user */
     return $token;
@@ -1229,11 +1221,11 @@ function SEC_createTokenGeneral($action='general',$ttl = 1200)
     $sql = "DELETE FROM {$_TABLES['tokens']} WHERE (DATE_ADD(created, INTERVAL ttl SECOND) < NOW())"
        . " AND (ttl > 0)";
 
-    DB_Query($sql);
+    DB_query($sql);
 
     /* Destroy tokens for this user/url combination */
     $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='".DB_escapeString($action)."'";
-    DB_Query($sql);
+    DB_query($sql);
 
     $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
            . "VALUES ('$token', NOW(), {$_USER['uid']}, '".DB_escapeString($action)."', '$ttl')";
