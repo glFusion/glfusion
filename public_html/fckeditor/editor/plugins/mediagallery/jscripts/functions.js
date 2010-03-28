@@ -1,12 +1,12 @@
 /*
  * Media Gallery - The ultimate gallery plugin for Geeklog
- * Copyright (C) 2003-2008  Mark R. Evans
+ * Copyright (C) 2003-2010  Mark R. Evans
  *
  * Licensed under the terms of the GNU General Public License:
  * 		http://www.opensource.org/licenses/gpl-license.php
  *
  * For further information visit:
- * 		http://www.gllabs.org
+ * 		http://www.glfusion.org
  *
  * "Support Open Source software. What about a donation today?"
  *
@@ -15,7 +15,7 @@
  *  media browser FCKeditor plugin.
  *
  * File Authors:
- * 		Mark R. Evans (mark@gllabs.org)
+ * 		Mark R. Evans (mark@glfusion.org)
  */
 
 
@@ -44,6 +44,8 @@ function makeHtmlForInsertion(obj){
 	var mid = '';
 	var dest = '';
 	var alturl = '';
+	var ribbon = '';
+	var showtitle = '';
 
 	// see which auto tag is selected...
 	for (i=0;i<obj.autotag.length;i++) {
@@ -69,6 +71,12 @@ function makeHtmlForInsertion(obj){
 	alturl    = obj.alturl.value;
 	if (obj.dest != undefined) {
 	    dest = obj.dest.value;
+	}
+	if ( obj.ribbon != undefined ) {
+	    ribbon = obj.ribbon.value;
+	}
+	if ( obj.showtitle != undefined ) {
+	    showtitle = obj.showtitle.value;
 	}
 
 	switch ( autotag ) {
@@ -142,6 +150,13 @@ function makeHtmlForInsertion(obj){
 	        if ( dest == 'block' ) {
 	            tag += " dest:block";
 	        }
+	        if ( showtitle == 'top' ) {
+	            tag += " title:top";
+	        }
+	        if ( showtitle == 'bottom' ) {
+	            tag += " title:bottom";
+	        }
+
 	        if ( caption != '' ) {
 	          tag += " " + caption;
 	        }
@@ -308,6 +323,9 @@ function makeHtmlForInsertion(obj){
 	        }
 	        if ( dest == 'block' ) {
 	            tag += " dest:block";
+	        }
+	        if ( ribbon == 1 ) {
+	            tag += " type:ribbon";
 	        }
 	        if ( caption != '' ) {
 	          tag += " " + caption;

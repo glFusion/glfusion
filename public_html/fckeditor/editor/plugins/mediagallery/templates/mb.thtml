@@ -22,6 +22,8 @@ function dodisabled(){
                 document.mediabrowser.caption.disabled = false;
                 document.mediabrowser.delay.disabled = true;
                 document.mediabrowser.alturl.disabled = false;
+                document.mediabrowser.ribbon.disabled = true;
+                document.mediabrowser.showtitle.disabled = true;
                 break;
             case 'slideshow' :
                 document.mediabrowser.autoplay.disabled = true;
@@ -32,6 +34,8 @@ function dodisabled(){
                 document.mediabrowser.caption.disabled = false;
                 document.mediabrowser.delay.disabled = false;
                 document.mediabrowser.alturl.disabled = true;
+                document.mediabrowser.ribbon.disabled = true;
+                document.mediabrowser.showtitle.disabled = true;
                 break;
             case 'fslideshow' :
                 document.mediabrowser.autoplay.disabled = true;
@@ -42,6 +46,8 @@ function dodisabled(){
                 document.mediabrowser.caption.disabled = false;
                 document.mediabrowser.delay.disabled = false;
                 document.mediabrowser.alturl.disabled = true;
+                document.mediabrowser.ribbon.disabled = true;
+                document.mediabrowser.showtitle.disabled = false;
                 break;
             case 'img' :
                 document.mediabrowser.autoplay.disabled = true;
@@ -52,6 +58,8 @@ function dodisabled(){
                 document.mediabrowser.caption.disabled = true;
                 document.mediabrowser.delay.disabled = true;
                 document.mediabrowser.alturl.disabled = false;
+                document.mediabrowser.ribbon.disabled = true;
+                document.mediabrowser.showtitle.disabled = true;
                 break;
             case 'mlink' :
                 document.mediabrowser.autoplay.disabled = true;
@@ -62,8 +70,21 @@ function dodisabled(){
                 document.mediabrowser.caption.disabled = false;
                 document.mediabrowser.delay.disabled = true;
                 document.mediabrowser.alturl.disabled = false;
+                document.mediabrowser.ribbon.disabled = true;
+                document.mediabrowser.showtitle.disabled = true;
                 break;
             case 'video' :
+                document.mediabrowser.autoplay.disabled = false;
+                document.mediabrowser.border.disabled = false;
+                document.mediabrowser.alignment.disabled = false;
+                document.mediabrowser.source.disabled = true;
+                document.mediabrowser.link.disabled = true;
+                document.mediabrowser.caption.disabled = true;
+                document.mediabrowser.delay.disabled = true;
+                document.mediabrowser.alturl.disabled = true;
+                document.mediabrowser.ribbon.disabled = true;
+                document.mediabrowser.showtitle.disabled = true;
+                break;
             case 'audio' :
                 document.mediabrowser.autoplay.disabled = false;
                 document.mediabrowser.border.disabled = false;
@@ -73,6 +94,8 @@ function dodisabled(){
                 document.mediabrowser.caption.disabled = true;
                 document.mediabrowser.delay.disabled = true;
                 document.mediabrowser.alturl.disabled = true;
+                document.mediabrowser.ribbon.disabled = false;
+                document.mediabrowser.showtitle.disabled = true;
                 break;
             case 'playall' :
                 document.mediabrowser.autoplay.disabled = false;
@@ -83,6 +106,8 @@ function dodisabled(){
                 document.mediabrowser.caption.disabled = true;
                 document.mediabrowser.delay.disabled = true;
                 document.mediabrowser.alturl.disabled = true;
+                document.mediabrowser.ribbon.disabled = true;
+                document.mediabrowser.showtitle.disabled = true;
                 break;
             default :
                 document.mediabrowser.autoplay.disabled = true;
@@ -93,6 +118,8 @@ function dodisabled(){
                 document.mediabrowser.caption.disabled = false;
                 document.mediabrowser.delay.disabled = true;
                 document.mediabrowser.alturl.disabled = false;
+                document.mediabrowser.ribbon.disabled = true;
+                document.mediabrowser.showtitle.disabled = true;
                 break;
 
         }
@@ -160,6 +187,25 @@ function dodisabled(){
 
   {lang_delay}
                     <input type="text" name="delay" size="3" maxlength="3" value="{delay}">&nbsp;&nbsp;
+  </p>
+  <p>
+
+  {lang_ribbon}
+     <select name="ribbon">
+       <option value="0">{lang_no}</option>
+       <option value="1">{lang_yes}</option>
+     </select>&nbsp;&nbsp;
+
+  {lang_showtitle}
+     <select name="showtitle">
+       <option value="0">{lang_none}</option>
+       <option value="top">{lang_top}</option>
+       <option value="bottom">{lang_bottom}</option>
+     </select>&nbsp;&nbsp;
+ </p>
+ <p>
+
+
   {destination}
 
   {lang_alturl}

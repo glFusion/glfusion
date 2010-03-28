@@ -1,9 +1,11 @@
-Media Gallery Media Browser FCKeditor Plugin - version 1.5.1
+Media Gallery Media Browser FCKeditor Plugin - version 1.6.0
 
-Author: Mark R. Evans mark@gllabs.org
-Date: March 12, 2008
+Author: Mark R. Evans mark@glfusion.org
 
 ChangeLog:
+
+v1.6.0
+    - Updated to latest auto tag options for Media Gallery
 
 v1.5.1
 

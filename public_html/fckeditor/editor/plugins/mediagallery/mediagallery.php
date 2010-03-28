@@ -381,6 +381,10 @@ $T->set_var(array(
     'lang_display'			=> $LANG_mgMB['display'],
     'lang_original'			=> $LANG_mgMB['original'],
     'lang_alturl'           => $LANG_mgMB['alturl'],
+    'lang_ribbon'           => $LANG_mgMB['ribbon'],
+    'lang_showtitle'        => $LANG_mgMB['showtitle'],
+    'lang_top'              => $LANG_mgMB['top'],
+    'lang_bottom'           => $LANG_mgMB['bottom'],
     'destination'           => ($_mgMB_CONF['enable_dest'] == 1 ? '<p>' . $LANG_mgMB['destination'] . '&nbsp;&nbsp;<select name="dest"><option value="story">' . $LANG_mgMB['story'] . '</option><option value="block">' . $LANG_mgMB['block'] . '</option></select>' : ''),
 ));
 
