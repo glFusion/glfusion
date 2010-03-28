@@ -8,9 +8,10 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2010 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Mark A. Howard         mark AT usable-web DOT com                        |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -57,36 +58,22 @@ if (!SEC_hasRights('topic.edit')) {
 * Show topic administration form
 *
 * @param    string  tid     ID of topic to edit
+* @param    array   $T      An array of topic fields (optional)
 * @return   string          HTML for the topic editor
 *
 */
-function edittopic ($tid = '')
+function TOPIC_edit ($tid = '', $T = array())
 {
     global $_CONF, $_GROUPS, $_TABLES, $_USER, $LANG27, $LANG_ACCESS,
            $LANG_ADMIN, $MESSAGE;
 
     $retval = '';
 
-    if (empty($tid)) {
-        // new topic - set defaults
-        $A = array();
-        $A['tid'] = '';
-        $A['topic'] = '';
-        $A['sortnum'] = 0;
-        $A['limitnews'] = ''; // leave empty!
-        $A['is_default'] = 0;
-        $A['archive_flag'] = 0;
-        $A['sort_by'] = 0;
-        $A['sort_dir'] = 'DESC';
-    } else {
-        $result = DB_query("SELECT * FROM {$_TABLES['topics']} WHERE tid ='".DB_escapeString($tid)."'");
+    if (!empty($tid)) {
+        // existing topic - pull fields from DB
+        $result = DB_query("SELECT * FROM {$_TABLES['topics']} WHERE tid ='" . DB_escapeString($tid) . "'");
         $A = DB_fetchArray($result);
-
-        if ( SEC_inGroup('Topic Admin') ) {
-            $access = 3;
-        } else {
-            $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
-        }
+        $access = (SEC_inGroup('Topic Admin')) ? 3 : SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
         if ($access == 0 OR $access == 2) {
             $retval .= COM_startBlock ($LANG27[12], '',
                                COM_getBlockTemplate ('_msg_block', 'header'));
@@ -95,45 +82,69 @@ function edittopic ($tid = '')
             COM_accessLog("User {$_USER['username']} tried to illegally create or edit topic $tid.");
             return $retval;
         }
-    }
-
-    $retval .= COM_startBlock ($LANG27[1], '',COM_getBlockTemplate ('_admin_block', 'header'));
-    if (!is_array ($A) || empty ($A['owner_id'])) {
-        $A['owner_id'] = $_USER['uid'];
-
-        // this is the one instance where we default the group
-        // most topics should belong to the Topic Admin group
-        if (isset ($_GROUPS['Topic Admin'])) {
-            $A['group_id'] = $_GROUPS['Topic Admin'];
+    } else {
+        // new topic - retain field values if any in case of failed validation
+	$A = array();
+        $A['tid'] = isset($T['tid']) ? $T['tid'] : '';
+        $A['topic'] = isset($T['topic']) ? $T['topic'] : '';
+        $A['sortnum'] = isset($T['sortnum']) ? $T['sortnum'] : 0;
+        $A['limitnews'] = isset($T['limitnews']) ? $T['limitnews'] : ''; // leave empty!
+        $A['is_default'] = isset($T['is_default']) && $T['is_default'] == 'on' ? 1 : 0;
+        $A['archive_flag'] = isset($T['archive_flag']) && $T['archive_flag'] == 'on' ? 1 : 0;
+	$A['sort_by'] = isset($T['sort_by']) && $T['sort_by'] == 'on' ? 1 : 0;
+	$A['sort_dir'] = isset($T['sort_dir']) ? $T['sort_dir'] : 'DESC';
+        $A['owner_id'] = isset($T['owner_id']) ? $T['owner_id'] : '';
+        $A['group_id'] = isset($T['group_id']) ? $T['group_id'] : '';
+        // an empty owner_id signifies this is a new block, set to current user
+        // this will also set the default values for group_id as well as the
+        // default values for topic permissions
+        if (empty($A['owner_id'])) {
+            $A['owner_id'] = $_USER['uid'];
+            // this is the one instance where we default the group
+            // most topics should belong to the Topic Admin group
+            if (isset ($_GROUPS['Topic Admin'])) {
+                $A['group_id'] = $_GROUPS['Topic Admin'];
+            } else {
+                $A['group_id'] = SEC_getFeatureGroup ('topic.edit');
+            }
+            SEC_setDefaultPermissions ($A, $_CONF['default_permissions_topic']);
         } else {
-            $A['group_id'] = SEC_getFeatureGroup ('topic.edit');
+            if ( isset($T['perm_owner']) ) {
+                $A['perm_owner'] = SEC_getPermissionValue($T['perm_owner']);
+                $A['perm_group'] = SEC_getPermissionValue($T['perm_group']);
+                $A['perm_member'] = SEC_getPermissionValue($T['perm_member']);
+                $A['perm_anon'] = SEC_getPermissionValue($T['perm_anon']);
+            } else {
+                SEC_setDefaultPermissions ($A, $_CONF['default_permissions_topic']);
+            }
         }
-        SEC_setDefaultPermissions ($A, $_CONF['default_permissions_topic']);
         $access = 3;
     }
+
+    // display the topic editor
     $topic_templates = new Template($_CONF['path_layout'] . 'admin/topic');
     $topic_templates->set_file('editor','topiceditor.thtml');
-    $topic_templates->set_var( 'xhtml', XHTML );
-    $topic_templates->set_var('site_url', $_CONF['site_url']);
-    $topic_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
-    $topic_templates->set_var('layout_url', $_CONF['layout_url']);
+
+    // generate input for topic id
     if (!empty($tid) && SEC_hasRights('topic.edit')) {
-        $tid_input = '<strong>'.$tid.'</strong>' . '<input type="hidden" size="20" maxlength="20" name="tid" value="'.$tid.'" />';
+        $tid_input = $tid . '<input type="hidden" size="20" maxlength="20" name="tid" value="'.$tid.'" />';
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
-                   . '" name="mode"%s' . XHTML . '>';
+                   . '" name="delete"%s' . XHTML . '>';
         $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
         $topic_templates->set_var('delete_option',
                                   sprintf($delbutton, $jsconfirm));
         $topic_templates->set_var('delete_option_no_confirmation',
                                   sprintf($delbutton, ''));
         $topic_templates->set_var('warning_msg', $LANG27[6]);
+        $topic_templates->clear_var('lang_donotusespaces');
     } else {
         $tid_input = '<input type="text" size="20" maxlength="20" name="tid" value="'.$tid.'" />';
+        $topic_templates->set_var('lang_donotusespaces', $LANG27[5]);
     }
     $topic_templates->set_var('tid_input',$tid_input);
+
     $topic_templates->set_var('lang_topicid', $LANG27[2]);
     $topic_templates->set_var('topic_id', $A['tid']);
-    $topic_templates->set_var('lang_donotusespaces', $LANG27[5]);
     $topic_templates->set_var('lang_accessrights',$LANG_ACCESS['accessrights']);
     $topic_templates->set_var('lang_owner', $LANG_ACCESS['owner']);
 
@@ -225,6 +236,8 @@ function edittopic ($tid = '')
     $topic_templates->set_var('gltoken_name', CSRF_TOKEN);
     $topic_templates->set_var('gltoken', SEC_createToken());
     $topic_templates->parse('output', 'editor');
+
+    $retval .= COM_startBlock ($LANG27[1], '',COM_getBlockTemplate ('_admin_block', 'header'));
     $retval .= $topic_templates->finish($topic_templates->get_var('output'));
     $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
 
@@ -249,13 +262,12 @@ function edittopic ($tid = '')
 * @param    string  $is_archive     'on' if this is the archive topic
 * @return   string                  HTML redirect or error message
 */
-function savetopic($tid,$topic,$imageurl,$sortnum,$limitnews,$storysort,$sortdir,$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon,$is_default,$is_archive)
+function TOPIC_save($tid,$topic,$imageurl,$sortnum,$limitnews,$storysort,$sortdir,$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon,$is_default,$is_archive)
 {
     global $_CONF, $_TABLES, $LANG27, $MESSAGE;
 
     $retval = '';
 
-    // Convert array values to numeric permission values
     list($perm_owner,$perm_group,$perm_members,$perm_anon) = SEC_getPermissionValues($perm_owner,$perm_group,$perm_members,$perm_anon);
 
     $tid = COM_sanitizeID ($tid);
@@ -291,7 +303,7 @@ function savetopic($tid,$topic,$imageurl,$sortnum,$limitnews,$storysort,$sortdir
         if ($imageurl == '/images/topics/') {
             $imageurl = '';
         }
-        $topic = DB_escapeString ($topic);
+        $topic = DB_escapeString($topic);
 
         if ($is_default == 'on') {
             $is_default = 1;
@@ -335,6 +347,86 @@ function savetopic($tid,$topic,$imageurl,$sortnum,$limitnews,$storysort,$sortdir
     return $retval;
 }
 
+
+/**
+ * return a field value for the topic administration list
+ *
+ */
+function TOPIC_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
+{
+    global $_CONF, $LANG_ADMIN, $LANG27, $_IMAGE_TYPE;
+
+    $retval = false;
+
+    $access = (SEC_inGroup('Topic Admin')) ? 3 : SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
+
+    if ($access > 0) {
+        switch($fieldname) {
+
+            case 'edit':
+                $retval = '';
+                if ($access == 3) {
+                    $attr['title'] = $LANG_ADMIN['edit'];
+                    $retval .= COM_createLink($icon_arr['edit'],
+                        $_CONF['site_admin_url'] . '/topic.php?edit=x&amp;tid=' . $A['tid'], $attr);
+                }
+                break;
+
+            case 'tid':
+            case 'topic':
+                $retval = stripslashes($fieldvalue);
+                break;
+
+            case 'sort_by':
+                $retval = $LANG27[30+$fieldvalue];
+                break;
+
+            case 'is_default':
+            case 'archive_flag':
+                $retval = ($fieldvalue != 0) ? $icon_arr['check'] : '';
+                break;
+
+            case 'move':
+                if ($access == 3) {
+                    if ($A['onleft'] == 1) {
+                        $side = $LANG21[40];
+                        $blockcontrol_image = 'block-right.' . $_IMAGE_TYPE;
+                        $moveTitleMsg = $LANG21[59];
+                        $switchside = '1';
+                    } else {
+                        $blockcontrol_image = 'block-left.' . $_IMAGE_TYPE;
+                        $moveTitleMsg = $LANG21[60];
+                        $switchside = '0';
+                    }
+                    $retval.="<img src=\"{$_CONF['layout_url']}/images/admin/$blockcontrol_image\" width=\"45\" height=\"20\" usemap=\"#arrow{$A['bid']}\" alt=\"\"" . XHTML . ">"
+                            ."<map id=\"arrow{$A['bid']}\" name=\"arrow{$A['bid']}\">"
+                            ."<area coords=\"0,0,12,20\"  title=\"{$LANG21[58]}\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=up&amp;".CSRF_TOKEN."={$token}\" alt=\"{$LANG21[58]}\"" . XHTML . ">"
+                            ."<area coords=\"13,0,29,20\" title=\"$moveTitleMsg\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=$switchside&amp;".CSRF_TOKEN."={$token}\" alt=\"$moveTitleMsg\"" . XHTML . ">"
+                            ."<area coords=\"30,0,43,20\" title=\"{$LANG21[57]}\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=dn&amp;".CSRF_TOKEN."={$token}\" alt=\"{$LANG21[57]}\"" . XHTML . ">"
+                            ."</map>";
+                }
+                break;
+
+            case 'delete':
+                $retval = '';
+                if ($access == 3) {
+                    $attr['title'] = $LANG_ADMIN['delete'];
+                    $attr['onclick'] = "return confirm('" . $LANG27[40] . "  " . $LANG27[6] . "');";
+                    $retval .= COM_createLink($icon_arr['delete'],
+                        $_CONF['site_admin_url'] . '/topic.php'
+                        . '?delete=x&amp;tid=' . $A['tid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+                }
+                break;
+
+            default:
+                $retval = $fieldvalue;
+                break;
+        }
+    }
+
+    return $retval;
+}
+
 /**
 * Displays a list of topics
 *
@@ -343,101 +435,70 @@ function savetopic($tid,$topic,$imageurl,$sortnum,$limitnews,$storysort,$sortdir
 * @return   string      HTML for the topic list
 *
 */
-function listtopics()
+function TOPIC_list()
 {
-    global $_CONF, $_TABLES, $LANG27, $LANG_ACCESS, $LANG_ADMIN;
+    global $_CONF, $_TABLES, $LANG27, $LANG_ACCESS, $LANG_ADMIN, $_IMAGE_TYPE;
 
-    require_once( $_CONF['path_system'] . 'lib-admin.php' );
+    USES_lib_admin();
 
     $retval = '';
 
-    $retval .= COM_startBlock ($LANG27[8], '',
-                               COM_getBlockTemplate ('_admin_block', 'header'));
-
-    $topic_templates = new Template($_CONF['path_layout'] . 'admin/topic');
-    $topic_templates->set_file(array('list'=>'topiclist.thtml', 'item'=>'listitem.thtml'));
-    $topic_templates->set_var( 'xhtml', XHTML );
-    $topic_templates->set_var('site_url', $_CONF['site_url']);
-    $topic_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
-    $topic_templates->set_var('layout_url', $_CONF['layout_url']);
-    $topic_templates->set_var('lang_newtopic', $LANG_ADMIN['create_new']);
-    $topic_templates->set_var('lang_adminhome', $LANG27[18]);
-    $topic_templates->set_var('lang_instructions', $LANG27[9]);
-    $topic_templates->set_var('begin_row', '<tr align="center" valign="bottom">');
-
-    $result = DB_query("SELECT * FROM {$_TABLES['topics']}");
-    $nrows = DB_numRows($result);
-    $counter = 1;
-
     $menu_arr = array (
-        array('url' => $_CONF['site_admin_url'] . '/topic.php?mode=edit',
+        array('url' => $_CONF['site_admin_url'] . '/topic.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home']));
-    $menu = ADMIN_createMenu(
+              'text' => $LANG_ADMIN['admin_home'])
+    );
+
+    $retval .= COM_startBlock ($LANG27[8], '', COM_getBlockTemplate ('_admin_block', 'header'));
+
+    $retval .= ADMIN_createMenu(
         $menu_arr,
         $LANG27[9],
-        $_CONF['layout_url'] . "/images/icons/topic.png"
+        $_CONF['layout_url'] . '/images/icons/topic.' . $_IMAGE_TYPE
     );
-    $topic_templates->set_var('top_menu', $menu);
 
-    for ($i = 0; $i < $nrows; $i++) {
-        $A = DB_fetchArray($result);
+    $header_arr = array(
+        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG27[10], 'field' => 'sortnum', 'sort' => true, 'align' => 'center'),
+        array('text' => $LANG27[2], 'field' => 'tid', 'sort' => true ),
+        array('text' => $LANG27[3], 'field' => 'topic', 'sort' => true ),
+        array('text' => $LANG27[11], 'field' => 'limitnews', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG27[35], 'field' => 'sort_by', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG27[37], 'field' => 'sort_dir', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG27[38], 'field' => 'is_default', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG27[39], 'field' => 'archive_flag', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center'),
+    );
 
-        if ( SEC_inGroup('Topic Admin') ) {
-            $access = 3;
-        } else {
-            $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
-        }
+    $defsort_arr = array('field' => 'sortnum', 'direction' => 'asc');
 
-        if ($access > 0) {
-            if ($access == 3) {
-                $access = $LANG_ACCESS['edit'];
-            } else {
-                $access = $LANG_ACCESS['readonly'];
-            }
+    $text_arr = array(
+        'has_extras' => true,
+        'form_url'   => $_CONF['site_admin_url'] . '/topic.php'
+    );
 
-            $topic_templates->set_var('topic_id', $A['tid']);
-            $topic_templates->set_var('topic_name', stripslashes ($A['topic']));
-            $topic_templates->set_var('topic_access', $access);
-            if ($A['is_default'] == 1) {
-                $topic_templates->set_var ('default_topic', $LANG27[24]);
-            } else {
-                $topic_templates->set_var ('default_topic', '');
-            }
-            if (empty ($A['imageurl'])) {
-                $topic_templates->set_var ('image_tag', '<img src="' . $_CONF['site_url'].'/images/topics/topic_gl.png'
-                                           . '" alt=""' . XHTML . '>');
-//                $topic_templates->set_var ('image_tag', '');
-            } else {
-                $imageurl = COM_getTopicImageUrl ($A['imageurl']);
-                $topic_templates->set_var ('image_tag', '<img src="' . $imageurl
-                                           . '" alt=""' . XHTML . '>');
-            }
-            if ($counter == 5) {
-                $counter = 1;
-                $topic_templates->set_var('end_row','</tr>');
-                $topic_templates->parse('list_row','item',true);
-                $topic_templates->set_var('begin_row','<tr align="center" valign="bottom">');
-            } else {
-                if ($i == $nrows - 1) {
-                    $topic_templates->set_var('end_row','</tr>');
-                } else {
-                    $topic_templates->set_var('end_row','');
-                }
+    $query_arr = array(
+        'table' => 'topics',
+        'sql' => "SELECT * FROM {$_TABLES['topics']} WHERE 1=1",
+        'query_fields' => array('tid', 'topic'),
+        'default_filter' => COM_getPermSql ('AND')
+    );
 
-                $topic_templates->parse('list_row','item',true);
-                $topic_templates->set_var('begin_row','');
-                $counter = $counter + 1;
-            }
-        }
-    }
-    $topic_templates->parse('output', 'list');
-    $retval .= $topic_templates->finish($topic_templates->get_var('output'));
-    $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
+    $token = SEC_createToken();
+    $form_arr = array(
+        'bottom'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="'. $token .'"/>',
+    );
+
+    $retval .= ADMIN_list('topics','TOPIC_getListField',
+        $header_arr,$text_arr,$query_arr,$defsort_arr,'',$token,'',$form_arr);
+
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
     return $retval;
+
 }
+
 
 /**
 * Delete a topic
@@ -446,7 +507,7 @@ function listtopics()
 * @return   string          HTML redirect
 *
 */
-function deleteTopic ($tid)
+function TOPIC_delete($tid)
 {
     global $_CONF, $_TABLES, $_USER;
 
@@ -498,7 +559,7 @@ function deleteTopic ($tid)
 * @return   string          filename of new photo (empty = no new photo)
 *
 */
-function handleIconUpload($tid)
+function TOPIC_iconUpload($tid)
 {
     global $_CONF, $_TABLES, $LANG27;
 
@@ -581,81 +642,86 @@ function handleIconUpload($tid)
 }
 
 
-// MAIN
-$display = '';
+// MAIN ========================================================================
 
-$mode = '';
-if (isset ($_REQUEST['mode'])) {
-    $mode = $_REQUEST['mode'];
+$action = '';
+$expected = array('edit','save','delete','cancel');
+foreach($expected as $provided) {
+    if (isset($_POST[$provided])) {
+        $action = $provided;
+    } elseif (isset($_GET[$provided])) {
+	$action = $provided;
+    }
 }
 
-if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
-    $tid = COM_applyFilter ($_POST['tid']);
-    if (!isset ($tid) || empty ($tid)) {
-        COM_errorLog ('Attempted to delete topic tid=' . $tid);
-        $display .= COM_refresh ($_CONF['site_admin_url'] . '/topic.php');
-    } elseif (SEC_checkToken()) {
-        $display .= deleteTopic($tid);
-    } else {
-        COM_accessLog("User {$_USER['username']} tried to illegally delete topic $tid and failed CSRF checks.");
-        echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
-    }
-} elseif (($mode == $LANG_ADMIN['save']) && !empty($LANG_ADMIN['save']) && SEC_checkToken()) {
-    if (empty ($_FILES['newicon']['name'])){
-        $imageurl = COM_applyFilter ($_POST['imageurl']);
-    } else {
-        $imageurl = handleIconUpload($_POST['tid']);
-        $imageurl = COM_applyFilter ($imageurl);
-    }
-    $is_default = '';
-    if (isset($_POST['is_default'])) {
-        $is_default = $_POST['is_default'];
-    }
-    $is_archive = '';
-    if (isset($_POST['is_archive'])) {
-        $is_archive = $_POST['is_archive'];
-    }
-    if ( isset($_POST['storysort']) ) {
-        $storysort = COM_applyFilter($_POST['storysort'],true);
-    } else {
-        $storysort = 0;
-    }
-    if ( $storysort < 0 || $storysort > 2 ) {
-        $storysort = 0;
-    }
-    if ( isset($_POST['sortdir']) ) {
-        $sortdir = ($_POST['sortdir'] == 'ASC' ? 'ASC' : 'DESC');
-    } else {
-        $sortdir = 'DESC';
-    }
+$tid = '';
+if (isset($_POST['tid'])) {
+    $tid = COM_applyFilter($_POST['tid']);
+} elseif (isset($_GET['tid'])) {
+    $tid = COM_applyFilter($_GET['tid']);
+}
 
-    $display .= savetopic (COM_applyFilter ($_POST['tid']), $_POST['topic'],
-                           $imageurl,
-                           COM_applyFilter ($_POST['sortnum'], true),
-                           COM_applyFilter ($_POST['limitnews'], true),
-                           $storysort,$sortdir,
-                           COM_applyFilter ($_POST['owner_id'], true),
-                           COM_applyFilter ($_POST['group_id'], true),
-                           $_POST['perm_owner'], $_POST['perm_group'],
-                           $_POST['perm_members'], $_POST['perm_anon'],
-                           $is_default, $is_archive);
-    CACHE_remove_instance('story');
+$validtoken = SEC_checkToken();
 
-} else if ($mode == 'edit') {
-    $display .= COM_siteHeader('menu', $LANG27[1]);
-    $tid = '';
-    if (isset($_GET['tid'])) {
-        $tid = COM_applyFilter($_GET['tid']);
-    }
-    $display .= edittopic($tid);
-    $display .= COM_siteFooter();
-} else { // 'cancel' or no mode at all
-    $display .= COM_siteHeader('menu', $LANG27[8]);
-    if (isset ($_GET['msg'])) {
-        $display .= COM_showMessage (COM_applyFilter ($_GET['msg'], true));
-    }
-    $display .= listtopics();
-    $display .= COM_siteFooter();
+switch ($action) {
+
+    case 'edit':
+        $display .= COM_siteHeader('menu', $LANG27[1]);
+        $display .= TOPIC_edit($tid);
+        $display .= COM_siteFooter();
+        break;
+
+    case 'save':
+        if ($validtoken) {
+            $imageurl = (empty($_FILES['newicon']['name'])) ? COM_applyFilter ($_POST['imageurl']) : COM_applyFilter(TOPIC_iconUpload($tid));
+            $is_default = (isset($_POST['is_default'])) ? $_POST['is_default'] : '';
+            $is_archive = (isset($_POST['is_archive'])) ? $_POST['is_archive'] : '';
+            $storysort = (isset($_POST['storysort'])) ? COM_applyFilter($_POST['storysort'],true) : 0;
+            $storysort = (($storysort < 0) || ($storysort > 2)) ? 0 : $storysort;
+            $sortdir = (isset($_POST['sortdir'])) ? (($_POST['sortdir'] == 'ASC') ? 'ASC' : 'DESC') : 'DESC';
+            $display .= TOPIC_save($tid, $_POST['topic'],
+                                   $imageurl,
+                                   COM_applyFilter ($_POST['sortnum'], true),
+                                   COM_applyFilter ($_POST['limitnews'], true),
+                                   $storysort,$sortdir,
+                                   COM_applyFilter ($_POST['owner_id'], true),
+                                   COM_applyFilter ($_POST['group_id'], true),
+                                   $_POST['perm_owner'], $_POST['perm_group'],
+                                   $_POST['perm_members'], $_POST['perm_anon'],
+                                   $is_default, $is_archive);
+
+            CACHE_remove_instance('story');
+        } else {
+            COM_accessLog("User {$_USER['username']} tried to illegally edit topic $tid and failed CSRF checks.");
+            echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
+        }
+        break;
+
+    case 'delete':
+        if (!isset ($tid) || empty ($tid)) {
+            COM_errorLog('Attempted to delete topic, tid empty or null, value =' . $tid);
+            $display .= COM_refresh($_CONF['site_admin_url'] . '/topic.php');
+        } elseif ($validtoken) {
+            $display .= TOPIC_delete($tid);
+        } else {
+            COM_accessLog("User {$_USER['username']} tried to illegally delete topic $tid and failed CSRF checks.");
+            echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
+        }
+        break;
+
+    default:
+        $display .= COM_siteHeader('menu', $LANG27[8]);
+        $msg = 0;
+        if (isset($_POST['msg'])) {
+            $msg = COM_applyFilter($_POST['msg'],true);
+        } elseif (isset($_GET['msg'])) {
+            $msg = COM_applyFilter($_GET['msg'],true);
+        }
+        $display .= ($msg > 0) ? COM_showMessage($msg) : '';
+        $display .= TOPIC_list();
+        $display .= COM_siteFooter();
+        break;
+
 }
 
 echo $display;
