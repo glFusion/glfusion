@@ -103,10 +103,7 @@ function BLOCK_editDefault($A, $access)
 
     $block_templates = new Template($_CONF['path_layout'] . 'admin/block');
     $block_templates->set_file('editor','defaultblockeditor.thtml');
-    $block_templates->set_var('xhtml', XHTML);
-    $block_templates->set_var('site_url', $_CONF['site_url']);
-    $block_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
-    $block_templates->set_var('layout_url', $_CONF['layout_url']);
+
     $block_templates->set_var('block_id', $A['bid']);
     // standard Admin strings
     $block_templates->set_var('lang_blocktitle', $LANG_ADMIN['title']);
@@ -282,10 +279,7 @@ function BLOCK_edit($bid = '', $B = array())
     } else {
         $block_templates->set_file('editor','blockeditor.thtml');
     }
-    $block_templates->set_var('site_url', $_CONF['site_url']);
-    $block_templates->set_var('xhtml', XHTML);
-    $block_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
-    $block_templates->set_var('layout_url', $_CONF['layout_url']);
+
     $block_templates->set_var('start_block_editor', COM_startBlock ($LANG21[3],
             '', COM_getBlockTemplate ('_admin_block', 'header')));
 
