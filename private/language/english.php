@@ -1527,9 +1527,11 @@ $LANG_BUTTONS = array(
 # 404.php
 
 $LANG_404 = array(
-    1 => '404 Error',
-    2 => 'Gee, I\'ve looked everywhere but I can not find <b>%s</b>.',
-    3 => "<p>We're sorry, but the file you have requested does not exist. Please feel free to check the <a href=\"{$_CONF['site_url']}\">main page</a> or the <a href=\"{$_CONF['site_url']}/search.php\">search page</a> to see if you can find what you lost."
+    1 => '404 - URL not found',
+    2 => '<div class="story-body">You may not be able to access this page because of one of the following conditions:<ul><li>an out of date bookmark or favorite</li><li>a search engine that has an out of date listing for this site</li><li>a mistyped address</li></ul></div>',
+    22 => 'I\'ve looked everywhere but I can not find <b>%s</b>.',
+    3 => "<p>Please try one of the following:<ul style=\"margin-left:15px;padding-top:10px;\"><li><a href=\"{$_CONF['site_url']}\">Home Page</a></li><li><a href=\"{$_CONF['site_url']}/search.php\">Search</a></li></ul></p>",
+    33 => "<p>We're sorry, but the file you have requested does not exist. Please feel free to check the <a href=\"{$_CONF['site_url']}\">main page</a> or the <a href=\"{$_CONF['site_url']}/search.php\">search page</a> to see if you can find what you lost."
 );
 
 ###############################################################################
@@ -1865,11 +1867,13 @@ $LANG_FILECHECK = array(
     'filecheck'         => 'File Integrity Check',
     'recheck'           => 'Recheck File Integrity',
     'confirm'           => 'Are you sure you want to deleted the selected file(s)?',
-    'explanation'       => 'This is a list of files that are not recognized as being a part of the glFusion v%s distribution.  <b>This DOES NOT mean you should simply delete these files</b>, this tool is intended to assist you in removing files that have been removed or have moved in the glFusion distribution.  <b>Please use this tool with caution.</b>',
+    'explanation'       => 'Your site\'s file integrity has been analyzed, and the results are shown below.  This tool identifies files and directories that are not part of the base glFusion v%s distribution.  This may include files and directories that are related to glFusion plugins or other scripts that you have added, or are otherwise critical to your site\'s operation, and therefore <b>this DOES NOT mean you should simply delete these files!&nbsp;&nbsp;<span style="color:red">Please use this tool with caution!</span></b>',
+    'delta'             => 'Change Detected:',
     'where'             => 'Root',
-    'directory'         => 'Directory',
-    'filename'          => 'Filename',
-    'removed'           => 'The selected file(s) were deleted.  Your site\'s File Integrity has been rechecked, and the results are shown below.'
+    'path'              => 'Path',
+    'file'              => 'File',
+    'perms'             => 'Permissions',
+    'removed'           => '%s %s deleted.  Your site\'s File Integrity has been rechecked, and the results are shown below.'
 );
 
 ###############################################################################
