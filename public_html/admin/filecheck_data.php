@@ -42,7 +42,7 @@ $glfIgnore = array('.','..','.svn','cgi-bin','.htaccess');
 // glFusion Distribution Directories (as-shipped)
 
 // test: 'R'=must exist, and recurse, 'E'=must exist, but do not recurse
-// perm: 'R' = readable, 'W' = writeable
+// preq: 'R' = readable, 'W' = writeable
 
 $glfDir = array(
 // private core directories
@@ -565,7 +565,7 @@ $glfDir = array(
 );
 
 // test: 'E'=must exist
-// perm: 'R' = readable, 'W' = writeable
+// preq: 'R' = readable, 'W' = writeable
 
 $glfFile = array(
 // private core
