@@ -8,9 +8,10 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Mark Howard            mark AT usable-web DOT com                        |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -1970,7 +1971,6 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/language/ukrainian_koi8-u.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/language/ukrainian_utf-8.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/plugin.xml' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/rss.inc.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/spamx.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/sql/mysql_install.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/templates/admin.thtml' ),
