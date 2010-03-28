@@ -30,6 +30,8 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 //
+_stopwatch('start');
+
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 require_once 'filecheck_data.php';
@@ -49,62 +51,31 @@ if (!SEC_inGroup ('Root')) {
     exit;
 }
 
-function FILECHECK_isWriteable( $perms )
+function _current_tick()
 {
-    return (($perms & 0x0080) || ($perms & 0x0010) || ($perms & 0x0002));
+    list($usec, $sec) = explode( ' ',microtime());
+    return (float)$sec + (float)$usec;
 }
 
-function FILECHECK_permString( $perms )
+function _stopwatch( $action='' )
 {
-
-    if (($perms & 0xC000) == 0xC000) {
-        // Socket
-        $info = 's';
-    } elseif (($perms & 0xA000) == 0xA000) {
-        // Symbolic Link
-        $info = 'l';
-    } elseif (($perms & 0x8000) == 0x8000) {
-        // Regular
-        $info = '-';
-    } elseif (($perms & 0x6000) == 0x6000) {
-        // Block special
-        $info = 'b';
-    } elseif (($perms & 0x4000) == 0x4000) {
-        // Directory
-        $info = 'd';
-    } elseif (($perms & 0x2000) == 0x2000) {
-        // Character special
-        $info = 'c';
-    } elseif (($perms & 0x1000) == 0x1000) {
-        // FIFO pipe
-        $info = 'p';
-    } else {
-        // Unknown
-        $info = 'u';
+    static $start;
+    $retval = 0;
+    switch ($action) {
+        case 'start':
+            $start = _current_tick();
+            break;
+        case 'stop':
+            $retval = round(_current_tick() - $start, 5);
+            break;
     }
+    return $retval;
+}
 
-    // Owner
-    $info .= (($perms & 0x0100) ? 'r' : '-');
-    $info .= (($perms & 0x0080) ? 'w' : '-');
-    $info .= (($perms & 0x0040) ?
-                (($perms & 0x0800) ? 's' : 'x' ) :
-                (($perms & 0x0800) ? 'S' : '-'));
-
-    // Group
-    $info .= (($perms & 0x0020) ? 'r' : '-');
-    $info .= (($perms & 0x0010) ? 'w' : '-');
-    $info .= (($perms & 0x0008) ?
-                (($perms & 0x0400) ? 's' : 'x' ) :
-                (($perms & 0x0400) ? 'S' : '-'));
-
-    // World
-    $info .= (($perms & 0x0004) ? 'r' : '-');
-    $info .= (($perms & 0x0002) ? 'w' : '-');
-    $info .= (($perms & 0x0001) ?
-                (($perms & 0x0200) ? 't' : 'x' ) :
-                (($perms & 0x0200) ? 'T' : '-'));
-
-    return $info;
+function FILECHECK_isWriteable( $file )
+{
+    $perms = fileperms($file);
+    return (($perms & 0x0080) || ($perms & 0x0010) || ($perms & 0x0002));
 }
 
 function FILECHECK_scanNegative()
@@ -131,9 +102,7 @@ function FILECHECK_scanNegative()
                 'path'  => $dir,
                 'file'  => '',
                 'type'  => 'D',
-                'delta' => '-',
-                'perms' => '',
-                'preq'  => $glfDir[$i]['preq']
+                'delta' => '-'
             );
         }
     }
@@ -157,13 +126,22 @@ function FILECHECK_scanNegative()
                 'path'  => $pathinfo['dirname'],
                 'file'  => $pathinfo['filename'] . '.' . $pathinfo['extension'],
                 'type'  => 'F',
-                'delta' => '-',
-                'perms' => '',
-                'preq'  => $glfFile[$i]['preq']
+                'delta' => '-'
             );
         }
     }
     return;
+}
+
+function FILECHECK_search($needle, $haystack)
+{
+    $retval = '';
+    foreach ($haystack as $row) {
+        if ($row['path'] == $needle) {
+            return $row['test'];
+        }
+    }
+    return $retval;
 }
 
 function FILECHECK_scanPositive( $path = '.', $where, $level = 0, $prefix=array())
@@ -186,14 +164,7 @@ function FILECHECK_scanPositive( $path = '.', $where, $level = 0, $prefix=array(
                     $needle .= $pdir .'/';
                 }
                 $needle .= $file;
-                // search distribution directory list
-                $D = array();
-                foreach($glfDir AS $D) {
-                    if ($D['path'] == $needle) {
-                        $test = $D['test'];
-                        $preq = $D['preq'];
-                    }
-                }
+                $test = FILECHECK_search($needle,$glfDir);
                 if (!empty($test)) {
                     if ($test=='R') {
                         // directory was recognized - recurse only if allowed
@@ -203,42 +174,30 @@ function FILECHECK_scanPositive( $path = '.', $where, $level = 0, $prefix=array(
                     }
                 } else {
                     // directory is not recognized, add to list
-                    $perms = fileperms("$path/$file");
                     $data_arr[] = array(
                         'where' => $where,
                         'path'  => $path . '/' . $file,
                         'file'  => '',
                         'type'  => 'D',
-                        'delta' => '+',
-                        'perms' => $perms,
-                        'preq'  => ''
+                        'delta' => '+'
                     );
                 }
             } else {
-                // this is a file - get it's permissions for later testing
-                $perms = fileperms("$path/$file");
+                // this is a file
                 // construct the search term
                 foreach($prefix AS $pdir ) {
                     $needle .= $pdir .'/';
                 }
                 $needle .= $file;
                 // search the distribution file list
-                $F = array();
-                foreach($glfFile AS $F) {
-                    if ($F['path'] == $needle) {
-                        $test = $F['test'];
-                        $preq = $F['preq'];
-                    }
-                }
+                $test = FILECHECK_search($needle,$glfFile);
                 if (empty($test)) {
                     // file is not recognized, add to list
                     $data_arr[] = array('where' => $where,
                                         'path'  => $path,
                                         'file'  => $file,
                                         'type'  => 'F',
-                                        'delta' => '+',
-                                        'perms' => $perms,
-                                        'preq'  => $preq
+                                        'delta' => '+'
                     );
                 }
             }
@@ -257,14 +216,15 @@ function FILECHECK_getListField($fieldname, $fieldvalue, $A, $icon_arr)
 
     switch($fieldname) {
         case 'delete':
-            if ((FILECHECK_isWriteable($A['perms'])) && $A['delta'] == '+' && $A['type'] == 'F') {
-                $retval = '<input type="checkbox" name="sel[]" value="' . $counter . '"'.XHTML.'>';
-                $retval .= '<input type="hidden" name="dir[' . $counter . ']" value="';
-                $retval .= $A['path'] . '/' . $A['file'] .'" '.XHTML.'>';
-                $counter++;
+            if ($A['type'] == 'F' && $A['delta'] == '+') {
+                if (FILECHECK_isWriteable($A['path'] . '/' . $A['file'])) {
+                    $retval = '<input type="checkbox" name="sel[]" value="' . $counter . '"'.XHTML.'>';
+                    $retval .= '<input type="hidden" name="dir[' . $counter . ']" value="';
+                    $retval .= $A['path'] . '/' . $A['file'] .'" '.XHTML.'>';
+                    $counter++;
+                }
             } else {
-                $retval = '';
-                $retval = '<input type="checkbox" name="disabled" value="x" DISABLED'.XHTML.'>';
+                    $retval = '<input type="checkbox" name="disabled" value="x" DISABLED'.XHTML.'>';
             }
             break;
         case 'delta':
@@ -273,9 +233,6 @@ function FILECHECK_getListField($fieldname, $fieldvalue, $A, $icon_arr)
             break;
         case 'path':
             $retval = $fieldvalue . '/';
-            break;
-        case 'perms':
-            $retval = ($A['delta'] == '+') ? FILECHECK_permString($fieldvalue) : '';
             break;
         default:
             $retval = $fieldvalue;
@@ -317,8 +274,7 @@ function FILECHECK_list()
         array('text' => $LANG_FILECHECK['where'], 'field' => 'where', 'align' => 'center'),
         array('text' => $LANG_FILECHECK['delta'], 'field' => 'delta', 'align' => 'right'),
         array('text' => $LANG_FILECHECK['path'], 'field' => 'path'),
-        array('text' => $LANG_FILECHECK['file'],  'field' => 'file'),
-        array('text' => $LANG_FILECHECK['perms'], 'field' => 'perms', 'align' => 'center')
+        array('text' => $LANG_FILECHECK['file'],  'field' => 'file')
     );
 
     $data_arr = array();
@@ -334,13 +290,24 @@ function FILECHECK_list()
 
     $form_arr = array('bottom' => $bottom);
 
+    _stopwatch('start');
     FILECHECK_scanPositive(substr($_CONF['path'],0,-1),'private');
+    COM_errorLog( 'Completed scanPositive(private) in ' . _stopwatch('stop') . ' sec');
+    _stopwatch('start');
     FILECHECK_scanPositive(substr($_CONF['path_html'],0,-1),'public_html');
+    COM_errorLog( 'Completed scanPositive(public_html) in ' . _stopwatch('stop') . ' sec');
+    _stopwatch('start');
     FILECHECK_scanNegative();
+    COM_errorLog( 'Completed scanNegative(private+public_html) in ' . _stopwatch('stop') . ' sec');
 
+    _stopwatch('start');
     sort($data_arr);
+    COM_errorLog( 'Sorted scan results in ' . _stopwatch('stop') . ' sec');
 
+
+    _stopwatch('start');
     $retval .= ADMIN_simpleList("FILECHECK_getListField", $header_arr, $text_arr, $data_arr, NULL, $form_arr);
+    COM_errorLog( 'Completed list output in ' . _stopwatch('stop') . ' sec');
 
     return $retval;
 }
@@ -353,14 +320,14 @@ function FILECHECK_delete( )
         return '';
     }
 
-    $numItems = count($_POST['sel']);
-    for ($i=0; $i < $numItems; $i++) {
+    $n = count($_POST['sel']);
+    for ($i=0; $i < $n; $i++) {
         $index = COM_applyFilter($_POST['sel'][$i]);
         $filespec = COM_applyFilter($_POST['dir'][$index]);
         @unlink($filespec);
         COM_errorLog('filecheck.php: admin deleted: ' . $filespec);
     }
-    return $numItems;
+    return $n;
 }
 
 // MAIN ========================================================================
@@ -392,6 +359,7 @@ if ($files > 0) {
     $desc = ($files > 1) ? 'files were' : 'file was';
     $display .= COM_showMessageText(sprintf($LANG_FILECHECK['removed'],$files,$desc));
 }
+COM_errorLog('Completed initialization in ' . _stopwatch('stop') . ' sec');
 $display .= FILECHECK_list() . COM_siteFooter();
 
 echo $display;
