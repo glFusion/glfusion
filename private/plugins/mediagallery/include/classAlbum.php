@@ -751,8 +751,8 @@ class mgAlbum {
                 if ( !$this->hidden || ( $this->hidden && ($MG_albums[0]->owner_id /*SEC_hasRights('mediagallery.admin')*/ ) ) ) {
                    $album_jumpbox .= '<option value="' . $this->id . '"' . ($this->id == $selected ? ' selected="selected" ' : '') .'>' . $indent;
                     $tatitle = strip_tags($this->title);
-                    if ( strlen( $tatitle ) > 25 ) {
-                        $aTitle = substr( $this->title, 0, 25 ) . '...';
+                    if ( strlen( $tatitle ) > 50 ) {
+                        $aTitle = substr( $this->title, 0, 50 ) . '...';
                     } else {
                         $aTitle = $tatitle;
                     }
