@@ -7387,6 +7387,10 @@ function USES_lib_pingback() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-pingback.php';
 }
+function USES_lib_security() {
+    global $_CONF;
+    require_once $_CONF['path_system'] . 'lib-security.php';
+}
 function USES_lib_story() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-story.php';
