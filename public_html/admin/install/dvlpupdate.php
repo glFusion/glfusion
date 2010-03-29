@@ -487,6 +487,11 @@ function glfusion_119()
     DB_query("ALTER TABLE {$_TABLES['topics']} ADD sort_by TINYINT(1) NOT NULL DEFAULT '0' AFTER archive_flag",1);
     DB_query("ALTER TABLE {$_TABLES['topics']} ADD sort_dir CHAR( 4 ) NOT NULL DEFAULT 'DESC' AFTER sort_by",1);
 
+    // static pages configuration options
+    $c->add('include_search', 1, 'select',0, 0, 0, 95, true, 'staticpages');
+    $c->add('comment_code', -1, 'select',0, 0,17, 97, true, 'staticpages');
+    $c->add('status_flag', 1, 'select',0, 0, 13, 99, true, 'staticpages');
+
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.9',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.9' WHERE name='glfusion'",1);
 

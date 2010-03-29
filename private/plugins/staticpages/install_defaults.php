@@ -106,6 +106,14 @@ $_SP_DEFAULT['default_permissions'] = array(3, 2, 2, 2);
 // The maximum number of items displayed when an Atom feed is requested
 $_SP_DEFAULT['atom_max_items'] = 10;
 
+// Include in system searh (1 = include, 0 = don't)
+$_SP_DEFAULT['include_search'] = 1;
+
+// Whether to enable (0) or disable (-1) comments by default
+$_SP_DEFAULT['comment_code'] = -1;
+
+// Initial setting of status flag for new pages
+$_SP_DEFAULT['status_flag'] = 1;
 
 /**
 * Initialize Static Pages plugin configuration
@@ -150,16 +158,21 @@ function plugin_initconfig_staticpages()
                 0, 0, 0, 80, true, 'staticpages');
         $c->add('censor', $_SP_DEFAULT['censor'], 'select',
                 0, 0, 0, 90, true, 'staticpages');
+        $c->add('include_search', $_SP_DEFAULT['include_search'], 'select',
+                0, 0, 0, 100, true, 'staticpages');
+        $c->add('comment_code', $_SP_DEFAULT['comment_code'], 'select',
+                0, 0,17, 110, true, 'staticpages');
+        $c->add('status_flag', $_SP_DEFAULT['status_flag'], 'select',
+                0, 0, 13,120, true, 'staticpages');
         $c->add('aftersave', $_SP_DEFAULT['aftersave'], 'select',
-                0, 0, 9, 100, true, 'staticpages');
+                0, 0, 9, 130, true, 'staticpages');
         $c->add('atom_max_items', $_SP_DEFAULT['atom_max_items'], 'text',
-                0, 0, null, 110, true, 'staticpages');
+                0, 0, null, 140, true, 'staticpages');
 
         $c->add('fs_permissions', NULL, 'fieldset',
                 0, 1, NULL, 0, true, 'staticpages');
         $c->add('default_permissions', $_SP_DEFAULT['default_permissions'],
-                '@select', 0, 1, 12, 120, true, 'staticpages');
-
+                '@select', 0, 1, 12, 150, true, 'staticpages');
     }
 
     return true;

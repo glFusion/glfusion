@@ -41,7 +41,7 @@ $LANG_STATIC = array(
     'adminhome' => 'Admin Home',
     'staticpages' => 'Static Pages',
     'staticpageeditor' => 'Static Page Editor',
-    'writtenby' => 'Owner',
+    'writtenby' => 'Author',
     'date' => 'Last Updated',
     'title' => 'Title',
     'content' => 'Content',
@@ -142,7 +142,10 @@ $LANG_confignames['staticpages'] = array(
     'censor' => 'Censor Content',
     'default_permissions' => 'Page Default Permissions',
     'aftersave' => 'After Saving Page',
-    'atom_max_items' => 'Max. Pages in Web Services Feed'
+    'atom_max_items' => 'Max. Pages in Web Services Feed',
+    'comment_code' => 'Comment Default',
+    'include_search' => 'Site Search Default',
+    'status_flag' => 'Default Page Mode',
 );
 
 $LANG_configsubgroups['staticpages'] = array(
@@ -161,7 +164,9 @@ $LANG_configselects['staticpages'] = array(
     2 => array('Date' => 'date', 'Page ID' => 'id', 'Title' => 'title'),
     3 => array('Date' => 'date', 'Page ID' => 'id', 'Title' => 'title', 'Label' => 'label'),
     9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3)
+    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
+    13 => array('Enabled' => 1, 'Disabled' => 0 ),
+    17 => array('Comments Enabled' => 0, 'Comments Disabled' => -1),
 );
 
 ?>

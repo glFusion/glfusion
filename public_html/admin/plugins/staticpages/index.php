@@ -72,19 +72,15 @@ function PAGE_form($A, $error = false)
     if (!empty($sp_id) && ($action=='edit' || $action =='clone' )) {
         $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
     } else {
-        $A['sp_inblock'] = $_SP_CONF['in_block'];
         $A['owner_id'] = $_USER['uid'];
-        if (isset ($_GROUPS['Static Page Admin'])) {
-            $A['group_id'] = $_GROUPS['Static Page Admin'];
+        if (isset ($_GROUPS['staticpages Admin'])) {
+            $A['group_id'] = $_GROUPS['staticpages Admin'];
         } else {
             $A['group_id'] = SEC_getFeatureGroup ('staticpages.edit');
         }
         SEC_setDefaultPermissions ($A, $_SP_CONF['default_permissions']);
         $access = 3;
-        if (isset ($_CONF['advanced_editor']) &&
-          ($_CONF['advanced_editor'] == 1) &&
-          file_exists ($template_path . '/editor_advanced.thtml'))
-        {
+        if (isset ($_CONF['advanced_editor']) && ($_CONF['advanced_editor'] == 1)) {
              $A['advanced_editor_mode'] = 1;
         }
     }
@@ -101,10 +97,7 @@ function PAGE_form($A, $error = false)
         $retval .= $error . '<br' . XHTML . '><br' . XHTML . '>';
     } else {
         $sp_template = new Template ($template_path);
-        if (isset ($_CONF['advanced_editor']) &&
-            ($_CONF['advanced_editor'] == 1) &&
-            file_exists ($template_path . '/editor_advanced.thtml'))
-        {
+        if (isset ($_CONF['advanced_editor']) && ($_CONF['advanced_editor'] == 1) ) {
             $sp_template->set_file ('form', 'editor_advanced.thtml');
             if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
                 $sp_template->set_var('glfusionStyleBasePath',$_CONF['layout_url']);
@@ -408,7 +401,7 @@ function PAGE_form($A, $error = false)
 */
 function PAGE_edit($sp_id, $action = '', $editor = '')
 {
-    global $_CONF, $_TABLES, $_USER, $LANG_STATIC;
+    global $_CONF, $_SP_CONF, $_TABLES, $_USER, $LANG_STATIC;
 
     if (!empty ($sp_id) && $action == 'edit') {
         $result = DB_query ("SELECT *,UNIX_TIMESTAMP(sp_date) AS unixdate FROM {$_TABLES['staticpage']} WHERE sp_id = '$sp_id'" . COM_getPermSQL ('AND', 0, 3));
@@ -417,14 +410,14 @@ function PAGE_edit($sp_id, $action = '', $editor = '')
     } elseif ($action == 'edit') {
         // we're creating a new staticpage, set default values
         $A['sp_id'] = COM_makesid ();   // make a default new/unique staticpage ID based upon the datetime
-        $A['sp_status'] = 1;            // enabled
+        $A['sp_status'] = $_SP_CONF['status_flag'];
         $A['sp_uid'] = $_USER['uid'];   // created by current user
         $A['unixdate'] = time ();       // date/time created
         $A['sp_help'] = '';             // no help URL
         $A['sp_old_id'] = '';           // sp_old_id is null, this is a new page
-        $A['commentcode'] = $_CONF['comment_code']; // follow system config default for comment mode
+        $A['commentcode'] = $_SP_CONF['comment_code'];
         $A['sp_where'] = 1;             // top of page
-        $A['sp_search'] = 1;            // searchable
+        $A['sp_search'] = $_SP_CONF['include_search'];
     } elseif (!empty ($sp_id) && $action == 'clone') {
         // we're creating a new staticpage based upon an old one.  get the page to be cloned
         $result = DB_query ("SELECT *,UNIX_TIMESTAMP(sp_date) AS unixdate FROM {$_TABLES['staticpage']} WHERE sp_id = '$sp_id'" . COM_getPermSQL ('AND', 0, 2));
@@ -640,7 +633,8 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 function PAGE_list($token)
 {
     global $_CONF, $_TABLES, $_IMAGE_TYPE, $LANG_ADMIN, $LANG_ACCESS, $LANG_STATIC;
-    require_once $_CONF['path_system'] . 'lib-admin.php';
+
+    USES_lib_admin();
     $retval = '';
 
     $header_arr = array(      # display 'text' and use table field 'field'
@@ -718,6 +712,7 @@ function PAGE_toggleStatus($enabledstaticpages,$sp_idarray)
             }
         }
     }
+    PLG_itemSaved($sp_id,'staticpages');
     CTL_clearCache();
 }
 
@@ -760,9 +755,9 @@ if (isset ($_POST['staticpageenabler']) && $validtoken) {
 switch ($action) {
 
     case 'edit':
-        @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
-                   time() + 1200, $_CONF['cookie_path'],
-                   $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+        SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                        time() + 1200, $_CONF['cookie_path'],
+                        $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
         $display .= COM_siteHeader ('menu', $LANG_STATIC['staticpageeditor']);
         $editor = '';
         if (isset ($_GET['editor'])) {
@@ -774,9 +769,9 @@ switch ($action) {
 
     case 'clone':
         if (!empty($sp_id)) {
-            @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
-                       time() + 1200, $_CONF['cookie_path'],
-                       $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+            SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                            time() + 1200, $_CONF['cookie_path'],
+                            $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
             $display .= COM_siteHeader('menu', $LANG_STATIC['staticpageeditor']);
             $display .= PAGE_edit($sp_id,$action);
             $display .= COM_siteFooter();
@@ -836,9 +831,9 @@ switch ($action) {
             }
         } else {
             //token expired?
-            @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
-                       time() + 1200, $_CONF['cookie_path'],
-                       $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+            SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                        time() + 1200, $_CONF['cookie_path'],
+                        $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
             $display .= COM_siteHeader ('menu', $LANG_STATIC['staticpageeditor']);
             $display .= COM_showMessage(501);
             $editor = '';
