@@ -1000,7 +1000,7 @@ function saveuser($A)
         }
 
         if ($A['cooktime'] <= 0) {
-            $cookie_timemout = 0;
+            $cookie_timeout = 0;
             $token_ttl = 14400;
         } else {
             $cookie_timeout = time() + $A['cooktime'];
