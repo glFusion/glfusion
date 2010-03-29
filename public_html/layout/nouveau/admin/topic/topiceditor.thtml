@@ -60,7 +60,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2"><b>{lang_permissions}</b>:</td>
+                                        <td colspan="2"><b>{lang_permissions}</b></td>
                                     </tr>
                                     <tr>
                                         <td colspan="2"></td>

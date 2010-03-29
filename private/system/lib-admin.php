@@ -828,62 +828,6 @@ function ADMIN_getListField_stories($fieldname, $fieldvalue, $A, $icon_arr)
 }
 
 /**
- * used for the list of plugins in admin/plugins.php
- *
- */
-function ADMIN_getListField_plugins($fieldname, $fieldvalue, $A, $icon_arr, $token)
-{
-    global $_CONF, $LANG_ADMIN, $LANG32,$_PLUGINS;
-    $retval = '';
-
-    switch($fieldname) {
-        case "edit":
-            $retval = COM_createLink($icon_arr['edit'],
-                "{$_CONF['site_admin_url']}/plugins.php?mode=edit&amp;pi_name={$A['pi_name']}");
-            break;
-        case 'pi_version':
-            $plugin_code_version = PLG_chkVersion ($A['pi_name']);
-            if (empty ($plugin_code_version)) {
-                $code_version = 'N/A';
-            } else {
-                $code_version = $plugin_code_version;
-            }
-            $pi_installed_version = $A['pi_version'];
-            if (empty ($plugin_code_version) ||
-                    ($pi_installed_version == $code_version)) {
-                $retval = $pi_installed_version;
-            } else {
-                $retval = "{$LANG32[37]}: $pi_installed_version,&nbsp;{$LANG32[36]}: $plugin_code_version";
-                if ($A['pi_enabled'] == 1) {
-                    $retval .= " <b>{$LANG32[38]}</b>";
-                }
-            }
-            break;
-        case 'pi_name' :
-            if ( array_search($fieldvalue,$_PLUGINS) === false ) {
-                $retval = '<span style="color:red;font-weight:700;">'.$fieldvalue.'</span>';
-            } else {
-                $retval = $fieldvalue;
-            }
-            break;
-        case 'enabled':
-            if ($A['pi_enabled'] == 1) {
-                $switch = ' checked="checked"';
-            } else {
-                $switch = '';
-            }
-            $retval = "<input type=\"checkbox\" name=\"enabledplugins[{$A['pi_name']}]\" "
-                . "onclick=\"submit()\" value=\"1\"$switch" . XHTML . ">";
-            $retval .= '<input type="hidden" name="pluginarray['.$A['pi_name'].']" value="1" />';
-            break;
-        default:
-            $retval = $fieldvalue;
-            break;
-    }
-    return $retval;
-}
-
-/**
  * used for the list of ping services in admin/trackback.php
  *
  */

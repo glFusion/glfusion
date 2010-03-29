@@ -983,7 +983,7 @@ if (isset($_POST['bid'])) {
 
 $where = '';
 if (isset($_POST['where'])) {
-    $where = COM_applyFilter($_GET['where']);
+    $where = COM_applyFilter($_POST['where']);
 } elseif (isset($_GET['where'])) {
     $where = COM_applyFilter($_GET['where']);
 }

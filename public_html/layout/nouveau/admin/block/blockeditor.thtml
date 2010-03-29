@@ -52,7 +52,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2"><hr{xhtml}></td>
+                                            <td colspan="2"><div style="margin:10px 0 5px 0;border-bottom:1px solid #cccccc"></div></td>
                                         </tr>
                                         <tr>
                                             <td colspan="2"><b>{lang_phpblockoptions}</b></td>
@@ -64,7 +64,7 @@
                                         <tr>
                                             <td colspan="2">{lang_phpblockwarning}</td>
                                         </tr>
-                                        <tr><td colspan="2"><hr{xhtml}></td></tr>
+                                        <tr><td colspan="2"><div style="margin:10px 0 5px 0;border-bottom:1px solid #cccccc"></div></td></tr>
                                         <tr>
                                             <td colspan="2"><b>{lang_portalblockoptions}</b></td>
                                         </tr>
@@ -80,7 +80,7 @@
                                             <td class="alignright">{lang_lastrdfupdate}:</td>
                                             <td><input type="text" size="19" name="rdfupdated" value="{block_rdfupdated}"{xhtml}></td>
                                         </tr>
-                                        <tr><td colspan="2"><hr{xhtml}></td></tr>
+                                        <tr><td colspan="2"><div style="margin:10px 0 5px 0;border-bottom:1px solid #cccccc"></div></td></tr>
                                         <tr>
                                             <td colspan="2"><b>{lang_normalblockoptions}</b></td>
                                         </tr>
@@ -94,7 +94,7 @@
                                             <td><input type="checkbox" name="allow_autotags" {allow_autotags}{xhtml}> ({lang_use_autotags})</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2"><hr{xhtml}></td>
+                                            <td colspan="2"><div style="margin:10px 0 5px 0;border-bottom:1px solid #cccccc"></div></td>
                                         </tr>
                                         <tr>
                                             <td colspan="2"><b>{lang_accessrights}</b></td>
@@ -111,16 +111,19 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2"><b>{lang_permissions}:</b></td>
+                                            <td colspan="2"><b>{lang_permissions}</b></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2">{lang_perm_key}</td>
+                                            <td></td>
+                                            <td>{lang_perm_key}</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2">{permissions_editor}</td>
+                                            <td></td>
+                                            <td>{permissions_editor}</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2">{lang_permissions_msg}</td>
+                                            <td></td>
+                                            <td>{lang_permissions_msg}</td>
                                         </tr>
                                         <tr><td>&nbsp;</td></tr>
                                         <tr>

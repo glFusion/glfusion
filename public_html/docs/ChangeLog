@@ -2,11 +2,13 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Plugin Admin: Code scrub/UI improvements (Mark H.)
+- Topic Admin: New list-based manager, code scrub/UI improvements (Mark H.)
 - Media Gallery: Updated FCKeditor Media Browser plugin to support all auto tag
   options (Mark)
 - Media Gallery: Fixed error in raw thumbnail preview where it did not work
   with images other than jpg (Mark)
-- Media Gallery: Increased the width of the album jumpbox to accomodate
+- Media Gallery: Increased the width of the album jumpbox to accommodate
   more nested albums (Mark)
 - General E_ALL fixes (Mark)
 - Updated FCKeditor to v2.6.6 (Mark)
