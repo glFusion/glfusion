@@ -793,7 +793,7 @@ class mbElement {
                                 $order .= 'sp_id';
                             }
                         }
-                        $result = DB_query ('SELECT sp_id, sp_label FROM ' . $_TABLES['staticpage'] . ' WHERE sp_onmenu = 1' . COM_getPermSql ('AND') . $order);
+                        $result = DB_query ('SELECT sp_id, sp_label FROM ' . $_TABLES['staticpage'] . ' WHERE sp_onmenu = 1 AND sp_status = 1' . COM_getPermSql ('AND') . $order);
                         $nrows = DB_numRows ($result);
                         $menuitems = array ();
                         for ($i = 0; $i < $nrows; $i++) {

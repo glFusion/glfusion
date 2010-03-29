@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Staticpage Admin: New feature: Enable/Disable pages, code scrub/UI (Mark H.)
 - Added wrapper static page widget (Eric)
 - Plugin Admin: Code scrub/UI improvements (Mark H.)
 - Topic Admin: New list-based manager, code scrub/UI improvements (Mark H.)

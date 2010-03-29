@@ -457,6 +457,9 @@ function glfusion_119()
     $c->add('session_ip_check',1,'select',7,30,26,545,TRUE);
     $c->del('default_search_order','Core');
 
+    DB_query("ALTER TABLE {$_TABLES['staticpage']} ADD sp_status tinyint(3) NOT NULL DEFAULT '1' AFTER sp_id",1);
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.5',pi_gl_version='1.1.9' WHERE pi_name = 'staticpages'");
+
     DB_query("UPDATE {$_TABLES['conf_values']} SET selectionArray = '0' WHERE name='searchloginrequired' AND group_name='Core'",1);
 
     // fixup the group names and admin switch

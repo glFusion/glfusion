@@ -8,9 +8,10 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Mark A. Howard         mark AT usable-web DOT com                        |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -40,6 +41,8 @@
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
 
+$display = '';
+
 if (!SEC_hasRights ('staticpages.edit')) {
     $display = COM_siteHeader ('menu', $LANG_STATIC['access_denied']);
     $display .= COM_startBlock ($LANG_STATIC['access_denied'], '',
@@ -52,7 +55,6 @@ if (!SEC_hasRights ('staticpages.edit')) {
     exit;
 }
 
-
 /**
 * Displays the static page form
 *
@@ -60,14 +62,14 @@ if (!SEC_hasRights ('staticpages.edit')) {
 * @param    string  $error  Error message to display
 *
 */
-function form ($A, $error = false)
+function PAGE_form($A, $error = false)
 {
-    global $_CONF, $_TABLES, $_USER, $_GROUPS, $_SP_CONF, $mode, $sp_id,
+    global $_CONF, $_TABLES, $_USER, $_GROUPS, $_SP_CONF, $action, $sp_id,
            $LANG21, $LANG_STATIC, $LANG_ACCESS, $LANG_ADMIN, $LANG24,
            $LANG_postmodes, $MESSAGE;
 
     $template_path = staticpages_templatePath ('admin');
-    if (!empty($sp_id) && ($mode=='edit' || $mode =='clone' )) {
+    if (!empty($sp_id) && ($action=='edit' || $action =='clone' )) {
         $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
     } else {
         $A['sp_inblock'] = $_SP_CONF['in_block'];
@@ -147,6 +149,7 @@ function form ($A, $error = false)
         );
 
         $sp_template->set_var('sp_search_checked',$A['sp_search'] == 1 ? ' checked="checked"' : '');
+        $sp_template->set_var('sp_status_checked',$A['sp_status'] == 1 ? ' checked="checked"' : '');
 
         $sp_template->set_var('lang_accessrights', $LANG_ACCESS['accessrights']);
         $sp_template->set_var('lang_owner', $LANG_ACCESS['owner']);
@@ -171,10 +174,10 @@ function form ($A, $error = false)
         $sp_template->set_var('lang_save', $LANG_ADMIN['save']);
         $sp_template->set_var('lang_cancel', $LANG_ADMIN['cancel']);
         $sp_template->set_var('lang_preview', $LANG_ADMIN['preview']);
-        if (SEC_hasRights ('staticpages.delete') && ($mode != 'clone') &&
+        if (SEC_hasRights ('staticpages.delete') && ($action != 'clone') &&
                 !empty ($A['sp_old_id'])) {
             $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
-                       . '" name="mode"%s' . XHTML . '>';
+                       . '" name="delete"%s' . XHTML . '>';
             $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
             $sp_template->set_var ('delete_option',
                                    sprintf ($delbutton, $jsconfirm));
@@ -395,94 +398,50 @@ function form ($A, $error = false)
     return $retval;
 }
 
-function liststaticpages()
-{
-    global $_CONF, $_TABLES, $_IMAGE_TYPE, $LANG_ADMIN, $LANG_STATIC;
-    require_once $_CONF['path_system'] . 'lib-admin.php';
-    $retval = '';
-
-    $header_arr = array(      # display 'text' and use table field 'field'
-        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false),
-        array('text' => $LANG_ADMIN['copy'], 'field' => 'copy', 'sort' => false),
-        array('text' => $LANG_STATIC['id'], 'field' => 'sp_id', 'sort' => true),
-        array('text' => $LANG_ADMIN['title'], 'field' => 'sp_title', 'sort' => true),
-        array('text' => $LANG_STATIC['writtenby'], 'field' => 'sp_uid', 'sort' => false),
-        array('text' => $LANG_STATIC['head_centerblock'], 'field' => 'sp_centerblock', 'sort' => true),
-        array('text' => $LANG_STATIC['date'], 'field' => 'unixdate', 'sort' => true),
-        array('text' => $LANG_ADMIN['delete'],'field' => 'delete','sort' => false),
-    );
-    $defsort_arr = array('field' => 'sp_title', 'direction' => 'asc');
-
-    $menu_arr = array (
-        array('url' => $_CONF['site_admin_url'] . '/plugins/staticpages/index.php?mode=edit',
-              'text' => $LANG_ADMIN['create_new']),
-        array('url' => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home'])
-    );
-
-    $retval .= COM_startBlock($LANG_STATIC['staticpagelist'], '',
-                              COM_getBlockTemplate('_admin_block', 'header'));
-
-    $retval .= ADMIN_createMenu($menu_arr, $LANG_STATIC['instructions'], plugin_geticon_staticpages());
-
-    $text_arr = array(
-        'has_extras' => true,
-        'form_url' => $_CONF['site_admin_url'] . '/plugins/staticpages/index.php'
-    );
-
-    $query_arr = array(
-        'table' => 'staticpage',
-        'sql' => "SELECT *,UNIX_TIMESTAMP(sp_date) AS unixdate "
-                ."FROM {$_TABLES['staticpage']} WHERE 1=1 ",
-        'query_fields' => array('sp_title', 'sp_id'),
-        'default_filter' => COM_getPermSQL ('AND', 0, 3)
-    );
-
-    $retval .= ADMIN_list('static_pages', 'plugin_getListField_staticpages',
-                          $header_arr, $text_arr, $query_arr, $defsort_arr);
-    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
-
-    return $retval;
-
-}
-
 /**
 * Displays the Static Page Editor
 *
 * @sp_id        string      ID of static page to edit
-* @mode         string      Mode
+* @action       string      action (edit, clone or null)
+* @editor       string      editor to use
 *
 */
-function staticpageeditor ($sp_id, $mode = '', $editor = '')
+function PAGE_edit($sp_id, $action = '', $editor = '')
 {
-    global $_CONF, $_TABLES, $_USER;
+    global $_CONF, $_TABLES, $_USER, $LANG_STATIC;
 
-    if (!empty ($sp_id) && $mode == 'edit') {
+    if (!empty ($sp_id) && $action == 'edit') {
         $result = DB_query ("SELECT *,UNIX_TIMESTAMP(sp_date) AS unixdate FROM {$_TABLES['staticpage']} WHERE sp_id = '$sp_id'" . COM_getPermSQL ('AND', 0, 3));
         $A = DB_fetchArray ($result);
-        $A['sp_old_id'] = $A['sp_id'];
-    } elseif ($mode == 'edit') {
-        $A['sp_id'] = COM_makesid ();
-        $A['sp_uid'] = $_USER['uid'];
-        $A['unixdate'] = time ();
-        $A['sp_help'] = '';
-        $A['sp_old_id'] = '';
-        $A['commentcode'] = $_CONF['comment_code'];
-        $A['sp_where'] = 1; // default new pages to "top of page"
-        $A['sp_search'] = 1;
-    } elseif (!empty ($sp_id) && $mode == 'clone') {
-        $result = DB_query ("SELECT *,UNIX_TIMESTAMP(sp_date) AS unixdate FROM {$_TABLES['staticpage']} WHERE sp_id = '$sp_id'" . COM_getPermSQL ('AND', 0, 3));
+        $A['sp_old_id'] = $A['sp_id'];  // // sp_old_id is not null, this is an existing page
+    } elseif ($action == 'edit') {
+        // we're creating a new staticpage, set default values
+        $A['sp_id'] = COM_makesid ();   // make a default new/unique staticpage ID based upon the datetime
+        $A['sp_status'] = 1;            // enabled
+        $A['sp_uid'] = $_USER['uid'];   // created by current user
+        $A['unixdate'] = time ();       // date/time created
+        $A['sp_help'] = '';             // no help URL
+        $A['sp_old_id'] = '';           // sp_old_id is null, this is a new page
+        $A['commentcode'] = $_CONF['comment_code']; // follow system config default for comment mode
+        $A['sp_where'] = 1;             // top of page
+        $A['sp_search'] = 1;            // searchable
+    } elseif (!empty ($sp_id) && $action == 'clone') {
+        // we're creating a new staticpage based upon an old one.  get the page to be cloned
+        $result = DB_query ("SELECT *,UNIX_TIMESTAMP(sp_date) AS unixdate FROM {$_TABLES['staticpage']} WHERE sp_id = '$sp_id'" . COM_getPermSQL ('AND', 0, 2));
         $A = DB_fetchArray ($result);
-        $A['sp_id'] = COM_makesid ();
-        $sp_id = $A['sp_id'];
-        $A['sp_uid'] = $_USER['uid'];
-        $A['unixdate'] = time ();
-        $A['sp_hits'] = 0;
-        $A['sp_old_id'] = '';
+        // override old page values with values unique to this page
+        $A['sp_id'] = COM_makesid ();   // make a default new/unique staticpage ID based upon the datetime
+        $sp_id = $A['sp_id'];           // to ensure value displayed in field reflects updated value
+        $sp_title = $A['sp_title'] . ' (' . $LANG_STATIC['copy'] . ')';
+        $A['sp_title'] = $sp_title;     // indicate in title that this is a cloned page
+        $A['sp_uid'] = $_USER['uid'];   // created by current user
+        $A['unixdate'] = time ();       // date/time created
+        $A['sp_hits'] = 0;              // reset page hits
+        $A['sp_old_id'] = '';           // sp_old_id is null, this is a new page
     } else {
         $A = $_POST;
         if (empty ($A['unixdate'])) {
-            $A['unixdate'] = time ();
+            $A['unixdate'] = time ();   // update date and time
         }
         $A['sp_content'] = COM_checkHTML (COM_checkWords ($A['sp_content']));
     }
@@ -491,7 +450,7 @@ function staticpageeditor ($sp_id, $mode = '', $editor = '')
     }
     $A['editor'] = $editor;
 
-    return form ($A);
+    return PAGE_form($A);
 }
 
 /**
@@ -521,7 +480,7 @@ function staticpageeditor ($sp_id, $mode = '', $editor = '')
 * @param sp_inblock      string  Flag: wrap page in a block (or not)
 *
 */
-function submitstaticpage ($sp_id, $sp_uid, $sp_title, $sp_content, $sp_hits,
+function PAGE_submit($sp_id, $sp_status, $sp_uid, $sp_title, $sp_content, $sp_hits,
                            $sp_format, $sp_onmenu, $sp_label, $commentcode,
                            $owner_id, $group_id, $perm_owner, $perm_group,
                            $perm_members, $perm_anon, $sp_php, $sp_nf,
@@ -534,6 +493,7 @@ function submitstaticpage ($sp_id, $sp_uid, $sp_title, $sp_content, $sp_hits,
 
     $args = array(
                 'sp_id' => $sp_id,
+                'sp_status' => $sp_status,
                 'sp_uid' => $sp_uid,
                 'sp_title' => $sp_title,
                 'sp_content' => $sp_content,
@@ -565,158 +525,393 @@ function submitstaticpage ($sp_id, $sp_uid, $sp_title, $sp_content, $sp_hits,
     return $retval;
 }
 
+function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
+{
+    global $_CONF, $LANG_ADMIN, $LANG_STATIC, $LANG_ACCESS, $_TABLES;
 
-// MAIN
-$mode = '';
-if (isset($_REQUEST['mode'])) {
-    $mode = COM_applyFilter ($_REQUEST['mode']);
+    $retval = '';
+    $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],
+                            $A['perm_group'],$A['perm_members'],$A['perm_anon']);
+    $enabled = ($A['sp_status'] == 1) ? true : false;
+
+    switch($fieldname) {
+
+        case 'edit':
+            if ($access == 3) {
+                $attr['title'] = $LANG_ADMIN['edit'];
+                $retval = COM_createLink($icon_arr['edit'],
+                    $_CONF['site_admin_url'] . '/plugins/staticpages/index.php?edit=x&amp;sp_id=' . $A['sp_id'], $attr );
+            } else {
+                $retval = $icon_arr['blank'];
+            }
+            break;
+
+        case 'copy':
+            if ($access >= 2) {
+                $attr['title'] = $LANG_ADMIN['copy'];
+                $retval .= (!empty($retval)) ? '&nbsp;&nbsp;' : '';
+                $retval .= COM_createLink($icon_arr['copy'],
+                    $_CONF['site_admin_url'] . '/plugins/staticpages/index.php?clone=x&amp;sp_id=' . $A['sp_id'], $attr);
+            } else {
+                $retval = $icon_arr['blank'];
+            }
+            break;
+
+        case "sp_title":
+            $sp_title = stripslashes($A['sp_title']);
+            if ($enabled) {
+                $url = COM_buildUrl ($_CONF['site_url'] .
+                                     '/staticpages/index.php?page=' . $A['sp_id']);
+                $retval = COM_createLink($sp_title, $url, array('title'=>$LANG_STATIC['title_display']));
+            } else {
+                $retval = '<span class="disabledfield">' . $sp_title . '</span>';
+            }
+            break;
+
+        case 'access':
+            if ($access == 3) {
+                $privs = $LANG_ACCESS['edit'];
+            } else {
+                $privs = $LANG_ACCESS['readonly'];
+            }
+            $retval = ($enabled) ? $privs : '<span class="disabledfield">' . $privs . '</span>';
+            break;
+
+        case "sp_uid":
+            $owner = COM_getDisplayName ($A['sp_uid']);
+            $retval = ($enabled) ? $owner : '<span class="disabledfield">' . $owner . '</span>';
+            break;
+
+        case "sp_centerblock":
+            if ($A['sp_centerblock']) {
+                switch ($A['sp_where']) {
+                    case '1': $where = $LANG_STATIC['centerblock_top']; break;
+                    case '2': $where = $LANG_STATIC['centerblock_feat']; break;
+                    case '3': $where = $LANG_STATIC['centerblock_bottom']; break;
+                    default:  $where = $LANG_STATIC['centerblock_entire']; break;
+                }
+            } else {
+                $where = $LANG_STATIC['centerblock_no'];
+            }
+            $retval = ($enabled) ? $where : '<span class="disabledfield">' . $where . '</span>';
+            break;
+
+        case "unixdate":
+            $datetime = strftime ($_CONF['daytime'], $A['unixdate']);
+            $retval = ($enabled) ? $datetime : '<span class="disabledfield">' . $datetime . '</span>';
+            break;
+
+        case 'delete':
+            if ($access == 3) {
+                $attr['title'] = $LANG_ADMIN['delete'];
+                $attr['onclick'] = "return confirm('" . $LANG_STATIC['delete_confirm'] . "');";
+                $retval .= (!empty($retval)) ? '&nbsp;&nbsp;' : '';
+                $retval .= COM_createLink(
+                    $icon_arr['delete'],
+                    $_CONF['site_admin_url'] . '/plugins/staticpages/index.php'
+                    . '?delete=x&amp;sp_id=' . $A['sp_id'], $attr);
+            }
+            break;
+
+        case 'sp_status':
+            if ($access == 3) {
+                if ($enabled) {
+                    $switch = ' checked="checked"';
+                    $title = 'title="' . $LANG_ADMIN['disable'] . '" ';
+                } else {
+                    $title = 'title="' . $LANG_ADMIN['enable'] . '" ';
+                    $switch = '';
+                }
+                $retval = '<input type="checkbox" name="enabledstaticpages[' . $A['sp_id'] . ']" ' . $title
+                    . 'onclick="submit()" value="1"' . $switch . XHTML . '>';
+                $retval .= '<input type="hidden" name="sp_idarray['.$A['sp_id'].']" value="1" />';
+            } else {
+                $retval = ($enabled) ? $LANG_ACCESS['yes'] : $LANG_ACCESS['No'];
+            }
+            break;
+
+        default:
+            $retval = ($enabled) ? $fieldvalue : '<span class="disabledfield">' . $fieldvalue . '</span>';
+            break;
+    }
+    return $retval;
 }
-$sp_id = '';
-if (isset($_REQUEST['sp_id'])) {
-    $sp_id = COM_applyFilter ($_REQUEST['sp_id']);
+
+function PAGE_list($token)
+{
+    global $_CONF, $_TABLES, $_IMAGE_TYPE, $LANG_ADMIN, $LANG_ACCESS, $LANG_STATIC;
+    require_once $_CONF['path_system'] . 'lib-admin.php';
+    $retval = '';
+
+    $header_arr = array(      # display 'text' and use table field 'field'
+        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG_ADMIN['copy'], 'field' => 'copy', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG_STATIC['id'], 'field' => 'sp_id', 'sort' => true),
+        array('text' => $LANG_ADMIN['title'], 'field' => 'sp_title', 'sort' => true),
+        array('text' => $LANG_STATIC['head_centerblock'], 'field' => 'sp_centerblock', 'sort' => true, 'align' => 'center'),
+        array('text' => $LANG_STATIC['writtenby'], 'field' => 'sp_uid', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG_STATIC['date'], 'field' => 'unixdate', 'sort' => true, 'align' => 'center'),
+        array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG_ADMIN['enabled'], 'field' => 'sp_status', 'sort' => true, 'align' => 'center'),
+    );
+    $defsort_arr = array('field' => 'sp_title', 'direction' => 'asc');
+
+    $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/plugins/staticpages/index.php?edit=x',
+              'text' => $LANG_ADMIN['create_new']),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
+
+    $retval .= COM_startBlock($LANG_STATIC['staticpagelist'], '',
+                              COM_getBlockTemplate('_admin_block', 'header'));
+
+    $retval .= ADMIN_createMenu($menu_arr, $LANG_STATIC['instructions'], plugin_geticon_staticpages());
+
+    $text_arr = array(
+        'has_extras' => true,
+        'form_url' => $_CONF['site_admin_url'] . '/plugins/staticpages/index.php'
+    );
+
+    $query_arr = array(
+        'table' => 'staticpage',
+        'sql' => "SELECT *,UNIX_TIMESTAMP(sp_date) AS unixdate "
+                ."FROM {$_TABLES['staticpage']} WHERE 1=1 ",
+        'query_fields' => array('sp_title', 'sp_id'),
+        'default_filter' => COM_getPermSQL ('AND')
+    );
+
+    // this is a dummy variable so we know the form has been used if all plugins
+    //  should be disabled in order to disable the last one.
+    $form_arr = array(
+            'top'    => '<input type="hidden" name="'.CSRF_TOKEN.'" value="'.$token.'"/>',
+            'bottom' => '<input type="hidden" name="staticpageenabler" value="true"' . XHTML . '>'
+    );
+
+    $retval .= ADMIN_list('static_pages', 'PAGE_getListField',
+                          $header_arr, $text_arr, $query_arr, $defsort_arr, '', $token, '', $form_arr);
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+
+    return $retval;
+
 }
 
-$display = '';
-
-if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete']) && SEC_checkToken()) {
-    if (empty ($sp_id) || (is_numeric ($sp_id) && ($sp_id == 0))) {
-        COM_errorLog ('Attempted to delete static page sp_id=' . $sp_id);
-    } else {
-        $args = array(
-                    'sp_id' => $sp_id
-                     );
-        PLG_invokeService('staticpages', 'delete', $args, $display, $svc_msg);
-    }
-} else if ($mode == 'edit') {
-    @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
-               time() + 1200, $_CONF['cookie_path'],
-               $_CONF['cookiedomain'], $_CONF['cookiesecure']);
-    $display .= COM_siteHeader ('menu', $LANG_STATIC['staticpageeditor']);
-    $editor = '';
-    if (isset ($_GET['editor'])) {
-        $editor = COM_applyFilter ($_GET['editor']);
-    }
-    $display .= staticpageeditor ($sp_id, $mode, $editor);
-    $display .= COM_siteFooter ();
-} else if ($mode == 'clone') {
-    if (!empty ($sp_id)) {
-        @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
-                   time() + 1200, $_CONF['cookie_path'],
-                   $_CONF['cookiedomain'], $_CONF['cookiesecure']);
-        $display .= COM_siteHeader('menu', $LANG_STATIC['staticpageeditor']);
-        $display .= staticpageeditor($sp_id,$mode);
-        $display .= COM_siteFooter();
-    } else {
-        $display = COM_refresh ($_CONF['site_admin_url'] . '/index.php');
-    }
-} else if (($mode == $LANG_ADMIN['save']) && !empty ($LANG_ADMIN['save'])) {
-    if ( SEC_checkToken() ) {
-        // purge any tokens we created for the advanced editor
-        $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'";
-        DB_query($sql,1);
-
-        if (!empty ($sp_id)) {
-            if (!isset ($_POST['sp_onmenu'])) {
-                $_POST['sp_onmenu'] = '';
+/**
+* Toggle status of a staticpage from enabled to disabled and back
+*
+* @param    array   $enabledstaticpages    array of sp_id's available
+* @param    array   $spidarray             array of status (1/0)
+* @return   void
+*
+*/
+function PAGE_toggleStatus($enabledstaticpages,$sp_idarray)
+{
+    global $_TABLES, $_DB_table_prefix;
+    if (isset($sp_idarray) && is_array($sp_idarray) ) {
+        foreach ($sp_idarray AS $sp_id => $junk ) {
+            $sp_id = COM_applyFilter($sp_id);
+            if (isset($enabledstaticpages[$sp_id])) {
+                DB_query ("UPDATE {$_TABLES['staticpage']} SET sp_status = '1' WHERE sp_id = '".DB_escapeString($sp_id)."'");
+            } else {
+                DB_query ("UPDATE {$_TABLES['staticpage']} SET sp_status = '0' WHERE sp_id = '".DB_escapeString($sp_id)."'");
             }
-            if (!isset ($_POST['sp_php'])) {
-                $_POST['sp_php'] = '';
-            }
-            if (!isset ($_POST['sp_nf'])) {
-                $_POST['sp_nf'] = '';
-            }
-            if (!isset ($_POST['sp_centerblock'])) {
-                $_POST['sp_centerblock'] = '';
-            }
-            $help = '';
-            if (isset ($_POST['sp_help'])) {
-                $sp_help = COM_sanitizeUrl ($_POST['sp_help'], array ('http', 'https'));
-            }
-            if (!isset ($_POST['sp_inblock'])) {
-                $_POST['sp_inblock'] = '';
-            }
-            $sp_uid = COM_applyFilter ($_POST['sp_uid'], true);
-            if ($sp_uid == 0) {
-                $sp_uid = $_USER['uid'];
-            }
-            if (!isset ($_POST['postmode'])) {
-                $_POST['postmode'] = '';
-            }
-            $display .= submitstaticpage ($sp_id, $sp_uid, COM_stripslashes($_POST['sp_title']),
-                COM_stripslashes($_POST['sp_content']), COM_applyFilter ($_POST['sp_hits'], true),
-                COM_applyFilter ($_POST['sp_format']), $_POST['sp_onmenu'],
-                $_POST['sp_label'], COM_applyFilter ($_POST['commentcode'], true),
-                COM_applyFilter ($_POST['owner_id'], true),
-                COM_applyFilter ($_POST['group_id'], true), $_POST['perm_owner'],
-                $_POST['perm_group'], $_POST['perm_members'], $_POST['perm_anon'],
-                $_POST['sp_php'], $_POST['sp_nf'],
-                COM_applyFilter ($_POST['sp_old_id']), $_POST['sp_centerblock'],
-                $sp_help, COM_applyFilter ($_POST['sp_tid']),
-                COM_applyFilter ($_POST['sp_where'], true), $_POST['sp_inblock'],
-                COM_applyFilter ($_POST['postmode']),
-                isset($_POST['sp_search']) ? 1 : 0);
-        } else {
-            $display = COM_refresh ($_CONF['site_admin_url'] . '/index.php');
         }
-    } else {
-        //token expired?
+    }
+    CTL_clearCache();
+}
+
+// MAIN ========================================================================
+
+$action = '';
+$expected = array('edit','clone','save','delete','cancel');
+foreach($expected as $provided) {
+    if (isset($_POST[$provided])) {
+        $action = $provided;
+    } elseif (isset($_GET[$provided])) {
+	$action = $provided;
+    }
+}
+
+$sp_id = '';
+if (isset($_POST['sp_id'])) {
+    $sp_id = COM_applyFilter($_POST['sp_id']);
+} elseif (isset($_GET['sp_id'])) {
+    $sp_id = COM_applyFilter($_GET['sp_id']);
+}
+
+$validtoken = SEC_checkToken();
+
+if (isset ($_POST['staticpageenabler']) && $validtoken) {
+    $enabledstaticpages = array();
+    if (isset($_POST['enabledstaticpages'])) {
+        $enabledstaticpages = $_POST['enabledstaticpages'];
+    }
+    $sp_idarray = array();
+    if ( isset($_POST['sp_idarray']) ) {
+        $sp_idarray = $_POST['sp_idarray'];
+    }
+    PAGE_toggleStatus($enabledstaticpages,$sp_idarray);
+    // force a refresh to redisplay staticpage status
+    header ('Location: ' . $_CONF['site_admin_url'] . '/plugins/staticpages/index.php');
+    exit;
+}
+
+switch ($action) {
+
+    case 'edit':
         @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
                    time() + 1200, $_CONF['cookie_path'],
                    $_CONF['cookiedomain'], $_CONF['cookiesecure']);
         $display .= COM_siteHeader ('menu', $LANG_STATIC['staticpageeditor']);
-        $display .= COM_showMessage(501);
         $editor = '';
         if (isset ($_GET['editor'])) {
             $editor = COM_applyFilter ($_GET['editor']);
         }
-        $mode = 'edit';
-        $owner_id = $_POST['owner_id'];
-        $group_id = $_POST['group_id'];
-        $perm_owner = $_POST['perm_owner'];
-        $perm_group = $_POST['perm_group'];
-        $perm_members = $_POST['perm_members'];
-        $perm_anon = $_POST['perm_anon'];
-        list($perm_owner,$perm_group,$perm_members,$perm_anon) = SEC_getPermissionValues($perm_owner,$perm_group,$perm_members,$perm_anon);
-        $_POST['perm_owner'] = $perm_owner;
-        $_POST['perm_group'] = $perm_group;
-        $_POST['perm_members'] = $perm_members;
-        $_POST['perm_anon'] = $perm_anon;
-        $sp_centerblock = $_POST['sp_centerblock'];
-        $sp_help = '';
-        if (!empty($_POST['sp_help'])) {
-            $sp_help = $_POST['sp_help'];
-        }
-        $sp_inblock = $_POST['sp_inblock'];
-        $sp_search = $_POST['sp_search'];
-        $sp_onmenu = $_POST['sp_onmenu'];
-        $sp_nf     = $_POST['sp_nf'];
-        if ($sp_onmenu == 'on') {
-            $_POST['sp_onmenu'] = 1;
-        } else {
-            $_POST['sp_onmenu'] = 0;
-        }
-        if ($sp_nf == 'on') {
-            $_POST['sp_nf'] = 1;
-        } else {
-            $_POST['sp_nf'] = 0;
-        }
-        if ($sp_centerblock == 'on') {
-            $_POST['sp_centerblock'] = 1;
-        } else {
-            $_POST['sp_centerblock'] = 0;
-        }
-        if ($sp_inblock == 'on') {
-            $_POST['sp_inblock'] = 1;
-        } else {
-            $_POST['sp_inblock'] = 0;
-        }
-        $display .= staticpageeditor ($sp_id, '', $editor);
+        $display .= PAGE_edit($sp_id, $action, $editor);
         $display .= COM_siteFooter ();
-    }
-} else {
-    $display .= COM_siteHeader ('menu', $LANG_STATIC['staticpagelist']);
-    $display .= liststaticpages();
-    $display .= COM_siteFooter ();
+        break;
+
+    case 'clone':
+        if (!empty($sp_id)) {
+            @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                       time() + 1200, $_CONF['cookie_path'],
+                       $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+            $display .= COM_siteHeader('menu', $LANG_STATIC['staticpageeditor']);
+            $display .= PAGE_edit($sp_id,$action);
+            $display .= COM_siteFooter();
+        } else {
+            $display = COM_refresh ($_CONF['site_admin_url'] . '/index.php');
+        }
+        break;
+
+    case 'save':
+        if ( $validtoken ) {
+            // purge any tokens we created for the advanced editor
+            $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'";
+            DB_query($sql,1);
+
+            if (!empty ($sp_id)) {
+                if (!isset ($_POST['sp_onmenu'])) {
+                    $_POST['sp_onmenu'] = '';
+                }
+                if (!isset ($_POST['sp_php'])) {
+                    $_POST['sp_php'] = '';
+                }
+                if (!isset ($_POST['sp_nf'])) {
+                    $_POST['sp_nf'] = '';
+                }
+                if (!isset ($_POST['sp_centerblock'])) {
+                    $_POST['sp_centerblock'] = '';
+                }
+                $help = '';
+                if (isset ($_POST['sp_help'])) {
+                    $sp_help = COM_sanitizeUrl ($_POST['sp_help'], array ('http', 'https'));
+                }
+                if (!isset ($_POST['sp_inblock'])) {
+                    $_POST['sp_inblock'] = '';
+                }
+                $sp_uid = COM_applyFilter ($_POST['sp_uid'], true);
+                if ($sp_uid == 0) {
+                    $sp_uid = $_USER['uid'];
+                }
+                if (!isset ($_POST['postmode'])) {
+                    $_POST['postmode'] = '';
+                }
+                $display .= PAGE_submit($sp_id, isset($_POST['sp_status']) ? 1 : 0, $sp_uid, COM_stripslashes($_POST['sp_title']),
+                    COM_stripslashes($_POST['sp_content']), COM_applyFilter ($_POST['sp_hits'], true),
+                    COM_applyFilter ($_POST['sp_format']), $_POST['sp_onmenu'],
+                    $_POST['sp_label'], COM_applyFilter ($_POST['commentcode'], true),
+                    COM_applyFilter ($_POST['owner_id'], true),
+                    COM_applyFilter ($_POST['group_id'], true), $_POST['perm_owner'],
+                    $_POST['perm_group'], $_POST['perm_members'], $_POST['perm_anon'],
+                    $_POST['sp_php'], $_POST['sp_nf'],
+                    COM_applyFilter ($_POST['sp_old_id']), $_POST['sp_centerblock'],
+                    $sp_help, COM_applyFilter ($_POST['sp_tid']),
+                    COM_applyFilter ($_POST['sp_where'], true), $_POST['sp_inblock'],
+                    COM_applyFilter ($_POST['postmode']),
+                    isset($_POST['sp_search']) ? 1 : 0);
+            } else {
+                $display = COM_refresh ($_CONF['site_admin_url'] . '/index.php');
+            }
+        } else {
+            //token expired?
+            @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                       time() + 1200, $_CONF['cookie_path'],
+                       $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+            $display .= COM_siteHeader ('menu', $LANG_STATIC['staticpageeditor']);
+            $display .= COM_showMessage(501);
+            $editor = '';
+            if (isset ($_GET['editor'])) {
+                $editor = COM_applyFilter ($_GET['editor']);
+            }
+            // $mode = 'edit';
+            $owner_id = $_POST['owner_id'];
+            $group_id = $_POST['group_id'];
+            $perm_owner = $_POST['perm_owner'];
+            $perm_group = $_POST['perm_group'];
+            $perm_members = $_POST['perm_members'];
+            $perm_anon = $_POST['perm_anon'];
+            list($perm_owner,$perm_group,$perm_members,$perm_anon) = SEC_getPermissionValues($perm_owner,$perm_group,$perm_members,$perm_anon);
+            $_POST['perm_owner'] = $perm_owner;
+            $_POST['perm_group'] = $perm_group;
+            $_POST['perm_members'] = $perm_members;
+            $_POST['perm_anon'] = $perm_anon;
+            $sp_centerblock = $_POST['sp_centerblock'];
+            $sp_help = '';
+            if (!empty($_POST['sp_help'])) {
+                $sp_help = $_POST['sp_help'];
+            }
+            $sp_inblock = $_POST['sp_inblock'];
+            $sp_search = $_POST['sp_search'];
+            $sp_onmenu = $_POST['sp_onmenu'];
+            $sp_nf     = $_POST['sp_nf'];
+            if ($sp_onmenu == 'on') {
+                $_POST['sp_onmenu'] = 1;
+            } else {
+                $_POST['sp_onmenu'] = 0;
+            }
+            if ($sp_nf == 'on') {
+                $_POST['sp_nf'] = 1;
+            } else {
+                $_POST['sp_nf'] = 0;
+            }
+            if ($sp_centerblock == 'on') {
+                $_POST['sp_centerblock'] = 1;
+            } else {
+                $_POST['sp_centerblock'] = 0;
+            }
+            if ($sp_inblock == 'on') {
+                $_POST['sp_inblock'] = 1;
+            } else {
+                $_POST['sp_inblock'] = 0;
+            }
+            $display .= PAGE_edit($sp_id, '', $editor);
+            $display .= COM_siteFooter ();
+        }
+        break;
+
+    case 'delete':
+        if (empty($sp_id) || (is_numeric ($sp_id) && ($sp_id == 0))) {
+            COM_errorLog('Attempted to delete staticpage, sp_id empty or null, value =' . $sp_id);
+            $display .= COM_refresh($_CONF['site_admin_url'] . '/plugins/staticpages/index.php');
+        } elseif ($validtoken) {
+            $args = array(
+                        'sp_id' => $sp_id
+                         );
+            PLG_invokeService('staticpages', 'delete', $args, $display, $svc_msg);
+        } else {
+            COM_accessLog("User {$_USER['username']} tried to illegally delete staticpage $sp_id and failed CSRF checks.");
+            echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
+        }
+        break;
+
+    default:
+        $token = SEC_createToken();
+        $display .= COM_siteHeader ('menu', $LANG_STATIC['staticpagelist']);
+        $display .= PAGE_list($token);
+        $display .= COM_siteFooter ();
+        break;
 }
 
 echo $display;

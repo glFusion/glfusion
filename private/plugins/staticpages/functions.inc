@@ -100,7 +100,7 @@ function plugin_getmenuitems_staticpages()
         }
     }
 
-    $result = DB_query('SELECT sp_id, sp_label FROM ' . $_TABLES['staticpage'] . ' WHERE sp_onmenu = 1' . COM_getPermSql('AND') . COM_getLangSql('sp_id', 'AND') . $order);
+    $result = DB_query('SELECT sp_id, sp_label FROM ' . $_TABLES['staticpage'] . ' WHERE sp_onmenu = 1 AND sp_status = 1' . COM_getPermSql('AND') . COM_getLangSql('sp_id', 'AND') . $order);
     $nrows = DB_numRows ($result);
     $menuitems = array ();
     for ($i = 0; $i < $nrows; $i++) {
@@ -156,7 +156,7 @@ function plugin_displaycomment_staticpages ($id, $cid, $title, $order, $format, 
     $sql = "SELECT COUNT(*) AS count, commentcode, owner_id, group_id, perm_owner, "
         . "perm_group, perm_members, perm_anon "
         . "FROM {$_TABLES['staticpage']} "
-        . "WHERE (sp_id = '".DB_escapeString($id)."')" . COM_getPermSQL('AND')
+        . "WHERE (sp_id = '".DB_escapeString($id)."') AND (sp_status = 1)" . COM_getPermSQL('AND')
         . ' GROUP BY sp_id';
     $result = DB_query ($sql);
     $A = DB_fetchArray ($result);
@@ -268,6 +268,8 @@ function plugin_getwhatsnewcomment_staticpages()
     } else {
         $stwhere .= "({$_TABLES['staticpage']}.perm_anon IS NOT NULL)";
     }
+    $stwhere .= " AND ({$_TABLES['staticpage']}.sp_status = 1)";
+
     $sql = "SELECT DISTINCT COUNT(*) AS dups, {$_TABLES['staticpage']}.sp_title AS title,
             {$_TABLES['staticpage']}.sp_id AS sid, UNIX_TIMESTAMP(max({$_TABLES['comments']}.date)) AS lastdate
             FROM {$_TABLES['comments']} LEFT JOIN {$_TABLES['staticpage']} ON (({$_TABLES['staticpage']}.sp_id = {$_TABLES['comments']}.sid)"
@@ -310,7 +312,7 @@ function SP_countVisiblePages ()
     if (!empty ($perms)) {
         $perms = ' WHERE ' . $perms;
     }
-    $result = DB_query ("SELECT COUNT(*) AS cnt FROM {$_TABLES['staticpage']}" . $perms);
+    $result = DB_query ("SELECT COUNT(*) AS cnt FROM {$_TABLES['staticpage']}" . $perms . " AND sp_status = 1");
     $A = DB_fetchArray ($result);
 
     return $A['cnt'];
@@ -374,7 +376,7 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
             $editiconhtml = COM_createImage($icon_url, $LANG_STATIC['edit'], $attr);
             $attr = array('class' => 'editlink','title' => $LANG_STATIC['edit']);
             $url = $_CONF['site_admin_url']
-                . '/plugins/staticpages/index.php?mode=edit&amp;sp_id=' . $page;
+                . '/plugins/staticpages/index.php?edit=x&amp;sp_id=' . $page;
             $icon =
                 '&nbsp;' . COM_createLink(
                 $editiconhtml, //display
@@ -560,7 +562,7 @@ function plugin_showstats_staticpages($showsitestats)
     if (!empty ($perms)) {
         $perms = ' AND ' . $perms;
     }
-    $result = DB_query ("SELECT sp_id,sp_title,sp_hits FROM {$_TABLES['staticpage']} WHERE sp_hits > 0 AND sp_search=1 " . $perms . ' ORDER BY sp_hits DESC LIMIT 10');
+    $result = DB_query ("SELECT sp_id,sp_title,sp_hits FROM {$_TABLES['staticpage']} WHERE sp_hits > 0 AND sp_search = 1 AND sp_status = 1 " . $perms . ' ORDER BY sp_hits DESC LIMIT 10');
     $nrows  = DB_numRows ($result);
     if ($nrows > 0) {
         require_once( $_CONF['path_system'] . 'lib-admin.php' );
@@ -645,7 +647,7 @@ function plugin_dopluginsearch_staticpages($query, $datestart, $dateend, $topic,
 
     $sql = "SELECT sp.sp_id AS id, sp.sp_title AS title, sp.sp_content AS description, UNIX_TIMESTAMP(sp.sp_date) AS date, sp.sp_uid AS uid, sp.sp_hits AS hits, CONCAT('/staticpages/index.php?page=', sp.sp_id) AS url ";
     $sql .= "FROM {$_TABLES['staticpage']} AS sp,{$_TABLES['users']} AS u ";
-    $sql .= "WHERE (sp.sp_uid = u.uid) AND (sp_php <> 1) AND (sp_search = 1) ";
+    $sql .= "WHERE (sp.sp_uid = u.uid) AND (sp_php <> 1) AND (sp_search = 1) AND (sp_status = 1) ";
     $sql .= COM_getPermSQL('AND') . COM_getLangSQL('sp_id', 'AND', 'sp') . ' ';
 
     if (!empty ($author))
@@ -806,7 +808,7 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
     global $_CONF, $_TABLES, $_SP_CONF, $LANG_STATIC, $_IMAGE_TYPE, $LANG01;
 
     $retval = '';
-    $moresql = "(sp_where = " . (int) $where . ") AND ";
+    $moresql = "(sp_where = " . (int) $where . ") AND (sp_status = 1) AND ";
 
     if (empty ($topic)) {
         $moresql .= "((sp_tid = 'none') OR (sp_tid = 'all'))";
@@ -886,7 +888,7 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
                 $attr = array('title' => $LANG_STATIC['edit']);
                 $editiconhtml = COM_createImage($icon_url, $LANG_STATIC['edit'], $attr);
                 $url = $_CONF['site_admin_url']
-                    . '/plugins/staticpages/index.php?mode=edit&amp;sp_id=' . $S['sp_id'];
+                    . '/plugins/staticpages/index.php?edit=x&amp;sp_id=' . $S['sp_id'];
                 $attr = array('class' => 'editlink','title' => $LANG_STATIC['edit']);
                 $icon =
                     '&nbsp;' . COM_createLink(
@@ -993,9 +995,13 @@ function plugin_autotags_staticpages($op, $content = '', $autotag = '')
     if ($op == 'tagname' ) {
         return array('staticpage', 'staticpage_content');
     } else if ($op == 'parse') {
-        if ($autotag['tag'] == 'staticpage' ) {
+        if (($autotag['tag'] == 'staticpage') || ($autotag['tag'] == 'staticpage_content' )) {
             $sp_id = COM_applyFilter($autotag['parm1']);
+            $sp_status = 0;
             if (! empty($sp_id)) {
+                $sp_status = DB_getItem($_TABLES['staticpage'], 'sp_status', "sp_id = '".DB_escapeString($sp_id)."'");
+            }
+            if (($autotag['tag'] == 'staticpage') && ($sp_status == 1)) {
                 $url = COM_buildUrl($_CONF['site_url']
                                     . '/staticpages/index.php?page=' . $sp_id);
                 if (empty($autotag['parm2'])) {
@@ -1006,10 +1012,7 @@ function plugin_autotags_staticpages($op, $content = '', $autotag = '')
                 }
                 $link = COM_createLink($linktext, $url);
                 $content = str_replace($autotag['tagstr'], $link, $content);
-            }
-        } else if ($autotag['tag'] == 'staticpage_content') {
-            $sp_id = COM_applyFilter($autotag['parm1']);
-            if (! empty($sp_id)) {
+            } else if (($autotag['tag'] == 'staticpage_content') && ($sp_status == 1)) {
                 if (isset($recursive[$sp_id])) {
                     $content = '';
                 } else {
@@ -1088,56 +1091,6 @@ function staticpages_templatePath ($path = '')
     return $retval;
 }
 
-function plugin_getListField_staticpages($fieldname, $fieldvalue, $A, $icon_arr)
-{
-    global $_CONF, $LANG_ADMIN, $LANG_STATIC, $_TABLES;
-
-    switch($fieldname) {
-        case "edit":
-            $retval = COM_createLink($icon_arr['edit'],
-                "{$_CONF['site_admin_url']}/plugins/staticpages/index.php?mode=edit&amp;sp_id={$A['sp_id']}");
-            break;
-        case "copy":
-            $retval = COM_createLink($icon_arr['copy'],
-                "{$_CONF['site_admin_url']}/plugins/staticpages/index.php?mode=clone&amp;sp_id={$A['sp_id']}");
-            break;
-        case "delete" :
-            $retval = COM_createLink('<img src="'.$_CONF['site_url'].'/staticpages/images/delete.png" alt="Delete" />',
-                $_CONF['site_admin_url'].'/plugins/staticpages/index.php?mode='.$LANG_ADMIN['delete'].'&amp;sp_id='.$A['sp_id'].'&amp;'.CSRF_TOKEN.'='.SEC_createToken().'" onclick="return confirm(\''.$LANG_STATIC['delete_confirm'].'\');"');
-            break;
-        case "sp_title":
-            $sp_title = $A['sp_title'];
-            $url = COM_buildUrl ($_CONF['site_url'] .
-                                 '/staticpages/index.php?page=' . $A['sp_id']);
-            $retval = COM_createLink($sp_title, $url, array('title'=>$LANG_STATIC['title_display']));
-            break;
-        case "sp_uid":
-            $retval = COM_getDisplayName ($A['sp_uid']);
-            break;
-        case "sp_centerblock":
-            if ($A['sp_centerblock']) {
-                switch ($A['sp_where']) {
-                    case '1': $where = $LANG_STATIC['centerblock_top']; break;
-                    case '2': $where = $LANG_STATIC['centerblock_feat']; break;
-                    case '3': $where = $LANG_STATIC['centerblock_bottom']; break;
-                    case '4': $where = $LANG_STATIC['centerblock_nonews']; break;
-                    default:  $where = $LANG_STATIC['centerblock_entire']; break;
-                }
-                $retval = $where;
-            } else {
-                $retval = $LANG_STATIC['centerblock_no'];
-            }
-            break;
-        case "unixdate":
-            $retval = strftime ($_CONF['daytime'], $A['unixdate']);
-            break;
-        default:
-            $retval = $fieldvalue;
-            break;
-    }
-    return $retval;
-}
-
 /**
 * Return information for a static page
 *
@@ -1176,9 +1129,9 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
         case 'label':
             $fields[] = 'sp_id';
             break;
-//      case 'status':
-//          $fields[] = 'sp_status';
-//          break;
+        case 'status':
+            $fields[] = 'sp_status';
+            break;
         default:
             break;
         }
@@ -1246,8 +1199,7 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
                     $props['label'] = $LANG_STATIC['staticpages'];
                     break;
                 case 'status':
-//                  $props['status'] = $A['sp_status'];
-                    $props['status'] = 1; // stub - default
+                    $props['status'] = $A['sp_status'];
                     break;
                 default:
                     $props[$p] = '';

@@ -50,8 +50,13 @@ function staticpages_upgrade()
     switch( $currentVersion ) {
         case '1.5.0' :
             $rc = update_150_to_151();
+        case '1.5.1' :
+        case '1.5.2' :
+        case '1.5.3' :
+            DB_query("ALTER TABLE {$_TABLES['staticpage']} ADD sp_search tinyint(4) NOT NULL default '1' AFTER postmode");
+        case '1.5.4' :
+            DB_query("ALTER TABLE {$_TABLES['staticpage']} ADD sp_status tinyint(3) NOT NULL DEFAULT '1' AFTER sp_id");
         default :
-            DB_query("ALTER TABLE {$_TABLES['staticpage']} ADD sp_search tinyint(4) NOT NULL default '1' AFTER postmode",1);
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_SP_CONF['pi_version']."',pi_gl_version='".$_SP_CONF['gl_version']."' WHERE pi_name='staticpages' LIMIT 1");
             break;
     }

@@ -37,12 +37,23 @@
             <td><input type="text" dir="ltr" name="sp_id" size="40" maxlength="40" value="{sp_id}"{xhtml}></td>
           </tr>
           <tr>
-            <td align="right">{$LANG_STATIC[search]}:</td>
-            <td><input type="checkbox" name="sp_search" id="sp_search" value="1"{sp_search_checked}{xhtml}></td>
+            <td align="right">
+                {$LANG_ADMIN[enabled]}:
+            </td>
+            <td>
+                <input type="checkbox" name="sp_status" id="sp_status" value="1"{sp_status_checked}{xhtml}>
+                &nbsp;&nbsp;{$LANG_STATIC[search]}:&nbsp;
+                <input type="checkbox" name="sp_search" id="sp_search" value="1"{sp_search_checked}{xhtml}>
+            </td>
           </tr>
           <tr>
             <td align="right">{lang_url}:</td>
-            <td>{example_url}</td>
+            <td>
+                {example_url}
+                &nbsp;&nbsp;&nbsp;
+                {lang_hits}: {sp_hits_formatted}
+                <input type="hidden" name="sp_hits" value="{sp_hits}"{xhtml}>
+            </td>
           </tr>
           <tr>
               <td valign="top" align="right">{lang_content}:</td>
@@ -50,6 +61,9 @@
                   <textarea name="sp_content" style="width:99%" cols="45" rows="24">{sp_content}</textarea>
                   <br{xhtml}><span class="warningsmall">{lang_allowedhtml}</span><br{xhtml}><br{xhtml}>
               </td>
+          </tr>
+          <tr>
+              <td colspan="2">&nbsp;</td>
           </tr>
           <tr>
               <td align="right">{lang_writtenby}:</td>
@@ -60,7 +74,7 @@
               <td>{sp_formateddate}</td>
           </tr>
           <tr>
-              <td colspan="2"><hr{xhtml}></td>
+              <td colspan="2"><div style="margin:10px 0 5px 0;border-bottom:1px solid #cccccc"></div></td>
           </tr>
           <tr>
               <td align="right" valign="top">{lang_centerblock}</td>
@@ -71,7 +85,7 @@
               <td>{pos_selection}&nbsp;&nbsp;&nbsp;{lang_topic}&nbsp;&nbsp;{topic_selection}</td>
           </tr>
           <tr>
-              <td colspan="2"><hr{xhtml}></td>
+              <td colspan="2"><div style="margin:10px 0 5px 0;border-bottom:1px solid #cccccc"></div></td>
           </tr>
           <tr>
               <td align="right" valign="top">{inblock_msg}</td>
@@ -91,7 +105,7 @@
               <td valign="top"><input type="checkbox" name="sp_nf" {exit_checked}{xhtml}>&nbsp;&nbsp;{exit_info}</td>
           </tr>
           <tr>
-              <td colspan="2"><hr{xhtml}></td>
+              <td colspan="2"><div style="margin:10px 0 5px 0;border-bottom:1px solid #cccccc"></div></td>
           </tr>
           <tr>
               <td colspan="2"><b>{lang_accessrights}</b></td>
@@ -107,34 +121,32 @@
               </td>
           </tr>
           <tr>
-              <td colspan="2"><b>{lang_permissions}</b>:</td>
+              <td colspan="2"><b>{lang_permissions}</b></td>
           </tr>
           <tr>
               <td colspan="2"></td>
           </tr>
           <tr>
-              <td colspan="2">{lang_perm_key}</td>
+              <td></td>
+              <td>{lang_perm_key}</td>
           </tr>
           <tr>
-              <td colspan="2">
+              <td></td>
+              <td>
               {permissions_editor}
               </td>
           </tr>
           <tr>
-              <td colspan="2">{permissions_msg}</td>
+              <td></td>
+              <td>{permissions_msg}</td>
           </tr>
           <tr>
-              <td colspan="2"><hr{xhtml}></td>
+              <td colspan="2"><div style="margin:10px 0 5px 0;border-bottom:1px solid #cccccc"></div></td>
           </tr>
-          <tr>
-              <td align="right">{lang_hits}:</td>
-              <td><input type="hidden" name="sp_hits" value="{sp_hits}"{xhtml}>{sp_hits_formatted}</td>
-          </tr>
-          <tr><td>&nbsp;</td></tr>
           <tr>
               <td colspan="2">
-                  <input type="submit" value="{lang_save}" name="mode"{xhtml}>
-                  <input type="submit" value="{lang_cancel}" name="mode"{xhtml}>
+                  <input type="submit" value="{lang_save}" name="save"{xhtml}>
+                  <input type="submit" value="{lang_cancel}" name="cancel"{xhtml}>
                   {delete_option}
                   <input type="hidden" name="sp_old_id" value="{sp_old_id}"{xhtml}>
                   <input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}>
