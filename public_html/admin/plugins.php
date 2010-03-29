@@ -65,7 +65,7 @@ if (!SEC_hasrights ('plugin.edit')) {
     exit;
 }
 
-function PLUGIN_showUploadForm( )
+function PLGADM_showUploadForm( )
 {
     global $_CONF,$LANG_ADMIN,$LANG32;
 
@@ -96,7 +96,7 @@ function PLUGIN_showUploadForm( )
 * @return   string              HTML for plugin editor form or error message
 *
 */
-function PLUGIN_edit($pi_name, $confirmed = 0)
+function PLGADM_edit($pi_name, $confirmed = 0)
 {
     global $_CONF, $_TABLES, $_USER, $LANG32, $LANG_ADMIN;
 
@@ -194,7 +194,7 @@ function PLUGIN_edit($pi_name, $confirmed = 0)
 * @return   string                  HTML redirect or error message
 *
 */
-function PLUGIN_save($pi_name, $pi_version, $pi_gl_version, $enabled, $pi_homepage)
+function PLGADM_save($pi_name, $pi_version, $pi_gl_version, $enabled, $pi_homepage)
 {
     global $_CONF, $_TABLES, $LANG32;
 
@@ -226,7 +226,7 @@ function PLUGIN_save($pi_name, $pi_version, $pi_gl_version, $enabled, $pi_homepa
                             COM_getBlockTemplate ('_msg_block', 'header'));
         $retval .= COM_errorLog ('error saving plugin, no pi_name provided', 1);
         $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-        $retval .= PLUGIN_edit($pi_name);
+        $retval .= PLGADM_edit($pi_name);
         $retval .= COM_siteFooter ();
     }
     CTL_clearCache();
@@ -239,7 +239,7 @@ function PLUGIN_save($pi_name, $pi_version, $pi_gl_version, $enabled, $pi_homepa
 * @return   string      HTML containing list of uninstalled plugins
 *
 */
-function PLUGIN_showNewPlugins($token)
+function PLGADM_showNewPlugins($token)
 {
     global $_CONF, $_TABLES, $LANG32;
     require_once( $_CONF['path_system'] . 'lib-admin.php' );
@@ -309,7 +309,7 @@ function PLUGIN_showNewPlugins($token)
 * @return             string   HTML for error or success message
 *
 */
-function PLUGIN_update($pi_name)
+function PLGADM_update($pi_name)
 {
     global $_CONF, $LANG32, $LANG08, $MESSAGE, $_IMAGE_TYPE;
 
@@ -348,7 +348,7 @@ function PLUGIN_update($pi_name)
 * @return             string   HTML for error or success message
 *
 */
-function PLUGIN_unInstall($pi_name)
+function PLGADM_unInstall($pi_name)
 {
     global $_CONF, $_DB_table_prefix, $_TABLES, $LANG32, $LANG08, $MESSAGE, $_IMAGE_TYPE;
 
@@ -396,7 +396,7 @@ function PLUGIN_unInstall($pi_name)
  * used for the list of plugins in admin/plugins.php
  *
  */
-function PLUGIN_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
+function PLGADM_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
     global $_CONF, $LANG_ADMIN, $LANG32, $_PLUGINS;
 
@@ -460,7 +460,7 @@ function PLUGIN_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 * @return   string                  formatted list of plugins
 *
 */
-function PLUGIN_list($token)
+function PLGADM_list($token)
 {
     global $_CONF, $_TABLES, $LANG32, $LANG_ADMIN, $_IMAGE_TYPE;
 
@@ -511,7 +511,7 @@ function PLUGIN_list($token)
         'bottom' => '<input type="hidden" name="pluginenabler" value="true"/>'
     );
 
-    $retval .= ADMIN_list('plugins', 'PLUGIN_getListField', $header_arr,
+    $retval .= ADMIN_list('plugins', 'PLGADM_getListField', $header_arr,
                 $text_arr, $query_arr, $defsort_arr, '', $token, '', $form_arr);
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
@@ -525,7 +525,7 @@ function PLUGIN_list($token)
 * @return   void
 *
 */
-function PLUGIN_toggleStatus($plugin_name_arr, $pluginarray)
+function PLGADM_toggleStatus($plugin_name_arr, $pluginarray)
 {
     global $_TABLES, $_DB_table_prefix;
 
@@ -576,7 +576,7 @@ if (isset ($_POST['pluginenabler']) && $validtoken) {
     if ( isset($_POST['pluginarray']) ) {
         $pluginarray = $_POST['pluginarray'];
     }
-    PLUGIN_toggleStatus($enabledplugins,$pluginarray);
+    PLGADM_toggleStatus($enabledplugins,$pluginarray);
 
     // force a refresh so that the information of the plugin that was just
     // enabled / disabled (menu entries, etc.) is displayed properly
@@ -588,7 +588,7 @@ switch ($action) {
 
     case 'edit':
         $display .= COM_siteHeader ('menu', $LANG32[13]);
-        $display .= PLUGIN_edit(COM_applyFilter ($_GET['pi_name']));
+        $display .= PLGADM_edit(COM_applyFilter ($_GET['pi_name']));
         $display .= COM_siteFooter ();
         break;
 
@@ -598,7 +598,7 @@ switch ($action) {
             $pi_gl_version = (isset($_POST['pi_gl_version'])) ? COM_applyFilter($_POST['pi_gl_version']) : '';
             $enabled = (isset($_POST['enabled'])) ? COM_applyFilter($_POST['enabled']) : '';
             $pi_homepage = (isset($_POST['pi_homepage'])) ? COM_applyFilter($_POST['pi_homepage']) : '';
-            $display .= PLUGIN_save($pi_name, $pi_version, $pi_gl_version, $enabled, $pi_homepage);
+            $display .= PLGADM_save($pi_name, $pi_version, $pi_gl_version, $enabled, $pi_homepage);
         } else {
             COM_accessLog("User {$_USER['username']} tried to illegally edit plugin $pi_name and failed CSRF checks.");
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
@@ -608,7 +608,7 @@ switch ($action) {
     case 'update':
         if ($validtoken) {
             $display .= COM_siteHeader ('menu', $LANG32[13]);
-            $display .= PLUGIN_update($pi_name);
+            $display .= PLGADM_update($pi_name);
             $display .= COM_siteFooter();
         } else {
             COM_accessLog("User {$_USER['username']} tried to illegally update plugin $pi_name and failed CSRF checks.");
@@ -619,18 +619,18 @@ switch ($action) {
     case 'delete':
         if (($_POST['confirmed'] == 1) && $validtoken) {
             $display .= COM_siteHeader ('menu', $LANG32[30]);
-            $display .= PLUGIN_unInstall($pi_name);
+            $display .= PLGADM_unInstall($pi_name);
             $token = SEC_createToken();
-            $display .= PLUGIN_list($token);
-            $display .= PLUGIN_showUploadForm($token);
-            $display .= PLUGIN_showNewPlugins($token);
+            $display .= PLGADM_list($token);
+            $display .= PLGADM_showUploadForm($token);
+            $display .= PLGADM_showNewPlugins($token);
             $display .= COM_siteFooter ();
         } else { // ask user for confirmation
             $display .= COM_siteHeader ('menu', $LANG32[30]);
             $display .= COM_startBlock ($LANG32[30], '', COM_getBlockTemplate ('_msg_block', 'header'));
             $display .= $LANG32[31];
             $display .= COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
-            $display .= PLUGIN_edit($pi_name, 1);
+            $display .= PLGADM_edit($pi_name, 1);
             $display .= COM_siteFooter ();
         }
         break;
@@ -652,9 +652,9 @@ switch ($action) {
         }
         $display .= ($msg > 0) ? COM_showMessage($msg,$plugin) : '';
         $token = SEC_createToken();
-        $display .= PLUGIN_list($token);
-        $display .= PLUGIN_showUploadForm($token);
-        $display .= PLUGIN_showNewPlugins($token);
+        $display .= PLGADM_list($token);
+        $display .= PLGADM_showUploadForm($token);
+        $display .= PLGADM_showNewPlugins($token);
         $display .= COM_siteFooter();
         break;
 
