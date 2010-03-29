@@ -98,6 +98,14 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
         $A['group_id']      = isset($T['group_id']) ? $T['group_id'] : '';
         $A['imageurl']      = isset($T['imageurl']) ? $T['imageurl'] : '';
 
+    if ( $A['sortnum'] != '' ) {
+        $tidSortNumber = DB_getItem($_TABLES['topics'],'sortnum','tid="'.DB_escapeString($A['sortnum']).'"');
+        $newSortNum = $tidSortNumber;
+    } else {
+        $newSortNum = 0;
+    }
+    $A['sortnum'] = $newSortNum;
+
         // an empty owner_id signifies this is a new block, set to current user
         // this will also set the default values for group_id as well as the
         // default values for topic permissions
@@ -141,7 +149,7 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
         $topic_templates->set_var('warning_msg', $LANG27[6]);
         $topic_templates->clear_var('lang_donotusespaces');
     } else {
-        $tid_input = '<input type="text" size="20" maxlength="20" name="tid" value="'.$tid.'" />';
+        $tid_input = '<input class="fValidate[\'required\',\'space\']" type="text" size="20" maxlength="20" name="tid" id="tid" value="'.$tid.'" />';
         $topic_templates->set_var('lang_donotusespaces', $LANG27[5]);
     }
     $topic_templates->set_var('tid_input',$tid_input);
@@ -173,10 +181,16 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
     $sort_select .= '<option value="0">' . 'First Position' . '</option>' . LB;
     $result = DB_query("SELECT tid,topic,sortnum FROM {$_TABLES['topics']} ORDER BY sortnum ASC");
 
+    if ( $topicEdit == 1 ) {
+        $testvar = 10;
+    } else {
+        $testvar = 0;
+    }
+
     $order = 10;
     while ($row = DB_fetchArray($result)) {
         if ( $row['tid'] != $tid ) {
-            $test_sortnum = $order + 10;
+            $test_sortnum = $order + $testvar;
             $sort_select .= '<option value="' . $row['tid'] . '"'.($A['sortnum'] == $test_sortnum ? ' selected="selected"' : '' ) . '>' . $row['topic'] . ' ('.$row['tid'].')' . '</option>' . LB;
         }
         $order += 10;
@@ -309,14 +323,6 @@ function TOPIC_save($T)
     $is_default = $T['is_default'];
     $archive_flag = $T['archive_flag'];
 
-    if ( $sortnum != '' ) {
-        $tidSortNumber = DB_getItem($_TABLES['topics'],'sortnum','tid="'.DB_escapeString($sortnum).'"');
-        $newSortNum = $tidSortNumber + 1;
-    } else {
-        $newSortNum = 0;
-    }
-    $T['sortnum'] = $newSortNum;
-
     // error checks...
 
     if ( empty($tid) ) {
@@ -340,6 +346,14 @@ function TOPIC_save($T)
         $retval .= COM_siteFooter();
         return $retval;
     }
+
+    if ( $sortnum != '' ) {
+        $tidSortNumber = DB_getItem($_TABLES['topics'],'sortnum','tid="'.DB_escapeString($sortnum).'"');
+        $newSortNum = $tidSortNumber + 1;
+    } else {
+        $newSortNum = 0;
+    }
+    $T['sortnum'] = $newSortNum;
 
     list($perm_owner,$perm_group,$perm_members,$perm_anon) = SEC_getPermissionValues($perm_owner,$perm_group,$perm_members,$perm_anon);
 

@@ -747,7 +747,7 @@ $LANG20 = array(
     6 => 'Admin access to this site is for authorized personnel only.<br />All access is logged and reviewed.',
     7 => 'login',
     8 => 'Session Timeout - Please re-authenticate',
-    9 => 'Access to Administration Features requires re-authentication',
+    9 => 'Access to Administration Features requires authentication',
 );
 
 ###############################################################################
