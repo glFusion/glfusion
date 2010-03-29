@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Added wrapper static page widget (Eric)
 - Plugin Admin: Code scrub/UI improvements (Mark H.)
 - Topic Admin: New list-based manager, code scrub/UI improvements (Mark H.)
 - Media Gallery: Updated FCKeditor Media Browser plugin to support all auto tag
