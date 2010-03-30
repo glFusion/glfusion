@@ -609,6 +609,8 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                     $_CONF['site_admin_url'] . '/plugins/staticpages/index.php'
                     . '?delete=x&amp;sp_id=' . $A['sp_id'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
 
+            } else {
+                $retval = $icon_arr['blank'];
             }
             break;
 
@@ -623,7 +625,7 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 }
                 $retval = '<input type="checkbox" name="enabledstaticpages[' . $A['sp_id'] . ']" ' . $title
                     . 'onclick="submit()" value="1"' . $switch . XHTML . '>';
-                $retval .= '<input type="hidden" name="sp_idarray['.$A['sp_id'].']" value="1" />';
+                $retval .= '<input type="hidden" name="sp_idarray['.$A['sp_id'].']" value="1" ' . XHTML . '>';
             } else {
                 $retval = ($enabled) ? $LANG_ACCESS['yes'] : $LANG_ACCESS['No'];
             }
@@ -641,6 +643,7 @@ function PAGE_list($token)
     global $_CONF, $_TABLES, $_IMAGE_TYPE, $LANG_ADMIN, $LANG_ACCESS, $LANG_STATIC;
 
     USES_lib_admin();
+
     $retval = '';
 
     $header_arr = array(      # display 'text' and use table field 'field'
