@@ -99,7 +99,7 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
     }
 
     # define icon paths. Those will be transmitted to $fieldfunction.
-    $icons_type_arr = array('edit', 'copy', 'delete', 'list', 'mail', 'group', 'user', 'check', 'cross', 'disk', 'addchild', 'blank');
+    $icons_type_arr = array('edit', 'copy', 'delete', 'list', 'mail', 'group', 'user', 'check', 'greycheck', 'cross', 'disk', 'addchild', 'blank');
     $icon_arr = array();
     foreach ($icons_type_arr as $icon_type) {
         $icon_url = "{$_CONF['layout_url']}/images/admin/$icon_type.$_IMAGE_TYPE";
@@ -356,7 +356,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     }
 
     # define icon paths. Those will be transmitted to $fieldfunction.
-    $icons_type_arr = array('edit', 'copy', 'delete', 'list', 'mail', 'group', 'user', 'check', 'cross', 'disk', 'addchild', 'blank');
+    $icons_type_arr = array('edit', 'copy', 'delete', 'list', 'mail', 'group', 'user', 'check', 'greycheck', 'cross', 'disk', 'addchild', 'blank');
     $icon_arr = array();
     foreach ($icons_type_arr as $icon_type) {
         $icon_url = "{$_CONF['layout_url']}/images/admin/$icon_type.$_IMAGE_TYPE";

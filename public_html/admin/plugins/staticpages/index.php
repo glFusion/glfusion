@@ -638,7 +638,7 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
     return $retval;
 }
 
-function PAGE_list($token)
+function PAGE_list()
 {
     global $_CONF, $_TABLES, $_IMAGE_TYPE, $LANG_ADMIN, $LANG_ACCESS, $LANG_STATIC;
 
@@ -685,11 +685,13 @@ function PAGE_list($token)
         'default_filter' => COM_getPermSQL ('AND')
     );
 
-    // this is a dummy variable so we know the form has been used if all plugins
-    //  should be disabled in order to disable the last one.
+    // create the security token, and embed it in the list form
+    // also set the hidden var which signifies that this list allows for pages
+    // to be enabled/disabled via checkbox
+    $token = SEC_createToken();
     $form_arr = array(
-            'top'    => '<input type="hidden" name="'.CSRF_TOKEN.'" value="'.$token.'"/>',
-            'bottom' => '<input type="hidden" name="staticpageenabler" value="true"' . XHTML . '>'
+        'top'    => '<input type="hidden" name="'.CSRF_TOKEN.'" value="'.$token.'"/>',
+        'bottom' => '<input type="hidden" name="staticpageenabler" value="true"' . XHTML . '>'
     );
 
     $retval .= ADMIN_list('static_pages', 'PAGE_getListField',
@@ -911,9 +913,8 @@ switch ($action) {
         break;
 
     default:
-        $token = SEC_createToken();
         $display .= COM_siteHeader ('menu', $LANG_STATIC['staticpagelist']);
-        $display .= PAGE_list($token);
+        $display .= PAGE_list();
         $display .= COM_siteFooter ();
         break;
 }
