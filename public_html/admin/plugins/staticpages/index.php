@@ -532,8 +532,10 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
         case 'edit':
             if ($access == 3) {
                 $attr['title'] = $LANG_ADMIN['edit'];
-                $retval = COM_createLink($icon_arr['edit'],
-                    $_CONF['site_admin_url'] . '/plugins/staticpages/index.php?edit=x&amp;sp_id=' . $A['sp_id'], $attr );
+                $retval = COM_createLink(
+                    $icon_arr['edit'],
+                    $_CONF['site_admin_url'] . '/plugins/staticpages/index.php'
+                    . '?edit=x&amp;sp_id=' . $A['sp_id'], $attr );
             } else {
                 $retval = $icon_arr['blank'];
             }
@@ -542,9 +544,10 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
         case 'copy':
             if ($access >= 2) {
                 $attr['title'] = $LANG_ADMIN['copy'];
-                $retval .= (!empty($retval)) ? '&nbsp;&nbsp;' : '';
-                $retval .= COM_createLink($icon_arr['copy'],
-                    $_CONF['site_admin_url'] . '/plugins/staticpages/index.php?clone=x&amp;sp_id=' . $A['sp_id'], $attr);
+                $retval = COM_createLink(
+                    $icon_arr['copy'],
+                    $_CONF['site_admin_url'] . '/plugins/staticpages/index.php'
+                    . '?clone=x&amp;sp_id=' . $A['sp_id'], $attr);
             } else {
                 $retval = $icon_arr['blank'];
             }
@@ -553,9 +556,12 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
         case "sp_title":
             $sp_title = stripslashes($A['sp_title']);
             if ($enabled) {
-                $url = COM_buildUrl ($_CONF['site_url'] .
-                                     '/staticpages/index.php?page=' . $A['sp_id']);
-                $retval = COM_createLink($sp_title, $url, array('title'=>$LANG_STATIC['title_display']));
+                $url = COM_buildUrl(
+                    $_CONF['site_url'] .
+                    '/staticpages/index.php?page=' . $A['sp_id']);
+                $retval = COM_createLink(
+                    $sp_title, $url,
+                    array('title'=>$LANG_STATIC['title_display']));
             } else {
                 $retval = '<span class="disabledfield">' . $sp_title . '</span>';
             }
@@ -598,8 +604,7 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             if ($access == 3) {
                 $attr['title'] = $LANG_ADMIN['delete'];
                 $attr['onclick'] = "return confirm('" . $LANG_STATIC['delete_confirm'] . "');";
-                $retval .= (!empty($retval)) ? '&nbsp;&nbsp;' : '';
-                $retval .= COM_createLink(
+                $retval = COM_createLink(
                     $icon_arr['delete'],
                     $_CONF['site_admin_url'] . '/plugins/staticpages/index.php'
                     . '?delete=x&amp;sp_id=' . $A['sp_id'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
