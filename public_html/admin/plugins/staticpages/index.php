@@ -602,7 +602,8 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 $retval .= COM_createLink(
                     $icon_arr['delete'],
                     $_CONF['site_admin_url'] . '/plugins/staticpages/index.php'
-                    . '?delete=x&amp;sp_id=' . $A['sp_id'], $attr);
+                    . '?delete=x&amp;sp_id=' . $A['sp_id'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+
             }
             break;
 
