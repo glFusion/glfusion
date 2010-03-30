@@ -460,6 +460,11 @@ function glfusion_119()
     DB_query("ALTER TABLE {$_TABLES['staticpage']} ADD sp_status tinyint(3) NOT NULL DEFAULT '1' AFTER sp_id",1);
     DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.5',pi_gl_version='1.1.9' WHERE pi_name = 'staticpages'");
 
+    DB_query("ALTER TABLE {$_TABLES['events']} ADD status tinyint(3) NOT NULL DEFAULT '1' AFTER eid",1);
+    DB_query("ALTER TABLE {$_TABLES['eventsubmission']} ADD status tinyint(3) NOT NULL DEFAULT '1' AFTER eid",1);
+    DB_query("ALTER TABLE {$_TABLES['personal_events']} ADD status tinyint(3) NOT NULL DEFAULT '1' AFTER eid",1);
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.0.7',pi_gl_version='1.1.9' WHERE pi_name = 'calendar'");
+
     DB_query("UPDATE {$_TABLES['conf_values']} SET selectionArray = '0' WHERE name='searchloginrequired' AND group_name='Core'",1);
 
     // fixup the group names and admin switch

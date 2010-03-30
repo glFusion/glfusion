@@ -45,6 +45,7 @@ if (!defined ('GVERSION')) {
 $_SQL['events'] = "
 CREATE TABLE {$_TABLES['events']} (
   eid varchar(20) NOT NULL default '',
+  status tinyint(3) NOT NULL default '1',
   title varchar(128) default NULL,
   description text,
   postmode varchar(10) NOT NULL default 'plaintext',
@@ -78,6 +79,7 @@ CREATE TABLE {$_TABLES['events']} (
 $_SQL['eventsubmission'] = "
 CREATE TABLE {$_TABLES['eventsubmission']} (
   eid varchar(20) NOT NULL default '',
+  status tinyint(3) NOT NULL default '1',
   title varchar(128) default NULL,
   description text,
   location varchar(128) default NULL,
@@ -101,6 +103,7 @@ CREATE TABLE {$_TABLES['eventsubmission']} (
 $_SQL['personal_events'] = "
 CREATE TABLE {$_TABLES['personal_events']} (
   eid varchar(20) NOT NULL default '',
+  status tinyint(3) NOT NULL default '1',
   title varchar(128) default NULL,
   event_type varchar(40) NOT NULL default '',
   datestart date default NULL,

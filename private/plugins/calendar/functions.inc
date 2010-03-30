@@ -120,9 +120,9 @@ function phpblock_calendar( $help='', $title='' )
         $eventSql = 'SELECT eid,title,url,datestart,dateend,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon '
         . "FROM {$_TABLES['events']} ";
         if($_DB_dbms == 'mssql') {
-            $eventSql .= "WHERE dateend >= DATEADD(hh, 24, NOW()) AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) ";
+            $eventSql .= "WHERE dateend >= DATEADD(hh, 24, NOW()) AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) AND (status = 1)";
         } else {
-            $eventSql .= "WHERE dateend >= (NOW() - INTERVAL 24 HOUR) AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range ) ";
+            $eventSql .= "WHERE dateend >= (NOW() - INTERVAL 24 HOUR) AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range ) AND (status = 1)";
         }
         $eventSql .= 'ORDER BY datestart,timestart';
 
@@ -363,7 +363,7 @@ function plugin_moderationvalues_calendar()
     return array (
         'eid',
         $_TABLES['events'],
-        "eid,title,description,location,address1,address2,city,state,zipcode,datestart,timestart,dateend,timeend,url,owner_id",
+        "eid,status,title,description,location,address1,address2,city,state,zipcode,datestart,timestart,dateend,timeend,url,owner_id",
         $_TABLES['eventsubmission']
     );
 }
@@ -425,6 +425,47 @@ function plugin_moderationdelete_calendar($id)
     DB_delete ($_TABLES['eventsubmission'], 'eid', DB_escapeString($id));
 
     return '';
+}
+
+/**
+* Send an email notification for a new submission.
+*
+* @param    string  $table  Table where the new submission can be found
+* @param    array   $A      submission data
+*
+*/
+function CALENDAR_sendNotification($table, $A)
+{
+    global $_CONF, $_TABLES, $LANG01, $LANG08, $LANG09, $LANG_CAL_1, $LANG_CAL_2;
+
+    $title = stripslashes ($A['title']);
+    $description = stripslashes ($A['description']);
+
+    $mailbody = "$LANG09[16]: $title\n"
+              . "$LANG09[17]: " . strftime ($_CONF['date'],
+                strtotime ($A['datestart'] . ' ' . $A['timestart']));
+    if ($A['allday']) {
+        $mailbody .= ' (' . $LANG_CAL_2[26] . ')';
+    }
+    $mailbody .= "\n";
+    if (!empty ($A['url']) && ($A['url'] != 'http://')) {
+        $mailbody .= "$LANG09[33]: <" . $A['url'] . ">\n";
+    }
+    $mailbody .= "\n" . $description . "\n\n";
+    if ($table == $_TABLES['eventsubmission']) {
+        $mailbody .= "$LANG01[10] <{$_CONF['site_admin_url']}/moderation.php>\n\n";
+    } else {
+        $mailbody .= "$LANG_CAL_1[12] <{$_CONF['site_url']}/calendar/event.php?eid={$A['eid']}>\n\n";
+    }
+    $mailsubject = $_CONF['site_name'] . ' ' . $LANG_CAL_2[43];
+
+    $mailbody .= "\n------------------------------\n";
+    $mailbody .= "\n$LANG08[34]\n";
+    $mailbody .= "\n------------------------------\n";
+
+    $to = array();
+    $to = COM_formatEmailAddress( '',$_CONF['site_mail'] );
+    COM_mail ($to, $mailsubject, $mailbody);
 }
 
 /**
@@ -613,7 +654,7 @@ function plugin_savesubmission_calendar($A)
                 !SEC_hasRights('calendar.submit')) {
 
             DB_save ($_TABLES['eventsubmission'],
-                     'eid,title,event_type,url,owner_id,datestart,timestart,dateend,timeend,allday,location,address1,address2,city,state,zipcode,description',
+                     'eid,status,title,event_type,url,owner_id,datestart,timestart,dateend,timeend,allday,location,address1,address2,city,state,zipcode,description',
                      "'{$A['eid']}','{$A['title']}','{$A['event_type']}','{$A['url']}',$owner_id,'{$A['datestart']}','{$A['timestart']}','{$A['dateend']}','{$A['timeend']}',{$A['allday']},'{$A['location']}','{$A['address1']}','{$A['address2']}','{$A['city']}','{$A['state']}','{$A['zipcode']}','{$A['description']}'");
 
             if (isset ($_CA_CONF['notification']) &&
@@ -639,8 +680,8 @@ function plugin_savesubmission_calendar($A)
             SEC_setDefaultPermissions($A, $_CA_CONF['default_permissions']);
 
             DB_save ($_TABLES['events'],
-                     'eid,title,event_type,url,datestart,timestart,dateend,timeend,allday,location,address1,address2,city,state,zipcode,description,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon',
-                     "'{$A['eid']}','{$A['title']}','{$A['event_type']}','{$A['url']}','{$A['datestart']}','{$A['timestart']}','{$A['dateend']}','{$A['timeend']}',{$A['allday']},'{$A['location']}','{$A['address1']}','{$A['address2']}','{$A['city']}','{$A['state']}','{$A['zipcode']}','{$A['description']}',$owner_id,{$A['group_id']},{$A['perm_owner']},{$A['perm_group']},{$A['perm_members']},{$A['perm_anon']}");
+                     'eid,status,title,event_type,url,datestart,timestart,dateend,timeend,allday,location,address1,address2,city,state,zipcode,description,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon',
+                     "'{$A['eid']}','{$A['status']}','{$A['title']}','{$A['event_type']}','{$A['url']}','{$A['datestart']}','{$A['timestart']}','{$A['dateend']}','{$A['timeend']}',{$A['allday']},'{$A['location']}','{$A['address1']}','{$A['address2']}','{$A['city']}','{$A['state']}','{$A['zipcode']}','{$A['description']}',$owner_id,{$A['group_id']},{$A['perm_owner']},{$A['perm_group']},{$A['perm_members']},{$A['perm_anon']}");
 
             PLG_itemSaved($A['eid'], 'calendar');
 
@@ -762,7 +803,7 @@ function plugin_submit_calendar($mode = 'master',$A = array())
         }
 
         echo COM_refresh ($_CONF['site_admin_url']
-                          . '/plugins/calendar/index.php?mode=edit' . $startat);
+                          . '/plugins/calendar/index.php?edit=x' . $startat);
         exit;
     }
     // otherwise non-admin or admin-personal. do personal form or public submission.
@@ -881,7 +922,7 @@ function plugin_submit_calendar($mode = 'master',$A = array())
     }
 
     $eventform->set_var ('startampm_selection',
-                         COM_getAmPmFormSelection ('start_ampm', $start_ampm));
+                         CALENDAR_getAmPmFormSelection ('start_ampm', $start_ampm, 'update_ampm()'));
 
     if ($start_hour > 12) {
         $start_hour = $start_hour - 12;
@@ -915,7 +956,7 @@ function plugin_submit_calendar($mode = 'master',$A = array())
         $end_ampm = 'am';
     }
     $eventform->set_var ('endampm_selection',
-                         COM_getAmPmFormSelection ('end_ampm', $end_ampm));
+                         CALENDAR_getAmPmFormSelection ('end_ampm', $end_ampm));
 
     if ($end_hour > 12) {
         $end_hour = $end_hour - 12;
@@ -989,272 +1030,6 @@ function plugin_submit_calendar($mode = 'master',$A = array())
 }
 
 /**
-* Delete an event
-*
-* @param    string  $eid    id of event to delete
-* @param    string  $type   'submission' when attempting to delete a submission
-* @param    string          HTML redirect
-*/
-function CALENDAR_deleteEvent($eid, $type = '')
-{
-    global $_CONF, $_TABLES, $_USER;
-
-    if (empty($type)) { // delete regular event
-        $result = DB_query("SELECT * FROM {$_TABLES['events']} WHERE eid = '".DB_escapeString($eid)."'");
-        $A = DB_fetchArray($result);
-        $access = SEC_hasAccess($A['owner_id'], $A['group_id'],
-                    $A['perm_owner'], $A['perm_group'], $A['perm_members'],
-                    $A['perm_anon']);
-        if ($access < 3) {
-            COM_accessLog("User {$_USER['username']} tried to illegally delete event $eid.");
-            return COM_refresh($_CONF['site_admin_url']
-                               . '/plugins/calendar/index.php');
-        }
-
-        DB_delete($_TABLES['events'], 'eid', DB_escapeString($eid));
-        DB_delete($_TABLES['personal_events'], 'eid', DB_escapeString($eid));
-        PLG_itemDeleted($eid, 'calendar');
-        COM_rdfUpToDateCheck('calendar', $A['event_type'], $A['eid']);
-
-        return COM_refresh($_CONF['site_admin_url'] . '/plugins/calendar/index.php?msg=18');
-    } elseif ($type == 'submission') {
-        if (plugin_ismoderator_calendar()) {
-            DB_delete($_TABLES['eventsubmission'], 'eid', DB_escapeString($eid));
-        } else {
-            COM_accessLog("User {$_USER['username']} tried to illegally delete event submission $eid.");
-        }
-    } else {
-        COM_accessLog("User {$_USER['username']} tried to illegally delete event $eid of type $type.");
-    }
-
-    return COM_refresh($_CONF['site_admin_url']
-                       . '/plugins/calendar/index.php');
-}
-
-function CALENDAR_listOld()
-{
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_CAL_ADMIN, $LANG_ACCESS,
-           $LANG01, $_IMAGE_TYPE;
-
-    if (isset($_REQUEST['usr_time'])) {
-        $usr_time = $_REQUEST['usr_time'];
-    } else {
-        $usr_time = 12;
-    }
-
-    require_once $_CONF['path_system'] . 'lib-admin.php';
-
-    $retval = '';
-
-    $header_arr = array(      # display 'text' and use table field 'field'
-        array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true),
-        array('text' => $LANG_CAL_ADMIN[13], 'field' => 'username', 'sort' => true),
-        array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false),
-        array('text' => $LANG_CAL_ADMIN[14], 'field' => 'datestart', 'sort' => true),
-        array('text' => $LANG_CAL_ADMIN[15], 'field' => 'dateend', 'sort' => true)
-    );
-
-    $defsort_arr = array('field' => 'datestart', 'direction' => 'desc');
-
-    $menu_arr = array (
-        array('url' => $_CONF['site_admin_url'] . '/plugins/calendar/index.php?mode=edit',
-            'text' => $LANG_ADMIN['create_new']),
-        array('url' => $_CONF['site_admin_url'] . '/plugins/calendar/index.php',
-            'text' => $LANG_CAL_ADMIN['32']),
-        array('url' => $_CONF['site_admin_url'],
-            'text' => $LANG_ADMIN['admin_home'])
-    );
-
-    $cal_templates = new Template($_CONF['path'] . 'plugins/calendar/templates/admin');
-    $cal_templates->set_file (array ('form' => 'batchdelete.thtml'));
-    $cal_templates->set_var ('site_admin_url', $_CONF['site_admin_url']);
-    $cal_templates->set_var ('site_url', $_CONF['site_url']);
-    $cal_templates->set_var('layout_url', $_CONF['layout_url']);
-    $cal_templates->set_var('usr_time', $usr_time);
-    $cal_templates->set_var('lang_text_start', $LANG_CAL_ADMIN[28]);
-    $cal_templates->set_var('lang_text_end', $LANG_CAL_ADMIN[29]);
-    $cal_templates->set_var('lang_updatelist', $LANG_CAL_ADMIN[30]);
-    $cal_templates->set_var('lang_delete_sel', $LANG_ADMIN['delete_sel']);
-    $cal_templates->set_var('lang_delconfirm', $LANG_CAL_ADMIN[31]);
-    $cal_templates->parse('form', 'form');
-    $desc = $cal_templates->finish($cal_templates->get_var('form'));
-
-    $text_arr = array(
-        'has_menu' =>  true,
-        'has_extras' => true,
-        'title' => $LANG_CAL_ADMIN[11],
-        'instructions' => $LANG_CAL_ADMIN[27] . $usr_time . "$desc",
-        'form_url' => $_CONF['site_admin_url'] . "/plugins/calendar/index.php?mode=batchdelete"
-    );
-
-    $sql = "SELECT {$_TABLES['events']}.*, {$_TABLES['users']}.username, {$_TABLES['users']}.fullname "
-        ."FROM {$_TABLES['events']} "
-        ."LEFT JOIN {$_TABLES['users']} "
-        ."ON {$_TABLES['events']}.owner_id={$_TABLES['users']}.uid "
-        ."WHERE 1=1 ";
-
-    $filterstr = " AND UNIX_TIMESTAMP() - UNIX_TIMESTAMP(dateend) > " . $usr_time * 2592000 . " ";
-
-    $query_arr = array (
-        'table' => 'events',
-        'sql' => $sql,
-        'query_fields' => array('title', 'datestart', 'dateend'),
-        'default_filter' => $filterstr . COM_getPermSQL('AND')
-    );
-
-    $listoptions = array('chkdelete' => true, 'chkfield' => 'eid');
-    $retval .= ADMIN_createMenu($menu_arr, $LANG_CAL_ADMIN[27] . $usr_time . "$desc", plugin_geticon_calendar());
-
-    $token = SEC_createToken();
-    $form_arr['bottom'] = "<input type=\"hidden\" name=\"" . CSRF_TOKEN
-                        . "\" value=\"{$token}\"" . XHTML . ">";
-    $retval .= ADMIN_list('calendar', 'plugin_getListField_calendar',
-                          $header_arr, $text_arr, $query_arr,
-                          $defsort_arr, '', '', $listoptions, $form_arr);
-
-    return $retval;
-}
-
-
-/**
-* This function deletes the events selected in the listOld function
-*
-* @return   string          HTML with success or error message
-*
-*/
-function CALENDAR_deleteOld() {
-    global $_CONF, $LANG_CAL_ADMIN;
-    $msg = '';
-    $event_list = array();
-    if (isset($_POST['delitem'])) {
-        $event_list = $_POST['delitem'];
-    }
-
-    if (count($event_list) == 0) {
-        $msg = $LANG_CAL_ADMIN[33] . "<br" . XHTML . ">";
-    }
-    $c = 0;
-    if (isset($event_list) AND is_array($event_list)) {
-        foreach($event_list as $delitem) {
-            $delitem = COM_applyFilter($delitem);
-            if (!CALENDAR_deleteEvent ($delitem)) {
-                $msg .= "<strong>{$LANG_CAL_ADMIN[34]} $delitem $LANG_CAL_ADMIN[35]}</strong><br" . XHTML . ">\n";
-            } else {
-                $c++; // count the deleted users
-            }
-        }
-    }
-    // Since this function is used for deletion only, its necessary to say that
-    // zero were deleted instead of just leaving this message away.
-    COM_numberFormat($c); // just in case we have more than 999)..
-    $msg .= "{$LANG_CAL_ADMIN[36]}: $c<br" . XHTML . ">\n";
-    return $msg;
-}
-
-function CALENDAR_listevents()
-{
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_CAL_ADMIN, $LANG_ACCESS,
-           $_IMAGE_TYPE;
-
-    require_once( $_CONF['path_system'] . 'lib-admin.php' );
-
-    $retval = '';
-
-    $header_arr = array(      # display 'text' and use table field 'field'
-        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false),
-        array('text' => $LANG_ADMIN['copy'], 'field' => 'copy', 'sort' => false),
-        array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true),
-        array('text' => $LANG_CAL_ADMIN[13], 'field' => 'username', 'sort' => true),
-        array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false),
-        array('text' => $LANG_CAL_ADMIN[14], 'field' => 'datestart', 'sort' => true),
-        array('text' => $LANG_CAL_ADMIN[15], 'field' => 'dateend', 'sort' => true)
-    );
-
-    $defsort_arr = array('field' => 'datestart', 'direction' => 'desc');
-
-    $menu_arr = array (
-        array('url' => $_CONF['site_admin_url'] . '/plugins/calendar/index.php?mode=edit',
-              'text' => $LANG_ADMIN['create_new']),
-        array('url' => $_CONF['site_admin_url'] . '/plugins/calendar/index.php?mode=batchdelete',
-              'text' => $LANG_CAL_ADMIN[26]),
-        array('url' => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home'])
-    );
-
-    $retval .= COM_startBlock($LANG_CAL_ADMIN[11], '',
-                              COM_getBlockTemplate('_admin_block', 'header'));
-    $retval .= ADMIN_createMenu($menu_arr, $LANG_CAL_ADMIN[12], plugin_geticon_calendar());
-
-    $text_arr = array(
-        'has_extras' => true,
-        'form_url'   => $_CONF['site_admin_url'] . '/plugins/calendar/index.php'
-    );
-
-    $sql = "SELECT {$_TABLES['events']}.*, {$_TABLES['users']}.username, {$_TABLES['users']}.fullname "
-          ."FROM {$_TABLES['events']} "
-          ."LEFT JOIN {$_TABLES['users']} "
-          ."ON {$_TABLES['events']}.owner_id={$_TABLES['users']}.uid "
-          ."WHERE 1=1 ";
-
-    $query_arr = array(
-        'table' => 'events',
-        'sql' => $sql,
-        'query_fields' => array('title', 'datestart', 'dateend'),
-        'default_filter' => COM_getPermSQL('AND')
-    );
-
-    $retval .= ADMIN_list ('calendar', 'plugin_getListField_calendar',
-                           $header_arr, $text_arr, $query_arr,
-                           $defsort_arr);
-
-    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
-
-    return $retval;
-}
-
-/**
-* Send an email notification for a new submission.
-*
-* @param    string  $table  Table where the new submission can be found
-* @param    array   $A      submission data
-*
-*/
-function CALENDAR_sendNotification ($table, $A)
-{
-    global $_CONF, $_TABLES, $LANG01, $LANG08, $LANG09, $LANG_CAL_1, $LANG_CAL_2;
-
-    $title = stripslashes ($A['title']);
-    $description = stripslashes ($A['description']);
-
-    $mailbody = "$LANG09[16]: $title\n"
-              . "$LANG09[17]: " . strftime ($_CONF['date'],
-                strtotime ($A['datestart'] . ' ' . $A['timestart']));
-    if ($A['allday']) {
-        $mailbody .= ' (' . $LANG_CAL_2[26] . ')';
-    }
-    $mailbody .= "\n";
-    if (!empty ($A['url']) && ($A['url'] != 'http://')) {
-        $mailbody .= "$LANG09[33]: <" . $A['url'] . ">\n";
-    }
-    $mailbody .= "\n" . $description . "\n\n";
-    if ($table == $_TABLES['eventsubmission']) {
-        $mailbody .= "$LANG01[10] <{$_CONF['site_admin_url']}/moderation.php>\n\n";
-    } else {
-        $mailbody .= "$LANG_CAL_1[12] <{$_CONF['site_url']}/calendar/event.php?eid={$A['eid']}>\n\n";
-    }
-    $mailsubject = $_CONF['site_name'] . ' ' . $LANG_CAL_2[43];
-
-    $mailbody .= "\n------------------------------\n";
-    $mailbody .= "\n$LANG08[34]\n";
-    $mailbody .= "\n------------------------------\n";
-
-    $to = array();
-    $to = COM_formatEmailAddress( '',$_CONF['site_mail'] );
-    COM_mail ($to, $mailsubject, $mailbody);
-}
-
-
-/**
 *
 * Counts the items that are submitted
 *
@@ -1285,16 +1060,20 @@ function plugin_autotags_calendar ($op, $content = '', $autotag = '')
         return 'event';
     } else if ($op == 'parse') {
         $eid = COM_applyFilter ($autotag['parm1']);
+        $status = 0;
         if (! empty($eid)) {
-        	$url = $_CONF['site_url'] . '/calendar/event.php?eid=' . $eid;
-        	if (empty ($autotag['parm2'])) {
-            	$linktext = stripslashes (DB_getItem ($_TABLES['events'],
-                	                      'title', "eid = '".DB_escapeString($eid)."'"));
-        	} else {
-            	$linktext = $autotag['parm2'];
-        	}
-        	$link = COM_createLink($linktext, $url);
-        	$content = str_replace ($autotag['tagstr'], $link, $content);
+            $status = DB_getItem($_TABLES['events'], 'status', "eid = '".DB_escapeString($eid)."'");
+        }
+        if (status==1) {
+            $url = $_CONF['site_url'] . '/calendar/event.php?eid=' . $eid;
+            if (empty ($autotag['parm2'])) {
+                $linktext = stripslashes (DB_getItem ($_TABLES['events'],
+                                          'title', "eid = '".DB_escapeString($eid)."'"));
+            } else {
+                $linktext = $autotag['parm2'];
+            }
+            $link = COM_createLink($linktext, $url);
+            $content = str_replace ($autotag['tagstr'], $link, $content);
         }
 
         return $content;
@@ -1332,6 +1111,7 @@ function plugin_getfeedcontent_calendar( $feed, &$link, &$update, $feedType, $fe
     if ( $feedType == 'ICS' ) {
         $sql = "SELECT * FROM {$_TABLES['events']} "
               ."WHERE perm_anon > 0 "
+              ."AND status = 1 "
               ."ORDER BY datestart,timestart";
         $result = DB_query($sql);
 
@@ -1396,7 +1176,7 @@ function plugin_getfeedcontent_calendar( $feed, &$link, &$update, $feedType, $fe
         }
 
         $sql = "SELECT eid,owner_id,title,description FROM {$_TABLES['events']} "
-              ."WHERE perm_anon > 0 AND dateend >= NOW() $where "
+              ."WHERE status = 1 AND perm_anon > 0 AND dateend >= NOW() $where "
               ."ORDER BY datestart,timestart $limitsql";
         $result = DB_query($sql);
 
@@ -1478,7 +1258,7 @@ function plugin_feedupdatecheck_calendar ($feed, $topic, $update_data, $limit,
         $limitsql = ' LIMIT 10';
     }
 
-    $result = DB_query( "SELECT eid FROM {$_TABLES['events']} WHERE perm_anon > 0 AND dateend >= NOW()$where ORDER BY datestart,timestart $limitsql" );
+    $result = DB_query( "SELECT eid FROM {$_TABLES['events']} WHERE status = 1 AND perm_anon > 0 AND dateend >= NOW()$where ORDER BY datestart,timestart $limitsql" );
     $nrows = DB_numRows( $result );
 
     $eids = array();
@@ -1527,7 +1307,7 @@ function plugin_showstats_calendar ($showsitestats)
     $display = '';
 
     // Top Ten Events
-    $result = DB_query("SELECT eid,title,hits from {$_TABLES['events']} WHERE (hits > 0)" . COM_getPermSQL ('AND') . " ORDER BY hits DESC LIMIT 10");
+    $result = DB_query("SELECT eid,title,hits from {$_TABLES['events']} WHERE (status = 1) AND (hits > 0)" . COM_getPermSQL ('AND') . " ORDER BY hits DESC LIMIT 10");
     $nrows  = DB_numRows($result);
     if ($nrows > 0) {
         $header_arr = array(
@@ -1791,7 +1571,7 @@ function plugin_dopluginsearch_calendar($query, $datestart, $dateend, $topic, $t
     $query = DB_escapeString(trim(htmlspecialchars($query)));
 
     $sql_e = "SELECT eid AS id, title, description, UNIX_TIMESTAMP(datestart) AS date, owner_id AS uid, hits, CONCAT('/calendar/event.php?eid=',eid) AS url ";
-    $sql_e .= "FROM {$_TABLES['events']} WHERE 1=1 ";
+    $sql_e .= "FROM {$_TABLES['events']} WHERE status=1 ";
 
     $sql_p = "SELECT eid AS id, title, description, UNIX_TIMESTAMP(datestart) AS date, owner_id AS uid, ";
     $sql_p .= "CONCAT('/calendar/event.php?mode=personal&eid=',eid) AS url ";
@@ -1849,59 +1629,6 @@ function plugin_templatesetvars_calendar ($templatename, &$template)
     }
 }
 
-function plugin_getListField_calendar($fieldname, $fieldvalue, $A, $icon_arr)
-{
-    global $_CONF, $LANG_ACCESS, $LANG_ADMIN;
-
-    $retval = '';
-
-    $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],
-                            $A['perm_group'],$A['perm_members'],$A['perm_anon']);
-
-    switch($fieldname) {
-        case 'delete':
-            $retval = "<input type=\"checkbox\" name=\"delitem[{$A['eid']}]\" checked=\"checked\"" . XHTML . ">";
-            break;
-    	case 'edit':
-            if ($access == 3) {
-                $retval = COM_createLink(
-                    $icon_arr['edit'],
-                    "{$_CONF['site_admin_url']}/plugins/calendar/index.php"
-                    . "?mode=edit&amp;eid={$A['eid']}");
-            }
-            break;
-        case 'copy':
-            if ($access == 3) {
-                $retval = COM_createLink(
-                    $icon_arr['copy'],
-                    "{$_CONF['site_admin_url']}/plugins/calendar/index.php"
-                    . "?mode=clone&amp;eid={$A['eid']}");
-            }
-            break;
-        case 'access':
-            if ($access == 3) {
-                $retval = $LANG_ACCESS['edit'];
-            } else {
-                $retval = $LANG_ACCESS['readonly'];
-            }
-            break;
-        case 'title':
-            $retval = stripslashes ($A['title']);
-            $retval = COM_createLink( $retval,
-                "{$_CONF['site_url']}/calendar/event.php?eid={$A['eid']}"
-            );
-            break;
-        case 'username':
-            $retval = COM_getDisplayName ($A['owner_id'], $A['username'], $A['fullname']);
-            break;
-        default:
-            $retval = $fieldvalue;
-            break;
-    }
-    return $retval;
-}
-
-
 /**
 * Return information for an event
 *
@@ -1938,8 +1665,11 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
             $fields[] = 'eid';
             break;
         case 'label':
-        case 'status' :
+		case 'status':
             $fields[] = 'eid';
+            break;
+        case 'status':
+            $fields[] = 'status';
             break;
         default:
             break;
@@ -2004,7 +1734,7 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
                 $props['label'] = $LANG_CAL_1[16];
                 break;
             case 'status':
-                $props['status'] = 1;
+                $props['status'] = $A['status'];
                 break;
             default:
                 $props[$p] = '';
@@ -2109,4 +1839,69 @@ function CALENDAR_siteFooter() {
     }
     return $retval;
 }
+
+/**
+* Create an am/pm selector dropdown menu
+*
+* @param    string  $name       name of the <select>
+* @param    string  $selected   preselection: 'am' or 'pm'
+* $param    string  $changefn   name of onchange() function to call
+* @return   string  HTML for the dropdown; empty string in 24 hour mode
+*
+*/
+function CALENDAR_getAmPmFormSelection( $name, $selected = '', $changefn = '' )
+{
+    global $_CONF;
+
+    $retval = '';
+    if( isset( $_CONF['hour_mode'] ) && ( $_CONF['hour_mode'] == 24 )) {
+        $retval = '';
+    } else {
+        $selected = (empty($selected)) ? date('a') : $selected;
+        $onchange = (empty($changefn)) ? '' : ' onchange="(' . $changefn . ')"';
+        $retval .= '<select name="' . $name . '" id="' . $name . '"' . $onchange .'>' . LB;
+        $retval .= '<option value="am"';
+        $retval .= ($selected == 'am') ? ' selected="selected"' : '';
+        $retval .= '>am</option>' . LB . '<option value="pm"';
+        $retval .= ($selected == 'pm') ? ' selected="selected"' : '';
+        $retval .= '>pm</option>' . LB . '</select>' . LB;
+    }
+    return $retval;
+}
+
+/**
+* Set localised day and month names.
+*
+* @param    object  $aCalendar  reference(!) to a Calendar object
+*
+*/
+function CALENDAR_setLanguage(&$aCalendar)
+{
+    global $_CONF, $LANG_WEEK, $LANG_MONTH;
+
+    $lang_days = array ('sunday'    => $LANG_WEEK[1],
+                        'monday'    => $LANG_WEEK[2],
+                        'tuesday'   => $LANG_WEEK[3],
+                        'wednesday' => $LANG_WEEK[4],
+                        'thursday'  => $LANG_WEEK[5],
+                        'friday'    => $LANG_WEEK[6],
+                        'saturday'  => $LANG_WEEK[7]);
+
+    $lang_months = array ('january'   => $LANG_MONTH[1],
+                          'february'  => $LANG_MONTH[2],
+                          'march'     => $LANG_MONTH[3],
+                          'april'     => $LANG_MONTH[4],
+                          'may'       => $LANG_MONTH[5],
+                          'june'      => $LANG_MONTH[6],
+                          'july'      => $LANG_MONTH[7],
+                          'august'    => $LANG_MONTH[8],
+                          'september' => $LANG_MONTH[9],
+                          'october'   => $LANG_MONTH[10],
+                          'november'  => $LANG_MONTH[11],
+                          'december'  => $LANG_MONTH[12]);
+
+    $aCalendar->setLanguage($lang_days, $lang_months, $_CONF['week_start']);
+}
+
+
 ?>

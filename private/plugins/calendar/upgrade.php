@@ -59,6 +59,10 @@ function calendar_upgrade()
         case '1.0.6' :
             $c = config::get_instance();
             $c->add('displayblocks', 0,'select', 0, 0, 13, 115, true, 'calendar');
+            // allow events to be enabled/disabled
+            DB_query("ALTER TABLE {$_TABLES['events']} ADD status tinyint(3) NOT NULL DEFAULT '1' AFTER eid");
+            DB_query("ALTER TABLE {$_TABLES['eventsubmission']} ADD status tinyint(3) NOT NULL DEFAULT '1' AFTER eid");
+            DB_query("ALTER TABLE {$_TABLES['personal_events']} ADD status tinyint(3) NOT NULL DEFAULT '1' AFTER eid");
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_CA_CONF['pi_version']."',pi_gl_version='".$_CA_CONF['gl_version']."' WHERE pi_name='calendar' LIMIT 1");
             break;

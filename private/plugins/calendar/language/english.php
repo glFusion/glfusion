@@ -148,7 +148,7 @@ $LANG_CAL_ADMIN = array(
     10 => 'You must provide the dates/times, event title, and description',
     11 => 'Calendar Manager',
     12 => 'To modify or delete an event, click on that event\'s edit icon below.  To create a new event, click on "Create New" above. Click on the copy icon to create a copy of an existing event.',
-    13 => 'Author',
+    13 => 'Owner',
     14 => 'Start Date',
     15 => 'End Date',
     16 => '',
@@ -161,10 +161,10 @@ $LANG_CAL_ADMIN = array(
     23 => 'Bad start date.',
     24 => 'Bad end date.',
     25 => 'End date is before start date.',
-    26 => 'Delete old entries',
-    27 => 'These are the events that are older than ',
-    28 => ' months. Please click on the trashcan Icon on the bottom to delete them, or select a different timespan:<br' . XHTML . '>Find all entries that are older than ',
-    29 => ' months.',
+    26 => 'Batch Event Manager',
+    27 => 'These are the events in your database that are older than ',
+    28 => ' months. Update the time period as desired, and then click Update List.  Select one or more events from the results displayed, and then click on the Delete icon below to remove these older events from your database.  Only events displayed and selected on this page will be deleted.',
+    29 => '',
     30 => 'Update List',
     31 => 'Are You sure you want to permanently delete ALL selected users?',
     32 => 'List all',
@@ -181,7 +181,8 @@ $LANG_CAL_MESSAGE = array(
     'login' => 'Cannot open your personal calendar until you login',
     'removed' => 'Event was successfully removed from your personal calendar',
     'noprivate' => 'Sorry, personal calendars are not enabled on this site',
-    'unauth' => 'Sorry, you do not have access to the event administration page.  Please note that all attempts to access unauthorized features are logged'
+    'unauth' => 'Sorry, you do not have access to the event administration page.  Please note that all attempts to access unauthorized features are logged',
+    'delete_confirm' => 'Are you sure you want to delete this event?'
 );
 
 $PLG_calendar_MESSAGE4 = "Thank-you for submitting an event to {$_CONF['site_name']}.  It has been submitted to our staff for approval.  If approved, your event will be seen here, in our <a href=\"{$_CONF['site_url']}/calendar/index.php\">calendar</a> section.";

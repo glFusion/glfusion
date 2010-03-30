@@ -1,6 +1,13 @@
 {# begin {templatelocation} #}
+<script language="javascript" type="text/javascript">
+function update_month() document.getElementById('end_month').value = document.getElementById('start_month').value;
+function update_day() document.getElementById('end_day').value = document.getElementById('start_day').value;
+function update_year() document.getElementById('end_year').value = document.getElementById('start_year').value;
+function update_hour() document.getElementById('end_hour').value = document.getElementById('start_hour').value;
+function update_minute() document.getElementById('end_minute').value = document.getElementById('start_minute').value;
+function update_ampm() document.getElementById('end_ampm').value = document.getElementById('start_ampm').value;
+</script>
 <form action="{site_admin_url}/plugins/calendar/index.php" name="events" method="post">
-  <hr style="margin:5px;" />
     <div class="form-description">{lang_eventtitle}:</div>
     <div class="form-field"><input type="text" size="48" maxlength="128" name="title" value="{event_title}" {xhtml}></div>
     <div class="clear-left"></div>
@@ -12,32 +19,35 @@
         </select>
     </div>
     <div class="clear-left"></div>
+    <div class="form-description">{$LANG_ADMIN[enabled]}:</div>
+    <div class="form-field"><input type="checkbox" name="status" id="status" value="1"{status_checked}{xhtml}></div>
+    <div class="clear-left"></div>
     <div class="form-description">{lang_eventurl}:</div>
     <div class="form-field"><input type="text" dir="ltr" size="48" maxlength="{max_url_length}" name="url" value="{event_url}"{xhtml}>{lang_includehttp}</div>
     <div class="clear-left"></div>
 
-  <hr style="margin:5px;" />
+  <div style="margin:5px 0 10px 0;border-bottom:1px solid #cccccc"></div>
 
     <div class="form-description">{lang_eventstartdate}:</div>
     <div class="form-field">
       <span dir="ltr">
-        <select name="start_month">
+        <select name="start_month" id="start_month" onchange="update_month()">
             {startmonth_options}
         </select>
         /
-        <select name="start_day">
+        <select name="start_day" id="start_day" onchange="update_day()">
             {startday_options}
         </select>
         /
-        <select name="start_year">
+        <select name="start_year" id="start_year" onchange="update_year()">
             {startyear_options}
         </select>&nbsp;&nbsp;
         <b>{lang_starttime}: </b>
-        <select name="start_hour">
+        <select name="start_hour" id="start_hour" onchange="update_hour()">
             {starthour_options}
         </select>
         :
-        <select name="start_minute">
+        <select name="start_minute" id="start_minute" onchange="update_minute()">
             {startminute_options}
         </select>
         {startampm_selection}
@@ -47,23 +57,23 @@
     <div class="form-description">{lang_eventenddate}:</div>
     <div class="form-field">
       <span dir="ltr">
-        <select name="end_month">
+        <select name="end_month" id="end_month">
             {endmonth_options}
         </select>
         /
-        <select name="end_day">
+        <select name="end_day" id="end_day">
             {endday_options}
         </select>
         /
-        <select name="end_year">
+        <select name="end_year" id="end_year">
             {endyear_options}
         </select>&nbsp;&nbsp;
         <b>{lang_endtime}: </b>
-        <select name="end_hour">
+        <select name="end_hour" id="end_hour">
             {endhour_options}
         </select>
         :
-        <select name="end_minute">
+        <select name="end_minute" id="end_minute">
             {endminute_options}
         </select>
         {endampm_selection}
@@ -73,7 +83,8 @@
     <div class="form-description">{lang_alldayevent}:</div>
     <div class="form-field"><input type="checkbox" name="allday" {allday_checked}{xhtml}></div>
     <div class="clear-left"></div>
-  <hr style="margin:5px;" />
+
+  <div style="margin:5px 0 10px 0;border-bottom:1px solid #cccccc"></div>
 
     <div class="form-description">{lang_location}:</div>
     <div class="form-field"><textarea name="location" cols="45" rows="2">{event_location}</textarea></div>
@@ -93,7 +104,8 @@
     <div class="form-description">{lang_zipcode}:</div>
     <div class="form-field"><input type="text" name="zipcode" size="5" value="{event_zipcode}" maxlength="5"{xhtml}></div>
     <div class="clear-left"></div>
-  <hr style="margin:5px;" />
+
+  <div style="margin:5px 0 10px 0;border-bottom:1px solid #cccccc"></div>
 
     <div class="form-description">{lang_eventdescription}:</div>
     <div class="form-field"><textarea name="description" style="width:90%;" cols="45" rows="8">{event_description}</textarea></div>
@@ -117,7 +129,8 @@
     </div>
     <div class="clear-left"></div>
 
- <hr style="margin:5px;" />
+  <div style="margin:5px 0 10px 0;border-bottom:1px solid #cccccc"></div>
+
     <div class="form-description">{lang_owner}:</div>
     <div class="form-field">{owner_name}<input type="hidden" name="owner_id" value="{owner_id}"{xhtml}></div>
     <div class="form-description">{lang_group}:</div>
@@ -126,13 +139,16 @@
     </div>
     <div class="form-description">{lang_permissions}:</div>
     <div class="form-field">{lang_permissionskey}</div>
-    <div style="padding: 5px 5px 5px 5px;clear:both">
+    <div class="form-description"></div>
+    <div class="form-field">
         {permissions_editor}
     </div>
-  <hr style="margin:5px;" />
+
+  <div style="margin:5px 0 10px 0;border-bottom:1px solid #cccccc"></div>
+
     <div style="margin:5px;padding-top:5px;">
-      <input type="submit" value="{lang_save}" name="mode"{xhtml}>
-      <input type="submit" value="{lang_cancel}" name="mode"{xhtml}>
+      <input type="submit" value="{lang_save}" name="save"{xhtml}>
+      <input type="submit" value="{lang_cancel}" name="cancel"{xhtml}>
       <input type="hidden" name="eid" value="{event_id}"{xhtml}>
       <input type="hidden" name="hour_mode" value="{hour_mode}"{xhtml}>
       {delete_option}

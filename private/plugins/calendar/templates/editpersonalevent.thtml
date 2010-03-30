@@ -1,4 +1,12 @@
 {# begin {templatelocation} #}
+<script language="javascript" type="text/javascript">
+function update_month() document.getElementById('end_month').value = document.getElementById('start_month').value;
+function update_day() document.getElementById('end_day').value = document.getElementById('start_day').value;
+function update_year() document.getElementById('end_year').value = document.getElementById('start_year').value;
+function update_hour() document.getElementById('end_hour').value = document.getElementById('start_hour').value;
+function update_minute() document.getElementById('end_minute').value = document.getElementById('start_minute').value;
+function update_ampm() document.getElementById('end_ampm').value = document.getElementById('start_ampm').value;
+</script>
                             <form action="{site_url}/calendar/event.php" method="post">
                                 <input type="hidden" name="calendar_type" value="personal"{xhtml}>
                                 <input type="hidden" name="hour_mode" value="{hour_mode}"{xhtml}>
@@ -22,23 +30,23 @@
                                         <td align="right"><b>{lang_startdate}:</b></td>
                                         <td>
                                           <span dir="ltr">
-                                            <select name="start_month">
+                                            <select name="start_month" id="start_month" onchange="update_month()">
                                                 {startmonth_options}
                                             </select>
                                             /
-                                            <select name="start_day">
+                                            <select name="start_day" id="start_day" onchange="update_day()">
                                                 {startday_options}
                                             </select>
                                             /
-                                            <select name="start_year">
+                                            <select name="start_year" id="start_year" onchange="update_year()">
                                                 {startyear_options}
                                             </select>&nbsp;&nbsp;
                                             <b>{lang_starttime}: </b>
-                                            <select name="start_hour">
+                                            <select name="start_hour" id="start_hour" onchange="update_hour()">
                                                 {starthour_options}
                                             </select>
                                             :
-                                            <select name="start_minute">
+                                            <select name="start_minute" id="start_minute" onchange="update_minute()">
                                                 {startminute_options}
                                             </select>
                                             {startampm_selection}
