@@ -646,20 +646,6 @@ function PAGE_list()
 
     $retval = '';
 
-    $header_arr = array(      # display 'text' and use table field 'field'
-        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center'),
-        array('text' => $LANG_ADMIN['copy'], 'field' => 'copy', 'sort' => false, 'align' => 'center'),
-        array('text' => $LANG_STATIC['id'], 'field' => 'sp_id', 'sort' => true),
-        array('text' => $LANG_ADMIN['title'], 'field' => 'sp_title', 'sort' => true),
-        array('text' => $LANG_STATIC['head_centerblock'], 'field' => 'sp_centerblock', 'sort' => true, 'align' => 'center'),
-        array('text' => $LANG_STATIC['writtenby'], 'field' => 'sp_uid', 'sort' => false, 'align' => 'center'),
-        array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false, 'align' => 'center'),
-        array('text' => $LANG_STATIC['date'], 'field' => 'unixdate', 'sort' => true, 'align' => 'center'),
-        array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center'),
-        array('text' => $LANG_ADMIN['enabled'], 'field' => 'sp_status', 'sort' => true, 'align' => 'center'),
-    );
-    $defsort_arr = array('field' => 'sp_title', 'direction' => 'asc');
-
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/plugins/staticpages/index.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
@@ -672,15 +658,33 @@ function PAGE_list()
 
     $retval .= ADMIN_createMenu($menu_arr, $LANG_STATIC['instructions'], plugin_geticon_staticpages());
 
+    $header_arr = array(      # display 'text' and use table field 'field'
+        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG_ADMIN['copy'], 'field' => 'copy', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG_STATIC['id'], 'field' => 'sp_id', 'sort' => true),
+        array('text' => $LANG_ADMIN['title'], 'field' => 'sp_title', 'sort' => true),
+        array('text' => $LANG_STATIC['head_centerblock'], 'field' => 'sp_centerblock', 'sort' => true, 'align' => 'center'),
+        array('text' => $LANG_STATIC['writtenby'], 'field' => 'sp_uid', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG_STATIC['date'], 'field' => 'unixdate', 'sort' => true, 'align' => 'center'),
+        array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG_ADMIN['enabled'], 'field' => 'sp_status', 'sort' => true, 'align' => 'center'),
+    );
+
+    $defsort_arr = array('field' => 'sp_title', 'direction' => 'asc');
+
     $text_arr = array(
         'has_extras' => true,
         'form_url' => $_CONF['site_admin_url'] . '/plugins/staticpages/index.php'
     );
 
+    // sql query which drives the list
+    $sql = "SELECT *,UNIX_TIMESTAMP(sp_date) AS unixdate "
+                ."FROM {$_TABLES['staticpage']} WHERE 1=1 ";
+
     $query_arr = array(
         'table' => 'staticpage',
-        'sql' => "SELECT *,UNIX_TIMESTAMP(sp_date) AS unixdate "
-                ."FROM {$_TABLES['staticpage']} WHERE 1=1 ",
+        'sql' => $sql,
         'query_fields' => array('sp_title', 'sp_id'),
         'default_filter' => COM_getPermSQL ('AND')
     );
@@ -710,7 +714,7 @@ function PAGE_list()
 * @return   void
 *
 */
-function PAGE_toggleStatus($enabledstaticpages,$sp_idarray)
+function PAGE_toggleStatus($enabledstaticpages, $sp_idarray)
 {
     global $_TABLES, $_DB_table_prefix;
     if (isset($sp_idarray) && is_array($sp_idarray) ) {
