@@ -76,23 +76,13 @@ function submissionform($type='story', $mode = '', $topic = '')
             . $LANG12[31]
             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     } else {
-        if (empty ($_USER['username']) &&
+        if (COM_isAnonUser() &&
             (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {
-            $retval .= COM_startBlock ($LANG_LOGIN[1], '',
-                               COM_getBlockTemplate ('_msg_block', 'header'));
-            $loginreq = new Template($_CONF['path_layout'] . 'submit');
-            $loginreq->set_file('loginreq', 'submitloginrequired.thtml');
-            $loginreq->set_var('xhtml', XHTML);
-            $loginreq->set_var('site_url', $_CONF['site_url']);
-            $loginreq->set_var('site_admin_url', $_CONF['site_admin_url']);
-            $loginreq->set_var('layout_url', $_CONF['layout_url']);
-            $loginreq->set_var('login_message', $LANG_LOGIN[2]);
-            $loginreq->set_var('lang_login', $LANG_LOGIN[3]);
-            $loginreq->set_var('lang_newuser', $LANG_LOGIN[4]);
-            $loginreq->parse('errormsg', 'loginreq');
-            $retval .= $loginreq->finish($loginreq->get_var('errormsg'));
-            $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-            return $retval;
+            $display  = COM_siteHeader('menu', $LANG_LOGIN[1]);
+            $display .= SEC_loginRequiredForm();
+            $display .= COM_siteFooter();
+            echo $display;
+            exit;
         } else {
             $retval .= COM_startBlock($LANG12[19])
                     . $LANG12[9]
@@ -444,7 +434,7 @@ if (($mode == $LANG12[8]) && !empty ($LANG12[8])) { // submit
     }
     $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'";
     DB_Query($sql,1);
-    if (empty ($_USER['username']) &&
+    if (COM_isAnonUser() &&
         (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {
         $display = COM_refresh ($_CONF['site_url'] . '/index.php');
     } else {
