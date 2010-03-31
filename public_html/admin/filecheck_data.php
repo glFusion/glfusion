@@ -48,7 +48,7 @@ $glfIgnore = array('.','..','.svn','cgi-bin','.htaccess');
 $glfDir = array(
 // private core directories
     array( 'test' => 'R', 'preq' => 'W', 'path' => 'private' ),
-    array( 'test' => 'R', 'preq' => 'W', 'path' => 'private/backups' ),
+    array( 'test' => 'E', 'preq' => 'W', 'path' => 'private/backups' ),
     array( 'test' => 'E', 'preq' => 'W', 'path' => 'private/data' ),
     array( 'test' => 'E', 'preq' => 'W', 'path' => 'private/data/layout_cache' ),
     array( 'test' => 'E', 'preq' => 'W', 'path' => 'private/data/temp' ),
@@ -945,7 +945,7 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/calendar/templates/addevent.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/calendar/templates/addeventoption.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/calendar/templates/addremoveevent.thtml' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/calendar/templates/admin/batchdelete.thtml' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/calendar/templates/admin/batchadmin.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/calendar/templates/admin/custom/index.html' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/calendar/templates/admin/eventeditor.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/calendar/templates/calendar.thtml' ),
@@ -3776,7 +3776,9 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/images/admin/copy.png' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/images/admin/cross.png' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/images/admin/delete.png' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/images/admin/disk.png' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/images/admin/edit.png' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/images/admin/greycheck.png' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/images/admin/group.png' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/images/admin/list.png' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/images/admin/mail.png' ),
