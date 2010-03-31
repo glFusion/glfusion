@@ -120,7 +120,7 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
     // This is the number of rows/records to display
     $nrows = count($data_arr);
 
-    if ($nrows > $min_data AND is_array($options) AND ($options['chkdelete'] OR $options['chkselect'])) {
+    if ($nrows > $min_data AND is_array($options) AND ((isset($options['chkdelete']) && $options['chkdelete']) OR (isset($options['chkselect']) && $options['chkselect']))) {
         $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form);"' . XHTML . '>');
         $admin_templates->set_var('class', 'admin-list-field');
         $admin_templates->set_var('header_column_style', 'style="text-align:center;width:25px;"'); // always center checkbox
@@ -166,7 +166,7 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
     } else {
         $admin_templates->set_var('show_message', 'display:none;');
         for ($i = 0; $i < $nrows; $i++) {
-            if ($nrows > $min_data AND is_array($options) AND ($options['chkdelete'] OR $options['chkselect'])) {
+            if ($nrows > $min_data AND is_array($options) AND ((isset($options['chkdelete']) && $options['chkdelete']) OR (isset($options['chkselect']) && $options['chkselect']))) {
                 $admin_templates->set_var('itemtext', '<input type="checkbox" name="delitem[]" value="' . $data_arr[$i][$options['chkfield']].'"' . XHTML . '>');
                 $admin_templates->set_var('class', 'admin-list-field');
                 $admin_templates->set_var('column_style', 'style="text-align:center;"'); // always center checkbox
@@ -215,7 +215,7 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
 
     // if we displayed data, and chkselect option is available, display the
     // actions row for all selected items. provide a delete action as a minimum
-    if ($nrows > $min_data AND is_array($options) AND ($options['chkdelete'] OR $options['chkselect'])) {
+    if ($nrows > $min_data AND is_array($options) AND ((isset($options['chkdelete']) && $options['chkdelete']) OR (isset($options['chkselect']) && $options['chkselect']))) {
         $actions = '<td style="text-align:center;">'
             . '<img src="' . $_CONF['layout_url'] . '/images/admin/action.' . $_IMAGE_TYPE . '"></td>';
         $delete_action = '<input name="delbutton" type="image" src="'
