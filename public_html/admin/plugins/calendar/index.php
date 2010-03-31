@@ -930,7 +930,7 @@ function CALENDAR_toggleStatus($enabledevents, $eidarray)
 // MAIN ========================================================================
 
 $action = '';
-$expected = array('edit','clone','save','delete','editsubmission','batchadmin','delbutton_x','cancel');
+$expected = array('edit','clone','save','delete','batchadmin','delbutton_x','cancel');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
@@ -959,6 +959,16 @@ if (isset($_POST['msg'])) {
 } elseif (isset($_GET['msg'])) {
     $msg = COM_applyFilter($_GET['msg']);
 }
+
+// this is to preserve compatibility with moderation.php, as this script
+// allows for submissions to be edited
+$mode = '';
+if (isset($_POST['mode'])) {
+    $mode = COM_applyFilter($_POST['mode']);
+} elseif (isset($_GET['mode'])) {
+    $mode = COM_applyFilter($_GET['mode']);
+}
+$action = ($mode == 'editsubmission') ? $mode : $action;
 
 $validtoken = SEC_checkToken();
 
