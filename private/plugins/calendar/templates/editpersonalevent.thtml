@@ -1,4 +1,7 @@
 {# begin {templatelocation} #}
+{# nogray calendar - must be replaced in 1.2.0 #}
+<script src="{site_url}/javascript/nogray_date_calendar_vs1_min.js" type="text/javascript"></script>
+{# nogray calendar - must be replaced in 1.2.0 #}
 <script language="javascript" type="text/javascript">
 <!--
 function update_month() document.getElementById('end_month').value = document.getElementById('start_month').value;
@@ -72,6 +75,12 @@ function toggleTOD() {
                                             <select name="start_year" id="start_year" onchange="update_year()">
                                                 {startyear_options}
                                             </select>
+                                            {# nogray calendar - must be replaced in 1.2.0 #}
+                                                    <a href="#" id="toggler1">
+                                                    <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:text-top;border:none;"{xhtml}>
+                                                    </a>
+                                                    <span id="calendar1"></span>
+                                            {# nogray calendar - must be replaced in 1.2.0 #}
                                             <span id="todstart">
                                                 &nbsp;&nbsp;
                                                 <b>{lang_starttime}: </b>
@@ -102,6 +111,12 @@ function toggleTOD() {
                                             <select name="end_year">
                                                 {endyear_options}
                                             </select>
+                                            {# nogray calendar - must be replaced in 1.2.0 #}
+                                                    <a href="#" id="toggler2">
+                                                    <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:text-top;border:none;"{xhtml}>
+                                                    </a>
+                                                    <span id="calendar2"></span>
+                                            {# nogray calendar - must be replaced in 1.2.0 #}
                                             <span id="todend">
                                                 &nbsp;&nbsp;
                                                 <b>{lang_endtime}: </b>
@@ -164,4 +179,56 @@ function toggleTOD() {
                                     </tr>
                                 </table>
                             </form>
+<script language="javascript" type="text/javascript">
+<!--
+
+window.addEvent("domready", function() {
+
+    var sYear  = document.getElementById('start_year').value;
+    var sMonth = document.getElementById('start_month').value;
+    var sDay   = document.getElementById('start_day').value;
+
+    var calender1 = new Calendar("calendar1", "toggler1",
+    {inputField:{date:'start_day',
+         month:'start_month',
+         year:'start_year'},
+         inputType:'select',
+         idPrefix:'cal1',
+         startDate:new Date(sYear-1,0,1),
+         selectedDate: new Date(sYear,sMonth-1,sDay),
+         allowDaysOffSelection:true,
+         allowWeekendSelection:true,
+         allowDatesOffSelection:true,
+         numMonths:1,
+         onSelect: function() {
+          document.getElementById('end_year').value = document.getElementById('start_year').value;
+          document.getElementById('end_month').value = document.getElementById('start_month').value;
+          document.getElementById('end_day').value = document.getElementById('start_day').value;
+          }
+    });
+
+});
+
+window.addEvent("domready", function(){
+
+    var eYear  = document.getElementById('end_year').value;
+    var eMonth = document.getElementById('end_month').value;
+    var eDay   = document.getElementById('end_day').value;
+
+    var calender2 = new Calendar("calendar2", "toggler2",
+       {inputField:{date:'end_day',
+            month:'end_month',
+            year:'end_year'},
+            inputType:'select',
+            idPrefix:'cal2',
+            startDate:new Date(eYear-1,0,1),
+            selectedDate:  new Date(eYear,eMonth-1,eDay),
+            allowDaysOffSelection:true,
+            allowWeekendSelection:true,
+            allowDatesOffSelection:true,
+            numMonths:1
+    });
+});
+-->
+</script>
 {# end {templatelocation} #}
