@@ -2,10 +2,16 @@ glFusion ChangeLog
 
 v1.1.9
 ------
-- Staticpage Admin: New feature: Enable/Disable pages, code scrub/UI (Mark H.)
+- Calendar Plugin: Admin interface improvements & code scrub (Mark H.)
+    - New feature: Ability to enable/disable events
+    - New feature: Auto-set event end month/day/year/hour/minute to event start
+    - New feature: Client-side validation for required fields
+- Staticpage Admin: Admin interface improvements & code scrub (Mark H.)
+    - New feature: Ability to enable/disable staticpages
 - Added wrapper static page widget (Eric)
 - Plugin Admin: Code scrub/UI improvements (Mark H.)
 - Topic Admin: New list-based manager, code scrub/UI improvements (Mark H.)
+    - New feature: Client-side validation for required fields (Mark)
 - Media Gallery: Updated FCKeditor Media Browser plugin to support all auto tag
   options (Mark)
 - Media Gallery: Fixed error in raw thumbnail preview where it did not work

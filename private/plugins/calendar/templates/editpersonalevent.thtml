@@ -1,13 +1,19 @@
 {# begin {templatelocation} #}
 <script language="javascript" type="text/javascript">
+<!--
 function update_month() document.getElementById('end_month').value = document.getElementById('start_month').value;
 function update_day() document.getElementById('end_day').value = document.getElementById('start_day').value;
 function update_year() document.getElementById('end_year').value = document.getElementById('start_year').value;
 function update_hour() document.getElementById('end_hour').value = document.getElementById('start_hour').value;
 function update_minute() document.getElementById('end_minute').value = document.getElementById('start_minute').value;
 function update_ampm() document.getElementById('end_ampm').value = document.getElementById('start_ampm').value;
+
+window.addEvent('domready',function() {
+    var myValidator = new fValidator("editpersonalevent");
+});
+-->
 </script>
-                            <form action="{site_url}/calendar/event.php" method="post">
+                            <form action="{site_url}/calendar/event.php" id="editpersonalevent" method="post">
                                 <input type="hidden" name="calendar_type" value="personal"{xhtml}>
                                 <input type="hidden" name="hour_mode" value="{hour_mode}"{xhtml}>
                                 <input type="hidden" name="eid" value="{eid}"{xhtml}>
@@ -15,7 +21,7 @@ function update_ampm() document.getElementById('end_ampm').value = document.getE
                                 <table border="0" cellspacing="0" cellpadding="3">
                                     <tr>
                                         <td align="right"><b>{lang_title}:</b></td>
-                                        <td><input type="text" size="36" maxlength="96" name="title" value="{event_title}"{xhtml}></td>
+                                        <td><input class="fValidate['required']" type="text" size="36" maxlength="96" name="title" value="{event_title}"{xhtml}></td>
                                     </tr>
                                     <tr>
                                         <td align="right"><b>{lang_eventtype}:</b></td>
@@ -116,7 +122,7 @@ function update_ampm() document.getElementById('end_ampm').value = document.getE
                                     </tr>
                                     <tr>
                                         <td align="right" valign="top"><b>{lang_description}:</b></td>
-                                        <td><textarea name="description" style="width:100%" cols="50" rows="20">{event_description}</textarea></td>
+                                        <td><textarea class="fValidate['required']" name="description" style="width:100%" cols="50" rows="20">{event_description}</textarea></td>
                                     </tr>
                                     <tr>
                                         <td align="center" colspan="2">{lang_htmlnotallowed}</td>

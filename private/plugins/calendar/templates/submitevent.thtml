@@ -1,17 +1,23 @@
 {# begin {templatelocation} #}
 {explanation}
 <script language="javascript" type="text/javascript">
+<!--
 function update_month() document.getElementById('end_month').value = document.getElementById('start_month').value;
 function update_day() document.getElementById('end_day').value = document.getElementById('start_day').value;
 function update_year() document.getElementById('end_year').value = document.getElementById('start_year').value;
 function update_hour() document.getElementById('end_hour').value = document.getElementById('start_hour').value;
 function update_minute() document.getElementById('end_minute').value = document.getElementById('start_minute').value;
 function update_ampm() document.getElementById('end_ampm').value = document.getElementById('start_ampm').value;
+
+window.addEvent('domready',function() {
+    var myValidator = new fValidator("submitevent");
+});
+-->
 </script>
-<form class="form-theme" action="{site_url}{submit_url}" method="post">
+<form class="form-theme" action="{site_url}{submit_url}" id="submitevent" method="post">
   <hr style="margin:5px;" />
     <div class="form-description">{lang_title}:</div>
-    <div class="form-field"><input type="text" size="48" maxlength="128" name="title" value="{title}" {xhtml}></div>
+    <div class="form-field"><input class="fValidate['required']" type="text" size="48" maxlength="128" name="title" value="{title}" {xhtml}></div>
     <div class="clear-left"></div>
     <div class="form-description">{lang_eventtype}:</div>
     <div class="form-field">
@@ -105,7 +111,7 @@ function update_ampm() document.getElementById('end_ampm').value = document.getE
   <hr style="margin:5px;" />
 
     <div class="form-description">{lang_description}:</div>
-    <div class="form-field"><textarea name="description" style="width:100%" cols="45" rows="8">{description}</textarea></div>
+    <div class="form-field"><textarea class="fValidate['required']" name="description" style="width:100%" cols="45" rows="8">{description}</textarea></div>
     <div class="clear-left"></div>
     <div class="form-field">{lang_htmnotallowed}</div>
   <hr style="margin:5px;" />
