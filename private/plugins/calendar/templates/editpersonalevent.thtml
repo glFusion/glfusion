@@ -11,6 +11,27 @@ function update_ampm() document.getElementById('end_ampm').value = document.getE
 window.addEvent('domready',function() {
     var myValidator = new fValidator("editpersonalevent");
 });
+
+window.addEvent('load', function() {
+  $('allday').addEvent('change',toggleTOD);
+  toggleTOD();
+});
+
+function toggleTOD() {
+  var selected = $('allday').getValue();
+  switch (selected) {
+    case false:
+      $('todstart').style.display='';
+      $('todend').style.display='';
+      break;
+    case 'on':
+      $('todstart').style.display='none';
+      $('todend').style.display='none';
+      break;
+  }
+
+}
+
 -->
 </script>
                             <form action="{site_url}/calendar/event.php" id="editpersonalevent" method="post">
@@ -33,6 +54,10 @@ window.addEvent('domready',function() {
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td align="right"><b>{lang_alldayevent}:</b></td>
+                                        <td><input type="checkbox" name="allday" {allday_checked}{xhtml}></td>
+                                    </tr>
+                                    <tr>
                                         <td align="right"><b>{lang_startdate}:</b></td>
                                         <td>
                                           <span dir="ltr">
@@ -46,16 +71,19 @@ window.addEvent('domready',function() {
                                             /
                                             <select name="start_year" id="start_year" onchange="update_year()">
                                                 {startyear_options}
-                                            </select>&nbsp;&nbsp;
-                                            <b>{lang_starttime}: </b>
-                                            <select name="start_hour" id="start_hour" onchange="update_hour()">
-                                                {starthour_options}
                                             </select>
-                                            :
-                                            <select name="start_minute" id="start_minute" onchange="update_minute()">
-                                                {startminute_options}
-                                            </select>
-                                            {startampm_selection}
+                                            <span id="todstart">
+                                                &nbsp;&nbsp;
+                                                <b>{lang_starttime}: </b>
+                                                <select name="start_hour" id="start_hour" onchange="update_hour()">
+                                                    {starthour_options}
+                                                </select>
+                                                :
+                                                <select name="start_minute" id="start_minute" onchange="update_minute()">
+                                                    {startminute_options}
+                                                </select>
+                                                {startampm_selection}
+                                            </span>
                                           </span>
                                         </td>
                                     </tr>
@@ -73,22 +101,21 @@ window.addEvent('domready',function() {
                                             /
                                             <select name="end_year">
                                                 {endyear_options}
-                                            </select>&nbsp;&nbsp;
-                                            <b>{lang_endtime}: </b>
-                                            <select name="end_hour">
-                                                {endhour_options}
                                             </select>
-                                            :
-                                            <select name="end_minute">
-                                                {endminute_options}
-                                            </select>
-                                            {endampm_selection}
+                                            <span id="todend">
+                                                &nbsp;&nbsp;
+                                                <b>{lang_endtime}: </b>
+                                                <select name="end_hour">
+                                                    {endhour_options}
+                                                </select>
+                                                :
+                                                <select name="end_minute">
+                                                    {endminute_options}
+                                                </select>
+                                                {endampm_selection}
+                                            </span>
                                           </span>
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right"><b>{lang_alldayevent}:</b></td>
-                                        <td><input type="checkbox" name="allday" {allday_checked}{xhtml}></td>
                                     </tr>
                                     <tr>
                                         <td align="right" valign="top"><b>{lang_location}:</b></td>

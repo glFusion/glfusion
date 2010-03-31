@@ -6,6 +6,7 @@ v1.1.9
     - New feature: Ability to enable/disable events
     - New feature: Auto-set event end month/day/year/hour/minute to event start
     - New feature: Client-side validation for required fields
+    - New feature: Suppress input fields for hr/min/ampm if all day event
 - Staticpage Admin: Admin interface improvements & code scrub (Mark H.)
     - New feature: Ability to enable/disable staticpages
 - Added wrapper static page widget (Eric)

@@ -10,8 +10,29 @@ function update_minute() document.getElementById('end_minute').value = document.
 function update_ampm() document.getElementById('end_ampm').value = document.getElementById('start_ampm').value;
 
 window.addEvent('domready',function() {
-    var myValidator = new fValidator("submitevent");
+  var myValidator = new fValidator("submitevent");
 });
+
+window.addEvent('load', function() {
+  $('allday').addEvent('change',toggleTOD);
+  toggleTOD();
+});
+
+function toggleTOD() {
+  var selected = $('allday').getValue();
+  switch (selected) {
+    case false:
+      $('todstart').style.display='';
+      $('todend').style.display='';
+      break;
+    case 'on':
+      $('todstart').style.display='none';
+      $('todend').style.display='none';
+      break;
+  }
+
+}
+
 -->
 </script>
 <form class="form-theme" action="{site_url}{submit_url}" id="submitevent" method="post">
@@ -33,6 +54,9 @@ window.addEvent('domready',function() {
 
   <hr style="margin:5px;" />
 
+    <div class="form-description">{lang_alldayevent}:</div>
+    <div class="form-field"><input type="checkbox" name="allday" {all_day_checked}{xhtml}></div>
+    <div class="clear-left"></div>
     <div class="form-description">{lang_startdate}:</div>
     <div class="form-field">
       <span dir="ltr">
@@ -46,16 +70,19 @@ window.addEvent('domready',function() {
         /
         <select name="start_year" id="start_year" onchange="update_year()">
             {start_year_options}
-        </select>&nbsp;&nbsp;
-        <b>{lang_starttime}: </b>
-        <select name="start_hour" id="start_hour" onchange="update_hour()">
-            {start_hour_options}
         </select>
-        :
-        <select name="start_minute" id="start_minute" onchange="update_minute()">
-            {start_minute_options}
-        </select>
-        {startampm_selection}
+        <span id="todstart">
+          &nbsp;&nbsp;
+          <b>{lang_starttime}: </b>
+          <select name="start_hour" id="start_hour" onchange="update_hour()">
+              {start_hour_options}
+          </select>
+          :
+          <select name="start_minute" id="start_minute" onchange="update_minute()">
+              {start_minute_options}
+          </select>
+          {startampm_selection}
+        </span>
       </span>
     </div>
     <div class="clear-left"></div>
@@ -72,21 +99,21 @@ window.addEvent('domready',function() {
         /
         <select name="end_year">
             {end_year_options}
-        </select>&nbsp;&nbsp;
-        <b>{lang_endtime}: </b>
-        <select name="end_hour">
-            {end_hour_options}
         </select>
-        :
-        <select name="end_minute">
-            {end_minute_options}
-        </select>
-        {endampm_selection}
+        <span id="todend">
+          &nbsp;&nbsp;
+          <b>{lang_endtime}: </b>
+          <select name="end_hour">
+              {end_hour_options}
+          </select>
+          :
+          <select name="end_minute">
+              {end_minute_options}
+          </select>
+          {endampm_selection}
+        </span>
       </span>
     </div>
-    <div class="clear-left"></div>
-    <div class="form-description">{lang_alldayevent}:</div>
-    <div class="form-field"><input type="checkbox" name="allday" {all_day_checked}{xhtml}></div>
     <div class="clear-left"></div>
   <hr style="margin:5px;" />
 
