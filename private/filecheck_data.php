@@ -6,7 +6,7 @@
 // |                                                                          |
 // | All valid glFusion directories / files                                   |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
+// | $Id:: filecheck_data.php 5763 2010-03-31 00:16:44Z usableweb            $|
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
@@ -382,7 +382,7 @@ $glfDir = array(
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/forum/images/ranks' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/forum/images/smilies' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/forum/javascript' ),
-    array( 'test' => 'R', 'preq' => 'W', 'path' => 'public_html/forum/media' ),
+    array( 'test' => 'E', 'preq' => 'W', 'path' => 'public_html/forum/media' ),
     array( 'test' => 'E', 'preq' => 'W', 'path' => 'public_html/forum/media/tn' ),
 // public core (cont'd)
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/help' ),
@@ -578,7 +578,8 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/db-config.php.dist' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/db-config.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/emailglfusionstories' ),
-// language files
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/filecheck_data.php' ),
+    // language files
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/language/index.html' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/language/afrikaans.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/language/afrikaans_utf-8.php' ),
@@ -2530,7 +2531,6 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/admin/database.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/admin/envcheck.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/admin/filecheck.php' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/admin/filecheck_data.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/admin/group.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/admin/index.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/admin/install/config-install.php' ),

@@ -1876,6 +1876,9 @@ $LANG_FILECHECK = array(
     'where'             => 'Root',
     'path'              => 'Path',
     'file'              => 'File',
+    'dir'               => 'Dir',
+    'added'             => 'added',
+    'missing'           => 'missing',
     'perms'             => 'Permissions',
     'removed'           => '%s %s deleted.  Your site\'s File Integrity has been rechecked, and the results are shown below.'
 );

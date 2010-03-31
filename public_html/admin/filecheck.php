@@ -34,7 +34,7 @@ _stopwatch('start');
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
-require_once 'filecheck_data.php';
+require_once $_CONF['path'] . 'filecheck_data.php';
 
 USES_lib_admin();
 
@@ -175,7 +175,8 @@ function FILECHECK_scanNegative()
 
 function FILECHECK_search($needle, $haystack)
 {
-    for ($i=0; $i < count($haystack); $i++) {
+    $hsCount = count($haystack);
+    for ($i=0; $i < $hsCount; $i++) {
         if ($haystack[$i]['path'] == $needle) {
             return array($haystack[$i]['test'],$i);
         }
@@ -251,11 +252,11 @@ function FILECHECK_scanPositive( $path = '.', $where, $level = 0, $prefix=array(
 
 function FILECHECK_getListField($fieldname, $fieldvalue, $A, $icon_arr)
 {
-    global $_CONF;
+    global $_CONF, $LANG_FILECHECK;
 
     static $counter = 0;
 
-    $retval = false;
+    $retval = '<span style="font-size:smaller">';
 
     switch($fieldname) {
         case 'delete':
@@ -271,14 +272,15 @@ function FILECHECK_getListField($fieldname, $fieldvalue, $A, $icon_arr)
             }
             break;
         case 'delta':
-            $type = ($A['type'] == 'F') ? 'File' : 'Directory';
-            $retval = ($fieldvalue<>'-') ? $type . ' added:' : $type . ' missing:';
+            $type = ($A['type'] == 'F') ? $LANG_FILECHECK['file'] : $LANG_FILECHECK['dir'];
+            $retval .= ($fieldvalue<>'-') ? $type . ' ' . $LANG_FILECHECK['added'] . ':' : $type . ' ' . $LANG_FILECHECK['missing'] . ':';
+            $retval .= '</span>';
             break;
         case 'path':
-            $retval = $fieldvalue . '/';
+            $retval .= $fieldvalue . '/</span>';
             break;
         default:
-            $retval = $fieldvalue;
+            $retval .= $fieldvalue . '</span';
             break;
     }
 
@@ -312,12 +314,14 @@ function FILECHECK_list()
 
     // list files that have been added
 
+    $spanstart = '<span style="font-size:smaller">';
+    $spanend = '</span>';
     $header_arr = array(
-        array('text' => $LANG_ADMIN['delete'],   'field' => 'delete', 'align' => 'center'),
-        array('text' => $LANG_FILECHECK['where'], 'field' => 'where', 'align' => 'center'),
-        array('text' => $LANG_FILECHECK['delta'], 'field' => 'delta', 'align' => 'right'),
-        array('text' => $LANG_FILECHECK['path'], 'field' => 'path'),
-        array('text' => $LANG_FILECHECK['file'],  'field' => 'file')
+        array('text' => $spanstart . $LANG_ADMIN['delete'] . $spanend,   'field' => 'delete', 'align' => 'center'),
+        array('text' => $spanstart . $LANG_FILECHECK['where'] . $spanend, 'field' => 'where', 'align' => 'center'),
+        array('text' => $spanstart . $LANG_FILECHECK['delta'] . $spanend, 'field' => 'delta', 'align' => 'right'),
+        array('text' => $spanstart . $LANG_FILECHECK['path'] . $spanend, 'field' => 'path'),
+        array('text' => $spanstart . $LANG_FILECHECK['file'] . $spanend,  'field' => 'file')
     );
 
     $data_arr = array();

@@ -1872,10 +1872,13 @@ $LANG_FILECHECK = array(
     'recheck'           => 'Recheck File Integrity',
     'confirm'           => 'Are you sure you want to deleted the selected file(s)?',
     'explanation'       => 'Your site\'s file integrity has been analyzed, and the results are shown below.  This tool identifies files and directories that are not part of the base glFusion v%s distribution.  This may include files and directories that are related to glFusion plugins or other scripts that you have added, or are otherwise critical to your site\'s operation, and therefore <b>this DOES NOT mean you should simply delete these files!&nbsp;&nbsp;<span style="color:red">Please use this tool with caution!</span></b>',
-    'delta'             => 'Change Detected:',
+    'delta'             => 'Change:',
     'where'             => 'Root',
     'path'              => 'Path',
     'file'              => 'File',
+    'dir'               => 'Dir',
+    'added'             => 'added',
+    'missing'           => 'missing',
     'perms'             => 'Permissions',
     'removed'           => '%s %s deleted.  Your site\'s File Integrity has been rechecked, and the results are shown below.'
 );
