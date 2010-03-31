@@ -47,7 +47,6 @@ $glfIgnore = array('.','..','.svn','cgi-bin','.htaccess');
 
 $glfDir = array(
 // private core directories
-    array( 'test' => 'R', 'preq' => 'W', 'path' => 'private' ),
     array( 'test' => 'E', 'preq' => 'W', 'path' => 'private/backups' ),
     array( 'test' => 'E', 'preq' => 'W', 'path' => 'private/data' ),
     array( 'test' => 'E', 'preq' => 'W', 'path' => 'private/data/layout_cache' ),
@@ -244,7 +243,6 @@ $glfDir = array(
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/system/pear/XML/RPC' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/system/pear/scripts' ),
 // public core
-    array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/admin' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/admin/install' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/admin/install/include' ),
