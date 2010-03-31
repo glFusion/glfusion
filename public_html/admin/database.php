@@ -37,8 +37,6 @@
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
-USES_lib_security();
-
 $display = '';
 
 // If user isn't a root user or if the backup feature is disabled, bail.
