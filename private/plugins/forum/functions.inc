@@ -1552,28 +1552,26 @@ function forumPLG_restoreEmoticons($str) {
     }
 }
 
-function forumPLG_getPMlink($member,$uid=0) {
+function forumPLG_getPMlink($uid=0) {
     global $_TABLES,$_CONF, $_PLUGINS;
 
     static $blockArray = array();
 
     if (in_array('pm', $_PLUGINS)) {
-        if ( !isset($blockArray[$member]) ) {
-            if ( $uid == 0 ) {
-                $uid = DB_getItem($_TABLES['users'],'uid','username="'.DB_escapeString($member).'"');
+        if ( !isset($blockArray[$uid]) || $uid == 0 ) {
+            $username = DB_getItem($_TABLES['users'],'username','uid='.(int)$uid);
+            if ( $username == '' ) {
+                return '';
             }
-            $block = DB_getItem($_TABLES['pm_userprefs'],'block','uid='.$uid);
-            $blockArray[$member] = intval($block);
+            $blockArray[$uid]['username'] = $username;
+            $block = DB_getItem($_TABLES['pm_userprefs'],'block','uid='.(int)$uid);
+            $blockArray[$uid]['allow'] = (int) $block;
         }
-        if ( $blockArray[$member] == 0 ) {
-            return "{$_CONF['site_url']}/pm/compose.php?mode=new&amp;username={$member};";
+        if ( $blockArray[$uid]['allow'] == 0 ) {
+            return $_CONF['site_url'].'/pm/compose.php?mode=new&amp;username='.htmlentities($blockArray[$uid]['username']);
         }
     }
-    if (DB_getItem($_TABLES['plugins'],'pi_enabled',"pi_name='messenger'") == 1) {
-        return "{$_CONF['site_url']}/messenger/index.php?action=newpm&amp;toname={$member};";
-    } else {
-        return '';
-    }
+    return '';
 }
 
 function forumPLG_getMemberBadge($uid) {
