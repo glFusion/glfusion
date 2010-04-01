@@ -2009,8 +2009,7 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
 
 
                 if ( $link == '' ) {
-
-                    if ( $autotag['tag'] != 'image' && $MG_albums[$aid]->hidden != 1 && $enable_link != 0) {
+                    if ( $autotag['tag'] != 'image' && ($MG_albums[$aid]->hidden != 1 || $enable_link == 2) && $enable_link != 0) {
                         if ( $enable_link == 2 && $direct_link != '' ) {
                             if ( $_MG_CONF['disable_lightbox'] == true ) {
                                 $link = $tagtext;
@@ -3730,9 +3729,9 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
                         break;
                     case 'url':
                         if (empty($A['id'])) {
-                            $props['url'] = COM_buildUrl($_MG_CONF['site_url'].'/media.php?f=0&amp;sort=0&amp;s='.$id);
+                            $props['url'] = $_MG_CONF['site_url'].'/media.php?f=0&amp;sort=0&amp;s='.$id;
                         } else {
-                            $props['url'] = COM_buildUrl($_MG_CONF['site_url'].'/media.php?f=0&amp;sort=0&amp;s='.$A['media_id']);
+                            $props['url'] = $_MG_CONF['site_url'].'/media.php?f=0&amp;sort=0&amp;s='.$A['media_id'];
                         }
                         break;
                     case 'label':

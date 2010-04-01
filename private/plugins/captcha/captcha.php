@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
+// | Copyright (C) 2009-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -40,7 +40,7 @@ global $_DB_table_prefix, $_TABLES;
 $_CP_CONF['pi_name']            = 'captcha';
 $_CP_CONF['pi_display_name']    = 'CAPTCHA';
 $_CP_CONF['pi_version']         = '3.2.4';
-$_CP_CONF['gl_version']         = '1.1.8';
+$_CP_CONF['gl_version']         = '1.1.9';
 $_CP_CONF['pi_url']             = 'http://www.glfusion.org/';
 
 // Database table definitions
