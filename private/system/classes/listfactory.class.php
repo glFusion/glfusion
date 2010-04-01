@@ -665,6 +665,20 @@ class ListFactory {
             return $retval;
         }
 
+        if ( $this->_style == 'table' ) {
+            foreach ($this->_fields as $field) {
+                if ($field['display'] == true && $field['title'] != '') {
+                    $text = $sort_text . $field['title'];
+                    $href = '';
+                    $selected = '';
+                    $list_templates->set_var('sort_text', $text);
+                    $list_templates->set_var('sort_href', $href);
+                    $list_templates->set_var('sort_selected', $selected);
+                    $list_templates->parse('page_sort', 'sort', true);
+                }
+            }
+        }
+
         $offset = ($this->_page-1) * $this->_per_page;
 
         $list_templates->set_var('show_message', 'display:none;');
