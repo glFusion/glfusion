@@ -280,7 +280,7 @@ switch ($action) {
 
     case 'backup':
         if ($validtoken) {
-            $display .= DB_ADMIN_backup();
+            $display .= DBADMIN_backup();
         } else {
             COM_accessLog("User {$_USER['username']} tried to illegally backup the database and failed CSRF checks.");
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
