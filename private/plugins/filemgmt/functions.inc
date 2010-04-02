@@ -350,9 +350,11 @@ function plugin_showstats_filemgmt($showsitestats)
 {
     global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_FM_TABLES, $_CONF;
 
-    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
+    if ( COM_isAnonUser() && $mydownloads_publicpriv != 1 )  {
         return '';
     }
+
+    $retval = '';
 
     $stat_templates = new Template($_CONF['path_layout'] . 'stats');
     $stat_templates->set_file(array('itemstats'=>'itemstatistics.thtml',
