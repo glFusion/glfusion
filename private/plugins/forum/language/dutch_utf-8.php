@@ -291,6 +291,7 @@ $LANG_GF01 = array(
     'h_help' => 'Klik om uitgebreide help te bekijken',
     't_help' => 'Gebruik [file]#[/file] om een bijlage aan een bericht toe te voegen',
     'e_help' => 'List item: [*]tekst',
+    'smiley' => 'Smileys',
     'grade' => '<br /><b>Groep Comfort<br />Niveau:</b>',
     'grade_user' => '<br /><b>Beoordeel Gebruiker</b>',
     'retract_grade' => '<br /><b>Verwijder Beoordeling</b>',
@@ -301,13 +302,11 @@ $LANG_GF01 = array(
     'edit_signature' => 'Wijzig BBcode Ondertekening',
     'signature_preview' => 'Bekijk Ondertekening',
     'cancel_confirm' => 'Are you sure you want to cancel this post?',
-    /* --- topic features --- */
     'disable_bbcode' => 'Disable BBCode:',
     'disable_smilies' => 'Disable Smilies:',
     'disable_urlparse' => 'Do not parse URLs:',
     'features' => 'Features:',
-    /* --- rss feature --- */
-    'rss_link' => 'Subscribe to this forum\'s RSS feed.',
+    'rss_link' => 'Subscribe to this forum\'s RSS feed.'
 );
 
 $LANG_GF02 = array(
@@ -533,14 +532,14 @@ $LANG_GF03 = array(
     'splitheading' => 'Splits draad optie:',
     'splitopt1' => 'Move all posts from this point',
     'splitopt2' => 'Move only this one post',
-    'merge_post'  => 'Merge Post',
+    'merge_post' => 'Merge Post',
     'merge_topic' => 'Merge Topic',
     'mergetopicmsg' => 'You can merge selected post(s) into another topic. These posts will not be reordered and will appear as if the users posted them to the new topic. Please enter the destination topic id or click on "Select topic" to search for one.',
     'mergeparent' => 'You have selected the option to merge <strong>all</strong> posts in this topic into another topic.',
-    'select'    => 'Select',
+    'select' => 'Select',
     'select_forum' => 'Select Forum Topic',
     'destination_topic' => 'Destination Topic ID:',
-    'select_topic' => 'Select Topic',
+    'select_topic' => 'Select Topic'
 );
 
 $LANG_GF04 = array(
@@ -740,10 +739,10 @@ $LANG_GF92 = array(
     'forumprefs_help' => 'Modify the Forum Plugin user preferences.<ul><li>Number of topics to display when viewing the forum index.</li><li>Number of posts to show per page.</li><li>Number of posts before calling a topic popular.</li><li>Number of lines to display in search results.</li><li>For the Members listing screen</li><li>Hide posts from anonymous users.</li><li>Enable auto notifications.</li><li>Only send one notification.</li><li>Show topic review (iframe) at bottom when replying.</li></ul>',
     'topic_order' => 'Topic Order',
     'editor_type' => 'Editor Type',
-    'bbcode'    => 'BBCode',
-    'wysiwyg'   => 'WYSIWYG',
+    'bbcode' => 'BBCode',
+    'wysiwyg' => 'WYSIWYG',
     'ascending' => 'Ascending',
-    'descending' => 'Descending',
+    'descending' => 'Descending'
 );
 
 $LANG_GF93 = array(
@@ -983,7 +982,7 @@ $LANG_confignames['forum'] = array(
     'use_wysiwyg_editor' => 'WYSIWYG HTML Editor Inschakelen',
     'bbcode_disabled' => 'Default Setting for BBCode Disabled Box',
     'smilies_disabled' => 'Default Setting for Smilies Disabled Box',
-    'urlparse_disabled' => 'Default Setting for URL Parse Disabled Box',
+    'urlparse_disabled' => 'Default Setting for URL Parse Disabled Box'
 );
 
 $LANG_configsubgroups['forum'] = array(

@@ -144,7 +144,10 @@ $LANG_confignames['staticpages'] = array(
     'censor' => '内容を検閲する',
     'default_permissions' => 'パーミッション',
     'aftersave' => 'ページ保存後の画面遷移',
-    'atom_max_items' => 'フィードに使用するページの最大数'
+    'atom_max_items' => 'フィードに使用するページの最大数',
+    'comment_code' => 'Comment Default',
+    'include_search' => 'Site Search Default',
+    'status_flag' => 'Default Page Mode'
 );
 
 $LANG_configsubgroups['staticpages'] = array(
@@ -163,7 +166,9 @@ $LANG_configselects['staticpages'] = array(
     2 => array('日付' => 'date', 'ページID' => 'id', 'タイトル' => 'title'),
     3 => array('日付' => 'date', 'ページID' => 'id', 'タイトル' => 'title', 'ラベル' => 'label'),
     9 => array('作成した静的ページを表示する' => 'item', '静的ページ管理を表示する' => 'list', 'Homeを表示する' => 'home', '管理画面TOPを表示する' => 'admin'),
-    12 => array('アクセス不可' => 0, '表示' => 2, '表示・編集' => 3)
+    12 => array('アクセス不可' => 0, '表示' => 2, '表示・編集' => 3),
+    13 => array('Enabled' => 1, 'Disabled' => 0),
+    17 => array('Comments Enabled' => 0, 'Comments Disabled' => -1)
 );
 
 ?>

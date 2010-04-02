@@ -161,7 +161,7 @@ $LANG_CAL_ADMIN = array(
     26 => 'Delete old entries',
     27 => 'These are the events that are older than ',
     28 => ' months. Please click on the trashcan Icon on the bottom to delete them, or select a different timespan:<br' . XHTML . '>Find all entries that are older than ',
-    29 => ' months.',
+    29 => '',
     30 => 'Update List',
     31 => 'Are You sure you want to permanently delete ALL selected users?',
     32 => 'List all',
@@ -178,7 +178,8 @@ $LANG_CAL_MESSAGE = array(
     'login' => 'U moet aangemeld zijn om uw persoonlijke kalender te bewerken.',
     'removed' => 'De gebeurtenis is van uw persoonlijke kalender verwijderd',
     'noprivate' => 'Sorry, persoonlijke kalenders zijn op deze webpagina niet beschikbaar.',
-    'unauth' => 'U heeft geen toegang tot het gebeurtenis-beheerdersgedeelte. Alle toegangspogingen worden opgeslagen.'
+    'unauth' => 'U heeft geen toegang tot het gebeurtenis-beheerdersgedeelte. Alle toegangspogingen worden opgeslagen.',
+    'delete_confirm' => 'Are you sure you want to delete this event?'
 );
 
 $PLG_calendar_MESSAGE4 = "Dank U voor uw bijdrage aan {$_CONF['site_name']}. Uw evenement wordt nu beoordeeld. Zodra deze geaccepteerd is wordt deze zo snel mogelijk in de <a href=\"{$_CONF['site_url']}/calendar/index.php\">kalender</a> opgenomen.";

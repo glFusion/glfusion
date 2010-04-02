@@ -163,7 +163,7 @@ $LANG_CAL_ADMIN = array(
     26 => 'Delete old entries',
     27 => 'These are the events that are older than ',
     28 => ' months. Please click on the trashcan Icon on the bottom to delete them, or select a different timespan:<br' . XHTML . '>Find all entries that are older than ',
-    29 => ' months.',
+    29 => '',
     30 => 'Update List',
     31 => 'Are You sure you want to permanently delete ALL selected users?',
     32 => 'List all',
@@ -180,7 +180,8 @@ $LANG_CAL_MESSAGE = array(
     'login' => '개인스캐줄을 열때에는，먼저 로그인 해 주시기 바랍니다。',
     'removed' => '개인스캐줄에서 이벤트가 삭제 되었습니다。',
     'noprivate' => '죄송합니다만，이 사이트에서는，개인스캐줄이 무효합니다。',
-    'unauth' => '죄송합니다만，이벤트 관리페이지에 접속할 권한이 없습니다。 이 접속이 기록 된다는 점을 양해해 주시기 바랍니다.'
+    'unauth' => '죄송합니다만，이벤트 관리페이지에 접속할 권한이 없습니다。 이 접속이 기록 된다는 점을 양해해 주시기 바랍니다.',
+    'delete_confirm' => 'Are you sure you want to delete this event?'
 );
 
 $PLG_calendar_MESSAGE4 = "{$_CONF['site_name']} 에 이벤트를 투고해 주셔서 대단히 감사합니다。스탭에게 보내어져，승인을 기다리고 있는 상태입니다。 승인이 되면 이 사이트의 <a href=\"{$_CONF['site_url']}/calendar/index.php\">스캐줄</a> 부문에 표시 됩니다。";

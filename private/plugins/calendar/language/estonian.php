@@ -164,7 +164,7 @@ $LANG_CAL_ADMIN = array(
     26 => 'Kustuta vanad kanded',
     27 => 'Need on sündmused, mis on vanemad kui ',
     28 => ' kuud. Nende kustutamiseks klõpsa lehe allosas oleval prügikasti nupul või vali teine ajavahemik:<br' . XHTML . '> Leia sündmused, mis on vanemad kui ',
-    29 => ' kuud.',
+    29 => '',
     30 => 'Värskenda loetelu',
     31 => 'Oled sa kindel, et soovid kustutada kõik valitud kasutajad?',
     32 => 'Näita kõiki',
@@ -181,7 +181,8 @@ $LANG_CAL_MESSAGE = array(
     'login' => 'Ei saa enne sinu sisselogimist sinu isiklikku kalendrit avada',
     'removed' => 'Sündmus on sinu isiklikust kalendrist kustutatud.',
     'noprivate' => 'Kahjuks pole sellel lehel isiklikud kalendrid kasutuses.',
-    'unauth' => 'Sul pole ligipääsu sündmuste haldamise lehele. Pane tähele, et kõik sellised lubamatud katsed logitakse'
+    'unauth' => 'Sul pole ligipääsu sündmuste haldamise lehele. Pane tähele, et kõik sellised lubamatud katsed logitakse',
+    'delete_confirm' => 'Are you sure you want to delete this event?'
 );
 
 $PLG_calendar_MESSAGE4 = "Täname sind {$_CONF['site_name']} lehele sündmuse sisestamise eest.  See saadeti meie meeskonnale kinnitamiseks. Pärast kinnitamist on see sündmus näha <a href=\"{$_CONF['site_url']}/calendar/\">kalendri</a> osas.";

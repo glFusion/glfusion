@@ -163,7 +163,7 @@ $LANG_CAL_ADMIN = array(
     26 => 'Delete old entries',
     27 => 'These are the events that are older than ',
     28 => ' months. Please click on the trashcan Icon on the bottom to delete them, or select a different timespan:<br' . XHTML . '>Find all entries that are older than ',
-    29 => ' months.',
+    29 => '',
     30 => 'Update List',
     31 => 'Are You sure you want to permanently delete ALL selected users?',
     32 => 'List all',
@@ -180,7 +180,8 @@ $LANG_CAL_MESSAGE = array(
     'login' => 'Cannot open your personal calendar until you login',
     'removed' => 'Event was successfully removed from your personal calendar',
     'noprivate' => 'Désolé, les calendriers persos ne sont pas admis sur ce site',
-    'unauth' => 'Sorry, you do not have access to the event administration page.  Please note that all attempts to access unauthorized features are logged'
+    'unauth' => 'Sorry, you do not have access to the event administration page.  Please note that all attempts to access unauthorized features are logged',
+    'delete_confirm' => 'Are you sure you want to delete this event?'
 );
 
 $PLG_calendar_MESSAGE4 = "Merci de soumettre un évènement à {$_CONF['site_name']}.  Vous pourrez le visualisé sur le <a href=\"{$_CONF['site_url']}/calendar/index.php\">calendrier</a> une fois approuvé.";

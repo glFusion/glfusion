@@ -67,9 +67,6 @@ $LANG_ST00 = array(
     'fix_install' => 'Bitte behebe die obigen Punkte vor dem Installieren.',
     'need_cache' => 'Site-Tailor benötigt die <a href="http://www.gllabs.org/filemgmt/index.php?id=156">Caching-Template-Library-Erweiterung</a>. Bitte downloade und installiere diese Library.',
     'need_memory' => 'Site-Tailor empfiehlt, dass mindestens 48M für <strong>memory_limit</strong> in der php.ini eingestellt sind.',
-    'thank_you'         => 'Thank you for upgrading to the latest release of Site Tailor. Please double check your System Configuration Options, there are many new features in this release that you may need to configure.',
-    'support'           => 'For support, questions or enhancement requests, please visit <a href="http://www.gllabs.org">gl Labs</a>.  For the latest documentation, please visist the <a href="http://www.gllabs.org/wiki/">Site Tailor Wiki</a>.',
-    'success_upgrade'   => 'Site Tailor Successfully Upgraded',
     'overview' => 'Site-Tailor ist ein benötigtes CMS-Plugin, dass benutzerdef. Änderungen an der Seite ermöglicht.',
     'preinstall_check' => 'Site Tailor benötigt folgendes:',
     'glfusion_check' => 'glFusion v1.0.0 oder größer, gemeldete Version ist <b>%s</b>.',
@@ -180,7 +177,7 @@ $LANG_ST01 = array(
     'disabled_plugin' => 'Nicht gefunden oder deaktiviertes Plugin',
     'clone' => 'Kopieren',
     'clone_menu_label' => 'Name für geklontes Menü',
-    'topic' => 'Topics',
+    'topic' => 'Topics'
 );
 
 $LANG_HC = array(
@@ -232,7 +229,7 @@ $LANG_ST_TYPES = array(
     6 => 'Externe URL',
     7 => 'PHP-Funktion',
     8 => 'Label',
-    9 => 'Topic',
+    9 => 'Topic'
 );
 
 $LANG_ST_TARGET = array(

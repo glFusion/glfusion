@@ -164,7 +164,7 @@ $LANG_CAL_ADMIN = array(
     26 => 'Delete old entries',
     27 => 'These are the events that are older than ',
     28 => ' months. Please click on the trashcan Icon on the bottom to delete them, or select a different timespan:<br' . XHTML . '>Find all entries that are older than ',
-    29 => ' months.',
+    29 => '',
     30 => 'Update List',
     31 => 'Are You sure you want to permanently delete ALL selected users?',
     32 => 'List all',
@@ -181,7 +181,8 @@ $LANG_CAL_MESSAGE = array(
     'login' => 'Ne morem odpreti tvojega osebnega koledarja, dokler se ne prijaviš',
     'removed' => 'Dogodek je uspešno odstranjen iz tvojega osebnega koledarja',
     'noprivate' => 'Žal osebni koledarji na tem spletnem mestu niso omogočeni',
-    'unauth' => 'Žal nimaš dostopa do strani za upravljanje dogodkov. Vsi poskusi dostopa do nepooblaščenih funkcij se beležijo.'
+    'unauth' => 'Žal nimaš dostopa do strani za upravljanje dogodkov. Vsi poskusi dostopa do nepooblaščenih funkcij se beležijo.',
+    'delete_confirm' => 'Are you sure you want to delete this event?'
 );
 
 $PLG_calendar_MESSAGE4 = "Hvala, da si dogodek oddal/a na spletno mesto {$_CONF['site_name']}. Pred objavo ga bo pregledal eden od urednikov. Če bo odobren, bo objavljen in dan na razpolago bralcem te spletne strani v razdelku <a href=\"{$_CONF['site_url']}/calendar/index.php\">koledar</a>.";

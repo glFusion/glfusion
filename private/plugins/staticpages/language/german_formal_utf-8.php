@@ -145,7 +145,10 @@ $LANG_confignames['staticpages'] = array(
     'censor' => 'Inhalt zensieren?',
     'default_permissions' => 'Grundeinstellungen Statische Seiten',
     'aftersave' => 'Nach dem Speichern der Seiten',
-    'atom_max_items' => 'Max. Seiten in Webservices News-Feed'
+    'atom_max_items' => 'Max. Seiten in Webservices News-Feed',
+    'comment_code' => 'Comment Default',
+    'include_search' => 'Site Search Default',
+    'status_flag' => 'Default Page Mode'
 );
 
 $LANG_configsubgroups['staticpages'] = array(
@@ -164,7 +167,9 @@ $LANG_configselects['staticpages'] = array(
     2 => array('Datum' => 'date', 'Seiten-ID' => 'id', 'Titel' => 'title'),
     3 => array('Datum' => 'date', 'Seiten-ID' => 'id', 'Titel' => 'title', 'Menüpunkt' => 'label'),
     9 => array('Zur Seite weiterleiten' => 'item', 'Liste anzeigen' => 'list', 'Startseite' => 'home', 'Kommandozentrale' => 'admin'),
-    12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3)
+    12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3),
+    13 => array('Enabled' => 1, 'Disabled' => 0),
+    17 => array('Comments Enabled' => 0, 'Comments Disabled' => -1)
 );
 
 ?>

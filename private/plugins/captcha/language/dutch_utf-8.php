@@ -79,6 +79,10 @@ $LANG_CP00 = array(
     'characters' => 'Karakters'
 );
 
+$PLG_captcha_MESSAGE1 = 'CAPTCHA plugin upgrade: Update succesvol gereed.';
+$PLG_captcha_MESSAGE2 = 'CAPTCHA Plugin Succesvol Geinstalleerd';
+$PLG_captcha_MESSAGE3 = 'CAPTCHA Plugin Successfully Installed';
+
 // Localization of the Admin Configuration UI
 $LANG_configsections['captcha'] = array(
     'label' => 'CAPTCHA',
@@ -104,7 +108,10 @@ $LANG_confignames['captcha'] = array(
     'enable_rating' => 'Bij Waardering Plugin Inschakelen',
     'enable_links' => 'Bij Links Plugin Inschakelen',
     'enable_calendar' => 'Bij Kalender Plugin Inschakelen',
-    'expire' => 'Aantal seconden dat een CAPTCHA Sessie geldig is'
+    'expire' => 'Aantal seconden dat een CAPTCHA Sessie geldig is',
+    'publickey' => 'reCAPTCHA Public Key - <a href="http://recaptcha.net/api/getkey?app=php">reCAPTCHA Signup</a>',
+    'privatekey' => 'reCAPTCHA Private Key',
+    'recaptcha_theme' => 'reCAPTCHA Theme'
 );
 
 $LANG_configsubgroups['captcha'] = array(
@@ -122,10 +129,8 @@ $LANG_configselects['captcha'] = array(
     1 => array('Ja' => true, 'Nee' => false),
     2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Statische Afbeeldingen' => 2),
     4 => array('Standaard' => 'default', 'Simpel' => 'simple'),
-    5 => array('JPG' => 'jpg', 'PNG' => 'png')
+    5 => array('JPG' => 'jpg', 'PNG' => 'png'),
+    6 => array('clean' => 'clean', 'red' => 'red', 'white' => 'white', 'blackglass' => 'blackglass')
 );
 
-$PLG_captcha_MESSAGE1 = 'CAPTCHA plugin upgrade: Update succesvol gereed.';
-$PLG_captcha_MESSAGE2 = 'CAPTCHA plugin upgrade mislukt - controleer error.log';
-$PLG_captcha_MESSAGE3 = 'CAPTCHA Plugin Succesvol Geinstalleerd';
 ?>
