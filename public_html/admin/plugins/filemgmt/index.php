@@ -411,7 +411,7 @@ function modDownload() {
     $display .= '<tr><td colspan="3" style="text-align:center;padding:10px;">';
     $display .= '<input type="submit" value="'._MD_SUBMIT.'"' . XHTML . '><span style="padding-left:15px;padding-right:15px;">';
     $display .= '<input type="submit" value="'._MD_DELETE.'" onclick=\'if (confirm("Delete this file ?")) {this.form.op.value="delDownload";return true}; return false\'' . XHTML . '>';
-    $display .= "</span><input type=\"button\" value=\""._MD_CANCEL."\" onclick=\"javascript:history.go(-1)\"" . XHTML . ">";
+    $display .= "</span><input type=\"submit\" name=\"cancel\" value=\""._MD_CANCEL."\"" . XHTML . ">";
     $display .= '</td></tr></table></form>' .LB;
 
 
@@ -793,7 +793,7 @@ function modCat() {
     $display .= '<tr><td colspan="2" style="text-align:center;padding:10px;">';
     $display .= '<input type="submit" value="'._MD_SAVE.'">';
     $display .= '<input type="submit" value="'._MD_DELETE.'" onClick=\'if (confirm("Delete this file ?")) {this.form.op.value="delCat";return true}; return false\'>';
-    $display .= "&nbsp;<input type=button value="._MD_CANCEL." onclick=\"javascript:history.go(-1)\">";
+    $display .= "&nbsp;<input type=\"submit\" value="._MD_CANCEL." name=\"cancel\" />";
     $display .= '</td></tr></table>';
     $display .= "</form>";
     $display .= COM_endBlock();
@@ -1337,6 +1337,11 @@ function filemgmt_error($errormsg) {
     $display .= COM_endBlock();
     echo $display;
     exit();
+}
+
+if ( isset($_POST['cancel']) ) {
+    echo COM_refresh($_CONF['site_url'].'/filemgmt/index.php');
+    exit;
 }
 
 switch ($op) {
