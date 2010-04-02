@@ -626,11 +626,11 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
     $retval = '';
 
     $B['bid']           = (int) $bid;
-    $B['name']          = COM_stripslashes($name);
-    $B['title']         = COM_stripslashes($title);
+    $B['name']          = $name;
+    $B['title']         = $title;
     $B['type']          = $type;
     $B['blockorder']    = $blockorder;
-    $B['content']       = COM_stripslashes($content);
+    $B['content']       = $content;
     $B['tid']           = $tid;
     $B['rdfurl']        = $rdfurl;
     $B['rdfupdated']    = $rdfupdated;
@@ -647,8 +647,8 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
     $B['allow_autotags'] = $allow_autotags;
 
     $bid   = intval($bid);
-    $title = DB_escapeString (COM_stripslashes (strip_tags ($title)));
-    $phpblockfn = DB_escapeString (COM_stripslashes (trim ($phpblockfn)));
+    $title = DB_escapeString (strip_tags ($title));
+    $phpblockfn = DB_escapeString (trim ($phpblockfn));
     $name = COM_stripslashes($name);
 
     if (empty($title) || !BLOCK_validateName($name)) {
@@ -1034,22 +1034,47 @@ switch ($action) {
                 $content = COM_stripslashes($_POST['content']);
             }
 
-            $rdfurl = (isset ($_POST['rdfurl'])) ? $_POST['rdfurl'] : ''; // to be sanitized later
-            $rdfupdated = (isset ($_POST['rdfupdated'])) ? $_POST['rdfupdated'] : '';
-            $rdflimit = (isset ($_POST['rdflimit'])) ? COM_applyFilter ($_POST['rdflimit'], true) : 0;
-            $phpblockfn = (isset ($_POST['phpblockfn'])) ? $_POST['phpblockfn'] : '';
-            $is_enabled = (isset ($_POST['is_enabled'])) ? $_POST['is_enabled'] : '';
-            $allow_autotags = (isset ($_POST['allow_autotags']) ) ? 'on' : 0;
+            $rdfurl         = isset ($_POST['rdfurl'])         ? COM_applyFilter($_POST['rdfurl']) : '';
+            $rdfupdated     = isset ($_POST['rdfupdated'])     ? $_POST['rdfupdated'] : '';
+            $rdflimit       = isset ($_POST['rdflimit'])       ? COM_applyFilter ($_POST['rdflimit'], true) : 0;
+            $phpblockfn     = isset ($_POST['phpblockfn'])     ? COM_applyFilter($_POST['phpblockfn']) : '';
+            $is_enabled     = isset ($_POST['is_enabled'])     ? 'on' : '';
+            $allow_autotags = isset ($_POST['allow_autotags']) ? 'on' : 0;
+            $name           = isset ($_POST['name'])        ? COM_stripslashes($_POST['name']) : '';
+            $title          = isset ($_POST['title'])       ? COM_stripslashes($_POST['title']) : '';
+            $type           = isset ($_POST['type'])        ? COM_applyFilter($_POST['type']) : '';
+            $blockorder     = isset ($_POST['blockorder'])  ? COM_applyFilter($_POST['blockorder'],true) : 0;
+            $tid            = isset ($_POST['tid'])         ? COM_applyFilter($_POST['tid']) : '';
+            $onleft         = isset ($_POST['onleft'])      ? COM_applyFilter($_POST['onleft']) : '';
+            $owner_id       = isset ($_POST['owner_id'])    ? COM_applyFilter($_POST['owner_id'],true) : 2;
+            $group_id       = isset ($_POST['group_id'])    ? COM_applyFilter($_POST['group_id'],true) : 0;
+            $perm_owner     = isset ($_POST['perm_owner'])  ? $_POST['perm_owner'] : array();
+            $perm_group     = isset ($_POST['perm_group'])  ? $_POST['perm_group'] : array();
+            $perm_members   = isset ($_POST['perm_members']) ? $_POST['perm_members'] : array();
+            $perm_anon      = isset ($_POST['perm_anon'])   ? $_POST['perm_anon'] : array();
 
-            $display .= BLOCK_save($bid, $_POST['name'], $_POST['title'],
-                            $help, $_POST['type'], $_POST['blockorder'], $content,
-                            COM_applyFilter ($_POST['tid']), $rdfurl, $rdfupdated,
-                            $rdflimit, $phpblockfn, $_POST['onleft'],
-                            COM_applyFilter ($_POST['owner_id'], true),
-                            COM_applyFilter ($_POST['group_id'], true),
-                            $_POST['perm_owner'], $_POST['perm_group'],
-                            $_POST['perm_members'], $_POST['perm_anon'],
-                            $is_enabled, $allow_autotags);
+            $display .= BLOCK_save( $bid,
+                                    $name,
+                                    $title,
+                                    $help,
+                                    $type,
+                                    $blockorder,
+                                    $content,
+                                    $tid,
+                                    $rdfurl,
+                                    $rdfupdated,
+                                    $rdflimit,
+                                    $phpblockfn,
+                                    $onleft,
+                                    $owner_id,
+                                    $group_id,
+                                    $perm_owner,
+                                    $perm_group,
+                                    $perm_members,
+                                    $perm_anon,
+                                    $is_enabled,
+                                    $allow_autotags
+                                  );
         } else {
             COM_accessLog("User {$_USER['username']} tried to illegally edit block $bid and failed CSRF checks.");
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
