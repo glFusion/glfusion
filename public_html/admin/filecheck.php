@@ -119,7 +119,7 @@ function FILECHECK_scanNegative()
 
             case 'R':
                 // we recursed here, unpinged dirs must be missing
-                if ($dir['ping'] <> 1) {
+                if (!isset($dir['ping'])) {
                     $data_arr[] = array(
                         'where' => $where,
                         'path'  => $rdir,
@@ -146,7 +146,7 @@ function FILECHECK_scanNegative()
             COM_errorlog( 'filecheck: unexpected root dirspec(not private/ or public_html/): ' . $dir );
         }
         // ok now check for unpinged files that are not set to be ignored
-        if (($file['ping'] <> 1) && ($file['test'] <> 'I')) {
+        if ((!isset($file['ping'])) && ($file['test'] <> 'I')) {
             // ostensibly, this file was not found - get the dir and file parts
             $pathinfo = pathinfo($rdir);
             $dirname = $pathinfo['dirname'];
@@ -231,6 +231,10 @@ function FILECHECK_scanPositive( $path = '.', $where, $level = 0, $prefix=array(
                             'delta' => '+'
                           );
                     }
+                    // fix to recurse unrecognized directories
+                    $prefix[] = $file;
+                    FILECHECK_scanPositive( "$path/$file", $where, ($level+1), $prefix );
+                    array_pop($prefix);
                 }
             } else {
                 // this is a file
@@ -300,65 +304,63 @@ function FILECHECK_scan()
 {
     global $_CONF, $LANG_ADMIN, $LANG_FILECHECK, $LANG01, $data_arr, $elapsed;
 
-    $retval = '';
-
-    $menu_arr = array (
-        array('url'  => $_CONF['site_admin_url'].'/filecheck.php',
-              'text' => $LANG_FILECHECK['recheck']),
-        array('url'  => $_CONF['site_admin_url'].'/envcheck.php',
-              'text' => $LANG01['env_check']),
-        array('url'  => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home'])
-    );
-
-    $retval .= COM_startBlock($LANG_FILECHECK['filecheck'], '',
-                              COM_getBlockTemplate('_admin_block', 'header'));
-    $retval .= ADMIN_createMenu(
-        $menu_arr,
-        sprintf($LANG_FILECHECK['explanation'], GVERSION),
-        $_CONF['layout_url'] . '/images/icons/filecheck.png'
-    );
-
-    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
-
-    // list files that have been added
-
-    $spanstart = '<span style="font-size:smaller">';
-    $spanend = '</span>';
-    $header_arr = array(
-        array('text' => $spanstart . $LANG_ADMIN['delete'] . $spanend,   'field' => 'delete', 'align' => 'center'),
-        array('text' => $spanstart . $LANG_FILECHECK['where'] . $spanend, 'field' => 'where', 'align' => 'center'),
-        array('text' => $spanstart . $LANG_FILECHECK['delta'] . $spanend, 'field' => 'delta', 'align' => 'right'),
-        array('text' => $spanstart . $LANG_FILECHECK['path'] . $spanend, 'field' => 'path'),
-        array('text' => $spanstart . $LANG_FILECHECK['file'] . $spanend,  'field' => 'file')
-    );
-
+    $retval = false;
     $data_arr = array();
-    $text_arr = array();
-    $form_arr = array();
 
-    $text_arr = array(
-        'form_url'   => $_CONF['site_admin_url'] . '/filecheck.php'
-    );
-
+    // begin timing scan process
     $start = _stopwatch('start');
-    $completed = (
-        FILECHECK_scanPositive(substr($_CONF['path'],0,-1),'private') &&
-        FILECHECK_scanPositive(substr($_CONF['path_html'],0,-1),'public_html') &&
-        FILECHECK_scanNegative()
-    );
-    $elapsed = _stopwatch('stop');
 
-    $bottom = '<br' . XHTML . '><input type="submit" onclick="return confirm(\'' . $LANG_FILECHECK['confirm'] . '\');" name="delete" value="' . $LANG_ADMIN['delete'] . '"' . XHTML . '>'
-            . '&nbsp;&nbsp;<input type="submit" name="cancel" value="' . $LANG_ADMIN['cancel'] . '"' . XHTML . '>'
-            . '&nbsp;&nbsp;' . sprintf($LANG_FILECHECK['elapsed'], $elapsed);
+    if ( FILECHECK_scanPositive(substr($_CONF['path'],0,-1),'private') &&
+         FILECHECK_scanPositive(substr($_CONF['path_html'],0,-1),'public_html') &&
+         FILECHECK_scanNegative()) {
 
-    $form_arr = array('bottom' => $bottom);
+        // scanning succeeded, sort the array and then capture the elapsed time
+        sort($data_arr);
+        $elapsed = _stopwatch('stop');
 
-    sort($data_arr);
+        // display the menu
+        $menu_arr = array (
+            array('url'  => $_CONF['site_admin_url'].'/filecheck.php',
+                  'text' => $LANG_FILECHECK['recheck']),
+            array('url'  => $_CONF['site_admin_url'].'/envcheck.php',
+                  'text' => $LANG01['env_check']),
+            array('url'  => $_CONF['site_admin_url'],
+                  'text' => $LANG_ADMIN['admin_home'])
+        );
 
-    $retval .= ADMIN_simpleList("FILECHECK_getListField", $header_arr, $text_arr, $data_arr, NULL, $form_arr);
+        $retval .= COM_startBlock($LANG_FILECHECK['filecheck'], '',
+                                  COM_getBlockTemplate('_admin_block', 'header'));
+        $retval .= ADMIN_createMenu(
+            $menu_arr,
+            sprintf($LANG_FILECHECK['results'], GVERSION),
+            $_CONF['layout_url'] . '/images/icons/filecheck.png'
+        );
 
+        $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+
+        // display the list of results in data_arr
+        $spanstart = '<span style="font-size:smaller">';
+        $spanend = '</span>';
+
+        $header_arr = array(
+            array('text' => $spanstart . $LANG_ADMIN['delete'] . $spanend,   'field' => 'delete', 'align' => 'center'),
+            array('text' => $spanstart . $LANG_FILECHECK['where'] . $spanend, 'field' => 'where', 'align' => 'center'),
+            array('text' => $spanstart . $LANG_FILECHECK['delta'] . $spanend, 'field' => 'delta', 'align' => 'right'),
+            array('text' => $spanstart . $LANG_FILECHECK['path'] . $spanend, 'field' => 'path'),
+            array('text' => $spanstart . $LANG_FILECHECK['file'] . $spanend,  'field' => 'file')
+        );
+
+        $text_arr = array(
+            'form_url'   => $_CONF['site_admin_url'] . '/filecheck.php'
+        );
+
+        $bottom = '<br' . XHTML . '><input type="submit" onclick="return confirm(\'' . $LANG_FILECHECK['confirm'] . '\');" name="delete" value="' . $LANG_ADMIN['delete'] . '"' . XHTML . '>'
+                    . '&nbsp;&nbsp;<input type="submit" name="cancel" value="' . $LANG_ADMIN['cancel'] . '"' . XHTML . '>'
+                    . '&nbsp;&nbsp;' . sprintf($LANG_FILECHECK['elapsed'], $elapsed);
+        $form_arr = array('bottom' => $bottom);
+
+        $retval .= ADMIN_simpleList("FILECHECK_getListField", $header_arr, $text_arr, $data_arr, NULL, $form_arr);
+    }
     return $retval;
 }
 
@@ -396,6 +398,8 @@ foreach($expected as $provided) {
 $files = 0;
 $elapsed = 0;
 $result = '';
+$timelimit = ini_get('max_execution_time');
+
 $display = COM_siteHeader();
 
 switch ($action) {
@@ -420,6 +424,23 @@ if ($files > 0) {
 }
 
 if (empty($result)) {
+
+    $menu_arr = array (
+        array('url'  => $_CONF['site_admin_url'].'/envcheck.php',
+              'text' => $LANG01['env_check']),
+        array('url'  => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
+
+    $display .= COM_startBlock($LANG_FILECHECK['filecheck'], '',
+                              COM_getBlockTemplate('_admin_block', 'header'));
+    $display .= ADMIN_createMenu(
+        $menu_arr,
+        sprintf($LANG_FILECHECK['scan'], $timelimit),
+        $_CONF['layout_url'] . '/images/icons/filecheck.png'
+    );
+
+    $display .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
     $display .= $LANG_FILECHECK['working'] . COM_siteFooter();
     $display .= COM_refresh($_CONF['site_admin_url'] . '/filecheck.php?scan=x');
 } else {

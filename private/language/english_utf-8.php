@@ -1871,7 +1871,8 @@ $LANG_FILECHECK = array(
     'filecheck'         => 'File Integrity Check',
     'recheck'           => 'Recheck File Integrity',
     'confirm'           => 'Are you sure you want to deleted the selected file(s)?',
-    'explanation'       => 'Your site\'s file integrity has been analyzed, and the results are shown below.  This tool identifies files and directories that are not part of the base glFusion v%s distribution, and whether any files that are a part of the distribution are missing.<br /><br />Additional files and/or directories that are detected may be associated with plugins or other scripts that you have added, or are otherwise critical to your site\'s operation, and therefore <b>this DOES NOT mean you should simply delete these files!&nbsp;&nbsp;<span style="color:red">Please use this tool with caution!</span></b>',
+    'scan'              => 'Your site\'s file integrity is being analyzed.  Please be patient, this process may take awhile to complete, and execution speed depends upon the hosting environment.  If this script approaches the maximum PHP script execution time of %s seconds, scanning will be interrupted and an error message will be displayed.',
+    'results'           => 'Your site\'s files and directories have been compared to the glFusion v%s distribtion, and the results are shown below.  Added or missing files and directories have been identified, and files that have been added may be selected for deletion.  Directories that have been added will be detected, but presently these must be removed manually.<br /><br />Additional files and/or directories that are detected may be associated with plugins or other scripts that you have added, or are otherwise critical to your site\'s operation, and therefore <b>this DOES NOT mean you should simply delete these files!&nbsp;&nbsp;<span style="color:red">Please use this tool with caution!</span></b>',
     'delta'             => 'Change:',
     'where'             => 'Root',
     'path'              => 'Path',
@@ -1881,7 +1882,7 @@ $LANG_FILECHECK = array(
     'missing'           => 'missing',
     'perms'             => 'Permissions',
     'removed'           => '%s %s deleted.  Your site\'s File Integrity has been rechecked, and the results are shown below.',
-    'working'           => 'Scanning, please be patient, this may take a little while to complete ...<br />',
+    'working'           => 'Scanning ...<br />',
     'elapsed'           => 'The scan completed in %s sec.'
 );
 
