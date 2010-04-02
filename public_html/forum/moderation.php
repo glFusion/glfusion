@@ -495,7 +495,8 @@ function moderator_confirmMove($topic_id,$topic_parent_id,$forum_id)
     $destination_forum_select .= '</select>';
 
     if ($target == 0) {
-        $retval .= alertMessage($LANG_GF02['msg181'],$LANG_GF01['WARNING'],'',true);
+        $retval = alertMessage($LANG_GF02['msg181'],$LANG_GF01['WARNING'],'',true);
+        return $retval;
     } else {
         $T->set_var('destination_forum_select',$destination_forum_select);
         $T->set_var('move_title',$subject);
