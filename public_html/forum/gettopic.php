@@ -86,7 +86,8 @@ function ADMIN_getListField_gettopic($fieldname, $fieldvalue, $A, $icon_arr)
     return $retval;
 }
 
-$forum_id = COM_applyFilter($_GET['fid'],true);
+$forum_id        = COM_applyFilter($_GET['fid'],true);
+$topic_parent_id = COM_applyFilter($_GET['pid'],true);
 
 $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
 $T->set_file('confirm','gettopic.thtml');
@@ -174,7 +175,7 @@ foreach ($usergroups as $group) {
 }
 $grouplist = implode(',',$groups);
 
-$sql = "SELECT * FROM {$_TABLES['gf_topic']} WHERE pid=0 AND forum=".$forum_id;
+$sql = "SELECT * FROM {$_TABLES['gf_topic']} WHERE pid=0 AND id<> ".$topic_parent_id." AND forum=".$forum_id;
 
 $query_arr = array('table'          => 'topic',
                    'sql'            => $sql,
@@ -184,7 +185,7 @@ $query_arr = array('table'          => 'topic',
 $retval .= ADMIN_list('topics', 'ADMIN_getListField_gettopic', $header_arr,
                       $text_arr, $query_arr, $defsort_arr);
 
-
+$T->set_var('topic_parent_id',$topic_parent_id);
 $T->set_var('selection_page',$retval);
 $T->parse ('output', 'confirm');
 $retval = $T->finish($T->get_var('output'));

@@ -29,8 +29,8 @@ function popitup(url)
         {$LANG_GF03[destination_topic]}&nbsp;
         <input name="mergetopic" id="mergetopic" type="text" size="5" value="0" />
         &nbsp;
-        <a onclick="return popitup('{site_url}/forum/gettopic.php?fid={forum_id}&amp;query_limit=20')" href="#">
-        Select Topic</a>
+        <a onclick="return popitup('{site_url}/forum/gettopic.php?fid={forum_id}&amp;pid={topic_parent_id}&amp;query_limit=20')" href="#">
+        {$LANG_GF03[select_topic]}</a>
       {!endif}
 
       {!if destination_forum_select}

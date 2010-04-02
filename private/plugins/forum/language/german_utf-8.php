@@ -541,6 +541,7 @@ $LANG_GF03 = array(
     'select'    => 'Select',
     'select_forum' => 'Select Forum Topic',
     'destination_topic' => 'Destination Topic ID:',
+    'select_topic' => 'Select Topic',
 );
 
 $LANG_GF04 = array(
