@@ -497,9 +497,23 @@ function glfusion_119()
     $c->add('comment_code', -1, 'select',0, 0,17, 97, true, 'staticpages');
     $c->add('status_flag', 1, 'select',0, 0, 13, 99, true, 'staticpages');
 
+    // new stats.view permission
+    DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('stats.view','Allows access to the Stats page.',0)",1);
+    $ft_id = DB_insertId();
+    $all_grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'All Users'"));
+    $loggedin_grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'Logged-in Users'"));
+    $root_grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'Root'"));
+    if ( $_CONF['statsloginrequired'] || $_CONF['loginrequired'] ) {
+        DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $loggedin_grp_id)", 1);
+    } else {
+        DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $all_grp_id)", 1);
+    }
+    DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $root_grp_id)", 1);
+    $c->del('statsloginrequired','Core');
+
+    // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.9',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.9' WHERE name='glfusion'",1);
-
 }
 
 $retval .= 'Performing database upgrades if necessary...<br />';

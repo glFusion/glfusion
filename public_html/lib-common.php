@@ -954,9 +954,7 @@ function COM_renderMenu( &$header, $plugin_menu )
             case 'stats':
                 $url = $_CONF['site_url'] . '/stats.php';
                 $label = $LANG01[76];
-                if( $anon &&
-                    ( $_CONF['loginrequired'] || $_CONF['statsloginrequired'] ))
-                {
+                if ( !SEC_hasRights('stats.view') ) {
                     $allowed = false;
                 }
                 break;

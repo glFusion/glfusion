@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- New permission - stats.view - controls access to Stats page (Mark)
+- Media Gallery: Added linksrc: parameter to media auto tag to specify
+  which image (tn/disp/orig) should be used in the direct link (Mark)
 - Calendar Plugin: Admin interface improvements & code scrub (Mark H.)
     - New feature: JS date picker for start/end dates
     - New feature: Ability to enable/disable events

@@ -365,10 +365,10 @@ class mbElement {
                         break;
                     case 5: // stats
                         $this->url = $_CONF['site_url'] . '/stats.php';
-                        if( $anon && ( $_CONF['loginrequired'] ||
-                                $_CONF['statsloginrequired'] )) {
+                        if ( !SEC_hasRights('stats.view') ) {
                             $allowed = false;
                         }
+
                         break;
                     default : // unknown?
                         $this->url = $_CONF['site_url'] . '/';
