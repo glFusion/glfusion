@@ -1667,8 +1667,6 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
         case 'label':
 		case 'status':
             $fields[] = 'eid';
-            break;
-        case 'status':
             $fields[] = 'status';
             break;
         default:
