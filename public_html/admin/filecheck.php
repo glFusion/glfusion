@@ -202,6 +202,10 @@ function FILECHECK_scanPositive( $path = '.', $where, $level = 0, $prefix=array(
 
     $ignore = $glfIgnore;
 
+    if (FILECHECK_timer('check') > $max_time ) {
+        return false;
+    }
+
     $dh = @opendir( $path );
 
     while( false !== ($file = readdir($dh)) ) {
@@ -221,13 +225,24 @@ function FILECHECK_scanPositive( $path = '.', $where, $level = 0, $prefix=array(
                     // directory was recognized
                     $glfDir[$i]['ping'] = 1;
                     if ($test == 'R') {
-                        // recurse only if allowed
+                        // recurse into this directory only if allowed
                         $prefix[] = $file;
                         FILECHECK_scanPositive( "$path/$file", $where, ($level+1), $prefix );
                         array_pop($prefix);
                     }
+                    // flag unbundled plugin dirs that are discovered
+                    if ($test == 'P') {
+                        $data_arr[] = array(
+                            'where' => $where,
+                            'path'  => $path . '/' . $file,
+                            'file'  => '',
+                            'type'  => 'P',
+                            'delta' => '+'
+                        );
+                    }
                 } else {
                     // directory is not recognized, add to list if not ignored
+                    // flag directories associated with unbundled plugins
                     if ($test <> 'I') {
                         $data_arr[] = array(
                             'where' => $where,
@@ -235,7 +250,7 @@ function FILECHECK_scanPositive( $path = '.', $where, $level = 0, $prefix=array(
                             'file'  => '',
                             'type'  => 'D',
                             'delta' => '+'
-                          );
+                        );
                     }
                     // fix to recurse unrecognized directories
                     $prefix[] = $file;
@@ -264,12 +279,11 @@ function FILECHECK_scanPositive( $path = '.', $where, $level = 0, $prefix=array(
                 }
             }
         }
-        if (FILECHECK_timer('check') > $max_time ) {
-            return false;
-        }
     }
     closedir( $dh );
+
     return true;
+
 }
 
 function FILECHECK_initMenu($max_time)
@@ -279,6 +293,8 @@ function FILECHECK_initMenu($max_time)
     $menu_arr = array (
         array('url'  => $_CONF['site_admin_url'].'/envcheck.php',
               'text' => $LANG01['env_check']),
+        array('url'  => $_CONF['site_admin_url'].'/filecheck.php?expired=x',
+              'text' => $LANG_FILECHECK['abort']),
         array('url'  => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -349,6 +365,40 @@ function FILECHECK_scanMenu()
     return $retval;
 }
 
+function FILECHECK_addPlugins()
+{
+    global $_TABLES, $glfPlugins, $glfDir, $data_arr;
+
+    $result = DB_query("SELECT pi_name FROM {$_TABLES['plugins']} WHERE 1=1");
+    $num_plugins = DB_numRows($result);
+    for ($i = 0; $i < $num_plugins; $i++) {
+        $A = DB_fetchArray($result);
+        if(!in_array($A['pi_name'], $glfPlugins)) {
+            // dirs that are associated with unbundled plugins need to be
+            // handled a little differently
+            // by setting the 'P' flag, we tell filecheck to not recurse those
+            // directories, but if they are discovered, then we will flag them
+            // in our results array
+            $glfDir[] = array(
+                'test' => 'P',
+                'preq' => 'R',
+                'path' => 'private/plugins/' . $A['pi_name']
+            );
+            $glfDir[] = array(
+                'test' => 'P',
+                'preq' => 'R',
+                'path' => 'public_html/' . $A['pi_name']
+            );
+            $glfDir[] = array(
+                'test' => 'P',
+                'preq' => 'R',
+                'path' => 'public_html/admin/plugins/' . $A['pi_name']
+            );
+        }
+    }
+    return true;
+}
+
 function FILECHECK_getListField($fieldname, $fieldvalue, $A, $icon_arr)
 {
     global $_CONF, $LANG_FILECHECK;
@@ -358,6 +408,7 @@ function FILECHECK_getListField($fieldname, $fieldvalue, $A, $icon_arr)
     $retval = '<span style="font-size:smaller">';
 
     switch($fieldname) {
+
         case 'delete':
             if ($A['type'] == 'F' && $A['delta'] == '+') {
                 if (FILECHECK_isWriteable($A['path'] . '/' . $A['file'])) {
@@ -370,18 +421,35 @@ function FILECHECK_getListField($fieldname, $fieldvalue, $A, $icon_arr)
                     $retval = '<input type="checkbox" name="disabled" value="x" DISABLED'.XHTML.'>';
             }
             break;
+
+        case 'type':
+            switch ($A['type']) {
+                case 'F':
+                    $retval .= $LANG_FILECHECK['file'];
+                    break;
+                case 'D':
+                    $retval .= $LANG_FILECHECK['dir'];
+                    break;
+                case 'P':
+                    $retval .= $LANG_FILECHECK['plugin'];
+                    break;
+            }
+            break;
+
         case 'delta':
-            $type = ($A['type'] == 'F') ? $LANG_FILECHECK['file'] : $LANG_FILECHECK['dir'];
-            $retval .= ($fieldvalue<>'-') ? $type . ' ' . $LANG_FILECHECK['added'] . ':' : $type . ' ' . $LANG_FILECHECK['missing'] . ':';
-            $retval .= '</span>';
+            $retval .= ($fieldvalue<>'-') ? $type . ' ' . $LANG_FILECHECK['added'] : $type . ' ' . $LANG_FILECHECK['missing'];
             break;
-        case 'path':
-            $retval .= $fieldvalue . '/</span>';
+
+        case 'location':
+            $retval .= $A['path'] . '/' . $A['file'];
             break;
+
         default:
-            $retval .= $fieldvalue . '</span';
+            $retval .= $fieldvalue;
             break;
     }
+
+    $retval .= '</span>';
 
     return $retval;
 }
@@ -392,6 +460,9 @@ function FILECHECK_scan()
 
     $retval = false;
     $data_arr = array();
+
+    // detect unbundled plugins
+    FILECHECK_addPlugins();
 
     // begin timing scan process
     $start_time = FILECHECK_timer('start');
@@ -408,15 +479,12 @@ function FILECHECK_scan()
         $retval = FILECHECK_scanMenu();
 
         // build the list of results
-        $spanstart = '<span style="font-size:smaller">';
-        $spanend = '</span>';
-
         $header_arr = array(
-            array('text' => $spanstart . $LANG_ADMIN['delete'] . $spanend,   'field' => 'delete', 'align' => 'center'),
-            array('text' => $spanstart . $LANG_FILECHECK['where'] . $spanend, 'field' => 'where', 'align' => 'center'),
-            array('text' => $spanstart . $LANG_FILECHECK['delta'] . $spanend, 'field' => 'delta', 'align' => 'right'),
-            array('text' => $spanstart . $LANG_FILECHECK['path'] . $spanend, 'field' => 'path'),
-            array('text' => $spanstart . $LANG_FILECHECK['file'] . $spanend,  'field' => 'file')
+            array('text' => $LANG_ADMIN['delete'],   'field' => 'delete', 'align' => 'center'),
+            array('text' => $LANG_FILECHECK['where'], 'field' => 'where', 'align' => 'center'),
+            array('text' => $LANG_FILECHECK['type'], 'field' => 'type', 'align' => 'center'),
+            array('text' => $LANG_FILECHECK['delta'], 'field' => 'delta', 'align' => 'center'),
+            array('text' => $LANG_FILECHECK['location'], 'field' => 'location')
         );
 
         $text_arr = array(
@@ -451,21 +519,6 @@ function FILECHECK_delete()
     return $n;
 }
 
-function FILECHECK_addPlugins()
-{
-    global $_TABLES, $glfPlugins;
-
-    $result = DB_query("SELECT pi_name FROM {$_TABLES['plugins']} WHERE 1=1");
-    $num_plugins = DB_numRows($result);
-    for ($i = 0; $i < $num_plugins; $i++) {
-        $A = DB_fetchArray($result);
-        if(!in_array($A['pi_name'], $glfPlugins)) {
-            COM_errorLog( 'Detected additional plugin: ' . $A['pi_name']);
-        }
-    }
-    return true;
-}
-
 // MAIN ========================================================================
 
 $action = '';
@@ -482,7 +535,6 @@ $files = 0;
 $results = '';
 $max_time = ini_get('max_execution_time') - 1;
 
-FILECHECK_addPlugins();
 $display = COM_siteHeader();
 
 switch ($action) {

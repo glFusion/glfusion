@@ -40,7 +40,7 @@ if (!defined ('GVERSION')) {
 
 $glfIgnore = array('.','..','.svn','cgi-bin','.htaccess');
 
-// these are the bundled plugins
+// these are the bundled plugins.  they are fully defined/checked as below
 
 $glfPlugins = array(
     'bad_behavior2',

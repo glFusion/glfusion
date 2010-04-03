@@ -1875,18 +1875,21 @@ $LANG_FILECHECK = array(
     'results'           => 'Your site\'s files and directories have been compared to the glFusion v%s distribtion, and the results are shown below.  Added or missing files and directories have been identified, and files that have been added may be selected for deletion.  Directories that have been added will be detected, but presently these must be removed manually.<br /><br />Additional files and/or directories that are detected may be associated with plugins or other scripts that you have added, or are otherwise critical to your site\'s operation, and therefore <b>this DOES NOT mean you should simply delete these files!&nbsp;&nbsp;<span style="color:red">Please use this tool with caution!</span></b>',
     'expiration1'       => 'NOTE: The scan was aborted because the elapsed time it was approaching your site\'s PHP maximum execution time limit.  This analysis script is CPU and I/O-intensive, and can be affected by a number of factors in your web hosting environment.  Please consider one or more of the following recommendations resolve this problem:<br />',
     'expiration2'       => '<ol><li>Try increasing the value of \'max_execution_time\' in your php.ini file.  It is currently set to %s seconds.</li><li>Manually inspect your site and remove any unneeded files and directories.</li></ol>',
+    'abort'             => 'Abort Scan',
     'aborted'           => 'The scan was aborted.',
-    'delta'             => 'Change:',
-    'where'             => 'Root',
+    'where'             => 'Where',
+    'type'              => 'Type',
+    'delta'             => 'Change',
+    'location'          => 'Location',
     'path'              => 'Path',
-    'file'              => 'File',
-    'dir'               => 'Dir',
+    'file'              => 'file',
+    'dir'               => 'directory',
+    'plugin'            => 'plugin',
     'added'             => 'added',
     'missing'           => 'missing',
-    'perms'             => 'Permissions',
     'removed'           => '%s %s deleted.  Your site\'s File Integrity has been rechecked, and the results are shown below.',
-    'working'           => 'Scanning ...<br />',
-    'elapsed'           => 'The scan completed in %s sec.'
+    'working'           => 'Scanning, please wait ...<br />',
+    'elapsed'           => 'Scan completed in %s sec.'
 );
 
 ###############################################################################
