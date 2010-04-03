@@ -130,7 +130,7 @@ function FILECHECK_scanNegative()
                 }
                 break;
         }
-        if (_stopwatch('check') > $max_time ) {
+        if (FILECHECK_timer('check') > $max_time ) {
             return false;
         }
     }
@@ -451,6 +451,21 @@ function FILECHECK_delete()
     return $n;
 }
 
+function FILECHECK_addPlugins()
+{
+    global $_TABLES, $glfPlugins;
+
+    $result = DB_query("SELECT pi_name FROM {$_TABLES['plugins']} WHERE 1=1");
+    $num_plugins = DB_numRows($result);
+    for ($i = 0; $i < $num_plugins; $i++) {
+        $A = DB_fetchArray($result);
+        if(!in_array($A['pi_name'], $glfPlugins)) {
+            COM_errorLog( 'Detected additional plugin: ' . $A['pi_name']);
+        }
+    }
+    return true;
+}
+
 // MAIN ========================================================================
 
 $action = '';
@@ -464,9 +479,10 @@ foreach($expected as $provided) {
 }
 
 $files = 0;
-$result = '';
+$results = '';
 $max_time = ini_get('max_execution_time') - 1;
 
+FILECHECK_addPlugins();
 $display = COM_siteHeader();
 
 switch ($action) {
@@ -486,8 +502,8 @@ switch ($action) {
         break;
 
     case 'scan':
-        $result = FILECHECK_scan();
-        if (!$result) {
+        $results = FILECHECK_scan();
+        if (!$results) {
             echo COM_refresh($_CONF['site_admin_url'] . '/filecheck.php?expired=x');
             exit;
         }
@@ -497,12 +513,12 @@ switch ($action) {
             $desc = ($files > 1) ? 'files were' : 'file was';
             $display .= COM_showMessageText(sprintf($LANG_FILECHECK['removed'],$files,$desc));
         }
-        if (empty($result)) {
+        if (empty($results)) {
             $display .= FILECHECK_initMenu($max_time);
             $display .= $LANG_FILECHECK['working'] . COM_siteFooter();
             $display .= COM_refresh($_CONF['site_admin_url'] . '/filecheck.php?scan=x');
         } else {
-            $display .= $result;
+            $display .= $results;
             $display .= COM_siteFooter();
         }
         break;
