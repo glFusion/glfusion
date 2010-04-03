@@ -451,7 +451,7 @@ function glfusion_119()
     DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.2.0',pi_gl_version='1.1.9' WHERE pi_name = 'forum'");
 
     DB_query("ALTER TABLE {$_TABLES['groups']} ADD grp_default tinyint(1) unsigned NOT NULL default '0' AFTER grp_gl_core",1);
-    DB_query("ALTER TABLE {$_TABLES['users']} CHANGE `passwd` `passwd` VARCHAR( 40 ))",1);
+    DB_query("ALTER TABLE {$_TABLES['users']} CHANGE `passwd` `passwd` VARCHAR( 40 )",1);
 
     $c->add('article_comment_close_enabled',0,'select',4,21,0,1695,TRUE);
     $c->add('session_ip_check',1,'select',7,30,26,545,TRUE);
