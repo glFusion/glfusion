@@ -47,6 +47,9 @@ function staticpages_upgrade()
 
     $currentVersion = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='staticpages'");
 
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+
     switch( $currentVersion ) {
         case '1.5.0' :
             $rc = update_150_to_151();
@@ -56,6 +59,10 @@ function staticpages_upgrade()
             DB_query("ALTER TABLE {$_TABLES['staticpage']} ADD sp_search tinyint(4) NOT NULL default '1' AFTER postmode",1);
         case '1.5.4' :
             DB_query("ALTER TABLE {$_TABLES['staticpage']} ADD sp_status tinyint(3) NOT NULL DEFAULT '1' AFTER sp_id");
+            // static pages configuration options
+            $c->add('include_search', 1, 'select',0, 0, 0, 95, true, 'staticpages');
+            $c->add('comment_code', -1, 'select',0, 0,17, 97, true, 'staticpages');
+            $c->add('status_flag', 1, 'select',0, 0, 13, 99, true, 'staticpages');
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_SP_CONF['pi_version']."',pi_gl_version='".$_SP_CONF['gl_version']."' WHERE pi_name='staticpages' LIMIT 1");
             break;
