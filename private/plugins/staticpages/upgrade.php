@@ -53,7 +53,7 @@ function staticpages_upgrade()
         case '1.5.1' :
         case '1.5.2' :
         case '1.5.3' :
-            DB_query("ALTER TABLE {$_TABLES['staticpage']} ADD sp_search tinyint(4) NOT NULL default '1' AFTER postmode");
+            DB_query("ALTER TABLE {$_TABLES['staticpage']} ADD sp_search tinyint(4) NOT NULL default '1' AFTER postmode",1);
         case '1.5.4' :
             DB_query("ALTER TABLE {$_TABLES['staticpage']} ADD sp_status tinyint(3) NOT NULL DEFAULT '1' AFTER sp_id");
         default :
