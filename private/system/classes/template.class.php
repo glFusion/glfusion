@@ -1583,8 +1583,6 @@ class Template
             }
             fwrite($f, $tmplt);
             fclose($f);
-        } else {
-            die("Cache directory is not writable.");
         }
     }
 
