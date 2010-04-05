@@ -314,16 +314,19 @@ function RATING_deleteVote( $voteID )
         list($rating_id, $current_rating, $current_votes) = RATING_getRating( $type, $item_id );
 
         if ( $current_votes > 0 ) {
-            $totalRating = $current_votes * $current_rating;
-            $sum = $totalRating - $user_rating;
-            $votes = $current_votes - 1;
-            if ( $sum > 0 && $votes > 0 ) {
-                $new_rating = $sum / $votes;
+            $tresult = DB_query("SELECT SUM( rating ),COUNT( item_id ) FROM  {$_TABLES['rating_votes']} WHERE item_id = ".$item_id." AND type='".$type."'");
+            list($total_rating,$total_votes) = DB_fetchArray($tresult);
+            $new_total_rating = $total_rating - $user_rating;
+            $new_total_votes  = $total_votes  - 1;
+            if ( $new_total_rating > 0 && $new_total_votes > 0 ) {
+                $new_rating = $new_total_rating / $new_total_votes;
+                $votes = $new_total_votes;
             } else {
                 $new_rating = 0;
-                $votes      = 0;
+                $new_total_votes = 0;
+                $votes = 0;
             }
-            $sql = "UPDATE {$_TABLES['rating']} SET votes=".$votes.", rating=".$new_rating." WHERE id = ".$rating_id;
+            $sql = "UPDATE {$_TABLES['rating']} SET votes=".$new_total_votes.", rating=".$new_rating." WHERE id = ".$rating_id;
             DB_query($sql);
             DB_delete($_TABLES['rating_votes'],'id',$voteID);
             PLG_itemRated( $type, $item_id, $new_rating, $votes );
@@ -361,9 +364,23 @@ function RATING_addVote( $type, $item_id, $rating, $uid, $ip )
         return array($current_rating, $current_votes);
     }
 
-    $sum = $rating  + ( $current_rating * $current_votes ); // add together the current vote value and the total vote value
-    ($sum==0 ? $votes=0 : $votes=$current_votes+1);
-    $new_rating = $sum / $votes;
+    $tresult = DB_query("SELECT SUM( rating ),COUNT( item_id ) FROM  {$_TABLES['rating_votes']} WHERE item_id = '".DB_escapeString($item_id)."' AND type='".DB_escapeString($type)."'");
+    if ( DB_numRows($tresult) > 0 ) {
+        list($total_rating,$total_votes) = DB_fetchArray($tresult);
+    } else {
+        $total_rating = 0;
+        $total_votes  = 0;
+    }
+    $sum = $total_rating + $rating;
+    $votes = $total_votes + 1;
+
+    if ( $sum > 0 && $votes > 0 ) {
+        $new_rating = $sum / $votes;
+    } else {
+        $new_rating = 0;
+        $sum = 0;
+        $votes = 0;
+    }
 
     $new_rating = @number_format($new_rating,2);
 
@@ -387,7 +404,6 @@ function RATING_addVote( $type, $item_id, $rating, $uid, $ip )
     PLG_itemRated( $type, $item_id, $new_rating, $votes );
 
     return array($new_rating, $votes);
-
 }
 
 
