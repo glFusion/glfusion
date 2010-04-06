@@ -306,6 +306,8 @@ $LANG_GF01 = array(
     'disable_smilies' => 'Disable Smilies:',
     'disable_urlparse' => 'Do not parse URLs:',
     'features' => 'Features:',
+    /* --- rss feature --- */
+    'rss_link' => 'Subscribe to this forum\'s RSS feed.',
 );
 
 $LANG_GF02 = array(
@@ -538,6 +540,7 @@ $LANG_GF03 = array(
     'select'    => 'Select',
     'select_forum' => 'Select Forum Topic',
     'destination_topic' => 'Destination Topic ID:',
+    'select_topic' => 'Select Topic',
 );
 
 $LANG_GF04 = array(

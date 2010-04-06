@@ -19,7 +19,6 @@
 </script>
 <script type="text/javascript" src="{site_url}/javascript/advanced_editor.js"></script>
 <script type="text/javascript" src="{site_url}/javascript/storyeditor_fckeditor.js"></script>
-<br{xhtml}>
 <div id="advanced_editor" style="display:none;">
     {# Hide the Advanced Editor as Javascript is required. If JS is enabled then the JS below will un-hide it #}
     <script type="text/javascript">

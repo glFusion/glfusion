@@ -305,16 +305,16 @@ function getIndirectFeatures ($grp_id)
     do {
         $grp = array_pop ($tocheck);
 
-        $result = DB_query ("SELECT ug_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $grp AND ug_uid IS NULL");
+        $result = DB_query ("SELECT ug_main_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_grp_id = $grp AND ug_uid IS NULL");
         $numrows = DB_numRows ($result);
 
         $checked[] = $grp;
 
         for ($j = 0; $j < $numrows; $j++) {
             $A = DB_fetchArray ($result);
-            if (!in_array ($A['ug_grp_id'], $checked) &&
-                !in_array ($A['ug_grp_id'], $tocheck)) {
-                $tocheck[] = $A['ug_grp_id'];
+            if (!in_array ($A['ug_main_grp_id'], $checked) &&
+                !in_array ($A['ug_main_grp_id'], $tocheck)) {
+                $tocheck[] = $A['ug_main_grp_id'];
             }
         }
     }

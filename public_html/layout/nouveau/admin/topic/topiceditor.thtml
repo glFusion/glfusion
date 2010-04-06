@@ -1,9 +1,17 @@
 {# begin {templatelocation} #}
-<form action="{site_admin_url}/topic.php" method="post" enctype="multipart/form-data">
+<script type="text/javascript">
+<!--
+window.addEvent('domready',function() {
+    var myValidator = new fValidator("topic");
+    myValidator.register($("tid"), {type: "space", re: /^[a-z0-9._-]+$/i, msg: "Topic ID can only contain 0-9, a-z, A-Z, _ - or . "});
+});
+-->
+</script>
+<form id="topic" action="{site_admin_url}/topic.php" method="post" enctype="multipart/form-data">
     <table cellspacing="0" cellpadding="2" width="100%">
         <tr>
             <td width="20%" class="alignright">{lang_topicname}:</td>
-            <td width="80%"><input type="text" size="48" name="topic" value="{topic_name}"{xhtml}></td>
+            <td width="80%"><input class="fValidate['required']" type="text" size="48" name="topic" id="topic" value="{topic_name}"{xhtml}></td>
         </tr>
         <tr>
             <td class="alignright">{lang_topicid}:</td>

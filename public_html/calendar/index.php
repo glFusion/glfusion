@@ -117,34 +117,6 @@ function getDayViewData($result, $cur_time = '')
     return array($hourcols, $thedata, $max, $alldaydata);
 }
 
-function setCalendarLanguage (&$aCalendar)
-{
-    global $_CONF, $LANG_WEEK, $LANG_MONTH;
-
-    $lang_days = array ('sunday'    => $LANG_WEEK[1],
-                        'monday'    => $LANG_WEEK[2],
-                        'tuesday'   => $LANG_WEEK[3],
-                        'wednesday' => $LANG_WEEK[4],
-                        'thursday'  => $LANG_WEEK[5],
-                        'friday'    => $LANG_WEEK[6],
-                        'saturday'  => $LANG_WEEK[7]);
-
-    $lang_months = array ('january'   => $LANG_MONTH[1],
-                          'february'  => $LANG_MONTH[2],
-                          'march'     => $LANG_MONTH[3],
-                          'april'     => $LANG_MONTH[4],
-                          'may'       => $LANG_MONTH[5],
-                          'june'      => $LANG_MONTH[6],
-                          'july'      => $LANG_MONTH[7],
-                          'august'    => $LANG_MONTH[8],
-                          'september' => $LANG_MONTH[9],
-                          'october'   => $LANG_MONTH[10],
-                          'november'  => $LANG_MONTH[11],
-                          'december'  => $LANG_MONTH[12]);
-
-    $aCalendar->setLanguage ($lang_days, $lang_months, $_CONF['week_start']);
-}
-
 /**
 * Returns an abbreviated day's name
 *
@@ -264,7 +236,7 @@ function getSmallCalendar ($m, $y, $mode = '')
 
     $retval = '';
     $mycal = new Calendar ();
-    setCalendarLanguage ($mycal);
+    CALENDAR_setLanguage($mycal);
     $mycal->setCalendarMatrix ($m, $y);
 
     if (!empty ($mode)) {
@@ -348,7 +320,7 @@ function getQuickAdd($tpl, $month, $day, $year, $token)
         $tpl->set_var('hour_options', COM_getHourFormOptions($cur_hour));
     }
     $tpl->set_var('startampm_selection',
-                  COM_getAmPmFormSelection('start_ampm', $ampm));
+                  CALENDAR_getAmPmFormSelection('start_ampm', $ampm, 'update_ampm()'));
     $cur_min = intval(date('i') / 15) * 15;
     $tpl->set_var('minute_options', COM_getMinuteFormOptions($cur_min, 15));
 
@@ -539,7 +511,7 @@ if ($nextmonth == 13) {
     $nextyear = $year;
 }
 
-setCalendarLanguage ($cal);
+CALENDAR_setLanguage($cal);
 
 // Build calendar matrix
 $cal->setCalendarMatrix ($month, $year);
@@ -599,6 +571,7 @@ case 'day':
         $calsql = "SELECT eid,title,datestart,dateend,timestart,timeend,allday,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['personal_events']} "
                 . "WHERE (uid = {$_USER['uid']}) "
                 . "AND ((allday=1 AND datestart = \"$year-$month-$day\") "
+                . "AND (status=1)"
                 . "OR (datestart >= \"$year-$month-$day 00:00:00\" AND datestart <= \"$year-$month-$day 23:59:59\") "
                 . "OR (dateend >= \"$year-$month-$day 00:00:00\" AND dateend <= \"$year-$month-$day 23:59:59\") "
                 . "OR (\"$year-$month-$day\" BETWEEN datestart AND dateend)) "
@@ -606,6 +579,7 @@ case 'day':
     } else {
         $calsql = "SELECT eid,title,datestart,dateend,timestart,timeend,allday,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['events']} WHERE ((allday=1 "
                 . "AND datestart = \"$year-$month-$day\") "
+                . "AND (status=1)"
                 . "OR (datestart >= \"$year-$month-$day 00:00:00\" AND datestart <= \"$year-$month-$day 23:59:59\") "
                 . "OR (dateend >= \"$year-$month-$day 00:00:00\" AND dateend <= \"$year-$month-$day 23:59:59\") "
                 . "OR (\"$year-$month-$day\" BETWEEN datestart AND dateend))" . COM_getPermSql ('AND')
@@ -830,9 +804,9 @@ case 'week':
             );
         }
         if ($mode == 'personal') {
-            $calsql = "SELECT eid,title,datestart,dateend,timestart,timeend,allday,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['personal_events']} WHERE (uid = '{$_USER['uid']}') AND ((allday=1 AND datestart = \"$yearnum-$monthnum-$daynum\") OR (datestart >= \"$yearnum-$monthnum-$daynum 00:00:00\" AND datestart <= \"$yearnum-$monthnum-$daynum 23:59:59\") OR (dateend >= \"$yearnum-$monthnum-$daynum 00:00:00\" AND dateend <= \"$yearnum-$monthnum-$daynum 23:59:59\") OR (\"$yearnum-$monthnum-$daynum\" BETWEEN datestart AND dateend)) ORDER BY datestart,timestart";
+            $calsql = "SELECT eid,title,datestart,dateend,timestart,timeend,allday,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['personal_events']} WHERE (uid = '{$_USER['uid']}') AND (status = 1) AND ((allday=1 AND datestart = \"$yearnum-$monthnum-$daynum\") OR (datestart >= \"$yearnum-$monthnum-$daynum 00:00:00\" AND datestart <= \"$yearnum-$monthnum-$daynum 23:59:59\") OR (dateend >= \"$yearnum-$monthnum-$daynum 00:00:00\" AND dateend <= \"$yearnum-$monthnum-$daynum 23:59:59\") OR (\"$yearnum-$monthnum-$daynum\" BETWEEN datestart AND dateend)) ORDER BY datestart,timestart";
         } else {
-            $calsql = "SELECT eid,title,datestart,dateend,timestart,timeend,allday,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['events']} WHERE ((allday=1 AND datestart = \"$yearnum-$monthnum-$daynum\") OR (datestart >= \"$yearnum-$monthnum-$daynum 00:00:00\" AND datestart <= \"$yearnum-$monthnum-$daynum 23:59:59\") OR (dateend >= \"$yearnum-$monthnum-$daynum 00:00:00\" AND dateend <= \"$yearnum-$monthnum-$daynum 23:59:59\") OR (\"$yearnum-$monthnum-$daynum\" BETWEEN datestart AND dateend))" . COM_getPermSql ('AND') . " ORDER BY datestart,timestart";
+            $calsql = "SELECT eid,title,datestart,dateend,timestart,timeend,allday,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['events']} WHERE (status = 1) AND ((allday=1 AND datestart = \"$yearnum-$monthnum-$daynum\") OR (datestart >= \"$yearnum-$monthnum-$daynum 00:00:00\" AND datestart <= \"$yearnum-$monthnum-$daynum 23:59:59\") OR (dateend >= \"$yearnum-$monthnum-$daynum 00:00:00\" AND dateend <= \"$yearnum-$monthnum-$daynum 23:59:59\") OR (\"$yearnum-$monthnum-$daynum\" BETWEEN datestart AND dateend))" . COM_getPermSql ('AND') . " ORDER BY datestart,timestart";
         }
         $result = DB_query($calsql);
         $nrows = DB_numRows($result);
@@ -1040,7 +1014,8 @@ for ($i = 1; $i <= 6; $i++) {
             }
 
             $calsql = "SELECT eid,title,datestart,dateend,timestart,timeend,allday,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM $calsql_tbl WHERE "
-                    . "((datestart >= \"$year-$month-$curday->daynumber 00:00:00\" "
+                    . "(status = 1) "
+                    . "AND ((datestart >= \"$year-$month-$curday->daynumber 00:00:00\" "
                     . "AND datestart <= \"$year-$month-$curday->daynumber 23:59:59\") "
                     . "OR (dateend >= \"$year-$month-$curday->daynumber 00:00:00\" "
                     . "AND dateend <= \"$year-$month-$curday->daynumber 23:59:59\") "

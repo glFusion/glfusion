@@ -49,7 +49,7 @@ require_once 'lib-common.php';
 */
 function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG04, $LANG08;
+    global $_CONF, $_TABLES, $_USER, $LANG04, $LANG08, $LANG_LOGIN;
 
     $retval = '';
 
@@ -57,7 +57,11 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
     if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
                              ($_CONF['emailuserloginrequired'] == 1))
                          && ($uid != 2)) {
-        IO_redirect($_CONF['site_url'] . '/index.php?msg=85');
+        $display  = COM_siteHeader('menu', $LANG_LOGIN[1]);
+        $display .= SEC_loginRequiredForm();
+        $display .= COM_siteFooter();
+        echo $display;
+        exit;
     }
 
     // check for correct 'to' user preferences

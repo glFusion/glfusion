@@ -34,14 +34,13 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once('lib-common.php');
-require_once( $_CONF['path_system'] . 'lib-admin.php' );
+require_once 'lib-common.php';
+USES_lib_admin();
 
 $display = '';
 
-if (empty ($_USER['username']) &&
-    (($_CONF['loginrequired'] == 1) || ($_CONF['statsloginrequired'] == 1))) {
-        IO_displayLoginRequired();
+if ( !SEC_hasRights('stats.view') ) {
+    COM_404();
 }
 
 // MAIN

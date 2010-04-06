@@ -440,7 +440,7 @@ function ST_createElement ( $menu_id ) {
 
     $spCount = 0;
     $sp_select = '<select id="spname" name="spname">' . LB;
-    $sql = "SELECT sp_id,sp_title,sp_label FROM {$_TABLES['staticpage']} ORDER BY sp_title";
+    $sql = "SELECT sp_id,sp_title,sp_label FROM {$_TABLES['staticpage']} WHERE sp_status = 1 ORDER BY sp_title ";
     $result = DB_query($sql);
     while (list ($sp_id, $sp_title,$sp_label) = DB_fetchArray($result)) {
         if ( $sp_title == '' ) {
@@ -748,7 +748,7 @@ function ST_editElement( $menu_id, $mid ) {
     $plugin_select .= '</select>' . LB;
 
     $sp_select = '<select id="spname" name="spname">' . LB;
-    $sql = "SELECT sp_id,sp_title,sp_label FROM {$_TABLES['staticpage']} ORDER BY sp_title";
+    $sql = "SELECT sp_id,sp_title,sp_label FROM {$_TABLES['staticpage']} WHERE sp_status = 1 ORDER BY sp_title";
     $result = DB_query($sql);
     while (list ($sp_id, $sp_title,$sp_label) = DB_fetchArray($result)) {
         if (trim($sp_label) == '') {

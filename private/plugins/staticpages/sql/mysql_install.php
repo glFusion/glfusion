@@ -41,6 +41,7 @@ if (!defined ('GVERSION')) {
 $_SQL['staticpage'] = "
 CREATE TABLE {$_TABLES['staticpage']} (
   sp_id varchar(40) NOT NULL default '',
+  sp_status tinyint(3) NOT NULL default '1',
   sp_uid mediumint(8) NOT NULL default '1',
   sp_title varchar(128) NOT NULL default '',
   sp_content text NOT NULL,

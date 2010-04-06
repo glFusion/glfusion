@@ -84,7 +84,11 @@ if ( !isset($CONF_FORUM['enable_user_rating_system']) ) {
 $CONF_FORUM['topic_order'] = 'ASC';
 $CONF_FORUM['allow_wysiwyg_editor'] = $CONF_FORUM['use_wysiwyg_editor'];
 
-if ( !empty($_USER['uid']) && $_USER['uid'] > 1 ) {
+if ( $_CONF['loginrequired'] == 1 ) {
+    $CONF_FORUM['registration_required'] = 1;
+}
+
+if ( !COM_isAnonUser() ) {
     $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} where uid = '{$_USER['uid']}'",1);
     if ( DB_numRows($result) > 0 ) {
         $userprefs = DB_fetchArray($result);
@@ -134,7 +138,7 @@ function plugin_getmenuitems_forum()
     $menuitems = array();
 
     if ( $CONF_FORUM['registration_required'] == 1 ) {
-        if ($_USER['uid'] > 1) {
+        if (!COM_isAnonUser() ) {
             $menuitems["$LANG_GF00[pluginlabel]"] = "$_CONF[site_url]/forum/index.php";
         } else {
             $menuitems = '';
@@ -224,7 +228,7 @@ function plugin_user_delete_forum ($uid)
     global $_TABLES;
 
     $username = DB_getItem($_TABLES['users'], "username", "uid=$uid");
-    $username = addslashes($username);
+    $username = DB_escapeString($username);
     DB_query("DELETE FROM {$_TABLES['gf_moderators']} WHERE mod_username='$username'");
     DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid ='$uid'");
     DB_query("DELETE FROM {$_TABLES['gf_userinfo']} WHERE uid ='$uid'");
@@ -382,8 +386,13 @@ function plugin_getheadercode_forum() {
         return '';
     }
 
-    $gf_header .= '<style>'. LB . file_get_contents($_CONF['path'] . 'plugins/forum/css/style.css') . LB . '</style>' . LB;
-    $gf_header .= '<script type="text/javascript">' . LB . file_get_contents($_CONF['path'] . 'plugins/forum/js/mootips.js') . LB . '</script>' . LB;
+    $gf_header .= '<style>'. file_get_contents($_CONF['path'] . 'plugins/forum/css/style.css') . '</style>';
+
+    $gf_header .= '<script type="text/javascript">' . LB;
+    $gf_header .= '	window.addEvent(\'load\', function() {' . LB;
+    $gf_header .= '		var gfTips = new Tips($$(\'.gf_mootip\'), { maxTitleChars: 50, className: \'gftool\' });' . LB;
+    $gf_header .= '	});' . LB;
+    $gf_header .= '</script>' . LB;
 
     return $gf_header;
 }
@@ -429,7 +438,7 @@ function plugin_dopluginsearch_forum($query, $datestart, $dateend, $topic, $type
         return;
     }
 
-    $query = trim(addslashes($query));
+    $query = trim(DB_escapeString($query));
 
     $sql   = "SELECT id,name,forum,date,subject as title,comment as description,views AS hits,uid, CONCAT('/forum/viewtopic.php?showtopic=',id,'&amp;topic=',id,'#',id) AS url ";
     $sql  .= "FROM {$_TABLES['gf_topic']} t ";
@@ -614,7 +623,7 @@ function plugin_getfeedcontent_forum ($feed, &$link, &$update)
 
         $desc = $preface . $comment;
 
-        $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic={$A['id']}";
+        $link = "{$_CONF['site_url']}/forum/viewtopic.php?topic={$A['id']}#{$A['id']}";
 
         if ($CONF_FORUM['use_censor']) {
             $A['subject'] = COM_checkWords($A['subject']);
@@ -697,12 +706,9 @@ function forum_chkUsercanPost() {
     global $_CONF,$CONF_FORUM,$LANG_GF00, $LANG_GF01, $LANG_GF02, $_TABLES, $_USER;
 
     //Check is anonymous users can post
-    if($CONF_FORUM['registered_to_post'] && $_USER['uid'] < 2){
-        $url = $_CONF['site_url']. '/users.php?mode=new';
-        $display .= COM_startBlock($LANG_GF00['access_denied']);
-        $display .= '<br' . XHTML . '>' .$LANG_GF01['loginreqpost']. '<br' . XHTML . '>';
-        $display .= '<meta http-equiv="refresh" content="3; URL=' .$url. '">';
-        $display .= COM_endBlock();
+    if($CONF_FORUM['registered_to_post'] && COM_isAnonUser() ){
+        $display = COM_siteHeader();
+        $display .= SEC_loginRequiredForm();
         $display .= COM_siteFooter();
         echo $display;
         exit;
@@ -724,11 +730,11 @@ function forum_chkUsercanPost() {
 function forum_chkUsercanAccess($secure=false) {
     global $_CONF, $LANG_GF01, $LANG_GF02, $CONF_FORUM, $_USER;
 
-    if ($CONF_FORUM['registration_required'] && $_USER['uid'] < 2) {
-            echo  '<table width="100%" height="100"><tr><td><center>';
-        printf($LANG_GF01['loginreqview'], '<A HREF="' .$_CONF['site_url']. '/users.php?mode=new">', '<A HREF="' .$_CONF['site_url']. '/users.php">');
-        echo '</center></td></tr></table>';
-        echo COM_siteFooter();
+    if ($CONF_FORUM['registration_required'] && COM_isAnonUser() ) {
+        $display = COM_siteHeader();
+        $display .= SEC_loginRequiredForm();
+        $display .= COM_siteFooter();
+        echo $display;
         exit;
     } elseif($secure AND empty($_USER['uid'])) {
         echo '<br' . XHTML . '>';
@@ -871,8 +877,16 @@ function phpblock_forum_newposts() {
         return;
     }
     $post_limit = $CONF_FORUM['sideblock_numposts'];
-    $mode = COM_applyFilter($_GET['mode']);
-    $order = COM_applyFilter($_GET['order']);
+    if ( isset($_GET['mode']) ) {
+        $mode = COM_applyFilter($_GET['mode']);
+    } else {
+        $mode = '';
+    }
+    if ( isset($_GET['order']) ) {
+        $order = COM_applyFilter($_GET['order']);
+    } else {
+        $order = '';
+    }
     if (DB_getItem($_TABLES['plugins'],'pi_enabled', 'pi_name="forum"')) {
         // Check if user has clicked on a sort option in the block
         if ($mode == 'forumblock') {
@@ -1094,7 +1108,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         $grouplist = implode(',',$groups);
 
         $sql  = "SELECT a.id, a.forum, a.name, a.date, a.lastupdated, a.last_reply_rec, a.subject, ";
-        $sql .= "a.comment, a.uid, a.name, a.pid, a.replies, a.views, b.forum_name  ";
+        $sql .= "a.comment, a.uid, a.name, a.pid, a.replies, a.views, a.status, b.forum_name  ";
         $sql .= "FROM {$_TABLES['gf_topic']} a ";
         $sql .= "LEFT JOIN {$_TABLES['gf_forums']} b ON a.forum=b.forum_id ";
         $sql .= "WHERE pid=0 AND b.grp_id IN ($grouplist) AND b.no_newposts = 0 ";
@@ -1140,7 +1154,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
 
                 $testText = gf_formatTextBlock($A['comment'],'text','noquote',$A['status']);
                 $testText = strip_tags($testText);
-                $html2txt = new html2text(addslashes($testText),false);
+                $html2txt = new html2text($testText,false);
                 $testText = trim($html2txt->get_text());
                 $shortComment = '';
                 $commentArray = explode(' ',$testText);
@@ -1169,7 +1183,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 }
                 $testText = gf_formatTextBlock($B['comment'],'text','noquote',$A['status']);
                 $testText = strip_tags($testText);
-                $html2txt = new html2text(addslashes($testText),false);
+                $html2txt = new html2text($testText,false);
                 $testText = trim($html2txt->get_text());
                 $shortComment = '';
                 $commentArray = explode(' ',$testText);
@@ -1268,7 +1282,7 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
         $where = '';
         $permOp = '';
     } else {
-        $where = " WHERE id = '" . addslashes($id) . "'";
+        $where = " WHERE id = '" . DB_escapeString($id) . "'";
         $permOp = ' AND ';
     }
 
@@ -1538,28 +1552,26 @@ function forumPLG_restoreEmoticons($str) {
     }
 }
 
-function forumPLG_getPMlink($member,$uid=0) {
+function forumPLG_getPMlink($uid=0) {
     global $_TABLES,$_CONF, $_PLUGINS;
 
     static $blockArray = array();
 
     if (in_array('pm', $_PLUGINS)) {
-        if ( !isset($blockArray[$member]) ) {
-            if ( $uid == 0 ) {
-                $uid = DB_getItem($_TABLES['users'],'uid','username="'.addslashes($member).'"');
+        if ( !isset($blockArray[$uid]) || $uid == 0 ) {
+            $username = DB_getItem($_TABLES['users'],'username','uid='.(int)$uid);
+            if ( $username == '' ) {
+                return '';
             }
-            $block = DB_getItem($_TABLES['pm_userprefs'],'block','uid='.$uid);
-            $blockArray[$member] = intval($block);
+            $blockArray[$uid]['username'] = $username;
+            $block = DB_getItem($_TABLES['pm_userprefs'],'block','uid='.(int)$uid);
+            $blockArray[$uid]['allow'] = (int) $block;
         }
-        if ( $blockArray[$member] == 0 ) {
-            return "{$_CONF['site_url']}/pm/compose.php?mode=new&amp;username={$member};";
+        if ( $blockArray[$uid]['allow'] == 0 ) {
+            return $_CONF['site_url'].'/pm/compose.php?mode=new&amp;username='.htmlentities($blockArray[$uid]['username']);
         }
     }
-    if (DB_getItem($_TABLES['plugins'],'pi_enabled',"pi_name='messenger'") == 1) {
-        return "{$_CONF['site_url']}/messenger/index.php?action=newpm&amp;toname={$member};";
-    } else {
-        return '';
-    }
+    return '';
 }
 
 function forumPLG_getMemberBadge($uid) {
@@ -1823,7 +1835,7 @@ function plugin_profilesave_forum($uid = 0 )
             // Insert a new blank record. Defaults are set in SQL Defintion for table.
             DB_query("INSERT INTO {$_TABLES['gf_userinfo']} (uid,rating,signature) VALUES ('$uid',0,'')");
         }
-        $sql = "UPDATE {$_TABLES['gf_userinfo']} SET signature='".addslashes($signature)."' WHERE uid=".$uid;
+        $sql = "UPDATE {$_TABLES['gf_userinfo']} SET signature='".DB_escapeString($signature)."' WHERE uid=".$uid;
         DB_query($sql);
     }
 }

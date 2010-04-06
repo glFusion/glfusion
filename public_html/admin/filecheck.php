@@ -8,9 +8,10 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Mark Howard            mark AT usable-web DOT com                        |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -29,40 +30,24 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 //
-_stopwatch('start');
 
 require_once '../lib-common.php';
-
-if (!SEC_inGroup ('Root')) {
-    $display .= COM_siteHeader ('menu');
-    $display .= COM_startBlock ($LANG20[1], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= '<p>' . $LANG20[6] . '</p>';
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-    $display .= COM_siteFooter ();
-    echo $display;
-    exit;
-}
-
-$fullIgnore = array('cgi-bin','.','..','.svn','layout_cache','tn','orig','disp');
-
-require_once 'filecheck_data.php';
+require_once 'auth.inc.php';
+require_once $_CONF['path'] . 'filecheck_data.php';
 
 USES_lib_admin();
 
-$mode = '';
+$display = '';
 
-if (isset ($_POST['submit'])) {
-    $mode = COM_applyFilter($_POST['submit']);
-}
-
-$rc = '';
-
-if ($mode == 'Cancel') {
-    echo COM_refresh ($_CONF['site_admin_url'] . '/index.php');
+if (!SEC_inGroup ('Root')) {
+    $display .= COM_siteHeader ('menu', $MESSAGE[30])
+        . COM_startBlock ($MESSAGE[30], '',COM_getBlockTemplate ('_msg_block', 'header'))
+        . $MESSAGE[200]
+        . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
+        . COM_siteFooter ();
+    COM_accessLog ("User {$_USER['username']} tried to illegally access the file integrity check screen");
+    echo $display;
     exit;
-} elseif ($mode == 'Delete') {
-    $rc = fileCheckDelete( );
 }
 
 function _current_tick()
@@ -74,13 +59,21 @@ function _current_tick()
 function _stopwatch( $action='' )
 {
     static $start;
+    static $run = false;
+
     $retval = 0;
     switch ($action) {
         case 'start':
+            $run = true;
             $start = _current_tick();
+            $retval = $start;
             break;
         case 'stop':
+            $run = false;
             $retval = round(_current_tick() - $start, 5);
+            break;
+        case 'check':
+            $retval = ($run) ? round(_current_tick() - $start, 5) : false;
             break;
     }
     return $retval;
@@ -94,73 +87,112 @@ function FILECHECK_isWriteable( $file )
 
 function FILECHECK_scanNegative()
 {
-    global $_CONF, $glfDir, $glfFile, $data_arr;
+    global $_CONF, $glfDir, $glfFile, $data_arr, $start;
 
-    $retval .= '<br />';
-    for ($i=0; $i < count($glfDir); $i++) {
-        $where = '';
-        $dir = $glfDir[$i]['path'];
-        if (strtolower(substr($dir,0,7)) == 'private') {
+    // check for missing directories
+    foreach( $glfDir as $dir ) {
+        // replace the generic prefix with the actual directory
+        $rdir = $dir['path'];
+        if (strtolower(substr($rdir,0,7)) == 'private') {
             $where = 'private';
-            $dir = (strtolower($dir) <> $where) ? $_CONF['path'] . substr($dir,8) : substr($_CONF['path'],0,-1);
-        } elseif (strtolower(substr($dir,0,11)) == 'public_html') {
+            $rdir = (strtolower($rdir) <> $where) ? $_CONF['path'] . substr($rdir,8) : substr($_CONF['path'],0,-1);
+        } elseif (strtolower(substr($rdir,0,11)) == 'public_html') {
             $where = 'public_html';
-            $dir = (strtolower($dir) <> $where) ? $_CONF['path_html'] . substr($dir,12) : substr($_CONF['path_html'],0,-1);
+            $rdir = (strtolower($rdir) <> $where) ? $_CONF['path_html'] . substr($rdir,12) : substr($_CONF['path_html'],0,-1);
         } else {
             COM_errorlog( 'filecheck: unexpected root dirspec(not private/ or public_html/): ' . $dir );
         }
-        if (!empty($where) && !(file_exists($dir))) {
-            // directory was not found - add to list and display preq
-            $data_arr[] = array(
-                'where' => $where,
-                'path'  => $dir,
-                'file'  => '',
-                'type'  => 'D',
-                'delta' => '-'
-            );
+        // how we check depends upon whether we were allowed to recurse there
+        switch ($dir['test']) {
+            case 'E':
+                // we were not allowed to recurse here, check manually
+                if (!is_dir($rdir)) {
+                    $data_arr[] = array(
+                        'where' => $where,
+                        'path'  => $rdir,
+                        'file'  => '',
+                        'type'  => 'D',
+                        'delta' => '-'
+                    );
+                }
+                break;
+
+            case 'R':
+                // we recursed here, unpinged dirs must be missing
+                if (!isset($dir['ping'])) {
+                    $data_arr[] = array(
+                        'where' => $where,
+                        'path'  => $rdir,
+                        'file'  => '',
+                        'type'  => 'D',
+                        'delta' => '-'
+                    );
+                }
+                break;
         }
     }
-    for ($i=0; $i < count($glfFile); $i++) {
-        $where = '';
-        $file = $glfFile[$i]['path'];
-        if (strtolower(substr($file,0,7)) == 'private') {
+
+    // check for missing files
+    foreach( $glfFile as $file ) {
+        // replace the generic prefix with the actual directory
+        $rdir = $file['path'];
+        if (strtolower(substr($rdir,0,7)) == 'private') {
             $where = 'private';
-            $file = (strtolower($file) <> $where) ? $_CONF['path'] . substr($file,8) : substr($_CONF['path'],0,-1);
-        } elseif (strtolower(substr($file,0,11)) == 'public_html') {
+            $rdir = (strtolower($rdir) <> $where) ? $_CONF['path'] . substr($rdir,8) : substr($_CONF['path'],0,-1);
+        } elseif (strtolower(substr($rdir,0,11)) == 'public_html') {
             $where = 'public_html';
-            $file = (strtolower($file) <> $where) ? $_CONF['path_html'] . substr($file,12) : substr($_CONF['path_html'],0,-1);
+            $rdir = (strtolower($rdir) <> $where) ? $_CONF['path_html'] . substr($rdir,12) : substr($_CONF['path_html'],0,-1);
         } else {
-            COM_errorlog( 'filecheck: unexpected root dirspec(not private/ or public_html/): ' . $file );
+            COM_errorlog( 'filecheck: unexpected root dirspec(not private/ or public_html/): ' . $dir );
         }
-        if (!empty($where) && !(file_exists($file))) {
-            // file was not found - add to list and display preq
-            $pathinfo = pathinfo($file);
-            $data_arr[] = array(
-                'where' => $where,
-                'path'  => $pathinfo['dirname'],
-                'file'  => $pathinfo['filename'] . '.' . $pathinfo['extension'],
-                'type'  => 'F',
-                'delta' => '-'
-            );
+        // ok now check for unpinged files that are not set to be ignored
+        if ((!isset($file['ping'])) && ($file['test'] <> 'I')) {
+            // ostensibly, this file was not found - get the dir and file parts
+            $pathinfo = pathinfo($rdir);
+            $dirname = $pathinfo['dirname'];
+            $filename = $pathinfo['filename'].'.'.$pathinfo['extension'];
+            // check to see if we were allowed to recurse into this dir
+            list($test,$i) = FILECHECK_search($dirname, $glfDir);
+            if ($test == 'R') {
+                // yes, we were allowed to look here, and the file was not found
+                $data_arr[] = array(
+                    'where' => $where,
+                    'path'  => $dirname,
+                    'file'  => $filename,
+                    'type'  => 'F',
+                    'delta' => '-'
+                );
+            } else {
+                // no, we were not allowed to look here, so test manually
+                if(!file_exists($rdir)) {
+                    $data_arr[] = array(
+                        'where' => $where,
+                        'path'  => $dirname,
+                        'file'  => $filename,
+                        'type'  => 'F',
+                        'delta' => '-'
+                    );
+                }
+            }
         }
     }
-    return;
+    return true;
 }
 
 function FILECHECK_search($needle, $haystack)
 {
-    $retval = '';
-    foreach ($haystack as $row) {
-        if ($row['path'] == $needle) {
-            return $row['test'];
+    $hsCount = count($haystack);
+    for ($i=0; $i < $hsCount; $i++) {
+        if ($haystack[$i]['path'] == $needle) {
+            return array($haystack[$i]['test'],$i);
         }
     }
-    return $retval;
+    return array('',0);
 }
 
 function FILECHECK_scanPositive( $path = '.', $where, $level = 0, $prefix=array())
 {
-    global $glfFile, $glfDir, $glfIgnore, $data_arr;
+    global $glfFile, $glfDir, $glfIgnore, $data_arr, $start;
 
     $ignore = $glfIgnore;
 
@@ -178,23 +210,31 @@ function FILECHECK_scanPositive( $path = '.', $where, $level = 0, $prefix=array(
                     $needle .= $pdir .'/';
                 }
                 $needle .= $file;
-                $test = FILECHECK_search($needle,$glfDir);
+                list($test, $i) = FILECHECK_search($needle,$glfDir);
                 if (!empty($test)) {
-                    if ($test=='R') {
-                        // directory was recognized - recurse only if allowed
+                    // directory was recognized
+                    $glfDir[$i]['ping'] = 1;
+                    if ($test == 'R') {
+                        // recurse only if allowed
                         $prefix[] = $file;
                         FILECHECK_scanPositive( "$path/$file", $where, ($level+1), $prefix );
                         array_pop($prefix);
                     }
                 } else {
-                    // directory is not recognized, add to list
-                    $data_arr[] = array(
-                        'where' => $where,
-                        'path'  => $path . '/' . $file,
-                        'file'  => '',
-                        'type'  => 'D',
-                        'delta' => '+'
-                    );
+                    // directory is not recognized, add to list if not ignored
+                    if ($test <> 'I') {
+                        $data_arr[] = array(
+                            'where' => $where,
+                            'path'  => $path . '/' . $file,
+                            'file'  => '',
+                            'type'  => 'D',
+                            'delta' => '+'
+                          );
+                    }
+                    // fix to recurse unrecognized directories
+                    $prefix[] = $file;
+                    FILECHECK_scanPositive( "$path/$file", $where, ($level+1), $prefix );
+                    array_pop($prefix);
                 }
             } else {
                 // this is a file
@@ -204,7 +244,7 @@ function FILECHECK_scanPositive( $path = '.', $where, $level = 0, $prefix=array(
                 }
                 $needle .= $file;
                 // search the distribution file list
-                $test = FILECHECK_search($needle,$glfFile);
+                list($test, $i) = FILECHECK_search($needle,$glfFile);
                 if (empty($test)) {
                     // file is not recognized, add to list
                     $data_arr[] = array('where' => $where,
@@ -213,21 +253,23 @@ function FILECHECK_scanPositive( $path = '.', $where, $level = 0, $prefix=array(
                                         'type'  => 'F',
                                         'delta' => '+'
                     );
+                } else {
+                    $glfFile[$i]['ping']=1;
                 }
             }
         }
     }
     closedir( $dh );
+    return true;
 }
 
-
-function ADMIN_getListField_filecheck($fieldname, $fieldvalue, $A, $icon_arr)
+function FILECHECK_getListField($fieldname, $fieldvalue, $A, $icon_arr)
 {
-    global $_CONF;
+    global $_CONF, $LANG_FILECHECK;
 
     static $counter = 0;
 
-    $retval = false;
+    $retval = '<span style="font-size:smaller">';
 
     switch($fieldname) {
         case 'delete':
@@ -243,91 +285,86 @@ function ADMIN_getListField_filecheck($fieldname, $fieldvalue, $A, $icon_arr)
             }
             break;
         case 'delta':
-            $type = ($A['type'] == 'F') ? 'File' : 'Directory';
-            $retval = ($fieldvalue<>'-') ? $type . ' added:' : $type . ' missing:';
+            $type = ($A['type'] == 'F') ? $LANG_FILECHECK['file'] : $LANG_FILECHECK['dir'];
+            $retval .= ($fieldvalue<>'-') ? $type . ' ' . $LANG_FILECHECK['added'] . ':' : $type . ' ' . $LANG_FILECHECK['missing'] . ':';
+            $retval .= '</span>';
             break;
         case 'path':
-            $retval = $fieldvalue . '/';
+            $retval .= $fieldvalue . '/</span>';
             break;
         default:
-            $retval = $fieldvalue;
+            $retval .= $fieldvalue . '</span';
             break;
     }
 
     return $retval;
 }
 
-function FILECHECK_list()
+function FILECHECK_scan()
 {
-    global $_CONF, $LANG_ADMIN, $LANG_FILECHECK, $LANG01, $data_arr;
+    global $_CONF, $LANG_ADMIN, $LANG_FILECHECK, $LANG01, $data_arr, $elapsed;
 
-    $retval = '';
-
-    $menu_arr = array (
-        array('url'  => $_CONF['site_admin_url'].'/filecheck.php',
-              'text' => $LANG_FILECHECK['recheck']),
-        array('url'  => $_CONF['site_admin_url'].'/envcheck.php',
-              'text' => $LANG01['env_check']),
-        array('url'  => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home'])
-    );
-
-    $retval .= COM_startBlock($LANG_FILECHECK['filecheck'], '',
-                              COM_getBlockTemplate('_admin_block', 'header'));
-    $retval .= ADMIN_createMenu(
-        $menu_arr,
-        sprintf($LANG_FILECHECK['explanation'], GVERSION),
-        $_CONF['layout_url'] . '/images/icons/filecheck.png'
-    );
-
-    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
-
-    // list files that have been added
-
-    $header_arr = array(
-        array('text' => $LANG_ADMIN['delete'],   'field' => 'delete', 'align' => 'center'),
-        array('text' => $LANG_FILECHECK['where'], 'field' => 'where', 'align' => 'center'),
-        array('text' => $LANG_FILECHECK['delta'], 'field' => 'delta', 'align' => 'right'),
-        array('text' => $LANG_FILECHECK['path'], 'field' => 'path'),
-        array('text' => $LANG_FILECHECK['file'],  'field' => 'file')
-    );
-
+    $retval = false;
     $data_arr = array();
-    $text_arr = array();
-    $form_arr = array();
 
-    $text_arr = array(
-        'form_url'   => $_CONF['site_admin_url'] . '/filecheck.php'
-    );
+    // begin timing scan process
+    $start = _stopwatch('start');
 
-    $bottom = '<br' . XHTML . '><input type="submit" onclick="return confirm(\'' . $LANG_FILECHECK['confirm'] . '\');" name="delete" value="' . $LANG_ADMIN['delete'] . '"' . XHTML . '>'
-            . '&nbsp;&nbsp;<input type="submit" name="cancel" value="' . $LANG_ADMIN['cancel'] . '"' . XHTML . '>';
+    if ( FILECHECK_scanPositive(substr($_CONF['path'],0,-1),'private') &&
+         FILECHECK_scanPositive(substr($_CONF['path_html'],0,-1),'public_html') &&
+         FILECHECK_scanNegative()) {
 
-    $form_arr = array('bottom' => $bottom);
+        // scanning succeeded, sort the array and then capture the elapsed time
+        sort($data_arr);
+        $elapsed = _stopwatch('stop');
 
-    _stopwatch('start');
-    FILECHECK_scanPositive(substr($_CONF['path'],0,-1),'private');
-    COM_errorLog( 'Completed scanPositive(private) in ' . _stopwatch('stop') . ' sec');
-    _stopwatch('start');
-    FILECHECK_scanPositive(substr($_CONF['path_html'],0,-1),'public_html');
-    COM_errorLog( 'Completed scanPositive(public_html) in ' . _stopwatch('stop') . ' sec');
-    _stopwatch('start');
-    FILECHECK_scanNegative();
-    COM_errorLog( 'Completed scanNegative(private+public_html) in ' . _stopwatch('stop') . ' sec');
+        // display the menu
+        $menu_arr = array (
+            array('url'  => $_CONF['site_admin_url'].'/filecheck.php',
+                  'text' => $LANG_FILECHECK['recheck']),
+            array('url'  => $_CONF['site_admin_url'].'/envcheck.php',
+                  'text' => $LANG01['env_check']),
+            array('url'  => $_CONF['site_admin_url'],
+                  'text' => $LANG_ADMIN['admin_home'])
+        );
 
-    _stopwatch('start');
-    sort($data_arr);
-    COM_errorLog( 'Sorted scan results in ' . _stopwatch('stop') . ' sec');
+        $retval .= COM_startBlock($LANG_FILECHECK['filecheck'], '',
+                                  COM_getBlockTemplate('_admin_block', 'header'));
+        $retval .= ADMIN_createMenu(
+            $menu_arr,
+            sprintf($LANG_FILECHECK['results'], GVERSION),
+            $_CONF['layout_url'] . '/images/icons/filecheck.png'
+        );
 
+        $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
-    _stopwatch('start');
-    $retval .= ADMIN_simpleList("FILECHECK_getListField", $header_arr, $text_arr, $data_arr, NULL, $form_arr);
-    COM_errorLog( 'Completed list output in ' . _stopwatch('stop') . ' sec');
+        // display the list of results in data_arr
+        $spanstart = '<span style="font-size:smaller">';
+        $spanend = '</span>';
 
+        $header_arr = array(
+            array('text' => $spanstart . $LANG_ADMIN['delete'] . $spanend,   'field' => 'delete', 'align' => 'center'),
+            array('text' => $spanstart . $LANG_FILECHECK['where'] . $spanend, 'field' => 'where', 'align' => 'center'),
+            array('text' => $spanstart . $LANG_FILECHECK['delta'] . $spanend, 'field' => 'delta', 'align' => 'right'),
+            array('text' => $spanstart . $LANG_FILECHECK['path'] . $spanend, 'field' => 'path'),
+            array('text' => $spanstart . $LANG_FILECHECK['file'] . $spanend,  'field' => 'file')
+        );
+
+        $text_arr = array(
+            'form_url'   => $_CONF['site_admin_url'] . '/filecheck.php'
+        );
+
+        $bottom = '<br' . XHTML . '><input type="submit" onclick="return confirm(\'' . $LANG_FILECHECK['confirm'] . '\');" name="delete" value="' . $LANG_ADMIN['delete'] . '"' . XHTML . '>'
+                    . '&nbsp;&nbsp;<input type="submit" name="cancel" value="' . $LANG_ADMIN['cancel'] . '"' . XHTML . '>'
+                    . '&nbsp;&nbsp;' . sprintf($LANG_FILECHECK['elapsed'], $elapsed);
+        $form_arr = array('bottom' => $bottom);
+
+        $retval .= ADMIN_simpleList("FILECHECK_getListField", $header_arr, $text_arr, $data_arr, NULL, $form_arr);
+    }
     return $retval;
 }
 
-function FILECHECK_delete( )
+function FILECHECK_delete()
 {
     global $_CONF, $_POST;
 
@@ -349,33 +386,67 @@ function FILECHECK_delete( )
 
 
 $action = '';
-$expected = array('delete','cancel');
+$expected = array('delete','cancel','scan');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
+        $action = $provided;
+    } elseif (isset($_GET[$provided])) {
         $action = $provided;
     }
 }
 
 $files = 0;
+$elapsed = 0;
+$result = '';
+$timelimit = ini_get('max_execution_time');
+
+$display = COM_siteHeader();
+
 switch ($action) {
 
     case 'cancel':
-        echo COM_refresh ($_CONF['site_admin_url'] . '/index.php');
+        echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         exit;
         break;
 
     case 'delete':
-        $files = FILECHECK_delete( );
+        $files = FILECHECK_delete();
+        break;
+
+    case 'scan':
+        $result = FILECHECK_scan();
         break;
 }
 
-$display .= COM_siteHeader();
 if ($files > 0) {
     $desc = ($files > 1) ? 'files were' : 'file was';
     $display .= COM_showMessageText(sprintf($LANG_FILECHECK['removed'],$files,$desc));
 }
-COM_errorLog('Completed initialization in ' . _stopwatch('stop') . ' sec');
-$display .= FILECHECK_list() . COM_siteFooter();
+
+if (empty($result)) {
+
+    $menu_arr = array (
+        array('url'  => $_CONF['site_admin_url'].'/envcheck.php',
+              'text' => $LANG01['env_check']),
+        array('url'  => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
+
+    $display .= COM_startBlock($LANG_FILECHECK['filecheck'], '',
+                              COM_getBlockTemplate('_admin_block', 'header'));
+    $display .= ADMIN_createMenu(
+        $menu_arr,
+        sprintf($LANG_FILECHECK['scan'], $timelimit),
+        $_CONF['layout_url'] . '/images/icons/filecheck.png'
+    );
+
+    $display .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+    $display .= $LANG_FILECHECK['working'] . COM_siteFooter();
+    $display .= COM_refresh($_CONF['site_admin_url'] . '/filecheck.php?scan=x');
+} else {
+    $display .= $result;
+    $display .= COM_siteFooter();
+}
 
 echo $display;
 

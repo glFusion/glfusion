@@ -334,9 +334,8 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
             $topictemplate->set_var ('profilelinkimg', $profile_linkimg);
             $topictemplate->set_var ('LANG_profile',$LANG_GF01['ProfileLink']);
             $topictemplate->parse ('profile_link', 'profile');
-            if ($CONF_FORUM['use_pm_plugin']) {
-                $pmusernmame = COM_getDisplayName($showtopic['uid']);
-                $pmplugin_link = forumPLG_getPMlink($pmusernmame,$showtopic['uid']);
+            if ($CONF_FORUM['use_pm_plugin'] && (isset($_USER['uid']) && $_USER['uid'] != $showtopic['uid']) ) {
+                $pmplugin_link = forumPLG_getPMlink($showtopic['uid']);
                 if ($pmplugin_link != '') {
                     $pm_link = $pmplugin_link;
                     $pm_linkimg = '<img src="'.gf_getImage('pm_button').'" border="0" align="middle" alt="'.$LANG_GF01['PMLink'].'" title="'.$LANG_GF01['PMLink'].'"' . XHTML . '>';

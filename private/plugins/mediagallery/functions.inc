@@ -652,6 +652,7 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
         $target         = '';
         $linkID         = 0;
         $alt            = 0;
+        $link_src       = 'disp';
 
         if ( $align != '' ) {
             $aSet = 1;
@@ -727,6 +728,14 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                     $a = explode (':',$part);
                     $mp3_type = $a[1];
                     $skip++;
+                } elseif ( substr($part,0,8) == 'linksrc:' ) {
+                    $a = explode (':',$part);
+                    $link_src = $a[1];
+                    if ( !in_array($link_src,array('tn','disp','orig') ) ) {
+                        $link_src = 'disp';
+                    }
+                    $skip++;
+
                 } else {
                     break;
                 }
@@ -1856,8 +1865,8 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                                 }
 
                                 foreach ($_MG_CONF['validExtensions'] as $ext ) {
-                                    if ( file_exists($_MG_CONF['path_mediaobjects'] . 'disp/' . $row['media_filename'][0] . '/' . $row['media_filename'] . $ext) ) {
-                                        $direct_link = $_MG_CONF['mediaobjects_url'] . '/disp/' . $row['media_filename'][0] . '/' . $row['media_filename'] . $ext;
+                                    if ( file_exists($_MG_CONF['path_mediaobjects'] . $link_src .'/' . $row['media_filename'][0] . '/' . $row['media_filename'] . $ext) ) {
+                                        $direct_link = $_MG_CONF['mediaobjects_url'] . '/'.$link_src.'/' . $row['media_filename'][0] . '/' . $row['media_filename'] . $ext;
                                         break;
                                     }
                                 }
@@ -1999,8 +2008,7 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
 
 
                 if ( $link == '' ) {
-
-                    if ( $autotag['tag'] != 'image' && $MG_albums[$aid]->hidden != 1 && $enable_link != 0) {
+                    if ( $autotag['tag'] != 'image' && ($MG_albums[$aid]->hidden != 1 || $enable_link == 2) && $enable_link != 0) {
                         if ( $enable_link == 2 && $direct_link != '' ) {
                             if ( $_MG_CONF['disable_lightbox'] == true ) {
                                 $link = $tagtext;
@@ -3714,9 +3722,9 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
                         break;
                     case 'url':
                         if (empty($A['id'])) {
-                            $props['url'] = COM_buildUrl($_MG_CONF['site_url'].'/media.php?f=0&amp;sort=0&amp;s='.$id);
+                            $props['url'] = $_MG_CONF['site_url'].'/media.php?f=0&amp;sort=0&amp;s='.$id;
                         } else {
-                            $props['url'] = COM_buildUrl($_MG_CONF['site_url'].'/media.php?f=0&amp;sort=0&amp;s='.$A['media_id']);
+                            $props['url'] = $_MG_CONF['site_url'].'/media.php?f=0&amp;sort=0&amp;s='.$A['media_id'];
                         }
                         break;
                     case 'label':

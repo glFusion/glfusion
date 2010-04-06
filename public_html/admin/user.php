@@ -2076,11 +2076,11 @@ switch($action) {
 
     case 'delbutton_x':
         if ($validtoken) {
-        $msg = USER_batchDeleteExec();
-        $display .= COM_siteHeader ('menu', $LANG28[11])
-            . COM_showMessageText($msg)
-            . USER_batchAdmin()
-            . COM_siteFooter();
+            $msg = USER_batchDeleteExec();
+            $display .= COM_siteHeader ('menu', $LANG28[11])
+                . COM_showMessageText($msg)
+                . USER_batchAdmin()
+                . COM_siteFooter();
         } else {
             COM_accessLog('User ' . $_USER['username'] . ' tried to illegally batch delete users and failed CSRF checks.');
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');

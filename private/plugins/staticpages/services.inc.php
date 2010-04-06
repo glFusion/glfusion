@@ -132,7 +132,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         $par_str = array('mode', 'sp_id', 'sp_old_id', 'sp_tid', 'sp_format',
                          'postmode');
         $par_num = array('sp_uid', 'sp_hits', 'owner_id', 'group_id',
-                         'sp_where', 'sp_php', 'commentcode','sp_search');
+                         'sp_where', 'sp_php', 'commentcode','sp_search', 'sp_status');
 
         foreach ($par_str as $str) {
             if (isset($args[$str])) {
@@ -152,6 +152,10 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
     }
 
     // START: Staticpages defaults
+
+    if ( $args['sp_status'] != 1 ) {
+        $args['sp_status'] = 0;
+    }
 
     if(empty($args['sp_format'])) {
         $args['sp_format'] = 'allblocks';
@@ -224,6 +228,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
     // END: Staticpages defaults
 
     $sp_id = $args['sp_id'];
+    $sp_status = $args['sp_status'];
     $sp_uid = $args['sp_uid'];
     $sp_title = $args['sp_title'];
     $sp_content = $args['sp_content'];
@@ -292,7 +297,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         $output .= COM_siteHeader ('menu', $LANG_STATIC['staticpageeditor']);
         $output .= COM_errorLog ($LANG_STATIC['duplicate_id'], 2);
         if (!$args['gl_svc']) {
-            $output .= staticpageeditor ($sp_id);
+            $output .= PAGE_edit($sp_id);
         }
         $output .= COM_siteFooter ();
         $svc_msg['error_desc'] = 'Duplicate ID';
@@ -370,9 +375,9 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
             list($perm_owner,$perm_group,$perm_members,$perm_anon) = SEC_getPermissionValues($perm_owner,$perm_group,$perm_members,$perm_anon);
         }
 
-        DB_save ($_TABLES['staticpage'], 'sp_id,sp_uid,sp_title,sp_content,sp_date,sp_hits,sp_format,sp_onmenu,sp_label,commentcode,owner_id,group_id,'
+        DB_save ($_TABLES['staticpage'], 'sp_id,sp_status,sp_uid,sp_title,sp_content,sp_date,sp_hits,sp_format,sp_onmenu,sp_label,commentcode,owner_id,group_id,'
                 .'perm_owner,perm_group,perm_members,perm_anon,sp_php,sp_nf,sp_centerblock,sp_help,sp_tid,sp_where,sp_inblock,postmode,sp_search',
-                "'$sp_id',$sp_uid,'$sp_title','$sp_content',NOW(),$sp_hits,'$sp_format',$sp_onmenu,'$sp_label','$commentcode',$owner_id,$group_id,"
+                "'$sp_id',$sp_status, $sp_uid,'$sp_title','$sp_content',NOW(),$sp_hits,'$sp_format',$sp_onmenu,'$sp_label','$commentcode',$owner_id,$group_id,"
                         ."$perm_owner,$perm_group,$perm_members,$perm_anon,'$sp_php','$sp_nf',$sp_centerblock,'$sp_help','$sp_tid',$sp_where,"
                         ."'$sp_inblock','$postmode',$sp_search");
 
@@ -396,7 +401,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         $output .= COM_siteHeader ('menu', $LANG_STATIC['staticpageeditor']);
         $output .= COM_errorLog ($LANG_STATIC['no_title_or_content'], 2);
         if (!$args['gl_svc']) {
-            $output .= staticpageeditor ($sp_id);
+            $output .= PAGE_edit($sp_id);
         }
         $output .= COM_siteFooter ();
         return PLG_RET_ERROR;
@@ -525,7 +530,7 @@ function service_get_staticpages($args, &$output, &$svc_msg)
                       . "commentcode,owner_id,group_id,perm_owner,perm_group,"
                       . "perm_members,perm_anon,sp_tid,sp_help,sp_php,"
                       . "sp_inblock FROM {$_TABLES['staticpage']} "
-                      . "WHERE (sp_id = '$page')" . $perms;
+                      . "WHERE (sp_id = '$page') AND (sp_status = 1)" . $perms;
         $sql['mssql'] = "SELECT sp_title,"
                       . "CAST(sp_content AS text) AS sp_content,sp_hits,"
                       . "sp_date,sp_format,commentcode,owner_id,group_id,"
@@ -613,7 +618,7 @@ function service_get_staticpages($args, &$output, &$svc_msg)
 
         $perms = SP_getPerms();
         if (!empty ($perms)) {
-            $perms = ' WHERE ' . $perms;
+            $perms = ' AND ' . $perms;
         }
 
         $offset = 0;
@@ -627,11 +632,7 @@ function service_get_staticpages($args, &$output, &$svc_msg)
         $sql = array();
         $sql['mysql'] = "SELECT sp_id,sp_title,sp_content,sp_hits,sp_date,sp_format,owner_id,"
                 ."group_id,perm_owner,perm_group,perm_members,perm_anon,sp_tid,sp_help,sp_php,"
-                ."sp_inblock FROM {$_TABLES['staticpage']}" . $perms . $order . $limit;
-        $sql['mssql'] = "SELECT sp_id,sp_title,CAST(sp_content AS text) AS sp_content,sp_hits,"
-                ."sp_date,sp_format,owner_id,group_id,perm_owner,perm_group,perm_members,"
-                ."perm_anon,sp_tid,sp_help,sp_php,sp_inblock FROM {$_TABLES['staticpage']}"
-                . $perms . $order . $limit;
+                ."sp_inblock FROM {$_TABLES['staticpage']} WHERE (sp_status = 1)" . $perms . $order . $limit;
         $result = DB_query ($sql);
 
         $count = 0;

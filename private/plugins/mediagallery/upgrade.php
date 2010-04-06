@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -193,6 +193,9 @@ function mediagallery_upgrade()
             if ( MG_upgrade_168() == 0 ) {
                 DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.6.8' WHERE pi_name='mediagallery' LIMIT 1");
             }
+        case "1.6.8" :
+        case "1.6.9" :
+            // no db / config changes.
         default :
             if ( $_DB_dbms != 'mssql' ) {
                 // we missed media_keywords field somewhere along the way...

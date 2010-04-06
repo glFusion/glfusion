@@ -84,13 +84,10 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
             'list' => 'list.thtml',
             'header' => 'header.thtml',
             'row' => 'listitem.thtml',
-            'field' => 'field.thtml'
+            'field' => 'field.thtml',
+            'arow'  => 'actionrow.thtml'
         )
     );
-    $admin_templates->set_var( 'xhtml', XHTML );
-    $admin_templates->set_var('site_url', $_CONF['site_url']);
-    $admin_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
-    $admin_templates->set_var('layout_url', $_CONF['layout_url']);
     $admin_templates->set_var('form_url', $form_url);
     $admin_templates->set_var('lang_edit', $LANG_ADMIN['edit']);
     $admin_templates->set_var('lang_deleteall', $LANG01[124]);
@@ -103,7 +100,7 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
     }
 
     # define icon paths. Those will be transmitted to $fieldfunction.
-    $icons_type_arr = array('edit', 'copy', 'delete', 'list', 'addchild', 'blank');
+    $icons_type_arr = array('edit', 'copy', 'delete', 'list', 'mail', 'group', 'user', 'check', 'greycheck', 'cross', 'disk', 'addchild', 'blank');
     $icon_arr = array();
     foreach ($icons_type_arr as $icon_type) {
         $icon_url = "{$_CONF['layout_url']}/images/admin/$icon_type.$_IMAGE_TYPE";
@@ -115,10 +112,17 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
     if (is_array($options) && isset($options['chkminimum'])) {
         $min_data = $options['chkminimum'];
     }
-    if (count($data_arr) > $min_data AND is_array($options) AND $options['chkdelete']) {
+
+    // This is the number of columns in each row
+    $ncols = count( $header_arr );
+
+    // This is the number of rows/records to display
+    $nrows = count($data_arr);
+
+    if ($nrows > $min_data AND is_array($options) AND ((isset($options['chkdelete']) && $options['chkdelete']) OR (isset($options['chkselect']) && $options['chkselect']))) {
         $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form);"' . XHTML . '>');
-        $admin_templates->set_var('class', "admin-list-field");
-        $admin_templates->set_var('show_deleteimage', '');
+        $admin_templates->set_var('class', 'admin-list-field');
+        $admin_templates->set_var('header_column_style', 'style="text-align:center;width:25px;"'); // always center checkbox
         $admin_templates->parse('header_row', 'header', true);
         $admin_templates->clear_var('on_click');
     } else {
@@ -126,7 +130,7 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
     }
 
     # HEADER FIELDS array(text, field, sort)
-    for ($i=0; $i < count( $header_arr ); $i++) {
+    for ($i=0; $i < $ncols; $i++) {
         $admin_templates->set_var('header_text', $header_arr[$i]['text']);
         if (!empty($header_arr[$i]['header_class'])) {
             $admin_templates->set_var('class', $header_arr[$i]['header_class']);
@@ -134,10 +138,26 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
             $class = ($header_arr[$i]['center'] == true) ? 'admin-list-headerfield-centered' : 'admin-list-headerfield';
             $admin_templates->set_var('class', $class);
         }
+        // header column formatting
+        $header_column_style = '';
+        if (!empty($header_arr[$i]['align'])) {
+            if ($header_arr[$i]['align'] == 'center') {
+                $header_column_style = 'text-align:center;';
+            } elseif ($header_arr[$i]['align'] == 'right') {
+                $header_column_style = 'text-align:right;';
+            }
+        }
+        $header_column_style .= (isset($header_arr[$i]['nowrap'])) ? ' white-space:nowrap;' : '';
+        $header_column_style .= (isset($header_arr[$i]['width'])) ? ' width:' . $header_arr[$i]['width'] . ';' : '';
+        if(!empty($header_column_style)) {
+            $admin_templates->set_var('header_column_style', 'style="' . $header_column_style . '"');
+        } else {
+            $admin_templates->clear_var('header_column_style');
+        }
         $admin_templates->parse('header_row', 'header', true);
     }
 
-    if (count($data_arr) == 0) {
+    if ($nrows == 0) {
         if (isset($text_arr['no_data'])) {
             $message = $text_arr['no_data'];
         } else {
@@ -148,13 +168,13 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
         $admin_templates->set_var('message', $LANG_ADMIN['data_error']);
     } else {
         $admin_templates->set_var('show_message', 'display:none;');
-        for ($i = 0; $i < count($data_arr); $i++) {
-            if (count($data_arr) > $min_data AND is_array($options) AND $options['chkdelete']) {
+        for ($i = 0; $i < $nrows; $i++) {
+            if ($nrows > $min_data AND is_array($options) AND ((isset($options['chkdelete']) && $options['chkdelete']) OR (isset($options['chkselect']) && $options['chkselect']))) {
                 $admin_templates->set_var('itemtext', '<input type="checkbox" name="delitem[]" value="' . $data_arr[$i][$options['chkfield']].'"' . XHTML . '>');
                 $admin_templates->set_var('class', "admin-list-field");
                 $admin_templates->parse('item_field', 'field', true);
             }
-            for ($j = 0; $j < count($header_arr); $j++) {
+            for ($j = 0; $j < $ncols; $j++) {
                 $fieldname = $header_arr[$j]['field'];
                 $fieldvalue = '';
                 if (!empty($data_arr[$i][$fieldname])) {
@@ -180,6 +200,22 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
             $admin_templates->parse('item_row', 'row', true);
             $admin_templates->clear_var('item_field');
         }
+    }
+
+    // if we displayed data, and chkselect option is available, display the
+    // actions row for all selected items. provide a delete action as a minimum
+    if ($nrows > $min_data AND is_array($options) AND ((isset($options['chkdelete']) && $options['chkdelete']) OR (isset($options['chkselect']) && $options['chkselect']))) {
+        $actions = '<td style="text-align:center;">'
+            . '<img src="' . $_CONF['layout_url'] . '/images/admin/action.' . $_IMAGE_TYPE . '"></td>';
+        $delete_action = '<input name="delbutton" type="image" src="'
+            . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
+            . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
+            . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
+            . XHTML . '>&nbsp;&nbsp;' . $LANG_ADMIN['delete'];
+        $actions .= '<td colspan="' . $ncols . '">' . $LANG_ADMIN['action'] . '&nbsp;&nbsp;&nbsp;' . $delete_action;
+        $actions .= (!empty($options['actions'])) ? $options['actions'] . '</td>' : '</td>';
+        $admin_templates->set_var('actions', $actions);
+        $admin_templates->parse('action_row', 'arow', true);
     }
 
     $admin_templates->parse('output', 'list');
@@ -289,10 +325,6 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     ));
 
     # insert std. values into the template
-    $admin_templates->set_var( 'xhtml', XHTML );
-    $admin_templates->set_var('site_url', $_CONF['site_url']);
-    $admin_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
-    $admin_templates->set_var('layout_url', $_CONF['layout_url']);
     $admin_templates->set_var('form_url', $form_url);
     $admin_templates->set_var('lang_edit', $LANG_ADMIN['edit']);
     $admin_templates->set_var('lang_deleteall', $LANG01[124]);
@@ -303,11 +335,12 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     if (isset($form_arr['bottom'])) {
         $admin_templates->set_var('formfields_bottom', $form_arr['bottom']);
     }
+
     // Check if the delete checkbox and support for the delete all feature should be displayed
     if (is_array($options) AND $options['chkdelete']) {
         $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form);"' . XHTML . '>');
-        $admin_templates->set_var('class', "admin-list-field");
-        $admin_templates->set_var('show_deleteimage', '');
+        $admin_templates->set_var('class', 'admin-list-field');
+        $admin_templates->set_var('header_column_style', 'style="text-align:center;width:25px;"'); // always center checkbox
         $admin_templates->parse('header_row', 'header', true);
         $admin_templates->clear_var('on_click');
     } else {
@@ -315,7 +348,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     }
 
     # define icon paths. Those will be transmitted to $fieldfunction.
-    $icons_type_arr = array('edit', 'copy', 'delete', 'list', 'addchild', 'blank');
+    $icons_type_arr = array('edit', 'copy', 'delete', 'list', 'mail', 'group', 'user', 'check', 'greycheck', 'cross', 'disk', 'addchild', 'blank');
     $icon_arr = array();
     foreach ($icons_type_arr as $icon_type) {
         $icon_url = "{$_CONF['layout_url']}/images/admin/$icon_type.$_IMAGE_TYPE";
@@ -379,6 +412,10 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     }
     $th_subtags = ''; // other tags in the th, such as onclick and mouseover
     $header_text = ''; // title as displayed to the user
+
+    // This is the number of columns in each row
+    $ncols = count( $header_arr );
+
     // HEADER FIELDS array(text, field, sort, class)
     // this part defines the contents & format of the header fields
     for ($i=0; $i < count( $header_arr ); $i++) { #iterate through all headers
@@ -420,6 +457,13 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         }
         if (isset($header_arr[$i]['nowrap'])) {
             $admin_templates->set_var('header_column_style','style="white-space:nowrap;"');
+        }
+        $header_column_style .= (isset($header_arr[$i]['nowrap'])) ? ' white-space:nowrap;' : '';
+        $header_column_style .= (isset($header_arr[$i]['width'])) ? ' width:' . $header_arr[$i]['width'] . ';' : '';
+        if(!empty($header_column_style)) {
+            $admin_templates->set_var('header_column_style', 'style="' . $header_column_style . '"');
+        } else {
+            $admin_templates->clear_var('header_column_style');
         }
         $admin_templates->set_var('header_text', $header_text);
         $admin_templates->set_var('th_subtags', $th_subtags);
@@ -484,7 +528,10 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     // echo $sql;
 
     $result = DB_query($sql);
+
+    // This is the number of rows/records to display
     $nrows = DB_numRows($result);
+
     $r = 1; # r is the counter for the actual displayed rows for correct coloring
     for ($i = 0; $i < $nrows; $i++) { # now go through actual data
         $A = DB_fetchArray($result);
@@ -543,7 +590,23 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $admin_templates->set_var('message', $message);
     }
 
-    if ($has_extras) { # now make google-paging
+    // if we displayed data, and chkselect option is available, display the
+    // actions row for all selected items. provide a delete action as a minimum
+    if (is_array($options) AND ($options['chkdelete'] OR $options['chkselect']) AND $nrows > 0 ) {
+        $actions = '<td style="text-align:center;">'
+            . '<img src="' . $_CONF['layout_url'] . '/images/admin/action.' . $_IMAGE_TYPE . '"></td>';
+        $delete_action = '<input name="delbutton" type="image" src="'
+            . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
+            . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
+            . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
+            . XHTML . '>&nbsp;&nbsp;' . $LANG_ADMIN['delete'];
+        $actions .= '<td colspan="' . $ncols . '">' . $LANG_ADMIN['action'] . '&nbsp;&nbsp;&nbsp;' . $delete_action;
+        $actions .= (!empty($options['actions'])) ? $options['actions'] . '</td>' : '</td>';
+        $admin_templates->set_var('actions', $actions);
+        $admin_templates->parse('action_row', 'arow', true);
+    }
+
+    if ($has_paging) { # now make google-paging
         $hasargs = strstr( $form_url, '?' );
         if( $hasargs ) {
             $sep = '&amp;';
@@ -612,10 +675,6 @@ function ADMIN_createMenu($menu_arr, $text, $icon = '')
     }
     $admin_templates->set_var('menu_fields', $menu_fields);
     $admin_templates->set_var('lang_instructions', $text);
-    $admin_templates->set_var('xhtml', XHTML);
-    $admin_templates->set_var('site_url', $_CONF['site_url']);
-    $admin_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
-    $admin_templates->set_var('layout_url', $_CONF['layout_url']);
     $admin_templates->parse('top_menu', 'top_menu');
     $retval = $admin_templates->finish($admin_templates->get_var('top_menu'));
     return $retval;
@@ -1002,129 +1061,6 @@ function ADMIN_getListField_stories($fieldname, $fieldvalue, $A, $icon_arr)
             break;
         case 'username':
             $retval = COM_getDisplayName ($A['uid'], $A['username'], $A['fullname']);
-            break;
-        default:
-            $retval = $fieldvalue;
-            break;
-    }
-
-    return $retval;
-}
-
-/**
- * used for the lists of submissions and draft stories in admin/moderation.php
- *
- */
-function ADMIN_getListField_moderation($fieldname, $fieldvalue, $A, $icon_arr)
-{
-    global $_CONF, $_TABLES, $LANG_ADMIN;
-
-    $retval = '';
-
-    $type = '';
-    if (isset ($A['_moderation_type'])) {
-        $type = $A['_moderation_type'];
-    }
-    switch ($fieldname) {
-    case 'edit':
-        $retval = COM_createLink($icon_arr['edit'], $A['edit']);
-        break;
-
-    case 'delete':
-        $retval = "<input type=\"radio\" name=\"action[{$A['row']}]\" value=\"delete\"" . XHTML . ">";
-        break;
-
-    case 'approve':
-        $retval = "<input type=\"radio\" name=\"action[{$A['row']}]\" value=\"approve\"" . XHTML . ">"
-                 ."<input type=\"hidden\" name=\"id[{$A['row']}]\" value=\"{$A[0]}\"" . XHTML . ">";
-        break;
-
-    case 'day':
-        $retval = strftime($_CONF['daytime'], $A['day']);
-        break;
-
-    case 'tid':
-        $retval = DB_getItem($_TABLES['topics'], 'topic',
-                             "tid = '".addslashes($A['tid'])."'");
-        break;
-
-    case 'uid':
-        $name = '';
-        if ($A['uid'] == 1) {
-            $name = htmlspecialchars(COM_stripslashes(DB_getItem($_TABLES['commentsubmissions'], 'name', "cid = '".addslashes($A['id'])."'")));
-        }
-        if (empty($name)) {
-            $name = DB_getItem($_TABLES['users'], 'username',
-                               "uid = ".intval($A['uid']));
-        }
-        if ($A['uid'] == 1) {
-            $retval = $name;
-        } else {
-            $retval = COM_createLink($name, $_CONF['site_url']
-                            . '/users.php?mode=profile&amp;uid=' . $A['uid']);
-        }
-        break;
-
-    case 'publishfuture':
-        if (!SEC_inGroup('Comment Submitters', $A['uid']) && ($A['uid'] > 1)) {
-            $retval = "<input type=\"checkbox\" name=\"publishfuture[]\" value=\"{$A['uid']}\"" . XHTML . ">";
-        } else {
-            $retval = $LANG_ADMIN['na'];
-        }
-        break;
-
-    default:
-        if (($fieldname == 3) && ($type == 'story')) {
-            $retval = DB_getItem($_TABLES['topics'], 'topic',
-                                  "tid = '".addslashes($A[3])."'");
-        } elseif (($fieldname == 2) && ($type == 'comment')) {
-            $retval = COM_truncate(strip_tags($A['comment']), 40, '...');
-        } else {
-            $retval = COM_makeClickableLinks(stripslashes($fieldvalue));
-        }
-        break;
-    }
-
-    return $retval;
-}
-
-/**
- * used for the list of ping services in admin/trackback.php
- *
- */
-function ADMIN_getListField_trackback($fieldname, $fieldvalue, $A, $icon_arr, $token)
-{
-    global $_CONF, $LANG_TRB;
-
-    $retval = '';
-
-    switch($fieldname) {
-        case "edit":
-            $retval = COM_createLink($icon_arr['edit'],
-                "{$_CONF['site_admin_url']}/trackback.php?mode=editservice&amp;service_id={$A['pid']}");
-            break;
-        case "name":
-            $retval = COM_createLink($A['name'], $A['site_url']);
-            break;
-        case "method":
-            if ($A['method'] == 'weblogUpdates.ping') {
-                $retval = $LANG_TRB['ping_standard'];
-            } else if ($A['method'] == 'weblogUpdates.extendedPing') {
-                $retval = $LANG_TRB['ping_extended'];
-            } else {
-                $retval = '<span class="glf-warning-small">' .
-                        $LANG_TRB['ping_unknown'] .  '</span>';
-            }
-            break;
-        case "is_enabled":
-            if ($A['is_enabled'] == 1) {
-                $switch = ' checked="checked"';
-            } else {
-                $switch = '';
-            }
-            $retval = "<input type=\"checkbox\" name=\"changedservices[{$A['pid']}]\" "
-                . "onclick=\"submit()\" value=\"{$A['pid']}\"$switch" . XHTML . ">";
-            $retval .= '<input type="hidden" name="tbarray['.$A['pid'].']" value="1" />';
             break;
         default:
             $retval = $fieldvalue;

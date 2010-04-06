@@ -7,7 +7,7 @@
                                     </tr>
                                     <tr>
                                         <td class="alignright">{lang_description}:</td>
-                                        <td><input type="text" size="40" maxlength="255" name="grp_descr" value="{group_description}"{xhtml}></td>
+                                        <td><input type="text" size="80" maxlength="255" name="grp_descr" value="{group_description}"{xhtml}></td>
                                     </tr>
                                     <tr{hide_adminoption}>
                                         <td class="alignright">{lang_admingroup}:</td>
@@ -24,7 +24,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2"><hr{xhtml}></td>
+                                        <td colspan="2"><div style="margin:10px 0 5px 0;border-bottom:1px solid #cccccc"></div></td>
                                     </tr>
                                     <tr>
                                         <td colspan="2"><b>{lang_securitygroups}</b></td>
@@ -38,7 +38,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2"><hr{xhtml}></td>
+                                        <td colspan="2"><div style="margin:10px 0 5px 0;border-bottom:1px solid #cccccc"></div></td>
                                     </tr>
                                     <tr>
                                         <td colspan="2"><b>{lang_rights}</b></td>

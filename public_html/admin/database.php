@@ -36,14 +36,22 @@
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
-require_once $_CONF['path_system'] . 'lib-security.php';
 
-/**
-* This page allows all Root admins to create a database backup.  This will not
-* allow the removal of past backups.  It's pretty simple actually.  The admin
-* clicks a button, we do a mysqldump to a file in the following format:
-* glfusion_db_backup_YYYY_MM_DD.sql  That's it.
-*/
+$display = '';
+
+// If user isn't a root user or if the backup feature is disabled, bail.
+if (!SEC_inGroup('Root') OR $_CONF['allow_mysqldump'] == 0) {
+    $display .= COM_siteHeader('menu', $LANG_DB_BACKUP['last_ten_backups']);
+    $display .= COM_startBlock($MESSAGE[30], '',
+                    COM_getBlockTemplate('_msg_block', 'header'));
+    $display .= $MESSAGE[46];
+    $display .= COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
+    $display .= COM_siteFooter();
+    COM_accessLog("User {$_USER['username']} tried to illegally access the database backup screen.");
+    echo $display;
+    exit;
+}
+
 
 /**
 * Sort backup files with newest first, oldest last.
@@ -51,7 +59,7 @@ require_once $_CONF['path_system'] . 'lib-security.php';
 * This is needed because the sort order of the backup files, coming from the
 * 'readdir' function, might not be that way.
 */
-function compareBackupFiles($pFileA, $pFileB)
+function DBADMIN_compareBackupFiles($pFileA, $pFileB)
 {
     global $_CONF;
 
@@ -70,11 +78,11 @@ function compareBackupFiles($pFileA, $pFileB)
 * @return   string      HTML for the list of files or an error when not writable
 *
 */
-function listbackups()
+function DBADMIN_list()
 {
     global $_CONF, $_TABLES, $_IMAGE_TYPE, $LANG08, $LANG_ADMIN, $LANG_DB_BACKUP;
 
-    require_once $_CONF['path_system'] . 'lib-admin.php';
+    USES_lib_admin();
 
     $retval = '';
 
@@ -93,16 +101,22 @@ function listbackups()
 
         // AS, 2004-03-29 - Sort backup files by date, newest first.
         // Order given by 'readdir' might not be correct.
-        usort($backups, 'compareBackupFiles');
+        usort($backups, 'DBADMIN_compareBackupFiles');
 
         $data_arr = array();
         $thisUrl = $_CONF['site_admin_url'] . '/database.php';
+        $diskIconUrl = $_CONF['layout_url'] . '/images/admin/disk.' . $_IMAGE_TYPE;
+        $attr['title'] = $LANG_DB_BACKUP['download'];
+        $alt = $LANG_DB_BACKUP['download'];
         $num_backups = count($backups);
         for ($i = 0; $i < $num_backups; $i++) {
-            $downloadUrl = $thisUrl . '?mode=download&amp;file='
+            $downloadUrl = $thisUrl . '?download=x&amp;file='
                          . urlencode($backups[$i]);
-            $downloadLink = COM_createLink($backups[$i], $downloadUrl,
-                    array('title' => $LANG_DB_BACKUP['download']));
+
+            $downloadLink = COM_createLink(COM_createImage($diskIconUrl, $alt, $attr), $downloadUrl, $attr);
+            $downloadLink .= '&nbsp;&nbsp;';
+            $attr['style'] = 'vertical-align:top;';
+            $downloadLink .= COM_createLink($backups[$i], $downloadUrl, $attr);
             $backupfile = $_CONF['backup_path'] . $backups[$i];
             $backupfilesize = COM_numberFormat(filesize($backupfile))
                             . ' <b>' . $LANG_DB_BACKUP['bytes'] . '</b>';
@@ -114,7 +128,7 @@ function listbackups()
         $token = SEC_createToken();
         $menu_arr = array(
             array('url' => $_CONF['site_admin_url']
-                           . '/database.php?mode=backup&amp;'.CSRF_TOKEN.'='.$token,
+                           . '/database.php?backup=x&amp;'.CSRF_TOKEN.'='.$token,
                   'text' => $LANG_ADMIN['create_new']),
             array('url' => $_CONF['site_admin_url'],
                   'text' => $LANG_ADMIN['admin_home'])
@@ -138,7 +152,7 @@ function listbackups()
         );
         $form_arr = array('bottom' => '', 'top' => '');
         if ($num_backups > 0) {
-            $form_arr['bottom'] = '<input type="hidden" name="mode" value="delete"' . XHTML . '>'
+            $form_arr['bottom'] = '<input type="hidden" name="delete" value="x"' . XHTML . '>'
                                 . '<input type="hidden" name="' . CSRF_TOKEN
                                 . '" value="' . $token . '"' . XHTML . '>' . LB;
         }
@@ -164,7 +178,7 @@ function listbackups()
 * @return   string      HTML success or error message
 *
 */
-function dobackup()
+function DBADMIN_backup()
 {
     global $_CONF, $LANG08, $LANG_DB_BACKUP, $MESSAGE, $_IMAGE_TYPE,
            $_DB_host, $_DB_name, $_DB_user, $_DB_pass, $_DB_mysqldump_path;
@@ -230,7 +244,7 @@ function dobackup()
 * @note     Filename should have been sanitized and checked before calling this.
 *
 */
-function downloadbackup($file)
+function DBADMIN_download($file)
 {
     global $_CONF;
 
@@ -248,74 +262,64 @@ function downloadbackup($file)
     $dl->downloadFile($file);
 }
 
+// MAIN ========================================================================
 
-// MAIN
-$display = '';
-
-// If user isn't a root user or if the backup feature is disabled, bail.
-if (!SEC_inGroup('Root') OR $_CONF['allow_mysqldump'] == 0) {
-    $display .= COM_siteHeader('menu', $LANG_DB_BACKUP['last_ten_backups']);
-    $display .= COM_startBlock($MESSAGE[30], '',
-                    COM_getBlockTemplate('_msg_block', 'header'));
-    $display .= $MESSAGE[46];
-    $display .= COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
-    $display .= COM_siteFooter();
-    COM_accessLog("User {$_USER['username']} tried to illegally access the database backup screen.");
-    echo $display;
-    exit;
-}
-
-$mode = '';
-if (isset($_GET['mode'])) {
-    if ($_GET['mode'] == 'backup') {
-        $mode = 'backup';
-    } else if ($_GET['mode'] == 'download') {
-        $mode = 'download';
-    }
-} else if (isset($_POST['mode'])) {
-    if (($_POST['mode'] == 'delete') && isset($_POST['delitem'])) {
-        $mode = 'delete';
+$action = '';
+$expected = array('backup','download','delete');
+foreach($expected as $provided) {
+    if (isset($_POST[$provided])) {
+        $action = $provided;
+    } elseif (isset($_GET[$provided])) {
+	$action = $provided;
     }
 }
 
-if ($mode == 'download') {
-    $file = '';
-    if (isset($_GET['file'])) {
-        $file = preg_replace('/[^a-zA-Z0-9\-_\.]/', '', $_GET['file']);
-        $file = str_replace('..', '', $file);
-        if (!file_exists($_CONF['backup_path'] . $file)) {
-            $file = '';
+$validtoken = SEC_checkToken();
+
+switch ($action) {
+
+    case 'backup':
+        if ($validtoken) {
+            $display .= DBADMIN_backup();
+        } else {
+            COM_accessLog("User {$_USER['username']} tried to illegally backup the database and failed CSRF checks.");
+            echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
-    }
-    if (!empty($file)) {
-        downloadbackup($file);
-        exit;
-    }
+        break;
+
+    case 'download':
+        $file = '';
+        if (isset($_GET['file'])) {
+            $file = preg_replace('/[^a-zA-Z0-9\-_\.]/', '', COM_applyFilter($_GET['file']));
+            $file = str_replace('..', '', $file);
+            if (!file_exists($_CONF['backup_path'] . $file)) {
+                $file = '';
+            }
+        }
+        if (!empty($file)) {
+            DBADMIN_download($file);
+            exit;
+        }
+        break;
+
+    case 'delete':
+        if (isset($_POST['delitem']) AND $validtoken) {
+            foreach ($_POST['delitem'] as $delfile) {
+                $file = preg_replace('/[^a-zA-Z0-9\-_\.]/', '', COM_applyFilter($delfile));
+                $file = str_replace('..', '', $file);
+                if (!@unlink($_CONF['backup_path'] . $file)) {
+                    COM_errorLog('Unable to remove backup file "' . $file . '"');
+                }
+            }
+        } else {
+            COM_accessLog("User {$_USER['username']} tried to illegally delete database backup(s) and failed CSRF checks.");
+            echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
+        }
+        break;
 }
 
 $display .= COM_siteHeader('menu', $LANG_DB_BACKUP['last_ten_backups']);
-
-if ($mode == 'backup') {
-    // Perform the backup if asked
-    if (SEC_checkToken()) {
-        $display .= dobackup();
-    }
-} elseif ($mode == 'delete') {
-    if (SEC_checkToken()) {
-        foreach ($_POST['delitem'] as $delfile) {
-            $file = preg_replace('/[^a-zA-Z0-9\-_\.]/', '', $delfile);
-            $file = str_replace('..', '', $file);
-            if (!@unlink($_CONF['backup_path'] . $file)) {
-                COM_errorLog('Unable to remove backup file "' . $file . '"');
-            }
-        }
-    }
-}
-
-// Show all backups
-
-$display .= listbackups();
-
+$display .= DBADMIN_list();
 $display .= COM_siteFooter();
 
 echo $display;

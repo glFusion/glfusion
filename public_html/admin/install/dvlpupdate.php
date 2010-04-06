@@ -453,9 +453,67 @@ function glfusion_119()
     DB_query("ALTER TABLE {$_TABLES['groups']} ADD grp_default tinyint(1) unsigned NOT NULL default '0' AFTER grp_gl_core",1);
     DB_query("ALTER TABLE {$_TABLES['users']} CHANGE `passwd` `passwd` VARCHAR( 40 ))",1);
 
+    $c->add('article_comment_close_enabled',0,'select',4,21,0,1695,TRUE);
+    $c->add('session_ip_check',1,'select',7,30,26,545,TRUE);
+    $c->del('default_search_order','Core');
+
+    DB_query("ALTER TABLE {$_TABLES['staticpage']} ADD sp_status tinyint(3) NOT NULL DEFAULT '1' AFTER sp_id",1);
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.5',pi_gl_version='1.1.9' WHERE pi_name = 'staticpages'");
+
+    DB_query("ALTER TABLE {$_TABLES['events']} ADD status tinyint(3) NOT NULL DEFAULT '1' AFTER eid",1);
+    DB_query("ALTER TABLE {$_TABLES['eventsubmission']} ADD status tinyint(3) NOT NULL DEFAULT '1' AFTER eid",1);
+    DB_query("ALTER TABLE {$_TABLES['personal_events']} ADD status tinyint(3) NOT NULL DEFAULT '1' AFTER eid",1);
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.0.7',pi_gl_version='1.1.9' WHERE pi_name = 'calendar'");
+
+    DB_query("UPDATE {$_TABLES['conf_values']} SET selectionArray = '0' WHERE name='searchloginrequired' AND group_name='Core'",1);
+
+    // fixup the group names and admin switch
+    DB_query("UPDATE {$_TABLES['groups']} SET grp_gl_core=2 WHERE grp_name='Bad Behavior2 Admin'",1);
+    DB_query("UPDATE {$_TABLES['groups']} SET grp_name='calendar Admin' WHERE grp_name='Calendar Admin'",1);
+    DB_query("UPDATE {$_TABLES['groups']} SET grp_gl_core=2 WHERE grp_name='calendar Admin'",1);
+    DB_query("UPDATE {$_TABLES['groups']} SET grp_gl_core=2 WHERE grp_name='filemgmt Admin'",1);
+    DB_query("UPDATE {$_TABLES['groups']} SET grp_gl_core=2 WHERE grp_name='forum Admin'",1);
+    DB_query("UPDATE {$_TABLES['groups']} SET grp_name='links Admin' WHERE grp_name='Links Admin'",1);
+    DB_query("UPDATE {$_TABLES['groups']} SET grp_gl_core=2 WHERE grp_name='links Admin'",1);
+    DB_query("UPDATE {$_TABLES['groups']} SET grp_gl_core=2 WHERE grp_name='mediagallery Admin'",1);
+    DB_query("UPDATE {$_TABLES['groups']} SET grp_name='polls Admin' WHERE grp_name='Polls Admin'",1);
+    DB_query("UPDATE {$_TABLES['groups']} SET grp_gl_core=2 WHERE grp_name='polls Admin'",1);
+    DB_query("UPDATE {$_TABLES['groups']} SET grp_gl_core=2 WHERE grp_name='sitetailor Admin'",1);
+    DB_query("UPDATE {$_TABLES['groups']} SET grp_name='staticpages Admin' WHERE grp_name='Static Page Admin'",1);
+    DB_query("UPDATE {$_TABLES['groups']} SET grp_gl_core=2 WHERE grp_name='staticpages Admin'",1);
+    DB_query("UPDATE {$_TABLES['groups']} SET grp_gl_core=2 WHERE grp_name='spamx Admin'",1);
+
+    // move multi-language support to its own area
+    DB_query("INSERT INTO {$_TABLES['conf_values']} (name,value,type,group_name,default_value,subgroup,selectionArray,sort_order,fieldset) VALUES ('fs_mulitlanguage','N;','fieldset','Core','N;',6,-1,0,41)",1);
+    DB_query("UPDATE {$_TABLES['conf_values']} SET fieldset='41' WHERE name='language_files' AND group_name='Core'",1);
+    DB_query("UPDATE {$_TABLES['conf_values']} SET fieldset='41' WHERE name='languages' AND group_name='Core'",1);
+
+    // topic sort order
+    DB_query("ALTER TABLE {$_TABLES['topics']} ADD sort_by TINYINT(1) NOT NULL DEFAULT '0' AFTER archive_flag",1);
+    DB_query("ALTER TABLE {$_TABLES['topics']} ADD sort_dir CHAR( 4 ) NOT NULL DEFAULT 'DESC' AFTER sort_by",1);
+
+    // static pages configuration options
+    $c->add('include_search', 1, 'select',0, 0, 0, 95, true, 'staticpages');
+    $c->add('comment_code', -1, 'select',0, 0,17, 97, true, 'staticpages');
+    $c->add('status_flag', 1, 'select',0, 0, 13, 99, true, 'staticpages');
+
+    // new stats.view permission
+    DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('stats.view','Allows access to the Stats page.',0)",1);
+    $ft_id = DB_insertId();
+    $all_grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'All Users'"));
+    $loggedin_grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'Logged-in Users'"));
+    $root_grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'Root'"));
+    if ( $_CONF['statsloginrequired'] || $_CONF['loginrequired'] ) {
+        DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $loggedin_grp_id)", 1);
+    } else {
+        DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $all_grp_id)", 1);
+    }
+    DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $root_grp_id)", 1);
+    $c->del('statsloginrequired','Core');
+
+    // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.9',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.9' WHERE name='glfusion'",1);
-
 }
 
 $retval .= 'Performing database upgrades if necessary...<br />';

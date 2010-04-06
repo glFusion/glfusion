@@ -15,9 +15,21 @@ v1.2.0 svn
 
 v1.1.9
 ------
+- New permission - stats.view - controls access to Stats page (Mark)
+- Media Gallery: Added linksrc: parameter to media auto tag to specify
+  which image (tn/disp/orig) should be used in the direct link (Mark)
+- Calendar Plugin: Admin interface improvements & code scrub (Mark H.)
+    - New feature: JS date picker for start/end dates
+    - New feature: Ability to enable/disable events
+    - New feature: Auto-set event end month/day/year/hour/minute to event start
+    - New feature: Client-side validation for required fields
+    - New feature: Suppress input fields for hr/min/ampm if all day event
+- Staticpage Admin: Admin interface improvements & code scrub (Mark H.)
+    - New feature: Ability to enable/disable staticpages
 - Added wrapper static page widget (Eric)
 - Plugin Admin: Code scrub/UI improvements (Mark H.)
 - Topic Admin: New list-based manager, code scrub/UI improvements (Mark H.)
+    - New feature: Client-side validation for required fields (Mark)
 - Media Gallery: Updated FCKeditor Media Browser plugin to support all auto tag
   options (Mark)
 - Media Gallery: Fixed error in raw thumbnail preview where it did not work

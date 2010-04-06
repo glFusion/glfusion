@@ -8,6 +8,10 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2010 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Mark A. Howard         mark AT usable-web DOT com                        |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -36,11 +40,6 @@
 
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
-
-// Uncomment the line below if you need to debug the HTTP variables being passed
-// to the script.  This will sometimes cause errors but it will allow you to see
-// the data being passed in a POST operation
-// COM_debug($_POST);
 
 $display = '';
 
@@ -71,7 +70,7 @@ if (!SEC_hasRights('calendar.edit')) {
 * @return   string          HTML for event editor or error message
 *
 */
-function CALENDAR_editEvent ($mode, $A, $msg = '')
+function CALENDAR_edit($mode, $A, $msg = '')
 {
     global $_CONF, $_GROUPS, $_TABLES, $_USER, $_CA_CONF, $LANG_CAL_1,
            $LANG_CAL_ADMIN, $LANG10, $LANG12, $LANG_ACCESS, $LANG_ADMIN,
@@ -88,10 +87,6 @@ function CALENDAR_editEvent ($mode, $A, $msg = '')
 
     $event_templates = new Template($_CONF['path'] . 'plugins/calendar/templates/admin');
     $event_templates->set_file('editor','eventeditor.thtml');
-    $event_templates->set_var( 'xhtml', XHTML );
-    $event_templates->set_var('site_url', $_CONF['site_url']);
-    $event_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
-    $event_templates->set_var('layout_url',$_CONF['layout_url']);
     $event_templates->set_var('lang_allowed_html', COM_allowedHTML());
     $event_templates->set_var('lang_postmode', $LANG_CAL_ADMIN[3]);
 
@@ -134,7 +129,7 @@ function CALENDAR_editEvent ($mode, $A, $msg = '')
 
     if (!empty($A['eid'])) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
-                   . '" name="mode"%s' . XHTML . '>';
+                   . '" name="delete"%s' . XHTML . '>';
         $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
         $event_templates->set_var ('delete_option',
                                    sprintf ($delbutton, $jsconfirm));
@@ -147,6 +142,7 @@ function CALENDAR_editEvent ($mode, $A, $msg = '')
         }
     } else { // new event
         $A['eid'] = COM_makesid ();
+        $A['status'] = 1;
         $A['title'] = '';
         $A['description'] = '';
         $A['url'] = '';
@@ -176,12 +172,11 @@ function CALENDAR_editEvent ($mode, $A, $msg = '')
     $A['title'] = str_replace('}','&#125;',$A['title']);
     $A['title'] = str_replace('"','&quot;',$A['title']);
     $event_templates->set_var('event_title', stripslashes ($A['title']));
-
     $event_templates->set_var('lang_eventtype', $LANG_CAL_1[37]);
     $event_templates->set_var('lang_editeventtypes', $LANG12[50]);
     $event_templates->set_var('type_options',
                               CALENDAR_eventTypeList ($A['event_type']));
-
+    $event_templates->set_var('status_checked',$A['status'] == 1 ? ' checked="checked"' : '');
     $event_templates->set_var('lang_eventurl', $LANG_CAL_ADMIN[4]);
     $event_templates->set_var('max_url_length', 255);
     $event_templates->set_var('event_url', $A['url']);
@@ -275,9 +270,9 @@ function CALENDAR_editEvent ($mode, $A, $msg = '')
     }
 
     $event_templates->set_var ('startampm_selection',
-                        COM_getAmPmFormSelection ('start_ampm', $startampm));
+                        CALENDAR_getAmPmFormSelection ('start_ampm', $startampm, 'update_ampm()'));
     $event_templates->set_var ('endampm_selection',
-                        COM_getAmPmFormSelection ('end_ampm', $endampm));
+                        CALENDAR_getAmPmFormSelection ('end_ampm', $endampm));
 
     $event_templates->set_var ('startminute_options',
                                COM_getMinuteFormOptions ($start_minute, 15));
@@ -346,14 +341,14 @@ function CALENDAR_editEvent ($mode, $A, $msg = '')
 * @return   string                  HTML redirect or error message
 *
 */
-function CALENDAR_saveEvent ($eid, $title, $event_type, $url, $allday,
-                             $start_month, $start_day, $start_year, $start_hour,
-                             $start_minute, $start_ampm, $end_month, $end_day,
-                             $end_year, $end_hour, $end_minute, $end_ampm,
-                             $location, $address1, $address2, $city, $state,
-                             $zipcode, $description, $postmode, $owner_id,
-                             $group_id, $perm_owner, $perm_group, $perm_members,
-                             $perm_anon, $hour_mode)
+function CALENDAR_save($eid, $status, $title, $event_type, $url, $allday,
+                        $start_month, $start_day, $start_year, $start_hour,
+                        $start_minute, $start_ampm, $end_month, $end_day,
+                        $end_year, $end_hour, $end_minute, $end_ampm,
+                        $location, $address1, $address2, $city, $state,
+                        $zipcode, $description, $postmode, $owner_id,
+                        $group_id, $perm_owner, $perm_group, $perm_members,
+                        $perm_anon, $hour_mode)
 {
     global $_CONF, $_TABLES, $_USER, $LANG_CAL_ADMIN, $MESSAGE, $_CA_CONF;
 
@@ -508,20 +503,15 @@ function CALENDAR_saveEvent ($eid, $title, $event_type, $url, $allday,
     }
 
     if (!empty ($eid) AND !empty ($description) AND !empty ($title)) {
-        if (!SEC_checkToken()) {
-            COM_accessLog("User {$_USER['username']} tried to save event $eid and failed CSRF checks.");
-            return COM_refresh($_CONF['site_admin_url']
-                               . '/plugins/calendar/index.php');
-        }
 
         DB_delete ($_TABLES['eventsubmission'], 'eid', $eid);
 
         DB_save($_TABLES['events'],
-               'eid,title,event_type,url,allday,datestart,dateend,timestart,'
+               'eid,status,title,event_type,url,allday,datestart,dateend,timestart,'
                .'timeend,location,address1,address2,city,state,zipcode,description,'
                .'postmode,owner_id,group_id,perm_owner,perm_group,perm_members,'
                .'perm_anon',
-               "'$eid','$title','$event_type','$url',$allday,'$datestart',"
+               "'$eid',$status,'$title','$event_type','$url',$allday,'$datestart',"
                ."'$dateend','$timestart','$timeend','$location','$address1',"
                ."'$address2','$city','$state','$zipcode','$description','$postmode',"
                ."$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon");
@@ -532,11 +522,11 @@ function CALENDAR_saveEvent ($eid, $title, $event_type, $url, $allday,
             for ($i = 1; $i <= $numrows; $i++) {
                 $P = DB_fetchArray ($result);
                 DB_save ($_TABLES['personal_events'],
-                        'eid,title,event_type,datestart,dateend,address1,address2,'
+                        'eid,status,title,event_type,datestart,dateend,address1,address2,'
                        .'city,state,zipcode,allday,url,description,postmode,'
                        .'group_id,owner_id,perm_owner,perm_group,perm_members,'
                        .'perm_anon,uid,location,timestart,timeend',
-                        "'$eid','$title','$event_type','$datestart','$dateend',"
+                        "'$eid',$status,'$title','$event_type','$datestart','$dateend',"
                        ."'$address1','$address2','$city','$state','$zipcode',"
                        ."$allday,'$url','$description','$postmode',$group_id,"
                        ."$owner_id,$perm_owner,$perm_group,$perm_members,"
@@ -564,130 +554,566 @@ function CALENDAR_saveEvent ($eid, $title, $event_type, $url, $allday,
     }
 }
 
+/**
+* Delete an event
+*
+* @param    string  $eid    id of event to delete
+* @param    string  $type   'submission' when attempting to delete a submission
+* @param    string          HTML redirect
+*/
+function CALENDAR_delete($eid, $type = '')
+{
+    global $_CONF, $_TABLES, $_USER;
 
-// MAIN
+    if (empty($type)) { // delete regular event
+        $result = DB_query("SELECT * FROM {$_TABLES['events']} WHERE eid = '".DB_escapeString($eid)."'");
+        $A = DB_fetchArray($result);
+        $access = SEC_hasAccess($A['owner_id'], $A['group_id'],
+                    $A['perm_owner'], $A['perm_group'], $A['perm_members'],
+                    $A['perm_anon']);
+        if ($access < 3) {
+            COM_accessLog("User {$_USER['username']} tried to illegally delete event $eid.");
+            return COM_refresh($_CONF['site_admin_url']
+                               . '/plugins/calendar/index.php');
+        }
+
+        DB_delete($_TABLES['events'], 'eid', DB_escapeString($eid));
+        DB_delete($_TABLES['personal_events'], 'eid', DB_escapeString($eid));
+        PLG_itemDeleted($eid, 'calendar');
+        COM_rdfUpToDateCheck('calendar', $A['event_type'], $A['eid']);
+
+        return COM_refresh($_CONF['site_admin_url'] . '/plugins/calendar/index.php?msg=18');
+    } elseif ($type == 'submission') {
+        if (plugin_ismoderator_calendar()) {
+            DB_delete($_TABLES['eventsubmission'], 'eid', DB_escapeString($eid));
+        } else {
+            COM_accessLog("User {$_USER['username']} tried to illegally delete event submission $eid.");
+        }
+    } else {
+        COM_accessLog("User {$_USER['username']} tried to illegally delete event $eid of type $type.");
+    }
+
+    return COM_refresh($_CONF['site_admin_url']
+                       . '/plugins/calendar/index.php');
+}
+
+
+/**
+* This function deletes the events selected in the CALENDAR_listBatch function
+*
+* @return   string          HTML with success or error message
+*
+*/
+function CALENDAR_batchDelete() {
+    global $_CONF, $LANG_CAL_ADMIN;
+    $msg = '';
+    $event_list = array();
+    if (isset($_POST['delitem'])) {
+        $event_list = $_POST['delitem'];
+    }
+
+    if (count($event_list) == 0) {
+        $msg = $LANG_CAL_ADMIN[33] . "<br" . XHTML . ">";
+    }
+    $c = 0;
+    if (isset($event_list) AND is_array($event_list)) {
+        foreach($event_list as $delitem) {
+            $delitem = COM_applyFilter($delitem);
+            if (!CALENDAR_delete($delitem)) {
+                $msg .= "<strong>{$LANG_CAL_ADMIN[34]} $delitem $LANG_CAL_ADMIN[35]}</strong><br" . XHTML . ">\n";
+            } else {
+                $c++; // count the deleted users
+            }
+        }
+    }
+    // Since this function is used for deletion only, its necessary to say that
+    // zero were deleted instead of just leaving this message away.
+    COM_numberFormat($c); // just in case we have more than 999)..
+    $msg .= "{$LANG_CAL_ADMIN[36]}: $c<br" . XHTML . ">\n";
+    return $msg;
+}
+
+function CALENDAR_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
+{
+    global $_CONF, $LANG_ACCESS, $LANG_ADMIN, $LANG_CAL_MESSAGE;
+
+    $retval = '';
+
+    $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],
+                            $A['perm_group'],$A['perm_members'],$A['perm_anon']);
+    $enabled = ($A['status']==1) ? true : false;
+
+    switch($fieldname) {
+        case "edit":
+            if ($access == 3) {
+                $attr['title'] = $LANG_ADMIN['edit'];
+                $retval = COM_createLink(
+                    $icon_arr['edit'],
+                    $_CONF['site_admin_url'] . '/plugins/calendar/index.php'
+                    . '?edit=x&amp;eid=' . $A['eid'], $attr);
+            } else {
+                $retval = $icon_arr['blank'];
+            }
+            break;
+
+        case 'copy':
+            if ($access >= 2) {
+                $attr['title'] = $LANG_ADMIN['copy'];
+                $retval = COM_createLink(
+                    $icon_arr['copy'],
+                    $_CONF['site_admin_url'] . '/plugins/calendar/index.php'
+                    . '?clone=x&amp;eid=' . $A['eid'], $attr);
+            } else {
+                $retval = $icon_arr['blank'];
+            }
+            break;
+
+        case 'title':
+            $title = stripslashes($A['title']);
+            if ($enabled) {
+                $retval = COM_createLink( $title,"{$_CONF['site_url']}/calendar/event.php?eid={$A['eid']}" );
+            } else {
+                $retval = '<span class="disabledfield">' . $title . '</span>';
+            }
+            break;
+
+        case 'username':
+            $owner = COM_getDisplayName( $A['owner_id'], $A['username'], $A['fullname'] );
+            $retval = ($enabled) ? $owner : '<span class="disabledfield">' . $owner . '</span>';
+            break;
+
+        case 'access':
+            if ($access == 3) {
+                $privs = $LANG_ACCESS['edit'];
+            } else {
+                $privs = $LANG_ACCESS['readonly'];
+            }
+            $retval = ($enabled) ? $privs : '<span class="disabledfield">' . $privs . '</span>';
+            break;
+
+        case 'allday':
+            $check = ($enabled) ? $icon_arr['check'] : $icon_arr['greycheck'];
+            $retval = ($A['allday'] == 1) ? $check : '';
+            break;
+
+        case 'delete':
+            if ($access == 3) {
+                $attr['title'] = $LANG_ADMIN['delete'];
+                $attr['onclick'] = "return confirm('" . $LANG_CAL_MESSAGE['delete_confirm'] . "');";
+                $retval = COM_createLink(
+                    $icon_arr['delete'],
+                    $_CONF['site_admin_url'] . '/plugins/calendar/index.php'
+                    . '?delete=x&amp;eid=' . $A['eid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            } else {
+                $retval = $icon_arr['blank'];
+            }
+            break;
+
+        case 'status':
+            if ($access == 3) {
+                if ($enabled) {
+                    $switch = ' checked="checked"';
+                    $title = 'title="' . $LANG_ADMIN['disable'] . '" ';
+                } else {
+                    $switch = '';
+                    $title = 'title="' . $LANG_ADMIN['enable'] . '" ';
+                }
+                $retval = '<input type="checkbox" name="enabledevents[' . $A['eid'] . ']" ' . $title
+                    . 'onclick="submit()" value="1"' . $switch . XHTML . '>';
+                $retval .= '<input type="hidden" name="eidarray[' . $A['eid'] . ']" value="1" ' . XHTML . '>';
+            } else {
+                $retval = ($enabled) ? $LANG_ACCESS['yes'] : $LANG_ACCESS['no'];
+            }
+            break;
+
+        case 'rostatus':
+            $retval = ($enabled) ? $LANG_ACCESS['yes'] : '<span class="disabledfield">' . $LANG_ACCESS['no'] . '</span>';
+            break;
+
+
+      default:
+            $retval = ($enabled) ? $fieldvalue : '<span class="disabledfield">' . $fieldvalue . '</span>';
+            break;
+    }
+    return $retval;
+}
+
+function CALENDAR_list()
+{
+    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_CAL_ADMIN, $LANG_ACCESS, $LANG_CAL_2,
+           $_IMAGE_TYPE;
+
+    USES_lib_admin();
+
+    $retval = '';
+
+    $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/plugins/calendar/index.php?edit=x',
+              'text' => $LANG_ADMIN['create_new']),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/calendar/index.php?batchadmin=x',
+              'text' => $LANG_CAL_ADMIN[26]),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
+
+    $retval .= COM_startBlock($LANG_CAL_ADMIN[11], '',
+                              COM_getBlockTemplate('_admin_block', 'header'));
+
+    $retval .= ADMIN_createMenu($menu_arr, $LANG_CAL_ADMIN[12], plugin_geticon_calendar());
+
+    $header_arr = array(      # display 'text' and use table field 'field'
+        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center'),
+	array('text' => $LANG_ADMIN['copy'], 'field' => 'copy', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true),
+        array('text' => $LANG_CAL_ADMIN[13], 'field' => 'username', 'sort' => true, 'align' => 'center'),
+        array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG_CAL_ADMIN[14], 'field' => 'datestart', 'sort' => true, 'align' => 'center'),
+        array('text' => $LANG_CAL_ADMIN[15], 'field' => 'dateend', 'sort' => true, 'align' => 'center'),
+        array('text' => $LANG_CAL_2[26], 'field' => 'allday', 'sort' => true, 'align' => 'center'),
+	array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG_ADMIN['enabled'], 'field' => 'status', 'sort' => true, 'align' => 'center')
+    );
+
+    $defsort_arr = array('field' => 'datestart', 'direction' => 'desc');
+
+    $text_arr = array(
+        'has_extras' => true,
+        'form_url'   => $_CONF['site_admin_url'] . '/plugins/calendar/index.php'
+    );
+
+    // sql query which drives the list
+    $sql = "SELECT {$_TABLES['events']}.*, {$_TABLES['users']}.username, {$_TABLES['users']}.fullname "
+          ."FROM {$_TABLES['events']} "
+          ."LEFT JOIN {$_TABLES['users']} "
+          ."ON {$_TABLES['events']}.owner_id={$_TABLES['users']}.uid "
+          ."WHERE 1=1 ";
+
+    $query_arr = array(
+        'table' => 'events',
+        'sql' => $sql,
+        'query_fields' => array('title', 'datestart', 'dateend'),
+        'default_filter' => COM_getPermSQL('AND')
+    );
+
+    // create the security token, and embed it in the list form
+    // also set the hidden var which signifies that this list allows for pages
+    // to be enabled/disabled via checkbox
+    $token = SEC_createToken();
+    $form_arr = array(
+        'top'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="'.$token.'"/>',
+        'bottom' => '<input type="hidden" name="eventenabler" value="true"' . XHTML . '>'
+    );
+
+    $retval .= ADMIN_list ('calendar', 'CALENDAR_getListField',
+                           $header_arr, $text_arr, $query_arr,
+                           $defsort_arr, '', $token, '', $form_arr);
+
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+
+    return $retval;
+}
+
+function CALENDAR_listBatch()
+{
+    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_CAL_ADMIN, $LANG_CAL_2,
+           $LANG_ACCESS, $LANG01, $_IMAGE_TYPE;
+
+    USES_lib_admin();
+
+    $display = COM_startBlock($LANG_CAL_ADMIN[26], '',
+                              COM_getBlockTemplate('_admin_block', 'header'));
+
+    if (isset($_REQUEST['usr_time'])) {
+        $usr_time = $_REQUEST['usr_time'];
+    } else {
+        $usr_time = 12;
+    }
+
+    // create the menu at the top
+    $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/plugins/calendar/index.php?edit=x',
+            'text' => $LANG_ADMIN['create_new']),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/calendar/index.php',
+            'text' => $LANG_CAL_ADMIN[11]),
+        array('url' => $_CONF['site_admin_url'],
+            'text' => $LANG_ADMIN['admin_home'])
+    );
+
+    $cal_templates = new Template($_CONF['path'] . 'plugins/calendar/templates/admin');
+    $cal_templates->set_file (array ('form' => 'batchadmin.thtml'));
+    $cal_templates->set_var('usr_time', $usr_time);
+    $cal_templates->set_var('lang_text_start', $LANG_CAL_ADMIN[27]);
+    $cal_templates->set_var('lang_text_end', $LANG_CAL_ADMIN[28]);
+    $cal_templates->set_var('lang_updatelist', $LANG_CAL_ADMIN[30]);
+    $cal_templates->set_var('lang_delete_sel', $LANG_ADMIN['delete_sel']);
+    $cal_templates->set_var('lang_delconfirm', $LANG_CAL_ADMIN[31]);
+    $cal_templates->parse('form', 'form');
+    $desc = $cal_templates->finish($cal_templates->get_var('form'));
+
+    $display .= ADMIN_createMenu($menu_arr, $desc, plugin_geticon_calendar());
+
+    $header_arr = array(      # display 'text' and use table field 'field'
+        array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true),
+        array('text' => $LANG_CAL_ADMIN[13], 'field' => 'username', 'sort' => true, 'align' => 'center'),
+        array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG_CAL_ADMIN[14], 'field' => 'datestart', 'sort' => true, 'align' => 'center'),
+        array('text' => $LANG_CAL_ADMIN[15], 'field' => 'dateend', 'sort' => true, 'align' => 'center'),
+        array('text' => $LANG_CAL_2[26], 'field' => 'allday', 'sort' => true, 'align' => 'center'),
+        array('text' => $LANG_ADMIN['enabled'], 'field' => 'rostatus', 'sort' => true, 'align' => 'center')
+    );
+
+    $text_arr = array(
+        'has_extras' => true,
+        'form_url' => $_CONF['site_admin_url'] . "/plugins/calendar/index.php?batchadmin=x"
+    );
+
+    $sql = "SELECT {$_TABLES['events']}.*, {$_TABLES['users']}.username, {$_TABLES['users']}.fullname "
+        ."FROM {$_TABLES['events']} "
+        ."LEFT JOIN {$_TABLES['users']} "
+        ."ON {$_TABLES['events']}.owner_id={$_TABLES['users']}.uid "
+        ."WHERE 1=1 ";
+
+    $filterstr = " AND UNIX_TIMESTAMP() - UNIX_TIMESTAMP(dateend) > " . $usr_time * 2592000 . " ";
+
+    $query_arr = array (
+        'table' => 'events',
+        'sql' => $sql,
+        'query_fields' => array('title', 'datestart', 'dateend'),
+        'default_filter' => $filterstr . COM_getPermSQL('AND')
+    );
+
+    $defsort_arr = array('field' => 'datestart', 'direction' => 'desc');
+
+    $options = array('chkselect' => true, 'chkfield' => 'eid');
+
+    // create the security token, and embed it in the list form
+    $token = SEC_createToken();
+    $form_arr['bottom'] = "<input type=\"hidden\" name=\"" . CSRF_TOKEN
+                        . "\" value=\"{$token}\"" . XHTML . ">";
+
+    $display .= ADMIN_list('calendar', 'CALENDAR_getListField',
+                            $header_arr, $text_arr, $query_arr,
+                            $defsort_arr, '', $token, $options, $form_arr);
+
+    $display .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+
+    return $display;
+}
+
+/**
+* Toggle status of a staticpage from enabled to disabled and back
+*
+* @param    array   $enabledstaticpages    array of sp_id's available
+* @param    array   $spidarray             array of status (1/0)
+* @return   void
+*
+*/
+function CALENDAR_toggleStatus($enabledevents, $eidarray)
+{
+    global $_TABLES, $_DB_table_prefix;
+    if (isset($eidarray) && is_array($eidarray) ) {
+        foreach ($eidarray AS $eid => $junk ) {
+            $eid = COM_applyFilter($eid);
+            if (isset($enabledevents[$eid])) {
+                DB_query ("UPDATE {$_TABLES['events']} SET status = '1' WHERE eid = '".DB_escapeString($eid)."'");
+            } else {
+                DB_query ("UPDATE {$_TABLES['events']} SET status = '0' WHERE eid = '".DB_escapeString($eid)."'");
+            }
+        }
+    }
+    PLG_itemSaved($eid,'calendar');
+    CTL_clearCache();
+    /* fixme - add logic to update personal events table as well */
+    /* logic should enable/disable all personal_event 'children' */
+}
+
+// MAIN ========================================================================
+
+$action = '';
+$expected = array('edit','clone','save','delete','batchadmin','delbutton_x','cancel');
+foreach($expected as $provided) {
+    if (isset($_POST[$provided])) {
+        $action = $provided;
+    } elseif (isset($_GET[$provided])) {
+	$action = $provided;
+    }
+}
+
+$eid = 0;
+if (isset($_POST['eid'])) {
+    $eid = COM_applyFilter($_POST['eid'], true);
+} elseif (isset($_GET['eid'])) {
+    $eid = COM_applyFilter($_GET['eid'], true);
+}
+
+$id = '';
+if (isset($_POST['id'])) {
+    $id = COM_applyFilter($_POST['id']);
+} elseif (isset($_GET['id'])) {
+    $id = COM_applyFilter($_GET['id']);
+}
+
+$msg = '';
+if (isset($_POST['msg'])) {
+    $msg = COM_applyFilter($_POST['msg']);
+} elseif (isset($_GET['msg'])) {
+    $msg = COM_applyFilter($_GET['msg']);
+}
+
+// this is to preserve compatibility with moderation.php, as this script
+// allows for submissions to be edited
 $mode = '';
-if (isset($_REQUEST['mode'])) {
-    $mode = $_REQUEST['mode'];
+if (isset($_POST['mode'])) {
+    $mode = COM_applyFilter($_POST['mode']);
+} elseif (isset($_GET['mode'])) {
+    $mode = COM_applyFilter($_GET['mode']);
 }
-if (isset($_POST['delbutton_x'])) {
-    $mode = 'batchdeleteexec';
+$action = ($mode == 'editsubmission') ? $mode : $action;
+
+$validtoken = SEC_checkToken();
+
+if (isset($_POST['eventenabler']) && $validtoken) {
+    $enabledevents = array();
+    if (isset($_POST['enabledevents'])) {
+        $enabledevents = $_POST['enabledevents'];
+    }
+    $eidarray = array();
+    if ( isset($_POST['eidarray']) ) {
+        $eidarray = $_POST['eidarray'];
+    }
+    CALENDAR_toggleStatus($enabledevents,$eidarray);
+    // force a refresh to redisplay calendar event status
+    header ('Location: ' . $_CONF['site_admin_url'] . '/plugins/calendar/index.php');
+    exit;
 }
 
-if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
-    $eid = COM_applyFilter ($_REQUEST['eid']);
-    if (!isset ($eid) || empty ($eid) || ($eid == 0)) {
-        COM_errorLog ('Attempted to delete event eid=\'' . $eid . "'");
-        $display .= COM_refresh($_CONF['site_admin_url']
-                                . '/plugins/calendar/index.php');
-    } elseif (SEC_checkToken()) {
-        $type = '';
-        if (isset($_POST['type'])) {
-            $type = COM_applyFilter($_POST['type']);
+switch ($action) {
+
+    case 'edit':
+        if (empty ($eid)) {
+            $A = array ();
+            $A['datestart'] = '';
+            if (isset($_POST['datestart'])) {
+                $A['datestart'] = COM_applyFilter($_POST['datestart']);
+            } elseif (isset($_GET['datestart'])) {
+                $A['datestart'] = COM_applyFilter($_GET['datestart']);
+            }
+            $A['timestart'] = '';
+            if (isset($_POST['timestart'])) {
+                $A['timestart'] = COM_applyFilter($_POST['timestart']);
+            } elseif (isset($_GET['timestart'])) {
+                $A['timestart'] = COM_applyFilter($_GET['timestart']);
+            }
+        } else {
+            $result = DB_query("SELECT * FROM {$_TABLES['events']} WHERE eid ='$eid'");
+            $A = DB_fetchArray($result);
         }
-        $display .= CALENDAR_deleteEvent($eid, $type);
-    } else {
-        COM_accessLog("User {$_USER['username']} tried to illegally delete event $eid and failed CSRF checks.");
-        echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
-    }
-} elseif (($mode == $LANG_ADMIN['save']) && !empty($LANG_ADMIN['save'])) {
-    if (!isset ($_POST['allday'])) {
-        $_POST['allday'] = '';
-    }
-    $hour_mode = 12;
-    if (isset($_POST['hour_mode']) && ($_POST['hour_mode'] == 24)) {
-        $hour_mode = 24;
-    }
-    if ($hour_mode == 24) {
-        // these aren't set in 24 hour mode
-        $_POST['start_ampm'] = '';
-        $_POST['end_ampm'] = '';
-    }
-    $display .= CALENDAR_saveEvent (COM_applyFilter ($_POST['eid']),
-            $_POST['title'], $_POST['event_type'],
-            $_POST['url'], COM_applyFilter ($_POST['allday']),
-            COM_applyFilter ($_POST['start_month'], true),
-            COM_applyFilter ($_POST['start_day'], true),
-            COM_applyFilter ($_POST['start_year'], true),
-            COM_applyFilter ($_POST['start_hour'], true),
-            COM_applyFilter ($_POST['start_minute'], true), $_POST['start_ampm'],
-            COM_applyFilter ($_POST['end_month'], true),
-            COM_applyFilter ($_POST['end_day'], true),
-            COM_applyFilter ($_POST['end_year'], true),
-            COM_applyFilter ($_POST['end_hour'], true),
-            COM_applyFilter ($_POST['end_minute'], true), $_POST['end_ampm'],
-            $_POST['location'], $_POST['address1'], $_POST['address2'],
-            $_POST['city'], $_POST['state'], $_POST['zipcode'],
-            $_POST['description'], $_POST['postmode'] ,
-            COM_applyFilter ($_POST['owner_id'], true),
-            COM_applyFilter ($_POST['group_id'], true),
-            $_POST['perm_owner'], $_POST['perm_group'],
-            $_POST['perm_members'], $_POST['perm_anon'], $hour_mode);
-} else if ($mode == 'editsubmission') {
-    $id = COM_applyFilter ($_REQUEST['id']);
-    $result = DB_query ("SELECT * FROM {$_TABLES['eventsubmission']} WHERE eid ='$id'");
-    $A = DB_fetchArray ($result);
-    $A['hits'] = 0;
-    $display .= COM_siteHeader ('menu', $LANG_CAL_ADMIN[1]);
-    $display .= CALENDAR_editEvent ($mode, $A);
-    $display .= COM_siteFooter ();
-} else if ($mode == 'clone') {
-    $eid = COM_applyFilter ($_REQUEST['eid']);
-    $result = DB_query ("SELECT * FROM {$_TABLES['events']} WHERE eid ='$eid'");
-    $A = DB_fetchArray ($result);
-    $A['eid'] = COM_makesid ();
-    $A['owner_id'] = $_USER['uid'];
-    $display .= COM_siteHeader ('menu', $LANG_CAL_ADMIN[1]);
-    $display .= CALENDAR_editEvent ($mode, $A);
-    $display .= COM_siteFooter ();
-} else if ($mode == 'edit') {
-    $eid = '';
-    if (isset ($_REQUEST['eid'])) {
-        $eid = COM_applyFilter ($_REQUEST['eid']);
-    }
-    if (empty ($eid)) {
-        $A = array ();
-        $A['datestart'] = '';
-        $A['timestart'] = '';
-        if (isset ($_REQUEST['datestart'])) {
-            $A['datestart'] = COM_applyFilter ($_REQUEST['datestart']);
+        $display .= COM_siteHeader ('menu', $LANG_CAL_ADMIN[1]);
+        $display .= CALENDAR_edit($action, $A);
+        $display .= COM_siteFooter ();
+        break;
+
+    case 'clone':
+        $result = DB_query("SELECT * FROM {$_TABLES['events']} WHERE eid ='$eid'");
+        $A = DB_fetchArray($result);
+        $A['eid'] = COM_makesid();
+        $title = $A['title'] . ' (' . $LANG_ADMIN['copy'] . ')';
+        $A['title'] = $title;
+        $A['owner_id'] = $_USER['uid'];
+        $display .= COM_siteHeader ('menu', $LANG_CAL_ADMIN[1]);
+        $display .= CALENDAR_edit($action, $A);
+        $display .= COM_siteFooter();
+        break;
+
+    case 'save':
+        if ($validtoken) {
+            $allday = (isset($_POST['allday'])) ? COM_applyFilter($_POST['allday']) : '';
+            $hour_mode = (isset($_POST['hour_mode']) && ($_POST['hour_mode'] == 24)) ? 24 : 12;
+            if ($hour_mode == 24) {
+                // these aren't set in 24 hour mode
+                $_POST['start_ampm'] = '';
+                $_POST['end_ampm'] = '';
+            }
+            $display .= CALENDAR_save($eid, $_POST['status'],
+                    $_POST['title'], $_POST['event_type'],
+                    $_POST['url'], $allday,
+                    COM_applyFilter ($_POST['start_month'], true),
+                    COM_applyFilter ($_POST['start_day'], true),
+                    COM_applyFilter ($_POST['start_year'], true),
+                    COM_applyFilter ($_POST['start_hour'], true),
+                    COM_applyFilter ($_POST['start_minute'], true), $_POST['start_ampm'],
+                    COM_applyFilter ($_POST['end_month'], true),
+                    COM_applyFilter ($_POST['end_day'], true),
+                    COM_applyFilter ($_POST['end_year'], true),
+                    COM_applyFilter ($_POST['end_hour'], true),
+                    COM_applyFilter ($_POST['end_minute'], true), $_POST['end_ampm'],
+                    $_POST['location'], $_POST['address1'], $_POST['address2'],
+                    $_POST['city'], $_POST['state'], $_POST['zipcode'],
+                    $_POST['description'], $_POST['postmode'] ,
+                    COM_applyFilter ($_POST['owner_id'], true),
+                    COM_applyFilter ($_POST['group_id'], true),
+                    $_POST['perm_owner'], $_POST['perm_group'],
+                    $_POST['perm_members'], $_POST['perm_anon'], $hour_mode);
+        } else {
+            COM_accessLog('User ' . $_USER['username'] . ' tried to illegally edit event ' . $eid . ' and failed CSRF checks.');
+            echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
-        if (isset ($_REQUEST['timestart'])) {
-            $A['timestart'] = COM_applyFilter ($_REQUEST['timestart']);
+        break;
+
+    case 'delete':
+        if (!isset ($eid) || empty ($eid) || ($eid == 0)) {
+            COM_errorLog ('User ' . $_USER['username'] . ' attempted to delete event, eid empty, null, or is 0');
+            $display .= COM_refresh($_CONF['site_admin_url']
+                                    . '/plugins/calendar/index.php');
+        } elseif ($validtoken) {
+            $type = (isset($_POST['type'])) ? COM_applyFilter($_POST['type']) : '';
+            $display .= CALENDAR_delete($eid, $type);
+        } else {
+            COM_accessLog("User {$_USER['username']} tried to illegally delete event $eid and failed CSRF checks.");
+            echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
-    } else {
-        $result = DB_query ("SELECT * FROM {$_TABLES['events']} WHERE eid ='$eid'");
-        $A = DB_fetchArray ($result);
-    }
-    $display .= COM_siteHeader ('menu', $LANG_CAL_ADMIN[1]);
-    $display .= CALENDAR_editEvent ($mode, $A);
-    $display .= COM_siteFooter ();
-} else if ($mode == 'batchdelete') {
-    // list_old
-    $display .= COM_siteHeader ('menu', $LANG_CAL_ADMIN[11]);
-    if (isset ($_REQUEST['msg'])) {
-        $display .= COM_showMessage (
-            COM_applyFilter ($_REQUEST['msg'], true),
-            'calendar'
-        );
-    }
-    $display .= CALENDAR_listOld();
-    $display .= COM_siteFooter ();
-} elseif (($mode == 'batchdeleteexec') && SEC_checkToken()) {
-    $msg = CALENDAR_deleteOld();
-    $display .= COM_siteHeader ('menu', $LANG_CAL_ADMIN[11])
-        . COM_showMessage($msg)
-        . CALENDAR_listOld()
-        . COM_siteFooter();
-} else { // 'cancel' or no mode at all
-    $display .= COM_siteHeader ('menu', $LANG_CAL_ADMIN[11]);
-    if (isset ($_REQUEST['msg'])) {
-        $display .= COM_showMessage (COM_applyFilter ($_REQUEST['msg'],
-                                                      true), 'calendar');
-    }
-    $display .= CALENDAR_listevents();
-    $display .= COM_siteFooter ();
+        break;
+
+    case 'editsubmission':
+        $result = DB_query("SELECT * FROM {$_TABLES['eventsubmission']} WHERE eid ='$id'");
+        $A = DB_fetchArray($result);
+        $A['hits'] = 0;
+        $display .= COM_siteHeader('menu', $LANG_CAL_ADMIN[1]);
+        $display .= CALENDAR_edit($action, $A);
+        $display .= COM_siteFooter();
+        break;
+
+    case 'batchadmin':
+        $display .= COM_siteHeader ('menu', $LANG_CAL_ADMIN[11]);
+        $display .= (is_numeric($msg) && ($msg > 0)) ? COM_showMessage( $msg, 'calendar' ) : '';
+        $display .= CALENDAR_listBatch();
+        $display .= COM_siteFooter ();
+        break;
+
+    case 'delbutton_x':
+        if ($validtoken) {
+            $msg = CALENDAR_batchDelete();
+            $display .= COM_siteHeader ('menu', $LANG_CAL_ADMIN[11])
+                . COM_showMessageText($msg)
+                . CALENDAR_listBatch()
+                . COM_siteFooter();
+        } else {
+            COM_accessLog('User ' . $_USER['username'] . ' tried to illegally batch delete events and failed CSRF checks.');
+            echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
+        }
+        break;
+
+    default:
+        $display .= COM_siteHeader ('menu', $LANG_CAL_ADMIN[11]);
+        if(isset($msg)) {
+            $display .= (is_numeric($msg)) ? COM_showMessage($msg, 'calendar') : COM_showMessageText( $msg );
+        }
+        $display .= CALENDAR_list();
+        $display .= COM_siteFooter ();
+        break;
+
 }
+
 echo $display;
 
 ?>

@@ -2,6 +2,15 @@
 <noscript><div class="pluginAlert" style="padding:10px;">{no_javascript_warning}</div></noscript>
 <script type="text/javascript" src="{site_url}/javascript/profile_editor.js"></script>
 <script type="text/javascript" src="{site_url}/javascript/pwd_strength.js"></script>
+<script type="text/javascript">
+<!--
+window.addEvent('domready',function() {
+    var myValidator = new fValidator("profileform");
+    myValidator.register($("passwd_conf"), {type: "confirm", idField: "passwd", msg: "Confirmation password does not match original password."});
+    myValidator.register($("email_conf"), {type: "confirm", idField: "email", msg: "Confirmation email does not match original email."});
+});
+-->
+</script>
 
 <div id="pe_navbar" style="display:none">
   {navbar}

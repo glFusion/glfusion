@@ -72,7 +72,7 @@ function submissionform($type='story', $mode = '', $topic = '')
     if ($last > 0) {
         COM_speedLimitError($last,$_CONF['speedlimit']);
     } else {
-        if (empty ($_USER['username']) &&
+        if (COM_isAnonUser() &&
             (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {
                 IO_displayLoginRequired();
         } else {
@@ -426,7 +426,7 @@ if (($mode == $LANG12[8]) && !empty ($LANG12[8])) { // submit
     }
     $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'";
     DB_Query($sql,1);
-    if (empty ($_USER['username']) &&
+    if (COM_isAnonUser() &&
         (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {
         $display = COM_refresh ($_CONF['site_url'] . '/index.php');
     } else {
