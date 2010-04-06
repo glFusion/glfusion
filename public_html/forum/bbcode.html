@@ -1,333 +1,107 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
-
-
-
-  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
-
-
-
-  <style type="text/css">
-body {
-margin: 1em 5%;
-background: white;
-color: black;
-font-family: Verdana, Arial, Helvetica, sans-serif;
-font-size: smaller;
-}
-h1 {
-font-size: 1.4em;
-}
-h2 {
-font-size: 1.2em;
-}
-h3 {
-font-size: 1.0em;
-}
-p, ul, ol, li {
-margin-top: 0.6em;
-margin-bottom: 0.6em;
-}
-ul, ol {
-margin-left: 0.9em;
-padding-left: 0.9em;
-}
-code, kbd, var {
-font-family: Courier, "Courier New", monospace;
-}
-table {
-width: 100%;
-}
-td, th {
-vertical-align: top;
-padding: 4px;
-line-height: 128%;
-font-size: smaller;
-}
-th {
-text-align: left;
-background: silver;
-}
-.r2 {
-background: rgb(240,240,240);
-}
-dt {
-font-weight: bold;
-}
-.usual {
-font-size: 100%;
-}
-.menu {
-font-size: 90%;
-background: #dddddd;
-color: black;
-}
-.footer {
-font-size: 90%;
-background: #dddddd;
-color: black;
-}
-.comment {
-font-size: 80%;
-}
-.codeheader { font-family: Courier, "Courier New", monospace; }
-a:link { color: #2222FF; background: transparent; }
-a:visited { color: #2222FF; background: transparent; }
-a:hover { color: #5252FF; background: transparent; }
-/*a:hover { color: #333366; background: #AAAADD; }*/
-a:active { color: #2222FF; background: transparent; }
-/* this is to prevent Mozilla from applying :hover on <a name="..."> */
-a[name] { color: black; background: transparent; }
-.quotemain
-{
-background:#FAFCFE url('forum/image_set/img_quote.gif') no-repeat top right; border: 1px dotted #000;
-border-left: 4px solid #8394B2;
-color:#465584;
-padding: 4px;
-margin: 5px auto 8px auto;
-}
-  </style>
-
-  <title>Forum BBCode Cheat Sheet</title></head>
-
-<body>
-
-
-<br>
-
-
-<table border="1">
-
-
-  <tbody>
-
-
-    <tr style="font-weight: bold;" align="center">
-
-      <td colspan="2" rowspan="1"><big><big>Forum BBCode Cheat Sheet</big></big></td>
-
-    </tr>
-
-    <tr>
-
-
-      <td style="text-align: left; font-weight: bold;">BBCode</td>
-
-
-      <td style="font-weight: bold; text-align: left;">Effect</td>
-
-
-    </tr>
-
-
-    <tr>
-
-
-      <td>[b]bolded text[/b]</td>
-
-
-      <td style="font-weight: bold;">bolded text</td>
-
-
-    </tr>
-
-
-    <tr>
-
-
-      <td>[i]italicized text[/i]</td>
-
-
-      <td style="font-style: italic;">italicized text</td>
-
-
-    </tr>
-
-
-    <tr>
-
-
-      <td>[u]underlined text[/u]</td>
-
-
-      <td style="text-decoration: underline;">underlined
-text</td>
-
-
-    </tr>
-
-
-    <tr>
-
-
-      <td>[s]strikethrough text[/s]</td>
-
-
-      <td style="text-decoration: line-through;">strikethrough text</td>
-
-
-    </tr>
-
-
-    <tr>
-
-
-      <td>[img]http://www.glfusion.org/images/forum.gif[/img] OR<br>
-[img h=65 w=50]http://www.glfusion.org/images/forum.gif[/img]</td>
-
-
-      <td style="text-align: center;"><img style="border: 0px solid ; width: 65px; height: 50px;" src="http://www.mediagallery.org/forum/images/forum.gif" alt="" longdesc="" align="middle"></td>
-
-
-    </tr>
-
-
-    <tr>
-
-
-      <td>[url=http://www.glfusion.org]glFusion.org[/url]</td>
-
-
-      <td><a href="http://www.glfusion.org" title="http://www.glfusion.org">glFusion.org</a></td>
-
-
-    </tr>
-
-
-    <tr>
-
-      <td>[url]http://www.glfusion.org[/url]</td>
-
-      <td><a href="http://www.glfusion.org">www.glfusion.org</a></td>
-
-    </tr>
-
-    <tr>
-
-
-      <td>[quote]quoted text[/quote]</td>
-
-
-      <td>
-To quote:
-
-      <div class="quotemain">
-
-      <p>quoted text</p>
-
-
-
-      </div>
-
-
-      </td>
-
-
-    </tr>
-
-
-    <tr>
-
-
-      <td>[code]monospaced text[/code]</td>
-
-
-      <td>monospaced text</td>
-
-
-    </tr>
-
-
-    <tr>
-
-
-      <td>[size=15]Your Text[/size]<br>
-
-
-("12" is usually standard on message boards. Usually
-measured in pixels (px))</td>
-
-
-      <td><font size="+2">Your Text</font></td>
-
-
-    </tr>
-
-
-    <tr>
-
-
-      <td>[color=red]Red Text[/color] or
-[color=#FF0000]Red Text[/color]<br>
-
-
-(Can use many different color names or hex codes.)</td>
-
-
-      <td style="color: rgb(204, 0, 0);">Red
-Text</td>
-
-
-    </tr>
-
-    <tr>
-
-      <td>[list]<br>
-
-[*]List item 1<br>
-
-[*]List item 2<br>
-
-[/list]<br>
-      <br>
-OR<br>
-      <br>
-[list=1]<br>
-[*]List item 1<br>
-[*]List item 2<br>
-[/list]</td>
-
-      <td>
-
-      <ul>
-
-        <li>List item 1</li>
-
-        <li>List item 2</li>
-
-
-      </ul>
-      <br>
-      <br>
-      <ol>
-        <li>List item 1</li>
-        <li>List item 2</li>
-      </ol>
-
-      </td>
-
-    </tr>
-    <tr>
-      <td>To enter a backslash (\) in your post, just enter the \</td>
-      <td>\</td>
-    </tr><tr><td>[file]1[/file]<br><br>If
-file attachments are enabled, and you upload an image, you can include
-a thumbnail of the image in the post by using the [file]#[/file] tags.
-&nbsp;The # is the number of the upload (1 is the first upload, 2 the
-second...).<br><br>This is will a thumbnail of the uploaded image into
-the post with a link to the original image. If you would like the
-original image to open in a 'lightbox' use the following syntax:<br><br>[file lightbox=1]#[/file]</td><td><img style="border: 0px solid ; width: 65px; height: 50px;" src="http://www.mediagallery.org/forum/images/forum.gif" alt="" longdesc="" align="middle"></td></tr>
-
-
-
-
-
-  </tbody>
-</table>
-
-
-<br>
-
-<center><a href="javascript:window.close()">Close</a></center>
-
-</body></html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type" />
+    <title>Forum BBCode Cheat Sheet</title>
+    <link rel="stylesheet" type="text/css" href="../layout/nouveau/style.css" />
+</head>
+
+<body style="margin:20px;">
+    <h1 align="center" style="margin:20px;">Forum BBCode Cheat Sheet</h1>
+    <table style="border:1px solid #ccc;">
+        <tr>
+            <th class="admin-list-headerfield">BBCode</th>
+            <th class="admin-list-headerfield">Effect</th>
+        </tr>
+        <tr class="pluginRow1">
+            <td class="admin-list-field" style="padding:5px;">[b]bolded text[/b]</td>
+            <td class="admin-list-field" style="padding:5px; font-weight:bold;">bolded text</td>
+        </tr>
+        <tr class="pluginRow2">
+            <td class="admin-list-field" style="padding:5px;">[i]italicized text[/i]</td>
+            <td  class="admin-list-field" style="padding:5px; font-style: italic;">italicized text</td>
+        </tr>
+        <tr class="pluginRow1">
+            <td class="admin-list-field" style="padding:5px;">[u]underlined text[/u]</td>
+            <td class="admin-list-field" style="padding:5px; text-decoration:underline;">underlined text</td>
+        </tr>
+        <tr class="pluginRow2">
+            <td class="admin-list-field" style="padding:5px;">[s]strikethrough text[/s]</td>
+            <td class="admin-list-field" style="padding:5px; text-decoration:line-through;">strikethrough text</td>
+        </tr>
+        <tr class="pluginRow1">
+            <td class="admin-list-field" style="padding:5px;">[img]http://www.glfusion.org/images/code.png[/img]<br /><br />
+            [img h=32 w=45]http://www.glfusion.org/images/help.png[/img]</td>
+            <td class="admin-list-field" style="padding:5px;">
+                <img src="../layout/nouveau/images/code.png" alt="" title="" /><br /><img style="width:45px; height:32px;" src="../layout/nouveau/images/help.png" alt="" title="" />
+            </td>
+        </tr>
+        <tr class="pluginRow2">
+            <td class="admin-list-field" style="padding:5px;">[url=http://www.glfusion.org]glFusion.org[/url]<br /><br />
+            [url]http://www.glfusion.org[/url]
+            </td>
+            <td class="admin-list-field" style="padding:5px;">
+                <a href="http://www.glfusion.org" title="http://www.glfusion.org">glFusion.org</a><br /><br /><a href="http://www.glfusion.org">http://www.glfusion.org</a>
+            </td>
+        </tr>
+        <tr class="pluginRow1">
+            <td class="admin-list-field" style="padding:5px;">[quote]quoted text[/quote]</td>
+            <td class="admin-list-field" style="padding:5px;">
+                <div class="quotemain">
+                    <p>quoted text</p>
+                </div>
+            </td>
+        </tr>
+        <tr class="pluginRow2">
+            <td class="admin-list-field" style="padding:5px;">[code]monospaced text[/code]</td>
+            <td class="admin-list-field php" style="padding:5px;">
+                <div style="font-family:monospace; font-size:12px; color:#0000cc; border:1px solid:D0D0D0; background:#fafafa; height:20px;margin:5px;">monospaced text</div>
+            </td>
+        </tr>
+        <tr class="pluginRow1">
+            <td class="admin-list-field" style="padding:5px;">[size=16]Your Text[/size]</td>
+            <td class="admin-list-field" style="padding:5px; font-size:16px;">Your Text</td>
+        </tr>
+        <tr class="pluginRow2">
+            <td class="admin-list-field" style="padding:5px;">[color=red]Red Text[/color]<br /><br />
+            [color=#FF0000]Red Text[/color]<br />
+            </td>
+            <td style="color:red; padding:5px;">Red Text</td>
+        </tr>
+        <tr class="pluginRow1">
+            <td class="admin-list-field" style="padding:5px;">[list]<br />
+            [*]List item 1<br />
+            [*]List item 2<br />
+            [/list]<br />
+            <br />
+            [list=1]<br />
+            [*]List item 1<br />
+            [*]List item 2<br />
+            [/list]</td>
+            <td class="admin-list-field" style="padding:5px;">
+                <ul>
+                <li>List item 1</li>
+                <li>List item 2</li>
+                </ul>
+                <ol style="margin-left:-20px;">
+                <li>List item 1</li>
+                <li>List item 2</li>
+                </ol>
+            </td>
+        </tr>
+        <tr class="pluginRow2">
+            <td class="admin-list-field" style="padding:5px;">To enter a backslash (\) in your post, just enter the \</td>
+            <td class="admin-list-field" style="padding:5px;">\</td>
+        </tr>
+        <tr class="pluginRow1">
+            <td class="admin-list-field" style="padding:5px;">[file]1[/file]<br /><br />
+            If file attachments are enabled, and you upload an image, you can include a thumbnail of the image in the post by using the [file]#[/file] tags. The # is the number of the upload (1 is the first upload, 2 the second...).<br /><br />
+            This will add a thumbnail of the uploaded image into the post with a link to the original image. If you would like the original image to open in a 'lightbox' use the following syntax:<br /><br />
+            [file lightbox=1]#[/file]</td>
+            <td class="admin-list-field" style="padding:5px;">
+                <img src="../layout/nouveau/images/lock.png" alt="" title="" />
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

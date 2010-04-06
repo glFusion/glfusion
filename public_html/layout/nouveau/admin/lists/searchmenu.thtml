@@ -1,5 +1,7 @@
 {# begin {templatelocation} #}
+{!if form_url}
 <form action="{form_url}" method="post">
+{!endif}
     <div class="admin-list-search">
         {filter}
         {lang_search}: <input type="text" size="20" name="q" value="{last_query}"{xhtml}>
@@ -16,5 +18,7 @@
             </select>
         &nbsp;&nbsp;{lang_records_found}:&nbsp;{records_found}
     </div>
+{!if form_url}
 </form>
+{!endif}
 {# end {templatelocation} #}

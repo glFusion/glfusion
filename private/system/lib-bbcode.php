@@ -69,7 +69,17 @@ function BBC_formatTextBlock( $str, $postmode='html', $parser = array(), $code =
 
     if ( is_array($parser) && count($parser) > 0 ) {
         foreach ($parser AS $extraparser) {
-            $bbcode->addParser($extraparser[0],$extraparser[1]);
+            if ( isset($extraparser[0]) ) {
+                $parm1 = $extraparser[0];
+            } else {
+                $parm1 = '';
+            }
+            if ( isset($extraparser[1]) ) {
+                $parm2 = $extraparser[1];
+            } else {
+                $parm2 = '';
+            }
+            $bbcode->addParser($parm1,$parm2); // $extraparser[0],$extraparser[1]);
         }
     }
 

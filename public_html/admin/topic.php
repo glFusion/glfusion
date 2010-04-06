@@ -81,8 +81,10 @@ function edittopic ($tid = '')
         $A['limitnews'] = ''; // leave empty!
         $A['is_default'] = 0;
         $A['archive_flag'] = 0;
+        $A['sort_by'] = 0;
+        $A['sort_dir'] = 'DESC';
     } else {
-        $result = DB_query("SELECT * FROM {$_TABLES['topics']} WHERE tid ='$tid'");
+        $result = DB_query("SELECT * FROM {$_TABLES['topics']} WHERE tid ='".DB_escapeString($tid)."'");
         $A = DB_fetchArray($result);
 
         if ( SEC_inGroup('Topic Admin') ) {
@@ -100,8 +102,7 @@ function edittopic ($tid = '')
         }
     }
 
-    $retval .= COM_startBlock ($LANG27[1], '',
-                               COM_getBlockTemplate ('_admin_block', 'header'));
+    $retval .= COM_startBlock ($LANG27[1], '',COM_getBlockTemplate ('_admin_block', 'header'));
     if (!is_array ($A) || empty ($A['owner_id'])) {
         $A['owner_id'] = $_USER['uid'];
 
@@ -122,6 +123,7 @@ function edittopic ($tid = '')
     $topic_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
     $topic_templates->set_var('layout_url', $_CONF['layout_url']);
     if (!empty($tid) && SEC_hasRights('topic.edit')) {
+        $tid_input = '<strong>'.$tid.'</strong>' . '<input type="hidden" size="20" maxlength="20" name="tid" value="'.$tid.'" />';
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
                    . '" name="mode"%s' . XHTML . '>';
         $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
@@ -130,7 +132,10 @@ function edittopic ($tid = '')
         $topic_templates->set_var('delete_option_no_confirmation',
                                   sprintf($delbutton, ''));
         $topic_templates->set_var('warning_msg', $LANG27[6]);
+    } else {
+        $tid_input = '<input type="text" size="20" maxlength="20" name="tid" value="'.$tid.'" />';
     }
+    $topic_templates->set_var('tid_input',$tid_input);
     $topic_templates->set_var('lang_topicid', $LANG27[2]);
     $topic_templates->set_var('topic_id', $A['tid']);
     $topic_templates->set_var('lang_donotusespaces', $LANG27[5]);

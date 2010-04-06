@@ -67,6 +67,10 @@ if ( !$canRate ) {
     header("Location: $referer");
 }
 
+if ( $vote_sent < 1 ) {
+    header("Location: $referer");
+}
+
 // look up the item in our database....
 
 $sql = "SELECT * FROM {$_TABLES['rating']} WHERE type='".addslashes($plugin)."' AND item_id='".addslashes($id_sent)."'";
@@ -103,19 +107,27 @@ if ( $last > 0 ) {
 }
 
 if(!$voted  && !$speedlimiterror) {
-
-    $sum = $vote_sent  + ( $current_rating * $count ); // add together the current vote value and the total vote value
-    $tense = ($count==1) ? $LANG_MG03['vote'] : $LANG_MG03['votes']; //plural form votes/vote
-
-    // checking to see if the first vote has been tallied
-    // or increment the current number of votes
-    ($sum==0 ? $added=0 : $added=$count+1);
-
-    $new_rating = $sum / $added;
+    $tresult = DB_query("SELECT SUM( rating ),COUNT( item_id ) FROM  {$_TABLES['rating_votes']} WHERE item_id = '".DB_escapeString($id_sent)."' AND type='".DB_escapeString($plugin)."'");
+    if ( DB_numRows($tresult) > 0 ) {
+        list($total_rating,$total_votes) = DB_fetchArray($tresult);
+    } else {
+        $total_rating = 0;
+        $total_votes  = 0;
+    }
+    $sum = $total_rating + $vote_sent;
+    $votes = $total_votes + 1;
+    if ( $sum > 0 && $votes > 0 ) {
+        $new_rating = $sum / $votes;
+    } else {
+        $new_rating = 0;
+        $sum = 0;
+        $votes = 0;
+    }
+    $new_rating = @number_format($new_rating,2);
 
     if (($vote_sent >= 1 && $vote_sent <= $units ) && ($ip == $ip_num)) { // keep votes within range
 	    if ( $rating_id != 0 ) {
-            $sql = "UPDATE {$_TABLES['rating']} SET votes=".$added.", rating=".$new_rating." WHERE id = ".$rating_id;
+            $sql = "UPDATE {$_TABLES['rating']} SET votes=".$votes.", rating=".$new_rating." WHERE id = ".$rating_id;
             DB_query($sql);
         } else {
             $sql = "SELECT MAX(id) + 1 AS newid FROM " . $_TABLES['rating'];
@@ -125,13 +137,13 @@ if(!$voted  && !$speedlimiterror) {
             if ( $newid < 1 ) {
                 $newid = 1;
             }
-            $sql = "INSERT INTO {$_TABLES['rating']} (id,type,item_id,votes,rating) VALUES (" . $newid . ", '". $plugin . "','" . addslashes($id_sent). "'," . $added . "," . $new_rating . " )";
+            $sql = "INSERT INTO {$_TABLES['rating']} (id,type,item_id,votes,rating) VALUES (" . $newid . ", '". $plugin . "','" . DB_escapeString($id_sent). "'," . $votes . "," . $new_rating . " )";
             DB_query($sql);
         }
         $sql = "INSERT INTO {$_TABLES['rating_votes']} (type,item_id,uid,ip_address,ratingdate) " .
                "VALUES ('".addslashes($plugin)."','".addslashes($id_sent)."',".$uid.",'".addslashes($ip)."',".$ratingdate.");";
         DB_query($sql);
-        PLG_itemRated( $plugin, $id_sent, $new_rating, $added );
+        PLG_itemRated( $plugin, $id_sent, $new_rating, $votes );
         COM_updateSpeedlimit ('rate');
         COM_resetSpeedlimit('rate');
 	}

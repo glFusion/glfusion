@@ -242,6 +242,7 @@ function MG_globalAlbumAttributeEditor($adminMenu=0) {
     $A['enable_views']       = 0;
     $A['enable_keywords']    = 0;
     $A['enable_sort']        = 0;
+    $A['enable_rating']      = 0;
     $A['albums_first']       = 0;
     $A['tn_size']            = 1;
     $A['display_rows']       = 3;
@@ -251,6 +252,9 @@ function MG_globalAlbumAttributeEditor($adminMenu=0) {
     $A['allow_download']     = 0;
     $A['display_album_desc'] = 0;
     $A['filename_title']     = 0;
+    $A['podcast']            = 0;
+    $A['mp3ribbon']          = 0;
+    $A['rsschildren']        = 1;
     $A['skin']               = '';
 
     $retval .= COM_startBlock ($LANG_MG01['global_attr_editor'], '',

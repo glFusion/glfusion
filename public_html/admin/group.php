@@ -245,8 +245,10 @@ function editgroup($grp_id = '')
         $form_url = $_CONF['site_admin_url'].'/group.php?edit=1&amp;grp_id=' . $grp_id;
 
         $text_arr = array('has_menu' => false,
-                          'title' => '', 'instructions' => '',
-                          'icon' => '', 'form_url' => $form_url );
+                          'has_extras' => false,
+                          'title' => '',
+                          'instructions' => '',
+                          'icon' => '' );
 
         $xsql = '';
         if (! empty($grp_id)) {
@@ -303,16 +305,16 @@ function getIndirectFeatures ($grp_id)
     do {
         $grp = array_pop ($tocheck);
 
-        $result = DB_query ("SELECT ug_main_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $grp AND ug_uid IS NULL");
+        $result = DB_query ("SELECT ug_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $grp AND ug_uid IS NULL");
         $numrows = DB_numRows ($result);
 
         $checked[] = $grp;
 
         for ($j = 0; $j < $numrows; $j++) {
             $A = DB_fetchArray ($result);
-            if (!in_array ($A['ug_main_grp_id'], $checked) &&
-                !in_array ($A['ug_main_grp_id'], $tocheck)) {
-                $tocheck[] = $A['ug_main_grp_id'];
+            if (!in_array ($A['ug_grp_id'], $checked) &&
+                !in_array ($A['ug_grp_id'], $tocheck)) {
+                $tocheck[] = $A['ug_grp_id'];
             }
         }
     }
@@ -740,13 +742,7 @@ function listusers ($grp_id)
         return $retval;
     }
 
-    if ($_CONF['lastlogin']) {
-        $login_text = $LANG28[41];
-        $login_field = 'lastlogin';
-    } else {
-        $login_text = $LANG28[40];
-        $login_field = 'regdate';
-    }
+    $showall = (isset($_REQUEST['chk_showall']) );
 
     $header_arr = array (
         array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'center' => true),
@@ -1195,9 +1191,10 @@ switch ($action) {
             $grp_applydefault = (isset($_POST['chk_applydefault'])) ? 1 : 0;
             $chk_grpadmin = (isset($_POST['chk_grpadmin'])) ? COM_applyFilter($_POST['chk_grpadmin']) : '';
             $features = array();
-            $features = (isset($_POST['features'])) ? $_POST['features'] : array();
+            $features = (isset($_POST['features']) ? $_POST['features'] : array());
             $groups = array();
-            $groups = (isset($_POST['groups'])) ? $_POST['groups'] : array();
+            $groups = (isset($_POST['groups']) ? $_POST['groups'] : array());
+
             $display .= savegroup($grp_id, COM_applyFilter($_POST['grp_name']),
                                   $_POST['grp_descr'], $chk_grpadmin, $grp_gl_core,
                                   $grp_default, $grp_applydefault, $features, $groups);

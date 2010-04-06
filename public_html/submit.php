@@ -109,8 +109,7 @@ function submitstory($topic = '')
 
     $story = new Story();
 
-    if( isset( $_POST['mode'] ) && ( $_POST['mode'] == $LANG12[32] ) )
-    {
+    if( isset( $_POST['mode'] ) && ( $_POST['mode'] == $LANG12[32] ) ) {
         // preview
         $story->loadSubmission();
         $retval .= COM_startBlock($LANG12[32])
@@ -138,7 +137,11 @@ function submitstory($topic = '')
     $storyform = new Template($_CONF['path_layout'] . 'submit');
     if (isset ($_CONF['advanced_editor']) && ($_CONF['advanced_editor'] == 1)) {
         $storyform->set_file('storyform','submitstory_advanced.thtml');
-        $ae_uid = intval(intval(COM_applyFilter($_USER['uid'],true)));
+        if ( COM_isAnonUser() ) {
+            $ae_uid = 1;
+        } else {
+            $ae_uid = (int) COM_applyFilter($_USER['uid'],true);
+        }
         $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
         DB_Query($sql,1);
         if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
