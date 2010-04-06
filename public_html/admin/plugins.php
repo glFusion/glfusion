@@ -206,10 +206,10 @@ function PLGADM_save($pi_name, $pi_version, $pi_gl_version, $enabled, $pi_homepa
         } else {
             $enabled = 0;
         }
-        $pi_name = addslashes ($pi_name);
-        $pi_version = addslashes ($pi_version);
-        $pi_gl_version = addslashes ($pi_gl_version);
-        $pi_homepage = addslashes ($pi_homepage);
+        $pi_name = DB_escapeString ($pi_name);
+        $pi_version = DB_escapeString ($pi_version);
+        $pi_gl_version = DB_escapeString ($pi_gl_version);
+        $pi_homepage = DB_escapeString ($pi_homepage);
 
         $currentState = DB_getItem ($_TABLES['plugins'], 'pi_enabled',
                                     "pi_name= '{$pi_name}' LIMIT 1");

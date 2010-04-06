@@ -1,7 +1,7 @@
 <script type="text/javascript">
 var FCK = opener.FCKeditorAPI.GetInstance('{instance}') ;
 </script>
-<script language="JavaScript">
+<script type="text/javascript">
 function dodisabled(){
 	var autotag = '';
     // see which auto tag is selected, if any
@@ -148,8 +148,8 @@ function dodisabled(){
   <input type="radio" name="autotag" value="audio" onChange="dodisabled()" {audioon}>&nbsp;{lang_audio}&nbsp;&nbsp;
   <input type="radio" name="autotag" value="playall" onChange="dodisabled()" {playallon}>&nbsp;{lang_playall}
   <p>
-  {lang_width} <input type="text" name="width" size="3" maxsize="3" value="{width}">&nbsp;&nbsp;
-  {lang_height} <input type="text" name="height" size="3" maxsize="3" value="{height}">&nbsp;&nbsp;
+  {lang_width} <input type="text" name="width" size="3" maxlength="3" value="{width}">&nbsp;&nbsp;
+  {lang_height} <input type="text" name="height" size="3" maxlength="3" value="{height}">&nbsp;&nbsp;
 
   {lang_border} <select name="border">
                   <option value="0" {border_no}>{lang_no}</option>
@@ -175,6 +175,7 @@ function dodisabled(){
   {lang_link} <select name="link">
                 <option value="0" {link_no}>{lang_no}</option>
                 <option value="1" {link_yes}>{lang_yes}</option>
+                <option value="2" {link_lb}>Lightbox</option>
               </select>
               &nbsp;&nbsp;
 
@@ -185,7 +186,7 @@ function dodisabled(){
               &nbsp;&nbsp;
 
   {lang_delay}
-                    <input type="text" name="delay" size="3" maxsize="3" value="{delay}">&nbsp;&nbsp;
+                    <input type="text" name="delay" size="3" maxlength="3" value="{delay}">&nbsp;&nbsp;
   </p>
   <p>
 
@@ -215,7 +216,7 @@ function dodisabled(){
                   &nbsp;&nbsp;
 
 <p>
-{lang_caption} <input type="text" name="caption" size="80" maxsize="120" value="{caption}">
+{lang_caption} <input type="text" name="caption" size="80" maxlength="120" value="{caption}">
 </fieldset>
 <p>
 <fieldset>

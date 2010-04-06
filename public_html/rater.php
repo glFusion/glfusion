@@ -73,7 +73,7 @@ if ( $vote_sent < 1 ) {
 
 // look up the item in our database....
 
-$sql = "SELECT * FROM {$_TABLES['rating']} WHERE type='".addslashes($plugin)."' AND item_id='".addslashes($id_sent)."'";
+$sql = "SELECT * FROM {$_TABLES['rating']} WHERE type='".DB_escapeString($plugin)."' AND item_id='".DB_escapeString($id_sent)."'";
 $result = DB_query($sql);
 if ( DB_numRows($result) > 0 ) {
     $row            = DB_fetchArray($result);
@@ -87,9 +87,9 @@ if ( DB_numRows($result) > 0 ) {
 }
 
 if ( $uid == 1 ) {
-    $sql = "SELECT id FROM {$_TABLES['rating_votes']} WHERE ip_address='".addslashes($ip)."' AND item_id='".addslashes($id_sent)."'";
+    $sql = "SELECT id FROM {$_TABLES['rating_votes']} WHERE ip_address='".DB_escapeString($ip)."' AND item_id='".DB_escapeString($id_sent)."'";
 } else {
-    $sql = "SELECT id FROM {$_TABLES['rating_votes']} WHERE (uid=$uid OR ip_address='".addslashes($ip)."') AND item_id='".addslashes($id_sent)."'";
+    $sql = "SELECT id FROM {$_TABLES['rating_votes']} WHERE (uid=$uid OR ip_address='".DB_escapeString($ip)."') AND item_id='".DB_escapeString($id_sent)."'";
 }
 $checkResult = DB_query($sql);
 if ( DB_numRows($checkResult) > 0 ) {
@@ -141,7 +141,7 @@ if(!$voted  && !$speedlimiterror) {
             DB_query($sql);
         }
         $sql = "INSERT INTO {$_TABLES['rating_votes']} (type,item_id,uid,ip_address,ratingdate) " .
-               "VALUES ('".addslashes($plugin)."','".addslashes($id_sent)."',".$uid.",'".addslashes($ip)."',".$ratingdate.");";
+               "VALUES ('".DB_escapeString($plugin)."','".DB_escapeString($id_sent)."',".$uid.",'".DB_escapeString($ip)."',".$ratingdate.");";
         DB_query($sql);
         PLG_itemRated( $plugin, $id_sent, $new_rating, $votes );
         COM_updateSpeedlimit ('rate');

@@ -34,6 +34,7 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../../../lib-common.php';
+require_once '../../auth.inc.php';
 
 
 // Only let admin users access this page
@@ -88,7 +89,7 @@ foreach ($files as $file) {
              . '/plugins/spamx/index.php?command=' . $file) . '</li>';
 }
 $display .= '<li>' . COM_createLink($LANG_SX00['documentation'],
-            $_CONF['site_url'] . '/docs/spamx.html') . '</li>';
+            $_CONF['site_url'] . '/docs/english/spamx.html') . '</li>';
 $display .= '</ul>';
 
 if (isset ($_REQUEST['command'])) {

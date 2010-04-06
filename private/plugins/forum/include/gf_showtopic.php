@@ -401,7 +401,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     }
 
     $uniqueid = isset($_POST['uniqueid']) ? COM_applyFilter($_POST['uniqueid'],true) : 0;
-    if ($showtopic['id'] > 0) {
+    if ($showtopic['id'] > 0 && (!isset($_POST['method']) || $_POST['method'] != 'postreply' )) {
         $topictemplate->set_var('attachments',gf_showattachments($showtopic['id']));
     } elseif ($uniqueid > 0) {
         $topictemplate->set_var('attachments',gf_showattachments($uniqueid));

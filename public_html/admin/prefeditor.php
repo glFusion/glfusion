@@ -62,11 +62,11 @@ function editPreferences()
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/user.php',
               'text' => $LANG28[11]),
-        array('url' => $_CONF['site_admin_url'] . '/user.php?mode=edit',
+        array('url' => $_CONF['site_admin_url'] . '/user.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
-        array('url' => $_CONF['site_admin_url'] . '/user.php?mode=importform',
+        array('url' => $_CONF['site_admin_url'] . '/user.php?import=x',
               'text' => $LANG28[23]),
-        array('url' => $_CONF['site_admin_url'] . '/user.php?mode=batchdelete',
+        array('url' => $_CONF['site_admin_url'] . '/user.php?batchadmin=x',
               'text' => $LANG28[54]),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
@@ -106,8 +106,6 @@ function editPreferences()
     foreach ($language as $langFile => $langName) {
         $selection .= '<option value="' . $langFile . '"';
         if ( $langFile == $_CONF['language'] ) {
-            $selection .= ' selected="selected"';
-        } else if ($userlang == $langFile) {
             $selection .= ' selected="selected"';
         }
         $selection .= '>' . $langName . '</option>' . LB;
@@ -233,7 +231,7 @@ function applyPreferences()
                         } else {
                             $users_first++;
                         }
-                        $users_sql .= 'language="'.addslashes($language).'" ';
+                        $users_sql .= 'language="'.DB_escapeString($language).'" ';
                     }
                     break;
                 case 'theme' :   // users - theme
@@ -244,7 +242,7 @@ function applyPreferences()
                         } else {
                             $users_first++;
                         }
-                        $users_sql .= 'theme="'.addslashes($theme).'" ';
+                        $users_sql .= 'theme="'.DB_escapeString($theme).'" ';
                     }
                     break;
                 case 'noicons' :    // userprefs - noicons
@@ -292,7 +290,7 @@ function applyPreferences()
                         } else {
                             $prefs_first++;
                         }
-                        $prefs_sql .= 'tzid="'.addslashes($tzid).'"';
+                        $prefs_sql .= 'tzid="'.DB_escapeString($tzid).'"';
                     }
                     break;
                 case 'dfid' :   // userprefs - dfid
@@ -315,7 +313,7 @@ function applyPreferences()
                         } else {
                             $prefs_first++;
                         }
-                        $prefs_sql .= 'search_result_format="'.addslashes($search_result_format).'"';
+                        $prefs_sql .= 'search_result_format="'.DB_escapeString($search_result_format).'"';
                     }
                     break;
                 case 'commentmode' :    //usercomment - commentmode
@@ -326,7 +324,7 @@ function applyPreferences()
                         } else {
                             $comment_first++;
                         }
-                        $comment_sql .= 'commentmode="'.addslashes($commentmode).'"';
+                        $comment_sql .= 'commentmode="'.DB_escapeString($commentmode).'"';
                     }
                     break;
                 case 'commentorder' :   // usercomment - commentorder
@@ -337,7 +335,7 @@ function applyPreferences()
                         } else {
                             $comment_first++;
                         }
-                        $comment_sql .= 'commentorder="'.addslashes($commentorder).'"';
+                        $comment_sql .= 'commentorder="'.DB_escapeString($commentorder).'"';
                     }
                     break;
                 case 'commentlimit' :   // usercomment - commentlimit

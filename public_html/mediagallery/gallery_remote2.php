@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -527,7 +527,7 @@ function _mg_gr_add_album($parentaname, $albumname, $title, $descr) {
     }
 
     $dc = time();
-    $grname = addslashes($albumname);
+    $grname = DB_escapeString($albumname);
 
     $retval .= 'album_name='.$aid."\n";
     _mg_gr_finish(GR_STAT_SUCCESS,$retval,'Album Created');

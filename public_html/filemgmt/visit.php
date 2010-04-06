@@ -73,22 +73,22 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
 
     $sql = "SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
     $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
-    $sql .= "WHERE a.lid='".addslashes($lid)."' $groupsql";
+    $sql .= "WHERE a.lid='".DB_escapeString($lid)."' $groupsql";
     list($testaccess_cnt) = DB_fetchArray( DB_query($sql));
 
-    if ($testaccess_cnt == 0 OR DB_count($_FM_TABLES['filemgmt_filedetail'],"lid",addslashes($lid) ) == 0) {
+    if ($testaccess_cnt == 0 OR DB_count($_FM_TABLES['filemgmt_filedetail'],"lid",DB_escapeString($lid) ) == 0) {
         COM_errorLOG("filemgmt visit.php ERROR: Invalid attempt to download a file. User:{$_USER['username']}, IP:{$_SERVER['REMOTE_ADDR']}, File ID:{$lid}");
         echo COM_refresh($_CONF['site_url'] . '/filemgmt/index.php');
         exit;
     } else {
-        $result = DB_query("SELECT url,platform FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='".addslashes($lid)."' AND ".$status);
+        $result = DB_query("SELECT url,platform FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='".DB_escapeString($lid)."' AND ".$status);
         list($url,$tmpnames) = DB_fetchArray($result);
         if ( $tempFile == 1 ) {
             $tmpfilenames = explode(";",$tmpnames);
             $tempfilepath = $filemgmt_FileStore . 'tmp/' .$tmpfilenames[0];
         } else {
-            DB_query("INSERT INTO {$_FM_TABLES['filemgmt_history']} (uid, lid, remote_ip, date) VALUES ($uid, '".addslashes($lid)."', '".addslashes($_SERVER['REMOTE_ADDR'])."', NOW())") or $eh->show("0013");
-            DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET hits=hits+1 WHERE lid='".addslashes($lid)."' AND status>0");
+            DB_query("INSERT INTO {$_FM_TABLES['filemgmt_history']} (uid, lid, remote_ip, date) VALUES ($uid, '".DB_escapeString($lid)."', '".DB_escapeString($_SERVER['REMOTE_ADDR'])."', NOW())") or $eh->show("0013");
+            DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET hits=hits+1 WHERE lid='".DB_escapeString($lid)."' AND status>0");
         }
         $allowed_protocols = array('http','https','ftp');
         $found_it = false;

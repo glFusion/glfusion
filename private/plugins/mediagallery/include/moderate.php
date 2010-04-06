@@ -263,7 +263,7 @@ function MG_saveModeration( $album_id, $actionURL = '' ) {
             //
             // copy all the mg_media fields over to the prod database
             //
-            $sql    = "SELECT * FROM {$_TABLES['mg_mediaqueue']} WHERE media_id='" . addslashes($id[$i]) . "'";
+            $sql    = "SELECT * FROM {$_TABLES['mg_mediaqueue']} WHERE media_id='" . DB_escapeString($id[$i]) . "'";
             $result = DB_query($sql);
             $row    = DB_fetchArray($result);
             $owner_uid = $row['media_user_id'];
@@ -271,14 +271,14 @@ function MG_saveModeration( $album_id, $actionURL = '' ) {
 			$sql = "INSERT INTO {$_TABLES['mg_media']} ( `media_id`,`media_filename`,`media_original_filename`,`media_mime_ext`,`media_exif`,`mime_type`,`media_title`,`media_desc`,`media_keywords`,`media_time`,`media_views`,`media_comments`,`media_votes`,`media_rating`,`media_resolution_x`,`media_resolution_y`,`remote_media`,`remote_url`,`media_tn_attached`,`media_tn_image`,`include_ss`,`media_user_id`,`media_user_ip`,`media_approval`,`media_type`,`media_upload_time`,`media_category`,`media_watermarked`,`artist`,`album`,`genre`,`v100`,`maint`) "
 					. " VALUES ( "
 					. "'" . $row['media_id'] . "',"
-					. "'" . addslashes($row['media_filename']) . "',"
-					. "'" . addslashes($row['media_original_filename']) . "',"
-					. "'" . addslashes($row['media_mime_ext']) . "',"
+					. "'" . DB_escapeString($row['media_filename']) . "',"
+					. "'" . DB_escapeString($row['media_original_filename']) . "',"
+					. "'" . DB_escapeString($row['media_mime_ext']) . "',"
 					. "'" . $row['media_exif'] . "',"
-					. "'" . addslashes($row['mime_type']) . "',"
-					. "'" . addslashes($row['media_title']) . "',"
-					. "'" . addslashes($row['media_desc']) . "',"
-					. "'" . addslashes($row['media_keywords']) . "',"
+					. "'" . DB_escapeString($row['mime_type']) . "',"
+					. "'" . DB_escapeString($row['media_title']) . "',"
+					. "'" . DB_escapeString($row['media_desc']) . "',"
+					. "'" . DB_escapeString($row['media_keywords']) . "',"
 					. "'" . $row['media_time'] . "',"
 					. "'" . $row['media_views'] . "',"
 					. "'" . $row['media_comments'] . "',"
@@ -287,12 +287,12 @@ function MG_saveModeration( $album_id, $actionURL = '' ) {
 					. "'" . $row['media_resolution_x'] . "',"
 					. "'" . $row['media_resolution_y'] . "',"
 					. "'" . $row['remote_media'] . "',"
-					. "'" . addslashes($row['remote_url']) . "',"
+					. "'" . DB_escapeString($row['remote_url']) . "',"
 					. "'" . $row['media_tn_attached'] . "',"
-					. "'" . addslashes($row['media_tn_image']) . "',"
+					. "'" . DB_escapeString($row['media_tn_image']) . "',"
 					. "'" . $row['include_ss'] . "',"
 					. "'" . $row['media_user_id'] . "',"
-					. "'" . addslashes($row['media_user_ip']) . "',"
+					. "'" . DB_escapeString($row['media_user_ip']) . "',"
 					. "'" . $row['media_approval'] . "',"
 					. "'" . $row['media_type'] . "',"
 					. "'" . $row['media_upload_time'] . "',"
@@ -305,7 +305,7 @@ function MG_saveModeration( $album_id, $actionURL = '' ) {
 					. "'" . $row['maint'] . "');";
 
             DB_query($sql);
-            $sql = "DELETE FROM " . $_TABLES['mg_mediaqueue'] . " WHERE media_id='" . addslashes($id[$i]) . "'";
+            $sql = "DELETE FROM " . $_TABLES['mg_mediaqueue'] . " WHERE media_id='" . DB_escapeString($id[$i]) . "'";
             DB_query($sql);
             $media_upload_time = $row['media_upload_time'];
             $media_filename    = $row['media_filename'];
@@ -315,7 +315,7 @@ function MG_saveModeration( $album_id, $actionURL = '' ) {
             // copy all the mg_media_album fields over to the prod database
             //
 
-            $sql = "SELECT * FROM " . $_TABLES['mg_media_album_queue'] . " WHERE media_id='" . addslashes($id[$i]) . "'";
+            $sql = "SELECT * FROM " . $_TABLES['mg_media_album_queue'] . " WHERE media_id='" . DB_escapeString($id[$i]) . "'";
             $result = DB_query($sql);
             $nRows = DB_numRows($result);
             for ( $x=0; $x < $nRows; $x++ ) {
@@ -327,7 +327,7 @@ function MG_saveModeration( $album_id, $actionURL = '' ) {
                        $row['media_id'] . "',32000+$x)";
 
                 DB_query($sql);
-                $sql = "DELETE FROM " . $_TABLES['mg_media_album_queue'] . " WHERE media_id='" . addslashes($id[$i]) . "'";
+                $sql = "DELETE FROM " . $_TABLES['mg_media_album_queue'] . " WHERE media_id='" . DB_escapeString($id[$i]) . "'";
                 DB_query($sql);
                 $statusReport .= "Media ID " . $id[$i] . $LANG_MG01['queue_processed'];
                 MG_SortMedia( $row['album_id'] );
@@ -375,12 +375,12 @@ function MG_saveModeration( $album_id, $actionURL = '' ) {
                 }
             }
         } elseif ($modaction[$i] == "delete") {
-            $sql    = "SELECT * FROM {$_TABLES['mg_mediaqueue']} WHERE media_id='" . addslashes($id[$i]) . "'";
+            $sql    = "SELECT * FROM {$_TABLES['mg_mediaqueue']} WHERE media_id='" . DB_escapeString($id[$i]) . "'";
             $result = DB_query($sql);
             $row    = DB_fetchArray($result);
 
-            DB_query("DELETE FROM " . $_TABLES['mg_mediaqueue'] . " WHERE media_id='" . addslashes($id[$i]) . "'");
-            DB_query("DELETE FROM " . $_TABLES['mg_media_album_queue'] . " WHERE media_id='" . addslashes($id[$i]) . "'");
+            DB_query("DELETE FROM " . $_TABLES['mg_mediaqueue'] . " WHERE media_id='" . DB_escapeString($id[$i]) . "'");
+            DB_query("DELETE FROM " . $_TABLES['mg_media_album_queue'] . " WHERE media_id='" . DB_escapeString($id[$i]) . "'");
 
             // now remove the media...
 

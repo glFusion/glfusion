@@ -49,7 +49,7 @@ function MG_batchProcess( $album_id, $action, $actionURL = '' ) {
                 $session_description = sprintf($LANG_MG01['batch_rotate_images'], $MG_albums[$album_id]->title);
                 $session_id = MG_beginSession('rotate',$_MG_CONF['site_url'] . '/admin.php?album_id=' . $album_id . '&mode=media',$session_description );
                 for ($i=0; $i < $numItems; $i++) {
-                    DB_query("INSERT INTO {$_TABLES['mg_session_items']} (session_id,mid,aid,data) VALUES('$session_id','".addslashes($_POST['sel'][$i])."',".intval($album_id).",'right')");
+                    DB_query("INSERT INTO {$_TABLES['mg_session_items']} (session_id,mid,aid,data) VALUES('$session_id','".DB_escapeString($_POST['sel'][$i])."',".intval($album_id).",'right')");
                 }
                 $display = MG_siteHeader();
                 $display .= MG_continueSession($session_id,0,30);
@@ -70,7 +70,7 @@ function MG_batchProcess( $album_id, $action, $actionURL = '' ) {
                 $session_description = sprintf($LANG_MG01['batch_rotate_images'], $MG_albums[$album_id]->title);
                 $session_id = MG_beginSession('rotate', $_MG_CONF['site_url'] . '/admin.php?album_id=' . $album_id . '&mode=media',$session_description );
                 for ($i=0; $i < $numItems; $i++) {
-                    DB_query("INSERT INTO {$_TABLES['mg_session_items']} (session_id,mid,aid,data) VALUES('$session_id','".addslashes($_POST['sel'][$i])."',".intval($album_id).",'left')");
+                    DB_query("INSERT INTO {$_TABLES['mg_session_items']} (session_id,mid,aid,data) VALUES('$session_id','".DB_escapeString($_POST['sel'][$i])."',".intval($album_id).",'left')");
                 }
                 $display = MG_siteHeader();
                 $display .= MG_continueSession($session_id,0,30);
@@ -91,7 +91,7 @@ function MG_batchProcess( $album_id, $action, $actionURL = '' ) {
                 $session_id = MG_beginSession('watermark',$_MG_CONF['site_url'] . '/admin.php?album_id=' . $album_id . '&mode=media',$session_description );
                 for ($i=0; $i < $numItems; $i++) {
                     // setup our new batch processor - fingers crossed...
-                    DB_query("INSERT INTO {$_TABLES['mg_session_items']} (session_id,mid,aid,data) VALUES('$session_id','".addslashes($_POST['sel'][$i])."',".intval($album_id).",'')");
+                    DB_query("INSERT INTO {$_TABLES['mg_session_items']} (session_id,mid,aid,data) VALUES('$session_id','".DB_escapeString($_POST['sel'][$i])."',".intval($album_id).",'')");
                 }
                 $display = MG_siteHeader();
                 $display .= MG_continueSession($session_id,0,30);
@@ -128,12 +128,12 @@ function MG_batchDeleteMedia( $album_id, $actionURL = '' ) {
     $numItems = count($_POST['sel']);
 
     for ($i=0; $i < $numItems; $i++) {
-        $sql = "DELETE FROM {$_TABLES['mg_media_albums']} WHERE media_id='" . addslashes($_POST['sel'][$i]) . "' AND album_id=" . intval($album_id);
+        $sql = "DELETE FROM {$_TABLES['mg_media_albums']} WHERE media_id='" . DB_escapeString($_POST['sel'][$i]) . "' AND album_id=" . intval($album_id);
         $result = DB_query($sql);
         if ( DB_error() ) {
             COM_errorLog("Error removing media from mg_media_albums");
         }
-        $sql = "SELECT media_filename, media_mime_ext FROM {$_TABLES['mg_media']} WHERE media_id='" . addslashes($_POST['sel'][$i]) . "'";
+        $sql = "SELECT media_filename, media_mime_ext FROM {$_TABLES['mg_media']} WHERE media_id='" . DB_escapeString($_POST['sel'][$i]) . "'";
         $result = DB_query($sql);
         $row = DB_fetchArray($result);
         $media_filename = $row['media_filename'];
@@ -142,10 +142,10 @@ function MG_batchDeleteMedia( $album_id, $actionURL = '' ) {
             @unlink($_MG_CONF['path_mediaobjects'] . 'disp/' . $row['media_filename'][0] .'/' . $row['media_filename'] . $ext);
         }
         @unlink($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] .'/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
-        $sql = "DELETE FROM {$_TABLES['mg_media']} WHERE media_id='"    . addslashes($_POST['sel'][$i]) . "'";
+        $sql = "DELETE FROM {$_TABLES['mg_media']} WHERE media_id='"    . DB_escapeString($_POST['sel'][$i]) . "'";
         DB_query($sql);
-        DB_delete($_TABLES['comments'], 'sid', addslashes($_POST['sel'][$i]));
-        DB_delete($_TABLES['mg_playback_options'],'media_id', addslashes($_POST['sel'][$i]));
+        DB_delete($_TABLES['comments'], 'sid', DB_escapeString($_POST['sel'][$i]));
+        DB_delete($_TABLES['mg_playback_options'],'media_id', DB_escapeString($_POST['sel'][$i]));
         PLG_itemDeleted($_POST['sel'][$i],'mediagallery');
         $mediaCount--;
         DB_query("UPDATE " . $_TABLES['mg_albums'] . " SET media_count=" . $mediaCount .
@@ -290,7 +290,7 @@ function MG_batchMoveMedia( $album_id, $actionURL = '' ) {
     $aMediaCount = $A['media_count'];
 
     for ($i=0; $i < $numItems; $i++) {
-        $sql = "UPDATE {$_TABLES['mg_media_albums']} SET album_id=" . $destination . ", media_order=" . $media_seq . " WHERE album_id=" . $album_id . " AND media_id='" . addslashes($_POST['sel'][$i]) . "'";
+        $sql = "UPDATE {$_TABLES['mg_media_albums']} SET album_id=" . $destination . ", media_order=" . $media_seq . " WHERE album_id=" . $album_id . " AND media_id='" . DB_escapeString($_POST['sel'][$i]) . "'";
         DB_query($sql);
         if (DB_error()) {
             COM_errorLog("Media Gallery - Error moving " . $_POST['sel'][$i] . " to new destination album " . $album_id);
@@ -306,7 +306,7 @@ function MG_batchMoveMedia( $album_id, $actionURL = '' ) {
         DB_query("UPDATE {$_TABLES['mg_albums']} set media_count=" . $aMediaCount . " WHERE album_id=" . $A['album_id']);
 
         // get the media_filename for the image / item we are moving...
-        $mediaFilename = DB_getItem($_TABLES['mg_media'],'media_filename',"media_id='" . addslashes($_POST['sel'][$i]) . "'");
+        $mediaFilename = DB_getItem($_TABLES['mg_media'],'media_filename',"media_id='" . DB_escapeString($_POST['sel'][$i]) . "'");
 
         //
         // check to see if cover of old album...

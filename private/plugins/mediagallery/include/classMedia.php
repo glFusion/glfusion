@@ -312,7 +312,7 @@ class Media {
 		            $playback_options['swf_version'] = $_MG_CONF['swf_version'];
 		            $playback_options['flashvars']   = $_MG_CONF['swf_flashvars'];
 
-		            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . addslashes($this->id) . "'");
+		            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . DB_escapeString($this->id) . "'");
 		            while ( $poRow = DB_fetchArray($poResult) ) {
 		                $playback_options[$poRow['option_name']] = $poRow['option_value'];
 		            }
@@ -339,7 +339,7 @@ class Media {
     		                        $resolution_y = $ThisFileInfo['video']['resolution_y'];
     		                    }
     		                    if ( $resolution_x != 0 ) {
-    		                        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . intval($resolution_x) . ",media_resolution_y=" . intval($resolution_y) . " WHERE media_id='" . addslashes($this->id) . "'";
+    		                        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . intval($resolution_x) . ",media_resolution_y=" . intval($resolution_y) . " WHERE media_id='" . DB_escapeString($this->id) . "'";
     		                        DB_query( $sql,1 );
     		                    }
                             }
@@ -561,7 +561,8 @@ class Media {
         	    $L->set_var('hrefdirect',$_MG_CONF['mediaobjects_url'] . '/' . $direct_url);
         	}
     	}
-    	$L->set_var('caption',PLG_replaceTags($this->title));
+
+    	$L->set_var('caption',PLG_replaceTags(str_replace('$','&#36;',$this->title)));
     	$L->set_var('id','id' . rand());
 
     	$L->parse('media_link_start','media_link');

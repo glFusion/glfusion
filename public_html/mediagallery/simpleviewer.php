@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -226,6 +226,8 @@ function MG_xml() {
 
 	echo $xml;
 }
-
+if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
+    exit;
+}
 MG_xml();
 ?>

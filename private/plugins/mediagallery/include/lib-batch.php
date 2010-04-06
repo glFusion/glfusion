@@ -51,12 +51,12 @@ function MG_beginSession( $action, $origin, $description, $flag0='',$flag1='',$f
     $session_action      = $action;
     $session_start_time  = time();
     $session_end_time    = time();
-    $session_description = addslashes($description);
-    $flag0               = addslashes($flag0);
-    $flag1               = addslashes($flag1);
-    $flag2               = addslashes($flag2);
-    $flag3               = addslashes($flag3);
-    $flag4               = addslashes($flag4);
+    $session_description = DB_escapeString($description);
+    $flag0               = DB_escapeString($flag0);
+    $flag1               = DB_escapeString($flag1);
+    $flag2               = DB_escapeString($flag2);
+    $flag3               = DB_escapeString($flag3);
+    $flag4               = DB_escapeString($flag4);
 
     $sql = "INSERT INTO {$_TABLES['mg_sessions']} (session_id,session_uid,session_description,session_status,session_action,session_origin,session_start_time,session_end_time,session_var0,session_var1,session_var2,session_var3,session_var4)
             VALUES ('$session_id',{$_USER['uid']}, '$session_description', $session_status, '$session_action','$origin', $session_start_time,$session_end_time,'$flag0','$flag1','$flag2','$flag3','$flag4')";
@@ -91,7 +91,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
     $session_id = COM_applyFilter($session_id);
 
     // Pull the session status info
-    $sql = "SELECT * FROM {$_TABLES['mg_sessions']} WHERE session_id='" . addslashes($session_id) . "'";
+    $sql = "SELECT * FROM {$_TABLES['mg_sessions']} WHERE session_id='" . DB_escapeString($session_id) . "'";
     $result = DB_query($sql,1);
     if ( DB_error() ) {
         COM_errorLog("MediaGallery:  Error - Unable to retrieve batch session data");
@@ -137,7 +137,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
     $label = COM_stripslashes($session['session_description']);
     // Pull the detail data from the sessions_items table...
 
-    $sql = "SELECT * FROM {$_TABLES['mg_session_items']} WHERE session_id='" . addslashes($session_id) . "' AND status=0 LIMIT " . $item_limit;
+    $sql = "SELECT * FROM {$_TABLES['mg_session_items']} WHERE session_id='" . DB_escapeString($session_id) . "' AND status=0 LIMIT " . $item_limit;
     $result = DB_query($sql);
 
     while ( ($row = DB_fetchArray($result)) && ($timer_expired == false) ) {
@@ -354,7 +354,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                             $file_extension = strtolower(substr(strrchr($filename,"."),1));
 
                             DB_query("INSERT INTO {$_TABLES['mg_session_items']} (session_id,mid,aid,data,data2,data3,status)
-                                      VALUES('".addslashes($session_id)."','".addslashes($mid)."',$new_aid,'" . addslashes($filetmp) . "','" . addslashes($purgefiles) . "','" . addslashes($filename) . "',0)");
+                                      VALUES('".DB_escapeString($session_id)."','".DB_escapeString($mid)."',$new_aid,'" . DB_escapeString($filetmp) . "','" . DB_escapeString($purgefiles) . "','" . DB_escapeString($filename) . "',0)");
                             if ( DB_error() ) {
                                 COM_errorLog("Media Gallery: Error - SQL error on inserting record into session_items table");
                             }
@@ -365,8 +365,8 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
 
                     if ( $MG_albums[$album_id]->max_filesize != 0 && filesize($srcFile) > $MG_albums[$album_id]->max_filesize) {
                         COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
-                        $statusMsg = addslashes(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
-                        DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".addslashes($session_id)."','$statusMsg')");
+                        $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
+                        DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
                         continue;
                     }
 
@@ -391,8 +391,8 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                             $filetype="application/force-download";
                     }
                     list($rc,$msg) = MG_getFile( $srcFile, $baseSrcFile, $album_id, '', '', 0, $purgefiles, $filetype,0,'','',0,0,0);
-                    $statusMsg = addslashes($baseSrcFile . " " . $msg);
-                    DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".addslashes($session_id)."','$statusMsg')");
+                    $statusMsg = DB_escapeString($baseSrcFile . " " . $msg);
+                    DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
                     MG_SortMedia( $album_id );
                     @set_time_limit($time_limit + 20);
                 }
@@ -411,8 +411,8 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
 
                 if ( $MG_albums[$album_id]->max_filesize != 0 && filesize($srcFile) > $MG_albums[$album_id]->max_filesize) {
                     COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
-                    $statusMsg = addslashes(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
-                    DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".addslashes($session_id)."','$statusMsg')");
+                    $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
+                    DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
                     continue;
                 }
                 //This will set the Content-Type to the appropriate setting for the file
@@ -451,7 +451,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     $cmtIP = $row2['data5'];
                     $cmtUid = 1;
                     if ( $row2['data1'] != '' && $row2['data1'] != 'everyone' ) {
-                        $sql = "SELECT uid FROM {$_TABLES['users']} WHERE username='" . addslashes(trim($row2['data1'])) . "'";
+                        $sql = "SELECT uid FROM {$_TABLES['users']} WHERE username='" . DB_escapeString(trim($row2['data1'])) . "'";
                         $uResult = DB_query($sql);
                         $uRows = DB_numRows($uResult);
                         if ( $uRows > 0 ) {
@@ -466,8 +466,8 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 DB_change($_TABLES['mg_media'],'media_comments', $comments, 'media_id',$new_media_id);
                 DB_query("DELETE FROM {$_TABLES['mg_session_items2']} WHERE id=" . $row['id']);
 
-                $statusMsg = addslashes($baseSrcFile . " " . $msg);
-                DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".addslashes($session_id)."','$statusMsg')");
+                $statusMsg = DB_escapeString($baseSrcFile . " " . $msg);
+                DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
                 MG_SortMedia( $album_id );
                 @set_time_limit($time_limit + 20);
                 break;
@@ -492,7 +492,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
 
                 if ( $MG_albums[$album_id]->max_filesize != 0 && filesize($srcFile) > $MG_albums[$album_id]->max_filesize) {
                     COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
-                    $statusMsg = addslashes(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
+                    $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
                     DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('$session_id','$statusMsg')");
                     continue;
                 }
@@ -518,7 +518,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 }
                 list($rc,$msg) = MG_getFile( $srcFile, $baseSrcFile, $album_id, $caption, $description, 0, $purgefiles, $filetype,0,'','',0,0,0 );
                 if ( $rc == true ) {
-                    $sql = "SELECT uid FROM {$_TABLES['users']} WHERE username='" . addslashes(trim(strtolower($uid))) . "'";
+                    $sql = "SELECT uid FROM {$_TABLES['users']} WHERE username='" . DB_escapeString(trim(strtolower($uid))) . "'";
                     $userResult = DB_query($sql);
                     $userRows = DB_numRows($userResult);
                     if ( $userRows > 0 ) {
@@ -541,7 +541,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                         $cmtIP = $row2['data5'];
                         $cmtUid = 1;
                         if ( $row2['data1'] != '' && $row2['data1'] != 'everyone' ) {
-                            $sql = "SELECT uid FROM {$_TABLES['users']} WHERE username='" . addslashes(trim(strtolower($row2['data1']))) . "'";
+                            $sql = "SELECT uid FROM {$_TABLES['users']} WHERE username='" . DB_escapeString(trim(strtolower($row2['data1']))) . "'";
                             $uResult = DB_query($sql);
                             $uRows = DB_numRows($uResult);
                             if ( $uRows > 0 ) {
@@ -557,8 +557,8 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 }
                 DB_query("DELETE FROM {$_TABLES['mg_session_items2']} WHERE id=" . $row['id']);
 
-                $statusMsg = addslashes($baseSrcFile . " " . $msg);
-                DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".addslashes($session_id)."','$statusMsg')");
+                $statusMsg = DB_escapeString($baseSrcFile . " " . $msg);
+                DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
                 MG_SortMedia( $album_id );
                 @set_time_limit($time_limit + 20);
                 break;
@@ -576,7 +576,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
 
                 if ( $MG_albums[$album_id]->max_filesize != 0 && filesize($srcFile) > $MG_albums[$album_id]->max_filesize) {
                     COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
-                    $statusMsg = addslashes(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
+                    $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
                     DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('$session_id','$statusMsg')");
                     continue;
                 }
@@ -603,8 +603,8 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 list($rc,$msg) = MG_getFile( $srcFile, $baseSrcFile, $album_id, $caption, '', 0, $purgefiles, $filetype,0,'','',0,0,0 );
                 DB_query("UPDATE {$_TABLES['mg_media']} SET media_views=" . $views . " WHERE media_id='" . $new_media_id . "'");
 
-                $statusMsg = addslashes($baseSrcFile . " " . $msg);
-                DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".addslashes($session_id)."','$statusMsg')");
+                $statusMsg = DB_escapeString($baseSrcFile . " " . $msg);
+                DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
                 MG_SortMedia( $album_id );
                 @set_time_limit($time_limit + 20);
                 break;
@@ -623,8 +623,8 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
 
                 if ( $MG_albums[$album_id]->max_filesize != 0 && filesize($srcFile) > $MG_albums[$album_id]->max_filesize) {
                     COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
-                    $statusMsg = addslashes(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
-                    DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".addslashes($session_id)."','$statusMsg')");
+                    $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
+                    DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
                     continue;
                 }
                 //This will set the Content-Type to the appropriate setting for the file
@@ -648,10 +648,10 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                         $filetype="application/force-download";
                 }
                 list($rc,$msg) = MG_getFile( $srcFile, $baseSrcFile, $album_id, $title, $caption, 0, $purgefiles, $filetype,0,'','',0,0,0 );
-                DB_query("UPDATE {$_TABLES['mg_media']} SET media_views=" . $views . " WHERE media_id='" . addslashes($new_media_id) . "'");
+                DB_query("UPDATE {$_TABLES['mg_media']} SET media_views=" . $views . " WHERE media_id='" . DB_escapeString($new_media_id) . "'");
 
-                $statusMsg = addslashes($baseSrcFile . " " . $msg);
-                DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".addslashes($session_id)."','$statusMsg')");
+                $statusMsg = DB_escapeString($baseSrcFile . " " . $msg);
+                DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
                 MG_SortMedia( $album_id );
                 @set_time_limit($time_limit + 20);
                 break;
@@ -663,7 +663,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 $album_id = $row['aid'];
                 $inm_mid  = $row['mid'];
                 $album_path = $row['data'];
-                $inmResult = DB_query("SELECT * FROM {$INM_TABLES['media']} WHERE mid='" . addslashes($inm_mid) . "'");
+                $inmResult = DB_query("SELECT * FROM {$INM_TABLES['media']} WHERE mid='" . DB_escapeString($inm_mid) . "'");
                 $inmNumRows = DB_numRows($inmResult);
                 if ( $inmNumRows > 0 ) {
                     $M = DB_fetchArray($inmResult);
@@ -679,8 +679,8 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
 
                     if ( $MG_albums[$album_id]->max_filesize != 0 && filesize($srcFile) > $MG_albums[$album_id]->max_filesize) {
                         COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
-                        $statusMsg = addslashes(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
-                        DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".addslashes($session_id)."','$statusMsg')");
+                        $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
+                        DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
                         continue;
                     }
                     //This will set the Content-Type to the appropriate setting for the file
@@ -705,10 +705,10 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     }
                     list($rc,$msg) = MG_getFile( $srcFile, $baseSrcFile, $album_id, $title, $caption, 0, $purgefiles, $filetype,0,'',$keywords,0,0,0 );
 
-                    DB_query("UPDATE {$_TABLES['mg_media']} SET media_views=" . $views . " WHERE media_id='" . addslashes($new_media_id) . "'");
+                    DB_query("UPDATE {$_TABLES['mg_media']} SET media_views=" . $views . " WHERE media_id='" . DB_escapeString($new_media_id) . "'");
 
-                    $statusMsg = addslashes($baseSrcFile . " " . $msg);
-                    DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".addslashes($session_id)."','$statusMsg')");
+                    $statusMsg = DB_escapeString($baseSrcFile . " " . $msg);
+                    DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
                     MG_SortMedia( $album_id );
                     @set_time_limit($time_limit + 20);
 
@@ -732,7 +732,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                         $new_rating = sprintf("%.2f", $rating);
                         $votes = $row['numvotes'];
                         $sql = "UPDATE {$_TABLES['mg_media']} SET media_votes = $votes, media_rating = '$rating'
-                                        WHERE media_id='" . addslashes($new_media_id) . "'";
+                                        WHERE media_id='" . DB_escapeString($new_media_id) . "'";
                         DB_query($sql);
                     }
                 }
@@ -746,7 +746,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 $gk_album_id = $row['data2'];
 
                 $album_path = $_GKCONST['full_geekage'];
-                $inmResult  = DB_query("SELECT * FROM {$_TABLES['geekary_images']} WHERE id='" . addslashes($inm_mid) . "'");
+                $inmResult  = DB_query("SELECT * FROM {$_TABLES['geekary_images']} WHERE id='" . DB_escapeString($inm_mid) . "'");
                 $inmNumRows = DB_numRows($inmResult);
                 if ( $inmNumRows > 0 ) {
                     $M = DB_fetchArray($inmResult);
@@ -760,8 +760,8 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
 
                     if ( $MG_albums[$album_id]->max_filesize != 0 && filesize($srcFile) > $MG_albums[$album_id]->max_filesize) {
                         COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
-                        $statusMsg = addslashes(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
-                        DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".addslashes($session_id)."','$statusMsg')");
+                        $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
+                        DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
                         continue;
                     }
                     //This will set the Content-Type to the appropriate setting for the file
@@ -786,10 +786,10 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     }
                     list($rc,$msg) = MG_getFile( $srcFile, $baseSrcFile, $album_id, $title, $caption, 0, $purgefiles, $filetype,0,'',$keywords,0,0,0 );
 
-                    DB_query("UPDATE {$_TABLES['mg_media']} SET media_views=" . $views . " WHERE media_id='" . addslashes($new_media_id) . "'");
+                    DB_query("UPDATE {$_TABLES['mg_media']} SET media_views=" . $views . " WHERE media_id='" . DB_escapeString($new_media_id) . "'");
 
-                    $statusMsg = addslashes($baseSrcFile . " " . $msg);
-                    DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".addslashes($session_id)."','$statusMsg')");
+                    $statusMsg = DB_escapeString($baseSrcFile . " " . $msg);
+                    DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
                     MG_SortMedia( $album_id );
                     @set_time_limit($time_limit + 20);
                 }
@@ -811,8 +811,8 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
 
                 if ( $MG_albums[$album_id]->max_filesize != 0 && filesize($srcFile) > $MG_albums[$album_id]->max_filesize) {
                     COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
-                    $statusMsg = addslashes(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
-                    DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".addslashes($session_id)."','$statusMsg')");
+                    $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
+                    DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
                     continue;
                 }
                 //This will set the Content-Type to the appropriate setting for the file
@@ -837,12 +837,12 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 }
                 list($rc,$msg) = MG_getFile( $srcFile, $baseSrcFile, $album_id, $caption, '', 0, $purgefiles, $filetype,0,'', $mid,0,0,0 );
                 $mid = $new_media_id;
-                $statusMsg = addslashes($baseSrcFile . " " . $msg);
-                DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".addslashes($session_id)."','$statusMsg')");
+                $statusMsg = DB_escapeString($baseSrcFile . " " . $msg);
+                DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
                 MG_SortMedia( $album_id );
 
                 // now update the tag in the article...
-                $sResult = DB_query("SELECT * FROM {$_TABLES['stories']} WHERE sid='" . addslashes($sid) . "'");
+                $sResult = DB_query("SELECT * FROM {$_TABLES['stories']} WHERE sid='" . DB_escapeString($sid) . "'");
                 $howmany = DB_numRows($sResult);
                 $S = DB_fetchArray($sResult);
                 $story = new Story();
@@ -880,10 +880,10 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 $intro = str_replace($right, $mg_right, $intro);
                 $body  = str_replace($right, $mg_right, $body);
 
-                DB_query("UPDATE {$_TABLES['stories']} SET introtext='" . addslashes($intro) . "', bodytext='" . addslashes($body) . "' WHERE sid='" . $sid . "'");
+                DB_query("UPDATE {$_TABLES['stories']} SET introtext='" . DB_escapeString($intro) . "', bodytext='" . DB_escapeString($body) . "' WHERE sid='" . $sid . "'");
 
                 if ( $delete == 1 ) {
-                    $sql = "DELETE FROM {$_TABLES['article_images']} WHERE ai_sid='" . addslashes($sid) . "'";
+                    $sql = "DELETE FROM {$_TABLES['article_images']} WHERE ai_sid='" . DB_escapeString($sid) . "'";
                     DB_query($sql);
                 }
 
@@ -1102,7 +1102,7 @@ function MG_saveComment ($title, $comment, $sid, $pid, $type, $postmode, $uid, $
 
     // Clean 'em up a bit!
     if ($postmode == 'html') {
-        $comment = COM_checkWords (COM_checkHTML (addslashes (COM_stripslashes ($comment))));
+        $comment = COM_checkWords (COM_checkHTML (DB_escapeString (COM_stripslashes ($comment))));
     } else {
         $comment = htmlspecialchars (COM_checkWords (COM_stripslashes ($comment)));
         $newcomment = COM_makeClickableLinks ($comment);
@@ -1133,8 +1133,8 @@ function MG_saveComment ($title, $comment, $sid, $pid, $type, $postmode, $uid, $
     }
 
     if (!empty ($title) && !empty ($comment)) {
-        $title = addslashes ($title);
-        $comment = addslashes ($comment);
+        $title = DB_escapeString ($title);
+        $comment = DB_escapeString ($comment);
 
         // Insert the comment into the comment table
         DB_query("LOCK TABLES {$_TABLES['comments']} WRITE");

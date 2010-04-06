@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2000-2010 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
 // |          Tom Willett      - twillett AT users DOT sourceforge DOT net    |
@@ -339,9 +339,9 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         $sp_title = strip_tags ($sp_title);
         $sp_label = strip_tags ($sp_label);
 
-        $sp_content = addslashes ($sp_content);
-        $sp_title = addslashes ($sp_title);
-        $sp_label = addslashes ($sp_label);
+        $sp_content = DB_escapeString ($sp_content);
+        $sp_title = DB_escapeString ($sp_title);
+        $sp_label = DB_escapeString ($sp_label);
 
         // If user does not have php edit perms, then set php flag to 0.
         if (($_SP_CONF['allow_php'] != 1) || !SEC_hasRights ('staticpages.PHP')) {
@@ -350,7 +350,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
 
         // make sure there's only one "entire page" static page per topic
         if (($sp_centerblock == 1) && ($sp_where == 0)) {
-            $sql = "UPDATE {$_TABLES['staticpage']} SET sp_centerblock = 0 WHERE sp_centerblock = 1 AND sp_where = 0 AND sp_tid = '".addslashes($sp_tid)."'";
+            $sql = "UPDATE {$_TABLES['staticpage']} SET sp_centerblock = 0 WHERE sp_centerblock = 1 AND sp_where = 0 AND sp_tid = '".DB_escapeString($sp_tid)."'";
 
             // multi-language configuration - allow one entire page
             // centerblock for all or none per language
@@ -360,7 +360,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
                 $ids = explode('_', $sp_id);
                 if (count($ids) > 1) {
                     $lang_id = array_pop($ids);
-                    $sql .= " AND sp_id LIKE '%\\_".addslashes($lang_id)."'";
+                    $sql .= " AND sp_id LIKE '%\\_".DB_escapeString($lang_id)."'";
                 }
             }
             DB_query($sql);
@@ -383,9 +383,9 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
 
         if ($delete_old_page && !empty ($sp_old_id)) {
             DB_delete ($_TABLES['staticpage'], 'sp_id', $sp_old_id);
-            DB_change($_TABLES['comments'], 'sid', addslashes($sp_id),
+            DB_change($_TABLES['comments'], 'sid', DB_escapeString($sp_id),
                       array('sid', 'type'),
-                      array(addslashes($sp_old_id), 'staticpages'));
+                      array(DB_escapeString($sp_old_id), 'staticpages'));
             PLG_itemDeleted($sp_old_id, 'staticpages');
 
         }
@@ -525,19 +525,11 @@ function service_get_staticpages($args, &$output, &$svc_msg)
         if (!empty ($perms)) {
             $perms = ' AND ' . $perms;
         }
-        $sql = array();
-        $sql['mysql'] = "SELECT sp_title,sp_content,sp_hits,sp_date,sp_format,"
+        $sql          = "SELECT sp_title,sp_content,sp_hits,sp_date,sp_format,"
                       . "commentcode,owner_id,group_id,perm_owner,perm_group,"
                       . "perm_members,perm_anon,sp_tid,sp_help,sp_php,"
                       . "sp_inblock FROM {$_TABLES['staticpage']} "
                       . "WHERE (sp_id = '$page') AND (sp_status = 1)" . $perms;
-        $sql['mssql'] = "SELECT sp_title,"
-                      . "CAST(sp_content AS text) AS sp_content,sp_hits,"
-                      . "sp_date,sp_format,commentcode,owner_id,group_id,"
-                      . "perm_owner,perm_group,perm_members,perm_anon,sp_tid,"
-                      . "sp_help,sp_php,sp_inblock "
-                      . "FROM {$_TABLES['staticpage']} WHERE (sp_id = '$page')"
-                      . $perms;
         $result = DB_query ($sql);
         $count = DB_numRows ($result);
 
@@ -561,28 +553,18 @@ function service_get_staticpages($args, &$output, &$svc_msg)
                 if ($mode !== 'autotag') {
                     $output = COM_siteHeader ('menu');
                 }
-                $output .= COM_startBlock ($LANG_LOGIN[1], '',
-                                        COM_getBlockTemplate ('_msg_block', 'header'));
-                $login = new Template ($_CONF['path_layout'] . 'submit');
-                $login->set_file (array ('login' => 'submitloginrequired.thtml'));
-                $login->set_var ('login_message', $LANG_LOGIN[2]);
-                $login->set_var ('site_url', $_CONF['site_url']);
-                $login->set_var ('lang_login', $LANG_LOGIN[3]);
-                $login->set_var ('lang_newuser', $LANG_LOGIN[4]);
-                $login->parse ('output', 'login');
-                $output .= $login->finish ($login->get_var ('output'));
-                $output .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+                $output .= SEC_loginRequiredForm();
+
                 if ($mode !== 'autotag') {
-                    $output .= COM_siteFooter (true);
+                    $output .= COM_siteFooter ();
                 }
             } else {
                 if ($mode !== 'autotag') {
                     $output = COM_siteHeader ('menu');
                 }
-                $output .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',
-                                        COM_getBlockTemplate ('_msg_block', 'header'));
+                $output .= COM_startBlock ($LANG_ACCESS['accessdenied'], '');
                 $output .= $LANG_STATIC['deny_msg'];
-                $output .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+                $output .= COM_endBlock ();
                 if ($mode !== 'autotag') {
                     $output .= COM_siteFooter (true);
                 }
@@ -629,8 +611,8 @@ function service_get_staticpages($args, &$output, &$svc_msg)
 
         $limit = " LIMIT $offset, $max_items";
         $order = " ORDER BY sp_date DESC";
-        $sql = array();
-        $sql['mysql'] = "SELECT sp_id,sp_title,sp_content,sp_hits,sp_date,sp_format,owner_id,"
+
+        $sql   = "SELECT sp_id,sp_title,sp_content,sp_hits,sp_date,sp_format,owner_id,"
                 ."group_id,perm_owner,perm_group,perm_members,perm_anon,sp_tid,sp_help,sp_php,"
                 ."sp_inblock FROM {$_TABLES['staticpage']} WHERE (sp_status = 1)" . $perms . $order . $limit;
         $result = DB_query ($sql);

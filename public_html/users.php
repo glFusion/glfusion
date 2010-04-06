@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2009-2010 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -47,7 +50,7 @@
 * glFusion common function library
 */
 require_once 'lib-common.php';
-require_once $_CONF['path_system'] . 'lib-user.php';
+USES_lib_user();
 $VERBOSE = false;
 
 /**
@@ -66,29 +69,16 @@ function userprofile($user, $msg = 0, $plugin = '')
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG04, $LANG09, $LANG28, $LANG_LOGIN;
 
     $retval = '';
-    if (empty ($_USER['username']) &&
+    if (COM_isAnonUser() &&
         (($_CONF['loginrequired'] == 1) || ($_CONF['profileloginrequired'] == 1))) {
         $retval .= COM_siteHeader ('menu', $LANG_LOGIN[1]);
-        $retval .= COM_startBlock ($LANG_LOGIN[1], '',
-                           COM_getBlockTemplate ('_msg_block', 'header'));
-        $login = new Template($_CONF['path_layout'] . 'submit');
-        $login->set_file (array ('login'=>'submitloginrequired.thtml'));
-        $login->set_var ( 'xhtml', XHTML );
-        $login->set_var ('login_message', $LANG_LOGIN[2]);
-        $login->set_var ('site_url', $_CONF['site_url']);
-        $login->set_var ('site_admin_url', $_CONF['site_admin_url']);
-        $login->set_var ('layout_url', $_CONF['layout_url']);
-        $login->set_var ('lang_login', $LANG_LOGIN[3]);
-        $login->set_var ('lang_newuser', $LANG_LOGIN[4]);
-        $login->parse ('output', 'login');
-        $retval .= $login->finish ($login->get_var('output'));
-        $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= SEC_loginRequiredForm();
         $retval .= COM_siteFooter ();
 
         return $retval;
     }
 
-    $result = DB_query ("SELECT {$_TABLES['users']}.uid,username,fullname,regdate,lastlogin,homepage,about,location,pgpkey,photo,email,status,emailfromadmin,emailfromuser,showonline FROM {$_TABLES['userinfo']},{$_TABLES['userprefs']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['userinfo']}.uid = {$_TABLES['userprefs']}.uid AND {$_TABLES['users']}.uid = ".intval($user));
+    $result = DB_query ("SELECT {$_TABLES['users']}.uid,username,fullname,regdate,lastlogin,homepage,about,location,pgpkey,photo,email,status,emailfromadmin,emailfromuser,showonline FROM {$_TABLES['userinfo']},{$_TABLES['userprefs']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['userinfo']}.uid = {$_TABLES['userprefs']}.uid AND {$_TABLES['users']}.uid = ".(int) $user);
     $nrows = DB_numRows ($result);
     if ($nrows == 0) { // no such user
         return COM_refresh ($_CONF['site_url'] . '/index.php');
@@ -99,8 +89,7 @@ function userprofile($user, $msg = 0, $plugin = '')
         COM_displayMessageAndAbort (30, '', 403, 'Forbidden');
     }
 
-    $display_name = htmlspecialchars(COM_getDisplayName($user, $A['username'],
-                                                        $A['fullname']));
+    $display_name = htmlspecialchars(COM_getDisplayName($user, $A['username'],$A['fullname']),ENT_COMPAT,COM_getEncodingt());
 
     $retval .= COM_siteHeader ('menu', $LANG04[1] . ' ' . $display_name);
     if ($msg > 0) {
@@ -115,8 +104,6 @@ function userprofile($user, $msg = 0, $plugin = '')
     $user_templates->set_file (array ('profile' => 'profile.thtml',
                                       'row'     => 'commentrow.thtml',
                                       'strow'   => 'storyrow.thtml'));
-    $user_templates->set_var ('xhtml', XHTML);
-    $user_templates->set_var ('site_url', $_CONF['site_url']);
     $user_templates->set_var ('layout_url', $_CONF['layout_url']);
     $user_templates->set_var ('start_block_userprofile',
             COM_startBlock ($LANG04[1] . ' ' . $display_name));
@@ -135,8 +122,8 @@ function userprofile($user, $msg = 0, $plugin = '')
         $username = $A['username'];
         $fullname = '';
     }
-    $username = htmlspecialchars($username);
-    $fullname = htmlspecialchars($fullname);
+    $username = htmlspecialchars($username,ENT_COMPAT,COM_getEncodingt());
+    $fullname = htmlspecialchars($fullname,ENT_COMPAT,COM_getEncodingt());
 
     if ($A['status'] == USER_ACCOUNT_DISABLED) {
         $username = sprintf ('<s title="%s">%s</s>', $LANG28[42], $username);
@@ -157,7 +144,7 @@ function userprofile($user, $msg = 0, $plugin = '')
         if ($_USER['uid'] == $A['uid']) {
             $edit_url = "{$_CONF['site_url']}/usersettings.php";
         } else {
-            $edit_url = "{$_CONF['site_admin_url']}/user.php?mode=edit&amp;uid={$A['uid']}";
+            $edit_url = "{$_CONF['site_admin_url']}/user.php?edit=x&amp;uid={$A['uid']}";
         }
 
         $edit_link_url = COM_createLink($edit_icon, $edit_url);
@@ -228,8 +215,7 @@ function userprofile($user, $msg = 0, $plugin = '')
     $user_templates->set_var ('headline_last10comments', $LANG04[10] . ' ' . $display_name);
     $user_templates->set_var ('headline_postingstats', $LANG04[83] . ' ' . $display_name);
 
-    $result = DB_query ("SELECT tid FROM {$_TABLES['topics']}"
-            . COM_getPermSQL ());
+    $result = DB_query ("SELECT tid FROM {$_TABLES['topics']}" . COM_getPermSQL ());
     $nrows = DB_numRows ($result);
     $tids = array ();
     for ($i = 0; $i < $nrows; $i++) {
@@ -240,7 +226,7 @@ function userprofile($user, $msg = 0, $plugin = '')
 
     // list of last 10 stories by this user
     if (sizeof ($tids) > 0) {
-        $sql = "SELECT sid,title,UNIX_TIMESTAMP(date) AS unixdate FROM {$_TABLES['stories']} WHERE (uid = '".intval($user)."') AND (draft_flag = 0) AND (date <= NOW()) AND (tid IN ($topics))" . COM_getPermSQL ('AND');
+        $sql = "SELECT sid,title,UNIX_TIMESTAMP(date) AS unixdate FROM {$_TABLES['stories']} WHERE (uid = '".(int) $user."') AND (draft_flag = 0) AND (date <= NOW()) AND (tid IN ($topics))" . COM_getPermSQL ('AND');
         $sql .= " ORDER BY unixdate DESC LIMIT 10";
         $result = DB_query ($sql);
         $nrows = DB_numRows ($result);
@@ -288,7 +274,7 @@ function userprofile($user, $msg = 0, $plugin = '')
     $sidList = "'$sidList'";
 
     // then, find all comments by the user in those stories
-    $sql = "SELECT sid,title,cid,UNIX_TIMESTAMP(date) AS unixdate FROM {$_TABLES['comments']} WHERE (uid = '".intval($user)."') GROUP BY sid,title,cid,UNIX_TIMESTAMP(date)";
+    $sql = "SELECT sid,title,cid,UNIX_TIMESTAMP(date) AS unixdate FROM {$_TABLES['comments']} WHERE (uid = '".(int) $user."') GROUP BY sid,title,cid,UNIX_TIMESTAMP(date)";
 
     // SQL NOTE:  Using a HAVING clause is usually faster than a where if the
     // field is part of the select
@@ -326,12 +312,12 @@ function userprofile($user, $msg = 0, $plugin = '')
 
     // posting stats for this user
     $user_templates->set_var ('lang_number_stories', $LANG04[84]);
-    $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (uid = ".intval($user).") AND (draft_flag = 0) AND (date <= NOW())" . COM_getPermSQL ('AND');
+    $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (uid = ".(int) $user.") AND (draft_flag = 0) AND (date <= NOW())" . COM_getPermSQL ('AND');
     $result = DB_query($sql);
     $N = DB_fetchArray ($result);
     $user_templates->set_var ('number_stories', COM_numberFormat ($N['count']));
     $user_templates->set_var ('lang_number_comments', $LANG04[85]);
-    $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['comments']} WHERE (uid = ".intval($user).")";
+    $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['comments']} WHERE (uid = ".(int) $user.")";
     if (!empty ($sidList)) {
         $sql .= " AND (sid in ($sidList))";
     }
@@ -387,14 +373,13 @@ function emailpassword ($username, $msg = 0)
 
     $retval = '';
 
-    $username = addslashes ($username);
+    $username = DB_escapeString ($username);
     // don't retrieve any remote users!
     $result = DB_query ("SELECT uid,email,status FROM {$_TABLES['users']} WHERE username = '$username' AND ((remoteservice is null) OR (remoteservice = ''))");
     $nrows = DB_numRows ($result);
     if ($nrows == 1) {
         $A = DB_fetchArray ($result);
-        if (($_CONF['usersubmission'] == 1) && ($A['status'] == USER_ACCOUNT_AWAITING_APPROVAL))
-        {
+        if (($_CONF['usersubmission'] == 1) && ($A['status'] == USER_ACCOUNT_AWAITING_APPROVAL)) {
             return COM_refresh ($_CONF['site_url'] . '/index.php?msg=48');
         }
 
@@ -431,7 +416,7 @@ function requestpassword ($username, $msg = 0)
     $retval = '';
 
     // no remote users!
-    $username = addslashes($username);
+    $username = DB_escapeString($username);
     $result = DB_query ("SELECT uid,email,passwd,status FROM {$_TABLES['users']} WHERE username = '$username' AND ((remoteservice IS NULL) OR (remoteservice=''))");
     $nrows = DB_numRows ($result);
     if ($nrows == 1) {
@@ -440,8 +425,7 @@ function requestpassword ($username, $msg = 0)
             return COM_refresh ($_CONF['site_url'] . '/index.php?msg=48');
         }
         $reqid = substr (md5 (uniqid (rand (), 1)), 1, 16);
-        DB_change ($_TABLES['users'], 'pwrequestid', "$reqid",
-                   'uid', intval($A['uid']));
+        DB_change ($_TABLES['users'], 'pwrequestid', "$reqid",'uid', intval($A['uid']));
 
         $mailtext = sprintf ($LANG04[88], $username);
         $mailtext .= $_CONF['site_url'] . '/users.php?mode=newpwd&uid=' . $A['uid'] . '&rid=' . $reqid . "\n\n";
@@ -499,7 +483,7 @@ function newpasswordform ($uid, $requestid)
 
     $pwform->set_var ('user_id', $uid);
     $pwform->set_var ('user_name', DB_getItem ($_TABLES['users'], 'username',
-                                               "uid = ".intval($uid)));
+                                               "uid = ".(int)$uid));
     $pwform->set_var ('request_id', $requestid);
 
     $pwform->set_var ('lang_explain', $LANG04[90]);
@@ -539,7 +523,7 @@ function createuser ($username, $email, $email_conf)
         if ($_CONF['custom_registration'] && function_exists ('CUSTOM_userForm')) {
             $retval .= CUSTOM_userForm ($msg);
         } else {
-            $retval .= newuserform ('Invalid Characters in username');
+            $retval .= newuserform ($LANG04[162]);
         }
         $retval .= COM_siteFooter();
 
@@ -564,8 +548,8 @@ function createuser ($username, $email, $email_conf)
             && (strlen ($username) <= 48)) {
 
         $ucount = DB_count ($_TABLES['users'], 'username',
-                            addslashes ($username));
-        $ecount = DB_count ($_TABLES['users'], 'email', addslashes ($email));
+                            DB_escapeString ($username));
+        $ecount = DB_count ($_TABLES['users'], 'email', DB_escapeString ($email));
 
         if ($ucount == 0 AND $ecount == 0) {
 
@@ -660,98 +644,32 @@ function createuser ($username, $email, $email_conf)
 */
 function loginform ($hide_forgotpw_link = false, $statusmode = -1)
 {
-    global $_CONF, $LANG01, $LANG04;
+    global $_CONF, $LANG04;
 
-    $retval = '';
+    $options = array(
+        'hide_forgotpw_link' => $hide_forgotpw_link,
+        'form_action'        => $_CONF['site_url'].'/users.php',
+    );
 
-    $user_templates = new Template ($_CONF['path_layout'] . 'users');
-    $user_templates->set_file('login', 'loginform.thtml');
-    $user_templates->set_var( 'xhtml', XHTML );
-    $user_templates->set_var('site_url', $_CONF['site_url']);
-    if ($statusmode == 0) {
-        $user_templates->set_var('start_block_loginagain', COM_startBlock($LANG04[114]));
-        $user_templates->set_var('lang_message', $LANG04[115]);
-    } elseif ($statusmode == 2) {
-        $user_templates->set_var('start_block_loginagain', COM_startBlock($LANG04[116]));
-        $user_templates->set_var('lang_message', $LANG04[117]);
-    } elseif ($statusmode == -1) {
-        $user_templates->set_var('start_block_loginagain', COM_startBlock($LANG04[65]));
-        $user_templates->set_var('lang_message', $LANG04[113]);
+    if ($statusmode == USER_ACCOUNT_DISABLED) {
+        $options['title']   = $LANG04[114];
+        $options['message'] = $LANG04[115];
+        $options['forgotpw_link']      = false;
+        $options['newreg_link']        = false;
+    } elseif ($statusmode == USER_ACCOUNT_AWAITING_APPROVAL) {
+        $options['title']   = $LANG04[116];
+        $options['message'] = $LANG04[117];
+        $options['forgotpw_link']      = false;
+        $options['newreg_link']        = false;
+    } elseif ($statusmode == -1) { // invalid credentials
+        $options['title']   = $LANG04[65];
+        $options['message'] = $LANG04[113];
     } else {
-        $user_templates->set_var('start_block_loginagain', COM_startBlock($LANG04[65]));
-        if ($_CONF['disable_new_user_registration']) {
-            $user_templates->set_var('lang_newreglink', '');
-        } else {
-            $user_templates->set_var('lang_newreglink', $LANG04[123]);
-        }
-        $user_templates->set_var('lang_message', $LANG04[66]);
+        $options['title']   = $LANG04[65];
+        $options['message'] = $LANG04[66];
     }
 
-    $user_templates->set_var('lang_username', $LANG04[2]);
-    $user_templates->set_var('lang_password', $LANG01[57]);
-    if ($hide_forgotpw_link) {
-        $user_templates->set_var('lang_forgetpassword', '');
-    } else {
-        $user_templates->set_var('lang_forgetpassword', $LANG04[25]);
-    }
-    $user_templates->set_var('lang_login', $LANG04[80]);
-    $user_templates->set_var('end_block', COM_endBlock());
-
-    // 3rd party remote authentification.
-    if ($_CONF['user_login_method']['3rdparty'] && !$_CONF['usersubmission']) {
-        $modules = SEC_collectRemoteAuthenticationModules();
-        if (count($modules) == 0) {
-            $user_templates->set_var('services', '');
-        } else {
-            if (!$_CONF['user_login_method']['standard'] &&
-                    (count($modules) == 1)) {
-                $select = '<input type="hidden" name="service" value="'
-                        . $modules[0] . '"' . XHTML . '>' . $modules[0];
-            } else {
-                // Build select
-                $select = '<select name="service">';
-                if ($_CONF['user_login_method']['standard']) {
-                    $select .= '<option value="">' .  $_CONF['site_name']
-                            . '</option>';
-                }
-                foreach ($modules as $service) {
-                    $select .= '<option value="' . $service . '">' . $service
-                            . '</option>';
-                }
-                $select .= '</select>';
-            }
-
-            $user_templates->set_file('services', 'services.thtml');
-            $user_templates->set_var('lang_service', $LANG04[121]);
-            $user_templates->set_var('select_service', $select);
-            $user_templates->parse('output', 'services');
-            $user_templates->set_var('services',
-                   $user_templates->finish($user_templates->get_var('output')));
-        }
-    } else {
-        $user_templates->set_var('services', '');
-    }
-
-    // OpenID remote authentification.
-    if ($_CONF['user_login_method']['openid'] && ($_CONF['usersubmission'] == 0)
-            && !$_CONF['disable_new_user_registration']) {
-        $user_templates->set_file('openid_login', '../loginform_openid.thtml');
-        $user_templates->set_var('lang_openid_login', $LANG01[128]);
-        $user_templates->set_var('input_field_size', 40);
-        $app_url = isset($_SERVER['SCRIPT_URI']) ? $_SERVER['SCRIPT_URI'] : 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
-        $user_templates->set_var('app_url', $app_url);
-        $user_templates->parse('output', 'openid_login');
-        $user_templates->set_var('openid_login',
-            $user_templates->finish($user_templates->get_var('output')));
-    } else {
-        $user_templates->set_var('openid_login', '');
-    }
-
-    $user_templates->parse('output', 'login');
-
-    $retval .= $user_templates->finish($user_templates->get_var('output'));
-
-    return $retval;
+    return SEC_loginForm($options);
 }
 
 /**
@@ -792,19 +710,17 @@ function newuserform ($msg = '')
 
     $username = '';
     if (!empty ($_POST['username'])) {
-//        $username = strip_tags($_POST['username']);
-        $username = trim ( $_POST['username'] );
-//        $username = COM_applyFilter ($_POST['username']);
+        $username = trim ( COM_stripslashes($_POST['username']) );
     }
-//print $username;
-    $user_templates->set_var ('username', htmlentities($username));
+    $user_templates->set_var ('username', htmlentities($username,ENT_COMPAT,COM_getEncodingt()));
 
     $fullname = '';
     if (!empty ($_POST['fullname'])) {
-        $fullname = COM_applyFilter ($_POST['fullname']);
+        $fullname = COM_stripslashes ($_POST['fullname']);
     }
-//print '<br/>'.$fullname;exit;
-    $user_templates->set_var ('fullname', $fullname);
+    $fullname = USER_sanitizeName($fullname);
+
+    $user_templates->set_var ('fullname', htmlentities($fullname,ENT_COMPAT,COM_getEncodingt()));
     switch ($_CONF['user_reg_fullname']) {
     case 2:
         $user_templates->set_var('require_fullname', 'true');
@@ -912,18 +828,14 @@ function displayLoginErrorAndAbort($msg, $message_title, $message_text)
         // and need to control the login process
         CUSTOM_loginErrorHandler($msg);
     } else {
+        header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden');
+        header('Status: 403 Forbidden');
         $retval = COM_siteHeader('menu', $message_title)
                 . COM_startBlock($message_title, '',
                                  COM_getBlockTemplate('_msg_block', 'header'))
                 . $message_text
                 . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
                 . COM_siteFooter();
-    /*
-     * some themes may have already called COM_siteHeader(), so we can
-     * send the 403 code.
-     */
-//        header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden');
-//        header('Status: 403 Forbidden');
         echo $retval;
     }
 
@@ -959,6 +871,15 @@ case 'logout':
     SEC_setCookie ($_CONF['cookie_name'], '', time() - 10000,
                    $_CONF['cookie_path'], $_CONF['cookiedomain'],
                    $_CONF['cookiesecure'],true);
+    if ( isset($_COOKIE['token'])) {
+        $token = COM_stripslashes($_COOKIE['token']);
+        DB_delete($_TABLES['tokens'],'token',DB_escapeString($token));
+        SEC_setCookie ('token', '', time() - 10000,
+                       $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                       $_CONF['cookiesecure'],true);
+
+    }
+    DB_delete($_TABLES['tokens'],'owner_id',(int) $_USER['uid']);
     $display = COM_refresh($_CONF['site_url'] . '/index.php?msg=8');
     break;
 
@@ -980,9 +901,13 @@ case 'profile':
     break;
 
 case 'user':
-    $username = COM_applyFilter ($_GET['username']);
-    if (!empty ($username)) {
-        $username = addslashes ($username);
+    $username = COM_stripslashes($_GET['username']);
+    if ( !USER_validateUsername($username) ) {
+        $username = '';
+    }
+//    $username = COM_applyFilter ($_GET['username']);
+    if (!empty ($username) && $username != '') {
+        $username = DB_escapeString ($username);
         $uid = DB_getItem ($_TABLES['users'], 'uid', "username = '$username'");
         if ($uid > 1) {
             $display .= userprofile ($uid);
@@ -1005,7 +930,8 @@ case 'create':
     } else {
         $email = COM_applyFilter ($_POST['email']);
         $email_conf = COM_applyFilter ($_POST['email_conf']);
-        $display .= createuser(COM_stripslashes($_POST['username']), $email, $email_conf);
+        $newusername = COM_stripslashes($_POST['username']);
+        $display .= createuser($newusername, $email, $email_conf);
     }
     break;
 
@@ -1033,7 +959,7 @@ case 'newpwd':
     if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) &&
             !empty ($reqid) && (strlen ($reqid) == 16)) {
         $uid = intval($uid);
-        $safereqid = addslashes($reqid);
+        $safereqid = DB_escapeString($reqid);
         $valid = DB_count ($_TABLES['users'], array ('uid', 'pwrequestid'),
                            array ($uid, $safereqid));
         if ($valid == 1) {
@@ -1056,24 +982,22 @@ case 'setnewpwd':
     if ( (empty ($_POST['passwd']))
             or ($_POST['passwd'] != $_POST['passwd_conf']) ) {
         $display = COM_refresh ($_CONF['site_url']
-                 . '/users.php?mode=newpwd&amp;uid=' . $_POST['uid']
-                 . '&amp;rid=' . $_POST['rid']);
+                 . '/users.php?mode=newpwd&amp;uid=' . COM_applyFilter($_POST['uid'],true)
+                 . '&amp;rid=' . COM_applyFilter($_POST['rid']));
     } else {
         $uid = COM_applyFilter ($_POST['uid'], true);
         $reqid = COM_applyFilter ($_POST['rid']);
         if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) &&
                 !empty ($reqid) && (strlen ($reqid) == 16)) {
             $uid = intval($uid);
-            $safereqid = addslashes($reqid);
+            $safereqid = DB_escapeString($reqid);
             $valid = DB_count ($_TABLES['users'], array ('uid', 'pwrequestid'),
                                array ($uid, $safereqid));
             if ($valid == 1) {
-                $passwd = SEC_encryptPassword($_POST['passwd']);
-                DB_change ($_TABLES['users'], 'passwd', addslashes($passwd),
-                           "uid", $uid);
+                $passwd = SEC_encryptPassword(COM_stripslashes($_POST['passwd']));
+                DB_change ($_TABLES['users'], 'passwd', DB_escapeString($passwd),"uid", $uid);
                 DB_delete ($_TABLES['sessions'], 'uid', $uid);
-                DB_change ($_TABLES['users'], 'pwrequestid', "NULL",
-                           'uid', $uid);
+                DB_change ($_TABLES['users'], 'pwrequestid', "NULL",'uid', $uid);
                 $display = COM_refresh ($_CONF['site_url'] . '/users.php?msg=53');
             } else { // request invalid or expired
                 $display .= COM_siteHeader ('menu', $LANG04[25]);
@@ -1102,18 +1026,17 @@ case 'emailpasswd':
                  . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
                  . COM_siteFooter ();
     } else {
-        $username = COM_applyFilter ($_POST['username']);
+        $username = COM_stripslashes ($_POST['username']);
         $email = COM_applyFilter ($_POST['email']);
         if (empty ($username) && !empty ($email)) {
             $username = DB_getItem ($_TABLES['users'], 'username',
-                                    "email = '".addslashes($email)."' AND ((remoteservice IS NULL) OR (remoteservice = ''))");
+                                    "email = '".DB_escapeString($email)."' AND ((remoteservice IS NULL) OR (remoteservice = ''))");
         }
         if (!empty ($username)) {
             $display .= requestpassword ($username, 55);
         } else {
 
-            echo COM_refresh ($_CONF['site_url']
-                                    . '/users.php?mode=getpassword');
+            echo COM_refresh ($_CONF['site_url'].'/users.php?mode=getpassword');
             exit;
         }
     }
@@ -1148,11 +1071,14 @@ default:
 
     $loginname = '';
     if (isset ($_POST['loginname'])) {
-        $loginname = COM_applyFilter ($_POST['loginname']);
+        $loginname = COM_stripslashes($_POST['loginname']);
+        if ( !USER_validateUsername($loginname) ) {
+            $loginname = '';
+        }
     }
     $passwd = '';
     if (isset ($_POST['passwd'])) {
-        $passwd = $_POST['passwd'];
+        $passwd = COM_stripslashes($_POST['passwd']);
     }
     $service = '';
     if (isset ($_POST['service'])) {
@@ -1249,61 +1175,7 @@ default:
     }
 
     if ($status == USER_ACCOUNT_ACTIVE) { // logged in AOK.
-        COM_resetSpeedLimit('login');
-        DB_change($_TABLES['users'],'pwrequestid',"NULL",'uid',intval($uid));
-        $userdata = SESS_getUserDataFromId($uid);
-        $_USER = $userdata;
-        $sessid = SESS_newSession($_USER['uid'], $_SERVER['REMOTE_ADDR'], $_CONF['session_cookie_timeout'], $_CONF['cookie_ip']);
-        SESS_setSessionCookie($sessid, $_CONF['session_cookie_timeout'], $_CONF['cookie_session'], $_CONF['cookie_path'], $_CONF['cookiedomain'], $_CONF['cookiesecure']);
-        PLG_loginUser ($_USER['uid']);
-
-        // Now that we handled session cookies, handle longterm cookie
-        if (!isset($_COOKIE[$_CONF['cookie_name']]) || !isset($_COOKIE['password'])) {
-            // Either their cookie expired or they are new
-            $cooktime = COM_getUserCookieTimeout();
-            if ($VERBOSE) {
-                COM_errorLog("Trying to set permanent cookie with time of $cooktime",1);
-            }
-            if ($cooktime > 0) {
-                // They want their cookie to persist for some amount of time so set it now
-                if ($VERBOSE) {
-                    COM_errorLog('Trying to set permanent cookie',1);
-                }
-                SEC_setCookie ($_CONF['cookie_name'], $_USER['uid'],
-                               time() + $cooktime, $_CONF['cookie_path'],
-                               $_CONF['cookiedomain'], $_CONF['cookiesecure'],true);
-                SEC_setCookie ($_CONF['cookie_password'],
-                               SEC_encryptPassword($passwd), time() + $cooktime,
-                               $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                               $_CONF['cookiesecure'],true);
-                DB_query("UPDATE {$_TABLES['users']} set remote_ip='".addslashes($_SERVER['REMOTE_ADDR'])."' WHERE uid=".$_USER['uid'],1);
-            }
-        } else {
-            $userid = $_COOKIE[$_CONF['cookie_name']];
-            if (empty ($userid) || ($userid == 'deleted')) {
-                unset ($userid);
-            } else {
-                $userid = COM_applyFilter ($userid, true);
-                if ($userid > 1) {
-                    if ($VERBOSE) {
-                        COM_errorLog ('NOW trying to set permanent cookie',1);
-                        COM_errorLog ('Got '.$userid.' from perm cookie in users.php',1);
-                    }
-                    // Create new session
-                    $userdata = SESS_getUserDataFromId ($userid);
-                    $_USER = $userdata;
-                    if ($VERBOSE) {
-                        COM_errorLog ('Got '.$_USER['username'].' for the username in user.php',1);
-                    }
-                }
-            }
-        }
-
-        // Now that we have users data see if their theme cookie is set.
-        // If not set it
-        SEC_setcookie ($_CONF['cookie_theme'], $_USER['theme'], time() + 31536000,
-                       $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                       $_CONF['cookiesecure'],true);
+        SESS_completeLogin($uid);
 
         if (!empty($_SERVER['HTTP_REFERER'])
                 && (strstr($_SERVER['HTTP_REFERER'], '/users.php') === false)

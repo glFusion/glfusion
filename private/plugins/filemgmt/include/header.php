@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Header / Footer                                                          |
 // +--------------------------------------------------------------------------+
-// | $Id:: header.php 3155 2008-09-16 02:13:18Z mevans0263                   $|
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
@@ -52,7 +52,7 @@ if (!in_array('filemgmt', $_PLUGINS)) {
 $FilemgmtUser  = false;
 $FilemgmtAdmin = false;
 
-if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
+if ( (COM_isAnonUser()) && $mydownloads_publicpriv != 1 )  {
     $FilemgmtUser = false;
 } else {
     $FilemgmtUser = true;
@@ -67,17 +67,9 @@ if (isset($_USER['uid'])) {
 }
 
 if ((!$FilemgmtUser) && (!$FilemgmtAdmin)) {
-    echo COM_refresh($_CONF['site_url'].'/users.php?mode=login');
-    exit;
-    $display .= COM_siteHeader('menu');
-    $display .= COM_startBlock(_GL_ERRORNOACCESS);
-    $display .= _MD_USER." ".$_USER['username']. " " ._GL_NOUSERACCESS;
-    $display .= COM_endBlock();
-    $display .= COM_siteFooter();
-    if (!isset($_USER['username'])) {
-        $_USER['username'] = 'anonymous';
-    }
-    COM_errorLog("UID:$uid ({$_USER['username']}), Remote address is: {$_SERVER['REMOTE_ADDR']} " . _GL_NOUSERACCESS,1);
+    $display = FM_siteHeader();
+    $display .= SEC_loginRequiredForm();
+    $display .= FM_siteFooter();
     echo $display;
     exit;
 }

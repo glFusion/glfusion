@@ -60,22 +60,12 @@ function polllist ()
 
     $retval = '';
 
-    if (empty ($_USER['username']) && (($_CONF['loginrequired'] == 1) ||
+    if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
             ($_PO_CONF['pollsloginrequired'] == 1))) {
-        $retval = COM_startBlock ($LANG_LOGIN[1], '',
-                          COM_getBlockTemplate ('_msg_block', 'header'));
-        $login = new Template ($_CONF['path_layout'] . 'submit');
-        $login->set_file (array ('login' => 'submitloginrequired.thtml'));
-        $login->set_var ( 'xhtml', XHTML );
-        $login->set_var ('login_message', $LANG_LOGIN[2]);
-        $login->set_var ('site_url', $_CONF['site_url']);
-        $login->set_var ('lang_login', $LANG_LOGIN[3]);
-        $login->set_var ('lang_newuser', $LANG_LOGIN[4]);
-        $login->parse ('output', 'login');
-        $retval .= $login->finish ($login->get_var('output'));
-        $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= SEC_loginRequiredForm();
     } else {
-        require_once( $_CONF['path_system'] . 'lib-admin.php' );
+        USES_lib_admin();
+
         $header_arr = array(    // display 'text' and use table field 'field'
                         array('text' => $LANG25[9], 'field' => 'topic', 'sort' => true),
                         array('text' => $LANG25[20], 'field' => 'voters', 'sort' => true),
@@ -150,7 +140,7 @@ if (isset($_REQUEST['msg'])) {
 
 if (isset($pid)) {
     $questions_sql = "SELECT question,qid FROM {$_TABLES['pollquestions']} "
-    . "WHERE pid='".addslashes($pid)."' ORDER BY qid";
+    . "WHERE pid='".DB_escapeString($pid)."' ORDER BY qid";
     $questions = DB_query($questions_sql);
     $nquestions = DB_numRows($questions);
 }
@@ -175,10 +165,10 @@ if (empty($pid)) {
                 $LANG_POLLS['not_saved'], '',
                 COM_getBlockTemplate ('_msg_block', 'header'))
             . $LANG_POLLS['answer_all'] . ' "'
-            . DB_getItem ($_TABLES['polltopics'], 'topic', "pid = '".addslashes($pid)."'") . '"'
+            . DB_getItem ($_TABLES['polltopics'], 'topic', "pid = '".DB_escapeString($pid)."'") . '"'
             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     }
-    if (DB_getItem($_TABLES['polltopics'], 'is_open', "pid = '".addslashes($pid)."'") != 1) {
+    if (DB_getItem($_TABLES['polltopics'], 'is_open', "pid = '".DB_escapeString($pid)."'") != 1) {
         $aid = -1; // poll closed - show result
     }
     if (!isset ($_COOKIE['poll-'.$pid])
@@ -190,7 +180,7 @@ if (empty($pid)) {
         $display .= POLLS_pollResults ($pid, 400, $order, $mode);
     }
 } else {
-    $poll_topic = DB_query ("SELECT topic FROM {$_TABLES['polltopics']} WHERE pid='".addslashes($pid)."'" . COM_getPermSql ('AND'));
+    $poll_topic = DB_query ("SELECT topic FROM {$_TABLES['polltopics']} WHERE pid='".DB_escapeString($pid)."'" . COM_getPermSql ('AND'));
     $Q = DB_fetchArray ($poll_topic);
     if (empty ($Q['topic'])) {
         $display .= POLLS_siteHeader ($LANG_POLLS['pollstitle'])

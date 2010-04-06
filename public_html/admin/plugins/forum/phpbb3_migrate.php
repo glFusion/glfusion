@@ -102,16 +102,16 @@ function phpbb3_migrateForum( $forum_id, $glfusion_forum_id ) {
             list ($post_id,$memberid,$membername,$post_time,$membername,$ip,$subject,$message,$bbcode_uid) = @mysql_fetch_array($parent_post);
             $topicsImported++;
             // Check to see if the user exists in the glFusion user table
-            $glf_user_id = DB_getItem($_TABLES['users'],'uid','username="'.addslashes($membername).'"');
+            $glf_user_id = DB_getItem($_TABLES['users'],'uid','username="'.DB_escapeString($membername).'"');
             if ( $glf_user_id < 2 ) {
                 $glf_user_id = 1;
             }
 
             $message = _convertPost( $message, $bbcode_uid);
 
-            $subject = addslashes($subject);
-            $message = addslashes($message);
-            $membername = addslashes($membername);
+            $subject = DB_escapeString($subject);
+            $message = DB_escapeString($message);
+            $membername = DB_escapeString($membername);
             if ( $topic_type > 0 ) {
                 $sticky = 1;
             } else {
@@ -136,16 +136,16 @@ function phpbb3_migrateForum( $forum_id, $glfusion_forum_id ) {
             while (list ($post_id,$memberid,$membername,$post_time,$membername,$ip,$subject,$message,$bbcode_uid) = @mysql_fetch_array($posts) )  {
                 $topicsImported++;
                 // Check to see if the user exists in the glFusion user table
-                $glf_user_id = DB_getItem($_TABLES['users'],'uid','username="'.addslashes($membername).'"');
+                $glf_user_id = DB_getItem($_TABLES['users'],'uid','username="'.DB_escapeString($membername).'"');
                 if ( $glf_user_id < 2 ) {
                     $glf_user_id = 1;
                 }
 
                 $message = _convertPost( $message, $bbcode_uid);
 
-                $subject = addslashes($subject);
-                $message = addslashes($message);
-                $membername = addslashes($membername);
+                $subject = DB_escapeString($subject);
+                $message = DB_escapeString($message);
+                $membername = DB_escapeString($membername);
 
                 $sql  = "INSERT INTO {$_TABLES['gf_topic']} (forum,pid,uid,name,date,subject,comment,ip,views,replies,mood) ";
                 $sql .= "VALUES ('$glfusion_forum_id','$glfusion_pid','$glf_user_id','$membername','$post_time','$subject','$message','$ip','$views','$replies','')";
@@ -265,7 +265,7 @@ function phpbb3_import( ) {
         }
         $categoriesImported++;
         $order+=10;
-        $name = addslashes($name);
+        $name = DB_escapeString($name);
         if (!mysql_query("INSERT INTO {$_TABLES['gf_categories']} (cat_name,cat_dscp,cat_order) VALUES ('$name','','$order')",$DB_glFusion)) {
             die('SQL Error:<br />' . mysql_error($DB_glFusion) );
         }
@@ -281,8 +281,8 @@ function phpbb3_import( ) {
             }
             $forumsImported++;
             $forum_order+=10;
-            $forum_name = addslashes($forum_name);
-            $forum_desc = addslashes($forum_desc);
+            $forum_name = DB_escapeString($forum_name);
+            $forum_desc = DB_escapeString($forum_desc);
             if (!mysql_query("INSERT INTO {$_TABLES['gf_forums']} (forum_cat,forum_name,forum_dscp,forum_order) VALUES ('$glFusion_Category_ID','$forum_name','$forum_desc','$forum_order')",$DB_glFusion) ) {
                 die('SQL Error:<br />' . mysql_error($DB_glFusion) );
             }
@@ -526,8 +526,8 @@ function phpbb3_migrateUsers() {
 
     $phpbb3_users_result = mysql_query("SELECT user_id,username_clean,user_password,user_email,user_regdate,user_lastvisit,user_sig,user_website,user_sig_bbcode_uid FROM {$_TABLES['phpbb_users']} WHERE user_email <> ''", $DB_phpBB);
     while (list($uid,$membername,$passwd, $email,$dateRegistered,$lastvisit,$signature,$website,$sig_bbcode_uid) = mysql_fetch_array($phpbb3_users_result) )   {
-        $username  = addslashes(trim($membername));
-        $emailaddr = addslashes(trim($email));
+        $username  = DB_escapeString(trim($membername));
+        $emailaddr = DB_escapeString(trim($email));
         if ($emailaddr != '' /*&& COM_isEmail ($email)*/) {
             $user_count  = DB_count ($_TABLES['users'], 'username', $username);
             $email_count = DB_count ($_TABLES['users'], 'email', $emailaddr);
@@ -535,7 +535,7 @@ function phpbb3_migrateUsers() {
                 $regdate = strftime('%Y-%m-%d %H:%M:%S',$dateRegistered);
 
                 // insert new user record into the appropriate tables
-                if ( !mysql_query("INSERT INTO {$_TABLES['users']} (username,passwd,email,regdate,sig,homepage,status) VALUES ('$username','$passwd','$emailaddr','$regdate','','".addslashes($website)."',3)", $DB_glFusion) ) {
+                if ( !mysql_query("INSERT INTO {$_TABLES['users']} (username,passwd,email,regdate,sig,homepage,status) VALUES ('$username','$passwd','$emailaddr','$regdate','','".DB_escapeString($website)."',3)", $DB_glFusion) ) {
                     die('SQL Error:<br />' . mysql_error($DB_glFusion) );
                 }
                 $uid_result = mysql_query("SELECT uid FROM {$_TABLES['users']} WHERE username = '{$username}'",$DB_glFusion);
@@ -555,7 +555,7 @@ function phpbb3_migrateUsers() {
 
                 $signature = _convertPost($signature, $sig_bbcode_uid);
 
-                $sql = "INSERT INTO {$_TABLES['gf_userinfo']} (uid,rating,signature) VALUES ('".$uid."',0,'".addslashes($signature)."')";
+                $sql = "INSERT INTO {$_TABLES['gf_userinfo']} (uid,rating,signature) VALUES ('".$uid."',0,'".DB_escapeString($signature)."')";
                 mysql_query($sql,$DB_glFusion);
 
                 $usersImported++;

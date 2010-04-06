@@ -60,6 +60,7 @@ function FILECHECK_timer( $action='' )
 {
     static $start;
     static $run = false;
+USES_lib_admin();
 
     $retval = 0;
     switch ($action) {

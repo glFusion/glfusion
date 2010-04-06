@@ -251,7 +251,7 @@ function DIR_displayMonth ($topic, $year, $month, $main = false)
 
     $sql = "SELECT sid,title,UNIX_TIMESTAMP(date) AS day,DATE_FORMAT(date, '%e') AS mday FROM {$_TABLES['stories']} WHERE (date >= '$start') AND (date <= '$end') AND (draft_flag = 0) AND (date <= NOW())";
     if ($topic != 'all') {
-        $sql .= " AND (tid = '".addslashes($topic)."')";
+        $sql .= " AND (tid = '".DB_escapeString($topic)."')";
     }
     $sql .= COM_getTopicSql ('AND') . COM_getPermSql ('AND')
          . COM_getLangSQL ('sid', 'AND') . " ORDER BY date ASC";
@@ -329,7 +329,7 @@ function DIR_displayYear ($topic, $year, $main = false)
     $monthsql['mysql'] = "SELECT DISTINCT MONTH(date) AS month,COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (date >= '$start') AND (date <= '$end') AND (draft_flag = 0) AND (date <= NOW())";
     $monthsql['mssql'] = "SELECT MONTH(date) AS month,COUNT(sid) AS count FROM {$_TABLES['stories']} WHERE (date >= '$start') AND (date <= '$end') AND (draft_flag = 0) AND (date <= NOW())";
     if ($topic != 'all') {
-        $monthsql['mysql'] .= " AND (tid = '".addslashes($topic)."')";
+        $monthsql['mysql'] .= " AND (tid = '".DB_escapeString($topic)."')";
         $monthsql['mssql'] .= " AND (tid = '$topic')";
     }
     $monthsql['mysql'] .= COM_getTopicSql ('AND') . COM_getPermSql ('AND')
@@ -491,7 +491,7 @@ if (($month < 1) || ($month > 12)) {
 $topicName = '';
 if ($topic != 'all') {
     $topicName = DB_getItem($_TABLES['topics'], 'topic',
-                            "tid = '" . addslashes($topic) . "'");
+                            "tid = '" . DB_escapeString($topic) . "'");
 }
 if (($year != 0) && ($month != 0)) {
     $title = sprintf ($LANG_DIR['title_month_year'],

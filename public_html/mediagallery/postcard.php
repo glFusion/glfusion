@@ -37,20 +37,9 @@ if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
     exit;
 }
-
-if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $_MG_CONF['loginrequired'] == 1 )  {
+if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
     $display = MG_siteHeader();
-    $display .= COM_startBlock ($LANG_LOGIN[1], '',
-              COM_getBlockTemplate ('_msg_block', 'header'));
-    $login = new Template($_CONF['path_layout'] . 'submit');
-    $login->set_file (array ('login'=>'submitloginrequired.thtml'));
-    $login->set_var ('login_message', $LANG_LOGIN[2]);
-    $login->set_var ('site_url', $_CONF['site_url']);
-    $login->set_var ('lang_login', $LANG_LOGIN[3]);
-    $login->set_var ('lang_newuser', $LANG_LOGIN[4]);
-    $login->parse ('output', 'login');
-    $display .= $login->finish ($login->get_var('output'));
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= SEC_loginRequiredForm();
     $display .= COM_siteFooter();
     echo $display;
     exit;
@@ -87,7 +76,7 @@ function MG_previewPostCard() {
 
     $retval = '';
 
-    $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . addslashes($mid) . '"');
+    $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_escapeString($mid) . '"');
 
     if ( $MG_albums[$aid]->access == 0 || $MG_albums[$aid]->enable_postcard == 0 || ($_USER['uid'] < 2 && $MG_albums[$aid]->enable_postcard != 2)) {
         $retval  = MG_siteHeader();
@@ -100,7 +89,7 @@ function MG_previewPostCard() {
     }
 
     $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma LEFT JOIN " . $_TABLES['mg_media'] . " as m " .
-            " ON ma.media_id=m.media_id WHERE m.media_id='" . addslashes($mid) . "'";
+            " ON ma.media_id=m.media_id WHERE m.media_id='" . DB_escapeString($mid) . "'";
     $result = DB_query( $sql );
     $nRows = DB_numRows( $result );
     if ( $nRows < 1 ) {
@@ -198,7 +187,7 @@ function MG_editPostCard( $mode, $mid, $msg='' ) {
         $fromemail  = $_USER['email'];
     }
 
-    $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . addslashes($mid) . '"');
+    $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_escapeString($mid) . '"');
     if ( $MG_albums[$aid]->access == 0 || $MG_albums[$aid]->enable_postcard == 0 || ($_USER['uid'] < 2 && $MG_albums[$aid]->enable_postcard != 2)) {
         $retval = MG_siteHeader();
         $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
@@ -210,7 +199,7 @@ function MG_editPostCard( $mode, $mid, $msg='' ) {
     }
 
     $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma LEFT JOIN " . $_TABLES['mg_media'] . " as m " .
-            " ON ma.media_id=m.media_id WHERE m.media_id='" . addslashes($mid) . "'";
+            " ON ma.media_id=m.media_id WHERE m.media_id='" . DB_escapeString($mid) . "'";
     $result = DB_query( $sql );
     $nRows = DB_numRows( $result );
     if ( $nRows < 1 ) {
@@ -313,7 +302,7 @@ function MG_sendPostCard() {
 
     $retval = '';
 
-    $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . addslashes($mid) . '"');
+    $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_escapeString($mid) . '"');
 
     if ( $MG_albums[$aid]->access == 0 || $MG_albums[$aid]->enable_postcard == 0 || ( $_USER['uid'] < 2 && $MG_albums[$aid]->enable_postcard != 2)) {
         $retval = MG_siteHeader();
@@ -326,7 +315,7 @@ function MG_sendPostCard() {
     }
 
     $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma LEFT JOIN " . $_TABLES['mg_media'] . " as m " .
-            " ON ma.media_id=m.media_id WHERE m.media_id='" . addslashes($mid) . "'";
+            " ON ma.media_id=m.media_id WHERE m.media_id='" . DB_escapeString($mid) . "'";
     $result = DB_query( $sql );
     $nRows = DB_numRows( $result );
     if ( $nRows < 1 ) {
@@ -346,8 +335,8 @@ function MG_sendPostCard() {
 
     // save this one in the database
 
-    $newsubject    = addslashes($subject);
-    $newmessage    = addslashes($message);
+    $newsubject    = DB_escapeString($subject);
+    $newmessage    = DB_escapeString($message);
     $pcId       = COM_makesid();
     $pc_time    = time();
     if ($_USER['uid'] < 2 ) {
@@ -356,7 +345,7 @@ function MG_sendPostCard() {
         $uid        = intval($_USER['uid']);
     }
 
-    $sql = "INSERT INTO {$_TABLES['mg_postcard']} (pc_id,mid,to_name,to_email,from_name,from_email,subject,message,pc_time,uid) VALUES ('$pcId','".addslashes($mid)."','".addslashes($toname)."','".addslashes($toemail)."','".addslashes($fromname)."','".addslashes($fromemail)."','$newsubject','$newmessage',$pc_time,$uid)";
+    $sql = "INSERT INTO {$_TABLES['mg_postcard']} (pc_id,mid,to_name,to_email,from_name,from_email,subject,message,pc_time,uid) VALUES ('$pcId','".DB_escapeString($mid)."','".DB_escapeString($toname)."','".DB_escapeString($toemail)."','".DB_escapeString($fromname)."','".DB_escapeString($fromemail)."','$newsubject','$newmessage',$pc_time,$uid)";
     $result = DB_query($sql);
     if ( DB_error() ) {
         COM_errorLog("Media Gallery: Error saving postcard");

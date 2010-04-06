@@ -79,11 +79,11 @@ class mbElement {
     function saveElement( ) {
         global $_TABLES, $stMenu;
 
-        $this->label            = addslashes($this->label);
-        $this->url              = addslashes($this->url);
+        $this->label            = DB_escapeString($this->label);
+        $this->url              = DB_escapeString($this->url);
 
         $sqlFieldList  = 'id,pid,menu_id,element_label,element_type,element_subtype,element_order,element_active,element_url,element_target,group_id';
-        $sqlDataValues = "$this->id,$this->pid,'".addslashes($this->menu_id)."','$this->label',$this->type,'$this->subtype',$this->order,$this->active,'$this->url','$this->target',$this->group_id";
+        $sqlDataValues = "$this->id,$this->pid,'".DB_escapeString($this->menu_id)."','$this->label',$this->type,'$this->subtype',$this->order,$this->active,'$this->url','$this->target',$this->group_id";
         DB_save($_TABLES['st_menu_elements'], $sqlFieldList, $sqlDataValues);
     }
 

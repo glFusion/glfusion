@@ -332,7 +332,7 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
         IO_redirect($redirectURL);
     }
 
-    $sql = "SELECT uid,title,introtext,bodytext,commentcode,UNIX_TIMESTAMP(date) AS day,postmode FROM {$_TABLES['stories']} WHERE sid = '".addslashes($sid)."'" . COM_getTopicSql('AND') . COM_getPermSql('AND');
+    $sql = "SELECT uid,title,introtext,bodytext,commentcode,UNIX_TIMESTAMP(date) AS day,postmode FROM {$_TABLES['stories']} WHERE sid = '".DB_escapeString($sid)."'" . COM_getTopicSql('AND') . COM_getPermSql('AND');
     $result = DB_query($sql);
     if (DB_numRows($result) == 0) {
         IO_redirect($_CONF['site_url'] . '/index.php');
@@ -406,7 +406,7 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
         }
     } else {
         // Increment numemails counter for story
-        DB_query ("UPDATE {$_TABLES['stories']} SET numemails = numemails + 1 WHERE sid = '".addslashes($sid)."'");
+        DB_query ("UPDATE {$_TABLES['stories']} SET numemails = numemails + 1 WHERE sid = '".DB_escapeString($sid)."'");
 
         if ($_CONF['url_rewrite']) {
             $retval = COM_refresh($storyurl . '?msg=26');
@@ -436,7 +436,7 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
         IO_displayLoginRequired();
     }
 
-    $result = DB_query("SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE sid = '".addslashes($sid)."'" . COM_getTopicSql('AND') . COM_getPermSql('AND'));
+    $result = DB_query("SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE sid = '".DB_escapeString($sid)."'" . COM_getTopicSql('AND') . COM_getPermSql('AND'));
     $A = DB_fetchArray($result);
     if ($A['count'] == 0) {
         IO_redirect($_CONF['site_url'] . '/index.php');

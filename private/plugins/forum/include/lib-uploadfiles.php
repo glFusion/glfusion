@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -52,9 +52,13 @@ function gf_check4files($id,$tempfile=false) {
         $chk_usefilemgmt = 'chk_usefilemgmt'.$z;
         $filemgmtcat  = 'filemgmtcat' . $z;
         $filemgmt_desc = 'filemgmt_desc' . $z;
-        $uploadfile = $_FILES[$varName];
+        if ( isset($_FILES[$varName]) && is_array($_FILES[$varName]) ) {
+            $uploadfile = $_FILES[$varName];
+        } else {
+            $uploadfile['name'] = '';
+        }
         if ($uploadfile['name'] != '' ) {
-            if ($_POST[$chk_usefilemgmt] == 1) {
+            if (isset($_POST[$chk_usefilemgmt]) && $_POST[$chk_usefilemgmt] == 1) {
                 $filename = $uploadfile['name'];
                 $pos = strrpos($uploadfile['name'],'.') + 1;
                 $ext = strtolower(substr($uploadfile['name'], $pos));
@@ -64,9 +68,9 @@ function gf_check4files($id,$tempfile=false) {
                 $ext = strtolower(substr($uploadfile['name'], $pos));
                 $filename = "{$uploadfilename}.{$ext}";
             }
-
-            if ( gf_uploadfile($filename,$uploadfile,$CONF_FORUM['allowablefiletypes'],$_POST[$chk_usefilemgmt]) ) {
-                if (array_key_exists($uploadfile['type'],$CONF_FORUM['inlineimageypes']) AND function_exists('IMG_resizeImage')) {
+            $set_chk_usefilemgmt = (isset($_POST[$chk_usefilemgmt]) ? (int) $_POST[$chk_usefilemgmt] : 0);
+            if ( gf_uploadfile($filename,$uploadfile,$CONF_FORUM['allowablefiletypes'],$set_chk_usefilemgmt) ) {
+                if (array_key_exists($uploadfile['type'],$CONF_FORUM['inlineimageypes'])) {
                     if ($_POST[$chk_usefilemgmt] == 1) {
                         $srcImage = "{$filemgmt_FileStore}{$filename}";
                         $destImage = "{$CONF_FORUM['uploadpath']}/tn/{$filename}";
@@ -84,19 +88,19 @@ function gf_check4files($id,$tempfile=false) {
                 } else {
                     $temp = 0;
                 }
-                if ($_POST[$chk_usefilemgmt] == 1) {
+                if (isset($_POST[$chk_usefilemgmt]) && $_POST[$chk_usefilemgmt] == 1) {
                     $cid = COM_applyFilter($_POST[$filemgmtcat],true);
                     $sql = "INSERT INTO {$_FM_TABLES['filemgmt_filedetail']} (cid, title, url, size, submitter, status,date ) ";
-                    $sql .= "VALUES ('".addslashes($cid)."', '".addslashes($realfilename)."', '".addslashes($realfilename)."', '".addslashes($uploadfile['size'])."', '{$_USER['uid']}', 1, UNIX_TIMESTAMP())";
+                    $sql .= "VALUES ('".DB_escapeString($cid)."', '".DB_escapeString($realfilename)."', '".DB_escapeString($realfilename)."', '".DB_escapeString($uploadfile['size'])."', '{$_USER['uid']}', 1, UNIX_TIMESTAMP())";
                     DB_query($sql);
                     $newid = DB_insertID();
                     DB_query("INSERT INTO {$_TABLES['gf_attachments']} (topic_id,repository_id,filename,tempfile)
-                        VALUES ('".addslashes($id)."',$newid,'".addslashes($filename)."',$temp)");
+                        VALUES ('".DB_escapeString($id)."',$newid,'".DB_escapeString($filename)."',$temp)");
                     $description = glfPrepareForDB($_POST[$filemgmt_desc]);
                     DB_query("INSERT INTO {$_FM_TABLES['filemgmt_filedesc']} (lid, description) VALUES ($newid, '$description')");
                 } else {
                     DB_query("INSERT INTO {$_TABLES['gf_attachments']} (topic_id,filename,tempfile)
-                        VALUES ('".addslashes($id)."','".addslashes($filename)."',$temp)");
+                        VALUES ('".DB_escapeString($id)."','".DB_escapeString($filename)."',$temp)");
                 }
 
             } else {
@@ -107,13 +111,11 @@ function gf_check4files($id,$tempfile=false) {
         }
     }
 
-    if (!$tempfile AND $_POST['uniqueid'] > 0 AND DB_COUNT($_TABLES['gf_topic'],'id',intval($id))) {
+    if (!$tempfile AND isset($_POST['uniqueid']) AND $_POST['uniqueid'] > 0 AND DB_COUNT($_TABLES['gf_topic'],'id',intval($id))) {
         DB_query("UPDATE {$_TABLES['gf_attachments']} SET topic_id=$id, tempfile=0 WHERE topic_id=".intval($_POST['uniqueid']));
     }
 
     return $retval;
-//    return $filelinks;
-
 }
 
 
@@ -169,5 +171,23 @@ function gf_uploadfile($filename,&$upload_file,$allowablefiletypes,$use_filemgmt
         return false;
     }
     return false;
+}
+
+function gf_FileCleanup($uniqueid)
+{
+    global $_TABLES,$CONF_FORUM,$filemgmt_FileStore;
+
+    $sql = "SELECT * FROM {$_TABLES['gf_attachments']} WHERE tempfile=1 AND topic_id=".(int)$uniqueid;
+    $result = DB_query($sql);
+    while ($F = DB_fetchArray($result) ) {
+        $filedata = explode(':', $F['filename']);
+        $filename = $filedata[0];
+        $realname = $filedata[1];
+        $filepath = "{$CONF_FORUM['uploadpath']}/$filename";
+        $tnpath   = $CONF_FORUM['uploadpath'].'/tn/'.$filename;
+        @unlink($filepath);
+        @unlink($tnpath);
+        DB_delete($_TABLES['gf_attachments'],'id',$F['id']);
+    }
 }
 ?>

@@ -86,7 +86,7 @@ function processOldPlugin( $tmpDir )
         return _pi_errorBox($LANG32[40]);
     }
 
-    $result = DB_query("SELECT * FROM {$_TABLES['plugins']} WHERE pi_name='".addslashes($pi_name)."' LIMIT 1");
+    $result = DB_query("SELECT * FROM {$_TABLES['plugins']} WHERE pi_name='".DB_escapeString($pi_name)."' LIMIT 1");
     if ( DB_numRows($result) > 0 ) {
         $P = DB_fetchArray($result);
 
@@ -393,7 +393,7 @@ function processPluginUpload()
     // if it does, check that this is an upgrade
     // if not, error
     // else validate we really want to upgrade
-    $result = DB_query("SELECT * FROM {$_TABLES['plugins']} WHERE pi_name='".addslashes($pluginData['id'])."'");
+    $result = DB_query("SELECT * FROM {$_TABLES['plugins']} WHERE pi_name='".DB_escapeString($pluginData['id'])."'");
     if ( DB_numRows($result) > 0 ) {
         $P = DB_fetchArray($result);
         if ($P['pi_version'] == $pluginData['version'] ) {

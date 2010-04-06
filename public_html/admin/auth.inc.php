@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2010 by the following authors:                             |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -38,97 +41,231 @@ if (!defined ('GVERSION')) {
     die('This file can not be used on its own.');
 }
 
-// MAIN
-COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
-if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
-    COM_displayMessageAndAbort($LANG04[112], '', 403, 'Access denied');
+USES_lib_user();
+
+/* --- Main Processing Loop --- */
+
+$display    = '';
+$uid        = '';
+$status     = '';
+$token      = '';
+$message    = '';
+
+if ( !isset($_SYSTEM['admin_session']) ) {
+    $_SYSTEM['admin_session'] = 1200;
 }
 
-$uid = '';
-$status = '';
+// determine the destination of this request
+$destination = COM_getCurrentURL();
 
-if (!empty($_POST['loginname']) && !empty($_POST['passwd'])) {
-    if ($_CONF['user_login_method']['standard']) {
-        $status = SEC_authenticate(COM_applyFilter($_POST['loginname']),
-                                   $_POST['passwd'], $uid);
-    } else {
-        $status = '';
-    }
+// validate the destination is not blank and is part of our site...
+if ( $destination == '' ) {
+    $destination = $_CONF['site_admin_url'] . '/index.php';
+}
+if ( substr($destination, 0,strlen($_CONF['site_url'])) != $_CONF['site_url']) {
+    $destination = $_CONF['site_admin_url'] . '/index.php';
+}
+
+if ( isset($_USER['uid']) ) {
+    $currentUID = $_USER['uid'];
 } else {
-    $status = '';
+    $currentUID = 1;
 }
-$display = '';
+
+// is user sending credentials?
+if ( isset($_POST['loginname']) && !empty($_POST['loginname']) && isset($_POST['passwd']) && !empty($_POST['passwd']) ) {
+    COM_updateSpeedlimit('login');
+    $loginname = COM_stripslashes($_POST['loginname']);
+    if ( !USER_validateUsername($loginname) ) {
+        $status = '';
+        $message = $LANG20[2];
+    } else {
+        $passwd = COM_stripslashes($_POST['passwd']);
+        $status = SEC_authenticate($loginname, $passwd, $uid);
+        if ( $status != USER_ACCOUNT_ACTIVE ) {
+            $message = $LANG20[2];
+        }
+    }
+}
 
 if ($status == USER_ACCOUNT_ACTIVE) {
-    DB_change($_TABLES['users'], 'pwrequestid', "NULL", 'uid', $uid);
-    $_USER = SESS_getUserDataFromId($uid);
-    $sessid = SESS_newSession($_USER['uid'], $_SERVER['REMOTE_ADDR'],
-            $_CONF['session_cookie_timeout'], $_CONF['cookie_ip']);
-    SESS_setSessionCookie($sessid, $_CONF['session_cookie_timeout'],
-            $_CONF['cookie_session'], $_CONF['cookie_path'],
-            $_CONF['cookiedomain'], $_CONF['cookiesecure']);
-    PLG_loginUser($_USER['uid']);
+    COM_resetSpeedlimit('login', $_SERVER['REMOTE_ADDR']);
+    SESS_completeLogin($uid);
+    if ( $_SYSTEM['admin_session'] != 0 ) {
+        $token = SEC_createTokenGeneral('administration',$_SYSTEM['admin_session']);
+        SEC_setCookie('token',$token,0,$_CONF['cookie_path'],$_CONF['cookiedomain'],$_CONF['cookiesecure'],true);
+    }
+    if ( $currentUID != $_USER['uid'] ) {
+        // remove tokens for previous user
+        if ( $currentUID > 1 ) {
+            DB_delete($_TABLES['tokens'],'owner_id',(int)$currentUID);
+        }
 
-    // Now that we handled session cookies, handle longterm cookie
+        echo COM_refresh($destination);
+        exit;
+    }
 
-    if (!isset($_COOKIE[$_CONF['cookie_name']])) {
+    $method = '';
+    if (isset($_POST['token_requestmethod'])) {
+        $method = COM_applyFilter($_POST['token_requestmethod']);
+    }
+    $postdata = '';
+    if (isset($_POST['token_postdata'])) {
+        $postdata = urldecode($_POST['token_postdata']);
+    }
+    $getdata = '';
+    if (isset($_POST['token_getdata'])) {
+        $getdata = urldecode($_POST['token_getdata']);
+    }
+    $filedata = '';
+    if ( isset($_POST['token_filedata']) ) {
+        $filedata = urldecode($_POST['token_filedata']);
+        $file_array = unserialize($filedata);
+    }
 
-        // Either their cookie expired or they are new
+    if (empty($_FILES) && is_array($file_array) ) {
+        foreach ($file_array as $fkey => $file) {
+            if ( isset($file['name']) && is_array($file['name']) ) {
+                foreach($file AS $key => $data) {
+                    foreach ($data AS $offset => $value) {
+                        if ( $key == 'tmp_name' ) {
+                            $filename = COM_sanitizeFilename(basename($value), true);
+                            $value = $_CONF['path_data'] . 'temp/'.$filename;
+                            if ( $filename == '' ) {
+                                $value = '';
+                            }
+                            $_FILES[$fkey]['_data_dir'][$offset] = true;
+                        }
+                        $_FILES[$fkey][$key][$offset] = $value;
+                        if (! file_exists($_FILES[$fkey]['tmp_name'][$offset])) {
+                            $_FILES[$fkey]['tmp_name'][$offset] = '';
+                            $_FILES[$fkey]['error'][$offset] = 4;
+                        }
+                    }
+                }
+            } else {
+                foreach($file AS $key => $value) {
+                    if ($key == 'tmp_name' ) {
+                        $filename = COM_sanitizeFilename(basename($value), true);
+                        $value = $_CONF['path_data'] . 'temp/'.$filename;
+                        if ( $filename == '' ) {
+                            $value = '';
+                        }
+                        // set _data_dir attribute to key upload class to not use move_uploaded_file()
+                        $_FILES[$fkey]['_data_dir'] = true;
+                    }
+                    $_FILES[$fkey][$key] = $value;
 
-        $cooktime = COM_getUserCookieTimeout();
-
-        if (!empty($cooktime)) {
-
-            // They want their cookie to persist for some amount of time so set it now
-
-            SEC_setCookie($_CONF['cookie_name'], $_USER['uid'],
-                      time() + $cooktime, $_CONF['cookie_path'],
-                      $_CONF['cookiedomain'], $_CONF['cookiesecure'],true);
-            DB_query("UPDATE {$_TABLES['users']} set remote_ip='".$_SERVER['REMOTE_ADDR']."' WHERE uid='".$_USER['uid']."'",1);
+                }
+                if (! file_exists($_FILES[$fkey]['tmp_name'])) {
+                    $_FILES[$fkey]['tmp_name'] = '';
+                    $_FILES[$fkey]['error'] = 4;
+                }
+            }
         }
     }
-    if (!SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,syndication.edit','OR')) {
-        $display .= COM_refresh($_CONF['site_admin_url'] . '/index.php');
-    } else {
-        $display .= COM_refresh($_CONF['site_url'] . '/index.php');
+    $_POST = array();
+    $_GET  = array();
+    $_SERVER['REQUEST_METHOD'] = $method;
+    $_POST = unserialize($postdata);
+    $_GET =  unserialize($getdata);
+    // refresh the token (easier to create new one than try to fake referer)
+    $newToken = SEC_createToken();
+    $_POST[CSRF_TOKEN] = $newToken;
+    $_GET[CSRF_TOKEN] = $newToken;
+    $_REQUEST = array_merge($_GET, $_POST);
+
+  // we have a logged in user - make sure they have permissions to be here...
+} else if (!SEC_isModerator() && !SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR')
+         && (count(PLG_getAdminOptions()) == 0)) {
+
+    COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
+    if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
+        if ( isset($_POST['token_filedata']) ) {
+            $filedata = urldecode($_POST['token_filedata']);
+            SEC_cleanupFiles($filedata);
+        }
+
+        $retval = COM_siteHeader('menu', $LANG12[26])
+                . COM_startBlock($LANG12[26], '')
+                . $LANG04[112]
+                . COM_endBlock()
+                . COM_siteFooter();
+        echo $retval;
+        exit;
     }
-    echo $display;
-    exit;
-} else if (!SEC_isModerator() && !SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR') && (count(PLG_getAdminOptions()) == 0)) {
-    COM_updateSpeedlimit('login');
 
     $display .= COM_siteHeader('menu');
-    $display .= COM_startBlock($LANG20[1]);
-
-    if (!$_CONF['user_login_method']['standard']) {
-        $display .= '<p>' . $LANG_LOGIN[2] . '</p>';
-    } else {
-
-        if (isset($_POST['warn'])) {
-            $display .= $LANG20[2]
-                     . '<br' . XHTML . '><br' . XHTML . '>'
-                     . COM_accessLog($LANG20[3] . ' ' . $_POST['loginname']);
-        }
-
-        $display .= '<form action="' . $_CONF['site_admin_url'] . '/index.php" method="post">'
-            .'<table cellspacing="0" cellpadding="0" border="0" width="100%">'.LB
-            .'<tr><td align="right">'.$LANG20[4].'&nbsp;</td>'.LB
-            .'<td><input type="text" name="loginname" size="16" maxlength="32"' . XHTML . '></td>'.LB
-            .'</tr>'.LB
-            .'<tr>'.LB
-            .'<td align="right">'.$LANG20[5].'&nbsp;</td>'.LB
-            .'<td><input type="password" name="passwd" size="16" ' . XHTML . '></td>'
-            .'</tr>'.LB
-            .'<tr>'.LB
-            .'<td colspan="2" align="center" class="glf-warning">'.$LANG20[6].'<input type="hidden" name="warn" value="1"' . XHTML . '>'
-            .'<br' . XHTML . '><input type="submit" name="mode" value="'.$LANG20[7].'"' . XHTML . '></td>'.LB
-            .'</tr>'.LB
-            .'</table></form>';
-    }
-
-    $display .= COM_endBlock()
-             . COM_siteFooter();
+    $display .= SEC_reauthform($destination,$LANG20[9]);
+    $display .= COM_siteFooter();
     echo $display;
     exit;
+} else {
+    if ( isset($_COOKIE['token']) ) {
+        $token = COM_stripslashes($_COOKIE['token']);
+        if ( $message == '' )
+            $message = $LANG20[8];
+    } else {
+        if ($message == '' )
+            $message = $LANG20[9];
+        $token = '';
+    }
+}
+
+if ( $_SYSTEM['admin_session'] != 0 ) {
+    // validate admin token
+    if ( !SEC_checkTokenGeneral($token,'administration') ) {
+        $method   = strtoupper($_SERVER['REQUEST_METHOD']) == 'GET' ? 'GET' : 'POST';
+        $postdata = serialize($_POST);
+        $getdata  = serialize($_GET);
+        $filedata = '';
+
+        if (! empty($_FILES)) {
+            foreach ($_FILES as $key => $file) {
+                if ( is_array($file['name']) ) {
+                    foreach ($file['name'] as $offset => $filename) {
+                        if ( !empty($file['name'][$offset]) ) {
+                            $filename = basename($file['tmp_name'][$offset]);
+                            move_uploaded_file($file['tmp_name'][$offset],$_CONF['path_data'] . 'temp/'. $filename);
+                            $_FILES[$key]['tmp_name'][$offset] = $filename;
+                        }
+                    }
+                } else {
+                    if (! empty($file['name']) && !empty($file['tmp_name'])) {
+                        $filename = basename($file['tmp_name']);
+                        move_uploaded_file($file['tmp_name'],$_CONF['path_data'] . 'temp/'. $filename);
+                        $_FILES[$key]['tmp_name'] = $filename;
+                    }
+                }
+            }
+            $filedata = serialize($_FILES);
+        }
+        COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
+        if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
+
+            SEC_cleanupFiles($filedata);
+
+            $retval = COM_siteHeader('menu', $LANG12[26])
+                    . COM_startBlock($LANG12[26], '')
+                    . $LANG04[112]
+                    . COM_endBlock()
+                    . COM_siteFooter();
+            echo $retval;
+            exit;
+        }
+        $username = isset($_USER['username']) ? $_USER['username'] : '';
+        $display .= COM_siteHeader();
+        $display .= SEC_reauthform($destination,$message,$method,$postdata,$getdata,$filedata);
+        $display .= COM_siteFooter();
+        echo $display;
+        exit;
+    } else {
+        // re-init the token...
+        $new_token = SEC_createTokenGeneral('administration',$_SYSTEM['admin_session']);
+        SEC_setCookie('token',$new_token,0,$_CONF['cookie_path'],$_CONF['cookiedomain'],$_CONF['cookiesecure'],true);
+        if ( $token != '' ) {
+            DB_delete($_TABLES['tokens'],'token',DB_escapeString($token));
+        }
+    }
 }
 ?>

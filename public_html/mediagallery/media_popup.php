@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -72,7 +72,7 @@ $T->set_var('plugin','mediagallery');
 // -- Verify that image really does belong to this album
 //
 
-$sql = "SELECT * FROM " . $_TABLES['mg_media_albums'] . " WHERE media_id='" . addslashes($mid) . "' AND album_id='" . intval($aid) . "'";
+$sql = "SELECT * FROM " . $_TABLES['mg_media_albums'] . " WHERE media_id='" . DB_escapeString($mid) . "' AND album_id='" . intval($aid) . "'";
 $result = DB_query($sql);
 if ( DB_numRows($result) < 1 ) {
     die("ERROR #2");
@@ -105,7 +105,7 @@ if ( $access == 0 ) {
 }
 
 $sql    = "SELECT * FROM " .
-           $_TABLES['mg_media'] . " WHERE media_id='" . addslashes($media_id) ."'";
+           $_TABLES['mg_media'] . " WHERE media_id='" . DB_escapeString($media_id) ."'";
 $result = DB_query( $sql );
 $row    = DB_fetchArray($result);
 

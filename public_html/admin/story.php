@@ -254,7 +254,7 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
 
     if (!empty ($currenttopic)) {
         $allowed = DB_getItem ($_TABLES['topics'], 'tid',
-                                "tid = '" . addslashes ($currenttopic) . "'" .
+                                "tid = '" . DB_escapeString ($currenttopic) . "'" .
                                 COM_getTopicSql ('AND'));
 
         if ($allowed != $currenttopic) {

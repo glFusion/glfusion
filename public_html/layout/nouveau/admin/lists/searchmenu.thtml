@@ -4,9 +4,13 @@
 {!endif}
     <div class="admin-list-search">
         {filter}
-        {lang_search}: <input type="text" size="20" name="q" value="{last_query}"{xhtml}>
+        {!if lang_search}
+        {lang_search}: <input type="text" id="admin-list-search" size="20" name="q" value="{last_query}"{xhtml}>
         <input type="submit" value="{lang_submit}"{xhtml}>
-        &nbsp;&nbsp;{lang_limit_results}:
+        <input type="submit" value="X" title="Clear" onclick="clearsearch();"{xhtml}>
+        {!endif}
+        {!if lang_limit_results}
+        &nbsp;&nbsp;&nbsp;&nbsp;{lang_limit_results}:
             <select name="query_limit" onchange="this.form.submit()">
                 <option value="10" {10_selected}>10</option>
                 <option value="20" {20_selected}>20</option>
@@ -17,6 +21,7 @@
                 <option value="500" {500_selected}>500</option>
             </select>
         &nbsp;&nbsp;{lang_records_found}:&nbsp;{records_found}
+        {!endif}
     </div>
 {!if form_url}
 </form>

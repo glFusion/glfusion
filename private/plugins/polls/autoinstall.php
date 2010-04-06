@@ -66,7 +66,7 @@ $INSTALL_plugin['polls'] = array(
   array('type' => 'table', 'table' => $_TABLES['pollvoters'], 'sql' => $_SQL['pollvoters']),
 
   array('type' => 'group', 'group' => 'polls Admin', 'desc' => 'Users in this group can administer the Polls plugin',
-        'variable' => 'admin_group_id', 'addroot' => true),
+        'variable' => 'admin_group_id', 'addroot' => true, 'admin' => true),
 
   array('type' => 'feature', 'feature' => 'polls.edit', 'desc' => 'Ability to edit Polls',
         'variable' => 'edit_feature_id'),

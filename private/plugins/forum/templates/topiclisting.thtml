@@ -14,7 +14,7 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pluginCellTitle alignleft">
     <tr>
         <td class="pluginBreadCrumbs alignleft" style="padding-left:5px;white-space:nowrap;">{pagenavigation}</td>
-        <td class="pluginBreadCrumbs alignright" style="width:80%;padding-right:15px;white-space:nowrap;">&nbsp;{subscribe_link}</td>
+        <td class="pluginBreadCrumbs alignright" style="width:80%;padding-right:15px;white-space:nowrap;">&nbsp;{subscribe_link}&nbsp;{rssfeed}</td>
     </tr>
 </table>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="alignleft">

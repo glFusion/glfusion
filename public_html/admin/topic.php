@@ -40,7 +40,7 @@
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
-require_once $_CONF['path_system'] . 'lib-story.php';
+USES_lib_story();
 
 if (!SEC_hasRights('topic.edit')) {
     $display = COM_siteHeader ('menu', $MESSAGE[30]);
@@ -53,11 +53,6 @@ if (!SEC_hasRights('topic.edit')) {
     echo $display;
     exit;
 }
-
-// Uncomment the line below if you need to debug the HTTP variables being passed
-// to the script.  This will sometimes cause errors but it will allow you to see
-// the data being passed in a POST operation
-// echo COM_debug($_POST);
 
 /**
 * Show topic administration form
@@ -163,7 +158,6 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
     $topic_templates->set_var('topic_id', $A['tid']);
     $topic_templates->set_var('lang_accessrights',$LANG_ACCESS['accessrights']);
     $topic_templates->set_var('lang_owner', $LANG_ACCESS['owner']);
-
 
     $ownername = COM_getDisplayName ($A['owner_id']);
     $topic_templates->set_var('owner_username', DB_getItem ($_TABLES['users'],

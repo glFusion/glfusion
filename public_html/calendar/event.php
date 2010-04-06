@@ -59,7 +59,7 @@ function CALENDAR_addUserEvent($eid)
 
     $retval = '';
 
-    $eventsql = "SELECT * FROM {$_TABLES['events']} WHERE eid='".addslashes($eid)."'" . COM_getPermSql ('AND');
+    $eventsql = "SELECT * FROM {$_TABLES['events']} WHERE eid='".DB_escapeString($eid)."'" . COM_getPermSql ('AND');
     $result = DB_query($eventsql);
     $nrows = DB_numRows($result);
     if ($nrows == 1) {
@@ -177,9 +177,9 @@ function CALENDAR_saveUserEvent($eid)
     if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
 
         // Try to delete the event first in case it has already been added
-        DB_query ("DELETE FROM {$_TABLES['personal_events']} WHERE uid={$_USER['uid']} AND eid='".addslashes($eid)."'");
+        DB_query ("DELETE FROM {$_TABLES['personal_events']} WHERE uid={$_USER['uid']} AND eid='".DB_escapeString($eid)."'");
 
-        $result = DB_query ("SELECT eid FROM {$_TABLES['events']} WHERE (eid = '".addslashes($eid)."')" . COM_getPermSql ('AND'));
+        $result = DB_query ("SELECT eid FROM {$_TABLES['events']} WHERE (eid = '".DB_escapeString($eid)."')" . COM_getPermSql ('AND'));
         if (DB_numRows ($result) == 1) {
 
             $savesql = "INSERT INTO {$_TABLES['personal_events']} "
@@ -187,7 +187,7 @@ function CALENDAR_saveUserEvent($eid)
              . "zipcode,url,description,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon) SELECT eid,"
              . $_USER['uid'] . ",title,event_type,datestart,dateend,timestart,timeend,allday,location,address1,address2,"
              . "city,state,zipcode,url,description,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon FROM "
-             . "{$_TABLES['events']} WHERE eid = '".addslashes($eid)."'";
+             . "{$_TABLES['events']} WHERE eid = '".DB_escapeString($eid)."'";
 
             DB_query ($savesql);
 
@@ -400,7 +400,7 @@ case $LANG_CAL_1[51]:
     if (($_CA_CONF['personalcalendars'] == 1) && SEC_checkToken()) {
         $eid = COM_applyFilter ($_REQUEST['eid']);
         if (!empty ($eid) && (isset ($_USER['uid']) && ($_USER['uid'] > 1))) {
-            DB_query ("DELETE FROM {$_TABLES['personal_events']} WHERE uid={$_USER['uid']} AND eid='".addslashes($eid)."'");
+            DB_query ("DELETE FROM {$_TABLES['personal_events']} WHERE uid={$_USER['uid']} AND eid='".DB_escapeString($eid)."'");
             $display .= COM_refresh ($_CONF['site_url']
                      . '/calendar/index.php?mode=personal&amp;msg=26');
         } else {
@@ -415,7 +415,7 @@ case 'edit':
     if ($_CA_CONF['personalcalendars'] == 1) {
         $eid = COM_applyFilter ($_GET['eid']);
         if (!empty ($eid) && (isset ($_USER['uid']) && ($_USER['uid'] > 1))) {
-            $result = DB_query ("SELECT * FROM {$_TABLES['personal_events']} WHERE (eid = '".addslashes($eid)."') AND (uid = {$_USER['uid']})");
+            $result = DB_query ("SELECT * FROM {$_TABLES['personal_events']} WHERE (eid = '".DB_escapeString($eid)."') AND (uid = {$_USER['uid']})");
             if (DB_numRows ($result) == 1) {
                 $A = DB_fetchArray ($result);
                 $display .= CALENDAR_siteHeader ($LANG_CAL_2[38])
@@ -460,7 +460,7 @@ default:
             } else {
                 $pagetitle = sprintf ($LANG_CAL_2[9], $_CONF['site_name']);
             }
-            DB_query ("UPDATE {$_TABLES['events']} SET hits = hits + 1 WHERE eid = '".addslashes($eid)."'");
+            DB_query ("UPDATE {$_TABLES['events']} SET hits = hits + 1 WHERE eid = '".DB_escapeString($eid)."'");
         }
 
         $display .= CALENDAR_siteHeader( $pagetitle);
@@ -570,7 +570,7 @@ default:
                 $cal_templates->set_var('event_title', $event_title);
                 if (($_CA_CONF['personalcalendars'] == 1)
                         && !COM_isAnonUser()) {
-                    $tmpresult = DB_query("SELECT * FROM {$_TABLES['personal_events']} WHERE eid='".addslashes($A['eid'])."' AND uid={$_USER['uid']}");
+                    $tmpresult = DB_query("SELECT * FROM {$_TABLES['personal_events']} WHERE eid='".DB_escapeString($A['eid'])."' AND uid={$_USER['uid']}");
                     $tmpnrows = DB_numRows($tmpresult);
                     if ($tmpnrows > 0) {
                         $token = SEC_createToken();

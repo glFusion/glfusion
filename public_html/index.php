@@ -73,7 +73,7 @@ if( $microsummary ) {
 
     // if a topic was provided only select those stories.
     if (!empty($topic)) {
-        $sql .= " AND s.tid = '".addslashes($topic)."' ";
+        $sql .= " AND s.tid = '".DB_escapeString($topic)."' ";
     } elseif (!$newstories) {
         $sql .= " AND frontpage <> 0 ";
     }
@@ -106,7 +106,7 @@ if( $microsummary ) {
                 $pagetitle = $_CONF['site_slogan'];
             } else {
                 $pagetitle = stripslashes( DB_getItem( $_TABLES['topics'], 'topic',
-                                                       "tid = '".addslashes($topic)."'" ));
+                                                       "tid = '".DB_escapeString($topic)."'" ));
             }
         }
         $pagetitle = $_CONF['site_name'] . ' - ' . $pagetitle;
@@ -147,7 +147,6 @@ if ($msg !== '') {
     IO_addMessage($msg, $plugin);
 }
 
-
 // Show any Plugin formatted blocks
 // Requires a plugin to have a function called plugin_centerblock_<plugin_name>
 $displayBlock = PLG_showCenterblock (1, $page, $topic); // top blocks
@@ -173,13 +172,22 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
     $U['tids'] = '';
 }
 
+$topiclimit = 0;
+$story_sort = 'date';
+$story_sort_dir = 'DESC';
+
+if ( !empty($topic) ) {
+    $result = DB_query("SELECT limitnews,sort_by,sort_dir FROM {$_TABLES['topics']} WHERE tid='".DB_escapeString($topic)."'");
+    if ( $result ) {
+        list($topiclimit, $story_sort, $story_sort_dir) = DB_fetchArray($result);
+    }
+}
+
 $maxstories = 0;
 if ($U['maxstories'] >= $_CONF['minnews']) {
     $maxstories = $U['maxstories'];
 }
 if ((!empty ($topic)) && ($maxstories == 0)) {
-    $topiclimit = DB_getItem ($_TABLES['topics'], 'limitnews',
-                              "tid = '".addslashes($topic)."'");
     if ($topiclimit >= $_CONF['minnews']) {
         $maxstories = $topiclimit;
     }
@@ -217,15 +225,15 @@ while (list ($sid, $expiretopic, $title, $expire, $statuscode) = DB_fetchArray (
     if ($statuscode == STORY_ARCHIVE_ON_EXPIRE) {
         if (!empty ($archivetid) ) {
             COM_errorLOG("Archive Story: $sid, Topic: $archivetid, Title: $title, Expired: $expire");
-            DB_query ("UPDATE {$_TABLES['stories']} SET tid = '$archivetid', frontpage = '0', featured = '0' WHERE sid='".addslashes($sid)."'");
+            DB_query ("UPDATE {$_TABLES['stories']} SET tid = '$archivetid', frontpage = '0', featured = '0' WHERE sid='".DB_escapeString($sid)."'");
             CACHE_remove_instance('story_'.$sid);
             CACHE_remove_instance('whatsnew');
         }
     } else if ($statuscode == STORY_DELETE_ON_EXPIRE) {
         COM_errorLOG("Delete Story and comments: $sid, Topic: $expiretopic, Title: $title, Expired: $expire");
         STORY_deleteImages ($sid);
-        DB_query("DELETE FROM {$_TABLES['comments']} WHERE sid='".addslashes($sid)."' AND type = 'article'");
-        DB_query("DELETE FROM {$_TABLES['stories']} WHERE sid='".addslashes($sid)."'");
+        DB_query("DELETE FROM {$_TABLES['comments']} WHERE sid='".DB_escapeString($sid)."' AND type = 'article'");
+        DB_query("DELETE FROM {$_TABLES['stories']} WHERE sid='".DB_escapeString($sid)."'");
         CACHE_remove_instance('story_'.$sid);
         CACHE_remove_instance('whatsnew');
     }
@@ -239,7 +247,7 @@ if (empty ($topic)) {
 
 // if a topic was provided only select those stories.
 if (!empty($topic)) {
-    $sql .= " AND s.tid = '".addslashes($topic)."' ";
+    $sql .= " AND s.tid = '".DB_escapeString($topic)."' ";
 } elseif (!$newstories) {
     $sql .= " AND frontpage = 1 ";
 }
@@ -273,23 +281,34 @@ if ($_CONF['allow_user_photo'] == 1) {
     }
 }
 
-if ( isset( $_SYSTEM['sort_story_by'] ) ) {
-    switch ( $_SYSTEM['sort_story_by'] ) {
-        case 0 : // date
-            $orderBy = ' date DESC ';
+if ( !empty($topic) ) {
+    switch ( $story_sort ) {
+        case 0 :    // date
+            $orderBy = ' date ';
             break;
-        case 1 : // title
-            $orderBy = ' title ASC ';
+        case 1 :    // title
+            $orderBy = ' title ';
             break;
-        case 2 : // ID
-            $orderBy = ' sid ASC ';
+        case 2 :    // ID
+            $orderBy = ' sid ';
             break;
         default :
-            $orderBy = ' date DESC ';
+            $orderBy = ' date ';
+            break;
+    }
+    switch ( $story_sort_dir ) {
+        case 'DESC' :
+            $orderBy = $orderBy . ' DESC ';
+            break;
+        case 'ASC' :
+            $orderBy = $orderBy . ' ASC ';
+            break;
+        default :
+            $orderBy = $orderBy . ' DESC ';
             break;
     }
 } else {
-    $orderBy = ' date DESC ';
+    $orderBy = ' date DESC';
 }
 
 $msql = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
@@ -363,7 +382,7 @@ if ( $A = DB_fetchArray( $result ) ) {
                         COM_getBlockTemplate ('_msg_block', 'header')) . $LANG05[2]);
             if (!empty ($topic)) {
                 $topicname = DB_getItem ($_TABLES['topics'], 'topic',
-                                         "tid = '".addslashes($topic)."'");
+                                         "tid = '".DB_escapeString($topic)."'");
                 IO_addContent( sprintf ($LANG05[3], $topicname) );
             }
             IO_addContent( COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer')) );

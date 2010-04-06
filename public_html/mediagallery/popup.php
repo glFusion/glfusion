@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -40,7 +40,7 @@ if (!in_array('mediagallery', $_PLUGINS)) {
 * Main Function
 */
 
-if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $_MG_CONF['loginrequired'] == 1 )  {
+if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
     $display = COM_startBlock ($LANG_ACCESS['accessdenied'], '',
                COM_getBlockTemplate ('_msg_block', 'header'))
              . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
@@ -55,7 +55,7 @@ if ( !isset($_USER['uid']) ) {
 $s      = COM_applyFilter($_GET['s'],true);
 $sort   = COM_applyFilter($_GET['sort'],true);
 
-$aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . addslashes($s) . '"');
+$aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_escapeString($s) . '"');
 
 if ( $MG_albums[$aid]->access == 0 ) {
     $display  = MG_siteHeader();

@@ -10,20 +10,21 @@ glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
 <form action="{site_admin_url}/mail.php" method="post" id="mailusers" onsubmit='set_postcontent();'>
 
     {startblock_email}
-    <table cellspacing="0" cellpadding="2" width="100%" style="margin:5px 0px 10px 0px;">
-        <tr>
-            <td><img src="{layout_url}/images/icons/mail.png" alt=""{xhtml}></td>
-            <td>{lang_note}</td>
-        </tr>
-    </table>
+    {admin_menu}
+    <br />
     <table width="100%" cellpadding="2" cellspacing="0">
         <tr>
-            <td class="alignright">{lang_to}:</td>
+            <td class="alignright" style="width:10%;">{lang_to}:</td>
             <td>
+{!if send_to_group}
                 <select name="to_group">
                     <option value="">{lang_selectgroup}</option>
                     {group_options}
                 </select>
+{!else}
+                {to_user}
+                <input type="hidden" name="to_uid" value="{to_uid}"{xhtml}>
+{!endif}
             </td>
         </tr>
         <tr>
@@ -36,42 +37,54 @@ glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
         </tr>
         <tr>
             <td class="alignright">{lang_subject}:</td>
-            <td><input type="text" name="subject" size="40"{xhtml}></td>
+            <td><input type="text" name="subject" value="{subject}" size="40"{xhtml}></td>
+        </tr>
+{!if send_to_group}
+        <tr>
+            <td class="alignright">{lang_options}:</td>
+            <td>
+                <input type="checkbox" style="vertical-align:middle;" name="overstyr"{xhtml}> {lang_ignoreusersettings}&nbsp;&nbsp;
+                <input type="checkbox" style="vertical-align:middle;" name="priority"{xhtml}> {lang_urgent}
+            </td>
+        </tr>
+{!else}
+{!if warning}
+        <tr>
+            <td class="alignright warning">{lang_warning}:</td>
+            <td class="warning">{warning}</td>
+        </tr>
+{!endif}
+        <tr>
+            <td class="alignright">{lang_options}:</td>
+            <td>
+                {!if warning}<input type="checkbox" style="vertical-align:middle;" name="overstyr"{xhtml}> {lang_ignoreusersettings}&nbsp;&nbsp;{!endif}
+                <input type="checkbox" style="vertical-align:middle;" name="priority"{xhtml}> {lang_urgent}
+            </td>
+        </tr>
+{!endif}
+        <tr>
+            <td class="alignright">{lang_postmode}:</td>
+            <td>
+              <select id="sel_editmode" name="postmode" onchange="change_editmode(this);">
+               {postmode_options}
+              </select>
+            </td>
         </tr>
         <tr>
           <td class="alignright" style="vertical-align:top;">{lang_body}:</td>
           <td>
           <div id="text_editor" style="display:{show_texteditor};">
-            <textarea id="message_text" name="message_text" cols="60" rows="10">{message_text}</textarea>
+            <textarea id="message_text" name="message_text" rows="10" cols="60" style="width:85%;">{message_text}</textarea>
           </div>
-          <div  id="html_editor" style="display:{show_htmleditor};">
-            <textarea id="message_html" name="message_html" rows="10" cols="60" style="width:90%;">{message_html}</textarea>
+          <div id="html_editor" style="{show_htmleditor};width:90%;">
+            <textarea id="message_html" name="message_html" rows="10" cols="60">{message_html}</textarea>
           </div>
           </td>
 
         </tr>
         <tr>
-            <td colspan="2" class="alignleft"><b>{lang_options}</b></td>
-        </tr>
-        <tr>
-        <td class="alignright" style="vertical-align:top;"><b>{lang_postmode}:</b></td>
-        <td style="vertical-align:top;">
-          <select id="sel_editmode" name="postmode" onchange="change_editmode(this);">
-           {postmode_options}
-          </select>
-        </td>
-
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td><input type="checkbox" name="priority"{xhtml}> {lang_urgent}</td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td><input type="checkbox" name="overstyr"{xhtml}> {lang_ignoreusersettings}</td>
-        </tr>
-        <tr>
-            <td colspan="2" class="aligncenter">
+            <td></td>
+            <td>
                 <input type="submit" value="{lang_send}"{xhtml}>
                 <input type="hidden" name="mail" value="mail"{xhtml}>
                 <input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}>

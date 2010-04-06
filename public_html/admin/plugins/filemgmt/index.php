@@ -35,6 +35,7 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../../../lib-common.php';
+require_once '../../auth.inc.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/xoopstree.php';
@@ -113,7 +114,9 @@ function mydownloads() {
 }
 
 function listNewDownloads(){
-    global $_CONF,$_FM_CONF, $_TABLES,$_FM_TABLES,$myts,$eh,$mytree,$filemgmt_FileStoreURL,$filemgmt_FileSnapURL,$LANG_FM02;
+    global $_CONF,$_FM_CONF, $_TABLES,$_FM_TABLES,$myts,$eh,$mytree,
+           $filemgmt_FileStore, $filemgmt_FileStoreURL,$filemgmt_FileSnapURL,$LANG_FM02;
+
 
     // List downloads waiting for validation
     $sql = "SELECT lid, cid, title, url, homepage, version, size, logourl, submitter, comments, platform ";
@@ -129,7 +132,7 @@ function listNewDownloads(){
         $display .= '<table width="100%" border="0" class="plugin">';
         $display .= '<tr><td width="100%" class="pluginHeader" style="padding:5px;">' . _MD_DLSWAITING. "&nbsp;($numrows)</td></tr>";
         while(list($lid, $cid, $title, $url, $homepage, $version, $size, $logourl, $submitter, $comments, $tmpnames) = DB_fetchARRAY($result)) {
-            $result2 = DB_query("SELECT description FROM {$_FM_TABLES['filemgmt_filedesc']} WHERE lid='".addslashes($lid)."'");
+            $result2 = DB_query("SELECT description FROM {$_FM_TABLES['filemgmt_filedesc']} WHERE lid='".DB_escapeString($lid)."'");
             list($description) = DB_fetchARRAY($result2);
             $title = $myts->makeTboxData4Edit($title);
             $url = rawurldecode($myts->makeTboxData4Edit($url));
@@ -328,8 +331,10 @@ function newfileConfigAdmin(){
 function modDownload() {
     global $_CONF,$_FM_TABLES,$_USER,$myts,$eh,$mytree,$filemgmt_SnapStore,$filemgmt_FileSnapURL;
 
+    $totalvotes = '';
+
     $lid = $_GET['lid'];
-    $result = DB_query("SELECT cid, title, url, homepage, version, size, logourl, comments,submitter FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='".addslashes($lid)."'");
+    $result = DB_query("SELECT cid, title, url, homepage, version, size, logourl, comments,submitter FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='".DB_escapeString($lid)."'");
     $nrows = DB_numROWS($result);
     if ($nrows == 0) {
         redirect_header("index.php",2,_MD_NOMATCH);
@@ -359,7 +364,7 @@ function modDownload() {
     $version = $myts->makeTboxData4Edit($version);
     $size = $myts->makeTboxData4Edit($size);
     $logourl = rawurldecode($myts->makeTboxData4Edit($logourl));
-    $result2 = DB_query("SELECT description FROM {$_FM_TABLES['filemgmt_filedesc']} WHERE lid='".addslashes($lid)."'");
+    $result2 = DB_query("SELECT description FROM {$_FM_TABLES['filemgmt_filedesc']} WHERE lid='".DB_escapeString($lid)."'");
     list($description)=DB_fetchARRAY($result2);
     $description = $myts->makeTareaData4Edit($description);
     $display .= '<tr><td>'._MD_FILEID.'</td><td colspan="2"><b>'.$lid.'</b></td></tr>';
@@ -520,11 +525,11 @@ function listBrokenDownloads() {
         while(list($reportid, $lid, $sender, $ip) = DB_fetchARRAY($result)) {
            $result2 = DB_query("SELECT title, url, submitter FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='$lid'");
            if ($sender != 0) {
-               $result3 = DB_query("SELECT username, email FROM {$_TABLES['users']} WHERE uid='".addslashes($sender)."'");
+               $result3 = DB_query("SELECT username, email FROM {$_TABLES['users']} WHERE uid='".DB_escapeString($sender)."'");
                list($sendername, $email) = DB_fetchARRAY($result3);
             }
             list($title, $url, $owner) = DB_fetchARRAY($result2);
-            $result4 = DB_query("SELECT username, email FROM {$_TABLES['users']} WHERE uid='".addslashes($owner)."'");
+            $result4 = DB_query("SELECT username, email FROM {$_TABLES['users']} WHERE uid='".DB_escapeString($owner)."'");
             list($ownername, $owneremail) = DB_fetchARRAY($result4);
             $display .= '<tr class="pluginRow'.$cssid.'"><td><a href="'.$_CONF['site_url'].'/filemgmt/visit.php?lid='.$lid.'">'.$title.'</a></td>';
 
@@ -563,8 +568,8 @@ function delBrokenDownloads() {
     global $_FM_TABLES,$eh;
 
     $lid = $_POST['lid'];
-    DB_query("DELETE FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='".addslashes($lid)."'");
-    DB_query("DELETE FROM {$_FM_TABLES['filemgmt_filedetail']}  WHERE lid='".addslashes($lid)."'");
+    DB_query("DELETE FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='".DB_escapeString($lid)."'");
+    DB_query("DELETE FROM {$_FM_TABLES['filemgmt_filedetail']}  WHERE lid='".DB_escapeString($lid)."'");
     redirect_header("index.php?op=listBrokenDownloads",1,_MD_FILEDELETED);
     exit();
 }
@@ -573,7 +578,7 @@ function ignoreBrokenDownloads() {
     global $_FM_TABLES,$eh;
 
     $lid = intval($_POST['lid']);
-    DB_query("DELETE FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='".addslashes($lid)."'");
+    DB_query("DELETE FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='".DB_escapeString($lid)."'");
     redirect_header("index.php?op=listBrokenDownloads",1,_MD_BROKENDELETED);
     exit();
 }
@@ -1209,7 +1214,7 @@ function approve(){
     }
     $homepage = $_POST['homepage'];
     $version = $_POST['version'];
-    $size = $_POST['size'];
+    $size = (isset($_POST['size']) ? COM_applyFilter($_POST['size'],true) : 0);
     $description = $_POST['description'];
     if (($_POST['url']) || ($_POST['url'] != '')) {
         $name = $myts->makeTboxData4Save($_POST['url']);
@@ -1218,6 +1223,9 @@ function approve(){
     if (($_POST['logourl']) || ($_POST['logourl'] != '')) {
         $shotname = $myts->makeTboxData4Save($_POST['logourl']);
         $logourl = $myts->makeTboxData4Save(rawurlencode($_POST['logourl']));
+    } else {
+        $logourl = '';
+        $shotname = '';
     }
 
     $result = DB_query("SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE url='$url' and status=1");
@@ -1232,7 +1240,7 @@ function approve(){
     $title = $myts->makeTboxData4Save($title);
     $homepage = $myts->makeTboxData4Save($homepage);
     $version = $myts->makeTboxData4Save($_POST['version']);
-    $size = $myts->makeTboxData4Save($_POST['size']);
+    $size = $myts->makeTboxData4Save($size);
     $description = $myts->makeTareaData4Save($description);
     $commentoption = $_POST["commentoption"];
 
@@ -1240,7 +1248,11 @@ function approve(){
     // Now to extract the temporary names for both the file and optional thumbnail. I've used th platform field which I'm not using now for anything.
     $tmpnames = explode(";",DB_getItem($_FM_TABLES['filemgmt_filedetail'],'platform',"lid='$lid'"));
     $tmpfilename = $tmpnames[0];
-    $tmpshotname = $tmpnames[1];
+    if ( isset($tmpnames[1]) ) {
+        $tmpshotname = $tmpnames[1];
+    } else {
+        $tmpshotname = '';
+    }
     $tmp = $filemgmt_FileStore ."tmp/" . $tmpfilename;
     if (file_exists($tmp) && (!is_dir($tmp))) {                      // if this temporary file was really uploaded?
         $newfile = $filemgmt_FileStore .$name;

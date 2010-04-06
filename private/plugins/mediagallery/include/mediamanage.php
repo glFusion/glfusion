@@ -363,11 +363,11 @@ function MG_saveMedia( $album_id, $actionURL = '' ) {
         $media_title_safe = substr($media[$i]['title'],0,254);
 
         if ($_MG_CONF['htmlallowed'] != 1 ) {
-            $media_title = addslashes(htmlspecialchars(strip_tags(COM_checkWords($media_title_safe))));
-            $media_desc = addslashes(htmlspecialchars(strip_tags(COM_checkWords($media[$i]['description']))));
+            $media_title = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords($media_title_safe))));
+            $media_desc = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords($media[$i]['description']))));
         } else {
-            $media_title = addslashes($media_title_safe);
-            $media_desc  = addslashes($media[$i]['description']);
+            $media_title = DB_escapeString($media_title_safe);
+            $media_desc  = DB_escapeString($media[$i]['description']);
         }
         if ( $media[$i]['include_ss'] == 1 ) {
             $ss = 1;
@@ -375,12 +375,12 @@ function MG_saveMedia( $album_id, $actionURL = '' ) {
             $ss = 0;
         }
         $media_keywords_safe = substr($media[$i]['keywords'],0,254);
-        $media_keywords = addslashes(htmlspecialchars(strip_tags(COM_checkWords($media_keywords_safe))));
+        $media_keywords = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords($media_keywords_safe))));
         $cat_id = $media[$i]['cat_id'];
 
-        $sql = "UPDATE {$_TABLES['mg_media']} SET media_title='" . $media_title . "',media_desc='" . $media_desc . "',include_ss=" . intval($ss) . ",media_keywords='" . $media_keywords . "', media_category=" . $cat_id . " WHERE media_id='" . addslashes($media[$i]['mid']) . "'";
+        $sql = "UPDATE {$_TABLES['mg_media']} SET media_title='" . $media_title . "',media_desc='" . $media_desc . "',include_ss=" . intval($ss) . ",media_keywords='" . $media_keywords . "', media_category=" . $cat_id . " WHERE media_id='" . DB_escapeString($media[$i]['mid']) . "'";
         DB_query($sql);
-        $sql = "UPDATE {$_TABLES['mg_media_albums']} SET media_order=" . intval($media[$i]['seq']) . " WHERE album_id=" . intval($album_id) . " AND media_id='" . addslashes($media[$i]['mid']) . "'";
+        $sql = "UPDATE {$_TABLES['mg_media_albums']} SET media_order=" . intval($media[$i]['seq']) . " WHERE album_id=" . intval($album_id) . " AND media_id='" . DB_escapeString($media[$i]['mid']) . "'";
         DB_query($sql);
         PLG_itemSaved($media[$i]['mid'],'mediagallery');
     }
@@ -401,7 +401,7 @@ function MG_saveMedia( $album_id, $actionURL = '' ) {
 
     if ( $cover != -1 ) {
 
-        $result = DB_query("SELECT * FROM {$_TABLES['mg_media']} WHERE media_id='" . addslashes($cover) . "'");
+        $result = DB_query("SELECT * FROM {$_TABLES['mg_media']} WHERE media_id='" . DB_escapeString($cover) . "'");
         $nRows = DB_numRows($result);
         if ( $nRows > 0 ) {
             $row = DB_fetchArray($result);
@@ -422,7 +422,7 @@ function MG_saveMedia( $album_id, $actionURL = '' ) {
             }
         }
         if ( $coverFilename != '' ) {
-            $sql = "UPDATE " . $_TABLES['mg_albums'] . " SET album_cover = '" . addslashes($cover) . "', album_cover_filename='" . $coverFilename . "' WHERE album_id = " . intval($album_id);
+            $sql = "UPDATE " . $_TABLES['mg_albums'] . " SET album_cover = '" . DB_escapeString($cover) . "', album_cover_filename='" . $coverFilename . "' WHERE album_id = " . intval($album_id);
             DB_query($sql);
             if ( DB_error() != 0 )  {
                 echo COM_errorLog("Error setting album cover");
@@ -483,7 +483,7 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
 
     $sql = "SELECT album_id FROM " .
             $_TABLES['mg_media_albums'] .
-            " WHERE media_id='" . addslashes($media_id) ."'";
+            " WHERE media_id='" . DB_escapeString($media_id) ."'";
 
     $result = DB_query($sql);
     $nRows  = DB_numRows($result);
@@ -503,11 +503,11 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
     if ($_DB_dbms == "mssql" ) {
         $sql = "SELECT *,CAST(media_desc AS TEXT) as media_desc FROM " .
                 ($mqueue ? $_TABLES['mg_mediaqueue'] : $_TABLES['mg_media']) .
-                " WHERE media_id='" . addslashes($media_id) . "'";
+                " WHERE media_id='" . DB_escapeString($media_id) . "'";
     } else {
         $sql = "SELECT * FROM " .
                 ($mqueue ? $_TABLES['mg_mediaqueue'] : $_TABLES['mg_media']) .
-                " WHERE media_id='" . addslashes($media_id) . "'";
+                " WHERE media_id='" . DB_escapeString($media_id) . "'";
     }
     $result = DB_query($sql);
     $row    = DB_fetchArray($result);
@@ -734,7 +734,7 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         $playback_options['width']              = $_MG_CONF['asf_width'];
         $playback_options['bgcolor']            = $_MG_CONF['asf_bgcolor'];
 
-        $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . addslashes($row['media_id']) . "'");
+        $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . DB_escapeString($row['media_id']) . "'");
         $poNumRows = DB_numRows($poResult);
         for ($i=0; $i < $poNumRows; $i++ ) {
             $poRow = DB_fetchArray($poResult);
@@ -797,7 +797,7 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         $playback_options['showstatusbar']      = $_MG_CONF['mp3_showstatusbar'];
         $playback_options['loop']               = $_MG_CONF['mp3_loop'];
 
-        $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . addslashes($row['media_id']) . "'");
+        $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . DB_escapeString($row['media_id']) . "'");
         $poNumRows = DB_numRows($poResult);
         for ($i=0; $i < $poNumRows; $i++ ) {
             $poRow = DB_fetchArray($poResult);
@@ -856,7 +856,7 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         $playback_options['bgcolor'] = $_MG_CONF['swf_bgcolor'];
         $playback_options['swf_version'] = $_MG_CONF['swf_version'];
 
-        $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . addslashes($row['media_id']) . "'");
+        $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . DB_escapeString($row['media_id']) . "'");
         $poNumRows = DB_numRows($poResult);
         for ($i=0; $i < $poNumRows; $i++ ) {
             $poRow = DB_fetchArray($poResult);
@@ -948,7 +948,7 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         $playback_options['width']      = $_MG_CONF['mov_width'];
         $playback_options['bgcolor']    = $_MG_CONF['mov_bgcolor'];
 
-        $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . addslashes($row['media_id']) . "'");
+        $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . DB_escapeString($row['media_id']) . "'");
         $poNumRows = DB_numRows($poResult);
         for ($i=0; $i < $poNumRows; $i++ ) {
             $poRow = DB_fetchArray($poResult);
@@ -1183,7 +1183,7 @@ function MG_mediaResetRating( $album_id, $media_id, $mqueue ) {
 function MG_mediaResetViews( $album_id, $media_id, $mqueue ) {
     global $_MG_CONF, $_TABLES;
 
-    $sql = "UPDATE {$_TABLES['mg_media']} SET media_views=0 WHERE media_id='" . addslashes($media_id) . "'";
+    $sql = "UPDATE {$_TABLES['mg_media']} SET media_views=0 WHERE media_id='" . DB_escapeString($media_id) . "'";
     DB_query($sql);
     $retval = MG_mediaEdit( $album_id, $media_id, $_MG_CONF['site_url'] . '/admin.php?mode=media&amp;album_id=' . $album_id, $mqueue );
     return $retval;
@@ -1226,9 +1226,9 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
       $attachtn = 0;
 
     if ( $queue ) {
-	    $old_attached_tn = DB_getItem($_TABLES['mg_mediaqueue'],'media_tn_attached','media_id="'.addslashes($media_id).'"');
+	    $old_attached_tn = DB_getItem($_TABLES['mg_mediaqueue'],'media_tn_attached','media_id="'.DB_escapeString($media_id).'"');
 	} else {
-    	$old_attached_tn = DB_getItem($_TABLES['mg_media'],'media_tn_attached','media_id="'.addslashes($media_id).'"');
+    	$old_attached_tn = DB_getItem($_TABLES['mg_media'],'media_tn_attached','media_id="'.DB_escapeString($media_id).'"');
 	}
 
     if ($old_attached_tn == 0 && $att == 1 && $thumbnail == '') {
@@ -1242,15 +1242,15 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
     }
 
     if ( $queue ) {
-    	$remote_media = DB_getItem($_TABLES['mg_mediaqueue'],'remote_media','media_id="'.addslashes($media_id).'"');
+    	$remote_media = DB_getItem($_TABLES['mg_mediaqueue'],'remote_media','media_id="'.DB_escapeString($media_id).'"');
 	} else {
-    	$remote_media = DB_getItem($_TABLES['mg_media'],'remote_media','media_id="'.addslashes($media_id).'"');
+    	$remote_media = DB_getItem($_TABLES['mg_media'],'remote_media','media_id="'.DB_escapeString($media_id).'"');
 	}
 
 	if ( $remote_media ) {
-		$remote_url = addslashes(COM_stripslashes($_POST['remoteurl']));
+		$remote_url = DB_escapeString(COM_stripslashes($_POST['remoteurl']));
 	} else {
-		$remote_url = addslashes(COM_stripslashes($_POST['remoteurl']));
+		$remote_url = DB_escapeString(COM_stripslashes($_POST['remoteurl']));
 	}
 
     if ( $_MG_CONF['htmlallowed'] ) {
@@ -1272,11 +1272,11 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
     $cat_id             = COM_applyFilter($_POST['cat_id'],true);
     $media_keywords     = COM_stripslashes($_POST['media_keywords']);
     $media_keywords_safe = substr($media_keywords,0,254);
-    $media_keywords = addslashes(htmlspecialchars(strip_tags(COM_checkWords($media_keywords_safe))));
+    $media_keywords = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords($media_keywords_safe))));
 
-    $artist = addslashes(COM_applyFilter(COM_stripslashes($_POST['artist']) ) );
-    $musicalbum = addslashes(COM_applyFilter(COM_stripslashes($_POST['musicalbum']) ) );
-    $genre = addslashes(COM_applyFilter(COM_stripslashes($_POST['genre']) ) );
+    $artist = DB_escapeString(COM_applyFilter(COM_stripslashes($_POST['artist']) ) );
+    $musicalbum = DB_escapeString(COM_applyFilter(COM_stripslashes($_POST['musicalbum']) ) );
+    $genre = DB_escapeString(COM_applyFilter(COM_stripslashes($_POST['genre']) ) );
 
     $media_time = mktime($media_time_hour,$media_time_minute,0,$media_time_month,$media_time_day,$media_time_year,1);
 
@@ -1288,9 +1288,9 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
     }
 
     $sql = "UPDATE " . ($queue ? $_TABLES['mg_mediaqueue'] : $_TABLES['mg_media']) . "
-            SET media_title='"  . addslashes($media_title) . "',
-            media_desc='"       . addslashes($media_desc) . "',
-            media_original_filename='" . addslashes($original_filename) . "',
+            SET media_title='"  . DB_escapeString($media_title) . "',
+            media_desc='"       . DB_escapeString($media_desc) . "',
+            media_original_filename='" . DB_escapeString($original_filename) . "',
             media_time="        . $media_time . ",
             media_tn_attached=" . $attachtn . ",
             media_category="    . intval($cat_id) . ",
@@ -1300,14 +1300,14 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
             genre='"            . $genre . "',
             remote_url='"       . $remote_url . "' " .
             $owner_sql .
-            "WHERE media_id='"   . addslashes($media_id) . "'";
+            "WHERE media_id='"   . DB_escapeString($media_id) . "'";
 
     DB_query($sql);
     if ( DB_error() != 0 ) {
         echo COM_errorLog("Media Gallery: ERROR Updating image in media database");
     }
     PLG_itemSaved($media_id,'mediagallery');
-    $media_id_db = addslashes($media_id);
+    $media_id_db = DB_escapeString($media_id);
 
     // process playback options if any...
     if (isset($_POST['autostart'])) {   // asf
@@ -1342,15 +1342,15 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
     if (isset($_POST['play'])) {    //swf
         $playback_option['play']        = COM_applyFilter($_POST['play'],true);
         $playback_option['menu']        = isset($_POST['menu']) ? COM_applyFilter($_POST['menu'],true) : '';
-        $playback_option['quality']     = isset($_POST['quality']) ? addslashes(COM_applyFilter($_POST['quality'])) : '';
-        $playback_option['flashvars']   = isset($_POST['flashvars']) ? addslashes(COM_applyFilter($_POST['flashvars'])) : '';
+        $playback_option['quality']     = isset($_POST['quality']) ? DB_escapeString(COM_applyFilter($_POST['quality'])) : '';
+        $playback_option['flashvars']   = isset($_POST['flashvars']) ? DB_escapeString(COM_applyFilter($_POST['flashvars'])) : '';
         $playback_option['height']      = COM_applyFilter($_POST['height'],true);
         $playback_option['width']       = COM_applyFilter($_POST['width'],true);
         $playback_option['loop']        = isset($_POST['loop']) ? COM_applyFilter($_POST['loop'],true) : 0;
-        $playback_option['scale']       = isset($_POST['scale']) ? addslashes(COM_applyFilter($_POST['scale'])) : '';
-        $playback_option['wmode']       = isset($_POST['wmode']) ? addslashes(COM_applyFilter($_POST['wmode'])) : '';
-        $playback_option['allowscriptaccess'] = isset($_POST['allowscriptaccess']) ? addslashes(COM_applyFilter($_POST['allowscriptaccess'])) : '';
-        $playback_option['bgcolor']     = isset($_POST['bgcolor']) ? addslashes(COM_applyFilter($_POST['bgcolor'])) : '';
+        $playback_option['scale']       = isset($_POST['scale']) ? DB_escapeString(COM_applyFilter($_POST['scale'])) : '';
+        $playback_option['wmode']       = isset($_POST['wmode']) ? DB_escapeString(COM_applyFilter($_POST['wmode'])) : '';
+        $playback_option['allowscriptaccess'] = isset($_POST['allowscriptaccess']) ? DB_escapeString(COM_applyFilter($_POST['allowscriptaccess'])) : '';
+        $playback_option['bgcolor']     = isset($_POST['bgcolor']) ? DB_escapeString(COM_applyFilter($_POST['bgcolor'])) : '';
         $playback_option['swf_version'] = isset($_POST['swf_version']) ? COM_applyFilter($_POST['swf_version'],true) : 9;
 
         DB_save($_TABLES['mg_playback_options'], 'media_id,option_name,option_value',"'$media_id_db','play',              {$playback_option['play']}");
@@ -1374,7 +1374,7 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
         $playback_option['autoref']     = COM_applyFilter($_POST['autoref'],true);
         $playback_option['controller']  = COM_applyFilter($_POST['controller'],true);
         $playback_option['kioskmode']   = COM_applyFilter($_POST['kioskmode'],true);
-        $playback_option['scale']       = addslashes(COM_applyFilter($_POST['scale']));
+        $playback_option['scale']       = DB_escapeString(COM_applyFilter($_POST['scale']));
         $playback_option['height']      = COM_applyFilter($_POST['height'],true);
         $playback_option['width']       = COM_applyFilter($_POST['width'],true);
         $playback_option['bgcolor']     = COM_applyFilter($_POST['bgcolor']);

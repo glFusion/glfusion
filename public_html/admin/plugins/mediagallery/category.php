@@ -124,11 +124,11 @@ function MG_saveCategory( $cat_id ) {
     $A['cat_id']        = COM_applyFilter($_POST['cat_id'],true);
 
     if ($_MG_CONF['htmlallowed'] == 1 ) {
-        $A['cat_name']          = addslashes(COM_checkHTML(COM_killJS($_POST['cat_name'])));
-        $A['cat_description']   = addslashes(COM_checkHTML(COM_killJS($_POST['cat_desc'])));
+        $A['cat_name']          = DB_escapeString(COM_checkHTML(COM_killJS($_POST['cat_name'])));
+        $A['cat_description']   = DB_escapeString(COM_checkHTML(COM_killJS($_POST['cat_desc'])));
     } else {
-        $A['cat_name']          = addslashes(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($_POST['cat_name'])))));
-        $A['cat_description']   = addslashes(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($_POST['cat_desc'])))));
+        $A['cat_name']          = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($_POST['cat_name'])))));
+        $A['cat_description']   = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($_POST['cat_desc'])))));
     }
 
     if ($A['cat_name'] == "" ) {

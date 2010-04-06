@@ -6,9 +6,9 @@
 // |                                                                          |
 // | input / display cleaner                                                  |
 // +--------------------------------------------------------------------------+
-// | $Id:: textsanitizer.php 3155 2008-09-16 02:13:18Z mevans0263            $|
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -160,9 +160,9 @@ class MyTextSanitizer {
     /*
     * if magic_quotes_gpc is off, add back slashes
     */
-    function oopsAddSlashes($text) {
+    function oopsDB_escapeString($text) {
         if (!get_magic_quotes_gpc()) {
-            $text = addslashes($text);
+            $text = DB_escapeString($text);
         }
         return $text;
     }
@@ -253,7 +253,7 @@ class MyTextSanitizer {
     */
     function makeTboxData4Save($text){
         //$text = $this->undoHtmlSpecialChars($text);
-        $text = $this->oopsAddSlashes($text);
+        $text = $this->oopsDB_escapeString($text);
         return $text;
     }
 
@@ -299,7 +299,7 @@ class MyTextSanitizer {
     *  data into DB
     */
     function makeTareaData4Save($text){
-        $text = $this->oopsAddSlashes($text);
+        $text = $this->oopsDB_escapeString($text);
         return $text;
     }
 

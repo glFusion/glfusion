@@ -75,9 +75,9 @@ if ($what == 'link') {
         $item = $i[0];
     }
     if (!empty($item)) {
-        $url = DB_getItem($_TABLES['links'], 'url', "lid = '".addslashes($item)."'");
+        $url = DB_getItem($_TABLES['links'], 'url', "lid = '".DB_escapeString($item)."'");
         if (!empty($url)) {
-            DB_change($_TABLES['links'], 'hits','hits + 1', 'lid',addslashes($item), '', true);
+            DB_change($_TABLES['links'], 'hits','hits + 1', 'lid',DB_escapeString($item), '', true);
         }
     }
 }

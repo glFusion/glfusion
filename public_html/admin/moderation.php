@@ -36,16 +36,12 @@
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
-require_once $_CONF['path_system'] . 'lib-user.php';
-require_once $_CONF['path_system'] . 'lib-story.php';
-require_once $_CONF['path_system'] . 'lib-admin.php';
 
-// Uncomment the line below if you need to debug the HTTP variables being passed
-// to the script.  This will sometimes cause errors but it will allow you to see
-// the data being passed in a POST operation
-// echo COM_debug($_POST);
+USES_lib_user();
+USES_lib_story();
+USES_lib_admin();
 
-function all_submissions($token)
+function MODERATE_submissions($token)
 {
     global $_CONF, $LANG01, $LANG29, $LANG_ADMIN, $_IMAGE_TYPE;
 
@@ -58,22 +54,99 @@ function all_submissions($token)
                                 $_CONF['layout_url'] . '/images/icons/moderation.'. $_IMAGE_TYPE);
 
     if (SEC_hasRights('story.moderate')) {
-        $retval .= itemlist('story', $token);
+        $retval .= MODERATE_itemList('story', $token);
     }
 
     if (SEC_hasRights('story.edit')) {
         if ($_CONF['listdraftstories'] == 1) {
-            $retval .= draftlist ($token);
+            $retval .= MODERATE_draftList($token);
         }
     }
     if ($_CONF['usersubmission'] == 1) {
         if (SEC_hasRights ('user.edit') && SEC_hasRights ('user.delete')) {
-            $retval .= userlist ($token);
+            $retval .= MODERATE_userList($token);
         }
     }
 
     $retval .= PLG_showModerationList($token);
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+
+    return $retval;
+}
+
+/**
+ * used for the lists of submissions and draft stories in admin/moderation.php
+ *
+ */
+function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr)
+{
+    global $_CONF, $_TABLES, $LANG_ADMIN;
+
+    $retval = '';
+
+    $type = '';
+    if (isset ($A['_moderation_type'])) {
+        $type = $A['_moderation_type'];
+    }
+    switch ($fieldname) {
+    case 'edit':
+        $retval = COM_createLink($icon_arr['edit'], $A['edit']);
+        break;
+
+    case 'delete':
+        $retval = "<input type=\"radio\" name=\"action[{$A['row']}]\" value=\"delete\"" . XHTML . ">";
+        break;
+
+    case 'approve':
+        $retval = "<input type=\"radio\" name=\"action[{$A['row']}]\" value=\"approve\"" . XHTML . ">"
+                 ."<input type=\"hidden\" name=\"id[{$A['row']}]\" value=\"{$A[0]}\"" . XHTML . ">";
+        break;
+
+    case 'day':
+        $retval = strftime($_CONF['daytime'], $A['day']);
+        break;
+
+    case 'tid':
+        $retval = DB_getItem($_TABLES['topics'], 'topic',
+                             "tid = '".DB_escapeString($A['tid'])."'");
+        break;
+
+    case 'uid':
+        $name = '';
+        if ($A['uid'] == 1) {
+            $name = htmlspecialchars(COM_stripslashes(DB_getItem($_TABLES['commentsubmissions'], 'name', "cid = '".DB_escapeString($A['id'])."'")));
+        }
+        if (empty($name)) {
+            $name = DB_getItem($_TABLES['users'], 'username',
+                               "uid = ".intval($A['uid']));
+        }
+        if ($A['uid'] == 1) {
+            $retval = $name;
+        } else {
+            $retval = COM_createLink($name, $_CONF['site_url']
+                            . '/users.php?mode=profile&amp;uid=' . $A['uid']);
+        }
+        break;
+
+    case 'publishfuture':
+        if (!SEC_inGroup('Comment Submitters', $A['uid']) && ($A['uid'] > 1)) {
+            $retval = "<input type=\"checkbox\" name=\"publishfuture[]\" value=\"{$A['uid']}\"" . XHTML . ">";
+        } else {
+            $retval = $LANG_ADMIN['na'];
+        }
+        break;
+
+    default:
+        if (($fieldname == 3) && ($type == 'story')) {
+            $retval = DB_getItem($_TABLES['topics'], 'topic',
+                                  "tid = '".DB_escapeString($A[3])."'");
+        } elseif (($fieldname == 2) && ($type == 'comment')) {
+            $retval = COM_truncate(strip_tags($A['comment']), 40, '...');
+        } else {
+            $retval = COM_makeClickableLinks(stripslashes($fieldvalue));
+        }
+        break;
+    }
 
     return $retval;
 }
@@ -86,7 +159,7 @@ function all_submissions($token)
 * @type     string      Type of object to build list for
 *
 */
-function itemlist($type, $token)
+function MODERATE_itemList($type, $token)
 {
     global $_CONF, $_TABLES, $LANG29, $LANG_ADMIN;
 
@@ -155,12 +228,12 @@ function itemlist($type, $token)
     }
 
     $header_arr = array(      // display 'text' and use table field 'field'
-        array('text' => $LANG_ADMIN['edit'], 'field' => 0),
+        array('text' => $LANG_ADMIN['edit'], 'field' => 0, 'align' => 'center'),
         array('text' => $H[0], 'field' => 1),
         array('text' => $H[1], 'field' => 2),
         array('text' => $H[2], 'field' => 3),
-        array('text' => $LANG29[2], 'field' => 'delete'),
-        array('text' => $LANG29[1], 'field' => 'approve'));
+        array('text' => $LANG29[2], 'field' => 'delete', 'align' => 'center'),
+        array('text' => $LANG29[1], 'field' => 'approve', 'align' => 'center'));
 
     $text_arr = array('has_menu'    => false,
                       'title'       => $section_title,
@@ -178,9 +251,9 @@ function itemlist($type, $token)
                 . $LANG_ADMIN['submit'] . '"' . XHTML . '></p>' . LB;
     }
 
-    $listoptions = array('chkdelete' => true, 'chkfield' => 'id');
-    $table = ADMIN_simpleList('ADMIN_getListField_moderation', $header_arr,
-                              $text_arr, $data_arr, $listoptions, $form_arr);
+    $options = array('chkselect' => true, 'chkfield' => 'id');
+    $table = ADMIN_simpleList('MODERATE_getListField', $header_arr,
+                              $text_arr, $data_arr, $options, $form_arr);
     $retval .= $table;
 
     return $retval;
@@ -194,7 +267,7 @@ function itemlist($type, $token)
 * password is sent out immediately.
 *
 */
-function userlist ($token)
+function MODERATE_userList($token)
 {
     global $_CONF, $_TABLES, $LANG29, $LANG_ADMIN;
 
@@ -207,19 +280,19 @@ function userlist ($token)
     $data_arr = array();
     for ($i = 0; $i < $nrows; $i++) {
         $A = DB_fetchArray($result);
-        $A['edit'] = $_CONF['site_admin_url'].'/user.php?mode=edit&amp;uid='.$A['id'];
+        $A['edit'] = $_CONF['site_admin_url'].'/user.php?edit=x&amp;uid='.$A['id'];
         $A['row'] = $i;
         $A['fullname'] = stripslashes($A['fullname']);
         $A['email'] = stripslashes($A['email']);
         $data_arr[$i] = $A;
     }
     $header_arr = array(
-        array('text' => $LANG_ADMIN['edit'], 'field' => 0),
+        array('text' => $LANG_ADMIN['edit'], 'field' => 0, 'align' => 'center'),
         array('text' => $LANG29[16], 'field' => 1),
         array('text' => $LANG29[17], 'field' => 2),
         array('text' => $LANG29[18], 'field' => 3),
-        array('text' => $LANG29[2], 'field' => 'delete'),
-        array('text' => $LANG29[1], 'field' => 'approve')
+        array('text' => $LANG29[2], 'field' => 'delete', 'align' => 'center'),
+        array('text' => $LANG29[1], 'field' => 'approve', 'align' => 'center')
     );
 
     $text_arr = array('has_menu'  => false,
@@ -229,7 +302,7 @@ function userlist ($token)
                       'form_url'  => "{$_CONF['site_admin_url']}/moderation.php"
     );
 
-    $listoptions = array('chkdelete' => true, 'chkfield' => 'id');
+    $options = array('chkselect' => true, 'chkfield' => 'id');
 
     $form_arr = array("bottom" => '', "top" => '');
     if ($nrows > 0) {
@@ -241,8 +314,8 @@ function userlist ($token)
                 . $LANG_ADMIN['submit'] . '"' . XHTML . '></p>' . LB;
     }
 
-    $table = ADMIN_simpleList('ADMIN_getListField_moderation', $header_arr,
-                              $text_arr, $data_arr, $listoptions, $form_arr);
+    $table = ADMIN_simpleList('MODERATE_getListField', $header_arr,
+                              $text_arr, $data_arr, $options, $form_arr);
     $retval .= $table;
 
 
@@ -257,7 +330,7 @@ function userlist ($token)
 * thus publish the story.
 *
 */
-function draftlist ($token)
+function MODERATE_draftList($token)
 {
     global $_CONF, $_TABLES, $LANG24, $LANG29, $LANG_ADMIN;
 
@@ -280,12 +353,12 @@ function draftlist ($token)
     }
 
     $header_arr = array(
-        array('text' => $LANG_ADMIN['edit'], 'field' => 0),
+        array('text' => $LANG_ADMIN['edit'], 'field' => 0, 'align' => 'center'),
         array('text' => $LANG29[10], 'field' => 'title'),
         array('text' => $LANG29[14], 'field' => 'day'),
-        array('text' => $LANG29[15], 'field' => 'tid'),
-        array('text' => $LANG29[2], 'field' => 'delete'),
-        array('text' => $LANG29[1], 'field' => 'approve'));
+        array('text' => $LANG29[15], 'field' => 'tid', 'align' => 'center'),
+        array('text' => $LANG29[2], 'field' => 'delete', 'align' => 'center'),
+        array('text' => $LANG29[1], 'field' => 'approve', 'align' => 'center'));
 
     $text_arr = array('has_menu'  => false,
                       'title'     => $LANG29[35] . ' (' . $LANG24[34] . ')',
@@ -303,9 +376,9 @@ function draftlist ($token)
                 . $LANG_ADMIN['submit'] . '"' . XHTML . '></p>' . LB;
     }
 
-    $listoptions = array('chkdelete' => true, 'chkfield' => 'id');
-    $table = ADMIN_simpleList('ADMIN_getListField_moderation', $header_arr,
-                              $text_arr, $data_arr, $listoptions, $form_arr);
+    $options = array('chkselect' => true, 'chkfield' => 'id');
+    $table = ADMIN_simpleList('MODERATE_getListField', $header_arr,
+                              $text_arr, $data_arr, $options, $form_arr);
     $retval .= $table;
     return $retval;
 }
@@ -322,7 +395,7 @@ function draftlist ($token)
 * @return   string              HTML for "command and control" page
 *
 */
-function moderation ($mid, $action, $type, $count)
+function MODERATE_items($mid, $action, $type, $count)
 {
     global $_CONF, $_TABLES;
 
@@ -376,11 +449,11 @@ function moderation ($mid, $action, $type, $count)
             if ($type == 'story') {
                 $result = DB_query ("SELECT * FROM {$_TABLES['storysubmission']} WHERE sid = '$mid[$i]'");
                 $A = DB_fetchArray ($result);
-                $A['related'] = addslashes (implode ("\n", STORY_extractLinks ($A['introtext'])));
+                $A['related'] = DB_escapeString (implode ("\n", STORY_extractLinks ($A['introtext'])));
                 $A['owner_id'] = $A['uid'];
-                $A['title'] = addslashes ($A['title']);
-                $A['introtext'] = addslashes ($A['introtext']);
-                $A['bodytext'] = addslashes( $A['bodytext'] );
+                $A['title'] = DB_escapeString ($A['title']);
+                $A['introtext'] = DB_escapeString ($A['introtext']);
+                $A['bodytext'] = DB_escapeString( $A['bodytext'] );
                 $result = DB_query ("SELECT group_id,perm_owner,perm_group,perm_members,perm_anon,archive_flag FROM {$_TABLES['topics']} WHERE tid = '{$A['tid']}'");
                 $T = DB_fetchArray ($result);
                 if ($T['archive_flag'] == 1) {
@@ -429,7 +502,7 @@ function moderation ($mid, $action, $type, $count)
         }
     }
 
-    $retval .= all_submissions(SEC_createToken());
+    $retval .= MODERATE_submissions(SEC_createToken());
 
     return $retval;
 }
@@ -446,7 +519,7 @@ function moderation ($mid, $action, $type, $count)
 * @return   string              HTML for "command and control" page
 *
 */
-function moderateusers ($uid, $action, $count)
+function MODERATE_users($uid, $action, $count)
 {
     global $_CONF, $_TABLES, $LANG04;
 
@@ -494,17 +567,22 @@ function moderateusers ($uid, $action, $count)
         }
     }
 
-    $retval .= all_submissions(SEC_createToken());
+    $retval .= MODERATE_submissions(SEC_createToken());
 
     return $retval;
 }
 
+// MAIN ========================================================================
+
 $display = '';
+
 $display .= COM_siteHeader ('menu', $LANG01[10]);
+
 $msg = 0;
 if (isset($_GET['msg'])) {
     $msg = COM_applyFilter($_GET['msg'], true);
 }
+
 if ($msg > 0) {
     $plugin = '';
     if (isset($_GET['plugin'])) {
@@ -519,14 +597,14 @@ if (isset ($_POST['mode']) && ($_POST['mode'] == 'moderation') && SEC_checkToken
         $action = $_POST['action'];
     }
     if ($_POST['type'] == 'user') {
-        $display .= moderateusers($_POST['id'], $action,
+        $display .= MODERATE_users($_POST['id'], $action,
                                   COM_applyFilter($_POST['count'], true));
     } else {
-        $display .= moderation($_POST['id'], $action, $_POST['type'],
+        $display .= MODERATE_items($_POST['id'], $action, $_POST['type'],
                                COM_applyFilter ($_POST['count'], true));
     }
 } else {
-    $display .= all_submissions(SEC_createToken());
+    $display .= MODERATE_submissions(SEC_createToken());
 }
 
 $display .= COM_siteFooter();

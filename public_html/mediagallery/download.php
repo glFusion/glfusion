@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -33,6 +33,14 @@ require_once '../lib-common.php';
 
 if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
+    exit;
+}
+
+if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
+    $display = MG_siteHeader();
+    $display .= SEC_loginRequiredForm();
+    $display .= COM_siteFooter();
+    echo $display;
     exit;
 }
 
@@ -69,7 +77,7 @@ if ( $allowed == 0 ) {
 
 $mid = COM_applyFilter($_GET['mid']);
 
-$aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . addslashes($mid) . '"');
+$aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_escapeString($mid) . '"');
 
 if ( $MG_albums[$aid]->access == 0 ) {
     $display  = MG_siteHeader();
@@ -81,7 +89,7 @@ if ( $MG_albums[$aid]->access == 0 ) {
     exit;
 }
 
-$sql = "SELECT * FROM {$_TABLES['mg_media']} WHERE media_id='" . addslashes($mid) . "'";
+$sql = "SELECT * FROM {$_TABLES['mg_media']} WHERE media_id='" . DB_escapeString($mid) . "'";
 $result = DB_query($sql);
 $numRows = DB_numRows($result);
 if ( $numRows > 0 ) {
@@ -106,7 +114,7 @@ if ( $numRows > 0 ) {
     }
     if (!$MG_albums[0]->owner_id) {
         $media_views = $row['media_views'] + 1;
-        DB_query("UPDATE " . $_TABLES['mg_media'] . " SET media_views=" . $media_views . " WHERE media_id='" . addslashes($mid) . "'");
+        DB_query("UPDATE " . $_TABLES['mg_media'] . " SET media_views=" . $media_views . " WHERE media_id='" . DB_escapeString($mid) . "'");
     }
     header("Pragma: public");
     header("Expires: 0");

@@ -81,6 +81,12 @@ $_SYSTEM['no_fail_sql']      = false;
 $_SYSTEM['no_cache_config']  = false;
 
 // +--------------------------------------------------------------------------+
+// | Administrative session timeout - set to 0 to disable re-auth             |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['admin_session'] = 1200;
+
+// +--------------------------------------------------------------------------+
 // | Swedish Date Hack - enable special hack to return UTF-8 Swedish          |
 // |                     date / time                                          |
 // |                                                                          |

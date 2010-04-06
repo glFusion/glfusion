@@ -81,7 +81,7 @@ function links_list($message)
     } elseif (isset($_POST['category'])) {
         $cid = strip_tags(COM_stripslashes($_POST['category']));
     }
-    $cat = addslashes($cid);
+    $cat = DB_escapeString($cid);
     $page = 0;
     if (isset ($_GET['page'])) {
         $page = COM_applyFilter ($_GET['page'], true);
@@ -172,7 +172,7 @@ function links_list($message)
             for ($i = 1; $i <= $nrows; $i++) {
                 $C = DB_fetchArray($result);
                 // Get number of child links user can see in this category
-                $ccid = addslashes($C['cid']);
+                $ccid = DB_escapeString($C['cid']);
                 $result1 = DB_query("SELECT COUNT(*) AS count FROM {$_TABLES['links']} WHERE cid='{$ccid}'" . COM_getPermSQL('AND'));
                 $D = DB_fetchArray($result1);
 
@@ -244,7 +244,7 @@ function links_list($message)
     $from_where = " FROM {$_TABLES['links']}";
     if ($_LI_CONF['linkcols'] > 0) {
         if (!empty($cid)) {
-            $from_where .= " WHERE cid='" . addslashes($cid) . "'";
+            $from_where .= " WHERE cid='" . DB_escapeString($cid) . "'";
         } else {
             $from_where .= " WHERE cid=''";
         }
@@ -294,7 +294,7 @@ function links_list($message)
                 }
                 $currentcid = $A['cid'];
                 $currentcategory = DB_getItem($_TABLES['linkcategories'],
-                        'category', "cid = '" . addslashes($currentcid) . "'");
+                        'category', "cid = '" . DB_escapeString($currentcid) . "'");
                 $linklist->set_var('link_category', $currentcategory);
             }
 
@@ -482,7 +482,7 @@ if (($mode == 'report') && (isset($_USER['uid']) && ($_USER['uid'] > 1))) {
         $lid = COM_applyFilter($_GET['lid']);
     }
     if (!empty($lid)) {
-        $lidsl = addslashes($lid);
+        $lidsl = DB_escapeString($lid);
         $result = DB_query("SELECT url, title FROM {$_TABLES['links']} WHERE lid = '$lidsl'");
         list($url, $title) = DB_fetchArray($result);
 

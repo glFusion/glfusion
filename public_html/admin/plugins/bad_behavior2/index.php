@@ -38,6 +38,7 @@
 // +--------------------------------------------------------------------------+
 
 require_once ('../../../lib-common.php');
+require_once '../../auth.inc.php';
 
 $display = '';
 
@@ -201,7 +202,7 @@ function viewEntry ($id, $page = 1)
     $templates->set_var ('lang_denied_reason', $LANG_BAD_BEHAVIOR['denied_reason']);
     $templates->set_var ('lang_search', $LANG_BAD_BEHAVIOR['search']);
 
-    $id = addslashes ($id);
+    $id = DB_escapeString ($id);
     $result = DB_query ("SELECT ip,date,request_method,request_uri,server_protocol,http_headers,user_agent,request_entity,`key` FROM " . WP_BB_LOG . " WHERE id = '$id'");
     $A = DB_fetchArray ($result);
 

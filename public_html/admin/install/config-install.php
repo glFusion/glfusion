@@ -97,10 +97,8 @@ function install_config($site_url)
 
     $c->add('fs_search', NULL, 'fieldset', 0, 6, NULL, 0, TRUE);
     $c->add('search_style','google','select',0,6,18,650,TRUE);
-    $c->add('search_limits','10,15,25,30','text',0,6,NULL,660,TRUE);
-    $c->add('num_search_results',25,'text',0,6,NULL,670,TRUE);
-//    $c->add('search_show_limit',TRUE,'select',0,6,1,680,TRUE);
-//    $c->add('search_show_sort',TRUE,'select',0,6,1,690,TRUE);
+    $c->add('search_limits','10,25,50,100','text',0,6,NULL,660,TRUE);
+    $c->add('num_search_results',10,'text',0,6,NULL,670,TRUE);
     $c->add('search_show_num',TRUE,'select',0,6,1,700,TRUE);
     $c->add('search_show_type',TRUE,'select',0,6,1,710,TRUE);
     $c->add('search_show_user',TRUE,'select',0,6,1,720,TRUE);
@@ -108,7 +106,6 @@ function install_config($site_url)
     $c->add('search_no_data','<i>Not available...</i>','text',0,6,NULL,740,TRUE);
     $c->add('search_separator',' &gt; ','text',0,6,NULL,750,TRUE);
     $c->add('search_def_keytype','phrase','select',0,6,19,760,TRUE);
-    $c->add('default_search_order','date','select',0,6,22,770,TRUE);
 
     // Subgroup: Stories and Trackback
     $c->add('sg_stories', NULL, 'subgroup', 1, 0, NULL, 0, TRUE);
@@ -221,7 +218,7 @@ function install_config($site_url)
     $c->add('submitloginrequired',0,'select',4,18,0,690,TRUE);
     $c->add('commentsloginrequired',0,'select',4,18,0,700,TRUE);
     $c->add('statsloginrequired',0,'select',4,18,0,710,TRUE);
-    $c->add('searchloginrequired',0,'select',4,18,16,720,TRUE);
+    $c->add('searchloginrequired',0,'select',4,18,0,720,TRUE);
     $c->add('profileloginrequired',0,'select',4,18,0,730,TRUE);
     $c->add('emailuserloginrequired',0,'select',4,18,0,740,TRUE);
     $c->add('emailstoryloginrequired',0,'select',4,18,0,750,TRUE);
@@ -253,6 +250,7 @@ function install_config($site_url)
     $c->add('comment_code',0,'select',4,21,17,1670,TRUE);
     $c->add('comment_edit',0,'select',4,21,0,1680,TRUE);
     $c->add('comment_edittime',1800,'text',4,21,NULL,1690,TRUE);
+    $c->add('article_comment_close_enabled',0,'select',4,21,0,1695,TRUE);
     $c->add('article_comment_close_days',30,'text',4,21,NULL,1700,TRUE);
     $c->add('comment_close_rec_stories',0,'text',4,21,NULL,1710,TRUE);
 
@@ -302,8 +300,8 @@ function install_config($site_url)
 
     $c->add('fs_language', NULL, 'fieldset', 6, 28, NULL, 0, TRUE);
     $c->add('language','english','select',6,28,NULL,350,TRUE);
-    $c->add('language_files',array('en'=>'english_utf-8', 'de'=>'german_formal_utf-8'),'*text',6,28,NULL,470,FALSE);
-    $c->add('languages',array('en'=>'English', 'de'=>'Deutsch'),'*text',6,28,NULL,480,FALSE);
+//    $c->add('language_files',array('en'=>'english_utf-8', 'de'=>'german_formal_utf-8'),'*text',6,28,NULL,470,FALSE);
+//    $c->add('languages',array('en'=>'English', 'de'=>'Deutsch'),'*text',6,28,NULL,480,FALSE);
 
     $c->add('fs_locale', NULL, 'fieldset', 6, 29, NULL, 0, TRUE);
     $c->add('locale','en_GB','text',6,29,NULL,360,TRUE);
@@ -319,12 +317,17 @@ function install_config($site_url)
     $c->add('decimal_count',"2",'text',6,29,NULL,460,TRUE);
     $c->add('timezone','America/Chicago','select',6,29,NULL,490,TRUE);
 
+    $c->add('fs_multilanguage', NULL, 'fieldset', 6, 41, NULL, 0, TRUE);
+    $c->add('language_files',array('en'=>'english_utf-8', 'de'=>'german_formal_utf-8'),'*text',6,41,NULL,470,FALSE);
+    $c->add('languages',array('en'=>'English', 'de'=>'Deutsch'),'*text',6,41,NULL,480,FALSE);
+
     // Subgroup: Miscellaneous
     $c->add('sg_misc', NULL, 'subgroup', 7, 0, NULL, 0, TRUE);
 
     $c->add('fs_cookies', NULL, 'fieldset', 7, 30, NULL, 0, TRUE);
     $c->add('cookie_session','glf_session','text',7,30,NULL,530,TRUE);
     $c->add('cookie_name','glfusion','text',7,30,NULL,540,TRUE);
+    $c->add('session_ip_check',1,'select',7,30,26,545,TRUE);
     $c->add('cookie_password','glf_password','text',7,30,NULL,550,TRUE);
     $c->add('cookie_theme','glf_theme','text',7,30,NULL,560,TRUE);
     $c->add('cookie_language','glf_language','text',7,30,NULL,570,TRUE);

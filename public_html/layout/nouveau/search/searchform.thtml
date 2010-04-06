@@ -1,63 +1,67 @@
 {# begin {templatelocation} #}
-<h1>{$LANG09[1]}</h1>
+<h2>{$LANG09[1]}</h2>
+<img style="float:left;padding-right:10px;" src="{layout_url}/images/search.png" alt="{$LANG09[10]}" title="{$LANG09[10]}"{xhtml}>
 <form method="get" action="{site_url}/search.php">
-  <input type="hidden" name="mode" value="search"/>
-  <strong>{$LANG09[2]}</strong><br/>
-  <input type="text" name="query" id="query" size="60" value="{query}"/>&nbsp;
-  <input type="submit" name="submit" value="{$LANG09[10]}" />
-  <br /><br />
-  <table style="width:80%;">
-    <tr>
+    <br />
+    <input type="hidden" name="mode" value="search"{xhtml}>
+    <input type="text" name="query" id="query" size="80" value="{query}"{xhtml}>&nbsp;<input type="submit" name="submit" value="{$LANG09[10]}"{xhtml}>&nbsp;&nbsp;<a href="#" id="toggleV">{$LANG09[2]}</a>
 
-      <td align="center">
-        <strong>{$LANG09[70]}</strong>
-      </td>
-      <td align="center">
-        <strong>{$LANG09[71]}</strong>
-      </td>
-      <td align="center">
-        <strong>{$LANG09[72]}</strong>
-      </td>
-    {!if author_option_list}
-      <td align="center">
-       <strong>{$LANG09[69]}</strong>
-      </td>
-    {!endif}
-      <td align="center">
-        <strong>{$LANG09[73]}</strong>
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-        <select name="type">
-        {plugin_types}
-        </select>
-      </td>
-      <td align="center">
-        <select name="st">
-        {search_time}
-        </select>
-      </td>
-      <td align="center">
-        <select name="keyType">
-          <option value="any" {key_any_selected}>{$LANG09[45]}</option>
-          <option value="all" {key_all_selected}>{$LANG09[44]}</option>
-          <option value="phrase" {key_phrase_selected}>{$LANG09[43]}</option>
-        </select>
-      </td>
-      {!if author_option_list}
-      <td align="center">
-        <select name="author">
-          {author_option_list}
-        </select>
-      </td>
-      {!endif}
-      <td align="center">
-        <select name="results">
-          {search_limits}
-        </select>
-      </td>
-    </tr>
-  </table>
+<script type="text/javascript">
+window.addEvent('load', function() {
+//-vertical slide
+	var mySlideV = new Fx.Slide('gl_moodrawerV').hide();
+		$('toggleV').addEvent('click', function(e){
+			e = new Event(e);
+			mySlideV.toggle();
+			e.stop();
+        }); //end vertical slide
+});
+</script>
+
+    <div id="gl_moodrawerV">
+        <table style="padding-top:5px; width:550px;">
+            <tr>
+                <td align="center">{$LANG09[70]}</td>
+                <td align="center">{$LANG09[71]}</td>
+                <td align="center">{$LANG09[72]}</td>
+{!if author_option_list}
+                <td align="center">{$LANG09[69]}</td>
+{!endif}
+                <td align="center">{$LANG09[73]}</td>
+            </tr>
+            <tr>
+                <td align="center">
+                    <select name="type">
+                        {plugin_types}
+                    </select>
+                </td>
+                <td align="center">
+                    <select name="st">
+                        {search_time}
+                    </select>
+                </td>
+                <td align="center">
+                    <select name="keyType">
+                        <option value="any" {key_any_selected}>{$LANG09[45]}</option>
+                        <option value="all" {key_all_selected}>{$LANG09[44]}</option>
+                        <option value="phrase" {key_phrase_selected}>{$LANG09[43]}</option>
+                    </select>
+                </td>
+{!if author_option_list}
+                <td align="center">
+                    <select name="author">
+                        {author_option_list}
+                    </select>
+                </td>
+{!endif}
+                <td align="center">
+                    <select name="results">
+                        {search_limits}
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
 </form>
+<br />
 {# end {templatelocation} #}

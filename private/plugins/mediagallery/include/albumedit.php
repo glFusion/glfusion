@@ -1150,7 +1150,7 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
     if ( $album->wm_id == 'blank.png' ) {
         $wm_id = 0;
     } else {
-        $wm_id = DB_getItem($_TABLES['mg_watermarks'],'wm_id','filename="' . addslashes($album->wm_id) . '"');
+        $wm_id = DB_getItem($_TABLES['mg_watermarks'],'wm_id','filename="' . DB_escapeString($album->wm_id) . '"');
     }
     if ( $wm_id == '' )
         $wm_id = 0;
@@ -1165,7 +1165,7 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
     if (SEC_hasRights('mediagallery.admin')) {
         if ( $album->featured ) {
             // check for other featured albums, we can only have one
-            $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE featured=1 AND cbpage='" . addslashes($album->cbpage) . "'";
+            $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE featured=1 AND cbpage='" . DB_escapeString($album->cbpage) . "'";
             $result = DB_query($sql);
             $nRows  = DB_numRows($result);
             if ( $nRows > 0 ) {

@@ -64,7 +64,7 @@ $INSTALL_plugin['filemgmt'] = array(
   array('type' => 'table', 'table' => $_FM_TABLES['filemgmt_history'], 'sql' => $_SQL['filemgmt_history']),
 
   array('type' => 'group', 'group' => 'filemgmt Admin', 'desc' => 'Users in this group can administer the FileMgmt plugin',
-        'variable' => 'admin_group_id', 'addroot' => true),
+        'variable' => 'admin_group_id', 'addroot' => true, 'admin' => true),
 
   array('type' => 'feature', 'feature' => 'filemgmt.user', 'desc' => 'FileMgmt Access',
         'variable' => 'user_feature_id'),

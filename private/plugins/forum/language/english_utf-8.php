@@ -6,7 +6,7 @@
 // |                                                                          |
 // | English language file                                                    |
 // +--------------------------------------------------------------------------+
-// | $Id:: english_utf-8.php 4802 2009-08-09 00:03:13Z ewarren               $|
+// | $Id:: english_utf-8.php 5788 2010-04-02 15:45:46Z mevans0263            $|
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
@@ -311,6 +311,8 @@ $LANG_GF01 = array(
     'disable_smilies' => 'Disable Smilies:',
     'disable_urlparse' => 'Do not parse URLs:',
     'features' => 'Features:',
+    /* --- rss feature --- */
+    'rss_link' => 'Subscribe to this forum\'s RSS feed.',
 );
 
 $LANG_GF02 = array(

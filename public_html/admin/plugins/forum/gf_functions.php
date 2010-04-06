@@ -38,6 +38,7 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../../../lib-common.php';
+require_once '../../auth.inc.php';
 
 if (!SEC_hasRights('forum.edit')) {
   echo COM_siteHeader();

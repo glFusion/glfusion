@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
+// | Copyright (C) 2009-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -35,6 +35,10 @@ require_once '../lib-common.php';
 global $_CONF, $_MG_CONF, $MG_albums;
 
 // main
+
+if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
+    exit;
+}
 
 if( $_MG_CONF['verbose'] ) {
     COM_errorLog( 'album_rpc.php: invocation ------------------------' );

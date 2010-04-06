@@ -61,7 +61,7 @@ $INSTALL_plugin['staticpages'] = array(
   array('type' => 'table', 'table' => $_TABLES['staticpage'], 'sql' => $_SQL['staticpage']),
 
   array('type' => 'group', 'group' => 'staticpages Admin', 'desc' => 'Users in this group can administer the StaticPages plugin',
-        'variable' => 'admin_group_id', 'addroot' => true),
+        'variable' => 'admin_group_id', 'addroot' => true, 'admin' => true),
 
   array('type' => 'feature', 'feature' => 'staticpages.edit', 'desc' => 'Ability to edit static pages',
         'variable' => 'edit_feature_id'),

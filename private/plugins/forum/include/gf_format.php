@@ -448,7 +448,7 @@ function gf_preparefordb($message,$postmode) {
         $message = COM_checkWords($message);
     }
 
-    $message = addslashes($message);
+    $message = DB_escapeString($message);
     return $message;
 }
 
@@ -733,8 +733,8 @@ function gf_getImage($image,$directory='') {
         'forum'             =>    'forum.png',
         'forumindex'        =>    'forumindex.png',
         'forumname'         =>    'forumname.gif',
-        'forumnotify_off'   =>    'forumnotify_off.gif',
-        'forumnotify_on'    =>    'forumnotify_on.gif',
+        'forumnotify_off'   =>    'notify_off.png',
+        'forumnotify_on'    =>    'notify_on.png',
         'gl_mootip_bg200'   =>    'gl_mootip_bg200.png',
         'green_dot'         =>    'green_dot.gif',
         'home'              =>    'home.png',
@@ -803,6 +803,7 @@ function gf_getImage($image,$directory='') {
         'red_dot'           =>    'red_dot.gif',
         'replypost'         =>    'replypost.gif',
         'return'            =>    'return.gif',
+        'rss_feed'          =>    'rss_small.png',
         'search'            =>    'search.gif',
         'spacer'            =>    'spacer.gif',
         'start-quote'       =>    'start-quote.gif',
@@ -1270,7 +1271,7 @@ function forum_showBlocks($showblocks)
     }
 
     foreach($showblocks as $block) {
-        $sql = "SELECT bid, name,type,title,content,rdfurl,phpblockfn,help,allow_autotags FROM {$_TABLES['blocks']} WHERE name='".addslashes($block)."'";
+        $sql = "SELECT bid, name,type,title,content,rdfurl,phpblockfn,help,allow_autotags FROM {$_TABLES['blocks']} WHERE name='".DB_escapeString($block)."'";
         $result = DB_query($sql);
         if (DB_numRows($result) == 1) {
             $A = DB_fetchArray($result);
@@ -1323,7 +1324,7 @@ function gf_FormatForEmail( $str, $postmode='html' ) {
     }
     $CONF_FORUM['use_geshi']     = true;
     $CONF_FORUM['allow_smilies'] = false;
-    $str = gf_formatTextBlock($str,$postmode,'text',$A['status']);
+    $str = gf_formatTextBlock($str,$postmode,'text');
 
     $str = str_replace('<img src="' . $_CONF['site_url'] . '/forum/images/img_quote.gif" alt=""/>','',$str);
 
@@ -1352,7 +1353,7 @@ function gfm_getoutput( $id ) {
     $A['comment'] = gf_FormatForEmail( $A['comment'], $A['postmode'] );
     $notifymsg = sprintf($LANG_GF02['msg27'],"<a href=\"$_CONF[site_url]/forum/notify.php\">$_CONF[site_url]/forum/notify.php</a>");
     $date = strftime('%B %d %Y @ %I:%M %p', $A['date']);
-    if ($A[pid] == '0') {
+    if ($A['pid'] == '0') {
         $postid = $A['id'];
     } else {
         $postid = $A['pid'];
@@ -1387,7 +1388,7 @@ function gfm_getoutput( $id ) {
         'post_comment'  => $A['comment'],
         'notify_msg'    => $notifymsg,
         'site_name'     => $_CONF['site_name'],
-        'online_version' => sprintf($LANG_GF02['view_online'],$_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$postid.'&lastpost=true#'.$topic_id),
+        'online_version' => sprintf($LANG_GF02['view_online'],$_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$postid.'&lastpost=true#'.$A['id']),
     ));
     $T->parse('output','email');
     $msgText = $T->finish($T->get_var('output'));

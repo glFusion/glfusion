@@ -203,7 +203,7 @@ class captcha {
         }
 
         if ( $this->session_id != 0 ) {
-            $sql = "UPDATE {$_TABLES['cp_sessions']} SET validation='" . $this->getCaptchaString() . "' WHERE session_id='" . addslashes($this->session_id) . "'";
+            $sql = "UPDATE {$_TABLES['cp_sessions']} SET validation='" . $this->getCaptchaString() . "' WHERE session_id='" . DB_escapeString($this->session_id) . "'";
             DB_query($sql);
         } else {
            CAPTCHA_errorLog("CAPTCHA: No valid session id passed");

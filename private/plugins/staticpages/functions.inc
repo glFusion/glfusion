@@ -197,7 +197,7 @@ function plugin_savecomment_staticpages($title, $comment, $id, $pid, $postmode)
     $retval = '';
 
     $commentcode = DB_getItem ($_TABLES['staticpage'], 'commentcode',
-                               "sp_id = '".addslashes($id)."'");
+                               "sp_id = '".DB_escapeString($id)."'");
     if ($commentcode != 0) {
         return COM_refresh ($_CONF['site_url'] . '/index.php');
     }
@@ -234,7 +234,7 @@ function plugin_deletecomment_staticpages($cid, $id)
 
     $has_editPermissions = SEC_hasRights ('staticpages.edit');
     $result = DB_query ("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon "
-        . "FROM {$_TABLES['staticpage']} WHERE sp_id = '".addslashes($id)."'");
+        . "FROM {$_TABLES['staticpage']} WHERE sp_id = '".DB_escapeString($id)."'");
     $A = DB_fetchArray ($result);
 
     if ($has_editPermissions && SEC_hasAccess ($A['owner_id'],
@@ -487,7 +487,7 @@ function SP_printPage ($page, $A)
     if ($A['commentcode'] >= 0) {
         $commentsUrl = $sp_url . '#comments';
         $comments = DB_count($_TABLES['comments'],
-                             array('sid', 'type'), array(addslashes($page), 'staticpages'));
+                             array('sid', 'type'), array(DB_escapeString($page), 'staticpages'));
         $numComments = COM_numberFormat ($comments);
         $print->set_var ('story_comments', $numComments);
         $print->set_var ('comments_url', $commentsUrl);
@@ -539,7 +539,7 @@ function SP_returnStaticpage($page='', $mode='', $comment_order = 'ASC', $commen
         }
 
         // increment hit counter for page
-        DB_query("UPDATE {$_TABLES['staticpage']} SET sp_hits = sp_hits + 1 WHERE sp_id = '".addslashes($page)."'");
+        DB_query("UPDATE {$_TABLES['staticpage']} SET sp_hits = sp_hits + 1 WHERE sp_id = '".DB_escapeString($page)."'");
 
     }
 
@@ -643,7 +643,7 @@ function plugin_dopluginsearch_staticpages($query, $datestart, $dateend, $topic,
     global $_TABLES, $LANG_STATIC;
 
     // Make sure the query is SQL safe
-    $query = trim(addslashes($query));
+    $query = trim(DB_escapeString($query));
 
     $sql = "SELECT sp.sp_id AS id, sp.sp_title AS title, sp.sp_content AS description, UNIX_TIMESTAMP(sp.sp_date) AS date, sp.sp_uid AS uid, sp.sp_hits AS hits, CONCAT('/staticpages/index.php?page=', sp.sp_id) AS url ";
     $sql .= "FROM {$_TABLES['staticpage']} AS sp,{$_TABLES['users']} AS u ";
@@ -682,7 +682,7 @@ function plugin_dopluginsearch_comment_staticpages($query, $datestart, $dateend,
 {
     global $_TABLES, $LANG_STATIC, $LANG09;
 
-    $query = trim(addslashes(htmlspecialchars($query)));
+    $query = trim(DB_escapeString(htmlspecialchars($query)));
 
     $sql =  "SELECT c.cid AS id1, c.sid AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
     $sql .= "CONCAT('/staticpages/index.php?page=', c.sid,'#comments') AS url ";
@@ -813,7 +813,7 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
     if (empty ($topic)) {
         $moresql .= "((sp_tid = 'none') OR (sp_tid = 'all'))";
     } else {
-        $moresql .= "((sp_tid = '".addslashes($topic)."') OR (sp_tid = 'all'))";
+        $moresql .= "((sp_tid = '".DB_escapeString($topic)."') OR (sp_tid = 'all'))";
     }
 
     if ($_SP_CONF['sort_by'] == 'date') {
@@ -1006,7 +1006,7 @@ function plugin_autotags_staticpages($op, $content = '', $autotag = '')
                                     . '/staticpages/index.php?page=' . $sp_id);
                 if (empty($autotag['parm2'])) {
                     $linktext = DB_getItem ($_TABLES['staticpage'],
-                                             'sp_title', "sp_id = '".addslashes($sp_id)."'");
+                                             'sp_title', "sp_id = '".DB_escapeString($sp_id)."'");
                 } else {
                     $linktext = $autotag['parm2'];
                 }
@@ -1149,7 +1149,7 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
         $where = '';
         $permOp = 'WHERE';
     } else {
-        $where = " WHERE sp_id = '" . addslashes($id) . "'";
+        $where = " WHERE sp_id = '" . DB_escapeString($id) . "'";
         $permOp = 'AND';
     }
     if ($uid > 0) {

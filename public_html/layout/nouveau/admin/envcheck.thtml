@@ -1,19 +1,27 @@
 <script type="text/javascript">
 // <![CDATA[
     window.addEvent('domready', function() {
-    	var mySlideV = new Fx.Slide('phpinfo').hide();
-    		$('toggleV').addEvent('click', function(e){
-    			e = new Event(e);
-    			mySlideV.toggle();
-    			e.stop();
-            });
+        var button = $('toggleV');
+        var status = {
+            'true': '{lang_show_phpinfo}',
+            'false': '{lang_hide_phpinfo}'
+        };
+
+        var mySlideV = new Fx.Slide('phpinfo').hide();
+
+        button.addEvent('click', function(e){
+            e = new Event(e);
+            mySlideV.toggle();
+            e.stop();
+            button.value = status[mySlideV.open];
+        });
     });
 // ]]>
 </script>
 <div class="step floatleft">
   <div class="stepfields-envchk">
     <h2 class="top">{lang_php_settings}</h2>
-    <table cellpadding="2">
+    <table cellpadding="2" style="width:98%;">
       <tr>
         <th>{lang_setting}</th>
         <th>{lang_current}</th>
@@ -55,8 +63,8 @@
     {!if phpinfo}
     <h2>{lang_current_php_settings}</h2>
     <hr />
-    <input class="button2" type="button" title="PHP Settings" style="text-decoration: none; width: 150px;" value="Show Full PHP Information" name="toggleV" id="toggleV"/>
-    <div id="phpinfo" style="padding-top:15px;">
+    <input class="button2" type="button" title="PHP Settings" style="text-decoration: none; width: 150px;" value="{lang_show_phpinfo}" name="toggleV" id="toggleV"/>
+    <div id="phpinfo" style="padding-top:15px;width:600px;">
     {phpinfo}
     </div>
     {!endif}

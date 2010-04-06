@@ -50,7 +50,7 @@ function MG_haveEXIF( $mid ) {
     $count      = 0;
     $exifItems  = 0;
 
-    $result = DB_query("SELECT media_filename,media_mime_ext,media_exif FROM {$_TABLES['mg_media']} WHERE media_id='" . addslashes($mid) . "'");
+    $result = DB_query("SELECT media_filename,media_mime_ext,media_exif FROM {$_TABLES['mg_media']} WHERE media_id='" . DB_escapeString($mid) . "'");
     list($media_filename, $media_mime_ext, $media_exif) = DB_fetchArray($result);
     if ( $media_exif == 0 )
         return 0;
@@ -67,7 +67,7 @@ function MG_haveEXIF( $mid ) {
     }
 
     if ( count($exif) == 0 ) {
-        DB_query("UPDATE {$_TABLES['mg_media']} SET media_exif=0 WHERE media_id='" . addslashes($mid) . "'");
+        DB_query("UPDATE {$_TABLES['mg_media']} SET media_exif=0 WHERE media_id='" . DB_escapeString($mid) . "'");
         return 0;
     }
 
@@ -94,13 +94,13 @@ function MG_readEXIF( $mid, $columns = 2, $mqueue=0) {
 
     $retval = '';
 
-    $media_filename = DB_getItem($mqueue ? $_TABLES['mg_mediaqueue'] : $_TABLES['mg_media'],'media_filename',"media_id='" .addslashes($mid)."'");
+    $media_filename = DB_getItem($mqueue ? $_TABLES['mg_mediaqueue'] : $_TABLES['mg_media'],'media_filename',"media_id='" .DB_escapeString($mid)."'");
     if ( $media_filename == '' ) {
         return '';
     }
-    $media_mime_ext = DB_getItem($mqueue ? $_TABLES['mg_mediaqueue'] : $_TABLES['mg_media'],'media_mime_ext',"media_id='" . addslashes($mid) . "'");
+    $media_mime_ext = DB_getItem($mqueue ? $_TABLES['mg_mediaqueue'] : $_TABLES['mg_media'],'media_mime_ext',"media_id='" . DB_escapeString($mid) . "'");
 
-    $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . addslashes($mid) . '"');
+    $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_escapeString($mid) . '"');
 
     // setup the template...
     $T = new Template( MG_getTemplatePath($aid) );

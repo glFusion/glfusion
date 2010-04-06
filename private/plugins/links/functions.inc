@@ -352,7 +352,7 @@ function plugin_dopluginsearch_links($query, $datestart, $dateend, $topic, $type
     global $_TABLES, $LANG_LINKS;
 
     // Make sure the query is SQL safe
-    $query = trim(addslashes(htmlspecialchars($query)));
+    $query = trim(DB_escapeString(htmlspecialchars($query)));
 
     $sql = "SELECT lid AS id, title, description, UNIX_TIMESTAMP(date) AS date, owner_id AS uid, hits, CONCAT('/links/portal.php?what=link&amp;item=',lid) AS url ";
     $sql .= "FROM {$_TABLES['links']} WHERE date <> 1 ";
@@ -531,7 +531,7 @@ function links_buildSql($cid, $limits)
 {
     $where = '';
     if ($cid != 'all') {
-        $where = "cid='" . addslashes($cid) . "'";
+        $where = "cid='" . DB_escapeString($cid) . "'";
     }
 
     $limitsql = '';
@@ -888,7 +888,7 @@ function plugin_save_submit_links($A)
 
     $validcat = false;
     if (!empty($A['cid'])) {
-        $cid = addslashes($A['cid']);
+        $cid = DB_escapeString($A['cid']);
         $cat = DB_getItem($_TABLES['linkcategories'], 'category',
                           "cid = '$cid'");
         if (!empty($cat)) {
@@ -919,11 +919,11 @@ function plugin_save_submit_links($A)
         return $retval;
     }
 
-    $A['cid'] = addslashes($A['cid']);
-    $A['description'] = addslashes(htmlspecialchars(COM_checkWords($A['description'])));
-    $A['title'] = addslashes(strip_tags(COM_checkWords($A['title'])));
-    $A['url'] = addslashes(COM_sanitizeUrl($A['url']));
-    $A['lid'] = addslashes(COM_makeSid());
+    $A['cid'] = DB_escapeString($A['cid']);
+    $A['description'] = DB_escapeString(htmlspecialchars(COM_checkWords($A['description'])));
+    $A['title'] = DB_escapeString(strip_tags(COM_checkWords($A['title'])));
+    $A['url'] = DB_escapeString(COM_sanitizeUrl($A['url']));
+    $A['lid'] = DB_escapeString(COM_makeSid());
 
     COM_updateSpeedlimit('submit');
     if (COM_isAnonUser()) {
@@ -1235,7 +1235,7 @@ function plugin_getiteminfo_links($lid, $what, $uid = 0, $options = array())
         $where = '';
         $permOp = 'WHERE';
     } else {
-        $where = " WHERE lid = '" . addslashes($lid) . "'";
+        $where = " WHERE lid = '" . DB_escapeString($lid) . "'";
         $permOp = 'AND';
     }
     if ($uid > 0) {
@@ -1346,7 +1346,7 @@ function links_select_box_recursive (&$menu, $cid, $sel, $indent, $access)
 {
     global $_CONF, $_TABLES;
 
-    $cat = addslashes($cid);
+    $cat = DB_escapeString($cid);
     $sql = "SELECT cid,category
             FROM {$_TABLES['linkcategories']}
             WHERE (pid='{$cat}') " . COM_getPermSQL('AND', 0, $access) . "
@@ -1365,7 +1365,7 @@ function links_select_box_recursive (&$menu, $cid, $sel, $indent, $access)
                   . $indent . $category . '</option>';
         }
         // Check and see if this category has any sub categories
-        if (DB_count($_TABLES['linkcategories'], 'pid', addslashes($cid)) > 0) {
+        if (DB_count($_TABLES['linkcategories'], 'pid', DB_escapeString($cid)) > 0) {
             // yes, call self
             $dum = links_select_box_recursive ($menu, $cid, $sel,
                         $indent . '&nbsp;&nbsp;', $access);
@@ -1389,7 +1389,7 @@ function links_breadcrumbs($root, $cid)
     $breadcrumb = '';
     $separator  = ' &gt; ';
 
-    $cat = addslashes($cid);
+    $cat = DB_escapeString($cid);
     $c = $cid;
     $pid = '';
     if ($root != $cid) {
@@ -1410,7 +1410,7 @@ function links_breadcrumbs($root, $cid)
             }
             $pid = $A['pid'];
             $c = $A['pid'];
-            $cat = addslashes($c);
+            $cat = DB_escapeString($c);
         }
     }
 
@@ -1446,7 +1446,7 @@ function phpblock_topic_links()
     $retval = '';
 
     if (!empty($topic)) {
-        $tid = addslashes($topic);
+        $tid = DB_escapeString($topic);
         $result = DB_query("SELECT l.lid, l.title, l.url, c.cid FROM {$_TABLES['links']} AS l LEFT JOIN {$_TABLES['linkcategories']} AS c ON l.cid=c.cid WHERE c.tid='{$tid}' OR c.tid='all'" . COM_getPermSQL('AND', 0, 2, 'c'));
         $nrows = DB_numRows($result);
         if ($nrows > 0) {
@@ -1478,7 +1478,7 @@ function phpblock_topic_categories()
     $retval = '';
 
     if (!empty($topic)) {
-        $tid = addslashes($topic);
+        $tid = DB_escapeString($topic);
         $result = DB_query("SELECT category, cid FROM {$_TABLES['linkcategories']} WHERE tid='{$tid}' OR tid='all'" . COM_getPermSQL ('AND'));
         $nrows = DB_numRows($result);
         if ($nrows > 0) {

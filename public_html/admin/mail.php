@@ -37,29 +37,32 @@ require_once 'auth.inc.php';
 
 $display = '';
 
-// Make sure user has access to this page
+// Make sure user has rights to access this page
 if (!SEC_inGroup ('Mail Admin') && !SEC_hasrights ('user.mail')) {
-    $retval .= COM_siteHeader ('menu', $MESSAGE[30]);
-    $retval .= COM_startBlock ($MESSAGE[30], '',
+    $display .= COM_siteHeader ('menu', $MESSAGE[30]);
+    $display .= COM_startBlock ($MESSAGE[30], '',
                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $retval .= $MESSAGE[39];
-    $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-    $retval .= COM_siteFooter ();
+    $display .= $MESSAGE[39];
+    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_siteFooter ();
     COM_accessLog ("User {$_USER['username']} tried to illegally access the mail administration screen.");
-    echo $retval;
+    echo $display;
     exit;
 }
 
 /**
-* Shows the form the admin uses to send glFusion members a message. Right now
-* you can only email an entire group.
+* Shows the form the admin uses to send glFusion members a message. Now you
+* can email a user or an entire group depending upon whether uid or grp_id is
+* set.  if both arguments are >0, the group send function takes precedence
 *
 * @return   string      HTML for the email form
 *
 */
-function display_mailform ()
+function MAIL_displayForm( $uid=0, $grp_id=0, $from='', $replyto='', $subject='' )
 {
-    global $_CONF, $_TABLES, $_USER, $LANG31, $LANG03;
+    global $_CONF, $_TABLES, $_USER, $LANG31, $LANG03, $LANG_ADMIN;
+
+    USES_lib_admin();
 
     $retval = '';
 
@@ -97,31 +100,82 @@ function display_mailform ()
             '', COM_getBlockTemplate ('_admin_block', 'header')));
     $mail_templates->set_var ('php_self', $_CONF['site_admin_url']
                                           . '/mail.php');
-    $mail_templates->set_var ('lang_note', $LANG31[19]);
-    $mail_templates->set_var ('lang_to', $LANG31[18]);
-    $mail_templates->set_var ('lang_selectgroup', $LANG31[25]);
-    $group_options = '';
-    $result = DB_query("SELECT grp_id, grp_name FROM {$_TABLES['groups']} WHERE grp_name <> 'All Users'");
-    $nrows = DB_numRows ($result);
-    $groups = array ();
-    for ($i = 0; $i < $nrows; $i++) {
-        $A = DB_fetchArray ($result);
-        $groups[$A['grp_id']] = ucwords ($A['grp_name']);
-    }
-    asort ($groups);
 
-    foreach ($groups as $groupID => $groupName) {
-        if (SEC_inGroup('Root') || (SEC_inGroup($groupName) && ($groupName <> 'Logged-in Users') && ($groupName <> 'Mail Admin'))) {
-            $group_options .= '<option value="' . $groupID . '">' . $groupName . '</option>';
+    $usermode = ($uid > 0 && $grp_id == 0) ? true : false;
+    $send_to_group = ($usermode) ? '' : '1';
+    $mail_templates->set_var ('send_to_group', $send_to_group);
+
+    $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/user.php',
+              'text' => $LANG_ADMIN['admin_users']),
+        array('url' => $_CONF['site_admin_url'] . '/group.php',
+              'text' => $LANG_ADMIN['admin_groups']),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
+    $instructions = ($usermode) ? $LANG31[28] : $LANG31[19];
+    $icon = $_CONF['layout_url'] . '/images/icons/mail.png';
+    $admin_menu = ADMIN_createMenu( $menu_arr, $instructions, $icon);
+    $mail_templates->set_var ('admin_menu', $admin_menu);
+
+    if ($usermode) {
+        // we're sending e-Mail to a specific user
+        $mail_templates->set_var ('lang_instructions', $LANG31[28]);
+        $mail_templates->set_var ('lang_to', $LANG31[18]);
+        $to_user = '';
+        $lang_warning = $LANG31[29];
+        $warning = '';
+        // get the user data, and check the privacy settings
+        $result = DB_query("SELECT username,fullname,email FROM {$_TABLES['users']} WHERE uid ='$uid'");
+        $nrows = DB_numRows($result);
+        if ($nrows > 0) {
+            $A = DB_fetchArray($result);
+            $username = ($_CONF['show_fullname']) ? $A['fullname'] : $A['username'];
+            $to_user = $username . ' (' . $A['email'] . ')';
+            $emailfromadmin = DB_getItem( $_TABLES['userprefs'], 'emailfromadmin', "uid = '$uid'");
+            $warning = ($emailfromadmin == 1) ? '' : $LANG31[30];
         }
+        $mail_templates->set_var ('to_user', $to_user);
+        $mail_templates->set_var ('to_uid', $uid);
+        $mail_templates->set_var ('lang_warning', $lang_warning);
+        $mail_templates->set_var ('warning', $warning);
+    } else {
+        // we're sending e-Mail to a group of users
+        $mail_templates->set_var ('lang_instructions', $LANG31[19]);
+        $mail_templates->set_var ('lang_to', $LANG31[27]);
+        $mail_templates->set_var ('lang_selectgroup', $LANG31[25]);
+        // build group options select, allow for possibility grp_id has been supplied
+        $group_options = '';
+        $result = DB_query("SELECT grp_id, grp_name FROM {$_TABLES['groups']} WHERE grp_name <> 'All Users'");
+        $nrows = DB_numRows ($result);
+        $groups = array ();
+        for ($i = 0; $i < $nrows; $i++) {
+            $A = DB_fetchArray ($result);
+            $groups[$A['grp_id']] = ucwords ($A['grp_name']);
+        }
+        asort ($groups);
+
+        foreach ($groups as $groupID => $groupName) {
+            if (SEC_inGroup('Root') || (SEC_inGroup($groupName) && ($groupName <> 'Logged-in Users') && ($groupName <> 'Mail Admin'))) {
+                $group_options .= '<option value="' . $groupID . '"';
+                $group_options .= ($groupID == $grp_id) ? ' selected="selected"' : '';
+                $group_options .= '>' . $groupName . '</option>';
+            }
+        }
+        $mail_templates->set_var ('group_options', $group_options);
     }
 
-    $mail_templates->set_var ('group_options', $group_options);
     $mail_templates->set_var ('lang_from', $LANG31[2]);
-    $mail_templates->set_var ('site_name', $_CONF['site_name']);
+    $frm = (empty($from)) ? $_CONF['site_name'] : $from;
+    $mail_templates->set_var ('site_name', $frm);
+
     $mail_templates->set_var ('lang_replyto', $LANG31[3]);
-    $mail_templates->set_var ('site_mail', $_CONF['site_mail']);
+    $rto = (empty($replyto)) ? $_CONF['site_mail'] : $replyto;
+    $mail_templates->set_var ('site_mail', $rto);
+
     $mail_templates->set_var ('lang_subject', $LANG31[4]);
+    $mail_templates->set_var ('subject', $subject);
+
     $mail_templates->set_var ('lang_body', $LANG31[5]);
     $mail_templates->set_var ('lang_sendto', $LANG31[6]);
     $mail_templates->set_var ('lang_allusers', $LANG31[7]);
@@ -153,11 +207,11 @@ function display_mailform ()
 * @return   string          HTML with success or error message
 *
 */
-function send_messages ($vars)
+function MAIL_sendMessages($vars)
 {
     global $_CONF, $_TABLES, $LANG31;
 
-    require_once $_CONF['path_system'] . 'lib-user.php';
+    USES_lib_user();
 
     $retval = '';
 
@@ -265,14 +319,67 @@ function send_messages ($vars)
     return $retval;
 }
 
-// MAIN
+// MAIN ========================================================================
+
+$action = '';
+$expected = array('mail');
+foreach($expected as $provided) {
+    if (isset($_POST[$provided])) {
+        $action = $provided;
+    } elseif (isset($_GET[$provided])) {
+	$action = $provided;
+    }
+}
+
+$grp_id = 0;
+if (isset($_POST['grp_id'])) {
+    $grp_id = COM_applyFilter($_POST['grp_id'], true);
+} elseif (isset($_GET['grp_id'])) {
+    $grp_id = COM_applyFilter($_GET['grp_id'], true);
+}
+
+$uid = 0;
+if (isset($_POST['uid'])) {
+    $uid = COM_applyFilter($_POST['uid'], true);
+} elseif (isset($_GET['uid'])) {
+    $uid = COM_applyFilter($_GET['uid'], true);
+}
+
+$from = '';
+if (isset($_POST['from'])) {
+    $from = COM_applyFilter($_POST['from']);
+} elseif (isset($_GET['from'])) {
+    $from = COM_applyFilter($_GET['from']);
+}
+
+$replyto = '';
+if (isset($_POST['replyto'])) {
+    $replyto = COM_applyFilter($_POST['replyto']);
+} elseif (isset($_GET['replyto'])) {
+    $replyto = COM_applyFilter($_GET['replyto']);
+}
+
+$subject = '';
+if (isset($_POST['subject'])) {
+    $subject = COM_applyFilter($_POST['subject']);
+} elseif (isset($_GET['subject'])) {
+    $subject = COM_applyFilter($_GET['subject']);
+}
+
+$validtoken = SEC_checkToken();
 
 $display .= COM_siteHeader ('menu', $LANG31[1]);
 
-if (isset($_POST['mail']) && ($_POST['mail'] == 'mail') && SEC_checkToken()) {
-    $display .= send_messages ($_POST);
-} else {
-    $display .= display_mailform ();
+switch ($action) {
+
+    case 'mail':
+        $display .= Mail_sendMessages($_POST);
+        break;
+
+    default:
+        $display .= MAIL_displayForm( $uid, $grp_id, $from, $replyto, $subject );
+        break;
+
 }
 
 $display .= COM_siteFooter ();

@@ -131,7 +131,7 @@ function commandcontrol()
                         'lang' => $LANG01['ctl'], 'image' => '/images/icons/ctl.'),
                   array('condition' => SEC_inGroup('Root'),
                         'url' => $_CONF['site_admin_url'].'/envcheck.php',
-                        'lang' => $LANG01['env_check'], 'image' => '/images/icons/versioncheck.'),
+                        'lang' => $LANG01['env_check'], 'image' => '/images/icons/envcheck.'),
                   array('condition' => SEC_inGroup('Root'),
                         'url' => $_CONF['site_admin_url'] . '/logview.php',
                         'lang' => $LANG_LOGVIEW['logview'], 'image' => '/images/icons/logview.')

@@ -91,7 +91,6 @@ if ($topic_pid == '') {
 if ($topic_pid != 0) {
     $showtopic = $topic_pid;
 }
-
 // Check if the number of records was specified to show
 if (empty($show) AND $CONF_FORUM['show_posts_perpage'] > 0) {
     $show = $CONF_FORUM['show_posts_perpage'];
@@ -163,7 +162,10 @@ if (isset($_REQUEST['lastpost']) && $_REQUEST['lastpost']) {
     $base_url = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$showtopic&amp;mode=$mode&amp;show=$show";
 } else {
     if ( $topic != 0 ) {
-        $sql = "SELECT id FROM {$_TABLES['gf_topic']} WHERE pid=".$showtopic."";
+
+        $order = $CONF_FORUM['topic_order'];
+
+        $sql = "SELECT id FROM {$_TABLES['gf_topic']} WHERE pid=".$showtopic." ORDER BY date " . $order;
         $idResult = DB_query($sql);
         $ids = array();
         while ( $I = DB_fetchArray($idResult)) {
@@ -409,6 +411,10 @@ if ($mode != 'preview') {
     $topic_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $topic_footer->set_file (array ('topicfooter'=>'topicfooter_preview.thtml'));
     $topic_footer->set_var('xhtml',XHTML);
+}
+
+if ( !isset($cat_name) ) {
+    $cat_name = DB_getItem($_TABLES['gf_categories'],"cat_name","id={$viewtopic['forum_cat']}");
 }
 
 $topic_footer->set_var('forum_home',$LANG_GF01['INDEXPAGE']);

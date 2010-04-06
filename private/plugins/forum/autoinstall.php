@@ -72,7 +72,7 @@ $INSTALL_plugin['forum'] = array(
   array('type' => 'table', 'table' => $_TABLES['gf_rating_assoc'], 'sql' => $_SQL['gf_rating_assoc']),
 
   array('type' => 'group', 'group' => 'forum Admin', 'desc' => 'Users in this group can administer the Forum plugin',
-        'variable' => 'admin_group_id', 'addroot' => true),
+        'variable' => 'admin_group_id', 'addroot' => true, 'admin' => true),
 
   array('type' => 'feature', 'feature' => 'forum.edit', 'desc' => 'Ability to edit Forum Posts',
         'variable' => 'edit_feature_id'),

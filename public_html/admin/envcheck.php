@@ -35,13 +35,14 @@ require_once 'auth.inc.php';
 USES_lib_admin();
 
 $display = '';
+
 if (!SEC_inGroup ('Root')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30])
         . COM_startBlock ($MESSAGE[30], '',COM_getBlockTemplate ('_msg_block', 'header'))
-        . $MESSAGE[33]
+        . $MESSAGE[200]
         . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
         . COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to illegally access the environment administration screen");
+    COM_accessLog ("User {$_USER['username']} tried to illegally access the hosting environment check screen");
     echo $display;
     exit;
 }
@@ -51,18 +52,21 @@ function _checkEnvironment()
 {
     global $_CONF, $_TABLES, $_PLUGINS, $_SYSTEM, $LANG_ADMIN, $LANG01,
            $filemgmt_FileStore, $filemgmt_SnapStore, $filemgmt_SnapCat,
-           $CONF_FORUM, $_MG_CONF;
+           $CONF_FORUM, $_MG_CONF, $LANG_FILECHECK;
 
+    $retval = '';
     $permError = 0;
 
     $T = new Template($_CONF['path_layout'] . 'admin');
     $T->set_file('page','envcheck.thtml');
 
     $menu_arr = array (
-        array('url'  => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home']),
         array('url'  => $_CONF['site_admin_url'].'/envcheck.php',
-              'text' => $LANG01['recheck'])
+              'text' => $LANG01['recheck']),
+        array('url'  => $_CONF['site_admin_url'] .'/filecheck.php',
+              'text' => $LANG_FILECHECK['filecheck']),
+        array('url'  => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
     );
 
     $retval .= COM_startBlock($LANG01['hosting_env'], '',
@@ -70,12 +74,10 @@ function _checkEnvironment()
     $retval .= ADMIN_createMenu(
         $menu_arr,
         $LANG01['php_warning'],
-        $_CONF['layout_url'] . '/images/icons/versioncheck.png'
+        $_CONF['layout_url'] . '/images/icons/envcheck.png'
     );
 
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
-
-    $T->set_var('step_heading',$LANG01['hosting_env']);
 
     /*
      * First we will validate the general environment..
@@ -311,7 +313,7 @@ function _checkEnvironment()
     $feedpath = $_CONF['rdf_file'];
     $pos = strrpos( $feedpath, '/' );
     $feedPath = substr( $feedpath, 0, $pos + 1 );
-    $feedPath .= $feedfile;
+//    $feedPath .= $feedfile;
 
     $file_list = array( $_CONF['path_data'],
                         $_CONF['path_log'].'error.log',
@@ -508,6 +510,8 @@ function _checkEnvironment()
         'lang_php_settings' => $LANG01['php_settings'],
         'lang_php_warning'  => $LANG01['php_warning'],
         'lang_current_php_settings' => $LANG01['current_php_settings'],
+        'lang_show_phpinfo' => $LANG01['show_phpinfo'],
+        'lang_hide_phpinfo' => $LANG01['hide_phpinfo'],
         'lang_graphics'     => $LANG01['graphics'],
         'phpinfo'           => _phpinfo(),
     ));
