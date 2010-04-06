@@ -837,6 +837,13 @@ if (isset($_POST['bid'])) {
     $bid = COM_applyFilter($_GET['bid'], true);
 }
 
+$where = '';
+if (isset($_POST['where'])) {
+    $where = COM_applyFilter($_POST['where']);
+} elseif (isset($_GET['where'])) {
+    $where = COM_applyFilter($_GET['where']);
+}
+
 $validtoken = SEC_checkToken();
 
 if (isset($_POST['blockenabler']) && $validtoken) {

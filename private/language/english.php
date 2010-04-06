@@ -924,10 +924,10 @@ $LANG27 = array(
     3 => 'Topic Name',
     4 => 'Topic Image',
     5 => '(do not use spaces)',
-    6 => 'Deleting a topic deletes all stories and blocks associated with it',
+    6 => 'NOTE: Deleting a topic deletes all stories and blocks associated with it!',
     7 => 'Please fill in the Topic ID and Topic Name fields',
     8 => 'Topic Manager',
-    9 => 'To modify or delete a topic, click on that topic.  To create a new topic, click on "Create New" above. You will find your access level for each topic in parenthesis. The asterisk(*) denotes the default topic.',
+    9 => 'To edit or delete a topic, click on the action icon below. To create a new topic, click on "Create New" above.  Please be cautions when deleting topics, as all stories and blocks that are associated with that topic will also be deleted.',
     10 => 'Sort Order',
     11 => 'Stories/Page',
     12 => 'Access Denied',
@@ -948,6 +948,10 @@ $LANG27 = array(
     27 => 'Or Upload Topic Icon',
     28 => 'Maximum',
     29 => 'File Upload Errors'
+    37 => 'Direction',
+    38 => 'Default Topic?',
+    39 => 'Archive Topic?',
+    40 => 'Are you sure you want to delete this topic?',
 );
 
 ###############################################################################
@@ -1395,7 +1399,7 @@ $LANG_ACCESS = array(
     'accessrights' => 'Access Rights',
     'owner' => 'Owner',
     'grantgrouplabel' => 'Grant Above Group Edit Rights',
-    'permmsg' => 'NOTE: members is all logged in members of the site and anonymous is all users browsing the site that aren\'t logged in.',
+    'permmsg' => 'Members = All logged-in members of the site.<br />Anonymous = All users browsing the site that aren\'t logged in.',
     'securitygroups' => 'Security Groups',
     'editrootmsg' => "Even though you are a User Administrator, you can't edit a root user without first being a root user yourself.  You can edit all other users except root users. Please note that all attempts to illegally edit root users are logged.  Please go back to the <a href=\"{$_CONF['site_admin_url']}/user.php\">User Administration page</a>.",
     'securitygroupsmsg' => 'Select the checkboxes for the groups you want the user to belong to.',
