@@ -147,9 +147,9 @@ if ( $_USER['uid'] < 2 && $_MG_CONF['loginrequired'] == 1) {
 * Main Function
 */
 
-$album_id  = COM_applyFilter($_REQUEST['aid'],true);
-$page      = COM_applyFilter($_REQUEST['page'],true);
-$instance  = COM_applyFilter($_REQUEST['i']);
+$album_id  = (isset($_REQUEST['aid']) ? COM_applyFilter($_REQUEST['aid'],true) : 0);
+$page      = (isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'],true) : 0);
+$instance  = (isset($_REQUEST['i']) ? COM_applyFilter($_REQUEST['i']) : '' );
 
 if ( $page != 0 ) {
     $page = $page - 1;
@@ -175,7 +175,7 @@ $media_per_page     = $columns_per_page * $rows_per_page;
 
 // construct the album jumpbox...
 $level = 0;
-$album_jumpbox .= $LANG_mgMB['select_album'] . ':&nbsp;<select name="aid" onChange="forms[\'mediabrowser\'].submit()">';
+$album_jumpbox = $LANG_mgMB['select_album'] . ':&nbsp;<select name="aid" onChange="forms[\'mediabrowser\'].submit()">';
 $MG_albums[0]->buildJumpBox($album_id);
 $album_jumpbox .= '</select>';
 $album_jumpbox .= '&nbsp;<input type="submit" value="' . $LANG_mgMB['go'] . '" />';
@@ -219,7 +219,7 @@ $begin = $media_per_page * $page;
 $end   = $media_per_page;
 $MG_media = array();
 
-$orderBy = MG_getSortOrder($album_id, $sortOrder);
+$orderBy = MG_getSortOrder($album_id,'');
 
 $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
         " ON ma.media_id=m.media_id WHERE ma.album_id=" . $album_id . $orderBy . ' LIMIT ' . $begin . ',' . $end;
@@ -271,9 +271,9 @@ if ( $aOffset > 0 ) {
     $aPage = 1;
 }
 
-$birdseed = $MG_albums[$album_id]->getPath(0,$sortOrder);
+$birdseed = $MG_albums[$album_id]->getPath(0,'');
 
-$refresh = COM_applyFilter($_REQUEST['refresh'],true);
+$refresh = (isset($_REQUEST['refresh']) ? COM_applyFilter($_REQUEST['refresh'],true) : 0);
 
 if ( $refresh != 1 ) {	// initial call
 	$T->set_var(array(
@@ -293,8 +293,8 @@ if ( $refresh != 1 ) {	// initial call
 	    'autoplay_no'			=> $_mgMB_CONF['at_autoplay'] == 1 ? '' : ' selected="selected"',
 	    'link_yes'				=> $_mgMB_CONF['at_enable_link'] == 1 ? ' selected="selected"' : '',
 	    'link_no'				=> $_mgMB_CONF['at_enable_link'] == 1 ? '' : ' selected="selected"',
-	    'alturl_no'             => $_mgMB_CONF['at_alt_url'] == 1 ? '' : ' selected="selected"',
-	    'alturl_yes'            => $_mgMB_CONF['at_alt_url'] == 1 ? ' selected="selected"' : '',
+	    'alturl_no'             => (isset($_mgMB_CONF['at_alt_url']) && $_mgMB_CONF['at_alt_url'] == 1) ? '' : ' selected="selected"',
+	    'alturl_yes'            => (isset($_mgMB_CONF['at_alt_url']) && $_mgMB_CONF['at_alt_url'] == 1) ? ' selected="selected"' : '',
 	));
 } else {
 	$T->set_var(array(
@@ -381,6 +381,10 @@ $T->set_var(array(
     'lang_display'			=> $LANG_mgMB['display'],
     'lang_original'			=> $LANG_mgMB['original'],
     'lang_alturl'           => $LANG_mgMB['alturl'],
+    'lang_ribbon'           => $LANG_mgMB['ribbon'],
+    'lang_showtitle'        => $LANG_mgMB['showtitle'],
+    'lang_top'              => $LANG_mgMB['top'],
+    'lang_bottom'           => $LANG_mgMB['bottom'],
     'destination'           => ($_mgMB_CONF['enable_dest'] == 1 ? '<p>' . $LANG_mgMB['destination'] . '&nbsp;&nbsp;<select name="dest"><option value="story">' . $LANG_mgMB['story'] . '</option><option value="block">' . $LANG_mgMB['block'] . '</option></select>' : ''),
 ));
 

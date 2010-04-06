@@ -1001,7 +1001,7 @@ $LANG_configselects['forum'] = array(
     0 => array('Ja' => 1, 'Nee' => 0),
     1 => array('Ja' => true, 'Nee' => false),
     2 => array('Bovenaan de Pagina' => 1, 'Na het Featured Artikel' => 2, 'Onderaan de Pagina' => 3),
-    3 => array('Geen Blokken' => 'noblocks', 'Linker Blokken' => 'leftblocks', 'Rechter Blokken' => 'rightblocks'),
+    3 => array('Geen Blokken' => 'noblocks', 'Linker Blokken' => 'leftblocks', 'Rechter Blokken' => 'rightblocks', 'Rechter / Linker Blokken' => 'allblocks'),
     4 => array('Blok Menu' => 'blockmenu', 'Nav Bar' => 'navbar', 'Geen' => 'none'),
     5 => array('Aflopend' => 'DESC', 'Oplopend' => 'ASC'),
     6 => array('Checked' => 1, 'Unchecked' => 0)

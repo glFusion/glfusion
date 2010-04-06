@@ -688,6 +688,12 @@ class Media {
         switch( $this->type ) {
             case 0 :    // standard image
                 $default_thumbnail = 'tn/' . $this->filename[0] . '/' . $this->filename . '.jpg';
+                foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                    if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/'.  $this->filename[0] . '/' . $this->filename . $ext) ) {
+                        $default_thumbnail      = 'tn/'.  $this->filename[0] . '/' . $this->filename . $ext;
+                        break;
+                    }
+                }
                 break;
             case 1 :    // video file
                 switch ( $this->mime_type ) {

@@ -1213,6 +1213,10 @@ function ADMIN_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
     global $CONF_FORUM,$_SYSTEM,$LANG_GF02;
 
+    if ( !isset($A['status']) ) {
+        $A['status'] = 0;
+    }
+
     USES_lib_html2text();
 
     $retval = '';

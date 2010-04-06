@@ -1002,7 +1002,7 @@ $LANG_configselects['forum'] = array(
     0 => array('Ja' => 1, 'Nein' => 0),
     1 => array('Ja' => true, 'Nein' => false),
     2 => array('Auf Seite oben' => 1, 'Nach Hauptartikel' => 2, 'Auf Seite unten' => 3),
-    3 => array('Keine Blöcke' => 'noblocks', 'Linke Blöcke' => 'leftblocks', 'Rechte Blöcke' => 'rightblocks'),
+    3 => array('Keine Blöcke' => 'noblocks', 'Linke Blöcke' => 'leftblocks', 'Rechte Blöcke' => 'rightblocks', 'Rechte / Linke Blöcke' => 'allblocks' ),
     4 => array('Blockmenü' => 'blockmenu', 'Navigation' => 'navbar', 'Keine' => 'none'),
     5 => array('Absteigend' => 'DESC', 'Aufsteigend' => 'ASC'),
     6 => array('Checked' => 1, 'Unchecked' => 0)
