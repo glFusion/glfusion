@@ -242,7 +242,8 @@ $LANG_confignames['links'] = array(
     'show_category_descriptions' => 'Kategoriebeschreibung anzeigen?',
     'root' => 'ID der Oberkategorie',
     'default_permissions' => 'Grundeinstellung Rechte',
-    'target_blank' => 'Open Links in New Window'
+    'target_blank' => 'Open Links in New Window',
+    'displayblocks' => 'Display glFusion Blocks'
 );
 
 $LANG_configsubgroups['links'] = array(
@@ -260,7 +261,8 @@ $LANG_configselects['links'] = array(
     0 => array('Ja' => 1, 'Nein' => 0),
     1 => array('Ja' => true, 'Nein' => false),
     9 => array('Weiterleiten zur verlinkten Seite' => 'item', 'Admin Liste anzeigen' => 'list', 'Öffentliche Liste anzeigen' => 'plugin', 'Startseite anzeigen' => 'home', 'Kommandozentrale' => 'admin'),
-    12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3)
+    12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3),
+    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
 );
 
 ?>

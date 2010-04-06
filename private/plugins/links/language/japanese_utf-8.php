@@ -246,7 +246,8 @@ $LANG_confignames['links'] = array(
     'show_category_descriptions' => 'カテゴリの説明を表示する',
     'root' => 'トップカテゴリのID',
     'default_permissions' => 'パーミッション',
-    'target_blank' => 'Open Links in New Window'
+    'target_blank' => 'Open Links in New Window',
+    'displayblocks' => 'Display glFusion Blocks'
 );
 
 $LANG_configsubgroups['links'] = array(
@@ -264,7 +265,8 @@ $LANG_configselects['links'] = array(
     0 => array('はい' => 1, 'いいえ' => 0),
     1 => array('はい' => true, 'いいえ' => false),
     9 => array('リンク先サイトを表示する' => 'item', 'リンク管理を表示する' => 'list', '公開リンクリストを表示する' => 'plugin', 'Homeを表示する' => 'home', '管理画面TOPを表示する' => 'admin'),
-    12 => array('アクセス不可' => 0, '表示' => 2, '表示・編集' => 3)
+    12 => array('アクセス不可' => 0, '表示' => 2, '表示・編集' => 3),
+    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
 );
 
 ?>

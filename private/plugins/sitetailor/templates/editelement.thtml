@@ -32,6 +32,7 @@ function toggleFields() {
             $('staticpage').style.display='none';
             $('glfunc').style.display='none';
             $('phpdiv').style.display='none';
+            $('topic').style.display='none';
             break;
         case '2' : // gl actioin
             $('urldiv').style.display='none';
@@ -41,6 +42,7 @@ function toggleFields() {
             $('staticpage').style.display='none';
             $('glfunc').style.display='';
             $('phpdiv').style.display='none';
+            $('topic').style.display='none';
             break;
         case '3' : // gl menus
             $('urldiv').style.display='none';
@@ -50,6 +52,7 @@ function toggleFields() {
             $('staticpage').style.display='none';
             $('glfunc').style.display='none';
             $('phpdiv').style.display='none';
+            $('topic').style.display='none';
             break;
         case '4' : // plugins
             $('urldiv').style.display='none';
@@ -59,6 +62,7 @@ function toggleFields() {
             $('staticpage').style.display='none';
             $('glfunc').style.display='none';
             $('phpdiv').style.display='none';
+            $('topic').style.display='none';
             break;
         case '5' :  // static pages
             $('urldiv').style.display='none';
@@ -68,6 +72,7 @@ function toggleFields() {
             $('staticpage').style.display='';
             $('glfunc').style.display='none';
             $('phpdiv').style.display='none';
+            $('topic').style.display='none';
             break;
         case '6' : // url
             $('urldiv').style.display='';
@@ -77,6 +82,7 @@ function toggleFields() {
             $('staticpage').style.display='none';
             $('glfunc').style.display='none';
             $('phpdiv').style.display='none';
+            $('topic').style.display='none';
             break;
         case '7' :  // php function
             $('urldiv').style.display='none';
@@ -86,6 +92,7 @@ function toggleFields() {
             $('staticpage').style.display='none';
             $('glfunc').style.display='none';
             $('phpdiv').style.display='';
+            $('topic').style.display='none';
             break;
         case '8' :
             $('urldiv').style.display='none';
@@ -95,6 +102,17 @@ function toggleFields() {
             $('staticpage').style.display='none';
             $('glfunc').style.display='none';
             $('phpdiv').style.display='none';
+            $('topic').style.display='none';
+            break;
+        case '9' :
+            $('urldiv').style.display='none';
+            $('targetdiv').style.display='none';
+            $('glcorediv').style.display='none';
+            $('plugin').style.display='none';
+            $('staticpage').style.display='none';
+            $('glfunc').style.display='none';
+            $('phpdiv').style.display='none';
+            $('topic').style.display='';
             break;
 
     }
@@ -157,7 +175,12 @@ function toggleFields() {
         {sp_select}
       </div>
 
-      <div id="glfunc" class="required">
+      <div id="topic" class="optional required">
+        <label for="topicname">{$LANG_ST01['topic']}:</label>
+        {topic_select}
+      </div>
+
+      <div id="glfunc" class="optional required">
         <label for="spname">{$LANG_ST01[glfusion_function]}:</label>
         {glfunction_select}
       </div>

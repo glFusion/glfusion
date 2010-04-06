@@ -61,7 +61,8 @@ $LANG_POLLS = array(
     'editinstructions' => 'Bitte für die Umfrage-ID mindestens eine Frage und zwei Antworten eintragen.',
     'pollclosed' => 'This poll is closed for voting.',
     'pollhidden' => 'You have already voted. This poll results will only be shown when voting is closed.',
-    'start_poll' => 'Start Poll'
+    'start_poll' => 'Start Poll',
+    'deny_msg' => 'Access to this poll is denied.  Either the poll has been moved/removed or you do not have sufficient permissions.'
 );
 
 ###############################################################################
@@ -133,7 +134,8 @@ $LANG_confignames['polls'] = array(
     'polladdresstime' => 'Voter IP-Adresse gültig für',
     'delete_polls' => 'Umfragen mit User löschen?',
     'aftersave' => 'Nach speichern der Umfrage',
-    'default_permissions' => 'Grundeinstellungen Umfragen'
+    'default_permissions' => 'Grundeinstellungen Umfragen',
+    'displayblocks' => 'Display glFusion Blocks'
 );
 
 $LANG_configsubgroups['polls'] = array(
@@ -151,7 +153,8 @@ $LANG_configselects['polls'] = array(
     1 => array('Ja' => true, 'Nein' => false),
     2 => array('Wie eingereicht' => 'submitorder', 'Nach Abstimmung' => 'voteorder'),
     9 => array('Zur Umfrage weiterleiten' => 'item', 'Admin Liste anzeigen' => 'list', 'Öffentliche Liste anzeigen' => 'plugin', 'Startseite anzeigen' => 'home', 'Kommandozentrale' => 'admin'),
-    12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3)
+    12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3),
+    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
 );
 
 ?>

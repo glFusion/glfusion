@@ -2,9 +2,9 @@
 // +--------------------------------------------------------------------------+
 // | CAPTCHA Plugin - glFusion CMS                                            |
 // +--------------------------------------------------------------------------+
-// | english_utf-8.php                                                        |
+// | dutch_utf-8.php                                                          |
 // |                                                                          |
-// | English language file                                                    |
+// | Dutch language file                                                      |
 // +--------------------------------------------------------------------------+
 // | $Id:: english_utf-8.php 4753 2009-08-05 14:39:39Z mevans0263            $|
 // +--------------------------------------------------------------------------+
@@ -78,10 +78,6 @@ $LANG_CP00 = array(
     'picture' => 'Afbeelding',
     'characters' => 'Karakters'
 );
-
-$PLG_captcha_MESSAGE1 = 'CAPTCHA plugin upgrade: Update succesvol gereed.';
-$PLG_captcha_MESSAGE2 = 'CAPTCHA Plugin Succesvol Geinstalleerd';
-$PLG_captcha_MESSAGE3 = 'CAPTCHA Plugin Successfully Installed';
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['captcha'] = array(

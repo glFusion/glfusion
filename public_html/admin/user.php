@@ -178,7 +178,7 @@ function edituser($uid = '', $msg = '')
         $lastlogin = DB_getItem ($_TABLES['userinfo'], 'lastlogin', "uid = $uid");
         $lasttime = COM_getUserDateTimeFormat ($lastlogin);
         $display_name = COM_getDisplayName ($uid);
-        $menuText = 'Editing User: ' . $U['username'];
+        $menuText = $LANG_ACCESS['editinguser'] . $U['username'];
         if ($U['fullname'] != '' ) {
             $menuText .= ' - ' . $U['fullname'];
         }
@@ -211,7 +211,7 @@ function edituser($uid = '', $msg = '')
     if ( isset($_POST['new_username']) )
         $U['username']       = trim(COM_stripslashes($_POST['new_username']));
     if ( isset($_POST['fullname']) )
-        $U['fullname']       = trim(COM_stripslashes($_POST['fullname']));
+        $U['fullname']       = COM_truncate(trim(USER_sanitizeName(COM_stripslashes($_POST['fullname']))),80);
     if ( isset($_POST['userstatus'] ) )
         $U['status']     = COM_applyFilter($_POST['userstatus'],true);
     if ( isset($_POST['cooktime'] ) )
@@ -1050,7 +1050,7 @@ function saveusers ($uid)
     }
     $regdate        = COM_applyFilter($_POST['regdate'],true);
     $username       = trim(COM_stripslashes($_POST['new_username']));
-    $fullname       = trim(COM_stripslashes($_POST['fullname']));
+    $fullname       = COM_truncate(trim(USER_sanitizeName(COM_stripslashes($_POST['fullname']))),80);
     $userstatus     = COM_applyFilter($_POST['userstatus'],true);
     $oldstatus      = COM_applyFilter($_POST['oldstatus'],true);
     $passwd         = trim(COM_stripslashes($_POST['passwd']));
@@ -1060,7 +1060,7 @@ function saveusers ($uid)
     $email_conf     = trim(COM_stripslashes($_POST['email_conf']));
     $groups         = $_POST['groups'];
     $homepage       = trim(COM_stripslashes($_POST['homepage']));
-    $location       = trim(COM_stripslashes($_POST['location']));
+    $location       = strip_tags(trim(COM_stripslashes($_POST['location'])));
     $photo          = $_POST['photo'];
     $delete_photo   = $_POST['delete_photo'] == 'on' ? 1 : 0;
     $sig            = trim(COM_stripslashes($_POST['sig']));
@@ -1099,6 +1099,9 @@ function saveusers ($uid)
     }
     if ( $username == '') {
         return edituser($uid,506);
+    }
+    if ( !USER_validateUsername($username)) {
+        return edituser($uid,512);
     }
     if ( $email == '' ) {
         return edituser($uid,507);

@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: phpbb3_migrate.php 4573 2009-06-21 05:12:30Z mevans0263           $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
+// | Copyright (C) 2009-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -106,13 +106,9 @@ function phpbb3_migrateForum( $forum_id, $glfusion_forum_id ) {
             if ( $glf_user_id < 2 ) {
                 $glf_user_id = 1;
             }
-            // clean up the phpbb post for the glFusion database
-            if ( $bbcode_uid != '' ) {
-                $message = str_replace(":".$bbcode_uid,"",$message);
-            }
-            $message = preg_replace('#<!\-\- s(.*?) \-\-><img src="\{SMILIES_PATH\}\/.*? \/><!\-\- s\1 \-\->#', '\1', $message);
-            $message = str_replace("&#58;",":",$message);
-            $message = str_replace("&#46;",".",$message);
+
+            $message = _convertPost( $message, $bbcode_uid);
+
             $subject = addslashes($subject);
             $message = addslashes($message);
             $membername = addslashes($membername);
@@ -121,9 +117,10 @@ function phpbb3_migrateForum( $forum_id, $glfusion_forum_id ) {
             } else {
                 $sticky = 0;
             }
+
             $sql  = "INSERT INTO {$_TABLES['gf_topic']} (forum,pid,uid,name,date,subject,comment,ip,views,replies,mood,sticky) ";
             $sql .= "VALUES ('$glfusion_forum_id','0','$glf_user_id','$membername','$post_time','$subject','$message','$ip','$views','$replies','',$sticky)";
-            if (!mysql_query($sql,$DB_glFusion) ) {
+            if (!@mysql_query($sql,$DB_glFusion) ) {
                 die('SQL Error:<br />' . mysql_error($DB_glFusion) . '<br />SQL: ' . $sql );
             }
             $glfusion_pid = @mysql_insert_id($DB_glFusion);
@@ -143,16 +140,13 @@ function phpbb3_migrateForum( $forum_id, $glfusion_forum_id ) {
                 if ( $glf_user_id < 2 ) {
                     $glf_user_id = 1;
                 }
-                // clean up the phpbb post for the glFusion database
-                if ( $bbcode_uid != '' ) {
-                    $message = str_replace(":".$bbcode_uid,"",$message);
-                }
-                $message = preg_replace('#<!\-\- s(.*?) \-\-><img src="\{SMILIES_PATH\}\/.*? \/><!\-\- s\1 \-\->#', '\1', $message);
-                $message = str_replace("&#58;",":",$message);
-                $message = str_replace("&#46;",".",$message);
+
+                $message = _convertPost( $message, $bbcode_uid);
+
                 $subject = addslashes($subject);
                 $message = addslashes($message);
                 $membername = addslashes($membername);
+
                 $sql  = "INSERT INTO {$_TABLES['gf_topic']} (forum,pid,uid,name,date,subject,comment,ip,views,replies,mood) ";
                 $sql .= "VALUES ('$glfusion_forum_id','$glfusion_pid','$glf_user_id','$membername','$post_time','$subject','$message','$ip','$views','$replies','')";
                 if (!mysql_query($sql,$DB_glFusion) ) {
@@ -182,6 +176,7 @@ function phpbb3_connect() {
     if (!$DB_glFusion) {
         return 'Could not connect to the glFusion Database. Error:' . @mysql_error();
     }
+    @mysql_query ("SET NAMES 'utf8'", $DB_glFusion);
     $DB_handle_glFusion = @mysql_select_db($_DB_name,$DB_glFusion);
     if (!$DB_handle_glFusion) {
        return 'Error selecting the glFusion database $_DB_name : ' . @mysql_error();
@@ -191,6 +186,7 @@ function phpbb3_connect() {
     if (!$DB_phpBB) {
         return 'Could not connect to the phpbb Database. Error:' . @mysql_error($DB_phpBB);
     }
+    @mysql_query ("SET NAMES 'utf8'", $DB_phpBB);
     $DB_handle_phpBB3 = @mysql_select_db($_phpbb_db_name,$DB_phpBB);
     if (!$DB_handle_phpBB3) {
        return "Error selecting the phpBB3 database $_phpbb_db_name : " . @mysql_error($DB_phpBB);
@@ -232,12 +228,6 @@ function phpbb3_purge_glfusion_forum() {
         if (!mysql_query("DELETE FROM {$_TABLES['gf_moderators']}",$DB_glFusion)) {
             die('SQL Error:<br />' . mysql_error($DB_glFusion) );
         }
-        if (!mysql_query("DELETE FROM {$_TABLES['gf_userinfo']}",$DB_glFusion)) {
-            die('SQL Error:<br />' . mysql_error($DB_glFusion) );
-        }
-        if (!mysql_query("DELETE FROM {$_TABLES['gf_userprefs']}",$DB_glFusion)) {
-            die('SQL Error:<br />' . mysql_error($DB_glFusion) );
-        }
         if (!mysql_query("DELETE FROM {$_TABLES['gf_watch']}",$DB_glFusion)) {
             die('SQL Error:<br />' . mysql_error($DB_glFusion) );
         }
@@ -276,7 +266,7 @@ function phpbb3_import( ) {
         $categoriesImported++;
         $order+=10;
         $name = addslashes($name);
-        if (!mysql_query("INSERT INTO {$_TABLES['gf_categories']} (cat_name,cat_order) VALUES ('$name','$order')",$DB_glFusion)) {
+        if (!mysql_query("INSERT INTO {$_TABLES['gf_categories']} (cat_name,cat_dscp,cat_order) VALUES ('$name','','$order')",$DB_glFusion)) {
             die('SQL Error:<br />' . mysql_error($DB_glFusion) );
         }
         // get glFusion Category id..
@@ -369,7 +359,8 @@ function _confirmImport()
 {
     global $_phpbb_db_host, $_phpbb_db_user, $_phpbb_db_pass,
            $_phpbb_db_name, $_purge_glfusion_forum,$_phpbb_db_prefix,
-           $_import_phpbb3_users, $_CONF, $_TABLES, $DB_phpBB;
+           $_import_phpbb3_users, $_purge_glfusion_users, $_highest_uid,
+           $_CONF, $_TABLES, $DB_phpBB;
 
     $retval = '';
 
@@ -429,6 +420,9 @@ function _confirmImport()
         'purgeglfusionforums' => $_purge_glfusion_forum,
         'importphpbb3user'    => $_import_phpbb3_users == 1 ? 'Yes' : 'No',
         'importphpbb3users'   => $_import_phpbb3_users,
+        'purgeglfusionuser'   => $_purge_glfusion_users == true ? 'Yes' : 'No',
+        'purgeglfusionusers'  => $_purge_glfusion_users,
+        'highestuid'          => $_highest_uid,
         'selection'           => $selection,
     ));
 
@@ -480,6 +474,41 @@ function gf_resyncforum($id) {
     }
 }
 
+function phpbb3_purgeUser($next_uid) {
+    global $_CONF, $_TABLES, $_PLUGINS;
+    global $DB_phpBB, $DB_glFusion;
+    global $categoriesImported, $forumsImported, $topicsImported, $usersImported;
+
+    if ( $next_uid < 2 ) {
+        return;
+    }
+
+    $autoIncrement = $next_uid + 1;
+
+    if (!mysql_query("DELETE FROM {$_TABLES['users']} WHERE uid > ".$next_uid,$DB_glFusion)) {
+        die('SQL Error:<br/>' . mysql_error($DB_glFusion) );
+    }
+
+    @mysql_query("ALTER TABLE {$_TABLES['users']} AUTO_INCREMENT = ".$autoIncrement,$DB_glFusion);
+
+    @mysql_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_uid > ".$next_uid,$DB_phpBB);
+    @mysql_query("DELETE FROM {$_TABLES['userprefs']} WHERE uid > ".$next_uid,$DB_glFusion);
+    @mysql_query("DELETE FROM {$_TABLES['userindex']} WHERE uid > ".$next_uid,$DB_glFusion);
+    @mysql_query("DELETE FROM {$_TABLES['usercomment']} WHERE uid > ".$next_uid,$DB_glFusion);
+    @mysql_query("DELETE FROM {$_TABLES['userinfo']} WHERE uid > ".$next_uid,$DB_glFusion);
+    @mysql_query("DELETE FROM {$_TABLES['gf_userinfo']} WHERE uid > ".$next_uid,$DB_glFusion);
+
+    // handle any plugins we know carry user preferences....
+
+    if (in_array('mediagallery', $_PLUGINS)) {
+        @mysql_query("DELETE FROM {$_TABLES['mg_userprefs']} WHERE uid > ".$next_uid,$DB_glFusion);
+    }
+    if (in_array('pm',$_PLUGINS)) {
+        @mysql_query("DELETE FROM {$_TABLES['pm_userprefs']} WHERE uid > ".$next_uid, $DB_glFusion);
+    }
+    return;
+}
+
 
 function phpbb3_migrateUsers() {
     global $_CONF, $_TABLES;
@@ -487,6 +516,8 @@ function phpbb3_migrateUsers() {
     global $categoriesImported, $forumsImported, $topicsImported, $usersImported;
 
     $retval = '';
+
+    @mysql_query("ALTER TABLE {$_TABLES['users']} CHANGE `passwd` `passwd` VARCHAR( 40 ))", $DB_glFusion);
 
     $loggedgrp_result = mysql_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name = 'Logged-in Users'",$DB_glFusion);
     list ($loggedin_grp) = mysql_fetch_array($loggedgrp_result);
@@ -497,18 +528,20 @@ function phpbb3_migrateUsers() {
     while (list($uid,$membername,$passwd, $email,$dateRegistered,$lastvisit,$signature,$website,$sig_bbcode_uid) = mysql_fetch_array($phpbb3_users_result) )   {
         $username  = addslashes(trim($membername));
         $emailaddr = addslashes(trim($email));
-        if ($emailaddr != '' && COM_isEmail ($email)) {
+        if ($emailaddr != '' /*&& COM_isEmail ($email)*/) {
             $user_count  = DB_count ($_TABLES['users'], 'username', $username);
             $email_count = DB_count ($_TABLES['users'], 'email', $emailaddr);
             if ($user_count == 0 && $email_count == 0) {
                 $regdate = strftime('%Y-%m-%d %H:%M:%S',$dateRegistered);
-                if ( $sig_bbcode_uid != '' ) {
-                    $signature = str_replace(":".$sig_bbcode_uid,"",$signature);
-                }
+
                 // insert new user record into the appropriate tables
-                mysql_query("INSERT INTO {$_TABLES['users']} (username,passwd,email,regdate,sig,homepage,status) VALUES ('$username','$passwd','$emailaddr','$regdate','$signature','$website',3)", $DB_glFusion);
+                if ( !mysql_query("INSERT INTO {$_TABLES['users']} (username,passwd,email,regdate,sig,homepage,status) VALUES ('$username','$passwd','$emailaddr','$regdate','','".addslashes($website)."',3)", $DB_glFusion) ) {
+                    die('SQL Error:<br />' . mysql_error($DB_glFusion) );
+                }
                 $uid_result = mysql_query("SELECT uid FROM {$_TABLES['users']} WHERE username = '{$username}'",$DB_glFusion);
                 list ($uid) = mysql_fetch_array($uid_result);
+
+
                 mysql_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_uid) values ($loggedin_grp, $uid)",$DB_glFusion);
                 mysql_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_uid) values ($all_grp, $uid)",$DB_glFusion);
                 mysql_query("INSERT INTO {$_TABLES['userprefs']} (uid) VALUES ($uid)",$DB_glFusion);
@@ -519,6 +552,12 @@ function phpbb3_migrateUsers() {
                 }
                 mysql_query("INSERT INTO {$_TABLES['usercomment']} (uid) VALUES ($uid)",$DB_glFusion);
                 mysql_query("INSERT INTO {$_TABLES['userinfo']} (uid,lastlogin) VALUES ($uid,$lastvisit)",$DB_glFusion);
+
+                $signature = _convertPost($signature, $sig_bbcode_uid);
+
+                $sql = "INSERT INTO {$_TABLES['gf_userinfo']} (uid,rating,signature) VALUES ('".$uid."',0,'".addslashes($signature)."')";
+                mysql_query($sql,$DB_glFusion);
+
                 $usersImported++;
             } else {
                 $retval .= "<br /><b>$membername</b> or <b>$email</b> already exist.<br />";
@@ -528,6 +567,44 @@ function phpbb3_migrateUsers() {
         }
     }
     return $retval;
+}
+
+function _convertPost( $message, $bbcode_uid = '' )
+{
+    // clean up the phpbb post for the glFusion database
+    if ( $bbcode_uid != '' ) {
+        $message = str_replace(":".$bbcode_uid,"",$message);
+    }
+    $message = preg_replace('#<!\-\- s(.*?) \-\-><img src="\{SMILIES_PATH\}\/.*? \/><!\-\- s\1 \-\->#', '\1', $message);
+
+    $message = preg_replace('/(\[quote=)(.*)(&quot;\])/','[quote]',$message);
+    $message = preg_replace('/(\[quote=)(.*)("\])/','[quote]',$message);
+    $message = preg_replace('/(\[quote=)(.*)(\])/','[quote]',$message);
+    $message = preg_replace('/(\[code:)(.*)(\])/','[code]',$message);
+    $message = preg_replace('/(\[\/code:)(.*)(\])/','[/code]',$message);
+    $message = preg_replace('/(\[\/list:)(.*)(\])/','[/list]',$message);
+
+    $message = str_replace("size=0"  ,"size=7",$message);
+    $message = str_replace("size=9"  ,"size=7",$message);
+    $message = str_replace("size=17" ,"size=7",$message);
+    $message = str_replace("size=24" ,"size=9",$message);
+    $message = str_replace("size=25" ,"size=9",$message);
+    $message = str_replace("size=34" ,"size=12",$message);
+    $message = str_replace("size=42" ,"size=12",$message);
+    $message = str_replace("size=50" ,"size=12",$message);
+    $message = str_replace("size=59" ,"size=12",$message);
+    $message = str_replace("size=92" ,"size=18",$message);
+    $message = str_replace("size=100","size=18",$message);
+    $message = str_replace("size=117","size=18",$message);
+    $message = str_replace("size=134","size=18",$message);
+    $message = str_replace("size=150","size=18",$message);
+    $message = str_replace("size=167","size=18",$message);
+    $message = str_replace("size=200","size=24",$message);
+
+    $message = str_replace("&#58;",":",$message);
+    $message = str_replace("&#46;",".",$message);
+
+    return $message;
 }
 
 
@@ -559,6 +636,20 @@ if ( isset($_POST['phpbb3dbserver']) ) {
         $_purge_glfusion_forum = false;
     }
 
+    if ( isset($_POST['purge_glfusion_users']) && ($_POST['purge_glfusion_users'] == 'on' || $_POST['purge_glfusion_users'] == 1 )) {
+        $_purge_glfusion_users = true;
+    } else {
+        $_purge_glfusion_users = false;
+    }
+
+    if ( isset($_POST['highest_uid']) ) {
+        $_highest_uid = COM_applyFilter($_POST['highest_uid'],true);
+    }
+
+    if ( $_purge_glfusion_users && ($_highest_uid == 0 || $_highest_uid < 2 ) ) {
+        $_purge_glfusion_users = 0;
+    }
+
     if ( isset($_POST['import_phpbb3_users']) && ($_POST['import_phpbb3_users'] == 'on' || $_POST['import_phpbb3_users'] == 1 ) ) {
         $_import_phpbb3_users = true;
     } else {
@@ -583,6 +674,9 @@ switch ( $mode ) {
             $display = phpbb3_getInfo();
         } else {
             if ( $_import_phpbb3_users ) {
+                if ($_purge_glfusion_users) {
+                    phpbb3_purgeUser($_highest_uid);
+                }
                 $userImport = phpbb3_migrateUsers();
             }
             $display .= _processImport();

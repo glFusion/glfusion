@@ -234,6 +234,7 @@ function install_config($site_url)
     $c->add('usersubmission',0,'select',4,19,0,780,TRUE);
     $c->add('allow_domains','','text',4,19,NULL,960,TRUE);
     $c->add('disallow_domains','','text',4,19,NULL,970,TRUE);
+    $c->add('user_reg_fullname',1,'select',4,19,25,980,TRUE);
 
     $c->add('fs_submission', NULL, 'fieldset', 4, 20, NULL, 0, TRUE);
     $c->add('storysubmission',1,'select',4,20,0,770,TRUE);

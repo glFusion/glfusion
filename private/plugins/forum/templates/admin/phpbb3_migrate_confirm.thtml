@@ -13,11 +13,28 @@
   <input type="hidden" name="phpbb3dbprefix" value="{phpbb3dbprefix}" />
   <input type="hidden" name="purge_glfusion_forum" value="{purgeglfusionforums}" />
   <input type="hidden" name="import_phpbb3_users" value="{importphpbb3users}" />
+  <input type="hidden" name="purge_glfusion_users" value="{purgeglfusionusers}"/>
+  <input type="hidden" name="highest_uid" value="{highestuid}"/>
 
   <h2>Current Settings</h2>
-   <p>Initialize all glFusion Forums before starting migration: <b>{purgeglfusionforum}</b></p>
-   <p>Import phpBB3 Users into glFusion: <b>{importphpbb3user}</b></p>
-
+  <table style="border:1px solid gray;width:95%;">
+  <tr class="pluginRow2">
+    <td style="width:50%;">Initialize all glFusion Forums before starting migration:</td>
+    <td style="text-align:left;"><b>{purgeglfusionforum}</b></td>
+  </tr>
+  <tr class="pluginRow1">
+    <td style="width:50%;">Import phpBB3 Users into glFusion:</td>
+    <td><b>{importphpbb3user}</b></td>
+  </tr>
+  <tr class="pluginRow2">
+    <td style="width:50%;">Purge glFusion Users:</td>
+    <td><b>{purgeglfusionuser}</b></td>
+  </tr>
+  <tr class="pluginRow1">
+    <td style="width:50%;">Highest User ID to KEEP:</td>
+    <td><b>{highestuid}</b></td>
+  </tr>
+  </table>
   <h2>Select Forums to Migrate</h2>
 
   {selection}

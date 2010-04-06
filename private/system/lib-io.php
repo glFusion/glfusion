@@ -512,4 +512,12 @@ function IO_getImage($image, $namespace='')
 
     return $pageHandle->getImage($image,$namespace);
 }
+
+function IO_getContent()
+{
+    global $pageHandle;
+
+    return $pageHandle->getContent();
+}
+
 ?>

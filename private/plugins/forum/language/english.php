@@ -293,6 +293,8 @@ $LANG_GF01 = array(
     'h_help' => 'Click to view more detailed help',
     't_help' => 'Use [file]#[/file] to embed an attached image in the post',
     'e_help' => 'List item: [*]text',
+    'smiley' => 'Smileys',
+
     /* --- Community moderation tags --- */
     'grade'         => '<br /><b>Group Comfort<br />Level:</b>',
     'grade_user'    => '<br /><b>Evaluate User</b>',
@@ -989,6 +991,9 @@ $LANG_confignames['forum'] = array(
     'enable_user_rating_system' => 'Enable User Rating System',
     'bbcode_signature' => 'Enable BBcode Signature',
     'use_wysiwyg_editor' => 'Enable WYSIWYG HTML Editor',
+    'bbcode_disabled' => 'Default Setting for BBCode Disabled Box',
+    'smilies_disabled' => 'Default Setting for Smilies Disabled Box',
+    'urlparse_disabled' => 'Default Setting for URL Parse Disabled Box',
 );
 
 $LANG_configsubgroups['forum'] = array(
