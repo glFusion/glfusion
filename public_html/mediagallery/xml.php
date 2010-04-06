@@ -182,5 +182,6 @@ function MG_xml() {
 	echo $xml;
 }
 
+
 MG_xml();
 ?>

@@ -442,7 +442,7 @@ function _checkEnvironment()
 ----------------------- */
     }
     // special test to see if we can create a directory under layout_cache...
-    $rc = mkdir($_CONF['path_data'].'layout_cache/test/');
+    $rc = @mkdir($_CONF['path_data'].'layout_cache/test/');
     if (!$rc) {
         $T->set_var('location',$_CONF['path_data'].'layout_cache/<br /><strong>'.$_GLFUSION['errstr'].'</strong>');
         $T->set_var('status', '<span class="notwriteable">'.$LANG01['unable_mkdir'].'</span>');

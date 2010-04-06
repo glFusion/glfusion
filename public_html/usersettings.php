@@ -1051,10 +1051,8 @@ function saveuser($A)
         }
 
         if ($A['cooktime'] <= 0) {
-            $cooktime = 1000;
-            SEC_setCookie ($_CONF['cookie_name'], $_USER['uid'], time() - $cooktime,
-                           $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                           $_CONF['cookiesecure'],true);
+            $cookie_timeout = 0;
+            $token_ttl = 14400;
         } else {
             SEC_setCookie ($_CONF['cookie_name'], $_USER['uid'],
                            time() + $A['cooktime'], $_CONF['cookie_path'],

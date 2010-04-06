@@ -106,7 +106,9 @@ function IMG_getMediaMetaData( $filename ) {
     // include getID3() library
     require_once($_CONF['path'] . '/lib/getid3/getid3.php');
     // Needed for windows only
-    define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
+    if ( !defined('GETID3_HELPERAPPSDIR') ) {
+        define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
+    }
 
     $getID3 = new getID3;
 
