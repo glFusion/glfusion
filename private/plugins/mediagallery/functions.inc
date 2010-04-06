@@ -880,7 +880,8 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                 }
                 break;
             case 'playall' :
-               if ( !isset($MG_albums[$parm1]->id) || $MG_albums[$parm1]->access == 0 ) {
+               if ( !isset($MG_albums[$parm1]->id) || $MG_albums[$parm1]->access == 0 ||
+                        ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )) {
                     $link = '';
                     $content = str_replace ($autotag['tagstr'], $link, $content);
                     return $content;

@@ -245,7 +245,9 @@ $LANG01 = array(
     'jhead_ok' => 'The jhead executable is installed.',
     'jpegtran' => 'jpegtran Program',
     'jpegtran_not_found' => 'Unable to locate the jpegtran executable.',
-    'jpegtran_ok' => 'The jpegtran executable is installed.'
+    'jpegtran_ok' => 'The jpegtran executable is installed.',
+    'show_phpinfo' => 'Show Full PHP Info',
+    'hide_phpinfo' => 'Hide Full PHP Info'
 );
 
 ###############################################################################
@@ -830,6 +832,7 @@ $LANG21 = array(
     67 => 'Check to allow autotags',
     68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.',
     69 => 'Are you sure you want to delete this block?'
+    70 => 'Block name cannot be blank and cannot contain spaces or the following characters: < > \' " % & * / or backslash'
 );
 
 ###############################################################################
@@ -958,7 +961,20 @@ $LANG27 = array(
     26 => 'сделать темой по умолчаниюдля архивированных статей - разрешена только одна тема.',
     27 => 'Or Upload Topic Icon',
     28 => 'Maximum',
-    29 => 'File Upload Errors'
+    29 => 'File Upload Errors',
+    30 => 'Date',
+    31 => 'Title',
+    32 => 'Story ID',
+    33 => 'Ascending',
+    34 => 'Descending',
+    35 => 'Sort Stories By',
+    36 => 'Sort Stories Direction',
+    37 => 'Direction',
+    38 => 'Default Topic?',
+    39 => 'Archive Topic?',
+    40 => 'Are you sure you want to delete this topic?',
+    41 => 'Display After',
+    42 => 'Topic ID cannont contain spaces'
 );
 
 ###############################################################################
@@ -1369,6 +1385,7 @@ $MESSAGE = array(
     98 => 'The plugin was successfully uploaded.',
     99 => 'The plugin already exists.',
     100 => 'The plugin file you uploaded was not a GZip or Zip compressed archive.',
+    200 => 'Sorry, you do not have access to this page.  Please note that all attempts to access unauthorized features are logged.',
     500 => 'The Template Cache has been successfully cleared',
     501 => 'Security Token is Invalid - Possible session timeout.',
     502 => 'Plugin successfully copied, please select Install from the New Plugin list below',
@@ -1450,6 +1467,34 @@ $LANG_BBCODE = array(
 );
 
 ###############################################################################
+# filecheck.php
+
+$LANG_FILECHECK = array(
+    'filecheck' => 'File Integrity Check',
+    'recheck' => 'Recheck File Integrity',
+    'confirm' => 'Are you sure you want to deleted the selected file(s)?',
+    'scan' => 'Your site\'s file integrity is being analyzed.  Please be patient, this process may take awhile to complete, and execution speed depends upon the hosting environment.  If this script approaches the maximum PHP script execution time of %s seconds, scanning will be interrupted and an error message will be displayed.',
+    'results' => 'Your site\'s files and directories have been compared to the glFusion v%s distribtion, and the results are shown below.  Added or missing files and directories have been identified, and files that have been added may be selected for deletion.  Directories that have been added will be detected, but presently these must be removed manually.<br /><br />Additional files and/or directories that are detected may be associated with plugins or other scripts that you have added, or are otherwise critical to your site\'s operation, and therefore <b>this DOES NOT mean you should simply delete these files!&nbsp;&nbsp;<span style="color:red">Please use this tool with caution!</span></b>',
+    'expiration1' => 'NOTE: The scan was aborted because the elapsed time it was approaching your site\'s PHP maximum execution time limit.  This analysis script is CPU and I/O-intensive, and can be affected by a number of factors in your web hosting environment.  Please consider one or more of the following recommendations resolve this problem:<br />',
+    'expiration2' => '<ol><li>Try increasing the value of \'max_execution_time\' in your php.ini file.  It is currently set to %s seconds.</li><li>Manually inspect your site and remove any unneeded files and directories.</li></ol>',
+    'abort' => 'Abort Scan',
+    'aborted' => 'The scan was aborted.',
+    'where' => 'Root',
+    'type' => 'Type',
+    'delta' => 'Change:',
+    'location' => 'Location',
+    'path' => 'Path',
+    'file' => 'File',
+    'dir' => 'Dir',
+    'plugin' => 'plugin',
+    'added' => 'added',
+    'missing' => 'missing',
+    'removed' => '%s %s deleted.  Your site\'s File Integrity has been rechecked, and the results are shown below.',
+    'working' => 'Scanning ...<br />',
+    'elapsed' => 'The scan completed in %s sec.'
+);
+
+###############################################################################
 
 $LANG_ACCESS = array(
     'access' => 'Доступ',
@@ -1523,7 +1568,11 @@ $LANG_ACCESS = array(
     'pe_content' => 'Content',
     'pe_privacy' => 'Privacy',
     'editusers' => 'Manage',
-    'editinguser' => 'Editing User:'
+    'sendemail' => 'eMail',
+    'admingroup' => 'Admin',
+    'defaultgroup' => 'Default',
+    'editinguser' => 'Editing User: ',
+    'createnewuser' => 'Creating New Account'
 );
 
 ###############################################################################
@@ -1769,7 +1818,10 @@ $LANG_ADMIN = array(
     'na' => '-',
     'action' => 'Action',
     'enable' => 'Enable',
-    'disable' => 'Disable'
+    'disable' => 'Disable',
+    'admin_users' => 'User Admin',
+    'admin_groups' => 'Group Admin',
+    'authenticate' => 'Authenticate'
 );
 
 ###############################################################################
@@ -2094,7 +2146,9 @@ $LANG_confignames['Core'] = array(
     'hidestorydate' => 'Hide Story Date',
     'maintenance_mode' => 'Enable Maintenance Mode',
     'rating_enabled' => 'Enable Rating',
-    'user_reg_fullname' => 'Full Name option on registration form?'
+    'user_reg_fullname' => 'Full Name option on registration form?',
+    'session_ip_check' => 'Session IP Validation',
+    'article_comment_close_enabled' => 'Automatically close comments (default)'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2150,7 +2204,8 @@ $LANG_fs['Core'] = array(
     'fs_perm_topic' => 'Topic Default Permission',
     'fs_perm_block' => 'Block Default Permission',
     'fs_webservices' => 'Webservices',
-    'fs_caching' => 'Caching'
+    'fs_caching' => 'Caching',
+    'fs_mulitlanguage' => 'Multiple Language Support - See <a href="http://www.glfusion.org/wiki/doku.php/glfusion:language#multilingual_sites" target=_blank>Multi-Language Documentation</a>'
 );
 
 $LANG_configselects['Core'] = array(
@@ -2179,7 +2234,8 @@ $LANG_configselects['Core'] = array(
     22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits'),
     23 => array('Disabled' => 0, 'Enabled (Exact Match)' => 1, 'Enabled (Word Beginning)' => 2, 'Enabled (Word Fragment)' => 3),
     24 => array('Disabled' => 0, 'Logged-in Users' => 1, 'Everyone' => 2),
-    25 => array('No' => 0, 'Optional' => 1, 'Required' => 2)
+    25 => array('No' => 0, 'Optional' => 1, 'Required' => 2),
+    26 => array('None' => 0, 'A.B' => 1, 'A.B.C' => 2, 'All' => 3)
 );
 
 ?>

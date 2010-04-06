@@ -40,6 +40,23 @@ if (!defined ('GVERSION')) {
 
 $glfIgnore = array('.','..','.svn','cgi-bin','.htaccess');
 
+// these are the bundled plugins.  they are fully defined/checked as below
+
+$glfPlugins = array(
+    'bad_behavior2',
+    'calendar',
+    'captcha',
+    'commentfeeds',
+    'filemgmt',
+    'forum',
+    'links',
+    'mediagallery',
+    'polls',
+    'sitetailor',
+    'spamx',
+    'staticpages'
+);
+
 // glFusion Distribution Directories (as-shipped)
 
 // test: 'R'= must exist, and recurse, 'E'= must exist, but do not recurse

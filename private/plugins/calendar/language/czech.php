@@ -160,7 +160,7 @@ $LANG_CAL_ADMIN = array(
     26 => 'Delete old entries',
     27 => 'These are the events that are older than ',
     28 => ' months. Please click on the trashcan Icon on the bottom to delete them, or select a different timespan:<br' . XHTML . '>Find all entries that are older than ',
-    29 => ' months.',
+    29 => '',
     30 => 'Update List',
     31 => 'Are You sure you want to permanently delete ALL selected users?',
     32 => 'List all',
@@ -177,7 +177,8 @@ $LANG_CAL_MESSAGE = array(
     'login' => 'Nemohu otevøít vá¹ osobní kalendáø dokud se nepøihlásíte',
     'removed' => 'Událost byla odstranìna z va¹eho osobního kalendáøe',
     'noprivate' => 'Bohu¾el, osobní kalendáøe tento server nepodporuje',
-    'unauth' => 'Bohu¾el, nemáte administrátorský pøístup. Tento vá¹ pokus byl zalogován'
+    'unauth' => 'Bohu¾el, nemáte administrátorský pøístup. Tento vá¹ pokus byl zalogován',
+    'delete_confirm' => 'Are you sure you want to delete this event?'
 );
 
 $PLG_calendar_MESSAGE4 = "Dìkujeme za odeslání události pro {$_CONF['site_name']}.  Nyní oèekává potvrzení.  Jakmile bude potvrzena, naleznete ji v <a href=\"{$_CONF['site_url']}/calendar/index.php\">kalendáøi</a>.";

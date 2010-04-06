@@ -143,7 +143,10 @@ $LANG_confignames['staticpages'] = array(
     'censor' => 'Gecensureerde Inhoud?',
     'default_permissions' => 'Standaard Pagina Rechten',
     'aftersave' => 'na het opslaan van de pagina',
-    'atom_max_items' => 'Max. aantal pagina\'s in Webservice Feed'
+    'atom_max_items' => 'Max. aantal pagina\'s in Webservice Feed',
+    'comment_code' => 'Comment Default',
+    'include_search' => 'Site Search Default',
+    'status_flag' => 'Default Page Mode'
 );
 
 $LANG_configsubgroups['staticpages'] = array(
@@ -162,7 +165,9 @@ $LANG_configselects['staticpages'] = array(
     2 => array('Datum' => 'date', 'Pagina ID' => 'id', 'Titel' => 'title'),
     3 => array('Datum' => 'date', 'Pagina ID' => 'id', 'Titel' => 'title', 'Label' => 'label'),
     9 => array('Ga naar pagina' => 'item', 'Toon Overzicht' => 'list', 'Toon Startpagina' => 'home', 'Toon Beheer' => 'admin'),
-    12 => array('Geen toegang' => 0, 'Alleen-Lezen' => 2, 'Lezen-Schrijven' => 3)
+    12 => array('Geen toegang' => 0, 'Alleen-Lezen' => 2, 'Lezen-Schrijven' => 3),
+    13 => array('Enabled' => 1, 'Disabled' => 0),
+    17 => array('Comments Enabled' => 0, 'Comments Disabled' => -1)
 );
 
 ?>

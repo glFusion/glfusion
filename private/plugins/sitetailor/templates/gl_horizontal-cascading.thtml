@@ -54,7 +54,7 @@
   line-height:2.3em;
   text-indent:1.3em;
   width:98%;
-  margin:0;
+  margin-left:1%;
   padding:0;
 }
 .gl_moomenu{menu_id} {

@@ -53,7 +53,7 @@ if (file_exists ($langfile)) {
 
 $_TABLES['plugins']             = $_DB_table_prefix . 'plugins';
 
-$pi_version = floatval (DB_getItem($_TABLES['plugins'], 'pi_version', "pi_name='forum'"));
+$pi_version = DB_getItem($_TABLES['plugins'], 'pi_version', "pi_name='forum'");
 
 require_once $_CONF['path'].'plugins/forum/config.php';
 require_once $_CONF['path'].'plugins/forum/forum.php';
@@ -508,7 +508,7 @@ function forum_buildFeedsSql ($forumID, $limits)
 {
     global $pi_version;
 
-    if ( !COM_checkVersion($pi_version, '2.6') ) {
+    if ( !COM_checkVersion($pi_version, '3.2.0') ) {
         return '';
     }
 
@@ -564,7 +564,7 @@ function plugin_getfeedcontent_forum ($feed, &$link, &$update)
     $lids = array();
     $ids = array();
 
-    if ( !COM_checkVersion($pi_version, '2.6') ) {
+    if ( !COM_checkVersion($pi_version, '3.2.0') ) {
         return '';
     }
 
@@ -869,7 +869,7 @@ function forum_deleteForum($id) {
 function phpblock_forum_newposts() {
     global $_CONF, $_SYSTEM, $_USER, $_TABLES, $LANG_GF01, $LANG_GF02, $mode, $CONF_FORUM,$pi_version;
 
-    if ( !COM_checkVersion($pi_version, '2.6') ) {
+    if ( !COM_checkVersion($pi_version, '3.2.0') ) {
         return '';
     }
 
@@ -1049,7 +1049,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
     global $_CONF, $_USER, $_TABLES, $LANG_GF01,$CONF_FORUM,
            $LANG_GF02, $mode, $order,$pi_version, $_GROUPS,$_SYSTEM;
 
-    if ( !COM_checkVersion($pi_version, '2.6') ) {
+    if ( !COM_checkVersion($pi_version, '3.2.0') ) {
         return '';
     }
 

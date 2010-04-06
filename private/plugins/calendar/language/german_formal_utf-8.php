@@ -161,7 +161,7 @@ $LANG_CAL_ADMIN = array(
     26 => 'Alte Einträge löschen',
     27 => 'Diese Termine sind älter als ',
     28 => ' Monate. Bite auf das Mülleimer-Icon klicken, um sie zu entfernen, oder eine andere Zeitspanne auswählen:<br' . XHTML . '>Suche alle Einträge älter als ',
-    29 => ' Monate.',
+    29 => '',
     30 => 'Liste aktualisieren',
     31 => 'Sind Sie sicher, dass Sie alle ausgewählten User permanent löschen möchten?',
     32 => 'Alle auflisten',
@@ -178,7 +178,8 @@ $LANG_CAL_MESSAGE = array(
     'login' => 'Sie müssen angemeldet sein, um auf Ihren persönlichen Kalender zugreifen zu können.',
     'removed' => 'Der Termin wurde aus Ihrem persönlichen Kalender entfernt',
     'noprivate' => 'Persönliche Kalender sind auf dieser Site nicht verfügbar.',
-    'unauth' => 'Sie haben keinen Zugriff auf die Termin-Administrationsseite. Alle Versuche, auf Bereiche ohne entsprechende Berechtigung zuzugreifen, werden protokolliert.'
+    'unauth' => 'Sie haben keinen Zugriff auf die Termin-Administrationsseite. Alle Versuche, auf Bereiche ohne entsprechende Berechtigung zuzugreifen, werden protokolliert.',
+    'delete_confirm' => 'Are you sure you want to delete this event?'
 );
 
 $PLG_calendar_MESSAGE4 = "Danke für Ihren Beitrag zu {$_CONF['site_name']}. Ihr Termin wurde an unser Team weitergeleitet. Wenn er akzeptiert wird, wird er bald im <a href=\"{$_CONF['site_url']}/calendar/index.php\">Kalender</a> aufgelistet werden.";

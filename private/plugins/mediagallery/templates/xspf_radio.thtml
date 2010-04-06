@@ -9,6 +9,7 @@
 	flashvars.playlist="{site_url}/xspf.php?aid={aid}";
 	flashvars.folder="{site_url}/players/";
 	flashvars.lma="yes";
+    flashvars.loop="playlist";
 	flashvars.display="1@. = @0@ - @";
 	flashvars.vol="50";
     swfobject.embedSWF("{site_url}/players/XSPF_RadioV.swf", "{id}", "270", "190", "9.0.0", "expressInstall.swf", flashvars, params, attributes);

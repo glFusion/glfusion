@@ -71,12 +71,16 @@ $LANG_CP00 = array(
     'cancel' => 'Abbruch',
     'success' => 'Konfigurationsoptionen erfolgreich gespeichert.',
     'reload' => 'Neues Bild',
-    'reload_failed' => 'Sorry, Du kannst das CAPTCHA-Bild nicht neuladen\nSende das Formular ab und ein neues CAPTCHA wird geladen',
+    'reload_failed' => "Sorry, Du kannst das CAPTCHA-Bild nicht neuladen\nSende das Formular ab und ein neues CAPTCHA wird geladen",
     'reload_too_many' => 'Du kannst max. 5 neue Bilder generieren lassen',
     'session_expired' => 'Deine CAPTCHA-Session ist abgelaufen, bitte versuche es erneut',
     'picture' => 'Bild',
     'characters' => 'Zeichen'
 );
+
+$PLG_captcha_MESSAGE1 = 'CAPTCHA-Plugin-Upgrade: Update erfolgreich.';
+$PLG_captcha_MESSAGE2 = 'CAPTCHA-Plugin erfolgreich installiert';
+$PLG_captcha_MESSAGE3 = 'CAPTCHA Plugin Successfully Installed';
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['captcha'] = array(
@@ -103,7 +107,10 @@ $LANG_confignames['captcha'] = array(
     'enable_rating' => 'Für Rating-Plugin',
     'enable_links' => 'Für Links-Plugin',
     'enable_calendar' => 'Für Kalender-Plugin',
-    'expire' => 'Wieviele Sekunden eine CAPTCHA-Session gültig ist'
+    'expire' => 'Wieviele Sekunden eine CAPTCHA-Session gültig ist',
+    'publickey' => 'reCAPTCHA Public Key - <a href="http://recaptcha.net/api/getkey?app=php">reCAPTCHA Signup</a>',
+    'privatekey' => 'reCAPTCHA Private Key',
+    'recaptcha_theme' => 'reCAPTCHA Theme'
 );
 
 $LANG_configsubgroups['captcha'] = array(
@@ -121,10 +128,8 @@ $LANG_configselects['captcha'] = array(
     1 => array('Ja' => true, 'Nein' => false),
     2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Stat. Bilder' => 2),
     4 => array('Standard' => 'default', 'Einfach' => 'simple'),
-    5 => array('JPG' => 'jpg', 'PNG' => 'png')
+    5 => array('JPG' => 'jpg', 'PNG' => 'png'),
+    6 => array('clean' => 'clean', 'red' => 'red', 'white' => 'white', 'blackglass' => 'blackglass')
 );
 
-$PLG_captcha_MESSAGE1 = 'CAPTCHA-Plugin-Upgrade: Update erfolgreich.';
-$PLG_captcha_MESSAGE2 = 'CAPTCHA-Plugin-Upgrade fehlgeschlagen - Schau in die Datei error.log für mehr Infos.';
-$PLG_captcha_MESSAGE3 = 'CAPTCHA-Plugin erfolgreich installiert';
 ?>

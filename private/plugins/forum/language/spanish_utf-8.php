@@ -39,7 +39,6 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
@@ -232,7 +231,7 @@ $LANG_GF01 = array(
     'PRINTABLE' => 'Versión Imprimible',
     'ForumProfile' => 'Opciones del Foro',
     'USERPREFS' => 'Preferencias de Usuario',
-	'SPEEDLIMIT' => '"Tu último comentario se realizó hace %s segundos.<br' . XHTML . '>Este sitio requiere al menos %s segundos entre Posts."',
+    'SPEEDLIMIT' => '"Tu último comentario se realizó hace %s segundos.<br' . XHTML . '>Este sitio requiere al menos %s segundos entre Posts."',
     'ACCESSERROR' => 'ERROR DE ACCESO',
     'LEGEND' => 'Leyenda',
     'ACTIONS' => 'Acciones',
@@ -278,7 +277,7 @@ $LANG_GF01 = array(
     'VIOLET' => 'Violeta',
     'WHITE' => 'Blanco',
     'BLACK' => 'Negro',
-    'ID'    => 'ID',
+    'ID' => 'ID',
     'b_help' => 'Negrita: [b]text[/b]',
     'i_help' => 'Cursiva: [i]text[/i]',
     'u_help' => 'Subrayado: [u]text[/u]',
@@ -294,23 +293,22 @@ $LANG_GF01 = array(
     'h_help' => 'Hacer clic para ayuda detallada',
     't_help' => 'Usar [file]#[/file] para insertar una imagen en el Post',
     'e_help' => 'Elemento de lista: [*]text',
-    /* --- Community moderation tags --- */
-    'grade'         => '<br /><b>Group Comfort<br />Level:</b>',
-    'grade_user'    => '<br /><b>Evaluar Usuario</b>',
+    'smiley' => 'Smileys',
+    'grade' => '<br /><b>Group Comfort<br />Level:</b>',
+    'grade_user' => '<br /><b>Evaluar Usuario</b>',
     'retract_grade' => '<br /><b>Eliminar Evaluación</b>',
-    'rate_too_low'  => 'Tu nivel de evaluación es demasiado bajo para enviar Posts a este foro',
+    'rate_too_low' => 'Tu nivel de evaluación es demasiado bajo para enviar Posts a este foro',
     'rate_too_low_forum' => 'Tu nivel de evaluación no es lo suficientemente alto para ver este foro',
     'rate_too_low_thread' => 'Tu nivel de evaluación no es los suficientemente alto para ver este tema',
-    /* --- bbcode signature --- */
     'signature' => 'Forum Signature',
     'edit_signature' => 'Edit BBcode Signature',
     'signature_preview' => 'Signature Preview',
     'cancel_confirm' => 'Seguro que deseas cancelar este Post?',
-    /* --- topic features --- */
     'disable_bbcode' => 'Disable BBCode:',
     'disable_smilies' => 'Disable Smilies:',
     'disable_urlparse' => 'Do not parse URLs:',
     'features' => 'Features:',
+    'rss_link' => 'Subscribe to this forum\'s RSS feed.'
 );
 
 $LANG_GF02 = array(
@@ -515,7 +513,7 @@ $LANG_GF02 = array(
     'EditTopic' => 'Editar tema',
     'quietforum' => 'Este Foro no tiene nuevos temas',
     'notify_full' => 'Incluir el Post completo en la notificación',
-    'view_online' => 'Si no puedes ver correctamente este mensaje, <a href="%s">puedes ver la versión en línea</a>.',
+    'view_online' => 'Si no puedes ver correctamente este mensaje, <a href="%s">puedes ver la versión en línea</a>.'
 );
 
 $LANG_GF03 = array(
@@ -536,14 +534,14 @@ $LANG_GF03 = array(
     'splitheading' => 'Opción de dividir tema:',
     'splitopt1' => 'Mover todos los Posts desde este punto',
     'splitopt2' => 'Mover únicamente este Post',
-    'merge_post'  => 'Merge Post',
+    'merge_post' => 'Merge Post',
     'merge_topic' => 'Merge Topic',
     'mergetopicmsg' => 'You can merge selected post(s) into another topic. These posts will not be reordered and will appear as if the users posted them to the new topic. Please enter the destination topic id or click on "Select topic" to search for one.',
     'mergeparent' => 'You have selected the option to merge <strong>all</strong> posts in this topic into another topic.',
-    'select'    => 'Select',
+    'select' => 'Select',
     'select_forum' => 'Select Forum Topic',
     'destination_topic' => 'Destination Topic ID:',
-    'select_topic' => 'Select Topic',
+    'select_topic' => 'Select Topic'
 );
 
 $LANG_GF04 = array(
@@ -572,7 +570,6 @@ $LANG_GF05 = array(
     'yim_alttext' => 'YIM:&nbsp;'
 );
 
-// Admin Navbar
 $LANG_GF06 = array(
     1 => 'Estadísticas',
     2 => 'Ajustes',
@@ -582,10 +579,9 @@ $LANG_GF06 = array(
     6 => 'Mensajes',
     7 => 'Direcciones IP',
     8 => 'Moderación de la Comunidad',
-    9 => 'Importar',
+    9 => 'Importar'
 );
 
-// User Functions Navbar
 $LANG_GF07 = array(
     1 => 'Ver Foros',
     2 => 'Preferencias',
@@ -594,14 +590,12 @@ $LANG_GF07 = array(
     5 => 'Miembros'
 );
 
-// Forum User Features
 $LANG_GF08 = array(
     1 => 'Notificaciones de temas',
     2 => 'Seguir notificaciones de los Foros',
     3 => 'Excepciones de notificación de temas'
 );
 
-// Attachment support feature
 $LANG_GF10 = array(
     'attachments' => 'Adjuntos',
     'maxattachments' => 'Máximo %s permitido',
@@ -637,7 +631,6 @@ $LANG_GF91 = array(
     'avgvmsg' => 'Media de visitas por:'
 );
 
-// Settings.php
 $LANG_GF92 = array(
     'gfsettings' => 'Ajustes de los Foros',
     'gensettings' => 'Ajustes generales',
@@ -748,13 +741,12 @@ $LANG_GF92 = array(
     'forumprefs_help' => 'Modificar las preferencias del modulo de Foros.<ul><li>Número de temas a mostrar en el índice de los foros.</li><li>Número de Posts a mostrar por página.</li><li>Número de Post para considerar un tema como popular.</li><li>Número de lineas a mostrar en los resultados de la búsqueda.</li><li>En la pantalla de listado de miembros</li><li>Ocultar Posts anónimos.</li><li>Activar notificaciones automáticas.</li><li>Enviar solo una notificación.</li><li>Mostrar la revisión del tema (iframe) al final de la página al responder.</li></ul>',
     'topic_order' => 'Topic Order',
     'editor_type' => 'Editor Type',
-    'bbcode'    => 'BBCode',
-    'wysiwyg'   => 'WYSIWYG',
+    'bbcode' => 'BBCode',
+    'wysiwyg' => 'WYSIWYG',
     'ascending' => 'Ascending',
-    'descending' => 'Descending',
+    'descending' => 'Descending'
 );
 
-// Board Admin
 $LANG_GF93 = array(
     'gfboard' => 'Administración de Foros',
     'vieworder' => 'Orden para mostrar',
@@ -880,12 +872,12 @@ $LANG_GF97 = array(
 );
 
 $LANG_GF98 = array(
-    'user_ratings'  => 'Evaluación de usuarios',
+    'user_ratings' => 'Evaluación de usuarios',
     'forum_settings' => 'Ajustes de foros moderados por la comunidad. Define el nivel mínimo de usuario para ver y enviar mensajes a los foros.',
     'board_ratings' => 'Ajustes de evaluación',
     'user_ratings_desc' => 'Ajustes de foros moderados por la comunidad. Puedes modificar los ajustes de usuario o ver que usuarios han evaluado o ver la evaluación de un usuario',
-    'rating'    => 'Evaluación',
-    'uid'       => 'UID',
+    'rating' => 'Evaluación',
+    'uid' => 'UID',
     'user_rating_title' => 'Evaluaciones de usuario de la comunidad',
     'no_subject_defined' => 'Sin asunto definido',
     'admin_set_value' => 'El administrador ha establecido una nueva evaluación de usuario',
@@ -896,10 +888,9 @@ $LANG_GF98 = array(
     'user_votes_desc' => 'Esta pantalla muestra como el usuario a votado (evaluado) a otros usuarios.',
     'user_rating_details' => 'Detalles de evaluación de usuario de: ',
     'user_voting_details' => 'Detalles de votación de usuario de: ',
-    'save_changes'  => 'Guardar cambios',
+    'save_changes' => 'Guardar cambios'
 );
 
-###############################################################################
 $PLG_forum_MESSAGE1 = 'Actualización del módulo de foros completada - sin errores';
 $PLG_forum_MESSAGE2 = 'Actualización del módulo de foros: No se puede actualizar esta versión automáticamente. Revisa la documentación del módulo.';
 $PLG_forum_MESSAGE5 = 'Ha fallado la actualización del módulo de foros - revisa el archivo error.log';
@@ -993,7 +984,7 @@ $LANG_confignames['forum'] = array(
     'use_wysiwyg_editor' => 'Activar Editor WYSIWYG HTML',
     'bbcode_disabled' => 'Default Setting for BBCode Disabled Box',
     'smilies_disabled' => 'Default Setting for Smilies Disabled Box',
-    'urlparse_disabled' => 'Default Setting for URL Parse Disabled Box',
+    'urlparse_disabled' => 'Default Setting for URL Parse Disabled Box'
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -1008,6 +999,8 @@ $LANG_fs['forum'] = array(
     'ff_rank_settings' => 'Ajustes de niveles de miembros (Ranking)',
     'ff_attachments_settings' => 'Ajustes de adjuntos'
 );
+
+// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['forum'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => true, 'False' => false),
@@ -1016,15 +1009,6 @@ $LANG_configselects['forum'] = array(
     4 => array('Block Menu' => 'blockmenu', 'Nav Bar' => 'navbar', 'None' => 'none'),
     5 => array('Descending' => 'DESC', 'Ascending' => 'ASC'),
     6 => array('Checked' => 1, 'Unchecked' => 0)
-
-//$LANG_configselects['foro'] = array(
-//    0 => array('Verdadero' => 1, 'Falso' => 0),
-//    1 => array('Verdadero' => true, 'Falso' => false),
-//    2 => array('Al principio de la pagina' => 1, 'Detras de la historia destacada' => 2, 'Al final de la pagina' => 3),
-//    3 => array('Sin bloques' => 'noblocks', 'Bloques izquierdos' => 'leftblocks', 'Bloques derechos' => 'rightblocks'),
-//    4 => array('Bloque de menu' => 'blockmenu', 'Barra de navegacion' => 'navbar', 'Ninguno' => 'none'),
-//    5 => array('Descendente' => 'DESC', 'Ascendente' => 'ASC')
-
 );
 
 ?>

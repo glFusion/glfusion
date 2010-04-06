@@ -142,7 +142,10 @@ $LANG_confignames['staticpages'] = array(
     'censor' => 'צינזור תוכן?',
     'default_permissions' => 'הרשאות ברירת המחדל של עמוד',
     'aftersave' => 'לאחר שמירת עמוד',
-    'atom_max_items' => 'הכמות המקסימלית של עמודים בהזנת שירותי רשת'
+    'atom_max_items' => 'הכמות המקסימלית של עמודים בהזנת שירותי רשת',
+    'comment_code' => 'Comment Default',
+    'include_search' => 'Site Search Default',
+    'status_flag' => 'Default Page Mode'
 );
 
 $LANG_configsubgroups['staticpages'] = array(
@@ -161,7 +164,9 @@ $LANG_configselects['staticpages'] = array(
     2 => array('Date' => 'date', 'Page ID' => 'id', 'Title' => 'title'),
     3 => array('Date' => 'date', 'Page ID' => 'id', 'Title' => 'title', 'Label' => 'label'),
     9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3)
+    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
+    13 => array('Enabled' => 1, 'Disabled' => 0),
+    17 => array('Comments Enabled' => 0, 'Comments Disabled' => -1)
 );
 
 ?>

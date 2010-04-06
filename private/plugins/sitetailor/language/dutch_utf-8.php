@@ -178,7 +178,7 @@ $LANG_ST01 = array(
     'disabled_plugin' => 'Niet gevonden of uitgeschakelde plugin',
     'clone' => 'Kopieer',
     'clone_menu_label' => 'Naam van Gekloonde Menu',
-    'topic'                 => 'Topics',
+    'topic' => 'Topics'
 );
 
 $LANG_HC = array(
@@ -230,7 +230,7 @@ $LANG_ST_TYPES = array(
     6 => 'Externe URL',
     7 => 'PHP Functie',
     8 => 'Label',
-    9 => 'Topic',
+    9 => 'Topic'
 );
 
 $LANG_ST_TARGET = array(
