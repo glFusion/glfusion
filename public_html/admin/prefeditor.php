@@ -210,7 +210,7 @@ function applyPreferences()
 
     $enabledOptions = array();
 
-    $enabledOptions = $_POST['enabled'];
+    $enabledOptions = (isset($_POST['enabled']) ? $_POST['enabled'] : array());
     if ( is_array($enabledOptions) ) {
         foreach($enabledOptions AS $attribute) {
             switch ($attribute) {

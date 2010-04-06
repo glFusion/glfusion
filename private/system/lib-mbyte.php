@@ -84,7 +84,7 @@ function MBYTE_languageList ($charset = 'utf-8')
 }
 
 // replacement functions for UTF-8 functions
-function MBYTE_checkEnabled()
+function MBYTE_checkEnabled($test = '', $enabled = true)
 {
     global $LANG_CHARSET;
 
@@ -93,9 +93,18 @@ function MBYTE_checkEnabled()
     if (!isset($mb_enabled)) {
         $mb_enabled = false;
         if (strcasecmp($LANG_CHARSET, 'utf-8') == 0) {
-            if (function_exists('mb_eregi_replace')) {
-                $mb_enabled = mb_internal_encoding('UTF-8');
-            }
+			if($test == '') {
+			// Normal situation in live environment
+            	if (function_exists('mb_eregi_replace')) {
+                	$mb_enabled = mb_internal_encoding('UTF-8');
+				}
+
+            } elseif($test == 'test') {
+				// Just for tests, true if we want function to exist
+				if($enabled) {
+					$mb_enabled = mb_internal_encoding('UTF-8');
+				}
+			}
         }
     }
 
@@ -145,7 +154,7 @@ function MBYTE_substr($str, $start, $length = NULL)
     return $result;
 }
 
-function MBYTE_strpos($hay, $needle, $offset = NULL)
+function MBYTE_strpos($haystack, $needle, $offset = NULL)
 {
     static $mb_enabled;
 
@@ -153,13 +162,14 @@ function MBYTE_strpos($hay, $needle, $offset = NULL)
         $mb_enabled = MBYTE_checkEnabled();
     }
     if ($mb_enabled) {
-        $result = mb_strpos($hay, $needle, $offset);
+        $result = mb_strpos($haystack, $needle, $offset);
     } else {
-        $result = strpos($hay, $needle, $offset);
+        $result = strpos($haystack, $needle, $offset);
     }
 
     return $result;
 }
+
 
 function MBYTE_strtolower($str)
 {
@@ -203,7 +213,7 @@ function MBYTE_eregi_replace($pattern, $replace, $str)
     if ($mb_enabled) {
         $result = mb_eregi_replace($pattern, $replace, $str);
     } else {
-        $result = preg_replace('/'.$pattern.'/i', $replace, $str);
+        $result = eregi_replace($pattern, $replace, $str);
     }
 
     return $result;
@@ -229,8 +239,6 @@ function MBYTE_is_utf8($string) {
 
 }
 
-
-/** those are currently not needed in GL, left here if needed later
 
 function MBYTE_substr_count($hay, $needle)
 {
@@ -264,7 +272,7 @@ function MBYTE_strtoupper($str)
     return $result;
 }
 
-function MBYTE_strrpos($hay, $needle, $offset='')
+function MBYTE_strrpos($haystack, $needle, $offset = NULL)
 {
     static $mb_enabled;
 
@@ -272,9 +280,17 @@ function MBYTE_strrpos($hay, $needle, $offset='')
         $mb_enabled = MBYTE_checkEnabled();
     }
     if ($mb_enabled) {
-        $result = mb_strrpos($hay, $needle, $offset, 'utf-8');
+        if ($offset === NULL) {
+            $result = mb_strrpos($haystack, $needle);
+        } else {
+            $result = mb_strrpos($haystack, $needle, $offset);
+        }
     } else {
-        $result = strrpos($hay, $needle, $offset);
+        if ($offset === NULL) {
+            $result = strrpos($haystack, $needle);
+        } else {
+            $result = strrpos($haystack, $needle, $offset);
+        }
     }
 
     return $result;
@@ -298,8 +314,6 @@ function MBYTE_mail($to, $subj, $mess, $header = NULL, $param = NULL)
     }
     return $result;
 }
-
-*/
 
 
 /**

@@ -369,7 +369,7 @@ function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_foru
             DB_query("UPDATE {$_TABLES['gf_topic']} SET pid=0 WHERE id=".$topic_id);
             DB_query("UPDATE {$_TABLES['gf_topic']} SET pid=".$topic_id." WHERE pid=".$move_to_topic);
             $move_to_topic = $topic_id;
-            $pidDate = $topicDate;
+            $pidDate = $movedDate;
         }
 
         // Update Topic and Post Count for the effected forums
@@ -733,9 +733,16 @@ if ($forum_id == 0) {
             if ( $topic_id == 0) {
                 moderator_error(ERROR_TOPIC_ID);
             }
-            $move_to_forum  = COM_applyFilter($_POST['movetoforum'],true);
+//            $move_to_forum  = COM_applyFilter($_POST['movetoforum'],true);
             $move_to_topic  = COM_applyFilter($_POST['mergetopic'],true);
-            $splittype      = COM_applyFilter($_POST['splittype']);
+//            $splittype      = COM_applyFilter($_POST['splittype']);
+
+            $splittype = '';
+
+            $move_to_forum = DB_getItem($_TABLES['gf_topic'],'forum','id='.(int)$move_to_topic);
+            if ( $move_to_forum == '' ) {
+                moderator_error(ACCESS_DENIED);
+            }
 
             if ( !forum_modPermission($move_to_forum,$_USER['uid'],'mod_move') ) {
                 moderator_error(ACCESS_DENIED);

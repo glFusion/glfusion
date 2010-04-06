@@ -211,7 +211,7 @@ function plugin_savecomment_staticpages($title, $comment, $id, $pid, $postmode)
     } else { // success
         $url = COM_buildUrl($_CONF['site_url'] . '/staticpages/index.php?page='
                             . $id);
-		CACHE_remove_instance('whatsnew_');							
+		CACHE_remove_instance('whatsnew_');
 		echo COM_refresh($url);
 		exit;
     }
@@ -1192,7 +1192,7 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
         return $retval;
     }
 
-    if ($sp_id == '*') {
+    if ($id == '*') {
         $where = '';
         $permOp = 'WHERE';
     } else {
