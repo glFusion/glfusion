@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Calendar: Enforce login required on event view (event.php) (Mark)
+- Forum: Translate <>& in posts when created with WYSIWYG editor (Mark)
+- Topic block - do not mark inactive if $topic is blank (Mark)
 - New permission - stats.view - controls access to Stats page (Mark)
 - Media Gallery: Added linksrc: parameter to media auto tag to specify
   which image (tn/disp/orig) should be used in the direct link (Mark)
