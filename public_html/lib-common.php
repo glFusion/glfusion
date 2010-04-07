@@ -355,6 +355,7 @@ else if( $_CONF['allow_user_themes'] == 1 ) {
         $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_CONF['theme'];
     }
 }
+$TEMPLATE_OPTIONS['default_vars']['layout_url'] = $_CONF['layout_url'];
 
 /**
 * Include theme functions file
