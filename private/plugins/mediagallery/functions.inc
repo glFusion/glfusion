@@ -3717,7 +3717,7 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
         $A = DB_fetchArray($result);
 
         $aid = $A['album_id'];
-        if ( $MG_albums[$aid]->access > 0 ) {
+        if ( isset($MG_albums[$aid]) && $MG_albums[$aid]->access > 0 ) {
             $props = array();
             foreach ($properties as $p) {
                 switch ($p) {
@@ -3758,7 +3758,7 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
         }
 
         $mapped = array();
-        if ( is_array($props) ) {
+        if ( isset($props) && is_array($props) ) {
             foreach ($props as $key => $value) {
                 if ($id == '*') {
                     if ($value != '') {
