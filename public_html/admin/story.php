@@ -314,7 +314,7 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
     } else if ($story->EditElements('tid') == '') {
         $story->setTid($currenttopic);
     }
-    if ( SEC_hasRights('story.edit') ) {
+    if ( SEC_inGroup('Story Admin') ) {
         $allowedTopicList = COM_topicList ('tid,topic', $story->EditElements('tid'), 1, true,0);
     } else {
         $allowedTopicList = COM_topicList ('tid,topic', $story->EditElements('tid'), 1, true,3);
@@ -448,7 +448,7 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
     $story_templates->set_var('owner', $ownername);
     $story_templates->set_var('owner_id', $story->EditElements('owner_id'));
 
-    if ( SEC_hasRights('story.edit') ) {
+    if ( SEC_inGroup('Story Admin') ) {
         $story_templates->set_var('owner_dropdown',COM_buildOwnerList('owner_id',$story->EditElements('owner_id')));
     } else {
         $ownerInfo = '<input type="hidden" name="owner_id" value="'.$story->editElements('owner_id').'" />'.$ownername;
@@ -456,15 +456,8 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
     }
 
     $story_templates->set_var('lang_group', $LANG_ACCESS['group']);
-
-    if ( SEC_inGroup($story->EditElements('group_id'))) {
-        $story_templates->set_var('group_dropdown',
-                                  SEC_getGroupDropdown ($story->EditElements('group_id'), 3));
-    } else {
-        $gdrpdown = '<input type="hidden" name="group_id" value="'.$story->EditElements('group_id').'"/>';
-        $grpddown .= DB_getItem($_TABLES['groups'],'grp_name','grp_id='.$story->EditElements('group_id'));
-        $story_templates->set_var('group_dropdown',$grpddown);
-    }
+    $story_templates->set_var('group_dropdown',
+                              SEC_getGroupDropdown ($story->EditElements('group_id'), 3));
     $story_templates->set_var('lang_permissions', $LANG_ACCESS['permissions']);
     $story_templates->set_var('lang_perm_key', $LANG_ACCESS['permissionskey']);
     $story_templates->set_var('permissions_editor', SEC_getPermissionsHTML(

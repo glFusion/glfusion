@@ -526,16 +526,9 @@ function plugin_cclabel_filemgmt()
 */
 
 function plugin_getuseroption_filemgmt() {
-    global $_CONF, $_FM_TABLES, $_TABLES, $LANG_FILEMGMT,$mydownloads_uploadselect;
-
+    global $_CONF, $_FM_TABLES, $LANG_FILEMGMT,$mydownloads_uploadselect;
     if (SEC_hasRights('filemgmt.upload') OR $mydownloads_uploadselect == 1) {
-        $groupsql = filemgmt_buildAccessSql();
-        $sql = "SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_cat']} WHERE pid=0 ";
-        $sql .= $groupsql;
-        list($catAccessCnt) = DB_fetchArray( DB_query($sql));
-        if ( $catAccessCnt > 0 ) {
            return array($LANG_FILEMGMT['usermenu3'], $_CONF['site_url'] . '/filemgmt/submit.php');
-        }
     } else {
         return false;
     }

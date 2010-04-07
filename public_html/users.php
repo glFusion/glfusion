@@ -536,7 +536,7 @@ function createuser ($username, $email, $email_conf)
 
     $fullname = '';
     if (!empty ($_POST['fullname'])) {
-        $fullname   = COM_truncate(trim(USER_sanitizeName(COM_stripslashes($_POST['fullname']))),80);
+        $fullname   = COM_truncate(trim(COM_applyFilter($_POST['fullname'])),80);
     }
 
     if (!isset ($_CONF['disallow_domains'])) {

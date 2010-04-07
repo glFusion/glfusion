@@ -461,9 +461,9 @@ class database {
                 $sql .= ' WHERE ';
                 for ($i = 1; $i <= count($id); $i++) {
                     if ($i == count($id)) {
-                        $sql .= current($id) . " = '" . addslashes(current($value)) . "'";
+                        $sql .= current($id) . " = '" . DB_escapeString(current($value)) . "'";
                     } else {
-                        $sql .= current($id) . " = '" . addslashes(current($value)) . "' AND ";
+                        $sql .= current($id) . " = '" . DB_escapeString(current($value)) . "' AND ";
                     }
                     next($id);
                     next($value);
@@ -475,7 +475,7 @@ class database {
             }
         } else {
             if (!empty($id) && ( isset($value) || $value != "")) {
-                $sql .= " WHERE $id = '".addslashes($value)."'";
+                $sql .= " WHERE $id = '".DB_escapeString($value)."'";
             }
         }
 
@@ -755,6 +755,22 @@ class database {
         if ($this->isVerbose()) {
             $this->_errorlog("\n*** Leaving database->dbUnlockTable ***");
         }
+    }
+
+    /**
+    * escape a string
+    *
+    * Escapes special characters in the unescaped_string , taking into account
+    * the current character set of the connection so that it is safe to place
+    * it in a SQL query.
+    *
+    * @param    string      $str      String to escape
+    * @return   void
+    *
+    */
+    function dbEscapeString($str)
+    {
+        return @mysql_real_escape_string($str);
     }
 }
 

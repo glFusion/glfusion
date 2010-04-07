@@ -146,7 +146,7 @@ function phpblock_calendar( $help='', $title='' )
         $oldDate1 = 'no_day';  // Invalid Date!
         $oldDate2 = 'last_d';  // Invalid Date!
 
-        if (($_CA_CONF['personalcalendars'] == 1) AND !COM_isAnonUser()) {
+        if( $_CA_CONF['personalcalendars'] == 1 AND !empty( $_USER['uid'] )) {
             $iterations = 2;
         } else {
             $iterations = 1;
@@ -324,9 +324,6 @@ function plugin_ismoderator_calendar()
 
 /**
 * Returns SQL & Language texts to moderation.php
-*
-* @return   mixed   Plugin object or void if not allowed
-*
 */
 function plugin_itemlist_calendar()
 {
@@ -545,23 +542,12 @@ function plugin_savesubmission_calendar($A)
     $A['description'] = (isset($A['description']) ? $A['description'] : '');
     $A['event_type']  = (isset($A['event_type']) ? $A['event_type'] : '');
 
-    if ($A['url'] == 'http://') {
-        // remove default entry now to avoid false spam reports
-        $A['url'] = '';
-    }
-
     // pseudo-formatted event description for the spam check
-    $spamcheck = '';
-    if (empty($A['url'])) {
-        $spamcheck .= $A['title'];
-    } else {
-        $spamcheck .= COM_createLink($A['title'], $A['url']);
-    }
-    $spamcheck .= '<br' . XHTML . '>' . $A['location'] . '<br' . XHTML . '>'
-               . $A['address1'] . '<br' . XHTML . '>' . $A['address2']
-               . '<br' . XHTML . '>' . $A['city'] . ', ' . $A['zipcode']
+    $spamcheck = COM_createLink($A['title'], $A['url']) . '<br' . XHTML . '>'
+               . $A['location'] . '<br' . XHTML . '>' . $A['address1'] . '<br' . XHTML . '>'
+               . $A['address2'] . '<br' . XHTML . '>' . $A['city'] . ', ' . $A['zipcode']
                . '<br' . XHTML . '>' . $A['description'] . '</p>';
-    $result = PLG_checkforSpam($spamcheck, $_CONF['spamx']);
+    $result = PLG_checkforSpam ($spamcheck, $_CONF['spamx']);
     if ($result > 0) {
         COM_updateSpeedlimit ('submit');
         COM_displayMessageAndAbort ($result, 'spamx', 403, 'Forbidden');
@@ -873,6 +859,9 @@ function plugin_submit_calendar($mode = 'master',$A = array())
     } else {
         $eventform->set_var ('hour_mode', 12);
     }
+    $eventform->set_var ('site_url', $_CONF['site_url']);
+    $eventform->set_var ('site_admin_url', $_CONF['site_admin_url']);
+    $eventform->set_var ('layout_url', $_CONF['layout_url']);
     $eventform->set_var ('lang_title', $LANG_CAL_1[28]);
 
     $eventform->set_var('lang_eventtype', $LANG_CAL_1[37]);

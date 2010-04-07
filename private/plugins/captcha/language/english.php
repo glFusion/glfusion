@@ -102,9 +102,6 @@ $LANG_confignames['captcha'] = array(
     'enable_links'          => 'Enable Links Plugin Support',
     'enable_calendar'       => 'Enable Calendar Plugin Support',
     'expire'                => 'How Many Seconds a CAPTCHA Session is Valid',
-    'publickey'             => 'reCAPTCHA Public Key - <a href="http://recaptcha.net/api/getkey?app=php">reCAPTCHA Signup</a>',
-    'privatekey'            => 'reCAPTCHA Private Key',
-    'recaptcha_theme'       => 'reCAPTCHA Theme',
 );
 $LANG_configsubgroups['captcha'] = array(
     'sg_main'               => 'Configuration Settings'
@@ -119,8 +116,7 @@ $LANG_configselects['captcha'] = array(
     1 => array('True' => TRUE, 'False' => FALSE),
     2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Static Images' => 2, 'reCAPTCHA' => 3),
     4 => array('Default' => 'default','Simple' => 'simple'),
-    5 => array('JPG' => 'jpg','PNG' => 'png'),
-    6 => array('clean' => 'clean','red' => 'red','white' => 'white','blackglass' => 'blackglass'),
+    5 => array('JPG' => 'jpg','PNG' => 'png')
 );
 
 $PLG_captcha_MESSAGE1 = 'CAPTCHA plugin upgrade: Update completed successfully.';

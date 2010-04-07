@@ -207,7 +207,7 @@ function TRB_allowDelete ($sid, $type)
     $allowed = false;
 
     if ($type == 'article') {
-        $sid = addslashes ($sid);
+        $sid = DB_escapeString ($sid);
         $result = DB_query ("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['stories']} WHERE sid = '$sid'" . COM_getPermSql ('AND', 0, 3) . COM_getTopicSql ('AND'));
         $A = DB_fetchArray ($result);
 
@@ -286,10 +286,10 @@ function TRB_saveTrackbackComment ($sid, $type, $url, $title = '', $blog = '', $
     $blog    = str_replace (array ('$',     '{',      '}'),
                             array ('&#36;', '&#123;', '&#126;'), $blog);
 
-    $url     = addslashes ($url);
-    $title   = addslashes ($title);
-    $blog    = addslashes ($blog);
-    $excerpt = addslashes ($excerpt);
+    $url     = DB_escapeString ($url);
+    $title   = DB_escapeString ($title);
+    $blog    = DB_escapeString ($blog);
+    $excerpt = DB_escapeString ($excerpt);
 
     if ($_CONF['multiple_trackbacks'] == 0) {
         // multiple trackbacks not allowed - check if we have this one already
@@ -300,16 +300,16 @@ function TRB_saveTrackbackComment ($sid, $type, $url, $title = '', $blog = '', $
     } else if ($_CONF['multiple_trackbacks'] == 1) {
         // delete any earlier trackbacks from the same URL
         DB_delete ($_TABLES['trackback'], array ('url', 'sid', 'type'),
-                   array ($url, addslashes($sid), addslashes($type)));
+                   array ($url, DB_escapeString($sid), DB_escapeString($type)));
     } // else: multiple trackbacks allowed
 
     DB_save ($_TABLES['trackback'], 'sid,url,title,blog,excerpt,date,type,ipaddress',
-             "'".addslashes($sid)."','$url','$title','$blog','$excerpt',NOW(),'".addslashes($type)."','".addslashes($_SERVER['REMOTE_ADDR'])."'");
+             "'".DB_escapeString($sid)."','$url','$title','$blog','$excerpt',NOW(),'".DB_escapeString($type)."','".DB_escapeString($_SERVER['REMOTE_ADDR'])."'");
 
     $comment_id = DB_insertId ();
 
     if ($type == 'article') {
-        DB_query ("UPDATE {$_TABLES['stories']} SET trackbacks = trackbacks + 1 WHERE (sid = '".addslashes($sid)."')");
+        DB_query ("UPDATE {$_TABLES['stories']} SET trackbacks = trackbacks + 1 WHERE (sid = '".DB_escapeString($sid)."')");
     }
     CACHE_remove_instance('whatsnew');
     CACHE_remove_instance('story_'.$sid);
@@ -329,7 +329,7 @@ function TRB_deleteTrackbackComment ($cid)
 {
     global $_TABLES;
 
-    $cid = addslashes ($cid);
+    $cid = DB_escapeString ($cid);
     DB_delete ($_TABLES['trackback'], 'cid', $cid);
     CACHE_remove_instance('whatsnew');
 }
@@ -699,7 +699,7 @@ function TRB_renderTrackbackComments ($sid, $type, $title, $permalink, $trackbac
     $template->set_var ('trackback_url', $trackback_url);
 
     $result = DB_query ("SELECT cid,url,title,blog,excerpt,ipaddress,UNIX_TIMESTAMP(date) AS day "
-        . "FROM {$_TABLES['trackback']} WHERE sid = '".addslashes($sid)."' AND type = '".addslashes($type)."' ORDER BY date");
+        . "FROM {$_TABLES['trackback']} WHERE sid = '".DB_escapeString($sid)."' AND type = '".DB_escapeString($type)."' ORDER BY date");
     $numrows = DB_numRows ($result);
 
     $template->set_var ('trackback_comment_count', $numrows);
@@ -895,8 +895,8 @@ function TRB_sendNotificationEmail ($cid, $what = 'trackback')
 {
     global $_CONF, $_TABLES, $LANG03, $LANG08, $LANG09, $LANG29, $LANG_TRB;
 
-    $cid = addslashes ($cid);
-    $result = DB_query ("SELECT sid,type,title,excerpt,url,blog,ipaddress FROM {$_TABLES['trackback']} WHERE (cid = '".addslashes($cid)."')");
+    $cid = DB_escapeString ($cid);
+    $result = DB_query ("SELECT sid,type,title,excerpt,url,blog,ipaddress FROM {$_TABLES['trackback']} WHERE (cid = '".DB_escapeString($cid)."')");
     $A = DB_fetchArray ($result);
     $type = $A['type'];
     $id = $A['sid'];

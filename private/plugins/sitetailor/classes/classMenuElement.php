@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C)  2008-2010 by the following authors:                       |
+// | Copyright (C)  2008-2009 by the following authors:                       |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -210,8 +210,6 @@ class mbElement {
                 case 7 :
                     $elementDetails .= '<b>' . $LANG_ST_TYPES[$this->type] . ':</b> ' . $this->subtype . '<br' . XHTML . '>';
                     break;
-                case 9 :
-                    $elementDetails .= '<b>' . $LANG_ST_TYPES[$this->type] . ':</b> ' . $this->subtype . '<br />'   ;
             }
 
             $moveup     = '<a href="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=move&amp;where=up&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
@@ -859,9 +857,6 @@ class mbElement {
                     $menu .= $functionName();
                     $menu .= '</li>';
                 }
-                break;
-            case '9' : // topic
-                $this->url = $_CONF['site_url'] . '/index.php?topic=' . $this->subtype;
                 break;
             default : // unknown
                 break;

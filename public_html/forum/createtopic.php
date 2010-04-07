@@ -298,7 +298,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
 
     if($method == 'newtopic') {
         if($_POST['aname'] != '') {
-            $name = gf_preparefordb(gf_checkHTML(strip_tags(trim(COM_checkWords(USER_sanitizeName(COM_stripslashes($_POST['aname'])))))),'text');
+            $name = gf_preparefordb(gf_checkHTML(strip_tags(COM_checkWords($_POST['aname']))),'text');
         } else {
             $name = gf_preparefordb(gf_checkHTML(strip_tags(COM_checkWords($_POST['name']))),'text');
         }
@@ -441,7 +441,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
         if ( $msg == '' ) {
             //Add Reply
             if(isset($_POST['aname']) && $_POST['aname'] != '') {
-                $name = gf_preparefordb(gf_checkHTML(strip_tags(trim(COM_checkWords(USER_sanitizeName(COM_stripslashes($_POST['aname'])))))),'text');
+                $name = gf_preparefordb(gf_checkHTML(strip_tags(COM_checkWords($_POST['aname']))),'text');
             } else {
                 $name = gf_preparefordb(gf_checkHTML(strip_tags(COM_checkWords($_POST['name']))),'text');
             }
@@ -637,7 +637,7 @@ if (isset($_REQUEST['preview']) )  {  //&& $_REQUEST['preview'] == $LANG_GF01['P
             $previewitem['name'] = $_USER['username'];
             $previewitem['uid'] = $_USER['uid'];
         } else {
-            $previewitem['name'] = gf_checkHTML(strip_tags(COM_checkWords(trim(USER_sanitizeName(COM_stripslashes(urldecode($_POST['aname'])))))));
+            $previewitem['name'] = gf_checkHTML(strip_tags(COM_checkWords(COM_stripslashes(urldecode($_POST['aname'])))));
             $previewitem['uid'] = 1;
         }
         /* Check for any uploaded files */
@@ -910,7 +910,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
         $submissionformtop->set_var ('layout_url', $_CONF['layout_url']);
         $submissionformtop->set_var ('post_message', $postmessage);
         $submissionformtop->set_var ('LANG_NAME', $LANG_GF02['msg33']);
-        $submissionformtop->set_var ('name', gf_checkHTML(strip_tags(COM_checkWords(trim(USER_sanitizeName(COM_stripslashes(isset($_POST['aname']) ? $_POST['aname'] : '')))))));
+        $submissionformtop->set_var ('name', gf_checkHTML(strip_tags(COM_checkWords(COM_stripslashes(isset($_POST['aname']) ? $_POST['aname'] : '')))));
         $submissionformtop->parse ('output', 'submissionformtop');
         echo $submissionformtop->finish($submissionformtop->get_var('output'));
 

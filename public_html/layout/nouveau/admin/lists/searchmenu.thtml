@@ -1,4 +1,12 @@
 {# begin {templatelocation} #}
+{!if lang_search}
+<script type="text/javascript">
+function clearsearch() {
+    document.getElementById('admin-list-search').value = '';
+    this.form.submit();
+}
+</script>
+{!endif}
 {!if form_url}
 <form action="{form_url}" method="post">
 {!endif}

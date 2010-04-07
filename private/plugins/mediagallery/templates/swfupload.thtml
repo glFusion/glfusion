@@ -441,7 +441,7 @@ function uploadSuccess(file, serverData) {
         var progress = new FileProgress(file, this.customSettings.progressTarget);
         progress.setComplete();
         if (serverData.substring(0, 7) === "FILEID:") {
-    	    addImage("{site_url}/thumbnail.php?id=" + serverData.substring(7),serverData.substring(7), file.name );
+    	    addImage("{site_url}/mediagallery/thumbnail.php?id=" + serverData.substring(7),serverData.substring(7), file.name );
     	    progress.setStatus("{swfupload_complete}.");
     	    progress.toggleCancel(false);
     	} else {
@@ -662,7 +662,7 @@ function onAlbumChange() {
   var size_limit_span = document.getElementById("swfu_size_limit");
   var size_limit = "{swfupload_size_limit}";
   var post_params = { "uid" : uid, "sid" : sid, "aid": aid };
-  var url = "{site_url}/album_rpc.php";
+  var url = "{site_url}/mediagallery/album_rpc.php";
   var query = "aid=" + aid;
 
   if (aid_index >= 0) {
@@ -743,7 +743,7 @@ function onAlbumChange() {
     </form>
 
     <div id="divSWFThumbnails">
-      <form name="captions" method="post" action="{site_url}/admin.php?album_id=0">
+      <form name="captions" method="post" action="{site_url}/mediagallery/admin.php?album_id=0">
 
     	<div id="thumbnails" style="vertical-align:middle;"></div>
 

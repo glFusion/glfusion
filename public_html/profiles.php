@@ -182,7 +182,11 @@ function contactform ($uid, $subject = '', $message = '')
     if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
                              ($_CONF['emailuserloginrequired'] == 1))
                          && ($uid != 2)) {
-        IO_displayLoginRequired();
+        $display  = COM_siteHeader('menu', $LANG_LOGIN[1]);
+        $display .= SEC_loginRequiredForm();
+        $display .= COM_siteFooter();
+        echo $display;
+        exit;
     } else {
         $result = DB_query ("SELECT emailfromadmin,emailfromuser FROM {$_TABLES['userprefs']} WHERE uid = ".intval($uid));
         $P = DB_fetchArray ($result);
@@ -433,7 +437,11 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
 
     if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
                              ($_CONF['emailstoryloginrequired'] == 1))) {
-        IO_displayLoginRequired();
+        $display  = COM_siteHeader('menu', $LANG_LOGIN[1]);
+        $display .= SEC_loginRequiredForm();
+        $display .= COM_siteFooter();
+        echo $display;
+        exit;
     }
 
     $result = DB_query("SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE sid = '".DB_escapeString($sid)."'" . COM_getTopicSql('AND') . COM_getPermSql('AND'));

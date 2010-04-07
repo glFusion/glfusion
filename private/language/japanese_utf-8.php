@@ -447,7 +447,8 @@ $LANG04 = array(
     158 => 'タイムゾーン',
     159 => 'このメールは自動送信されたものです。返信しないでください。',
     160 => 'Online',
-    161 => 'Password Strength'
+    161 => 'Password Strength',
+    162 => 'The username contains invalid characters ( < > " % & * / \ ) are not allowed'
 );
 
 ###############################################################################
@@ -591,20 +592,7 @@ $LANG09 = array(
     65 => 'Story',
     66 => 'Comment',
     67 => 'Show %d Results',
-    68 => 'Sort By',
-    69 => 'Filter by Author',
-    70 => 'Filter by type',
-    71 => 'Filter by date',
-    72 => 'Search Type',
-    73 => 'Display Per Page',
-    74 => 'Your search yielded no results<br/><ul><li>Check if your spelling is correct.</li><li>Change the <strong>Search Type</strong> being used.<em>Any of these</em> will return results if <strong>any</strong> of the search words appear in the text.  <em>All of these</em> will only return results when <strong>all</strong> all of the search words appear, and <em>Exact Match</em> will only return results where the text matches exactly to the search words entered.</li><li>Consider expanding the <strong>Date Filter</strong> or the <strong>Content Type Filter</strong>.</li></ul>',
-    75 => '1 day',
-    76 => '7 days',
-    77 => '2 weeks',
-    78 => '1 month',
-    79 => '3 months',
-    80 => '6 months',
-    81 => '1 year'
+    68 => 'Sort By'
 );
 
 ###############################################################################
@@ -641,7 +629,8 @@ $LANG10 = array(
     28 => 'No users have logged in.',
     29 => 'Last %d users logged on:',
     30 => 'ヒット',
-    31 => ''
+    31 => '',
+    32 => 'Total'
 );
 
 ###############################################################################
@@ -747,7 +736,9 @@ $LANG20 = array(
     4 => 'ユーザ名：',
     5 => 'パスワード：',
     6 => '管理ツールの使用は，すべてが記録されます。<br' . XHTML . '>このページは，管理者のみ使用できます。',
-    7 => 'ログイン'
+    7 => 'ログイン',
+    8 => 'Session Timeout - Please re-authenticate',
+    9 => 'Access to Administration Features requires re-authentication'
 );
 
 ###############################################################################
@@ -822,7 +813,7 @@ $LANG21 = array(
     66 => '自動タグ',
     67 => '自動タグ使用許可',
     68 => 'このポータルブロックのフィードは表示するには長すぎます。ブロック設定画面でブロックに表示する記事の最大数を設定するか，コンフィギュレーションで標準の最大数を設定してください。',
-    69 => 'Are you sure you want to delete this block?'
+    69 => 'Are you sure you want to delete this block?',
     70 => 'Block name cannot be blank and cannot contain spaces or the following characters: < > \' " % & * / or backslash'
 );
 
@@ -1069,7 +1060,12 @@ $LANG28 = array(
     95 => 'Global Preference Editor',
     96 => 'Using the <strong>Selected</strong> column, select the items you wish to change for <strong>all</strong> users.  Set the attribute to the desired setting and press Save.',
     97 => 'Comment Display Mode',
-    98 => 'Comment Sort Order'
+    98 => 'Comment Sort Order',
+    99 => 'Send eMail',
+    100 => 'eMail Site Login Reminders to the selected users?',
+    101 => 'Group',
+    102 => 'users',
+    103 => 'Batch User Administration'
 );
 
 ###############################################################################
@@ -1131,7 +1127,11 @@ $LANG31 = array(
     23 => '失敗したものはありません',
     24 => '成功したものはありません',
     25 => '-- グループを選択 --',
-    26 => 'すべてのフィールドに入力してください。また，グループはドロップダウンリストで選択してください。'
+    26 => 'すべてのフィールドに入力してください。また，グループはドロップダウンリストで選択してください。',
+    27 => 'Group',
+    28 => 'Use this panel to send eMail to a specific user on this site.  To send a message to a different user, select the user from the User List panel, the link is above.',
+    29 => 'Warning',
+    30 => 'eMail from Admin Privacy option is set.'
 );
 
 ###############################################################################
@@ -1268,8 +1268,7 @@ $LANG33 = array(
     52 => 'エラー: このファイル名は既に使用されています',
     53 => 'All Frontpage Stories',
     54 => 'Please select the type of feed to create.',
-    55 => 'Articles',
-    56 => 'Do you really want to delete this feed?'
+    55 => 'Articles'
 );
 
 ###############################################################################
@@ -1388,8 +1387,7 @@ $MESSAGE = array(
     508 => 'Email address does not match the confirmation email address.',
     509 => 'Error creating new user account - please check the error log for details.',
     510 => 'Default settings have been applied to all users.',
-    511 => 'Are you sure you want to delete this group?',
-    512 => 'Username contains invalid characters " < > / \ $ % * are not allowed'
+    511 => 'Are you sure you want to delete this group?'
 );
 
 ###############################################################################

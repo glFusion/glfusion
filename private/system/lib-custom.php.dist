@@ -214,7 +214,7 @@ function CUSTOM_userCreate ($uid)
     $homepage = '';
     if (isset ($_POST['homepage'])) {
         $homepage = COM_applyFilter ($_POST['homepage']);
-        $homepage = addslashes ($homepage);
+        $homepage = DB_escapeString ($homepage);
     }
 
     $fullname = '';
@@ -222,7 +222,7 @@ function CUSTOM_userCreate ($uid)
         // COM_applyFilter would strip special characters, e.g. quotes, so
         // we only strip HTML
         $fullname = strip_tags ($_POST['fullname']);
-        $fullname = addslashes ($fullname);
+        $fullname = DB_escapeString ($fullname);
     }
 
     // Note: In this case, we can trust the $uid variable to contain the new

@@ -212,8 +212,7 @@ $LANG_confignames['calendar'] = array(
     'delete_event' => 'Termine mit Benutzer löschen?',
     'aftersave' => 'Nach Speichern des Termins',
     'default_permissions' => 'Standardberechtigungen - Termine',
-    'only_admin_submit' => 'Nur Admins das Eintragen erlauben',
-    'displayblocks' => 'Display glFusion Blocks'
+    'only_admin_submit' => 'Nur Admins das Eintragen erlauben'
 );
 
 $LANG_configsubgroups['calendar'] = array(
@@ -231,8 +230,7 @@ $LANG_configselects['calendar'] = array(
     1 => array('Ja' => true, 'Nein' => false),
     6 => array('12' => 12, '24' => 24),
     9 => array('Zum Termin weiterleiten' => 'item', 'Admin Liste anzeigen' => 'list', 'Kalender anzeigen' => 'plugin', 'Startseite anzeigen' => 'home', 'Kommandozentrale' => 'admin'),
-    12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3),
-    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
+    12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3)
 );
 
 ?>

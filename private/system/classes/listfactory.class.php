@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -335,8 +335,6 @@ class ListFactory {
      */
     function ExecuteQueries()
     {
-        global $_CONF;
-
         if ( isset($_POST['order']) ) {
             $this->_sort_arr['field'] = COM_applyFilter($_POST['order']);
         } elseif (isset($_GET['order']) ) {
@@ -360,19 +358,14 @@ class ListFactory {
         if ( !$this->array_search_recursive($ord,$this->_fields) ) {
             $order_sql = ' ORDER BY date DESC';
         } else {
-            $order_sql = ' ORDER BY ' . addslashes($ord) . ' ' . addslashes(strtoupper($this->_sort_arr['direction']));
+            $order_sql = ' ORDER BY ' . DB_escapeString($ord) . ' ' . DB_escapeString(strtoupper($this->_sort_arr['direction']));
         }
         if ( isset($_POST['results']) ) {
             $this->_per_page = intval(COM_applyFilter($_POST['results'], true));
         } elseif (isset($_GET['results']) ) {
             $this->_per_page = intval(COM_applyFilter($_GET['results'], true));
         }
-        $keyType = 'any';
-        if ( isset($_POST['keyType']) ) {
-            $keyType = COM_applyFilter($_POST['keyType']);
-        } elseif (isset($_GET['keyType']) ) {
-            $keyType = COM_applyFilter($_GET['keyType']);
-        }
+
         // Calculate the limits for each query
 
         $num_query_results = $this->_per_page - count($this->_preset_rows);
@@ -441,7 +434,6 @@ class ListFactory {
         for ($i = 0; $i < count($this->_query_arr); $i++) {
             $limits[$i]['name'] = $this->_query_arr[$i]['name'];
             $limits[$i]['total'] = $this->_query_arr[$i]['found'];
-
             $limits[$i]['pp'] = round(($this->_query_arr[$i]['rank'] / $this->_total_rank) * $num_query_results);
             $this->_total_found += $this->_query_arr[$i]['found'];
             /*
@@ -466,6 +458,7 @@ class ListFactory {
                     $limits[$i]['offset'] = 0;
                 }
             }
+
             /*
              * Check to see if offset+limit is greater
              */
@@ -563,7 +556,7 @@ class ListFactory {
                 }
             } else if ( $this->_query_arr[$i]['type'] == 'text' ) {
                 $sqlFunction = 'plugin_executepluginsearch_'.$this->_query_arr[$i]['name'];
-                $sqlResults  = $sqlFunction($this->_query_arr[$i]['sql'],$limits[$i]['offset'],$limits[$i]['limit'],$keyType);
+                $sqlResults  = $sqlFunction($this->_query_arr[$i]['sql'],$limits[$i]['offset'],$limits[$i]['limit']);
                 if ( is_array($sqlResults) ) {
                     foreach ($sqlResults as $A) {
                         $col = array();
@@ -599,7 +592,6 @@ class ListFactory {
         array_multisort($column, $direction, $rows_arr);
 
         $this->_limits = $limits;
-
         return $rows_arr;
     }
 
@@ -649,8 +641,6 @@ class ListFactory {
         $pp_encode = urlencode(base64_encode($string_pp));
 
         if (count($rows_arr) == 0) {
-//            $list_templates->set_var('show_sort', 'display:none;');
-//            $list_templates->set_var('show_limit', 'display:none;');
             $list_templates->set_var('message', $LANG_ADMIN['no_results']);
             $list_templates->set_var('list_top', $list_top);
             $list_templates->set_var('list_bottom', $list_bottom);
@@ -680,6 +670,8 @@ class ListFactory {
                 }
             }
         }
+        else
+            $list_templates->set_var('show_limit', 'display:none;');
 
         $offset = ($this->_page-1) * $this->_per_page;
 
@@ -736,24 +728,16 @@ class ListFactory {
         $list_templates->set_var('page_url',$page_url);
 
         $search_numbers = @sprintf($LANG09[64],$offset+1, $r+$offset-1, $this->_total_found);
-        $list_top = $list_top . '<p>'.$search_numbers.'<br /><p>';
+        $list_top = $list_top . '<p>'.$search_numbers.'<br /></p>';
         $list_templates->set_var('list_top', $list_top);
         $list_templates->set_var('list_bottom', $list_bottom);
 
         $list_templates->parse('output', 'list');
 
         // Do the actual output
-        $retval = '<hr/>';
-
-        if (!empty($title)) {
-//            $retval .= COM_startBlock($title, '', COM_getBlockTemplate('_admin_block', 'header'));
-        }
+        $retval = '<div style="border-bottom:1px solid #ccc;"></div>';
 
         $retval .= $list_templates->finish($list_templates->get_var('output'));
-
-        if (!empty($title)) {
-//            $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
-        }
 
         return $retval;
     }

@@ -236,7 +236,7 @@ function PNB_getType ($url)
     } else {
         $parts = explode ('/', $part);
         if (strpos ($parts[0], '?') === false) {
-            $plugin = IO_prepareForDB ($parts[0]);
+            $plugin = DB_escapeString ($parts[0]);
             if (DB_getItem ($_TABLES['plugins'], 'pi_enabled',
                             "pi_name = '$plugin'") == 1) {
                 $retval = $parts[0];

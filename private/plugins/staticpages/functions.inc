@@ -183,6 +183,7 @@ function plugin_displaycomment_staticpages ($id, $cid, $title, $order, $format, 
 /**
  * Static Page saves a comment
  *
+ * @param   string  $type   Plugin to save comment
  * @param   string  $title  comment title
  * @param   string  $comment comment text
  * @param   string  $id     Item id to which $cid belongs
@@ -241,17 +242,15 @@ function plugin_deletecomment_staticpages($cid, $id)
             $A['group_id'], $A['perm_owner'], $A['perm_group'],
             $A['perm_members'], $A['perm_anon']) == 3) {
         CMT_deleteComment($cid, $id, 'staticpages');
-        $url = COM_buildUrl($_CONF['site_url'] . '/staticpages/index.php?page='
-                            . $id);
-        $retval .= COM_refresh($url);
+        $retval .= COM_refresh ($_CONF['site_url']
+                                 . "/staticpages/index.php?page=$id");
     } else {
         COM_errorLog ("User {$_USER['username']} (IP: {$_SERVER['REMOTE_ADDR']}) "
                     . "tried to illegally delete comment $cid from staticpage $id");
         $retval .= COM_refresh ($_CONF['site_url'] . '/index.php');
     }
     CACHE_remove_instance('whatsnew_');
-    echo $retval;
-    exit;
+    return $retval;
 }
 
 function plugin_getwhatsnewcomment_staticpages()

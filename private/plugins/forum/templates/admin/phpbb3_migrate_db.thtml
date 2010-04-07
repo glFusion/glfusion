@@ -6,71 +6,41 @@
 {!endif}
 <form method="post" action="{form_action}">
 <input type="hidden" name="mode" value="{mode}" />
-<table style="width:100%;border:1px solid black;padding:5px;" cellspacing="5" cellpadding="5">
-<tr class="pluginRow1">
+<table style="width:100%;border:none;padding:5px;" cellspacing="5" cellpadding="5">
+<tr>
   <td style="text-align:right;width:25%;">phpBB3 Database Server</td>
   <td><input type="text" name="phpbb3dbserver" value="{phpbb3dbserver}" /></td>
-  <td>&nbsp;</td>
 </tr>
-<tr class="pluginRow2">
+<tr>
   <td style="text-align:right;width:25%;">phpBB3 Database User</td>
   <td><input type="text" name="phpbb3dbuser" value="{phpbb3dbuser}" /></td>
-  <td>&nbsp;</td>
 </tr>
-<tr class="pluginRow1">
+<tr>
   <td style="text-align:right;width:25%;">phpBB3 Database Password</td>
   <td><input type="password" name="phpbb3dbpass" value="{phpbb3dbpass}" /></td>
-  <td>&nbsp;</td>
 </tr>
-<tr class="pluginRow2">
+<tr>
   <td style="text-align:right;width:25%;">phpBB3 Database Name</td>
   <td><input type="text" name="phpbb3dbname" value="{phpbb3dbname}" /></td>
-  <td>&nbsp;</td>
 </tr>
-<tr class="pluginRow1">
+<tr>
   <td style="text-align:right;width:25%;">phpBB3 Database Prefix</td>
   <td><input type="text" name="phpbb3dbprefix" value="{phpbb3dbprefix}" /></td>
-  <td>&nbsp;</td>
 </tr>
-<tr class="pluginRow2">
+<tr>
   <td style="text-align:right;width:25%;">Purge glFusion Forums before import?</td>
   <td>
     <input type="checkbox" name="purge_glfusion_forum" value="1" {purgeglfusionforums} />
-  </td>
-  <td>
-    <b>NOTE</b>: If Purge glFusion Forums is selected, <b>ALL</b> existing forums will be deleted
+    <b>NOTE</b>: If Purge glFusion Forums is selected, ALL existing forums will be deleted
     prior to performing the import.
   </td>
 </tr>
-<tr class="pluginRow1">
+<tr>
   <td style="text-align:right;width:25%;">Import phpBB3 Users into glFusion?</td>
   <td>
     <input type="checkbox" name="import_phpbb3_users" value="1" {importphpbb3users} />
   </td>
-  <td>&nbsp;</td>
 </tr>
-
-<tr class="pluginRow2">
-  <td style="text-align:right;width:25%;">Purge Existing glFusion Users First?</td>
-  <td>
-    <input type="checkbox" name="purge_glfusion_users" value="1" {purgeglfusionusers} />
-  </td>
-  <td>
-    <b>NOTE</b>: If Purge glFusion Users is selected, <b>ALL</b> existing users will be deleted, including their content,
-    prior to performing the import.
-  </td>
-</tr>
-
-<tr class="pluginRow1">
-  <td style="text-align:right;width:25%;">Higest UserID to <b>KEEP</b>?</td>
-  <td>
-    <input type="text" name="highest_uid" size="3" value="{higestuid}"/>
-  </td>
-  <td>
-    <b>NOTE</b>: Specify the highest userid to keep in the system.  All users ABOVE this user will be <b>DELETED</b in the glFusion user database.  All other users will be deleted.
-  </td>
-</tr>
-
 </table>
 <br />
 <center>

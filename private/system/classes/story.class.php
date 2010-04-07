@@ -449,7 +449,7 @@ class Story
     {
         global $_TABLES, $_CONF, $_USER, $_GROUPS;
 
-        $sid = addslashes(COM_applyFilter($sid));
+        $sid = DB_escapeString(COM_applyFilter($sid));
 
         if (!empty($sid) && (($mode == 'edit') || ($mode == 'view') || ($mode == 'clone'))) {
             $sql = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, UNIX_TIMESTAMP(s.expire) as expireunix, UNIX_TIMESTAMP(s.comment_expire) as cmt_expire_unix, "
@@ -596,7 +596,7 @@ class Story
                 $this->_comment_expire = 0;
             }
 
-            if (DB_getItem($_TABLES['topics'], 'archive_flag', "tid = '".addslashes($this->_tid)."'") == 1) {
+            if (DB_getItem($_TABLES['topics'], 'archive_flag', "tid = '".DB_escapeString($this->_tid)."'") == 1) {
                 $this->_frontpage = 0;
             } elseif (isset($_CONF['frontpage'])) {
                 $this->_frontpage = $_CONF['frontpage'];
@@ -696,8 +696,8 @@ class Story
              * sid that was then thrown away) to reduce the sheer
              * number of SQL queries we do.
              */
-            $checksid = addslashes($this->_originalSid);
-            $newsid = addslashes($this->_sid);
+            $checksid = DB_escapeString($this->_originalSid);
+            $newsid = DB_escapeString($this->_sid);
 
             $sql = "SELECT 1 FROM {$_TABLES['stories']} WHERE sid='{$checksid}'";
             $result = DB_query($sql);
@@ -724,7 +724,7 @@ class Story
         }
 
         /* Acquire Comment Count */
-        $sql = "SELECT count(1) FROM {$_TABLES['comments']} WHERE type='article' AND sid='".addslashes($this->_sid)."'";
+        $sql = "SELECT count(1) FROM {$_TABLES['comments']} WHERE type='article' AND sid='".DB_escapeString($this->_sid)."'";
         $result = DB_query($sql);
 
         if ($result && (DB_numRows($result) == 1)) {
@@ -773,7 +773,7 @@ class Story
                         $values .= "'0000-00-00 00:00:00', ";
                     }
                 } else {
-                    $values .= '\'' . addslashes($this->{$varname}) . '\', ';
+                    $values .= '\'' . DB_escapeString($this->{$varname}) . '\', ';
                 }
             }
         }
@@ -795,7 +795,7 @@ class Story
             if ( !empty($checksid) ) {
                 DB_delete($_TABLES['storysubmission'], 'sid', $checksid);
             } else {
-                DB_delete($_TABLES['storysubmission'], 'sid', addslashes($this->_sid));
+                DB_delete($_TABLES['storysubmission'], 'sid', DB_escapeString($this->_sid));
             }
         }
 
@@ -828,7 +828,7 @@ class Story
          */
         $sql
         = 'SELECT owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon ' . ' FROM ' . $_TABLES['stories']
-            . ' WHERE sid=\'' . addslashes($this->_sid) . '\'';
+            . ' WHERE sid=\'' . DB_escapeString($this->_sid) . '\'';
         $result = DB_query($sql);
 
         if ($result && (DB_numRows($result) > 0)) {
@@ -869,7 +869,7 @@ class Story
         }
 
         /* Load up the topic name and icon */
-        $topic = DB_query("SELECT topic, imageurl FROM {$_TABLES['topics']} WHERE tid='".addslashes($this->_tid)."'");
+        $topic = DB_query("SELECT topic, imageurl FROM {$_TABLES['topics']} WHERE tid='".DB_escapeString($this->_tid)."'");
         $topic = DB_fetchArray($topic);
         $this->_topic = $topic['topic'];
         $this->_imageurl = $topic['imageurl'];
@@ -921,7 +921,7 @@ class Story
         // Have we specified a permitted topic?
         if (!empty($topic)) {
             $allowed
-            = DB_getItem($_TABLES['topics'], 'tid', "tid = '" . addslashes($topic) . "'" . COM_getTopicSql('AND'));
+            = DB_getItem($_TABLES['topics'], 'tid', "tid = '" . DB_escapeString($topic) . "'" . COM_getTopicSql('AND'));
 
             if ($allowed != $topic) {
                 $topic = '';
@@ -1032,7 +1032,7 @@ class Story
             $this->_uid = $_USER['uid'];
         }
 
-        $tmptid = addslashes(COM_sanitizeID($this->_tid));
+        $tmptid = DB_escapeString(COM_sanitizeID($this->_tid));
 
         $result = DB_query('SELECT group_id,perm_owner,perm_group,perm_members,perm_anon FROM ' .
                             "{$_TABLES['topics']} WHERE tid = '{$tmptid}'" .
@@ -1046,12 +1046,12 @@ class Story
         $T = DB_fetchArray($result);
 
         if (($_CONF['storysubmission'] == 1) && !SEC_hasRights('story.submit')) {
-            $this->_sid = addslashes($this->_sid);
+            $this->_sid = DB_escapeString($this->_sid);
             $this->_tid = $tmptid;
-            $this->_title = addslashes($this->_title);
-            $this->_introtext = addslashes($this->_introtext);
-            $this->_bodytext = addslashes($this->_bodytext);
-            $this->_postmode = addslashes($this->_postmode);
+            $this->_title = DB_escapeString($this->_title);
+            $this->_introtext = DB_escapeString($this->_introtext);
+            $this->_bodytext = DB_escapeString($this->_bodytext);
+            $this->_postmode = DB_escapeString($this->_postmode);
             DB_save($_TABLES['storysubmission'], 'sid,tid,uid,title,introtext,bodytext,date,postmode',
                         "'{$this->_sid}','{$this->_tid}','".intval($this->_uid)."','{$this->_title}'," .
                         "'{$this->_introtext}','{$this->_bodytext}',NOW(),'{$this->_postmode}'");
@@ -1371,12 +1371,12 @@ class Story
     /**
      * Return the SID in a clean way
      *
-     * @param $fordb    boolean True if we want an 'addslashes' version for the db
+     * @param $fordb    boolean True if we want an 'DB_escapeString' version for the db
      */
     function getSid($fordb = false)
     {
         if ($fordb) {
-            return addslashes($this->_sid);
+            return DB_escapeString($this->_sid);
         } else {
             return $this->_sid;
         }
@@ -2067,7 +2067,7 @@ class Story
      * can then (simply) spit back out into the page on render. After doing a
      * magic tags replacement.
      *
-     * This DOES NOT ADDSLASHES! We do that on DB store, because we want to
+     * This DOES NOT DB_escapeString! We do that on DB store, because we want to
      * keep our internal variables in "display mode", not in db mode or anything.
      *
      * @param $title    string  posttitle, only had stripslashes if necessary
@@ -2098,7 +2098,7 @@ class Story
      * spit back out into the page on render. After doing a magic tags
      * replacement. And nl2br.
      *
-     * This DOES NOT ADDSLASHES! We do that on DB store, because we want to
+     * This DOES NOT DB_escapeString! We do that on DB store, because we want to
      * keep our internal variables in "display mode", not in db mode or anything.
      *
      * @param $title    string  posttitle, only had stripslashes if necessary

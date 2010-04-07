@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C)  2008-2010 by the following authors:                       |
+// | Copyright (C)  2008 by the following authors:                            |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -180,7 +180,6 @@ $LANG_ST01 = array (
 	'disabled_plugin'       => 'Not found or disabled plugin',
 	'clone'                 => 'Copy',
 	'clone_menu_label'      => 'Name for Cloned Menu',
-	'topic'                 => 'Topics',
 );
 
 $LANG_HC = array (
@@ -229,7 +228,6 @@ $LANG_ST_TYPES = array(
     6                   => 'External URL',
     7                   => 'PHP Function',
     8                   => 'Label',
-    9                   => 'Topic',
 );
 
 

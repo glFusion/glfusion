@@ -247,11 +247,6 @@ function PAGE_form($A, $error = false)
             $position .= ' selected="selected"';
         }
         $position .= '>' . $LANG_STATIC['position_entire'] . '</option>';
-        $position .= '<option value="4"';
-        if ($A['sp_where'] == 4) {
-            $position .= ' selected="selected"';
-        }
-        $position .= '>' . $LANG_STATIC['position_nonews'] . '</option>';
         $position .= '</select>';
         $sp_template->set_var ('pos_selection', $position);
 

@@ -50,10 +50,6 @@ function sitetailor_upgrade()
             if ( SITETAILOR_upgrade_200() == 0 ) {
                 DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='2.0.0' WHERE pi_name='sitetailor' LIMIT 1");
             }
-        case '2.0.0' :
-        case '2.0.1' :
-        case '2.0.2' :
-        case '2.0.3' :
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_homepage='http://www.glfusion.org' WHERE pi_name='sitetailor'",1);
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='{$_ST_CONF['pi_version']}' WHERE pi_name='sitetailor' LIMIT 1");

@@ -281,6 +281,7 @@ $LANG03 = array(
     39 => 'You may view the comment thread at the following address: ',
     40 => 'If you wish to recieve no further notifications of replies, visit the following link: ',
     41 => 'Edit a Comment',
+    42 => 'Internal processing error',
 );
 
 ###############################################################################
@@ -730,6 +731,7 @@ $LANG13 = array(
     'thanks_for_vote'   => 'Thanks for voting!',
     'reset_rating'      => 'Reset Rating',
 );
+
 
 ###############################################################################
 # ADMIN PHRASES - These are file phrases used in admin scripts
@@ -1409,8 +1411,7 @@ $MESSAGE = array(
     508 => 'eMail address does not match the confirmation eMail address.',
     509 => 'Error creating new user account - please check the error log for details.',
     510 => 'Default settings have been applied to all users.',
-    511 => 'Are you sure you want to delete this group?',
-    512 => 'Username contains invalid characters " < > / \ $ % * are not allowed',
+    511 => 'Are you sure you want to delete this group?'
 );
 
 ###############################################################################
@@ -1754,7 +1755,8 @@ $LANG_WIDGETS = array(
     'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
     'prev' => 'Previous',
     'next' => 'Next',
-    'playpause' => 'Play/Pause'
+    'playpause' => 'Play/Pause',
+    'noOpera' => 'This script does not automatically resize the iframe in the Opera browser.'
 );
 
 # Localisation of the texts for the various drop-down menus that are actually

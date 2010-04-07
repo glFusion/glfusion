@@ -368,27 +368,19 @@ if ( $A = DB_fetchArray( $result ) ) {
     }
 } else { // no stories to display
     IO_addContent(PLG_showCenterblock (2, $page, $topic));
-    IO_addContent(PLG_showCenterblock (3, $page, $topic)); // bottom blocks
-
-    $display = IO_getContent();
-
-    if ( (!isset ($_CONF['hide_no_news_msg']) ||
-            ($_CONF['hide_no_news_msg'] == 0)) && $display == '') {
-        // If there's still nothing to display, show any default centerblocks.
-        IO_addContent(PLG_showCenterblock(4, $page, $topic));
-        if ($display == '') {
-            // If there's *still* nothing to show, show the stock message
-            IO_addContent( COM_startBlock ($LANG05[1], '',
-                        COM_getBlockTemplate ('_msg_block', 'header')) . $LANG05[2]);
-            if (!empty ($topic)) {
-                $topicname = DB_getItem ($_TABLES['topics'], 'topic',
-                                         "tid = '".DB_escapeString($topic)."'");
-                IO_addContent( sprintf ($LANG05[3], $topicname) );
-            }
-            IO_addContent( COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer')) );
+    if (!isset ($_CONF['hide_no_news_msg']) ||
+            ($_CONF['hide_no_news_msg'] == 0)) {
+        IO_addContent( COM_startBlock ($LANG05[1], '',
+                    COM_getBlockTemplate ('_msg_block', 'header')) . $LANG05[2]);
+        if (!empty ($topic)) {
+            $topicname = DB_getItem ($_TABLES['topics'], 'topic',
+                                     "tid = '".addslashes($topic)."'");
+            IO_addContent( sprintf ($LANG05[3], $topicname) );
         }
-
+        IO_addContent( COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer')) );
     }
+
+    IO_addContent( PLG_showCenterblock (3, $page, $topic)); // bottom blocks
 }
 
 IO_setShowExtraBlocks( true );

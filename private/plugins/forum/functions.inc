@@ -386,13 +386,8 @@ function plugin_getheadercode_forum() {
         return '';
     }
 
-    $gf_header .= '<style>'. file_get_contents($_CONF['path'] . 'plugins/forum/css/style.css') . '</style>';
-
-    $gf_header .= '<script type="text/javascript">' . LB;
-    $gf_header .= '	window.addEvent(\'load\', function() {' . LB;
-    $gf_header .= '		var gfTips = new Tips($$(\'.gf_mootip\'), { maxTitleChars: 50, className: \'gftool\' });' . LB;
-    $gf_header .= '	});' . LB;
-    $gf_header .= '</script>' . LB;
+    $gf_header .= '<style>'. LB . file_get_contents($_CONF['path'] . 'plugins/forum/css/style.css') . LB . '</style>' . LB;
+    $gf_header .= '<script type="text/javascript">' . LB . file_get_contents($_CONF['path'] . 'plugins/forum/js/mootips.js') . LB . '</script>' . LB;
 
     return $gf_header;
 }

@@ -178,7 +178,7 @@ function USER_edit($uid = '', $msg = '')
         $lastlogin = DB_getItem ($_TABLES['userinfo'], 'lastlogin', "uid = $uid");
         $lasttime = COM_getUserDateTimeFormat ($lastlogin);
         $display_name = COM_getDisplayName ($uid);
-        $menuText = $LANG_ACCESS['editinguser'] . $U['username'];
+        $menuText = 'Editing User: ' . $U['username'];
         if ($U['fullname'] != '' ) {
             $menuText .= ' - ' . $U['fullname'];
         }
@@ -225,7 +225,7 @@ function USER_edit($uid = '', $msg = '')
     if ( isset($_POST['new_username']) )
         $U['username']       = trim(COM_stripslashes($_POST['new_username']));
     if ( isset($_POST['fullname']) )
-        $U['fullname']       = COM_truncate(trim(USER_sanitizeName(COM_stripslashes($_POST['fullname']))),80);
+        $U['fullname']       = trim(COM_stripslashes($_POST['fullname']));
     if ( isset($_POST['userstatus'] ) )
         $U['status']     = COM_applyFilter($_POST['userstatus'],true);
     if ( isset($_POST['cooktime'] ) )
@@ -1300,7 +1300,7 @@ function USER_save($uid)
     }
     $regdate        = COM_applyFilter($_POST['regdate'],true);
     $username       = trim(COM_stripslashes($_POST['new_username']));
-    $fullname       = COM_truncate(trim(USER_sanitizeName(COM_stripslashes($_POST['fullname']))),80);
+    $fullname       = trim(COM_stripslashes($_POST['fullname']));
     $userstatus     = COM_applyFilter($_POST['userstatus'],true);
     $oldstatus      = COM_applyFilter($_POST['oldstatus'],true);
     $passwd         = trim(COM_stripslashes($_POST['passwd']));
@@ -1310,7 +1310,7 @@ function USER_save($uid)
     $email_conf     = trim(COM_stripslashes($_POST['email_conf']));
     $groups         = $_POST['groups'];
     $homepage       = trim(COM_stripslashes($_POST['homepage']));
-    $location       = strip_tags(trim(COM_stripslashes($_POST['location'])));
+    $location       = trim(COM_stripslashes($_POST['location']));
     $photo          = isset($_POST['photo']) ? $_POST['photo'] : '';
     $delete_photo   = (isset($_POST['delete_photo']) && $_POST['delete_photo'] == 'on') ? 1 : 0;
     $sig            = trim(COM_stripslashes($_POST['sig']));

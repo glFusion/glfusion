@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -219,9 +219,6 @@ function listNewDownloads(){
 function categoryConfigAdmin(){
     global $_CONF, $_TABLES, $LANG_FM02, $_FM_TABLES, $myts, $eh, $mytree;
 
-    $liu_group = DB_getItem($_TABLES['groups'],'grp_id','grp_name="Logged-in Users"');
-    $fma_group = DB_getItem($_TABLES['groups'],'grp_id','grp_name="filemgmt Admin"');
-
     $display = COM_siteHeader('menu');
     $display .= COM_startBlock("<b>"._MD_ADMINTITLE."</b>");
     $display .= filemgmt_navbar($LANG_FM02['nav2']);
@@ -231,9 +228,7 @@ function categoryConfigAdmin(){
     $display .= '<tr><td colspan="2" class="pluginHeader" style="width:100%;padding:5px;">' . _MD_ADDMAIN . '</td></tr>';
     $display .= '<tr><td>' . _MD_TITLEC. '</td><td><input type="text" name="title" size="30" maxlength="50"' . XHTML . '></td></tr>';
     $display .= '<tr><td>' . _MD_CATSEC. '</td><td><select name="sel_access">';
-    $display .= COM_optionList($_TABLES['groups'], "grp_id,grp_name",$liu_group) . '</select></td></tr>';
-    $display .= '<tr><td>' . _MD_UPLOADSEC. '</td><td><select name="sel_uploadaccess"><option value="0">Select Access</option>';
-    $display .= COM_optionList($_TABLES['groups'], "grp_id,grp_name",$fma_group) . '</select></td></tr>';
+    $display .= COM_optionList($_TABLES['groups'], "grp_id,grp_name") . '</select></td></tr>';
     $display .= '<tr><td>'. _MD_ADDCATEGORYSNAP . '<br' . XHTML . '><span style="text-size:-2">'. _MD_ADDIMAGENOTE .'</span></td>';
     $display .= '<td><input type="file" name="uploadfile" size="50" maxlength="200"' . XHTML . '></td></tr>';
     $display .= '<tr><td colspan="2" style="text-align:center;padding:10px;">';
@@ -252,12 +247,6 @@ function categoryConfigAdmin(){
 
         $display .= '<tr><td style="width:20%;">'. _MD_TITLEC.'</td><td><input type="text" name="title" size="30" maxlength="50"' . XHTML . '>&nbsp;' ._MD_IN. '&nbsp;';
         $display .= $mytree->makeMySelBox('title', 'title') . '</td></tr>';
-
-        $display .= '<tr><td>' . _MD_CATSEC. '</td><td><select name="sel_access">';
-        $display .= COM_optionList($_TABLES['groups'], "grp_id,grp_name",$liu_group) . '</select></td></tr>';
-        $display .= '<tr><td>' . _MD_UPLOADSEC. '</td><td><select name="sel_uploadaccess"><option value="0">Select Access</option>';
-        $display .= COM_optionList($_TABLES['groups'], "grp_id,grp_name",$fma_group) . '</select></td></tr>';
-
         $display .= '<tr><td colspan="2" style="text-align:center;padding:10px;">';
         $display .= '<input type="hidden" name="op" value="addCat"' . XHTML . '>';
         $display .= "<input type=\"submit\" value=\""._MD_ADD."\"" . XHTML . "></td></tr></table></form><br" . XHTML . ">";
@@ -992,11 +981,11 @@ function addCat() {
     $pid = $_POST['cid'];
     $title = $_POST['title'];
     $title = str_replace('/','&#47',$title);
-    $grp_access = COM_applyFilter($_POST['sel_access'],true);
+    $grp_access = $_POST['sel_access'];
     if ($grp_access < 2) {
        $grp_access = 2;
     }
-    $write_access = COM_applyFilter($_POST['sel_uploadaccess'],true);
+    $write_access = $_POST['sel_uploadaccess'];
     if ($write_access < 2) {
        $write_access = 2;
     }

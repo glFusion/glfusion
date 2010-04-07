@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2010 by the following authors:                        |
+// | Copyright (C) 2009 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -275,25 +275,25 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
     global $_CONF, $_TABLES;
 
     $queueUser = false;
-    $username = addslashes ($username);
-    $email = addslashes ($email);
+    $username = DB_escapeString ($username);
+    $email = DB_escapeString ($email);
 
     $regdate = strftime ('%Y-%m-%d %H:%M:%S', time ());
     $fields = 'username,email,regdate,cookietimeout';
     $values = "'$username','$email','$regdate','{$_CONF['default_perm_cookie_timeout']}'";
 
     if (!empty ($passwd)) {
-        $passwd = addslashes ($passwd);
+        $passwd = DB_escapeString ($passwd);
         $fields .= ',passwd';
         $values .= ",'$passwd'";
     }
     if (!empty ($fullname)) {
-        $fullname = addslashes (strip_tags($fullname));
+        $fullname = DB_escapeString (strip_tags($fullname));
         $fields .= ',fullname';
         $values .= ",'$fullname'";
     }
     if (!empty ($homepage)) {
-        $homepage = addslashes ($homepage);
+        $homepage = DB_escapeString ($homepage);
         $fields .= ',homepage';
         $values .= ",'$homepage'";
     }
@@ -311,11 +311,11 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
     } else {
         if (!empty($remoteusername)) {
             $fields .= ',remoteusername';
-            $values .= ",'".addslashes($remoteusername)."'";
+            $values .= ",'".DB_escapeString($remoteusername)."'";
         }
         if (!empty($service)) {
             $fields .= ',remoteservice';
-            $values .= ",'".addslashes($service)."'";
+            $values .= ",'".DB_escapeString($service)."'";
         }
     }
 
@@ -323,7 +323,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
     // Get the uid of the user, possibly given a service:
     if ($remoteusername != '')
     {
-        $uid = DB_getItem ($_TABLES['users'], 'uid', "remoteusername = '".addslashes($remoteusername)."' AND remoteservice='".addslashes($service)."'");
+        $uid = DB_getItem ($_TABLES['users'], 'uid', "remoteusername = '".DB_escapeString($remoteusername)."' AND remoteservice='".DB_escapeString($service)."'");
     } else {
         $uid = DB_getItem ($_TABLES['users'], 'uid', "username = '$username' AND remoteservice IS NULL");
     }
@@ -682,7 +682,7 @@ function USER_uniqueUsername($username)
 
     $try = $username;
     do {
-        $try = addslashes($try);
+        $try = DB_escapeString($try);
         $uid = DB_getItem($_TABLES['users'], 'uid', "username = '".$try."'");
         if (!empty($uid)) {
             $r = rand(2, 9999);
@@ -699,7 +699,7 @@ function USER_uniqueUsername($username)
 
 
 /**
-* Check to see if the username has been taken, or if it is disallowed.
+* Check to see if the username contains invalid characters.
 * Also checks if it includes the " character, which we don't allow in usernames.
 * Used for registering, changing names, and posting anonymously with a username
 *
@@ -712,7 +712,6 @@ function USER_validateUsername($username)
 	global $_CONF, $_TABLES, $_USER;
 
     $regex = '[\x00-\x1F\x7F<>"%&*\/\\\\]';
-
 	// ... fast checks first.
 	if (strpos($username, '&quot;') !== false || strpos($username, '"') !== false ) {
 		return false;
@@ -726,7 +725,7 @@ function USER_validateUsername($username)
 
 
 /**
-* Check to see if the username has been taken, or if it is disallowed.
+* Sanitize a name by removing the disallowed characters.
 * Also checks if it includes the " character, which we don't allow in usernames.
 * Used for registering, changing names, and posting anonymously with a username
 *
@@ -807,4 +806,30 @@ function USER_createPassword ($length)
     return($password);
 }
 
+/**
+* Build a list of all topics the current user has access to
+*
+* @return   string   List of topic IDs, separated by spaces
+*
+*/
+function USER_buildTopicList ()
+{
+    global $_TABLES;
+
+    $topics = '';
+
+    $result = DB_query ("SELECT tid FROM {$_TABLES['topics']}");
+    $numrows = DB_numRows ($result);
+    for ($i = 1; $i <= $numrows; $i++) {
+        $A = DB_fetchArray ($result);
+        if (SEC_hasTopicAccess ($A['tid'])) {
+            if ($i > 1) {
+                $topics .= ' ';
+            }
+            $topics .= $A['tid'];
+        }
+    }
+
+    return $topics;
+}
 ?>

@@ -390,13 +390,11 @@ function PLG_enableStateChange ($type, $enable)
     // IF we are enabling the plugin
     // THEN we must include its functions.inc so we have access to the function
     if ($enable) {
-        if (@file_exists($_CONF['path'] . 'plugins/' . $type . '/functions.inc') ) {
-            require_once $_CONF['path'] . 'plugins/' . $type . '/functions.inc';
-            return PLG_callFunctionForOnePlugin ('plugin_enablestatechange_' . $type,$args);
-        }
-    } else {
-        return PLG_callFunctionForOnePlugin ('plugin_enablestatechange_' . $type,$args);
+        require_once ($_CONF['path'] . 'plugins/' . $type . '/functions.inc');
     }
+
+    return PLG_callFunctionForOnePlugin ('plugin_enablestatechange_' . $type,
+                                         $args);
 }
 
 /**
@@ -1144,7 +1142,7 @@ function PLG_showModerationList($token)
     $retval = '';
 
     foreach ($_PLUGINS as $pi_name) {
-        $retval .= itemlist($pi_name, $token);
+        $retval .= MODERATE_itemList($pi_name, $token);
     }
 
     return $retval;
@@ -1784,7 +1782,7 @@ function PLG_replaceTags($content, $plugin = '')
                     $url = COM_buildUrl ($_CONF['site_url']
                          . '/article.php?story=' . $autotag['parm1']);
                     if (empty ($linktext)) {
-                        $linktext = stripslashes (DB_getItem ($_TABLES['stories'], 'title', "sid = '".addslashes($autotag['parm1'])."'"));
+                        $linktext = stripslashes (DB_getItem ($_TABLES['stories'], 'title', "sid = '".DB_escapeString($autotag['parm1'])."'"));
                     }
                 }
                 if (!empty ($url)) {
@@ -1843,7 +1841,7 @@ function PLG_replaceTags($content, $plugin = '')
                 }
                 if ( $autotag['tag'] == 'showblock' ) {
                     $blockName = COM_applyBasicFilter($autotag['parm1']);
-                    $result = DB_query("SELECT * FROM {$_TABLES['blocks']} WHERE name = '".addslashes($blockName)."'");
+                    $result = DB_query("SELECT * FROM {$_TABLES['blocks']} WHERE name = '".DB_escapeString($blockName)."'");
                     if ( DB_numRows($result) > 0 ) {
                         $B = DB_fetchArray($result);
                         $template = '';
@@ -2753,7 +2751,7 @@ function PLG_afterSaveSwitch($target, $item_url, $plugin, $message = '')
         break;
 
     case 'admin':
-        $url = $_CONF['site_admin_url'] . '/moderation.php';
+        $url = $_CONF['site_admin_url'] . '/index.php';
         if (!empty($msg)) {
             $url .= '?' . $msg;
             if (($plugin != 'story') && ($plugin != 'user')) {
@@ -2830,7 +2828,7 @@ function PLG_itemRated( $plugin, $id_sent, $new_rating, $added )
     $retval = true;
 
     if ( $plugin == 'article' ) {
-        $sql = "UPDATE {$_TABLES['stories']} SET rating = ".(float) $new_rating. ", votes=".(int) $added . " WHERE sid='".addslashes($id_sent)."'";
+        $sql = "UPDATE {$_TABLES['stories']} SET rating = ".(float) $new_rating. ", votes=".(int) $added . " WHERE sid='".DB_escapeString($id_sent)."'";
         DB_query($sql);
     } else {
         $args[1] = $id_sent;

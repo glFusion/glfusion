@@ -366,7 +366,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 $comments_with_count = sprintf( $LANG01[121], COM_numberFormat( $story->DisplayElements('comments') ));
 
                 if ( $story->DisplayElements('comments') > 0 ) {
-                    $result = DB_query( "SELECT UNIX_TIMESTAMP(date) AS day,username,fullname,{$_TABLES['comments']}.uid as cuid FROM {$_TABLES['comments']},{$_TABLES['users']} WHERE {$_TABLES['users']}.uid = {$_TABLES['comments']}.uid AND sid = '".addslashes($story->getsid())."' ORDER BY date desc LIMIT 1" );
+                    $result = DB_query( "SELECT UNIX_TIMESTAMP(date) AS day,username,fullname,{$_TABLES['comments']}.uid as cuid FROM {$_TABLES['comments']},{$_TABLES['users']} WHERE {$_TABLES['users']}.uid = {$_TABLES['comments']}.uid AND sid = '".DB_escapeString($story->getsid())."' ORDER BY date desc LIMIT 1" );
                     $C = DB_fetchArray( $result );
 
                     $recent_post_anchortag = '<span class="storybyline">'
@@ -480,7 +480,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
 
             if ($_CONF['backend'] == 1) {
                 $tid = $story->displayElements('tid');
-                $result = DB_query("SELECT filename, title FROM {$_TABLES['syndication']} WHERE type = 'article' AND topic = '".addslashes($tid)."' AND is_enabled = 1");
+                $result = DB_query("SELECT filename, title FROM {$_TABLES['syndication']} WHERE type = 'article' AND topic = '".DB_escapeString($tid)."' AND is_enabled = 1");
                 $feeds = DB_numRows($result);
                 for ($i = 0; $i < $feeds; $i++) {
                     list($filename, $title) = DB_fetchArray($result);
@@ -658,7 +658,7 @@ function STORY_whatsRelated( $related, $uid, $tid )
         }
 
         // add a link to "search by topic"
-        $topic = DB_getItem( $_TABLES['topics'], 'topic', "tid = '".addslashes($tid)."'" );
+        $topic = DB_getItem( $_TABLES['topics'], 'topic', "tid = '".DB_escapeString($tid)."'" );
         $rel[] = '<a href="' . $_CONF['site_url']
                . '/search.php?mode=search&amp;type=stories&amp;topic=' . $tid
                . '">' . $LANG24[38] . ' ' . stripslashes( $topic ) . '</a>';
@@ -719,13 +719,13 @@ function STORY_deleteImages ($sid)
 {
     global $_TABLES;
 
-    $result = DB_query ("SELECT ai_filename FROM {$_TABLES['article_images']} WHERE ai_sid = '".addslashes($sid)."'");
+    $result = DB_query ("SELECT ai_filename FROM {$_TABLES['article_images']} WHERE ai_sid = '".DB_escapeString($sid)."'");
     $nrows = DB_numRows ($result);
     for ($i = 0; $i < $nrows; $i++) {
         $A = DB_fetchArray ($result);
         STORY_deleteImage ($A['ai_filename']);
     }
-    DB_delete ($_TABLES['article_images'], 'ai_sid', addslashes($sid));
+    DB_delete ($_TABLES['article_images'], 'ai_sid', DB_escapeString($sid));
 }
 
 /**
@@ -789,7 +789,7 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
     if ($sid == '*') {
         $where = ' WHERE';
     } else {
-        $where = " WHERE (sid = '" . addslashes($sid) . "') AND";
+        $where = " WHERE (sid = '" . DB_escapeString($sid) . "') AND";
     }
     $where .= ' (draft_flag = 0) AND (date <= NOW())';
     if ($uid > 0) {
@@ -1194,17 +1194,17 @@ function service_submit_story($args, &$output, &$svc_msg)
         if (array_key_exists('delete', $args)) {
             $delete = count($args['delete']);
             for ($i = 1; $i <= $delete; $i++) {
-                $ai_filename = DB_getItem ($_TABLES['article_images'],'ai_filename', "ai_sid = '".addslashes($sid)."' AND ai_img_num = " . intval(key($args['delete'])));
+                $ai_filename = DB_getItem ($_TABLES['article_images'],'ai_filename', "ai_sid = '".DB_escapeString($sid)."' AND ai_img_num = " . intval(key($args['delete'])));
                 STORY_deleteImage ($ai_filename);
 
-                DB_query ("DELETE FROM {$_TABLES['article_images']} WHERE ai_sid = '".addslashes($sid)."' AND ai_img_num = '" . intval(key($args['delete'])) ."'");
+                DB_query ("DELETE FROM {$_TABLES['article_images']} WHERE ai_sid = '".DB_escapeString($sid)."' AND ai_img_num = '" . intval(key($args['delete'])) ."'");
                 next($args['delete']);
             }
         }
 
         // OK, let's upload any pictures with the article
-        if (DB_count($_TABLES['article_images'], 'ai_sid', addslashes($sid)) > 0) {
-            $index_start = DB_getItem($_TABLES['article_images'],'max(ai_img_num)',"ai_sid = '".addslashes($sid)."'") + 1;
+        if (DB_count($_TABLES['article_images'], 'ai_sid', DB_escapeString($sid)) > 0) {
+            $index_start = DB_getItem($_TABLES['article_images'],'max(ai_img_num)',"ai_sid = '".DB_escapeString($sid)."'") + 1;
         } else {
             $index_start = 1;
         }
@@ -1253,7 +1253,7 @@ function service_submit_story($args, &$output, &$svc_msg)
             $upload->setPerms('0644');
             $filenames = array();
 
-                    $sql = "SELECT MAX(ai_img_num) + 1 AS ai_img_num FROM " . $_TABLES['article_images'] . " WHERE ai_sid = '" . addslashes($sid) ."'";
+                    $sql = "SELECT MAX(ai_img_num) + 1 AS ai_img_num FROM " . $_TABLES['article_images'] . " WHERE ai_sid = '" . DB_escapeString($sid) ."'";
         	        $result = DB_query( $sql,1 );
         	        $row = DB_fetchArray( $result );
         	        $ai_img_num = $row['ai_img_num'];
@@ -1288,14 +1288,14 @@ function service_submit_story($args, &$output, &$svc_msg)
             }
             for ($z = 0; $z < $_CONF['maximagesperarticle']; $z++ ) {
                 if ( $filenames[$z] != '' ) {
-                    $sql = "SELECT MAX(ai_img_num) + 1 AS ai_img_num FROM " . $_TABLES['article_images'] . " WHERE ai_sid = '" . addslashes($sid) ."'";
+                    $sql = "SELECT MAX(ai_img_num) + 1 AS ai_img_num FROM " . $_TABLES['article_images'] . " WHERE ai_sid = '" . DB_escapeString($sid) ."'";
         	        $result = DB_query( $sql,1 );
         	        $row = DB_fetchArray( $result );
         	        $ai_img_num = $row['ai_img_num'];
         	        if ( $ai_img_num < 1 ) {
         	            $ai_img_num = 1;
         	        }
-                    DB_query("INSERT INTO {$_TABLES['article_images']} (ai_sid, ai_img_num, ai_filename) VALUES ('".addslashes($sid)."', $ai_img_num, '" . addslashes($filenames[$z]) . "')");
+                    DB_query("INSERT INTO {$_TABLES['article_images']} (ai_sid, ai_img_num, ai_filename) VALUES ('".DB_escapeString($sid)."', $ai_img_num, '" . DB_escapeString($filenames[$z]) . "')");
                 }
             }
         }
@@ -1370,7 +1370,7 @@ function service_delete_story($args, &$output, &$svc_msg)
 
     $sid = $args['sid'];
 
-    $result = DB_query ("SELECT tid,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['stories']} WHERE sid = '".addslashes($sid)."'");
+    $result = DB_query ("SELECT tid,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['stories']} WHERE sid = '".DB_escapeString($sid)."'");
     $A = DB_fetchArray ($result);
     $access = SEC_hasAccess ($A['owner_id'], $A['group_id'], $A['perm_owner'],
                              $A['perm_group'], $A['perm_members'], $A['perm_anon']);
@@ -1386,11 +1386,11 @@ function service_delete_story($args, &$output, &$svc_msg)
     }
 
     STORY_deleteImages ($sid);
-    DB_query("DELETE FROM {$_TABLES['comments']} WHERE sid = '".addslashes($sid)."' AND type = 'article'");
-    DB_delete ($_TABLES['stories'], 'sid', addslashes($sid));
+    DB_query("DELETE FROM {$_TABLES['comments']} WHERE sid = '".DB_escapeString($sid)."' AND type = 'article'");
+    DB_delete ($_TABLES['stories'], 'sid', DB_escapeString($sid));
 
     // delete Trackbacks
-    DB_query ("DELETE FROM {$_TABLES['trackback']} WHERE sid = '".addslashes($sid)."' AND type = 'article';");
+    DB_query ("DELETE FROM {$_TABLES['trackback']} WHERE sid = '".DB_escapeString($sid)."' AND type = 'article';");
 
     PLG_itemDeleted($sid, 'article');
 

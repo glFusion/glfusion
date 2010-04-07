@@ -94,7 +94,7 @@ if (!defined('CSRF_TOKEN')) {
 *       used through out the page.
 *
 * @param        int     $uid            User ID to get information for. If empty current user.
-* @return	array	Associative Array grp_name -> ug_main_grp_id of group ID's user belongs to
+* @return   array   Associative Array grp_name -> ug_main_grp_id of group ID's user belongs to
 *
 */
 function SEC_getUserGroups($uid='')
@@ -293,7 +293,7 @@ function SEC_isModerator()
 * Checks to see if current user has access to a topic
 *
 * @param        string      $tid        ID for topic to check on
-* @return       int 	returns 3 for read/edit 2 for read only 0 for no access
+* @return       int     returns 3 for read/edit 2 for read only 0 for no access
 *
 */
 function SEC_hasTopicAccess($tid)
@@ -304,7 +304,7 @@ function SEC_hasTopicAccess($tid)
         return 0;
     }
 
-    $result = DB_query("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['topics']} WHERE tid = '".addslashes($tid)."'");
+    $result = DB_query("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['topics']} WHERE tid = '".DB_escapeString($tid)."'");
     $A = DB_fetchArray($result);
 
     return SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
@@ -324,7 +324,7 @@ function SEC_hasTopicAccess($tid)
 * @param        int     $perm_group     Permissions the gorup has
 * @param        int     $perm_members   Permissions logged in members have
 * @param        int     $perm_anon      Permissions anonymous users have
-* @return       int 	returns 3 for read/edit 2 for read only 0 for no access
+* @return       int     returns 3 for read/edit 2 for read only 0 for no access
 *
 */
 function SEC_hasAccess($owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon)
@@ -554,7 +554,7 @@ function SEC_getUserPermissions($grp_id='',$uid='')
 * @param        array       $perm_members   Array of member permissions
 * @param        array       $perm_anon      Array of anonymous user permissions
 * @return       array       returns numeric equivalent for each permissions array (2 = read, 3=edit/read)
-* @see	SEC_getPermissionsHTML
+* @see  SEC_getPermissionsHTML
 * @see  SEC_getPermissionValue
 *
 */
@@ -682,7 +682,7 @@ function SEC_getFeatureGroup ($feature, $uid = '')
 
     $group = 0;
 
-    $ft_id = DB_getItem ($_TABLES['features'], 'ft_id', "ft_name = '".addslashes($feature)."'");
+    $ft_id = DB_getItem ($_TABLES['features'], 'ft_id', "ft_name = '".DB_escapeString($feature)."'");
     if (($ft_id > 0) && (sizeof ($ugroups) > 0)) {
         $grouplist = implode (',', $ugroups);
         $result = DB_query ("SELECT acc_grp_id FROM {$_TABLES['access']} WHERE (acc_ft_id = $ft_id) AND (acc_grp_id IN ($grouplist)) ORDER BY acc_grp_id LIMIT 1");
@@ -710,9 +710,9 @@ function SEC_getFeatureGroup ($feature, $uid = '')
 */
 function SEC_authenticate($username, $password, &$uid)
 {
-    global $_CONF, $_SYSTEM, $_TABLES, $LANG01;
+    global $_CONF, $_TABLES, $LANG01;
 
-    $escaped_name = addslashes(trim($username));
+    $escaped_name = DB_escapeString(trim($username));
 
     $result = DB_query("SELECT status, passwd, email, uid FROM {$_TABLES['users']} WHERE username='$escaped_name' AND ((remoteservice is null) or (remoteservice = ''))");
     $tmp = DB_error();
@@ -724,8 +724,8 @@ function SEC_authenticate($username, $password, &$uid)
         if ($U['status'] == USER_ACCOUNT_DISABLED) {
             // banned, jump to here to save an md5 calc.
             return USER_ACCOUNT_DISABLED;
-        } elseif ( !SEC_check_hash($password, $U['passwd']) ) {
-            return -1;
+        } elseif ($U['passwd'] != SEC_encryptPassword($password)) {
+            return -1; // failed login
         } elseif ($U['status'] == USER_ACCOUNT_AWAITING_APPROVAL) {
             return USER_ACCOUNT_AWAITING_APPROVAL;
         } elseif ($U['status'] == USER_ACCOUNT_AWAITING_ACTIVATION) {
@@ -811,8 +811,8 @@ function SEC_remoteAuthentication(&$loginname, $passwd, $service, &$uid)
     global $_CONF, $_TABLES;
 
     /* First try a local cached login */
-    $remoteusername = addslashes($loginname);
-    $remoteservice = addslashes($service);
+    $remoteusername = DB_escapeString($loginname);
+    $remoteservice = DB_escapeString($service);
     $result = DB_query("SELECT passwd, status, uid FROM {$_TABLES['users']} WHERE remoteusername='$remoteusername' AND remoteservice='$remoteservice'");
     $tmp = DB_error();
     $nrows = DB_numRows($result);
@@ -860,7 +860,7 @@ function SEC_remoteAuthentication(&$loginname, $passwd, $service, &$uid)
                           // and integrates user activation, see?
             } else {
                 // user existed, update local password:
-                DB_change($_TABLES['users'], 'passwd', addslashes(SEC_encryptPassword($passwd)), array('remoteusername','remoteservice'), array(addslashes($remoteusername),addslashes($remoteservice)));
+                DB_change($_TABLES['users'], 'passwd', DB_escapeString(SEC_encryptPassword($passwd)), array('remoteusername','remoteservice'), array(DB_escapeString($remoteusername),DB_escapeString($remoteservice)));
                 // and return their status
                 return DB_getItem($_TABLES['users'], 'status', "remoteusername='$remoteusername' AND remoteservice='$remoteservice'");
             }
@@ -901,25 +901,24 @@ function SEC_collectRemoteAuthenticationModules()
 /**
   * Add user to a group
   *
-  * work in progress
-  *
-  * Rather self explanitory shortcut function
-  * Is this the right place for this, Dirk?
-  *
   * @author Trinity L Bays, trinity93 AT gmail DOT com
   *
-  * @param  string  $uid Their user id
-  * @param  string  $gname The group name
-  * @return boolean status, true or false.
+  * @param  string  $uid    Their user id
+  * @param  string  $gname  The group name
+  * @return boolean status  true or false.
   */
 function SEC_addUserToGroup($uid, $gname)
 {
     global $_TABLES, $_CONF;
 
-    $uid = intval($uid);
+    $uid = (int) $uid;
 
-    $remote_grp = DB_getItem ($_TABLES['groups'], 'grp_id', "grp_name='". addslashes($gname) ."'");
-    DB_query ("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_uid) VALUES ('$remote_grp', $uid)");
+    $remote_grp = (int) DB_getItem ($_TABLES['groups'], 'grp_id', "grp_name='". DB_escapeString($gname) ."'");
+    if ( $remote_grp != 0 ) {
+        DB_query ("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_uid) VALUES ('$remote_grp', $uid)");
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -1001,7 +1000,7 @@ function SEC_removeFeatureFromDB ($feature_name, $logging = false)
 
     if (!empty ($feature_name)) {
         $feat_id = DB_getItem ($_TABLES['features'], 'ft_id',
-                               "ft_name = '".addslashes($feature_name)."'");
+                               "ft_name = '".DB_escapeString($feature_name)."'");
         if (!empty ($feat_id)) {
             // Before removing the feature itself, remove it from all groups
             if ($logging) {
@@ -1057,7 +1056,7 @@ function SEC_getGroupDropdown ($group_id, $access)
     } else {
         // They can't set the group then
         $groupdd .= DB_getItem ($_TABLES['groups'], 'grp_name',
-                                "grp_id = '".addslashes($group_id)."'")
+                                "grp_id = '".DB_escapeString($group_id)."'")
                  . '<input type="hidden" name="group_id" value="' . $group_id
                  . '"' . XHTML . '>';
     }
@@ -1078,7 +1077,7 @@ function SEC_getGroupDropdown ($group_id, $access)
 */
 function SEC_encryptPassword($password)
 {
-    return SEC_hash($password);
+    return md5($password);
 }
 
 /**
@@ -1102,12 +1101,9 @@ function SEC_createToken($ttl = 1200)
         $pageURL = COM_getCurrentURL();
     }
 
-    /* Figure out the full url to the current page */
-//    $pageURL = COM_getCurrentURL();
-
     /* Generate the token */
     $token = md5($_USER['uid'].$pageURL.uniqid (rand (), 1));
-    $pageURL = addslashes($pageURL);
+    $pageURL = DB_escapeString($pageURL);
 
     /* Destroy exired tokens: */
     if($_DB_dbms == 'mssql') {
@@ -1120,7 +1116,7 @@ function SEC_createToken($ttl = 1200)
     DB_query($sql);
 
     /* Destroy tokens for this user/url combination */
-    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='".addslashes($pageURL)."'";
+    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='".DB_escapeString($pageURL)."'";
     DB_query($sql);
 
     /* Create a token for this user/url combination */
@@ -1151,7 +1147,7 @@ function SEC_checkToken()
     if ( isset($_SYSTEM['token_ip']) && $_SYSTEM['token_ip'] == true ) {
         $referCheck  = $_SERVER['REMOTE_ADDR'];
     } else {
-        $referCheck = $_SERVER['HTTP_REFERER'];
+        $referCheck = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
     }
 
     if(array_key_exists(CSRF_TOKEN, $_GET)) {
@@ -1161,21 +1157,12 @@ function SEC_checkToken()
     }
 
     if(trim($token) != '') {
-        if($_DB_dbms != 'mssql') {
-            $sql = "SELECT ((DATE_ADD(created, INTERVAL ttl SECOND) < NOW()) AND ttl > 0) as expired, owner_id, urlfor FROM "
-               . "{$_TABLES['tokens']} WHERE token='".addslashes($token)."'";
-        } else {
-            $sql = "SELECT owner_id, urlfor, expired =
-                      CASE
-                         WHEN (DATEADD(s,ttl,created) < getUTCDate()) AND (ttl>0) THEN 1
-
-                         ELSE 0
-                      END
-                    FROM {$_TABLES['tokens']} WHERE token='".addslashes($token)."'";
-        }
+        $sql = "SELECT ((DATE_ADD(created, INTERVAL ttl SECOND) < NOW()) AND ttl > 0) as expired, owner_id, urlfor FROM "
+           . "{$_TABLES['tokens']} WHERE token='".DB_escapeString($token)."'";
         $tokens = DB_query($sql);
         $numberOfTokens = DB_numRows($tokens);
         if($numberOfTokens != 1) {
+            COM_errorLog("CheckToken: Token failed - no token found or more than 1 token found in database");
             $return = false; // none, or multiple tokens. Both are invalid. (token is unique key...)
         } else {
             $tokendata = DB_fetchArray($tokens);
@@ -1191,7 +1178,7 @@ function SEC_checkToken()
                 COM_errorLog("CheckToken: Token failed - token URL/IP does not match referer URL/IP.");
                 COM_errorLog("Token URL: " . $tokendata['urlfor'] . " - REFERER URL: " . $_SERVER['HTTP_REFERER']);
                 $return = false;
-            } else if($tokendata['expired']) {
+            } else if($tokendata['expired'] != 0) {
                 COM_errorLog("CheckToken: Token failed - token has expired.");
                 $return = false;
             } else {
@@ -1199,7 +1186,7 @@ function SEC_checkToken()
             }
 
             // It's a one time token. So eat it.
-            $sql = "DELETE FROM {$_TABLES['tokens']} WHERE token='".addslashes($token)."'";
+            $sql = "DELETE FROM {$_TABLES['tokens']} WHERE token='".DB_escapeString($token)."'";
             DB_query($sql);
         }
     } else {
@@ -1237,11 +1224,11 @@ function SEC_createTokenGeneral($action='general',$ttl = 1200)
     DB_query($sql);
 
     /* Destroy tokens for this user/url combination */
-    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='".addslashes($action)."'";
+    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='".DB_escapeString($action)."'";
     DB_query($sql);
 
     $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
-           . "VALUES ('$token', NOW(), {$_USER['uid']}, '".addslashes($action)."', '$ttl')";
+           . "VALUES ('$token', NOW(), {$_USER['uid']}, '".DB_escapeString($action)."', '$ttl')";
     DB_query($sql);
 
     /* And return the token to the user */
@@ -1250,16 +1237,20 @@ function SEC_createTokenGeneral($action='general',$ttl = 1200)
 
 
 
-function SEC_checkTokenGeneral($token,$action='general')
+function SEC_checkTokenGeneral($token,$action='general',$uid=0)
 {
     global $_USER, $_TABLES, $_DB_dbms;
 
     $return = false; // Default to fail.
 
+    if ( $uid == 0 ) {
+        $uid = $_USER['uid'];
+    }
+
     if(trim($token) != '') {
         $token = COM_applyFilter($token);
         $sql = "SELECT ((DATE_ADD(created, INTERVAL ttl SECOND) < NOW()) AND ttl > 0) as expired, owner_id, urlfor FROM "
-           . "{$_TABLES['tokens']} WHERE token='".addslashes($token)."'";
+           . "{$_TABLES['tokens']} WHERE token='".DB_escapeString($token)."'";
 
         $tokens = DB_Query($sql);
         $numberOfTokens = DB_numRows($tokens);
@@ -1271,15 +1262,14 @@ function SEC_checkTokenGeneral($token,$action='general')
              *  token's user is the current user.
              *  token is not expired.
              */
-            if( $_USER['uid'] != $tokendata['owner_id'] ) {
+            if( $uid != $tokendata['owner_id'] ) {
                 COM_errorLog("CheckToken: Token failed - userid does not match token owner id");
                 $return = false;
             } else if($tokendata['expired']) {
-                COM_errorLog("CheckToken: Token failed - token has expired.");
                 $return = false;
             } else if($tokendata['urlfor'] != $action) {
-                COM_errorLog("CheckToken: Token failed - token URL does not match referer URL.");
-                COM_errorLog("Token URL: " . $tokendata['urlfor'] . " - REFERER URL: " . $action);
+                COM_errorLog("CheckToken: Token failed - token action does not match referer action.");
+                COM_errorLog("Token Action: " . $tokendata['urlfor'] . " - ACTION: " . $action);
                 $return = false;
             } else {
                 $return = true; // Everything is OK
@@ -1337,6 +1327,47 @@ function SEC_setCookie($name, $value, $expire = 0, $path = '', $domain = '', $se
     return $retval;
 }
 
+
+/**
+* Clean up any leftover files on failed re-authentication
+*
+* When re-authentication fails, we need to clean up any files that may have
+* been rescued during the original POST request.
+*
+* @param    mixed   $files  original or recreated $_FILES array
+* @return   void
+*
+*/
+function SEC_cleanupFiles($files)
+{
+    global $_CONF;
+
+    // first, some sanity checks
+    if (! is_array($files)) {
+        if (empty($files)) {
+            return; // nothing to do
+        } else {
+            $files = @unserialize($files);
+        }
+    }
+    if (!is_array($files) || empty($files)) {
+        return;
+    }
+
+    foreach ($files as $key => $value) {
+        if (! empty($value['tmp_name'])) {
+            $filename = COM_sanitizeFilename(basename($value['tmp_name']), true);
+            $orphan = $_CONF['path_data'] .'temp/'. $filename;
+            if (file_exists($orphan)) {
+                if (! @unlink($orphan)) {
+                    COM_errorLog("SEC_cleanupFile: Unable to remove file $filename from 'data' directory");
+                }
+            }
+        }
+    }
+}
+
+
 /**
 *
 * Borrowed from the phpBB3 project
@@ -1350,7 +1381,7 @@ function SEC_setCookie($name, $value, $expire = 0, $path = '', $domain = '', $se
 *
 * The homepage URL for this framework is:
 *
-*	http://www.openwall.com/phpass/
+*   http://www.openwall.com/phpass/
 *
 * Please be sure to update the Version line if you edit this file in any way.
 * It is suggested that you leave the main version number intact, but indicate
@@ -1368,38 +1399,34 @@ function SEC_setCookie($name, $value, $expire = 0, $path = '', $domain = '', $se
 */
 function SEC_hash($password)
 {
-	$itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    $itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
-	$random_state = _unique_id();
-	$random = '';
-	$count = 6;
+    $random_state = _unique_id();
+    $random = '';
+    $count = 6;
 
-	if (($fh = @fopen('/dev/urandom', 'rb')))
-	{
-		$random = fread($fh, $count);
-		fclose($fh);
-	}
+    if (($fh = @fopen('/dev/urandom', 'rb'))) {
+        $random = fread($fh, $count);
+        fclose($fh);
+    }
 
-	if (strlen($random) < $count)
-	{
-		$random = '';
+    if (strlen($random) < $count) {
+        $random = '';
 
-		for ($i = 0; $i < $count; $i += 16)
-		{
-			$random_state = md5(_unique_id() . $random_state);
-			$random .= pack('H*', md5($random_state));
-		}
-		$random = substr($random, 0, $count);
-	}
+        for ($i = 0; $i < $count; $i += 16) {
+            $random_state = md5(_unique_id() . $random_state);
+            $random .= pack('H*', md5($random_state));
+        }
+        $random = substr($random, 0, $count);
+    }
 
-	$hash = _hash_crypt_private($password, _hash_gensalt_private($random, $itoa64), $itoa64);
+    $hash = _hash_crypt_private($password, _hash_gensalt_private($random, $itoa64), $itoa64);
 
-	if (strlen($hash) == 34)
-	{
-		return $hash;
-	}
+    if (strlen($hash) == 34) {
+        return $hash;
+    }
 
-	return md5($password);
+    return md5($password);
 }
 
 /**
@@ -1412,13 +1439,12 @@ function SEC_hash($password)
 */
 function SEC_check_hash($password, $hash)
 {
-	$itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-	if (strlen($hash) == 34)
-	{
-		return (_hash_crypt_private($password, $hash, $itoa64) === $hash) ? true : false;
-	}
+    $itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    if (strlen($hash) == 34) {
+        return (_hash_crypt_private($password, $hash, $itoa64) === $hash) ? true : false;
+    }
 
-	return (md5($password) === $hash) ? true : false;
+    return (md5($password) === $hash) ? true : false;
 }
 
 /**
@@ -1426,16 +1452,15 @@ function SEC_check_hash($password, $hash)
 */
 function _hash_gensalt_private($input, &$itoa64, $iteration_count_log2 = 6)
 {
-	if ($iteration_count_log2 < 4 || $iteration_count_log2 > 31)
-	{
-		$iteration_count_log2 = 8;
-	}
+    if ($iteration_count_log2 < 4 || $iteration_count_log2 > 31) {
+        $iteration_count_log2 = 8;
+    }
 
-	$output = '$H$';
-	$output .= $itoa64[min($iteration_count_log2 + ((PHP_VERSION >= 5) ? 5 : 3), 30)];
-	$output .= _hash_encode64($input, 6, $itoa64);
+    $output = '$H$';
+    $output .= $itoa64[min($iteration_count_log2 + ((PHP_VERSION >= 5) ? 5 : 3), 30)];
+    $output .= _hash_encode64($input, 6, $itoa64);
 
-	return $output;
+    return $output;
 }
 
 /**
@@ -1443,43 +1468,37 @@ function _hash_gensalt_private($input, &$itoa64, $iteration_count_log2 = 6)
 */
 function _hash_encode64($input, $count, &$itoa64)
 {
-	$output = '';
-	$i = 0;
+    $output = '';
+    $i = 0;
 
-	do
-	{
-		$value = ord($input[$i++]);
-		$output .= $itoa64[$value & 0x3f];
+    do {
+        $value = ord($input[$i++]);
+        $output .= $itoa64[$value & 0x3f];
 
-		if ($i < $count)
-		{
-			$value |= ord($input[$i]) << 8;
-		}
+        if ($i < $count) {
+            $value |= ord($input[$i]) << 8;
+        }
 
-		$output .= $itoa64[($value >> 6) & 0x3f];
+        $output .= $itoa64[($value >> 6) & 0x3f];
 
-		if ($i++ >= $count)
-		{
-			break;
-		}
+        if ($i++ >= $count) {
+            break;
+        }
 
-		if ($i < $count)
-		{
-			$value |= ord($input[$i]) << 16;
-		}
+        if ($i < $count) {
+            $value |= ord($input[$i]) << 16;
+        }
 
-		$output .= $itoa64[($value >> 12) & 0x3f];
+        $output .= $itoa64[($value >> 12) & 0x3f];
 
-		if ($i++ >= $count)
-		{
-			break;
-		}
+        if ($i++ >= $count) {
+            break;
+        }
 
-		$output .= $itoa64[($value >> 18) & 0x3f];
-	}
-	while ($i < $count);
+        $output .= $itoa64[($value >> 18) & 0x3f];
+    } while ($i < $count);
 
-	return $output;
+    return $output;
 }
 
 /**
@@ -1487,60 +1506,52 @@ function _hash_encode64($input, $count, &$itoa64)
 */
 function _hash_crypt_private($password, $setting, &$itoa64)
 {
-	$output = '*';
+    $output = '*';
 
-	// Check for correct hash
-	if (substr($setting, 0, 3) != '$H$')
-	{
-		return $output;
-	}
+    // Check for correct hash
+    if (substr($setting, 0, 3) != '$H$') {
+        return $output;
+    }
 
-	$count_log2 = strpos($itoa64, $setting[3]);
+    $count_log2 = strpos($itoa64, $setting[3]);
 
-	if ($count_log2 < 7 || $count_log2 > 30)
-	{
-		return $output;
-	}
+    if ($count_log2 < 7 || $count_log2 > 30) {
+        return $output;
+    }
 
-	$count = 1 << $count_log2;
-	$salt = substr($setting, 4, 8);
+    $count = 1 << $count_log2;
+    $salt = substr($setting, 4, 8);
 
-	if (strlen($salt) != 8)
-	{
-		return $output;
-	}
+    if (strlen($salt) != 8) {
+        return $output;
+    }
 
-	/**
-	* We're kind of forced to use MD5 here since it's the only
-	* cryptographic primitive available in all versions of PHP
-	* currently in use.  To implement our own low-level crypto
-	* in PHP would result in much worse performance and
-	* consequently in lower iteration counts and hashes that are
-	* quicker to crack (by non-PHP code).
-	*/
-	if (PHP_VERSION >= 5)
-	{
-		$hash = md5($salt . $password, true);
-		do
-		{
-			$hash = md5($hash . $password, true);
-		}
-		while (--$count);
-	}
-	else
-	{
-		$hash = pack('H*', md5($salt . $password));
-		do
-		{
-			$hash = pack('H*', md5($hash . $password));
-		}
-		while (--$count);
-	}
+    /**
+    * We're kind of forced to use MD5 here since it's the only
+    * cryptographic primitive available in all versions of PHP
+    * currently in use.  To implement our own low-level crypto
+    * in PHP would result in much worse performance and
+    * consequently in lower iteration counts and hashes that are
+    * quicker to crack (by non-PHP code).
+    */
+    if (PHP_VERSION >= 5) {
+        $hash = md5($salt . $password, true);
+        do {
+            $hash = md5($hash . $password, true);
+        }
+        while (--$count);
+    } else {
+        $hash = pack('H*', md5($salt . $password));
+        do {
+            $hash = pack('H*', md5($hash . $password));
+        }
+        while (--$count);
+    }
 
-	$output = substr($setting, 0, 12);
-	$output .= _hash_encode64($hash, 16, $itoa64);
+    $output = substr($setting, 0, 12);
+    $output .= _hash_encode64($hash, 16, $itoa64);
 
-	return $output;
+    return $output;
 }
 
 /**
@@ -1549,15 +1560,224 @@ function _hash_crypt_private($password, $setting, &$itoa64)
 */
 function _unique_id($extra = 'c')
 {
-	static $dss_seeded = false;
-	global $_SYSTEM;
+    static $dss_seeded = false;
+    global $_SYSTEM;
 
-	$rand_seed = COM_makesid();
+    $rand_seed = COM_makesid();
 
-	$val = $rand_seed . microtime();
-	$val = md5($val);
-	$rand_seed = md5($rand_seed . $val . $extra);
+    $val = $rand_seed . microtime();
+    $val = md5($val);
+    $rand_seed = md5($rand_seed . $val . $extra);
 
-	return substr($val, 4, 16);
+    return substr($val, 4, 16);
 }
+
+
+/**
+* Display login form and ask user to re-authenticate
+*
+* @param    string  $desturl    URL to return to after authentication
+* @param    string  $method     original request method: POST or GET
+* @param    string  $postdata   serialized POST data
+* @param    string  $getdata    serialized GET data
+* @param    string  $filedata   serialized FILE data
+* @return   string              HTML for the authentication form
+*
+*/
+function SEC_reauthform($desturl, $message = '',$method = '', $postdata = '', $getdata = '', $filedata = '')
+{
+    global $LANG20, $LANG_ADMIN;
+
+    $hidden = '';
+
+    $hidden .= '<input type="hidden" name="token_postdata" value="'.urlencode($postdata).'"/>' . LB;
+    $hidden .= '<input type="hidden" name="token_getdata" value="'.urlencode($getdata).'"/>' . LB;
+    $hidden .= '<input type="hidden" name="token_filedata" value="'.urlencode($filedata).'"/>' . LB;
+    $hidden .= '<input type="hidden" name="token_requestmethod" value="'.$method.'"/>' . LB;
+
+    $options = array(
+        'forgotpw_link'   => false,
+        'newreg_link'     => false,
+        'openid_login'    => false,
+        'plugin_vars'     => false,
+        'prefill_user'    => COM_isAnonUser() ? false : true,
+        'title'           => $LANG20[1],
+        'message'         => $message,
+        'footer_message'  => $LANG20[6],
+        'button_text'     => $LANG_ADMIN['authenticate'],
+        'form_action'     => $desturl,
+        'hidden_fields'   => $hidden
+    );
+
+    return SEC_loginForm($options);
+}
+
+
+/**
+* Display a "to access this area you need to be logged in" message
+*
+* @return   string      HTML for the message
+*
+*/
+function SEC_loginRequiredForm()
+{
+    global $_CONF, $LANG_LOGIN;
+
+    $options = array(
+        'title'   => $LANG_LOGIN[1],
+        'message' => $LANG_LOGIN[2]
+    );
+
+    return SEC_loginForm($options);
+}
+
+/**
+* Displays a login form
+*
+* This is the version of the login form displayed in the content area of the
+* page (not the side bar). It will present all options (remote authentication
+* - including OpenID, new registration link, etc.) according to the current
+* configuration settings.
+*
+* @param    array   $use_options    options to override default settings
+* @return   string                  HTML of the login form
+*
+*/
+function SEC_loginForm($use_options = array())
+{
+    global $_CONF, $_USER, $LANG01, $LANG04;
+
+    $retval = '';
+
+    $default_options = array(
+        // display options
+        'forgotpw_link'     => true,
+
+        // for hidden fields to be included in the form
+        'hidden_fields'     => '',
+
+        // options to locally override some specific $_CONF options
+        '3rdparty_login'    => true,    // $_CONF['user_login_method']['3rdparty']
+        'openid_login'      => true,    // $_CONF['user_login_method']['openid']
+        'newreg_link'       => true,    // $_CONF['disable_new_user_registration']
+        'plugin_vars'       => true,    // call PLG_templateSetVars?
+        'prefill_user'      => false,
+
+        // default texts
+        'title'             => $LANG04[65], // Try Logging in Again
+        'message'           => $LANG04[66], // You may have mistyped ...
+        'footer_message'    => '',
+        'button_text'       => $LANG04[80], // Login
+
+        // action
+        'form_action' => $_CONF['site_url'].'/users.php',
+    );
+
+    $options = array_merge($default_options, $use_options);
+
+    $loginform = new Template($_CONF['path_layout'] . 'users');
+    $loginform->set_file('login', 'loginform.thtml');
+
+    $loginform->set_var('form_action', $options['form_action']);
+    $loginform->set_var('footer_message',$options['footer_message']);
+
+    $loginform->set_var('start_block_loginagain',
+                        COM_startBlock($options['title']));
+    $loginform->set_var('lang_message', $options['message']);
+    if ($options['newreg_link'] == false || $_CONF['disable_new_user_registration']) {
+        $loginform->set_var('lang_newreglink', '');
+    } else {
+        $loginform->set_var('lang_newreglink', $LANG04[123]);
+    }
+
+    $loginform->set_var('lang_username', $LANG04[2]);
+    $loginform->set_var('lang_password', $LANG01[57]);
+    if ($options['forgotpw_link']) {
+        $loginform->set_var('lang_forgetpassword', $LANG04[25]);
+        $forget = COM_createLink($LANG04[25], $_CONF['site_url']
+                                              . '/users.php?mode=getpassword',
+                                 array('rel' => 'nofollow'));
+        $loginform->set_var('forgetpassword_link', $forget);
+    } else {
+        $loginform->set_var('lang_forgetpassword', '');
+        $loginform->set_var('forgetpassword_link', '');
+    }
+
+    $loginform->set_var('lang_login', $options['button_text']);
+    $loginform->set_var('end_block', COM_endBlock());
+
+    // 3rd party remote authentification.
+    $services = '';
+
+    if ($options['3rdparty_login'] &&
+            $_CONF['user_login_method']['3rdparty'] &&
+            ($_CONF['usersubmission'] == 0)) {
+
+        $modules = SEC_collectRemoteAuthenticationModules();
+        if (count($modules) > 0) {
+            if (!$_CONF['user_login_method']['standard'] && (count($modules) == 1)) {
+                $select = '<input type="hidden" name="service" value="'. $modules[0] . '"/>' . $modules[0] . LB;
+            } else {
+                // Build select
+                $select = '<select name="service">';
+                if ($_CONF['user_login_method']['standard']) {
+                    $select .= '<option value="">' .  $_CONF['site_name'] . '</option>' . LB;
+                }
+                foreach ($modules as $service) {
+                    $select .= '<option value="' . $service . '">' . $service . '</option>' . LB;
+                }
+                $select .= '</select>';
+            }
+
+            $loginform->set_file('services', 'services.thtml');
+            $loginform->set_var('lang_service', $LANG04[121]);
+            $loginform->set_var('select_service', $select);
+            $loginform->parse('output', 'services');
+            $services .= $loginform->finish($loginform->get_var('output'));
+        }
+    }
+    if (! empty($options['hidden_fields'])) {
+        // allow caller to (ab)use {services} for hidden fields
+        $services .= $options['hidden_fields'];
+    }
+    $loginform->set_var('services', $services);
+
+    // OpenID remote authentification.
+    if ($options['openid_login'] && $_CONF['user_login_method']['openid'] &&
+            ($_CONF['usersubmission'] == 0) &&
+            !$_CONF['disable_new_user_registration']) {
+        $loginform->set_file('openid_login', '../loginform_openid.thtml');
+        $loginform->set_var('lang_openid_login', $LANG01[128]);
+        $loginform->set_var('input_field_size', 40);
+
+        // for backward compatibility - not used any more
+        $app_url = isset($_SERVER['SCRIPT_URI'])
+                 ? $_SERVER['SCRIPT_URI']
+                 : 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
+        $loginform->set_var('app_url', $app_url);
+
+        $loginform->parse('output', 'openid_login');
+        $loginform->set_var('openid_login',$loginform->finish($loginform->get_var('output')));
+    } else {
+        $loginform->set_var('openid_login', '');
+    }
+
+    if ($options['prefill_user'] && isset($_USER['username']) && $_USER['username'] != '' ) {
+        $loginform->set_var('loginname',$_USER['username']);
+        $loginform->set_var('focus', 'passwd');
+    } else {
+        $loginform->set_var('loginname','');
+        $loginform->set_var('focus','loginname');
+    }
+    if ( $options['plugin_vars'] ) {
+        PLG_templateSetVars('loginform', $loginform);
+    }
+    $loginform->parse('output', 'login');
+
+    $retval .= $loginform->finish($loginform->get_var('output'));
+
+    return $retval;
+}
+
+
 ?>
