@@ -43,6 +43,17 @@ if (!in_array('calendar', $_PLUGINS)) {
 
 require_once $_CONF['path_system'] . 'classes/calendar.class.php';
 
+$display = '';
+
+if (COM_isAnonUser() &&
+    (($_CONF['loginrequired'] == 1) || ($_CA_CONF['calendarloginrequired'] == 1))) {
+    $display .= CALENDAR_siteHeader($LANG_CAL_1[41]);
+    $display .= SEC_loginRequiredForm();
+    $display .= CALENDAR_siteFooter();
+    echo $display;
+    exit;
+}
+
 /**
 * Adds an event to the user's calendar
 *
@@ -101,7 +112,7 @@ function CALENDAR_addUserEvent($eid)
                   . ', ' . stripslashes($A['state']) . ' ' . $A['zipcode'];
 
 /* this will eventually replace the above code
-  
+
         // build well-formatted location html
         $location = '';
         $keys = array('location','address1','address2','city','state','zipcode');
