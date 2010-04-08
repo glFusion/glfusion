@@ -219,13 +219,20 @@ function PAGE_form($A, $error = false)
             $alltopics .= ' selected="selected"';
         }
         $alltopics .= '>' . $LANG_STATIC['all_topics'] . '</option>' . LB;
+
+        $allnhp = '<option value="allnhp"';
+        if ($current_topic == 'allnhp') {
+            $allnhp .= ' selected="selected"';
+        }
+        $allnhp .= '>' . $LANG_STATIC['allnhp_topics']. '</option>' . LB;
+
         $notopic = '<option value="none"';
         if ($current_topic == 'none') {
             $notopic .= ' selected="selected"';
         }
         $notopic .= '>' . $LANG_STATIC['no_topic'] . '</option>' . LB;
         $sp_template->set_var ('topic_selection', '<select name="sp_tid">'
-                               . $alltopics . $notopic . $topics . '</select>');
+                               . $alltopics . $allnhp . $notopic . $topics . '</select>');
         $position = '<select name="sp_where">';
         $position .= '<option value="1"';
         if ($A['sp_where'] == 1) {

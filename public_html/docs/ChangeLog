@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Staticpage / Media Gallery: Option to specify centerblock for all topics
+  except the homepage (Mark)
+- Implement skip token re-init on admin auth (Mark)
 - Calendar: Enforce login required on event view (event.php) (Mark)
 - Forum: Translate <>& in posts when created with WYSIWYG editor (Mark)
 - Topic block - do not mark inactive if $topic is blank (Mark)
