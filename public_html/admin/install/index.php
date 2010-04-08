@@ -1454,15 +1454,15 @@ function INST_installAndContentPlugins()
     DB_query("UPDATE {$_TABLES['users']} SET theme='nouveau' WHERE uid=2",1);
 
     $var = time() - rand();
-    $session_cookie = 'pw'.md5($var);
+    $session_cookie = 'pw'.substr(md5($var),0,3);
     DB_query("UPDATE {$_TABLES['conf_values']} SET value='".serialize($session_cookie)."' WHERE name='cookie_password'",1);
 
     $var = time() - rand();
-    $session_cookie = 'pc'.md5($var);
+    $session_cookie = 'pc'.substr(md5($var),0,3);
     DB_query("UPDATE {$_TABLES['conf_values']} SET value='".serialize($session_cookie)."' WHERE name='cookie_name'",1);
 
     $var = time() - rand();
-    $session_cookie = 'sc'.md5($var);
+    $session_cookie = 'sc'.substr(md5($var),0,3);
     DB_query("UPDATE {$_TABLES['conf_values']} SET value='".serialize($session_cookie)."' WHERE name='cookie_session'",1);
 
     $config->_purgeCache();
