@@ -341,6 +341,7 @@ else if( $_CONF['allow_user_themes'] == 1 ) {
         $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_CONF['theme'];
     }
 }
+$TEMPLATE_OPTIONS['default_vars']['layout_url'] = $_CONF['layout_url'];
 
 /**
 * Include theme functions file
@@ -2266,54 +2267,39 @@ function COM_showTopics( $topic='' )
     global $_CONF, $_TABLES, $_USER, $LANG01, $_BLOCK_TEMPLATE, $page;
 
     $langsql = COM_getLangSQL( 'tid' );
-    if( empty( $langsql ))
-    {
+    if( empty( $langsql )) {
         $op = 'WHERE';
-    }
-    else
-    {
+    } else {
         $op = 'AND';
     }
 
     $sql = "SELECT tid,topic,imageurl FROM {$_TABLES['topics']}" . $langsql;
-    if( !COM_isAnonUser() )
-    {
+    if( !COM_isAnonUser() ) {
         $tids = DB_getItem( $_TABLES['userindex'], 'tids',
                             "uid = {$_USER['uid']}" );
-        if( !empty( $tids ))
-        {
+        if( !empty( $tids )) {
             $sql .= " $op (tid NOT IN ('" . str_replace( ' ', "','", $tids )
                  . "'))" . COM_getPermSQL( 'AND' );
-        }
-        else
-        {
+        } else {
             $sql .= COM_getPermSQL( $op );
         }
-    }
-    else
-    {
+    } else {
         $sql .= COM_getPermSQL( $op );
     }
-    if( $_CONF['sortmethod'] == 'alpha' )
-    {
+    if( $_CONF['sortmethod'] == 'alpha' ) {
         $sql .= ' ORDER BY topic ASC';
-    }
-    else
-    {
+    } else {
         $sql .= ' ORDER BY sortnum';
     }
     $result = DB_query( $sql );
 
     $retval = '';
     $sections = new Template( $_CONF['path_layout'] );
-    if( isset( $_BLOCK_TEMPLATE['topicoption'] ))
-    {
+    if( isset( $_BLOCK_TEMPLATE['topicoption'] )) {
         $templates = explode( ',', $_BLOCK_TEMPLATE['topicoption'] );
         $sections->set_file( array( 'option'  => $templates[0],
                                     'current' => $templates[1] ));
-    }
-    else
-    {
+    } else {
         $sections->set_file( array( 'option'   => 'topicoption.thtml',
                                     'inactive' => 'topicoption_off.thtml' ));
     }
@@ -2324,21 +2310,17 @@ function COM_showTopics( $topic='' )
     $sections->set_var( 'layout_url', $_CONF['layout_url'] );
     $sections->set_var( 'block_name', str_replace( '_', '-', 'section_block' ));
 
-    if( $_CONF['hide_home_link'] == 0 )
-    {
+    if( $_CONF['hide_home_link'] == 0 ) {
         // Give a link to the homepage here since a lot of people use this for
         // navigating the site
 
-        if( COM_onFrontpage() )
-        {
+        if( COM_onFrontpage() ) {
             $sections->set_var( 'option_url', '' );
             $sections->set_var( 'option_label', $LANG01[90] );
             $sections->set_var( 'option_count', '' );
             $sections->set_var( 'topic_image', '' );
             $retval .= $sections->parse( 'item', 'inactive' );
-        }
-        else
-        {
+        } else {
             $sections->set_var( 'option_url',
                                 $_CONF['site_url'] . '/index.php' );
             $sections->set_var( 'option_label', $LANG01[90] );
@@ -2348,66 +2330,51 @@ function COM_showTopics( $topic='' )
         }
     }
 
-    if( $_CONF['showstorycount'] )
-    {
+    if( $_CONF['showstorycount'] ) {
         $sql = "SELECT tid, COUNT(*) AS count FROM {$_TABLES['stories']} "
              . 'WHERE (draft_flag = 0) AND (date <= NOW()) '
              . COM_getPermSQL( 'AND' )
              . ' GROUP BY tid';
         $rcount = DB_query( $sql );
-        while( $C = DB_fetchArray( $rcount ))
-        {
+        while( $C = DB_fetchArray( $rcount )) {
             $storycount[$C['tid']] = $C['count'];
         }
     }
 
-    if( $_CONF['showsubmissioncount'] )
-    {
+    if( $_CONF['showsubmissioncount'] ) {
         $sql = "SELECT tid, COUNT(*) AS count FROM {$_TABLES['storysubmission']} "
              . ' GROUP BY tid';
         $rcount = DB_query( $sql );
-        while( $C = DB_fetchArray( $rcount ))
-        {
+        while( $C = DB_fetchArray( $rcount )) {
             $submissioncount[$C['tid']] = $C['count'];
         }
     }
 
-    while( $A = DB_fetchArray( $result ) )
-    {
-        $topicname = stripslashes( $A['topic'] );
+    while( $A = DB_fetchArray( $result ) ) {
+        $topicname = $A['topic'];
         $sections->set_var( 'option_url', $_CONF['site_url']
                             . '/index.php?topic=' . $A['tid'] );
         $sections->set_var( 'option_label', $topicname );
 
         $countstring = '';
-        if( $_CONF['showstorycount'] || $_CONF['showsubmissioncount'] )
-        {
+        if( $_CONF['showstorycount'] || $_CONF['showsubmissioncount'] ) {
             $countstring .= '(';
 
-            if( $_CONF['showstorycount'] )
-            {
-                if( empty( $storycount[$A['tid']] ))
-                {
+            if( $_CONF['showstorycount'] ) {
+                if( empty( $storycount[$A['tid']] )) {
                     $countstring .= 0;
-                }
-                else
-                {
+                } else {
                     $countstring .= COM_numberFormat( $storycount[$A['tid']] );
                 }
             }
 
-            if( $_CONF['showsubmissioncount'] )
-            {
-                if( $_CONF['showstorycount'] )
-                {
+            if( $_CONF['showsubmissioncount'] ) {
+                if( $_CONF['showstorycount'] ) {
                     $countstring .= '/';
                 }
-                if( empty( $submissioncount[$A['tid']] ))
-                {
+                if( empty( $submissioncount[$A['tid']] )) {
                     $countstring .= 0;
-                }
-                else
-                {
+                } else {
                     $countstring .= COM_numberFormat( $submissioncount[$A['tid']] );
                 }
             }
@@ -2417,20 +2384,16 @@ function COM_showTopics( $topic='' )
         $sections->set_var( 'option_count', $countstring );
 
         $topicimage = '';
-        if( !empty( $A['imageurl'] ))
-        {
+        if( !empty( $A['imageurl'] )) {
             $imageurl = COM_getTopicImageUrl( $A['imageurl'] );
             $topicimage = '<img src="' . $imageurl . '" alt="' . $topicname
                         . '" title="' . $topicname . '" border="0"' . XHTML . '>';
         }
         $sections->set_var( 'topic_image', $topicimage );
 
-        if(( $A['tid'] == $topic ) && ( $page == 1 ))
-        {
+        if(( $A['tid'] == $topic ) && ( $page == 1 ) && $topic != '') {
             $retval .= $sections->parse( 'item', 'inactive' );
-        }
-        else
-        {
+        } else {
             $retval .= $sections->parse( 'item', 'option' );
         }
     }

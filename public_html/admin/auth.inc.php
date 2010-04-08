@@ -261,10 +261,12 @@ if ( $_SYSTEM['admin_session'] != 0 ) {
         exit;
     } else {
         // re-init the token...
-        $new_token = SEC_createTokenGeneral('administration',$_SYSTEM['admin_session']);
-        SEC_setCookie('token',$new_token,0,$_CONF['cookie_path'],$_CONF['cookiedomain'],$_CONF['cookiesecure'],true);
-        if ( $token != '' ) {
-            DB_delete($_TABLES['tokens'],'token',DB_escapeString($token));
+        if ( !isset($_GET['stri']) ) {
+            $new_token = SEC_createTokenGeneral('administration',$_SYSTEM['admin_session']);
+            SEC_setCookie('token',$new_token,0,$_CONF['cookie_path'],$_CONF['cookiedomain'],$_CONF['cookiesecure'],true);
+            if ( $token != '' ) {
+                DB_delete($_TABLES['tokens'],'token',DB_escapeString($token));
+            }
         }
     }
 }

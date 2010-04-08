@@ -929,21 +929,33 @@ function STORY_featuredCheck()
 {
     global $_TABLES;
 
-    $curdate = date( "Y-m-d H:i:s", time() );
-
-    // Loop through each topic
+    // allow only 1 featured for frontpage
+    $sql = "SELECT sid FROM {$_TABLES['stories']} WHERE featured = 1 AND draft_flag = 0 AND frontpage = 1 AND date <= NOW() ORDER BY date DESC LIMIT 2";
+    $result = DB_query($sql);
+    $numrows = DB_numRows($result);
+    if ($numrows > 1) {
+        $F = DB_fetchArray($result);
+        // un-feature all other featured frontpage story
+        $sql = "UPDATE {$_TABLES['stories']} SET featured = 0 WHERE featured = 1 AND draft_flag = 0 AND frontpage = 1 AND date <= NOW() AND sid <> '{$F['sid']}'";
+        DB_query($sql);
+    }
+    // check all topics
     $sql = "SELECT tid FROM {$_TABLES['topics']}";
-    $result = DB_query( $sql );
-    $num = DB_numRows( $result );
-    for( $i = 0; $i < $num; $i++) {
-        $A = DB_fetchArray( $result );
-        if( DB_getItem( $_TABLES['stories'], 'COUNT(*)', "featured = 1 AND draft_flag = 0 AND tid = '{$A['tid']}' AND date <= '$curdate'" ) > 1 ) {
-            $sid = DB_getItem( $_TABLES['stories'], 'sid', "featured = 1 AND draft_flag = 0 ORDER BY date LIMIT 1" );
-            DB_query( "UPDATE {$_TABLES['stories']} SET featured = 0 WHERE sid = '$sid'" );
+    $topicResult = DB_query($sql);
+    $topicRows = DB_numRows($topicResult);
+    for($i = 0; $i < $topicRows; $i++) {
+        $T = DB_fetchArray($topicResult);
+        $sql = "SELECT sid FROM {$_TABLES['stories']} WHERE featured = 1 AND draft_flag = 0 AND tid = '{$T['tid']}' AND date <= NOW() ORDER BY date DESC LIMIT 2";
+        $storyResult = DB_query($sql);
+        $storyRows   = DB_numRows($storyResult);
+        if ($storyRows > 1) {
+            // OK, we have two or more featured stories in a topic, fix that
+            $S = DB_fetchArray($storyResult);
+            $sql = "UPDATE {$_TABLES['stories']} SET featured = 0 WHERE featured = 1 AND draft_flag = 0 AND tid = '{$T['tid']}' AND date <= NOW() AND sid <> '{$S['sid']}'";
+            DB_query($sql);
         }
     }
 }
-
 
 
 /**

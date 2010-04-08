@@ -308,6 +308,12 @@ function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_foru
         exit();
     }
 
+    // ensure move_to_topic is a parent id
+    $move_to_topic_pid = DB_getItem($_TABLES['gf_topic'],'pid','id='.$move_to_topic);
+    if ( $move_to_topic_pid != 0 && $move_to_topic_pid != '' ) {
+        $move_to_topic = $move_to_topic_pid;
+    }
+
     if ($curpostpid == 0 ) {
         $subject = DB_escapeString(DB_getItem($_TABLES['gf_topic'],'subject','id='.$move_to_topic));
         $pidDate = DB_getItem($_TABLES['gf_topic'],'date','id='.$move_to_topic);

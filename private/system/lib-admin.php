@@ -348,7 +348,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     }
 
     // Check if the delete checkbox and support for the delete all feature should be displayed
-    if (is_array($options) AND ($options['chkdelete'] OR $options['chkselect'])) {
+    if (is_array($options) AND ((isset($options['chkdelete']) && $options['chkdelete']) OR (isset($options['chkselect']) && $options['chkselect']))) {
         $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form);"' . XHTML . '>');
         $admin_templates->set_var('class', 'admin-list-field');
         $admin_templates->set_var('header_column_style', 'style="text-align:center;width:25px;"'); // always center checkbox
@@ -557,7 +557,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     for ($i = 0; $i < $nrows; $i++) { # now go through actual data
         $A = DB_fetchArray($result);
         $this_row = false; # as long as no fields are returned, dont print row
-        if (is_array($options) AND ($options['chkdelete'] OR $options['chkselect'])) {
+        if (is_array($options) AND ((isset($options['chkdelete']) && $options['chkdelete']) OR (isset($options['chkselect']) && $options['chkselect']))) {
             $admin_templates->set_var('class', 'admin-list-field');
             $admin_templates->set_var('column_style', 'style="text-align:center;"'); // always center checkbox
             $admin_templates->set_var('itemtext', '<input type="checkbox" name="delitem[]" value="' . $A[$options['chkfield']].'"' . XHTML . '>');
@@ -622,7 +622,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
 
     // if we displayed data, and chkselect option is available, display the
     // actions row for all selected items. provide a delete action as a minimum
-    if (is_array($options) AND ($options['chkdelete'] OR $options['chkselect']) AND $nrows > 0 ) {
+    if (is_array($options) AND ((isset($options['chkdelete']) && $options['chkdelete']) OR (isset($options['chkselect']) && $options['chkselect'])) AND $nrows > 0 ) {
         $actions = '<td style="text-align:center;">'
             . '<img src="' . $_CONF['layout_url'] . '/images/admin/action.' . $_IMAGE_TYPE . '"></td>';
         $delete_action = '<input name="delbutton" type="image" src="'

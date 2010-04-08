@@ -729,6 +729,7 @@ $LANG_MG01 = array (
     'search_views'              => 'Show Views Counter in Search Results',
     'search_rating'             => 'Show Rating in Search Results',
     'gallery_only'              => 'Media Gallery Replaces glFusion Index Page',
+    'all_nhp'                   => 'All topics (No Homepage)',
 );
 
 // error messages

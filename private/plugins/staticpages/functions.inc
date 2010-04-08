@@ -809,10 +809,16 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
     $retval = '';
     $moresql = "(sp_where = " . (int) $where . ") AND (sp_status = 1) AND ";
 
-    if (empty ($topic)) {
-        $moresql .= "((sp_tid = 'none') OR (sp_tid = 'all'))";
+    if( !COM_onFrontpage() ) {
+        $hpsql = " OR (sp_tid = 'allnhp') ";
     } else {
-        $moresql .= "((sp_tid = '".DB_escapeString($topic)."') OR (sp_tid = 'all'))";
+        $hpsql = '';
+    }
+
+    if (empty ($topic)) {
+        $moresql .= "((sp_tid = 'none') OR (sp_tid = 'all')".$hpsql.")";
+    } else {
+        $moresql .= "((sp_tid = '".DB_escapeString($topic)."') OR (sp_tid = 'all')".$hpsql.")";
     }
 
     if ($_SP_CONF['sort_by'] == 'date') {

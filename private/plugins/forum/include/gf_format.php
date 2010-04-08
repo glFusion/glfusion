@@ -276,7 +276,7 @@ function do_bbcode_color  ($action, $attributes, $content, $params, $node_object
 }
 
 function do_bbcode_code($action, $attributes, $content, $params, $node_object) {
-    global $CONF_FORUM, $oldPost;
+    global $CONF_FORUM, $oldPost, $pm;
 
     if ( $action == 'validate') {
         return true;
@@ -308,7 +308,7 @@ function do_bbcode_code($action, $attributes, $content, $params, $node_object) {
     $codeblock = str_replace('{','&#123;',$codeblock);
     $codeblock = str_replace('}','&#125;',$codeblock);
 
-    if ( $CONF_FORUM['use_wysiwyg_editor'] == 1 ) {
+    if ( $CONF_FORUM['use_wysiwyg_editor'] == 1 || $pm == 'html' ) {
         $codeblock = str_replace('&lt;','<',$codeblock);
         $codeblock = str_replace('&gt;','>',$codeblock);
         $codeblock = str_replace('&amp;','&',$codeblock);
@@ -497,10 +497,16 @@ function gf_checkHTML($str) {
 
 
 function gf_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
-    global $_CONF, $CONF_FORUM;
+    global $_CONF, $CONF_FORUM, $pm;
 
     $bbcode = new StringParser_BBCode ();
     $bbcode->setGlobalCaseSensitive (false);
+
+    if ($postmode == 'text' ) {
+        $pm = 'text';
+    } else {
+        $pm = 'html';
+    }
 
     if ( $postmode == 'text') {
         $bbcode->addParser (array ('block', 'inline', 'link', 'listitem'), 'bbcode_htmlspecialchars');
@@ -1513,7 +1519,7 @@ function make_clickable_callback($type, $whitespace, $url, $relative_url, $class
     $text   = htmlspecialchars($text);
     $append = htmlspecialchars($append);
 
-    $html   = "$whitespace<!-- $tag --><a$class href=\"$url\">$text</a><!-- $tag -->$append";
+    $html   = "$whitespace<a$class href=\"$url\">$text</a>$append";
 
     return $html;
 }

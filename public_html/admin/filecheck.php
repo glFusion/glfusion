@@ -568,7 +568,7 @@ switch ($action) {
         if (empty($results)) {
             $display .= FILECHECK_initMenu($max_time);
             $display .= $LANG_FILECHECK['working'] . COM_siteFooter();
-            $display .= COM_refresh($_CONF['site_admin_url'] . '/filecheck.php?scan=x');
+            $display .= COM_refresh($_CONF['site_admin_url'] . '/filecheck.php?scan=x&amp;stri=x');
         } else {
             $display .= $results;
             $display .= COM_siteFooter();

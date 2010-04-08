@@ -96,26 +96,30 @@ USES_lib_admin();
 
 $retval = '';
 
+$cacheID = DB_getItem($_TABLES['vars'],'value','name="cacheid"');
+
 if ( !isset($_CONF['css_cache_filename']) ) {
     $_CONF['css_cache_filename'] = 'stylecache_';
 }
+
 if ( $_SYSTEM['use_direct_style_js'] ) {
-    $cacheURL  = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css?t='.$_CONF['theme'];
+    $cacheURL = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css?t='.$_CONF['theme'].'&amp;i='.$cacheID;
 } else {
-    $cacheURL  = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'];
+    $cacheURL = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'].'&amp;i='.$cacheID;
 }
-$cacheURL  = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'];
+
 $T->set_var('style_cache_url',$cacheURL);
 if ( !isset($_CONF['js_cache_filename']) ) {
     $_CONF['js_cache_filename'] = 'jscache_';
 }
 
 if ( $_SYSTEM['use_direct_style_js'] ) {
-    $cacheURL  = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].'.js?t='.$_CONF['theme'];
+    $js_cache_url    = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].$_CONF['theme'].'.js?t='.$_CONF['theme'].'&amp;i='.$cacheID;
 } else {
-    $cacheURL  = $_CONF['site_url'].'/js.php?t='.$_CONF['theme'];
+    $js_cache_url    = $_CONF['site_url'].'/js.php?t='.$_CONF['theme'].'&amp;i='.$cacheID;
 }
-$T->set_var('js_cache_url',$cacheURL);
+
+$T->set_var('js_cache_url',$js_cache_url);
 $T->set_var('theme',$_CONF['theme']);
 
 $forumList = array();

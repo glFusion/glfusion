@@ -2711,7 +2711,7 @@ function plugin_centerblock_mediagallery($where=1,$page=1,$topic =''){
         }
     }
 
-    $result = DB_query("SELECT album_id, cbpage, cbposition FROM {$_TABLES['mg_albums']} WHERE featured='1' AND (cbpage='" . DB_escapeString($sTopic) . "' OR cbpage='all') " . COM_getPermSQL('and') . " LIMIT 1");
+    $result = DB_query("SELECT album_id, cbpage, cbposition FROM {$_TABLES['mg_albums']} WHERE featured='1' AND (cbpage='" . DB_escapeString($sTopic) . "' OR cbpage='all' OR cbpage='allnhp') " . COM_getPermSQL('and') . " LIMIT 1");
 
     if (DB_numRows($result) == 1) {
         list($album_id,$cbpage,$cbpos) = DB_fetchArray($result);
@@ -2721,7 +2721,9 @@ function plugin_centerblock_mediagallery($where=1,$page=1,$topic =''){
             $cbenable = 0;
         } elseif ($cbpage == 'all' && $page > 1 ){
             $cbenable = 0;
-        } elseif ($cbpage != 'none' && $cbpage != 'all' && $cbpage != $topic) { // $cbpage != $topic) {
+        } elseif ($cbpage == 'allnhp' && COM_onFrontpage() ) {
+            $cbenable = 0;
+        } elseif ($cbpage != 'allnhp' && $cbpage != 'none' && $cbpage != 'all' && $cbpage != $topic) { // $cbpage != $topic) {
             $cbenable = 0;
         } else
             $cbenable = 1;
@@ -3709,7 +3711,7 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
         $A = DB_fetchArray($result);
 
         $aid = $A['album_id'];
-        if ( $MG_albums[$aid]->access > 0 ) {
+        if ( isset($MG_albums[$aid]) && $MG_albums[$aid]->access > 0 ) {
             $props = array();
             foreach ($properties as $p) {
                 switch ($p) {
@@ -3750,7 +3752,7 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
         }
 
         $mapped = array();
-        if ( is_array($props) ) {
+        if ( isset($props) && is_array($props) ) {
             foreach ($props as $key => $value) {
                 if ($id == '*') {
                     if ($value != '') {
