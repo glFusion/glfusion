@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -470,16 +470,36 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
 
                     DB_query("DELETE FROM {$_TABLES['gf_log']} WHERE topic='".DB_escapeString($id)."' and time > 0");
 
+                    $status = 0;
+                    // get our options...
+                    if ( isset($_POST['disable_bbcode']) && $_POST['disable_bbcode'] == 1 ) {
+                        $disable_bbcode_val = ' checked="checked"';
+                        $status += DISABLE_BBCODE;
+                    } else {
+                        $disable_bbcode_val = '';
+                    }
+                    if ( isset($_POST['disable_smilies']) && $_POST['disable_smilies'] == 1 ) {
+                        $disable_smilies_val = ' checked="checked"';
+                        $status += DISABLE_SMILIES;
+                    } else {
+                        $disable_smilies_val = '';
+                    }
+                    if ( isset($_POST['disable_urlparse']) && $_POST['disable_urlparse'] == 1 ) {
+                        $disable_urlparse_val = ' checked="checked"';
+                        $status += DISABLE_URLPARSE;
+                    } else {
+                        $disable_urlparse_val = '';
+                    }
 
                     $postmode = gf_chkpostmode($postmode,$postmode_switch);
                     $subject = gf_preparefordb($_POST['subject'],'text');
                     $comment = gf_preparefordb($_POST['comment'],$postmode);
                     $mood = COM_applyFilter($_POST['mood']);
 
-                    $fields = "name,date,subject,comment,postmode,ip,mood,uid,pid,forum";
+                    $fields = "name,date,subject,comment,postmode,ip,mood,uid,pid,forum,status";
                     $sql  = "INSERT INTO {$_TABLES['gf_topic']} ($fields) ";
                     $sql .= "VALUES  ('$name','$date','$subject','$comment',";
-                    $sql .= "'$postmode','".DB_escapeString($REMOTE_ADDR)."','".DB_escapeString($mood)."','".DB_escapeString($uid)."','".DB_escapeString($id)."','".DB_escapeString($forum)."')";
+                    $sql .= "'$postmode','".DB_escapeString($REMOTE_ADDR)."','".DB_escapeString($mood)."','".DB_escapeString($uid)."','".DB_escapeString($id)."','".DB_escapeString($forum)."',".$status.")";
                     DB_query($sql);
 
                     // Find the id of the last inserted topic
