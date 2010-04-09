@@ -81,7 +81,24 @@ if ( isset($_POST['loginname']) && !empty($_POST['loginname']) && isset($_POST['
         $message = $LANG20[2];
     } else {
         $passwd = COM_stripslashes($_POST['passwd']);
-        $status = SEC_authenticate($loginname, $passwd, $uid);
+        if ($_CONF['user_login_method']['3rdparty'] && 
+            isset($_POST['service']) && !empty($_POST['service'])) {
+            /* Distributed Authentication */
+            $service = COM_stripslashes($_POST['service']);
+            // safety check to ensure this user is really a known remote user
+            $sql = "SELECT uid 
+                    FROM {$_TABLES['users']} 
+                    WHERE remoteusername='". DB_escapeString($loginname)."' 
+                    AND remoteservice='". DB_escapeString($service)."'";
+            $result = DB_query($sql);
+            if ( DB_numRows($result) != 1 ) {
+                $status = -1;
+            } else {
+                $status = SEC_remoteAuthentication($loginname, $passwd, $service, $uid);
+            }
+        } else {
+            $status = SEC_authenticate($loginname, $passwd, $uid);
+        }
         if ( $status != USER_ACCOUNT_ACTIVE ) {
             $message = $LANG20[2];
         }
