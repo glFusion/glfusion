@@ -37,10 +37,8 @@ require_once $_CONF['path'] . 'filecheck_data.php';
 
 USES_lib_admin();
 
-$display = '';
-
 if (!SEC_inGroup ('Root')) {
-    $display .= COM_siteHeader ('menu', $MESSAGE[30])
+    $display = COM_siteHeader ('menu', $MESSAGE[30])
         . COM_startBlock ($MESSAGE[30], '',COM_getBlockTemplate ('_msg_block', 'header'))
         . $MESSAGE[200]
         . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
@@ -108,11 +106,10 @@ function FILECHECK_scanNegative()
                 // we were not allowed to recurse here, check manually
                 if (!is_dir($rdir)) {
                     $data_arr[] = array(
-                        'where' => $where,
-                        'path'  => $rdir,
-                        'file'  => '',
-                        'type'  => 'D',
-                        'delta' => '-'
+                        'where'     => $where,
+                        'type'      => 'D',
+                        'delta'     => '-',
+                        'location'  => $rdir . '/',
                     );
                 }
                 break;
@@ -121,11 +118,10 @@ function FILECHECK_scanNegative()
                 // we recursed here, unpinged dirs must be missing
                 if (!isset($dir['ping'])) {
                     $data_arr[] = array(
-                        'where' => $where,
-                        'path'  => $rdir,
-                        'file'  => '',
+                        'where'     => $where,
                         'type'  => 'D',
-                        'delta' => '-'
+                        'delta' => '-',
+                        'location'  => $rdir . '/',
                     );
                 }
                 break;
@@ -159,21 +155,19 @@ function FILECHECK_scanNegative()
             if ($test == 'R') {
                 // yes, we were allowed to look here, and the file was not found
                 $data_arr[] = array(
-                    'where' => $where,
-                    'path'  => $dirname,
-                    'file'  => $filename,
-                    'type'  => 'F',
-                    'delta' => '-'
-                );
+                    'where'     => $where,
+                    'type'      => 'F',
+                    'delta'     => '-',
+                    'location'  => $rdir . '/',
+               );
             } else {
                 // no, we were not allowed to look here, so test manually
                 if(!file_exists($rdir)) {
                     $data_arr[] = array(
-                        'where' => $where,
-                        'path'  => $dirname,
-                        'file'  => $filename,
-                        'type'  => 'F',
-                        'delta' => '-'
+                        'where'     => $where,
+                        'type'      => 'F',
+                        'delta'     => '-',
+                        'location'  => $rdir . '/',
                     );
                 }
             }
@@ -233,11 +227,10 @@ function FILECHECK_scanPositive( $path = '.', $where, $level = 0, $prefix=array(
                     // flag unbundled plugin dirs that are discovered
                     if ($test == 'P') {
                         $data_arr[] = array(
-                            'where' => $where,
-                            'path'  => $path . '/' . $file,
-                            'file'  => '',
-                            'type'  => 'P',
-                            'delta' => '+'
+                            'where'     => $where,
+                            'type'      => 'P',
+                            'delta'     => '+',
+                            'location'  => $path . '/' . $file,
                         );
                     }
                 } else {
@@ -245,11 +238,10 @@ function FILECHECK_scanPositive( $path = '.', $where, $level = 0, $prefix=array(
                     // flag directories associated with unbundled plugins
                     if ($test <> 'I') {
                         $data_arr[] = array(
-                            'where' => $where,
-                            'path'  => $path . '/' . $file,
-                            'file'  => '',
-                            'type'  => 'D',
-                            'delta' => '+'
+                            'where'     => $where,
+                            'type'      => 'D',
+                            'delta'     => '+',
+                            'location'  => $path . '/' . $file,
                         );
                     }
                     // fix to recurse unrecognized directories
@@ -269,10 +261,9 @@ function FILECHECK_scanPositive( $path = '.', $where, $level = 0, $prefix=array(
                 if (empty($test)) {
                     // file is not recognized, add to list
                     $data_arr[] = array('where' => $where,
-                                        'path'  => $path,
-                                        'file'  => $file,
                                         'type'  => 'F',
-                                        'delta' => '+'
+                                        'delta' => '+',
+                                        'location'  => $path . '/' . $file,
                     );
                 } else {
                     $glfFile[$i]['ping']=1;
@@ -399,28 +390,19 @@ function FILECHECK_addPlugins()
     return true;
 }
 
+function FILECHECK_chkListField($A)
+{
+    $retval = (($A['type'] == 'F') && ($A['delta'] == '+') && FILECHECK_isWriteable($A['location'])) ? true : false;
+    return $retval;
+}
+
 function FILECHECK_getListField($fieldname, $fieldvalue, $A, $icon_arr)
 {
     global $_CONF, $LANG_FILECHECK;
 
-    static $counter = 0;
-
     $retval = '<span style="font-size:smaller">';
 
     switch($fieldname) {
-
-        case 'delete':
-            if ($A['type'] == 'F' && $A['delta'] == '+') {
-                if (FILECHECK_isWriteable($A['path'] . '/' . $A['file'])) {
-                    $retval = '<input type="checkbox" name="sel[]" value="' . $counter . '"'.XHTML.'>';
-                    $retval .= '<input type="hidden" name="dir[' . $counter . ']" value="';
-                    $retval .= $A['path'] . '/' . $A['file'] .'" '.XHTML.'>';
-                    $counter++;
-                }
-            } else {
-                    $retval = '<input type="checkbox" name="disabled" value="x" DISABLED'.XHTML.'>';
-            }
-            break;
 
         case 'type':
             switch ($A['type']) {
@@ -438,10 +420,6 @@ function FILECHECK_getListField($fieldname, $fieldvalue, $A, $icon_arr)
 
         case 'delta':
             $retval .= ($fieldvalue<>'-') ? $type . ' ' . $LANG_FILECHECK['added'] : $type . ' ' . $LANG_FILECHECK['missing'];
-            break;
-
-        case 'location':
-            $retval .= $A['path'] . '/' . $A['file'];
             break;
 
         default:
@@ -480,7 +458,6 @@ function FILECHECK_scan()
 
         // build the list of results
         $header_arr = array(
-            array('text' => $LANG_ADMIN['delete'],   'field' => 'delete', 'align' => 'center'),
             array('text' => $LANG_FILECHECK['where'], 'field' => 'where', 'align' => 'center'),
             array('text' => $LANG_FILECHECK['type'], 'field' => 'type', 'align' => 'center'),
             array('text' => $LANG_FILECHECK['delta'], 'field' => 'delta', 'align' => 'center'),
@@ -491,12 +468,18 @@ function FILECHECK_scan()
             'form_url'   => $_CONF['site_admin_url'] . '/filecheck.php'
         );
 
-        $bottom = '<br' . XHTML . '><input type="submit" onclick="return confirm(\'' . $LANG_FILECHECK['confirm'] . '\');" name="delete" value="' . $LANG_ADMIN['delete'] . '"' . XHTML . '>'
-                    . '&nbsp;&nbsp;<input type="submit" name="cancel" value="' . $LANG_ADMIN['cancel'] . '"' . XHTML . '>'
-                    . '&nbsp;&nbsp;' . sprintf($LANG_FILECHECK['elapsed'], $elapsed_time);
-        $form_arr = array('bottom' => $bottom);
+        $option_arr = array(
+            'chkselect' => true,
+            'chkfield' => 'location',
+            'chkname' => 'actionitem',
+            'chkfunction' => 'FILECHECK_chkListField',
+        );
 
-        $retval .= ADMIN_simpleList("FILECHECK_getListField", $header_arr, $text_arr, $data_arr, NULL, $form_arr);
+        $top = sprintf($LANG_FILECHECK['elapsed'], $elapsed_time);
+
+        $form_arr = array('top' => $top);
+
+        $retval .= ADMIN_simpleList("FILECHECK_getListField", $header_arr, $text_arr, $data_arr, $option_arr, $form_arr );
     }
     return $retval;
 }
@@ -509,20 +492,20 @@ function FILECHECK_delete()
         return '';
     }
 
-    $n = count($_POST['sel']);
+    $n = count($_POST['actionitem']);
     for ($i=0; $i < $n; $i++) {
-        $index = COM_applyFilter($_POST['sel'][$i]);
-        $filespec = COM_applyFilter($_POST['dir'][$index]);
+        $filespec = COM_applyFilter($_POST['actionitem'][$i]);
         @unlink($filespec);
         COM_errorLog('filecheck.php: admin deleted: ' . $filespec);
     }
     return $n;
 }
 
+
 // MAIN ========================================================================
 
 $action = '';
-$expected = array('delete','cancel','scan','expired');
+$expected = array('delbutton_x','cancel','scan','expired');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
@@ -539,13 +522,17 @@ $display = COM_siteHeader();
 
 switch ($action) {
 
+    case 'scan':
+        $results = FILECHECK_scan();
+        if (!$results) {
+            echo COM_refresh($_CONF['site_admin_url'] . '/filecheck.php?expired=x');
+            exit;
+        }
+        break;
+
     case 'cancel':
         echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         exit;
-        break;
-
-    case 'delete':
-        $files = FILECHECK_delete();
         break;
 
     case 'expired' :
@@ -553,27 +540,21 @@ switch ($action) {
         $display .= $LANG_FILECHECK['aborted'] . COM_siteFooter();
         break;
 
-    case 'scan':
-        $results = FILECHECK_scan();
-        if (!$results) {
-            echo COM_refresh($_CONF['site_admin_url'] . '/filecheck.php?expired=x');
-            exit;
-        }
-
-    default:
+    case 'delbutton_x':
+        $files = FILECHECK_delete();
         if ($files > 0) {
             $desc = ($files > 1) ? 'files were' : 'file was';
             $display .= COM_showMessageText(sprintf($LANG_FILECHECK['removed'],$files,$desc));
         }
-        if (empty($results)) {
-            $display .= FILECHECK_initMenu($max_time);
-            $display .= $LANG_FILECHECK['working'] . COM_siteFooter();
-            $display .= COM_refresh($_CONF['site_admin_url'] . '/filecheck.php?scan=x&amp;stri=x');
-        } else {
-            $display .= $results;
-            $display .= COM_siteFooter();
-        }
-        break;
+}
+
+if (empty($results)) {
+    $display .= FILECHECK_initMenu($max_time);
+    $display .= $LANG_FILECHECK['working'] . COM_siteFooter();
+    $display .= COM_refresh($_CONF['site_admin_url'] . '/filecheck.php?scan=x&amp;stri=x');
+} else {
+    $display .= $results;
+    $display .= COM_siteFooter();
 }
 
 echo $display;

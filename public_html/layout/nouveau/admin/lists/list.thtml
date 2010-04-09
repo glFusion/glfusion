@@ -9,6 +9,7 @@
                                     {header_row}
                                     </tr>
                                     {item_row}
+                                    {footer_row}
                                     {action_row}
                                 </table>
                                 <div>

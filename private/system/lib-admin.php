@@ -44,39 +44,71 @@ if (!defined ('GVERSION')) {
 }
 
 /**
+* Stub function for generation of checkbox
+*
+*/
+function ADMIN_chkDefault($A = array())
+{
+    return true;
+}
+
+/**
+* Create a list of admin icons, for use in admin/list functions
+*
+* These images should be available in public_html/layout/theme/images/admin
+*
+*/
+function ADMIN_getIcons()
+{
+    global $_CONF, $_IMAGE_TYPE, $LANG_ADMIN;
+
+    $icons_type_arr = array('edit', 'copy', 'delete', 'list', 'mail', 'group', 'user', 'check', 'greycheck', 'cross', 'disk', 'addchild', 'blank');
+    $icon_arr = array();
+    foreach ($icons_type_arr as $icon_type) {
+        $icon_url = "{$_CONF['layout_url']}/images/admin/$icon_type.$_IMAGE_TYPE";
+        $alt = (isset($LANG_ADMIN[$icon_type])) ? $LANG_ADMIN[$icon_type] : '';
+        $attr['title'] = $alt;
+        $icon_arr[$icon_type] = COM_createImage($icon_url, $alt, $attr);
+    }
+    return $icon_arr;
+}
+
+
+/**
 * Common function used in Admin scripts to display a list of items
 *
 * @param    string  $fieldfunction  Name of a function used to display the list item row details
 * @param    array   $header_arr     array of header fields with sortables and table fields
 * @param    array   $text_arr       array with different text strings
 * @param    array   $data_arr       array with sql query data - array of list records
-* @param    array   $options        array of options - intially just used for the Check-All feature
+* @param    array   $options_arr    array of options - used for check-all feature
 * @param    array   $form_arr       optional extra forms at top or bottom
 * @return   string                  HTML output of function
 *
 */
 function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
-                           $data_arr, $options = '', $form_arr='')
+                           $data_arr, $options_arr = '', $form_arr='')
 {
     global $_CONF, $_TABLES, $LANG01, $LANG_ADMIN, $LANG_ACCESS, $MESSAGE,
            $_IMAGE_TYPE;
 
     $retval = '';
 
-    $help_url = '';
-    if (!empty($text_arr['help_url'])) {
-        $help_url = $text_arr['help_url'];
-    }
+    // process text_arr for title, help url and form url
+    $title = (is_array($text_arr) AND !empty($text_arr['title'])) ? $text_arr['title'] : '';
+    $help_url = (is_array($text_arr) AND !empty($text_arr['help_url'])) ? $text_arr['help_url'] : '';
+    $form_url = (is_array($text_arr) AND !empty($text_arr['form_url'])) ? $text_arr['form_url'] : '';
+    $no_data = (is_array($text_arr) AND !empty($text_arr['no_data'])) ? $text_arr['no_data'] : '';
 
-    $title = '';
-    if (!empty($text_arr['title'])) {
-        $title = $text_arr['title'];
-    }
-
-    $form_url = '';
-    if (!empty($text_arr['form_url'])) {
-        $form_url = $text_arr['form_url'];
-    }
+    // process options_arr for chkdelete/chkselect options if any
+    $chkselect = (is_array($options_arr) AND
+                   ((isset($options_arr['chkselect']) AND $options_arr['chkselect']) OR
+                   (isset($options_arr['chkdelete']) AND $options_arr['chkdelete']))) ? true : false;
+    $chkname = (is_array($options_arr) AND isset($options_arr['chkname'])) ? $options_arr['chkname'] : 'delitem';
+    $chkfield = (is_array($options_arr) AND isset($options_arr['chkfield'])) ? $options_arr['chkfield'] : '';
+    $chkactions = (is_array($options_arr) AND isset($options_arr['chkactions'])) ? $options_arr['chkactions'] : '';
+    $chkfunction = (is_array($options_arr) AND isset($options_arr['chkfunction'])) ? $options_arr['chkfunction'] : 'ADMIN_chkDefault';
+    $chkminimum = (is_array($options_arr) AND isset($options_arr['chkminimum'])) ? $options_arr['chkminimum'] : 1;
 
     $admin_templates = new Template($_CONF['path_layout'] . 'admin/lists');
     $admin_templates->set_file (
@@ -98,30 +130,17 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
         $admin_templates->set_var('formfields_bottom', $form_arr['bottom']);
     }
 
-    # define icon paths. Those will be transmitted to $fieldfunction.
-    $icons_type_arr = array('edit', 'copy', 'delete', 'list', 'mail', 'group', 'user', 'check', 'greycheck', 'cross', 'disk', 'addchild', 'blank');
-    $icon_arr = array();
-    foreach ($icons_type_arr as $icon_type) {
-        $icon_url = "{$_CONF['layout_url']}/images/admin/$icon_type.$_IMAGE_TYPE";
-        $alt = (isset($LANG_ADMIN[$icon_type])) ? $LANG_ADMIN[$icon_type] : '';
-        $attr['title'] = $alt;
-        $icon_arr[$icon_type] = COM_createImage($icon_url, $alt, $attr);
-    }
+    // retrieve the array of admin icons
+    $icon_arr = ADMIN_getIcons();
 
-    // Check if the delete checkbox and support for the delete all feature should be displayed
-    $min_data = 1;
-    if (is_array($options) && isset($options['chkminimum'])) {
-        $min_data = $options['chkminimum'];
-    }
-
-    // This is the number of columns in each row
+    // number of columns in each row
     $ncols = count( $header_arr );
 
-    // This is the number of rows/records to display
+    // number of rows/records to display
     $nrows = count($data_arr);
 
-    if ($nrows > $min_data AND is_array($options) AND ((isset($options['chkdelete']) && $options['chkdelete']) OR (isset($options['chkselect']) && $options['chkselect']))) {
-        $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form);"' . XHTML . '>');
+    if ($nrows > $chkminimum AND $chkselect) {
+        $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form, \'' . $chkname . '\');"' . XHTML . '>');
         $admin_templates->set_var('class', 'admin-list-field');
         $admin_templates->set_var('header_column_style', 'style="text-align:center;width:25px;"'); // always center checkbox
         $admin_templates->parse('header_row', 'header', true);
@@ -155,21 +174,21 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
     }
 
     if ($nrows == 0) {
-        if (isset($text_arr['no_data'])) {
-            $message = $text_arr['no_data'];
-        } else {
-            $message = $LANG_ADMIN['no_results'];
-        }
+        $message = (isset($no_data)) ? $no_data : $LANG_ADMIN['no_results'];
         $admin_templates->set_var('message', $message);
     } else if ($data_arr === false) {
         $admin_templates->set_var('message', $LANG_ADMIN['data_error']);
     } else {
         $admin_templates->set_var('show_message', 'display:none;');
         for ($i = 0; $i < $nrows; $i++) {
-            if ($nrows > $min_data AND is_array($options) AND ((isset($options['chkdelete']) && $options['chkdelete']) OR (isset($options['chkselect']) && $options['chkselect']))) {
-                $admin_templates->set_var('itemtext', '<input type="checkbox" name="delitem[]" value="' . $data_arr[$i][$options['chkfield']].'"' . XHTML . '>');
+            if ($nrows > $chkminimum AND $chkselect) {
                 $admin_templates->set_var('class', 'admin-list-field');
                 $admin_templates->set_var('column_style', 'style="text-align:center;"'); // always center checkbox
+                if ($chkfunction($data_arr[$i])) {
+                    $admin_templates->set_var('itemtext', '<input type="checkbox" name="' . $chkname . '[]" value="' . $data_arr[$i][$chkfield] . '" title="' . $LANG_ADMIN['select'] . '"' . XHTML . '>');
+                } else {
+                    $admin_templates->set_var('itemtext', '<input type="checkbox" name="disabled" value="x" style="visibility:hidden" DISABLED'.XHTML.'>');
+                }
                 $admin_templates->parse('item_field', 'field', true);
             }
             for ($j = 0; $j < $ncols; $j++) {
@@ -209,13 +228,16 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
             }
             $admin_templates->set_var('cssid', ($i%2)+1);
             $admin_templates->parse('item_row', 'row', true);
+
             $admin_templates->clear_var('item_field');
         }
+    $footer_cols = ($chkselect) ? $ncols + 1 : $ncols;
+    $admin_templates->set_var('footer_row', '<tr><td colspan="' . $footer_cols . '"><div style="margin:2px 0 2px 0;border-top:1px solid #cccccc"></div></td></tr>');
     }
 
     // if we displayed data, and chkselect option is available, display the
     // actions row for all selected items. provide a delete action as a minimum
-    if ($nrows > $min_data AND is_array($options) AND ((isset($options['chkdelete']) && $options['chkdelete']) OR (isset($options['chkselect']) && $options['chkselect']))) {
+    if ($nrows > $chkminimum AND $chkselect) {
         $actions = '<td style="text-align:center;">'
             . '<img src="' . $_CONF['layout_url'] . '/images/admin/action.' . $_IMAGE_TYPE . '"></td>';
         $delete_action = '<input name="delbutton" type="image" src="'
@@ -224,7 +246,7 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
             . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
             . XHTML . '>&nbsp;&nbsp;' . $LANG_ADMIN['delete'];
         $actions .= '<td colspan="' . $ncols . '">' . $LANG_ADMIN['action'] . '&nbsp;&nbsp;&nbsp;' . $delete_action;
-        $actions .= (!empty($options['actions'])) ? $options['actions'] . '</td>' : '</td>';
+        $actions .= (!empty($chkactions)) ? $chkactions . '</td>' : '</td>';
         $admin_templates->set_var('actions', $actions);
         $admin_templates->parse('action_row', 'arow', true);
     }
@@ -254,14 +276,14 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
 * @param    array   $defsort_arr    default sorting values
 * @param    string  $filter         additional drop-down filters
 * @param    string  $extra          additional values passed to fieldfunction
-* @param    array   $options        array of options - intially just used for the Check-All feature
+* @param    array   $options_arr    array of options - used for check-all feature
 * @param    array   $form_arr       optional extra forms at top or bottom
 * @return   string                  HTML output of function
 *
 */
 function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
             $query_arr, $defsort_arr, $filter = '', $extra = '',
-            $options = '', $form_arr='')
+            $options_arr = '', $form_arr='')
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_ACCESS, $LANG01, $_IMAGE_TYPE, $MESSAGE;
 
@@ -310,20 +332,31 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $curpage = 1; #current page has to be larger 0
     }
 
-    $help_url = ''; # do we have a help url for the block-header?
-    if (!empty ($text_arr['help_url'])) {
-        $help_url = $text_arr['help_url'];
+    // process text_arr for title, help url and form url
+    $title = (is_array($text_arr) AND !empty($text_arr['title'])) ? $text_arr['title'] : '';
+    $help_url = (is_array($text_arr) AND !empty($text_arr['help_url'])) ? $text_arr['help_url'] : '';
+    $form_url = (is_array($text_arr) AND !empty($text_arr['form_url'])) ? $text_arr['form_url'] : '';
+
+    // determine what extra options we should use (search, limit, paging)
+    if (isset($text_arr['has_extras']) && $text_arr['has_extras']) { # old option, denotes all
+        $has_search = true;
+        $has_limit = true;
+        $has_paging = true;
+    } else {
+        $has_search = (isset($text_arr['has_search']) && $text_arr['has_search']) ? true : false;
+        $has_limit = (isset($text_arr['has_limit']) && $text_arr['has_limit']) ? true : false;
+        $has_paging = (isset($text_arr['has_paging']) && $text_arr['has_paging']) ? true : false;
     }
 
-    $form_url = ''; # what is the form-url for the search button and list sorters?
-    if (!empty ($text_arr['form_url'])) {
-        $form_url = $text_arr['form_url'];
-    }
-
-    $title = ''; # what is the title of the page?
-    if (!empty ($text_arr['title'])) {
-        $title = $text_arr['title'];
-    }
+    // process options_arr for chkdelete/chkselect options if any
+    $chkselect = (is_array($options_arr) AND
+                   ((isset($options_arr['chkselect']) AND $options_arr['chkselect']) OR
+                   (isset($options_arr['chkdelete']) AND $options_arr['chkdelete']))) ? true : false;
+    $chkname = (is_array($options_arr) AND isset($options_arr['chkname'])) ? $options_arr['chkname'] : 'delitem';
+    $chkfield = (is_array($options_arr) AND isset($options_arr['chkfield'])) ? $options_arr['chkfield'] : '';
+    $chkactions = (is_array($options_arr) AND isset($options_arr['chkactions'])) ? $options_arr['chkactions'] : '';
+    $chkfunction = (is_array($options_arr) AND isset($options_arr['chkfunction'])) ? $options_arr['chkfunction'] : 'ADMIN_chkDefault';
+    $chkminimum = (is_array($options_arr) AND isset($options_arr['chkminimum'])) ? $options_arr['chkminimum'] : 1;
 
     # get all template fields.
     $admin_templates = new Template($_CONF['path_layout'] . 'admin/lists');
@@ -348,33 +381,14 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     }
 
     // Check if the delete checkbox and support for the delete all feature should be displayed
-    if (is_array($options) AND ((isset($options['chkdelete']) && $options['chkdelete']) OR (isset($options['chkselect']) && $options['chkselect']))) {
-        $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form);"' . XHTML . '>');
+    if ($chkselect) {
+        $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form,\'' . $chkname . '\');"' . XHTML . '>');
         $admin_templates->set_var('class', 'admin-list-field');
         $admin_templates->set_var('header_column_style', 'style="text-align:center;width:25px;"'); // always center checkbox
         $admin_templates->parse('header_row', 'header', true);
     }
 
-    # define icon paths. Those will be transmitted to $fieldfunction.
-    $icons_type_arr = array('edit', 'copy', 'delete', 'list', 'mail', 'group', 'user', 'check', 'greycheck', 'cross', 'disk', 'addchild', 'blank');
-    $icon_arr = array();
-    foreach ($icons_type_arr as $icon_type) {
-        $icon_url = "{$_CONF['layout_url']}/images/admin/$icon_type.$_IMAGE_TYPE";
-        $alt = (isset($LANG_ADMIN[$icon_type])) ? $LANG_ADMIN[$icon_type] : '';
-        $attr['title'] = $alt;
-        $icon_arr[$icon_type] = COM_createImage($icon_url, $alt, $attr);
-    }
-
-    // determine what extra options we should use (search, limit, paging)
-    if (isset($text_arr['has_extras']) && $text_arr['has_extras']) { # old option, denotes all
-        $has_search = true;
-        $has_limit = true;
-        $has_paging = true;
-    } else {
-        $has_search = (isset($text_arr['has_search']) && $text_arr['has_search']) ? true : false;
-        $has_limit = (isset($text_arr['has_limit']) && $text_arr['has_limit']) ? true : false;
-        $has_paging = (isset($text_arr['has_paging']) && $text_arr['has_paging']) ? true : false;
-    }
+    $icon_arr = ADMIN_getIcons();
 
     if ($has_search) { // show search
         $admin_templates->set_var('lang_search', $LANG_ADMIN['search']);
@@ -430,7 +444,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     $th_subtags = ''; // other tags in the th, such as onclick and mouseover
     $header_text = ''; // title as displayed to the user
 
-    // This is the number of columns in each row
+    // number of columns in each row
     $ncols = count( $header_arr );
 
     // HEADER FIELDS array(text, field, sort, class)
@@ -550,17 +564,21 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
 
     $result = DB_query($sql);
 
-    // This is the number of rows/records to display
+    // number of rows/records to display
     $nrows = DB_numRows($result);
 
     $r = 1; # r is the counter for the actual displayed rows for correct coloring
     for ($i = 0; $i < $nrows; $i++) { # now go through actual data
         $A = DB_fetchArray($result);
         $this_row = false; # as long as no fields are returned, dont print row
-        if (is_array($options) AND ((isset($options['chkdelete']) && $options['chkdelete']) OR (isset($options['chkselect']) && $options['chkselect']))) {
+        if ($chkselect) {
             $admin_templates->set_var('class', 'admin-list-field');
             $admin_templates->set_var('column_style', 'style="text-align:center;"'); // always center checkbox
-            $admin_templates->set_var('itemtext', '<input type="checkbox" name="delitem[]" value="' . $A[$options['chkfield']].'"' . XHTML . '>');
+            if ($chkfunction($A)) {
+                $admin_templates->set_var('itemtext', '<input type="checkbox" name="' . $chkname . '[]" value="' . $A[$chkfield] . '" title="' . $LANG_ADMIN['select'] . '"' . XHTML . '>');
+            } else {
+                $admin_templates->set_var('itemtext', '<input type="checkbox" name="disabled" value="x" style="visibility:hidden" DISABLED'.XHTML.'>');
+            }
             $admin_templates->parse('item_field', 'field', true);
         }
         for ($j = 0; $j < $ncols; $j++) {
@@ -612,17 +630,16 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     }
 
     if ($nrows==0) { # there is no data. return notification message.
-        if (isset($text_arr['no_data'])) {
-            $message = $text_arr['no_data']; # there is a user-message
-        } else {
-            $message = $LANG_ADMIN['no_results']; # take std.
-        }
+        $message = (isset($no_data)) ? $text_arr['no_data'] : $LANG_ADMIN['no_results'];
         $admin_templates->set_var('message', $message);
+    } else {
+        $footer_cols = ($chkselect) ? $ncols + 1 : $ncols;
+        $admin_templates->set_var('footer_row', '<tr><td colspan="' . $footer_cols . '"><div style="margin:2px 0 2px 0;border-top:1px solid #cccccc"></div></td></tr>');
     }
 
     // if we displayed data, and chkselect option is available, display the
     // actions row for all selected items. provide a delete action as a minimum
-    if (is_array($options) AND ((isset($options['chkdelete']) && $options['chkdelete']) OR (isset($options['chkselect']) && $options['chkselect'])) AND $nrows > 0 ) {
+    if ($nrows > 0 AND $chkselect ) {
         $actions = '<td style="text-align:center;">'
             . '<img src="' . $_CONF['layout_url'] . '/images/admin/action.' . $_IMAGE_TYPE . '"></td>';
         $delete_action = '<input name="delbutton" type="image" src="'
@@ -631,7 +648,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
             . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
             . XHTML . '>&nbsp;&nbsp;' . $LANG_ADMIN['delete'];
         $actions .= '<td colspan="' . $ncols . '">' . $LANG_ADMIN['action'] . '&nbsp;&nbsp;&nbsp;' . $delete_action;
-        $actions .= (!empty($options['actions'])) ? $options['actions'] . '</td>' : '</td>';
+        $actions .= (!empty($chkactions)) ? $chkactions . '</td>' : '</td>';
         $admin_templates->set_var('actions', $actions);
         $admin_templates->parse('action_row', 'arow', true);
     }

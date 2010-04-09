@@ -168,7 +168,7 @@ $LANG01 = array(
     121 => 'Comments (%d)',
     122 => 'Trackbacks (%d)',
     123 => 'All HTML is allowed',
-    124 => 'Click to delete all checked items',
+    124 => 'Click to delete all selected items',
     125 => 'Are you sure you want to delete all selected items?',
     126 => 'Select or de-select all items',
     127 => 'Permalink',
@@ -1742,6 +1742,7 @@ $LANG_ADMIN = array(
     'admin_groups' => 'Group Admin',
     'action' => 'Action for all selected:',
     'authenticate' => 'Authenticate',
+    'select' => 'Select',
 );
 
 ###############################################################################
@@ -1887,9 +1888,9 @@ $LANG_FILECHECK = array(
     'plugin'            => 'plugin',
     'added'             => 'added',
     'missing'           => 'missing',
-    'removed'           => '%s %s deleted.  Your site\'s File Integrity has been rechecked, and the results are shown below.',
+    'removed'           => '%s %s deleted.  Your site\'s File Integrity will now be rechecked ....',
     'working'           => 'Scanning, please wait ...<br />',
-    'elapsed'           => 'Scan completed in %s sec.'
+    'elapsed'           => 'The scan completed in %s sec.<br /><br />'
 );
 
 ###############################################################################

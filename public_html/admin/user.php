@@ -1852,7 +1852,7 @@ function USER_batchAdmin()
         . '" onclick="return confirm(\'' . $LANG28[100] . '\');"'
         . XHTML . '>&nbsp;&nbsp;' . $LANG28[77];
 
-    $options = array('chkselect' => true, 'chkfield' => 'uid', 'actions' => $reminder_action);
+    $options = array('chkselect' => true, 'chkfield' => 'uid', 'chkactions' => $reminder_action);
 
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/user.php',
