@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Media Gallery: Fixed issue where quota was not always set properly when
+  member album enrollment was enabled (Mark)
 - Fixed default username and password being translated accidentally (Eric)
 - Improved bbcode cheat sheet based on nouveau theme (Eric)
 - Updated public_html/docs/config.html with new search info (Eric)
