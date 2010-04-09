@@ -428,6 +428,7 @@ function glfusion_119()
 
     // FileMgmt enable rating config setting
     $c->add('enable_rating', 1,'select',0, 2, 0, 35, true, 'filemgmt');
+    $c->add('silent_edit_default', 1,'select',0, 2, 0, 37, true, 'filemgmt');
     $c->add('displayblocks', 0,'select',0, 0, 3, 115, true, 'filemgmt');
     DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.7.7',pi_gl_version='1.1.9' WHERE pi_name = 'filemgmt'");
 

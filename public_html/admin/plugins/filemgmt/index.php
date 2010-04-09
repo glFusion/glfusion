@@ -329,7 +329,7 @@ function newfileConfigAdmin(){
 }
 
 function modDownload() {
-    global $_CONF,$_FM_TABLES,$_USER,$myts,$eh,$mytree,$filemgmt_SnapStore,$filemgmt_FileSnapURL;
+    global $_CONF,$_FM_CONF, $_FM_TABLES,$_USER,$myts,$eh,$mytree,$filemgmt_SnapStore,$filemgmt_FileSnapURL;
 
     $totalvotes = '';
 
@@ -403,8 +403,8 @@ function modDownload() {
     $display .= '</td></tr>'.LB;
 
 
-    $display .= '<tr><td>Silent Edit</td><td colspan="2">';
-    $display .= '<input type="checkbox" name="silentedit" value="1"' . XHTML . '>';
+    $display .= '<tr><td>'._MD_SILENTEDIT.'</td><td colspan="2">';
+    $display .= '<input type="checkbox" name="silentedit" value="1" '.($_FM_CONF['silent_edit_default'] ? ' checked="checked"' : '') . '/>';
     $display .= '</td></tr>' . LB;
 
 

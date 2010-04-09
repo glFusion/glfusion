@@ -171,6 +171,7 @@ $LANG_confignames['filemgmt'] = array(
     'outside_webroot' => 'Store Files Outside Web Root',
     'enable_rating'         => 'Enable Ratings',
     'displayblocks'         => 'Display glFusion Blocks',
+    'silent_edit_default'   => 'Silent Edit Default',
 );
 
 $LANG_configsubgroups['filemgmt'] = array(
@@ -422,6 +423,9 @@ define("_MD_VISITAT","Visita nuestra secci&oacute;n de descargas en %s");
 define("_MD_DLRATINGS","Calificaci&oacute;n de descarga (total de votos: %s)");
 define("_MD_CONFUPDATED","¡Configuraci&oacute;n actualizada con &eacute;xito!");
 define("_MD_NOFILES","No se encontraron ficheros");
+define("_MD_APPROVEREQ","* Upload needs to be approved in this category");
+define("_MD_REQUIRED","* Required field");
+define("_MD_SILENTEDIT","Silent Edit: ");
 
 // Additional glFusion Defines
 define("_MD_NOVOTE","Sin calificar a&uacute;n");
