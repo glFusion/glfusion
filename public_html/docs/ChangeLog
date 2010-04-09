@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Move services dropdown after password on login forms (Mark)
 - Staticpage / Media Gallery: Option to specify centerblock for all topics
   except the homepage (Mark)
 - Implement skip token re-init on admin auth (Mark)
