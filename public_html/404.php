@@ -35,6 +35,7 @@
 
 require_once ('lib-common.php');
 
+header("HTTP/1.0 404 Not Found");
 $display = COM_siteHeader ('menu', $LANG_404[1]);
 $display .= COM_startBlock ($LANG_404[1]);
 if (isset ($_SERVER['SCRIPT_URI'])) {
@@ -53,6 +54,7 @@ $display .= $LANG_404[3];
 $display .= COM_endBlock ();
 $display .= COM_siteFooter ();
 
+//header("HTTP/1.0 404 Not Found");
 echo $display
 
 ?>

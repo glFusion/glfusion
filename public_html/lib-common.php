@@ -6196,22 +6196,26 @@ function COM_isFrontpage()
     return !COM_onFrontpage();
 }
 
-/** Converts a number for output into a formatted number with thousands-
-*         separator, comma-separator and fixed decimals if necessary
+/**
+*   Converts a number for output into a formatted number with thousands-
+*   separator, comma-separator and fixed decimals if necessary
 *
-*        @param        float        $number        Number that will be formatted
-*        @return        string                        formatted number
+*   @param  float   $number     Number that will be formatted
+*   @param  integer $decimals   Optional number of decimals
+*   @return string              Formatted number
 */
-function COM_numberFormat( $number )
+function COM_numberFormat( $number, $decimals=-1 )
 {
     global $_CONF;
 
-    if( $number - floor( $number ) > 0 ) // number has decimals
-    {
+    if ($decimals != -1) {
+        // Specific number of decimals requested, could be zero
+        $dc = (int)$decimals;
+    } elseif( $number - floor( $number ) > 0 ) {
+        // Number has decimals, get the configured decimal count
         $dc = $_CONF['decimal_count'];
-    }
-    else
-    {
+    } else {
+        // Number has no decimals, and we don't care
         $dc = 0;
     }
     $ts = $_CONF['thousand_separator'];
