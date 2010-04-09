@@ -705,7 +705,8 @@ $LANG_MG01 = array(
     'search_av_playback' => 'Search Results Audio/Video Playback Type',
     'search_views' => 'Show Views Counter in Search Results',
     'search_rating' => 'Show Rating in Search Results',
-    'gallery_only' => 'Media Gallery Replaces glFusion Index Page'
+    'gallery_only' => 'Media Gallery Replaces glFusion Index Page',
+    'all_nhp' => 'All topics (No Homepage)'
 );
 
 ###############################################################################

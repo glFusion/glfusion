@@ -115,7 +115,8 @@ $LANG_STATIC = array(
     'limit_results' => 'Piira tulemused',
     'search' => 'Otsi',
     'submit' => 'Sisesta',
-    'delete_confirm' => 'Are you sure you want to delete this page?'
+    'delete_confirm' => 'Are you sure you want to delete this page?',
+    'allnhp_topics' => 'All Topics (No Homepage)'
 );
 
 $PLG_staticpages_MESSAGE19 = '';

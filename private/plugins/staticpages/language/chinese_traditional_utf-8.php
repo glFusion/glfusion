@@ -116,7 +116,8 @@ $LANG_STATIC = array(
     'limit_results' => '限制結果',
     'search' => '搜尋',
     'submit' => '提交',
-    'delete_confirm' => 'Are you sure you want to delete this page?'
+    'delete_confirm' => 'Are you sure you want to delete this page?',
+    'allnhp_topics' => 'All Topics (No Homepage)'
 );
 
 $PLG_staticpages_MESSAGE19 = '';
