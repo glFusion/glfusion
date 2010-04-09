@@ -1845,6 +1845,7 @@ function PLG_replaceTags($content, $plugin = '')
                     $blockName = COM_applyBasicFilter($autotag['parm1']);
                     $result = DB_query("SELECT * FROM {$_TABLES['blocks']} WHERE name = '".DB_escapeString($blockName)."'");
                     if ( DB_numRows($result) > 0 ) {
+                        $skip = 0;
                         $B = DB_fetchArray($result);
                         $template = '';
                         $side     = '';
