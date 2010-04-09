@@ -444,6 +444,10 @@ $LANG04 = array(
     160 => 'Online',
     161 => 'Password Strength',
     162 => 'The username contains invalid characters ( < > " % & * / \ ) are not allowed',
+    163 => 'Remote User',
+    164 => 'Remote Username',
+    165 => 'Remote Service',
+    166 => 'Remote User Info',
 );
 
 ###############################################################################
@@ -1411,6 +1415,8 @@ $MESSAGE = array(
     510 => 'Default settings have been applied to all users.',
     511 => 'Are you sure you want to delete this group?',
     512 => 'Username contains invalid characters " < > / \ $ % * are not allowed',
+    513 => 'Remote username cannot be blank.',
+    514 => 'Remote service cannot be empty.',
 );
 
 ###############################################################################

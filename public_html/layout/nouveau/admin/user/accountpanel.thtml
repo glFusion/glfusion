@@ -27,6 +27,12 @@
             <td style="width:150px;"><label for="fullname">{lang_fullname}:</label></td>
             <td><input type="text" id="fullname" name="fullname" size="60" maxlength="80" value="{fullname_value}"{xhtml}></td>
           </tr>
+          {!if remoteuserenable}
+          <tr>
+            <td style="width:150px;"><label for="remoteuser">{lang_remoteuser}:</label></td>
+            <td><input type="checkbox" name="remoteuser" id="remoteuser" {remote_user_checked} {remote_user_disabled} onclick="aptoggle();" /></td>
+          </tr>
+          {!endif}
           <tr>
             <td><label for="userstatus">{lang_user_status}:</label></td>
             <td>{user_status}</td>
@@ -34,21 +40,37 @@
           {!if lang_email_password}
           <tr>
             <td><label for="emailuser">{lang_email_password}:</label></td>
-            <td><input type="checkbox" name="emailuser" value="1"></td>
+            <td><input type="checkbox" name="emailuser" id="emailuser" value="1" {pwd_disabled} /></td>
           </tr>
           {!endif}
           {plugin_namepass_name}
         </table>
       </fieldset>
+      {!if remoteuserenable}
+      <div id="remoteuserinfo" style="display:{remote_user_display};">
+      <fieldset style="margin-top:10px;"><legend>{lang_remoteuserdata}</legend>
+      <table class="inputTable" border="0">
+      <tr>
+        <td style="width:150px;"><label for="remoteusername">{lang_remoteusername}:</label></td>
+        <td><input type="text" name="remoteusername" id="remoteusername" value="{remoteusername}" size="60" maxlength="60" {remote_user_disabled}/></td>
+      </tr>
+      <tr>
+        <td style="width:150px;"><label for="remoteservice">{lang_remoteservice}:</label></td>
+        <td>{remoteservice_select}</td>
+      </tr>
+      </table>
+      </fieldset>
+      </div>
+      {!endif}
       <fieldset style="margin-top:10px;"><legend>{lang_password_email_legend}</legend>
         <table class="inputTable" border="0">
           <tr>
             <td style="width:150px;"><label for="passwd">{lang_password}:</label></td>
-            <td><input type="password" id="passwd" name="passwd" size="32" maxlength="32" value="{password_value}" onkeyup="runPassword(this.value, 'mypassword');"{xhtml}></td>
+            <td><input type="password" id="passwd" name="passwd" size="32" maxlength="32" value="{password_value}" {pwd_disabled} onkeyup="runPassword(this.value, 'mypassword');"{xhtml}></td>
           </tr>
           <tr>
             <td><label for="passwd_conf">{lang_password_conf}:</label></td>
-            <td><input type="password" id="passwd_conf" name="passwd_conf" size="32" maxlength="32" value="{password_value}"{xhtml}></td>
+            <td><input type="password" id="passwd_conf" name="passwd_conf" size="32" maxlength="32" value="{password_value}" {pwd_disabled} {xhtml}></td>
           </tr>
           <tr>
             <td style="width:150px;">
@@ -78,4 +100,21 @@
 
       {plugin_namepass}
     </div>
+<script type="text/javascript">
+function aptoggle() {
+  if (document.getElementById) {
+    if (document.getElementById("remoteuser").checked == true) {
+      document.getElementById("remoteuserinfo").style.display = "";
+      document.getElementById("emailuser").disabled=true;
+      document.getElementById("passwd").disabled=true;
+      document.getElementById("passwd_conf").disabled=true;
+    } else {
+      document.getElementById("remoteuserinfo").style.display = "none";
+      document.getElementById("emailuser").disabled=false;
+      document.getElementById("passwd").disabled=false;
+      document.getElementById("passwd_conf").disabled=false;
+    }
+  }
+}
+</script>
 {# end username & password panel #}

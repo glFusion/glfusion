@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Added ability to create remote users (when enabled) (Mark)
 - FileMgmt: Add new configuration option 'Silent Edit Default' (Mark)
 - Move services dropdown after password on login forms (Mark)
 - Staticpage / Media Gallery: Option to specify centerblock for all topics

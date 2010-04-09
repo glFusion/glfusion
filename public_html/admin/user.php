@@ -187,6 +187,9 @@ function USER_edit($uid = '', $msg = '')
         $U['username'] = '';
         $U['fullname'] = '';
         $U['email'] = '';
+        $U['remoteuser'] = 0;
+        $U['remoteusername'] = '';
+        $U['remoteservice'] = '';
         $U['homepage'] = '';
         $U['location'] = '';
         $U['sig'] = '';
@@ -226,6 +229,12 @@ function USER_edit($uid = '', $msg = '')
         $U['username']       = trim(COM_stripslashes($_POST['new_username']));
     if ( isset($_POST['fullname']) )
         $U['fullname']       = COM_truncate(trim(USER_sanitizeName(COM_stripslashes($_POST['fullname']))),80);
+    if ( isset($_POST['remoteuser']) )
+        $U['remoteuser'] = ($_POST['remoteuser'] == 'on' ? 1 : 0);
+    if ( isset($_POST['remoteusername']) )
+        $U['remoteusername'] = COM_truncate(trim(COM_stripslashes($_POST['remoteusername'])),60);
+    if ( isset($_POST['remoteservice']) )
+        $U['remoteservice'] = COM_applyFilter($_POST['remoteservice']);
     if ( isset($_POST['userstatus'] ) )
         $U['status']     = COM_applyFilter($_POST['userstatus'],true);
     if ( isset($_POST['cooktime'] ) )
@@ -376,6 +385,65 @@ function USER_accountPanel($U,$newuser = 0)
 
     $userform->set_var('user_name',$U['username']);
     $userform->set_var('fullname_value', htmlspecialchars($U['fullname']));
+
+    // remote services
+    if ( $U['uid'] != '' && $U['remoteservice'] == '' ) {
+        $allow_remote_user = 0;
+    } else {
+        $allow_remote_user = 1;
+    }
+    $remote_user_display = 'none';
+    $remote_user_checked = '';
+    $pwd_disabled = '';
+    $remote_user_edit = 0;
+    if (($_CONF['user_login_method']['openid'] || $_CONF['user_login_method']['3rdparty']) && $allow_remote_user ) {
+        $modules = array();
+        if ( ($U['remoteusername'] != '' && $U['remoteservice'] != '') || $U['remoteuser'] == 1) {
+            $remote_user_checked = ' checked="checked"';
+            $pwd_disabled = ' disabled="disabled"';
+            $remote_user_display = '';
+            if ( isset($U['uid']) && $U['uid'] > 2 ) {
+                $remote_user_edit = 1;
+            }
+        }
+        if ( $_CONF['user_login_method']['3rdparty'] ) {
+            $modules = SEC_collectRemoteAuthenticationModules();
+        }
+        $service_select = '<select name="remoteservice" id="remoteservice"';
+        if ( $remote_user_edit == 1 ) {
+            $service_select .= ' disabled="disabled"';
+        }
+        $service_select .= '>' .LB;
+        if ( count($modules) > 0 ) {
+            foreach( $modules AS $service ) {
+                $service_select .= '<option value="' . $service . '"'.($U['remoteservice'] == $service ? ' selected="selected"' : '') . '>' . $service . '</option>' . LB;
+            }
+        }
+        if ( $_CONF['user_login_method']['openid'] ) {
+            $service_select .= '<option value="openid"' . ($U['remoteservice'] == 'openid' ? ' selected="selected"' : '') .'>'.'OpenID'.'</option>'. LB;
+        }
+        $service_select .= '</select>'.LB;
+        $userform->set_var('remoteusername',htmlspecialchars($U['remoteusername'],ENT_NOQUOTES,COM_getEncodingt()));
+        $userform->set_var('remoteservice_select',$service_select);
+        $userform->set_var('remote_user_checked',$remote_user_checked);
+        $userform->set_var('remote_user_display',$remote_user_display);
+        $userform->set_var('remoteuserenable','1');
+        $userform->set_var('lang_remoteuser',$LANG04[163]);
+        $userform->set_var('lang_remoteusername',$LANG04[164]);
+        $userform->set_var('lang_remoteservice',$LANG04[165]);
+        $userform->set_var('lang_remoteuserdata',$LANG04[166]);
+        if ( $remote_user_edit == 1 ) {
+            $userform->set_var('remote_user_disabled',' disabled="disabled"');
+        }
+        $userform->set_var('pwd_disabled',$pwd_disabled);
+    } else {
+        $userform->set_var('remoteuserenable','');
+        $userform->set_var('remoteusername','');
+        $userform->set_var('remoteservice_select','');
+        $userform->set_var('remote_user_checked',$remote_user_checked);
+        $userform->set_var('remote_user_display',$remote_user_display);
+    }
+
 
     $selection  = '<select id="cooktime" name="cooktime">' . LB;
     $selection .= COM_optionList($_TABLES['cookiecodes'],'cc_value,cc_descr',$U['cookietimeout'], 0);
@@ -1303,8 +1371,8 @@ function USER_save($uid)
     $fullname       = COM_truncate(trim(USER_sanitizeName(COM_stripslashes($_POST['fullname']))),80);
     $userstatus     = COM_applyFilter($_POST['userstatus'],true);
     $oldstatus      = COM_applyFilter($_POST['oldstatus'],true);
-    $passwd         = trim(COM_stripslashes($_POST['passwd']));
-    $passwd_conf    = trim(COM_stripslashes($_POST['passwd_conf']));
+    $passwd         = (isset($_POST['passwd'])) ? trim(COM_stripslashes($_POST['passwd'])) : '';
+    $passwd_conf    = (isset($_POST['passwd_conf']) ) ? trim(COM_stripslashes($_POST['passwd_conf'])) : '';
     $cooktime       = COM_applyFilter($_POST['cooktime'],true);
     $email          = trim(COM_stripslashes($_POST['email']));
     $email_conf     = trim(COM_stripslashes($_POST['email_conf']));
@@ -1333,13 +1401,16 @@ function USER_save($uid)
     $topic_order    = (isset($_POST['topic_order']) && $_POST['topic_order'] == 'ASC') ? 'ASC' : 'DESC';
     $maxstories     = COM_applyFilter($_POST['maxstories'],true);
     $newuser        = COM_applyFilter($_POST['newuser'],true);
+    $remoteuser     = (isset($_POST['remoteuser']) && $_POST['remoteuser'] == 'on') ? 1 : 0;
+    $remoteusername = (isset($_POST['remoteusername'])) ? strip_tags(trim(COM_stripslashes($_POST['remoteusername']) ) ): '';
+    $remoteservice  = (isset($_POST['remoteservice'])) ? COM_applyFilter($_POST['remoteservice']) : '';
 
     if ( $uid == 1 ) {
         return USER_list();
     }
 
     if ( $uid == '' || $uid < 2 || $newuser == 1 ) {
-        if (empty($passwd) ) {
+        if (empty($passwd) && $remoteuser == 0) {
             return USER_edit($uid,504);
         }
         if (empty($email) ) {
@@ -1355,11 +1426,20 @@ function USER_save($uid)
     if ( $email == '' ) {
         return USER_edit($uid,507);
     }
-    if ($passwd != $passwd_conf) { // passwords don't match
+    if ($passwd != $passwd_conf && $remoteuser == 0) { // passwords don't match
         return USER_edit($uid, 67);
     }
     if ($email != $email_conf) {
         return USER_edit($uid,508);
+    }
+    // remote user checks
+    if ( $remoteuser == 1 ) {
+        if ( $remoteusername == '' ) {
+            return USER_edit($uid,513);
+        }
+        if ( $remoteservice == '' ) {
+            return USER_edit($uid,514);
+        }
     }
 
     $validEmail = true;
@@ -1453,9 +1533,14 @@ function USER_save($uid)
                 $passwd = USER_createPassword (8);
                 $passwd2 = SEC_encryptPassword($passwd);
             }
-
-            $uid = USER_createAccount ($username, $email, $passwd2, $fullname,
-                                       $homepage);
+            if ( $remoteuser == 1 ) {
+                $uid = USER_createAccount($username, $email, '',
+                           $fullname, '', $remoteusername,
+                           $remoteservice);
+            } else {
+                $uid = USER_createAccount ($username, $email, $passwd2, $fullname,
+                                           $homepage);
+            }
             if ($uid > 1) {
                 DB_query("UPDATE {$_TABLES['users']} SET status = $userstatus WHERE uid = $uid");
             }
