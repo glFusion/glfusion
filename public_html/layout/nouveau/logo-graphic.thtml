@@ -2,5 +2,5 @@
 					<a href="{site_url}">
 						<img id="header-site-logo" src="{site_logo}" alt="{site_name}" title="{site_name}"{xhtml}>
 					</a>
-					<div id="header-site-slogan">{site_slogan}</div>
+					<p id="header-site-slogan">{site_slogan}</p>
 {# end {templatelocation} #}
