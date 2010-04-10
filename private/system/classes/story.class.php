@@ -719,6 +719,12 @@ class Story
                 $sql = "UPDATE {$_TABLES['trackback']} SET sid='{$newsid}' WHERE sid='{$checksid}' AND type='article'";
                 DB_query($sql);
 
+                /* Move ratings */
+                $sql = "UPDATE {$_TABLES['rating']} SET item_id='{$newsid}' WHERE item_id='{$checksid}' AND type='article'";
+                DB_query($sql);
+                $sql = "UPDATE {$_TABLES['rating_votes']} SET item_id='{$newsid}' WHERE item_id='{$checksid}' AND type='article'";
+                DB_query($sql);
+
                 CACHE_remove_instance('story_'.$this->_originalSid);
             }
         }
