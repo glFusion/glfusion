@@ -85,12 +85,12 @@ function FILECHECK_isWriteable( $file )
 
 function FILECHECK_scanNegative()
 {
-    global $_CONF, $glfDir, $glfFile, $data_arr, $max_time;
+    global $_CONF, $D, $F, $data_arr, $max_time;
 
     // check for missing directories
-    foreach( $glfDir as $dir ) {
+    foreach( $D AS $key => $value ) {
         // replace the generic prefix with the actual directory
-        $rdir = $dir['path'];
+        $rdir = $key;
         if (strtolower(substr($rdir,0,7)) == 'private') {
             $where = 'private';
             $rdir = (strtolower($rdir) <> $where) ? $_CONF['path'] . substr($rdir,8) : substr($_CONF['path'],0,-1);
@@ -101,7 +101,9 @@ function FILECHECK_scanNegative()
             COM_errorlog( 'filecheck: unexpected root dirspec(not private/ or public_html/): ' . $dir );
         }
         // how we check depends upon whether we were allowed to recurse there
-        switch ($dir['test']) {
+        $test = $value[0];
+        switch ($test) {
+
             case 'E':
                 // we were not allowed to recurse here, check manually
                 if (!is_dir($rdir)) {
@@ -116,7 +118,7 @@ function FILECHECK_scanNegative()
 
             case 'R':
                 // we recursed here, unpinged dirs must be missing
-                if (!isset($dir['ping'])) {
+                if (!eregi('!',$value)) {
                     $data_arr[] = array(
                         'where'     => $where,
                         'type'  => 'D',
@@ -126,15 +128,13 @@ function FILECHECK_scanNegative()
                 }
                 break;
         }
-        if (FILECHECK_timer('check') > $max_time ) {
-            return false;
-        }
     }
 
     // check for missing files
-    foreach( $glfFile as $file ) {
+    foreach( $F as $key => $value) {
+
         // replace the generic prefix with the actual directory
-        $rdir = $file['path'];
+        $rdir = $key;
         if (strtolower(substr($rdir,0,7)) == 'private') {
             $where = 'private';
             $rdir = (strtolower($rdir) <> $where) ? $_CONF['path'] . substr($rdir,8) : substr($_CONF['path'],0,-1);
@@ -144,22 +144,25 @@ function FILECHECK_scanNegative()
         } else {
             COM_errorlog( 'filecheck: unexpected root dirspec(not private/ or public_html/): ' . $dir );
         }
+
         // ok now check for unpinged files that are not set to be ignored
-        if ((!isset($file['ping'])) && ($file['test'] <> 'I')) {
+        $test = $value[0];
+        if ((!eregi('!',$value)) && ($test <> 'I')) {
             // ostensibly, this file was not found - get the dir and file parts
             $pathinfo = pathinfo($rdir);
             $dirname = $pathinfo['dirname'];
             $filename = $pathinfo['filename'].'.'.$pathinfo['extension'];
+
             // check to see if we were allowed to recurse into this dir
-            list($test,$i) = FILECHECK_search($dirname, $glfDir);
             if ($test == 'R') {
                 // yes, we were allowed to look here, and the file was not found
                 $data_arr[] = array(
                     'where'     => $where,
                     'type'      => 'F',
                     'delta'     => '-',
-                    'location'  => $rdir . '/',
+                    'location'  => $rdir,
                );
+
             } else {
                 // no, we were not allowed to look here, so test manually
                 if(!file_exists($rdir)) {
@@ -167,32 +170,19 @@ function FILECHECK_scanNegative()
                         'where'     => $where,
                         'type'      => 'F',
                         'delta'     => '-',
-                        'location'  => $rdir . '/',
+                        'location'  => $rdir,
                     );
                 }
             }
-        }
-        if (FILECHECK_timer('check') > $max_time ) {
-            return false;
+
         }
     }
     return true;
 }
 
-function FILECHECK_search($needle, $haystack)
-{
-    $hsCount = count($haystack);
-    for ($i=0; $i < $hsCount; $i++) {
-        if ($haystack[$i]['path'] == $needle) {
-            return array($haystack[$i]['test'],$i);
-        }
-    }
-    return array('',0);
-}
-
 function FILECHECK_scanPositive( $path = '.', $where, $level = 0, $prefix=array())
 {
-    global $glfFile, $glfDir, $glfIgnore, $data_arr, $max_time;
+    global $glfDir, $D, $glfFile, $F, $glfIgnore, $data_arr, $max_time;
 
     $ignore = $glfIgnore;
 
@@ -206,18 +196,18 @@ function FILECHECK_scanPositive( $path = '.', $where, $level = 0, $prefix=array(
         // ignore some files & directories
         $test = '';
         $needle = $where . '/';
-        if( !in_array( $file, $ignore ) ){
+        if (!in_array( $file, $ignore ) ){
             // not on the ignore list, so determine whether it is a file or dir
-            if( is_dir( "$path/$file" ) ){
+            if (is_dir( "$path/$file" )) {
                 // this is a directory - construct the search term
                 foreach($prefix AS $pdir ) {
                     $needle .= $pdir .'/';
                 }
                 $needle .= $file;
-                list($test, $i) = FILECHECK_search($needle,$glfDir);
+                $test = (isset($D[$needle])) ? $D[$needle] : '';
                 if (!empty($test)) {
-                    // directory was recognized
-                    $glfDir[$i]['ping'] = 1;
+                    // directory was recognized, set found flag
+                    $D[$needle] .= '!';
                     if ($test == 'R') {
                         // recurse into this directory only if allowed
                         $prefix[] = $file;
@@ -257,7 +247,7 @@ function FILECHECK_scanPositive( $path = '.', $where, $level = 0, $prefix=array(
                 }
                 $needle .= $file;
                 // search the distribution file list
-                list($test, $i) = FILECHECK_search($needle,$glfFile);
+                $test = (isset($F[$needle])) ? $F[$needle] : '';
                 if (empty($test)) {
                     // file is not recognized, add to list
                     $data_arr[] = array('where' => $where,
@@ -266,7 +256,7 @@ function FILECHECK_scanPositive( $path = '.', $where, $level = 0, $prefix=array(
                                         'location'  => $path . '/' . $file,
                     );
                 } else {
-                    $glfFile[$i]['ping']=1;
+                    $F[$needle] .= '!';
                 }
             }
         }
@@ -432,6 +422,21 @@ function FILECHECK_getListField($fieldname, $fieldvalue, $A, $icon_arr)
     return $retval;
 }
 
+function FILECHECK_foldArrays() {
+    global $glfDir, $glfFile, $D, $F;
+
+    $D = array();
+    foreach($glfDir AS $dir) {
+        $D[$dir['path']] = $dir['test'];
+    }
+
+    $F = array();
+    foreach($glfFile AS $file) {
+        $F[$file['path']] = $file['test'];
+    }
+
+}
+
 function FILECHECK_scan()
 {
     global $_CONF, $LANG_ADMIN, $LANG_FILECHECK, $data_arr;
@@ -442,12 +447,14 @@ function FILECHECK_scan()
     // detect unbundled plugins
     FILECHECK_addPlugins();
 
+    FILECHECK_foldArrays();
+
     // begin timing scan process
     $start_time = FILECHECK_timer('start');
 
-    if ( FILECHECK_scanPositive(substr($_CONF['path'],0,-1),'private') &&
-         FILECHECK_scanPositive(substr($_CONF['path_html'],0,-1),'public_html') &&
-         FILECHECK_scanNegative()) {
+    if ( FILECHECK_scanPositive(substr($_CONF['path'],0,-1),'private')
+         && FILECHECK_scanPositive(substr($_CONF['path_html'],0,-1),'public_html')
+         && FILECHECK_scanNegative() ) {
 
         // scanning succeeded, sort the array and then capture the elapsed time
         sort($data_arr);
