@@ -456,6 +456,7 @@ function FILECHECK_scan()
 
         // scanning succeeded, sort the array and then capture the elapsed time
         sort($data_arr);
+
         $elapsed_time = FILECHECK_timer('stop');
 
         // build the menu
@@ -475,14 +476,14 @@ function FILECHECK_scan()
 
         $option_arr = array(
             'chkselect' => true,
+            'chkall' => false,
             'chkfield' => 'location',
             'chkname' => 'actionitem',
             'chkfunction' => 'FILECHECK_chkListField',
         );
 
-        $top = sprintf($LANG_FILECHECK['elapsed'], $elapsed_time);
-
-        $form_arr = array('top' => $top);
+//        $top = sprintf($LANG_FILECHECK['elapsed'], $elapsed_time);
+//        $form_arr = array('top' => $top);
 
         $retval .= ADMIN_simpleList("FILECHECK_getListField", $header_arr, $text_arr, $data_arr, $option_arr, $form_arr );
     }

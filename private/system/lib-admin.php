@@ -104,6 +104,7 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
     $chkselect = (is_array($options_arr) AND
                    ((isset($options_arr['chkselect']) AND $options_arr['chkselect']) OR
                    (isset($options_arr['chkdelete']) AND $options_arr['chkdelete']))) ? true : false;
+    $chkall = (is_array($options_arr) AND isset($options_arr['chkall'])) ? $options_arr['chkall'] : true;
     $chkname = (is_array($options_arr) AND isset($options_arr['chkname'])) ? $options_arr['chkname'] : 'delitem';
     $chkfield = (is_array($options_arr) AND isset($options_arr['chkfield'])) ? $options_arr['chkfield'] : '';
     $chkactions = (is_array($options_arr) AND isset($options_arr['chkactions'])) ? $options_arr['chkactions'] : '';
@@ -140,7 +141,11 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
     $nrows = count($data_arr);
 
     if ($nrows > $chkminimum AND $chkselect) {
-        $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form, \'' . $chkname . '\');"' . XHTML . '>');
+        if ($chkall) {
+            $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form, \'' . $chkname . '\');"' . XHTML . '>');
+        } else {
+            $admin_templates->set_var('header_text', '<input type="checkbox" name="disabled" value="x" style="visibility:hidden" DISABLED'.XHTML.'>');
+        }
         $admin_templates->set_var('class', 'admin-list-field');
         $admin_templates->set_var('header_column_style', 'style="text-align:center;width:25px;"'); // always center checkbox
         $admin_templates->parse('header_row', 'header', true);
@@ -352,6 +357,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     $chkselect = (is_array($options_arr) AND
                    ((isset($options_arr['chkselect']) AND $options_arr['chkselect']) OR
                    (isset($options_arr['chkdelete']) AND $options_arr['chkdelete']))) ? true : false;
+    $chkall = (is_array($options_arr) AND isset($options_arr['chkall'])) ? $options_arr['chkall'] : true;
     $chkname = (is_array($options_arr) AND isset($options_arr['chkname'])) ? $options_arr['chkname'] : 'delitem';
     $chkfield = (is_array($options_arr) AND isset($options_arr['chkfield'])) ? $options_arr['chkfield'] : '';
     $chkactions = (is_array($options_arr) AND isset($options_arr['chkactions'])) ? $options_arr['chkactions'] : '';
@@ -382,7 +388,11 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
 
     // Check if the delete checkbox and support for the delete all feature should be displayed
     if ($chkselect) {
-        $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form,\'' . $chkname . '\');"' . XHTML . '>');
+        if ($chkall) {
+            $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form,\'' . $chkname . '\');"' . XHTML . '>');
+        } else {
+            $admin_templates->set_var('header_text', '<input type="checkbox" name="disabled" value="x" style="visibility:hidden" DISABLED'.XHTML.'>');
+        }
         $admin_templates->set_var('class', 'admin-list-field');
         $admin_templates->set_var('header_column_style', 'style="text-align:center;width:25px;"'); // always center checkbox
         $admin_templates->parse('header_row', 'header', true);
