@@ -535,6 +535,7 @@ function BLOCK_list()
     $defsort_arr = array('field' => 'blockorder', 'direction' => 'asc');
 
     $text_arr = array(
+        'title'      => "$LANG21[19] ($LANG21[40])",
         'form_url'   => $_CONF['site_admin_url'] . '/block.php'
     );
 
