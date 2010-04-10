@@ -274,8 +274,6 @@ function FILECHECK_initMenu($max_time)
     $menu_arr = array (
         array('url'  => $_CONF['site_admin_url'].'/envcheck.php',
               'text' => $LANG01['env_check']),
-        array('url'  => $_CONF['site_admin_url'].'/filecheck.php?expired=x',
-              'text' => $LANG_FILECHECK['abort']),
         array('url'  => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
