@@ -448,6 +448,17 @@ $LANG04 = array(
     164 => 'Remote Username',
     165 => 'Remote Service',
     166 => 'Remote User Info',
+    167 => 'A verification email will be sent to the eMail address you entered.',
+    168 => 'Welcome to ',
+    169 => 'Request New Verification Token',
+    170 => 'Please keep this eMail for your records. Your account information is as follows:',
+    171 => 'Site URL',
+    172 => 'Please visit the following link in order to activate your account:',
+    173 => 'Your password has been securely stored in our database and cannot be retrieved. In the event that it is forgotten, you will be able to reset it using the email address associated with your account.',
+    174 => 'Thank you for registering.',
+    175 => 'To request a new verification token, please enter your username and password below and a new verification email will be sent to you.',
+
+
 );
 
 ###############################################################################
@@ -991,7 +1002,7 @@ $LANG28 = array(
     13 => 'SecLev',
     14 => 'Registered',
     15 => 'New User',
-    16 => '',
+    16 => 'Awaiting Verification',
     17 => '',
     18 => '',
     19 => '',
@@ -1303,7 +1314,7 @@ $LANG_LOGVIEW = array(
 $MESSAGE = array(
     1 => "Your password has been eMailed to you and should arrive momentarily. Please follow the directions in the message and we thank-you for using {$_CONF['site_name']}",
     2 => "Thank-you for submitting your story to {$_CONF['site_name']}.  It has been submitted to our staff for approval. If approved, your story will be available for others to read on our site.",
-    3 => '',
+    3 => "A verification eMail has been sent to you and should arrive momentarily. Please follow the directions in the message and we thank-you for using {$_CONF['site_name']}",
     4 => '',
     5 => 'Your account information has been successfully saved.',
     6 => 'Your preferences have been successfully saved.',
@@ -1417,6 +1428,9 @@ $MESSAGE = array(
     512 => 'Username contains invalid characters " < > / \ $ % * are not allowed',
     513 => 'Remote username cannot be blank.',
     514 => 'Remote service cannot be empty.',
+    515 => 'Your account is now active.',
+    516 => 'Your registration token has expired.',
+    517 => 'This account has already been verified, please login below.',
 
 );
 
@@ -2155,6 +2169,7 @@ $LANG_confignames['Core'] = array(
     'user_reg_fullname' => 'Full Name option on registration form?',
     'session_ip_check' => 'Session IP Validation',
     'article_comment_close_enabled' => 'Automatically close comments (default)',
+    'registration_type' => 'Registration Type',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2242,7 +2257,7 @@ $LANG_configselects['Core'] = array(
     24 => array('Disabled' => 0, 'Logged-in Users' => 1, 'Everyone' => 2),
     25 => array('No' => 0, 'Optional' => 1, 'Required' => 2),
     26 => array('None' => 0, 'A.B' => 1, 'A.B.C' => 2, 'All' => 3),
-
+    27 => array('Generate Password' => 0, 'User Enters Password' => 1),
 );
 
 ?>

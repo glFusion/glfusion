@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Allow users to select their own passwords and implement verification email
+  (Mark)
 - Ratings were not moved to new story when story id changed (Mark)
 - Media Gallery: Fixed issue where quota was not always set properly when
   member album enrollment was enabled (Mark)

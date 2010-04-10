@@ -229,6 +229,7 @@ function install_config($site_url)
 
     $c->add('fs_user_submission', NULL, 'fieldset', 4, 19, NULL, 0, TRUE);
     $c->add('usersubmission',0,'select',4,19,0,780,TRUE);
+    $c->add('registration_type',0,'select',4,19,27,785,TRUE);
     $c->add('allow_domains','','text',4,19,NULL,960,TRUE);
     $c->add('disallow_domains','','text',4,19,NULL,970,TRUE);
     $c->add('user_reg_fullname',1,'select',4,19,25,980,TRUE);

@@ -548,8 +548,8 @@ function MODERATE_users($uid, $action, $count)
                 $nrows = DB_numRows($result);
                 if ($nrows == 1) {
                     $A = DB_fetchArray($result);
-                    $sql = "UPDATE {$_TABLES['users']} SET status=3 WHERE uid={$A['uid']}";
-                    DB_Query($sql);
+                    $sql = "UPDATE {$_TABLES['users']} SET status=".USER_ACCOUNT_AWAITING_ACTIVATION." WHERE uid={$A['uid']}";
+                    DB_query($sql);
                     USER_createAndSendPassword ($A['username'], $A['email'], $A['uid']);
                 }
                 break;

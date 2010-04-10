@@ -363,11 +363,12 @@ function userprofile($user, $msg = 0, $plugin = '')
 * This will email the given user their password.
 *
 * @param    string      $username       Username for which to get and email password
+* @param    string      $passwd         Unencrypted password (optional)
 * @param    int         $msg            Message number of message to show when done
 * @return   string      Optionally returns the HTML for the default form if the user info can't be found
 *
 */
-function emailpassword ($username, $msg = 0)
+function emailpassword ($username, $passwd = '', $msg = 0)
 {
     global $_CONF, $_TABLES, $LANG04;
 
@@ -383,14 +384,18 @@ function emailpassword ($username, $msg = 0)
             return COM_refresh ($_CONF['site_url'] . '/index.php?msg=48');
         }
 
-        $mailresult = USER_createAndSendPassword ($username, $A['email'], $A['uid']);
+        $mailresult = USER_createAndSendPassword ($username, $A['email'], $A['uid'],$passwd);
 
         if ($mailresult == false) {
             $retval = COM_refresh ("{$_CONF['site_url']}/index.php?msg=85");
         } else if ($msg) {
             $retval = COM_refresh ("{$_CONF['site_url']}/index.php?msg=$msg");
         } else {
-            $retval = COM_refresh ("{$_CONF['site_url']}/index.php?msg=1");
+            if ($_CONF['registration_type'] == 1 ) {
+                $retval = COM_refresh ("{$_CONF['site_url']}/index.php?msg=3");
+            } else {
+                $retval = COM_refresh ("{$_CONF['site_url']}/index.php?msg=1");
+            }
         }
     } else {
         $retval = COM_siteHeader ('menu','')
@@ -500,6 +505,101 @@ function newpasswordform ($uid, $requestid)
 }
 
 /**
+* User request for a verification token - send email with a link and request id
+*
+* @param uid      int      userid of user who requested the new token
+* @param msg      int      index of message to display (if any)
+* @return         string   form or meta redirect
+*
+*/
+function requesttoken ($uid, $msg = 0)
+{
+    global $_CONF, $_TABLES, $LANG04;
+
+    $retval = '';
+    // no remote users!
+    $uid = (int) $uid;
+    $result = DB_query ("SELECT uid,username,email,passwd,status FROM {$_TABLES['users']} WHERE uid = $uid AND ((remoteservice IS NULL) OR (remoteservice=''))");
+    $nrows = DB_numRows ($result);
+    if ($nrows == 1) {
+        $A = DB_fetchArray ($result);
+        if (($_CONF['usersubmission'] == 1) && ($A['status'] == USER_ACCOUNT_AWAITING_APPROVAL)) {
+            return COM_refresh ($_CONF['site_url'] . '/index.php?msg=48');
+        }
+        $verification_id = USER_createActivationToken($uid,$A['username']);
+        $activation_link = $_CONF['site_url'].'/users.php?mode=verify&vid='.$verification_id.'&u='.$uid;
+        $mailtext  = $LANG04[168] . $_CONF['site_name'] . ".\n\n";
+        $mailtext .= $LANG04[170] . "\n\n";
+        $mailtext .= "----------------------------\n";
+        $mailtext .= $LANG04[2] . ': ' . $A['username'] ."\n";
+        $mailtext .= $LANG04[171] .': ' . $_CONF['site_url'] ."\n";
+        $mailtext .= "----------------------------\n\n";
+        $mailtext .= $LANG04[172] . "\n\n";
+        $mailtext .= $activation_link . "\n\n";
+        $mailtext .= $LANG04[173] . "\n\n";
+        $mailtext .= $LANG04[174] . "\n\n";
+        $mailtext .= "--\n";
+        $mailtext .= $_CONF['site_name'] . "\n";
+        $mailtext .= $_CONF['site_url'] . "\n";
+
+        $subject = $_CONF['site_name'] . ': ' . $LANG04[16];
+        if ($_CONF['site_mail'] !== $_CONF['noreply_mail']) {
+            $mailfrom = $_CONF['noreply_mail'];
+            global $LANG_LOGIN;
+            $mailtext .= LB . LB . $LANG04[159];
+        } else {
+            $mailfrom = $_CONF['site_mail'];
+        }
+        $to = array();
+        $to = COM_formatEmailAddress('',$A['email']);
+        $from = array();
+        $from = COM_formatEmailAddress('',$mailfrom);
+        COM_mail ($to, $subject, $mailtext, $from);
+
+        if ($msg) {
+            $retval .= COM_refresh ($_CONF['site_url'] . "/index.php?msg=$msg");
+        } else {
+            $retval .= COM_refresh ($_CONF['site_url'] . '/index.php');
+        }
+        COM_updateSpeedlimit ('verifytoken');
+    } else {
+        COM_updateSpeedlimit ('verifytoken');
+        echo COM_refresh ($_CONF['site_url'] .'/users.php?mode=getnewtoken' );
+        exit;
+    }
+
+    return $retval;
+}
+
+/**
+* Display a form where the user can request a new token.
+*
+* @param uid       int      user id
+* @return          string   new token form
+*
+*/
+function newtokenform ($uid)
+{
+    global $_CONF, $_TABLES, $LANG04;
+
+    $tokenform = new Template ($_CONF['path_layout'] . 'users');
+    $tokenform->set_file (array ('newtoken' => 'newtoken.thtml'));
+
+    $tokenform->set_var ('user_id', $uid);
+
+    $tokenform->set_var ('lang_explain',  $LANG04[175]);
+    $tokenform->set_var ('lang_username', $LANG04[2]);
+    $tokenform->set_var ('lang_password', $LANG04[4]);
+    $tokenform->set_var ('lang_submit', $LANG04[169]);
+
+    $retval = COM_startBlock ($LANG04[169]);
+    $retval .= $tokenform->finish ($tokenform->parse ('output', 'newtoken'));
+    $retval .= COM_endBlock ();
+
+    return $retval;
+}
+
+/**
 * Creates a user
 *
 * Creates a user with the give username and email address
@@ -507,12 +607,14 @@ function newpasswordform ($uid, $requestid)
 * @param    string      $username       username to create user for
 * @param    string      $email          email address to assign to user
 * @param    string      $email_conf     confirmation email address check
+* @param    string      $passwd         password
+* @param    string      $passwd_conf    confirmation password check
 * @return   string      HTML for the form again if error occurs, otherwise nothing.
 *
 */
-function createuser ($username, $email, $email_conf)
+function createuser ($username, $email, $email_conf, $passwd='', $passwd_conf='')
 {
-    global $_CONF, $_TABLES, $LANG01, $LANG04;
+    global $_CONF, $_TABLES, $LANG01, $LANG04, $MESSAGE;
 
     $retval = '';
 
@@ -532,7 +634,15 @@ function createuser ($username, $email, $email_conf)
 
     $email      = COM_truncate(trim ($email),96);
     $email_conf = trim ($email_conf);
-    $passwd     = '';   // placeholder for future user-entered password
+
+    if ( $_CONF['registration_type'] == 1 ) {
+        if ( $passwd != $passwd_conf ) {
+            $retval .= COM_siteHeader('menu',$LANG04[22]);
+            $retval .= newuserform($MESSAGE[67]);
+            $retval .= COM_siteFooter();
+            return $retval;
+        }
+    }
 
     $fullname = '';
     if (!empty ($_POST['fullname'])) {
@@ -555,8 +665,7 @@ function createuser ($username, $email, $email_conf)
 
             // For glFusion, it would be okay to create this user now. But check
             // with a custom userform first, if one exists.
-            if ($_CONF['custom_registration'] &&
-                    function_exists ('CUSTOM_userCheck')) {
+            if ($_CONF['custom_registration'] && function_exists ('CUSTOM_userCheck')) {
                 $msg = CUSTOM_userCheck ($username, $email);
                 if (!empty ($msg)) {
                     // no, it's not okay with the custom userform
@@ -581,19 +690,24 @@ function createuser ($username, $email, $email_conf)
 
                 return $retval;
             }
+            if ( $_CONF['registration_type'] == 1 && !empty($passwd) ) {
+                $encryptedPasswd = SEC_encryptPassword($passwd);
+            } else {
+                $encryptedPasswd = '';
+            }
 
-            $uid = USER_createAccount ($username, $email, $passwd, $fullname);
+            $uid = USER_createAccount ($username, $email, $encryptedPasswd, $fullname);
 
             if ($_CONF['usersubmission'] == 1) {
-                if (DB_getItem ($_TABLES['users'], 'status', "uid = ".intval($uid))
+                if (DB_getItem ($_TABLES['users'], 'status', "uid = ".(int) $uid)
                         == USER_ACCOUNT_AWAITING_APPROVAL) {
                     $retval = COM_refresh ($_CONF['site_url']
                                            . '/index.php?msg=48');
                 } else {
-                    $retval = emailpassword ($username, 1);
+                    $retval = emailpassword ($username, $passwd, 1);
                 }
             } else {
-                $retval = emailpassword ($username, 1);
+                $retval = emailpassword ($username,$passwd);
             }
 
             return $retval;
@@ -681,7 +795,7 @@ function loginform ($hide_forgotpw_link = false, $statusmode = -1)
 */
 function newuserform ($msg = '')
 {
-    global $_CONF, $LANG04;
+    global $_CONF, $LANG01, $LANG04;
 
     $retval = '';
 
@@ -703,7 +817,16 @@ function newuserform ($msg = '')
     $user_templates->set_var('lang_fullname', $LANG04[3]);
     $user_templates->set_var('lang_email', $LANG04[5]);
     $user_templates->set_var('lang_email_conf', $LANG04[124]);
-    $user_templates->set_var('lang_warning', $LANG04[24]);
+//FIX ME
+// we may want to check for submission queue and add some more info about once the admin approves...
+    if ( $_CONF['registration_type'] == 1 ) { // verification link
+        $user_templates->set_var('lang_passwd',$LANG01[57]);
+        $user_templates->set_var('lang_passwd_conf',$LANG01[57]);
+        $user_templates->set_var('lang_warning',$LANG04[167]);
+    } else {
+        $user_templates->set_var('lang_warning', $LANG04[24]);
+    }
+
     $user_templates->set_var('lang_register', $LANG04[27]);
     PLG_templateSetVars ('registration', $user_templates);
     $user_templates->set_var('end_block', COM_endBlock());
@@ -928,10 +1051,19 @@ case 'create':
                  . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
         $display .= COM_siteFooter ();
     } else {
+        $passwd = '';
+        $passwd_conf = '';
+
         $email = COM_applyFilter ($_POST['email']);
         $email_conf = COM_applyFilter ($_POST['email_conf']);
         $newusername = COM_stripslashes($_POST['username']);
-        $display .= createuser($newusername, $email, $email_conf);
+        if ( isset($_POST['passwd']) ) {
+            $passwd = COM_stripslashes($_POST['passwd']);
+        }
+        if ( isset($_POST['passwd_conf']) ) {
+            $passwd_conf = COM_stripslashes($_POST['passwd_conf']);
+        }
+        $display .= createuser($newusername, $email, $email_conf, $passwd, $passwd_conf);
     }
     break;
 
@@ -1059,6 +1191,97 @@ case 'new':
         }
     }
     $display .= COM_siteFooter();
+    break;
+
+case 'verify':
+    $uid    = (int) COM_applyFilter ($_GET['u'], true);
+    $vid    = COM_applyFilter ($_GET['vid']);
+
+    if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) &&
+            !empty ($vid) && (strlen ($vid) == 32)) {
+        $uid = (int) $uid;
+        $safevid = DB_escapeString($vid);
+        $result = DB_query("SELECT UNIX_TIMESTAMP(act_time) AS act_time FROM {$_TABLES['users']} WHERE uid=".$uid." AND act_token='".$safevid."' AND status=".USER_ACCOUNT_AWAITING_VERIFICATION);
+        if ( DB_numRows($result) != 1 ) {
+            $valid = 0;
+        } else {
+            $U = DB_fetchArray($result);
+            if ( $U['act_time'] != '' && $U['act_time'] > (time() - 86400) ) {
+                $valid = 1;
+            } else {
+                $valid = 0;
+            }
+        }
+        if ($valid == 1) {
+            DB_query("UPDATE {$_TABLES['users']} SET status=".USER_ACCOUNT_AWAITING_ACTIVATION.",act_time='0000-00-00 00:00:00' WHERE uid=".$uid);
+            $display .= COM_siteHeader ('menu', $LANG04[25]);
+            $display .= COM_showMessage (515);
+            $display .= SEC_loginForm();
+            $display .= COM_siteFooter ();
+        } else { // request invalid or expired
+            $result = DB_query("SELECT * FROM {$_TABLES['users']} WHERE uid=".$uid);
+            $display .= COM_siteHeader ('menu', $LANG04[25]);
+            if ( DB_numRows($result) == 1 ) {
+                $U = DB_fetchArray($result);
+                switch ($U['status']) {
+                    case USER_ACCOUNT_AWAITING_ACTIVATION :
+                    case USER_ACCOUNT_ACTIVE :
+                        $display .= COM_showMessage(517);
+                        $display .= SEC_loginForm();
+                        break;
+                    case USER_ACCOUNT_AWAITING_VERIFICATION :
+                        $display .= COM_showMessage(516);
+                        $display .= newtokenform($uid);
+                        break;
+                    default :
+                        echo COM_refresh($_CONF['site_url']);
+                        exit;
+                }
+                $display .= COM_siteFooter();
+            } else {
+                $display = COM_refresh ($_CONF['site_url']);
+            }
+        }
+    } else {
+        // this request doesn't make sense - ignore it
+        $display = COM_refresh ($_CONF['site_url']);
+    }
+
+    break;
+
+case 'getnewtoken':
+    if ($_CONF['passwordspeedlimit'] == 0) {
+        $_CONF['passwordspeedlimit'] = 300; // 5 minutes
+    }
+
+    $uid = COM_applyFilter($_POST['uid'],true);
+    COM_clearSpeedlimit ($_CONF['passwordspeedlimit'], 'verifytoken');
+    $last = COM_checkSpeedlimit ('verifytoken');
+    if ($last > 0) {
+        $display .= COM_siteHeader ('menu', $LANG12[26])
+                 . COM_startBlock ($LANG12[26], '',
+                           COM_getBlockTemplate ('_msg_block', 'header'))
+                 . sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit'])
+                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
+                 . COM_siteFooter ();
+    } else {
+        $username = COM_stripslashes ($_POST['username']);
+        $passwd   = COM_stripslashes ($_POST['passwd']);
+        if (!empty ($username) && !empty ($passwd)) {
+            $encryptedPassword = DB_getItem($_TABLES['users'],'passwd','username="'.DB_escapeString($username).'"');
+            if ( SEC_check_hash($passwd, $encryptedPassword) ) {
+                $display .= requesttoken ($uid, 3);
+            } else {
+                $display .= COM_siteHeader('menu');
+                $display .= newtokenform($uid);
+                $display .= COM_siteFooter();
+            }
+        } else {
+            $display .= COM_siteHeader('menu');
+            $display .= newtokenform($uid);
+            $display .= COM_siteFooter();
+        }
+    }
     break;
 
 default:

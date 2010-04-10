@@ -149,6 +149,7 @@ function USER_deleteAccount ($uid)
 * @param    string  $username   user's login name
 * @param    string  $useremail  user's email address
 * @param    int     $uid        user id of user
+* @param    string  $passwd     user's password (optional)
 * @return   bool                true = success, false = an error occured
 *
 */
@@ -156,13 +157,20 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
 {
     global $_CONF, $_TABLES, $LANG04;
 
-    $uid = intval($uid);
+    $activation_link = '';
 
-    if ( $passwd == '' ) {
-        $passwd = USER_createPassword(8);
+    $uid = (int) $uid;
+
+    $storedPassword = DB_getItem($_TABLES['users'],'passwd','uid='.$uid);
+    if ( $passwd == '' && substr($storedPassword,0,4) == '$H$9' ) {
+        // no need to update password
+    } else {
+        if ( $passwd == '' ) {
+            $passwd = USER_createPassword(8);
+        }
+        $passwd2 = SEC_encryptPassword($passwd);
+        DB_change ($_TABLES['users'], 'passwd', "$passwd2", 'uid', $uid);
     }
-    $passwd2 = SEC_encryptPassword($passwd);
-    DB_change ($_TABLES['users'], 'passwd', "$passwd2", 'uid', $uid);
 
     if (file_exists ($_CONF['path_data'] . 'welcome_email.txt')) {
         $template = new Template ($_CONF['path_data']);
@@ -183,12 +191,34 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
         $template->parse ('output', 'mail');
         $mailtext = $template->get_var ('output');
     } else {
-        $mailtext = $LANG04[15] . "\n\n";
-        $mailtext .= $LANG04[2] . ": $username\n";
-        $mailtext .= $LANG04[4] . ": $passwd\n\n";
-        $mailtext .= $LANG04[14] . "\n\n";
-        $mailtext .= $_CONF['site_name'] . "\n";
-        $mailtext .= $_CONF['site_url'] . "\n";
+        switch ( $_CONF['registration_type'] ) {
+            case 1 : // verification email
+                $verification_id = USER_createActivationToken($uid,$username);
+                $activation_link = $_CONF['site_url'].'/users.php?mode=verify&vid='.$verification_id.'&u='.$uid;
+                $mailtext  = $LANG04[168] . $_CONF['site_name'] . ".\n\n";
+                $mailtext .= $LANG04[170] . "\n\n";
+                $mailtext .= "----------------------------\n";
+                $mailtext .= $LANG04[2] . ': ' . $username ."\n";
+                $mailtext .= $LANG04[171] .': ' . $_CONF['site_url'] ."\n";
+                $mailtext .= "----------------------------\n\n";
+                $mailtext .= $LANG04[172] . "\n\n";
+                $mailtext .= $activation_link . "\n\n";
+                $mailtext .= $LANG04[173] . "\n\n";
+                $mailtext .= $LANG04[174] . "\n\n";
+                $mailtext .= "--\n";
+                $mailtext .= $_CONF['site_name'] . "\n";
+                $mailtext .= $_CONF['site_url'] . "\n";
+                break;
+            case 0 : // standard here's your password
+            default :
+                $mailtext = $LANG04[15] . "\n\n";
+                $mailtext .= $LANG04[2] . ": $username\n";
+                $mailtext .= $LANG04[4] . ": $passwd\n\n";
+                $mailtext .= $LANG04[14] . "\n\n";
+                $mailtext .= $_CONF['site_name'] . "\n";
+                $mailtext .= $_CONF['site_url'] . "\n";
+                break;
+        }
     }
     $subject = $_CONF['site_name'] . ': ' . $LANG04[16];
     if ($_CONF['site_mail'] !== $_CONF['noreply_mail']) {
@@ -206,6 +236,18 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
 
     return COM_mail ($to, $subject, $mailtext, $from);
 }
+
+function USER_createActivationToken($uid,$username)
+{
+    global $_CONF, $_TABLES;
+
+    $token = md5($_USER['uid'].$pageURL.uniqid (rand (), 1));
+
+    DB_query("UPDATE {$_TABLES['users']} SET act_token='".DB_escapeString($token)."', act_time=NOW() WHERE uid=".$uid);
+
+    return $token;
+}
+
 
 /**
 * Inform a user their account has been activated.
@@ -309,6 +351,10 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
             $values .= ',' . USER_ACCOUNT_AWAITING_APPROVAL;
         }
     } else {
+        if ($_CONF['registration_type'] == 1 ) {
+            $fields .= ',status';
+            $values .= ',' . USER_ACCOUNT_AWAITING_VERIFICATION;
+        }
         if (!empty($remoteusername)) {
             $fields .= ',remoteusername';
             $values .= ",'".DB_escapeString($remoteusername)."'";

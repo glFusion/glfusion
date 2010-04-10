@@ -547,6 +547,8 @@ CREATE TABLE {$_TABLES['users']} (
   theme varchar(64) default NULL,
   language varchar(64) default NULL,
   pwrequestid varchar(16) default NULL,
+  act_token varchar(32) NOT NULL default '',
+  act_time datetime NOT NULL default '0000-00-00 00:00:00',
   status smallint(5) unsigned NOT NULL default '1',
   num_reminders tinyint(1) NOT NULL default 0,
   remote_ip varchar(15) NOT NULL default '',

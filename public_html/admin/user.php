@@ -452,8 +452,9 @@ function USER_accountPanel($U,$newuser = 0)
     $userform->set_var('cooktime_selector', $selection);
     $userform->set_var('email_value', htmlspecialchars ($U['email']));
 
-    $statusarray = array(USER_ACCOUNT_AWAITING_ACTIVATION => $LANG28[43],
-                         USER_ACCOUNT_ACTIVE              => $LANG28[45]
+    $statusarray = array(USER_ACCOUNT_AWAITING_ACTIVATION   => $LANG28[43],
+                         USER_ACCOUNT_AWAITING_VERIFICATION => $LANG28[16],
+                         USER_ACCOUNT_ACTIVE                => $LANG28[45]
                    );
 
     $allow_ban = true;
@@ -1682,7 +1683,7 @@ function USER_save($uid)
             CUSTOM_userSave($uid);
         }
         if( ($_CONF['usersubmission'] == 1) && ($oldstatus == USER_ACCOUNT_AWAITING_APPROVAL)
-               && ($userstatus == USER_ACCOUNT_ACTIVE) ) {
+               && ($userstatus == USER_ACCOUNT_ACTIVE || $userstatus == USER_ACCOUNT_AWAITING_ACTIVATION) ) {
             USER_createAndSendPassword ($username, $email, $uid);
         }
         if ($userstatus == USER_ACCOUNT_DISABLED) {

@@ -76,6 +76,7 @@ define('USER_ACCOUNT_DISABLED', 0); // Account is banned/disabled
 define('USER_ACCOUNT_AWAITING_ACTIVATION', 1); // Account awaiting user to login.
 define('USER_ACCOUNT_AWAITING_APPROVAL', 2); // Account awaiting moderator approval
 define('USER_ACCOUNT_ACTIVE', 3); // active account
+define('USER_ACCOUNT_AWAITING_VERIFICATION', 4); // Account waiting for user to complete verification
 
 /* Constant for Security Token */
 if (!defined('CSRF_TOKEN')) {
