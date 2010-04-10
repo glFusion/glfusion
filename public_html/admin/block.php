@@ -521,15 +521,15 @@ function BLOCK_list()
 
     // writing the list
     $header_arr = array(      # display 'text' and use table field 'field'
-        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center', 'width' => '10%'),
-        array('text' => $LANG21[65], 'field' => 'blockorder', 'sort' => true, 'align' => 'center', 'width' => '10%'),
-        array('text' => $LANG21[46], 'field' => 'move', 'sort' => false, 'align' => 'center', 'width' => '10%'),
-        array('text' => $LANG21[48], 'field' => 'name', 'sort' => true),
-        array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true, 'width' => '40%'),
-        array('text' => $LANG_ADMIN['type'], 'field' => 'type', 'sort' => true, 'align' => 'center', '10%'),
-        array('text' => $LANG_ADMIN['topic'], 'field' => 'tid', 'sort' => true, 'align' => 'center', 'width' => '10%'),
-        array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center', 'width' => '10%'),
-        array('text' => $LANG_ADMIN['enabled'], 'field' => 'is_enabled', 'sort' => true, 'align' => 'center', 'width' => '10%')
+        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center', 'width' => '30px'),
+        array('text' => $LANG21[65], 'field' => 'blockorder', 'sort' => true, 'align' => 'center', 'width' => '60px'),
+        array('text' => $LANG21[46], 'field' => 'move', 'sort' => false, 'align' => 'center', 'width' => '30px'),
+        array('text' => $LANG21[48], 'field' => 'name', 'sort' => true, 'width' => '25%'),
+        array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true, 'width' => '25%'),
+        array('text' => $LANG_ADMIN['topic'], 'field' => 'tid', 'sort' => true, 'align' => 'center', 'width' => '20%'),
+        array('text' => $LANG_ADMIN['type'], 'field' => 'type', 'sort' => true, 'align' => 'center', '60px'),
+        array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center', 'width' => '30px'),
+        array('text' => $LANG_ADMIN['enabled'], 'field' => 'is_enabled', 'sort' => true, 'align' => 'center', 'width' => '60px')
     );
 
     $defsort_arr = array('field' => 'blockorder', 'direction' => 'asc');
