@@ -275,7 +275,7 @@ function confirmAccountDelete ($form_reqid)
     // to change the password, email address, or cookie timeout,
     // we need the user's current password
     $current_password = DB_getItem($_TABLES['users'],'passwd',"uid={$_USER['uid']}");
-    if (empty($_POST['old_passwd']) || !SEC_check_hash($_POST['old_passwd'],$current_password)) {
+    if (empty($_POST['old_passwd']) || !SEC_check_hash(trim(COM_stripslashes($_POST['old_passwd'])),$current_password)) {
          return COM_refresh($_CONF['site_url']
                             . '/usersettings.php?msg=84');
     }
@@ -895,7 +895,7 @@ function saveuser($A)
     // we need the user's current password
     if (!empty ($A['passwd']) || ($A['email'] != $_USER['email']) ||
             ($A['cooktime'] != $_USER['cookietimeout'])) {
-        $A['old_passwd'] = COM_stripslashes($A['old_passwd']);
+        $A['old_passwd'] = trim(COM_stripslashes($A['old_passwd']));
         $current_password = DB_getItem($_TABLES['users'],'passwd',"uid={$_USER['uid']}");
         if (empty($A['old_passwd']) || !SEC_check_hash($A['old_passwd'],$current_password) ) {
             return COM_refresh ($_CONF['site_url']
@@ -982,8 +982,8 @@ function saveuser($A)
     } else {
 
         if (!empty($A['passwd'])) {
-            $A['passwd'] = COM_stripslashes($A['passwd']);
-            $A['passwd_conf'] = COM_stripslashes($A['passwd_conf']);
+            $A['passwd'] = trim(COM_stripslashes($A['passwd']));
+            $A['passwd_conf'] = trim(COM_stripslashes($A['passwd_conf']));
             $current_password = DB_getItem($_TABLES['users'],'passwd',"uid=".(int)$_USER['uid']);
             if (($A['passwd'] == $A['passwd_conf']) && SEC_check_hash($A['old_passwd'],$current_password) ){
                 $passwd = SEC_encryptPassword($A['passwd']);

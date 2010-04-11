@@ -505,7 +505,9 @@ function SESS_endUserSession($userid)
 {
     global $_TABLES;
 
-    $sql = "DELETE FROM {$_TABLES['sessions']} WHERE (uid = ".intval($userid).")";
+    $sql = "DELETE FROM {$_TABLES['sessions']} WHERE (uid = ".(int)$userid.")";
+    $result = DB_query($sql);
+    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE (owner_id = ".(int)$userid.")";
     $result = DB_query($sql);
 
     return 1;

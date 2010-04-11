@@ -53,6 +53,10 @@ require_once 'lib-common.php';
 USES_lib_user();
 $VERBOSE = false;
 
+if ( !isset($_SYSTEM['verification_token_ttl']) ) {
+    $_SYSTEM['verification_token_ttl'] = 86400;
+}
+
 /**
 * Shows a profile for a user
 *
@@ -1028,7 +1032,6 @@ case 'user':
     if ( !USER_validateUsername($username) ) {
         $username = '';
     }
-//    $username = COM_applyFilter ($_GET['username']);
     if (!empty ($username) && $username != '') {
         $username = DB_escapeString ($username);
         $uid = DB_getItem ($_TABLES['users'], 'uid', "username = '$username'");
@@ -1058,10 +1061,10 @@ case 'create':
         $email_conf = COM_applyFilter ($_POST['email_conf']);
         $newusername = COM_stripslashes($_POST['username']);
         if ( isset($_POST['passwd']) ) {
-            $passwd = COM_stripslashes($_POST['passwd']);
+            $passwd = trim(COM_stripslashes($_POST['passwd']));
         }
         if ( isset($_POST['passwd_conf']) ) {
-            $passwd_conf = COM_stripslashes($_POST['passwd_conf']);
+            $passwd_conf = trim(COM_stripslashes($_POST['passwd_conf']));
         }
         $display .= createuser($newusername, $email, $email_conf, $passwd, $passwd_conf);
     }
@@ -1206,7 +1209,7 @@ case 'verify':
             $valid = 0;
         } else {
             $U = DB_fetchArray($result);
-            if ( $U['act_time'] != '' && $U['act_time'] > (time() - 86400) ) {
+            if ( $U['act_time'] != '' && $U['act_time'] > (time() - $_SYSTEM['verification_token_ttl']) ) {
                 $valid = 1;
             } else {
                 $valid = 0;

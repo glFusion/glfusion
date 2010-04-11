@@ -1683,7 +1683,7 @@ function USER_save($uid)
             CUSTOM_userSave($uid);
         }
         if( ($_CONF['usersubmission'] == 1) && ($oldstatus == USER_ACCOUNT_AWAITING_APPROVAL)
-               && ($userstatus == USER_ACCOUNT_ACTIVE || $userstatus == USER_ACCOUNT_AWAITING_ACTIVATION) ) {
+               && ($userstatus == USER_ACCOUNT_ACTIVE || $userstatus == USER_ACCOUNT_AWAITING_ACTIVATION || $userstatus == USER_ACCOUNT_AWAITING_VERIFICATION) ) {
             USER_createAndSendPassword ($username, $email, $uid);
         }
         if ($userstatus == USER_ACCOUNT_DISABLED) {

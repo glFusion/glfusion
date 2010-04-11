@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
+// | Copyright (C) 2009-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -714,6 +714,7 @@ function SEC_authenticate($username, $password, &$uid)
     global $_CONF, $_SYSTEM, $_TABLES, $LANG01;
 
     $escaped_name = DB_escapeString(trim($username));
+    $password = trim(str_replace(array("\015", "\012"), '', $password));
 
     $result = DB_query("SELECT status, passwd, email, uid FROM {$_TABLES['users']} WHERE username='$escaped_name' AND ((remoteservice is null) or (remoteservice = ''))");
     $tmp = DB_error();

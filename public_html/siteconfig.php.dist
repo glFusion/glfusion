@@ -97,18 +97,14 @@ $_SYSTEM['admin_session'] = 1200;
 $_SYSTEM['swedish_date_hack'] = false;
 
 // +--------------------------------------------------------------------------+
-// | Skip IP Check - disables glFusion's checking of the long term cookie     |
-// |                 against the user's IP address.                           |
+// | Verification Token Time to Live - the number of seconds a verification   |
+// |                 token is valid.                                          |
 // |                                                                          |
-// | As a security precaution, glFusion validates that the IP address used    |
-// | to set the long term cookie matches the IP address of the user each time |
-// | it is checked.  This can cause issues for users who change IPs often,    |
-// | for example, if they are behind a proxy server farm.                     |
-// |                                                                          |
-// | If this value is set to true, the IP address will not be checked.        |
+// | The number of seconds that the registration verification token is valid. |
+// | The default is 24 hours (86400 seconds).                                 |
 // +--------------------------------------------------------------------------+
 
-$_SYSTEM['skip_ip_check'] = false;
+$_SYSTEM['verification_token_ttl'] = 86400;
 
 // +--------------------------------------------------------------------------+
 // | Token IP - use IP address to validate tokens instead of referring URL    |
