@@ -7,9 +7,10 @@ var RecaptchaOptions = {
 };
 //]]>
 </script>
-<div style="margin-left:130px;">
+<div style="float:right;border:1px solid #ccc;">
   {recaptcha}
 </div>
+<div style="clear:both;"></div>
 {!else}
 <script type="text/javascript">
 //<![CDATA[
@@ -35,17 +36,8 @@ function new_captcha()
 }
 //]]>
 </script>
-<label>{$LANG_CP00[picture]}:<br{xhtml}>
-<a href="javascript:new_captcha();" style="vertical-align:middle;">{lang_reload}</a>
-</label>
-
-<img src="{captcha_image}" id="captchaimage" border="0" alt="{lang_alt}" title="{lang_alt}"{xhtml}>
-
-<div style="clear:both;"></div>
-<label for="captcha">{$LANG_CP00[characters]}:</label>
-
-<input type="text" id="captcha" name="captcha" size="25" maxlength="40" value="{captchastring}"{xhtml}>
+<img style="border:1px solid #ccc;margin-bottom:5px;" src="{captcha_image}" id="captchaimage" border="0" alt="{lang_alt}" title="{lang_alt}"{xhtml}><br{xhtml}>
+<a href="javascript:new_captcha();" style="vertical-align:middle;text-align:right;padding:5px 5px 10px;text-decoration:none;">{lang_reload}</a>&nbsp;<input type="text" id="captcha" name="captcha" size="18" maxlength="6" value="{lang_captcha_help}" title="{lang_captcha_help}" onfocus="if (this.value=='{lang_captcha_help}')this.value='';" onblur="if(this.value=='')this.value='{lang_captcha_help}';"{xhtml}>
 <input type="hidden" name="csid" value="{csid}"{xhtml}><br{xhtml}>
-<div style="margin-left: 95px;">{lang_captcha_help}</div>
 {!endif}
 {# end {templatelocation} #}
