@@ -730,6 +730,8 @@ function SEC_authenticate($username, $password, &$uid)
             return -1;
         } elseif ($U['status'] == USER_ACCOUNT_AWAITING_APPROVAL) {
             return USER_ACCOUNT_AWAITING_APPROVAL;
+        } elseif ($U['status'] == USER_ACCOUNT_AWAITING_VERIFICATION ) {
+            return USER_ACCOUNT_AWAITING_VERIFICATION;
         } elseif ($U['status'] == USER_ACCOUNT_AWAITING_ACTIVATION) {
             // Awaiting user activation, activate:
             DB_change($_TABLES['users'], 'status', USER_ACCOUNT_ACTIVE,
@@ -1662,6 +1664,7 @@ function SEC_loginForm($use_options = array())
         '3rdparty_login'    => true,    // $_CONF['user_login_method']['3rdparty']
         'openid_login'      => true,    // $_CONF['user_login_method']['openid']
         'newreg_link'       => true,    // $_CONF['disable_new_user_registration']
+        'verification_link' => false,   // resend verification?
         'plugin_vars'       => true,    // call PLG_templateSetVars?
         'prefill_user'      => false,
 
@@ -1763,6 +1766,18 @@ function SEC_loginForm($use_options = array())
     } else {
         $loginform->set_var('openid_login', '');
     }
+
+    if ($options['verification_link']) {
+        $loginform->set_var('lang_verification', $LANG04[169]);
+        $verify = COM_createLink($LANG04[25], $_CONF['site_url']
+                                              . '/users.php?mode=getnewtoken',
+                                 array('rel' => 'nofollow'));
+        $loginform->set_var('verification_link', $verify);
+    } else {
+        $loginform->set_var('lang_verification', '');
+        $loginform->set_var('verification_link', '');
+    }
+
 
     if ($options['prefill_user'] && isset($_USER['username']) && $_USER['username'] != '' ) {
         $loginform->set_var('loginname',$_USER['username']);

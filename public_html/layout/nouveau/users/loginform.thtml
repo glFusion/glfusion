@@ -21,6 +21,9 @@
             <p style="text-align:right;">
                 <a href="{site_url}/users.php?mode=getpassword" rel="nofollow">{lang_forgetpassword}</a>
             </p>
+            <p style="text-align:right;">
+                <a href="{site_url}/users.php?mode=getnewtoken" rel="nofollow">{lang_verification}</a>
+            </p>
             <p>
               &nbsp;
             </p>

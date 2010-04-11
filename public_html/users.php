@@ -774,11 +774,19 @@ function loginform ($hide_forgotpw_link = false, $statusmode = -1)
         $options['message'] = $LANG04[115];
         $options['forgotpw_link']      = false;
         $options['newreg_link']        = false;
+        $options['verification_link']  = false;
     } elseif ($statusmode == USER_ACCOUNT_AWAITING_APPROVAL) {
         $options['title']   = $LANG04[116];
         $options['message'] = $LANG04[117];
         $options['forgotpw_link']      = false;
         $options['newreg_link']        = false;
+        $options['verification_link']  = false;
+    } elseif ($statusmode == USER_ACCOUNT_AWAITING_VERIFICATION ) {
+        $options['title']   = $LANG04[116];
+        $options['message'] = $LANG04[177];
+        $options['forgotpw_link']      = false;
+        $options['newreg_link']        = false;
+        $options['verification_link']  = true;
     } elseif ($statusmode == -1) { // invalid credentials
         $options['title']   = $LANG04[65];
         $options['message'] = $LANG04[113];

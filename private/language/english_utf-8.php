@@ -450,7 +450,7 @@ $LANG04 = array(
     166 => 'Remote User Info',
     167 => 'A verification email will be sent to your eMail address.',
     168 => 'Welcome to ',
-    169 => 'Request New Verification Token',
+    169 => 'Request New Verification eMail',
     170 => 'Please keep this eMail for your records. Your account information is as follows:',
     171 => 'Site URL',
     172 => 'Please visit the following link in order to activate your account:',
@@ -458,6 +458,7 @@ $LANG04 = array(
     174 => 'Thank you for registering.',
     175 => 'To request a new verification token, please enter your username and password below and a new verification email will be sent to you.',
     176 => 'Confirm Password',
+    177 => 'Your account is currently awaiting verification.<br />You will not be able to login until your account has been verified by following the link in the verification email.',
 
 );
 
