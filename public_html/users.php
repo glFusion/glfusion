@@ -821,7 +821,7 @@ function newuserform ($msg = '')
 // we may want to check for submission queue and add some more info about once the admin approves...
     if ( $_CONF['registration_type'] == 1 ) { // verification link
         $user_templates->set_var('lang_passwd',$LANG01[57]);
-        $user_templates->set_var('lang_passwd_conf',$LANG01[57]);
+        $user_templates->set_var('lang_passwd_conf',$LANG04[176]);
         $user_templates->set_var('lang_warning',$LANG04[167]);
     } else {
         $user_templates->set_var('lang_warning', $LANG04[24]);

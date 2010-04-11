@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Layout on Register screen now matches the layout on Login screen (Eric)
 - Allow users to select their own passwords and implement verification email
   (Mark)
 - Ratings were not moved to new story when story id changed (Mark)
