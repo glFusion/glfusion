@@ -155,7 +155,11 @@ function USER_deleteAccount ($uid)
 */
 function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
 {
-    global $_CONF, $_TABLES, $LANG04;
+    global $_CONF, $_SYSTEM, $_TABLES, $LANG04;
+
+    if ( !isset($_SYSTEM['verification_token_ttl']) ) {
+        $_SYSTEM['verification_token_ttl'] = 86400;
+    }
 
     $activation_link = '';
 
@@ -201,7 +205,7 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
             $mailtext .= $LANG04[2] . ': ' . $username ."\n";
             $mailtext .= $LANG04[171] .': ' . $_CONF['site_url'] ."\n";
             $mailtext .= "----------------------------\n\n";
-            $mailtext .= $LANG04[172] . "\n\n";
+            $mailtext .= sprintf($LANG04[172],($_SYSTEM['verification_token_ttl']/3600)) . "\n\n";
             $mailtext .= $activation_link . "\n\n";
             $mailtext .= $LANG04[173] . "\n\n";
             $mailtext .= $LANG04[174] . "\n\n";

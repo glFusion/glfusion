@@ -448,17 +448,17 @@ $LANG04 = array(
     164 => 'Remote Username',
     165 => 'Remote Service',
     166 => 'Remote User Info',
-    167 => 'A verification email will be sent to your eMail address.',
+    167 => 'A activation eMail will be sent to your eMail address.',
     168 => 'Welcome to ',
-    169 => 'Request New Verification eMail',
+    169 => 'Request New activation eMail',
     170 => 'Please keep this eMail for your records. Your account information is as follows:',
     171 => 'Site URL',
-    172 => 'Please visit the following link in order to activate your account:',
-    173 => 'Your password has been securely stored in our database and cannot be retrieved. In the event that it is forgotten, you will be able to reset it using the email address associated with your account.',
+    172 => 'Please visit the following link in order to activate your account (the activation link is only valid for %d hours):',
+    173 => 'Your password has been securely stored in our database and cannot be retrieved. In the event that it is forgotten, you will be able to reset it using the eMail address associated with your account.',
     174 => 'Thank you for registering.',
-    175 => 'To request a new verification token, please enter your username and password below and a new verification email will be sent to you.',
+    175 => 'To request a new activation token, please enter your username and password below and a new activation eMail will be sent to you.',
     176 => 'Confirm Password',
-    177 => 'Your account is currently awaiting verification.<br />You will not be able to login until your account has been verified by following the link in the verification email.',
+    177 => 'Your account is currently awaiting verification.<br />You will not be able to login until your account has been verified by following the link in the activation eMail.',
 
 );
 
@@ -1429,9 +1429,9 @@ $MESSAGE = array(
     512 => 'Username contains invalid characters " < > / \ $ % * are not allowed',
     513 => 'Remote username cannot be blank.',
     514 => 'Remote service cannot be empty.',
-    515 => 'Your account is now active.',
-    516 => 'Your registration token has expired.',
-    517 => 'This account has already been verified, please login below.',
+    515 => 'Thank you, your account has now been activated.',
+    516 => 'Your activation token has expired.',
+    517 => 'This account has already been activated, please login below.',
 
 );
 
