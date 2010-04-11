@@ -1765,6 +1765,7 @@ $LANG_ADMIN = array(
     'action' => 'Action for all selected:',
     'authenticate' => 'Authenticate',
     'select' => 'Select',
+    'name' => 'Name',
 );
 
 ###############################################################################

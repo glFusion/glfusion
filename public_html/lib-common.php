@@ -6739,21 +6739,29 @@ function COM_truncateHTML ( $htmltext, $maxlen, $filler = '', $endchars = 0 )
 * @param    string  $text   the text string to truncate
 * @param    int     $maxlen max. number of characters in the truncated string
 * @param    string  $filler optional filler string, e.g. '...'
+* @param    boolean $tip    optional tooltip with untruncated text
+*
 * @return   string          truncated string
 *
 * @note The truncated string may be shorter but will never be longer than
 *       $maxlen characters, i.e. the $filler string is taken into account.
+*       if $tip is true, and text is truncated, the result is encapsulated in a
+*       span with title attribute set to the full text (hovertip effect)
+
 *
 */
-function COM_truncate( $text, $maxlen, $filler = '' )
+function COM_truncate( $text, $maxlen, $filler = '', $tip = false )
 {
     $newlen = $maxlen - MBYTE_strlen( $filler );
     $len = MBYTE_strlen( $text );
     if( $len > $maxlen ) {
-        $text = MBYTE_substr( $text, 0, $newlen ) . $filler;
+        $retval = ($tip) ? '<span title="' . $text . '">' : '';
+        $retval .= MBYTE_substr( $text, 0, $newlen ) . $filler;
+        $retval .= ($tip) ? '</span>' : '';
+        return $retval;
+    } else {
+        return $text;
     }
-
-    return $text;
 }
 
 /**

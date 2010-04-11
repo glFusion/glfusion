@@ -3,7 +3,7 @@
                                 <table cellspacing="0" cellpadding="3" width="100%">
                                     <tr>
                                         <td class="alignright">{lang_blocktitle}:</td>
-                                        <td><input type="text" name="title" value="{block_title}" size="48"{xhtml}></td>
+                                        <td><input type="text" name="title" value="{block_title}" size="48" maxlength="48" {xhtml}></td>
                                     </tr>
                                     <tr>
                                         <td class="alignright">{lang_enabled}:</td>
