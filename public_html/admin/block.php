@@ -126,10 +126,13 @@ function BLOCK_editDefault($A, $access)
     $block_templates->set_var('block_name',$A['name']);
     $block_templates->set_var('lang_blockname', $LANG21[48]);
     $block_templates->set_var('lang_homeonly', $LANG21[43]);
+    $block_templates->set_var('lang_nohomepage', $LANG21[44]);
     if ($A['tid'] == 'all') {
         $block_templates->set_var('all_selected', 'selected="selected"');
     } else if ($A['tid'] == 'homeonly') {
         $block_templates->set_var('homeonly_selected', 'selected="selected"');
+    } else if ( $A['tid'] == 'allnhp' ) {
+        $block_templates->set_var('nohomepage_selected','selected="selected"');
     }
     $block_templates->set_var('topic_options',
                               COM_topicList ('tid,topic', $A['tid'], 1, true));
@@ -319,10 +322,13 @@ function BLOCK_edit($bid = '', $B = array())
     $block_templates->set_var('lang_nospaces', $LANG21[49]);
     $block_templates->set_var('lang_all', $LANG21[7]);
     $block_templates->set_var('lang_homeonly', $LANG21[43]);
+    $block_templates->set_var('lang_nohomepage', $LANG21[44]);
     if ($A['tid'] == 'all') {
         $block_templates->set_var('all_selected', 'selected="selected"');
     } else if ($A['tid'] == 'homeonly') {
         $block_templates->set_var('homeonly_selected', 'selected="selected"');
+    } else if ( $A['tid'] == 'allnhp' ) {
+        $block_templates->set_var('nohomepage_selected','selected="selected"');
     }
     $block_templates->set_var('topic_options',
                               COM_topicList('tid,topic', $A['tid'], 1, true));

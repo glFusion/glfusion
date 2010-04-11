@@ -24,6 +24,7 @@
                                                 <select name="tid">
                                                     <option value="all" {all_selected}>{lang_all}</option>
                                                     <option value="homeonly" {homeonly_selected}>{lang_homeonly}</option>
+                                                    <option value="allnhp" {nohomepage_selected}>{lang_nohomepage}</option>
                                                     {topic_options}
                                                 </select>
                                             </td>

@@ -813,7 +813,7 @@ $LANG21 = array(
     41 => 'Right',
     42 => 'You must enter the block title and block order for glFusion default blocks.',
     43 => 'Homepage Only',
-    44 => '',
+    44 => 'All Except Homepage',
     45 => "You are trying to access a block that you don't have rights to.  This attempt has been logged. Please <a href=\"{$_CONF['site_admin_url']}/block.php\">go back to the block administration screen</a>.",
     46 => 'Move',
     47 => '',

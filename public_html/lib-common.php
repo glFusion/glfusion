@@ -3657,7 +3657,7 @@ function COM_showBlocks( $side, $topic='', $name='all' )
         }
         else
         {
-            $commonsql .= " AND (tid = 'all')";
+            $commonsql .= " AND (tid = 'all' OR tid = 'allnhp')";
         }
     }
 
