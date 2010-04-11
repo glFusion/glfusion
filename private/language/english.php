@@ -309,7 +309,7 @@ $LANG04 = array(
     20 => 'The eMail address provided does not appear to be a valid eMail address',
     21 => 'Error',
     22 => "Register with {$_CONF['site_name']}!",
-    23 => "Creating a user account will give you all the benefits of {$_CONF['site_name']} membership and it will allow you to post comments and submit items as yourself. If you don't have an account, you will only be able to post anonymously. Please note that your eMail address will <b><i>never</i></b> be publicly displayed on this site.",
+    23 => "Register for {$_CONF['site_name']} membership.<br />Your eMail address will <b><i>never</i></b> be publicly displayed on this site.",
     24 => 'Your password will be sent to the eMail address you enter.',
     25 => 'Did You Forget Your Password?',
     26 => 'Enter <em>either</em> your username <em>or</em> the eMail address you used to register and click eMail Password. Instructions on how to set a new password will be mailed to the eMail address on record.',
@@ -448,7 +448,7 @@ $LANG04 = array(
     164 => 'Remote Username',
     165 => 'Remote Service',
     166 => 'Remote User Info',
-    167 => 'A verification email will be sent to the eMail address you entered.',
+    167 => 'A verification email will be sent to your eMail address.',
     168 => 'Welcome to ',
     169 => 'Request New Verification Token',
     170 => 'Please keep this eMail for your records. Your account information is as follows:',
@@ -457,7 +457,7 @@ $LANG04 = array(
     173 => 'Your password has been securely stored in our database and cannot be retrieved. In the event that it is forgotten, you will be able to reset it using the email address associated with your account.',
     174 => 'Thank you for registering.',
     175 => 'To request a new verification token, please enter your username and password below and a new verification email will be sent to you.',
-
+    176 => 'Confirm Password',
 
 );
 
