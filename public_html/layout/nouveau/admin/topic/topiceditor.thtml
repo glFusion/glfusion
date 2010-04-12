@@ -3,7 +3,7 @@
 <script type="text/javascript">
 <!--
 window.addEvent('domready',function() {
-    var myValidator = new fValidator("topic");
+    var myValidator = new fValidator("topiceditor");
 {!if lang_donotusespaces}
     myValidator.register($("tid"), {type: "space", re: /^[a-z0-9._-]+$/i, msg: "Topic ID can only contain 0-9, a-z, A-Z, _ - or . "});
 {!endif}
