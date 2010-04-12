@@ -27,7 +27,7 @@ window.addEvent('domready',function() {
             </p>
 {!if lang_passwd}
             <p style="text-align:right;">
-                <label for="passwd">{lang_passwd}:</label></b>&nbsp;&nbsp;<input class="fValidate['required']" type="password" size="32" maxlength="32" id="passwd" name="passwd" value="" onkeyup="runPassword(this.value, 'mypassword');" style="width:12em;"{xhtml}><br{xhtml}>
+                <label for="passwd">{lang_passwd}:</label>&nbsp;&nbsp;<input class="fValidate['required']" type="password" size="32" maxlength="32" id="passwd" name="passwd" value="" onkeyup="runPassword(this.value, 'mypassword');" style="width:12em;"{xhtml}><br{xhtml}>
             </p>
             <p style="text-align:right;">
                 <label for="passwd_conf">{lang_passwd_conf}:</label>&nbsp;&nbsp;<input class="fValidate['required']" type="password" size="32" maxlength="32" id="passwd_conf" name="passwd_conf" value="" style="width:12em;"{xhtml}><br{xhtml}>
