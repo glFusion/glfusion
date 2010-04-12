@@ -109,6 +109,11 @@
     // a counter used to create unique IDs
     adddwEvent.guid = 1;
 
+    // double confirmation (are you really sure?)
+    function doubleconfirm( msg1, msg2 ) {
+        return confirm(msg1) && confirm(msg2);
+    }
+    
     //widget wrapper iframe buster (load links to parent site in parent window)
     if (top.location != location) {
     top.location.href = document.location.href; }

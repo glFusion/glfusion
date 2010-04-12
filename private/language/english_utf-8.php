@@ -1425,7 +1425,7 @@ $MESSAGE = array(
     508 => 'eMail address does not match the confirmation eMail address.',
     509 => 'Error creating new user account - please check the error log for details.',
     510 => 'Default settings have been applied to all users.',
-    511 => 'Are you sure you want to delete this group?',
+    511 => '',
     512 => 'Username contains invalid characters " < > / \ $ % * are not allowed',
     513 => 'Remote username cannot be blank.',
     514 => 'Remote service cannot be empty.',
@@ -1514,6 +1514,8 @@ $LANG_ACCESS = array(
     'defaultgroup' => 'Default',
     'editinguser'   => 'Editing User: ',
     'createnewuser' => 'Creating New Account',
+    'confirm1' => 'Are you sure you want to delete this group?',
+    'confirm2' => 'Are you absolutely sure you want to delete this group?  This will affect any users or groups that are associated with this group!  Press Cancel and then Edit this group if you wish to view the details.',
 );
 
 ###############################################################################

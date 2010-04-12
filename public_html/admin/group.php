@@ -158,7 +158,7 @@ function GROUP_edit($grp_id = '')
         if ($A['grp_gl_core'] != 1) {
             $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
                        . '" name="delete"%s' . XHTML . '>';
-            $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[511] . '\');"';
+            $jsconfirm = ' onclick="return confirm(\'' . $LANG_ACCESS['confirm1'] . '\');"';
             $group_templates->set_var ('delete_option',
                                        sprintf ($delbutton, $jsconfirm));
             $group_templates->set_var ('delete_option_no_confirmation',
@@ -234,7 +234,7 @@ function GROUP_edit($grp_id = '')
         $whereGroups = '(grp_id IN (' . implode (',', $thisUsersGroups) . '))';
 
         $header_arr = array(
-                        array('text' => $LANG28[86], 'field' => ($A['grp_gl_core'] == 1 ? 'checkbox' : 'checkbox'), 'sort' => false, 'align' => 'center'),
+                        array('text' => $LANG28[86], 'field' => ($A['grp_gl_core'] == 1 ? 'disabled-checkbox' : 'checkbox'), 'sort' => false, 'align' => 'center'),
                         array('text' => $LANG_ACCESS['groupname'], 'field' => 'grp_name', 'sort' => true),
                         array('text' => $LANG_ACCESS['description'], 'field' => 'grp_descr', 'sort' => true)
         );
@@ -261,7 +261,7 @@ function GROUP_edit($grp_id = '')
                            'query' => '',
                            'query_limit' => 0);
 
-        $groupoptions = ADMIN_list('groups', 'GROUP_getListField',
+        $groupoptions = ADMIN_list('groups', 'GROUP_getListField2',
                                    $header_arr, $text_arr, $query_arr,
                                    $defsort_arr, '', explode(' ', $selected));
     }
@@ -717,7 +717,7 @@ function GROUP_getGroupList($basegroup)
  * group administration panel list field function for ADMIN_list()
  *
  */
-function GROUP_getListField($fieldname, $fieldvalue, $A, $icon_arr, $selected = '')
+function GROUP_getListField1($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
     global $_CONF, $LANG_ACCESS, $LANG_ADMIN, $MESSAGE, $thisUsersGroups;
 
@@ -731,12 +731,18 @@ function GROUP_getListField($fieldname, $fieldvalue, $A, $icon_arr, $selected = 
 
     if (in_array ($A['grp_id'], $thisUsersGroups ) ||
         SEC_groupIsRemoteUserAndHaveAccess( $A['grp_id'], $thisUsersGroups )) {
+        
         switch($fieldname) {
+
         case 'edit':
             $url = $_CONF['site_admin_url'] . '/group.php?edit=x&amp;grp_id=' . $A['grp_id'];
             $url .= ($showall) ? '&amp;chk_showall=1' : '';
             $attr['title'] = $LANG_ADMIN['edit'];
             $retval = COM_createLink($icon_arr['edit'], $url, $attr);
+            break;
+
+        case 'grp_name':
+            $retval = ucwords($fieldvalue);
             break;
 
         case 'grp_gl_core':
@@ -773,6 +779,45 @@ function GROUP_getListField($fieldname, $fieldvalue, $A, $icon_arr, $selected = 
                 $retval .= COM_createLink($icon_arr['edit'], $url, $attr);
             }
             break;
+
+        case 'delete':
+            $retval = '';
+            $attr['title'] = $LANG_ADMIN['delete'];
+            $attr['onclick'] = "return doubleconfirm('" . $LANG_ACCESS['confirm1'] . "','" . $LANG_ACCESS['confirm2'] . "');";
+            $retval .= COM_createLink($icon_arr['delete'],
+                $_CONF['site_admin_url'] . '/group.php'
+                . '?delete=x&amp;grp_id=' . $A['grp_id'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            break;
+
+        default:
+            $retval = $fieldvalue;
+            break;
+        }
+    }
+
+    return $retval;
+}
+
+/**
+ * group administration panel list field function for ADMIN_list()
+ *
+ */
+function GROUP_getListField2($fieldname, $fieldvalue, $A, $icon_arr, $selected = '')
+{
+    global $_CONF, $LANG_ACCESS, $LANG_ADMIN, $MESSAGE, $thisUsersGroups;
+
+    $retval = false;
+
+    if(! is_array($thisUsersGroups)) {
+        $thisUsersGroups = SEC_getUserGroups();
+    }
+
+    $showall = (isset($_REQUEST['chk_showall']) );
+
+    if (in_array ($A['grp_id'], $thisUsersGroups ) ||
+        SEC_groupIsRemoteUserAndHaveAccess( $A['grp_id'], $thisUsersGroups )) {
+
+        switch($fieldname) {
 
         case 'checkbox':
             $retval = '<input type="checkbox" name="groups[]" value="' . $A['grp_id'] . '"';
@@ -825,8 +870,9 @@ function GROUP_list($show_all_groups = false)
             array('text' => $LANG_ACCESS['coregroup'], 'field' => 'grp_gl_core', 'sort' => true, 'align' => 'center'),
             array('text' => $LANG_ACCESS['defaultgroup'], 'field' => 'grp_default', 'sort' => true, 'align' => 'center'),
             array('text' => $LANG_ACCESS['listusers'], 'field' => 'listusers', 'sort' => false, 'align' => 'center'),
-            array('text' => $LANG_ACCESS['editusers'], 'field' => 'editusers', 'sort' => false, 'align' => 'center'),
             array('text' => $LANG_ACCESS['sendemail'], 'field' => 'sendemail', 'sort' => false, 'align' => 'center'),
+            array('text' => $LANG_ACCESS['editusers'], 'field' => 'editusers', 'sort' => false, 'align' => 'center'),
+            array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center'),
         );
     } else {
         $header_arr = array(      // display 'text' and use table field 'field'
@@ -836,8 +882,9 @@ function GROUP_list($show_all_groups = false)
             array('text' => $LANG_ACCESS['coregroup'], 'field' => 'grp_gl_core', 'sort' => true, 'align' => 'center'),
             array('text' => $LANG_ACCESS['defaultgroup'], 'field' => 'grp_default', 'sort' => true, 'align' => 'center'),
             array('text' => $LANG_ACCESS['listusers'], 'field' => 'listusers', 'sort' => false, 'align' => 'center'),
-            array('text' => $LANG_ACCESS['editusers'], 'field' => 'editusers', 'sort' => false, 'align' => 'center'),
             array('text' => $LANG_ACCESS['sendemail'], 'field' => 'sendemail', 'sort' => false, 'align' => 'center'),
+            array('text' => $LANG_ACCESS['editusers'], 'field' => 'editusers', 'sort' => false, 'align' => 'center'),
+            array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center'),
         );
     }
 
@@ -900,8 +947,13 @@ function GROUP_list($show_all_groups = false)
     }
     $filter .= $LANG28[48] . '</label></span>';
 
-    $retval .= ADMIN_list('groups', 'GROUP_getListField', $header_arr,
-                          $text_arr, $query_arr, $defsort_arr, $filter);
+    $token = SEC_createToken();
+    $form_arr = array(
+        'bottom'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="'. $token .'"/>',
+    );
+
+    $retval .= ADMIN_list('groups', 'GROUP_getListField1', $header_arr,
+                          $text_arr, $query_arr, $defsort_arr, $filter, $token, '', $form_arr);
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
     return $retval;
