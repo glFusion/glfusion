@@ -1229,13 +1229,13 @@ case 'verify':
         }
         if ($valid == 1) {
             DB_query("UPDATE {$_TABLES['users']} SET status=".USER_ACCOUNT_AWAITING_ACTIVATION.",act_time='0000-00-00 00:00:00' WHERE uid=".$uid);
-            $display .= COM_siteHeader ('menu', $LANG04[25]);
+            $display .= COM_siteHeader ('menu');
             $display .= COM_showMessage (515);
             $display .= SEC_loginForm();
             $display .= COM_siteFooter ();
         } else { // request invalid or expired
             $result = DB_query("SELECT * FROM {$_TABLES['users']} WHERE uid=".$uid);
-            $display .= COM_siteHeader ('menu', $LANG04[25]);
+            $display .= COM_siteHeader ('menu');
             if ( DB_numRows($result) == 1 ) {
                 $U = DB_fetchArray($result);
                 switch ($U['status']) {
