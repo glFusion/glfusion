@@ -224,7 +224,11 @@ function plugin_commentPreSave_captcha($uid, $title, $comment, $sid, $pid, $type
     }
 
     if ( ($_CP_CONF['anonymous_only'] && $uid < 2) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
-        $str = COM_applyFilter($_POST['captcha']);
+        if ( isset($_POST['captcha']) ) {
+            $str = COM_applyFilter($_POST['captcha']);
+        } else {
+            $str = '';
+        }
         list( $rc, $msg) = CAPTCHA_checkInput( $str, 'comment' );
         if ( $rc == 1 )
             return 0;
@@ -299,7 +303,11 @@ function plugin_itemPreSave_captcha( $ctype='registration', $content='' ) {
         $_USER['uid'] = 1;
     }
     if ( ($_CP_CONF['anonymous_only'] && $_USER['uid'] < 2) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
-        $response = COM_applyFilter($_POST['captcha']);
+        if ( isset($_POST['captcha']) ) {
+            $response = COM_applyFilter($_POST['captcha']);
+        } else {
+            $response = '';
+        }
         list( $rc, $msg )  = CAPTCHA_checkInput( $response, $ctype );
         return $msg;
     }
