@@ -1,9 +1,12 @@
 {# begin {templatelocation} #}
+
 <script type="text/javascript">
 <!--
 window.addEvent('domready',function() {
     var myValidator = new fValidator("topic");
+{!if lang_donotusespaces}
     myValidator.register($("tid"), {type: "space", re: /^[a-z0-9._-]+$/i, msg: "Topic ID can only contain 0-9, a-z, A-Z, _ - or . "});
+{!endif}
 });
 -->
 </script>
@@ -62,6 +65,64 @@ window.addEvent('domready',function() {
         <tr>
             <td colspan="2"><div style="margin:10px 0 5px 0;border-bottom:1px solid #cccccc"></div></td>
         </tr>
+        {!if lang_assoc_objects}
+        <tr>
+            <td colspan="2"><b>{lang_assoc_objects}</b></td>
+        </tr>
+        {!endif}
+        {!if lang_assoc_stories_published}
+        <tr>
+            <td class="alignright">{lang_assoc_stories_published}:</td>
+            <td>{assoc_stories_published}&nbsp;&nbsp;&nbsp;[{published_story_admin_link}]</td>
+        </tr>
+        {!endif}
+        {!if lang_assoc_stories_draft}
+        <tr>
+            <td class="alignright">{lang_assoc_stories_draft}:</td>
+            <td>{assoc_stories_draft}&nbsp;&nbsp;&nbsp;[{draft_story_admin_link}]</td>
+        </tr>
+        {!endif}
+        {!if lang_assoc_stories_submitted}
+        <tr>
+            <td class="alignright">{lang_assoc_stories_submitted}:</td>
+            <td>{assoc_stories_submitted}&nbsp;&nbsp;&nbsp;[{moderation_link}]</td>
+        </tr>
+        {!endif}
+        {!if lang_assoc_images}
+        <tr>
+            <td class="alignright">{lang_assoc_images}:</td>
+            <td>{assoc_images}</td>
+        </tr>
+        {!endif}
+        {!if lang_assoc_comments}
+        <tr>
+            <td class="alignright">{lang_assoc_comment}:</td>
+            <td>{assoc_comments}</td>
+        </tr>
+        {!endif}
+        {!if lang_assoc_trackbacks}
+        <tr>
+            <td class="alignright">{lang_assoc_trackbacks}:</td>
+            <td>{assoc_trackbacks}</td>
+        </tr>
+        {!endif}
+        {!if lang_assoc_blocks}
+        <tr>
+            <td class="alignright">{lang_assoc_blocks}:</td>
+            <td>{assoc_blocks}&nbsp;&nbsp;&nbsp;[{block_admin_link}]</td>
+        </tr>
+        {!endif}
+        {!if lang_assoc_feeds}
+        <tr>
+            <td class="alignright">{lang_assoc_feeds}:</td>
+            <td>{assoc_feeds}&nbsp;&nbsp;&nbsp;[{syndication_admin_link}]</td>
+        </tr>
+        {!endif}
+        {!if lang_assoc_objects}
+        <tr>
+            <td colspan="2"><div style="margin:10px 0 5px 0;border-bottom:1px solid #cccccc"></div></td>
+        </tr>
+        {!endif}
         <tr>
             <td colspan="2"><b>{lang_accessrights}</b></td>
         </tr>
@@ -100,7 +161,7 @@ window.addEvent('domready',function() {
             <td colspan="2">
                 <input type="submit" value="{lang_save}" name="save"{xhtml}>
                 <input type="submit" value="{lang_cancel}" name="cancel"{xhtml}>
-                {!if delete_option}{delete_option}&nbsp;&nbsp;<span class="warning">{warning_msg}</span>{!endif}
+                {!if delete_option}{delete_option}{!endif}
                 <input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}>
             </td>
         </tr>

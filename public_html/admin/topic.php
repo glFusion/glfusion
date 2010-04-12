@@ -69,6 +69,11 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
 
     $retval = '';
     $topicEdit = 0;
+    $assoc_stories_published = 0;
+    $assoc_stories_draft = 0;
+    $assoc_images = 0;
+    $assoc_comments = 0;
+    $assoc_trackbacks = 0;
 
     if (!empty($tid)) {
         $topicEdit = 1;
@@ -83,6 +88,37 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
             COM_accessLog("User {$_USER['username']} tried to illegally create or edit topic $tid.");
             return $retval;
         }
+
+        // ok let's see what is associated with this topic
+        
+        $result2 = DB_query("SELECT bid FROM {$_TABLES['blocks']} WHERE tid = '$tid'");
+        $assoc_blocks = DB_numRows($result2);
+        
+        $result2 = DB_query("SELECT fid FROM {$_TABLES['syndication']} WHERE topic = '$tid'");
+        $assoc_feeds = DB_numRows($result2);
+        
+        $result2 = DB_query("SELECT sid FROM {$_TABLES['storysubmission']} WHERE tid = '$tid'");
+        $assoc_stories_submitted = DB_numRows($result2);
+    
+        $result2 = DB_query("SELECT sid, draft_flag FROM {$_TABLES['stories']} WHERE tid = '$tid'");
+        $total_assoc_stories = DB_numRows($result2);
+        if ($total_assoc_stories > 0) {
+            for ($i = 0; $i < $total_assoc_stories; $i++) {
+                $S = DB_fetchArray($result2);
+                if ($S['draft_flag'] == 0) {
+                    $assoc_stories_published += 1;
+                } else {
+                    $assoc_stories_draft += 1;                
+                }
+                $result3 = DB_query("SELECT ai_filename FROM {$_TABLES['article_images']} WHERE ai_sid = '{$S['sid']}'");
+                $assoc_images += DB_numRows($result3);
+                $result3 = DB_query("SELECT cid FROM {$_TABLES['comments']} WHERE sid = '{$S['sid']}' AND type = 'article'");
+                $assoc_comments += DB_numRows($result3);
+                $result3 = DB_query("SELECT cid FROM {$_TABLES['trackback']} WHERE sid = '{$S['sid']}' AND type = 'article'");
+                $assoc_trackbacks += DB_numRows($result3);
+            }
+        }
+
     } else {
         // new topic - retain field values if any in case of failed validation
     	$A = array();
@@ -131,7 +167,7 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
         }
         $access = 3;
     }
-
+    
     // display the topic editor
     $topic_templates = new Template($_CONF['path_layout'] . 'admin/topic');
     $topic_templates->set_file('editor','topiceditor.thtml');
@@ -141,12 +177,11 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
         $tid_input = $tid . '<input type="hidden" size="20" maxlength="20" name="tid" value="'.$tid.'" />';
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
                    . '" name="delete"%s' . XHTML . '>';
-        $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
+        $jsconfirm = ' onclick="return doubleconfirm(\'' . $LANG27[40] . '\',\'' . $LANG27[6] . '\');"';
         $topic_templates->set_var('delete_option',
                                   sprintf($delbutton, $jsconfirm));
         $topic_templates->set_var('delete_option_no_confirmation',
                                   sprintf($delbutton, ''));
-        $topic_templates->set_var('warning_msg', $LANG27[6]);
         $topic_templates->clear_var('lang_donotusespaces');
     } else {
         $tid_input = '<input class="fValidate[\'required\',\'space\']" type="text" size="20" maxlength="20" name="tid" id="tid" value="'.$tid.'" />';
@@ -268,6 +303,55 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
             $topic_templates->set_var ('archive_disabled', 'disabled');
         }
     }
+    
+    $assoc_stories = (($assoc_stories_published > 0) OR
+                        ($assoc_stories_draft > 0) OR
+                        ($assoc_stories_submitted > 0) OR
+                        ($assoc_images > 0) OR
+                        ($assoc_comments > 0) OR
+                        ($assoc_trackbacks > 0));
+    
+    if (($assoc_blocks > 0) OR ($assoc_feeds > 0) OR ($assoc_stories)) {
+        $topic_templates->set_var('lang_assoc_objects', $LANG27[43]);
+        if ($assoc_stories_published > 0) {
+            $topic_templates->set_var('lang_assoc_stories_published', $LANG27[44]);
+            $topic_templates->set_var('assoc_stories_published', $assoc_stories_published);
+            $topic_templates->set_var('published_story_admin_link', COM_createLink($LANG27[52], $_CONF['admin_url'] . '/admin/story.php'));
+        }
+        if ($assoc_stories_draft > 0) {
+            $topic_templates->set_var('lang_assoc_stories_draft', $LANG27[45]);            
+            $topic_templates->set_var('assoc_stories_draft', $assoc_stories_draft);
+            $topic_templates->set_var('draft_story_admin_link', COM_createLink($LANG27[52], $_CONF['admin_url'] . '/admin/story.php'));
+        }
+        if ($assoc_stories_submitted > 0) {
+            $topic_templates->set_var('lang_assoc_stories_submitted', $LANG27[46]);
+            $topic_templates->set_var('assoc_stories_submitted', $assoc_stories_submitted);
+            $topic_templates->set_var('moderation_link', COM_createLink($LANG27[53], $_CONF['admin_url'] . '/admin/moderation.php'));
+        }
+        if ($assoc_images > 0) {
+            $topic_templates->set_var('lang_assoc_images', $LANG27[47]);
+            $topic_templates->set_var('assoc_images', $assoc_images);
+        }
+        if ($assoc_comments > 0) {
+            $topic_templates->set_var('lang_assoc_comments', $LANG27[48]);
+            $topic_templates->set_var('assoc_comments', $assoc_comments);
+        }
+        if ($assoc_trackbacks > 0) {
+            $topic_templates->set_var('lang_assoc_trackbacks', $LANG27[49]);
+            $topic_templates->set_var('assoc_trackbacks', $assoc_trackbacks);
+        }
+        if ($assoc_blocks > 0) {
+            $topic_templates->set_var('lang_assoc_blocks', $LANG27[50]);
+            $topic_templates->set_var('assoc_blocks', $assoc_blocks);
+            $topic_templates->set_var('block_admin_link', COM_createLink($LANG27[54], $_CONF['admin_url'] . '/admin/block.php'));            
+        }
+        if ($assoc_feeds > 0) {
+            $topic_templates->set_var('lang_assoc_feeds', $LANG27[51]);
+            $topic_templates->set_var('assoc_feeds', $assoc_feeds);            
+            $topic_templates->set_var('syndication_admin_link', COM_createLink($LANG27[55], $_CONF['admin_url'] . '/admin/syndication.php'));
+            }
+    }
+
     $topic_templates->set_var('gltoken_name', CSRF_TOKEN);
     $topic_templates->set_var('gltoken', SEC_createToken());
     $topic_templates->parse('output', 'editor');
@@ -467,8 +551,11 @@ function TOPIC_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 break;
 
             case 'tid':
+                $retval = COM_truncate(stripslashes($fieldvalue), 20, ' ...', true);
+                break;
+                
             case 'topic':
-                $retval = stripslashes($fieldvalue);
+                $retval = COM_truncate(stripslashes($fieldvalue), 28, ' ...', true);
                 break;
 
             case 'sort_by':
@@ -505,7 +592,7 @@ function TOPIC_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 $retval = '';
                 if ($access == 3) {
                     $attr['title'] = $LANG_ADMIN['delete'];
-                    $attr['onclick'] = "return confirm('" . $LANG27[40] . "  " . $LANG27[6] . "');";
+                    $attr['onclick'] = 'return doubleconfirm(\'' . $LANG27[40] . '\',\'' . $LANG27[6] . ' ' . $LANG27[56] . '\');';
                     $retval .= COM_createLink($icon_arr['delete'],
                         $_CONF['site_admin_url'] . '/topic.php'
                         . '?delete=x&amp;tid=' . $A['tid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
@@ -555,10 +642,10 @@ function TOPIC_list()
     $header_arr = array(
         array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center'),
         array('text' => $LANG27[10], 'field' => 'sortnum', 'sort' => true, 'align' => 'center'),
-        array('text' => $LANG27[2], 'field' => 'tid', 'sort' => true ),
-        array('text' => $LANG27[3], 'field' => 'topic', 'sort' => true ),
+        array('text' => $LANG27[2], 'field' => 'tid', 'sort' => true, 'align' => 'center' ),
+        array('text' => $LANG27[3], 'field' => 'topic', 'sort' => true, 'align' => 'center' ),
         array('text' => $LANG27[11], 'field' => 'limitnews', 'sort' => false, 'align' => 'center'),
-        array('text' => $LANG27[35], 'field' => 'sort_by', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG27[35], 'field' => 'sort_by', 'sort' => false, 'align' => 'center', 'nowrap' => 'true'),
         array('text' => $LANG27[37], 'field' => 'sort_dir', 'sort' => false, 'align' => 'center'),
         array('text' => $LANG27[38], 'field' => 'is_default', 'sort' => false, 'align' => 'center'),
         array('text' => $LANG27[39], 'field' => 'archive_flag', 'sort' => false, 'align' => 'center'),
