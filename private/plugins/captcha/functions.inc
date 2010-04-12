@@ -465,7 +465,12 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
             return array(1,'');
         } else {
             # set the error code so that we can display it
-            return array(0,$resp->error);
+            if ( $resp->error == 'incorrect-captcha-sol' ) {
+                $error = $LANG_CP00['entry_error'];
+            } else {
+                $error = $resp->error;
+            }
+            return array(0,$error);
         }
     }
 
