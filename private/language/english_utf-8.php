@@ -1107,8 +1107,8 @@ $LANG28 = array(
     103 => 'Batch User Administration',
     104 => 'Are you sure you want to delete this User?',
     105 => 'Status',
-    106 => 'Submitted',
-    107 => 'Activation',
+    106 => 'Queued',
+    107 => 'Verification',
 );
 
 ###############################################################################
@@ -1501,7 +1501,7 @@ $LANG_ACCESS = array(
     'cancel' => 'cancel',
     'delete' => 'delete',
     'canteditroot' => 'You have tried to edit the Root group but you are not in the Root group yourself therefore your access to this group is denied.  Please contact the system administrator if you feel this is an error.',
-    'listusers' => 'Users',
+    'listusers' => 'View Members',
     'listthem' => 'list',
     'usersingroup' => 'Users in Group: %s',
     'usergroupadmin' => 'User Group Administration',
