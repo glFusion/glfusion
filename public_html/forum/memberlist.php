@@ -97,7 +97,7 @@ function ADMIN_getListField_memberlist($fieldname, $fieldvalue, $A, $icon_arr)
             $A['posts'] = DB_count($_TABLES['gf_topic'],'uid',$A['uid']);
             if ($A['posts'] > 0) {
                 $reportlinkURL = $_CONF['site_url'] .'/forum/memberlist.php?op=last10posts&amp;showuser='.$A['uid'];
-                $reportlinkURL .= '&amp;prevorder='.$order.'&amp;direction='.$direction.'&amp;page='.$page;
+//                $reportlinkURL .= '&amp;prevorder='.$order.'&amp;direction='.$direction.'&amp;page='.$page;
                 $retval = '<a href="'.$reportlinkURL.'"><img src="'.gf_getImage('latestposts').'"/></a>';
             }
             break;
@@ -172,23 +172,13 @@ if ($op == "last10posts") {
     }
     $grouplist = implode(',',$groups);
 
-    if ($forum > 0) {
-        $inforum = "AND forum = '$forum'";
-    } else {
-        $inforum = "";
-    }
+    $inforum = "";
 
     $orderby    = 'date';
     $order      = 1;
     $direction  = "DESC";
 
-    if ($CONF_FORUM['enable_user_rating_system']) {
-        $sql = "SELECT * FROM {$_TABLES['gf_topic']} a LEFT JOIN {$_TABLES['gf_forums']} b ON a.forum=b.forum_id WHERE (pid=0) AND b.rating_view <= ".$rating." $inforum AND b.grp_id IN (".$grouplist.") AND b.no_newposts = 0 ORDER BY $orderby $direction";
-    } else {
-        $sql = "SELECT * FROM {$_TABLES['gf_topic']} a LEFT JOIN {$_TABLES['gf_forums']} b ON a.forum=b.forum_id WHERE (pid=0) $inforum AND b.grp_id IN (".$grouplist.") AND b.no_newposts = 0 ORDER BY $orderby $direction";
-    }
-
-    $sql = "SELECT a.date,a.subject,a.comment,a.replies,a.views,a.id,a.forum,b.forum_name FROM {$_TABLES['gf_topic']} a ";
+    $sql = "SELECT a.uid,a.status,a.date,a.subject,a.comment,a.replies,a.views,a.id,a.forum,b.forum_name,a.lastupdated,b.forum_id FROM {$_TABLES['gf_topic']} a ";
     $sql .= "LEFT JOIN {$_TABLES['gf_forums']} b ON a.forum=b.forum_id ";
     $sql .= "WHERE (a.uid = ".(int) $showuser.") AND b.grp_id IN ($grouplist) ";
     $sql .= "ORDER BY a.date DESC LIMIT {$CONF_FORUM['show_last_post_count']}";
@@ -303,8 +293,6 @@ if ($op == "last10posts") {
         $sql .= " user.uid <> 1 AND user.status = 3 AND user.uid=topic.uid AND user.uid=userprefs.uid ";
         $sql .= "GROUP by uid ";
     } else {
-        // Option to order by posts - only valid if option for 'forum activity' cheeked
-        $orderby = ($orderby == 'posts') ? 'username' : $orderby;
         $sql = "SELECT user.uid,user.uid,user.username,user.regdate,user.email,user.homepage, userprefs.emailfromuser ";
         $sql .= " FROM {$_TABLES['users']} user, {$_TABLES['userprefs']} userprefs WHERE user.uid > 1 AND user.status = 3 ";
         $sql .= "AND user.uid=userprefs.uid ";
@@ -320,7 +308,7 @@ if ($op == "last10posts") {
     if ($chkactivity) {
         $filter .= '<label for="chkactivity"><input id="chkactivity" type="checkbox" name="chkactivity" value="1" onclick="this.form.submit();" checked="checked"' . XHTML . '>';
     } else {
-        $filter .= '<label for="chkactivity"><input id="chkactivity" type="checkbox" name="chkactivity" value="1" onclick="this.form.submit();"' . $checked . XHTML . '>';
+        $filter .= '<label for="chkactivity"><input id="chkactivity" type="checkbox" name="chkactivity" value="1" onclick="this.form.submit();"' . XHTML . '>';
     }
 
     $filter .= $LANG_GF02['msg88b'] . '</label></span>';
