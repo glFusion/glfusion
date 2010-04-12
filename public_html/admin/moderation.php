@@ -548,7 +548,11 @@ function MODERATE_users($uid, $action, $count)
                 $nrows = DB_numRows($result);
                 if ($nrows == 1) {
                     $A = DB_fetchArray($result);
-                    $sql = "UPDATE {$_TABLES['users']} SET status=".USER_ACCOUNT_AWAITING_ACTIVATION." WHERE uid={$A['uid']}";
+                    if ( $_CONF['registration_type'] == 1 ) {
+                        $sql = "UPDATE {$_TABLES['users']} SET status=".USER_ACCOUNT_AWAITING_VERIFICATION." WHERE uid={$A['uid']}";
+                    } else {
+                        $sql = "UPDATE {$_TABLES['users']} SET status=".USER_ACCOUNT_AWAITING_ACTIVATION." WHERE uid={$A['uid']}";
+                    }
                     DB_query($sql);
                     USER_createAndSendPassword ($A['username'], $A['email'], $A['uid']);
                 }
