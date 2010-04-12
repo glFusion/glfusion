@@ -604,6 +604,8 @@ function formatData($type,$tag,$intel,$data) {
 }
 
 function formatExposure($data) {
+    global $LANG_MG04;
+
 	if ($data > 0) {
 		if ($data > 1) {
 			return round($data, 2).' '.$LANG_MG04['sec'];
