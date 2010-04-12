@@ -1125,7 +1125,7 @@ function USER_getGroupListField($fieldname, $fieldvalue, $A, $icon_arr, $al_sele
  * returns field data for the user administration panel list
  *
  */
-function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr)
+function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
 
@@ -1133,9 +1133,9 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr)
 
     switch ($fieldname) {
 
-        case 'delete':
-            $retval = '<input type="checkbox" name="delitem[]" checked="checked"' . XHTML . '>';
-            break;
+//        case 'delete':
+//            $retval = '<input type="checkbox" name="delitem[]" checked="checked"' . XHTML . '>';
+//            break;
 
         case 'edit':
             $attr['title'] = $LANG_ADMIN['edit'];
@@ -1144,6 +1144,15 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr)
             break;
 
         case 'username':
+            $attr['title'] = 'View Profile';
+            $url = $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' .  $A['uid'];
+            $retval = COM_createLink($icon_arr['user'], $url, $attr);
+            $retval .= '&nbsp;&nbsp;';
+            $attr['style'] = 'vertical-align:top;';
+            $retval .= COM_createLink($fieldvalue, $url, $attr);
+            break;
+
+        case 'fullname':
             $photoico = '';
             if (!empty ($A['photo'])) {
                 $photoico = "&nbsp;<img src=\"{$_CONF['layout_url']}/images/smallcamera."
@@ -1151,10 +1160,30 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr)
             } else {
                 $photoico = '';
             }
-            $retval = COM_createLink($fieldvalue, $_CONF['site_url']
-                    . '/users.php?mode=profile&amp;uid=' .  $A['uid']) . $photoico;
+            $retval = COM_truncate($fieldvalue, 24, ' ...', true) . $photoico;
             break;
-
+        
+        case 'status':
+            $status = $A['status'];
+            switch ($status) {
+                case 0:
+                    $retval = $LANG28[42];
+                    break;
+                case 1:
+                    $retval = $LANG28[14];
+                    break;
+                case 2:
+                    $retval = $LANG28[106];
+                    break;
+                case 3:
+                    $retval = $LANG28[45];
+                    break;
+                case 4:
+                    $retval = $LANG28[107];
+                    break;
+            }
+            break;
+            
         case 'lastlogin':
             if ($fieldvalue < 1) {
                 // if the user never logged in, show the registration date
@@ -1212,6 +1241,16 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr)
             $retval .= COM_createLink($fieldvalue, $url, $attr);
             break;
 
+        case 'delete':
+            $retval = '';
+
+            $attr['title'] = $LANG_ADMIN['delete'];
+            $attr['onclick'] = 'return confirm(\'' . $LANG28[104] .'\');';
+            $retval .= COM_createLink($icon_arr['delete'],
+                $_CONF['site_admin_url'] . '/user.php'
+                . '?delete=x&amp;uid=' . $A['uid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            break;
+
         default:
             $retval = $fieldvalue;
             break;
@@ -1263,12 +1302,14 @@ function USER_list($grp_id)
     }
 
     $header_arr = array(      # display 'text' and use table field 'field'
-                    array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center'),
-                    array('text' => $LANG28[37], 'field' => $_TABLES['users'] . '.uid', 'sort' => true, 'align' => 'center'),
+                    array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center', 'width' => '25px'),
+//                  array('text' => $LANG28[37], 'field' => $_TABLES['users'] . '.uid', 'sort' => true, 'align' => 'center'),
                     array('text' => $LANG28[3], 'field' => 'username', 'sort' => true),
                     array('text' => $LANG28[4], 'field' => 'fullname', 'sort' => true),
+                    array('text' => $LANG28[105], 'field' => 'status', 'sort' => true, 'align' => 'center'),
                     array('text' => $login_text, 'field' => $login_field, 'sort' => true, 'align' => 'center'),
-                    array('text' => $LANG28[7], 'field' => 'email', 'sort' => true)
+                    array('text' => $LANG28[7], 'field' => 'email', 'sort' => true),
+                    array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center', 'width' => '35px')
     );
 
     if ($_CONF['user_login_method']['openid'] ||
@@ -1323,13 +1364,13 @@ function USER_list($grp_id)
     if ($grp_id > 0) {
         $groups = USER_getGroupList ($grp_id);
         $groupList = implode (',', $groups);
-        $sql = "SELECT DISTINCT {$_TABLES['users']}.uid,username,fullname,email,photo,regdate$select_userinfo "
+        $sql = "SELECT DISTINCT {$_TABLES['users']}.uid,username,fullname,email,photo,regdate,status$select_userinfo "
               ."FROM {$_TABLES['group_assignments']},{$_TABLES['users']} $join_userinfo "
               ."WHERE {$_TABLES['users']}.uid > 1 "
               ."AND {$_TABLES['users']}.uid = {$_TABLES['group_assignments']}.ug_uid "
               ."AND ({$_TABLES['group_assignments']}.ug_main_grp_id IN ({$groupList}))";
     } else {
-        $sql = "SELECT {$_TABLES['users']}.uid,username,fullname,email,photo,status,regdate$select_userinfo "
+        $sql = "SELECT {$_TABLES['users']}.uid,username,fullname,email,photo,regdate,status$select_userinfo "
              . "FROM {$_TABLES['users']} $join_userinfo WHERE 1=1";
     }
 
@@ -1338,8 +1379,10 @@ function USER_list($grp_id)
                        'query_fields' => array('username', 'email', 'fullname'),
                        'default_filter' => "AND {$_TABLES['users']}.uid > 1");
 
+    $token = SEC_createToken();
+    
     $retval .= ADMIN_list('user', 'USER_getListField', $header_arr,
-                          $text_arr, $query_arr, $defsort_arr, $filter);
+                          $text_arr, $query_arr, $defsort_arr, $filter, $token);
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
     return $retval;
@@ -1864,7 +1907,7 @@ function USER_batchAdmin()
     $desc = $user_templates->finish($user_templates->get_var('form'));
 
     $header_arr = array(      # display 'text' and use table field 'field'
-                    array('text' => $LANG28[37], 'field' => $_TABLES['users'] . '.uid', 'sort' => true, 'align' => 'center'),
+//                  array('text' => $LANG28[37], 'field' => $_TABLES['users'] . '.uid', 'sort' => true, 'align' => 'center'),
                     array('text' => $LANG28[3], 'field' => 'username', 'sort' => true),
                     array('text' => $LANG28[4], 'field' => 'fullname', 'sort' => true)
     );
@@ -1905,7 +1948,7 @@ function USER_batchAdmin()
     }
 
     $header_arr[] = array('text' => $LANG28[7], 'field' => 'email', 'sort' => true);
-    $header_arr[] = array('text' => $LANG28[87], 'field' => 'num_reminders', 'sort' => true, 'align' => 'center');
+    $header_arr[] = array('text' => $LANG28[87], 'field' => 'num_reminders', 'sort' => true, 'align' => 'center', 'width' => '40px');
 
     $text_arr = array('has_menu'     => true,
                       'has_extras'   => true,
@@ -1965,8 +2008,9 @@ function USER_batchAdmin()
     $token = SEC_createToken();
     $form_arr['bottom'] = "<input type=\"hidden\" name=\"" . CSRF_TOKEN
                         . "\" value=\"{$token}\"" . XHTML . ">";
+                        
     $display .= ADMIN_list('user', 'USER_getListField', $header_arr,
-                           $text_arr, $query_arr, $defsort_arr, $filter, '',
+                           $text_arr, $query_arr, $defsort_arr, $filter, $token,
                            $options, $form_arr);
 
     $display .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
