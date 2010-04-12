@@ -10,7 +10,7 @@ window.addEvent('domready',function() {
 });
 -->
 </script>
-<form id="topic" action="{site_admin_url}/topic.php" method="post" enctype="multipart/form-data">
+<form id="topiceditor" action="{site_admin_url}/topic.php" method="post" enctype="multipart/form-data">
     <table cellspacing="0" cellpadding="2" width="100%">
         <tr>
             <td width="20%" class="alignright">{lang_topicname}:</td>
