@@ -743,7 +743,13 @@ function GROUP_getListField1($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case 'grp_name':
-            $retval = ucwords($fieldvalue);
+            $attr['title'] = $LANG_ACCESS['listusers'];
+            $url = $_CONF['site_admin_url'] . '/user.php?grp_id=' . $A['grp_id'];
+            $url .= ($showall) ? '&amp;chk_showall=1' : '';
+            $retval = COM_createLink($icon_arr['group'], $url, $attr);
+            $retval .= '&nbsp;&nbsp;';
+            $attr['style'] = 'vertical-align:top;';
+            $retval .= COM_createLink(ucwords($fieldvalue), $url, $attr);
             break;
 
         case 'grp_gl_core':
@@ -863,33 +869,20 @@ function GROUP_list($show_all_groups = false)
 
     $retval = '';
 
-    $header_arr = '';
+    $header_arr = array();
+    $header_arr[] = array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center', 'width' => '35px');
+    $header_arr[] = array('text' => $LANG_ACCESS['groupname'], 'field' => 'grp_name', 'sort' => true, 'width' => '175px');
+    $header_arr[] = array('text' => $LANG_ACCESS['description'], 'field' => 'grp_descr', 'sort' => true);
+
     if ($show_all_groups) {
-        $header_arr = array(      // display 'text' and use table field 'field'
-            array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center'),
-            array('text' => $LANG_ACCESS['groupname'], 'field' => 'grp_name', 'sort' => true),
-            array('text' => $LANG_ACCESS['description'], 'field' => 'grp_descr', 'sort' => true),
-            array('text' => $LANG_ACCESS['admingroup'], 'field' => 'grp_admin', 'sort' => false, 'align' => 'center'),
-            array('text' => $LANG_ACCESS['coregroup'], 'field' => 'grp_gl_core', 'sort' => true, 'align' => 'center'),
-            array('text' => $LANG_ACCESS['defaultgroup'], 'field' => 'grp_default', 'sort' => true, 'align' => 'center'),
-            array('text' => $LANG_ACCESS['listusers'], 'field' => 'listusers', 'sort' => false, 'align' => 'center'),
-            array('text' => $LANG_ACCESS['sendemail'], 'field' => 'sendemail', 'sort' => false, 'align' => 'center'),
-            array('text' => $LANG_ACCESS['editusers'], 'field' => 'editusers', 'sort' => false, 'align' => 'center'),
-            array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center'),
-        );
-    } else {
-        $header_arr = array(      // display 'text' and use table field 'field'
-            array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center'),
-            array('text' => $LANG_ACCESS['groupname'], 'field' => 'grp_name', 'sort' => true),
-            array('text' => $LANG_ACCESS['description'], 'field' => 'grp_descr', 'sort' => true),
-            array('text' => $LANG_ACCESS['coregroup'], 'field' => 'grp_gl_core', 'sort' => true, 'align' => 'center'),
-            array('text' => $LANG_ACCESS['defaultgroup'], 'field' => 'grp_default', 'sort' => true, 'align' => 'center'),
-            array('text' => $LANG_ACCESS['listusers'], 'field' => 'listusers', 'sort' => false, 'align' => 'center'),
-            array('text' => $LANG_ACCESS['sendemail'], 'field' => 'sendemail', 'sort' => false, 'align' => 'center'),
-            array('text' => $LANG_ACCESS['editusers'], 'field' => 'editusers', 'sort' => false, 'align' => 'center'),
-            array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center'),
-        );
+        $header_arr[] = array('text' => $LANG_ACCESS['admingroup'], 'field' => 'grp_admin', 'sort' => false, 'align' => 'center');
     }
+    
+    $header_arr[] = array('text' => $LANG_ACCESS['coregroup'], 'field' => 'grp_gl_core', 'sort' => true, 'align' => 'center', 'width' => '40px');
+    $header_arr[] = array('text' => $LANG_ACCESS['defaultgroup'], 'field' => 'grp_default', 'sort' => true, 'align' => 'center', 'width' => '40px');
+    $header_arr[] = array('text' => $LANG_ACCESS['sendemail'], 'field' => 'sendemail', 'sort' => false, 'align' => 'center', 'width' => '40px');
+    $header_arr[] = array('text' => $LANG_ACCESS['editusers'], 'field' => 'editusers', 'sort' => false, 'align' => 'center', 'width' => '40px');
+    $header_arr[] = array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center', 'width' => '35px');
 
     $defsort_arr = array('field' => 'grp_name', 'direction' => 'asc');
 

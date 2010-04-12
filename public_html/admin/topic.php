@@ -640,7 +640,7 @@ function TOPIC_list()
     );
 
     $header_arr = array(
-        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center', 'width' => '35px'),
         array('text' => $LANG27[10], 'field' => 'sortnum', 'sort' => true, 'align' => 'center'),
         array('text' => $LANG27[2], 'field' => 'tid', 'sort' => true, 'align' => 'center' ),
         array('text' => $LANG27[3], 'field' => 'topic', 'sort' => true, 'align' => 'center' ),
@@ -649,7 +649,7 @@ function TOPIC_list()
         array('text' => $LANG27[37], 'field' => 'sort_dir', 'sort' => false, 'align' => 'center'),
         array('text' => $LANG27[38], 'field' => 'is_default', 'sort' => false, 'align' => 'center'),
         array('text' => $LANG27[39], 'field' => 'archive_flag', 'sort' => false, 'align' => 'center'),
-        array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center', 'width' => '35px'),
     );
 
     $defsort_arr = array('field' => 'sortnum', 'direction' => 'asc');
