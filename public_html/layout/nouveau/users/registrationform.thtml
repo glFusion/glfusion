@@ -46,9 +46,11 @@ window.addEvent('domready',function() {
             </p>
 {!endif}
             {plugin_fields}
-            <div style="margin-top:10px;margin-bottom:10px;text-align:right;">{captcha}</div>
-            <div class="warning">{lang_warning}</div>
-            <input type="hidden" name="mode" value="create"{xhtml}><br{xhtml}>
+{!if captcha}
+            {captcha}
+{!endif}
+            <div class="warning" style="margin:10px;">{lang_warning}</div>
+            <input type="hidden" name="mode" value="create"{xhtml}>
             <input type="submit" value="{lang_register}"{xhtml}><br{xhtml}>
         </div>
     </form>
