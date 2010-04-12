@@ -4,8 +4,8 @@
 <!--
 window.addEvent('domready',function() {
     var myValidator = new fValidator("registration");
-    myValidator.register($("passwd_conf"), {type: "confirm", idField: "passwd", msg: "Confirmation password does not match original password."});
-    myValidator.register($("email_conf"), {type: "confirm", idField: "email", msg: "Confirmation email does not match original email."});
+    myValidator.register($("passwd_conf"), {type: "confirm", idField: "passwd", msg: "<font style=\"color:red;\">Not a match!</font>"});
+    myValidator.register($("email_conf"), {type: "confirm", idField: "email", msg: "<font style=\"color:red;\">Not a match!</font>"});
 });
 -->
 </script>
