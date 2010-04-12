@@ -174,7 +174,7 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
 
     // generate input for topic id
     if (!empty($topicEdit) && SEC_hasRights('topic.edit')) {
-        $tid_input = $tid . '<input type="hidden" size="20" maxlength="20" name="tid" value="'.$tid.'" />';
+        $tid_input = $tid . '<input type="hidden" size="20" maxlength="20" name="tid" value="'.$tid.'"' . XHTML . '>';
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
                    . '" name="delete"%s' . XHTML . '>';
         $jsconfirm = ' onclick="return doubleconfirm(\'' . $LANG27[40] . '\',\'' . $LANG27[6] . '\');"';
@@ -184,7 +184,7 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
                                   sprintf($delbutton, ''));
         $topic_templates->clear_var('lang_donotusespaces');
     } else {
-        $tid_input = '<input class="fValidate[\'required\',\'space\']" type="text" size="20" maxlength="20" name="tid" id="tid" value="'.$tid.'" />';
+        $tid_input = '<input class="fValidate[\'required\',\'space\']" type="text" size="20" maxlength="20" name="tid" id="tid" value="'.$tid.'"' . XHTML . '>';
         $topic_templates->set_var('lang_donotusespaces', $LANG27[5]);
     }
     $topic_templates->set_var('tid_input',$tid_input);
@@ -316,17 +316,17 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
         if ($assoc_stories_published > 0) {
             $topic_templates->set_var('lang_assoc_stories_published', $LANG27[44]);
             $topic_templates->set_var('assoc_stories_published', $assoc_stories_published);
-            $topic_templates->set_var('published_story_admin_link', COM_createLink($LANG27[52], $_CONF['admin_url'] . '/admin/story.php'));
+            $topic_templates->set_var('published_story_admin_link', COM_createLink($LANG27[52], $_CONF['site_admin_url'] . '/story.php'));
         }
         if ($assoc_stories_draft > 0) {
             $topic_templates->set_var('lang_assoc_stories_draft', $LANG27[45]);            
             $topic_templates->set_var('assoc_stories_draft', $assoc_stories_draft);
-            $topic_templates->set_var('draft_story_admin_link', COM_createLink($LANG27[52], $_CONF['admin_url'] . '/admin/story.php'));
+            $topic_templates->set_var('draft_story_admin_link', COM_createLink($LANG27[52], $_CONF['site_admin_url'] . '/story.php'));
         }
         if ($assoc_stories_submitted > 0) {
             $topic_templates->set_var('lang_assoc_stories_submitted', $LANG27[46]);
             $topic_templates->set_var('assoc_stories_submitted', $assoc_stories_submitted);
-            $topic_templates->set_var('moderation_link', COM_createLink($LANG27[53], $_CONF['admin_url'] . '/admin/moderation.php'));
+            $topic_templates->set_var('moderation_link', COM_createLink($LANG27[53], $_CONF['site_admin_url'] . '/moderation.php'));
         }
         if ($assoc_images > 0) {
             $topic_templates->set_var('lang_assoc_images', $LANG27[47]);
@@ -343,12 +343,12 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
         if ($assoc_blocks > 0) {
             $topic_templates->set_var('lang_assoc_blocks', $LANG27[50]);
             $topic_templates->set_var('assoc_blocks', $assoc_blocks);
-            $topic_templates->set_var('block_admin_link', COM_createLink($LANG27[54], $_CONF['admin_url'] . '/admin/block.php'));            
+            $topic_templates->set_var('block_admin_link', COM_createLink($LANG27[54], $_CONF['site_admin_url'] . '/block.php'));            
         }
         if ($assoc_feeds > 0) {
             $topic_templates->set_var('lang_assoc_feeds', $LANG27[51]);
             $topic_templates->set_var('assoc_feeds', $assoc_feeds);            
-            $topic_templates->set_var('syndication_admin_link', COM_createLink($LANG27[55], $_CONF['admin_url'] . '/admin/syndication.php'));
+            $topic_templates->set_var('syndication_admin_link', COM_createLink($LANG27[55], $_CONF['site_admin_url'] . '/syndication.php'));
             }
     }
 
