@@ -234,7 +234,8 @@ function GROUP_edit($grp_id = '')
         $whereGroups = '(grp_id IN (' . implode (',', $thisUsersGroups) . '))';
 
         $header_arr = array(
-                        array('text' => $LANG28[86], 'field' => ($A['grp_gl_core'] == 1 ? 'disabled-checkbox' : 'checkbox'), 'sort' => false, 'align' => 'center'),
+//                        array('text' => $LANG28[86], 'field' => ($A['grp_gl_core'] == 1 ? 'disabled-checkbox' : 'checkbox'), 'sort' => false, 'align' => 'center'),
+                        array('text' => $LANG28[86], 'field' => 'checkbox', 'sort' => false, 'align' => 'center'),
                         array('text' => $LANG_ACCESS['groupname'], 'field' => 'grp_name', 'sort' => true),
                         array('text' => $LANG_ACCESS['description'], 'field' => 'grp_descr', 'sort' => true)
         );
@@ -782,11 +783,13 @@ function GROUP_getListField1($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
         case 'delete':
             $retval = '';
-            $attr['title'] = $LANG_ADMIN['delete'];
-            $attr['onclick'] = "return doubleconfirm('" . $LANG_ACCESS['confirm1'] . "','" . $LANG_ACCESS['confirm2'] . "');";
-            $retval .= COM_createLink($icon_arr['delete'],
-                $_CONF['site_admin_url'] . '/group.php'
-                . '?delete=x&amp;grp_id=' . $A['grp_id'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            if ($A['grp_gl_core'] <> 1) {
+                $attr['title'] = $LANG_ADMIN['delete'];
+                $attr['onclick'] = "return doubleconfirm('" . $LANG_ACCESS['confirm1'] . "','" . $LANG_ACCESS['confirm2'] . "');";
+                $retval .= COM_createLink($icon_arr['delete'],
+                    $_CONF['site_admin_url'] . '/group.php'
+                    . '?delete=x&amp;grp_id=' . $A['grp_id'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            }
             break;
 
         default:
