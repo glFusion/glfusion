@@ -7,10 +7,9 @@ var RecaptchaOptions = {
 };
 //]]>
 </script>
-<div style="float:right;border:1px solid #ccc;">
-  {recaptcha}
+<div style="width:318px;border:1px solid #ccc;margin:10px auto;">
+    {recaptcha}
 </div>
-<div style="clear:both;"></div>
 {!else}
 <script type="text/javascript">
 //<![CDATA[
@@ -36,8 +35,10 @@ function new_captcha()
 }
 //]]>
 </script>
+<div style="width:170px;margin:10px auto;">
 <img style="border:1px solid #ccc;margin-bottom:5px;" src="{captcha_image}" id="captchaimage" border="0" alt="{lang_alt}" title="{lang_alt}"{xhtml}><br{xhtml}>
 <a href="javascript:new_captcha();" style="vertical-align:middle;text-align:right;padding:5px 5px 10px;text-decoration:none;">{lang_reload}</a>&nbsp;<input type="text" id="captcha" name="captcha" size="18" maxlength="6" value="{lang_captcha_help}" title="{lang_captcha_help}" onfocus="if (this.value=='{lang_captcha_help}')this.value='';" onblur="if(this.value=='')this.value='{lang_captcha_help}';"{xhtml}>
 <input type="hidden" name="csid" value="{csid}"{xhtml}><br{xhtml}>
+</div>
 {!endif}
 {# end {templatelocation} #}
