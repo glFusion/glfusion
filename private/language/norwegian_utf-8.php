@@ -454,7 +454,22 @@ $LANG04 = array(
     159 => 'This email was generated automatically. Please do not reply to this email.',
     160 => 'Online',
     161 => 'Password Strength',
-    162 => 'The username contains invalid characters ( < > " % & * / \ ) are not allowed'
+    162 => 'The username contains invalid characters ( < > " % & * / \ ) are not allowed',
+    163 => 'Remote User',
+    164 => 'Remote Username',
+    165 => 'Remote Service',
+    166 => 'Remote User Info',
+    167 => 'An activation eMail will be sent to your eMail address.',
+    168 => 'Welcome to ',
+    169 => 'Request New activation eMail',
+    170 => 'Please keep this eMail for your records. Your account information is as follows:',
+    171 => 'Site URL',
+    172 => 'Please visit the following link in order to activate your account (the activation link is only valid for %d hours):',
+    173 => 'Your password has been securely stored in our database and cannot be retrieved. In the event that it is forgotten, you will be able to reset it using the eMail address associated with your account.',
+    174 => 'Thank you for registering.',
+    175 => 'To request a new activation token, please enter your username and password below and a new activation eMail will be sent to you.',
+    176 => 'Confirm Password',
+    177 => 'Your account is currently awaiting verification.<br />You will not be able to login until your account has been verified by following the link in the activation eMail.'
 );
 
 ###############################################################################
@@ -807,7 +822,7 @@ $LANG21 = array(
     41 => 'Høyre',
     42 => 'du må skrive inn rekkefølge og sikkerhetsnivå for glFusion standard blokker',
     43 => 'Kun hjemmeside',
-    44 => '',
+    44 => 'All Except Homepage',
     45 => "Du forsøker å få tilgang til en blokk som du ikke har rettigheter til. Forsøket er logget. Vennligst <a href=\"{$_CONF['site_admin_url']}/block.php\">gå tilbake til administrasjonsiden for blokker</a>.",
     46 => 'Ny Blokk',
     47 => '',
@@ -927,7 +942,8 @@ $LANG24 = array(
     85 => 'Show All',
     86 => 'Advanced Editor',
     87 => 'Story Stats',
-    88 => 'Wiki-style format'
+    88 => 'Wiki-style format',
+    89 => 'Are you sure you want to delete this Story?'
 );
 
 ###############################################################################
@@ -975,7 +991,21 @@ $LANG27 = array(
     39 => 'Archive Topic?',
     40 => 'Are you sure you want to delete this topic?',
     41 => 'Display After',
-    42 => 'Topic ID cannont contain spaces'
+    42 => 'Topic ID cannont contain spaces',
+    43 => 'Associated Objects',
+    44 => 'Stories',
+    45 => 'Draft Stories',
+    46 => 'Submitted Stories',
+    47 => 'Images',
+    48 => 'Comments',
+    49 => 'Trackbacks',
+    50 => 'Blocks',
+    51 => 'Feeds',
+    52 => 'Story Admin',
+    53 => 'Submissions',
+    54 => 'Block Admin',
+    55 => 'Syndication Admin',
+    56 => 'Press Cancel and then Edit this topic to view details including the total number of objects in the database that are associated with this topic.'
 );
 
 ###############################################################################
@@ -997,7 +1027,7 @@ $LANG28 = array(
     13 => 'SecLev',
     14 => 'Reg. Dato',
     15 => 'New User',
-    16 => '',
+    16 => 'Awaiting User Verification',
     17 => '',
     18 => '',
     19 => '',
@@ -1084,7 +1114,11 @@ $LANG28 = array(
     100 => 'eMail Site Login Reminders to the selected users?',
     101 => 'Group',
     102 => 'users',
-    103 => 'Batch User Administration'
+    103 => 'Batch User Administration',
+    104 => 'Are you sure you want to delete this User?',
+    105 => 'Status',
+    106 => 'Queued',
+    107 => 'Verification'
 );
 
 ###############################################################################
@@ -1297,7 +1331,7 @@ $LANG33 = array(
 $MESSAGE = array(
     1 => "Passordet ditt er sendt på mail og du vil motta det hvert øyeblikk. Vennligst følg instruksjonene i meldingen. Takk for at du bruker {$_CONF['site_name']}",
     2 => "Takk for at du sendte inn artikkelen din til {$_CONF['site_name']}. Den er oversendt til vår stab for godkjenning. Hvis artikkelen din blir godkjent såp vil den bli publisert på nettstedet vårt slik at andre kan lese den.",
-    3 => '',
+    3 => "A verification eMail has been sent to you and should arrive momentarily. Please follow the directions in the message and we thank-you for using {$_CONF['site_name']}",
     4 => '',
     5 => 'Kontoinformasjonen din ble lagret.',
     6 => 'Dine visningsvalg ble lagret.',
@@ -1407,8 +1441,13 @@ $MESSAGE = array(
     508 => 'Email address does not match the confirmation email address.',
     509 => 'Error creating new user account - please check the error log for details.',
     510 => 'Default settings have been applied to all users.',
-    511 => 'Are you sure you want to delete this group?',
-    512 => 'Username contains invalid characters " < > / \ $ % * are not allowed'
+    511 => '',
+    512 => 'Username contains invalid characters " < > / \ $ % * are not allowed',
+    513 => 'Remote username cannot be blank.',
+    514 => 'Remote service cannot be empty.',
+    515 => 'Thank you, your account has now been activated.',
+    516 => 'Your activation token has expired.',
+    517 => 'This account has already been activated, please login below.'
 );
 
 ###############################################################################
@@ -1582,7 +1621,9 @@ $LANG_ACCESS = array(
     'admingroup' => 'Admin',
     'defaultgroup' => 'Default',
     'editinguser' => 'Editing User: ',
-    'createnewuser' => 'Creating New Account'
+    'createnewuser' => 'Creating New Account',
+    'confirm1' => 'Are you sure you want to delete this group?',
+    'confirm2' => 'Are you absolutely sure you want to delete this group?  This will affect any users or groups that are associated with this group!  Press Cancel and then Edit this group if you wish to view the details.'
 );
 
 ###############################################################################
@@ -1832,7 +1873,8 @@ $LANG_ADMIN = array(
     'admin_users' => 'User Admin',
     'admin_groups' => 'Group Admin',
     'authenticate' => 'Authenticate',
-    'select' => 'Select'
+    'select' => 'Select',
+    'name' => 'Name'
 );
 
 ###############################################################################
@@ -2159,7 +2201,8 @@ $LANG_confignames['Core'] = array(
     'rating_enabled' => 'Enable Rating',
     'user_reg_fullname' => 'Full Name option on registration form?',
     'session_ip_check' => 'Session IP Validation',
-    'article_comment_close_enabled' => 'Automatically close comments (default)'
+    'article_comment_close_enabled' => 'Automatically close comments (default)',
+    'registration_type' => 'Registration Type'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2246,7 +2289,8 @@ $LANG_configselects['Core'] = array(
     23 => array('Disabled' => 0, 'Enabled (Exact Match)' => 1, 'Enabled (Word Beginning)' => 2, 'Enabled (Word Fragment)' => 3),
     24 => array('Disabled' => 0, 'Logged-in Users' => 1, 'Everyone' => 2),
     25 => array('No' => 0, 'Optional' => 1, 'Required' => 2),
-    26 => array('None' => 0, 'A.B' => 1, 'A.B.C' => 2, 'All' => 3)
+    26 => array('None' => 0, 'A.B' => 1, 'A.B.C' => 2, 'All' => 3),
+    27 => array('Generate Password' => 0, 'User Enters Password' => 1)
 );
 
 ?>
