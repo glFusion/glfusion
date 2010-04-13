@@ -3614,7 +3614,7 @@ function plugin_itemrated_mediagallery($media_id, $rating, $votes)
 {
     global $_TABLES;
 
-    $sql = "UPDATE {$_TABLES['mg_media']} SET media_votes = $votes, media_rating = '$rating'
+    $sql = "UPDATE {$_TABLES['mg_media']} SET media_votes = $votes, media_rating = '".DB_escapeString($rating)."'
                     WHERE media_id='" . DB_escapeString($media_id) . "'";
     DB_query($sql);
     return true;

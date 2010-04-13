@@ -326,7 +326,8 @@ function RATING_deleteVote( $voteID )
                 $new_total_votes = 0;
                 $votes = 0;
             }
-            $sql = "UPDATE {$_TABLES['rating']} SET votes=".$new_total_votes.", rating=".$new_rating." WHERE id = ".$rating_id;
+            $new_rating = sprintf("%2.02f",$new_rating);
+            $sql = "UPDATE {$_TABLES['rating']} SET votes=".$new_total_votes.", rating='".DB_escapeString($new_rating)."' WHERE id = ".$rating_id;
             DB_query($sql);
             DB_delete($_TABLES['rating_votes'],'id',$voteID);
             PLG_itemRated( $type, $item_id, $new_rating, $votes );
@@ -382,7 +383,7 @@ function RATING_addVote( $type, $item_id, $rating, $uid, $ip )
         $votes = 0;
     }
 
-    $new_rating = @number_format($new_rating,2);
+    $new_rating = sprintf("%2.02f",$new_rating);
 
     if ( $rating_id != 0 ) {
         $sql = "UPDATE {$_TABLES['rating']} SET votes=".$votes.", rating='".DB_escapeString($new_rating)."' WHERE id = ".$rating_id;

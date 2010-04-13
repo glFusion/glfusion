@@ -2831,7 +2831,7 @@ function PLG_itemRated( $plugin, $id_sent, $new_rating, $added )
     $retval = true;
 
     if ( $plugin == 'article' ) {
-        $sql = "UPDATE {$_TABLES['stories']} SET rating = ".(float) $new_rating. ", votes=".(int) $added . " WHERE sid='".DB_escapeString($id_sent)."'";
+        $sql = "UPDATE {$_TABLES['stories']} SET rating = '".DB_escapeString($new_rating). "', votes=".(int) $added . " WHERE sid='".DB_escapeString($id_sent)."'";
         DB_query($sql);
     } else {
         $args[1] = $id_sent;

@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Ensure rating value is properly formatted and escaped prior to inserting
+  into database (Mark)
 - Forum: Fixed sorting on New Posts (Mark)
 - New option for block location - all except home page (Mark)
 - Forum: Use admin lists for site member report (Mark)
