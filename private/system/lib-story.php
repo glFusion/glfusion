@@ -1169,9 +1169,9 @@ function service_submit_story($args, &$output, &$svc_msg)
         $output .= COM_errorLog ($LANG24[24], 2);
         if (!$args['gl_svc']) {
             if ( $args['type'] == 'submission' ) {
-                $output .= storyeditor($sid,'editsubmission');
+                $output .= STORY_edit($sid,'editsubmission');
             } else {
-                $output .= storyeditor ($sid);
+                $output .= STORY_edit($sid);
             }
         }
         $output .= COM_siteFooter ();
@@ -1192,7 +1192,7 @@ function service_submit_story($args, &$output, &$svc_msg)
         $output .= COM_siteHeader('menu');
         $output .= COM_errorLog($LANG24[31],2);
         if (!$args['gl_svc']) {
-            $output .= storyeditor($sid);
+            $output .= STORY_edit($sid);
         }
         $output .= COM_siteFooter();
         return PLG_RET_ERROR;
@@ -1324,7 +1324,7 @@ function service_submit_story($args, &$output, &$svc_msg)
                     next($errors);
                 }
                 $output .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-                $output .= storyeditor($sid);
+                $output .= STORY_edit($sid);
                 $output .= COM_siteFooter();
                 echo $output;
                 exit;

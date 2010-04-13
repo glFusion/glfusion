@@ -75,39 +75,150 @@ if (!SEC_hasRights('story.edit')) {
 }
 
 
-// Uncomment the line below if you need to debug the HTTP variables being passed
-// to the script.  This will sometimes cause errors but it will allow you to see
-// the data being passed in a POST operation
-// debug($_POST);
-
-
 /**
-* Returns a list of all users and their user ids, wrapped in <option> tags.
-*
-* @param    int     uid     current user (to be displayed as selected)
-* @return   string          string with <option> tags, to be wrapped in <select>
-*
-*/
-function userlist ($uid = 0)
+ * used for the list of stories in admin/story.php
+ *
+ */
+function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
-    global $_TABLES;
+    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG24, $LANG_ACCESS, $_IMAGE_TYPE;
+
+    static $topics;
+
+    if (!isset ($topics)) {
+        $topics = array ();
+    }
 
     $retval = '';
 
-    $result = DB_query ("SELECT uid,username FROM {$_TABLES['users']} WHERE uid > 1 ORDER BY username");
+    switch($fieldname) {
 
-    while ($A = DB_fetchArray ($result)) {
-        $retval .= '<option value="' . $A['uid'] . '"';
-        if ($uid == $A['uid']) {
-            $retval .= ' selected="selected"';
-        }
-        $retval .= '>' . $A['username'] . '</option>' . LB;
+        case "access":
+        case "edit":
+        case "edit_adv":
+            if ( SEC_inGroup('Story Admin') ) {
+                $access = $LANG_ACCESS['edit'];
+            } else {
+                $access = SEC_hasAccess ($A['owner_id'], $A['group_id'],
+                                         $A['perm_owner'], $A['perm_group'],
+                                         $A['perm_members'], $A['perm_anon']);
+                if ($access == 3) {
+                    if (SEC_hasTopicAccess ($A['tid']) == 3) {
+                        $access = $LANG_ACCESS['edit'];
+                    } else {
+                        $access = $LANG_ACCESS['readonly'];
+                    }
+                } else {
+                    $access = $LANG_ACCESS['readonly'];
+                }
+            }
+            if ($fieldname == 'access') {
+                $retval = $access;
+            } else if ($access == $LANG_ACCESS['edit']) {
+                if ($fieldname == 'edit_adv') {
+                    $retval = COM_createLink($icon_arr['edit'],
+                        "{$_CONF['site_admin_url']}/story.php?mode=edit&amp;editor=adv&amp;sid={$A['sid']}");
+                } else if ($fieldname == 'edit') {
+                    $retval = COM_createLink($icon_arr['edit'],
+                        "{$_CONF['site_admin_url']}/story.php?mode=edit&amp;editor=std&amp;sid={$A['sid']}");
+                }
+            }
+            break;
+
+        case "copy":
+        case "copy_adv":
+            if ( SEC_inGroup('Story Admin') ) {
+                $access = $LANG_ACCESS['copy'];
+            } else {
+                $access = SEC_hasAccess ($A['owner_id'], $A['group_id'],
+                                         $A['perm_owner'], $A['perm_group'],
+                                         $A['perm_members'], $A['perm_anon']);
+                if ($access == 3) {
+                    if (SEC_hasTopicAccess ($A['tid']) == 3) {
+                        $access = $LANG_ACCESS['copy'];
+                    } else {
+                        $access = $LANG_ACCESS['readonly'];
+                    }
+                } else {
+                    $access = $LANG_ACCESS['readonly'];
+                }
+            }
+            if ($fieldname == 'access') {
+                $retval = $access;
+            } else if ($access == $LANG_ACCESS['copy']) {
+                if ($fieldname == 'copy_adv') {
+                    $retval = COM_createLink($icon_arr['copy'],
+                        "{$_CONF['site_admin_url']}/story.php?mode=clone&amp;editor=adv&amp;sid={$A['sid']}");
+                } else if ($fieldname == 'copy') {
+                    $retval = COM_createLink($icon_arr['copy'],
+                        "{$_CONF['site_admin_url']}/story.php?mode=clone&amp;editor=std&amp;sid={$A['sid']}");
+                }
+            }
+            break;
+
+        case "title":
+            $A['title'] = str_replace('$', '&#36;', $A['title']);
+            $article_url = COM_buildUrl ($_CONF['site_url'] . '/article.php?story='
+                                  . $A['sid']);
+            $retval = COM_createLink(stripslashes($A['title']), $article_url);
+            break;
+
+        case 'tid':
+            if (!isset ($topics[$A['tid']])) {
+                $topics[$A['tid']] = DB_getItem ($_TABLES['topics'], 'topic',
+                                                 "tid = '".DB_escapeString($A['tid'])."'");
+            }
+            $retval = $topics[$A['tid']];
+            break;
+
+        case "draft_flag":
+            $retval = ($A['draft_flag'] == 1) ? $icon_arr['check'] : '';
+            break;
+
+        case "featured":
+            $retval = ($A['featured'] == 1) ? $icon_arr['check'] : '';
+            break;
+
+        case 'username':
+            $retval = COM_getDisplayName ($A['uid'], $A['username'], $A['fullname']);
+            break;
+
+        case "unixdate":
+            $curtime = COM_getUserDateTimeFormat ($A['unixdate']);
+            $retval = strftime($_CONF['daytime'], $curtime[1]);
+            break;
+
+        case "ping":
+            $pingico = '<img src="' . $_CONF['layout_url'] . '/images/sendping.'
+                     . $_IMAGE_TYPE . '" alt="' . $LANG24[21] . '" title="'
+                     . $LANG24[21] . '"' . XHTML . '>';
+            if (($A['draft_flag'] == 0) && ($A['unixdate'] < time())) {
+                $url = $_CONF['site_admin_url']
+                     . '/trackback.php?mode=sendall&amp;id=' . $A['sid'];
+                $retval = COM_createLink($pingico, $url);
+            } else {
+                $retval = '';
+            }
+            break;
+
+        case 'delete':
+            $retval = '';
+            $attr['title'] = $LANG_ADMIN['delete'];
+            $attr['onclick'] = 'return confirm(\'' . $LANG24[89] .'\');';
+            $retval .= COM_createLink($icon_arr['delete'],
+                $_CONF['site_admin_url'] . '/story.php'
+                . '?mode=' . $LANG_ADMIN['delete'] . '&amp;sid=' . $A['sid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            break;
+
+        default:
+            $retval = $fieldvalue;
+            break;
     }
 
     return $retval;
 }
 
-function liststories()
+function STORY_list()
 {
     global $_CONF, $_TABLES, $_IMAGE_TYPE,
            $LANG09, $LANG_ADMIN, $LANG_ACCESS, $LANG24;
@@ -163,22 +274,22 @@ function liststories()
         . ': <select name="tid" style="width: 125px" onchange="this.form.submit()">'
         . $alltopics . $seltopics . '</select>';
 
-    $header_arr = array(
-        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false));
-
-    $header_arr[] = array('text' => $LANG_ADMIN['copy'], 'field' => 'copy', 'sort' => false);
+    $header_arr = array();
+    
+    $header_arr[] = array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center', 'width' => '35px');
+    $header_arr[] = array('text' => $LANG_ADMIN['copy'], 'field' => 'copy', 'sort' => false, 'align' => 'center', 'width' => '35px');
     $header_arr[] = array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true);
-    $header_arr[] = array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false);
-    $header_arr[] = array('text' => $LANG24[34], 'field' => 'draft_flag', 'sort' => true);
+    $header_arr[] = array('text' => $LANG_ADMIN['topic'], 'field' => 'tid', 'sort' => true);    
+    $header_arr[] = array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false, 'align' => 'center');
+    $header_arr[] = array('text' => $LANG24[34], 'field' => 'draft_flag', 'sort' => true, 'align' => 'center');
+    $header_arr[] = array('text' => $LANG24[32], 'field' => 'featured', 'sort' => true, 'align' => 'center');
     $header_arr[] = array('text' => $LANG24[7], 'field' => 'username', 'sort' => true); //author
-    $header_arr[] = array('text' => $LANG24[15], 'field' => 'unixdate', 'sort' => true); //date
-    $header_arr[] = array('text' => $LANG_ADMIN['topic'], 'field' => 'tid', 'sort' => true);
-    $header_arr[] = array('text' => $LANG24[32], 'field' => 'featured', 'sort' => true);
-
+    $header_arr[] = array('text' => $LANG24[15], 'field' => 'unixdate', 'sort' => true, 'align' => 'center'); //date
     if (SEC_hasRights ('story.ping') && ($_CONF['trackback_enabled'] ||
             $_CONF['pingback_enabled'] || $_CONF['ping_enabled'])) {
-        $header_arr[] = array('text' => $LANG24[20], 'field' => 'ping', 'sort' => false);
+        $header_arr[] = array('text' => $LANG24[20], 'field' => 'ping', 'sort' => false, 'align' => 'center');
     }
+    $header_arr[] = array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center');
 
     $defsort_arr = array('field' => 'unixdate', 'direction' => 'desc');
 
@@ -216,8 +327,13 @@ function liststories()
         'default_filter' => $excludetopics . COM_getPermSQL ('AND')
     );
 
-    $retval .= ADMIN_list('story', 'ADMIN_getListField_stories', $header_arr,
-                          $text_arr, $query_arr, $defsort_arr, $filter);
+    $token = SEC_createToken();
+    $form_arr = array(
+        'bottom'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="'. $token .'"/>',
+    );
+
+    $retval .= ADMIN_list('story', 'STORY_getListField', $header_arr,
+                          $text_arr, $query_arr, $defsort_arr, $filter, $token, '', $form_arr);
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
     return $retval;
 }
@@ -234,7 +350,7 @@ function liststories()
 * @return   string      HTML for story editor
 *
 */
-function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
+function STORY_edit($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
 {
     global $_CONF, $_GROUPS, $_TABLES, $_USER, $LANG24, $LANG_ACCESS,
            $LANG_ADMIN, $MESSAGE;
@@ -784,7 +900,7 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
 * @param    int         $delete         String array of attached images to delete from article
 *
 */
-function submitstory($type='')
+function STORY_submit($type='')
 {
     $output = '';
 
@@ -859,7 +975,7 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
     if (!empty ($_GET['editor'])) {
         $editor = COM_applyFilter ($_GET['editor']);
     }
-    $display .= storyeditor (COM_applyFilter ($_POST['sid']), 'preview', '', '',
+    $display .= STORY_edit(COM_applyFilter ($_POST['sid']), 'preview', '', '',
                              $editor);
     $display .= COM_siteFooter();
     echo $display;
@@ -880,7 +996,7 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
     if (isset ($_GET['editor'])) {
         $editor = COM_applyFilter ($_GET['editor']);
     }
-    $display .= storyeditor ($sid, $mode, '', $topic, $editor);
+    $display .= STORY_edit($sid, $mode, '', $topic, $editor);
     $display .= COM_siteFooter();
     echo $display;
 } else if ($mode == 'clone') {
@@ -890,7 +1006,7 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
     }
     if (!empty($sid)) {
         $display .= COM_siteHeader('menu', $LANG24[5]);
-        $display .= storyeditor ($sid, $mode);
+        $display .= STORY_edit($sid, $mode);
         $display .= COM_siteFooter();
     } else {
         $display = COM_refresh ($_CONF['site_admin_url'] . '/index.php');
@@ -901,7 +1017,7 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
                    time() + 1200, $_CONF['cookie_path'],
                    $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
     $display .= COM_siteHeader('menu', $LANG24[5]);
-    $display .= storyeditor (COM_applyFilter ($_GET['id']), $mode);
+    $display .= STORY_edit(COM_applyFilter ($_GET['id']), $mode);
     $display .= COM_siteFooter();
     echo $display;
 } else if (($mode == $LANG_ADMIN['save']) && !empty ($LANG_ADMIN['save'])) {
@@ -919,11 +1035,11 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
                        $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
         $display  = COM_siteHeader('menu', $LANG24[5]);
         $display .= COM_showMessage(501);
-        $display .= storyeditor (COM_applyFilter ($_POST['sid']), 'preview', '', '',$editor);
+        $display .= STORY_edit(COM_applyFilter ($_POST['sid']), 'preview', '', '',$editor);
         $display .= COM_siteFooter();
         echo $display;
     } else {
-        submitstory();
+        STORY_submit();
     }
 } else { // 'cancel' or no mode at all
     // purge any tokens we created for the advanced editor
@@ -944,7 +1060,7 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
             $msg = COM_applyFilter($_GET['msg'], true);
             $display .= COM_showMessage($msg);
         }
-        $display .= liststories();
+        $display .= STORY_list();
         $display .= COM_siteFooter();
     }
     echo $display;

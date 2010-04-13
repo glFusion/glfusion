@@ -671,7 +671,7 @@ function PAGE_list()
         array('text' => $LANG_STATIC['id'], 'field' => 'sp_id', 'sort' => true),
         array('text' => $LANG_ADMIN['title'], 'field' => 'sp_title', 'sort' => true),
         array('text' => $LANG_STATIC['head_centerblock'], 'field' => 'sp_centerblock', 'sort' => true, 'align' => 'center'),
-        array('text' => $LANG_STATIC['writtenby'], 'field' => 'sp_uid', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG_STATIC['writtenby'], 'field' => 'sp_uid', 'sort' => true),
         array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false, 'align' => 'center'),
         array('text' => $LANG_STATIC['date'], 'field' => 'unixdate', 'sort' => true, 'align' => 'center'),
         array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center'),

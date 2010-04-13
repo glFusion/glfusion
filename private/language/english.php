@@ -933,7 +933,8 @@ $LANG24 = array(
     85 => 'Show All',
     86 => 'Advanced Editor',
     87 => 'Story Stats',
-    88 => 'Wiki-style format'
+    88 => 'Wiki-style format',
+    89 => 'Are you sure you want to delete this Story?',
 );
 
 ###############################################################################
