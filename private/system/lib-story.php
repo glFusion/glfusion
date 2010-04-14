@@ -8,9 +8,10 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Mark Howard            mark AT usable-web DOT com                        |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -42,7 +43,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-require_once $_CONF['path_system'] . '/classes/story.class.php';
+USES_class_story();
 
 /* Check for PHP5 */
 if (PHP_VERSION < 5) {
@@ -512,24 +513,24 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         if( $storyAccess == 3 AND SEC_hasrights( 'story.edit' ) AND ( $index != 'p' )) {
             $article->set_var( 'edit_link',
                 COM_createLink($LANG01[4], $_CONF['site_admin_url']
-                    . '/story.php?mode=edit&amp;sid=' . $story->getSid())
+                    . '/story.php?edit=x&amp;sid=' . $story->getSid())
                 );
             $article->set_var( 'edit_url', $_CONF['site_admin_url']
-                    . '/story.php?mode=edit&amp;sid=' . $story->getSid() );
+                    . '/story.php?edit=x&amp;sid=' . $story->getSid() );
             $article->set_var( 'lang_edit_text',  $LANG01[4] );
             $editicon = $_CONF['layout_url'] . '/images/edit.' . $_IMAGE_TYPE;
             $editiconhtml = '<img src="' . $editicon . '" alt="' . $LANG01[4] . '" title="' . $LANG01[4] . '"' . XHTML . '>';
             $article->set_var( 'edit_icon',
                 COM_createLink(
                     $editiconhtml,
-                    $_CONF['site_admin_url'] . '/story.php?mode=edit&amp;sid=' . $story->getSid()
+                    $_CONF['site_admin_url'] . '/story.php?edit=x&amp;sid=' . $story->getSid()
                 )
             );
             $article->set_var( 'edit_image', $editiconhtml);
         }
         PLG_templateSetVars($article_filevar,$article);
 
-        if ( $_CONF['rating_enabled'] != 0 ) {
+        if ( $_CONF['rating_enabled'] != 0 && $index != 'p') {
             if ( @in_array($story->getSid(),$ratedIds)) {
                 $static = true;
                 $voted = 1;
@@ -649,7 +650,7 @@ function STORY_whatsRelated( $related, $uid, $tid )
         $rel = array ();
     }
 
-    if( !empty( $_USER['username'] ) || (( $_CONF['loginrequired'] == 0 ) &&
+    if( !COM_isAnonUser() || (( $_CONF['loginrequired'] == 0 ) &&
            ( $_CONF['searchloginrequired'] == 0 ))) {
         // add a link to "search by author"
         if( $_CONF['contributedbyline'] == 1 ) {
@@ -773,6 +774,9 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
             case 'label':
                 $fields[] = 'sid';
                 break;
+            case 'status' :
+                $fields[] = 'draft_flag';
+                break;
             default:
                 break;
         }
@@ -791,7 +795,7 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
     } else {
         $where = " WHERE (sid = '" . DB_escapeString($sid) . "') AND";
     }
-    $where .= ' (draft_flag = 0) AND (date <= NOW())';
+    $where .= ' (date <= NOW())';
     if ($uid > 0) {
         $permSql = COM_getPermSql('AND', $uid)
                  . COM_getTopicSql('AND', $uid);
@@ -858,6 +862,13 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
                     break;
                 case 'label':
                     $props['label'] = $LANG09[65];
+                    break;
+                case 'status' :
+                    if ( $A['draft_flag'] == 0 ) {
+                        $props['status'] = 1;
+                    } else {
+                        $props['status'] = 0;
+                    }
                     break;
                 default:
                     $props[$p] = '';
