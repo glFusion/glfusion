@@ -862,11 +862,13 @@ if (isset($_POST['tid'])) {
 $validtoken = SEC_checkToken();
 
 switch ($action) {
+    
     case 'edit':
         $display .= COM_siteHeader('menu', $LANG27[1]);
         $display .= TOPIC_edit($tid);
         $display .= COM_siteFooter();
         break;
+    
     case 'save':
         $T = array();
 
@@ -887,7 +889,7 @@ switch ($action) {
         $T['sort_by']       = (($T['sort_by'] < 0) || ($T['sort_by'] > 2)) ? 0 : $T['sort_by'];
         $T['sort_dir']      = (isset($_POST['sort_dir'])) ? (($_POST['sort_dir'] == 'ASC') ? 'ASC' : 'DESC') : 'DESC';
 
-        if (! $validtoken) {
+        if (!$validtoken) {
             $display .= COM_siteHeader('menu');
             $display .= TOPIC_edit('',$T,$MESSAGE[501]);
             $display .= COM_siteFooter();
@@ -897,9 +899,10 @@ switch ($action) {
         $display .= TOPIC_save($T);
         CACHE_remove_instance('story');
         break;
+    
     case 'delete':
-        if (!isset ($tid) || empty ($tid)) {
-            COM_errorLog('Attempted to delete topic, tid empty or null, value =' . $tid);
+        if (!isset($tid) || empty($tid)) {
+            COM_errorLog('Attempted to delete topic, tid empty or null, value = ' . $tid);
             $display .= COM_refresh($_CONF['site_admin_url'] . '/topic.php');
         } elseif ($validtoken) {
             $display .= TOPIC_delete($tid);

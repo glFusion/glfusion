@@ -49,16 +49,11 @@
 * glFusion common function library
 */
 require_once '../lib-common.php';
-require_once $_CONF['path_system'] . 'lib-story.php';
-
-/**
-* Security check to ensure user even belongs on this page
-*/
 require_once 'auth.inc.php';
 
-// Set this to true if you want to have this code output debug messages to
-// the error log
-$_STORY_VERBOSE = false;
+USES_lib_story();
+
+$_STORY_VERBOSE = false; // verbose logging option
 
 $display = '';
 
@@ -117,10 +112,10 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             } else if ($access == $LANG_ACCESS['edit']) {
                 if ($fieldname == 'edit_adv') {
                     $retval = COM_createLink($icon_arr['edit'],
-                        "{$_CONF['site_admin_url']}/story.php?mode=edit&amp;editor=adv&amp;sid={$A['sid']}");
+                        "{$_CONF['site_admin_url']}/story.php?edit=x&amp;editor=adv&amp;sid={$A['sid']}");
                 } else if ($fieldname == 'edit') {
                     $retval = COM_createLink($icon_arr['edit'],
-                        "{$_CONF['site_admin_url']}/story.php?mode=edit&amp;editor=std&amp;sid={$A['sid']}");
+                        "{$_CONF['site_admin_url']}/story.php?edit=x&amp;editor=std&amp;sid={$A['sid']}");
                 }
             }
             break;
@@ -148,10 +143,10 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             } else if ($access == $LANG_ACCESS['copy']) {
                 if ($fieldname == 'copy_adv') {
                     $retval = COM_createLink($icon_arr['copy'],
-                        "{$_CONF['site_admin_url']}/story.php?mode=clone&amp;editor=adv&amp;sid={$A['sid']}");
+                        "{$_CONF['site_admin_url']}/story.php?clone=x&amp;editor=adv&amp;sid={$A['sid']}");
                 } else if ($fieldname == 'copy') {
                     $retval = COM_createLink($icon_arr['copy'],
-                        "{$_CONF['site_admin_url']}/story.php?mode=clone&amp;editor=std&amp;sid={$A['sid']}");
+                        "{$_CONF['site_admin_url']}/story.php?clone=x&amp;editor=std&amp;sid={$A['sid']}");
                 }
             }
             break;
@@ -207,7 +202,7 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             $attr['onclick'] = 'return confirm(\'' . $LANG24[89] .'\');';
             $retval .= COM_createLink($icon_arr['delete'],
                 $_CONF['site_admin_url'] . '/story.php'
-                . '?mode=' . $LANG_ADMIN['delete'] . '&amp;sid=' . $A['sid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+                . '?delete=x&amp;sid=' . $A['sid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
             break;
 
         default:
@@ -294,7 +289,7 @@ function STORY_list()
     $defsort_arr = array('field' => 'unixdate', 'direction' => 'desc');
 
     $menu_arr = array (
-        array('url' => $_CONF['site_admin_url'] . '/story.php?mode=edit&amp;editor=std',
+        array('url' => $_CONF['site_admin_url'] . '/story.php?edit=x&amp;editor=std',
               'text' => $LANG_ADMIN['create_new'])
     );
 
@@ -344,13 +339,13 @@ function STORY_list()
 * Displays the story entry form
 *
 * @param    string      $sid            ID of story to edit
-* @param    string      $mode           'preview', 'edit', 'editsubmission'
+* @param    string      $action         'preview', 'edit', 'editsubmission'
 * @param    string      $errormsg       a message to display on top of the page
 * @param    string      $currenttopic   topic selection for drop-down menu
 * @return   string      HTML for story editor
 *
 */
-function STORY_edit($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
+function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
 {
     global $_CONF, $_GROUPS, $_TABLES, $_USER, $LANG24, $LANG_ACCESS,
            $LANG_ADMIN, $MESSAGE;
@@ -379,7 +374,7 @@ function STORY_edit($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
     }
 
     $story = new Story();
-    if ($mode == 'preview') {
+    if ($action == 'preview') {
         // Handle Magic GPC Garbage:
         while (list($key, $value) = each($_POST)) {
             if (!is_array($value)) {
@@ -392,7 +387,7 @@ function STORY_edit($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
         }
         $result = $story->loadFromArgsArray($_POST);
     } else {
-        $result = $story->loadFromDatabase($sid, $mode);
+        $result = $story->loadFromDatabase($sid, $action);
     }
 
     if( ($result == STORY_PERMISSION_DENIED) || ($result == STORY_NO_ACCESS_PARAMS) )
@@ -412,7 +407,7 @@ function STORY_edit($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
         COM_accessLog("User {$_USER['username']} tried to illegally edit story $sid. - STORY_EDIT_DENIED or STORY_EXISTING_NO_EDIT_PERMISSION");
         return $display;
     } elseif( $result == STORY_INVALID_SID ) {
-        if( $mode == 'editsubmission' )
+        if( $action == 'editsubmission' )
         {
             // that submission doesn't seem to be there any more (may have been
             // handled by another Admin) - take us back to the moderation page
@@ -519,7 +514,7 @@ function STORY_edit($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
             $navbar->add_menuitem($LANG24[85],'showhideEditorDiv("all",5);return false;',true);
         }
 
-        if ($mode == 'preview') {
+        if ($action == 'preview') {
             $story_templates->set_var ('show_preview', '');
             $story_templates->set_var ('show_htmleditor', 'none');
             $story_templates->set_var ('show_texteditor', 'none');
@@ -536,14 +531,14 @@ function STORY_edit($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
     $oldsid = $story->EditElements('originalSid');
     if (!empty ($oldsid)) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
-                   . '" name="mode"%s' . XHTML . '>';
+                   . '" name="delete"%s' . XHTML . '>';
         $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
         $story_templates->set_var ('delete_option',
                                    sprintf ($delbutton, $jsconfirm));
         $story_templates->set_var ('delete_option_no_confirmation',
                                    sprintf ($delbutton, ''));
     }
-    if (($mode == 'editsubmission') || ($story->type == 'submission')) {
+    if (($action == 'editsubmission') || ($story->type == 'submission')) {
         $story_templates->set_var ('submission_option',
                 '<input type="hidden" name="type" value="submission"' . XHTML . '>');
     }
@@ -922,148 +917,144 @@ function STORY_submit($type='')
 
     PLG_invokeService('story', 'submit', $args, $output, $svc_msg);
 
-    echo $output;
+    return $output;
 }
 
-// MAIN
-$mode = '';
-if (isset($_REQUEST['mode'])){
-    $mode = COM_applyFilter ($_REQUEST['mode']);
+// MAIN ========================================================================
+
+$action = '';
+$expected = array('edit','editsubmission','clone','save','preview','delete','cancel');
+foreach($expected as $provided) {
+    if (isset($_POST[$provided])) {
+        $action = $provided;
+    } elseif (isset($_GET[$provided])) {
+	$action = $provided;
+    }
+}
+COM_errorLog( 'action=' . $action );
+
+$sid = '';
+if (isset($_POST['sid'])) {
+    $sid = COM_applyFilter($_POST['sid']);
+} elseif (isset($_GET['sid'])) {
+    $sid = COM_applyFilter($_GET['sid']);
+}
+COM_errorLog( 'sid=' . $sid );
+
+$editopt = '';
+if (isset($_POST['editopt'])) {
+    $editopt = COM_applyFilter($_POST['editopt']);
+} elseif (isset($_GET['editopt'])) {
+    $editopt = COM_applyFilter($_GET['editopt']);
+}
+if ($editopt == 'default') {
+    $_CONF['advanced_editor'] = false;
 }
 
-if (isset($_REQUEST['editopt'])){
-    $editopt = COM_applyFilter ($_REQUEST['editopt']);
-    if ($editopt == 'default') {
-        $_CONF['advanced_editor'] = false;
-    }
-}
+$id = (isset($_GET['id'])) ? COM_applyFilter($_GET['id']) : '';
+$msg = (isset($_GET['msg'])) ? COM_applyFilter($_GET['msg'], true) : '';
+$editor = (isset($_GET['editor'])) ? COM_applyFilter($_GET['editor']) : '';
+$topic = (isset($_GET['topic'])) ? COM_applyFilter($_GET['topic']) : '';
+$type = (isset($_POST['type'])) ? COM_applyFilter($_POST['type']) : '';
 
-$display = '';
-if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
-    $sid = COM_applyFilter ($_POST['sid']);
-    $type = '';
-    if (isset ($_POST['type'])) {
-        $type = COM_applyFilter ($_POST['type']);
-    }
-    if (!isset ($sid) || empty ($sid)) {
-        COM_errorLog ('Attempted to delete story sid=' . $sid);
-        echo COM_refresh ($_CONF['site_admin_url'] . '/story.php');
-    } else if ($type == 'submission') {
-        $tid = DB_getItem ($_TABLES['storysubmission'], 'tid', "sid = '$sid'");
-        if (SEC_hasTopicAccess ($tid) < 3) {
-            COM_accessLog ("User {$_USER['username']} tried to illegally delete story submission $sid.");
-            echo COM_refresh ($_CONF['site_admin_url'] . '/index.php');
-        } else if (SEC_checkToken()) {
-            DB_delete ($_TABLES['storysubmission'], 'sid', $sid,
-                       $_CONF['site_admin_url'] . '/moderation.php');
-        } else {
-            COM_accessLog ("User {$_USER['username']} tried to illegally delete story submission $sid and failed CSRF checks.");
-            echo COM_refresh ($_CONF['site_admin_url'] . '/index.php');
-        }
-    } else if (SEC_checkToken()) {
-        echo STORY_deleteStory ($sid);
-    } else {
-        COM_accessLog ("User {$_USER['username']} tried to delete story and failed CSRF checks $sid.");
-        echo COM_refresh ($_CONF['site_admin_url'] . '/index.php');
-    }
-} else if (($mode == $LANG_ADMIN['preview']) && !empty ($LANG_ADMIN['preview'])) {
-    SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
-                   time() + 1200, $_CONF['cookie_path'],
-                   $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
-    $display .= COM_siteHeader('menu', $LANG24[5]);
-    $editor = '';
-    if (!empty ($_GET['editor'])) {
-        $editor = COM_applyFilter ($_GET['editor']);
-    }
-    $display .= STORY_edit(COM_applyFilter ($_POST['sid']), 'preview', '', '',
-                             $editor);
-    $display .= COM_siteFooter();
-    echo $display;
-} else if ($mode == 'edit') {
-    SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
-                   time() + 1200, $_CONF['cookie_path'],
-                   $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
-    $display .= COM_siteHeader('menu', $LANG24[5]);
-    $sid = '';
-    if (isset ($_GET['sid'])) {
-        $sid = COM_applyFilter ($_GET['sid']);
-    }
-    $topic = '';
-    if (isset ($_GET['topic'])) {
-        $topic = COM_applyFilter ($_GET['topic']);
-    }
-    $editor = '';
-    if (isset ($_GET['editor'])) {
-        $editor = COM_applyFilter ($_GET['editor']);
-    }
-    $display .= STORY_edit($sid, $mode, '', $topic, $editor);
-    $display .= COM_siteFooter();
-    echo $display;
-} else if ($mode == 'clone') {
-    $sid = '';
-    if (isset ($_GET['sid'])) {
-        $sid = COM_applyFilter ($_GET['sid']);
-    }
-    if (!empty($sid)) {
-        $display .= COM_siteHeader('menu', $LANG24[5]);
-        $display .= STORY_edit($sid, $mode);
-        $display .= COM_siteFooter();
-    } else {
-        $display = COM_refresh ($_CONF['site_admin_url'] . '/index.php');
-    }
-    echo $display;
-} else if ($mode == 'editsubmission') {
-    SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
-                   time() + 1200, $_CONF['cookie_path'],
-                   $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
-    $display .= COM_siteHeader('menu', $LANG24[5]);
-    $display .= STORY_edit(COM_applyFilter ($_GET['id']), $mode);
-    $display .= COM_siteFooter();
-    echo $display;
-} else if (($mode == $LANG_ADMIN['save']) && !empty ($LANG_ADMIN['save'])) {
-    // purge any tokens we created for the advanced editor
-    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'";
-    DB_Query($sql,1);
+$validtoken = SEC_checkToken();
 
-    if ( !SEC_checkToken() ) {
-        $editor = '';
-        if (!empty ($_GET['editor'])) {
-            $editor = COM_applyFilter ($_GET['editor']);
-        }
+switch ($action) {
+    
+    case 'edit':
         SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
                        time() + 1200, $_CONF['cookie_path'],
                        $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
-        $display  = COM_siteHeader('menu', $LANG24[5]);
-        $display .= COM_showMessage(501);
-        $display .= STORY_edit(COM_applyFilter ($_POST['sid']), 'preview', '', '',$editor);
+        $display .= COM_siteHeader('menu', $LANG24[5]);
+        $display .= STORY_edit($sid, $action, '', $topic, $editor);
         $display .= COM_siteFooter();
-        echo $display;
-    } else {
-        STORY_submit();
-    }
-} else { // 'cancel' or no mode at all
-    // purge any tokens we created for the advanced editor
-    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'";
-    DB_Query($sql,1);
-
-    $type = '';
-    if (isset($_POST['type'])){
-        $type = COM_applyFilter ($_POST['type']);
-    }
-    if (($mode == $LANG24[10]) && !empty ($LANG24[10]) &&
-            ($type == 'submission')) {
-        $display = COM_refresh ($_CONF['site_admin_url'] . '/moderation.php');
-    } else {
-        $display .= COM_siteHeader('menu', $LANG24[22]);
-        $msg = "";
-        if (isset($_GET['msg'])) {
-            $msg = COM_applyFilter($_GET['msg'], true);
-            $display .= COM_showMessage($msg);
+        break;
+    
+    case 'editsubmission':
+        SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                       time() + 1200, $_CONF['cookie_path'],
+                       $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
+        $display .= COM_siteHeader('menu', $LANG24[5]);
+        $display .= STORY_edit($id, $action);
+        $display .= COM_siteFooter();
+        break;
+    
+    case 'clone':
+        if (!empty($sid)) {
+            $display .= COM_siteHeader('menu', $LANG24[5]);
+            $display .= STORY_edit($sid, $action);
+            $display .= COM_siteFooter();
+        } else {
+            COM_errorLog('User ' . $_USER['username'] . ' attempted to clone a story, sid empty or null, sid=' . $sid);
+            $display = COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
-        $display .= STORY_list();
+        break;
+    
+    case 'save':
+        // purge any tokens we created for the advanced editor
+        DB_query("DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'",1);
+    
+        if ($validtoken) {
+            $display = STORY_submit();
+        } else {
+            SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                           time() + 1200, $_CONF['cookie_path'],
+                           $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
+            $display  = COM_siteHeader('menu', $LANG24[5]);
+            $display .= COM_showMessage(501);
+            $display .= STORY_edit(COM_applyFilter ($_POST['sid']), 'preview', '', '',$editor);
+            $display .= COM_siteFooter();
+        }
+        break;
+    
+    case 'preview':
+        SEC_setCookie($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                       time() + 1200, $_CONF['cookie_path'],
+                       $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
+        $display .= COM_siteHeader('menu', $LANG24[5]);
+        $display .= STORY_edit($sid, 'preview', '', '', $editor);
         $display .= COM_siteFooter();
-    }
-    echo $display;
+        break;
+    
+    case 'delete':
+        if (!isset($sid) || empty($sid)) {
+            COM_errorLog('User ' . $_USER['username'] . ' attempted to delete a story, sid empty or null, sid=' . $sid);
+            $display = COM_refresh($_CONF['site_admin_url'] . '/story.php');
+        } elseif ($type == 'submission') {
+            $tid = DB_getItem($_TABLES['storysubmission'], 'tid', "sid = '$sid'");
+            if (SEC_hasTopicAccess($tid) < 3) {
+                COM_accessLog ('User ' . $_USER['username'] . ' had insufficient rights to delete a story submission, sid=' . $sid);
+                $display = COM_refresh($_CONF['site_admin_url'] . '/index.php');
+            } elseif ($validtoken) {
+                DB_delete ($_TABLES['storysubmission'], 'sid', $sid,
+                           $_CONF['site_admin_url'] . '/moderation.php');
+            } else {
+                COM_accessLog ("User {$_USER['username']} tried to illegally delete a story submission, sid=$sid and failed CSRF checks.");
+                $display = COM_refresh($_CONF['site_admin_url'] . '/index.php');
+            }
+        } else if ($validtoken) {
+            $display .= STORY_deleteStory($sid);
+        } else {
+            COM_accessLog ("User {$_USER['username']} tried to a delete a story, sid=$sid and failed CSRF checks");
+            $display = COM_refresh($_CONF['site_admin_url'] . '/index.php');
+        }
+        break;
+    
+    default:
+        // purge any tokens we created for the advanced editor
+        DB_query("DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'",1);
+        if (($action == 'cancel') && ($type == 'submission')) {
+            $display = COM_refresh($_CONF['site_admin_url'] . '/moderation.php');
+        } else {            
+            $display .= COM_siteHeader('menu', $LANG24[22]);
+            $display .= (isset($msg)) ? COM_showMessage($msg) : '';
+            $display .= STORY_list();
+            $display .= COM_siteFooter();
+        }
+        break;
+    
 }
+
+echo $display;
 
 ?>

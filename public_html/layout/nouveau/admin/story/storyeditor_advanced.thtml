@@ -287,9 +287,9 @@
             </fieldset>
         </div>
         <div id="se_bottom" style="width:100%; paddin:3px; margin-top:20px;">
-            <input type="submit" value="{lang_save}" name="mode"{xhtml}>
-            <span style="padding-right:10px;padding-left:10px;"><input type="submit" value="{lang_preview}" name="mode"{xhtml}></span>
-            <span style="padding-right:50px;"><input type="submit" value="{lang_cancel}" name="mode"{xhtml}></span>
+            <input type="submit" value="{lang_save}" name="save"{xhtml}>
+            <span style="padding-right:10px;padding-left:10px;"><input type="submit" value="{lang_preview}" name="preview"{xhtml}></span>
+            <span style="padding-right:50px;"><input type="submit" value="{lang_cancel}" name="cancel"{xhtml}></span>
             {delete_option}
             {submission_option}
             <input type="hidden" name="old_sid" value="{old_story_id}"{xhtml}>

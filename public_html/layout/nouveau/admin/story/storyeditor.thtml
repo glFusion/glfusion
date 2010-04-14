@@ -278,9 +278,9 @@ function enablearchive(obj) {
         <tr><td colspan="2">&nbsp;</td></tr>
         <tr>
             <td colspan="2">
-                <input type="submit" value="{lang_save}" name="mode"{xhtml}>
-                <input type="submit" value="{lang_preview}" name="mode"{xhtml}>
-                <input type="submit" value="{lang_cancel}" name="mode"{xhtml}>
+                <input type="submit" value="{lang_save}" name="save"{xhtml}>
+                <input type="submit" value="{lang_preview}" name="preview"{xhtml}>
+                <input type="submit" value="{lang_cancel}" name="cancel"{xhtml}>
                 {delete_option}
                 {submission_option}
                 <input type="hidden" name="old_sid" value="{old_story_id}"{xhtml}>

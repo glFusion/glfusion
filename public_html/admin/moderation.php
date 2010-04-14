@@ -220,7 +220,7 @@ function MODERATE_itemList($type, $token)
                      . '/index.php?mode=editsubmission&amp;id=' . $A[0];
         } else {
             $A['edit'] = $_CONF['site_admin_url'] . '/' .  $type
-                     . '.php?mode=editsubmission&amp;id=' . $A[0];
+                     . '.php?editsubmission=x&amp;id=' . $A[0];
         }
         $A['row'] = $i;
         $A['_moderation_type'] = $type;
@@ -344,7 +344,7 @@ function MODERATE_draftList($token)
 
     for ($i = 0; $i < $nrows; $i++) {
         $A = DB_fetchArray($result);
-        $A['edit'] = $_CONF['site_admin_url'] . '/story.php?mode=edit&amp;sid='
+        $A['edit'] = $_CONF['site_admin_url'] . '/story.php?edit=x&amp;sid='
                     . $A['id'];
         $A['row'] = $i;
         $A['title'] = stripslashes($A['title']);
