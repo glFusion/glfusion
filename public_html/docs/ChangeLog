@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Media Gallery: Fixed issue where album owners would see the Delete option
+  for media comments, but they could not actually delete the comment (Mark)
 - Convert session cookie to use MD5 token instead of random number (Mark)
 - Use mt_rand() instead of rand() and seed once per session (Mark)
 - Ensure rating value is properly formatted and escaped prior to inserting

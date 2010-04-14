@@ -112,28 +112,20 @@ function plugin_editcomment_mediagallery($cid,$id) {
  *
  */
 function plugin_deletecomment_mediagallery($cid,$id) {
-    global $_CONF, $_MG_CONF, $_TABLES;
+    global $_CONF, $_MG_CONF, $_TABLES, $MG_albums;
 
     // find the album that holds this peice of media
 
-    $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} WHERE media_id='" . DB_escapeString($id) . "'";
+    $sql = "SELECT album_id FROM {$_TABLES['mg_media_albums']} WHERE media_id='" . DB_escapeString($id) . "'";
     $result = DB_query($sql);
     $nRows  = DB_numRows($result);
     if ( $nRows > 0 ) {
         $row = DB_fetchArray($result);
-        $sql = "SELECT group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['mg_albums']} WHERE album_id='" . $row['album_id'] ."'";
-        $result = DB_query($sql);
-        $nRows = DB_numRows($result);
-        if ( $nRows > 0 ) {
-            $row = DB_fetchArray($result);
-            $access = SEC_hasAccess ($row['owner_id'],
-                        $row['group_id'],
-                        $row['perm_owner'],
-                        $row['perm_group'],
-                        $row['perm_members'],
-                        $row['perm_anon']);
+        $aid = $row['album_id'];
+        if ( $MG_albums[0]->owner_id ) {
+            $access = 3;
         } else {
-            $access = 0;
+            $access = $MG_albums[$aid]->access;
         }
     } else {
         $access = 0;
