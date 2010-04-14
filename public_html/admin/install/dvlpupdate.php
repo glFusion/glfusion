@@ -520,7 +520,7 @@ function glfusion_119()
     // session handling
     $c->del('cookie_ip','Core');
     DB_query("ALTER TABLE {$_TABLES['sessions']} DROP PRIMARY KEY",1);
-    DB_query("ALTER TABLE {$_TABLES['sessions']} ADD PRIMARY KEY ('md5_sess_id')",1);
+    DB_query("ALTER TABLE {$_TABLES['sessions']} ADD PRIMARY KEY (md5_sess_id)",1);
 
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.9',name='glfusion'",1);
