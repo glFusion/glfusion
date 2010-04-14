@@ -1106,7 +1106,7 @@ function SEC_createToken($ttl = 1200)
     }
 
     /* Generate the token */
-    $token = md5($_USER['uid'].$pageURL.uniqid (rand (), 1));
+    $token = md5($_USER['uid'].$pageURL.uniqid (mt_rand (), 1));
     $pageURL = DB_escapeString($pageURL);
 
     /* Destroy exired tokens: */
@@ -1219,7 +1219,7 @@ function SEC_createTokenGeneral($action='general',$ttl = 1200)
     }
 
     /* Generate the token */
-    $token = md5($_USER['uid'].$_USER['uid'].uniqid (rand (), 1));
+    $token = md5($_USER['uid'].$_USER['uid'].uniqid (mt_rand (), 1));
 
     /* Destroy exired tokens: */
     $sql = "DELETE FROM {$_TABLES['tokens']} WHERE (DATE_ADD(created, INTERVAL ttl SECOND) < NOW())"

@@ -102,8 +102,10 @@ function SESS_sessionCheck()
             COM_errorLog("got $sessid as the session id from lib-sessions.php",1);
         }
 
-        $userid = SESS_getUserIdFromSession($sessid, $_CONF['session_cookie_timeout'], $_SERVER['REMOTE_ADDR'], $_CONF['cookie_ip']);
-        $userid = intval($userid);
+        $request_ip = (!empty($_SERVER['REMOTE_ADDR'])) ? htmlspecialchars($_SERVER['REMOTE_ADDR']) : '';
+
+        $userid = SESS_getUserIdFromSession($sessid, $_CONF['session_cookie_timeout'], $request_ip);
+        $userid = (int) $userid;
         if ($_SESS_VERBOSE) {
             COM_errorLog("Got $userid as User ID from the session ID",1);
         }
@@ -114,7 +116,7 @@ function SESS_sessionCheck()
             if (($status == USER_ACCOUNT_ACTIVE) || ($status == USER_ACCOUNT_AWAITING_ACTIVATION)) {
                 $user_logged_in = 1;
 
-                SESS_updateSessionTime($sessid, $_CONF['cookie_ip']);
+                SESS_updateSessionTime($sessid);
                 $userdata = SESS_getUserDataFromId($userid);
                 if ($_SESS_VERBOSE) {
                     COM_errorLog("Found " . count($userdata) . " pieces of data from userdata", 1);
@@ -136,13 +138,14 @@ function SESS_sessionCheck()
                         if (array_key_exists('cookie_password', $_CONF)) {
                             $cookie_password = $_COOKIE[$_CONF['cookie_password']];
                         }
-                        $result = DB_query("SELECT remote_ip FROM {$_TABLES['users']} WHERE uid=$userid",1);
+                        $result = DB_query("SELECT remote_ip FROM {$_TABLES['users']} WHERE uid=" . (int) $userid,1);
                         $rip    = DB_fetchArray($result);
                         $remote_ip = $rip['remote_ip'];
                     }
+                    $request_ip = (!empty($_SERVER['REMOTE_ADDR'])) ? htmlspecialchars($_SERVER['REMOTE_ADDR']) : '';
                     $ipmatch = false;
                     $remote_ip_array = explode('.',$remote_ip);
-                    $server_ip_array = explode('.',$_SERVER['REMOTE_ADDR']);
+                    $server_ip_array = explode('.',$request_ip);
                     switch ( $_CONF['session_ip_check'] ) {
                         case 1 : // a.b
                             if ( $remote_ip_array[0] == $server_ip_array[0] &&
@@ -183,8 +186,8 @@ function SESS_sessionCheck()
                         $status = SEC_checkUserStatus ($userid);
                         if (($status == USER_ACCOUNT_ACTIVE) || ($status == USER_ACCOUNT_AWAITING_ACTIVATION)) {
                             $user_logged_in = 1;
-
-                            $sessid = SESS_newSession($userid, $_SERVER['REMOTE_ADDR'], $_CONF['session_cookie_timeout'], $_CONF['cookie_ip']);
+                            $request_ip = (!empty($_SERVER['REMOTE_ADDR'])) ? htmlspecialchars($_SERVER['REMOTE_ADDR']) : '';
+                            $sessid = SESS_newSession($userid, $request_ip, $_CONF['session_cookie_timeout']);
                             SESS_setSessionCookie($sessid, $_CONF['session_cookie_timeout'], $_CONF['cookie_session'], $_CONF['cookie_path'], $_CONF['cookiedomain'], $_CONF['cookiesecure']);
                             $userdata = SESS_getUserDataFromId($userid);
                             $_USER = $userdata;
@@ -215,12 +218,13 @@ function SESS_sessionCheck()
                 $userid = (int) COM_applyFilter ($userid, true);
                 $cookie_password = '';
                 if ($userid > 1) {
+                    $request_ip = (!empty($_SERVER['REMOTE_ADDR'])) ? htmlspecialchars($_SERVER['REMOTE_ADDR']) : '';
                     $result     = DB_query("SELECT remote_ip FROM {$_TABLES['users']} WHERE uid=$userid",1);
                     $rip        = DB_fetchArray($result);
                     $remote_ip  = $rip['remote_ip'];
                     $cookie_password = $_COOKIE[$_CONF['cookie_password']];
                     $remote_ip_array = explode('.',$remote_ip);
-                    $server_ip_array = explode('.',$_SERVER['REMOTE_ADDR']);
+                    $server_ip_array = explode('.',$request_ip);
                     $ipmatch = false;
                     switch ( $_CONF['session_ip_check'] ) {
                         case 1 : // a.b
@@ -264,9 +268,9 @@ function SESS_sessionCheck()
                     if (($status == USER_ACCOUNT_ACTIVE) ||
                             ($status == USER_ACCOUNT_AWAITING_ACTIVATION)) {
                         $user_logged_in = 1;
-
+                        $request_ip = (!empty($_SERVER['REMOTE_ADDR'])) ? htmlspecialchars($_SERVER['REMOTE_ADDR']) : '';
                         // Create new session and write cookie
-                        $sessid = SESS_newSession($userid, $_SERVER['REMOTE_ADDR'], $_CONF['session_cookie_timeout'], $_CONF['cookie_ip']);
+                        $sessid = SESS_newSession($userid, $request_ip, $_CONF['session_cookie_timeout']);
                         SESS_setSessionCookie($sessid, $_CONF['session_cookie_timeout'], $_CONF['cookie_session'], $_CONF['cookie_path'], $_CONF['cookiedomain'], $_CONF['cookiesecure']);
                         $userdata = SESS_getUserDataFromId($userid);
                         $_USER = $userdata;
@@ -298,31 +302,19 @@ function SESS_sessionCheck()
 * @param        int         $userid         User ID to create session for
 * @param        string      $remote_ip      IP address user is connected from
 * @param        string      $lifespan       How long (seconds) this cookie should persist
-* @param        string      $md5_based      If 1 session will be MD5 hash of ip address
 * @return       string      Session ID
 *
 */
-function SESS_newSession($userid, $remote_ip, $lifespan, $md5_based=0)
+function SESS_newSession($userid, $remote_ip, $lifespan)
 {
     global $_TABLES, $_CONF, $_SESS_VERBOSE;
 
     if ($_SESS_VERBOSE) {
         COM_errorLog("*************inside new_session*****************",1);
-        COM_errorLog("Args to new_session: userid = $userid, remote_ip = $remote_ip, lifespan = $lifespan, md5_based = $md5_based",1);
+        COM_errorLog("Args to new_session: userid = $userid, remote_ip = $remote_ip, lifespan = $lifespan",1);
     }
-    mt_srand((double)microtime()*1000000);
-    $sessid = mt_rand();
-
-    // For added security we are adding the option to build a IP-based
-    // session ID.  This has the advantage of better security but it may
-    // required dialed users to login every time.  You can turn the below
-    // code on in the configuration (it's turned off by default)
-    if ($md5_based == 1) {
-        $ip = str_replace('.','',$remote_ip);
-        $md5_sessid = md5($ip + $sessid);
-    } else {
-        $md5_sessid = '';
-    }
+    $sessid = 0;
+    $md5_sessid = md5(uniqid (mt_rand (), 1));
 
     $currtime = (string) (time());
     $expirytime = (string) (time() - $lifespan);
@@ -355,24 +347,17 @@ function SESS_newSession($userid, $remote_ip, $lifespan, $md5_based=0)
     DB_query("DELETE FROM {$_TABLES['sessions']} WHERE uid = 1 AND remote_ip = '".DB_escapeString($remote_ip)."'");
 
     // Create new session
-    if (empty ($md5_sessid)) {
-        $sql = "INSERT INTO {$_TABLES['sessions']} (sess_id, uid, start_time, remote_ip) VALUES ('$sessid', '$userid', '$currtime', '$remote_ip')";
-    } else {
-        $sql = "INSERT INTO {$_TABLES['sessions']} (sess_id, md5_sess_id, uid, start_time, remote_ip) VALUES ('$sessid', '$md5_sessid', '$userid', '$currtime', '".DB_escapeString($remote_ip)."')";
-    }
+    $sql = "INSERT INTO {$_TABLES['sessions']} (sess_id, md5_sess_id, uid, start_time, remote_ip) VALUES ('$sessid', '".DB_escapeString($md5_sessid)."', ". (int) $userid .", '$currtime', '".DB_escapeString($remote_ip)."')";
+
     $result = DB_query($sql);
     if ($result) {
         if ($_CONF['lastlogin'] == true) {
             // Update userinfo record to record the date and time as lastlogin
-            DB_query("UPDATE {$_TABLES['userinfo']} SET lastlogin = UNIX_TIMESTAMP() WHERE uid='".intval($userid)."'");
+            DB_query("UPDATE {$_TABLES['userinfo']} SET lastlogin = UNIX_TIMESTAMP() WHERE uid='".(int) $userid."'");
         }
         if ($_SESS_VERBOSE) COM_errorLog("Assigned the following session id: $sessid",1);
         if ($_SESS_VERBOSE) COM_errorLog("*************leaving SESS_newSession*****************",1);
-        if ($md5_based == 1) {
-            return $md5_sessid;
-        } else {
-            return $sessid;
-        }
+        return $md5_sessid;
     } else {
         echo DB_error().": ".DB_error()."<br" . XHTML . ">";
         die("Insert failed in new_session()");
@@ -420,10 +405,9 @@ function SESS_setSessionCookie($sessid, $cookietime, $cookiename, $cookiepath, $
 * @param        string      $sessid         Session ID to get user ID from
 * @param        string      $cookietime     Used to query DB for valid sessions
 * @param        string      $remote_ip      Used to pull session we need
-* @param        int         $md5_based      Let's us now if we need to take MD5 hash into consideration
 * @return       int         User ID
 */
-function SESS_getUserIdFromSession($sessid, $cookietime, $remote_ip, $md5_based=0)
+function SESS_getUserIdFromSession($sessid, $cookietime, $remote_ip)
 {
     global $_CONF, $_TABLES, $_SESS_VERBOSE;
 
@@ -433,13 +417,8 @@ function SESS_getUserIdFromSession($sessid, $cookietime, $remote_ip, $md5_based=
 
     $mintime = time() - $cookietime;
 
-    if ($md5_based == 1) {
-        $sql = "SELECT uid FROM {$_TABLES['sessions']} WHERE "
+    $sql = "SELECT uid FROM {$_TABLES['sessions']} WHERE "
         . "(md5_sess_id = '".DB_escapeString($sessid)."') AND (start_time > $mintime) AND (remote_ip = '".DB_escapeString($remote_ip)."')";
-    } else {
-        $sql = "SELECT uid FROM {$_TABLES['sessions']} WHERE "
-        . "(sess_id = '".DB_escapeString($sessid)."') AND (start_time > $mintime) AND (remote_ip = '".DB_escapeString($remote_ip)."')";
-    }
 
     if ($_SESS_VERBOSE) {
         COM_errorLog("SQL in SESS_getUserIdFromSession is:\n $sql\n");
@@ -471,21 +450,16 @@ function SESS_getUserIdFromSession($sessid, $cookietime, $remote_ip, $md5_based=
 * This is called whenever a page is hit by a user with a valid session.
 *
 * @param        string      $sessid     Session ID to update time for
-* @param        int         $md5_based  Indicates if sessid is MD5 hash
 * @return       boolean     always true for some reason
 *
 */
-function SESS_updateSessionTime($sessid, $md5_based=0)
+function SESS_updateSessionTime($sessid)
 {
     global $_TABLES;
 
     $newtime = (string) time();
 
-    if ($md5_based == 1) {
-        $sql = "UPDATE {$_TABLES['sessions']} SET start_time=$newtime WHERE (md5_sess_id = '".DB_escapeString($sessid)."')";
-    } else {
-        $sql = "UPDATE {$_TABLES['sessions']} SET start_time=$newtime WHERE (sess_id = '".DB_escapeString($sessid)."')";
-    }
+    $sql = "UPDATE {$_TABLES['sessions']} SET start_time=$newtime WHERE (md5_sess_id = '".DB_escapeString($sessid)."')";
 
     $result = DB_query($sql);
 
@@ -579,10 +553,12 @@ function SESS_completeLogin($uid)
 {
     global $_TABLES, $_CONF, $_SYSTEM, $_USER, $_SESS_VERBOSE;
 
+    $request_ip = (!empty($_SERVER['REMOTE_ADDR'])) ? htmlspecialchars($_SERVER['REMOTE_ADDR']) : '';
+
     DB_change($_TABLES['users'],'pwrequestid',"NULL",'uid',(int) $uid);
     $userdata = SESS_getUserDataFromId($uid);
     $_USER = $userdata;
-    $sessid = SESS_newSession($_USER['uid'], $_SERVER['REMOTE_ADDR'], $_CONF['session_cookie_timeout'], $_CONF['cookie_ip']);
+    $sessid = SESS_newSession($_USER['uid'], $request_ip, $_CONF['session_cookie_timeout']);
     SESS_setSessionCookie($sessid, $_CONF['session_cookie_timeout'], $_CONF['cookie_session'], $_CONF['cookie_path'], $_CONF['cookiedomain'], $_CONF['cookiesecure']);
     PLG_loginUser ($_USER['uid']);
 
@@ -612,7 +588,8 @@ function SESS_completeLogin($uid)
                        $ltToken, $cookieTimeout,
                        $_CONF['cookie_path'], $_CONF['cookiedomain'],
                        $_CONF['cookiesecure'],true);
-        DB_query("UPDATE {$_TABLES['users']} set remote_ip='".DB_escapeString($_SERVER['REMOTE_ADDR'])."' WHERE uid=".$_USER['uid'],1);
+        $request_ip = (!empty($_SERVER['REMOTE_ADDR'])) ? htmlspecialchars($_SERVER['REMOTE_ADDR']) : '';
+        DB_query("UPDATE {$_TABLES['users']} set remote_ip='".DB_escapeString($request_ip)."' WHERE uid=".$_USER['uid'],1);
     } else {
         $userid = $_COOKIE[$_CONF['cookie_name']];
         if (empty ($userid) || ($userid == 'deleted')) {

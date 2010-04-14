@@ -151,6 +151,9 @@ if (isset($_SYSTEM['site_enabled']) && !$_SYSTEM['site_enabled']) {
     exit;
 }
 
+list($usec, $sec) = explode(' ', microtime());
+mt_srand( (10000000000 * (float)$usec) ^ (float)$sec );
+
 // +--------------------------------------------------------------------------+
 // | Library Includes                                                         |
 // +--------------------------------------------------------------------------+
@@ -561,13 +564,12 @@ if (COM_isAnonUser() && isset($_SERVER['REMOTE_ADDR'])) {
     $tries = 0;
     do
     {
-        // Build a useless sess_id (needed for insert to work properly)
-        mt_srand(( double )microtime() * 1000000 );
-        $sess_id = mt_rand();
+        $sess_id = 0;
+        $md5_sessid = md5(mt_rand());
         $curtime = time();
 
         // Insert anonymous user session
-        $result = DB_query( "INSERT INTO {$_TABLES['sessions']} (sess_id, start_time, remote_ip, uid) VALUES ('$sess_id', '$curtime', '".DB_escapeString($_SERVER['REMOTE_ADDR'])."', 1)", 1 );
+        $result = DB_query( "INSERT INTO {$_TABLES['sessions']} (sess_id, start_time, remote_ip, uid,md5_sess_id) VALUES ('$sess_id', '$curtime', '".DB_escapeString($_SERVER['REMOTE_ADDR'])."', 1,'".DB_escapeString($md5_sessid)."')", 1 );
         $tries++;
     }
     while(( $result === false) && ( $tries < 5 ));
@@ -3256,8 +3258,8 @@ function COM_undoSpecialChars( $string )
 function COM_makesid()
 {
     $sid = date( 'YmdHis' );
-    srand(( double ) microtime() * 1000000 );
-    $sid .= rand( 0, 999 );
+//    srand(( double ) microtime() * 1000000 );
+    $sid .= mt_rand( 0, 999 );
 
     return $sid;
 }

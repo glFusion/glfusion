@@ -917,6 +917,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query("ALTER TABLE {$_TABLES['users']} ADD act_token VARCHAR(32) NOT NULL DEFAULT '' AFTER pwrequestid",1);
             DB_query("ALTER TABLE {$_TABLES['users']} ADD act_time DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' AFTER act_token",1);
 
+            $c->del('cookie_ip','Core');
+            DB_query("ALTER TABLE {$_TABLES['sessions']} DROP PRIMARY KEY",1);
+            DB_query("ALTER TABLE {$_TABLES['sessions']} ADD PRIMARY KEY ('md5_sess_id')",1);
+
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.9',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.9' WHERE name='glfusion'",1);
             DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);

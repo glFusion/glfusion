@@ -249,7 +249,7 @@ function USER_createActivationToken($uid,$username)
 {
     global $_CONF, $_TABLES;
 
-    $token = md5($_USER['uid'].$pageURL.uniqid (rand (), 1));
+    $token = md5($_USER['uid'].$pageURL.uniqid (mt_rand (), 1));
 
     DB_query("UPDATE {$_TABLES['users']} SET act_token='".DB_escapeString($token)."', act_time=NOW() WHERE uid=".$uid);
 
@@ -838,7 +838,7 @@ function USER_getChildGroups($groupid)
 *
 */
 
-function USER_createPassword ($length)
+function USER_createPassword ($length = 7)
 {
     // Enforce reasonable limits
     if (($length < 5) || ($length > 10)) {
@@ -849,12 +849,10 @@ function USER_createPassword ($length)
     // -----------------------------------------------------------
     $legal_characters = "-23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ";
 
-    srand((double) microtime () * 1000000);
-
     $password = "";
     $num_legal_chars = strlen($legal_characters);
     while (strlen($password) < $length) {
-        $password .= $legal_characters[rand(0,$num_legal_chars-1)];
+        $password .= $legal_characters[mt_rand(0,$num_legal_chars-1)];
     }
 
     return($password);

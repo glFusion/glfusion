@@ -333,7 +333,7 @@ function install_config($site_url)
     $c->add('cookie_theme','glf_theme','text',7,30,NULL,560,TRUE);
     $c->add('cookie_language','glf_language','text',7,30,NULL,570,TRUE);
     $c->add('cookie_tzid','glf_timezone','text',7,30,NULL,575,TRUE);
-    $c->add('cookie_ip',0,'select',7,30,0,580,TRUE);
+//    $c->add('cookie_ip',0,'select',7,30,0,580,TRUE);
     $c->add('default_perm_cookie_timeout',28800,'text',7,30,NULL,590,TRUE);
     $c->add('session_cookie_timeout',7200,'text',7,30,NULL,600,TRUE);
     $c->add('cookie_path','/','text',7,30,NULL,610,TRUE);

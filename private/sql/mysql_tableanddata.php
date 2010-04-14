@@ -296,7 +296,7 @@ CREATE TABLE {$_TABLES['sessions']} (
   remote_ip varchar(15) NOT NULL default '',
   uid mediumint(8) NOT NULL default '1',
   md5_sess_id varchar(128) default NULL,
-  PRIMARY KEY  (sess_id),
+  PRIMARY KEY  (md5_sess_id),
   KEY start_time (start_time),
   KEY remote_ip (remote_ip)
 ) TYPE=MyISAM
