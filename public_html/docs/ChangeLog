@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- CAPTCHA: Link and Calendar submissions did not work with reCAPTCHA (Mark)
 - Links Admin: Admin interface improvements and partial scrub (Mark H.)
 - Moderation: Admin interface improvements and extensive rewrite (Mark H.)
     - New feature: Only display submission lists for item types in queue
