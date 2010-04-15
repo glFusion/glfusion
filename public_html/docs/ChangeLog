@@ -2,6 +2,11 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Links Admin: Admin interface improvements and partial scrub (Mark H.)
+- Moderation: Admin interface improvements and extensive rewrite (Mark H.)
+    - New feature: Only display submission lists for item types in queue
+    - New feature: Display user who submitted item
+- Story Admin: Admin interface improvements and code scrub (Mark H.)
 - Media Gallery: Fixed issue where album owners would see the Delete option
   for media comments, but they could not actually delete the comment (Mark)
 - Convert session cookie to use MD5 token instead of random number (Mark)

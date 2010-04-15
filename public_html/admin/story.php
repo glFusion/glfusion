@@ -287,11 +287,13 @@ function STORY_list()
 
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/story.php?edit=x',
-              'text' => $LANG_ADMIN['create_new'])
+              'text' => $LANG_ADMIN['create_new']),
+        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
+              'text' => $LANG_ADMIN['submissions']),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home']),
     );
-
-    $menu_arr[] = array('url' => $_CONF['site_admin_url'],
-                          'text' => $LANG_ADMIN['admin_home']);
+    
     $retval .= COM_startBlock($LANG24[22], '',
                               COM_getBlockTemplate('_admin_block', 'header'));
     $retval .= ADMIN_createMenu(
@@ -928,7 +930,6 @@ foreach($expected as $provided) {
 	$action = $provided;
     }
 }
-//COM_errorLog( 'action=' . $action );
 
 $sid = '';
 if (isset($_POST['sid'])) {
@@ -936,7 +937,6 @@ if (isset($_POST['sid'])) {
 } elseif (isset($_GET['sid'])) {
     $sid = COM_applyFilter($_GET['sid']);
 }
-//COM_errorLog( 'sid=' . $sid );
 
 $editopt = '';
 if (isset($_POST['editopt'])) {

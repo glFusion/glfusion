@@ -53,7 +53,6 @@
 
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
-require_once $_CONF['path_system'] . 'lib-security.php';
 
 // Uncomment the lines below if you need to debug the HTTP variables being passed
 // to the script.  This will sometimes cause errors but it will allow you to see
@@ -375,49 +374,51 @@ function listlinks ()
     require_once $_CONF['path_system'] . 'lib-admin.php';
 
     $retval = '';
+    $token = SEC_createToken();
 
     $header_arr = array(      # display 'text' and use table field 'field'
-        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false),
+        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center'),
         array('text' => $LANG_LINKS_ADMIN[2], 'field' => 'lid', 'sort' => true),
         array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true),
-        array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false),
-        array('text' => $LANG_LINKS_ADMIN[14], 'field' => 'category', 'sort' => true)
+        array('text' => $LANG_LINKS_ADMIN[61], 'field' => 'owner', 'sort' => true, 'align' => 'center'),
+        array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG_LINKS_ADMIN[62], 'field' => 'unixdate', 'sort' => true, 'align' => 'center'),
+        array('text' => $LANG_LINKS_ADMIN[14], 'field' => 'category', 'sort' => true, 'align' => 'center'),
+        array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center'),
     );
 
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?mode=edit',
               'text' => $LANG_LINKS_ADMIN[51])
     );
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/plugins/links/category.php',
+              'text' => $LANG_LINKS_ADMIN[50]);
 
     $validate = '';
     if (isset($_GET['validate'])) {
-        $token = SEC_createToken();
+//      $token = SEC_createToken();
         $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php',
             'text' => $LANG_LINKS_ADMIN[53]);
         $dovalidate_url = $_CONF['site_admin_url'] . '/plugins/links/index.php?validate=validate' . '&amp;'.CSRF_TOKEN.'='.$token;
         $dovalidate_text = $LANG_LINKS_ADMIN[58];
-        $form_arr['top'] = COM_createLink($dovalidate_text, $dovalidate_url);
+        $validate_link = '<span style="padding-right:20px;">' . COM_createLink($dovalidate_text, $dovalidate_url) . '</span>';
         if ($_GET['validate'] == 'enabled') {
-            $header_arr[] = array('text' => $LANG_LINKS_ADMIN[27], 'field' => 'beforevalidate', 'sort' => false);
+            $header_arr[] = array('text' => $LANG_LINKS_ADMIN[27], 'field' => 'beforevalidate', 'sort' => false, 'align' => 'center');
             $validate = '?validate=enabled';
         } else if ($_GET['validate'] == 'validate') {
-            $header_arr[] = array('text' => $LANG_LINKS_ADMIN[27], 'field' => 'dovalidate', 'sort' => false);
-            $validate = '?validate=validate&amp;'.CSRF_TOKEN.'='.$token;
+            $header_arr[] = array('text' => $LANG_LINKS_ADMIN[27], 'field' => 'dovalidate', 'sort' => false, 'align' => 'center');
+            $validate = '?validate=validate&amp;' . CSRF_TOKEN . '=' . $token;
         }
         $validate_help = $LANG_LINKS_ADMIN[59];
     } else {
         $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?validate=enabled',
               'text' => $LANG_LINKS_ADMIN[26]);
-        $form_arr = array();
+        $validate_link = '';
         $validate_help = '';
     }
 
     $defsort_arr = array('field' => 'title', 'direction' => 'asc');
 
-    $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/plugins/links/category.php',
-              'text' => $LANG_LINKS_ADMIN[50]);
-    $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/plugins/links/category.php?mode=edit',
-              'text' => $LANG_LINKS_ADMIN[52]);
     $menu_arr[] = array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home']);
 
@@ -432,9 +433,9 @@ function listlinks ()
     );
 
     $query_arr = array('table' => 'links',
-        'sql' => "SELECT l.lid AS lid, l.cid as cid, l.title AS title, "
+        'sql' => "SELECT l.lid AS lid, l.cid as cid, l.title AS title, UNIX_TIMESTAMP(date) AS unixdate, "
             . "c.category AS category, l.url AS url, l.description AS description, "
-            . "l.owner_id, l.group_id, l.perm_owner, l.perm_group, l.perm_members, l.perm_anon "
+            . "l.owner_id AS owner_id, l.group_id, l.perm_owner, l.perm_group, l.perm_members, l.perm_anon "
             . "FROM {$_TABLES['links']} AS l "
             . "LEFT JOIN {$_TABLES['linkcategories']} AS c "
             . "ON l.cid=c.cid WHERE 1=1",
@@ -443,7 +444,8 @@ function listlinks ()
     );
 
     $retval .= ADMIN_list('links', 'plugin_getListField_links', $header_arr,
-                    $text_arr, $query_arr, $defsort_arr, '', '', '', $form_arr);
+                    $text_arr, $query_arr, $defsort_arr, $validate_link, $token, '', $form_arr);
+    
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
     return $retval;
@@ -499,23 +501,27 @@ $mode = '';
 if (isset ($_REQUEST['mode'])) {
     $mode = $_REQUEST['mode'];
 }
+$lid = '';
+if (isset($_REQUEST['lid'])) {
+    $lid = COM_applyFilter ($_REQUEST['lid']);
+}
+$validtoken = SEC_checkToken();
 
 if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
-    $lid = COM_applyFilter ($_POST['lid']);
     if (!isset ($lid) || empty ($lid)) {  // || ($lid == 0)
         COM_errorLog ('Attempted to delete link lid=' . $lid );
         $display .= COM_refresh ($_CONF['site_admin_url'] . '/plugins/links/index.php');
-    } elseif (SEC_checkToken()) {
+    } elseif ($validtoken) {
         $type = '';
-        if (isset($_POST['type'])) {
-            $type = COM_applyFilter($_POST['type']);
+        if (isset($_REQUEST['type'])) {
+            $type = COM_applyFilter($_REQUEST['type']);
         }
         $display .= deleteLink($lid, $type);
     } else {
         COM_accessLog("User {$_USER['username']} tried to illegally delete link $lid and failed CSRF checks.");
         echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
     }
-} elseif (($mode == $LANG_ADMIN['save']) && !empty($LANG_ADMIN['save']) && SEC_checkToken()) {
+} elseif (($mode == $LANG_ADMIN['save']) && !empty($LANG_ADMIN['save']) && $validtoken) {
     $cid = '';
     if (isset($_POST['cid'])) {
         $cid = $_POST['cid'];

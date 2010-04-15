@@ -61,7 +61,7 @@ function editPreferences()
 
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/user.php',
-              'text' => $LANG28[11]),
+              'text' => $LANG_ADMIN['admin_users']),
         array('url' => $_CONF['site_admin_url'] . '/user.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'] . '/user.php?import=x',

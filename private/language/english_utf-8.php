@@ -168,8 +168,8 @@ $LANG01 = array(
     121 => 'Comments (%d)',
     122 => 'Trackbacks (%d)',
     123 => 'All HTML is allowed',
-    124 => 'Click to delete all selected items',
-    125 => 'Are you sure you want to delete all selected items?',
+    124 => 'Delete all selected items',
+    125 => 'Are you sure you want to delete the selected item(s)?',
     126 => 'Select or de-select all items',
     127 => 'Permalink',
     128 => 'Login with OpenID:',
@@ -838,7 +838,7 @@ $LANG21 = array(
     66 => 'Autotags',
     67 => 'Check to allow autotags',
     68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.',
-    69 => 'Are you sure you want to delete this block?',
+    69 => 'Are you sure you want to delete this Block?',
     70 => 'Block name cannot be blank and cannot contain spaces or the following characters: < > \' " % & * / or backslash',
 );
 
@@ -867,7 +867,7 @@ $LANG24 = array(
     19 => 'Comments',
     20 => 'Ping',
     21 => 'Send Ping',
-    22 => 'Story List',
+    22 => 'Story Administration',
     23 => 'To modify or delete a story, click on that story\'s edit icon below. To view a story, click on the title of the story you wish to view. To create a new story, click on "Create New" above.',
     24 => 'The ID you chose for this story is already in use. Please use another ID.',
     25 => 'Error when saving story',
@@ -980,7 +980,7 @@ $LANG27 = array(
     37 => 'Direction',
     38 => 'Default?',
     39 => 'Archive?',
-    40 => 'Are you sure you want to delete this topic?',
+    40 => 'Are you sure you want to delete this Topic?',
     41 => 'Display After',
     42 => 'Topic ID cannot contain spaces',
     43 => 'Associated Objects',
@@ -1056,7 +1056,7 @@ $LANG28 = array(
     51 => 'Online Days',
     52 => '<br' . XHTML . '>Note: "Online Days" is the number of days between the first registration and the last login.',
     53 => 'Reg',
-    54 => 'Batch Administration',
+    54 => 'Batch Admin',
     55 => 'This only works if you have enabled the \'Record Last Login\' option in the Configuration admin panel.',
     56 => 'Please update the user search criteria below and then click "Update List". Select one or more users from the results displayed, and click on the desired action below.  Only users displayed and selected on this page will be processed.',
     57 => 'Phantom users',
@@ -1126,20 +1126,23 @@ $LANG29 = array(
     13 => 'Submissions',
     14 => 'Date',
     15 => 'Topic',
-    16 => 'User name',
-    17 => 'Full name',
+    16 => 'Username',
+    17 => 'Full Name',
     18 => 'eMail',
     34 => 'Command & Control',
     35 => 'Story Submissions',
     36 => 'Comment',
     37 => 'Time',
     38 => 'Submit',
-    39 => 'There are no submissions to moderate at this time',
+    39 => 'There are no submissions to moderate at this time.',
     40 => 'User Submissions',
     41 => 'Comment Submissions',
     42 => 'User Name',
-    43 => 'Auto-pubish Comments?',
-    'info' => 'Approve or Decline submissions'
+    43 => 'Auto-publish Comments?',
+    44 => 'Approve all selected items',
+    45 => 'Are you sure you want to approve the selected item(s)?',
+    46 => 'Submitted By',
+    'info' => 'Use this panel to Edit, Approve or Delete submissions.  The submission queue option for any given item type must be enabled in the glFusion or Plugin Configuration in order for items to be queued here for administrative approval.<br /><br />To view or edit a submitted item, click the Edit icon.  To approve or delete one or more items, click the checkbox next to that item, and then click the corresponding action icon. Note that only one item type may be moderated at one time.  '
 );
 
 ###############################################################################
@@ -1533,8 +1536,8 @@ $LANG_ACCESS = array(
     'defaultgroup' => 'Default',
     'editinguser'   => 'Editing User: ',
     'createnewuser' => 'Creating New Account',
-    'confirm1' => 'Are you sure you want to delete this group?',
-    'confirm2' => 'Are you absolutely sure you want to delete this group?  This will affect any users or groups that are associated with this group!  Press Cancel and then Edit this group if you wish to view the details.',
+    'confirm1' => 'Are you sure you want to delete this Group?',
+    'confirm2' => 'Are you absolutely sure you want to delete this Group?  This will affect any Users or Groups that are associated with this Group!  Press Cancel and then Edit this Group if you wish to view the details.',
 );
 
 ###############################################################################
@@ -1787,6 +1790,7 @@ $LANG_ADMIN = array(
     'authenticate' => 'Authenticate',
     'select' => 'Select',
     'name' => 'Name',
+    'submissions' => 'Submissions',
 );
 
 ###############################################################################

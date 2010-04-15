@@ -11,6 +11,7 @@
 // | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Mark A. Howard         mark AT usable-web DOT com                        |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2009 by the following authors:                        |
@@ -1243,7 +1244,6 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
         case 'delete':
             $retval = '';
-
             $attr['title'] = $LANG_ADMIN['delete'];
             $attr['onclick'] = 'return confirm(\'' . $LANG28[104] .'\');';
             $retval .= COM_createLink($icon_arr['delete'],
@@ -1325,6 +1325,8 @@ function USER_list($grp_id)
               'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'] . '/group.php',
               'text' => $LANG_ADMIN['admin_groups']),
+        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
+              'text' => $LANG_ADMIN['submissions']),
         array('url' => $_CONF['site_admin_url'] . '/user.php?import=x',
               'text' => $LANG28[23]),
         array('url' => $_CONF['site_admin_url'] . '/user.php?batchadmin=x',
@@ -1979,7 +1981,7 @@ function USER_batchAdmin()
         . $_CONF['layout_url'] . '/images/admin/mail.' . $_IMAGE_TYPE
         . '" style="vertical-align:bottom;" title="' . $LANG28[78]
         . '" onclick="return confirm(\'' . $LANG28[100] . '\');"'
-        . XHTML . '>&nbsp;&nbsp;' . $LANG28[77];
+        . XHTML . '>&nbsp;' . $LANG28[77];
 
     $options = array('chkselect' => true, 'chkfield' => 'uid', 'chkactions' => $reminder_action);
 

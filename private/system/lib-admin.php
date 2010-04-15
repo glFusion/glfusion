@@ -62,7 +62,7 @@ function ADMIN_getIcons()
 {
     global $_CONF, $_IMAGE_TYPE, $LANG_ADMIN;
 
-    $icons_type_arr = array('edit', 'copy', 'delete', 'list', 'mail', 'group', 'user', 'check', 'greycheck', 'cross', 'disk', 'addchild', 'blank');
+    $icons_type_arr = array('add', 'edit', 'copy', 'delete', 'list', 'mail', 'group', 'user', 'check', 'greycheck', 'cross', 'disk', 'accept', 'addchild', 'blank');
     $icon_arr = array();
     foreach ($icons_type_arr as $icon_type) {
         $icon_url = "{$_CONF['layout_url']}/images/admin/$icon_type.$_IMAGE_TYPE";
@@ -249,7 +249,7 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
             . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
             . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
             . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
-            . XHTML . '>&nbsp;&nbsp;' . $LANG_ADMIN['delete'];
+            . XHTML . '>&nbsp;' . $LANG_ADMIN['delete'];
         $actions .= '<td colspan="' . $ncols . '">' . $LANG_ADMIN['action'] . '&nbsp;&nbsp;&nbsp;' . $delete_action;
         $actions .= (!empty($chkactions)) ? $chkactions . '</td>' : '</td>';
         $admin_templates->set_var('actions', $actions);
@@ -656,7 +656,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
             . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
             . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
             . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
-            . XHTML . '>&nbsp;&nbsp;' . $LANG_ADMIN['delete'];
+            . XHTML . '>&nbsp;' . $LANG_ADMIN['delete'];
         $actions .= '<td colspan="' . $ncols . '">' . $LANG_ADMIN['action'] . '&nbsp;&nbsp;&nbsp;' . $delete_action;
         $actions .= (!empty($chkactions)) ? $chkactions . '</td>' : '</td>';
         $admin_templates->set_var('actions', $actions);

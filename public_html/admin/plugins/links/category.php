@@ -77,27 +77,25 @@ function links_list_categories($root)
     require_once $_CONF['path_system'] . 'lib-admin.php';
 
     $retval = '';
-
+    
     $header_arr = array(      # display 'text' and use table field 'field'
-                    array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false),
-                    array('text' => $LANG_LINKS_ADMIN[44], 'field' => 'addchild', 'sort' => false),
+                    array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center', 'width' => '25px'),
                     array('text' => $LANG_LINKS_ADMIN[30], 'field' => 'category', 'sort' => true),
-                    array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false),
-                    array('text' => $LANG_LINKS_ADMIN[33], 'field' => 'tid', 'sort' => true));
+                    array('text' => $LANG_LINKS_ADMIN[41], 'field' => 'addchild', 'sort' => false, 'align' => 'center', 'width' => '25px'),                    
+                    array('text' => $LANG_LINKS_ADMIN[61], 'field' => 'owner', 'sort' => true, 'align' => 'center'),
+                    array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false, 'align' => 'center'),
+                    array('text' => $LANG_LINKS_ADMIN[62], 'field' => 'unixdate', 'sort' => true, 'align' => 'center'),
+                    array('text' => $LANG_LINKS_ADMIN[33], 'field' => 'tid', 'sort' => true, 'align' => 'center'),
+                    array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center', 'width' => '25px')
+                );
 
     $defsort_arr = array('field' => 'category', 'direction' => 'asc');
 
     $menu_arr = array (
-        array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php',
-              'text' => $LANG_LINKS_ADMIN[53]),
-        array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?mode=edit',
-              'text' => $LANG_LINKS_ADMIN[51]),
-        array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?validate=enabled',
-              'text' => $LANG_LINKS_ADMIN[26]),
-        array('url' => $_CONF['site_admin_url'] . '/plugins/links/category.php',
-              'text' => $LANG_LINKS_ADMIN[50]),
         array('url' => $_CONF['site_admin_url'] . '/plugins/links/category.php?mode=edit',
               'text' => $LANG_LINKS_ADMIN[52]),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php',
+              'text' => $LANG_LINKS_ADMIN[53]),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -130,7 +128,7 @@ function links_list_categories_recursive($data_arr, $cid, $indent)
     $cid = DB_escapeString($cid);
 
     // get all children of present category
-    $sql = "SELECT cid,category,tid,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon "
+    $sql = "SELECT cid,category,tid,UNIX_TIMESTAMP(modified) AS unixdate,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon "
         . "FROM {$_TABLES['linkcategories']} "
         . "WHERE (pid='{$cid}')" . COM_getPermSQL('AND', 0, 3)
         . "ORDER BY pid,category";
