@@ -46,9 +46,10 @@ $plugin     = COM_applyFilter($_GET['p']);
 $ip         = $_SERVER['REMOTE_ADDR'];
 $ratingdate = time();
 $uid        = isset($_USER['uid']) ? $_USER['uid'] : 1;
+$uid        = (int) $uid;
 
 // validate the referer here - just to be safe....
-$referer = $_SERVER['HTTP_REFERER'];
+$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_CONF['site_url'];
 if ( $referer == '' ) {
     $referer = $_CONF['site_url'];
 }
@@ -62,13 +63,14 @@ if ($vote_sent > $units) {
     die("Sorry, vote appears to be invalid."); // kill the script because normal users will never see this.
 }
 
-$canRate = PLG_canUserRate($plugin, $id_sent, $USER['uid']);
+$canRate = PLG_canUserRate($plugin, $id_sent, $uid);
 if ( !$canRate ) {
     header("Location: $referer");
 }
 
-if ( $vote_sent < 1 ) {
+if ( $vote_sent < 1 || $vote_sent == 0) {
     header("Location: $referer");
+    exit;
 }
 
 // look up the item in our database....
@@ -107,46 +109,9 @@ if ( $last > 0 ) {
 }
 
 if(!$voted  && !$speedlimiterror) {
-    $tresult = DB_query("SELECT SUM( rating ),COUNT( item_id ) FROM  {$_TABLES['rating_votes']} WHERE item_id = '".DB_escapeString($id_sent)."' AND type='".DB_escapeString($plugin)."'");
-    if ( DB_numRows($tresult) > 0 ) {
-        list($total_rating,$total_votes) = DB_fetchArray($tresult);
-    } else {
-        $total_rating = 0;
-        $total_votes  = 0;
-    }
-    $sum = $total_rating + $vote_sent;
-    $votes = $total_votes + 1;
-    if ( $sum > 0 && $votes > 0 ) {
-        $new_rating = $sum / $votes;
-    } else {
-        $new_rating = 0;
-        $sum = 0;
-        $votes = 0;
-    }
-    $new_rating = @number_format($new_rating,2);
+    list($new_rating,$num_votes) = RATING_addVote( $plugin,$id_sent,$vote_sent,$uid,$ip);
 
-    if (($vote_sent >= 1 && $vote_sent <= $units ) && ($ip == $ip_num)) { // keep votes within range
-	    if ( $rating_id != 0 ) {
-            $sql = "UPDATE {$_TABLES['rating']} SET votes=".$votes.", rating=".$new_rating." WHERE id = ".$rating_id;
-            DB_query($sql);
-        } else {
-            $sql = "SELECT MAX(id) + 1 AS newid FROM " . $_TABLES['rating'];
-            $result = DB_query( $sql );
-            $row = DB_fetchArray( $result );
-            $newid = $row['newid'];
-            if ( $newid < 1 ) {
-                $newid = 1;
-            }
-            $sql = "INSERT INTO {$_TABLES['rating']} (id,type,item_id,votes,rating) VALUES (" . $newid . ", '". $plugin . "','" . DB_escapeString($id_sent). "'," . $votes . "," . $new_rating . " )";
-            DB_query($sql);
-        }
-        $sql = "INSERT INTO {$_TABLES['rating_votes']} (type,item_id,uid,ip_address,ratingdate) " .
-               "VALUES ('".DB_escapeString($plugin)."','".DB_escapeString($id_sent)."',".$uid.",'".DB_escapeString($ip)."',".$ratingdate.");";
-        DB_query($sql);
-        PLG_itemRated( $plugin, $id_sent, $new_rating, $votes );
-        COM_updateSpeedlimit ('rate');
-        COM_resetSpeedlimit('rate');
-	}
+    COM_updateSpeedlimit ('rate');
 
     header("Location: " . $referer); // go back to the page we came from
     exit;
