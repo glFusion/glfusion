@@ -51,10 +51,10 @@ function MODERATE_submissions()
     global $_CONF, $LANG01, $LANG29, $LANG_ADMIN, $_IMAGE_TYPE;
 
     $token = SEC_createToken();
-        
+
     $userlist = (SEC_hasRights ('user.edit') &&
                  SEC_hasRights ('user.delete') &&
-                 ($_CONF['usersubmission'] == 1)) ? MODERATE_userList($token) : '';    
+                 ($_CONF['usersubmission'] == 1)) ? MODERATE_userList($token) : '';
     $storylist = (SEC_hasRights('story.moderate')) ? MODERATE_itemList('story', $token) : '';
     $draftlist = (SEC_hasRights('story.edit') &&
                        ($_CONF['listdraftstories'] == 1)) ? MODERATE_draftList($token) : '';
@@ -72,7 +72,7 @@ function MODERATE_submissions()
                                 $_CONF['layout_url'] . '/images/icons/moderation.'. $_IMAGE_TYPE);
 
     $retval .= (!empty($moderationlist)) ? $moderationlist : '<br ' . XHTML . '><p>' . $LANG29[39] . '</p>';
-    
+
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
     return $retval;
@@ -101,7 +101,7 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr)
     $field = ($type <> 'user' && $fieldname == 4) ? 'uid' : $field;
 
     switch ($field) {
-        
+
         case 'edit':
             $retval = COM_createLink($icon_arr['edit'], $A['edit']);
             break;
@@ -119,10 +119,6 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr)
         case 'tid':
             $retval = DB_getItem($_TABLES['topics'], 'topic',
                                  "tid = '".DB_escapeString($A['tid'])."'");
-            break;
-        
-        case 'comment':
-            $retval = COM_truncate(strip_tags($A['comment']), 40, '...');
             break;
 
         case 'uid':
@@ -143,14 +139,6 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr)
                 $retval .= '&nbsp;&nbsp;';
                 $attr['style'] = 'vertical-align:top;';
                 $retval .= COM_createLink($username, $url, $attr);
-            }
-            break;
-
-        case 'publishfuture':
-            if (!SEC_inGroup('Comment Submitters', $A['uid']) && ($A['uid'] > 1)) {
-                $retval = "<input type=\"checkbox\" name=\"publishfuture[]\" value=\"{$A['uid']}\"" . XHTML . ">";
-            } else {
-                $retval = $LANG_ADMIN['na'];
             }
             break;
 
@@ -178,7 +166,7 @@ function MODERATE_userList($token)
     $sql = "SELECT uid as id,username,fullname,email FROM {$_TABLES['users']} WHERE status = 2";
     $result = DB_query ($sql);
     $nrows = DB_numRows($result);
-    
+
     if ($nrows > 0) {
         $data_arr = array();
         for ($i = 0; $i < $nrows; $i++) {
@@ -190,7 +178,7 @@ function MODERATE_userList($token)
             $A['_type_'] = 'user';
             $data_arr[$i] = $A;
         }
-        
+
         $header_arr = array(
             array('text' => $LANG_ADMIN['edit'], 'field' => 0, 'align' => 'center', 'width' => '25px'),
             array('text' => $LANG29[16], 'field' => 1),
@@ -204,7 +192,7 @@ function MODERATE_userList($token)
                           'no_data'   => '',
                           'form_url'  => "{$_CONF['site_admin_url']}/moderation.php"
         );
-    
+
         $approve_action = '&nbsp;&nbsp;&nbsp;&nbsp;<input name="approve" type="image" src="'
             . $_CONF['layout_url'] . '/images/admin/accept.' . $_IMAGE_TYPE
             . '" style="vertical-align:bottom;" title="' . $LANG29[44]
@@ -218,7 +206,7 @@ function MODERATE_userList($token)
                          'chkall' => false,
                          'chkactions' => $approve_action
                          );
-            
+
         $form_arr['bottom'] = '<input type="hidden" name="type" value="user"' . XHTML . '>' . LB
                 . '<input type="hidden" name="' . CSRF_TOKEN . '" value="' . $token . '"'. XHTML . '>' . LB
                 . '<input type="hidden" name="moderation" value="x"' . XHTML . '>' . LB
@@ -227,7 +215,7 @@ function MODERATE_userList($token)
         $retval = ADMIN_simpleList('MODERATE_getListField', $header_arr,
                               $text_arr, $data_arr, $options, $form_arr);
     }
-    
+
     return $retval;
 }
 
@@ -275,7 +263,7 @@ function MODERATE_itemList($type, $token)
         $section_title = $LANG29[35];
         $section_help = 'ccstorysubmission.html';
     }
-    
+
     // the first 4 columns default to Title, Date, User and Topic unless otherwise
     // specified.  not sure I like this approach - but whatever - it's not
     // breaking anything at the momemnt
@@ -298,14 +286,14 @@ function MODERATE_itemList($type, $token)
         $sql .= ' LIMIT 50'; // quick'n'dirty workaround to prevent timeouts
         $result = DB_query($sql, 1);
     }
-    
+
     if (empty($sql) || DB_error()) {
         $nrows = 0; // more than likely a plugin that doesn't need moderation
     } else {
         $nrows = DB_numRows($result);
     }
-    
-    if ($nrows > 0) {       
+
+    if ($nrows > 0) {
         $data_arr = array();
         for ($i = 0; $i < $nrows; $i++) {
             $A = DB_fetchArray($result);
@@ -320,7 +308,7 @@ function MODERATE_itemList($type, $token)
             $A['_type_'] = $type;
             $data_arr[$i] = $A;
         }
-    
+
         $header_arr = array(      // display 'text' and use table field 'field'
             array('text' => $LANG_ADMIN['edit'], 'field' => 0, 'align' => 'center', 'width' => '25px'),
             array('text' => $H[0], 'field' => 1),
@@ -328,14 +316,14 @@ function MODERATE_itemList($type, $token)
             array('text' => $H[2], 'field' => 3, 'width' => '30%'),
             array('text' => $H[3], 'field' => 4, 'width' => '15%'),
         );
-    
+
         $text_arr = array('has_menu'    => false,
                           'title'       => $section_title,
                           'help_url'    => $section_help,
                           'no_data'   => $LANG29[39],
                           'form_url'  => "{$_CONF['site_admin_url']}/moderation.php"
         );
-        
+
         $approve_action = '&nbsp;&nbsp;&nbsp;&nbsp;<input name="approve" type="image" src="'
             . $_CONF['layout_url'] . '/images/admin/accept.' . $_IMAGE_TYPE
             . '" style="vertical-align:bottom;" title="' . $LANG29[44]
@@ -349,7 +337,7 @@ function MODERATE_itemList($type, $token)
                          'chkall' => false,
                          'chkactions' => $approve_action,
                          );
-        
+
         $form_arr['bottom'] = '<input type="hidden" name="type" value="' . $type . '"' . XHTML . '>' . LB
                 . '<input type="hidden" name="' . CSRF_TOKEN . '" value="' . $token . '"'. XHTML . '>' . LB
                 . '<input type="hidden" name="moderation" value="x"' . XHTML . '>' . LB
@@ -358,7 +346,7 @@ function MODERATE_itemList($type, $token)
         $retval .= ADMIN_simpleList('MODERATE_getListField', $header_arr,
                                   $text_arr, $data_arr, $options, $form_arr);
     }
-    
+
     return $retval;
 }
 
@@ -378,9 +366,9 @@ function MODERATE_draftList($token)
 
     $result = DB_query ("SELECT sid AS id,title,UNIX_TIMESTAMP(date) AS day,tid,uid FROM {$_TABLES['stories']} WHERE (draft_flag = 1)" . COM_getTopicSQL ('AND') . COM_getPermSQL ('AND', 0, 3) . " ORDER BY date ASC");
     $nrows = DB_numRows($result);
-    
+
     if ($nrows > 0) {
-        $data_arr = array();   
+        $data_arr = array();
         for ($i = 0; $i < $nrows; $i++) {
             $A = DB_fetchArray($result);
             $A['edit'] = $_CONF['site_admin_url'] . '/story.php?edit=x&amp;sid='
@@ -391,7 +379,7 @@ function MODERATE_draftList($token)
             $A['_type_'] = 'draft';
             $data_arr[$i] = $A;
         }
-    
+
         $header_arr = array(
             array('text' => $LANG_ADMIN['edit'], 'field' => 0, 'align' => 'center', 'width' => '25px'),
             array('text' => $LANG29[10], 'field' => 'title'),
@@ -399,13 +387,13 @@ function MODERATE_draftList($token)
             array('text' => $LANG29[15], 'field' => 'tid', 'width' => '30%'),
             array('text' => $LANG29[46], 'field' => 'uid', 'width' => '15%'),
             );
-    
+
         $text_arr = array('has_menu'  => false,
                           'title'     => $LANG29[35] . ' (' . $LANG24[34] . ')',
                           'help_url'  => '',
                           'no_data'   => $LANG29[39],
                           'form_url'  => "{$_CONF['site_admin_url']}/moderation.php");
-    
+
         $approve_action = '&nbsp;&nbsp;&nbsp;&nbsp;<input name="approve" type="image" src="'
             . $_CONF['layout_url'] . '/images/admin/accept.' . $_IMAGE_TYPE
             . '" style="vertical-align:bottom;" title="' . $LANG29[44]
@@ -419,7 +407,7 @@ function MODERATE_draftList($token)
                          'chkall' => false,
                          'chkactions' => $approve_action,
                          );
-        
+
         $form_arr['bottom'] = '<input type="hidden" name="type" value="draft"' . XHTML . '>' . LB
                 . '<input type="hidden" name="' . CSRF_TOKEN . '" value="' . $token . '"'. XHTML . '>' . LB
                 . '<input type="hidden" name="count" value="' . $nrows . '"' . XHTML . '>';
@@ -427,7 +415,7 @@ function MODERATE_draftList($token)
         $retval .= ADMIN_simpleList('MODERATE_getListField', $header_arr,
                                   $text_arr, $data_arr, $options, $form_arr);
     }
-    
+
     return $retval;
 }
 
@@ -461,7 +449,7 @@ function MODERATE_items($type='', $action='')
             $fields = 'sid,uid,tid,title,introtext,date,postmode';
             $submissiontable = $_TABLES['storysubmission'];
             break;
-            
+
         case 'draft':
             $id = 'sid';
             $table = $_TABLES['stories'];
@@ -485,7 +473,7 @@ function MODERATE_items($type='', $action='')
     if (isset($_POST['selitem'])) {
         $item_list = $_POST['selitem'];
     }
-    
+
     if (isset($item_list) AND is_array($item_list)) {
         foreach($item_list as $selitem) {
             $item_id = COM_applyFilter($selitem);
@@ -495,11 +483,11 @@ function MODERATE_items($type='', $action='')
             }
 
             switch ($action) {
-                
+
                 case 'delete':
-                    
+
                     switch ($type) {
-                        
+
                         case 'user':
                             // user
                             if ($item_id > 1) {
@@ -525,12 +513,12 @@ function MODERATE_items($type='', $action='')
                     }
 
                     break;
-                    
-        
+
+
                 case 'approve':
-                    
+
                     switch ($type) {
-                        
+
                         case 'story':
                             // story (needs to move to a plugin)
                             $result = DB_query("SELECT * FROM $submissiontable WHERE $id = '$item_id'");
@@ -556,14 +544,14 @@ function MODERATE_items($type='', $action='')
                             COM_rdfUpToDateCheck();
                             COM_olderStuff();
                             break;
-                        
+
                         case 'draft':
                             // draft story
                             DB_query("UPDATE $table SET draft_flag = 0 WHERE $id = '$item_id'");
                             COM_rdfUpToDateCheck();
                             COM_olderStuff();
                             break;
-                        
+
                         case 'user':
                             // user
                             $result = DB_query("SELECT $fields FROM $table WHERE $id = '$item_id'");
@@ -579,16 +567,16 @@ function MODERATE_items($type='', $action='')
                                 USER_createAndSendPassword($A['username'], $A['email'], $A['uid']);
                             }
                             break;
-                        
+
                         default:
                             // plugin
                             DB_copy($table,$fields,$fields,$submissiontable,$id,$item_id);
                             $retval .= PLG_approveSubmission($type,$item_id);
                             break;
                     }
-    
+
                     break;
-                
+
             }
         }
     }
@@ -617,7 +605,7 @@ $validtoken = SEC_checkToken();
 $display .= COM_siteHeader ('menu', $LANG01[10]);
 
 switch ($action) {
-    
+
     case 'delbutton_x':
         if ($validtoken) {
             $retval .= MODERATE_items($type, 'delete');
@@ -626,7 +614,7 @@ switch ($action) {
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;
-    
+
     case 'approve_x':
         if ($validtoken) {
             $retval .= MODERATE_items($type, 'approve');
