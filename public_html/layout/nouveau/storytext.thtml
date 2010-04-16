@@ -37,7 +37,10 @@ digg_window = 'new'; {# open Digg.com window in a new window, if left blank will
     <div class="story-footer">
         <p>{page_selector}</p>
         <p>{readmore_link} {post_comment_link}</p>
-        <p>{plugin_itemdisplay}
+        {!if rating_bar}
+        <p>
+        {!endif}
+        {plugin_itemdisplay}
         {!if comments_count}
             {comments_with_count}
         {!endif}
