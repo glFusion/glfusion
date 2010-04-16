@@ -97,7 +97,6 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr)
     $field = ($type == 'user' && $fieldname == 1) ? 'user' : $field;
     $field = ($type == 'story' && $fieldname == 2) ? 'day' : $field;
     $field = ($type == 'story' && $fieldname == 3) ? 'tid' : $field;
-    $field = ($type == 'comment' && $fieldname == 2) ? 'comment' : $field;
     $field = ($type <> 'user' && $fieldname == 4) ? 'uid' : $field;
 
     switch ($field) {
@@ -122,14 +121,8 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr)
             break;
 
         case 'uid':
-            $username = '';
-            if ($A['uid'] == 1) {
-                $username = htmlspecialchars(COM_stripslashes(DB_getItem($_TABLES['commentsubmissions'], 'name', "cid = '".DB_escapeString($A['id'])."'")));
-            }
-            if (empty($username)) {
-                $username = DB_getItem($_TABLES['users'], 'username',
+            $username = DB_getItem($_TABLES['users'], 'username',
                                    "uid = ".intval($A['uid']));
-            }
             if ($A['uid'] == 1) {
                 $retval = $username;
             } else {
