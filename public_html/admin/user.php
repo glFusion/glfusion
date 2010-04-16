@@ -1163,7 +1163,7 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             }
             $retval = COM_truncate($fieldvalue, 24, ' ...', true) . $photoico;
             break;
-        
+
         case 'status':
             $status = $A['status'];
             switch ($status) {
@@ -1184,7 +1184,7 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                     break;
             }
             break;
-            
+
         case 'lastlogin':
             if ($fieldvalue < 1) {
                 // if the user never logged in, show the registration date
@@ -1382,7 +1382,7 @@ function USER_list($grp_id)
                        'default_filter' => "AND {$_TABLES['users']}.uid > 1");
 
     $token = SEC_createToken();
-    
+
     $retval .= ADMIN_list('user', 'USER_getListField', $header_arr,
                           $text_arr, $query_arr, $defsort_arr, $filter, $token);
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
@@ -2010,7 +2010,7 @@ function USER_batchAdmin()
     $token = SEC_createToken();
     $form_arr['bottom'] = "<input type=\"hidden\" name=\"" . CSRF_TOKEN
                         . "\" value=\"{$token}\"" . XHTML . ">";
-                        
+
     $display .= ADMIN_list('user', 'USER_getListField', $header_arr,
                            $text_arr, $query_arr, $defsort_arr, $filter, $token,
                            $options, $form_arr);

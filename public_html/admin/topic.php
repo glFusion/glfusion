@@ -90,16 +90,16 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
         }
 
         // ok let's see what is associated with this topic
-        
+
         $result2 = DB_query("SELECT bid FROM {$_TABLES['blocks']} WHERE tid = '$tid'");
         $assoc_blocks = DB_numRows($result2);
-        
+
         $result2 = DB_query("SELECT fid FROM {$_TABLES['syndication']} WHERE topic = '$tid'");
         $assoc_feeds = DB_numRows($result2);
-        
+
         $result2 = DB_query("SELECT sid FROM {$_TABLES['storysubmission']} WHERE tid = '$tid'");
         $assoc_stories_submitted = DB_numRows($result2);
-    
+
         $result2 = DB_query("SELECT sid, draft_flag FROM {$_TABLES['stories']} WHERE tid = '$tid'");
         $total_assoc_stories = DB_numRows($result2);
         if ($total_assoc_stories > 0) {
@@ -108,7 +108,7 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
                 if ($S['draft_flag'] == 0) {
                     $assoc_stories_published += 1;
                 } else {
-                    $assoc_stories_draft += 1;                
+                    $assoc_stories_draft += 1;
                 }
                 $result3 = DB_query("SELECT ai_filename FROM {$_TABLES['article_images']} WHERE ai_sid = '{$S['sid']}'");
                 $assoc_images += DB_numRows($result3);
@@ -167,7 +167,7 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
         }
         $access = 3;
     }
-    
+
     // display the topic editor
     $topic_templates = new Template($_CONF['path_layout'] . 'admin/topic');
     $topic_templates->set_file('editor','topiceditor.thtml');
@@ -303,14 +303,14 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
             $topic_templates->set_var ('archive_disabled', 'disabled');
         }
     }
-    
+
     $assoc_stories = (($assoc_stories_published > 0) OR
                         ($assoc_stories_draft > 0) OR
                         ($assoc_stories_submitted > 0) OR
                         ($assoc_images > 0) OR
                         ($assoc_comments > 0) OR
                         ($assoc_trackbacks > 0));
-    
+
     if (($assoc_blocks > 0) OR ($assoc_feeds > 0) OR ($assoc_stories)) {
         $topic_templates->set_var('lang_assoc_objects', $LANG27[43]);
         if ($assoc_stories_published > 0) {
@@ -319,7 +319,7 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
             $topic_templates->set_var('published_story_admin_link', COM_createLink($LANG27[52], $_CONF['site_admin_url'] . '/story.php'));
         }
         if ($assoc_stories_draft > 0) {
-            $topic_templates->set_var('lang_assoc_stories_draft', $LANG27[45]);            
+            $topic_templates->set_var('lang_assoc_stories_draft', $LANG27[45]);
             $topic_templates->set_var('assoc_stories_draft', $assoc_stories_draft);
             $topic_templates->set_var('draft_story_admin_link', COM_createLink($LANG27[52], $_CONF['site_admin_url'] . '/story.php'));
         }
@@ -343,11 +343,11 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
         if ($assoc_blocks > 0) {
             $topic_templates->set_var('lang_assoc_blocks', $LANG27[50]);
             $topic_templates->set_var('assoc_blocks', $assoc_blocks);
-            $topic_templates->set_var('block_admin_link', COM_createLink($LANG27[54], $_CONF['site_admin_url'] . '/block.php'));            
+            $topic_templates->set_var('block_admin_link', COM_createLink($LANG27[54], $_CONF['site_admin_url'] . '/block.php'));
         }
         if ($assoc_feeds > 0) {
             $topic_templates->set_var('lang_assoc_feeds', $LANG27[51]);
-            $topic_templates->set_var('assoc_feeds', $assoc_feeds);            
+            $topic_templates->set_var('assoc_feeds', $assoc_feeds);
             $topic_templates->set_var('syndication_admin_link', COM_createLink($LANG27[55], $_CONF['site_admin_url'] . '/syndication.php'));
             }
     }
@@ -553,7 +553,7 @@ function TOPIC_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             case 'tid':
                 $retval = COM_truncate(stripslashes($fieldvalue), 20, ' ...', true);
                 break;
-                
+
             case 'topic':
                 $retval = COM_truncate(stripslashes($fieldvalue), 28, ' ...', true);
                 break;
@@ -642,13 +642,13 @@ function TOPIC_list()
     $header_arr = array(
         array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center', 'width' => '35px'),
         array('text' => $LANG27[10], 'field' => 'sortnum', 'sort' => true, 'align' => 'center'),
-        array('text' => $LANG27[2], 'field' => 'tid', 'sort' => true, 'align' => 'center' ),
-        array('text' => $LANG27[3], 'field' => 'topic', 'sort' => true, 'align' => 'center' ),
+        array('text' => $LANG27[2], 'field' => 'tid', 'sort' => true),
+        array('text' => $LANG27[3], 'field' => 'topic', 'sort' => true),
+        array('text' => $LANG27[38], 'field' => 'is_default', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG27[39], 'field' => 'archive_flag', 'sort' => false, 'align' => 'center'),
         array('text' => $LANG27[11], 'field' => 'limitnews', 'sort' => false, 'align' => 'center'),
         array('text' => $LANG27[35], 'field' => 'sort_by', 'sort' => false, 'align' => 'center', 'nowrap' => 'true'),
         array('text' => $LANG27[37], 'field' => 'sort_dir', 'sort' => false, 'align' => 'center'),
-        array('text' => $LANG27[38], 'field' => 'is_default', 'sort' => false, 'align' => 'center'),
-        array('text' => $LANG27[39], 'field' => 'archive_flag', 'sort' => false, 'align' => 'center'),
         array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center', 'width' => '35px'),
     );
 
@@ -862,13 +862,13 @@ if (isset($_POST['tid'])) {
 $validtoken = SEC_checkToken();
 
 switch ($action) {
-    
+
     case 'edit':
         $display .= COM_siteHeader('menu', $LANG27[1]);
         $display .= TOPIC_edit($tid);
         $display .= COM_siteFooter();
         break;
-    
+
     case 'save':
         $T = array();
 
@@ -899,7 +899,7 @@ switch ($action) {
         $display .= TOPIC_save($T);
         CACHE_remove_instance('story');
         break;
-    
+
     case 'delete':
         if (!isset($tid) || empty($tid)) {
             COM_errorLog('Attempted to delete topic, tid empty or null, value = ' . $tid);
