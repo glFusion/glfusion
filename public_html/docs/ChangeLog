@@ -1,6 +1,6 @@
 glFusion ChangeLog
 
-v1.1.9
+v1.2.0
 ------
 - Fixed orphaned p tag in story footer preview when editing a story (Eric)
 - CAPTCHA: Link and Calendar submissions did not work with reCAPTCHA (Mark)

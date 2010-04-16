@@ -121,8 +121,12 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr)
             break;
 
         case 'uid':
+            if ( !isset($A['uid']) ) {
+                $A['uid'] = 1;
+            }
+
             $username = DB_getItem($_TABLES['users'], 'username',
-                                   "uid = ".intval($A['uid']));
+                                   "uid = ". (int) $A['uid']);
             if ($A['uid'] == 1) {
                 $retval = $username;
             } else {

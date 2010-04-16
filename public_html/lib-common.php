@@ -58,7 +58,7 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.1.9');
+    define('GVERSION', '1.2.0');
 }
 
 define('PATCHLEVEL','');

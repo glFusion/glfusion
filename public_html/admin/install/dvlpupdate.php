@@ -416,7 +416,7 @@ function glfusion_118()
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.8' WHERE name='glfusion'",1);
 }
 
-function glfusion_119()
+function glfusion_120()
 {
     global $_TABLES, $_FM_TABLES, $_CONF;
 
@@ -430,7 +430,7 @@ function glfusion_119()
     $c->add('enable_rating', 1,'select',0, 2, 0, 35, true, 'filemgmt');
     $c->add('silent_edit_default', 1,'select',0, 2, 0, 37, true, 'filemgmt');
     $c->add('displayblocks', 0,'select',0, 0, 3, 115, true, 'filemgmt');
-    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.7.7',pi_gl_version='1.1.9' WHERE pi_name = 'filemgmt'");
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.7.7',pi_gl_version='1.2.0' WHERE pi_name = 'filemgmt'");
 
     // Forum configuration options (for new features option)
     $c->add('bbcode_disabled', 0, 'select', 0, 2, 6, 165, true, 'forum');
@@ -449,7 +449,7 @@ function glfusion_119()
     DB_query("ALTER TABLE {$_TABLES['gf_userprefs']} ADD use_wysiwyg_editor tinyint(3) NOT NULL DEFAULT '1' AFTER topic_order",1);
     DB_query("ALTER TABLE {$_TABLES['gf_topic']} ADD `status` int(10) unsigned NOT NULL DEFAULT '0' AFTER locked",1);
 
-    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.2.0',pi_gl_version='1.1.9' WHERE pi_name = 'forum'");
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.2.0',pi_gl_version='1.2.0' WHERE pi_name = 'forum'");
 
     DB_query("ALTER TABLE {$_TABLES['groups']} ADD grp_default tinyint(1) unsigned NOT NULL default '0' AFTER grp_gl_core",1);
     DB_query("ALTER TABLE {$_TABLES['users']} CHANGE `passwd` `passwd` VARCHAR( 40 ) NOT NULL default ''");
@@ -459,12 +459,12 @@ function glfusion_119()
     $c->del('default_search_order','Core');
 
     DB_query("ALTER TABLE {$_TABLES['staticpage']} ADD sp_status tinyint(3) NOT NULL DEFAULT '1' AFTER sp_id",1);
-    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.5',pi_gl_version='1.1.9' WHERE pi_name = 'staticpages'");
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.5',pi_gl_version='1.2.0' WHERE pi_name = 'staticpages'");
 
     DB_query("ALTER TABLE {$_TABLES['events']} ADD status tinyint(3) NOT NULL DEFAULT '1' AFTER eid",1);
     DB_query("ALTER TABLE {$_TABLES['eventsubmission']} ADD status tinyint(3) NOT NULL DEFAULT '1' AFTER eid",1);
     DB_query("ALTER TABLE {$_TABLES['personal_events']} ADD status tinyint(3) NOT NULL DEFAULT '1' AFTER eid",1);
-    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.0.7',pi_gl_version='1.1.9' WHERE pi_name = 'calendar'");
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.0.7',pi_gl_version='1.2.0' WHERE pi_name = 'calendar'");
 
     DB_query("UPDATE {$_TABLES['conf_values']} SET selectionArray = '0' WHERE name='searchloginrequired' AND group_name='Core'",1);
 
@@ -523,13 +523,18 @@ function glfusion_119()
     DB_query("ALTER TABLE {$_TABLES['sessions']} ADD PRIMARY KEY (md5_sess_id)",1);
 
     // update version number
-    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.9',name='glfusion'",1);
-    DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.9' WHERE name='glfusion'",1);
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.2.0',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.2.0' WHERE name='glfusion'",1);
 }
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_119();
+glfusion_120();
+
+$stdPlugins=array('staticpages','spamx','links','polls','calendar','sitetailor','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
+foreach ($stdPlugins AS $pi_name) {
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_gl_version='".GVERSION."', pi_homepage='http://www.glfusion.org' WHERE pi_name='".$pi_name."'",1);
+}
 
 // probably need to clear the template cache so do it here
 CTL_clearCache();
