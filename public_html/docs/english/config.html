@@ -1178,6 +1178,14 @@ the user submission queue (i.e. new users must be approved before they
 receive their password) </td>
 </tr>
 <tr class="row1">
+<td class="col0 leftalign"><a name="desc_registration_type">Registration Type</a> </td>
+<td class="col1 leftalign">Generate Password will automatically generate a random password for the user
+upon registration, and send it to them in the welcome email. User Enters Password will prompt the user to create their own password 
+when they fill out the registration form, and will require them to click on a verification link sent in the welcome email.<br />
+<br />
+Example: 'mycompany.com,myothercompany.com' </td>
+</tr>
+<tr class="row2">
 <td class="col0 leftalign"><a name="desc_allow_domains">Automatic Allow Domains</a> </td>
 <td class="col1 leftalign">When the user submission
 queue is
@@ -1187,7 +1195,7 @@ Regular expressions are also allowed and interpreted. <br />
 <br />
 Example: 'mycompany.com,myothercompany.com' </td>
 </tr>
-<tr class="row2">
+<tr class="row3">
 <td class="col0 leftalign"><a name="desc_disallow_domains">Automatic Disallow Domains</a>
 </td>
 <td class="col1 leftalign">This is the opposite of
@@ -1199,7 +1207,7 @@ Again, regular expression can be used. <br />
 Example disallow email addresses with a certain domain name and from
 any &#8221;.edu&#8221; domain: 'somebaddomain.com,\.edu$' </td>
 </tr>
-<tr class="row2">
+<tr class="row4">
 <td class="col0 leftalign"><a name="desc_user_reg_fullname">Full Name option on registration form?</a>
 </td>
 <td class="col1 leftalign">This controls whether there will be a "Full Name" field shown on the user registration form.  The options are:<br />
