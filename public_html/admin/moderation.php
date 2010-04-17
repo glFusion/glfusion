@@ -193,18 +193,24 @@ function MODERATE_userList($token)
                           'form_url'  => "{$_CONF['site_admin_url']}/moderation.php"
         );
 
-        $approve_action = '&nbsp;&nbsp;&nbsp;&nbsp;<input name="approve" type="image" src="'
+        $actions = '<input name="approve" type="image" src="'
             . $_CONF['layout_url'] . '/images/admin/accept.' . $_IMAGE_TYPE
             . '" style="vertical-align:bottom;" title="' . $LANG29[44]
             . '" onclick="return confirm(\'' . $LANG29[45] . '\');"'
             . XHTML . '>&nbsp;' . $LANG29[1];
+        $actions .= '&nbsp;&nbsp;&nbsp;&nbsp;';
+        $actions .= '<input name="delbutton" type="image" src="'
+            . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
+            . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
+            . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
+            . XHTML . '>&nbsp;' . $LANG_ADMIN['delete'];
 
         $options = array('chkselect' => true,
                          'chkfield' => 'id',
                          'chkname' => 'selitem',
                          'chkminimum' => 0,
                          'chkall' => false,
-                         'chkactions' => $approve_action
+                         'chkactions' => $actions
                          );
 
         $form_arr['bottom'] = '<input type="hidden" name="type" value="user"' . XHTML . '>' . LB
@@ -325,18 +331,24 @@ function MODERATE_itemList($type='', $token)
                           'form_url'  => "{$_CONF['site_admin_url']}/moderation.php"
         );
 
-        $approve_action = '&nbsp;&nbsp;&nbsp;&nbsp;<input name="approve" type="image" src="'
+        $actions = '<input name="approve" type="image" src="'
             . $_CONF['layout_url'] . '/images/admin/accept.' . $_IMAGE_TYPE
             . '" style="vertical-align:bottom;" title="' . $LANG29[44]
             . '" onclick="return confirm(\'' . $LANG29[45] . '\');"'
             . XHTML . '>&nbsp;' . $LANG29[1];
+        $actions .= '&nbsp;&nbsp;&nbsp;&nbsp;';
+        $actions .= '<input name="delbutton" type="image" src="'
+            . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
+            . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
+            . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
+            . XHTML . '>&nbsp;' . $LANG_ADMIN['delete'];
 
         $options = array('chkselect' => true,
                          'chkfield' => 'id',
                          'chkname' => 'selitem',
                          'chkminimum' => 0,
                          'chkall' => false,
-                         'chkactions' => $approve_action,
+                         'chkactions' => $actions,
                          );
 
         $form_arr['bottom'] = '<input type="hidden" name="type" value="' . $type . '"' . XHTML . '>' . LB
@@ -396,18 +408,24 @@ function MODERATE_draftList($token)
                           'no_data'   => $LANG29[39],
                           'form_url'  => "{$_CONF['site_admin_url']}/moderation.php");
 
-        $approve_action = '&nbsp;&nbsp;&nbsp;&nbsp;<input name="approve" type="image" src="'
+        $actions = '<input name="approve" type="image" src="'
             . $_CONF['layout_url'] . '/images/admin/accept.' . $_IMAGE_TYPE
             . '" style="vertical-align:bottom;" title="' . $LANG29[44]
             . '" onclick="return confirm(\'' . $LANG29[45] . '\');"'
             . XHTML . '>&nbsp;' . $LANG29[1];
+            $actions .= '&nbsp;&nbsp;&nbsp;&nbsp;';
+        $actions .= '<input name="delbutton" type="image" src="'
+            . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
+            . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
+            . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
+            . XHTML . '>&nbsp;' . $LANG_ADMIN['delete'];
 
         $options = array('chkselect' => true,
                          'chkfield' => 'id',
                          'chkname' => 'selitem',
                          'chkminimum' => 0,
                          'chkall' => false,
-                         'chkactions' => $approve_action,
+                         'chkactions' => $actions,
                          );
 
         $form_arr['bottom'] = '<input type="hidden" name="type" value="draftstory"' . XHTML . '>' . LB

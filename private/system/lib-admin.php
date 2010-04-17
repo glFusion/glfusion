@@ -245,13 +245,17 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
     if ($nrows > $chkminimum AND $chkselect) {
         $actions = '<td style="text-align:center;">'
             . '<img src="' . $_CONF['layout_url'] . '/images/admin/action.' . $_IMAGE_TYPE . '"></td>';
-        $delete_action = '<input name="delbutton" type="image" src="'
+        $actions .= '<td colspan="' . $ncols . '">' . $LANG_ADMIN['action'] . '&nbsp;&nbsp;&nbsp;';
+        if (empty($chkactions)) {
+            $actions .= '<input name="delbutton" type="image" src="'
             . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
             . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
             . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
             . XHTML . '>&nbsp;' . $LANG_ADMIN['delete'];
-        $actions .= '<td colspan="' . $ncols . '">' . $LANG_ADMIN['action'] . '&nbsp;&nbsp;&nbsp;' . $delete_action;
-        $actions .= (!empty($chkactions)) ? $chkactions . '</td>' : '</td>';
+        } else {
+            $actions .= $chkactions;
+        }
+        $actions .= '</td>';
         $admin_templates->set_var('actions', $actions);
         $admin_templates->parse('action_row', 'arow', true);
     }
@@ -652,13 +656,17 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     if ($nrows > 0 AND $chkselect ) {
         $actions = '<td style="text-align:center;">'
             . '<img src="' . $_CONF['layout_url'] . '/images/admin/action.' . $_IMAGE_TYPE . '"></td>';
-        $delete_action = '<input name="delbutton" type="image" src="'
+        $actions .= '<td colspan="' . $ncols . '">' . $LANG_ADMIN['action'] . '&nbsp;&nbsp;&nbsp;';
+        if (empty($chkactions)) {
+            $actions .= '<input name="delbutton" type="image" src="'
             . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
             . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
             . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
             . XHTML . '>&nbsp;' . $LANG_ADMIN['delete'];
-        $actions .= '<td colspan="' . $ncols . '">' . $LANG_ADMIN['action'] . '&nbsp;&nbsp;&nbsp;' . $delete_action;
-        $actions .= (!empty($chkactions)) ? $chkactions . '</td>' : '</td>';
+        } else {
+            $actions .= $chkactions;
+        }
+        $actions .= '</td>';
         $admin_templates->set_var('actions', $actions);
         $admin_templates->parse('action_row', 'arow', true);
     }

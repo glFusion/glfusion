@@ -1977,13 +1977,19 @@ function USER_batchAdmin()
         'default_filter' => "AND $filter_sql {$_TABLES['users']}.uid > 1"
     );
 
-    $reminder_action = '&nbsp;&nbsp;&nbsp;&nbsp;<input name="reminder" type="image" src="'
+    $actions = '<input name="delbutton" type="image" src="'
+        . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
+        . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
+        . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
+        . XHTML . '>&nbsp;' . $LANG_ADMIN['delete'];
+    $actions .= '&nbsp;&nbsp;&nbsp;&nbsp;';
+    $actions .= '<input name="reminder" type="image" src="'
         . $_CONF['layout_url'] . '/images/admin/mail.' . $_IMAGE_TYPE
         . '" style="vertical-align:bottom;" title="' . $LANG28[78]
         . '" onclick="return confirm(\'' . $LANG28[100] . '\');"'
         . XHTML . '>&nbsp;' . $LANG28[77];
 
-    $options = array('chkselect' => true, 'chkfield' => 'uid', 'chkactions' => $reminder_action);
+    $options = array('chkselect' => true, 'chkfield' => 'uid', 'chkactions' => $actions);
 
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/user.php',
