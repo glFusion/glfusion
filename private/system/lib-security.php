@@ -238,7 +238,7 @@ function SEC_inGroup($grp_to_verify,$uid='',$cur_grp_id='')
         }
     }
 
-    if ( (COM_isAnonUser() ) || (isset($_USER['uid']) && $uid == $_USER['uid'])) {
+    if ( $uid == 1 || (isset($_USER['uid']) && $uid == $_USER['uid'])) {
         if (empty ($_GROUPS)) {
             $_GROUPS = SEC_getUserGroups ($uid);
         }
@@ -246,7 +246,6 @@ function SEC_inGroup($grp_to_verify,$uid='',$cur_grp_id='')
     } else {
         $groups = SEC_getUserGroups ($uid);
     }
-
     if (is_numeric($grp_to_verify)) {
         if (in_array($grp_to_verify, $groups)) {
            return true;
