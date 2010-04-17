@@ -43,10 +43,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-if( $_CONF['allow_user_photo'] ) {
-    // only needed for the USER_getPhoto function
-    USES_lib_user();
-}
+USES_lib_user();
 
 /**
 * This function displays the comment control bar
