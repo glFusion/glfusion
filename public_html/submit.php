@@ -87,6 +87,7 @@ function submissionform($type='story', $mode = '', $topic = '')
             $retval .= COM_startBlock($LANG12[19])
                     . $LANG12[9]
                     . COM_endBlock();
+            $retval .= '<div style="border-bottom:1px solid #cccccc"></div>';
 
             if ((strlen($type) > 0) && ($type <> 'story')) {
                 $formresult = PLG_showSubmitForm($type);
@@ -123,6 +124,7 @@ function submitstory($topic = '')
         $retval .= COM_startBlock($LANG12[32])
                 . STORY_renderArticle ($story, 'p')
                 . COM_endBlock();
+        $retval .= '<div style="border-bottom:1px solid #cccccc"></div>';
     } else {
         $story->initSubmission($topic);
         $story->loadSubmission();

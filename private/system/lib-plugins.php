@@ -1155,12 +1155,44 @@ function PLG_showModerationList($token)
 * needed by moderation.php to approve stuff.
 *
 * @param        string      $type       Plugin to call function for
-* @return       string
+* @return       array       $retval     Array of results as follows:
+*
+* id                string      name of key field in table (eg. uid, sid)
+* $table            string      name of table to which approved items are posted
+* $fields           string      fields in submission table that are to be posted
+* $submissiontable  string      name of table containing submissions
 *
 */
 function PLG_getModerationValues($type)
 {
-    return PLG_callFunctionForOnePlugin('plugin_moderationvalues_' . $type);
+    global $_TABLES;
+
+    switch ($type) {
+
+        case 'user':
+
+            return array(
+                'uid',
+                $_TABLES['users'],
+                'email,username,uid',
+                ''
+            );
+            break;
+
+        case 'draftstory':
+            return array(
+                'sid',
+                $_TABLES['stories'],
+                '',
+                ''
+            );
+            break;
+
+        default:
+            return PLG_callFunctionForOnePlugin('plugin_moderationvalues_' . $type);
+            break;
+    }
+
 }
 
 /**

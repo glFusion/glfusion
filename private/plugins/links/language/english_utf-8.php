@@ -205,7 +205,7 @@ $LANG_LINKS_ADMIN = array(
     43 => 'Site categories',
     44 => 'Add Subcategory',
     46 => 'User %s tried to delete a category to which they do not have access rights',
-    50 => 'Link Category Admin',
+    50 => 'Category Admin',
     51 => 'New Link',
     52 => 'New Root Category',
     53 => 'Links Admin',
@@ -219,7 +219,8 @@ $LANG_LINKS_ADMIN = array(
     61 => 'Owner',
     62 => 'Last Updated',
     63 => 'Are you sure you want to delete this link?',
-    64 => 'Are you sure you want to delete this category?'
+    64 => 'Are you sure you want to delete this category?',
+    65 => 'Moderate Link',
 );
 
 $LANG_LINKS_STATUS = array(

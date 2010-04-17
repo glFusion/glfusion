@@ -312,7 +312,7 @@ if ($numrows > 0) {
         $p->set_var ('sid',$sid);
         $p->set_var ('topic',stripslashes($topic));
         if($_POST['seltopic'] == "submissions") {
-            $p->set_var ('story_link', $_CONF['site_admin_url'] . '/story.php?mode=editsubmission&id=' . $sid);
+            $p->set_var ('story_link', $_CONF['site_admin_url'] . '/story.php?moderate=x&amp;sid=' . $sid);
         } else {
             $p->set_var ('story_link', $_CONF['site_url'] . '/article.php?story=' . $sid);
         }

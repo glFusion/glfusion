@@ -1029,21 +1029,21 @@ function plugin_getListField_links($fieldname, $fieldvalue, $A, $icon_arr, $toke
     $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
     if ($access > 0) {
         switch($fieldname) {
-            
+
             case 'edit':
                 if ($access == 3) {
                     $attr['title'] = $LANG_ADMIN['edit'];
                     $retval = COM_createLink(
                         $icon_arr['edit'],
-                        $_CONF['site_admin_url'] . '/plugins/links/index.php?mode=edit&amp;lid=' . $A['lid'],
+                        $_CONF['site_admin_url'] . '/plugins/links/index.php?edit=x&amp;lid=' . $A['lid'],
                         $attr);
                 }
                 break;
-            
+
             case "owner":
                 $retval = COM_getDisplayName ($A['owner_id']);
                 break;
-            
+
             case 'access':
                 if ($access == 3) {
                    $retval = $LANG_ACCESS['edit'];
@@ -1051,23 +1051,23 @@ function plugin_getListField_links($fieldname, $fieldvalue, $A, $icon_arr, $toke
                    $retval = $LANG_ACCESS['readonly'];
                 }
                 break;
-            
+
             case "unixdate":
                 $retval = strftime( $_CONF['daytime'], $A['unixdate'] );
                 break;
-            
+
             case 'title':
                 $retval = COM_createLink(stripslashes($A['title']), $A['url']);
                 break;
-            
+
             case 'dovalidate';
                 $retval = links_validateUrl($A['url']);
                 break;
-            
+
             case 'beforevalidate';
                 $retval = $LANG_LINKS_ADMIN[57];
                 break;
-            
+
             case 'category':
                 if (isset($A['indent'])) {
                     $indent = ($A['indent'] - 1) * 20;
@@ -1079,17 +1079,17 @@ function plugin_getListField_links($fieldname, $fieldvalue, $A, $icon_arr, $toke
                         . urlencode($A['cid']));
                 $retval = "<span style=\"padding-left:{$indent}px;\">$cat</span>";
                 break;
-            
+
             case 'delete':
                 if ($access == 3) {
                     $attr['title'] = $LANG_ADMIN['delete'];
                     $attr['onclick'] = "return confirm('" . $LANG_LINKS_ADMIN[63] . "');";
                     $retval = COM_createLink($icon_arr['delete'],
                         $_CONF['site_admin_url'] . '/plugins/links/index.php'
-                        . '?mode=' . $LANG_ADMIN['delete'] . '&amp;lid=' . $A['lid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+                        . '?delete=x&amp;lid=' . $A['lid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
                 }
                 break;
-            
+
             default:
                 $retval = $fieldvalue;
                 break;
@@ -1106,27 +1106,27 @@ function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
     $retval = '';
 
     $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
-    
+
     if ($access > 0) {
 
         switch($fieldname) {
-            
+
             case 'edit':
                 if ($access == 3) {
                     $attr['title'] = $LANG_ADMIN['edit'];
                     $retval = COM_createLink(
                         $icon_arr['edit'],
-                        $_CONF['site_admin_url'] . '/plugins/links/category.php?mode=edit&amp;cid=' . urlencode($A['cid']),
+                        $_CONF['site_admin_url'] . '/plugins/links/category.php?edit=x&amp;cid=' . urlencode($A['cid']),
                         $attr);
                 }
                 break;
-            
+
             case 'addchild':
                 if ($access == 3) {
                     $attr['title'] = $LANG_LINKS_ADMIN[44];
                     $retval .= COM_createLink(
                         $icon_arr['addchild'],
-                        $_CONF['site_admin_url'] . '/plugins/links/category.php?mode=edit&amp;pid=' . urlencode($A['cid']),
+                        $_CONF['site_admin_url'] . '/plugins/links/category.php?edit=x&amp;pid=' . urlencode($A['cid']),
                         $attr);
                 }
                 break;
@@ -1134,7 +1134,7 @@ function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
             case "owner":
                 $retval = COM_getDisplayName ($A['owner_id']);
                 break;
-            
+
             case 'access':
                 if ($access == 3) {
                    $retval = $LANG_ACCESS['edit'];
@@ -1142,11 +1142,11 @@ function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
                    $retval = $LANG_ACCESS['readonly'];
                 }
                 break;
-            
+
             case "unixdate":
                 $retval = strftime ($_CONF['daytime'], $A['unixdate']);
                 break;
-            
+
             case 'category':
                 $indent = ($A['indent'] - 1) * 20;
                 $cat = COM_createLink($A['category'],
@@ -1154,16 +1154,16 @@ function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
                         . urlencode($A['cid']));
                 $retval = "<span style=\"padding-left:{$indent}px;\">$cat</span>";
                 break;
-            
+
             case 'addchild';
                 if ($access == 3) {
                     $retval = COM_createLink(
                         $icon_arr['addchild'],
-                        "{$_CONF['site_admin_url']}/plugins/links/category.php?mode=edit&amp;pid=" . urlencode($A['cid'])
+                        "{$_CONF['site_admin_url']}/plugins/links/category.php?edit=x&amp;pid=" . urlencode($A['cid'])
                     );
                 }
                 break;
-            
+
             case 'tid';
                 if ($A['tid'] == 'all') {
                     $retval = $LANG_LINKS_ADMIN[35];
@@ -1182,7 +1182,7 @@ function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
                     $attr['onclick'] = "return confirm('" . $LANG_LINKS_ADMIN[64] . "');";
                     $retval = COM_createLink($icon_arr['delete'],
                         $_CONF['site_admin_url'] . '/plugins/links/category.php'
-                        . '?mode=' . $LANG_ADMIN['delete'] . '&amp;cid=' . $A['cid'] . '&amp;' . CSRF_TOKEN . '=' . SEC_createToken(), $attr);
+                        . '?delete=x&amp;cid=' . $A['cid'] . '&amp;' . CSRF_TOKEN . '=' . SEC_createToken(), $attr);
                 }
                 break;
 

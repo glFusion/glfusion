@@ -423,7 +423,7 @@ function BLOCK_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
     if (($access > 0) && (BLOCK_hasTopicAccess($A['tid']) > 0)) {
         switch($fieldname) {
-            
+
             case 'edit':
                 $retval = '';
                 if ($access == 3) {
@@ -432,12 +432,12 @@ function BLOCK_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                         $_CONF['site_admin_url'] . '/block.php?edit=x&amp;bid=' . $A['bid'], $attr);
                 }
                 break;
-            
+
             case 'blockorder':
                 $order = $A['blockorder'];
                 $retval = ($enabled) ? $order : '<span class="disabledfield">' . $order . '</span>';
                 break;
-            
+
             case 'move':
                 if ($access == 3) {
                     if ($A['onleft'] == 1) {
@@ -458,17 +458,17 @@ function BLOCK_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                             ."</map>";
                 }
                 break;
-            
+
             case 'name':
                 $name =  COM_truncate(stripslashes($A['name']), 20, ' ...', true);
                 $retval = ($enabled) ? $name : '<span class="disabledfield">' . $name . '</span>';
                 break;
-                
+
             case 'title':
                 $title =  COM_truncate(stripslashes($A['title']), 20, ' ...', true);
                 $retval = ($enabled) ? $title : '<span class="disabledfield">' . $title . '</span>';
                 break;
-            
+
             case 'tid':
                 $topic =  COM_truncate(stripslashes($A['tid']), 20, ' ...', true);
                 $retval = ($enabled) ? $topic : '<span class="disabledfield">' . $topic . '</span>';
@@ -499,7 +499,7 @@ function BLOCK_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                     $retval .= '<input type="hidden" name="bidarray[' . $A['bid'] . ']" value="' . $A['onleft'] . '"' . XHTML . '>';
                 }
                 break;
-            
+
             default:
                 $retval = ($enabled) ? $fieldvalue : '<span class="disabledfield">' . $fieldvalue . '</span>';
                 break;
@@ -544,7 +544,7 @@ function BLOCK_list()
         array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center', 'width' => '5%'),
         array('text' => $LANG21[65], 'field' => 'blockorder', 'sort' => true, 'align' => 'center', 'width' => '8%'),
         array('text' => $LANG21[46], 'field' => 'move', 'sort' => false, 'align' => 'center', 'width' => '8%'),
-        array('text' => $LANG_ADMIN['name'], 'field' => 'name', 'sort' => true, 'width' => '18%', 'align' => 'center'),        
+        array('text' => $LANG_ADMIN['name'], 'field' => 'name', 'sort' => true, 'width' => '18%', 'align' => 'center'),
         array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true, 'width' => '18%', 'align' => 'center'),
         array('text' => $LANG_ADMIN['topic'], 'field' => 'tid', 'sort' => true, 'align' => 'center', 'width' => '18%'),
         array('text' => $LANG_ADMIN['type'], 'field' => 'type', 'sort' => true, 'align' => 'center', 'width' => '9%'),

@@ -726,8 +726,8 @@ $LANG12 = array(
     51 => 'Location',
     52 => 'Delete',
     53 => 'Create Account',
-    54 => 'Story Introduction',
-    55 => 'Story Body'
+    54 => 'Introduction',
+    55 => 'Body'
 );
 
 ###############################################################################
@@ -935,6 +935,8 @@ $LANG24 = array(
     87 => 'Story Stats',
     88 => 'Wiki-style format',
     89 => 'Are you sure you want to delete this Story?',
+    90 => 'Moderate Story',
+    91 => 'Moderate Draft Story',
 );
 
 ###############################################################################
@@ -978,8 +980,8 @@ $LANG27 = array(
     35 => 'Sort By',
     36 => 'Sort Stories Direction',
     37 => 'Direction',
-    38 => 'Default?',
-    39 => 'Archive?',
+    38 => 'Default',
+    39 => 'Archive',
     40 => 'Are you sure you want to delete this Topic?',
     41 => 'Display After',
     42 => 'Topic ID cannot contain spaces',
@@ -1110,6 +1112,7 @@ $LANG28 = array(
     105 => 'Status',
     106 => 'Queued',
     107 => 'Verification',
+    108 => 'View Profile',
 );
 
 ###############################################################################
@@ -1791,6 +1794,7 @@ $LANG_ADMIN = array(
     'select' => 'Select',
     'name' => 'Name',
     'submissions' => 'Submissions',
+    'moderate' => 'Save & Approve',
 );
 
 ###############################################################################

@@ -58,6 +58,7 @@ function MODERATE_submissions()
     $storylist = (SEC_hasRights('story.moderate')) ? MODERATE_itemList('story', $token) : '';
     $draftlist = (SEC_hasRights('story.edit') &&
                        ($_CONF['listdraftstories'] == 1)) ? MODERATE_draftList($token) : '';
+
     $pluginlist = PLG_showModerationList($token);
     $moderationlist = $userlist . $storylist . $draftlist . $pluginlist;
 
@@ -89,8 +90,10 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr)
     $retval = '';
 
     $type = '';
-    if (isset ($A['_type_'])) {
+    if (isset($A['_type_']) && !empty($A['_type_'])) {
         $type = $A['_type_'];
+    } else {
+        return $retval; // we can't work without an item type
     }
 
     $field = $fieldname;
@@ -130,7 +133,7 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr)
             if ($A['uid'] == 1) {
                 $retval = $username;
             } else {
-                $attr['title'] = 'View Profile';
+                $attr['title'] = $LANG28[108];
                 $url = $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' .  $A['uid'];
                 $retval = COM_createLink($icon_arr['user'], $url, $attr);
                 $retval .= '&nbsp;&nbsp;';
@@ -169,10 +172,10 @@ function MODERATE_userList($token)
         for ($i = 0; $i < $nrows; $i++) {
             $A = DB_fetchArray($result);
             $A['edit'] = $_CONF['site_admin_url'].'/user.php?edit=x&amp;uid='.$A['id'];
-            $A['row'] = $i;
             $A['fullname'] = stripslashes($A['fullname']);
             $A['email'] = stripslashes($A['email']);
             $A['_type_'] = 'user';
+            $A['_key_'] = 'uid';
             $data_arr[$i] = $A;
         }
 
@@ -224,15 +227,14 @@ function MODERATE_userList($token)
 * @type     string      Type of object to build list for
 *
 */
-function MODERATE_itemList($type, $token)
+function MODERATE_itemList($type='', $token)
 {
     global $_CONF, $_TABLES, $LANG29, $LANG_ADMIN, $_IMAGE_TYPE;
 
     $retval = '';
     $isplugin = false;
 
-    if ((strlen ($type) > 0) && ($type <> 'story')) {
-        // we are being called back from a plugin, via PLG_showModerationList
+    if (!empty($type)) {
         $function = 'plugin_itemlist_' . $type;
         if (function_exists ($function)) {
             $plugin = new Plugin();
@@ -254,20 +256,20 @@ function MODERATE_itemList($type, $token)
             }
         }
     } else {
-        // it's a story submission (this needs to move into the story plugin)
-        $sql = "SELECT sid AS id,title,UNIX_TIMESTAMP(date) AS day,tid,uid FROM {$_TABLES['storysubmission']}" . COM_getTopicSQL ('WHERE') . " ORDER BY date ASC";
-        $H =  array($LANG29[10],$LANG29[14],$LANG29[15],$LANG29[46],);
-        $section_title = $LANG29[35];
-        $section_help = 'ccstorysubmission.html';
+        COM_errorLog("Submissions Error: Attempted to generate a moderation list for a null item type.");
+        return $retval;
     }
 
-    // the first 4 columns default to Title, Date, User and Topic unless otherwise
+    // we really only need the id from this list, so that we know key/id field name
+    list($id, $table, $fields, $submissiontable) = PLG_getModerationValues($type);
+
+    // the first 4 columns default to Title, Date, Topic and Submitted By unless otherwise
     // specified.  not sure I like this approach - but whatever - it's not
     // breaking anything at the momemnt
     if ( !isset($H[0]) || empty($H[0]) ) {
         $H[0] = $LANG29[10];
     }
-    if ( !isset($H[1]) || empty($H[0]) ) {
+    if ( !isset($H[1]) || empty($H[1]) ) {
         $H[1] = $LANG29[14];
     }
     if ( !isset($H[2]) || empty($H[2]) ) {
@@ -277,8 +279,8 @@ function MODERATE_itemList($type, $token)
         $H[3] = $LANG29[46];
     }
 
-    // run SQL but this time ignore any errors.  note that the max number of items
-    // that can be modified by type is limited to 50
+    // run SQL but this time ignore any errors.  note that the max items for
+    // each type that can be moderated is limited to 50
     if (!empty($sql)) {
         $sql .= ' LIMIT 50'; // quick'n'dirty workaround to prevent timeouts
         $result = DB_query($sql, 1);
@@ -290,20 +292,22 @@ function MODERATE_itemList($type, $token)
         $nrows = DB_numRows($result);
     }
 
-    if ($nrows > 0) {
+    if ($nrows > 0) {  // only generate list html if there are items to moderate
         $data_arr = array();
         for ($i = 0; $i < $nrows; $i++) {
             $A = DB_fetchArray($result);
-            if ($isplugin)  {
-                $A['edit'] = $_CONF['site_admin_url'] . '/plugins/' . $type
-                         . '/index.php?mode=editsubmission&amp;id=' . $A[0];
+            if ($isplugin && ($type <> 'story'))  {
+                $A['edit'] = $_CONF['site_admin_url']
+                            . '/plugins/' . $type . '/index.php?moderate=x'
+                            . '&amp;' . $id . '=' . $A[0];
             } else {
-                $A['edit'] = $_CONF['site_admin_url'] . '/' .  $type
-                         . '.php?editsubmission=x&amp;id=' . $A[0];
+                $A['edit'] = $_CONF['site_admin_url']
+                            . '/' .  $type . '.php?moderate=x'
+                            . '&amp;' . $id . '=' . $A[0];
             }
-            $A['row'] = $i;
-            $A['_type_'] = $type;
-            $data_arr[$i] = $A;
+            $A['_type_'] = $type;   // type of item
+            $A['_key_'] = $id;      // name of key/id field
+            $data_arr[$i] = $A;     // push row data into array
         }
 
         $header_arr = array(      // display 'text' and use table field 'field'
@@ -368,12 +372,13 @@ function MODERATE_draftList($token)
         $data_arr = array();
         for ($i = 0; $i < $nrows; $i++) {
             $A = DB_fetchArray($result);
-            $A['edit'] = $_CONF['site_admin_url'] . '/story.php?edit=x&amp;sid='
+            $A['edit'] = $_CONF['site_admin_url']
+                        . '/story.php?draft=x&amp;sid='
                         . $A['id'];
-            $A['row'] = $i;
             $A['title'] = stripslashes($A['title']);
             $A['tid'] = stripslashes($A['tid']);
-            $A['_type_'] = 'draft';
+            $A['_type_'] = 'draftstory';
+            $A['_key_'] = 'sid';
             $data_arr[$i] = $A;
         }
 
@@ -405,7 +410,7 @@ function MODERATE_draftList($token)
                          'chkactions' => $approve_action,
                          );
 
-        $form_arr['bottom'] = '<input type="hidden" name="type" value="draft"' . XHTML . '>' . LB
+        $form_arr['bottom'] = '<input type="hidden" name="type" value="draftstory"' . XHTML . '>' . LB
                 . '<input type="hidden" name="' . CSRF_TOKEN . '" value="' . $token . '"'. XHTML . '>' . LB
                 . '<input type="hidden" name="count" value="' . $nrows . '"' . XHTML . '>';
 
@@ -432,38 +437,16 @@ function MODERATE_items($type='', $action='')
 
     $retval = '';
 
-    switch ($type) {
-
-        case 'user':
-            $id = 'uid';
-            $fields = 'email,username,uid';
-            $table = $_TABLES['users'];
-            break;
-
-        case 'story':
-            $id = 'sid';
-            $table = $_TABLES['stories'];
-            $fields = 'sid,uid,tid,title,introtext,date,postmode';
-            $submissiontable = $_TABLES['storysubmission'];
-            break;
-
-        case 'draft':
-            $id = 'sid';
-            $table = $_TABLES['stories'];
-            break;
-
-        default:
-            if (empty($type)) {
-                // null item type
-                $retval .= COM_errorLog("Submissions Error: An attempt was made to moderate a null item type.");
-                return $retval;
-            } else {
-                list($id, $table, $fields, $submissiontable) = PLG_getModerationValues($type);
-                if (empty($id)) {
-                    $retval .= COM_errorLog("Submissions Error: A request was made to moderate an item of unknown type: $type");
-                    return $retval;
-                }
-            }
+    if (empty($type)) {
+        // null item type
+        $retval .= COM_errorLog("Submissions Error: An attempt was made to moderate a null item type.");
+        return $retval;
+    } else {
+        list($id, $table, $fields, $submissiontable) = PLG_getModerationValues($type);
+        if (empty($id)) {
+            $retval .= COM_errorLog("Submissions Error: A request was made to moderate an item of unknown type: $type");
+            return $retval;
+        }
     }
 
     $item_list = array();
@@ -497,7 +480,7 @@ function MODERATE_items($type='', $action='')
                             DB_delete($submissiontable,"$id",$item_id);
                             break;
 
-                        case 'draft':
+                        case 'draftstory':
                             // draft story
                             STORY_deleteStory($item_id);
                             break;
@@ -542,7 +525,7 @@ function MODERATE_items($type='', $action='')
                             COM_olderStuff();
                             break;
 
-                        case 'draft':
+                        case 'draftstory':
                             // draft story
                             DB_query("UPDATE $table SET draft_flag = 0 WHERE $id = '$item_id'");
                             COM_rdfUpToDateCheck();

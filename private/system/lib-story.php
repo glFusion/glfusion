@@ -968,6 +968,11 @@ function STORY_featuredCheck()
     }
 }
 
+/**
+ * START STORY PLUGIN STUB SECTION
+ * These functions will ultimately move into a story plugin
+ */
+
 
 /**
  * Return true since this component supports webservices
@@ -978,6 +983,69 @@ function plugin_wsEnabled_story()
 {
     return true;
 }
+
+/**
+*
+* Checks that the current user has the rights to moderate a story
+* returns true if this is the case, false otherwise
+*
+* @return        boolean       Returns true if moderator
+*
+*/
+function plugin_ismoderator_story()
+{
+    return SEC_hasRights('story.moderate');
+}
+
+/**
+* Returns SQL & Language texts to moderation.php
+*
+* @return   mixed   Plugin object or void if not allowed
+*
+*/
+function plugin_itemlist_story()
+{
+    global $_TABLES, $LANG29;
+
+    if (plugin_ismoderator_story()) {
+        $plugin = new Plugin();
+        $plugin->submissionlabel = $LANG29[35];
+        $plugin->submissionhelpfile = 'ccstorysubmission.html';
+        $plugin->getsubmissionssql = "SELECT sid AS id,title,UNIX_TIMESTAMP(date) AS day,tid,uid"
+                                    . " FROM {$_TABLES['storysubmission']}"
+                                    . COM_getTopicSQL ('WHERE')
+                                    . " ORDER BY date ASC";
+        $plugin->addSubmissionHeading($LANG29[10]);
+        $plugin->addSubmissionHeading($LANG29[14]);
+        $plugin->addSubmissionHeading($LANG29[15]);
+        $plugin->addSubmissionHeading($LANG29[46]);
+
+        return $plugin;
+    }
+}
+
+/**
+* returns list of moderation values
+*
+* The array returned contains (in order): the row 'id' label, main plugin
+* table, moderation fields (comma seperated), and plugin submission table
+*
+* @return       array        Returns array of useful moderation values
+*
+*/
+function plugin_moderationvalues_story()
+{
+    global $_TABLES;
+
+    return array (
+        'sid',
+        $_TABLES['stories'],
+        'sid,uid,tid,title,introtext,date,postmode',
+        $_TABLES['storysubmission']
+    );
+}
+
+
 
 /*
  * START SERVICES SECTION
@@ -1180,7 +1248,7 @@ function service_submit_story($args, &$output, &$svc_msg)
         $output .= COM_errorLog ($LANG24[24], 2);
         if (!$args['gl_svc']) {
             if ( $args['type'] == 'submission' ) {
-                $output .= STORY_edit($sid,'editsubmission');
+                $output .= STORY_edit($sid,'moderate');
             } else {
                 $output .= STORY_edit($sid);
             }

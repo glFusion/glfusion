@@ -293,7 +293,7 @@ function STORY_list()
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home']),
     );
-    
+
     $retval .= COM_startBlock($LANG24[22], '',
                               COM_getBlockTemplate('_admin_block', 'header'));
     $retval .= ADMIN_createMenu(
@@ -338,7 +338,7 @@ function STORY_list()
 * Displays the story entry form
 *
 * @param    string      $sid            ID of story to edit
-* @param    string      $action         'preview', 'edit', 'editsubmission'
+* @param    string      $action         'preview', 'edit', 'moderate', 'draft'
 * @param    string      $errormsg       a message to display on top of the page
 * @param    string      $currenttopic   topic selection for drop-down menu
 * @return   string      HTML for story editor
@@ -350,6 +350,24 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
            $LANG_ADMIN, $MESSAGE;
 
     $display = '';
+    switch ($action) {
+        case 'edit':
+            $title = $LANG25[5];
+            $saveoption = $LANG_ADMIN['save'];
+            $submission = false;
+            break;
+        case 'moderate':
+            $title = $LANG24[90];
+            $saveoption = $LANG_ADMIN['moderate'];
+            $submission = true;
+            break;
+        case 'draft':
+            $title = $LANG24[91];
+            $saveoption = $LANG_ADMIN['save'];
+            $submission = true;
+            $action = 'edit';
+            break;
+    }
 
     if (!isset ($_CONF['hour_mode'])) {
         $_CONF['hour_mode'] = 12;
@@ -406,7 +424,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         COM_accessLog("User {$_USER['username']} tried to illegally edit story $sid. - STORY_EDIT_DENIED or STORY_EXISTING_NO_EDIT_PERMISSION");
         return $display;
     } elseif( $result == STORY_INVALID_SID ) {
-        if( $action == 'editsubmission' )
+        if( $action == 'moderate' )
         {
             // that submission doesn't seem to be there any more (may have been
             // handled by another Admin) - take us back to the moderation page
@@ -477,9 +495,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         $story_templates->set_var('xhtml', XHTML);
         $advanced_editormode = false;
     }
-    $story_templates->set_var ('site_url',       $_CONF['site_url']);
-    $story_templates->set_var ('site_admin_url', $_CONF['site_admin_url']);
-    $story_templates->set_var ('layout_url',     $_CONF['layout_url']);
+
     $story_templates->set_var ('hour_mode',      $_CONF['hour_mode']);
 
     if ($story->hasContent()) {
@@ -525,7 +541,8 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         $story_templates->set_var ('navbar', $navbar->generate() );
     }
 
-    $display .= COM_startBlock ($LANG24[5], '',
+    // start generating the story editor block
+    $display .= COM_startBlock ($title, '',
                         COM_getBlockTemplate ('_admin_block', 'header'));
     $oldsid = $story->EditElements('originalSid');
     if (!empty ($oldsid)) {
@@ -537,7 +554,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         $story_templates->set_var ('delete_option_no_confirmation',
                                    sprintf ($delbutton, ''));
     }
-    if (($action == 'editsubmission') || ($story->type == 'submission')) {
+    if ($submission || ($story->type == 'submission')) {
         $story_templates->set_var ('submission_option',
                 '<input type="hidden" name="type" value="submission"' . XHTML . '>');
     }
@@ -852,7 +869,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     $story_templates->set_var('story_id', $story->getSid());
     $story_templates->set_var('old_story_id', $story->EditElements('originalSid'));
     $story_templates->set_var('lang_sid', $LANG24[12]);
-    $story_templates->set_var('lang_save', $LANG_ADMIN['save']);
+    $story_templates->set_var('lang_save', $saveoption);
     $story_templates->set_var('lang_preview', $LANG_ADMIN['preview']);
     $story_templates->set_var('lang_cancel', $LANG_ADMIN['cancel']);
     $story_templates->set_var('lang_delete', $LANG_ADMIN['delete']);
@@ -922,7 +939,7 @@ function STORY_submit($type='')
 // MAIN ========================================================================
 
 $action = '';
-$expected = array('edit','editsubmission','clone','save','preview','delete','cancel');
+$expected = array('edit','moderate','draft','clone','save','preview','delete','cancel');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
@@ -948,30 +965,33 @@ if ($editopt == 'default') {
     $_CONF['advanced_editor'] = false;
 }
 
-$id     = (isset($_GET['id'])) ? COM_applyFilter($_GET['id']) : '';
-$msg    = (isset($_GET['msg'])) ? COM_applyFilter($_GET['msg'], true) : '';
-$topic  = (isset($_GET['topic'])) ? COM_applyFilter($_GET['topic']) : '';
-$type   = (isset($_POST['type'])) ? COM_applyFilter($_POST['type']) : '';
+$msg = (isset($_GET['msg'])) ? COM_applyFilter($_GET['msg']) : '';
+$topic = (isset($_GET['topic'])) ? COM_applyFilter($_GET['topic']) : '';
+$type = (isset($_POST['type'])) ? COM_applyFilter($_POST['type']) : '';
 
 $validtoken = SEC_checkToken();
 
 switch ($action) {
 
     case 'edit':
+    case 'moderate':
+    case 'draft':
         SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
                        time() + 1200, $_CONF['cookie_path'],
                        $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
-        $display .= COM_siteHeader('menu', $LANG24[5]);
+        switch ($action) {
+            case 'edit':
+                $blocktitle = $LANG25[5];
+                break;
+            case 'moderate':
+                $blocktitle = $LANG24[90];
+                break;
+            case 'draft':
+                $blocktitle = $LANG24[91];
+                break;
+        }
+        $display .= COM_siteHeader('menu', $blocktitle);
         $display .= STORY_edit($sid, $action, '', $topic);
-        $display .= COM_siteFooter();
-        break;
-
-    case 'editsubmission':
-        SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
-                       time() + 1200, $_CONF['cookie_path'],
-                       $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
-        $display .= COM_siteHeader('menu', $LANG24[5]);
-        $display .= STORY_edit($id, $action);
         $display .= COM_siteFooter();
         break;
 
@@ -1043,7 +1063,9 @@ switch ($action) {
             $display = COM_refresh($_CONF['site_admin_url'] . '/moderation.php');
         } else {
             $display .= COM_siteHeader('menu', $LANG24[22]);
-            $display .= (isset($msg)) ? COM_showMessage($msg) : '';
+            if(isset($msg)) {
+                $display .= (is_numeric($msg)) ? COM_showMessage($msg) : COM_showMessageText( $msg );
+            }
             $display .= STORY_list();
             $display .= COM_siteFooter();
         }

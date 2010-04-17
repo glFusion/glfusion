@@ -39,7 +39,7 @@ function toggleTOD() {
 -->
 </script>
 <form class="form-theme" action="{site_url}{submit_url}" id="submitevent" method="post">
-  <hr style="margin:5px;" />
+  <div style="margin:15px 0 15px 0;border-bottom:1px solid #cccccc"></div>
     <div class="form-description">{lang_title}:</div>
     <div class="form-field"><input class="fValidate['required']" type="text" size="48" maxlength="128" name="title" value="{title}" {xhtml}></div>
     <div class="clear-left"></div>
@@ -55,10 +55,10 @@ function toggleTOD() {
     <div class="form-field"><input type="text" dir="ltr" size="48" maxlength="{max_url_length}" name="url" value="{url}"{xhtml}></div>
     <div class="clear-left"></div>
 
-  <hr style="margin:5px;" />
+  <div style="margin:10px 0 10px 0;border-bottom:1px solid #cccccc"></div>
 
     <div class="form-description">{lang_alldayevent}:</div>
-    <div class="form-field"><input type="checkbox" name="allday" {all_day_checked}{xhtml}></div>
+    <div class="form-field"><input type="checkbox" id="allday" name="allday" {all_day_checked}{xhtml}></div>
     <div class="clear-left"></div>
     <div class="form-description">{lang_startdate}:</div>
     <div class="form-field">
@@ -98,15 +98,15 @@ function toggleTOD() {
     <div class="form-description">{lang_enddate}:</div>
     <div class="form-field">
       <span dir="ltr">
-        <select name="end_month">
+        <select name="end_month" id="end_month">
             {end_month_options}
         </select>
         /
-        <select name="end_day">
+        <select name="end_day" id="end_day">
             {end_day_options}
         </select>
         /
-        <select name="end_year">
+        <select name="end_year" id="end_year">
             {end_year_options}
         </select>
         {# nogray calendar - must be replaced in 1.2.0 #}
@@ -114,14 +114,15 @@ function toggleTOD() {
         <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:text-top;border:none;"{xhtml}>
         </a>
         <span id="calendar2"></span>
-        {# nogray calendar - must be replaced in 1.2.0 #}        <span id="todend">
+        {# nogray calendar - must be replaced in 1.2.0 #}
+        <span id="todend">
           &nbsp;&nbsp;
           <b>{lang_endtime}: </b>
-          <select name="end_hour">
+          <select name="end_hour" id="end_hour">
               {end_hour_options}
           </select>
           :
-          <select name="end_minute">
+          <select name="end_minute" id="end_minute">
               {end_minute_options}
           </select>
           {endampm_selection}
@@ -129,7 +130,8 @@ function toggleTOD() {
       </span>
     </div>
     <div class="clear-left"></div>
-  <hr style="margin:5px;" />
+
+  <div style="margin:10px 0 10px 0;border-bottom:1px solid #cccccc"></div>
 
     <div class="form-description">{lang_location}:</div>
     <div class="form-field"><textarea name="location" cols="45" rows="2">{location}</textarea></div>
@@ -149,17 +151,20 @@ function toggleTOD() {
     <div class="form-description">{lang_zipcode}:</div>
     <div class="form-field"><input type="text" name="zipcode" size="5" value="{zipcode}" maxlength="5"{xhtml}></div>
     <div class="clear-left"></div>
-  <hr style="margin:5px;" />
+
+  <div style="margin:10px 0 10px 0;border-bottom:1px solid #cccccc"></div>
 
     <div class="form-description">{lang_description}:</div>
     <div class="form-field"><textarea class="fValidate['required']" name="description" style="width:100%" cols="45" rows="8">{description}</textarea></div>
     <div class="clear-left"></div>
     <div class="form-field">{lang_htmnotallowed}</div>
-  <hr style="margin:5px;" />
+
+  <div style="margin:10px 0 10px 0;border-bottom:1px solid #cccccc"></div>
+
   {!if captcha}
 
     {captcha}
-  <hr style="margin:5px;" />
+  <div style="margin:10px 0 10px 0;border-bottom:1px solid #cccccc"></div>
   {!endif}
   <div class="form-field">
     <input type="hidden" name="mode" value="{lang_submit}"{xhtml}>

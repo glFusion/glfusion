@@ -1145,7 +1145,7 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case 'username':
-            $attr['title'] = 'View Profile';
+            $attr['title'] = $LANG28[108];
             $url = $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' .  $A['uid'];
             $retval = COM_createLink($icon_arr['user'], $url, $attr);
             $retval .= '&nbsp;&nbsp;';
