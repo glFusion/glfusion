@@ -1103,7 +1103,7 @@ $LANG28 = array(
     96 => 'Using the <strong>Selected</strong> column, select the items you wish to change for <strong>all</strong> users.  Set the attribute to the desired setting and press Save.',
     97 => 'Comment Display Mode',
     98 => 'Comment Sort Order',
-    99 => 'Send eMail',
+    99 => 'Send eMail (Site)',
     100 => 'eMail Site Login Reminders to the selected users?',
     101 => 'Group',
     102 => 'users',
@@ -1115,6 +1115,7 @@ $LANG28 = array(
     108 => 'View Profile',
     109 => 'Are you absolutely sure you want to delete this User?  Deleting this User will delete some of the content that has been created by this User, and the remainder will be assigned to the Anonymous User or Site Administrator!  Press Cancel and then click on the Username to view the User Profile to see details.',
     110 => 'Are you absolutely sure you want to delete ALL selected Users?  Deleting these Users will delete some of the content that has been created by these Users, and the remainder will be assigned to the Anonymous User or Site Administrator!  Press Cancel and then click on the Username to view the User Profile to see details.',
+    111 => 'Send eMail (Local)'
 );
 
 ###############################################################################

@@ -1234,9 +1234,10 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
         case 'email':
             $url = 'mailto:' . $fieldvalue;
-            $attr['title'] = $LANG28[99];
+            $attr['title'] = $LANG28[111];
             $retval = COM_createLink($icon_arr['mail'], $url, $attr);
             $retval .= '&nbsp;&nbsp;';
+            $attr['title'] = $LANG28[99];
             $url = $_CONF['site_admin_url'] . '/mail.php?uid=' . $A['uid'];
             $attr['style'] = 'vertical-align:top;';
             $retval .= COM_createLink($fieldvalue, $url, $attr);
