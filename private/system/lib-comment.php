@@ -219,7 +219,7 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
 * @return   string   HTML       Formated Comment
 *
 */
-function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = false, $preview = false, $ccode = 0 )
+function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = false, $preview = false, $ccode = 0, $sid_author_id = '' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG03, $MESSAGE, $_IMAGE_TYPE;
 
@@ -319,6 +319,11 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         $template->set_var( 'author_id', $A['uid'] );
         $template->set_var( 'cid', $A['cid'] );
         $template->set_var( 'cssid', $row % 2 );
+        if ( $sid_author_id != '' && $sid_author_id != 1 && ($sid_author_id == $A['uid'] ) ) {
+            $template->set_var('author_match','1');
+        } else {
+            $template->set_var('author_match','');
+        }
 
         if( $A['uid'] > 1 ) {
             $fullname = COM_getDisplayName( $A['uid'], $A['username'],
@@ -549,7 +554,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 * @see CMT_commentBar
 *
 */
-function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $pid = 0, $page = 1, $cid = false, $delete_option = false, $ccode = 0 )
+function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $pid = 0, $page = 1, $cid = false, $delete_option = false, $ccode = 0, $sid_author_id = '' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG01;
 
@@ -690,7 +695,7 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
         $thecomments = '';
         $result = DB_query( $q );
         $thecomments .= CMT_getComment( $result, $mode, $type, $order,
-                                        $delete_option, false, $ccode );
+                                        $delete_option, false, $ccode, $sid_author_id );
 
         // Pagination
         $tot_pages =  ceil( $count / $limit );

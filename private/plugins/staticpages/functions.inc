@@ -153,7 +153,7 @@ function plugin_displaycomment_staticpages ($id, $cid, $title, $order, $format, 
 
     $retval = '';
 
-    $sql = "SELECT COUNT(*) AS count, commentcode, owner_id, group_id, perm_owner, "
+    $sql = "SELECT COUNT(*) AS count, commentcode, sp_uid,owner_id, group_id, perm_owner, "
         . "perm_group, perm_members, perm_anon "
         . "FROM {$_TABLES['staticpage']} "
         . "WHERE (sp_id = '".DB_escapeString($id)."') AND (sp_status = 1)" . COM_getPermSQL('AND')
@@ -169,7 +169,7 @@ function plugin_displaycomment_staticpages ($id, $cid, $title, $order, $format, 
                     $A['perm_anon']) == 3));
         $retval .= CMT_userComments ($id, $title, 'staticpages', $order, $format,
                                      $cid, $page, $view, $delete_option,
-                                     $A['commentcode']);
+                                     $A['commentcode'],$A['sp_uid']);
     } else {
         $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',
                         COM_getBlockTemplate ('_msg_block', 'header'))
@@ -400,7 +400,7 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
 
         $spage->set_var ('commentbar', CMT_userComments($page, $A['sp_title'], 'staticpages',
                                     $comment_order, $comment_mode, 0, $cmt_page, false,
-                                    $delete_option, $A['commentcode']));
+                                    $delete_option, $A['commentcode'],$A['sp_uid']));
     }
 
 

@@ -344,7 +344,7 @@ if ($A['count'] > 0) {
             }
             $story_template->set_var ('commentbar',
                     CMT_userComments ($story->getSid(), $story->displayElements('title'), 'article',
-                                      $order, $mode, 0, $page, false, $delete_option, $story->displayElements('commentcode')));
+                                      $order, $mode, 0, $page, false, $delete_option, $story->displayElements('commentcode'),$story->displayElements('uid')));
         }
         if ($_CONF['trackback_enabled'] && ($story->displayElements('trackbackcode') >= 0) &&
                 $show_comments) {

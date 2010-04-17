@@ -526,7 +526,7 @@ function service_get_staticpages($args, &$output, &$svc_msg)
             $perms = ' AND ' . $perms;
         }
         $sql          = "SELECT sp_title,sp_content,sp_hits,sp_date,sp_format,"
-                      . "commentcode,owner_id,group_id,perm_owner,perm_group,"
+                      . "commentcode,sp_uid,owner_id,group_id,perm_owner,perm_group,"
                       . "perm_members,perm_anon,sp_tid,sp_help,sp_php,"
                       . "sp_inblock FROM {$_TABLES['staticpage']} "
                       . "WHERE (sp_id = '$page') AND (sp_status = 1)" . $perms;
