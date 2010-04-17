@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
+// | Copyright (C) 2009-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -290,14 +290,14 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
     $row = 1;
     do {
         //check for comment edit
-        $commentedit = DB_query("SELECT cid,uid,UNIX_TIMESTAMP(time) as time FROM {$_TABLES['commentedits']} WHERE cid = ".intval($A['cid']));
+        $commentedit = DB_query("SELECT cid,uid,UNIX_TIMESTAMP(time) as time FROM {$_TABLES['commentedits']} WHERE cid = ".(int) $A['cid']);
         $B = DB_fetchArray($commentedit);
         if ($B) { //comment edit present
             //get correct editor name
             if ($A['uid'] == $B['uid']) {
                 $editname = $A['username'];
             } else {
-                $editname = DB_getItem($_TABLES['users'], 'username', "uid=".intval($B['uid']));
+                $editname = DB_getItem($_TABLES['users'], 'username', "uid=".(int) $B['uid']);
             }
             //add edit info to text
             $A['comment'] .= LB . '<div class="comment-edit">' . $LANG03[30] . ' '
@@ -311,6 +311,11 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         }
 
         // comment variables
+
+        if ( !isset($A['uid']) || $A['uid'] == '' ) {
+            $A['uid'] = 1;
+        }
+
         $template->set_var( 'indent', $indent );
         $template->set_var( 'author_name', strip_tags(USER_sanitizeName($A['username'] )));
         $template->set_var( 'author_id', $A['uid'] );
@@ -388,7 +393,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 
         // for threaded mode, add a link to comment parent
         if( $mode == 'threaded' && $A['pid'] != 0 && $indent == 0 ) {
-            $result = DB_query( "SELECT title,pid FROM {$_TABLES['comments']} WHERE cid = ".intval($A['pid']));
+            $result = DB_query( "SELECT title,pid FROM {$_TABLES['comments']} WHERE cid = ".(int) $A['pid']);
             $P = DB_fetchArray( $result );
             if( $P['pid'] != 0 ) {
                 $plink = $_CONF['site_url'] . '/comment.php?mode=display&amp;sid='
@@ -416,7 +421,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             if ( $_USER['uid'] == $A['uid'] && $_CONF['comment_edit'] == 1
                     && (time() - $A['nice_date']) < $_CONF['comment_edittime'] &&
                     $ccode == 0 &&
-                    DB_getItem($_TABLES['comments'], 'COUNT(*)', "pid = ".intval($A['cid'])) == 0) {
+                    DB_getItem($_TABLES['comments'], 'COUNT(*)', "pid = ".(int) $A['cid']) == 0) {
                 $edit_option = true;
             } else if (SEC_inGroup('Root') ) {
                 $edit_option = true;
@@ -585,13 +590,13 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
     if( empty( $limit )) {
         $limit = $_CONF['comment_limit'];
     } else {
-        $limit = intval($limit);
+        $limit = (int) $limit;
     }
 
     if( !is_numeric($page) || $page < 1 ) {
         $page = 1;
     } else {
-        $page = intval($page);
+        $page = (int) $page;
     }
 
     $start = $limit * ( $page - 1 );
@@ -617,7 +622,7 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
                     $q = "SELECT c.*, u.username, u.fullname, u.photo, u.email, "
                        . "UNIX_TIMESTAMP(c.date) AS nice_date "
                        . "FROM {$_TABLES['comments']} AS c, {$_TABLES['users']} AS u "
-                       . "WHERE c.uid = u.uid AND c.cid = ".intval($pid)." AND type='".DB_escapeString($type)."'";
+                       . "WHERE c.uid = u.uid AND c.cid = ".(int) $pid." AND type='".DB_escapeString($type)."'";
                 } else {
                     $count = DB_count( $_TABLES['comments'],
                                 array( 'sid', 'type' ), array( DB_escapeString($sid), DB_escapeString($type) ));
@@ -646,7 +651,7 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
                     $q2 = "SELECT COUNT(*) "
                         . "FROM {$_TABLES['comments']} AS c, {$_TABLES['comments']} AS c2 "
                         . "WHERE c.sid = '".DB_escapeString($sid)."' AND (c.lft >= c2.lft AND c.lft <= c2.rht) "
-                        . "AND c2.cid = ".intval($pid)." AND c.type='".DB_escapeString($type)."'";
+                        . "AND c2.cid = ".(int) $pid." AND c.type='".DB_escapeString($type)."'";
                     $result = DB_query( $q2 );
                     list( $count ) = DB_fetchArray( $result );
 
@@ -655,7 +660,7 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
                        . "FROM {$_TABLES['comments']} AS c, {$_TABLES['comments']} AS c2, "
                        . "{$_TABLES['users']} AS u "
                        . "WHERE c.sid = '".DB_escapeString($sid)."' AND (c.lft >= c2.lft AND c.lft <= c2.rht) "
-                       . "AND c2.cid = ".intval($pid)." AND c.uid = u.uid AND c.type='".DB_escapeString($type)."' "
+                       . "AND c2.cid = ".(int) $pid." AND c.uid = u.uid AND c.type='".DB_escapeString($type)."' "
                        . "ORDER BY $cOrder LIMIT $start, $limit";
                 } else {    // pid refers to parentid rather than commentid
                     if( $pid == 0 ) {  // the simple, fast case
@@ -673,7 +678,7 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
                         $q2 = "SELECT COUNT(*) "
                             . "FROM {$_TABLES['comments']} AS c, {$_TABLES['comments']} AS c2 "
                             . "WHERE c.sid = '".DB_escapeString($sid)."' AND (c.lft > c2.lft AND c.lft < c2.rht) "
-                            . "AND c2.cid = ".intval($pid)." AND c.type='".DB_escapeString($type)."'";
+                            . "AND c2.cid = ".(int) $pid." AND c.type='".DB_escapeString($type)."'";
                         $result = DB_query($q2);
                         list($count) = DB_fetchArray($result);
 
@@ -682,7 +687,7 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
                            . "FROM {$_TABLES['comments']} AS c, {$_TABLES['comments']} AS c2, "
                            . "{$_TABLES['users']} AS u "
                            . "WHERE c.sid = '".DB_escapeString($sid)."' AND (c.lft > c2.lft AND c.lft < c2.rht) "
-                           . "AND c2.cid = ".intval($pid)." AND c.uid = u.uid AND c.type='".DB_escapeString($type)."' "
+                           . "AND c2.cid = ".(int) $pid." AND c.uid = u.uid AND c.type='".DB_escapeString($type)."' "
                            . "ORDER BY $cOrder LIMIT $start, $limit";
                     }
                 }
@@ -691,6 +696,7 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
 
         $thecomments = '';
         $result = DB_query( $q );
+
         $thecomments .= CMT_getComment( $result, $mode, $type, $order,
                                         $delete_option, false, $ccode, $sid_author_id );
 
@@ -749,7 +755,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
     $commentuid = $uid;
     if ( ($mode == 'edit' || $mode == $LANG03[28]) && isset($_REQUEST['cid']) ) {
         $cid = COM_applyFilter ($_REQUEST['cid']);
-        $commentuid = DB_getItem ($_TABLES['comments'], 'uid', "cid = ".intval($cid));
+        $commentuid = DB_getItem ($_TABLES['comments'], 'uid', "cid = ".(int) $cid);
     }
 
     if (COM_isAnonUser() &&
@@ -821,7 +827,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 $A = array();
                 foreach ($_POST as $key => $value) {
                     if (($key == 'pid') || ($key == 'cid')) {
-                        $A[$key] = intval(COM_applyFilter ($_POST[$key], true));
+                        $A[$key] = (int) COM_applyFilter ($_POST[$key], true);
                     } else if (($key == 'title') || ($key == 'comment')) {
                         // these have already been filtered above
                         $A[$key] = $_POST[$key];
@@ -836,15 +842,15 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 //correct time and username for edit preview
                 if ($mode == $LANG03[28]) {
                     $A['nice_date'] = DB_getItem ($_TABLES['comments'],
-                                        'UNIX_TIMESTAMP(date)', "cid = ".intval($cid));
+                                        'UNIX_TIMESTAMP(date)', "cid = ".(int) $cid);
                     if ($_USER['uid'] != $commentuid) {
                         $A['username'] = DB_getItem ($_TABLES['users'],
-                                              'username', "uid = ".intval($commentuid));
+                                              'username', "uid = ".(int) $commentuid);
                     }
                 }
                 if (empty ($A['username'])) {
                     $A['username'] = DB_getItem ($_TABLES['users'], 'username',
-                                                 "uid = ".intval($uid));
+                                                 "uid = ".(int) $uid);
                 }
                 $thecomments = CMT_getComment ($A, 'flat', $type, 'ASC', false,
                                                true);
@@ -867,7 +873,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 if ( COM_isAnonUser() ) {
                     $ae_uid = 1;
                 } else {
-                    $ae_uid = intval(COM_applyFilter($_USER['uid'],true));
+                    $ae_uid = (int) COM_applyFilter($_USER['uid'],true);
                 }
                 $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
                 DB_Query($sql,1);
@@ -1060,7 +1066,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         // Insert the comment into the comment table
         DB_lockTable ($_TABLES['comments']);
         if ($pid > 0) {
-            $result = DB_query("SELECT rht, indent FROM {$_TABLES['comments']} WHERE cid = ".intval($pid)
+            $result = DB_query("SELECT rht, indent FROM {$_TABLES['comments']} WHERE cid = ".(int) $pid
                              . " AND sid = '".DB_escapeString($sid)."'");
             list($rht, $indent) = DB_fetchArray($result);
             if ( !DB_error() ) {
@@ -1069,7 +1075,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
                 DB_query("UPDATE {$_TABLES['comments']} SET rht = rht + 2 "
                        . "WHERE sid = '".DB_escapeString($sid)."' AND type = '$type' AND rht >= $rht");
                 DB_save ($_TABLES['comments'], 'sid,uid,comment,date,title,pid,lft,rht,indent,type,ipaddress',
-                        "'".DB_escapeString($sid)."',$uid,'$comment',now(),'$title',".intval($pid).",$rht,$rht+1,$indent+1,'$type','".DB_escapeString($_SERVER['REMOTE_ADDR'])."'");
+                        "'".DB_escapeString($sid)."',$uid,'$comment',now(),'$title',".(int) $pid.",$rht,$rht+1,$indent+1,'$type','".DB_escapeString($_SERVER['REMOTE_ADDR'])."'");
             } else { //replying to non-existent comment or comment in wrong article
                 COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REMOTE_ADDR']} tried "
                            . 'to reply to a non-existent comment or the pid/sid did not match');
@@ -1081,13 +1087,13 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
                 $rht = 0;
             }
             DB_save ($_TABLES['comments'], 'sid,uid,comment,date,title,pid,lft,rht,indent,type,ipaddress',
-                    "'".DB_escapeString($sid)."',".intval($uid).",'$comment',now(),'$title',".intval($pid).",$rht+1,$rht+2,0,'$type','".DB_escapeString($_SERVER['REMOTE_ADDR'])."'");
+                    "'".DB_escapeString($sid)."',".(int) $uid.",'$comment',now(),'$title',".(int) $pid.",$rht+1,$rht+2,0,'$type','".DB_escapeString($_SERVER['REMOTE_ADDR'])."'");
         }
         $cid = DB_insertId();
         //set Anonymous user name if present
-        if (isset($_POST['username']) && strcmp($_POST['username'],$LANG03[24]) != 0) {
+        if (isset($_POST['username']) ) {
             $name = strip_tags(USER_sanitizeName (COM_stripslashes($_POST['username'])));
-            DB_change($_TABLES['comments'],'name',DB_escapeString($name),'cid',intval($cid));
+            DB_change($_TABLES['comments'],'name',DB_escapeString($name),'cid',(int) $cid);
         }
         DB_unlockTable ($_TABLES['comments']);
 
@@ -1205,11 +1211,11 @@ function CMT_deleteComment ($cid, $sid, $type)
     // but aren't supported with MyISAM tables.
     DB_lockTable ($_TABLES['comments']);
     $result = DB_query("SELECT pid, lft, rht FROM {$_TABLES['comments']} "
-                     . "WHERE cid = ".intval($cid)." AND sid = '".DB_escapeString($sid)."' AND type = '".DB_escapeString($type)."'");
+                     . "WHERE cid = ".(int) $cid." AND sid = '".DB_escapeString($sid)."' AND type = '".DB_escapeString($type)."'");
     if ( DB_numRows($result) == 1 ) {
         list($pid,$lft,$rht) = DB_fetchArray($result);
-        DB_change ($_TABLES['comments'], 'pid', intval($pid), 'pid', intval($cid));
-        DB_delete ($_TABLES['comments'], 'cid', intval($cid));
+        DB_change ($_TABLES['comments'], 'pid', (int) $pid, 'pid', (int) $cid);
+        DB_delete ($_TABLES['comments'], 'cid', (int) $cid);
         DB_query("UPDATE {$_TABLES['comments']} SET indent = indent - 1 "
            . "WHERE sid = '".DB_escapeString($sid)."' AND type = '".DB_escapeString($type)."' AND lft BETWEEN $lft AND $rht");
         DB_query("UPDATE {$_TABLES['comments']} SET lft = lft - 2 "
@@ -1273,10 +1279,10 @@ function CMT_reportAbusiveComment ($cid, $type)
     $start->set_var('gltoken_name', CSRF_TOKEN);
     $start->set_var('gltoken', SEC_createToken());
 
-    $result = DB_query ("SELECT uid,sid,pid,title,comment,UNIX_TIMESTAMP(date) AS nice_date FROM {$_TABLES['comments']} WHERE cid = ".intval($cid)." AND type = '".DB_escapeString($type)."'");
+    $result = DB_query ("SELECT uid,sid,pid,title,comment,UNIX_TIMESTAMP(date) AS nice_date FROM {$_TABLES['comments']} WHERE cid = ".(int) $cid." AND type = '".DB_escapeString($type)."'");
     $A = DB_fetchArray ($result);
 
-    $result = DB_query ("SELECT username,fullname,photo,email FROM {$_TABLES['users']} WHERE uid = ".intval($A['uid']));
+    $result = DB_query ("SELECT username,fullname,photo,email FROM {$_TABLES['users']} WHERE uid = ".(int) $A['uid']);
     $B = DB_fetchArray ($result);
 
     // prepare data for comment preview
@@ -1325,7 +1331,7 @@ function CMT_sendReport ($cid, $type)
 
     $username = DB_getItem ($_TABLES['users'], 'username',
                             "uid = {$_USER['uid']}");
-    $result = DB_query ("SELECT uid,title,comment,sid,ipaddress FROM {$_TABLES['comments']} WHERE cid = ".intval($cid)." AND type = '".DB_escapeString($type)."'");
+    $result = DB_query ("SELECT uid,title,comment,sid,ipaddress FROM {$_TABLES['comments']} WHERE cid = ".(int) $cid." AND type = '".DB_escapeString($type)."'");
     $A = DB_fetchArray ($result);
 
     $title = stripslashes ($A['title']);
@@ -1408,14 +1414,14 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
         $uid = 1;
     } elseif ($edit && is_numeric($cid) ){
         //if comment moderator
-        $uid = DB_getItem ($_TABLES['comments'], 'uid', "cid = ".intval($cid));
+        $uid = DB_getItem ($_TABLES['comments'], 'uid', "cid = ".(int) $cid);
     } else {
         $uid = $_USER['uid'];
     }
 
     $sig = '';
     if ($uid > 1) {
-        $sig = DB_getItem ($_TABLES['users'], 'sig', "uid = ".intval($uid));
+        $sig = DB_getItem ($_TABLES['users'], 'sig', "uid = ".(int) $uid);
         if (!empty ($sig)) {
             $comment .= '<!-- COMMENTSIG --><div class="comment-sig">';
             if ( $postmode == 'html') {
