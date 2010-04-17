@@ -473,7 +473,7 @@ function plugin_showstats_mediagallery($showsitestats) {
                 }
 
                 $S['title'] = '<a href="' . $_MG_CONF['site_url'] . '/media.php?s=' . $A['media_id'] . '">' . $title . '</a>';
-                $S['rating'] = @number_format($A['media_rating']/2,2) . '/5.00';
+                $S['rating'] = @number_format($A['media_rating'],2);
                 $data_arr[$i] = $S;
             }
             $retval .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
