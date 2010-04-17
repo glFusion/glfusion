@@ -303,7 +303,7 @@ function USER_edit($uid = '', $msg = '')
 
     if (!empty($uid) && ($uid != $_USER['uid']) && SEC_hasRights('user.delete')) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete'] . '" name="delete"%s' . XHTML . '>';
-        $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
+        $jsconfirm = ' onclick="return doubleconfirm(\'' . $LANG28[104] . '\',\'' . $LANG28[109] . '\');"';
         $userform->set_var('delete_option',sprintf ($delbutton, $jsconfirm));
         $userform->set_var('delete_option_no_confirmation',sprintf ($delbutton, ''));
     }
@@ -1245,7 +1245,7 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
         case 'delete':
             $retval = '';
             $attr['title'] = $LANG_ADMIN['delete'];
-            $attr['onclick'] = 'return confirm(\'' . $LANG28[104] .'\');';
+            $attr['onclick'] = 'return doubleconfirm(\'' . $LANG28[104] . '\',\'' . $LANG28[109] . '\');';
             $retval .= COM_createLink($icon_arr['delete'],
                 $_CONF['site_admin_url'] . '/user.php'
                 . '?delete=x&amp;uid=' . $A['uid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
@@ -1980,7 +1980,7 @@ function USER_batchAdmin()
     $actions = '<input name="delbutton" type="image" src="'
         . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
         . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
-        . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
+        . '" onclick="return doubleconfirm(\'' . $LANG28[73] . '\',\'' . $LANG28[110] . '\');"'
         . XHTML . '>&nbsp;' . $LANG_ADMIN['delete'];
     $actions .= '&nbsp;&nbsp;&nbsp;&nbsp;';
     $actions .= '<input name="reminder" type="image" src="'
