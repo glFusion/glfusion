@@ -169,7 +169,7 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
                 '<input type="hidden" name="mode" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['mode']),ENT_COMPAT,COM_getEncodingt()) . '"' . XHTML . '>' );
     } else if( $type == 'article' ) {
         $commentbar->set_var( 'parent_url',
-                              $_CONF['site_url'] . '/article.php' );
+                              $_CONF['site_url'] . '/article.php#comments' );
         $commentbar->set_var( 'hidden_field',
                 '<input type="hidden" name="story" value="' . $sid . '"' . XHTML . '>' );
     } else { // plugin
