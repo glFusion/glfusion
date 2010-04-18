@@ -184,7 +184,7 @@ function getDeleteImageLink($mode, $A, $token)
     global $_CONF, $LANG_ADMIN, $LANG_CAL_2, $_IMAGE_TYPE;
 
     $retval = '';
-    $img = '<img src="' . $_CONF['site_url']
+    $img = '<img style="vertical-align:top" src="' . $_CONF['site_url']
         . '/calendar/images/delete_event.' . $_IMAGE_TYPE
         . '" alt="' . $LANG_CAL_2[30] . '" title="'
         . $LANG_CAL_2[30] . '"' . XHTML . '>';
@@ -985,7 +985,7 @@ for ($i = 1; $i <= 6; $i++) {
                     . '/calendar/index.php?view=day&amp;' . addMode ($mode)
                     . 'day=' . $curday->daynumber . "&amp;month=$month&amp;year=$year",
                     array('class'=>'cal-date'))
-                . '<hr' . XHTML . '>'
+                    . '<div style="margin:2px 0 5px;border-bottom:1px solid #666666"></div>'
             );
 
             if (strlen($month) == 1) {
@@ -1024,7 +1024,7 @@ for ($i = 1; $i <= 6; $i++) {
                                 $_CONF['site_url'] . '/calendar/event.php?' . addMode ($mode)
                                 . 'eid=' . $results['eid'],
                                 array('class'=>'cal-event'))
-                            . '<hr' . XHTML . '>';
+                                . '<div style="margin:5px 0 5px;border-bottom:1px solid #bbbbbb"></div>';
                     }
                 }
                 for ($z = $z; $z <= 4; $z++) {
