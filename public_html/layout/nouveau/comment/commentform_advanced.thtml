@@ -10,7 +10,7 @@
                 <form action="{site_url}/comment.php" method="post" onsubmit='set_postcontent();'>
                     <table cellspacing="0" cellpadding="3" width="100%">
                         <tr>
-                            <td class="alignright"><b>{lang_username}:</b></td>
+                            <td class="alignright" style="width:10%;"><b>{lang_username}:</b></td>
                             <td>
                                                             {cid}
                                 <input type="hidden" name="sid" value="{sid}"{xhtml}>
@@ -31,7 +31,7 @@
                                 <div id="text_editor" style="display:{show_texteditor};">
                                     <textarea id="comment_text" name="comment_text" cols="60" rows="10" style="width:90%;">{comment}</textarea>
                                 </div>
-                                <div  id="html_editor" style="display:{show_htmleditor};">
+                                <div  id="html_editor" style="display:{show_htmleditor};margin-right:20px;">
                                     <textarea id="comment_html" name="comment_html" rows="10" cols="60" style="width:90%;">{comment}</textarea>
                                 </div>
                             </td>
@@ -56,6 +56,7 @@
                                 <li>{lang_instr_line3}</li>
                                 <li>{lang_instr_line4}</li>
                                 <li>{lang_instr_line5}</li></ul>
+                                <br{xhtml}>
                                 <input type="submit" name="mode" value="{lang_preview}"{xhtml}>
                                 {save_option}
                             </td>

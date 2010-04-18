@@ -19,7 +19,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td class="alignright" style="vertical-align:top;"><b>{lang_comment}:</b></td>
-                                                        <td><textarea name="comment" rows="10" style="width:95%">{comment}</textarea></td>
+                                                        <td><textarea name="comment" rows="10" style="width:90%">{comment}</textarea></td>
                                                     </tr>
                                                     <tr>
                                                         <td class="alignright" style="vertical-align:top;"><b>{lang_postmode}:</b></td>
@@ -41,7 +41,7 @@
                                                             <li>{lang_instr_line3}</li>
                                                             <li>{lang_instr_line4}</li>
                                                             <li>{lang_instr_line5}</li></ul>
-                                                            <br />
+                                                            <br{xhtml}>
                                                             <input type="submit" name="mode" value="{lang_preview}"{xhtml}>
                                                             {save_option}
                                                         </td>
