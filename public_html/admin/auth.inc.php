@@ -81,14 +81,14 @@ if ( isset($_POST['loginname']) && !empty($_POST['loginname']) && isset($_POST['
         $message = $LANG20[2];
     } else {
         $passwd = COM_stripslashes($_POST['passwd']);
-        if ($_CONF['user_login_method']['3rdparty'] && 
+        if ($_CONF['user_login_method']['3rdparty'] &&
             isset($_POST['service']) && !empty($_POST['service'])) {
             /* Distributed Authentication */
             $service = COM_stripslashes($_POST['service']);
             // safety check to ensure this user is really a known remote user
-            $sql = "SELECT uid 
-                    FROM {$_TABLES['users']} 
-                    WHERE remoteusername='". DB_escapeString($loginname)."' 
+            $sql = "SELECT uid
+                    FROM {$_TABLES['users']}
+                    WHERE remoteusername='". DB_escapeString($loginname)."'
                     AND remoteservice='". DB_escapeString($service)."'";
             $result = DB_query($sql);
             if ( DB_numRows($result) != 1 ) {
@@ -106,8 +106,32 @@ if ( isset($_POST['loginname']) && !empty($_POST['loginname']) && isset($_POST['
 }
 
 if ($status == USER_ACCOUNT_ACTIVE) {
-    COM_resetSpeedlimit('login', $_SERVER['REMOTE_ADDR']);
+
     SESS_completeLogin($uid);
+    $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
+    if (!SEC_isModerator() && !SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR')
+             && (count(PLG_getAdminOptions()) == 0)) {
+        COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
+        if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
+            if ( isset($_POST['token_filedata']) ) {
+                $filedata = urldecode($_POST['token_filedata']);
+                SEC_cleanupFiles($filedata);
+            }
+            $display = COM_siteHeader('menu', $LANG12[26])
+                    . COM_startBlock($LANG12[26], '')
+                    . $LANG04[112]
+                    . COM_endBlock()
+                    . COM_siteFooter();
+            echo $display;
+            exit;
+        }
+        $display  = COM_siteHeader('menu');
+        $display .= SEC_reauthform($destination,$LANG20[9]);
+        $display .= COM_siteFooter();
+        echo $display;
+        exit;
+    }
+    COM_resetSpeedlimit('login', $_SERVER['REMOTE_ADDR']);
     if ( $_SYSTEM['admin_session'] != 0 ) {
         $token = SEC_createTokenGeneral('administration',$_SYSTEM['admin_session']);
         SEC_setCookie('token',$token,0,$_CONF['cookie_path'],$_CONF['cookiedomain'],$_CONF['cookiesecure'],true);
@@ -195,7 +219,6 @@ if ($status == USER_ACCOUNT_ACTIVE) {
   // we have a logged in user - make sure they have permissions to be here...
 } else if (!SEC_isModerator() && !SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR')
          && (count(PLG_getAdminOptions()) == 0)) {
-
     COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
     if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
         if ( isset($_POST['token_filedata']) ) {
