@@ -52,7 +52,7 @@ window.addEvent('domready',function() {
       </tr>
       {captcha}
       <tr>
-        <td colspan="2"><hr{xhtml}></td>
+        <td colspan="2"><div style="border-bottom:1px solid #cccccc"></div></td>
       </tr>
       <tr>
         <td colspan="2">
