@@ -1045,7 +1045,24 @@ function plugin_moderationvalues_story()
     );
 }
 
+/**
+* Counts the number of stories that are submitted
+*
+* @return   int     number of stories in submission queue
+*
+*/
+function plugin_submissioncount_story()
+{
+    global $_TABLES;
 
+    $retval = 0;
+
+    if (plugin_ismoderator_story()) {
+        $retval = DB_count ($_TABLES['storysubmission']);
+    }
+
+    return $retval;
+}
 
 /*
  * START SERVICES SECTION
