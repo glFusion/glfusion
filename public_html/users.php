@@ -1414,6 +1414,14 @@ default:
 
     if ($status == USER_ACCOUNT_ACTIVE) { // logged in AOK.
         SESS_completeLogin($uid);
+        $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
+        if ($_SYSTEM['admin_session'] > 0 ) {
+            if (SEC_isModerator() || SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR')
+                     || (count(PLG_getAdminOptions()) > 0)) {
+                $admin_token = SEC_createTokenGeneral('administration',$_SYSTEM['admin_session']);
+                SEC_setCookie('token',$admin_token,0,$_CONF['cookie_path'],$_CONF['cookiedomain'],$_CONF['cookiesecure'],true);
+            }
+        }
 
         if (!empty($_SERVER['HTTP_REFERER'])
                 && (strstr($_SERVER['HTTP_REFERER'], '/users.php') === false)
