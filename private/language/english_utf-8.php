@@ -47,7 +47,7 @@ $LANG_CHARSET = 'utf-8';
 
 $LANG01 = array(
     1 => 'Contributed by:',
-    2 => 'read more',
+    2 => 'Read more',
     3 => 'comments',
     4 => 'Edit',
     5 => 'Vote',
