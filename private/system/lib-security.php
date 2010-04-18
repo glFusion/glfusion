@@ -288,6 +288,20 @@ function SEC_isModerator()
 }
 
 /**
+* Determines if current user is an Admin of any kind
+*
+* Checks to see if this user is a administrator for any of the GL features OR
+* GL plugins
+*
+* @return   boolean     returns true if user has any admin rights
+*
+*/
+function SEC_isAdmin()
+{
+    return SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR') OR (count(PLG_getAdminOptions()) > 0) OR SEC_inGroup('Root');
+}
+
+/**
 * Checks to see if current user has access to a topic
 *
 * Checks to see if current user has access to a topic
