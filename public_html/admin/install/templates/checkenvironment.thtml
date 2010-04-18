@@ -46,7 +46,7 @@
         </tr>
       </table>
       <h2>{lang_filesystem}</h2>
-      <hr />
+      <div style="margin-bottom:5px;border-bottom:1px solid #cccccc;"></div>
       <table style="width:714px;">
         <!-- BEGIN perms -->
         <tr class="Row{rowclass}">
