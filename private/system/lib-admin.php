@@ -62,7 +62,12 @@ function ADMIN_getIcons()
 {
     global $_CONF, $_IMAGE_TYPE, $LANG_ADMIN;
 
-    $icons_type_arr = array('add', 'edit', 'copy', 'delete', 'list', 'mail', 'group', 'user', 'check', 'greycheck', 'cross', 'disk', 'accept', 'addchild', 'blank');
+    $icons_type_arr = array('add', 'edit', 'copy', 'delete',
+                            'list', 'mail', 'group', 'user',
+                            'greyuser','check', 'greycheck',
+                            'cross', 'disk', 'accept', 'addchild',
+                            'blank'
+                            );
     $icon_arr = array();
     foreach ($icons_type_arr as $icon_type) {
         $icon_url = "{$_CONF['layout_url']}/images/admin/$icon_type.$_IMAGE_TYPE";

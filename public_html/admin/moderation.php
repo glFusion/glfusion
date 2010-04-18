@@ -40,6 +40,14 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
+
+$display = '';
+if (!SEC_isModerator()) {
+    $display = COM_refresh($_CONF['site_url'] . '?msg=200');
+    echo $display;
+    exit;
+}
+
 require_once 'auth.inc.php';
 
 USES_lib_user();
@@ -85,7 +93,7 @@ function MODERATE_submissions()
  */
 function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr)
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $_IMAGE_TYPE;
+    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG28, $_IMAGE_TYPE;
 
     $retval = '';
 
@@ -131,7 +139,9 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr)
             $username = DB_getItem($_TABLES['users'], 'username',
                                    "uid = ". (int) $A['uid']);
             if ($A['uid'] == 1) {
-                $retval = $username;
+                $retval = $icon_arr['greyuser']
+                            . '&nbsp;&nbsp;'
+                            . '<span style="vertical-align:top">' . $username . '</span>';
             } else {
                 $attr['title'] = $LANG28[108];
                 $url = $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' .  $A['uid'];
