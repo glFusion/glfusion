@@ -1324,10 +1324,10 @@ function USER_list($grp_id)
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/user.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
-        array('url' => $_CONF['site_admin_url'] . '/group.php',
-              'text' => $LANG_ADMIN['admin_groups']),
         array('url' => $_CONF['site_admin_url'] . '/moderation.php',
               'text' => $LANG_ADMIN['submissions']),
+        array('url' => $_CONF['site_admin_url'] . '/group.php',
+              'text' => $LANG_ADMIN['admin_groups']),
         array('url' => $_CONF['site_admin_url'] . '/user.php?import=x',
               'text' => $LANG28[23]),
         array('url' => $_CONF['site_admin_url'] . '/user.php?batchadmin=x',
