@@ -88,11 +88,12 @@ function ADMIN_getIcons()
 * @param    array   $data_arr       array with sql query data - array of list records
 * @param    array   $options_arr    array of options - used for check-all feature
 * @param    array   $form_arr       optional extra forms at top or bottom
+* @param    string  $extra          additional values passed to fieldfunction
 * @return   string                  HTML output of function
 *
 */
 function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
-                           $data_arr, $options_arr = '', $form_arr='')
+                           $data_arr, $options_arr = '', $form_arr='', $extra='')
 {
     global $_CONF, $_TABLES, $LANG01, $LANG_ADMIN, $LANG_ACCESS, $MESSAGE,
            $_IMAGE_TYPE;
@@ -207,7 +208,9 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
                 if (!empty($data_arr[$i][$fieldname])) {
                     $fieldvalue = $data_arr[$i][$fieldname];
                 }
-                if (!empty($fieldfunction)) {
+                if (!empty($fieldfunction) && !empty($extra)) {
+                    $fieldvalue = $fieldfunction($fieldname, $fieldvalue, $data_arr[$i], $icon_arr, $extra);
+                } elseif(!empty($fieldfunction)) {
                     $fieldvalue = $fieldfunction($fieldname, $fieldvalue, $data_arr[$i], $icon_arr);
                 } else {
                     $fieldvalue = $fieldvalue;
