@@ -1148,6 +1148,9 @@ $LANG29 = array(
     44 => 'Approve all selected items',
     45 => 'Are you sure you want to approve the selected item(s)?',
     46 => 'Submitted By',
+    47 => 'Registered On',
+    48 => 'Are you sure you want to approve this submission?',
+    49 => 'Are you sure you want to delete this submission?',
     'info' => 'Use this panel to Edit, Approve or Delete submissions.  The submission queue option for any given item type must be enabled in the glFusion or Plugin Configuration in order for items to be queued here for administrative approval.<br /><br />To view or edit a submitted item, click the Edit icon.  To approve or delete one or more items, click the checkbox next to that item, and then click the corresponding action icon. Note that only one item type may be moderated at one time.  '
 );
 
