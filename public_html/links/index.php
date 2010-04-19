@@ -382,7 +382,7 @@ function prepare_link_item ($A, &$template)
             $A['perm_group'], $A['perm_members'], $A['perm_anon']) == 3) &&
             SEC_hasRights ('links.edit')) {
         $editurl = $_CONF['site_admin_url']
-                 . '/plugins/links/index.php?mode=edit&amp;lid=' . $A['lid'];
+                 . '/plugins/links/index.php?edit=x&amp;lid=' . $A['lid'];
         $template->set_var ('link_edit', COM_createLink($LANG_ADMIN['edit'],$editurl));
         $edit_icon = "<img src=\"{$_CONF['layout_url']}/images/edit.$_IMAGE_TYPE\" "
             . "alt=\"{$LANG_ADMIN['edit']}\" title=\"{$LANG_ADMIN['edit']}\"" . XHTML . ">";
@@ -430,7 +430,7 @@ if ( $mode == 'submit' ) {
     if (SEC_hasRights ("links.edit") ||
         SEC_hasRights ("links.admin"))  {
         echo COM_refresh ($_CONF['site_admin_url']
-                . "/plugins/links/index.php?mode=edit");
+                . "/plugins/links/index.php?edit=x");
         exit;
     }
 
@@ -487,7 +487,7 @@ if (($mode == 'report') && (isset($_USER['uid']) && ($_USER['uid'] > 1))) {
         list($url, $title) = DB_fetchArray($result);
 
         $editurl = $_CONF['site_admin_url']
-                 . '/plugins/links/index.php?mode=edit&lid=' . $lid;
+                 . '/plugins/links/index.php?edit=x&lid=' . $lid;
         $msg = $LANG_LINKS[119] . LB . LB . "$title, <$url>". LB . LB
              .  $LANG_LINKS[120] . LB . '<' . $editurl . '>' . LB . LB
              .  $LANG_LINKS[121] . $_USER['username'] . ', IP: '
