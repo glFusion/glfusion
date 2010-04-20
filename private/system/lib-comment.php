@@ -351,7 +351,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                         )
                     );
                 } else {
-                    $template->set_var( 'author_photo', '<img src="'.$_CONF['site_url'].'/images/userphotos/default.jpg" alt="" class="userphoto"/>' );
+                    $template->set_var( 'author_photo', '<img src="'.$_CONF['default_photo'].'" alt="" class="userphoto"/>' );
                     $template->set_var( 'camera_icon', '' );
                 }
             } else {
@@ -380,7 +380,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             $template->set_var( 'author_link', htmlspecialchars($username,ENT_COMPAT,COM_getEncodingt() ));
 
             if( $_CONF['allow_user_photo'] ) {
-                $template->set_var( 'author_photo', '<img src="'.$_CONF['site_url'].'/images/userphotos/default.jpg" alt="" class="userphoto"/>' );
+                $template->set_var( 'author_photo', '<img src="'.$_CONF['default_photo'].'" alt="" class="userphoto"/>' );
                 $template->set_var( 'camera_icon', '' );
             } else {
                 $template->set_var( 'author_photo', '' );
