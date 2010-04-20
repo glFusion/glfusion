@@ -238,7 +238,7 @@ function SEC_inGroup($grp_to_verify,$uid='',$cur_grp_id='')
         }
     }
 
-    if ( $uid == 1 || (isset($_USER['uid']) && $uid == $_USER['uid'])) {
+    if ( (isset($_USER['uid']) && $uid == $_USER['uid'])) {
         if (empty ($_GROUPS)) {
             $_GROUPS = SEC_getUserGroups ($uid);
         }

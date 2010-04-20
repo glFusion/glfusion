@@ -337,20 +337,23 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             $photo = '';
             if( $_CONF['allow_user_photo'] ) {
                 if (isset ($A['photo']) && empty ($A['photo'])) {
-                    $A['photo'] = '(none)';
+                    $A['photo'] = '';
                 }
                 $photo = USER_getPhoto( $A['uid'], $A['photo'], $A['email'] );
-            }
-            if( !empty( $photo )) {
-                $template->set_var( 'author_photo', $photo );
-                $camera_icon = '<img src="' . $_CONF['layout_url']
-                    . '/images/smallcamera.' . $_IMAGE_TYPE . '" alt=""' . XHTML . '>';
-                $template->set_var( 'camera_icon',
-                    COM_createLink(
-                        $camera_icon,
-                        $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $A['uid']
-                    )
-                );
+                if( !empty( $photo ) ) {
+                    $template->set_var( 'author_photo', $photo );
+                    $camera_icon = '<img src="' . $_CONF['layout_url']
+                        . '/images/smallcamera.' . $_IMAGE_TYPE . '" alt=""' . XHTML . '>';
+                    $template->set_var( 'camera_icon',
+                        COM_createLink(
+                            $camera_icon,
+                            $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $A['uid']
+                        )
+                    );
+                } else {
+                    $template->set_var( 'author_photo', '<img src="'.$_CONF['site_url'].'/images/userphotos/default.jpg" alt="" class="userphoto"/>' );
+                    $template->set_var( 'camera_icon', '' );
+                }
             } else {
                 $template->set_var( 'author_photo', '' );
                 $template->set_var( 'camera_icon', '' );
@@ -368,11 +371,21 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             );
 
         } else {
-            $template->set_var( 'author', strip_tags(USER_sanitizeName($A['name'] )));
-            $template->set_var( 'author_fullname', strip_tags(USER_sanitizeName($A['name'] )));
-            $template->set_var( 'author_link', htmlspecialchars(strip_tags(USER_sanitizeName($A['name'] )),ENT_COMPAT,COM_getEncodingt() ));
-            $template->set_var( 'author_photo', '' );
-            $template->set_var( 'camera_icon', '' );
+            $username = strip_tags(USER_sanitizeName(trim($A['name'])));
+            if ( $username == '' ) {
+                $username = $LANG01[24];
+            }
+            $template->set_var( 'author', $username);
+            $template->set_var( 'author_fullname', $username);
+            $template->set_var( 'author_link', htmlspecialchars($username,ENT_COMPAT,COM_getEncodingt() ));
+
+            if( $_CONF['allow_user_photo'] ) {
+                $template->set_var( 'author_photo', '<img src="'.$_CONF['site_url'].'/images/userphotos/default.jpg" alt="" class="userphoto"/>' );
+                $template->set_var( 'camera_icon', '' );
+            } else {
+                $template->set_var( 'author_photo', '' );
+                $template->set_var( 'camera_icon', '' );
+            }
             $template->set_var( 'start_author_anchortag', '' );
             $template->set_var( 'end_author_anchortag', '' );
         }
@@ -908,7 +921,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             	$comment_template->set_var('cid', '');
             }
 
-            if (!empty($_USER['username'])) {
+            if (! COM_isAnonUser()) {
             	$comment_template->set_var('CSRF_TOKEN', SEC_createToken());
                 $comment_template->set_var('uid', $_USER['uid']);
                 $name = COM_getDisplayName($_USER['uid'], $_USER['username'],$_USER['fullname']);
