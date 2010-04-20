@@ -247,7 +247,7 @@ function install_config($site_url)
     $c->add('fs_comments', NULL, 'fieldset', 4, 21, NULL, 0, TRUE);
     $c->add('commentspeedlimit',45,'text',4,21,NULL,1640,TRUE);
     $c->add('comment_limit',100,'text',4,21,NULL,1650,TRUE);
-    $c->add('comment_mode','threaded','select',4,21,11,1660,TRUE);
+    $c->add('comment_mode','nested','select',4,21,11,1660,TRUE);
     $c->add('comment_code',0,'select',4,21,17,1670,TRUE);
     $c->add('comment_edit',0,'select',4,21,0,1680,TRUE);
     $c->add('comment_edittime',1800,'text',4,21,NULL,1690,TRUE);
