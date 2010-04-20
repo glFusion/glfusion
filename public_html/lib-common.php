@@ -130,6 +130,10 @@ $config->initConfig();
 
 $_CONF = $config->get_config('Core');
 
+if ( !isset($_CONF['default_photo']) || $_CONF['default_photo'] == '' ) {
+    $_CONF['default_photo'] = $_CONF['site_url'].'/images/userphotos/default.jpg';
+}
+
 // Before we do anything else, check to ensure site is enabled
 
 if (isset($_SYSTEM['site_enabled']) && !$_SYSTEM['site_enabled']) {
