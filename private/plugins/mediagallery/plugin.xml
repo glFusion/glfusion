@@ -2,7 +2,7 @@
     <id>mediagallery</id>
     <name>Media Gallery</name>
     <description>Online Media Management System (Photo Albums, etc.)</description>
-    <version>1.6.10/version>
+    <version>1.6.10</version>
     <glfusionversion>1.2.0</glfusionversion>
     <phpversion>4.3.0</phpversion>
     <url>http://www.glfusion.org</url>
