@@ -389,7 +389,7 @@ function MODERATE_itemList($type='', $token)
 
             case 'user': // user -----------------------------------------------
 
-                $result = DB_query ("SELECT uid,username,fullname,email,regdate FROM {$_TABLES['users']} WHERE status = 2");
+                $result = DB_query ("SELECT uid,username,fullname,email,UNIX_TIMESTAMP(regdate) AS day FROM {$_TABLES['users']} WHERE status = 2");
                 $nrows = DB_numRows($result);
 
                 if ($nrows > 0) {
@@ -399,7 +399,6 @@ function MODERATE_itemList($type='', $token)
                         $A['edit'] = $_CONF['site_admin_url'].'/user.php?edit=x&amp;uid='.$A['uid'];
                         $A['fullname'] = stripslashes($A['fullname']);
                         $A['email'] = stripslashes($A['email']);
-                        $A['day'] = $A['regdate'];
                         $A['_type_'] = 'user';
                         $A['_key_'] = 'uid';
                         $data_arr[$i] = $A;
