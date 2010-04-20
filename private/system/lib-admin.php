@@ -60,7 +60,7 @@ function ADMIN_chkDefault($A = array())
 */
 function ADMIN_sortList(&$data, $field)
 {
-    $code = "return strnatcmp(\a$['$field'], \$b['$field']);";
+    $code = "return strnatcmp(\$a['$field'], \$b['$field']);";
     usort($data, create_function('$a,$b', $code));
 }
 
@@ -78,7 +78,8 @@ function ADMIN_getIcons()
                             'list', 'mail', 'group', 'user',
                             'greyuser','check', 'greycheck',
                             'cross', 'disk', 'accept', 'addchild',
-                            'update', 'wrench', 'blank'
+                            'update', 'wrench', 'info', 'greyinfo',
+                            'blank'
                             );
     $icon_arr = array();
     foreach ($icons_type_arr as $icon_type) {

@@ -40,6 +40,7 @@
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
+require_once $_CONF['path'] . 'filecheck_data.php';
 
 // Uncomment the line below if you need to debug the HTTP variables being passed
 // to the script.  This will sometimes cause errors but it will allow you to see
@@ -64,36 +65,6 @@ if (!SEC_hasrights ('plugin.edit')) {
     COM_accessLog ("User {$_USER['username']} tried to illegally access the plugin administration screen.");
     echo $display;
     exit;
-}
-
-function PLUGINS_getPluginXML($pluginDir)
-{
-    global $_CONF, $pluginData;
-
-    if (!$dh = @opendir($pluginDir)) {
-        return false;
-    }
-
-    $filename = $pluginDir . '/plugin.xml';
-
-    if (!($fp=@fopen($filename, "r"))) {
-        return -1;
-    }
-
-    $pluginData = array();
-
-    if (!($xml_parser = xml_parser_create()))
-        return false;
-
-    xml_set_element_handler($xml_parser,"PLUGINS_startElementHandler","PLUGINS_endElementHandler");
-    xml_set_character_data_handler( $xml_parser, "PLUGINS_characterDataHandler");
-
-    while( $data = fread($fp, 4096)){
-        if(!xml_parse($xml_parser, $data, feof($fp))) {
-            break;
-        }
-    }
-    xml_parser_free($xml_parser);
 }
 
 /**
@@ -192,7 +163,7 @@ function PLUGINS_characterDataHandler($parser, $data)
             $pluginData['url'] = $data;
             break;
         case 'maintainer' :
-            $pluginData['author'] = $data;
+            $pluginData['maintainer'] = $data;
             break;
         case 'database' :
             $pluginData['database'] = $data;
@@ -210,6 +181,43 @@ function PLUGINS_characterDataHandler($parser, $data)
             $pluginData['renamedist'][] = $data;
             break;
     }
+}
+
+/**
+* Parses the plugin.xml form to the global $pluginData
+*
+*/
+function PLUGINS_getPluginXML($pluginDir)
+{
+    global $_CONF, $pluginData;
+
+    if (!$dh = @opendir($pluginDir)) {
+        return false;
+    }
+
+    $filename = $pluginDir . '/plugin.xml';
+
+    if (!($fp=@fopen($filename, "r"))) {
+        return false;
+    }
+
+    $pluginData = array();
+
+    if (!($xml_parser = xml_parser_create())) {
+        return false;
+    }
+
+    xml_set_element_handler($xml_parser,"PLUGINS_startElementHandler","PLUGINS_endElementHandler");
+    xml_set_character_data_handler( $xml_parser, "PLUGINS_characterDataHandler");
+
+    while( $data = fread($fp, 4096)){
+        if(!xml_parse($xml_parser, $data, feof($fp))) {
+            break;
+        }
+    }
+    xml_parser_free($xml_parser);
+
+    return $pluginData;
 }
 
 /**
@@ -240,42 +248,54 @@ function PLUGINS_showUploadForm($token)
 * Adds installed plugins to the list
 *
 */
-function PLUGINS_installedPlugins()
+function PLUGINS_loadPlugins(&$data_arr)
 {
-    global $_TABLES, $data_arr;
+    global $_CONF, $_TABLES, $glfPlugins;
 
     $result = DB_query("SELECT pi_name,pi_version,pi_gl_version,pi_enabled,pi_homepage FROM {$_TABLES['plugins']} WHERE 1=1");
     $rows = DB_numRows($result);
+
     for ($i=0; $i<$rows; $i++) {
-        $data_arr[] = DB_fetchArray($result);
+        $P = DB_fetchArray($result);
+        $pluginData = PLUGINS_getPluginXML($_CONF['path'] . 'plugins/' . $P['pi_name']);
+        // ok the plugin is in the plugins table, so it's installed
+        $P['installed'] = 1;
+        // determine the plugin code version
+        if ($P['pi_enabled'] == 1) {
+            $P['pi_code_version'] = PLG_chkVersion($P['pi_name']);
+        } else {
+            $P['pi_code_version'] = (is_array($pluginData)) ? $pluginData['version'] : '0.0.0';
+        }
+        $P['name'] = (is_array($pluginData)) ? $pluginData['name'] : '';
+        $P['description'] = (is_array($pluginData)) ? $pluginData['description'] : '';
+        $P['maintainer'] = (is_array($pluginData)) ? $pluginData['maintainer'] : '';
+        $P['phpversion'] = (is_array($pluginData)) ? $pluginData['phpversion'] : '';
+        $P['glfusionversion'] = (is_array($pluginData)) ? $pluginData['glfusionversion'] : '';
+        $P['update'] = (($P['pi_enabled'] == 1) AND ($P['pi_version'] <> $P['pi_code_version'])) ? 1 : 0;
+        $P['bundled'] = (in_array($P['pi_name'], $glfPlugins)) ? 1 : 0;
+        $data_arr[] = $P;
     }
-    return $rows;
+    return;
 }
 
 /**
 * Adds new/uninstalled plugins (if any) to the list
 *
 */
-function PLUGINS_newPlugins()
+function PLUGINS_loadNewPlugins(&$data_arr)
 {
-    global $_CONF, $_TABLES, $LANG32, $data_arr, $pluginData;
+    global $_CONF, $_TABLES, $LANG32, $glfIgnore;
 
-    $plugins = array ();
     $plugins_dir = $_CONF['path'] . 'plugins/';
     $fd = opendir($plugins_dir);
-    $found = 0;
-    $retval = '';
-    while (($dir = @readdir ($fd)) == TRUE) {
-        if (($dir <> '.') && ($dir <> '..') && ($dir <> 'CVS') &&
-           ($dir <> '.svn') && (substr($dir, 0 , 1) <> '.') && is_dir($plugins_dir . $dir)) {
+
+    while (($pi_name = @readdir ($fd)) == TRUE) {
+        if ((!in_array($pi_name, $glfIgnore)) && is_dir($plugins_dir . $pi_name)) {
             clearstatcache ();
-            // Check and see if this plugin is installed - if there is a record.
-            // If not then it's a new plugin
-            if (DB_count($_TABLES['plugins'],'pi_name',$dir) == 0) {
-                // additionally, check if a 'functions.inc' exists
-                if (file_exists ($plugins_dir . $dir . '/functions.inc')) {
-                    // and finally, since we're going to link to it, check if
-                    // an install script exists
+            if (DB_count($_TABLES['plugins'], 'pi_name', $pi_name) == 0) {
+                // plugin is not in the plugins table, check prereqs for installation
+                if (file_exists ($plugins_dir . $pi_name . '/functions.inc')) {
+                    // functions.inc exists (essential)
                     $adminurl = $_CONF['site_admin_url'];
                     if (strrpos ($adminurl, '/') == strlen ($adminurl)) {
                         $adminurl = substr ($adminurl, 0, -1);
@@ -288,30 +308,33 @@ function PLUGINS_newPlugins()
                         $admindir = $_CONF['path_html']
                                   . substr ($adminurl, $pos + 1);
                     }
-                    $fh = @fopen ($admindir . '/plugins/' . $dir
+                    $fh = @fopen ($admindir . '/plugins/' . $pi_name
                         . '/install.php', 'r');
                     if ($fh) {
+                        // ok if we got here, we have an install.php
                         fclose ($fh);
-                        $rc = PLUGINS_getPluginXML($_CONF['path'] . 'plugins/' . $dir);
-                        $url = ($rc <> -1) ? $pluginData['url'] : '';
-                        $glfusionversion = ($rc <> -1) ? $pluginData['glfusionversion'] : '';
-                        $version = ($rc <> -1) ? $pluginData['version'] : '';
+                        // so all we have is a name at this point, try to parse a plugin.xml
+                        $pluginData = PLUGINS_getPluginXML($_CONF['path'] . 'plugins/' . $pi_name);
                         $data_arr[] = array(
-                            'install' => true,
-                            'pi_name' => $dir,
-                            'pi_homepage' => $url,
-                            'pi_gl_version' => $glfusionversion,
-                            'pi_code_version' => $version
+                            'installed' => 0,
+                            'bundled' => 0,
+                            'update' => 0,
+                            'pi_name' => $pi_name,
+                            'pi_homepage' => ((is_array($pluginData)) ? $pluginData['url'] : ''),
+                            'pi_gl_version' => ((is_array($pluginData)) ? $pluginData['glfusionversion'] : '0.0.0'),
+                            'pi_code_version' => ((is_array($pluginData)) ? $pluginData['version'] : '0.0.0'),
+                            'name' => ((is_array($pluginData)) ? $pluginData['name'] : ''),
+                            'description' => ((is_array($pluginData)) ? $pluginData['description'] : ''),
+                            'maintainer' => ((is_array($pluginData)) ? $pluginData['maintainer'] : ''),
+                            'phpversion' => ((is_array($pluginData)) ? $pluginData['phpversion'] : ''),
+                            'glfusionversion' => ((is_array($pluginData)) ? $pluginData['glfusionversion'] : ''),
                         );
-
-                        $A['pi_homepage'] = (!empty($pluginData['url'])) ? $pluginData['url'] : '';
-                        $found++;
                     }
                 }
             }
         }
     }
-    return ($found > 0) ? true : false;
+    return;
 }
 
 /**
@@ -335,6 +358,7 @@ function PLUGINS_update($pi_name)
 
         return $retval;
     }
+
     $result = PLG_upgrade ($pi_name);
     if ($result > 0 ) {
         if ($result === TRUE) { // Catch returns that are just true/false
@@ -414,23 +438,18 @@ function PLUGINS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
     $retval = false;
 
-    $install = $A['install'];
+    $update = ($A['update'] == 1) ? true : false;
+    $bundled = ($A['bundled'] == 1) ? true : false;
+    $installed = ($A['installed'] == 1) ? true : false;
     $enabled = ($A['pi_enabled'] == 1) ? true : false;
-    if ($install) {
-        $code_version = $A['pi_code_version'];
-    } elseif ($enabled) {
-        $code_version = PLG_chkVersion($A['pi_name']);
-    } else {
-        $rc = PLUGINS_getPluginXML($_CONF['path'] . 'plugins/' . $A['pi_name']);
-        $code_version = ($rc <> -1) ? $pluginData['version'] : '?.?.?';
-    }
 
     switch($fieldname) {
 
         case 'control':
-            if ($install) {
+            if (!$installed) {
                 $attr['title'] = $LANG32[60];
-                $retval = COM_createLink($icon_arr['wrench'],
+                $attr['onclick'] = 'return confirm(\'' . $LANG32[80] . '\');';
+                $retval = COM_createLink($icon_arr['add'],
                     $_CONF['site_admin_url'] . '/plugins/' . $A['pi_name'] . '/install.php'
                     . '?action=install'
                     . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
@@ -449,58 +468,75 @@ function PLUGINS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 $retval .= '<input type="hidden" name="pluginarray['.$A['pi_name'].']" value="1" />';
             }
             break;
-/*
-        case 'pi_name' :
-            if ($install) {
-                $retval = $fieldvalue;
+
+        case 'version':
+                if ($update) {
+                    $retval = $A['pi_version'] . '&nbsp;';
+                    $attr['title'] = $LANG32[38];
+                    $attr['onclick'] = 'return confirm(\'' . $LANG32[77] . '\');';
+                    $attr['style'] = 'vertical-align:top;';
+                    $retval .= COM_createLink($icon_arr['update'],
+                        $_CONF['site_admin_url'] . '/plugins.php'
+                        . '?update=x'
+                        . '&amp;pi_name=' . $A['pi_name']
+                        . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+                    $retval .= '&nbsp;<span class="warning">'
+                        . $A['pi_code_version']
+                        . '</span><br ' . XHTML . '>';
+                } elseif ($enabled) {
+                    $retval = $A['pi_version'];
+                } elseif (!$installed) {
+                    $retval = '<span class="disabledfield">' . $A['pi_code_version'] . '</span>';
+                } else {
+                    $retval = '<span class="disabledfield">' . $A['pi_version'] . '</span>';
+                }
+                break;
+
+        case 'info':
+            $tip = $A['name']
+                . '::'
+                . $A['description']
+                . '<p><b>' . $LANG32[81] . ':</b></p>'
+                . '<p>' . $A['maintainer'] . '</p>'
+                . '<p><b>' . $LANG32[82] . ':</b></p>'
+                . '<p>glFusion: v' . $A['glfusionversion'] . '<br />' . 'PHP: v' . $A['phpversion'] . '</p>';
+            $attr['class'] = 'gl_mootip';
+            $attr['title'] = $tip;
+             if ($enabled) {
+                $retval = COM_createLink($icon_arr['info'], '#', $attr);
+             } else {
+                $retval = COM_createLink($icon_arr['greyinfo'], '#', $attr);
+             }
+             break;
+
+        case 'bundled':
+            if ($bundled) {
+                $retval = ($enabled) ? $icon_arr['check'] : $icon_arr['greycheck'];
+            } else {
+                $retval = '';
+            }
+            break;
+
+        case 'pi_homepage':
+            if ($enabled) {
+                $attr['target'] = '_blank';
+                $retval = COM_createLink(stripslashes($fieldvalue), $fieldvalue, $attr);
             } else {
                 $retval = ($enabled) ? $fieldvalue : '<span class="disabledfield">' . $fieldvalue . '</span>';
             }
             break;
-*/
-        case 'pi_code_version':
-            $fieldvalue = $code_version;
-            if ($enabled) {
-                $retval = ($fieldvalue <> $A['pi_version']) ? '<span class="warning">' . $fieldvalue . '</span>' : $fieldvalue;
-            } else {
-                $retval = '<span class="disabledfield">' . $fieldvalue . '</span>';
-            }
-            break;
 
-        case 'pi_version':
-            if ($enabled) {
-                $retval = ($fieldvalue <> $code_version) ? '<span class="warning">' . $fieldvalue . '</span>' : $fieldvalue;
-            } else {
-                $retval = '<span class="disabledfield">' . $fieldvalue . '</span>';
-            }
-            break;
-
-        case 'update':
-            if ($enabled AND ($A['pi_version'] <> $code_version)) {
-                $retval = '';
-                $attr['title'] = $LANG32[38];
-                $attr['onclick'] = 'return confirm(\'' . $LANG32[77] . '\');';
-                $retval .= COM_createLink($icon_arr['update'],
-                    $_CONF['site_admin_url'] . '/plugins.php'
-                    . '?update=x'
-                    . '&amp;pi_name=' . $A['pi_name']
-                    . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
-            } else {
-                $retval = '';
-            }
-            break;
-
-        case 'delete':
-            if ($install) {
-                $retval = '';
-            } else {
-                $attr['title'] = $LANG_ADMIN['delete'];
+        case 'unplug':
+            if ($installed) {
+                $attr['title'] = $LANG32[79];
                 $attr['onclick'] = 'return doubleconfirm(\'' . $LANG32[76] . '\',\'' . $LANG32[31] . '\');';
                 $retval = COM_createLink($icon_arr['delete'],
                     $_CONF['site_admin_url'] . '/plugins.php'
                     . '?delete=x'
                     . '&amp;pi_name=' . $A['pi_name']
                     . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            } else {
+                $retval = '';
             }
             break;
 
@@ -540,18 +576,20 @@ function PLUGINS_list($token)
     $retval .= PLUGINS_showUploadForm($token);  // show the plugin upload form
 
     $data_arr = array();
-    $oldplugins = PLUGINS_installedPlugins();   // installed plugins
-    $newplugins = PLUGINS_newPlugins();         // uninstalled/new plugins
+    PLUGINS_loadPlugins($data_arr);             // installed plugins
+    PLUGINS_loadNewPlugins($data_arr);          // uninstalled/new plugins
+
+    ADMIN_sortList($data_arr,'pi_name');        // default sort for now (fancier later)
 
     $header_arr = array(
         array('text' => $LANG32[78], 'field' => 'control', 'align' => 'center', 'width' => '40px'),
         array('text' => $LANG32[16], 'field' => 'pi_name'),
-        array('text' => $LANG32[27], 'field' => 'pi_homepage'),
+        array('text' => $LANG32[36], 'field' => 'version', 'align' => 'center', 'nowrap' => true, 'width' => '75px'),
+        array('text' => $LANG32[83], 'field' => 'info', 'align' => 'center', 'width' => '40px'),
+        array('text' => $LANG32[84], 'field' => 'bundled', 'align' => 'center', 'width' => '40px'),
+        array('text' => $LANG32[27], 'field' => 'pi_homepage', 'width' => '150px'),
         array('text' => $LANG32[18], 'field' => 'pi_gl_version', 'align' => 'center', 'width' => '75px'),
-        array('text' => $LANG32[36], 'field' => 'pi_code_version', 'align' => 'center', 'width' => '75px'),
-        array('text' => $LANG32[17], 'field' => 'pi_version', 'align' => 'center', 'width' => '75px'),
-        array('text' => $LANG32[38], 'field' => 'update', 'align' => 'center','width' => '40px'),
-        array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'align' => 'center', 'width' => '40px'),
+        array('text' => $LANG32[79], 'field' => 'unplug', 'align' => 'center', 'width' => '40px'),
     );
 
     $text_arr = array(
