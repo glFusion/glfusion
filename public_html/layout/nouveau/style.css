@@ -2862,3 +2862,18 @@ border: 1px solid #666666;
 .bbc-buttons a.button2, .bbc-buttons input.button2 {
 border: 1px solid #666666;
 }
+.userphoto {
+width:50px;
+border:1px solid #ccc;
+padding:2px;
+}
+.groupauthor {
+background:#eef7dd !important;
+border:1px solid #9acc2e !important;
+color:green !important;
+}
+.articleauthor {
+background:#d8e5f8 !important;
+border:1px solid #629de3 !important;
+color:#0055bb !important;
+}
