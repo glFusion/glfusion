@@ -38,7 +38,7 @@ if (!defined ('GVERSION')) {
 
 // these file/dir names will be completely ignored, and not checked
 
-$glfIgnore = array('.','..','.svn','cgi-bin','.htaccess');
+$glfIgnore = array('.','..','.svn','CVS','cgi-bin','.htaccess','robots.txt');
 
 // these are the bundled plugins.  they are fully defined/checked as below
 
@@ -301,9 +301,9 @@ $glfDir = array(
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/calendar/images' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/captcha' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/captcha/class' ),
-    array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/docs' ),
-    array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/docs/english' ),
-    array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/docs/images' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/docs' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/docs/english' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/docs/images' ),
 // fckeditor
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/fckeditor' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/fckeditor/editor' ),
@@ -3697,7 +3697,6 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/admin/moderation/index.html' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/admin/moderation/moderation.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/admin/plugins/custom/index.html' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/admin/plugins/editor.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/admin/plugins/index.html' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/admin/plugins/plugin_upload_confirm.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/admin/plugins/plugin_upload_form.thtml' ),
@@ -4493,7 +4492,7 @@ $glfFile = array(
 // public core files (cont'd)
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/privpol.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/profiles.php' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/robots.txt' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/robots.txt.sample' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/search.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/siteconfig.php.dist' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/siteconfig.php' ),

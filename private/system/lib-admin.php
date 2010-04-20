@@ -53,6 +53,18 @@ function ADMIN_chkDefault($A = array())
 }
 
 /**
+* Sorts a multi-dimensional associative array $data by column $field
+*
+* See: http://www.the-art-of-web.com/php/sortarray/
+*
+*/
+function ADMIN_sortList(&$data, $field)
+{
+    $code = "return strnatcmp(\a$['$field'], \$b['$field']);";
+    usort($data, create_function('$a,$b', $code));
+}
+
+/**
 * Create a list of admin icons, for use in admin/list functions
 *
 * These images should be available in public_html/layout/theme/images/admin
@@ -66,7 +78,7 @@ function ADMIN_getIcons()
                             'list', 'mail', 'group', 'user',
                             'greyuser','check', 'greycheck',
                             'cross', 'disk', 'accept', 'addchild',
-                            'blank'
+                            'update', 'wrench', 'blank'
                             );
     $icon_arr = array();
     foreach ($icons_type_arr as $icon_type) {
