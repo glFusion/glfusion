@@ -529,7 +529,7 @@ function SEC_getUserPermissions($grp_id='',$uid='')
         }
     }
 
-    if ((empty ($_USER['uid']) && ($uid == 1)) || ($uid == $_USER['uid'])) {
+    if ( (isset($_USER['uid']) && $uid == $_USER['uid'])) {
         if (empty ($_GROUPS)) {
             $_GROUPS = SEC_getUserGroups ($uid);
         }
@@ -685,7 +685,7 @@ function SEC_getFeatureGroup ($feature, $uid = '')
         }
     }
 
-    if ((empty ($_USER['uid']) && ($uid == 1)) || ($uid == $_USER['uid'])) {
+    if ( (isset($_USER['uid']) && $uid == $_USER['uid'])) {
         if (empty ($_GROUPS)) {
             $_GROUPS = SEC_getUserGroups ($uid);
         }
