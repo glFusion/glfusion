@@ -134,6 +134,10 @@ if ( !isset($_CONF['default_photo']) || $_CONF['default_photo'] == '' ) {
     $_CONF['default_photo'] = $_CONF['site_url'].'/images/userphotos/default.jpg';
 }
 
+if ( !isset($_SYSTEM['admin_session']) ) {
+    $_SYSTEM['admin_session'] = 1200;
+}
+
 // Before we do anything else, check to ensure site is enabled
 
 if (isset($_SYSTEM['site_enabled']) && !$_SYSTEM['site_enabled']) {
