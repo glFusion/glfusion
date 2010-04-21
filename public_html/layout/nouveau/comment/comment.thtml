@@ -3,7 +3,7 @@
 you can also duplicate the php code and add another group name and css class to echo #}
 <div class="comment" style="padding-left:{indent}px; margin-bottom:10px; clear:right;">
     <div class="commenttitle
-<?php if (SEC_inGroup('root',$this->get_var('author_id'))) { echo " groupauthor"; } ?>
+<?php if (SEC_inGroup('Root',$this->get_var('author_id'))) { echo " groupauthor"; } ?>
 {!if author_match}
  articleauthor
 {!endif}
