@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-{# change root below to any glFusion group name, for example Logged-in Users. 
+{# change root below to any glFusion group name, for example Logged-in Users.
 you can also duplicate the php code and add another group name and css class to echo #}
 <div class="comment" style="padding-left:{indent}px; margin-bottom:10px; clear:right;">
     <div class="commenttitle
@@ -23,4 +23,5 @@ you can also duplicate the php code and add another group name and css class to 
    </span>
   </div>
 </div>
+<div style="clear:both;"></div>
 {# end {templatelocation} #}
