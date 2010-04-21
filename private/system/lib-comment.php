@@ -273,6 +273,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                 $A['email'] = '';
             }
         }
+        $A['name'] = $A['username'];
         $mode = 'flat';
     } else {
         $A = DB_fetchArray( $comments );
