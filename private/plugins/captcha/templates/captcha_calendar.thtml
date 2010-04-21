@@ -1,8 +1,5 @@
 {# begin {templatelocation} #}
 {!if recaptcha}
-<table width="100%" style="border:none;">
-<tr><td class="pluginCellSubTitle">&nbsp;</td>
-<td class="pluginCellText pluginCellFill">
 <script type="text/javascript">
 //<![CDATA[
 var RecaptchaOptions = {
@@ -10,14 +7,10 @@ var RecaptchaOptions = {
 };
 //]]>
 </script>
-  {recaptcha}
-</td>
-</tr>
-</table>
+<div style="width:318px;border:1px solid #ccc;margin:10px 0 10px 105px;">
+    {recaptcha}
+</div>
 {!else}
-<table width="100%" style="border:none;">
-  <tr>
-    <td {colone}>
 <script type="text/javascript">
 //<![CDATA[
 var counter = 0;
@@ -42,13 +35,11 @@ function new_captcha()
 }
 //]]>
 </script>
-<img src="{captcha_image}" id="captcha" border="0" alt="{lang_alt}" title="{lang_alt}"{xhtml}><br{xhtml}>
-<a href="javascript:new_captcha();">{lang_reload}</a>
-    </td>
-    <td {coltwo}>
-      <input type="text" name="captcha" size="25" maxlength="40" value="{captchastring}"{xhtml}>
-      <input type="hidden" name="csid" value="{csid}"{xhtml}>
-      <br{xhtml}>{lang_captcha_help}
+<div style="width:170px;margin:10px 0 10px 105px;">
+<img style="border:1px solid #ccc;margin-bottom:5px;" src="{captcha_image}" id="captchaimage" border="0" alt="{lang_alt}" title="{lang_alt}"{xhtml}><br{xhtml}>
+<a href="javascript:new_captcha();" style="vertical-align:middle;text-align:right;padding:5px 5px 10px;text-decoration:none;">{lang_reload}</a>&nbsp;<input type="text" id="captcha" name="captcha" size="18" maxlength="6" value="{lang_captcha_help}" title="{lang_captcha_help}" onfocus="if (this.value=='{lang_captcha_help}')this.value='';" onblur="if(this.value=='')this.value='{lang_captcha_help}';"{xhtml}>
+<input type="hidden" name="csid" value="{csid}"{xhtml}><br{xhtml}>
+</div>
     </td>
   </tr>
 </table>
