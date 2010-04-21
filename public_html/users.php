@@ -1415,6 +1415,7 @@ default:
     if ($status == USER_ACCOUNT_ACTIVE) { // logged in AOK.
         SESS_completeLogin($uid);
         $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
+        $_RIGHTS = explode( ',', SEC_getUserPermissions() );
         if ($_SYSTEM['admin_session'] > 0 ) {
             if (SEC_isModerator() || SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR')
                      || (count(PLG_getAdminOptions()) > 0)) {
