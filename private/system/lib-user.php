@@ -249,7 +249,7 @@ function USER_createActivationToken($uid,$username)
 {
     global $_CONF, $_TABLES;
 
-    $token = md5($_USER['uid'].$pageURL.uniqid (mt_rand (), 1));
+    $token = md5($uid.$username.uniqid (mt_rand (), 1));
 
     DB_query("UPDATE {$_TABLES['users']} SET act_token='".DB_escapeString($token)."', act_time=NOW() WHERE uid=".$uid);
 
