@@ -320,6 +320,7 @@ function PLUGINS_loadNewPlugins(&$data_arr)
                             'bundled' => 0,
                             'update' => 0,
                             'pi_name' => $pi_name,
+                            'pi_enabled' => 0,
                             'pi_homepage' => ((is_array($pluginData)) ? $pluginData['url'] : ''),
                             'pi_gl_version' => ((is_array($pluginData)) ? $pluginData['glfusionversion'] : '0.0.0'),
                             'pi_code_version' => ((is_array($pluginData)) ? $pluginData['version'] : '0.0.0'),
@@ -559,7 +560,7 @@ function PLUGINS_list($token)
 
     USES_lib_admin();
 
-    $retval .= COM_startBlock($LANG32[5], '',
+    $retval = COM_startBlock($LANG32[5], '',
                               COM_getBlockTemplate('_admin_block', 'header'));
 
     $menu_arr = array (

@@ -377,7 +377,7 @@ function MODERATE_selectedItems($action = '', $type='')
 */
 function MODERATE_itemList($type='', $token)
 {
-    global $_CONF, $_TABLES, $LANG24, $LANG29, $LANG_ADMIN, $_IMAGE_TYPE;
+    global $_CONF, $_TABLES, $LANG01, $LANG24, $LANG29, $LANG_ADMIN, $_IMAGE_TYPE;
 
     $retval = '';
 
@@ -702,7 +702,7 @@ foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
     } elseif (isset($_GET[$provided])) {
-	$action = $provided;
+        $action = $provided;
     }
 }
 
