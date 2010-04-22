@@ -88,22 +88,16 @@ function handleSubmit()
             if (!isset($commentcode) || ($commentcode != 0)) {
                 return COM_refresh($_CONF['site_url'] . '/index.php');
             }
-            if ($_CONF['advanced_editor'] == 1) {
-                if ( $_POST['postmode'] == 'html' ) {
-                    $comment = $_POST['comment_html'];
-                } else if ( $_POST['postmode'] == 'plaintext' ) {
-                    $comment = $_POST['comment_text'];
-                }
-            } else {
-                $comment = $_POST['comment'];
-            }
-            $ret = CMT_saveComment ( strip_tags ($_POST['title']),
+
+            $comment = COM_stripslashes($_POST['comment_text']);
+
+            $ret = CMT_saveComment ( strip_tags (COM_stripslashes($_POST['title'])),
                 $comment, $sid, COM_applyFilter ($_POST['pid'], true),
                 'article', COM_applyFilter ($_POST['postmode']));
 
             if ( $ret > 0 ) { // failure //FIXME: some failures should not return to comment form
                 $display .= COM_siteHeader ('menu', $LANG03[1])
-                         . CMT_commentForm ($_POST['title'], $comment,
+                         . CMT_commentForm (strip_tags(COM_stripslashes($_POST['title'])), $comment,
                            $sid, COM_applyFilter($_POST['pid']), $type,
                            $LANG03[14], COM_applyFilter($_POST['postmode']))
                          . COM_siteFooter();
@@ -117,16 +111,10 @@ function handleSubmit()
             break;
         default: // assume plugin
             $comment = '';
-            if ($_CONF['advanced_editor'] == 1) {
-                if ( $_POST['postmode'] == 'html' ) {
-                    $comment = $_POST['comment_html'];
-                } else if ( $_POST['postmode'] == 'plaintext' ) {
-                    $comment = $_POST['comment_text'];
-                }
-            } else {
-                $comment = $_POST['comment'];
-            }
-            if ( !($display = PLG_commentSave($type, strip_tags ($_POST['title']),
+
+            $comment = COM_stripslashes($_POST['comment_text']);
+
+            if ( !($display = PLG_commentSave($type, strip_tags (COM_stripslashes($_POST['title'])),
                                 $comment, $sid, COM_applyFilter ($_POST['pid'], true),
                                 COM_applyFilter ($_POST['postmode']))) ) {
                 $display = COM_refresh ($_CONF['site_url'] . '/index.php');
@@ -383,15 +371,7 @@ function handleEditSubmit()
         $uid = $_USER['uid'];
     }
 
-    if ($_CONF['advanced_editor'] == 1) {
-        if ( $_POST['postmode'] == 'html' ) {
-            $comment = $_POST['comment_html'];
-        } else if ( $_POST['postmode'] == 'plaintext' ) {
-            $comment = $_POST['comment_text'];
-        }
-    } else {
-        $comment = $_POST['comment'];
-    }
+    $comment = COM_stripslashes($_POST['comment_text']);
 
     //check for bad input
     if (empty ($sid) || empty ($_POST['title']) || empty ($comment) || !is_numeric ($cid)
@@ -454,19 +434,13 @@ case $LANG03[28]: //Preview Changes (for edit)
 
 case $LANG03[14]: // Preview
     $comment = '';
-    if ($_CONF['advanced_editor'] == 1) {
-        if ( $_POST['postmode'] == 'html' ) {
-            $comment = $_POST['comment_html'];
-        } else if ( $_POST['postmode'] == 'plaintext' ) {
-            $comment = $_POST['comment_text'];
-        }
-    } else {
-        $comment = $_POST['comment'];
-    }
+
+    $comment = COM_stripslashes($_POST['comment_text']);
+
     $display .= COM_siteHeader('menu', $LANG03[14])
-             . CMT_commentForm (strip_tags ($_POST['title']), $comment,
+             . CMT_commentForm (strip_tags (COM_stripslashes($_POST['title'])), $comment,
                     COM_applyFilter ($_POST['sid']),
-                    intval(COM_applyFilter ($_POST['pid'], true)),
+                    (int) COM_applyFilter ($_POST['pid'], true),
                     COM_applyFilter ($_POST['type']), $mode,
                     COM_applyFilter ($_POST['postmode']))
              . COM_siteFooter();
@@ -530,9 +504,9 @@ default:  // New Comment
     $type = COM_applyFilter ($_REQUEST['type']);
     $title = '';
     if (isset ($_REQUEST['title'])) {
-        $title = strip_tags ($_REQUEST['title']);
+        $title = strip_tags (COM_stripslashes($_REQUEST['title']));
     }
-    $postmode = $_CONF['postmode'];
+    $postmode = $_CONF['comment_postmode'];
     if (isset ($_REQUEST['postmode'])) {
         $postmode = COM_applyFilter ($_REQUEST['postmode']);
     }

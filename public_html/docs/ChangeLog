@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.2.0
 ------
+- Added 2 new configuration options for comments: (Mark)
+    - comment_postmode - set default postmode for comments (Text/HTML)
+    - comment_editor   - select between text box or WYSIWYG
 - Implemented profile photos and custom author and group css in comments (Mark & Eric)
 - Changed default comment mode to Nested (Eric)
 - Fixed orphaned p tag in story footer preview when editing a story (Eric)

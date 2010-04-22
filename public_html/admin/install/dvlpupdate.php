@@ -522,6 +522,10 @@ function glfusion_120()
     DB_query("ALTER TABLE {$_TABLES['sessions']} DROP PRIMARY KEY",1);
     DB_query("ALTER TABLE {$_TABLES['sessions']} ADD PRIMARY KEY (md5_sess_id)",1);
 
+    // comment editor
+    $c->add('comment_postmode','plaintext','select',4,21,5,1693,TRUE);
+    $c->add('comment_editor',0,'select',4,21,28,1694,TRUE);
+
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.2.0',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.2.0' WHERE name='glfusion'",1);

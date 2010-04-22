@@ -76,7 +76,7 @@ $LANG01 = array(
     28 => 'Delete',
     29 => 'No user comments.',
     30 => 'Older Stories',
-    31 => 'Allowed HTML Tags:',
+    31 => 'Allowed Auto Tags:',
     32 => 'Error, invalid username',
     33 => 'Error, could not write to the log file',
     34 => 'Error',
@@ -1868,8 +1868,8 @@ $LANG_frontpagecodes = array(
 );
 
 $LANG_postmodes = array(
-    'plaintext' => 'Plain Old Text',
-    'html' => 'HTML Formatted'
+    'plaintext' => 'Text',
+    'html' => 'HTML'
 );
 
 $LANG_sortcodes = array(
@@ -2216,6 +2216,8 @@ $LANG_confignames['Core'] = array(
     'session_ip_check' => 'Session IP Validation',
     'article_comment_close_enabled' => 'Automatically close comments (default)',
     'registration_type' => 'Registration Type',
+    'comment_postmode' => 'Comment Postmode',
+    'comment_editor' => 'Comment Editor',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2281,7 +2283,7 @@ $LANG_configselects['Core'] = array(
     2 => array('Reject' => 0, 'Only Keep Latest' => 1, 'Allow Multiple Posts' => 2),
     3 => array('Trackback Enabled' => 0, 'Trackback Disabled' => -1),
     4 => array('Don\'t Check Anything' => 0, 'Check against Site URL' => 1, 'Check full URL' => 2, 'Check against Site URL and full URL' => 3, 'Check IP against Site IP' => 4, 'Check IP and Site URL' => 5, 'Check IP and Full URL' => 6, 'Check IP, Full URL, and Site URL' => 7),
-    5 => array('Plain Old Text' => 'plaintext', 'HTML Formatted' => 'html'),
+    5 => array('Text' => 'plaintext', 'HTML' => 'html'),
     6 => array('12' => 12, '24' => 24),
     7 => array('Last Page' => 'last', 'First Page' => 'first', 'Every Page' => 'all'),
     8 => array('Right' => 'right', 'Left' => 'left'),
@@ -2304,6 +2306,7 @@ $LANG_configselects['Core'] = array(
     25 => array('No' => 0, 'Optional' => 1, 'Required' => 2),
     26 => array('None' => 0, 'A.B' => 1, 'A.B.C' => 2, 'All' => 3),
     27 => array('Generate Password' => 0, 'User Enters Password' => 1),
+    28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
 );
 
 ?>

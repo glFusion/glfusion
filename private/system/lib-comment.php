@@ -92,7 +92,7 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
     $commentbar->set_var( 'comment_type', $type );
     $commentbar->set_var( 'sid', $sid );
 
-    $cmt_title = stripslashes($title);
+    $cmt_title = $title;
     $commentbar->set_var('story_title', $cmt_title);
     // Article's are pre-escaped.
     if ($type != 'article') {
@@ -109,7 +109,7 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
         if( $page == 'comment.php' ) {
             $commentbar->set_var('story_link',
                 COM_createLink(
-                    stripslashes( $title ),
+                    htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()),
                     $articleUrl,
                     array('class'=>'non-ul b')
                 )
@@ -228,10 +228,6 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                                 'thread'  => 'thread.thtml'  ));
 
     // generic template variables
-    $template->set_var( 'xhtml', XHTML );
-    $template->set_var( 'site_url', $_CONF['site_url'] );
-    $template->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
-    $template->set_var( 'layout_url', $_CONF['layout_url'] );
     $template->set_var( 'lang_authoredby', $LANG01[42] );
     $template->set_var( 'lang_on', $LANG01[36] );
     $template->set_var( 'lang_permlink', $LANG01[120] );
@@ -794,11 +790,14 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
         } else {
             if ( empty($postmode) ) {
+                $postmode = $_CONF['comment_postmode'];
+/*-----------------------------------------------------
                 if ($_CONF['advanced_editor'] == 1) {
                     $postmode = 'html';
                 } elseif (empty ($postmode)) {
                     $postmode = $_CONF['postmode'];
                 }
+------------------------------------------------------- */
             }
 
             // Note:
@@ -807,20 +806,20 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             // $commenttext is what the user entered and goes back into the
             // <textarea> -> don't strip HTML
 
-            $commenttext = htmlspecialchars (COM_stripslashes ($comment),ENT_COMPAT,COM_getEncodingt());
+            $commenttext = htmlspecialchars ($comment,ENT_COMPAT,COM_getEncodingt());
 
             $fakepostmode = $postmode;
             if ($postmode == 'html') {
-                $comment = COM_checkWords (COM_checkHTML  (COM_stripslashes ($comment)));
+                $comment = COM_checkWords (COM_checkHTML  ($comment));
             } else {
-                $comment = htmlspecialchars (COM_checkWords (COM_stripslashes ($comment)),ENT_COMPAT,COM_getEncodingt());
+                $comment = htmlspecialchars (COM_checkWords ($comment),ENT_COMPAT,COM_getEncodingt());
                 $newcomment = COM_makeClickableLinks ($comment);
                 if (strcmp ($comment, $newcomment) != 0) {
                     $comment = nl2br ($newcomment);
                     $fakepostmode = 'html';
                 }
             }
-            $title = COM_checkWords (strip_tags (COM_stripslashes ($title)));
+            $title = COM_checkWords (strip_tags ($title));
 
             $_POST['title'] = $title;
             $newcomment = $comment;
@@ -882,7 +881,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             }
 
             $comment_template = new Template($_CONF['path_layout'] . 'comment');
-            if ($_CONF['advanced_editor'] == 1) {
+            if ( $_CONF['comment_editor'] == 1 ) {
                 $comment_template->set_file('form','commentform_advanced.thtml');
                 if ( COM_isAnonUser() ) {
                     $ae_uid = 1;
@@ -890,7 +889,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                     $ae_uid = (int) COM_applyFilter($_USER['uid'],true);
                 }
                 $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
-                DB_Query($sql,1);
+                DB_query($sql,1);
             } else {
                 $comment_template->set_file('form','commentform.thtml');
             }
@@ -1062,7 +1061,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
     if ($someError = PLG_commentPreSave($uid, $title, $comment, $sid, $pid, $type, $postmode)) {
         return $someError;
     }
-    $title = COM_checkWords (strip_tags (COM_stripslashes ($title)));
+    $title = COM_checkWords (strip_tags ($title));
     $comment = CMT_prepareText($comment,$postmode);
 
     // check for non-int pid's
@@ -1348,8 +1347,8 @@ function CMT_sendReport ($cid, $type)
     $result = DB_query ("SELECT uid,title,comment,sid,ipaddress FROM {$_TABLES['comments']} WHERE cid = ".(int) $cid." AND type = '".DB_escapeString($type)."'");
     $A = DB_fetchArray ($result);
 
-    $title = stripslashes ($A['title']);
-    $comment = stripslashes ($A['comment']);
+    $title = $A['title'];
+    $comment = $A['comment'];
 
     // strip HTML if posted in HTML mode
     if (preg_match ('/<.*>/', $comment) != 0) {
@@ -1414,10 +1413,10 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
     global $_USER, $_TABLES, $LANG03, $_CONF;
 
     if ($postmode == 'html') {
-        $comment = COM_checkWords (COM_checkHTML (COM_stripslashes ($comment)));
+        $comment = COM_checkWords (COM_checkHTML ($comment));
     } else {
     	//plaintext
-        $comment = htmlspecialchars (COM_checkWords (COM_stripslashes ($comment)),ENT_COMPAT,COM_getEncodingt());
+        $comment = htmlspecialchars (COM_checkWords ($comment),ENT_COMPAT,COM_getEncodingt());
         $newcomment = COM_makeClickableLinks ($comment);
         if (strcmp ($comment, $newcomment) != 0) {
             $comment = nl2br ($newcomment);
