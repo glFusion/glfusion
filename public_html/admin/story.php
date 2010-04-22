@@ -351,6 +351,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
 
     $display = '';
     switch ($action) {
+        case 'clone' :
         case 'edit':
             $title = $LANG24[5];
             $saveoption = $LANG_ADMIN['save'];
