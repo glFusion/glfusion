@@ -80,7 +80,7 @@ $LANG_CP00 = array(
 );
 
 $PLG_captcha_MESSAGE1 = 'CAPTCHA plugin upgrade: Update succesvol gereed.';
-$PLG_captcha_MESSAGE2 = 'CAPTCHA Plugin Succesvol Geinstalleerd';
+$PLG_captcha_MESSAGE2 = 'CAPTCHA Plugin Successfully Installed';
 $PLG_captcha_MESSAGE3 = 'CAPTCHA Plugin Successfully Installed';
 
 // Localization of the Admin Configuration UI

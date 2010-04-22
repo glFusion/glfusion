@@ -98,7 +98,8 @@ $LANG_LINKS_SUBMIT = array(
     8 => 'Tiitel',
     9 => 'URL',
     10 => 'Kategooria',
-    11 => 'Sisestatud lingid'
+    11 => 'Sisestatud lingid',
+    12 => 'Submitted By'
 );
 
 ###############################################################################
@@ -175,7 +176,12 @@ $LANG_LINKS_ADMIN = array(
     57 => 'Veel kontrollimata',
     58 => 'Kontrolli nüüd',
     59 => '<p>Kõigi nähtaval olevate linkide kontrollimiseks, klõpsa palun allpool oleval lingil "Kontrolli nüüd". Pane tähele, et kontrollimine võib sõltuvalt nähtaval olevate linkide arvust võtta veidi aega.</p>',
-    60 => 'Kasutaja %s proovis õigustamatult  muuta kategooriat: %s.'
+    60 => 'Kasutaja %s proovis õigustamatult  muuta kategooriat: %s.',
+    61 => 'Owner',
+    62 => 'Last Updated',
+    63 => 'Are you sure you want to delete this link?',
+    64 => 'Are you sure you want to delete this category?',
+    65 => 'Moderate Link'
 );
 
 

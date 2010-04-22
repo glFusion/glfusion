@@ -93,7 +93,8 @@ $LANG_CAL_1 = array(
     48 => '閲覧数',
     49 => 'このサイトにはイベントがないか，誰もイベントをクリックしていないかどちらかのようです。',
     50 => 'イベント',
-    51 => '削除'
+    51 => '削除',
+    52 => 'Submitted By'
 );
 
 $_LANG_CAL_SEARCH = array(
@@ -173,7 +174,10 @@ $LANG_CAL_ADMIN = array(
     33 => '削除対象のイベントが選択されていません。',
     34 => 'イベント ID',
     35 => '削除できませんでした。',
-    36 => '削除したイベント'
+    36 => '削除したイベント',
+    37 => 'Moderate Event',
+    38 => 'Batch Event Admin',
+    39 => 'Event Admin'
 );
 
 $LANG_CAL_MESSAGE = array(

@@ -88,7 +88,8 @@ $LANG_CAL_1 = array(
     48 => 'Angezeigt',
     49 => 'Es gibt keine Termine oder sie wurden von niemandem gelesen.',
     50 => 'Termine',
-    51 => 'Löschen'
+    51 => 'Löschen',
+    52 => 'Submitted By'
 );
 
 $_LANG_CAL_SEARCH = array(
@@ -168,7 +169,10 @@ $LANG_CAL_ADMIN = array(
     33 => 'Keine Termine zum Löschen ausgewählt',
     34 => 'Termin ID',
     35 => 'konnte nicht gelöscht werden',
-    36 => 'Erfolgreich gelöscht'
+    36 => 'Erfolgreich gelöscht',
+    37 => 'Moderate Event',
+    38 => 'Batch Event Admin',
+    39 => 'Event Admin'
 );
 
 $LANG_CAL_MESSAGE = array(

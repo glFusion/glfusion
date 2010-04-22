@@ -96,7 +96,8 @@ $LANG_LINKS_SUBMIT = array(
     8 => 'Titel',
     9 => 'URL',
     10 => 'Kategorie',
-    11 => 'Beiträge: Links'
+    11 => 'Beiträge: Links',
+    12 => 'Submitted By'
 );
 
 ###############################################################################
@@ -173,7 +174,12 @@ $LANG_LINKS_ADMIN = array(
     57 => 'Noch nicht überprüft',
     58 => 'Jetzt überprüfen',
     59 => '<p>Um alle aufgeführten Links zu überprüfen, einfach "Jetzt überprüfen" unten anklicken. Es kann etwas dauern, abhängig davon, wie viele Links aufgeführt sind.</p>',
-    60 => 'User %s hat unrechtmäßig versucht, die Kategorie %s zu editieren.'
+    60 => 'User %s hat unrechtmäßig versucht, die Kategorie %s zu editieren.',
+    61 => 'Owner',
+    62 => 'Last Updated',
+    63 => 'Are you sure you want to delete this link?',
+    64 => 'Are you sure you want to delete this category?',
+    65 => 'Moderate Link'
 );
 
 

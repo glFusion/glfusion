@@ -928,7 +928,9 @@ $LANG24 = array(
     86 => 'Advanced Editor',
     87 => 'Story Stats',
     88 => 'Wiki-style format',
-    89 => 'Are you sure you want to delete this Story?'
+    89 => 'Are you sure you want to delete this Story?',
+    90 => 'Moderate Story',
+    91 => 'Moderate Draft Story'
 );
 
 ###############################################################################
@@ -1103,7 +1105,11 @@ $LANG28 = array(
     104 => 'Are you sure you want to delete this User?',
     105 => 'Status',
     106 => 'Queued',
-    107 => 'Verification'
+    107 => 'Verification',
+    108 => 'View Profile',
+    109 => 'Are you absolutely sure you want to delete this User?  Deleting this User will delete some of the content that has been created by this User, and the remainder will be assigned to the Anonymous User or Site Administrator!  Press Cancel and then click on the Username to view the User Profile to see details.',
+    110 => 'Are you absolutely sure you want to delete ALL selected Users?  Deleting these Users will delete some of the content that has been created by these Users, and the remainder will be assigned to the Anonymous User or Site Administrator!  Press Cancel and then click on the Username to view the User Profile to see details.',
+    111 => 'Send eMail (Local)'
 );
 
 ###############################################################################
@@ -1133,6 +1139,12 @@ $LANG29 = array(
     41 => 'Comment Submissions',
     42 => 'User Name',
     43 => 'Auto-pubish Comments?',
+    44 => 'Approve all selected items',
+    45 => 'Are you sure you want to approve the selected item(s)?',
+    46 => 'Submitted By',
+    47 => 'Registered On',
+    48 => 'Are you sure you want to approve this submission?',
+    49 => 'Are you sure you want to delete this submission?',
     'info' => 'Approve or Decline submissions'
 );
 
@@ -1250,7 +1262,16 @@ $LANG32 = array(
     72 => 'A version of this plugin is installed but disabled. glFusion cannot upgrade a disabled plugin. Please re-enable the plugin and perform the upload again.',
     73 => 'Automated Plugin Installer',
     74 => 'Unable to locate the plugin\'s XML description file.',
-    75 => 'Unable to copy %s to %s<br />'
+    75 => 'Unable to copy %s to %s<br />',
+    76 => 'Are you sure you want to delete (uninstall) this Plugin?',
+    77 => 'Are you sure you want to update this Plugin?',
+    78 => 'Control',
+    79 => 'Unplug',
+    80 => 'Are you sure you want to install this Plugin?',
+    81 => 'Maintainer',
+    82 => 'Requires',
+    83 => 'Info',
+    84 => 'Bundled'
 );
 
 ###############################################################################
@@ -1859,7 +1880,9 @@ $LANG_ADMIN = array(
     'admin_groups' => 'Group Admin',
     'authenticate' => 'Authenticate',
     'select' => 'Select',
-    'name' => 'Name'
+    'name' => 'Name',
+    'submissions' => 'Submissions',
+    'moderate' => 'Save & Approve'
 );
 
 ###############################################################################
@@ -2187,7 +2210,9 @@ $LANG_confignames['Core'] = array(
     'user_reg_fullname' => 'Full Name option on registration form?',
     'session_ip_check' => 'Session IP Validation',
     'article_comment_close_enabled' => 'Automatically close comments (default)',
-    'registration_type' => 'Registration Type'
+    'registration_type' => 'Registration Type',
+    'comment_postmode' => 'Comment Postmode',
+    'comment_editor' => 'Comment Editor'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2275,7 +2300,8 @@ $LANG_configselects['Core'] = array(
     24 => array('Disabled' => 0, 'Logged-in Users' => 1, 'Everyone' => 2),
     25 => array('No' => 0, 'Optional' => 1, 'Required' => 2),
     26 => array('None' => 0, 'A.B' => 1, 'A.B.C' => 2, 'All' => 3),
-    27 => array('Generate Password' => 0, 'User Enters Password' => 1)
+    27 => array('Generate Password' => 0, 'User Enters Password' => 1),
+    28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1)
 );
 
 ?>
