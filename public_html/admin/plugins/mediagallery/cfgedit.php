@@ -170,7 +170,9 @@ function MG_editConfig( ) {
     } else {
         $T->set_var('at_autoplay_no_checked', ' checked="checked"');
     }
-    if ( $_MG_CONF['at_enable_link'] == 1 ) {
+    if ( $_MG_CONF['at_enable_link'] == 2 ) {
+        $T->set_var('at_enable_link_lb_checked', ' checked="checked"');
+    } elseif ( $_MG_CONF['at_enable_link'] == 1 ) {
         $T->set_var('at_enable_link_yes_checked', ' checked="checked"');
     } else {
         $T->set_var('at_enable_link_no_checked', ' checked="checked"');

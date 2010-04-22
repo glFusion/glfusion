@@ -730,6 +730,7 @@ $LANG_MG01 = array (
     'search_rating'             => 'Show Rating in Search Results',
     'gallery_only'              => 'Media Gallery Replaces glFusion Index Page',
     'all_nhp'                   => 'All topics (No Homepage)',
+    'lightbox'                  => 'Lightbox',
 );
 
 // error messages
