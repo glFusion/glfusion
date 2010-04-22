@@ -562,7 +562,12 @@ class Media {
         	}
     	}
 
-    	$L->set_var('caption',PLG_replaceTags(str_replace('$','&#36;',$this->title)));
+        $caption = PLG_replaceTags(str_replace('$','&#36;',$this->title));
+        if ($this->owner_id == $_USER['uid'] || 
+                SEC_hasRights('mediagallery.admin')) {
+            $caption .= '<br '.XHTML.'>('.$this->id.')';
+        }
+        $L->set_var('caption', $caption);
     	$L->set_var('id','id' . rand());
 
     	$L->parse('media_link_start','media_link');
