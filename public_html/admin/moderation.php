@@ -724,7 +724,7 @@ switch ($action) {
     case 'delete':
     case 'delbutton_x':
         if ($validtoken) {
-            $retval .= ($action=='delete') ? MODERATE_item($action, $type, $id) : MODERATE_selectedItems('delete', $type);
+            $display .= ($action=='delete') ? MODERATE_item($action, $type, $id) : MODERATE_selectedItems('delete', $type);
         } else {
             COM_accessLog('User ' . $_USER['username'] . ' tried to illegally delete submission(s) and failed CSRF checks.');
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
@@ -734,7 +734,7 @@ switch ($action) {
     case 'approve':
     case 'approve_x':
         if ($validtoken) {
-            $retval .= ($action == 'approve') ? MODERATE_item($action, $type, $id) : MODERATE_selectedItems('approve', $type);
+            $display .= ($action == 'approve') ? MODERATE_item($action, $type, $id) : MODERATE_selectedItems('approve', $type);
         } else {
             COM_accessLog('User ' . $_USER['username'] . ' tried to illegally approve submission(s) and failed CSRF checks.');
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');

@@ -352,7 +352,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     $display = '';
     switch ($action) {
         case 'edit':
-            $title = $LANG25[5];
+            $title = $LANG24[5];
             $saveoption = $LANG_ADMIN['save'];
             $submission = false;
             break;
@@ -981,7 +981,7 @@ switch ($action) {
                        $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
         switch ($action) {
             case 'edit':
-                $blocktitle = $LANG25[5];
+                $blocktitle = $LANG24[5];
                 break;
             case 'moderate':
                 $blocktitle = $LANG24[90];
