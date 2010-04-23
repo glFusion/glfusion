@@ -371,8 +371,6 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
             break;
     }
 
-    COM_errorLog( "saveoption=$saveoption");
-
     if (!isset ($_CONF['hour_mode'])) {
         $_CONF['hour_mode'] = 12;
     }
