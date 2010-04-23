@@ -1,8 +1,8 @@
 {# begin {templatelocation} #}
 {!if recaptcha}
 <table width="100%">
-<tr>
-<td align="center">
+    <tr>
+        <td align="center">
 <script type="text/javascript">
 //<![CDATA[
 var RecaptchaOptions = {
@@ -10,9 +10,9 @@ var RecaptchaOptions = {
 };
 //]]>
 </script>
-  {recaptcha}
-</td>
-</tr>
+            {recaptcha}
+        </td>
+    </tr>
 </table>
 {!else}
 <script type="text/javascript">
@@ -40,9 +40,12 @@ var RecaptchaOptions = {
 //]]>
 </script>
 <div style="width:170px;margin:10px auto;">
-<img style="border:1px solid #ccc;margin-bottom:5px;" src="{captcha_image}" id="captcha_image" border="0" alt="{lang_alt}" title="{lang_alt}"{xhtml}><br{xhtml}>
-<a href="javascript:new_captcha();" style="vertical-align:middle;text-align:right;padding:5px 5px 10px;text-decoration:none;">{lang_reload}</a>&nbsp;<input type="text" id="captcha" name="captcha" size="18" maxlength="6" value="{lang_captcha_help}" title="{lang_captcha_help}" onfocus="if (this.value=='{lang_captcha_help}')this.value='';" onblur="if(this.value=='')this.value='{lang_captcha_help}';"{xhtml}>
-<input type="hidden" name="csid" value="{csid}"{xhtml}><br{xhtml}>
+    <img style="border:1px solid #ccc;margin-bottom:5px;" src="{captcha_image}" id="captcha_image" border="0" alt="{lang_alt}" title="{lang_alt}"{xhtml}><br{xhtml}>
+    <a href="javascript:new_captcha();" style="text-decoration:none;">
+        <img style="vertical-align:middle; width:22px; height:22px;" src="{site_url}/captcha/reload.png" alt="{lang_reload}" title="{lang_reload}"{xhtml}>
+    </a>
+    <input style="border:1px solid #ccc;" type="text" id="captcha" name="captcha" size="20" maxlength="6" value="{lang_captcha_help}" title="{lang_captcha_help}" onfocus="if (this.value=='{lang_captcha_help}')this.value='';" onblur="if(this.value=='')this.value='{lang_captcha_help}';"{xhtml}>
+    <input type="hidden" name="csid" value="{csid}"{xhtml}>
 </div>
 {!endif}
 {# end {templatelocation} #}
