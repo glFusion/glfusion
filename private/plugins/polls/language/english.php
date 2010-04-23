@@ -81,7 +81,7 @@ $LANG25 = array(
     15 => 'cancel',
     16 => 'delete',
     17 => 'Please enter a Poll ID',
-    18 => 'Poll List',
+    18 => 'Polls Administration',
     19 => 'To modify or delete a poll, click on the edit icon of the poll.  To create a new poll, click on "Create New" above.',
     20 => 'Voters',
     21 => 'Access Denied',
@@ -96,14 +96,16 @@ $LANG25 = array(
     30 => 'Limit Results',
     31 => 'Question',
     32 => 'To remove this question from the poll, remove its question text',
-    33 => 'Open for voting',
+    33 => 'Open',
     34 => 'Poll Topic:',
     35 => 'This poll has',
     36 => 'more questions.',
     37 => 'Hide results while poll is open',
     38 => 'While the poll is open, only the owner &amp; root can see the results',
     39 => 'The topic will be only displayed if there are more than 1 questions.',
-    40 => 'See all answers to this poll'
+    40 => 'See all answers to this poll',
+    41 => 'Are you sure you want to delete this Poll?',
+    42 => 'Are you absolutely sure you want to delete this Poll?  All questions, answers and comments that are associated with this Poll will also be permanently deleted from the database.'
 );
 
 $PLG_polls_MESSAGE19 = 'Your poll has been successfully saved.';
