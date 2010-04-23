@@ -96,7 +96,7 @@ window.addEvent('domready',function() {
         {!endif}
         {!if lang_assoc_comments}
         <tr>
-            <td class="alignright">{lang_assoc_comment}:</td>
+            <td class="alignright">{lang_assoc_comments}:</td>
             <td>{assoc_comments}</td>
         </tr>
         {!endif}

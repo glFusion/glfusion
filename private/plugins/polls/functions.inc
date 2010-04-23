@@ -1453,7 +1453,7 @@ function POLLS_siteFooter() {
 
 function POLLS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
-    global $_CONF, $LANG25, $LANG_ACCESS, $_USER;
+    global $_CONF, $LANG25, $LANG_ACCESS, $LANG_ADMIN, $_USER;
 
     $retval = '';
 
