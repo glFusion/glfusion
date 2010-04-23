@@ -76,7 +76,7 @@ require_once $_CONF['path'].'plugins/polls/polls.php';
 *
 * @return   mixed   menu entry, or boolean false if disabled / hidden
 */
-function plugin_getmenuitems_polls ()
+function plugin_getmenuitems_polls()
 {
     global $_CONF, $_USER, $_PO_CONF, $LANG_POLLS;
 
@@ -106,7 +106,7 @@ function plugin_commentsupport_polls()
     return true;
 }
 
-function plugin_getcommenturlid_polls( ) {
+function plugin_getcommenturlid_polls() {
     global $_CONF;
     $retval = array();
     $retval[] = $_CONF['site_url'] . '/polls/index.php';
@@ -149,6 +149,7 @@ function plugin_savecomment_polls($title, $comment, $id, $pid, $postmode)
     CACHE_remove_instance('whatsnew_');
     return $retval;
 }
+
 function plugin_editcomment_polls($cid,$id) {
     global $_CONF;
 
@@ -220,7 +221,7 @@ function plugin_getwhatsnewcomment_polls()
     if ( $nrows > 0 ) {
         for ($x = 0; $x < $nrows; $x++ ) {
             $A = DB_fetchArray($result);
-            $cmtReturn['url'] = $_CONF['site_url'].'/polls/index.php?pid='.$A['sid'].'#comments';
+            $cmtReturn['url'] = $_CONF['site_url'].'/polls/index.php?pid=' . $A['sid'] . '#comments';
             $cmtReturn['type'] = 'polls';
             $cmtReturn['dups'] = $A['dups'];
             $cmtReturn['title'] = $A['title'];
@@ -274,49 +275,13 @@ function plugin_dopluginsearch_comment_polls($query, $datestart, $dateend, $topi
 }
 
 /**
-* Helper function: count number of polls and total number of votes
-*
-* @return   array(number of polls, number of votes);
-*
-*/
-function POLLS_countPollsAndVotes ()
-{
-    global $_TABLES;
-
-    $total_polls = 0;
-    $total_answers = 0;
-
-    $result = DB_query ("SELECT COUNT(*) AS count FROM {$_TABLES['polltopics']}" . COM_getPermSQL ());
-    $A = DB_fetchArray($result);
-    $total_polls = $A['count'];
-
-    $result = DB_query ("SELECT pid FROM {$_TABLES['polltopics']}" . COM_getPermSQL ());
-    $nrows = DB_numRows ($result);
-    if ($nrows > 0) {
-        $topics = '';
-        for ($i = 1; $i <= $nrows; $i++) {
-            $A = DB_fetchArray($result);
-            if ($i > 1) {
-                $topics .= ',';
-            }
-            $topics .= "'" . $A['pid'] . "'";
-        }
-        $result = DB_query ("SELECT SUM(votes) FROM {$_TABLES['pollanswers']} WHERE pid IN ({$topics})");
-        $A = DB_fetchArray($result, true);
-        $total_answers = $A[0];
-    }
-
-    return array ($total_polls, $total_answers);
-}
-
-/**
 * Shows the statistics for the Polls plugin on stats.php.
 * If $showsitestats is 1 then we are to only print the overall stats in the
 * 'site statistics box' otherwise we show the detailed stats
 *
-* @param    int     showsitestate   Flag to let us know which stats to get
+* @param    int     showsitestats   Flag to let us know which stats to get
 */
-function plugin_showstats_polls ($showsitestats)
+function plugin_showstats_polls($showsitestats)
 {
     global $_CONF, $_TABLES, $LANG_POLLS;
 
@@ -367,7 +332,7 @@ function plugin_showstats_polls ($showsitestats)
 * @return   array(item text, item count);
 *
 */
-function plugin_statssummary_polls ()
+function plugin_statssummary_polls()
 {
     global $LANG_POLLS;
 
@@ -426,7 +391,7 @@ function plugin_getadminoption_polls()
 * @param   uid   int   User id of deleted user
 *
 */
-function plugin_user_delete_polls ($uid)
+function plugin_user_delete_polls($uid)
 {
     global $_TABLES, $_PO_CONF;
 
@@ -476,7 +441,7 @@ function plugin_chkVersion_polls()
 * @return   void
 *
 */
-function plugin_enablestatechange_polls ($enable)
+function plugin_enablestatechange_polls($enable)
 {
     global $_TABLES;
 
@@ -484,590 +449,6 @@ function plugin_enablestatechange_polls ($enable)
 
     // toggle Poll block
     DB_query ("UPDATE {$_TABLES['blocks']} SET is_enabled = $is_enabled WHERE (type = 'phpblock') AND (phpblockfn = 'phpblock_polls')");
-}
-
-/**
-* Get path for the template files.
-*
-* @param    string  $path   subdirectory within the base template path
-* @return   string          full path to template directory
-*
-*/
-function polls_templatePath ($path = '')
-{
-    global $_CONF;
-
-    if (empty ($path)) {
-        $layout_path = $_CONF['path_layout'] . polls;
-    } else {
-        $layout_path = $_CONF['path_layout'] . polls . '/' . $path;
-    }
-
-    if (is_dir ($layout_path)) {
-        $retval = $layout_path;
-    } else {
-        $retval = $_CONF['path'] . 'plugins/polls/templates';
-        if (!empty ($path)) {
-            $retval .= '/' . $path;
-        }
-    }
-
-    return $retval;
-}
-
-
-/**
-* Shows a poll form
-*
-* Shows an HTML formatted poll for the given topic ID
-*
-* @param      string      $pid      ID for poll topic
-* @param      boolean     $showall  Show only the first question in the poll or all?
-* @param        int        $displaytype       Possible values 0 = Normal, 1 = In Block, 2 = autotag
-* @see function COM_pollResults
-* @see function COM_showPoll
-* @return       string  HTML Formatted Poll
-*
-*/
-
-function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
-{
-    global $_CONF, $_TABLES, $LANG_POLLS, $LANG01, $_USER, $LANG25, $_IMAGE_TYPE;
-    $retval = '';
-
-    $result = DB_query("SELECT topic,voters,commentcode,is_open,hideresults,owner_id "
-        . ",group_id,perm_owner,perm_group,perm_anon,perm_members "
-        . "FROM {$_TABLES['polltopics']} WHERE pid='".DB_escapeString($pid)."'" . COM_getPermSql('AND'));
-    $ntopics = DB_numRows($result);
-
-    if($ntopics == 0 ) {
-        return $retval;
-    }
-    $P = DB_fetchArray($result);
-    if ((!isset($_COOKIE[$pid]) && !POLLS_ipAlreadyVoted($pid)) or ($P['is_open'] == 1)) {
-        if ($ntopics == 1) {
-            $questions_sql = "SELECT question,qid "
-                . "FROM {$_TABLES['pollquestions']} "
-                . "WHERE pid='".DB_escapeString($pid)."' ORDER BY qid";
-
-            $questions = DB_query($questions_sql);
-            $nquestions = DB_numRows($questions );
-
-            if($nquestions > 0 ) {
-                $poll = new Template($_CONF['path'] . 'plugins/polls/templates/');
-                $poll->set_file(array('panswer' => 'pollanswer.thtml',
-                                        'block' => 'pollblock.thtml',
-                                        'pquestions' => 'pollquestions.thtml',
-                                        'comments' => 'pollcomments.thtml'));
-                $poll->set_var('xhtml', XHTML);
-                $poll->set_var('site_url', $_CONF['site_url']);
-                $poll->set_var('layout_url', $_CONF['layout_url']);
-                $poll->set_var('site_admin_url', $_CONF['site_admin_url']);
-                $poll->set_var('poll_id', $pid );
-                if ($nquestions > 1) {
-                    $poll->set_var('poll_topic', $LANG25['34'] . " " . htmlspecialchars($P['topic']));
-                    $poll->set_var('lang_question', $LANG25[31].':');
-                }
-                $poll->set_var('num_votes', COM_numberFormat($P['voters']));
-                $poll->set_var('poll_vote_url', $_CONF['site_url']
-                                                . '/polls/index.php');
-                if (($nquestions == 1) || $showall) {
-                    $poll->set_var('lang_vote', $LANG_POLLS['vote']);
-                } else {
-                    $poll->set_var('lang_vote', $LANG_POLLS['start_poll']);
-                }
-                $poll->set_var('lang_votes', $LANG_POLLS['votes']);
-
-                $results = '';
-                if (($P['is_open'] == 0) || ($P['hideresults'] == 0) ||
-                    (($P['hideresults'] == 1) &&
-                        (
-                        SEC_inGroup('Root') ||
-                        (isset($_USER['uid'])
-                            && ($_USER['uid'] == $P['owner_id']))
-                        ))) {
-                    $results = COM_createLink($LANG_POLLS['results'],
-                        $_CONF['site_url'] . '/polls/index.php?pid=' . $pid
-                        . '&amp;aid=-1');
-                }
-                $poll->set_var('poll_results', $results);
-
-                $access = SEC_hasAccess($P['owner_id'], $P['group_id'],
-                                $P['perm_owner'], $P['perm_group'],
-                                $P['perm_members'], $P['perm_anon']);
-                if (($access == 3) && SEC_hasRights('polls.edit')) {
-                    $editlink = COM_createLink($LANG25[27], $_CONF['site_admin_url']
-                        . '/plugins/polls/index.php?mode=edit&amp;pid=' . $pid);
-                    $poll->set_var('edit_link', $editlink);
-                    $editicon = $_CONF['layout_url'] . '/images/edit.' . $_IMAGE_TYPE;
-                    $icon_attr = array('title' => $LANG25[27]);
-                    $editiconhtml = COM_createImage($editicon, $LANG25[27], $icon_attr);
-                    $editlink = COM_createLink($editiconhtml, $_CONF['site_admin_url']
-                        . '/plugins/polls/index.php?mode=edit&amp;pid=' . $pid);
-                    $poll->set_var('edit_icon', $editlink);
-                }
-
-                if (array_key_exists('aid', $_POST)) {
-                    $aid = $_POST['aid'];
-                } else {
-                    $aid = array();
-                }
-
-                for($j=0; $j<$nquestions; $j++) {
-                    $Q = DB_fetchArray($questions);
-                    $poll->set_var('poll_question', " ".$Q['question']);
-                    $poll->set_var('question_id', $j);
-
-                    $notification = "";
-                    $filter = "";
-                    if ($showall == false) {
-                        $nquestions--;
-                        $notification = $LANG25[35] . " $nquestions " . $LANG25[36];
-                        $filter = "AND qid='0'";
-                        $nquestions = 1;
-                    } else {
-                        $filter = "AND qid = '{$Q['qid']}'";
-                        $poll->set_var('lang_question_number', " ". ($j+1).":");
-                    }
-                    $answer_sql = "SELECT answer,aid "
-                        . "FROM {$_TABLES['pollanswers']} "
-                        . "WHERE pid='".DB_escapeString($pid)."'$filter ORDER BY qid, aid";
-                    $answers = DB_query($answer_sql);
-                    $nanswers = DB_numRows($answers );
-                    for($i=0; $i<$nanswers; $i++) {
-                        $A = DB_fetchArray($answers );
-                        if (($j < count($aid)) && ($aid[$j] == $A['aid'])) {
-                            $poll->set_var('selected', ' checked');
-                        }
-                        $poll->set_var('answer_id', $A['aid']);
-                        $poll->set_var('answer_text', $A['answer']);
-                        $poll->parse('poll_answers', 'panswer', true);
-                        $poll->clear_var('selected');
-                    }
-                    $poll->parse('poll_questions', 'pquestions', true);
-                    $poll->clear_var('poll_answers');
-                }
-                $poll->set_var('lang_polltopics', $LANG_POLLS['polltopics']);
-                $poll->set_var('poll_notification', $notification);
-                if($P['commentcode'] >= 0 ) {
-                    $num_comments = DB_count($_TABLES['comments'],
-                            array('sid', 'type'), array(DB_escapeString($pid), 'polls'));
-                    $poll->set_var('num_comments',
-                            COM_numberFormat($num_comments));
-                    $poll->set_var('lang_comments', $LANG01[3]);
-                    $poll->set_var('poll_comments_url', $_CONF['site_url'] .
-                        '/polls/index.php?pid=' . $pid . '#comments');
-                    $poll->parse('poll_comments', 'comments', true);
-                } else {
-                    $poll->set_var('poll_comments', '');
-                    $poll->set_var('poll_comments_url', '');
-                }
-                $retval =  $poll->finish($poll->parse('output', 'block')) . LB;
-
-                if ($showall && ($P['commentcode'] >= 0 AND $displaytype != 2)) {
-                    $delete_option = (SEC_hasRights('polls.edit') &&
-                        SEC_hasAccess($P['owner_id'], $P['group_id'],
-                        $P['perm_owner'], $P['perm_group'], $P['perm_members'],
-                        $P['perm_anon']) == 3 ? true : false);
-
-                    USES_lib_comments();
-
-                    $page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
-                    if ( isset($_POST['order']) ) {
-                        $order  =  $_POST['order'] == 'ASC' ? 'ASC' : 'DESC';
-                    } elseif (isset($_GET['order']) ) {
-                        $order =  $_GET['order'] == 'ASC' ? 'ASC' : 'DESC';
-                    } else {
-                        $order = 'DESC';
-                    }
-                    if ( isset($_POST['mode']) ) {
-                        $mode = COM_applyFilter($_POST['mode']);
-                    } elseif ( isset($_GET['mode']) ) {
-                        $mode = COM_applyFilter($_GET['mode']);
-                    } else {
-                        $mode = '';
-                    }
-                    $retval .= CMT_userComments($pid, $P['topic'], 'polls',
-                                                $order, $mode, 0, $page, false,
-                                                $delete_option, $P['commentcode']);
-                }
-            }
-        }
-    } else {
-        $retval .= POLLS_pollResults($pid, 0, '', '', $displaytype);
-    }
-
-    return $retval;
-}
-
-/**
-* This shows a poll
-*
-* This will determine if a user needs to see the poll form OR the poll result.
-*
-* @param        int     $size           Size in pixels of poll results
-* @param        string  $pid            Poll topic ID to show (optional)
-* @param        boolean $showall        Show only the first question or all
-* @param        int     $displaytype    Possible values 0 = Normal, 1 = In Block, 2 = autotag
-* @return       string  HTML formatted string of poll
-* @see function COM_pollVote
-* @see function COM_pollResults
-*
-*/
-function POLLS_showPoll($size, $pid = '', $showall = false, $displaytype = 0)
-{
-    global $_CONF, $_PO_CONF, $_TABLES, $LANG_POLLS;
-
-    $retval = '';
-    $is_open = 0;
-
-    DB_query("DELETE FROM {$_TABLES['pollvoters']} WHERE date < unix_timestamp() - {$_PO_CONF['polladdresstime']}");
-
-    if(!empty($pid)) {
-        $sql = "SELECT * FROM {$_TABLES['polltopics']} WHERE pid='".$pid."'";
-        $result = DB_query($sql);
-        if ( DB_numRows($result) > 0 ) {
-            $row = DB_fetchArray($result);
-            $is_open = $row['is_open'];
-
-            if (($displaytype == 2) && ($is_open == 0)) {
-                $retval = '<div class="poll-autotag-message">'
-                        . $LANG_POLLS['pollclosed'] . '</div>';
-            }
-            if(!isset($_COOKIE["poll-".$pid]) && !POLLS_ipAlreadyVoted($pid) && ($is_open == 1)) {
-                $retval .= POLLS_pollVote($pid,$showall,$displaytype);
-            } else {
-                $retval .= POLLS_pollResults($pid, $size,'','',$displaytype);
-            }
-        } else {
-            if ( $displaytype == 2 ) {
-                $retval = '';
-            } else {
-                if(!isset($_COOKIE["poll-".$pid]) && !POLLS_ipAlreadyVoted($pid) && ($is_open == 1)) {
-                    $retval .= POLLS_pollVote($pid,$showall,$displaytype);
-                } else {
-                    $retval .= POLLS_pollResults($pid, $size,'','',$displaytype);
-                }
-            }
-        }
-    } else {
-        $result = DB_query("SELECT pid,topic,is_open from {$_TABLES['polltopics']} WHERE display = 1 ORDER BY date DESC");
-        $nrows = DB_numRows($result );
-
-        $title = DB_getItem($_TABLES['blocks'], 'title', "name='poll_block'");
-
-        if ($nrows > 0) {
-            for ($i = 1; $i <= $nrows; $i++) {
-                $Q = DB_fetchArray($result);
-                $pid = $Q['pid'];
-                if ($displaytype == 1) { // in the poll block
-                    $showall = false;
-                } else { // assume we're in polls/index.php
-                    $retval .= COM_startBlock($title);
-                    $showall = true;
-                }
-
-                if (!isset($_COOKIE['poll-' . $pid]) &&
-                        !POLLS_ipAlreadyVoted($pid) && ($Q['is_open'] == 1)) {
-                    $retval .= POLLS_pollVote($pid, $showall, $displaytype);
-                } else {
-                    $retval .= POLLS_pollResults($pid, $size, '', '',
-                                                 $displaytype);
-                }
-
-                if ($displaytype == 1) { // in the poll block
-                    if (($i < $nrows) && !empty($retval)) {
-                        $retval .= '<div class="poll-divider"></div>';
-                    }
-                } else {
-                    $retval .= COM_endBlock();
-                }
-            }
-        }
-    }
-    return $retval;
-}
-
-/**
-* Saves a user's vote
-*
-* Saves the users vote, if allowed for the poll $pid.
-* NOTE: all data comes from form post
-*
-* @param    string   $pid   poll id
-* @param    array    $aid   selected answers
-* @return   string   HTML for poll results
-*
-*/
-function POLLS_pollsave($pid, $aid)
-{
-    global $_TABLES, $LANG_POLLS;
-
-    $retval = '';
-
-    if (POLLS_ipAlreadyVoted ($pid)) {
-        exit;
-    }
-
-    DB_change($_TABLES['polltopics'],'voters',"voters + 1",'pid',DB_escapeString($pid),'',true);
-    // This call to DB-change will properly supress the insertion of quotes around $value in the sql
-    $answers = count($aid);
-    for ($i = 0; $i < $answers; $i++) {
-        DB_change(
-            $_TABLES['pollanswers'],
-            'votes',
-            "votes + 1",
-            array('pid', 'qid', 'aid'),
-            array(DB_escapeString($pid),  $i, COM_applyFilter($aid[$i], true)),
-            '',
-            true
-        );
-    }
-
-    // This always does an insert so no need to provide key_field and key_value args
-    DB_save($_TABLES['pollvoters'],'ipaddress,date,pid',"'".DB_escapeString($_SERVER['REMOTE_ADDR'])."'," . time() . ",'".DB_escapeString($pid)."'");
-    $retval .= COM_startBlock ($LANG_POLLS['savedvotetitle'], '',
-                       COM_getBlockTemplate ('_msg_block', 'header'))
-        . $LANG_POLLS['savedvotemsg'] . ' "'
-        . DB_getItem ($_TABLES['polltopics'], 'topic', "pid = '".DB_escapeString($pid)."'")
-        . '"'
-        . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
-        . POLLS_pollResults($pid);
-
-    return $retval;
-}
-
-/**
-* Shows the results of a poll
-*
-* Shows the poll results for a given poll topic
-*
-* @param        string      $pid        ID for poll topic to show
-* @param        int         $scale      Size in pixels to scale formatted results to
-* @param        string      $order      'ASC' or 'DESC' for Comment ordering (SQL statment ordering)
-* @param        string      $mode       Comment Mode possible values 'nocomment', 'flat', 'nested', 'threaded'
-* @param        int        $displaytype       Possible values 0 = Normal, 1 = In Block, 2 = autotag
-* @see POLLS_pollVote
-* @see POLLS_showPoll
-* @return     string   HTML Formated Poll Results
-*
-*/
-function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype = 0)
-{
-    global $_CONF, $_TABLES, $_USER, $_IMAGE_TYPE,
-           $_PO_CONF, $LANG01, $LANG_POLLS, $_COM_VERBOSE, $LANG25;
-
-    $retval = '';
-    $topic_sql = "SELECT topic,voters,is_open,hideresults,commentcode,owner_id,group_id,"
-        . "perm_owner,perm_group,perm_members,perm_anon "
-        . "FROM {$_TABLES['polltopics']} WHERE pid='".DB_escapeString($pid)."'";
-    $result = DB_query($topic_sql);
-    $P = DB_fetchArray($result);
-
-    if(SEC_hasAccess($P['owner_id'], $P['group_id'], $P['perm_owner'],
-        $P['perm_group'], $P['perm_members'], $P['perm_anon']) == 0 ) {
-        return $retval;
-    }
-
-    if ((
-            $P['hideresults'] == 0
-        ) || (
-            ($P['hideresults'] == 1) && (isset($_USER['uid']) &&
-                                         ($_USER['uid'] == $P['owner_id']))
-        ) || (
-            ($P['hideresults'] == 1) && (SEC_inGroup('Root'))
-        )
-    ) {
-        $retval = '';
-    } else {
-        if ($displaytype == 2) {
-            $retval = '<div class="poll-autotag-message">' . $LANG_POLLS['pollhidden']. "</div>";
-        }
-
-        return $retval;
-    }
-
-    $ntopic = DB_numRows($result);
-    if ($ntopic == 1) {
-        $questions_sql = "SELECT qid,pid,question "
-            . "FROM {$_TABLES['pollquestions']} "
-            . "WHERE pid='".DB_escapeString($pid)."' "
-            . "ORDER BY qid";
-        $questions = DB_query ($questions_sql);
-        $nquestions = DB_numRows($questions);
-
-        if ($_COM_VERBOSE) {
-            COM_errorLog("got $questions questions in COM_pollResults", 1 );
-        }
-
-        if ($nquestions > 0){
-            $poll = new Template($_CONF['path'] . 'plugins/polls/templates/' );
-            $poll->set_file(array('result' => 'pollresult.thtml',
-                'question' => 'pollquestion.thtml',
-                'comments' => 'pollcomments.thtml',
-                'votes_bar' => 'pollvotes_bar.thtml',
-                'votes_num' => 'pollvotes_num.thtml' ));
-            $poll->set_var('xhtml', XHTML);
-            $poll->set_var('site_url', $_CONF['site_url']);
-            $poll->set_var('site_admin_url', $_CONF['site_admin_url']);
-            $poll->set_var('layout_url', $_CONF['layout_url']);
-            $poll->set_var('poll_topic', htmlspecialchars($P['topic']));
-
-            $poll->set_var('poll_id', $pid);
-            $poll->set_var('num_votes', COM_numberFormat($P['voters']));
-            $poll->set_var('lang_votes', $LANG_POLLS['votes']);
-            $access = SEC_hasAccess($P['owner_id'],$P['group_id'],$P['perm_owner'],
-                $P['perm_group'],$P['perm_members'],$P['perm_anon']);
-            if ($access == 3) {
-                $editlink = COM_createLink($LANG25[27], $_CONF['site_admin_url']
-                    . '/plugins/polls/index.php?mode=edit&amp;pid=' . $pid );
-                $poll->set_var('edit_link', $editlink);
-                $editicon = $_CONF['layout_url'] . '/images/edit.' . $_IMAGE_TYPE;
-                $icon_attr = array('title' => $LANG25[27]);
-                $editiconhtml = COM_createImage($editicon, $LANG25[27], $icon_attr);
-                $editlink = COM_createLink($editiconhtml, $_CONF['site_admin_url']
-                    . '/plugins/polls/index.php?mode=edit&amp;pid=' . $pid );
-                $poll->set_var('edit_icon', $editlink);
-            }
-            if ($_PO_CONF['answerorder'] == 'voteorder'){
-                $order = "votes DESC";
-            } else {
-                $order = "aid";
-            }
-
-            for ($j = 0; $j < $nquestions; $j++) {
-                $Q = DB_fetchArray($questions);
-
-                if ($nquestions >= 1) {
-                    $counter = ($j + 1) . "/$nquestions: " ;
-                }
-                $poll->set_var('poll_question', $counter . $Q['question']);
-
-                $answer_sql = "SELECT votes,answer,remark "
-                    . "FROM {$_TABLES['pollanswers']} "
-                    . "WHERE pid='".DB_escapeString($pid)."' and qid='".DB_escapeString($Q['qid'])."' "
-                    . "ORDER BY $order";
-                $answers = DB_query ($answer_sql);
-                $nanswers = DB_numRows($answers);
-
-                $a_summ_sql = "SELECT SUM(votes) as votesumm FROM {$_TABLES['pollanswers']} "
-                    . "WHERE pid='".DB_escapeString($pid)."' and qid='".DB_escapeString($Q['qid'])."' "
-                    . "GROUP BY qid";
-                $a_summ = DB_query ($a_summ_sql);
-                $S = DB_fetchArray($a_summ);
-
-                if ($_COM_VERBOSE) {
-                    COM_errorLog("got $answers answers in COM_pollResults", 1 );
-                }
-                for ($i=1; $i<=$nanswers; $i++) {
-                    $A = DB_fetchArray($answers);
-                    if ($S['votesumm'] == 0) {
-                        $percent = 0;
-                    } else {
-                        $percent = $A['votes'] / $S['votesumm'];
-                    }
-                    $poll->set_var('cssida', 1);
-                    $poll->set_var('cssidb', 2);
-                    $poll->set_var('answer_text', $A['answer']);
-                    $poll->set_var('remark_text', $A['remark']);
-                    $poll->set_var('answer_counter', $i);
-                    $poll->set_var('answer_odd', (($i - 1) % 2));
-                    $poll->set_var('answer_num', COM_numberFormat($A['votes']));
-                    $poll->set_var('answer_percent',
-                                    sprintf('%.2f', $percent * 100));
-                    if ($scale < 120) {
-                        $poll->parse('poll_votes', 'votes_num', true );
-                    } else {
-                        $width = (int)($percent * $scale);
-                        $poll->set_var('bar_width', $width);
-                        $poll->parse('poll_votes', 'votes_bar', true);
-                    }
-                }
-                $poll->parse('poll_questions', 'question', true);
-                $poll->clear_var('poll_votes');
-                if (($scale < 100) && ($j < 1)) {
-                    $url = $_CONF['site_url'] . "/polls/index.php?pid=$pid";
-                    $poll->set_var('notification', COM_createLink($LANG25[40], $url). "<br" . XHTML . ">");
-                    break;
-                }
-            }
-
-            if($P['commentcode'] >= 0 ) {
-                $num_comments = DB_count($_TABLES['comments'],
-                        array('sid', 'type' ), array(DB_escapeString($pid), 'polls' ));
-                $poll->set_var('num_comments',
-                        COM_numberFormat($num_comments));
-                $poll->set_var('lang_comments', $LANG01[3]);
-                $poll->set_var('poll_comments_url', $_CONF['site_url'] .
-                        '/polls/index.php?pid=' . $pid . '#comments');
-                $poll->parse('poll_comments', 'comments', true);
-            } else {
-                $poll->set_var('poll_comments_url', '');
-                $poll->set_var('poll_comments', '');
-            }
-
-            $poll->set_var('lang_polltopics', $LANG_POLLS['polltopics'] );
-
-            $retval .= $poll->finish($poll->parse('output', 'result' ));
-
-            if($scale > 399 && $P['commentcode'] >= 0 && $displaytype != 2) {
-                $delete_option = (SEC_hasRights('polls.edit') &&
-                    SEC_hasAccess($P['owner_id'], $P['group_id'],
-                    $P['perm_owner'], $P['perm_group'], $P['perm_members'],
-                    $P['perm_anon']) == 3 ? true : false);
-
-                USES_lib_comments();
-
-                $page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
-                if ( isset($_POST['order']) ) {
-                    $order  =  $_POST['order'] == 'ASC' ? 'ASC' : 'DESC';
-                } elseif (isset($_GET['order']) ) {
-                    $order =  $_GET['order'] == 'ASC' ? 'ASC' : 'DESC';
-                } else {
-                    $order = 'DESC';
-                }
-                if ( isset($_POST['mode']) ) {
-                    $mode = COM_applyFilter($_POST['mode']);
-                } elseif ( isset($_GET['mode']) ) {
-                    $mode = COM_applyFilter($_GET['mode']);
-                } else {
-                    $mode = '';
-                }
-                $retval .= CMT_userComments($pid, $P['topic'], 'polls',
-                                            $order, $mode, 0, $page, false,
-                                            $delete_option, $P['commentcode']);
-            }
-        }
-    }
-
-    return $retval;
-}
-
-/**
-* Check if we already have a vote from this IP address
-*
-* @param    string  $pid    Poll ID
-* @param    string  $ip     (optional) IP address
-* @return   boolean         true: IP already voted; false: didn't
-*
-*/
-function POLLS_ipAlreadyVoted($pid, $ip = '' )
-{
-    global $_TABLES;
-
-    $retval = false;
-
-    if(empty($ip )) {
-        $ip = $_SERVER['REMOTE_ADDR'];
-    }
-
-    if(DB_count($_TABLES['pollvoters'],
-                 array('ipaddress', 'pid'),
-                 array(DB_escapeString($ip), DB_escapeString($pid))) > 0) {
-        $retval = true;
-    }
-
-    return $retval;
 }
 
 /**
@@ -1089,7 +470,7 @@ function phpblock_polls()
 * @return   string      URL of the icon
 *
 */
-function plugin_geticon_polls ()
+function plugin_geticon_polls()
 {
     global $_CONF;
     return $_CONF['site_url'] . '/polls/images/polls.png';
@@ -1107,7 +488,7 @@ function plugin_geticon_polls ()
 * @param   boolean $view   True to view comment (by cid), false to display (by $pid)
 * @return  mixed   results of calling the plugin_displaycomment_ function
 */
-function plugin_displaycomment_polls ($id, $cid, $title, $order, $format, $page, $view)
+function plugin_displaycomment_polls($id, $cid, $title, $order, $format, $page, $view)
 {
     global $_TABLES, $LANG_ACCESS;
 
@@ -1135,71 +516,6 @@ function plugin_displaycomment_polls ($id, $cid, $title, $order, $format, $page,
                         COM_getBlockTemplate ('_msg_block', 'header'))
                 . $LANG_POLLS['deny_msg']
                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-    }
-
-    return $retval;
-}
-
-function plugin_getListField_polls($fieldname, $fieldvalue, $A, $icon_arr)
-{
-    global $_CONF, $LANG25, $LANG_ACCESS, $_USER;
-
-    $retval = '';
-
-    $access = SEC_hasAccess ($A['owner_id'], $A['group_id'],
-                             $A['perm_owner'], $A['perm_group'],
-                             $A['perm_members'], $A['perm_anon']);
-    if ($access > 0) {
-        switch($fieldname) {
-            case 'edit':
-                if ($access == 3) {
-                    $retval = COM_createLink($icon_arr['edit'],
-                        "{$_CONF['site_admin_url']}/plugins/polls/index.php?mode=edit&amp;pid={$A['pid']}");
-                }
-                break;
-            case 'unixdate':
-                $retval = strftime ($_CONF['daytime'], $A['unixdate']);
-                break;
-            case 'topic':
-                if (($A['hideresults'] == 0) ||
-                    (isset($_USER['uid']) && ($_USER['uid'] == $A['owner_id'])) || SEC_inGroup('Root')) {
-                    $retval = COM_createLink($fieldvalue,
-                        "{$_CONF['site_url']}/polls/index.php?pid={$A['pid']}");
-                } else {
-                    $retval = $fieldvalue;
-                }
-                break;
-            case 'access':
-                if ($access == 3) {
-                    $access = $LANG_ACCESS['edit'];
-                } else {
-                    $access = $LANG_ACCESS['readonly'];
-                }
-                $retval = $access;
-                break;
-            case 'is_open':
-                if ($A['is_open'] == 1) {
-                    $retval = $LANG25[25];
-                } else {
-                    $retval = $LANG25[26];
-                }
-                break;
-            case 'display':
-                if ($A['display'] == 1) {
-                    $retval = $LANG25[25];
-                } else {
-                    $retval = $LANG25[26];
-                }
-                break;
-            case 'voters':
-                $retval = COM_numberFormat ($A['voters']);
-                break;
-            default:
-                $retval = $fieldvalue;
-                break;
-        }
-    } else {
-        $retval = false;
     }
 
     return $retval;
@@ -1506,6 +822,592 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
     return $retval;
 }
 
+/**
+* Helper function: count number of polls and total number of votes
+*
+* @return   array(number of polls, number of votes);
+*
+*/
+function POLLS_countPollsAndVotes()
+{
+    global $_TABLES;
+
+    $total_polls = 0;
+    $total_answers = 0;
+
+    $result = DB_query ("SELECT COUNT(*) AS count FROM {$_TABLES['polltopics']}" . COM_getPermSQL ());
+    $A = DB_fetchArray($result);
+    $total_polls = $A['count'];
+
+    $result = DB_query ("SELECT pid FROM {$_TABLES['polltopics']}" . COM_getPermSQL ());
+    $nrows = DB_numRows ($result);
+    if ($nrows > 0) {
+        $topics = '';
+        for ($i = 1; $i <= $nrows; $i++) {
+            $A = DB_fetchArray($result);
+            if ($i > 1) {
+                $topics .= ',';
+            }
+            $topics .= "'" . $A['pid'] . "'";
+        }
+        $result = DB_query ("SELECT SUM(votes) FROM {$_TABLES['pollanswers']} WHERE pid IN ({$topics})");
+        $A = DB_fetchArray($result, true);
+        $total_answers = $A[0];
+    }
+
+    return array ($total_polls, $total_answers);
+}
+
+/**
+* Shows a poll form
+*
+* Shows an HTML formatted poll for the given topic ID
+*
+* @param      string      $pid      ID for poll topic
+* @param      boolean     $showall  Show only the first question in the poll or all?
+* @param        int        $displaytype       Possible values 0 = Normal, 1 = In Block, 2 = autotag
+* @see function COM_pollResults
+* @see function COM_showPoll
+* @return       string  HTML Formatted Poll
+*
+*/
+
+function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
+{
+    global $_CONF, $_TABLES, $LANG_POLLS, $LANG01, $_USER, $LANG25, $_IMAGE_TYPE;
+    $retval = '';
+
+    $result = DB_query("SELECT topic,voters,commentcode,is_open,hideresults,owner_id "
+        . ",group_id,perm_owner,perm_group,perm_anon,perm_members "
+        . "FROM {$_TABLES['polltopics']} WHERE pid='".DB_escapeString($pid)."'" . COM_getPermSql('AND'));
+    $ntopics = DB_numRows($result);
+
+    if($ntopics == 0 ) {
+        return $retval;
+    }
+    $P = DB_fetchArray($result);
+    if ((!isset($_COOKIE[$pid]) && !POLLS_ipAlreadyVoted($pid)) or ($P['is_open'] == 1)) {
+        if ($ntopics == 1) {
+            $questions_sql = "SELECT question,qid "
+                . "FROM {$_TABLES['pollquestions']} "
+                . "WHERE pid='".DB_escapeString($pid)."' ORDER BY qid";
+
+            $questions = DB_query($questions_sql);
+            $nquestions = DB_numRows($questions );
+
+            if($nquestions > 0 ) {
+                $poll = new Template($_CONF['path'] . 'plugins/polls/templates/');
+                $poll->set_file(array('panswer' => 'pollanswer.thtml',
+                                        'block' => 'pollblock.thtml',
+                                        'pquestions' => 'pollquestions.thtml',
+                                        'comments' => 'pollcomments.thtml'));
+                $poll->set_var('poll_id', $pid );
+                if ($nquestions > 1) {
+                    $poll->set_var('poll_topic', $LANG25['34'] . " " . htmlspecialchars($P['topic']));
+                    $poll->set_var('lang_question', $LANG25[31].':');
+                }
+                $poll->set_var('num_votes', COM_numberFormat($P['voters']));
+                $poll->set_var('poll_vote_url', $_CONF['site_url']
+                                                . '/polls/index.php');
+                if (($nquestions == 1) || $showall) {
+                    $poll->set_var('lang_vote', $LANG_POLLS['vote']);
+                } else {
+                    $poll->set_var('lang_vote', $LANG_POLLS['start_poll']);
+                }
+                $poll->set_var('lang_votes', $LANG_POLLS['votes']);
+
+                $results = '';
+                if (($P['is_open'] == 0) || ($P['hideresults'] == 0) ||
+                    (($P['hideresults'] == 1) &&
+                        (
+                        SEC_inGroup('Root') ||
+                        (isset($_USER['uid'])
+                            && ($_USER['uid'] == $P['owner_id']))
+                        ))) {
+                    $results = COM_createLink($LANG_POLLS['results'],
+                        $_CONF['site_url'] . '/polls/index.php?pid=' . $pid
+                        . '&amp;aid=-1');
+                }
+                $poll->set_var('poll_results', $results);
+
+                $access = SEC_hasAccess($P['owner_id'], $P['group_id'],
+                                $P['perm_owner'], $P['perm_group'],
+                                $P['perm_members'], $P['perm_anon']);
+                if (($access == 3) && SEC_hasRights('polls.edit')) {
+                    $editlink = COM_createLink($LANG25[27], $_CONF['site_admin_url']
+                        . '/plugins/polls/index.php?edit=x&amp;pid=' . $pid);
+                    $poll->set_var('edit_link', $editlink);
+                    $editicon = $_CONF['layout_url'] . '/images/edit.' . $_IMAGE_TYPE;
+                    $icon_attr = array('title' => $LANG25[27]);
+                    $editiconhtml = COM_createImage($editicon, $LANG25[27], $icon_attr);
+                    $editlink = COM_createLink($editiconhtml, $_CONF['site_admin_url']
+                        . '/plugins/polls/index.php?edit=x&amp;pid=' . $pid);
+                    $poll->set_var('edit_icon', $editlink);
+                }
+
+                if (array_key_exists('aid', $_POST)) {
+                    $aid = $_POST['aid'];
+                } else {
+                    $aid = array();
+                }
+
+                for($j=0; $j<$nquestions; $j++) {
+                    $Q = DB_fetchArray($questions);
+                    $poll->set_var('poll_question', " ".$Q['question']);
+                    $poll->set_var('question_id', $j);
+
+                    $notification = "";
+                    $filter = "";
+                    if ($showall == false) {
+                        $nquestions--;
+                        $notification = $LANG25[35] . " $nquestions " . $LANG25[36];
+                        $filter = "AND qid='0'";
+                        $nquestions = 1;
+                    } else {
+                        $filter = "AND qid = '{$Q['qid']}'";
+                        $poll->set_var('lang_question_number', " ". ($j+1).":");
+                    }
+                    $answer_sql = "SELECT answer,aid "
+                        . "FROM {$_TABLES['pollanswers']} "
+                        . "WHERE pid='".DB_escapeString($pid)."'$filter ORDER BY qid, aid";
+                    $answers = DB_query($answer_sql);
+                    $nanswers = DB_numRows($answers );
+                    for($i=0; $i<$nanswers; $i++) {
+                        $A = DB_fetchArray($answers );
+                        if (($j < count($aid)) && ($aid[$j] == $A['aid'])) {
+                            $poll->set_var('selected', ' checked');
+                        }
+                        $poll->set_var('answer_id', $A['aid']);
+                        $poll->set_var('answer_text', $A['answer']);
+                        $poll->parse('poll_answers', 'panswer', true);
+                        $poll->clear_var('selected');
+                    }
+                    $poll->parse('poll_questions', 'pquestions', true);
+                    $poll->clear_var('poll_answers');
+                }
+                $poll->set_var('lang_polltopics', $LANG_POLLS['polltopics']);
+                $poll->set_var('poll_notification', $notification);
+                if($P['commentcode'] >= 0 ) {
+                    $num_comments = DB_count($_TABLES['comments'],
+                            array('sid', 'type'), array(DB_escapeString($pid), 'polls'));
+                    $poll->set_var('num_comments',
+                            COM_numberFormat($num_comments));
+                    $poll->set_var('lang_comments', $LANG01[3]);
+                    $poll->set_var('poll_comments_url', $_CONF['site_url'] .
+                        '/polls/index.php?pid=' . $pid . '#comments');
+                    $poll->parse('poll_comments', 'comments', true);
+                } else {
+                    $poll->set_var('poll_comments', '');
+                    $poll->set_var('poll_comments_url', '');
+                }
+                $retval =  $poll->finish($poll->parse('output', 'block')) . LB;
+
+                if ($showall && ($P['commentcode'] >= 0 AND $displaytype != 2)) {
+                    $delete_option = (SEC_hasRights('polls.edit') &&
+                        SEC_hasAccess($P['owner_id'], $P['group_id'],
+                        $P['perm_owner'], $P['perm_group'], $P['perm_members'],
+                        $P['perm_anon']) == 3 ? true : false);
+
+                    USES_lib_comments();
+
+                    $page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
+                    if ( isset($_POST['order']) ) {
+                        $order  =  $_POST['order'] == 'ASC' ? 'ASC' : 'DESC';
+                    } elseif (isset($_GET['order']) ) {
+                        $order =  $_GET['order'] == 'ASC' ? 'ASC' : 'DESC';
+                    } else {
+                        $order = 'DESC';
+                    }
+                    if ( isset($_POST['mode']) ) {
+                        $mode = COM_applyFilter($_POST['mode']);
+                    } elseif ( isset($_GET['mode']) ) {
+                        $mode = COM_applyFilter($_GET['mode']);
+                    } else {
+                        $mode = '';
+                    }
+                    $retval .= CMT_userComments($pid, $P['topic'], 'polls',
+                                                $order, $mode, 0, $page, false,
+                                                $delete_option, $P['commentcode']);
+                }
+            }
+        }
+    } else {
+        $retval .= POLLS_pollResults($pid, 0, '', '', $displaytype);
+    }
+
+    return $retval;
+}
+
+/**
+* This shows a poll
+*
+* This will determine if a user needs to see the poll form OR the poll result.
+*
+* @param        int     $size           Size in pixels of poll results
+* @param        string  $pid            Poll topic ID to show (optional)
+* @param        boolean $showall        Show only the first question or all
+* @param        int     $displaytype    Possible values 0 = Normal, 1 = In Block, 2 = autotag
+* @return       string  HTML formatted string of poll
+* @see function COM_pollVote
+* @see function COM_pollResults
+*
+*/
+function POLLS_showPoll($size, $pid = '', $showall = false, $displaytype = 0)
+{
+    global $_CONF, $_PO_CONF, $_TABLES, $LANG_POLLS;
+
+    $retval = '';
+    $is_open = 0;
+
+    DB_query("DELETE FROM {$_TABLES['pollvoters']} WHERE date < unix_timestamp() - {$_PO_CONF['polladdresstime']}");
+
+    if(!empty($pid)) {
+        $sql = "SELECT * FROM {$_TABLES['polltopics']} WHERE pid='".$pid."'";
+        $result = DB_query($sql);
+        if ( DB_numRows($result) > 0 ) {
+            $row = DB_fetchArray($result);
+            $is_open = $row['is_open'];
+
+            if (($displaytype == 2) && ($is_open == 0)) {
+                $retval = '<div class="poll-autotag-message">'
+                        . $LANG_POLLS['pollclosed'] . '</div>';
+            }
+            if(!isset($_COOKIE["poll-".$pid]) && !POLLS_ipAlreadyVoted($pid) && ($is_open == 1)) {
+                $retval .= POLLS_pollVote($pid,$showall,$displaytype);
+            } else {
+                $retval .= POLLS_pollResults($pid, $size,'','',$displaytype);
+            }
+        } else {
+            if ( $displaytype == 2 ) {
+                $retval = '';
+            } else {
+                if(!isset($_COOKIE["poll-".$pid]) && !POLLS_ipAlreadyVoted($pid) && ($is_open == 1)) {
+                    $retval .= POLLS_pollVote($pid,$showall,$displaytype);
+                } else {
+                    $retval .= POLLS_pollResults($pid, $size,'','',$displaytype);
+                }
+            }
+        }
+    } else {
+        $result = DB_query("SELECT pid,topic,is_open from {$_TABLES['polltopics']} WHERE display = 1 ORDER BY date DESC");
+        $nrows = DB_numRows($result );
+
+        $title = DB_getItem($_TABLES['blocks'], 'title', "name='poll_block'");
+
+        if ($nrows > 0) {
+            for ($i = 1; $i <= $nrows; $i++) {
+                $Q = DB_fetchArray($result);
+                $pid = $Q['pid'];
+                if ($displaytype == 1) { // in the poll block
+                    $showall = false;
+                } else { // assume we're in polls/index.php
+                    $retval .= COM_startBlock($title);
+                    $showall = true;
+                }
+
+                if (!isset($_COOKIE['poll-' . $pid]) &&
+                        !POLLS_ipAlreadyVoted($pid) && ($Q['is_open'] == 1)) {
+                    $retval .= POLLS_pollVote($pid, $showall, $displaytype);
+                } else {
+                    $retval .= POLLS_pollResults($pid, $size, '', '',
+                                                 $displaytype);
+                }
+
+                if ($displaytype == 1) { // in the poll block
+                    if (($i < $nrows) && !empty($retval)) {
+                        $retval .= '<div class="poll-divider"></div>';
+                    }
+                } else {
+                    $retval .= COM_endBlock();
+                }
+            }
+        }
+    }
+    return $retval;
+}
+
+/**
+* Saves a user's vote
+*
+* Saves the users vote, if allowed for the poll $pid.
+* NOTE: all data comes from form post
+*
+* @param    string   $pid   poll id
+* @param    array    $aid   selected answers
+* @return   string   HTML for poll results
+*
+*/
+function POLLS_saveVote($pid, $aid)
+{
+    global $_TABLES, $LANG_POLLS;
+
+    $retval = '';
+
+    if (POLLS_ipAlreadyVoted ($pid)) {
+        exit;
+    }
+
+    DB_change($_TABLES['polltopics'],'voters',"voters + 1",'pid',DB_escapeString($pid),'',true);
+    // This call to DB-change will properly supress the insertion of quotes around $value in the sql
+    $answers = count($aid);
+    for ($i = 0; $i < $answers; $i++) {
+        DB_change(
+            $_TABLES['pollanswers'],
+            'votes',
+            "votes + 1",
+            array('pid', 'qid', 'aid'),
+            array(DB_escapeString($pid),  $i, COM_applyFilter($aid[$i], true)),
+            '',
+            true
+        );
+    }
+
+    // This always does an insert so no need to provide key_field and key_value args
+    DB_save($_TABLES['pollvoters'],'ipaddress,date,pid',"'".DB_escapeString($_SERVER['REMOTE_ADDR'])."'," . time() . ",'".DB_escapeString($pid)."'");
+    $retval .= COM_startBlock ($LANG_POLLS['savedvotetitle'], '',
+                       COM_getBlockTemplate ('_msg_block', 'header'))
+        . $LANG_POLLS['savedvotemsg'] . ' "'
+        . DB_getItem ($_TABLES['polltopics'], 'topic', "pid = '".DB_escapeString($pid)."'")
+        . '"'
+        . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
+        . POLLS_pollResults($pid);
+
+    return $retval;
+}
+
+/**
+* Shows the results of a poll
+*
+* Shows the poll results for a given poll topic
+*
+* @param        string      $pid        ID for poll topic to show
+* @param        int         $scale      Size in pixels to scale formatted results to
+* @param        string      $order      'ASC' or 'DESC' for Comment ordering (SQL statment ordering)
+* @param        string      $mode       Comment Mode possible values 'nocomment', 'flat', 'nested', 'threaded'
+* @param        int        $displaytype       Possible values 0 = Normal, 1 = In Block, 2 = autotag
+* @see POLLS_pollVote
+* @see POLLS_showPoll
+* @return     string   HTML Formated Poll Results
+*
+*/
+function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype = 0)
+{
+    global $_CONF, $_TABLES, $_USER, $_IMAGE_TYPE,
+           $_PO_CONF, $LANG01, $LANG_POLLS, $_COM_VERBOSE, $LANG25;
+
+    $retval = '';
+    $topic_sql = "SELECT topic,voters,is_open,hideresults,commentcode,owner_id,group_id,"
+        . "perm_owner,perm_group,perm_members,perm_anon "
+        . "FROM {$_TABLES['polltopics']} WHERE pid='".DB_escapeString($pid)."'";
+    $result = DB_query($topic_sql);
+    $P = DB_fetchArray($result);
+
+    if(SEC_hasAccess($P['owner_id'], $P['group_id'], $P['perm_owner'],
+        $P['perm_group'], $P['perm_members'], $P['perm_anon']) == 0 ) {
+        return $retval;
+    }
+
+    if ((
+            $P['hideresults'] == 0
+        ) || (
+            ($P['hideresults'] == 1) && (isset($_USER['uid']) &&
+                                         ($_USER['uid'] == $P['owner_id']))
+        ) || (
+            ($P['hideresults'] == 1) && (SEC_inGroup('Root'))
+        )
+    ) {
+        $retval = '';
+    } else {
+        if ($displaytype == 2) {
+            $retval = '<div class="poll-autotag-message">' . $LANG_POLLS['pollhidden']. "</div>";
+        }
+
+        return $retval;
+    }
+
+    $ntopic = DB_numRows($result);
+    if ($ntopic == 1) {
+        $questions_sql = "SELECT qid,pid,question "
+            . "FROM {$_TABLES['pollquestions']} "
+            . "WHERE pid='".DB_escapeString($pid)."' "
+            . "ORDER BY qid";
+        $questions = DB_query ($questions_sql);
+        $nquestions = DB_numRows($questions);
+
+        if ($_COM_VERBOSE) {
+            COM_errorLog("got $questions questions in COM_pollResults", 1 );
+        }
+
+        if ($nquestions > 0){
+            $poll = new Template($_CONF['path'] . 'plugins/polls/templates/' );
+            $poll->set_file(array('result' => 'pollresult.thtml',
+                'question' => 'pollquestion.thtml',
+                'comments' => 'pollcomments.thtml',
+                'votes_bar' => 'pollvotes_bar.thtml',
+                'votes_num' => 'pollvotes_num.thtml' ));
+            $poll->set_var('xhtml', XHTML);
+            $poll->set_var('site_url', $_CONF['site_url']);
+            $poll->set_var('site_admin_url', $_CONF['site_admin_url']);
+            $poll->set_var('layout_url', $_CONF['layout_url']);
+            $poll->set_var('poll_topic', htmlspecialchars($P['topic']));
+
+            $poll->set_var('poll_id', $pid);
+            $poll->set_var('num_votes', COM_numberFormat($P['voters']));
+            $poll->set_var('lang_votes', $LANG_POLLS['votes']);
+            $access = SEC_hasAccess($P['owner_id'],$P['group_id'],$P['perm_owner'],
+                $P['perm_group'],$P['perm_members'],$P['perm_anon']);
+            if ($access == 3) {
+                $editlink = COM_createLink($LANG25[27], $_CONF['site_admin_url']
+                    . '/plugins/polls/index.php?edit=x&amp;pid=' . $pid );
+                $poll->set_var('edit_link', $editlink);
+                $editicon = $_CONF['layout_url'] . '/images/edit.' . $_IMAGE_TYPE;
+                $icon_attr = array('title' => $LANG25[27]);
+                $editiconhtml = COM_createImage($editicon, $LANG25[27], $icon_attr);
+                $editlink = COM_createLink($editiconhtml, $_CONF['site_admin_url']
+                    . '/plugins/polls/index.php?edit=x&amp;pid=' . $pid );
+                $poll->set_var('edit_icon', $editlink);
+            }
+            if ($_PO_CONF['answerorder'] == 'voteorder'){
+                $order = "votes DESC";
+            } else {
+                $order = "aid";
+            }
+
+            for ($j = 0; $j < $nquestions; $j++) {
+                $Q = DB_fetchArray($questions);
+
+                if ($nquestions >= 1) {
+                    $counter = ($j + 1) . "/$nquestions: " ;
+                }
+                $poll->set_var('poll_question', $counter . $Q['question']);
+
+                $answer_sql = "SELECT votes,answer,remark "
+                    . "FROM {$_TABLES['pollanswers']} "
+                    . "WHERE pid='".DB_escapeString($pid)."' and qid='".DB_escapeString($Q['qid'])."' "
+                    . "ORDER BY $order";
+                $answers = DB_query ($answer_sql);
+                $nanswers = DB_numRows($answers);
+
+                $a_summ_sql = "SELECT SUM(votes) as votesumm FROM {$_TABLES['pollanswers']} "
+                    . "WHERE pid='".DB_escapeString($pid)."' and qid='".DB_escapeString($Q['qid'])."' "
+                    . "GROUP BY qid";
+                $a_summ = DB_query ($a_summ_sql);
+                $S = DB_fetchArray($a_summ);
+
+                if ($_COM_VERBOSE) {
+                    COM_errorLog("got $answers answers in COM_pollResults", 1 );
+                }
+                for ($i=1; $i<=$nanswers; $i++) {
+                    $A = DB_fetchArray($answers);
+                    if ($S['votesumm'] == 0) {
+                        $percent = 0;
+                    } else {
+                        $percent = $A['votes'] / $S['votesumm'];
+                    }
+                    $poll->set_var('cssida', 1);
+                    $poll->set_var('cssidb', 2);
+                    $poll->set_var('answer_text', $A['answer']);
+                    $poll->set_var('remark_text', $A['remark']);
+                    $poll->set_var('answer_counter', $i);
+                    $poll->set_var('answer_odd', (($i - 1) % 2));
+                    $poll->set_var('answer_num', COM_numberFormat($A['votes']));
+                    $poll->set_var('answer_percent',
+                                    sprintf('%.2f', $percent * 100));
+                    if ($scale < 120) {
+                        $poll->parse('poll_votes', 'votes_num', true );
+                    } else {
+                        $width = (int)($percent * $scale);
+                        $poll->set_var('bar_width', $width);
+                        $poll->parse('poll_votes', 'votes_bar', true);
+                    }
+                }
+                $poll->parse('poll_questions', 'question', true);
+                $poll->clear_var('poll_votes');
+                if (($scale < 100) && ($j < 1)) {
+                    $url = $_CONF['site_url'] . "/polls/index.php?pid=$pid";
+                    $poll->set_var('notification', COM_createLink($LANG25[40], $url). "<br" . XHTML . ">");
+                    break;
+                }
+            }
+
+            if($P['commentcode'] >= 0 ) {
+                $num_comments = DB_count($_TABLES['comments'],
+                        array('sid', 'type' ), array(DB_escapeString($pid), 'polls' ));
+                $poll->set_var('num_comments',
+                        COM_numberFormat($num_comments));
+                $poll->set_var('lang_comments', $LANG01[3]);
+                $poll->set_var('poll_comments_url', $_CONF['site_url'] .
+                        '/polls/index.php?pid=' . $pid . '#comments');
+                $poll->parse('poll_comments', 'comments', true);
+            } else {
+                $poll->set_var('poll_comments_url', '');
+                $poll->set_var('poll_comments', '');
+            }
+
+            $poll->set_var('lang_polltopics', $LANG_POLLS['polltopics'] );
+
+            $retval .= $poll->finish($poll->parse('output', 'result' ));
+
+            if($scale > 399 && $P['commentcode'] >= 0 && $displaytype != 2) {
+                $delete_option = (SEC_hasRights('polls.edit') &&
+                    SEC_hasAccess($P['owner_id'], $P['group_id'],
+                    $P['perm_owner'], $P['perm_group'], $P['perm_members'],
+                    $P['perm_anon']) == 3 ? true : false);
+
+                USES_lib_comments();
+
+                $page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
+                if ( isset($_POST['order']) ) {
+                    $order  =  $_POST['order'] == 'ASC' ? 'ASC' : 'DESC';
+                } elseif (isset($_GET['order']) ) {
+                    $order =  $_GET['order'] == 'ASC' ? 'ASC' : 'DESC';
+                } else {
+                    $order = 'DESC';
+                }
+                if ( isset($_POST['mode']) ) {
+                    $mode = COM_applyFilter($_POST['mode']);
+                } elseif ( isset($_GET['mode']) ) {
+                    $mode = COM_applyFilter($_GET['mode']);
+                } else {
+                    $mode = '';
+                }
+                $retval .= CMT_userComments($pid, $P['topic'], 'polls',
+                                            $order, $mode, 0, $page, false,
+                                            $delete_option, $P['commentcode']);
+            }
+        }
+    }
+
+    return $retval;
+}
+
+/**
+* Check if we already have a vote from this IP address
+*
+* @param    string  $pid    Poll ID
+* @param    string  $ip     (optional) IP address
+* @return   boolean         true: IP already voted; false: didn't
+*
+*/
+function POLLS_ipAlreadyVoted($pid, $ip = '' )
+{
+    global $_TABLES;
+
+    $retval = false;
+
+    if(empty($ip )) {
+        $ip = $_SERVER['REMOTE_ADDR'];
+    }
+
+    if(DB_count($_TABLES['pollvoters'],
+                 array('ipaddress', 'pid'),
+                 array(DB_escapeString($ip), DB_escapeString($pid))) > 0) {
+        $retval = true;
+    }
+
+    return $retval;
+}
+
 function POLLS_siteHeader($title='', $meta='')
 {
     global $_PO_CONF;
@@ -1548,4 +1450,86 @@ function POLLS_siteFooter() {
     }
     return $retval;
 }
+
+function POLLS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
+{
+    global $_CONF, $LANG25, $LANG_ACCESS, $_USER;
+
+    $retval = '';
+
+    $access = SEC_hasAccess ($A['owner_id'], $A['group_id'],
+                             $A['perm_owner'], $A['perm_group'],
+                             $A['perm_members'], $A['perm_anon']);
+    if ($access > 0) {
+        switch($fieldname) {
+            case 'edit':
+                if ($access == 3) {
+                    $retval = COM_createLink($icon_arr['edit'],
+                        "{$_CONF['site_admin_url']}/plugins/polls/index.php?edit=x&amp;pid={$A['pid']}");
+                }
+                break;
+            case 'unixdate':
+                $retval = strftime ($_CONF['daytime'], $A['unixdate']);
+                break;
+            case 'topic':
+                if (($A['hideresults'] == 0) ||
+                    (isset($_USER['uid']) && ($_USER['uid'] == $A['owner_id'])) || SEC_inGroup('Root')) {
+                    $retval = COM_createLink($fieldvalue,
+                        "{$_CONF['site_url']}/polls/index.php?pid={$A['pid']}");
+                } else {
+                    $retval = $fieldvalue;
+                }
+                break;
+            case 'access':
+                if ($access == 3) {
+                    $access = $LANG_ACCESS['edit'];
+                } else {
+                    $access = $LANG_ACCESS['readonly'];
+                }
+                $retval = $access;
+                break;
+            case 'is_open':
+                if ($A['is_open'] == 1) {
+                    $retval = $LANG25[25];
+                } else {
+                    $retval = $LANG25[26];
+                }
+                break;
+            case 'display':
+                if ($A['display'] == 1) {
+                    $retval = $LANG25[25];
+                } else {
+                    $retval = $LANG25[26];
+                }
+                break;
+            case 'voters':
+                $retval = COM_numberFormat ($A['voters']);
+                break;
+
+            case 'delete':
+                if ($access == 3) {
+                    $attr['title'] = $LANG_ADMIN['delete'];
+                    $attr['onclick'] = "return doubleconfirm('" . $LANG25[41] . "','" . $LANG25[42] . "');";
+                    $retval = COM_createLink(
+                        $icon_arr['delete'],
+                        $_CONF['site_admin_url'] . '/plugins/polls/index.php'
+                        . '?delete=x&amp;pid=' . $A['pid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+                } else {
+                    $retval = $icon_arr['blank'];
+                }
+                break;
+
+
+            default:
+                $retval = $fieldvalue;
+                break;
+        }
+    } else {
+        $retval = false;
+    }
+
+    return $retval;
+}
+
+
 ?>
