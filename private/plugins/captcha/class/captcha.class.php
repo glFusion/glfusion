@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -181,12 +181,8 @@ class captcha {
             $i = mt_rand(0,$cCount);
             $this->CaptchaString = $i;
         } else {
-            $uppercase  = range('A', 'Z');
-            //$lowercase  = range('a', 'z');
-            $numeric    = range(0, 9);
-
-            $CharPool   = array_merge($uppercase, $numeric);
-            $PoolLength = count($CharPool) - 1;
+            $CharPool = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";
+            $PoolLength = strlen($CharPool) - 1;
 
             for ($i = 0; $i < $this->Length; $i++) {
                 $this->CaptchaString .= $CharPool[mt_rand(0, $PoolLength)];

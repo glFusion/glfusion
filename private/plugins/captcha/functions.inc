@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -147,12 +147,6 @@ function plugin_templatesetvars_captcha($ctype, &$template) {
                 return;
             }
             break;
-        case 'rating' :
-            if ( $_CP_CONF['enable_rating'] != 1 ) {
-                $template->set_var('captcha','');
-                return;
-            }
-            break;
         case 'links' :
             if ( $_CP_CONF['enable_links'] != 1 ) {
                 $template->set_var('captcha','');
@@ -276,11 +270,6 @@ function plugin_itemPreSave_captcha( $ctype='registration', $content='' ) {
             break;
         case 'mediagallery' :
             if ( $_CP_CONF['enable_mediagallery'] != 1 ) {
-                return '';
-            }
-            break;
-        case 'rating' :
-            if ( $_CP_CONF['enable_rating'] != 1 ) {
                 return '';
             }
             break;
@@ -408,9 +397,6 @@ function CAPTCHA_getHTML($csid, $ctype='general' ) {
             break;
         case 'mediagallery' :
             $T->set_file('page', 'captcha_mediagallery.thtml');
-            break;
-        case 'rating' :
-            $T->set_file('page', 'captcha_rating.thtml');
             break;
         case 'general' :
             $T->set_file('page', 'captcha.thtml');
