@@ -353,6 +353,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     switch ($action) {
         case 'clone' :
         case 'edit':
+        case 'preview':
             $title = $LANG24[5];
             $saveoption = $LANG_ADMIN['save'];
             $submission = false;
@@ -369,6 +370,8 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
             $action = 'edit';
             break;
     }
+
+    COM_errorLog( "saveoption=$saveoption");
 
     if (!isset ($_CONF['hour_mode'])) {
         $_CONF['hour_mode'] = 12;
