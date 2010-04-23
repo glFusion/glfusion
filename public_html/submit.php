@@ -259,11 +259,16 @@ function sendNotification ($table, $story)
 {
     global $_CONF, $_TABLES, $LANG01, $LANG08, $LANG24, $LANG29, $LANG_ADMIN;
 
-    $title = COM_undoSpecialChars( $story->displayElements('title') );
-    if ($A['postmode'] == 'html') {
-        $A['introtext'] = strip_tags ($A['introtext']);
-    }
+    $title = stripslashes(COM_undoSpecialChars( $story->displayElements('title') ));
+    $postmode = $story->displayElements('postmode');
     $introtext = COM_undoSpecialChars( $story->displayElements('introtext') . "\n" . $story->displayElements('bodytext') );
+    if ($postmode == 'html') {
+        USES_lib_html2text();
+        $introtext = str_replace("\\r","",$introtext);
+        $introtext = stripslashes($introtext);
+        $html2txt  = new html2text($introtext,false);
+        $introtext = trim($html2txt->get_text());
+    }
     $storyauthor = COM_getDisplayName( $story->displayelements('uid') );
     $topic = stripslashes(DB_getItem ($_TABLES['topics'], 'topic',
                                        'tid = \''.DB_escapeString($story->displayElements('tid')).'\''));
