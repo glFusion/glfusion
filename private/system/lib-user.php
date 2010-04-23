@@ -539,6 +539,9 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
                                    strlen ($_CONF['path_html']));
                 $img = $_CONF['site_url'] . '/' . $imgpath . 'userphotos/'
                      . $photo;
+                if ( !@file_exists( $_CONF['path_html'] . $imgpath . 'userphotos/'.$photo ) ) {
+                    $img = '';
+                }
             } else {
                 $img = $_CONF['site_url']
                      . '/getimage.php?mode=userphotos&amp;image=' . $photo;

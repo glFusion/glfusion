@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.2.0
 ------
+- CAPTCHA - Exclude 0,O,1,I,L from dynamic CAPTCHA generation (Mark)
+- Add check to ensure user photo physically exists, if not return default
+  user photo (Mark)
 - Polls Admin - code scrub and UI improvements, some template tweaks (Mark H.)
 - Added 2 new configuration options for comments: (Mark)
     - comment_postmode - set default postmode for comments (Text/HTML)
