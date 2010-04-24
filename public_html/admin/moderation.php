@@ -540,7 +540,7 @@ function MODERATE_itemList($type='', $token)
 
                 // this needs to be removed when story moves into a plugin
                 if ($type == 'story') {
-                    $iplugin = false;
+                    $isplugin = false;
                 }
 
                 // we really only need the id from this list, so that we know key/id field name
