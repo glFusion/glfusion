@@ -2019,7 +2019,7 @@ function USER_batchAdmin()
                         . "\" value=\"{$token}\"" . XHTML . ">";
 
     $display .= ADMIN_list('user', 'USER_getListField', $header_arr,
-                           $text_arr, $query_arr, $defsort_arr, $filter, $token,
+                           $text_arr, $query_arr, $defsort_arr, '', $token,
                            $options, $form_arr);
 
     $display .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
