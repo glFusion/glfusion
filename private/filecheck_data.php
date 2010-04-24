@@ -1341,7 +1341,6 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/captcha/templates/captcha_forum.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/captcha/templates/captcha_links.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/captcha/templates/captcha_mediagallery.thtml' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/captcha/templates/captcha_rating.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/captcha/templates/captcha_registration.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/captcha/templates/captcha_story.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/captcha/templates/custom/index.html' ),
@@ -2771,6 +2770,7 @@ $glfFile = array(
 // plugin: captcha
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/captcha/captcha.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/captcha/captcha.png' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/captcha/reload.png' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/captcha/class/captcha.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/captcha/class/index.html' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/captcha/index.html' ),
