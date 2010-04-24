@@ -2,6 +2,11 @@ glFusion ChangeLog
 
 v1.2.0
 ------
+- General (x)HTML compliance fixes (Eric)
+- Added ie7 horizontal scrollbar fix (Eric)
+- Added help text for Registration Type (Eric)
+- Moved comments links to same line in story footer (Eric)
+- Re-freshed CAPTCHA layouts (Eric and Mark H.)
 - CAPTCHA - Exclude 0,O,1,I,L from dynamic CAPTCHA generation (Mark)
 - Add check to ensure user photo physically exists, if not return default
   user photo (Mark)
