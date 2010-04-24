@@ -176,6 +176,7 @@ function mediagallery_upgrade()
                 DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.5.0' WHERE pi_name='mediagallery' LIMIT 1");
             }
         case "1.5.0" :
+        case "1.5.1" :
             if ( MG_upgrade_160() == 0 ) {
                 DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.6.0' WHERE pi_name='mediagallery' LIMIT 1");
             }
