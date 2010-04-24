@@ -690,6 +690,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('article_comment_close_days',30,'text',4,21,NULL,1700,TRUE);
             $c->add('comment_close_rec_stories',0,'text',4,21,NULL,1710,TRUE);
 
+            $c->add('image_lib','gdlib','select',5,22,10,1450,TRUE);
             $c->add('jhead_enabled',0,'select',5,22,0,1480,TRUE);
             $c->add('path_to_jhead','','text',5,22,NULL,1490,TRUE);
             $c->add('jpegtrans_enabled',0,'select',5,22,0,1500,TRUE);
