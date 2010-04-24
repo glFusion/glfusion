@@ -607,8 +607,22 @@ function queueComplete(numFilesUploaded) {
 
 var swfu;
 
-SWFUpload.onload = function () {
-    var settings = {
+function addLoadEvent(func) {
+  var oldonload = window.onload;
+  if (typeof window.onload != 'function') {
+    window.onload = func;
+  } else {
+    window.onload = function() {
+      if (oldonload) {
+        oldonload();
+      }
+      func();
+    }
+  }
+}
+
+addLoadEvent(function() {
+var settings = {
         flash_url : "{flash_url}",
         upload_url: "{upload_url}",
         file_upload_limit : 100,
@@ -645,11 +659,9 @@ SWFUpload.onload = function () {
     };
 
     swfu = new SWFUpload(settings);
-
-    // set the user_id, user_token, dest_album & allowed_file_types
-    onAlbumChange();
-    onAlbumChange();
-}
+});
+addLoadEvent(onAlbumChange);
+addLoadEvent(onAlbumChange);
 
 function onAlbumChange() {
   var aid_index = document.form_album.album_id.selectedIndex;
