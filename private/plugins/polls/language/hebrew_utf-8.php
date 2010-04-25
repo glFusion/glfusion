@@ -109,7 +109,9 @@ $LANG25 = array(
     37 => 'החבאת תוצאות כל זמן שהסקר פתוח',
     38 => 'בזמן שהסקר פתוח, רק יוצריו והמנהלים הראשיים יוכלו לצפות בתוצאות',
     39 => 'הנושא יוצג רק אם יש יותר משאלה אחת.',
-    40 => 'צפו בכל התשובות של סקר זה'
+    40 => 'צפו בכל התשובות של סקר זה',
+    41 => 'Are you sure you want to delete this Poll?',
+    42 => 'Are you absolutely sure you want to delete this Poll?  All questions, answers and comments that are associated with this Poll will also be permanently deleted from the database.'
 );
 
 $PLG_polls_MESSAGE19 = 'הסקר שלכם נשמר בהצלחה.';

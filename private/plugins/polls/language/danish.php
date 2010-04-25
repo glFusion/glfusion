@@ -109,7 +109,9 @@ $LANG25 = array(
     37 => 'Skjul resultater, mens meningsmåling er åben',
     38 => 'Mens meningsmåling er åben, kan kun ejeren &amp; root kan se resultaterne',
     39 => 'Emnet vil blive kun blivet vist, hvis der er mere end 1 spørgsmål.',
-    40 => 'Se alle svar til denne afstemning'
+    40 => 'Se alle svar til denne afstemning',
+    41 => 'Are you sure you want to delete this Poll?',
+    42 => 'Are you absolutely sure you want to delete this Poll?  All questions, answers and comments that are associated with this Poll will also be permanently deleted from the database.'
 );
 
 $PLG_polls_MESSAGE19 = 'Din afstemning er blevet gemt.';

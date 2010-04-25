@@ -1901,7 +1901,8 @@ $LANG_WIDGETS = array(
     'translate' => '点击旗帜，就能自动翻译本站为该国语言。',
     'prev' => '向前',
     'next' => '向后',
-    'playpause' => '播放/暂停'
+    'playpause' => '播放/暂停',
+    'noOpera' => 'This script does not automatically resize the iframe in the Opera browser.'
 );
 
 # Localisation of the texts for the various drop-down menus that are actually

@@ -1901,7 +1901,8 @@ $LANG_WIDGETS = array(
     'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
     'prev' => 'Previous',
     'next' => 'Next',
-    'playpause' => 'Play/Pause'
+    'playpause' => 'Play/Pause',
+    'noOpera' => 'This script does not automatically resize the iframe in the Opera browser.'
 );
 
 # Localisation of the texts for the various drop-down menus that are actually

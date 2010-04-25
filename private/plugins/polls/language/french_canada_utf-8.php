@@ -109,7 +109,9 @@ $LANG25 = array(
     37 => 'Hide results while poll is open',
     38 => 'While the poll is open, only the owner &amp; root can see the results',
     39 => 'The topic will be only displayed if there are more than 1 questions.',
-    40 => 'See all answers to this poll'
+    40 => 'See all answers to this poll',
+    41 => 'Are you sure you want to delete this Poll?',
+    42 => 'Are you absolutely sure you want to delete this Poll?  All questions, answers and comments that are associated with this Poll will also be permanently deleted from the database.'
 );
 
 $PLG_polls_MESSAGE19 = 'Vos sondages ont été sauvegardés avec succès.';
