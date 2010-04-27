@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.2.0
 ------
+- Updated / new Czech translations compliments of Ivan Simunek (Mark)
 - General (x)HTML compliance fixes (Eric)
 - Added ie7 horizontal scrollbar fix (Eric)
 - Added help text for Registration Type (Eric)

@@ -5,6 +5,8 @@
 #
 # Copyright (C) 2002 hermes_trismegistos
 # hermes_trismegistos@hermetik.net
+# (c) 2010 Ivan Simunek
+# ivsi AT post DOT cz
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -44,7 +46,7 @@ $LANG_STATIC = array(
     'date' => 'Poslední aktualizace',
     'title' => 'Titulek',
     'content' => 'Obsah',
-    'hits' => 'Klicknutí',
+    'hits' => 'Kliknutí',
     'staticpagelist' => 'Výpis statických stránek',
     'url' => 'URL',
     'edit' => 'Editovat',
@@ -73,7 +75,7 @@ $LANG_STATIC = array(
     'php_warn' => 'Warning: PHP code in your page will be evaluated if you enable this option. Use with caution !!',
     'exit_msg' => 'Exit Type: ',
     'exit_info' => 'Enable for Login Required Message.  Leave unchecked for normal security check and message.',
-    'deny_msg' => 'Access to this page is denied.  Either the page has been moved/removed or you do not have sufficient permissions.',
+    'deny_msg' => 'Pøístup na tuto stránku není povolen.  Buï byla stránka odstranìna èi pøesunuta nebo nemá¹ dostateèná práva.',
     'stats_headline' => 'Top Ten Static Pages',
     'stats_page_title' => 'Page Title',
     'stats_hits' => 'Hits',
@@ -113,8 +115,8 @@ $LANG_STATIC = array(
     'limit_results' => 'Limit Results',
     'search' => 'Search',
     'submit' => 'Submit',
-    'delete_confirm' => 'Are you sure you want to delete this page?',
-    'allnhp_topics' => 'All Topics (No Homepage)'
+    'delete_confirm' => 'OPRAVDU chce¹ smazat tuto stránku?',
+    'allnhp_topics' => 'All Topics (No Homepage)',
 );
 
 $PLG_staticpages_MESSAGE19 = '';
@@ -145,7 +147,7 @@ $LANG_confignames['staticpages'] = array(
     'atom_max_items' => 'Max. Pages in Webservices Feed',
     'comment_code' => 'Comment Default',
     'include_search' => 'Site Search Default',
-    'status_flag' => 'Default Page Mode'
+    'status_flag' => 'Default Page Mode',
 );
 
 $LANG_configsubgroups['staticpages'] = array(
@@ -165,8 +167,8 @@ $LANG_configselects['staticpages'] = array(
     3 => array('Date' => 'date', 'Page ID' => 'id', 'Title' => 'title', 'Label' => 'label'),
     9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
-    13 => array('Enabled' => 1, 'Disabled' => 0),
-    17 => array('Comments Enabled' => 0, 'Comments Disabled' => -1)
+    13 => array('Enabled' => 1, 'Disabled' => 0 ),
+    17 => array('Comments Enabled' => 0, 'Comments Disabled' => -1),
 );
 
 ?>

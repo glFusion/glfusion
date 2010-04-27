@@ -1,10 +1,16 @@
 <?php
 ###############################################################################
-# czech.php
-# This is the czech (ISO 8859-2) language file for the glFusion Links Plugin
+# czech_utf-8.php
+# This is the czech (utf-8) language file for the glFusion Links Plugin
 #
+# Copyright (C) 2001 Tony Bibbs
+# tony AT tonybibbs DOT com
+# Copyright (C) 2005 Trinity Bays
+# trinity93 AT gmail DOT com
 # Copyright (C) 2007 Ondrej Rusek
 # rusek@gybon.cz
+# Copyright (C) 2010 Ivan Simunek
+# ivsi AT post DOT cz
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -95,7 +101,7 @@ $LANG_LINKS_SUBMIT = array(
     9 => 'URL',
     10 => 'Kategorie',
     11 => 'Požadavky odkazů',
-    12 => 'Submitted By'
+    12 => 'Přidáno',
 );
 
 ###############################################################################
@@ -135,7 +141,7 @@ $LANG_LINKS_ADMIN = array(
     8 => 'Použití odkazu',
     9 => 'Popis odkazu',
     10 => 'Musíte zadat titulek, URL a popis.',
-    11 => 'Správce odkazů',
+    11 => 'Správa odkazů',
     12 => 'Pro změnu nebo vymazání odkazu, klikněte na ikonu editace.  Pro vytvoření nového odkazu, klikněte na "Create New".',
     14 => 'Kategorie odkazu',
     16 => 'Přístup byl zakázán',
@@ -144,40 +150,40 @@ $LANG_LINKS_ADMIN = array(
     21 => 'uložit',
     22 => 'storno',
     23 => 'vymazat',
-    24 => 'Link not found',
+    24 => 'Odkaz nenalezen',
     25 => 'The link you selected for editing could not be found.',
     26 => 'Validate Links',
     27 => 'HTML Status',
     28 => 'Edit category',
     29 => 'Enter or edit the details below.',
-    30 => 'Category',
-    31 => 'Description',
+    30 => 'Kategorie',
+    31 => 'Popis',
     32 => 'Category ID',
     33 => 'Topic',
     34 => 'Parent',
-    35 => 'All',
-    40 => 'Edit this category',
-    41 => 'Create child category',
-    42 => 'Delete this category',
+    35 => 'Vše',
+    40 => 'Oprav kategorii',
+    41 => 'Přidej',
+    42 => 'Vymaž kategorii',
     43 => 'Site categories',
-    44 => 'Add&nbsp;child',
-    46 => 'User %s tried to delete a category to which they do not have access rights',
-    50 => 'List categories',
-    51 => 'New link',
-    52 => 'New category',
-    53 => 'List links',
-    54 => 'Category Manager',
+    44 => 'Přidej podkategorii',
+    46 => 'Uživatel %s se pokusil vymazat kategorii, aniž by k tomu měl práva',
+    50 => 'Výpis kategorií',
+    51 => 'Nový odkaz',
+    52 => 'Nová kořenová kategorie',
+    53 => 'Admin odkazů',
+    54 => 'Admin kategorií',
     55 => 'Edit categories below. Note that you cannot delete a category that contains other categories or links - you should delete these first, or move them to another category.',
     56 => 'Category Editor',
     57 => 'Not validated yet',
     58 => 'Validate now',
-    59 => '<p>To validate all links displayed, please click on the "Validate now" link below. Please note that this might take some time depending on the amount of links displayed.</p>',
+    59 => '<br /><br />To validate all links displayed, please click on the "Validate now" link below. The validation process may take some time depending on the amount of links displayed.',
     60 => 'User %s tried illegally to edit category %s.',
     61 => 'Owner',
     62 => 'Last Updated',
     63 => 'Are you sure you want to delete this link?',
     64 => 'Are you sure you want to delete this category?',
-    65 => 'Moderate Link'
+    65 => 'Moderate Link',
 );
 
 
@@ -247,7 +253,7 @@ $LANG_confignames['links'] = array(
     'root' => 'ID of Root Category',
     'default_permissions' => 'Link Default Permissions',
     'target_blank' => 'Open Links in New Window',
-    'displayblocks' => 'Display glFusion Blocks'
+    'displayblocks' => 'Display glFusion Blocks',
 );
 
 $LANG_configsubgroups['links'] = array(
@@ -266,7 +272,7 @@ $LANG_configselects['links'] = array(
     1 => array('True' => true, 'False' => false),
     9 => array('Forward to Linked Site' => 'item', 'Display Admin List' => 'list', 'Display Public List' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
-    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
+    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3),
 );
 
 ?>

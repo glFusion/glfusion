@@ -1,10 +1,11 @@
 <?php
 ###############################################################################
-# czech.php
-# This is the czech language (ISO 8859-2) page for the glFusion Calendar Plug-in!
+# czech.php  (iso 8859-2)
+# This is the czech language page for the glFusion Calendar Plug-in!
 #
 # Copyright (C) 2007 Ondrej Rusek
 # rusek@gybon.cz
+# (c) 2010 Ivan Simunek ivsi@post.cz
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -59,8 +60,8 @@ $LANG_CAL_1 = array(
     20 => 'Titulek',
     21 => 'Poèáteèní datum',
     22 => 'URL',
-    23 => 'Tvoje události',
-    24 => 'Události webu',
+    23 => '<hr>...soukromé',
+    24 => '...veøejné',
     25 => '®ádné blí¾ící se události',
     26 => 'Poslat událost',
     27 => "Odesláním události pro {$_CONF['site_name']} pøidáte va¹i událost do hlavního kalendáøe. Po odeslání bude událost podrobena schválení a poté bude publikována v hlavním kalendáøi.",
@@ -88,7 +89,7 @@ $LANG_CAL_1 = array(
     49 => '®ádné události.',
     50 => 'Události',
     51 => 'Vymazat',
-    52 => 'Submitted By'
+    52 => 'Pøidal(a)',
 );
 
 $_LANG_CAL_SEARCH = array(
@@ -145,7 +146,7 @@ $LANG_CAL_ADMIN = array(
     10 => 'Musíte zadata datum/èas, titulek a popis',
     11 => 'Správce kalendáøe',
     12 => 'Pro zmìnu nebo vymazání události, kliknìte na ikonu události.  Pro vytvoøení nové události, kliknìte na "Vytvoøit novou". Kliknutím na ikonu kopie vytvoøíte kopii události.',
-    13 => 'Autor',
+    13 => 'Vlastník',
     14 => 'Datum zaèátku',
     15 => 'Datum konce',
     16 => '',
@@ -158,20 +159,21 @@ $LANG_CAL_ADMIN = array(
     23 => 'Chybný datum zaèátku.',
     24 => 'Chybný datum konce.',
     25 => 'Koncové datum je pøed datem zaèátku.',
-    26 => 'Delete old entries',
-    27 => 'These are the events that are older than ',
+    26 => 'Dávkové zpracování',
+    27 => 'Tohle jsou události star¹í ne¾ ',
     28 => ' months. Please click on the trashcan Icon on the bottom to delete them, or select a different timespan:<br' . XHTML . '>Find all entries that are older than ',
-    29 => '',
-    30 => 'Update List',
+     28 => ' mìsícù. Pokud chce¹, zmìò délku období a pak klikni na Obnov výpis. Pro odstranìní z databáze vyber jednu nebo více událostí  a pak klikni na ikonu pro vymazání. Budou vymazány pouze vybrané události ze zobrazených.',
+    29 => ' mìsícù.',
+    30 => 'Obnov výpis',
     31 => 'Are You sure you want to permanently delete ALL selected users?',
-    32 => 'List all',
-    33 => 'No events selected for deletion',
+    32 => 'Vypsat v¹e',
+    33 => 'Nic nebylo vybráno pro vymazání',
     34 => 'Event ID',
     35 => 'could not be deleted',
-    36 => 'Sucessfully deleted',
+    36 => 'Úspì¹nì vymazáno',
     37 => 'Moderate Event',
     38 => 'Batch Event Admin',
-    39 => 'Event Admin'
+    39 => 'Event Admin',
 );
 
 $LANG_CAL_MESSAGE = array(
@@ -182,7 +184,7 @@ $LANG_CAL_MESSAGE = array(
     'removed' => 'Událost byla odstranìna z va¹eho osobního kalendáøe',
     'noprivate' => 'Bohu¾el, osobní kalendáøe tento server nepodporuje',
     'unauth' => 'Bohu¾el, nemáte administrátorský pøístup. Tento vá¹ pokus byl zalogován',
-    'delete_confirm' => 'Are you sure you want to delete this event?'
+    'delete_confirm' => 'OPRAVDU chce¹ vymazat tuto událost?'   
 );
 
 $PLG_calendar_MESSAGE4 = "Dìkujeme za odeslání události pro {$_CONF['site_name']}.  Nyní oèekává potvrzení.  Jakmile bude potvrzena, naleznete ji v <a href=\"{$_CONF['site_url']}/calendar/index.php\">kalendáøi</a>.";
@@ -214,8 +216,8 @@ $LANG_confignames['calendar'] = array(
     'delete_event' => 'Delete Events with Owner?',
     'aftersave' => 'After Saving Event',
     'default_permissions' => 'Event Default Permissions',
-    'only_admin_submit' => 'Only Allow Admins to Submit',
-    'displayblocks' => 'Display glFusion Blocks'
+    'only_admin_submit' => 'Pøidat událost smí jen Admin',
+    'displayblocks' => 'Display glFusion Blocks',
 );
 
 $LANG_configsubgroups['calendar'] = array(
