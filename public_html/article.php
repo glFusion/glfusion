@@ -280,14 +280,14 @@ if ($A['count'] > 0) {
                                       $story->displayElements('tid'));
         if (!empty ($related)) {
             $related = COM_startBlock ($LANG11[1], '',
-                COM_getBlockTemplate ('whats_related_block', 'header'))
+                COM_getBlockTemplate ('whats_related_block', 'header'), 'whats-related')
                 . $related
                 . COM_endBlock (COM_getBlockTemplate ('whats_related_block',
                     'footer'));
         }
         if (count ($story_options) > 0) {
             $optionsblock = COM_startBlock ($LANG11[4], '',
-                    COM_getBlockTemplate ('story_options_block', 'header'))
+                    COM_getBlockTemplate ('story_options_block', 'header'), 'story-options')
                 . COM_makeList ($story_options, 'list-story-options')
                 . COM_endBlock (COM_getBlockTemplate ('story_options_block',
                     'footer'));
