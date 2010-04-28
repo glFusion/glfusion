@@ -567,7 +567,6 @@ function PLUGINS_list($token)
                     array('url' => $_CONF['site_admin_url'],
                           'text' => $LANG_ADMIN['admin_home']));
 
-
     $retval .= ADMIN_createMenu(
         $menu_arr,
         $LANG32[11],
@@ -588,7 +587,7 @@ function PLUGINS_list($token)
         array('text' => $LANG32[36], 'field' => 'version', 'align' => 'center', 'nowrap' => true, 'width' => '75px'),
         array('text' => $LANG32[83], 'field' => 'info', 'align' => 'center', 'width' => '40px'),
         array('text' => $LANG32[84], 'field' => 'bundled', 'align' => 'center', 'width' => '40px'),
-        array('text' => $LANG32[27], 'field' => 'pi_homepage', 'width' => '150px'),
+        array('text' => $LANG32[27], 'field' => 'pi_homepage', 'nowrap' => true, 'width' => '150px'),
         array('text' => $LANG32[18], 'field' => 'pi_gl_version', 'align' => 'center', 'width' => '75px'),
         array('text' => $LANG32[79], 'field' => 'unplug', 'align' => 'center', 'width' => '40px'),
     );
