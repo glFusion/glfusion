@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.2.0
 ------
+- Add rel="nofolllow" to bbcode url (Mark)
 - Updated / new Czech translations compliments of Ivan Simunek (Mark)
 - General (x)HTML compliance fixes (Eric)
 - Added ie7 horizontal scrollbar fix (Eric)

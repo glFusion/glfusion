@@ -290,15 +290,15 @@ function _bbcode_url ($action, $attributes, $content, $params, $node_object) {
     }
     if (!isset ($attributes['default'])) {
         if ( stristr($content,'http') ) {
-            return '<a href="'.$content.'">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
+            return '<a href="'.$content.'" rel="nofollow">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
         } else {
-            return '<a href="http://'.$content.'">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
+            return '<a href="http://'.$content.'" rel="nofollow">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
         }
     }
     if ( stristr($attributes['default'],'http') ) {
-        return '<a href="'.$attributes['default'].'">'.$content.'</a>';
+        return '<a href="'.$attributes['default'].'" rel="nofollow">'.$content.'</a>';
     } else {
-        return '<a href="http://'.$attributes['default'].'">'.$content.'</a>';
+        return '<a href="http://'.$attributes['default'].'" rel="nofollow">'.$content.'</a>';
     }
 }
 
