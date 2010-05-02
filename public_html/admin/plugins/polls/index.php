@@ -313,12 +313,6 @@ function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $statuscode, $open, $
         $retval .= COM_siteFooter ();
         return $retval;
     }
-
-    if (!SEC_checkToken()) {
-        COM_accessLog("User {$_USER['username']} tried to save poll $pid and failed CSRF checks.");
-        return COM_refresh($_CONF['site_admin_url']
-                           . '/plugins/polls/index.php');
-    }
     // check for poll id change
     if (!empty($old_pid) && ($pid != $old_pid)) {
         // check if new pid is already in use
@@ -580,7 +574,6 @@ if (isset($_POST['msg'])) {
 
 $validtoken = SEC_checktoken();
 
-
 switch ($action) {
     
     case 'edit':
@@ -590,37 +583,42 @@ switch ($action) {
         break;
     
     case 'save':
-        $old_pid = (isset($_POST['old_pid'])) ? COM_applyFilter($_POST['old_pid']): '';
-        if (empty($pid) && !empty($old_pid)) {
-            $pid = $old_pid;
-        }
-        if (empty($old_pid) && (!empty($pid))) {
-            $old_pid = $pid;
-        }
-        if (!empty ($pid)) {
-            $statuscode = (isset($_POST['statuscode'])) ? COM_applyFilter($_POST['statuscode'], true) : 0;
-            $mainpage = (isset($_POST['mainpage'])) ? COM_applyFilter($_POST['mainpage']) : '';
-            $open = (isset($_POST['open'])) ? COM_applyFilter($_POST['open']) : '';
-            $hideresults = (isset($_POST['hideresults'])) ? COM_applyFilter($_POST['hideresults']) : '';
-            $display .= POLLS_save($pid, $old_pid, $_POST['question'], $mainpage, $_POST['topic'],
-                            $statuscode, $open, $hideresults,
-                            COM_applyFilter($_POST['commentcode'], true),
-                            $_POST['answer'], $_POST['votes'], $_POST['remark'],
-                            COM_applyFilter($_POST['owner_id'], true),
-                            COM_applyFilter($_POST['group_id'], true),
-                            $_POST['perm_owner'], $_POST['perm_group'],
-                            $_POST['perm_members'], $_POST['perm_anon']);
+        if ($validtoken) {
+          $old_pid = (isset($_POST['old_pid'])) ? COM_applyFilter($_POST['old_pid']): '';
+          if (empty($pid) && !empty($old_pid)) {
+              $pid = $old_pid;
+          }
+          if (empty($old_pid) && (!empty($pid))) {
+              $old_pid = $pid;
+          }
+          if (!empty ($pid)) {
+              $statuscode = (isset($_POST['statuscode'])) ? COM_applyFilter($_POST['statuscode'], true) : 0;
+              $mainpage = (isset($_POST['mainpage'])) ? COM_applyFilter($_POST['mainpage']) : '';
+              $open = (isset($_POST['open'])) ? COM_applyFilter($_POST['open']) : '';
+              $hideresults = (isset($_POST['hideresults'])) ? COM_applyFilter($_POST['hideresults']) : '';
+              $display .= POLLS_save($pid, $old_pid, $_POST['question'], $mainpage, $_POST['topic'],
+                              $statuscode, $open, $hideresults,
+                              COM_applyFilter($_POST['commentcode'], true),
+                              $_POST['answer'], $_POST['votes'], $_POST['remark'],
+                              COM_applyFilter($_POST['owner_id'], true),
+                              COM_applyFilter($_POST['group_id'], true),
+                              $_POST['perm_owner'], $_POST['perm_group'],
+                              $_POST['perm_members'], $_POST['perm_anon']);
+          } else {
+              $display .= COM_siteHeader('menu', $LANG25[5]);
+              $display .= COM_startBlock($LANG21[32], '',
+                                  COM_getBlockTemplate('_msg_block', 'header'));
+              $display .= $LANG25[17];
+              $display .= COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
+              $display .= POLLS_edit ();
+              $display .= COM_siteFooter ();
+          }
         } else {
-            $display .= COM_siteHeader('menu', $LANG25[5]);
-            $display .= COM_startBlock($LANG21[32], '',
-                                COM_getBlockTemplate('_msg_block', 'header'));
-            $display .= $LANG25[17];
-            $display .= COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
-            $display .= POLLS_edit ();
-            $display .= COM_siteFooter ();
+          COM_accessLog("User {$_USER['username']} tried to save poll $pid and failed CSRF checks.");
+          $display =  COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;
-    
+
     case 'delete':
         if (empty($pid)) {
             COM_errorLog ('Ignored possibly manipulated request to delete a poll.');
