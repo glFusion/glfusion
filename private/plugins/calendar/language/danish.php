@@ -89,7 +89,8 @@ $LANG_CAL_1 = array(
     48 => 'Hits',
     49 => 'Det ser ikke ud til der er nogen begivenherder på siden, eller er der ikke klikket på nogen.',
     50 => 'Begivenheder',
-    51 => 'Slet'
+    51 => 'Slet',
+    52 => 'Submitted By'
 );
 
 $_LANG_CAL_SEARCH = array(
@@ -169,7 +170,10 @@ $LANG_CAL_ADMIN = array(
     33 => 'No events selected for deletion',
     34 => 'Event ID',
     35 => 'could not be deleted',
-    36 => 'Sucessfully deleted'
+    36 => 'Sucessfully deleted',
+    37 => 'Moderate Event',
+    38 => 'Batch Event Admin',
+    39 => 'Event Admin'
 );
 
 $LANG_CAL_MESSAGE = array(

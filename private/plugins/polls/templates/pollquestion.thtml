@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<div class="poll-questions">
+<div class="poll-questions" style="margin-bottom:5px;">
     <p class="poll-question">{lang_question}{lang_question_number}{poll_question}</p>
     <table width="100%">
         {poll_votes}

@@ -13,8 +13,53 @@ v2.0.0 svn
 - Fixed issue where gl_moomorph wasn't consistently called (Eric)
 - Merge layout custom CSS files rather than uniquely select (Mark H.)
 
-v1.1.9
+v1.2.0
 ------
+- Add rel="nofolllow" to bbcode url (Mark)
+- Updated / new Czech translations compliments of Ivan Simunek (Mark)
+- General (x)HTML compliance fixes (Eric)
+- Added ie7 horizontal scrollbar fix (Eric)
+- Added help text for Registration Type (Eric)
+- Moved comments links to same line in story footer (Eric)
+- Re-freshed CAPTCHA layouts (Eric and Mark H.)
+- CAPTCHA - Exclude 0,O,1,I,L from dynamic CAPTCHA generation (Mark)
+- Add check to ensure user photo physically exists, if not return default
+  user photo (Mark)
+- Polls Admin - code scrub and UI improvements, some template tweaks (Mark H.)
+- Added 2 new configuration options for comments: (Mark)
+    - comment_postmode - set default postmode for comments (Text/HTML)
+    - comment_editor   - select between text box or WYSIWYG
+- Implemented profile photos and custom author and group css in comments (Mark & Eric)
+- Changed default comment mode to Nested (Eric)
+- Fixed orphaned p tag in story footer preview when editing a story (Eric)
+- CAPTCHA: Link and Calendar submissions did not work with reCAPTCHA (Mark)
+- Links Admin: Admin interface improvements and partial scrub (Mark H.)
+- Moderation: Admin interface improvements and extensive rewrite (Mark H.)
+    - New feature: Only display submission lists for item types in queue
+    - New feature: Display user who submitted item
+- Story Admin: Admin interface improvements and code scrub (Mark H.)
+- Media Gallery: Fixed issue where album owners would see the Delete option
+  for media comments, but they could not actually delete the comment (Mark)
+- Convert session cookie to use MD5 token instead of random number (Mark)
+- Use mt_rand() instead of rand() and seed once per session (Mark)
+- Ensure rating value is properly formatted and escaped prior to inserting
+  into database (Mark)
+- Forum: Fixed sorting on New Posts (Mark)
+- New option for block location - all except home page (Mark)
+- Forum: Use admin lists for site member report (Mark)
+- Updated CAPTCHA and reCAPTCHA layouts (Eric)
+- Layout on Register screen now matches the layout on Login screen (Eric)
+- Allow users to select their own passwords and implement verification email
+  (Mark)
+- Ratings were not moved to new story when story id changed (Mark)
+- Media Gallery: Fixed issue where quota was not always set properly when
+  member album enrollment was enabled (Mark)
+- Fixed default username and password being translated accidentally (Eric)
+- Improved bbcode cheat sheet based on nouveau theme (Eric)
+- Updated public_html/docs/config.html with new search info (Eric)
+- Added ability to create remote users (when enabled) (Mark)
+- FileMgmt: Add new configuration option 'Silent Edit Default' (Mark)
+- Move services dropdown after password on login forms (Mark)
 - Staticpage / Media Gallery: Option to specify centerblock for all topics
   except the homepage (Mark)
 - Implement skip token re-init on admin auth (Mark)

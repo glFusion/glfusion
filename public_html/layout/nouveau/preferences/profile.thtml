@@ -29,7 +29,7 @@
             <div class="notes">
                 <h4>{lang_password_help_title}</h4>
                 <p class="last">
-                    <span class="glf-warning-small">{lang_enter_current_password}</span><br{xhtml}><br{xhtml}>
+                    <span class="warningsmall">{lang_enter_current_password}</span><br{xhtml}><br{xhtml}>
                     {lang_password_help}
                 </p>
             </div>

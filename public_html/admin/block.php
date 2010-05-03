@@ -126,10 +126,13 @@ function BLOCK_editDefault($A, $access)
     $block_templates->set_var('block_name',$A['name']);
     $block_templates->set_var('lang_blockname', $LANG21[48]);
     $block_templates->set_var('lang_homeonly', $LANG21[43]);
+    $block_templates->set_var('lang_nohomepage', $LANG21[44]);
     if ($A['tid'] == 'all') {
         $block_templates->set_var('all_selected', 'selected="selected"');
     } else if ($A['tid'] == 'homeonly') {
         $block_templates->set_var('homeonly_selected', 'selected="selected"');
+    } else if ( $A['tid'] == 'allnhp' ) {
+        $block_templates->set_var('nohomepage_selected','selected="selected"');
     }
     $block_templates->set_var('topic_options',
                               COM_topicList ('tid,topic', $A['tid'], 1, true));
@@ -319,10 +322,13 @@ function BLOCK_edit($bid = '', $B = array())
     $block_templates->set_var('lang_nospaces', $LANG21[49]);
     $block_templates->set_var('lang_all', $LANG21[7]);
     $block_templates->set_var('lang_homeonly', $LANG21[43]);
+    $block_templates->set_var('lang_nohomepage', $LANG21[44]);
     if ($A['tid'] == 'all') {
         $block_templates->set_var('all_selected', 'selected="selected"');
     } else if ($A['tid'] == 'homeonly') {
         $block_templates->set_var('homeonly_selected', 'selected="selected"');
+    } else if ( $A['tid'] == 'allnhp' ) {
+        $block_templates->set_var('nohomepage_selected','selected="selected"');
     }
     $block_templates->set_var('topic_options',
                               COM_topicList('tid,topic', $A['tid'], 1, true));
@@ -417,6 +423,7 @@ function BLOCK_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
     if (($access > 0) && (BLOCK_hasTopicAccess($A['tid']) > 0)) {
         switch($fieldname) {
+
             case 'edit':
                 $retval = '';
                 if ($access == 3) {
@@ -425,41 +432,12 @@ function BLOCK_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                         $_CONF['site_admin_url'] . '/block.php?edit=x&amp;bid=' . $A['bid'], $attr);
                 }
                 break;
-            case 'delete':
-                $retval = '';
-                if ($access == 3) {
-                    $attr['title'] = $LANG_ADMIN['delete'];
-                    $attr['onclick'] = "return confirm('" . $LANG21[69] . "');";
-                    $retval .= COM_createLink($icon_arr['delete'],
-                        $_CONF['site_admin_url'] . '/block.php'
-                        . '?delete=x&amp;bid=' . $A['bid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
-                }
-                break;
-            case 'title':
-                $title = stripslashes ($A['title']);
-                if (empty ($title)) {
-                    $title = '(' . $A['name'] . ')';
-                }
-                $retval = ($enabled) ? $title : '<span class="disabledfield">' . $title . '</span>';
-                break;
+
             case 'blockorder':
                 $order = $A['blockorder'];
                 $retval = ($enabled) ? $order : '<span class="disabledfield">' . $order . '</span>';
                 break;
-            case 'is_enabled':
-                if ($access == 3) {
-                    if ($enabled) {
-                        $switch = ' checked="checked"';
-                        $title = 'title="' . $LANG_ADMIN['disable'] . '" ';
-                    } else {
-                        $title = 'title="' . $LANG_ADMIN['enable'] . '" ';
-                        $switch = '';
-                    }
-                    $retval = '<input type="checkbox" name="enabledblocks[' . $A['bid'] . ']" ' . $title
-                        . 'onclick="submit()" value="' . $A['onleft'] . '"' . $switch . XHTML . '>';
-                    $retval .= '<input type="hidden" name="bidarray[' . $A['bid'] . ']" value="' . $A['onleft'] . '"' . XHTML . '>';
-                }
-                break;
+
             case 'move':
                 if ($access == 3) {
                     if ($A['onleft'] == 1) {
@@ -480,6 +458,48 @@ function BLOCK_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                             ."</map>";
                 }
                 break;
+
+            case 'name':
+                $name =  COM_truncate(stripslashes($A['name']), 20, ' ...', true);
+                $retval = ($enabled) ? $name : '<span class="disabledfield">' . $name . '</span>';
+                break;
+
+            case 'title':
+                $title =  COM_truncate(stripslashes($A['title']), 20, ' ...', true);
+                $retval = ($enabled) ? $title : '<span class="disabledfield">' . $title . '</span>';
+                break;
+
+            case 'tid':
+                $topic =  COM_truncate(stripslashes($A['tid']), 20, ' ...', true);
+                $retval = ($enabled) ? $topic : '<span class="disabledfield">' . $topic . '</span>';
+                break;
+
+            case 'delete':
+                $retval = '';
+                if ($access == 3) {
+                    $attr['title'] = $LANG_ADMIN['delete'];
+                    $attr['onclick'] = "return confirm('" . $LANG21[69] . "');";
+                    $retval .= COM_createLink($icon_arr['delete'],
+                        $_CONF['site_admin_url'] . '/block.php'
+                        . '?delete=x&amp;bid=' . $A['bid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+                }
+                break;
+
+            case 'is_enabled':
+                if ($access == 3) {
+                    if ($enabled) {
+                        $switch = ' checked="checked"';
+                        $title = 'title="' . $LANG_ADMIN['disable'] . '" ';
+                    } else {
+                        $title = 'title="' . $LANG_ADMIN['enable'] . '" ';
+                        $switch = '';
+                    }
+                    $retval = '<input type="checkbox" name="enabledblocks[' . $A['bid'] . ']" ' . $title
+                        . 'onclick="submit()" value="' . $A['onleft'] . '"' . $switch . XHTML . '>';
+                    $retval .= '<input type="hidden" name="bidarray[' . $A['bid'] . ']" value="' . $A['onleft'] . '"' . XHTML . '>';
+                }
+                break;
+
             default:
                 $retval = ($enabled) ? $fieldvalue : '<span class="disabledfield">' . $fieldvalue . '</span>';
                 break;
@@ -521,20 +541,21 @@ function BLOCK_list()
 
     // writing the list
     $header_arr = array(      # display 'text' and use table field 'field'
-        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center'),
-        array('text' => $LANG21[65], 'field' => 'blockorder', 'sort' => true, 'align' => 'center'),
-        array('text' => $LANG21[46], 'field' => 'move', 'sort' => false, 'align' => 'center'),
-        array('text' => $LANG21[48], 'field' => 'name', 'sort' => true),
-        array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true),
-        array('text' => $LANG_ADMIN['type'], 'field' => 'type', 'sort' => true, 'align' => 'center'),
-        array('text' => $LANG_ADMIN['topic'], 'field' => 'tid', 'sort' => true, 'align' => 'center'),
-        array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center'),
-        array('text' => $LANG_ADMIN['enabled'], 'field' => 'is_enabled', 'sort' => true, 'align' => 'center')
+        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center', 'width' => '5%'),
+        array('text' => $LANG21[65], 'field' => 'blockorder', 'sort' => true, 'align' => 'center', 'width' => '8%'),
+        array('text' => $LANG21[46], 'field' => 'move', 'sort' => false, 'align' => 'center', 'width' => '8%'),
+        array('text' => $LANG_ADMIN['name'], 'field' => 'name', 'sort' => true, 'width' => '18%', 'align' => 'center'),
+        array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true, 'width' => '18%', 'align' => 'center'),
+        array('text' => $LANG_ADMIN['topic'], 'field' => 'tid', 'sort' => true, 'align' => 'center', 'width' => '18%'),
+        array('text' => $LANG_ADMIN['type'], 'field' => 'type', 'sort' => true, 'align' => 'center', 'width' => '9%'),
+        array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center', 'width' => '7%'),
+        array('text' => $LANG_ADMIN['enabled'], 'field' => 'is_enabled', 'sort' => true, 'align' => 'center', 'width' => '9%')
     );
 
     $defsort_arr = array('field' => 'blockorder', 'direction' => 'asc');
 
     $text_arr = array(
+        'title'      => "$LANG21[19] ($LANG21[40])",
         'form_url'   => $_CONF['site_admin_url'] . '/block.php'
     );
 

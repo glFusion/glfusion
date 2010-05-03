@@ -35,6 +35,7 @@ function enablearchive(obj) {
 }
 //]]>
 </script>
+<div style="border-bottom:1px solid #cccccc"></div>
 <form name="frmstory" action="{site_admin_url}/story.php" method="post" enctype="multipart/form-data">
     <table cellspacing="0" cellpadding="3" width="100%">
         <tr>
@@ -243,7 +244,7 @@ function enablearchive(obj) {
             </td>
         </tr>
         <tr>
-            <td colspan="2"><hr{xhtml}></td>
+            <td colspan="2"><div style="border-bottom:1px solid #cccccc"></div></td>
         </tr>
         <tr>
             <td colspan="2"><b>{lang_accessrights}</b></td>
@@ -278,9 +279,9 @@ function enablearchive(obj) {
         <tr><td colspan="2">&nbsp;</td></tr>
         <tr>
             <td colspan="2">
-                <input type="submit" value="{lang_save}" name="mode"{xhtml}>
-                <input type="submit" value="{lang_preview}" name="mode"{xhtml}>
-                <input type="submit" value="{lang_cancel}" name="mode"{xhtml}>
+                <input type="submit" value="{lang_save}" name="save"{xhtml}>
+                <input type="submit" value="{lang_preview}" name="preview"{xhtml}>
+                <input type="submit" value="{lang_cancel}" name="cancel"{xhtml}>
                 {delete_option}
                 {submission_option}
                 <input type="hidden" name="old_sid" value="{old_story_id}"{xhtml}>

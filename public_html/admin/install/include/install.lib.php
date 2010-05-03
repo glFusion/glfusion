@@ -690,6 +690,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('article_comment_close_days',30,'text',4,21,NULL,1700,TRUE);
             $c->add('comment_close_rec_stories',0,'text',4,21,NULL,1710,TRUE);
 
+            $c->add('image_lib','gdlib','select',5,22,10,1450,TRUE);
             $c->add('jhead_enabled',0,'select',5,22,0,1480,TRUE);
             $c->add('path_to_jhead','','text',5,22,NULL,1490,TRUE);
             $c->add('jpegtrans_enabled',0,'select',5,22,0,1500,TRUE);
@@ -872,7 +873,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query("UPDATE {$_TABLES['conf_values']} SET selectionArray = '0' WHERE  name='searchloginrequired' AND group_name='Core'");
 
             DB_query("ALTER TABLE {$_TABLES['groups']} ADD grp_default tinyint(1) unsigned NOT NULL default '0' AFTER grp_gl_core");
-            DB_query("ALTER TABLE {$_TABLES['users']} CHANGE `passwd` `passwd` VARCHAR( 40 )");
+            DB_query("ALTER TABLE {$_TABLES['users']} CHANGE `passwd` `passwd` VARCHAR( 40 ) NOT NULL default ''");
 
             // clean up group names and assign proper admin setting
             DB_query("UPDATE {$_TABLES['groups']} SET grp_gl_core=2 WHERE grp_name='Bad Behavior2 Admin'",1);
@@ -913,10 +914,21 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $root_grp_id)", 1);
             $c->del('statsloginrequired','Core');
 
-            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.9',name='glfusion'",1);
-            DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.9' WHERE name='glfusion'",1);
+            $c->add('registration_type',0,'select',4,19,27,785,TRUE,'Core');
+            DB_query("ALTER TABLE {$_TABLES['users']} ADD act_token VARCHAR(32) NOT NULL DEFAULT '' AFTER pwrequestid",1);
+            DB_query("ALTER TABLE {$_TABLES['users']} ADD act_time DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' AFTER act_token",1);
+
+            $c->del('cookie_ip','Core');
+            DB_query("ALTER TABLE {$_TABLES['sessions']} DROP PRIMARY KEY",1);
+            DB_query("ALTER TABLE {$_TABLES['sessions']} ADD PRIMARY KEY (md5_sess_id)",1);
+
+            $c->add('comment_postmode','plaintext','select',4,21,5,1693,TRUE);
+            $c->add('comment_editor',0,'select',4,21,28,1694,TRUE);
+
+            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.2.0',name='glfusion'",1);
+            DB_query("UPDATE {$_TABLES['vars']} SET value='1.2.0' WHERE name='glfusion'",1);
             DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
-            $current_fusion_version = '1.1.9';
+            $current_fusion_version = '1.2.0';
         default:
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='".$current_fusion_version."' WHERE name='glfusion'",1);

@@ -174,7 +174,8 @@ function plugin_initconfig_filemgmt()
                 0, 2, 0, 30, true, 'filemgmt');
         $c->add('enable_rating', 1,'select',
                 0, 2, 0, 35, true, 'filemgmt');
-
+        $c->add('silent_edit_default', 1,'select',
+                0, 2, 0, 37, true, 'filemgmt');
         $c->add('FileStore', $_FM_DEFAULT['FileStore'], 'text',
                 0, 2, 0, 40, true, 'filemgmt');
         $c->add('SnapStore', $_FM_DEFAULT['SnapStore'], 'text',

@@ -708,7 +708,8 @@ $LANG_MG01 = array(
     'search_av_playback' => 'Suchergebnisse Audio-/Video-Abspieltyp',
     'search_views' => 'Ansichten-Zähler in Suchergebnissen anzeigen',
     'search_rating' => 'Bewertungen in Suchergebnissen anzeigen',
-    'gallery_only' => 'Mediengallery ersetzt die glFusion Index-Seite'
+    'gallery_only' => 'Mediengallery ersetzt die glFusion Index-Seite',
+    'all_nhp' => 'All topics (No Homepage)'
 );
 
 ###############################################################################

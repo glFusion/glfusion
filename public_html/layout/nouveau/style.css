@@ -1196,13 +1196,13 @@ margin-right:10px;
 vertical-align:middle;
 }
 
-.glf-warning {
+.warning {
 background:transparent;
 color:red;
 font-weight:700;
 }
 
-.glf-warning-small {
+.warningsmall {
 background:transparent;
 color:red;
 }
@@ -1322,7 +1322,7 @@ padding:4px 6px;
 }
 
 .pluginTinyText {
-font-size:.9em;
+font-size:.8em;
 }
 
 .pluginMediumText {
@@ -2550,12 +2550,11 @@ display:block;
 position:absolute;
 }
 
-/* gl_mootip css */
-
-.tip-top {              /* top of the tip */
-    color: #fff;
-    width: 139px;
-    z-index: 13000;
+/* start gl_mootip css */
+.tool-tip {
+color:#fff;
+width:150px;
+z-index:13000;
 }
 .tip-title {            /* title of tip */
     width: 123px;
@@ -2891,4 +2890,19 @@ border: 1px solid #666666;
 }
 .bbc-buttons a.button2, .bbc-buttons input.button2 {
 border: 1px solid #666666;
+}
+.userphoto {
+width:50px;
+border:1px solid #ccc;
+padding:2px;
+}
+.groupauthor {
+background:#eef7dd !important;
+border:1px solid #9acc2e !important;
+color:green !important;
+}
+.articleauthor {
+background:#d8e5f8 !important;
+border:1px solid #629de3 !important;
+color:#0055bb !important;
 }

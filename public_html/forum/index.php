@@ -145,7 +145,7 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
         $inforum = "";
     }
 
-    $orderby    = 'date';
+    $orderby    = 'lastupdated';
     $order      = 1;
     $direction  = "DESC";
 

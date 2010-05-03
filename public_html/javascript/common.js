@@ -35,11 +35,11 @@
 // Check All Items - generic function that can be used to check and un-check all items in a list
 // Used in the Admin Lists - like on the moderation page
 // -------------------------------------------------------------------
-   function caItems(f) {
+   function caItems(f, name) {
        var n=f.elements.length;
        for (i=0;i<n; i++) {
            var field=f.elements[i];
-           if (field.type == 'checkbox' && field.name.match("delitem")) {
+           if (field.type == 'checkbox' && field.name.match(name)) {
                 if (f.chk_selectall.checked) {
                     field.checked=true;
                 } else {
@@ -109,6 +109,12 @@
     // a counter used to create unique IDs
     adddwEvent.guid = 1;
 
+    // double confirmation (are you really sure?)
+    function doubleconfirm( msg1, msg2 ) {
+        return confirm(msg1) && confirm(msg2);
+    }
+    
     //widget wrapper iframe buster (load links to parent site in parent window)
     if (top.location != location) {
-    top.location.href = document.location.href; }
+        top.location.href = document.location.href;
+    }

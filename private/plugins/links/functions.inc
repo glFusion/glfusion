@@ -95,12 +95,12 @@ function plugin_getmenuitems_links()
 /**
 * Return headlines for New Links section in the What's New block, if enabled
 *
-* @return   mixed       array(headline, byline), or boolean false is disabled
+* @return   mixed       array(headline, byline), or boolean false if disabled
 *
 */
 function plugin_whatsnewsupported_links()
 {
-    global $_TABLES, $_LI_CONF, $LANG_LINKS, $LANG_WHATSNEW;
+    global $_LI_CONF, $LANG_LINKS, $LANG_WHATSNEW;
 
     if ( $_LI_CONF['hidenewlinks'] == 0 ) {
         $retval = array( $LANG_LINKS[84],
@@ -227,8 +227,8 @@ function LINKS_countLinksAndClicks ()
 {
     global $_TABLES;
 
-    $result = DB_query ("SELECT COUNT(*) AS count,SUM(hits) AS clicks FROM {$_TABLES['links']}" . COM_getPermSQL ());
-    $A = DB_fetchArray ($result);
+    $result = DB_query("SELECT COUNT(*) AS count,SUM(hits) AS clicks FROM {$_TABLES['links']}" . COM_getPermSQL() . LINKS_getCategorySQL('AND'));
+    $A = DB_fetchArray($result);
     $total_links = $A['count'];
     $total_clicks = $A['clicks'];
     if (empty ($total_clicks)) {
@@ -255,7 +255,7 @@ function plugin_showstats_links ($showsitestats)
 
     $retval = '';
 
-    $result = DB_query ("SELECT lid,url,title,hits FROM {$_TABLES['links']} WHERE (hits > 0)" . COM_getPermSQL ('AND') . " ORDER BY hits DESC LIMIT 10");
+    $result = DB_query("SELECT lid,url,title,hits FROM {$_TABLES['links']} WHERE (hits > 0)" . COM_getPermSQL('AND') . LINKS_getCategorySQL('AND') . " ORDER BY hits DESC LIMIT 10");
     $nrows  = DB_numRows ($result);
     if ($nrows > 0) {
         $header_arr = array(
@@ -431,7 +431,7 @@ function plugin_user_delete_links ($uid)
 
     if ($_LI_CONF['delete_links'] == 1) {
         // delete the links
-        DB_query ("DELETE FROM {$_TABLES['links']} WHERE owner_id = $uid");
+        DB_delete($_TABLES['links'], 'owner_id', $uid);
     } else {
         // assign ownership to a user from the Root group
         $rootgroup = DB_getItem ($_TABLES['groups'], 'grp_id',
@@ -690,10 +690,11 @@ function plugin_itemlist_links()
         $plugin = new Plugin();
         $plugin->submissionlabel = $LANG_LINKS_SUBMIT[11];
         $plugin->submissionhelpfile = 'cclinksubmission.html';
-        $plugin->getsubmissionssql = "SELECT lid AS id,title,cid AS category,url FROM {$_TABLES['linksubmission']} ORDER BY title ASC";
+        $plugin->getsubmissionssql = "SELECT lid AS id,title,cid AS category,url,owner_id AS uid FROM {$_TABLES['linksubmission']} ORDER BY title ASC";
         $plugin->addSubmissionHeading($LANG_LINKS_SUBMIT[8]);
         $plugin->addSubmissionHeading($LANG_LINKS_SUBMIT[10]);
         $plugin->addSubmissionHeading($LANG_LINKS_SUBMIT[9]);
+        $plugin->addSubmissionHeading($LANG_LINKS_SUBMIT[12]);
 
         return $plugin;
     }
@@ -1019,23 +1020,30 @@ function plugin_geticon_links ()
     return $_CONF['site_url'] . '/links/images/links.png';
 }
 
-function plugin_getListField_links($fieldname, $fieldvalue, $A, $icon_arr)
+function plugin_getListField_links($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
-    global $_CONF, $LANG_ACCESS, $LANG_LINKS_ADMIN;
+    global $_CONF, $LANG_ACCESS, $LANG_LINKS_ADMIN, $LANG_ADMIN;
 
     $retval = '';
 
     $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
     if ($access > 0) {
         switch($fieldname) {
+
             case 'edit':
                 if ($access == 3) {
+                    $attr['title'] = $LANG_ADMIN['edit'];
                     $retval = COM_createLink(
                         $icon_arr['edit'],
-                        "{$_CONF['site_admin_url']}/plugins/links/index.php?mode=edit&amp;lid={$A['lid']}"
-                    );
+                        $_CONF['site_admin_url'] . '/plugins/links/index.php?edit=x&amp;lid=' . $A['lid'],
+                        $attr);
                 }
                 break;
+
+            case "owner":
+                $retval = COM_getDisplayName ($A['owner_id']);
+                break;
+
             case 'access':
                 if ($access == 3) {
                    $retval = $LANG_ACCESS['edit'];
@@ -1043,15 +1051,23 @@ function plugin_getListField_links($fieldname, $fieldvalue, $A, $icon_arr)
                    $retval = $LANG_ACCESS['readonly'];
                 }
                 break;
+
+            case "unixdate":
+                $retval = strftime( $_CONF['daytime'], $A['unixdate'] );
+                break;
+
             case 'title':
                 $retval = COM_createLink(stripslashes($A['title']), $A['url']);
                 break;
+
             case 'dovalidate';
                 $retval = links_validateUrl($A['url']);
                 break;
+
             case 'beforevalidate';
                 $retval = $LANG_LINKS_ADMIN[57];
                 break;
+
             case 'category':
                 if (isset($A['indent'])) {
                     $indent = ($A['indent'] - 1) * 20;
@@ -1063,7 +1079,17 @@ function plugin_getListField_links($fieldname, $fieldvalue, $A, $icon_arr)
                         . urlencode($A['cid']));
                 $retval = "<span style=\"padding-left:{$indent}px;\">$cat</span>";
                 break;
+
+            case 'delete':
+                if ($access == 3) {
+                    $attr['title'] = $LANG_ADMIN['delete'];
+                    $attr['onclick'] = "return confirm('" . $LANG_LINKS_ADMIN[63] . "');";
+                    $retval = COM_createLink($icon_arr['delete'],
+                        $_CONF['site_admin_url'] . '/plugins/links/index.php'
+                        . '?delete=x&amp;lid=' . $A['lid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+                }
                 break;
+
             default:
                 $retval = $fieldvalue;
                 break;
@@ -1075,21 +1101,40 @@ function plugin_getListField_links($fieldname, $fieldvalue, $A, $icon_arr)
 
 function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
 {
-    global $_CONF, $_TABLES, $LANG_ACCESS, $LANG_LINKS_ADMIN;
+    global $_CONF, $_TABLES, $LANG_ACCESS, $LANG_ADMIN, $LANG_LINKS_ADMIN;
 
     $retval = '';
 
     $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
+
     if ($access > 0) {
+
         switch($fieldname) {
+
             case 'edit':
                 if ($access == 3) {
+                    $attr['title'] = $LANG_ADMIN['edit'];
                     $retval = COM_createLink(
                         $icon_arr['edit'],
-                        "{$_CONF['site_admin_url']}/plugins/links/category.php?mode=edit&amp;cid=" . urlencode($A['cid'])
-                    );
+                        $_CONF['site_admin_url'] . '/plugins/links/category.php?edit=x&amp;cid=' . urlencode($A['cid']),
+                        $attr);
                 }
                 break;
+
+            case 'addchild':
+                if ($access == 3) {
+                    $attr['title'] = $LANG_LINKS_ADMIN[44];
+                    $retval .= COM_createLink(
+                        $icon_arr['addchild'],
+                        $_CONF['site_admin_url'] . '/plugins/links/category.php?edit=x&amp;pid=' . urlencode($A['cid']),
+                        $attr);
+                }
+                break;
+
+            case "owner":
+                $retval = COM_getDisplayName ($A['owner_id']);
+                break;
+
             case 'access':
                 if ($access == 3) {
                    $retval = $LANG_ACCESS['edit'];
@@ -1097,6 +1142,11 @@ function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
                    $retval = $LANG_ACCESS['readonly'];
                 }
                 break;
+
+            case "unixdate":
+                $retval = strftime ($_CONF['daytime'], $A['unixdate']);
+                break;
+
             case 'category':
                 $indent = ($A['indent'] - 1) * 20;
                 $cat = COM_createLink($A['category'],
@@ -1104,14 +1154,16 @@ function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
                         . urlencode($A['cid']));
                 $retval = "<span style=\"padding-left:{$indent}px;\">$cat</span>";
                 break;
+
             case 'addchild';
                 if ($access == 3) {
                     $retval = COM_createLink(
                         $icon_arr['addchild'],
-                        "{$_CONF['site_admin_url']}/plugins/links/category.php?mode=edit&amp;pid=" . urlencode($A['cid'])
+                        "{$_CONF['site_admin_url']}/plugins/links/category.php?edit=x&amp;pid=" . urlencode($A['cid'])
                     );
                 }
                 break;
+
             case 'tid';
                 if ($A['tid'] == 'all') {
                     $retval = $LANG_LINKS_ADMIN[35];
@@ -1123,6 +1175,17 @@ function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
                     $retval = $A['tid'];
                 }
                 break;
+
+            case 'delete':
+                if ($access == 3) {
+                    $attr['title'] = $LANG_ADMIN['delete'];
+                    $attr['onclick'] = "return confirm('" . $LANG_LINKS_ADMIN[64] . "');";
+                    $retval = COM_createLink($icon_arr['delete'],
+                        $_CONF['site_admin_url'] . '/plugins/links/category.php'
+                        . '?delete=x&amp;cid=' . $A['cid'] . '&amp;' . CSRF_TOKEN . '=' . SEC_createToken(), $attr);
+                }
+                break;
+
             default:
                 $retval = $fieldvalue;
                 break;
@@ -1396,6 +1459,9 @@ function links_breadcrumbs($root, $cid)
     if ($root != $cid) {
         while ($pid != $root) {
             $parent = DB_query("SELECT cid,pid,category FROM {$_TABLES['linkcategories']} WHERE cid='{$cat}'");
+            if ( DB_numRows($parent) == 0 ) {
+                break;
+            }
             $A = DB_fetchArray($parent);
             if ($cid != $c) {
                 $content = stripslashes($A['category']);

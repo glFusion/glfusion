@@ -40,6 +40,7 @@
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
+require_once $_CONF['path'] . 'filecheck_data.php';
 
 // Uncomment the line below if you need to debug the HTTP variables being passed
 // to the script.  This will sometimes cause errors but it will allow you to see
@@ -49,6 +50,7 @@ require_once 'auth.inc.php';
 // Number of plugins to list per page
 // We use 25 here instead of the 50 entries in other lists to leave room
 // for the list of uninstalled plugins.
+
 define ('PLUGINS_PER_PAGE', 25);
 
 $display = '';
@@ -65,201 +67,235 @@ if (!SEC_hasrights ('plugin.edit')) {
     exit;
 }
 
-function PLGADM_showUploadForm( )
+/**
+* XML startElement callback
+*
+* used for plugin.xml parsing
+*
+* @param    object $parser  Handle to the parser object
+* @param    string $name    Name of element
+* @param    array  $attrib  array of attributes for element
+* @return   none
+*
+*/
+function PLUGINS_startElementHandler($parser,$name,$attrib)
+{
+    global $pluginData, $state;
+
+    switch ($name) {
+        case 'ID' :
+            $state = 'id';
+            break;
+        case 'NAME' :
+            $state = 'pluginname';
+            break;
+        case 'VERSION' :
+            $state = 'pluginversion';
+            break;
+        case 'GLFUSIONVERSION' :
+            $state = 'glfusionversion';
+            break;
+        case 'PHPVERSION' :
+            $state = 'phpversion';
+            break;
+        case 'DESCRIPTION' :
+            $state = 'description';
+            break;
+        case 'URL' :
+            $state = 'url';
+            break;
+        case 'MAINTAINER' :
+            $state = 'maintainer';
+            break;
+        case 'DATABASE' :
+            $state = 'database';
+            break;
+        case 'REQUIRES' :
+            $state = 'requires';
+            break;
+        case 'DATAPROXYDRIVER' :
+            $state = 'dataproxydriver';
+            break;
+        case 'LAYOUT' :
+            $state = 'layout';
+            break;
+        case 'RENAMEDIST' :
+            $state = 'renamedist';
+            break;
+    }
+}
+
+function PLUGINS_endElementHandler($parser,$name)
+{
+    global $pluginData, $state;
+
+    $state='';
+}
+
+function PLUGINS_characterDataHandler($parser, $data)
+{
+    global $pluginData, $state;
+
+    if (!$state) {
+        return;
+    }
+
+    switch ($state) {
+        case 'id' :
+            $pluginData['id'] = $data;
+            break;
+        case 'pluginname' :
+            $pluginData['name'] = $data;
+            break;
+        case 'pluginversion' :
+            $pluginData['version'] = $data;
+            break;
+        case 'glfusionversion' :
+            $pluginData['glfusionversion'] = $data;
+            break;
+        case 'phpversion' :
+            $pluginData['phpversion'] = $data;
+            break;
+        case 'description' :
+            $pluginData['description'] = $data;
+            break;
+        case 'url' :
+            $pluginData['url'] = $data;
+            break;
+        case 'maintainer' :
+            $pluginData['maintainer'] = $data;
+            break;
+        case 'database' :
+            $pluginData['database'] = $data;
+            break;
+        case 'requires' :
+            $pluginData['requires'][] = $data;
+            break;
+        case 'dataproxydriver' :
+            $pluginData['dataproxydriver'] = $data;
+            break;
+        case 'layout' :
+            $pluginData['layout'] = $data;
+            break;
+        case 'renamedist' :
+            $pluginData['renamedist'][] = $data;
+            break;
+    }
+}
+
+/**
+* Parses the plugin.xml form to the global $pluginData
+*
+*/
+function PLUGINS_getPluginXML($pluginDir)
+{
+    global $_CONF, $pluginData;
+
+    if (!$dh = @opendir($pluginDir)) {
+        return false;
+    }
+
+    $filename = $pluginDir . '/plugin.xml';
+
+    if (!($fp=@fopen($filename, "r"))) {
+        return false;
+    }
+
+    $pluginData = array();
+
+    if (!($xml_parser = xml_parser_create())) {
+        return false;
+    }
+
+    xml_set_element_handler($xml_parser,"PLUGINS_startElementHandler","PLUGINS_endElementHandler");
+    xml_set_character_data_handler( $xml_parser, "PLUGINS_characterDataHandler");
+
+    while( $data = fread($fp, 4096)){
+        if(!xml_parse($xml_parser, $data, feof($fp))) {
+            break;
+        }
+    }
+    xml_parser_free($xml_parser);
+
+    return $pluginData;
+}
+
+/**
+* Shows the plugin upload form
+*
+*/
+function PLUGINS_showUploadForm($token)
 {
     global $_CONF,$LANG_ADMIN,$LANG32;
 
     $retval = '';
-
-    $retval .= COM_startBlock ($LANG32[13],'', COM_getBlockTemplate ('_admin_block', 'header'));
 
     $T = new Template($_CONF['path_layout'] . 'admin/plugins');
     $T->set_file('form','plugin_upload_form.thtml');
 
     $T->set_var(array(
         'form_action_url'   =>  $_CONF['site_admin_url'] .'/plugin_upload.php',
-        'lang_instructions' => 'Select a plugin from your local system to uploads',
+        'lang_upload_plugin' => $LANG32[57],
     ));
 
     $retval .= $T->parse('output', 'form');
 
-    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
-
     return $retval;
 }
 
-/**
-* Shows the plugin editor form
-*
-* @param    string  $pi_name    Plugin name
-* @param    int     $confirmed  Flag indicated the user has confirmed an action
-* @return   string              HTML for plugin editor form or error message
-*
-*/
-function PLGADM_edit($pi_name, $confirmed = 0)
-{
-    global $_CONF, $_TABLES, $_USER, $LANG32, $LANG_ADMIN;
-
-    $retval = '';
-
-    if (strlen ($pi_name) == 0) {
-        $retval .= COM_startBlock ($LANG32[13], '',
-                            COM_getBlockTemplate ('_msg_block', 'header'));
-        $retval .= COM_errorLog ($LANG32[12]);
-        $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-
-        return $retval;
-    }
-
-    $result = DB_query("SELECT pi_homepage,pi_version,pi_gl_version,pi_enabled FROM {$_TABLES['plugins']} WHERE pi_name = '$pi_name'");
-    if (DB_numRows($result) <> 1) {
-        // Serious problem, we got a pi_name that doesn't exist
-        // or returned more than one row
-        $retval .= COM_startBlock ($LANG32[13], '',
-                            COM_getBlockTemplate ('_msg_block', 'header'));
-        $retval .= COM_errorLog ('Error in editing plugin ' . $pi_name
-                . '. Either the plugin does not exist or there is more than one row with with same pi_name.  Bailing out to prevent trouble.');
-        $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-
-        return $retval;
-    }
-
-    $A = DB_fetchArray($result);
-
-    $plg_templates = new Template($_CONF['path_layout'] . 'admin/plugins');
-    $plg_templates->set_file('editor', 'editor.thtml');
-    $plg_templates->set_var( 'xhtml', XHTML );
-    $plg_templates->set_var('site_url', $_CONF['site_url']);
-    $plg_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
-    $plg_templates->set_var('layout_url', $_CONF['layout_url']);
-    $plg_templates->set_var('start_block_editor', COM_startBlock ($LANG32[13],
-            '', COM_getBlockTemplate ('_admin_block', 'header')));
-    $plg_templates->set_var('lang_save', $LANG_ADMIN['save']);
-    $plg_templates->set_var('lang_cancel', $LANG_ADMIN['cancel']);
-    $plg_templates->set_var('lang_delete', $LANG_ADMIN['delete']);
-    $plg_templates->set_var ('pi_icon', PLG_getIcon ($pi_name));
-    if (!empty($pi_name)) {
-        $plg_templates->set_var ('delete_option', '<input type="submit" value="'
-                                 . $LANG_ADMIN['delete'] . '" name="delete"' . XHTML . '>');
-    }
-    $plugin_code_version = PLG_chkVersion($pi_name);
-    if (empty ($plugin_code_version)) {
-        $code_version = 'N/A';
-    } else {
-        $code_version = $plugin_code_version;
-    }
-    $pi_installed_version = $A['pi_version'];
-    if (empty ($plugin_code_version) ||
-            ($pi_installed_version == $code_version)) {
-        $plg_templates->set_var ('update_option', '');
-    } else {
-        $plg_templates->set_var ('update_option', '<input type="submit" value="'
-                                 . $LANG32[34] . '" name="update"' . XHTML . '>');
-    }
-    $plg_templates->set_var('confirmed', $confirmed);
-    $plg_templates->set_var('lang_pluginname', $LANG32[26]);
-    $plg_templates->set_var('pi_name', $pi_name);
-    $plg_templates->set_var('lang_pluginhomepage', $LANG32[27]);
-    $plg_templates->set_var('pi_homepage', $A['pi_homepage']);
-    $plg_templates->set_var('lang_pluginversion', $LANG32[28]);
-    $plg_templates->set_var('lang_plugincodeversion', $LANG32[33]);
-    $plg_templates->set_var('pi_version', $A['pi_version']);
-    $plg_templates->set_var('lang_glfusionversion', $LANG32[29]);
-    $plg_templates->set_var('pi_gl_version', $A['pi_gl_version']);
-    $plg_templates->set_var('pi_codeversion', $code_version );
-    $plg_templates->set_var('lang_enabled', $LANG32[19]);
-    if ($A['pi_enabled'] == 1) {
-        $plg_templates->set_var('enabled_checked', 'checked="checked"');
-    } else {
-        $plg_templates->set_var('enabled_checked', '');
-    }
-    $plg_templates->set_var('gltoken', SEC_createToken());
-    $plg_templates->set_var('gltoken_name', CSRF_TOKEN);
-    $plg_templates->set_var('end_block',
-            COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer')));
-
-    $retval .= $plg_templates->parse('output', 'editor');
-
-    return $retval;
-}
 
 /**
-* Saves a plugin
-*
-* @param    string  $pi_name        Plugin name
-* @param    string  $pi_version     Plugin version number
-* @param    string  $pi_gl_version  glFusion version plugin is compatible with
-* @param    int     $enabled        Flag that indicates if plugin is enabled
-* @param    string  $pi_homepage    URL to homepage for plugin
-* @return   string                  HTML redirect or error message
+* Adds installed plugins to the list
 *
 */
-function PLGADM_save($pi_name, $pi_version, $pi_gl_version, $enabled, $pi_homepage)
+function PLUGINS_loadPlugins(&$data_arr)
 {
-    global $_CONF, $_TABLES, $LANG32;
+    global $_CONF, $_TABLES, $glfPlugins;
 
-    $retval = '';
+    $result = DB_query("SELECT pi_name,pi_version,pi_gl_version,pi_enabled,pi_homepage FROM {$_TABLES['plugins']} WHERE 1=1");
+    $rows = DB_numRows($result);
 
-    if (!empty ($pi_name)) {
-        if ($enabled == 'on') {
-            $enabled = 1;
+    for ($i=0; $i<$rows; $i++) {
+        $P = DB_fetchArray($result);
+        $pluginData = PLUGINS_getPluginXML($_CONF['path'] . 'plugins/' . $P['pi_name']);
+        // ok the plugin is in the plugins table, so it's installed
+        $P['installed'] = 1;
+        // determine the plugin code version
+        if ($P['pi_enabled'] == 1) {
+            $P['pi_code_version'] = PLG_chkVersion($P['pi_name']);
         } else {
-            $enabled = 0;
+            $P['pi_code_version'] = (is_array($pluginData)) ? $pluginData['version'] : '0.0.0';
         }
-        $pi_name = DB_escapeString ($pi_name);
-        $pi_version = DB_escapeString ($pi_version);
-        $pi_gl_version = DB_escapeString ($pi_gl_version);
-        $pi_homepage = DB_escapeString ($pi_homepage);
-
-        $currentState = DB_getItem ($_TABLES['plugins'], 'pi_enabled',
-                                    "pi_name= '{$pi_name}' LIMIT 1");
-        if ($currentState != $enabled) {
-            PLG_enableStateChange ($pi_name, ($enabled == 1) ? true : false);
-        }
-
-        DB_save ($_TABLES['plugins'], 'pi_name, pi_version, pi_gl_version, pi_enabled, pi_homepage', "'$pi_name', '$pi_version', '$pi_gl_version', $enabled, '$pi_homepage'");
-
-        $retval = COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=28');
-    } else {
-        $retval .= COM_siteHeader ('menu', $LANG32[13]);
-        $retval .= COM_startBlock ($LANG32[13], '',
-                            COM_getBlockTemplate ('_msg_block', 'header'));
-        $retval .= COM_errorLog ('error saving plugin, no pi_name provided', 1);
-        $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-        $retval .= PLGADM_edit($pi_name);
-        $retval .= COM_siteFooter ();
+        $P['name'] = (is_array($pluginData)) ? $pluginData['name'] : '';
+        $P['description'] = (is_array($pluginData)) ? $pluginData['description'] : '';
+        $P['maintainer'] = (is_array($pluginData)) ? $pluginData['maintainer'] : '';
+        $P['phpversion'] = (is_array($pluginData)) ? $pluginData['phpversion'] : '';
+        $P['glfusionversion'] = (is_array($pluginData)) ? $pluginData['glfusionversion'] : '';
+        $P['update'] = (($P['pi_enabled'] == 1) AND ($P['pi_version'] <> $P['pi_code_version'])) ? 1 : 0;
+        $P['bundled'] = (in_array($P['pi_name'], $glfPlugins)) ? 1 : 0;
+        $data_arr[] = $P;
     }
-    CTL_clearCache();
-    return $retval;
+    return;
 }
 
 /**
-* Creates list of uninstalled plugins (if any) and offers install link to them.
-*
-* @return   string      HTML containing list of uninstalled plugins
+* Adds new/uninstalled plugins (if any) to the list
 *
 */
-function PLGADM_showNewPlugins($token)
+function PLUGINS_loadNewPlugins(&$data_arr)
 {
-    global $_CONF, $_TABLES, $LANG32;
-    require_once( $_CONF['path_system'] . 'lib-admin.php' );
-    $plugins = array ();
+    global $_CONF, $_TABLES, $LANG32, $glfIgnore;
+
     $plugins_dir = $_CONF['path'] . 'plugins/';
-    $fd = opendir ($plugins_dir);
-    $index = 1;
-    $retval = '';
-    $data_arr = array();
-    while (($dir = @readdir ($fd)) == TRUE) {
-        if (($dir <> '.') && ($dir <> '..') && ($dir <> 'CVS') &&
-           ($dir <> '.svn') && (substr($dir, 0 , 1) <> '.') && is_dir($plugins_dir . $dir)) {
+    $fd = opendir($plugins_dir);
+
+    while (($pi_name = @readdir ($fd)) == TRUE) {
+        if ((!in_array($pi_name, $glfIgnore)) && is_dir($plugins_dir . $pi_name)) {
             clearstatcache ();
-            // Check and see if this plugin is installed - if there is a record.
-            // If not then it's a new plugin
-            if (DB_count($_TABLES['plugins'],'pi_name',$dir) == 0) {
-                // additionally, check if a 'functions.inc' exists
-                if (file_exists ($plugins_dir . $dir . '/functions.inc')) {
-                    // and finally, since we're going to link to it, check if
-                    // an install script exists
+            if (DB_count($_TABLES['plugins'], 'pi_name', $pi_name) == 0) {
+                // plugin is not in the plugins table, check prereqs for installation
+                if (file_exists ($plugins_dir . $pi_name . '/functions.inc')) {
+                    // functions.inc exists (essential)
                     $adminurl = $_CONF['site_admin_url'];
                     if (strrpos ($adminurl, '/') == strlen ($adminurl)) {
                         $adminurl = substr ($adminurl, 0, -1);
@@ -272,34 +308,34 @@ function PLGADM_showNewPlugins($token)
                         $admindir = $_CONF['path_html']
                                   . substr ($adminurl, $pos + 1);
                     }
-                    $fh = @fopen ($admindir . '/plugins/' . $dir
+                    $fh = @fopen ($admindir . '/plugins/' . $pi_name
                         . '/install.php', 'r');
                     if ($fh) {
+                        // ok if we got here, we have an install.php
                         fclose ($fh);
+                        // so all we have is a name at this point, try to parse a plugin.xml
+                        $pluginData = PLUGINS_getPluginXML($_CONF['path'] . 'plugins/' . $pi_name);
                         $data_arr[] = array(
-                            'pi_name' => $dir,
-                            'number' => $index,
-                            'install_link'=> COM_createLink($LANG32[22],
-                                $_CONF['site_admin_url'] . '/plugins/' . $dir
-                                . '/install.php?action=install&amp;'.CSRF_TOKEN.'='.$token)
+                            'installed' => 0,
+                            'bundled' => 0,
+                            'update' => 0,
+                            'pi_name' => $pi_name,
+                            'pi_enabled' => 0,
+                            'pi_homepage' => ((is_array($pluginData)) ? $pluginData['url'] : ''),
+                            'pi_gl_version' => ((is_array($pluginData)) ? $pluginData['glfusionversion'] : '0.0.0'),
+                            'pi_code_version' => ((is_array($pluginData)) ? $pluginData['version'] : '0.0.0'),
+                            'name' => ((is_array($pluginData)) ? $pluginData['name'] : ''),
+                            'description' => ((is_array($pluginData)) ? $pluginData['description'] : ''),
+                            'maintainer' => ((is_array($pluginData)) ? $pluginData['maintainer'] : ''),
+                            'phpversion' => ((is_array($pluginData)) ? $pluginData['phpversion'] : ''),
+                            'glfusionversion' => ((is_array($pluginData)) ? $pluginData['glfusionversion'] : ''),
                         );
-                        $index++;
                     }
                 }
             }
         }
     }
-
-    $header_arr = array(      # display 'text' and use table field 'field'
-                    array('text' => '#', 'field' => 'number'),
-                    array('text' => $LANG32[16], 'field' => 'pi_name'),
-                    array('text' => '', 'field' => 'install_link')
-    );
-
-    $text_arr = array('title' => $LANG32[14]);
-    $retval .= ADMIN_simpleList('', $header_arr, $text_arr,
-                           $data_arr);
-    return $retval;
+    return;
 }
 
 /**
@@ -309,7 +345,7 @@ function PLGADM_showNewPlugins($token)
 * @return             string   HTML for error or success message
 *
 */
-function PLGADM_update($pi_name)
+function PLUGINS_update($pi_name)
 {
     global $_CONF, $LANG32, $LANG08, $MESSAGE, $_IMAGE_TYPE;
 
@@ -323,6 +359,7 @@ function PLGADM_update($pi_name)
 
         return $retval;
     }
+
     $result = PLG_upgrade ($pi_name);
     if ($result > 0 ) {
         if ($result === TRUE) { // Catch returns that are just true/false
@@ -348,7 +385,7 @@ function PLGADM_update($pi_name)
 * @return             string   HTML for error or success message
 *
 */
-function PLGADM_unInstall($pi_name)
+function PLUGINS_unInstall($pi_name)
 {
     global $_CONF, $_DB_table_prefix, $_TABLES, $LANG32, $LANG08, $MESSAGE, $_IMAGE_TYPE;
 
@@ -396,57 +433,114 @@ function PLGADM_unInstall($pi_name)
  * used for the list of plugins in admin/plugins.php
  *
  */
-function PLGADM_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
+function PLUGINS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
-    global $_CONF, $LANG_ADMIN, $LANG32, $_PLUGINS;
+    global $_CONF, $LANG_ADMIN, $LANG32, $_PLUGINS, $pluginData;
 
     $retval = false;
 
+    $update = ($A['update'] == 1) ? true : false;
+    $bundled = ($A['bundled'] == 1) ? true : false;
+    $installed = ($A['installed'] == 1) ? true : false;
     $enabled = ($A['pi_enabled'] == 1) ? true : false;
 
     switch($fieldname) {
-        case "edit":
-            $retval = COM_createLink($icon_arr['edit'],
-                "{$_CONF['site_admin_url']}/plugins.php?edit=x&amp;pi_name={$A['pi_name']}");
-            break;
-        case 'pi_version':
-            $plugin_code_version = PLG_chkVersion ($A['pi_name']);
-            if (empty ($plugin_code_version)) {
-                $code_version = 'N/A';
+
+        case 'control':
+            if (!$installed) {
+                $attr['title'] = $LANG32[60];
+                $attr['onclick'] = 'return confirm(\'' . $LANG32[80] . '\');';
+                $retval = COM_createLink($icon_arr['add'],
+                    $_CONF['site_admin_url'] . '/plugins/' . $A['pi_name'] . '/install.php'
+                    . '?action=install'
+                    . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
             } else {
-                $code_version = $plugin_code_version;
-            }
-            $pi_installed_version = $A['pi_version'];
-            if (empty ($plugin_code_version) ||
-                    ($pi_installed_version == $code_version)) {
-                $version = $pi_installed_version;
-            } else {
-                $version = "{$LANG32[37]}: $pi_installed_version,&nbsp;{$LANG32[36]}: $plugin_code_version";
                 if ($enabled) {
-                    $retval .= " <b>{$LANG32[38]}</b>";
+                    $switch = ' checked="checked"';
+                    $title = 'title="' . $LANG_ADMIN['disable'] . '" ';
+                } else {
+                    $switch = '';
+                    $title = 'title="' . $LANG_ADMIN['enable'] . '" ';
                 }
+                $retval = '<input type="checkbox" name="enabledplugins[' . $A['pi_name'] . ']"'
+                    . ' onclick="submit()" value="1"' . $switch
+                    . $title
+                    . XHTML . ">";
+                $retval .= '<input type="hidden" name="pluginarray['.$A['pi_name'].']" value="1" />';
             }
-            $retval = ($enabled) ? $version : '<span class="disabledfield">' . $version . '</span>';
             break;
-        case 'pi_name' :
-            if ( array_search($fieldvalue,$_PLUGINS) === false ) {
-                $retval = '<span class="disabledfield">' . $fieldvalue . '</span>';
+
+        case 'version':
+                if ($update) {
+                    $retval = $A['pi_version'] . '&nbsp;';
+                    $attr['title'] = $LANG32[38];
+                    $attr['onclick'] = 'return confirm(\'' . $LANG32[77] . '\');';
+                    $attr['style'] = 'vertical-align:top;';
+                    $retval .= COM_createLink($icon_arr['update'],
+                        $_CONF['site_admin_url'] . '/plugins.php'
+                        . '?update=x'
+                        . '&amp;pi_name=' . $A['pi_name']
+                        . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+                    $retval .= '&nbsp;<span class="warning">'
+                        . $A['pi_code_version']
+                        . '</span><br ' . XHTML . '>';
+                } elseif ($enabled) {
+                    $retval = $A['pi_version'];
+                } elseif (!$installed) {
+                    $retval = '<span class="disabledfield">' . $A['pi_code_version'] . '</span>';
+                } else {
+                    $retval = '<span class="disabledfield">' . $A['pi_version'] . '</span>';
+                }
+                break;
+
+        case 'info':
+            $tip = $A['name']
+                . '::'
+                . $A['description']
+                . '<p><b>' . $LANG32[81] . ':</b></p>'
+                . '<p>' . $A['maintainer'] . '</p>'
+                . '<p><b>' . $LANG32[82] . ':</b></p>'
+                . '<p>glFusion: v' . $A['glfusionversion'] . '<br />' . 'PHP: v' . $A['phpversion'] . '</p>';
+            $attr['class'] = 'gl_mootip';
+            $attr['title'] = $tip;
+             if ($enabled) {
+                $retval = COM_createLink($icon_arr['info'], '#', $attr);
+             } else {
+                $retval = COM_createLink($icon_arr['greyinfo'], '#', $attr);
+             }
+             break;
+
+        case 'bundled':
+            if ($bundled) {
+                $retval = ($enabled) ? $icon_arr['check'] : $icon_arr['greycheck'];
             } else {
-                $retval = $fieldvalue;
+                $retval = '';
             }
             break;
-        case 'enabled':
+
+        case 'pi_homepage':
             if ($enabled) {
-                $switch = ' checked="checked"';
-                $title = 'title="' . $LANG_ADMIN['disable'] . '" ';
+                $attr['target'] = '_blank';
+                $retval = COM_createLink(stripslashes($fieldvalue), $fieldvalue, $attr);
             } else {
-                $switch = '';
-                $title = 'title="' . $LANG_ADMIN['enable'] . '" ';
+                $retval = ($enabled) ? $fieldvalue : '<span class="disabledfield">' . $fieldvalue . '</span>';
             }
-            $retval = "<input type=\"checkbox\" name=\"enabledplugins[{$A['pi_name']}]\" "
-                . "onclick=\"submit()\" value=\"1\"$switch" . XHTML . ">";
-            $retval .= '<input type="hidden" name="pluginarray['.$A['pi_name'].']" value="1" />';
             break;
+
+        case 'unplug':
+            if ($installed) {
+                $attr['title'] = $LANG32[79];
+                $attr['onclick'] = 'return doubleconfirm(\'' . $LANG32[76] . '\',\'' . $LANG32[31] . '\');';
+                $retval = COM_createLink($icon_arr['delete'],
+                    $_CONF['site_admin_url'] . '/plugins.php'
+                    . '?delete=x'
+                    . '&amp;pi_name=' . $A['pi_name']
+                    . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            } else {
+                $retval = '';
+            }
+            break;
+
         default:
             $retval = ($enabled) ? $fieldvalue : '<span class="disabledfield">' . $fieldvalue . '</span>';
             break;
@@ -460,29 +554,18 @@ function PLGADM_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 * @return   string                  formatted list of plugins
 *
 */
-function PLGADM_list($token)
+function PLUGINS_list($token)
 {
-    global $_CONF, $_TABLES, $LANG32, $LANG_ADMIN, $_IMAGE_TYPE;
+    global $_CONF, $_TABLES, $LANG32, $LANG_ADMIN, $_IMAGE_TYPE, $data_arr;
 
-    require_once $_CONF['path_system'] . 'lib-admin.php';
+    USES_lib_admin();
 
-    $retval = '';
-    $header_arr = array(      # display 'text' and use table field 'field'
-        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center'),
-        array('text' => $LANG32[16], 'field' => 'pi_name', 'sort' => true),
-        array('text' => $LANG32[17], 'field' => 'pi_version', 'sort' => true, 'align' => 'center'),
-        array('text' => $LANG32[18], 'field' => 'pi_gl_version', 'sort' => true, 'align' => 'center'),
-        array('text' => $LANG_ADMIN['enabled'], 'field' => 'enabled', 'sort' => false, 'align' => 'center')
-    );
-
-    $defsort_arr = array('field' => 'pi_name', 'direction' => 'asc');
+    $retval = COM_startBlock($LANG32[5], '',
+                              COM_getBlockTemplate('_admin_block', 'header'));
 
     $menu_arr = array (
                     array('url' => $_CONF['site_admin_url'],
                           'text' => $LANG_ADMIN['admin_home']));
-
-    $retval .= COM_startBlock($LANG32[5], '',
-                              COM_getBlockTemplate('_admin_block', 'header'));
 
     $retval .= ADMIN_createMenu(
         $menu_arr,
@@ -490,29 +573,41 @@ function PLGADM_list($token)
         $_CONF['layout_url'] . '/images/icons/plugins.' . $_IMAGE_TYPE
     );
 
+    $retval .= PLUGINS_showUploadForm($token);  // show the plugin upload form
+
+    $data_arr = array();
+    PLUGINS_loadPlugins($data_arr);             // installed plugins
+    PLUGINS_loadNewPlugins($data_arr);          // uninstalled/new plugins
+
+    ADMIN_sortList($data_arr,'pi_name');        // default sort for now (fancier later)
+
+    $header_arr = array(
+        array('text' => $LANG32[78], 'field' => 'control', 'align' => 'center', 'width' => '40px'),
+        array('text' => $LANG32[16], 'field' => 'pi_name'),
+        array('text' => $LANG32[36], 'field' => 'version', 'align' => 'center', 'nowrap' => true, 'width' => '75px'),
+        array('text' => $LANG32[83], 'field' => 'info', 'align' => 'center', 'width' => '40px'),
+        array('text' => $LANG32[84], 'field' => 'bundled', 'align' => 'center', 'width' => '40px'),
+        array('text' => $LANG32[27], 'field' => 'pi_homepage', 'nowrap' => true, 'width' => '150px'),
+        array('text' => $LANG32[18], 'field' => 'pi_gl_version', 'align' => 'center', 'width' => '75px'),
+        array('text' => $LANG32[79], 'field' => 'unplug', 'align' => 'center', 'width' => '40px'),
+    );
+
     $text_arr = array(
-        'has_extras'   => true,
-        'instructions' => $LANG32[11],
         'form_url'     => $_CONF['site_admin_url'] . '/plugins.php'
     );
 
-    $query_arr = array(
-        'table' => 'plugins',
-        'sql' => "SELECT pi_name, pi_version, pi_gl_version, "
-                ."pi_enabled, pi_homepage FROM {$_TABLES['plugins']} WHERE 1=1",
-        'query_fields' => array('pi_name'),
-        'default_filter' => ''
-    );
 
-    // this is a dummy variable so we know the form has been used if all plugins
-    //  should be disabled in order to disable the last one.
+    $options_arr = array();
+
+    // set security token and plugin enable/disable indicator
     $form_arr = array(
-        'top'    => '<input type="hidden" name="'.CSRF_TOKEN.'" value="'.$token.'"/>',
+        'top'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="' . $token . '"/>',
         'bottom' => '<input type="hidden" name="pluginenabler" value="true"/>'
     );
 
-    $retval .= ADMIN_list('plugins', 'PLGADM_getListField', $header_arr,
-                $text_arr, $query_arr, $defsort_arr, '', $token, '', $form_arr);
+    $retval .= ADMIN_simpleList('PLUGINS_getListField', $header_arr,
+                $text_arr, $data_arr, $options_arr, $form_arr, $token);
+
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
     return $retval;
@@ -525,7 +620,7 @@ function PLGADM_list($token)
 * @return   void
 *
 */
-function PLGADM_toggleStatus($plugin_name_arr, $pluginarray)
+function PLUGINS_toggleStatus($plugin_name_arr, $pluginarray)
 {
     global $_TABLES, $_DB_table_prefix;
 
@@ -544,12 +639,13 @@ function PLGADM_toggleStatus($plugin_name_arr, $pluginarray)
         }
     }
     CTL_clearCache();
+    return;
 }
 
 // MAIN ========================================================================
 
 $action = '';
-$expected = array('edit','save','update','delete','cancel');
+$expected = array('update','delete','cancel');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
@@ -576,39 +672,23 @@ if (isset ($_POST['pluginenabler']) && $validtoken) {
     if ( isset($_POST['pluginarray']) ) {
         $pluginarray = $_POST['pluginarray'];
     }
-    PLGADM_toggleStatus($enabledplugins,$pluginarray);
+    PLUGINS_toggleStatus($enabledplugins,$pluginarray);
 
     // force a refresh so that the information of the plugin that was just
     // enabled / disabled (menu entries, etc.) is displayed properly
+
+//    echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php');
+//    exit;
     header ('Location: ' . $_CONF['site_admin_url'] . '/plugins.php');
     exit;
 }
 
 switch ($action) {
 
-    case 'edit':
-        $display .= COM_siteHeader ('menu', $LANG32[13]);
-        $display .= PLGADM_edit(COM_applyFilter ($_GET['pi_name']));
-        $display .= COM_siteFooter ();
-        break;
-
-    case 'save':
-        if ($validtoken) {
-            $pi_version = (isset($_POST['pi_version'])) ? COM_applyFilter($_POST['pi_version']) : '';
-            $pi_gl_version = (isset($_POST['pi_gl_version'])) ? COM_applyFilter($_POST['pi_gl_version']) : '';
-            $enabled = (isset($_POST['enabled'])) ? COM_applyFilter($_POST['enabled']) : '';
-            $pi_homepage = (isset($_POST['pi_homepage'])) ? COM_applyFilter($_POST['pi_homepage']) : '';
-            $display .= PLGADM_save($pi_name, $pi_version, $pi_gl_version, $enabled, $pi_homepage);
-        } else {
-            COM_accessLog("User {$_USER['username']} tried to illegally edit plugin $pi_name and failed CSRF checks.");
-            echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
-        }
-        break;
-
     case 'update':
         if ($validtoken) {
             $display .= COM_siteHeader ('menu', $LANG32[13]);
-            $display .= PLGADM_update($pi_name);
+            $display .= PLUGINS_update($pi_name);
             $display .= COM_siteFooter();
         } else {
             COM_accessLog("User {$_USER['username']} tried to illegally update plugin $pi_name and failed CSRF checks.");
@@ -617,21 +697,16 @@ switch ($action) {
         break;
 
     case 'delete':
-        if (($_POST['confirmed'] == 1) && $validtoken) {
+        if ($validtoken) {
             $display .= COM_siteHeader ('menu', $LANG32[30]);
-            $display .= PLGADM_unInstall($pi_name);
+            $display .= PLUGINS_unInstall($pi_name);
             $token = SEC_createToken();
-            $display .= PLGADM_list($token);
-            $display .= PLGADM_showUploadForm($token);
-            $display .= PLGADM_showNewPlugins($token);
+            $display .= PLUGINS_list($token);
             $display .= COM_siteFooter ();
-        } else { // ask user for confirmation
-            $display .= COM_siteHeader ('menu', $LANG32[30]);
-            $display .= COM_startBlock ($LANG32[30], '', COM_getBlockTemplate ('_msg_block', 'header'));
-            $display .= $LANG32[31];
-            $display .= COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
-            $display .= PLGADM_edit($pi_name, 1);
             $display .= COM_siteFooter ();
+        } else {
+            COM_accessLog("User {$_USER['username']} tried to illegally delete plugin $pi_name and failed CSRF checks.");
+            echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;
 
@@ -652,9 +727,7 @@ switch ($action) {
         }
         $display .= ($msg > 0) ? COM_showMessage($msg,$plugin) : '';
         $token = SEC_createToken();
-        $display .= PLGADM_list($token);
-        $display .= PLGADM_showUploadForm($token);
-        $display .= PLGADM_showNewPlugins($token);
+        $display .= PLUGINS_list($token);
         $display .= COM_siteFooter();
         break;
 

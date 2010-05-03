@@ -254,6 +254,11 @@ function PAGE_form($A, $error = false)
             $position .= ' selected="selected"';
         }
         $position .= '>' . $LANG_STATIC['position_entire'] . '</option>';
+        $position .= '<option value="4"';
+        if ($A['sp_where'] == 4) {
+            $position .= ' selected="selected"';
+        }
+        $position .= '>' . $LANG_STATIC['position_nonews'] . '</option>';
         $position .= '</select>';
         $sp_template->set_var ('pos_selection', $position);
 
@@ -666,7 +671,7 @@ function PAGE_list()
         array('text' => $LANG_STATIC['id'], 'field' => 'sp_id', 'sort' => true),
         array('text' => $LANG_ADMIN['title'], 'field' => 'sp_title', 'sort' => true),
         array('text' => $LANG_STATIC['head_centerblock'], 'field' => 'sp_centerblock', 'sort' => true, 'align' => 'center'),
-        array('text' => $LANG_STATIC['writtenby'], 'field' => 'sp_uid', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG_STATIC['writtenby'], 'field' => 'sp_uid', 'sort' => true),
         array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false, 'align' => 'center'),
         array('text' => $LANG_STATIC['date'], 'field' => 'unixdate', 'sort' => true, 'align' => 'center'),
         array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center'),

@@ -23,11 +23,15 @@
     </div>
     <div class="story-footer">
         <p>{page_selector}</p>
-        <p>{readmore_link} {post_comment_link}</p>
-        <p>{plugin_itemdisplay}
+        <p>{readmore_link}</p>
+        {!if rating_bar}
+        <p>
+        {!endif}
+        {plugin_itemdisplay}
         {!if comments_count}
             {comments_with_count}
         {!endif}
+            &nbsp;&nbsp;{post_comment_link}
         {!if trackback_count}
             {trackbacks_with_count}
         {!endif}

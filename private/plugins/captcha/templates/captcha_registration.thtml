@@ -7,8 +7,8 @@ var RecaptchaOptions = {
 };
 //]]>
 </script>
-<div style="margin-left:130px;">
-  {recaptcha}
+<div style="width:318px;border:1px solid #ccc;margin:10px auto;">
+    {recaptcha}
 </div>
 {!else}
 <script type="text/javascript">
@@ -24,10 +24,10 @@ function new_captcha()
             alert("{lang_too_many}");
         } else {
             // extract image name from image source (i.e. cut off ?randomness)
-            thesrc = document.getElementById("captchaimage").src;
+            thesrc = document.getElementById("captcha_image").src;
             thesrc = thesrc.substring(0,thesrc.lastIndexOf(".")+4);
             // add ?(random) to prevent browser/isp caching
-            document.getElementById("captchaimage").src = thesrc+"?"+Math.round(Math.random()*100000);
+            document.getElementById("captcha_image").src = thesrc+"?"+Math.round(Math.random()*100000);
         }
     } else {
          alert("{lang_reload_failed}");
@@ -35,17 +35,14 @@ function new_captcha()
 }
 //]]>
 </script>
-<label>{$LANG_CP00[picture]}:<br{xhtml}>
-<a href="javascript:new_captcha();" style="vertical-align:middle;">{lang_reload}</a>
-</label>
-
-<img src="{captcha_image}" id="captchaimage" border="0" alt="{lang_alt}" title="{lang_alt}"{xhtml}>
-
-<div style="clear:both;"></div>
-<label for="captcha">{$LANG_CP00[characters]}:</label>
-
-<input type="text" id="captcha" name="captcha" size="25" maxlength="40" value="{captchastring}"{xhtml}>
-<input type="hidden" name="csid" value="{csid}"{xhtml}><br{xhtml}>
-<div style="margin-left: 95px;">{lang_captcha_help}</div>
+<div style="width:170px;margin:10px 0; float:right;">
+    <img style="border:1px solid #ccc;margin-bottom:5px;" src="{captcha_image}" id="captcha_image" border="0" alt="{lang_alt}" title="{lang_alt}"{xhtml}><br{xhtml}>
+    <a href="javascript:new_captcha();" style="text-decoration:none;">
+        <img style="vertical-align:middle; width:22px; height:22px;" src="{site_url}/captcha/reload.png" alt="{lang_reload}" title="{lang_reload}"{xhtml}>
+    </a>
+    <input style="border:1px solid #ccc;" type="text" id="captcha" name="captcha" size="20" maxlength="6" value="{lang_captcha_help}" title="{lang_captcha_help}" onfocus="if (this.value=='{lang_captcha_help}')this.value='';" onblur="if(this.value=='')this.value='{lang_captcha_help}';"{xhtml}>
+    <input type="hidden" name="csid" value="{csid}"{xhtml}>
+</div>
+<div style="clear:right;"></div>
 {!endif}
 {# end {templatelocation} #}

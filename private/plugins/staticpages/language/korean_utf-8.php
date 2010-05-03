@@ -112,7 +112,8 @@ $LANG_STATIC = array(
     'limit_results' => '좁혀가며 검색',
     'search' => '검색',
     'submit' => '등록',
-    'delete_confirm' => 'Are you sure you want to delete this page?'
+    'delete_confirm' => 'Are you sure you want to delete this page?',
+    'allnhp_topics' => 'All Topics (No Homepage)'
 );
 
 $PLG_staticpages_MESSAGE19 = '';

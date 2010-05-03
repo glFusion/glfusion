@@ -136,8 +136,11 @@ function FM_notifyAdmins( $filename,$file_user_id,$description ) {
         $group_id = DB_getItem($_TABLES['groups'],'grp_id','grp_name="filemgmt Admin"');
 
         $groups = FM_getGroupList($group_id);
-        $groupList = implode(',',$groups);
-
+        if ( count ($groups) == 0 ) {
+            $groupList = '1';
+        } else {
+            $groupList = implode(',',$groups);
+        }
 	    $sql = "SELECT DISTINCT {$_TABLES['users']}.uid,username,fullname,email "
 	          ."FROM {$_TABLES['group_assignments']},{$_TABLES['users']} "
 	          ."WHERE {$_TABLES['users']}.uid > 1 "
@@ -217,6 +220,17 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
     $eh = new ErrorHandler; //ErrorHandler object
     $mytree = new XoopsTree($_DB_name,$_FM_TABLES['filemgmt_cat'],"cid","pid");
     $mytree->setGroupAccessFilter($_GROUPS);
+
+    $groupsql = filemgmt_buildAccessSql();
+    $sql = "SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_cat']} WHERE pid=0 ";
+    $sql .= $groupsql;
+    list($catAccessCnt) = DB_fetchArray( DB_query($sql));
+
+    if ( $catAccessCnt < 1 ) {
+        COM_errorLOG("Submit.php => FileMgmt Plugin Access denied. Attempted user upload of a file, Remote address is:{$_SERVER['REMOTE_ADDR']}");
+        redirect_header($_CONF['site_url']."/index.php",1,_GL_ERRORNOUPLOAD);
+        exit;
+    }
 
     if ( isset($_POST['submit']) ){
 

@@ -4,7 +4,7 @@
         <div id="commentarea">
             {comment}
         </div>
-        <hr{xhtml}>
+        <div style="border-bottom:1px solid #cccccc"></div>
         <p>
             {lang_report_this}
         </p>

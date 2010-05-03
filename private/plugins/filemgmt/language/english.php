@@ -167,6 +167,7 @@ $LANG_confignames['filemgmt'] = array(
     'outside_webroot'       => 'Store Files Outside Web Root',
     'enable_rating'         => 'Enable Ratings',
     'displayblocks'         => 'Display glFusion Blocks',
+    'silent_edit_default'   => 'Silent Edit Default',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Main Settings'
@@ -427,6 +428,7 @@ define("_MD_CONFUPDATED","Configuration Updated Successfully!");
 define("_MD_NOFILES","No Files Found");
 define("_MD_APPROVEREQ","* Upload needs to be approved in this category");
 define("_MD_REQUIRED","* Required field");
+define("_MD_SILENTEDIT","Silent Edit: ");
 
 // Additional glFusion Defines
 define("_MD_NOVOTE","Not rated yet");

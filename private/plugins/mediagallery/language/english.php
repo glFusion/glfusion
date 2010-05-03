@@ -388,7 +388,7 @@ $LANG_MG01 = array (
     'recurse'                   => 'Process Subdirectories',
     'include_ss'                => 'SS',
     'original_filename'         => 'Original Filename',
-    'swfupload_usage'           => "<p>Select the destination Album, and then click 'Upload' to display the file browser.  To select multiple items, hold down the 'Ctrl' key while clicking on multiple individual files. To select a range of items, click on the first file, and then while holding down the 'Shift' key, click on the last file in the range.    Click 'Open' to begin the upload.</p><p><b>NOTE:</b> Javascript must be enabled and Adobe's Flash Player must be installed to use this upload method.  IE7 and Chrome users may experience a slight delay before the Browse button appears.</p>",
+    'swfupload_usage'           => "<p>Select the destination Album, and then click 'Upload' to display the file browser.  To select multiple items, hold down the 'Ctrl' key while clicking on multiple individual files. To select a range of items, click on the first file, and then while holding down the 'Shift' key, click on the last file in the range.    Click 'Open' to begin the upload.</p><p><b>NOTE:</b> Javascript must be enabled and Adobe's Flash Player must be installed to use this upload method.  IE7 and Chrome users may experience a delay before the Browse button appears.</p>",
     'swfupload_media'           => 'Flash Upload',
     'swfupload_pending'         => 'Pending...',
     'swfupload_q_too_many'      => 'You have attempted to queue too many files.\n',
@@ -730,6 +730,7 @@ $LANG_MG01 = array (
     'search_rating'             => 'Show Rating in Search Results',
     'gallery_only'              => 'Media Gallery Replaces glFusion Index Page',
     'all_nhp'                   => 'All topics (No Homepage)',
+    'lightbox'                  => 'Lightbox',
 );
 
 // error messages

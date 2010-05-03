@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -296,7 +296,7 @@ CREATE TABLE {$_TABLES['sessions']} (
   remote_ip varchar(15) NOT NULL default '',
   uid mediumint(8) NOT NULL default '1',
   md5_sess_id varchar(128) default NULL,
-  PRIMARY KEY  (sess_id),
+  PRIMARY KEY  (md5_sess_id),
   KEY start_time (start_time),
   KEY remote_ip (remote_ip)
 ) TYPE=MyISAM
@@ -477,7 +477,7 @@ CREATE TABLE {$_TABLES['trackbackcodes']} (
 $_SQL[] = "
 CREATE TABLE {$_TABLES['usercomment']} (
   uid mediumint(8) NOT NULL default '1',
-  commentmode varchar(10) NOT NULL default 'threaded',
+  commentmode varchar(10) NOT NULL default 'nested',
   commentorder varchar(4) NOT NULL default 'ASC',
   commentlimit mediumint(8) unsigned NOT NULL default '100',
   PRIMARY KEY  (uid)
@@ -537,7 +537,7 @@ CREATE TABLE {$_TABLES['users']} (
   remoteusername varchar(60) NULL,
   remoteservice varchar(60) NULL,
   fullname varchar(80) default NULL,
-  passwd varchar(32) NOT NULL default '',
+  passwd varchar(40) NOT NULL default '',
   email varchar(96) default NULL,
   homepage varchar(96) default NULL,
   sig varchar(160) NOT NULL default '',
@@ -547,6 +547,8 @@ CREATE TABLE {$_TABLES['users']} (
   theme varchar(64) default NULL,
   language varchar(64) default NULL,
   pwrequestid varchar(16) default NULL,
+  act_token varchar(32) NOT NULL default '',
+  act_time datetime NOT NULL default '0000-00-00 00:00:00',
   status smallint(5) unsigned NOT NULL default '1',
   num_reminders tinyint(1) NOT NULL default 0,
   remote_ip varchar(15) NOT NULL default '',
@@ -719,7 +721,7 @@ $_DATA[] = "INSERT INTO {$_TABLES['syndication']} (type, topic, header_tid, form
 $_DATA[] = "INSERT INTO {$_TABLES['topics']} (tid, topic, imageurl, sortnum, sort_by, sort_dir, limitnews, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('General','General News','/images/topics/topic_news.png',1,0,'DESC',10,6,2,3,2,2,2)";
 
 $_DATA[] = "INSERT INTO {$_TABLES['usercomment']} (uid, commentmode, commentorder, commentlimit) VALUES (1,'nested','ASC',100) ";
-$_DATA[] = "INSERT INTO {$_TABLES['usercomment']} (uid, commentmode, commentorder, commentlimit) VALUES (2,'threaded','ASC',100) ";
+$_DATA[] = "INSERT INTO {$_TABLES['usercomment']} (uid, commentmode, commentorder, commentlimit) VALUES (2,'nested','ASC',100) ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['userindex']} (uid, tids, etids, aids, boxes, noboxes, maxstories) VALUES (1,'','-','','',0,NULL) ";
 $_DATA[] = "INSERT INTO {$_TABLES['userindex']} (uid, tids, etids, aids, boxes, noboxes, maxstories) VALUES (2,'','','','',0,NULL) ";
@@ -741,7 +743,7 @@ $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('totalhits','0'
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('lastemailedstories','') ";
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('last_scheduled_run','') ";
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('spamx.counter','0') ";
-$_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion','1.2.0') ";
+$_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion','2.0.0') ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['trackbackcodes']} (code, name) VALUES (0,'Trackback Enabled') ";
 $_DATA[] = "INSERT INTO {$_TABLES['trackbackcodes']} (code, name) VALUES (-1,'Trackback Disabled') ";

@@ -95,7 +95,7 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
                 $sig = DB_getItem($_TABLES['users'], 'sig',
                                   "uid={$_USER['uid']}");
                 if (!empty ($sig)) {
-                    $sig = strip_tags ($sig);
+                    $sig = strip_tags (COM_stripslashes ($sig));
                     $sig = "\n\n-- \n" . $sig;
                 }
             }
@@ -243,7 +243,7 @@ function contactform ($uid, $subject = '', $message = '')
                 if (isset ($_POST['author'])) {
                     $sender = IO_getVar('text','author','post','');
                     $sender = substr ($sender, 0, strcspn ($sender, "\r\n"));
-                    $sender = trim($sender);
+                    $sender = htmlspecialchars (trim ($sender), ENT_QUOTES,COM_getEncodingt());
                 }
                 $mail_template->set_var ('username', $sender);
             } else {
@@ -257,7 +257,7 @@ function contactform ($uid, $subject = '', $message = '')
                 if (isset ($_POST['authoremail'])) {
                     $email = IO_getVar('text','authoremail','post','');
                     $email = substr ($email, 0, strcspn ($email, "\r\n"));
-                    $email = trim($email);
+                    $email = htmlspecialchars (trim ($email), ENT_QUOTES,COM_getEncodingt());
                 }
                 $mail_template->set_var ('useremail', $email);
             } else {

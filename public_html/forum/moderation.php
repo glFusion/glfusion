@@ -109,7 +109,7 @@ function moderator_deletePost($topic_id,$topic_parent_id,$forum_id)
         $topicparent = $topic_id;
         gf_updateLastPost($forum_id);
     } else {
-        gf_updateLastPost($forum_id,$topic_id);
+        gf_updateLastPost($forum_id,$topicparent);
     }
 
     CACHE_remove_instance('forumcb');
@@ -442,6 +442,8 @@ function moderator_confirmMove($topic_id,$topic_parent_id,$forum_id)
     $retval = '';
     $message = '';
 
+    $modfunction = COM_applyFilter($_POST['modfunction']);
+
     $subject = DB_getItem($_TABLES['gf_topic'],"subject","id=$topic_id");
 
     $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
@@ -480,7 +482,11 @@ function moderator_confirmMove($topic_id,$topic_parent_id,$forum_id)
         $forumResult = DB_query($sql);
 
         while($B = DB_fetchArray($forumResult)) {
-            if ( $B['forum_id'] != $forum_id ) {
+            if ( $modfunction == 'movetopic' ) {
+                if ( $B['forum_id'] != $forum_id ) {
+                    $forumList[$cat_id][$B['forum_id']] = $B['forum_name'];
+                }
+            } else {
                 $forumList[$cat_id][$B['forum_id']] = $B['forum_name'];
             }
         }

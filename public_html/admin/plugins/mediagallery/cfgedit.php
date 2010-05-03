@@ -1,33 +1,34 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | Media Gallery Plugin 1.6                                                  |
-// +---------------------------------------------------------------------------+
-// | $Id::                                                                    $|
-// | Set configuration options for Media Gallery Plugin.                       |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2005-2008 by the following authors:                         |
-// |                                                                           |
-// | Mark R. Evans              - mark@gllabs.org                              |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
+// +--------------------------------------------------------------------------+
+// | Media Gallery Plugin for glFusion CMS                                    |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// | Set configuration options for Media Gallery Plugin.                      |
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2005-2010 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 //
 
 require_once '../../../lib-common.php';
+require_once '../../auth.inc.php';
 require_once $_MG_CONF['path_admin'] . 'envcheck.php';
 require_once $_MG_CONF['path_admin'] . 'navigation.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/classFrame.php';
@@ -169,7 +170,9 @@ function MG_editConfig( ) {
     } else {
         $T->set_var('at_autoplay_no_checked', ' checked="checked"');
     }
-    if ( $_MG_CONF['at_enable_link'] == 1 ) {
+    if ( $_MG_CONF['at_enable_link'] == 2 ) {
+        $T->set_var('at_enable_link_lb_checked', ' checked="checked"');
+    } elseif ( $_MG_CONF['at_enable_link'] == 1 ) {
         $T->set_var('at_enable_link_yes_checked', ' checked="checked"');
     } else {
         $T->set_var('at_enable_link_no_checked', ' checked="checked"');

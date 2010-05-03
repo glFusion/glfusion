@@ -65,11 +65,10 @@ if (!SEC_hasRights('links.edit')) {
 // +--------------------------------------------------------------------------+
 
 
-
 // Returns a category tree of categories in the database to which
 // the user has edit access
 
-function links_list_categories($root)
+function LINK_CAT_list($root)
 {
     global $_CONF, $_TABLES, $_USER, $_IMAGE_TYPE, $LANG_ADMIN, $LANG_ACCESS,
            $LANG_LINKS_ADMIN, $LANG_LINKS, $_LI_CONF;
@@ -79,25 +78,23 @@ function links_list_categories($root)
     $retval = '';
 
     $header_arr = array(      # display 'text' and use table field 'field'
-                    array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false),
-                    array('text' => $LANG_LINKS_ADMIN[44], 'field' => 'addchild', 'sort' => false),
+                    array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center', 'width' => '25px'),
+                    array('text' => $LANG_LINKS_ADMIN[41], 'field' => 'addchild', 'sort' => false, 'align' => 'center', 'width' => '25px'),
                     array('text' => $LANG_LINKS_ADMIN[30], 'field' => 'category', 'sort' => true),
-                    array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false),
-                    array('text' => $LANG_LINKS_ADMIN[33], 'field' => 'tid', 'sort' => true));
+                    array('text' => $LANG_LINKS_ADMIN[33], 'field' => 'tid', 'sort' => true, 'align' => 'center'),
+                    array('text' => $LANG_LINKS_ADMIN[61], 'field' => 'owner', 'sort' => true, 'align' => 'center'),
+                    array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false, 'align' => 'center'),
+                    array('text' => $LANG_LINKS_ADMIN[62], 'field' => 'unixdate', 'sort' => true, 'align' => 'center'),
+                    array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center', 'width' => '25px')
+                );
 
     $defsort_arr = array('field' => 'category', 'direction' => 'asc');
 
     $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/plugins/links/category.php?edit=x',
+              'text' => $LANG_LINKS_ADMIN[52]),
         array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php',
               'text' => $LANG_LINKS_ADMIN[53]),
-        array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?mode=edit',
-              'text' => $LANG_LINKS_ADMIN[51]),
-        array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?validate=enabled',
-              'text' => $LANG_LINKS_ADMIN[26]),
-        array('url' => $_CONF['site_admin_url'] . '/plugins/links/category.php',
-              'text' => $LANG_LINKS_ADMIN[50]),
-        array('url' => $_CONF['site_admin_url'] . '/plugins/links/category.php?mode=edit',
-              'text' => $LANG_LINKS_ADMIN[52]),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -113,7 +110,7 @@ function links_list_categories($root)
     );
 
     $dummy = array();
-    $data_arr = links_list_categories_recursive ($dummy, $_LI_CONF['root'], 0);
+    $data_arr = LINK_CAT_list_recursive ($dummy, $_LI_CONF['root'], 0);
 
     $retval .= ADMIN_simpleList('plugin_getListField_categories', $header_arr,
                                 $text_arr, $data_arr);
@@ -122,7 +119,7 @@ function links_list_categories($root)
     return $retval;
 }
 
-function links_list_categories_recursive($data_arr, $cid, $indent)
+function LINK_CAT_list_recursive($data_arr, $cid, $indent)
 {
     global $_CONF, $_TABLES, $_LI_CONF, $LANG_LINKS_ADMIN;
 
@@ -130,7 +127,7 @@ function links_list_categories_recursive($data_arr, $cid, $indent)
     $cid = DB_escapeString($cid);
 
     // get all children of present category
-    $sql = "SELECT cid,category,tid,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon "
+    $sql = "SELECT cid,category,tid,UNIX_TIMESTAMP(modified) AS unixdate,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon "
         . "FROM {$_TABLES['linkcategories']} "
         . "WHERE (pid='{$cid}')" . COM_getPermSQL('AND', 0, 3)
         . "ORDER BY pid,category";
@@ -145,7 +142,7 @@ function links_list_categories_recursive($data_arr, $cid, $indent)
             $A['indent'] = $indent;
             $data_arr[] = $A;
             if (DB_count($_TABLES['linkcategories'], 'pid', DB_escapeString($A['cid'])) > 0) {
-                $data_arr = links_list_categories_recursive($data_arr, $A['cid'], $indent);
+                $data_arr = LINK_CAT_list_recursive($data_arr, $A['cid'], $indent);
             }
         }
     }
@@ -156,7 +153,7 @@ function links_list_categories_recursive($data_arr, $cid, $indent)
 
 // Returns form to create a new category or edit an existing one
 
-function links_edit_category($cid, $pid)
+function LINK_CAT_edit($cid, $pid)
 {
     global $_CONF, $_TABLES, $_USER, $MESSAGE,
            $LANG_LINKS_ADMIN, $LANG_ADMIN, $LANG_ACCESS, $_LI_CONF;
@@ -221,7 +218,7 @@ function links_edit_category($cid, $pid)
 
     if (!empty($cid)) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
-                   . '" name="mode"%s' . XHTML . '>';
+                   . '" name="delete"%s' . XHTML . '>';
         $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
         $T->set_var('delete_option', sprintf($delbutton, $jsconfirm));
         $T->set_var('delete_option_no_confirmation', sprintf($delbutton, ''));
@@ -287,7 +284,7 @@ function links_edit_category($cid, $pid)
 * output    string      message giving outcome status of requested operation
 */
 
-function links_save_category($cid, $old_cid, $pid, $category, $description, $tid, $owner_id, $group_id, $perm_owner, $perm_group, $perm_members, $perm_anon)
+function LINK_CAT_save($cid, $old_cid, $pid, $category, $description, $tid, $owner_id, $group_id, $perm_owner, $perm_group, $perm_members, $perm_anon)
 {
     global $_CONF, $_TABLES, $_USER, $LANG_LINKS, $LANG_LINKS_ADMIN, $_LI_CONF,
            $PLG_links_MESSAGE17;
@@ -435,7 +432,7 @@ function links_save_category($cid, $old_cid, $pid, $category, $description, $tid
 * output            string      message about success of requested operation
 */
 
-function links_delete_category($cid)
+function LINK_CAT_delete($cid)
 {
     global $_TABLES, $LANG_LINKS_ADMIN;
 
@@ -473,78 +470,84 @@ function links_delete_category($cid)
     }
 }
 
+// MAIN ========================================================================
 
-// MAIN
-
-$mode = '';
-if (isset ($_REQUEST['mode'])) {
-    $mode = $_REQUEST['mode'];
+$action = '';
+$expected = array('edit','save','delete','cancel');
+foreach($expected as $provided) {
+    if (isset($_POST[$provided])) {
+        $action = $provided;
+    } elseif (isset($_GET[$provided])) {
+	$action = $provided;
+    }
 }
+
+$cid = '';
+if (isset($_POST['cid'])) {
+    $cid = COM_applyFilter($_POST['cid']);
+} elseif (isset($_GET['cid'])) {
+    $cid = COM_applyFilter($_GET['cid']);
+}
+
+$pid = '';
+if (isset($_POST['pid'])) {
+    $pid = COM_applyFilter($_POST['pid']);
+} elseif (isset($_GET['pid'])) {
+    $pid = COM_applyFilter($_GET['pid']);
+}
+
+$msg = (isset($_GET['msg'])) ? COM_applyFilter($_GET['msg']) : '';
+
+$validtoken = SEC_checkToken();
 
 $root = $_LI_CONF['root'];
 
-// delete category
-if ((($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) || ($mode=="delete")) {
-    $cid = '';
-    if (isset($_REQUEST['cid'])) {
-        $cid = strip_tags($_REQUEST['cid']);
-    }
-    if (empty($cid)) {
-        COM_errorLog('Attempted to delete empty category');
-        $display .= COM_refresh($_CONF['site_admin_url']
-                                . '/plugins/links/category.php');
-    } elseif (SEC_checkToken()) {
-        $msg = links_delete_category($cid);
+switch ($action) {
 
-        $display .= COM_siteHeader('menu', $LANG_LINKS_ADMIN[11]);
-        $display .= COM_showMessage($msg, 'links');
-        $display .= links_list_categories($root);
+    case 'edit':
+        $display .= COM_siteHeader('menu', $LANG_LINKS_ADMIN[56]);
+        $display .= LINK_CAT_edit($cid, $pid);
         $display .= COM_siteFooter();
-    } else {
-        COM_accessLog("User {$_USER['username']} tried to illegally delete link category $cid and failed CSRF checks.");
-        echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
-    }
+        break;
 
-// save category
-} elseif (($mode == $LANG_ADMIN['save']) && !empty($LANG_ADMIN['save']) && SEC_checkToken()) {
-    $msg = links_save_category($_POST['cid'], $_POST['old_cid'],
-                $_POST['pid'], $_POST['category'],
-                $_POST['description'], COM_applyFilter($_POST['tid']),
-                COM_applyFilter($_POST['owner_id'], true),
-                COM_applyFilter($_POST['group_id'], true),
-                $_POST['perm_owner'], $_POST['perm_group'],
-                $_POST['perm_members'], $_POST['perm_anon']);
+    case 'save':
+        $msg = LINK_CAT_save($cid, $_POST['old_cid'],
+                    $_POST['pid'], $_POST['category'],
+                    $_POST['description'], COM_applyFilter($_POST['tid']),
+                    COM_applyFilter($_POST['owner_id'], true),
+                    COM_applyFilter($_POST['group_id'], true),
+                    $_POST['perm_owner'], $_POST['perm_group'],
+                    $_POST['perm_members'], $_POST['perm_anon']);
+        $display .= COM_siteHeader ('menu', $LANG_LINKS_ADMIN[11]);
+        $display .= COM_showMessage ($msg, 'links');
+        $display .= LINK_CAT_list($root);
+        $display .= COM_siteFooter();
+        break;
 
-    $display .= COM_siteHeader ('menu', $LANG_LINKS_ADMIN[11]);
-    $display .= COM_showMessage ($msg, 'links');
-    $display .= links_list_categories($root);
-    $display .= COM_siteFooter();
-
-// edit category
-} else if ($mode == 'edit') {
-    $display .= COM_siteHeader('menu', $LANG_LINKS_ADMIN[56]);
-    $pid = '';
-    if (isset($_GET['pid'])) {
-        $pid = strip_tags(COM_stripslashes($_GET['pid']));
-    }
-    $cid = '';
-    if (isset($_GET['cid'])) {
-        $cid = strip_tags(COM_stripslashes($_GET['cid']));
-    }
-    $display .= links_edit_category($cid, $pid);
-    $display .= COM_siteFooter();
-
-// nothing, so list categories
-} else {
-    $display .= COM_siteHeader ('menu', $LANG_LINKS_ADMIN[11]);
-    if (isset ($_REQUEST['msg'])) {
-        $msg = COM_applyFilter ($_REQUEST['msg'], true);
-        if ($msg > 0) {
-            $display .= COM_showMessage ($msg, 'links');
+    case 'delete':
+        if (!isset ($cid) || empty ($cid)) {
+            COM_errorLog ('User ' . $_USER['username'] . ' attempted to delete link category, cid is null');
+            $display .= COM_refresh ($_CONF['site_admin_url'] . '/plugins/links/category.php');
+        } elseif ($validtoken) {
+            $msg = LINK_CAT_delete($cid);
+            $display .= COM_siteHeader('menu', $LANG_LINKS_ADMIN[11]);
+            $display .= COM_showMessage($msg, 'links');
+            $display .= LINK_CAT_list($root);
+            $display .= COM_siteFooter();
+        } else {
+            COM_accessLog("User {$_USER['username']} tried to illegally delete link category $cid and failed CSRF checks.");
+            echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
-    }
-    $display .= links_list_categories($root);
-    $display .= COM_siteFooter();
+        break;
+
+    default:
+        $display .= COM_siteHeader ('menu', $LANG_LINKS_ADMIN[11]);
+        if(isset($msg)) {
+            $display .= (is_numeric($msg)) ? COM_showMessage($msg, 'links') : COM_showMessageText( $msg );
+        }
+        $display .= LINK_CAT_list($root);
+        $display .= COM_siteFooter();
+        break;
 }
 
 echo $display;

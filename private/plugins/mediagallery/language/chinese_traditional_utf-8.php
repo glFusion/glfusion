@@ -706,7 +706,8 @@ $LANG_MG01 = array(
     'search_av_playback' => '搜尋結果的音/影播放器種類',
     'search_views' => '顯示觀看數在搜尋結果裏',
     'search_rating' => '顯示評價在搜尋結果裏',
-    'gallery_only' => '媒體畫廊代替志樂的主頁'
+    'gallery_only' => '媒體畫廊代替志樂的主頁',
+    'all_nhp' => 'All topics (No Homepage)'
 );
 
 ###############################################################################

@@ -99,7 +99,14 @@ class LDAP
              * DES crypt().
              */
             $crypt_method = 'des';
+
             $correct_cyphertext = $A[0]['userpassword'][0];
+            if ($correct_cyphertext == '' ) {
+                return false;
+            }
+            if ( $password == '' ) {
+                return false;
+            }
 
             if (preg_match("/^\{(crypt|des)\}(.*)$/i", $correct_cyphertext,
                     $tmpmatches)) {

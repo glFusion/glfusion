@@ -93,6 +93,10 @@ function MG_saveEnroll() {
         exit;
     }
 
+    if ( !isset($_MG_CONF['member_quota']) ) {
+        $_MG_CONF['member_quota'] = 0;
+    }
+
     $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE owner_id=" . $_USER['uid'] . " AND album_parent=" . $_MG_CONF['member_album_root'];
     $result = DB_query($sql);
     $nRows = DB_numRows($result);
@@ -108,7 +112,7 @@ function MG_saveEnroll() {
 
     $uid = $_USER['uid'];
     $aid = plugin_user_create_mediagallery($uid,1);
-    $result = DB_query("UPDATE {$_TABLES['mg_userprefs']} SET member_gallery=1 WHERE uid=" . $uid,1);
+    $result = DB_query("UPDATE {$_TABLES['mg_userprefs']} SET member_gallery=1,quota=".$_MG_CONF['member_quota']." WHERE uid=" . $uid,1);
     $affected = DB_affectedRows($result);
 
     if ( DB_error()) {

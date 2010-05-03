@@ -1,39 +1,39 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | Media Gallery Plugin 1.6                                                  |
-// +---------------------------------------------------------------------------+
-// | $Id::                                                                    $|
-// | This glFusion log file viewer.                                            |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2003-2008 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tom Willett        - twillett@users.sourceforge.net              |
-// |   Updated for GL 1.4+ (register_globals=Off support) by:                  |
-// |          Mark R. Evans      - mark@gllabs.org                             |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
+// +--------------------------------------------------------------------------+
+// | Media Gallery Plugin for glFusion CMS                                    |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// | This glFusion log file viewer.                                           |
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2005-2010 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2003-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tom Willett - twillett AT users DOT sourceforge DOT net         |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 //
 
-//
-// you will need to edit the path to lib-common.php if you put this file anywhere other than
-// the Ban Plugin admin directory in a standard install
-//
 require_once '../../../lib-common.php';
+require_once '../../auth.inc.php';
 require_once $_MG_CONF['path_admin'] . 'navigation.php';
 
 // Path to this file

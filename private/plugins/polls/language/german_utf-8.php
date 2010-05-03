@@ -108,7 +108,9 @@ $LANG25 = array(
     37 => 'Ergebnisse ausblenden wenn Umfrage läuft',
     38 => 'Während diese Umfrage läuft, können nur der Eigentümer &amp; Root die Ergebnisse sehen.',
     39 => 'Die Kategorie wird nur angezeigt, wenn sie mehr als eine Frage enthält.',
-    40 => 'Alle Antworten zu dieser Umfrage ansehen'
+    40 => 'Alle Antworten zu dieser Umfrage ansehen',
+    41 => 'Are you sure you want to delete this Poll?',
+    42 => 'Are you absolutely sure you want to delete this Poll?  All questions, answers and comments that are associated with this Poll will also be permanently deleted from the database.'
 );
 
 $PLG_polls_MESSAGE19 = 'Umfrage wurde gespeichert.';

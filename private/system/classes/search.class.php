@@ -58,14 +58,16 @@ class Search {
     var $_topic = '';
     var $_dateStart = null;
     var $_dateEnd = null;
+    var $_searchDays = 0;
     var $_author = '';
     var $_type = '';
     var $_keyType = '';
+    var $_results = 25;
     var $_names = array();
     var $_url_rewrite = array();
     var $_searchURL = '';
     var $_wordlength;
-    var $_charset = 'iso-8859-1';
+    var $_charset = 'utf-8';
 
     /**
      * Constructor
@@ -117,6 +119,16 @@ class Search {
         if ( $this->_validateDate($this->_dateEnd) == false ) {
             $this->_dateEnd = '';
         }
+
+        if ( isset($_GET['st']) ) {
+            $st = COM_applyFilter($_GET['st'],true);
+            $this->_searchDays = $st;
+            if ( $st != 0 ) {
+                $this->_dateEnd = date('Y-m-d');
+                $this->_dateStart   = date('Y-m-d', time() - ($st * 24 * 60 * 60));
+            }
+        }
+
         if (isset ($_GET['author'])) {
             $this->_author = COM_applyFilter($_GET['author']);
         } else if ( isset($_POST['author']) ) {
@@ -146,6 +158,14 @@ class Search {
             $this->_keyType = COM_applyFilter($_POST['keyType']);
         } else {
             $this->_keyType = $_CONF['search_def_keytype'];
+        }
+
+        if ( isset($_GET['results']) ) {
+            $this->_results = COM_applyFilter($_GET['results'],true);
+        } else if ( isset($_POST['results']) ) {
+            $this->_results = COM_applyFilter($_POST['results']);
+        } else {
+            $this->_results = $_CONF['num_search_results'];
         }
 
         $this->_charset = COM_getCharset();
@@ -226,7 +246,7 @@ class Search {
      */
     function showForm ()
     {
-        global $_CONF, $_TABLES, $LANG09;
+        global $_CONF, $_TABLES, $_PLUGINS, $LANG09;
 
         $retval = '';
 
@@ -235,11 +255,9 @@ class Search {
             return $this->_getAccessDeniedMessage();
         }
 
-        $retval .= COM_startBlock($LANG09[1],'advancedsearch.html');
         $searchform = new Template($_CONF['path_layout'].'search');
         $searchform->set_file (array ('searchform' => 'searchform.thtml',
                                       'authors'    => 'searchauthors.thtml'));
-        $searchform->set_var( 'xhtml', XHTML );
         $searchform->set_var('search_intro', $LANG09[19]);
         $searchform->set_var('site_url', $_CONF['site_url']);
         $searchform->set_var('site_admin_url', $_CONF['site_admin_url']);
@@ -281,13 +299,14 @@ class Search {
         $options = '';
         $plugintypes = array('all' => $LANG09[4], 'stories' => $LANG09[6], 'comments' => $LANG09[7]);
         $plugintypes = array_merge($plugintypes, PLG_getSearchTypes());
-        // Generally I don't like to hardcode HTML but this seems easiest
+
         foreach ($plugintypes as $key => $val) {
             $options .= "<option value=\"$key\"";
             if ($this->_type == $key)
                 $options .= ' selected="selected"';
             $options .= ">$val</option>".LB;
         }
+        $plugin_types_option = $options;
         $searchform->set_var('plugin_types', $options);
 
         if ($_CONF['contributedbyline'] == 1) {
@@ -300,6 +319,12 @@ class Search {
             $result = DB_query("SELECT DISTINCT uid FROM {$_TABLES['stories']} WHERE (date <= NOW()) AND (draft_flag = 0)");
             while ($A = DB_fetchArray($result)) {
                 $searchusers[$A['uid']] = $A['uid'];
+            }
+            if (in_array('forum', $_PLUGINS)) {
+                $result = DB_query("SELECT DISTINCT uid FROM {$_TABLES['gf_topic']}");
+                while ( $A = DB_fetchArray($result)) {
+                    $searchusers[$A['uid']] = $A['uid'];
+                }
             }
 
             $inlist = implode(',', $searchusers);
@@ -317,6 +342,7 @@ class Search {
                 }
                 $result = DB_query ($sql);
                 $options = '';
+                $options .= '<option value="all">'.$LANG09[4].'</option>'.LB;
                 while ($A = DB_fetchArray($result)) {
                     $options .= '<option value="' . $A['uid'] . '"';
                     if ($A['uid'] == $this->_author) {
@@ -334,23 +360,45 @@ class Search {
                     '<input type="hidden" name="author" value="0"' . XHTML . '>');
         }
 
+        $searchTimeOptions = array(
+            '0' => $LANG09[4],
+            '1' => $LANG09[75],
+            '7' => $LANG09[76],
+            '14' => $LANG09[77],
+            '30' => $LANG09[78],
+            '90' => $LANG09[79],
+            '180' => $LANG09[80],
+            '365' => $LANG09[81]);
+
+        // search time frame
+        $options = '';
+        foreach ( $searchTimeOptions AS $days => $prompt ) {
+            $options .= '<option value="'.$days.'"';
+            if ( $this->_searchDays == $days ) {
+                $options .= ' selected="selected"';
+            }
+            $options .= '>'.$prompt.'</option>'.LB;
+        }
+        $date_option = $options;
+        $searchform->set_var('search_time',$options);
+
         // Results per page
         $options = '';
         $limits = explode(',', $_CONF['search_limits']);
         foreach ($limits as $limit) {
             $options .= "<option value=\"$limit\"";
-            if ($_CONF['num_search_results'] == $limit) {
+            if ($this->_results == $limit) {
                 $options .= ' selected="selected"';
             }
             $options .= ">$limit</option>" . LB;
         }
+        $search_limit_option = $options;
         $searchform->set_var('search_limits', $options);
 
         $searchform->set_var('lang_search', $LANG09[10]);
         $searchform->parse('output', 'searchform');
 
         $retval .= $searchform->finish($searchform->get_var('output'));
-        $retval .= COM_endBlock();
 
         return $retval;
     }
@@ -493,7 +541,9 @@ class Search {
             ((!empty($this->_dateStart))  ? '&amp;datestart=' . urlencode($this->_dateStart) : '' ) .
             ((!empty($this->_dateEnd))    ? '&amp;dateend=' . urlencode($this->_dateEnd) : '' ) .
             ((!empty($this->_topic))      ? '&amp;topic=' . urlencode($this->_topic) : '' ) .
-            ((!empty($this->_author))     ? '&amp;author=' . urlencode($this->_author) : '' );
+            ((!empty($this->_author))     ? '&amp;author=' . urlencode($this->_author) : '' ) .
+            ((!empty($this->_searchDays)) ? '&amp;st=' . urlencode($this->_searchDays) : '' )
+            ;
 
         $url = "{$this->_searchURL}&amp;type={$this->_type}&amp;mode=";
         $obj = new ListFactory($url.'search', $_CONF['search_limits'], $_CONF['num_search_results']);
@@ -512,8 +562,7 @@ class Search {
             }
         }
 
-        if ($style == 'table')
-        {
+        if ($style == 'table') {
             $obj->setStyle('table');
             //             Title        Name           Display     Sort   Format
             $obj->setField($LANG09[62], ROW_NUMBER,    $show_num,  false, '<b>%d.</b>');
@@ -524,9 +573,7 @@ class Search {
             $obj->setField($LANG09[18], 'uid',         $show_user, true);
             $obj->setField($LANG09[50], 'hits',        $show_hits, true);
             $this->_wordlength = 7;
-        }
-        else if ($style == 'google')
-        {
+        } else if ($style == 'google') {
             $obj->setStyle('inline');
             $obj->setField('',          ROW_NUMBER,    $show_num,  false, '<span style="font-size:larger; font-weight:bold;">%d.</span>');
             $obj->setField($LANG09[16], 'title',       true,       true,  '<span style="font-size:larger; font-weight:bold;">%s</span><br/>');
@@ -565,8 +612,7 @@ class Search {
         $old_api = 0;
         $num_results = 0;
 
-        foreach ($result_plugins as $result)
-        {
+        foreach ($result_plugins as $result) {
             if (is_a($result, 'SearchCriteria')) {
                 $debug_info .= $result->getName() . " using APIv2, ";
 
@@ -582,17 +628,13 @@ class Search {
 
                     $sql = $this->_convertsql($sql);
 
-                    $debug_info .= "\tSQL = " . print_r($sql,1) . "\n";
-
                     $obj->setQuery($result->getLabel(), $result->getName(), $sql, $result->getRank());
                     $this->_url_rewrite[ $result->getName() ] = $result->UrlRewriteEnable() ? true : false;
                 } else if ($type == 'text') {
                     $obj->setQueryText($result->getLabel(), $result->getName(), $this->_query, $result->getNumResults(), $result->getRank());
                 }
                 $new_api++;
-            }
-            else if (is_a($result, 'Plugin') && $result->num_searchresults != 0)
-            {
+            } else if (is_a($result, 'Plugin') && $result->num_searchresults != 0) {
                 // Some backwards compatibility
                 $debug_info .= $result->plugin_name . " using APIv1, search using backwards compatibility\n";
 
@@ -624,18 +666,17 @@ class Search {
                     $counter = 0;
 
                     // Extract the results
-                    foreach ($result->searchresults as $old_row)
-                    {
+                    foreach ($result->searchresults as $old_row) {
                         if ( $counter >= $offset && $counter <= ($offset+$limit) ) {
-                            if ($col_date != -1)
-                            {
+                            if ($col_date != -1) {
                                 // Convert the date back to a timestamp
                                 $date = $old_row[$col_date];
                                 $date = substr($date, 0, strpos($date, '@'));
-                                if ($date == '')
+                                if ($date == '') {
                                     $date = $old_row[$col_date];
-                                else
+                                } else {
                                     $date = strtotime($date);
+                                }
                             }
 
                             $api_results = array(
@@ -657,6 +698,7 @@ class Search {
                 $old_api++;
             }
         }
+
         // Find out how many plugins are on the old/new system
         $debug_info .= "\nAPIv1: $old_api\nAPIv2: $new_api";
 
@@ -673,8 +715,9 @@ class Search {
         } else if ($this->_keyType == 'all') {
             $searchQuery = str_replace(' ', "</b>' " . $LANG09[56] . " '<b>", $escquery);
             $searchQuery = "<b>'$searchQuery'</b>";
-        } else
+        } else {
             $searchQuery = $LANG09[55] . " '<b>$escquery</b>'";
+        }
         // Clean the query string so that sprintf works as expected
         $searchQuery = str_replace("%", "%%", $searchQuery);
 
@@ -691,6 +734,7 @@ class Search {
 
         return $retval;
     }
+
 
     /**
      * CallBack function for the ListFactory class
@@ -734,7 +778,7 @@ class Search {
                 $row['title'] = $row[SQL_TITLE];
             }
 
-            $row['title'] = $this->_shortenText($this->_query, $row['title'], 6);
+            $row['title'] = $row['title']; // $this->_shortenText($this->_query, $row['title'], 6);
             $row['title'] = str_replace('$', '&#36;', $row['title']);
             $row['title'] = COM_createLink($row['title'], $row['url']);
 
@@ -744,8 +788,9 @@ class Search {
                 $row['description'] = $row['description'];
             }
 
-            if ($row['description'] != $_CONF['search_no_data'])
+            if ($row['description'] != $_CONF['search_no_data']) {
                 $row['description'] = $this->_shortenText($this->_query, $row['description'], $this->_wordlength);
+            }
 
             $row['date'] = @strftime($_CONF['daytime'], $row['date']);
             $row['hits'] = COM_NumberFormat($row['hits']).' '; // simple solution to a silly problem!

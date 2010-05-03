@@ -1,6 +1,6 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
+// | Media Gallery Plugin for glFusion CMS                                    |
 // +--------------------------------------------------------------------------+
 // | envcheck.php                                                             |
 // |                                                                          |
@@ -30,8 +30,7 @@
 // +--------------------------------------------------------------------------+
 
 // this file can't be used on its own
-if (stripos ($_SERVER['PHP_SELF'], 'envcheck.php') !== false)
-{
+if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 

@@ -47,7 +47,7 @@ $LANG_CHARSET = 'iso-8859-1';
 
 $LANG01 = array(
     1 => 'Contributed by:',
-    2 => 'read more',
+    2 => 'Read more',
     3 => 'comments',
     4 => 'Edit',
     5 => 'Vote',
@@ -76,7 +76,7 @@ $LANG01 = array(
     28 => 'Delete',
     29 => 'No user comments.',
     30 => 'Older Stories',
-    31 => 'Allowed HTML Tags:',
+    31 => 'Allowed Auto Tags:',
     32 => 'Error, invalid username',
     33 => 'Error, could not write to the log file',
     34 => 'Error',
@@ -168,8 +168,8 @@ $LANG01 = array(
     121 => 'Comments (%d)',
     122 => 'Trackbacks (%d)',
     123 => 'All HTML is allowed',
-    124 => 'Click to delete all checked items',
-    125 => 'Are you sure you want to delete all selected items?',
+    124 => 'Delete all selected items',
+    125 => 'Are you sure you want to delete the selected item(s)?',
     126 => 'Select or de-select all items',
     127 => 'Permalink',
     128 => 'Login with OpenID:',
@@ -310,7 +310,7 @@ $LANG04 = array(
     20 => 'The eMail address provided does not appear to be a valid eMail address',
     21 => 'Error',
     22 => "Register with {$_CONF['site_name']}!",
-    23 => "Creating a user account will give you all the benefits of {$_CONF['site_name']} membership and it will allow you to post comments and submit items as yourself. If you don't have an account, you will only be able to post anonymously. Please note that your eMail address will <b><i>never</i></b> be publicly displayed on this site.",
+    23 => "Register for {$_CONF['site_name']} membership.<br />Your eMail address will <b><i>never</i></b> be publicly displayed on this site.",
     24 => 'Your password will be sent to the eMail address you enter.',
     25 => 'Did You Forget Your Password?',
     26 => 'Enter <em>either</em> your username <em>or</em> the eMail address you used to register and click eMail Password. Instructions on how to set a new password will be mailed to the eMail address on record.',
@@ -445,6 +445,22 @@ $LANG04 = array(
     160 => 'Online',
     161 => 'Password Strength',
     162 => 'The username contains invalid characters ( < > " % & * / \ ) are not allowed',
+    163 => 'Remote User',
+    164 => 'Remote Username',
+    165 => 'Remote Service',
+    166 => 'Remote User Info',
+    167 => 'An activation eMail will be sent to your eMail address.',
+    168 => 'Welcome to ',
+    169 => 'Request New activation eMail',
+    170 => 'Please keep this eMail for your records. Your account information is as follows:',
+    171 => 'Site URL',
+    172 => 'Please visit the following link in order to activate your account (the activation link is only valid for %d hours):',
+    173 => 'Your password has been securely stored in our database and cannot be retrieved. In the event that it is forgotten, you will be able to reset it using the eMail address associated with your account.',
+    174 => 'Thank you for registering.',
+    175 => 'To request a new activation token, please enter your username and password below and a new activation eMail will be sent to you.',
+    176 => 'Confirm Password',
+    177 => 'Your account is currently awaiting verification.<br />You will not be able to login until your account has been verified by following the link in the activation eMail.',
+
 );
 
 ###############################################################################
@@ -711,8 +727,8 @@ $LANG12 = array(
     51 => 'Location',
     52 => 'Delete',
     53 => 'Create Account',
-    54 => 'Story Introduction',
-    55 => 'Story Body'
+    54 => 'Introduction',
+    55 => 'Body'
 );
 
 ###############################################################################
@@ -731,7 +747,6 @@ $LANG13 = array(
     'thanks_for_vote'   => 'Thanks for voting!',
     'reset_rating'      => 'Reset Rating',
 );
-
 
 ###############################################################################
 # ADMIN PHRASES - These are file phrases used in admin scripts
@@ -799,7 +814,7 @@ $LANG21 = array(
     41 => 'Right',
     42 => 'You must enter the block title and block order for glFusion default blocks.',
     43 => 'Homepage Only',
-    44 => '',
+    44 => 'All Except Homepage',
     45 => "You are trying to access a block that you don't have rights to.  This attempt has been logged. Please <a href=\"{$_CONF['site_admin_url']}/block.php\">go back to the block administration screen</a>.",
     46 => 'Move',
     47 => '',
@@ -824,7 +839,7 @@ $LANG21 = array(
     66 => 'Autotags',
     67 => 'Check to allow autotags',
     68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.',
-    69 => 'Are you sure you want to delete this block?',
+    69 => 'Are you sure you want to delete this Block?',
     70 => 'Block name cannot be blank and cannot contain spaces or the following characters: < > \' " % & * / or backslash',
 );
 
@@ -853,7 +868,7 @@ $LANG24 = array(
     19 => 'Comments',
     20 => 'Ping',
     21 => 'Send Ping',
-    22 => 'Story List',
+    22 => 'Story Administration',
     23 => 'To modify or delete a story, click on that story\'s edit icon below. To view a story, click on the title of the story you wish to view. To create a new story, click on "Create New" above.',
     24 => 'The ID you chose for this story is already in use. Please use another ID.',
     25 => 'Error when saving story',
@@ -919,7 +934,10 @@ $LANG24 = array(
     85 => 'Show All',
     86 => 'Advanced Editor',
     87 => 'Story Stats',
-    88 => 'Wiki-style format'
+    88 => 'Wiki-style format',
+    89 => 'Are you sure you want to delete this Story?',
+    90 => 'Moderate Story',
+    91 => 'Moderate Draft Story',
 );
 
 ###############################################################################
@@ -927,15 +945,15 @@ $LANG24 = array(
 
 $LANG27 = array(
     1 => 'Topic Editor',
-    2 => 'Topic ID',
-    3 => 'Topic Name',
-    4 => 'Topic Image',
+    2 => 'ID',
+    3 => 'Name',
+    4 => 'Image',
     5 => '(do not use spaces)',
-    6 => 'NOTE: Deleting a topic deletes all stories and blocks associated with it!',
+    6 => 'Are you absolutely sure you want to delete this Topic?  CAUTION: Deleting this topic will also delete all stories (including drafts & submissions), as well as all related images, comments, and trackbacks!  Blocks and feeds associated with this topic will be retained and disabled.',
     7 => 'Please fill in the Topic ID and Topic Name fields',
     8 => 'Topic Manager',
-    9 => 'To edit or delete a topic, click on the action icon below. To create a new topic, click on "Create New" above.  Please be cautions when deleting topics, as all stories and blocks that are associated with that topic will also be deleted.',
-    10 => 'Sort Order',
+    9 => 'To edit or delete a topic, click on the action icon below. To create a new topic, click on "Create New" above.  Please be cautious when deleting topics, as all related stories, images, comments and trackbacks will also be deleted, and any related blocks or feeds will be disabled.',
+    10 => 'Order',
     11 => 'Stories/Page',
     12 => 'Access Denied',
     13 => "You are trying to access a topic that you don't have rights to.  This attempt has been logged. Please <a href=\"{$_CONF['site_admin_url']}/topic.php\">go back to the topic administration screen</a>.",
@@ -960,14 +978,28 @@ $LANG27 = array(
     32 => 'Story ID',
     33 => 'Ascending',
     34 => 'Descending',
-    35 => 'Sort Stories By',
+    35 => 'Sort By',
     36 => 'Sort Stories Direction',
     37 => 'Direction',
-    38 => 'Default Topic?',
-    39 => 'Archive Topic?',
-    40 => 'Are you sure you want to delete this topic?',
+    38 => 'Default',
+    39 => 'Archive',
+    40 => 'Are you sure you want to delete this Topic?',
     41 => 'Display After',
-    42 => 'Topic ID cannont contain spaces',
+    42 => 'Topic ID cannot contain spaces',
+    43 => 'Associated Objects',
+    44 => 'Stories',
+    45 => 'Draft Stories',
+    46 => 'Submitted Stories',
+    47 => 'Images',
+    48 => 'Comments',
+    49 => 'Trackbacks',
+    50 => 'Blocks',
+    51 => 'Feeds',
+    52 => 'Story Admin',
+    53 => 'Submissions',
+    54 => 'Block Admin',
+    55 => 'Syndication Admin',
+    56 => 'Press Cancel and then Edit this topic to view details including the total number of objects in the database that are associated with this topic.',
 );
 
 ###############################################################################
@@ -989,7 +1021,7 @@ $LANG28 = array(
     13 => 'SecLev',
     14 => 'Registered',
     15 => 'New User',
-    16 => '',
+    16 => 'Awaiting User Verification',
     17 => '',
     18 => '',
     19 => '',
@@ -1016,8 +1048,8 @@ $LANG28 = array(
     40 => 'Registration Date',
     41 => 'Last Login',
     42 => 'Banned',
-    43 => 'Awaiting Activation',
-    44 => 'Awaiting Authorization',
+    43 => 'Awaiting Initial Login',
+    44 => 'Awaiting Moderator Approval',
     45 => 'Active',
     46 => 'User Status',
     47 => 'Edit',
@@ -1026,8 +1058,8 @@ $LANG28 = array(
     50 => 'Check to allow filtering this group as an Admin Use Group',
     51 => 'Online Days',
     52 => '<br' . XHTML . '>Note: "Online Days" is the number of days between the first registration and the last login.',
-    53 => 'Registered',
-    54 => 'Batch Administration',
+    53 => 'Reg',
+    54 => 'Batch Admin',
     55 => 'This only works if you have enabled the \'Record Last Login\' option in the Configuration admin panel.',
     56 => 'Please update the user search criteria below and then click "Update List". Select one or more users from the results displayed, and click on the desired action below.  Only users displayed and selected on this page will be processed.',
     57 => 'Phantom users',
@@ -1064,7 +1096,7 @@ $LANG28 = array(
     88 => 'Default Group',
     89 => 'Check to make this a default group for new users',
     90 => 'Apply "Default Group" change to existing user accounts',
-    91 => 'Do you really want to apply these settings to all users?',
+    91 => 'Are you sure you want to apply these settings to all users?',
     92 => 'Attribute',
     93 => 'Value',
     94 => 'Selected',
@@ -1072,11 +1104,19 @@ $LANG28 = array(
     96 => 'Using the <strong>Selected</strong> column, select the items you wish to change for <strong>all</strong> users.  Set the attribute to the desired setting and press Save.',
     97 => 'Comment Display Mode',
     98 => 'Comment Sort Order',
-    99 => 'Send eMail',
+    99 => 'Send eMail (Site)',
     100 => 'eMail Site Login Reminders to the selected users?',
     101 => 'Group',
     102 => 'users',
-    103 => 'Batch User Administration'
+    103 => 'Batch User Administration',
+    104 => 'Are you sure you want to delete this User?',
+    105 => 'Status',
+    106 => 'Queued',
+    107 => 'Verification',
+    108 => 'View Profile',
+    109 => 'Are you absolutely sure you want to delete this User?  Deleting this User will delete some of the content that has been created by this User, and the remainder will be assigned to the Anonymous User or Site Administrator!  Press Cancel and then click on the Username to view the User Profile to see details.',
+    110 => 'Are you absolutely sure you want to delete ALL selected Users?  Deleting these Users will delete some of the content that has been created by these Users, and the remainder will be assigned to the Anonymous User or Site Administrator!  Press Cancel and then click on the Username to view the User Profile to see details.',
+    111 => 'Send eMail (Local)'
 );
 
 ###############################################################################
@@ -1093,20 +1133,26 @@ $LANG29 = array(
     13 => 'Submissions',
     14 => 'Date',
     15 => 'Topic',
-    16 => 'User name',
-    17 => 'Full name',
+    16 => 'Username',
+    17 => 'Full Name',
     18 => 'eMail',
     34 => 'Command & Control',
     35 => 'Story Submissions',
     36 => 'Comment',
     37 => 'Time',
     38 => 'Submit',
-    39 => 'There are no submissions to moderate at this time',
+    39 => 'There are no submissions to moderate at this time.',
     40 => 'User Submissions',
     41 => 'Comment Submissions',
     42 => 'User Name',
-    43 => 'Auto-pubish Comments?',
-    'info' => 'Approve or Decline submissions'
+    43 => 'Auto-publish Comments?',
+    44 => 'Approve all selected items',
+    45 => 'Are you sure you want to approve the selected item(s)?',
+    46 => 'Submitted By',
+    47 => 'Registered On',
+    48 => 'Are you sure you want to approve this submission?',
+    49 => 'Are you sure you want to delete this submission?',
+    'info' => 'Use this panel to Edit, Approve or Delete submissions.  The submission queue option for any given item type must be enabled in the glFusion or Plugin Configuration in order for items to be queued here for administrative approval.<br /><br />To view or edit a submitted item, click the Edit icon.  To approve or delete one or more items, click the checkbox next to that item, and then click the corresponding action icon. Note that only one item type may be moderated at one time.  '
 );
 
 ###############################################################################
@@ -1153,20 +1199,20 @@ $LANG32 = array(
     2 => 'Plugin Installation Disclaimer',
     3 => 'Plugin Installation Form',
     4 => 'Plugin File',
-    5 => 'Plugin List',
+    5 => 'Plugin Administration',
     6 => 'Warning: Plugin Already Installed!',
     7 => 'The plugin you are trying to install already exists.  Please delete the plugin before re-installing it',
     8 => 'Plugin Compatibility Check Failed',
     9 => 'This plugin requires a newer version of glFusion. Either upgrade your copy of <a href="http://www.gllabs.org">glFusion</a> or get a newer version of the plugin.',
     10 => '<br' . XHTML . '><b>There are no plugins currently installed.</b><br' . XHTML . '><br' . XHTML . '>',
-    11 => 'To modify or delete a plugin, click on that plugin\'s edit icon below. This will show the plugin details including the authors\'s website. Both the installed version and the version returned from the plugin\'s code are shown. This will aid you to know if the plugin needs to be upgraded. To install or upgrade a plugin please consult its documentation.',
-    12 => 'no plugin name provided to plugineditor()',
+    11 => 'To enable or disable installed plugins, click the associated checkbox in the Control column.  Plugins that have been uploaded to your system may be installed by clicking the Install icon in the Control column.  To update a plugin, click the Update icon that is displayed in the Version column.  To uninstall a plugin, click the icon in the UnPlug column.',
+    12 => 'No plugin name provided to plugineditor()',
     13 => 'Plugin Editor',
     14 => 'New Plugin',
     15 => 'Admin Home',
-    16 => 'Plugin Name',
-    17 => 'Plugin Version',
-    18 => 'glFusion Version',
+    16 => 'Name',
+    17 => 'Data Version',
+    18 => 'For glFusion',
     19 => 'Enabled',
     20 => 'Yes',
     21 => 'No',
@@ -1175,18 +1221,18 @@ $LANG32 = array(
     24 => 'Cancel',
     25 => 'Delete',
     26 => 'Plugin Name',
-    27 => 'Plugin Homepage',
+    27 => 'Homepage',
     28 => 'Installed Version',
     29 => 'glFusion Version',
     30 => 'Delete Plugin?',
-    31 => 'Are you sure you want to delete this plugin?  By doing so you will remove all the data and data structures that this plugin uses.  If you are sure, click delete again on the form below.',
+    31 => 'Are you you absolutely sure you want to uninstall this Plugin?  By doing so you will permanently remove all of the data that is associated with this Plugin from the database.',
     32 => '<p><b>Error AutoLink tag not correct format</b></p>',
-    33 => 'Code Version',
+    33 => 'Code',
     34 => 'Update',
     35 => 'Edit',
-    36 => 'Code',
+    36 => 'Version',
     37 => 'Data',
-    38 => 'Update!',
+    38 => 'Update',
     39 => 'Unable to open temporary upload directory.',
     40 => 'Unable to locate the required plugin.xml file in the plugin archive. This may be an older plugin that has not been updated to work with glFusion\'s automated installer. You will need to manually install this plugin.',
     41 => 'Permission error on file: %s<br />',
@@ -1205,7 +1251,7 @@ $LANG32 = array(
     54 => 'There was an error installing the plugin, please see the error.log for details.',
     55 => 'Auto Installer file autoinstall.php not found, you must manually run the installation from the Plugin Administration screen.',
     56 => 'Automated Plugin Installer Error',
-    57 => 'Select a plugin from your workstation to upload to your glFusion powered site.',
+    57 => 'Upload a Plugin:',
     58 => 'Upload',
     59 => 'Cancel',
     60 => 'Install',
@@ -1223,7 +1269,16 @@ $LANG32 = array(
     72 => 'A version of this plugin is installed but disabled. glFusion cannot upgrade a disabled plugin. Please re-enable the plugin and perform the upload again.',
     73 => 'Automated Plugin Installer',
     74 => 'Unable to locate the plugin\'s XML description file.',
-    75 => 'Unable to copy %s to %s<br />'
+    75 => 'Unable to copy %s to %s<br />',
+    76 => 'Are you sure you want to uninstall (unplug) this Plugin?',
+    77 => 'Are you sure you want to update this Plugin?',
+    78 => 'Control',
+    79 => 'Unplug',
+    80 => 'Are you sure you want to install this Plugin?',
+    81 => 'Maintainer',
+    82 => 'Requires',
+    83 => 'Info',
+    84 => 'Bundled',
 );
 
 ###############################################################################
@@ -1280,7 +1335,7 @@ $LANG33 = array(
     53 => 'All Frontpage Stories',
     54 => 'Please select the type of feed to create.',
     55 => 'Articles',
-    56 => 'Do you really want to delete this feed?'
+    56 => 'Are you sure you want to delete this Feed?'
 );
 
 ###############################################################################
@@ -1301,19 +1356,19 @@ $LANG_LOGVIEW = array(
 $MESSAGE = array(
     1 => "Your password has been eMailed to you and should arrive momentarily. Please follow the directions in the message and we thank-you for using {$_CONF['site_name']}",
     2 => "Thank-you for submitting your story to {$_CONF['site_name']}.  It has been submitted to our staff for approval. If approved, your story will be available for others to read on our site.",
-    3 => '',
+    3 => "A verification eMail has been sent to you and should arrive momentarily. Please follow the directions in the message and we thank-you for using {$_CONF['site_name']}",
     4 => '',
     5 => 'Your account information has been successfully saved.',
     6 => 'Your preferences have been successfully saved.',
     7 => 'Your comment preferences have been successfully saved.',
     8 => 'You have been successfully logged out.',
-    9 => 'Your story has been successfully saved.',
-    10 => 'The story has been successfully deleted.',
-    11 => 'Your block has been successfully saved.',
-    12 => 'The block has been successfully deleted.',
-    13 => 'Your topic has been successfully saved.',
-    14 => 'The topic and all its stories and blocks have been successfully deleted.',
-    15 => 'Your comment has been submitted for review and will be published when approved by a moderator.',
+    9 => 'Your Story has been successfully saved.',
+    10 => 'The Story has been successfully deleted.',
+    11 => 'Your Block has been successfully saved.',
+    12 => 'The Block has been successfully deleted.',
+    13 => 'Your Topic has been successfully saved.',
+    14 => 'The Topic and all its Stories and Blocks have been successfully deleted.',
+    15 => 'Your Comment has been submitted for review and will be published when approved by a moderator.',
     16 => 'You have been unsubscribed. You will no longer be notified of new replies',
     17 => '',
     18 => '',
@@ -1343,7 +1398,7 @@ $MESSAGE = array(
     42 => 'Your word has been successfully saved.',
     43 => 'The word has been successfully deleted.',
     44 => 'The plugin was successfully installed!',
-    45 => 'The plugin was successfully deleted.',
+    45 => 'The plugin was successfully uninstalled.  The plugin file structure will remain and can be reinstalled unless it is manually removed.',
     46 => 'Sorry, you do not have access to the database backup utility.  Please note that all attempts to access unauthorized features are logged',
     47 => 'This functionality only works under *nix.  If you are running *nix as your operating system then your cache has been successfully cleared. If you are on Windows, you will need to search for files name adodb_*.php and remove them manually.',
     48 => "Thank you for applying for a membership with {$_CONF['site_name']}. Our team will review your application. If approved, your password will be eMailed to you at the eMail address you just entered.",
@@ -1374,7 +1429,7 @@ $MESSAGE = array(
     73 => 'An error occured while attempting to uninstall the plugin. See error.log for details.',
     74 => 'The pingback has been successfully sent.',
     75 => 'Trackbacks must be sent using a POST request.',
-    76 => 'Do you really want to delete this item?',
+    76 => 'Are you sure you want to delete this item?',
     77 => 'WARNING:<br' . XHTML . '>You have set your default encoding to UTF-8. However, your server does not support multibyte encodings. Please install mbstring functions for PHP or choose a different character set/language.',
     78 => 'Please make sure that the eMail address and the confirmation eMail address are the same.',
     79 => 'The page you have been trying to open refers to a function that no longer exists on this site.',
@@ -1411,7 +1466,14 @@ $MESSAGE = array(
     508 => 'eMail address does not match the confirmation eMail address.',
     509 => 'Error creating new user account - please check the error log for details.',
     510 => 'Default settings have been applied to all users.',
-    511 => 'Are you sure you want to delete this group?'
+    511 => '',
+    512 => 'Username contains invalid characters " < > / \ $ % * are not allowed',
+    513 => 'Remote username cannot be blank.',
+    514 => 'Remote service cannot be empty.',
+    515 => 'Thank you, your account has now been activated.',
+    516 => 'Your activation token has expired.',
+    517 => 'This account has already been activated, please login below.',
+
 );
 
 ###############################################################################
@@ -1462,7 +1524,7 @@ $LANG_ACCESS = array(
     'cancel' => 'cancel',
     'delete' => 'delete',
     'canteditroot' => 'You have tried to edit the Root group but you are not in the Root group yourself therefore your access to this group is denied.  Please contact the system administrator if you feel this is an error.',
-    'listusers' => 'Users',
+    'listusers' => 'View Members',
     'listthem' => 'list',
     'usersingroup' => 'Users in Group: %s',
     'usergroupadmin' => 'User Group Administration',
@@ -1493,6 +1555,8 @@ $LANG_ACCESS = array(
     'defaultgroup' => 'Default',
     'editinguser'   => 'Editing User: ',
     'createnewuser' => 'Creating New Account',
+    'confirm1' => 'Are you sure you want to delete this Group?',
+    'confirm2' => 'Are you absolutely sure you want to delete this Group?  This will affect any Users or Groups that are associated with this Group!  Press Cancel and then Edit this Group if you wish to view the details.',
 );
 
 ###############################################################################
@@ -1743,6 +1807,10 @@ $LANG_ADMIN = array(
     'admin_groups' => 'Group Admin',
     'action' => 'Action for all selected:',
     'authenticate' => 'Authenticate',
+    'select' => 'Select',
+    'name' => 'Name',
+    'submissions' => 'Submissions',
+    'moderate' => 'Save & Approve',
 );
 
 ###############################################################################
@@ -1802,8 +1870,8 @@ $LANG_frontpagecodes = array(
 );
 
 $LANG_postmodes = array(
-    'plaintext' => 'Plain Old Text',
-    'html' => 'HTML Formatted'
+    'plaintext' => 'Text',
+    'html' => 'HTML'
 );
 
 $LANG_sortcodes = array(
@@ -1889,9 +1957,9 @@ $LANG_FILECHECK = array(
     'plugin'            => 'plugin',
     'added'             => 'added',
     'missing'           => 'missing',
-    'removed'           => '%s %s deleted.  Your site\'s File Integrity has been rechecked, and the results are shown below.',
+    'removed'           => '%s %s deleted.  Your site\'s File Integrity will now be rechecked ....',
     'working'           => 'Scanning, please wait ...<br />',
-    'elapsed'           => 'Scan completed in %s sec.'
+    'elapsed'           => 'The scan completed in %s sec.<br /><br />'
 );
 
 ###############################################################################
@@ -2149,6 +2217,9 @@ $LANG_confignames['Core'] = array(
     'user_reg_fullname' => 'Full Name option on registration form?',
     'session_ip_check' => 'Session IP Validation',
     'article_comment_close_enabled' => 'Automatically close comments (default)',
+    'registration_type' => 'Registration Type',
+    'comment_postmode' => 'Comment Postmode',
+    'comment_editor' => 'Comment Editor',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2214,7 +2285,7 @@ $LANG_configselects['Core'] = array(
     2 => array('Reject' => 0, 'Only Keep Latest' => 1, 'Allow Multiple Posts' => 2),
     3 => array('Trackback Enabled' => 0, 'Trackback Disabled' => -1),
     4 => array('Don\'t Check Anything' => 0, 'Check against Site URL' => 1, 'Check full URL' => 2, 'Check against Site URL and full URL' => 3, 'Check IP against Site IP' => 4, 'Check IP and Site URL' => 5, 'Check IP and Full URL' => 6, 'Check IP, Full URL, and Site URL' => 7),
-    5 => array('Plain Old Text' => 'plaintext', 'HTML Formatted' => 'html'),
+    5 => array('Text' => 'plaintext', 'HTML' => 'html'),
     6 => array('12' => 12, '24' => 24),
     7 => array('Last Page' => 'last', 'First Page' => 'first', 'Every Page' => 'all'),
     8 => array('Right' => 'right', 'Left' => 'left'),
@@ -2236,7 +2307,8 @@ $LANG_configselects['Core'] = array(
     24 => array('Disabled' => 0, 'Logged-in Users' => 1, 'Everyone' => 2),
     25 => array('No' => 0, 'Optional' => 1, 'Required' => 2),
     26 => array('None' => 0, 'A.B' => 1, 'A.B.C' => 2, 'All' => 3),
-
+    27 => array('Generate Password' => 0, 'User Enters Password' => 1),
+    28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
 );
 
 ?>

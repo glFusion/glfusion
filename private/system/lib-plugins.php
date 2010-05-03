@@ -390,11 +390,13 @@ function PLG_enableStateChange ($type, $enable)
     // IF we are enabling the plugin
     // THEN we must include its functions.inc so we have access to the function
     if ($enable) {
-        require_once ($_CONF['path'] . 'plugins/' . $type . '/functions.inc');
+        if (@file_exists($_CONF['path'] . 'plugins/' . $type . '/functions.inc') ) {
+            require_once $_CONF['path'] . 'plugins/' . $type . '/functions.inc';
+            return PLG_callFunctionForOnePlugin ('plugin_enablestatechange_' . $type,$args);
+        }
+    } else {
+        return PLG_callFunctionForOnePlugin ('plugin_enablestatechange_' . $type,$args);
     }
-
-    return PLG_callFunctionForOnePlugin ('plugin_enablestatechange_' . $type,
-                                         $args);
 }
 
 /**
@@ -408,6 +410,11 @@ function PLG_enableStateChange ($type, $enable)
 function PLG_isModerator()
 {
     global $_PLUGINS;
+
+    // needed until story moves to a plugin
+    if (plugin_ismoderator_story()) {
+        return true;
+    }
 
     foreach ($_PLUGINS as $pi_name) {
         $function = 'plugin_ismoderator_' . $pi_name;
@@ -1139,7 +1146,10 @@ function PLG_showModerationList($token)
 {
     global $_PLUGINS;
 
-    $retval = '';
+    // needed until story becomes a plugin
+    // also ensures that story moderation is always first
+    // here is where it might be handy to control plugin order ...
+    $retval = MODERATE_itemList('story', $token);
 
     foreach ($_PLUGINS as $pi_name) {
         $retval .= MODERATE_itemList($pi_name, $token);
@@ -1153,12 +1163,44 @@ function PLG_showModerationList($token)
 * needed by moderation.php to approve stuff.
 *
 * @param        string      $type       Plugin to call function for
-* @return       string
+* @return       array       $retval     Array of results as follows:
+*
+* $key              string      name of key field in table (eg. uid, sid)
+* $table            string      name of table to which approved items are posted
+* $fields           string      fields in submission table that are to be posted
+* $submissiontable  string      name of table containing submissions
 *
 */
 function PLG_getModerationValues($type)
 {
-    return PLG_callFunctionForOnePlugin('plugin_moderationvalues_' . $type);
+    global $_TABLES;
+
+    switch ($type) {
+
+        case 'user':
+
+            return array(
+                'uid',
+                $_TABLES['users'],
+                'email,username,uid',
+                ''
+            );
+            break;
+
+        case 'draftstory':
+            return array(
+                'sid',
+                $_TABLES['stories'],
+                '',
+                ''
+            );
+            break;
+
+        default:
+            return PLG_callFunctionForOnePlugin('plugin_moderationvalues_' . $type);
+            break;
+    }
+
 }
 
 /**
@@ -1843,6 +1885,7 @@ function PLG_replaceTags($content, $plugin = '')
                     $blockName = COM_applyBasicFilter($autotag['parm1']);
                     $result = DB_query("SELECT * FROM {$_TABLES['blocks']} WHERE name = '".DB_escapeString($blockName)."'");
                     if ( DB_numRows($result) > 0 ) {
+                        $skip = 0;
                         $B = DB_fetchArray($result);
                         $template = '';
                         $side     = '';
@@ -2828,7 +2871,7 @@ function PLG_itemRated( $plugin, $id_sent, $new_rating, $added )
     $retval = true;
 
     if ( $plugin == 'article' ) {
-        $sql = "UPDATE {$_TABLES['stories']} SET rating = ".(float) $new_rating. ", votes=".(int) $added . " WHERE sid='".DB_escapeString($id_sent)."'";
+        $sql = "UPDATE {$_TABLES['stories']} SET rating = '".DB_escapeString($new_rating). "', votes=".(int) $added . " WHERE sid='".DB_escapeString($id_sent)."'";
         DB_query($sql);
     } else {
         $args[1] = $id_sent;
@@ -2886,4 +2929,97 @@ function PLG_canUserRate( $type, $item_id, $uid )
 
     return $retval;
 }
+
+/**
+ * START STORY PLUGIN STUB SECTION
+ *
+ * These functions will ultimately move into a story plugin
+ *
+ */
+
+
+/**
+ * Return true since this component supports webservices
+ *
+ * @return  bool	True, if webservices are supported
+ */
+function plugin_wsEnabled_story()
+{
+    return true;
+}
+
+/**
+*
+* Checks that the current user has the rights to moderate a story
+* returns true if this is the case, false otherwise
+*
+* @return        boolean       Returns true if moderator
+*
+*/
+function plugin_ismoderator_story()
+{
+    return SEC_hasRights('story.moderate');
+}
+
+/**
+* Returns SQL & Language texts to moderation.php
+*
+* @return   mixed   Plugin object or void if not allowed
+*
+*/
+function plugin_itemlist_story()
+{
+    global $_TABLES, $LANG29;
+
+    if (plugin_ismoderator_story()) {
+        $plugin = new Plugin();
+        $plugin->submissionlabel = $LANG29[35];
+        $plugin->submissionhelpfile = 'ccstorysubmission.html';
+        $plugin->getsubmissionssql = "SELECT sid AS id,title,UNIX_TIMESTAMP(date) AS day,tid,uid"
+                                    . " FROM {$_TABLES['storysubmission']}"
+                                    . COM_getTopicSQL ('WHERE')
+                                    . " ORDER BY date ASC";
+        $plugin->addSubmissionHeading($LANG29[10]);
+        $plugin->addSubmissionHeading($LANG29[14]);
+        $plugin->addSubmissionHeading($LANG29[15]);
+        $plugin->addSubmissionHeading($LANG29[46]);
+
+        return $plugin;
+    }
+}
+
+/**
+* returns list of moderation values
+*
+* The array returned contains (in order): the key field name, main plugin
+* table, moderation fields (comma seperated), and plugin submission table
+*
+* @return       array        Returns array of useful moderation values
+*
+*/
+function plugin_moderationvalues_story()
+{
+    global $_TABLES;
+
+    return array (
+        'sid',
+        $_TABLES['stories'],
+        'sid,uid,tid,title,introtext,date,postmode',
+        $_TABLES['storysubmission']
+    );
+}
+
+/**
+* Counts the number of stories that are submitted
+*
+* @return   int     number of stories in submission queue
+*
+*/
+function plugin_submissioncount_story()
+{
+    global $_TABLES;
+
+    return (plugin_ismoderator_story) ? DB_count ($_TABLES['storysubmission']) : 0;
+}
+
 ?>

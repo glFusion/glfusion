@@ -116,7 +116,8 @@ $LANG_STATIC = array(
     'limit_results' => 'Ergebnisse einschränken',
     'search' => 'Suchen',
     'submit' => 'Absenden',
-    'delete_confirm' => 'Möchtest Du diese Seite wirklich löschen?'
+    'delete_confirm' => 'Möchtest Du diese Seite wirklich löschen?',
+    'allnhp_topics' => 'All Topics (No Homepage)'
 );
 
 $PLG_staticpages_MESSAGE19 = '';

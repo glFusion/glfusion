@@ -122,6 +122,12 @@ function glfusion_SecurityCheck() {
     return $retval;
 }
 
+function glfusion_SubmissionsCheck()
+{
+    $retval = '';
+    return $retval;
+}
+
 function phpblock_blogroll ()
 {
     global $_CONF, $_TABLES, $_ST_CONF;

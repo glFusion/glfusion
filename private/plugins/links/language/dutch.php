@@ -96,7 +96,8 @@ $LANG_LINKS_SUBMIT = array(
     8 => 'Titel',
     9 => 'URL',
     10 => 'Categorie',
-    11 => 'Ingezonden links'
+    11 => 'Ingezonden links',
+    12 => 'Submitted By'
 );
 
 ###############################################################################
@@ -173,7 +174,12 @@ $LANG_LINKS_ADMIN = array(
     57 => 'Not validated yet',
     58 => 'Validate now',
     59 => '<p>To validate all links displayed, please click on the "Validate now" link below. Please note that this might take some time depending on the amount of links displayed.</p>',
-    60 => 'User %s tried illegally to edit category %s.'
+    60 => 'User %s tried illegally to edit category %s.',
+    61 => 'Owner',
+    62 => 'Last Updated',
+    63 => 'Are you sure you want to delete this link?',
+    64 => 'Are you sure you want to delete this category?',
+    65 => 'Moderate Link'
 );
 
 

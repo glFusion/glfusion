@@ -407,7 +407,7 @@ function DIR_displayAll ($topic, $list_current_month = false)
 
         $retval .= DIR_displayMonth ($topic, $currentyear, $currentmonth);
 
-        $retval .= '<hr' . XHTML . '>' . LB;
+        $retval .= '<div style="margin-top:10px;border-bottom:1px solid #cccccc;"></div>' . LB;
     }
 
     $retval .= '<div><h2>' . $LANG_DIR['title']

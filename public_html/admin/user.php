@@ -11,6 +11,7 @@
 // | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Mark A. Howard         mark AT usable-web DOT com                        |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2009 by the following authors:                        |
@@ -178,7 +179,7 @@ function USER_edit($uid = '', $msg = '')
         $lastlogin = DB_getItem ($_TABLES['userinfo'], 'lastlogin', "uid = $uid");
         $lasttime = COM_getUserDateTimeFormat ($lastlogin);
         $display_name = COM_getDisplayName ($uid);
-        $menuText = 'Editing User: ' . $U['username'];
+        $menuText = $LANG_ACCESS['editinguser'] . $U['username'];
         if ($U['fullname'] != '' ) {
             $menuText .= ' - ' . $U['fullname'];
         }
@@ -187,6 +188,9 @@ function USER_edit($uid = '', $msg = '')
         $U['username'] = '';
         $U['fullname'] = '';
         $U['email'] = '';
+        $U['remoteuser'] = 0;
+        $U['remoteusername'] = '';
+        $U['remoteservice'] = '';
         $U['homepage'] = '';
         $U['location'] = '';
         $U['sig'] = '';
@@ -225,7 +229,13 @@ function USER_edit($uid = '', $msg = '')
     if ( isset($_POST['new_username']) )
         $U['username']       = trim(COM_stripslashes($_POST['new_username']));
     if ( isset($_POST['fullname']) )
-        $U['fullname']       = trim(COM_stripslashes($_POST['fullname']));
+        $U['fullname']       = COM_truncate(trim(USER_sanitizeName(COM_stripslashes($_POST['fullname']))),80);
+    if ( isset($_POST['remoteuser']) )
+        $U['remoteuser'] = ($_POST['remoteuser'] == 'on' ? 1 : 0);
+    if ( isset($_POST['remoteusername']) )
+        $U['remoteusername'] = COM_truncate(trim(COM_stripslashes($_POST['remoteusername'])),60);
+    if ( isset($_POST['remoteservice']) )
+        $U['remoteservice'] = COM_applyFilter($_POST['remoteservice']);
     if ( isset($_POST['userstatus'] ) )
         $U['status']     = COM_applyFilter($_POST['userstatus'],true);
     if ( isset($_POST['cooktime'] ) )
@@ -293,7 +303,7 @@ function USER_edit($uid = '', $msg = '')
 
     if (!empty($uid) && ($uid != $_USER['uid']) && SEC_hasRights('user.delete')) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete'] . '" name="delete"%s' . XHTML . '>';
-        $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
+        $jsconfirm = ' onclick="return doubleconfirm(\'' . $LANG28[104] . '\',\'' . $LANG28[109] . '\');"';
         $userform->set_var('delete_option',sprintf ($delbutton, $jsconfirm));
         $userform->set_var('delete_option_no_confirmation',sprintf ($delbutton, ''));
     }
@@ -377,6 +387,65 @@ function USER_accountPanel($U,$newuser = 0)
     $userform->set_var('user_name',$U['username']);
     $userform->set_var('fullname_value', htmlspecialchars($U['fullname']));
 
+    // remote services
+    if ( $U['uid'] != '' && $U['remoteservice'] == '' ) {
+        $allow_remote_user = 0;
+    } else {
+        $allow_remote_user = 1;
+    }
+    $remote_user_display = 'none';
+    $remote_user_checked = '';
+    $pwd_disabled = '';
+    $remote_user_edit = 0;
+    if (($_CONF['user_login_method']['openid'] || $_CONF['user_login_method']['3rdparty']) && $allow_remote_user ) {
+        $modules = array();
+        if ( ($U['remoteusername'] != '' && $U['remoteservice'] != '') || $U['remoteuser'] == 1) {
+            $remote_user_checked = ' checked="checked"';
+            $pwd_disabled = ' disabled="disabled"';
+            $remote_user_display = '';
+            if ( isset($U['uid']) && $U['uid'] > 2 ) {
+                $remote_user_edit = 1;
+            }
+        }
+        if ( $_CONF['user_login_method']['3rdparty'] ) {
+            $modules = SEC_collectRemoteAuthenticationModules();
+        }
+        $service_select = '<select name="remoteservice" id="remoteservice"';
+        if ( $remote_user_edit == 1 ) {
+            $service_select .= ' disabled="disabled"';
+        }
+        $service_select .= '>' .LB;
+        if ( count($modules) > 0 ) {
+            foreach( $modules AS $service ) {
+                $service_select .= '<option value="' . $service . '"'.($U['remoteservice'] == $service ? ' selected="selected"' : '') . '>' . $service . '</option>' . LB;
+            }
+        }
+        if ( $_CONF['user_login_method']['openid'] ) {
+            $service_select .= '<option value="openid"' . ($U['remoteservice'] == 'openid' ? ' selected="selected"' : '') .'>'.'OpenID'.'</option>'. LB;
+        }
+        $service_select .= '</select>'.LB;
+        $userform->set_var('remoteusername',htmlspecialchars($U['remoteusername'],ENT_NOQUOTES,COM_getEncodingt()));
+        $userform->set_var('remoteservice_select',$service_select);
+        $userform->set_var('remote_user_checked',$remote_user_checked);
+        $userform->set_var('remote_user_display',$remote_user_display);
+        $userform->set_var('remoteuserenable','1');
+        $userform->set_var('lang_remoteuser',$LANG04[163]);
+        $userform->set_var('lang_remoteusername',$LANG04[164]);
+        $userform->set_var('lang_remoteservice',$LANG04[165]);
+        $userform->set_var('lang_remoteuserdata',$LANG04[166]);
+        if ( $remote_user_edit == 1 ) {
+            $userform->set_var('remote_user_disabled',' disabled="disabled"');
+        }
+        $userform->set_var('pwd_disabled',$pwd_disabled);
+    } else {
+        $userform->set_var('remoteuserenable','');
+        $userform->set_var('remoteusername','');
+        $userform->set_var('remoteservice_select','');
+        $userform->set_var('remote_user_checked',$remote_user_checked);
+        $userform->set_var('remote_user_display',$remote_user_display);
+    }
+
+
     $selection  = '<select id="cooktime" name="cooktime">' . LB;
     $selection .= COM_optionList($_TABLES['cookiecodes'],'cc_value,cc_descr',$U['cookietimeout'], 0);
     $selection .= '</select>';
@@ -384,8 +453,9 @@ function USER_accountPanel($U,$newuser = 0)
     $userform->set_var('cooktime_selector', $selection);
     $userform->set_var('email_value', htmlspecialchars ($U['email']));
 
-    $statusarray = array(USER_ACCOUNT_AWAITING_ACTIVATION => $LANG28[43],
-                         USER_ACCOUNT_ACTIVE              => $LANG28[45]
+    $statusarray = array(USER_ACCOUNT_AWAITING_ACTIVATION   => $LANG28[43],
+                         USER_ACCOUNT_AWAITING_VERIFICATION => $LANG28[16],
+                         USER_ACCOUNT_ACTIVE                => $LANG28[45]
                    );
 
     $allow_ban = true;
@@ -1056,7 +1126,7 @@ function USER_getGroupListField($fieldname, $fieldvalue, $A, $icon_arr, $al_sele
  * returns field data for the user administration panel list
  *
  */
-function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr)
+function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
 
@@ -1064,9 +1134,9 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr)
 
     switch ($fieldname) {
 
-        case 'delete':
-            $retval = '<input type="checkbox" name="delitem[]" checked="checked"' . XHTML . '>';
-            break;
+//        case 'delete':
+//            $retval = '<input type="checkbox" name="delitem[]" checked="checked"' . XHTML . '>';
+//            break;
 
         case 'edit':
             $attr['title'] = $LANG_ADMIN['edit'];
@@ -1075,6 +1145,15 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr)
             break;
 
         case 'username':
+            $attr['title'] = $LANG28[108];
+            $url = $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' .  $A['uid'];
+            $retval = COM_createLink($icon_arr['user'], $url, $attr);
+            $retval .= '&nbsp;&nbsp;';
+            $attr['style'] = 'vertical-align:top;';
+            $retval .= COM_createLink($fieldvalue, $url, $attr);
+            break;
+
+        case 'fullname':
             $photoico = '';
             if (!empty ($A['photo'])) {
                 $photoico = "&nbsp;<img src=\"{$_CONF['layout_url']}/images/smallcamera."
@@ -1082,8 +1161,28 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr)
             } else {
                 $photoico = '';
             }
-            $retval = COM_createLink($fieldvalue, $_CONF['site_url']
-                    . '/users.php?mode=profile&amp;uid=' .  $A['uid']) . $photoico;
+            $retval = COM_truncate($fieldvalue, 24, ' ...', true) . $photoico;
+            break;
+
+        case 'status':
+            $status = $A['status'];
+            switch ($status) {
+                case 0:
+                    $retval = $LANG28[42];
+                    break;
+                case 1:
+                    $retval = $LANG28[14];
+                    break;
+                case 2:
+                    $retval = $LANG28[106];
+                    break;
+                case 3:
+                    $retval = $LANG28[45];
+                    break;
+                case 4:
+                    $retval = $LANG28[107];
+                    break;
+            }
             break;
 
         case 'lastlogin':
@@ -1135,12 +1234,22 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr)
 
         case 'email':
             $url = 'mailto:' . $fieldvalue;
-            $attr['title'] = $LANG28[99];
+            $attr['title'] = $LANG28[111];
             $retval = COM_createLink($icon_arr['mail'], $url, $attr);
             $retval .= '&nbsp;&nbsp;';
+            $attr['title'] = $LANG28[99];
             $url = $_CONF['site_admin_url'] . '/mail.php?uid=' . $A['uid'];
             $attr['style'] = 'vertical-align:top;';
             $retval .= COM_createLink($fieldvalue, $url, $attr);
+            break;
+
+        case 'delete':
+            $retval = '';
+            $attr['title'] = $LANG_ADMIN['delete'];
+            $attr['onclick'] = 'return doubleconfirm(\'' . $LANG28[104] . '\',\'' . $LANG28[109] . '\');';
+            $retval .= COM_createLink($icon_arr['delete'],
+                $_CONF['site_admin_url'] . '/user.php'
+                . '?delete=x&amp;uid=' . $A['uid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
             break;
 
         default:
@@ -1194,12 +1303,14 @@ function USER_list($grp_id)
     }
 
     $header_arr = array(      # display 'text' and use table field 'field'
-                    array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center'),
-                    array('text' => $LANG28[37], 'field' => $_TABLES['users'] . '.uid', 'sort' => true, 'align' => 'center'),
+                    array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center', 'width' => '35px'),
+//                  array('text' => $LANG28[37], 'field' => $_TABLES['users'] . '.uid', 'sort' => true, 'align' => 'center'),
                     array('text' => $LANG28[3], 'field' => 'username', 'sort' => true),
                     array('text' => $LANG28[4], 'field' => 'fullname', 'sort' => true),
+                    array('text' => $LANG28[105], 'field' => 'status', 'sort' => true, 'align' => 'center'),
                     array('text' => $login_text, 'field' => $login_field, 'sort' => true, 'align' => 'center'),
-                    array('text' => $LANG28[7], 'field' => 'email', 'sort' => true)
+                    array('text' => $LANG28[7], 'field' => 'email', 'sort' => true),
+                    array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center', 'width' => '35px')
     );
 
     if ($_CONF['user_login_method']['openid'] ||
@@ -1213,6 +1324,8 @@ function USER_list($grp_id)
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/user.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
+        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
+              'text' => $LANG_ADMIN['submissions']),
         array('url' => $_CONF['site_admin_url'] . '/group.php',
               'text' => $LANG_ADMIN['admin_groups']),
         array('url' => $_CONF['site_admin_url'] . '/user.php?import=x',
@@ -1254,13 +1367,13 @@ function USER_list($grp_id)
     if ($grp_id > 0) {
         $groups = USER_getGroupList ($grp_id);
         $groupList = implode (',', $groups);
-        $sql = "SELECT DISTINCT {$_TABLES['users']}.uid,username,fullname,email,photo,regdate$select_userinfo "
+        $sql = "SELECT DISTINCT {$_TABLES['users']}.uid,username,fullname,email,photo,regdate,status$select_userinfo "
               ."FROM {$_TABLES['group_assignments']},{$_TABLES['users']} $join_userinfo "
               ."WHERE {$_TABLES['users']}.uid > 1 "
               ."AND {$_TABLES['users']}.uid = {$_TABLES['group_assignments']}.ug_uid "
               ."AND ({$_TABLES['group_assignments']}.ug_main_grp_id IN ({$groupList}))";
     } else {
-        $sql = "SELECT {$_TABLES['users']}.uid,username,fullname,email,photo,status,regdate$select_userinfo "
+        $sql = "SELECT {$_TABLES['users']}.uid,username,fullname,email,photo,regdate,status$select_userinfo "
              . "FROM {$_TABLES['users']} $join_userinfo WHERE 1=1";
     }
 
@@ -1269,8 +1382,10 @@ function USER_list($grp_id)
                        'query_fields' => array('username', 'email', 'fullname'),
                        'default_filter' => "AND {$_TABLES['users']}.uid > 1");
 
+    $token = SEC_createToken();
+
     $retval .= ADMIN_list('user', 'USER_getListField', $header_arr,
-                          $text_arr, $query_arr, $defsort_arr, $filter);
+                          $text_arr, $query_arr, $defsort_arr, $filter, $token);
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
     return $retval;
@@ -1300,17 +1415,17 @@ function USER_save($uid)
     }
     $regdate        = COM_applyFilter($_POST['regdate'],true);
     $username       = trim(COM_stripslashes($_POST['new_username']));
-    $fullname       = trim(COM_stripslashes($_POST['fullname']));
+    $fullname       = COM_truncate(trim(USER_sanitizeName(COM_stripslashes($_POST['fullname']))),80);
     $userstatus     = COM_applyFilter($_POST['userstatus'],true);
     $oldstatus      = COM_applyFilter($_POST['oldstatus'],true);
-    $passwd         = trim(COM_stripslashes($_POST['passwd']));
-    $passwd_conf    = trim(COM_stripslashes($_POST['passwd_conf']));
+    $passwd         = (isset($_POST['passwd'])) ? trim(COM_stripslashes($_POST['passwd'])) : '';
+    $passwd_conf    = (isset($_POST['passwd_conf']) ) ? trim(COM_stripslashes($_POST['passwd_conf'])) : '';
     $cooktime       = COM_applyFilter($_POST['cooktime'],true);
     $email          = trim(COM_stripslashes($_POST['email']));
     $email_conf     = trim(COM_stripslashes($_POST['email_conf']));
     $groups         = $_POST['groups'];
     $homepage       = trim(COM_stripslashes($_POST['homepage']));
-    $location       = trim(COM_stripslashes($_POST['location']));
+    $location       = strip_tags(trim(COM_stripslashes($_POST['location'])));
     $photo          = isset($_POST['photo']) ? $_POST['photo'] : '';
     $delete_photo   = (isset($_POST['delete_photo']) && $_POST['delete_photo'] == 'on') ? 1 : 0;
     $sig            = trim(COM_stripslashes($_POST['sig']));
@@ -1333,13 +1448,16 @@ function USER_save($uid)
     $topic_order    = (isset($_POST['topic_order']) && $_POST['topic_order'] == 'ASC') ? 'ASC' : 'DESC';
     $maxstories     = COM_applyFilter($_POST['maxstories'],true);
     $newuser        = COM_applyFilter($_POST['newuser'],true);
+    $remoteuser     = (isset($_POST['remoteuser']) && $_POST['remoteuser'] == 'on') ? 1 : 0;
+    $remoteusername = (isset($_POST['remoteusername'])) ? strip_tags(trim(COM_stripslashes($_POST['remoteusername']) ) ): '';
+    $remoteservice  = (isset($_POST['remoteservice'])) ? COM_applyFilter($_POST['remoteservice']) : '';
 
     if ( $uid == 1 ) {
         return USER_list();
     }
 
     if ( $uid == '' || $uid < 2 || $newuser == 1 ) {
-        if (empty($passwd) ) {
+        if (empty($passwd) && $remoteuser == 0) {
             return USER_edit($uid,504);
         }
         if (empty($email) ) {
@@ -1355,11 +1473,20 @@ function USER_save($uid)
     if ( $email == '' ) {
         return USER_edit($uid,507);
     }
-    if ($passwd != $passwd_conf) { // passwords don't match
+    if ($passwd != $passwd_conf && $remoteuser == 0) { // passwords don't match
         return USER_edit($uid, 67);
     }
     if ($email != $email_conf) {
         return USER_edit($uid,508);
+    }
+    // remote user checks
+    if ( $remoteuser == 1 ) {
+        if ( $remoteusername == '' ) {
+            return USER_edit($uid,513);
+        }
+        if ( $remoteservice == '' ) {
+            return USER_edit($uid,514);
+        }
     }
 
     $validEmail = true;
@@ -1453,9 +1580,14 @@ function USER_save($uid)
                 $passwd = USER_createPassword (8);
                 $passwd2 = SEC_encryptPassword($passwd);
             }
-
-            $uid = USER_createAccount ($username, $email, $passwd2, $fullname,
-                                       $homepage);
+            if ( $remoteuser == 1 ) {
+                $uid = USER_createAccount($username, $email, '',
+                           $fullname, '', $remoteusername,
+                           $remoteservice);
+            } else {
+                $uid = USER_createAccount ($username, $email, $passwd2, $fullname,
+                                           $homepage);
+            }
             if ($uid > 1) {
                 DB_query("UPDATE {$_TABLES['users']} SET status = $userstatus WHERE uid = $uid");
             }
@@ -1597,7 +1729,7 @@ function USER_save($uid)
             CUSTOM_userSave($uid);
         }
         if( ($_CONF['usersubmission'] == 1) && ($oldstatus == USER_ACCOUNT_AWAITING_APPROVAL)
-               && ($userstatus == USER_ACCOUNT_ACTIVE) ) {
+               && ($userstatus == USER_ACCOUNT_ACTIVE || $userstatus == USER_ACCOUNT_AWAITING_ACTIVATION || $userstatus == USER_ACCOUNT_AWAITING_VERIFICATION) ) {
             USER_createAndSendPassword ($username, $email, $uid);
         }
         if ($userstatus == USER_ACCOUNT_DISABLED) {
@@ -1778,7 +1910,7 @@ function USER_batchAdmin()
     $desc = $user_templates->finish($user_templates->get_var('form'));
 
     $header_arr = array(      # display 'text' and use table field 'field'
-                    array('text' => $LANG28[37], 'field' => $_TABLES['users'] . '.uid', 'sort' => true, 'align' => 'center'),
+//                  array('text' => $LANG28[37], 'field' => $_TABLES['users'] . '.uid', 'sort' => true, 'align' => 'center'),
                     array('text' => $LANG28[3], 'field' => 'username', 'sort' => true),
                     array('text' => $LANG28[4], 'field' => 'fullname', 'sort' => true)
     );
@@ -1819,7 +1951,7 @@ function USER_batchAdmin()
     }
 
     $header_arr[] = array('text' => $LANG28[7], 'field' => 'email', 'sort' => true);
-    $header_arr[] = array('text' => $LANG28[87], 'field' => 'num_reminders', 'sort' => true, 'align' => 'center');
+    $header_arr[] = array('text' => $LANG28[87], 'field' => 'num_reminders', 'sort' => true, 'align' => 'center', 'width' => '40px');
 
     $text_arr = array('has_menu'     => true,
                       'has_extras'   => true,
@@ -1846,13 +1978,19 @@ function USER_batchAdmin()
         'default_filter' => "AND $filter_sql {$_TABLES['users']}.uid > 1"
     );
 
-    $reminder_action = '&nbsp;&nbsp;&nbsp;&nbsp;<input name="reminder" type="image" src="'
+    $actions = '<input name="delbutton" type="image" src="'
+        . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
+        . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
+        . '" onclick="return doubleconfirm(\'' . $LANG28[73] . '\',\'' . $LANG28[110] . '\');"'
+        . XHTML . '>&nbsp;' . $LANG_ADMIN['delete'];
+    $actions .= '&nbsp;&nbsp;&nbsp;&nbsp;';
+    $actions .= '<input name="reminder" type="image" src="'
         . $_CONF['layout_url'] . '/images/admin/mail.' . $_IMAGE_TYPE
         . '" style="vertical-align:bottom;" title="' . $LANG28[78]
         . '" onclick="return confirm(\'' . $LANG28[100] . '\');"'
-        . XHTML . '>&nbsp;&nbsp;' . $LANG28[77];
+        . XHTML . '>&nbsp;' . $LANG28[77];
 
-    $options = array('chkselect' => true, 'chkfield' => 'uid', 'actions' => $reminder_action);
+    $options = array('chkselect' => true, 'chkfield' => 'uid', 'chkactions' => $actions);
 
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/user.php',
@@ -1879,8 +2017,9 @@ function USER_batchAdmin()
     $token = SEC_createToken();
     $form_arr['bottom'] = "<input type=\"hidden\" name=\"" . CSRF_TOKEN
                         . "\" value=\"{$token}\"" . XHTML . ">";
+
     $display .= ADMIN_list('user', 'USER_getListField', $header_arr,
-                           $text_arr, $query_arr, $defsort_arr, $filter, '',
+                           $text_arr, $query_arr, $defsort_arr, '', $token,
                            $options, $form_arr);
 
     $display .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));

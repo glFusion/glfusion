@@ -146,7 +146,7 @@ function phpblock_calendar( $help='', $title='' )
         $oldDate1 = 'no_day';  // Invalid Date!
         $oldDate2 = 'last_d';  // Invalid Date!
 
-        if( $_CA_CONF['personalcalendars'] == 1 AND !empty( $_USER['uid'] )) {
+        if (($_CA_CONF['personalcalendars'] == 1) AND !COM_isAnonUser()) {
             $iterations = 2;
         } else {
             $iterations = 1;
@@ -324,6 +324,9 @@ function plugin_ismoderator_calendar()
 
 /**
 * Returns SQL & Language texts to moderation.php
+*
+* @return   mixed   Plugin object or void if not allowed
+*
 */
 function plugin_itemlist_calendar()
 {
@@ -333,13 +336,14 @@ function plugin_itemlist_calendar()
         $plugin = new Plugin();
         $plugin->submissionlabel = $LANG_CAL_1[19];
         $plugin->submissionhelpfile = 'cceventsubmission.html';
-        $plugin->getsubmissionssql = "SELECT eid AS id,title,datestart as day,url "
+        $plugin->getsubmissionssql = "SELECT eid AS id,title,datestart as day,url,owner_id AS uid "
                                    . "FROM {$_TABLES['eventsubmission']} "
                                    . "ORDER BY datestart ASC";
         $plugin->addSubmissionHeading($LANG_CAL_1[20]);
         $plugin->addSubmissionHeading($LANG_CAL_1[21]);
         $plugin->addSubmissionHeading($LANG_CAL_1[22]);
-
+        $plugin->addSubmissionHeading($LANG_CAL_1[52]);
+        
         return $plugin;
     }
 }
@@ -542,12 +546,23 @@ function plugin_savesubmission_calendar($A)
     $A['description'] = (isset($A['description']) ? $A['description'] : '');
     $A['event_type']  = (isset($A['event_type']) ? $A['event_type'] : '');
 
+    if ($A['url'] == 'http://') {
+        // remove default entry now to avoid false spam reports
+        $A['url'] = '';
+    }
+
     // pseudo-formatted event description for the spam check
-    $spamcheck = COM_createLink($A['title'], $A['url']) . '<br' . XHTML . '>'
-               . $A['location'] . '<br' . XHTML . '>' . $A['address1'] . '<br' . XHTML . '>'
-               . $A['address2'] . '<br' . XHTML . '>' . $A['city'] . ', ' . $A['zipcode']
+    $spamcheck = '';
+    if (empty($A['url'])) {
+        $spamcheck .= $A['title'];
+    } else {
+        $spamcheck .= COM_createLink($A['title'], $A['url']);
+    }
+    $spamcheck .= '<br' . XHTML . '>' . $A['location'] . '<br' . XHTML . '>'
+               . $A['address1'] . '<br' . XHTML . '>' . $A['address2']
+               . '<br' . XHTML . '>' . $A['city'] . ', ' . $A['zipcode']
                . '<br' . XHTML . '>' . $A['description'] . '</p>';
-    $result = PLG_checkforSpam ($spamcheck, $_CONF['spamx']);
+    $result = PLG_checkforSpam($spamcheck, $_CONF['spamx']);
     if ($result > 0) {
         COM_updateSpeedlimit ('submit');
         COM_displayMessageAndAbort ($result, 'spamx', 403, 'Forbidden');
@@ -573,6 +588,12 @@ function plugin_savesubmission_calendar($A)
     }
 
     COM_updateSpeedlimit ('submit');
+
+    if (!isset($A['status']) OR (isset ($A['status']) && ($A['status'] == 'on'))) {
+        $A['status'] = 1;
+    } else {
+        $A['status'] = 0;
+    }        
 
     if (isset ($A['allday']) && ($A['allday'] == 'on')) {
         $A['allday'] = 1;
@@ -639,9 +660,10 @@ function plugin_savesubmission_calendar($A)
         if (($_CA_CONF['eventsubmission'] == 1) &&
                 !SEC_hasRights('calendar.submit')) {
 
+            $fields = 'eid,status,title,event_type,url,owner_id,datestart,timestart,dateend,timeend,allday,location,address1,address2,city,state,zipcode,description';
             DB_save ($_TABLES['eventsubmission'],
                      'eid,status,title,event_type,url,owner_id,datestart,timestart,dateend,timeend,allday,location,address1,address2,city,state,zipcode,description',
-                     "'{$A['eid']}','{$A['title']}','{$A['event_type']}','{$A['url']}',$owner_id,'{$A['datestart']}','{$A['timestart']}','{$A['dateend']}','{$A['timeend']}',{$A['allday']},'{$A['location']}','{$A['address1']}','{$A['address2']}','{$A['city']}','{$A['state']}','{$A['zipcode']}','{$A['description']}'");
+                     "'{$A['eid']}',{$A['status']},'{$A['title']}','{$A['event_type']}','{$A['url']}',$owner_id,'{$A['datestart']}','{$A['timestart']}','{$A['dateend']}','{$A['timeend']}',{$A['allday']},'{$A['location']}','{$A['address1']}','{$A['address2']}','{$A['city']}','{$A['state']}','{$A['zipcode']}','{$A['description']}'");
 
             if (isset ($_CA_CONF['notification']) &&
                     ($_CA_CONF['notification'] == 1)) {
@@ -667,7 +689,7 @@ function plugin_savesubmission_calendar($A)
 
             DB_save ($_TABLES['events'],
                      'eid,status,title,event_type,url,datestart,timestart,dateend,timeend,allday,location,address1,address2,city,state,zipcode,description,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon',
-                     "'{$A['eid']}','{$A['status']}','{$A['title']}','{$A['event_type']}','{$A['url']}','{$A['datestart']}','{$A['timestart']}','{$A['dateend']}','{$A['timeend']}',{$A['allday']},'{$A['location']}','{$A['address1']}','{$A['address2']}','{$A['city']}','{$A['state']}','{$A['zipcode']}','{$A['description']}',$owner_id,{$A['group_id']},{$A['perm_owner']},{$A['perm_group']},{$A['perm_members']},{$A['perm_anon']}");
+                     "'{$A['eid']}',{$A['status']},'{$A['title']}','{$A['event_type']}','{$A['url']}','{$A['datestart']}','{$A['timestart']}','{$A['dateend']}','{$A['timeend']}',{$A['allday']},'{$A['location']}','{$A['address1']}','{$A['address2']}','{$A['city']}','{$A['state']}','{$A['zipcode']}','{$A['description']}',$owner_id,{$A['group_id']},{$A['perm_owner']},{$A['perm_group']},{$A['perm_members']},{$A['perm_anon']}");
 
             PLG_itemSaved($A['eid'], 'calendar');
 
@@ -689,8 +711,8 @@ function plugin_savesubmission_calendar($A)
             $retval = COM_refresh($_CONF['site_url'] . '/calendar/index.php');
         } else {
             DB_save ($_TABLES['personal_events'],
-                     'uid,eid,title,event_type,url,datestart,timestart,dateend,timeend,allday,location,address1,address2,city,state,zipcode,description',
-                     "{$_USER['uid']},'{$A['eid']}','{$A['title']}','{$A['event_type']}','{$A['url']}','{$A['datestart']}','{$A['timestart']}','{$A['dateend']}','{$A['timeend']}',{$A['allday']},'{$A['location']}','{$A['address1']}','{$A['address2']}','{$A['city']}','{$A['state']}','{$A['zipcode']}','{$A['description']}'");
+                     'uid,eid,status,title,event_type,url,datestart,timestart,dateend,timeend,allday,location,address1,address2,city,state,zipcode,description',
+                     "{$_USER['uid']},'{$A['eid']}',{$A['status']},'{$A['title']}','{$A['event_type']}','{$A['url']}','{$A['datestart']}','{$A['timestart']}','{$A['dateend']}','{$A['timeend']}',{$A['allday']},'{$A['location']}','{$A['address1']}','{$A['address2']}','{$A['city']}','{$A['state']}','{$A['zipcode']}','{$A['description']}'");
             $retval = COM_refresh ($_CONF['site_url']
                                    . '/calendar/index.php?mode=personal&amp;msg=17');
         }
@@ -755,7 +777,7 @@ function plugin_submit_calendar($mode = 'master',$A = array())
 
     if (($_CA_CONF['personalcalendars'] == 1) && ($mode == 'quickadd')) {
         // quick add form, just save it.
-        $display = plugin_savesubmission_calendar ($_POST);
+        $display = plugin_savesubmission_calendar($_POST);
         return $display;
     } else if (SEC_hasRights('calendar.edit') && ($mode != 'personal')) {
         // admin posts non-personal, go to editor
@@ -859,9 +881,6 @@ function plugin_submit_calendar($mode = 'master',$A = array())
     } else {
         $eventform->set_var ('hour_mode', 12);
     }
-    $eventform->set_var ('site_url', $_CONF['site_url']);
-    $eventform->set_var ('site_admin_url', $_CONF['site_admin_url']);
-    $eventform->set_var ('layout_url', $_CONF['layout_url']);
     $eventform->set_var ('lang_title', $LANG_CAL_1[28]);
 
     $eventform->set_var('lang_eventtype', $LANG_CAL_1[37]);

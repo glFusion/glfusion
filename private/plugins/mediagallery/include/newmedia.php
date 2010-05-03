@@ -139,7 +139,7 @@ function MG_SWFUpload( $album_id ) {
     $T = new Template( MG_getTemplatePath($album_id) );
     $T->set_file ('mupload','swfupload.thtml');
     $T->set_var(array(
-        'site_url'                  => $_CONF['site_url'],
+        'site_url'                  => $_MG_CONF['site_url'],
         'album_id'                  => $album_id,
         'album_select'              => $album_selectbox,
         'jumpbox'                   => $album_jumpbox,

@@ -5,9 +5,9 @@
 // | $Id::                                                                   $|
 // | Coppermine v1.4x Import Script                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2009 by the following authors:                        |
+// | Copyright (C) 2005-2010 by the following authors:                        |
 // |                                                                          |
-// | Mark R. Evans              - mark AT glfusion DOT org                    |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -28,6 +28,7 @@
 //
 
 require_once '../../../../../lib-common.php';
+require_once '../../../../auth.inc.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-batch.php';
 

@@ -91,7 +91,8 @@ $LANG_CAL_1 = array(
     48 => 'klikke',
     49 => 'Näib, et saidil pole ühtegi sündmust või mitte keegi pole neil klõpsanud.',
     50 => 'Sündmused',
-    51 => 'Kustuta'
+    51 => 'Kustuta',
+    52 => 'Submitted By'
 );
 
 $_LANG_CAL_SEARCH = array(
@@ -171,7 +172,10 @@ $LANG_CAL_ADMIN = array(
     33 => 'Kustutamiseks pole valitud ühtegi sündmust',
     34 => 'Sündmuse ID',
     35 => 'ei kustutatud ',
-    36 => 'Edukalt kustutatud'
+    36 => 'Edukalt kustutatud',
+    37 => 'Moderate Event',
+    38 => 'Batch Event Admin',
+    39 => 'Event Admin'
 );
 
 $LANG_CAL_MESSAGE = array(

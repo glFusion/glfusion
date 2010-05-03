@@ -45,7 +45,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2"><hr{xhtml}></td>
+                                            <td colspan="2"><div style="border-bottom:1px solid #cccccc;margin:5px 0 5px;"></div></td>
                                         </tr>
                                         <tr>
                                             <td colspan="2"><b>{lang_accessrights}</b></td>
@@ -61,27 +61,28 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2"><b>{lang_permissions}</b>:</td>
+                                            <td colspan="2"><b>{lang_permissions}</b></td>
                                         </tr>
                                         <tr>
                                             <td colspan="2"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2">{lang_permissionskey}</td>
+                                            <td></td>
+                                            <td>{lang_permissionskey}</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2">
-                                                {permissions_editor}
-                                            </td>
+                                            <td></td>
+                                            <td>{permissions_editor}</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2">{lang_lockmsg}</td>
+                                            <td></td>
+                                            <td>{lang_lockmsg}</td>
                                         </tr>
                                         <tr><td>&nbsp;</td></tr>
                                         <tr>
                                             <td colspan="2">
-                                                <input type="submit" value="{lang_save}" name="mode"{xhtml}>
-                                                <input type="submit" value="{lang_cancel}" name="mode"{xhtml}>
+                                                <input type="submit" value="{lang_save}" name="save"{xhtml}>
+                                                <input type="submit" value="{lang_cancel}" name="cancel"{xhtml}>
                                                 <input type="hidden" value="{link_id}" name="old_lid"{xhtml}>
                                                 {delete_option}
                                                 {submission_option}

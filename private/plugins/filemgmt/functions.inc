@@ -871,7 +871,7 @@ function plugin_itemrated_filemgmt($lid, $rating, $votes)
 {
     global $_FM_TABLES;
 
-    $sql = "UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET rating = ".$rating. ", votes=".$votes . " WHERE lid=".$lid;
+    $sql = "UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET rating = '".DB_escapeString($rating). "', votes=".$votes . " WHERE lid=".$lid;
     DB_query($sql);
     return true;
 }

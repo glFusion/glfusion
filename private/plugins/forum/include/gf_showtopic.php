@@ -149,7 +149,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
                 $userarray['user_levelname'] = $user_levelname;
 
                 if ($userarray['photo'] != "") {
-                    $avatar = USER_getPhoto($showtopic['uid'],'','',$CONF_FORUM['avatar_width']);
+                    $avatar = '<img src="' . USER_getPhoto($showtopic['uid'],'','','','0') . '" alt="" title="" class="forum-userphoto" style="width:' . $CONF_FORUM['avatar_width'] . 'px;"' . XHTML . '>';
                     $min_height = $min_height + 150;
                 } else {
                     $avatar = '';

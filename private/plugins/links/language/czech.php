@@ -1,10 +1,16 @@
 <?php
 ###############################################################################
 # czech.php
-# This is the czech (ISO 8859-2) language file for the glFusion Links Plugin
+# This is the czech (iso 8859-2) language file for the glFusion Links Plugin
 #
+# Copyright (C) 2001 Tony Bibbs
+# tony AT tonybibbs DOT com
+# Copyright (C) 2005 Trinity Bays
+# trinity93 AT gmail DOT com
 # Copyright (C) 2007 Ondrej Rusek
 # rusek@gybon.cz
+# Copyright (C) 2010 Ivan Simunek
+# ivsi AT post DOT cz
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -36,12 +42,12 @@ global $LANG32;
 ###############################################################################
 
 $LANG_LINKS = array(
-    10 => 'Po¾adavky',
+    10 => 'Požadavky',
     14 => 'Odkazy',
     84 => 'ODKAZY',
-    88 => '®ádné nové odkazy',
+    88 => 'Žádné nové odkazy',
     114 => 'Odkazy',
-    116 => 'Pøidat odkaz',
+    116 => 'Pridat odkaz',
     117 => 'Report Broken Link',
     118 => 'Broken Link Report',
     119 => 'The following link has been reported to be broken: ',
@@ -63,10 +69,10 @@ $LANG_LINKS = array(
 
 $LANG_LINKS_STATS = array(
     'links' => 'Odkazy (Kliknutí) v systému',
-    'stats_headline' => 'Top Ten odkazù',
+    'stats_headline' => 'Top Ten odkazu',
     'stats_page_title' => 'Odkazy',
-    'stats_hits' => 'Pou¾ito',
-    'stats_no_hits' => 'Vypadá to, ¾e nejsou ¾ádné odkazy nebo odkaz nikdo je¹tì nepou¾il.'
+    'stats_hits' => 'Použito',
+    'stats_no_hits' => 'Vypadá to, že nejsou žádné odkazy nebo odkaz nikdo ješte nepoužil.'
 );
 
 ###############################################################################
@@ -75,8 +81,8 @@ $LANG_LINKS_STATS = array(
 $LANG_LINKS_SEARCH = array(
     'results' => 'Výsledky - odkazy',
     'title' => 'Titulek',
-    'date' => 'Datum pøidání',
-    'author' => 'Pøidal ',
+    'date' => 'Datum pridání',
+    'author' => 'Pridal ',
     'hits' => 'Kliknuto'
 );
 
@@ -90,20 +96,21 @@ $LANG_LINKS_SUBMIT = array(
     4 => 'Jiná',
     5 => 'Pokud jiná, tak specifikuj',
     6 => 'Chyba: chybí kategorie',
-    7 => 'Pokud vybere¹ "Jiná", dopi¹ jméno kategorie',
+    7 => 'Pokud vybereš "Jiná", dopiš jméno kategorie',
     8 => 'Titulek',
     9 => 'URL',
     10 => 'Kategorie',
-    11 => 'Po¾adavky odkazù'
+    11 => 'Požadavky odkazu',
+    12 => 'Pridáno',
 );
 
 ###############################################################################
 # Messages for COM_showMessage the submission form
 
-$PLG_links_MESSAGE1 = "Dìkujeme za odeslání odkazu na {$_CONF['site_name']}.  Nyní oèekává odsouhlasení.  Po odouhlasení bude Vá¹ odkaz v sekci <a href={$_CONF['site_url']}/links/index.php>odkazù</a>.";
-$PLG_links_MESSAGE2 = 'Vá¹ odkaz byl úspì¹nì pøidán.';
-$PLG_links_MESSAGE3 = 'Odkaz byl úspì¹nì vymazán.';
-$PLG_links_MESSAGE4 = "Dìkujeme za odeslání odkazu {$_CONF['site_name']}.  Mù¾ete ho nalézt v <a href={$_CONF['site_url']}/links/index.php>odkazech</a>.";
+$PLG_links_MESSAGE1 = "Dekujeme za odeslání odkazu na {$_CONF['site_name']}.  Nyní ocekává odsouhlasení.  Po odouhlasení bude Váš odkaz v sekci <a href={$_CONF['site_url']}/links/index.php>odkazu</a>.";
+$PLG_links_MESSAGE2 = 'Váš odkaz byl úspešne pridán.';
+$PLG_links_MESSAGE3 = 'Odkaz byl úspešne vymazán.';
+$PLG_links_MESSAGE4 = "Dekujeme za odeslání odkazu {$_CONF['site_name']}.  Mužete ho nalézt v <a href={$_CONF['site_url']}/links/index.php>odkazech</a>.";
 $PLG_links_MESSAGE5 = 'You do not have sufficient access rights to view this category.';
 $PLG_links_MESSAGE6 = 'You do not have sufficient rights to edit this category.';
 $PLG_links_MESSAGE7 = 'Please enter a Category Name and Description.';
@@ -124,54 +131,59 @@ $PLG_links_MESSAGE3002 = $LANG32[9];
 # admin/plugins/links/index.php
 
 $LANG_LINKS_ADMIN = array(
-    1 => 'Editor odkazù',
+    1 => 'Editor odkazu',
     2 => 'ID odkazu',
     3 => 'Titulek odkazu',
     4 => 'URL odkazu',
     5 => 'Kategorie',
-    6 => '(vèetnì http://)',
+    6 => '(vcetne http://)',
     7 => 'Jiná',
-    8 => 'Pou¾ití odkazu',
+    8 => 'Použití odkazu',
     9 => 'Popis odkazu',
     10 => 'Musíte zadat titulek, URL a popis.',
-    11 => 'Správce odkazù',
-    12 => 'Pro zmìnu nebo vymazání odkazu, kliknìte na ikonu editace.  Pro vytvoøení nového odkazu, kliknìte na "Create New".',
+    11 => 'Správa odkazu',
+    12 => 'Pro zmenu nebo vymazání odkazu, kliknete na ikonu editace.  Pro vytvorení nového odkazu, kliknete na "Create New".',
     14 => 'Kategorie odkazu',
-    16 => 'Pøístup byl zakázán',
-    17 => "Pokoou¹íte se pou¾ít odkaz, na který nemáte dostateèná práva. Vá¹ pokus byl zalogován. Prosím, <a href=\"{$_CONF['site_admin_url']}/plugins/links/index.php\">na stránku pro administraci</a>.",
+    16 => 'Prístup byl zakázán',
+    17 => "Pokooušíte se použít odkaz, na který nemáte dostatecná práva. Váš pokus byl zalogován. Prosím, <a href=\"{$_CONF['site_admin_url']}/plugins/links/index.php\">na stránku pro administraci</a>.",
     20 => 'Pokud jiná, specifikuj',
-    21 => 'ulo¾it',
+    21 => 'uložit',
     22 => 'storno',
     23 => 'vymazat',
-    24 => 'Link not found',
+    24 => 'Odkaz nenalezen',
     25 => 'The link you selected for editing could not be found.',
     26 => 'Validate Links',
     27 => 'HTML Status',
     28 => 'Edit category',
     29 => 'Enter or edit the details below.',
-    30 => 'Category',
-    31 => 'Description',
+    30 => 'Kategorie',
+    31 => 'Popis',
     32 => 'Category ID',
     33 => 'Topic',
     34 => 'Parent',
-    35 => 'All',
-    40 => 'Edit this category',
-    41 => 'Create child category',
-    42 => 'Delete this category',
+    35 => 'Vše',
+    40 => 'Oprav kategorii',
+    41 => 'Pridej',
+    42 => 'Vymaž kategorii',
     43 => 'Site categories',
-    44 => 'Add&nbsp;child',
-    46 => 'User %s tried to delete a category to which they do not have access rights',
-    50 => 'List categories',
-    51 => 'New link',
-    52 => 'New category',
-    53 => 'List links',
-    54 => 'Category Manager',
+    44 => 'Pridej podkategorii',
+    46 => 'Uživatel %s se pokusil vymazat kategorii, aniž by k tomu mel práva',
+    50 => 'Výpis kategorií',
+    51 => 'Nový odkaz',
+    52 => 'Nová korenová kategorie',
+    53 => 'Admin odkazu',
+    54 => 'Admin kategorií',
     55 => 'Edit categories below. Note that you cannot delete a category that contains other categories or links - you should delete these first, or move them to another category.',
     56 => 'Category Editor',
     57 => 'Not validated yet',
     58 => 'Validate now',
-    59 => '<p>To validate all links displayed, please click on the "Validate now" link below. Please note that this might take some time depending on the amount of links displayed.</p>',
-    60 => 'User %s tried illegally to edit category %s.'
+    59 => '<br /><br />To validate all links displayed, please click on the "Validate now" link below. The validation process may take some time depending on the amount of links displayed.',
+    60 => 'User %s tried illegally to edit category %s.',
+    61 => 'Owner',
+    62 => 'Last Updated',
+    63 => 'Are you sure you want to delete this link?',
+    64 => 'Are you sure you want to delete this category?',
+    65 => 'Moderate Link',
 );
 
 
@@ -240,7 +252,8 @@ $LANG_confignames['links'] = array(
     'show_category_descriptions' => 'Show Category Description?',
     'root' => 'ID of Root Category',
     'default_permissions' => 'Link Default Permissions',
-    'target_blank' => 'Open Links in New Window'
+    'target_blank' => 'Open Links in New Window',
+    'displayblocks' => 'Display glFusion Blocks',
 );
 
 $LANG_configsubgroups['links'] = array(
@@ -258,7 +271,8 @@ $LANG_configselects['links'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => true, 'False' => false),
     9 => array('Forward to Linked Site' => 'item', 'Display Admin List' => 'list', 'Display Public List' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3)
+    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
+    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3),
 );
 
 ?>

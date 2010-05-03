@@ -148,7 +148,8 @@
         <td  style="width:50%;" class="mgAdminAlignRight">{lang_link_to_media}</td>
         <td class="mgAdminAlignLeft">
           <input type="radio" name="at_enable_link" value="0" {at_enable_link_no_checked}{xhtml}>{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="at_enable_link" value="1" {at_enable_link_yes_checked}{xhtml}>{lang_yes}
+          <input type="radio" name="at_enable_link" value="1" {at_enable_link_yes_checked}{xhtml}>{lang_yes}&nbsp;&nbsp;
+          <input type="radio" name="at_enable_link" value="2" {at_enable_link_lb_checked}{xhtml}>{$LANG_MG01['lightbox']}
         </td>
       </tr>
       <tr class="pluginRow2">

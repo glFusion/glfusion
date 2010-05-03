@@ -253,7 +253,7 @@ function TRACKBACK_sendPingbacks($type, $id)
             if (empty ($result)) {
                 $result = '<b>' . $LANG_TRB['pingback_success'] . '</b>';
             } else if ($result != $LANG_TRB['no_pingback_url']) {
-                $result = '<span class="glf-warning-small">' . $result . '</span>';
+                $result = '<span class="warningsmall">' . $result . '</span>';
                 // TBD: $resend = '...';
             }
             $parts = parse_url($URLtoPing);
@@ -350,7 +350,7 @@ function TRACKBACK_sendPings($type, $id)
             if (empty ($pinged)) {
                 $pinged = '<b>' . $LANG_TRB['ping_success'] . '</b>';
             } else {
-                $pinged = '<span class="glf-warning-small">' . $pinged . '</span>';
+                $pinged = '<span class="warningsmall">' . $pinged . '</span>';
             }
 
             $template->set_var('service_name', $A['name']);
@@ -964,7 +964,7 @@ if (($mode == 'delete') && SEC_checkToken()) {
             $display .= TRACKBACK_edit();
         } else {
             $message = '<p>' . $LANG_TRB['send_error_details']
-                     . '<br' . XHTML . '><span class="glf-warning-small">'
+                     . '<br' . XHTML . '><span class="warningsmall">'
                      . htmlspecialchars($result,ENT_COMPAT,COM_getEncodingt()) . '</span></p>';
             $display .= TRACKBACK_showMessage($LANG_TRB['send_error'], $message);
 

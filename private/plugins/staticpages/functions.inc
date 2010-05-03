@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -153,7 +153,7 @@ function plugin_displaycomment_staticpages ($id, $cid, $title, $order, $format, 
 
     $retval = '';
 
-    $sql = "SELECT COUNT(*) AS count, commentcode, owner_id, group_id, perm_owner, "
+    $sql = "SELECT COUNT(*) AS count, commentcode, sp_uid,owner_id, group_id, perm_owner, "
         . "perm_group, perm_members, perm_anon "
         . "FROM {$_TABLES['staticpage']} "
         . "WHERE (sp_id = '".DB_escapeString($id)."') AND (sp_status = 1)" . COM_getPermSQL('AND')
@@ -169,7 +169,7 @@ function plugin_displaycomment_staticpages ($id, $cid, $title, $order, $format, 
                     $A['perm_anon']) == 3));
         $retval .= CMT_userComments ($id, $title, 'staticpages', $order, $format,
                                      $cid, $page, $view, $delete_option,
-                                     $A['commentcode']);
+                                     $A['commentcode'],$A['sp_uid']);
     } else {
         $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',
                         COM_getBlockTemplate ('_msg_block', 'header'))
@@ -183,7 +183,6 @@ function plugin_displaycomment_staticpages ($id, $cid, $title, $order, $format, 
 /**
  * Static Page saves a comment
  *
- * @param   string  $type   Plugin to save comment
  * @param   string  $title  comment title
  * @param   string  $comment comment text
  * @param   string  $id     Item id to which $cid belongs
@@ -242,15 +241,17 @@ function plugin_deletecomment_staticpages($cid, $id)
             $A['group_id'], $A['perm_owner'], $A['perm_group'],
             $A['perm_members'], $A['perm_anon']) == 3) {
         CMT_deleteComment($cid, $id, 'staticpages');
-        $retval .= COM_refresh ($_CONF['site_url']
-                                 . "/staticpages/index.php?page=$id");
+        $url = COM_buildUrl($_CONF['site_url'] . '/staticpages/index.php?page='
+                            . $id);
+        $retval .= COM_refresh($url);
     } else {
         COM_errorLog ("User {$_USER['username']} (IP: {$_SERVER['REMOTE_ADDR']}) "
                     . "tried to illegally delete comment $cid from staticpage $id");
         $retval .= COM_refresh ($_CONF['site_url'] . '/index.php');
     }
     CACHE_remove_instance('whatsnew_');
-    return $retval;
+    echo $retval;
+    exit;
 }
 
 function plugin_getwhatsnewcomment_staticpages()
@@ -399,7 +400,7 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
 
         $spage->set_var ('commentbar', CMT_userComments($page, $A['sp_title'], 'staticpages',
                                     $comment_order, $comment_mode, 0, $cmt_page, false,
-                                    $delete_option, $A['commentcode']));
+                                    $delete_option, $A['commentcode'],$A['sp_uid']));
     }
 
 

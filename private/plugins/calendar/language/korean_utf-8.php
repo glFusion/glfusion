@@ -90,7 +90,8 @@ $LANG_CAL_1 = array(
     48 => '검색수',
     49 => '이 사이트에는 이벤트가 없거나, 아무도 이벤트를 클릭한 적 없거나 어느 쪽일 것으로 생각됩니다。',
     50 => '이벤트',
-    51 => '삭제'
+    51 => '삭제',
+    52 => 'Submitted By'
 );
 
 $_LANG_CAL_SEARCH = array(
@@ -170,7 +171,10 @@ $LANG_CAL_ADMIN = array(
     33 => 'No events selected for deletion',
     34 => 'Event ID',
     35 => 'could not be deleted',
-    36 => 'Sucessfully deleted'
+    36 => 'Sucessfully deleted',
+    37 => 'Moderate Event',
+    38 => 'Batch Event Admin',
+    39 => 'Event Admin'
 );
 
 $LANG_CAL_MESSAGE = array(

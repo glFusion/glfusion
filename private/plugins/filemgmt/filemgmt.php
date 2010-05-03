@@ -45,7 +45,7 @@ global $_DB_table_prefix, $_TABLES;
 $CONF_FM['pi_name']            = 'filemgmt';
 $CONF_FM['pi_display_name']    = 'FileMgmt';
 $CONF_FM['pi_version']         = '1.7.7';
-$CONF_FM['gl_version']         = '1.1.9';
+$CONF_FM['gl_version']         = '1.2.0';
 $CONF_FM['pi_url']             = 'http://www.glfusion.org/';
 
 // Database Tables

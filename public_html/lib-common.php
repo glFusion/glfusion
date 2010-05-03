@@ -58,10 +58,10 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.2.0.svn');
+    define('GVERSION', '2.0.0');
 }
 
-define('PATCHLEVEL','');
+define('PATCHLEVEL','.svn');
 
 //define('DEMO_MODE',true);
 
@@ -123,6 +123,14 @@ $_CONF = $config->get_config('Core');
 require_once $_CONF['path_system'].'classes/message.class.php';
 $messageHandle =& messageHandler::getInstance();
 
+if ( !isset($_CONF['default_photo']) || $_CONF['default_photo'] == '' ) {
+    $_CONF['default_photo'] = $_CONF['site_url'].'/images/userphotos/default.jpg';
+}
+
+if ( !isset($_SYSTEM['admin_session']) ) {
+    $_SYSTEM['admin_session'] = 1200;
+}
+
 // Before we do anything else, check to ensure site is enabled
 
 if (isset($_SYSTEM['site_enabled']) && !$_SYSTEM['site_enabled']) {
@@ -151,6 +159,9 @@ require_once $_CONF['path_system'] . 'classes/sanitize.class.php';
 $inputHandler =& sanitize::getInstance();
 
 require_once $_CONF['path_system'] . 'lib-io.php';
+list($usec, $sec) = explode(' ', microtime());
+mt_srand( (10000000000 * (float)$usec) ^ (float)$sec );
+
 // +--------------------------------------------------------------------------+
 // | Library Includes                                                         |
 // +--------------------------------------------------------------------------+
@@ -554,13 +565,12 @@ if (COM_isAnonUser() && isset($_SERVER['REMOTE_ADDR'])) {
     $tries = 0;
     do
     {
-        // Build a useless sess_id (needed for insert to work properly)
-        mt_srand(( double )microtime() * 1000000 );
-        $sess_id = mt_rand();
+        $sess_id = 0;
+        $md5_sessid = md5(mt_rand());
         $curtime = time();
 
         // Insert anonymous user session
-        $result = DB_query( "INSERT INTO {$_TABLES['sessions']} (sess_id, start_time, remote_ip, uid) VALUES ('$sess_id', '$curtime', '".DB_escapeString($_SERVER['REMOTE_ADDR'])."', 1)", 1 );
+        $result = DB_query( "INSERT INTO {$_TABLES['sessions']} (sess_id, start_time, remote_ip, uid,md5_sess_id) VALUES ('$sess_id', '$curtime', '".DB_escapeString($_SERVER['REMOTE_ADDR'])."', 1,'".DB_escapeString($md5_sessid)."')", 1 );
         $tries++;
     }
     while(( $result === false) && ( $tries < 5 ));
@@ -3006,7 +3016,7 @@ function COM_checkWords( $Message )
 {
     global $_CONF;
 
-    $EditedMessage = $Message;
+    $EditedMessage = ' '. $Message . ' ';
 
     if( $_CONF['censormode'] != 0 )
     {
@@ -3041,7 +3051,7 @@ function COM_checkWords( $Message )
         }
     }
 
-    return $EditedMessage;
+    return trim($EditedMessage);
 }
 
 
@@ -3250,8 +3260,8 @@ function COM_undoSpecialChars( $string )
 function COM_makesid()
 {
     $sid = date( 'YmdHis' );
-    srand(( double ) microtime() * 1000000 );
-    $sid .= rand( 0, 999 );
+//    srand(( double ) microtime() * 1000000 );
+    $sid .= mt_rand( 0, 999 );
 
     return $sid;
 }
@@ -3651,7 +3661,7 @@ function COM_showBlocks( $side, $topic='', $name='all' )
         }
         else
         {
-            $commonsql .= " AND (tid = 'all')";
+            $commonsql .= " AND (tid = 'all' OR tid = 'allnhp')";
         }
     }
 
@@ -4014,7 +4024,7 @@ function COM_allowedHTML( $permissions = 'story.edit', $list_only = false )
     {
         if( !$list_only )
         {
-            $retval .= '<span class="glf-warning-small">' . $LANG01[123] . '</span>, ';
+            $retval .= '<span class="warningsmall">' . $LANG01[123] . '</span>, ';
         }
 
     }
@@ -4022,12 +4032,12 @@ function COM_allowedHTML( $permissions = 'story.edit', $list_only = false )
     {
         if( !$list_only )
         {
-            $retval .= '<span class="glf-warning-small">' . $LANG01[31] . ' ';
+            $retval .= '<span class="warningsmall">' . $LANG01[31] . ' ';
         }
 
         $allow_page_break = true;
     }
-    $retval = '<span class="glf-warning-small">' . $LANG01[31] . ' ';
+    $retval = '<span class="warningsmall">' . $LANG01[31] . ' ';
 
     $retval .= '[code], [raw]';
 
@@ -6204,22 +6214,26 @@ function COM_isFrontpage()
     return !COM_onFrontpage();
 }
 
-/** Converts a number for output into a formatted number with thousands-
-*         separator, comma-separator and fixed decimals if necessary
+/**
+*   Converts a number for output into a formatted number with thousands-
+*   separator, comma-separator and fixed decimals if necessary
 *
-*        @param        float        $number        Number that will be formatted
-*        @return        string                        formatted number
+*   @param  float   $number     Number that will be formatted
+*   @param  integer $decimals   Optional number of decimals
+*   @return string              Formatted number
 */
-function COM_numberFormat( $number )
+function COM_numberFormat( $number, $decimals=-1 )
 {
     global $_CONF;
 
-    if( $number - floor( $number ) > 0 ) // number has decimals
-    {
+    if ($decimals != -1) {
+        // Specific number of decimals requested, could be zero
+        $dc = (int)$decimals;
+    } elseif( $number - floor( $number ) > 0 ) {
+        // Number has decimals, get the configured decimal count
         $dc = $_CONF['decimal_count'];
-    }
-    else
-    {
+    } else {
+        // Number has no decimals, and we don't care
         $dc = 0;
     }
     $ts = $_CONF['thousand_separator'];
@@ -6743,21 +6757,29 @@ function COM_truncateHTML ( $htmltext, $maxlen, $filler = '', $endchars = 0 )
 * @param    string  $text   the text string to truncate
 * @param    int     $maxlen max. number of characters in the truncated string
 * @param    string  $filler optional filler string, e.g. '...'
+* @param    boolean $tip    optional tooltip with untruncated text
+*
 * @return   string          truncated string
 *
 * @note The truncated string may be shorter but will never be longer than
 *       $maxlen characters, i.e. the $filler string is taken into account.
+*       if $tip is true, and text is truncated, the result is encapsulated in a
+*       span with title attribute set to the full text (hovertip effect)
+
 *
 */
-function COM_truncate( $text, $maxlen, $filler = '' )
+function COM_truncate( $text, $maxlen, $filler = '', $tip = false )
 {
     $newlen = $maxlen - MBYTE_strlen( $filler );
     $len = MBYTE_strlen( $text );
     if( $len > $maxlen ) {
-        $text = MBYTE_substr( $text, 0, $newlen ) . $filler;
+        $retval = ($tip) ? '<span title="' . $text . '">' : '';
+        $retval .= MBYTE_substr( $text, 0, $newlen ) . $filler;
+        $retval .= ($tip) ? '</span>' : '';
+        return $retval;
+    } else {
+        return $text;
     }
-
-    return $text;
 }
 
 /**
@@ -7471,16 +7493,15 @@ function css_out(){
             }
         }
     }
-
-    // Merge the default CSS with whatever is in custom ...
-    $files[] = $_CONF['path_layout'] . 'style.css';
     if ( file_exists($_CONF['path_layout'] .'custom/style.css') ) {
         $files[] = $_CONF['path_layout'] . 'custom/style.css';
+    } else {
+        $files[] = $_CONF['path_layout'] . 'style.css';
     }
-
-    $files[] = $_CONF['path_layout'] . 'style-colors.css';
     if ( file_exists($_CONF['path_layout'] .'custom/style-colors.css') ) {
         $files[] = $_CONF['path_layout'] . 'custom/style-colors.css';
+    } else {
+        $files[] = $_CONF['path_layout'] . 'style-colors.css';
     }
 
     /*
@@ -7778,6 +7799,40 @@ function js_cacheok($cache,$files){
         }
     }
     return true;
+}
+
+/**
+* Turn a piece of HTML into continuous(!) plain text
+*
+* This function removes HTML tags, line breaks, etc. and returns one long
+* line of text. This is useful for word counts (do an explode() on the result)
+* and for text excerpts.
+*
+* @param    string  $text   original text, including HTML and line breaks
+* @return   string          continuous plain text
+*
+*/
+function COM_getTextContent($text)
+{
+    // replace <br> with spaces so that Text<br>Text becomes two words
+    $text = preg_replace('/\<br(\s*)?\/?\>/i', ' ', $text);
+
+    // add extra space between tags, e.g. <p>Text</p><p>Text</p>
+    $text = str_replace('><', '> <', $text);
+
+    // only now remove all HTML tags
+    $text = strip_tags($text);
+
+    // replace all tabs, newlines, and carrriage returns with spaces
+    $text = str_replace(array("\011", "\012", "\015"), ' ', $text);
+
+    // replace entities with plain spaces
+    $text = str_replace(array('&#20;', '&#160;', '&nbsp;'), ' ', $text);
+
+    // collapse whitespace
+    $text = preg_replace('/\s\s+/', ' ', $text);
+
+    return trim($text);
 }
 css_out();
 js_out();

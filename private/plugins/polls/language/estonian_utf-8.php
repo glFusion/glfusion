@@ -109,7 +109,9 @@ $LANG25 = array(
     37 => 'Peida tulemused kuni küsitlus on avatud',
     38 => 'Kuni küsitlus on avatud, näevad  &tulemusi ainult omanik amp; root ',
     39 => 'Rubriiki näidatakse vaid siis, kui selles on üle ühe küsimuse.',
-    40 => 'Vaata kõiki sellele küsitlusele antud vastuseid'
+    40 => 'Vaata kõiki sellele küsitlusele antud vastuseid',
+    41 => 'Are you sure you want to delete this Poll?',
+    42 => 'Are you absolutely sure you want to delete this Poll?  All questions, answers and comments that are associated with this Poll will also be permanently deleted from the database.'
 );
 
 $PLG_polls_MESSAGE19 = 'Sinu küsitlus on edukalt salvestatud.';

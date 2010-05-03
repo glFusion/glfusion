@@ -113,7 +113,8 @@ $LANG_STATIC = array(
     'limit_results' => 'Beperk Resultaten',
     'search' => 'Zoek',
     'submit' => 'Opslaan',
-    'delete_confirm' => 'Weet u zeker dat u deze pagina wilt verwijderen?'
+    'delete_confirm' => 'Weet u zeker dat u deze pagina wilt verwijderen?',
+    'allnhp_topics' => 'All Topics (No Homepage)'
 );
 
 $PLG_staticpages_MESSAGE19 = '';

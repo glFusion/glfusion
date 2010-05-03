@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -458,6 +458,20 @@ function ST_createElement ( $menu_id ) {
         $sp_select = '';
     }
 
+    $topicCount = 0;
+    $topic_select = '<select id="topicname" name="topicname">' . LB;
+    $sql = "SELECT tid,topic FROM {$_TABLES['topics']} ORDER BY topic";
+    $result = DB_query($sql);
+    while (list ($tid, $topic) = DB_fetchArray($result)) {
+        $topic_select .= '<option value="' . $tid . '">' . $topic . '</option>' . LB;
+        $topicCount++;
+    }
+    $topic_select .= '</select>' . LB;
+
+    if ( $topicCount == 0 ) {
+        $topic_select = '';
+    }
+
     $type_select = '<select id="menutype" name="menutype">' . LB;
     while ( $types = current($LANG_ST_TYPES) ) {
         if ( $spCount == 0 && key($LANG_ST_TYPES) == 5 ) {
@@ -553,6 +567,7 @@ function ST_createElement ( $menu_id ) {
         'order_select'      => $order_select,
         'plugin_select'     => $plugin_select,
         'sp_select'         => $sp_select,
+        'topic_select'      => $topic_select,
         'glfunction_select' => $glfunction_select,
         'group_select'      => $group_select,
         'xhtml'             => XHTML,
@@ -608,6 +623,9 @@ function ST_saveNewMenuElement ( ) {
             break;
         case 7 :
             $E['element_subtype'] = COM_applyFilter($_POST['phpfunction']);
+            break;
+        case 9 :
+            $E['element_subtype'] = COM_applyFilter($_POST['topicname']);
             break;
         default :
             $E['element_subtype'] = '';
@@ -743,6 +761,14 @@ function ST_editElement( $menu_id, $mid ) {
     }
     $sp_select .= '</select>' . LB;
 
+    $topic_select = '<select id="topicname" name="topicname">' . LB;
+    $sql = "SELECT tid,topic FROM {$_TABLES['topics']} ORDER BY topic";
+    $result = DB_query($sql);
+    while (list ($tid, $topic) = DB_fetchArray($result)) {
+        $topic_select .= '<option value="' . $tid . '"' . ($stMenu[$menu_id]['elements'][$mid]->subtype == $tid ? ' selected="selected"' : '') . '>' . $topic . '</option>' . LB;
+    }
+    $topic_select .= '</select>' . LB;
+
     if ( $stMenu[$menu_id]['menu_type'] == 2 || $stMenu[$menu_id]['menu_type'] == 4 ) {
         $parent_select = '<input type="hidden" name="pid" id="pid" value="0"'.XHTML.'>'.$LANG_ST01['top_level'];
     } else {
@@ -816,6 +842,7 @@ function ST_editElement( $menu_id, $mid ) {
         'gl_select'         => $gl_select,
         'plugin_select'     => $plugin_select,
         'sp_select'         => $sp_select,
+        'topic_select'      => $topic_select,
         'glfunction_select' => $glfunction_select,
         'parent_select'     => $parent_select,
         'group_select'      => $group_select,
@@ -870,6 +897,9 @@ function ST_saveEditMenuElement ( ) {
             break;
         case 7 :
             $subtype = COM_applyFilter($_POST['phpfunction']);
+            break;
+        case 9 :
+            $subtype = COM_applyFIlter($_POST['topicname']);
             break;
         default :
             $subtype = '';

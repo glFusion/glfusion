@@ -107,7 +107,9 @@ $LANG25 = array(
     37 => 'Verberg de resultaten zolang er gestemd kan worden op een enquete',
     38 => 'Alleen de eigenaar &amp; root kan de resultaten zien zolang er op de enquete kan worden gestemd',
     39 => 'Het onderwerp wordt alleen getoond als er meer dan 1 vraag is.',
-    40 => 'Bekijk alle antwoorden'
+    40 => 'Bekijk alle antwoorden',
+    41 => 'Are you sure you want to delete this Poll?',
+    42 => 'Are you absolutely sure you want to delete this Poll?  All questions, answers and comments that are associated with this Poll will also be permanently deleted from the database.'
 );
 
 $PLG_polls_MESSAGE19 = 'Uw Enquete is met succes opgeslagen.';

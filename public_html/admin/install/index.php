@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric Warren            eric AT glfusion DOT org                          |
@@ -38,7 +38,7 @@
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
 if (!defined('GVERSION')) {
-    define('GVERSION', '1.2.0.svn');
+    define('GVERSION', '2.0.0');
 }
 
 define('SESSION_EXPIRED',           1);
@@ -1719,6 +1719,7 @@ function INST_doSiteUpgrade()
                 $c->add('comment_edittime',1800,'text',4,21,NULL,1690,TRUE);
                 $c->add('article_comment_close_days',30,'text',4,21,NULL,1700,TRUE);
                 $c->add('comment_close_rec_stories',0,'text',4,21,NULL,1710,TRUE);
+                $c->add('image_lib','gdlib','select',5,22,10,1450,TRUE);
                 $c->add('jhead_enabled',0,'select',5,22,0,1480,TRUE);
                 $c->add('path_to_jhead','','text',5,22,NULL,1490,TRUE);
                 $c->add('jpegtrans_enabled',0,'select',5,22,0,1500,TRUE);

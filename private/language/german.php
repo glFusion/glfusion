@@ -445,7 +445,22 @@ $LANG04 = array(
     159 => 'Diese E-Mail wurde automatisch generiert. Bitte nicht auf diese E-Mail antworten.',
     160 => 'Online',
     161 => 'Passwortstärke',
-    162 => 'The username contains invalid characters ( < > " % & * / \ ) are not allowed'
+    162 => 'The username contains invalid characters ( < > " % & * / \ ) are not allowed',
+    163 => 'Remote User',
+    164 => 'Remote Username',
+    165 => 'Remote Service',
+    166 => 'Remote User Info',
+    167 => 'An activation eMail will be sent to your eMail address.',
+    168 => 'Welcome to ',
+    169 => 'Request New activation eMail',
+    170 => 'Please keep this eMail for your records. Your account information is as follows:',
+    171 => 'Site URL',
+    172 => 'Please visit the following link in order to activate your account (the activation link is only valid for %d hours):',
+    173 => 'Your password has been securely stored in our database and cannot be retrieved. In the event that it is forgotten, you will be able to reset it using the eMail address associated with your account.',
+    174 => 'Thank you for registering.',
+    175 => 'To request a new activation token, please enter your username and password below and a new activation eMail will be sent to you.',
+    176 => 'Confirm Password',
+    177 => 'Your account is currently awaiting verification.<br />You will not be able to login until your account has been verified by following the link in the activation eMail.'
 );
 
 ###############################################################################
@@ -785,7 +800,7 @@ $LANG21 = array(
     41 => 'rechts',
     42 => 'Für glFusion-Standard-Blöcke muss ein Block-Titel und die Block-Reihenfolge angegeben werden.',
     43 => 'Nur auf der Startseite',
-    44 => '',
+    44 => 'All Except Homepage',
     45 => "Du hast keine Zugriffsrechte für diesen Block. Dieser Zugriffsversuch wurde protokolliert. <a href=\"{$_CONF['site_admin_url']}/block.php\">Zurück zum Administrator-Menü</a>.",
     46 => 'Verschieben',
     47 => '',
@@ -905,7 +920,10 @@ $LANG24 = array(
     85 => 'Alles anzeigen',
     86 => 'Erweiterter Editor',
     87 => 'Artikel-Statistik',
-    88 => 'Format im Wiki-Stil '
+    88 => 'Format im Wiki-Stil ',
+    89 => 'Are you sure you want to delete this Story?',
+    90 => 'Moderate Story',
+    91 => 'Moderate Draft Story'
 );
 
 ###############################################################################
@@ -953,7 +971,21 @@ $LANG27 = array(
     39 => 'Archive Topic?',
     40 => 'Are you sure you want to delete this topic?',
     41 => 'Display After',
-    42 => 'Topic ID cannont contain spaces'
+    42 => 'Topic ID cannont contain spaces',
+    43 => 'Associated Objects',
+    44 => 'Stories',
+    45 => 'Draft Stories',
+    46 => 'Submitted Stories',
+    47 => 'Images',
+    48 => 'Comments',
+    49 => 'Trackbacks',
+    50 => 'Blocks',
+    51 => 'Feeds',
+    52 => 'Story Admin',
+    53 => 'Submissions',
+    54 => 'Block Admin',
+    55 => 'Syndication Admin',
+    56 => 'Press Cancel and then Edit this topic to view details including the total number of objects in the database that are associated with this topic.'
 );
 
 ###############################################################################
@@ -975,7 +1007,7 @@ $LANG28 = array(
     13 => 'SecLev',
     14 => 'Reg. Datum',
     15 => 'New User',
-    16 => '',
+    16 => 'Awaiting User Verification',
     17 => '',
     18 => '',
     19 => '',
@@ -1062,7 +1094,15 @@ $LANG28 = array(
     100 => 'eMail Site Login Reminders to the selected users?',
     101 => 'Group',
     102 => 'users',
-    103 => 'Batch User Administration'
+    103 => 'Batch User Administration',
+    104 => 'Are you sure you want to delete this User?',
+    105 => 'Status',
+    106 => 'Queued',
+    107 => 'Verification',
+    108 => 'View Profile',
+    109 => 'Are you absolutely sure you want to delete this User?  Deleting this User will delete some of the content that has been created by this User, and the remainder will be assigned to the Anonymous User or Site Administrator!  Press Cancel and then click on the Username to view the User Profile to see details.',
+    110 => 'Are you absolutely sure you want to delete ALL selected Users?  Deleting these Users will delete some of the content that has been created by these Users, and the remainder will be assigned to the Anonymous User or Site Administrator!  Press Cancel and then click on the Username to view the User Profile to see details.',
+    111 => 'Send eMail (Local)'
 );
 
 ###############################################################################
@@ -1092,6 +1132,12 @@ $LANG29 = array(
     41 => 'Eingesendete Kommentare',
     42 => 'Benutzername',
     43 => 'Kommentare automatisch veröffentlichen?',
+    44 => 'Approve all selected items',
+    45 => 'Are you sure you want to approve the selected item(s)?',
+    46 => 'Submitted By',
+    47 => 'Registered On',
+    48 => 'Are you sure you want to approve this submission?',
+    49 => 'Are you sure you want to delete this submission?',
     'info' => 'Einsendungen zustimmen oder ablehnen'
 );
 
@@ -1209,7 +1255,16 @@ $LANG32 = array(
     72 => 'Eine Version des Plugins ist schon installiert, aber abgeschaltet. glFusion kann keine abgeschalteten Plugins upgraden. Bitte das Plugin wieder einschalten und noch mal hochladen.',
     73 => 'Plugin Autoinstaller',
     74 => 'Kann die XML Beschreibungsdatei des Plugins nicht finden.',
-    75 => 'Kann %s nicht nach %s kopieren<br />'
+    75 => 'Kann %s nicht nach %s kopieren<br />',
+    76 => 'Are you sure you want to delete (uninstall) this Plugin?',
+    77 => 'Are you sure you want to update this Plugin?',
+    78 => 'Control',
+    79 => 'Unplug',
+    80 => 'Are you sure you want to install this Plugin?',
+    81 => 'Maintainer',
+    82 => 'Requires',
+    83 => 'Info',
+    84 => 'Bundled'
 );
 
 ###############################################################################
@@ -1274,7 +1329,7 @@ $LANG33 = array(
 $MESSAGE = array(
     1 => "Dein Passwort sollte in Kürze per E-Mail bei Dir eintreffen. Bitte beachte die Hinweise in der E-Mail. Danke, dass Du Dich bei {$_CONF['site_name']} registriert hast.",
     2 => "Danke für Deinen Beitrag zu {$_CONF['site_name']}. Dein Artikel wurde an unser Team weitergeleitet. Wenn er akzeptiert wird, wird er bald auf dieser Webseite für alle Besucher zu lesen sein.",
-    3 => '',
+    3 => "A verification eMail has been sent to you and should arrive momentarily. Please follow the directions in the message and we thank-you for using {$_CONF['site_name']}",
     4 => '',
     5 => 'Dein Benutzer-Profil wurde gespeichert.',
     6 => 'Deine Einstellungen wurden gespeichert.',
@@ -1384,7 +1439,13 @@ $MESSAGE = array(
     508 => 'Email address does not match the confirmation email address.',
     509 => 'Error creating new user account - please check the error log for details.',
     510 => 'Default settings have been applied to all users.',
-    511 => 'Are you sure you want to delete this group?'
+    511 => '',
+    512 => 'Username contains invalid characters " < > / \ $ % * are not allowed',
+    513 => 'Remote username cannot be blank.',
+    514 => 'Remote service cannot be empty.',
+    515 => 'Thank you, your account has now been activated.',
+    516 => 'Your activation token has expired.',
+    517 => 'This account has already been activated, please login below.'
 );
 
 ###############################################################################
@@ -1558,7 +1619,9 @@ $LANG_ACCESS = array(
     'admingroup' => 'Admin',
     'defaultgroup' => 'Default',
     'editinguser' => 'Editing User: ',
-    'createnewuser' => 'Creating New Account'
+    'createnewuser' => 'Creating New Account',
+    'confirm1' => 'Are you sure you want to delete this group?',
+    'confirm2' => 'Are you absolutely sure you want to delete this group?  This will affect any users or groups that are associated with this group!  Press Cancel and then Edit this group if you wish to view the details.'
 );
 
 ###############################################################################
@@ -1807,7 +1870,11 @@ $LANG_ADMIN = array(
     'disable' => 'Disable',
     'admin_users' => 'User Admin',
     'admin_groups' => 'Group Admin',
-    'authenticate' => 'Authenticate'
+    'authenticate' => 'Authenticate',
+    'select' => 'Select',
+    'name' => 'Name',
+    'submissions' => 'Submissions',
+    'moderate' => 'Save & Approve'
 );
 
 ###############################################################################
@@ -1820,7 +1887,8 @@ $LANG_WIDGETS = array(
     'translate' => 'Auf die Flagge klicken für eine automatisch Übersetzung dieses Auftritts in die jeweilige Landessprache',
     'prev' => 'vorherige',
     'next' => 'nächste',
-    'playpause' => 'Anspielen/Pause'
+    'playpause' => 'Anspielen/Pause',
+    'noOpera' => 'This script does not automatically resize the iframe in the Opera browser.'
 );
 
 # Localisation of the texts for the various drop-down menus that are actually
@@ -2134,7 +2202,10 @@ $LANG_confignames['Core'] = array(
     'rating_enabled' => 'Enable Rating',
     'user_reg_fullname' => 'Full Name option on registration form?',
     'session_ip_check' => 'Session IP Validation',
-    'article_comment_close_enabled' => 'Automatically close comments (default)'
+    'article_comment_close_enabled' => 'Automatically close comments (default)',
+    'registration_type' => 'Registration Type',
+    'comment_postmode' => 'Comment Postmode',
+    'comment_editor' => 'Comment Editor'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2221,7 +2292,9 @@ $LANG_configselects['Core'] = array(
     23 => array('Deaktiviert' => 0, 'Aktiviert (Exakt. Übereinstimmung)' => 1, 'Aktiviert (Wortanfag)' => 2, 'Aktiviert (Wortfragment)' => 3),
     24 => array('Disabled' => 0, 'Logged-in Users' => 1, 'Everyone' => 2),
     25 => array('No' => 0, 'Optional' => 1, 'Required' => 2),
-    26 => array('None' => 0, 'A.B' => 1, 'A.B.C' => 2, 'All' => 3)
+    26 => array('None' => 0, 'A.B' => 1, 'A.B.C' => 2, 'All' => 3),
+    27 => array('Generate Password' => 0, 'User Enters Password' => 1),
+    28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1)
 );
 
 ?>

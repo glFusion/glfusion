@@ -116,7 +116,7 @@ function links_list($message)
         $result = DB_query("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['linkcategories']} WHERE cid='{$cat}'");
         $A = DB_fetchArray($result);
         if (SEC_hasAccess ($A['owner_id'], $A['group_id'], $A['perm_owner'], $A['perm_group'], $A['perm_members'], $A['perm_anon']) < 2) {
-            $display .= LINKS_siteHeader ('menu', $page_title);
+            $display .= LINKS_siteHeader ($page_title);
             $display .= COM_showMessage (5, 'links');
             $display .= LINKS_siteFooter ();
             echo $display;
@@ -124,7 +124,7 @@ function links_list($message)
         }
     }
 
-    $display .= LINKS_siteHeader ('menu', $page_title);
+    $display .= LINKS_siteHeader ($page_title);
 
     if (is_array($message) && !empty($message[0])) {
         $display .= COM_startBlock($message[0], '',
@@ -382,7 +382,7 @@ function prepare_link_item ($A, &$template)
             $A['perm_group'], $A['perm_members'], $A['perm_anon']) == 3) &&
             SEC_hasRights ('links.edit')) {
         $editurl = $_CONF['site_admin_url']
-                 . '/plugins/links/index.php?mode=edit&amp;lid=' . $A['lid'];
+                 . '/plugins/links/index.php?edit=x&amp;lid=' . $A['lid'];
         $template->set_var ('link_edit', COM_createLink($LANG_ADMIN['edit'],$editurl));
         $edit_icon = "<img src=\"{$_CONF['layout_url']}/images/edit.$_IMAGE_TYPE\" "
             . "alt=\"{$LANG_ADMIN['edit']}\" title=\"{$LANG_ADMIN['edit']}\"" . XHTML . ">";
@@ -408,7 +408,7 @@ $message = array();
 if ( $mode == 'submit' ) {
     if (COM_isAnonUser() &&
         (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {
-        $display .= LINKS_siteHeader ('menu', $LANG_LINKS[114]);
+        $display .= LINKS_siteHeader ($LANG_LINKS[114]);
         $display .= COM_startBlock ($LANG_LOGIN[1], '',
                                     COM_getBlockTemplate ('_msg_blockx', 'header'));
         $login = new Template ($_CONF['path_layout'] . 'submit');
@@ -430,7 +430,7 @@ if ( $mode == 'submit' ) {
     if (SEC_hasRights ("links.edit") ||
         SEC_hasRights ("links.admin"))  {
         echo COM_refresh ($_CONF['site_admin_url']
-                . "/plugins/links/index.php?mode=edit");
+                . "/plugins/links/index.php?edit=x");
         exit;
     }
 
@@ -487,7 +487,7 @@ if (($mode == 'report') && (isset($_USER['uid']) && ($_USER['uid'] > 1))) {
         list($url, $title) = DB_fetchArray($result);
 
         $editurl = $_CONF['site_admin_url']
-                 . '/plugins/links/index.php?mode=edit&lid=' . $lid;
+                 . '/plugins/links/index.php?edit=x&lid=' . $lid;
         $msg = $LANG_LINKS[119] . LB . LB . "$title, <$url>". LB . LB
              .  $LANG_LINKS[120] . LB . '<' . $editurl . '>' . LB . LB
              .  $LANG_LINKS[121] . $_USER['username'] . ', IP: '
@@ -501,7 +501,7 @@ if (($mode == 'report') && (isset($_USER['uid']) && ($_USER['uid'] > 1))) {
 
 if (COM_isAnonUser() &&
     (($_CONF['loginrequired'] == 1) || ($_LI_CONF['linksloginrequired'] == 1))) {
-    $display .= LINKS_siteHeader ('menu', $LANG_LINKS[114]);
+    $display .= LINKS_siteHeader ( $LANG_LINKS[114]);
     $display .= COM_startBlock ($LANG_LOGIN[1], '',
                                 COM_getBlockTemplate ('_msg_block', 'header'));
     $login = new Template ($_CONF['path_layout'] . 'submit');

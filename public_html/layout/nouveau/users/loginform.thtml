@@ -7,10 +7,10 @@
             <img class="floatleft" style="width:128px;" src="{layout_url}/images/lock.png" alt=""{xhtml}>
             <p style="text-align:right;">
                 <b><label for="loginname">{lang_username}:</label></b>&nbsp;&nbsp;<input type="text" size="25" name="loginname" value="{loginname}" id="loginname" style="width:12em;"{xhtml}><br{xhtml}>
-                {services}
             </p>
             <p style="text-align:right;">
                 <b><label for="passwd">{lang_password}:</label></b>&nbsp;&nbsp;<input type="password" size="25" name="passwd" id="passwd" style="width:12em;"{xhtml}><br{xhtml}>
+                {services}
             </p>
             <p style="text-align:right;">
                 <input style="margin-top:.5em;" type="submit" value="{lang_login}"{xhtml}>
@@ -20,6 +20,9 @@
             </p>
             <p style="text-align:right;">
                 <a href="{site_url}/users.php?mode=getpassword" rel="nofollow">{lang_forgetpassword}</a>
+            </p>
+            <p style="text-align:right;">
+                <a href="{site_url}/users.php?mode=getnewtoken" rel="nofollow">{lang_verification}</a>
             </p>
             <p>
               &nbsp;

@@ -88,7 +88,8 @@ $LANG_CAL_1 = array(
     48 => 'Aangekondigd',
     49 => 'Er zijn geen gebeurtenissen of ze worden door niemand gelezen.',
     50 => 'Gebeurtenissen',
-    51 => 'Wissen'
+    51 => 'Wissen',
+    52 => 'Submitted By'
 );
 
 $_LANG_CAL_SEARCH = array(
@@ -168,7 +169,10 @@ $LANG_CAL_ADMIN = array(
     33 => 'No events selected for deletion',
     34 => 'Event ID',
     35 => 'could not be deleted',
-    36 => 'Sucessfully deleted'
+    36 => 'Sucessfully deleted',
+    37 => 'Moderate Event',
+    38 => 'Batch Event Admin',
+    39 => 'Event Admin'
 );
 
 $LANG_CAL_MESSAGE = array(

@@ -229,6 +229,7 @@ function install_config($site_url)
 
     $c->add('fs_user_submission', NULL, 'fieldset', 4, 19, NULL, 0, TRUE);
     $c->add('usersubmission',0,'select',4,19,0,780,TRUE);
+    $c->add('registration_type',0,'select',4,19,27,785,TRUE);
     $c->add('allow_domains','','text',4,19,NULL,960,TRUE);
     $c->add('disallow_domains','','text',4,19,NULL,970,TRUE);
 
@@ -245,13 +246,15 @@ function install_config($site_url)
     $c->add('fs_comments', NULL, 'fieldset', 4, 21, NULL, 0, TRUE);
     $c->add('commentspeedlimit',45,'text',4,21,NULL,1640,TRUE);
     $c->add('comment_limit',100,'text',4,21,NULL,1650,TRUE);
-    $c->add('comment_mode','threaded','select',4,21,11,1660,TRUE);
+    $c->add('comment_mode','nested','select',4,21,11,1660,TRUE);
     $c->add('comment_code',0,'select',4,21,17,1670,TRUE);
     $c->add('comment_edit',0,'select',4,21,0,1680,TRUE);
     $c->add('comment_edittime',1800,'text',4,21,NULL,1690,TRUE);
-    $c->add('article_comment_close_enabled',0,'select',4,21,0,1695,TRUE);
-    $c->add('article_comment_close_days',30,'text',4,21,NULL,1700,TRUE);
-    $c->add('comment_close_rec_stories',0,'text',4,21,NULL,1710,TRUE);
+    $c->add('comment_postmode','plaintext','select',4,21,5,1695,TRUE);
+    $c->add('comment_editor',0,'select',4,21,28,1700,TRUE);
+    $c->add('article_comment_close_enabled',0,'select',4,21,0,1705,TRUE);
+    $c->add('article_comment_close_days',30,'text',4,21,NULL,1710,TRUE);
+    $c->add('comment_close_rec_stories',0,'text',4,21,NULL,1715,TRUE);
 
     // Subgroup: Images
     $c->add('sg_images', NULL, 'subgroup', 5, 0, NULL, 0, TRUE);
@@ -331,7 +334,7 @@ function install_config($site_url)
     $c->add('cookie_theme','glf_theme','text',7,30,NULL,560,TRUE);
     $c->add('cookie_language','glf_language','text',7,30,NULL,570,TRUE);
     $c->add('cookie_tzid','glf_timezone','text',7,30,NULL,575,TRUE);
-    $c->add('cookie_ip',0,'select',7,30,0,580,TRUE);
+//    $c->add('cookie_ip',0,'select',7,30,0,580,TRUE);
     $c->add('default_perm_cookie_timeout',28800,'text',7,30,NULL,590,TRUE);
     $c->add('session_cookie_timeout',7200,'text',7,30,NULL,600,TRUE);
     $c->add('cookie_path','/','text',7,30,NULL,610,TRUE);

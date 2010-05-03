@@ -136,7 +136,7 @@ function _mg_gr_login( $loginname, $passwd ) {
         DB_change($_TABLES['users'],'pwrequestid',"NULL",'uid',intval($uid));
         $userdata = SESS_getUserDataFromId($uid);
         $_USER=$userdata;
-        $sessid = SESS_newSession($_USER['uid'], $_SERVER['REMOTE_ADDR'], $_CONF['session_cookie_timeout'], $_CONF['cookie_ip']);
+        $sessid = SESS_newSession($_USER['uid'], $_SERVER['REMOTE_ADDR'], $_CONF['session_cookie_timeout']);
         SESS_setSessionCookie($sessid, $_CONF['session_cookie_timeout'], $_CONF['cookie_session'], $_CONF['cookie_path'], $_CONF['cookiedomain'], $_CONF['cookiesecure']);
         PLG_loginUser ($_USER['uid']);
         // Now that we have users data see if their theme cookie is set.

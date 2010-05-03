@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
+// | Copyright (C) 2009-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -76,6 +76,7 @@ define('USER_ACCOUNT_DISABLED', 0); // Account is banned/disabled
 define('USER_ACCOUNT_AWAITING_ACTIVATION', 1); // Account awaiting user to login.
 define('USER_ACCOUNT_AWAITING_APPROVAL', 2); // Account awaiting moderator approval
 define('USER_ACCOUNT_ACTIVE', 3); // active account
+define('USER_ACCOUNT_AWAITING_VERIFICATION', 4); // Account waiting for user to complete verification
 
 /* Constant for Security Token */
 if (!defined('CSRF_TOKEN')) {
@@ -237,7 +238,7 @@ function SEC_inGroup($grp_to_verify,$uid='',$cur_grp_id='')
         }
     }
 
-    if ( (COM_isAnonUser() ) || (isset($_USER['uid']) && $uid == $_USER['uid'])) {
+    if ( (isset($_USER['uid']) && $uid == $_USER['uid'])) {
         if (empty ($_GROUPS)) {
             $_GROUPS = SEC_getUserGroups ($uid);
         }
@@ -245,7 +246,6 @@ function SEC_inGroup($grp_to_verify,$uid='',$cur_grp_id='')
     } else {
         $groups = SEC_getUserGroups ($uid);
     }
-
     if (is_numeric($grp_to_verify)) {
         if (in_array($grp_to_verify, $groups)) {
            return true;
@@ -285,6 +285,20 @@ function SEC_isModerator()
     // So, let's return if they're a plugin moderator
 
     return PLG_isModerator();
+}
+
+/**
+* Determines if current user is an Admin of any kind
+*
+* Checks to see if this user is a administrator for any of the GL features OR
+* GL plugins
+*
+* @return   boolean     returns true if user has any admin rights
+*
+*/
+function SEC_isAdmin()
+{
+    return SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR') OR (count(PLG_getAdminOptions()) > 0) OR SEC_inGroup('Root');
 }
 
 /**
@@ -515,7 +529,7 @@ function SEC_getUserPermissions($grp_id='',$uid='')
         }
     }
 
-    if ((empty ($_USER['uid']) && ($uid == 1)) || ($uid == $_USER['uid'])) {
+    if ( (isset($_USER['uid']) && $uid == $_USER['uid'])) {
         if (empty ($_GROUPS)) {
             $_GROUPS = SEC_getUserGroups ($uid);
         }
@@ -671,7 +685,7 @@ function SEC_getFeatureGroup ($feature, $uid = '')
         }
     }
 
-    if ((empty ($_USER['uid']) && ($uid == 1)) || ($uid == $_USER['uid'])) {
+    if ( (isset($_USER['uid']) && $uid == $_USER['uid'])) {
         if (empty ($_GROUPS)) {
             $_GROUPS = SEC_getUserGroups ($uid);
         }
@@ -710,9 +724,10 @@ function SEC_getFeatureGroup ($feature, $uid = '')
 */
 function SEC_authenticate($username, $password, &$uid)
 {
-    global $_CONF, $_TABLES, $LANG01;
+    global $_CONF, $_SYSTEM, $_TABLES, $LANG01;
 
     $escaped_name = DB_escapeString(trim($username));
+    $password = trim(str_replace(array("\015", "\012"), '', $password));
 
     $result = DB_query("SELECT status, passwd, email, uid FROM {$_TABLES['users']} WHERE username='$escaped_name' AND ((remoteservice is null) or (remoteservice = ''))");
     $tmp = DB_error();
@@ -724,10 +739,12 @@ function SEC_authenticate($username, $password, &$uid)
         if ($U['status'] == USER_ACCOUNT_DISABLED) {
             // banned, jump to here to save an md5 calc.
             return USER_ACCOUNT_DISABLED;
-        } elseif ($U['passwd'] != SEC_encryptPassword($password)) {
-            return -1; // failed login
+        } elseif ( !SEC_check_hash($password, $U['passwd']) ) {
+            return -1;
         } elseif ($U['status'] == USER_ACCOUNT_AWAITING_APPROVAL) {
             return USER_ACCOUNT_AWAITING_APPROVAL;
+        } elseif ($U['status'] == USER_ACCOUNT_AWAITING_VERIFICATION ) {
+            return USER_ACCOUNT_AWAITING_VERIFICATION;
         } elseif ($U['status'] == USER_ACCOUNT_AWAITING_ACTIVATION) {
             // Awaiting user activation, activate:
             DB_change($_TABLES['users'], 'status', USER_ACCOUNT_ACTIVE,
@@ -1077,7 +1094,7 @@ function SEC_getGroupDropdown ($group_id, $access)
 */
 function SEC_encryptPassword($password)
 {
-    return md5($password);
+    return SEC_hash($password);
 }
 
 /**
@@ -1102,7 +1119,7 @@ function SEC_createToken($ttl = 1200)
     }
 
     /* Generate the token */
-    $token = md5($_USER['uid'].$pageURL.uniqid (rand (), 1));
+    $token = md5($_USER['uid'].$pageURL.uniqid (mt_rand (), 1));
     $pageURL = DB_escapeString($pageURL);
 
     /* Destroy exired tokens: */
@@ -1215,7 +1232,7 @@ function SEC_createTokenGeneral($action='general',$ttl = 1200)
     }
 
     /* Generate the token */
-    $token = md5($_USER['uid'].$_USER['uid'].uniqid (rand (), 1));
+    $token = md5($_USER['uid'].$_USER['uid'].uniqid (mt_rand (), 1));
 
     /* Destroy exired tokens: */
     $sql = "DELETE FROM {$_TABLES['tokens']} WHERE (DATE_ADD(created, INTERVAL ttl SECOND) < NOW())"
@@ -1660,6 +1677,7 @@ function SEC_loginForm($use_options = array())
         '3rdparty_login'    => true,    // $_CONF['user_login_method']['3rdparty']
         'openid_login'      => true,    // $_CONF['user_login_method']['openid']
         'newreg_link'       => true,    // $_CONF['disable_new_user_registration']
+        'verification_link' => false,   // resend verification?
         'plugin_vars'       => true,    // call PLG_templateSetVars?
         'prefill_user'      => false,
 
@@ -1761,6 +1779,18 @@ function SEC_loginForm($use_options = array())
     } else {
         $loginform->set_var('openid_login', '');
     }
+
+    if ($options['verification_link']) {
+        $loginform->set_var('lang_verification', $LANG04[169]);
+        $verify = COM_createLink($LANG04[25], $_CONF['site_url']
+                                              . '/users.php?mode=getnewtoken',
+                                 array('rel' => 'nofollow'));
+        $loginform->set_var('verification_link', $verify);
+    } else {
+        $loginform->set_var('lang_verification', '');
+        $loginform->set_var('verification_link', '');
+    }
+
 
     if ($options['prefill_user'] && isset($_USER['username']) && $_USER['username'] != '' ) {
         $loginform->set_var('loginname',$_USER['username']);

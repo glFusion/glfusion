@@ -197,8 +197,6 @@ if ($A['count'] > 0) {
         }
         DB_query ("UPDATE {$_TABLES['stories']} SET hits = hits + 1 WHERE (sid = '".DB_escapeString($story->getSid())."') AND (date <= NOW()) AND (draft_flag = 0)");
 
-        DB_query ("UPDATE {$_TABLES['stories']} SET hits = hits + 1 WHERE (sid = '".IO_prepareForDB($story->getSid())."') AND (date <= NOW()) AND (draft_flag = 0)");
-
         // Display whats related
 
         $story_template = new Template($_CONF['path_layout'] . 'article');
@@ -246,14 +244,14 @@ if ($A['count'] > 0) {
                                       $story->displayElements('tid'));
         if (!empty ($related)) {
             $related = COM_startBlock ($LANG11[1], '',
-                COM_getBlockTemplate ('whats_related_block', 'header'))
+                COM_getBlockTemplate ('whats_related_block', 'header'), 'whats-related')
                 . $related
                 . COM_endBlock (COM_getBlockTemplate ('whats_related_block',
                     'footer'));
         }
         if (count ($story_options) > 0) {
             $optionsblock = COM_startBlock ($LANG11[4], '',
-                    COM_getBlockTemplate ('story_options_block', 'header'))
+                    COM_getBlockTemplate ('story_options_block', 'header'), 'story-options')
                 . COM_makeList ($story_options, 'list-story-options')
                 . COM_endBlock (COM_getBlockTemplate ('story_options_block',
                     'footer'));
@@ -301,7 +299,7 @@ if ($A['count'] > 0) {
 
             $story_template->set_var ('commentbar',
                     CMT_userComments ($story->getSid(), $story->displayElements('title'), 'article',
-                                      $order, $mode, 0, $page, false, $delete_option, $story->displayElements('commentcode')));
+                                      $order, $mode, 0, $page, false, $delete_option, $story->displayElements('commentcode'),$story->displayElements('uid')));
         }
         if ($_CONF['trackback_enabled'] && ($story->displayElements('trackbackcode') >= 0) &&
                 $show_comments) {

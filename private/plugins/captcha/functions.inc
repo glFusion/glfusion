@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -147,12 +147,6 @@ function plugin_templatesetvars_captcha($ctype, &$template) {
                 return;
             }
             break;
-        case 'rating' :
-            if ( $_CP_CONF['enable_rating'] != 1 ) {
-                $template->set_var('captcha','');
-                return;
-            }
-            break;
         case 'links' :
             if ( $_CP_CONF['enable_links'] != 1 ) {
                 $template->set_var('captcha','');
@@ -224,7 +218,11 @@ function plugin_commentPreSave_captcha($uid, $title, $comment, $sid, $pid, $type
     }
 
     if ( ($_CP_CONF['anonymous_only'] && $uid < 2) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
-        $str = COM_applyFilter($_POST['captcha']);
+        if ( isset($_POST['captcha']) ) {
+            $str = COM_applyFilter($_POST['captcha']);
+        } else {
+            $str = '';
+        }
         list( $rc, $msg) = CAPTCHA_checkInput( $str, 'comment' );
         if ( $rc == 1 )
             return 0;
@@ -275,11 +273,6 @@ function plugin_itemPreSave_captcha( $ctype='registration', $content='' ) {
                 return '';
             }
             break;
-        case 'rating' :
-            if ( $_CP_CONF['enable_rating'] != 1 ) {
-                return '';
-            }
-            break;
         case 'links' :
             if ( $_CP_CONF['enable_links'] != 1 ) {
                 return '';
@@ -299,7 +292,11 @@ function plugin_itemPreSave_captcha( $ctype='registration', $content='' ) {
         $_USER['uid'] = 1;
     }
     if ( ($_CP_CONF['anonymous_only'] && $_USER['uid'] < 2) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
-        $response = COM_applyFilter($_POST['captcha']);
+        if ( isset($_POST['captcha']) ) {
+            $response = COM_applyFilter($_POST['captcha']);
+        } else {
+            $response = '';
+        }
         list( $rc, $msg )  = CAPTCHA_checkInput( $response, $ctype );
         return $msg;
     }
@@ -401,9 +398,6 @@ function CAPTCHA_getHTML($csid, $ctype='general' ) {
         case 'mediagallery' :
             $T->set_file('page', 'captcha_mediagallery.thtml');
             break;
-        case 'rating' :
-            $T->set_file('page', 'captcha_rating.thtml');
-            break;
         case 'general' :
             $T->set_file('page', 'captcha.thtml');
             break;
@@ -457,7 +451,12 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
             return array(1,'');
         } else {
             # set the error code so that we can display it
-            return array(0,$resp->error);
+            if ( $resp->error == 'incorrect-captcha-sol' ) {
+                $error = $LANG_CP00['entry_error'];
+            } else {
+                $error = $resp->error;
+            }
+            return array(0,$error);
         }
     }
 

@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
+// | Copyright (C) 2009-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -149,20 +149,33 @@ function USER_deleteAccount ($uid)
 * @param    string  $username   user's login name
 * @param    string  $useremail  user's email address
 * @param    int     $uid        user id of user
+* @param    string  $passwd     user's password (optional)
 * @return   bool                true = success, false = an error occured
 *
 */
 function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
 {
-    global $_CONF, $_TABLES, $LANG04;
+    global $_CONF, $_SYSTEM, $_TABLES, $LANG04;
 
-    $uid = intval($uid);
-
-    if ( $passwd == '' ) {
-        $passwd = USER_createPassword(8);
+    if ( !isset($_SYSTEM['verification_token_ttl']) ) {
+        $_SYSTEM['verification_token_ttl'] = 86400;
     }
-    $passwd2 = SEC_encryptPassword($passwd);
-    DB_change ($_TABLES['users'], 'passwd', "$passwd2", 'uid', $uid);
+
+    $activation_link = '';
+
+    $uid = (int) $uid;
+
+    $storedPassword = DB_getItem($_TABLES['users'],'passwd','uid='.$uid);
+    $userStatus     = DB_getItem($_TABLES['users'],'status','uid='.$uid);
+    if ( $passwd == '' && substr($storedPassword,0,4) == '$H$9' ) {
+        // no need to update password
+    } else {
+        if ( $passwd == '' ) {
+            $passwd = USER_createPassword(8);
+        }
+        $passwd2 = SEC_encryptPassword($passwd);
+        DB_change ($_TABLES['users'], 'passwd', "$passwd2", 'uid', $uid);
+    }
 
     if (file_exists ($_CONF['path_data'] . 'welcome_email.txt')) {
         $template = new Template ($_CONF['path_data']);
@@ -183,12 +196,37 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
         $template->parse ('output', 'mail');
         $mailtext = $template->get_var ('output');
     } else {
-        $mailtext = $LANG04[15] . "\n\n";
-        $mailtext .= $LANG04[2] . ": $username\n";
-        $mailtext .= $LANG04[4] . ": $passwd\n\n";
-        $mailtext .= $LANG04[14] . "\n\n";
-        $mailtext .= $_CONF['site_name'] . "\n";
-        $mailtext .= $_CONF['site_url'] . "\n";
+        if ( $userStatus == USER_ACCOUNT_AWAITING_VERIFICATION ) {
+            $verification_id = USER_createActivationToken($uid,$username);
+            $activation_link = $_CONF['site_url'].'/users.php?mode=verify&vid='.$verification_id.'&u='.$uid;
+            $mailtext  = $LANG04[168] . $_CONF['site_name'] . ".\n\n";
+            $mailtext .= $LANG04[170] . "\n\n";
+            $mailtext .= "----------------------------\n";
+            $mailtext .= $LANG04[2] . ': ' . $username ."\n";
+            $mailtext .= $LANG04[171] .': ' . $_CONF['site_url'] ."\n";
+            $mailtext .= "----------------------------\n\n";
+            $mailtext .= sprintf($LANG04[172],($_SYSTEM['verification_token_ttl']/3600)) . "\n\n";
+            $mailtext .= $activation_link . "\n\n";
+            $mailtext .= $LANG04[173] . "\n\n";
+            $mailtext .= $LANG04[174] . "\n\n";
+            $mailtext .= "--\n";
+            $mailtext .= $_CONF['site_name'] . "\n";
+            $mailtext .= $_CONF['site_url'] . "\n";
+        } else {
+            $mailtext  = $LANG04[168] . $_CONF['site_name'] . ".\n\n";
+            $mailtext .= $LANG04[170] . "\n\n";
+            $mailtext .= "----------------------------\n";
+            $mailtext .= $LANG04[2] . ': ' . $username ."\n";
+            if ( $passwd != '' ) {
+                $mailtext .= $LANG04[4] . ": $passwd\n";
+            }
+            $mailtext .= $LANG04[171] .': ' . $_CONF['site_url'] ."\n";
+            $mailtext .= "----------------------------\n\n";
+            $mailtext .= $LANG04[14] . "\n\n";
+            $mailtext .= "--\n";
+            $mailtext .= $_CONF['site_name'] . "\n";
+            $mailtext .= $_CONF['site_url'] . "\n";
+        }
     }
     $subject = $_CONF['site_name'] . ': ' . $LANG04[16];
     if ($_CONF['site_mail'] !== $_CONF['noreply_mail']) {
@@ -206,6 +244,18 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
 
     return COM_mail ($to, $subject, $mailtext, $from);
 }
+
+function USER_createActivationToken($uid,$username)
+{
+    global $_CONF, $_TABLES;
+
+    $token = md5($uid.$username.uniqid (mt_rand (), 1));
+
+    DB_query("UPDATE {$_TABLES['users']} SET act_token='".DB_escapeString($token)."', act_time=NOW() WHERE uid=".$uid);
+
+    return $token;
+}
+
 
 /**
 * Inform a user their account has been activated.
@@ -309,6 +359,10 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
             $values .= ',' . USER_ACCOUNT_AWAITING_APPROVAL;
         }
     } else {
+        if ($_CONF['registration_type'] == 1 ) {
+            $fields .= ',status';
+            $values .= ',' . USER_ACCOUNT_AWAITING_VERIFICATION;
+        }
         if (!empty($remoteusername)) {
             $fields .= ',remoteusername';
             $values .= ",'".DB_escapeString($remoteusername)."'";
@@ -485,6 +539,9 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
                                    strlen ($_CONF['path_html']));
                 $img = $_CONF['site_url'] . '/' . $imgpath . 'userphotos/'
                      . $photo;
+                if ( !@file_exists( $_CONF['path_html'] . $imgpath . 'userphotos/'.$photo ) ) {
+                    $img = '';
+                }
             } else {
                 $img = $_CONF['site_url']
                      . '/getimage.php?mode=userphotos&amp;image=' . $photo;
@@ -784,7 +841,7 @@ function USER_getChildGroups($groupid)
 *
 */
 
-function USER_createPassword ($length)
+function USER_createPassword ($length = 7)
 {
     // Enforce reasonable limits
     if (($length < 5) || ($length > 10)) {
@@ -795,12 +852,10 @@ function USER_createPassword ($length)
     // -----------------------------------------------------------
     $legal_characters = "-23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ";
 
-    srand((double) microtime () * 1000000);
-
     $password = "";
     $num_legal_chars = strlen($legal_characters);
     while (strlen($password) < $length) {
-        $password .= $legal_characters[rand(0,$num_legal_chars-1)];
+        $password .= $legal_characters[mt_rand(0,$num_legal_chars-1)];
     }
 
     return($password);

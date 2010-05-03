@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<div class="block-box-left blocklist">
+<div {block_id}class="block-box-left blocklist">
     <span class="block-helpicon">
         {block_help}
     </span>

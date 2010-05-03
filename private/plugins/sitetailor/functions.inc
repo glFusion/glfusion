@@ -64,6 +64,7 @@ function plugin_getheadercss_sitetailor() {
     global $_CONF, $_ST_CONF, $stMenu, $themeAPI, $themeStyle;
 
     $st_header = array();
+    $st_header[] = $_CONF['path_html'] . 'admin/plugins/sitetailor/css/mooRainbow.css';
 
     if ( is_array($stMenu) ) {
         foreach ($stMenu AS $menu) {
@@ -186,6 +187,7 @@ function plugin_getheadercode_sitetailor() {
     if ( $themeAPI > 1 ) {
         return $st_header;
     }
+    $st_header .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . $_CONF['site_url'] . '/admin/plugins/sitetailor/css/mooRainbow.css"' . XHTML . ">" . LB;
     if ( is_array($stMenu) ) {
         foreach ($stMenu AS $menu) {
             if ( $menu['active'] == 1 ) {

@@ -51,7 +51,7 @@
     </table>
 
     <h2>{lang_filesystem}</h2>
-    <hr />
+    <div style="margin:5px 0 5px 0;border-bottom:1px solid #cccccc"></div>
     <table style="width:714px;">
       <!-- BEGIN perms -->
       <tr class="pluginRow{rowclass}">
@@ -62,7 +62,7 @@
     </table>
     {!if phpinfo}
     <h2>{lang_current_php_settings}</h2>
-    <hr />
+    <div style="margin:5px 0 10px 0;border-bottom:1px solid #cccccc"></div>
     <input class="button2" type="button" title="PHP Settings" style="text-decoration: none; width: 150px;" value="{lang_show_phpinfo}" name="toggleV" id="toggleV"/>
     <div id="phpinfo" style="padding-top:15px;width:600px;">
     {phpinfo}

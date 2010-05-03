@@ -68,20 +68,6 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         return PLG_RET_AUTH_FAILED;
     }
 
-    // TEST CODE
-    /*
-    foreach ($args as $k => $v) {
-        if (!is_array($v)) {
-            echo "$k => $v\r\n";
-        } else {
-            echo "$k => $v\r\n";
-            foreach ($v as $k1 => $v1) {
-                echo "        $k1 => $v1\r\n";
-            }
-        }
-    }
-    exit ();
-    */
     $gl_edit = false;
     if (isset($args['gl_edit'])) {
         $gl_edit = $args['gl_edit'];
@@ -122,7 +108,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         $args['sp_tid'] = $args['category'][0];
     }
 
-    if ( empty($args['owner_id']) ) {
+    if (!isset($args['owner_id'])) {
         $args['owner_id'] = $_USER['uid'];
     }
 
@@ -179,7 +165,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         $args['sp_tid'] = 'all';
     }
 
-    if (($args['sp_where'] < 0) || ($args['sp_where'] > 3)) {
+    if (($args['sp_where'] < 0) || ($args['sp_where'] > 4)) {
         $args['sp_where'] = 0;
     }
 
@@ -540,7 +526,7 @@ function service_get_staticpages($args, &$output, &$svc_msg)
             $perms = ' AND ' . $perms;
         }
         $sql          = "SELECT sp_title,sp_content,sp_hits,sp_date,sp_format,"
-                      . "commentcode,owner_id,group_id,perm_owner,perm_group,"
+                      . "commentcode,sp_uid,owner_id,group_id,perm_owner,perm_group,"
                       . "perm_members,perm_anon,sp_tid,sp_help,sp_php,"
                       . "sp_inblock FROM {$_TABLES['staticpage']} "
                       . "WHERE (sp_id = '$page') AND (sp_status = 1)" . $perms;

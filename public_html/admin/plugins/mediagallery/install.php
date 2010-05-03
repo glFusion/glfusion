@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2009 by the following authors:                        |
+// | Copyright (C) 2005-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -30,6 +30,7 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../../../lib-common.php';
+require_once '../../auth.inc.php';
 require_once $_CONF['path'].'/plugins/mediagallery/autoinstall.php';
 
 USES_lib_install();

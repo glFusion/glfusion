@@ -111,7 +111,9 @@ $LANG25 = array(
     37 => '投票時は結果非公開',
     38 => 'アンケート実施中は，オーナーとルート管理者だけが結果を見ることができます。',
     39 => 'テーマは1つ以上の質問がある場合に表示されます。',
-    40 => 'アンケートの結果を見る'
+    40 => 'アンケートの結果を見る',
+    41 => 'Are you sure you want to delete this Poll?',
+    42 => 'Are you absolutely sure you want to delete this Poll?  All questions, answers and comments that are associated with this Poll will also be permanently deleted from the database.'
 );
 
 $PLG_polls_MESSAGE19 = 'アンケートが登録されました。';

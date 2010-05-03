@@ -112,28 +112,20 @@ function plugin_editcomment_mediagallery($cid,$id) {
  *
  */
 function plugin_deletecomment_mediagallery($cid,$id) {
-    global $_CONF, $_MG_CONF, $_TABLES;
+    global $_CONF, $_MG_CONF, $_TABLES, $MG_albums;
 
     // find the album that holds this peice of media
 
-    $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} WHERE media_id='" . DB_escapeString($id) . "'";
+    $sql = "SELECT album_id FROM {$_TABLES['mg_media_albums']} WHERE media_id='" . DB_escapeString($id) . "'";
     $result = DB_query($sql);
     $nRows  = DB_numRows($result);
     if ( $nRows > 0 ) {
         $row = DB_fetchArray($result);
-        $sql = "SELECT group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['mg_albums']} WHERE album_id='" . $row['album_id'] ."'";
-        $result = DB_query($sql);
-        $nRows = DB_numRows($result);
-        if ( $nRows > 0 ) {
-            $row = DB_fetchArray($result);
-            $access = SEC_hasAccess ($row['owner_id'],
-                        $row['group_id'],
-                        $row['perm_owner'],
-                        $row['perm_group'],
-                        $row['perm_members'],
-                        $row['perm_anon']);
+        $aid = $row['album_id'];
+        if ( $MG_albums[0]->owner_id ) {
+            $access = 3;
         } else {
-            $access = 0;
+            $access = $MG_albums[$aid]->access;
         }
     } else {
         $access = 0;
@@ -288,8 +280,7 @@ function plugin_getheaderjs_mediagallery() {
     if ( $_MG_CONF['disable_lightbox'] != true ) {
         $js[] = $_MG_CONF['path_html'] . 'js/slimbox.js';
     }
-//  $js[] = $_MG_CONF['path_html'] . 'js/rating.js';
-//  $js[] = $_MG_CONF['path_html'] . 'js/slideshow.js';
+    $js[] = $_MG_CONF['path_html'] . 'js/slideshow.js';
 
 	return ($js);
 }
@@ -482,7 +473,7 @@ function plugin_showstats_mediagallery($showsitestats) {
                 }
 
                 $S['title'] = '<a href="' . $_MG_CONF['site_url'] . '/media.php?s=' . $A['media_id'] . '">' . $title . '</a>';
-                $S['rating'] = @number_format($A['media_rating']/2,2) . '/5.00';
+                $S['rating'] = @number_format($A['media_rating'],2);
                 $data_arr[$i] = $S;
             }
             $retval .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
@@ -734,6 +725,10 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                 } elseif ( substr($part,0,7) == 'target:' ) {
                     $a = explode (':',$part);
                     $target = $a[1];
+                    $skip++;
+                } elseif ( substr($part,0,5) == 'type:' ) {
+                    $a = explode (':',$part);
+                    $mp3_type = $a[1];
                     $skip++;
                 } elseif ( substr($part,0,8) == 'linksrc:' ) {
                     $a = explode (':',$part);
@@ -1309,7 +1304,11 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                             $playback_options['height'] = 50;;
                             $playback_options['width']  = 300;
                             $V = new Template( MG_getTemplatePath(0) );
-			                $tfile = 'view_mp3_flv.thtml';
+                            if ($mp3_type == 'ribbon' ) {
+                                $tfile = 'mp3_podcast.thtml';
+                            } else {
+    			                $tfile = 'view_mp3_flv.thtml';
+    			            }
 			                $autostart = $autoplay ? 'play' : 'stop';
 
                             if ( $row['media_tn_attached'] == 1 ) {
@@ -1345,6 +1344,7 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                                 'id2'				=> 'mp3' . rand(),
                                 'site_url'			=> $_MG_CONF['site_url'],
                                 'movie'             => $_MG_CONF['mediaobjects_url'] . '/orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'],
+                                'mp3_file'          => $_MG_CONF['mediaobjects_url'] . '/orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'],
                                 'xhtml'             =>  XHTML,
                             ));
                             $V->parse('output','audio');
@@ -3606,7 +3606,7 @@ function plugin_itemrated_mediagallery($media_id, $rating, $votes)
 {
     global $_TABLES;
 
-    $sql = "UPDATE {$_TABLES['mg_media']} SET media_votes = $votes, media_rating = '$rating'
+    $sql = "UPDATE {$_TABLES['mg_media']} SET media_votes = $votes, media_rating = '".DB_escapeString($rating)."'
                     WHERE media_id='" . DB_escapeString($media_id) . "'";
     DB_query($sql);
     return true;

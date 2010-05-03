@@ -132,7 +132,8 @@ $LANG_LINKS_SUBMIT = array(
     8 => 'Title',
     9 => 'URL',
     10 => 'Category',
-    11 => 'Link Submissions'
+    11 => 'Link Submissions',
+    12 => 'Submitted By',
 );
 
 ###############################################################################
@@ -177,7 +178,7 @@ $LANG_LINKS_ADMIN = array(
     8 => 'Link Hits',
     9 => 'Link Description',
     10 => 'You need to provide a link Title, URL and Description.',
-    11 => 'Link Manager',
+    11 => 'Link Administration',
     12 => 'To modify or delete a link, click on that link\'s edit icon below.  To create a new link or a new category, click on "New link" or "New category" above. To edit multiple categories, click on "Edit categories" above.',
     14 => 'Link Category',
     16 => 'Access Denied',
@@ -199,22 +200,27 @@ $LANG_LINKS_ADMIN = array(
     34 => 'Parent',
     35 => 'All',
     40 => 'Edit this category',
-    41 => 'Create child category',
+    41 => 'Add',
     42 => 'Delete this category',
     43 => 'Site categories',
-    44 => 'Add&nbsp;child',
+    44 => 'Add Subcategory',
     46 => 'User %s tried to delete a category to which they do not have access rights',
-    50 => 'List categories',
-    51 => 'New link',
-    52 => 'New category',
-    53 => 'List links',
-    54 => 'Category Manager',
+    50 => 'Category Admin',
+    51 => 'New Link',
+    52 => 'New Root Category',
+    53 => 'Links Admin',
+    54 => 'Link Category Administration',
     55 => 'Edit categories below. Note that you cannot delete a category that contains other categories or links - you should delete these first, or move them to another category.',
     56 => 'Category Editor',
     57 => 'Not validated yet',
     58 => 'Validate now',
-    59 => '<p>To validate all links displayed, please click on the "Validate now" link below. Please note that this might take some time depending on the amount of links displayed.</p>',
-    60 => 'User %s tried illegally to edit category %s.'
+    59 => '<br /><br />To validate all links displayed, please click on the "Validate now" link below. The validation process may take some time depending on the amount of links displayed.',
+    60 => 'User %s tried illegally to edit category %s.',
+    61 => 'Owner',
+    62 => 'Last Updated',
+    63 => 'Are you sure you want to delete this link?',
+    64 => 'Are you sure you want to delete this category?',
+    65 => 'Moderate Link',
 );
 
 $LANG_LINKS_STATUS = array(
@@ -305,4 +311,5 @@ $LANG_configselects['links'] = array(
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
     13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
 );
+
 ?>
