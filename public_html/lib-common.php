@@ -58,10 +58,10 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.2.0');
+    define('GVERSION', '1.2.1');
 }
 
-define('PATCHLEVEL','');
+define('PATCHLEVEL','.svn');
 
 //define('DEMO_MODE',true);
 
@@ -4426,7 +4426,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
             if( $newstories && ( $page < 2 )) {
                 $retval .= $newmsg . '<br' . XHTML . '>';
             } else {
-                $newstories = array();
+                $newstory = array();
                 while ($A=DB_fetchArray($result)) {
                     $title = COM_undoSpecialChars( $A['title'] );
                     $title = str_replace('&nbsp;',' ',$title);
@@ -4437,9 +4437,9 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                         $attr = array();
                     }
                     $url = COM_buildUrl($_CONF['site_url'] . '/article.php?story=' . $A['sid']);
-                    $newstories[] = COM_createLink($titletouse,$url,$attr);
+                    $newstory[] = COM_createLink($titletouse,$url,$attr);
                 }
-                $retval .= COM_makeList( $newstories, 'list-new-articles' );
+                $retval .= COM_makeList( $newstory, 'list-new-articles' );
             }
         } else {
             $retval .= $LANG01[100] . '<br' . XHTML . '>';

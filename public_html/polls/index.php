@@ -60,7 +60,7 @@ function POLLS_pollList()
 
     $retval = '';
 
-    if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
+        if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
             ($_PO_CONF['pollsloginrequired'] == 1))) {
         $retval .= SEC_loginRequiredForm();
     } else {
@@ -87,10 +87,8 @@ function POLLS_pollList()
                            'query' => '',
                            'query_limit' => 0);
 
-        $token = SEC_createToken();
-        
         $retval .= ADMIN_list ('polls', 'POLLS_getListField',
-                   $header_arr, $text_arr, $query_arr, $defsort_arr, '', $token);
+                   $header_arr, $text_arr, $query_arr, $defsort_arr, '', $token='dummy');
     }
 
     return $retval;
@@ -113,7 +111,7 @@ if (isset ($_POST['reply']) && ($_POST['reply'] == $LANG01[25])) {
     exit;
 }
 
-$pid = 0;
+$pid = '';
 $aid = 0;
 if (isset ($_REQUEST['pid'])) {
     $pid = COM_applyFilter ($_REQUEST['pid']);

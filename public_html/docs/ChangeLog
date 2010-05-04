@@ -1,5 +1,12 @@
 glFusion ChangeLog
 
+v1.2.0.pl1
+----------
+- showblock: auto tag did not honor block permissions. (Mark)
+- COM_onFrontPage() and COM_whatsNew() had a global variable conflict with
+  $newstories (Mark)
+- fs_multilanguage configuration field was misspelled in new install (Mark)
+
 v1.2.0
 ------
 - Add rel="nofolllow" to bbcode url (Mark)

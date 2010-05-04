@@ -25,14 +25,14 @@
   border: .1em solid black;
   padding: 5px;
   margin: 0 auto;
-  width: 300px;
+  width: 350px;
 }
 
 .poll-autotag-left{
   border: .2em dotted black;
   padding: 5px;
   margin-right: auto;
-  width: 300px;
+  width: 350px;
 }
 
 .poll-questions ul {

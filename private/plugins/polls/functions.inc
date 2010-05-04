@@ -669,7 +669,7 @@ function plugin_autotags_polls($op, $content = '', $autotag = '')
                     $retval = '';
                 } else {
                     $retval = COM_createLink($title, $_CONF['site_url']
-                                . '/polls/index.php?pid=' . $pid . '&amp;aid=-1');
+                                . '/polls/index.php?pid=' . $pid);
                 }
                 break;
         case 'poll_vote':
@@ -1073,8 +1073,10 @@ function POLLS_showPoll($size, $pid = '', $showall = false, $displaytype = 0)
                         . $LANG_POLLS['pollclosed'] . '</div>';
             }
             if(!isset($_COOKIE["poll-".$pid]) && !POLLS_ipAlreadyVoted($pid) && ($is_open == 1)) {
+                // poll is open and this user has not voted yet
                 $retval .= POLLS_pollVote($pid,$showall,$displaytype);
             } else {
+                // poll is open, and this user has already voted
                 $retval .= POLLS_pollResults($pid, $size,'','',$displaytype);
             }
         } else {
@@ -1082,8 +1084,10 @@ function POLLS_showPoll($size, $pid = '', $showall = false, $displaytype = 0)
                 $retval = '';
             } else {
                 if(!isset($_COOKIE["poll-".$pid]) && !POLLS_ipAlreadyVoted($pid) && ($is_open == 1)) {
+                    // poll is open and this user has not voted yet
                     $retval .= POLLS_pollVote($pid,$showall,$displaytype);
                 } else {
+                    // poll is open and this user has already voted
                     $retval .= POLLS_pollResults($pid, $size,'','',$displaytype);
                 }
             }
@@ -1457,29 +1461,29 @@ function POLLS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
     $retval = '';
 
-    $access = SEC_hasAccess ($A['owner_id'], $A['group_id'],
+    $access = SEC_hasAccess($A['owner_id'], $A['group_id'],
                              $A['perm_owner'], $A['perm_group'],
                              $A['perm_members'], $A['perm_anon']);
     if ($access > 0) {
+
         switch($fieldname) {
+
             case 'edit':
                 if ($access == 3) {
                     $retval = COM_createLink($icon_arr['edit'],
                         "{$_CONF['site_admin_url']}/plugins/polls/index.php?edit=x&amp;pid={$A['pid']}");
                 }
                 break;
+
             case 'unixdate':
                 $retval = strftime ($_CONF['daytime'], $A['unixdate']);
                 break;
+
             case 'topic':
-                if (($A['hideresults'] == 0) ||
-                    (isset($_USER['uid']) && ($_USER['uid'] == $A['owner_id'])) || SEC_inGroup('Root')) {
-                    $retval = COM_createLink($fieldvalue,
+                $retval = COM_createLink($fieldvalue,
                         "{$_CONF['site_url']}/polls/index.php?pid={$A['pid']}");
-                } else {
-                    $retval = $fieldvalue;
-                }
                 break;
+
             case 'access':
                 if ($access == 3) {
                     $access = $LANG_ACCESS['edit'];
@@ -1488,13 +1492,11 @@ function POLLS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 }
                 $retval = $access;
                 break;
+
             case 'is_open':
-                if ($A['is_open'] == 1) {
-                    $retval = $LANG25[25];
-                } else {
-                    $retval = $LANG25[26];
-                }
+                $retval = ($A['is_open'] == 1) ? $icon_arr['check'] : '';
                 break;
+
             case 'display':
                 if ($A['display'] == 1) {
                     $retval = $LANG25[25];
@@ -1502,6 +1504,7 @@ function POLLS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                     $retval = $LANG25[26];
                 }
                 break;
+
             case 'voters':
                 $retval = COM_numberFormat ($A['voters']);
                 break;

@@ -1883,7 +1883,7 @@ function PLG_replaceTags($content, $plugin = '')
                 }
                 if ( $autotag['tag'] == 'showblock' ) {
                     $blockName = COM_applyBasicFilter($autotag['parm1']);
-                    $result = DB_query("SELECT * FROM {$_TABLES['blocks']} WHERE name = '".DB_escapeString($blockName)."'");
+                    $result = DB_query("SELECT * FROM {$_TABLES['blocks']} WHERE name = '".DB_escapeString($blockName)."'" . COM_getPermSQL( 'AND' ));
                     if ( DB_numRows($result) > 0 ) {
                         $skip = 0;
                         $B = DB_fetchArray($result);
@@ -1924,6 +1924,8 @@ function PLG_replaceTags($content, $plugin = '')
                         }
                         $linktext = COM_formatBlock( $B );
                         $content = str_replace($autotag['tagstr'],$linktext,$content);
+                    } else {
+                        $content = str_replace($autotag['tagstr'],'',$content);
                     }
                 }
             } else if (function_exists ($function) AND

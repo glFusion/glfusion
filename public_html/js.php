@@ -30,7 +30,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.2.0');
+    define('GVERSION', '1.2.1');
 }
 
 require_once 'siteconfig.php';
