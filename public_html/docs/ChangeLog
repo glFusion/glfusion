@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.2.0.pl1
 ----------
+- COM_checkWords() was trimming spaces when it should not. (Mark)
+- Links: Invalid multibyte string would cause crash. (Mark)
 - showblock: auto tag did not honor block permissions. (Mark)
 - COM_onFrontPage() and COM_whatsNew() had a global variable conflict with
   $newstories (Mark)

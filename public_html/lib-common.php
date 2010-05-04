@@ -3057,7 +3057,10 @@ function COM_checkWords( $Message )
         }
     }
 
-    return trim($EditedMessage);
+    $EditedMessage = substr($EditedMessage,1);
+    $EditedMessage = substr($EditedMessage,0,-1);
+
+    return $EditedMessage;
 }
 
 
