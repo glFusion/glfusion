@@ -1,5 +1,19 @@
 glFusion ChangeLog
 
+v1.2.0.pl3
+----------
+- Plugin API bug - PLG_callFunctionForAllPlugins() did not cycle through
+  all the plugins - returned after first hit. (Mark)
+
+v1.2.0.pl2
+----------
+- When using embedded images in a story, if you select an image to delete and
+  save, the story is deleted. (Mark)
+- Save button text disappears if submitting a story and it contains missing
+  fields. (Mark)
+- Always use the title attribute in What's New (Mark)
+- Fixed issue with Gallery Remote2 not properly logging into the site (Mark)
+
 v1.2.0.pl1
 ----------
 - COM_checkWords() was trimming spaces when it should not. (Mark)

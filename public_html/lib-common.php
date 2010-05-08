@@ -4434,11 +4434,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                     $title = COM_undoSpecialChars( $A['title'] );
                     $title = str_replace('&nbsp;',' ',$title);
                     $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],'...' );
-                    if( $title != $titletouse ) {
-                        $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
-                    } else {
-                        $attr = array();
-                    }
+                    $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
                     $url = COM_buildUrl($_CONF['site_url'] . '/article.php?story=' . $A['sid']);
                     $newstory[] = COM_createLink($titletouse,$url,$attr);
                 }
@@ -4505,11 +4501,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                 $title = str_replace('&nbsp;',' ',$title);
                 $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],
                                             '...' );
-                if( $title != $titletouse ) {
-                    $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
-                } else {
-                    $attr = array();
-                }
+                $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
 
                 if( $commentrow[$x]['dups'] > 1 ) {
                     $titletouse .= ' [+' . $commentrow[$x]['dups'] . ']';
@@ -4554,11 +4546,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                 $title = str_replace('&nbsp;',' ',$title);
                 $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],'...' );
 
-                if( $title != $titletouse ) {
-                    $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
-                } else {
-                    $attr = array();
-                }
+                $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
                 if( $A['count'] > 1 ) {
                     $titletouse .= ' [+' . $A['count'] . ']';
                 }
