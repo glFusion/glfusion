@@ -1315,9 +1315,13 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
 */
 function SEC_setCookie($name, $value, $expire = 0, $path = '', $domain = '', $secure = false, $httponly = false)
 {
-    global $_CONF;
+    global $_CONF, $_SYSTEM;
 
     $retval = false;
+
+    if ( isset($_SYSTEM['nohttponly']) && $_SYSTEM['nohttponly'] == 1 ) {
+        $httponly = 0;
+    }
 
     if ($path == '') {
         $path = $_CONF['cookie_path'];

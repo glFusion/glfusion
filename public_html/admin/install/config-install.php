@@ -319,7 +319,7 @@ function install_config($site_url)
     $c->add('decimal_count',"2",'text',6,29,NULL,460,TRUE);
     $c->add('timezone','America/Chicago','select',6,29,NULL,490,TRUE);
 
-    $c->add('fs_multilanguage', NULL, 'fieldset', 6, 41, NULL, 0, TRUE);
+    $c->add('fs_mulitlanguage', NULL, 'fieldset', 6, 41, NULL, 0, TRUE);
     $c->add('language_files',array('en'=>'english_utf-8', 'de'=>'german_formal_utf-8'),'*text',6,41,NULL,470,FALSE);
     $c->add('languages',array('en'=>'English', 'de'=>'Deutsch'),'*text',6,41,NULL,480,FALSE);
 

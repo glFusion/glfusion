@@ -3051,7 +3051,10 @@ function COM_checkWords( $Message )
         }
     }
 
-    return trim($EditedMessage);
+    $EditedMessage = substr($EditedMessage,1);
+    $EditedMessage = substr($EditedMessage,0,-1);
+
+    return $EditedMessage;
 }
 
 
@@ -4420,20 +4423,16 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
             if( $newstories && ( $page < 2 )) {
                 $retval .= $newmsg . '<br' . XHTML . '>';
             } else {
-                $newstories = array();
+                $newstory = array();
                 while ($A=DB_fetchArray($result)) {
                     $title = COM_undoSpecialChars( $A['title'] );
                     $title = str_replace('&nbsp;',' ',$title);
                     $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],'...' );
-                    if( $title != $titletouse ) {
-                        $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
-                    } else {
-                        $attr = array();
-                    }
+                    $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
                     $url = COM_buildUrl($_CONF['site_url'] . '/article.php?story=' . $A['sid']);
-                    $newstories[] = COM_createLink($titletouse,$url,$attr);
+                    $newstory[] = COM_createLink($titletouse,$url,$attr);
                 }
-                $retval .= COM_makeList( $newstories, 'list-new-articles' );
+                $retval .= COM_makeList( $newstory, 'list-new-articles' );
             }
         } else {
             $retval .= $LANG01[100] . '<br' . XHTML . '>';
@@ -4496,11 +4495,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                 $title = str_replace('&nbsp;',' ',$title);
                 $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],
                                             '...' );
-                if( $title != $titletouse ) {
-                    $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
-                } else {
-                    $attr = array();
-                }
+                $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
 
                 if( $commentrow[$x]['dups'] > 1 ) {
                     $titletouse .= ' [+' . $commentrow[$x]['dups'] . ']';
@@ -4545,11 +4540,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                 $title = str_replace('&nbsp;',' ',$title);
                 $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],'...' );
 
-                if( $title != $titletouse ) {
-                    $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
-                } else {
-                    $attr = array();
-                }
+                $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
                 if( $A['count'] > 1 ) {
                     $titletouse .= ' [+' . $A['count'] . ']';
                 }

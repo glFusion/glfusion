@@ -93,34 +93,33 @@ function PLG_callFunctionForAllPlugins($function_name, $args='')
     foreach ($_PLUGINS as $pi_name) {
         $function = 'plugin_' . $function_name . '_' . $pi_name;
         if (function_exists($function)) {
-            // great, function exists, run it
             switch (count($args)) {
             case 0:
-                return $function();
+                $function();
                 break;
             case 1:
-                return $function($args[1]);
+                $function($args[1]);
                 break;
             case 2:
-                return $function($args[1], $args[2]);
+                $function($args[1], $args[2]);
                 break;
             case 3:
-                return $function($args[1], $args[2], $args[3]);
+                $function($args[1], $args[2], $args[3]);
                 break;
             case 4:
-                return $function($args[1], $args[2], $args[3], $args[4]);
+                $function($args[1], $args[2], $args[3], $args[4]);
                 break;
             case 5:
-                return $function($args[1], $args[2], $args[3], $args[4], $args[5]);
+                $function($args[1], $args[2], $args[3], $args[4], $args[5]);
                 break;
             case 6:
-                return $function($args[1], $args[2], $args[3], $args[4], $args[5], $args[6]);
+                $function($args[1], $args[2], $args[3], $args[4], $args[5], $args[6]);
                 break;
             case 7:
-                return $function($args[1], $args[2], $args[3], $args[4], $args[5], $args[6], $args[7]);
+                $function($args[1], $args[2], $args[3], $args[4], $args[5], $args[6], $args[7]);
                 break;
             default:
-                return $function($args);
+                $function($args);
                 break;
             }
         }
@@ -1883,7 +1882,7 @@ function PLG_replaceTags($content, $plugin = '')
                 }
                 if ( $autotag['tag'] == 'showblock' ) {
                     $blockName = COM_applyBasicFilter($autotag['parm1']);
-                    $result = DB_query("SELECT * FROM {$_TABLES['blocks']} WHERE name = '".DB_escapeString($blockName)."'");
+                    $result = DB_query("SELECT * FROM {$_TABLES['blocks']} WHERE name = '".DB_escapeString($blockName)."'" . COM_getPermSQL( 'AND' ));
                     if ( DB_numRows($result) > 0 ) {
                         $skip = 0;
                         $B = DB_fetchArray($result);
@@ -1924,6 +1923,8 @@ function PLG_replaceTags($content, $plugin = '')
                         }
                         $linktext = COM_formatBlock( $B );
                         $content = str_replace($autotag['tagstr'],$linktext,$content);
+                    } else {
+                        $content = str_replace($autotag['tagstr'],'',$content);
                     }
                 }
             } else if (function_exists ($function) AND

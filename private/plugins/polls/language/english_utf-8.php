@@ -55,8 +55,9 @@ $LANG_POLLS = array(
     'upgrade2'          => 'upgrade',
     'editinstructions'  => 'Please fill in the Poll ID, at least one question and two answers for it.',
     'pollclosed'        => 'This poll is closed for voting.',
-    'pollhidden'        => 'You have already voted. This poll results will only be shown when voting is closed.',
-    'start_poll'        => 'Start Poll'
+    'pollhidden'        => 'Poll results will be available only after the Poll has closed.',
+    'start_poll'        => 'Start Poll',
+    'deny_msg' => 'Access to this poll is denied.  Either the poll has been moved/removed or you do not have sufficient permissions.'
 );
 
 ###############################################################################

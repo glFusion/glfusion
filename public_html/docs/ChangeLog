@@ -13,6 +13,29 @@ v2.0.0 svn
 - Fixed issue where gl_moomorph wasn't consistently called (Eric)
 - Merge layout custom CSS files rather than uniquely select (Mark H.)
 
+v1.2.0.pl3
+----------
+- Plugin API bug - PLG_callFunctionForAllPlugins() did not cycle through
+  all the plugins - returned after first hit. (Mark)
+
+v1.2.0.pl2
+----------
+- When using embedded images in a story, if you select an image to delete and
+  save, the story is deleted. (Mark)
+- Save button text disappears if submitting a story and it contains missing
+  fields. (Mark)
+- Always use the title attribute in What's New (Mark)
+- Fixed issue with Gallery Remote2 not properly logging into the site (Mark)
+
+v1.2.0.pl1
+----------
+- COM_checkWords() was trimming spaces when it should not. (Mark)
+- Links: Invalid multibyte string would cause crash. (Mark)
+- showblock: auto tag did not honor block permissions. (Mark)
+- COM_onFrontPage() and COM_whatsNew() had a global variable conflict with
+  $newstories (Mark)
+- fs_multilanguage configuration field was misspelled in new install (Mark)
+
 v1.2.0
 ------
 - Add rel="nofolllow" to bbcode url (Mark)

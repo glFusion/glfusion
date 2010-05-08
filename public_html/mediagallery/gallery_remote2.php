@@ -48,6 +48,8 @@ require_once $_CONF['path'] . 'plugins/mediagallery/include/classMedia.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
 
+$_SYSTEM['nohttponly'] = 1;
+
 /*
  * Definitions for handling the gallery remote protocol
  * See http://gallery.menalto.com/ for more info.
@@ -122,7 +124,7 @@ function _mg_gr_finish($code, $body = NULL, $message = NULL) {
 }
 
 function _mg_gr_login( $loginname, $passwd ) {
-	global $_CONF, $_USER, $_TABLES, $_SERVER, $_COOKIE, $VERBOSE;
+	global $_CONF, $_USER, $_TABLES, $_SERVER, $_COOKIE, $_GROUPS, $_RIGHTS, $VERBOSE;
 
 	$retval = 'server_version='. GR_SERVER_VERSION."\n";
 
@@ -133,17 +135,9 @@ function _mg_gr_login( $loginname, $passwd ) {
     }
 
     if ($status == USER_ACCOUNT_ACTIVE) { // logged in AOK.
-        DB_change($_TABLES['users'],'pwrequestid',"NULL",'uid',intval($uid));
-        $userdata = SESS_getUserDataFromId($uid);
-        $_USER=$userdata;
-        $sessid = SESS_newSession($_USER['uid'], $_SERVER['REMOTE_ADDR'], $_CONF['session_cookie_timeout']);
-        SESS_setSessionCookie($sessid, $_CONF['session_cookie_timeout'], $_CONF['cookie_session'], $_CONF['cookie_path'], $_CONF['cookiedomain'], $_CONF['cookiesecure']);
-        PLG_loginUser ($_USER['uid']);
-        // Now that we have users data see if their theme cookie is set.
-        // If not set it
-        setcookie ($_CONF['cookie_theme'], $_USER['theme'], time() + 31536000,
-                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                   $_CONF['cookiesecure']);
+        SESS_completeLogin($uid);
+        $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
+        $_RIGHTS = explode( ',', SEC_getUserPermissions() );
         _mg_gr_finish(GR_STAT_SUCCESS, $retval);
     } else {
 	    _mg_gr_finish(GR_STAT_PASSWD_WRONG, $retval);

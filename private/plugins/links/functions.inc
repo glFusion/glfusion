@@ -146,11 +146,11 @@ function plugin_getwhatsnew_links()
             $attr = array();
             if ( $_LI_CONF['target_blank'] == 1 ) {
                 $attr = array(
-                    'title' => htmlspecialchars($A['title'],ENT_COMPAT,COM_getEncodingt()),
+                    'title' => @htmlspecialchars($A['title'],ENT_COMPAT,COM_getEncodingt()),
                     'target' => '_blank');
             } else {
                 $attr = array(
-                    'title' => htmlspecialchars($A['title'],ENT_COMPAT,COM_getEncodingt())
+                    'title' => @htmlspecialchars($A['title'],ENT_COMPAT,COM_getEncodingt())
                     );
             }
 
@@ -352,7 +352,7 @@ function plugin_dopluginsearch_links($query, $datestart, $dateend, $topic, $type
     global $_TABLES, $LANG_LINKS;
 
     // Make sure the query is SQL safe
-    $query = trim(DB_escapeString(htmlspecialchars($query)));
+    $query = trim(DB_escapeString(@htmlspecialchars($query)));
 
     $sql = "SELECT lid AS id, title, description, UNIX_TIMESTAMP(date) AS date, owner_id AS uid, hits, CONCAT('/links/portal.php?what=link&amp;item=',lid) AS url ";
     $sql .= "FROM {$_TABLES['links']} WHERE date <> 1 ";
@@ -835,7 +835,7 @@ function plugin_submit_links($A = array())
         $linkform->set_var('title',strip_tags($A['title']));
     }
     if ( isset($A['description'] ) ) {
-        $linkform->set_var('description',htmlspecialchars($A['description']));
+        $linkform->set_var('description',@htmlspecialchars($A['description']));
     }
     if ( isset($A['url']) ) {
         $linkform->set_var('url',$A['url']);
@@ -921,7 +921,7 @@ function plugin_save_submit_links($A)
     }
 
     $A['cid'] = DB_escapeString($A['cid']);
-    $A['description'] = DB_escapeString(htmlspecialchars(COM_checkWords($A['description'])));
+    $A['description'] = DB_escapeString(@htmlspecialchars(COM_checkWords($A['description'])));
     $A['title'] = DB_escapeString(strip_tags(COM_checkWords($A['title'])));
     $A['url'] = DB_escapeString(COM_sanitizeUrl($A['url']));
     $A['lid'] = DB_escapeString(COM_makeSid());
@@ -1420,12 +1420,12 @@ function links_select_box_recursive (&$menu, $cid, $sel, $indent, $access)
         // set selected item
         if ($cid == $sel) {
             // yes, selected
-            $menu .= '<option value="' . htmlspecialchars($cid)
+            $menu .= '<option value="' . @htmlspecialchars($cid)
                   . '" selected="selected">' . $indent . $category
                   . '</option>';
         } else {
             // no, not selected
-            $menu .= '<option value="' . htmlspecialchars($cid) . '">'
+            $menu .= '<option value="' . @htmlspecialchars($cid) . '">'
                   . $indent . $category . '</option>';
         }
         // Check and see if this category has any sub categories

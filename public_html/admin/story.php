@@ -369,6 +369,12 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
             $submission = true;
             $action = 'edit';
             break;
+        default :
+            $title = $LANG24[5];
+            $saveoption = $LANG_ADMIN['save'];
+            $submission = false;
+            $action = 'edit';
+            break;
     }
 
     if (!isset ($_CONF['hour_mode'])) {
@@ -549,7 +555,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     $oldsid = $story->EditElements('originalSid');
     if (!empty ($oldsid)) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
-                   . '" name="delete"%s' . XHTML . '>';
+                   . '" name="deletestory"%s' . XHTML . '>';
         $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
         $story_templates->set_var ('delete_option',
                                    sprintf ($delbutton, $jsconfirm));
@@ -941,7 +947,7 @@ function STORY_submit($type='')
 // MAIN ========================================================================
 
 $action = '';
-$expected = array('edit','moderate','draft','clone','save','preview','delete','cancel');
+$expected = array('edit','moderate','draft','clone','save','preview','deletestory','cancel');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
@@ -1034,7 +1040,7 @@ switch ($action) {
         $display .= COM_siteFooter();
         break;
 
-    case 'delete':
+    case 'deletestory':
         if (!isset($sid) || empty($sid)) {
             COM_errorLog('User ' . $_USER['username'] . ' attempted to delete a story, sid empty or null, sid=' . $sid);
             $display = COM_refresh($_CONF['site_admin_url'] . '/story.php');
