@@ -123,7 +123,7 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
 }
 
 /**
-* Common function used in Admin scripts to display a list of items (new version)
+* Common function used in Admin scripts to display a list of items in an array
 *
 * @param    string  $component      name of the list (stub for now)
 * @param    string  $fieldfunction  Name of a function used to display the list item row details
@@ -667,7 +667,6 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
 
     # form the sql query to retrieve the data
     $sql .= "$filtersql $orderbysql $limitsql;";
-    COM_errorLog("sql=$sql");
     $result = DB_query($sql);
 
     // number of rows/records to display
