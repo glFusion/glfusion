@@ -58,10 +58,17 @@ function ADMIN_chkDefault($A = array())
 * See: http://www.the-art-of-web.com/php/sortarray/
 *
 */
-function ADMIN_sortList(&$data, $field)
+function ADMIN_sortArray(&$data, $field, $dir='')
 {
-    $code = "return strnatcmp(\$a['$field'], \$b['$field']);";
-    usort($data, create_function('$a,$b', $code));
+    $asc_sort = "return strnatcmp(\$a['$field'], \$b['$field']);";
+    $desc_sort = "return -strnatcmp(\$a['$field'], \$b['$field']);";
+    $dir = strtolower($dir);
+    $dir = (($dir == 'asc') OR ($dir == 'desc')) ? $dir : 'asc';
+    if ($dir == 'asc') {
+        usort($data, create_function('$a,$b', $asc_sort));
+    } else {
+        usort($data, create_function('$a,$b', $desc_sort));
+    }
 }
 
 /**
@@ -93,7 +100,7 @@ function ADMIN_getIcons()
 
 
 /**
-* Common function used in Admin scripts to display a list of items
+* Common function used in Admin scripts to display a list of items (old version)
 *
 * @param    string  $fieldfunction  Name of a function used to display the list item row details
 * @param    array   $header_arr     array of header fields with sortables and table fields
@@ -107,6 +114,33 @@ function ADMIN_getIcons()
 */
 function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
                            $data_arr, $options_arr = '', $form_arr='', $extra='')
+{
+
+    $retval = ADMIN_listArray('simpleList', $fieldfunction, $header_arr, $text_arr,
+                                $data_arr, $defsort_arr = '', $filter='', $extra,
+                                $options_arr, $form_arr);
+    return $retval;
+}
+
+/**
+* Common function used in Admin scripts to display a list of items (new version)
+*
+* @param    string  $component      name of the list (stub for now)
+* @param    string  $fieldfunction  Name of a function used to display the list item row details
+* @param    array   $header_arr     array of header fields with sortables and table fields
+* @param    array   $text_arr       array with different text strings
+* @param    array   $data_arr       array with sql query data - array of list records
+* @param    array   $defsort_arr    default sorting values
+* @param    string  $filter         additional drop-down filters (stub for now)
+* @param    string  $extra          additional values passed to fieldfunction
+* @param    array   $options_arr    array of options - used for check-all feature
+* @param    array   $form_arr       optional extra forms at top or bottom
+* @return   string                  HTML output of function
+*
+*/
+function ADMIN_listArray($component, $fieldfunction, $header_arr, $text_arr,
+                           $data_arr, $defsort_arr, $filter='', $extra='',
+                           $options_arr = '', $form_arr='')
 {
     global $_CONF, $_TABLES, $LANG01, $LANG_ADMIN, $LANG_ACCESS, $MESSAGE,
            $_IMAGE_TYPE;
@@ -153,9 +187,6 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
     // retrieve the array of admin icons
     $icon_arr = ADMIN_getIcons();
 
-    // number of columns in each row
-    $ncols = count( $header_arr );
-
     // number of rows/records to display
     $nrows = count($data_arr);
 
@@ -170,15 +201,62 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
         $admin_templates->parse('header_row', 'header', true);
     }
 
-    # HEADER FIELDS array(text, field, sort)
+    // setup list sort options
+    if (!isset($_GET['orderby'])) {
+        $orderby = $defsort_arr['field']; // not set - use default (this could be null)
+    } else {
+        $orderbyidx = COM_applyFilter($_GET['orderby'], true); // set - retrieve and clean
+        $orderidx_link = "&amp;order=$orderbyidx"; // preserve the value for paging
+        $orderby = $header_arr[$orderbyidx]['field']; // get the field name to sort by
+    }
+
+    // set sort direction.  defaults to ASC
+    $direction = (isset($_GET['direction'])) ? COM_applyFilter($_GET['direction']) : $defsort_arr['direction'];
+    $direction = strtoupper($direction) == 'DESC' ? 'DESC' : 'ASC';
+
+    // retrieve previous sort order field
+    $prevorder = (isset($_GET['prevorder'])) ? COM_applyFilter ($_GET['prevorder']) : '';
+
+    // reverse direction if previous order field was the same (this is a toggle)
+    if ($orderby == $prevorder) { // reverse direction if prev. order was the same
+        $direction = ($direction == 'DESC') ? 'ASC' : 'DESC';
+    }
+
+    // assign proper arrow img based upon order
+    $arrow_img = ($direction == 'ASC') ? 'bararrowdown' : 'bararrowup';
+    $img_arrow_url = "{$_CONF['layout_url']}/images/$arrow_img.$_IMAGE_TYPE";
+    $img_arrow = '&nbsp;' . COM_createImage($img_arrow_url, $arrow_img);
+
+    # HEADER FIELDS array(text, field, sort, align, class) =====================
+
+    // number of columns in each row
+    $ncols = count( $header_arr );
+
     for ($i=0; $i < $ncols; $i++) {
-        $admin_templates->set_var('header_text', $header_arr[$i]['text']);
+        $header_text = (isset($header_arr[$i]['text']) && !empty($header_arr[$i]['text'])) ? $header_arr[$i]['text'] : '';
+        // check to see if field is sortable
+        if (isset($header_arr[$i]['sort']) && $header_arr[$i]['sort'] != false) {
+            // add the sort indicator
+            $header_text .= ($orderby == $header_arr[$i]['field']) ? $img_arrow : '';
+            // change the mouse to a pointer
+            $th_subtags = " onmouseover=\"this.style.cursor='pointer';\"";
+            // create an index so we know what to sort
+            $separator = (strpos($form_url, '?') > 0) ? '&amp;' : '?';
+            // ok now setup the parameters to preserve:
+            // sort field and direction
+            $th_subtags .= " onclick=\"window.location.href='$form_url$separator" // onclick action
+                    ."orderby=$i&amp;prevorder=$orderby&amp;direction=$direction";
+            $th_subtags .= "';\"";
+        } else {
+            $th_subtags = '';
+        }
+        // apply field styling if specified
         if (!empty($header_arr[$i]['header_class'])) {
             $admin_templates->set_var('class', $header_arr[$i]['header_class']);
         } else {
             $admin_templates->set_var('class', 'admin-list-headerfield');
         }
-        // header column formatting
+        // apply field alignment options if specified
         $header_column_style = '';
         if (!empty($header_arr[$i]['align'])) {
             if ($header_arr[$i]['align'] == 'center') {
@@ -187,14 +265,23 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
                 $header_column_style = 'text-align:right;';
             }
         }
+        // apply field wrap option if specified
         $header_column_style .= (isset($header_arr[$i]['nowrap'])) ? ' white-space:nowrap;' : '';
+        // allow specification of field width
         $header_column_style .= (isset($header_arr[$i]['width'])) ? ' width:' . $header_arr[$i]['width'] . ';' : '';
         if(!empty($header_column_style)) {
             $admin_templates->set_var('header_column_style', 'style="' . $header_column_style . '"');
         } else {
             $admin_templates->clear_var('header_column_style');
         }
+        // output the header field
+        $admin_templates->set_var('header_text', $header_text);
+        $admin_templates->set_var('th_subtags', $th_subtags);
         $admin_templates->parse('header_row', 'header', true);
+        // clear all for next header field (if any)
+        $admin_templates->clear_var('th_subtags');
+        $admin_templates->clear_var('class');
+        $admin_templates->clear_var('header_text');
     }
 
     if ($nrows == 0) {
@@ -204,12 +291,21 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
         $admin_templates->set_var('message', $LANG_ADMIN['data_error']);
     } else {
         $admin_templates->set_var('show_message', 'display:none;');
+
+        // prior to displaying the data, sort the array if a column is specified
+        if (!empty($orderby)) ADMIN_sortArray($data_arr, $orderby, $direction);
+
+        # ARRAY DATA FIELDS ====================================================
+
+        $row = 1;
         for ($i = 0; $i < $nrows; $i++) {
+            $A = $data_arr[$i];
+            $row_output = false;
             if ($nrows > $chkminimum AND $chkselect) {
                 $admin_templates->set_var('class', 'admin-list-field');
                 $admin_templates->set_var('column_style', 'style="text-align:center;"'); // always center checkbox
-                if ($chkfunction($data_arr[$i])) {
-                    $admin_templates->set_var('itemtext', '<input type="checkbox" name="' . $chkname . '[]" value="' . $data_arr[$i][$chkfield] . '" title="' . $LANG_ADMIN['select'] . '"' . XHTML . '>');
+                if ($chkfunction($A)) {
+                    $admin_templates->set_var('itemtext', '<input type="checkbox" name="' . $chkname . '[]" value="' . $A[$chkfield] . '" title="' . $LANG_ADMIN['select'] . '"' . XHTML . '>');
                 } else {
                     $admin_templates->set_var('itemtext', '<input type="checkbox" name="disabled" value="x" style="visibility:hidden" DISABLED'.XHTML.'>');
                 }
@@ -218,21 +314,28 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
             for ($j = 0; $j < $ncols; $j++) {
                 $fieldname = $header_arr[$j]['field'];
                 $fieldvalue = '';
-                if (!empty($data_arr[$i][$fieldname])) {
-                    $fieldvalue = $data_arr[$i][$fieldname];
+                if (!empty($A[$fieldname])) {
+                    $fieldvalue = $A[$fieldname];
                 }
                 if (!empty($fieldfunction) && !empty($extra)) {
-                    $fieldvalue = $fieldfunction($fieldname, $fieldvalue, $data_arr[$i], $icon_arr, $extra);
+                    $fieldvalue = $fieldfunction($fieldname, $fieldvalue, $A, $icon_arr, $extra);
                 } elseif(!empty($fieldfunction)) {
-                    $fieldvalue = $fieldfunction($fieldname, $fieldvalue, $data_arr[$i], $icon_arr);
+                    $fieldvalue = $fieldfunction($fieldname, $fieldvalue, $A, $icon_arr);
                 } else {
                     $fieldvalue = $fieldvalue;
                 }
+                if ($fieldvalue !== false) { # return was there, so write line
+                    $row_output = true;
+                } else {
+                    $fieldvalue = ''; // dont give empty fields
+                }
+                // apply field style option if specified
                 if (!empty($header_arr[$j]['field_class'])) {
                     $admin_templates->set_var('class', $header_arr[$j]['field_class']);
                 } else {
                     $admin_templates->set_var('class', 'admin-list-field');
                 }
+                // process field alignment option if specified
                 $column_style = '';
                 if (!empty($header_arr[$j]['align'])) {
                     if ($header_arr[$j]['align'] == 'center') {
@@ -241,20 +344,23 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
                         $column_style = 'text-align:right;';
                     }
                 }
+                // process field nowrap option if specified
                 $column_style .= (isset($header_arr[$j]['nowrap'])) ? ' white-space:nowrap;' : '';
                 if(!empty($column_style)) {
                     $admin_templates->set_var('column_style', 'style="' . $column_style . '"');
                 } else {
                     $admin_templates->clear_var('column_style');
                 }
-                if ($fieldvalue !== false) {
-                    $admin_templates->set_var('itemtext', $fieldvalue);
-                    $admin_templates->parse('item_field', 'field', true);
-                }
-            }
-            $admin_templates->set_var('cssid', ($i%2)+1);
-            $admin_templates->parse('item_row', 'row', true);
 
+                $admin_templates->set_var('itemtext', $fieldvalue);
+                $admin_templates->parse('item_field', 'field', true);
+            }
+            // if we had any field data, then parse row
+            if ($row_output) {
+                $row++;
+                $admin_templates->set_var('cssid', ($row%2)+1);
+                $admin_templates->parse('item_row', 'row', true);
+            }
             $admin_templates->clear_var('item_field');
         }
     $footer_cols = ($chkselect) ? $ncols + 1 : $ncols;
@@ -281,16 +387,14 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
         $admin_templates->parse('action_row', 'arow', true);
     }
 
-    $admin_templates->parse('output', 'list');
+    // paging will go here in the future
 
-    if (!empty($title)) {
-        $retval .= COM_startBlock($title, $help_url,
-                            COM_getBlockTemplate('_admin_block', 'header'));
-    }
+    // return the html output
+    $admin_templates->parse('output', 'list');
+    $retval = (!empty($title)) ? COM_startBlock($title, $help_url,
+                            COM_getBlockTemplate('_admin_block', 'header')) : '';
     $retval .= $admin_templates->finish($admin_templates->get_var('output'));
-    if (!empty($title)) {
-        $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
-    }
+    $retval .= (!empty($title)) ? COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')) : '';
 
     return $retval;
 }
@@ -317,50 +421,38 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_ACCESS, $LANG01, $_IMAGE_TYPE, $MESSAGE;
 
-    // set all variables to avoid warnings
-    $retval = '';
-    $filter_str = '';
-    $order_sql = '';
-    $limit = '';
-    $prevorder = '';
-    if (isset ($_GET['prevorder'])) { # what was the last sorting?
-        $prevorder = COM_applyFilter ($_GET['prevorder']);
-    }
-
-    $query = '';
-    if ( isset($_GET['q']) ) {
+    // retrieve the query
+    if (isset($_GET['q'])) {
         $query = strip_tags(COM_stripslashes($_GET['q']));
-    } else if (isset ($_POST['q'])) {
+    } else if (isset($_POST['q'])) {
         $query = strip_tags(COM_stripslashes($_POST['q']));
     } else {
         $query = '';
     }
 
-    $query_limit = 0;
+    // retrieve the query_limit
     if ( isset($_GET['query_limit']) ) {
         $query_limit = intval(COM_applyFilter ($_GET['query_limit'], true));
     } else if ( isset($_POST['query_limit']) ) {
         $query_limit = intval(COM_applyFilter ($_POST['query_limit'], true));
-    }
-    if($query_limit == 0) {
+    } else {
         $query_limit = 50;
     }
 
-    // we assume that the current page is 1 to set it.
-    $curpage = 1;
-    $page = '';
     // get the current page from the interface. The variable is linked to the
     // component, i.e. the plugin/function calling this here to avoid overlap
-    if ( isset($_GET[$component . 'listpage'])) {
+    // the default page number is 1
+    if (isset($_GET[$component . 'listpage'])) {
         $page = intval(COM_applyFilter ($_GET[$component . 'listpage'], true));
         $curpage = $page;
     } else if ( isset($_POST[$component . 'listpage'])) {
         $page = intval(COM_applyFilter ($_POST[$component . 'listpage'], true));
         $curpage = $page;
+    } else {
+        $page ='';
+        $curpage = 1;
     }
-    if ($curpage <= 0) {
-        $curpage = 1; #current page has to be larger 0
-    }
+    $curpage = ($curpage <= 0) ? 1 : $curpage; // curpagee has to be > 0
 
     // process text_arr for title, help url and form url
     $title = (is_array($text_arr) AND !empty($text_arr['title'])) ? $text_arr['title'] : '';
@@ -432,94 +524,73 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $admin_templates->set_var('filter', $filter);
     }
 
-    $sql_query = DB_escapeString($query); // replace quotes etc for security
     $sql = $query_arr['sql']; // get sql from array that builds data
 
-    $order_var = ''; # number that is displayed in URL
-    $order = '';     # field that is used in SQL
-    $order_var_link = ''; # Variable for google paging.
-
-    // is the order set in the link (when sorting the list)
-    if (!isset ($_GET['order'])) {
-        $order = $defsort_arr['field']; // no, get the default
+    // setup list sort options
+    if (!isset($_GET['orderby'])) {
+        $orderby = $defsort_arr['field']; // not set - use default (this could be null)
     } else {
-        $order_var = COM_applyFilter ($_GET['order'], true);
-        $order_var_link = "&amp;order=$order_var"; # keep the variable for the google paging
-        $order = $header_arr[$order_var]['field'];  # current order field name
+        $orderbyidx = COM_applyFilter($_GET['orderby'], true); // set - retrieve and clean
+        $orderidx_link = "&amp;order=$orderbyidx"; // preserve the value for paging
+        $orderby = $header_arr[$orderbyidx]['field']; // get the field name to sort by
     }
-    $order_for_query = $order;
 
-    $direction = '';
-    if (!isset ($_GET['direction'])) { # get direction to sort after
-        $direction = $defsort_arr['direction'];
-    } else {
-        $direction = COM_applyFilter ($_GET['direction']);
-    }
+    // set sort direction.  defaults to ASC
+    $direction = (isset($_GET['direction'])) ? COM_applyFilter($_GET['direction']) : $defsort_arr['direction'];
     $direction = strtoupper($direction) == 'DESC' ? 'DESC' : 'ASC';
 
-    if ($order == $prevorder) { #reverse direction if prev. order was the same
+    // retrieve previous sort order field
+    $prevorder = (isset($_GET['prevorder'])) ? COM_applyFilter ($_GET['prevorder']) : '';
+
+    // reverse direction if previous order field was the same (this is a toggle)
+    if ($orderby == $prevorder) { // reverse direction if prev. order was the same
         $direction = ($direction == 'DESC') ? 'ASC' : 'DESC';
-    } else {
-        $direction = ($direction == 'DESC') ? 'DESC' : 'ASC';
     }
 
-    if ($direction == 'ASC') { # assign proper arrow img name dep. on sort order
-        $arrow = 'bararrowdown';
-    } else {
-        $arrow = 'bararrowup';
-    }
-    # make actual order arrow image
-    $img_arrow_url = "{$_CONF['layout_url']}/images/$arrow.$_IMAGE_TYPE";
-    $img_arrow = '&nbsp;' . COM_createImage($img_arrow_url, $arrow);
+    // ok now let's build the order sql
+    $orderbysql = (!empty($orderby)) ? "ORDER BY $orderby $direction" : '';
 
-    if (!empty ($order_for_query)) { # concat order string
-        $order_sql = "ORDER BY $order_for_query $direction";
-    }
+    // assign proper arrow img based upon order
+    $arrow_img = ($direction == 'ASC') ? 'bararrowdown' : 'bararrowup';
+    $img_arrow_url = "{$_CONF['layout_url']}/images/$arrow_img.$_IMAGE_TYPE";
+    $img_arrow = '&nbsp;' . COM_createImage($img_arrow_url, $arrow_img);
 
-    $th_subtags = ''; // other tags in the th, such as onclick and mouseover
-    $header_text = ''; // title as displayed to the user
+    # HEADER FIELDS array(text, field, sort, align, class) =====================
 
     // number of columns in each row
     $ncols = count( $header_arr );
 
-    // HEADER FIELDS array(text, field, sort, class)
-    // this part defines the contents & format of the header fields
-    for ($i=0; $i < $ncols; $i++) { #iterate through all headers
-        $header_text = $header_arr[$i]['text'];
-        $th_subtags = '';
-        if (isset($header_arr[$i]['sort']) && $header_arr[$i]['sort'] != false) { # is this sortable?
-            if ($order==$header_arr[$i]['field']) { # is this currently sorted?
-                $header_text .= $img_arrow;
-            }
-            # make the mouseover effect is sortable
+    for ($i=0; $i < $ncols; $i++) {
+        $header_text = (isset($header_arr[$i]['text']) && !empty($header_arr[$i]['text'])) ? $header_arr[$i]['text'] : '';
+        // check to see if field is sortable
+        if (isset($header_arr[$i]['sort']) && $header_arr[$i]['sort'] != false) {
+            // add the sort indicator
+            $header_text .= ($orderby == $header_arr[$i]['field']) ? $img_arrow : '';
+            // change the mouse to a pointer
             $th_subtags = " onmouseover=\"this.style.cursor='pointer';\"";
-            $order_var = $i; # assign number to field so we know what to sort
-            if (strpos ($form_url, '?') > 0) {
-                $separator = '&amp;';
-            } else {
-                $separator = '?';
-            }
+            // create an index so we know what to sort
+            $separator = (strpos($form_url, '?') > 0) ? '&amp;' : '?';
+            // ok now setup the parameters to preserve:
+            // sort field and direction
             $th_subtags .= " onclick=\"window.location.href='$form_url$separator" // onclick action
-                    ."order=$order_var&amp;prevorder=$order&amp;direction=$direction";
-            if (!empty ($page)) {
-                $th_subtags .= '&amp;' . $component . 'listpage=' . $page;
-            }
-            if (!empty ($query)) {
-                $th_subtags .= '&amp;q=' . urlencode($query);
-            }
-            if (!empty ($query_limit)) {
-                $th_subtags .= '&amp;query_limit=' . $query_limit;
-            }
+                    ."orderby=$i&amp;prevorder=$orderby&amp;direction=$direction";
+            // page number
+            $th_subtags .= (!empty($page)) ? '&amp;' . $component . 'listpage=' . $page : '';
+            // query
+            $th_subtags .= (!empty($query)) ? '&amp;q=' . urlencode($query): '';
+            // query limit
+            $th_subtags .= (!empty($query_limit)) ? '&amp;query_limit=' . $query_limit : '';
             $th_subtags .= "';\"";
         } else {
             $th_subtags = '';
         }
-
+        // apply field styling if specified
         if (!empty($header_arr[$i]['header_class'])) {
             $admin_templates->set_var('class', $header_arr[$i]['header_class']);
         } else {
             $admin_templates->set_var('class', 'admin-list-headerfield');
         }
+        // apply field alignment options if specified
         $header_column_style = '';
         if (!empty($header_arr[$i]['align'])) {
             if ($header_arr[$i]['align'] == 'center') {
@@ -528,28 +599,31 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
                 $header_column_style = 'text-align:right;';
             }
         }
+        // apply field wrap option if specified
         $header_column_style .= (isset($header_arr[$i]['nowrap'])) ? ' white-space:nowrap;' : '';
+        // apply field width option if specified
         $header_column_style .= (isset($header_arr[$i]['width'])) ? ' width:' . $header_arr[$i]['width'] . ';' : '';
+        // apply field style option if specified
         if(!empty($header_column_style)) {
             $admin_templates->set_var('header_column_style', 'style="' . $header_column_style . '"');
         } else {
             $admin_templates->clear_var('header_column_style');
         }
+        // output the header field
         $admin_templates->set_var('header_text', $header_text);
         $admin_templates->set_var('th_subtags', $th_subtags);
         $admin_templates->parse('header_row', 'header', true);
-        $admin_templates->clear_var('th_subtags'); // clear all for next header
+        // clear all for next header
+        $admin_templates->clear_var('th_subtags');
         $admin_templates->clear_var('class');
         $admin_templates->clear_var('header_text');
     }
 
     if ($has_limit) {
         $admin_templates->set_var('lang_limit_results', $LANG_ADMIN['limit_results']);
-        $limit = 50; # default query limit if not other chosen.
-                     # maybe this could be a setting from the list?
-        if (!empty($query_limit)) {
-            $limit = $query_limit;
-        }
+
+        $limit = (!empty($query_limit)) ? $query_limit : 50; // query limit (default=50)
+
         if ($query != '') { # set query into form after search
             $admin_templates->set_var ('query', urlencode($query) );
         } else {
@@ -559,29 +633,27 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         # choose proper dropdown field for query limit
         $admin_templates->set_var($limit . '_selected', 'selected="selected"');
 
-        if (!empty($query_arr['default_filter'])){ # add default filter to sql
-            $filter_str = " {$query_arr['default_filter']}";
-        }
-        if (!empty ($query)) { # add query fields with search term
-            $filter_str .= " AND (";
+        // set the default sql filter (if any)
+        $filtersql = (isset($query_arr['default_filter']) && !empty($query_arr['default_filter'])) ? " {$query_arr['default_filter']}" : '';
+        // now add the query fields
+        if (!empty($query)) { # add query fields with search term
+            $filtersql .= " AND (";
             for ($f = 0; $f < count($query_arr['query_fields']); $f++) {
-                $filter_str .= $query_arr['query_fields'][$f]
-                            . " LIKE '%$sql_query%'";
+                $filtersql .= $query_arr['query_fields'][$f]
+                            . " LIKE '%" . DB_escapeString($query) . "%'";
                 if ($f < (count($query_arr['query_fields']) - 1)) {
-                    $filter_str .= " OR ";
+                    $filtersql .= " OR ";
                 }
             }
-            $filter_str .= ")";
+            $filtersql .= ")";
         }
-        $num_pages_sql = $sql . $filter_str;
-        $num_pages_result = DB_query($num_pages_sql);
-        $num_rows = DB_numRows($num_pages_result);
+        $num_pagessql = $sql . $filtersql;
+        $num_pagesresult = DB_query($num_pagessql);
+        $num_rows = DB_numRows($num_pagesresult);
         $num_pages = ceil ($num_rows / $limit);
-        if ($num_pages < $curpage) { # make sure we dont go beyond possible results
-               $curpage = 1;
-        }
+        $curpage = ($num_pages < $curpage) ? 1 : $curpage; // don't go beyond possible results
         $offset = (($curpage - 1) * $limit);
-        $limit = "LIMIT $offset,$limit"; # get only current page data
+        $limitsql = "LIMIT $offset,$limit"; // get only current page data
         $admin_templates->set_var ('lang_records_found',
                                    $LANG_ADMIN['records_found']);
         $admin_templates->set_var ('records_found',
@@ -593,10 +665,9 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $admin_templates->set_var('search_menu','');
     }
 
-    # SQL
-    $sql .= "$filter_str $order_sql $limit;";
-    // echo $sql;
-
+    # form the sql query to retrieve the data
+    $sql .= "$filtersql $orderbysql $limitsql;";
+    COM_errorLog("sql=$sql");
     $result = DB_query($sql);
 
     // number of rows/records to display
@@ -605,7 +676,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     $r = 1; # r is the counter for the actual displayed rows for correct coloring
     for ($i = 0; $i < $nrows; $i++) { # now go through actual data
         $A = DB_fetchArray($result);
-        $this_row = false; # as long as no fields are returned, dont print row
+        $row_output = false; # as long as no fields are returned, dont print row
         if ($chkselect) {
             $admin_templates->set_var('class', 'admin-list-field');
             $admin_templates->set_var('column_style', 'style="text-align:center;"'); // always center checkbox
@@ -630,7 +701,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
                 $fieldvalue = $fieldvalue;
             }
             if ($fieldvalue !== false) { # return was there, so write line
-                $this_row = true;
+                $row_output = true;
             } else {
                 $fieldvalue = ''; // dont give empty fields
             }
@@ -639,6 +710,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
             } else {
                 $admin_templates->set_var('class', 'admin-list-field');
             }
+            // process field alignment option if specified
             $column_style = '';
             if (!empty($header_arr[$j]['align'])) {
                 if ($header_arr[$j]['align'] == 'center') {
@@ -656,7 +728,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
             $admin_templates->set_var('itemtext', $fieldvalue); # write field
             $admin_templates->parse('item_field', 'field', true);
         }
-        if ($this_row) { # there was data in at least one field, so print line
+        if ($row_output) { # there was data in at least one field, so print line
             $r++; # switch to next color
             $admin_templates->set_var('cssid', ($r%2)+1); # make alternating table color
             $admin_templates->parse('item_row', 'row', true); # process the complete row
@@ -692,7 +764,8 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $admin_templates->parse('action_row', 'arow', true);
     }
 
-    if ($has_paging) { # now make google-paging
+    // perform the paging
+    if ($has_paging) {
         $hasargs = strstr( $form_url, '?' );
         if( $hasargs ) {
             $sep = '&amp;';
@@ -700,9 +773,9 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
             $sep = '?';
         }
         if (!empty($query)) { # port query to next page
-            $base_url = $form_url . $sep . 'q=' . urlencode($query) . "&amp;query_limit=$query_limit$order_var_link&amp;direction=$direction";
+            $base_url = $form_url . $sep . 'q=' . urlencode($query) . "&amp;query_limit=$query_limit$orderidx_link&amp;direction=$direction";
         } else {
-            $base_url = $form_url . $sep ."query_limit=$query_limit$order_var_link&amp;direction=$direction";
+            $base_url = $form_url . $sep ."query_limit=$query_limit$orderidx_link&amp;direction=$direction";
         }
 
         if ($num_pages > 1) { # print actual google-paging
@@ -712,17 +785,12 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         }
     }
 
+    // return the html output
     $admin_templates->parse('output', 'list');
-
-    // Do the actual output
-    if (!empty($title)) {
-        $retval .= COM_startBlock($title, $help_url,
-                            COM_getBlockTemplate('_admin_block', 'header'));
-    }
+    $retval = (!empty($title)) ? COM_startBlock($title, $help_url,
+                            COM_getBlockTemplate('_admin_block', 'header')) : '';
     $retval .= $admin_templates->finish($admin_templates->get_var('output'));
-    if (!empty($title)) {
-        $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
-    }
+    $retval .= (!empty($title)) ? COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')) : '';
 
     return $retval;
 }

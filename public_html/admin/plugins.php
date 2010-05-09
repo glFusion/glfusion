@@ -579,7 +579,7 @@ function PLUGINS_list($token)
     PLUGINS_loadPlugins($data_arr);             // installed plugins
     PLUGINS_loadNewPlugins($data_arr);          // uninstalled/new plugins
 
-    ADMIN_sortList($data_arr,'pi_name');        // default sort for now (fancier later)
+    ADMIN_sortArray($data_arr,'pi_name');       // default sort for now (fancier later)
 
     $header_arr = array(
         array('text' => $LANG32[78], 'field' => 'control', 'align' => 'center', 'width' => '40px'),
