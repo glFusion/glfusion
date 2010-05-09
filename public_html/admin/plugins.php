@@ -579,16 +579,16 @@ function PLUGINS_list($token)
     PLUGINS_loadPlugins($data_arr);             // installed plugins
     PLUGINS_loadNewPlugins($data_arr);          // uninstalled/new plugins
 
-    ADMIN_sortArray($data_arr,'pi_name');       // default sort for now (fancier later)
+    $defsort_arr = array('field' => 'pi_name', 'direction' => 'asc');
 
     $header_arr = array(
         array('text' => $LANG32[78], 'field' => 'control', 'align' => 'center', 'width' => '40px'),
-        array('text' => $LANG32[16], 'field' => 'pi_name'),
+        array('text' => $LANG32[16], 'field' => 'pi_name', 'sort' => true),
         array('text' => $LANG32[36], 'field' => 'version', 'align' => 'center', 'nowrap' => true, 'width' => '75px'),
         array('text' => $LANG32[83], 'field' => 'info', 'align' => 'center', 'width' => '40px'),
-        array('text' => $LANG32[84], 'field' => 'bundled', 'align' => 'center', 'width' => '40px'),
-        array('text' => $LANG32[27], 'field' => 'pi_homepage', 'nowrap' => true, 'width' => '150px'),
-        array('text' => $LANG32[18], 'field' => 'pi_gl_version', 'align' => 'center', 'width' => '75px'),
+        array('text' => $LANG32[84], 'field' => 'bundled', 'align' => 'center', 'width' => '40px', 'sort' => true),
+        array('text' => $LANG32[27], 'field' => 'pi_homepage', 'nowrap' => true, 'width' => '150px', 'sort' => true),
+        array('text' => $LANG32[18], 'field' => 'pi_gl_version', 'align' => 'center', 'width' => '75px', 'sort' => true),
         array('text' => $LANG32[79], 'field' => 'unplug', 'align' => 'center', 'width' => '40px'),
     );
 
@@ -605,8 +605,9 @@ function PLUGINS_list($token)
         'bottom' => '<input type="hidden" name="pluginenabler" value="true"/>'
     );
 
-    $retval .= ADMIN_simpleList('PLUGINS_getListField', $header_arr,
-                $text_arr, $data_arr, $options_arr, $form_arr, $token);
+    $retval .= ADMIN_listArray('plugins', 'PLUGINS_getListField', $header_arr,
+                            $text_arr, $data_arr, $defsort_arr, '', $token,
+                            $options_arr, $form_arr);
 
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
