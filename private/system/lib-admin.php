@@ -223,9 +223,10 @@ function ADMIN_listArray($component, $fieldfunction, $header_arr, $text_arr,
     }
 
     // assign proper arrow img based upon order
-    $arrow_img = ($direction == 'ASC') ? 'bararrowdown' : 'bararrowup';
-    $img_arrow_url = "{$_CONF['layout_url']}/images/$arrow_img.$_IMAGE_TYPE";
-    $img_arrow = '&nbsp;' . COM_createImage($img_arrow_url, $arrow_img);
+    $arrow_img = ($direction == 'ASC') ? 'ascending' : 'descending';
+    $img_arrow_url = "{$_CONF['layout_url']}/images/admin/$arrow_img.$_IMAGE_TYPE";
+    $attr['style'] = "vertical-align:text-top;";
+    $img_arrow = '&nbsp;' . COM_createImage($img_arrow_url, $arrow_img, $attr);
 
     # HEADER FIELDS array(text, field, sort, align, class) =====================
 
@@ -551,9 +552,10 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     $orderbysql = (!empty($orderby)) ? "ORDER BY $orderby $direction" : '';
 
     // assign proper arrow img based upon order
-    $arrow_img = ($direction == 'ASC') ? 'bararrowdown' : 'bararrowup';
-    $img_arrow_url = "{$_CONF['layout_url']}/images/$arrow_img.$_IMAGE_TYPE";
-    $img_arrow = '&nbsp;' . COM_createImage($img_arrow_url, $arrow_img);
+    $arrow_img = ($direction == 'ASC') ? 'ascending' : 'descending';
+    $img_arrow_url = "{$_CONF['layout_url']}/images/admin/$arrow_img.$_IMAGE_TYPE";
+    $attr['style'] = "vertical-align:text-top;";
+    $img_arrow = '&nbsp;' . COM_createImage($img_arrow_url, $arrow_img, $attr);
 
     # HEADER FIELDS array(text, field, sort, align, class) =====================
 
