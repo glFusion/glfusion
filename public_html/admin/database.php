@@ -188,7 +188,7 @@ function DBADMIN_backup()
     if (is_dir($_CONF['backup_path'])) {
         $curdatetime = date('Y_m_d_H_i_s');
         $backupfile = "{$_CONF['backup_path']}glfusion_db_backup_{$curdatetime}.sql";
-        $command = $_DB_mysqldump_path . " -h$_DB_host -u$_DB_user";
+        $command = '"'.$_DB_mysqldump_path.'" ' . " -h$_DB_host -u$_DB_user";
         if (!empty($_DB_pass)) {
             $command .= " -p$_DB_pass";
         }
@@ -207,7 +207,7 @@ function DBADMIN_backup()
             $canExec = @file_exists($_DB_mysqldump_path);
         }
         if ($canExec) {
-            exec($command);
+            DBADMIN_execWrapper($command);
             if (file_exists($backupfile) && filesize($backupfile) > 1000) {
                 @chmod($backupfile, 0644);
                 $retval .= COM_showMessage(93);
@@ -260,6 +260,38 @@ function DBADMIN_download($file)
     $dl->setAllowedExtensions(array('sql' =>  'application/x-gzip-compressed'));
 
     $dl->downloadFile($file);
+}
+
+function DBADMIN_exec($cmd) {
+    global $_CONF;
+
+    $debugfile = "";
+    $status="";
+    $results=array();
+    COM_errorLog(sprintf("DBADMIN_exec: Executing: %s",$cmd));
+
+    $debugfile = $_CONF['path'] . 'logs/debug.log';
+
+    if (PHP_OS == "WINNT") {
+        $cmd .= " 2>&1";
+        exec('"' . $cmd . '"',$results,$status);
+    } else {
+        exec($cmd, $results, $status);
+    }
+
+    return array($results, $status);
+}
+
+function DBADMIN_execWrapper($cmd) {
+
+    list($results, $status) = DBADMIN_exec($cmd);
+
+    if ( $status == 0 ) {
+        return true;
+    } else {
+        COM_errorLog("DBADMIN_execWrapper: Failed Command: " . $cmd);
+        return false;
+    }
 }
 
 // MAIN ========================================================================

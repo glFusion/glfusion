@@ -2931,6 +2931,23 @@ function PLG_canUserRate( $type, $item_id, $uid )
     return $retval;
 }
 
+// return the path to a plugin's templates
+
+function PLG_templatePath($plugin, $path = '')
+{
+    global $_CONF, $_TABLES;
+
+    $fn = 'plugin_templatePath_' . $plugin;
+    if (function_exists($fn)) {
+        $args = (!empty($path)) ? array($path) : array();
+        return PLG_callFunctionForOnePlugin($fn, $args);
+    } else {
+        $layout_path = $_CONF['path'] . 'plugins/' . $plugin . 'templates';
+        $layout_path .= (empty($path)) ? '/' . $path : '';
+    }
+    return $layout_path;
+}
+
 /**
  * START STORY PLUGIN STUB SECTION
  *
