@@ -199,7 +199,7 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             $attr['onclick'] = 'return confirm(\'' . $LANG24[89] .'\');';
             $retval .= COM_createLink($icon_arr['delete'],
                 $_CONF['site_admin_url'] . '/story.php'
-                . '?delete=x&amp;sid=' . $A['sid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+                . '?deletestory=x&amp;sid=' . $A['sid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
             break;
 
         default:

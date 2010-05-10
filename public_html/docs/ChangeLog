@@ -1,7 +1,13 @@
 glFusion ChangeLog
 
+v1.2.1.svn
+----------
+
+
 v1.2.0.pl3
 ----------
+- Database backup would always fail with 0 byte file message. (Mark)
+- Delete story from admin list did not work (result of a fix done in pl2) (Mark)
 - Plugin API bug - PLG_callFunctionForAllPlugins() did not cycle through
   all the plugins - returned after first hit. (Mark)
 
