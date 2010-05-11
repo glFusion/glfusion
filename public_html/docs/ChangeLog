@@ -2,6 +2,12 @@ glFusion ChangeLog
 
 v1.2.1.svn
 ----------
+- Implement PLG_templatePath: plugin helper function to find templates (Mark H.)
+- Extend ADMIN_simpleList -> ADMIN_arrayList, allows sortable columns (Mark H.)
+- Rename ADMIN_sortList function to ADMIN_sortArray (Mark H.)
+- Fix filecheck_data - create missing nouveau custom template dirs (Mark H.)
+- Plugin Admin - allow sorting of columns in Plugin list (Mark H.)
+- Replace/fix sort direction arrows in ADMIN_list and ADMIN_arrayList (Mark H.)
 
 
 v1.2.0.pl3
