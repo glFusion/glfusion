@@ -294,7 +294,7 @@ USES_lib_widgets();
 
 //call the WIDGET_mooslide function from lib-widgets.php
 // last 4 options below are width, height, css id, and autoscroll interval
-//in ms, thus 1000 is 1 second, set to 0 to turn off autoscroll
+// in ms, thus 1000 is 1 second, set to 0 to turn off autoscroll
 return WIDGET_mooslide(\$slides, 560, 160, \'gl_slide\', 5000);', 1, NOW(), 'leftblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 1, '', 'none', 3, 1, 0, 0, 'html', 0) ";
 
 $_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_status`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('mooslide_whatsnew', 1, 2, 'What\'s New', '<p><img hspace=\"18\" height=\"135\" width=\"135\" vspace=\"5\" align=\"left\" alt=\"whats new\" src=\"xxxSITEURLxxx/images/library/Image/whatsnew.png\" /></p>
