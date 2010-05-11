@@ -248,6 +248,18 @@ function MG_SWFUpload( $album_id ) {
             return $tmpmsg;
         }
 
+        // check user quota -- do we have one????
+        $user_quota = MG_getUserQuota( $_USER['uid'] );
+        if ( $user_quota > 0 ) {
+            $disk_used = MG_quotaUsage( $_USER['uid'] );
+            if ( $disk_used+$filesize > $user_quota) {
+                COM_errorLog("MG Upload: File " . $filename . " would exceeds the users quota");
+                $tmpmsg = sprintf($LANG_MG02['upload_exceeds_quota'], $filename);
+                $statusMsg .= $tmpmsg . '<br' . XHTML . '>';
+                return $tmpmsg;
+            }
+        }
+
         $attach_tn = 0;
 
         // override the determination for some filetypes
