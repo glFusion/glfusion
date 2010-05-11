@@ -292,7 +292,7 @@ USES_lib_widgets();
 // add your staticpage IDs, order here is order they appear on the mooslide tabs
 \$slides = Array(\'mooslide_whatsnew\', \'mooslide_cachetech\', \'mooslide_integratedplugins\', \'mooslide_mootools\', \'mooslide_widgets\');
 
-//call the WIDGET_mooslide function from lib-widgets.php
+// call the WIDGET_mooslide function from lib-widgets.php
 // last 4 options below are width, height, css id, and autoscroll interval
 // in ms, thus 1000 is 1 second, set to 0 to turn off autoscroll
 return WIDGET_mooslide(\$slides, 560, 160, \'gl_slide\', 5000);', 1, NOW(), 'leftblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 1, '', 'none', 3, 1, 0, 0, 'html', 0) ";
