@@ -222,7 +222,7 @@ function BLOCK_edit($bid = '', $B = array())
         $A['tid'] = isset($B['tid']) ? $B['tid'] : 'All';
         $A['blockorder'] = isset($B['blockorder']) ? $B['blockorder'] : 0;
         $A['content'] = isset($B['content']) ? $B['content'] : '';
-        $A['allow_autotags'] = isset($B['allow_autotags']) && $B['allow_autotags'] == 'on' ? 1 : 0;
+        $A['allow_autotags'] = isset($B['allow_autotags']) && $B['allow_autotags'] == 1 ? 1 : 0;
         $A['rdfurl'] = isset($B['rdfurl']) ? $B['rdfurl'] : '';
         $A['rdfupdated'] = isset($B['rdfupdated']) ? $B['rdfupdated'] : '';
         $A['rdflimit'] = isset($B['rdflimit']) ? $B['rdflimit'] : 0;
@@ -720,7 +720,7 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
         } else {
             $is_enabled = 0;
         }
-        if ($allow_autotags == 'on') {
+        if ($allow_autotags == 1) {
             $allow_autotags = 1;
         } else {
             $allow_autotags = 0;
@@ -1060,7 +1060,7 @@ switch ($action) {
             $rdflimit       = isset ($_POST['rdflimit'])       ? COM_applyFilter ($_POST['rdflimit'], true) : 0;
             $phpblockfn     = isset ($_POST['phpblockfn'])     ? COM_applyFilter($_POST['phpblockfn']) : '';
             $is_enabled     = isset ($_POST['is_enabled'])     ? 'on' : '';
-            $allow_autotags = isset ($_POST['allow_autotags']) ? 'on' : 0;
+            $allow_autotags = isset ($_POST['allow_autotags']) ? 1 : 0;
             $name           = isset ($_POST['name'])        ? COM_stripslashes($_POST['name']) : '';
             $title          = isset ($_POST['title'])       ? COM_stripslashes($_POST['title']) : '';
             $type           = isset ($_POST['type'])        ? COM_applyFilter($_POST['type']) : '';

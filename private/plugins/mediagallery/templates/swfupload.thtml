@@ -634,7 +634,7 @@ var settings = {
         debug: false,
 
         // Button Settings
-        button_image_url : "images/SWFUploadButton.png",
+        button_image_url : "{site_url}/images/SWFUploadButton.png",
         button_placeholder_id : "spanButtonPlaceholder",
         button_width: 61,
         button_height: 22,

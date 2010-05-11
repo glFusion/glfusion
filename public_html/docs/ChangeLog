@@ -16,7 +16,13 @@ v1.2.1.svn
 
 v1.2.0.pl3
 ----------
-- Database backup would always fail with 0 byte file message. (Mark)
+- Block Editor did not allow you to un-check allow auto tags (Mark)
+- Media Gallery: SWFUpload did not enforce user quotas (Mark)
+- Database backup would fail if pipe char (|) used in password (Mark)
+- Media Gallery: SWFUpload referenced SWFUpload Button in wrong directory if
+  glFusion is installed in a sub-directory. (Mark).
+- Database backup would always fail with 0 byte file message on Windows
+  hosts. (Mark)
 - Delete story from admin list did not work (result of a fix done in pl2) (Mark)
 - Plugin API bug - PLG_callFunctionForAllPlugins() did not cycle through
   all the plugins - returned after first hit. (Mark)
