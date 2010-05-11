@@ -2436,7 +2436,7 @@ background:#ccc;
 color:#999;
 }
 
-div#frame {
+div#gl_frame {
 clear:both;
 position:relative;
 overflow:hidden;
@@ -2444,7 +2444,7 @@ border:5px solid #CCC;
 margin:0 auto 2em;
 }
 
-div#frame div.button {
+div#gl_frame div.button {
 position:absolute;
 width:28px;
 height:28px;
@@ -2453,28 +2453,29 @@ overflow:hidden;
 top:40%;
 }
 
-div#frame div.button#left {
+div#gl_frame div.button#left {
 left:10px;
 background:url(layout/nouveau/images/prev.png) no-repeat;
 }
 
-div#frame div.button#right {
+div#gl_frame div.button#right {
 right:10px;
 background:url(layout/nouveau/images/next.png) no-repeat;
 }
 
-#scroller {
+#gl_scroller {
 overflow:hidden;
 margin:0 auto;
 }
 
-.tab-pane {
+.gl_tab-pane {
 float:left;
 overflow:hidden;
 margin:0;
 }
 
-.tab-pane img {
+
+.gl_tab-pane img {
 padding:0;
 }
 

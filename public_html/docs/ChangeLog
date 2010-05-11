@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.2.1.svn
 ----------
+- MooSlide widget resize bugfix, implement custom css, autoscroll and mouseover
+  capability, all code courtesy of Rowan (Eric)
 - Implement PLG_templatePath: plugin helper function to find templates (Mark H.)
 - Extend ADMIN_simpleList -> ADMIN_arrayList, allows sortable columns (Mark H.)
 - Rename ADMIN_sortList function to ADMIN_sortArray (Mark H.)
