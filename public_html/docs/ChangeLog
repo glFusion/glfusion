@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.2.1.svn
 ----------
+- Fix block id conflict between Blog Roll and Forum Menu blocks (Eric)
 - MooSlide widget resize bugfix, implement custom css, autoscroll and mouseover
   capability, all code courtesy of Rowan (Eric)
 - Implement PLG_templatePath: plugin helper function to find templates (Mark H.)
