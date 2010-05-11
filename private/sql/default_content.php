@@ -53,7 +53,7 @@ $_DATA['links'][] = "INSERT INTO {$_TABLES['linkcategories']} (cid, pid, categor
 $_DATA['links'][] = "INSERT INTO {$_TABLES['linkcategories']} (cid, pid, category, description, tid, created, modified, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('blog-roll', 'site', 'Blog Roll', 'glFusion Related Sites', NULL, NOW(), NOW(), 2, 5, 3, 3, 2, 2);";
 $_DATA['links'][] = "INSERT INTO {$_TABLES['links']} (lid, cid, url, description, title, hits, date, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('glfusion.org', 'blog-roll', 'http://www.glfusion.org/', 'Visit glFusion - A site dedicated to enhancing glFusion.', 'glFusion - Enhancing glFusion', 1, NOW(), 2, 5, 3, 3, 2, 2);";
 $_DATA['links'][] = "INSERT INTO {$_TABLES['links']} (lid, cid, url, description, title, hits, date, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('glfusion_wiki', 'blog-roll', 'http://www.glfusion.org/wiki/doku.php?id=glfusion:start', 'The glFusion documentation wiki.', 'glFusion Wiki', 1, NOW(), 2, 5, 3, 3, 2, 2);";
-$_DATA['links'][] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (20,1,'blogroll_block','phpblock','Blog Roll','all',2,'','','0000-00-00 00:00:00',0,'phpblock_blogroll',4,2,3,3,2,2) ";
+$_DATA['links'][] = "INSERT INTO {$_TABLES['blocks']} (is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (1,'blogroll_block','phpblock','Blog Roll','all',2,'','','0000-00-00 00:00:00',0,'phpblock_blogroll',4,2,3,3,2,2) ";
 
 // Media Gallery Default Data
 
@@ -70,7 +70,7 @@ $_DATA['polls'][] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid
 $_DATA['polls'][] = "INSERT INTO `{$_TABLES['pollquestions']}` (`pid`, `qid`, `question`) VALUES ('glfusionfeaturepoll', 0, 'What is the best new feature of glFusion?');";
 $_DATA['polls'][] = "INSERT INTO `{$_TABLES['pollquestions']}` (`pid`, `qid`, `question`) VALUES ('glfusionfeaturepoll', 1, 'What is your favorite plugin?');";
 $_DATA['polls'][] = "INSERT INTO `{$_TABLES['polltopics']}` (`pid`, `topic`, `voters`, `questions`, `date`, `display`, `is_open`, `hideresults`, `commentcode`, `statuscode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES ('glfusionfeaturepoll', 'Tell us your opinion about glFusion', 0, 2, NOW(), 1, 1, 1, 0, 0, 2, 8, 3, 2, 2, 2);";
-$_DATA['polls'][] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (4,1,'polls_block','phpblock','Poll','all',3,'','','0000-00-00 00:00:00',0,'phpblock_polls',4,2,3,3,2,2) ";
+$_DATA['polls'][] = "INSERT INTO {$_TABLES['blocks']} (is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (1,'polls_block','phpblock','Poll','all',3,'','','0000-00-00 00:00:00',0,'phpblock_polls',4,2,3,3,2,2) ";
 
 // Site Tailor Default Data
 $_ST_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES
@@ -524,7 +524,7 @@ $_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_status
 //<a href=\"javascript:loadintoIframe(''myframe'', ''external.htm'')\">Link</a>\r\n\r\n//notice to Opera users that this script will NOT automatically re-size\r\n//the iframe height in that browser\r\n\r\n?>\r\n\r\n<div id=\"noOpera\" style=\"width:100%; text-align:center; margin:10px auto;\"></div>\r\n\r\n<iframe\r\n	src=\"http://my-other-site-here\"\r\n	id=\"myframe\"\r\n	scrolling=\"no\"\r\n	marginwidth=\"0\"\r\n	marginheight=\"0\"\r\n	frameborder=\"0\"\r\n	style=\"\r\n	        overflow:visible;\r\n		width:100%;\r\n\">Unfortunately, your browser does not support iframes.</iframe>', 7, '2010-04-23 17:35:55', 'noblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 1, 2, 0, 0, 'html', 0)";
 
 // Blocks Default Data
-$_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (19,1,'moorotator','normal','Visit glFusion','all',0,'<script type=\"text/javascript\" src=\"xxxSITEURLxxx/javascript/mootools/gl_moorotator-block.js\"></script>
+$_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['blocks']} (is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (1,'moorotator','normal','Visit glFusion','all',0,'<script type=\"text/javascript\" src=\"xxxSITEURLxxx/javascript/mootools/gl_moorotator-block.js\"></script>
 <script type=\"text/javascript\">
 	window.addEvent(\'domready\', function() {
 		var rotator = new gl_mooRotator_block(\'gl_moorotator_block\', {
