@@ -36,7 +36,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-function WIDGET_mooslide($page_ids, $width = 550, $height = 160, $id = 'gl_slide')
+function WIDGET_mooslide($page_ids, $width = 550, $height = 160, $id = 'gl_', $slide_interval = 0)
 /*  Sample standalone staticpage:
 
 USES_lib_widgets();
@@ -45,7 +45,7 @@ $slides = Array('staticpage_id_1', 'staticpage_id_2');
 $display = COM_siteHeader();
 // test the parameters, or not
 $display .= WIDGET_mooslide($slides);
-$display .= WIDGET_mooslide($slides, 560, 160, 'div id of mooSlide');
+$display .= WIDGET_mooslide($slides, 560, 160, 'gl_', 5000);
 $display .= COM_siteFooter();
 echo $display;
 */
@@ -56,6 +56,9 @@ echo $display;
         return '';
     }
 
+	// Backwards Compatibility - if $id is still the old default 'gl_slide', change it.
+	if ($id == 'gl_slide') {$id = 'gl_';}
+	
     $display = <<<EOJ
 <script type="text/javascript" src="{$_CONF['site_url']}/javascript/mootools/gl_mooslide.js"></script>
 <script type="text/javascript">
@@ -71,26 +74,45 @@ echo $display;
             dimensions: {
                 width: $width,
                 height: $height
-                }
+                },
+			cssvars: {
+				customID: '$id'
+				},
+			autoScroll: {
+				interval: $slide_interval    // in ms, thus 1000 is 1 second, set to 0 to turn off.
+				}
         });
     });
 </script>
-
-<div id="$id" class="gl_slide">
+<div id="$id" class="{$id}slide">
 EOJ;
 
-    $sql = "SELECT sp_id, sp_content, sp_php, sp_title FROM {$_TABLES['staticpage']} WHERE sp_id in ("
-         . implode(', ', array_map(create_function('$a','return "\'" . htmlspecialchars($a) . "\'";'), $page_ids))
-         . ')' . COM_getPermSQL('AND');
-
-    $res = DB_query($sql);
-    $pages = array();
-    for ($i = 0; $A = DB_fetchArray($res); ++$i) {
-        $content = SP_render_content(stripslashes($A['sp_content']), $A['sp_php']);
-        $title = htmlspecialchars(stripslashes($A['sp_title']));
-        $order = array_search($A['sp_id'],$page_ids); // find proper order
-        $pages[$order] = Array('content' => $content, 'title' => $title, 'index' => $order+1);
-    }
+	if (!is_array($page_ids[0])) {
+	//we are in Static Pages Mode
+	    $sql = "SELECT sp_id, sp_content, sp_php, sp_title FROM {$_TABLES['staticpage']} WHERE sp_id in ("
+	         . implode(', ', array_map(create_function('$a','return "\'" . htmlspecialchars($a) . "\'";'), $page_ids))
+	         . ')' . COM_getPermSQL('AND');
+	
+	    $res = DB_query($sql);
+	    $pages = array();
+	    for ($i = 0; $A = DB_fetchArray($res); ++$i) {
+	    COM_errorLog($A['sp_title'],1);
+	        $content = SP_render_content(stripslashes($A['sp_content']), $A['sp_php']);
+	        $title = htmlspecialchars(stripslashes($A['sp_title']));
+	        $order = array_search($A['sp_id'],$page_ids); // find proper order
+	        $pages[$order] = Array('content' => $content, 'title' => $title, 'index' => $order+1);
+	    }
+	} else {
+	//we have been passed pre-formatted pages
+	    $pages = array();
+	    for ($i = 0; $i < sizeof($page_ids); ++$i) {
+	        $content = stripslashes($page_ids[$i]['content']);
+	        $title = htmlspecialchars(stripslashes($page_ids[$i]['title']));
+	        $order = $i;
+	        $pages[$order] = Array('content' => $content, 'title' => $title, 'index' => $order+1);
+	    }
+	}
+/* 	COM_errorLog(print_r($pages,true),1); */
     if (count($pages) == 0) {
         return '';
     }
@@ -98,8 +120,8 @@ EOJ;
     foreach ($pages as $page) {
         extract($page);
         $display .= <<<EOS
-<div class="tab-pane" id="tab-$index-pane">
-    <h1 class="tab-title">$title</h1>
+<div class="{$id}tab-pane" id="{$id}tab-$index-pane">
+    <h1 class="{$id}tab-title">$title</h1>
     <div>$content</div>
 </div>
 EOS;
