@@ -103,7 +103,11 @@ var gl_Slide=new Class(
 						styles:{
 							width:this.options.dimensions.width-102,
 							height:this.options.dimensions.height
-							}
+							},
+						events:{
+							'mouseover':function(){ that.autoScrollStop();},
+							'mouseout':function(){  that.autoScrollStart();}
+						   	}
 						}).adopt(this.content.setStyle('width',this.sections.length*1600)),
 					new Element('div',{
 							'class':'button',
