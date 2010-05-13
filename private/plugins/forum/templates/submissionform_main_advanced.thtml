@@ -15,7 +15,7 @@ glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
   <td colspan="2" class="pluginCellText pluginCellFill" style="padding-left: 5px;">
     {!if smilies}
     <input class="button2" type="button" title="Smileys" style="text-decoration: none; width: 60px;" value="Smileys" name="toggleV" id="toggleV" />
-    <div style="width:100%; padding:10px; clear:both;" id="smileys">
+    <div style="width:95%; padding:10px; clear:both;" id="smileys">
     {smilies}
     </div>
     {!endif}

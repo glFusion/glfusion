@@ -1016,13 +1016,17 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
                     } elseif (isset($_GET['order']) ) {
                         $order =  $_GET['order'] == 'ASC' ? 'ASC' : 'DESC';
                     } else {
-                        $order = 'DESC';
+                        $order = '';
                     }
                     if ( isset($_POST['mode']) ) {
                         $mode = COM_applyFilter($_POST['mode']);
                     } elseif ( isset($_GET['mode']) ) {
                         $mode = COM_applyFilter($_GET['mode']);
                     } else {
+                        $mode = '';
+                    }
+                    $valid_cmt_modes = array('flat','nested','nocomment','threaded');
+                    if ( !in_array($mode,$valid_cmt_modes) ) {
                         $mode = '';
                     }
                     $retval .= CMT_userComments($pid, $P['topic'], 'polls',

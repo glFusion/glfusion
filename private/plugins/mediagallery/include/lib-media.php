@@ -1944,8 +1944,8 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
     if ($comments) {
         // glFusion Comment support
         $mid = $media[$mediaObject]['media_id'];
-        if ($MG_albums[$aid]->enable_comments == 1){
-            require_once $_CONF['path_system'] . 'lib-comment.php';
+        if ($MG_albums[$aid]->enable_comments == 1) {
+            USES_lib_comments();
             if ($MG_albums[$aid]->access == 3 || $MG_albums[0]->owner_id){
                 $delete_option = true;
             } else {
@@ -1959,14 +1959,18 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
                 } elseif (isset($_GET['order']) ) {
                     $comorder =  $_GET['order'] == 'ASC' ? 'ASC' : 'DESC';
                 } else {
-                    $comorder = 'DESC';
+                    $comorder = '';
                 }
                 if ( isset($_POST['mode']) ) {
                     $commode = COM_applyFilter($_POST['mode']);
                 } elseif ( isset($_GET['mode']) ) {
                     $commode = COM_applyFilter($_GET['mode']);
                 } else {
-                    $commode = 'flat';
+                    $commode = '';
+                }
+                $valid_cmt_modes = array('flat','nested','nocomment','threaded');
+                if ( !in_array($commode,$valid_cmt_modes) ) {
+                    $commode = '';
                 }
                 $commentbar = CMT_userComments ($cid,$media[$mediaObject]['media_title'],
                               'mediagallery',$comorder,$commode,0,$page,false,$delete_option);

@@ -1241,8 +1241,10 @@ function SEC_createTokenGeneral($action='general',$ttl = 1200)
     DB_query($sql);
 
     /* Destroy tokens for this user/url combination */
-    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='".DB_escapeString($action)."'";
-    DB_query($sql);
+    if ( !defined('DEMO_MODE') ) {
+        $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='".DB_escapeString($action)."'";
+        DB_query($sql);
+    }
 
     $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
            . "VALUES ('$token', NOW(), {$_USER['uid']}, '".DB_escapeString($action)."', '$ttl')";

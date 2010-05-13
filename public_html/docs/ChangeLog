@@ -16,9 +16,17 @@ v1.2.1.svn
 
 v1.2.0.pl3
 ----------
+- Forum: Smiley display did not wrap properly if using wide icons (Mark)
+- Demo mode tweaks - remove some advanced features from demo mode
+  (i.e.; allow multiple logins from same userid) (Mark)
+- Forum: Use noreply email address for notifications (Mark)
+- Polls: Comment view did not default to user preferences (Mark)
+- Media Gallery: Comment view did not default to user preferences (Mark)
+- FileMgmt: Comment view did not default to user preferences (Mark)
 - Block Editor did not allow you to un-check allow auto tags (Mark)
 - Media Gallery: SWFUpload did not enforce user quotas (Mark)
-- Database backup would fail if pipe char (|) used in password (Mark)
+- Database backup would fail if password contained certain special
+  characters (Mark)
 - Media Gallery: SWFUpload referenced SWFUpload Button in wrong directory if
   glFusion is installed in a sub-directory. (Mark).
 - Database backup would always fail with 0 byte file message on Windows
