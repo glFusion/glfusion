@@ -1792,7 +1792,7 @@ function USER_save($uid)
         }
 
         if ( $newuser == 0 ) {
-            PLG_profileSave($uid);
+            PLG_profileSave('',$uid);
         }
 
         if ($userChanged) {

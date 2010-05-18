@@ -476,7 +476,7 @@ function BLOCK_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
             case 'delete':
                 $retval = '';
-                if ($access == 3) {
+                if ($access == 3 && $A['type'] != 'gldefault' ) {
                     $attr['title'] = $LANG_ADMIN['delete'];
                     $attr['onclick'] = "return confirm('" . $LANG21[69] . "');";
                     $retval .= COM_createLink($icon_arr['delete'],
@@ -946,8 +946,13 @@ function BLOCK_delete($bid)
 {
     global $_CONF, $_TABLES, $_USER;
 
-    $result = DB_query ("SELECT tid,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['blocks']} WHERE bid ='$bid'");
+    $result = DB_query ("SELECT tid,owner_id,type,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['blocks']} WHERE bid ='$bid'");
     $A = DB_fetchArray($result);
+
+    if ( $A['type'] != 'gldefault' ) {
+        return COM_refresh ($_CONF['site_admin_url'] . '/block.php');
+    }
+
     $access = SEC_hasAccess ($A['owner_id'], $A['group_id'], $A['perm_owner'],
             $A['perm_group'], $A['perm_members'], $A['perm_anon']);
     if (($access < 3) || (BLOCK_hasTopicAccess($A['tid']) < 3)) {

@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2006-2008 by the following authors:                        |
+// | Copyright (C) 2006-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -382,6 +382,7 @@ $T->set_var(array(
     'lang_original'			=> $LANG_mgMB['original'],
     'lang_alturl'           => $LANG_mgMB['alturl'],
     'lang_ribbon'           => $LANG_mgMB['ribbon'],
+    'lang_link_src'         => $LANG_mgMB['link_src'],
     'lang_showtitle'        => $LANG_mgMB['showtitle'],
     'lang_top'              => $LANG_mgMB['top'],
     'lang_bottom'           => $LANG_mgMB['bottom'],

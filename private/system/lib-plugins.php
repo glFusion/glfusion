@@ -1460,7 +1460,7 @@ function PLG_profileSave ($plugin = '', $uid = 0)
     $args[1] = $uid;
 
     if (empty ($plugin)) {
-        PLG_callFunctionForAllPlugins ('profilesave');
+        PLG_callFunctionForAllPlugins ('profilesave', $args);
     } else {
         $function = 'plugin_profilesave_' . $plugin;
         return PLG_callFunctionForOnePlugin($function, $args);

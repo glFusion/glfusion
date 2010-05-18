@@ -898,8 +898,8 @@ function BaseFooter($showbottom=true) {
     global $_USER,$_CONF,$LANG_GF02,$forum,$CONF_FORUM;
 
     if (!$CONF_FORUM['registration_required'] OR $_USER['uid'] > 1) {
-        $footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
-        $footer->set_file (array ('footerblock'=>'footer/footer.thtml',
+        $footer = new Template(array($_CONF['path'] . 'plugins/forum/templates/',$_CONF['path'].'plugins/forum/templates/footer/'));
+        $footer->set_file (array ('footerblock'=>'footer.thtml',
                   'header'=>'forum_outline_header.thtml',
                   'footer'=>'forum_outline_footer.thtml'
         ));

@@ -200,6 +200,11 @@ if( !function_exists( 'stripos' )) {
     PHP_Compat::loadFunction( 'stripos' );
 }
 
+if ( !function_exists( 'htmlspecialchars_decode' ) ) {
+    require_once 'PHP/Compat.php';
+
+    PHP_Compat::loadFunction( 'htmlspecialchars_decode' );
+}
 
 /**
 * Include page time -- used to time how fast each page was created
@@ -2940,7 +2945,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
         if( $_CONF['link_versionchecker'] == 1 AND SEC_inGroup( 'Root' ))
         {
             $adminmenu->set_var( 'option_url',
-               'http://www.glfusion.org/versionchecker.php?version=' . GVERSION );
+               'http://www.glfusion.org/versionchecker.php?version=' . GVERSION . PATCHLEVEL );
             $adminmenu->set_var( 'option_label', $LANG01[107] );
             $adminmenu->set_var( 'option_count', GVERSION . PATCHLEVEL );
 
@@ -4610,7 +4615,7 @@ function COM_formatTimeString( $time_string, $time, $type = '', $amount = 0 )
 
     // This is the amount you have to divide the previous by to get the
     // different time intervals: hour, day, week, months
-    $time_divider = array( 60, 60, 24, 7, 30 );
+    $time_divider = array( 60, 60, 24, 7, 4 );
 
     // These are the respective strings to the numbers above. They have to match
     // the strings in $LANG_WHATSNEW (i.e. these are the keys for the array -

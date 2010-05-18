@@ -13,6 +13,22 @@ v1.2.1.svn
 - Plugin Admin - allow sorting of columns in Plugin list (Mark H.)
 - Replace/fix sort direction arrows in ADMIN_list and ADMIN_arrayList (Mark H.)
 
+v1.2.0.pl4
+----------
+- Add patch level to version checker (Mark)
+- Plugin user preferences were not properly saved in admin user editor (Mark)
+- Fixed date calculation error (Mark)
+- Comment disclaimer displayed when no comments had been entered yet. (Mark)
+- htmlspecialchars_decode() is a PHP5 only function. Updated lib-common to
+  load the compatible function when running PHP4. (Mark)
+- Forum: footer.thtml template did not work with custom/ directory (Mark)
+- Setting comment edit time to 0 did not allow unlimited time to edit
+  comments - instead it prevented comments from being edited (Mark)
+- When story.admin user selects contribute, the redirect was broken
+  that took them to the admin story editor (Mark)
+- Do not allow default blocks to be deleted (Mark)
+- linksrc: was not included in allowed autotag options for the MG media
+  Browser (Mark)
 
 v1.2.0.pl3
 ----------

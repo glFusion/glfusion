@@ -155,9 +155,9 @@ if ($op == 'delchecked') {
 }
 
 //$report = new Template($_CONF['path_layout'] . 'forum/layout');
-$report = new Template($_CONF['path'] . 'plugins/forum/templates/');
-$report->set_file (array ('report' => 'reports/notifications.thtml',
-                    'records' => 'reports/notifications_line.thtml',
+$report = new Template(array($_CONF['path'] . 'plugins/forum/templates/',$_CONF['path'] . 'plugins/forum/templates/reports/'));
+$report->set_file (array ('report' => 'notifications.thtml',
+                    'records' => 'notifications_line.thtml',
                     'outline_header'=>'forum_outline_header.thtml',
                     'outline_footer' => 'forum_outline_footer.thtml' ));
 

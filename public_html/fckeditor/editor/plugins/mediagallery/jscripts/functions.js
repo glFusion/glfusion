@@ -46,6 +46,7 @@ function makeHtmlForInsertion(obj){
 	var alturl = '';
 	var ribbon = '';
 	var showtitle = '';
+	var linksrc = '';
 
 	// see which auto tag is selected...
 	for (i=0;i<obj.autotag.length;i++) {
@@ -77,6 +78,9 @@ function makeHtmlForInsertion(obj){
 	}
 	if ( obj.showtitle != undefined ) {
 	    showtitle = obj.showtitle.value;
+	}
+	if ( obj.link_src != undefined ) {
+	    linksrc = obj.link_src.value;
 	}
 
 	switch ( autotag ) {
@@ -201,6 +205,9 @@ function makeHtmlForInsertion(obj){
 	        if ( alturl != '' ) {
 	            tag += " alt:" + alturl;
 	        }
+	        if ( linksrc != '' ) {
+	            tag += " linksrc:" + linksrc;
+	        }
 	        if ( caption != '' ) {
 	          tag += " " + caption;
 	        }
@@ -243,6 +250,9 @@ function makeHtmlForInsertion(obj){
 	        }
 	        if ( alturl != '' ) {
 	            tag += " alt:" + alturl;
+	        }
+	        if ( linksrc != '' ) {
+	            tag += " linksrc:" + linksrc;
 	        }
 	        tag += "]";
 	        break;

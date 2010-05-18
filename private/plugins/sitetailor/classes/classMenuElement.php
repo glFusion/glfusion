@@ -648,8 +648,8 @@ class mbElement {
                                 }
 
                                 if( SEC_inGroup( 'Root' )) {
-                                    $url = 'http://www.glfusion.org/versionchecker.php?version=' . GVERSION;
-                                    $label = $LANG01[107] . ' (' . GVERSION . ')';
+                                    $url = 'http://www.glfusion.org/versionchecker.php?version=' . GVERSION . PATCHLEVEL;
+                                    $label = $LANG01[107] . ' (' . GVERSION . PATCHLEVEL . ')';
                                     $link_array[$LANG01[107]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
                                 }
                                 if (SEC_isModerator()) {

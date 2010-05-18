@@ -474,7 +474,7 @@ if (($mode == $LANG12[8]) && !empty ($LANG12[8])) { // submit
             $topic = '&topic=' . urlencode(COM_applyFilter($_REQUEST['topic']));
         }
         echo COM_refresh ($_CONF['site_admin_url']
-                . '/story.php?mode=edit' . $topic);
+                . '/story.php?edit=x' . $topic);
         exit;
     }
     $topic = '';

@@ -80,7 +80,11 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
     $commentbar->set_var( 'lang_comments', $LANG01[3] );
     $commentbar->set_var( 'lang_refresh', $LANG01[39] );
     $commentbar->set_var( 'lang_reply', $LANG01[60] );
-    $commentbar->set_var( 'lang_disclaimer', $LANG01[26] );
+    if ( $nrows > 0 ) {
+        $commentbar->set_var( 'lang_disclaimer', $LANG01[26] );
+    } else {
+        $commentbar->set_var( 'lang_disclaimer', '' );
+    }
 
     if( $ccode == 0 &&
      ($_CONF['commentsloginrequired'] == 0 || !COM_isAnonUser())) {
@@ -429,7 +433,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         //COMMENT edit rights
         if ( !COM_isAnonUser() ) {
             if ( $_USER['uid'] == $A['uid'] && $_CONF['comment_edit'] == 1
-                    && (time() - $A['nice_date']) < $_CONF['comment_edittime'] &&
+                    && ($_CONF['comment_edittime'] == 0 || ((time() - $A['nice_date']) < $_CONF['comment_edittime'] )) &&
                     $ccode == 0 &&
                     DB_getItem($_TABLES['comments'], 'COUNT(*)', "pid = ".(int) $A['cid']) == 0) {
                 $edit_option = true;
