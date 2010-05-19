@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.2.1.svn
 ----------
+- Allow forum plugin to find custom CSS in private/plugins/forum/css/custom
 - Let default content blocks auto-increment on install (Eric)
 - Fix block id conflict between Blog Roll and Forum Menu blocks (Eric)
 - MooSlide widget resize bugfix, implement custom css, autoscroll and mouseover
