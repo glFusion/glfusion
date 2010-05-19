@@ -362,12 +362,13 @@ function plugin_getheadercss_forum() {
 
     if ( @file_exists($_CONF['path_layout'].'plugins/forum/style.css') ) {
         $styles[] = $_CONF['path_layout'].'plugins/forum/style.css';
+    } else if ( @file_exists($_CONF['path'] . 'plugins/forum/css/custom/style.css') ) {
+        $styles[] = $_CONF['path'] . 'plugins/forum/css/custom/style.css';
     } else {
         $styles[] = $_CONF['path'] . 'plugins/forum/css/style.css';
     }
     return($styles);
 }
-
 
 function plugin_getheaderjs_forum() {
     global $_CONF;
