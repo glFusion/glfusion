@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.2.1.svn
 ----------
+- Calendar: Add permission check to auto tags (mark)
+- FileMgmt: Add permission check to auto tags (mark)
+- Staticpages: Add permission check to auto tags (mark)
 - Allow forum plugin to find custom CSS in private/plugins/forum/css/custom
 - Let default content blocks auto-increment on install (Eric)
 - Fix block id conflict between Blog Roll and Forum Menu blocks (Eric)
@@ -13,6 +16,17 @@ v1.2.1.svn
 - Fix filecheck_data - create missing nouveau custom template dirs (Mark H.)
 - Plugin Admin - allow sorting of columns in Plugin list (Mark H.)
 - Replace/fix sort direction arrows in ADMIN_list and ADMIN_arrayList (Mark H.)
+
+1.2.0.pl5
+---------
+- Admin user edit photo upload missing (Mark)
+- Batch Admin interface did not keep settings when paging through results (Mark)
+- Calendar: auto tag was broken (Mark)
+- Do not include summary when contentlength = 0 in syndication (Mark)
+- Fixed issue where you could not delete blocks (Mark)
+- Forum: Fixed footer formatting issue (Mark)
+- Fixed daily digest issue where it did not honor the emailstorieslength
+  configuration setting (Mark)
 
 v1.2.0.pl4
 ----------

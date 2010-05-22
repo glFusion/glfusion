@@ -1823,7 +1823,7 @@ function PLG_replaceTags($content, $plugin = '')
                     $url = COM_buildUrl ($_CONF['site_url']
                          . '/article.php?story=' . $autotag['parm1']);
                     if (empty ($linktext)) {
-                        $linktext = stripslashes (DB_getItem ($_TABLES['stories'], 'title', "sid = '".DB_escapeString($autotag['parm1'])."'"));
+                        $linktext = DB_getItem ($_TABLES['stories'], 'title', "sid = '".DB_escapeString($autotag['parm1'])."'");
                     }
                 }
                 if (!empty ($url)) {

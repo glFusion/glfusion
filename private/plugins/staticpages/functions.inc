@@ -1003,30 +1003,44 @@ function plugin_autotags_staticpages($op, $content = '', $autotag = '')
     } else if ($op == 'parse') {
         if (($autotag['tag'] == 'staticpage') || ($autotag['tag'] == 'staticpage_content' )) {
             $sp_id = COM_applyFilter($autotag['parm1']);
-            $sp_status = 0;
-            if (! empty($sp_id)) {
-                $sp_status = DB_getItem($_TABLES['staticpage'], 'sp_status', "sp_id = '".DB_escapeString($sp_id)."'");
+            if ( empty($sp_id) ) {
+                $content = str_replace ($autotag['tagstr'], '',$content);
+                return $content;
             }
-            if (($autotag['tag'] == 'staticpage') && ($sp_status == 1)) {
+            $sp_status = 0;
+            $perms = SP_getPerms ();
+            if (!empty ($perms)) {
+                $perms = ' AND ' . $perms;
+            }
+            $sql = "SELECT sp_title FROM {$_TABLES['staticpage']} "
+                 . "WHERE (sp_id = '".DB_escapeString($sp_id)."') AND (sp_status = 1)" . $perms;
+            $result = DB_query ($sql);
+            $count  = DB_numRows ($result);
+            if ( $count < 1 ) {
+                $content = str_replace ($autotag['tagstr'], '',$content);
+                return $content;
+            }
+            $S = DB_fetchArray($result);
+            if (($autotag['tag'] == 'staticpage')) {
                 $url = COM_buildUrl($_CONF['site_url']
                                     . '/staticpages/index.php?page=' . $sp_id);
                 if (empty($autotag['parm2'])) {
-                    $linktext = DB_getItem ($_TABLES['staticpage'],
-                                             'sp_title', "sp_id = '".DB_escapeString($sp_id)."'");
+                    $linktext = $S['sp_title'];
                 } else {
                     $linktext = $autotag['parm2'];
                 }
                 $link = COM_createLink($linktext, $url);
                 $content = str_replace($autotag['tagstr'], $link, $content);
-            } else if (($autotag['tag'] == 'staticpage_content') && ($sp_status == 1)) {
+            } else if (($autotag['tag'] == 'staticpage_content') ) {
                 if (isset($recursive[$sp_id])) {
                     $content = '';
                 } else {
                     $recursive[$sp_id] = true;
                     $sp_content = SP_returnStaticpage($sp_id, 'autotag');
-                    $content = str_replace($autotag['tagstr'], $sp_content,
-                                           $content);
+                    $content = str_replace($autotag['tagstr'], $sp_content,$content);
                 }
+            } else {
+                $content = str_replace ($autotag['tagstr'], '',$content);
             }
         }
 

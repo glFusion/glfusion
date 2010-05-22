@@ -343,7 +343,7 @@ function plugin_itemlist_calendar()
         $plugin->addSubmissionHeading($LANG_CAL_1[21]);
         $plugin->addSubmissionHeading($LANG_CAL_1[22]);
         $plugin->addSubmissionHeading($LANG_CAL_1[52]);
-        
+
         return $plugin;
     }
 }
@@ -593,7 +593,7 @@ function plugin_savesubmission_calendar($A)
         $A['status'] = 1;
     } else {
         $A['status'] = 0;
-    }        
+    }
 
     if (isset ($A['allday']) && ($A['allday'] == 'on')) {
         $A['allday'] = 1;
@@ -1065,25 +1065,31 @@ function plugin_autotags_calendar ($op, $content = '', $autotag = '')
     global $_CONF, $_TABLES;
 
     if ($op == 'tagname' ) {
-        return 'event';
+        return 'calendar';
     } else if ($op == 'parse') {
-        $eid = COM_applyFilter ($autotag['parm1']);
-        $status = 0;
-        if (! empty($eid)) {
-            $status = DB_getItem($_TABLES['events'], 'status', "eid = '".DB_escapeString($eid)."'");
-        }
-        if (status==1) {
-            $url = $_CONF['site_url'] . '/calendar/event.php?eid=' . $eid;
-            if (empty ($autotag['parm2'])) {
-                $linktext = stripslashes (DB_getItem ($_TABLES['events'],
-                                          'title', "eid = '".DB_escapeString($eid)."'"));
+        if (($autotag['tag'] == 'calendar')) {
+            $eid = COM_applyFilter ($autotag['parm1']);
+            if (empty($eid) ) {
+                $content = str_replace ($autotag['tagstr'], '', $content);
             } else {
-                $linktext = $autotag['parm2'];
+                $perm = COM_getPermSQL( 'AND' );
+                $sql  = "SELECT status,title FROM {$_TABLES['events']} WHERE eid='".DB_escapeString($eid)."' AND status=1 " . $perm;
+                $result = DB_query($sql);
+                if ( DB_numRows($result) > 0 ) {
+                    $C = DB_fetchArray($result);
+                    $url = $_CONF['site_url'] . '/calendar/event.php?eid=' . $eid;
+                    if (empty ($autotag['parm2'])) {
+                        $linktext = $C['title'];
+                    } else {
+                        $linktext = $autotag['parm2'];
+                    }
+                    $link = COM_createLink($linktext, $url);
+                    $content = str_replace ($autotag['tagstr'], $link, $content);
+                } else {
+                    $content = str_replace ($autotag['tagstr'], '', $content);
+                }
             }
-            $link = COM_createLink($linktext, $url);
-            $content = str_replace ($autotag['tagstr'], $link, $content);
         }
-
         return $content;
     }
 }
