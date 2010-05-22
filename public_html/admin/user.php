@@ -114,6 +114,7 @@ function USER_edit($uid = '', $msg = '')
     $userform = new Template ($_CONF['path_layout'] . 'admin/user/');
     $userform->set_file('user','adminuseredit.thtml');
 
+    $userform->set_var('enctype',' enctype="multipart/form-data"');
     $userform->set_var('lang_save', $LANG_ADMIN['save']);
     $userform->set_var('lang_cancel',$LANG_ADMIN['cancel']);
 
@@ -1607,12 +1608,7 @@ function USER_save($uid)
         $about    = strip_tags($about);
         $pgpkey   = strip_tags($pgpkey);
 
-        $curphoto = DB_getItem($_TABLES['users'],'photo',"uid = $uid");
-        if (!empty ($curphoto) && ($delete_photo)) {
-            USER_deletePhoto ($curphoto);
-            $curphoto = '';
-        }
-
+        $curphoto = USER_handlePhotoUpload ($uid, $delete_photo);
         if (($_CONF['allow_user_photo'] == 1) && !empty ($curphoto)) {
             $curusername = DB_getItem ($_TABLES['users'], 'username',"uid = $uid");
             if ($curusername != $username) {
@@ -1857,8 +1853,15 @@ function USER_batchAdmin()
 
     $usr_time_arr = array();
     $usr_time = '';
+    $usr_time_arr['phantom'] = 2;
+    $usr_time_arr['short'] = 6;
+    $usr_time_arr['old'] = 24;
+    $usr_time_arr['recent'] = 1;
+
     if (isset($_POST['usr_time'])) {
         $usr_time_arr = $_POST['usr_time'];
+    } elseif (isset($_GET['usr_time']) ) {
+        $usr_time_arr[$usr_type] = $_GET['usr_time'];
     } else {
         $usr_time_arr['phantom'] = 2;
         $usr_time_arr['short'] = 6;
@@ -2328,6 +2331,84 @@ function USER_delete($uid)
     }
     CACHE_remove_instance('stmenu');
     return COM_refresh ($_CONF['site_admin_url'] . '/user.php?msg=22');
+}
+
+/**
+* Upload new photo, delete old photo
+*
+* @param    string  $delete_photo   'on': delete old photo
+* @return   string                  filename of new photo (empty = no new photo)
+*
+*/
+function USER_handlePhotoUpload ($uid, $delete_photo = '')
+{
+    global $_CONF, $_TABLES, $LANG24;
+
+    USES_class_upload();
+
+    $upload = new upload();
+    if (!empty ($_CONF['image_lib'])) {
+        $upload->setAutomaticResize (true);
+        if (isset ($_CONF['debug_image_upload']) &&
+                $_CONF['debug_image_upload']) {
+            $upload->setLogFile ($_CONF['path'] . 'logs/error.log');
+            $upload->setDebug (true);
+        }
+    }
+    $upload->setAllowedMimeTypes (array ('image/gif'   => '.gif',
+                                         'image/jpeg'  => '.jpg,.jpeg',
+                                         'image/pjpeg' => '.jpg,.jpeg',
+                                         'image/x-png' => '.png',
+                                         'image/png'   => '.png'
+                                 )      );
+    if (!$upload->setPath ($_CONF['path_images'] . 'userphotos')) {
+        return '';
+    }
+
+    $filename = '';
+    if (!empty ($delete_photo) && ($delete_photo == 1)) {
+        $delete_photo = true;
+    } else {
+        $delete_photo = false;
+    }
+
+    $curphoto = DB_getItem ($_TABLES['users'], 'photo',"uid = ".(int) $uid);
+    if (empty ($curphoto)) {
+        $delete_photo = false;
+    }
+    // see if user wants to upload a (new) photo
+    $newphoto = $_FILES['photo'];
+    if (!empty ($newphoto['name'])) {
+        $pos = strrpos ($newphoto['name'], '.') + 1;
+        $fextension = substr ($newphoto['name'], $pos);
+        $filename = $uid . '.' . $fextension;
+
+        if (!empty ($curphoto) && ($filename != $curphoto)) {
+            $delete_photo = true;
+        } else {
+            $delete_photo = false;
+        }
+    }
+    // delete old photo first
+    if ($delete_photo) {
+        USER_deletePhoto ($curphoto);
+    }
+    // now do the upload
+    if (!empty ($filename)) {
+        $upload->setFileNames ($filename);
+        $upload->setFieldName('photo');
+        $upload->setPerms ('0644');
+        $upload->setMaxDimensions (1024000,1024000);
+        $upload->uploadFiles ();
+
+        if ($upload->areErrors ()) {
+            return '';
+        }
+        IMG_resizeImage($_CONF['path_images'] . 'userphotos/'.$filename,$_CONF['path_images'] . 'userphotos/'.$filename,$_CONF['max_photo_height'],$_CONF['max_photo_width']);
+    } else if (!$delete_photo && !empty ($curphoto)) {
+        $filename = $curphoto;
+    }
+    return $filename;
 }
 
 // MAIN ========================================================================

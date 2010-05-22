@@ -4198,6 +4198,10 @@ function COM_emailUserTopics()
     if ($_CONF['emailstories'] == 0) {
         return;
     }
+
+    $storytext = '';
+    $storytext_text = '';
+
     USES_lib_story();
 
     $subject = strip_tags( $_CONF['site_name'] . $LANG08[30] . strftime( '%Y-%m-%d', time() ));
@@ -4310,17 +4314,17 @@ function COM_emailUserTopics()
             $story_date = strftime( $_CONF['date'], strtotime( $S['day' ]));
 
             if( $_CONF['emailstorieslength'] > 0 ) {
-                $storytext = COM_undoSpecialChars( strip_tags( PLG_replaceTags( stripslashes( $S['introtext'] ))));
+                $storytext      = COM_undoSpecialChars( strip_tags( PLG_replaceTags( stripslashes( $S['introtext'] ))));
+                $storytext_text = COM_undoSpecialChars( strip_tags( PLG_replaceTags( stripslashes( $S['introtext'] ))));
 
                 if( $_CONF['emailstorieslength'] > 1 ) {
-                    $storytext = COM_truncate( $storytext,
-                                    $_CONF['emailstorieslength'], '...' );
+                    $storytext = COM_truncate( $storytext,$_CONF['emailstorieslength'], '...' );
+                    $storytext_text = COM_truncate( $storytext_text,$_CONF['emailstorieslength'], '...' );
                 }
             } else {
-                $storytext = $story->DisplayElements('introtext');
+                $storytext = '';
+                $storytext_text = '';
             }
-            $storytext = $story->DisplayElements('introtext');
-            $storytext_text = COM_undoSpecialChars( strip_tags( PLG_replaceTags( stripslashes( $S['introtext'] ))));
             $T->set_var ('story_introtext',$storytext);
             $TT->set_var ('story_introtext',$storytext_text);
 
@@ -4349,13 +4353,10 @@ function COM_emailUserTopics()
         $mailtext = $T->finish($T->get_var('digest'));
         $mailtext_text = $TT->finish($TT->get_var('digest'));
 
-        if ($_CONF['site_mail'] !== $_CONF['noreply_mail']) {
-            $mailfrom = $_CONF['noreply_mail'];
-            global $LANG_LOGIN;
-            $mailtext .= LB . LB . $LANG04[159];
-        } else {
-            $mailfrom = $_CONF['site_mail'];
-        }
+        $mailfrom = $_CONF['noreply_mail'];
+        $mailtext .= LB . LB . $LANG04[159];
+        $mailtext_text .= LB . LB . $LANG04[159];
+
         $to = array();
         $from = array();
         $from = COM_formatEmailAddress('',$mailfrom);
@@ -7370,9 +7371,14 @@ function USES_lib_story() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-story.php';
 }
+function USES_lib_trackback() {
+    global $_CONF;
+    require_once $_CONF['path_system'] . 'lib-trackback.php';
+}
+/* this one is depreciated */
 function USES_lib_trackbacks() {
     global $_CONF;
-    require_once $_CONF['path_system'] . 'lib-trackbacks.php';
+    require_once $_CONF['path_system'] . 'lib-trackback.php';
 }
 function USES_lib_user() {
     global $_CONF;

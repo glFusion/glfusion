@@ -949,7 +949,7 @@ function BLOCK_delete($bid)
     $result = DB_query ("SELECT tid,owner_id,type,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['blocks']} WHERE bid ='$bid'");
     $A = DB_fetchArray($result);
 
-    if ( $A['type'] != 'gldefault' ) {
+    if ( $A['type'] == 'gldefault' ) {
         return COM_refresh ($_CONF['site_admin_url'] . '/block.php');
     }
 
@@ -996,7 +996,7 @@ foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
     } elseif (isset($_GET[$provided])) {
-	$action = $provided;
+	    $action = $provided;
     }
 }
 

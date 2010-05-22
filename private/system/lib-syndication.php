@@ -40,7 +40,7 @@ if (!defined ('GVERSION')) {
 $_SYND_DEBUG = false;
 
 if ($_CONF['trackback_enabled']) {
-    require_once ($_CONF['path_system'] . 'lib-trackback.php');
+    USES_lib_trackback();
 }
 
 /**
@@ -231,44 +231,39 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
     $content = array ();
     $sids = array();
 
-    if( DB_getItem( $_TABLES['topics'], 'perm_anon', "tid = '".DB_escapeString($tid)."'") >= 2)
-    {
+    if( DB_getItem( $_TABLES['topics'], 'perm_anon', "tid = '".DB_escapeString($tid)."'") >= 2) {
         $where = '';
-        if( !empty( $limit ))
-        {
-            if( substr( $limit, -1 ) == 'h' ) // last xx hours
-            {
+        if( !empty( $limit )) {
+            if( substr( $limit, -1 ) == 'h' ) { // last xx hours
                 $limitsql = '';
                 $hours = substr( $limit, 0, -1 );
                 $where = " AND date >= DATE_SUB(NOW(),INTERVAL $hours HOUR)";
-            }
-            else
-            {
+            } else {
                 $limitsql = ' LIMIT ' . $limit;
             }
-        }
-        else
-        {
+        } else {
             $limitsql = ' LIMIT 10';
         }
 
-        $topic = stripslashes( DB_getItem( $_TABLES['topics'], 'topic',
-                               "tid = '".DB_escapeString($tid)."'" ));
+        $topic = DB_getItem( $_TABLES['topics'], 'topic',"tid = '".DB_escapeString($tid)."'" );
 
         $result = DB_query( "SELECT sid,uid,title,introtext,bodytext,postmode,UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() AND tid = '".DB_escapeString($tid)."' AND perm_anon > 0 ORDER BY date DESC $limitsql" );
 
         $nrows = DB_numRows( $result );
 
-        for( $i = 1; $i <= $nrows; $i++ )
-        {
+        for( $i = 1; $i <= $nrows; $i++ ) {
             $row = DB_fetchArray( $result );
             $sids[] = $row['sid'];
 
-            $storytitle = stripslashes( $row['title'] );
-            $fulltext = stripslashes( $row['introtext']."\n".$row['bodytext'] );
-            $fulltext = PLG_replaceTags( $fulltext );
-            $storytext = COM_truncateHTML ( $fulltext, $contentLength, ' ...' );
+            $storytitle = $row['title'];
+            $fulltext   = $row['introtext']."\n".$row['bodytext'];
+            $fulltext   = PLG_replaceTags( $fulltext );
+            $storytext  = PLG_replaceTags($row['introtext']);
 
+            if ( $contentLength > 1 ) {
+                $fulltext  = COM_truncateHTML( $fulltext, $contentLength, ' ...');
+                $storytext = COM_truncateHTML( $storytext,$contentLength, ' ...');
+            }
             $fulltext = trim( $fulltext );
             $fulltext = str_replace(array("\015\012", "\015"), "\012", $fulltext);
 
@@ -284,30 +279,31 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
             $storylink = COM_buildUrl( $_CONF['site_url']
                                        . '/article.php?story=' . $row['sid'] );
             $extensionTags = PLG_getFeedElementExtensions('article', $row['sid'], $feedType, $feedVersion, $tid, $fid);
-            if( $_CONF['trackback_enabled'] && ($feedType == 'RSS') && ($row['trackbackcode'] >= 0))
-            {
+            if( $_CONF['trackback_enabled'] && ($feedType == 'RSS') && ($row['trackbackcode'] >= 0)) {
                 $trbUrl = TRB_makeTrackbackUrl( $row['sid'] );
                 $extensionTags['trackbacktag'] = '<trackback:ping>'.htmlspecialchars($trbUrl).'</trackback:ping>';
             }
             $article = array( 'title'      => $storytitle,
-                                'summary'    => $storytext,
-                                'text'       => $fulltext,
-                                'link'       => $storylink,
-                                'uid'        => $row['uid'],
-                                'author'     => COM_getDisplayName( $row['uid'] ),
-                                'date'       => $row['modified'],
-                                'format'     => $row['postmode'],
-                                'topic'      => $topic,
-                                'extensions' => $extensionTags
-                              );
-            if($row['commentcode'] >= 0)
-            {
+                              'link'       => $storylink,
+                              'uid'        => $row['uid'],
+                              'author'     => COM_getDisplayName( $row['uid'] ),
+                              'date'       => $row['modified'],
+                              'format'     => $row['postmode'],
+                              'topic'      => $topic,
+                              'extensions' => $extensionTags
+                            );
+
+            if ( $contentLength > 0 ) {
+                $article['summary'] = $storytext;
+                $article['text']    = $fulltext;
+            }
+
+            if($row['commentcode'] >= 0) {
                 $article['commenturl'] = $storylink . '#comments';
             }
             $content[] = $article;
         }
     }
-
     $link = $_CONF['site_url'] . '/index.php?topic=' . $tid;
     $update = implode( ',', $sids );
 
@@ -331,21 +327,15 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
     global $_TABLES, $_CONF, $LANG01;
 
     $where = '';
-    if( !empty( $limit ))
-    {
-        if( substr( $limit, -1 ) == 'h' ) // last xx hours
-        {
+    if( !empty( $limit )) {
+        if( substr( $limit, -1 ) == 'h' ) { // last xx hours
             $limitsql = '';
             $hours = substr( $limit, 0, -1 );
             $where = " AND date >= DATE_SUB(NOW(),INTERVAL $hours HOUR)";
-        }
-        else
-        {
+        } else {
             $limitsql = ' LIMIT ' . $limit;
         }
-    }
-    else
-    {
+    } else {
         $limitsql = ' LIMIT 10';
     }
 
@@ -355,18 +345,15 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
                          . COM_getPermSQL( 'WHERE', 1 ));
     $tnumrows = DB_numRows( $tresult );
     $tlist = '';
-    for( $i = 1; $i <= $tnumrows; $i++ )
-    {
+    for( $i = 1; $i <= $tnumrows; $i++ ) {
         $T = DB_fetchArray( $tresult );
         $tlist .= "'" . $T['tid'] . "'";
-        if( $i < $tnumrows )
-        {
+        if( $i < $tnumrows ) {
             $tlist .= ',';
         }
         $topics[$T['tid']] = stripslashes( $T['topic'] );
     }
-    if( !empty( $tlist ))
-    {
+    if( !empty( $tlist )) {
         $where .= " AND (tid IN ($tlist))";
     }
     if ($frontpage_only) {
@@ -379,20 +366,24 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
     $sids = array();
     $nrows = DB_numRows( $result );
 
-    for( $i = 1; $i <= $nrows; $i++ )
-    {
+    for( $i = 1; $i <= $nrows; $i++ ) {
         $row = DB_fetchArray( $result );
         $sids[] = $row['sid'];
 
-        $storytitle = stripslashes( $row['title'] );
+        $storytitle = $row['title'];
+        $fulltext   = $row['introtext']."\n".$row['bodytext'];
+        $fulltext   = PLG_replaceTags( $fulltext );
+        $storytext  = PLG_replaceTags($row['introtext']);
 
-        $fulltext = stripslashes( $row['introtext']."\n".$row['bodytext'] );
-        $fulltext = PLG_replaceTags( $fulltext );
-        $storytext = COM_truncateHTML ( $fulltext, $contentLength, ' ...' );
+        if ( $contentLength > 1 ) {
+            $fulltext  = COM_truncateHTML($fulltext,$contentLength,' ...');
+            $storytext = COM_truncateHTML($storytext,$contentLength,' ...');
+        }
+
         $fulltext = trim( $fulltext );
         $fulltext = str_replace(array("\015\012", "\015"), "\012", $fulltext);
 
-        if($row['postmode']=='plaintext'){
+        if($row['postmode']=='plaintext') {
             if(!empty($storytext)){
                 $storytext = nl2br($storytext);
             }
@@ -401,32 +392,30 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
             }
         }
 
-        $storylink = COM_buildUrl( $_CONF['site_url'] . '/article.php?story='
-                                   . $row['sid'] );
+        $storylink = COM_buildUrl( $_CONF['site_url'] . '/article.php?story='.$row['sid'] );
         $extensionTags = PLG_getFeedElementExtensions('article', $row['sid'], $feedType, $feedVersion, $fid, ($frontpage_only ? '::frontpage' : '::all'));
-        if( $_CONF['trackback_enabled'] && ($feedType == 'RSS') && ($row['trackbackcode'] >= 0))
-        {
+        if( $_CONF['trackback_enabled'] && ($feedType == 'RSS') && ($row['trackbackcode'] >= 0)) {
             $trbUrl = TRB_makeTrackbackUrl( $row['sid'] );
             $extensionTags['trackbacktag'] = '<trackback:ping>'.htmlspecialchars($trbUrl).'</trackback:ping>';
         }
         $article = array( 'title'      => $storytitle,
-                            'summary'    => $storytext,
-                            'text'       => $fulltext,
-                            'link'       => $storylink,
-                            'uid'        => $row['uid'],
-                            'author'     => COM_getDisplayName( $row['uid'] ),
-                            'date'       => $row['modified'],
-                            'format'     => $row['postmode'],
-                            'topic'      => $topics[$row['tid']],
-                            'extensions' => $extensionTags
+                          'link'       => $storylink,
+                          'uid'        => $row['uid'],
+                          'author'     => COM_getDisplayName( $row['uid'] ),
+                          'date'       => $row['modified'],
+                          'format'     => $row['postmode'],
+                          'topic'      => $topics[$row['tid']],
+                          'extensions' => $extensionTags
                           );
-        if($row['commentcode'] >= 0)
-        {
+        if ( $contentLength > 0 ) {
+            $article['summary'] = $storytext;
+            $artcile['text'] = $fulltext;
+        }
+
+        if($row['commentcode'] >= 0) {
             $article['commenturl'] = $storylink . '#comments';
         }
         $content[] = $article;
-
-
     }
 
     $link = $_CONF['site_url'];
@@ -502,12 +491,9 @@ function SYND_updateFeed( $fid )
 
             $feed->title = $A['title'];
             $feed->description = $A['description'];
-            if( empty( $A['feedlogo'] ))
-            {
+            if( empty( $A['feedlogo'] )) {
                 $feed->feedlogo = '';
-            }
-            else
-            {
+            } else {
                 $feed->feedlogo = $_CONF['site_url'] . $A['feedlogo'];
             }
             $feed->sitelink = $link;
