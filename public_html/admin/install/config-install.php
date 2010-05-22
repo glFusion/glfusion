@@ -196,8 +196,8 @@ function install_config($site_url)
 
     $c->add('fs_users', NULL, 'fieldset', 4, 16, NULL, 0, TRUE);
     $c->add('disable_new_user_registration',FALSE,'select',4,16,0,220,TRUE);
-    $c->add('allow_user_themes',1,'select',4,16,0,230,TRUE);
-    $c->add('allow_user_language',1,'select',4,16,0,240,TRUE);
+    $c->add('allow_user_themes',0,'select',4,16,0,230,TRUE);
+    $c->add('allow_user_language',0,'select',4,16,0,240,TRUE);
     $c->add('allow_user_photo',1,'select',4,16,0,250,TRUE);
     $c->add('allow_username_change',0,'select',4,16,0,260,TRUE);
     $c->add('allow_account_delete',0,'select',4,16,0,270,TRUE);
