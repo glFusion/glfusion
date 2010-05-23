@@ -37,6 +37,11 @@ require_once $_CONF['path'] . 'filecheck_data.php';
 
 USES_lib_admin();
 
+if ( defined('DEMO_MODE') ) {
+    echo COM_refresh($_CONF['site_admin_url'] . '/envcheck.php');
+    exit;
+}
+
 if (!SEC_inGroup ('Root')) {
     $display = COM_siteHeader ('menu', $MESSAGE[30])
         . COM_startBlock ($MESSAGE[30], '',COM_getBlockTemplate ('_msg_block', 'header'))

@@ -187,6 +187,9 @@ if( !$_CONF['have_pear'] ) {
     }
 }
 
+    PHP_Compat::loadFunction( 'htmlspecialchars_decode' );
+}
+
 /**
 * Include page time -- used to time how fast each page was created
 *
@@ -2934,7 +2937,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
         if( $_CONF['link_versionchecker'] == 1 AND SEC_inGroup( 'Root' ))
         {
             $adminmenu->set_var( 'option_url',
-               'http://www.glfusion.org/versionchecker.php?version=' . GVERSION );
+               'http://www.glfusion.org/versionchecker.php?version=' . GVERSION . PATCHLEVEL );
             $adminmenu->set_var( 'option_label', $LANG01[107] );
             $adminmenu->set_var( 'option_count', GVERSION . PATCHLEVEL );
 
@@ -4187,6 +4190,10 @@ function COM_emailUserTopics()
     if ($_CONF['emailstories'] == 0) {
         return;
     }
+
+    $storytext = '';
+    $storytext_text = '';
+
     USES_lib_story();
 
     $subject = strip_tags( $_CONF['site_name'] . $LANG08[30] . strftime( '%Y-%m-%d', time() ));
@@ -4299,17 +4306,17 @@ function COM_emailUserTopics()
             $story_date = strftime( $_CONF['date'], strtotime( $S['day' ]));
 
             if( $_CONF['emailstorieslength'] > 0 ) {
-                $storytext = COM_undoSpecialChars( strip_tags( PLG_replaceTags( stripslashes( $S['introtext'] ))));
+                $storytext      = COM_undoSpecialChars( strip_tags( PLG_replaceTags( stripslashes( $S['introtext'] ))));
+                $storytext_text = COM_undoSpecialChars( strip_tags( PLG_replaceTags( stripslashes( $S['introtext'] ))));
 
                 if( $_CONF['emailstorieslength'] > 1 ) {
-                    $storytext = COM_truncate( $storytext,
-                                    $_CONF['emailstorieslength'], '...' );
+                    $storytext = COM_truncate( $storytext,$_CONF['emailstorieslength'], '...' );
+                    $storytext_text = COM_truncate( $storytext_text,$_CONF['emailstorieslength'], '...' );
                 }
             } else {
-                $storytext = $story->DisplayElements('introtext');
+                $storytext = '';
+                $storytext_text = '';
             }
-            $storytext = $story->DisplayElements('introtext');
-            $storytext_text = COM_undoSpecialChars( strip_tags( PLG_replaceTags( stripslashes( $S['introtext'] ))));
             $T->set_var ('story_introtext',$storytext);
             $TT->set_var ('story_introtext',$storytext_text);
 
@@ -4338,13 +4345,10 @@ function COM_emailUserTopics()
         $mailtext = $T->finish($T->get_var('digest'));
         $mailtext_text = $TT->finish($TT->get_var('digest'));
 
-        if ($_CONF['site_mail'] !== $_CONF['noreply_mail']) {
-            $mailfrom = $_CONF['noreply_mail'];
-            global $LANG_LOGIN;
-            $mailtext .= LB . LB . $LANG04[159];
-        } else {
-            $mailfrom = $_CONF['site_mail'];
-        }
+        $mailfrom = $_CONF['noreply_mail'];
+        $mailtext .= LB . LB . $LANG04[159];
+        $mailtext_text .= LB . LB . $LANG04[159];
+
         $to = array();
         $from = array();
         $from = COM_formatEmailAddress('',$mailfrom);
@@ -4604,7 +4608,7 @@ function COM_formatTimeString( $time_string, $time, $type = '', $amount = 0 )
 
     // This is the amount you have to divide the previous by to get the
     // different time intervals: hour, day, week, months
-    $time_divider = array( 60, 60, 24, 7, 30 );
+    $time_divider = array( 60, 60, 24, 7, 4 );
 
     // These are the respective strings to the numbers above. They have to match
     // the strings in $LANG_WHATSNEW (i.e. these are the keys for the array -

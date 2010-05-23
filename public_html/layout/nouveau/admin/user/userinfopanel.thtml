@@ -17,9 +17,9 @@
             <td><input type="text" id="location" name="location" size="48" maxlength="96" value="{location_value}"{xhtml}></td>
           </tr>
           {!if lang_userphoto}
-          <tr>
+           <tr>
             <td style="width:100px;"><label for="photo">{lang_userphoto}:</label></td>
-            <td>{display_photo}</td>
+            <td><input type="file" dir="ltr" id="photo" name="photo" size="30" /><br />{display_photo}</td>
           </tr>
           {!endif}
           <tr>

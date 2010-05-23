@@ -75,5 +75,6 @@ $LANG_mgMB = array (
     'block'             => 'Block',
     'alturl'            => 'Alt URL',
     'playall'           => 'playall',
+    'link_src'          => 'Link Src',
 );
 ?>

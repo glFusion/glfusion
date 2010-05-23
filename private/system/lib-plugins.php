@@ -1460,7 +1460,7 @@ function PLG_profileSave ($plugin = '', $uid = 0)
     $args[1] = $uid;
 
     if (empty ($plugin)) {
-        PLG_callFunctionForAllPlugins ('profilesave');
+        PLG_callFunctionForAllPlugins ('profilesave', $args);
     } else {
         $function = 'plugin_profilesave_' . $plugin;
         return PLG_callFunctionForOnePlugin($function, $args);
@@ -1823,7 +1823,7 @@ function PLG_replaceTags($content, $plugin = '')
                     $url = COM_buildUrl ($_CONF['site_url']
                          . '/article.php?story=' . $autotag['parm1']);
                     if (empty ($linktext)) {
-                        $linktext = stripslashes (DB_getItem ($_TABLES['stories'], 'title', "sid = '".DB_escapeString($autotag['parm1'])."'"));
+                        $linktext = DB_getItem ($_TABLES['stories'], 'title', "sid = '".DB_escapeString($autotag['parm1'])."'");
                     }
                 }
                 if (!empty ($url)) {

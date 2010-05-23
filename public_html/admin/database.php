@@ -190,7 +190,8 @@ function DBADMIN_backup()
         $backupfile = "{$_CONF['backup_path']}glfusion_db_backup_{$curdatetime}.sql";
         $command = '"'.$_DB_mysqldump_path.'" ' . " -h$_DB_host -u$_DB_user";
         if (!empty($_DB_pass)) {
-            $command .= " -p".'"'.$_DB_pass.'"';
+            $command .= " -p".escapeshellarg($_DB_pass);
+            $parg = " -p".escapeshellarg($_DB_pass);
         }
         if (!empty($_CONF['mysqldump_options'])) {
             $command .= ' ' . $_CONF['mysqldump_options'];
@@ -198,7 +199,7 @@ function DBADMIN_backup()
         $command .= " $_DB_name > \"$backupfile\"";
         $log_command = $command;
         if (!empty($_DB_pass)) {
-            $log_command = str_replace(" -p\"$_DB_pass\"", ' -p*****', $command);
+            $log_command = str_replace($parg, ' -p*****', $command);
         }
 
         if (function_exists('is_executable')) {

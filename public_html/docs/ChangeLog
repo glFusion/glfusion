@@ -15,6 +15,14 @@ v2.0.0 svn
 
 v1.2.1.svn
 ----------
+- Calendar: Add permission check to auto tags (mark)
+- FileMgmt: Add permission check to auto tags (mark)
+- Staticpages: Add permission check to auto tags (mark)
+- Allow forum plugin to find custom CSS in private/plugins/forum/css/custom
+- Let default content blocks auto-increment on install (Eric)
+- Fix block id conflict between Blog Roll and Forum Menu blocks (Eric)
+- MooSlide widget resize bugfix, implement custom css, autoscroll and mouseover
+  capability, all code courtesy of Rowan (Eric)
 - Implement PLG_templatePath: plugin helper function to find templates (Mark H.)
 - Extend ADMIN_simpleList -> ADMIN_arrayList, allows sortable columns (Mark H.)
 - Rename ADMIN_sortList function to ADMIN_sortArray (Mark H.)
@@ -22,12 +30,47 @@ v1.2.1.svn
 - Plugin Admin - allow sorting of columns in Plugin list (Mark H.)
 - Replace/fix sort direction arrows in ADMIN_list and ADMIN_arrayList (Mark H.)
 
+1.2.0.pl5
+---------
+- Admin user edit photo upload missing (Mark)
+- Batch Admin interface did not keep settings when paging through results (Mark)
+- Calendar: auto tag was broken (Mark)
+- Do not include summary when contentlength = 0 in syndication (Mark)
+- Fixed issue where you could not delete blocks (Mark)
+- Forum: Fixed footer formatting issue (Mark)
+- Fixed daily digest issue where it did not honor the emailstorieslength
+  configuration setting (Mark)
+
+v1.2.0.pl4
+----------
+- Add patch level to version checker (Mark)
+- Plugin user preferences were not properly saved in admin user editor (Mark)
+- Fixed date calculation error (Mark)
+- Comment disclaimer displayed when no comments had been entered yet. (Mark)
+- htmlspecialchars_decode() is a PHP5 only function. Updated lib-common to
+  load the compatible function when running PHP4. (Mark)
+- Forum: footer.thtml template did not work with custom/ directory (Mark)
+- Setting comment edit time to 0 did not allow unlimited time to edit
+  comments - instead it prevented comments from being edited (Mark)
+- When story.admin user selects contribute, the redirect was broken
+  that took them to the admin story editor (Mark)
+- Do not allow default blocks to be deleted (Mark)
+- linksrc: was not included in allowed autotag options for the MG media
+  Browser (Mark)
 
 v1.2.0.pl3
 ----------
+- Forum: Smiley display did not wrap properly if using wide icons (Mark)
+- Demo mode tweaks - remove some advanced features from demo mode
+  (i.e.; allow multiple logins from same userid) (Mark)
+- Forum: Use noreply email address for notifications (Mark)
+- Polls: Comment view did not default to user preferences (Mark)
+- Media Gallery: Comment view did not default to user preferences (Mark)
+- FileMgmt: Comment view did not default to user preferences (Mark)
 - Block Editor did not allow you to un-check allow auto tags (Mark)
 - Media Gallery: SWFUpload did not enforce user quotas (Mark)
-- Database backup would fail if pipe char (|) used in password (Mark)
+- Database backup would fail if password contained certain special
+  characters (Mark)
 - Media Gallery: SWFUpload referenced SWFUpload Button in wrong directory if
   glFusion is installed in a sub-directory. (Mark).
 - Database backup would always fail with 0 byte file message on Windows

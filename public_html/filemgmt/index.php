@@ -143,7 +143,7 @@ if ( COM_isAnonUser() && $mydownloads_publicpriv != 1 )  {
             } elseif (isset($_GET['order']) ) {
                 $cmt_order =  $_GET['order'] == 'ASC' ? 'ASC' : 'DESC';
             } else {
-                $cmt_order = 'DESC';
+                $cmt_order = '';
             }
             if ( isset($_POST['mode']) ) {
                 $cmt_mode = COM_applyFilter($_POST['mode']);
@@ -154,7 +154,7 @@ if ( COM_isAnonUser() && $mydownloads_publicpriv != 1 )  {
             }
             $valid_cmt_modes = array('flat','nested','nocomment','threaded');
             if ( !in_array($cmt_mode,$valid_cmt_modes) ) {
-                $cmt_mode = 'flat';
+                $cmt_mode = '';
             }
 
             $p->set_var('comment_records', CMT_userComments( "fileid_{$lid}", $title, 'filemgmt',$cmt_order,$cmt_mode,0,$cmt_page,false,$delete_option));

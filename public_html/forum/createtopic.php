@@ -1404,9 +1404,9 @@ function gf_chknotifications($forumid,$topicid,$userid,$type='topic') {
                         $to = COM_formatEmailAddress('',$B['email']);
                         $notifyfull = DB_getItem($_TABLES['gf_userprefs'],'notify_full',"uid=".(int)$N['uid']);
                         if ( $notifyfull ) {
-                            COM_mail($to,$digestSubject, $digestMessage,'',true,0,'',$digestMessageText);
+                            COM_mail($to,$digestSubject, $digestMessage,$_CONF['noreply_mail'],true,0,'',$digestMessageText);
                         } else {
-                            COM_mail($to,$subjectline,$message,false);
+                            COM_mail($to,$subjectline,$message,$_CONF['noreply_mail']);
                         }
                     }
                 }

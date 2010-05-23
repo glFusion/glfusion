@@ -175,7 +175,7 @@ function commandcontrol()
             'lang' => $LANG01[113], 'image' => '/images/icons/docs.'),
         array('condition' => (SEC_inGroup ('Root') &&
                               ($_CONF['link_versionchecker'] == 1)),
-            'url' => 'http://www.glfusion.org/versionchecker.php?version=' . GVERSION,
+            'url' => 'http://www.glfusion.org/versionchecker.php?version=' . GVERSION . PATCHLEVEL,
             'lang' => $LANG01[107], 'image' => '/images/icons/versioncheck.'),
         array('condition' => (SEC_inGroup ('Root')),
             'url'=>$_CONF['site_admin_url'] . '/configuration.php',
