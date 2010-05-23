@@ -187,9 +187,6 @@ if( !$_CONF['have_pear'] ) {
     }
 }
 
-    PHP_Compat::loadFunction( 'htmlspecialchars_decode' );
-}
-
 /**
 * Include page time -- used to time how fast each page was created
 *
