@@ -2,10 +2,12 @@ glFusion ChangeLog
 
 v1.2.1.svn
 ----------
+- Implement persistent (non-fading) system messaging (Mark H.)
+  See: COM_showMessage(), COM_showMessageText(), COM_showMessageFromParameter()
 - All bundled Plugins: Allow custom language string overrides (Mark H.)
 - Config setting Allow User Theme and Allow User Language to False
   on default installs (Eric)
-- submit.php was not providing new edit=x parameter to plugins (now uses both)
+- submit.php was not providing new edit=x parameter to plugins (Mark H.)
 - Calendar: Add permission check to auto tags (mark)
 - FileMgmt: Add permission check to auto tags (mark)
 - Staticpages: Add permission check to auto tags (mark)

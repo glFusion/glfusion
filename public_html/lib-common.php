@@ -4662,10 +4662,11 @@ function COM_formatTimeString( $time_string, $time, $type = '', $amount = 0 )
 *
 * @param    string  $message    Message text; may contain HTML
 * @param    string  $title      (optional) alternative block title
+* @param	string	$boolean	(optional) whether message should be persistent
 * @return   string              HTML block with message
 *
 */
-function COM_showMessageText($message, $title = '')
+function COM_showMessageText($message, $title = '', $persist = false)
 {
     global $_CONF, $MESSAGE, $_IMAGE_TYPE;
 
@@ -4676,12 +4677,13 @@ function COM_showMessageText($message, $title = '')
             $title = $MESSAGE[40];
         }
         $timestamp = strftime($_CONF['daytime']);
+        $msg_block = ($persist) ? '_persistent_msg_block' : '_msg_block';
         $retval .= COM_startBlock($title . ' - ' . $timestamp, '',
-                                  COM_getBlockTemplate('_msg_block', 'header'))
+                                  COM_getBlockTemplate($msg_block, 'header'))
                 . '<p class="sysmessage"><img src="' . $_CONF['layout_url']
                 . '/images/sysmessage.' . $_IMAGE_TYPE . '" alt="" ' . XHTML
                 . '>' . $message . '</p>'
-                . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
+                . COM_endBlock(COM_getBlockTemplate($msg_block, 'footer'));
     }
 
     return $retval;
@@ -4696,9 +4698,11 @@ function COM_showMessageText($message, $title = '')
 *
 * @param    int     $msg        ID of message to show
 * @param    string  $plugin     Optional Name of plugin to lookup plugin defined message
+* @param    string  $title      (optional) alternative block title
+* @param	string	$boolean	(optional) whether message should be persistent
 * @return   string              HTML block with message
 */
-function COM_showMessage($msg, $plugin = '')
+function COM_showMessage($msg, $plugin = '', $title = '', $persist = false)
 {
     global $MESSAGE;
 
@@ -4719,7 +4723,7 @@ function COM_showMessage($msg, $plugin = '')
         }
 
         if (!empty($message)) {
-            $retval .= COM_showMessageText($message);
+            $retval .= COM_showMessageText($message, $title, $persist);
         }
     }
 
@@ -4729,9 +4733,9 @@ function COM_showMessage($msg, $plugin = '')
 /**
 * Displays a message, as defined by URL parameters
 *
-* Helper function to display a message, if URL parameters 'msg' and 'plugin'
-* (optional) are defined. Only for GET requests, but that's what glFusion uses
-* everywhere anyway.
+* Helper function to display a message, but only if $_GET parameter 'msg' is defined. 
+* optional parameters 'plugin', 'title' and 'persist' are also parsed
+* Only for GET requests, but that's what glFusion uses everywhere anyway.
 *
 * @return   string  HTML block with message
 *
@@ -4743,11 +4747,10 @@ function COM_showMessageFromParameter()
     if (isset($_GET['msg'])) {
         $msg = COM_applyFilter($_GET['msg'], true);
         if ($msg > 0) {
-            $plugin = '';
-            if (isset($_GET['plugin'])) {
-                $plugin = COM_applyFilter($_GET['plugin']);
-            }
-            $retval .= COM_showMessage($msg, $plugin);
+			$plugin = (isset($_GET['plugin'])) ? COM_applyFilter($_GET['plugin']) : '';
+			$title = (isset($_GET['title'])) ? COM_applyFilter($_GET['title']) : '';
+			$persist = (isset($_GET['persist'])) ? true : false;
+            $retval .= COM_showMessage($msg, $plugin, $title, $persist);
         }
     }
 
