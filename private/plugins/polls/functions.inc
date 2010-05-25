@@ -42,14 +42,24 @@
 if (!defined ('GVERSION')) {
     die('This file can not be used on its own.');
 }
-
-$plugin_path = $_CONF['path'] . 'plugins/polls/';
-$langfile = $plugin_path . 'language/' . $_CONF['language'] . '.php';
+/*
+* load the language file(s), including custom strings if any
+*/
+$langfile = $_CONF['path'] . 'plugins/polls/language/' . $_CONF['language'] . '.php';
+$custfile = $_CONF['path'] . 'plugins/polls/language/custom/' . $_CONF['language'] . '.php';
 
 if (file_exists($langfile)) {
-    require_once $langfile;
+    include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
 } else {
-    require_once $plugin_path . 'language/english.php';
+    $langfile = $_CONF['path'].'plugins/polls/language/english.php';
+    $custfile = $_CONF['path'].'plugins/polls/language/custom/english.php';
+    include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
 }
 
 /*

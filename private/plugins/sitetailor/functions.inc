@@ -34,16 +34,24 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
-/**
-* Language file Include
+/*
+* load the language file(s), including custom strings if any
 */
 $langfile = $_CONF['path'] . 'plugins/sitetailor/language/' . $_CONF['language'] . '.php';
+$custfile = $_CONF['path'] . 'plugins/sitetailor/language/custom/' . $_CONF['language'] . '.php';
 
-if (file_exists ($langfile)) {
+if (file_exists($langfile)) {
     include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
 } else {
-    include_once $_CONF['path'] . 'plugins/sitetailor/language/english.php';
+    $langfile = $_CONF['path'].'plugins/sitetailor/language/english.php';
+    $custfile = $_CONF['path'].'plugins/sitetailor/language/custom/english.php';
+    include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
 }
 
 require_once $_CONF['path'].'plugins/sitetailor/sitetailor.php';

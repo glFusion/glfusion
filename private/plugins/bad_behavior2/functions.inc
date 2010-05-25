@@ -50,13 +50,25 @@ if (!defined ('BAD_BEHAVIOR_VERSION')) {
 
 define('WP_BB_LOG', $_DB_table_prefix . 'bad_behavior2');
 
-$langfile = $_CONF['path'] . 'plugins/' . BAD_BEHAVIOR_PLUGIN . '/language/'
-          . $_CONF['language'] . '.php';
-if (file_exists ($langfile)) {
-    include ($langfile);
+$langfile = $_CONF['path'] . 'plugins/' . BAD_BEHAVIOR_PLUGIN
+    . '/language/' . $_CONF['language'] . '.php';
+$custfile = $_CONF['path'] . 'plugins/' . BAD_BEHAVIOR_PLUGIN
+    . '/language/custom/' . $_CONF['language'] . '.php';
+
+if (file_exists($langfile)) {
+    include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
 } else {
-    include ($_CONF['path'] . 'plugins/' . BAD_BEHAVIOR_PLUGIN
-             . '/language/english.php');
+    $langfile = $_CONF['path'].'plugins/' . BAD_BEHAVIOR_PLUGIN
+        . '/language/english.php';
+    $custfile = $_CONF['path'].'plugins/' . BAD_BEHAVIOR_PLUGIN
+        . '/language/custom/english.php';
+    include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
 }
 
 require_once $_CONF['path'].'plugins/bad_behavior2/bad_behavior2.php';

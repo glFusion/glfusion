@@ -37,12 +37,24 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
+/*
+* load the language file(s), including custom strings if any
+*/
+$langfile = $_CONF['path'].'plugins/filemgmt/language/' . $_CONF['language'] . '.php';
+$custfile = $_CONF['path'].'plugins/filemgmt/language/custom/' . $_CONF['language'] . '.php';
 
-$langfile = $_CONF['path'] . 'plugins/filemgmt/language/' . $_CONF['language'] . '.php';
-if (file_exists ($langfile)) {
+if (file_exists($langfile)) {
     include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
 } else {
-    include_once $_CONF['path'] . 'plugins/filemgmt/language/english.php';
+    $langfile = $_CONF['path'].'plugins/filemgmt/language/english.php';
+    $custfile = $_CONF['path'].'plugins/filemgmt/language/custom/english.php';
+    include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
 }
 
 /*

@@ -42,11 +42,23 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-$langfile = $_CONF['path'].'plugins/forum/language/'.$_CONF['language'].'.php';
-if (file_exists ($langfile)) {
+// load the language file(s), including custom strings if any
+
+$langfile = $_CONF['path'] . 'plugins/forum/language/' . $_CONF['language'] . '.php';
+$custfile = $_CONF['path'] . 'plugins/forum/language/custom/' . $_CONF['language'] . '.php';
+
+if (file_exists($langfile)) {
     include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
 } else {
-    include_once $_CONF['path'].'plugins/forum/language/english.php';
+    $langfile = $_CONF['path'].'plugins/forum/language/english.php';
+    $custfile = $_CONF['path'].'plugins/forum/language/custom/english.php';
+    include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
 }
 
 // Need to add this line because PLG_enableStateChange does an include of this file inside a plugin function and $_TABLES is not global.
