@@ -39,12 +39,22 @@ if (!defined ('GVERSION'))
 /**
 * Language file Include
 */
-$langfile = $_CONF['path'] . 'plugins/mediagallery/language/' . $_CONF['language'] . '.php';
 
-if (file_exists ($langfile)) {
+$langfile = $_CONF['path'] . 'plugins/mediagallery/language/' . $_CONF['language'] . '.php';
+$custfile = $_CONF['path'] . 'plugins/mediagallery/language/custom/' . $_CONF['language'] . '.php';
+
+if (file_exists($langfile)) {
     include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
 } else {
-    include_once $_CONF['path'] . 'plugins/mediagallery/language/english.php';
+    $langfile = $_CONF['path'].'plugins/mediagallery/language/english.php';
+    $custfile = $_CONF['path'].'plugins/mediagallery/language/custom/english.php';
+    include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
 }
 
 /*

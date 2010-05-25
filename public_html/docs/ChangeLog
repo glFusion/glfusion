@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.2.1.svn
 ----------
+- MediaGallery: Allow custom language string overrides (Mark H.)
 - CAPTCHA: Allow custom language string overrides (Mark H.)
 - Config setting Allow User Theme and Allow User Language to False
   on default installs (Eric)
