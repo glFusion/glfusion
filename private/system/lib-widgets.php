@@ -96,7 +96,6 @@ EOJ;
 	    $res = DB_query($sql);
 	    $pages = array();
 	    for ($i = 0; $A = DB_fetchArray($res); ++$i) {
-	    COM_errorLog($A['sp_title'],1);
 	        $content = SP_render_content(stripslashes($A['sp_content']), $A['sp_php']);
 	        $title = htmlspecialchars(stripslashes($A['sp_title']));
 	        $order = array_search($A['sp_id'],$page_ids); // find proper order
