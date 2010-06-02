@@ -52,7 +52,7 @@
 
     <h2>{lang_filesystem}</h2>
     <div style="margin:5px 0 5px 0;border-bottom:1px solid #cccccc"></div>
-    <table style="width:714px;">
+    <table style="width:194px;">
       <!-- BEGIN perms -->
       <tr class="pluginRow{rowclass}">
         <td class="pathtext">{location}</td>

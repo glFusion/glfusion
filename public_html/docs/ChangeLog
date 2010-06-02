@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.2.1.svn
 ----------
+- Fix width of Directory/File Permissions table in envcheck (Mark H.)
 - Implement persistent (non-fading) system messaging (Mark H.)
   See: COM_showMessage(), COM_showMessageText(), COM_showMessageFromParameter()
 - All bundled Plugins: Allow custom language string overrides (Mark H.)
