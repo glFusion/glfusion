@@ -404,7 +404,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 $album_id       = $row['aid'];
                 $purgefiles     = 0;
                 $baseSrcFile    = $row['data2'];    // basefilename
-                $views          = $row['mid'];
+                $views          = (int) $row['mid'];
                 $caption        = $row['data3'];
 
                 $file_extension = strtolower(substr(strrchr($baseSrcFile,"."),1));
@@ -436,8 +436,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                         $filetype="application/force-download";
                 }
                 list($rc,$msg) = MG_getFile( $srcFile, $baseSrcFile, $album_id, $caption, '', 0, $purgefiles, $filetype,0,'','',0,0,0 );
-                DB_query("UPDATE {$_TABLES['mg_media']} SET media_views=" . $views . ",media_user_id='" . $MG_albums[$album_id]->owner_id . "' WHERE media_id='" . $new_media_id . "'");
-
+                DB_query("UPDATE {$_TABLES['mg_media']} SET media_views=" . (int) $views . ",media_user_id='" . $MG_albums[$album_id]->owner_id . "' WHERE media_id='" . $new_media_id . "'");
                 $sql = "SELECT * FROM {$_TABLES['mg_session_items2']} WHERE id=" . $row['id'];
                 $gcmtResult2 = DB_query($sql);
                 $cRows = DB_numRows($gcmtResult2);
@@ -477,8 +476,8 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 $srcFile        = $row['data'];     // full path
                 $album_id       = $row['aid'];
                 $sdata          = unserialize($row['mid']);
-                $views          = $sdata[0];
-                $uid            = $sdata[1];
+                $views          = (int) $sdata[0];
+                $uid            = (int) $sdata[1];
                 $purgefiles     = 0;
                 $file    = basename($row['data']);
                 $baseSrcFile = stripslashes($file);
@@ -527,7 +526,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     } else {
                         $glUid = 1;
                     }
-                    DB_query("UPDATE {$_TABLES['mg_media']} SET media_views=" . $views . ",media_user_id='" . $glUid . "' WHERE media_id='" . $new_media_id . "'");
+                    DB_query("UPDATE {$_TABLES['mg_media']} SET media_views=" . (int) $views . ",media_user_id='" . $glUid . "' WHERE media_id='" . $new_media_id . "'");
                     $sql = "SELECT * FROM {$_TABLES['mg_session_items2']} WHERE id=" . $row['id'];
                     $gcmtResult2 = DB_query($sql);
                     $cRows = DB_numRows($gcmtResult2);
@@ -601,7 +600,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                         $filetype="application/force-download";
                 }
                 list($rc,$msg) = MG_getFile( $srcFile, $baseSrcFile, $album_id, $caption, '', 0, $purgefiles, $filetype,0,'','',0,0,0 );
-                DB_query("UPDATE {$_TABLES['mg_media']} SET media_views=" . $views . " WHERE media_id='" . $new_media_id . "'");
+                DB_query("UPDATE {$_TABLES['mg_media']} SET media_views=" . (int) $views . " WHERE media_id='" . $new_media_id . "'");
 
                 $statusMsg = DB_escapeString($baseSrcFile . " " . $msg);
                 DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
@@ -616,7 +615,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 $purgefiles     = 0;
                 $title          = $row['data2'];
                 $baseSrcFile    = basename($row['data']);
-                $views          = $row['mid'];
+                $views          = (int) $row['mid'];
                 $caption        = $row['data3'];
 
                 $file_extension = strtolower(substr(strrchr($baseSrcFile,"."),1));
@@ -648,7 +647,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                         $filetype="application/force-download";
                 }
                 list($rc,$msg) = MG_getFile( $srcFile, $baseSrcFile, $album_id, $title, $caption, 0, $purgefiles, $filetype,0,'','',0,0,0 );
-                DB_query("UPDATE {$_TABLES['mg_media']} SET media_views=" . $views . " WHERE media_id='" . DB_escapeString($new_media_id) . "'");
+                DB_query("UPDATE {$_TABLES['mg_media']} SET media_views=" . (int) $views . " WHERE media_id='" . DB_escapeString($new_media_id) . "'");
 
                 $statusMsg = DB_escapeString($baseSrcFile . " " . $msg);
                 DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
@@ -669,7 +668,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     $M = DB_fetchArray($inmResult);
                     $srcFile = $album_path . $M['filename'];
                     $baseSrcFile = $M['filename'];
-                    $views       = $M['hits'];
+                    $views       = (int) $M['hits'];
                     $caption     = $M['caption'];
                     $keywords    = $M['keywords'];
                     $date        = $M['date'];
@@ -705,7 +704,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     }
                     list($rc,$msg) = MG_getFile( $srcFile, $baseSrcFile, $album_id, $title, $caption, 0, $purgefiles, $filetype,0,'',$keywords,0,0,0 );
 
-                    DB_query("UPDATE {$_TABLES['mg_media']} SET media_views=" . $views . " WHERE media_id='" . DB_escapeString($new_media_id) . "'");
+                    DB_query("UPDATE {$_TABLES['mg_media']} SET media_views=" . (int) $views . " WHERE media_id='" . DB_escapeString($new_media_id) . "'");
 
                     $statusMsg = DB_escapeString($baseSrcFile . " " . $msg);
                     DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
@@ -752,7 +751,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     $M = DB_fetchArray($inmResult);
                     $srcFile     = $album_path . '/' . $gk_album_id . '/' . $M['file_name'];
                     $baseSrcFile = $M['file_name'];
-                    $views       = $M['hits'];
+                    $views       = (int) $M['hits'];
                     $caption     = $M['description'];
                     $title       = $M['name'];
                     $purgefiles  = 0;
@@ -786,7 +785,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     }
                     list($rc,$msg) = MG_getFile( $srcFile, $baseSrcFile, $album_id, $title, $caption, 0, $purgefiles, $filetype,0,'',$keywords,0,0,0 );
 
-                    DB_query("UPDATE {$_TABLES['mg_media']} SET media_views=" . $views . " WHERE media_id='" . DB_escapeString($new_media_id) . "'");
+                    DB_query("UPDATE {$_TABLES['mg_media']} SET media_views=" . (int) $views . " WHERE media_id='" . DB_escapeString($new_media_id) . "'");
 
                     $statusMsg = DB_escapeString($baseSrcFile . " " . $msg);
                     DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");

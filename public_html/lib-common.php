@@ -3206,7 +3206,7 @@ function COM_checkHTML( $str, $permissions = 'story.edit' )
 */
 function COM_filterHTML( $str, $permissions = 'story.edit' )
 {
-    global $_CONF;
+    global $_CONF, $_SYSTEM;
 
     if( isset( $_CONF['skip_html_filter_for_root'] ) &&
              ( $_CONF['skip_html_filter_for_root'] == 1 ) &&
@@ -3214,22 +3214,33 @@ function COM_filterHTML( $str, $permissions = 'story.edit' )
         return $str;
     }
 
+    if ( $_CONF['allow_embed_object'] == 1 ) {
+        $configArray = array('safe' => 1,
+                             'elements' => '*+embed+object',
+                             'balance'  => 1,
+                             'valid_xhtml' => 0
+                            );
+    } else {
+        $configArray = array('safe' => 1,
+                             'balance'  => 1,
+                             'valid_xhtml' => 1
+                            );
+    }
+
+    if ( isset($_SYSTEM['filterOverride']) && is_array($_SYSTEM['filterOverride'] ) ) {
+        $configArray = array_merge($configArray,$_SYSTEM['filterOverride']);
+    }
+
+    if ( SEC_inGroup('Root') && isset($_SYSTEM['RootFilterOverride']) && is_array($_SYSTEM['RootFilterOverride'] ) ) {
+        $configArray = array_merge($configArray,$_SYSTEM['RootFilterOverride']);
+    }
+
     require_once $_CONF['path'] . 'lib/htmLawed/htmLawed.php';
 
     if ( $_CONF['allow_embed_object'] == 1 ) {
-        $str = htmLawed($str,array( 'safe'=>1,
-                                    'elements'=>'*+embed+object',
-                                    'balance'=>1,
-                                    'valid_xhtml'=>0
-
-                                    )
-                        );
+        $str = htmLawed($str,$configArray);
     } else {
-        $str = htmLawed($str,array( 'safe'=>1,
-                                    'balance'=>1,
-                                    'valid_xhtml'=>1
-                                    )
-                        );
+        $str = htmLawed($str,$configArray);
     }
     return $str;
 }
@@ -5975,7 +5986,10 @@ function COM_highlightQuery( $text, $query, $class = 'highlight' )
                       $after = "/u";
                  }
             }
-            $text = preg_replace($before . $searchword . $after, "<span class=\"$class\">\\0</span>", '<!-- x -->' . $text . '<!-- x -->' );
+            $HLtext = @preg_replace($before . $searchword . $after, "<span class=\"$class\">\\0</span>", '<!-- x -->' . $text . '<!-- x -->' );
+            if ( $HLtext != NULL ) {
+                $text = $HLtext;
+            }
         }
     }
     return $text;

@@ -99,12 +99,12 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
                 if ( $tempFile == 1 ) {
                     $fullurl = $tempfilepath;
                 } else {
-                    $fullurl = $filemgmt_FileStore . $url;
+                    $fullurl = $filemgmt_FileStore . urldecode($url);
                 }
                 if ( file_exists($fullurl) ) {
                     if ($fd = fopen ($fullurl, "rb")) {
-                        header('Content-Type: application/octet-stream; name="'.$url.'"');
-                        header('Content-Disposition: attachment; filename="'.$url.'"');
+                        header('Content-Type: application/octet-stream; name="'.urldecode($url).'"');
+                        header('Content-Disposition: attachment; filename="'.urldecode($url).'"');
                         header('Accept-Ranges: bytes');
                         header('Pragma: no-cache');
                         header('Expires: 0');
@@ -113,7 +113,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
                         fpassthru($fd);
                         flush();
                     } else {
-                        COM_errorLog("FileMgmt: Error - Unable to download selected file: ". $url);
+                        COM_errorLog("FileMgmt: Error - Unable to download selected file: ". urldecode($url));
                     }
                 }
             } else {

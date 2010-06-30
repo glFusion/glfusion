@@ -26,6 +26,26 @@ v1.2.1.svn
 
 1.2.0.pl5
 ---------
+- Add option for admins to set story author (Lee / Mark)
+- Reset login speedlimit check on successful login (Mark)
+- Forum: Fix ambiguous use of uid in query (Lee)
+- Forum: Ensure all notifications are sent from no_reply address (Mark)
+- Fixed published date bug when using Chrome browser (Mark)
+- Forum: Now process autotags before processing smilies (Mark)
+- Fixed preg_replace compilation failure when non UTF-8 used in search (Mark)
+- Updated htmLawed HTML filter module (Mark)
+- Allow user / root element overrides for HTML filtering (Mark)
+- Add user id column to user list (Mark)
+- Static Pages: Add support for custom language files (Lee / Mark)
+- Media Gallery: Display full setting was reversed when viewing media
+  item (Lee / Mark)
+- Media Gallery: Admin user edit did not properly retrieve / set Media Gallery
+  user preference settings (Lee / Mark)
+- Media Gallery - Batch import could fail if the source album does not have
+  views properly set. (Lee / Mark)
+- CUSTOM user form was not called if password validation failed when using
+  custom registration (Mark)
+- FileMgmt: Files with embedded spaces outside of webroot would not d/l (Mark H)
 - Admin user edit photo upload missing (Mark)
 - Batch Admin interface did not keep settings when paging through results (Mark)
 - Calendar: auto tag was broken (Mark)

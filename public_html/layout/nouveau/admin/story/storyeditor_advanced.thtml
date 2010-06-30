@@ -27,7 +27,7 @@
         <table id="adveditor" cellspacing="0" cellpadding="3" style="width:100%; margin-top:10px; border:1px solid #ECE9D8;">
             <tr>
                 <td style="width:20%;" class="alignright">{lang_author}:</td>
-                <td>{story_author}<input type="hidden" name="uid" value="{story_uid}"{xhtml}></td>
+                <td><select name="uid">{story_author_select}</select></td>
             </tr>
             <tr>
                 <td class="alignright">{lang_title}:</td>
@@ -304,6 +304,8 @@
     <script type="text/javascript">
         {# This code will only be executed by a browser that suppports Javascript #}
 
+        var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+
         var jstest = {showarchivedisabled};
         if (jstest) {
             document.frmstory.expire_month.disabled=true;
@@ -316,49 +318,51 @@
             document.frmstory.storycode11.disabled=true;
         }
 
-	window.addEvent("domready", function(){
-		var today = new Date();
+        if ( is_chrome == 0 ) {
+        	window.addEvent("domready", function(){
+        		var today = new Date();
 
-		var sYear = document.getElementById('publish_year').value;
-		var sMonth = document.getElementById('publish_month').value;
-		var sDay   = document.getElementById('publish_day').value;
+        		var sYear = document.getElementById('publish_year').value;
+        		var sMonth = document.getElementById('publish_month').value;
+        		var sDay   = document.getElementById('publish_day').value;
 
-        var calender1 = new Calendar("calendar1", "toggler",
-           {inputField:{date:'publish_day',
-        	month:'publish_month',
-        	year:'publish_year'},
-        	inputType:'select',
-        	idPrefix:'cal1',
-        	startDate:new Date(sYear-1,0,1),
-        	selectedDate: new Date(sYear,sMonth-1,sDay),
-        	allowDaysOffSelection:true,
-        	allowWeekendSelection:true,
-        	allowDatesOffSelection:true,
-        	numMonths:1
-        });
-    });
+                var calender1 = new Calendar("calendar1", "toggler",
+                   {inputField:{date:'publish_day',
+                	month:'publish_month',
+                	year:'publish_year'},
+                	inputType:'select',
+                	idPrefix:'cal1',
+                	startDate:new Date(sYear-1,0,1),
+                	selectedDate: new Date(sYear,sMonth-1,sDay),
+                	allowDaysOffSelection:true,
+                	allowWeekendSelection:true,
+                	allowDatesOffSelection:true,
+                	numMonths:1
+                });
+            });
 
-	window.addEvent("domready", function(){
-		var ctoday = new Date();
+        	window.addEvent("domready", function(){
+        		var ctoday = new Date();
 
-		var cYear  = document.getElementById('cmt_close_year').value;
-		var cMonth = document.getElementById('cmt_close_month').value;
-		var cDay   = document.getElementById('cmt_close_day').value;
+        		var cYear  = document.getElementById('cmt_close_year').value;
+        		var cMonth = document.getElementById('cmt_close_month').value;
+        		var cDay   = document.getElementById('cmt_close_day').value;
 
-        var calender2 = new Calendar("calendar2", "toggler1",
-           {inputField:{date:'cmt_close_day',
-        	month:'cmt_close_month',
-        	year:'cmt_close_year'},
-        	inputType:'select',
-        	idPrefix:'cal2',
-        	startDate:new Date(cYear-1,0,1),
-        	selectedDate:  new Date(cYear,cMonth-1,cDay),
-        	allowDaysOffSelection:true,
-        	allowWeekendSelection:true,
-        	allowDatesOffSelection:true,
-        	numMonths:1
-        });
-    });
+                var calender2 = new Calendar("calendar2", "toggler1",
+                   {inputField:{date:'cmt_close_day',
+                	month:'cmt_close_month',
+                	year:'cmt_close_year'},
+                	inputType:'select',
+                	idPrefix:'cal2',
+                	startDate:new Date(cYear-1,0,1),
+                	selectedDate:  new Date(cYear,cMonth-1,cDay),
+                	allowDaysOffSelection:true,
+                	allowWeekendSelection:true,
+                	allowDatesOffSelection:true,
+                	numMonths:1
+                });
+            });
+        }
     </script>
 </div>
 {# end {templatelocation} #}

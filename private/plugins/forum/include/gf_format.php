@@ -519,11 +519,11 @@ function gf_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
     if ( $postmode != 'html' && $postmode != 'HTML') {
         $bbcode->addParser(array('block','inline','link','listitem'), 'nl2br');
     }
+    $bbcode->addParser(array('block','inline','link','listitem'), 'PLG_replacetags');
     if ( ! ($status & DISABLE_SMILIES ) ) {
         $bbcode->addParser(array('block','inline','link','listitem'), 'gf_replacesmilie');      // calls replacesmilie on all text blocks
     }
     $bbcode->addParser(array('block','inline','link','listitem'), 'gf_fixtemplate');
-    $bbcode->addParser(array('block','inline','link','listitem'), 'PLG_replacetags');
 
     if ( ! ($status & DISABLE_BBCODE ) ) {
 

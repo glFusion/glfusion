@@ -646,7 +646,11 @@ function createuser ($username, $email, $email_conf, $passwd='', $passwd_conf=''
     if ( $_CONF['registration_type'] == 1 ) {
         if ( $passwd != $passwd_conf ) {
             $retval .= COM_siteHeader('menu',$LANG04[22]);
-            $retval .= newuserform($MESSAGE[67]);
+            if ($_CONF['custom_registration'] && function_exists ('CUSTOM_userForm')) {
+                $retval .= CUSTOM_userForm($MESSAGE[67]);
+            } else {
+                $retval .= newuserform($MESSAGE[67]);
+            }
             $retval .= COM_siteFooter();
             return $retval;
         }
@@ -1423,6 +1427,7 @@ default:
                 SEC_setCookie('token',$admin_token,0,$_CONF['cookie_path'],$_CONF['cookiedomain'],$_CONF['cookiesecure'],true);
             }
         }
+        COM_resetSpeedlimit('login');
 
         if (!empty($_SERVER['HTTP_REFERER'])
                 && (strstr($_SERVER['HTTP_REFERER'], '/users.php') === false)
