@@ -48,14 +48,12 @@ $lang = $_CONF['language'];
 $langfile = $plugin_path . 'language/' . $lang . '.php';
 
 if (file_exists($langfile)) {
-    include_once $langfile;
-    if (file_exists($custfile)) {
-        include_once $custfile;
-    }
+    require_once $langfile;
 } else {
     $lang = 'english';
     require_once $plugin_path . 'language/english.php';
 }
+
 // Include the custom language file, if any
 $langfile = $plugin_path . 'language/custom/' . $lang . '.php';
 if (@file_exists($langfile)) {
