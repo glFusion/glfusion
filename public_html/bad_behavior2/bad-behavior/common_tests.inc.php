@@ -114,7 +114,7 @@ function bb2_misc_headers($settings, $package)
 		return "b9cc1d86";
 	}
 	// Proxy-Connection does not exist and should never be seen in the wild
-	if (array_key_exists('Proxy-Connection', $package['headers_mixed'])) {
+	if ($settings['strict'] && array_key_exists('Proxy-Connection', $package['headers_mixed'])) {
 		return "b7830251";
 	}
 

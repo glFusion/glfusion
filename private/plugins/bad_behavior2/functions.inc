@@ -11,7 +11,7 @@
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2009 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -45,7 +45,7 @@ if (!defined ('BAD_BEHAVIOR_PLUGIN')) {
     define('BAD_BEHAVIOR_PLUGIN', 'bad_behavior2');
 }
 if (!defined ('BAD_BEHAVIOR_VERSION')) {
-    define ('BAD_BEHAVIOR_VERSION', '2.0.36');
+    define ('BAD_BEHAVIOR_VERSION', '2.0.37');
 }
 
 define('WP_BB_LOG', $_DB_table_prefix . 'bad_behavior2');
