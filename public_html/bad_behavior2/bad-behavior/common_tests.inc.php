@@ -54,9 +54,9 @@ function bb2_misc_headers($settings, $package)
 	// Real user-agents do not start ranges at 0
 	// NOTE: this blocks the whois.sc bot. No big loss.
 	// Exceptions: MT (not fixable); LJ (refuses to fix; may be
-	// blocked again in the future)
+	// blocked again in the future); Facebook
 	if ($settings['strict'] && array_key_exists('Range', $package['headers_mixed']) && strpos($package['headers_mixed']['Range'], "=0-") !== FALSE) {
-		if (strncmp($ua, "MovableType", 11) && strncmp($ua, "URI::Fetch", 10) && strncmp($ua, "php-openid/", 11)) {
+		if (strncmp($ua, "MovableType", 11) && strncmp($ua, "URI::Fetch", 10) && strncmp($ua, "php-openid/", 11) && strncmp($ua, "facebookexternalhit", 19)) {
 			return "7ad04a8a";
 		}
 	}
