@@ -411,7 +411,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         $display .= FM_siteHeader();
         $display .= COM_startBlock("<b>". _MD_UPLOADTITLE ."</b>");
         $display .= "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"8\" class=\"plugin\"><tr><td style=\"padding-top:10px;padding-left:50px;\">\n";
-        $display .= "<ul><li>"._MD_SUBMITONCE."</li>\n";
+        $display .= "<ul><li>"._MD_SUBMITONCE."<b>&nbsp;&nbsp;".'(max:'."&nbsp;" . ini_get('upload_max_filesize') . ')' . "</b> </li>\n";
         $display .= "<li>"._MD_ALLPENDING."</li>\n";
         $display .= "<li>"._MD_DONTABUSE."</li>\n";
         $display .= "<li>"._MD_TAKEDAYS."</li>\n";
