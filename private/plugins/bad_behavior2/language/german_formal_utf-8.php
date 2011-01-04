@@ -2,24 +2,20 @@
 // +--------------------------------------------------------------------------+
 // | Bad Behavior Plugin - glFusion CMS                                       |
 // +--------------------------------------------------------------------------+
-// | german_utf-8.php                                                         |
+// | german_formal_utf-8.php                                                  |
 // |                                                                          |
-// | German language file                                                     |
+// | German formal language file, addressing the user as "Sie"                |
 // +--------------------------------------------------------------------------+
-// | $Id:: german.php 2846 2008-07-29 00:52:10Z mevans0263                   $|
+// | $Id:: german_formal.php 2846 2008-07-29 00:52:10Z mevans0263            $|
 // +--------------------------------------------------------------------------+
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2008 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Dirk Haun         - dirk AT haun-online DOT de                  |
-// | Modifiziert: August 09 Tony Kluever                                      |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -68,7 +64,7 @@ $LANG_BAD_BEHAVIOR = array(
     'error' => 'Fehler',
     'fsockopen_not_available' => 'Die PHP-Funktion <code>fsockopen</code> ist leider nicht verfügbar. Selbsttest nicht durchführbar.',
     'fsockopen_failed' => 'Konnte keine Socket-Verbindung öffnen. Selbsttest nicht durchführbar.',
-    'donate_msg' => 'Wenn Du dieses Plugin nützlich findest, denke doch bitte über eine Spende an den Autor von Bad Behavior, Michael Hampton, nach. <a href="http://www.bad-behavior.ioerror.us/">Zur Bad Behavior-Homepage</a>.',
+    'donate_msg' => 'Wenn Sie dieses Plugin nützlich finden, denken Sie doch bitte über eine Spende an den Autor von Bad Behavior, Michael Hampton, nach. <a href="http://www.bad-behavior.ioerror.us/">Zur Bad Behavior-Homepage</a>.',
     'denied_reason' => 'Grund',
     'results' => 'Bad Behavior-Einträge',
     'search' => 'Suchen',
@@ -120,7 +116,7 @@ $LANG_BB2_RESPONSE = array(
     'f9f2b8b9' => 'Ein User-Agent ist erforderlich aber keiner war vorgesehen.'
 );
 
-$PLG_bad_behavior_MESSAGE1 = 'Wenn Du diesen Hinweis siehst, dann ist Bad Behavior <b>nicht</b> korrekt installiert. Bitte lies Dir die Installationsanleitung noch einmal sorgfältig durch.';
+$PLG_bad_behavior_MESSAGE1 = 'Wenn Sie diesen Hinweis sehen, dann ist Bad Behavior <b>nicht</b> korrekt installiert. Bitte lesen Sie sich die Installationsanleitung noch einmal sorgfältig durch.';
 $PLG_bad_behavior_MESSAGE100 = 'Die IP-Adresse wurde wieder freigegeben.';
 $PLG_bad_behavior_MESSAGE101 = 'Es gab ein Problem beim Freigeben der IP-Adresse.';
 

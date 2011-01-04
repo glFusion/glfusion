@@ -59,10 +59,10 @@ $LANG_POLLS = array(
     'upgrade1' => 'Neue Version des Umfrage-Plugins installiert. Bitte',
     'upgrade2' => 'upgraden',
     'editinstructions' => 'Bitte für die Umfrage-ID mindestens eine Frage und zwei Antworten eintragen.',
-    'pollclosed' => 'This poll is closed for voting.',
-    'pollhidden' => 'You have already voted. This poll results will only be shown when voting is closed.',
-    'start_poll' => 'Start Poll',
-    'deny_msg' => 'Access to this poll is denied.  Either the poll has been moved/removed or you do not have sufficient permissions.'
+    'pollclosed' => 'Diese Umfrage ist für die Abstimmung geschlossen.',
+    'pollhidden' => 'Sie haben bereits abgestimmt. Diese Umfrage-Ergebnisse werden nur angezeigt, wenn eine Abstimmung abgegeben werden.',
+    'start_poll' => 'Umfrage starten',
+    'deny_msg' => 'Der Zugang zu dieser Umfrage wird verweigert. Entweder wurde die Umfrage verschoben, entfernt, oder Sie verfügen nicht über ausreichende Berechtigungen.'
 );
 
 ###############################################################################
@@ -73,29 +73,29 @@ $LANG25 = array(
     2 => 'Bitte eine Kategorie, mindestens eine Frage und eine Antwort für die Frage eintragen.',
     3 => 'Umfrage erstellt',
     4 => 'Umfrage %s gespeichert',
-    5 => 'Umfrage editieren',
+    5 => 'Umfrage bearbeiten',
     6 => 'Umfrage-ID',
     7 => '(keine Leerzeichen benutzen)',
     8 => 'Erscheint im Umfrageblock',
     9 => 'Kategorie',
     10 => 'Antworten / Abstimmungen / Bemerkungen',
-    11 => 'There was an error getting Umfrage answer data about the poll %s',
-    12 => 'There was an error getting Umfrage question data about the poll %s',
+    11 => 'Es trat ein Fehler auf beim Holen der Antwortdaten für Umfrage %s',
+    12 => 'Es trat ein Fehler auf beim Holen der Fragedaten für Umfrage %s',
     13 => 'Umfrage erstellen',
     14 => 'speichern',
     15 => 'abbrechen',
     16 => 'löschen',
     17 => 'Bitte Umfrage-ID eingeben',
     18 => 'Liste der Umfragen',
-    19 => 'Um eine Umfrage zu editieren oder zu löschen, auf das Edit-Icon klicken.  Um eine neue Umfrage zu eröffnen, bitte auf "Neu anlegen" oben klicken.',
-    20 => 'Abstimmende',
+    19 => 'Um eine Umfrage zu bearbeiten oder zu löschen, auf das Bearbeiten-Icon klicken.  Um eine neue Umfrage zu eröffnen, bitte auf "Neu anlegen" oben klicken.',
+    20 => 'Umfrageende',
     21 => 'Kein Zugang',
-    22 => "You are trying to access a poll that you don't have rights to.  This attempt has been logged. Please <a href=\"{$_CONF['site_admin_url']}/poll.php\">go back to the poll administration screen</a>.",
+    22 => "Sie versuchen auf eine Umfrage zuzugreifen, für die Sie keine Berechtigung haben. Dieser Versuch wurde aufgezeichnet. Bitte <a href=\"{$_CONF['site_admin_url']}/poll.php\">gehen Sie zurück zur Umfrage-Administration</a>.",
     23 => 'Neue Umfrage',
     24 => 'Kommandozentrale',
     25 => 'Ja',
     26 => 'Nein',
-    27 => 'Editieren',
+    27 => 'Bearbeiten',
     28 => 'Senden',
     29 => 'Suchen',
     30 => 'Ergebnisse eingrenzen',
@@ -117,7 +117,7 @@ $PLG_polls_MESSAGE19 = 'Umfrage wurde gespeichert.';
 $PLG_polls_MESSAGE20 = 'Umfrage wurde gelöscht.';
 
 // Messages for the plugin upgrade
-$PLG_polls_MESSAGE3001 = 'Plugin upgrade not supported.';
+$PLG_polls_MESSAGE3001 = 'Plugin-Upgrade nicht unterstützt.';
 $PLG_polls_MESSAGE3002 = $LANG32[9];
 
 // Localization of the Admin Configuration UI
@@ -127,36 +127,36 @@ $LANG_configsections['polls'] = array(
 );
 
 $LANG_confignames['polls'] = array(
-    'pollsloginrequired' => 'Zur Einsicht einloggen nötig?',
+    'pollsloginrequired' => 'Zur Einsicht anmelden erforderlich?',
     'hidepollsmenu' => 'Menüeintrag ausblenden?',
     'maxquestions' => 'Max. Fragen pro Umfrage',
     'maxanswers' => 'Max. Möglichkeiten pro Frage',
     'answerorder' => 'Ergebnisse sortieren ...',
     'pollcookietime' => 'Voter Cookie gültig für',
     'polladdresstime' => 'Voter IP-Adresse gültig für',
-    'delete_polls' => 'Umfragen mit User löschen?',
+    'delete_polls' => 'Umfragen mit Benutzer löschen?',
     'aftersave' => 'Nach speichern der Umfrage',
-    'default_permissions' => 'Grundeinstellungen Umfragen',
-    'displayblocks' => 'Display glFusion Blocks'
+    'default_permissions' => 'Standardeinstellungen Umfragen',
+    'displayblocks' => 'Anzeige glFusion Blöcke'
 );
 
 $LANG_configsubgroups['polls'] = array(
-    'sg_main' => 'Hauptbereich'
+    'sg_main' => 'Haupteinstellungen'
 );
 
 $LANG_fs['polls'] = array(
     'fs_main' => 'Allgemeine Umfrageeinstellungen',
-    'fs_permissions' => 'Grundeinstellungen Rechte'
+    'fs_permissions' => 'Standardberechtigeungen - Umfragen'
 );
 
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['polls'] = array(
     0 => array('Ja' => 1, 'Nein' => 0),
     1 => array('Ja' => true, 'Nein' => false),
-    2 => array('Wie eingereicht' => 'submitorder', 'Nach Abstimmung' => 'voteorder'),
+    2 => array('Wie eingesandt' => 'submitorder', 'Nach Abstimmung' => 'voteorder'),
     9 => array('Zur Umfrage weiterleiten' => 'item', 'Admin Liste anzeigen' => 'list', 'Öffentliche Liste anzeigen' => 'plugin', 'Startseite anzeigen' => 'home', 'Kommandozentrale' => 'admin'),
     12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3),
-    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
+    13 => array('Linker Block' => 0, 'Rechter Block' => 1, 'Linker & Rechter Block' => 2, 'Keine' => 3)
 );
 
 ?>

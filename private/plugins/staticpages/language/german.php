@@ -1,6 +1,6 @@
 <?php
 ###############################################################################
-# german_utf-8.php
+# german.php
 #
 # This is the German language file for the glFusion Static Pages plugin
 #

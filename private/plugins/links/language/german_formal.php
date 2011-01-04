@@ -38,7 +38,7 @@ global $LANG32;
 ###############################################################################
 
 $LANG_LINKS = array(
-    10 => 'Beiträge',
+    10 => 'Einsendungen',
     14 => 'Links',
     84 => 'LINKS',
     88 => 'Es gibt keine Links anzuzeigen.',
@@ -54,7 +54,7 @@ $LANG_LINKS = array(
     124 => 'Go',
     125 => 'Kategorien',
     126 => 'Sie sind hier:',
-    'root' => 'oben',
+    'root' => 'Root',
     'error_header' => 'Link Submission Error',
     'verification_failed' => 'The URL specified does not appear to be a valid URL',
     'category_not_found' => 'The Category does not appear to be valid'
@@ -67,7 +67,7 @@ $LANG_LINKS_STATS = array(
     'links' => 'Anzahl Links (Klicks)',
     'stats_headline' => 'Top Ten der Links',
     'stats_page_title' => 'Links',
-    'stats_hits' => 'Angeklickt',
+    'stats_hits' => 'Aufrufe',
     'stats_no_hits' => 'Es gibt keine Links oder sie wurden von niemandem angeklickt.'
 );
 
@@ -78,15 +78,15 @@ $LANG_LINKS_SEARCH = array(
     'results' => 'Ergebnisse: Links',
     'title' => 'Titel',
     'date' => 'Hinzugefügt',
-    'author' => 'Eingereicht von',
-    'hits' => 'Angeklickt'
+    'author' => 'Eingesendet von',
+    'hits' => 'Aufrufe'
 );
 
 ###############################################################################
 # for the submission form
 
 $LANG_LINKS_SUBMIT = array(
-    1 => 'Einen Link einreichen',
+    1 => 'Einen Link einsenden',
     2 => 'Link',
     3 => 'Kategorie',
     4 => 'Andere',
@@ -97,7 +97,7 @@ $LANG_LINKS_SUBMIT = array(
     9 => 'URL',
     10 => 'Kategorie',
     11 => 'Beiträge: Links',
-    12 => 'Submitted By'
+    12 => 'eingereicht von'
 );
 
 ###############################################################################
@@ -120,7 +120,7 @@ $PLG_links_MESSAGE16 = 'So eine Kategorie existiert nicht.';
 $PLG_links_MESSAGE17 = 'Diese Kategorie-ID existiert schon.';
 
 // Messages for the plugin upgrade
-$PLG_links_MESSAGE3001 = 'Plugin upgrade not supported.';
+$PLG_links_MESSAGE3001 = 'Plugin-Upgrade nicht unterstützt.';
 $PLG_links_MESSAGE3002 = $LANG32[9];
 
 ###############################################################################
@@ -138,32 +138,32 @@ $LANG_LINKS_ADMIN = array(
     9 => 'Beschreibung',
     10 => 'Einen Titel, eine URL und eine Beschreibung für den Link angeben.',
     11 => 'Link-Manager',
-    12 => "Auf das Ändern-Icon klicken, um einen Link zu ändern oder zu löschen.  \nMit Neuer Link (s.o.) kann ein neuer Link angelegt werden.",
+    12 => "Auf das Bearbeiten-Icon klicken, um einen Link zu bearbeiten oder zu löschen.  \nMit Neuer Link (s.o.) kann ein neuer Link angelegt werden.",
     14 => 'Kategorie',
     16 => 'Zugriff verweigert',
-    17 => "Keine Zugriffsrechte für diesen Link. Dieser Zugriffsversuch wurde protokolliert. <a href=\"{$_CONF['site_admin_url']}/plugins/links/index.php\">Zurück zum  Administrator-Menü</a>.",
+    17 => "Keine Berechtigungen für diesen Link. Dieser Zugriffsversuch wurde protokolliert. <a href=\"{$_CONF['site_admin_url']}/plugins/links/index.php\">Zurück zum  Administrator-Menü</a>.",
     20 => 'Andere bitte eingeben',
     21 => 'Speichern',
     22 => 'Abbruch',
     23 => 'Löschen',
     24 => 'Link nicht gefunden',
-    25 => 'Der zu editierende Link konnte nicht gefunden werden.',
+    25 => 'Der zu bearbeitende Link konnte nicht gefunden werden.',
     26 => 'Links überprüfen',
     27 => 'HTML Status',
-    28 => 'Kategorie editieren',
-    29 => 'Die Details unten editieren oder eingeben.',
+    28 => 'Kategorie bearbeiten',
+    29 => 'Die Details unten bearbeiten oder eingeben.',
     30 => 'Kategorie',
     31 => 'Beschreibung',
     32 => 'Kategorie-ID',
     33 => 'Kategorie',
     34 => 'Übergeordnete Kategorie',
     35 => 'Alle',
-    40 => 'Dies Kategorie editieren',
+    40 => 'Dies Kategorie bearbeiten',
     41 => 'Unterkategorie einrichten',
     42 => 'Diese Kategorie löschen',
-    43 => 'Kategorie der Site',
+    43 => 'Kategorie der Seite',
     44 => 'Unterkategorie&nbsp;hinzufügen',
-    46 => 'User %s hat unrechtmäßig versucht die Kategorie %s zu löschen.',
+    46 => 'Benutzer %s hat unrechtmäßig versucht die Kategorie %s zu löschen.',
     50 => 'Kategorien auflisten',
     51 => 'Neuer Link',
     52 => 'Neue Kategorie',
@@ -174,82 +174,82 @@ $LANG_LINKS_ADMIN = array(
     57 => 'Noch nicht überprüft',
     58 => 'Jetzt überprüfen',
     59 => '<p>Um alle aufgeführten Links zu überprüfen, einfach "Jetzt überprüfen" unten anklicken. Es kann etwas dauern, abhängig davon, wie viele Links aufgeführt sind.</p>',
-    60 => 'User %s hat unrechtmäßig versucht, die Kategorie %s zu editieren.',
+    60 => 'Benutzer %s hat unrechtmäßig versucht, die Kategorie %s zu editieren.',
     61 => 'Owner',
     62 => 'Last Updated',
-    63 => 'Are you sure you want to delete this link?',
-    64 => 'Are you sure you want to delete this category?',
+    63 => 'Soll dieser Link wirklich gelöscht werden?',
+    64 => 'Soll diese Kategorie wirklich gelöscht werden?',
     65 => 'Moderate Link'
 );
 
 
 $LANG_LINKS_STATUS = array(
     100 => 'Fortsetzen',
-    101 => 'Switching Protocols',
+    101 => 'Wechsel Protokolle',
     200 => 'OK',
     201 => 'Erstellt',
-    202 => 'Angenomen',
+    202 => 'Akzeptiert',
     203 => 'Non-Authoritative Information',
     204 => 'Kein Inhalt',
     205 => 'Inhalt zurücksetzten',
     206 => 'Teilweiser Inhalt',
     300 => 'Mehrfache Möglichkeiten',
-    301 => 'Moved Permanently',
+    301 => 'Permanent verschoben',
     302 => 'Gefunden',
-    303 => 'See Other',
+    303 => 'Siehe andere',
     304 => 'Nicht verändert',
-    305 => 'Use Proxy',
-    307 => 'Temporary Redirect',
-    400 => 'Bad Request',
-    401 => 'Unauthorized',
+    305 => 'Proxy verwenden',
+    307 => 'vorübergehend umleiten',
+    400 => 'ungültige Anfrage',
+    401 => 'Nicht autorisiert',
     402 => 'Zahlung erbeten',
     403 => 'Kein Zugang',
     404 => 'Nicht gefunden',
-    405 => 'Method Not Allowed',
-    406 => 'Not Acceptable',
-    407 => 'Proxy Authentication Required',
-    408 => 'Request Timeout',
-    409 => 'Conflict',
+    405 => 'Methode nicht erlaubt',
+    406 => 'Nicht akzeptabel',
+    407 => 'Proxy-Authentifizierung erforderlich',
+    408 => 'Anfragedauer überschritten',
+    409 => 'Konflikt',
     410 => 'Verschwunden',
-    411 => 'Länge nötig',
-    412 => 'Precondition Failed',
-    413 => 'Request Entity Too Large',
-    414 => 'Request-URI Too Long',
-    415 => 'Unsupported Media Type',
-    416 => 'Requested Range Not Satisfiable',
-    417 => 'Expectation Failed',
-    500 => 'Internal Server Error',
-    501 => 'Not Implemented',
-    502 => 'Bad Gateway',
-    503 => 'Service Unavailable',
-    504 => 'Gateway Timeout',
-    505 => 'HTTP Version Not Supported',
-    999 => 'Connection Timed out'
+    411 => 'Länge erforderlich',
+    412 => 'Voraussetzung nicht refüllt',
+    413 => 'Anfrage-Objekt zu groß',
+    414 => 'Anfrage-URI zu lang',
+    415 => 'Medientyp nicht unterstützt',
+    416 => 'angeforderte Operation nicht ausführbar',
+    417 => 'Erwartungen sind nicht eingetroffen',
+    500 => 'Interner Server Error',
+    501 => 'Nicht Implementiert',
+    502 => 'ungültiger Gateway',
+    503 => 'Service nicht verfügbar',
+    504 => 'Gateway Zeitüberschreitung',
+    505 => 'HTTP Version wird nicht unterstützt',
+    999 => 'Zeitüberschreitung der Verbindung'
 );
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['links'] = array(
     'label' => 'Links',
-    'title' => 'Links Konfiguration'
+    'title' => 'Links-Konfiguration'
 );
 
 $LANG_confignames['links'] = array(
-    'linksloginrequired' => 'Einloggen zur Ansicht nötig?',
+    'linksloginrequired' => 'Anmelden zur Ansicht nötig?',
     'linksubmission' => 'Links moderieren?',
     'newlinksinterval' => 'Zeitabstand neue Links',
     'hidenewlinks' => 'Neue Links ausblenden?',
     'hidelinksmenu' => 'Menüeintrag ausblenden?',
-    'linkcols' => 'Kategorien pro Spalte',
-    'linksperpage' => 'Links pro Seite',
+    'linkcols' => 'Kategorien je Spalte',
+    'linksperpage' => 'Links je Seite',
     'show_top10' => 'Top 10 Links zeigen?',
-    'notification' => 'Benachrichtigungsemail?',
-    'delete_links' => 'Links löschen mit User?',
+    'notification' => 'E-Mail Benachrichtigung?',
+    'delete_links' => 'Links löschen mit Benutzer?',
     'aftersave' => 'Nach Abspeichern des Links',
     'show_category_descriptions' => 'Kategoriebeschreibung anzeigen?',
     'root' => 'ID der Oberkategorie',
-    'default_permissions' => 'Grundeinstellung Rechte',
-    'target_blank' => 'Open Links in New Window',
-    'displayblocks' => 'Display glFusion Blocks'
+    'default_permissions' => 'Standardberechtigungen - Links',
+    'target_blank' => 'Links in neuen Fenster öffnen',
+    'displayblocks' => 'Anzeige glFusion Blöcke'
 );
 
 $LANG_configsubgroups['links'] = array(
@@ -257,9 +257,9 @@ $LANG_configsubgroups['links'] = array(
 );
 
 $LANG_fs['links'] = array(
-    'fs_public' => 'Einstellungen öffentliche Links',
-    'fs_admin' => 'Admin Einstellungen',
-    'fs_permissions' => 'Grundeinstellungen Rechte'
+    'fs_public' => 'Einstellungen - öffentliche Links',
+    'fs_admin' => 'Admin-Einstellungen',
+    'fs_permissions' => 'Standardeinstellungen - Berechtigungen'
 );
 
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
@@ -268,7 +268,7 @@ $LANG_configselects['links'] = array(
     1 => array('Ja' => true, 'Nein' => false),
     9 => array('Weiterleiten zur verlinkten Seite' => 'item', 'Admin Liste anzeigen' => 'list', 'Öffentliche Liste anzeigen' => 'plugin', 'Startseite anzeigen' => 'home', 'Kommandozentrale' => 'admin'),
     12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3),
-    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
+    13 => array('Linker Block' => 0, 'Rechter Block' => 1, 'linker & Rechter Block' => 2, 'Keine' => 3)
 );
 
 ?>

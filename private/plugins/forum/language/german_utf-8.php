@@ -19,7 +19,7 @@
 // | Prototype & Concept :        Mr.GxBlock, www.gxblock.com                 |
 // |                                                                          |
 // | Translation by Dirk Haun <dirk AT haun-online DOT de>                    |
-// | Modifiziert: August 09 Tony Kluever									  |
+// | Modifiziert: August 09 Tony Kluever									                    |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -45,7 +45,7 @@ if (!defined ('GVERSION')) {
 ###############################################################################
 
 $LANG_GF00 = array(
-    'admin_only' => 'Sorry, nur für Admins. Wenn Du ein Admin bist, melde Dich zuerst ein.',
+    'admin_only' => 'Sorry, nur für Admins. Wenn Du ein Admin bist, melde Dich zuerst an.',
     'plugin' => 'Plugin',
     'pluginlabel' => 'Forum',
     'searchlabel' => 'Forum',
@@ -294,20 +294,20 @@ $LANG_GF01 = array(
     'e_help' => 'Listenobjekt: [*]text',
     'smiley' => 'Smileys',
     'grade' => '<br /><b>Gruppen - Komfortlevel:</b>',
-    'grade_user' => '<br /><b>Benutzer evaluieren</b>',
-    'retract_grade' => '<br /><b>Evaluierung zurückziehen</b>',
+    'grade_user' => '<br /><b>Benutzer bewerten</b>',
+    'retract_grade' => '<br /><b>Bewertung zurückziehen</b>',
     'rate_too_low' => 'Dein Bewertungslevel ist zu niedrig, um in diesem Forum zu schreiben',
     'rate_too_low_forum' => 'Dein Bewertungslevel ist nicht hoch genug, um dieses Forum zu lesen',
     'rate_too_low_thread' => 'Dein Bewertungslevel ist nicht hoch genug, um dieses Thema zu lesen',
     'signature' => 'Signatur',
     'edit_signature' => 'Bearbeite BBcode-Signatur',
     'signature_preview' => 'Signatur-Vorschau',
-    'cancel_confirm' => 'Are you sure you want to cancel this post?',
-    'disable_bbcode' => 'Disable BBCode:',
-    'disable_smilies' => 'Disable Smilies:',
-    'disable_urlparse' => 'Do not parse URLs:',
+    'cancel_confirm' => 'Soll die Übermittlung dieser Nachricht abgebrochen werden?',
+    'disable_bbcode' => 'BBCode deaktivieren:',
+    'disable_smilies' => 'Smilies deaktivieren:',
+    'disable_urlparse' => 'URLs nicht analysieren:',
     'features' => 'Features:',
-    'rss_link' => 'Subscribe to this forum\'s RSS feed.'
+    'rss_link' => 'RSS feed dieses forum\'s abonieren.'
 );
 
 $LANG_GF02 = array(
@@ -352,7 +352,7 @@ $LANG_GF02 = array(
     'msg37' => 'Nachricht:',
     'msg38' => 'Bei Antworten benachrichtigen ',
     'msg39' => '<br' . XHTML . '>Keine Themenvorschauen für dieses Thema.',
-    'msg40' => '<br' . XHTML . '>Sorry, aber Du erhältst schon Benachrichtigungen über Antworten in diesem Thema.<br' . XHTML . '><br' . XHTML . '>',
+    'msg40' => '<br' . XHTML . '>Sorry, aber Du erhältst bereits Benachrichtigungen über Antworten in diesem Thema.<br' . XHTML . '><br' . XHTML . '>',
     'msg41' => '<br' . XHTML . '>Danke! Du wirst nun über Antworten in Thema %s benachrichtigt.<br' . XHTML . '><br' . XHTML . '>',
     'msg42' => 'Danke! Du bekommst zu Diesem Thema keine Benachrichtigungen mehr.',
     'msg43' => 'Möchtest Du diese Benachrichtigung wirklich löschen?.',
@@ -384,7 +384,7 @@ $LANG_GF02 = array(
     'msg69' => 'Möchtest Du die IP-Adresse %s wirklich sperren?',
     'msg70' => 'Sperre bestätigen',
     'msg71' => 'Keine Aktion gewählt, wähle einen Beitrag und dann eine Moderator-Aktion.<br' . XHTML . '>Hinweis: Du musst ein Moderator sein, um diese Aktionen auszuführen.',
-    'msg72' => 'Warnung, Du hast keine Rechte, um diese Moderator-Aktion auszuführen.',
+    'msg72' => 'Warnung, Du hast keine Berechtigung, um diese Moderator-Aktion auszuführen.',
     'msg74' => 'Letzte %s Forenbeiträge',
     'msg75' => 'Top %s Themen nach Aufrufen',
     'msg76' => 'Top %s Themen nach Beiträgen',
@@ -533,14 +533,14 @@ $LANG_GF03 = array(
     'splitheading' => 'Aufteilen-Option:',
     'splitopt1' => 'Alle Beiträge von diesem Punkt an verschieben',
     'splitopt2' => 'Nur diesen Beitrag verschieben',
-    'merge_post' => 'Merge Post',
-    'merge_topic' => 'Merge Topic',
-    'mergetopicmsg' => 'You can merge selected post(s) into another topic. These posts will not be reordered and will appear as if the users posted them to the new topic. Please enter the destination topic id or click on "Select topic" to search for one.',
+    'merge_post' => 'Post zusammenfassen',
+    'merge_topic' => 'Kategorie zusammenfassen',
+    'mergetopicmsg' => 'You can merge selected post(s) into another topic. These posts will not be reordered and will appear as if the users posted them to the new topic. Bitte die Kategorie-ID festlegen oder auf "Kategorie wählen" klicken und eine Kategorie ausewählen.',
     'mergeparent' => 'You have selected the option to merge <strong>all</strong> posts in this topic into another topic.',
-    'select' => 'Select',
-    'select_forum' => 'Select Forum Topic',
-    'destination_topic' => 'Destination Topic ID:',
-    'select_topic' => 'Select Topic'
+    'select' => 'auswählen',
+    'select_forum' => 'Forenkategorie wählen',
+    'destination_topic' => 'Kategorie-ID festlegen:',
+    'select_topic' => 'Kategorie wählen'
 );
 
 $LANG_GF04 = array(
@@ -551,7 +551,7 @@ $LANG_GF04 = array(
     'label_icq' => 'ICQ Identität',
     'label_msnm' => 'MS Messenger Name',
     'label_interests' => 'Interessen',
-    'label_occupation' => 'Occupation'
+    'label_occupation' => 'Beruf/Tätigkeit'
 );
 
 $LANG_GF05 = array(
@@ -738,12 +738,12 @@ $LANG_GF92 = array(
     'forum_prefs' => 'Forum-Präferenzen',
     'forumprefs_help_title' => 'Forum-Präferenzen: Hilfe',
     'forumprefs_help' => 'Forum-Plugin: Benutzerpräferenzen ändern.<ul><li>Anzahl der Themen beim Anzeigen des Forenindex.</li><li>Anzahl der Beiträge die je Seite angezeigt werden.</li><li>Anzahl der Beiträge, bevor ein Thema als beliebt eingestuft wird.</li><li>Anzahl der Zeilen, die in den Suchergebnissen angezeigt werdens.</li><li>Für die Mitgliederliste</li><li>Verstecke Beiträge von Gästen.</li><li>Auto-Benachrichtigungen aktivieren.</li><li>Nur eine Benachrichtigung senden.</li><li>Beim Antworten, zeige Themenvorschau (iframe) unten.</li></ul>',
-    'topic_order' => 'Topic Order',
+    'topic_order' => 'Kategorie-Reihenfolge',
     'editor_type' => 'Editor Type',
     'bbcode' => 'BBCode',
     'wysiwyg' => 'WYSIWYG',
-    'ascending' => 'Ascending',
-    'descending' => 'Descending'
+    'ascending' => 'aufsteigend',
+    'descending' => 'absteigend'
 );
 
 $LANG_GF93 = array(
@@ -826,9 +826,9 @@ $LANG_GF94 = array(
     'modexistsmsg' => 'Fehler: Sorry, dieser Moderator existiert bereits.',
     'transfer' => 'Wechsel zum Mod-Index..',
     'removemodnote1' => 'Möchtest Du %s von Forum %s entfernen?',
-    'removemodnote2' => 'Einmal gelöscht, können sie dieses Forum nicht mehr moderieren.',
-    'removemodnote3' => 'Möchtest Du Moderator %s von allen Foren entfernen?',
-    'removemodnote4' => 'Einmal gelöscht, können sie kein Forum mehr moderieren.',
+    'removemodnote2' => 'Einmal gelöscht, kannst Du dieses Forum nicht mehr moderieren.',
+    'removemodnote3' => 'Möchtest Du Moderator %s aus allen Foren entfernen?',
+    'removemodnote4' => 'Einmal gelöscht, kannst Du kein Forum mehr moderieren.',
     'allforums' => 'Alle Foren'
 );
 
@@ -851,7 +851,7 @@ $LANG_GF96 = array(
     'ipbanned' => 'IP-Addresse gesperrt',
     'banip' => 'IP-Sperren-Bestätigung',
     'banipmsg' => 'Möchtest Du die IP %s wirklich sperren?',
-    'specip' => 'Bitte spezifiere die zu sperrende IP-Adresse!',
+    'specip' => 'Bitte spezifiziere die zu sperrende IP-Adresse!',
     'ipunbanned' => 'IP-Addresse entsperrt.'
 );
 
@@ -864,7 +864,7 @@ $LANG_GF97 = array(
     'msgdelsuccess' => 'Du hast diese Nachricht erfolgreich gelöscht.',
     'msgdelerr' => 'Diese Nachricht wurde nicht gelöscht. Bitte gehe <a href=\"javascript:history.back()\">zurück</a> und wähle eine aus.',
     'msgpriv' => 'Private Nachrichten',
-    'msgprivnote1' => 'Du hast %s private Nachrichten.',
+    'msgprivnote1' => 'Du hast %s private Nachricht.',
     'msgprivnote2' => 'Du hast %s private Nachrichten.',
     'msgto' => 'An Benutzername:',
     'msgmembers' => 'Mitgliederliste.'
@@ -957,7 +957,7 @@ $LANG_confignames['forum'] = array(
     'allow_img_bbcode' => 'IMG-BBcode erlauben',
     'show_moderators' => 'Moderatoren anzeigen (verlangsamt die Seite!)',
     'default_Datetime_format' => 'Standard für Datums-/Zeitformat',
-    'default_Topic_Datetime_format' => 'Standard für Datums-/Zeitformat',
+    'default_Topic_Datetime_format' => 'Standard für Datums-/Zeitformat (Thema)',
     'contentinfo_numchars' => 'Pop-up - Anzahl der Zeichen',
     'linkinfo_width' => 'Pop-up - Breite',
     'quoteformat' => 'Zitat-Format',
@@ -1007,7 +1007,7 @@ $LANG_configselects['forum'] = array(
     3 => array('Keine Blöcke' => 'noblocks', 'Linke Blöcke' => 'leftblocks', 'Rechte Blöcke' => 'rightblocks', 'Rechte / Linke Blöcke' => 'allblocks'),
     4 => array('Blockmenü' => 'blockmenu', 'Navigation' => 'navbar', 'Keine' => 'none'),
     5 => array('Absteigend' => 'DESC', 'Aufsteigend' => 'ASC'),
-    6 => array('Checked' => 1, 'Unchecked' => 0)
+    6 => array('aktiviert' => 1, 'deaktiviert' => 0)
 );
 
 ?>

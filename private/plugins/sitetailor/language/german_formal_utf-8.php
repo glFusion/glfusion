@@ -2,10 +2,10 @@
 // +--------------------------------------------------------------------------+
 // | Site Tailor Plugin - glFusion CMS                                        |
 // +--------------------------------------------------------------------------+
-// | german_utf-8.php                                                         |
+// | german_formal_utf-8.php                                                  |
 // |                                                                          |
 // | German language file                                                     |
-// | Modifiziert: August 09 Tony Kluever                                      |
+// | Modifiziert: August 09 Tony Kluever						                   			  |
 // +--------------------------------------------------------------------------+
 // | Copyright (C)  2008 by the following authors:                            |
 // |                                                                          |
@@ -38,7 +38,7 @@ $LANG_ST00 = array(
     'menulabel' => 'Site-Tailor',
     'plugin' => 'Sitetailor',
     'access_denied' => 'Zugriff verweigert',
-    'access_denied_msg' => 'Du hast nicht die Berechtigung auf diese Seite zuzugreifen. Dein Benutzername und IP wurden aufgezeichnet.',
+    'access_denied_msg' => 'Sie Haben nicht die Berechtigung auf diese Seite zuzugreifen. Ihr Benutzername und IP wurden aufgezeichnet.',
     'admin' => 'Site-Tailor-Administration',
     'install_header' => 'Site Tailor - Installation/Deinstallation',
     'installed' => 'Site-Tailor ist installiert',
@@ -52,8 +52,8 @@ $LANG_ST00 = array(
     'enabled' => 'Deaktiviere das Plugin vor dem Deinstallieren.',
     'readme' => 'Site-Tailor-Plugin - Installation',
     'installdoc' => "<a href=\"{$_CONF['site_admin_url']}/plugins/sitetailor/install_doc.html\">Installationsanleitung</a>",
-    'thank_you' => 'Danke für das Upgraden auf die letzte Version von Site-Tailor. Bitte überprüfe Deine Systemkonfigurationsoptionen, da es viele neues Features in diesem Release geben könnte, die Du konfigurieren mußt.',
-    'support' => 'Für Support, Fragen oder Verbesserungswünsche, besuche bitte <a href="http://www.gllabs.org">gl Labs</a>.  Für die aktuelleste Dokumentation, besuche das <a href="http://www.gllabs.org/wiki/">Site-Tailor Wiki</a>.',
+    'thank_you' => 'Danke für das Upgraden auf die letzte Version von Site-Tailor. Bitte überprüfen Sie ihre Systemkonfigurationsoptionen, da es viele neues Features in diesem Release geben könnte, die Sie konfigurieren müssen.',
+    'support' => 'Für Support, Fragen oder Verbesserungswünsche, besuchen Sie bitte <a href="http://www.gllabs.org">gl Labs</a>.  Für die aktuelleste Dokumentation, besucheen Sie das <a href="http://www.gllabs.org/wiki/">Site-Tailor Wiki</a>.',
     'success_upgrade' => 'Site-Tailor-Upgrade erfolgreich',
     'template_cache' => 'Template-Cache-Library installiert',
     'env_check' => 'Environment-Check',
@@ -64,18 +64,18 @@ $LANG_ST00 = array(
     'ml_error' => 'php.ini <strong>memory_limit</strong> ist kleiner als 48M.',
     'ml_ok' => 'php.ini <strong>memory_limit</strong> ist 48M oder größer.',
     'recheck_env' => 'Umgebung neu prüfen',
-    'fix_install' => 'Bitte behebe die obigen Punkte vor dem Installieren.',
+    'fix_install' => 'Bitte beheben Sie die obigen Punkte vor dem Installieren.',
     'need_cache' => 'Site-Tailor benötigt die <a href="http://www.gllabs.org/filemgmt/index.php?id=156">Caching-Template-Library-Erweiterung</a>. Bitte downloade und installiere diese Library.',
     'need_memory' => 'Site-Tailor empfiehlt, dass mindestens 48M für <strong>memory_limit</strong> in der php.ini eingestellt sind.',
     'overview' => 'Site-Tailor ist ein benötigtes CMS-Plugin, dass benutzerdef. Änderungen an der Seite ermöglicht.',
     'preinstall_check' => 'Site Tailor benötigt folgendes:',
     'glfusion_check' => 'glFusion v1.0.0 oder größer, gemeldete Version ist <b>%s</b>.',
     'php_check' => 'PHP v4.3.0 oder größer, gemeldete Version ist <b>%s</b>.',
-    'preinstall_confirm' => "Für Details zur Installation von Site-Tailor, schau bitte in die <a href=\"{$_CONF['site_admin_url']}/plugins/sitetailor/install_doc.html\">Installationsanleitung</a>."
+    'preinstall_confirm' => "Für Details zur Installation von Site-Tailor, schauen Sie bitte in die <a href=\"{$_CONF['site_admin_url']}/plugins/sitetailor/install_doc.html\">Installationsanleitung</a>."
 );
 
 $LANG_ST01 = array(
-    'instructions' => 'Mit Site Tailor kannst du leicht deine Website-Logo und die Anzeige des Website-Slogan anpassen.',
+    'instructions' => 'Mit Site Tailor können Sie leicht Ihr Website-Logo und die Anzeige des Website-Slogan anpassen.',
     'javascript_required' => 'Site-Tailor benötigt aktiviertes JavaScript.',
     'logo_options' => 'Site-Tailor - Logo-Optionen',
     'use_graphic_logo' => 'Grafik-Logo verwenden',
@@ -116,7 +116,7 @@ $LANG_ST01 = array(
     'permission' => 'Sichtbar für',
     'active' => 'Aktiv',
     'top_level' => 'Top-Level-Menü',
-    'confirm_delete' => 'Möchtest Du dieses Menübjekt wirklich löschen?',
+    'confirm_delete' => 'Möchten Sie dieses Menübjekt wirklich löschen?',
     'type_submenu' => 'Untermenü',
     'type_url_same' => 'Übergordnetes Fenster',
     'type_url_new' => 'Neues Fenster mit Navigation',
@@ -172,7 +172,7 @@ $LANG_ST01 = array(
     'blocks' => 'Block-Stile',
     'reset' => 'Formular zurücksetzen',
     'defaults' => 'Auf Standardwerte zurücksetzen',
-    'confirm_reset' => 'Dies setzt die Menüfarben und Grafiken auf die Installationswerte zurück und löscht automatisch den Template-Cache. Möchtest Du wirklich weitermachen? Wenn fertig, dann lösche auch den Cache Deines Browsers.',
+    'confirm_reset' => 'Dies setzt die Menüfarben und Grafiken auf die Installationswerte zurück und löscht automatisch den Template-Cache. Möchten Sie wirklich weitermachen? Wenn fertig, dann löschen Sie auch den Cache ihres Browsers.',
     'menu_properties' => 'Menüeigenschaften für',
     'disabled_plugin' => 'Nicht gefunden oder deaktiviertes Plugin',
     'clone' => 'Kopieren',
@@ -258,11 +258,11 @@ $LANG_ST_GLTYPES = array(
 
 $LANG_ST_ADMIN = array(
     1 => 'Menü-Builder erlaubt Dir das Erstellen und bearbeiten von Menüs für Deine Seite. Um ein neues Menü hinzuzufügen, klicke auf den Neues-Menü-erstellen Link oben. Um ein Menüobjekt zu bearbeiten, klicke auf das Icon unter der Elemente-Spalte. Um die Menüfarben zu ändern, klicke auf das Icon unter der Optionen-Spalte.',
-    2 => 'Um ein neues Menü zu erstellen, gib unten einen Menünamen und Menütyp an. Du kannst auch den aktiven Status setzen und welche Gruppen das Menü sehen können, indem Du die Aktiv und Sichtbar-für Felder verwendest.',
+    2 => 'Um ein neues Menü zu erstellen, geben Sie unten einen Menünamen und Menütyp an. Sie können auch den aktiven Status setzen und welche Gruppen das Menü sehen können, indem Sie die Aktiv und Sichtbar-für Felder verwenden.',
     3 => 'Klick auf das Icon unter der Bearbeiten-Spalte, um die Eigenschaften eines Menüobjekts zu bearbeiten. Ordne die Objekte, indem Du sie mit den Pfeilen unter der Sortierung-Spalte, hoch oder unter schiebst.',
-    4 => 'Um ein neues Menüelement zu erstellen, gib unten die Details und Berechtigungen ein.',
-    5 => 'Sobald ein Element erstellt wurde, kannst Du immer zurück gehen und seine Details und Berechtigungen unten bearbeiten.',
-    6 => 'Menü-Builder erlaubt Dir, das Aussehen Deiner Menüs auf einfach Art zu ändern. Bearbeite die Werte unten, um einen besonderen Menüstil zu erstellen.'
+    4 => 'Um ein neues Menüelement zu erstellen, geben Sie unten die Details und Berechtigungen ein.',
+    5 => 'Sobald ein Element erstellt wurde, könne Sie immer zurück gehen und seine Details und Berechtigungen unten bearbeiten.',
+    6 => 'Menü-Builder erlaubt Ihnen, das Aussehen ihrer Menüs auf einfach Art zu ändern. Bearbeiten Sie die Werte unten, um einen besonderen Menüstil zu erstellen.'
 );
 
 $PLG_sitetailor_MESSAGE1 = 'Site-Tailor - Logo-Optionen erfolgreich gespeichert.';

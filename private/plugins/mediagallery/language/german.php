@@ -8,7 +8,7 @@
 // | Mark R. Eavns               -    mark@glfusion.org                        |
 // | Translated into German/ Übersetzt:                                        |
 // | Jan Muhs                    -    webmaster@muhs-news.de                   |
-// | Modifiziert: August 09 Tony Kluever									   |
+// | Modifiziert: August 09 Tony Kluever									                     |
 // +---------------------------------------------------------------------------|
 // |                                                                           |
 // | If you translate this file, please consider uploading a copy at           |
@@ -77,14 +77,14 @@ $LANG_MG00 = array(
     'album' => 'Album: ',
     'none_rated' => 'Keine Medienobjekte bis jetzt bewertet.',
     'no_viewed_items' => 'Keine Medienobjekte bis jetzt angeschaut.',
-    'no_access' => 'Du hast ein Album mit eingeschränkten Zugriff ausgewählt. Bitte wähle ein anderes Album.',
+    'no_access' => 'Du hast ein Album mit eingeschränktem Zugriff ausgewählt. Bitte wähle ein anderes Album.',
     'overview' => 'Mediengalerie ist ein natives Plugin für glFusion, welches eine umfassende Multimedia-Galerie für Deine Seite bietet. Die Mediengalerie unterstützt viele Bild-, Video- und Audioformate und biete fortgeschrittene Features, um die Medienobjekte in einer robusten Umgebung einfach und leicht zu verwalten.',
     'preinstall_check' => 'Mediengalerie benötigt folgendes:',
     'geeklog_check' => 'glFusion v1.0.0 oder höher, vorhandene Version ist <b>%s</b>.',
     'php_check' => 'PHP v4.3.0 oder höher, vorhandene Version ist <b>%s</b>.',
     'preinstall_confirm' => "Für Infos zum Installieren von Mediengalerie, schau bitte in die <a href=\"{$_CONF['site_admin_url']}/plugins/mediagallery/install_doc.html\">die Installationsanleitung</a>.",
     'filecheck' => 'FileCheck-Werkzeug',
-    'filecheck_disclaimer' => 'FileCheck scannt die Ordner der Mediengalerie und listet alle Dateien auf, die nicht zur Mediengalerie-Installation gehörten.  Diese Dateien könnten veraltet sein und mehr benötigt werden.  <b>Vorsichtig sein</b> und sichergehen, dass diese Dateien nicht vom Webserver benötigt werden.  <br' . XHTML . '><b>DU SOLLTEST EIN AKTUELLES BACKUP HABEN, BEVOR DU DIESES WERKZEUG EINSETZT!</b>',
+    'filecheck_disclaimer' => 'FileCheck scannt die Ordner der Mediengalerie und listet alle Dateien auf, die nicht zur Mediengalerie-Installation gehörten.  Diese Dateien könnten veraltet sein und nicht mehr benötigt werden.  <b>Vorsichtig sein</b> und sicherstellen, dass diese Dateien nicht vom Webserver benötigt werden.  <br' . XHTML . '><b>DU SOLLTEST EIN AKTUELLES BACKUP HABEN, BEVOR DU DIESES WERKZEUG EINSETZT!</b>',
     'mg_enroll_header' => 'Alben-Einrichtung',
     'whatsnew_title' => 'Mediengalerie',
     'template_cache' => 'Template-Cache-Library installiert',
@@ -155,7 +155,7 @@ $LANG_MG01 = array(
     'configuration_help' => 'Stelle die Konfigurationsoptionen für das Standardverhalten des Mediengalerie-Plugins ein.',
     'media_edit_help' => 'Bearbeitet einzelen Medienobjekte und dessen Eigenschaften.  Um eine größere Ansicht zu bekommen, klicken auf das Bild.',
     'album_edit_help' => 'Setzen die Albumeigenschaften, inkl. Berechtigungen, Anzeigestatus, Titel und Beschreibung.',
-    'album_delete_help' => 'Hier löschen Du ein Album und dessen Unteralben. Bitte wählen aus, ob die Dateien in einen anderes Album verschoben werden sollen oder die Löschung endgültig sein soll.<br' . XHTML . '><b>Löschungen können nicht wieder hergestellt werden.</b>',
+    'album_delete_help' => 'Hier löschst Du ein Album und dessen Unteralben. Bitte wähle aus, ob die Dateien in einen anderes Album verschoben werden sollen oder die Löschung endgültig sein soll.<br' . XHTML . '><b>Löschungen können nicht wieder hergestellt werden.</b>',
     'configuration_title' => 'Mediengalerie-Konfiguration',
     'configuration_header' => 'Mediengalerie-Optionen',
     'album_maintenance' => 'Mediengalerie: Alben-Wartung',
@@ -183,7 +183,7 @@ $LANG_MG01 = array(
     'comments_prompt' => 'Kommentare erlauben',
     'comments_help' => 'Setze diesen Parameter, um Benutzern das Kommentieren von Mediaobjekten zu erlauben.',
     'graphicspackage_prompt' => 'Grafikskripte',
-    'graphicspackage_help' => 'Wähle das Grafikskript auf Deinm Server aus, dass die Vorschaubilder und Medienobjekte verarbeiten soll.',
+    'graphicspackage_help' => 'Wähle das Grafikskript auf dem Server aus, dass die Vorschaubilder und Medienobjekte verarbeiten soll.',
     'graphicspackage_path_prompt' => 'Grafikskript-Pfad',
     'graphicspackage_path_help' => 'Gib hier den Pfad zum Grafikskript an, sofern vorhanden.',
     'displayblock_prompt' => 'glFusion-Blöcke anzeigen',
@@ -572,8 +572,8 @@ $LANG_MG01 = array(
     'rss_feed_name' => 'Basis-Dateiname für RSS-Feed-Datei',
     'postcard_retention' => 'Tage für Verfügbarkeit einer Postkarte',
     'member_album_postfix' => '\'s Album',
-    'mass_delete_help' => 'Massenlöscung von Alben - Bitte mit Vorsicht benutzen',
-    'batch_delete_albums' => 'Massenlöscung von Alben',
+    'mass_delete_help' => 'Massenlöschung von Alben - Bitte mit Vorsicht benutzen',
+    'batch_delete_albums' => 'Massenlöschung von Alben',
     'reset_members' => 'Flag für das Erstellen von Mitgliederalben zurücksetzen.',
     'reset_members_details' => 'Dies überprüft, ob ein Mitgliederalbum für alle Benutzer existiert.',
     'approve_all' => 'Alle bestätigen',
@@ -723,7 +723,7 @@ $LANG_MG02 = array(
     'missing_tmp' => 'Kein Temp-Ordner vorhanden.',
     'disk_fail' => 'Datei konnten nicht auf Disk gescrieben werden.',
     'unknown_err' => 'Unbekannter Fehler beim Datei-Upload',
-    'albumaccessdeny' => "Du hast keinen Zugriff auf dieses Album. Dies kann sein weil Du kein Mitglied von {$_CONF['site_name']} bist. Bitte <a href={$_CONF['site_url']}/users.php?mode=new> registriere Dich als Mitglied.</a> of {$_CONF['site_name']} ,um volle Mitgliederrechte zu erhalten!",
+    'albumaccessdeny' => "Du hast keinen Zugriff auf dieses Album. Dies kann sein weil Du kein Mitglied von {$_CONF['site_name']} bist. Bitte <a href={$_CONF['site_url']}/users.php?mode=new> registriere Dich als Mitglied.</a> von {$_CONF['site_name']} ,um volle Mitgliederrechte zu erhalten!",
     'admin_access_deny' => 'Sorry, Du hast keinen Zugriff zur Mediengalerie-Administration. Zugriffsversuche auf nicht authorisierte Features werden aufgezeichnet.',
     'no_target_album' => 'Es wurde kein Zielalbum ausgewählt.',
     'invalid_directory' => 'Ordner existiert nicht',
@@ -901,7 +901,7 @@ $LANG_MG03 = array(
     'click_here' => 'Hier klicken',
     'published' => 'Veröffentlicht von',
     'on' => 'An',
-    'no_flash' => '<div style="width:200px;">Es scheint, Du das Flash-Plugin nicht installiert hast, oder dass die vorhandene Vesion zu alt ist, so dass die angeforderten Inhale nicht wiedergegeben werden können.<br' . XHTML . '><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Adobe-Flash-Player herunterladen" style="border:none;" /></a></p></div>',
+    'no_flash' => '<div style="width:200px;">Es scheint, dass Du Flash-Plugin nicht installiert hast, oder dass die vorhandene Vesion zu alt ist, so dass die angeforderten Inhale nicht wiedergegeben werden können.<br' . XHTML . '><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Adobe-Flash-Player herunterladen" style="border:none;" /></a></p></div>',
     'tagline' => '<a href="http://www.glfusion.org" target="_new">Galerie powered by MediaGallery</a>',
     'xp_pub_url' => '<a href="%s">xppubwiz.reg (Windows XP) herunterladen</a>',
     'vista_pub_url' => '<a href="%s">xppubwiz.reg (Windows Vista) herunteladen</a>',
@@ -1195,7 +1195,7 @@ $LANG_MG06 = array(
     'welcome' => 'Willkommen zu',
     'info_text' => 'Der Mediagallerie XP-Upload-Assisitent zeichnet keine Übetragungsfehler auf, er überspringt die Dateien sobald ein Fehler auftritt.<p>Sollte eine Datei nicht übetragen worden sein, schau bitte in die Datei error.log für mehr Infos.',
     'no_albums' => 'Es existieren keine Alben oder Du hast keine Berechtigung in Alben hochzuladen.',
-    'select_album' => 'Wählen das Album, in das Du die Medien hochladen möchstet.'
+    'select_album' => 'Wähle das Album, in das Du die Medien hochladen möchtest.'
 );
 
 $LANG_MG07 = array(
@@ -1318,6 +1318,6 @@ $PLG_mediagallery_MESSAGE6 = 'Während Deiner Bewerung ist ein Fehler aufgetreten
 $PLG_mediagallery_MESSAGE7 = 'Es wurden keine Dateien zur Verabeitung gefunden.';
 $PLG_mediagallery_MESSAGE8 = 'Ihre Postkarte wurde versand.';
 $PLG_mediagallery_MESSAGE9 = 'Es ist ein Fehler beim Versenden der Postkarte aufgetreten, Bitte informiere den Seiten-Admin';
-$PLG_mediagallery_MESSAGE10 = 'Es trat ein Fehler beim Ersetzen Deiner Mediendatei auf, Schau in die Datei error.log für mehr Infos.';
+$PLG_mediagallery_MESSAGE10 = 'Es trat ein Fehler beim Ersetzen Deiner Mediendatei auf, Schau in die Datei error.log für weitere Infos.';
 
 ?>

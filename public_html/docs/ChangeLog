@@ -2,6 +2,10 @@ glFusion ChangeLog
 
 v1.2.1
 ------
+- Updated / new German Language files for glFusion and all bundled plugins
+  Thanks to André for the translations (Mark)
+- Ensure $REMOTE_ADDR is properly set (André)
+- FileMgmt: Add max file size to information text on upload screen (André)
 - Media Gallery: Fixed bug where user quota would reset to unlimited (Mark)
 - Fixed issue with XSS in configuration (Mark)
 - Fixed issue where the MooRotator would not auto start in Chrome (Mark)
