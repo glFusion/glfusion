@@ -77,6 +77,10 @@ $_COM_VERBOSE = false;
 */
 $_REQUEST = array_merge($_GET, $_POST);
 
+if (!isset($REMOTE_ADDR)) {
+    $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
+}
+
 /**
   * Here, we shall establish an error handler. This will mean that whenever a
   * php level error is encountered, our own code handles it. This will hopefuly
