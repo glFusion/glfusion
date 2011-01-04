@@ -16,7 +16,7 @@ var gl_Slide=new Class(
 					},
 
 				cssvars: {
-					customID: 'gl_',
+					customID: 'gl_'
 					},
 				autoScroll: {
 					interval: 0
@@ -28,7 +28,7 @@ var gl_Slide=new Class(
 		this.sections=this.content.getElements('.'+this.options.cssvars.customID+'tab-pane');
 		if(!this.sections.length)
 		return;
-		
+
 		this.filmstrip=new Element('div',{id:this.options.cssvars.customID+'slide_hr'}).injectAfter(this.content);
 		this.buildToolbar();
 		this.buildFrame();
@@ -36,7 +36,7 @@ var gl_Slide=new Class(
 		this.scroller=$(this.options.cssvars.customID+'scroller');
 		this.startposition=$(this.sections[0].id.replace('-tab','-pane')).getPosition().x;
 		this.scroller.scrollFX=new Fx.Scroll(this.scroller,this.options.scrollFX);
-		
+
 		this.autoSlide='';
 		if (this.options.autoScroll.interval > 0) {this.autoScrollStart();}
 
@@ -118,7 +118,7 @@ var gl_Slide=new Class(
 			},
 	fixIE:function(){
 		this.filmstrip.getElement('hr').setStyle('display','none')
-		},	
+		},
 	scrollSection:function(element){
 		element=$($(element||this.sections[0]).id.replace('-pane','-tab'));
 		var oldactive=element.getParent().getElement('.current');
@@ -137,15 +137,15 @@ var gl_Slide=new Class(
 		this.scrollSection(this.sectionptr[to<0?this.sectionptr.length-1:to%this.sectionptr.length])
 		},
 	autoScroll:function() {
-		var currentid = (this.filmstrip.getElement('.current').id); 
-		var current=this.sectionptr.indexOf(this.filmstrip.getElement('.current').id); 
+		var currentid = (this.filmstrip.getElement('.current').id);
+		var current=this.sectionptr.indexOf(this.filmstrip.getElement('.current').id);
 		var direction=Math.pow(-1,['left','right'].indexOf(currentid.id)+1);
 		var to=current+direction;
 		this.scrollSection(this.sectionptr[to<0?this.sectionptr.length-1:to%this.sectionptr.length]);
 		},
 	autoScrollStart: function () {
 		if (this.options.autoScroll.interval > 0)
-		 this.autoSlide = this.autoScroll.bind(this).periodical(this.options.autoScroll.interval); 
+		 this.autoSlide = this.autoScroll.bind(this).periodical(this.options.autoScroll.interval);
 		},
 	autoScrollStop: function() {
 		var that=this;
@@ -153,5 +153,5 @@ var gl_Slide=new Class(
 			$clear(that.autoSlide);
 		}
 	});
-							
+
 	gl_Slide.implement(new Options);
