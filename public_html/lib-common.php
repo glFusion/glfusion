@@ -6,7 +6,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -61,7 +61,7 @@ if (!defined ('GVERSION')) {
     define('GVERSION', '1.2.1');
 }
 
-define('PATCHLEVEL','.svn');
+define('PATCHLEVEL','.pl0');
 
 //define('DEMO_MODE',true);
 
@@ -4744,7 +4744,7 @@ function COM_showMessage($msg, $plugin = '', $title = '', $persist = false)
 /**
 * Displays a message, as defined by URL parameters
 *
-* Helper function to display a message, but only if $_GET parameter 'msg' is defined. 
+* Helper function to display a message, but only if $_GET parameter 'msg' is defined.
 * optional parameters 'plugin', 'title' and 'persist' are also parsed
 * Only for GET requests, but that's what glFusion uses everywhere anyway.
 *

@@ -1,8 +1,19 @@
 glFusion ChangeLog
 
-v1.2.1.svn
-----------
-- Bad Behavior2: Updated to v2.0.37 (Mark)
+v1.2.1
+------
+- Media Gallery: Fixed bug where user quota would reset to unlimited (Mark)
+- Fixed issue with XSS in configuration (Mark)
+- Fixed issue where the MooRotator would not auto start in Chrome (Mark)
+- Forum: Added permission check to forum notification emails (Mark)
+- Media Gallery: Fixed bug when in Global Album Editor, the Display Image Skin
+  setting was not being saved. (Eric - Fix by Walter Rowe)
+- Calendar: Copying event from master calendar to personal calendar caused
+  SQL error (Mark)
+- Updated htmLawed to v1.1.9.4 (Mark)
+- Media Gallery: Fixed bug where mediagallery.admin members could not access
+  admin page.
+- Bad Behavior2: Updated to v2.0.38 (Mark)
 - Fix width of Directory/File Permissions table in envcheck (Mark H.)
 - Implement persistent (non-fading) system messaging (Mark H.)
   See: COM_showMessage(), COM_showMessageText(), COM_showMessageFromParameter()

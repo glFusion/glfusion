@@ -34,8 +34,7 @@
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
-$conf_group = array_key_exists('conf_group', $_POST) ? $_POST['conf_group'] : 'Core';
-
+$conf_group = array_key_exists('conf_group', $_POST) ? COM_applyFilter($_POST['conf_group']) : 'Core';
 $config =& config::get_instance();
 
 /**
@@ -273,9 +272,11 @@ $tokenstate = SEC_checkToken();
 if (array_key_exists('set_action', $_POST) && $tokenstate){
     if (SEC_inGroup('Root')) {
         if ($_POST['set_action'] == 'restore') {
-            $config->restore_param($_POST['name'], $conf_group);
+            $name = COM_applyFilter($_POST['name']);
+            $config->restore_param($name, $conf_group);
         } elseif ($_POST['set_action'] == 'unset') {
-            $config->unset_param($_POST['name'], $conf_group);
+            $name = COM_applyFilter($_POST['name']);
+            $config->unset_param($name, $conf_group);
         }
     }
 }
@@ -288,36 +289,29 @@ if (array_key_exists('form_submit', $_POST) && $tokenstate) {
         /*
          * An ugly hack to get the proper theme selected
          */
-        if( $_CONF['allow_user_themes'] == 1 )
-        {
-            if( isset( $_COOKIE[$_CONF['cookie_theme']] ) && empty( $_USER['theme'] ))
-            {
+        if( $_CONF['allow_user_themes'] == 1 ) {
+            if( isset( $_COOKIE[$_CONF['cookie_theme']] ) && empty( $_USER['theme'] )) {
                 $theme = COM_sanitizeFilename($_COOKIE[$_CONF['cookie_theme']], true);
-                if( is_dir( $_CONF['path_themes'] . $theme ))
-                {
+                if( is_dir( $_CONF['path_themes'] . $theme )) {
                     $_USER['theme'] = $theme;
                 }
             }
 
-            if( !empty( $_USER['theme'] ))
-            {
-                if( is_dir( $_CONF['path_themes'] . $_USER['theme'] ))
-                {
+            if( !empty( $_USER['theme'] )) {
+                if( is_dir( $_CONF['path_themes'] . $_USER['theme'] )) {
                     $_CONF['theme'] = $_USER['theme'];
                     $_CONF['path_layout'] = $_CONF['path_themes'] . $_CONF['theme'] . '/';
                     $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_CONF['theme'];
-                }
-                else
-                {
+                } else {
                     $_USER['theme'] = $_CONF['theme'];
                 }
             }
         }
     }
-    echo $config->get_ui($conf_group, $_POST['sub_group'], $result);
+    $sub_group = array_key_exists('sub_group', $_POST) ? COM_applyFilter($_POST['sub_group']) : null;
+    echo $config->get_ui($conf_group, $sub_group, $result);
 } else {
-    echo $config->get_ui($conf_group, array_key_exists('subgroup', $_POST) ?
-                         $_POST['subgroup'] : null);
+    $sub_group = array_key_exists('subgroup', $_POST) ? COM_applyFilter($_POST['subgroup']) : null;
+    echo $config->get_ui($conf_group, $sub_group);
 }
-
 ?>

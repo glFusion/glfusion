@@ -1394,7 +1394,8 @@ function gf_chknotifications($forumid,$topicid,$userid,$type='topic') {
                 if  ($userNotifyOnceOption == 0 OR ($userNotifyOnceOption == 1 AND ($nologRecord OR $logtime != 0)) ) {
                     $userrec = DB_query("SELECT username,email,status FROM {$_TABLES['users']} WHERE uid=".(int)$N['uid']);
                     $B = DB_fetchArray($userrec);
-                    if ($B['status'] == USER_ACCOUNT_ACTIVE) {
+
+                    if ($B['status'] == USER_ACCOUNT_ACTIVE && SEC_inGroup($grp_id,(int)$N['uid'])) {
                         $subjectline = "{$_CONF['site_name']} {$LANG_GF02['msg22']}";
                         $message  = "{$LANG_GF01['HELLO']} {$B['username']},\n\n" . $messageBody;
                         if ($nologRecord and $userNotifyOnceOption == 1 ) {
@@ -1410,6 +1411,10 @@ function gf_chknotifications($forumid,$topicid,$userid,$type='topic') {
                         } else {
                             COM_mail($to,$subjectline,$message,$from);
                         }
+                    } else {
+                        // remove the watch entry since this user can no longer access the forum.
+                        DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid=".$N['uid']." AND ((topic_id=".(int) $pid.") OR ((forum_id=".(int) $forumid.") AND (topic_id=0) ))");
+//                        COM_errorLog("Removing user from notification: " . $B['username']);
                     }
                 }
             }
