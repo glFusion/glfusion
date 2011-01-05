@@ -6,7 +6,7 @@ function bb2_protocol($settings, $package)
 {
 	// Is it claiming to be HTTP/1.0?  Then it shouldn't do HTTP/1.1 things
 	// Always run this test; we should never see Expect:
-	if (array_key_exists('Expect', $package['headers_mixed']) && stripos($package['headers_mixed']['Expect'], "100-continue") !== FALSE) {
+	if (array_key_exists('Expect', $package['headers_mixed']) && stripos($package['headers_mixed']['Expect'], "100-continue") !== FALSE && !strcmp($package['server_protocol'], "HTTP/1.0")) {
 		return "a0105122";
 	}
 

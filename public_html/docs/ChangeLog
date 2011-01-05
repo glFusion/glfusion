@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.2.1
 ------
+- Updated Bad Behavior2 Plugin to v2.0.39 (Mark)
 - Updated / new German Language files for glFusion and all bundled plugins
   Thanks to André for the translations (Mark)
 - Ensure $REMOTE_ADDR is properly set (André)
@@ -17,7 +18,6 @@ v1.2.1
 - Updated htmLawed to v1.1.9.4 (Mark)
 - Media Gallery: Fixed bug where mediagallery.admin members could not access
   admin page.
-- Bad Behavior2: Updated to v2.0.38 (Mark)
 - Fix width of Directory/File Permissions table in envcheck (Mark H.)
 - Implement persistent (non-fading) system messaging (Mark H.)
   See: COM_showMessage(), COM_showMessageText(), COM_showMessageFromParameter()

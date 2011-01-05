@@ -1,7 +1,7 @@
 <?php
 /*
 Bad Behavior - detects and blocks unwanted Web accesses
-Copyright (C) 2005-2008 Michael Hampton
+Copyright (C) 2005-2011 Michael Hampton
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
