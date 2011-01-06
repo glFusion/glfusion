@@ -138,10 +138,11 @@
                                 <select id="publish_year" name="publish_year">
                                     {publish_year_options}
                                 </select>
-
+                                <span id="cale1">
                                 <a href="#" id="toggler">
                                 <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:middle;border:none;"{xhtml}>
                                 </a>
+                                </span>
                                 <span id="calendar1"></span>
 
                                 &nbsp;&nbsp;
@@ -199,10 +200,11 @@
                                                  <select id="cmt_close_year" name="cmt_close_year">
                                                     {cmt_close_year_options}
                                                  </select>&nbsp;&nbsp;
-
+                                <span id="cale2">
                                 <a href="#" id="toggler1">
                                 <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:middle;border:none;"{xhtml}>
                                 </a>
+                                </span>
                                 <span id="calendar2"></span>
 
                                 &nbsp;&nbsp;
@@ -362,6 +364,17 @@
                 	numMonths:1
                 });
             });
+        } else {
+            document.getElementById('cale1').innerHTML = '';
+            document.getElementById('calendar1').style.borderTop = '0px';
+            document.getElementById('calendar1').style.borderLeft = '0px';
+            document.getElementById('calendar1').style.borderRight = '0px';
+            document.getElementById('calendar1').style.borderBottom = '0px';
+            document.getElementById('cale2').innerHTML = '';
+            document.getElementById('calendar2').style.borderTop = '0px';
+            document.getElementById('calendar2').style.borderLeft = '0px';
+            document.getElementById('calendar2').style.borderRight = '0px';
+            document.getElementById('calendar2').style.borderBottom = '0px';
         }
     </script>
 </div>

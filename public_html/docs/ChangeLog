@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.2.1
 ------
+- Calendar: Fixed issue where datepicker does not work with Chrome (Mark)
 - Updated Bad Behavior2 Plugin to v2.0.39 (Mark)
 - Updated / new German Language files for glFusion and all bundled plugins
   Thanks to André for the translations (Mark)
