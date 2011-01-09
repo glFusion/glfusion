@@ -2349,10 +2349,10 @@ width:15px;
 }
 
 #gl_moorotator .control-prev,
-div#frame div.button#left:hover,
-div#frame div.button#left.hover,
-div#frame div.button#right:hover,
-div#frame div.button#right.hover,
+div#gl_frame div.button#left:hover,
+div#gl_frame div.button#left.hover,
+div#gl_frame div.button#right:hover,
+div#gl_frame div.button#right.hover,
 #gl_mooticker .control-prev {
 background-position:0 0;
 }
