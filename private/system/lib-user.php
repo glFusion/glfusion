@@ -92,7 +92,6 @@ function USER_deleteAccount ($uid)
     PLG_deleteUser ($uid);
 
     if ( function_exists('CUSTOM_userDeleteHook')) {
-        COM_errorLog("WARNING: Use of depreciated CUSTOM_userDeleteHook() - use CUSTOM_user_delete()");
         CUSTOM_userDeleteHook($uid);
     }
 
@@ -412,7 +411,6 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
         CUSTOM_userCreate ($uid,$batchimport);
     }
     if ( function_exists('CUSTOM_userCreateHook') ) {
-        COM_errorLog("WARNING: Use of depreciated CUSTOM_userCreateHook() - use CUSTOM_user_create()");
         CUSTOM_userCreateHook($uid);
     }
     PLG_createUser ($uid);
