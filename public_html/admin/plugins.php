@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -402,7 +402,11 @@ function PLUGINS_unInstall($pi_name)
 
     // if the plugin is disabled, load the functions.inc now
     if (!function_exists ('plugin_uninstall_' . $pi_name)) {
-        require_once ($_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc');
+        if ( !file_exists($_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc') ) {
+            COM_errorLog("Unable to locate the plugin directory for " . $pi_name." - cannot uninstall");
+        } else {
+            require_once ($_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc');
+        }
     }
 
     if ( !function_exists('plugin_autouninstall_'.$pi_name) && file_exists($_CONF['path'].'plugins/'.$pi_name.'/autoinstall.php') ) {

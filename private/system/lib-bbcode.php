@@ -290,15 +290,15 @@ function _bbcode_url ($action, $attributes, $content, $params, $node_object) {
     }
     if (!isset ($attributes['default'])) {
         if ( stristr($content,'http') ) {
-            return '<a href="'.$content.'" rel="nofollow">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
+            return '<a href="'._bbcode_cleanHTML($content).'" rel="nofollow">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
         } else {
-            return '<a href="http://'.$content.'" rel="nofollow">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
+            return '<a href="http://'._bbcode_cleanHTML($content).'" rel="nofollow">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
         }
     }
     if ( stristr($attributes['default'],'http') ) {
-        return '<a href="'.$attributes['default'].'" rel="nofollow">'.$content.'</a>';
+        return '<a href="'._bbcode_cleanHTML($attributes['default']).'" rel="nofollow">'.$content.'</a>';
     } else {
-        return '<a href="http://'.$attributes['default'].'" rel="nofollow">'.$content.'</a>';
+        return '<a href="http://'._bbcode_cleanHTML($attributes['default']).'" rel="nofollow">'.$content.'</a>';
     }
 }
 
@@ -334,31 +334,34 @@ function _bbcode_img ($action, $attributes, $content, $params, $node_object) {
     }
 
     if ( isset($attributes['h']) AND isset ($attributes['w']) ) {
-        $dim = 'width=' . $attributes['w'] . ' height=' . $attributes['h'];
+        $dim = 'width=' . (int) $attributes['w'] . ' height=' . (int) $attributes['h'];
     } else {
         $dim = '';
     }
     if ( isset($attributes['align'] ) ) {
+        if ( !in_array(strtolower($attributes['align']),array('left','right','center') ) ) {
+            $attributes['align'] = 'left';
+        }
         $align = ' align=' . $attributes['align'] . ' ';
     } else {
         $align = '';
     }
 
-    return '<img src="'.htmlspecialchars($content,ENT_QUOTES, COM_getEncodingt()).'" ' . $dim . $align . ' alt=""' . XHTML . '>';
+    return '<img src="'._bbcode_cleanHTML(htmlspecialchars($content,ENT_QUOTES, COM_getEncodingt())).'" ' . $dim . $align . ' alt=""' . XHTML . '>';
 }
 
 function _bbcode_size  ($action, $attributes, $content, $params, $node_object) {
     if ( $action == 'validate') {
         return true;
     }
-    return '<span style="font-size: '.$attributes['default'].'px;">'.$content.'</span>';
+    return '<span style="font-size: '.(int) $attributes['default'].'px;">'.$content.'</span>';
 }
 
 function _bbcode_color  ($action, $attributes, $content, $params, $node_object) {
     if ( $action == 'validate') {
         return true;
     }
-    return '<span style="color: '.$attributes['default'].';">'.$content.'</span>';
+    return '<span style="color: '._bbcode_cleanHTML($attributes['default']).';">'.$content.'</span>';
 }
 
 function _bbcode_code($action, $attributes, $content, $params, $node_object) {
@@ -378,6 +381,24 @@ function _bbcode_code($action, $attributes, $content, $params, $node_object) {
     $codeblock = str_replace('}','&#125;',$codeblock);
 
     return $codeblock;
+}
+
+/**
+* Cleans (filters) HTML - only allows safe HTML tags
+*
+* @param        string      $str    string to filter
+* @return       string      filtered HTML code
+*/
+function _bbcode_cleanHTML($str) {
+    global $_CONF;
+
+    require_once $_CONF['path'] . 'lib/htmLawed/htmLawed.php';
+    $configArray = array('safe' => 1,
+                         'balance'  => 1,
+                         'valid_xhtml' => 1
+                        );
+
+    return htmLawed($str,$configArray);
 }
 
 function _geshi($str,$type='PHP') {

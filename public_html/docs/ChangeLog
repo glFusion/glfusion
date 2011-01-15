@@ -1,5 +1,16 @@
 glFusion ChangeLog
 
+v1.3.0 (Stable Development Branch)
+------
+
+
+v1.2.1.pl1
+----------
+- Security Fix - bbcode implementation suffered from several XSS
+  vulnerabilities.  Reported by Saif El-Sherei (Mark)
+- Fixed plugin uninstall to not crash if plugin directory is missing (Mark)
+- Removed unneeded log message in user create (Mark)
+
 v1.2.1
 ------
 - Calendar: Fixed issue where datepicker does not work with Chrome (Mark)
