@@ -1,6 +1,6 @@
 <?php
 ###############################################################################
-# german_utf-8.php
+# german.php
 #
 # This is the German language file for the glFusion Links Plugin
 # addressing the user as "Du" (informal German).
@@ -97,8 +97,8 @@ $LANG_LINKS_SUBMIT = array(
     8 => 'Titel',
     9 => 'URL',
     10 => 'Kategorie',
-    11 => 'Link Einsendungen',
-    12 => 'Submitted By'
+    11 => 'Beiträge: Links',
+    12 => 'eingereicht von'
 );
 
 ###############################################################################
@@ -178,8 +178,8 @@ $LANG_LINKS_ADMIN = array(
     60 => 'Benutzer %s hat unrechtmäßig versucht, die Kategorie %s zu editieren.',
     61 => 'Owner',
     62 => 'Last Updated',
-    63 => 'Are you sure you want to delete this link?',
-    64 => 'Are you sure you want to delete this category?',
+    63 => 'Soll dieser Link wirklich gelöscht werden?',
+    64 => 'Soll diese Kategorie wirklich gelöscht werden?',
     65 => 'Moderate Link'
 );
 
@@ -200,32 +200,32 @@ $LANG_LINKS_STATUS = array(
     303 => 'Siehe andere',
     304 => 'Nicht verändert',
     305 => 'Proxy verwenden',
-    307 => 'Temporary Redirect',
-    400 => 'Bad Request',
+    307 => 'vorübergehend umleiten',
+    400 => 'ungültige Anfrage',
     401 => 'Nicht autorisiert',
     402 => 'Zahlung erbeten',
     403 => 'Kein Zugang',
     404 => 'Nicht gefunden',
     405 => 'Methode nicht erlaubt',
     406 => 'Nicht akzeptabel',
-    407 => 'Proxy Authentication Required',
-    408 => 'Request Timeout',
+    407 => 'Proxy-Authentifizierung erforderlich',
+    408 => 'Anfragedauer überschritten',
     409 => 'Konflikt',
     410 => 'Verschwunden',
-    411 => 'Länge nötig',
-    412 => 'Precondition Failed',
-    413 => 'Request Entity Too Large',
-    414 => 'Request-URI Too Long',
-    415 => 'Unsupported Media Type',
-    416 => 'Requested Range Not Satisfiable',
-    417 => 'Expectation Failed',
-    500 => 'Internal Server Error',
-    501 => 'Not Implemented',
-    502 => 'Bad Gateway',
-    503 => 'Service Unavailable',
-    504 => 'Gateway Timeout',
-    505 => 'HTTP Version Not Supported',
-    999 => 'Connection Timed out'
+    411 => 'Länge erforderlich',
+    412 => 'Voraussetzung nicht refüllt',
+    413 => 'Anfrage-Objekt zu groß',
+    414 => 'Anfrage-URI zu lang',
+    415 => 'Medientyp nicht unterstützt',
+    416 => 'angeforderte Operation nicht ausführbar',
+    417 => 'Erwartungen sind nicht eingetroffen',
+    500 => 'Interner Server Error',
+    501 => 'Nicht Implementiert',
+    502 => 'ungültiger Gateway',
+    503 => 'Service nicht verfügbar',
+    504 => 'Gateway Zeitüberschreitung',
+    505 => 'HTTP Version wird nicht unterstützt',
+    999 => 'Zeitüberschreitung der Verbindung'
 );
 
 // Localization of the Admin Configuration UI
@@ -249,7 +249,8 @@ $LANG_confignames['links'] = array(
     'show_category_descriptions' => 'Kategoriebeschreibung anzeigen?',
     'root' => 'ID der Oberkategorie',
     'default_permissions' => 'Standardberechtigungen - Links',
-    'target_blank' => 'Links in neuen Fenster öffnen'
+    'target_blank' => 'Links in neuen Fenster öffnen',
+    'displayblocks' => 'Anzeige glFusion Blöcke'
 );
 
 $LANG_configsubgroups['links'] = array(
@@ -267,7 +268,8 @@ $LANG_configselects['links'] = array(
     0 => array('Ja' => 1, 'Nein' => 0),
     1 => array('Ja' => true, 'Nein' => false),
     9 => array('Weiterleiten zur verlinkten Seite' => 'item', 'Admin Liste anzeigen' => 'list', 'Öffentliche Liste anzeigen' => 'plugin', 'Startseite anzeigen' => 'home', 'Kommandozentrale' => 'admin'),
-    12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3)
+    12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3),
+    13 => array('Linker Block' => 0, 'Rechter Block' => 1, 'linker & Rechter Block' => 2, 'Keine' => 3)
 );
 
 ?>

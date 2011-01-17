@@ -281,7 +281,6 @@ $LANG03 = array(
     39 => 'You may view the comment thread at the following address: ',
     40 => 'If you wish to recieve no further notifications of replies, visit the following link: ',
     41 => 'Edit a Comment',
-    42 => 'Internal processing error',
 );
 
 ###############################################################################
@@ -1087,7 +1086,7 @@ $LANG28 = array(
     79 => 'No User(s) were selected for Site Login Reminders.',
     80 => 'Successfully sent Reminders',
     81 => 'Reminder to verify account for %s',
-    82 => "Your account on {$_CONF['site_name']} has not been accesssed since %s and will be disabled if not accessed in the next 30 days.",
+    82 => "Your account on {$_CONF['site_name']} has not been accessed since %s and will be disabled if not accessed in the next 30 days.",
     83 => "Your account on {$_CONF['site_name']} has not been used since it was created and will be deleted soon if not accessed.",
     84 => "Your login name is: %s  for our site: {$_CONF['site_url']}",
     85 => 'If you have forgotten the password use the following link: %s',
@@ -1942,7 +1941,7 @@ $LANG_FILECHECK = array(
     'recheck'           => 'Recheck File Integrity',
     'confirm'           => 'Are you sure you want to deleted the selected file(s)?',
     'scan'              => 'Your site\'s file integrity is being analyzed.  Please be patient, this process may take awhile to complete, and execution speed depends upon the hosting environment.  If this script approaches the maximum PHP script execution time of %s seconds, scanning will be interrupted and an error message will be displayed.',
-    'results'           => 'Your site\'s files and directories have been compared to the glFusion v%s distribtion, and the results are shown below.  Added or missing files and directories have been identified, and files that have been added may be selected for deletion.  Directories that have been added will be detected, but presently these must be removed manually.<br /><br />Additional files and/or directories that are detected may be associated with plugins or other scripts that you have added, or are otherwise critical to your site\'s operation, and therefore <b>this DOES NOT mean you should simply delete these files!&nbsp;&nbsp;<span style="color:red">Please use this tool with caution!</span></b>',
+    'results'           => 'Your site\'s files and directories have been compared to the glFusion v%s distribution, and the results are shown below.  Added or missing files and directories have been identified, and files that have been added may be selected for deletion.  Directories that have been added will be detected, but presently these must be removed manually.<br /><br />Additional files and/or directories that are detected may be associated with plugins or other scripts that you have added, or are otherwise critical to your site\'s operation, and therefore <b>this DOES NOT mean you should simply delete these files!&nbsp;&nbsp;<span style="color:red">Please use this tool with caution!</span></b>',
     'expiration1'       => 'NOTE: The scan was aborted because the elapsed time it was approaching your site\'s PHP maximum execution time limit.  This analysis script is CPU and I/O-intensive, and can be affected by a number of factors in your web hosting environment.  Please consider one or more of the following recommendations resolve this problem:<br />',
     'expiration2'       => '<ol><li>Try increasing the value of \'max_execution_time\' in your php.ini file.  It is currently set to %s seconds.</li><li>Manually inspect your site and remove any unneeded files and directories.</li></ol>',
     'abort'             => 'Abort Scan',

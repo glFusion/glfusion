@@ -60,7 +60,7 @@ $LANG_FM00 = array (
     'new_upload_body'   => 'Eine neue Datei wurde in die Upload-Warteschlange eingesendet ',
     'details'           => 'Dateidetails',
     'filename'          => 'Dateiname',
-    'uploaded_by'       => 'Hochgeladen von',
+    'uploaded_by'       => 'Hochgeladen von'
 );
 
 // Admin Navbar
@@ -91,7 +91,7 @@ $LANG_FILEMGMT = array(
     'hits' => "Aufrufe",
     'Filelisting' => "Dateiauflistung",
     'DownloadReport' => "Download-Verlauf für einzelne Datei",
-    'StatsMsg1' => "Top-Ten der Dateien in der Repository",
+    'StatsMsg1' => "Top-Ten der Dateien in dem Archiv",
     'StatsMsg2' => "Es scheint, dass keine Dateien für das Filemgmt-Plugin definiert wurden oder dass niemand auf sie zugegriffen hat.",
     'usealtheader' => "Alternativen Header verwenden",
     'url' => "URL",
@@ -104,7 +104,7 @@ $LANG_FILEMGMT = array(
     'leftblocks' => "Linke Blöcke",
     'addtomenu' => 'Zu Menü hinzufügen',
     'label' => 'Label',
-    'nofiles' => 'Anzahl der Dateien in der Repository (Downloads)',
+    'nofiles' => 'Anzahl der Dateien in dem Archiv (Downloads)',
     'save' => 'Speichern',
     'preview' => 'Vorschau',
     'delete' => 'Löschen',
@@ -114,7 +114,7 @@ $LANG_FILEMGMT = array(
     'start_install' => 'Versuche das Filemgmt-Plugin zu installieren',
     'start_dbcreate' => 'Versuche Tabellen für das Filemgmt-Plugin zu erstellen',
     'install_skip' => '... übersprungen entsprechend der filemgmt.cfg',
-    'access_denied_msg' => 'Du hast illegal versuch auf Filemgmt-Administration zuzugreifen.  Alle Versuche, illegal auf die Seite zuzugreifen, werden aufgezeichent',
+    'access_denied_msg' => 'Du hast illegal versucht auf Filemgmt-Administration zuzugreifen.  Alle Versuche, illegal auf die Seite zuzugreifen, werden aufgezeichent',
     'installation_complete' => 'Installation komplett',
     'installation_complete_msg' => 'Die Datenstrukturen für das Filemgmt-Plugin wurden erfolgreich in Deiner Datenbank erstellt!  Solltest Du das Plugin deinstallieren, dann schau in das README Dokument, dass zu diesem Plugin gehört.',
     'installation_failed' => 'Installation fehlgeschlagen',
@@ -139,6 +139,7 @@ $LANG_configsections['filemgmt'] = array(
     'label'                 => 'FileMgmt',
     'title'                 => 'FileMgmt-Konfiguration'
 );
+
 $LANG_confignames['filemgmt'] = array(
     'whatsnew'              => 'WasIstNeu-Auflistung aktivieren',
     'perpage'               => 'Angezeigte Downloads je Seite',
@@ -165,12 +166,14 @@ $LANG_confignames['filemgmt'] = array(
     'numsubcategories2show' => 'Unterkategorie je Reihe',
     'outside_webroot'       => 'Datei außerhalb Web-Root speichern',
     'enable_rating'         => 'Enable Ratings',
-    'displayblocks'         => 'Display glFusion Blocks',
-    'silent_edit_default'   => 'Silent Edit Default',
+    'displayblocks'         => 'glFusion Blöcke anzeigen',
+    'silent_edit_default'   => 'stilles Bearbeiten: Default',
 );
+
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Haupteinstellungen'
 );
+
 $LANG_fs['filemgmt'] = array(
     'fs_public'             => 'Öffentliche FileMgmt-Einstellungen',
     'fs_admin'              => 'FileMgmt - Admin-Einstellungen',
@@ -178,6 +181,7 @@ $LANG_fs['filemgmt'] = array(
     'fm_access'             => 'FileMgmt - Zugangskontrolle',
     'fm_general'            => 'FileMgmt - Allgemeine Einstellungen',
 );
+
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['filemgmt'] = array(
     0 => array('Ja' => 1, 'Nein' => 0),
@@ -185,8 +189,6 @@ $LANG_configselects['filemgmt'] = array(
     2 => array(' 5' => 5, '10' => 10, '15' => 15, '20' => 20, '25' => 25,'30' => 30,'50' => 50),
     3 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
 );
-
-
 
 $PLG_filemgmt_MESSAGE1 = 'Filemgmt-Plugin-Installation abgebrochen<br>Datei: plugins/filemgmt/filemgmt.php ist nicht beschreibbar';
 $PLG_filemgmt_MESSAGE3 = 'Dieses Plugin benötigt glFusion Version 1.0 oder größer, Upgrade abgebrochen.';
@@ -279,7 +281,7 @@ define("_MD_VOTEAPPRE","Deine Bewertung wurde dankend angenommen.");
 define("_MD_THANKYOU","Danke, dass Du dir Zeit genommen hast, hier bei %s Deine Bewertung abzugeben"); // %s is your site name
 define("_MD_VOTEFROMYOU","Der Input von Benutzern wie Dir, hilft anderen Besucher zu entscheiden, welche Dateien sie downloaden sollen.");
 define("_MD_VOTEONCE","Bitte bewerte die gleiche Sache nicht mehr als einmal.");
-define("_MD_RATINGSCALE","Die Skala geht von 1 - 10, wobei 1 schlecht ist und 10 exzellent.");
+define("_MD_RATINGSCALE","Die Skala geht von 1 - 10, wobei 1 schlecht ist und 10 exzellent ist.");
 define("_MD_BEOBJECTIVE","Bitte sei objektiv, wenn jeder eine Wertung von einer 1 oder einer 10 erhält, dann sind die Bewertungen nicht sehr hilfreich.");
 define("_MD_DONOTVOTE","Bitte bewerte nicht Deine eigenen Sachen.");
 define("_MD_RATEIT","Bewerten!");
@@ -294,7 +296,7 @@ define("_MD_APPROVED", "Deine Datei wurde bestätigt");
 define("_MD_ALLPENDING","Alle Dateiinformationen erwarten eine Überprüfung.");
 define("_MD_DONTABUSE","Benutzername und IP wurden aufgezeichnet, bitte missbrauche das System nicht.");
 define("_MD_TAKEDAYS","Es kann einige Tage dauern, bis Deine Datei unserer Datenbank hinzugefügt wird.");
-define("_MD_FILEAPPROVED", "Deine Datei wurde unserer Datei-Repository hinzugefügt");
+define("_MD_FILEAPPROVED", "Deine Datei wurde unserem Datei-Archiv hinzugefügt");
 
 define("_MD_RANK","Rang");
 define("_MD_CATEGORY","Kategorie");
@@ -351,7 +353,7 @@ define("_MD_APPROVE","Bestätigen");
 define("_MD_DELETE","Löschen");
 define("_MD_NOSUBMITTED","Keine neuen eingesendeten Downloads.");
 define("_MD_ADDMAIN","Hauptkategorie hinzufügen");
-define("_MD_TITLEC","Tittel: ");
+define("_MD_TITLEC","Titel: ");
 define("_MD_CATSEC", "Ansicht-Zugang: ");
 define("_MD_UPLOADSEC", "Upload-Zugang: ");
 define("_MD_IMGURL","<br>Bilddateiname <font size='-2'> (zu finden im Ordner filemgmt_data/category_snaps - Bildhöhe wird auf 50 gesetzt)</font>");
@@ -370,7 +372,7 @@ define("_MD_NOUNREGVOTES","Keine Stimmen von unregistrierten Benutzern");
 define("_MD_VOTEDELETED","Stimmendaten gelöscht.");
 define("_MD_NOBROKEN","Keine gemeldeten fehlerhaften Dateien.");
 define("_MD_IGNOREDESC","Ignorieren (Ignoriert den Bericht und löscht nur diesen Bericht</b>)");
-define("_MD_DELETEDESC","Löschen (Löscht <b>den gemeldeten Dateieintrag in der Repository</b> aber nicht die Datei)");
+define("_MD_DELETEDESC","Löschen (Löscht <b>den gemeldeten Dateieintrag in dem Archiv</b> aber nicht die Datei)");
 define("_MD_REPORTER","Bericht-Einsender");
 define("_MD_FILESUBMITTER","Datei-Einsender");
 define("_MD_IGNORE","Ignorieren");
@@ -432,7 +434,7 @@ define("_MD_SILENTEDIT","Silent Edit: ");
 // Additional glFusion Defines
 define("_MD_NOVOTE","Noch nicht bewertet");
 define("_IFNOTRELOAD","Wenn die Seite nicht automatisch neu lädt, dann klicke bitte <a href=\"%s\">hier</a>");
-define("_GL_ERRORNOACCESS","FEHLER: Kein Zugang zu dieser Dokument-Repository-Sektion");
+define("_GL_ERRORNOACCESS","FEHLER: Kein Zugang zu dieser Dokument-Archiv-Sektion");
 define("_GL_ERRORNOUPLOAD","FEHLER: Du hast keine Upload-Privilegien");
 define("_GL_ERRORNOADMIN","FEHLER: Diese Funktion ist eingeschränkt");
 define("_GL_NOUSERACCESS","hat keinen Zugang zu dieser Dokument-Repository");

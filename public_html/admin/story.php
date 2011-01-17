@@ -568,7 +568,10 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     }
     $story_templates->set_var ('lang_author', $LANG24[7]);
     $storyauthor = COM_getDisplayName ($story->EditElements('uid'));
-    $story_templates->set_var ('story_author', $storyauthor);
+    $storyauthor_select= COM_optionList($_TABLES['users'], 'uid,username',
+            $story->EditElements('uid'));
+     $story_templates->set_var ('story_author', $storyauthor);
+    $story_templates->set_var ('story_author_select', $storyauthor_select);
     $story_templates->set_var ('author', $storyauthor);
     $story_templates->set_var ('story_uid', $story->EditElements('uid'));
 

@@ -120,6 +120,26 @@ $_SYSTEM['verification_token_ttl'] = 86400;
 $_SYSTEM['token_ip'] = false;
 
 // +--------------------------------------------------------------------------+
+// | HTML Filtering Overrides                                                 |
+// |                                                                          |
+// | By default, glFusion allows most safe HTML, but will filter out items    |
+// | such as the iframe tag for security reasons.                             |
+// |                                                                          |
+// | You can override what elements are filtered by allowing new items using  |
+// | the following two configuration options:                                 |
+// |                                                                          |
+// | $_SYSTEM['filterOverride'] = array() - Applies to all users              |
+// | $_SYSTEM['RootFilterOverride'] = array() - Applies to only Root users    |
+// |                                                                          |
+// | Overrides must include the full set of elements to allow / disallow      |
+// | See the detailed HTML filtering documentation at:                        |
+// |  http://www.glfusion.org/wiki/doku.php?id=glfusion:htmlfilter            |
+// +--------------------------------------------------------------------------+
+
+//$_SYSTEM['filterOverride'] = array( 'elements' => '*+embed+object' );
+//$_SYSTEM['RootFilterOverride'] = array( 'elements' => '*+embed+object+iframe' );
+
+// +--------------------------------------------------------------------------+
 // | Use direct style / js - Directly call the style / jss cache files        |
 // |                                                                          |
 // | If loading the PHP processor on your site adds additional load to your   |

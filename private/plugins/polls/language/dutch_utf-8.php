@@ -61,7 +61,8 @@ $LANG_POLLS = array(
     'editinstructions' => 'Vul a.u.b. de Enquete ID in en minimaal 1 vraag met twee ogelijke antwoorden.',
     'pollclosed' => 'This poll is closed for voting.',
     'pollhidden' => 'You have already voted. This poll results will only be shown when voting is closed.',
-    'start_poll' => 'Vul Enquete in'
+    'start_poll' => 'Vul Enquete in',
+    'deny_msg' => 'Access to this poll is denied.  Either the poll has been moved/removed or you do not have sufficient permissions.'
 );
 
 ###############################################################################
@@ -135,7 +136,8 @@ $LANG_confignames['polls'] = array(
     'polladdresstime' => 'Deelnemer\'s IP Adres geldig voor',
     'delete_polls' => 'Verwijder enquetes als de eigenaar ervan wordt verwijderd?',
     'aftersave' => 'Na opslaan Enquete',
-    'default_permissions' => 'Standaard Enquete Rechten'
+    'default_permissions' => 'Standaard Enquete Rechten',
+    'displayblocks' => 'Display glFusion Blocks'
 );
 
 $LANG_configsubgroups['polls'] = array(
@@ -153,7 +155,8 @@ $LANG_configselects['polls'] = array(
     1 => array('Ja' => true, 'Nee' => false),
     2 => array('Zoals Ingezonden' => 'submitorder', 'Op basis van Stemmen' => 'voteorder'),
     9 => array('Ga naar Enquete' => 'item', 'Toon Beheer Overizcht' => 'list', 'Toon Publieke Overzicht' => 'plugin', 'Toon Startpagina' => 'home', 'Toon Beheerpagina' => 'admin'),
-    12 => array('Geen Toegang' => 0, 'Alleen Lezen' => 2, 'Lezen en Schrijven' => 3)
+    12 => array('Geen Toegang' => 0, 'Alleen Lezen' => 2, 'Lezen en Schrijven' => 3),
+    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
 );
 
 ?>

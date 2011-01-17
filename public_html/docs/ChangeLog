@@ -1,20 +1,42 @@
 glFusion ChangeLog
 
-v2.0.0 svn
-----------
-- Bumped up size of .pluginTinyText for readability (Eric)
-- Added ability for theme to add to css blob (Eric)
-- Added {!!autotag ..} feature to template class (Mark)
-- Added wrapper static page widget (Eric)
-- Update all MooTools-dependent javascript to MooTools 1.2.3 (Mark H.)
-- Added Mootools core and more files to install directory (Eric)
-- Changed sizingMethod to properly scale pngfix images (Eric)
-- Fixed Windows site link in gl_mooie6warning script (Eric)
-- Fixed issue where gl_moomorph wasn't consistently called (Eric)
-- Merge layout custom CSS files rather than uniquely select (Mark H.)
+v1.3.0 (Stable Development Branch)
+------
 
-v1.2.1.svn
+
+v1.2.1.pl1
 ----------
+- Security Fix - bbcode implementation suffered from several XSS
+  vulnerabilities.  Reported by Saif El-Sherei (Mark)
+- Fixed plugin uninstall to not crash if plugin directory is missing (Mark)
+- Removed unneeded log message in user create (Mark)
+
+v1.2.1
+------
+- Calendar: Fixed issue where datepicker does not work with Chrome (Mark)
+- Updated Bad Behavior2 Plugin to v2.0.39 (Mark)
+- Updated / new German Language files for glFusion and all bundled plugins
+  Thanks to André for the translations (Mark)
+- Ensure $REMOTE_ADDR is properly set (André)
+- FileMgmt: Add max file size to information text on upload screen (André)
+- Media Gallery: Fixed bug where user quota would reset to unlimited (Mark)
+- Fixed issue with XSS in configuration (Mark)
+- Fixed issue where the MooRotator would not auto start in Chrome (Mark)
+- Forum: Added permission check to forum notification emails (Mark)
+- Media Gallery: Fixed bug when in Global Album Editor, the Display Image Skin
+  setting was not being saved. (Eric - Fix by Walter Rowe)
+- Calendar: Copying event from master calendar to personal calendar caused
+  SQL error (Mark)
+- Updated htmLawed to v1.1.9.4 (Mark)
+- Media Gallery: Fixed bug where mediagallery.admin members could not access
+  admin page.
+- Fix width of Directory/File Permissions table in envcheck (Mark H.)
+- Implement persistent (non-fading) system messaging (Mark H.)
+  See: COM_showMessage(), COM_showMessageText(), COM_showMessageFromParameter()
+- All bundled Plugins: Allow custom language string overrides (Mark H.)
+- Config setting Allow User Theme and Allow User Language to False
+  on default installs (Eric)
+- submit.php was not providing new edit=x parameter to plugins (Mark H.)
 - Calendar: Add permission check to auto tags (mark)
 - FileMgmt: Add permission check to auto tags (mark)
 - Staticpages: Add permission check to auto tags (mark)
@@ -32,6 +54,26 @@ v1.2.1.svn
 
 1.2.0.pl5
 ---------
+- Add option for admins to set story author (Lee / Mark)
+- Reset login speedlimit check on successful login (Mark)
+- Forum: Fix ambiguous use of uid in query (Lee)
+- Forum: Ensure all notifications are sent from no_reply address (Mark)
+- Fixed published date bug when using Chrome browser (Mark)
+- Forum: Now process autotags before processing smilies (Mark)
+- Fixed preg_replace compilation failure when non UTF-8 used in search (Mark)
+- Updated htmLawed HTML filter module (Mark)
+- Allow user / root element overrides for HTML filtering (Mark)
+- Add user id column to user list (Mark)
+- Static Pages: Add support for custom language files (Lee / Mark)
+- Media Gallery: Display full setting was reversed when viewing media
+  item (Lee / Mark)
+- Media Gallery: Admin user edit did not properly retrieve / set Media Gallery
+  user preference settings (Lee / Mark)
+- Media Gallery - Batch import could fail if the source album does not have
+  views properly set. (Lee / Mark)
+- CUSTOM user form was not called if password validation failed when using
+  custom registration (Mark)
+- FileMgmt: Files with embedded spaces outside of webroot would not d/l (Mark H)
 - Admin user edit photo upload missing (Mark)
 - Batch Admin interface did not keep settings when paging through results (Mark)
 - Calendar: auto tag was broken (Mark)
@@ -304,6 +346,10 @@ v1.1.8.pl5
 
 v1.1.8.pl4
 ----------
+- FileMgmt: Do now allow users access to the upload form if they do not
+  have permission to upload to any categories (Mark)
+- Media Gallery: SWFUpload does not work if Media Gallery directory is
+  changed (Mark)
 - SpamX: Fixed preg compilation error in SpamX plugin (Mark)
 - Media Gallery: Fixed keywords so they now wrap properly (Mark)
 

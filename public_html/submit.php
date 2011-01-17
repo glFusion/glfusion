@@ -65,16 +65,25 @@ function submissionform($type='story', $mode = '', $topic = '')
 
     $retval = '';
 
-    COM_clearSpeedlimit ($_CONF['speedlimit'], 'submit');
+    COM_clearSpeedlimit($_CONF['speedlimit'], 'submit');
 
     $last = COM_checkSpeedlimit ('submit');
 
     if ($last > 0) {
-        COM_speedLimitError($last,$_CONF['speedlimit']);
+        $retval .= COM_startBlock($LANG12[26], '',
+                           COM_getBlockTemplate ('_msg_block', 'header'))
+            . $LANG12[30]
+            . $last
+            . $LANG12[31]
+            . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     } else {
         if (COM_isAnonUser() &&
             (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {
-                IO_displayLoginRequired();
+            $display  = COM_siteHeader('menu', $LANG_LOGIN[1]);
+            $display .= SEC_loginRequiredForm();
+            $display .= COM_siteFooter();
+            echo $display;
+            exit;
         } else {
             $retval .= COM_startBlock($LANG12[19])
                     . $LANG12[9]
@@ -247,7 +256,7 @@ function submitstory($topic = '')
 * @param    string  $story  Story object that was submitted.
 *
 */
-function sendNotification ($table, $story)
+function sendNotification($table, $story)
 {
     global $_CONF, $_TABLES, $LANG01, $LANG08, $LANG24, $LANG29, $LANG_ADMIN;
 
@@ -300,7 +309,7 @@ function sendNotification ($table, $story)
 * @return   string      HTML redirect
 *
 */
-function savestory ($A)
+function savestory($A)
 {
     global $_CONF, $_TABLES, $_USER;
 
@@ -456,8 +465,11 @@ if (($mode == $LANG12[8]) && !empty ($LANG12[8])) { // submit
     if ((strlen ($type) > 0) && ($type <> 'story')) {
         if (SEC_hasRights ("$type.edit") ||
             SEC_hasRights ("$type.admin"))  {
+            // this is an ugly hack - provide both edit parameter styles
+            // to ensure compatibility with old plugins.  the preferred
+            // edit (or create new) parameter format  is now edit=x
             echo COM_refresh ($_CONF['site_admin_url']
-                    . "/plugins/$type/index.php?mode=edit");
+                    . "/plugins/$type/index.php?mode=edit&amp;edit=x");
             exit;
         }
     } elseif (SEC_hasRights ('story.edit')) {

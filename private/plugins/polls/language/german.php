@@ -1,6 +1,6 @@
 <?php
 ###############################################################################
-# german_utf-8.php
+# german.php
 #
 # This is the German language file for the glFusion Polls Plugin
 # addressing the user as "Du" (informal German).
@@ -41,7 +41,7 @@ global $LANG32;
 $LANG_POLLS = array(
     'polls' => 'Umfragen',
     'results' => 'Ergebnisse',
-    'pollresults' => 'Umfrageergebnisse',
+    'pollresults' => 'Umfrage-Ergebnisse',
     'votes' => 'Stimmen',
     'vote' => 'Abstimmen',
     'pastpolls' => 'Ältere Umfragen',
@@ -60,9 +60,10 @@ $LANG_POLLS = array(
     'upgrade1' => 'Neue Version des Umfrage-Plugins installiert. Bitte',
     'upgrade2' => 'upgraden',
     'editinstructions' => 'Bitte für die Umfrage-ID mindestens eine Frage und zwei Antworten eintragen.',
-    'pollclosed' => 'This poll is closed for voting.',
-    'pollhidden' => 'You have already voted. This poll results will only be shown when voting is closed.',
-    'start_poll' => 'Umfrage starten'
+    'pollclosed' => 'Diese Umfrage ist für die Abstimmung geschlossen.',
+    'pollhidden' => 'Du hast bereits abgestimmt. Diese Umfrage-Ergebnisse werden nur angezeigt, wenn eine Abstimmung abgegeben werden.',
+    'start_poll' => 'Umfrage starten',
+    'deny_msg' => 'Der Zugang zu dieser Umfrage wird verweigert. Entweder wurde die Umfrage verschoben, entfernt, oder du verfügst nicht über ausreichende Berechtigungen.'
 );
 
 ###############################################################################
@@ -90,7 +91,7 @@ $LANG25 = array(
     19 => 'Um eine Umfrage zu bearbeiten oder zu löschen, auf das Bearbeiten-Icon klicken.  Um eine neue Umfrage zu eröffnen, bitte auf "Neu anlegen" oben klicken.',
     20 => 'Umfrageende',
     21 => 'Kein Zugang',
-    22 => "Du versuchst auf eine Umfrage zuzugreifen, für die Du keine Rechte hast. Dieser Versuch wurde aufgezeichnet. Bitte <a href=\"{$_CONF['site_admin_url']}/poll.php\">gehe zurück zur Umfrage-Administration</a>.",
+    22 => "Du versuchst auf eine Umfrage zuzugreifen, für die Du keine Berechtigung hast. Dieser Versuch wurde aufgezeichnet. Bitte <a href=\"{$_CONF['site_admin_url']}/poll.php\">gehe zurück zur Umfrage-Administration</a>.",
     23 => 'Neue Umfrage',
     24 => 'Kommandozentrale',
     25 => 'Ja',
@@ -102,7 +103,7 @@ $LANG25 = array(
     31 => 'Frage',
     32 => 'Um diese Frage aus der Umfrage zu entfernen, den Fragetext löschen.',
     33 => 'Umfrage läuft',
-    34 => 'Umfragekategorie:',
+    34 => 'Umfrage-Kategorie:',
     35 => 'Diese Umfrage hat noch ',
     36 => 'Fragen.',
     37 => 'Ergebnisse ausblenden wenn Umfrage läuft',
@@ -127,7 +128,7 @@ $LANG_configsections['polls'] = array(
 );
 
 $LANG_confignames['polls'] = array(
-    'pollsloginrequired' => 'Zur Einsicht anmelden nötig?',
+    'pollsloginrequired' => 'Zur Einsicht anmelden erforderlich?',
     'hidepollsmenu' => 'Menüeintrag ausblenden?',
     'maxquestions' => 'Max. Fragen pro Umfrage',
     'maxanswers' => 'Max. Möglichkeiten pro Frage',
@@ -136,7 +137,8 @@ $LANG_confignames['polls'] = array(
     'polladdresstime' => 'Voter IP-Adresse gültig für',
     'delete_polls' => 'Umfragen mit Benutzer löschen?',
     'aftersave' => 'Nach speichern der Umfrage',
-    'default_permissions' => 'Standardeinstellungen Umfragen'
+    'default_permissions' => 'Standardeinstellungen Umfragen',
+    'displayblocks' => 'Anzeige glFusion Blöcke'
 );
 
 $LANG_configsubgroups['polls'] = array(
@@ -152,9 +154,10 @@ $LANG_fs['polls'] = array(
 $LANG_configselects['polls'] = array(
     0 => array('Ja' => 1, 'Nein' => 0),
     1 => array('Ja' => true, 'Nein' => false),
-    2 => array('Wie eingesendet' => 'submitorder', 'Nach Abstimmung' => 'voteorder'),
+    2 => array('Wie eingesandt' => 'submitorder', 'Nach Abstimmung' => 'voteorder'),
     9 => array('Zur Umfrage weiterleiten' => 'item', 'Admin Liste anzeigen' => 'list', 'Öffentliche Liste anzeigen' => 'plugin', 'Startseite anzeigen' => 'home', 'Kommandozentrale' => 'admin'),
-    12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3)
+    12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3),
+    13 => array('Linker Block' => 0, 'Rechter Block' => 1, 'Linker & Rechter Block' => 2, 'Keine' => 3)
 );
 
 ?>

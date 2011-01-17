@@ -65,7 +65,8 @@ $LANG_POLLS = array(
     'editinstructions' => 'アンケートIDを入力してください。少なくとも1つの質問と2つの回答を用意してください。',
     'pollclosed' => 'This poll is closed for voting.',
     'pollhidden' => 'You have already voted. This poll results will only be shown when voting is closed.',
-    'start_poll' => 'Start Poll'
+    'start_poll' => 'Start Poll',
+    'deny_msg' => 'Access to this poll is denied.  Either the poll has been moved/removed or you do not have sufficient permissions.'
 );
 
 ###############################################################################
@@ -139,7 +140,8 @@ $LANG_confignames['polls'] = array(
     'polladdresstime' => '投票者のIPアドレスの有効期間',
     'delete_polls' => '所有者の削除と共に削除する',
     'aftersave' => 'アンケート保存後の画面遷移',
-    'default_permissions' => 'パーミッション'
+    'default_permissions' => 'パーミッション',
+    'displayblocks' => 'Display glFusion Blocks'
 );
 
 $LANG_configsubgroups['polls'] = array(
@@ -157,7 +159,8 @@ $LANG_configselects['polls'] = array(
     1 => array('はい' => true, 'いいえ' => false),
     2 => array('登録順' => 'submitorder', '得票順' => 'voteorder'),
     9 => array('作成したアンケートを表示する' => 'item', 'アンケート管理を表示する' => 'list', 'アンケート一覧を表示する' => 'plugin', 'Homeを表示する' => 'home', '管理画面TOPを表示する' => 'admin'),
-    12 => array('アクセス不可' => 0, '表示' => 2, '表示・編集' => 3)
+    12 => array('アクセス不可' => 0, '表示' => 2, '表示・編集' => 3),
+    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
 );
 
 ?>

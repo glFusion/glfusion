@@ -389,7 +389,7 @@ function SEC_hasRights($features,$operator='AND')
 {
     global $_USER, $_RIGHTS, $_SEC_VERBOSE;
 
-    if (strstr($features,',')) {
+    if (is_string($features)) {
         $features = explode(',',$features);
     }
 

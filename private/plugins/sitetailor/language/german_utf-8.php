@@ -5,7 +5,7 @@
 // | german_utf-8.php                                                         |
 // |                                                                          |
 // | German language file                                                     |
-// | Modifiziert: August 09 Tony Kluever									  |
+// | Modifiziert: August 09 Tony Kluever                                      |
 // +--------------------------------------------------------------------------+
 // | Copyright (C)  2008 by the following authors:                            |
 // |                                                                          |
@@ -75,7 +75,7 @@ $LANG_ST00 = array(
 );
 
 $LANG_ST01 = array(
-    'instructions' => 'Site Tailor allows you to easily customize your site logo and control the display of the site slogan.',
+    'instructions' => 'Mit Site Tailor kannst du leicht deine Website-Logo und die Anzeige des Website-Slogan anpassen.',
     'javascript_required' => 'Site-Tailor benötigt aktiviertes JavaScript.',
     'logo_options' => 'Site-Tailor - Logo-Optionen',
     'use_graphic_logo' => 'Grafik-Logo verwenden',

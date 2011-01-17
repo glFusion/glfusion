@@ -2,10 +2,10 @@
 // +--------------------------------------------------------------------------+
 // | CAPTCHA Plugin - glFusion CMS                                            |
 // +--------------------------------------------------------------------------+
-// | german_utf-8.php                                                         |
+// | german.php                                                               |
 // |                                                                          |
 // | German language file                                                     |
-// | Modifiziert: August 09 Tony Kluever									  |
+// | Modifiziert: August 09 Tony Kluever                                      |
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2002-2008 by the following authors:                        |
 // |                                                                          |
@@ -44,7 +44,7 @@ $LANG_CP00 = array(
     'installed' => 'CAPTCHA ist installiert',
     'uninstalled' => 'CAPTCHA ist nicht installiert',
     'install_success' => 'CAPTCHA-Installation erfolgreich.  <br /><br />Bitte lies Dir die Dokumentation durch und gehe in die <a href="%s">Admin-Sektion</a> um sicherzustellen, dass Deine Einstellungen zu Deiner Hosting-Umgebung passen.',
-    'install_failed' => 'Installation fehlgeschlagen -- Schau in die Datei error.log für mehr Infos.',
+    'install_failed' => 'Installation fehlgeschlagen -- Schau in die Datei error.log für weitere Infos.',
     'uninstall_msg' => 'Plugin erfolgreich deinstalliert',
     'install' => 'Installieren',
     'uninstall' => 'Deinstallieren',
@@ -61,7 +61,7 @@ $LANG_CP00 = array(
     'captcha_help' => 'Gib den fett gedruckten Text ein und achte auf Groß-/Kleinschreibung!',
     'bypass_error' => 'Du hast versucht CAPTCHA auf dieser Seite zu umgehen, bitte verwende den Neuer-Benutzer-Link zur Registrierung.',
     'bypass_error_blank' => 'Du hast versucht CAPTCHA auf dieser Seite zu umgehen, bitte gib eine gültige CAPTCHA-Zeichenfolge ein.',
-    'entry_error' => 'Die eingegebene CAPTCHA-Zeichenfolge stimmt nicht mit den Zeichen in der Grafik überein, bitte versuche es erneut. <b>This is case sensitive.</b>',
+    'entry_error' => 'Die eingegebene CAPTCHA-Zeichenfolge stimmt nicht mit den Zeichen in der Grafik überein, bitte versuche es erneut. <b>Groß-und Kleinschreibung!</b>',
     'captcha_info' => 'Das CAPTCHA-Plugin bietet Deiner Seite zusätzlichen Schutz vor Spambots.  Schau in das <a href="%s">Online-Dokumentation-Wiki</a> für mehr Infos.',
     'enabled_header' => 'Aktuelle CAPTCHA-Einstellungen',
     'on' => 'An',
@@ -78,9 +78,9 @@ $LANG_CP00 = array(
     'characters' => 'Zeichen'
 );
 
-$PLG_captcha_MESSAGE1 = 'CAPTCHA-Plugin-Upgrade: Update erfolgreich.';
-$PLG_captcha_MESSAGE2 = 'CAPTCHA Plugin Successfully Installed';
-$PLG_captcha_MESSAGE3 = 'CAPTCHA Plugin Successfully Installed';
+$PLG_captcha_MESSAGE1 = 'CAPTCHA-Plugin Upgrade: Update erfolgreich abgeschlossen.';
+$PLG_captcha_MESSAGE2 = 'CAPTCHA-Plugin Upgrade: Update fehlgeschlagen - Details in error.log';
+$PLG_captcha_MESSAGE3 = 'Captcha Plugin: erfolgreich installiert';
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['captcha'] = array(

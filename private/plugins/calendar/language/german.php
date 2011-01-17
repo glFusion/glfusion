@@ -1,12 +1,12 @@
 <?php
 ###############################################################################
-# german_utf-8.php
+# german.php
 #
 # This is the German language file for the glFusion Calendar Plugin
 #
 # Authors: Dirk Haun <dirk AT haun-online DOT de>
 #          Markus Wollschläger
-# Modifiziert: August 09 Tony Kluever
+# Modifiziert: Oct 2010
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -76,7 +76,7 @@ $LANG_CAL_1 = array(
     35 => 'Bundesland',
     36 => 'Postleitzahl',
     37 => 'Art des Termins',
-    38 => 'Terminarten ',
+    38 => 'Terminarten ändern',
     39 => 'Ort',
     40 => 'Termin hinzufügen zu',
     41 => 'Kalender',
@@ -90,7 +90,7 @@ $LANG_CAL_1 = array(
     49 => 'Es gibt keine Termine oder sie wurden von niemandem gelesen.',
     50 => 'Termine',
     51 => 'Löschen',
-    52 => 'Submitted By'
+    52 => 'Eingereicht von'
 );
 
 $_LANG_CAL_SEARCH = array(
@@ -128,7 +128,7 @@ $LANG_CAL_2 = array(
     40 => 'Woche',
     41 => 'Monat',
     42 => 'Neuer Termin',
-    43 => 'Beiträge - Termine'
+    43 => 'Beiträge: Termine'
 );
 
 ###############################################################################
@@ -162,10 +162,10 @@ $LANG_CAL_ADMIN = array(
     25 => 'Enddatum ist vor dem Startdatum.',
     26 => 'Alte Einträge löschen',
     27 => 'Diese Termine sind älter als ',
-    28 => ' Monate. Bite auf das Mülleimer-Icon klicken, um sie zu entfernen, oder eine andere Zeitspanne auswählen:<br' . XHTML . '>Suche alle Einträge älter als ',
+    28 => ' Monate. Btite auf das Mülleimer-Icon klicken, um sie zu entfernen, oder eine andere Zeitspanne auswählen:<br' . XHTML . '>Suche alle Einträge älter als ',
     29 => '',
     30 => 'Liste aktualisieren',
-    31 => 'Sind Sie sicher, dass Sie alle ausgewählten Benutzer permanent löschen möchten?',
+    31 => 'Bist Du sicher, dass Du alle ausgewählten Benutzer permanent löschen möchtest?',
     32 => 'Alle auflisten',
     33 => 'Keine Termine zum Löschen ausgewählt',
     34 => 'Termin ID',
@@ -216,7 +216,8 @@ $LANG_confignames['calendar'] = array(
     'delete_event' => 'Termine mit Benutzer löschen?',
     'aftersave' => 'Nach Speichern des Termins',
     'default_permissions' => 'Standardberechtigungen - Termine',
-    'only_admin_submit' => 'Nur Admins das Eintragen erlauben'
+    'only_admin_submit' => 'Nur Admins das Eintragen erlauben',
+    'displayblocks' => 'glFusion Blöcke anzeigen'
 );
 
 $LANG_configsubgroups['calendar'] = array(
@@ -234,7 +235,8 @@ $LANG_configselects['calendar'] = array(
     1 => array('Ja' => true, 'Nein' => false),
     6 => array('12' => 12, '24' => 24),
     9 => array('Zum Termin weiterleiten' => 'item', 'Admin Liste anzeigen' => 'list', 'Kalender anzeigen' => 'plugin', 'Startseite anzeigen' => 'home', 'Kommandozentrale' => 'admin'),
-    12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3)
+    12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3),
+    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
 );
 
 ?>

@@ -42,12 +42,12 @@ global $LANG32;
 ###############################################################################
 
 $LANG_LINKS = array(
-    10 => 'Poadavky',
+    10 => 'PoÅ¾adavky',
     14 => 'Odkazy',
     84 => 'ODKAZY',
-    88 => 'ádné nové odkazy',
+    88 => 'Å½Ã¡dnÃ© novÃ© odkazy',
     114 => 'Odkazy',
-    116 => 'Pridat odkaz',
+    116 => 'PÅ™idat odkaz',
     117 => 'Report Broken Link',
     118 => 'Broken Link Report',
     119 => 'The following link has been reported to be broken: ',
@@ -68,21 +68,21 @@ $LANG_LINKS = array(
 # for stats
 
 $LANG_LINKS_STATS = array(
-    'links' => 'Odkazy (Kliknutí) v systému',
-    'stats_headline' => 'Top Ten odkazu',
+    'links' => 'Odkazy (KliknutÃ­) v systÃ©mu',
+    'stats_headline' => 'Top Ten odkazÅ¯',
     'stats_page_title' => 'Odkazy',
-    'stats_hits' => 'Pouito',
-    'stats_no_hits' => 'Vypadá to, e nejsou ádné odkazy nebo odkaz nikdo ješte nepouil.'
+    'stats_hits' => 'PouÅ¾ito',
+    'stats_no_hits' => 'VypadÃ¡ to, Å¾e nejsou Å¾Ã¡dnÃ© odkazy nebo odkaz nikdo jeÅ¡tÄ› nepouÅ¾il.'
 );
 
 ###############################################################################
 # for the search
 
 $LANG_LINKS_SEARCH = array(
-    'results' => 'Vısledky - odkazy',
+    'results' => 'VÃ½sledky - odkazy',
     'title' => 'Titulek',
-    'date' => 'Datum pridání',
-    'author' => 'Pridal ',
+    'date' => 'Datum pÅ™idÃ¡nÃ­',
+    'author' => 'PÅ™idal ',
     'hits' => 'Kliknuto'
 );
 
@@ -93,24 +93,24 @@ $LANG_LINKS_SUBMIT = array(
     1 => 'Poslat odkaz',
     2 => 'Odkaz',
     3 => 'Kategorie',
-    4 => 'Jiná',
-    5 => 'Pokud jiná, tak specifikuj',
-    6 => 'Chyba: chybí kategorie',
-    7 => 'Pokud vybereš "Jiná", dopiš jméno kategorie',
+    4 => 'JinÃ¡',
+    5 => 'Pokud jinÃ¡, tak specifikuj',
+    6 => 'Chyba: chybÃ­ kategorie',
+    7 => 'Pokud vybereÅ¡ "JinÃ¡", dopiÅ¡ jmÃ©no kategorie',
     8 => 'Titulek',
     9 => 'URL',
     10 => 'Kategorie',
-    11 => 'Poadavky odkazu',
-    12 => 'Pridáno',
+    11 => 'PoÅ¾adavky odkazÅ¯',
+    12 => 'PÅ™idÃ¡no',
 );
 
 ###############################################################################
 # Messages for COM_showMessage the submission form
 
-$PLG_links_MESSAGE1 = "Dekujeme za odeslání odkazu na {$_CONF['site_name']}.  Nyní ocekává odsouhlasení.  Po odouhlasení bude Váš odkaz v sekci <a href={$_CONF['site_url']}/links/index.php>odkazu</a>.";
-$PLG_links_MESSAGE2 = 'Váš odkaz byl úspešne pridán.';
-$PLG_links_MESSAGE3 = 'Odkaz byl úspešne vymazán.';
-$PLG_links_MESSAGE4 = "Dekujeme za odeslání odkazu {$_CONF['site_name']}.  Muete ho nalézt v <a href={$_CONF['site_url']}/links/index.php>odkazech</a>.";
+$PLG_links_MESSAGE1 = "DÄ›kujeme za odeslÃ¡nÃ­ odkazu na {$_CONF['site_name']}.  NynÃ­ oÄekÃ¡vÃ¡ odsouhlasenÃ­.  Po odouhlasenÃ­ bude VÃ¡Å¡ odkaz v sekci <a href={$_CONF['site_url']}/links/index.php>odkazÅ¯</a>.";
+$PLG_links_MESSAGE2 = 'VÃ¡Å¡ odkaz byl ÃºspÄ›Å¡nÄ› pÅ™idÃ¡n.';
+$PLG_links_MESSAGE3 = 'Odkaz byl ÃºspÄ›Å¡nÄ› vymazÃ¡n.';
+$PLG_links_MESSAGE4 = "DÄ›kujeme za odeslÃ¡nÃ­ odkazu {$_CONF['site_name']}.  MÅ¯Å¾ete ho nalÃ©zt v <a href={$_CONF['site_url']}/links/index.php>odkazech</a>.";
 $PLG_links_MESSAGE5 = 'You do not have sufficient access rights to view this category.';
 $PLG_links_MESSAGE6 = 'You do not have sufficient rights to edit this category.';
 $PLG_links_MESSAGE7 = 'Please enter a Category Name and Description.';
@@ -131,23 +131,23 @@ $PLG_links_MESSAGE3002 = $LANG32[9];
 # admin/plugins/links/index.php
 
 $LANG_LINKS_ADMIN = array(
-    1 => 'Editor odkazu',
+    1 => 'Editor odkazÅ¯',
     2 => 'ID odkazu',
     3 => 'Titulek odkazu',
     4 => 'URL odkazu',
     5 => 'Kategorie',
-    6 => '(vcetne http://)',
-    7 => 'Jiná',
-    8 => 'Pouití odkazu',
+    6 => '(vÄetnÄ› http://)',
+    7 => 'JinÃ¡',
+    8 => 'PouÅ¾itÃ­ odkazu',
     9 => 'Popis odkazu',
-    10 => 'Musíte zadat titulek, URL a popis.',
-    11 => 'Správa odkazu',
-    12 => 'Pro zmenu nebo vymazání odkazu, kliknete na ikonu editace.  Pro vytvorení nového odkazu, kliknete na "Create New".',
+    10 => 'MusÃ­te zadat titulek, URL a popis.',
+    11 => 'SprÃ¡va odkazÅ¯',
+    12 => 'Pro zmÄ›nu nebo vymazÃ¡nÃ­ odkazu, kliknÄ›te na ikonu editace.  Pro vytvoÅ™enÃ­ novÃ©ho odkazu, kliknÄ›te na "Create New".',
     14 => 'Kategorie odkazu',
-    16 => 'Prístup byl zakázán',
-    17 => "Pokooušíte se pouít odkaz, na kterı nemáte dostatecná práva. Váš pokus byl zalogován. Prosím, <a href=\"{$_CONF['site_admin_url']}/plugins/links/index.php\">na stránku pro administraci</a>.",
-    20 => 'Pokud jiná, specifikuj',
-    21 => 'uloit',
+    16 => 'PÅ™Ã­stup byl zakÃ¡zÃ¡n',
+    17 => "PokoouÅ¡Ã­te se pouÅ¾Ã­t odkaz, na kterÃ½ nemÃ¡te dostateÄnÃ¡ prÃ¡va. VÃ¡Å¡ pokus byl zalogovÃ¡n. ProsÃ­m, <a href=\"{$_CONF['site_admin_url']}/plugins/links/index.php\">na strÃ¡nku pro administraci</a>.",
+    20 => 'Pokud jinÃ¡, specifikuj',
+    21 => 'uloÅ¾it',
     22 => 'storno',
     23 => 'vymazat',
     24 => 'Odkaz nenalezen',
@@ -161,18 +161,18 @@ $LANG_LINKS_ADMIN = array(
     32 => 'Category ID',
     33 => 'Topic',
     34 => 'Parent',
-    35 => 'Vše',
+    35 => 'VÅ¡e',
     40 => 'Oprav kategorii',
-    41 => 'Pridej',
-    42 => 'Vyma kategorii',
+    41 => 'PÅ™idej',
+    42 => 'VymaÅ¾ kategorii',
     43 => 'Site categories',
-    44 => 'Pridej podkategorii',
-    46 => 'Uivatel %s se pokusil vymazat kategorii, ani by k tomu mel práva',
-    50 => 'Vıpis kategorií',
-    51 => 'Novı odkaz',
-    52 => 'Nová korenová kategorie',
-    53 => 'Admin odkazu',
-    54 => 'Admin kategorií',
+    44 => 'PÅ™idej podkategorii',
+    46 => 'UÅ¾ivatel %s se pokusil vymazat kategorii, aniÅ¾ by k tomu mÄ›l prÃ¡va',
+    50 => 'VÃ½pis kategoriÃ­',
+    51 => 'NovÃ½ odkaz',
+    52 => 'NovÃ¡ koÅ™enovÃ¡ kategorie',
+    53 => 'Admin odkazÅ¯',
+    54 => 'Admin kategoriÃ­',
     55 => 'Edit categories below. Note that you cannot delete a category that contains other categories or links - you should delete these first, or move them to another category.',
     56 => 'Category Editor',
     57 => 'Not validated yet',

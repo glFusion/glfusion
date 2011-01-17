@@ -530,6 +530,8 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     // setup list sort options
     if (!isset($_GET['orderby'])) {
         $orderby = $defsort_arr['field']; // not set - use default (this could be null)
+        $orderidx_link = '';
+        $orderbyidx = '';
     } else {
         $orderbyidx = COM_applyFilter($_GET['orderby'], true); // set - retrieve and clean
         $orderidx_link = "&amp;order=$orderbyidx"; // preserve the value for paging

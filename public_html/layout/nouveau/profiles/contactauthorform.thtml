@@ -2,7 +2,7 @@
 <script type="text/javascript">
 <!--
 window.addEvent('domready',function() {
-    var myValidator = new FormValidator.Inline("contact", { scrollToErrorsOnSubmit:false });
+    var myValidator = new fValidator("contact");
 });
 -->
 </script>
@@ -11,25 +11,25 @@ window.addEvent('domready',function() {
 <form action="{site_url}/profiles.php" method="post" id="contact">
 <div>
   <label for="from">{lang_fromname}:</label>
-  <input class="required" type="text" id="from" name="from" size="40" maxlength="96" value="{name}"{xhtml}>
+  <input class="fValidate['required']" type="text" id="from" name="from" size="40" maxlength="96" value="{name}"{xhtml}>
 </div>
 <div>
   <label for="fromemail">{lang_fromemailaddress}:</label>
-  <input class="required validate-email" type="text" id="fromemail" name="fromemail" size="40" maxlength="96" value="{email}"{xhtml}>
+  <input class="fValidate['required','email']" type="text" id="fromemail" name="fromemail" size="40" maxlength="96" value="{email}"{xhtml}>
 </div>
 <div>
   <label for="to">{lang_toname}:</label>
-  <input class="required" type="text" id="to" name="to" size="40" maxlength="96" value="{toname}"{xhtml}><br{xhtml}>
+  <input class="fValidate['required']" type="text" id="to" name="to" size="40" maxlength="96" value="{toname}"{xhtml}><br{xhtml}>
 </div>
 <div>
   <label for="toemail">{lang_toemailaddress}:</label>
-  <input class="required validate-email" type="text" id="toemail" name="toemail" size="40" maxlength="96" value="{toemail}"{xhtml}><br{xhtml}>
+  <input class="fValidate['required','email']" type="text" id="toemail" name="toemail" size="40" maxlength="96" value="{toemail}"{xhtml}><br{xhtml}>
 </div>
 <div>
   <label for="shortmsg">{lang_shortmessage}:</label>
-  <textarea class="required" id="shortmsg" name="shortmsg" rows="10" cols="50">{shortmsg}</textarea><br{xhtml}>
+  <textarea class="fValidate['required']" id="shortmsg" name="shortmsg" rows="10" cols="50">{shortmsg}</textarea><br{xhtml}>
 </div>
-<div class="glf-warning">{lang_warning}</div>
+<div class="warning">{lang_warning}</div>
 <div style="margin-top:10px;margin-bottom:10px;">{captcha}</div>
 
 <input type="hidden" name="sid" value="{story_id}"{xhtml}>

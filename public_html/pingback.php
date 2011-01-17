@@ -35,8 +35,8 @@ require_once 'lib-common.php';
 
 // once received, we're handling pingbacks like trackbacks,
 // so we use the trackback library even when trackback may be disabled
-USES_lib_pingback();
-USES_lib_trackback();
+require_once $_CONF['path_system'] . 'lib-pingback.php';
+require_once $_CONF['path_system'] . 'lib-trackback.php';
 
 // PEAR class to handle XML-RPC
 require_once 'XML/RPC/Server.php';

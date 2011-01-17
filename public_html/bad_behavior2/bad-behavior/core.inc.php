@@ -116,6 +116,7 @@ function bb2_start($settings)
 	$ip = $_SERVER['REMOTE_ADDR'];
 	$request_method = $_SERVER['REQUEST_METHOD'];
 	$request_uri = $_SERVER['REQUEST_URI'];
+	if (!$request_uri) $request_uri = $_SERVER['SCRIPT_NAME'];	# IIS
 	$server_protocol = $_SERVER['SERVER_PROTOCOL'];
 	@$user_agent = $_SERVER['HTTP_USER_AGENT'];
 

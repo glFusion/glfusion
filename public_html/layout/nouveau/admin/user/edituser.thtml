@@ -59,9 +59,6 @@
     <td><input type="checkbox" value="1" name="emailuser" /></td>
 </tr>
 {!endif}
-
-{customfields}
-
 <tr>
     <td colspan="2"><div style="border-bottom:1px solid #cccccc"></div></td>
 </tr>

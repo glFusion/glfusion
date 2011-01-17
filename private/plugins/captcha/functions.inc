@@ -34,12 +34,23 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-$langfile = $_CONF['path'].'plugins/captcha/language/' . $_CONF['language'] . '.php';
+// load the language file(s), including custom strings if any
 
-if (file_exists ($langfile)) {
+$langfile = $_CONF['path'].'plugins/captcha/language/' . $_CONF['language'] . '.php';
+$custfile = $_CONF['path'].'plugins/captcha/language/custom/' . $_CONF['language'] . '.php';
+
+if (file_exists($langfile)) {
     include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
 } else {
-    include_once $_CONF['path'].'plugins/captcha/language/english.php';
+    $langfile = $_CONF['path'].'plugins/captcha/language/english.php';
+    $custfile = $_CONF['path'].'plugins/captcha/language/custom/english.php';
+    include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
 }
 
 require_once $_CONF['path'].'plugins/captcha/captcha.php';

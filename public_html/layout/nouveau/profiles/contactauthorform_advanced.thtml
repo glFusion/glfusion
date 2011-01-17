@@ -4,7 +4,7 @@
 glfusionEditorBasePath = "{site_url}/fckeditor/" ;
 glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
 window.addEvent('domready',function() {
-    var myValidator = new FormValidator.Inline("contact", { scrollToErrorsOnSubmit:false });
+    var myValidator = new fValidator("contact");
 });
 -->
 </script>
@@ -14,19 +14,19 @@ window.addEvent('domready',function() {
 <table cellspacing="0" cellpadding="3" width="100%">
       <tr>
         <td class="alignright" style="width:20%;"><b>{lang_fromname}:</b></td>
-        <td><input class="required" type="text" id="from" name="from" size="40" value="{name}" maxlength="96"{xhtml}></td>
+        <td><input class="fValidate['required']" type="text" id="from" name="from" size="40" value="{name}" maxlength="96"{xhtml}></td>
       </tr>
       <tr>
         <td class="alignright"><b>{lang_fromemailaddress}:</b></td>
-        <td><input class="required validate-email" type="text" id="fromemail" name="fromemail" size="40" value="{email}" maxlength="96"{xhtml}></td>
+        <td><input class="fValidate['required','email']" type="text" id="fromemail" name="fromemail" size="40" value="{email}" maxlength="96"{xhtml}></td>
       </tr>
       <tr>
         <td class="alignright"><b>{lang_toname}:</b></td>
-        <td><input class="required" type="text" id="to" name="to" size="32" value="{toname}" maxlength="96"{xhtml}></td>
+        <td><input class="fValidate['required']" type="text" id="to" name="to" size="32" value="{toname}" maxlength="96"{xhtml}></td>
       </tr>
       <tr>
         <td class="alignright"><b>{lang_toemailaddress}:</b></td>
-        <td><input class="required validate-email" type="text" id="toemail" name="toemail" size="40" value="{toemail}" maxlength="96"{xhtml}></td>
+        <td><input class="fValidate['required','email']" type="text" id="toemail" name="toemail" size="40" value="{toemail}" maxlength="96"{xhtml}></td>
       </tr>
 
       <tr>

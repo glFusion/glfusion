@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2010 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -31,20 +31,29 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (!defined ('GVERSION'))
-{
+if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
 /**
 * Language file Include
 */
-$langfile = $_CONF['path'] . 'plugins/mediagallery/language/' . $_CONF['language'] . '.php';
 
-if (file_exists ($langfile)) {
+$langfile = $_CONF['path'] . 'plugins/mediagallery/language/' . $_CONF['language'] . '.php';
+$custfile = $_CONF['path'] . 'plugins/mediagallery/language/custom/' . $_CONF['language'] . '.php';
+
+if (file_exists($langfile)) {
     include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
 } else {
-    include_once $_CONF['path'] . 'plugins/mediagallery/language/english.php';
+    $langfile = $_CONF['path'].'plugins/mediagallery/language/english.php';
+    $custfile = $_CONF['path'].'plugins/mediagallery/language/custom/english.php';
+    include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
 }
 
 /*
@@ -170,20 +179,7 @@ function plugin_displaycomment_mediagallery($id,$commentid,$title,$order,$format
     global $_CONF, $_USER, $_MG_CONF, $LANG_LOGIN;
 
     if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $_MG_CONF['loginrequired'] == 1) {
-        $display = MG_siteHeader();
-        $display .= COM_startBlock ($LANG_LOGIN[1], '',
-                  COM_getBlockTemplate ('_msg_block', 'header'));
-        $login = new Template($_CONF['path_layout'] . 'submit');
-        $login->set_file (array ('login'=>'submitloginrequired.thtml'));
-        $login->set_var ('login_message', $LANG_LOGIN[2]);
-        $login->set_var ('site_url', $_CONF['site_url']);
-        $login->set_var ('lang_login', $LANG_LOGIN[3]);
-        $login->set_var ('lang_newuser', $LANG_LOGIN[4]);
-        $login->parse ('output', 'login');
-        $display .= $login->finish ($login->get_var('output'));
-        $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-        $display .= MG_siteFooter();
-        echo $display;
+        echo SEC_loginRequiredForm();
         exit;
     }
 
@@ -193,16 +189,15 @@ function plugin_displaycomment_mediagallery($id,$commentid,$title,$order,$format
     list($ptitle,$retval,$themeCSS,$album_id) =  MG_displayMediaImage( $id, 0, 0, 0 );
 
     $retval = $themeCSS . $retval;
-    if (SEC_hasRights('mediagallery.admin')){
+    if (SEC_hasRights('mediagallery.admin')) {
         $delete_option = true;
-    } else
-        $delete_option = false;
-
-    if ($view == 1) {
-        $retval .= CMT_userComments ($id, $title, 'mediagallery',$order,$format,$commentid,$page,true,$delete_option);
     } else {
-        $retval .= CMT_userComments ($id, $title, 'mediagallery',$order,$format,$commentid,$page,false,$delete_option);
+        $delete_option = false;
     }
+
+    $view = $view == 1 ? true : false;
+    $retval .= CMT_userComments ($id, $title, 'mediagallery',$order,$format,$commentid,$page,$view,$delete_option);
+
     return $retval;
 }
 
@@ -573,15 +568,13 @@ function plugin_cclabel_mediagallery() {
 *
 * Adds the plugin to the Admin menu
 *
-* Universal Plugin:  Modify/Uncomment use it
-*
 * @return   array   Array containing (plugin name, plugin admin url, # of items in plugin or '')
 *
 */
 function plugin_getadminoption_mediagallery() {
     global $_CONF, $_TABLES, $LANG_MG00, $_MG_CONF;
 
-    if (SEC_hasRights('mediagallery.config')) {
+    if (SEC_hasRights(array('mediagallery.config','mediagallery.admin'))) {
         return array($LANG_MG00['plugin'], $_MG_CONF['admin_url'] . 'index.php', DB_count($_TABLES['mg_albums']));
     }
 }
@@ -3365,7 +3358,6 @@ function MG_exec($cmd) {
 
     if (PHP_OS == "WINNT") {
         $cmd .= ">NUL 2>&1";
-//        exec("cmd.exe /c " . $cmd, $results, $status);
         exec('"' . $cmd . '"',$results,$status);
     } else {
         exec($cmd, $results, $status);
@@ -3455,16 +3447,27 @@ function plugin_profileedit_mediagallery($uid,$panel,$fieldset)
         return;
     }
 
+    if ( $_USER['uid'] != $uid ) {
+        $result = DB_query("SELECT * FROM {$_TABLES['mg_userprefs']} WHERE uid=".(int) $uid);
+        if ( DB_numRows($result) > 0 ) {
+            $_PREFS = DB_fetchArray($result);
+        } else {
+            $_PREFS = array('mp3_player' => -1, 'playback_mod' => 1, 'tn_size' => -1, 'display_rows' => 0, 'display_columns' => 0);
+        }
+    } else {
+        $_PREFS = $_MG_USERPREFS;
+    }
+
     $retval = '';
     $x = 0;
 
     // let's see if anything is actually set...
-    if ( !isset($_MG_USERPREFS['mp3_player']) ) {
-        $_MG_USERPREFS['mp3_player']    = -1;
-        $_MG_USERPREFS['playback_mode'] = 1;
-        $_MG_USERPREFS['tn_size']       = -1;
-        $_MG_USERPREFS['display_rows']  = 0;
-        $_MG_USERPREFS['display_columns'] = 0;
+    if ( !isset($_PREFS['mp3_player']) ) {
+        $_PREFS['mp3_player']    = -1;
+        $_PREFS['playback_mode'] = 1;
+        $_PREFS['tn_size']       = -1;
+        $_PREFS['display_rows']  = 0;
+        $_PREFS['display_columns'] = 0;
     }
 
     $T = new Template( MG_getTemplatePath(0) );
@@ -3474,31 +3477,31 @@ function plugin_profileedit_mediagallery($uid,$panel,$fieldset)
     // build select boxes
 
     $mp3_select  = '<select name="mp3_player">';
-    $mp3_select .= '<option value="-1"' . ($_MG_USERPREFS['mp3_player']== -1 ? ' selected="selected"' : '') . '>' . $LANG_MG01['system_default'] . '</option>';
-    $mp3_select .= '<option value="0"'  . ($_MG_USERPREFS['mp3_player'] == 0 ? ' selected="selected"' : '') . '>' . $LANG_MG01['windows_media_player'] . '</option>';
-    $mp3_select .= '<option value="1"'  . ($_MG_USERPREFS['mp3_player'] == 1 ? ' selected="selected"' : '') . '>' . $LANG_MG01['quicktime_player'] . '</option>';
-    $mp3_select .= '<option value="2"'  . ($_MG_USERPREFS['mp3_player'] == 2 ? ' selected="selected"' : '') . '>' . $LANG_MG01['flashplayer'] . '</option>';
+    $mp3_select .= '<option value="-1"' . ($_PREFS['mp3_player']== -1 ? ' selected="selected"' : '') . '>' . $LANG_MG01['system_default'] . '</option>';
+    $mp3_select .= '<option value="0"'  . ($_PREFS['mp3_player'] == 0 ? ' selected="selected"' : '') . '>' . $LANG_MG01['windows_media_player'] . '</option>';
+    $mp3_select .= '<option value="1"'  . ($_PREFS['mp3_player'] == 1 ? ' selected="selected"' : '') . '>' . $LANG_MG01['quicktime_player'] . '</option>';
+    $mp3_select .= '<option value="2"'  . ($_PREFS['mp3_player'] == 2 ? ' selected="selected"' : '') . '>' . $LANG_MG01['flashplayer'] . '</option>';
     $mp3_select .= '</select>';
 
     $playback_select  = '<select name="playback_mode">';
-    $playback_select .= '<option value="-1"' . ($_MG_USERPREFS['playback_mode'] == 1 ? ' selected="selected"' : '') . '>' . $LANG_MG01['system_default'] . '</option>';
-    $playback_select .= '<option value="0"' . ($_MG_USERPREFS['playback_mode'] == 0 ? ' selected="selected"' : '') . '>' . $LANG_MG01['play_in_popup'] . '</option>';
-    $playback_select .= '<option value="2"' . ($_MG_USERPREFS['playback_mode'] == 2 ? ' selected="selected"' : '') . '>' . $LANG_MG01['play_inline'] . '</option>';
-    $playback_select .= '<option value="3"' . ($_MG_USERPREFS['playback_mode'] == 3 ? ' selected="selected"' : '') . '>' . $LANG_MG01['use_mms'] . '</option>';
+    $playback_select .= '<option value="-1"' . ($_PREFS['playback_mode'] == 1 ? ' selected="selected"' : '') . '>' . $LANG_MG01['system_default'] . '</option>';
+    $playback_select .= '<option value="0"' . ($_PREFS['playback_mode'] == 0 ? ' selected="selected"' : '') . '>' . $LANG_MG01['play_in_popup'] . '</option>';
+    $playback_select .= '<option value="2"' . ($_PREFS['playback_mode'] == 2 ? ' selected="selected"' : '') . '>' . $LANG_MG01['play_inline'] . '</option>';
+    $playback_select .= '<option value="3"' . ($_PREFS['playback_mode'] == 3 ? ' selected="selected"' : '') . '>' . $LANG_MG01['use_mms'] . '</option>';
     $playback_select .= '</select>';
 
     $tn_select  = '<select name="tn_size">';
-    $tn_select .= '<option value="-1"' . ($_MG_USERPREFS['tn_size'] == -1 ? ' selected="selected"' : '') . '>' . $LANG_MG01['system_default'] . '</option>';
-    $tn_select .= '<option value="0"' . ($_MG_USERPREFS['tn_size'] == 0 ? ' selected="selected"' : '') . '>' . $LANG_MG01['small'] . '</option>';
-    $tn_select .= '<option value="1"' . ($_MG_USERPREFS['tn_size'] == 1 ? ' selected="selected"' : '') . '>' . $LANG_MG01['medium'] . '</option>';
-    $tn_select .= '<option value="2"' . ($_MG_USERPREFS['tn_size'] == 2 ? ' selected="selected"' : '') . '>' . $LANG_MG01['large'] . '</option>';
+    $tn_select .= '<option value="-1"' . ($_PREFS['tn_size'] == -1 ? ' selected="selected"' : '') . '>' . $LANG_MG01['system_default'] . '</option>';
+    $tn_select .= '<option value="0"' . ($_PREFS['tn_size'] == 0 ? ' selected="selected"' : '') . '>' . $LANG_MG01['small'] . '</option>';
+    $tn_select .= '<option value="1"' . ($_PREFS['tn_size'] == 1 ? ' selected="selected"' : '') . '>' . $LANG_MG01['medium'] . '</option>';
+    $tn_select .= '<option value="2"' . ($_PREFS['tn_size'] == 2 ? ' selected="selected"' : '') . '>' . $LANG_MG01['large'] . '</option>';
     $tn_select .= '</select>';
 
     $helpText = '<ul>';
     if ( $_MG_CONF['up_display_rows_enabled'] ) {
         $T->set_var(array(
             'lang_prompt'   => $LANG_MG01['display_rows_prompt'],
-            'input_field'   => '<input type="text" size="3" name="display_rows" value="' . $_MG_USERPREFS['display_rows'] . '"' . XHTML . '>',
+            'input_field'   => '<input type="text" size="3" name="display_rows" value="' . $_PREFS['display_rows'] . '"' . XHTML . '>',
             'lang_help'     => $LANG_MG01['display_rows_help'],
             'rowcounter' => $x++ % 2,
         ));
@@ -3508,7 +3511,7 @@ function plugin_profileedit_mediagallery($uid,$panel,$fieldset)
     if ( $_MG_CONF['up_display_columns_enabled'] ) {
         $T->set_var(array(
             'lang_prompt'   => $LANG_MG01['display_columns_prompt'],
-            'input_field'   => '<input type="text" size="3" name="display_columns" value="' . $_MG_USERPREFS['display_columns'] . '"' . XHTML . '>',
+            'input_field'   => '<input type="text" size="3" name="display_columns" value="' . $_PREFS['display_columns'] . '"' . XHTML . '>',
             'lang_help'     => $LANG_MG01['display_columns_help'],
         ));
         $T->parse('pRow', 'prefRow',true);
@@ -3553,7 +3556,7 @@ function plugin_profileedit_mediagallery($uid,$panel,$fieldset)
     return $retval;
 }
 
-function plugin_profilesave_mediagallery()
+function plugin_profilesave_mediagallery($uid = 0)
 {
     global $_CONF, $_MG_CONF, $_TABLES, $_USER;
 
@@ -3569,12 +3572,13 @@ function plugin_profilesave_mediagallery()
         return;
     }
 
-    $display_rows    = intval(COM_applyFilter($_POST['display_rows'],true));
-    $display_columns = intval(COM_applyFilter($_POST['display_columns'],true));
-    $mp3_player      = isset($_POST['mp3_player']) ? intval(COM_applyFilter($_POST['mp3_player'],true)) : 0;
-    $playback_mode   = intval(COM_applyFilter($_POST['playback_mode'],true));
-    $tn_size         = intval(COM_applyFilter($_POST['tn_size'],true));
-    $uid             = intval($_USER['uid']);
+    $display_rows    = (int) COM_applyFilter($_POST['display_rows'],true);
+    $display_columns = (int) COM_applyFilter($_POST['display_columns'],true);
+    $mp3_player      = isset($_POST['mp3_player']) ? (int) COM_applyFilter($_POST['mp3_player'],true) : 0;
+    $playback_mode   = (int) COM_applyFilter($_POST['playback_mode'],true);
+    $tn_size         = (int) COM_applyFilter($_POST['tn_size'],true);
+
+    $uid = ($uid == 0 ? (int) $_USER['uid'] : (int) $uid);
 
     if ( $display_columns < 0 || $display_columns > 5 ) {
         $display_columns = 3;
@@ -3598,8 +3602,18 @@ function plugin_profilesave_mediagallery()
     if ( $_MG_CONF['up_thumbnail_size_enabled'] == 0 ) {
         $tn_size = -1;
     }
-
-    DB_save($_TABLES['mg_userprefs'],'uid,display_rows,display_columns,mp3_player,playback_mode,tn_size',"$uid,$display_rows,$display_columns,$mp3_player,$playback_mode,$tn_size");
+    $active = 1;
+    // Let's see if user exists in table already
+    $result = DB_query("SELECT * FROM ".$_TABLES['mg_userprefs']." WHERE uid=".$uid);
+    if ( DB_numRows($result) > 0 ) {
+        $row = DB_fetchArray($result);
+        $quota = $row['quota'];
+        $member_gallery = $row['member_gallery'];
+    } else {
+        $quota = $_MG_CONF['member_quota'];
+        $member_gallery = 0;
+    }
+    DB_save($_TABLES['mg_userprefs'],'uid,active,display_rows,display_columns,mp3_player,playback_mode,tn_size,member_gallery,quota',"$uid,$active,$display_rows,$display_columns,$mp3_player,$playback_mode,$tn_size,$member_gallery,$quota");
 }
 
 function plugin_itemrated_mediagallery($media_id, $rating, $votes)

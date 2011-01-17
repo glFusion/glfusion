@@ -293,8 +293,9 @@ USES_lib_widgets();
 \$slides = Array(\'mooslide_whatsnew\', \'mooslide_cachetech\', \'mooslide_integratedplugins\', \'mooslide_mootools\', \'mooslide_widgets\');
 
 // call the WIDGET_mooslide function from lib-widgets.php
-// last 3 options below are width, height, and css id
-return WIDGET_mooslide(\$slides, 560, 160, \'gl_slide\');', 1, NOW(), 'leftblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 1, '', 'none', 3, 1, 0, 0, 'html', 0) ";
+// last 4 options below are width, height, css id, and autoscroll interval
+// in ms, thus 1000 is 1 second, set to 0 to turn off autoscroll
+return WIDGET_mooslide(\$slides, 560, 160, \'gl_slide\', 5000);', 1, NOW(), 'leftblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 1, '', 'none', 3, 1, 0, 0, 'html', 0) ";
 
 $_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_status`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('mooslide_whatsnew', 1, 2, 'What\'s New', '<p><img hspace=\"18\" height=\"135\" width=\"135\" vspace=\"5\" align=\"left\" alt=\"whats new\" src=\"xxxSITEURLxxx/images/library/Image/whatsnew.png\" /></p>
 <h3><span style=\"font-size: large; padding-top: 10px;\"><em>What\'s New in glFusion?<br />
@@ -512,7 +513,11 @@ $_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_status
 		</p>
 	</div>
 </div>
-<script type=\"text/javascript\" src=\"xxxSITEURLxxx/javascript/mootools/gl_moomorph.js\"></script>', 1, NOW(), 'allblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 2, 0, 0, 0, 'html', 0) ";
+<script type=\"text/javascript\">
+	var fx = new Fx.Styles(\'msgbox\', { duration: 3000 });
+	fx.addEvent(\'onComplete\',function () { $(\'msgbox\').setStyle(\'display\', \'none\'); });
+	fx.start.delay(5000, fx, { \'opacity\' : 0 });
+</script>', 1, NOW(), 'allblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 2, 0, 0, 0, 'html', 0) ";
 
 $_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_status`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES
 ('wrapper', 1, 2, 'wrapper', '// this staticpage needs to have PHP set to execute PHP below\r\n// use lib-widgets.php\r\nUSES_lib_widgets();\r\n\r\n//call the WIDGET_wrapper function from lib-widgets.php\r\n//see lib-widgets.php for advanced options\r\necho WIDGET_wrapper();\r\n\r\n//enter the URL to be wrapped in the src field below.\r\n//THIS URL MUST RESIDE ON THE SAME PHYSICAL SERVER\r\n//AS YOUR GLFUSION SITE TO WORK PROPERLY!\r\n//FOR MORE INFO ON CROSS-DOMAIN DYNAMIC HEIGHT IFRAMES VISIT:\r\n//http://stackoverflow.com/questions/153152/resizing-an-iframe-based-on-content/1203608\r\n//http://msdn.microsoft.com/en-us/library/bb735305.aspx#jour12securecdcomm_topic1\r\n//http://www.povert.com/2008/05/19/dynamic-resizing-of-cross-domain-iframes/\r\n//http://geekswithblogs.net/rashid/archive/2007/01/13/103518.aspx\r\n\r\n//You can also use link(s) on your main page to show an iframe by using the code below\r\n\r\n

@@ -3,7 +3,7 @@
 <script type="text/javascript">
 <!--
 window.addEvent('domready',function() {
-    var myValidator = new FormValidator.Inline("registration", { scrollToErrorsOnSubmit:false });
+    var myValidator = new fValidator("registration");
     myValidator.register($("passwd_conf"), {type: "confirm", idField: "passwd", msg: "<font style=\"color:red;\">Not a match!</font>"});
     myValidator.register($("email_conf"), {type: "confirm", idField: "email", msg: "<font style=\"color:red;\">Not a match!</font>"});
 });

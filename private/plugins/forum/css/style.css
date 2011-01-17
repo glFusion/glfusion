@@ -9,30 +9,26 @@
   margin: 0px;
   padding: 0px;
 }
-
-/* gf_mootip css */
-
-.gftool .tip-top {              /* top of the tip */
-    color: #fff;
-    width: 200px;
-    z-index: 13000;
-}
-.gftool .tip-title {            /* title of tip */
-    width: 184px;
-    font-weight: 700;
-    font-size: 11px;
-    margin: 0;
-    color: #679EF1;
-    padding: 8px 8px 4px;
-    background: url(forum/images/gl_mootip_bg200.png) top left;
+.gftool-tip {
+color:#fff;
+width:200px;
+overflow:hidden;
+z-index:13000;
 }
 
-.gftool .tip-text {             /* text in tip */
-    width: 184px;
-    font-size: 11px;
-    padding: 4px 8px 8px;
-    background: url(forum/images/gl_mootip_bg200.png) bottom right;
-    color:#fff;
+.gftool-title {
+font-weight:700;
+font-size:11px;
+color:#679EF1;
+background:url(forum/images/gl_mootip_bg200.png) top left;
+margin:0;
+padding:8px 8px 4px;
+}
+
+.gftool-text {
+font-size:11px;
+background:url(forum/images/gl_mootip_bg200.png) bottom right;
+padding:4px 8px 8px;
 }
 
 .top-link {

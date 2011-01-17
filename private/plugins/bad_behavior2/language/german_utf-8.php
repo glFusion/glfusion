@@ -2,7 +2,7 @@
 // +--------------------------------------------------------------------------+
 // | Bad Behavior Plugin - glFusion CMS                                       |
 // +--------------------------------------------------------------------------+
-// | german_utf-8.php                                                               |
+// | german_utf-8.php                                                         |
 // |                                                                          |
 // | German language file                                                     |
 // +--------------------------------------------------------------------------+
@@ -19,7 +19,7 @@
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Dirk Haun         - dirk AT haun-online DOT de                  |
-// | Modifiziert: August 09 Tony Kluever								      |
+// | Modifiziert: August 09 Tony Kluever                                      |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -70,9 +70,9 @@ $LANG_BAD_BEHAVIOR = array(
     'fsockopen_failed' => 'Konnte keine Socket-Verbindung öffnen. Selbsttest nicht durchführbar.',
     'donate_msg' => 'Wenn Du dieses Plugin nützlich findest, denke doch bitte über eine Spende an den Autor von Bad Behavior, Michael Hampton, nach. <a href="http://www.bad-behavior.ioerror.us/">Zur Bad Behavior-Homepage</a>.',
     'denied_reason' => 'Grund',
-    'results' => 'Bad Behavior2-Einträge',
+    'results' => 'Bad Behavior-Einträge',
     'search' => 'Suchen',
-    'stats_headline' => 'Bad Behavior2 - Statistiken',
+    'stats_headline' => 'Bad Behavior - Statistiken',
     'stats_reason' => 'Grund',
     'stats_blocked' => 'Gesperrt',
     'stats_no_hits' => 'Keine Einträge.',
@@ -81,43 +81,43 @@ $LANG_BAD_BEHAVIOR = array(
 );
 
 $LANG_BB2_RESPONSE = array(
-    '00000000' => 'Request Passed - No User Agent Specified',
-    '136673cd' => 'IP address found on external blacklist',
-    '17566707' => 'Required header \'Accept\' missing',
-    '17f4e8c8' => 'User-Agent was found on blacklist',
-    '21f11d3f' => 'User-Agent claimed to be AvantGo, claim appears false',
-    '2b021b1f' => 'IP address found on http:BL blacklist',
-    '2b90f772' => 'Connection: TE present, not supported by MSIE',
-    '35ea7ffa' => 'Invalid language specified',
-    '408d7e72' => 'POST comes too quickly after GET',
-    '41feed15' => 'Header \'Pragma\' without \'Cache-Control\' prohibited for HTTP/1.1 requests',
-    '45b35e30' => 'Header \'Referer\' is corrupt',
-    '57796684' => 'Prohibited header \'X-Aaaaaaaaaa\' or \'X-Aaaaaaaaaaaa\' present',
-    '582ec5e4' => '"Header \'TE\' present but TE not specified in \'Connection\' header',
-    '69920ee5' => 'Header \'Referer\' present but blank',
-    '6c502ff1' => 'Bot not fully compliant with RFC 2965',
-    '799165c2' => 'Rotating user-agents detected',
-    '7a06532b' => 'Required header \'Accept-Encoding\' missing',
-    '7ad04a8a' => 'Prohibited header \'Range\' present',
-    '7d12528e' => 'Prohibited header \'Range\' or \'Content-Range\' in POST request',
-    '939a6fbb' => 'Banned proxy server in use',
-    '9c9e4979' => 'Prohibited header \'via\' present',
-    'a0105122' => 'Header \'Expect\' prohibited; resend without Expect',
-    'a1084bad' => 'User-Agent claimed to be MSIE, with invalid Windows version',
-    'a52f0448' => 'Header \'Connection\' contains invalid values',
-    'b40c8ddc' => 'POST more than two days after GET',
-    'b7830251' => 'Prohibited header \'Proxy-Connection\' present',
-    'b9cc1d86' => 'Prohibited header \'X-Aaaaaaaaaa\' or \'X-Aaaaaaaaaaaa\' present',
-    'c1fa729b' => 'Use of rotating proxy servers detected',
-    'cd361abb' => 'Referer did not point to a form on this site',
-    'd60b87c7' => 'Trackback received via proxy server',
-    'e3990b47' => 'Obviously fake trackback received',
-    'dfd9b1ad' => 'Request contained a malicious JavaScript or SQL injection attack',
-    'e4de0453' => 'User-Agent claimed to be msnbot, claim appears to be false',
-    'e87553e1' => 'I know you and I don\'t like you, dirty spammer.',
-    'f0dcb3fd' => 'Web browser attempted to send a trackback',
-    'f1182195' => 'User-Agent claimed to be Googlebot, claim appears to be false.',
-    'f9f2b8b9' => 'A User-Agent is required but none was provided.'
+    '00000000' => 'Anforderung übergeben - Keine User Agent angegeben',
+    '136673cd' => 'IP-Adresse in externer Blacklist',
+    '17566707' => 'Benötigte Header \'Accept \' fehlt',
+    '17f4e8c8' => 'User-Agent wurde in Blacklist gefunden',
+    '21f11d3f' => 'User-Agent behauptet AvantGo scheint falsch zu sein',
+    '2b021b1f' => 'IP-Adresse auf http:BL Blacklist',
+    '2b90f772' => 'Anschluss: TE vorhanden, nicht von MSIE unterstützt',
+    '35ea7ffa' => 'Ungültige Sprache angegeben',
+    '408d7e72' => 'POST zu schnell erhalten',
+    '41feed15' => 'Header \'Pragma\' ohne \'Cache-Control\' für HTTP/1.1 Anfragen verboten',
+    '45b35e30' => 'Header \'Referer\' ist beschädigt',
+    '57796684' => 'Verbotene Header \'X-AAAAAAAAAA\' oder \'X-aaaaaaaaaaaa\' erhalten',
+    '582ec5e4' => 'Header \'TE \' vorhanden, aber nicht in TE angegeben \'Connection \'Kopfzeile',
+    '69920ee5' => 'Header \'Referer\' vorhanden, aber leer',
+    '6c502ff1' => 'Bot nicht vollständig konform mit RFC 2965',
+    '799165c2' => 'Rotierende User-Agents erkannt',
+    '7a06532b' => 'Benötigte Header \'Accept-Encoding\' fehlt',
+    '7ad04a8a' => 'Verbotene Header \'Range\' erhalten',
+    '7d12528e' => 'Verbotene Header \'Range\' oder \'Content-Range\' in POST-Anfrage',
+    '939a6fbb' => 'Gebannter Proxy-Server im Einsatz',
+    '9c9e4979' => 'Verbotene Header \'via\' erhalten',
+    'a0105122' => 'Header \'Expect\' verboten; erneut erhalten',
+    'a1084bad' => 'User-Agent behauptet MSIE mit falscher Windowsversion',
+    'a52f0448' => 'Header \'Connection\' enthält ungültige Werte',
+    'b40c8ddc' => 'POST nach mehr als zwei Tage nach erhalten',
+    'b7830251' => 'Verbotene Header \'Proxy-Connection\' erhalten',
+    'b9cc1d86' => 'Verbotene Header \'X-Aaaaaaaaaa\' oder \'X-Aaaaaaaaaaaa\' präsentiert',
+    'c1fa729b' => 'Einsatz von rotierenden Proxy-Servern entdeckt',
+    'cd361abb' => 'Referer deutete nicht auf ein Formular auf dieser Seite',
+    'd60b87c7' => 'Trackback empfangen über Proxy-Server',
+    'e3990b47' => 'Offensichtlich gefälschte Trackback erhalten',
+    'dfd9b1ad' => 'Anfrage enthielt einen bösartigen JavaScript-oder SQL-Injection-Angriff',
+    'e4de0453' => 'User-Agent behauptet MSNbot scheint falsch zu sein',
+    'e87553e1' => 'Ich weiß, Sie und ich mag dich nicht, schmutzig Spammer.',
+    'f0dcb3fd' => 'Web-Browser versucht, einen Trackback senden',
+    'f1182195' => 'User-Agent behauptete Googlebot scheint falsch zu sein.',
+    'f9f2b8b9' => 'Ein User-Agent ist erforderlich aber keiner war vorgesehen.'
 );
 
 $PLG_bad_behavior_MESSAGE1 = 'Wenn Du diesen Hinweis siehst, dann ist Bad Behavior <b>nicht</b> korrekt installiert. Bitte lies Dir die Installationsanleitung noch einmal sorgfältig durch.';

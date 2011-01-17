@@ -6,7 +6,7 @@
 // |                                                                          |
 // | English language file                                                    |
 // +--------------------------------------------------------------------------+
-// | $Id:: english_utf-8.php 4753 2009-08-05 14:39:39Z mevans0263            $|
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2009 Michael Hampton                                  |

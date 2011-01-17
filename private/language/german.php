@@ -1,6 +1,6 @@
 <?php
 ###############################################################################
-# german_utf-8.php
+# german.php
 #
 # This is the German language file for glFusion, addressing the user as "Du"
 # (informal German). See german_formal.php for a language file addressing the
@@ -31,7 +31,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-$LANG_CHARSET = 'iso-8859-1';
+$LANG_CHARSET = 'iso-8859-15';
 
 ###############################################################################
 # Array Format:
@@ -49,7 +49,7 @@ $LANG_CHARSET = 'iso-8859-1';
 
 $LANG01 = array(
     1 => 'Beitrag von:',
-    2 => '(mehr)',
+    2 => 'mehr lesen',
     3 => 'Kommentar(e)',
     4 => 'Bearbeiten',
     5 => 'Umfrage',
@@ -65,7 +65,7 @@ $LANG01 = array(
     15 => '',
     16 => '',
     17 => 'Benutzer',
-    18 => 'SQL-Query',
+    18 => 'SQL-Abfrage',
     19 => 'Abmelden',
     20 => 'Benutzerinformation:',
     21 => 'Benutzername',
@@ -73,7 +73,7 @@ $LANG01 = array(
     23 => 'Sicherheitsstufe',
     24 => 'Gast',
     25 => 'Antwort',
-    26 => 'Die folgenden Kommentare geben Meinungen von Lesern wieder und entsprechen nicht notwendigerweise der Meinung der Betreiber dieser Seite. Die Betreiber behalten sich die Löschung von Kommentaren vor.',
+    26 => 'Die folgenden Kommentare geben Meinungen von Lesern wider und entsprechen nicht notwendigerweise der Meinung der Betreiber dieser Seite. Die Betreiber behalten sich die Löschung von Kommentaren vor.',
     27 => 'Letzter Beitrag',
     28 => 'Löschen',
     29 => 'Keine Kommentare.',
@@ -87,7 +87,7 @@ $LANG01 = array(
     37 => 'Keine Artikel.',
     38 => 'Newsfeed',
     39 => 'Neuladen',
-    40 => 'Du hast <tt>register_globals = Off</tt> in Deiner <tt>php.ini</tt>. Für glFusion muss <tt>register_globals</tt> jedoch auf <strong>on</strong> stehen. Bitte ändere dies auf <strong>on</strong> und starte Deinen Webserver neu.',
+    40 => 'Du hast <tt>register_globals = Off</tt> in Deiner <tt>php.ini</tt>. Für glFusion muss <tt>register_globals</tt> jedoch auf <strong>on</strong> stehen. Bitte ändere dies auf <strong>on</strong> und starte deine Webserver neu.',
     41 => 'Gäste',
     42 => 'Autor:',
     43 => 'Antwort schreiben',
@@ -102,7 +102,7 @@ $LANG01 = array(
     52 => 'Neu',
     53 => 'Kommandozentrale',
     54 => 'Konnte die Datei nicht öffnen:',
-    55 => 'Fehler,',
+    55 => 'Fehler in,',
     56 => 'Abstimmen',
     57 => 'Passwort',
     58 => 'Anmelden',
@@ -118,7 +118,7 @@ $LANG01 = array(
     68 => 'Home',
     69 => 'Kontakt',
     70 => 'Suchen',
-    71 => 'Mitmachen',
+    71 => 'Beitrag',
     72 => 'Links',
     73 => '',
     74 => '',
@@ -134,15 +134,15 @@ $LANG01 = array(
     84 => '',
     85 => 'der letzten 48 Stunden',
     86 => 'Keine neuen Kommentare',
-    87 => 'den letzten 2 Wochen',
+    87 => 'der letzten 2 Wochen',
     88 => '',
     89 => '',
     90 => 'Home',
     91 => 'Seite erzeugt in',
     92 => 'Sekunden',
     93 => '',
-    94 => 'All trademarks and copyrights on this page are owned by their respective owners.',
-    95 => 'Powered by',
+    94 => 'Alle Warenzeichen und Copyrights auf dieser Seite sind Eigentum der jeweiligen Besitzer.',
+    95 => ' durch ',
     96 => 'Gruppen',
     97 => 'Wortliste',
     98 => 'Plugins',
@@ -166,47 +166,47 @@ $LANG01 = array(
     117 => 'Verzeichnis',
     118 => 'Fortsetzung auf der nächsten Seite:',
     119 => "<a href=\"{$_CONF['site_url']}/users.php?mode=getpassword\" rel=\"nofollow\">Passwort vergessen?</a>",
-    120 => 'Permalink',
+    120 => 'Permanenter Link zu diesem Kommentar',
     121 => 'Kommentare (%d)',
     122 => 'Trackbacks (%d)',
     123 => 'Alle HTML-Tags sind erlaubt',
     124 => 'Alle angekreuzten Einträge löschen',
     125 => 'Willst Du wirklich alle angekreuzten Einträge löschen?',
     126 => 'Alle Einträge ankreuzen oder deselektieren',
-    127 => 'Permalink',
+    127 => 'Permanenter Link',
     128 => 'Anmelden mit OpenID:',
     129 => 'Konfiguration',
     130 => 'Webservices',
-    500 => 'Bite das Verzeichnis admin/install/ löschen!',
+    500 => 'Bitte das Verzeichnis /private/admin/install löschen!',
     501 => 'Root Debug ist eingeschaltet',
     502 => 'No fail SQL ist eingeschaltet',
-    503 => 'Wartungsmodus - Non-admin logins sind ausgeschaltet',
-    504 => 'The database version is: %s<br />The glFusion script version is: %s<br />Please run the <a href="%s">installation script</a> to upgrade the database!',
-    505 => 'Your database version is: %s<br />The glFusion script version is: %s<br />Please check the integrity of your site!',
+    503 => 'Wartungsmodus: Nicht-Admin Logins sind ausgeschaltet',
+    504 => 'Datenbankversion: %s<br />glFusion Scriptversion: %s<br />Bitte das <a href="%s">Installationsscript</a> zum Upgrade der Datenbank ausführen!',
+    505 => 'Diese Datenbankversion: %s<br />glFusion Scriptversion: %s<br />Bitte überprüfe die Integrität dieser Seite!',
     'ctl' => 'Cache löschen',
-    'logview' => 'Log-Ansicht',
-    'correct_perms' => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
-    'current' => 'Current',
-    'current_php_settings' => 'Current PHP Settings',
-    'directory_permissions' => 'Directory Permissions',
-    'enabled' => 'Enabled',
-    'env_check' => 'Environment Check',
-    'file_permissions' => 'File Permissions',
-    'file_uploads' => 'Many features of glFusion require the ability to upload files, this should be enabled.',
-    'filesystem_check' => 'Directory / File Permissions',
-    'gd_lib' => 'GD Libraries',
-    'gd_not_found' => 'Unable to locate the GD library functions.  Please ensure that the GD libraries were compiled into PHP or select an alternate graphics library.',
-    'gd_ok' => 'GD Libraries v2 are installed.',
-    'gd_v1' => 'GD Libraries v1 is installed - This version does not fully support JPG image processing so there may be some quality issues.',
-    'graphics' => 'Graphics Library',
-    'hosting_env' => 'Hosting Environment Check',
-    'imagemagick' => 'ImageMagick Programs',
+    'logview' => 'Protokolle einsehen',
+    'correct_perms' => 'Bitte korrigiere die folgenden Hinweise. Nach erfolgter Korrektur den Button <b>Recheck</b> drücken, um die Umgebung zu validieren.',
+    'current' => 'Aktuell',
+    'current_php_settings' => 'Aktuelle PHP-Einstellungen',
+    'directory_permissions' => 'Verzeichnisberechtigungen',
+    'enabled' => 'Aktiviert',
+    'env_check' => 'Umgebung prüfen',
+    'file_permissions' => 'Dateiberechtigungen',
+    'file_uploads' => 'Viele Funktionen von glFusion erfordern die Fähigkeit, Dateien hochzuladen. Dise Funktion sollte aktiviert werden.',
+    'filesystem_check' => 'Verzeichnis- / Dateiberechtigungen',
+    'gd_lib' => 'GD Bibliotheken',
+    'gd_not_found' => 'Die GD-Bibliothek konnte nicht gefunden werden.  Bitte stell sicher, dass die GD-Bibliothek vorhanden ist, oder wähle eine andere Grafik-Biblithek aus.',
+    'gd_ok' => 'GD-Bibliothek v2 ist installiert.',
+    'gd_v1' => 'GD-Bibliothek v1 ist installiert - Diese Version unterstützt die Jpg-Bildbearbeitung nicht vollständig. Dabei können Qualitätsproblme auftreten.',
+    'graphics' => 'Graphic-Bibliothek',
+    'hosting_env' => 'Hosting-Umgebung prüfen',
+    'imagemagick' => 'ImageMagick Programm',
     'im_not_found' => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
     'im_ok' => 'The <strong>convert</strong> executable appears to be valid.',
-    'memory_limit' => 'It is recommended that you have at least 48M of memory enabled on your site.',
-    'not_writable' => 'NOT WRITABLE',
-    'notes' => 'Notes',
-    'not_found' => 'Not Found',
+    'memory_limit' => 'ES wird empfohlen, mindestens 48 MB Speicher für diese Webseite festzulegen.',
+    'not_writable' => 'nicht schreibbar',
+    'notes' => 'Hinweise',
+    'not_found' => 'nicht gefunden',
     'netpbm' => 'NetPBM Library',
     'np_ok' => 'The NetPBM library is installed',
     'np_not_found' => 'The NetPBM executables were not found.',
@@ -234,8 +234,8 @@ $LANG01 = array(
     'jpegtran' => 'jpegtran Program',
     'jpegtran_not_found' => 'Unable to locate the jpegtran executable.',
     'jpegtran_ok' => 'The jpegtran executable is installed.',
-    'show_phpinfo' => 'Show Full PHP Info',
-    'hide_phpinfo' => 'Hide Full PHP Info'
+    'show_phpinfo' => 'PHP Info einblenden',
+    'hide_phpinfo' => 'PHP Info ausblenden'
 );
 
 ###############################################################################
@@ -320,12 +320,12 @@ $LANG04 = array(
     29 => 'abgemeldet von',
     30 => 'angemeldet von',
     31 => 'Um diese Funktion nutzen zu können, musst Du angemeldet sein',
-    32 => 'Tag-Zeile',
-    33 => 'Auf der Seite nicht sichtbar!',
+    32 => 'Tag Zeile',
+    33 => 'Diese Seite ist nicht öffentlich sichtbar!',
     34 => 'Dein richtiger Name',
     35 => 'Passwort eingeben, um es zu ändern',
     36 => '(mit http://)',
-    37 => 'Wird an Deine Kommentare angefügt',
+    37 => 'Wird an deine Kommentare angefügt',
     38 => 'Alles über Dich - für alle sichtbar',
     39 => 'Dein PGP-Key, so vorhanden',
     40 => 'Kategorien ohne Icons',
@@ -337,7 +337,7 @@ $LANG04 = array(
     46 => 'Nicht anzeigen für',
     47 => 'Block-Einstellungen für',
     48 => 'Kategorien',
-    49 => 'Keine Icons in Artikeln',
+    49 => 'Artikel ohne Icons',
     50 => 'Häkchen entfernen, wenn es Dich nicht interessiert',
     51 => 'Nur die Artikel',
     52 => 'Standardeinstellung:',
@@ -362,14 +362,14 @@ $LANG04 = array(
     71 => "Zu den Features von {$_CONF['site_name']} gehört, dass Du selbst festlegen kannst, welche Artikel Du angezeigt bekommst. Darüber hinaus kannst Du auch das Aussehen der Webseite verändern. Um in den Genuss dieser Features zu kommen, musst Du Dich jedoch zuerst bei {$_CONF['site_name']} <a href=\"{$_CONF['site_url']}/users.php?mode=new\" rel=\"nofollow\">anmelden</a>. Oder bist Du schon angemeldet? Dann benutze bitte das Anmeldeformular auf der linken Seite.",
     72 => 'Erscheinungsbild',
     73 => 'Sprache',
-    74 => 'Ändere das Aussehen dieser Seite',
+    74 => 'Das Aussehen dieser Seite ändern',
     75 => 'Artikel per E-Mail für',
     76 => 'Wähle Kategorien aus der folgenden Liste und Du bekommst einmal pro Tag eine E-Mail mit einer Übersicht aller neuen Artikel in den ausgewählten Kategorien. Du brauchst nur die Kategorien anzukreuzen, die Dich interessieren.',
     77 => 'Foto',
     78 => 'Ein Bild von Dir',
     79 => 'Ankreuzen, um dieses Bild zu löschen:',
     80 => 'Anmelden',
-    81 => 'E-Mail schreiben',
+    81 => 'E-Mail senden',
     82 => 'Die letzten 10 Artikel von',
     83 => 'Statistik für',
     84 => 'Gesamtanzahl Artikel:',
@@ -416,7 +416,7 @@ $LANG04 = array(
     125 => 'Die E-Mail-Adressen stimmen nicht überein. Bitte in beiden Feldern die gleiche E-Mail-Adresse eintragen!',
     126 => 'Bitte die gleiche Adresse noch einmal eingeben',
     127 => 'Um diese Angaben zu ändern musst Du Dein aktuelles Passwort eingeben.',
-    128 => 'Dein Name',
+    128 => 'Benutzername',
     129 => 'Passwort &amp; E-Mail',
     130 => 'Über Dich',
     131 => 'Daily-Digest - Optionen',
@@ -445,22 +445,22 @@ $LANG04 = array(
     159 => 'Diese E-Mail wurde automatisch generiert. Bitte nicht auf diese E-Mail antworten.',
     160 => 'Online',
     161 => 'Passwortstärke',
-    162 => 'The username contains invalid characters ( < > " % & * / \ ) are not allowed',
+    162 => 'Der Benutzername enthält ungültige Zeichen. Nicht erlaubt sind: ( < > " % & * / \ ) ',
     163 => 'Remote User',
     164 => 'Remote Username',
     165 => 'Remote Service',
     166 => 'Remote User Info',
-    167 => 'An activation eMail will be sent to your eMail address.',
-    168 => 'Welcome to ',
-    169 => 'Request New activation eMail',
-    170 => 'Please keep this eMail for your records. Your account information is as follows:',
-    171 => 'Site URL',
-    172 => 'Please visit the following link in order to activate your account (the activation link is only valid for %d hours):',
-    173 => 'Your password has been securely stored in our database and cannot be retrieved. In the event that it is forgotten, you will be able to reset it using the eMail address associated with your account.',
-    174 => 'Thank you for registering.',
-    175 => 'To request a new activation token, please enter your username and password below and a new activation eMail will be sent to you.',
-    176 => 'Confirm Password',
-    177 => 'Your account is currently awaiting verification.<br />You will not be able to login until your account has been verified by following the link in the activation eMail.'
+    167 => 'Aktivierungs-Email wird an deine eMail-Adresse gesendet werden.',
+    168 => 'Willkommen bei ',
+    169 => 'Neue Aktivierungs E-Mail anfordern',
+    170 => 'Bitte bewahre diese E-Mail auf. Deine Kontoinformationen sind wie folgt:',
+    171 => 'Seiten URL',
+    172 => 'Bitte besuche folgenden Link, um dein Konto zu aktivieren. (Der Aktivierungs-Link ist nur gültig für %d Stunden):',
+    173 => 'Das Passwort wurde sicher in unserer Datenbank gespeichert und kann nicht abgerufen werden. Für den Fall, dass es vergessen wird, kannst Du zurücksetzen. Ein neues Passwort wird an die mit diesem Account verbundene E-Mailadresse versandt.',
+    174 => 'Vielen Dank für die Registrierung.',
+    175 => 'Für eine erneute Aktivierung, gib bitte deinen Benutzernamen und das Passwort ein. Zur Aktivierungs wird eine E-Mail wird an dich gesendet werden.',
+    176 => 'Kennwort bestätigen',
+    177 => 'Dein Account erwartet eine Überprüfung. <br />Mit der Aktivierungs-eMail erhältst du einen Link, mit welchem der Account aktiviert werden kann.'
 );
 
 ###############################################################################
@@ -495,7 +495,7 @@ $LANG05 = array(
 
 $LANG08 = array(
     1 => 'Es gab einen Fehler beim Versenden der Nachricht. Bitte noch einmal versuchen.',
-    2 => 'Nachricht wurde versendet.',
+    2 => 'Nachricht wurde versandt.',
     3 => 'Bitte sicherstellen, dass Du eine gültige E-Mail-Adresse eingetragen hast.',
     4 => 'Bitte alle Felder ausfüllen: Dein Name, Deine E-Mail, Betreff und Nachricht',
     5 => 'Fehler: Benutzername nicht bekannt.',
@@ -516,8 +516,8 @@ $LANG08 = array(
     20 => 'Von (Name)',
     21 => 'Von (E-Mail)',
     22 => 'Alle Felder müssen ausgefüllt werden.',
-    23 => "Diese Nachricht wurde Dir von %s <%s> gesendet, da er/sie der Meinung war, Du würdest dich vielleicht für diesen Artikel auf <{$_CONF['site_url']}> interessieren. Dies ist kein Spam und die beteiligten E-Mail-Adressen (Ihre und die des Absenders) wurden nicht gespeichert.",
-    24 => 'Schreibe einen Kommentar zu diesem Artikel:',
+    23 => "Diese Nachricht wurde Dir von %s <%s> gesendet, da er/sie der Meinung war, Du würdest dich vielleicht für diesen Artikel auf <{$_CONF['site_url']}> interessieren. Dies ist kein Spam und die beteiligten E-Mail-Adressen (Deine und die des Absenders) wurden nicht gespeichert.",
+    24 => 'Schreib einen Kommentar zu diesem Artikel:',
     25 => 'Du musst Dich anmelden, um diese Funktion benutzen zu können. Dies ist leider nötig, um den Missbrauch des Systems zu verhindern',
     26 => 'Mit diesem Formular kannst Du eine E-Mail an diesen Benutzer senden. Alle Felder müssen ausgefüllt werden.',
     27 => 'Kurze Nachricht',
@@ -592,8 +592,8 @@ $LANG09 = array(
     53 => 'Gefundene Artikel',
     54 => 'Gefundene Kommentare',
     55 => 'der Wortgruppe',
-    56 => '<em>und</em>',
-    57 => '<em>oder</em>',
+    56 => '<em>UND</em>',
+    57 => '<em>ODER</em>',
     58 => 'Weitere Ergebnisse &gt;&gt;',
     59 => 'Ergebnisse',
     60 => 'pro Seite',
@@ -604,7 +604,20 @@ $LANG09 = array(
     65 => 'Artikel',
     66 => 'Kommentar',
     67 => 'Zeige %d Ergebnisse',
-    68 => 'Sortieren nach'
+    68 => 'Sortieren nach',
+    69 => 'Filter nach Autor',
+    70 => 'Filter nach Kategorie',
+    71 => 'Filter nach Datum',
+    72 => 'Suche',
+    73 => 'Treffer pro Seite',
+    74 => 'Suche ergab kein Ergebnis. <br/><ul><li>Prüfe, ob die Schreibweise korrekt ist.</li><li>Benutze eine andere <strong>Suche</strong>, um ein anderes Ergebnis zu erzielen. <em>irgend eines der Wörter</em> liefert Ergebnisse, wenn <strong>Alle</strong> der Suchbegriffe im Text. <em>Alle Wörter</em> liefert nur Ergebnisse, wenn <strong>Alle</strong> Suchbegriffe angezeigt, und <em>genaue Wortgruppe</em> Liefert nur Ergebnisse, deren Suchbegriff dem Text entspricht. </li><li>Benutze für die Abfrage <strong>Filter Datum</strong> oder <strong>Filter Kategorie</strong>.</li></ul>',
+    75 => '1 Tag',
+    76 => '7 Tage',
+    77 => '2 Wochen',
+    78 => '1 Monat',
+    79 => '3 Monate',
+    80 => '6 Monate',
+    81 => '1 Jahr'
 );
 
 ###############################################################################
@@ -721,17 +734,17 @@ $LANG12 = array(
 # lib-rating.php
 
 $LANG13 = array(
-    'vote' => 'vote',
-    'votes' => 'votes',
-    'currently' => 'Currently',
-    'rating' => 'Rating',
-    'cast' => 'cast',
+    'vote' => 'Abstimmung',
+    'votes' => 'Abstimmungen',
+    'currently' => 'gegenwärtig',
+    'rating' => 'Bewertung',
+    'cast' => 'Stimmen',
     'rate_speedlimit' => 'You last rated an item %s seconds ago. This site requires at least %s seconds between ratings',
     'ip_rated' => 'Your IP address has already rated this item.',
     'uid_rated' => 'Your User ID has already rated this item.',
     'own_rated' => 'Either you own the item or do not have permission to rate it.',
-    'thanks_for_vote' => 'Thanks for voting!',
-    'reset_rating' => 'Reset Rating'
+    'thanks_for_vote' => 'Danke für die Abstimmung!',
+    'reset_rating' => 'Bewertung zurücksetzen'
 );
 
 ###############################################################################
@@ -749,8 +762,8 @@ $LANG20 = array(
     5 => 'Passwort:',
     6 => 'Zugriffe auf die Administrationsseiten dieser Webseite werden aufgezeichnet und kontrolliert.<br' . XHTML . '>Diese Seiten sind nur für befugte Personen zugänglich.',
     7 => 'anmelden',
-    8 => 'Session Timeout - Please re-authenticate',
-    9 => 'Access to Administration Features requires re-authentication'
+    8 => 'Session-Timeout: Bitte erneut authentifizieren.',
+    9 => 'Zugang zur Verwaltung: Authentifizierung ist erforderlich!'
 );
 
 ###############################################################################
@@ -800,7 +813,7 @@ $LANG21 = array(
     41 => 'rechts',
     42 => 'Für glFusion-Standard-Blöcke muss ein Block-Titel und die Block-Reihenfolge angegeben werden.',
     43 => 'Nur auf der Startseite',
-    44 => 'All Except Homepage',
+    44 => 'Alle, außer Startseite',
     45 => "Du hast keine Zugriffsrechte für diesen Block. Dieser Zugriffsversuch wurde protokolliert. <a href=\"{$_CONF['site_admin_url']}/block.php\">Zurück zum Administrator-Menü</a>.",
     46 => 'Verschieben',
     47 => '',
@@ -825,8 +838,8 @@ $LANG21 = array(
     66 => 'Autotags',
     67 => 'Ankreuzen, um Autotags zu interpretieren',
     68 => 'Der Newsfeed für diesen Block ist zu lang, um angezeigt werden zu können. Bitte im Block-Editor eine maximale Anzahl Artikel zum Import vorgeben, oder ein übergeordnetes Maximum im der Konfiguration.',
-    69 => 'Are you sure you want to delete this block?',
-    70 => 'Block name cannot be blank and cannot contain spaces or the following characters: < > \' " % & * / or backslash'
+    69 => 'Diesen Block wirklich löschen?',
+    70 => 'Block Name darf nicht leer sein und darf keine Leerzeichen enthalten oder die folgenden Zeichen: < > \' " % & * / oder Backslash'
 );
 
 ###############################################################################
@@ -854,7 +867,7 @@ $LANG24 = array(
     19 => 'Kommentare',
     20 => 'Ping',
     21 => 'Senden',
-    22 => 'Artikelliste',
+    22 => 'Artikelverwaltung',
     23 => 'Auf das Bearbeiten-Icon klicken, um einen Artikel zu Bearbeiten oder zu löschen. Um einen Artikel anzusehen, auf dessen Titel klicken. Auf Neu anlegen (s.o.) klicken, um einen neuen Artikel zu schreiben.',
     24 => 'Diese ID wird bereits für einen anderen Artikel benutzt. Bitte wähle eine andere ID.',
     25 => 'Fehler beim Speichern des Artikels',
@@ -862,7 +875,7 @@ $LANG24 = array(
     27 => '<p>Wenn Du [unscaledX] statt [imageX] verwendest, wird das Bild in Originalgröße eingebunden.',
     28 => '<p><strong>VORSCHAU:</strong> Der Vorschau-Button sollte nur verwendet werden, wenn der Artikel keine Bilder enthält. Bei Artikeln mit Bildern empfiehlt es sich, den Artikel als Entwurf zu markieren, zu speichern und dann von der Liste der Artikel aus zu betrachten.</p>',
     29 => 'Trackbacks',
-    30 => 'Fehler beim Datei-Upload',
+    30 => 'Fehler beim Hochladen der Datei',
     31 => 'Bitte mindestens die Felder Titel und Einleitung ausfüllen',
     32 => 'Hauptartikel',
     33 => 'Es kann nur einen Hauptartikel geben',
@@ -921,7 +934,7 @@ $LANG24 = array(
     86 => 'Erweiterter Editor',
     87 => 'Artikel-Statistik',
     88 => 'Format im Wiki-Stil ',
-    89 => 'Are you sure you want to delete this Story?',
+    89 => 'Diesen Artikel wirklich löschen?',
     90 => 'Moderate Story',
     91 => 'Moderate Draft Story'
 );
@@ -958,34 +971,34 @@ $LANG27 = array(
     26 => 'Zur Archiv-Kategorie machen (nur für eine Kategorie möglich)',
     27 => 'oder ein Icon hochladen',
     28 => 'maximal',
-    29 => 'Fehler beim Datei-Upload',
-    30 => 'Date',
-    31 => 'Title',
-    32 => 'Story ID',
-    33 => 'Ascending',
-    34 => 'Descending',
-    35 => 'Sort Stories By',
-    36 => 'Sort Stories Direction',
-    37 => 'Direction',
-    38 => 'Default Topic?',
+    29 => 'Fehler beim Hochladen der Datei',
+    30 => 'Datum',
+    31 => 'Titel',
+    32 => 'Artikel-ID',
+    33 => 'Aufsteigend',
+    34 => 'Absteigend',
+    35 => 'Artikel sortiert nach',
+    36 => 'Artikel Sortierrichtung',
+    37 => 'Sortierrichtung',
+    38 => 'Standard Topic?',
     39 => 'Archive Topic?',
-    40 => 'Are you sure you want to delete this topic?',
-    41 => 'Display After',
-    42 => 'Topic ID cannont contain spaces',
-    43 => 'Associated Objects',
-    44 => 'Stories',
-    45 => 'Draft Stories',
-    46 => 'Submitted Stories',
-    47 => 'Images',
-    48 => 'Comments',
+    40 => 'Diese  Kategorie wirklich löschen?',
+    41 => 'Anzeige nach',
+    42 => 'Kategorie-ID  darf keine Leerzeichen enthalten',
+    43 => 'Zugeordnete Objekte',
+    44 => 'Artikel',
+    45 => 'Entwurf Artikel',
+    46 => 'eingereichte Artikel',
+    47 => 'Bilder',
+    48 => 'Kommentare',
     49 => 'Trackbacks',
-    50 => 'Blocks',
+    50 => 'Blöcke',
     51 => 'Feeds',
-    52 => 'Story Admin',
-    53 => 'Submissions',
-    54 => 'Block Admin',
+    52 => 'Admin Artikel',
+    53 => 'Einreichungen/Vorlagen',
+    54 => 'Admin Blöcke',
     55 => 'Syndication Admin',
-    56 => 'Press Cancel and then Edit this topic to view details including the total number of objects in the database that are associated with this topic.'
+    56 => 'Drücke auf Abbrechen und dann auf Bearbeiten dieser Kategorie, zur Ansicht von Details wie die Gesamtzahl der Objekte in der Datenbank.'
 );
 
 ###############################################################################
@@ -1002,12 +1015,12 @@ $LANG28 = array(
     8 => 'Homepage',
     9 => '(keine Leerzeichen!)',
     10 => 'Bitte die Felder Benutzername und E-Mail-Adresse ausfüllen.',
-    11 => 'Benutzer-Manager',
+    11 => 'Benutzer-Verwaltung',
     12 => 'Auf das Bearbeiten-Icon klicken, um einen Benutzer zu bearbeiten oder zu löschen. Ein neuer Benutzer kann mit Neu anlegen (s.o.) angelegt werden.',
-    13 => 'SecLev',
-    14 => 'Reg. Datum',
-    15 => 'New User',
-    16 => 'Awaiting User Verification',
+    13 => 'Sicherheitsstufe',
+    14 => 'Registierdatum',
+    15 => 'Neuer Benutzer',
+    16 => 'Warten auf Benutzerbestätigung',
     17 => '',
     18 => '',
     19 => '',
@@ -1030,7 +1043,7 @@ $LANG28 = array(
     36 => '(noch nie)',
     37 => 'UID',
     38 => 'Gruppenliste',
-    39 => 'Passwort (nochmal)',
+    39 => 'Passwort (Wiederholung)',
     40 => 'Registriert',
     41 => 'Letzte Anmeldung',
     42 => 'Gesperrt',
@@ -1047,7 +1060,7 @@ $LANG28 = array(
     53 => 'registriert',
     54 => 'Benutzer löschen',
     55 => 'Dies funktioniert nur, wenn die Funktion \'Record Last Login\' im Configuration admin panel aktiviert wurde.',
-    56 => 'Bitte den Typ Benutzer wählen, der gelöscht werden soll und "Liste aktualisieren" drücken. Dann die aus der Liste abhaken, di enicht gelöscht werden sollen und "Delete" drücken. Es werden nur die gelöscht, die gegenwärtig sichtbar sind. Dieser Hinweis für den Fall, dass die Liste sich über mehrere Seiten erstreckt.',
+    56 => 'Bitte den Typ Benutzer wählen, der gelöscht werden soll und "Liste aktualisieren" drücken. Dann die aus der Liste abhaken, die nicht gelöscht werden sollen und "Delete" drücken. Es werden nur die gelöscht, die gegenwärtig sichtbar sind. Dieser Hinweis für den Fall, dass die Liste sich über mehrere Seiten erstreckt.',
     57 => 'Phantom-Benutzer',
     58 => 'Einmal-Benutzer',
     59 => 'Alte Benutzer',
@@ -1064,7 +1077,7 @@ $LANG28 = array(
     70 => 'konnte nicht gelöscht werden',
     71 => 'erfolgreich gelöscht',
     72 => 'Kein Benutzer zum Löschen vorgemerkt',
-    73 => 'Alle ausgewählten Benutzer dauerhaft löschen?',
+    73 => 'Alle ausgewählten Benutzer wirklich dauerhaft löschen?',
     74 => 'Aktuelle Benutzer',
     75 => 'Benutzer, angemeldet in den letzen ',
     76 => ' Monaten.',
@@ -1073,36 +1086,36 @@ $LANG28 = array(
     79 => 'Keine Benutzer ausgewählt für Erinnerung',
     80 => 'Erinnerung erfolgreich versendet',
     81 => 'Erinnerung, um den Account zu verifizieren für %s',
-    82 => "Dein Account auf der Seite {$_CONF['site_name']} wurde nicht benutzt seit %s und wird innerhalb  30 .",
+    82 => "Dein Account auf der Seite {$_CONF['site_name']} wurde seit %s Tagen nicht benutzt und wird deaktiviert, wenn er nicht innerhalb von 30 Tagen aufgerufen wird.",
     83 => "Dein Account auf der Seite {$_CONF['site_name']} wurde seit der Einrichtung nicht benutzt \und wird gelöscht, wenn Du Dich nicht in Kürze anmeldest.",
     84 => "Dein Einlogname ist: %s  auf der Seite: {$_CONF['site_url']}",
     85 => 'Wenn Du das Passwort vergessen hast, benutze folgenden Link: %s',
     86 => 'Einschließen',
     87 => 'Erinnnerungen',
-    88 => 'Default Group',
-    89 => 'Check to make this a default group for new users',
-    90 => 'Apply "Default Group" change to existing user accounts',
-    91 => 'Do you really want to apply these settings to all users?',
-    92 => 'Attribute',
-    93 => 'Value',
-    94 => 'Selected',
-    95 => 'Global Preference Editor',
-    96 => 'Using the <strong>Selected</strong> column, select the items you wish to change for <strong>all</strong> users.  Set the attribute to the desired setting and press Save.',
-    97 => 'Comment Display Mode',
-    98 => 'Comment Sort Order',
-    99 => 'Send eMail',
-    100 => 'eMail Site Login Reminders to the selected users?',
-    101 => 'Group',
-    102 => 'users',
-    103 => 'Batch User Administration',
-    104 => 'Are you sure you want to delete this User?',
+    88 => 'Standardgruppe',
+    89 => 'Diese Gruppe zur Standardgruppe für neue Benutzer machen.',
+    90 => 'Änderung der Standardgruppe für bestehende Benuterkonten bestätigen.',
+    91 => 'Willst du wirklich diese Einstellungen für alle Benutzer?',
+    92 => 'Merkmal',
+    93 => 'Einstellung',
+    94 => 'ausgewählt',
+    95 => 'Bevorzugte Einstellungen',
+    96 => 'Benutze die <strong>ausgewählt</strong> Spalte, ändere die Einstellung für das zu ändernde Merkmal. Diese Einstellung wird für <strong>Alle</strong> Benutzer angewandt.  Setze das Merkaml auf die gewünschte Einstellung und drücke Speichern.',
+    97 => 'Kommentar Anzeigemodus',
+    98 => 'Kommentar Sortierreihenfolge',
+    99 => 'eMail senden',
+    100 => 'Erinnerungs-eMail von ausgewählten Benutzern bei Anmeldung?',
+    101 => 'Gruppe',
+    102 => 'Benutzer',
+    103 => 'Mehrfach-Löschen von Benutzern',
+    104 => 'Diesen Benutzer wirklich löschen?',
     105 => 'Status',
     106 => 'Queued',
-    107 => 'Verification',
-    108 => 'View Profile',
-    109 => 'Are you absolutely sure you want to delete this User?  Deleting this User will delete some of the content that has been created by this User, and the remainder will be assigned to the Anonymous User or Site Administrator!  Press Cancel and then click on the Username to view the User Profile to see details.',
-    110 => 'Are you absolutely sure you want to delete ALL selected Users?  Deleting these Users will delete some of the content that has been created by these Users, and the remainder will be assigned to the Anonymous User or Site Administrator!  Press Cancel and then click on the Username to view the User Profile to see details.',
-    111 => 'Send eMail (Local)'
+    107 => 'Überprüfung',
+    108 => 'Ansicht Profile',
+    109 => 'Bist du absolut sicher, dass du diesen Benutzer löschen willst?  Das Löschen dieses Benutzers löscht einige der Inhalte, die von diesem Benutzer erstellt wurden. Der Rest wird dem anonymen Benutzer oder Seiten-Administrator zugewiesen werden! Um Details dieses Benutzerprofil zu sehen, drücke auf Abbrechen und dann auf den Benutzernamen.',
+    110 => 'Bist du absolut sicher, dass du alle markierten Benutzer löschen willst?  Das Löschen aller dieser Benutzers löscht einige der Inhalte, die von diesen Benutzern erstellt wurden. Der Rest wird dem anonymen Benutzer oder Site-Administrator zugewiesen werden! Um Details dieses Benutzerprofil zu sehen, drücke auf Abbrechen und dann auf den Benutzernamen.',
+    111 => 'eMail senden (Local)'
 );
 
 ###############################################################################
@@ -1132,12 +1145,12 @@ $LANG29 = array(
     41 => 'Eingesendete Kommentare',
     42 => 'Benutzername',
     43 => 'Kommentare automatisch veröffentlichen?',
-    44 => 'Approve all selected items',
-    45 => 'Are you sure you want to approve the selected item(s)?',
-    46 => 'Submitted By',
-    47 => 'Registered On',
-    48 => 'Are you sure you want to approve this submission?',
-    49 => 'Are you sure you want to delete this submission?',
+    44 => 'Alle ausgewählten Elemente genehmigen',
+    45 => 'Sollen alle ausgewählten Elemente genehmigt werden?',
+    46 => 'Eingereicht von',
+    47 => 'Registriert am',
+    48 => 'Bist du sicher, dieser Einsendung zuzustimmen?',
+    49 => 'Bist du sicher, diese Einsendung zu löschen?',
     'info' => 'Einsendungen zustimmen oder ablehnen'
 );
 
@@ -1171,9 +1184,9 @@ $LANG31 = array(
     24 => 'Keine erfolgreich',
     25 => '-- Gruppe wählen --',
     26 => 'Um eine E-Mail versenden zu können, müssen alle Felder ausgefüllt und eine Gruppe von Benutzern aus dem Drop-Down-Menü ausgewählt werden.',
-    27 => 'Group',
-    28 => 'Use this panel to send eMail to a specific user on this site.  To send a message to a different user, select the user from the User List panel, the link is above.',
-    29 => 'Warning',
+    27 => 'Gruppe',
+    28 => 'Mit dieser Oberfläche können eMails an ausgewählete Benutzer dieser Seite versandt werden.  Um eine Nachricht an einen anderen Benutzer zu senden, wähle den Benutzer aus der Benutzerliste.',
+    29 => 'Warnung',
     30 => 'eMail from Admin Privacy option is set.'
 );
 
@@ -1187,7 +1200,7 @@ $LANG32 = array(
     4 => 'Plugin-Datei',
     5 => 'Plugin-Liste',
     6 => 'Warnung: Plugin schon installiert!',
-    7 => 'Das Plugin, das Du installieren willst, ist schon vorhanden. Bitte lösche es, bevor Du noch einmal versuchst, es zu installieren',
+    7 => 'Das Plugin, das Du installieren willst, ist bereits vorhanden. Bitte lösche es, bevor Du noch einmal versuchst, es zu installieren',
     8 => 'Plugin-Kompatibilitätstest fehlgeschlagen',
     9 => 'Dieses Plugin benötigt eine neuere Version von glFusion. Abhilfe schafft ein Update von <a href="http://www.gllabs.org/">glFusion</a> oder evtl. eine andere Version dieses Plugins.',
     10 => '<br' . XHTML . '><b>Es sind derzeit keine Plugins installiert.</b><br' . XHTML . '><br' . XHTML . '>',
@@ -1216,7 +1229,7 @@ $LANG32 = array(
     33 => 'Code-Version',
     34 => 'Aktualisieren',
     35 => 'Bearbeiten',
-    36 => 'Code',
+    36 => 'Version',
     37 => 'Aktuell',
     38 => 'Bitte aktualisieren!',
     39 => 'Kann kein temporäres Hochladeverzeichnis erstellen.',
@@ -1256,15 +1269,15 @@ $LANG32 = array(
     73 => 'Plugin Autoinstaller',
     74 => 'Kann die XML Beschreibungsdatei des Plugins nicht finden.',
     75 => 'Kann %s nicht nach %s kopieren<br />',
-    76 => 'Are you sure you want to delete (uninstall) this Plugin?',
-    77 => 'Are you sure you want to update this Plugin?',
-    78 => 'Control',
-    79 => 'Unplug',
-    80 => 'Are you sure you want to install this Plugin?',
+    76 => 'Dieses Plugin wirklich löschen?',
+    77 => 'Dieses Plugin wirklich aktualisieren?',
+    78 => 'Steuerung',
+    79 => 'Löschen',
+    80 => 'Dieses Plugin wirklich installieren?',
     81 => 'Maintainer',
-    82 => 'Requires',
+    82 => 'erfordert',
     83 => 'Info',
-    84 => 'Bundled'
+    84 => 'in glfusion enthalten'
 );
 
 ###############################################################################
@@ -1320,7 +1333,8 @@ $LANG33 = array(
     52 => 'Fehler: Dateiname existiert schon',
     53 => 'Alle auf der Startseite',
     54 => 'Bitte wähle die Art des Newsfeeds aus.',
-    55 => 'Artikel'
+    55 => 'Artikel',
+    56 => 'Dieses Newsfeed wirklich löschen?'
 );
 
 ###############################################################################
@@ -1342,7 +1356,7 @@ $MESSAGE = array(
     13 => 'Deine Kategorie wurde gespeichert.',
     14 => 'Die Kategorie und alle zugehörigen Artikel wurden gelöscht.',
     15 => 'Der Kommentar wurde in die Warteschlage eingetragen und wird veröffentlicht, wenn ein Moderator zustimmt.',
-    16 => 'Sie wurden ausgetragen und erhalten keine Benachrichtigungen mehr.',
+    16 => 'Du wurdest ausgetragen und erhältst keine Benachrichtigungen mehr.',
     17 => '',
     18 => '',
     19 => '',
@@ -1412,7 +1426,7 @@ $MESSAGE = array(
     83 => 'Um das Passwort, die E-Mail-Adresse oder die "Angemeldet für"-Zeit zu ändern müsst Du das aktuelle Passwort eingeben.',
     84 => 'Um den Account zu löschen, bitte aktuelles Passwort eingeben.',
     85 => 'Es gab ein Problem, die E-Mail zu senden.',
-    86 => 'Der OpenID-Server erklärte Ihren Einlogversuch für ungültig.',
+    86 => 'Der OpenID-Server erklärte Deinen Einlogversuch für ungültig.',
     87 => 'OpenID-Anmeldung wurde vom Benutzer abgebrochen.',
     88 => 'Der OpenID-Server gab einen Fehler zurück.',
     89 => 'Kann OpenID-Server nicht finden bzgl. der angegebenen Identity-URL.',
@@ -1432,32 +1446,32 @@ $MESSAGE = array(
     501 => 'Security Token ist ungültig - Möglicherweise ist die Sitzung abgelaufen.',
     502 => 'Das Plugin wurde erfolgreich kopiert. Bitte Install aus der Liste unten auswählen',
     503 => 'Die Plugin-Installation ist im Demomodus ausgeschaltet.',
-    504 => 'Please enter a password for the user account.',
-    505 => 'Please enter an email for the user account.',
-    506 => 'Username cannot be blank.',
-    507 => 'Email cannot be blank.',
-    508 => 'Email address does not match the confirmation email address.',
-    509 => 'Error creating new user account - please check the error log for details.',
-    510 => 'Default settings have been applied to all users.',
+    504 => 'Bitte gib ein Kennwort für das Benutzerkonto ein.',
+    505 => 'Bitte gib eine gültige E-Maladresse für dieses Benutzerkonto ein.',
+    506 => 'Benutzername darf nicht leer sein.',
+    507 => 'Email darf nicht leer sein.',
+    508 => 'Email-Adresse stimmt nicht mit der Bestätigungs-Email-Adresse überein.',
+    509 => 'Fehler beim Erstellen des neuen Benutzerkontos - bitte das Fehlerprotokoll für weitere Details überprüfen.',
+    510 => 'Die Standardeinstellungen sind für alle Benutzer angewendet worden.',
     511 => '',
-    512 => 'Username contains invalid characters " < > / \ $ % * are not allowed',
-    513 => 'Remote username cannot be blank.',
-    514 => 'Remote service cannot be empty.',
-    515 => 'Thank you, your account has now been activated.',
-    516 => 'Your activation token has expired.',
-    517 => 'This account has already been activated, please login below.'
+    512 => 'Benutzername enthält ungültige Zeichen " < > / \ $ % * sind nicht erlaubt',
+    513 => 'Remote Benutzername darf nicht leer sein.',
+    514 => 'Remote Service darf nicht leer sein.',
+    515 => 'Vielen Dank, das Konto nun aktiviert.',
+    516 => 'Der Aktivierungszeitraum ist abgelaufen.',
+    517 => 'Dieses Konto wurde bereits aktiviert, bitte einloggen.'
 );
 
 ###############################################################################
 # admin/logview.php
 
 $LANG_LOGVIEW = array(
-    'logview' => 'Log-Ansicht',
-    'info' => 'glFusion Logdatei-Administration',
+    'logview' => 'Protokolle',
+    'info' => 'glFusion Verwaltung Protokolle',
     'logs' => 'Logs',
-    'view' => 'Logatei anzeigen',
-    'clear' => 'Logdatei löschen',
-    'log_file' => 'Logdatei'
+    'view' => 'Protokoll anzeigen',
+    'clear' => 'Protokoll löschen',
+    'log_file' => 'Protokolldatei'
 );
 
 ###############################################################################
@@ -1517,28 +1531,28 @@ $LANG_BBCODE = array(
 # filecheck.php
 
 $LANG_FILECHECK = array(
-    'filecheck' => 'File Integrity Check',
-    'recheck' => 'Recheck File Integrity',
-    'confirm' => 'Are you sure you want to deleted the selected file(s)?',
-    'scan' => 'Your site\'s file integrity is being analyzed.  Please be patient, this process may take awhile to complete, and execution speed depends upon the hosting environment.  If this script approaches the maximum PHP script execution time of %s seconds, scanning will be interrupted and an error message will be displayed.',
-    'results' => 'Your site\'s files and directories have been compared to the glFusion v%s distribtion, and the results are shown below.  Added or missing files and directories have been identified, and files that have been added may be selected for deletion.  Directories that have been added will be detected, but presently these must be removed manually.<br /><br />Additional files and/or directories that are detected may be associated with plugins or other scripts that you have added, or are otherwise critical to your site\'s operation, and therefore <b>this DOES NOT mean you should simply delete these files!&nbsp;&nbsp;<span style="color:red">Please use this tool with caution!</span></b>',
-    'expiration1' => 'NOTE: The scan was aborted because the elapsed time it was approaching your site\'s PHP maximum execution time limit.  This analysis script is CPU and I/O-intensive, and can be affected by a number of factors in your web hosting environment.  Please consider one or more of the following recommendations resolve this problem:<br />',
-    'expiration2' => '<ol><li>Try increasing the value of \'max_execution_time\' in your php.ini file.  It is currently set to %s seconds.</li><li>Manually inspect your site and remove any unneeded files and directories.</li></ol>',
-    'abort' => 'Abort Scan',
-    'aborted' => 'The scan was aborted.',
+    'filecheck' => 'Datei-Integritätsprüfung',
+    'recheck' => 'Überprüfen der Datei-Integrität',
+    'confirm' => 'Sollen die ausgewähleten Dateien wirklich gelöscht werden?',
+    'scan' => 'Die Datei-Integrität dieser Webseite wird analysiert. Bitte habe Geduld. Dieser Vorgang kann eine Weile dauern. Die Ausführungsgeschwindigkeit hängt von der Hosting-Umgebung ab. Wenn das Skript sich der maximalen PHP-Skript-Ausführungszeit von %s Sekunden nähert, wird das Scannen unterbrochen und eine Fehlermeldung angezeigt.',
+    'results' => 'Die Dateien und Verzeichnisse dieser Webseite sind mit glFusion Version v%s verglichen worden. Die Ergebnisse sind unten dargestellt.  Hinzugefügt oder fehlende Dateien und Verzeichnisse sind identifiziert worden. Dateien, die hinzugefügt wurden, können ausgewählt und gelöscht werden.  Neu erkannte Verzeichnisse müssen gegenwärtig manuell entfert werden. <br /><br /> Zusätzliche erkannte Dateien/Verzeichnisse, die du hinzugefügt hast, die mit Plugins oder anderen Skripts in Verbindung gebracht werden sind kritisch für den Betrieb dieser Webseite. <b>Das bedeutet: Du solltest diese Dateien nicht einfach löschen!&nbsp;&nbsp;<span style="color:red">Bitte benutze dieses Tool unbedingt mit Vorsicht!</span></b>',
+    'expiration1' => 'HINWEIS: Der Scan wurde abgebrochen, weil die PHP Ausführungszeit überschritten wurde.  This analysis script is CPU and I/O-intensive, and can be affected by a number of factors in your web hosting environment.  Please consider one or more of the following recommendations resolve this problem:<br />',
+    'expiration2' => '<ol><li>Erhöhe den Wert der \'max_execution_time\' in der Datei php.ini.  Derzeit eingestellt sind: %s Sekunden.</li><li>Überprüfe deine Website manuell und entferne alle nicht benötigten Dateien und Verzeichnisse.</li></ol>',
+    'abort' => 'Abbruch Scan',
+    'aborted' => 'Der Scan wurde abgebrochen.',
     'where' => 'Root',
     'type' => 'Type',
-    'delta' => 'Change:',
-    'location' => 'Location',
-    'path' => 'Path',
-    'file' => 'File',
+    'delta' => 'Änderung:',
+    'location' => 'Verzeichnis',
+    'path' => 'Verzeichnis',
+    'file' => 'Datei',
     'dir' => 'Dir',
     'plugin' => 'plugin',
     'added' => 'added',
     'missing' => 'missing',
     'removed' => '%s %s deleted.  Your site\'s File Integrity has been rechecked, and the results are shown below.',
-    'working' => 'Scanning ...<br />',
-    'elapsed' => 'The scan completed in %s sec.'
+    'working' => 'Datei-Integritätsprüfung: Bitte warten, ...<br />',
+    'elapsed' => 'Scan beendet nach %s Sekunden.'
 );
 
 ###############################################################################
@@ -1609,18 +1623,18 @@ $LANG_ACCESS = array(
     'groupexists' => 'Gruppenname existiert schon',
     'groupexistsmsg' => 'Es existiert bereits eine Gruppe mit diesem Namen. Gruppennamen müssen eindeutig sein.',
     'copy' => 'Kopieren',
-    'pe_namepass' => 'Account',
+    'pe_namepass' => 'Benutzerkonto',
     'pe_userinfo' => 'Information',
-    'pe_layout' => 'Layout &amp; Language',
-    'pe_content' => 'Content',
-    'pe_privacy' => 'Privacy',
-    'editusers' => 'Manage',
+    'pe_layout' => 'Layout &amp; Sprache',
+    'pe_content' => 'Inhalt',
+    'pe_privacy' => 'Privatsphäre',
+    'editusers' => 'Bearbeiten',
     'sendemail' => 'eMail',
     'admingroup' => 'Admin',
     'defaultgroup' => 'Default',
     'editinguser' => 'Editing User: ',
-    'createnewuser' => 'Creating New Account',
-    'confirm1' => 'Are you sure you want to delete this group?',
+    'createnewuser' => 'Neues Benutzerkonto anlegen',
+    'confirm1' => 'Diese Gruppe wirklich löschen?',
     'confirm2' => 'Are you absolutely sure you want to delete this group?  This will affect any users or groups that are associated with this group!  Press Cancel and then Edit this group if you wish to view the details.'
 );
 
@@ -1648,7 +1662,7 @@ $LANG_DB_BACKUP = array(
 $LANG_BUTTONS = array(
     1 => 'Home',
     2 => 'Kontakt',
-    3 => 'Mitmachen',
+    3 => 'Artikel einsenden',
     4 => '',
     5 => '',
     6 => '',
@@ -1660,12 +1674,34 @@ $LANG_BUTTONS = array(
 );
 
 ###############################################################################
+# 401.php
+
+$LANG_401 = array(
+    1 => 'Fehler 401',
+    2 => '<p>Die angeforderten Daten sind zugangsgeschützt. </br>Der Server kann die Daten nur senden, wenn eine gültige Zugangskennung, bestehend aus Benutzername und Passwort, bei der Anfrage mit gesendet wird.</p>',
+    3 => 'Deine IP wurde ermittelt und protokolliert!',
+    4 => 'Deine IP-Adresse lautet:',
+    5 => 'Dein Hostname lautet:'
+);
+
+###############################################################################
+# 403.php
+
+$LANG_403 = array(
+    1 => 'Fehler 403',
+    2 => '<p>Der Server möchte die angeforderten Daten nicht herausgeben. </br>Das passiert zum Beispiel wenn der Zugriff auf die Ressource von dem IP-Adress-Bereich, aus dem die Anfrage kommt,</br>in der Serverkonfiguration verboten wurde, die Ressource ganz und gar gesperrt wurde oder man versucht, ein Verzeichnislisting zu bekommen, dies jedoch in der Serverkonfiguration abgeschaltet wurde.</p>',
+    3 => 'Deine IP wurde ermittelt und protokolliert!',
+    4 => 'Deine IP-Adresse lautet:',
+    5 => 'Ihr Hostname lautet:'
+);
+
+###############################################################################
 # 404.php
 
 $LANG_404 = array(
     1 => 'Fehler 404',
     2 => 'Hmm, ich habe alles versucht, aber <b>%s</b> war nicht aufzufinden.',
-    3 => "<p>Sorry, diese Seite oder Datei existiert nicht. Du könntest es auf der <a href=\"{$_CONF['site_url']}\">Startseite</a> oder mit der <a href=\"{$_CONF['site_url']}/search.php\">Suchfunktion</a> probieren, vielleicht wirst Du ja fündig ..."
+    3 => "<p>Sorry, diese Seite oder Datei existiert nicht. Du kannst es auf der <a href=\"{$_CONF['site_url']}\">Startseite</a> oder mit der <a href=\"{$_CONF['site_url']}/search.php\">Suchfunktion</a> probieren, vielleicht wirst du ja fündig ...</p>"
 );
 
 ###############################################################################
@@ -1778,7 +1814,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1834,7 +1870,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1879,7 +1915,7 @@ $LANG_ADMIN = array(
 
 ###############################################################################
 # Widgets - Strings
-# 
+#
 # These are some standard strings used by the widget static pages
 
 $LANG_WIDGETS = array(
@@ -1888,7 +1924,7 @@ $LANG_WIDGETS = array(
     'prev' => 'vorherige',
     'next' => 'nächste',
     'playpause' => 'Anspielen/Pause',
-    'noOpera' => 'This script does not automatically resize the iframe in the Opera browser.'
+    'noOpera' => 'Diese Skript verändert nicht automatisch die Rahmengröße im Opera-Browser.'
 );
 
 # Localisation of the texts for the various drop-down menus that are actually
@@ -1978,7 +2014,7 @@ $LANG_confignames['Core'] = array(
     'noreply_mail' => 'No-Reply E-Mail',
     'site_name' => 'Name des Webauftritts',
     'site_slogan' => 'Slogan',
-    'microsummary_short' => 'Microsummary',
+    'microsummary_short' => 'Kurzzusammenfassung',
     'path_log' => 'Pfad zum Log',
     'path_language' => 'Pfad zu Sprachdateien',
     'backup_path' => 'Pfad zum Backup',
@@ -1991,7 +2027,7 @@ $LANG_confignames['Core'] = array(
     'mysqldump_path' => 'Pfad zu Executable',
     'mysqldump_options' => 'MySQL Dump Optionen',
     'theme' => 'Theme',
-    'menu_elements' => 'Elemente des Menüs ',
+    'menu_elements' => 'Elemente des Menüs',
     'path_themes' => 'Pfad zu Themes',
     'disable_new_user_registration' => 'Registrieren neuer Benutzer abschalten',
     'allow_user_themes' => 'Benutzer können Theme wählen',
@@ -2004,7 +2040,7 @@ $LANG_confignames['Core'] = array(
     'hide_exclude_content' => 'Inhalte-Tab verstecken in Benutzer-Präferenzen',
     'show_servicename' => 'Name des Service wird angezeigt',
     'custom_registration' => '"Custom Registration" aktivieren',
-    'user_login_method' => 'Benutzer-Anmeldemethode ',
+    'user_login_method' => 'Benutzer-Anmeldemethode',
     'spamx' => 'Spam-X Aktionen',
     'sort_admin' => 'Admin Links sortieren',
     'language' => 'Sprache',
@@ -2028,7 +2064,7 @@ $LANG_confignames['Core'] = array(
     'cookie_name' => 'Permanent Cookie Name',
     'cookie_password' => 'Password Cookie Name',
     'cookie_theme' => 'Theme Cookie Name',
-    'cookie_language' => 'Language Cookie Name',
+    'cookie_language' => 'Sprache Cookie Name',
     'cookie_tzid' => 'Zeitzone Cookie Name',
     'cookie_ip' => 'Cookies embed IP?',
     'default_perm_cookie_timeout' => 'Permanent Timeout',
@@ -2075,7 +2111,7 @@ $LANG_confignames['Core'] = array(
     'hidenewcomments' => 'Neue Kommentare ausblenden',
     'hidenewtrackbacks' => 'Neue Trackbacks ausblenden',
     'hidenewplugins' => 'Neue Plugin-Einträge ausblenden',
-    'title_trim_length' => 'Titel abschneiden nach ',
+    'title_trim_length' => 'Titel abschneiden nach',
     'trackback_enabled' => 'Trackback möglich?',
     'pingback_enabled' => 'Pingback möglich?',
     'ping_enabled' => 'Ping möglich?',
@@ -2199,13 +2235,13 @@ $LANG_confignames['Core'] = array(
     'template_comments' => 'Template-Kommentare aktivieren',
     'hidestorydate' => 'Artikeldatum verstecken',
     'maintenance_mode' => 'Wartungsmodus aktivieren',
-    'rating_enabled' => 'Enable Rating',
+    'rating_enabled' => 'Bewertung aktivieren',
     'user_reg_fullname' => 'Full Name option on registration form?',
-    'session_ip_check' => 'Session IP Validation',
-    'article_comment_close_enabled' => 'Automatically close comments (default)',
-    'registration_type' => 'Registration Type',
-    'comment_postmode' => 'Comment Postmode',
-    'comment_editor' => 'Comment Editor'
+    'session_ip_check' => 'Überprüfung Session-IP',
+    'article_comment_close_enabled' => 'automatisch Kommentare schliessen (default)',
+    'registration_type' => 'Registrierungsart',
+    'comment_postmode' => 'Kommentar Eingabeart',
+    'comment_editor' => 'Kommentar Editor'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2262,7 +2298,7 @@ $LANG_fs['Core'] = array(
     'fs_perm_block' => 'Standardeinstellung Blockrechte',
     'fs_webservices' => 'Webservices',
     'fs_caching' => 'Caching',
-    'fs_mulitlanguage' => 'Multiple Language Support - See <a href="http://www.glfusion.org/wiki/doku.php/glfusion:language#multilingual_sites" target=_blank>Multi-Language Documentation</a>'
+    'fs_mulitlanguage' => 'Unterstützung mehrerer Sprachen - Siehe: <a href="http://www.glfusion.org/wiki/doku.php/glfusion:language#multilingual_sites" target=_blank>Multi-Language Documentation</a>'
 );
 
 $LANG_configselects['Core'] = array(
@@ -2292,7 +2328,7 @@ $LANG_configselects['Core'] = array(
     23 => array('Deaktiviert' => 0, 'Aktiviert (Exakt. Übereinstimmung)' => 1, 'Aktiviert (Wortanfag)' => 2, 'Aktiviert (Wortfragment)' => 3),
     24 => array('Disabled' => 0, 'Logged-in Users' => 1, 'Everyone' => 2),
     25 => array('No' => 0, 'Optional' => 1, 'Required' => 2),
-    26 => array('None' => 0, 'A.B' => 1, 'A.B.C' => 2, 'All' => 3),
+    26 => array('Keine' => 0, 'A.B' => 1, 'A.B.C' => 2, 'All' => 3),
     27 => array('Generate Password' => 0, 'User Enters Password' => 1),
     28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1)
 );

@@ -50,27 +50,49 @@
 * glFusion common function library
 */
 require_once 'lib-common.php';
-
-USES_lib_story();
+require_once $_CONF['path_system'] . 'lib-story.php';
 
 if ($_CONF['trackback_enabled']) {
-    USES_lib_trackback();
+    require_once $_CONF['path_system'] . 'lib-trackback.php';
 }
 
-// set argument names for URL rewrite.
+// MAIN
+$display = '';
 
-$inputHandler->setArgNames (array ('story', 'mode'));
-
-$sid   = IO_getVar('strict','story',array('post','get'),'');
-$mode  = IO_getVar('strict','mode' ,array('post','get'),'');
-$order = IO_getVar('strict','order',array('post','get'),'');
-$query = IO_getVar('strict','query',array('post','get'),'');
-$reply = IO_getVar('strict','reply',array('post','get'),'');
+$order = '';
+$query = '';
+$reply = '';
+if (isset ($_POST['mode'])) {
+    $sid = COM_applyFilter ($_POST['story']);
+    $mode = COM_applyFilter ($_POST['mode']);
+    if (isset ($_POST['order'])) {
+        $order = COM_applyFilter ($_POST['order']);
+    }
+    if (isset ($_POST['query'])) {
+        $query = COM_applyFilter ($_POST['query']);
+    }
+    if (isset ($_POST['reply'])) {
+        $reply = COM_applyFilter ($_POST['reply']);
+    }
+} else {
+    COM_setArgNames (array ('story', 'mode'));
+    $sid = COM_applyFilter (COM_getArgument ('story'));
+    $mode = COM_applyFilter (COM_getArgument ('mode'));
+    if (isset ($_GET['order'])) {
+        $order = COM_applyFilter ($_GET['order']);
+    }
+    if (isset ($_GET['query'])) {
+        $query = COM_applyFilter ($_GET['query']);
+    }
+    if (isset ($_GET['reply'])) {
+        $reply = COM_applyFilter ($_GET['reply']);
+    }
+}
 
 if (empty ($sid)) {
-    IO_redirect($_CONF['site_url'] . '/index.php');
+    echo COM_refresh ($_CONF['site_url'] . '/index.php');
+    exit();
 }
-
 if ((strcasecmp ($order, 'ASC') != 0) && (strcasecmp ($order, 'DESC') != 0)) {
     $order = '';
 }
@@ -78,6 +100,7 @@ if ((strcasecmp ($order, 'ASC') != 0) && (strcasecmp ($order, 'DESC') != 0)) {
 $result = DB_query("SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE sid = '".DB_escapeString($sid)."'" . COM_getPermSql ('AND'));
 $A = DB_fetchArray($result);
 if ($A['count'] > 0) {
+
     $ratedIds = array();
     if ( $_CONF['rating_enabled'] != 0 ) {
         $ratedIds = RATING_getRatedIds('article');
@@ -85,8 +108,10 @@ if ($A['count'] > 0) {
 
     $story = new Story();
 
-    $args = array ( 'sid' => $sid,
-                    'mode' => 'view');
+    $args = array (
+                    'sid' => $sid,
+                    'mode' => 'view'
+                  );
 
     $output = STORY_LOADED_OK;
     $result = PLG_invokeService('story', 'get', $args, $output, $svc_msg);
@@ -106,12 +131,18 @@ if ($A['count'] > 0) {
        $story->_fullname = $output['fullname'];
     }
     if ($output == STORY_PERMISSION_DENIED) {
-        $pageHandle->displayAccessError($LANG_ACCESS['accessdenied'],$LANG_ACCESS['storydenialmsg'], $desc='' );
+        $display .= COM_siteHeader ('menu', $LANG_ACCESS['accessdenied'])
+                 . COM_startBlock ($LANG_ACCESS['accessdenied'], '',
+                           COM_getBlockTemplate ('_msg_block', 'header'))
+                 . $LANG_ACCESS['storydenialmsg']
+                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
+                 . COM_siteFooter ();
     } elseif ( $output == STORY_INVALID_SID ) {
-        IO_redirect($_CONF['site_url'] . '/404.php');
+        $display .= COM_refresh($_CONF['site_url'] . '/index.php');
     } elseif (($mode == 'print') && ($_CONF['hideprintericon'] == 0)) {
         $story_template = new Template($_CONF['path_layout'] . 'article');
         $story_template->set_file('article', 'printable.thtml');
+        $story_template->set_var('xhtml', XHTML);
         $story_template->set_var('direction', $LANG_DIRECTION);
         $story_template->set_var('page_title',
                 $_CONF['site_name'] . ': ' . $story->displayElements('title'));
@@ -140,7 +171,7 @@ if ($A['count'] > 0) {
         $story_template->set_var ('site_name', $_CONF['site_name']);
         $story_template->set_var ('site_slogan', $_CONF['site_slogan']);
         $story_template->set_var ('story_id', $story->getSid());
-        $articleUrl = IO_buildUrl ($_CONF['site_url']
+        $articleUrl = COM_buildUrl ($_CONF['site_url']
                                     . '/article.php?story=' . $story->getSid());
         if ($story->DisplayElements('commentcode') >= 0) {
             $commentsUrl = $articleUrl . '#comments';
@@ -166,34 +197,36 @@ if ($A['count'] > 0) {
 
         $story_template->parse('output', 'article');
         $display = $story_template->finish($story_template->get_var('output'));
-        echo $display;
-        exit;
     } else {
         // Set page title
         $pagetitle = $story->DisplayElements('title');
-        IO_setPageTitle($pagetitle);
 
-        $permalink = IO_buildUrl($_CONF['site_url'] . '/article.php?story='
+        $headercode = '';
+        $permalink = COM_buildUrl($_CONF['site_url'] . '/article.php?story='
                                   . $story->getSid());
-
-        IO_addLink('canonical',$permalink);
-
+        $headercode .= '<link rel="canonical" href="'.$permalink.'"'.XHTML.'>';
         if ($story->DisplayElements('trackbackcode') == 0) {
             if ($_CONF['trackback_enabled']) {
                 $trackbackurl = TRB_makeTrackbackUrl($story->getSid());
-                IO_addRaw( LB . '<!--' . LB
+                $headercode .= LB . '<!--' . LB
                      . TRB_trackbackRdf($permalink, $pagetitle, $trackbackurl)
-                     . LB . '-->' . LB);
+                     . LB . '-->' . LB;
             }
             if ($_CONF['pingback_enabled']) {
-                IO_addDirectHeader('X-Pingback: ' . $_CONF['site_url'] . '/pingback.php');
+                header ('X-Pingback: ' . $_CONF['site_url'] . '/pingback.php');
             }
         }
+        $display .= COM_siteHeader('menu', $pagetitle, $headercode);
 
-        $msg = IO_getVar('integer','msg',array('get'),0);
-        if ($msg > 0) {
-            $plugin = IO_getVar('strict','plugin',array('get'),'');
-            IO_addMessage($msg,$plugin);
+        if (isset($_GET['msg'])) {
+            $msg = intval(COM_applyFilter($_GET['msg'], true));
+            if ($msg > 0) {
+                $plugin = '';
+                if (isset($_GET['plugin'])) {
+                    $plugin = COM_applyFilter($_GET['plugin']);
+                }
+                $display .= COM_showMessage($msg, $plugin);
+            }
         }
         DB_query ("UPDATE {$_TABLES['stories']} SET hits = hits + 1 WHERE (sid = '".DB_escapeString($story->getSid())."') AND (date <= NOW()) AND (draft_flag = 0)");
 
@@ -202,6 +235,9 @@ if ($A['count'] > 0) {
         $story_template = new Template($_CONF['path_layout'] . 'article');
         $story_template->set_file('article','article.thtml');
 
+        $story_template->set_var('xhtml', XHTML);
+        $story_template->set_var('site_url', $_CONF['site_url']);
+        $story_template->set_var('site_admin_url', $_CONF['site_admin_url']);
         $story_template->set_var('layout_url', $_CONF['layout_url']);
         $story_template->set_var('story_id', $story->getSid());
         $story_template->set_var('story_title', $pagetitle);
@@ -216,7 +252,7 @@ if ($A['count'] > 0) {
             $story_template->set_var ('lang_email_story', $LANG11[2]);
             $story_template->set_var ('lang_email_story_alt', $LANG01[64]);
         }
-        $printUrl = IO_buildUrl ($_CONF['site_url']
+        $printUrl = COM_buildUrl ($_CONF['site_url']
                 . '/article.php?story=' . $story->getSid() . '&amp;mode=print');
         if ($_CONF['hideprintericon'] == 0) {
             $story_options[] = COM_createLink($LANG11[3], $printUrl, array('rel' => 'nofollow'));
@@ -267,7 +303,8 @@ if ($A['count'] > 0) {
                                   STORY_renderArticle ($story, 'n', '', $query));
 
         // display comments or not?
-        if ( (is_numeric($mode)) and ($_CONF['allow_page_breaks'] == 1) ) {
+        if ( (is_numeric($mode)) and ($_CONF['allow_page_breaks'] == 1) )
+        {
             $story_page = $mode;
             $mode = '';
             if( $story_page <= 0 ) {
@@ -292,11 +329,19 @@ if ($A['count'] > 0) {
         if (($story->displayElements('commentcode') >= 0) and $show_comments) {
             $delete_option = (SEC_hasRights('story.edit') && ($story->getAccess() == 3)
                              ? true : false);
-            USES_lib_comments();
-
-            $mode = IO_getVar('strict','mode',array('get','post'),'');
-            $page = IO_getVar('integer','page',array('get'),1);
-
+            require_once ( $_CONF['path_system'] . 'lib-comment.php' );
+            if ( isset($_GET['mode']) ) {
+                $mode = COM_applyFilter($_GET['mode']);
+            } elseif ( isset($_POST['mode']) ) {
+                $mode = COM_applyFilter($_POST['mode']);
+            } else {
+                $mode = '';
+            }
+            if ( isset($_GET['page']) ) {
+                $page = intval(COM_applyFilter($_GET['page'],true));
+            } else {
+                $page = 1;
+            }
             $story_template->set_var ('commentbar',
                     CMT_userComments ($story->getSid(), $story->displayElements('title'), 'article',
                                       $order, $mode, 0, $page, false, $delete_option, $story->displayElements('commentcode'),$story->displayElements('uid')));
@@ -316,7 +361,7 @@ if ($A['count'] > 0) {
                 }
             }
 
-            $permalink = IO_buildUrl ($_CONF['site_url']
+            $permalink = COM_buildUrl ($_CONF['site_url']
                                        . '/article.php?story=' . $story->getSid());
             $story_template->set_var ('trackback',
                     TRB_renderTrackbackComments ($story->getSID(), 'article',
@@ -324,13 +369,13 @@ if ($A['count'] > 0) {
         } else {
             $story_template->set_var ('trackback', '');
         }
-        IO_addContent($story_template->finish ($story_template->parse ('output', 'article')));
+        $display .= $story_template->finish ($story_template->parse ('output', 'article'));
+        $display .= COM_siteFooter ();
     }
 } else {
-    IO_redirect($_CONF['site_url'] . '/index.php');
+    $display .= COM_refresh($_CONF['site_url'] . '/index.php');
 }
 
-
-IO_displayPage();
+echo $display;
 
 ?>

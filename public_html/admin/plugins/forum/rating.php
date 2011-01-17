@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Forum Plugin Community Moderation Setting administration                 |
 // +--------------------------------------------------------------------------+
-// | $Id:: rating.php 4800 2009-08-08 22:00:48Z mevans0263                   $|
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2009 by the following authors:                             |
 // |                                                                          |

@@ -9,6 +9,7 @@
 #
 # German translation by Dirk Haun <dirk AT haun-online DOT de>
 # and Markus Wollschläger
+# Modifiziert: August 09 Tony Kluever
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -48,10 +49,10 @@ $LANG_STATIC = array(
     'date' => 'Letzte Änderung',
     'title' => 'Titel',
     'content' => 'Inhalt',
-    'hits' => 'Abrufe',
+    'hits' => 'Aufrufe',
     'staticpagelist' => 'Liste der Statischen Seiten',
     'url' => 'URL',
-    'edit' => 'Ändern',
+    'edit' => 'Bearbeiten',
     'lastupdated' => 'Letzte Änderung',
     'pageformat' => 'Seitenformat',
     'leftrightblocks' => 'Blöcke links &amp; rechts',
@@ -71,8 +72,8 @@ $LANG_STATIC = array(
     'results' => 'Gefundene Statische Seiten',
     'author' => 'Autor',
     'no_title_or_content' => 'Bitte mindestens die Felder <b>Titel</b> und <b>Inhalt</b> ausfüllen.',
-    'no_such_page_anon' => 'Bitte einloggen.',
-    'no_page_access_msg' => "Dies könnte passiert sein, weil Sie nicht eingeloggt sind, oder kein Mitglied sind von  {$_CONF['site_name']}. Bitte <a href=\"{$_CONF['site_url']}/users.php?mode=new\"> Mitglied werden</a> bei {$_CONF['site_name']}, um vollen Zugriff zu erhalten.",
+    'no_such_page_anon' => 'Bitte anmelden.',
+    'no_page_access_msg' => "Dies könnte passiert sein, weil Sie nicht angemeldet sind, oder kein Mitglied sind von  {$_CONF['site_name']}. Bitte <a href=\"{$_CONF['site_url']}/users.php?mode=new\"> Mitglied werden</a> bei {$_CONF['site_name']}, um vollen Zugriff zu erhalten.",
     'php_msg' => 'PHP: ',
     'php_warn' => 'Hinweis: Wenn diese Option aktiviert ist, wird in der Seite enthaltener PHP-Code ausgeführt. <em>Bitte mit Bedacht verwenden!</em>',
     'exit_msg' => 'Hinweistext: ',
@@ -80,7 +81,7 @@ $LANG_STATIC = array(
     'deny_msg' => 'Zugriff auf diese Seite ist nicht möglich. Die Seite wurde entweder umbenannt oder gelöscht oder Sie haben nicht die nötigen Zugriffsrechte.',
     'stats_headline' => 'Top Ten der Statischen Seiten',
     'stats_page_title' => 'Titel',
-    'stats_hits' => 'Angezeigt',
+    'stats_hits' => 'Aufrufe',
     'stats_no_hits' => 'Es gibt keine Statischen Seiten oder sie wurden von niemandem gelesen.',
     'id' => 'ID',
     'duplicate_id' => 'Diese ID wird bereits für eine andere Statische Seite benutzt. Bitte andere ID wählen.',
@@ -95,12 +96,14 @@ $LANG_STATIC = array(
     'position_feat' => 'Nach Hauptartikel',
     'position_bottom' => 'Seitenende',
     'position_entire' => 'Ganze Seite',
+    'position_nonews' => 'Only if No Other News',
     'head_centerblock' => 'Centerblock',
     'centerblock_no' => 'Nein',
     'centerblock_top' => 'oben',
     'centerblock_feat' => 'Hauptartikel',
     'centerblock_bottom' => 'unten',
     'centerblock_entire' => 'Ganze Seite',
+    'centerblock_nonews' => 'If No News',
     'inblock_msg' => 'Im Block: ',
     'inblock_info' => 'Block-Templates für diese Seite verwenden.',
     'title_edit' => 'Seite ändern',
@@ -115,7 +118,7 @@ $LANG_STATIC = array(
     'limit_results' => 'Ergebnisse einschränken',
     'search' => 'Suchen',
     'submit' => 'Absenden',
-    'delete_confirm' => 'Are you sure you want to delete this page?',
+    'delete_confirm' => 'Möchten Sie diese Seite wirklich löschen?',
     'allnhp_topics' => 'All Topics (No Homepage)'
 );
 
@@ -123,13 +126,13 @@ $PLG_staticpages_MESSAGE19 = '';
 $PLG_staticpages_MESSAGE20 = '';
 
 // Messages for the plugin upgrade
-$PLG_staticpages_MESSAGE3001 = 'Plugin upgrade not supported.';
+$PLG_staticpages_MESSAGE3001 = 'Plugin-Upgrade nicht unterstützt.';
 $PLG_staticpages_MESSAGE3002 = $LANG32[9];
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['staticpages'] = array(
     'label' => 'Statische Seiten',
-    'title' => 'Konfiguration Statische Seiten'
+    'title' => 'Konfiguration - Statische Seiten'
 );
 
 $LANG_confignames['staticpages'] = array(
@@ -138,11 +141,11 @@ $LANG_confignames['staticpages'] = array(
     'sort_menu_by' => 'Menüeinträge sortieren nach',
     'delete_pages' => 'Seiten mit Benutzer löschen?',
     'in_block' => 'Block-Template verwenden?',
-    'show_hits' => 'Treffer anzeigen?',
+    'show_hits' => 'Aufrufe anzeigen?',
     'show_date' => 'Datum anzeigen?',
     'filter_html' => 'HTML filtern?',
     'censor' => 'Inhalt zensieren?',
-    'default_permissions' => 'Grundeinstellungen Statische Seiten',
+    'default_permissions' => 'Standardeinstellungen - Statische Seiten',
     'aftersave' => 'Nach dem Speichern der Seiten',
     'atom_max_items' => 'Max. Seiten in Webservices News-Feed',
     'comment_code' => 'Comment Default',
@@ -155,8 +158,8 @@ $LANG_configsubgroups['staticpages'] = array(
 );
 
 $LANG_fs['staticpages'] = array(
-    'fs_main' => 'Statische Seiten Haupteinstellungen',
-    'fs_permissions' => 'Grundeinstellungen Rechte'
+    'fs_main' => 'Statische Seiten - Haupteinstellungen',
+    'fs_permissions' => 'Standardberechtigungen - Statische Seiten'
 );
 
 // Note: entries 0, 1, 9, and 12 are the same as in $LANG_configselects['Core']

@@ -1284,7 +1284,7 @@ if (($mode == 'delete') && SEC_checkToken()) {
             $target = '';
         } else {
             $message = '<p>' . $LANG_TRB['pb_error_details'] . '<br' . XHTML . '>'
-                     . '<span class="glf-warning-small">'
+                     . '<span class="warningsmall">'
                      . htmlspecialchars($result,ENT_COMPAT,COM_getEncodingt()) . '</span></p>';
             $display .= TRACKBACK_showMessage($LANG_TRB['send_error'], $message);
         }

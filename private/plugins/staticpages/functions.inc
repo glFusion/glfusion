@@ -44,12 +44,20 @@ if (!defined ('GVERSION')) {
 }
 
 $plugin_path = $_CONF['path'] . 'plugins/staticpages/';
-$langfile = $plugin_path . 'language/' . $_CONF['language'] . '.php';
+$lang = $_CONF['language'];
+$langfile = $plugin_path . 'language/' . $lang . '.php';
 
 if (file_exists($langfile)) {
     require_once $langfile;
 } else {
+    $lang = 'english';
     require_once $plugin_path . 'language/english.php';
+}
+
+// Include the custom language file, if any
+$langfile = $plugin_path . 'language/custom/' . $lang . '.php';
+if (@file_exists($langfile)) {
+    require_once $langfile;
 }
 
 /*

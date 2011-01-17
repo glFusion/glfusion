@@ -6,7 +6,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -58,10 +58,10 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '2.0.0');
+    define('GVERSION', '1.2.1');
 }
 
-define('PATCHLEVEL','.svn');
+define('PATCHLEVEL','.pl0');
 
 //define('DEMO_MODE',true);
 
@@ -77,6 +77,10 @@ $_COM_VERBOSE = false;
 */
 $_REQUEST = array_merge($_GET, $_POST);
 
+if (!isset($REMOTE_ADDR)) {
+    $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
+}
+
 /**
   * Here, we shall establish an error handler. This will mean that whenever a
   * php level error is encountered, our own code handles it. This will hopefuly
@@ -87,8 +91,18 @@ $_REQUEST = array_merge($_GET, $_POST);
   * Must make sure that the function hasn't been disabled before calling it.
   *
   */
-if( function_exists('set_error_handler') ) {
-    $defaultErrorHandler = set_error_handler('COM_handleError', error_reporting());
+if( function_exists('set_error_handler') )
+{
+    if( PHP_VERSION >= 5 )
+    {
+        /* Tell the error handler to use the default error reporting options.
+         * you may like to change this to use it in more/less cases, if so,
+         * just use the syntax used in the call to error_reporting() above.
+         */
+        $defaultErrorHandler = set_error_handler('COM_handleError', error_reporting());
+    } else {
+        $defaultErrorHandler = set_error_handler('COM_handleError');
+    }
 }
 
 /**
@@ -120,9 +134,6 @@ $config->initConfig();
 
 $_CONF = $config->get_config('Core');
 
-require_once $_CONF['path_system'].'classes/message.class.php';
-$messageHandle =& messageHandler::getInstance();
-
 if ( !isset($_CONF['default_photo']) || $_CONF['default_photo'] == '' ) {
     $_CONF['default_photo'] = $_CONF['site_url'].'/images/userphotos/default.jpg';
 }
@@ -151,14 +162,7 @@ if (isset($_SYSTEM['site_enabled']) && !$_SYSTEM['site_enabled']) {
     }
     exit;
 }
-/*
- * Setup the input handler
- */
-require_once $_CONF['path_system'] . 'classes/htmlfilter.class.php';
-require_once $_CONF['path_system'] . 'classes/sanitize.class.php';
-$inputHandler =& sanitize::getInstance();
 
-require_once $_CONF['path_system'] . 'lib-io.php';
 list($usec, $sec) = explode(' ', microtime());
 mt_srand( (10000000000 * (float)$usec) ^ (float)$sec );
 
@@ -185,6 +189,25 @@ if( !$_CONF['have_pear'] ) {
                                  . $curPHPIncludePath ) === false ) {
         COM_errorLog( 'set_include_path failed - there may be problems using the PEAR classes.', 1);
     }
+}
+
+
+if( !function_exists( 'file_put_contents' )) {
+    require_once 'PHP/Compat.php';
+
+    PHP_Compat::loadFunction( 'file_put_contents' );
+}
+
+if( !function_exists( 'stripos' )) {
+    require_once 'PHP/Compat.php';
+
+    PHP_Compat::loadFunction( 'stripos' );
+}
+
+if ( !function_exists( 'htmlspecialchars_decode' ) ) {
+    require_once 'PHP/Compat.php';
+
+    PHP_Compat::loadFunction( 'htmlspecialchars_decode' );
 }
 
 /**
@@ -369,13 +392,6 @@ elseif (file_exists($_CONF['path_layout'] . 'functions.php')) {
 if (!isset($themeAPI) ) {
     $themeAPI = 1;
 }
-
-/**
-* Initialize the output Handler
-*/
-require_once $_CONF['path_system'] . 'classes/output.class.php';
-$pageHandle = new outputHandler();
-$pageHandle->setRewriteEnabled($_CONF['url_rewrite']);
 
 // ensure XHTML constant is defined to avoid problems elsewhere
 
@@ -1063,7 +1079,6 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG01, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $theme_what, $theme_pagetitle,
            $theme_headercode, $theme_layout,$stMenu,$themeAPI;
-
 
     if ( $themeAPI == 1 ) {
         require_once $_CONF['path_system'] . 'lib-compatibility.php';
@@ -3195,7 +3210,7 @@ function COM_checkHTML( $str, $permissions = 'story.edit' )
 */
 function COM_filterHTML( $str, $permissions = 'story.edit' )
 {
-    global $_CONF;
+    global $_CONF, $_SYSTEM;
 
     if( isset( $_CONF['skip_html_filter_for_root'] ) &&
              ( $_CONF['skip_html_filter_for_root'] == 1 ) &&
@@ -3203,22 +3218,33 @@ function COM_filterHTML( $str, $permissions = 'story.edit' )
         return $str;
     }
 
+    if ( $_CONF['allow_embed_object'] == 1 ) {
+        $configArray = array('safe' => 1,
+                             'elements' => '*+embed+object',
+                             'balance'  => 1,
+                             'valid_xhtml' => 0
+                            );
+    } else {
+        $configArray = array('safe' => 1,
+                             'balance'  => 1,
+                             'valid_xhtml' => 1
+                            );
+    }
+
+    if ( isset($_SYSTEM['filterOverride']) && is_array($_SYSTEM['filterOverride'] ) ) {
+        $configArray = array_merge($configArray,$_SYSTEM['filterOverride']);
+    }
+
+    if ( SEC_inGroup('Root') && isset($_SYSTEM['RootFilterOverride']) && is_array($_SYSTEM['RootFilterOverride'] ) ) {
+        $configArray = array_merge($configArray,$_SYSTEM['RootFilterOverride']);
+    }
+
     require_once $_CONF['path'] . 'lib/htmLawed/htmLawed.php';
 
     if ( $_CONF['allow_embed_object'] == 1 ) {
-        $str = htmLawed($str,array( 'safe'=>1,
-                                    'elements'=>'*+embed+object',
-                                    'balance'=>1,
-                                    'valid_xhtml'=>0
-
-                                    )
-                        );
+        $str = htmLawed($str,$configArray);
     } else {
-        $str = htmLawed($str,array( 'safe'=>1,
-                                    'balance'=>1,
-                                    'valid_xhtml'=>1
-                                    )
-                        );
+        $str = htmLawed($str,$configArray);
     }
     return $str;
 }
@@ -4651,10 +4677,11 @@ function COM_formatTimeString( $time_string, $time, $type = '', $amount = 0 )
 *
 * @param    string  $message    Message text; may contain HTML
 * @param    string  $title      (optional) alternative block title
+* @param	string	$boolean	(optional) whether message should be persistent
 * @return   string              HTML block with message
 *
 */
-function COM_showMessageText($message, $title = '')
+function COM_showMessageText($message, $title = '', $persist = false)
 {
     global $_CONF, $MESSAGE, $_IMAGE_TYPE;
 
@@ -4665,12 +4692,13 @@ function COM_showMessageText($message, $title = '')
             $title = $MESSAGE[40];
         }
         $timestamp = strftime($_CONF['daytime']);
+        $msg_block = ($persist) ? '_persistent_msg_block' : '_msg_block';
         $retval .= COM_startBlock($title . ' - ' . $timestamp, '',
-                                  COM_getBlockTemplate('_msg_block', 'header'))
+                                  COM_getBlockTemplate($msg_block, 'header'))
                 . '<p class="sysmessage"><img src="' . $_CONF['layout_url']
                 . '/images/sysmessage.' . $_IMAGE_TYPE . '" alt="" ' . XHTML
                 . '>' . $message . '</p>'
-                . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
+                . COM_endBlock(COM_getBlockTemplate($msg_block, 'footer'));
     }
 
     return $retval;
@@ -4685,9 +4713,11 @@ function COM_showMessageText($message, $title = '')
 *
 * @param    int     $msg        ID of message to show
 * @param    string  $plugin     Optional Name of plugin to lookup plugin defined message
+* @param    string  $title      (optional) alternative block title
+* @param	string	$boolean	(optional) whether message should be persistent
 * @return   string              HTML block with message
 */
-function COM_showMessage($msg, $plugin = '')
+function COM_showMessage($msg, $plugin = '', $title = '', $persist = false)
 {
     global $MESSAGE;
 
@@ -4708,7 +4738,7 @@ function COM_showMessage($msg, $plugin = '')
         }
 
         if (!empty($message)) {
-            $retval .= COM_showMessageText($message);
+            $retval .= COM_showMessageText($message, $title, $persist);
         }
     }
 
@@ -4718,9 +4748,9 @@ function COM_showMessage($msg, $plugin = '')
 /**
 * Displays a message, as defined by URL parameters
 *
-* Helper function to display a message, if URL parameters 'msg' and 'plugin'
-* (optional) are defined. Only for GET requests, but that's what glFusion uses
-* everywhere anyway.
+* Helper function to display a message, but only if $_GET parameter 'msg' is defined.
+* optional parameters 'plugin', 'title' and 'persist' are also parsed
+* Only for GET requests, but that's what glFusion uses everywhere anyway.
 *
 * @return   string  HTML block with message
 *
@@ -4732,11 +4762,10 @@ function COM_showMessageFromParameter()
     if (isset($_GET['msg'])) {
         $msg = COM_applyFilter($_GET['msg'], true);
         if ($msg > 0) {
-            $plugin = '';
-            if (isset($_GET['plugin'])) {
-                $plugin = COM_applyFilter($_GET['plugin']);
-            }
-            $retval .= COM_showMessage($msg, $plugin);
+			$plugin = (isset($_GET['plugin'])) ? COM_applyFilter($_GET['plugin']) : '';
+			$title = (isset($_GET['title'])) ? COM_applyFilter($_GET['title']) : '';
+			$persist = (isset($_GET['persist'])) ? true : false;
+            $retval .= COM_showMessage($msg, $plugin, $title, $persist);
         }
     }
 
@@ -5456,20 +5485,6 @@ function COM_resetSpeedlimit($type = 'submit', $property = '')
     DB_delete($_TABLES['speedlimit'], array('type', 'ipaddress'), array($type, $property));
 }
 
-function COM_SpeedLimitError($type,$seconds,$wait)
-{
-    global $_CONF, $pageHandle;
-
-    $pageHandle->pageTemplate->set_var('speedlimit','true');
-    $pageHandle->pageTemplate->set_var('type',$type);
-    $pageHandle->pageTemplate->set_var('seconds',$seconds);
-    $pageHandle->pageTemplate->set_var('wait',$wait);
-    $pageHandle->flushContentBuffer();
-
-    IO_displayPage();
-}
-
-
 /**
 * Wrapper function for URL class so as to not confuse people as this will
 * eventually get used all over the place
@@ -5482,9 +5497,9 @@ function COM_SpeedLimitError($type,$seconds,$wait)
 
 function COM_buildURL( $url )
 {
-    global $pageHandle;
+    global $_URL;
 
-    return $pageHandle->buildURL($url);
+    return $_URL->buildURL( $url );
 }
 
 /**
@@ -5975,7 +5990,10 @@ function COM_highlightQuery( $text, $query, $class = 'highlight' )
                       $after = "/u";
                  }
             }
-            $text = preg_replace($before . $searchword . $after, "<span class=\"$class\">\\0</span>", '<!-- x -->' . $text . '<!-- x -->' );
+            $HLtext = @preg_replace($before . $searchword . $after, "<span class=\"$class\">\\0</span>", '<!-- x -->' . $text . '<!-- x -->' );
+            if ( $HLtext != NULL ) {
+                $text = $HLtext;
+            }
         }
     }
     return $text;
@@ -7069,6 +7087,30 @@ function COM_isAnonUser($uid = '')
     }
 }
 
+/**
+* Convert wiki-formatted text to (X)HTML
+*
+* @param    string  $wikitext   wiki-formatted text
+* @return   string              XHTML formatted text
+*
+*/
+function COM_renderWikiText($wikitext)
+{
+    global $_CONF;
+
+    if (!$_CONF['wikitext_editor']) {
+        return $wikitext;
+    }
+
+    require_once 'Text/Wiki.php';
+
+    $wiki = new Text_Wiki();
+    $wiki->disableRule('wikilink');
+    $wiki->disableRule('freelink');
+    $wiki->disableRule('interwiki');
+
+    return $wiki->transform($wikitext, 'Xhtml');
+}
 
 /**
 * Set the {lang_id} and {lang_attribute} variables for a template
@@ -7354,6 +7396,11 @@ function USES_lib_trackback() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-trackback.php';
 }
+/* this one is depreciated */
+function USES_lib_trackbacks() {
+    global $_CONF;
+    require_once $_CONF['path_system'] . 'lib-trackback.php';
+}
 function USES_lib_user() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-user.php';
@@ -7471,20 +7518,7 @@ function css_out(){
 
     $files   = array();
 
-    /*
-     * Check to see if the theme has any css to include...
-     */
-
-    $function = 'theme_themeCSS';
-
-    if( function_exists( $function )) {
-        $cssTheme = $function( );
-        if ( is_array($cssTheme) ) {
-            foreach($cssTheme AS $item => $file) {
-                $files[] = $file;
-            }
-        }
-    }
+    // Let's look in the custom directory first...
     if ( file_exists($_CONF['path_layout'] .'custom/style.css') ) {
         $files[] = $_CONF['path_layout'] . 'custom/style.css';
     } else {
@@ -7637,10 +7671,10 @@ function js_out(){
      */
 
     $files = array(
-        $_CONF['path_html'] . 'javascript/mootools/mootools-1.2.3-core.js',
-        $_CONF['path_html'] . 'javascript/mootools/mootools-1.2.3.1-more.js',
+        $_CONF['path_html'] . 'javascript/mootools/mootools-release-1.11.packed.js',
         $_CONF['path_html'] . 'fckeditor/fckeditor.js',
         $_CONF['path_html'] . 'javascript/common.js',
+        $_CONF['path_html'] . 'javascript/fValidator.js',
         $_CONF['path_html'] . 'javascript/mootools/gl_mooreflection.js',
         $_CONF['path_html'] . 'javascript/mootools/gl_moomenu.js',
         $_CONF['path_html'] . 'javascript/mootools/moorating.js',

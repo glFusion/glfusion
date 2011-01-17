@@ -216,7 +216,8 @@ $LANG_confignames['calendar'] = array(
     'delete_event' => 'Delete Events with Owner?',
     'aftersave' => 'After Saving Event',
     'default_permissions' => 'Event Default Permissions',
-    'only_admin_submit' => 'Only Allow Admins to Submit'
+    'only_admin_submit' => 'Only Allow Admins to Submit',
+    'displayblocks' => 'Display glFusion Blocks'
 );
 
 $LANG_configsubgroups['calendar'] = array(
@@ -234,7 +235,8 @@ $LANG_configselects['calendar'] = array(
     1 => array('True' => true, 'False' => false),
     6 => array('12' => 12, '24' => 24),
     9 => array('Forward to Event' => 'item', 'Display Admin List' => 'list', 'Display Calendar' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3)
+    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
+    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
 );
 
 ?>

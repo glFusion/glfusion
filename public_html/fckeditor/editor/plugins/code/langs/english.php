@@ -2,7 +2,7 @@
 // +---------------------------------------------------------------------------+
 // | CodeEmbed Plugin for FCKeditor                                            |
 // +---------------------------------------------------------------------------+
-// | $Id:: english.php 4739 2009-07-31 20:08:16Z mevans0263                   $|
+// | $Id::                                                                    $|
 // | This is the English language file for the code embed FCKeditor Plugin     |
 // +---------------------------------------------------------------------------|
 // | Copyright (C) 2005-2009 by the following authors:                         |

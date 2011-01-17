@@ -82,16 +82,16 @@
         var oEditor = FCKeditorAPI.GetInstance('comment_html') ;
         if (curmode == 'html') { // Switching from Text to HTML mode
             // Get the content from the textarea 'text' content and copy it to the editor
-            content = document.getElementById('comment').value;
+            content = document.getElementById('comment_text').value;
             oEditor.SetHTML(content);
         } else {
               content = getEditorContent();
-              document.getElementById('comment').value = content;
+              document.getElementById('comment_text').value = content;
           }
     }
 
     function set_postcontent() {
         if (document.getElementById('sel_editmode').value == 'html') {
-            document.getElementById('comment').value = getEditorContent();
+            document.getElementById('comment_text').value = getEditorContent();
         }
     }

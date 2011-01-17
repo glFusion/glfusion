@@ -607,7 +607,20 @@ $LANG09 = array(
     65 => 'Artikel',
     66 => 'Reactie',
     67 => 'Toon %d Resultaten',
-    68 => 'Sorteer Op'
+    68 => 'Sorteer Op',
+    69 => 'Filter by Author',
+    70 => 'Filter by type',
+    71 => 'Filter by date',
+    72 => 'Search Type',
+    73 => 'Display Per Page',
+    74 => 'Your search yielded no results<br/><ul><li>Check if your spelling is correct.</li><li>Change the <strong>Search Type</strong> being used.<em>Any of these</em> will return results if <strong>any</strong> of the search words appear in the text.  <em>All of these</em> will only return results when <strong>all</strong> all of the search words appear, and <em>Exact Match</em> will only return results where the text matches exactly to the search words entered.</li><li>Consider expanding the <strong>Date Filter</strong> or the <strong>Content Type Filter</strong>.</li></ul>',
+    75 => '1 day',
+    76 => '7 days',
+    77 => '2 weeks',
+    78 => '1 month',
+    79 => '3 months',
+    80 => '6 months',
+    81 => '1 year'
 );
 
 ###############################################################################
@@ -1323,7 +1336,8 @@ $LANG33 = array(
     52 => 'Fout: Bestaande Bestandsnaam',
     53 => 'Alle Voorpagina Artikelen',
     54 => 'Selecteer a.u.b. het feed-type dat u wilt aanmaken.',
-    55 => 'Artikelen'
+    55 => 'Artikelen',
+    56 => 'Do you really want to delete this feed?'
 );
 
 ###############################################################################

@@ -41,14 +41,25 @@ if (!defined ('GVERSION')) {
 }
 
 $plugin_path = $_CONF['path'] . 'plugins/calendar/';
-$langfile = $plugin_path . 'language/' . $_CONF['language'] . '.php';
+
+// load the language file(s), including custom strings if any
+
+$langfile = $_CONF['path'] . 'plugins/calendar/language/' . $_CONF['language'] . '.php';
+$custfile = $_CONF['path'] . 'plugins/calendar/language/custom/' . $_CONF['language'] . '.php';
 
 if (file_exists($langfile)) {
-    require_once $langfile;
+    include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
 } else {
-    require_once $plugin_path . 'language/english.php';
+    $langfile = $_CONF['path'].'plugins/calendar/language/english.php';
+    $custfile = $_CONF['path'].'plugins/calendar/language/custom/english.php';
+    include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
 }
-
 /*
 * Check and see if we need to load the plugin configuration
 */

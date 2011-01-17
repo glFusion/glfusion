@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2010 by the following authors:                        |
+// | Copyright (C) 2009-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -52,6 +52,6 @@ $_TABLES['staticpage']          = $_DB_table_prefix . 'staticpage';
 $_SP_CONF['pi_name']            = 'staticpages';
 $_SP_CONF['pi_display_name']    = 'Static Pages';
 $_SP_CONF['pi_version']         = '1.5.5';
-$_SP_CONF['gl_version']         = '1.2.0';
+$_SP_CONF['gl_version']         = '1.2.1';
 $_SP_CONF['pi_url']             = 'http://www.glfusion.org/';
 ?>

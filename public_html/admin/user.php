@@ -1305,7 +1305,7 @@ function USER_list($grp_id)
 
     $header_arr = array(      # display 'text' and use table field 'field'
                     array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center', 'width' => '35px'),
-//                  array('text' => $LANG28[37], 'field' => $_TABLES['users'] . '.uid', 'sort' => true, 'align' => 'center'),
+                    array('text' => $LANG28[37], 'field' => $_TABLES['users'] . '.uid', 'sort' => true, 'align' => 'center'),
                     array('text' => $LANG28[3], 'field' => 'username', 'sort' => true),
                     array('text' => $LANG28[4], 'field' => 'fullname', 'sort' => true),
                     array('text' => $LANG28[105], 'field' => 'status', 'sort' => true, 'align' => 'center'),

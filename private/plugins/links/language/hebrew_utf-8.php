@@ -248,7 +248,8 @@ $LANG_confignames['links'] = array(
     'show_category_descriptions' => 'הצגת תיאור הקטגוריה?',
     'root' => 'קוד הזיהוי של הקטגוריה הראשית',
     'default_permissions' => 'הרשאות ברירת המחדל של קישורים',
-    'target_blank' => 'Open Links in New Window'
+    'target_blank' => 'Open Links in New Window',
+    'displayblocks' => 'Display glFusion Blocks'
 );
 
 $LANG_configsubgroups['links'] = array(
@@ -266,7 +267,8 @@ $LANG_configselects['links'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => true, 'False' => false),
     9 => array('Forward to Linked Site' => 'item', 'Display Admin List' => 'list', 'Display Public List' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3)
+    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
+    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
 );
 
 ?>

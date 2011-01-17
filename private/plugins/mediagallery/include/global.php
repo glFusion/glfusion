@@ -630,7 +630,7 @@ function MG_saveGlobalAlbumAttr() {
     $filename_title_active  = isset($_POST['filename_title_active']) ? COM_applyFIlter($_POST['filename_title_active'],true) : 0;
     $image_skin_active      = isset($_POST['image_skin_active']) ? COM_applyFilter($_POST['image_skin_active'],true) : 0;
     $album_skin_active      = isset($_POST['album_skin_active']) ? COM_applyFilter($_POST['album_skin_active'],true) : 0;
-    $display_skin_active    = isset($_POST['display_dkin_active']) ? COM_applyFilter($_POST['display_skin_active'],true) : 0;
+    $display_skin_active    = isset($_POST['display_skin_active']) ? COM_applyFilter($_POST['display_skin_active'],true) : 0;
     $admin_menu             = isset($_POST['admin_menu']) ? COM_applyFilter($_POST['admin_menu'],true) : 0;
     $album_theme_active     = isset($_POST['album_theme_active']) ? COM_applyFilter($_POST['album_theme_active'],true) : 0;
 

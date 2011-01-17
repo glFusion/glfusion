@@ -18,7 +18,7 @@
     <div>
       <div class="required">
         <label for="menuname">{$LANG_ST01[label]}:</label>
-        <input class="required" type="text" id="menuname" name="menuname" size="48" value="{menuname}"{xhtml}>
+        <input class="fValidate['required']" type="text" id="menuname" name="menuname" size="48" value="{menuname}"{xhtml}>
       </div>
       <div class="required">
         <label for="menutype">{$LANG_ST01[menu_type]}:</label>

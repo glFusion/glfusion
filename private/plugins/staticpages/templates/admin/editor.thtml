@@ -59,7 +59,7 @@
               <td valign="top" align="right">{lang_content}:</td>
               <td>
                   <textarea name="sp_content" style="width:99%" cols="45" rows="24">{sp_content}</textarea>
-                  <br{xhtml}><span class="glf-warning-small">{lang_allowedhtml}</span><br{xhtml}><br{xhtml}>
+                  <br{xhtml}><span class="warningsmall">{lang_allowedhtml}</span><br{xhtml}><br{xhtml}>
               </td>
           </tr>
           <tr>

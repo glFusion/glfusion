@@ -2,7 +2,7 @@
 <script type="text/javascript">
     document.getElementById('sitetailor').style.display='';
 window.addEvent('load',function() {
-    var myValidator = new FormValidator.Inline("clonemenu");
+    var myValidator = new fValidator("clonemenu");
 });
 </script>
   <div class="glfform">
@@ -10,7 +10,7 @@ window.addEvent('load',function() {
     <div>
       <div class="required">
         <label for="menuname">{$LANG_ST01[clone_menu_label]}:</label>
-        <input class="required" type="text" id="menuname" name="menuname" size="48" value="{menuname}"{xhtml}>
+        <input class="fValidate['required']" type="text" id="menuname" name="menuname" size="48" value="{menuname}"{xhtml}>
       </div>
     <div style="text-align:center;padding-top:20px;padding-bottom:10px;">
       <input type="hidden" id="mode" name="mode" value="saveclonemenu"{xhtml}>

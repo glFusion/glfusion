@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2010 by the following authors:                        |
+// | Copyright (C) 2009 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -36,6 +36,9 @@
 
 require_once 'lib-common.php';
 
+// configuration option:
+// List stories for the current month on top of the overview page
+// (if set = true)
 $conf_list_current_month = false;
 
 // name of this script
@@ -45,7 +48,11 @@ $display = '';
 
 if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
                                    ($_CONF['directoryloginrequired'] == 1))) {
-    IO_displayLoginRequired();
+    $display .= COM_siteHeader('menu', $LANG_DIR['title']);
+    $display .= SEC_loginRequiredForm();
+    $display .= COM_siteFooter();
+    echo $display;
+    exit;
 }
 
 /**

@@ -42,11 +42,23 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-$langfile = $_CONF['path'].'plugins/forum/language/'.$_CONF['language'].'.php';
-if (file_exists ($langfile)) {
+// load the language file(s), including custom strings if any
+
+$langfile = $_CONF['path'] . 'plugins/forum/language/' . $_CONF['language'] . '.php';
+$custfile = $_CONF['path'] . 'plugins/forum/language/custom/' . $_CONF['language'] . '.php';
+
+if (file_exists($langfile)) {
     include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
 } else {
-    include_once $_CONF['path'].'plugins/forum/language/english.php';
+    $langfile = $_CONF['path'].'plugins/forum/language/english.php';
+    $custfile = $_CONF['path'].'plugins/forum/language/custom/english.php';
+    include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
 }
 
 // Need to add this line because PLG_enableStateChange does an include of this file inside a plugin function and $_TABLES is not global.
@@ -387,8 +399,13 @@ function plugin_getheadercode_forum() {
         return '';
     }
 
-    $gf_header .= '<style>'. LB . file_get_contents($_CONF['path'] . 'plugins/forum/css/style.css') . LB . '</style>' . LB;
-    $gf_header .= '<script type="text/javascript">' . LB . file_get_contents($_CONF['path'] . 'plugins/forum/js/mootips.js') . LB . '</script>' . LB;
+    $gf_header .= '<style>'. file_get_contents($_CONF['path'] . 'plugins/forum/css/style.css') . '</style>';
+
+    $gf_header .= '<script type="text/javascript">' . LB;
+    $gf_header .= '	window.addEvent(\'load\', function() {' . LB;
+    $gf_header .= '		var gfTips = new Tips($$(\'.gf_mootip\'), { maxTitleChars: 50, className: \'gftool\' });' . LB;
+    $gf_header .= '	});' . LB;
+    $gf_header .= '</script>' . LB;
 
     return $gf_header;
 }

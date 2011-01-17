@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric Warren            eric AT glfusion DOT org                          |
@@ -38,7 +38,7 @@
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
 if (!defined('GVERSION')) {
-    define('GVERSION', '2.0.0');
+    define('GVERSION', '1.2.1');
 }
 
 define('SESSION_EXPIRED',           1);
@@ -86,7 +86,6 @@ $glFusionVars = array('language','method','migrate','expire','dbconfig_path','lo
 if ( is_array($_POST) ) {
     foreach ($_POST AS $name => $value) {
         if ( in_array($name,$glFusionVars)) {
-//            $_GLFUSION[$name] = INST_stripslashes($value);
             switch ($name) {
                 case 'dbconfig_path' :
                 case 'log_path' :

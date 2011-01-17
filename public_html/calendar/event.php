@@ -144,7 +144,7 @@ function CALENDAR_addUserEvent($eid)
                         break;
                     default:
                         $location .= '<br' . XHTML . '>';
-						break;
+                        break;
                 }
             }
         }
@@ -185,7 +185,7 @@ function CALENDAR_saveUserEvent($eid)
 {
     global $_CONF, $_TABLES, $_USER;
 
-    if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
+    if (!COM_isAnonUser() ) {
 
         // Try to delete the event first in case it has already been added
         DB_query ("DELETE FROM {$_TABLES['personal_events']} WHERE uid={$_USER['uid']} AND eid='".DB_escapeString($eid)."'");
@@ -195,8 +195,8 @@ function CALENDAR_saveUserEvent($eid)
 
             $savesql = "INSERT INTO {$_TABLES['personal_events']} "
              . "(eid,status,uid,title,event_type,datestart,dateend,timestart,timeend,allday,location,address1,address2,city,state,"
-             . "zipcode,url,description,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon) SELECT eid,"
-             . $_USER['uid'] . ",title,event_type,datestart,dateend,timestart,timeend,allday,location,address1,address2,"
+             . "zipcode,url,description,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon) "
+             . " SELECT eid, status,".$_USER['uid'].",title,event_type,datestart,dateend,timestart,timeend,allday,location,address1,address2,"
              . "city,state,zipcode,url,description,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon FROM "
              . "{$_TABLES['events']} WHERE eid = '".DB_escapeString($eid)."'";
 
@@ -376,7 +376,7 @@ case 'addevent':
 
         $display .= CALENDAR_siteFooter ();
     } else {
-        $display = COM_refresh ($_CONF['site_url'] . '/index.php');
+        $display = COM_refresh ($_CONF['site_url'] . '/calendar/index.php');
     }
     break;
 
@@ -391,7 +391,7 @@ case 'saveuserevent':
             $display .= CALENDAR_siteFooter ();
         }
     } else {
-        $display = COM_refresh ($_CONF['site_url'] . '/index.php');
+        $display = COM_refresh ($_CONF['site_url'] . '/calendar/index.php');
     }
     break;
 
@@ -402,7 +402,7 @@ case $LANG_CAL_1[45]: // save edited personal event
              ($_POST['calendar_type'] == 'personal')) && SEC_checkToken()) {
         $display = plugin_savesubmission_calendar ($_POST);
     } else {
-        $display = COM_refresh ($_CONF['site_url'] . '/index.php');
+        $display = COM_refresh ($_CONF['site_url'] . '/calendar/index.php');
     }
     break;
 
@@ -415,10 +415,10 @@ case $LANG_CAL_1[51]:
             $display .= COM_refresh ($_CONF['site_url']
                      . '/calendar/index.php?mode=personal&amp;msg=26');
         } else {
-            $display = COM_refresh ($_CONF['site_url'] . '/index.php');
+            $display = COM_refresh ($_CONF['site_url'] . '/calendar/index.php');
         }
     } else {
-        $display = COM_refresh ($_CONF['site_url'] . '/index.php');
+        $display = COM_refresh ($_CONF['site_url'] . '/calendar/index.php');
     }
     break;
 
@@ -435,13 +435,13 @@ case 'edit':
                          . COM_endBlock ()
                          . CALENDAR_siteFooter ();
             } else {
-                $display = COM_refresh ($_CONF['site_url'] . '/index.php');
+                $display = COM_refresh ($_CONF['site_url'] . '/calendar/index.php');
             }
         } else {
-            $display = COM_refresh ($_CONF['site_url'] . '/index.php');
+            $display = COM_refresh ($_CONF['site_url'] . '/calendar/index.php');
         }
     } else {
-        $display = COM_refresh ($_CONF['site_url'] . '/index.php');
+        $display = COM_refresh ($_CONF['site_url'] . '/calendar/index.php');
     }
     break;
 

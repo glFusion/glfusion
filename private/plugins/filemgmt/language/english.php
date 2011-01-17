@@ -179,7 +179,7 @@ $LANG_fs['filemgmt'] = array(
     'fm_access'             => 'FileMgmt Access Control',
     'fm_general'            => 'FileMgmt General Settings',
 );
-// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
+// Note: entries 0, 1 are the same as in $LANG_configselects['Core']
 $LANG_configselects['filemgmt'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => TRUE, 'False' => FALSE),

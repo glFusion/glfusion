@@ -4,7 +4,7 @@
  glfusionEditorBasePath = "{site_url}/fckeditor/" ;
  glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
 window.addEvent('domready',function() {
-    var myValidator = new FormValidator.Inline("contact", { scrollToErrorsOnSubmit:false });
+    var myValidator = new fValidator("contact");
 });
 </script>
 <script type="text/javaScript" src="{site_url}/javascript/submitcontactuser_fckeditor.js"></script>
@@ -13,15 +13,15 @@ window.addEvent('domready',function() {
     <table cellspacing="0" cellpadding="3" width="100%">
       <tr>
         <td class="alignright" style="width:10%"><b>{lang_username}</b></td>
-        <td><input class="required" type="text" id="author" name="author" size="45" value="{username}" maxlength="96"{xhtml}></td>
+        <td><input class="fValidate['required']" type="text" id="author" name="author" size="45" value="{username}" maxlength="96"{xhtml}></td>
       </tr>
       <tr>
         <td class="alignright"><b>{lang_useremail}</b></td>
-        <td><input class="required validate-email" type="text" id="authoremail" name="authoremail" size="45" value="{useremail}" maxlength="96"{xhtml}></td>
+        <td><input class="fValidate['required','email']" type="text" id="authoremail" name="authoremail" size="45" value="{useremail}" maxlength="96"{xhtml}></td>
       </tr>
       <tr>
         <td class="alignright"><b>{lang_subject}</b></td>
-        <td><input class="required" type="text" id="subject" name="subject" size="45" maxlength="96" value="{subject}"{xhtml}></td>
+        <td><input class="fValidate['required']" type="text" id="subject" name="subject" size="45" maxlength="96" value="{subject}"{xhtml}></td>
       </tr>
       <tr>
         <td class="alignright" style="vertical-align:top;"><b>{lang_message}</b></td>

@@ -45,8 +45,7 @@ if ( !SEC_hasRights('stats.view') ) {
 
 // MAIN
 
-IO_setPageTitle($LANG10[1]);
-IO_setShowNavigationBlocks(true);
+$display .= COM_siteHeader ('menu', $LANG10[1]);
 
 // Overall Site Statistics
 
@@ -102,7 +101,7 @@ if (count ($plg_stats) > 0) {
     }
 }
 
-IO_addContent(ADMIN_simpleList("", $header_arr, $text_arr, $data_arr));
+$display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
 
 // Detailed story statistics
 
@@ -128,11 +127,11 @@ if ($nrows > 0) {
         $data_arr[$i] = $A;
 
     }
-    IO_addContent(ADMIN_simpleList("", $header_arr, $text_arr, $data_arr));
+    $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
 } else {
-    IO_addContent(COM_startBlock($LANG10[7]));
-    IO_addContent($LANG10[10]);
-    IO_addContent(COM_endBlock());
+    $display .= COM_startBlock($LANG10[7]);
+    $display .= $LANG10[10];
+    $display .= COM_endBlock();
 }
 
 // Top Ten Commented Stories
@@ -156,12 +155,12 @@ if ($nrows > 0) {
         $A['comments'] = COM_NumberFormat ($A['comments']);
         $data_arr[$i] = $A;
     }
-    IO_addContent(ADMIN_simpleList("", $header_arr, $text_arr, $data_arr));
+    $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
 
 } else {
-    IO_addContent(COM_startBlock($LANG10[11]));
-    IO_addContent($LANG10[13]);
-    IO_addContent(COM_endBlock());
+    $display .= COM_startBlock($LANG10[11]);
+    $display .= $LANG10[13];
+    $display .= COM_endBlock();
 }
 
 // Top Ten Trackback Comments
@@ -186,12 +185,12 @@ if ($_CONF['trackback_enabled'] || $_CONF['pingback_enabled']) {
             $A['count'] = COM_NumberFormat ($A['count']);
             $data_arr[$i] = $A;
         }
-        IO_addContent(ADMIN_simpleList("", $header_arr, $text_arr, $data_arr));
+        $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
 
     } else {
-        IO_addContent(COM_startBlock ($LANG10[25]));
-        IO_addContent($LANG10[26]);
-        IO_addContent(COM_endBlock ());
+        $display .= COM_startBlock ($LANG10[25]);
+        $display .= $LANG10[26];
+        $display .= COM_endBlock ();
     }
 }
 
@@ -218,11 +217,11 @@ if ($nrows > 0) {
         $data_arr[$i] = $A;
 
     }
-    IO_addContent(ADMIN_simpleList("", $header_arr, $text_arr, $data_arr));
+    $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
 } else {
-    IO_addContent(COM_startBlock($LANG10[22]));
-    IO_addContent($LANG10[24]);
-    IO_addContent(COM_endBlock());
+    $display .= COM_startBlock($LANG10[22]);
+    $display .= $LANG10[24];
+    $display .= COM_endBlock();
 }
 
 // Last 10 Logins
@@ -256,16 +255,17 @@ if ($nrows > 0) {
         }
         $data_arr[$i] = $A;
     }
-    IO_addContent(ADMIN_simpleList("", $header_arr, $text_arr, $data_arr));
+    $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
 } else {
-    IO_addContent(COM_startBlock($LANG10[6]));
-    IO_addContent($LANG10[28]);
-    IO_addContent(COM_endBlock());
+    $display .= COM_startBlock($LANG10[6]);
+    $display .= $LANG10[28];
+    $display .= COM_endBlock();
 }
 
 // Now show stats for any plugins that want to be included
-IO_addContent(PLG_getPluginStats(2));
+$display .= PLG_getPluginStats(2);
+$display .= COM_siteFooter();
 
-IO_displayPage();
+echo $display;
 
 ?>

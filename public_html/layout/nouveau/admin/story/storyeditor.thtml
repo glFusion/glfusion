@@ -40,7 +40,7 @@ function enablearchive(obj) {
     <table cellspacing="0" cellpadding="3" width="100%">
         <tr>
             <td class="alignright" style="width:100px;">{lang_author}:</td>
-            <td>{story_author}<input type="hidden" name="uid" value="{story_uid}"{xhtml}></td>
+            <td><select name="uid">{story_author_select}</select></td>
         </tr>
         <tr>
             <td class="alignright" style="vertical-align:top;">{lang_date}:</td>

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Forum Plugin Community Moderation User administration                    |
 // +--------------------------------------------------------------------------+
-// | $Id:: userrating.php 4574 2009-06-21 05:14:01Z mevans0263               $|
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2009 by the following authors:                             |
 // |                                                                          |
