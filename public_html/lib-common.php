@@ -58,10 +58,10 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.2.1');
+    define('GVERSION', '1.2.2');
 }
 
-define('PATCHLEVEL','.pl0');
+define('PATCHLEVEL','.svn');
 
 //define('DEMO_MODE',true);
 

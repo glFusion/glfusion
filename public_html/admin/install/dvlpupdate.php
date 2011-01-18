@@ -546,9 +546,24 @@ function glfusion_121()
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.2.1' WHERE name='glfusion'",1);
 }
 
+function glfusion_122()
+{
+    global $_TABLES, $_FM_TABLES, $_CONF;
+
+    $_SQL = array();
+
+    // new config options
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+
+    // update version number
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.2.2',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.2.2' WHERE name='glfusion'",1);
+}
+
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_121();
+glfusion_122();
 
 $stdPlugins=array('staticpages','spamx','links','polls','calendar','sitetailor','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
 foreach ($stdPlugins AS $pi_name) {
