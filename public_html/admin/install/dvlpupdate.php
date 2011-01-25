@@ -1,4 +1,4 @@
-<?php
+f<?php
 // +--------------------------------------------------------------------------+
 // | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
@@ -499,18 +499,23 @@ function glfusion_120()
     $c->add('status_flag', 1, 'select',0, 0, 13, 99, true, 'staticpages');
 
     // new stats.view permission
-    DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('stats.view','Allows access to the Stats page.',0)",1);
-    $ft_id = DB_insertId();
-    $all_grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'All Users'"));
-    $loggedin_grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'Logged-in Users'"));
-    $root_grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'Root'"));
-    if ( $_CONF['statsloginrequired'] || $_CONF['loginrequired'] ) {
-        DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $loggedin_grp_id)", 1);
+    $result = DB_query("SELECT * FROM {$_TABLES['features']} WHERE ft_name='stats.view'");
+    if ( DB_numRows($result) > 0 ) {
+        COM_errorLog("glFusion 1.2.0 Development update: stats.view permission already exists");
     } else {
-        DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $all_grp_id)", 1);
+        DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('stats.view','Allows access to the Stats page.',0)",1);
+        $ft_id = DB_insertId();
+        $all_grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'All Users'"));
+        $loggedin_grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'Logged-in Users'"));
+        $root_grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'Root'"));
+        if ( $_CONF['statsloginrequired'] || $_CONF['loginrequired'] ) {
+            DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $loggedin_grp_id)", 1);
+        } else {
+            DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $all_grp_id)", 1);
+        }
+        DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $root_grp_id)", 1);
+        $c->del('statsloginrequired','Core');
     }
-    DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $root_grp_id)", 1);
-    $c->del('statsloginrequired','Core');
 
     // registration
     $c->add('registration_type',0,'select',4,19,27,785,TRUE,'Core');

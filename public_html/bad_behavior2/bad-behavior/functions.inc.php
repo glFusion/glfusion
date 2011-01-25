@@ -41,6 +41,7 @@ function match_cidr($addr, $cidr) {
 		foreach ($cidr as $cidrlet) {
 			if (match_cidr($addr, $cidrlet)) {
 				$output = true;
+				break;
 			}
 		}
 	} else {

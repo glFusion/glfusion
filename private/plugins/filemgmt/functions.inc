@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -623,7 +623,7 @@ function filemgmt_buildSql ($topic, $limits)
 
     $where = ' filedetail.status=1 AND cat.grp_access IN (' . $grouplist . ') ';
     if ($topic > 0) {
-        $where = 'cid=' . $topic;
+        $where = 'filedetail.cid=' . $topic;
     }
 
     $limitsql = '';
@@ -634,13 +634,11 @@ function filemgmt_buildSql ($topic, $limits)
             if (!empty ($where)) {
                 $where .= ' AND ';
             }
-            $where .= "date >= DATE_SUB(NOW(),INTERVAL $hours HOUR)";
+            $where .= "filedetail.date >= DATE_SUB(NOW(),INTERVAL $hours HOUR)";
         } else {
             $limitsql = ' ORDER BY filedetail.date DESC LIMIT ' . $limits;
         }
-    }
-    else
-    {
+    } else {
         $limitsql = ' ORDER BY filedetail.date DESC LIMIT 10';
     }
 

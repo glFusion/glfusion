@@ -4,6 +4,23 @@ v1.2.x (Trunk Development Branch)
 ------
 
 
+v1.2.1.pl2
+----------
+- Fixed SQL error when creating FileMgmt content syndication (Mark)
+- Updated MSN IPs for Bad Behavior2 Plugin (Mark)
+- Bad Behavior provides an option to allow cross-site POST requests; these are
+  meant to be blocked by default as most sites do not need to receive form data
+  submitted from other sites. However, the option to enable it for those sites
+  which do need it had inverted logic, resulting in cross-site requests being
+  allowed when the option was set to disallow them, and vice versa. (Mark)
+- Fixed missing call to CUSTOM_userEdit() in user profile panel (Mark)
+- Fixed an issue with the plugin uploader where it could overwrite existing
+  configuration files during plugin updates. (Mark)
+- Fixed issue with URL parser retrieving URL parameters when only
+  $_SERVER['orig_path_info'] is set. (Mark)
+- Removed global <li> style from SiteTailor stylesheet. (Mark)
+- Added some safety checks to dvlpupdate.php (Mark)
+
 v1.2.1.pl1
 ----------
 - Security Fix - bbcode implementation suffered from several XSS

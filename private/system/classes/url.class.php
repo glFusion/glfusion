@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2010-2011 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2002-2008 by the following authors:                        |
@@ -80,10 +83,8 @@ class url {
     function _getArguments()
     {
         if (isset ($_SERVER['PATH_INFO'])) {
-            if ($_SERVER['PATH_INFO'] == '')
-            {
-                if (isset ($_ENV['ORIG_PATH_INFO']))
-                {
+            if ($_SERVER['PATH_INFO'] == '') {
+                if (isset ($_ENV['ORIG_PATH_INFO'])) {
                     $this->_arguments = explode('/', $_ENV['ORIG_PATH_INFO']);
                 } else {
                     $this->_arguments = array();
@@ -105,13 +106,22 @@ class url {
             }
         } elseif (isset($_SERVER['ORIG_PATH_INFO'])) {
             $this->_arguments = explode('/', substr($_SERVER['ORIG_PATH_INFO'], 1));
-/* -- added for IIS 7 to work in FastCGI mode -- */
             array_shift ($this->_arguments);
-            if ( $this->_arguments[0] == substr($_SERVER['SCRIPT_NAME'],1) ) {
+            $script_name = strrchr($_SERVER['SCRIPT_NAME'],"/");
+            if ( $script_name == '' ) {
+                $script_name = $_SERVER['SCRIPT_NAME'];
+            }
+            $indexArray = 0;
+            $search_script_name = substr($script_name,1);
+            if ( array_search($search_script_name,$this->_arguments) !== FALSE ) {
+                $indexArray = array_search($search_script_name,$this->_arguments);
+            }
+            for ($x=0; $x < $indexArray; $x++) {
                 array_shift($this->_arguments);
             }
-/* -- end of add -- */
-
+            if ( $this->_arguments[0] == substr($script_name,1) ) {
+                array_shift($this->_arguments);
+            }
         } else {
             $this->_arguments = array ();
         }

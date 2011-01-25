@@ -638,6 +638,9 @@ function USER_userinfoPanel($U, $newuser = 0)
     if (!empty($uid) && $uid > 1 ) {
         $userform->set_var('plugin_userinfo_personalinfo',PLG_profileEdit($uid,'userinfo','personalinfo'));
         $userform->set_var('plugin_userinfo',PLG_profileEdit($uid,'userinfo'));
+        if ($_CONF['custom_registration'] && function_exists('CUSTOM_userEdit')) {
+            $userform->set_var('customfields', CUSTOM_userEdit($uid));
+        }
     }
     $retval = $userform->finish ($userform->parse ('output', 'user'));
     return $retval;

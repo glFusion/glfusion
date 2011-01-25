@@ -307,7 +307,7 @@ function do_bbcode_code($action, $attributes, $content, $params, $node_object) {
         if (!isset ($attributes['default'])) {
             $codeblock = '</p>' . geshi_formatted($content) . '<p>';
         } else {
-            $codeblock = '</p>' . geshi_formatted($content,strtoupper($attributes['default'])) . '<p>';
+            $codeblock = '</p>' . geshi_formatted($content,strtoupper(strip_tags($attributes['default']))) . '<p>';
         }
     } else {
         $codeblock = '<pre class="codeblock">'  . @htmlspecialchars($content,ENT_QUOTES, COM_getEncodingt()) . '</pre>';

@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
+// | Copyright (C) 2009-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -183,7 +183,6 @@ function processOldPluginInstall(  )
             }
         }
     }
-
 
     if ( $permError != 0 ) {
         $errorMessage = '<h2>'.$LANG32[42].'</h2>'.$LANG32[43].$permErrorList.'<br />'.$LANG32[44];
@@ -666,7 +665,7 @@ function post_uploadProcess() {
                 }
                 $fileName = substr($fileNameDist,0,$lastSlash);
 
-                if ( !file_exists($_CONF['path_html'].'public_html/'.$pluginData['id'].$pathTo.$fileName) ) {
+                if ( !file_exists($_CONF['path_html'].$pluginData['id'].$pathTo.$fileName) ) {
                     COM_errorLog("PLG-INSTALL: Renaming " . $fileNameDist ." to " . $_CONF['path_html'].$pluginData['id'].$pathTo.$fileName);
                     $rc = @copy ($_CONF['path_html'].$pluginData['id'].$absoluteFileName,$_CONF['path_html'].$pluginData['id'].$pathTo.$fileName);
                     if ( $rc === false ) {
