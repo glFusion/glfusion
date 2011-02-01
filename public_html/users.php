@@ -51,7 +51,6 @@
 */
 require_once 'lib-common.php';
 USES_lib_user();
-$VERBOSE = false;
 
 if ( !isset($_SYSTEM['verification_token_ttl']) ) {
     $_SYSTEM['verification_token_ttl'] = 86400;
@@ -106,6 +105,7 @@ function userprofile($user, $msg = 0, $plugin = '')
 
     $user_templates = new Template ($_CONF['path_layout'] . 'users');
     $user_templates->set_file (array ('profile' => 'profile.thtml',
+                                      'email'   => 'email.thtml',
                                       'row'     => 'commentrow.thtml',
                                       'strow'   => 'storyrow.thtml'));
     $user_templates->set_var ('layout_url', $_CONF['layout_url']);
@@ -191,9 +191,10 @@ function userprofile($user, $msg = 0, $plugin = '')
     $user_templates->set_var ('user_id', $user);
 
     if ( $A['email'] == '' || $A['emailfromuser'] == 0 ) {
-        $user_templates->set_var ('lang_sendemail', '');
+        $user_templates->set_var ('email_option', '');
     } else {
         $user_templates->set_var ('lang_sendemail', $LANG04[81]);
+        $user_templates->parse ('email_option', 'email', true);
     }
 
     $user_templates->set_var ('lang_homepage', $LANG04[6]);
@@ -778,29 +779,29 @@ function loginform ($hide_forgotpw_link = false, $statusmode = -1)
     );
 
     if ($statusmode == USER_ACCOUNT_DISABLED) {
-        $options['title']   = $LANG04[114];
-        $options['message'] = $LANG04[115];
+        $options['title']   = $LANG04[114]; // account disabled
+        $options['message'] = $LANG04[115]; // your account has been disabled, you may not login
         $options['forgotpw_link']      = false;
         $options['newreg_link']        = false;
         $options['verification_link']  = false;
     } elseif ($statusmode == USER_ACCOUNT_AWAITING_APPROVAL) {
-        $options['title']   = $LANG04[116];
-        $options['message'] = $LANG04[117];
+        $options['title']   = $LANG04[116]; // account awaiting activation
+        $options['message'] = $LANG04[117]; // your account is currently awaiting activation by an admin
         $options['forgotpw_link']      = false;
         $options['newreg_link']        = false;
         $options['verification_link']  = false;
     } elseif ($statusmode == USER_ACCOUNT_AWAITING_VERIFICATION ) {
-        $options['title']   = $LANG04[116];
-        $options['message'] = $LANG04[177];
+        $options['title']   = $LANG04[116]; // account awaiting activation
+        $options['message'] = $LANG04[177]; // your account is currently awaiting verification
         $options['forgotpw_link']      = false;
         $options['newreg_link']        = false;
         $options['verification_link']  = true;
     } elseif ($statusmode == -1) { // invalid credentials
-        $options['title']   = $LANG04[65];
-        $options['message'] = $LANG04[113];
+        $options['title']   = $LANG04[65]; // log in to {site_name}
+        $options['message'] = $LANG04[113]; // login attempt failed
     } else {
-        $options['title']   = $LANG04[65];
-        $options['message'] = $LANG04[66];
+        $options['title']   = $LANG04[65]; // log in to {site_name}
+        $options['message'] = $LANG04[66]; // please enter your user name and password below
     }
 
     return SEC_loginForm($options);
@@ -827,10 +828,6 @@ function newuserform ($msg = '')
     }
     $user_templates = new Template($_CONF['path_layout'] . 'users');
     $user_templates->set_file('regform', 'registrationform.thtml');
-    $user_templates->set_var( 'xhtml', XHTML );
-    $user_templates->set_var('site_url', $_CONF['site_url']);
-    $user_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
-    $user_templates->set_var('layout_url', $_CONF['layout_url']);
     $user_templates->set_var('start_block', COM_startBlock($LANG04[22]));
     $user_templates->set_var('lang_instructions', $LANG04[23]);
     $user_templates->set_var('lang_username', $LANG04[2]);
@@ -904,10 +901,6 @@ function getpasswordform()
 
     $user_templates = new Template($_CONF['path_layout'] . 'users');
     $user_templates->set_file('form', 'getpasswordform.thtml');
-    $user_templates->set_var( 'xhtml', XHTML );
-    $user_templates->set_var('site_url', $_CONF['site_url']);
-    $user_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
-    $user_templates->set_var('layout_url', $_CONF['layout_url']);
     $user_templates->set_var('start_block_forgetpassword', COM_startBlock($LANG04[25]));
     $user_templates->set_var('lang_instructions', $LANG04[26]);
     $user_templates->set_var('lang_username', $LANG04[2]);
@@ -1305,6 +1298,7 @@ case 'getnewtoken':
 
 default:
     $status = -2;
+
     // prevent dictionary attacks on passwords
     COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
     if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
@@ -1322,10 +1316,12 @@ default:
     if (isset ($_POST['passwd'])) {
         $passwd = COM_stripslashes($_POST['passwd']);
     }
+
     $service = '';
     if (isset ($_POST['service'])) {
         $service = COM_applyFilter($_POST['service']);
     }
+
     $uid = '';
     if (!empty($loginname) && !empty($passwd) && empty($service)) {
         if (empty($service) && $_CONF['user_login_method']['standard']) {
@@ -1335,17 +1331,24 @@ default:
             $status = -2;
         }
 
-    } elseif (( $_CONF['usersubmission'] == 0) && $_CONF['user_login_method']['3rdparty'] && ($service != '')) {
-        /* Distributed Authentication */
-        //pass $loginname by ref so we can change it ;-)
+    // begin distributed (3rd party) remote authentication method
+
+    } elseif ($_CONF['user_login_method']['3rdparty'] &&
+        ($_CONF['usersubmission'] == 0) &&
+        ($service != '')) {
+
         COM_updateSpeedlimit('login');
+        //pass $loginname by ref so we can change it ;-)
         $status = SEC_remoteAuthentication($loginname, $passwd, $service, $uid);
 
+    // end distributed (3rd party) remote authentication method
+
+    // begin OpenID remote authentication method
+
     } elseif ($_CONF['user_login_method']['openid'] &&
-            ($_CONF['usersubmission'] == 0) &&
-            !$_CONF['disable_new_user_registration'] &&
-            (isset($_GET['openid_login']) && ($_GET['openid_login'] == '1'))) {
-        // Here we go with the handling of OpenID authentification.
+        ($_CONF['usersubmission'] == 0) &&
+        !$_CONF['disable_new_user_registration'] &&
+        (isset($_GET['openid_login']) && ($_GET['openid_login'] == '1'))) {
 
         $query = array_merge($_GET, $_POST);
 
@@ -1412,6 +1415,70 @@ default:
             echo COM_refresh($_CONF['site_url'] . '/users.php?msg=91');
             exit;
         }
+
+    // end OpenID remote authentication method
+
+    // begin OAuth authentication method(s)
+
+    } elseif ($_CONF['user_login_method']['oauth'] &&
+        ($_CONF['usersubmission'] == 0) &&
+        !$_CONF['disable_new_user_registration'] &&
+        isset($_GET['oauth_login'])) {
+
+        $active_service = false;
+        $modules = SEC_collectRemoteOAuthModules();
+        $active_service = (count($modules) == 0) ? false : in_array($_GET['oauth_login'], $modules);
+        if (!$active_service) {
+            $status = -1;
+        } else {
+            $query = array_merge($_GET, $_POST);
+            $service = $query['oauth_login'];
+            $callback_url = $_CONF['site_url'] . '/users.php?oauth_login=' . $service;
+
+            COM_clearSpeedlimit($_CONF['login_speedlimit'], $service);
+            if (COM_checkSpeedlimit($service, $_CONF['login_attempts']) > 0) {
+                displayLoginErrorAndAbort(82, $LANG12[26], $LANG04[112]);
+            }
+
+            require_once $_CONF['path_system'] . 'classes/oauthhelper.class.php';
+
+            $consumer = new OAuthConsumer($service);
+            $callback_query_string = $consumer->getCallback_query_string();
+            $cancel_query_string = $consumer->getCancel_query_string();
+
+            if (!isset($query[$callback_query_string]) && (empty($cancel_query_string) || !isset($query[$cancel_query_string]))) {
+                $url = $consumer->find_identity_info($callback_url, $query);
+                if (empty($url)) {
+                    COM_updateSpeedlimit('login');
+                    COM_updateSpeedlimit($service);
+                    echo COM_refresh($_CONF['site_url'] . '/users.php?msg=110');
+                    exit;
+                } else {
+                    header('Location: ' . $url);
+                    exit;
+                }
+            } elseif (isset($query[$callback_query_string])) {
+                $oauth_userinfo = $consumer->sreq_userinfo_response($query);
+                if (empty($oauth_userinfo)) {
+                    COM_updateSpeedlimit('login');
+                    echo COM_refresh($_CONF['site_url'] . '/users.php?msg=111');
+                    exit;
+                } else {
+                    $consumer->doAction($oauth_userinfo);
+                }
+            } elseif (!empty($cancel_query_string) && isset($query[$cancel_query_string])) {
+                    COM_updateSpeedlimit('login');
+                    echo COM_refresh($_CONF['site_url'] . '/users.php?msg=112');
+                    exit;
+            } else {
+                COM_updateSpeedlimit('login');
+                echo COM_refresh($_CONF['site_url'] . '/users.php?msg=91');
+                exit;
+            }
+        }
+
+    //  end OAuth authentication method(s)
+
     } else {
         $status = -2;
     }

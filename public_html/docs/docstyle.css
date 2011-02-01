@@ -181,4 +181,10 @@ h5 {
 
 .col0 {
     width:25%;
+    text-decoration:none;
+}
+
+.col1 a {
+    text-decoration:underline;
+    color:blue;
 }

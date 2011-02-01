@@ -34,27 +34,9 @@
                 </p>
             </div>
             <table class="inputTable" border="0">
-                <tr>
-                    <td><label for="old_passwd" class="warningsmall">{lang_old_password}:</label></td>
-                    <td><input type="password" id="old_passwd" name="old_passwd" size="32" maxlength="32" value=""{xhtml}></td>
-                </tr>
-                <tr>
-                    <td style="width:150px;"><label for="passwd">{lang_password}:</label></td>
-                    <td><input type="password" id="passwd" name="passwd" size="32" maxlength="32" value="{password_value}" onkeyup="runPassword(this.value, 'mypassword');"{xhtml}></td>
-                </tr>
-                <tr>
-                    <td><label for="passwd_conf">{lang_password_conf}:</label></td>
-                    <td><input type="password" id="passwd_conf" name="passwd_conf" size="32" maxlength="32" value="{password_value}"{xhtml}></td>
-                 </tr>
-                <tr>
-                <td style="width:150px;">
-                <label>{$LANG04[161]}:</label>
-                </td>
-                <td>
-                    <div id="mypassword_text" style="font-size:normal;"></div>
-                    <div id="mypassword_bar"  style="display:none;"></div>
-                </td>
-                </tr>
+                {current_password_option}
+                {password_option}
+                {resynch_option}
                 <tr>
                     <td><label for="cooktime">{lang_cooktime}:</label></td>
                     <td>{cooktime_selector}</td>

@@ -35,6 +35,7 @@
         </div>
     </form>
     {openid_login}
+    {oauth_login}
     {end_block}
 </div>
 <script type="text/javascript">

@@ -561,6 +561,28 @@ function glfusion_122()
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
 
+    // add user photo option to whosonline block
+    $c->add('whosonline_photo',FALSE,'select',3,14,0,930,TRUE);
+
+    // add oauth user_login_method
+    $c->del('user_login_method', 'Core');
+    $standard = ($_CONF['user_login_method']['standard']) ? true : false;
+    $openid = ($_CONF['user_login_method']['openid']) ? true : false;
+    $thirdparty = ($_CONF['user_login_method']['3rdparty']) ? true: false;
+    $oauth = false;
+    $c->add('user_login_method',array('standard' => $standard , 'openid' => $openid , '3rdparty' => $thirdparty , 'oauth' => $oauth),'@select',4,16,1,320,TRUE);
+
+    // OAuth configuration settings
+    $c->add('facebook_login',0,'select',4,16,1,350,TRUE);
+    $c->add('facebook_consumer_key','','text',4,16,NULL,351,TRUE);
+    $c->add('facebook_consumer_secret','','text',4,16,NULL,352,TRUE);
+    $c->add('linkedin_login',0,'select',4,16,1,353,TRUE);
+    $c->add('linkedin_consumer_key','','text',4,16,NULL,354,TRUE);
+    $c->add('linkedin_consumer_secret','','text',4,16,NULL,355,TRUE);
+    $c->add('twitter_login',0,'select',4,16,1,356,TRUE);
+    $c->add('twitter_consumer_key','','text',4,16,NULL,357,TRUE);
+    $c->add('twitter_consumer_secret','','text',4,16,NULL,358,TRUE);
+
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.2.2',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.2.2' WHERE name='glfusion'",1);

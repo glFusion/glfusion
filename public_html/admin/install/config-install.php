@@ -180,6 +180,7 @@ function install_config($site_url)
     $c->add('fs_whosonline_block', NULL, 'fieldset', 3, 14, NULL, 0, TRUE);
     $c->add('whosonline_threshold',300,'text',3,14,NULL,910,TRUE);
     $c->add('whosonline_anonymous',0,'select',3,14,0,920,TRUE);
+    $c->add('whosonline_photo',FALSE,'select',3,14,0,930,TRUE);
 
     $c->add('fs_whatsnew_block', NULL, 'fieldset', 3, 15, NULL, 0, TRUE);
     $c->add('newstoriesinterval',86400,'text',3,15,NULL,980,TRUE);
@@ -206,7 +207,17 @@ function install_config($site_url)
     $c->add('hide_exclude_content',1,'select',4,16,0,295,TRUE);
     $c->add('show_servicename',TRUE,'select',4,16,1,300,TRUE);
     $c->add('custom_registration',FALSE,'select',4,16,1,310,TRUE);
-    $c->add('user_login_method',array('standard' => true, 'openid' => false, '3rdparty' => false),'@select',4,16,1,320,TRUE);
+
+    $c->add('user_login_method',array('standard' => true, 'openid' => false, '3rdparty' => false, 'oauth' => false),'@select',4,16,1,320,TRUE);
+    $c->add('facebook_login',0,'select',4,16,1,350,TRUE);
+    $c->add('facebook_consumer_key','','text',4,16,NULL,351,TRUE);
+    $c->add('facebook_consumer_secret','','text',4,16,NULL,352,TRUE);
+    $c->add('linkedin_login',0,'select',4,16,1,353,TRUE);
+    $c->add('linkedin_consumer_key','','text',4,16,NULL,354,TRUE);
+    $c->add('linkedin_consumer_secret','','text',4,16,NULL,355,TRUE);
+    $c->add('twitter_login',0,'select',4,16,1,356,TRUE);
+    $c->add('twitter_consumer_key','','text',4,16,NULL,357,TRUE);
+    $c->add('twitter_consumer_secret','','text',4,16,NULL,358,TRUE);
     $c->add('aftersave_user','item','select',4,16,9,1340,TRUE);
 
     $c->add('fs_spamx', NULL, 'fieldset', 4, 17, NULL, 0, TRUE);
