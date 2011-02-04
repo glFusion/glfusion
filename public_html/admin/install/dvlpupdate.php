@@ -574,14 +574,14 @@ function glfusion_122()
 
     // OAuth configuration settings
     $c->add('facebook_login',0,'select',4,16,1,350,TRUE);
-    $c->add('facebook_consumer_key','','text',4,16,NULL,351,TRUE);
-    $c->add('facebook_consumer_secret','','text',4,16,NULL,352,TRUE);
+    $c->add('facebook_consumer_key','not configured yet','text',4,16,NULL,351,TRUE);
+    $c->add('facebook_consumer_secret','not configured yet','text',4,16,NULL,352,TRUE);
     $c->add('linkedin_login',0,'select',4,16,1,353,TRUE);
-    $c->add('linkedin_consumer_key','','text',4,16,NULL,354,TRUE);
-    $c->add('linkedin_consumer_secret','','text',4,16,NULL,355,TRUE);
+    $c->add('linkedin_consumer_key','not configured yet','text',4,16,NULL,354,TRUE);
+    $c->add('linkedin_consumer_secret','not configured yet','text',4,16,NULL,355,TRUE);
     $c->add('twitter_login',0,'select',4,16,1,356,TRUE);
-    $c->add('twitter_consumer_key','','text',4,16,NULL,357,TRUE);
-    $c->add('twitter_consumer_secret','','text',4,16,NULL,358,TRUE);
+    $c->add('twitter_consumer_key','not configured yet','text',4,16,NULL,357,TRUE);
+    $c->add('twitter_consumer_secret','not configured yet','text',4,16,NULL,358,TRUE);
 
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.2.2',name='glfusion'",1);

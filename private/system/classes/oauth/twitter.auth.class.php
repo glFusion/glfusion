@@ -51,7 +51,7 @@ class twitterConsumer extends OAuthConsumerBaseClass {
             'passwd2'        => '',
             'fullname'       => $info->name,
             'homepage'       => 'http://twitter.com/'.$info->screen_name,
-            'remoteusername' => addslashes($info->screen_name),
+            'remoteusername' => DB_escapeString($info->screen_name),
             'remoteservice'  => 'oauth.twitter',
             'remotephoto'    => $info->profile_image_url,
         );
@@ -68,7 +68,7 @@ class twitterConsumer extends OAuthConsumerBaseClass {
 
     protected function _after_trigger($uid, $users, $userinfo) {
         global $_CONF, $MESSAGE;
-        
+
         $url = $this->_shorten($_CONF['site_url']);
         // twitter send message
         $msg = str_replace(array('{site_url}','\n'), array($url,"\n"), $MESSAGE[113]);

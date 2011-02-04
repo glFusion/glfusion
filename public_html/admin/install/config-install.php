@@ -210,14 +210,14 @@ function install_config($site_url)
 
     $c->add('user_login_method',array('standard' => true, 'openid' => false, '3rdparty' => false, 'oauth' => false),'@select',4,16,1,320,TRUE);
     $c->add('facebook_login',0,'select',4,16,1,350,TRUE);
-    $c->add('facebook_consumer_key','','text',4,16,NULL,351,TRUE);
-    $c->add('facebook_consumer_secret','','text',4,16,NULL,352,TRUE);
+    $c->add('facebook_consumer_key','not configured yet','text',4,16,NULL,351,TRUE);
+    $c->add('facebook_consumer_secret','not configured yet','text',4,16,NULL,352,TRUE);
     $c->add('linkedin_login',0,'select',4,16,1,353,TRUE);
-    $c->add('linkedin_consumer_key','','text',4,16,NULL,354,TRUE);
-    $c->add('linkedin_consumer_secret','','text',4,16,NULL,355,TRUE);
+    $c->add('linkedin_consumer_key','not configured yet','text',4,16,NULL,354,TRUE);
+    $c->add('linkedin_consumer_secret','not configured yet','text',4,16,NULL,355,TRUE);
     $c->add('twitter_login',0,'select',4,16,1,356,TRUE);
-    $c->add('twitter_consumer_key','','text',4,16,NULL,357,TRUE);
-    $c->add('twitter_consumer_secret','','text',4,16,NULL,358,TRUE);
+    $c->add('twitter_consumer_key','not configured yet','text',4,16,NULL,357,TRUE);
+    $c->add('twitter_consumer_secret','not configured yet','text',4,16,NULL,358,TRUE);
     $c->add('aftersave_user','item','select',4,16,9,1340,TRUE);
 
     $c->add('fs_spamx', NULL, 'fieldset', 4, 17, NULL, 0, TRUE);

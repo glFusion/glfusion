@@ -2,6 +2,12 @@ glFusion ChangeLog
 
 v1.2.x (Trunk Development Branch)
 ------
+- Feature: OAuth login support for FB, LinkedIn and Twitter (Mark H.); This will
+  allow users to login to your site with their existing FaceBook, LinkedIn or
+  Twitter accounts.  User Submission Queue must be disabled, and the php_openssl
+  PHP extension must be installed on your webserver.
+- Feature: Allow users displayed in Who's Online block to be displayed as user
+  photo icons (FB-style) rather than their username/fullname.
 
 
 v1.2.1.pl2

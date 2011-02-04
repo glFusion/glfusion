@@ -41,27 +41,29 @@ class facebookConsumer extends OAuthConsumerBaseClass {
     public $url_userinfo_photo = 'https://graph.facebook.com/me/picture';
     public $callback_query_string = 'code';
     public $cancel_query_string = 'error_reason';
-    
+
     public function __construct() {
         $this->request = new HTTP_Request2;
         $this->request->setConfig('ssl_verify_peer', false);
         $this->request->setHeader('Accept-Encoding', '.*');
     }
-    
+
     public function find_identity_info($callback_url, $query) {
+        // COM_errorLog("FB:find_identity_info()------------------");
         $params = array(
             'client_id' => $this->consumer_key,
             'redirect_uri' => $callback_url,
-            'scope' => 'email,user_website,user_location,user_photos',
+            'scope' => 'email,user_website,user_location,user_about_me,user_photos',
         );
         return $this->url_authorize . '?' . http_build_query($params, null, '&');
     }
-    
+
     public function sreq_userinfo_response($query) {
         global $_CONF;
-        
+
+        // COM_errorLog("FB:sreq_userinfo_response()------------------");
         $userinfo = array();
-        
+
         try {
             $verifier = $query[$this->callback_query_string];
             $callback_url = $_CONF['site_url'] . '/users.php?oauth_login=facebook';
@@ -71,38 +73,45 @@ class facebookConsumer extends OAuthConsumerBaseClass {
                 'client_secret' => $this->consumer_secret,
                 'code' => $verifier,
             );
+
+            // first request obtains access token
+
             $url_auth = $this->url_accessToken . '?' . http_build_query($params, null, '&');
+            // COM_errorLog("FB:sreq_userinfo_response() req1: " . $url_me);
             $this->request->setUrl($url_auth);
             $response = $this->request->send();
             $rdata = $response->getBody();
+            // COM_errorLog("FB:sreq_userinfo_response() rsp1: " . $rdata);
             parse_str($rdata, $data);
             if (isset($data['access_token'])) {
                 $this->token = $data['access_token'];
+                // COM_errorLog("access_token={$data['access_token']}");
             } else {
+                // COM_errorLog("error: access_token not retrieved");
                 $data = json_decode($rdata);
                 if (!empty($data->error)) {
                     $this->errormsg = $data->error->message;
                 }
-                return;
+                return; // early exit
             }
-            
+
+            // second request obtains what basic user info that the graphs API
+            // will give us without additional requests (everything but photo)
+
             $params = array('access_token' => $this->token);
             $url_me = $this->url_userinfo . '?' . http_build_query($params, null, '&');
+            // COM_errorLog("FB:sreq_userinfo_response() req2: " . $url_me);
             $this->request->setUrl($url_me);
             $response = $this->request->send();
             $rdata = $response->getBody();
+            // COM_errorLog("FB:sreq_userinfo_response() rsp2: " . $rdata);
             $data = json_decode($rdata);
             if (!empty($data->error)) {
                 $this->errormsg = $data->error->message;
                 return;
             }
             $userinfo = $data;
-            
-            $url_photo = $this->url_userinfo_photo . '?' . http_build_query($params, null, '&');
-            $this->request->setUrl($url_photo);
-            $response = $this->request->send();
-            $rdata = $response->getHeader();
-            $userinfo->photo = $rdata['location'];
+
         } catch (Exception $e) {
             $this->errormsg = get_class($e) . ': ' . $e->getMessage();
         }
@@ -117,9 +126,9 @@ class facebookConsumer extends OAuthConsumerBaseClass {
             'passwd2'        => '',
             'fullname'       => $info->name,
             'homepage'       => $info->link,
-            'remoteusername' => addslashes($info->id),
+            'remoteusername' => DB_escapeString($info->id),
             'remoteservice'  => 'oauth.facebook',
-            'remotephoto'    => $info->photo,
+            'remotephoto'    => '',
         );
         return $users;
     }
@@ -127,7 +136,7 @@ class facebookConsumer extends OAuthConsumerBaseClass {
     protected function _getUpdateUserInfo($info) {
         $userinfo = array(
             'about'          => $info->about,
-            'location'       => $info->location,
+            'location'       => $info->location->name,
         );
         return $userinfo;
     }
@@ -136,11 +145,11 @@ class facebookConsumer extends OAuthConsumerBaseClass {
 
 if ( !function_exists('json_decode') ){
     function json_decode($json)
-    { 
+    {
         // Author: walidator.info 2009
         $comment = false;
         $out = '$x=';
-       
+
         for ($i=0; $i<strlen($json); $i++)
         {
             if (!$comment)
@@ -148,14 +157,14 @@ if ( !function_exists('json_decode') ){
                 if ($json[$i] == '{')        $out .= ' array(';
                 else if ($json[$i] == '}')    $out .= ')';
                 else if ($json[$i] == ':')    $out .= '=>';
-                else                         $out .= $json[$i];           
+                else                         $out .= $json[$i];
             }
             else $out .= $json[$i];
             if ($json[$i] == '"')    $comment = !$comment;
         }
         eval($out . ';');
         return $x;
-    } 
+    }
 }
 
 ?>

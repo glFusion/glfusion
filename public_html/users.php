@@ -1433,8 +1433,9 @@ default:
         } else {
             $query = array_merge($_GET, $_POST);
             $service = $query['oauth_login'];
+            // COM_errorLog("------------------- users.php?oauth_login={$service}----------------------------- ");
             $callback_url = $_CONF['site_url'] . '/users.php?oauth_login=' . $service;
-
+            // COM_errorLog("callback_url={$callback_url}");
             COM_clearSpeedlimit($_CONF['login_speedlimit'], $service);
             if (COM_checkSpeedlimit($service, $_CONF['login_attempts']) > 0) {
                 displayLoginErrorAndAbort(82, $LANG12[26], $LANG04[112]);
@@ -1444,35 +1445,55 @@ default:
 
             $consumer = new OAuthConsumer($service);
             $callback_query_string = $consumer->getCallback_query_string();
+            // COM_errorLog("callback_query_string={$callback_query_string}");
             $cancel_query_string = $consumer->getCancel_query_string();
+            // COM_errorLog("cancel_query_string={$cancel_query_string}");
+
+            // OK, let's make sure we have what we need to callback and authenticate.  if the callback query string is null
+            // then this might mean that the user is not actually logged into the remote service they specified, in which case
+            // we need to redirect to the remote service authentication URL
 
             if (!isset($query[$callback_query_string]) && (empty($cancel_query_string) || !isset($query[$cancel_query_string]))) {
+                // COM_errorLog("user was not logged in, attempting to authenticate remotely");
                 $url = $consumer->find_identity_info($callback_url, $query);
                 if (empty($url)) {
                     COM_updateSpeedlimit('login');
                     COM_updateSpeedlimit($service);
-                    echo COM_refresh($_CONF['site_url'] . '/users.php?msg=110');
+                    echo COM_refresh($_CONF['site_url'] . '/users.php?msg=110'); // Unable to retrieve OAuth authentication URL
+                    COM_errorLog($MESSAGE[110]);
                     exit;
                 } else {
-                    header('Location: ' . $url);
+                    // COM_errorLog("authentication URL={$url}, attempting remote service login");
+                    header('Location: ' . $url); // refresh to the OAuth remote service authentication dialog
                     exit;
                 }
+
+            //
             } elseif (isset($query[$callback_query_string])) {
+                // COM_errorLog("user is already logged into remote service, retrieve userinfo");
                 $oauth_userinfo = $consumer->sreq_userinfo_response($query);
                 if (empty($oauth_userinfo)) {
                     COM_updateSpeedlimit('login');
-                    echo COM_refresh($_CONF['site_url'] . '/users.php?msg=111');
+                    echo COM_refresh($_CONF['site_url'] . '/users.php?msg=111'); // OAuth authentication error
+                    COM_errorLog($MESSAGE[111]);
+                    // COM_errorLog("error: unable to retrieve essential userinfo");
                     exit;
                 } else {
+                    // COM_errorLog("userinfo retrieved.");
+                    // foreach($oauth_userinfo as $key=>$value) {
+                        // COM_errorLog("oauth_user_info[{$key}] set");
+                    // }
                     $consumer->doAction($oauth_userinfo);
                 }
             } elseif (!empty($cancel_query_string) && isset($query[$cancel_query_string])) {
                     COM_updateSpeedlimit('login');
-                    echo COM_refresh($_CONF['site_url'] . '/users.php?msg=112');
+                    echo COM_refresh($_CONF['site_url'] . '/users.php?msg=112'); // OAuth certification has been cancelled
+                    COM_errorLog($MESSAGE[112]);
                     exit;
             } else {
                 COM_updateSpeedlimit('login');
-                echo COM_refresh($_CONF['site_url'] . '/users.php?msg=91');
+                echo COM_refresh($_CONF['site_url'] . '/users.php?msg=91'); // You specified an invalid identity URL
+                COM_errorLog($MESSAGE[91]);
                 exit;
             }
         }
