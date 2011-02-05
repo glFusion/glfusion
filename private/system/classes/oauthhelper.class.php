@@ -301,13 +301,14 @@ class OAuthConsumerBaseClass {
         // COM_errorLog("_DBupdate_users()---------------------");
         $sql = "UPDATE {$_TABLES['users']} SET remoteusername = '{$users['remoteusername']}', remoteservice = '{$users['remoteservice']}', status = 3";
         if (!empty($users['remotephoto'])) {
-            // COM_errorLog("!empty(remotephoto): updating userphoto");
-            // save user photo
+            // COM_errorLog("saving userphoto");
             $save_img = $_CONF['path_images'] . 'userphotos/' . $users['loginname'];
+            // COM_errorLog("from={$users['remotephoto']} to={$save_img}");
             $imgsize = $this->_saveUserPhoto($users['remotephoto'], $save_img);
-            // COM_errorLog("after _saveUserPhoto(), imgsize={$imgsize}");
+            // COM_errorLog("imgsize={$imgsize}");
             if (!empty($imgsize)) {
                 $ext = $this->_getImageExt($save_img);
+                // COM_errorLog("image_ext={$ext}");
                 rename($save_img, $save_img . $ext);
                 $imgname = $users['loginname'] . $ext;
                 $sql .= ", photo = '{$imgname}'";

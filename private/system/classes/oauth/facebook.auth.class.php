@@ -112,6 +112,19 @@ class facebookConsumer extends OAuthConsumerBaseClass {
             }
             $userinfo = $data;
 
+            // third request retrieves the user's photo URL
+
+            $url_photo = $this->url_userinfo_photo . '?' . http_build_query($params, null, '&');
+            $this->request->setUrl($url_photo);
+            // COM_errorLog("FB:sreq_serinfo_response() req3: " . $url_photo);
+            $response = $this->request->send();
+            if(($response->getStatus() == '302') AND ($response->getReasonPhrase() == 'Found')) {
+                $header = $response->getHeader();
+                $userinfo->photo_url = $header['location'];
+            } else {
+                $userinfo->photo_url = '';
+            }
+
         } catch (Exception $e) {
             $this->errormsg = get_class($e) . ': ' . $e->getMessage();
         }
@@ -128,7 +141,7 @@ class facebookConsumer extends OAuthConsumerBaseClass {
             'homepage'       => $info->link,
             'remoteusername' => DB_escapeString($info->id),
             'remoteservice'  => 'oauth.facebook',
-            'remotephoto'    => '',
+            'remotephoto'    => $info->photo_url,
         );
         return $users;
     }
