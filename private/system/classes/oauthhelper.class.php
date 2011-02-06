@@ -7,7 +7,7 @@
 // |                                                                          |
 // | OAuth Distributed Authentication Module.                                 |
 // +--------------------------------------------------------------------------+
-// | $Id:: oauthhelper.class.php                                             $|
+// | $Id::                                             $|
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2010 by the following authors:                             |
 // |                                                                          |
@@ -140,6 +140,7 @@ class OAuthConsumerBaseClass {
             SEC_setCookie('request_token_secret', $this->consumer->getTokenSecret(), $timeout);
 
             $url = $this->consumer->getAuthorizeUrl($this->url_authorize);
+
         } catch (HTTP_OAuth_Consumer_Exception_Invalid_Response $e) {
             $this->errormsg = get_class($e) . ': ' . $e->getBody();
         } catch (Exception $e) {

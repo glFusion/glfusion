@@ -11,6 +11,7 @@
 // | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Mark A. Howard         mark AT usable-web DOT com                        |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -166,15 +167,15 @@ function edituser()
     $preferences->set_var ('fullname_value', htmlspecialchars ($A['fullname']));
     $preferences->set_var ('new_username_value',
                            htmlspecialchars ($_USER['username']));
-    
+
     if ($A['remoteservice'] == '') {
         $preferences->set_var ('password_value', '');
-        $preferences->parse ('password_option', 'password', true);
         $preferences->parse ('current_password_option', 'current_password', true);
+        $preferences->parse ('password_option', 'password', true);
         $preferences->set_var ('resynch_option', '');
     } else {
-        $preferences->set_var ('password_option', '');
         $preferences->set_var ('current_password_option', '');
+        $preferences->set_var ('password_option', '');
         if ($_CONF['user_login_method']['oauth'] && (strpos($_USER['remoteservice'], 'oauth.') === 0)) { // OAuth only supports re-synch at the moment
             $preferences->set_var ('resynch_checked', '');
             $preferences->parse ('resynch_option', 'resynch', true);
@@ -906,17 +907,17 @@ function saveuser($A)
 
     // to change the password, email address, or cookie timeout,
     // we need the user's current password
-    $service = DB_getItem ($_TABLES['users'], 'remoteservice', "uid = {$_USER['uid']}"); 
+    $service = DB_getItem ($_TABLES['users'], 'remoteservice', "uid = {$_USER['uid']}");
     if ($service == '') {
         $current_password = DB_getItem($_TABLES['users'], 'passwd',
                                        "uid = {$_USER['uid']}");
         if (!empty ($A['passwd']) || ($A['email'] != $_USER['email']) ||
                 ($A['cooktime'] != $_USER['cookietimeout'])) {
-        	if (empty($A['old_passwd']) || 
-					!SEC_check_hash($A['old_passwd'],$current_password)) {
+            if (empty($A['old_passwd']) ||
+                !SEC_check_hash($A['old_passwd'],$current_password)) {
 
-            	return COM_refresh ($_CONF['site_url']
-                                	. '/usersettings.php?msg=83');
+                return COM_refresh ($_CONF['site_url']
+                                        . '/usersettings.php?msg=83');
             } elseif ($_CONF['custom_registration'] &&
                         function_exists ('CUSTOM_userCheck')) {
                 $ret = CUSTOM_userCheck ($A['username'], $A['email']);
@@ -932,9 +933,9 @@ function saveuser($A)
         } elseif ($_CONF['custom_registration'] &&
                     function_exists ('CUSTOM_userCheck')) {
             $ret = CUSTOM_userCheck ($A['username'], $A['email']);
-			if (!empty($ret)) {
-            // Need a numeric return for the default message hander - if not numeric use default message
-            // - if not numeric use default message
+            if (!empty($ret)) {
+                // Need a numeric return for the default message hander - if not numeric use default message
+                // - if not numeric use default message
                 if (!is_numeric($ret)) {
                     $ret = 97;
                 }
@@ -970,7 +971,6 @@ function saveuser($A)
                         DB_change ($_TABLES['users'], 'photo',DB_escapeString ($newphoto), "uid", (int) $_USER['uid']);
                     }
                 }
-
                 DB_change ($_TABLES['users'], 'username', $A['new_username'],"uid", (int)$_USER['uid']);
             } else {
                 return COM_refresh ($_CONF['site_url'].'/usersettings.php?msg=51');
@@ -979,10 +979,13 @@ function saveuser($A)
     }
 
     // a quick spam check with the unfiltered field contents
-    $profile = '<h1>' . $LANG04[1] . ' ' . $_USER['username'] . '</h1>'
-             . '<p>'. COM_createLink($A['homepage'], $A['homepage'])
-             . '<br' . XHTML . '>' . $A['location'] . '<br' . XHTML . '>' . $A['sig'] . '<br' . XHTML . '>'
-             . $A['about'] . '<br' . XHTML . '>' . $A['pgpkey'] . '</p>';
+    $profile = '<h1>' . $LANG04[1] . ' ' . $_USER['username'] . '</h1><p>';
+    // this is a hack, for some reason remoteservice links made SPAMX SLV check barf
+    if (empty($service)) {
+        $profile .= COM_createLink($A['homepage'], $A['homepage']) . '<br' . XHTML . '>';
+    }
+    $profile .= $A['location'] . '<br' . XHTML . '>' . $A['sig'] . '<br' . XHTML . '>'
+                . $A['about'] . '<br' . XHTML . '>' . $A['pgpkey'] . '</p>';
     $result = PLG_checkforSpam ($profile, $_CONF['spamx']);
     if ($result > 0) {
         COM_displayMessageAndAbort ($result, 'spamx', 403, 'Forbidden');
@@ -1009,13 +1012,13 @@ function saveuser($A)
         return COM_refresh ($_CONF['site_url']
                 . '/usersettings.php?msg=56');
     } else {
-		if ($service == '') {
-        	if (!empty($A['passwd'])) {
-            	$A['passwd'] = trim(COM_stripslashes($A['passwd']));
-            	$A['passwd_conf'] = trim(COM_stripslashes($A['passwd_conf']));
-            	if (($A['passwd'] == $A['passwd_conf']) && SEC_check_hash($A['old_passwd'],$current_password) ){
-                	$passwd = SEC_encryptPassword($A['passwd']);
-                	DB_change($_TABLES['users'], 'passwd', DB_escapeString($passwd),"uid", (int)$_USER['uid']);
+        if ($service == '') {
+            if (!empty($A['passwd'])) {
+                $A['passwd'] = trim(COM_stripslashes($A['passwd']));
+                $A['passwd_conf'] = trim(COM_stripslashes($A['passwd_conf']));
+                if (($A['passwd'] == $A['passwd_conf']) && SEC_check_hash($A['old_passwd'],$current_password) ){
+                    $passwd = SEC_encryptPassword($A['passwd']);
+                    DB_change($_TABLES['users'], 'passwd', DB_escapeString($passwd),"uid", (int)$_USER['uid']);
                     if ($A['cooktime'] > 0) {
                         $cooktime = $A['cooktime'];
                     } else {
@@ -1023,12 +1026,12 @@ function saveuser($A)
                     }
                     SEC_setCookie($_CONF['cookie_password'], $passwd,
                                   time() + $cooktime);
-            	} elseif (!SEC_check_hash($A['old_passwd'],$current_password) ) {
-                	return COM_refresh ($_CONF['site_url'].'/usersettings.php?msg=68');
-            	} elseif ($A['passwd'] != $A['passwd_conf']) {
-                	return COM_refresh ($_CONF['site_url'].'/usersettings.php?msg=67');
-	            }
-	        }
+                } elseif (!SEC_check_hash($A['old_passwd'],$current_password) ) {
+                    return COM_refresh ($_CONF['site_url'].'/usersettings.php?msg=68');
+                } elseif ($A['passwd'] != $A['passwd_conf']) {
+                    return COM_refresh ($_CONF['site_url'].'/usersettings.php?msg=67');
+                }
+            }
         } else {
             // Cookie
             if ($A['cooktime'] > 0) {
@@ -1104,12 +1107,12 @@ function saveuser($A)
 
         PLG_userInfoChanged ((int)$_USER['uid']);
 
-        $msg = 5;
-        // Re Sync data if needed
+        // at this point, the user information has been saved, but now we're going to check to see if
+        // the user has requested resynchronization with their remoteservice account
+        $msg = 5; // default msg = Your account information has been successfully saved
         if (isset($A['resynch'])) {
-            if ($_CONF['user_login_method']['oauth'] && (strpos($_USER['remoteservice'], 'oauth.') === 0)) {       
+            if ($_CONF['user_login_method']['oauth'] && (strpos($_USER['remoteservice'], 'oauth.') === 0)) {
                 $modules = SEC_collectRemoteOAuthModules();
-
                 $active_service = (count($modules) == 0) ? false : in_array(substr($_USER['remoteservice'], 6), $modules);
                 if (!$active_service) {
                     $status = -1;
@@ -1117,24 +1120,27 @@ function saveuser($A)
                 } else {
                     // Send request to OAuth Service for user information
                     require_once $_CONF['path_system'] . 'classes/oauthhelper.class.php';
-        
+
                     $consumer = new OAuthConsumer($service);
 
                     $query[] = '';
                     $callback_url = $_CONF['site_url'] . '/usersettings.php?mode=synch&oauth_login=' . $service;
 
                     $url = $consumer->find_identity_info($callback_url, $query);
+                    // COM_errorLog("authentication url={$url}");
                     if (empty($url)) {
                         $msg = 110; // Can not get URL for authentication.'
+                        COM_errorLog($MESSAGE[$msg]);
                     } else {
                         header('Location: ' . $url);
                         exit;
                     }
-                }            
+                }
             }
-            
+
             if ($msg != 5) {
                 $msg = 114; // Account saved but re-synch failed.
+                COM_errorLog($MESSAGE[$msg]);
             }
         }
 
@@ -1167,7 +1173,6 @@ function userprofile ($user, $msg = 0)
         $retval .= COM_siteHeader ('menu');
         $retval .= SEC_loginRequiredForm();
         $retval .= COM_siteFooter ();
-
         return $retval;
     }
 
@@ -1609,38 +1614,52 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
         $display = COM_refresh ($_CONF['site_url']
                                 . '/usersettings.php?msg=5');
         break;
-        
+
     case 'synch':
-        // This case is the result of a callback from an OAuth service. 
-		// The user has made a request to resynch their glFusion user account with the OAuth service 
-		// they used to login to the site with
+        // This case is the result of a callback from an OAuth service.
+        // The user has made a request to resynch their glFusion user account with the remote OAuth service
         if ($_CONF['user_login_method']['oauth'] && (strpos($_USER['remoteservice'], 'oauth.') === 0) && isset($_GET['oauth_login'])) {
             $msg = 5;
-            $query[] = '';
-            
+
             $modules = SEC_collectRemoteOAuthModules();
             $active_service = (count($modules) == 0) ? false : in_array(substr($_GET['oauth_login'], 6), $modules);
             if (!$active_service) {
                 $status = -1;
-                $msg = 114; // Your re-synch with your remote account has failed but your other account information has been successfully saved.
+                $msg = 114; // resynch with remote account has failed but your other account information has been successfully saved.
             } else {
                 $query = array_merge($_GET, $_POST);
-                $service = $query['oauth_login'];  
-                $callback_url = $_CONF['site_url'] . '/usersettings.php?mode=synch&oauth_login=' . $service;
-    
+                $service = $query['oauth_login'];
+                // COM_errorLog("---------- usersettings.php?mode=resynch&oauth_login={$service}----------");
+
                 require_once $_CONF['path_system'] . 'classes/oauthhelper.class.php';
 
                 $consumer = new OAuthConsumer($service);
-                $callback_query_string = $consumer->getCallback_query_string();
-                $cancel_query_string = $consumer->getCancel_query_string();
 
+                // setup what we need to callback and authenticate
+                $callback_query_string = $consumer->getCallback_query_string();
+                // COM_errorLog("callback_query_string={$callback_query_string}");
+                $cancel_query_string = $consumer->getCancel_query_string();
+                // COM_errorLog("cancel_query_string={$cancel_query_string}");
+                $callback_url = $_CONF['site_url'] . '/usersettings.php?mode=synch&oauth_login=' . $service;
+                // COM_errorLog("callback_url={$callback_url}");
+
+                // authenticate with the remote service
                 if (!isset($query[$callback_query_string]) && (empty($cancel_query_string) || !isset($query[$cancel_query_string]))) {
                     $msg = 114; // Resynch with remote account has failed but other account information has been successfully saved
+                // elseif the callback query string is set, then we have successfully authenticated
                 } elseif (isset($query[$callback_query_string])) {
+                    // COM_errorLog("authenticated with remote service, retrieve userinfo");
+                    // foreach($query as $key=>$value) {
+                    //     COM_errorLog("query[{$key}]={$value}");
+                    // }
                     $oauth_userinfo = $consumer->sreq_userinfo_response($query);
                     if (empty($oauth_userinfo)) {
                         $msg = 111; // Authentication error.
                     } else {
+                        // COM_errorLog("resynchronizing userinfo");
+                        // foreach($oauth_userinfo as $key=>$value) {
+                        //     COM_errorLog("oauth_user_info[{$key}] set");
+                        // }
                         $consumer->doSynch($oauth_userinfo);
                     }
                 } elseif (!empty($cancel_query_string) && isset($query[$cancel_query_string])) {
@@ -1648,16 +1667,17 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
                 } else {
                     $msg = 91; // You specified an invalid identity URL.
                 }
-            }   
-            
+            }
+
             if ($msg == 5) {
                 $display = COM_refresh ($_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $_USER['uid'] . '&amp;msg=5');
             } else {
+                COM_errorLog($MESSAGE[$msg]);
                 $display = COM_refresh ($_CONF['site_url'] . '/usersettings.php?msg=' . $msg);
             }
             break;
         }
-        
+
         // If OAuth is disabled, drop into default case
 
     default: // also if $mode == 'edit', 'preferences', or 'comments'

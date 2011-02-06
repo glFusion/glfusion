@@ -7,6 +7,8 @@
 // |                                                                          |
 // | LinkedIn (OAuth) Distributed Authentication Module.                      |
 // +--------------------------------------------------------------------------+
+// | $Id::                                             $|
+// +--------------------------------------------------------------------------+
 // | Copyright (C) 2010 by the following authors:                             |
 // |                                                                          |
 // | Authors: Hiroron          - hiroron AT hiroron DOT com                   |

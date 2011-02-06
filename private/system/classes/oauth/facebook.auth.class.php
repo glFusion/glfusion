@@ -7,6 +7,8 @@
 // |                                                                          |
 // | FaceBook (OAuth) Distributed Authentication Module.                      |
 // +--------------------------------------------------------------------------+
+// | $Id::                                             $|
+// +--------------------------------------------------------------------------+
 // | Copyright (C) 2010 by the following authors:                             |
 // |                                                                          |
 // | Authors: Hiroron          - hiroron AT hiroron DOT com                   |
@@ -77,7 +79,7 @@ class facebookConsumer extends OAuthConsumerBaseClass {
             // first request obtains access token
 
             $url_auth = $this->url_accessToken . '?' . http_build_query($params, null, '&');
-            // COM_errorLog("FB:sreq_userinfo_response() req1: " . $url_me);
+            // COM_errorLog("FB:sreq_userinfo_response() req1: " . $url_auth);
             $this->request->setUrl($url_auth);
             $response = $this->request->send();
             $rdata = $response->getBody();
@@ -121,8 +123,10 @@ class facebookConsumer extends OAuthConsumerBaseClass {
             if(($response->getStatus() == '302') AND ($response->getReasonPhrase() == 'Found')) {
                 $header = $response->getHeader();
                 $userinfo->photo_url = $header['location'];
+                // COM_errorLog("photo_url=" . $userinfo->photo_url);
             } else {
                 $userinfo->photo_url = '';
+                // COM_errorLog("photo_url=(null)");
             }
 
         } catch (Exception $e) {

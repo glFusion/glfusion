@@ -8,9 +8,10 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2010 by the following authors:                        |
+// | Copyright (C) 2009-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Mark A. Howard         mark AT usable-web DOT com                        |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -1425,17 +1426,16 @@ default:
         !$_CONF['disable_new_user_registration'] &&
         isset($_GET['oauth_login'])) {
 
-        $active_service = false;
         $modules = SEC_collectRemoteOAuthModules();
         $active_service = (count($modules) == 0) ? false : in_array($_GET['oauth_login'], $modules);
         if (!$active_service) {
             $status = -1;
+            COM_errorLog("OAuth login failed - there was no consumer available for the service:" . $_GET['oauth_login']);
         } else {
             $query = array_merge($_GET, $_POST);
             $service = $query['oauth_login'];
             // COM_errorLog("------------------- users.php?oauth_login={$service}----------------------------- ");
-            $callback_url = $_CONF['site_url'] . '/users.php?oauth_login=' . $service;
-            // COM_errorLog("callback_url={$callback_url}");
+
             COM_clearSpeedlimit($_CONF['login_speedlimit'], $service);
             if (COM_checkSpeedlimit($service, $_CONF['login_attempts']) > 0) {
                 displayLoginErrorAndAbort(82, $LANG12[26], $LANG04[112]);
@@ -1444,17 +1444,18 @@ default:
             require_once $_CONF['path_system'] . 'classes/oauthhelper.class.php';
 
             $consumer = new OAuthConsumer($service);
+
+            // setup what we need to callback and authenticate
             $callback_query_string = $consumer->getCallback_query_string();
             // COM_errorLog("callback_query_string={$callback_query_string}");
             $cancel_query_string = $consumer->getCancel_query_string();
             // COM_errorLog("cancel_query_string={$cancel_query_string}");
+            $callback_url = $_CONF['site_url'] . '/users.php?oauth_login=' . $service;
+            // COM_errorLog("callback_url={$callback_url}");
 
-            // OK, let's make sure we have what we need to callback and authenticate.  if the callback query string is null
-            // then this might mean that the user is not actually logged into the remote service they specified, in which case
-            // we need to redirect to the remote service authentication URL
-
+            // authenticate with the remote service
             if (!isset($query[$callback_query_string]) && (empty($cancel_query_string) || !isset($query[$cancel_query_string]))) {
-                // COM_errorLog("user was not logged in, attempting to authenticate remotely");
+                // COM_errorLog("authenticating with {$service}");
                 $url = $consumer->find_identity_info($callback_url, $query);
                 if (empty($url)) {
                     COM_updateSpeedlimit('login');
@@ -1468,9 +1469,9 @@ default:
                     exit;
                 }
 
-            //
+            // elseif the callback query string is set, then we have successfully authenticated
             } elseif (isset($query[$callback_query_string])) {
-                // COM_errorLog("user is already logged into remote service, retrieve userinfo");
+                // COM_errorLog("authenticated with remote service, retrieve userinfo");
                 $oauth_userinfo = $consumer->sreq_userinfo_response($query);
                 if (empty($oauth_userinfo)) {
                     COM_updateSpeedlimit('login');
@@ -1481,15 +1482,15 @@ default:
                 } else {
                     // COM_errorLog("userinfo retrieved.");
                     // foreach($oauth_userinfo as $key=>$value) {
-                        // COM_errorLog("oauth_user_info[{$key}] set");
+                    //     COM_errorLog("oauth_user_info[{$key}]=set");
                     // }
                     $consumer->doAction($oauth_userinfo);
                 }
             } elseif (!empty($cancel_query_string) && isset($query[$cancel_query_string])) {
-                    COM_updateSpeedlimit('login');
-                    echo COM_refresh($_CONF['site_url'] . '/users.php?msg=112'); // OAuth certification has been cancelled
-                    COM_errorLog($MESSAGE[112]);
-                    exit;
+                COM_updateSpeedlimit('login');
+                echo COM_refresh($_CONF['site_url'] . '/users.php?msg=112'); // OAuth certification has been cancelled
+                COM_errorLog($MESSAGE[112]);
+                exit;
             } else {
                 COM_updateSpeedlimit('login');
                 echo COM_refresh($_CONF['site_url'] . '/users.php?msg=91'); // You specified an invalid identity URL
