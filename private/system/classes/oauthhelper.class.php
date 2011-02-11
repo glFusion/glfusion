@@ -77,6 +77,10 @@ class OAuthConsumer {
         return $this->consumer->sreq_userinfo_response($query);
     }
 
+    public function refresh_userinfo() {
+        return $this->consumer->refresh_userinfo();
+    }
+
     public function getErrorMsg() {
         return $this->consumer->getErrorMsg();
     }
@@ -152,11 +156,12 @@ class OAuthConsumerBaseClass {
     public function sreq_userinfo_response($query) {
         $userinfo = array();
 
+        // COM_errorLog("BASE:sreq_userinfo_response()------------------");
         try {
             $this->token = $_COOKIE['request_token'];
-            // COM_errorLog("request_token cookie={$this->token}");
             $this->token_secret = $_COOKIE['request_token_secret'];
             $verifier = $query[$this->callback_query_string];
+            // clear cookies
             SEC_setCookie($_COOKIE['request_token'], '', time() - 10000);
             SEC_setCookie($_COOKIE['request_token_secret'], '', time() - 10000);
             $this->consumer = new HTTP_OAuth_Consumer($this->consumer_key, $this->consumer_secret, $this->token, $this->token_secret);
@@ -189,9 +194,7 @@ class OAuthConsumerBaseClass {
 
         // COM_errorLog("doSynch() method ------------------");
 
-        // Remote auth precludes usersubmission,
-        // and integrates user activation, see?;
-        //$status = USER_ACCOUNT_ACTIVE;
+        // remote auth precludes usersubmission and integrates user activation
 
         $users = $this->_getCreateUserInfo($info);
         $userinfo = $this->_getUpdateUserInfo($info);
@@ -310,7 +313,12 @@ class OAuthConsumerBaseClass {
             if (!empty($imgsize)) {
                 $ext = $this->_getImageExt($save_img);
                 // COM_errorLog("image_ext={$ext}");
-                rename($save_img, $save_img . $ext);
+                $image = $save_img . $ext;
+                // if a userphoto exists, delete it
+                if (file_exists($image)) {
+                    unlink($image);
+                }
+                rename($save_img, $image);
                 $imgname = $users['loginname'] . $ext;
                 $sql .= ", photo = '{$imgname}'";
             }

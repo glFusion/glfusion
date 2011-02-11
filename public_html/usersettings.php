@@ -1111,6 +1111,10 @@ function saveuser($A)
         // the user has requested resynchronization with their remoteservice account
         $msg = 5; // default msg = Your account information has been successfully saved
         if (isset($A['resynch'])) {
+            // COM_errorLog("remote service resynch requested --------------");
+            // COM_errorLog("upon entry, _COOKIE[request_token]={$_COOKIE['request_token']}");
+            // COM_errorLog("upon entry, _COOKIE[request_token_secret]={$_COOKIE['request_token_secret']}");
+
             if ($_CONF['user_login_method']['oauth'] && (strpos($_USER['remoteservice'], 'oauth.') === 0)) {
                 $modules = SEC_collectRemoteOAuthModules();
                 $active_service = (count($modules) == 0) ? false : in_array(substr($_USER['remoteservice'], 6), $modules);
@@ -1118,22 +1122,26 @@ function saveuser($A)
                     $status = -1;
                     $msg = 115; // Remote service has been disabled.
                 } else {
-                    // Send request to OAuth Service for user information
-                    require_once $_CONF['path_system'] . 'classes/oauthhelper.class.php';
-
-                    $consumer = new OAuthConsumer($service);
-
                     $query[] = '';
                     $callback_url = $_CONF['site_url'] . '/usersettings.php?mode=synch&oauth_login=' . $service;
 
-                    $url = $consumer->find_identity_info($callback_url, $query);
-                    // COM_errorLog("authentication url={$url}");
-                    if (empty($url)) {
-                        $msg = 110; // Can not get URL for authentication.'
-                        COM_errorLog($MESSAGE[$msg]);
+                    if($service == 'oauth.facebook') {
+                        // Facebook does sync after refresh
+                        return COM_refresh($callback_url);
                     } else {
-                        header('Location: ' . $url);
-                        exit;
+                        // other OAuth services use reauth/callback method
+                        require_once $_CONF['path_system'] . 'classes/oauthhelper.class.php';
+
+                        $consumer = new OAuthConsumer($service);
+                        $url = $consumer->find_identity_info($callback_url, $query);
+                        // COM_errorLog("authentication url={$url}");
+                        if (empty($url)) {
+                            $msg = 110; // Can not get URL for authentication.'
+                            COM_errorLog($MESSAGE[$msg]);
+                        } else {
+                            header('Location: ' . $url);
+                            exit;
+                        }
                     }
                 }
             }
@@ -1629,43 +1637,57 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
             } else {
                 $query = array_merge($_GET, $_POST);
                 $service = $query['oauth_login'];
-                // COM_errorLog("---------- usersettings.php?mode=resynch&oauth_login={$service}----------");
+                // COM_errorLog("-------------------------------------------------------------------------");
+                // COM_errorLog("usersettings.php?mode=resynch&oauth_login={$service}");
+                // COM_errorLog("-------------------------------------------------------------------------");
 
                 require_once $_CONF['path_system'] . 'classes/oauthhelper.class.php';
 
                 $consumer = new OAuthConsumer($service);
 
-                // setup what we need to callback and authenticate
-                $callback_query_string = $consumer->getCallback_query_string();
-                // COM_errorLog("callback_query_string={$callback_query_string}");
-                $cancel_query_string = $consumer->getCancel_query_string();
-                // COM_errorLog("cancel_query_string={$cancel_query_string}");
-                $callback_url = $_CONF['site_url'] . '/usersettings.php?mode=synch&oauth_login=' . $service;
-                // COM_errorLog("callback_url={$callback_url}");
-
-                // authenticate with the remote service
-                if (!isset($query[$callback_query_string]) && (empty($cancel_query_string) || !isset($query[$cancel_query_string]))) {
-                    $msg = 114; // Resynch with remote account has failed but other account information has been successfully saved
-                // elseif the callback query string is set, then we have successfully authenticated
-                } elseif (isset($query[$callback_query_string])) {
-                    // COM_errorLog("authenticated with remote service, retrieve userinfo");
-                    // foreach($query as $key=>$value) {
-                    //     COM_errorLog("query[{$key}]={$value}");
-                    // }
-                    $oauth_userinfo = $consumer->sreq_userinfo_response($query);
+                if($service == 'oauth.facebook') {
+                    // facebook resynchronizations are simple to perform
+                    $oauth_userinfo = $consumer->refresh_userinfo();
                     if (empty($oauth_userinfo)) {
-                        $msg = 111; // Authentication error.
+                        $msg = 114; // Account saved but re-synch failed.
+                        COM_errorLog($MESSAGE[$msg]);
                     } else {
-                        // COM_errorLog("resynchronizing userinfo");
-                        // foreach($oauth_userinfo as $key=>$value) {
-                        //     COM_errorLog("oauth_user_info[{$key}] set");
-                        // }
                         $consumer->doSynch($oauth_userinfo);
                     }
-                } elseif (!empty($cancel_query_string) && isset($query[$cancel_query_string])) {
-                    $msg = 112; // Certification has been cancelled.
                 } else {
-                    $msg = 91; // You specified an invalid identity URL.
+                    // other OAuth services are more complex
+                    // setup what we need to callback and authenticate
+                    $callback_query_string = $consumer->getCallback_query_string();
+                    // COM_errorLog("callback_query_string={$callback_query_string}");
+                    $cancel_query_string = $consumer->getCancel_query_string();
+                    // COM_errorLog("cancel_query_string={$cancel_query_string}");
+                    $callback_url = $_CONF['site_url'] . '/usersettings.php?mode=synch&oauth_login=' . $service;
+                    // COM_errorLog("callback_url={$callback_url}");
+
+                    // authenticate with the remote service
+                    if (!isset($query[$callback_query_string]) && (empty($cancel_query_string) || !isset($query[$cancel_query_string]))) {
+                        $msg = 114; // Resynch with remote account has failed but other account information has been successfully saved
+                    // elseif the callback query string is set, then we have successfully authenticated
+                    } elseif (isset($query[$callback_query_string])) {
+                        // COM_errorLog("authenticated with remote service, retrieve userinfo");
+                        // foreach($query as $key=>$value) {
+                        //     COM_errorLog("query[{$key}]={$value}");
+                        // }
+                        $oauth_userinfo = $consumer->sreq_userinfo_response($query);
+                        if (empty($oauth_userinfo)) {
+                            $msg = 111; // Authentication error.
+                        } else {
+                            // COM_errorLog("resynchronizing userinfo");
+                            // foreach($oauth_userinfo as $key=>$value) {
+                            //     COM_errorLog("oauth_user_info[{$key}] set");
+                            // }
+                            $consumer->doSynch($oauth_userinfo);
+                        }
+                    } elseif (!empty($cancel_query_string) && isset($query[$cancel_query_string])) {
+                        $msg = 112; // Certification has been cancelled.
+                    } else {
+                        $msg = 91; // You specified an invalid identity URL.
+                    }
                 }
             }
 

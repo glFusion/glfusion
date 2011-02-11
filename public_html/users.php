@@ -1434,7 +1434,11 @@ default:
         } else {
             $query = array_merge($_GET, $_POST);
             $service = $query['oauth_login'];
-            // COM_errorLog("------------------- users.php?oauth_login={$service}----------------------------- ");
+            // COM_errorLog("--------------------------------------------------------------");
+            // COM_errorLog("users.php?oauth_login={$service}");
+            // COM_errorLog("--------------------------------------------------------------");
+            // COM_errorLog("upon entry, COOKIE[request_token]={$_COOKIE['request_token']}");
+            // COM_errorLog("upon entry, COOKIE[request_token_secret]={$_COOKIE['request_token_secret']}");
 
             COM_clearSpeedlimit($_CONF['login_speedlimit'], $service);
             if (COM_checkSpeedlimit($service, $_CONF['login_attempts']) > 0) {
@@ -1457,6 +1461,7 @@ default:
             if (!isset($query[$callback_query_string]) && (empty($cancel_query_string) || !isset($query[$cancel_query_string]))) {
                 // COM_errorLog("authenticating with {$service}");
                 $url = $consumer->find_identity_info($callback_url, $query);
+                // COM_errorLog("after find_identity_info, url={$url}");
                 if (empty($url)) {
                     COM_updateSpeedlimit('login');
                     COM_updateSpeedlimit($service);
@@ -1464,7 +1469,8 @@ default:
                     COM_errorLog($MESSAGE[110]);
                     exit;
                 } else {
-                    // COM_errorLog("authentication URL={$url}, attempting remote service login");
+                    // COM_errorLog("attempting remote service login");
+                    // COM_errorLog("redirecting to authentication URL={$url}");
                     header('Location: ' . $url); // refresh to the OAuth remote service authentication dialog
                     exit;
                 }

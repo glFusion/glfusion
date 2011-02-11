@@ -51,7 +51,10 @@ class facebookConsumer extends OAuthConsumerBaseClass {
     }
 
     public function find_identity_info($callback_url, $query) {
-        // COM_errorLog("FB:find_identity_info()------------------");
+        // COM_errorLog("FB:find_identity_info()----------------------");
+        // COM_errorLog("clearing cookies");
+        SEC_setCookie($_COOKIE['request_token'], '', time() - 10000);
+        SEC_setCookie($_COOKIE['request_token_secret'], '', time() - 10000);
         $params = array(
             'client_id' => $this->consumer_key,
             'redirect_uri' => $callback_url,
@@ -67,6 +70,8 @@ class facebookConsumer extends OAuthConsumerBaseClass {
         $userinfo = array();
 
         try {
+            // COM_errorLog("upon entry, _COOKIE[request_token]={$_COOKIE['request_token']}");
+            // COM_errorLog("upon entry, _COOKIE[request_token_secret]={$_COOKIE['request_token_secret']}");
             $verifier = $query[$this->callback_query_string];
             $callback_url = $_CONF['site_url'] . '/users.php?oauth_login=facebook';
             $params = array(
@@ -87,7 +92,7 @@ class facebookConsumer extends OAuthConsumerBaseClass {
             parse_str($rdata, $data);
             if (isset($data['access_token'])) {
                 $this->token = $data['access_token'];
-                // COM_errorLog("access_token={$data['access_token']}");
+                SEC_setCookie('request_token', $data['access_token']);
             } else {
                 // COM_errorLog("error: access_token not retrieved");
                 $data = json_decode($rdata);
@@ -132,6 +137,59 @@ class facebookConsumer extends OAuthConsumerBaseClass {
         } catch (Exception $e) {
             $this->errormsg = get_class($e) . ': ' . $e->getMessage();
         }
+        // COM_errorLog("upon exit, request_token cookie={$this->token}");
+        // COM_errorLog("upon entry, request_token secret cookie={$this->token_secret}");
+        return $userinfo;
+    }
+
+    public function refresh_userinfo() {
+
+        // COM_errorLog("FB:refresh_userinfo()------------------");
+        $userinfo = array();
+
+        try {
+            // COM_errorLog("upon entry, _COOKIE[request_token]={$_COOKIE['request_token']}");
+            // COM_errorLog("upon entry, _COOKIE[request_token_secret]={$_COOKIE['request_token_secret']}");
+
+            // retrieve the access token
+            $this->token = $_COOKIE['request_token'];
+            if(empty($this->token)) {
+                exit;
+            } else {
+                // retrieve the userinfo
+                $params = array('access_token' => $this->token);
+                $url_me = $this->url_userinfo . '?' . http_build_query($params, null, '&');
+                // COM_errorLog("FB:refresh_userinfo() req1: " . $url_me);
+                $this->request->setUrl($url_me);
+                $response = $this->request->send();
+                $rdata = $response->getBody();
+                // COM_errorLog("FB:refresh_userinfo() rsp1: " . $rdata);
+                $data = json_decode($rdata);
+                if (!empty($data->error)) {
+                    $this->errormsg = $data->error->message;
+                    return;
+                }
+                $userinfo = $data;
+
+                // retrieve the user's photo URL
+                $url_photo = $this->url_userinfo_photo . '?' . http_build_query($params, null, '&');
+                $this->request->setUrl($url_photo);
+                // COM_errorLog("FB:refresh_userinfo() req2: " . $url_photo);
+                $response = $this->request->send();
+                if(($response->getStatus() == '302') AND ($response->getReasonPhrase() == 'Found')) {
+                    $header = $response->getHeader();
+                    $userinfo->photo_url = $header['location'];
+                    // COM_errorLog("photo_url=" . $userinfo->photo_url);
+                } else {
+                    $userinfo->photo_url = '';
+                    // COM_errorLog("photo_url=(null)");
+                }
+            }
+
+        } catch (Exception $e) {
+            $this->errormsg = get_class($e) . ': ' . $e->getMessage();
+        }
+
         return $userinfo;
     }
 
