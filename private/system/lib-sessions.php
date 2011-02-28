@@ -530,9 +530,9 @@ function SESS_getUserDataFromId($userid)
 {
     global $_TABLES;
 
-    $sql = "SELECT *,format FROM {$_TABLES['dateformats']},{$_TABLES['users']},{$_TABLES['userprefs']} "
+    $sql = "SELECT *,format FROM {$_TABLES['dateformats']},{$_TABLES['users']},{$_TABLES['userprefs']},{$_TABLES['userinfo']} "
      . "WHERE {$_TABLES['dateformats']}.dfid = {$_TABLES['userprefs']}.dfid AND "
-     . "{$_TABLES['userprefs']}.uid = ".intval($userid)." AND {$_TABLES['users']}.uid = ".intval($userid);
+     . "{$_TABLES['userprefs']}.uid = ".(int) $userid." AND {$_TABLES['users']}.uid = ".(int)$userid." AND {$_TABLES['userinfo']}.uid = ".(int) $userid;
 
     if (!$result = DB_query($sql)) {
         $userdata = array('error' => '1');
