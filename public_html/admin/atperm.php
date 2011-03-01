@@ -70,7 +70,7 @@ function ATP_adminList()
     );
 
     $retval .= ADMIN_createMenu($menu_arr, $LANG_ATP['instructions'],
-                   $_CONF['layout_url'] . '/images/icons/autotag.' . $_IMAGE_TYPE);
+                   $_CONF['layout_url'] . '/images/icons/atperm.' . $_IMAGE_TYPE);
 
     $autoTags = PLG_collectTags();
     ksort($autoTags);
@@ -165,7 +165,7 @@ function ATP_edit($autotag_id = '')
     $retval .= ADMIN_createMenu(
         $menu_arr,
         $LANG_ADMIN['autotagpermmsg'],
-        $_CONF['layout_url'] . '/images/icons/autotag.' . $_IMAGE_TYPE
+        $_CONF['layout_url'] . '/images/icons/atperm.' . $_IMAGE_TYPE
     );
 
     $retval .= '<form action="'.$_CONF['site_admin_url'].'/atperm.php" method="post">';
