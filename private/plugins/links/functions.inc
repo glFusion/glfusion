@@ -193,6 +193,11 @@ function plugin_autotags_links($op, $content = '', $autotag = '')
 
     if ($op == 'tagname' ) {
         return 'link';
+    } else if ($op == 'tagusage') {
+        $tagUsage = array(
+            array('namespace' => 'links','usage' => 'description')
+        );
+        return $tagUsage;
     } else if ($op == 'parse') {
         $lid = COM_applyFilter($autotag['parm1']);
         $url = COM_buildUrl($_CONF['site_url']

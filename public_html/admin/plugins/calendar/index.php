@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -101,7 +101,7 @@ function CALENDAR_edit($action, $A, $msg = '')
 
     $event_templates = new Template($_CONF['path'] . 'plugins/calendar/templates/admin');
     $event_templates->set_file('editor','eventeditor.thtml');
-    $event_templates->set_var('lang_allowed_html', COM_allowedHTML());
+    $event_templates->set_var('lang_allowed_html', COM_allowedHTML(SEC_getUserPermissions(),false,'calendar','description'));
     $event_templates->set_var('lang_postmode', $LANG_CAL_ADMIN[3]);
 
     if ($action <> 'moderate' AND !empty($A['eid'])) {

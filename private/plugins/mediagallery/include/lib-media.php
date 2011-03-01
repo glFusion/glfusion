@@ -242,7 +242,7 @@ function MG_displayASF( $aid, $I, $full ) {
         'media_width'       =>  $imageWidth,
         'border_width'      =>  $imageWidth + 15,
         'border_height'     =>  $imageHeight + 15,
-        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title']) : '',
+        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title'],'mediagallery','media_title') : '',
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
@@ -380,7 +380,7 @@ function MG_displayMOV( $aid, $I, $full ) {
         'media_width'       =>  $imageWidth,
         'border_width'      =>  $imageWidth + 15,
         'border_height'     =>  $imageHeight + 15,
-        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title']) : '',
+        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title'],'mediagallery','media_title') : '',
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
@@ -544,7 +544,7 @@ function MG_displaySWF( $aid, $I, $full ) {
         'media_width'       =>  $imageWidth,
         'border_width'      =>  $imageWidth + 15,
         'border_height'     =>  $imageHeight + 15,
-        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title']) : '',
+        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title'],'mediagallery','media_title') : '',
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
@@ -818,7 +818,7 @@ function MG_displayFLV ( $aid, $I, $full ) {
         'media_width'       =>  $imageWidth,
         'border_width'      =>  $imageWidth + 15,
         'border_height'     =>  $imageHeight + 15,
-        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title']) : '',
+        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title'],'mediagallery','media_title') : '',
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
@@ -1001,7 +1001,7 @@ function MG_displayMP3( $aid, $I, $full ) {
         'media_width'       =>  $imageWidth,
         'border_width'      =>  $imageWidth + 15,
         'border_height'     =>  $imageHeight + 15,
-        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title']) : '',
+        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title'],'mediagallery','media_title') : '',
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
@@ -1043,7 +1043,7 @@ function MG_displayOGG( $aid, $I, $full ) {
         'media_width'       =>  $imageWidth,
         'border_width'      =>  $imageWidth + 15,
         'border_height'     =>  $imageHeight + 15,
-        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title']) : '',
+        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title'],'mediagallery','media_title') : '',
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
@@ -1100,7 +1100,7 @@ function MG_displayGeneric( $aid, $I, $full ) {
         'media_width'       =>  $imageWidth,
         'border_width'      =>  $imageWidth + 15,
         'border_height'     =>  $imageHeight + 15,
-        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title']) : '',
+        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title'],'mediagallery','media_title') : '',
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
@@ -1147,7 +1147,7 @@ function MG_displayTGA($aid,$I,$full,$mediaObject) {
         'media_width'       =>  $imageWidth,
         'border_width'      =>  $imageWidth + 15,
         'border_height'     =>  $imageHeight + 15,
-        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title']) : '',
+        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title'],'mediagallery','media_title') : '',
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
@@ -1191,7 +1191,7 @@ function MG_displayPSD($aid,$I,$full,$mediaObject) {
         'media_width'       =>  $imageWidth,
         'border_width'      =>  $imageWidth + 15,
         'border_height'     =>  $imageHeight + 15,
-        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title']) : '',
+        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title'],'mediagallery','media_title') : '',
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
@@ -1238,7 +1238,7 @@ function MG_displayEmbed($aid,$I,$full,$mediaObject) {
 		    $F->set_file('media_frame','embed.thtml');
 		    $F->set_var(array(
 		    	'embed_string'		=>  $I['remote_url'],
-		        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title']) : '',
+		        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title'],'mediagallery','media_title') : '',
 		        'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
 		        'xhtml'             =>  XHTML,
 		    ));
@@ -1261,7 +1261,7 @@ function MG_displayEmbed($aid,$I,$full,$mediaObject) {
         'media_width'       =>  $imageWidth,
         'border_width'      =>  $imageWidth + 15,
         'border_height'     =>  $imageHeight + 15,
-        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title']) : '',
+        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title'],'mediagallery','media_title') : '',
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
@@ -1361,7 +1361,7 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
         'media_height'      =>  $imageHeight,
         'media_width'       =>  $imageWidth,
 
-        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title']) : '',
+        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title'],'mediagallery','media_title') : '',
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
@@ -1737,7 +1737,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         $edit_item = '';
     }
 
-    $media_desc = PLG_replaceTags(nl2br($media[$mediaObject]['media_desc']));
+    $media_desc = PLG_replaceTags(nl2br($media[$mediaObject]['media_desc']),'mediagallery','media_description');
     if ( strlen($media_desc) > 0 ) {
         $media_desc .= '<br' . XHTML . '><br' . XHTML . '>';
     }
@@ -1798,7 +1798,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         'image_detail'  =>  $u_image,
         'border_height' =>  $raw_image_height + 30,
         'border_width'  =>  $raw_image_width + 30,
-        'media_title'   =>  (isset($media[$mediaObject]['media_title']) && $media[$mediaObject]['media_title'] != ' ' ) ? PLG_replaceTags($media[$mediaObject]['media_title']) : '',
+        'media_title'   =>  (isset($media[$mediaObject]['media_title']) && $media[$mediaObject]['media_title'] != ' ' ) ? PLG_replaceTags($media[$mediaObject]['media_title'],'mediagallery','media_title') : '',
         'album_title'   =>  ($sortID > 0 ? $LANG_MG03['search_results'] : $MG_albums[$aid]->title),
         'media_desc'    =>  (isset($media[$mediaObject]['media_desc']) && $media[$mediaObject]['media_desc'] != ' ' ) ? $media_desc : '',
         'media_time'    =>  $media_date[0],

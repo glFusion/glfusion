@@ -257,8 +257,8 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
 
             $storytitle = $row['title'];
             $fulltext   = $row['introtext']."\n".$row['bodytext'];
-            $fulltext   = PLG_replaceTags( $fulltext );
-            $storytext  = PLG_replaceTags($row['introtext']);
+            $fulltext   = PLG_replaceTags( $fulltext,'glfusion','story' );
+            $storytext  = PLG_replaceTags($row['introtext'],'glfusion','story');
 
             if ( $contentLength > 1 ) {
                 $fulltext  = COM_truncateHTML( $fulltext, $contentLength, ' ...');
@@ -372,8 +372,8 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
 
         $storytitle = $row['title'];
         $fulltext   = $row['introtext']."\n".$row['bodytext'];
-        $fulltext   = PLG_replaceTags( $fulltext );
-        $storytext  = PLG_replaceTags($row['introtext']);
+        $fulltext   = PLG_replaceTags( $fulltext,'glfusion','story' );
+        $storytext  = PLG_replaceTags($row['introtext'],'glfusion','story');
 
         if ( $contentLength > 1 ) {
             $fulltext  = COM_truncateHTML($fulltext,$contentLength,' ...');

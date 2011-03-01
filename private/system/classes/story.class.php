@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -881,7 +881,7 @@ class Story
         $this->_imageurl = $topic['imageurl'];
 
         /* Then load the title, intro and body */
-        if (($array['postmode'] == 'html') || ($array['postmode'] == 'adveditor') || ($array['postmode'] == 'wikitext')) {
+        if (($array['postmode'] == 'html') || ($array['postmode'] == 'adveditor') ) {
             $this->_htmlLoadStory($array['title'], $array['introtext'], $array['bodytext']);
 
             if ($this->_postmode == 'adveditor') {
@@ -1122,9 +1122,14 @@ class Story
         $body = $this->_bodytext;
         $fulltext = "$intro $body";
 
-        $result = DB_query("SELECT ai_filename FROM {$_TABLES['article_images']} WHERE "
-                            ."ai_sid = '{$this->_sid}' ORDER BY ai_img_num"
-                          );
+        if (! empty($this->_originalSid) && ($this->_sid != $this->_originalSid)) {
+            $ai_sid = $this->_originalSid;
+        } else {
+            $ai_sid = $this->_sid;
+        }
+
+        $result = DB_query("SELECT ai_filename FROM {$_TABLES['article_images']} WHERE ai_sid = '{$ai_sid}' ORDER BY ai_img_num");
+
         $nrows = DB_numRows($result);
         $errors = array();
         $stdImageLoc = true;
@@ -1623,25 +1628,21 @@ class Story
         case 'introtext':
             if ($this->_postmode == 'plaintext') {
                 $return = nl2br($this->_introtext);
-            } elseif ($this->_postmode == 'wikitext') {
-                $return = COM_renderWikiText($this->_editUnescape($this->_introtext));
             } else {
                 $return = $this->_introtext;
             }
 
-            $return = PLG_replaceTags($this->_displayEscape($return));
+            $return = PLG_replaceTags($this->_displayEscape($return),'glfusion','story');
             break;
 
         case 'bodytext':
             if (($this->_postmode == 'plaintext') && !(empty($this->_bodytext))) {
                 $return = nl2br($this->_bodytext);
-            } elseif (($this->_postmode == 'wikitext') && !(empty($this->_bodytext))) {
-                $return = COM_renderWikiText($this->_editUnescape($this->_bodytext));
             } elseif (!empty($this->_bodytext)) {
                 $return = $this->_displayEscape($this->_bodytext);
             }
 
-            $return = PLG_replaceTags($return);
+            $return = PLG_replaceTags($return,'glfusion','story');
             break;
 
         case 'title':
@@ -1776,7 +1777,7 @@ class Story
      */
     function _editUnescape($in)
     {
-        if (($this->_postmode == 'html') || ($this->_postmode == 'wikitext')) {
+        if (($this->_postmode == 'html')) {
             /* Raw and code blocks need entity decoding. Other areas do not.
              * otherwise, annoyingly, &lt; will end up as < on preview 1, on
              * preview 2 it'll be stripped by KSES. Can't beleive I missed that
@@ -1872,8 +1873,6 @@ class Story
         if ($this->_postmode == 'plaintext') {
             $out = COM_undoClickableLinks($out);
             $out = $this->_displayEscape($out);
-        } elseif ($this->_postmode == 'wikitext') {
-            $out = $this->_editUnescape($in);
         } else {
             // html
             $out = str_replace('<pre><code>', '[code]', $out);

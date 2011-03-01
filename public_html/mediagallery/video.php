@@ -101,7 +101,7 @@ if ( $nRows > 0 ) {
 		    $T->set_file (array ('video'=>'embed.thtml'));
 		    $T->set_var(array(
 		    	'embed_string'		=>  $row['remote_url'],
-		        'media_title'       =>  PLG_replaceTags($row['media_title']),
+		        'media_title'       =>  PLG_replaceTags($row['media_title'],'mediagallery','media_title'),
 		        'media_tag'         =>  strip_tags($row['media_title']),
 		    ));
 		    break;

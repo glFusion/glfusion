@@ -234,6 +234,7 @@ $LANG01 = array(
     'jpegtran_ok'               => 'The jpegtran executable is installed.',
     'show_phpinfo'              => 'Show Full PHP Info',
     'hide_phpinfo'              => 'Hide Full PHP Info',
+    'autotag_perms'             => 'AutoTag Permissions',
 );
 
 ###############################################################################
@@ -1388,7 +1389,7 @@ $MESSAGE = array(
     33 => 'Sorry, you do not have access to the block administration page.  Please note that all attempts to access unauthorized features are logged',
     34 => '',
     35 => '',
-    36 => '',
+    36 => 'The AutoTag permissions have been successfully saved.',
     37 => 'Sorry, you do not have access to the user administration page.  Please note that all attempts to access unauthorized features are logged',
     38 => 'Sorry, you do not have access to the plugin administration page.  Please note that all attempts to access unauthorized features are logged',
     39 => 'Sorry, you do not have access to the mail administration page.  Please note that all attempts to access unauthorized features are logged',

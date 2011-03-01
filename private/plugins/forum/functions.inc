@@ -9,7 +9,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -162,12 +162,17 @@ function plugin_getmenuitems_forum()
     return $menuitems;
 }
 
-
 function plugin_autotags_forum($op,$content='',$autotag='') {
     global $_CONF;
 
     if ($op == 'tagname' ) {
         return 'forum';
+    } elseif ($op == 'tagusage') {
+        $tagUsage = array(
+            array('namespace' => 'forum','usage' => 'signature'),
+            array('namespace' => 'forum','usage' => 'post')
+        );
+        return $tagUsage;
     } elseif ($op == 'parse') {
         if ($autotag['parm2'] == '') {
             $autotag['parm2'] = 'here';

@@ -388,12 +388,12 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
         $mailtext .= $LANG01[1] . ' ' . $author . LB;
     }
     if ( $html ) {
-        $mailtext .= PLG_replaceTags($A['introtext']) . '<br />'.PLG_replaceTags($A['bodytext']).'<br /><br />'
+        $mailtext .= PLG_replaceTags($A['introtext'],'glfusion','mail_story') . '<br />'.PLG_replaceTags($A['bodytext'],'glfusion','mail_story').'<br /><br />'
         . '------------------------------------------------------------<br />';
     } else {
         $mailtext .= LB
-            . COM_undoSpecialChars(stripslashes(strip_tags(PLG_replaceTags($A['introtext'])))).LB.LB
-            . COM_undoSpecialChars(stripslashes(strip_tags(PLG_replaceTags($A['bodytext'])))).LB.LB
+            . COM_undoSpecialChars(stripslashes(strip_tags(PLG_replaceTags($A['introtext'],'glfusion','mail_story')))).LB.LB
+            . COM_undoSpecialChars(stripslashes(strip_tags(PLG_replaceTags($A['bodytext'],'glfusion','mail_story')))).LB.LB
             . '------------------------------------------------------------'.LB;
     }
     if ($A['commentcode'] == 0) { // comments allowed

@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2010 by the following authors:                        |
+// | Copyright (C) 2009-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -514,7 +514,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         }
 
         // Replace any plugin autolink tags
-        $A['comment'] = PLG_replaceTags( $A['comment'] );
+        $A['comment'] = PLG_replaceTags( $A['comment'],'glfusion','comment' );
 
         // create a reply to link
         $reply_link = '';
@@ -962,7 +962,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             $comment_template->set_var('comment', $commenttext);
             $comment_template->set_var('lang_postmode', $LANG03[2]);
             $comment_template->set_var('postmode_options', COM_optionList($_TABLES['postmodes'],'code,name',$postmode));
-            $comment_template->set_var('allowed_html', COM_allowedHTML());
+            $comment_template->set_var('allowed_html', COM_allowedHTML(SEC_getUserPermissions(),false,'glfusion','comment'));
             $comment_template->set_var('lang_importantstuff', $LANG03[18]);
             $comment_template->set_var('lang_instr_line1', $LANG03[19]);
             $comment_template->set_var('lang_instr_line2', $LANG03[20]);

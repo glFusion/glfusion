@@ -58,7 +58,7 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.2.2');
+    define('GVERSION', '1.3.0');
 }
 
 define('PATCHLEVEL','.svn');
@@ -91,18 +91,8 @@ if (!isset($REMOTE_ADDR)) {
   * Must make sure that the function hasn't been disabled before calling it.
   *
   */
-if( function_exists('set_error_handler') )
-{
-    if( PHP_VERSION >= 5 )
-    {
-        /* Tell the error handler to use the default error reporting options.
-         * you may like to change this to use it in more/less cases, if so,
-         * just use the syntax used in the call to error_reporting() above.
-         */
-        $defaultErrorHandler = set_error_handler('COM_handleError', error_reporting());
-    } else {
-        $defaultErrorHandler = set_error_handler('COM_handleError');
-    }
+if( function_exists('set_error_handler') ) {
+    $defaultErrorHandler = set_error_handler('COM_handleError', error_reporting());
 }
 
 /**
@@ -189,25 +179,6 @@ if( !$_CONF['have_pear'] ) {
                                  . $curPHPIncludePath ) === false ) {
         COM_errorLog( 'set_include_path failed - there may be problems using the PEAR classes.', 1);
     }
-}
-
-
-if( !function_exists( 'file_put_contents' )) {
-    require_once 'PHP/Compat.php';
-
-    PHP_Compat::loadFunction( 'file_put_contents' );
-}
-
-if( !function_exists( 'stripos' )) {
-    require_once 'PHP/Compat.php';
-
-    PHP_Compat::loadFunction( 'stripos' );
-}
-
-if ( !function_exists( 'htmlspecialchars_decode' ) ) {
-    require_once 'PHP/Compat.php';
-
-    PHP_Compat::loadFunction( 'htmlspecialchars_decode' );
 }
 
 /**
@@ -2793,6 +2764,18 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $link_array[$LANG01[12]] = $menu_item;
         }
 
+        if( SEC_hasRights( 'autotag_perm.admin' ))
+        {
+            $url = $_CONF['site_admin_url'] . '/atperm.php';
+            $adminmenu->set_var( 'option_url', $url );
+            $adminmenu->set_var( 'option_label', $LANG01['autotag_perms'] );
+            $adminmenu->set_var( 'option_count', 'n/a');
+
+            $menu_item = $adminmenu->parse( 'item',
+                    ( $thisUrl == $url ) ? 'current' : 'option' );
+            $link_array[$LANG01['autotag_perms']] = $menu_item;
+        }
+
         if( SEC_hasRights( 'topic.edit' ))
         {
             $result = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['topics']}" . COM_getPermSql());
@@ -3047,51 +3030,38 @@ function COM_userComments( $sid, $title, $type='article', $order='', $mode='', $
 * @see function COM_checkHTML
 * @return   string  Edited $Message
 *
+* @copyright (c) 2005 phpBB Group
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+*
 */
 
 function COM_checkWords( $Message )
 {
     global $_CONF;
 
-    $EditedMessage = ' '. $Message . ' ';
+    if ( $_CONF['censormode'] != 0 && is_array( $_CONF['censorlist'] ) ) {
+        $Replacement = $_CONF['censorreplace'];
+        $unicode = ((version_compare(PHP_VERSION, '5.1.0', '>=') || (version_compare(PHP_VERSION, '5.0.0-dev', '<=') && version_compare(PHP_VERSION, '4.4.0', '>='))) && @preg_match('/\p{L}/u', 'a') !== false) ? true : false;
+        foreach ($_CONF['censorlist'] AS $word ) {
+			if ($unicode) {
+				// Unescape the asterisk to simplify further conversions
+				$word = str_replace('\*', '*', preg_quote($word, '#'));
+				// Replace the asterisk inside the pattern, at the start and at the end of it with regexes
+				$word = preg_replace(array('#(?<=[\p{Nd}\p{L}_])\*(?=[\p{Nd}\p{L}_])#iu', '#^\*#', '#\*$#'), array('([\x20]*?|[\p{Nd}\p{L}_-]*?)', '[\p{Nd}\p{L}_-]*?', '[\p{Nd}\p{L}_-]*?'), $word);
 
-    if( $_CONF['censormode'] != 0 )
-    {
-        if( is_array( $_CONF['censorlist'] ))
-        {
-            $Replacement = $_CONF['censorreplace'];
+				// Generate the final substitution
+				$censors['match'][] = '#(?<![\p{Nd}\p{L}_-])(' . $word . ')(?![\p{Nd}\p{L}_-])#iu';
+			} else {
+				$censors['match'][] = '#(?<!\S)(' . str_replace('\*', '\S*?', preg_quote($word, '#')) . ')(?!\S)#iu';
+			}
 
-            switch( $_CONF['censormode'])
-            {
-                case 1: # Exact match
-                    $RegExPrefix = '(\s)';
-                    $RegExSuffix = '(\W)';
-                    break;
-
-                case 2: # Word beginning
-                    $RegExPrefix = '(\s*)';
-                    $RegExSuffix = '(\w*)';
-                    break;
-
-                case 3: # Word fragment
-                    $RegExPrefix   = '(\w*)';
-                    $RegExSuffix   = '(\w*)';
-                    break;
-            }
-
-            foreach ($_CONF['censorlist'] as $c) {
-                if (!empty($c)) {
-                    $EditedMessage = MBYTE_eregi_replace($RegExPrefix . $c
-                        . $RegExSuffix, "\\1$Replacement\\2", $EditedMessage);
-                }
-            }
-        }
+			$censors['replace'][] = $Replacement;
+		}
+	    if (sizeof($censors)) {
+		    return preg_replace($censors['match'], $censors['replace'], $Message);
+	    }
     }
-
-    $EditedMessage = substr($EditedMessage,1);
-    $EditedMessage = substr($EditedMessage,0,-1);
-
-    return $EditedMessage;
+	return $Message;
 }
 
 
@@ -3894,7 +3864,7 @@ function COM_formatBlock( $A, $noboxes = false )
         // autotags are only(!) allowed in normal blocks
         if(( $A['allow_autotags'] == 1 ) && ( $A['type'] == 'normal' ))
         {
-            $blockcontent = PLG_replaceTags( $blockcontent );
+            $blockcontent = PLG_replaceTags( $blockcontent,'glfusion','block' );
         }
         $blockcontent = str_replace( array( '<?', '?>' ), '', $blockcontent );
 
@@ -4059,10 +4029,12 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
 *
 * @param    string  $permissions    comma-separated list of rights which identify the current user as an "Admin"
 * @param    boolean $list_only      true = return only the list of HTML tags
+* @param    string  $namespace      Optional Namespace or plugin name collecting tag info
+* @param    string  $operation      Optional Operation being performed
 * @return   string  HTML <span> enclosed string
 * @see function COM_checkHTML
 */
-function COM_allowedHTML( $permissions = 'story.edit', $list_only = false )
+function COM_allowedHTML( $permissions = 'story.edit', $list_only = false, $namespace='',$operation='' )
 {
     global $_CONF, $LANG01;
 
@@ -4071,18 +4043,13 @@ function COM_allowedHTML( $permissions = 'story.edit', $list_only = false )
     $allow_page_break = false;
     if( isset( $_CONF['skip_html_filter_for_root'] ) &&
              ( $_CONF['skip_html_filter_for_root'] == 1 ) &&
-            SEC_inGroup( 'Root' ))
-    {
-        if( !$list_only )
-        {
+            SEC_inGroup( 'Root' )) {
+        if( !$list_only ) {
             $retval .= '<span class="warningsmall">' . $LANG01[123] . '</span>, ';
         }
 
-    }
-    else
-    {
-        if( !$list_only )
-        {
+    } else {
+        if( !$list_only ) {
             $retval .= '<span class="warningsmall">' . $LANG01[31] . ' ';
         }
 
@@ -4092,20 +4059,17 @@ function COM_allowedHTML( $permissions = 'story.edit', $list_only = false )
 
     $retval .= '[code], [raw]';
 
-    if( $allow_page_break )
-    {
+    if( $allow_page_break ) {
         $retval .= ', [page_break]';
     }
 
     // list autolink tags
-    $autotags = PLG_collectTags();
-    foreach( $autotags as $tag => $module )
-    {
+    $autotags = PLG_collectTags($namespace,$operation);
+    foreach( $autotags as $tag => $module ) {
         $retval .= ', [' . $tag . ':]';
     }
 
-    if( !$list_only )
-    {
+    if( !$list_only ) {
         $retval .= '</span>';
     }
 
@@ -4351,8 +4315,8 @@ function COM_emailUserTopics()
             $story_date = strftime( $_CONF['date'], strtotime( $S['day' ]));
 
             if( $_CONF['emailstorieslength'] > 0 ) {
-                $storytext      = COM_undoSpecialChars( strip_tags( PLG_replaceTags( stripslashes( $S['introtext'] ))));
-                $storytext_text = COM_undoSpecialChars( strip_tags( PLG_replaceTags( stripslashes( $S['introtext'] ))));
+                $storytext      = COM_undoSpecialChars( strip_tags( PLG_replaceTags( stripslashes( $S['introtext'] ),'glfusion','story')));
+                $storytext_text = COM_undoSpecialChars( strip_tags( PLG_replaceTags( stripslashes( $S['introtext'] ),'glfusion','story')));
 
                 if( $_CONF['emailstorieslength'] > 1 ) {
                     $storytext = COM_truncate( $storytext,$_CONF['emailstorieslength'], '...' );
@@ -6003,26 +5967,28 @@ function COM_undoClickableLinks( $text )
 */
 function COM_highlightQuery( $text, $query, $class = 'highlight' )
 {
-    // escape PCRE special characters
-    $query = preg_quote($query, '/');
+    if (!empty($text) && !empty($query)) {
+        // escape PCRE special characters
+        $query = preg_quote($query, '/');
 
-    $mywords = explode(' ', $query);
-    foreach ($mywords as $searchword) {
-        if (!empty($searchword)) {
-            $before = "/(?!(?:[^<]+>|[^>]+<\/a>))\b";
-            $after = "\b/i";
-            if ($searchword <> utf8_encode($searchword)) {
-                 if (@preg_match('/^\pL$/u', urldecode('%C3%B1'))) { // Unicode property support
-                      $before = "/(?<!\p{L})";
-                      $after = "(?!\p{L})/u";
-                 } else {
-                      $before = "/";
-                      $after = "/u";
-                 }
-            }
-            $HLtext = @preg_replace($before . $searchword . $after, "<span class=\"$class\">\\0</span>", '<!-- x -->' . $text . '<!-- x -->' );
-            if ( $HLtext != NULL ) {
-                $text = $HLtext;
+        $mywords = explode(' ', $query);
+        foreach ($mywords as $searchword) {
+            if (!empty($searchword)) {
+                $before = "/(?!(?:[^<]+>|[^>]+<\/a>))\b";
+                $after = "\b/i";
+                if ($searchword <> utf8_encode($searchword)) {
+                     if (@preg_match('/^\pL$/u', urldecode('%C3%B1'))) { // Unicode property support
+                          $before = "/(?<!\p{L})";
+                          $after = "(?!\p{L})/u";
+                     } else {
+                          $before = "/";
+                          $after = "/u";
+                     }
+                }
+                $HLtext = @preg_replace($before . $searchword . $after, "<span class=\"$class\">\\0</span>", '<!-- x -->' . $text . '<!-- x -->' );
+                if ( $HLtext != NULL ) {
+                    $text = $HLtext;
+                }
             }
         }
     }
@@ -7115,31 +7081,6 @@ function COM_isAnonUser($uid = '')
     } else {
         return true;
     }
-}
-
-/**
-* Convert wiki-formatted text to (X)HTML
-*
-* @param    string  $wikitext   wiki-formatted text
-* @return   string              XHTML formatted text
-*
-*/
-function COM_renderWikiText($wikitext)
-{
-    global $_CONF;
-
-    if (!$_CONF['wikitext_editor']) {
-        return $wikitext;
-    }
-
-    require_once 'Text/Wiki.php';
-
-    $wiki = new Text_Wiki();
-    $wiki->disableRule('wikilink');
-    $wiki->disableRule('freelink');
-    $wiki->disableRule('interwiki');
-
-    return $wiki->transform($wikitext, 'Xhtml');
 }
 
 /**

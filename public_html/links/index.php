@@ -351,7 +351,7 @@ function prepare_link_item ($A, &$template)
     $template->set_var ('link_name', stripslashes ($A['title']));
     $template->set_var ('link_hits', COM_numberFormat ($A['hits']));
     $template->set_var ('link_description',
-                        nl2br (PLG_replaceTags(stripslashes ($A['description']))));
+                        nl2br (PLG_replaceTags(stripslashes ($A['description']),'links','description')));
     $content = stripslashes ($A['title']);
 
     if ( $_LI_CONF['target_blank'] == 1 ) {

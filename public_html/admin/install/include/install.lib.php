@@ -934,6 +934,31 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.2.1' WHERE name='glfusion'",1);
             DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
             $current_fusion_version = '1.2.1';
+        case '1.2.1' :
+            $_SQL = array();
+            $_SQL[] = "CREATE TABLE {$_TABLES['autotag_perm']} (
+              autotag_id varchar(128) NOT NULL,
+              autotag_namespace varchar(128) NOT NULL,
+              autotag_name varchar(128) NOT NULL,
+              PRIMARY KEY (autotag_id)
+            ) TYPE=MyISAM
+            ";
+
+            $_SQL[] = "CREATE TABLE {$_TABLES['autotag_usage']} (
+              autotag_id varchar(128) NOT NULL,
+              autotag_allowed tinyint(1) NOT NULL DEFAULT '1',
+              usage_namespace varchar(128) NOT NULL,
+              usage_operation varchar(128) NOT NULL,
+              KEY `autotag_id (autotag_id)
+            ) TYPE=MyISAM
+            ";
+            foreach ($_SQL as $sql) {
+                DB_query($sql,1);
+            }
+            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.3.0',name='glfusion'",1);
+            DB_query("UPDATE {$_TABLES['vars']} SET value='1.3.0' WHERE name='glfusion'",1);
+            DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
+            $current_fusion_version = '1.3.0';
         default:
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='".$current_fusion_version."' WHERE name='glfusion'",1);

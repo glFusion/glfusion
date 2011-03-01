@@ -1077,6 +1077,11 @@ function plugin_autotags_calendar ($op, $content = '', $autotag = '')
 
     if ($op == 'tagname' ) {
         return 'calendar';
+    } else if ($op == 'tagusage') {
+        $tagUsage = array(
+            array('namespace' => 'calendar','usage' => 'description')
+        );
+        return $tagUsage;
     } else if ($op == 'parse') {
         if (($autotag['tag'] == 'calendar')) {
             $eid = COM_applyFilter ($autotag['parm1']);
@@ -1735,7 +1740,7 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
             switch ($p) {
             case 'description':
             case 'excerpt':
-                $props[$p] = PLG_replaceTags($A['description']);
+                $props[$p] = PLG_replaceTags($A['description'],'calendar','description');
                 break;
             case 'raw-description' :
                 $props[$p] = $A['description'];

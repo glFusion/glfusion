@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -370,7 +370,7 @@ function PAGE_form($A, $error = false)
         }
         $sp_template->set_var('sp_content', $content);
         if ($_SP_CONF['filter_html'] == 1) {
-            $sp_template->set_var('lang_allowedhtml', COM_allowedHTML());
+            $sp_template->set_var('lang_allowedhtml', COM_allowedHTML(SEC_getUserPermissions(),false,'staticpages','page'));
         } else {
             $sp_template->set_var('lang_allowedhtml', $LANG_STATIC['all_html_allowed']);
         }

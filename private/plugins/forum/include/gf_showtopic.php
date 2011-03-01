@@ -479,7 +479,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     $topictemplate->set_var ('topic_comment', $showtopic['comment']);
     $topictemplate->set_var ('comment_minheight', "min-height:{$min_height}px");
     if (isset($sig) && trim($sig) != '') {
-        $topictemplate->set_var ('sig', PLG_replaceTags(($sig)));
+        $topictemplate->set_var ('sig', PLG_replaceTags($sig,'forum','signature'));
         $topictemplate->set_var ('show_sig', '');
     } else {
         $topictemplate->set_var ('sig', '');

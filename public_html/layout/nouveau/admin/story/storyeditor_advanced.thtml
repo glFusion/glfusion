@@ -6,376 +6,397 @@
 <script src="{site_url}/javascript/resetrating.js" type="text/javascript"></script>
 {# Hide the Advanced Editor as Javascript is required. If JS is not enabled then the message below in the <nonscript> tags will be displayed #}
 <noscript>
-    <div class="pluginAlert aligncenter" style="border:1px dashed #ccc;margin-top:10px;padding:15px;">{lang_nojavascript}
-    <p>{no_javascript_return_link}</p>
-    </div>
+  <div class="pluginAlert aligncenter" style="border:1px dashed #ccc;margin-top:10px;padding:15px;">{lang_nojavascript}
+  <p>{no_javascript_return_link}</p>
+  </div>
 </noscript>
 <script type="text/javascript">
-    // Setup editor path for FCKeditor JS Functions
-    glfusionEditorBasePath = "{site_url}/fckeditor/";
-    glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
+  // Setup editor path for FCKeditor JS Functions
+  glfusionEditorBasePath = "{site_url}/fckeditor/";
+  glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
 </script>
 <script type="text/javascript" src="{site_url}/javascript/advanced_editor.js"></script>
 <script type="text/javascript" src="{site_url}/javascript/storyeditor_fckeditor.js"></script>
 <div id="advanced_editor" style="display:none;">
-    {# Hide the Advanced Editor as Javascript is required. If JS is enabled then the JS below will un-hide it #}
-    <script type="text/javascript">
-        document.getElementById('advanced_editor').style.display=''
-    </script>
-    {navbar}
-    <form name="frmstory" action="{site_admin_url}/story.php" method="post" enctype="multipart/form-data" onsubmit='set_postcontent();'>
-        <table id="adveditor" cellspacing="0" cellpadding="3" style="width:100%; margin-top:10px; border:1px solid #ECE9D8;">
+  {# Hide the Advanced Editor as Javascript is required. If JS is enabled then the JS below will un-hide it #}
+  <script type="text/javascript">
+    document.getElementById('advanced_editor').style.display=''
+  </script>
+  {navbar}
+  <form name="frmstory" action="{site_admin_url}/story.php" method="post" enctype="multipart/form-data" onsubmit='set_postcontent();'>
+    <table id="adveditor" cellspacing="0" cellpadding="3" style="width:100%; margin-top:10px; border:1px solid #ECE9D8;">
+      <tr>
+        <td style="width:20%;" class="alignright">{lang_author}:</td>
+        <td><select name="uid">{story_author_select}</select></td>
+      </tr>
+      <tr>
+        <td class="alignright">{lang_title}:</td>
+        <td><input type="text" size="48" maxlength="128" name="title" value="{story_title}"{xhtml}></td>
+      </tr>
+      <tr>
+        <td class="alignright" style="vertical-align:top;">{lang_sid}:</td>
+        <td><input type="text" dir="ltr" size="48" maxlength="40" name="sid" value="{story_id}"{xhtml}></td>
+      </tr>
+      <tr>
+        <td class="alignright">{lang_topic}:</td>
+        <td>
+          <select name="tid">
+            {topic_options}
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td class="alignright">{lang_story_stats}:</td>
+        <td>
+          <table cellspacing="0" cellpadding="3">
             <tr>
-                <td style="width:20%;" class="alignright">{lang_author}:</td>
-                <td><select name="uid">{story_author_select}</select></td>
+              <td class="alignright">{lang_hits}:</td>
+              <td><input type="hidden" name="hits" value="{story_hits}"{xhtml}>{story_hits}</td>
+              <td class="alignright">{lang_comments}:</td>
+              <td><input type="hidden" name="comments" value="{story_comments}"{xhtml}>{story_comments}</td>
+              <td class="alignright">{lang_emails}:</td>
+              <td><input type="hidden" name="numemails" value="{story_emails}"{xhtml}>{story_emails}</td>
+{!if rating}
+              <td class="alignright">{$LANG13[rating]}:</td>
+              <td>
+                <span id="rating">
+                  {rating} / 5 ({votes} {$LANG13[votes]})&nbsp;
+                  <a href="#" onclick="ajax_resetrating('article','{story_id}');return false;">
+                   {$LANG13[reset_rating]}
+                  </a>
+                </span>
+              </td>
+{!endif}
             </tr>
-            <tr>
-                <td class="alignright">{lang_title}:</td>
-                <td><input type="text" size="48" maxlength="128" name="title" value="{story_title}"{xhtml}></td>
-            </tr>
-            <tr>
-                <td class="alignright" style="vertical-align:top;">{lang_sid}:</td>
-                <td><input type="text" dir="ltr" size="48" maxlength="40" name="sid" value="{story_id}"{xhtml}></td>
-            </tr>
-            <tr>
-                <td class="alignright">{lang_topic}:</td>
-                <td>
-                    <select name="tid">
-                        {topic_options}
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td class="alignright">{lang_story_stats}:</td>
-                <td>
-                  <table cellspacing="0" cellpadding="3">
-                    <tr>
-                        <td class="alignright">{lang_hits}:</td>
-                        <td><input type="hidden" name="hits" value="{story_hits}"{xhtml}>{story_hits}</td>
-                        <td class="alignright">{lang_comments}:</td>
-                        <td><input type="hidden" name="comments" value="{story_comments}"{xhtml}>{story_comments}</td>
-                        <td class="alignright">{lang_emails}:</td>
-                        <td><input type="hidden" name="numemails" value="{story_emails}"{xhtml}>{story_emails}</td>
-                        {!if rating}
-                        <td class="alignright">{$LANG13[rating]}:</td>
-                        <td>
-                        <span id="rating">
-                        {rating} / 5 ({votes} {$LANG13[votes]})&nbsp;
-                        <a href="#" onclick="ajax_resetrating('article','{story_id}');return false;">
-                        {$LANG13[reset_rating]}
-                        </a>
-                        </span>
-                        </td>
-                        {!endif}
-                    </tr>
-                 </table>
-                </td>
-            </tr>
-            <tr>
-                <td class="alignright">{lang_show_topic_icon}:<input type="checkbox" name="show_topic_icon" {show_topic_icon_checked}{xhtml}> </td>
-                <td style="padding-left:25px;">{lang_draft}:<input type="checkbox" name="draft_flag" {is_checked}{xhtml}><span style="padding-left:30px;">{lang_postmode}:</span>&nbsp;<select id="sel_editmode" name="postmode" {change_editormode}>{post_options}</select></td>
-            </tr>
-        </table>
-        {# Basic textarea field - no editor #}
-        <div id="text_editor" style="width:98%;margin-top:10px;padding:10px;display:{show_texteditor};">
-            {lang_introtext}:
-            <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="{lang_expandhelp}" alt="" onclick="changeTextAreaSize('introtext','larger');"{xhtml}>
-            <img src="{layout_url}/images/collapse.png" style="vertical-align:middle;" title="{lang_reducehelp}" alt="" onclick="changeTextAreaSize('introtext','smaller');"{xhtml}>
-            <div style="width:99%; padding-bottom:10px;">
-            <textarea id="introtext"  style="width:98%;padding:5px 5px 5px 10px;" name="introtext" cols="45" rows="14">{story_introtext}</textarea><br{xhtml}>
-            </div>
-            {lang_bodytext}:
-            <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="{lang_expandhelp}" alt="" onclick="changeTextAreaSize('bodytext','larger');"{xhtml}>
-            <img src="{layout_url}/images/collapse.png" style="vertical-align:middle;" title="{lang_reducehelp}" alt="" onclick="changeTextAreaSize('bodytext','smaller');"{xhtml}>
-            <div style="width:99%;">
-            <textarea id="bodytext" style="width:98%;padding:5px 5px 5px 10px;" name="bodytext" cols="45" rows="14">{story_bodytext}</textarea>
-            </div>
-        </div>
-        {# HTML Editor #}
-        <div id="html_editor" style="margin-top:10px; padding:5px; border:1px solid #ECE9D8;display:{show_htmleditor};">
-            {lang_introtext}:
-            <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="{lang_expandhelp}" alt="" onclick="changeHTMLTextAreaSize('introhtml','larger');"{xhtml}>
-            <img src="{layout_url}/images/collapse.png" style="vertical-align:middle;" title="{lang_reducehelp}" alt="" onclick="changeHTMLTextAreaSize('introhtml','smaller');"{xhtml}>
-            <span style="padding-left:15px;">{lang_toolbar}:&nbsp;
-                <select id="fckeditor_toolbar_selector" name="fckeditor_toolbar_selector" onchange="changeToolbar(this.value);">
-                     <option value="editor-toolbar1">{toolbar1}</option>
-                     <option value="editor-toolbar2">{toolbar2}</option>
-                     <option value="editor-toolbar3" selected="selected">{toolbar3}</option>
-                     <option value="Default">{toolbar5}</option>
-                </select>
-            </span>
-            <div style="padding:5px;">
-              <textarea id="introhtml" style="width:98%;padding:5px 5px 5px 10px;" name="introhtml" cols="80" rows="12">{story_introtext}</textarea><br{xhtml}>
-            </div>
-            {lang_bodytext}:
-            <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="lang_expandhelp" alt="" onclick="changeHTMLTextAreaSize('bodyhtml','larger');"{xhtml}>
-            <img src="{layout_url}/images/collapse.png" style="vertical-align:middle;" title="{lang_reducehelp}" alt="" onclick="changeHTMLTextAreaSize('bodyhtml','smaller');"{xhtml}>
-            <div>
-              <textarea id="bodyhtml" style="width:98%;padding:5px 5px 5px 10px;" name="bodyhtml" cols="80" rows="12">{story_bodytext}</textarea>
-            </div>
-        </div>
-
-        <div id="editor_mode" style="margin-top:10px; padding:10px; border:1px solid #ECE9D8; display:'';">
-            {lang_allowed_html}
-        </div>
-
-        <div  id="se_options" style="width:100%; margin-top:10px; border:1px solid #ECE9D8; display:none;">
-            <div id="se_publish" style="display:none;">
-                <fieldset><legend>{lang_publishdate}</legend>
-                    <table cellspacing="0" cellpadding="3" style="width:100%;">
-                        <tr>
-                            <td class="alignright" style="vertical-align:top;">{lang_date}:</td>
-                            <td>
-                              <span dir="ltr">
-                                <select id="publish_month" name="publish_month">
-                                    {publish_month_options}
-                                </select>
-                                /
-                                <select id="publish_day" name="publish_day">
-                                    {publish_day_options}
-                                </select>
-                                /
-                                <select id="publish_year" name="publish_year">
-                                    {publish_year_options}
-                                </select>
-                                <span id="cale1">
-                                <a href="#" id="toggler">
-                                <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:middle;border:none;"{xhtml}>
-                                </a>
-                                </span>
-                                <span id="calendar1"></span>
-
-                                &nbsp;&nbsp;
-                                <select name="publish_hour">
-                                    {publish_hour_options}
-                                </select>
-                                :
-                                <select name="publish_minute">
-                                    {publish_minute_options}
-                                </select>
-                                {publishampm_selection}
-                                <input type="hidden" name="publish_second" value="{publish_second}"{xhtml}>
-                              </span><br{xhtml}><br{xhtml}>
-                              {publish_date_explanation}
-                            </td>
-                        </tr>
-                    </table>
-                </fieldset>
-                <fieldset style="margin-top:10px;"><legend>{lang_publishoptions}</legend>
-                    <table cellspacing="3" cellpadding="3" style="width:100%;">
-                        <tr>
-                            <td>
-                                {featured_options}
-                            </td>
-                            <td style="width:75%;">
-                                <select name="frontpage">
-                                    {frontpage_options}
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <select name="commentcode">
-                                    {comment_options}
-                                </select>
-                            </td>
-                            <td>
-                                <select name="trackbackcode">
-                                    {trackback_options}
-                                </select>
-                            </td>
-                        </tr>
-                         <tr>
-                            <td>{lang_cmt_disable}:</td>
-                                        <td class="alignleft" style="vertical-align:top;" colspan="1">{lang_enabled}:<input type="checkbox" name="cmt_close_flag" value="1" {is_checked5} onclick="enablecmtclose(this);"{xhtml}>
-                                            <span dir="ltr">
-                                                <select id="cmt_close_month" name="cmt_close_month">
-                                                    {cmt_close_month_options}
-                                                 </select>
-                                                 /
-                                                 <select id="cmt_close_day" name="cmt_close_day">
-                                                    {cmt_close_day_options}
-                                                 </select>
-                                                 /
-                                                 <select id="cmt_close_year" name="cmt_close_year">
-                                                    {cmt_close_year_options}
-                                                 </select>&nbsp;&nbsp;
-                                <span id="cale2">
-                                <a href="#" id="toggler1">
-                                <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:middle;border:none;"{xhtml}>
-                                </a>
-                                </span>
-                                <span id="calendar2"></span>
-
-                                &nbsp;&nbsp;
-
-
-                                                 <select name="cmt_close_hour">
-                                                     {cmt_close_hour_options}
-                                                 </select>
-                                                 :
-                                                 <select name="cmt_close_minute">
-                                                     {cmt_close_minute_options}
-                                                 </select>
-                                                     {cmt_close_ampm_selection}
-                                                  <input type="hidden" name="cmt_close_second" value="{cmt_close_second}"{xhtml}>
-                                                      </span><br{xhtml}>
-                                        </td>
-
-                        </tr>
-                    </table>
-                </fieldset>
-            </div>
-            <div id="se_images" style="display:none;">
-                <fieldset style="margin-top:10px;"><legend>{lang_images}</legend>
-                    {saved_images}
-                    {image_form_elements}
-                </fieldset>
-            </div>
-            <div id="se_archive" style="display:none;">
-                <fieldset style="margin-top:10px;">
-                    <legend>{lang_archivetitle}</legend>
-                    <table cellspacing="0" cellpadding="3" style="width:100%;">
-                        <tr>
-                            <td class="alignright" style="width:20%; padding-right:5px;">{lang_option}:</td>
-                            <td style="width:20%;">{lang_enabled}:<input type="checkbox" name="archiveflag" value="1" {is_checked2} onclick="enablearchive(this);"{xhtml}></td>
-                            <td class="alignleft">
-                                <label for="storycode10">
-                                    <input type="radio" name="statuscode" id="storycode10" value="10" {is_checked3}{xhtml}>{lang_optionarchive}
-                                </label>&nbsp;
-                                <label for="storycode11">
-                                    <input type="radio" name="statuscode" id="storycode11" value="11" {is_checked4}{xhtml}>{lang_optiondelete}
-                                </label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="alignright" style="vertical-align:top;padding-right:5px;">{lang_date}:</td>
-                            <td colspan="2">
-                              <span dir="ltr">
-                                <select id="expire_month" name="expire_month">
-                                    {expire_month_options}
-                                </select>
-                                <select name="expire_day">
-                                    {expire_day_options}
-                                </select>
-                                <select name="expire_year">
-                                    {expire_year_options}
-                                </select>
-                                <select name="expire_hour">
-                                    {expire_hour_options}
-                                </select>&nbsp;:
-                                <select name="expire_minute">
-                                    {expire_minute_options}
-                                </select>
-                                {expireampm_selection}
-                                <input type="hidden" name="expire_second" value="{expire_second}"{xhtml}>
-                              </span><br{xhtml}>
-                            </td>
-                        </tr>
-                    </table>
-                </fieldset>
-            </div>
-            <fieldset id="se_perms" style="margin-top:10px; display:none;">
-                <legend>{lang_permissions}</legend>
-                <p><b>{lang_owner}:</b> {owner_dropdown}
-{#                {owner_name} #}
-{#                <input type="hidden" name="owner_id" value="{owner_id}"{xhtml}> #}
-                </p>
-                <p><b>{lang_group}:</b> {group_dropdown}</p>
-                <p><b>{lang_permissions}:</b></p>
-                <p>{lang_perm_key}</p>
-                {permissions_editor}
-                <p>{permissions_msg}</p>
-            </fieldset>
-        </div>
-        <div id="se_bottom" style="width:100%; paddin:3px; margin-top:20px;">
-            <input type="submit" value="{lang_save}" name="save"{xhtml}>
-            <span style="padding-right:10px;padding-left:10px;"><input type="submit" value="{lang_preview}" name="preview"{xhtml}></span>
-            <span style="padding-right:50px;"><input type="submit" value="{lang_cancel}" name="cancel"{xhtml}></span>
-            {delete_option}
-            {submission_option}
-            <input type="hidden" name="old_sid" value="{old_story_id}"{xhtml}>
-            <input type="hidden" name="hour_mode" value="{hour_mode}"{xhtml}>
-            <input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}>
-        </div>
-    </form>
-    <div id="preview" style="width:96%; border:1px dashed grey;padding:5px;margin:10px;display:{show_preview};">
-        {preview_content}
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td class="alignright">{lang_show_topic_icon}:<input type="checkbox" name="show_topic_icon" {show_topic_icon_checked}{xhtml}> </td>
+        <td style="padding-left:25px;">{lang_draft}:<input type="checkbox" name="draft_flag" {is_checked}{xhtml}><span style="padding-left:30px;">{lang_postmode}:</span>&nbsp;<select id="sel_editmode" name="postmode" {change_editormode}>{post_options}</select></td>
+      </tr>
+    </table>
+    {# Basic textarea field - no editor #}
+    <div id="text_editor" style="width:98%;margin-top:10px;padding:10px;display:{show_texteditor};">
+      {lang_introtext}:
+      <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="{lang_expandhelp}" alt="" onclick="changeTextAreaSize('introtext','larger');"{xhtml}>
+      <img src="{layout_url}/images/collapse.png" style="vertical-align:middle;" title="{lang_reducehelp}" alt="" onclick="changeTextAreaSize('introtext','smaller');"{xhtml}>
+      <div style="width:99%; padding-bottom:10px;">
+        <textarea id="introtext"  style="width:98%;padding:5px 5px 5px 10px;" name="introtext" cols="45" rows="14">{story_introtext}</textarea><br{xhtml}>
+      </div>
+      {lang_bodytext}:
+      <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="{lang_expandhelp}" alt="" onclick="changeTextAreaSize('bodytext','larger');"{xhtml}>
+      <img src="{layout_url}/images/collapse.png" style="vertical-align:middle;" title="{lang_reducehelp}" alt="" onclick="changeTextAreaSize('bodytext','smaller');"{xhtml}>
+      <div style="width:99%;">
+        <textarea id="bodytext" style="width:98%;padding:5px 5px 5px 10px;" name="bodytext" cols="45" rows="14">{story_bodytext}</textarea>
+      </div>
+    </div>
+    {# HTML Editor #}
+    <div id="html_editor" style="margin-top:10px; padding:5px; border:1px solid #ECE9D8;display:{show_htmleditor};">
+      {lang_introtext}:
+      <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="{lang_expandhelp}" alt="" onclick="changeHTMLTextAreaSize('introhtml','larger');"{xhtml}>
+      <img src="{layout_url}/images/collapse.png" style="vertical-align:middle;" title="{lang_reducehelp}" alt="" onclick="changeHTMLTextAreaSize('introhtml','smaller');"{xhtml}>
+      <span style="padding-left:15px;">
+        {lang_toolbar}:&nbsp;
+        <select id="fckeditor_toolbar_selector" name="fckeditor_toolbar_selector" onchange="changeToolbar(this.value);">
+          <option value="editor-toolbar1">{toolbar1}</option>
+          <option value="editor-toolbar2">{toolbar2}</option>
+          <option value="editor-toolbar3" selected="selected">{toolbar3}</option>
+          <option value="Default">{toolbar5}</option>
+        </select>
+      </span>
+      <div style="padding:5px;">
+        <textarea id="introhtml" style="width:98%;padding:5px 5px 5px 10px;" name="introhtml" cols="80" rows="12">{story_introtext}</textarea><br{xhtml}>
+      </div>
+      {lang_bodytext}:
+      <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="lang_expandhelp" alt="" onclick="changeHTMLTextAreaSize('bodyhtml','larger');"{xhtml}>
+      <img src="{layout_url}/images/collapse.png" style="vertical-align:middle;" title="{lang_reducehelp}" alt="" onclick="changeHTMLTextAreaSize('bodyhtml','smaller');"{xhtml}>
+      <div>
+        <textarea id="bodyhtml" style="width:98%;padding:5px 5px 5px 10px;" name="bodyhtml" cols="80" rows="12">{story_bodytext}</textarea>
+      </div>
     </div>
 
-    <script type="text/javascript">
-        {# This code will only be executed by a browser that suppports Javascript #}
+    <div id="editor_mode" style="margin-top:10px; padding:10px; border:1px solid #ECE9D8; display:'';">
+      {lang_allowed_html}
+    </div>
 
-        var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+    <div  id="se_options" style="width:100%; margin-top:10px; border:1px solid #ECE9D8; display:none;">
+      <div id="se_publish" style="display:none;">
+        <fieldset>
+          <legend>{lang_publishdate}</legend>
+          <table cellspacing="0" cellpadding="3" style="width:100%;">
+            <tr>
+              <td class="alignright" style="vertical-align:top;">{lang_date}:</td>
+              <td>
+                <span dir="ltr">
+                  <select id="publish_month" name="publish_month">
+                    {publish_month_options}
+                  </select>
+                  /
+                  <select id="publish_day" name="publish_day">
+                    {publish_day_options}
+                  </select>
+                  /
+                  <select id="publish_year" name="publish_year">
+                    {publish_year_options}
+                  </select>
+                  <span id="cale1">
+                    <a href="#" id="toggler">
+                      <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:middle;border:none;"{xhtml}>
+                    </a>
+                  </span>
+                  <span id="calendar1"></span>
+                  &nbsp;&nbsp;
+                  <select name="publish_hour">
+                    {publish_hour_options}
+                  </select>
+                  :
+                  <select name="publish_minute">
+                    {publish_minute_options}
+                  </select>
+                  {publishampm_selection}
+                  <input type="hidden" name="publish_second" value="{publish_second}"{xhtml}>
+                </span>
+                <br{xhtml}>
+                <br{xhtml}>
+                {publish_date_explanation}
+              </td>
+            </tr>
+          </table>
+        </fieldset>
 
-        var jstest = {showarchivedisabled};
-        if (jstest) {
-            document.frmstory.expire_month.disabled=true;
-            document.frmstory.expire_day.disabled=true;
-            document.frmstory.expire_year.disabled=true;
-            document.frmstory.expire_hour.disabled=true;
-            document.frmstory.expire_minute.disabled=true;
-            document.frmstory.expire_ampm.disabled=true;
-            document.frmstory.storycode10.disabled=true;
-            document.frmstory.storycode11.disabled=true;
-        }
+        <fieldset style="margin-top:10px;">
+          <legend>{lang_publishoptions}</legend>
+          <table cellspacing="3" cellpadding="3" style="width:100%;">
+            <tr>
+              <td>
+                {featured_options}
+              </td>
+              <td style="width:75%;">
+                <select name="frontpage">
+                  {frontpage_options}
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <select name="commentcode">
+                  {comment_options}
+                </select>
+              </td>
+              <td>
+                <select name="trackbackcode">
+                  {trackback_options}
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>{lang_cmt_disable}:</td>
+              <td class="alignleft" style="vertical-align:top;" colspan="1">{lang_enabled}:<input type="checkbox" name="cmt_close_flag" value="1" {is_checked5} onclick="enablecmtclose(this);"{xhtml}>
+                <span dir="ltr">
+                  <select id="cmt_close_month" name="cmt_close_month">
+                    {cmt_close_month_options}
+                  </select>
+                  /
+                  <select id="cmt_close_day" name="cmt_close_day">
+                    {cmt_close_day_options}
+                  </select>
+                  /
+                  <select id="cmt_close_year" name="cmt_close_year">
+                    {cmt_close_year_options}
+                  </select>
+                  &nbsp;&nbsp;
+                  <span id="cale2">
+                    <a href="#" id="toggler1">
+                      <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:middle;border:none;"{xhtml}>
+                    </a>
+                  </span>
+                  <span id="calendar2"></span>
+                  &nbsp;&nbsp;
 
-        if ( is_chrome == 0 ) {
-        	window.addEvent("domready", function(){
-        		var today = new Date();
+                  <select name="cmt_close_hour">
+                    {cmt_close_hour_options}
+                  </select>
+                  :
+                  <select name="cmt_close_minute">
+                    {cmt_close_minute_options}
+                  </select>
+                  {cmt_close_ampm_selection}
+                  <input type="hidden" name="cmt_close_second" value="{cmt_close_second}"{xhtml}>
+                </span>
+                <br{xhtml}>
+              </td>
+            </tr>
+          </table>
+        </fieldset>
+      </div>
 
-        		var sYear = document.getElementById('publish_year').value;
-        		var sMonth = document.getElementById('publish_month').value;
-        		var sDay   = document.getElementById('publish_day').value;
+      <div id="se_images" style="display:none;">
+        <fieldset style="margin-top:10px;">
+          <legend>{lang_images}</legend>
+          {saved_images}
+          {image_form_elements}
+        </fieldset>
+      </div>
 
-                var calender1 = new Calendar("calendar1", "toggler",
-                   {inputField:{date:'publish_day',
-                	month:'publish_month',
-                	year:'publish_year'},
-                	inputType:'select',
-                	idPrefix:'cal1',
-                	startDate:new Date(sYear-1,0,1),
-                	selectedDate: new Date(sYear,sMonth-1,sDay),
-                	allowDaysOffSelection:true,
-                	allowWeekendSelection:true,
-                	allowDatesOffSelection:true,
-                	numMonths:1
-                });
-            });
+      <div id="se_archive" style="display:none;">
+        <fieldset style="margin-top:10px;">
+          <legend>{lang_archivetitle}</legend>
+          <table cellspacing="0" cellpadding="3" style="width:100%;">
+            <tr>
+              <td class="alignright" style="width:20%; padding-right:5px;">{lang_option}:</td>
+              <td style="width:20%;">{lang_enabled}:<input type="checkbox" name="archiveflag" value="1" {is_checked2} onclick="enablearchive(this);"{xhtml}></td>
+              <td class="alignleft">
+                <label for="storycode10">
+                 <input type="radio" name="statuscode" id="storycode10" value="10" {is_checked3}{xhtml}>{lang_optionarchive}
+                </label>
+                &nbsp;
+                <label for="storycode11">
+                 <input type="radio" name="statuscode" id="storycode11" value="11" {is_checked4}{xhtml}>{lang_optiondelete}
+                </label>
+              </td>
+            </tr>
+            <tr>
+              <td class="alignright" style="vertical-align:top;padding-right:5px;">{lang_date}:</td>
+              <td colspan="2">
+                <span dir="ltr">
+                  <select id="expire_month" name="expire_month">
+                    {expire_month_options}
+                  </select>
+                  <select name="expire_day">
+                    {expire_day_options}
+                  </select>
+                  <select name="expire_year">
+                    {expire_year_options}
+                  </select>
+                  <select name="expire_hour">
+                    {expire_hour_options}
+                  </select>
+                  &nbsp;:
+                  <select name="expire_minute">
+                    {expire_minute_options}
+                  </select>
+                  {expireampm_selection}
+                  <input type="hidden" name="expire_second" value="{expire_second}"{xhtml}>
+                </span>
+                <br{xhtml}>
+              </td>
+            </tr>
+          </table>
+        </fieldset>
+      </div>
 
-        	window.addEvent("domready", function(){
-        		var ctoday = new Date();
+      <fieldset id="se_perms" style="margin-top:10px; display:none;">
+        <legend>{lang_permissions}</legend>
+        <p><b>{lang_owner}:</b> {owner_dropdown}</p>
+        <p><b>{lang_group}:</b> {group_dropdown}</p>
+        <p><b>{lang_permissions}:</b></p>
+        <p>{lang_perm_key}</p>
+        {permissions_editor}
+        <p>{permissions_msg}</p>
+      </fieldset>
+    </div>
 
-        		var cYear  = document.getElementById('cmt_close_year').value;
-        		var cMonth = document.getElementById('cmt_close_month').value;
-        		var cDay   = document.getElementById('cmt_close_day').value;
-
-                var calender2 = new Calendar("calendar2", "toggler1",
-                   {inputField:{date:'cmt_close_day',
-                	month:'cmt_close_month',
-                	year:'cmt_close_year'},
-                	inputType:'select',
-                	idPrefix:'cal2',
-                	startDate:new Date(cYear-1,0,1),
-                	selectedDate:  new Date(cYear,cMonth-1,cDay),
-                	allowDaysOffSelection:true,
-                	allowWeekendSelection:true,
-                	allowDatesOffSelection:true,
-                	numMonths:1
-                });
-            });
-        } else {
-            document.getElementById('cale1').innerHTML = '';
-            document.getElementById('calendar1').style.borderTop = '0px';
-            document.getElementById('calendar1').style.borderLeft = '0px';
-            document.getElementById('calendar1').style.borderRight = '0px';
-            document.getElementById('calendar1').style.borderBottom = '0px';
-            document.getElementById('cale2').innerHTML = '';
-            document.getElementById('calendar2').style.borderTop = '0px';
-            document.getElementById('calendar2').style.borderLeft = '0px';
-            document.getElementById('calendar2').style.borderRight = '0px';
-            document.getElementById('calendar2').style.borderBottom = '0px';
-        }
-    </script>
+    <div id="se_bottom" style="width:100%; padding:3px; margin-top:20px;display:{show_submitoptions}">
+      <input type="submit" value="{lang_save}" name="save"{xhtml}>
+      <span style="padding-right:10px;padding-left:10px;">
+        <input type="submit" value="{lang_preview}" name="previewstory"{xhtml}>
+      </span>
+      <span style="padding-right:50px;">
+        <input type="submit" value="{lang_cancel}" name="cancel"{xhtml}>
+      </span>
+      {delete_option}
+      {submission_option}
+      <input type="hidden" name="old_sid" value="{old_story_id}"{xhtml}>
+      <input type="hidden" name="hour_mode" value="{hour_mode}"{xhtml}>
+      <input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}>
+    </div>
+  </form>
+  <div id="preview" style="width:96%; border:1px dashed grey;padding:5px;margin:10px;display:{show_preview};">
+    {preview_content}
+  </div>
 </div>
+
+<script type="text/javascript">
+{# This code will only be executed by a browser that suppports Javascript #}
+
+var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+var archiveTest = {showarchivedisabled};
+var commentTest = {showcmtclosedisabled};
+
+if (archiveTest) {
+    document.frmstory.expire_month.disabled=true;
+    document.frmstory.expire_day.disabled=true;
+    document.frmstory.expire_year.disabled=true;
+    document.frmstory.expire_hour.disabled=true;
+    document.frmstory.expire_minute.disabled=true;
+    document.frmstory.expire_ampm.disabled=true;
+    document.frmstory.storycode10.disabled=true;
+    document.frmstory.storycode11.disabled=true;
+}
+if (commentTest) {
+    document.frmstory.cmt_close_month.disabled=true;
+    document.frmstory.cmt_close_day.disabled=true;
+    document.frmstory.cmt_close_year.disabled=true;
+    document.frmstory.cmt_close_hour.disabled=true;
+    document.frmstory.cmt_close_minute.disabled=true;
+    document.frmstory.cmt_close_ampm.disabled=true;
+}
+if ( is_chrome == 0 ) {
+	window.addEvent("domready", function(){
+		var today = new Date();
+
+		var sYear = document.getElementById('publish_year').value;
+		var sMonth = document.getElementById('publish_month').value;
+		var sDay   = document.getElementById('publish_day').value;
+
+        var calender1 = new Calendar("calendar1", "toggler",
+           {inputField:{date:'publish_day',
+        	month:'publish_month',
+        	year:'publish_year'},
+        	inputType:'select',
+        	idPrefix:'cal1',
+        	startDate:new Date(sYear-1,0,1),
+        	selectedDate: new Date(sYear,sMonth-1,sDay),
+        	allowDaysOffSelection:true,
+        	allowWeekendSelection:true,
+        	allowDatesOffSelection:true,
+        	numMonths:1
+        });
+    });
+
+	window.addEvent("domready", function(){
+		var ctoday = new Date();
+
+		var cYear  = document.getElementById('cmt_close_year').value;
+		var cMonth = document.getElementById('cmt_close_month').value;
+		var cDay   = document.getElementById('cmt_close_day').value;
+
+        var calender2 = new Calendar("calendar2", "toggler1",
+           {inputField:{date:'cmt_close_day',
+        	month:'cmt_close_month',
+        	year:'cmt_close_year'},
+        	inputType:'select',
+        	idPrefix:'cal2',
+        	startDate:new Date(cYear-1,0,1),
+        	selectedDate:  new Date(cYear,cMonth-1,cDay),
+        	allowDaysOffSelection:true,
+        	allowWeekendSelection:true,
+        	allowDatesOffSelection:true,
+        	numMonths:1
+        });
+    });
+} else {
+    document.getElementById('cale1').innerHTML = '';
+    document.getElementById('calendar1').style.borderTop = '0px';
+    document.getElementById('calendar1').style.borderLeft = '0px';
+    document.getElementById('calendar1').style.borderRight = '0px';
+    document.getElementById('calendar1').style.borderBottom = '0px';
+    document.getElementById('cale2').innerHTML = '';
+    document.getElementById('calendar2').style.borderTop = '0px';
+    document.getElementById('calendar2').style.borderLeft = '0px';
+    document.getElementById('calendar2').style.borderRight = '0px';
+    document.getElementById('calendar2').style.borderBottom = '0px';
+}
+</script>
 {# end {templatelocation} #}

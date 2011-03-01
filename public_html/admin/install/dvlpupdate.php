@@ -551,11 +551,26 @@ function glfusion_121()
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.2.1' WHERE name='glfusion'",1);
 }
 
-function glfusion_122()
+function glfusion_130()
 {
     global $_TABLES, $_FM_TABLES, $_CONF;
 
     $_SQL = array();
+
+    $_SQL[] = "CREATE TABLE {$_TABLES['autotag_perm']} (
+      autotag_id varchar(128) NOT NULL,
+      autotag_namespace varchar(128) NOT NULL,
+      autotag_name varchar(128) NOT NULL,
+      PRIMARY KEY (autotag_id)
+    ) TYPE=MyISAM";
+
+    $_SQL[] = "CREATE TABLE {$_TABLES['autotag_usage']} (
+      autotag_id varchar(128) NOT NULL,
+      autotag_allowed tinyint(1) NOT NULL DEFAULT '1',
+      usage_namespace varchar(128) NOT NULL,
+      usage_operation varchar(128) NOT NULL,
+      KEY `autotag_id (autotag_id)
+    ) TYPE=MyISAM";
 
     // new config options
     require_once $_CONF['path_system'].'classes/config.class.php';
@@ -583,14 +598,23 @@ function glfusion_122()
     $c->add('twitter_consumer_key','not configured yet','text',4,16,NULL,357,TRUE);
     $c->add('twitter_consumer_secret','not configured yet','text',4,16,NULL,358,TRUE);
 
+    foreach ($_SQL as $sql) {
+        DB_query($sql,1);
+    }
+
+    DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('autotag_perm.admin','AutoTag Permissions Admin',1)",1);
+    $ft_id = DB_insertId();
+    $grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'Root'"));
+    DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $grp_id)", 1);
+
     // update version number
-    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.2.2',name='glfusion'",1);
-    DB_query("UPDATE {$_TABLES['vars']} SET value='1.2.2' WHERE name='glfusion'",1);
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.3.0',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.3.0' WHERE name='glfusion'",1);
 }
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_122();
+glfusion_130();
 
 $stdPlugins=array('staticpages','spamx','links','polls','calendar','sitetailor','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
 foreach ($stdPlugins AS $pi_name) {

@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -1008,6 +1008,11 @@ function plugin_autotags_staticpages($op, $content = '', $autotag = '')
 
     if ($op == 'tagname' ) {
         return array('staticpage', 'staticpage_content');
+    } else if ($op == 'tagusage') {
+        $tagUsage = array(
+            array('namespace' => 'staticpages','usage' => 'page')
+        );
+        return $tagUsage;
     } else if ($op == 'parse') {
         if (($autotag['tag'] == 'staticpage') || ($autotag['tag'] == 'staticpage_content' )) {
             $sp_id = COM_applyFilter($autotag['parm1']);
@@ -1287,13 +1292,13 @@ function SP_render_content ($sp_content, $sp_php)
         } else {
             $retval = $sp_content;
         }
-        $retval = PLG_replacetags ($retval);
+        $retval = PLG_replacetags ($retval,'staticpages','page');
     } else {
         if ($sp_php != 0) {
             COM_errorLog ("PHP in static pages is disabled. Can not display page '$page'.", 1);
             $retval .= $LANG_STATIC['deny_msg'];
         } else {
-            $retval .= PLG_replacetags ($sp_content);
+            $retval .= PLG_replacetags ($sp_content,'staticpages','page');
         }
     }
 

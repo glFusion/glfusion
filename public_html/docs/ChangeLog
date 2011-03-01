@@ -1,14 +1,34 @@
 glFusion ChangeLog
 
-v1.2.x (Trunk Development Branch)
+v1.3.0 (Trunk Development Branch)
 ------
+- Feature: AutoTag Permission Editor (Mark)
+- Load userprefs data into $_USER array (Mark)
 - Feature: OAuth login support for FB, LinkedIn and Twitter (Mark H.); This will
   allow users to login to your site with their existing FaceBook, LinkedIn or
   Twitter accounts.  User Submission Queue must be disabled, and the php_openssl
   PHP extension must be installed on your webserver.
 - Feature: Allow users displayed in Who's Online block to be displayed as user
   photo icons (FB-style) rather than their username/fullname.
+- Removed PHP4 items (Mark)
+- Removed wiki text formatting (Mark)
+- Removed storybodytext.thtml / featuredbodytext.thtml templates (Mark)
 
+v1.2.1.pl4
+----------
+- Advanced story editor has some 'quirks' in IE (Mark)
+- Update Bad Behavior to v2.0.42 (Mark)
+   - Google operates a proxy server for “feature phones” (dumb mobile phones;
+     perhaps should be called feature limited) with limited Web browsers which
+     reformats web pages into a simpler format for viewing on such phones.
+     While it is now rarely used, requests from this proxy server, known
+     as Google Wireless Transcoder, were being treated as search engine
+     requests (and denied for not being a search engine).
+     This issue has been fixed.
+
+v1.2.1.pl3
+----------
+- Update Bad Behavior to v2.0.41 (Mark)
 
 v1.2.1.pl2
 ----------

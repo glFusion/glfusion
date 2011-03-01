@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | Administer Media Gallery categories.                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -110,7 +110,7 @@ function MG_editCategory( $cat_id, $mode ) {
     ));
 
     if ( $_MG_CONF['htmlallowed'] == 1 ) {
-        $T->set_var('allowed_html',COM_allowedHTML());
+        $T->set_var('allowed_html',COM_allowedHTML(SEC_getUserPermissions(),false,'mediagallery','category_title'));
     }
 
     $T->parse('output', 'admin');

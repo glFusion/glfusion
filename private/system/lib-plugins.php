@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -48,6 +48,8 @@ if (!defined ('GVERSION')) {
 */
 
 require_once $_CONF['path_system'] . 'classes/plugin.class.php';
+
+global $autoTagUsage;
 
 /**
 * Response codes for the service invocation PLG_invokeService(). Note that
@@ -324,6 +326,10 @@ function PLG_uninstall ($type)
             DB_delete ($_TABLES['blocks'], array ('type',     'phpblockfn'),
                                            array ('phpblock', $remvars['php_blocks'][$i]));
         }
+
+        // remove autotag permissions
+        DB_query("DELETE {$_TABLES['autotag_perm']}.*, {$_TABLES['autotag_usage']}.* FROM {$_TABLES['autotag_perm']} JOIN {$_TABLES['autotag_usage']} ON {$_TABLES['autotag_perm']}.autotag_id={$_TABLES['autotag_usage']}.autotag_id WHERE {$_TABLES['autotag_perm']}.autotag_namespace='".$type."'");
+        DB_delete($_TABLES['autotag_usage'],'usage_namespace',$type);
 
         // remove config table data for this plugin
 
@@ -1695,10 +1701,12 @@ function PLG_getHeaderCode()
 *
 * Returns an associative array where $A['tag-name'] = 'plugin-name'
 *
+* @param    string  $namespace      Namespace or plugin name collecting tag info
+* @param    string  $operation      Operation being performed
 * @return   array   All currently supported autolink tags
 *
 */
-function PLG_collectTags()
+function PLG_collectTags($namespace='',$operation='')
 {
     global $_CONF, $_PLUGINS;
 
@@ -1707,9 +1715,24 @@ function PLG_collectTags()
         return array ();
     }
 
+    $autoTagPerms    = PLG_autoTagPerms();
+    if ( !empty($namespace) && !empty($operation) ) {
+        $postFix = '.'.$namespace.'.'.$operation;
+    } else {
+        $postFix = '';
+    }
+
     // Determine which Core Modules and Plugins support AutoLinks
     //                        'tag'   => 'module'
-    $autolinkModules = array ('story' => 'glfusion','story_introtext' => 'glfusion', 'showblock' => 'glfusion');
+    $autolinkModules = array();
+
+    $coreTags = array ('story' => 'glfusion','story_introtext' => 'glfusion', 'showblock' => 'glfusion');
+    foreach ($coreTags as $tag => $pi_name) {
+        $permCheck = $tag.$postFix;
+        if ( empty($postFix) || !isset($autoTagPerms[$permCheck]) || $autoTagPerms[$permCheck] == 1 ) {
+            $autolinkModules[$tag] = $pi_name;
+        }
+    }
 
     foreach ($_PLUGINS as $pi_name) {
         $function = 'plugin_autotags_' . $pi_name;
@@ -1717,15 +1740,93 @@ function PLG_collectTags()
             $autotag = $function ('tagname');
             if (is_array($autotag)) {
                 foreach ($autotag as $tag) {
-                    $autolinkModules[$tag] = $pi_name;
+                    $permCheck = $tag.$postFix;
+                    if ( empty($postFix) || !isset($autoTagPerms[$permCheck]) || $autoTagPerms[$permCheck] == 1 ) {
+                        $autolinkModules[$tag] = $pi_name;
+                    }
                 }
             } else {
-                $autolinkModules[$autotag] = $pi_name;
+                $permCheck = $autotag.$postFix;
+                if ( empty($postFix) || !isset($autoTagPerms[$permCheck]) || $autoTagPerms[$permCheck] == 1 ) {
+                    $autolinkModules[$autotag] = $pi_name;
+                }
             }
         }
     }
 
     return $autolinkModules;
+}
+
+/**
+* Get a list of all areas that utilize autotags via PLG_replaceTags()
+*
+* Returns an associative array where $A['namespace'] = 'operation'
+*
+* @return   array   All array of namespace / usage
+*
+*/
+function PLG_collectAutotagUsage()
+{
+    global $_CONF, $_PLUGINS;
+
+    if (isset($_CONF['disable_autolinks']) && ($_CONF['disable_autolinks'] == 1)) {
+        // autolinks are disabled - return an empty array
+        return array ();
+    }
+
+    $autolinkModules = array(
+        array('namespace' => 'glfusion', 'usage'    => 'comment'),
+        array('namespace' => 'glfusion', 'usage'    => 'story'),
+        array('namespace' => 'glfusion', 'usage'    => 'contact_user'),
+        array('namespace' => 'glfusion', 'usage'    => 'mail_story'),
+        array('namespace' => 'glfusion', 'usage'    => 'block'),
+    );
+
+    foreach ($_PLUGINS as $pi_name) {
+        $function = 'plugin_autotags_' . $pi_name;
+        if (function_exists($function)) {
+            $autotag = $function ('tagusage');
+            if (is_array($autotag)) {
+                $autolinkModules = array_merge($autolinkModules,$autotag);
+            }
+        }
+    }
+    ksort($autolinkModules);
+    return $autolinkModules;
+}
+
+/**
+* Get a list of autotag-namespace-operation permissiong mapping
+*
+* Returns an associative array where $A['autotag.namespace.operation'] = allowed
+*
+* @return   array   array of autotag.namespace.operation => allowed
+*
+*/
+function PLG_autoTagPerms()
+{
+    global $_CONF, $_TABLES, $autoTagUsage;
+
+    static $atp_initialized;
+
+    if ( $atp_initialized == 1 ) {
+        return $autoTagUsage;
+    }
+
+    $autoTagArray = array();
+    $tags = array();
+
+    $sql = "SELECT * FROM {$_TABLES['autotag_perm']} JOIN {$_TABLES['autotag_usage']} ON {$_TABLES['autotag_perm']}.autotag_id = {$_TABLES['autotag_usage']}.autotag_id";
+
+    $result = DB_query($sql);
+
+    while ($row = DB_fetchArray($result) ) {
+        $uniqueID = $row['autotag_name'].'.'.$row['usage_namespace'].'.'.$row['usage_operation'];
+        $autoTagArray[$uniqueID] = $row['autotag_allowed'];
+    }
+    $atp_initialized = 1;
+    $autoTagUsage = $autoTagArray;
+    return $autoTagArray;
 }
 
 /**
@@ -1735,12 +1836,14 @@ function PLG_collectTags()
 * The autolink would be like:  [story:20040101093000103 here]
 *
 * @param   string   $content   Content that should be parsed for autolinks
+* @param    string  $namespace Optional Namespace or plugin name collecting tag info
+* @param    string  $operation Optional Operation being performed
 * @param   string   $plugin    Optional if you only want to parse using a specific plugin
 *
 */
-function PLG_replaceTags($content, $plugin = '')
+function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
 {
-    global $_CONF, $_TABLES, $_BLOCK_TEMPLATE, $LANG32;
+    global $_CONF, $_TABLES, $_BLOCK_TEMPLATE, $LANG32, $autoTagUsage;
 
     if (isset ($_CONF['disable_autolinks']) && ($_CONF['disable_autolinks'] == 1)) {
         // autolinks are disabled - return $content unchanged
@@ -1748,6 +1851,13 @@ function PLG_replaceTags($content, $plugin = '')
     }
 
     $autolinkModules = PLG_collectTags ();
+    $autoTagUsage    = PLG_autoTagPerms();
+
+    if ( !empty($namespace) && !empty($operation) ) {
+        $postFix = '.'.$namespace.'.'.$operation;
+    } else {
+        $postFix = '';
+    }
 
     // For each supported module, scan the content looking for any AutoLink tags
     $tags = array ();
@@ -1813,123 +1923,127 @@ function PLG_replaceTags($content, $plugin = '')
     // If we have found 1 or more AutoLink tag
     if (count ($tags) > 0) {       // Found the [tag] - Now process them all
         foreach ($tags as $autotag) {
-            $function = 'plugin_autotags_' . $autotag['module'];
-            if (($autotag['module'] == 'glfusion') AND
-                    (empty ($plugin) OR ($plugin == 'glfusion'))) {
-                $url = '';
-                $linktext = $autotag['parm2'];
-                if ($autotag['tag'] == 'story') {
-                    $autotag['parm1'] = COM_applyFilter ($autotag['parm1']);
-                    $url = COM_buildUrl ($_CONF['site_url']
-                         . '/article.php?story=' . $autotag['parm1']);
-                    if (empty ($linktext)) {
-                        $linktext = DB_getItem ($_TABLES['stories'], 'title', "sid = '".DB_escapeString($autotag['parm1'])."'");
-                    }
-                }
-                if (!empty ($url)) {
-                    $filelink = COM_createLink($linktext, $url);
-                    $content = str_replace ($autotag['tagstr'], $filelink,
-                                            $content);
-                }
-                if ( $autotag['tag'] == 'story_introtext' ) {
+            $permCheck = $autotag['tag'].$postFix;
+            if ( empty($postFix) || !isset($autoTagUsage[$permCheck]) || $autoTagUsage[$permCheck] == 1 ) {
+
+                $function = 'plugin_autotags_' . $autotag['module'];
+                if (($autotag['module'] == 'glfusion') AND
+                        (empty ($plugin) OR ($plugin == 'glfusion'))) {
                     $url = '';
-                    $linktext = '';
-                    USES_lib_story();
-                    if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
-                        $result = DB_query("SELECT maxstories,tids,aids FROM {$_TABLES['userindex']} WHERE uid = {$_USER['uid']}");
-                        $U = DB_fetchArray($result);
-                    } else {
-                        $U['maxstories'] = 0;
-                        $U['aids'] = '';
-                        $U['tids'] = '';
-                    }
-
-                    $sql = " (date <= NOW()) AND (draft_flag = 0)";
-
-                    if (empty ($topic)) {
-                        $sql .= COM_getLangSQL ('tid', 'AND', 's');
-                    }
-
-                    $sql .= COM_getPermSQL ('AND', 0, 2, 's');
-
-                    if (!empty($U['aids'])) {
-                        $sql .= " AND s.uid NOT IN (" . str_replace( ' ', ",", $U['aids'] ) . ") ";
-                    }
-
-                    if (!empty($U['tids'])) {
-                        $sql .= " AND s.tid NOT IN ('" . str_replace( ' ', "','", $U['tids'] ) . "') ";
-                    }
-
-                    $sql .= COM_getTopicSQL ('AND', 0, 's') . ' ';
-
-                    $userfields = 'u.uid, u.username, u.fullname';
-
-                    $msql = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
-                             . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
-                             . $userfields . ", t.topic, t.imageurl "
-                             . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, "
-                             . "{$_TABLES['topics']} AS t WHERE s.sid = '".$autotag['parm1']."' AND (s.uid = u.uid) AND (s.tid = t.tid) AND"
-                             . $sql;
-
-                    $result = DB_query ($msql);
-                    $nrows = DB_numRows ($result);
-                    if ( $A = DB_fetchArray( $result ) ) {
-                        $story = new Story();
-                        $story->loadFromArray($A);
-                        $linktext = STORY_renderArticle ($story, 'y');
-                    }
-                    $content = str_replace($autotag['tagstr'],$linktext,$content);
-                }
-                if ( $autotag['tag'] == 'showblock' ) {
-                    $blockName = COM_applyBasicFilter($autotag['parm1']);
-                    $result = DB_query("SELECT * FROM {$_TABLES['blocks']} WHERE name = '".DB_escapeString($blockName)."'" . COM_getPermSQL( 'AND' ));
-                    if ( DB_numRows($result) > 0 ) {
-                        $skip = 0;
-                        $B = DB_fetchArray($result);
-                        $template = '';
-                        $side     = '';
-                        $px = explode (' ', trim ($autotag['parm2']));
-                        if (is_array ($px)) {
-                            foreach ($px as $part) {
-                                if (substr ($part, 0, 9) == 'template:') {
-                                    $a = explode (':', $part);
-                                    $template = $a[1];
-                                    $skip++;
-                                } elseif (substr ($part, 0, 5) == 'side:') {
-                                    $a = explode (':', $part);
-                                    $side = $a[1];
-                                    $skip++;
-                                    break;
-                                }
-                            }
-                            if ($skip != 0) {
-                                if (count ($px) > $skip) {
-                                    for ($i = 0; $i < $skip; $i++) {
-                                        array_shift ($px);
-                                    }
-                                    $caption = trim (implode (' ', $px));
-                                } else {
-                                    $caption = '';
-                                }
-                            }
+                    $linktext = $autotag['parm2'];
+                    if ($autotag['tag'] == 'story') {
+                        $autotag['parm1'] = COM_applyFilter ($autotag['parm1']);
+                        $url = COM_buildUrl ($_CONF['site_url']
+                             . '/article.php?story=' . $autotag['parm1']);
+                        if (empty ($linktext)) {
+                            $linktext = DB_getItem ($_TABLES['stories'], 'title', "sid = '".DB_escapeString($autotag['parm1'])."'");
                         }
-                        if ( $template != '' ) {
-                            $_BLOCK_TEMPLATE[$blockName] = 'blockheader-'.$template.'.thtml,blockfooter-'.$template.'.thtml';
+                    }
+                    if (!empty ($url)) {
+                        $filelink = COM_createLink($linktext, $url);
+                        $content = str_replace ($autotag['tagstr'], $filelink,
+                                                $content);
+                    }
+                    if ( $autotag['tag'] == 'story_introtext' ) {
+                        $url = '';
+                        $linktext = '';
+                        USES_lib_story();
+                        if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
+                            $result = DB_query("SELECT maxstories,tids,aids FROM {$_TABLES['userindex']} WHERE uid = {$_USER['uid']}");
+                            $U = DB_fetchArray($result);
+                        } else {
+                            $U['maxstories'] = 0;
+                            $U['aids'] = '';
+                            $U['tids'] = '';
                         }
-                        if ( $side == 'left' ) {
-                            $B['onleft'] = 1;
-                        } else if ( $side == 'right' ) {
-                            $B['onleft'] = 0;
+
+                        $sql = " (date <= NOW()) AND (draft_flag = 0)";
+
+                        if (empty ($topic)) {
+                            $sql .= COM_getLangSQL ('tid', 'AND', 's');
                         }
-                        $linktext = COM_formatBlock( $B );
+
+                        $sql .= COM_getPermSQL ('AND', 0, 2, 's');
+
+                        if (!empty($U['aids'])) {
+                            $sql .= " AND s.uid NOT IN (" . str_replace( ' ', ",", $U['aids'] ) . ") ";
+                        }
+
+                        if (!empty($U['tids'])) {
+                            $sql .= " AND s.tid NOT IN ('" . str_replace( ' ', "','", $U['tids'] ) . "') ";
+                        }
+
+                        $sql .= COM_getTopicSQL ('AND', 0, 's') . ' ';
+
+                        $userfields = 'u.uid, u.username, u.fullname';
+
+                        $msql = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
+                                 . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
+                                 . $userfields . ", t.topic, t.imageurl "
+                                 . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, "
+                                 . "{$_TABLES['topics']} AS t WHERE s.sid = '".$autotag['parm1']."' AND (s.uid = u.uid) AND (s.tid = t.tid) AND"
+                                 . $sql;
+
+                        $result = DB_query ($msql);
+                        $nrows = DB_numRows ($result);
+                        if ( $A = DB_fetchArray( $result ) ) {
+                            $story = new Story();
+                            $story->loadFromArray($A);
+                            $linktext = STORY_renderArticle ($story, 'y');
+                        }
                         $content = str_replace($autotag['tagstr'],$linktext,$content);
-                    } else {
-                        $content = str_replace($autotag['tagstr'],'',$content);
                     }
+                    if ( $autotag['tag'] == 'showblock' ) {
+                        $blockName = COM_applyBasicFilter($autotag['parm1']);
+                        $result = DB_query("SELECT * FROM {$_TABLES['blocks']} WHERE name = '".DB_escapeString($blockName)."'" . COM_getPermSQL( 'AND' ));
+                        if ( DB_numRows($result) > 0 ) {
+                            $skip = 0;
+                            $B = DB_fetchArray($result);
+                            $template = '';
+                            $side     = '';
+                            $px = explode (' ', trim ($autotag['parm2']));
+                            if (is_array ($px)) {
+                                foreach ($px as $part) {
+                                    if (substr ($part, 0, 9) == 'template:') {
+                                        $a = explode (':', $part);
+                                        $template = $a[1];
+                                        $skip++;
+                                    } elseif (substr ($part, 0, 5) == 'side:') {
+                                        $a = explode (':', $part);
+                                        $side = $a[1];
+                                        $skip++;
+                                        break;
+                                    }
+                                }
+                                if ($skip != 0) {
+                                    if (count ($px) > $skip) {
+                                        for ($i = 0; $i < $skip; $i++) {
+                                            array_shift ($px);
+                                        }
+                                        $caption = trim (implode (' ', $px));
+                                    } else {
+                                        $caption = '';
+                                    }
+                                }
+                            }
+                            if ( $template != '' ) {
+                                $_BLOCK_TEMPLATE[$blockName] = 'blockheader-'.$template.'.thtml,blockfooter-'.$template.'.thtml';
+                            }
+                            if ( $side == 'left' ) {
+                                $B['onleft'] = 1;
+                            } else if ( $side == 'right' ) {
+                                $B['onleft'] = 0;
+                            }
+                            $linktext = COM_formatBlock( $B );
+                            $content = str_replace($autotag['tagstr'],$linktext,$content);
+                        } else {
+                            $content = str_replace($autotag['tagstr'],'',$content);
+                        }
+                    }
+                } else if (function_exists ($function) AND
+                        (empty ($plugin) OR ($plugin == $autotag['module']))) {
+                    $content = $function ('parse', $content, $autotag);
                 }
-            } else if (function_exists ($function) AND
-                    (empty ($plugin) OR ($plugin == $autotag['module']))) {
-                $content = $function ('parse', $content, $autotag);
             }
         }
     }

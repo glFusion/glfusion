@@ -280,7 +280,7 @@ function enablearchive(obj) {
         <tr>
             <td colspan="2">
                 <input type="submit" value="{lang_save}" name="save"{xhtml}>
-                <input type="submit" value="{lang_preview}" name="preview"{xhtml}>
+                <input type="submit" value="{lang_preview}" name="previewstory"{xhtml}>
                 <input type="submit" value="{lang_cancel}" name="cancel"{xhtml}>
                 {delete_option}
                 {submission_option}

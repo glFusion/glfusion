@@ -811,7 +811,6 @@ function plugin_getwhatsnew_filemgmt() {
     }
 }
 
-
 /**
 * Implements the [file:] and [file_download:]  autotags.
 *
@@ -822,6 +821,11 @@ function plugin_autotags_filemgmt ($op, $content = '', $autotag = '')
 
     if ($op == 'tagname' ) {
         return array('file', 'file_download');
+    } else if ($op == 'tagusage') {
+        $tagUsage = array(
+            array('namespace' => 'filemgmt','usage' => 'description')
+        );
+        return $tagUsage;
     } else if ($op == 'parse') {
         if (($autotag['tag'] == 'file') || ($autotag['tag'] == 'file_download') ) {
             $target = '';
@@ -1018,7 +1022,7 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
                     break;
                 case 'description':
                 case 'excerpt':
-                    $props[$p] = PLG_replaceTags($A['description']);
+                    $props[$p] = PLG_replaceTags($A['description'],'filemgmt','description');
                     break;
                 case 'raw-description':
                     $props[$p] = $A['description'];

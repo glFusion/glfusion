@@ -579,7 +579,6 @@ function plugin_getadminoption_mediagallery() {
     }
 }
 
-
 function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
     global $MG_albums, $_MG_CONF, $_CONF, $_MG_USERPREFS, $_TABLES, $LANG_MG00, $LANG_MG03, $side_count, $swfjsinclude;
     global $mgAutoTagArray, $mg_installed_version,$glversion;
@@ -591,6 +590,16 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
     }
     if ($op == 'tagname' ) {
         return array('album','media','img','slideshow','fslideshow','video','audio','download','image','oimage','mlink','alink','playall');
+    } else if ( $op == 'tagusage' ) {
+        $tagUsage = array(
+            array('namespace' => 'mediagallery','usage' => 'album_title'),
+            array('namespace' => 'mediagallery','usage' => 'album_description'),
+            array('namespace' => 'mediagallery','usage' => 'media_title'),
+            array('namespace' => 'mediagallery','usage' => 'media_description'),
+            array('namespace' => 'mediagallery','usage' => 'category_title'),
+            array('namespace' => 'mediagallery','usage' => 'category_description')
+        );
+        return $tagUsage;
     } else if ($op == 'parse') {
 
         if (!isset($mgAutoTagArray['count']) || empty($mgAutoTagArray['count'])) {
@@ -2452,7 +2461,7 @@ function phpblock_mg_randommedia($parm1=array(),$parm2=''){
             'media_height'      =>  $height,
             'media_width'       =>  $width,
             'border_width'      =>  $width + 14,
-            'media_title'       =>  PLG_replaceTags(strip_tags($row['media_title'])),
+            'media_title'       =>  PLG_replaceTags(strip_tags($row['media_title']),'mediagallery','media_title'),
             'lang_browse_album' =>  $LANG_MG03['browse_album'],
             'xhtml'             =>  XHTML,
             'framecss'          =>  '', //$fCSS,
@@ -3734,7 +3743,7 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
                         break;
                     case 'description':
                     case 'excerpt':
-                        $prop[$p] = PLG_replaceTags($A['media_desc']);
+                        $prop[$p] = PLG_replaceTags($A['media_desc'],'mediagallery','media_description');
                         break;
                     case 'raw-description' :
                         $props[$p] = $A['media_desc'];

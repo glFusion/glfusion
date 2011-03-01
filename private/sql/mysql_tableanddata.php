@@ -58,6 +58,23 @@ CREATE TABLE {$_TABLES['article_images']} (
 ) TYPE=MyISAM
 ";
 
+$_SQL[] = "CREATE TABLE {$_TABLES['autotag_perm']} (
+  autotag_id varchar(128) NOT NULL,
+  autotag_namespace varchar(128) NOT NULL,
+  autotag_name varchar(128) NOT NULL,
+  PRIMARY KEY (autotag_id)
+) TYPE=MyISAM
+";
+
+$_SQL[] = "CREATE TABLE {$_TABLES['autotag_usage']} (
+  autotag_id varchar(128) NOT NULL,
+  autotag_allowed tinyint(1) NOT NULL DEFAULT '1',
+  usage_namespace varchar(128) NOT NULL,
+  usage_operation varchar(128) NOT NULL,
+  KEY `autotag_id (autotag_id)
+) TYPE=MyISAM
+";
+
 $_SQL[] = "
 CREATE TABLE {$_TABLES['blocks']} (
   bid smallint(5) unsigned NOT NULL auto_increment,
@@ -570,6 +587,9 @@ CREATE TABLE {$_TABLES['vars']} (
 ) TYPE=MyISAM
 ";
 
+
+
+
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (1,3) ";
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (2,3) ";
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (4,3) ";
@@ -652,6 +672,7 @@ $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (15,'group.delete','Ability to delete groups',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (16,'block.delete','Ability to delete a block',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (17,'stats.view','Ability to view the stats page',1) ";
+$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (18,'autotag_perm.admin','AutoTag Permission Administrator',1) ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['frontpagecodes']} (code, name) VALUES (0,'Show Only in Topic') ";
 $_DATA[] = "INSERT INTO {$_TABLES['frontpagecodes']} (code, name) VALUES (1,'Show on Front Page') ";

@@ -1066,7 +1066,7 @@ class mgAlbum {
             'album_title'       => $this->title,
             'album_media_count'  => $this->media_count,
             'subalbum_media_count' => $total_images_subalbums,
-            'album_desc'        => PLG_replaceTags($this->description),
+            'album_desc'        => PLG_replaceTags($this->description,'mediagallery','album_description'),
             'album_last_update' => $album_last_update[0],
             'img_height'        => $newheight,
             'img_width'         => $newwidth,

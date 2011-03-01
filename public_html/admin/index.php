@@ -134,7 +134,10 @@ function commandcontrol()
                         'lang' => $LANG01['env_check'], 'image' => '/images/icons/envcheck.'),
                   array('condition' => SEC_inGroup('Root'),
                         'url' => $_CONF['site_admin_url'] . '/logview.php',
-                        'lang' => $LANG_LOGVIEW['logview'], 'image' => '/images/icons/logview.')
+                        'lang' => $LANG_LOGVIEW['logview'], 'image' => '/images/icons/logview.'),
+                  array('condition' => SEC_inGroup('Root'),
+                        'url' => $_CONF['site_admin_url'] . '/atperm.php',
+                        'lang' => $LANG01['autotag_perms'], 'image' => '/images/icons/atperm.')
     );
     $admin_templates->set_var('cc_icon_width', floor(100/ICONS_PER_ROW));
 

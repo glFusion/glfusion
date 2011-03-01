@@ -562,8 +562,8 @@ class Media {
         	}
     	}
 
-        $caption = PLG_replaceTags(str_replace('$','&#36;',$this->title));
-        if ($this->owner_id == $_USER['uid'] || 
+        $caption = PLG_replaceTags(str_replace('$','&#36;',$this->title),'mediagallery','media_description');
+        if ($this->owner_id == $_USER['uid'] ||
                 SEC_hasRights('mediagallery.admin')) {
             $caption .= '<br '.XHTML.'>('.$this->id.')';
         }
@@ -578,8 +578,8 @@ class Media {
     		'download_now'	    => $_MG_CONF['site_url'] . '/download.php?mid=' . $this->id,
     		'play_in_popup'     => "javascript:showVideo('" . $_MG_CONF['site_url'] . '/video.php?n=' . $this->id . "'," . $resolution_y . ',' . $resolution_x . ')',
             'row_height'        => $tn_height + 40,
-            'media_title'       => PLG_replaceTags($this->title),
-            'media_description' => PLG_replaceTags(nl2br($this->description)),
+            'media_title'       => PLG_replaceTags($this->title,'mediagallery','media_title'),
+            'media_description' => PLG_replaceTags(nl2br($this->description),'mediagallery','media_description'),
             'media_tag'         => strip_tags($this->title),
             'media_time'        => $media_time[0],
             'media_owner'		=> $username,

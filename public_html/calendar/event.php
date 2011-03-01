@@ -156,7 +156,7 @@ function CALENDAR_addUserEvent($eid)
             $description = nl2br ($description);
         }
         $cal_template->set_var ('event_description',
-                                PLG_replaceTags ($description));
+                                PLG_replaceTags ($description,'calendar','description'));
         $cal_template->set_var('event_id', $eid);
         $cal_template->set_var('lang_addtomycalendar', $LANG_CAL_1[9]);
         $cal_template->set_var('gltoken_name', CSRF_TOKEN);
@@ -685,7 +685,7 @@ default:
                 if (empty($A['postmode']) || ($A['postmode'] == 'plaintext')) {
                     $description = nl2br($description);
                 }
-                $description = PLG_replaceTags($description);
+                $description = PLG_replaceTags($description,'calendar','description');
                 if (!empty($query)) {
                     $description = COM_highlightQuery($description, $query);
                 }

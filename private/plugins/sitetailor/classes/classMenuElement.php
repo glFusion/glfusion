@@ -541,6 +541,16 @@ class mbElement {
                                     $label = $LANG01[12] . ' (' . COM_numberFormat($count) . ')';
                                     $link_array[$LANG01[12]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
                                 }
+                                if( SEC_hasRights( 'autotag_perm.admin' )) {
+                                    $url = $_CONF['site_admin_url'] . '/atperm.php';
+                                    $label =  $LANG01['autotag_perms'];
+                                    $link_array[$LANG01['autotag_perms']] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                }
+                                if( SEC_inGroup( 'Root' )) {
+                                    $url = $_CONF['site_admin_url'] . '/clearctl.php';
+                                    $label =  $LANG01['ctl'];
+                                    $link_array[$LANG01['ctl']] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                }
 
                                 if( SEC_hasRights( 'topic.edit' )) {
                                     $result = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['topics']}" . COM_getPermSql());

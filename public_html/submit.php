@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -228,7 +228,7 @@ function submitstory($topic = '')
     $storyform->set_var('story_bodytext', $story->EditElements('bodytext'));
     $storyform->set_var('lang_postmode', $LANG12[36]);
     $storyform->set_var('story_postmode_options', COM_optionList($_TABLES['postmodes'],'code,name',$story->EditElements('postmode')));
-    $storyform->set_var('allowed_html', COM_allowedHTML());
+    $storyform->set_var('allowed_html', COM_allowedHTML(SEC_getUserPermissions(),false,'glfusion','story'));
     $storyform->set_var('story_uid', $story->EditElements('uid'));
     $storyform->set_var('story_sid', $story->EditElements('sid'));
     $storyform->set_var('story_date', $story->EditElements('unixdate'));

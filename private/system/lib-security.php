@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2010 by the following authors:                        |
+// | Copyright (C) 2009-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -1853,7 +1853,7 @@ function SEC_collectRemoteOAuthModules()
     global $_CONF;
 
     $modules = array();
-    
+
     // Check for OpenSSL PHP extension which is required
     if (extension_loaded('openssl')) {
         $modulespath = $_CONF['path_system'] . 'classes/oauth/';
@@ -1876,9 +1876,9 @@ function SEC_collectRemoteOAuthModules()
                                             if ($_CONF[$mod . '_consumer_secret'] != '') {
                                                 $modules[] = $mod;
                                             }
-                                        }                                
+                                        }
                                     }
-                                }                                
+                                }
                             }
                         } else {
                             $modules[] = $mod;
@@ -1888,7 +1888,7 @@ function SEC_collectRemoteOAuthModules()
             }
         }
     }
-    
+
     return $modules;
 }
 

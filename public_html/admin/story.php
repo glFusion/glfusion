@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -820,7 +820,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         }
     }
     $story_templates->set_var('post_options',$post_options );
-    $story_templates->set_var('lang_allowed_html', COM_allowedHTML());
+    $story_templates->set_var('lang_allowed_html', COM_allowedHTML(SEC_getUserPermissions(),false,'glfusion','story'));
     if ($story->EditElements('advanced_editor_mode') == 1 OR $story->EditElements('postmode') == 'adveditor' OR $story->EditElements('postmode') == 'plaintext') {
         $story_templates->set_var ('show_allowedhtml', 'none');
     } else {
@@ -950,7 +950,7 @@ function STORY_submit($type='')
 // MAIN ========================================================================
 
 $action = '';
-$expected = array('edit','moderate','draft','clone','save','preview','deletestory','cancel');
+$expected = array('edit','moderate','draft','clone','save','previewstory','deletestory','cancel');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
@@ -1034,7 +1034,7 @@ switch ($action) {
         }
         break;
 
-    case 'preview':
+    case 'previewstory':
         SEC_setCookie($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
                        time() + 1200, $_CONF['cookie_path'],
                        $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);

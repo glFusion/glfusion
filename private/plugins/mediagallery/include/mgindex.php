@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: mgindex.php 2869 2008-07-31 14:38:32Z mevans0263                  $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -34,19 +34,12 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+require_once $_CONF['path'] . 'plugins/mediagallery/include/classFrame.php';
+
 function MG_index() {
 	global $_USER, $_MG_CONF, $_CONF, $_TABLES, $MG_albums, $LANG_MG00, $LANG_MG01, $LANG_MG02, $LANG_MG03, $themeStyle;
 
-	require_once $_CONF['path'] . 'plugins/mediagallery/include/classFrame.php';
-
-	/*
-	* Main Function
-	*/
-
-	MG_usage('MediaGallery','Main Menu','',0);
-	$themeStyle = MG_getThemeCSS(0);
-	ob_start();
-	echo MG_siteHeader($LANG_MG00['plugin']);
+	$display = '';
 
     if ( isset($_GET['page']) ) {
 	    $page      = COM_applyFilter($_GET['page'],true);
@@ -56,6 +49,10 @@ function MG_index() {
 	if ( $page != 0 ) {
 	    $page = $page - 1;
 	}
+
+	$themeStyle = MG_getThemeCSS(0);
+
+	$display .= MG_siteHeader($LANG_MG00['plugin']);
 
 	if (!isset($_MG_CONF['album_display_columns']) || $_MG_CONF['album_display_columns'] < 1 ) {
 	    $_MG_CONF['album_display_columns'] = 1;
@@ -82,18 +79,14 @@ function MG_index() {
 
 	$T->set_file( array (
 	    'page'      =>  'gallery_page.thtml',
-	    'header'    =>  'gallery_page_header.thtml',
 	    'body'      =>  $albumListTemplate,
 	    'noitems'   =>  'gallery_page_noitems.thtml',
-	    'footer'    =>  'gallery_page_footer.thtml'
 	));
 
 	$T->set_var(array(
-	    'site_url'          =>  $_CONF['site_url'],
-	    'lang_menulabel'    =>  $_MG_CONF['menulabel'],
+	    'lang_menulabel'    => $_MG_CONF['menulabel'],
 	    'lang_search'       => $LANG_MG01['search'],
 	    'site_url'          => $_MG_CONF['site_url'],
-	    'xhtml'             =>  XHTML,
 	));
 
 	if ( $_MG_CONF['rss_full_enabled'] ) {
@@ -152,7 +145,6 @@ function MG_index() {
 	}
 
 	$T->set_var('select_adminbox',$admin_box);
-	$T->parse('gallery_header','header');
 
 	$album_count = 0;
 
@@ -161,11 +153,11 @@ function MG_index() {
 
 	$albumCount = 0;
 	$indexCounter = 0;
-	if ( !isset($_USER['uid']) || $_USER['uid'] < 2 ) {
+	if ( COM_isAnonUser() ) {
 	    $lastlogin = time();
 	} else {
 	    if ( isset($_USER['uid']) && $_USER['uid'] > 1 ) {
-	        $lastlogin    = DB_getItem ($_TABLES['userinfo'], 'lastlogin', "uid = " . $_USER['uid']);
+	        $lastlogin = $_USER['lastlogin'];
 	    } else {
 	        $lastlogin = time();
 	    }
@@ -204,16 +196,12 @@ function MG_index() {
 	    $T->set_block('body', 'AlbumColumn', 'AColumn');
 	    $T->set_block('body', 'AlbumRow','ARow');
 
-
 	    for ( $i = $begin; $i < ($begin+$items_per_page ); $i += $_MG_CONF['album_display_columns']) {
 	        for ($j = $i; $j < ($i + $_MG_CONF['album_display_columns']); $j++) {
 	            if ($j >= $nrows) {
 	                $k = ($i+$_MG_CONF['album_display_columns']) - $j;
 	                $m = $k % $_MG_CONF['album_display_columns'];
                     for ( $z = $m; $z > 0; $z--) {
-// - commented out appears to cause problems where an album will get skipped
-//                      $T->set_var('AColumn','');
-//                      $T->parse('AColumn', 'AlbumColumn',true);
                         $needFinalParse = 1;
                     }
                     if ( $needFinalParse == 1 ) {
@@ -249,7 +237,7 @@ function MG_index() {
                         }
 	                    $album_media_count  = $MG_albums[$achild[$indexCounter]]->media_count;
 
-	                    if ( isset($_USER['uid']) && $_USER['uid'] > 1 ) {
+	                    if ( !COM_isAnonUser() ) {
 	                        if ($MG_albums[$achild[$indexCounter]]->last_update > $lastlogin) {
 	                            $album_last_update[0] = '<font color="red">' . $album_last_update[0] . '</font>';
 	                        }
@@ -496,8 +484,8 @@ function MG_index() {
 	                'class'             => $rowcounter % 2,
 	                'table_column_width' => 'width="' . $width . '%"',
 	                'album_id'          => $MG_albums[$achild[$indexCounter]]->id,
-	                'album_title'       => PLG_replaceTags($MG_albums[$achild[$indexCounter]]->title),
-	                'album_desc'        => $MG_albums[$achild[$indexCounter]]->description == '' ? '' : PLG_replaceTags($MG_albums[$achild[$indexCounter]]->description),
+	                'album_title'       => PLG_replaceTags($MG_albums[$achild[$indexCounter]]->title,'mediagallery','album_title'),
+	                'album_desc'        => $MG_albums[$achild[$indexCounter]]->description == '' ? '' : PLG_replaceTags($MG_albums[$achild[$indexCounter]]->description,'mediagallery','album_description'),
 	                'album_media_count' => $album_media_count,
 	                'subalbum_media_count' => $total_images_subalbums,
 	                'album_owner'       => $ownername,
@@ -531,12 +519,10 @@ function MG_index() {
 	    $T->parse('gallery_body','body');
 	}
 	$T->parse('output','page');
-	echo '<style type="text/css">'.$nFrame->getCSS().'</style>';
+	$display .= '<style type="text/css">'.$nFrame->getCSS().'</style>';
 
-	echo $T->finish($T->get_var('output'));
-	echo MG_siteFooter();
-	$data = ob_get_contents();
-	ob_end_clean();
-	echo $data;
+	$display .= $T->finish($T->get_var('output'));
+	$display .= MG_siteFooter();
+    echo $display;
 	exit;
 }

@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2010 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -51,19 +51,19 @@ if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
 */
 
 if ( isset($_GET['aid']) ) {
-    $album_id  = intval(COM_applyFilter($_GET['aid'],true));
+    $album_id  = (int) COM_applyFilter($_GET['aid'],true);
 } else {
     $album_id = 0;
 }
 
 if (isset($_GET['page']) ) {
-    $page      = intval(COM_applyFilter($_GET['page'],true));
+    $page      = (int) COM_applyFilter($_GET['page'],true);
 } else {
     $page = 0;
 }
 
 if ( isset($_GET['sort']) ) {
-    $sortOrder = intval(COM_applyFilter($_GET['sort'],true));
+    $sortOrder = (int) COM_applyFilter($_GET['sort'],true);
 } else {
     $sortOrder = 0;
 }
@@ -86,7 +86,7 @@ if ( $page != 0 ) {
     $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma LEFT JOIN " . $_TABLES['mg_media'] . " as m " .
             " ON ma.media_id=m.media_id WHERE ma.album_id=" . $aid . $orderBy;
     $result = DB_query( $sql );
-    $nRows = DB_numRows( $result );
+    $nRows  = DB_numRows( $result );
     $total_media = $nRows;
     $media = array();
     while ( $row = DB_fetchArray($result) ) {
@@ -150,8 +150,6 @@ if ( $errorMessage != '' ) {
     echo $display;
     exit;
 }
-
-MG_usage('album_view', $MG_albums[$album_id]->title, '',0);
 
 // update views counter....
 
@@ -353,7 +351,6 @@ if ( $total_print_pages == 0 ) {
     $total_print_pages = 1;
 }
 
-//$aOffset = $MG_albums[$album_id]->getOffset();
 if ( $aOffset > 0 ) {
     $aPage = intval(($aOffset)  / ($_MG_CONF['album_display_columns'] * $_MG_CONF['album_display_rows'])) + 1;
 } else {
@@ -503,16 +500,13 @@ $T = new Template( MG_getTemplatePath($album_id) );
 
 $T->set_file (array(
     'page'      => 'album_page.thtml',
-    'header'    => 'album_page_header.thtml',
-    'body'      => 'album_page_body.thtml',
     'noitems'   => 'album_page_noitems.thtml',
-    'footer'    => 'album_page_footer.thtml',
 ));
 
 $T->set_var(array(
     'site_url'              => $_MG_CONF['site_url'],
     'birdseed'              => $birdseed,
-    'album_title'           => PLG_replaceTags($MG_albums[$album_id]->title),
+    'album_title'           => PLG_replaceTags($MG_albums[$album_id]->title,'mediagallery','album_title'),
     'url_slideshow'         => $url_slideshow,
     'table_columns'         => $columns_per_page,
     'table_column_width'    => intval(100 / $columns_per_page) . '%',
@@ -522,7 +516,7 @@ $T->set_var(array(
     'jumpbox'               => $album_jumpbox,
     'album_id'              => $album_id,
 	'lbslideshow'           => $lbSlideShow,
-	'album_description' 	=> ($MG_albums[$album_id]->display_album_desc ? PLG_replaceTags($MG_albums[$album_id]->description) : ''),
+	'album_description' 	=> ($MG_albums[$album_id]->display_album_desc ? PLG_replaceTags($MG_albums[$album_id]->description,'mediagallery','album_description') : ''),
 	'album_id_display'  	=> ($MG_albums[0]->owner_id || $_MG_CONF['enable_media_id'] == 1 ? $LANG_MG03['album_id_display'] . $album_id : ''),
 	'lang_slideshow'        => $lang_slideshow,
 	'select_adminbox'		=> $admin_box,
@@ -544,12 +538,7 @@ if ( $MG_albums[$album_id]->enable_rss ) {
 	$T->set_var('rsslink','');
 }
 
-// completed setting header / footer vars, parse them
-
 PLG_templateSetVars('mediagallery',$T);
-
-$T->parse('album_header', 'header');
-$T->parse('album_footer', 'footer');
 
 if ( $total_media == 0 ) {
     $T->set_var(array(
@@ -568,8 +557,8 @@ $needFinalParse = 0;
 if ( $total_media > 0 ) {
     $k = 0;
 
-    $T->set_block('body', 'ImageColumn', 'IColumn');
-    $T->set_block('body', 'ImageRow','IRow');
+    $T->set_block('page', 'ImageColumn', 'IColumn');
+    $T->set_block('page', 'ImageRow','IRow');
 
     for ( $i = 0; $i < ($media_per_page ); $i += $columns_per_page ) {
 
@@ -630,7 +619,6 @@ if ( $total_media > 0 ) {
         $T->set_var('IColumn','');
 
     }
-    $T->parse('album_body', 'body');
 }
 
 $T->parse('output','page');
@@ -643,13 +631,10 @@ if ($nFrame->name != $aFrame->name ) {
 if ( $fCSS != '' ) {
     $fCSS = '<style type="text/css">'.$fCSS.'</style>';
 }
-ob_start();
-echo MG_siteHeader(strip_tags($MG_albums[$album_id]->title),$fCSS);
 
-echo $T->finish($T->get_var('output'));
-echo MG_siteFooter();
-$data = ob_get_contents();
-ob_end_clean();
-echo $data;
-exit;
+$display = MG_siteHeader(strip_tags($MG_albums[$album_id]->title),$fCSS);
+
+$display .= $T->finish($T->get_var('output'));
+$display .= MG_siteFooter();
+echo $display;
 ?>

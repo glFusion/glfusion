@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: mediamanage.php 3070 2008-09-07 02:40:49Z mevans0263              $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -1034,7 +1034,7 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         's_rotate_right'    =>  $rotate_right,
         's_rotate_left'     =>  $rotate_left,
         's_form_action'     =>  $actionURL,
-        'allowed_html'      =>  COM_allowedHTML(),
+        'allowed_html'      =>  COM_allowedHTML(SEC_getUserPermissions(),false,'mediagallery','media_title'),
         'site_url'          =>  $_MG_CONF['site_url'],
         'preview'           =>  $preview,
         'preview_end'       =>  $preview_end,

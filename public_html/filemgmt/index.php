@@ -119,7 +119,7 @@ if ( COM_isAnonUser() && $mydownloads_publicpriv != 1 )  {
         $platform = $myts->makeTboxData4Show(isset($platform) ? $platform : '');
         $logourl = $myts->makeTboxData4Show($logourl);
         $datetime = formatTimestamp($time);
-        $description = PLG_replaceTags($myts->makeTareaData4Show($description,0)); //no html
+        $description = PLG_replaceTags($myts->makeTareaData4Show($description,0),'filemgmt','description'); //no html
         $result2 = DB_query("SELECT username,fullname,photo FROM {$_TABLES['users']} WHERE uid = $submitter");
         list ($submitter_name,$submitter_fullname,$photo) = DB_fetchArray($result2);
         $submitter_name = COM_getDisplayName ($submitter, $submitter_name, $submitter_fullname);
@@ -290,7 +290,7 @@ if ( COM_isAnonUser() && $mydownloads_publicpriv != 1 )  {
                     $platform = $myts->makeTboxData4Show(isset($platform) ? $platform : '');
                     $logourl = $myts->makeTboxData4Show($logourl);
                     $datetime = formatTimestamp($time);
-                    $description = PLG_replaceTags($myts->makeTareaData4Show($description,0)); //no html
+                    $description = PLG_replaceTags($myts->makeTareaData4Show($description,0),'filemgmt','description'); //no html
                     $breakPosition = strpos($description,"<br /><br />");
                     if (($breakPosition > 0) AND ($breakPosition < strlen($description)) AND $mydownloads_trimdesc) {
                         $description = substr($description, 0,$breakPosition) . "<p style=\"text-align:left;\"><a href=\"{$_CONF['site_url']}/filemgmt/index.php?id=$lid&amp;comments=1\">{$LANG_FILEMGMT['more']}</a></p>";

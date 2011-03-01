@@ -732,15 +732,15 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
 	$L->set_var('xhtml',XHTML);
 	$L->set_var('href',$url_media_item);
 	$L->set_var('hrefdirect',$direct_url);
-	$L->set_var('caption',PLG_replaceTags($M['media_title']));
+	$L->set_var('caption',PLG_replaceTags($M['media_title'],'mediagallery','media_title'));
 	$L->set_var('id','id' . rand());
 	$L->parse('media_link_start','media_link');
 	$media_start_link = $L->finish($L->get_var('media_link_start'));
 
     $T->set_var(array(
         'row_height'        => $tn_height + 40,
-        'media_title'       => (isset($M['media_title']) && $M['media_title'] != '' && $M['media_title'] != ' ') ? PLG_replaceTags($M['media_title']) : '',
-        'media_description' => (isset($M['media_desc']) && $M['media_desc'] != '' && $M['media_desc'] != ' ') ? PLG_replaceTags($M['media_desc']) : '',
+        'media_title'       => (isset($M['media_title']) && $M['media_title'] != '' && $M['media_title'] != ' ') ? PLG_replaceTags($M['media_title'],'mediagallery','media_title') : '',
+        'media_description' => (isset($M['media_desc']) && $M['media_desc'] != '' && $M['media_desc'] != ' ') ? PLG_replaceTags($M['media_desc'],'mediagallery','media_title') : '',
         'media_tag'         => (isset($M['media_title']) && $M['media_title'] != '' && $M['media_title'] != ' ') ? strip_tags($M['media_title']) : '',
         'media_time'        => $media_time[0],
         'media_owner'		=> $username,

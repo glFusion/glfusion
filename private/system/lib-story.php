@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -91,7 +91,14 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
     }
 
     $introtext = $story->displayElements('introtext');
-    $bodytext = $story->displayElements('bodytext');
+//    $bodytext = $story->displayElements('bodytext');
+    if (($index == 'n') || ($index == 'p')) {
+        $bodytext = $story->displayElements('bodytext');
+    } else {
+        // for the index page, we don't need the body text anyway
+        // also saves processing autotags
+        $bodytext = '';
+    }
 
     if( !empty( $query )) {
         $introtext = COM_highlightQuery( $introtext, $query );
@@ -101,11 +108,8 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
     $article = new Template( $_CONF['path_layout'] );
     $article->set_file( array(
             'article'          => $storytpl,
-            'bodytext'         => 'storybodytext.thtml',
             'featuredarticle'  => 'featuredstorytext.thtml',
-            'featuredbodytext' => 'featuredstorybodytext.thtml',
             'archivearticle'   => 'archivestorytext.thtml',
-            'archivebodytext'  => 'archivestorybodytext.thtml'
             ));
 
     if( $_CONF['hideviewscount'] != 1 ) {
@@ -137,7 +141,6 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
     if ( $index == 'p' || !empty($query) || !$article->check_instance($instance_id,$article_filevar)) {
     // end of instance cache
         $article->set_var('article_filevar','');
-        $article->set_var( 'xhtml', XHTML );
         $article->set_var( 'layout_url', $_CONF['layout_url'] );
         $article->set_var( 'site_url', $_CONF['site_url'] );
         $article->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
@@ -549,7 +552,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         } else {
             $article->set_var('rating_bar','',false,true );
         }
-
+/* ---------NOT REALLY USED???
         if( $story->DisplayElements('featured') == 1 ) {
             $article->set_var( 'lang_todays_featured_article', $LANG05[4] );
             $article->parse( 'story_bodyhtml', 'featuredbodytext', true );
@@ -558,6 +561,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         } else {
             $article->parse( 'story_bodyhtml', 'bodytext', true );
         }
+---------------- */
         if ($index != 'p') {
             $article->create_instance($instance_id,$article_filevar);
         }
@@ -821,14 +825,14 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
                     $props['date-created'] = $A['unixdate'];
                     break;
                 case 'description':
-                    $props['description'] = trim(PLG_replaceTags(stripslashes($A['introtext']) . ' ' . stripslashes($A['bodytext'])));
+                    $props['description'] = trim(PLG_replaceTags(stripslashes($A['introtext']) . ' ' . stripslashes($A['bodytext']),'glfusion','story'));
                     break;
                 case 'raw-description':
                     $props['raw-description'] = trim(stripslashes($A['introtext']) . ' ' . stripslashes($A['bodytext']));
                     break;
                 case 'excerpt':
                     $excerpt = stripslashes($A['introtext']);
-                    $props['excerpt'] = trim(PLG_replaceTags($excerpt));
+                    $props['excerpt'] = trim(PLG_replaceTags($excerpt,'glfusion','story'));
                     break;
                 case 'feed':
                     $feedfile = DB_getItem($_TABLES['syndication'], 'filename',
