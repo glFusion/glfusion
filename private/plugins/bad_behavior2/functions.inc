@@ -45,7 +45,7 @@ if (!defined ('BAD_BEHAVIOR_PLUGIN')) {
     define('BAD_BEHAVIOR_PLUGIN', 'bad_behavior2');
 }
 if (!defined ('BAD_BEHAVIOR_VERSION')) {
-    define ('BAD_BEHAVIOR_VERSION', '2.0.40');
+    define ('BAD_BEHAVIOR_VERSION', '2.0.42');
 }
 
 define('WP_BB_LOG', $_DB_table_prefix . 'bad_behavior2');
