@@ -589,7 +589,7 @@ function ST_saveNewMenuElement ( ) {
     // build post vars
     $E['menu_id']           = COM_applyFilter($_POST['menuid'],true);
     $E['pid']               = COM_applyFilter($_POST['pid'],true);
-    $E['element_label']     = htmlspecialchars(strip_tags(COM_checkWords(COM_stripslashes($_POST['menulabel']))));
+    $E['element_label']     = htmlspecialchars(strip_tags(COM_checkWords($_POST['menulabel'])));
     $E['element_type']      = COM_applyFilter($_POST['menutype'],true);
     $E['element_target']    = COM_applyFilter($_POST['urltarget']);
     $afterElementID         = COM_applyFilter($_POST['menuorder'],true);
@@ -869,7 +869,7 @@ function ST_saveEditMenuElement ( ) {
     $id            = COM_applyFilter($_POST['id'],true);
     $menu_id       = COM_applyFilter($_POST['menu']);
     $pid           = COM_applyFilter($_POST['pid'],true);
-    $label         = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_stripslashes($_POST['menulabel'])))));
+    $label         = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords($_POST['menulabel']))));
     $type          = COM_applyFilter($_POST['menutype'],true);
     $target        = COM_applyFilter($_POST['urltarget']);
 

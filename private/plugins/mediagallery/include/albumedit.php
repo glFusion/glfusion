@@ -872,11 +872,11 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
     }
 
     if ($_MG_CONF['htmlallowed'] == 1 ) {
-        $album->title       = COM_checkHTML(COM_killJS(COM_stripslashes($_POST['album_name'])));
-        $album->description = COM_checkHTML(COM_killJS(COM_stripslashes($_POST['album_desc'])));
+        $album->title       = COM_checkHTML(COM_killJS($_POST['album_name']));
+        $album->description = COM_checkHTML(COM_killJS($_POST['album_desc']));
     } else {
-        $album->title       = htmlspecialchars(strip_tags(COM_checkWords(COM_killJS(COM_stripslashes($_POST['album_name'])))));
-        $album->description = htmlspecialchars(strip_tags(COM_checkWords(COM_killJS(COM_stripslashes($_POST['album_desc'])))));
+        $album->title       = htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($_POST['album_name']))));
+        $album->description = htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($_POST['album_desc']))));
     }
     if ($album->title == "" ) {
         return(MG_errorHandler( "You must enter an Album Name" ));

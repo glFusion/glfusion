@@ -461,11 +461,6 @@ function bbcode_cleanHTML($str) {
 function gf_preparefordb($message,$postmode) {
     global $CONF_FORUM, $_CONF;
 
-    // if magic quotes is on, remove the slashes from the $_POST
-    if(get_magic_quotes_gpc() ) {
-       $message = stripslashes($message);
-    }
-
     if ( $CONF_FORUM['use_glfilter'] == 1 && ($postmode == 'html' || $postmode == 'HTML') ) {
         $message = gf_checkHTMLforSQL($message,$postmode);
     }

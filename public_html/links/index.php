@@ -77,9 +77,9 @@ function links_list($message)
     $cid = $_LI_CONF['root'];
     $display = '';
     if (isset($_GET['category'])) {
-        $cid = strip_tags(COM_stripslashes($_GET['category']));
+        $cid = strip_tags($_GET['category']);
     } elseif (isset($_POST['category'])) {
-        $cid = strip_tags(COM_stripslashes($_POST['category']));
+        $cid = strip_tags($_POST['category']);
     }
     $cat = DB_escapeString($cid);
     $page = 0;
@@ -348,20 +348,20 @@ function prepare_link_item ($A, &$template)
                  . '/links/portal.php?what=link&amp;item=' . $A['lid']);
     $template->set_var ('link_url', $url);
     $template->set_var ('link_actual_url', $A['url']);
-    $template->set_var ('link_name', stripslashes ($A['title']));
+    $template->set_var ('link_name', $A['title']);
     $template->set_var ('link_hits', COM_numberFormat ($A['hits']));
     $template->set_var ('link_description',
-                        nl2br (PLG_replaceTags(stripslashes ($A['description']),'links','description')));
-    $content = stripslashes ($A['title']);
+                        nl2br (PLG_replaceTags($A['description'],'links','description')));
+    $content = $A['title'];
 
     if ( $_LI_CONF['target_blank'] == 1 ) {
         $attr = array(
-            'title' => stripslashes ($A['url']),
+            'title' => $A['url'],
             'class' => 'ext-link',
             'target' => '_blank');
     } else {
         $attr = array(
-            'title' => stripslashes ($A['url']),
+            'title' => $A['url'],
             'class' => 'ext-link');
     }
     $html = COM_createLink($content, $url, $attr);
@@ -406,31 +406,16 @@ if (isset ($_REQUEST['mode'])) {
 $message = array();
 
 if ( $mode == 'submit' ) {
-    if (COM_isAnonUser() &&
-        (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {
-        $display .= LINKS_siteHeader ($LANG_LINKS[114]);
-        $display .= COM_startBlock ($LANG_LOGIN[1], '',
-                                    COM_getBlockTemplate ('_msg_blockx', 'header'));
-        $login = new Template ($_CONF['path_layout'] . 'submit');
-        $login->set_file (array ('login' => 'submitloginrequired.thtml'));
-        $login->set_var ( 'xhtml', XHTML );
-        $login->set_var ('login_message', $LANG_LOGIN[2]);
-        $login->set_var ('site_url', $_CONF['site_url']);
-        $login->set_var ('lang_login', $LANG_LOGIN[3]);
-        $login->set_var ('lang_newuser', $LANG_LOGIN[4]);
-        $login->parse ('output', 'login');
-        $display .= $login->finish ($login->get_var ('output'));
-        $display .= COM_endBlock (COM_getBlockTemplate ('_msg_blockx', 'footer'));
-        $display .= LINKS_siteFooter ();
-
+    if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {
+        $display .= LINKS_siteHeader($LANG_LINKS[114]);
+        $display .= SEC_loginRequiredForm();
+        $display .= LINKS_siteFooter();
         echo $display;
         exit;
     }
 
-    if (SEC_hasRights ("links.edit") ||
-        SEC_hasRights ("links.admin"))  {
-        echo COM_refresh ($_CONF['site_admin_url']
-                . "/plugins/links/index.php?edit=x");
+    if (SEC_hasRights ("links.edit") || SEC_hasRights ("links.admin"))  {
+        echo COM_refresh ($_CONF['site_admin_url']."/plugins/links/index.php?edit=x");
         exit;
     }
 
@@ -438,8 +423,7 @@ if ( $mode == 'submit' ) {
     COM_clearSpeedlimit ($_CONF['speedlimit'], 'submit');
     $last = COM_checkSpeedlimit ('submit');
     if ($last > 0) {
-        $slerror .= COM_startBlock ($LANG12[26], '',
-                           COM_getBlockTemplate ('_msg_block', 'header'))
+        $slerror .= COM_startBlock ($LANG12[26], '',COM_getBlockTemplate ('_msg_block', 'header'))
             . $LANG12[30]
             . $last
             . $LANG12[31]
@@ -459,13 +443,13 @@ if ( $mode == 'submit' ) {
 if ( $mode == $LANG12[8] && !empty($LANG12[8]) ) {
     $A = array();
     if ( isset($_POST['url']) ) {
-        $A['url'] = COM_stripslashes($_POST['url']);
+        $A['url'] = $_POST['url'];
     }
     if ( isset($_POST['title']) ) {
-        $A['title'] = COM_stripslashes($_POST['title']);
+        $A['title'] = $_POST['title'];
     }
     if ( isset($_POST['description']) ) {
-        $A['description'] = COM_stripslashes($_POST['description']);
+        $A['description'] = $_POST['description'];
     }
     if ( isset($_POST['categorydd']) ) {
         $A['categorydd'] = $_POST['categorydd'];
@@ -499,21 +483,12 @@ if (($mode == 'report') && (isset($_USER['uid']) && ($_USER['uid'] > 1))) {
     }
 }
 
-if (COM_isAnonUser() &&
-    (($_CONF['loginrequired'] == 1) || ($_LI_CONF['linksloginrequired'] == 1))) {
-    $display .= LINKS_siteHeader ( $LANG_LINKS[114]);
-    $display .= COM_startBlock ($LANG_LOGIN[1], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $login = new Template ($_CONF['path_layout'] . 'submit');
-    $login->set_file (array ('login' => 'submitloginrequired.thtml'));
-    $login->set_var ( 'xhtml', XHTML );
-    $login->set_var ('login_message', $LANG_LOGIN[2]);
-    $login->set_var ('site_url', $_CONF['site_url']);
-    $login->set_var ('lang_login', $LANG_LOGIN[3]);
-    $login->set_var ('lang_newuser', $LANG_LOGIN[4]);
-    $login->parse ('output', 'login');
-    $display .= $login->finish ($login->get_var ('output'));
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) || ($_LI_CONF['linksloginrequired'] == 1))) {
+    $display .= LINKS_siteHeader($LANG_LINKS[114]);
+    $display .= SEC_loginRequiredForm();
+    $display .= LINKS_siteFooter();
+    echo $display;
+    exit;
 } else {
     $display .= links_list($message);
 }

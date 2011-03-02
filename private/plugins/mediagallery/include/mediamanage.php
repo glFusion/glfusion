@@ -352,10 +352,10 @@ function MG_saveMedia( $album_id, $actionURL = '' ) {
         $media[$i]['mid'] = $_POST['mid'][$i];
         $media[$i]['seq'] = $_POST['seq'][$i];
         $media[$i]['oldseq'] = $_POST['oldseq'][$i];
-        $media[$i]['title'] = COM_stripslashes($_POST['mtitle'][$i]);
-        $media[$i]['description'] = COM_stripslashes($_POST['mdesc'][$i]);
+        $media[$i]['title'] = $_POST['mtitle'][$i];
+        $media[$i]['description'] = $_POST['mdesc'][$i];
         $media[$i]['include_ss'] = $_POST['ss'][$i];
-        $media[$i]['keywords'] = COM_stripslashes($_POST['mkeywords'][$i]);
+        $media[$i]['keywords'] = $_POST['mkeywords'][$i];
         $media[$i]['cat_id'] = $_POST['cat_id'][$i];
     }
 
@@ -1248,35 +1248,35 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
 	}
 
 	if ( $remote_media ) {
-		$remote_url = DB_escapeString(COM_stripslashes($_POST['remoteurl']));
+		$remote_url = DB_escapeString($_POST['remoteurl']);
 	} else {
-		$remote_url = DB_escapeString(COM_stripslashes($_POST['remoteurl']));
+		$remote_url = DB_escapeString($_POST['remoteurl']);
 	}
 
     if ( $_MG_CONF['htmlallowed'] ) {
-        $media_title    = COM_checkWords(COM_stripslashes($_POST['media_title']));
-        $media_desc     = COM_checkWords(COM_stripslashes($_POST['media_desc']));
+        $media_title    = COM_checkWords($_POST['media_title']);
+        $media_desc     = COM_checkWords($_POST['media_desc']);
     } else {
-        $media_title        = htmlspecialchars(strip_tags(COM_checkWords(COM_stripslashes($_POST['media_title']))));
-        $media_desc         = htmlspecialchars(strip_tags(COM_checkWords(COM_stripslashes($_POST['media_desc']))));
+        $media_title        = htmlspecialchars(strip_tags(COM_checkWords($_POST['media_title'])));
+        $media_desc         = htmlspecialchars(strip_tags(COM_checkWords($_POST['media_desc'])));
     }
     $media_time_month   = COM_applyFilter($_POST['media_month']);
     $media_time_day     = COM_applyFilter($_POST['media_day']);
     $media_time_year    = COM_applyFilter($_POST['media_year']);
     $media_time_hour    = COM_applyFilter($_POST['media_hour']);
     $media_time_minute  = COM_applyFilter($_POST['media_minute']);
-    $original_filename  = COM_applyFilter(COM_stripslashes($_POST['original_filename']));
+    $original_filename  = COM_applyFilter($_POST['original_filename']);
     if ( $replacefile == 1 ) {
 		$original_filename = $filename;
 	}
     $cat_id             = COM_applyFilter($_POST['cat_id'],true);
-    $media_keywords     = COM_stripslashes($_POST['media_keywords']);
+    $media_keywords     = $_POST['media_keywords'];
     $media_keywords_safe = substr($media_keywords,0,254);
     $media_keywords = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords($media_keywords_safe))));
 
-    $artist = DB_escapeString(COM_applyFilter(COM_stripslashes($_POST['artist']) ) );
-    $musicalbum = DB_escapeString(COM_applyFilter(COM_stripslashes($_POST['musicalbum']) ) );
-    $genre = DB_escapeString(COM_applyFilter(COM_stripslashes($_POST['genre']) ) );
+    $artist = DB_escapeString(COM_applyFilter($_POST['artist'] ) );
+    $musicalbum = DB_escapeString(COM_applyFilter($_POST['musicalbum'] ) );
+    $genre = DB_escapeString(COM_applyFilter($_POST['genre'] ) );
 
     $media_time = mktime($media_time_hour,$media_time_minute,0,$media_time_month,$media_time_day,$media_time_year,1);
 

@@ -288,7 +288,7 @@ function DIR_displayMonth ($topic, $year, $month, $main = false)
 
             $url = COM_buildUrl ($_CONF['site_url'] . '/article.php?story='
                                  . $A['sid']);
-            $entries[] = COM_createLink(stripslashes ($A['title']), $url);
+            $entries[] = COM_createLink($A['title'], $url);
         }
 
         if (count($entries) > 0) {

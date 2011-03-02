@@ -75,16 +75,16 @@ if ( isset($_USER['uid']) ) {
 // is user sending credentials?
 if ( isset($_POST['loginname']) && !empty($_POST['loginname']) && isset($_POST['passwd']) && !empty($_POST['passwd']) ) {
     COM_updateSpeedlimit('login');
-    $loginname = COM_stripslashes($_POST['loginname']);
+    $loginname = $_POST['loginname'];
     if ( !USER_validateUsername($loginname) ) {
         $status = '';
         $message = $LANG20[2];
     } else {
-        $passwd = COM_stripslashes($_POST['passwd']);
+        $passwd = $_POST['passwd'];
         if ($_CONF['user_login_method']['3rdparty'] &&
             isset($_POST['service']) && !empty($_POST['service'])) {
             /* Distributed Authentication */
-            $service = COM_stripslashes($_POST['service']);
+            $service = $_POST['service'];
             // safety check to ensure this user is really a known remote user
             $sql = "SELECT uid
                     FROM {$_TABLES['users']}
@@ -242,7 +242,7 @@ if ($status == USER_ACCOUNT_ACTIVE) {
     exit;
 } else {
     if ( isset($_COOKIE['token']) ) {
-        $token = COM_stripslashes($_COOKIE['token']);
+        $token = $_COOKIE['token'];
         if ( $message == '' )
             $message = $LANG20[8];
     } else {

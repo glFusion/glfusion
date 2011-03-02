@@ -218,14 +218,14 @@ function MAIL_sendMessages($vars)
     $html = 0;
     if (($_CONF['advanced_editor'] == 1)) {
         if ( $vars['postmode'] == 'html' ) {
-            $message = COM_stripslashes($vars['message_html']);
+            $message = $vars['message_html'];
             $html = true;
         } else if ( $vars['postmode'] == 'text' ) {
-            $message = COM_stripslashes($vars['message_text']);
+            $message = $vars['message_text'];
             $html = false;
         }
     } else {
-        $message = COM_stripslashes($vars['message']);
+        $message = $vars['message'];
     }
 
     if (empty ($vars['fra']) OR empty ($vars['fraepost']) OR
@@ -264,7 +264,7 @@ function MAIL_sendMessages($vars)
     $nrows = DB_numRows ($result);
     $from = array();
     $from = COM_formatEmailAddress ($vars['fra'], $vars['fraepost']);
-    $subject = COM_stripslashes ($vars['subject']);
+    $subject = $vars['subject'];
 
     // Loop through and send the messages!
     $successes = array ();

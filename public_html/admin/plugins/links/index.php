@@ -184,7 +184,7 @@ function LINK_edit($action, $lid = '')
     }
     $link_templates->set_var('lang_linktitle', $LANG_LINKS_ADMIN[3]);
     $link_templates->set_var('link_title',
-                             htmlspecialchars (stripslashes ($A['title'])));
+                             htmlspecialchars ($A['title']));
     $link_templates->set_var('lang_linkid', $LANG_LINKS_ADMIN[2]);
     $link_templates->set_var('lang_linkurl', $LANG_LINKS_ADMIN[4]);
     $link_templates->set_var('max_url_length', 255);
@@ -198,7 +198,7 @@ function LINK_edit($action, $lid = '')
     $link_templates->set_var('lang_linkhits', $LANG_LINKS_ADMIN[8]);
     $link_templates->set_var('link_hits', $A['hits']);
     $link_templates->set_var('lang_linkdescription', $LANG_LINKS_ADMIN[9]);
-    $link_templates->set_var('link_description', stripslashes($A['description']));
+    $link_templates->set_var('link_description', $A['description']);
     $link_templates->set_var('lang_save', $saveoption);
     $link_templates->set_var('lang_cancel', $LANG_ADMIN['cancel']);
 
@@ -269,6 +269,7 @@ function LINK_save($lid, $old_lid, $cid, $categorydd, $url, $description, $title
     $description = DB_escapeString (COM_checkHTML (COM_checkWords ($description)));
     $title = DB_escapeString (COM_checkHTML (COM_checkWords ($title)));
     $cid = DB_escapeString ($cid);
+    $url = DB_escapeString($url);
 
     if (empty ($owner_id)) {
         // this is new link from admin, set default values
@@ -462,7 +463,7 @@ function LINK_list($validate)
     );
 
     $retval .= ADMIN_list('links', 'plugin_getListField_links', $header_arr,
-                    $text_arr, $query_arr, $defsort_arr, $validate_link, $token, '', $form_arr);
+                    $text_arr, $query_arr, $defsort_arr, $validate_link, $token, '', '');
 
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 

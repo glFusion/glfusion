@@ -850,7 +850,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                         $A[$key] = $_POST[$key];
                     } else if ($key == 'username') {
                         $A[$key] = htmlspecialchars(COM_checkWords(strip_tags(
-                                    COM_stripslashes($_POST[$key]))));
+                                    $_POST[$key])));
                     } else {
                         $A[$key] = COM_applyFilter($_POST[$key]);
                     }
@@ -936,7 +936,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 //Anonymous user
                 $comment_template->set_var('uid', 1);
                 if ( isset($_POST['username']) ) {
-                    $name = strip_tags(USER_sanitizeName(COM_stripslashes($_POST['username']))); //for preview
+                    $name = strip_tags(USER_sanitizeName($_POST['username'])); //for preview
                 } else {
                     $name = $LANG03[24]; //anonymous user
                 }
@@ -1109,7 +1109,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         $cid = DB_insertId();
         //set Anonymous user name if present
         if (isset($_POST['username']) ) {
-            $name = strip_tags(USER_sanitizeName (COM_stripslashes($_POST['username'])));
+            $name = strip_tags(USER_sanitizeName ($_POST['username']));
             DB_change($_TABLES['comments'],'name',DB_escapeString($name),'cid',(int) $cid);
         }
         DB_unlockTable ($_TABLES['comments']);

@@ -418,7 +418,7 @@ class html2text
         $this->_link_count = 0;
         $this->_link_list = '';
 
-        $text = trim(stripslashes($this->html));
+        $text = trim($this->html);
 
         // Run our defined search-and-replace
         $text = preg_replace($this->search, $this->replace, $text);

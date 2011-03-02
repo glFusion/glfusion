@@ -551,11 +551,11 @@ function TOPIC_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 break;
 
             case 'tid':
-                $retval = COM_truncate(stripslashes($fieldvalue), 20, ' ...', true);
+                $retval = COM_truncate($fieldvalue, 20, ' ...', true);
                 break;
 
             case 'topic':
-                $retval = COM_truncate(stripslashes($fieldvalue), 28, ' ...', true);
+                $retval = COM_truncate($fieldvalue, 28, ' ...', true);
                 break;
 
             case 'sort_by':
@@ -873,7 +873,7 @@ switch ($action) {
         $T = array();
 
         $T['tid']           = (isset($_POST['tid']) ? $_POST['tid'] : '');
-        $T['topic']         = (isset($_POST['topic']) ? COM_stripslashes($_POST['topic']) : '');
+        $T['topic']         = (isset($_POST['topic']) ? $_POST['topic'] : '');
         $T['sortnum']       = (isset($_POST['sortnum']) ? COM_applyFilter($_POST['sortnum']) : '');
         $T['limitnews']     = (isset($_POST['limitnews']) ? COM_applyFilter($_POST['limitnews'],true) : '');
         $T['owner_id']      = (isset($_POST['owner_id']) ? COM_applyFilter($_POST['owner_id'],true) : 2 );

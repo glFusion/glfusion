@@ -1843,7 +1843,7 @@ function plugin_profilesave_forum($uid = 0 )
 
 
     if ( isset($_POST['signature'] ) ){
-        $signature = COM_stripslashes($_POST['signature']);
+        $signature = $_POST['signature'];
 
         // see if user already has a preference record...
         // Get user specific settings from database

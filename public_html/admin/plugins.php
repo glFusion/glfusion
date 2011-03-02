@@ -525,7 +525,7 @@ function PLUGINS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
         case 'pi_homepage':
             if ($enabled) {
                 $attr['target'] = '_blank';
-                $retval = COM_createLink(stripslashes($fieldvalue), $fieldvalue, $attr);
+                $retval = COM_createLink($fieldvalue, $fieldvalue, $attr);
             } else {
                 $retval = ($enabled) ? $fieldvalue : '<span class="disabledfield">' . $fieldvalue . '</span>';
             }

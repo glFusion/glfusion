@@ -228,13 +228,13 @@ function USER_edit($uid = '', $msg = '')
     // now let's check to see if any post vars are set in the event we are returning from an error...
 
     if ( isset($_POST['new_username']) )
-        $U['username']       = trim(COM_stripslashes($_POST['new_username']));
+        $U['username']       = trim($_POST['new_username']);
     if ( isset($_POST['fullname']) )
-        $U['fullname']       = COM_truncate(trim(USER_sanitizeName(COM_stripslashes($_POST['fullname']))),80);
+        $U['fullname']       = COM_truncate(trim(USER_sanitizeName($_POST['fullname'])),80);
     if ( isset($_POST['remoteuser']) )
         $U['remoteuser'] = ($_POST['remoteuser'] == 'on' ? 1 : 0);
     if ( isset($_POST['remoteusername']) )
-        $U['remoteusername'] = COM_truncate(trim(COM_stripslashes($_POST['remoteusername'])),60);
+        $U['remoteusername'] = COM_truncate(trim($_POST['remoteusername']),60);
     if ( isset($_POST['remoteservice']) )
         $U['remoteservice'] = COM_applyFilter($_POST['remoteservice']);
     if ( isset($_POST['userstatus'] ) )
@@ -242,17 +242,17 @@ function USER_edit($uid = '', $msg = '')
     if ( isset($_POST['cooktime'] ) )
         $U['cookietimeout'] = COM_applyFilter($_POST['cooktime'],true);
     if ( isset($_POST['email'] ) )
-        $U['email']          = trim(COM_stripslashes($_POST['email']));
+        $U['email']          = trim($_POST['email']);
     if ( isset($_POST['homepage']) )
-        $U['homepage']       = trim(COM_stripslashes($_POST['homepage']));
+        $U['homepage']       = trim($_POST['homepage']);
     if ( isset($_POST['location']) )
-        $U['location']       = trim(COM_stripslashes($_POST['location']));
+        $U['location']       = trim($_POST['location']);
     if ( isset($_POST['sig']) )
-        $U['sig']            = trim(COM_stripslashes($_POST['sig']));
+        $U['sig']            = trim($_POST['sig']);
     if ( isset($_POST['about'] ) )
-        $U['about'] = trim(COM_stripslashes($_POST['about']));
+        $U['about'] = trim($_POST['about']);
     if ( isset($_POST['pgpkey']) )
-        $U['pgpkey']         = trim(COM_stripslashes($_POST['pgpkey']));
+        $U['pgpkey']         = trim($_POST['pgpkey']);
     if ( isset($_POST['language'] ) )
         $U['language']       = trim(COM_applyFilter($_POST['language']));
     if ( isset($_POST['theme'] ) )
@@ -1418,23 +1418,23 @@ function USER_save($uid)
         $uid = '';
     }
     $regdate        = COM_applyFilter($_POST['regdate'],true);
-    $username       = trim(COM_stripslashes($_POST['new_username']));
-    $fullname       = COM_truncate(trim(USER_sanitizeName(COM_stripslashes($_POST['fullname']))),80);
+    $username       = trim($_POST['new_username']);
+    $fullname       = COM_truncate(trim(USER_sanitizeName($_POST['fullname'])),80);
     $userstatus     = COM_applyFilter($_POST['userstatus'],true);
     $oldstatus      = COM_applyFilter($_POST['oldstatus'],true);
-    $passwd         = (isset($_POST['passwd'])) ? trim(COM_stripslashes($_POST['passwd'])) : '';
-    $passwd_conf    = (isset($_POST['passwd_conf']) ) ? trim(COM_stripslashes($_POST['passwd_conf'])) : '';
+    $passwd         = (isset($_POST['passwd'])) ? trim($_POST['passwd']) : '';
+    $passwd_conf    = (isset($_POST['passwd_conf']) ) ? trim($_POST['passwd_conf']) : '';
     $cooktime       = COM_applyFilter($_POST['cooktime'],true);
-    $email          = trim(COM_stripslashes($_POST['email']));
-    $email_conf     = trim(COM_stripslashes($_POST['email_conf']));
+    $email          = trim($_POST['email']);
+    $email_conf     = trim($_POST['email_conf']);
     $groups         = $_POST['groups'];
-    $homepage       = trim(COM_stripslashes($_POST['homepage']));
-    $location       = strip_tags(trim(COM_stripslashes($_POST['location'])));
+    $homepage       = trim($_POST['homepage']);
+    $location       = strip_tags(trim($_POST['location']));
     $photo          = isset($_POST['photo']) ? $_POST['photo'] : '';
     $delete_photo   = (isset($_POST['delete_photo']) && $_POST['delete_photo'] == 'on') ? 1 : 0;
-    $sig            = trim(COM_stripslashes($_POST['sig']));
-    $about          = trim(COM_stripslashes($_POST['about']));
-    $pgpkey         = trim(COM_stripslashes($_POST['pgpkey']));
+    $sig            = trim($_POST['sig']);
+    $about          = trim($_POST['about']);
+    $pgpkey         = trim($_POST['pgpkey']);
     $language       = trim(COM_applyFilter($_POST['language']));
     $theme          = trim(COM_applyFilter($_POST['theme']));
     $maxstories     = COM_applyFilter($_POST['maxstories'],true);
@@ -1453,7 +1453,7 @@ function USER_save($uid)
     $maxstories     = COM_applyFilter($_POST['maxstories'],true);
     $newuser        = COM_applyFilter($_POST['newuser'],true);
     $remoteuser     = (isset($_POST['remoteuser']) && $_POST['remoteuser'] == 'on') ? 1 : 0;
-    $remoteusername = (isset($_POST['remoteusername'])) ? strip_tags(trim(COM_stripslashes($_POST['remoteusername']) ) ): '';
+    $remoteusername = (isset($_POST['remoteusername'])) ? strip_tags(trim($_POST['remoteusername'] ) ): '';
     $remoteservice  = (isset($_POST['remoteservice'])) ? COM_applyFilter($_POST['remoteservice']) : '';
 
     if ( $uid == 1 ) {
@@ -2477,13 +2477,13 @@ switch($action) {
                 $_POST['userstatus'] = USER_ACCOUNT_ACTIVE;
             }
 
-            $username = (isset($_POST['username']) ? trim(COM_stripslashes($_POST['username'])) : '');
-            $fullname = (isset($_POST['fullname']) ? COM_stripslashes($_POST['fullname']) : '');
-            $passwd   = (isset($_POST['passwd'])   ? trim(COM_stripslashes($_POST['passwd'])) : '');
-            $passwd_conf = (isset($_POST['passwd_conf']) ? trim(COM_stripslashes($_POST['passwd_conf'])) : '');
-            $email = (isset($_POST['email']) ? trim(COM_stripslashes($_POST['email'])) : '');
+            $username = (isset($_POST['username']) ? trim($_POST['username']) : '');
+            $fullname = (isset($_POST['fullname']) ? $_POST['fullname'] : '');
+            $passwd   = (isset($_POST['passwd'])   ? trim($_POST['passwd']) : '');
+            $passwd_conf = (isset($_POST['passwd_conf']) ? trim($_POST['passwd_conf']) : '');
+            $email = (isset($_POST['email']) ? trim($_POST['email']) : '');
             $regdate = (isset($_POST['regdate']) ? $_POST['regdate'] : '');
-            $homepage = (isset($_POST['homepage']) ? COM_stripSlashes($_POST['homepage']) : '');
+            $homepage = (isset($_POST['homepage']) ? $_POST['homepage'] : '');
             $groups  = (isset($_POST['groups']) ? $_POST['groups'] : array());
             $userstatus = (isset($_POST['userstatus']) ? $_POST['userstatus'] : 0);
             $oldstatus = (isset($_POST['oldstatus']) ? $_POST['oldstatus'] : 0 );

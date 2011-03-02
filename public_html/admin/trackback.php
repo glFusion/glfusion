@@ -738,9 +738,9 @@ function TRACKBACK_saveService($pid, $name, $site_url, $ping_url, $method, $enab
         $method = 'weblogUpdates.ping';
     }
 
-    $name     = strip_tags(COM_stripslashes ($name));
-    $site_url = strip_tags(COM_stripslashes ($site_url));
-    $ping_url = strip_tags(COM_stripslashes ($ping_url));
+    $name     = strip_tags($name);
+    $site_url = strip_tags($site_url);
+    $ping_url = strip_tags($ping_url);
 
     $errormsg = '';
     if (empty ($name)) {
@@ -935,9 +935,9 @@ if (($mode == 'delete') && SEC_checkToken()) {
 } else if ($mode == 'send') {
     $target = COM_applyFilter ($_POST['target']);
     $url = COM_applyFilter ($_POST['url']);
-    $title = COM_stripslashes ($_POST['title']);
-    $excerpt = COM_stripslashes ($_POST['excerpt']);
-    $blog = COM_stripslashes ($_POST['blog_name']);
+    $title = $_POST['title'];
+    $excerpt = $_POST['excerpt'];
+    $blog = $_POST['blog_name'];
 
     if (empty ($target)) {
         $display .= COM_siteHeader ('menu', $LANG_TRB['trackback']);
@@ -1191,15 +1191,15 @@ if (($mode == 'delete') && SEC_checkToken()) {
     }
     $title = '';
     if (isset ($_REQUEST['title'])) {
-        $title = COM_stripslashes($_REQUEST['title']);
+        $title = $_REQUEST['title'];
     }
     $excerpt = '';
     if (isset ($_REQUEST['excerpt'])) {
-        $excerpt = COM_stripslashes($_REQUEST['excerpt']);
+        $excerpt = $_REQUEST['excerpt'];
     }
     $blog = '';
     if (isset ($_REQUEST['blog_name'])) {
-        $blog = COM_stripslashes($_REQUEST['blog_name']);
+        $blog = $_REQUEST['blog_name'];
     }
 
     if (isset ($_REQUEST['id']) && isset ($_REQUEST['type'])) {

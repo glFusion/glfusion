@@ -276,8 +276,8 @@ if ($op == 'search') {
         $direction = ($direction == "ASC") ? "ASC" : "DESC";
     }
 
-    $html_query = strip_tags(COM_stripslashes($_REQUEST['query']));
-    $query = DB_escapeString(COM_stripslashes($_REQUEST['query']));
+    $html_query = strip_tags($_REQUEST['query']);
+    $query = DB_escapeString($_REQUEST['query']);
     $report->set_var ('layout_url', $_CONF['layout_url']);
     $report->set_var ('phpself',$_CONF['site_url'] . '/forum/index.php?op=search');
     $report->set_var ('LANG_TITLE',$LANG_GF02['msg119']. ' ' . htmlentities($html_query, ENT_QUOTES, COM_getEncodingt()));

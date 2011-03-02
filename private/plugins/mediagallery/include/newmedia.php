@@ -425,9 +425,9 @@ function MG_saveUserUpload( $album_id ) {
         $filesize    = $file['size'][$key];
         $filetmp     = $file['tmp_name'][$key];
         $error       = $file['error'][$key];
-        $caption     = COM_stripslashes($_POST['caption'][$key]);
-        $description = COM_stripslashes($_POST['description'][$key]);
-        $keywords    = COM_stripslashes($_POST['keywords'][$key]);
+        $caption     = $_POST['caption'][$key];
+        $description = $_POST['description'][$key];
+        $keywords    = $_POST['keywords'][$key];
         $category    = COM_applyFilter($_POST['cat_id'][$key],true);
         $attachtn    = isset($_POST['attachtn'][$key]) ? $_POST['attachtn'][$key] : '';
         $thumbnail   = isset($thumbs['tmp_name'][$key]) ? $thumbs['tmp_name'][$key] : '';

@@ -148,7 +148,7 @@ function plugin_getwhatsnew_links()
         $newlinks = array();
         for ($x = 0; $x < $nrows; $x++) {
             $A = DB_fetchArray($result);
-            $A['title'] = stripslashes($A['title']);
+            $A['title'] = $A['title'];
 
             // redirect link via portal.php so we can count the clicks
             $lcount = COM_buildUrl($_CONF['site_url']
@@ -293,7 +293,7 @@ function plugin_showstats_links ($showsitestats)
         );
         for ($i = 0; $i < $nrows; $i++) {
             $A = DB_fetchArray ($result);
-            $title = stripslashes (str_replace ('$', '&#36;', $A['title']));
+            $title = str_replace ('$', '&#36;', $A['title']);
             $url = COM_buildUrl ($_CONF['site_url']
                         . '/links/portal.php?what=link&amp;item=' . $A['lid']);
             $sid = COM_createLink($title, $url, array('title' => $A['url']));
@@ -515,8 +515,8 @@ function plugin_getfeedcontent_links ($feed, &$link, &$update)
         $row = DB_fetchArray( $result );
         $lids[] = $row['lid'];
 
-        $linktitle = stripslashes( $row['title'] );
-        $linkdesc = stripslashes( $row['description'] );
+        $linktitle = $row['title'];
+        $linkdesc = $row['description'];
 
         $linklink = COM_buildUrl( $_CONF['site_url']
                   . '/links/portal.php?what=link&amp;item=' . $row['lid'] );
@@ -903,7 +903,7 @@ function plugin_save_submit_links($A)
         COM_displayMessageAndAbort($result, 'spamx', 403, 'Forbidden');
     }
 
-    $A['cid'] = strip_tags(COM_stripslashes($A['categorydd']));
+    $A['cid'] = strip_tags($A['categorydd']);
 
     $validcat = false;
     if (!empty($A['cid'])) {
@@ -948,7 +948,7 @@ function plugin_save_submit_links($A)
     if (COM_isAnonUser()) {
         $owner_id = 1; // anonymous user
     } else {
-        $owner_id = $_USER['uid'];
+        $owner_id = (int) $_USER['uid'];
     }
 
     if (($_LI_CONF['linksubmission'] == 1) && !SEC_hasRights('links.submit')) {
@@ -1002,8 +1002,8 @@ function LINKS_sendNotification ($table, $A)
 {
     global $_CONF, $_TABLES, $LANG_LINKS, $LANG_LINKS_SUBMIT, $LANG08;
 
-    $title = stripslashes ($A['title']);
-    $description = stripslashes ($A['description']);
+    $title = $A['title'];
+    $description = $A['description'];
 
     $mailbody = "$LANG_LINKS_SUBMIT[8]: $title\n"
               . "$LANG_LINKS_SUBMIT[9]: <{$A['url']}>\n"
@@ -1075,7 +1075,7 @@ function plugin_getListField_links($fieldname, $fieldvalue, $A, $icon_arr, $toke
                 break;
 
             case 'title':
-                $retval = COM_createLink(stripslashes($A['title']), $A['url']);
+                $retval = COM_createLink($A['title'], $A['url']);
                 break;
 
             case 'dovalidate';
@@ -1346,13 +1346,13 @@ function plugin_getiteminfo_links($lid, $what, $uid = 0, $options = array())
                 case 'description':
                 case 'excerpt':
                 case 'raw-description' :
-                    $props[$p] = stripslashes($A['description']);
+                    $props[$p] = $A['description'];
                     break;
                 case 'id':
                     $props['id'] = $A['lid'];
                     break;
                 case 'title':
-                    $props['title'] = stripslashes($A['title']);
+                    $props['title'] = $A['title'];
                     break;
                 case 'url':
                     if (empty($A['lid'])) {
@@ -1482,7 +1482,7 @@ function links_breadcrumbs($root, $cid)
             }
             $A = DB_fetchArray($parent);
             if ($cid != $c) {
-                $content = stripslashes($A['category']);
+                $content = $A['category'];
                 $url = $_CONF['site_url'] . '/links/index.php?category='
                                           . urlencode($A['cid']);
                 $breadcrumb = COM_createLink($content, $url) . $separator
@@ -1534,7 +1534,7 @@ function phpblock_topic_links()
         if ($nrows > 0) {
             for ($i = 0; $i < $nrows; $i++) {
                 $A = DB_fetchArray($result);
-                $content = stripslashes($A['title']);
+                $content = $A['title'];
                 $url = COM_buildUrl($_CONF['site_url']
                      . '/links/portal.php?what=link&amp;item=' . $A['lid']);
                 $retval .= COM_createLink($content, $url,
@@ -1566,7 +1566,7 @@ function phpblock_topic_categories()
         if ($nrows > 0) {
             for ($i = 0; $i < $nrows; $i++) {
                 $A = DB_fetchArray($result);
-                $content = stripslashes($A['category']);
+                $content = $A['category'];
                 $url = $_CONF['site_url'] . '/links/index.php?category='
                                           . urlencode($A['cid']);
                 $retval .= COM_createLink($content, $url) . '<br' . XHTML . '>';

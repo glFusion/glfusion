@@ -239,7 +239,7 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
     $from = array();
     $from = COM_formatEmailAddress($_CONF['site_name'],$mailfrom);
     $to   = COM_formatEmailAddress( $username,$useremail );
-    $subject    = COM_undoSpecialChars(strip_tags(stripslashes($subject)));
+    $subject    = COM_undoSpecialChars(strip_tags($subject));
 
     return COM_mail ($to, $subject, $mailtext, $from);
 }

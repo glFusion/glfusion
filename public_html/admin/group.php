@@ -556,7 +556,7 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
             }
         }
 
-        $grp_descr = COM_stripslashes ($grp_descr);
+        $grp_descr = $grp_descr;
         $grp_descr = DB_escapeString ($grp_descr);
 
         $grp_applydefault_add = true;
@@ -732,7 +732,7 @@ function GROUP_getListField1($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
     if (in_array ($A['grp_id'], $thisUsersGroups ) ||
         SEC_groupIsRemoteUserAndHaveAccess( $A['grp_id'], $thisUsersGroups )) {
-        
+
         switch($fieldname) {
 
         case 'edit':
@@ -877,7 +877,7 @@ function GROUP_list($show_all_groups = false)
     if ($show_all_groups) {
         $header_arr[] = array('text' => $LANG_ACCESS['admingroup'], 'field' => 'grp_admin', 'sort' => false, 'align' => 'center');
     }
-    
+
     $header_arr[] = array('text' => $LANG_ACCESS['coregroup'], 'field' => 'grp_gl_core', 'sort' => true, 'align' => 'center', 'width' => '40px');
     $header_arr[] = array('text' => $LANG_ACCESS['defaultgroup'], 'field' => 'grp_default', 'sort' => true, 'align' => 'center', 'width' => '40px');
     $header_arr[] = array('text' => $LANG_ACCESS['sendemail'], 'field' => 'sendemail', 'sort' => false, 'align' => 'center', 'width' => '40px');

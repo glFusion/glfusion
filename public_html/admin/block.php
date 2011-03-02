@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2010 by the following authors:                             |
+// | Copyright (C) 2010-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -114,7 +114,7 @@ function BLOCK_editDefault($A, $access)
     $block_templates->set_var('lang_cancel', $LANG_ADMIN['cancel']);
     $block_templates->set_var('lang_blocktype', $LANG_ADMIN['type']);
 
-    $block_templates->set_var('block_title', stripslashes ($A['title']));
+    $block_templates->set_var('block_title', $A['title']);
     if ($A['is_enabled'] == 1) {
         $block_templates->set_var('is_enabled', 'checked="checked"');
     } else {
@@ -307,7 +307,7 @@ function BLOCK_edit($bid = '', $B = array())
     $block_templates->set_var('lang_blocktype', $LANG_ADMIN['type']);
     $block_templates->set_var('lang_allowed_html', $LANG01[123]);
 
-    $block_templates->set_var('block_title', stripslashes ($A['title']));
+    $block_templates->set_var('block_title', $A['title']);
     $block_templates->set_var('lang_enabled', $LANG21[53]);
     if ($A['is_enabled'] == 1) {
         $block_templates->set_var('is_enabled', 'checked="checked"');
@@ -389,11 +389,11 @@ function BLOCK_edit($bid = '', $B = array())
     $block_templates->set_var ('lang_autotags', $LANG21[66]);
     $block_templates->set_var ('lang_use_autotags', $LANG21[67]);
     $block_templates->set_var ('block_content',
-                               htmlspecialchars (stripslashes ($A['content'])));
+                               htmlspecialchars ($A['content']));
     $block_templates->set_var ('block_text',
-                               htmlspecialchars (stripslashes ($A['content'])));
+                               htmlspecialchars ($A['content']));
     $block_templates->set_var ('block_html',
-                               htmlspecialchars (stripslashes ($A['content'])));
+                               htmlspecialchars ($A['content']));
     if ($A['allow_autotags'] == 1) {
         $block_templates->set_var ('allow_autotags', 'checked="checked"');
     } else {
@@ -460,17 +460,17 @@ function BLOCK_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 break;
 
             case 'name':
-                $name =  COM_truncate(stripslashes($A['name']), 20, ' ...', true);
+                $name =  COM_truncate($A['name'], 20, ' ...', true);
                 $retval = ($enabled) ? $name : '<span class="disabledfield">' . $name . '</span>';
                 break;
 
             case 'title':
-                $title =  COM_truncate(stripslashes($A['title']), 20, ' ...', true);
+                $title =  COM_truncate($A['title'], 20, ' ...', true);
                 $retval = ($enabled) ? $title : '<span class="disabledfield">' . $title . '</span>';
                 break;
 
             case 'tid':
-                $topic =  COM_truncate(stripslashes($A['tid']), 20, ' ...', true);
+                $topic =  COM_truncate($A['tid'], 20, ' ...', true);
                 $retval = ($enabled) ? $topic : '<span class="disabledfield">' . $topic . '</span>';
                 break;
 
@@ -667,10 +667,9 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
     $B['is_enabled']    = $is_enabled;
     $B['allow_autotags'] = $allow_autotags;
 
-    $bid   = intval($bid);
+    $bid   = (int) $bid;
     $title = DB_escapeString (strip_tags ($title));
     $phpblockfn = DB_escapeString (trim ($phpblockfn));
-    $name = COM_stripslashes($name);
 
     if (empty($title) || !BLOCK_validateName($name)) {
         if ( empty($title) ) {
@@ -920,8 +919,8 @@ function BLOCK_toggleStatus($side, $bid_arr, $bidarray)
 
     if (isset($bidarray) ) {
         foreach ($bidarray AS $bid => $side ) {
-            $bid = intval($bid);
-            $side = intval($side);
+            $bid = (int) $bid;
+            $side = (int) $side;
             if ( isset($bid_arr[$bid]) ) {
                 $sql = "UPDATE {$_TABLES['blocks']} SET is_enabled = '1' WHERE bid=$bid AND onleft=$side";
                 DB_query($sql);
@@ -1050,14 +1049,14 @@ switch ($action) {
             $content = '';
             if (($_CONF['advanced_editor'] == 1)) {
                 if ( $_POST['postmode'] == 'adveditor' ) {
-                    $content = COM_stripslashes($_POST['block_html']);
+                    $content = $_POST['block_html'];
                     $html = true;
                 } else if ( $_POST['postmode'] == 'html' ) {
-                    $content = COM_stripslashes($_POST['block_text']);
+                    $content = $_POST['block_text'];
                     $html = false;
                 }
             } else {
-                $content = COM_stripslashes($_POST['content']);
+                $content = $_POST['content'];
             }
 
             $rdfurl         = isset ($_POST['rdfurl'])         ? COM_applyFilter($_POST['rdfurl']) : '';
@@ -1066,8 +1065,8 @@ switch ($action) {
             $phpblockfn     = isset ($_POST['phpblockfn'])     ? COM_applyFilter($_POST['phpblockfn']) : '';
             $is_enabled     = isset ($_POST['is_enabled'])     ? 'on' : '';
             $allow_autotags = isset ($_POST['allow_autotags']) ? 1 : 0;
-            $name           = isset ($_POST['name'])        ? COM_stripslashes($_POST['name']) : '';
-            $title          = isset ($_POST['title'])       ? COM_stripslashes($_POST['title']) : '';
+            $name           = isset ($_POST['name'])        ? $_POST['name'] : '';
+            $title          = isset ($_POST['title'])       ? $_POST['title'] : '';
             $type           = isset ($_POST['type'])        ? COM_applyFilter($_POST['type']) : '';
             $blockorder     = isset ($_POST['blockorder'])  ? COM_applyFilter($_POST['blockorder'],true) : 0;
             $tid            = isset ($_POST['tid'])         ? COM_applyFilter($_POST['tid']) : '';

@@ -561,7 +561,7 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case "sp_title":
-            $sp_title = stripslashes($A['sp_title']);
+            $sp_title = $A['sp_title'];
             if ($enabled) {
                 $url = COM_buildUrl(
                     $_CONF['site_url'] .

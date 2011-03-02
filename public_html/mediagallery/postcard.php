@@ -271,8 +271,8 @@ function MG_sendPostCard() {
     $toemail    = COM_applyFilter($_POST['toemail']);
     $fromname   = COM_applyFilter($_POST['fromname']);
     $fromemail  = COM_applyFilter($_POST['fromemail']);
-    $subject    = strip_tags(COM_checkWords(COM_stripslashes($_POST['subject'])));
-    $message    = htmlspecialchars(strip_tags(COM_checkWords(COM_stripslashes($_POST['message']))));
+    $subject    = strip_tags(COM_checkWords($_POST['subject']));
+    $message    = htmlspecialchars(strip_tags(COM_checkWords($_POST['message'])));
     $ccself     = (isset($_POST['ccself']) ? 1 : 0);
 
     $errCount = 0;
@@ -392,7 +392,7 @@ function MG_sendPostCard() {
         'media_url'         =>  $_MG_CONF['site_url'] . '/media.php?s=' . $mid,
         'media_image'       =>  $_MG_CONF['mediaobjects_url'] . '/disp/' . $M['media_filename'][0] . '/' . $M['media_filename'] . '.jpg',
         'site_url'          =>  $_MG_CONF['site_url'] . '/',
-        'postcard_subject'  =>  stripslashes($subject),
+        'postcard_subject'  =>  $subject,
         'postcard_message'  =>  nl2br($message),
         'from_email'        =>  $fromemail,
         'site_name'         =>  $_CONF['site_name'],

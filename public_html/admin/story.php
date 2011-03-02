@@ -152,7 +152,7 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             $A['title'] = str_replace('$', '&#36;', $A['title']);
             $article_url = COM_buildUrl ($_CONF['site_url'] . '/article.php?story='
                                   . $A['sid']);
-            $retval = COM_createLink(stripslashes($A['title']), $article_url);
+            $retval = COM_createLink($A['title'], $article_url);
             break;
 
         case 'tid':
@@ -403,10 +403,10 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         // Handle Magic GPC Garbage:
         while (list($key, $value) = each($_POST)) {
             if (!is_array($value)) {
-                $_POST[$key] = COM_stripslashes($value);
+                $_POST[$key] = $value;
             } else {
                 while (list($subkey, $subvalue) = each($value)) {
-                    $value[$subkey] = COM_stripslashes($subvalue);
+                    $value[$subkey] = $subvalue;
                 }
             }
         }
@@ -708,7 +708,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     $story_templates->set_var('lang_optiondelete', $LANG24[62]);
     $story_templates->set_var('lang_title', $LANG_ADMIN['title']);
 
-    $story_templates->set_var('story_title', $story->EditElements('title'));//stripslashes ($A['title']));
+    $story_templates->set_var('story_title', $story->EditElements('title'));
     $story_templates->set_var('lang_topic', $LANG_ADMIN['topic']);
 
     $story_templates->set_var ('topic_options',$allowedTopicList);
@@ -931,10 +931,10 @@ function STORY_submit($type='')
     // Handle Magic GPC Garbage:
     while (list($key, $value) = each($args)) {
         if (!is_array($value)) {
-            $args[$key] = COM_stripslashes($value);
+            $args[$key] = $value;
         } else {
             while (list($subkey, $subvalue) = each($value)) {
-                $value[$subkey] = COM_stripslashes($subvalue);
+                $value[$subkey] = $subvalue;
             }
         }
     }

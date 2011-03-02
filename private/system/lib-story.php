@@ -666,7 +666,7 @@ function STORY_whatsRelated( $related, $uid, $tid )
         $topic = DB_getItem( $_TABLES['topics'], 'topic', "tid = '".DB_escapeString($tid)."'" );
         $rel[] = '<a href="' . $_CONF['site_url']
                . '/search.php?mode=search&amp;type=stories&amp;topic=' . $tid
-               . '">' . $LANG24[38] . ' ' . stripslashes( $topic ) . '</a>';
+               . '">' . $LANG24[38] . ' ' . $topic . '</a>';
     }
 
     $related = '';
@@ -825,13 +825,13 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
                     $props['date-created'] = $A['unixdate'];
                     break;
                 case 'description':
-                    $props['description'] = trim(PLG_replaceTags(stripslashes($A['introtext']) . ' ' . stripslashes($A['bodytext']),'glfusion','story'));
+                    $props['description'] = trim(PLG_replaceTags($A['introtext'] . ' ' . $A['bodytext'],'glfusion','story'));
                     break;
                 case 'raw-description':
-                    $props['raw-description'] = trim(stripslashes($A['introtext']) . ' ' . stripslashes($A['bodytext']));
+                    $props['raw-description'] = trim($A['introtext'] . ' ' . $A['bodytext']);
                     break;
                 case 'excerpt':
-                    $excerpt = stripslashes($A['introtext']);
+                    $excerpt = $A['introtext'];
                     $props['excerpt'] = trim(PLG_replaceTags($excerpt,'glfusion','story'));
                     break;
                 case 'feed':
@@ -855,7 +855,7 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
                     $props['id'] = $A['sid'];
                     break;
                 case 'title':
-                    $props['title'] = stripslashes($A['title']);
+                    $props['title'] = $A['title'];
                     break;
                 case 'url':
                     if (empty($A['sid'])) {

@@ -81,7 +81,7 @@ function CALENDAR_addUserEvent($eid)
         $cal_template->set_file(array('addevent' => 'addevent.thtml'));
         $cal_template->set_var('intro_msg', $LANG_CAL_1[8]);
         $cal_template->set_var('lang_event', $LANG_CAL_1[12]);
-        $event_title = stripslashes($A['title']);
+        $event_title = $A['title'];
 
         if (!empty ($A['url']) && ($A['url'] != 'http://')) {
             $cal_template->set_var ('event_url', $A['url']);
@@ -105,11 +105,11 @@ function CALENDAR_addUserEvent($eid)
 
         $cal_template->set_var('lang_where',$LANG_CAL_1[4]);
 
-        $location = stripslashes($A['location']) . '<br' . XHTML . '>'
-                  . stripslashes ($A['address1']) . '<br' . XHTML . '>'
-                  . stripslashes ($A['address2']) . '<br' . XHTML . '>'
-                  . stripslashes ($A['city'])
-                  . ', ' . stripslashes($A['state']) . ' ' . $A['zipcode'];
+        $location = $A['location'] . '<br' . XHTML . '>'
+                  . $A['address1'] . '<br' . XHTML . '>'
+                  . $A['address2'] . '<br' . XHTML . '>'
+                  . $A['city']
+                  . ', ' . $A['state'] . ' ' . $A['zipcode'];
 
 /* this will eventually replace the above code
 
@@ -151,7 +151,7 @@ function CALENDAR_addUserEvent($eid)
 */
         $cal_template->set_var('event_location', $location);
         $cal_template->set_var('lang_description', $LANG_CAL_1[5]);
-        $description = stripslashes ($A['description']);
+        $description = $A['description'];
         if (empty($A['postmode']) || ($A['postmode'] == 'plaintext')) {
             $description = nl2br ($description);
         }
@@ -225,7 +225,7 @@ function CALENDAR_editPersonalEvent($A)
     $cal_templates->set_file('form','editpersonalevent.thtml');
 
     $cal_templates->set_var ('lang_title', $LANG_CAL_1[28]);
-    $title = stripslashes ($A['title']);
+    $title = $A['title'];
     $title = str_replace ('{', '&#123;', $title);
     $title = str_replace ('}', '&#125;', $title);
     $title = str_replace ('"', '&quot;', $title);
@@ -313,19 +313,19 @@ function CALENDAR_editPersonalEvent($A)
     }
 
     $cal_templates->set_var('lang_location',$LANG_CAL_1[39]);
-    $cal_templates->set_var('event_location', htmlspecialchars(stripslashes ($A['location'])));
+    $cal_templates->set_var('event_location', htmlspecialchars($A['location']));
 
     $cal_templates->set_var('lang_addressline1', $LANG_CAL_1[32]);
-    $cal_templates->set_var('event_address1', stripslashes ($A['address1']));
+    $cal_templates->set_var('event_address1', $A['address1']);
     $cal_templates->set_var('lang_addressline2', $LANG_CAL_1[33]);
-    $cal_templates->set_var('event_address2', stripslashes ($A['address2']));
+    $cal_templates->set_var('event_address2', $A['address2']);
 
     $cal_templates->set_var('lang_city', $LANG_CAL_1[34]);
-    $cal_templates->set_var('event_city', stripslashes ($A['city']));
+    $cal_templates->set_var('event_city', $A['city']);
 
     $cal_templates->set_var('lang_state', $LANG_CAL_1[35]);
     $cal_templates->set_var('state_options', '');
-    $cal_templates->set_var('event_state', stripslashes ($A['state']));
+    $cal_templates->set_var('event_state', $A['state']);
 
     $cal_templates->set_var('lang_zipcode', $LANG_CAL_1[36]);
     $cal_templates->set_var('event_zipcode', $A['zipcode']);
@@ -335,7 +335,7 @@ function CALENDAR_editPersonalEvent($A)
 
     $cal_templates->set_var('lang_description', $LANG_CAL_1[5]);
     $cal_templates->set_var('event_description',
-                            nl2br (htmlspecialchars(stripslashes ($A['description']))));
+                            nl2br (htmlspecialchars($A['description'])));
 
     $cal_templates->set_var('lang_htmlnotallowed', $LANG_CAL_1[44]);
     $cal_templates->set_var('lang_submit', $LANG_CAL_1[45]);
@@ -570,11 +570,11 @@ default:
                     $cal_templates->set_var('event_year', strftime('%Y',strtotime($A['datestart'])));
                     $currentmonth = strftime('%B',strtotime($A['datestart']));
                 }
-                $cal_templates->set_var('event_title', stripslashes($A['title']));
+                $cal_templates->set_var('event_title', $A['title']);
                 $cal_templates->set_var('site_url', $_CONF['site_url']);
                 $cal_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
                 $cal_templates->set_var('layout_url', $_CONF['layout_url']);
-                $event_title = stripslashes($A['title']);
+                $event_title = $A['title'];
                 if (!empty($A['url'])) {
                     $event_title = COM_createLink($event_title, $A['url']);
                 }
@@ -632,14 +632,14 @@ default:
                 // set the location variables
                 $cal_templates->set_var ('lang_where', $LANG_CAL_1[4]);
                 $cal_templates->set_var ('event_location',
-                                         stripslashes ($A['location']));
+                                         $A['location']);
                 $cal_templates->set_var ('event_address1',
-                                         stripslashes ($A['address1']));
+                                         $A['address1']);
                 $cal_templates->set_var ('event_address2',
-                                         stripslashes ($A['address2']));
+                                         $A['address2']);
                 $cal_templates->set_var ('event_zip', $A['zipcode']);
                 $cal_templates->set_var ('event_city',
-                                         stripslashes ($A['city']));
+                                         $A['city']);
                 $cal_templates->set_var ('event_state_only', $A['state']);
                 if (empty ($A['state']) || ($A['state'] == '--')) {
                     $cal_templates->set_var ('event_state', '');
@@ -681,7 +681,7 @@ default:
                 }
 
                 $cal_templates->set_var('lang_description', $LANG_CAL_1[5]);
-                $description = stripslashes($A['description']);
+                $description = $A['description'];
                 if (empty($A['postmode']) || ($A['postmode'] == 'plaintext')) {
                     $description = nl2br($description);
                 }

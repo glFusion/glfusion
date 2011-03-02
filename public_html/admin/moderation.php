@@ -194,7 +194,7 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         default:
-            $retval = COM_makeClickableLinks(stripslashes($fieldvalue));
+            $retval = COM_makeClickableLinks($fieldvalue);
             break;
     }
 
@@ -397,8 +397,8 @@ function MODERATE_itemList($type='', $token)
                     for ($i = 0; $i < $nrows; $i++) {
                         $A = DB_fetchArray($result);
                         $A['edit'] = $_CONF['site_admin_url'].'/user.php?edit=x&amp;uid='.$A['uid'];
-                        $A['fullname'] = stripslashes($A['fullname']);
-                        $A['email'] = stripslashes($A['email']);
+                        $A['fullname'] = $A['fullname'];
+                        $A['email'] = $A['email'];
                         $A['_type_'] = 'user';
                         $A['_key_'] = 'uid';
                         $data_arr[$i] = $A;
@@ -463,8 +463,8 @@ function MODERATE_itemList($type='', $token)
                         $A['edit'] = $_CONF['site_admin_url']
                                     . '/story.php?draft=x&amp;sid='
                                     . $A['id'];
-                        $A['title'] = stripslashes($A['title']);
-                        $A['tid'] = stripslashes($A['tid']);
+                        $A['title'] = $A['title'];
+                        $A['tid'] = $A['tid'];
                         $A['_type_'] = 'draftstory';
                         $A['_key_'] = 'sid';
                         $data_arr[$i] = $A;

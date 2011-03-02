@@ -162,16 +162,16 @@ function MG_sortAlbums( $parent=0, $actionURL ) {
         $subalbums = DB_count($_TABLES['mg_albums'], 'album_parent', $row['album_id']);
 
         if ( $subalbums ) {
-            $albumTitle = strip_tags(COM_stripslashes($row['album_title'])) . ' - ' . '<a href="' . $_MG_CONF['site_url'] . '/admin.php?mode=albumsort&amp;album_id=' . $row['album_id'] . '">' . $LANG_MG01['subalbums'] . ' (' . $subalbums . ')</a>';
+            $albumTitle = strip_tags($row['album_title']) . ' - ' . '<a href="' . $_MG_CONF['site_url'] . '/admin.php?mode=albumsort&amp;album_id=' . $row['album_id'] . '">' . $LANG_MG01['subalbums'] . ' (' . $subalbums . ')</a>';
         } else {
-            $albumTitle = strip_tags(COM_stripslashes($row['album_title']));
+            $albumTitle = strip_tags($row['album_title']);
         }
 
         $T->set_var(array(
             'row_class'     => ($rowcounter % 2) ? '2' : '1',
             'album_id'      => $row['album_id'],
             'album_title'   => $albumTitle,
-            'album_desc'    => COM_stripslashes($row['album_desc']),
+            'album_desc'    => $row['album_desc'],
             'media_count'   => $row['media_count'],
             'album_order'   => $row['album_order'],
         ));

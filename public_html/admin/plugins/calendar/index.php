@@ -117,7 +117,7 @@ function CALENDAR_edit($action, $A, $msg = '')
             return $retval;
         }
     } else {
-        if ( $A['owner_id'] == '' ) {
+        if ( !isset($A['owner_id']) || $A['owner_id'] == '' ) {
             $A['owner_id'] = $_USER['uid'];
         }
         if (isset ($_GROUPS['Calendar Admin'])) {
@@ -185,7 +185,7 @@ function CALENDAR_edit($action, $A, $msg = '')
     $A['title'] = str_replace('{','&#123;',$A['title']);
     $A['title'] = str_replace('}','&#125;',$A['title']);
     $A['title'] = str_replace('"','&quot;',$A['title']);
-    $event_templates->set_var('event_title', stripslashes ($A['title']));
+    $event_templates->set_var('event_title', $A['title']);
     $event_templates->set_var('lang_eventtype', $LANG_CAL_1[37]);
     $event_templates->set_var('lang_editeventtypes', $LANG12[50]);
     $event_templates->set_var('type_options',
@@ -303,22 +303,22 @@ function CALENDAR_edit($action, $A, $msg = '')
         $event_templates->set_var('allday_checked', 'checked="checked"');
     }
     $event_templates->set_var('lang_location',$LANG12[51]);
-    $event_templates->set_var('event_location', stripslashes ($A['location']));
+    $event_templates->set_var('event_location', $A['location']);
     $event_templates->set_var('lang_addressline1',$LANG12[44]);
-    $event_templates->set_var('event_address1', stripslashes ($A['address1']));
+    $event_templates->set_var('event_address1', $A['address1']);
     $event_templates->set_var('lang_addressline2',$LANG12[45]);
-    $event_templates->set_var('event_address2', stripslashes ($A['address2']));
+    $event_templates->set_var('event_address2', $A['address2']);
     $event_templates->set_var('lang_city',$LANG12[46]);
-    $event_templates->set_var('event_city', stripslashes ($A['city']));
+    $event_templates->set_var('event_city', $A['city']);
     $event_templates->set_var('lang_state',$LANG12[47]);
     $event_templates->set_var('state_options', '');
-    $event_templates->set_var('event_state', stripslashes ($A['state']));
+    $event_templates->set_var('event_state', $A['state']);
     $event_templates->set_var('lang_zipcode',$LANG12[48]);
     $event_templates->set_var('event_zipcode', $A['zipcode']);
     $event_templates->set_var('lang_eventlocation', $LANG_CAL_ADMIN[7]);
-    $event_templates->set_var('event_location', stripslashes ($A['location']));
+    $event_templates->set_var('event_location', $A['location']);
     $event_templates->set_var('lang_eventdescription', $LANG_CAL_ADMIN[8]);
-    $event_templates->set_var('event_description', stripslashes ($A['description']));
+    $event_templates->set_var('event_description', $A['description']);
     $event_templates->set_var('lang_hits', $LANG10[30]);
     $event_templates->set_var('hits', COM_numberFormat ($A['hits']));
     $event_templates->set_var('lang_save', $saveoption);
@@ -486,14 +486,15 @@ function CALENDAR_save( $eid, $status, $title, $event_type, $url, $allday,
         $description = htmlspecialchars (COM_checkWords ($description));
     }
     $description = DB_escapeString ($description);
-    $title = DB_escapeString (COM_checkHTML (COM_checkWords ($title)));
-    $location = DB_escapeString (COM_checkHTML (COM_checkWords ($location)));
-    $address1 = DB_escapeString (COM_checkHTML (COM_checkWords ($address1)));
-    $address2 = DB_escapeString (COM_checkHTML (COM_checkWords ($address2)));
-    $city = DB_escapeString (COM_checkHTML (COM_checkWords ($city)));
-    $zipcode =  DB_escapeString (COM_checkHTML (COM_checkWords ($zipcode)));
-    $event_type = DB_escapeString (strip_tags (COM_checkWords ($event_type)));
-    $url = DB_escapeString (strip_tags ($url));
+    $title       = DB_escapeString (COM_checkHTML (COM_checkWords ($title)));
+    $location    = DB_escapeString (COM_checkHTML (COM_checkWords ($location)));
+    $address1    = DB_escapeString (COM_checkHTML (COM_checkWords ($address1)));
+    $address2    = DB_escapeString (COM_checkHTML (COM_checkWords ($address2)));
+    $city        = DB_escapeString (COM_checkHTML (COM_checkWords ($city)));
+    $state       = DB_escapeString (COM_checkHTML (COM_checkWords ($state)));
+    $zipcode     = DB_escapeString (COM_checkHTML (COM_checkWords ($zipcode)));
+    $event_type  = DB_escapeString (strip_tags (COM_checkWords ($event_type)));
+    $url         = DB_escapeString (strip_tags ($url));
 
     if ($allday == 0) {
         // Add 12 to make time on 24 hour clock if needed
@@ -688,7 +689,7 @@ function CALENDAR_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case 'title':
-            $title = stripslashes($A['title']);
+            $title = $A['title'];
             if ($enabled) {
                 $retval = COM_createLink( $title,"{$_CONF['site_url']}/calendar/event.php?eid={$A['eid']}" );
             } else {

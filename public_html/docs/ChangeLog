@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.3.0 (Trunk Development Branch)
 ------
+- Implemented global magic_quotes_gpc() handling that is now automatic. Plugins
+  and other items no longer need to worry about calling any routines to deal
+  with magic quotes. (Mark)
 - Feature: AutoTag Permission Editor (Mark)
 - Load userprefs data into $_USER array (Mark)
 - Feature: OAuth login support for FB, LinkedIn and Twitter (Mark H.); This will

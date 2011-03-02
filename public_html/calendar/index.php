@@ -585,7 +585,7 @@ case 'day':
                                     getDeleteImageLink($mode, $A, $token));
             $cal_templates->set_var('event_time', $LANG_CAL_2[26]);
             $cal_templates->set_var('eid', $A['eid']);
-            $cal_templates->set_var('event_title', stripslashes($A['title']));
+            $cal_templates->set_var('event_title', $A['title']);
             if ($i < $alldaycount) {
                 $cal_templates->set_var('br', '<br' . XHTML . '>');
             } else {
@@ -612,7 +612,7 @@ case 'day':
                 $cal_templates->set_var('delete_imagelink',
                                         getDeleteImageLink($mode, $A, $token));
                 $cal_templates->set_var('eid', $A['eid']);
-                $cal_templates->set_var('event_title', stripslashes($A['title']));
+                $cal_templates->set_var('event_title', $A['title']);
                 if ($j < $numevents) {
                     $cal_templates->set_var('br', '<br' . XHTML . '>');
                 } else {
@@ -823,7 +823,7 @@ case 'week':
                 $cal_templates->set_var('event_endtime', ' - ' . $endtime);
             }
             $cal_templates->set_var ('event_title_and_link',
-                COM_createLink(stripslashes($A['title']), $_CONF['site_url']
+                COM_createLink($A['title'], $_CONF['site_url']
                     . '/calendar/event.php?' . addMode ($mode)
                 . 'eid=' . $A['eid'])
             );
@@ -1020,7 +1020,7 @@ for ($i = 1; $i <= 6; $i++) {
                         $cal_templates->set_var ('cal_day_entries', '');
                         $entries .=
                             COM_createLink(
-                                stripslashes ($results['title']),
+                                $results['title'],
                                 $_CONF['site_url'] . '/calendar/event.php?' . addMode ($mode)
                                 . 'eid=' . $results['eid'],
                                 array('class'=>'cal-event'))

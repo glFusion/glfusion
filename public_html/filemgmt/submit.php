@@ -106,7 +106,7 @@ function FM_notifyAdmins( $filename,$file_user_id,$description ) {
             'lang_uploaded_by'  =>  $LANG_FM00['uploaded_by'],
             'username'          =>  $uname,
             'filename'          =>  $filename,
-            'description'       =>  stripslashes($description),
+            'description'       =>  $description,
             'url_moderate'      =>  '<a href="' . $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php?op=listNewDownloads">Click here to view</a>',
             'site_name'         =>  $_CONF['site_name'] . ' - ' . $_CONF['site_slogan'],
             'site_url'          =>  $_CONF['site_url'],
@@ -190,7 +190,7 @@ function FM_getGroupList ($basegroup)
     while (sizeof ($to_check) > 0) {
         $thisgroup = array_pop ($to_check);
         if ($thisgroup > 0) {
-            $result = DB_query ("SELECT ug_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $thisgroup");
+            $result = DB_query ("SELECT ug_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = ".(int) $thisgroup);
             $numGroups = DB_numRows ($result);
             for ($i = 0; $i < $numGroups; $i++) {
                 $A = DB_fetchArray ($result);
@@ -235,7 +235,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
     if ( isset($_POST['submit']) ){
 
         if(isset($_USER['uid']) AND $_USER['uid'] > 1 ) {
-            $submitter = $_USER['uid'];
+            $submitter = (int) $_USER['uid'];
         }else{
             $submitter = 1;
         }
@@ -266,7 +266,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         }
 
         if ( !empty($_POST['cid']) ) {
-            $cid = intval($_POST['cid']);
+            $cid = (int) COM_applyFilter($_POST['cid'],true));
         } else {
             $cid = 0;
         }
@@ -278,7 +278,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         $version = $myts->makeTboxData4Save($_POST['version']);
         $size = intval($_FILES['newfile']['size']);
         $description = $myts->makeTareaData4Save($_POST['description']);
-        $comments = $_POST['commentoption'];
+        $comments = (int) COM_applyFilter($_POST['commentoption'],true);
         $date = time();
         $tmpfilename = randomfilename();
 
@@ -390,7 +390,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
             }
             $fields = 'cid,title,url,homepage,version,size,platform,logourl,submitter,status,date,hits,rating,votes,comments';
             $sql = "INSERT INTO {$_FM_TABLES['filemgmt_filedetail']} ($fields) VALUES ";
-            $sql .= "('$cid','$title','$url','$homepage','$version','$size','$tmpfilename','$logourl','$submitter',$status,'$date',0,0,0,'$comments')";
+            $sql .= "($cid,'$title','$url','$homepage','$version','$size','$tmpfilename','$logourl',$submitter,$status,'$date',0,0,0,$comments)";
             DB_query($sql) or $eh->show("0013");
             $newid = DB_insertID();
             DB_query("INSERT INTO {$_FM_TABLES['filemgmt_filedesc']} (lid, description) VALUES ($newid, '$description')") or $eh->show("0013");

@@ -936,7 +936,7 @@ class config {
                 }
             }
         } else {
-            $r = COM_stripslashes($input_val);
+            $r = $input_val;
             if ($r == 'b:0' OR $r == 'b:1') {
                 $r = ($r == 'b:1');
             }

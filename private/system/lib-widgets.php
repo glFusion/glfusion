@@ -96,8 +96,8 @@ EOJ;
 	    $res = DB_query($sql);
 	    $pages = array();
 	    for ($i = 0; $A = DB_fetchArray($res); ++$i) {
-	        $content = SP_render_content(stripslashes($A['sp_content']), $A['sp_php']);
-	        $title = htmlspecialchars(stripslashes($A['sp_title']));
+	        $content = SP_render_content($A['sp_content'], $A['sp_php']);
+	        $title = htmlspecialchars($A['sp_title']);
 	        $order = array_search($A['sp_id'],$page_ids); // find proper order
 	        $pages[$order] = Array('content' => $content, 'title' => $title, 'index' => $order+1);
 	    }
@@ -105,8 +105,8 @@ EOJ;
 	//we have been passed pre-formatted pages
 	    $pages = array();
 	    for ($i = 0; $i < sizeof($page_ids); ++$i) {
-	        $content = stripslashes($page_ids[$i]['content']);
-	        $title = htmlspecialchars(stripslashes($page_ids[$i]['title']));
+	        $content = $page_ids[$i]['content'];
+	        $title = htmlspecialchars($page_ids[$i]['title']);
 	        $order = $i;
 	        $pages[$order] = Array('content' => $content, 'title' => $title, 'index' => $order+1);
 	    }

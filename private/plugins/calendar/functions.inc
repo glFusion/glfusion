@@ -295,7 +295,7 @@ function phpblock_calendar( $help='', $title='' )
                         }
 
                         $newevent = COM_createLink(
-                            stripslashes( $theEvent['title'] ),
+                             $theEvent['title'],
                             $newevent_url,
                             $attr
                         );
@@ -450,8 +450,8 @@ function CALENDAR_sendNotification($table, $A)
 {
     global $_CONF, $_TABLES, $LANG01, $LANG08, $LANG09, $LANG_CAL_1, $LANG_CAL_2;
 
-    $title = stripslashes ($A['title']);
-    $description = stripslashes ($A['description']);
+    $title = $A['title'];
+    $description = $A['description'];
 
     $mailbody = "$LANG09[16]: $title\n"
               . "$LANG09[17]: " . strftime ($_CONF['date'],
@@ -850,9 +850,9 @@ function plugin_submit_calendar($mode = 'master',$A = array())
 
     // Pull all the POST data so we can pre-fill the form.
 
-    $title      = isset($_POST['title']) ? COM_stripslashes($_POST['title']) : '';
-    $event_type = isset($_POST['event_type']) ? COM_stripslashes($_POST['event_type']) : '';
-    $url        = isset($_POST['url']) ? COM_stripslashes($_POST['url']) : '';
+    $title      = isset($_POST['title']) ? $_POST['title'] : '';
+    $event_type = isset($_POST['event_type']) ? $_POST['event_type'] : '';
+    $url        = isset($_POST['url']) ? $_POST['url'] : '';
     $allday     = isset($_POST['allday']) ? COM_applyFilter ($_POST['allday']) : '';
     $start_month = isset($_POST['start_month']) ? COM_applyFilter ($_POST['start_month'], true) : $month;
     $start_day   = isset($_POST['start_day']) ? COM_applyFilter ($_POST['start_day'], true) : $day;
@@ -866,14 +866,14 @@ function plugin_submit_calendar($mode = 'master',$A = array())
     $end_hour   = isset($_POST['end_hour']) ? COM_applyFilter ($_POST['end_hour'], true) : $hour;
     $end_minute = isset($_POST['end_minute']) ? COM_applyFilter ($_POST['end_minute'], true) : 0;
     $end_ampm   = isset($_POST['end_ampm']) ?  $_POST['end_ampm'] : '';
-    $location   = isset($_POST['location']) ? COM_stripslashes($_POST['location']) : '';
-    $address1   = isset($_POST['address1']) ? COM_stripslashes($_POST['address1']) : '';
-    $address2   = isset($_POST['address2']) ? COM_stripslashes($_POST['address2']) : '';
-    $city       = isset($_POST['city']) ? COM_stripslashes($_POST['city']) : '';
-    $state      = isset($_POST['state']) ? COM_stripslashes($_POST['state']) : '';
-    $zipcode    = isset($_POST['zipcode']) ? COM_stripslashes($_POST['zipcode']) : '';
-    $description= isset($_POST['description']) ? COM_stripslashes($_POST['description']) : '';
-    $postmode   = isset($_POST['postmode']) ? COM_stripslashes($_POST['postmode']) : '';
+    $location   = isset($_POST['location']) ? $_POST['location'] : '';
+    $address1   = isset($_POST['address1']) ? $_POST['address1'] : '';
+    $address2   = isset($_POST['address2']) ? $_POST['address2'] : '';
+    $city       = isset($_POST['city']) ? $_POST['city'] : '';
+    $state      = isset($_POST['state']) ? $_POST['state'] : '';
+    $zipcode    = isset($_POST['zipcode']) ? $_POST['zipcode'] : '';
+    $description= isset($_POST['description']) ? $_POST['description'] : '';
+    $postmode   = isset($_POST['postmode']) ? $_POST['postmode'] : '';
 
     $retval = '';
 
@@ -1219,7 +1219,7 @@ function plugin_getfeedcontent_calendar( $feed, &$link, &$update, $feedType, $fe
             $row = DB_fetchArray( $result );
             $eids[] = $row['eid'];
 
-            $eventtitle = stripslashes( $row['title'] );
+            $eventtitle =  $row['title'];
             $eventtext = SYND_truncateSummary( $row['description'], MBYTE_strlen($row['description']));
             $eventlink  = $_CONF['site_url'] . '/calendar/event.php?eid='
                         . $row['eid'];
@@ -1350,7 +1350,7 @@ function plugin_showstats_calendar ($showsitestats)
         );
         for ($i = 0; $i < $nrows; $i++) {
             $A = DB_fetchArray($result);
-            $A['title'] = stripslashes(str_replace('$','&#36;',$A['title']));
+            $A['title'] = str_replace('$','&#36;',$A['title']);
             $A['sid'] = COM_createLink($A['title'], $_CONF['site_url']
                       . "/calendar/event.php?eid={$A['eid']}");
             $A['hits'] = COM_NumberFormat ($A['hits']);
@@ -1749,7 +1749,7 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
                 $props['id'] = $A['eid'];
                 break;
             case 'title':
-                $props['title'] = stripslashes($A['title']);
+                $props['title'] = $A['title'];
                 break;
             case 'url':
                 if (empty($A['eid'])) {

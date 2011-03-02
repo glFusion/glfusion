@@ -3752,7 +3752,7 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
                         $props['id'] = $A['media_id'];
                         break;
                     case 'title':
-                        $props['title'] = stripslashes($A['media_title']);
+                        $props['title'] = $A['media_title'];
                         break;
                     case 'url':
                         if (empty($A['id'])) {

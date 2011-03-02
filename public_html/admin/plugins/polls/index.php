@@ -94,13 +94,8 @@ function POLLS_edit($pid = '')
     $poll_templates->set_file (array ('editor' => 'polleditor.thtml',
                                       'question' => 'pollquestions.thtml',
                                       'answer' => 'pollansweroption.thtml'));
-    $poll_templates->set_var ( 'xhtml', XHTML );
-    $poll_templates->set_var ('site_url', $_CONF['site_url']);
-    $poll_templates->set_var ('site_admin_url', $_CONF['site_admin_url']);
-    $poll_templates->set_var ('layout_url', $_CONF['layout_url']);
-
     if (!empty ($pid)) {
-        $topic = DB_query("SELECT * FROM {$_TABLES['polltopics']} WHERE pid='$pid'");
+        $topic = DB_query("SELECT * FROM {$_TABLES['polltopics']} WHERE pid='".DB_escapeString($pid)."'");
         $T = DB_fetchArray($topic);
 
         // Get permissions for poll
@@ -292,7 +287,7 @@ function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $statuscode, $open, $
     list($perm_owner,$perm_group,$perm_members,$perm_anon) = SEC_getPermissionValues($perm_owner,$perm_group,$perm_members,$perm_anon);
 
     $pid = COM_sanitizeID($pid);
-    $topic = COM_stripslashes($topic);
+    $topic = $topic;
     $old_pid = COM_sanitizeID($old_pid);
     if (empty($pid)) {
         if (empty($old_pid)) {
@@ -378,7 +373,7 @@ function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $statuscode, $open, $
     // first dimension of array are the questions
     $num_questions = count($Q);
     for ($i = 0; $i < $num_questions; $i++) {
-        $Q[$i] = COM_stripslashes($Q[$i]);
+        $Q[$i] = $Q[$i];
         if (strlen($Q[$i]) > 0) { // only insert questions that exist
             $Q[$i] = DB_escapeString($Q[$i]);
             DB_save($_TABLES['pollquestions'], 'qid, pid, question',
@@ -387,7 +382,7 @@ function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $statuscode, $open, $
             // votes and remarks
             $num_answers = count($A[$i]);
             for ($j = 0; $j < $num_answers; $j++) {
-                $A[$i][$j] = COM_stripslashes($A[$i][$j]);
+                $A[$i][$j] = $A[$i][$j];
                 if (strlen($A[$i][$j]) > 0) { // only insert answers etc that exist
                     if (!is_numeric($V[$i][$j])) {
                         $V[$i][$j] = "0";
@@ -534,7 +529,7 @@ function POLLS_list()
     );
 
     $token = SEC_createToken();
-    
+
     $retval .= ADMIN_list (
         'polls', 'POLLS_getListField', $header_arr,
         $text_arr, $query_arr, $defsort_arr, '', $token
@@ -575,13 +570,13 @@ if (isset($_POST['msg'])) {
 $validtoken = SEC_checktoken();
 
 switch ($action) {
-    
+
     case 'edit':
         $display .= COM_siteHeader('menu', $LANG25[5]);
         $display .= POLLS_edit($pid);
         $display .= COM_siteFooter();
         break;
-    
+
     case 'save':
         if ($validtoken) {
           $old_pid = (isset($_POST['old_pid'])) ? COM_applyFilter($_POST['old_pid']): '';
@@ -630,14 +625,14 @@ switch ($action) {
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;
-    
+
     default:
         $display .= COM_siteHeader('menu', $LANG25[18]);
         $display .= ($msg > 0) ? COM_showMessage ($msg, 'polls') : '';
         $display .= POLLS_list();
         $display .= COM_siteFooter();
         break;
-    
+
 }
 
 echo $display;

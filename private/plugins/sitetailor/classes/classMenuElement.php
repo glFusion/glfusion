@@ -746,7 +746,7 @@ class mbElement {
                         }
 
                         while( $A = DB_fetchArray( $result ) ) {
-                            $topicname = stripslashes( $A['topic'] );
+                            $topicname = $A['topic'];
                             $url =  $_CONF['site_url'] . '/index.php?topic=' . $A['tid'];
                             $label = $topicname;
 

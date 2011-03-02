@@ -161,9 +161,7 @@ class MyTextSanitizer {
     * if magic_quotes_gpc is off, add back slashes
     */
     function oopsDB_escapeString($text) {
-        if (!get_magic_quotes_gpc()) {
-            $text = DB_escapeString($text);
-        }
+        $text = DB_escapeString($text);
         return $text;
     }
 
@@ -171,9 +169,6 @@ class MyTextSanitizer {
     * if magic_quotes_gpc is on, stirip back slashes
     */
     function oopsStripSlashesGPC($text) {
-        if (get_magic_quotes_gpc()) {
-            $text = stripslashes($text);
-        }
         return $text;
     }
 
@@ -181,9 +176,6 @@ class MyTextSanitizer {
     * if magic_quotes_runtime is on, stirip back slashes
     */
     function oopsStripSlashesRT($text) {
-        if (get_magic_quotes_runtime()) {
-            $text = stripslashes($text);
-        }
         return $text;
     }
 

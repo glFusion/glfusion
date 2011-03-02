@@ -759,7 +759,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
 	        $loopCounter = 0;
 	        $digitCounter = 1;
 
-	        $file_name = stripslashes($file);
+	        $file_name = $file;
 	        $file_name = MG_replace_accents($file_name);
 	        $file_name = preg_replace("#[ ]#","_",$file_name);  // change spaces to underscore
 	        $file_name = preg_replace('#[^\.\-,\w]#','_',$file_name);  //only parenthesis, underscore, letters, numbers, comma, hyphen, period - others to underscore

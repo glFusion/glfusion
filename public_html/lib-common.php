@@ -72,11 +72,25 @@ define('PATCHLEVEL','.svn');
 
 $_COM_VERBOSE = false;
 
-/**
-* Override the $_REQUEST setting...
-*/
+// process all vars to handle magic_quotes_gpc
+function all_stripslashes($var)
+{
+    if (get_magic_quotes_gpc()) {
+        if (is_array($var)) {
+            return array_map('all_stripslashes', $var);
+        } else {
+            return stripslashes($var);
+        }
+    } else {
+        return $var;
+    }
+}
+$_POST   = all_stripslashes($_POST);
+$_GET    = all_stripslashes($_GET);
+$_COOKIE = all_stripslashes($_COOKIE);
+// Override the $_REQUEST setting...
 $_REQUEST = array_merge($_GET, $_POST);
-
+// set $REMOTE_ADDR
 if (!isset($REMOTE_ADDR)) {
     $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
 }
@@ -91,34 +105,15 @@ if (!isset($REMOTE_ADDR)) {
   * Must make sure that the function hasn't been disabled before calling it.
   *
   */
-if( function_exists('set_error_handler') ) {
+if ( function_exists('set_error_handler') ) {
     $defaultErrorHandler = set_error_handler('COM_handleError', error_reporting());
-}
-
-/**
-* Strip slashes from a string only when magic_quotes_gpc = on.
-* This has to be way up here in the file before COM_stripslashes is used.
-*
-* @param   string  $text  The text
-* @return  string  The text, possibly without slashes.
-*/
-if (get_magic_quotes_gpc() == 1) {
-    function COM_stripslashes($text)
-    {
-        return stripslashes($text);
-    }
-} else {
-    function COM_stripslashes($text)
-    {
-        return $text;
-    }
 }
 
 require_once 'siteconfig.php' ;
 require_once $_CONF['path_system'] . 'classes/config.class.php';
 
 $config =& config::get_instance();
-$config->set_configfile($_CONF['path'] . 'db-config.php');
+$config->set_configfile($_CONF['path'].'db-config.php');
 $config->load_baseconfig();
 $config->initConfig();
 
@@ -164,19 +159,18 @@ mt_srand( (10000000000 * (float)$usec) ^ (float)$sec );
 * If needed, add our PEAR path to the list of include paths
 *
 */
-if( !$_CONF['have_pear'] ) {
+if ( !$_CONF['have_pear'] ) {
     $curPHPIncludePath = get_include_path();
-    if( defined( 'PATH_SEPARATOR' )) {
+    if ( defined( 'PATH_SEPARATOR' )) {
         $separator = PATH_SEPARATOR;
     } else {
         // prior to PHP 4.3.0, we have to guess the correct separator ...
         $separator = ';';
-        if( strpos( $curPHPIncludePath, $separator ) === false ) {
+        if ( strpos( $curPHPIncludePath, $separator ) === false ) {
             $separator = ':';
         }
     }
-    if( set_include_path( $_CONF['path_pear'] . $separator
-                                 . $curPHPIncludePath ) === false ) {
+    if ( set_include_path( $_CONF['path_pear'] . $separator.$curPHPIncludePath ) === false ) {
         COM_errorLog( 'set_include_path failed - there may be problems using the PEAR classes.', 1);
     }
 }
@@ -301,18 +295,18 @@ require_once $_CONF['path_system'].'lib-rating.php';
 // which theme to show them.
 
 $usetheme = '';
-if( isset( $_POST['usetheme'] )) {
+if ( isset( $_POST['usetheme'] )) {
     $usetheme = COM_sanitizeFilename($_POST['usetheme'], true);
 }
-if( !empty( $usetheme ) && is_dir( $_CONF['path_themes'] . $usetheme )) {
+if ( !empty( $usetheme ) && is_dir( $_CONF['path_themes'] . $usetheme )) {
     $_CONF['theme'] = $usetheme;
     $_CONF['path_layout'] = $_CONF['path_themes'] . $_CONF['theme'] . '/';
     $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_CONF['theme'];
 }
-else if( $_CONF['allow_user_themes'] == 1 ) {
-    if( isset( $_COOKIE[$_CONF['cookie_theme']] ) && empty( $_USER['theme'] )) {
+else if ( $_CONF['allow_user_themes'] == 1 ) {
+    if ( isset( $_COOKIE[$_CONF['cookie_theme']] ) && empty( $_USER['theme'] )) {
         $theme = COM_sanitizeFilename($_COOKIE[$_CONF['cookie_theme']], true);
-        if( is_dir( $_CONF['path_themes'] . $theme ))
+        if ( is_dir( $_CONF['path_themes'] . $theme ))
         {
             $_USER['theme'] = $theme;
         }
@@ -328,8 +322,8 @@ else if( $_CONF['allow_user_themes'] == 1 ) {
         }
     }
 
-    if( !empty( $_USER['theme'] )) {
-        if( is_dir( $_CONF['path_themes'] . $_USER['theme'] ))
+    if ( !empty( $_USER['theme'] )) {
+        if ( is_dir( $_CONF['path_themes'] . $_USER['theme'] ))
         {
             $_CONF['theme'] = $_USER['theme'];
             $_CONF['path_layout'] = $_CONF['path_themes'] . $_CONF['theme'] . '/';
@@ -355,8 +349,7 @@ $TEMPLATE_OPTIONS['default_vars']['layout_url'] = $_CONF['layout_url'];
 // Include theme functions file which may/may not do anything
 if (file_exists($_CONF['path_layout'] . 'custom/functions.php') ) {
     require_once $_CONF['path_layout'] . 'custom/functions.php';
-}
-elseif (file_exists($_CONF['path_layout'] . 'functions.php')) {
+} elseif (file_exists($_CONF['path_layout'] . 'functions.php')) {
     require_once $_CONF['path_layout'] . 'functions.php';
 }
 
@@ -379,21 +372,21 @@ if (empty($_IMAGE_TYPE)) {
 
 // Similarly set language
 
-if( isset( $_COOKIE[$_CONF['cookie_language']] ) && empty( $_USER['language'] )) {
+if ( isset( $_COOKIE[$_CONF['cookie_language']] ) && empty( $_USER['language'] )) {
     $language = COM_sanitizeFilename($_COOKIE[$_CONF['cookie_language']]);
-    if( is_file( $_CONF['path_language'] . $language . '.php' ) &&
+    if ( is_file( $_CONF['path_language'] . $language . '.php' ) &&
             ( $_CONF['allow_user_language'] == 1 ))
     {
         $_USER['language'] = $language;
         $_CONF['language'] = $language;
     }
-} else if( !empty( $_USER['language'] )) {
-    if( is_file( $_CONF['path_language'] . $_USER['language'] . '.php' ) &&
+} else if ( !empty( $_USER['language'] )) {
+    if ( is_file( $_CONF['path_language'] . $_USER['language'] . '.php' ) &&
             ( $_CONF['allow_user_language'] == 1 ))
     {
         $_CONF['language'] = $_USER['language'];
     }
-} else if( !empty( $_CONF['languages'] ) && !empty( $_CONF['language_files'] )) {
+} else if ( !empty( $_CONF['languages'] ) && !empty( $_CONF['language_files'] )) {
     $_CONF['language'] = COM_getLanguage();
 }
 
@@ -550,8 +543,7 @@ if (COM_isAnonUser() && isset($_SERVER['REMOTE_ADDR'])) {
     DB_delete($_TABLES['sessions'], array('remote_ip', 'uid'),array(DB_escapeString($_SERVER['REMOTE_ADDR']), 1));
 
     $tries = 0;
-    do
-    {
+    do {
         $sess_id = 0;
         $md5_sessid = md5(mt_rand());
         $curtime = time();
@@ -559,8 +551,7 @@ if (COM_isAnonUser() && isset($_SERVER['REMOTE_ADDR'])) {
         // Insert anonymous user session
         $result = DB_query( "INSERT INTO {$_TABLES['sessions']} (sess_id, start_time, remote_ip, uid,md5_sess_id) VALUES ('$sess_id', '$curtime', '".DB_escapeString($_SERVER['REMOTE_ADDR'])."', 1,'".DB_escapeString($md5_sessid)."')", 1 );
         $tries++;
-    }
-    while(( $result === false) && ( $tries < 5 ));
+    } while (( $result === false) && ( $tries < 5 ));
 }
 
 // Clear out any expired sessions
@@ -581,8 +572,39 @@ if (empty($LANG_DIRECTION)) {
 
 COM_switchLocaleSettings();
 
-if( setlocale( LC_ALL, $_CONF['locale'] ) === false ) {
+if ( setlocale( LC_ALL, $_CONF['locale'] ) === false ) {
     setlocale( LC_TIME, $_CONF['locale'] );
+}
+
+
+/**
+* Global array of groups current user belongs to
+*
+* @global array $_GROUPS
+*
+*/
+
+if ( !COM_isAnonUser() ) {
+    $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
+} else {
+    $_GROUPS = SEC_getUserGroups( 1 );
+}
+
+/**
+* Global array of current user permissions [read,edit]
+*
+* @global array $_RIGHTS
+*
+*/
+
+$_RIGHTS = explode( ',', SEC_getUserPermissions() );
+
+if ( isset( $_GET['topic'] )) {
+    $topic = COM_applyFilter( $_GET['topic'] );
+} else if ( isset( $_POST['topic'] )) {
+    $topic = COM_applyFilter( $_POST['topic'] );
+} else {
+    $topic = '';
 }
 
 /**
@@ -610,41 +632,6 @@ function COM_getLanguageName()
 }
 
 /**
-* Global array of groups current user belongs to
-*
-* @global array $_GROUPS
-*
-*/
-
-if( !COM_isAnonUser() ) {
-    $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
-} else {
-    $_GROUPS = SEC_getUserGroups( 1 );
-}
-
-/**
-* Global array of current user permissions [read,edit]
-*
-* @global array $_RIGHTS
-*
-*/
-
-$_RIGHTS = explode( ',', SEC_getUserPermissions() );
-
-if( isset( $_GET['topic'] )) {
-    $topic = COM_applyFilter( $_GET['topic'] );
-} else if( isset( $_POST['topic'] )) {
-    $topic = COM_applyFilter( $_POST['topic'] );
-} else {
-    $topic = '';
-}
-
-
-// +---------------------------------------------------------------------------+
-// | HTML WIDGETS                                                              |
-// +---------------------------------------------------------------------------+
-
-/**
 * Return the file to use for a block template.
 *
 * This returns the template needed to build the HTML for a block.  This function
@@ -665,45 +652,29 @@ function COM_getBlockTemplate( $blockname, $which, $position='' )
 {
     global $_BLOCK_TEMPLATE, $_COM_VERBOSE, $_CONF;
 
-    if( $_COM_VERBOSE )
-    {
+    if ( $_COM_VERBOSE ) {
         COM_errorLog( "_BLOCK_TEMPLATE[$blockname] = " . $_BLOCK_TEMPLATE[$blockname], 1 );
     }
 
-    if( !empty( $_BLOCK_TEMPLATE[$blockname] ))
-    {
+    if ( !empty( $_BLOCK_TEMPLATE[$blockname] )) {
         $templates = explode( ',', $_BLOCK_TEMPLATE[$blockname] );
-        if( $which == 'header' )
-        {
-            if( !empty( $templates[0] )  )
-            {
+        if ( $which == 'header' ) {
+            if ( !empty( $templates[0] )  ) {
                 $template = $templates[0];
-            }
-            else
-            {
+            } else {
                 $template = 'blockheader.thtml';
             }
-        }
-        else
-        {
-            if( !empty( $templates[1] )  )
-            {
+        } else {
+            if ( !empty( $templates[1] )  ) {
                 $template = $templates[1];
-            }
-            else
-            {
+            } else {
                 $template = 'blockfooter.thtml';
             }
         }
-    }
-    else
-    {
-        if( $which == 'header' )
-        {
+    } else {
+        if ( $which == 'header' ) {
             $template = 'blockheader.thtml';
-        }
-        else
-        {
+        } else {
             $template = 'blockfooter.thtml';
         }
     }
@@ -712,19 +683,16 @@ function COM_getBlockTemplate( $blockname, $which, $position='' )
     // position specific then look to see if there is a position specific
     // override.
     $templateLC = strtolower($template);
-    if( !empty($position) && ( strpos($templateLC, $position) === false ) )
-    {
+    if ( !empty($position) && ( strpos($templateLC, $position) === false ) ) {
         // Trim .thtml from the end.
         $positionSpecific = substr($template, 0, strlen($template) - 6);
         $positionSpecific .= '-' . $position . '.thtml';
-        if( file_exists( $_CONF['path_layout'] . $positionSpecific ) )
-        {
+        if ( file_exists( $_CONF['path_layout'] . $positionSpecific ) ) {
             $template = $positionSpecific;
         }
     }
 
-    if( $_COM_VERBOSE )
-    {
+    if ( $_COM_VERBOSE ) {
         COM_errorLog( "Block template for the $which of $blockname is: $template", 1 );
     }
 
@@ -751,18 +719,13 @@ function COM_getThemes( $all = false )
 
     // If users aren't allowed to change their theme then only return the default theme
 
-    if(( $_CONF['allow_user_themes'] == 0 ) && !$all )
-    {
+    if (( $_CONF['allow_user_themes'] == 0 ) && !$all ) {
         $themes[$index] = $_CONF['theme'];
-    }
-    else
-    {
+    } else {
         $fd = opendir( $_CONF['path_themes'] );
 
-        while(( $dir = @readdir( $fd )) == TRUE )
-        {
-            if( is_dir( $_CONF['path_themes'] . $dir) && $dir <> '.' && $dir <> '..' && $dir <> 'CVS' && substr( $dir, 0 , 1 ) <> '.' )
-            {
+        while (( $dir = @readdir( $fd )) == TRUE ) {
+            if ( is_dir( $_CONF['path_themes'] . $dir) && $dir <> '.' && $dir <> '..' && $dir <> 'CVS' && substr( $dir, 0 , 1 ) <> '.' ) {
                 clearstatcache();
                 if ( $dir == 'chameleon' ) {
                     if (in_array($dir,$_PLUGINS)) {
@@ -792,8 +755,7 @@ function COM_renderMenu( &$header, $plugin_menu )
 {
     global $_CONF, $_USER, $LANG01, $topic;
 
-    if( empty( $_CONF['menu_elements'] ))
-    {
+    if ( empty( $_CONF['menu_elements'] )) {
         $_CONF['menu_elements'] = array( // default set of links
                 'contribute', 'search', 'stats', 'directory', 'plugins' );
     }
@@ -804,21 +766,17 @@ function COM_renderMenu( &$header, $plugin_menu )
     $counter = 0;
 
     $num_plugins = count( $plugin_menu );
-    if( ( $num_plugins == 0 ) && in_array( 'plugins', $_CONF['menu_elements'] ))
-    {
+    if ( ( $num_plugins == 0 ) && in_array( 'plugins', $_CONF['menu_elements'] )) {
         $key = array_search( 'plugins', $_CONF['menu_elements'] );
         unset( $_CONF['menu_elements'][$key] );
     }
 
-    if( in_array( 'custom', $_CONF['menu_elements'] ))
-    {
+    if ( in_array( 'custom', $_CONF['menu_elements'] )) {
         $custom_entries = array();
-        if( function_exists( 'CUSTOM_menuEntries' ))
-        {
+        if ( function_exists( 'CUSTOM_menuEntries' )) {
             $custom_entries = CUSTOM_menuEntries();
         }
-        if( count( $custom_entries ) == 0 )
-        {
+        if ( count( $custom_entries ) == 0 ) {
             $key = array_search( 'custom', $_CONF['menu_elements'] );
             unset( $_CONF['menu_elements'][$key] );
         }
@@ -826,56 +784,44 @@ function COM_renderMenu( &$header, $plugin_menu )
 
     $num_elements = count( $_CONF['menu_elements'] );
 
-    foreach( $_CONF['menu_elements'] as $item )
-    {
+    foreach( $_CONF['menu_elements'] as $item ) {
         $counter++;
         $allowed = true;
         $last_entry = ( $counter == $num_elements ) ? true : false;
 
-        switch( $item )
-        {
+        switch( $item ) {
             case 'contribute':
-                if( empty( $topic ))
-                {
+                if ( empty( $topic )) {
                     $url = $_CONF['site_url'] . '/submit.php?type=story';
                     $header->set_var( 'current_topic', '' );
-                }
-                else
-                {
+                } else {
                     $url = $_CONF['site_url']
                          . '/submit.php?type=story&amp;topic=' . $topic;
                     $header->set_var( 'current_topic', '&amp;topic=' . $topic );
                 }
                 $label = $LANG01[71];
-                if( $anon && ( $_CONF['loginrequired'] ||
-                        $_CONF['submitloginrequired'] ))
-                {
+                if ( $anon && ( $_CONF['loginrequired'] || $_CONF['submitloginrequired'] )) {
                     $allowed = false;
                 }
                 break;
 
             case 'custom':
                 $custom_count = 0;
-                    $custom_size = count($custom_entries);
-                foreach( $custom_entries as $entry )
-                {
+                $custom_size = count($custom_entries);
+                foreach( $custom_entries as $entry ) {
                     $custom_count++;
 
-                    if( empty( $entry['url'] ) || empty( $entry['label'] ))
-                    {
+                    if ( empty( $entry['url'] ) || empty( $entry['label'] )) {
                         continue;
                     }
 
                     $header->set_var( 'menuitem_url',  $entry['url'] );
                     $header->set_var( 'menuitem_text', $entry['label'] );
 
-                    if( $last_entry && ( $custom_count == $custom_size ))
-                    {
+                    if ( $last_entry && ( $custom_count == $custom_size )) {
                         $header->parse( 'menu_elements', 'menuitem_last',
                                         true );
-                    }
-                    else
-                    {
+                    } else {
                         $header->parse( 'menu_elements', 'menuitem', true );
                     }
                     $menuCounter++;
@@ -886,15 +832,12 @@ function COM_renderMenu( &$header, $plugin_menu )
 
             case 'directory':
                 $url = $_CONF['site_url'] . '/directory.php';
-                if( !empty( $topic ))
-                {
+                if ( !empty( $topic )) {
                     $url = COM_buildUrl( $url . '?topic='
                                          . urlencode( $topic ));
                 }
                 $label = $LANG01[117];
-                if( $anon && ( $_CONF['loginrequired'] ||
-                        $_CONF['directoryloginrequired'] ))
-                {
+                if ( $anon && ( $_CONF['loginrequired'] || $_CONF['directoryloginrequired'] )) {
                     $allowed = false;
                 }
                 break;
@@ -905,18 +848,13 @@ function COM_renderMenu( &$header, $plugin_menu )
                 break;
 
             case 'plugins':
-                for( $i = 1; $i <= $num_plugins; $i++ )
-                {
+                for( $i = 1; $i <= $num_plugins; $i++ ) {
                     $header->set_var( 'menuitem_url', current( $plugin_menu ));
                     $header->set_var( 'menuitem_text', key( $plugin_menu ));
 
-                    if( $last_entry && ( $i == $num_plugins ))
-                    {
-                        $header->parse( 'menu_elements', 'menuitem_last',
-                                        true );
-                    }
-                    else
-                    {
+                    if ( $last_entry && ( $i == $num_plugins )) {
+                        $header->parse( 'menu_elements', 'menuitem_last', true );
+                    } else {
                         $header->parse( 'menu_elements', 'menuitem', true );
                     }
                     $menuCounter++;
@@ -935,9 +873,7 @@ function COM_renderMenu( &$header, $plugin_menu )
             case 'search':
                 $url = $_CONF['site_url'] . '/search.php';
                 $label = $LANG01[75];
-                if( $anon && ( $_CONF['loginrequired'] ||
-                        $_CONF['searchloginrequired'] ))
-                {
+                if ( $anon && ( $_CONF['loginrequired'] || $_CONF['searchloginrequired'] )) {
                     $allowed = false;
                 }
                 break;
@@ -956,29 +892,20 @@ function COM_renderMenu( &$header, $plugin_menu )
                 break;
         }
 
-        if( !empty( $url ) && !empty( $label ))
-        {
+        if ( !empty( $url ) && !empty( $label )) {
             $header->set_var( 'menuitem_url',  $url );
             $header->set_var( 'menuitem_text', $label );
-            if( $last_entry )
-            {
+            if ( $last_entry ) {
                 $header->parse( 'menu_elements', 'menuitem_last', true );
-            }
-            else
-            {
+            } else {
                 $header->parse( 'menu_elements', 'menuitem', true );
             }
             $menuCounter++;
 
-            if( $allowed )
-            {
-                if( $last_entry )
-                {
-                    $header->parse( 'allowed_menu_elements', 'menuitem_last',
-                                    true );
-                }
-                else
-                {
+            if ( $allowed ) {
+                if ( $last_entry ) {
+                    $header->parse( 'allowed_menu_elements', 'menuitem_last',true );
+                } else {
                     $header->parse( 'allowed_menu_elements', 'menuitem', true );
                 }
                 $allowedCounter++;
@@ -986,12 +913,10 @@ function COM_renderMenu( &$header, $plugin_menu )
         }
     }
 
-    if( $menuCounter == 0 )
-    {
+    if ( $menuCounter == 0 ) {
         $header->parse( 'menu_elements', 'menuitem_none', true );
     }
-    if( $allowedCounter == 0 )
-    {
+    if ( $allowedCounter == 0 ) {
         $header->parse( 'allowed_menu_elements', 'menuitem_none', true );
     }
 }
@@ -1059,8 +984,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 
     $function = $_CONF['theme'] . '_siteHeader';
 
-    if( function_exists( $function ))
-    {
+    if ( function_exists( $function )) {
         return $function( $what, $pagetitle, $headercode );
     }
 
@@ -1090,26 +1014,26 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 
     $function = $_CONF['theme'] . '_headerVars';
 
-    if( function_exists( $function ))
+    if ( function_exists( $function ))
     {
         $function( $header );
     }
 
     // get topic if not on home page
-    if( !isset( $_GET['topic'] )) {
-        if( isset( $_GET['story'] )) {
+    if ( !isset( $_GET['topic'] )) {
+        if ( isset( $_GET['story'] )) {
             $sid = COM_applyFilter( $_GET['story'] );
-        } elseif( isset( $_GET['sid'] )) {
+        } elseif ( isset( $_GET['sid'] )) {
             $sid = COM_applyFilter( $_GET['sid'] );
-        } elseif( isset( $_POST['story'] )) {
+        } elseif ( isset( $_POST['story'] )) {
             $sid = COM_applyFilter( $_POST['story'] );
         }
-        if( empty( $sid ) && $_CONF['url_rewrite'] &&
+        if ( empty( $sid ) && $_CONF['url_rewrite'] &&
                 ( strpos( $_SERVER['PHP_SELF'], 'article.php' ) !== false )) {
             COM_setArgNames( array( 'story', 'mode' ));
             $sid = COM_applyFilter( COM_getArgument( 'story' ));
         }
-        if( !empty( $sid )) {
+        if ( !empty( $sid )) {
             $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='".DB_escapeString($sid)."'" );
         }
     } else {
@@ -1117,12 +1041,12 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     }
 
     $feed_url = array();
-    if( $_CONF['backend'] == 1 ) { // add feed-link to header if applicable
+    if ( $_CONF['backend'] == 1 ) { // add feed-link to header if applicable
         $baseurl = SYND_getFeedUrl();
 
         $sql = 'SELECT format, filename, title, language FROM '
              . $_TABLES['syndication'] . " WHERE (header_tid = 'all')";
-        if( !empty( $topic )) {
+        if ( !empty( $topic )) {
             $sql .= " OR (header_tid = '" . DB_escapeString( $topic ) . "')";
         }
         $result = DB_query( $sql );
@@ -1144,25 +1068,25 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     $header->set_var( 'feed_url', implode( LB, $feed_url ));
 
     $relLinks = array();
-    if( !COM_onFrontpage() ) {
+    if ( !COM_onFrontpage() ) {
         $relLinks['home'] = '<link rel="home" href="' . $_CONF['site_url']
                           . '/" title="' . $LANG01[90] . '"' . XHTML . '>';
     } else {
         CMT_updateCommentcodes();
     }
     $loggedInUser = !COM_isAnonUser();
-    if( $loggedInUser || (( $_CONF['loginrequired'] == 0 ) &&
+    if ( $loggedInUser || (( $_CONF['loginrequired'] == 0 ) &&
                 ( $_CONF['searchloginrequired'] == 0 ))) {
-        if(( substr( $_SERVER['PHP_SELF'], -strlen( '/search.php' ))
+        if (( substr( $_SERVER['PHP_SELF'], -strlen( '/search.php' ))
                 != '/search.php' ) || isset( $_GET['mode'] )) {
             $relLinks['search'] = '<link rel="search" href="'
                                 . $_CONF['site_url'] . '/search.php" title="'
                                 . $LANG01[75] . '"' . XHTML . '>';
         }
     }
-    if( $loggedInUser || (( $_CONF['loginrequired'] == 0 ) &&
+    if ( $loggedInUser || (( $_CONF['loginrequired'] == 0 ) &&
                 ( $_CONF['directoryloginrequired'] == 0 ))) {
-        if( strpos( $_SERVER['PHP_SELF'], '/article.php' ) !== false ) {
+        if ( strpos( $_SERVER['PHP_SELF'], '/article.php' ) !== false ) {
             $relLinks['contents'] = '<link rel="contents" href="'
                         . $_CONF['site_url'] . '/directory.php" title="'
                         . $LANG01[117] . '"' . XHTML . '>';
@@ -1177,23 +1101,20 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     // TBD: add a plugin API and a lib-custom.php function
     $header->set_var( 'rel_links', implode( LB, $relLinks ));
 
-    if( empty( $pagetitle ) && isset( $_CONF['pagetitle'] )) {
+    if ( empty( $pagetitle ) && isset( $_CONF['pagetitle'] )) {
         $pagetitle = $_CONF['pagetitle'];
     }
-    if( empty( $pagetitle )) {
-        if( empty( $topic )) {
+    if ( empty( $pagetitle )) {
+        if ( empty( $topic )) {
             $pagetitle = $_CONF['site_slogan'];
         } else {
-            $pagetitle = stripslashes(DB_getItem( $_TABLES['topics'], 'topic',
-                                                   "tid = '".DB_escapeString($topic)."'" ));
+            $pagetitle = DB_getItem( $_TABLES['topics'], 'topic',
+                                                   "tid = '".DB_escapeString($topic)."'" );
         }
     }
-    if( !empty( $pagetitle ))
-    {
+    if ( !empty( $pagetitle )) {
         $header->set_var( 'page_site_splitter', ' - ');
-    }
-    else
-    {
+    } else {
         $header->set_var( 'page_site_splitter', '');
     }
     $header->set_var( 'page_title', $pagetitle );
@@ -1213,7 +1134,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     }
     $header->set_var('page_title_and_site_name', $title_and_name);
 
-    if( isset( $_CONF['advanced_editor'] ) && ( $_CONF['advanced_editor'] == 1 )
+    if ( isset( $_CONF['advanced_editor'] ) && ( $_CONF['advanced_editor'] == 1 )
             && file_exists( $_CONF['path_layout']
                             . 'advanced_editor_header.thtml' )) {
         $header->set_file( 'editor'  , 'advanced_editor_header.thtml');
@@ -1226,22 +1147,22 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     }
 
     $langAttr = '';
-    if( !empty( $_CONF['languages'] ) && !empty( $_CONF['language_files'] )) {
+    if ( !empty( $_CONF['languages'] ) && !empty( $_CONF['language_files'] )) {
         $langId = COM_getLanguageId();
     } else {
         // try to derive the language id from the locale
         $l = explode( '.', $_CONF['locale'] );
         $langId = $l[0];
     }
-    if( !empty( $langId )) {
+    if ( !empty( $langId )) {
         $l = explode( '-', str_replace( '_', '-', $langId ));
-        if(( count( $l ) == 1 ) && ( strlen( $langId ) == 2 )) {
+        if (( count( $l ) == 1 ) && ( strlen( $langId ) == 2 )) {
             $langAttr = 'lang="' . $langId . '"';
-        } else if( count( $l ) == 2 ) {
-            if(( $l[0] == 'i' ) || ( $l[0] == 'x' )) {
+        } else if ( count( $l ) == 2 ) {
+            if (( $l[0] == 'i' ) || ( $l[0] == 'x' )) {
                 $langId = implode( '-', $l );
                 $langAttr = 'lang="' . $langId . '"';
-            } else if( strlen( $l[0] ) == 2 ) {
+            } else if ( strlen( $l[0] ) == 2 ) {
                 $langId = implode( '-', $l );
                 $langAttr = 'lang="' . $langId . '"';
             } else {
@@ -1258,9 +1179,6 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 
     $header->set_var( 'background_image', $_CONF['layout_url']
                                           . '/images/bg.' . $_IMAGE_TYPE );
-    $header->set_var( 'site_url', $_CONF['site_url'] );
-    $header->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
-    $header->set_var( 'layout_url', $_CONF['layout_url'] );
     $header->set_var( 'site_mail', "mailto:{$_CONF['site_mail']}" );
     $header->set_var( 'site_name', $_CONF['site_name'] );
     $header->set_var( 'site_slogan', $_CONF['site_slogan'] );
@@ -1271,13 +1189,13 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 
     $msg = $LANG01[67] . ' ' . $_CONF['site_name'];
 
-    if( !empty( $_USER['username'] ) && !COM_isAnonUser()) {
+    if ( !empty( $_USER['username'] ) && !COM_isAnonUser()) {
         $msg .= ', ' . COM_getDisplayName( $_USER['uid'], $_USER['username'],
                                            $_USER['fullname'] );
     }
 
     $curtime =  COM_getUserDateTimeFormat();
-//print $curtime[0];exit;
+
     $header->set_var( 'welcome_msg', $msg );
     $header->set_var( 'datetime', $curtime[0] );
     $header->set_var( 'site_logo', $_CONF['layout_url']
@@ -1297,7 +1215,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     $header->set_var('js_cache_url',$js_cache_url);
 
     $header->set_var( 'charset', COM_getCharset());
-    if( empty( $LANG_DIRECTION )) {
+    if ( empty( $LANG_DIRECTION )) {
         // default to left-to-right
         $header->set_var( 'direction', 'ltr' );
     } else {
@@ -1355,8 +1273,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     $function = $_CONF['theme'] . '_siteFooter';
 
-    if( function_exists( $function ))
-    {
+    if ( function_exists( $function )) {
         return $function( $rightblock, $custom );
     }
 
@@ -1382,19 +1299,19 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_var('xhtml',XHTML);
     $theme->set_var( 'num_search_results',$_CONF['num_search_results'] );
     // get topic if not on home page
-    if( !isset( $_GET['topic'] )) {
-        if( isset( $_GET['story'] )) {
+    if ( !isset( $_GET['topic'] )) {
+        if ( isset( $_GET['story'] )) {
             $sid = COM_applyFilter( $_GET['story'] );
-        } elseif( isset( $_GET['sid'] )) {
+        } elseif ( isset( $_GET['sid'] )) {
             $sid = COM_applyFilter( $_GET['sid'] );
-        } elseif( isset( $_POST['story'] )) {
+        } elseif ( isset( $_POST['story'] )) {
             $sid = COM_applyFilter( $_POST['story'] );
         }
-        if( empty( $sid ) && $_CONF['url_rewrite'] &&
+        if ( empty( $sid ) && $_CONF['url_rewrite'] &&
                 ( strpos( $_SERVER['PHP_SELF'], 'article.php' ) !== false )) {
             COM_setArgNames( array( 'story', 'mode' ));
             $sid = COM_applyFilter( COM_getArgument( 'story' ));
-        } if( !empty( $sid )) {
+        } if ( !empty( $sid )) {
             $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='".DB_escapeString($sid)."'" );
         }
     } else {
@@ -1402,18 +1319,18 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     }
 
     $loggedInUser = !COM_isAnonUser();
-    if( $loggedInUser || (( $_CONF['loginrequired'] == 0 ) &&
+    if ( $loggedInUser || (( $_CONF['loginrequired'] == 0 ) &&
                 ( $_CONF['searchloginrequired'] == 0 ))) {
-        if(( substr( $_SERVER['PHP_SELF'], -strlen( '/search.php' ))
+        if (( substr( $_SERVER['PHP_SELF'], -strlen( '/search.php' ))
                 != '/search.php' ) || isset( $_GET['mode'] )) {
             $relLinks['search'] = '<link rel="search" href="'
                                 . $_CONF['site_url'] . '/search.php" title="'
                                 . $LANG01[75] . '"' . XHTML . '>';
         }
     }
-    if( $loggedInUser || (( $_CONF['loginrequired'] == 0 ) &&
+    if ( $loggedInUser || (( $_CONF['loginrequired'] == 0 ) &&
                 ( $_CONF['directoryloginrequired'] == 0 ))) {
-        if( strpos( $_SERVER['PHP_SELF'], '/article.php' ) !== false ) {
+        if ( strpos( $_SERVER['PHP_SELF'], '/article.php' ) !== false ) {
             $relLinks['contents'] = '<link rel="contents" href="'
                         . $_CONF['site_url'] . '/directory.php" title="'
                         . $LANG01[117] . '"' . XHTML . '>';
@@ -1432,7 +1349,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     $msg = $LANG01[67] . ' ' . $_CONF['site_name'];
 
-    if( !empty( $_USER['username'] ) && !COM_isAnonUser()) {
+    if ( !empty( $_USER['username'] ) && !COM_isAnonUser()) {
         $msg .= ', ' . COM_getDisplayName( $_USER['uid'], $_USER['username'],
                                            $_USER['fullname'] );
     }
@@ -1510,14 +1427,14 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     // Get plugin menu options
     $plugin_menu = PLG_getMenuItems();
 
-    if( $_COM_VERBOSE ) {
+    if ( $_COM_VERBOSE ) {
         COM_errorLog( 'num plugin menu items in header = ' . count( $plugin_menu ), 1 );
     }
 
     // Now add nested template for menu items
     COM_renderMenu( $theme, $plugin_menu );
 
-    if( count( $plugin_menu ) == 0 ) {
+    if ( count( $plugin_menu ) == 0 ) {
         $theme->parse( 'plg_menu_elements', 'menuitem_none', true );
     } else {
         $count_plugin_menu = count( $plugin_menu );
@@ -1525,7 +1442,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
             $theme->set_var( 'menuitem_url', current( $plugin_menu ));
             $theme->set_var( 'menuitem_text', key( $plugin_menu ));
 
-            if( $i == $count_plugin_menu ) {
+            if ( $i == $count_plugin_menu ) {
                 $theme->parse( 'plg_menu_elements', 'menuitem_last', true );
             } else {
                 $theme->parse( 'plg_menu_elements', 'menuitem', true );
@@ -1540,21 +1457,21 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
      * function or custom function
      * This can be used to take control over what blocks are then displayed
      */
-    if( is_array( $what )) {
+    if ( is_array( $what )) {
         $function = $what[0];
-        if( function_exists( $function )) {
+        if ( function_exists( $function )) {
             $lblocks = $function( $what[1], 'left' );
         } else {
             $lblocks = COM_showBlocks( 'left', $topic );
         }
-    } else if( $what <> 'none' ) {
+    } else if ( $what <> 'none' ) {
         // Now show any blocks -- need to get the topic if not on home page
         $lblocks = COM_showBlocks( 'left', $topic );
     }
 
     /* Now build footer */
 
-    if( empty( $lblocks )) {
+    if ( empty( $lblocks )) {
         $theme->set_var( 'left_blocks', '' );
         $theme->set_var( 'glfusion_blocks', '' );
     } else {
@@ -1576,7 +1493,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     $year = date( 'Y' );
     $copyrightyear = $year;
-    if( !empty( $_CONF['copyrightyear'] )) {
+    if ( !empty( $_CONF['copyrightyear'] )) {
         $copyrightyear = $_CONF['copyrightyear'];
     }
     $theme->set_var( 'copyright_notice', $LANG01[93] . ' &copy; '
@@ -1596,17 +1513,17 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
      * function or custom function.
      * This can be used to take control over what blocks are then displayed
      */
-    if( is_array( $custom )) {
+    if ( is_array( $custom )) {
         $function = $custom['0'];
-        if( function_exists( $function )) {
+        if ( function_exists( $function )) {
             $rblocks = $function( $custom['1'], 'right' );
         }
-    } elseif( $rightblock == 1 || $_CONF['show_right_blocks'] == 1 ) {
+    } elseif ( $rightblock == 1 || $_CONF['show_right_blocks'] == 1 ) {
         $rblocks = '';
 
         $rblocks = COM_showBlocks( 'right', $topic );
 
-        if( empty( $rblocks )) {
+        if ( empty( $rblocks )) {
             $theme->set_var( 'glfusion_rblocks', '');
             $theme->set_var( 'right_blocks','');
             if ( empty($lblocks) ) {
@@ -1625,7 +1542,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     } else {
         $theme->set_var( 'glfusion_rblocks', '');
         $theme->set_var( 'right_blocks', '' );
-        if( empty( $lblocks )) {
+        if ( empty( $lblocks )) {
             $theme->set_var( 'centercolumn','gl_content-full' );
         } else {
             $theme->set_var( 'centercolumn','gl_content-wide-left' );
@@ -1695,22 +1612,18 @@ function COM_startBlock( $title='', $helpfile='', $template='blockheader.thtml',
     $block->set_var( 'site_url', $_CONF['site_url'] );
     $block->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
     $block->set_var( 'layout_url', $_CONF['layout_url'] );
-    $block->set_var( 'block_title', stripslashes( $title ));
-    if( !empty( $name ) ) {
+    $block->set_var( 'block_title', $title );
+    if ( !empty( $name ) ) {
         $block->set_var( 'block_id', 'id="' . $name . '" ' );
     }
 
-    if( !empty( $helpfile ))
-    {
+    if ( !empty( $helpfile )) {
         $helpimg = $_CONF['layout_url'] . '/images/button_help.' . $_IMAGE_TYPE;
         $help_content = '<img src="' . $helpimg. '" alt="?"' . XHTML . '>';
         $help_attr = array('class'=>'blocktitle');
-        if( !stristr( $helpfile, 'http://' ) && !stristr($helpfile,'https://') )
-        {
+        if ( !stristr( $helpfile, 'http://' ) && !stristr($helpfile,'https://') ) {
             $help_url = $_CONF['site_url'] . "/help/$helpfile";
-        }
-        else
-        {
+        } else {
             $help_url = $helpfile;
         }
         $help = COM_createLink($help_content, $help_url, $help_attr);
@@ -1769,23 +1682,17 @@ function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where=''
     $retval = '';
 
     $LangTableName = '';
-    if( substr( $table, 0, strlen( $_DB_table_prefix )) == $_DB_table_prefix )
-    {
+    if ( substr( $table, 0, strlen( $_DB_table_prefix )) == $_DB_table_prefix ) {
         $LangTableName = 'LANG_' . substr( $table, strlen( $_DB_table_prefix ));
-    }
-    else
-    {
+    } else {
         $LangTableName = 'LANG_' . $table;
     }
 
     global $$LangTableName;
 
-    if( isset( $$LangTableName ))
-    {
+    if ( isset( $$LangTableName )) {
         $LangTable = $$LangTableName;
-    }
-    else
-    {
+    } else {
         $LangTable = array();
     }
 
@@ -1793,41 +1700,31 @@ function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where=''
     $select_set = explode( ',', $tmp );
 
     $sql = "SELECT $selection FROM $table";
-    if( $where != '' )
-    {
+    if ( $where != '' ) {
         $sql .= " WHERE $where";
     }
     $sql .= " ORDER BY {$select_set[$sortcol]}";
     $result = DB_query( $sql );
     $nrows = DB_numRows( $result );
 
-    for( $i = 0; $i < $nrows; $i++ )
-    {
+    for( $i = 0; $i < $nrows; $i++ ) {
         $A = DB_fetchArray( $result, true );
         $retval .= '<option value="' . $A[0] . '"';
 
-        if( is_array( $selected ) AND count( $selected ) > 0 )
-        {
-            foreach( $selected as $selected_item )
-            {
-                if( $A[0] == $selected_item )
-                {
+        if ( is_array( $selected ) AND count( $selected ) > 0 ) {
+            foreach( $selected as $selected_item ) {
+                if ( $A[0] == $selected_item ) {
                     $retval .= ' selected="selected"';
                 }
             }
-        }
-        elseif( !is_array( $selected ) AND $A[0] == $selected )
-        {
+        } elseif ( !is_array( $selected ) AND $A[0] == $selected ) {
             $retval .= ' selected="selected"';
         }
 
         $retval .= '>';
-        if( empty( $LangTable[$A[0]] ))
-        {
+        if ( empty( $LangTable[$A[0]] )) {
             $retval .= $A[1];
-        }
-        else
-        {
+        } else {
             $retval .= $LangTable[$A[0]];
         }
         $retval .= '</option>' . LB;
@@ -1914,7 +1811,7 @@ function COM_topicArray($selection, $sortcol = 0, $ignorelang = false, $access =
     if (count($select_set) > 1) {
         for ($i = 0; $i < $nrows; $i++) {
             $A = DB_fetchArray($result, true);
-            $retval[$A[0]] = stripslashes($A[1]);
+            $retval[$A[0]] = $A[1];
         }
     } else {
         for ($i = 0; $i < $nrows; $i++) {
@@ -1946,21 +1843,21 @@ function COM_checkList($table, $selection, $where = '', $selected = '', $fieldna
 
     $sql = "SELECT $selection FROM $table";
 
-    if( !empty( $where )) {
+    if ( !empty( $where )) {
         $sql .= " WHERE $where";
     }
 
     $result = DB_query( $sql );
     $nrows = DB_numRows( $result );
 
-    if( !empty( $selected )) {
-        if( $_COM_VERBOSE ) {
+    if ( !empty( $selected )) {
+        if ( $_COM_VERBOSE ) {
             COM_errorLog( "exploding selected array: $selected in COM_checkList", 1 );
         }
 
         $S = explode( ' ', $selected );
     } else {
-        if( $_COM_VERBOSE) {
+        if ( $_COM_VERBOSE) {
             COM_errorLog( 'selected string was empty COM_checkList', 1 );
         }
 
@@ -1971,7 +1868,7 @@ function COM_checkList($table, $selection, $where = '', $selected = '', $fieldna
         $access = true;
         $A = DB_fetchArray( $result, true );
 
-        if( $table == $_TABLES['topics'] AND SEC_hasTopicAccess( $A['tid'] ) == 0 ) {
+        if ( $table == $_TABLES['topics'] AND SEC_hasTopicAccess( $A['tid'] ) == 0 ) {
             $access = false;
         }
 
@@ -1981,21 +1878,21 @@ function COM_checkList($table, $selection, $where = '', $selected = '', $fieldna
             $fieldname = $table;
         }
 
-        if( $access ) {
+        if ( $access ) {
             $retval .= '<li><input type="checkbox" name="' . $fieldname . '[]" value="' . $A[0] . '"';
 
             $sizeS = count( $S );
             for( $x = 0; $x < $sizeS; $x++ ) {
-                if( $A[0] == $S[$x] ) {
+                if ( $A[0] == $S[$x] ) {
                     $retval .= ' checked="checked"';
                     break;
                 }
             }
 
-            if(( $table == $_TABLES['blocks'] ) && isset( $A[2] ) && ( $A[2] == 'gldefault' )) {
-                $retval .= XHTML . '><span class="gldefault">' . stripslashes( $A[1] ) . '</span></li>' . LB;
+            if (( $table == $_TABLES['blocks'] ) && isset( $A[2] ) && ( $A[2] == 'gldefault' )) {
+                $retval .= XHTML . '><span class="gldefault">' .  $A[1]  . '</span></li>' . LB;
             } else {
-                $retval .= XHTML . '><span>' . stripslashes( $A[1] ) . '</span></li>' . LB;
+                $retval .= XHTML . '><span>' .  $A[1]  . '</span></li>' . LB;
             }
         }
     }
@@ -2018,12 +1915,10 @@ function COM_checkList($table, $selection, $where = '', $selected = '', $fieldna
 
 function COM_debug( $A )
 {
-    if( !empty( $A ))
-    {
+    if ( !empty( $A )) {
         $retval .= LB . '<pre><p>---- DEBUG ----</p>';
 
-        for( reset( $A ); $k = key( $A ); next( $A ))
-        {
+        for( reset( $A ); $k = key( $A ); next( $A )) {
             $retval .= sprintf( "<li>%13s [%s]</li>\n", $k, $A[$k] );
         }
 
@@ -2055,38 +1950,29 @@ function COM_rdfUpToDateCheck( $updated_type = '', $updated_topic = '', $updated
 {
     global $_CONF, $_TABLES;
 
-    if( $_CONF['backend'] > 0 )
-    {
-        if( !empty( $updated_type ) && ( $updated_type != 'article' ))
-        {
+    if ( $_CONF['backend'] > 0 ) {
+        if ( !empty( $updated_type ) && ( $updated_type != 'article' )) {
             // when a plugin's feed is to be updated, skip glFusion's own feeds
             $sql = "SELECT fid,type,topic,limits,update_info FROM {$_TABLES['syndication']} WHERE (is_enabled = 1) AND (type <> 'article')";
-        }
-        else
-        {
+        } else {
             $sql = "SELECT fid,type,topic,limits,update_info FROM {$_TABLES['syndication']} WHERE is_enabled = 1";
         }
         $result = DB_query( $sql );
         $num = DB_numRows( $result );
-        for( $i = 0; $i < $num; $i++)
-        {
+        for( $i = 0; $i < $num; $i++) {
             $A = DB_fetchArray( $result );
 
             $is_current = true;
-            if( $A['type'] == 'article' )
-            {
+            if ( $A['type'] == 'article' ) {
                 $is_current = SYND_feedUpdateCheck( $A['topic'],
                                 $A['update_info'], $A['limits'],
                                 $updated_topic, $updated_id );
-            }
-            else
-            {
+            } else {
                 $is_current = PLG_feedUpdateCheck( $A['type'], $A['fid'],
                                 $A['topic'], $A['update_info'], $A['limits'],
                                 $updated_type, $updated_topic, $updated_id );
             }
-            if( !$is_current )
-            {
+            if ( !$is_current ) {
                 SYND_updateFeed( $A['fid'] );
             }
         }
@@ -2129,8 +2015,7 @@ function COM_errorLog( $logentry, $actionid = '' )
 
     $retval = '';
 
-    if( !empty( $logentry ))
-    {
+    if ( !empty( $logentry )) {
         $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),
                                  $logentry );
 
@@ -2144,17 +2029,13 @@ function COM_errorLog( $logentry, $actionid = '' )
             $actionid = 3;
         }
 
-        switch( $actionid )
-        {
+        switch( $actionid ) {
             case 1:
                 $logfile = $_CONF['path_log'] . 'error.log';
 
-                if( !$file = fopen( $logfile, 'a' ))
-                {
+                if ( !$file = fopen( $logfile, 'a' )) {
                     $retval .= $LANG01[33] . ' ' . $logfile . ' (' . $timestamp . ')<br' . XHTML . '>' . LB;
-                }
-                else
-                {
+                } else {
                     fputs( $file, "$timestamp - $logentry \n" );
                 }
                 break;
@@ -2178,12 +2059,9 @@ function COM_errorLog( $logentry, $actionid = '' )
             default:
                 $logfile = $_CONF['path_log'] . 'error.log';
 
-                if( !$file = fopen( $logfile, 'a' ))
-                {
+                if ( !$file = fopen( $logfile, 'a' )) {
                     $retval .= $LANG01[33] . ' ' . $logfile . ' (' . $timestamp . ')<br' . XHTML . '>' . LB;
-                }
-                else
-                {
+                } else {
                     fputs( $file, "$timestamp - $logentry \n" );
                     if ( class_exists('Template') ) {
                         $retval .= COM_startBlock( $LANG01[34] . ' - ' . $timestamp,
@@ -2219,25 +2097,20 @@ function COM_accessLog( $logentry )
 
     $retval = '';
 
-    if( !empty( $logentry ))
-    {
+    if ( !empty( $logentry )) {
         $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),
                                  $logentry );
 
         $timestamp = strftime( '%c' );
         $logfile = $_CONF['path_log'] . 'access.log';
 
-        if( !$file = fopen( $logfile, 'a' ))
-        {
+        if ( !$file = fopen( $logfile, 'a' )) {
             return $LANG01[33] . $logfile . ' (' . $timestamp . ')<br' . XHTML . '>' . LB;
         }
 
-        if( isset( $_USER['uid'] ))
-        {
+        if ( isset( $_USER['uid'] )) {
             $byuser = $_USER['uid'] . '@' . $_SERVER['REMOTE_ADDR'];
-        }
-        else
-        {
+        } else {
             $byuser = 'anon@' . $_SERVER['REMOTE_ADDR'];
         }
 
@@ -2263,17 +2136,17 @@ function COM_showTopics( $topic='' )
     global $_CONF, $_TABLES, $_USER, $LANG01, $_BLOCK_TEMPLATE, $page;
 
     $langsql = COM_getLangSQL( 'tid' );
-    if( empty( $langsql )) {
+    if ( empty( $langsql )) {
         $op = 'WHERE';
     } else {
         $op = 'AND';
     }
 
     $sql = "SELECT tid,topic,imageurl FROM {$_TABLES['topics']}" . $langsql;
-    if( !COM_isAnonUser() ) {
+    if ( !COM_isAnonUser() ) {
         $tids = DB_getItem( $_TABLES['userindex'], 'tids',
                             "uid = {$_USER['uid']}" );
-        if( !empty( $tids )) {
+        if ( !empty( $tids )) {
             $sql .= " $op (tid NOT IN ('" . str_replace( ' ', "','", $tids )
                  . "'))" . COM_getPermSQL( 'AND' );
         } else {
@@ -2282,7 +2155,7 @@ function COM_showTopics( $topic='' )
     } else {
         $sql .= COM_getPermSQL( $op );
     }
-    if( $_CONF['sortmethod'] == 'alpha' ) {
+    if ( $_CONF['sortmethod'] == 'alpha' ) {
         $sql .= ' ORDER BY topic ASC';
     } else {
         $sql .= ' ORDER BY sortnum';
@@ -2291,7 +2164,7 @@ function COM_showTopics( $topic='' )
 
     $retval = '';
     $sections = new Template( $_CONF['path_layout'] );
-    if( isset( $_BLOCK_TEMPLATE['topicoption'] )) {
+    if ( isset( $_BLOCK_TEMPLATE['topicoption'] )) {
         $templates = explode( ',', $_BLOCK_TEMPLATE['topicoption'] );
         $sections->set_file( array( 'option'  => $templates[0],
                                     'current' => $templates[1] ));
@@ -2306,11 +2179,11 @@ function COM_showTopics( $topic='' )
     $sections->set_var( 'layout_url', $_CONF['layout_url'] );
     $sections->set_var( 'block_name', str_replace( '_', '-', 'section_block' ));
 
-    if( $_CONF['hide_home_link'] == 0 ) {
+    if ( $_CONF['hide_home_link'] == 0 ) {
         // Give a link to the homepage here since a lot of people use this for
         // navigating the site
 
-        if( COM_onFrontpage() ) {
+        if ( COM_onFrontpage() ) {
             $sections->set_var( 'option_url', '' );
             $sections->set_var( 'option_label', $LANG01[90] );
             $sections->set_var( 'option_count', '' );
@@ -2326,49 +2199,49 @@ function COM_showTopics( $topic='' )
         }
     }
 
-    if( $_CONF['showstorycount'] ) {
+    if ( $_CONF['showstorycount'] ) {
         $sql = "SELECT tid, COUNT(*) AS count FROM {$_TABLES['stories']} "
              . 'WHERE (draft_flag = 0) AND (date <= NOW()) '
              . COM_getPermSQL( 'AND' )
              . ' GROUP BY tid';
         $rcount = DB_query( $sql );
-        while( $C = DB_fetchArray( $rcount )) {
+        while ( $C = DB_fetchArray( $rcount )) {
             $storycount[$C['tid']] = $C['count'];
         }
     }
 
-    if( $_CONF['showsubmissioncount'] ) {
+    if ( $_CONF['showsubmissioncount'] ) {
         $sql = "SELECT tid, COUNT(*) AS count FROM {$_TABLES['storysubmission']} "
              . ' GROUP BY tid';
         $rcount = DB_query( $sql );
-        while( $C = DB_fetchArray( $rcount )) {
+        while ( $C = DB_fetchArray( $rcount )) {
             $submissioncount[$C['tid']] = $C['count'];
         }
     }
 
-    while( $A = DB_fetchArray( $result ) ) {
+    while ( $A = DB_fetchArray( $result ) ) {
         $topicname = $A['topic'];
         $sections->set_var( 'option_url', $_CONF['site_url']
                             . '/index.php?topic=' . $A['tid'] );
         $sections->set_var( 'option_label', $topicname );
 
         $countstring = '';
-        if( $_CONF['showstorycount'] || $_CONF['showsubmissioncount'] ) {
+        if ( $_CONF['showstorycount'] || $_CONF['showsubmissioncount'] ) {
             $countstring .= '(';
 
-            if( $_CONF['showstorycount'] ) {
-                if( empty( $storycount[$A['tid']] )) {
+            if ( $_CONF['showstorycount'] ) {
+                if ( empty( $storycount[$A['tid']] )) {
                     $countstring .= 0;
                 } else {
                     $countstring .= COM_numberFormat( $storycount[$A['tid']] );
                 }
             }
 
-            if( $_CONF['showsubmissioncount'] ) {
-                if( $_CONF['showstorycount'] ) {
+            if ( $_CONF['showsubmissioncount'] ) {
+                if ( $_CONF['showstorycount'] ) {
                     $countstring .= '/';
                 }
-                if( empty( $submissioncount[$A['tid']] )) {
+                if ( empty( $submissioncount[$A['tid']] )) {
                     $countstring .= 0;
                 } else {
                     $countstring .= COM_numberFormat( $submissioncount[$A['tid']] );
@@ -2380,14 +2253,14 @@ function COM_showTopics( $topic='' )
         $sections->set_var( 'option_count', $countstring );
 
         $topicimage = '';
-        if( !empty( $A['imageurl'] )) {
+        if ( !empty( $A['imageurl'] )) {
             $imageurl = COM_getTopicImageUrl( $A['imageurl'] );
             $topicimage = '<img src="' . $imageurl . '" alt="' . $topicname
                         . '" title="' . $topicname . '" border="0"' . XHTML . '>';
         }
         $sections->set_var( 'topic_image', $topicimage );
 
-        if(( $A['tid'] == $topic ) && ( $page == 1 ) && $topic != '') {
+        if (( $A['tid'] == $topic ) && ( $page == 1 ) && $topic != '') {
             $retval .= $sections->parse( 'item', 'inactive' );
         } else {
             $retval .= $sections->parse( 'item', 'option' );
@@ -2415,9 +2288,9 @@ function COM_userMenu( $help='', $title='', $position='' )
 
     $retval = '';
 
-    if( !COM_isAnonUser() ) {
+    if ( !COM_isAnonUser() ) {
         $usermenu = new Template( $_CONF['path_layout'] );
-        if( isset( $_BLOCK_TEMPLATE['useroption'] ))
+        if ( isset( $_BLOCK_TEMPLATE['useroption'] ))
         {
             $templates = explode( ',', $_BLOCK_TEMPLATE['useroption'] );
             $usermenu->set_file( array( 'option' => $templates[0],
@@ -2429,7 +2302,7 @@ function COM_userMenu( $help='', $title='', $position='' )
         $usermenu->set_var( 'layout_url', $_CONF['layout_url'] );
         $usermenu->set_var( 'block_name', str_replace( '_', '-', 'user_block' ));
 
-        if( empty( $title )) {
+        if ( empty( $title )) {
             $title = DB_getItem( $_TABLES['blocks'], 'title',
                                  "name='user_block'" );
         }
@@ -2445,8 +2318,7 @@ function COM_userMenu( $help='', $title='', $position='' )
 
         if (SEC_isModerator() OR
                 SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit', 'OR') OR
-                ($num_plugins > 0))
-        {
+                ($num_plugins > 0)) {
             $url = $_CONF['site_admin_url'] . '/index.php';
             $usermenu->set_var('option_label', $LANG29[34]);
             $usermenu->set_var('option_url', $url);
@@ -2464,14 +2336,14 @@ function COM_userMenu( $help='', $title='', $position='' )
             $plg = current( $plugin_options );
             $usermenu->set_var( 'option_label', $plg->adminlabel );
 
-            if( !empty( $plg->numsubmissions )) {
+            if ( !empty( $plg->numsubmissions )) {
                 $usermenu->set_var( 'option_count', '(' . $plg->numsubmissions . ')' );
             } else {
                 $usermenu->set_var( 'option_count', '' );
             }
 
             $usermenu->set_var( 'option_url', $plg->adminurl );
-            if( $thisUrl == $plg->adminurl ) {
+            if ( $thisUrl == $plg->adminurl ) {
                 $retval .= $usermenu->parse( 'item', 'current' );
             } else {
                 $retval .= $usermenu->parse( 'item', 'option' );
@@ -2483,7 +2355,7 @@ function COM_userMenu( $help='', $title='', $position='' )
         $usermenu->set_var( 'option_label', $LANG01[48] );
         $usermenu->set_var( 'option_count', '' );
         $usermenu->set_var( 'option_url', $url );
-        if( $thisUrl == $url ) {
+        if ( $thisUrl == $url ) {
             $retval .= $usermenu->parse( 'item', 'current' );
         } else {
             $retval .= $usermenu->parse( 'item', 'option' );
@@ -2505,7 +2377,7 @@ function COM_userMenu( $help='', $title='', $position='' )
         $login->set_var( 'lang_password', $LANG01[57] );
         $login->set_var( 'lang_forgetpassword', $LANG01[119] );
         $login->set_var( 'lang_login', $LANG01[58] );
-        if( $_CONF['disable_new_user_registration'] == 1 ) {
+        if ( $_CONF['disable_new_user_registration'] == 1 ) {
             $login->set_var( 'lang_signup', '' );
         } else {
             $login->set_var( 'lang_signup', $LANG01[59] );
@@ -2608,16 +2480,14 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
 
     $retval = '';
 
-    if( empty( $_USER['username'] ))
-    {
+    if ( COM_isAnonUser()) {
         return $retval;
     }
 
     $plugin_options = PLG_getAdminOptions();
     $num_plugins = count( $plugin_options );
 
-    if( SEC_isModerator() OR SEC_hasRights( 'story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit', 'OR' ) OR ( $num_plugins > 0 ))
-    {
+    if ( SEC_isModerator() OR SEC_hasRights( 'story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit', 'OR' ) OR ( $num_plugins > 0 )) {
         // what's our current URL?
         $thisUrl = COM_getCurrentURL();
 
@@ -2626,25 +2496,18 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
         }
 
         $adminmenu = new Template( $_CONF['path_layout'] );
-        if( isset( $_BLOCK_TEMPLATE['adminoption'] ))
-        {
+        if ( isset( $_BLOCK_TEMPLATE['adminoption'] )) {
             $templates = explode( ',', $_BLOCK_TEMPLATE['adminoption'] );
             $adminmenu->set_file( array( 'option' => $templates[0],
                                          'current' => $templates[1] ));
-        }
-        else
-        {
+        } else {
             $adminmenu->set_file( array( 'option' => 'adminoption.thtml',
                                          'current' => 'adminoption_off.thtml' ));
         }
-        $adminmenu->set_var( 'xhtml', XHTML );
-        $adminmenu->set_var( 'site_url', $_CONF['site_url'] );
-        $adminmenu->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
         $adminmenu->set_var( 'layout_url', $_CONF['layout_url'] );
         $adminmenu->set_var( 'block_name', str_replace( '_', '-', 'admin_block' ));
 
-        if( empty( $title ))
-        {
+        if ( empty( $title )) {
             $title = DB_getItem( $_TABLES['blocks'], 'title',
                                  "name = 'admin_block'" );
         }
@@ -2653,49 +2516,38 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
                            COM_getBlockTemplate( 'admin_block', 'header', $position ), 'admin_block' );
 
         $topicsql = '';
-        if( SEC_isModerator() || SEC_hasRights( 'story.edit' ))
-        {
+        if ( SEC_isModerator() || SEC_hasRights( 'story.edit' )) {
             $tresult = DB_query( "SELECT tid FROM {$_TABLES['topics']}"
                                  . COM_getPermSQL() );
             $trows = DB_numRows( $tresult );
-            if( $trows > 0 )
-            {
+            if ( $trows > 0 ) {
                 $tids = array();
-                for( $i = 0; $i < $trows; $i++ )
-                {
+                for( $i = 0; $i < $trows; $i++ ) {
                     $T = DB_fetchArray( $tresult );
                     $tids[] = $T['tid'];
                 }
-                if( count( $tids ) > 0 )
-                {
+                if ( count( $tids ) > 0 ) {
                     $topicsql = " (tid IN ('" . implode( "','", $tids ) . "'))";
                 }
             }
         }
 
         $modnum = 0;
-        if( SEC_hasRights( 'story.edit,story.moderate', 'OR' ) || (( $_CONF['usersubmission'] == 1 ) && SEC_hasRights( 'user.edit,user.delete' )))
-        {
+        if ( SEC_hasRights( 'story.edit,story.moderate', 'OR' ) || (( $_CONF['usersubmission'] == 1 ) && SEC_hasRights( 'user.edit,user.delete' ))) {
 
-            if( SEC_hasRights( 'story.moderate' ))
-            {
-                if( empty( $topicsql ))
-                {
+            if ( SEC_hasRights( 'story.moderate' )) {
+                if ( empty( $topicsql )) {
                     $modnum += DB_count( $_TABLES['storysubmission'] );
-                }
-                else
-                {
+                } else {
                     $sresult = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['storysubmission']} WHERE " . $topicsql );
                     $S = DB_fetchArray( $sresult );
                     $modnum += $S['count'];
                 }
             }
 
-            if(( $_CONF['listdraftstories'] == 1 ) && SEC_hasRights( 'story.edit' ))
-            {
+            if (( $_CONF['listdraftstories'] == 1 ) && SEC_hasRights( 'story.edit' )) {
                 $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (draft_flag = 1)";
-                if( !empty( $topicsql ))
-                {
+                if ( !empty( $topicsql )) {
                     $sql .= ' AND' . $topicsql;
                 }
                 $result = DB_query( $sql . COM_getPermSQL( 'AND', 0, 3 ));
@@ -2703,10 +2555,8 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
                 $modnum += $A['count'];
             }
 
-            if( $_CONF['usersubmission'] == 1 )
-            {
-                if( SEC_hasRights( 'user.edit' ) && SEC_hasRights( 'user.delete' ))
-                {
+            if ( $_CONF['usersubmission'] == 1 ) {
+                if ( SEC_hasRights( 'user.edit' ) && SEC_hasRights( 'user.delete' )) {
                     $modnum += DB_count( $_TABLES['users'], 'status', '2' );
                 }
             }
@@ -2727,17 +2577,13 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
         // now handle submissions for plugins
         $modnum += PLG_getSubmissionCount();
 
-        if( SEC_hasRights( 'story.edit' ))
-        {
+        if ( SEC_hasRights( 'story.edit' )) {
             $url = $_CONF['site_admin_url'] . '/story.php';
             $adminmenu->set_var( 'option_url', $url );
             $adminmenu->set_var( 'option_label', $LANG01[11] );
-            if( empty( $topicsql ))
-            {
+            if ( empty( $topicsql )) {
                 $numstories = DB_count( $_TABLES['stories'] );
-            }
-            else
-            {
+            } else {
                 $nresult = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE" . $topicsql . COM_getPermSql( 'AND' ));
                 $N = DB_fetchArray( $nresult );
                 $numstories = $N['count'];
@@ -2749,8 +2595,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $link_array[$LANG01[11]] = $menu_item;
         }
 
-        if( SEC_hasRights( 'block.edit' ))
-        {
+        if ( SEC_hasRights( 'block.edit' )) {
             $result = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['blocks']}" . COM_getPermSql());
             list( $count ) = DB_fetchArray( $result );
 
@@ -2764,8 +2609,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $link_array[$LANG01[12]] = $menu_item;
         }
 
-        if( SEC_hasRights( 'autotag_perm.admin' ))
-        {
+        if ( SEC_hasRights( 'autotag_perm.admin' )) {
             $url = $_CONF['site_admin_url'] . '/atperm.php';
             $adminmenu->set_var( 'option_url', $url );
             $adminmenu->set_var( 'option_label', $LANG01['autotag_perms'] );
@@ -2776,8 +2620,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $link_array[$LANG01['autotag_perms']] = $menu_item;
         }
 
-        if( SEC_hasRights( 'topic.edit' ))
-        {
+        if ( SEC_hasRights( 'topic.edit' )) {
             $result = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['topics']}" . COM_getPermSql());
             list( $count ) = DB_fetchArray( $result );
 
@@ -2791,8 +2634,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $link_array[$LANG01[13]] = $menu_item;
         }
 
-        if( SEC_hasRights( 'user.edit' ))
-        {
+        if ( SEC_hasRights( 'user.edit' )) {
             $url = $_CONF['site_admin_url'] . '/user.php';
             $adminmenu->set_var( 'option_url', $url );
             $adminmenu->set_var( 'option_label', $LANG01[17] );
@@ -2804,8 +2646,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $link_array[$LANG01[17]] = $menu_item;
         }
 
-        if( SEC_hasRights( 'group.edit' ))
-        {
+        if ( SEC_hasRights( 'group.edit' )) {
             if (SEC_inGroup('Root')) {
                 $grpFilter = '';
             } else {
@@ -2826,8 +2667,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $link_array[$LANG01[96]] = $menu_item;
         }
 
-        if( SEC_hasRights( 'user.mail' ))
-        {
+        if ( SEC_hasRights( 'user.mail' )) {
             $url = $_CONF['site_admin_url'] . '/mail.php';
             $adminmenu->set_var( 'option_url', $url );
             $adminmenu->set_var( 'option_label', $LANG01[105] );
@@ -2838,8 +2678,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $link_array[$LANG01[105]] = $menu_item;
         }
 
-        if(( $_CONF['backend'] == 1 ) && SEC_hasRights( 'syndication.edit' ))
-        {
+        if (( $_CONF['backend'] == 1 ) && SEC_hasRights( 'syndication.edit' )) {
             $url = $_CONF['site_admin_url'] . '/syndication.php';
             $adminmenu->set_var( 'option_url', $url );
             $adminmenu->set_var( 'option_label', $LANG01[38] );
@@ -2851,19 +2690,15 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $link_array[$LANG01[38]] = $menu_item;
         }
 
-        if(( $_CONF['trackback_enabled'] || $_CONF['pingback_enabled'] ||
-                $_CONF['ping_enabled'] ) && SEC_hasRights( 'story.ping' ))
-        {
+        if (( $_CONF['trackback_enabled'] || $_CONF['pingback_enabled'] ||
+                $_CONF['ping_enabled'] ) && SEC_hasRights( 'story.ping' )) {
             $url = $_CONF['site_admin_url'] . '/trackback.php';
             $adminmenu->set_var( 'option_url', $url );
             $adminmenu->set_var( 'option_label', $LANG01[116] );
-            if( $_CONF['ping_enabled'] )
-            {
+            if ( $_CONF['ping_enabled'] ) {
                 $count = COM_numberFormat( DB_count( $_TABLES['pingservice'] ));
                 $adminmenu->set_var( 'option_count', $count );
-            }
-            else
-            {
+            } else {
                 $adminmenu->set_var( 'option_count', $LANG_ADMIN['na'] );
             }
 
@@ -2910,9 +2745,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             next( $plugin_options );
         }
 
-        if(( $_CONF['allow_mysqldump'] == 1 ) AND ( $_DB_dbms == 'mysql' ) AND
-                SEC_inGroup( 'Root' ))
-        {
+        if (( $_CONF['allow_mysqldump'] == 1 ) AND ( $_DB_dbms == 'mysql' ) AND SEC_inGroup( 'Root' )) {
             $url = $_CONF['site_admin_url'] . '/database.php';
             $adminmenu->set_var( 'option_url', $url );
             $adminmenu->set_var( 'option_label', $LANG01[103] );
@@ -2923,8 +2756,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $link_array[$LANG01[103]] = $menu_item;
         }
 
-        if( SEC_inGroup( 'Root' ))
-        {
+        if ( SEC_inGroup( 'Root' )) {
             $url = $_CONF['site_admin_url'] . '/logview.php';
             $adminmenu->set_var( 'option_url', $url );
             $adminmenu->set_var( 'option_label', $LANG01['logview'] );
@@ -2935,8 +2767,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $link_array[$LANG01['logview']] = $menu_item;
         }
 
-        if( $_CONF['link_documentation'] == 1 )
-        {
+        if ( $_CONF['link_documentation'] == 1 ) {
             $doclang = COM_getLanguageName();
             if ( @file_exists($_CONF['path_html'] . 'docs/' . $doclang . '/index.html') ) {
                 $docUrl = $_CONF['site_url'].'/docs/'.$doclang.'/index.html';
@@ -2951,8 +2782,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $link_array[$LANG01[113]] = $menu_item;
         }
 
-        if( $_CONF['link_versionchecker'] == 1 AND SEC_inGroup( 'Root' ))
-        {
+        if ( $_CONF['link_versionchecker'] == 1 AND SEC_inGroup( 'Root' )) {
             $adminmenu->set_var( 'option_url',
                'http://www.glfusion.org/versionchecker.php?version=' . GVERSION . PATCHLEVEL );
             $adminmenu->set_var( 'option_label', $LANG01[107] );
@@ -2973,8 +2803,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $link_array[$LANG01[10]] = $menu_item;
         }
 
-        if ($_CONF['sort_admin'])
-        {
+        if ($_CONF['sort_admin']) {
             uksort($link_array, 'strcasecmp');
         }
 
@@ -3120,17 +2949,15 @@ function COM_checkHTML( $str, $permissions = 'story.edit' )
 {
     global $_CONF;
 
-    $str = COM_stripslashes($str);
-
     // Get rid of any newline characters
     $str = preg_replace( "/\n/", '', $str );
 
     // handle [code] ... [/code]
     do {
         $start_pos = MBYTE_strpos( MBYTE_strtolower( $str ), '[code]' );
-        if( $start_pos !== false ) {
+        if ( $start_pos !== false ) {
             $end_pos = MBYTE_strpos( MBYTE_strtolower( $str ), '[/code]' );
-            if( $end_pos !== false ) {
+            if ( $end_pos !== false ) {
                 $encoded = COM_handleCode( MBYTE_substr( $str, $start_pos + 6,
                         $end_pos - ( $start_pos + 6 )));
                 $encoded = '<pre><code>' . $encoded . '</code></pre>';
@@ -3147,14 +2974,14 @@ function COM_checkHTML( $str, $permissions = 'story.edit' )
             }
         }
     }
-    while( $start_pos !== false );
+    while ( $start_pos !== false );
 
     // handle [raw] ... [/raw]
     do {
         $start_pos = MBYTE_strpos( MBYTE_strtolower( $str ), '[raw]' );
-        if( $start_pos !== false ) {
+        if ( $start_pos !== false ) {
             $end_pos = MBYTE_strpos( MBYTE_strtolower( $str ), '[/raw]' );
-            if( $end_pos !== false ) {
+            if ( $end_pos !== false ) {
                 $encoded = COM_handleCode( MBYTE_substr( $str, $start_pos + 5,
                         $end_pos - ( $start_pos + 5 )));
                 // [raw2] to avoid infinite loop. Not HTML comment as we strip
@@ -3175,9 +3002,9 @@ function COM_checkHTML( $str, $permissions = 'story.edit' )
             }
         }
     }
-    while( $start_pos !== false );
+    while ( $start_pos !== false );
 
-    if( isset( $_CONF['skip_html_filter_for_root'] ) &&
+    if ( isset( $_CONF['skip_html_filter_for_root'] ) &&
              ( $_CONF['skip_html_filter_for_root'] == 1 ) &&
             SEC_inGroup( 'Root' )) {
         return $str;
@@ -3204,7 +3031,7 @@ function COM_filterHTML( $str, $permissions = 'story.edit' )
 {
     global $_CONF, $_SYSTEM;
 
-    if( isset( $_CONF['skip_html_filter_for_root'] ) &&
+    if ( isset( $_CONF['skip_html_filter_for_root'] ) &&
              ( $_CONF['skip_html_filter_for_root'] == 1 ) &&
             SEC_inGroup( 'Root' )) {
         return $str;
@@ -3321,25 +3148,18 @@ function COM_emailEscape( $string )
     global $_CONF;
 
     $charset = COM_getCharset();
-    if(( $charset == 'utf-8' ) && ( $string != utf8_decode( $string )))
-    {
-        if( function_exists( 'iconv_mime_encode' ))
-        {
+    if (( $charset == 'utf-8' ) && ( $string != utf8_decode( $string ))) {
+        if ( function_exists( 'iconv_mime_encode' )) {
             $mime_parameters = array( 'input-charset'  => 'utf-8',
                                       'output-charset' => 'utf-8',
                                       // 'Q' encoding is more readable than 'B'
                                       'scheme'         => 'Q'
                                     );
-            $string = substr( iconv_mime_encode( '', $string,
-                                                 $mime_parameters ), 2 );
-        }
-        else
-        {
+            $string = substr( iconv_mime_encode( '', $string, $mime_parameters ), 2 );
+        } else {
             $string = '=?' . $charset . '?B?' . base64_encode( $string ) . '?=';
         }
-    }
-    else if( preg_match( '/[^0-9a-z\-\.,:;\?! ]/i', $string ))
-    {
+    } else if ( preg_match( '/[^0-9a-z\-\.,:;\?! ]/i', $string )) {
         $string = '=?' . $charset . '?B?' . base64_encode( $string ) . '?=';
     }
 
@@ -3359,10 +3179,8 @@ function COM_formatEmailAddress( $name, $address )
 {
     $formatted_name = COM_emailEscape( $name );
     // if the name comes back unchanged, it's not UTF-8, so preg_match is fine
-    if(( $formatted_name == $name ) && preg_match( '/[^0-9a-z ]/i', $name ))
-    {
+    if (( $formatted_name == $name ) && preg_match( '/[^0-9a-z ]/i', $name )) {
         $formatted_name = str_replace( '"', '\\"', $formatted_name );
-//        $formatted_name = '"' . $formatted_name . '"';
     }
     return array($address,$formatted_name);
 }
@@ -3393,8 +3211,7 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
     $subject = substr( $subject, 0, strcspn( $subject, "\r\n" ));
     $subject = COM_emailEscape( $subject );
 
-    if( function_exists( 'CUSTOM_mail' ))
-    {
+    if ( function_exists( 'CUSTOM_mail' )) {
         return CUSTOM_mail( $to, $subject, $message, $from, $html, $priority, $cc );
     }
 
@@ -3481,7 +3298,7 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
         $mail->Priority = 1;
     }
 
-    if(!$mail->Send()) {
+    if (!$mail->Send()) {
         COM_errorLog("Email Error: " . $mail->ErrorInfo);
         return false;
     }
@@ -3504,26 +3321,21 @@ function COM_olderStuff()
     $result = DB_query( $sql );
     $nrows = DB_numRows( $result );
 
-    if( $nrows > 0 )
-    {
+    if ( $nrows > 0 ) {
         $dateonly = $_CONF['dateonly'];
-        if( empty( $dateonly ))
-        {
+        if ( empty( $dateonly )) {
             $dateonly = '%d-%b'; // fallback: day - abbrev. month name
         }
 
         $day = 'noday';
         $string = '';
 
-        for( $i = 0; $i < $nrows; $i++ )
-        {
+        for( $i = 0; $i < $nrows; $i++ ) {
             $A = DB_fetchArray( $result );
 
             $daycheck = strftime( '%A', $A['day'] );
-            if( $day != $daycheck )
-            {
-                if( $day != 'noday' )
-                {
+            if ( $day != $daycheck ) {
+                if ( $day != 'noday' ) {
                    $daylist = COM_makeList($oldnews, 'list-older-stories');
                     $daylist = str_replace(array("\015", "\012"), '', $daylist);
                     $string .= $daylist . '<br' . XHTML . '>';
@@ -3542,8 +3354,7 @@ function COM_olderStuff()
                 .' (' . COM_numberFormat( $A['comments'] ) . ')';
         }
 
-        if( !empty( $oldnews ))
-        {
+        if ( !empty( $oldnews )) {
             $daylist = COM_makeList( $oldnews, 'list-older-stories' );
             $daylist = str_replace(array("\015", "\012"), '', $daylist);
             $string .= $daylist;
@@ -3575,21 +3386,16 @@ function COM_showBlock( $name, $help='', $title='', $position='' )
 
     $retval = '';
 
-    if( !isset( $_USER['noboxes'] ))
-    {
-        if( !COM_isAnonUser() )
-        {
+    if ( !isset( $_USER['noboxes'] )) {
+        if ( !COM_isAnonUser() ) {
             $_USER['noboxes'] = DB_getItem( $_TABLES['userindex'], 'noboxes',
                                             "uid = {$_USER['uid']}" );
-        }
-        else
-        {
+        } else {
             $_USER['noboxes'] = 0;
         }
     }
 
-    switch( $name )
-    {
+    switch( $name ) {
         case 'user_block':
             $retval .= COM_userMenu( $help,$title, $position );
             break;
@@ -3606,8 +3412,7 @@ function COM_showBlock( $name, $help='', $title='', $position='' )
             break;
 
         case 'whats_new_block':
-            if( !$_USER['noboxes'] )
-            {
+            if ( !$_USER['noboxes'] ) {
                 $retval .= COM_whatsNewBlock( $help, $title, $position );
             }
             break;
@@ -3638,16 +3443,12 @@ function COM_showBlocks( $side, $topic='', $name='all' )
     $retval = '';
 
     // Get user preferences on blocks
-    if( !isset( $_USER['noboxes'] ) || !isset( $_USER['boxes'] ))
-    {
-        if( !COM_isAnonUser() )
-        {
+    if ( !isset( $_USER['noboxes'] ) || !isset( $_USER['boxes'] )) {
+        if ( !COM_isAnonUser() ) {
             $result = DB_query( "SELECT boxes,noboxes FROM {$_TABLES['userindex']} "
                                ."WHERE uid = {$_USER['uid']}" );
             list($_USER['boxes'], $_USER['noboxes']) = DB_fetchArray( $result );
-        }
-        else
-        {
+        } else {
             $_USER['boxes'] = '';
             $_USER['noboxes'] = 0;
         }
@@ -3661,33 +3462,23 @@ function COM_showBlocks( $side, $topic='', $name='all' )
 
     $commonsql = "FROM {$_TABLES['blocks']} WHERE is_enabled = 1";
 
-    if( $side == 'left' )
-    {
+    if ( $side == 'left' ) {
         $commonsql .= " AND onleft = 1";
-    }
-    else
-    {
+    } else {
         $commonsql .= " AND onleft = 0";
     }
 
-    if( !empty( $topic ))
-    {
+    if ( !empty( $topic )) {
         $commonsql .= " AND (tid = '".DB_escapeString($topic)."' OR tid = 'all')";
-    }
-    else
-    {
-        if( COM_onFrontpage() )
-        {
+    } else {
+        if ( COM_onFrontpage() ) {
             $commonsql .= " AND (tid = 'homeonly' OR tid = 'all')";
-        }
-        else
-        {
+        } else {
             $commonsql .= " AND (tid = 'all' OR tid = 'allnhp')";
         }
     }
 
-    if( !empty( $_USER['boxes'] ))
-    {
+    if ( !empty( $_USER['boxes'] )) {
         $BOXES = str_replace( ' ', ',', trim($_USER['boxes']) );
 
         $commonsql .= " AND (bid NOT IN ($BOXES) OR bid = '-1')";
@@ -3702,8 +3493,7 @@ function COM_showBlocks( $side, $topic='', $name='all' )
 
     // convert result set to an array of associated arrays
     $blocks = array();
-    for( $i = 0; $i < $nrows; $i++ )
-    {
+    for( $i = 0; $i < $nrows; $i++ ) {
         $blocks[] = DB_fetchArray( $result );
     }
 
@@ -3715,12 +3505,9 @@ function COM_showBlocks( $side, $topic='', $name='all' )
     $column = 'blockorder';
     $sortedBlocks = $blocks;
     $num_sortedBlocks = count( $sortedBlocks );
-    for( $i = 0; $i < $num_sortedBlocks - 1; $i++ )
-    {
-        for( $j = 0; $j < $num_sortedBlocks - 1 - $i; $j++ )
-        {
-            if( $sortedBlocks[$j][$column] > $sortedBlocks[$j+1][$column] )
-            {
+    for( $i = 0; $i < $num_sortedBlocks - 1; $i++ ) {
+        for( $j = 0; $j < $num_sortedBlocks - 1 - $i; $j++ ) {
+            if ( $sortedBlocks[$j][$column] > $sortedBlocks[$j+1][$column] ) {
                 $tmp = $sortedBlocks[$j];
                 $sortedBlocks[$j] = $sortedBlocks[$j + 1];
                 $sortedBlocks[$j + 1] = $tmp;
@@ -3731,10 +3518,8 @@ function COM_showBlocks( $side, $topic='', $name='all' )
 
     // Loop though resulting sorted array and pass associative arrays
     // to COM_formatBlock
-    foreach( $blocks as $A )
-    {
-        if( $A['type'] == 'dynamic' or SEC_hasAccess( $A['owner_id'], $A['group_id'], $A['perm_owner'], $A['perm_group'], $A['perm_members'], $A['perm_anon'] ) > 0 )
-        {
+    foreach( $blocks as $A ) {
+        if ( $A['type'] == 'dynamic' or SEC_hasAccess( $A['owner_id'], $A['group_id'], $A['perm_owner'], $A['perm_group'], $A['perm_members'], $A['perm_anon'] ) > 0 ) {
            $retval .= COM_formatBlock( $A, $_USER['noboxes'] );
         }
     }
@@ -3762,17 +3547,10 @@ function COM_formatBlock( $A, $noboxes = false )
     $lang = COM_getLanguageId();
     if (!empty($lang)) {
 
-        $blocksql['mssql']  = "SELECT bid, is_enabled, name, type, title, tid, blockorder, cast(content as text) as content, ";
-        $blocksql['mssql'] .= "rdfurl, rdfupdated, rdflimit, onleft, phpblockfn, help, owner_id, ";
-        $blocksql['mssql'] .= "group_id, perm_owner, perm_group, perm_members, perm_anon, allow_autotags,UNIX_TIMESTAMP(rdfupdated) AS date ";
+        $blocksql = "SELECT *,UNIX_TIMESTAMP(rdfupdated) AS date ";
+        $commonsql = "FROM {$_TABLES['blocks']} WHERE name = '" . $A['name'] . '_' . $lang . "'";
+        $blocksql .= $commonsql;
 
-        $blocksql['mysql'] = "SELECT *,UNIX_TIMESTAMP(rdfupdated) AS date ";
-
-        $commonsql = "FROM {$_TABLES['blocks']} WHERE name = '"
-                   . $A['name'] . '_' . $lang . "'";
-
-        $blocksql['mysql'] .= $commonsql;
-        $blocksql['mssql'] .= $commonsql;
         $result = DB_query( $blocksql );
 
         if (DB_numRows($result) == 1) {
@@ -3781,10 +3559,8 @@ function COM_formatBlock( $A, $noboxes = false )
         }
     }
 
-    if( array_key_exists( 'onleft', $A ) )
-    {
-        if( $A['onleft'] == 1 )
-        {
+    if ( array_key_exists( 'onleft', $A ) ) {
+        if ( $A['onleft'] == 1 ) {
             $position = 'left';
         } else {
             $position = 'right';
@@ -3793,28 +3569,22 @@ function COM_formatBlock( $A, $noboxes = false )
         $position = '';
     }
 
-    if( $A['type'] == 'portal' )
-    {
-        if( COM_rdfCheck( $A['bid'], $A['rdfurl'], $A['date'], $A['rdflimit'] ))
-        {
+    if ( $A['type'] == 'portal' ) {
+        if ( COM_rdfCheck( $A['bid'], $A['rdfurl'], $A['date'], $A['rdflimit'] )) {
             $A['content'] = DB_getItem( $_TABLES['blocks'], 'content',
                                         "bid = '{$A['bid']}'");
         }
     }
 
-    if( $A['type'] == 'gldefault' )
-    {
+    if ( $A['type'] == 'gldefault' ) {
         $retval .= COM_showBlock( $A['name'], $A['help'], $A['title'], $position );
     }
 
-    if( $A['type'] == 'phpblock' && !$noboxes )
-    {
-        if( !( $A['name'] == 'whosonline_block' AND DB_getItem( $_TABLES['blocks'], 'is_enabled', "name='whosonline_block'" ) == 0 ))
-        {
+    if ( $A['type'] == 'phpblock' && !$noboxes ) {
+        if ( !( $A['name'] == 'whosonline_block' AND DB_getItem( $_TABLES['blocks'], 'is_enabled', "name='whosonline_block'" ) == 0 )) {
             $function = $A['phpblockfn'];
             $matches = array();
-            if (preg_match('/^(phpblock_\w*)\\((.*)\\)$/', $function, $matches) == 1)
-            {
+            if (preg_match('/^(phpblock_\w*)\\((.*)\\)$/', $function, $matches) == 1) {
                 $function = $matches[1];
                 $args = $matches[2];
             }
@@ -3823,23 +3593,18 @@ function COM_formatBlock( $A, $noboxes = false )
             $blkfooter = COM_endBlock( COM_getBlockTemplate( $A['name'],
                     'footer', $position ));
 
-            if( function_exists( $function ))
-            {
-               if (isset($args))
-               {
+            if ( function_exists( $function )) {
+               if (isset($args)) {
                     $fretval = $function($A, $args);
                } else {
                     $fretval = $function();
                }
-               if( !empty( $fretval ))
-               {
+               if ( !empty( $fretval )) {
                     $retval .= $blkheader;
                     $retval .= $fretval;
                     $retval .= $blkfooter;
                }
-            }
-            else
-            {
+            } else {
                 // show error message
                 $retval .= $blkheader;
                 $retval .= sprintf( $LANG21[31], $function );
@@ -3848,22 +3613,19 @@ function COM_formatBlock( $A, $noboxes = false )
         }
     }
 
-    if( !empty( $A['content'] ) && ( trim( $A['content'] ) != '' ) && !$noboxes )
-    {
-        $blockcontent = stripslashes( $A['content'] );
+    if ( !empty( $A['content'] ) && ( trim( $A['content'] ) != '' ) && !$noboxes ) {
+        $blockcontent =  $A['content'] ;
 
         // Hack: If the block content starts with a '<' assume it
         // contains HTML and do not call nl2br() which would only add
         // unwanted <br> tags.
 
-        if( substr( $blockcontent, 0, 1 ) != '<' )
-        {
+        if ( substr( $blockcontent, 0, 1 ) != '<' ) {
             $blockcontent = nl2br( $blockcontent );
         }
 
         // autotags are only(!) allowed in normal blocks
-        if(( $A['allow_autotags'] == 1 ) && ( $A['type'] == 'normal' ))
-        {
+        if (( $A['allow_autotags'] == 1 ) && ( $A['type'] == 'normal' )) {
             $blockcontent = PLG_replaceTags( $blockcontent,'glfusion','block' );
         }
         $blockcontent = str_replace( array( '<?', '?>' ), '', $blockcontent );
@@ -3896,8 +3658,7 @@ function COM_rdfCheck( $bid, $rdfurl, $date, $maxheadlines = 0 )
     $retval = false;
     $nextupdate = $date + 3600;
 
-    if( $nextupdate < time() )
-    {
+    if ( $nextupdate < time() ) {
         COM_rdfImport( $bid, $rdfurl, $maxheadlines );
         $retval = true;
     }
@@ -4041,15 +3802,15 @@ function COM_allowedHTML( $permissions = 'story.edit', $list_only = false, $name
     $retval = '';
 
     $allow_page_break = false;
-    if( isset( $_CONF['skip_html_filter_for_root'] ) &&
+    if ( isset( $_CONF['skip_html_filter_for_root'] ) &&
              ( $_CONF['skip_html_filter_for_root'] == 1 ) &&
             SEC_inGroup( 'Root' )) {
-        if( !$list_only ) {
+        if ( !$list_only ) {
             $retval .= '<span class="warningsmall">' . $LANG01[123] . '</span>, ';
         }
 
     } else {
-        if( !$list_only ) {
+        if ( !$list_only ) {
             $retval .= '<span class="warningsmall">' . $LANG01[31] . ' ';
         }
 
@@ -4059,7 +3820,7 @@ function COM_allowedHTML( $permissions = 'story.edit', $list_only = false, $name
 
     $retval .= '[code], [raw]';
 
-    if( $allow_page_break ) {
+    if ( $allow_page_break ) {
         $retval .= ', [page_break]';
     }
 
@@ -4069,7 +3830,7 @@ function COM_allowedHTML( $permissions = 'story.edit', $list_only = false, $name
         $retval .= ', [' . $tag . ':]';
     }
 
-    if( !$list_only ) {
+    if ( !$list_only ) {
         $retval .= '</span>';
     }
 
@@ -4094,13 +3855,10 @@ function COM_getPassword( $loginname )
     $tmp = DB_error();
     $nrows = DB_numRows( $result );
 
-    if(( $tmp == 0 ) && ( $nrows == 1 ))
-    {
+    if (( $tmp == 0 ) && ( $nrows == 1 )) {
         $U = DB_fetchArray( $result );
         return $U['passwd'];
-    }
-    else
-    {
+    } else {
         $tmp = $LANG01[32] . ": '" . $loginname . "'";
         COM_errorLog( $tmp, 1 );
     }
@@ -4229,7 +3987,7 @@ function COM_emailUserTopics()
         $tresult   = DB_query( $topicsql );
         $trows     = DB_numRows( $tresult );
 
-        if( $trows == 0 ) {
+        if ( $trows == 0 ) {
             // this user doesn't seem to have access to any topics ...
             continue;
         }
@@ -4240,12 +3998,12 @@ function COM_emailUserTopics()
             $TIDS[] = $T['tid'];
         }
 
-        if( !empty( $U['etids'] )) {
+        if ( !empty( $U['etids'] )) {
             $ETIDS = explode( ' ', $U['etids'] );
             $TIDS = array_intersect( $TIDS, $ETIDS );
         }
 
-        if( sizeof( $TIDS ) > 0) {
+        if ( sizeof( $TIDS ) > 0) {
             $commonsql .= " AND (tid IN ('" . implode( "','", $TIDS ) . "'))";
         }
 
@@ -4257,7 +4015,7 @@ function COM_emailUserTopics()
         $stories = DB_query( $storysql );
         $nsrows  = DB_numRows( $stories );
 
-        if( $nsrows == 0 ) {
+        if ( $nsrows == 0 ) {
             // If no new stories where pulled for this user, continue with next
             continue;
         }
@@ -4287,7 +4045,7 @@ function COM_emailUserTopics()
             $args = array ( 'sid' => $S['sid'],'mode' => 'view');
             $output = STORY_LOADED_OK;
             $result = PLG_invokeService('story', 'get', $args, $output, $svc_msg);
-            if($result == PLG_RET_OK) {
+            if ($result == PLG_RET_OK) {
                 /* loadFromArray cannot be used, since it overwrites the timestamp */
                 reset($story->_dbFields);
 
@@ -4302,9 +4060,9 @@ function COM_emailUserTopics()
                $story->_fullname = $output['fullname'];
             }
             $story_url = COM_buildUrl( $_CONF['site_url'] . '/article.php?story=' . $S['sid'] );
-            $title     = COM_undoSpecialChars( stripslashes( $S['title'] ));
-            if( $_CONF['contributedbyline'] == 1 ) {
-                if( empty( $authors[$S['uid']] )) {
+            $title     = COM_undoSpecialChars(  $S['title'] );
+            if ( $_CONF['contributedbyline'] == 1 ) {
+                if ( empty( $authors[$S['uid']] )) {
                     $storyauthor = COM_getDisplayName ($S['uid']);
                     $authors[$S['uid']] = $storyauthor;
                 } else {
@@ -4314,11 +4072,11 @@ function COM_emailUserTopics()
 
             $story_date = strftime( $_CONF['date'], strtotime( $S['day' ]));
 
-            if( $_CONF['emailstorieslength'] > 0 ) {
-                $storytext      = COM_undoSpecialChars( strip_tags( PLG_replaceTags( stripslashes( $S['introtext'] ),'glfusion','story')));
-                $storytext_text = COM_undoSpecialChars( strip_tags( PLG_replaceTags( stripslashes( $S['introtext'] ),'glfusion','story')));
+            if ( $_CONF['emailstorieslength'] > 0 ) {
+                $storytext      = COM_undoSpecialChars( strip_tags( PLG_replaceTags( $S['introtext'],'glfusion','story')));
+                $storytext_text = COM_undoSpecialChars( strip_tags( PLG_replaceTags( $S['introtext'],'glfusion','story')));
 
-                if( $_CONF['emailstorieslength'] > 1 ) {
+                if ( $_CONF['emailstorieslength'] > 1 ) {
                     $storytext = COM_truncate( $storytext,$_CONF['emailstorieslength'], '...' );
                     $storytext_text = COM_truncate( $storytext_text,$_CONF['emailstorieslength'], '...' );
                 }
@@ -4403,16 +4161,16 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                        COM_getBlockTemplate( 'whats_new_block', 'header', $position ), 'whats_new_block' );
 
     $topicsql = '';
-    if(( $_CONF['hidenewstories'] == 0 ) || ( $_CONF['hidenewcomments'] == 0 )
+    if (( $_CONF['hidenewstories'] == 0 ) || ( $_CONF['hidenewcomments'] == 0 )
             || ( $_CONF['trackback_enabled']
             && ( $_CONF['hidenewtrackbacks'] == 0 ))) {
         $topicsql = COM_getTopicSql ('AND', 0, $_TABLES['stories']);
     }
 
-    if( $_CONF['hidenewstories'] == 0 ) {
+    if ( $_CONF['hidenewstories'] == 0 ) {
         $archsql = '';
         $archivetid = DB_getItem( $_TABLES['topics'], 'tid', "archive_flag=1" );
-        if( !empty( $archivetid )) {
+        if ( !empty( $archivetid )) {
             $archsql = " AND (tid <> '" . DB_escapeString( $archivetid ) . "')";
         }
 
@@ -4422,18 +4180,18 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         $result = DB_query( $sql );
         $nrows  = DB_numRows( $result );
 
-        if( empty( $title )) {
+        if ( empty( $title )) {
             $title = DB_getItem( $_TABLES['blocks'], 'title', "name='whats_new_block'" );
         }
 
         // Any late breaking news stories?
         $retval .= '<h3>' . $LANG01[99] . '</h3>';
 
-        if( $nrows > 0 ) {
+        if ( $nrows > 0 ) {
             $newmsg = COM_formatTimeString( $LANG_WHATSNEW['new_string'],
                         $_CONF['newstoriesinterval'], $LANG01[11], $nrows);
 
-            if( $newstories && ( $page < 2 )) {
+            if ( $newstories && ( $page < 2 )) {
                 $retval .= $newmsg . '<br' . XHTML . '>';
             } else {
                 $newstory = array();
@@ -4451,14 +4209,14 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
             $retval .= $LANG01[100] . '<br' . XHTML . '>';
         }
 
-        if(( $_CONF['hidenewcomments'] == 0 ) || ( $_CONF['trackback_enabled']
+        if (( $_CONF['hidenewcomments'] == 0 ) || ( $_CONF['trackback_enabled']
                 && ( $_CONF['hidenewtrackbacks'] == 0 ))
                 || ( $_CONF['hidenewplugins'] == 0 )) {
             $retval .= '<br' . XHTML . '>';
         }
     }
 
-    if( $_CONF['hidenewcomments'] == 0 ) {
+    if ( $_CONF['hidenewcomments'] == 0 ) {
         // Go get the newest comments
         $retval .= '<h3>' . $LANG01[83] . ' <small>'
                 . COM_formatTimeString( $LANG_WHATSNEW['new_last'],
@@ -4472,7 +4230,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 
         $stwhere = '';
 
-        if( !COM_isAnonUser() ) {
+        if ( !COM_isAnonUser() ) {
             $stwhere .= "({$_TABLES['stories']}.owner_id IS NOT NULL AND {$_TABLES['stories']}.perm_owner IS NOT NULL) OR ";
             $stwhere .= "({$_TABLES['stories']}.group_id IS NOT NULL AND {$_TABLES['stories']}.perm_group IS NOT NULL) OR ";
             $stwhere .= "({$_TABLES['stories']}.perm_members IS NOT NULL)";
@@ -4499,18 +4257,18 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 
         $nrows = count($commentrow);
 
-        if( $nrows > 0 ) {
+        if ( $nrows > 0 ) {
             $newcomments = array();
             for( $x = 0; $x < $nrows; $x++ ) {
                 $titletouse = '';
                 $url = $commentrow[$x]['url'];
-                $title = COM_undoSpecialChars( stripslashes( $commentrow[$x]['title'] ));
+                $title = COM_undoSpecialChars( $commentrow[$x]['title'] );
                 $title = str_replace('&nbsp;',' ',$title);
                 $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],
                                             '...' );
                 $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
 
-                if( $commentrow[$x]['dups'] > 1 ) {
+                if ( $commentrow[$x]['dups'] > 1 ) {
                     $titletouse .= ' [+' . $commentrow[$x]['dups'] . ']';
                 }
 
@@ -4529,7 +4287,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         }
     }
 
-    if( $_CONF['trackback_enabled'] && ( $_CONF['hidenewtrackbacks'] == 0 )) {
+    if ( $_CONF['trackback_enabled'] && ( $_CONF['hidenewtrackbacks'] == 0 )) {
         $retval .= '<h3>' . $LANG01[114] . ' <small>'
                 . COM_formatTimeString( $LANG_WHATSNEW['new_last'],
                                         $_CONF['newtrackbackinterval'] )
@@ -4539,7 +4297,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         $result = DB_query( $sql );
 
         $nrows = DB_numRows( $result );
-        if( $nrows > 0 ) {
+        if ( $nrows > 0 ) {
             $newcomments = array();
 
             for( $i = 0; $i < $nrows; $i++ ) {
@@ -4549,12 +4307,12 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                 $url = COM_buildUrl( $_CONF['site_url']
                     . '/article.php?story=' . $A['sid'] ) . '#trackback';
 
-                $title = COM_undoSpecialChars( stripslashes( $A['title'] ));
+                $title = COM_undoSpecialChars( $A['title'] );
                 $title = str_replace('&nbsp;',' ',$title);
                 $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],'...' );
 
                 $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
-                if( $A['count'] > 1 ) {
+                if ( $A['count'] > 1 ) {
                     $titletouse .= ' [+' . $A['count'] . ']';
                 }
 
@@ -4566,25 +4324,25 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
             $retval .= $LANG01[115] . '<br' . XHTML . '>' . LB;
         }
 
-        if( $_CONF['hidenewplugins'] == 0 ) {
+        if ( $_CONF['hidenewplugins'] == 0 ) {
             $retval .= '<br' . XHTML . '>';
         }
     }
 
-    if( $_CONF['hidenewplugins'] == 0 ) {
+    if ( $_CONF['hidenewplugins'] == 0 ) {
         list( $headlines, $smallheadlines, $content ) = PLG_getWhatsNew();
         $plugins = count( $headlines );
-        if( $plugins > 0 ) {
+        if ( $plugins > 0 ) {
             for( $i = 0; $i < $plugins; $i++ ) {
                 $retval .= '<h3>' . $headlines[$i] . ' <small>'
                         . $smallheadlines[$i] . '</small></h3>';
-                if( is_array( $content[$i] )) {
+                if ( is_array( $content[$i] )) {
                     $retval .= COM_makeList( $content[$i], 'list-new-plugins' );
                 } else {
                     $retval .= $content[$i];
                 }
 
-                if( $i + 1 < $plugins ) {
+                if ( $i + 1 < $plugins ) {
                     $retval .= '<br' . XHTML . '>';
                 }
             }
@@ -4626,25 +4384,17 @@ function COM_formatTimeString( $time_string, $time, $type = '', $amount = 0 )
     $times_description = array( 'minutes', 'hours', 'days', 'weeks', 'months' );
 
     $time_dividers = count( $time_divider );
-    for( $s = 0; $s < $time_dividers; $s++ )
-    {
+    for( $s = 0; $s < $time_dividers; $s++ ) {
         $time = $time / $time_divider[$s];
-        if( $time < $time_divider[$s + 1] )
-        {
-            if( $time == 1 )
-            {
-                if( $s == 0 )
-                {
+        if ( $time < $time_divider[$s + 1] ) {
+            if ( $time == 1 ) {
+                if ( $s == 0 ) {
                     $time_str = $time_description[$s];
-                }
-                else // go back to the previous unit, e.g. 1 day -> 24 hours
-                {
+                } else { // go back to the previous unit, e.g. 1 day -> 24 hours
                     $time_str = $times_description[$s - 1];
                     $time *= $time_divider[$s];
                 }
-            }
-            else
-            {
+            } else {
                 $time_str = $times_description[$s];
             }
             $fields = array( '%n', '%i', '%t', '%s' );
@@ -4779,60 +4529,44 @@ function COM_printPageNavigation( $base_url, $curpage, $num_pages,
 
     $retval = '';
 
-    if( $num_pages < 2 )
-    {
+    if ( $num_pages < 2 ) {
         return;
     }
 
-    if( !$do_rewrite )
-    {
+    if ( !$do_rewrite ) {
         $hasargs = strstr( $base_url, '?' );
-        if( $hasargs )
-        {
+        if ( $hasargs ) {
             $sep = '&amp;';
-        }
-        else
-        {
+        } else {
             $sep = '?';
         }
-    }
-    else
-    {
+    } else {
         $sep = '/';
         $page_str = '';
     }
 
-    if( $curpage > 1 )
-    {
+    if ( $curpage > 1 ) {
         $retval .= COM_createLink($LANG05[7], $base_url) . ' | ';
         $pg = '';
-        if( ( $curpage - 1 ) > 1 )
-        {
+        if ( ( $curpage - 1 ) > 1 ) {
             $pg = $sep . $page_str . ( $curpage - 1 );
         }
         $retval .= COM_createLink($LANG05[6], $base_url . $pg ) . ' | ';
-    }
-    else
-    {
+    } else {
         $retval .= $LANG05[7] . ' | ' ;
         $retval .= $LANG05[6] . ' | ' ;
     }
 
-    for( $pgcount = ( $curpage - 10 ); ( $pgcount <= ( $curpage + 9 )) AND ( $pgcount <= $num_pages ); $pgcount++ )
-    {
-        if( $pgcount <= 0 )
-        {
+    for( $pgcount = ( $curpage - 10 ); ( $pgcount <= ( $curpage + 9 )) AND ( $pgcount <= $num_pages ); $pgcount++ ) {
+        if ( $pgcount <= 0 ) {
             $pgcount = 1;
         }
 
-        if( $pgcount == $curpage )
-        {
+        if ( $pgcount == $curpage ) {
             $retval .= '<b>' . $pgcount . '</b> ';
-        }
-        else
-        {
+        } else {
             $pg = '';
-            if( $pgcount > 1 )
+            if ( $pgcount > 1 )
             {
                 $pg = $sep . $page_str . $pgcount;
             }
@@ -4840,27 +4574,20 @@ function COM_printPageNavigation( $base_url, $curpage, $num_pages,
         }
     }
 
-    if( !empty( $open_ended ))
-    {
+    if ( !empty( $open_ended )) {
         $retval .= '| ' . $open_ended;
-    }
-    else if( $curpage == $num_pages )
-    {
+    } else if ( $curpage == $num_pages ) {
         $retval .= '| ' . $LANG05[5] . ' ';
         $retval .= '| ' . $LANG05[8];
-    }
-    else
-    {
+    } else {
         $retval .= '| ' . COM_createLink($LANG05[5], $base_url . $sep
                                          . $page_str . ($curpage + 1));
         $retval .= ' | ' . COM_createLink($LANG05[8], $base_url . $sep
                                           . $page_str . $num_pages);
     }
 
-    if( !empty( $retval ))
-    {
-        if( !empty( $msg ))
-        {
+    if ( !empty( $retval )) {
+        if ( !empty( $msg )) {
             $msg .=  ' ';
         }
         $retval = '<div class="pagenav">' . $msg . $retval . '</div>';
@@ -4887,9 +4614,8 @@ function COM_getUserDateTimeFormat( $date='' )
 
     // Get display format for time
 
-    if( !COM_isAnonUser() ) {
-        if( empty( $_USER['format'] ))
-        {
+    if ( !COM_isAnonUser() ) {
+        if ( empty( $_USER['format'] )) {
             $dateformat = $_CONF['date'];
         } else {
             $dateformat = $_USER['format'];
@@ -4898,10 +4624,10 @@ function COM_getUserDateTimeFormat( $date='' )
         $dateformat = $_CONF['date'];
     }
 
-    if( empty( $date )) {
+    if ( empty( $date )) {
         // Date is empty, get current date/time
         $stamp = time();
-    } else if( is_numeric( $date )) {
+    } else if ( is_numeric( $date )) {
         // This is a timestamp
         $stamp = $date;
     } else {
@@ -4931,123 +4657,20 @@ function COM_getUserCookieTimeout()
 {
     global $_TABLES, $_USER, $_CONF;
 
-    if( empty( $_USER ))
-    {
+    if ( empty( $_USER )) {
         return;
     }
 
     $timeoutvalue = DB_getItem( $_TABLES['users'], 'cookietimeout', "uid = {$_USER['uid']}" );
 
-    if( empty( $timeoutvalue ))
-    {
+    if ( empty( $timeoutvalue )) {
         $timeoutvalue = 0;
     }
 
     return $timeoutvalue;
 }
 
-/**
-* Shows who is online in slick little block
-* @return   string  HTML string of online users seperated by line breaks.
-*/
 
-function phpblock_whosonline()
-{
-    global $_CONF, $_TABLES, $_USER, $LANG01, $_IMAGE_TYPE;
-
-    $retval = '';
-
-    $expire_time = time() - $_CONF['whosonline_threshold'];
-
-    $byname = 'username';
-    if( $_CONF['show_fullname'] == 1 )
-    {
-        $byname .= ',fullname';
-    }
-    if( $_CONF['user_login_method']['openid'] || $_CONF['user_login_method']['3rdparty'] )
-    {
-        $byname .= ',remoteusername,remoteservice';
-    }
-
-    $result = DB_query( "SELECT DISTINCT {$_TABLES['sessions']}.uid,{$byname},photo,showonline FROM {$_TABLES['sessions']},{$_TABLES['users']},{$_TABLES['userprefs']} WHERE {$_TABLES['users']}.uid = {$_TABLES['sessions']}.uid AND {$_TABLES['users']}.uid = {$_TABLES['userprefs']}.uid AND start_time >= $expire_time AND {$_TABLES['sessions']}.uid <> 1 ORDER BY {$byname}" );
-    $nrows = DB_numRows( $result );
-
-    $num_anon = 0;
-    $num_reg  = 0;
-
-    for( $i = 0; $i < $nrows; $i++ )
-    {
-        $A = DB_fetchArray( $result );
-
-        if( $A['showonline'] == 1 )
-        {
-            $fullname = '';
-            if( $_CONF['show_fullname'] == 1 )
-            {
-                $fullname = $A['fullname'];
-            }
-            if( $_CONF['user_login_method']['openid'] || $_CONF['user_login_method']['3rdparty'] )
-            {
-                $username = COM_getDisplayName( $A['uid'], $A['username'],
-                        $fullname, $A['remoteusername'], $A['remoteservice'] );
-            }
-            else
-            {
-                $username = COM_getDisplayName( $A['uid'], $A['username'],
-                                                $fullname );
-            }
-
-            $url = $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $A['uid'];
-            $retval .= COM_createLink($username, $url);
-
-            if (!empty( $A['photo'] ) AND $_CONF['allow_user_photo'] == 1) {
-                if ($_CONF['whosonline_photo'] == true) {
-                    $usrimg = '<img src="' . $_CONF['site_url']
-                            . '/images/userphotos/' . $A['photo']
-                            . '" alt="" height="30" width="30"' . XHTML . '>';
-                } else {
-                    $usrimg = '<img src="' . $_CONF['layout_url']
-                            . '/images/smallcamera.' . $_IMAGE_TYPE
-                            . '" border="0" alt=""' . XHTML . '>';
-                }
-                $retval .= '&nbsp;' . COM_createLink($usrimg, $url);
-            }
-
-            $retval .= '<br' . XHTML . '>';
-            $num_reg++;
-        }
-        else
-        {
-            // this user does not want to show up in Who's Online
-            $num_anon++; // count as anonymous
-        }
-    }
-
-    $num_anon += DB_count( $_TABLES['sessions'], 'uid', 1 );
-
-    if(( $_CONF['whosonline_anonymous'] == 1 ) &&
-            COM_isAnonUser() )
-    {
-        // note that we're overwriting the contents of $retval here
-        if( $num_reg > 0 )
-        {
-            $retval = $LANG01[112] . ': ' . COM_numberFormat($num_reg)
-                    . '<br' . XHTML . '>';
-        }
-        else
-        {
-            $retval = '';
-        }
-    }
-
-    if( $num_anon > 0 )
-    {
-        $retval .= $LANG01[41] . ': ' . COM_numberFormat($num_anon)
-                . '<br' . XHTML . '>';
-    }
-
-    return $retval;
-}
 
 /**
 * Gets the <option> values for calendar months
@@ -5066,13 +4689,11 @@ function COM_getMonthFormOptions( $selected = '' )
 
     $month_options = '';
 
-    for( $i = 1; $i <= 12; $i++ )
-    {
+    for( $i = 1; $i <= 12; $i++ ) {
         $mval = $i;
         $month_options .= '<option value="' . $mval . '"';
 
-        if( $i == $selected )
-        {
+        if ( $i == $selected ) {
             $month_options .= ' selected="selected"';
         }
 
@@ -5097,21 +4718,16 @@ function COM_getDayFormOptions( $selected = '' )
 {
     $day_options = '';
 
-    for( $i = 1; $i <= 31; $i++ )
-    {
-        if( $i < 10 )
-        {
+    for( $i = 1; $i <= 31; $i++ ) {
+        if ( $i < 10 ) {
             $dval = '0' . $i;
-        }
-        else
-        {
+        } else {
             $dval = $i;
         }
 
         $day_options .= '<option value="' . $dval . '"';
 
-        if( $i == $selected )
-        {
+        if ( $i == $selected ) {
             $day_options .= ' selected="selected"';
         }
 
@@ -5179,25 +4795,18 @@ function COM_getHourFormOptions( $selected = '', $mode = 12 )
 {
     $hour_options = '';
 
-    if( $mode == 12 )
-    {
-        for( $i = 1; $i <= 11; $i++ )
-        {
-            if( $i < 10 )
-            {
+    if ( $mode == 12 ) {
+        for( $i = 1; $i <= 11; $i++ ) {
+            if ( $i < 10 ) {
                 $hval = '0' . $i;
-            }
-            else
-            {
+            } else {
                 $hval = $i;
             }
 
-            if( $i == 1 )
-            {
+            if ( $i == 1 ) {
                 $hour_options .= '<option value="12"';
 
-                if( $selected == 12 )
-                {
+                if ( $selected == 12 ) {
                     $hour_options .= ' selected="selected"';
                 }
 
@@ -5206,31 +4815,23 @@ function COM_getHourFormOptions( $selected = '', $mode = 12 )
 
             $hour_options .= '<option value="' . $hval . '"';
 
-            if( $selected == $i )
-            {
+            if ( $selected == $i ) {
                 $hour_options .= ' selected="selected"';
             }
 
             $hour_options .= '>' . $i . '</option>';
         }
-    }
-    else // if( $mode == 24 )
-    {
-        for( $i = 0; $i < 24; $i++ )
-        {
-            if( $i < 10 )
-            {
+    } else { // if ( $mode == 24 )
+        for( $i = 0; $i < 24; $i++ ) {
+            if ( $i < 10 ) {
                 $hval = '0' . $i;
-            }
-            else
-            {
+            } else {
                 $hval = $i;
             }
 
             $hour_options .= '<option value="' . $hval . '"';
 
-            if( $selected == $i )
-            {
+            if ( $selected == $i ) {
                 $hour_options .= ' selected="selected"';
             }
 
@@ -5257,26 +4858,20 @@ function COM_getMinuteFormOptions( $selected = '', $step = 1 )
 {
     $minute_options = '';
 
-    if(( $step < 1 ) || ( $step > 30 ))
-    {
+    if (( $step < 1 ) || ( $step > 30 )) {
         $step = 1;
     }
 
-    for( $i = 0; $i <= 59; $i += $step )
-    {
-        if( $i < 10 )
-        {
+    for( $i = 0; $i <= 59; $i += $step ) {
+        if ( $i < 10 ) {
             $mval = '0' . $i;
-        }
-        else
-        {
+        } else {
             $mval = $i;
         }
 
         $minute_options .= '<option value="' . $mval . '"';
 
-        if( $selected == $i )
-        {
+        if ( $selected == $i ) {
             $minute_options .= ' selected="selected"';
         }
 
@@ -5310,26 +4905,20 @@ function COM_getAmPmFormSelection( $name, $selected = '' )
 
     $retval = '';
 
-    if( isset( $_CONF['hour_mode'] ) && ( $_CONF['hour_mode'] == 24 ))
-    {
+    if ( isset( $_CONF['hour_mode'] ) && ( $_CONF['hour_mode'] == 24 )) {
         $retval = '';
-    }
-    else
-    {
-        if( empty( $selected ))
-        {
+    } else {
+        if ( empty( $selected )) {
             $selected = date( 'a' );
         }
 
         $retval .= '<select name="' . $name . '">' . LB;
         $retval .= '<option value="am"';
-        if( $selected == 'am' )
-        {
+        if ( $selected == 'am' ) {
             $retval .= ' selected="selected"';
         }
         $retval .= '>am</option>' . LB . '<option value="pm"';
-        if( $selected == 'pm' )
-        {
+        if ( $selected == 'pm' ) {
             $retval .= ' selected="selected"';
         }
         $retval .= '>pm</option>' . LB . '</select>' . LB;
@@ -5555,22 +5144,18 @@ function COM_getRate( $occurrences, $timespan )
         "year"   => 31557600
         );
 
-    if( $occurrences != 0 )
-    {
+    if ( $occurrences != 0 ) {
         $rate = ( int )( $timespan / $occurrences );
         $adjustedRate = $occurrences + 1;
         $time_unit = 'second';
 
         $found_one = false;
 
-        foreach( $common_time as $unit=>$seconds )
-        {
-            if( $rate > $seconds )
-            {
+        foreach( $common_time as $unit=>$seconds ) {
+            if ( $rate > $seconds ) {
                 $foo = ( int )(( $rate / $seconds ) + .5 );
 
-                if(( $foo < $occurrences ) && ( $foo > 0 ))
-                {
+                if (( $foo < $occurrences ) && ( $foo > 0 )) {
                     $adjustedRate = $foo;
                     $time_unit = $unit;
                 }
@@ -5579,13 +5164,10 @@ function COM_getRate( $occurrences, $timespan )
 
         $singular = '1 shout every ' . $adjustedRate . ' ' . $time_unit;
 
-        if( $adjustedRate > 1 )
-        {
+        if ( $adjustedRate > 1 ) {
             $singular .= 's';
         }
-    }
-    else
-    {
+    } else {
         $singular = 'No events';
     }
 
@@ -5609,64 +5191,48 @@ function COM_getPermSQL( $type = 'WHERE', $u_id = 0, $access = 2, $table = '' )
 {
     global $_USER, $_GROUPS;
 
-    if( !empty( $table ))
-    {
+    if ( !empty( $table )) {
         $table .= '.';
     }
-    if( $u_id <= 0)
-    {
-        if( COM_isAnonUser() )
-        {
+    if ( $u_id <= 0) {
+        if ( COM_isAnonUser() ) {
             $uid = 1;
-        }
-        else
-        {
+        } else {
             $uid = $_USER['uid'];
         }
-    }
-    else
-    {
+    } else {
         $uid = $u_id;
     }
 
     $UserGroups = array();
-    if(( empty( $_USER['uid'] ) && ( $uid == 1 )) || ( $uid == $_USER['uid'] ))
-    {
-        if( empty( $_GROUPS ))
-        {
+    if (( empty( $_USER['uid'] ) && ( $uid == 1 )) || ( $uid == $_USER['uid'] )) {
+        if ( empty( $_GROUPS )) {
             $_GROUPS = SEC_getUserGroups( $uid );
         }
         $UserGroups = $_GROUPS;
-    }
-    else
-    {
+    } else {
         $UserGroups = SEC_getUserGroups( $uid );
     }
 
-    if( empty( $UserGroups ))
-    {
+    if ( empty( $UserGroups )) {
         // this shouldn't really happen, but if it does, handle user
         // like an anonymous user
         $uid = 1;
     }
 
-    if( SEC_inGroup( 'Root', $uid ))
-    {
+    if ( SEC_inGroup( 'Root', $uid )) {
         return '';
     }
 
     $sql = ' ' . $type . ' (';
 
-    if( $uid > 1 )
-    {
+    if ( $uid > 1 ) {
         $sql .= "(({$table}owner_id = '{$uid}') AND ({$table}perm_owner >= $access)) OR ";
 
         $sql .= "(({$table}group_id IN (" . implode( ',', $UserGroups )
              . ")) AND ({$table}perm_group >= $access)) OR ";
         $sql .= "({$table}perm_members >= $access)";
-    }
-    else
-    {
+    } else {
         $sql .= "{$table}perm_anon >= $access";
     }
 
@@ -5696,56 +5262,43 @@ function COM_getTopicSQL( $type = 'WHERE', $u_id = 0, $table = '' )
 
     $topicsql = ' ' . $type . ' ';
 
-    if( !empty( $table ))
-    {
+    if ( !empty( $table )) {
         $table .= '.';
     }
 
     $UserGroups = array();
-    if(( $u_id <= 0 ) || ( isset( $_USER['uid'] ) && $u_id == $_USER['uid'] ))
-    {
-        if( !COM_isAnonUser() )
-        {
+    if (( $u_id <= 0 ) || ( isset( $_USER['uid'] ) && $u_id == $_USER['uid'] )) {
+        if ( !COM_isAnonUser() ) {
             $uid = $_USER['uid'];
-        }
-        else
-        {
+        } else {
             $uid = 1;
         }
         $UserGroups = $_GROUPS;
-    }
-    else
-    {
+    } else {
         $uid = $u_id;
         $UserGroups = SEC_getUserGroups( $uid );
     }
 
-    if( empty( $UserGroups ))
-    {
+    if ( empty( $UserGroups )) {
         // this shouldn't really happen, but if it does, handle user
         // like an anonymous user
         $uid = 1;
     }
 
-    if( SEC_inGroup( 'Root', $uid ))
-    {
+    if ( SEC_inGroup( 'Root', $uid )) {
         return '';
     }
 
     $result = DB_query( "SELECT tid FROM {$_TABLES['topics']}"
                         . COM_getPermSQL( 'WHERE', $uid ));
     $tids = array();
-    while( $T = DB_fetchArray( $result ))
-    {
+    while ( $T = DB_fetchArray( $result )) {
         $tids[] = $T['tid'];
     }
 
-    if( sizeof( $tids ) > 0 )
-    {
+    if ( sizeof( $tids ) > 0 ) {
         $topicsql .= "({$table}tid IN ('" . implode( "','", $tids ) . "'))";
-    }
-    else
-    {
+    } else {
         $topicsql .= '0';
     }
 
@@ -5762,7 +5315,7 @@ function COM_getTopicSQL( $type = 'WHERE', $u_id = 0, $table = '' )
 */
 function COM_applyFilter( $parameter, $isnumeric = false )
 {
-    $p = COM_stripslashes($parameter);
+    $p = $parameter;
 
     return COM_applyBasicFilter($p, $isnumeric);
 }
@@ -5785,16 +5338,12 @@ function COM_applyBasicFilter( $parameter, $isnumeric = false )
     $p = strip_tags( $parameter );
     $p = COM_killJS( $p ); // doesn't help a lot right now, but still ...
 
-    if( $isnumeric )
-    {
+    if ( $isnumeric ) {
         // Note: PHP's is_numeric() accepts values like 4e4 as numeric
-        if( !is_numeric( $p ) || ( preg_match( '/^-?\d+$/', $p ) == 0 ))
-        {
+        if ( !is_numeric( $p ) || ( preg_match( '/^-?\d+$/', $p ) == 0 )) {
             $p = 0;
         }
-    }
-    else
-    {
+    } else {
         $p = preg_replace( '/\/\*.*/', '', $p );
         $pa = explode( "'", $p );
         $pa = explode( '"', $pa[0] );
@@ -5805,10 +5354,8 @@ function COM_applyBasicFilter( $parameter, $isnumeric = false )
         $p = $pa[0];
     }
 
-    if( $log_manipulation )
-    {
-        if( strcmp( $p, $parameter ) != 0 )
-        {
+    if ( $log_manipulation ) {
+        if ( strcmp( $p, $parameter ) != 0 ) {
             COM_errorLog( "Filter applied: >> $parameter << filtered to $p [IP {$_SERVER['REMOTE_ADDR']}]", 1);
         }
     }
@@ -5829,50 +5376,36 @@ function COM_sanitizeUrl( $url, $allowed_protocols = array('http','https','ftp')
 {
     global $_CONF;
 
-    if( empty( $allowed_protocols ))
-    {
+    if ( empty( $allowed_protocols )) {
         $allowed_protocols = $_CONF['allowed_protocols'];
-    }
-    else if( !is_array( $allowed_protocols ))
-    {
+    } else if ( !is_array( $allowed_protocols )) {
         $allowed_protocols = array( $allowed_protocols );
     }
 
-    if( empty( $default_protocol ))
-    {
+    if ( empty( $default_protocol )) {
         $default_protocol = 'http:';
-    }
-    else if( substr( $default_protocol, -1 ) != ':' )
-    {
+    } else if ( substr( $default_protocol, -1 ) != ':' ) {
         $default_protocol .= ':';
     }
 
     $url = strip_tags( $url );
-    if( !empty( $url ))
-    {
+    if ( !empty( $url )) {
         $pos = MBYTE_strpos( $url, ':' );
-        if( $pos === false )
-        {
+        if ( $pos === false ) {
             $url = $default_protocol . '//' . $url;
-        }
-        else
-        {
+        } else {
             $protocol = MBYTE_substr( $url, 0, $pos + 1 );
             $found_it = false;
-            foreach( $allowed_protocols as $allowed )
-            {
-                if( substr( $allowed, -1 ) != ':' )
-                {
+            foreach( $allowed_protocols as $allowed ) {
+                if ( substr( $allowed, -1 ) != ':' ) {
                     $allowed .= ':';
                 }
-                if( $protocol == $allowed )
-                {
+                if ( $protocol == $allowed ) {
                     $found_it = true;
                     break;
                 }
             }
-            if( !$found_it )
-            {
+            if ( !$found_it ) {
                 $url = $default_protocol . MBYTE_substr( $url, $pos + 1 );
             }
         }
@@ -5893,8 +5426,7 @@ function COM_sanitizeID( $id, $new_id = true )
     $id = str_replace( ' ', '', $id );
     $id = str_replace( array( '/', '\\', ':', '+' ), '-', $id );
     $id = preg_replace( '/[^a-zA-Z0-9\-_\.]/', '', $id );
-    if( empty( $id ) && $new_id )
-    {
+    if ( empty( $id ) && $new_id ) {
         $id = COM_makesid();
     }
 
@@ -6019,41 +5551,35 @@ function COM_highlightQuery( $text, $query, $class = 'highlight' )
 function COM_dateDiff( $interval, $date1, $date2 )
 {
     // Convert dates to timestamps, if needed.
-    if( !is_numeric( $date1 ))
-    {
+    if ( !is_numeric( $date1 )) {
         $date1 = strtotime( $date1 );
     }
 
-    if( !is_numeric( $date2 ))
-    {
+    if ( !is_numeric( $date2 )) {
         $date2 = strtotime( $date2 );
     }
 
     // Function roughly equivalent to the ASP "DateDiff" function
-    if( $date2 > $date1 )
-    {
+    if ( $date2 > $date1 ) {
         $seconds = $date2 - $date1;
-    }
-    else
-    {
+    } else {
         $seconds = $date1 - $date2;
     }
 
-    switch( $interval )
-    {
+    switch( $interval ) {
         case "y":
             list($year1, $month1, $day1) = split('-', date('Y-m-d', $date1));
             list($year2, $month2, $day2) = split('-', date('Y-m-d', $date2));
             $time1 = (date('H',$date1)*3600) + (date('i',$date1)*60) + (date('s',$date1));
             $time2 = (date('H',$date2)*3600) + (date('i',$date2)*60) + (date('s',$date2));
             $diff = $year2 - $year1;
-            if($month1 > $month2) {
+            if ($month1 > $month2) {
                 $diff -= 1;
-            } elseif($month1 == $month2) {
-                if($day1 > $day2) {
+            } elseif ($month1 == $month2) {
+                if ($day1 > $day2) {
                     $diff -= 1;
-                } elseif($day1 == $day2) {
-                    if($time1 > $time2) {
+                } elseif ($day1 == $day2) {
+                    if ($time1 > $time2) {
                         $diff -= 1;
                     }
                 }
@@ -6065,10 +5591,10 @@ function COM_dateDiff( $interval, $date1, $date2 )
             $time1 = (date('H',$date1)*3600) + (date('i',$date1)*60) + (date('s',$date1));
             $time2 = (date('H',$date2)*3600) + (date('i',$date2)*60) + (date('s',$date2));
             $diff = ($year2 * 12 + $month2) - ($year1 * 12 + $month1);
-            if($day1 > $day2) {
+            if ($day1 > $day2) {
                 $diff -= 1;
-            } elseif($day1 == $day2) {
-                if($time1 > $time2) {
+            } elseif ($day1 == $day2) {
+                if ($time1 > $time2) {
                     $diff -= 1;
                 }
             }
@@ -6112,54 +5638,38 @@ function COM_getCurrentURL()
 
     $thisUrl = '';
 
-    if( empty( $_SERVER['SCRIPT_URI'] ))
-    {
-        if( !empty( $_SERVER['DOCUMENT_URI'] ))
-        {
+    if ( empty( $_SERVER['SCRIPT_URI'] )) {
+        if ( !empty( $_SERVER['DOCUMENT_URI'] )) {
             $thisUrl = $_SERVER['DOCUMENT_URI'];
         }
-    }
-    else
-    {
+    } else {
         $thisUrl = $_SERVER['SCRIPT_URI'];
     }
-    if( !empty( $thisUrl ) && !empty( $_SERVER['QUERY_STRING'] ) && (strpos($thisUrl,'?') === false)  )
-    {
+    if ( !empty( $thisUrl ) && !empty( $_SERVER['QUERY_STRING'] ) && (strpos($thisUrl,'?') === false)  ) {
         $thisUrl .= '?' . $_SERVER['QUERY_STRING'];
     }
-    if( empty( $thisUrl ))
-    {
+    if ( empty( $thisUrl )) {
         $requestUri = $_SERVER['REQUEST_URI'];
-        if( empty( $_SERVER['REQUEST_URI'] ))
-        {
+        if ( empty( $_SERVER['REQUEST_URI'] )) {
             // on a Zeus webserver, prefer PATH_INFO over SCRIPT_NAME
-            if( empty( $_SERVER['PATH_INFO'] ))
-            {
+            if ( empty( $_SERVER['PATH_INFO'] )) {
                 $requestUri = $_SERVER['SCRIPT_NAME'];
-            }
-            else
-            {
+            } else {
                 $requestUri = $_SERVER['PATH_INFO'];
             }
-            if( !empty( $_SERVER['QUERY_STRING'] ))
-            {
+            if ( !empty( $_SERVER['QUERY_STRING'] )) {
                 $requestUri .= '?' . $_SERVER['QUERY_STRING'];
             }
         }
 
         $firstslash = strpos( $_CONF['site_url'], '/' );
-        if( $firstslash === false )
-        {
+        if ( $firstslash === false ) {
             // special case - assume it's okay
             $thisUrl = $_CONF['site_url'] . $requestUri;
-        }
-        else if( $firstslash + 1 == strrpos( $_CONF['site_url'], '/' ))
-        {
+        } else if ( $firstslash + 1 == strrpos( $_CONF['site_url'], '/' )) {
             // site is in the document root
             $thisUrl = $_CONF['site_url'] . $requestUri;
-        }
-        else
-        {
+        } else {
             // extract server name first
             $pos = strpos( $_CONF['site_url'], '/', $firstslash + 2 );
             $thisUrl = substr( $_CONF['site_url'], 0, $pos ) . $requestUri;
@@ -6186,19 +5696,15 @@ function COM_onFrontpage()
     $onFrontpage = false;
 
     // on a Zeus webserver, prefer PATH_INFO over SCRIPT_NAME
-    if( empty( $_SERVER['PATH_INFO'] ))
-    {
+    if ( empty( $_SERVER['PATH_INFO'] )) {
         $scriptName = $_SERVER['SCRIPT_NAME'];
-    }
-    else
-    {
+    } else {
         $scriptName = $_SERVER['PATH_INFO'];
     }
 
     preg_match( '/\/\/[^\/]*(.*)/', $_CONF['site_url'], $pathonly );
-    if(( $scriptName == $pathonly[1] . '/index.php' ) &&
-            empty( $topic ) && ( $page == 1 ) && !$newstories )
-    {
+    if (( $scriptName == $pathonly[1] . '/index.php' ) &&
+            empty( $topic ) && ( $page == 1 ) && !$newstories ) {
         $onFrontpage = true;
     }
 
@@ -6235,7 +5741,7 @@ function COM_numberFormat( $number, $decimals=-1 )
     if ($decimals != -1) {
         // Specific number of decimals requested, could be zero
         $dc = (int)$decimals;
-    } elseif( $number - floor( $number ) > 0 ) {
+    } elseif ( $number - floor( $number ) > 0 ) {
         // Number has decimals, get the configured decimal count
         $dc = $_CONF['decimal_count'];
     } else {
@@ -6263,37 +5769,28 @@ function COM_convertDate2Timestamp( $date, $time = '' )
     // Breakup the string using either a space, fwd slash, dash, bkwd slash or
     // colon as a delimiter
     $atok = strtok( $date, ' /-\\:' );
-    while( $atok !== FALSE )
-    {
+    while ( $atok !== FALSE ) {
         $atoks[] = $atok;
         $atok = strtok( ' /-\\:' );  // get the next token
     }
 
-    for( $i = 0; $i < 3; $i++ )
-    {
-        if( !isset( $atoks[$i] ) || !is_numeric( $atoks[$i] ))
-        {
+    for( $i = 0; $i < 3; $i++ ) {
+        if ( !isset( $atoks[$i] ) || !is_numeric( $atoks[$i] )) {
             $atoks[$i] = 0;
         }
     }
 
-    if( $time == '' )
-    {
+    if ( $time == '' ) {
         $timestamp = @mktime( 0, 0, 0, $atoks[1], $atoks[2], $atoks[0] );
-    }
-    else
-    {
+    } else {
         $btok = strtok( $time, ' /-\\:' );
-        while( $btok !== FALSE )
-        {
+        while ( $btok !== FALSE ) {
             $btoks[] = $btok;
             $btok = strtok( ' /-\\:' );
         }
 
-        for( $i = 0; $i < 3; $i++ )
-        {
-            if( !isset( $btoks[$i] ) || !is_numeric( $btoks[$i] ))
-            {
+        for( $i = 0; $i < 3; $i++ ) {
+            if ( !isset( $btoks[$i] ) || !is_numeric( $btoks[$i] )) {
                 $btoks[$i] = 0;
             }
         }
@@ -6315,11 +5812,9 @@ function COM_getImgSizeAttributes( $file )
 {
     $sizeattributes = '';
 
-    if( file_exists( $file ))
-    {
+    if ( file_exists( $file )) {
         $dimensions = getimagesize( $file );
-        if( !empty( $dimensions[0] ) AND !empty( $dimensions[1] ))
-        {
+        if ( !empty( $dimensions[0] ) AND !empty( $dimensions[1] )) {
             $sizeattributes = 'width="' . $dimensions[0]
                             . '" height="' . $dimensions[1] . '" ';
         }
@@ -6362,26 +5857,18 @@ function COM_getTopicImageUrl( $imageurl )
 
     $iconurl = '';
 
-    if( !empty( $imageurl ))
-    {
-        if( isset( $_THEME_URL ))
-        {
+    if ( !empty( $imageurl )) {
+        if ( isset( $_THEME_URL )) {
             $iconurl = $_THEME_URL . $imageurl;
-        }
-        else
-        {
+        } else {
             $stdImageLoc = true;
-            if( !strstr( $_CONF['path_images'], $_CONF['path_html'] ))
-            {
+            if ( !strstr( $_CONF['path_images'], $_CONF['path_html'] )) {
                 $stdImageLoc = false;
             }
 
-            if( $stdImageLoc )
-            {
+            if ( $stdImageLoc ) {
                 $iconurl = $_CONF['site_url'] . $imageurl;
-            }
-            else
-            {
+            } else {
                 $t = explode( '/', $imageurl );
                 $topicicon = $t[count( $t ) - 1];
                 $iconurl = $_CONF['site_url']
@@ -6569,17 +6056,14 @@ function COM_getLangSQL( $field, $type = 'WHERE', $table = '' )
 
     $sql = '';
 
-    if( !empty( $_CONF['languages'] ) && !empty( $_CONF['language_files'] ))
-    {
-        if( !empty( $table ))
-        {
+    if ( !empty( $_CONF['languages'] ) && !empty( $_CONF['language_files'] )) {
+        if ( !empty( $table )) {
             $table .= '.';
         }
 
         $lang_id = COM_getLanguageId();
 
-        if( !empty( $lang_id ))
-        {
+        if ( !empty( $lang_id )) {
             $sql = ' ' . $type . " ({$table}$field LIKE '%\\_$lang_id')";
         }
     }
@@ -6587,72 +6071,7 @@ function COM_getLangSQL( $field, $type = 'WHERE', $table = '' )
     return $sql;
 }
 
-/**
-* Provides a drop-down menu (or simple link, if you only have two languages)
-* to switch languages. This can be used as a PHP block or called from within
-* your theme's header.thtml: <?php print phpblock_switch_language(); ?>
-*
-* @return   string  HTML for drop-down or link to switch languages
-*
-*/
-function phpblock_switch_language()
-{
-    global $_CONF;
 
-    $retval = '';
-
-    if( empty( $_CONF['languages'] ) || empty( $_CONF['language_files'] ) ||
-          ( count( $_CONF['languages'] ) != count( $_CONF['language_files'] )))
-    {
-        return $retval;
-    }
-
-    $lang = COM_getLanguage();
-    $langId = COM_getLanguageId( $lang );
-
-    if( count( $_CONF['languages'] ) == 2 )
-    {
-        foreach( $_CONF['languages'] as $key => $value )
-        {
-            if( $key != $langId )
-            {
-                $newLang = $value;
-                $newLangId = $key;
-                break;
-            }
-        }
-
-        $switchUrl = COM_buildUrl( $_CONF['site_url'] . '/switchlang.php?lang='
-                                   . $newLangId );
-        $retval .= COM_createLink($newLang, $switchUrl);
-    }
-    else
-    {
-        $retval .= '<form name="change" action="'. $_CONF['site_url']
-                . '/switchlang.php" method="get">' . LB;
-        $retval .= '<input type="hidden" name="oldlang" value="' . $langId
-                . '"' . XHTML . '>' . LB;
-
-        $retval .= '<select onchange="change.submit()" name="lang">';
-        foreach( $_CONF['languages'] as $key => $value )
-        {
-            if( $lang == $_CONF['language_files'][$key] )
-            {
-                $selected = ' selected="selected"';
-            }
-            else
-            {
-                $selected = '';
-            }
-            $retval .= '<option value="' . $key . '"' . $selected . '>'
-                    . $value . '</option>' . LB;
-        }
-        $retval .= '</select>' . LB;
-        $retval .= '</form>' . LB;
-    }
-
-    return $retval;
-}
 
 /**
 * Switch locale settings
@@ -6666,8 +6085,7 @@ function COM_switchLocaleSettings()
 {
     global $_CONF;
 
-    if( !empty( $_CONF['languages'] ) && !empty( $_CONF['language_files'] ))
-    {
+    if ( !empty( $_CONF['languages'] ) && !empty( $_CONF['language_files'] )) {
         $overridables = array
         (
           'locale',
@@ -6677,10 +6095,8 @@ function COM_switchLocaleSettings()
         );
 
         $langId = COM_getLanguageId();
-        foreach( $overridables as $option )
-        {
-            if( isset( $_CONF[$option . '_' . $langId] ))
-            {
+        foreach( $overridables as $option ) {
+            if ( isset( $_CONF[$option . '_' . $langId] )) {
                 $_CONF[$option] = $_CONF[$option . '_' . $langId];
             }
         }
@@ -6735,7 +6151,7 @@ function COM_truncateHTML ( $htmltext, $maxlen, $filler = '', $endchars = 0 )
         $len_opened = count($openedtags);
 
         // all tags are closed
-        if(count( $closedtags ) == $len_opened) {
+        if (count( $closedtags ) == $len_opened) {
             return $htmltext;
         }
         $openedtags = array_reverse ($openedtags);
@@ -6778,7 +6194,7 @@ function COM_truncate( $text, $maxlen, $filler = '', $tip = false )
 {
     $newlen = $maxlen - MBYTE_strlen( $filler );
     $len = MBYTE_strlen( $text );
-    if( $len > $maxlen ) {
+    if ( $len > $maxlen ) {
         $retval = ($tip) ? '<span title="' . $text . '">' : '';
         $retval .= MBYTE_substr( $text, 0, $newlen ) . $filler;
         $retval .= ($tip) ? '</span>' : '';
@@ -6803,9 +6219,9 @@ function COM_getCharset()
 {
     global $_CONF, $LANG_CHARSET;
 
-    if( empty( $LANG_CHARSET )) {
+    if ( empty( $LANG_CHARSET )) {
         $charset = $_CONF['default_charset'];
-        if( empty( $charset )) {
+        if ( empty( $charset )) {
             $charset = 'iso-8859-1';
         }
     } else {
@@ -6876,11 +6292,6 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
 
     // Handle @ operator
     if (error_reporting() == 0) {
-        return;
-    }
-
-    // If in PHP4, then respect error_reporting
-    if ((PHP_VERSION < 5) && (($errno & error_reporting()) == 0)) {
         return;
     }
 
@@ -6988,16 +6399,16 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
 function COM_rootDebugClean($array, $blank=false)
 {
     $blankField = false;
-    while(list($key, $value) = each($array)) {
+    while (list($key, $value) = each($array)) {
         $lkey = strtolower($key);
-        if((strpos($lkey, 'pass') !== false) || (strpos($lkey, 'cookie')!== false)) {
+        if ((strpos($lkey, 'pass') !== false) || (strpos($lkey, 'cookie')!== false)) {
             $blankField = true;
         } else {
             $blankField = $blank;
         }
-        if(is_array($value)) {
+        if (is_array($value)) {
             $array[$key] = COM_rootDebugClean($value, $blankField);
-        } elseif($blankField) {
+        } elseif ($blankField) {
             $array[$key] = '[VALUE REMOVED]';
         }
     }
@@ -7067,16 +6478,13 @@ function COM_isAnonUser($uid = '')
     global $_USER;
 
     /* If no user was specified, fail over to the current user if there is one */
-    if( empty( $uid ) )
-    {
-        if( isset( $_USER['uid'] ) )
-        {
+    if ( empty( $uid ) ) {
+        if ( isset( $_USER['uid'] ) ) {
             $uid = $_USER['uid'];
         }
     }
 
-    if( !empty( $uid ) )
-    {
+    if ( !empty( $uid ) ) {
         return ($uid == 1);
     } else {
         return true;
@@ -7134,39 +6542,6 @@ function COM_setLangIdAndAttribute(&$template)
     }
 }
 
-function CMT_updateCommentcodes() {
-    global $_CONF;
-    global $_TABLES;
-
-    $cleared = 0;
-
-    if ($_CONF['comment_close_rec_stories'] > 0) {
-        $results = DB_query("SELECT sid FROM {$_TABLES['stories']} ORDER BY date DESC LIMIT ".intval($_CONF['comment_close_rec_stories']));
-        while($A = DB_fetchArray($results))  {
-            $allowedcomments[] = $A['sid'];
-        }
-        //update comment codes.
-        $sql = '';
-        if ( is_array($allowedcomments) ) {
-            foreach ($allowedcomments as $sid) {
-                $sql .= "AND sid <> '".DB_escapeString($sid)."' ";
-            }
-            $sql = "UPDATE {$_TABLES['stories']} SET commentcode = 1 WHERE commentcode = 0 " . $sql;
-            $result = DB_query($sql,1);
-            if ( DB_affectedRows($result) > 0 ) {
-                CACHE_remove_instance('story_');
-                $cleared = 1;
-            }
-        }
-    }
-    $sql = "UPDATE {$_TABLES['stories']} SET commentcode = 1 WHERE UNIX_TIMESTAMP(comment_expire) < UNIX_TIMESTAMP() AND UNIX_TIMESTAMP(comment_expire) <> 0";
-    $result = DB_query($sql,1);
-    if ( $cleared == 0 ) {
-        if ( DB_affectedRows($result) > 0 ) {
-            CACHE_remove_instance('story_');
-        }
-    }
-}
 
 /**
  * Display 404 - Not found message
@@ -7293,6 +6668,439 @@ function COM_buildOwnerList($fieldName,$owner_id=2)
     return $owner_select;
 }
 
+/**
+* Turn a piece of HTML into continuous(!) plain text
+*
+* This function removes HTML tags, line breaks, etc. and returns one long
+* line of text. This is useful for word counts (do an explode() on the result)
+* and for text excerpts.
+*
+* @param    string  $text   original text, including HTML and line breaks
+* @return   string          continuous plain text
+*
+*/
+function COM_getTextContent($text)
+{
+    // replace <br> with spaces so that Text<br>Text becomes two words
+    $text = preg_replace('/\<br(\s*)?\/?\>/i', ' ', $text);
+
+    // add extra space between tags, e.g. <p>Text</p><p>Text</p>
+    $text = str_replace('><', '> <', $text);
+
+    // only now remove all HTML tags
+    $text = strip_tags($text);
+
+    // replace all tabs, newlines, and carrriage returns with spaces
+    $text = str_replace(array("\011", "\012", "\015"), ' ', $text);
+
+    // replace entities with plain spaces
+    $text = str_replace(array('&#20;', '&#160;', '&nbsp;'), ' ', $text);
+
+    // collapse whitespace
+    $text = preg_replace('/\s\s+/', ' ', $text);
+
+    return trim($text);
+}
+
+/*
+ * For backward compatibility
+ */
+function COM_stripslashes($text)
+{
+    return $text;
+}
+
+function CMT_updateCommentcodes() {
+    global $_CONF;
+    global $_TABLES;
+
+    $cleared = 0;
+
+    if ($_CONF['comment_close_rec_stories'] > 0) {
+        $results = DB_query("SELECT sid FROM {$_TABLES['stories']} ORDER BY date DESC LIMIT ".intval($_CONF['comment_close_rec_stories']));
+        while ($A = DB_fetchArray($results))  {
+            $allowedcomments[] = $A['sid'];
+        }
+        //update comment codes.
+        $sql = '';
+        if ( is_array($allowedcomments) ) {
+            foreach ($allowedcomments as $sid) {
+                $sql .= "AND sid <> '".DB_escapeString($sid)."' ";
+            }
+            $sql = "UPDATE {$_TABLES['stories']} SET commentcode = 1 WHERE commentcode = 0 " . $sql;
+            $result = DB_query($sql,1);
+            if ( DB_affectedRows($result) > 0 ) {
+                CACHE_remove_instance('story_');
+                $cleared = 1;
+            }
+        }
+    }
+    $sql = "UPDATE {$_TABLES['stories']} SET commentcode = 1 WHERE UNIX_TIMESTAMP(comment_expire) < UNIX_TIMESTAMP() AND UNIX_TIMESTAMP(comment_expire) <> 0";
+    $result = DB_query($sql,1);
+    if ( $cleared == 0 ) {
+        if ( DB_affectedRows($result) > 0 ) {
+            CACHE_remove_instance('story_');
+        }
+    }
+}
+
+
+
+function _commentsort($a, $b)
+{
+    if ( $a['lastdate'] == $b['lastdate'] ) {
+        return 0;
+    }
+    return ($b['lastdate'] < $a['lastdate']) ? -1 : 1;
+}
+
+
+function css_out(){
+    global $_CONF, $_SYSTEM, $_PLUGINS, $_TABLES;
+    global $_ST_CONF, $stMenu, $themeAPI, $themeStyle;
+
+    if ( !isset($_CONF['css_cache_filename']) ) {
+        $_CONF['css_cache_filename'] = 'stylecache_';
+    }
+
+    if ( $_SYSTEM['use_direct_style_js'] ) {
+        $cacheFile = $_CONF['path_html'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css';
+        $cacheURL  = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css?t='.$_CONF['theme'];
+    } else {
+        $cacheFile = $_CONF['path'].'/data/layout_cache/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css';
+        $cacheURL  = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'];
+    }
+
+    $cacheURL  = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'];
+
+    $files   = array();
+
+    // Let's look in the custom directory first...
+    if ( file_exists($_CONF['path_layout'] .'custom/style.css') ) {
+        $files[] = $_CONF['path_layout'] . 'custom/style.css';
+    } else {
+        $files[] = $_CONF['path_layout'] . 'style.css';
+    }
+    if ( file_exists($_CONF['path_layout'] .'custom/style-colors.css') ) {
+        $files[] = $_CONF['path_layout'] . 'custom/style-colors.css';
+    } else {
+        $files[] = $_CONF['path_layout'] . 'style-colors.css';
+    }
+
+    /*
+     * Check to see if there are any custom CSS files to include
+     */
+    if ( function_exists( 'CUSTOM_css' )) {
+        $customCSS = CUSTOM_css( );
+        if ( is_array($customCSS) ) {
+            foreach($customCSS AS $item => $file) {
+                $files[] = $file;
+            }
+        }
+    }
+
+    if ( is_array($_PLUGINS) ) {
+        foreach ( $_PLUGINS as $pi_name ) {
+            if ( function_exists('plugin_getheadercss_'.$pi_name) ) {
+                $function = 'plugin_getheadercss_'.$pi_name;
+                $pHeader = array();
+                $pHeader = $function();
+                if ( is_array($pHeader) ) {
+                    foreach($pHeader AS $item => $file) {
+                        $files[] = $file;
+                    }
+                }
+            }
+        }
+    }
+
+    // check cache age & handle conditional request
+    if (css_cacheok($cacheFile,$files)){
+        return $cacheURL;
+    }
+
+    $cacheID = 'css_' . md5( time() );
+
+    DB_query("REPLACE INTO {$_TABLES['vars']} (name, value) VALUES ('cacheid','".$cacheID."')");
+
+    // start output buffering and build the stylesheet
+    ob_start();
+
+    // load files
+    if ( is_array($files) ) {
+        foreach($files as $file) {
+            css_loadfile($file);
+            print "\n";
+        }
+    }
+
+    // end output buffering and get contents
+    $css = ob_get_contents();
+    ob_end_clean();
+
+    // compress whitespace and comments
+    if ($_CONF['compress_css']){
+        $css = css_compress($css);
+    }
+    // save cache file
+    $fp = fopen($cacheFile,'w');
+    fwrite($fp,$css);
+    fclose($fp);
+    return $cacheURL;
+}
+
+/**
+ * Checks if a CSS Cache file still is valid
+ *
+ */
+function css_cacheok($cache,$files){
+    $ctime = @filemtime($cache);
+    if (!$ctime) {
+        return false;
+    } //There is no cache
+
+    // now walk the files
+
+    if ( is_array($files) ) {
+        foreach($files as $file){
+            if (@filemtime($file) > $ctime){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+/**
+ * Loads a given file
+ */
+function css_loadfile($file) {
+    if (!@file_exists($file))
+        return '';
+    $css = readfile($file);
+    return;
+}
+/**
+ * Very simple CSS optimizer
+ *
+ */
+function css_compress($css){
+    //strip comments through a callback
+    $css = preg_replace_callback('#(/\*)(.*?)(\*/)#s','css_comment_cb',$css);
+
+    //strip (incorrect but common) one line comments
+    $css = preg_replace('/(?<!:)\/\/.*$/m','',$css);
+
+    // strip whitespaces
+    $css = preg_replace('![\r\n\t ]+!',' ',$css);
+    $css = preg_replace('/ ?([:;,{}\/]) ?/','\\1',$css);
+
+    // shorten colors
+    $css = preg_replace("/#([0-9a-fA-F]{1})\\1([0-9a-fA-F]{1})\\2([0-9a-fA-F]{1})\\3/", "#\\1\\2\\3",$css);
+
+    return $css;
+}
+
+/**
+ * Callback for css_compress()
+ *
+ * Keeps short comments (< 5 chars) to maintain typical browser hacks
+ *
+ */
+function css_comment_cb( $matches ) {
+    if (strlen($matches[2]) > 4)
+        return '';
+    return $matches[0];
+}
+
+function js_out() {
+    global $_CONF, $_SYSTEM, $_PLUGINS, $themeAPI;
+
+    if ( !isset($_CONF['js_cache_filename']) ) {
+        $_CONF['js_cache_filename'] = 'jscache_';
+    }
+
+    if ( $_SYSTEM['use_direct_style_js'] ) {
+        $cacheFile = $_CONF['path_html'].'/'.$_CONF['js_cache_filename'].$_CONF['theme'].'.js';
+        $cacheURL  = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].'.js?t='.$_CONF['theme'];
+    } else {
+        $cacheFile = $_CONF['path'].'/data/layout_cache/'.$_CONF['js_cache_filename'].$_CONF['theme'].'.js';
+        $cacheURL  = $_CONF['site_url'].'/js.php?t='.$_CONF['theme'];
+    }
+
+    /*
+     * Static list of standard JavaScript used by glFusion...
+     */
+
+    $files = array(
+        $_CONF['path_html'] . 'javascript/mootools/mootools-release-1.11.packed.js',
+        $_CONF['path_html'] . 'fckeditor/fckeditor.js',
+        $_CONF['path_html'] . 'javascript/common.js',
+        $_CONF['path_html'] . 'javascript/fValidator.js',
+        $_CONF['path_html'] . 'javascript/mootools/gl_mooreflection.js',
+        $_CONF['path_html'] . 'javascript/mootools/gl_moomenu.js',
+        $_CONF['path_html'] . 'javascript/mootools/moorating.js',
+
+    );
+
+    if ( $themeAPI < 2 ) {
+        $files[] = $_CONF['path_html'] . 'javascript/sitetailor_ie6vertmenu.js';
+    }
+    /*
+     * Check to see if the theme has any JavaScript to include...
+     */
+
+    $function = 'theme_themeJS';
+
+    if ( function_exists( $function )) {
+        $jTheme = $function( );
+        if ( is_array($jTheme) ) {
+            foreach($jTheme AS $item => $file) {
+                $files[] = $file;
+            }
+        }
+    }
+
+    /*
+     * Check to see if there are any custom javascript files to include
+     */
+    if ( function_exists( 'CUSTOM_js' )) {
+        $jTheme = CUSTOM_js( );
+        if ( is_array($jTheme) ) {
+            foreach($jTheme AS $item => $file) {
+                $files[] = $file;
+            }
+        }
+    }
+
+    /*
+     * Let the plugins add their JavaScript needs here...
+     */
+
+    if ( is_array($_PLUGINS) ) {
+        foreach ( $_PLUGINS as $pi_name ) {
+            if ( function_exists('plugin_getheaderjs_'.$pi_name) ) {
+                $function = 'plugin_getheaderjs_'.$pi_name;
+                $pHeader = array();
+                $pHeader = $function();
+                if ( is_array($pHeader) ) {
+                    foreach($pHeader AS $item => $file) {
+                        $files[] = $file;
+                    }
+                }
+            }
+        }
+    }
+
+    /*
+     * Let the plugins add any global JS variables
+     */
+    if (is_array($_PLUGINS) ) {
+        foreach ( $_PLUGINS as $pi_name ) {
+            if ( function_exists('plugin_getglobaljs_'.$pi_name) ) {
+                $function = 'plugin_getglobaljs_'.$pi_name;
+                $globalJS = array();
+                $globalJS = $function();
+                if ( is_array($globalJS) ) {
+                    foreach($globalJS AS $name => $value) {
+                        $pluginJSvars[$name] = $value;
+                    }
+                }
+            }
+        }
+    }
+
+    if (js_cacheok($cacheFile,$files)){
+        return $cacheURL;
+    }
+
+    // start output buffering and build the script
+    ob_start();
+
+    // add some global variables
+    print "var glfusionSiteUrl = '".$_CONF['site_url']."';" . LB;
+    print "var glfusionEditorBaseUrl = '".$_CONF['site_url']."';" . LB;
+    print "var glfusionLayoutUrl     = '".$_CONF['layout_url']."';" . LB;
+
+    if ( $_SYSTEM['use_direct_style_js'] ) {
+        print "var glfusionStyleCSS      = '".$_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css?t='.$_CONF['theme'] . "';" . LB;
+    } else {
+        print "var glfusionStyleCSS      = '".$_CONF['site_url']."/css.php?t=" . $_CONF['theme'] . "';" . LB;
+    }
+
+    // send any global plugin JS vars
+
+    if ( is_array($pluginJSvars) ) {
+        foreach ($pluginJSvars AS $name => $value) {
+            print "var " . $name . " = '".$value."';";
+        }
+    }
+
+    // load files
+    if ( is_array($files) ) {
+        foreach($files as $file){
+            js_load($file);
+            print "\n";
+        }
+    }
+
+    // end output buffering and get contents
+    $js = ob_get_contents();
+    ob_end_clean();
+
+    $js .= "\n"; // https://bugzilla.mozilla.org/show_bug.cgi?id=316033
+
+    // save cache file
+    $fp = fopen($cacheFile,'w');
+    fwrite($fp,$js);
+    fclose($fp);
+    return $cacheURL;
+}
+
+/**
+ * Load the given file, handle include calls and print it
+ */
+function js_load($file) {
+    if (!@file_exists($file))
+        return;
+
+    $js = readfile($file);
+
+    return;
+}
+
+/**
+ * Checks if a JavaScript Cache file still is valid
+ *
+ */
+function js_cacheok($cache,$files) {
+
+    $ctime = @filemtime($cache);
+    if (!$ctime)
+        return false; //There is no cache
+
+    // now walk the files
+    if ( is_array($files) ) {
+        foreach($files as $file){
+            if (@filemtime($file) > $ctime){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+/**
+ * This block will display a list of flags that link to the Google automatic
+ * translation service.
+ *
+ * Loads the autotranslations widget block from private/system/lib-widgets.php
+ */
+function phpblock_autotranslations() {
+   global $_CONF, $LANG_WIDGETS;
+   require_once $_CONF['path_system'] . 'lib-widgets.php';
+   return(WIDGET_autotranslations());
+}
+
 function phpblock_lastlogin()
 {
     global $_TABLES, $_CONF, $LANG10;
@@ -7308,7 +7116,7 @@ function phpblock_lastlogin()
             if (0 < $i)
                 $retval .= ', ';
             $A = DB_fetchArray($result);
-            $A['username'] = stripslashes(str_replace('$','&#36;',$A['username']));
+            $A['username'] = str_replace('$','&#36;',$A['username']);
             $A['user'] = "<a href=\"" . $_CONF['site_url']
                       . "/users.php?mode=profile&amp;uid={$A['uid']}" . "\">{$A['username']}</a>";
             $retval .= $A['user'];
@@ -7317,13 +7125,149 @@ function phpblock_lastlogin()
     return $retval;
 }
 
-function _commentsort($a, $b)
+
+/**
+* Provides a drop-down menu (or simple link, if you only have two languages)
+* to switch languages. This can be used as a PHP block or called from within
+* your theme's header.thtml: <?php print phpblock_switch_language(); ?>
+*
+* @return   string  HTML for drop-down or link to switch languages
+*
+*/
+function phpblock_switch_language()
 {
-    if ( $a['lastdate'] == $b['lastdate'] ) {
-        return 0;
+    global $_CONF;
+
+    $retval = '';
+
+    if ( empty( $_CONF['languages'] ) || empty( $_CONF['language_files'] ) ||
+          ( count( $_CONF['languages'] ) != count( $_CONF['language_files'] ))) {
+        return $retval;
     }
-    return ($b['lastdate'] < $a['lastdate']) ? -1 : 1;
+
+    $lang = COM_getLanguage();
+    $langId = COM_getLanguageId( $lang );
+
+    if ( count( $_CONF['languages'] ) == 2 ) {
+        foreach( $_CONF['languages'] as $key => $value ) {
+            if ( $key != $langId ) {
+                $newLang = $value;
+                $newLangId = $key;
+                break;
+            }
+        }
+
+        $switchUrl = COM_buildUrl( $_CONF['site_url'] . '/switchlang.php?lang='
+                                   . $newLangId );
+        $retval .= COM_createLink($newLang, $switchUrl);
+    } else {
+        $retval .= '<form name="change" action="'. $_CONF['site_url']
+                . '/switchlang.php" method="get">' . LB;
+        $retval .= '<input type="hidden" name="oldlang" value="' . $langId
+                . '"' . XHTML . '>' . LB;
+
+        $retval .= '<select onchange="change.submit()" name="lang">';
+        foreach( $_CONF['languages'] as $key => $value ) {
+            if ( $lang == $_CONF['language_files'][$key] ) {
+                $selected = ' selected="selected"';
+            } else {
+                $selected = '';
+            }
+            $retval .= '<option value="' . $key . '"' . $selected . '>'
+                    . $value . '</option>' . LB;
+        }
+        $retval .= '</select>' . LB;
+        $retval .= '</form>' . LB;
+    }
+
+    return $retval;
 }
+
+/**
+* Shows who is online in slick little block
+* @return   string  HTML string of online users seperated by line breaks.
+*/
+
+function phpblock_whosonline()
+{
+    global $_CONF, $_TABLES, $_USER, $LANG01, $_IMAGE_TYPE;
+
+    $retval = '';
+
+    $expire_time = time() - $_CONF['whosonline_threshold'];
+
+    $byname = 'username';
+    if ( $_CONF['show_fullname'] == 1 ) {
+        $byname .= ',fullname';
+    }
+    if ( $_CONF['user_login_method']['openid'] || $_CONF['user_login_method']['3rdparty'] ) {
+        $byname .= ',remoteusername,remoteservice';
+    }
+
+    $result = DB_query( "SELECT DISTINCT {$_TABLES['sessions']}.uid,{$byname},photo,showonline FROM {$_TABLES['sessions']},{$_TABLES['users']},{$_TABLES['userprefs']} WHERE {$_TABLES['users']}.uid = {$_TABLES['sessions']}.uid AND {$_TABLES['users']}.uid = {$_TABLES['userprefs']}.uid AND start_time >= $expire_time AND {$_TABLES['sessions']}.uid <> 1 ORDER BY {$byname}" );
+    $nrows = DB_numRows( $result );
+
+    $num_anon = 0;
+    $num_reg  = 0;
+
+    for( $i = 0; $i < $nrows; $i++ ) {
+        $A = DB_fetchArray( $result );
+
+        if ( $A['showonline'] == 1 ) {
+            $fullname = '';
+            if ( $_CONF['show_fullname'] == 1 ) {
+                $fullname = $A['fullname'];
+            }
+            if ( $_CONF['user_login_method']['openid'] || $_CONF['user_login_method']['3rdparty'] ) {
+                $username = COM_getDisplayName( $A['uid'], $A['username'],
+                        $fullname, $A['remoteusername'], $A['remoteservice'] );
+            } else {
+                $username = COM_getDisplayName( $A['uid'], $A['username'],
+                                                $fullname );
+            }
+
+            $url = $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $A['uid'];
+            $retval .= COM_createLink($username, $url);
+
+            if (!empty( $A['photo'] ) AND $_CONF['allow_user_photo'] == 1) {
+                if ($_CONF['whosonline_photo'] == true) {
+                    $usrimg = '<img src="' . $_CONF['site_url']
+                            . '/images/userphotos/' . $A['photo']
+                            . '" alt="" height="30" width="30"' . XHTML . '>';
+                } else {
+                    $usrimg = '<img src="' . $_CONF['layout_url']
+                            . '/images/smallcamera.' . $_IMAGE_TYPE
+                            . '" border="0" alt=""' . XHTML . '>';
+                }
+                $retval .= '&nbsp;' . COM_createLink($usrimg, $url);
+            }
+
+            $retval .= '<br' . XHTML . '>';
+            $num_reg++;
+        } else {
+            // this user does not want to show up in Who's Online
+            $num_anon++; // count as anonymous
+        }
+    }
+
+    $num_anon += DB_count( $_TABLES['sessions'], 'uid', 1 );
+
+    if (( $_CONF['whosonline_anonymous'] == 1 ) && COM_isAnonUser() ) {
+        // note that we're overwriting the contents of $retval here
+        if ( $num_reg > 0 ) {
+            $retval = $LANG01[112] . ': ' . COM_numberFormat($num_reg) . '<br' . XHTML . '>';
+        } else {
+            $retval = '';
+        }
+    }
+
+    if ( $num_anon > 0 ) {
+        $retval .= $LANG01[41] . ': ' . COM_numberFormat($num_anon) . '<br' . XHTML . '>';
+    }
+
+    return $retval;
+}
+
 
 /**
  * Loads the specified library or class normally not loaded by lib-common.php
@@ -7367,11 +7311,12 @@ function USES_lib_trackback() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-trackback.php';
 }
-/* this one is depreciated */
+/*
 function USES_lib_trackbacks() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-trackback.php';
 }
+*/
 function USES_lib_user() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-user.php';
@@ -7447,394 +7392,19 @@ if ( isset($_CONF['maintenance_mode']) && $_CONF['maintenance_mode'] == 1 && !SE
 
 // Check and see if any plugins (or custom functions)
 // have scheduled tasks to perform
-if( $_CONF['cron_schedule_interval'] > 0 )
-{
-    if(( DB_getItem( $_TABLES['vars'], 'value', "name='last_scheduled_run'" )
-            + $_CONF['cron_schedule_interval'] ) <= time())
-    {
+if ( $_CONF['cron_schedule_interval'] > 0 && COM_onFrontpage() ) {
+    if (( DB_getItem( $_TABLES['vars'], 'value', "name='last_scheduled_run'" )
+            + $_CONF['cron_schedule_interval'] ) <= time()) {
         DB_query( "UPDATE {$_TABLES['vars']} SET value=UNIX_TIMESTAMP() WHERE name='last_scheduled_run'" );
         PLG_runScheduledTask();
     }
 }
 
-/**
- * This block will display a list of flags that link to the Google automatic
- * translation service.
- *
- * Loads the autotranslations widget block from private/system/lib-widgets.php
- */
-function phpblock_autotranslations() {
-   global $_CONF, $LANG_WIDGETS;
-   require_once $_CONF['path_system'] . 'lib-widgets.php';
-   return(WIDGET_autotranslations());
-}
-
-function css_out(){
-    global $_CONF, $_SYSTEM, $_PLUGINS, $_TABLES;
-    global $_ST_CONF, $stMenu, $themeAPI, $themeStyle;
-
-    if ( !isset($_CONF['css_cache_filename']) ) {
-        $_CONF['css_cache_filename'] = 'stylecache_';
-    }
-
-    if ( $_SYSTEM['use_direct_style_js'] ) {
-        $cacheFile = $_CONF['path_html'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css';
-        $cacheURL  = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css?t='.$_CONF['theme'];
-    } else {
-        $cacheFile = $_CONF['path'].'/data/layout_cache/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css';
-        $cacheURL  = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'];
-    }
-
-    $cacheURL  = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'];
-
-    $files   = array();
-
-    // Let's look in the custom directory first...
-    if ( file_exists($_CONF['path_layout'] .'custom/style.css') ) {
-        $files[] = $_CONF['path_layout'] . 'custom/style.css';
-    } else {
-        $files[] = $_CONF['path_layout'] . 'style.css';
-    }
-    if ( file_exists($_CONF['path_layout'] .'custom/style-colors.css') ) {
-        $files[] = $_CONF['path_layout'] . 'custom/style-colors.css';
-    } else {
-        $files[] = $_CONF['path_layout'] . 'style-colors.css';
-    }
-
-    /*
-     * Check to see if there are any custom CSS files to include
-     */
-    if( function_exists( 'CUSTOM_css' )) {
-        $customCSS = CUSTOM_css( );
-        if ( is_array($customCSS) ) {
-            foreach($customCSS AS $item => $file) {
-                $files[] = $file;
-            }
-        }
-    }
-
-    if ( is_array($_PLUGINS) ) {
-        foreach ( $_PLUGINS as $pi_name ) {
-            if ( function_exists('plugin_getheadercss_'.$pi_name) ) {
-                $function = 'plugin_getheadercss_'.$pi_name;
-                $pHeader = array();
-                $pHeader = $function();
-                if ( is_array($pHeader) ) {
-                    foreach($pHeader AS $item => $file) {
-                        $files[] = $file;
-                    }
-                }
-            }
-        }
-    }
-
-    // check cache age & handle conditional request
-    if(css_cacheok($cacheFile,$files)){
-        return $cacheURL;
-    }
-
-    $cacheID = 'css_' . md5( time() );
-
-    DB_query("REPLACE INTO {$_TABLES['vars']} (name, value) VALUES ('cacheid','".$cacheID."')");
-
-    // start output buffering and build the stylesheet
-    ob_start();
-
-    // load files
-    if ( is_array($files) ) {
-        foreach($files as $file) {
-            css_loadfile($file);
-            print "\n";
-        }
-    }
-
-    // end output buffering and get contents
-    $css = ob_get_contents();
-    ob_end_clean();
-
-    // compress whitespace and comments
-    if($_CONF['compress_css']){
-        $css = css_compress($css);
-    }
-    // save cache file
-    $fp = fopen($cacheFile,'w');
-    fwrite($fp,$css);
-    fclose($fp);
-    return $cacheURL;
-}
-
-/**
- * Checks if a CSS Cache file still is valid
- *
- */
-function css_cacheok($cache,$files){
-    $ctime = @filemtime($cache);
-    if(!$ctime) { return false; } //There is no cache
-
-    // now walk the files
-
-    if ( is_array($files) ) {
-        foreach($files as $file){
-            if(@filemtime($file) > $ctime){
-                return false;
-            }
-        }
-    }
-    return true;
-}
-/**
- * Loads a given file
- */
-function css_loadfile($file){
-    if(!@file_exists($file)) return '';
-    $css = readfile($file);
-    return;
-}
-/**
- * Very simple CSS optimizer
- *
- */
-function css_compress($css){
-    //strip comments through a callback
-    $css = preg_replace_callback('#(/\*)(.*?)(\*/)#s','css_comment_cb',$css);
-
-    //strip (incorrect but common) one line comments
-    $css = preg_replace('/(?<!:)\/\/.*$/m','',$css);
-
-    // strip whitespaces
-    $css = preg_replace('![\r\n\t ]+!',' ',$css);
-    $css = preg_replace('/ ?([:;,{}\/]) ?/','\\1',$css);
-
-    // shorten colors
-    $css = preg_replace("/#([0-9a-fA-F]{1})\\1([0-9a-fA-F]{1})\\2([0-9a-fA-F]{1})\\3/", "#\\1\\2\\3",$css);
-
-    return $css;
-}
-
-/**
- * Callback for css_compress()
- *
- * Keeps short comments (< 5 chars) to maintain typical browser hacks
- *
- */
-function css_comment_cb($matches){
-    if(strlen($matches[2]) > 4) return '';
-    return $matches[0];
-}
-
-function js_out(){
-    global $_CONF, $_SYSTEM, $_PLUGINS, $themeAPI;
-
-    if ( !isset($_CONF['js_cache_filename']) ) {
-        $_CONF['js_cache_filename'] = 'jscache_';
-    }
-
-    if ( $_SYSTEM['use_direct_style_js'] ) {
-        $cacheFile = $_CONF['path_html'].'/'.$_CONF['js_cache_filename'].$_CONF['theme'].'.js';
-        $cacheURL  = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].'.js?t='.$_CONF['theme'];
-    } else {
-        $cacheFile = $_CONF['path'].'/data/layout_cache/'.$_CONF['js_cache_filename'].$_CONF['theme'].'.js';
-        $cacheURL  = $_CONF['site_url'].'/js.php?t='.$_CONF['theme'];
-    }
-
-    /*
-     * Static list of standard JavaScript used by glFusion...
-     */
-
-    $files = array(
-        $_CONF['path_html'] . 'javascript/mootools/mootools-release-1.11.packed.js',
-        $_CONF['path_html'] . 'fckeditor/fckeditor.js',
-        $_CONF['path_html'] . 'javascript/common.js',
-        $_CONF['path_html'] . 'javascript/fValidator.js',
-        $_CONF['path_html'] . 'javascript/mootools/gl_mooreflection.js',
-        $_CONF['path_html'] . 'javascript/mootools/gl_moomenu.js',
-        $_CONF['path_html'] . 'javascript/mootools/moorating.js',
-
-    );
-
-    if ( $themeAPI < 2 ) {
-        $files[] = $_CONF['path_html'] . 'javascript/sitetailor_ie6vertmenu.js';
-    }
-    /*
-     * Check to see if the theme has any JavaScript to include...
-     */
-
-    $function = 'theme_themeJS';
-
-    if( function_exists( $function )) {
-        $jTheme = $function( );
-        if ( is_array($jTheme) ) {
-            foreach($jTheme AS $item => $file) {
-                $files[] = $file;
-            }
-        }
-    }
-
-    /*
-     * Check to see if there are any custom javascript files to include
-     */
-    if( function_exists( 'CUSTOM_js' )) {
-        $jTheme = CUSTOM_js( );
-        if ( is_array($jTheme) ) {
-            foreach($jTheme AS $item => $file) {
-                $files[] = $file;
-            }
-        }
-    }
-
-    /*
-     * Let the plugins add their JavaScript needs here...
-     */
-
-    if ( is_array($_PLUGINS) ) {
-        foreach ( $_PLUGINS as $pi_name ) {
-            if ( function_exists('plugin_getheaderjs_'.$pi_name) ) {
-                $function = 'plugin_getheaderjs_'.$pi_name;
-                $pHeader = array();
-                $pHeader = $function();
-                if ( is_array($pHeader) ) {
-                    foreach($pHeader AS $item => $file) {
-                        $files[] = $file;
-                    }
-                }
-            }
-        }
-    }
-
-    /*
-     * Let the plugins add any global JS variables
-     */
-    if (is_array($_PLUGINS) ) {
-        foreach ( $_PLUGINS as $pi_name ) {
-            if ( function_exists('plugin_getglobaljs_'.$pi_name) ) {
-                $function = 'plugin_getglobaljs_'.$pi_name;
-                $globalJS = array();
-                $globalJS = $function();
-                if ( is_array($globalJS) ) {
-                    foreach($globalJS AS $name => $value) {
-                        $pluginJSvars[$name] = $value;
-                    }
-                }
-            }
-        }
-    }
-
-    if(js_cacheok($cacheFile,$files)){
-        return $cacheURL;
-    }
-
-    // start output buffering and build the script
-    ob_start();
-
-    // add some global variables
-    print "var glfusionSiteUrl = '".$_CONF['site_url']."';" . LB;
-    print "var glfusionEditorBaseUrl = '".$_CONF['site_url']."';" . LB;
-    print "var glfusionLayoutUrl     = '".$_CONF['layout_url']."';" . LB;
-
-    if ( $_SYSTEM['use_direct_style_js'] ) {
-        print "var glfusionStyleCSS      = '".$_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css?t='.$_CONF['theme'] . "';" . LB;
-    } else {
-        print "var glfusionStyleCSS      = '".$_CONF['site_url']."/css.php?t=" . $_CONF['theme'] . "';" . LB;
-    }
-
-    // send any global plugin JS vars
-
-    if ( is_array($pluginJSvars) ) {
-        foreach ($pluginJSvars AS $name => $value) {
-            print "var " . $name . " = '".$value."';";
-        }
-    }
-
-    // load files
-    if ( is_array($files) ) {
-        foreach($files as $file){
-            js_load($file);
-            print "\n";
-        }
-    }
-
-    // end output buffering and get contents
-    $js = ob_get_contents();
-    ob_end_clean();
-
-    $js .= "\n"; // https://bugzilla.mozilla.org/show_bug.cgi?id=316033
-
-    // save cache file
-    $fp = fopen($cacheFile,'w');
-    fwrite($fp,$js);
-    fclose($fp);
-    return $cacheURL;
-}
-
-/**
- * Load the given file, handle include calls and print it
- */
-function js_load($file){
-    if (!@file_exists($file))
-        return;
-
-    $js = readfile($file);
-
-    return;
-}
-
-/**
- * Checks if a JavaScript Cache file still is valid
- *
- */
-function js_cacheok($cache,$files){
-
-    $ctime = @filemtime($cache);
-    if(!$ctime) return false; //There is no cache
-
-    // now walk the files
-    if ( is_array($files) ) {
-        foreach($files as $file){
-            if(@filemtime($file) > $ctime){
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
-/**
-* Turn a piece of HTML into continuous(!) plain text
-*
-* This function removes HTML tags, line breaks, etc. and returns one long
-* line of text. This is useful for word counts (do an explode() on the result)
-* and for text excerpts.
-*
-* @param    string  $text   original text, including HTML and line breaks
-* @return   string          continuous plain text
-*
-*/
-function COM_getTextContent($text)
-{
-    // replace <br> with spaces so that Text<br>Text becomes two words
-    $text = preg_replace('/\<br(\s*)?\/?\>/i', ' ', $text);
-
-    // add extra space between tags, e.g. <p>Text</p><p>Text</p>
-    $text = str_replace('><', '> <', $text);
-
-    // only now remove all HTML tags
-    $text = strip_tags($text);
-
-    // replace all tabs, newlines, and carrriage returns with spaces
-    $text = str_replace(array("\011", "\012", "\015"), ' ', $text);
-
-    // replace entities with plain spaces
-    $text = str_replace(array('&#20;', '&#160;', '&nbsp;'), ' ', $text);
-
-    // collapse whitespace
-    $text = preg_replace('/\s\s+/', ' ', $text);
-
-    return trim($text);
-}
 css_out();
 js_out();
 
 if ( function_exists('CUSTOM_splashpage') ) {
     CUSTOM_splashpage();
 }
+
 ?>

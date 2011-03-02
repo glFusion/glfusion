@@ -547,7 +547,7 @@ function FEED_save($A)
     global $_CONF, $_TABLES, $LANG33;
 
     foreach ($A as $name => $value) {
-        $A[$name] = COM_stripslashes ($value);
+        $A[$name] = $value;
     }
 
     if ($A['is_enabled'] == 'on') {

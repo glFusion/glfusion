@@ -77,7 +77,7 @@ class conversion
         preg_match_all("|<\?=(.*?)\?>|U",$file,$out);
         for($i=0; $i < count($out[0]); $i++) {
             eval('$temp=' . $out[1][$i] . ';');
-            $file = str_replace($out[0][$i], stripslashes($temp), $file);
+            $file = str_replace($out[0][$i], $temp, $file);
         }
 
         if ($opt == 1) {

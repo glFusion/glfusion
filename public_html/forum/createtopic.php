@@ -297,17 +297,20 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
     $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
 
     if($method == 'newtopic') {
-        if($_POST['aname'] != '') {
-            $name = gf_preparefordb(gf_checkHTML(strip_tags(trim(COM_checkWords(USER_sanitizeName(COM_stripslashes($_POST['aname'])))))),'text');
+        if (isset($_POST['aname']) && $_POST['aname'] != '') {
+            $name = gf_preparefordb(gf_checkHTML(strip_tags(trim(COM_checkWords(USER_sanitizeName($_POST['aname']))))),'text');
         } else {
             $name = gf_preparefordb(gf_checkHTML(strip_tags(COM_checkWords($_POST['name']))),'text');
         }
         $name = urldecode($name);
         if ( function_exists('plugin_itemPreSave_captcha') ) {
+            if ( !isset($_POST['captcha']) ) {
+                $_POST['captcha'] = '';
+            }
             $msg = plugin_itemPreSave_captcha('forum',$_POST['captcha']);
             if ( $msg != '' ) {
                 $preview = 'Preview';
-                $subject = COM_stripslashes($_POST['subject']);
+                $subject = $_POST['subject'];
                 $retval .= COM_startBlock ($LANG03[17], '',
                              COM_getBlockTemplate ('_msg_block', 'header'))
                         . $msg
@@ -430,7 +433,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
             $msg = plugin_itemPreSave_captcha('forum',$captchaString);
             if ( $msg != '' ) {
                 $preview = 'Preview';
-                $subject = COM_stripslashes($_POST['subject']);
+                $subject = $_POST['subject'];
                 $retval .= COM_startBlock ($LANG03[17], '',
                              COM_getBlockTemplate ('_msg_block', 'header'))
                         . $msg
@@ -441,7 +444,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
         if ( $msg == '' ) {
             //Add Reply
             if(isset($_POST['aname']) && $_POST['aname'] != '') {
-                $name = gf_preparefordb(gf_checkHTML(strip_tags(trim(COM_checkWords(USER_sanitizeName(COM_stripslashes($_POST['aname'])))))),'text');
+                $name = gf_preparefordb(gf_checkHTML(strip_tags(trim(COM_checkWords(USER_sanitizeName($_POST['aname']))))),'text');
             } else {
                 $name = gf_preparefordb(gf_checkHTML(strip_tags(COM_checkWords($_POST['name']))),'text');
             }
@@ -559,7 +562,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
 }
 
 // EDIT MESSAGE
-$comment = isset($_POST['comment']) ? COM_stripslashes( $_POST['comment'] ) : '';
+$comment = isset($_POST['comment']) ? $_POST['comment'] : '';
 
 if ($id > 0) {
     $sql  = "SELECT a.forum,a.pid,a.comment,a.date,a.locked,a.subject,a.mood,a.sticky,a.uid,a.name,a.postmode,a.status,b.forum_cat,b.forum_name,b.is_readonly,c.cat_name,";
@@ -657,7 +660,7 @@ if (isset($_REQUEST['preview']) )  {  //&& $_REQUEST['preview'] == $LANG_GF01['P
             $previewitem['name'] = $_USER['username'];
             $previewitem['uid'] = $_USER['uid'];
         } else {
-            $previewitem['name'] = gf_checkHTML(strip_tags(COM_checkWords(trim(USER_sanitizeName(COM_stripslashes(urldecode($_POST['aname'])))))));
+            $previewitem['name'] = gf_checkHTML(strip_tags(COM_checkWords(trim(USER_sanitizeName(urldecode($_POST['aname']))))));
             $previewitem['uid'] = 1;
         }
         /* Check for any uploaded files */
@@ -740,7 +743,7 @@ if (isset($_REQUEST['preview']) )  {  //&& $_REQUEST['preview'] == $LANG_GF01['P
 // NEW TOPIC OR REPLY
 if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($preview == "Preview")) {
     if ( $preview == 'Preview' ) {
-        $edittopic['subject'] = COM_stripslashes($_POST['subject']);
+        $edittopic['subject'] = $_POST['subject'];
     }
     // validate the forum is actually the forum the topic belongs in...
     if ( $method == 'postreply' || $method=='edit') {
@@ -778,7 +781,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     if ($method == 'postreply' OR ($method == 'edit' AND $subject == '')) {
         $subject = $edittopic['subject'];
     } else {
-        $subject = isset($subject) ? COM_stripslashes($subject) : '';
+        $subject = isset($subject) ? $subject : '';
     }
 
     $topicnavbar = new Template($_CONF['path'] . 'plugins/forum/templates/');
@@ -930,7 +933,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
         $submissionformtop->set_var ('layout_url', $_CONF['layout_url']);
         $submissionformtop->set_var ('post_message', $postmessage);
         $submissionformtop->set_var ('LANG_NAME', $LANG_GF02['msg33']);
-        $submissionformtop->set_var ('name', gf_checkHTML(strip_tags(COM_checkWords(trim(USER_sanitizeName(COM_stripslashes(isset($_POST['aname']) ? $_POST['aname'] : '')))))));
+        $submissionformtop->set_var ('name', gf_checkHTML(strip_tags(COM_checkWords(trim(USER_sanitizeName(isset($_POST['aname']) ? $_POST['aname'] : ''))))));
         $submissionformtop->parse ('output', 'submissionformtop');
         echo $submissionformtop->finish($submissionformtop->get_var('output'));
 

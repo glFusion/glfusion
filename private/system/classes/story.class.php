@@ -967,9 +967,8 @@ class Story
             $this->_comment_expire = 0;
         }
 
-        // Handle Magic GPC Garbage:
         while (list($key, $value) = each($array)) {
-            $array[$key] = COM_stripslashes($value);
+            $array[$key] = $value;
         }
 
         if ( isset($array['postmode']) ) {

@@ -94,13 +94,13 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
                 $sig = DB_getItem($_TABLES['users'], 'sig',
                                   "uid={$_USER['uid']}");
                 if (!empty ($sig)) {
-                    $sig = strip_tags (COM_stripslashes ($sig));
+                    $sig = strip_tags ($sig);
                     $sig = "\n\n-- \n" . $sig;
                 }
             }
 
-            $subject = COM_filterHTML(COM_stripslashes ($subject));
-            $message = COM_filterHTML(COM_stripslashes ($message));
+            $subject = COM_filterHTML($subject);
+            $message = COM_filterHTML($message);
 
             // do a spam check with the unfiltered message text and subject
             $mailtext = $subject . "\n" . $message . $sig;
@@ -356,7 +356,6 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
     }
     $A = DB_fetchArray($result);
 
-    $shortmsg = COM_stripslashes ($shortmsg);
     $mailtext = sprintf ($LANG08[23], $from, $fromemail) . LB;
     if (strlen ($shortmsg) > 0) {
         if ( $html ) {
@@ -374,12 +373,12 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
 
     if ( $html ) {
         $mailtext .= '------------------------------------------------------------<br /><br />'
-                  . COM_undoSpecialChars (stripslashes ($A['title'])) . '<br />'
+                  . COM_undoSpecialChars ($A['title']) . '<br />'
                   . strftime ($_CONF['date'], $A['day']) . '<br />';
     } else {
         $mailtext .= '------------------------------------------------------------'
                   . LB . LB
-                  . COM_undoSpecialChars (stripslashes ($A['title'])) . LB
+                  . COM_undoSpecialChars ($A['title']) . LB
                   . strftime ($_CONF['date'], $A['day']) . LB;
     }
 
@@ -392,8 +391,8 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
         . '------------------------------------------------------------<br />';
     } else {
         $mailtext .= LB
-            . COM_undoSpecialChars(stripslashes(strip_tags(PLG_replaceTags($A['introtext'],'glfusion','mail_story')))).LB.LB
-            . COM_undoSpecialChars(stripslashes(strip_tags(PLG_replaceTags($A['bodytext'],'glfusion','mail_story')))).LB.LB
+            . COM_undoSpecialChars(strip_tags(PLG_replaceTags($A['introtext'],'glfusion','mail_story'))).LB.LB
+            . COM_undoSpecialChars(strip_tags(PLG_replaceTags($A['bodytext'],'glfusion','mail_story'))).LB.LB
             . '------------------------------------------------------------'.LB;
     }
     if ($A['commentcode'] == 0) { // comments allowed
@@ -411,7 +410,7 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
 
     $mailto = COM_formatEmailAddress ($to, $toemail);
     $mailfrom = COM_formatEmailAddress ($from, $fromemail);
-    $subject = COM_undoSpecialChars(strip_tags(stripslashes('Re: '.$A['title'])));
+    $subject = COM_undoSpecialChars(strip_tags('Re: '.$A['title']));
 
     $rc = COM_mail ($mailto, $subject, $mailtext, $mailfrom,$html);
     COM_updateSpeedlimit ('mail');

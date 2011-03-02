@@ -116,8 +116,12 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
                            $data_arr, $options_arr = '', $form_arr='', $extra='')
 {
 
+    // these are not used by simpleList - initialize to prevent E_ALL issues
+    $defsort_arr = array('field' => 0, 'direction' => 'ASC');
+    $filter      = '';
+
     $retval = ADMIN_listArray('simpleList', $fieldfunction, $header_arr, $text_arr,
-                                $data_arr, $defsort_arr = '', $filter='', $extra,
+                                $data_arr, $defsort_arr, $filter, $extra,
                                 $options_arr, $form_arr);
     return $retval;
 }
@@ -424,9 +428,9 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
 
     // retrieve the query
     if (isset($_GET['q'])) {
-        $query = strip_tags(COM_stripslashes($_GET['q']));
+        $query = strip_tags($_GET['q']);
     } else if (isset($_POST['q'])) {
-        $query = strip_tags(COM_stripslashes($_POST['q']));
+        $query = strip_tags($_POST['q']);
     } else {
         $query = '';
     }
@@ -670,6 +674,15 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     }
 
     # form the sql query to retrieve the data
+    if ( !isset($filtersql) ) {
+        $filtersql = '';
+    }
+    if ( !isset($orderbysql) ) {
+        $orderbysql = '';
+    }
+    if ( !isset($limitsql) ) {
+        $limitsql = '';
+    }
     $sql .= "$filtersql $orderbysql $limitsql;";
     $result = DB_query($sql);
 

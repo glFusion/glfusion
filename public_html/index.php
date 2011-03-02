@@ -104,8 +104,8 @@ if( $microsummary ) {
             if( empty( $topic )) {
                 $pagetitle = $_CONF['site_slogan'];
             } else {
-                $pagetitle = stripslashes( DB_getItem( $_TABLES['topics'], 'topic',
-                                                       "tid = '".DB_escapeString($topic)."'" ));
+                $pagetitle = DB_getItem( $_TABLES['topics'], 'topic',
+                                                       "tid = '".DB_escapeString($topic)."'" );
             }
         }
         $pagetitle = $_CONF['site_name'] . ' - ' . $pagetitle;

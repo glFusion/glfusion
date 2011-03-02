@@ -161,11 +161,11 @@ function MG_saveRemoteUpload( $albumId ) {
 	    if ( $remoteURL[$i] == '' ) {
 		    continue;
 	    }
-	    $URL		 = COM_stripslashes($remoteURL[$i]);
+	    $URL		 = $remoteURL[$i];
 	    $uploadType  = COM_applyFilter($_POST['type'][$i]);
-        $caption     = COM_stripslashes($_POST['caption'][$i]);
-        $description = COM_stripslashes($_POST['description'][$i]);
-        $keywords    = COM_stripslashes($_POST['keywords'][$i]);
+        $caption     = $_POST['caption'][$i];
+        $description = $_POST['description'][$i];
+        $keywords    = $_POST['keywords'][$i];
         $category    = COM_applyFilter($_POST['cat_id'][$i],true);
 //        $remotethumbnail   = COM_applyFilter($_POST['remotethumbnail'][$i]);
         $thumbnail   = $file['tmp_name'][$i];

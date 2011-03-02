@@ -77,12 +77,10 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     $topictemplate->set_var('xhtml',XHTML);
     // if preview, only stripslashes is gpc=on, else assume from db so strip
     if ( $mode == 'preview' ) {
-        $showtopic['subject'] = COM_stripslashes($showtopic['subject']);
         $topictemplate->set_var('show_topicrow1','none');
         $topictemplate->set_var('show_topicrule','none');
         $topictemplate->set_var('lang_postpreview',$LANG_GF01['PREVIEW_HEADER']);
     } else {
-        $showtopic['subject'] = stripslashes($showtopic['subject']);
         $topictemplate->set_var('show_topicrow2','none');
     }
 
@@ -311,7 +309,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     if ($mode != 'preview') {
         if ($is_lockedtopic == 0) {
             $is_readonly = DB_getItem($_TABLES['gf_forums'],'is_readonly','forum_id=' . intval($showtopic['forum']));
-            if ($is_readonly == 0 OR forum_modPermission($showtopic['forum'],$_USER['uid'],'mod_edit')) {
+            if ($is_readonly == 0 OR forum_modPermission($showtopic['forum'],(COM_isAnonUser() ? 1 : $_USER['uid']),'mod_edit')) {
                 if ( $canPost != 0 ) {
                     $quotelink = "{$_CONF['site_url']}/forum/createtopic.php?method=postreply&amp;forum={$showtopic['forum']}&amp;id=$replytopicid&amp;quoteid={$showtopic['id']}";
                     $quotelinkimg = '<img src="'.gf_getImage('quote_button').'" border="0" align="middle" alt="'.$LANG_GF01['QUOTEICON'].'" title="'.$LANG_GF01['QUOTEICON'].'"' . XHTML . '>';

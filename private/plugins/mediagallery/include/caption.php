@@ -281,11 +281,11 @@ function MG_batchCaptionSave( $album_id, $start, $actionURL ) {
 
     for ($i=0; $i < $total_media; $i++ ) {
         if ( $_MG_CONF['htmlallowed'] ) {
-            $title    = DB_escapeString(COM_checkWords(COM_stripslashes($media_title[$i])));
-            $desc     = DB_escapeString(COM_checkWords(COM_stripslashes($media_desc[$i])));
+            $title    = DB_escapeString(COM_checkWords($media_title[$i]));
+            $desc     = DB_escapeString(COM_checkWords($media_desc[$i]));
         } else {
-            $title    = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_stripslashes($media_title[$i])))));
-            $desc     = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_stripslashes($media_desc[$i])))));
+            $title    = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords($media_title[$i]))));
+            $desc     = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords($media_desc[$i]))));
         }
 
         $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_title='" . $title . "', `media_desc` ='" . $desc  . "' WHERE media_id='" . DB_escapeString(COM_applyFilter($media_id[$i])) ."'";

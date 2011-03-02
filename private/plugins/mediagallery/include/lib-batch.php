@@ -134,7 +134,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
         $time_limit = $max_execution_time;
     }
 
-    $label = COM_stripslashes($session['session_description']);
+    $label = $session['session_description'];
     // Pull the detail data from the sessions_items table...
 
     $sql = "SELECT * FROM {$_TABLES['mg_session_items']} WHERE session_id='" . DB_escapeString($session_id) . "' AND status=0 LIMIT " . $item_limit;
@@ -333,7 +333,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     require_once $_CONF['path'] . 'plugins/mediagallery/include/albumedit.php';
                     $new_aid = MG_quickCreate($album_id, $baseSrcFile );
 
-                    $dir = $srcFile; // COM_stripslashes($srcFile);
+                    $dir = $srcFile;
                     if (!$dh = @opendir($dir)) {
                         COM_errorLog("Media Gallery: Error - unable process FTP import directory " . $dir );
                     } else {
@@ -480,7 +480,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 $uid            = (int) $sdata[1];
                 $purgefiles     = 0;
                 $file    = basename($row['data']);
-                $baseSrcFile = stripslashes($file);
+                $baseSrcFile = $file;
                 $baseSrcFile = MG_replace_accents($baseSrcFile);
                 $baseSrcFile = preg_replace("#[ ]#","_",$baseSrcFile);  // change spaces to underscore
                 $baseSrcFile = preg_replace('#[^()\.\-,\w]#','_',$baseSrcFile);  //only parenthesis, underscore, letters, numbers, comma, hyphen, period - others to underscore
@@ -1101,16 +1101,16 @@ function MG_saveComment ($title, $comment, $sid, $pid, $type, $postmode, $uid, $
 
     // Clean 'em up a bit!
     if ($postmode == 'html') {
-        $comment = COM_checkWords (COM_checkHTML (DB_escapeString (COM_stripslashes ($comment))));
+        $comment = COM_checkWords (COM_checkHTML (DB_escapeString ($comment)));
     } else {
-        $comment = htmlspecialchars (COM_checkWords (COM_stripslashes ($comment)));
+        $comment = htmlspecialchars (COM_checkWords ($comment));
         $newcomment = COM_makeClickableLinks ($comment);
         if (strcmp ($comment, $newcomment) != 0) {
             $comment = nl2br ($newcomment);
             $postmode = 'html';
         }
     }
-    $title = COM_checkWords (strip_tags (COM_stripslashes ($title)));
+    $title = COM_checkWords (strip_tags ($title));
 
     // Get signature
     $sig = '';

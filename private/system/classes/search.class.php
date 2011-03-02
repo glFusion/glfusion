@@ -84,18 +84,18 @@ class Search {
 
         // Set search criteria
         if ( isset($_GET['query']) ){
-            $this->_query = strip_tags (COM_stripslashes ($_GET['query']));
+            $this->_query = strip_tags ($_GET['query']);
         } else if ( isset($_POST['query']) ) {
-            $this->_query = strip_tags (COM_stripslashes ($_POST['query']));
+            $this->_query = strip_tags ($_POST['query']);
         } else {
             $this->_query = '';
         }
         $this->_query = preg_replace('/\s\s+/', ' ', $this->_query);
 
         if ( isset($_GET['topic']) ){
-            $this->_topic = COM_applyFilter (COM_stripslashes ($_GET['topic']));
+            $this->_topic = COM_applyFilter ($_GET['topic']);
         } else if ( isset($_POST['topic']) ) {
-            $this->_topic = COM_applyFilter (COM_stripslashes ($_POST['topic']));
+            $this->_topic = COM_applyFilter ($_POST['topic']);
         } else {
             $this->_topic = '';
         }
@@ -892,7 +892,7 @@ class Search {
         if ($key + $i != $word_count) {
             $rt .= ' <b>...</b>';
         }
-        return stripslashes(COM_highlightQuery($rt, $keyword, 'b'));
+        return COM_highlightQuery($rt, $keyword, 'b');
     }
 
     /**

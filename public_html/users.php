@@ -204,7 +204,7 @@ function userprofile($user, $msg = 0, $plugin = '')
     $user_templates->set_var ('user_location', strip_tags ($A['location']));
     $user_templates->set_var ('lang_online', $LANG04[160]);
     $user_templates->set_var ('lang_bio', $LANG04[7]);
-    $user_templates->set_var ('user_bio', nl2br (stripslashes ($A['about'])));
+    $user_templates->set_var ('user_bio', nl2br ($A['about']));
     $user_templates->set_var ('lang_pgpkey', $LANG04[8]);
     $user_templates->set_var ('user_pgp', nl2br ($A['pgpkey']));
     $user_templates->set_var ('start_block_last10stories',
@@ -250,7 +250,7 @@ function userprofile($user, $msg = 0, $plugin = '')
             $C['title'] = str_replace ('$', '&#36;', $C['title']);
             $user_templates->set_var ('story_title',
                 COM_createLink(
-                    stripslashes ($C['title']),
+                    $C['title'],
                     $articleUrl,
                     array ('class'=>''))
             );
@@ -304,7 +304,7 @@ function userprofile($user, $msg = 0, $plugin = '')
                     '/comment.php?mode=view&amp;cid=' . $C['cid'];
             $user_templates->set_var ('comment_title',
                 COM_createLink(
-                    stripslashes ($C['title']),
+                    $C['title'],
                     $comment_url,
                     array ('class'=>''))
             );
@@ -660,7 +660,7 @@ function createuser ($username, $email, $email_conf, $passwd='', $passwd_conf=''
 
     $fullname = '';
     if (!empty ($_POST['fullname'])) {
-        $fullname   = COM_truncate(trim(USER_sanitizeName(COM_stripslashes($_POST['fullname']))),80);
+        $fullname   = COM_truncate(trim(USER_sanitizeName($_POST['fullname'])),80);
     }
 
     if (!isset ($_CONF['disallow_domains'])) {
@@ -851,13 +851,13 @@ function newuserform ($msg = '')
 
     $username = '';
     if (!empty ($_POST['username'])) {
-        $username = trim ( COM_stripslashes($_POST['username']) );
+        $username = trim ( $_POST['username'] );
     }
     $user_templates->set_var ('username', htmlentities($username,ENT_COMPAT,COM_getEncodingt()));
 
     $fullname = '';
     if (!empty ($_POST['fullname'])) {
-        $fullname = COM_stripslashes ($_POST['fullname']);
+        $fullname = $_POST['fullname'];
     }
     $fullname = USER_sanitizeName($fullname);
 
@@ -1009,7 +1009,7 @@ case 'logout':
                    $_CONF['cookie_path'], $_CONF['cookiedomain'],
                    $_CONF['cookiesecure'],true);
     if ( isset($_COOKIE['token'])) {
-        $token = COM_stripslashes($_COOKIE['token']);
+        $token = $_COOKIE['token'];
         DB_delete($_TABLES['tokens'],'token',DB_escapeString($token));
         SEC_setCookie ('token', '', time() - 10000,
                        $_CONF['cookie_path'], $_CONF['cookiedomain'],
@@ -1038,7 +1038,7 @@ case 'profile':
     break;
 
 case 'user':
-    $username = COM_stripslashes($_GET['username']);
+    $username = $_GET['username'];
     if ( !USER_validateUsername($username) ) {
         $username = '';
     }
@@ -1069,12 +1069,12 @@ case 'create':
 
         $email = COM_applyFilter ($_POST['email']);
         $email_conf = COM_applyFilter ($_POST['email_conf']);
-        $newusername = COM_stripslashes($_POST['username']);
+        $newusername = $_POST['username'];
         if ( isset($_POST['passwd']) ) {
-            $passwd = trim(COM_stripslashes($_POST['passwd']));
+            $passwd = trim($_POST['passwd']);
         }
         if ( isset($_POST['passwd_conf']) ) {
-            $passwd_conf = trim(COM_stripslashes($_POST['passwd_conf']));
+            $passwd_conf = trim($_POST['passwd_conf']);
         }
         $display .= createuser($newusername, $email, $email_conf, $passwd, $passwd_conf);
     }
@@ -1139,7 +1139,7 @@ case 'setnewpwd':
             $valid = DB_count ($_TABLES['users'], array ('uid', 'pwrequestid'),
                                array ($uid, $safereqid));
             if ($valid == 1) {
-                $passwd = SEC_encryptPassword(COM_stripslashes($_POST['passwd']));
+                $passwd = SEC_encryptPassword($_POST['passwd']);
                 DB_change ($_TABLES['users'], 'passwd', DB_escapeString($passwd),"uid", $uid);
                 DB_delete ($_TABLES['sessions'], 'uid', $uid);
                 DB_change ($_TABLES['users'], 'pwrequestid', "NULL",'uid', $uid);
@@ -1171,7 +1171,7 @@ case 'emailpasswd':
                  . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
                  . COM_siteFooter ();
     } else {
-        $username = COM_stripslashes ($_POST['username']);
+        $username = $_POST['username'];
         $email = COM_applyFilter ($_POST['email']);
         if (empty ($username) && !empty ($email)) {
             $username = DB_getItem ($_TABLES['users'], 'username',
@@ -1278,8 +1278,8 @@ case 'getnewtoken':
                  . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
                  . COM_siteFooter ();
     } else {
-        $username = COM_stripslashes ($_POST['username']);
-        $passwd   = COM_stripslashes ($_POST['passwd']);
+        $username = $_POST['username'];
+        $passwd   = $_POST['passwd'];
         if (!empty ($username) && !empty ($passwd)) {
             $encryptedPassword = DB_getItem($_TABLES['users'],'passwd','username="'.DB_escapeString($username).'"');
             if ( SEC_check_hash($passwd, $encryptedPassword) ) {
@@ -1308,14 +1308,14 @@ default:
 
     $loginname = '';
     if (isset ($_POST['loginname'])) {
-        $loginname = COM_stripslashes($_POST['loginname']);
+        $loginname = $_POST['loginname'];
         if ( !USER_validateUsername($loginname) ) {
             $loginname = '';
         }
     }
     $passwd = '';
     if (isset ($_POST['passwd'])) {
-        $passwd = COM_stripslashes($_POST['passwd']);
+        $passwd = $_POST['passwd'];
     }
 
     $service = '';

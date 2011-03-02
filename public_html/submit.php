@@ -260,19 +260,19 @@ function sendNotification($table, $story)
 {
     global $_CONF, $_TABLES, $LANG01, $LANG08, $LANG24, $LANG29, $LANG_ADMIN;
 
-    $title = stripslashes(COM_undoSpecialChars( $story->displayElements('title') ));
+    $title = COM_undoSpecialChars( $story->displayElements('title') );
     $postmode = $story->displayElements('postmode');
     $introtext = COM_undoSpecialChars( $story->displayElements('introtext') . "\n" . $story->displayElements('bodytext') );
     if ($postmode == 'html') {
         USES_lib_html2text();
         $introtext = str_replace("\\r","",$introtext);
-        $introtext = stripslashes($introtext);
+        $introtext = $introtext;
         $html2txt  = new html2text($introtext,false);
         $introtext = trim($html2txt->get_text());
     }
     $storyauthor = COM_getDisplayName( $story->displayelements('uid') );
-    $topic = stripslashes(DB_getItem ($_TABLES['topics'], 'topic',
-                                       'tid = \''.DB_escapeString($story->displayElements('tid')).'\''));
+    $topic = DB_getItem ($_TABLES['topics'], 'topic',
+                                       'tid = \''.DB_escapeString($story->displayElements('tid')).'\'');
     $mailbody = "$LANG08[31]: {$title}\n"
               . "$LANG24[7]: {$storyauthor}\n"
               . "$LANG08[32]: " . strftime ($_CONF['date']) . "\n"

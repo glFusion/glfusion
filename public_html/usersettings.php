@@ -292,7 +292,7 @@ function confirmAccountDelete ($form_reqid)
     // to change the password, email address, or cookie timeout,
     // we need the user's current password
     $current_password = DB_getItem($_TABLES['users'],'passwd',"uid={$_USER['uid']}");
-    if (empty($_POST['old_passwd']) || !SEC_check_hash(trim(COM_stripslashes($_POST['old_passwd'])),$current_password)) {
+    if (empty($_POST['old_passwd']) || !SEC_check_hash(trim($_POST['old_passwd']),$current_password)) {
          return COM_refresh($_CONF['site_url']
                             . '/usersettings.php?msg=84');
     }
@@ -956,7 +956,7 @@ function saveuser($A)
 
     // no need to filter the password as it's encoded anyway
     if ($_CONF['allow_username_change'] == 1) {
-        $A['new_username'] = COM_stripslashes($A['new_username']);
+        $A['new_username'] = $A['new_username'];
         if (!empty ($A['new_username']) && USER_validateUsername($A['new_username']) &&
                 ($A['new_username'] != $_USER['username'])) {
             $A['new_username'] = DB_escapeString ($A['new_username']);
@@ -996,11 +996,11 @@ function saveuser($A)
     $A['homepage'] = COM_applyFilter ($A['homepage']);
 
     // basic filtering only
-    $A['fullname'] = COM_truncate(trim(USER_sanitizeName(COM_stripslashes($A['fullname']))),80);
-    $A['location'] = strip_tags (COM_stripslashes ($A['location']));
-    $A['sig'] = strip_tags (COM_stripslashes ($A['sig']));
-    $A['about'] = strip_tags (COM_stripslashes ($A['about']));
-    $A['pgpkey'] = strip_tags (COM_stripslashes ($A['pgpkey']));
+    $A['fullname'] = COM_truncate(trim(USER_sanitizeName($A['fullname'])),80);
+    $A['location'] = strip_tags ($A['location']);
+    $A['sig'] = strip_tags ($A['sig']);
+    $A['about'] = strip_tags ($A['about']);
+    $A['pgpkey'] = strip_tags ($A['pgpkey']);
 
     if (!COM_isEmail ($A['email'])) {
         return COM_refresh ($_CONF['site_url']
@@ -1014,8 +1014,8 @@ function saveuser($A)
     } else {
         if ($service == '') {
             if (!empty($A['passwd'])) {
-                $A['passwd'] = trim(COM_stripslashes($A['passwd']));
-                $A['passwd_conf'] = trim(COM_stripslashes($A['passwd_conf']));
+                $A['passwd'] = trim($A['passwd']);
+                $A['passwd_conf'] = trim($A['passwd_conf']);
                 if (($A['passwd'] == $A['passwd_conf']) && SEC_check_hash($A['old_passwd'],$current_password) ){
                     $passwd = SEC_encryptPassword($A['passwd']);
                     DB_change($_TABLES['users'], 'passwd', DB_escapeString($passwd),"uid", (int)$_USER['uid']);
@@ -1247,7 +1247,7 @@ function userprofile ($user, $msg = 0)
     $user_templates->set_var ('lang_location', $LANG04[106]);
     $user_templates->set_var ('user_location', strip_tags ($A['location']));
     $user_templates->set_var ('lang_bio', $LANG04[7]);
-    $user_templates->set_var ('user_bio', nl2br (stripslashes ($A['about'])));
+    $user_templates->set_var ('user_bio', nl2br ($A['about']));
     $user_templates->set_var ('lang_pgpkey', $LANG04[8]);
     $user_templates->set_var ('user_pgp', nl2br ($A['pgpkey']));
     $user_templates->set_var ('start_block_last10stories',
@@ -1294,7 +1294,7 @@ function userprofile ($user, $msg = 0)
             $C['title'] = str_replace ('$', '&#36;', $C['title']);
             $user_templates->set_var ('story_title',
                 COM_createLink(
-                    stripslashes ($C['title']),
+                    $C['title'],
                     $articleUrl,
                     array('class'=> 'b')
                 )
@@ -1350,7 +1350,7 @@ function userprofile ($user, $msg = 0)
             $C['title'] = str_replace ('$', '&#36;', $C['title']);
             $user_templates->set_var ('comment_title',
                 COM_createLink(
-                    stripslashes ($C['title']),
+                    $C['title'],
                     $comment_url,
                     array('class'=> 'b')
                 )

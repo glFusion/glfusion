@@ -351,7 +351,7 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
         if( $i < $tnumrows ) {
             $tlist .= ',';
         }
-        $topics[$T['tid']] = stripslashes( $T['topic'] );
+        $topics[$T['tid']] = $T['topic'];
     }
     if( !empty( $tlist )) {
         $where .= " AND (tid IN ($tlist))";

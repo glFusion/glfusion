@@ -120,7 +120,7 @@ if ($nrows > 0) {
 
     for ($i = 0; $i < $nrows; $i++) {
         $A = DB_fetchArray($result);
-        $A['title'] = stripslashes(str_replace('$','&#36;',$A['title']));
+        $A['title'] = str_replace('$','&#36;',$A['title']);
         $A['sid'] = COM_createLink($A['title'],  COM_buildUrl ($_CONF['site_url']
                   . "/article.php?story={$A['sid']}"));
         $A['hits'] = COM_NumberFormat ($A['hits']);
@@ -149,7 +149,7 @@ if ($nrows > 0) {
     );
     for ($i = 0; $i < $nrows; $i++) {
         $A = DB_fetchArray($result);
-        $A['title'] = stripslashes(str_replace('$','&#36;',$A['title']));
+        $A['title'] = str_replace('$','&#36;',$A['title']);
         $A['sid'] = COM_createLink($A['title'], COM_buildUrl ($_CONF['site_url']
                   . "/article.php?story={$A['sid']}"));
         $A['comments'] = COM_NumberFormat ($A['comments']);
@@ -179,7 +179,7 @@ if ($_CONF['trackback_enabled'] || $_CONF['pingback_enabled']) {
         );
         for ($i = 0; $i < $nrows; $i++) {
             $A = DB_fetchArray ($result);
-            $A['title'] = stripslashes(str_replace('$','&#36;',$A['title']));
+            $A['title'] = str_replace('$','&#36;',$A['title']);
             $A['sid'] = COM_createLink($A['title'], COM_buildUrl ($_CONF['site_url']
                       . "/article.php?story={$A['sid']}"));
             $A['count'] = COM_NumberFormat ($A['count']);
@@ -210,7 +210,7 @@ if ($nrows > 0) {
     );
     for ($i = 0; $i < $nrows; $i++) {
         $A = DB_fetchArray($result);
-        $A['title'] = stripslashes(str_replace('$','&#36;',$A['title']));
+        $A['title'] = str_replace('$','&#36;',$A['title']);
         $A['sid'] = COM_createLink($A['title'], COM_buildUrl ($_CONF['site_url']
                   . "/article.php?story={$A['sid']}"));
         $A['numemails'] = COM_NumberFormat ($A['numemails']);
@@ -244,7 +244,7 @@ if ($nrows > 0) {
     );
     for ($i = 0; $i < $nrows; $i++) {
         $A = DB_fetchArray($result);
-        $A['username'] = stripslashes(str_replace('$','&#36;',$A['username']));
+        $A['username'] = str_replace('$','&#36;',$A['username']);
         $A['user'] = "<a href=\"" . $_CONF['site_url']
                   . "/users.php?mode=profile&amp;uid={$A['uid']}" . "\">{$A['username']}</a>";
         if ( $A['login'] ) {
