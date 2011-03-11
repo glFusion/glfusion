@@ -71,7 +71,7 @@ $_SQL[] = "CREATE TABLE {$_TABLES['autotag_usage']} (
   autotag_allowed tinyint(1) NOT NULL DEFAULT '1',
   usage_namespace varchar(128) NOT NULL,
   usage_operation varchar(128) NOT NULL,
-  KEY `autotag_id (autotag_id)
+  KEY autotag_id (autotag_id)
 ) TYPE=MyISAM
 ";
 
