@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -46,7 +46,7 @@ CREATE TABLE {$_TABLES['access']} (
   acc_ft_id mediumint(8) NOT NULL default '0',
   acc_grp_id mediumint(8) NOT NULL default '0',
   PRIMARY KEY  (acc_ft_id,acc_grp_id)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -55,7 +55,7 @@ CREATE TABLE {$_TABLES['article_images']} (
   ai_img_num tinyint(2) unsigned NOT NULL,
   ai_filename varchar(128) NOT NULL,
   PRIMARY KEY (ai_sid,ai_img_num)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "CREATE TABLE {$_TABLES['autotag_perm']} (
@@ -63,7 +63,7 @@ $_SQL[] = "CREATE TABLE {$_TABLES['autotag_perm']} (
   autotag_namespace varchar(128) NOT NULL,
   autotag_name varchar(128) NOT NULL,
   PRIMARY KEY (autotag_id)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "CREATE TABLE {$_TABLES['autotag_usage']} (
@@ -72,7 +72,7 @@ $_SQL[] = "CREATE TABLE {$_TABLES['autotag_usage']} (
   usage_namespace varchar(128) NOT NULL,
   usage_operation varchar(128) NOT NULL,
   KEY autotag_id (autotag_id)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -106,7 +106,7 @@ CREATE TABLE {$_TABLES['blocks']} (
   INDEX blocks_name(name),
   INDEX blocks_onleft(onleft),
   PRIMARY KEY  (bid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -114,7 +114,7 @@ CREATE TABLE {$_TABLES['commentcodes']} (
   code tinyint(4) NOT NULL default '0',
   name varchar(32) default NULL,
   PRIMARY KEY  (code)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -123,7 +123,7 @@ CREATE TABLE {$_TABLES['commentedits']} (
   uid mediumint(8) NOT NULL,
   time datetime NOT NULL,
   PRIMARY KEY (cid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -131,7 +131,7 @@ CREATE TABLE {$_TABLES['commentmodes']} (
   mode varchar(10) NOT NULL default '',
   name varchar(32) default NULL,
   PRIMARY KEY  (mode)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -157,7 +157,7 @@ CREATE TABLE {$_TABLES['comments']} (
   INDEX comments_rht(rht),
   INDEX comments_date(date),
   PRIMARY KEY  (cid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -171,7 +171,7 @@ CREATE TABLE {$_TABLES['conf_values']} (
   selectionArray int(11) default NULL,
   sort_order int(11) default NULL,
   fieldset int(11) default NULL
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -179,7 +179,7 @@ CREATE TABLE {$_TABLES['cookiecodes']} (
   cc_value int(8) unsigned NOT NULL default '0',
   cc_descr varchar(20) NOT NULL default '',
   PRIMARY KEY  (cc_value)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -188,7 +188,7 @@ CREATE TABLE {$_TABLES['dateformats']} (
   format varchar(32) default NULL,
   description varchar(64) default NULL,
   PRIMARY KEY  (dfid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -196,7 +196,7 @@ CREATE TABLE {$_TABLES['featurecodes']} (
   code tinyint(4) NOT NULL default '0',
   name varchar(32) default NULL,
   PRIMARY KEY  (code)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -207,7 +207,7 @@ CREATE TABLE {$_TABLES['features']} (
   ft_gl_core tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (ft_id),
   KEY ft_name (ft_name)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -215,7 +215,7 @@ CREATE TABLE {$_TABLES['frontpagecodes']} (
   code tinyint(4) NOT NULL default '0',
   name varchar(32) default NULL,
   PRIMARY KEY  (code)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -225,7 +225,7 @@ CREATE TABLE {$_TABLES['group_assignments']} (
   ug_grp_id mediumint(8) unsigned default NULL,
   INDEX group_assignments_ug_main_grp_id(ug_main_grp_id),
   INDEX group_assignments_ug_uid(ug_uid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -237,7 +237,7 @@ CREATE TABLE {$_TABLES['groups']} (
   grp_default tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (grp_id),
   UNIQUE grp_name (grp_name)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -245,7 +245,7 @@ CREATE TABLE {$_TABLES['maillist']} (
   code int(1) NOT NULL default '0',
   name char(32) default NULL,
   PRIMARY KEY  (code)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -258,7 +258,7 @@ CREATE TABLE {$_TABLES['pingservice']} (
   is_enabled tinyint(1) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (pid),
   INDEX pingservice_is_enabled(is_enabled)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -270,7 +270,7 @@ CREATE TABLE {$_TABLES['plugins']} (
   pi_homepage varchar(128) NOT NULL default '',
   INDEX plugins_enabled(pi_enabled),
   PRIMARY KEY  (pi_name)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -278,7 +278,7 @@ CREATE TABLE {$_TABLES['postmodes']} (
   code char(10) NOT NULL default '',
   name char(32) default NULL,
   PRIMARY KEY  (code)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "CREATE TABLE {$_TABLES['rating']} (
@@ -288,7 +288,7 @@ $_SQL[] = "CREATE TABLE {$_TABLES['rating']} (
   `votes` int(11) NOT NULL,
   `rating` decimal(4,2) NOT NULL,
   KEY `id` (`id`)
-) Type=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "CREATE TABLE {$_TABLES['rating_votes']} (
@@ -303,12 +303,13 @@ $_SQL[] = "CREATE TABLE {$_TABLES['rating_votes']} (
   KEY `uid` (`uid`),
   KEY `ip_address` (`ip_address`),
   KEY `type` (`type`)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
 CREATE TABLE {$_TABLES['sessions']} (
   sess_id int(10) unsigned NOT NULL default '0',
+  browser varchar(255) NOT NULL default '',
   start_time int(10) unsigned NOT NULL default '0',
   remote_ip varchar(15) NOT NULL default '',
   uid mediumint(8) NOT NULL default '1',
@@ -316,7 +317,7 @@ CREATE TABLE {$_TABLES['sessions']} (
   PRIMARY KEY  (md5_sess_id),
   KEY start_time (start_time),
   KEY remote_ip (remote_ip)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -324,7 +325,7 @@ CREATE TABLE {$_TABLES['sortcodes']} (
   code char(4) NOT NULL default '0',
   name char(32) default NULL,
   PRIMARY KEY  (code)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -344,7 +345,7 @@ CREATE TABLE {$_TABLES['statuscodes']} (
   code int(1) NOT NULL default '0',
   name char(32) default NULL,
   PRIMARY KEY  (code)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -389,7 +390,7 @@ CREATE TABLE {$_TABLES['stories']} (
   INDEX stories_date(date),
   INDEX stories_frontpage(frontpage),
   PRIMARY KEY  (sid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -403,7 +404,7 @@ CREATE TABLE {$_TABLES['storysubmission']} (
   date datetime default NULL,
   postmode varchar(10) NOT NULL default 'html',
   PRIMARY KEY  (sid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -429,7 +430,7 @@ CREATE TABLE {$_TABLES['syndication']} (
   INDEX syndication_topic(topic),
   INDEX syndication_is_enabled(is_enabled),
   INDEX syndication_updated(updated)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -440,7 +441,7 @@ CREATE TABLE {$_TABLES['tokens']} (
   urlfor varchar(255) NOT NULL,
   ttl mediumint(8) unsigned NOT NULL default '1',
   PRIMARY KEY (token)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -461,7 +462,7 @@ CREATE TABLE {$_TABLES['topics']} (
   perm_members tinyint(1) unsigned NOT NULL default '2',
   perm_anon tinyint(1) unsigned NOT NULL default '2',
   PRIMARY KEY  (tid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -480,7 +481,7 @@ CREATE TABLE {$_TABLES['trackback']} (
   INDEX trackback_url(url),
   INDEX trackback_type(type),
   INDEX trackback_date(date)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -488,7 +489,7 @@ CREATE TABLE {$_TABLES['trackbackcodes']} (
   code tinyint(4) NOT NULL default '0',
   name varchar(32) default NULL,
   PRIMARY KEY  (code)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -498,7 +499,7 @@ CREATE TABLE {$_TABLES['usercomment']} (
   commentorder varchar(4) NOT NULL default 'ASC',
   commentlimit mediumint(8) unsigned NOT NULL default '100',
   PRIMARY KEY  (uid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -513,7 +514,7 @@ CREATE TABLE {$_TABLES['userindex']} (
   INDEX userindex_noboxes(noboxes),
   INDEX userindex_maxstories(maxstories),
   PRIMARY KEY  (uid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -528,7 +529,7 @@ CREATE TABLE {$_TABLES['userinfo']} (
   lastgranted int(10) unsigned NOT NULL default '0',
   lastlogin VARCHAR(10) NOT NULL default '0',
   PRIMARY KEY  (uid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -544,7 +545,7 @@ CREATE TABLE {$_TABLES['userprefs']} (
   showonline tinyint(1) NOT NULL default '1',
   search_result_format varchar( 48 ) NOT NULL DEFAULT 'google',
   PRIMARY KEY  (uid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -576,7 +577,7 @@ CREATE TABLE {$_TABLES['users']} (
   INDEX users_email(email),
   INDEX users_passwd(passwd),
   INDEX users_pwrequestid(pwrequestid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -584,7 +585,7 @@ CREATE TABLE {$_TABLES['vars']} (
   name varchar(20) NOT NULL default '',
   value varchar(128) default NULL,
   PRIMARY KEY  (name)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 
@@ -608,6 +609,7 @@ $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (15,
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (16,4) ";
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (17,1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (17,13) ";
+$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (18,1) ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (1,1,'user_block','gldefault','My Account','all',4,'','','0000-00-00 00:00:00',1,'',4,2,3,3,2,2) ";
 $_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (2,1,'admin_block','gldefault','Admins Only','all',3,'','','0000-00-00 00:00:00',1,'',4,2,3,3,2,2) ";
@@ -652,7 +654,26 @@ $_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VA
 $_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (16,'%y-%m-%d %I:%M','99-03-21 10:00') ";
 $_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (17,'%d/%m/%y %H:%M','21/03/99 22:00') ";
 $_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (18,'%a %d %b %I:%M%p','Sun 21 Mar 10:00PM') ";
-
+/*---------------
+$_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (0,'','System Default') ";
+$_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (1,'l F d, Y @h:iA','Sunday March 21, 1999 @10:00PM') ";
+$_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (2,'l F d, Y @H:i','Sunday March 21, 1999 @22:00') ";
+$_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (4,'l F d @H:i','Sunday March 21 @22:00') ";
+$_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (5,'H:i d F Y','22:00 21 March 1999') ";
+$_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (6,'H:i l d F Y','22:00 Sunday 21 March 1999') ";
+$_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (7,'h:iA -- l F d Y','10:00PM -- Sunday March 21 1999') ";
+$_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (8,'D F d, h:iA','Sun March 21, 10:00PM') ";
+$_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (9,'D F d, H:i','Sun March 21, 22:00') ";
+$_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (10,'m-d-y H:i','3-21-99 22:00') ";
+$_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (11,'d-m-y H:i','21-3-99 22:00') ";
+$_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (12,'m-d-y h:iA','3-21-99 10:00PM') ";
+$_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (13,'h:iA  F d, Y','10:00PM  March 21st, 1999') ";
+$_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (14,'D M d, \'y h:iA','Sun Mar 21, \'99 10:00PM') ";
+$_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (15,'Day z, h ish','Day 80, 10 ish') ";
+$_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (16,'y-m-d h:i','99-03-21 10:00') ";
+$_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (17,'d/m/y H:i','21/03/99 22:00') ";
+$_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (18,'D d M h:iA','Sun 21 Mar 10:00PM') ";
+----------------- */
 $_DATA[] = "INSERT INTO {$_TABLES['featurecodes']} (code, name) VALUES (0,'Not Featured') ";
 $_DATA[] = "INSERT INTO {$_TABLES['featurecodes']} (code, name) VALUES (1,'Featured') ";
 

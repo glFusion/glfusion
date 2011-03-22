@@ -553,7 +553,7 @@ function glfusion_121()
 
 function glfusion_130()
 {
-    global $_TABLES, $_FM_TABLES, $_CONF;
+    global $_TABLES, $_CONF;
 
     $_SQL = array();
 
@@ -562,7 +562,7 @@ function glfusion_130()
       autotag_namespace varchar(128) NOT NULL,
       autotag_name varchar(128) NOT NULL,
       PRIMARY KEY (autotag_id)
-    ) TYPE=MyISAM";
+    ) ENGINE=MyISAM";
 
     $_SQL[] = "CREATE TABLE {$_TABLES['autotag_usage']} (
       autotag_id varchar(128) NOT NULL,
@@ -570,8 +570,28 @@ function glfusion_130()
       usage_namespace varchar(128) NOT NULL,
       usage_operation varchar(128) NOT NULL,
       KEY `autotag_id (autotag_id)
-    ) TYPE=MyISAM";
+    ) ENGINE=MyISAM";
 
+    $_SQL[] = "ALTER TABLE {$_TABLES['sessions']} ADD browser varchar(255) default '' AFTER sess_id";
+/* ---------------------------------
+    $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='l F d, Y @h:iA' WHERE dfid=1";
+    $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='l F d, Y @H:i' WHERE dfid=2";
+    $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='l F d @H:i' WHERE dfid=4";
+    $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='H:i d F Y' WHERE dfid=5";
+    $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='H:i l d F Y' WHERE dfid=6";
+    $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='h:iA -- l F d Y' WHERE dfid=7";
+    $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='D F d, h:iA' WHERE dfid=8";
+    $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='D F d, H:i' WHERE dfid=9";
+    $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='m-d-y H:i' WHERE dfid=10";
+    $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='d-m-y H:i' WHERE dfid=11";
+    $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='m-d-y h:iA' WHERE dfid=12";
+    $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='h:iA  F d, Y' WHERE dfid=13";
+    $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='D M d, \'y h:iA' WHERE dfid=14";
+    $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='Day z, h ish' WHERE dfid=15";
+    $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='y-m-d h:i' WHERE dfid=16";
+    $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='d/m/y H:i' WHERE dfid=17";
+    $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='D d M h:iA' WHERE dfid=18";
+------------------------------------- */
     // new config options
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
@@ -598,14 +618,27 @@ function glfusion_130()
     $c->add('twitter_consumer_key','not configured yet','text',4,16,NULL,357,TRUE);
     $c->add('twitter_consumer_secret','not configured yet','text',4,16,NULL,358,TRUE);
 
+    // date / time format changes
+    /* ---------------------------------------
+    $c->add('date','l, F d Y @ h:i A T','text',6,29,NULL,370,TRUE);
+    $c->add('daytime','m/d h:iA','text',6,29,NULL,380,TRUE);
+    $c->add('shortdate','m/d/y','text',6,29,NULL,390,TRUE);
+    $c->add('dateonly','d-M','text',6,29,NULL,400,TRUE);
+    $c->add('timeonly','H:iA','text',6,29,NULL,410,TRUE);
+    ----------------------------------- */
     foreach ($_SQL as $sql) {
         DB_query($sql,1);
     }
 
-    DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('autotag_perm.admin','AutoTag Permissions Admin',1)",1);
-    $ft_id = DB_insertId();
-    $grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'Root'"));
-    DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $grp_id)", 1);
+    $result = DB_query("SELECT * FROM {$_TABLES['features']} WHERE ft_name='autotag_perm.admin'");
+    if ( DB_numRows($result) > 0 ) {
+        COM_errorLog("glFusion 1.3.0 Development update: autotag_perm.admin permission already exists");
+    } else {
+        DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('autotag_perm.admin','AutoTag Permissions Admin',1)",1);
+        $ft_id  = DB_insertId();
+        $grp_id = (int) DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'Root'");
+        DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $grp_id)", 1);
+    }
 
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.3.0',name='glfusion'",1);
@@ -621,7 +654,7 @@ foreach ($stdPlugins AS $pi_name) {
     DB_query("UPDATE {$_TABLES['plugins']} SET pi_gl_version='".GVERSION."', pi_homepage='http://www.glfusion.org' WHERE pi_name='".$pi_name."'",1);
 }
 
-// probably need to clear the template cache so do it here
+// need to clear the template cache so do it here
 CTL_clearCache();
 
 $retval .= 'Development Code upgrades complete - see error.log for details<br>';

@@ -537,26 +537,6 @@ switch ($_CONF['language']) {
         break;
 }
 
-// Handle Who's Online block
-if (COM_isAnonUser() && isset($_SERVER['REMOTE_ADDR'])) {
-    // The following code handles anonymous users so they show up properly
-    DB_delete($_TABLES['sessions'], array('remote_ip', 'uid'),array(DB_escapeString($_SERVER['REMOTE_ADDR']), 1));
-
-    $tries = 0;
-    do {
-        $sess_id = 0;
-        $md5_sessid = md5(mt_rand());
-        $curtime = time();
-
-        // Insert anonymous user session
-        $result = DB_query( "INSERT INTO {$_TABLES['sessions']} (sess_id, start_time, remote_ip, uid,md5_sess_id) VALUES ('$sess_id', '$curtime', '".DB_escapeString($_SERVER['REMOTE_ADDR'])."', 1,'".DB_escapeString($md5_sessid)."')", 1 );
-        $tries++;
-    } while (( $result === false) && ( $tries < 5 ));
-}
-
-// Clear out any expired sessions
-DB_query( "DELETE FROM {$_TABLES['sessions']} WHERE start_time < " . ( time() - $_CONF['whosonline_threshold'] ));
-
 /**
 *
 * Language include
