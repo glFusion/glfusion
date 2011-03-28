@@ -73,7 +73,7 @@ CREATE TABLE {$_TABLES['staticpage']} (
   KEY staticpage_sp_centerblock (sp_centerblock),
   KEY staticpage_sp_tid (sp_tid),
   KEY staticpage_sp_where (sp_where)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 ?>

@@ -72,7 +72,7 @@ CREATE TABLE {$_TABLES['linkcategories']} (
   perm_anon tinyint(1) unsigned NOT NULL default '2',
   PRIMARY KEY (cid),
   KEY links_pid (pid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL['links'] = "
@@ -93,7 +93,7 @@ CREATE TABLE {$_TABLES['links']} (
   INDEX links_category(cid),
   INDEX links_date(date),
   PRIMARY KEY (lid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL['linksubmission'] = "
@@ -107,7 +107,7 @@ CREATE TABLE {$_TABLES['linksubmission']} (
   date datetime default NULL,
   owner_id mediumint(8) unsigned NOT NULL default '1',
   PRIMARY KEY (lid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL['d1'] = "INSERT INTO {$_TABLES['linkcategories']} (cid, pid, category, description, tid, created, modified, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('site', 'root', 'Root', 'Website root', '', NOW(), NOW(), #group#, 2, 3, 3, 2, 2)";

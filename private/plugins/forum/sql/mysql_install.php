@@ -46,7 +46,7 @@ $_SQL['gf_categories'] = "CREATE TABLE {$_TABLES['gf_categories']} (
   cat_dscp text NOT NULL,
   id int(2) NOT NULL auto_increment,
   PRIMARY KEY  (id)
-) TYPE=MyISAM";
+) ENGINE=MyISAM";
 # --------------------------------------------------------
 
 #
@@ -71,7 +71,7 @@ $_SQL['gf_forums'] = "CREATE TABLE {$_TABLES['gf_forums']} (
   rating_post mediumint(8) NOT NULL default '0',
   PRIMARY KEY  (forum_id),
   KEY forum_cat (forum_cat)
-) TYPE=MyISAM;";
+) ENGINE=MyISAM;";
 # --------------------------------------------------------
 
 #
@@ -106,7 +106,7 @@ $_SQL['gf_topic'] = "CREATE TABLE {$_TABLES['gf_topic']} (
   KEY `idxtopicpid` (`pid`),
   KEY `idxdate` (`date`),
   KEY `idxlastdate` (`lastupdated`)
-) TYPE=MyISAM;";
+) ENGINE=MyISAM;";
 # --------------------------------------------------------
 
 #
@@ -121,7 +121,7 @@ $_SQL['gf_log'] = "CREATE TABLE {$_TABLES['gf_log']} (
   KEY uid_forum (uid,forum),
   KEY uid_topic (uid,topic),
   KEY forum (forum)
-) TYPE=MyISAM;";
+) ENGINE=MyISAM;";
 # --------------------------------------------------------
 
 #
@@ -140,7 +140,7 @@ $_SQL['gf_moderators'] = "CREATE TABLE {$_TABLES['gf_moderators']} (
   mod_move tinyint(1) NOT NULL default '0',
   mod_stick tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (mod_id)
-) TYPE=MyISAM;";
+) ENGINE=MyISAM;";
 # --------------------------------------------------------
 
 #
@@ -164,7 +164,7 @@ $_SQL['gf_userprefs'] = "CREATE TABLE {$_TABLES['gf_userprefs']} (
   topic_order varchar(10) NOT NULL default 'ASC',
   use_wysiwyg_editor tinyint(3) NOT NULL DEFAULT '1',
   PRIMARY KEY  (uid)
-) TYPE=MyISAM;";
+) ENGINE=MyISAM;";
 # --------------------------------------------------------
 
 #
@@ -181,7 +181,7 @@ $_SQL['gf_watch'] = "CREATE TABLE {$_TABLES['gf_watch']} (
   KEY uid (uid),
   KEY forum_id (forum_id),
   KEY topic_id (topic_id)
-) TYPE=MyISAM;";
+) ENGINE=MyISAM;";
 # --------------------------------------------------------
 
 #
@@ -190,7 +190,7 @@ $_SQL['gf_watch'] = "CREATE TABLE {$_TABLES['gf_watch']} (
 $_SQL['gf_banned_ip'] = "CREATE TABLE {$_TABLES['gf_banned_ip']} (
   host_ip varchar(255) default NULL,
   KEY index1 (host_ip)
-) TYPE=MyISAM;";
+) ENGINE=MyISAM;";
 
 
 # --------------------------------------------------------
@@ -211,7 +211,7 @@ $_SQL['gf_userinfo'] = "CREATE TABLE {$_TABLES['gf_userinfo']} (
   `occupation` varchar(255) NOT NULL default '',
   `signature` mediumtext,
   PRIMARY KEY  (`uid`)
-) TYPE=MyISAM COMMENT='Forum Extra User Profile Information';";
+) ENGINE=MyISAM COMMENT='Forum Extra User Profile Information';";
 
 
 #
@@ -224,7 +224,7 @@ $_SQL['gf_bookmarks'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_bookmarks']} (
   KEY `topic_id` (`topic_id`),
   KEY `pid` (`pid`),
   KEY `uid` (`uid`)
-) TYPE=MyISAM ;";
+) ENGINE=MyISAM ;";
 
 #
 # Table structure for table `forum_attachments`
@@ -238,7 +238,7 @@ $_SQL['gf_attachments'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_attachments'
   `show_inline` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `topic_id` (`topic_id`)
-) Type=MyISAM  AUTO_INCREMENT=1 ;";
+) ENGINE=MyISAM  AUTO_INCREMENT=1 ;";
 
 #
 # Table structures for table 'forum_rating_assoc'
@@ -251,7 +251,7 @@ $_SQL['gf_rating_assoc'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_rating_asso
   `topic_id` int(11) NOT NULL,
   KEY `user_id` (`user_id`),
   KEY `voter_id` (`voter_id`)
-) Type=MyISAM ; ";
+) ENGINE=MyISAM ; ";
 
 
 $_SQL['d1'] = "INSERT INTO {$_TABLES['gf_categories']} (`cat_order`, `cat_name`, `cat_dscp`, `id`) VALUES (0,'General','General News and Discussions',1);";

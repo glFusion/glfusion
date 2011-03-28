@@ -48,7 +48,7 @@ CREATE TABLE {$_TABLES['pollanswers']} (
   votes mediumint(8) unsigned default NULL,
   remark varchar(255) NULL,
   PRIMARY KEY (pid, qid, aid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL['pollquestions'] = "
@@ -57,7 +57,7 @@ CREATE TABLE {$_TABLES['pollquestions']} (
     pid varchar(20) NOT NULL,
     question varchar(255) NOT NULL,
     PRIMARY KEY (qid, pid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL['polltopics'] = "
@@ -84,7 +84,7 @@ CREATE TABLE {$_TABLES['polltopics']} (
   INDEX pollquestions_commentcode(commentcode),
   INDEX pollquestions_statuscode(statuscode),
   PRIMARY KEY  (pid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL['pollvoters'] = "
@@ -94,7 +94,7 @@ CREATE TABLE {$_TABLES['pollvoters']} (
   ipaddress varchar(15) NOT NULL default '',
   date int(10) unsigned default NULL,
   PRIMARY KEY  (id)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 ?>

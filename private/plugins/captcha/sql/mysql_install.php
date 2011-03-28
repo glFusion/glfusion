@@ -41,7 +41,7 @@ CREATE TABLE {$_TABLES['cp_sessions']} (
   `validation` varchar(40) NOT NULL default '',
   `counter`    TINYINT(4) NOT NULL default 0,
   PRIMARY KEY (`session_id`)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 ?>
