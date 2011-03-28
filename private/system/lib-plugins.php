@@ -1850,6 +1850,13 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
         return $content;
     }
 
+    static $recursionCount = 0;
+
+    if ( $recursionCount > 5 ) {
+        COM_errorLog("AutoTag infinite recursion detected on " . $namespace . " " . $operation);
+        return $content;
+    }
+
     $autolinkModules = PLG_collectTags ();
     $autoTagUsage    = PLG_autoTagPerms();
 
@@ -1922,6 +1929,7 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
 
     // If we have found 1 or more AutoLink tag
     if (count ($tags) > 0) {       // Found the [tag] - Now process them all
+        $recursionCount++;
         foreach ($tags as $autotag) {
             $permCheck = $autotag['tag'].$postFix;
             if ( empty($postFix) || !isset($autoTagUsage[$permCheck]) || $autoTagUsage[$permCheck] == 1 ) {
@@ -2046,8 +2054,8 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
                 }
             }
         }
+        $recursionCount--;
     }
-
     return $content;
 }
 
