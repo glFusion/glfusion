@@ -252,10 +252,10 @@ function plugin_editcomment_filemgmt($cid,$id) {
  * @return  mixed   results of calling the CMT_userComments function
  */
 function plugin_displaycomment_filemgmt($id,$commentid,$title,$order,$format,$page,$view) {
-    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_FM_TABLES, $_CONF, $LANG01;
+    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_FM_TABLES, $_CONF, $LANG01,$_DB_name;
 
 
-    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
+    if ( COM_isAnonUser() && $mydownloads_publicpriv != 1 )  {
         return '';
     }
 
