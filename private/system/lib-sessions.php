@@ -61,9 +61,6 @@ if (session_id()) {
 	session_destroy();
 }
 
-// set default session save handler
-ini_set('session.save_handler', 'files');
-
 // disable transparent sid support
 ini_set('session.use_trans_sid', '0');
 session_name($_CONF['cookie_session']); // cookie name
@@ -163,7 +160,7 @@ function SESS_sessionCheck()
     SESS_setVar('session.counter',$count);
     $gc_check = $count % 10;
 
-    if ( isset($_USER['tzid']) ) {
+    if ( isset($_USER['tzid']) && !empty($_USER['tzid']) ) {
         $_CONF['timezone'] = $_USER['tzid'];
     }
 
@@ -194,6 +191,8 @@ function SESS_checkRememberMe()
     global $_CONF, $_TABLES, $_USER, $_SYSTEM;
 
     $userid = 0;
+
+    $request_ip = (!empty($_SERVER['REMOTE_ADDR'])) ? htmlspecialchars($_SERVER['REMOTE_ADDR']) : '';
 
     if (isset ($_COOKIE[$_CONF['cookie_name']])) {
         $userid = COM_applyFilter($_COOKIE[$_CONF['cookie_name']]);
@@ -414,7 +413,7 @@ function SESS_updateSessionTime($sessid)
 */
 function SESS_endUserSession($userid)
 {
-    global $_TABLES;
+    global $_TABLES, $_CONF;
 
     if ( !defined('DEMO_MODE') ) {
         $sql = "DELETE FROM {$_TABLES['sessions']} WHERE (uid = ".(int)$userid.")";
@@ -509,6 +508,10 @@ function SESS_completeLogin($uid)
     // build the $_USER array
     $userdata = SESS_getUserDataFromId($uid);
     $_USER = $userdata;
+
+    // save old session data
+    $savedSessionData = $_SESSION;
+
     // create the session
     $sessid = SESS_newSession($_USER['uid'], $request_ip, $_CONF['session_cookie_timeout']);
 
@@ -520,6 +523,9 @@ function SESS_completeLogin($uid)
 
     session_id($sessid);
     session_start();
+
+    $_SESSION = $savedSessionData;
+
     // initialize session counter
     SESS_setVar('session.counter',1);
 
