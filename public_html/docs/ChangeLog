@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.3.0 (Trunk Development Branch)
 ------
+- Fix layout bug when forum signature is present in a fixed width site with rightblocks. (Eric)
 - Implemented global magic_quotes_gpc() handling that is now automatic. Plugins
   and other items no longer need to worry about calling any routines to deal
   with magic quotes. (Mark)
