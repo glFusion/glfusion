@@ -171,10 +171,13 @@ function INSTALLER_install_table($step, &$vars)
         }
         $use_innodb = false;
     }
+
+    $sql55 = str_replace("TYPE=MyISAM","ENGINE=MyISAM", $step['sql']);
+
     if ($use_innodb) {
-        $sql = str_replace('MyISAM', 'InnoDB', $step['sql']);
+        $sql = str_replace('MyISAM', 'InnoDB', $sql55);
     } else {
-        $sql = $step['sql'];
+        $sql = $sql55;
     }
 
     DB_query($sql, 1);
