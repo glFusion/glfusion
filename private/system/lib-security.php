@@ -101,7 +101,7 @@ if (!defined('CSRF_TOKEN')) {
 function SEC_getUserGroups($uid='')
 {
     global $_TABLES, $_USER, $_SEC_VERBOSE;
-    static $runonce = Array();
+    static $runonce = array();
 
     if ($_SEC_VERBOSE) {
         COM_errorLog("****************in getusergroups(uid=$uid,usergroups=$usergroups,cur_grp_id=$cur_grp_id)***************",1);
@@ -1112,6 +1112,14 @@ function SEC_createToken($ttl = 1200)
 {
     global $_CONF, $_SYSTEM, $_USER, $_TABLES, $_DB_dbms;
 
+    static $tokenKey;
+
+    if (isset($tokenKey) && !empty($tokenKey) ) {
+        return $tokenKey;
+    }
+
+    $uid = isset($_USER['uid']) ? $_USER['uid'] : 1;
+
     if ( isset($_SYSTEM['token_ip']) && $_SYSTEM['token_ip'] == true ) {
         $pageURL  = $_SERVER['REMOTE_ADDR'];
     } else {
@@ -1119,28 +1127,26 @@ function SEC_createToken($ttl = 1200)
     }
 
     /* Generate the token */
-    $token = md5($_USER['uid'].$pageURL.uniqid (mt_rand (), 1));
+    $token = md5($uid.$pageURL.uniqid (mt_rand (), 1));
     $pageURL = DB_escapeString($pageURL);
 
     /* Destroy exired tokens: */
-    if($_DB_dbms == 'mssql') {
-        $sql = "DELETE FROM {$_TABLES['tokens']} WHERE (DATEADD(ss, ttl, created) < NOW())"
+    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE (DATE_ADD(created, INTERVAL ttl SECOND) < NOW())"
            . " AND (ttl > 0)";
-    } else {
-        $sql = "DELETE FROM {$_TABLES['tokens']} WHERE (DATE_ADD(created, INTERVAL ttl SECOND) < NOW())"
-           . " AND (ttl > 0)";
-    }
+
     DB_query($sql);
 
     /* Destroy tokens for this user/url combination */
-    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='".DB_escapeString($pageURL)."'";
+    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$uid} AND urlfor='".DB_escapeString($pageURL)."'";
     DB_query($sql);
 
     /* Create a token for this user/url combination */
     /* NOTE: TTL mapping for PageURL not yet implemented */
     $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
-           . "VALUES ('$token', NOW(), {$_USER['uid']}, '".$pageURL."', '".intval($ttl)."')";
+           . "VALUES ('$token', NOW(), {$uid}, '".$pageURL."', '".(int) $ttl."')";
     DB_query($sql);
+
+    $tokenKey = $token;
 
     /* And return the token to the user */
     return $token;
