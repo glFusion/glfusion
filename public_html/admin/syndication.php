@@ -145,6 +145,8 @@ function FEED_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
     $retval = '';
     $enabled = ($A['is_enabled'] == 1) ? true : false;
 
+    $dt = new Date('now',$_CONF['timezone']);
+
     switch($fieldname) {
 
         case 'edit':
@@ -176,7 +178,8 @@ function FEED_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case 'updated':
-            $datetime = strftime ($_CONF['daytime'], $A['date']);
+            $dt->setTimeStamp($A['date']);
+            $datetime = $dt->format($_CONF['daytime'],true);
             $retval = ($enabled) ? $datetime : '<span class="disabledfield">' . $datetime . '</span>';
             break;
 

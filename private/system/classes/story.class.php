@@ -449,6 +449,10 @@ class Story
     {
         global $_TABLES, $_CONF, $_USER, $_GROUPS;
 
+        $dtPublish  = new Date('now',$_CONF['timezone']);
+        $dtExpire   = new Date('now',$_CONF['timezone']);
+        $dtCmtclose = new Date('now',$_CONF['timezone']);
+
         $sid = DB_escapeString(COM_applyFilter($sid));
 
         if (!empty($sid) && (($mode == 'edit') || ($mode == 'view') || ($mode == 'clone'))) {
@@ -478,10 +482,10 @@ class Story
             } else {
                 $this->_uid = $_USER['uid'];
             }
-            $this->_date = time();
-            $this->_expire = time();
+            $this->_date = $dtPublish->toUnix();
+            $this->_expire = $dtExpire->toUnix();
             if ($_CONF['article_comment_close_enabled']) {
-                $this->_comment_expire = time() +
+                $this->_comment_expire = $dtCmtClose->toUnix() +
                     ($_CONF['article_comment_close_days'] * 86400);
             } else {
                 $this->_comment_expire = 0;
@@ -618,8 +622,8 @@ class Story
 	    } else {
                 $this->_uid = $_USER['uid'];
 	    }
-            $this->_date = time();
-            $this->_expire = time();
+            $this->_date = $dtPublish->toUnix();
+            $this->_expire = $dtExpire->toUnix(); //time();
 
             // if the original story uses comment expire, update the time
             if ($this->_comment_expire != 0) {
@@ -649,7 +653,7 @@ class Story
      */
     function saveToDatabase()
     {
-        global $_TABLES;
+        global $_TABLES, $_CONF;
 
         if (DB_getItem($_TABLES['topics'], 'tid', "archive_flag=1") == $this->_tid) {
             $this->_featured = 0;
@@ -745,17 +749,6 @@ class Story
         $this->_rating = $rating;
         $this->_votes = $votes;
 
-       /* Format dates for storage: */
-        /*
-         * Doing this here would use the webserver's timezone, but we need
-         * to use the DB server's timezone so that ye olde timezone hack
-         * still works. See use of FROM_UNIXTIME in the SQL below.
-         *
-         * $this->_date = date('Y-m-d H:i:s', $this->_date);
-         * $this->_expire = date('Y-m-d H:i:s', $this->_expire);
-         *
-         */
-
         // Get the related URLs
         $this->_related = implode("\n", STORY_extractLinks("{$this->_introtext} {$this->_bodytext}"));
         $sql = 'REPLACE INTO ' . $_TABLES['stories'] . ' (';
@@ -772,7 +765,7 @@ class Story
                 $varname = '_' . $fieldname;
                 $sql .= $fieldname . ', ';
                 if (($fieldname == 'date') || ($fieldname == 'expire') || ($fieldname == 'comment_expire')) {
-                    // let the DB server do this conversion (cf. timezone hack)
+                    // let the DB server do this conversion
                     if (!empty($this->{$varname})) {
                         $values .= 'FROM_UNIXTIME(' . $this->{$varname} . '), ';
                     } else {
@@ -912,6 +905,8 @@ class Story
     {
         global $_USER, $_CONF, $_TABLES;
 
+        $dt = new Date('now',$_CONF['timezone']);
+
         if (COM_isAnonUser()) {
             $this->_uid = 1;
         } else {
@@ -942,7 +937,7 @@ class Story
 
         // Use what we have:
         $this->_tid = $topic;
-        $this->_date = time();
+        $this->_date = $dt->toUnix();
     }
 
     /**
@@ -952,16 +947,20 @@ class Story
     {
         global $_CONF;
 
+        $dtPublish  = new Date('now',$_CONF['timezone']);
+        $dtExpire   = new Date('now',$_CONF['timezone']);
+        $dtCmtClose = new Date('now',$_CONF['timezone']);
+
         $array = $_POST;
 
         if ( count($_POST) == 0 ) {
             return;
         }
 
-        $this->_expire = time();
-        $this->_date = time();
+        $this->_expire = $dtExpire->toUnix();
+        $this->_date = $dtPublish->toUnix();
         if ($_CONF['article_comment_close_enabled']) {
-            $this->_comment_expire = time() +
+            $this->_comment_expire = $dtCmtClose->toUnix() +
                 ($_CONF['article_comment_close_days'] * 86400);
         } else {
             $this->_comment_expire = 0;
@@ -1029,6 +1028,9 @@ class Story
     function saveSubmission()
     {
         global $_USER, $_CONF, $_TABLES;
+
+        $dt = new Date('now',$_CONF['timezone']);
+
         $this->_sid = COM_makeSid();
 
         if (COM_isAnonUser()) {
@@ -1079,7 +1081,7 @@ class Story
             }
 
             $this->_oldsid = $this->_sid;
-            $this->_date = mktime();
+            $this->_date = $dt->toUnix();
             $this->_featured = 0;
             $this->_commentcode = $_CONF['comment_code'];
             $this->_trackbackcode = $_CONF['trackback_code'];
@@ -1416,187 +1418,137 @@ class Story
     function EditElements($item = 'title')
     {
         global $_CONF;
-        switch (strtolower($item))
-        {
-        case 'unixdate':
-            $return = strtotime($this->_date);
 
-            break;
+        $dtPublish  = new Date($this->_date,$_CONF['timezone']);
+        $dtExpire   = new Date($this->_expire,$_CONF['timezone']);
 
-        case 'expirestamp':
-            $return = strtotime($this->_expire);
+        if (isset($this->_comment_expire) && $this->_comment_expire != 0) {
+            $dtCmtClose = new Date($this->_comment_expire,$_CONF['timezone']);
+        } else {
+            $dtCmtClose = new Date($this->_date + ($_CONF['article_comment_close_days']*86400),$_CONF['timezone']);
+        }
 
-            break;
+        switch (strtolower($item)) {
+            case 'unixdate':
+                $return = $dtPublish->toUnix();
+                break;
 
-        case 'publish_hour':
-            $return = date('H', $this->_date);
+            case 'expirestamp':
+                $return = $dtExpire->toUnix();
+                break;
 
-            break;
+            case 'publish_month':
+                $return = $dtPublish->month;
+                break;
 
-        case 'publish_month':
-            $return = date('m', $this->_date);
+            case 'publish_day':
+                $return = $dtPublish->day;
+                break;
 
-            break;
+            case 'publish_year':
+                $return = $dtPublish->year;
+                break;
 
-        case 'publish_day':
-            $return = date('d', $this->_date);
+            case 'publish_hour':
+                $return = $dtPublish->hour;
+                break;
 
-            break;
+            case 'publish_minute':
+                $return = $dtPublish->minute;
+                break;
 
-        case 'publish_year':
-            $return = date('Y', $this->_date);
+            case 'publish_second':
+                $return = $dtPublish->second;
+                break;
 
-            break;
+            case 'expire_second':
+                $return = $dtExpire->second;
+                break;
 
-        case 'public_hour':
-            $return = date('H', $this->_date);
+            case 'expire_minute':
+                $return = $dtExpire->minute;
+                break;
 
-            break;
+            case 'expire_hour':
+                $return = $dtExpire->hour;
+                break;
 
-        case 'publish_minute':
-            $return = date('i', $this->_date);
+            case 'expire_day':
+                $return = $dtExpire->day;
+                break;
 
-            break;
+            case 'expire_month':
+                $return = $dtExpire->month;
+                break;
 
-        case 'publish_second':
-            $return = date('s', $this->_date);
+            case 'expire_year':
+                $return = $dtExpire->year;
+                break;
 
-            break;
+            case 'cmt_close':
+                if (isset($this->_comment_expire) && $this->_comment_expire != 0) {
+                    $return = true;
+                } else {
+                    $return = false;
+                    //return default expire time to form
+                    $this->_comment_expire = $dtPublish->toUnix() + ($_CONF['article_comment_close_days']*86400);
+                }
 
-        case 'expire_second':
-            $return = date('s', $this->_expire);
+                break;
 
-            break;
+            case 'cmt_close_second':
+                $return = $dtCmtClose->second;
+                break;
 
-        case 'expire_minute':
-            $return = date('i', $this->_expire);
+            case 'cmt_close_minute':
+                $return = $dtCmtClose->minute;
+                break;
 
-            break;
+            case 'cmt_close_hour':
+                $return = $dtCmtClose->hour;
+                break;
 
-        case 'expire_hour':
-            $return = date('H', $this->_expire);
+            case 'cmt_close_day':
+                $return = $dtCmtClose->day;
+                break;
 
-            break;
+            case 'cmt_close_month':
+                $return = $dtCmtClose->month;
+                break;
 
-        case 'expire_day':
-            $return = date('d', $this->_expire);
+            case 'cmt_close_year':
+                $return = $dtCmtClose->year;
+                break;
 
-            break;
+            case 'title':
+                $return = $this->_title;
+                break;
 
-        case 'expire_month':
-            $return = date('m', $this->_expire);
+            case 'draft_flag':
+                if (isset($this->_draft_flag) && ($this->_draft_flag == 1)) {
+                    $return = true;
+                } else {
+                    $return = false;
+                }
+                break;
 
-            break;
+            case 'introtext':
+                $return = $this->_editText($this->_introtext);
+                break;
 
-        case 'expire_year':
-            $return = date('Y', $this->_expire);
+            case 'bodytext':
+                $return = $this->_editText($this->_bodytext);
+                break;
 
-            break;
-        case 'cmt_close':
-            if (isset($this->_comment_expire) && $this->_comment_expire != 0) {
-                $return = true;
-            } else {
-                $return = false;
-                //return default expire time to form
-                $this->_comment_expire = $this->_date + ($_CONF['article_comment_close_days']*86400);
-            }
+            default:
+                $varname = '_' . $item;
 
-            break;
-
-        case 'cmt_close_second':
-            if ($this->_comment_expire == 0) {
-                $return = date('s', time() +
-                               ($_CONF['article_comment_close_days'] * 86400));
-            } else {
-                $return = date('s', $this->_comment_expire);
-            }
-
-            break;
-
-        case 'cmt_close_minute':
-            if ($this->_comment_expire == 0) {
-                $return = date('i', time() +
-                               ($_CONF['article_comment_close_days'] * 86400));
-            } else {
-                $return = date('i', $this->_comment_expire);
-            }
-
-            break;
-
-        case 'cmt_close_hour':
-            if ($this->_comment_expire == 0) {
-                $return = date('H', time() +
-                               ($_CONF['article_comment_close_days'] * 86400));
-            } else {
-                $return = date('H', $this->_comment_expire);
-            }
-
-            break;
-
-        case 'cmt_close_day':
-            if ($this->_comment_expire == 0) {
-                $return = date('d', time() +
-                               ($_CONF['article_comment_close_days'] * 86400));
-            } else {
-                $return = date('d', $this->_comment_expire);
-            }
-
-            break;
-
-        case 'cmt_close_month':
-            if ($this->_comment_expire == 0) {
-                $return = date('m', time() +
-                               ($_CONF['article_comment_close_days'] * 86400));
-            } else {
-                $return = date('m', $this->_comment_expire);
-            }
-
-            break;
-
-        case 'cmt_close_year':
-            if ($this->_comment_expire == 0) {
-                $return = date('Y', time() +
-                               ($_CONF['article_comment_close_days'] * 86400));
-            } else {
-                $return = date('Y', $this->_comment_expire);
-            }
-
-            break;
-
-        case 'title':
-            $return = $this->_title; //htmlspecialchars($this->_title);
-
-            break;
-
-        case 'draft_flag':
-            if (isset($this->_draft_flag) && ($this->_draft_flag == 1)) {
-                $return = true;
-            } else {
-                $return = false;
-            }
-
-            break;
-
-        case 'introtext':
-            $return = $this->_editText($this->_introtext);
-
-            break;
-
-        case 'bodytext':
-            $return = $this->_editText($this->_bodytext);
-
-            break;
-
-        default:
-            $varname = '_' . $item;
-
-            if (isset($this->{$varname})) {
-                $return = $this->{$varname};
-            } else {
-                $return = '';
-            }
-
-            break;
+                if (isset($this->{$varname})) {
+                    $return = $this->{$varname};
+                } else {
+                    $return = '';
+                }
+                break;
         }
 
         return $return;
@@ -1620,103 +1572,97 @@ class Story
     {
         global $_CONF, $_TABLES;
 
+        $dtObject = new Date($this->_date,$_CONF['timezone']);
+
+        if (isset($this->_expire) && $this->_expire != 0) {
+            $dtExpire = new Date($this->_expire,$_CONF['timezone']);
+        } else {
+            $dtExpire = new Date($this->_date + (7*86400),$_CONF['timezone']);
+        }
+
         $return = '';
 
-        switch (strtolower($item))
-        {
-        case 'introtext':
-            if ($this->_postmode == 'plaintext') {
-                $return = nl2br($this->_introtext);
-            } else {
-                $return = $this->_introtext;
-            }
+        switch (strtolower($item)) {
+            case 'introtext':
+                if ($this->_postmode == 'plaintext') {
+                    $return = nl2br($this->_introtext);
+                } else {
+                    $return = $this->_introtext;
+                }
 
-            $return = PLG_replaceTags($this->_displayEscape($return),'glfusion','story');
-            break;
+                $return = PLG_replaceTags($this->_displayEscape($return),'glfusion','story');
+                break;
 
-        case 'bodytext':
-            if (($this->_postmode == 'plaintext') && !(empty($this->_bodytext))) {
-                $return = nl2br($this->_bodytext);
-            } elseif (!empty($this->_bodytext)) {
-                $return = $this->_displayEscape($this->_bodytext);
-            }
+            case 'bodytext':
+                if (($this->_postmode == 'plaintext') && !(empty($this->_bodytext))) {
+                    $return = nl2br($this->_bodytext);
+                } elseif (!empty($this->_bodytext)) {
+                    $return = $this->_displayEscape($this->_bodytext);
+                }
 
-            $return = PLG_replaceTags($return,'glfusion','story');
-            break;
+                $return = PLG_replaceTags($return,'glfusion','story');
+                break;
 
-        case 'title':
-            $return = $this->_displayEscape($this->_title);
+            case 'title':
+                $return = $this->_displayEscape($this->_title);
 
-            break;
+                break;
 
-        case 'shortdate':
-            $return = strftime($_CONF['shortdate'], $this->_date);
+            case 'shortdate':
+                $return = $dtObject->format($_CONF['shortdate'],true);
 
-            break;
+                break;
 
-        case 'dateonly':
-            $return = strftime($_CONF['dateonly'], $this->_date);
+            case 'dateonly':
+                $return = $dtObject->format($_CONF['dateonly'],true);
 
-            break;
+                break;
 
-        case 'date':
-            $return = COM_getUserDateTimeFormat($this->_date);
+            case 'date':
+                $return = $dtObject->format($dtObject->getUserFormat(),true);
+                break;
 
-            $return = $return[0];
-            break;
+            case 'unixdate':
+                $return = $dtObject->toUnix();
+                break;
 
-        case 'unixdate':
-            $return = $this->_date;
-            break;
+            case 'hits':
+                $return = COM_NumberFormat($this->_hits);
+                break;
+            case 'rating':
+                $return = @number_format($this->_rating,2);
+                break;
 
-        case 'hits':
-            $return = COM_NumberFormat($this->_hits);
+            case 'votes':
+                $return = COM_NumberFormat($this->_votes);
+                break;
+            case 'topic':
+                $return = htmlspecialchars($this->_topic);
+                break;
 
-            break;
-        case 'rating':
-            $return = @number_format($this->_rating,2);
+            case 'expire':
+                $return = $dtExpire->toUnix();
+                break;
 
-            break;
+            case 'commentcode':
+                // check to see if comment_time has passed
+                if ($this->_comment_expire != 0 && (time() > $this->_comment_expire) && $this->_commentcode == 0 ) {
+                    $return = 1;
+                    //if comment code is not 1, change it to 1
+                    DB_query("UPDATE {$_TABLES['stories']} SET commentcode = '1' WHERE sid = '$this->_sid'"); //die('changed cc');
+                } else {
+                    $return = $this->_commentcode;
+                }
+                break;
 
-        case 'votes':
-            $return = COM_NumberFormat($this->_votes);
+            default:
+                $varname = '_' . $item;
 
-            break;
-        case 'topic':
-            $return = htmlspecialchars($this->_topic);
+                if (isset($this->{$varname})) {
+                    $return = $this->{$varname};
+                }
 
-            break;
-
-        case 'expire':
-            if (empty($this->_expire)) {
-                $return = time();
-            } else {
-                // Need to convert text date/time to a timestamp
-                $return = explode(' ', $this->_expire);
-                $return = COM_convertDate2Timestamp($return[0], $return[1]);
-            }
-
-            break;
-
-        case 'commentcode':
-            // check to see if comment_time has passed
-            if ($this->_comment_expire != 0 && (time() > $this->_comment_expire) && $this->_commentcode == 0 ) {
-                $return = 1;
-                //if comment code is not 1, change it to 1
-                DB_query("UPDATE {$_TABLES['stories']} SET commentcode = '1' WHERE sid = '$this->_sid'"); //die('changed cc');
-            } else {
-                $return = $this->_commentcode;
-            }
-            break;
-
-        default:
-            $varname = '_' . $item;
-
-            if (isset($this->{$varname})) {
-                $return = $this->{$varname};
-            }
-
-            break;
+                break;
         }
 
         return $return;
@@ -1894,6 +1840,8 @@ class Story
      */
     function _loadBasics(&$array)
     {
+        global $_CONF;
+
         /* For the really, really basic stuff, we can very easily load them
          * based on an array that defines how to COM_applyFilter them.
          */
@@ -1978,9 +1926,9 @@ class Story
         if (isset($array['publish_day'])) {
             $publish_day = COM_applyFilter($array['publish_day'], true);
         }
-        $this->_date = strtotime(
-                           "$publish_month/$publish_day/$publish_year $publish_hour:$publish_minute:$publish_second");
-
+        $dtPublish = new Date('now',$_CONF['timezone']);
+        $dtPublish->setDateTimestamp ( $publish_year,$publish_month,$publish_day,$publish_hour,$publish_minute,$publish_second );
+        $this->_date = $dtPublish->toUnix();
         $archiveflag = 0;
 
         if (isset($array['archiveflag'])) {
@@ -1990,7 +1938,7 @@ class Story
         if ($archiveflag != 1) {
             $this->_statuscode = 0;
         }
-
+        $dtExpire = new Date('now',$_CONF['timezone']);
         if (array_key_exists('expire_ampm', $array)) {
             $expire_ampm = COM_applyFilter($array['expire_ampm']);
             $expire_hour = COM_applyFilter($array['expire_hour'], true);
@@ -2010,14 +1958,15 @@ class Story
                 $expire_hour = '00';
             }
 
-            $expiredate
-            = strtotime("$expire_month/$expire_day/$expire_year $expire_hour:$expire_minute:$expire_second");
+            $dtExpire->setDateTimestamp ( $expire_year,$expire_month,$expire_day,$expire_hour,$expire_minute,$expire_second );
+            $expiredate = $dtExpire->toUnix();
         } else {
-            $expiredate = time();
+            $expiredate = $dtExpire->toUnix();
         }
 
         $this->_expire = $expiredate;
 
+        $dtCmtClose = new Date('now',$_CONF['timezone']);
         //comment expire time
         if (isset($array['cmt_close_flag'])) {
             $cmt_close_ampm = COM_applyFilter($array['cmt_close_ampm']);
@@ -2037,10 +1986,8 @@ class Story
             if ($cmt_close_ampm == 'am' AND $cmt_close_hour == 12) {
                 $cmt_close_hour = '00';
             }
-
-            $cmt_close_date
-            = strtotime("$cmt_close_month/$cmt_close_day/$cmt_close_year $cmt_close_hour:$cmt_close_minute:$cmt_close_second");
-
+            $dtCmtClose->setDateTimestamp ( $cmt_close_year,$cmt_close_month,$cmt_close_day,$cmt_close_hour,$cmt_close_minute,$cmt_close_second );
+            $cmt_close_date = $dtCmtClose->toUnix();
             $this->_comment_expire = $cmt_close_date;
         } else {
             $this->_comment_expire = 0;
@@ -2163,29 +2110,5 @@ class Story
 // End Private Methods.
 
 /**************************************************************************/
-}
-
-if (!function_exists('html_entity_decode')) {
-    /**
-     * html_entity_decode()
-     *
-     * Convert all HTML entities to their applicable characters
-     * This function is a fallback if html_entity_decode isn't defined
-     * in the PHP version used (i.e. PHP < 4.3.0).
-     * Please note that this function doesn't support all parameters
-     * of the original html_entity_decode function.
-     *
-     * Function borrowed from postnuke, under the GPL.
-     *
-     * @param  string $string the this function converts all HTML entities to their applicable characters from string.
-     * @return the converted string
-     * @link http://php.net/html_entity_decode The documentation of html_entity_decode
-     **/
-    function html_entity_decode($string)
-    {
-        $trans_tbl = get_html_translation_table(HTML_ENTITIES);
-        $trans_tbl = array_flip($trans_tbl);
-        return (strtr($string, $trans_tbl));
-    }
 }
 ?>

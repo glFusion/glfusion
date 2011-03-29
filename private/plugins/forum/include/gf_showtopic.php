@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -42,11 +42,6 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-if( !function_exists( 'str_ireplace' )) {
-    require_once( 'PHP/Compat.php' );
-    PHP_Compat::loadFunction( 'str_ireplace' );
-}
-
 USES_lib_user();
 
 function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
@@ -56,6 +51,8 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     global $canPost;
 
     $retval = '';
+
+    $dt = new Date('now',$_CONF['timezone']);
 
     static $cacheUserArray = array();
 
@@ -74,7 +71,6 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
             'website'       =>  'website.thtml',
             'quote'         =>  'quotetopic.thtml',
             'edit'          =>  'edittopic.thtml'));
-    $topictemplate->set_var('xhtml',XHTML);
     // if preview, only stripslashes is gpc=on, else assume from db so strip
     if ( $mode == 'preview' ) {
         $topictemplate->set_var('show_topicrow1','none');
@@ -85,10 +81,8 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     }
 
     $min_height = 50;     // Base minimum  height of topic - will increase if avatar or sig is used
-    $date = strftime( $CONF_FORUM['default_Topic_Datetime_format'], $showtopic['date'] );
-    if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
-        $date = iconv('ISO-8859-1','UTF-8',$date);
-    }
+    $dt->setTimestamp($showtopic['date']);
+    $date = $dt->format($CONF_FORUM['default_Topic_Datetime_format'],true);
 
     $foundUser = 0;
     if ( $showtopic['uid'] > 1 ) {
@@ -117,7 +111,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
                 $posts = DB_numRows($postcount);
                 $userarray['posts'] = $posts;
 
-                $starimage = "<img src=\"%s\" alt=\"{$LANG_GF01['FORUM']} %s\" title=\"{$LANG_GF01['FORUM']} %s\"" . XHTML . ">";
+                $starimage = "<img src=\"%s\" alt=\"{$LANG_GF01['FORUM']} %s\" title=\"{$LANG_GF01['FORUM']} %s\"/>";
 
                 if ($posts < $CONF_FORUM['level2']) {
                     $user_level = sprintf($starimage, gf_getImage('rank1','ranks'), $CONF_FORUM['level1name'],$CONF_FORUM['level1name']);
@@ -147,7 +141,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
                 $userarray['user_levelname'] = $user_levelname;
 
                 if ($userarray['photo'] != "") {
-                    $avatar = '<img src="' . USER_getPhoto($showtopic['uid'],'','','','0') . '" alt="" title="" class="forum-userphoto" style="width:' . $CONF_FORUM['avatar_width'] . 'px;"' . XHTML . '>';
+                    $avatar = '<img src="' . USER_getPhoto($showtopic['uid'],'','','','0') . '" alt="" title="" class="forum-userphoto" style="width:' . $CONF_FORUM['avatar_width'] . 'px;"/>';
                     $min_height = $min_height + 150;
                 } else {
                     $avatar = '';
@@ -160,13 +154,15 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
                 if ( SEC_inGroup('Root') && function_exists('plugin_cclabel_nettools') && isset($showtopic['ip']) ) {
                     $min_height = $min_height + 5;
                 }
-                $regdate = $LANG_GF01['REGISTERED']. ': ' . strftime('%m/%d/%y',strtotime($userarray['regdate'])). '<br' . XHTML . '>';
+                $dt->setTimestamp(strtotime($userarray['regdate']));
+
+                $regdate = $LANG_GF01['REGISTERED']. ': ' . $dt->format('m/d/y',true) . '<br/>';
                 $numposts = $LANG_GF01['POSTS']. ': ' .$posts;
                 if (DB_count( $_TABLES['sessions'], 'uid', intval($showtopic['uid'])) > 0 AND DB_getItem($_TABLES['userprefs'],'showonline',"uid=".intval($showtopic['uid'])."") == 1) {
-                    $avatar .= '<br' . XHTML . '>' .$LANG_GF01['STATUS']. ' ' .$LANG_GF01['ONLINE'];
+                    $avatar .= '<br/>' .$LANG_GF01['STATUS']. ' ' .$LANG_GF01['ONLINE'];
                     $onlinestatus = $LANG_GF01['ONLINE'];
                 } else {
-                    $avatar .= '<br' . XHTML . '>' .$LANG_GF01['STATUS']. ' ' .$LANG_GF01['OFFLINE'];
+                    $avatar .= '<br/>' .$LANG_GF01['STATUS']. ' ' .$LANG_GF01['OFFLINE'];
                     $onlinestatus = $LANG_GF01['OFFLINE'];
                 }
                 $userarray['avatar'] = $avatar;
@@ -186,7 +182,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         $uservalid = true;
 
         if($userarray['sig'] != '' || $userarray['signature'] != '' ) {
-            $sig = '<hr style="width:95%;color=:black;text-align:left;margin-left:0; margin-bottom:5;padding:0" noshade="noshade"' . XHTML . '>';
+            $sig = '<hr style="width:95%;color=:black;text-align:left;margin-left:0; margin-bottom:5;padding:0" noshade="noshade"/>';
 
             $usersig = GF_getSignature( $userarray['sig'],$userarray['signature'], 'html' );
             $sig .= $usersig;
@@ -200,7 +196,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     }
 
     if ($CONF_FORUM['show_moods'] &&  $showtopic['mood'] != "") {
-        $moodimage = '<img align="middle" src="'.gf_getImage($showtopic['mood'],'moods') .'" title="'.$showtopic['mood'].'" alt=""' . XHTML . '><br' . XHTML . '>';
+        $moodimage = '<img align="middle" src="'.gf_getImage($showtopic['mood'],'moods') .'" title="'.$showtopic['mood'].'" alt=""/><br/>';
         $min_height = $min_height + 30;
     }
     // Handle Pre ver 2.5 quoting and New Line Formatting - consider adding this to a migrate function
@@ -217,7 +213,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         }
         $showtopic['comment'] = str_ireplace("[code]<code>",'[code]',$showtopic['comment']);
         $showtopic['comment'] = str_ireplace("</code>[/code]",'[/code]',$showtopic['comment']);
-        $showtopic['comment'] = str_replace(array("<br" . XHTML . ">\r\n","<br" . XHTML . ">\n\r","<br" . XHTML . ">\r","<br" . XHTML . ">\n"), '<br' . XHTML . '>', $showtopic['comment'] );
+        $showtopic['comment'] = str_replace(array("<br/>\r\n","<br/>\n\r","<br/>\r","<br/>\n"), '<br/>', $showtopic['comment'] );
         $showtopic['comment'] = preg_replace("/\[QUOTE\sBY=\s(.+?)\]/i","[QUOTE] Quote by $1:",$showtopic['comment']);
         /* Reformat code blocks - version 2.3.3 and prior */
         $showtopic['comment'] = str_replace( '<pre class="forumCode">', '[code]', $showtopic['comment'] );
@@ -260,7 +256,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         }
         if ($editAllowed) {
             $editlink = "{$_CONF['site_url']}/forum/createtopic.php?method=edit&amp;forum={$showtopic['forum']}&amp;id={$showtopic['id']}&amp;editid={$showtopic['id']}&amp;page=$page";
-            $editlinkimg = '<img src="'.gf_getImage('edit_button').'" border="0" align="middle" alt="'.$LANG_GF01['EDITICON'].'" title="'.$LANG_GF01['EDITICON'].'"' . XHTML . '>';
+            $editlinkimg = '<img src="'.gf_getImage('edit_button').'" border="0" align="middle" alt="'.$LANG_GF01['EDITICON'].'" title="'.$LANG_GF01['EDITICON'].'"/>';
             $topictemplate->set_var ('editlink', $editlink);
             $topictemplate->set_var ('editlinkimg', $editlinkimg);
             $topictemplate->set_var ('LANG_edit', $LANG_GF01['EDITICON']);
@@ -279,7 +275,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         $views = $showtopic['views'];
         $topictemplate->set_var ('read_msg', sprintf($LANG_GF02['msg49'],$views) );
         if ($is_lockedtopic) {
-            $topictemplate->set_var('locked_icon','<img src="'.gf_getImage('padlock').'" title="'.$LANG_GF02['msg114'].'" alt=""' . XHTML . '>');
+            $topictemplate->set_var('locked_icon','<img src="'.gf_getImage('padlock').'" title="'.$LANG_GF02['msg114'].'" alt=""/>');
         }
     } else {
         $replytopicid = $showtopic['pid'];
@@ -289,9 +285,9 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     // Bookmark feature
     if (!COM_isAnonUser() ) {
         if (DB_count($_TABLES['gf_bookmarks'],array('uid','topic_id'),array($_USER['uid'],intval($showtopic['id'])))) {
-            $topictemplate->set_var('bookmark_icon','<img src="'.gf_getImage('star_on_sm').'" title="'.$LANG_GF02['msg204'].'" alt=""' . XHTML . '>');
+            $topictemplate->set_var('bookmark_icon','<img src="'.gf_getImage('star_on_sm').'" title="'.$LANG_GF02['msg204'].'" alt=""/>');
         } else {
-            $topictemplate->set_var('bookmark_icon','<img src="'.gf_getImage('star_off_sm').'" title="'.$LANG_GF02['msg203'].'" alt=""' . XHTML . '>');
+            $topictemplate->set_var('bookmark_icon','<img src="'.gf_getImage('star_off_sm').'" title="'.$LANG_GF02['msg203'].'" alt=""/>');
         }
     }
 
@@ -299,10 +295,8 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         $date = COM_getUserDateTimeFormat($showtopic['date']);
         $topictemplate->set_var ('posted_date', $date[0]);
     } else {
-        $date = strftime( $CONF_FORUM['default_Topic_Datetime_format'], $showtopic['date'] );
-        if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
-            $date = iconv('ISO-8859-1','UTF-8',$date);
-        }
+        $dt->setTimestamp($showtopic['date']);
+        $date = $dt->format($CONF_FORUM['default_Topic_Datetime_format'],true);
         $topictemplate->set_var ('posted_date', $date);
     }
 
@@ -312,7 +306,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
             if ($is_readonly == 0 OR forum_modPermission($showtopic['forum'],(COM_isAnonUser() ? 1 : $_USER['uid']),'mod_edit')) {
                 if ( $canPost != 0 ) {
                     $quotelink = "{$_CONF['site_url']}/forum/createtopic.php?method=postreply&amp;forum={$showtopic['forum']}&amp;id=$replytopicid&amp;quoteid={$showtopic['id']}";
-                    $quotelinkimg = '<img src="'.gf_getImage('quote_button').'" border="0" align="middle" alt="'.$LANG_GF01['QUOTEICON'].'" title="'.$LANG_GF01['QUOTEICON'].'"' . XHTML . '>';
+                    $quotelinkimg = '<img src="'.gf_getImage('quote_button').'" border="0" align="middle" alt="'.$LANG_GF01['QUOTEICON'].'" title="'.$LANG_GF01['QUOTEICON'].'"/>';
                     $topictemplate->set_var ('quotelink', $quotelink);
                     $topictemplate->set_var ('quotelinkimg', $quotelinkimg);
                     $topictemplate->set_var ('LANG_quote', $LANG_GF01['QUOTEICON']);
@@ -327,7 +321,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         $mod_functions = forum_getmodFunctions($showtopic);
         if($showtopic['uid'] > 1 && $uservalid) {
             $profile_link = "{$_CONF['site_url']}/users.php?mode=profile&amp;uid={$showtopic['uid']}";
-            $profile_linkimg = '<img src="'.gf_getImage('profile_button').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF01['ProfileLink'].'" title="'.$LANG_GF01['ProfileLink'].'"' . XHTML . '>';
+            $profile_linkimg = '<img src="'.gf_getImage('profile_button').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF01['ProfileLink'].'" title="'.$LANG_GF01['ProfileLink'].'"/>';
             $topictemplate->set_var ('profilelink', $profile_link);
             $topictemplate->set_var ('profilelinkimg', $profile_linkimg);
             $topictemplate->set_var ('LANG_profile',$LANG_GF01['ProfileLink']);
@@ -336,7 +330,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
                 $pmplugin_link = forumPLG_getPMlink($showtopic['uid']);
                 if ($pmplugin_link != '') {
                     $pm_link = $pmplugin_link;
-                    $pm_linkimg = '<img src="'.gf_getImage('pm_button').'" border="0" align="middle" alt="'.$LANG_GF01['PMLink'].'" title="'.$LANG_GF01['PMLink'].'"' . XHTML . '>';
+                    $pm_linkimg = '<img src="'.gf_getImage('pm_button').'" border="0" align="middle" alt="'.$LANG_GF01['PMLink'].'" title="'.$LANG_GF01['PMLink'].'"/>';
                     $topictemplate->set_var ('pmlink', $pm_link);
                     $topictemplate->set_var ('pmlinkimg', $pm_linkimg);
                     $topictemplate->set_var ('LANG_pm', $LANG_GF01['PMLink']);
@@ -347,7 +341,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
 
         if(isset($userarray['email']) && $userarray['email'] != '' && $showtopic["uid"] > 1 && $userarray['emailfromuser'] == 1) {
             $email_link = "{$_CONF['site_url']}/profiles.php?uid={$showtopic['uid']}";
-            $email_linkimg = '<img src="'.gf_getImage('email_button').'" border="0" align="middle" alt="'.$LANG_GF01['EmailLink'].'" title="'.$LANG_GF01['EmailLink'].'"' . XHTML . '>';
+            $email_linkimg = '<img src="'.gf_getImage('email_button').'" border="0" align="middle" alt="'.$LANG_GF01['EmailLink'].'" title="'.$LANG_GF01['EmailLink'].'"/>';
             $topictemplate->set_var ('emaillink', $email_link);
             $topictemplate->set_var ('emaillinkimg', $email_linkimg);
             $topictemplate->set_var ('LANG_email', $LANG_GF01['EmailLink']);
@@ -356,10 +350,9 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         if(isset($userarray['homepage']) && $userarray['homepage'] != '') {
             $homepage = $userarray['homepage'];
             if (!preg_match("/http/i",$homepage) ) {
-//            if(!eregi("http",$homepage)) {
                 $homepage = 'http://' .$homepage;
             }
-            $homepageimg = '<img src="'.gf_getImage('website_button').'" border="0" align="middle" alt="'.$LANG_GF01['WebsiteLink'].'" title="'.$LANG_GF01['WebsiteLink'].'"' . XHTML . '>';
+            $homepageimg = '<img src="'.gf_getImage('website_button').'" border="0" align="middle" alt="'.$LANG_GF01['WebsiteLink'].'" title="'.$LANG_GF01['WebsiteLink'].'"/>';
             $topictemplate->set_var ('websitelink', $homepage);
             $topictemplate->set_var ('websitelinkimg', $homepageimg);
             $topictemplate->set_var ('LANG_website', $LANG_GF01['WebsiteLink']);
@@ -504,9 +497,6 @@ function forum_getmodFunctions($showtopic) {
     }
     if (forum_modPermission($showtopic['forum'],$_USER['uid'],'mod_edit')) {
         $options .= '<option value="editpost">' .$LANG_GF03['edit'] . '</option>';
-//        if ($showtopic['locked'] == 1) {
-//            $options .= '<option value="lockedpost">' .$LANG_GF03['lockedpost'] . '</option>';
-//        }
     }
     if (forum_modPermission($showtopic['forum'],$_USER['uid'],'mod_delete')) {
         $options .= '<option value="deletepost">' .$LANG_GF03['delete'] . '</option>';
@@ -535,12 +525,12 @@ function forum_getmodFunctions($showtopic) {
             $msgpid = $showtopic['pid'];
             $top = "no";
         }
-        $retval .= '</select><input type="hidden" name="topic_id" value="' .$showtopic['id']. '"' . XHTML . '>';
-        $retval .= '<input type="hidden" name="forum_id" value="' .$showtopic['forum']. '"' . XHTML . '>';
-        $retval .= '<input type="hidden" name="topic_parent_id" value="' .$msgpid. '"'  . XHTML . '>';
-        $retval .= '<input type="hidden" name="top" value="' .$top. '"'  . XHTML . '>';
-        $retval .= '<input type="hidden" name="page" value="' .$page. '"' . XHTML . '>';
-        $retval .= '&nbsp;&nbsp;<input type="submit" name="submit" value="' .$LANG_GF01['GO'].'!"' . XHTML . '>';
+        $retval .= '</select><input type="hidden" name="topic_id" value="' .$showtopic['id']. '"/>';
+        $retval .= '<input type="hidden" name="forum_id" value="' .$showtopic['forum']. '"/>';
+        $retval .= '<input type="hidden" name="topic_parent_id" value="' .$msgpid. '"/>';
+        $retval .= '<input type="hidden" name="top" value="' .$top. '"/>';
+        $retval .= '<input type="hidden" name="page" value="' .$page. '"/>';
+        $retval .= '&nbsp;&nbsp;<input type="submit" name="submit" value="' .$LANG_GF01['GO'].'!"/>';
         $retval .= '</div></form>';
     }
     return $retval;

@@ -2,7 +2,14 @@ glFusion ChangeLog
 
 v1.3.0 (Trunk Development Branch)
 ------
-- Fix layout bug when forum signature is present in a fixed width site with rightblocks. (Eric)
+- Fix layout bug when forum signature is present in a fixed width site with
+  rightblocks. (Eric)
+- Updated install lib to handle MySQL ENGINE keyword (Mark)
+- Implemented new date / time class / handling (Mark)
+- Implemented improved session handling (Mark)
+- Fixed bug in requesting a new verification email (Mark)
+- MySQL version 4.0.18 or newer required. (Mark)
+- Detect refering URL on clear cache call and return to calling page (Mark)
 - Implemented global magic_quotes_gpc() handling that is now automatic. Plugins
   and other items no longer need to worry about calling any routines to deal
   with magic quotes. (Mark)
@@ -18,8 +25,22 @@ v1.3.0 (Trunk Development Branch)
 - Removed wiki text formatting (Mark)
 - Removed storybodytext.thtml / featuredbodytext.thtml templates (Mark)
 
+v1.2.1.pl6
+----------
+- Fixed permission check for story edit (Mark)
+- Calendar: Fixed permission check for anon users adding master cal
+  events (Mark)
+
+v1.2.1.pl5
+----------
+- Fixed performance issue with forum lists when user rating enabled (Mark)
+- Fixed bug where validation email requests would fail (Mark)
+- Fixed issue deleting comments (Mark)
+- FileMgmt: Expand autotags when displaying comments (Mark)
+
 v1.2.1.pl4
 ----------
+- Implement global autotag recursion detection (Mark)
 - Advanced story editor has some 'quirks' in IE (Mark)
 - Update Bad Behavior to v2.0.42 (Mark)
    - Google operates a proxy server for “feature phones” (dumb mobile phones;

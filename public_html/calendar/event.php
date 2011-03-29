@@ -70,6 +70,8 @@ function CALENDAR_addUserEvent($eid)
 
     $retval = '';
 
+    $dt = new Date('now',$_CONF['timezone']);
+
     $eventsql = "SELECT * FROM {$_TABLES['events']} WHERE eid='".DB_escapeString($eid)."'" . COM_getPermSql ('AND');
     $result = DB_query($eventsql);
     $nrows = DB_numRows($result);
@@ -99,15 +101,17 @@ function CALENDAR_addUserEvent($eid)
             $cal_template->set_var('event_start', $thestart[0]);
             $cal_template->set_var('event_end', $theend[0]);
         } else {
-            $cal_template->set_var('event_start', strftime($_CONF['shortdate'], $thestart[1]));
-            $cal_template->set_var('event_end', strftime($_CONF['shortdate'], $theend[1]));
+            $dt->setTimestamp($thestart[1]);
+            $cal_template->set_var('event_start', $dt->format($_CONF['shortdate'], true));
+            $dt->setTimestamp($theend[1]);
+            $cal_template->set_var('event_end', $dt->format($_CONF['shortdate'], true));
         }
 
         $cal_template->set_var('lang_where',$LANG_CAL_1[4]);
 
-        $location = $A['location'] . '<br' . XHTML . '>'
-                  . $A['address1'] . '<br' . XHTML . '>'
-                  . $A['address2'] . '<br' . XHTML . '>'
+        $location = $A['location'] . '<br/>'
+                  . $A['address1'] . '<br/>'
+                  . $A['address2'] . '<br/>'
                   . $A['city']
                   . ', ' . $A['state'] . ' ' . $A['zipcode'];
 
@@ -132,18 +136,18 @@ function CALENDAR_addUserEvent($eid)
                                     $location .= ' ';
                             }
                         } else {
-                            $location .= '<br' . XHTML . '>';
+                            $location .= '<br/>';
                         }
                         break;
                     case 'state':
                         if (!empty($A['zipcode'])) {
                             $location .= ' ';
                         } else {
-                            $location .= '<br' . XHTML . '>';
+                            $location .= '<br/>';
                         }
                         break;
                     default:
-                        $location .= '<br' . XHTML . '>';
+                        $location .= '<br/>';
                         break;
                 }
             }
@@ -221,6 +225,8 @@ function CALENDAR_editPersonalEvent($A)
 {
     global $_CONF, $_CA_CONF, $LANG_CAL_1;
 
+    $dt = new Date('now',$_CONF['timezone']);
+
     $cal_templates = new Template($_CONF['path'] . 'plugins/calendar/templates/');
     $cal_templates->set_file('form','editpersonalevent.thtml');
 
@@ -240,33 +246,34 @@ function CALENDAR_editPersonalEvent($A)
     $cal_templates->set_var('lang_starttime', $LANG_CAL_1[30]);
     $A['startdate'] = $A['datestart'] . ' ' . $A['timestart'];
 
-    $start_month = date ('n', strtotime ($A['startdate']));
+    $dt->setTimestamp(strtotime($A['startdate']));
+    $start_month = $dt->month; // date ('n', strtotime ($A['startdate']));
     $month_options = COM_getMonthFormOptions ($start_month);
     $cal_templates->set_var ('startmonth_options', $month_options);
 
-    $start_day = date ('j', strtotime ($A['startdate']));
+    $start_day = $dt->day; // date ('j', strtotime ($A['startdate']));
     $day_options = COM_getDayFormOptions ($start_day);
     $cal_templates->set_var('startday_options', $day_options);
 
-    $start_year = date ('Y', strtotime ($A['startdate']));
+    $start_year = $dt->year; //date ('Y', strtotime ($A['startdate']));
     $year_options = COM_getYearFormOptions ($start_year);
     $cal_templates->set_var('startyear_options', $year_options);
 
     if (isset ($_CA_CONF['hour_mode']) && ($_CA_CONF['hour_mode'] == 24)) {
-        $start_hour = date ('H', strtotime ($A['startdate']));
+        $start_hour = $dt->hour; //date ('H', strtotime ($A['startdate']));
         $hour_options = COM_getHourFormOptions ($start_hour, 24);
         $cal_templates->set_var ('starthour_options', $hour_options);
     } else {
-        $start_hour = date ('g', strtotime ($A['startdate']));
+        $start_hour = $dt->format('g',true); // date ('g', strtotime ($A['startdate']));
         $hour_options = COM_getHourFormOptions ($start_hour);
         $cal_templates->set_var ('starthour_options', $hour_options);
     }
 
-    $startmin = intval (date ('i', strtotime ($A['startdate'])) / 15) * 15;
+    $startmin = intval ($dt->minute / 15) * 15;
     $cal_templates->set_var ('startminute_options',
                              COM_getMinuteFormOptions ($startmin, 15));
 
-    $ampm = date ('a', strtotime ($A['startdate']));
+    $ampm = $dt->format('a',true); //date ('a', strtotime ($A['startdate']));
     $cal_templates->set_var ('startampm_selection',
                      CALENDAR_getAmPmFormSelection ('startampm_selection', $ampm, 'update_ampm()'));
 
@@ -275,33 +282,35 @@ function CALENDAR_editPersonalEvent($A)
     $cal_templates->set_var('lang_endtime', $LANG_CAL_1[29]);
     $A['enddate'] = $A['dateend'] . ' ' . $A['timeend'];
 
-    $end_month = date ('n', strtotime ($A['enddate']));
+    $dt->setTimestamp(strtotime($A['enddate']));
+
+    $end_month = $dt->month; //date ('n', strtotime ($A['enddate']));
     $month_options = COM_getMonthFormOptions ($end_month);
     $cal_templates->set_var ('endmonth_options', $month_options);
 
-    $end_day = date ('j', strtotime ($A['enddate']));
+    $end_day = $dt->day; // date ('j', strtotime ($A['enddate']));
     $day_options = COM_getDayFormOptions ($end_day);
     $cal_templates->set_var ('endday_options', $day_options);
 
-    $end_year = date ('Y', strtotime ($A['enddate']));
+    $end_year = $dt->year; //date ('Y', strtotime ($A['enddate']));
     $year_options = COM_getYearFormOptions ($end_year);
     $cal_templates->set_var ('endyear_options', $year_options);
 
     if (isset ($_CA_CONF['hour_mode']) && ($_CA_CONF['hour_mode'] == 24)) {
-        $end_hour = date ('H', strtotime ($A['enddate']));
+        $end_hour = $dt->hour; //date ('H', strtotime ($A['enddate']));
         $hour_options = COM_getHourFormOptions ($end_hour, 24);
         $cal_templates->set_var ('endhour_options', $hour_options);
     } else {
-        $end_hour = date ('g', strtotime ($A['enddate']));
+        $end_hour = $dt->format('g',true); //date ('g', strtotime ($A['enddate']));
         $hour_options = COM_getHourFormOptions ($end_hour);
         $cal_templates->set_var ('endhour_options', $hour_options);
     }
 
-    $endmin = intval (date ('i', strtotime ($A['enddate'])) / 15) * 15;
+    $endmin = intval ($dt->minute / 15) * 15;
     $cal_templates->set_var ('endminute_options',
                              COM_getMinuteFormOptions ($endmin, 15));
 
-    $ampm = date ('a', strtotime ($A['enddate']));
+    $ampm = $dt->format('a',true); //date ('a', strtotime ($A['enddate']));
     $cal_templates->set_var ('endampm_selection',
                          CALENDAR_getAmPmFormSelection ('endampm_selection', $ampm));
 
@@ -356,6 +365,8 @@ function CALENDAR_editPersonalEvent($A)
 // MAIN ========================================================================
 
 $display = '';
+
+$dt = new Date('now',$_CONF['timezone']);
 
 $action = '';
 if (isset ($_REQUEST['action'])) {
@@ -497,13 +508,12 @@ default:
             $day = COM_applyFilter ($_GET['day'], true);
         }
         if (($year == 0) || ($month == 0) || ($day == 0)) {
-            $year = date ('Y');
-            $month = date ('n');
-            $day = date ('j');
+            $year = $dt->year; // date ('Y');
+            $month = $dt->month; //date ('n');
+            $day = $dt->day; //date ('j');
         }
-
-        $pagetitle = $LANG_CAL_2[10] . ' ' . strftime ($_CONF['shortdate'],
-                                         mktime (0, 0, 0, $month, $day, $year));
+        $dt->setDateTimestamp($year,$month,$day,0,0,0);
+        $pagetitle = $LANG_CAL_2[10] . ' ' . $dt->format($_CONF['shortdate'],true);
         $display .= CALENDAR_siteHeader ( $pagetitle);
         $display .= COM_startBlock ($pagetitle);
 
@@ -556,19 +566,20 @@ default:
         $display .= $cal_templates->finish($cal_templates->get_var('output'));
         $display .= $LANG_CAL_1[2];
     } else {
-        $cal = new Calendar();
-        CALENDAR_setLanguage($cal);
+        $dt = new Date('now',$_CONF['timezone']);
 
         $currentmonth = '';
         for ($i = 0; $i < $nrows; $i++) {
             $A = DB_fetchArray($result);
             if (SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],
                               $A['perm_group'],$A['perm_members'],$A['perm_anon']) > 0) {
-                if (strftime('%B',strtotime($A['datestart'])) != $currentmonth) {
-                    $str_month = $cal->getMonthName(strftime('%m',strtotime($A['datestart'])));
+                $dt->setTimestamp(strtotime($A['datestart'] . ' 00:00:00'));
+
+                if ( $dt->month != $currentmonth ) {
+                    $str_month = $dt->monthToString($dt->month,false);
                     $cal_templates->set_var('lang_month', $str_month);
-                    $cal_templates->set_var('event_year', strftime('%Y',strtotime($A['datestart'])));
-                    $currentmonth = strftime('%B',strtotime($A['datestart']));
+                    $cal_templates->set_var('event_year', $dt->year);
+                    $currentmonth = $dt->month;
                 }
                 $cal_templates->set_var('event_title', $A['title']);
                 $cal_templates->set_var('site_url', $_CONF['site_url']);
@@ -607,24 +618,25 @@ default:
                     $cal_templates->set_var ('event_start', $thedatetime[0]);
 
                     if ($A['datestart'] == $A['dateend']) {
-                        $thedatetime[0] = strftime ($_CONF['timeonly'],
-                            strtotime ($A['dateend'] . ' ' . $A['timeend']));
+                        $dt->setTimestamp(strtotime ($A['dateend'] . ' ' . $A['timeend']));
+                        $thedatetime[0] = $dt->format($_CONF['timeonly'],true);
+
                     } else {
                         $thedatetime = COM_getUserDateTimeFormat ($A['dateend']
                                                         . ' ' . $A['timeend']);
                     }
                     $cal_templates->set_var ('event_end', $thedatetime[0]);
                 } else if ($A['allday'] == 1 AND $A['datestart'] <> $A['dateend']) {
-                    $thedatetime1 = strftime ('%A, ' . $_CONF['shortdate'],
-                                             strtotime ($A['datestart']));
+                    $dt->setTimestamp(strtotime ($A['datestart'].' 00:00:00'));
+                    $thedatetime1 = $dt->format('%A, ' . $_CONF['shortdate'],true);
                     $cal_templates->set_var ('event_start', $thedatetime1);
-                    $thedatetime2 = strftime ('%A, ' . $_CONF['shortdate'],
-                                                  strtotime ($A['dateend']));
+                    $dt->setTimestamp($strtotime($A['dateend'].' 00:00:00'));
+                    $thedatetime2 = $dt->format('%A, ' . $_CONF['shortdate'],true);
                     $cal_templates->set_var ('event_end', $thedatetime2
                                                         . ' ' . $LANG_CAL_2[26]);
                 } else {
-                    $thedatetime = strftime ('%A, ' . $_CONF['shortdate'],
-                                             strtotime ($A['datestart']));
+                    $dt->setTimestamp(strtotime($A['datestart'] . ' 00:00:00'));
+                    $thedatetime = $dt->format('%A, ' . $_CONF['shortdate'],true);
                     $cal_templates->set_var ('event_start', $thedatetime);
                     $cal_templates->set_var ('event_end', $LANG_CAL_2[26]);
                 }
@@ -665,18 +677,18 @@ default:
                                     empty ($A['address2']) && !$hasCityEtc)) {
                         $cal_templates->set_var ('br0', '');
                     } else {
-                        $cal_templates->set_var ('br0', '<br' . XHTML . '>');
+                        $cal_templates->set_var ('br0', '<br/>');
                     }
                     if (empty ($A['address1']) || (empty ($A['address2']) &&
                                                    !$hasCityEtc)) {
                         $cal_templates->set_var ('br1', '');
                     } else {
-                        $cal_templates->set_var ('br1', '<br' . XHTML . '>');
+                        $cal_templates->set_var ('br1', '<br/>');
                     }
                     if (empty ($A['address2']) || !$hasCityEtc) {
                         $cal_templates->set_var ('br2', '');
                     } else {
-                        $cal_templates->set_var ('br2', '<br' . XHTML . '>');
+                        $cal_templates->set_var ('br2', '<br/>');
                     }
                 }
 
@@ -701,7 +713,7 @@ default:
                             COM_createLink($LANG01[4], $editurl));
                     $img = '<img src="' . $_CONF['layout_url'] . '/images/edit.'
                         . $_IMAGE_TYPE . '" alt="' . $LANG01[4] . '" title="'
-                        . $LANG01[4] . '"' . XHTML . '>';
+                        . $LANG01[4] . '"/>';
                     $cal_templates->set_var('edit_icon',
                             COM_createLink($img, $editurl));
                 } else if ((SEC_hasAccess ($A['owner_id'], $A['group_id'],
@@ -714,7 +726,7 @@ default:
                             COM_createLink($LANG01[4], $editurl));
                     $img = '<img src="' . $_CONF['layout_url'] . '/images/edit.'
                         . $_IMAGE_TYPE . '" alt="' . $LANG01[4] . '" title="'
-                        . $LANG01[4] . '"' . XHTML . '>';
+                        . $LANG01[4] . '"/>';
                     $cal_templates->set_var('edit_icon',
                             COM_createLink($img, $editurl));
                     $cal_templates->set_var('hits_admin',

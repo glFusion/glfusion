@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric M. Kingsley       kingsley AT trains-n-town DOTcom                  |
@@ -41,11 +41,6 @@
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
-}
-
-if ( !function_exists('plugin_getmenuitems_forum') ) {
-    header("HTTP/1.0 404 Not Found");
-    exit;
 }
 
 // Magic url types
@@ -168,13 +163,20 @@ function do_bbcode_file ($action, $attributes, $content, $params, $node_object) 
     if ( $action == 'validate') {
         return true;
     }
+
+    if ( isset($_POST['uniqueid']) ) {
+        $uniqueID = COM_applyFilter($_POST['uniqueid'],true);
+    } else {
+        $uniqueID = 0;
+    }
+
     $sql = "SELECT id,filename,repository_id,show_inline,topic_id FROM {$_TABLES['gf_attachments']} ";
-    if (isset($_POST['uniqueid']) AND $_POST['uniqueid'] > 0) {  // User is previewing a new post
-        $sql .= "WHERE topic_id = ".intval($_POST['uniqueid'])." AND tempfile=1 ";
+    if ( $uniqueID > 0 ) {  // User is previewing a new post
+        $sql .= "WHERE topic_id = ". (int) $uniqueID ." AND tempfile=1 ";
     } else if(isset($previewitem['id'])) {
-         $sql .= "WHERE topic_id = ".intval($previewitem['id'])." ";
+         $sql .= "WHERE topic_id = ".(int) $previewitem['id']." ";
     } else if(isset($topicRec['id'])){
-        $sql .= "WHERE topic_id = ".intval($topicRec['id'])." ";
+        $sql .= "WHERE topic_id = ".(int) $topicRec['id']." ";
     } else {
         return '';
     }
@@ -223,7 +225,7 @@ function do_bbcode_file ($action, $attributes, $content, $params, $node_object) 
                     $srcThumbnail = "{$_CONF['site_url']}/forum/images/icons/none.gif";
                 }
             }
-            $retval = '<a href="'.$srcImage.'" '.$lb.' target="_new"><img src="'. $srcThumbnail . '" '.$align.' style="padding:5px;" title="'.$LANG_GF10['click2download'].'" alt="'.$LANG_GF10['click2download'].'"'.XHTML.'></a>';
+            $retval = '<a href="'.$srcImage.'" '.$lb.' target="_new"><img src="'. $srcThumbnail . '" '.$align.' style="padding:5px;" title="'.$LANG_GF10['click2download'].'" alt="'.$LANG_GF10['click2download'].'"/></a>';
             break;
          }
         $i++;
@@ -242,10 +244,12 @@ function do_bbcode_img ($action, $attributes, $content, $params, $node_object) {
             if ($node_object->_parent->type() == STRINGPARSER_NODE_ROOT OR
                 in_array($node_object->_parent->_codeInfo['content_type'], array('block', 'list', 'listitem'))) {
                 return true;
+            } else {
+                return false;
             }
-            else return false;
+        } else {
+            return true;
         }
-        else return true;
     }
 
     if ($CONF_FORUM['allow_img_bbcode']) {
@@ -263,7 +267,7 @@ function do_bbcode_img ($action, $attributes, $content, $params, $node_object) {
             $align = '';
         }
         $content = bbcode_cleanHTML($content);
-        return '<img src="'.htmlspecialchars($content,ENT_QUOTES, COM_getEncodingt()).'" ' . $dim . $align . ' alt=""' . XHTML . '>';
+        return '<img src="'.htmlspecialchars($content,ENT_QUOTES, COM_getEncodingt()).'" ' . $dim . $align . ' alt=""/>';
     } else {
         return '[img]' . bbcode_cleanHTML($content) . '[/img]';
     }
@@ -353,13 +357,11 @@ function ForumHeader($forum,$showtopic) {
 
     $forum_outline_header = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $forum_outline_header->set_file (array ('forum_outline_header'=>'forum_outline_header.thtml'));
-    $forum_outline_header->set_var('xhtml',XHTML);
     $forum_outline_header->parse ('output', 'forum_outline_header');
     echo $forum_outline_header->finish($forum_outline_header->get_var('output'));
 
     $navbar = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $navbar->set_file (array ('topicheader'=>'navbar.thtml'));
-    $navbar->set_var ('xhtml',XHTML);
     $navbar->set_var ('site_url', $_CONF['site_url']);
     $navbar->set_var ('search_forum', f_forumsearch());
     $navbar->set_var ('select_forum', f_forumjump());
@@ -388,7 +390,6 @@ function ForumHeader($forum,$showtopic) {
             BlockMessage($LANG_GF01['ACCESSERROR'],$LANG_GF02['msg77'],false);
             $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
             $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
-            $forum_outline_footer->set_var('xhtml',XHTML);
             $forum_outline_footer->parse ('output', 'forum_outline_footer');
             echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
             gf_siteFooter();
@@ -398,7 +399,6 @@ function ForumHeader($forum,$showtopic) {
 
     $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
-    $forum_outline_footer->set_var ('xhtml',XHTML);
     $forum_outline_footer->parse ('output', 'forum_outline_footer');
     echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
 }
@@ -892,7 +892,6 @@ function alertMessage($message,$title='',$prompt='',$noprint = 0) {
         'alertmsg'=>'alertmsg.thtml',
         'outline_footer'=>'forum_outline_footer.thtml'));
 
-    $alertmsg->set_var ('xhtml',XHTML);
     $alertmsg->set_var ('layout_url', $_CONF['layout_url']);
     $alertmsg->set_var ('site_url', $_CONF['site_url']);
     $alertmsg->set_var ('alert_title', $title);
@@ -947,7 +946,6 @@ function f_forumsearch() {
     $forum_search = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $forum_search->set_file (array ('forum_search'=>'forum_search.thtml'));
     $forum_search->set_var ('forum', $forum);
-    $forum_search->set_var ('xhtml',XHTML);
     if ($forum == "") {
         $forum_search->set_var ('search', $LANG_GF02['msg117']);
     } else {
@@ -968,6 +966,7 @@ function f_forumjump($action='',$selected=0) {
     while($A = DB_fetchArray($asql)) {
         $firstforum=true;
         $bsql = DB_query("SELECT * FROM {$_TABLES['gf_forums']} WHERE forum_cat='$A[id]' ORDER BY forum_order ASC");
+        $initialOptGroup = 0;
         while($B = DB_fetchArray($bsql)) {
             $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='{$B['grp_id']}'");
             if (SEC_inGroup($B['grp_id'])) {
@@ -989,7 +988,6 @@ function f_forumjump($action='',$selected=0) {
     }
     $forum_jump = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $forum_jump->set_file (array ('forum_jump'=>'forum_jump.thtml'));
-    $forum_jump->set_var ('xhtml',XHTML);
     $forum_jump->set_var ('LANG_msg103', $LANG_GF02['msg103']);
     $forum_jump->set_var ('LANG_msg106', $LANG_GF02['msg106']);
     $forum_jump->set_var ('jumpheading', $LANG_GF02['msg103']);
@@ -1008,11 +1006,13 @@ function f_forumjump($action='',$selected=0) {
 function f_forumtime() {
     global $CONF_FORUM, $_CONF,$_TABLES,$LANG_GF01,$LANG_GF02,$forum;
 
+    $dt = new Date('now',$_CONF['timezone']);
+    $tz = $dt->getTimezone();
+
     $forum_time = new Template($_CONF['path'] . 'plugins/forum/templates/footer');
     $forum_time->set_file (array ('forum_time'=>'forum_time.thtml'));
-    $forum_time->set_var('xhtml',XHTML);
-    $timezone = strftime('%Z');
-    $time = strftime('%I:%M %p');
+    $timezone = $dt->format('T',true);
+    $time = $dt->format('h:i a',true);
     $forum_time->set_var ('message', sprintf($LANG_GF02['msg121'],$timezone,$time));
     $forum_time->parse ('output', 'forum_time');
     return $forum_time->finish($forum_time->get_var('output'));
@@ -1023,25 +1023,23 @@ function f_legend() {
 
     $forum_legend = new Template($_CONF['path'] . 'plugins/forum/templates/footer/');
     $forum_legend->set_file (array ('forum_legend'=>'forum_legend.thtml'));
-    $forum_legend->set_var ('xhtml',XHTML);
-
 
     if ($forum == '') {
         $forum_legend->set_var ('normal_msg', $LANG_GF02['msg194']);
         $forum_legend->set_var ('new_msg', $LANG_GF02['msg108']);
-        $forum_legend->set_var ('normal_icon','<img src="'.gf_getImage('quietforum').'" alt="'.$LANG_GF02['msg194'].'" title="' .$LANG_GF02['msg194']. '"' . XHTML . '>');
-        $forum_legend->set_var ('new_icon','<img src="'.gf_getImage('busyforum').'" alt="'.$LANG_GF02['msg111'].'" title="' .$LANG_GF02['msg111']. '"' . XHTML . '>');
-        $forum_legend->set_var ('viewnew_icon','<img src="'.gf_getImage('viewnew').'" alt="' . $LANG_GF02['msg112'] .'" title="' .$LANG_GF02['msg112']. '"' . XHTML . '>');
+        $forum_legend->set_var ('normal_icon','<img src="'.gf_getImage('quietforum').'" alt="'.$LANG_GF02['msg194'].'" title="' .$LANG_GF02['msg194']. '"/>');
+        $forum_legend->set_var ('new_icon','<img src="'.gf_getImage('busyforum').'" alt="'.$LANG_GF02['msg111'].'" title="' .$LANG_GF02['msg111']. '"/>');
+        $forum_legend->set_var ('viewnew_icon','<img src="'.gf_getImage('viewnew').'" alt="' . $LANG_GF02['msg112'] .'" title="' .$LANG_GF02['msg112']. '"/>');
         $forum_legend->set_var ('viewnew_msg', $LANG_GF02['msg112']);
-        $forum_legend->set_var ('markread_icon','<img src="'.gf_getImage('allread').'" alt="' . $LANG_GF02['msg84'] .'" title="' .$LANG_GF02['msg84']. '"' . XHTML . '>');
+        $forum_legend->set_var ('markread_icon','<img src="'.gf_getImage('allread').'" alt="' . $LANG_GF02['msg84'] .'" title="' .$LANG_GF02['msg84']. '"/>');
         $forum_legend->set_var ('markread_msg', $LANG_GF02['msg84']);
     } else {
-        $sticky_icon = '<img src="'.gf_getImage('sticky').'" alt="' .$LANG_GF02['msg61']. '" title="' .$LANG_GF02['msg61']. '"' . XHTML . '>';
-        $locked_icon = '<img src="'.gf_getImage('locked').'" alt="' .$LANG_GF02['msg114']. '" title="' .$LANG_GF02['msg114']. '"' . XHTML . '>';
-        $stickynew_icon = '<img src="'.gf_getImage('sticky_new').'" alt="' .$LANG_GF02['msg115']. '" title="' .$LANG_GF02['msg115']. '"' . XHTML . '>';
-        $lockednew_icon = '<img src="'.gf_getImage('locked_new').'" alt="' .$LANG_GF02['msg116']. '" title="' .$LANG_GF02['msg116']. '"' . XHTML . '>';
-        $forum_legend->set_var ('normal_icon','<img src="'.gf_getImage('noposts').'" alt="'.$LANG_GF02['msg59'].'" title="' .$LANG_GF02['msg59']. '"' . XHTML . '>');
-        $forum_legend->set_var ('new_icon','<img src="'.gf_getImage('newposts').'" alt="'.$LANG_GF02['msg60'].'" title="' .$LANG_GF02['msg60']. '"' . XHTML . '>');
+        $sticky_icon = '<img src="'.gf_getImage('sticky').'" alt="' .$LANG_GF02['msg61']. '" title="' .$LANG_GF02['msg61']. '"/>';
+        $locked_icon = '<img src="'.gf_getImage('locked').'" alt="' .$LANG_GF02['msg114']. '" title="' .$LANG_GF02['msg114']. '"/>';
+        $stickynew_icon = '<img src="'.gf_getImage('sticky_new').'" alt="' .$LANG_GF02['msg115']. '" title="' .$LANG_GF02['msg115']. '"/>';
+        $lockednew_icon = '<img src="'.gf_getImage('locked_new').'" alt="' .$LANG_GF02['msg116']. '" title="' .$LANG_GF02['msg116']. '"/>';
+        $forum_legend->set_var ('normal_icon','<img src="'.gf_getImage('noposts').'" alt="'.$LANG_GF02['msg59'].'" title="' .$LANG_GF02['msg59']. '"/>');
+        $forum_legend->set_var ('new_icon','<img src="'.gf_getImage('newposts').'" alt="'.$LANG_GF02['msg60'].'" title="' .$LANG_GF02['msg60']. '"/>');
         $forum_legend->set_var ('normal_msg', $LANG_GF02['msg59']);
         $forum_legend->set_var ('new_msg', $LANG_GF02['msg60']);
         $forum_legend->set_var ('sticky_msg',$LANG_GF02['msg61']);
@@ -1064,7 +1062,6 @@ function f_whosonline(){
     $onlineusers = phpblock_whosonline();
     $forum_users = new Template($_CONF['path'] . 'plugins/forum/templates/footer/');
     $forum_users->set_file (array ('forum_users'=>'forum_users.thtml'));
-    $forum_users->set_var ('xhtml',XHTML);
     $forum_users->set_var ('LANG_msg07', $LANG_GF02['msg07']);
     $forum_users->set_var ('onlineusers', $onlineusers);
     $forum_users->parse ('output', 'forum_users');
@@ -1076,13 +1073,13 @@ function f_forumrules() {
 
     if ( ($CONF_FORUM['registered_to_post'] AND ($_USER['uid'] < 2 OR empty($_USER['uid'])) ) || $canPost == 0 ) {
         $postperm_msg = $LANG_GF01['POST_PERM_MSG1'];
-        $post_perm_image = '<img src="'.gf_getImage('red_dot').'" alt=""' . XHTML . '>';
+        $post_perm_image = '<img src="'.gf_getImage('red_dot').'" alt=""/>';
     } else {
         $postperm_msg = $LANG_GF01['POST_PERM_MSG1'];
-        $post_perm_image = '<img src="'.gf_getImage('green_dot').'" alt=""' . XHTML . '>';
+        $post_perm_image = '<img src="'.gf_getImage('green_dot').'" alt=""/>';
     }
     if ($CONF_FORUM['allow_html']) {
-        $html_perm_image = '<img src="'.gf_getImage('green_dot').'" alt=""' . XHTML . '>';
+        $html_perm_image = '<img src="'.gf_getImage('green_dot').'" alt=""/>';
         if ($CONF_FORUM['use_glfilter']) {
             $htmlmsg = $LANG_GF01['HTML_FILTER_MSG'];
         } else {
@@ -1090,23 +1087,22 @@ function f_forumrules() {
         }
     } else {
         $htmlmsg = $LANG_GF01['HTML_MSG'];
-        $html_perm_image = '<img src="'.gf_getImage('red_dot').'" alt=""' . XHTML . '>';
+        $html_perm_image = '<img src="'.gf_getImage('red_dot').'" alt=""/>';
     }
     if ($CONF_FORUM['use_censor']) {
-        $censor_perm_image = '<img src="'.gf_getImage('green_dot').'" alt=""' . XHTML . '>';
+        $censor_perm_image = '<img src="'.gf_getImage('green_dot').'" alt=""/>';
     } else {
-        $censor_perm_image = '<img src="'.gf_getImage('red_dot').'" alt=""' . XHTML . '>';
+        $censor_perm_image = '<img src="'.gf_getImage('red_dot').'" alt=""/>';
     }
 
     if ($CONF_FORUM['show_anonymous_posts']) {
-        $anon_perm_image = '<img src="'.gf_getImage('green_dot').'" alt=""' . XHTML . '>';
+        $anon_perm_image = '<img src="'.gf_getImage('green_dot').'" alt=""/>';
     } else {
-        $anon_perm_image = '<img src="'.gf_getImage('red_dot').'" alt=""' . XHTML . '>';
+        $anon_perm_image = '<img src="'.gf_getImage('red_dot').'" alt=""/>';
     }
 
     $forum_rules = new Template($_CONF['path'] . 'plugins/forum/templates/footer/');
     $forum_rules->set_file (array ('forum_rules'=>'forum_rules.thtml'));
-    $forum_rules->set_var ('xhtml',XHTML);
     $forum_rules->set_var ('LANG_title', $LANG_GF02['msg101']);
 
     $forum_rules->set_var ('anonymous_msg', $LANG_GF01['ANON_PERM_MSG']);
@@ -1200,14 +1196,14 @@ function gf_showattachments($topic,$mode='') {
             list($testaccess_cnt) = DB_fetchArray(DB_query($sql));
         }
         if ($lid > 0 AND (!$filemgmtSupport OR $testaccess_cnt == 0 OR DB_count($_FM_TABLES['filemgmt_filedetail'],"lid",$lid ) == 0)) {
-            $retval .= "<img src=\"{$_CONF['site_url']}/forum/images/document_sm.gif\" border=\"0\" alt=\"\"" . XHTML . ">Insufficent Access";
+            $retval .= "<img src=\"{$_CONF['site_url']}/forum/images/document_sm.gif\" border=\"0\" alt=\"\"/>Insufficent Access";
         } elseif (!empty($field_value)) {
-            $retval .= "<img src=\"{$_CONF['site_url']}/forum/images/document_sm.gif\" border=\"0\" alt=\"\"" . XHTML . ">";
+            $retval .= "<img src=\"{$_CONF['site_url']}/forum/images/document_sm.gif\" border=\"0\" alt=\"\"/>";
             $retval .= "<a href=\"{$_CONF['site_url']}/forum/getattachment.php?id=$id\" target=\"_new\">";
             $retval .= "{$filename[1]}</a>&nbsp;";
             if ($mode == 'edit') {
                 $retval .= "<a href=\"#\" onclick='ajaxDeleteFile($topic,$id);'>";
-                $retval .= "<img src=\"{$_CONF['site_url']}/forum/images/delete.gif\" border=\"0\" alt=\"\"" . XHTML . "></a>";
+                $retval .= "<img src=\"{$_CONF['site_url']}/forum/images/delete.gif\" border=\"0\" alt=\"\"/></a>";
             }
         } else {
             $retval .= 'N/A&nbsp;';
@@ -1243,18 +1239,13 @@ function ADMIN_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
 
     $retval = '';
 
+    $dt = new Date('now',$_CONF['timezone']);
+
     switch ($fieldname) {
         case 'date':
-            $retval = @strftime( $CONF_FORUM['default_Datetime_format'], $fieldvalue );
-            if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
-                $retval = iconv('ISO-8859-1','UTF-8',$retval);
-            }
-            break;
-        case 'lastupdated':
-            $retval = @strftime( $CONF_FORUM['default_Datetime_format'], $fieldvalue );
-            if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
-                $retval = iconv('ISO-8859-1','UTF-8',$retval);
-            }
+        case 'lastupdated' :
+            $dt->setTimestamp($fieldvalue);
+            $retval = $dt->format($CONF_FORUM['default_Datetime_format'],true);
             break;
         case 'subject':
             $testText        = gf_formatTextBlock($A['comment'],'text','text',$A['status']);
@@ -1265,8 +1256,16 @@ function ADMIN_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
             $retval = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . ($A['pid'] == 0 ? $A['id'] : $A['pid']) . '&amp;topic='.$A['id'].'#'.$A['id'].'" title="' . $A['subject'] . '::' . $lastpostinfogll . '" rel="nofollow">' . $fieldvalue . '</a>';
             break;
         case 'bookmark' :
-            $bm_icon_on = '<img src="'.gf_getImage('star_on_sm').'" title="'.$LANG_GF02['msg204'].'" alt=""' . XHTML . '>';
+            $bm_icon_on = '<img src="'.gf_getImage('star_on_sm').'" title="'.$LANG_GF02['msg204'].'" alt=""/>';
             $retval = '<span id="forumbookmark'.$A['topic_id'].'"><a href="#" onclick="ajax_toggleForumBookmark('.$A['topic_id'].');return false;">'.$bm_icon_on.'</a></span>';
+            break;
+        case 'replies' :
+        case 'views'   :
+            if ( $fieldvalue != '' ) {
+                $retval = $fieldvalue;
+            } else {
+                $retval = '0';
+            }
             break;
         default:
             $retval = $fieldvalue;
@@ -1357,6 +1356,8 @@ function gf_FormatForEmail( $str, $postmode='html' ) {
 function gfm_getoutput( $id ) {
     global $_TABLES,$LANG_GF01,$LANG_GF02,$_CONF,$CONF_FORUM;
 
+    $dt = new Date('now',$_CONF['timezone']);
+
     $id = COM_applyFilter($id,true);
     $result = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE id={$id}");
     $A = DB_fetchArray($result);
@@ -1373,7 +1374,8 @@ function gfm_getoutput( $id ) {
     $A['subject'] = @htmlspecialchars($A["subject"],ENT_QUOTES, COM_getEncodingt());
     $A['comment'] = gf_FormatForEmail( $A['comment'], $A['postmode'] );
     $notifymsg = sprintf($LANG_GF02['msg27'],"<a href=\"$_CONF[site_url]/forum/notify.php\">$_CONF[site_url]/forum/notify.php</a>");
-    $date = strftime('%B %d %Y @ %I:%M %p', $A['date']);
+    $dt->setTimestamp($A['date']);
+    $date = $dt->format('F d Y @ h:i a');
     if ($A['pid'] == '0') {
         $postid = $A['id'];
     } else {

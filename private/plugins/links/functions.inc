@@ -1044,6 +1044,8 @@ function plugin_getListField_links($fieldname, $fieldvalue, $A, $icon_arr, $toke
 
     $retval = '';
 
+    $dt = new Date('now',$_CONF['timezone']);
+
     $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
     if ($access > 0) {
         switch($fieldname) {
@@ -1071,7 +1073,8 @@ function plugin_getListField_links($fieldname, $fieldvalue, $A, $icon_arr, $toke
                 break;
 
             case "unixdate":
-                $retval = strftime( $_CONF['daytime'], $A['unixdate'] );
+                $dt->setTimestamp($A['unixdate']);
+                $retval = $dt->format($_CONF['daytime'],true);
                 break;
 
             case 'title':
@@ -1123,6 +1126,8 @@ function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
 
     $retval = '';
 
+    $dt = new Date('now',$_CONF['timezone']);
+
     $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
 
     if ($access > 0) {
@@ -1162,7 +1167,8 @@ function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
                 break;
 
             case "unixdate":
-                $retval = strftime ($_CONF['daytime'], $A['unixdate']);
+                $dt->setTimestamp($A['unixdate']);
+                $retval = $dt->format($_CONF['daytime'],true);
                 break;
 
             case 'category':

@@ -524,9 +524,9 @@ function plugin_getfeednames_forum ()
 
 function forum_buildFeedsSql ($forumID, $limits)
 {
-    global $pi_version;
+    global $pi_version, $_FF_CONF;
 
-    if ( !COM_checkVersion($pi_version, '3.2.0') ) {
+    if ( !COM_checkVersion($pi_version, $_FF_CONF['pi_version']) ) {
         return '';
     }
 
@@ -576,13 +576,13 @@ function forum_buildFeedsSql ($forumID, $limits)
 
 function plugin_getfeedcontent_forum ($feed, &$link, &$update)
 {
-    global $_CONF, $_TABLES, $CONF_FORUM, $LANG_GF01, $pi_version;
+    global $_CONF, $_TABLES, $CONF_FORUM, $LANG_GF01, $pi_version,$_FF_CONF;
 
     $content = array();
     $lids = array();
     $ids = array();
 
-    if ( !COM_checkVersion($pi_version, '3.2.0') ) {
+    if ( !COM_checkVersion($pi_version, $_FF_CONF['pi_version']) ) {
         return '';
     }
 
@@ -885,15 +885,16 @@ function forum_deleteForum($id) {
 
 
 function phpblock_forum_newposts() {
-    global $_CONF, $_SYSTEM, $_USER, $_TABLES, $LANG_GF01, $LANG_GF02, $mode, $CONF_FORUM,$pi_version;
+    global $_CONF, $_SYSTEM, $_USER, $_TABLES, $LANG_GF01, $LANG_GF02, $mode, $CONF_FORUM,$pi_version, $_FF_CONF;
 
-    if ( !COM_checkVersion($pi_version, '3.2.0') ) {
+    if ( !COM_checkVersion($pi_version, $_FF_CONF['pi_version']) ) {
         return '';
     }
 
     if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $CONF_FORUM['registration_required'] == 1 )  {
         return;
     }
+    $dt = new Date('now',$_CONF['timezone']);
     $post_limit = $CONF_FORUM['sideblock_numposts'];
     if ( isset($_GET['mode']) ) {
         $mode = COM_applyFilter($_GET['mode']);
@@ -1000,31 +1001,29 @@ function phpblock_forum_newposts() {
                     $profilelink = '';
                 }
 
-               $block->set_var ('site_url', $_CONF['site_url']);
-               $block->set_var ('css_id', $onetwo);
-               $block->set_var ('img_dir', $_CONF['site_url'] . '/forum/images');
-               $block->set_var ('forum_id', $A['forum']);
-               $block->set_var ('forum_name', DB_getItem($_TABLES['gf_forums'],'forum_name',"forum_id='{$A['forum']}'"));
-               $block->set_var ('topic_id', $A['id']);
-               $block->set_var ('topic_subject', $A['subject']);
-               $block->set_var ('fullsubject', $fullsubject);
-               $block->set_var ('topic_id', $A['id']);
-               $block->set_var ('profilelink', $profilelink);
-               $block->set_var ('user_name', $postername);
-               $block->set_var ('LANG_BY', $LANG_GF01['BY']);
-               $block->set_var ('LANG_ON', $LANG_GF01['ON']);
-               $block->set_var ('LANG_VIEWS', $LANG_GF01['VIEWS']);
-               $block->set_var ('LANG_REPLIES', $LANG_GF01['REPLIES']);
-               $block->set_var ('views', $A['views']);
-               $block->set_var ('replies', $A['replies']);
+                $block->set_var ('site_url', $_CONF['site_url']);
+                $block->set_var ('css_id', $onetwo);
+                $block->set_var ('img_dir', $_CONF['site_url'] . '/forum/images');
+                $block->set_var ('forum_id', $A['forum']);
+                $block->set_var ('forum_name', DB_getItem($_TABLES['gf_forums'],'forum_name',"forum_id='{$A['forum']}'"));
+                $block->set_var ('topic_id', $A['id']);
+                $block->set_var ('topic_subject', $A['subject']);
+                $block->set_var ('fullsubject', $fullsubject);
+                $block->set_var ('topic_id', $A['id']);
+                $block->set_var ('profilelink', $profilelink);
+                $block->set_var ('user_name', $postername);
+                $block->set_var ('LANG_BY', $LANG_GF01['BY']);
+                $block->set_var ('LANG_ON', $LANG_GF01['ON']);
+                $block->set_var ('LANG_VIEWS', $LANG_GF01['VIEWS']);
+                $block->set_var ('LANG_REPLIES', $LANG_GF01['REPLIES']);
+                $block->set_var ('views', $A['views']);
+                $block->set_var ('replies', $A['replies']);
+                $dt->setTimestamp($postdate);
                 if ($CONF_FORUM['allow_user_dateformat']) {
-                    $date = COM_getUserDateTimeFormat ($postdate);
-                    $block->set_var ('date', $date[0]);
+                    $date = $dt->format($dt->getUserFormat(),true);
+                    $block->set_var ('date', $date);
                 } else {
-                    $tdate = strftime($CONF_FORUM['default_Datetime_format'], $postdate);
-                    if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
-                        $tdate = iconv('ISO-8859-1','UTF-8',$tdate);
-                    }
+                    $tdate = $dt->format($CONF_FORUM['default_Datetime_format'],true);
                     $block->set_var ('date', $tdate);
                 }
 
@@ -1065,19 +1064,21 @@ function phpblock_forum_newposts() {
 function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
 {
     global $_CONF, $_USER, $_TABLES, $LANG_GF01,$CONF_FORUM,
-           $LANG_GF02, $mode, $order,$pi_version, $_GROUPS,$_SYSTEM;
+           $LANG_GF02, $mode, $order,$pi_version, $_GROUPS,$_SYSTEM, $_FF_CONF;
 
-    if ( !COM_checkVersion($pi_version, '3.2.0') ) {
+    if ( !COM_checkVersion($pi_version, $_FF_CONF['pi_version']) ) {
         return '';
     }
 
-    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $CONF_FORUM['registration_required'] == 1 )  {
+    if ( COM_isAnonUser() && $CONF_FORUM['registration_required'] == 1 )  {
         return;
     }
 
     if ( $CONF_FORUM['centerblock_where'] != $where ) {
         return;
     }
+
+    $dt = new Date('now',$_CONF['timezone']);
 
     require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 
@@ -1150,14 +1151,10 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 $A['subject'] .= '...';
             }
 
-            $firstdate = strftime($CONF_FORUM['default_Datetime_format'], $A['date']);
-            if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
-                $first = iconv('ISO-8859-1','UTF-8',$firstdate);
-            }
-            $lastdate = strftime($CONF_FORUM['default_Datetime_format'], $A['lastupdated']);
-            if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
-                $lastdate = iconv('ISO-8859-1','UTF-8',$lastdate);
-            }
+            $dt->setTimestamp($A['date']);
+            $firstdate = $dt->format($CONF_FORUM['default_Datetime_format'],true);
+            $dt->setTimestamp($A['lastupdated']);
+            $lastdate = $dt->format($CONF_FORUM['default_Datetime_format'],true);
 
             if ($A['uid'] > 1) {
                 $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($A['uid']) . ', ';
@@ -1657,24 +1654,42 @@ function glmenu_showforums() {
 function can_view_forum($forum_id) {
     global $_USER, $_TABLES, $CONF_FORUM;
 
+    static $forum_req = array();
+    static $user_rate = array();
+
     if ( !$CONF_FORUM['enable_user_rating_system'] || SEC_inGroup('Root')) {
-	    return true; //since user rating is not enabled
+	    return true;
 	}
 
-	$forum_requirment_res = DB_query("SELECT rating_view FROM {$_TABLES['gf_forums']} WHERE forum_id = ". intval($forum_id));
-	$forum_requirment_row = DB_fetchArray($forum_requirment_res);
-	if (COM_isAnonUser() ) {
-		//Annon user can only view forums with 0 or less
-		if($forum_requirment_row['rating_view'] < 1)
-			return true;
-		else
-			return false;
-	}
-	//get users forum rating
-	$user_score_res = DB_query("SELECT rating FROM {$_TABLES['gf_userinfo']} WHERE uid = {$_USER['uid']}");
-	$user_score_row = DB_fetchArray($user_score_res);
+	$uid = COM_isAnonUser() ? 1 : $_USER['uid'];
 
-	if($forum_requirment_row['rating_view'] > intval($user_score_row['rating']))
+	if ( isset($forum_req[$forum_id]) && $uid == 1 ) {
+	    if ( $forum_req[$forum_id] < 1 ) {
+	        return true;
+	    } else {
+	        return false;
+	    }
+	}
+    if ( !isset($forum_req[$forum_id]) ) {
+    	$forum_requirment_res = DB_query("SELECT rating_view FROM {$_TABLES['gf_forums']} WHERE forum_id = ". intval($forum_id));
+    	$forum_requirement_row = DB_fetchArray($forum_requirment_res);
+    	$forum_req[$forum_id] = $forum_requirement_row['rating_view'];
+    	if (COM_isAnonUser() ) {
+    		//Annon user can only view forums with 0 or less
+    		if($forum_requirement_row['rating_view'] < 1)
+    			return true;
+    		else
+    			return false;
+    	}
+    }
+    if ( !isset($user_rate[$uid]) ) {
+    	//get users forum rating
+    	$user_score_res = DB_query("SELECT rating FROM {$_TABLES['gf_userinfo']} WHERE uid = {$_USER['uid']}");
+    	$user_score_row = DB_fetchArray($user_score_res);
+    	$user_rate[$uid] = $user_score_row['rating'];
+    }
+
+	if ($forum_req[$forum_id] > (int) $user_rate[$uid] )
 		return false;
 	else
 		return true;
@@ -1768,7 +1783,7 @@ function plugin_profileedit_forum($uid,$panel,$fieldset)
     $usersettings->set_var('lang_forumprefs_help', $LANG_GF92['forumprefs_help']);
 
     $usersettings->set_var('lang_topic_order',$LANG_GF92['topic_order']);
-    $to_select =  '<select name="topic_order">';
+    $to_select =  '<select name="topic_order" id="topic_order">';
     $to_select .= '<option value="ASC" '.($A['topic_order'] == 'ASC' ? ' selected="selected"' : '').'>'.$LANG_GF92['ascending'].'</option>';
     $to_select .= '<option value="DESC" '.($A['topic_order'] == 'DESC' ? ' selected="selected"' : '').'>'.$LANG_GF92['descending'].'</option>';
     $to_select .= '</select>';
@@ -1776,7 +1791,7 @@ function plugin_profileedit_forum($uid,$panel,$fieldset)
 
     if ( $CONF_FORUM['allow_wysiwyg_editor'] && $CONF_FORUM['post_htmlmode']) {
         $usersettings->set_var('lang_use_wysiwyg',$LANG_GF92['editor_type']);
-        $wysiwyg_select = '<select name="use_wysiwyg_editor">';
+        $wysiwyg_select = '<select name="use_wysiwyg_editor" id="use_wysiwyg_editor">';
         $wysiwyg_select .= '<option value="0" '.($A['use_wysiwyg_editor'] == 0 ? ' selected="selected"' : '').'>'.$LANG_GF92['bbcode'].'</option>';
         $wysiwyg_select .= '<option value="1" '.($A['use_wysiwyg_editor'] == 1 ? ' selected="selected"' : '').'>'.$LANG_GF92['wysiwyg'].'</option>';
         $wysiwyg_select .= '</select>';

@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: functions.php 3155 2008-09-16 02:13:18Z mevans0263                $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -51,9 +51,9 @@ function newdownloadgraphic($time, $status) {
     $startdate = (time()-(86400 * $count));
     if ($startdate < $time) {
         if($status==1){
-            $functionretval = "&nbsp;<img src=\"{$_CONF['site_url']}/filemgmt/images/newred.gif\" alt=\"" ._MD_NEWTHISWEEK . '"' . XHTML . '>';
+            $functionretval = "&nbsp;<img src=\"{$_CONF['site_url']}/filemgmt/images/newred.gif\" alt=\"" ._MD_NEWTHISWEEK . '"/>';
         }elseif($status==2){
-            $functionretval = "&nbsp;<img src=\"{$_CONF['site_url']}/filemgmt/images/update.gif\" alt=\"" ._MD_UPTHISWEEK . '"' . XHTML . '>';
+            $functionretval = "&nbsp;<img src=\"{$_CONF['site_url']}/filemgmt/images/update.gif\" alt=\"" ._MD_UPTHISWEEK . '"/>';
             }
         }
         return $functionretval;
@@ -65,7 +65,7 @@ function popgraphic($hits) {
         $functionretval = '';
 
         if ($hits >= $mydownloads_popular) {
-            $functionretval = "&nbsp;<img src=\"{$_CONF['site_url']}/filemgmt/images/pop.gif\" alt=\"" ._MD_POPULAR . '"' . XHTML . '>';
+            $functionretval = "&nbsp;<img src=\"{$_CONF['site_url']}/filemgmt/images/pop.gif\" alt=\"" ._MD_POPULAR . '"/>';
         }
         return $functionretval;
 }
@@ -112,8 +112,10 @@ function getTotalItems($sel_id, $status=''){
 * Function to display formatted times in user timezone
 */
 function formatTimestamp($usertimestamp) {
-    $datetime = date("M.d.y", $usertimestamp);
-    $datetime = ucfirst($datetime);
+    global $_CONF;
+
+    $dt = new Date($usertimestamp,$_CONF['timezone']);
+    $datetime = $dt->format('M.d.y',true);
     return $datetime;
 }
 
@@ -158,9 +160,9 @@ function redirect_header($url, $time=3, $message=''){
     $display .= COM_startBlock();
     $display .= "<center>";
     if ( $message!="" ) {
-        $display .= "<br" . XHTML . "><p><h4>".$message."</h4>\n";
+        $display .= "<br/><p><h4>".$message."</h4>\n";
     }
-    $display .= "<br" . XHTML . "><b>\n";
+    $display .= "<br/><b>\n";
     $display .= sprintf(_IFNOTRELOAD,$url);
     $display .= "</b>\n";
     $display .= "</center></div>\n";

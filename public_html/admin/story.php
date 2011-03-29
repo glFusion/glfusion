@@ -176,8 +176,8 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case "unixdate":
-            $curtime = COM_getUserDateTimeFormat ($A['unixdate']);
-            $retval = strftime($_CONF['daytime'], $curtime[1]);
+            $dt = new Date($A['unixdate'],$_CONF['timezone']);
+            $retval = $dt->format($_CONF['daytime'],true);
             break;
 
         case "ping":
@@ -400,7 +400,6 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
 
     $story = new Story();
     if ($action == 'preview') {
-        // Handle Magic GPC Garbage:
         while (list($key, $value) = each($_POST)) {
             if (!is_array($value)) {
                 $_POST[$key] = $value;
@@ -475,7 +474,6 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         } else {
             $story_templates->set_var('glfusionStyleBasePath',$_CONF['site_url'] . '/fckeditor');
         }
-        $story_templates->set_var ( 'xhtml', XHTML );
         $story_templates->set_var ('change_editormode', 'onchange="change_editmode(this);"');
 
         require_once $_CONF['path_system'] . 'classes/navbar.class.php';
@@ -928,7 +926,6 @@ function STORY_submit($type='')
 
     $args = &$_POST;
 
-    // Handle Magic GPC Garbage:
     while (list($key, $value) = each($args)) {
         if (!is_array($value)) {
             $args[$key] = $value;

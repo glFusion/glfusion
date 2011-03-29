@@ -319,11 +319,11 @@ function install_config($site_url)
 
     $c->add('fs_locale', NULL, 'fieldset', 6, 29, NULL, 0, TRUE);
     $c->add('locale','en_GB','text',6,29,NULL,360,TRUE);
-    $c->add('date','%A, %B %d %Y @ %I:%M %p %Z','text',6,29,NULL,370,TRUE);
-    $c->add('daytime','%m/%d %I:%M%p','text',6,29,NULL,380,TRUE);
-    $c->add('shortdate','%x','text',6,29,NULL,390,TRUE);
-    $c->add('dateonly','%d-%b','text',6,29,NULL,400,TRUE);
-    $c->add('timeonly','%I:%M%p','text',6,29,NULL,410,TRUE);
+    $c->add('date','l, F d Y @ h:i A T','text',6,29,NULL,370,TRUE);
+    $c->add('daytime','m/d h:iA','text',6,29,NULL,380,TRUE);
+    $c->add('shortdate','m/d/y','text',6,29,NULL,390,TRUE);
+    $c->add('dateonly','d-M','text',6,29,NULL,400,TRUE);
+    $c->add('timeonly','H:iA','text',6,29,NULL,410,TRUE);
     $c->add('week_start','Sun','select',6,29,14,420,TRUE);
     $c->add('hour_mode',12,'select',6,29,6,430,TRUE);
     $c->add('thousand_separator',",",'text',6,29,NULL,440,TRUE);

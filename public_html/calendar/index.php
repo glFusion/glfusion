@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -355,7 +355,10 @@ if ( isset($_GET['op']) ) {
 if ( isset($_POST['addevent']) || isset($_POST['addpersonalevent']) ) {
     if (COM_isAnonUser() &&
         (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {
-        echo COM_refresh ($_CONF['site_url'] . '/calendar/index.php');
+        $display = CALENDAR_siteHeader($LANG_CAL_1[41]);
+        $display .= SEC_loginRequiredForm();
+        $display .= CALENDAR_siteFooter();
+        echo $display;
         exit;
     }
 
@@ -1114,9 +1117,14 @@ if ($mode == 'personal') {
             $cal_templates->set_var('addevent_name','addevent');
         }
     } else {
-        $cal_templates->set_var('lang_addevent', $LANG_CAL_2[42]);
-        $cal_templates->set_var('addevent_formurl', '/calendar/index.php');
-        $cal_templates->set_var('addevent_name','addevent');
+        if (COM_isAnonUser() &&
+            (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {
+                $cal_templates->set_var('lang_addevent', '');
+        } else {
+            $cal_templates->set_var('lang_addevent', $LANG_CAL_2[42]);
+            $cal_templates->set_var('addevent_formurl', '/calendar/index.php');
+            $cal_templates->set_var('addevent_name','addevent');
+        }
     }
 }
 $cal_templates->parse('add_event_option','addevent',true);

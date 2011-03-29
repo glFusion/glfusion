@@ -34,7 +34,6 @@ $_USER_VERBOSE = false;
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
-require_once $_CONF['path_system'] . 'classes/timezoneconfig.class.php';
 USES_lib_user();
 USES_lib_admin();
 
@@ -147,8 +146,7 @@ function editPreferences()
     $selection .= '</select>';
     $T->set_var('cooktime_selector', $selection);
 
-    $timezone = TimeZoneConfig::getUserTimeZone();
-    $selection = TimeZoneConfig::getTimeZoneDropDown($timezone,
+    $selection = Date::getTimeZoneDropDown($_CONF['timezone'],
             array('id' => 'tzid', 'name' => 'tzid'));
     $T->set_var('timezone_selector', $selection);
 

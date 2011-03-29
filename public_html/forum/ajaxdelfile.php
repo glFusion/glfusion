@@ -35,8 +35,8 @@
 require_once '../lib-common.php'; // Path to your lib-common.php
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 
-$deleteid = intval(COM_applyFilter($_GET['id'],true));
-$topic    = intval(COM_applyFilter($_GET['topic'],true));
+$deleteid = COM_applyFilter($_GET['id'],true);
+$topic    = COM_applyFilter($_GET['topic'],true);
 
 $query  = DB_query("SELECT uid,forum,date FROM {$_TABLES['gf_topic']} WHERE id=$topic");
 $edittopic = DB_fetchArray($query,false);

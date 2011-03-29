@@ -753,6 +753,8 @@ class Search {
     {
         global $_CONF;
 
+        $dt = new Date('now',$_CONF['timezone']);
+
         if ($preSort) {
             $row[SQL_TITLE] = is_array($row[SQL_TITLE]) ? implode($_CONF['search_separator'],$row[SQL_TITLE]) : $row[SQL_TITLE];
 
@@ -791,8 +793,8 @@ class Search {
             if ($row['description'] != $_CONF['search_no_data']) {
                 $row['description'] = $this->_shortenText($this->_query, $row['description'], $this->_wordlength);
             }
-
-            $row['date'] = @strftime($_CONF['daytime'], $row['date']);
+            $dt->setTimestamp($row['date']);
+            $row['date'] = $dt->format($_CONF['daytime'],true);
             $row['hits'] = COM_NumberFormat($row['hits']).' '; // simple solution to a silly problem!
         }
 

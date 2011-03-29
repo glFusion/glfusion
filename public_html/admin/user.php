@@ -765,14 +765,13 @@ function USER_layoutPanel($U, $newuser = 0)
     $userform->set_var('maxstories_value', $U['maxstories']);
 
     // Timezone
-    require_once $_CONF['path_system'] . 'classes/timezoneconfig.class.php';
 
     if ( isset($U['tzid']) ) {
         $timezone = $U['tzid'];
     } else {
-        $timezone = TimeZoneConfig::getUserTimeZone();
+        $timezone = $_CONF['timezone'];
     }
-    $selection = TimeZoneConfig::getTimeZoneDropDown($timezone,
+    $selection = Date::getTimeZoneDropDown($timezone,
             array('id' => 'tzid', 'name' => 'tzid'));
 
     $userform->set_var('timezone_selector', $selection);
@@ -1136,6 +1135,8 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
     $retval = '';
 
+    $dt = new Date('now',$_CONF['timezone']);
+
     switch ($fieldname) {
 
 //        case 'delete':
@@ -1192,20 +1193,24 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
         case 'lastlogin':
             if ($fieldvalue < 1) {
                 // if the user never logged in, show the registration date
-                $regdate = strftime ($_CONF['shortdate'], strtotime($A['regdate']));
+                $dt->setTimestamp(strtotime($A['regdate']));
+                $regdate = $dt->format($_CONF['shortdate'],true);
                 $retval = "{$LANG28[36]} ({$LANG28[53]}: $regdate)";
             } else {
-                $retval = strftime ($_CONF['shortdate'], $fieldvalue);
+                $dt->setTimestamp($fieldvalue);
+                $retval = $dt->format($_CONF['shortdate'],true);
             }
             break;
 
         case 'lastlogin_short':
             if ($fieldvalue < 1) {
                 // if the user never logged in, show the registration date
-                $regdate = strftime ($_CONF['shortdate'], strtotime($A['regdate']));
+                $dt->setTimestamp(strtotime($A['regdate']));
+                $regdate = $dt->format($_CONF['shortdate'],true);
                 $retval = "({$LANG28[36]})";
             } else {
-                $retval = strftime ($_CONF['shortdate'], $fieldvalue);
+                $dt->setTimestamp($fieldvalue);
+                $retval = $dt->format($_CONF['shortdate'],true);
             }
             break;
 
@@ -1229,7 +1234,8 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case 'regdate':
-            $retval = strftime ($_CONF['shortdate'], strtotime($fieldvalue));
+            $dt->setTimestamp(strtotime($fieldvalue));
+            $retval = $dt->format($_CONF['shortdate'],true);
             break;
 
         case $_TABLES['users'] . '.uid':

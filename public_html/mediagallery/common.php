@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2010 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -136,15 +136,9 @@ function MG_initAlbums() {
     }
 
     $groups = $_GROUPS;
-
-    if ( $_DB_dbms == "mssql" ) {
-        $sql        = "SELECT *, CAST(album_desc AS TEXT) as album_desc FROM " . $_TABLES['mg_albums'] . " ORDER BY album_order DESC";
-    } else {
-        $sql        = "SELECT * FROM " . $_TABLES['mg_albums'] . " ORDER BY album_order DESC";
-    }
+    $sql        = "SELECT * FROM " . $_TABLES['mg_albums'] . " ORDER BY album_order DESC";
     $result     = DB_query( $sql, 1);
     $MG_albums = array();
-
     $album = new mgAlbum();
     $album->id = 0;
     $album->title = 'root album';
@@ -251,7 +245,7 @@ function MG_siteHeader($title='', $meta='') {
 function MG_siteFooter() {
     global $_CONF, $_MG_CONF;
 
-    $retval = '<br' . XHTML . '><div style="text-align:center;"><a href="http://www.glfusion.org"><img src="' . MG_getImageFile('powerby_mg.png') . '" alt="" style="border:none;"' . XHTML . '></a></div><br' . XHTML . '>';
+    $retval = '<br /><div style="text-align:center;"><a href="http://www.glfusion.org"><img src="' . MG_getImageFile('powerby_mg.png') . '" alt="" style="border:none;" /></a></div><br />';
 
     switch( $_MG_CONF['displayblocks'] ) {
         case 0 : // left only
@@ -346,24 +340,21 @@ function MG_errorHandler( $message ) {
 
     $retval =  '<div style="width:90%;border:1px solid;padding:8px;margin-top:8px;text-align:center;">' . LB;
     $retval .= '  <span style="text-align:center;font-weight:bold;">' . $LANG_MG02['error_header'] . '</span>' . LB;
-    $retval .= '  <br' . XHTML . '>' . LB;
-    $retval .= '  <br' . XHTML . '>' . LB;
+    $retval .= '  <br />' . LB;
+    $retval .= '  <br />' . LB;
     $retval .= '  <span style="text-align:center;font-weight:bold;">' . $LANG_MG02['error'] . '</span>' . LB;
     $retval .= $message . LB;
-    $retval .= '  <br' . XHTML . '>' . LB;
-    $retval .= '  <br' . XHTML . '>' . LB;
+    $retval .= '  <br />' . LB;
+    $retval .= '  <br />' . LB;
     $retval .= '  [ <a href=\'javascript:history.go(-1)\'>' . $LANG_MG02['go_back'] . '</a> ]' . LB;
-    $retval .= '  <br' . XHTML . '>' . LB;
-    $retval .= '  <br' . XHTML . '>' . LB;
+    $retval .= '  <br />' . LB;
+    $retval .= '  <br />' . LB;
     $retval .= '</div>' . LB;
 
     return $retval;
 }
 
-
-//hacked COM_getUserDateTimeFormat to allow different format for Media Gallery
-
-function MG_getUserDateTimeFormat($date = ''){
+function MG_getUserDateTimeFormat($date = 'now'){
     global $_TABLES, $_CONF, $_MG_CONF, $_SYSTEM;
 
     if ( $date == '99')
@@ -376,22 +367,20 @@ function MG_getUserDateTimeFormat($date = ''){
     } else {
         $dateformat = $_MG_CONF['dateformat'][$dfid];
     }
-    if(empty($date)){
+
+    $dtObject = new Date($date,$_CONF['timezone']);
+
+    if ( empty( $date ) || $date == 'now') {
         // Date is empty, get current date/time
         $stamp = time();
-    } elseif (is_numeric($date)){
+    } else if ( is_numeric( $date )) {
         // This is a timestamp
         $stamp = $date;
     } else {
         // This is a string representation of a date/time
-        $stamp = strtotime($date);
+        $stamp = $dtObject->toUnix();
     }
-
-    // Format the date
-    $date = strftime($dateformat, $stamp);
-    if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
-        $date = iconv('ISO-8859-1','UTF-8',$date);
-    }
+    $date = $dtObject->format($dateformat,true);
 
     return array( $date, $stamp );
 }
@@ -517,7 +506,7 @@ function MG_getThemeCSS( $aid ) {
         return '';
     }
     if ( file_exists ($_MG_CONF['template_path'] . '/themes/' . $MG_albums[$aid]->skin . '/style.css') ) {
-        $css .= '<link rel="stylesheet" type="text/css" href="' . $_MG_CONF['site_url'] . '/mgcss.php?theme=' . $MG_albums[$aid]->skin . '"'.XHTML.'>' . LB;
+        $css .= '<link rel="stylesheet" type="text/css" href="' . $_MG_CONF['site_url'] . '/mgcss.php?theme=' . $MG_albums[$aid]->skin . '" />' . LB;
     }
     return ($css);
 }

@@ -362,7 +362,8 @@ function TRB_formatComment ($url, $title = '', $blog = '', $excerpt = '', $date 
     if ($date == 0) {
         $date = time ();
     }
-    $curtime = COM_getUserDateTimeFormat ($date);
+    $dt = new Date($date,$_CONF['timezone']);
+    $curtime = $dt->format($dt->getUserFormat(),true);
 
     $template = new Template ($_CONF['path_layout'] . 'trackback');
     $template->set_file (array ('comment' => 'formattedcomment.thtml'));
@@ -384,7 +385,7 @@ function TRB_formatComment ($url, $title = '', $blog = '', $excerpt = '', $date 
     $template->set_var ('trackback_url', $url);
     $template->set_var ('trackback_title', $title);
     $template->set_var ('trackback_blog_name', $blog);
-    $template->set_var ('trackback_date', $curtime[0]);
+    $template->set_var ('trackback_date', $curtime);
 
     if (empty ($blog)) {
         $template->set_var ('trackback_from_blog_name', '');

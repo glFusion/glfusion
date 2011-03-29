@@ -326,6 +326,8 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG08;
 
+    $dt = new Date('now',$_CONF['timezone']);
+
     $storyurl = COM_buildUrl($_CONF['site_url'] . '/article.php?story=' . $sid);
     if ($_CONF['url_rewrite']) {
         $retval = COM_refresh($storyurl . '?msg=85');
@@ -370,16 +372,16 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
         COM_updateSpeedlimit ('mail');
         COM_displayMessageAndAbort ($result, 'spamx', 403, 'Forbidden');
     }
-
+    $dt->setTimestamp($A['day']);
     if ( $html ) {
         $mailtext .= '------------------------------------------------------------<br /><br />'
                   . COM_undoSpecialChars ($A['title']) . '<br />'
-                  . strftime ($_CONF['date'], $A['day']) . '<br />';
+                  . $dt->format($_CONF['date'], true) . '<br />';
     } else {
         $mailtext .= '------------------------------------------------------------'
                   . LB . LB
                   . COM_undoSpecialChars ($A['title']) . LB
-                  . strftime ($_CONF['date'], $A['day']) . LB;
+                  . $dt->format($_CONF['date'], true) . LB;
     }
 
     if ($_CONF['contributedbyline'] == 1) {

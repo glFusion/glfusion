@@ -1945,7 +1945,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         // glFusion Comment support
         $mid = $media[$mediaObject]['media_id'];
         if ($MG_albums[$aid]->enable_comments == 1) {
-            USES_lib_comments();
+            USES_lib_comment();
             if ($MG_albums[$aid]->access == 3 || $MG_albums[0]->owner_id){
                 $delete_option = true;
             } else {

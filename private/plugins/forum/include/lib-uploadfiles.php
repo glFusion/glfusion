@@ -162,7 +162,7 @@ function gf_uploadfile($filename,&$upload_file,$allowablefiletypes,$use_filemgmt
         if ($upload->areErrors() AND !$upload->_continueOnError) {
             $errmsg = "Forum Upload Attachment Error:" . $upload->printErrors(false);
             COM_errorlog($errmsg);
-            $GLOBALS['gf_errmsg'] = $LANG_GF00['uploaderr'] .':<br' . XHTML . '>' . $upload->printErrors(false);
+            $GLOBALS['gf_errmsg'] = $LANG_GF00['uploaderr'] .':<br/>' . $upload->printErrors(false);
             return false;
         }
         return true;

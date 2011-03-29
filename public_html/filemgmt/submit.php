@@ -266,7 +266,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         }
 
         if ( !empty($_POST['cid']) ) {
-            $cid = (int) COM_applyFilter($_POST['cid'],true));
+            $cid = (int) COM_applyFilter($_POST['cid'],true);
         } else {
             $cid = 0;
         }

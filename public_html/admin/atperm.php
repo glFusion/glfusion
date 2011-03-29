@@ -241,6 +241,7 @@ function ATP_edit($autotag_id = '')
     $retval .= '<input type="hidden" name="autotag_id" value="'.$autotag_id.'"/>';
     $retval .= '<input type="hidden" name="'.CSRF_TOKEN.'" value="'.SEC_createToken().'" />';
     $retval .= '</td></tr></table>';
+    $retval .= '</form>';
 
     $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
 

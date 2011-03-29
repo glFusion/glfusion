@@ -44,6 +44,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+$dt = new Date('now',$_CONF['timezone']);
+
 
 $path = $mytree->getPathFromId($cid, "title");
 $path = substr($path, 1);
@@ -133,7 +135,8 @@ if ($comments) {
     if ($commentCount > 0) {
         $result4 = DB_query("SELECT cid, UNIX_TIMESTAMP(date) AS day,username FROM {$_TABLES['comments']},{$_TABLES['users']} WHERE {$_TABLES['users']}.uid = {$_TABLES['comments']}.uid AND sid = 'fileid_$lid' ORDER BY date desc LIMIT 1");
         $C = DB_fetchArray($result4);
-        $recentPostMessage = $LANG01[27].': '.strftime($_CONF['daytime'],$C['day']). ' ' . $LANG01[104] . ' ' . $C['username'];
+        $dt->setTimestamp($C['day']);
+        $recentPostMessage = $LANG01[27].': '.$dt->format($_CONF['daytime'],true). ' ' . $LANG01[104] . ' ' . $C['username'];
         $comment_link = '<a href="' .$_CONF['site_url'] .'/filemgmt/index.php?id=' .$lid.'" title="'.$recentPostMessage.'">' .$commentCount.'&nbsp;' .$LANG01[3]. '</a>';
     } else {
         $comment_link = '<a href="' .$_CONF['site_url'] . '/comment.php?type=filemgmt&amp;sid=fileid_' .$lid.'" title="'.$recentPostMessage.'">' . _MD_ENTERCOMMENT . '</a>';

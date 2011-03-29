@@ -244,6 +244,8 @@ function DIR_displayMonth ($topic, $year, $month, $main = false)
 
     $retval = '';
 
+    $dt = new Date('now',$_CONF['timezone']);
+
     if ($main) {
         $retval .= '<div><h2>' . $LANG_MONTH[$month]
                 . ' ' . $year . '</h2> ' . DIR_topicList ($topic, $year, $month)
@@ -278,8 +280,8 @@ function DIR_displayMonth ($topic, $year, $month, $main = false)
                     $retval .= COM_makeList ($entries);
                     $entries = array ();
                 }
-
-                $day = strftime ($_CONF['shortdate'], $A['day']);
+                $dt->setTimestamp($A['day']);
+                $day = $dt->format($_CONF['shortdate'],true);
 
                 $retval .= '<h2>' . $day . '</h2>' . LB;
 

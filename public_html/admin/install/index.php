@@ -38,7 +38,7 @@
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
 if (!defined('GVERSION')) {
-    define('GVERSION', '1.2.2.svn');
+    define('GVERSION', '1.3.0.svn');
 }
 
 define('SESSION_EXPIRED',           1);
@@ -65,19 +65,9 @@ define('FILE_INCLUDE_ERROR',       20);
 require_once 'include/install.lib.php';
 require_once 'include/template-lite.class.php';
 
-if( function_exists('set_error_handler') )
-{
-    if( PHP_VERSION >= 5 ) {
-        /* Tell the error handler to use the default error reporting options.
-         * you may like to change this to use it in more/less cases, if so,
-         * just use the syntax used in the call to error_reporting() above.
-         */
-        $defaultErrorHandler = set_error_handler('INST_handleError', error_reporting());
-    } else {
-        $defaultErrorHandler = set_error_handler('INST_handleError');
-    }
+if( function_exists('set_error_handler') ) {
+    $defaultErrorHandler = set_error_handler('INST_handleError', error_reporting());
 }
-
 
 $_GLFUSION = array();
 

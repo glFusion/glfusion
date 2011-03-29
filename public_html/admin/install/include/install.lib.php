@@ -941,7 +941,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
               autotag_namespace varchar(128) NOT NULL,
               autotag_name varchar(128) NOT NULL,
               PRIMARY KEY (autotag_id)
-            ) TYPE=MyISAM
+            ) ENGINE=MyISAM
             ";
 
             $_SQL[] = "CREATE TABLE {$_TABLES['autotag_usage']} (
@@ -950,11 +950,73 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
               usage_namespace varchar(128) NOT NULL,
               usage_operation varchar(128) NOT NULL,
               KEY `autotag_id (autotag_id)
-            ) TYPE=MyISAM
+            ) ENGINE=MyISAM
             ";
+
+            $_SQL[] = "ALTER TABLE {$_TABLES['sessions']} ADD browser varchar(255) default '' AFTER sess_id";
+
+            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='l F d, Y @h:iA' WHERE dfid=1";
+            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='l F d, Y @H:i' WHERE dfid=2";
+            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='l F d @H:i' WHERE dfid=4";
+            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='H:i d F Y' WHERE dfid=5";
+            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='H:i l d F Y' WHERE dfid=6";
+            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='h:iA -- l F d Y' WHERE dfid=7";
+            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='D F d, h:iA' WHERE dfid=8";
+            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='D F d, H:i' WHERE dfid=9";
+            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='m-d-y H:i' WHERE dfid=10";
+            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='d-m-y H:i' WHERE dfid=11";
+            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='m-d-y h:iA' WHERE dfid=12";
+            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='h:iA  F d, Y' WHERE dfid=13";
+            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='D M d, \'y h:iA' WHERE dfid=14";
+            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='Day z, h ish' WHERE dfid=15";
+            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='y-m-d h:i' WHERE dfid=16";
+            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='d/m/y H:i' WHERE dfid=17";
+            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='D d M h:iA' WHERE dfid=18";
+
             foreach ($_SQL as $sql) {
                 DB_query($sql,1);
             }
+            $result = DB_query("SELECT * FROM {$_TABLES['features']} WHERE ft_name='autotag_perm.admin'",1);
+            if ( DB_numRows($result) < 1 ) {
+                DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('autotag_perm.admin','AutoTag Permissions Admin',1)",1);
+                $ft_id  = DB_insertId();
+                $grp_id = (int) DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'Root'");
+                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $grp_id)", 1);
+            }
+
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+
+            // add user photo option to whosonline block
+            $c->add('whosonline_photo',FALSE,'select',3,14,0,930,TRUE);
+
+            // add oauth user_login_method
+            $c->del('user_login_method', 'Core');
+            $standard = ($_CONF['user_login_method']['standard']) ? true : false;
+            $openid = ($_CONF['user_login_method']['openid']) ? true : false;
+            $thirdparty = ($_CONF['user_login_method']['3rdparty']) ? true: false;
+            $oauth = false;
+            $c->add('user_login_method',array('standard' => $standard , 'openid' => $openid , '3rdparty' => $thirdparty , 'oauth' => $oauth),'@select',4,16,1,320,TRUE);
+
+            // OAuth configuration settings
+            $c->add('facebook_login',0,'select',4,16,1,350,TRUE);
+            $c->add('facebook_consumer_key','not configured yet','text',4,16,NULL,351,TRUE);
+            $c->add('facebook_consumer_secret','not configured yet','text',4,16,NULL,352,TRUE);
+            $c->add('linkedin_login',0,'select',4,16,1,353,TRUE);
+            $c->add('linkedin_consumer_key','not configured yet','text',4,16,NULL,354,TRUE);
+            $c->add('linkedin_consumer_secret','not configured yet','text',4,16,NULL,355,TRUE);
+            $c->add('twitter_login',0,'select',4,16,1,356,TRUE);
+            $c->add('twitter_consumer_key','not configured yet','text',4,16,NULL,357,TRUE);
+            $c->add('twitter_consumer_secret','not configured yet','text',4,16,NULL,358,TRUE);
+
+            // date / time format changes
+
+            $c->add('date','l, F d Y @ h:i A T','text',6,29,NULL,370,TRUE);
+            $c->add('daytime','m/d h:iA','text',6,29,NULL,380,TRUE);
+            $c->add('shortdate','m/d/y','text',6,29,NULL,390,TRUE);
+            $c->add('dateonly','d-M','text',6,29,NULL,400,TRUE);
+            $c->add('timeonly','H:iA','text',6,29,NULL,410,TRUE);
+
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.3.0',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.3.0' WHERE name='glfusion'",1);
             DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);

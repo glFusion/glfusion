@@ -746,12 +746,8 @@ if ($forum_id == 0) {
             if ( $topic_id == 0) {
                 moderator_error(ERROR_TOPIC_ID);
             }
-//            $move_to_forum  = COM_applyFilter($_POST['movetoforum'],true);
             $move_to_topic  = COM_applyFilter($_POST['mergetopic'],true);
-//            $splittype      = COM_applyFilter($_POST['splittype']);
-
             $splittype = '';
-
             $move_to_forum = DB_getItem($_TABLES['gf_topic'],'forum','id='.(int)$move_to_topic);
             if ( $move_to_forum == '' ) {
                 moderator_error(ACCESS_DENIED);

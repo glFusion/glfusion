@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | Admin menu.                                                              |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -36,14 +36,13 @@ function MG_navigation() {
     global $_MG_CONF, $_CONF, $_TABLES, $LANG_MG01;
 
     $retval = '';
-    $T = new Template($_MG_CONF['template_path']);
+    $T = new Template($_MG_CONF['template_path'].'/admin');
     $T->set_file ('admin','mg_navigation.thtml');
 
     $queue_count = DB_count($_TABLES['mg_media_album_queue'],'','');
 
     $T->set_var(array(
         'site_url'                  => $_MG_CONF['site_url'],
-        'site_admin_url'            => $_CONF['site_admin_url'],
         'admin_url'                 => $_MG_CONF['admin_url'],
         'lang_configuration'        => $LANG_MG01['configuration'],
         'lang_system_options'       => $LANG_MG01['system_options'],

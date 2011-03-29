@@ -818,6 +818,8 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
     $retval = '';
     $moresql = "(sp_where = " . (int) $where . ") AND (sp_status = 1) AND ";
 
+    $dt = new Date('now',$_CONF['timezone']);
+
     if( !COM_onFrontpage() ) {
         $hpsql = " OR (sp_tid = 'allnhp') ";
     } else {
@@ -915,8 +917,8 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
 
             $spage->set_var('info_separator', 'hidden');
             if ($_SP_CONF['show_date'] == 1) {
-                $curtime = COM_getUserDateTimeFormat($S['sp_date']);
-                $lastupdate = $LANG_STATIC['lastupdated']. ' ' . strftime( $_CONF['daytime'], $curtime[1] );
+                $dt->setTimestamp(strtotime($S['sp_date']));
+                $lastupdate = $LANG_STATIC['lastupdated']. ' ' . $dt->format($_CONF['daytime'], true);
                 $spage->set_var('lastupdate', $lastupdate);
             }
 
@@ -1004,8 +1006,6 @@ function plugin_autotags_staticpages($op, $content = '', $autotag = '')
 {
     global $_CONF, $_TABLES;
 
-    static $recursive = array();
-
     if ($op == 'tagname' ) {
         return array('staticpage', 'staticpage_content');
     } else if ($op == 'tagusage') {
@@ -1045,13 +1045,9 @@ function plugin_autotags_staticpages($op, $content = '', $autotag = '')
                 $link = COM_createLink($linktext, $url);
                 $content = str_replace($autotag['tagstr'], $link, $content);
             } else if (($autotag['tag'] == 'staticpage_content') ) {
-                if (isset($recursive[$sp_id])) {
-                    $content = '';
-                } else {
-                    $recursive[$sp_id] = true;
-                    $sp_content = SP_returnStaticpage($sp_id, 'autotag');
-                    $content = str_replace($autotag['tagstr'], $sp_content,$content);
-                }
+                $recursive[$sp_id] = true;
+                $sp_content = SP_returnStaticpage($sp_id, 'autotag');
+                $content = str_replace($autotag['tagstr'], $sp_content,$content);
             } else {
                 $content = str_replace ($autotag['tagstr'], '',$content);
             }

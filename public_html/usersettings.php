@@ -541,11 +541,7 @@ function editpreferences()
     }
 
     // Timezone
-    require_once $_CONF['path_system'] . 'classes/timezoneconfig.class.php';
-
-    $timezone = TimeZoneConfig::getUserTimeZone();
-    $selection = TimeZoneConfig::getTimeZoneDropDown($timezone,
-            array('id' => 'tzid', 'name' => 'tzid'));
+    $selection = Date::getTimeZoneDropDown($A['tzid'],array('id' => 'tzid', 'name' => 'tzid'));
 
     $preferences->set_var('timezone_selector', $selection);
     $preferences->set_var('lang_timezone', $LANG04[158]);

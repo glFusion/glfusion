@@ -584,9 +584,7 @@ function service_get_staticpages($args, &$output, &$svc_msg)
             $output['content']      = $output['sp_content'];
             $output['content_type'] = 'html';
 
-            $owner_data = SESS_getUserDataFromId($output['owner_id']);
-
-            $output['author_name']  = $owner_data['username'];
+            $output['author_name']  = DB_getItem($_TABLES['users'],'username','uid='.(int)$output['owner_id']);
 
             $output['link_edit'] = $page;
         }
@@ -636,10 +634,7 @@ function service_get_staticpages($args, &$output, &$svc_msg)
                 $output_item['category']     = array($output_item['sp_tid']);
                 $output_item['content']      = $output_item['sp_content'];
                 $output_item['content_type'] = 'html';
-
-                $owner_data = SESS_getUserDataFromId($output_item['owner_id']);
-
-                $output_item['author_name']  = $owner_data['username'];
+                $output_item['author_name']  = DB_getItem($_TABLES['users'],'username','uid='.(int)$output['owner_id']);
             }
             $output[] = $output_item;
         }

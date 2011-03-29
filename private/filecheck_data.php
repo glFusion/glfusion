@@ -1848,7 +1848,6 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/classes/syndication/rss.feed.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/classes/syndication/ics.feed.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/classes/template.class.php' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/classes/timezoneconfig.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/classes/timer.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/classes/upload.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/classes/url.class.php' ),

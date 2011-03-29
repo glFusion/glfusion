@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: classAlbum.php 3093 2008-09-10 23:53:51Z mevans0263               $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -270,10 +270,10 @@ class mgAlbum {
     function saveAlbum( ) {
         global $_TABLES, $MG_albums;
 
-        $this->album_disk_usage = intval($this->album_disk_usage);
-        $this->last_update      = intval($this->last_update);
-        $this->views            = intval($this->views);
-        $this->enable_keywords  = intval($this->enable_keywords);
+        $this->album_disk_usage = (int) $this->album_disk_usage;
+        $this->last_update      = (int) $this->last_update;
+        $this->views            = (int) $this->views;
+        $this->enable_keywords  = (int) $this->enable_keywords;
         $this->title            = DB_escapeString($this->title);
         $this->description      = DB_escapeString($this->description);
 

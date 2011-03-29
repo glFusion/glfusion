@@ -45,6 +45,8 @@ if ( !SEC_hasRights('stats.view') ) {
 
 // MAIN
 
+$dt = new Date('now',$_CONF['timezone']);
+
 $display .= COM_siteHeader ('menu', $LANG10[1]);
 
 // Overall Site Statistics
@@ -248,8 +250,9 @@ if ($nrows > 0) {
         $A['user'] = "<a href=\"" . $_CONF['site_url']
                   . "/users.php?mode=profile&amp;uid={$A['uid']}" . "\">{$A['username']}</a>";
         if ( $A['login'] ) {
-            $lastlogin = COM_getUserDateTimeFormat($A['login']);
-            $A['date'] = $lastlogin[0];
+            $dt->setTimestamp($A['login']);
+            $A['date'] = $dt->format($dt->getUserFormat(),true);
+
         } else {
             $A['date'] = $LANG28[36];
         }

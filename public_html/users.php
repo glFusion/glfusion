@@ -1263,11 +1263,10 @@ case 'verify':
     break;
 
 case 'getnewtoken':
+    $uid = 0;
     if ($_CONF['passwordspeedlimit'] == 0) {
         $_CONF['passwordspeedlimit'] = 300; // 5 minutes
     }
-
-    $uid = COM_applyFilter($_POST['uid'],true);
     COM_clearSpeedlimit ($_CONF['passwordspeedlimit'], 'verifytoken');
     $last = COM_checkSpeedlimit ('verifytoken');
     if ($last > 0) {
@@ -1278,11 +1277,18 @@ case 'getnewtoken':
                  . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
                  . COM_siteFooter ();
     } else {
-        $username = $_POST['username'];
-        $passwd   = $_POST['passwd'];
-        if (!empty ($username) && !empty ($passwd)) {
-            $encryptedPassword = DB_getItem($_TABLES['users'],'passwd','username="'.DB_escapeString($username).'"');
-            if ( SEC_check_hash($passwd, $encryptedPassword) ) {
+        $username = (isset($_POST['username']) ? $_POST['username'] : '');
+        $passwd   = (isset($_POST['passwd']) ? $_POST['passwd'] : '');
+        if (!empty ($username) && !empty ($passwd) && USER_validateUsername($username)) {
+            $encryptedPassword = '';
+            $uid = 0;
+            $result = DB_query("SELECT uid,passwd FROM {$_TABLES['users']} WHERE username='".DB_escapeString($username)."'");
+            if ( DB_numRows($result)  > 0 ) {
+                $row = DB_fetchArray($result);
+                $encryptedPassword = $row['passwd'];
+                $uid = $row['uid'];
+            }
+            if ( $encryptedPassword != '' && SEC_check_hash($passwd, $encryptedPassword) ) {
                 $display .= requesttoken ($uid, 3);
             } else {
                 $display .= COM_siteHeader('menu');
@@ -1470,7 +1476,7 @@ default:
                     exit;
                 } else {
                     // COM_errorLog("attempting remote service login");
-                    // COM_errorLog("redirecting to authentication URL={$url}");
+                     COM_errorLog("redirecting to authentication URL={$url}");
                     header('Location: ' . $url); // refresh to the OAuth remote service authentication dialog
                     exit;
                 }

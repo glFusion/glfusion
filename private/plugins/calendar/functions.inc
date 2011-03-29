@@ -113,6 +113,8 @@ function phpblock_calendar( $help='', $title='' )
 
     $retval = '';
 
+    $dt = new Date('now',$_CONF['timezone']);
+
     if( !$_USER['noboxes'] && $_CA_CONF['showupcomingevents'] ) {
         $range = $_CA_CONF['upcomingeventsrange'];
         if( $range == 0 ) {
@@ -203,7 +205,7 @@ function phpblock_calendar( $help='', $title='' )
                             }
                         } else {
                             if( $totalrows > 0 ) {
-                                $retval .= '<b>' . $LANG_CAL_1[24] . '</b><br' . XHTML . '>';
+                                $retval .= '<b>' . $LANG_CAL_1[24] . '</b><br/>';
                             }
                         }
                         $headline = true;
@@ -212,20 +214,16 @@ function phpblock_calendar( $help='', $title='' )
                     // Start Date strings...
                     $startDate = $theEvent['datestart'];
                     $theTime1 = strtotime( $startDate );
-                    $dayName1 = strftime( '%A', $theTime1 );
-                    if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
-                        $dayName1 = iconv('ISO-8859-1','UTF-8',$dayName1);
-                    }
-                    $abbrDate1 = strftime( $dateonly, $theTime1 );
+                    $dt->setTimestamp($theTime1);
+                    $dayName1 = $dt->format('%A', true );
+                    $abbrDate1 = $dt->format( $dateonly, true );
 
                     // End Date strings...
                     $endDate = $theEvent['dateend'];
                     $theTime2 = strtotime( $endDate );
-                    $dayName2 = strftime( '%A', $theTime2 );
-                    if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
-                        $dayName2 = iconv('ISO-8859-1','UTF-8',$dayName2);
-                    }
-                    $abbrDate2 = strftime( $dateonly, $theTime2 );
+                    $dt->setTimestamp($theTime2);
+                    $dayName2 = $dt->format( '%A', true );
+                    $abbrDate2 = $dt->format( $dateonly, true );
 
                     if ( COM_getCharset() == 'utf-8' ) {
                         if ( !MBYTE_is_utf8($dayName1) ) {
@@ -259,7 +257,7 @@ function phpblock_calendar( $help='', $title='' )
                             if( $skipFirstBreak ) {
                                 $skipFirstBreak = false;
                             } else {
-                                $retval .= '<br' . XHTML . '>';
+                                $retval .= '<br/>';
                             }
                             if( $todaysEvent ) {
                                 $retval .= '<span class="' . $todaysClassName . '">';
@@ -269,7 +267,7 @@ function phpblock_calendar( $help='', $title='' )
 
                             // If different start and end dates, then display end date:
                             if( $abbrDate1 != $abbrDate2 ) {
-                                $retval .= ' - <br' . XHTML . '><b>' . $dayName2 . '</b>&nbsp;<small>' . $abbrDate2 . '</small>';
+                                $retval .= ' - <br/><b>' . $dayName2 . '</b>&nbsp;<small>' . $abbrDate2 . '</small>';
                             }
                             if( $todaysEvent ) {
                                 $retval .= '</span>';
@@ -407,10 +405,7 @@ function plugin_moderationapprove_calendar ($id)
     } else {
         $group_id = SEC_getFeatureGroup ('calendar.moderate');
     }
-/*    DB_query ("UPDATE {$_TABLES['events']} SET owner_id = {$_USER['uid']},"
-             ."group_id = '$group_id',perm_owner = {$A['perm_owner']}, "
-             ."perm_group = {$A['perm_group']}, perm_members = {$A['perm_members']},"
-             ."perm_anon = {$A['perm_anon']} WHERE eid = '".DB_escapeString($id)."'"); */
+
     DB_query ("UPDATE {$_TABLES['events']} SET "
              ."group_id = '$group_id',perm_owner = {$A['perm_owner']}, "
              ."perm_group = {$A['perm_group']}, perm_members = {$A['perm_members']},"
@@ -492,6 +487,8 @@ function plugin_savesubmission_calendar($A)
 {
     global $_CONF, $_CA_CONF, $_TABLES, $_USER, $LANG12, $LANG_CAL_1;
 
+    $A['start_ampm'] = COM_applyFilter($A['startampm_selection']);
+
     $A['title'] = strip_tags (COM_checkWords ($A['title']));
     $A['start_year'] = COM_applyFilter ($A['start_year'], true);
     $A['start_month'] = COM_applyFilter ($A['start_month'], true);
@@ -569,10 +566,10 @@ function plugin_savesubmission_calendar($A)
     } else {
         $spamcheck .= COM_createLink($A['title'], $A['url']);
     }
-    $spamcheck .= '<br' . XHTML . '>' . $A['location'] . '<br' . XHTML . '>'
-               . $A['address1'] . '<br' . XHTML . '>' . $A['address2']
-               . '<br' . XHTML . '>' . $A['city'] . ', ' . $A['zipcode']
-               . '<br' . XHTML . '>' . $A['description'] . '</p>';
+    $spamcheck .= '<br/>' . $A['location'] . '<br/>'
+               . $A['address1'] . '<br/>' . $A['address2']
+               . '<br/>' . $A['city'] . ', ' . $A['zipcode']
+               . '<br/>' . $A['description'] . '</p>';
     $result = PLG_checkforSpam($spamcheck, $_CONF['spamx']);
     if ($result > 0) {
         COM_updateSpeedlimit ('submit');
@@ -748,7 +745,7 @@ function plugin_getheadercode_calendar()
     // use the CSS only if we are on the plugin's pages
     if (substr_count ($_SERVER['PHP_SELF'], '/calendar/') > 0) {
         $str = '<link rel="stylesheet" type="text/css" href="'
-             . $_CONF['site_url'] . '/calendar/style.css"' . XHTML . '>';
+             . $_CONF['site_url'] . '/calendar/style.css"/>';
     }
 
     return $str;
@@ -778,6 +775,8 @@ function plugin_submit_calendar($mode = 'master',$A = array())
 {
     global $_CONF, $_USER, $_CA_CONF, $LANG_CAL_1;
 
+    $dt = new Date('now',$_CONF['timezone']);
+
     if (isset($_POST['calendar_type'])) {
         $mode = $_POST['calendar_type'];
     } else if (isset($_REQUEST['mode']) && ($_REQUEST['mode'] == 'personal')) {
@@ -795,22 +794,22 @@ function plugin_submit_calendar($mode = 'master',$A = array())
         if (isset ($_REQUEST['year'])) {
             $year = COM_applyFilter ($_REQUEST['year'], true);
         } else {
-            $year = date ('Y', time ());
+            $year = $dt->year;
         }
         if (isset ($_REQUEST['month'])) {
             $month = COM_applyFilter ($_REQUEST['month'], true);
         } else {
-            $month = date ('m', time ());
+            $month = $dt->month;
         }
         if (isset ($_REQUEST['day'])) {
             $day = COM_applyFilter ($_REQUEST['day'], true);
         } else {
-            $day = date ('d', time ());
+            $day = $dt->day;
         }
         if (isset ($_REQUEST['hour'])) {
             $hour = COM_applyFilter ($_REQUEST['hour'], true);
         } else {
-            $hour = date ('H', time ());
+            $hour = $dt->hour;
         }
         $startat = '';
         if ($year > 0) {
@@ -830,22 +829,22 @@ function plugin_submit_calendar($mode = 'master',$A = array())
     if (isset ($_REQUEST['year'])) {
         $year = COM_applyFilter ($_REQUEST['year'], true);
     } else {
-        $year = date ('Y', time ());
+        $year = $dt->year;
     }
     if (isset ($_REQUEST['month'])) {
         $month = COM_applyFilter ($_REQUEST['month'], true);
     } else {
-        $month = date ('m', time ());
+        $month = $dt->month;
     }
     if (isset ($_REQUEST['day'])) {
         $day = COM_applyFilter ($_REQUEST['day'], true);
     } else {
-        $day = date ('d', time ());
+        $day = $dt->day;
     }
     if (isset ($_REQUEST['hour'])) {
         $hour = COM_applyFilter ($_REQUEST['hour'], true);
     } else {
-        $hour = date ('H', time ());
+        $hour = $dt->hour;
     }
 
     // Pull all the POST data so we can pre-fill the form.
@@ -904,13 +903,13 @@ function plugin_submit_calendar($mode = 'master',$A = array())
     $eventform->set_var('lang_starttime', $LANG_CAL_1[30]);
 
     if (empty ($start_month) || $start_month == 0) {
-        $start_month = date ('m', time ());
+        $start_month = $dt->month;
     }
     if (empty ($start_day) || $start_day == 0) {
-        $start_day = date ('d', time ());
+        $start_day = $dt->day;
     }
     if (empty ($start_year)) {
-        $start_year = date ('Y', time ());
+        $start_year = $dt->year;
     }
     $eventform->set_var ('start_month_options', COM_getMonthFormOptions ($start_month));
     $eventform->set_var ('start_day_options', COM_getDayFormOptions ($start_day));
@@ -918,20 +917,20 @@ function plugin_submit_calendar($mode = 'master',$A = array())
 
 
     if (empty ($end_month)) {
-        $end_month = date ('m', time ());
+        $end_month = $dt->month;
     }
     if (empty ($end_day)) {
-        $end_day = date ('d', time ());
+        $end_day = $dt->day;
     }
     if (empty ($end_year)) {
-        $end_year = date ('Y', time ());
+        $end_year = $dt->year;
     }
     $eventform->set_var ('end_month_options', COM_getMonthFormOptions ($end_month));
     $eventform->set_var ('end_day_options', COM_getDayFormOptions ($end_day));
     $eventform->set_var ('end_year_options', COM_getYearFormOptions ($end_year));
 
     if (empty ($start_hour) || ($start_hour < 0)) {
-        $start_hour = date ('H', time ());
+        $start_hour = $dt->hour;
     }
     $start_hour_24 = $start_hour % 24;
     if ($start_hour >= 12) {
@@ -957,7 +956,7 @@ function plugin_submit_calendar($mode = 'master',$A = array())
                              COM_getHourFormOptions ($start_hour));
     }
     if ( empty($start_minute) ) {
-        $cur_min = intval (date ('i') / 15) * 15;
+        $cur_min = intval ($dt->minute / 15) * 15;
     } else {
         $cur_min = $start_minute;
     }
@@ -966,7 +965,7 @@ function plugin_submit_calendar($mode = 'master',$A = array())
 
     // end hours
     if (empty ($end_hour) || ($end_hour < 0)) {
-        $end_hour = date ('H', time ());
+        $end_hour = $dt->hour;
     }
     $end_hour_24 = $end_hour % 24;
     if ($end_hour >= 12) {
@@ -992,7 +991,7 @@ function plugin_submit_calendar($mode = 'master',$A = array())
     }
 
     if (empty($end_minute) ) {
-        $end_min = intval (date ('i') / 15) * 15;
+        $end_min = intval ($dt->minute / 15) * 15;
     } else {
         $end_min = $end_minute;
     }
@@ -1026,7 +1025,6 @@ function plugin_submit_calendar($mode = 'master',$A = array())
     } else {
         $eventform->set_var('hidden_fields', '');
     }
-    $eventform->set_var('xhtml', XHTML);
 
     // set the fields
     $eventform->set_var('title',$title);
@@ -1168,7 +1166,7 @@ function plugin_getfeedcontent_calendar( $feed, &$link, &$update, $feedType, $fe
             $mysec = substr( $row['eid'], 12, 2 );
             $newtime = "{$mymonth}/{$myday}/{$myyear} {$myhour}:{$mymin}:{$mysec}";
             $creationtime = strtotime( $newtime );
-            $extensionTags = array(); // PLG_getFeedElementExtensions('calendar', $row['eid'], $feedType, $feedVersion, $eventtitle, );
+            $extensionTags = array();
             $content[] = array( 'title'      => $eventtitle,
                                 'summary'    => $eventtext,
                                 'link'       => $eventlink,

@@ -148,7 +148,6 @@ function links_list($message)
                                 'actcol'   => 'categoryactivecol.thtml',
                                 'pagenav'  => 'pagenavigation.thtml',
                                 'catdrop'  => 'categorydropdown.thtml'));
-    $linklist->set_var('xhtml', XHTML);
     $linklist->set_var('blockheader', COM_startBlock($LANG_LINKS[114]));
     $linklist->set_var('layout_url', $_CONF['layout_url']);
 
@@ -385,7 +384,7 @@ function prepare_link_item ($A, &$template)
                  . '/plugins/links/index.php?edit=x&amp;lid=' . $A['lid'];
         $template->set_var ('link_edit', COM_createLink($LANG_ADMIN['edit'],$editurl));
         $edit_icon = "<img src=\"{$_CONF['layout_url']}/images/edit.$_IMAGE_TYPE\" "
-            . "alt=\"{$LANG_ADMIN['edit']}\" title=\"{$LANG_ADMIN['edit']}\"" . XHTML . ">";
+            . "alt=\"{$LANG_ADMIN['edit']}\" title=\"{$LANG_ADMIN['edit']}\"/>";
         $template->set_var ('edit_icon', COM_createLink($edit_icon, $editurl));
     } else {
         $template->set_var ('link_edit', '');

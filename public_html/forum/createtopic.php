@@ -156,7 +156,7 @@ if ( intval($forum) == 0 && intval($id) != 0 ) {
 $result = DB_query("SELECT forum_id AS forum,is_readonly,grp_id,rating_post FROM {$_TABLES['gf_forums']} WHERE forum_id=".intval($forum));
 $forumArray = DB_fetchArray($result);
 if ( !forum_canPost($forumArray) ) {
-    echo '<br' . XHTML . '>';
+    echo '<br/>';
     BlockMessage($LANG_GF01['ACCESSERROR'],$LANG_GF02['msg03'],false);
     echo COM_siteFooter();
     exit;
@@ -419,7 +419,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                     if ($uid != '1') {
                         DB_query("INSERT INTO {$_TABLES['gf_log']} (uid,forum,topic,time) VALUES ('$_USER[uid]','".DB_escapeString($forum)."','".DB_escapeString($lastid)."','".DB_escapeString($date)."')");
                     }
-                    forum_statusMessage($LANG_GF02['msg19'] . '<br' . XHTML . '><br' . XHTML . '>' . $uploadErrorMessage, $_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$lastid",$LANG_GF02['msg19']);
+                    forum_statusMessage($LANG_GF02['msg19'] . '<br/><br/>' . $uploadErrorMessage, $_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$lastid",$LANG_GF02['msg19']);
                 }
 
             } else {
@@ -583,7 +583,7 @@ if ($method == 'edit') {
     $editAllowed = false;
     if (forum_modPermission($edittopic['forum'],$_USER['uid'],'mod_edit')) {
         $editAllowed = true;
-        echo '<input type="hidden" name="modedit" value="1"' . XHTML . '>';
+        echo '<input type="hidden" name="modedit" value="1"/>';
     } else {
         // User is trying to edit their topic post - this is allowed
         if ($edittopic['date'] > 0 AND $edittopic['uid'] == $_USER['uid'] ) {
@@ -722,7 +722,7 @@ if (isset($_REQUEST['preview']) )  {  //&& $_REQUEST['preview'] == $LANG_GF01['P
     $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
     $forum_outline_footer->parse ('output', 'forum_outline_footer');
     echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
-    echo '<br' . XHTML . '>';
+    echo '<br/>';
 
     // If Moderator and editing the parent topic - see if form has skicky or locked checkbox on
     $editmoderator = FALSE;
@@ -748,7 +748,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     // validate the forum is actually the forum the topic belongs in...
     if ( $method == 'postreply' || $method=='edit') {
         if ( ($forum != 0) && $forum != $edittopic['forum'] ) {
-            echo '<br' . XHTML . '>';
+            echo '<br/>';
             BlockMessage('ERROR',$LANG_GF02['msg87'],false);
             gf_siteFooter();
             exit;
@@ -757,7 +757,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     if ( $method == 'newtopic' && ($newtopic['is_readonly'] == 1 ) ) {
         /* Check if this user has moderation rights now to allow a post to a locked topic */
         if (!forum_modPermission($forum,$_USER['uid'],'mod_edit')) {
-            echo '<br' . XHTML . '>';
+            echo '<br/>';
             BlockMessage('ERROR',$LANG_GF02['msg87'],false);
             gf_siteFooter();
             exit;
@@ -766,7 +766,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     if ($method == 'postreply' AND ( $edittopic['locked'] == 1 || $edittopic['is_readonly'] == 1 )) {
         /* Check if this user has moderation rights now to allow a post to a locked topic */
         if (!forum_modPermission($edittopic['forum'],$_USER['uid'],'mod_edit')) {
-            echo '<br' . XHTML . '>';
+            echo '<br/>';
             BlockMessage('ERROR',$LANG_GF02['msg87'],false);
             gf_siteFooter();
             exit;
@@ -786,8 +786,8 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
 
     $topicnavbar = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $topicnavbar->set_file (array ('topicnavbar'=>'post_topic_navbar.thtml'));
-    $topicnavbar->set_var ('navbreadcrumbsimg','<img src="'.gf_getImage('nav_breadcrumbs').'" alt=""' . XHTML . '>');
-    $topicnavbar->set_var ('navtopicimg','<img src="'.gf_getImage('nav_topic').'" alt=""' . XHTML . '>');
+    $topicnavbar->set_var ('navbreadcrumbsimg','<img src="'.gf_getImage('nav_breadcrumbs').'" alt=""/>');
+    $topicnavbar->set_var ('navtopicimg','<img src="'.gf_getImage('nav_topic').'" alt=""/>');
     $topicnavbar->set_var ('site_url', $_CONF['site_url']);
     $topicnavbar->set_var ('layout_url', $_CONF['layout_url']);
     $topicnavbar->set_var ('phpself', $_CONF['site_url'] .'/forum/createtopic.php');
@@ -1109,12 +1109,12 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
         }
     }
     if ($editmoderator) {
-        if ($notify == 'on' OR $_POST['notify'] == 'on') {
+        if ($notify == 'on' OR (isset($_POST['notify']) && $_POST['notify'] == 'on')) {
             $notify_val = 'checked="checked"';
         } else {
             $notify_val = '';
         }
-        $notify_prompt = $LANG_GF02['msg38']. '<br' . XHTML . '><input type="checkbox" name="notify" ' .$notify_val. XHTML . '>';
+        $notify_prompt = $LANG_GF02['msg38']. '<br/><input type="checkbox" name="notify" ' .$notify_val. '/>';
 
         // check that this is the parent topic - only able to make it skicky or locked
         if ($editpid == 0) {
@@ -1131,8 +1131,8 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
                     $sticky_val = '';
                 }
             }
-            $locked_prompt = $LANG_GF02['msg109']. '<br' . XHTML . '><input type="checkbox" name="locked_switch" ' .$locked_val. ' value="1"' . XHTML . '>';
-            $sticky_prompt = $LANG_GF02['msg61']. '<br' . XHTML . '><input type="checkbox" name="sticky_switch" ' .$sticky_val. ' value="1"' . XHTML . '>';
+            $locked_prompt = $LANG_GF02['msg109']. '<br/><input type="checkbox" name="locked_switch" ' .$locked_val. ' value="1"/>';
+            $sticky_prompt = $LANG_GF02['msg61']. '<br/><input type="checkbox" name="sticky_switch" ' .$sticky_val. ' value="1"/>';
         } else {
             $locked_prompt = '';
             $sticky_prompt = '';
@@ -1144,7 +1144,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
             } else {
                 $notify_val = '';
             }
-            $notify_prompt = $LANG_GF02['msg38']. '<br' . XHTML . '><input type="checkbox" name="notify" ' .$notify_val. XHTML . '>';
+            $notify_prompt = $LANG_GF02['msg38']. '<br/><input type="checkbox" name="notify" ' .$notify_val. '/>';
             $locked_prompt = '';
         } else {
             $notify_prompt = '';
@@ -1165,13 +1165,13 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
                 $mode_prompt = '<input type="hidden" name="postmode" value="html" />';
                 $wysiwyg = 1;
             } else {
-                $mode_prompt = $postmode_msg. '<br' . XHTML . '><input type="checkbox" name="postmode_switch" value="1"' . XHTML . '><input type="hidden" name="postmode" value="' . $postmode . '"' . XHTML . '>';
+                $mode_prompt = $postmode_msg. '<br/><input type="checkbox" name="postmode_switch" value="1"/><input type="hidden" name="postmode" value="' . $postmode . '"/>';
             }
         } elseif ( $CONF_FORUM['use_wysiwyg_editor'] && $CONF_FORUM['post_htmlmode']) {
             $mode_prompt = '<input type="hidden" name="postmode" value="html" />';
             $wysiwyg = 1;
         } else {
-            $mode_prompt = $postmode_msg. '<br' . XHTML . '><input type="checkbox" name="postmode_switch" value="1"' . XHTML . '><input type="hidden" name="postmode" value="' . $postmode . '"' . XHTML . '>';
+            $mode_prompt = $postmode_msg. '<br/><input type="checkbox" name="postmode_switch" value="1"/><input type="hidden" name="postmode" value="' . $postmode . '"/>';
         }
     }
 
@@ -1197,11 +1197,11 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
             $comment = str_replace( '<pre>', '[code]', $comment );
             $comment = str_replace( '</pre>', '[/code]', $comment );
         }
-        $edit_prompt = $LANG_GF02['msg190'] . '<br' . XHTML . '><input type="checkbox" name="silentedit" ';
+        $edit_prompt = $LANG_GF02['msg190'] . '<br/><input type="checkbox" name="silentedit" ';
         if ((isset($_POST['silentedit']) && $_POST['silentedit'] == 1) OR ( !isset($_POST['modedit']) AND $CONF_FORUM['silent_edit_default'])) {
              $edit_prompt .= 'checked="checked" ';
         }
-        $edit_prompt .= 'value="1"' . XHTML . '>';
+        $edit_prompt .= 'value="1"/>';
         $submissionform_main->set_var('attachments','<div id="fileattachlist">' . gf_showattachments($id,'edit') . '</div>');
         $numAttachments = DB_Count($_TABLES['gf_attachments'],'topic_id',$id);
         $allowedAttachments = $CONF_FORUM['maxattachments'] - $numAttachments;
@@ -1417,7 +1417,6 @@ function gf_chknotifications($forumid,$topicid,$userid,$type='topic') {
                     } else {
                         // remove the watch entry since this user can no longer access the forum.
                         DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid=".$N['uid']." AND ((topic_id=".(int) $pid.") OR ((forum_id=".(int) $forumid.") AND (topic_id=0) ))");
-//                        COM_errorLog("Removing user from notification: " . $B['username']);
                     }
                 }
             }

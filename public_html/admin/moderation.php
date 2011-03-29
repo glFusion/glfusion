@@ -106,6 +106,8 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
         return $retval; // we can't work without an item type
     }
 
+    $dt = new Date('now',$_CONF['timezone']);
+
     $field = $fieldname;
     $field = ($type == 'user' && $fieldname == 1) ? 'user' : $field;
     $field = ($type == 'story' && $fieldname == 2) ? 'day' : $field;
@@ -127,7 +129,8 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case 'day':
-            $retval = strftime($_CONF['daytime'], $A['day']);
+            $dt->setTimeStamp($A['day']);
+            $retval = $dt->format($_CONF['daytime'],true);
             break;
 
         case 'tid':

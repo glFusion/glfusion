@@ -52,7 +52,7 @@ function MG_editCategory( $cat_id, $mode ) {
 
     $retval = '';
 
-    $T = new Template($_MG_CONF['template_path']);
+    $T = new Template($_MG_CONF['template_path'].'/admin');
 
     $T->set_var('site_url', $_CONF['site_url']);
     $T->set_var('site_admin_url', $_CONF['site_admin_url']);
@@ -196,7 +196,7 @@ function MG_displayCategories( ) {
 
     $retval = '';
 
-    $T = new Template($_MG_CONF['template_path']);
+    $T = new Template($_MG_CONF['template_path'].'/admin');
 
     $T->set_file (array(
         'category'  =>  'category.thtml',
@@ -279,7 +279,7 @@ if ( isset($_REQUEST['mode']) ) {
 $display = '';
 
 $display = COM_siteHeader();
-$T = new Template($_MG_CONF['template_path']);
+$T = new Template($_MG_CONF['template_path'].'/admin');
 $T->set_file (array ('admin' => 'administration.thtml'));
 $T->set_var(array(
     'site_admin_url'    => $_CONF['site_admin_url'],
@@ -309,7 +309,6 @@ if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {
         'admin_body'    => MG_editCategory($cat_id,'edit'),
         'title'         => $LANG_MG01['edit_category'],
     ));
-
 } elseif ($mode == $LANG_MG01['delete'] && !empty ($LANG_MG01['delete'])) {
     if ( isset($_POST['cat_id'] ) ) {
         $cat_id = $_POST['cat_id'];

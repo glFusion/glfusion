@@ -97,16 +97,13 @@ function ADMIN_getListField_memberlist($fieldname, $fieldvalue, $A, $icon_arr)
             $A['posts'] = DB_count($_TABLES['gf_topic'],'uid',$A['uid']);
             if ($A['posts'] > 0) {
                 $reportlinkURL = $_CONF['site_url'] .'/forum/memberlist.php?op=last10posts&amp;showuser='.$A['uid'];
-//                $reportlinkURL .= '&amp;prevorder='.$order.'&amp;direction='.$direction.'&amp;page='.$page;
                 $retval = '<a href="'.$reportlinkURL.'"><img src="'.gf_getImage('latestposts').'"/></a>';
             }
             break;
         case 'regdate':
             $phpdate = strtotime( $fieldvalue );
-            $retval = @strftime( $CONF_FORUM['default_Datetime_format'], $phpdate );
-            if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
-                $retval = iconv('ISO-8859-1','UTF-8',$retval);
-            }
+            $dt = new Date($phpdate,$_CONF['timezone']);
+            $retval = $dt->format($CONF_FORUM['default_Datetime_format'],true);
             break;
         default:
             $retval = $fieldvalue;
@@ -154,6 +151,8 @@ if ($op == "last10posts") {
 
     $retval = '';
 
+    $dt = new Date('now',$_CONF['timezone']);
+
     $header_arr = array(
         array('text' => $LANG_GF01['FORUM'],  'field' => 'forum'),
         array('text' => $LANG_GF01['TOPIC'],  'field' => 'subject'),
@@ -199,14 +198,10 @@ if ($op == "last10posts") {
             $topic_id = $P['id'];
             $displayrecs++;
 
-            $firstdate = strftime($CONF_FORUM['default_Datetime_format'], $P['date']);
-            if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
-                $firstdate = @iconv('ISO-8859-1','UTF-8',$firstdate);
-            }
-            $lastdate  = strftime($CONF_FORUM['default_Datetime_format'], $P['lastupdated']);
-            if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
-                $lastdate = @iconv('ISO-8859-1','UTF-8',$lastdate);
-            }
+            $dt->setTimestamp($P['date']);
+            $firstdate = $dt->format($CONF_FORUM['default_Datetime_format'],true);
+            $dt->setTimestamp($P['lastupdated']);
+            $lastdate = $dt->format($CONF_FORUM['default_Datetime_format'],true);
 
             if ($P['uid'] > 1) {
                 $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($P['uid']) . ', ';
@@ -214,7 +209,7 @@ if ($op == "last10posts") {
                 $topicinfo = "{$LANG_GF01['STARTEDBY']} {$P['name']},";
             }
 
-            $topicinfo .= "{$firstdate}<br" . XHTML . ">{$LANG_GF01['VIEWS']}:{$P['views']}, {$LANG_GF01['REPLIES']}:{$P['replies']}<br" . XHTML . ">";
+            $topicinfo .= "{$firstdate}<br/>{$LANG_GF01['VIEWS']}:{$P['views']}, {$LANG_GF01['REPLIES']}:{$P['replies']}<br/>";
 
             if (empty ($P['last_reply_rec']) || $P['last_reply_rec'] < 1) {
                 $lastid = $P['id'];
@@ -244,10 +239,8 @@ if ($op == "last10posts") {
 
             $topiclink = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] .'/forum/viewtopic.php?showtopic=' . $topic_id . '" title="' . htmlspecialchars($P['subject']) . '::' . $topicinfo . '">' . $P['subject'] . '</a>';
 
-            $tdate = strftime( $CONF_FORUM['default_Datetime_format'], $P['date'] );
-            if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
-                $tdate = iconv('ISO-8859-1','UTF-8',$tdate);
-            }
+            $dt->setTimestamp($P['date']);
+            $tdate = $dt->format($CONF_FORUM['default_Datetime_format'],true);
 
             $data_arr[] = array('forum'   => '<a href="'.$_CONF['site_url'].'/forum/index.php?forum='.$P['forum_id'].'">'.$P['forum_name'].'</a>',
                                 'subject' => $topiclink,
@@ -306,9 +299,9 @@ if ($op == "last10posts") {
     $filter  = '<span style="padding-right:20px;">';
 
     if ($chkactivity) {
-        $filter .= '<label for="chkactivity"><input id="chkactivity" type="checkbox" name="chkactivity" value="1" onclick="this.form.submit();" checked="checked"' . XHTML . '>';
+        $filter .= '<label for="chkactivity"><input id="chkactivity" type="checkbox" name="chkactivity" value="1" onclick="this.form.submit();" checked="checked"/>';
     } else {
-        $filter .= '<label for="chkactivity"><input id="chkactivity" type="checkbox" name="chkactivity" value="1" onclick="this.form.submit();"' . XHTML . '>';
+        $filter .= '<label for="chkactivity"><input id="chkactivity" type="checkbox" name="chkactivity" value="1" onclick="this.form.submit();"/>';
     }
 
     $filter .= $LANG_GF02['msg88b'] . '</label></span>';

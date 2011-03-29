@@ -1018,7 +1018,7 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
                         $P['perm_owner'], $P['perm_group'], $P['perm_members'],
                         $P['perm_anon']) == 3 ? true : false);
 
-                    USES_lib_comments();
+                    USES_lib_comment();
 
                     $page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
                     if ( isset($_POST['order']) ) {
@@ -1372,7 +1372,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
                     $P['perm_owner'], $P['perm_group'], $P['perm_members'],
                     $P['perm_anon']) == 3 ? true : false);
 
-                USES_lib_comments();
+                USES_lib_comment();
 
                 $page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
                 if ( isset($_POST['order']) ) {
@@ -1480,6 +1480,8 @@ function POLLS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                              $A['perm_members'], $A['perm_anon']);
     if ($access > 0) {
 
+        $dt = new Date('now',$_CONF['timezone']);
+
         switch($fieldname) {
 
             case 'edit':
@@ -1490,7 +1492,8 @@ function POLLS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 break;
 
             case 'unixdate':
-                $retval = strftime ($_CONF['daytime'], $A['unixdate']);
+                $dt->setTimestamp($A['unixdate']);
+                $retval = $dt->format($_CONF['daytime'],true);
                 break;
 
             case 'topic':

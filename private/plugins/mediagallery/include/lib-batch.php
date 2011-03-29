@@ -1072,7 +1072,7 @@ function _mg_create_percent_box($box, $percent_color, $percent_width) {
 function MG_saveComment ($title, $comment, $sid, $pid, $type, $postmode, $uid, $cmtdate,$ipaddress='') {
     global $_CONF, $_TABLES, $_USER, $_SERVER, $LANG03;
 
-    USES_lib_comments();
+    USES_lib_comment();
 
     $ret = 0;
     // Sanity check

@@ -96,7 +96,7 @@ if ( COM_isAnonUser() && $mydownloads_publicpriv != 1 )  {
         $p->set_var('block_header', COM_startBlock("<b>". $LANG_FILEMGMT['plugin_name'] ."</b>"));
         $p->set_var('block_footer', COM_endBlock());
 
-        require_once $_CONF['path_system'] . 'lib-comment.php';
+        USES_lib_comment();
 
         $sql = "SELECT d.lid, d.cid, d.title, d.url, d.homepage, d.version, d.size, d.logourl, d.submitter, d.status, d.date, ";
         $sql .= "d.hits, d.rating, d.votes, d.comments, t.description FROM {$_FM_TABLES['filemgmt_filedetail']} d, ";

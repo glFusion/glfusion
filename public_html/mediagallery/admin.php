@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2010 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -469,7 +469,7 @@ if (($mode == 'edit') ) {
     echo $display;
 } else if ( ($mode == $LANG_MG01['upload'] && !empty ($LANG_MG01['upload'])) || ($mode == 'upload') ) {
     if ( isset($_POST['action']) ) {
-        $action = $_POST['action'];
+        $action = COM_applyFilter($_POST['action']);
     } else {
         $action = '';
     }

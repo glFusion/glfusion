@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | Edit Media Gallery A/V Default Settings.                                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -51,17 +51,15 @@ function MG_editAVDefaults( ) {
     global $glversion,$LANG04;
 
     $retval = '';
-    $T = new Template($_MG_CONF['template_path']);
+    $T = new Template($_MG_CONF['template_path'].'/admin');
 
     $T->set_file(array(
         'admin'         =>  'editavdefaults.thtml',
     ));
 
     $T->set_var('site_url', $_MG_CONF['site_url']);
-    $T->set_var('site_admin_url', $_CONF['site_admin_url']);
-    $T->set_var('xhtml',XHTML);
 
-    include_once($_CONF['path_system']."classes/navbar.class.php");
+    require_once $_CONF['path_system'].'classes/navbar.class.php';
 
     $navbar = new navbar;
     $navbar->add_menuitem($LANG_MG07['wmp_options'],'showhideMGAdminEditorDiv("wmp",0);return false;',true);
@@ -171,20 +169,20 @@ function MG_editAVDefaults( ) {
         'lang_clsid'                    => $LANG_MG07['clsid'],
         'lang_codebase'                 => $LANG_MG07['codebase'],
         'lang_swf_version_help'         => $LANG_MG07['swf_version_help'],
-        'asf_autostart_enabled'             => $_MG_CONF['asf_autostart'] ? ' checked="checked"' : '',
-        'asf_autostart_disabled'            => $_MG_CONF['asf_autostart'] ? '' : ' checked="checked"',
-        'asf_enablecontextmenu_enabled'     => $_MG_CONF['asf_enablecontextmenu'] ? ' checked="checked"' : '',
-        'asf_enablecontextmenu_disabled'    => $_MG_CONF['asf_enablecontextmenu'] ? '' : ' checked="checked"',
-        'asf_stretchtofit_enabled'          => $_MG_CONF['asf_stretchtofit'] ? ' checked="checked"' : '',
-        'asf_stretchtofit_disabled'         => $_MG_CONF['asf_stretchtofit'] ? '' : ' checked="checked"',
-        'asf_showstatusbar_enabled'         => $_MG_CONF['asf_showstatusbar'] ? ' checked="checked"' : '',
-        'asf_showstatusbar_disabled'        => $_MG_CONF['asf_showstatusbar'] ? '' : ' checked="checked"',
-        'asf_uimode_select'                 => $asf_uimode_select,
-        'asf_uimode'                        => $_MG_CONF['asf_uimode'],
-        'asf_playcount'                     => $_MG_CONF['asf_playcount'],
-        'asf_height'                        => $_MG_CONF['asf_height'],
-        'asf_width'                         => $_MG_CONF['asf_width'],
-        'asf_bgcolor'                       => $_MG_CONF['asf_bgcolor'],
+        'asf_autostart_enabled'         => $_MG_CONF['asf_autostart'] ? ' checked="checked"' : '',
+        'asf_autostart_disabled'        => $_MG_CONF['asf_autostart'] ? '' : ' checked="checked"',
+        'asf_enablecontextmenu_enabled' => $_MG_CONF['asf_enablecontextmenu'] ? ' checked="checked"' : '',
+        'asf_enablecontextmenu_disabled'=> $_MG_CONF['asf_enablecontextmenu'] ? '' : ' checked="checked"',
+        'asf_stretchtofit_enabled'      => $_MG_CONF['asf_stretchtofit'] ? ' checked="checked"' : '',
+        'asf_stretchtofit_disabled'     => $_MG_CONF['asf_stretchtofit'] ? '' : ' checked="checked"',
+        'asf_showstatusbar_enabled'     => $_MG_CONF['asf_showstatusbar'] ? ' checked="checked"' : '',
+        'asf_showstatusbar_disabled'    => $_MG_CONF['asf_showstatusbar'] ? '' : ' checked="checked"',
+        'asf_uimode_select'             => $asf_uimode_select,
+        'asf_uimode'                    => $_MG_CONF['asf_uimode'],
+        'asf_playcount'                 => $_MG_CONF['asf_playcount'],
+        'asf_height'                    => $_MG_CONF['asf_height'],
+        'asf_width'                     => $_MG_CONF['asf_width'],
+        'asf_bgcolor'                   => $_MG_CONF['asf_bgcolor'],
         'mov_autoref_enabled'           => $_MG_CONF['mov_autoref'] ? ' checked="checked"' : '',
         'mov_autoref_disabled'          => $_MG_CONF['mov_autoref'] ? '' : ' checked="checked"',
         'mov_autoplay_enabled'          => $_MG_CONF['mov_autoplay'] ? ' checked="checked"' : '',
@@ -223,7 +221,6 @@ function MG_editAVDefaults( ) {
         'swf_height'                    => $_MG_CONF['swf_height'],
         'swf_width'                     => $_MG_CONF['swf_width'],
         'swf_bgcolor'                   => $_MG_CONF['swf_bgcolor'],
-//        'swf_clsid'                     => $_MG_CONF['swf_clsid'],
         'swf_codebase'                  => $_MG_CONF['swf_version'],
         'swf_version'                   => $_MG_CONF['swf_version'],
         'rtl'                           => $LANG_DIRECTION == "rtl" ? "rtl" : "",
@@ -271,7 +268,6 @@ function MG_saveAVDefaults( ) {
     $swf_wmode              = COM_applyFilter($_POST['swf_wmode']);
     $swf_asa                = COM_applyFilter($_POST['swf_allowscriptaccess']);
     $swf_flashvars          = COM_applyFilter($_POST['swf_flashvars']);
-//    $swf_codebase           = COM_applyFilter($_POST['swf_codebase']);
     $swf_version            = COM_applyFilter($_POST['swf_version'],true);
     $swf_height             = COM_applyFilter($_POST['swf_height'],true);
     $swf_width              = COM_applyFilter($_POST['swf_width'],true);
@@ -309,13 +305,10 @@ function MG_saveAVDefaults( ) {
     DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_wmode','$swf_wmode'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_allowscriptaccess','$swf_asa'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_flashvars','$swf_flashvars'");
-//    DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_clsid','$swf_clsid'");
-//    DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_codebase','$swf_codebase'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_version','$swf_version'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_height','$swf_height'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_width','$swf_width'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_bgcolor','$swf_bgcolor'");
-
 
     echo COM_refresh($_MG_CONF['admin_url'] . 'index.php?msg=5');
     exit;
@@ -336,8 +329,7 @@ if (isset ($_POST['mode'])) {
 
 $display = COM_siteHeader('menu','');
 
-//$display = COM_siteHeader('menu','',$meta);
-$T = new Template($_MG_CONF['template_path']);
+$T = new Template($_MG_CONF['template_path'].'/admin');
 $T->set_file (array ('admin' => 'administration.thtml'));
 
 $T->set_var(array(

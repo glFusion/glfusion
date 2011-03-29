@@ -226,6 +226,13 @@ if (DB_count($_TABLES['plugins'], array("pi_name","pi_enabled"),array("bad_behav
 require_once $_CONF['path_system'].'lib-security.php';
 
 /**
+* This is the date / time library used for formatting
+*
+*/
+require_once $_CONF['path_system'] . 'classes/date.class.php';
+
+
+/**
 * This is the syndication library used to offer (RSS) feeds.
 *
 */
@@ -250,9 +257,6 @@ require_once $_CONF['path_system'].'lib-glfusion.php';
 
 require_once $_CONF['path_system'].'lib-custom.php';
 
-require_once $_CONF['path_system'] . 'classes/timezoneconfig.class.php';
-TimeZoneConfig::setSystemTimeZone();
-
 /**
 * Include plugin class.
 *
@@ -266,8 +270,6 @@ require_once $_CONF['path_system'].'lib-plugins.php';
 */
 
 require_once $_CONF['path_system'].'lib-sessions.php';
-
-TimeZoneConfig::setUserTimeZone();
 
 /**
 * Multibyte functions
@@ -312,7 +314,7 @@ else if ( $_CONF['allow_user_themes'] == 1 ) {
         }
     }
 
-    if ( $_USER['theme'] == 'chameleon' ) {
+    if ( isset($_USER['theme']) && $_USER['theme'] == 'chameleon' ) {
         if (DB_count($_TABLES['plugins'], array("pi_name","pi_enabled"),array("chameleon","1")) < 1) {
             if ( $_CONF['theme'] != 'chameleon' ) {
                 $_USER['theme'] = $_CONF['theme'];
@@ -556,6 +558,7 @@ if ( setlocale( LC_ALL, $_CONF['locale'] ) === false ) {
     setlocale( LC_TIME, $_CONF['locale'] );
 }
 
+@date_default_timezone_set($_CONF['timezone']);
 
 /**
 * Global array of groups current user belongs to
@@ -968,6 +971,8 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         return $function( $what, $pagetitle, $headercode );
     }
 
+    $dt = new Date('now',$_CONF['timezone']);
+
     static $headerCalled = 0;
 
     if ( $headerCalled == 1 ) {
@@ -1174,10 +1179,10 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
                                            $_USER['fullname'] );
     }
 
-    $curtime =  COM_getUserDateTimeFormat();
+    $curtime =  $dt->format($dt->getUserFormat(),true);
 
     $header->set_var( 'welcome_msg', $msg );
-    $header->set_var( 'datetime', $curtime[0] );
+    $header->set_var( 'datetime', $curtime );
     $header->set_var( 'site_logo', $_CONF['layout_url']
                                    . '/images/logo.' . $_IMAGE_TYPE );
     $header->set_var( 'css_url', $_CONF['layout_url'] . '/style.css' );
@@ -1257,6 +1262,8 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         return $function( $rightblock, $custom );
     }
 
+    $dt = new Date('now',$_CONF['timezone']);
+
     $what       = $theme_what;
     $pagetitle  = $theme_pagetitle;
     $themecode  = $theme_headercode;
@@ -1334,10 +1341,10 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
                                            $_USER['fullname'] );
     }
 
-    $curtime =  COM_getUserDateTimeFormat();
+    $curtime = $dt->format($dt->getUserFormat(),true);
 
     $theme->set_var( 'welcome_msg', $msg );
-    $theme->set_var( 'datetime', $curtime[0] );
+    $theme->set_var( 'datetime', $curtime );
 
     if ( $_ST_CONF['use_graphic_logo'] == 1 && file_exists($_CONF['path_html'] . '/images/' . $_ST_CONF['logo_name']) ) {
         $L = new Template( $_CONF['path_layout'] );
@@ -3874,7 +3881,7 @@ function COM_getDisplayName( $uid = '', $username='', $fullname='', $remoteusern
             $uid = $_USER['uid'];
         }
     } else {
-        $uid = intval($uid);
+        $uid = (int) $uid;
     }
 
     if (array_key_exists($uid, $cache)) {
@@ -4403,11 +4410,13 @@ function COM_showMessageText($message, $title = '', $persist = false)
 
     $retval = '';
 
+    $dt = new Date('now',$_CONF['timezone']);
+
     if (!empty($message)) {
         if (empty($title)) {
             $title = $MESSAGE[40];
         }
-        $timestamp = strftime($_CONF['daytime']);
+        $timestamp = $dt->format($_CONF['daytime'],true);
         $msg_block = ($persist) ? '_persistent_msg_block' : '_msg_block';
         $retval .= COM_startBlock($title . ' - ' . $timestamp, '',
                                   COM_getBlockTemplate($msg_block, 'header'))
@@ -4588,9 +4597,11 @@ function COM_printPageNavigation( $base_url, $curpage, $num_pages,
 * @return   array   array[0] is the formatted date and array[1] is the unixtimestamp.
 */
 
-function COM_getUserDateTimeFormat( $date='' )
+function COM_getUserDateTimeFormat( $date='now' )
 {
     global $_TABLES, $_USER, $_CONF, $_SYSTEM;
+
+    $dtObject = new Date($date,$_CONF['timezone']);
 
     // Get display format for time
 
@@ -4604,7 +4615,7 @@ function COM_getUserDateTimeFormat( $date='' )
         $dateformat = $_CONF['date'];
     }
 
-    if ( empty( $date )) {
+    if ( empty( $date ) || $date == 'now') {
         // Date is empty, get current date/time
         $stamp = time();
     } else if ( is_numeric( $date )) {
@@ -4612,14 +4623,9 @@ function COM_getUserDateTimeFormat( $date='' )
         $stamp = $date;
     } else {
         // This is a string representation of a date/time
-        $stamp = strtotime( $date );
+        $stamp = $dtObject->toUnix();
     }
-
-    // Format the date
-    $date = strftime( $dateformat, $stamp );
-    if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
-        $date = iconv('ISO-8859-1','UTF-8',$date);
-    }
+    $date = $dtObject->format($dateformat,true);
 
     return array( $date, $stamp );
 }
@@ -6690,9 +6696,9 @@ function COM_stripslashes($text)
     return $text;
 }
 
-function CMT_updateCommentcodes() {
-    global $_CONF;
-    global $_TABLES;
+function CMT_updateCommentcodes()
+{
+    global $_CONF, $_TABLES;
 
     $cleared = 0;
 
@@ -6725,7 +6731,6 @@ function CMT_updateCommentcodes() {
 }
 
 
-
 function _commentsort($a, $b)
 {
     if ( $a['lastdate'] == $b['lastdate'] ) {
@@ -6735,7 +6740,8 @@ function _commentsort($a, $b)
 }
 
 
-function css_out(){
+function css_out()
+{
     global $_CONF, $_SYSTEM, $_PLUGINS, $_TABLES;
     global $_ST_CONF, $stMenu, $themeAPI, $themeStyle;
 
@@ -6833,7 +6839,8 @@ function css_out(){
  * Checks if a CSS Cache file still is valid
  *
  */
-function css_cacheok($cache,$files){
+function css_cacheok($cache,$files)
+{
     $ctime = @filemtime($cache);
     if (!$ctime) {
         return false;
@@ -6853,7 +6860,8 @@ function css_cacheok($cache,$files){
 /**
  * Loads a given file
  */
-function css_loadfile($file) {
+function css_loadfile($file)
+{
     if (!@file_exists($file))
         return '';
     $css = readfile($file);
@@ -6863,7 +6871,8 @@ function css_loadfile($file) {
  * Very simple CSS optimizer
  *
  */
-function css_compress($css){
+function css_compress($css)
+{
     //strip comments through a callback
     $css = preg_replace_callback('#(/\*)(.*?)(\*/)#s','css_comment_cb',$css);
 
@@ -6886,13 +6895,15 @@ function css_compress($css){
  * Keeps short comments (< 5 chars) to maintain typical browser hacks
  *
  */
-function css_comment_cb( $matches ) {
+function css_comment_cb( $matches )
+{
     if (strlen($matches[2]) > 4)
         return '';
     return $matches[0];
 }
 
-function js_out() {
+function js_out()
+{
     global $_CONF, $_SYSTEM, $_PLUGINS, $themeAPI;
 
     if ( !isset($_CONF['js_cache_filename']) ) {
@@ -7039,7 +7050,8 @@ function js_out() {
 /**
  * Load the given file, handle include calls and print it
  */
-function js_load($file) {
+function js_load($file)
+{
     if (!@file_exists($file))
         return;
 
@@ -7052,7 +7064,8 @@ function js_load($file) {
  * Checks if a JavaScript Cache file still is valid
  *
  */
-function js_cacheok($cache,$files) {
+function js_cacheok($cache,$files)
+{
 
     $ctime = @filemtime($cache);
     if (!$ctime)
@@ -7075,7 +7088,8 @@ function js_cacheok($cache,$files) {
  *
  * Loads the autotranslations widget block from private/system/lib-widgets.php
  */
-function phpblock_autotranslations() {
+function phpblock_autotranslations()
+{
    global $_CONF, $LANG_WIDGETS;
    require_once $_CONF['path_system'] . 'lib-widgets.php';
    return(WIDGET_autotranslations());
@@ -7263,7 +7277,11 @@ function USES_lib_bbcode() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-bbcode.php';
 }
-function USES_lib_comments() {
+function USES_lib_comment() {
+    global $_CONF;
+    require_once $_CONF['path_system'] . 'lib-comment.php';
+}
+function USES_lib_comments() {  // depreciated
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-comment.php';
 }
@@ -7291,12 +7309,6 @@ function USES_lib_trackback() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-trackback.php';
 }
-/*
-function USES_lib_trackbacks() {
-    global $_CONF;
-    require_once $_CONF['path_system'] . 'lib-trackback.php';
-}
-*/
 function USES_lib_user() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-user.php';
@@ -7386,5 +7398,4 @@ js_out();
 if ( function_exists('CUSTOM_splashpage') ) {
     CUSTOM_splashpage();
 }
-
 ?>

@@ -553,7 +553,7 @@ function php_v()
 function _phpOutOfDate()
 {
     $phpv = php_v();
-    if (($phpv[0] < 4) || (($phpv[0] == 4) && ($phpv[1] < 1))) {
+    if (($phpv[0] < 5) || (($phpv[0] == 5) && ($phpv[1] < 2))) {
         return true;
     } else {
         return false;

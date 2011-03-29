@@ -537,11 +537,13 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         $exif_info = '';
     }
 
-    $media_time_month  = date("m", $row['media_time']);
-    $media_time_day    = date("d", $row['media_time']);
-    $media_time_year   = date("Y", $row['media_time']);
-    $media_time_hour   = date("H", $row['media_time']);
-    $media_time_minute = date("i", $row['media_time']);
+    $dtObject = new Date($row['media_time'],$_CONF['timezone']);
+
+    $media_time_month  = $dtObject->month;
+    $media_time_day    = $dtObject->day;
+    $media_time_year   = $dtObject->year;
+    $media_time_hour   = $dtObject->hour;
+    $media_time_minute = $dtObject->minute;
 
     $month_select = '<select name="media_month">';
     $month_select .= COM_getMonthFormOptions($media_time_month);
@@ -1041,13 +1043,11 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
     ));
     if ( $row['remote_media'] == 1 ) {
 	    $T->set_var(array(
-//	    	'remote_url' => '<td class="mgAdminAlignRight">' . $LANG_MG01['remote_url'] . '</td><td id="mgAdminAlignLeft"><textarea name="remoteurl" cols="60" rows="3">' . $row['remote_url'] . '</textarea></td>',
 	    	'remoteurl' => $row['remote_url'],
 	    	'lang_remote_url' => $LANG_MG01['remote_url'],
 	    ));
     } else {
         $T->set_var(array(
-//            'remote_url' => '<td class="mgAdminAlignRight">' . $LANG_MG01['alternate_url'] . '</td><td id="mgAdminAlignLeft"><textarea name="remoteurl" cols="60" rows="3">' . $row['remote_url'] . '</textarea></td>',
             'remoteurl' => $row['remote_url'],
             'lang_remote_url' => $LANG_MG01['alternate_url'],
         ));
@@ -1077,8 +1077,6 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
     } else {
         $username = '';
     }
-
-//    $T->set_var('username',$username);
 
     $userselect = '<select name="owner_name"> ';
     $sql = "SELECT * FROM {$_TABLES['users']} WHERE status=3 AND uid > 1 ORDER BY username ASC";
@@ -1167,7 +1165,6 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
 
     $T->parse('output','admin');
     $retval .= $T->finish($T->get_var('output'));
-//    $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
     return $retval;
 }
 
@@ -1278,7 +1275,9 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
     $musicalbum = DB_escapeString(COM_applyFilter($_POST['musicalbum'] ) );
     $genre = DB_escapeString(COM_applyFilter($_POST['genre'] ) );
 
-    $media_time = mktime($media_time_hour,$media_time_minute,0,$media_time_month,$media_time_day,$media_time_year,1);
+    $dtObject = new Date('now',$_CONF['timezone']);
+	$dtObject->setDateTimestamp ( $media_time_year,$media_time_month,$media_time_day,$media_time_hour,$media_time_minute,0 );
+    $media_time = $dtObject->toUnix();
 
     if ( isset($_POST['owner_name']) ) {
         $owner_id = COM_applyFilter($_POST['owner_name'],true);

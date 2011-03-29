@@ -91,14 +91,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
     }
 
     $introtext = $story->displayElements('introtext');
-//    $bodytext = $story->displayElements('bodytext');
-    if (($index == 'n') || ($index == 'p')) {
-        $bodytext = $story->displayElements('bodytext');
-    } else {
-        // for the index page, we don't need the body text anyway
-        // also saves processing autotags
-        $bodytext = '';
-    }
+    $bodytext  = $story->displayElements('bodytext');
 
     if( !empty( $query )) {
         $introtext = COM_highlightQuery( $introtext, $query );
@@ -391,7 +384,6 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 }
                 if( $story->DisplayElements( 'commentcode' ) == 0 &&
                  ($_CONF['commentsloginrequired'] == 0 || !COM_isAnonUser())) {
-//                if( $story->DisplayElements( 'commentcode' ) == 0 ) {
                     $postCommentUrl = $_CONF['site_url'] . '/comment.php?sid='
                                 . $story->getSid() . '&amp;pid=0&amp;type=article';
                     $article->set_var( 'post_comment_link',
@@ -513,7 +505,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         $access = $story->checkAccess();
         $storyAccess = min($access, SEC_hasTopicAccess($story->DisplayElements('tid')));
 
-        if( $storyAccess == 3 AND SEC_hasrights( 'story.edit' ) AND ( $index != 'p' )) {
+        if( ($storyAccess == 3 || SEC_hasrights( 'story.edit' )) AND ( $index != 'p' )) {
             $article->set_var( 'edit_link',
                 COM_createLink($LANG01[4], $_CONF['site_admin_url']
                     . '/story.php?edit=x&amp;sid=' . $story->getSid())

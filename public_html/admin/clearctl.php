@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -48,7 +48,25 @@ if (!SEC_inGroup ('Root')) {
  * Main processing
  */
 
+// validate the referer here - just to be safe....
+$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_CONF['site_url'];
+if ( $referer == '' ) {
+    $referer = $_CONF['site_url'];
+}
+
+$sLength = strlen($_CONF['site_url']);
+if ( substr($referer,0,$sLength) != $_CONF['site_url'] ) {
+    $referer = $_CONF['site_url'];
+}
+
+$hasargs = strstr( $referer, '?' );
+if ( $hasargs ) {
+    $sep = '&amp;';
+} else {
+    $sep = '?';
+}
+
 CTL_clearCache();
 
-echo COM_refresh($_CONF['site_admin_url'] . '/index.php?msg=500');
+echo COM_refresh($referer . $sep . 'msg=500');
 ?>

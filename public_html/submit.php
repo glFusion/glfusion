@@ -275,7 +275,7 @@ function sendNotification($table, $story)
                                        'tid = \''.DB_escapeString($story->displayElements('tid')).'\'');
     $mailbody = "$LANG08[31]: {$title}\n"
               . "$LANG24[7]: {$storyauthor}\n"
-              . "$LANG08[32]: " . strftime ($_CONF['date']) . "\n"
+              . "$LANG08[32]: " . $dt->format($_CONF['date'],true) . "\n"
               . "{$LANG_ADMIN['topic']}: {$topic}\n\n";
 
     if ($_CONF['emailstorieslength'] > 0) {

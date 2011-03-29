@@ -573,7 +573,7 @@ function glfusion_130()
     ) ENGINE=MyISAM";
 
     $_SQL[] = "ALTER TABLE {$_TABLES['sessions']} ADD browser varchar(255) default '' AFTER sess_id";
-/* ---------------------------------
+
     $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='l F d, Y @h:iA' WHERE dfid=1";
     $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='l F d, Y @H:i' WHERE dfid=2";
     $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='l F d @H:i' WHERE dfid=4";
@@ -591,7 +591,7 @@ function glfusion_130()
     $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='y-m-d h:i' WHERE dfid=16";
     $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='d/m/y H:i' WHERE dfid=17";
     $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='D d M h:iA' WHERE dfid=18";
-------------------------------------- */
+
     // new config options
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
@@ -619,13 +619,13 @@ function glfusion_130()
     $c->add('twitter_consumer_secret','not configured yet','text',4,16,NULL,358,TRUE);
 
     // date / time format changes
-    /* ---------------------------------------
+
     $c->add('date','l, F d Y @ h:i A T','text',6,29,NULL,370,TRUE);
     $c->add('daytime','m/d h:iA','text',6,29,NULL,380,TRUE);
     $c->add('shortdate','m/d/y','text',6,29,NULL,390,TRUE);
     $c->add('dateonly','d-M','text',6,29,NULL,400,TRUE);
     $c->add('timeonly','H:iA','text',6,29,NULL,410,TRUE);
-    ----------------------------------- */
+
     foreach ($_SQL as $sql) {
         DB_query($sql,1);
     }

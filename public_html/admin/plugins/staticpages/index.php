@@ -534,6 +534,8 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                             $A['perm_group'],$A['perm_members'],$A['perm_anon']);
     $enabled = ($A['sp_status'] == 1) ? true : false;
 
+    $dt = new Date('now',$_CONF['timezone']);
+
     switch($fieldname) {
 
         case 'edit':
@@ -603,7 +605,8 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case "unixdate":
-            $datetime = strftime ($_CONF['daytime'], $A['unixdate']);
+            $dt->setTimestamp($A['unixdate']);
+            $datetime = $dt->format($_CONF['daytime'],true);
             $retval = ($enabled) ? $datetime : '<span class="disabledfield">' . $datetime . '</span>';
             break;
 
@@ -835,8 +838,8 @@ switch ($action) {
                 if (!isset ($_POST['postmode'])) {
                     $_POST['postmode'] = '';
                 }
-                $display .= PAGE_submit($sp_id, isset($_POST['sp_status']) ? 1 : 0, $sp_uid, COM_stripslashes($_POST['sp_title']),
-                    COM_stripslashes($_POST['sp_content']), COM_applyFilter ($_POST['sp_hits'], true),
+                $display .= PAGE_submit($sp_id, isset($_POST['sp_status']) ? 1 : 0, $sp_uid, $_POST['sp_title'],
+                    $_POST['sp_content'], COM_applyFilter ($_POST['sp_hits'], true),
                     COM_applyFilter ($_POST['sp_format']), $_POST['sp_onmenu'],
                     $_POST['sp_label'], COM_applyFilter ($_POST['commentcode'], true),
                     COM_applyFilter ($_POST['owner_id'], true),
@@ -879,10 +882,10 @@ switch ($action) {
             if (!empty($_POST['sp_help'])) {
                 $sp_help = $_POST['sp_help'];
             }
-            $sp_inblock = $_POST['sp_inblock'];
-            $sp_search = $_POST['sp_search'];
-            $sp_onmenu = $_POST['sp_onmenu'];
-            $sp_nf     = $_POST['sp_nf'];
+            $sp_inblock = (isset($_POST['sp_inblock']) ? $_POST['sp_inblock'] : '');
+            $sp_search = (isset($_POST['sp_search']) ? $_POST['sp_search'] : '');
+            $sp_onmenu = (isset($_POST['sp_onmenu']) ? $_POST['sp_onmenu'] : '');
+            $sp_nf     = (isset($_POST['sp_nf']) ? $_POST['sp_nf'] : '');
             if ($sp_onmenu == 'on') {
                 $_POST['sp_onmenu'] = 1;
             } else {
