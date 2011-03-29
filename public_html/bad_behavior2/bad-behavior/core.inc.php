@@ -27,7 +27,7 @@ function bb2_table_structure($name)
 		`key` TEXT NOT NULL,
 		INDEX (`ip`(15)),
 		INDEX (`user_agent`(10)),
-		PRIMARY KEY (`id`) ) TYPE=MyISAM;";	// TODO: INDEX might need tuning
+		PRIMARY KEY (`id`) ) ENGINE=MyISAM;";	// TODO: INDEX might need tuning
 }
 
 // Insert a new record
