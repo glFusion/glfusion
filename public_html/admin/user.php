@@ -398,7 +398,7 @@ function USER_accountPanel($U,$newuser = 0)
     $remote_user_checked = '';
     $pwd_disabled = '';
     $remote_user_edit = 0;
-    if (($_CONF['user_login_method']['openid'] || $_CONF['user_login_method']['3rdparty']) && $allow_remote_user ) {
+    if (($_CONF['user_login_method']['openid'] || $_CONF['user_login_method']['3rdparty'] || $_CONF['user_login_method']['oauth'] ) && $allow_remote_user ) {
         $modules = array();
         if ( ($U['remoteusername'] != '' && $U['remoteservice'] != '') || $U['remoteuser'] == 1) {
             $remote_user_checked = ' checked="checked"';
@@ -423,6 +423,14 @@ function USER_accountPanel($U,$newuser = 0)
         }
         if ( $_CONF['user_login_method']['openid'] ) {
             $service_select .= '<option value="openid"' . ($U['remoteservice'] == 'openid' ? ' selected="selected"' : '') .'>'.'OpenID'.'</option>'. LB;
+        }
+        if ( $_CONF['user_login_method']['oauth'] ) {
+            $modules = SEC_collectRemoteOAuthModules();
+            if ( count($modules) > 0 ) {
+                foreach( $modules AS $service ) {
+                    $service_select .= '<option value="' . 'oauth.'.$service . '"'.($U['remoteservice'] == 'oauth.'.$service ? ' selected="selected"' : '') . '>' . $service . '</option>' . LB;
+                }
+            }
         }
         $service_select .= '</select>'.LB;
         $userform->set_var('remoteusername',htmlspecialchars($U['remoteusername'],ENT_NOQUOTES,COM_getEncodingt()));
@@ -554,7 +562,7 @@ function USER_groupPanel($U, $newuser = 0)
                           'inline' => true
         );
 
-        $sql = "SELECT grp_id, grp_name, grp_descr FROM {$_TABLES['groups']} WHERE " . $where;
+        $sql = "SELECT grp_id, grp_name, grp_descr, grp_gl_core	FROM {$_TABLES['groups']} WHERE " . $where;
         $query_arr = array('table' => 'groups',
                            'sql' => $sql,
                            'query_fields' => array('grp_name'),
@@ -1107,6 +1115,9 @@ function USER_getGroupListField($fieldname, $fieldvalue, $A, $icon_arr, $al_sele
                         . '<input type="hidden" name="groups[]" value="'
                         . $A['grp_id'] . '"' . $checked . XHTML . '>';
             } else {
+                if ( $A['grp_gl_core'] > 0 && SEC_isRemoteUser($uid) ) {
+                    $checked = ' disabled="disabled"';
+                }
                 $retval = '<input type="checkbox" name="groups[]" value="'
                         . $A['grp_id'] . '"' . $checked . XHTML . '>';
             }
