@@ -7,8 +7,14 @@
 // |                                                                          |
 // | FaceBook (OAuth) Distributed Authentication Module.                      |
 // +--------------------------------------------------------------------------+
-// | $Id::                                             $|
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2011 by the following authors:                             |
+// |                                                                          |
+// | Mark Howard            mark AT usable-web DOT com                        |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2010 by the following authors:                             |
 // |                                                                          |
 // | Authors: Hiroron          - hiroron AT hiroron DOT com                   |
@@ -30,8 +36,8 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (strpos(strtolower($_SERVER['PHP_SELF']), 'facebook.auth.class.php') !== false) {
-    die('This file can not be used on its own.');
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own!');
 }
 
 class facebookConsumer extends OAuthConsumerBaseClass {
@@ -53,8 +59,9 @@ class facebookConsumer extends OAuthConsumerBaseClass {
     public function find_identity_info($callback_url, $query) {
         // COM_errorLog("FB:find_identity_info()----------------------");
         // COM_errorLog("clearing cookies");
-        SEC_setCookie($_COOKIE['request_token'], '', time() - 10000);
-        SEC_setCookie($_COOKIE['request_token_secret'], '', time() - 10000);
+        SEC_setCookie('request_token', '', time() - 10000);
+        SEC_setCookie('request_token_secret', '', time() - 10000);
+
         $params = array(
             'client_id' => $this->consumer_key,
             'redirect_uri' => $callback_url,
@@ -152,7 +159,7 @@ class facebookConsumer extends OAuthConsumerBaseClass {
             // COM_errorLog("upon entry, _COOKIE[request_token_secret]={$_COOKIE['request_token_secret']}");
 
             // retrieve the access token
-            $this->token = $_COOKIE['request_token'];
+            $this->token = isset($_COOKIE['request_token']) ? $_COOKIE['request_token'] : '';
             if(empty($this->token)) {
                 exit;
             } else {
@@ -195,7 +202,7 @@ class facebookConsumer extends OAuthConsumerBaseClass {
 
     protected function _getCreateUserInfo($info) {
         $users = array(
-            'loginname'      => $info->id,
+            'loginname'      => (isset($info->first_name) ? $info->first_name : $info->id),
             'email'          => $info->email,
             'passwd'         => '',
             'passwd2'        => '',
@@ -209,10 +216,14 @@ class facebookConsumer extends OAuthConsumerBaseClass {
     }
 
     protected function _getUpdateUserInfo($info) {
-        $userinfo = array(
-            'about'          => $info->about,
-            'location'       => $info->location->name,
-        );
+        $userinfo = array();
+
+        if ( isset($info->about) ) {
+            $userinfo['about'] = $info->about;
+        }
+        if ( isset($info->location->name) ) {
+            $userinfo['location'] = $info->location->name;
+        }
         return $userinfo;
     }
 
