@@ -3,12 +3,12 @@
 // | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
 // | linkedin.auth.class.php                                                  |
-// | version: 1.0.0                                                           |
 // |                                                                          |
 // | LinkedIn (OAuth) Distributed Authentication Module.                      |
 // +--------------------------------------------------------------------------+
-// | $Id::                                             $|
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2010 by the following authors:                             |
 // |                                                                          |
 // | Authors: Hiroron          - hiroron AT hiroron DOT com                   |
@@ -30,8 +30,8 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (strpos(strtolower($_SERVER['PHP_SELF']), 'linkedin.auth.class.php') !== false) {
-    die('This file can not be used on its own.');
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own!');
 }
 
 // PEAR class to handle HTTP-OAuth
