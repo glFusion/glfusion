@@ -301,6 +301,22 @@ function SEC_isAdmin()
     return SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR') OR (count(PLG_getAdminOptions()) > 0) OR SEC_inGroup('Root');
 }
 
+function SEC_isRemoteUser($uid)
+{
+    global $_TABLES;
+
+    static $remotecheck = array();
+
+    if ( !isset($remotecheck[$uid])) {
+        $remoteusername = DB_getItem($_TABLES['users'],'remoteusername','uid='.(int) $uid);
+        $remotecheck[$uid] = $remoteusername;
+    }
+    if ( $remotecheck[$uid] != '' ) {
+        return true;
+    }
+    return false;
+}
+
 /**
 * Checks to see if current user has access to a topic
 *
@@ -1628,6 +1644,7 @@ function SEC_reauthform($desturl, $message = '',$method = '', $postdata = '', $g
         'forgotpw_link'   => false,
         'newreg_link'     => false,
         'openid_login'    => false,
+        'oauth_login'     => false,
         'plugin_vars'     => false,
         'prefill_user'    => COM_isAnonUser() ? false : true,
         'title'           => $LANG20[1],
