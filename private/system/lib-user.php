@@ -323,11 +323,13 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
 {
     global $_CONF, $_TABLES;
 
+    $dt = new Date('now',$_CONF['timezone']);
+
     $queueUser = false;
     $username = DB_escapeString ($username);
     $email = DB_escapeString ($email);
 
-    $regdate = strftime ('%Y-%m-%d %H:%M:%S', time ());
+    $regdate = $dt->toMySQL(true);
     $fields = 'username,email,regdate,cookietimeout';
     $values = "'$username','$email','$regdate','{$_CONF['default_perm_cookie_timeout']}'";
 
@@ -442,9 +444,11 @@ function USER_sendNotification ($username, $email, $uid, $mode='inactive')
 {
     global $_CONF, $_TABLES, $LANG01, $LANG04, $LANG08, $LANG28, $LANG29;
 
+    $dt = new Date('now',$_CONF['timezone']);
+
     $mailbody = "$LANG04[2]: $username\n"
               . "$LANG04[5]: $email\n"
-              . "$LANG28[14]: " . strftime ($_CONF['date']) . "\n\n";
+              . "$LANG28[14]: " . $dt->format($_CONF['date'],true) . "\n\n";
 
     if ($mode == 'inactive') {
         // user needs admin approval
