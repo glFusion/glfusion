@@ -467,7 +467,7 @@ class Date extends DateTime
             if ($zone[0] == 'Africa' || $zone[0] == 'America' || $zone[0] == 'Antarctica' || $zone[0] == 'Arctic' || $zone[0] == 'Asia' || $zone[0] == 'Atlantic' || $zone[0] == 'Australia' || $zone[0] == 'Europe' || $zone[0] == 'Indian' || $zone[0] == 'Pacific') {
                 if (isset($zone[1]) != '') {
                     $tzname = $zone[0].'/'.$zone[1];
-                    $select .= '<option vaue="'.$tzname.'"'.($tzname == $selected ? ' selected="selected"' : '') .'>'.str_replace('_', ' ', $tzname).'</option>' . LB;
+                    $select .= '<option value="'.$tzname.'"'.($tzname == $selected ? ' selected="selected"' : '') .'>'.str_replace('_', ' ', $tzname).'</option>' . LB;
                 }
             }
         }
