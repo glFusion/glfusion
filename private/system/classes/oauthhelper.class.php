@@ -7,8 +7,14 @@
 // |                                                                          |
 // | OAuth Distributed Authentication Module.                                 |
 // +--------------------------------------------------------------------------+
-// | $Id::                                             $|
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2011 by the following authors:                             |
+// |                                                                          |
+// | Mark Howard            mark AT usable-web DOT com                        |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2010 by the following authors:                             |
 // |                                                                          |
 // | Authors: Hiroron          - hiroron AT hiroron DOT com                   |
@@ -30,8 +36,8 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (strpos(strtolower($_SERVER['PHP_SELF']), 'oauthhelper.class.php') !== false) {
-    die('This file can not be used on its own.');
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own!');
 }
 
 // PEAR class to handle HTTP-Request2
@@ -158,12 +164,12 @@ class OAuthConsumerBaseClass {
 
         // COM_errorLog("BASE:sreq_userinfo_response()------------------");
         try {
-            $this->token = $_COOKIE['request_token'];
-            $this->token_secret = $_COOKIE['request_token_secret'];
+            $this->token = (isset($_COOKIE['request_token']) ? $_COOKIE['request_token'] : '');
+            $this->token_secret = (isset($_COOKIE['request_token_secret']) ? $_COOKIE['request_token_secret'] : '');
             $verifier = $query[$this->callback_query_string];
             // clear cookies
-            SEC_setCookie($_COOKIE['request_token'], '', time() - 10000);
-            SEC_setCookie($_COOKIE['request_token_secret'], '', time() - 10000);
+            SEC_setCookie('request_token', '', time() - 10000);
+            SEC_setCookie('request_token_secret', '', time() - 10000);
             $this->consumer = new HTTP_OAuth_Consumer($this->consumer_key, $this->consumer_secret, $this->token, $this->token_secret);
             $this->consumer->accept($this->request);
 
@@ -205,17 +211,17 @@ class OAuthConsumerBaseClass {
         if (is_array($users)) {
             $sql = "UPDATE {$_TABLES['users']} SET ";
             if (!empty($users['fullname'])) {
-                $updatecolumns .= "fullname='{$users['fullname']}'";
+                $updatecolumns .= "fullname='".DB_escapeString($users['fullname'])."'";
             }
             if (!empty($users['email'])) {
                 if (!empty($updatecolumns)) { $updatecolumns .= ", "; }
-                $updatecolumns .= "email='{$users['email']}'";
+                $updatecolumns .= "email='".DB_escapeString($users['email'])."'";
             }
             if (!empty($users['homepage'])) {
                 if (!empty($updatecolumns)) { $updatecolumns .= ", "; }
-                $updatecolumns .= "homepage='{$users['homepage']}'";
+                $updatecolumns .= "homepage='".DB_escapeString($users['homepage'])."'";
             }
-            $sql = $sql . $updatecolumns . " WHERE uid={$_USER['uid']}";
+            $sql = $sql . $updatecolumns . " WHERE uid=" . (int) $_USER['uid'];
 
             DB_query($sql);
 
@@ -242,7 +248,7 @@ class OAuthConsumerBaseClass {
         $users = $this->_getCreateUserInfo($info);
         $userinfo = $this->_getUpdateUserInfo($info);
 
-        $sql = "SELECT uid,status FROM {$_TABLES['users']} WHERE remoteusername = '{$users['remoteusername']}' AND remoteservice = '{$users['remoteservice']}'";
+        $sql = "SELECT uid,status FROM {$_TABLES['users']} WHERE remoteusername = '".DB_escapeString($users['remoteusername'])."' AND remoteservice = '".DB_escapeString($users['remoteservice'])."'";
         // COM_errorLog("sql={$sql}");
         $result = DB_query($sql);
         $tmp = DB_error();
@@ -256,23 +262,21 @@ class OAuthConsumerBaseClass {
             // COM_errorLog("user not found - creating new account");
             // initial login - create account
             $status = USER_ACCOUNT_ACTIVE;
-
+            $loginname = $users['loginname'];
             // COM_errorLog("checking remoteusername for uniqueness");
-            // the likelihood that a remoteusername would not be unique within a given service is extremely unlikely
-            // but, i guess it's better to be safe than sorry
-            $checkName = DB_getItem($_TABLES['users'], 'username', "username='{$users['remoteusername']}'");
+            $checkName = DB_getItem($_TABLES['users'], 'username', "username='".DB_escapeString($loginname)."'");
             if (!empty($checkName)) {
                 if (function_exists('CUSTOM_uniqueRemoteUsername')) {
                     // COM_errorLog("CUSTOM_uniqueRemoteUserName function exists, calling it");
-                    $loginname = CUSTOM_uniqueRemoteUsername($loginname, $remoteservice);
+                    $loginname = CUSTOM_uniqueRemoteUsername(loginname, $remoteservice);
                 }
-                if ($checkName == $loginname) {
+                if (strcasecmp($checkName,$loginname) == 0) {
                     // COM_errorLog("remoteusername is not unique, using USER_uniqueUsername() to create one");
                     $loginname = USER_uniqueUsername($loginname);
                 }
             }
-
-            $uid = USER_createAccount($users['loginname'], $users['email'], $users['passwd2'], $users['fullname'], $users['homepage'], $users['remoteusername'], $users['remoteservice']);
+            $users['loginname'] = $loginname;
+            $uid = USER_createAccount($users['loginname'], $users['email'], '', $users['fullname'], $users['homepage'], $users['remoteusername'], $users['remoteservice']);
             // COM_errorLog("after creation, uid={$uid}");
 
             // COM_errorLog("updating users[]");
@@ -303,7 +307,7 @@ class OAuthConsumerBaseClass {
     protected function _DBupdate_users($uid, $users) {
         global $_TABLES, $_CONF;
         // COM_errorLog("_DBupdate_users()---------------------");
-        $sql = "UPDATE {$_TABLES['users']} SET remoteusername = '{$users['remoteusername']}', remoteservice = '{$users['remoteservice']}', status = 3";
+        $sql = "UPDATE {$_TABLES['users']} SET remoteusername = '".DB_escapeString($users['remoteusername'])."', remoteservice = '".DB_escapeString($users['remoteservice'])."', status = 3";
         if (!empty($users['remotephoto'])) {
             // COM_errorLog("saving userphoto");
             $save_img = $_CONF['path_images'] . 'userphotos/' . $users['loginname'];
@@ -320,10 +324,10 @@ class OAuthConsumerBaseClass {
                 }
                 rename($save_img, $image);
                 $imgname = $users['loginname'] . $ext;
-                $sql .= ", photo = '{$imgname}'";
+                $sql .= ", photo = '".DB_escapeString($imgname)."'";
             }
         }
-        $sql .= " WHERE uid = $uid";
+        $sql .= " WHERE uid = ".(int) $uid;
         // COM_errorLog("sql={$sql}");
         DB_query($sql);
     }
@@ -336,10 +340,10 @@ class OAuthConsumerBaseClass {
             // COM_errorLog("userinfo[about]={$userinfo['about']}");
             // COM_errorLog("userinfo[location]={$userinfo['location']}");
             $sql = "UPDATE {$_TABLES['userinfo']} SET";
-            $sql .= !empty($userinfo['about']) ? " about = '{$userinfo['about']}'" : "";
+            $sql .= !empty($userinfo['about']) ? " about = '".DB_escapeString($userinfo['about'])."'" : "";
             $sql .= (!empty($userinfo['about']) && !empty($userinfo['location'])) ? "," : "";
-            $sql .= !empty($userinfo['location']) ? " location = '{$userinfo['location']}'" : "";
-            $sql .= " WHERE uid = {$uid}";
+            $sql .= !empty($userinfo['location']) ? " location = '".DB_escapeString($userinfo['location'])."'" : "";
+            $sql .= " WHERE uid = ".(int) $uid;
             // COM_errorLog("sql={$sql}");
             DB_query($sql);
         }
@@ -349,7 +353,7 @@ class OAuthConsumerBaseClass {
         $ret = '';
         require_once 'HTTP/Request.php';
         $req = new HTTP_Request($from);
-        $req->addHeader('User-Agent', 'glFusion/' . VERSION);
+        $req->addHeader('User-Agent', 'glFusion/' . GVERSION);
         $req->addHeader('Referer', COM_getCurrentUrl());
         $res = $req->sendRequest();
         if( !PEAR::isError($res) ){
