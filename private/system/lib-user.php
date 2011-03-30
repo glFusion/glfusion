@@ -355,12 +355,15 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
                 $queueUser = false;
             }
         }
+        if ( !emtpy($remoteusername) && !emtpy(!$service) ) {
+            $queueUser = false;
+        }
         if ($queueUser) {
             $fields .= ',status';
             $values .= ',' . USER_ACCOUNT_AWAITING_APPROVAL;
         }
     } else {
-        if ($_CONF['registration_type'] == 1 ) {
+        if ($_CONF['registration_type'] == 1 && (empty($remoteusername) || empty($server))) {
             $fields .= ',status';
             $values .= ',' . USER_ACCOUNT_AWAITING_VERIFICATION;
         }
@@ -376,8 +379,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
 
     DB_query ("INSERT INTO {$_TABLES['users']} ($fields) VALUES ($values)");
     // Get the uid of the user, possibly given a service:
-    if ($remoteusername != '')
-    {
+    if ($remoteusername != '') {
         $uid = DB_getItem ($_TABLES['users'], 'uid', "remoteusername = '".DB_escapeString($remoteusername)."' AND remoteservice='".DB_escapeString($service)."'");
     } else {
         $uid = DB_getItem ($_TABLES['users'], 'uid', "username = '$username' AND remoteservice IS NULL");
@@ -398,7 +400,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
         list($def_grp) = DB_fetchArray($result);
         DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ($def_grp, $uid)");
     }
-    DB_query ("INSERT INTO {$_TABLES['userprefs']} (uid) VALUES ($uid)");
+    DB_query ("INSERT INTO {$_TABLES['userprefs']} (uid,tzid) VALUES ($uid,'{$_CONF['timezone']}')");
     if ($_CONF['emailstoriesperdefault'] == 1) {
         DB_query ("INSERT INTO {$_TABLES['userindex']} (uid,etids) VALUES ($uid,'')");
     } else {
