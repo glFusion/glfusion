@@ -202,7 +202,13 @@ class config {
             $value = $fn($value);
         }
 
-        $escaped_val = DB_escapeString(serialize($value));
+        if ( $name == 'facebook_consumer_key') {
+            $svalue = strval($value);
+            $escaped_val = DB_escapeString(serialize($svalue));
+        } else {
+            $escaped_val = DB_escapeString(serialize($value));
+        }
+
         $escaped_name = DB_escapeString($name);
         $escaped_grp = DB_escapeString($group);
         $sql = "UPDATE {$_TABLES['conf_values']} " .
@@ -894,8 +900,10 @@ class config {
         if ( is_array($this->config_array[$group]) ) {
             foreach ($this->config_array[$group] as $param_name => $param_value) {
                 if (array_key_exists($param_name, $change_array)) {
-                    $change_array[$param_name] =
-                        $this->_validate_input($change_array[$param_name]);
+                    if ($param_name != 'facebook_consumer_key') {
+                        $change_array[$param_name] =
+                            $this->_validate_input($change_array[$param_name]);
+                    }
                     if ($change_array[$param_name] != $param_value) {
                         $this->set($param_name, $change_array[$param_name], $group);
                         $success_array[$param_name] = true;
