@@ -1305,6 +1305,7 @@ case 'getnewtoken':
 
 default:
     $status = -2;
+    $local_login = false;
 
     // prevent dictionary attacks on passwords
     COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
@@ -1334,6 +1335,9 @@ default:
         if (empty($service) && $_CONF['user_login_method']['standard']) {
             COM_updateSpeedlimit('login');
             $status = SEC_authenticate($loginname, $passwd, $uid);
+            if ($status == USER_ACCOUNT_ACTIVE) {
+                $local_login = true;
+            }
         } else {
             $status = -2;
         }
@@ -1521,7 +1525,7 @@ default:
         SESS_completeLogin($uid);
         $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
         $_RIGHTS = explode( ',', SEC_getUserPermissions() );
-        if ($_SYSTEM['admin_session'] > 0 ) {
+        if ($_SYSTEM['admin_session'] > 0 && $local_login ) {
             if (SEC_isModerator() || SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR')
                      || (count(PLG_getAdminOptions()) > 0)) {
                 $admin_token = SEC_createTokenGeneral('administration',$_SYSTEM['admin_session']);
