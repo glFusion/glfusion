@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2010 by the following authors:                             |
+// | Copyright (C) 2011 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -211,9 +211,11 @@ if ($status == USER_ACCOUNT_ACTIVE) {
     $_POST = unserialize($postdata);
     $_GET =  unserialize($getdata);
     // refresh the token (easier to create new one than try to fake referer)
-    $newToken = SEC_createToken();
-    $_POST[CSRF_TOKEN] = $newToken;
-    $_GET[CSRF_TOKEN] = $newToken;
+    if ( array_key_exists(CSRF_TOKEN, $_POST) || array_key_exists(CSRF_TOKEN,$_GET) ) {
+        $newToken = SEC_createToken();
+        $_POST[CSRF_TOKEN] = $newToken;
+        $_GET[CSRF_TOKEN] = $newToken;
+    }
     $_REQUEST = array_merge($_GET, $_POST);
 
   // we have a logged in user - make sure they have permissions to be here...
