@@ -3300,7 +3300,7 @@ function COM_emailNotification( $msgData = array() )
     global $_CONF;
 
     // define the maximum number of emails allowed per bcc
-    $maxEmailsPerSend = 25;
+    $maxEmailsPerSend = 10;
 
     // ensure we have something to send...
     if ( !isset($msgData['htmlmessage']) && !isset($msgData['textmessage']) ) {
@@ -3400,7 +3400,6 @@ function COM_emailNotification( $msgData = array() )
         }
     }
     if ( $queued > 0 ) {
-COM_errorLog("DEBUG: COM_emailNotification() - Sending Final Batch");
         if ( !$mail->Send() ) {
             COM_errorLog("Email Error: " . $mail->ErrorInfo);
         }
