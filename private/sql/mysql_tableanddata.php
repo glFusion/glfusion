@@ -408,6 +408,22 @@ CREATE TABLE {$_TABLES['storysubmission']} (
 ";
 
 $_SQL[] = "
+CREATE TABLE {$_TABLES['subscriptions']} (
+  sub_id int(11) NOT NULL AUTO_INCREMENT,
+  type varchar(255) NOT NULL,
+  category varchar(255) NOT NULL DEFAULT '',
+  category_desc varchar(255) NOT NULL DEFAULT '',
+  id varchar(40) NOT NULL,
+  id_desc varchar(255) NOT NULL DEFAULT '',
+  uid int(11) NOT NULL,
+  date_added datetime NOT NULL,
+  PRIMARY KEY (sub_id),
+  UNIQUE KEY descriptor (type,category,id,uid),
+  KEY uid (uid)
+) ENGINE=MyISAM
+";
+
+$_SQL[] = "
 CREATE TABLE {$_TABLES['syndication']} (
   fid int(10) unsigned NOT NULL auto_increment,
   type varchar(30) NOT NULL default 'article',

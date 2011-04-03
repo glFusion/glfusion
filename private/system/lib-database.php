@@ -81,6 +81,7 @@ $_TABLES['speedlimit']          = $_DB_table_prefix . 'speedlimit';
 $_TABLES['statuscodes']         = $_DB_table_prefix . 'statuscodes';
 $_TABLES['stories']             = $_DB_table_prefix . 'stories';
 $_TABLES['storysubmission']     = $_DB_table_prefix . 'storysubmission';
+$_TABLES['subscriptions']       = $_DB_table_prefix . 'subscriptions';
 $_TABLES['syndication']         = $_DB_table_prefix . 'syndication';
 $_TABLES['tokens']              = $_DB_table_prefix . 'tokens';
 $_TABLES['topics']              = $_DB_table_prefix . 'topics';

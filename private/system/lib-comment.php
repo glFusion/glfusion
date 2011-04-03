@@ -45,6 +45,85 @@ if (!defined ('GVERSION')) {
 
 USES_lib_user();
 
+/*
+ * category = comment type i.e.; filemgmt, article
+ * track_id = item being tracked
+ * post_id  = comment it
+ * uid      = userid who posted the comment
+ */
+
+function plugin_subscription_email_format_comment($category,$track_id,$post_id,$uid)
+{
+    global $_CONF, $_TABLES, $LANG01, $LANG03;
+
+    $dt = new Date('now',$_CONF['timezone']);
+    $permalink = 'Not defined';
+
+    $post_id = COM_applyFilter($post_id,true);
+    $result = DB_query("SELECT * FROM {$_TABLES['comments']} WHERE cid={$post_id}");
+    if ( DB_numRows($result) > 0 ) {
+        $A = DB_fetchArray($result);
+        $itemInfo = PLG_getItemInfo($A['type'],$track_id,'url,title');
+        $permalink = $itemInfo['url'];
+        if ( empty($permalink) ) {
+            $permalink = $_CONF['site_url'];
+        }
+        if ( $A['uid'] > 1 ) {
+            $name = COM_getDisplayName($A['uid']);
+        } else {
+            $name = COM_checkWords(USER_sanitizeName($A['name']));
+        }
+
+        $name = @htmlspecialchars($name,ENT_QUOTES, COM_getEncodingt());
+
+        $A['title']   = COM_checkWords($A['title']);
+        $A['title']   = @htmlspecialchars($A['title'],ENT_QUOTES, COM_getEncodingt());
+
+        //and finally: format the actual text of the comment, but check only the text, not sig or edit
+        $text = str_replace('<!-- COMMENTSIG --><div class="comment-sig">', '', $A['comment']);
+        $text = str_replace('</div><!-- /COMMENTSIG -->', '', $text);
+        $text = str_replace('<div class="comment-edit">', '', $text);
+        $text = str_replace('</div><!-- /COMMENTEDIT -->', '', $text);
+        $A['comment'] = $text;
+        if( preg_match( '/<.*>/', $text ) == 0 ) {
+            $A['comment'] = nl2br( $A['comment'] );
+        }
+        // Replace any plugin autolink tags
+        $A['comment'] = PLG_replaceTags( $A['comment'],'glfusion','comment' );
+
+        $notifymsg = sprintf($LANG03[46],'<a href="'.$_CONF['site_url'].'/comment.php?mode=unsubscribe&sid='.htmlentities($track_id).'&type='.$A['type'].'">'.$LANG01['unsubscribe'].'</a>');
+
+        $dt->setTimestamp(strtotime($A['date']));
+        $date = $dt->format('F d Y @ h:i a');
+        $T = new Template( $_CONF['path_layout'] . 'comment' );
+        $T->set_file (array(
+            'htmlemail'     => 'notifymessage_html.thtml',
+            'textemail'     => 'notifymessage_text.thtml',
+        ));
+
+        $T->set_var(array(
+            'post_subject'  => $A['title'],
+            'post_date'     => $date,
+            'post_name'     => $name,
+            'post_comment'  => $A['comment'],
+            'notify_msg'    => $notifymsg,
+            'site_name'     => $_CONF['site_name'],
+            'online_version' => sprintf($LANG01['view_online'],$permalink),
+            'permalink'     => $permalink,
+        ));
+        $T->parse('htmloutput','htmlemail');
+        $message = $T->finish($T->get_var('htmloutput'));
+        $T->parse('textoutput','textemail');
+        $msgText = $T->finish($T->get_var('textoutput'));
+
+        $html2txt = new html2text($msgText,false);
+
+        $messageText = $html2txt->get_text();
+        return array($message,$messageText,array());
+    }
+    return false;
+}
+
 /**
 * This function displays the comment control bar
 *
@@ -83,6 +162,14 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
         $commentbar->set_var( 'lang_disclaimer', $LANG01[26] );
     } else {
         $commentbar->set_var( 'lang_disclaimer', '' );
+    }
+
+    if ( !COM_isAnonUser() ) {
+        if ( PLG_isSubscribed('comment',$type,$sid) ) {
+        $commentbar->set_var( 'subscribe','[<a href="'.$_CONF['site_url'].'/comment.php?mode=unsubscribe&amp;type='.htmlentities($type).'&amp;sid='.htmlentities($sid).'">'.$LANG01['unsubscribe'].'</a>]&nbsp;');
+        } else {
+            $commentbar->set_var( 'subscribe','[<a href="'.$_CONF['site_url'].'/comment.php?mode=subscribe&amp;type='.htmlentities($type).'&amp;sid='.htmlentities($sid).'">'.$LANG01['subscribe'].'</a>]&nbsp;');
+        }
     }
 
     if( $ccode == 0 &&
@@ -785,10 +872,10 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             //not edit mode or preview changes
             $last = COM_checkSpeedlimit ('comment');
         }
-
+/*
 //($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
 $retval .= PLG_displayComment($type, $sid, '', '', '', '', '', '');
-
+*/
         if ($last > 0) {
             $retval .= COM_startBlock ($LANG12[26], '',
                                COM_getBlockTemplate ('_msg_block', 'header'))
@@ -1119,6 +1206,9 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
                 in_array ('comment', $_CONF['notification'])) {
             CMT_sendNotification ($title, $comment, $uid, $_SERVER['REMOTE_ADDR'],
                               $type, $cid);
+        }
+        if ( $ret == 0 ) {
+            PLG_sendSubscriptionNotification('comment',$type,$sid,$cid,$uid);
         }
     } else {
         COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REMOTE_ADDR']} tried "

@@ -377,7 +377,8 @@ function editpreferences()
                                    'comment' => 'commentblock.thtml',
                                    'language' => 'language.thtml',
                                    'theme' => 'theme.thtml',
-                                   'privacy' => 'privacyblock.thtml'
+                                   'privacy' => 'privacyblock.thtml',
+                                   'subscriptions' => 'subscriptionblock.thtml'
                                   ));
 
     $preferences->set_var ('user_name', $_USER['username']);
@@ -601,6 +602,22 @@ function editpreferences()
     $preferences->set_var('plugin_privacy',PLG_profileEdit($_USER['uid'],'privacy'));
 
     $preferences->parse ('privacy_block', 'privacy', true);
+
+    // subscription block
+    $csscounter = 1;
+    $res = DB_query("SELECT * FROM {$_TABLES['subscriptions']} WHERE uid=".$_USER['uid'] . " ORDER BY type,category ASC");
+    $preferences->set_block('subscriptions', 'subrows', 'srow');
+    while ( ($S = DB_fetchArray($res) ) != NULL ) {
+        $cssstyle = ($csscounter % 2) + 1;
+        $preferences->set_var('subid',$S['sub_id']);
+        $preferences->set_var('sub_type',$S['type']);
+        $preferences->set_var('sub_category',$S['category_desc']);
+        $preferences->set_var('sub_description',$S['id_desc']);
+        $preferences->set_var('csscounter',$cssstyle);
+        $preferences->parse('srow', 'subrows',true);
+        $csscounter++;
+    }
+    $preferences->parse ('subscriptions_block','subscriptions',true);
 
     // excluded items block
 
@@ -1553,6 +1570,13 @@ function savepreferences($A)
     }
 
     DB_save($_TABLES['usercomment'],'uid,commentmode,commentorder,commentlimit',"{$_USER['uid']},'{$A['commentmode']}','{$A['commentorder']}',".(int) $A['commentlimit']);
+
+    $subscription_deletes  = @array_values($A['subdelete']);
+    if ( is_array($subscription_deletes) ) {
+        foreach ( $subscription_deletes AS $subid ) {
+            DB_delete($_TABLES['subscriptions'],'sub_id',(int) $subid);
+        }
+    }
 
     PLG_userInfoChanged ($_USER['uid']);
 }

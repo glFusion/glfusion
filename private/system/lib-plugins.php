@@ -3162,4 +3162,166 @@ function plugin_submissioncount_story()
     return (plugin_ismoderator_story) ? DB_count ($_TABLES['storysubmission']) : 0;
 }
 
+
+/**
+* Subscribe user to notification feed for an item
+*
+* @param    string  $type     plugin name or comment
+* @param    string  $category category type (i.e.; for comment it would contain
+                              filemgmt, article, etc.)
+* @param    string  $id       item id to subscribe to (i.e.; article sid, mg album)
+* @param    int     $uid      user to subscribe
+* @param    string  $cat_desc Text description of category i.e.; forum cat title
+* @param    string  $id_desc  Text description of id, i.e.; article title
+* @return   boolean           true on succes, false on fail
+* @since    glFusion v1.3.0
+*
+*/
+function PLG_subscribe($type,$category,$id,$uid = 0,$cat_desc='',$id_desc='')
+{
+    global $_CONF, $_TABLES, $_USER;
+
+    $dt = new Date('now',$_CONF['timezone']);
+    if ( $uid == 0 ) {
+        if ( isset($_USER['uid']) ) {
+            $uid = $_USER['uid'];
+        } else {
+            return false;
+        }
+    }
+    // check to ensure we don't have a subscription yet...
+    $wid = (int) DB_getItem($_TABLES['subscriptions'],'sub_id','category="'.DB_escapeString($category).'" AND uid='.$uid.' AND id="'.DB_escapeString($id).'"');
+    if ($wid > 0 ) {
+        return false;
+    }
+    $sql="INSERT INTO {$_TABLES['subscriptions']} ".
+         "(type,uid,category,id,date_added,category_desc,id_desc) VALUES " .
+         "('".DB_escapeString($type)."',".
+         (int)$uid.",'".
+         DB_escapeString($category)."','".
+         DB_escapeString($id)."','".
+         $dt->toMySQL(true)."','".
+         DB_escapeString($cat_desc)."','".
+         DB_escapeString($id_desc)."')";
+
+    DB_query($sql);
+
+    return true;
+}
+
+
+/**
+* Unsubscribe user to notification feed for an item
+*
+* @param    string  $type     plugin name or comment
+* @param    string  $category category type (i.e.; for comment it would contain
+                              filemgmt, article, etc.)
+* @param    string  $id       item id to subscribe to (i.e.; article sid, mg album)
+* @param    int     $uid      user to subscribe
+* @return   boolean           true on succes, false on fail
+* @since    glFusion v1.3.0
+*
+*/
+function PLG_unsubscribe($type,$category,$id,$uid = 0)
+{
+    global $_CONF, $_TABLES, $_USER;
+
+    if ( $uid == 0 || $uid == '' ) {
+        if ( isset($_USER['uid']) ) {
+            $uid = $_USER['uid'];
+        } else {
+            return false;
+        }
+    }
+    $sql="DELETE FROM {$_TABLES['subscriptions']} WHERE uid=" . (int) $uid ." AND category='".DB_escapeString($category)."' AND id='".DB_escapeString($id)."' AND type='".DB_escapeString($type)."'";
+    DB_query($sql);
+    return true;
+}
+
+
+/**
+* Check if user is subscribed
+*
+* @param    string  $id       item id to subscribe to (i.e.; article sid, mg album)
+* @param    string  $type     plugin name or comment
+* @param    int     $uid      user to subscribe
+* @return   boolean           true on succes, false on fail
+* @since    glFusion v1.3.0
+*
+*/
+function PLG_isSubscribed( $type, $category, $id, $uid = 0 )
+{
+    global $_TABLES, $_USER;
+
+    if ( $uid == 0 || $uid == '' ) {
+        if ( isset($_USER['uid']) ) {
+            $uid = $_USER['uid'];
+        } else {
+            return false;
+        }
+    }
+    $count = DB_count($_TABLES['subscriptions'],array('uid','id','type','category'),array($uid,DB_escapeString($id),DB_escapeString($type),DB_escapeString($category)));
+    if ( $count > 0 ) {
+        return true;
+    }
+    return false;
+}
+
+
+/**
+* Send new item notification emails
+*
+* @param    string  $type     plugin name or comment
+* @param    string  $category category type (i.e.; for comment it would contain
+                              filemgmt, article, etc.)
+* @param    string  $track_id id of item being tracked
+* @param    string  $post_id  id of new item posted (i.e.; comment id, media_id, etc.)
+* @param    int     $post_uid user who posted item
+* @return   boolean           true on succes, false on fail
+* @since    glFusion v1.3.0
+*
+*/
+function PLG_sendSubscriptionNotification($type,$category,$track_id,$post_id,$post_uid)
+{
+    global $_CONF, $_TABLES, $LANG04;
+
+    USES_lib_html2text();
+
+    $function = 'plugin_subscription_email_format_' . $type;
+    if ( function_exists($function) ) {
+        $args[1] = $category;
+        $args[2] = $track_id;
+        $args[3] = $post_id;
+        $args[4] = $uid;
+        list($htmlmsg,$textmsg,$imageData) = PLG_callFunctionForOnePlugin($function,$args);
+    } else {
+        COM_errorLog("PLG_sendSubscriptionNotification() - No plugin_subscription_email_format_ defined");
+        return false;
+    }
+
+    $sql    = "SELECT {$_TABLES['subscriptions']}.uid,email FROM {$_TABLES['subscriptions']} LEFT JOIN {$_TABLES['users']} ON {$_TABLES['subscriptions']}.uid={$_TABLES['users']}.uid WHERE {$_TABLES['users']}.status=".USER_ACCOUNT_ACTIVE." AND category='".DB_escapeString($category)."' AND id='".DB_escapeString($track_id)."' AND type='".DB_escapeString($type)."'";
+    $result = DB_query($sql);
+    $nrows  = DB_numRows($result);
+
+    $messageData = array();
+    $messageData['subject'] = $LANG04[184];
+    $messageData['from']    = $_CONF['noreply_mail'];
+    $messageData['htmlmessage'] = $htmlmsg;
+    $messageData['textmessage'] = $textmsg;
+    if ( is_array($imageData) && count($imageData) > 0 ) {
+        $messageData['embeddedImage'] = $imageData;
+    }
+
+    $to = array();
+
+    while (($S = DB_fetchArray($result)) != NULL ) {
+        if ( $S['uid'] == $post_uid ) {  // skip author
+            continue;
+        }
+        $to[] = $S['email'];
+    }
+    $messageData['to'] = $to;
+    COM_emailNotification($messageData);
+    return true;
+}
 ?>

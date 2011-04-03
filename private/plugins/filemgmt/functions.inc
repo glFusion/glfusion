@@ -952,6 +952,8 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
 {
     global $_CONF, $_TABLES, $LANG_FILEMGMT;
 
+    $id = str_replace('fileid_','',$id);
+
     $properties = explode(',', $what);
     $fields = array();
     foreach ($properties as $p) {
@@ -1053,6 +1055,7 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
         }
 
         $mapped = array();
+
         foreach ($props as $key => $value) {
             if ($id == '*') {
                 if ($value != '') {
@@ -1072,7 +1075,8 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
     }
 
     if (($id != '*') && (count($retval) == 1)) {
-        $retval = $retval[0];
+        $tRet = array_values($retval);
+        $retval = $tRet[0];
     }
 
     return $retval;

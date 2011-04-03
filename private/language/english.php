@@ -235,6 +235,9 @@ $LANG01 = array(
     'show_phpinfo'              => 'Show Full PHP Info',
     'hide_phpinfo'              => 'Hide Full PHP Info',
     'autotag_perms'             => 'AutoTag Permissions',
+    'subscribe'                 => 'Subscribe',
+    'unsubscribe'               => 'Unsubscribe',
+    'view_online'               => 'Click here %s to view online',
 );
 
 ###############################################################################
@@ -282,6 +285,11 @@ $LANG03 = array(
     39 => 'You may view the comment thread at the following address: ',
     40 => 'If you wish to recieve no further notifications of replies, visit the following link: ',
     41 => 'Edit a Comment',
+    42 => 'New Comment Notification',
+    43 => 'Posted By',
+    44 => 'Post Date',
+    45 => 'You are receiving this email because you have chosen to be notified when a new comment has been posted.',
+    46 => 'To unsubscribe to this comment feed, please click this link: %s',
 );
 
 ###############################################################################
@@ -461,6 +469,12 @@ $LANG04 = array(
     176 => 'Confirm Password',
     177 => 'Your account is currently awaiting verification.<br />You will not be able to login until your account has been verified by following the link in the activation eMail.',
     178 => 'Resynchronize Remote Account',
+    179 => 'Delete',
+    180 => 'Type',
+    181 => 'Category',
+    182 => 'Description',
+    183 => 'Notification Subscriptions',
+    184 => 'New Post Notification',
 );
 
 ###############################################################################
@@ -473,7 +487,8 @@ $LANG_MYACCOUNT = array(
     'pe_userinfo' => 'About You',
     'pe_layout' => 'Layout &amp; Language',
     'pe_content' => 'Content',
-    'pe_privacy' => 'Privacy'
+    'pe_privacy' => 'Privacy',
+    'pe_subscriptions' => 'Subscriptions',
 );
 
 ###############################################################################
@@ -1479,6 +1494,10 @@ $MESSAGE = array(
     515 => 'Thank you, your account has now been activated.',
     516 => 'Your activation token has expired.',
     517 => 'This account has already been activated, please login below.',
+    518 => 'You must login to subscribe to a notification feed.',
+    519 => 'You are already subscribed to this notification feed.',
+    520 => 'You have been subscribed to this notification feed.',
+    521 => 'You have been successfully un-subscribed from the notification feed.',
 
 );
 
@@ -1757,7 +1776,19 @@ $LANG_MONTH = array(
     9 => 'September',
     10 => 'October',
     11 => 'November',
-    12 => 'December'
+    12 => 'December',
+    13 => 'Jan',
+    14 => 'Feb',
+    15 => 'Mar',
+    16 => 'Apr',
+    17 => 'May',
+    18 => 'Jun',
+    19 => 'Jul',
+    20 => 'Aug',
+    21 => 'Sep',
+    22 => 'Oct',
+    23 => 'Nov',
+    24 => 'Dec'
 );
 
 ###############################################################################

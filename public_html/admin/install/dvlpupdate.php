@@ -557,19 +557,33 @@ function glfusion_130()
 
     $_SQL = array();
 
-    $_SQL[] = "CREATE TABLE {$_TABLES['autotag_perm']} (
+    $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['autotag_perm']} (
       autotag_id varchar(128) NOT NULL,
       autotag_namespace varchar(128) NOT NULL,
       autotag_name varchar(128) NOT NULL,
       PRIMARY KEY (autotag_id)
     ) ENGINE=MyISAM";
 
-    $_SQL[] = "CREATE TABLE {$_TABLES['autotag_usage']} (
+    $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['autotag_usage']} (
       autotag_id varchar(128) NOT NULL,
       autotag_allowed tinyint(1) NOT NULL DEFAULT '1',
       usage_namespace varchar(128) NOT NULL,
       usage_operation varchar(128) NOT NULL,
       KEY `autotag_id (autotag_id)
+    ) ENGINE=MyISAM";
+
+    $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['subscriptions']} (
+      sub_id int(11) NOT NULL AUTO_INCREMENT,
+      type varchar(255) NOT NULL,
+      category varchar(255) NOT NULL DEFAULT '',
+      category_desc varchar(255) NOT NULL DEFAULT '',
+      id varchar(40) NOT NULL,
+      id_desc varchar(255) NOT NULL DEFAULT '',
+      uid int(11) NOT NULL,
+      date_added datetime NOT NULL,
+      PRIMARY KEY (sub_id),
+      UNIQUE KEY descriptor (type,category,id,uid),
+      KEY uid (uid)
     ) ENGINE=MyISAM";
 
     $_SQL[] = "ALTER TABLE {$_TABLES['sessions']} ADD browser varchar(255) default '' AFTER sess_id";

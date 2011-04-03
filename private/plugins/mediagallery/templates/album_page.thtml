@@ -79,6 +79,10 @@
   <tr>
     <td style="text-align:left;vertical-align:bottom;padding:2px 5px 2px 0px;">
       {album_id_display}&nbsp;
+      {!if subscribe}
+        &nbsp;[{subscribe}]
+      {!endif}
+
     </td>
     <td style="text-align:right;vertical-align:bottom;white-space:nowrap;padding:2px 5px 2px 0px;">{select_sortbox}</td>
   </tr>

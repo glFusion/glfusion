@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.3.0 (Trunk Development Branch)
 ------
+- Implemented subscription / notification system (Mark)
+- Do not allow remote users to be members of admin groups (Mark)
 - Fix layout bug when forum signature is present in a fixed width site with
   rightblocks. (Eric)
 - Updated install lib to handle MySQL ENGINE keyword (Mark)

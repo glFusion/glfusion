@@ -46,6 +46,7 @@ if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
     exit;
 }
 
+
 /*
 * Main Function
 */
@@ -537,6 +538,16 @@ if ( $MG_albums[$album_id]->enable_rss ) {
 } else {
 	$T->set_var('rsslink','');
 }
+
+$subscribe = '';
+if ( !COM_isAnonUser() ) {
+    if ( PLG_isSubscribed('mediagallery','',$album_id,$_USER['uid']) ) {
+        $subscribe = '<a class="subscribelink" href="'.$_MG_CONF['site_url'].'/subscription.php?op=unsubscribe&amp;sid='.$album_id.'">'.$LANG01['unsubscribe'].'</a>';
+    } else {
+        $subscribe = '<a class="subscribelink" href="'.$_MG_CONF['site_url'].'/subscription.php?op=subscribe&amp;sid='.$album_id.'">'.$LANG01['subscribe'].'</a>';
+    }
+}
+$T->set_var('subscribe', $subscribe);
 
 PLG_templateSetVars('mediagallery',$T);
 

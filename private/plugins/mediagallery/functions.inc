@@ -3340,8 +3340,6 @@ function plugin_itemrated_mediagallery($media_id, $rating, $votes)
 }
 
 
-
-
 /**
 * Return information for a media item
 *
@@ -3376,6 +3374,7 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
                 break;
             case 'label':
             case 'url':
+            case 'status' :
                 $fields[] = 'a.media_id';
                 break;
             default:
@@ -3473,7 +3472,8 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
     }
 
     if (($id != '*') && (count($retval) == 1)) {
-        $retval = $retval[0];
+        $tRet = array_values($retval);
+        $retval = $tRet[0];
     }
 
     return $retval;
@@ -3794,5 +3794,92 @@ function MG_convertImageFormat ( $srcImage, $destImage, $destFormat, $deleteOrig
 function MG_watermarkImage( $origImage, $watermarkImage, $opacity, $location ) {
     return IMG_watermarkImage( $origImage, $watermarkImage, $opacity, $location );
 }
+
+function plugin_subscription_email_format_mediagallery($category,$track_id,$post_id,$uid)
+{
+    global $_CONF, $_MG_CONF, $_TABLES, $MG_albums, $LANG_MG01,$LANG01, $LANG03;
+
+    $dt = new Date('now',$_CONF['timezone']);
+    $permalink = 'Not defined';
+
+    $aid = 0;
+
+    $post_id = COM_applyFilter($post_id,true);
+    $sql = "SELECT * FROM {$_TABLES['mg_media']} LEFT JOIN {$_TABLES['mg_media_albums']} ON {$_TABLES['mg_media']}.media_id={$_TABLES['mg_media_albums']}.media_id WHERE {$_TABLES['mg_media']}.media_id='".DB_escapeString($post_id)."'";
+
+    $result = DB_query("SELECT * FROM {$_TABLES['mg_media']} LEFT JOIN {$_TABLES['mg_media_albums']} ON {$_TABLES['mg_media']}.media_id={$_TABLES['mg_media_albums']}.media_id WHERE {$_TABLES['mg_media']}.media_id='".DB_escapeString($post_id)."'");
+    if ( DB_numRows($result) > 0 ) {
+        $A = DB_fetchArray($result);
+        $permalink = $_MG_CONF['site_url'].'/album.php?aid='.$track_id;
+
+        if ( $A['media_user_id'] > 1 ) {
+            $name = COM_getDisplayName($A['media_user_id']);
+        } else {
+            $name = 'Anonymous User';
+        }
+
+        $name = @htmlspecialchars($name,ENT_QUOTES, COM_getEncodingt());
+
+        $aid = $A['album_id'];
+
+        $A['media_title']   = COM_checkWords($A['media_title']);
+        $A['media_title']   = @htmlspecialchars($A['media_title'],ENT_QUOTES, COM_getEncodingt());
+
+        $notifymsg = sprintf($LANG03[46],'<a href="'.$_MG_CONF['site_url'].'/subscription.php?op=unsubscribe&sid='.htmlentities($track_id).'&type=mediagallery">'.$LANG01['unsubscribe'].'</a>');
+
+        $dt->setTimestamp($A['media_time']);
+        $date = $dt->format('F d Y @ h:i a');
+        $T = new Template($_MG_CONF['template_path']);
+        $T->set_file (array(
+            'htmlemail'     => 'notifymessage_html.thtml',
+            'textemail'     => 'notifymessage_text.thtml',
+        ));
+
+        if ( empty($A['media_title']) ) {
+            $A['media_title'] = $LANG_MG01['no_title'];
+        }
+        if ( empty($A['media_desc']) ) {
+            $A['media_desc'] = '';
+        }
+
+        $imageData = array();
+
+        foreach ($_MG_CONF['validExtensions'] as $tnext ) {
+            if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $A['media_filename'][0] . '/' . $A['media_filename'] . $tnext) ) {
+                $imageData['file'] = $_MG_CONF['path_mediaobjects'] . 'tn/' . $A['media_filename'][0] . '/' . $A['media_filename'] . $tnext;
+                $imageData['name'] = "pc-image";
+                $imageData['filename'] = $A['media_original_filename'];
+                $imageData['encoding'] = 'base64';
+                $imageData['mime'] = $A['mime_type'];
+            }
+        }
+
+        $T->set_var(array(
+            'post_subject'  => $A['media_title'],
+            'post_text'     => $LANG_MG01['new_upload_body'].'<strong>'.$MG_albums[$aid]->title.'</strong>',
+            'post_date'     => $date,
+            'post_name'     => $name,
+            'album_title'   => $MG_albums[$aid]->title,
+            'media_title'   => $A['media_title'],
+            'media_description' => $A['media_desc'],
+            'notify_msg'    => $notifymsg,
+            'site_name'     => $_CONF['site_name'],
+            'online_version' => sprintf($LANG01['view_online'],$permalink),
+            'permalink'     => $permalink,
+        ));
+        $T->parse('htmloutput','htmlemail');
+        $message = $T->finish($T->get_var('htmloutput'));
+
+        $T->parse('textoutput','textemail');
+        $msgText = $T->finish($T->get_var('textoutput'));
+
+        $html2txt = new html2text($msgText,false);
+
+        $messageText = $html2txt->get_text();
+        return array($message,$messageText,$imageData);
+    }
+    return false;
+}
+
 
 ?>

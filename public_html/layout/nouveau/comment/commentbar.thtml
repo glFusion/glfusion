@@ -16,6 +16,7 @@
     </form>
     <form style="float:right; margin-top:2px; margin-bottom:3px;" action="{parent_url}" method="post">
         <div>
+{subscribe}
             {hidden_field}
             {order_selector}
             {mode_selector}

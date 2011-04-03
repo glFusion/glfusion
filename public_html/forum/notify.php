@@ -146,10 +146,12 @@ if ($page == 0) {
 
 /* Check to see if user has checked multiple records to delete */
 if ($op == 'delchecked') {
-    foreach ($_POST['chkrecid'] as $id) {
-        $id = intval(COM_applyFilter($id,true));
-        if (DB_getItem($_TABLES['gf_watch'],'uid',"id=$id") == $_USER['uid']) {
-            DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE id=$id");
+    if ( isset($_POST['chkrecid']) && is_array($_POST['chkrecid']) ) {
+        foreach ($_POST['chkrecid'] as $id) {
+            $id = (int) COM_applyFilter($id,true);
+            if (DB_getItem($_TABLES['gf_watch'],'uid',"id=$id") == $_USER['uid']) {
+                DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE id=$id");
+            }
         }
     }
 }

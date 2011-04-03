@@ -14,4 +14,7 @@
         {privacy_block}
         {plugin_privacy}
 </div>
+<div id="pe_subscriptions" class="jsenabled_hide">
+        {subscriptions_block}
+</div>
 {# end {templatelocation} #}

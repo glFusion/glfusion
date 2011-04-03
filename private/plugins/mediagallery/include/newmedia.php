@@ -277,6 +277,7 @@ function MG_SWFUpload( $album_id ) {
 
     if ( $successfull_upload ) {
         MG_notifyModerators($albums);
+        PLG_sendSubscriptionNotification('mediagallery','',$albums,$new_media_id,$_USER['uid']);
     }
 
     // failsafe check - after all the uploading is done, double check that the database counts
@@ -400,7 +401,7 @@ function MG_userUpload( $album_id ) {
 *
 */
 function MG_saveUserUpload( $album_id ) {
-    global $MG_albums, $_FILES, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG02, $LANG_MG03, $_POST;
+    global $MG_albums, $_FILES, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG02, $LANG_MG03, $new_media_id;
 
     $retval = '';
     $retval .= COM_startBlock ($LANG_MG03['upload_results'], '',
@@ -510,6 +511,7 @@ function MG_saveUserUpload( $album_id ) {
 
     if ( $successfull_upload ) {
         MG_notifyModerators($albums);
+        PLG_sendSubscriptionNotification('mediagallery','',$albums,$new_media_id,$_USER['uid']);
     }
 
     // failsafe check - after all the uploading is done, double check that the database counts

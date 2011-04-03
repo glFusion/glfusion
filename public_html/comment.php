@@ -415,6 +415,81 @@ function handleEditSubmit()
     return COM_refresh (COM_buildUrl ($_CONF['site_url'] . "/article.php?story=$sid"));
 }
 
+function handleSubscribe($sid,$type)
+{
+    global $_CONF, $_TABLES, $_USER;
+
+    $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_CONF['site_url'];
+    if ( $referer == '' ) {
+        $referer = $_CONF['site_url'];
+    }
+    $sLength = strlen($_CONF['site_url']);
+    if ( substr($referer,0,$sLength) != $_CONF['site_url'] ) {
+        $referer = $_CONF['site_url'];
+    }
+    $hasargs = strstr( $referer, '?' );
+    if ( $hasargs ) {
+        $sep = '&amp;';
+    } else {
+        $sep = '?';
+    }
+
+    if ( COM_isAnonUser() ) {
+        echo COM_refresh($referer.$sep.'msg=518');
+        exit;
+    }
+    $uid = $_USER['uid'];
+
+    $itemInfo = PLG_getItemInfo($type,$sid,('url,title'));
+    if ( isset($itemInfo['title']) ) {
+        $id_desc = $itemInfo['title'];
+    } else {
+        $id_desc = 'not defined';
+    }
+
+    $rc = PLG_subscribe('comment',$type,$sid,$uid,$type,$id_desc);
+    if ( $rc === false ) {
+        echo COM_refresh($referer.$sep.'msg=519');
+        exit;
+    }
+    echo COM_refresh($referer.$sep.'msg=520');
+    exit;
+}
+
+function handleunSubscribe($sid,$type)
+{
+    global $_CONF, $_TABLES, $_USER;
+
+    $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_CONF['site_url'];
+    if ( $referer == '' ) {
+        $referer = $_CONF['site_url'];
+    }
+
+    $sLength = strlen($_CONF['site_url']);
+    if ( substr($referer,0,$sLength) != $_CONF['site_url'] ) {
+        $referer = $_CONF['site_url'];
+    }
+    if ( strcasecmp($referer,$_CONF['site_url'].'/users.php')  == 0 ) {
+        $referer = $_CONF['site_url'];
+    }
+    $hasargs = strstr( $referer, '?' );
+    if ( $hasargs ) {
+        $sep = '&amp;';
+    } else {
+        $sep = '?';
+    }
+    if ( COM_isAnonUser() ) {
+        $display = COM_siteHeader();
+        $display .= SEC_loginRequiredForm();
+        $display .= COM_siteFooter();
+        echo $display;
+        exit;
+    }
+
+    $rc = PLG_unsubscribe('comment',$type,$sid);
+    echo COM_refresh($referer.$sep.'msg=521');
+    exit;
+}
 
 // MAIN
 CMT_updateCommentcodes();
@@ -493,6 +568,28 @@ case 'sendreport':
 case 'edit':
     if (SEC_checkToken()) {
         $display .= handleEdit();
+    } else {
+        $display .= COM_refresh($_CONF['site_url'] . '/index.php');
+    }
+    break;
+
+case 'subscribe' :
+    if ( isset($_GET['sid']) ) {
+        $sid = COM_applyFilter($_GET['sid']);
+        $type = COM_applyFilter($_GET['type']);
+        $display = handleSubscribe($sid,$type);
+    } else {
+        $display .= COM_refresh($_CONF['site_url'] . '/index.php');
+    }
+    break;
+
+case 'unsubscribe' :
+    if ( isset($_GET['sid']) ) {
+        $sid = COM_applyFilter($_GET['sid']);
+
+        $type = COM_applyFilter($_GET['type']);
+
+        $display = handleunSubscribe($sid,$type);
     } else {
         $display .= COM_refresh($_CONF['site_url'] . '/index.php');
     }

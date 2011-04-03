@@ -3292,6 +3292,121 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
     return true;
 }
 
+/*
+ * A notification system that is a bit kinder to the mail server
+ */
+function COM_emailNotification( $msgData = array() )
+{
+    global $_CONF;
+
+    // define the maximum number of emails allowed per bcc
+    $maxEmailsPerSend = 25;
+
+    // ensure we have something to send...
+    if ( !isset($msgData['htmlmessage']) && !isset($msgData['textmessage']) ) {
+        COM_errorLog("COM_emailNotification() - No message data provided");
+        return false; // no message defined
+    }
+    if ( empty($msgData['htmlmessage']) && empty($msgData['textmessage']) ) {
+        COM_errorLog("COM_emailNotification() - Empty message data provided");
+        return false; // no text in either...
+    }
+    if ( !isset($msgData['subject']) || empty($msgData['subject']) ) {
+        COM_errorLog("COM_emailNotification() - No subject provided");
+        return false; // must have a subject
+    }
+
+    $queued = 0;
+
+    $subject = substr( $msgData['subject'], 0, strcspn( $msgData['subject'], "\r\n" ));
+    $subject = COM_emailEscape( $subject );
+
+    require_once $_CONF['path'] . 'lib/phpmailer/class.phpmailer.php';
+
+    $mail = new PHPMailer();
+    $mail->SetLanguage('en',$_CONF['path'].'lib/phpmailer/language/');
+    $mail->CharSet = COM_getCharset();
+    if ($_CONF['mail_backend'] == 'smtp' ) {
+        $mail->IsSMTP();
+        $mail->Host     = $_CONF['mail_smtp_host'];
+        $mail->Port     = $_CONF['mail_smtp_port'];
+        if ( $_CONF['mail_smtp_secure'] != 'none' ) {
+            $mail->SMTPSecure = $_CONF['mail_smtp_secure'];
+        }
+        if ( $_CONF['mail_smtp_auth'] ) {
+            $mail->SMTPAuth   = true;
+            $mail->Username = $_CONF['mail_smtp_username'];
+            $mail->Password = $_CONF['mail_smtp_password'];
+        }
+        $mail->Mailer = "smtp";
+
+    } elseif ($_CONF['mail_backend'] == 'sendmail') {
+        $mail->Mailer = "sendmail";
+        $mail->Sendmail = $_CONF['mail_sendmail_path'];
+    } else {
+        $mail->Mailer = "mail";
+    }
+    $mail->WordWrap = 76;
+
+    if ( isset($msgData['htmlmessage']) && !empty($msgData['htmlmessage']) ) {
+        $mail->IsHTML(true);
+        $mail->Body = $msgData['htmlmessage'];
+        if ( isset($msgData['textmessage']) && !empty($msgData['textmessage']) ) {
+            $mail->AltBody = $msgData['textmessage'];
+        }
+    } else {
+        $mail->IsHTML(false);
+        if ( isset($msgData['textmessage']) && !empty($msgData['textmessage']) ) {
+            $mail->Body = $msgData['textmessage'];
+        }
+    }
+    $mail->Subject = $subject;
+
+    if ( isset($msgData['embeddedImage']) ) {
+        $mail->AddEmbeddedImage(
+            $msgData['embeddedImage']['file'],
+            $msgData['embeddedImage']['name'],
+            $msgData['embeddedImage']['filename'],
+            $msgData['embeddedImage']['encoding'],
+            $msgData['embeddedImage']['mime']
+        );
+    }
+
+    if ( is_array($msgData['from'])) {
+        $mail->From = $msgData['from']['email'];
+        $mail->FromName = $msgData['from']['name'];
+    } else {
+        $mail->From = $msgData['from'];
+        $mail->FromName = $_CONF['site_name'];
+    }
+
+    $queued = 0;
+    if ( is_array($msgData['to']) ) {
+        foreach ($msgData['to'] AS $to) {
+            if ( is_array($to) ) {
+                $mail->AddBCC($to['email'],$to['name']);
+            } else {
+                $mail->AddBCC($to);
+            }
+
+            $queued++;
+            if ( $queued >= $maxEmailsPerSend ) {
+                if (!$mail->Send()) {
+                    COM_errorLog("Email Error: " . $mail->ErrorInfo);
+                }
+                $queued = 0;
+                $mail->ClearBCCs();
+            }
+        }
+    }
+    if ( $queued > 0 ) {
+COM_errorLog("DEBUG: COM_emailNotification() - Sending Final Batch");
+        if ( !$mail->Send() ) {
+            COM_errorLog("Email Error: " . $mail->ErrorInfo);
+        }
+    }
+}
+
 /**
 * Creates older stuff block
 *
