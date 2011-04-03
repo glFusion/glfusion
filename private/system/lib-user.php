@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2010 by the following authors:                        |
+// | Copyright (C) 2009-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -52,7 +52,7 @@ function USER_deleteAccount ($uid)
 {
     global $_CONF, $_TABLES, $_USER;
 
-    $uid = intval($uid);
+    $uid = (int) $uid;
 
     // first some checks ...
     if ((($uid == $_USER['uid']) && ($_CONF['allow_account_delete'] == 1)) ||
@@ -122,6 +122,9 @@ function USER_deleteAccount ($uid)
         $photo = DB_getItem ($_TABLES['users'], 'photo', "uid = $uid");
         USER_deletePhoto ($photo, false);
     }
+
+    // delete subscriptions
+    DB_delete($_TABLES['subscriptions'],'uid',$uid);
 
     // in case the user owned any objects that require Admin access, assign
     // them to the Root user with the lowest uid
