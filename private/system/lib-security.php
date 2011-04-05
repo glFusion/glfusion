@@ -127,7 +127,7 @@ function SEC_getUserGroups($uid='')
             . " WHERE grp_id = ug_main_grp_id AND ug_uid = ".intval($uid),1);
 
     if ($result == -1) {
-        $once[$uid] = $groups;
+        $runonce[$uid] = $groups;
         return $groups;
     }
 
@@ -253,6 +253,13 @@ function SEC_inGroup($grp_to_verify,$uid='',$cur_grp_id='')
            return false;
         }
     } else {
+        // perform case-insensitive comparison
+        $lgroups = array();
+        foreach ($groups as $key => $value) {
+            $lkey = strtolower($key);
+            $lgroups[$lkey] = $value;
+        }
+        $grp_to_verify = strtolower($grp_to_verify);
         if (!empty($groups[$grp_to_verify])) {
             return true;
         } else {
