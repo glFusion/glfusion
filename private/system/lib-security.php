@@ -260,7 +260,7 @@ function SEC_inGroup($grp_to_verify,$uid='',$cur_grp_id='')
             $lgroups[$lkey] = $value;
         }
         $grp_to_verify = strtolower($grp_to_verify);
-        if (!empty($groups[$grp_to_verify])) {
+        if (!empty($lgroups[$grp_to_verify])) {
             return true;
         } else {
             return false;
