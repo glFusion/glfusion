@@ -267,7 +267,7 @@ function configmanager_select_timezone_helper()
         if ($zone[0] == 'Africa' || $zone[0] == 'America' || $zone[0] == 'Antarctica' || $zone[0] == 'Arctic' || $zone[0] == 'Asia' || $zone[0] == 'Atlantic' || $zone[0] == 'Australia' || $zone[0] == 'Europe' || $zone[0] == 'Indian' || $zone[0] == 'Pacific') {
             if (isset($zone[1]) != '') {
                 $tzname = $zone[0].'/'.$zone[1];
-                $locations[$tzname] = str_replace('_', ' ', $tzname);
+                $locations[$tzname] = $tzname;
             }
         }
     }
