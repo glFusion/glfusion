@@ -488,11 +488,11 @@ $topic = COM_applyFilter ($topic);
 if (empty ($topic)) {
     $topic = 'all';
 }
-$year = intval(COM_applyFilter ($year, true));
+$year = COM_applyFilter ($year, true);
 if ($year < 0) {
     $year = 0;
 }
-$month = intval(COM_applyFilter ($month, true));
+$month = COM_applyFilter ($month, true);
 if (($month < 1) || ($month > 12)) {
     $month = 0;
 }

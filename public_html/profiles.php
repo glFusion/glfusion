@@ -65,7 +65,7 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
     }
 
     // check for correct 'to' user preferences
-    $result = DB_query ("SELECT emailfromadmin,emailfromuser FROM {$_TABLES['userprefs']} WHERE uid = ".intval($uid));
+    $result = DB_query ("SELECT emailfromadmin,emailfromuser FROM {$_TABLES['userprefs']} WHERE uid = ".(int) $uid);
     $P = DB_fetchArray ($result);
     if (SEC_inGroup ('Root') || SEC_hasRights ('user.mail')) {
         $isAdmin = true;
@@ -85,7 +85,7 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
 
     if (!empty($author) && !empty($subject) && !empty($message)) {
         if (COM_isemail($authoremail)) {
-            $result = DB_query("SELECT username,fullname,email FROM {$_TABLES['users']} WHERE uid = ".intval($uid));
+            $result = DB_query("SELECT username,fullname,email FROM {$_TABLES['users']} WHERE uid = ".(int) $uid);
             $A = DB_fetchArray($result);
 
             // Append the user's signature to the message
@@ -199,7 +199,7 @@ function contactform ($uid, $subject = '', $message = '')
         echo $display;
         exit;
     } else {
-        $result = DB_query ("SELECT emailfromadmin,emailfromuser FROM {$_TABLES['userprefs']} WHERE uid = ".intval($uid));
+        $result = DB_query ("SELECT emailfromadmin,emailfromuser FROM {$_TABLES['userprefs']} WHERE uid = ".(int) $uid);
         $P = DB_fetchArray ($result);
         if (SEC_inGroup ('Root') || SEC_hasRights ('user.mail')) {
             $isAdmin = true;
@@ -223,7 +223,7 @@ function contactform ($uid, $subject = '', $message = '')
             if (($_CONF['advanced_editor'] == 1)) {
                 $mail_template->set_file('form','contactuserform_advanced.thtml');
                 if ( isset($_USER['uid']) ) {
-                    $ae_uid = intval(COM_applyFilter($_USER['uid'],true));
+                    $ae_uid = COM_applyFilter($_USER['uid'],true);
                 } else {
                     $ae_uid = 1;
                 }
@@ -488,7 +488,7 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
 
     if (($_CONF['advanced_editor'] == 1)) {
         $mail_template->set_file('form','contactauthorform_advanced.thtml');
-        $ae_uid = intval(intval(COM_applyFilter($_USER['uid'],true)));
+        $ae_uid = COM_applyFilter($_USER['uid'],true);
         $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
         DB_Query($sql,1);
     } else {

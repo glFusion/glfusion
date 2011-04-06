@@ -219,7 +219,7 @@ if ($A['count'] > 0) {
         $display .= COM_siteHeader('menu', $pagetitle, $headercode);
 
         if (isset($_GET['msg'])) {
-            $msg = intval(COM_applyFilter($_GET['msg'], true));
+            $msg = (int) COM_applyFilter($_GET['msg'], true);
             if ($msg > 0) {
                 $plugin = '';
                 if (isset($_GET['plugin'])) {
@@ -338,7 +338,7 @@ if ($A['count'] > 0) {
                 $mode = '';
             }
             if ( isset($_GET['page']) ) {
-                $page = intval(COM_applyFilter($_GET['page'],true));
+                $page = (int) COM_applyFilter($_GET['page'],true);
             } else {
                 $page = 1;
             }

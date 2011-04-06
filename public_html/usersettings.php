@@ -614,6 +614,11 @@ function editpreferences()
         $preferences->set_var('sub_category',$S['category_desc']);
         $preferences->set_var('sub_description',$S['id_desc']);
         $preferences->set_var('csscounter',$cssstyle);
+        if ( $S['id'] < 0 ) {
+            $preferences->set_var('row_class','pluginRowExclude');
+        } else {
+            $preferences->set_var('row_class','pluginRow');
+        }
         $preferences->parse('srow', 'subrows',true);
         $csscounter++;
     }

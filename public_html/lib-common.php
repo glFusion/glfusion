@@ -3791,7 +3791,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
     require_once $_CONF['path_system']
                  . '/classes/syndication/feedparserbase.class.php';
 
-    $result = DB_query("SELECT rdf_last_modified, rdf_etag FROM {$_TABLES['blocks']} WHERE bid = ".intval($bid));
+    $result = DB_query("SELECT rdf_last_modified, rdf_etag FROM {$_TABLES['blocks']} WHERE bid = ".(int)$bid);
     list($last_modified, $etag) = DB_fetchArray($result);
 
     // Load the actual feed handlers:
@@ -3830,9 +3830,9 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
         }
 
         if (empty($last_modified) || empty($etag)) {
-            DB_query("UPDATE {$_TABLES['blocks']} SET rdfupdated = '$update', rdf_last_modified = NULL, rdf_etag = NULL WHERE bid = ".intval($bid));
+            DB_query("UPDATE {$_TABLES['blocks']} SET rdfupdated = '$update', rdf_last_modified = NULL, rdf_etag = NULL WHERE bid = ".(int) $bid);
         } else {
-            DB_query("UPDATE {$_TABLES['blocks']} SET rdfupdated = '$update', rdf_last_modified = '$last_modified', rdf_etag = '$etag' WHERE bid = ".intval($bid));
+            DB_query("UPDATE {$_TABLES['blocks']} SET rdfupdated = '$update', rdf_last_modified = '$last_modified', rdf_etag = '$etag' WHERE bid = ".(int) $bid);
         }
 
         $charset = COM_getCharset();
@@ -3869,7 +3869,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
 
         // Standard theme based function to put it in the block
         $result = DB_change($_TABLES['blocks'], 'content',
-                            DB_escapeString($content), 'bid', intval($bid));
+                            DB_escapeString($content), 'bid', (int) $bid);
     } else if ($factory->errorStatus !== false) {
         // failed to aquire info, 0 out the block and log an error
         COM_errorLog("Unable to aquire feed reader for $rdfurl", 1);
@@ -3877,7 +3877,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
                      $factory->errorStatus[1] . ' ' .
                      $factory->errorStatus[2]);
         $content = DB_escapeString($LANG21[4]);
-        DB_query("UPDATE {$_TABLES['blocks']} SET content = '$content', rdf_last_modified = NULL, rdf_etag = NULL WHERE bid = ".intval($bid));
+        DB_query("UPDATE {$_TABLES['blocks']} SET content = '$content', rdf_last_modified = NULL, rdf_etag = NULL WHERE bid = ".(int) $bid);
     }
 }
 
@@ -6817,7 +6817,7 @@ function CMT_updateCommentcodes()
     $cleared = 0;
 
     if ($_CONF['comment_close_rec_stories'] > 0) {
-        $results = DB_query("SELECT sid FROM {$_TABLES['stories']} ORDER BY date DESC LIMIT ".intval($_CONF['comment_close_rec_stories']));
+        $results = DB_query("SELECT sid FROM {$_TABLES['stories']} ORDER BY date DESC LIMIT ".(int) $_CONF['comment_close_rec_stories']);
         while ($A = DB_fetchArray($results))  {
             $allowedcomments[] = $A['sid'];
         }

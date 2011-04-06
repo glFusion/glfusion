@@ -183,7 +183,7 @@ function userprofile($user, $msg = 0, $plugin = '')
     }
 
     if ($A['showonline']) {
-        if ( DB_count($_TABLES['sessions'],'uid',intval($user))) {
+        if ( DB_count($_TABLES['sessions'],'uid',(int) $user)) {
             $user_templates->set_var ('online', 'online');
         }
     }
@@ -436,7 +436,7 @@ function requestpassword ($username, $msg = 0)
             return COM_refresh ($_CONF['site_url'] . '/index.php?msg=48');
         }
         $reqid = substr (md5 (uniqid (rand (), 1)), 1, 16);
-        DB_change ($_TABLES['users'], 'pwrequestid', "$reqid",'uid', intval($A['uid']));
+        DB_change ($_TABLES['users'], 'pwrequestid', "$reqid",'uid', (int) $A['uid']);
 
         $mailtext = sprintf ($LANG04[88], $username);
         $mailtext .= $_CONF['site_url'] . '/users.php?mode=newpwd&uid=' . $A['uid'] . '&rid=' . $reqid . "\n\n";
@@ -1103,7 +1103,7 @@ case 'newpwd':
     $reqid = COM_applyFilter ($_GET['rid']);
     if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) &&
             !empty ($reqid) && (strlen ($reqid) == 16)) {
-        $uid = intval($uid);
+        $uid = (int) $uid;
         $safereqid = DB_escapeString($reqid);
         $valid = DB_count ($_TABLES['users'], array ('uid', 'pwrequestid'),
                            array ($uid, $safereqid));
@@ -1134,7 +1134,7 @@ case 'setnewpwd':
         $reqid = COM_applyFilter ($_POST['rid']);
         if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) &&
                 !empty ($reqid) && (strlen ($reqid) == 16)) {
-            $uid = intval($uid);
+            $uid = (int) $uid;
             $safereqid = DB_escapeString($reqid);
             $valid = DB_count ($_TABLES['users'], array ('uid', 'pwrequestid'),
                                array ($uid, $safereqid));
