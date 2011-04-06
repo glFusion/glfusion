@@ -3,8 +3,8 @@ Tags: comment,trackback,referrer,spam,robot,antispam
 Contributors: error, markjaquith, skeltoac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=error%40ioerror%2eus&item_name=Bad%20Behavior%20%28From%20WordPress%20Page%29&no_shipping=1&cn=Comments%20about%20Bad%20Behavior&tax=0&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8
 Requires at least: 2.7
-Tested up to: 3.1.0
-Stable tag: 2.0.42
+Tested up to: 3.1.1
+Stable tag: 2.0.43
 
 Bad Behavior prevents spammers from ever delivering their junk, and in many
 cases, from ever reading your site in the first place.
@@ -14,6 +14,10 @@ cases, from ever reading your site in the first place.
 Welcome to a whole new way of keeping your blog, forum, guestbook, wiki or
 content management system free of link spam. Bad Behavior is a PHP-based
 solution for blocking link spam and the robots which deliver it.
+
+Thousands of sites, large and small, like SourceForge, GNOME, the U.S.
+Department of Education, and many more, trust Bad Behavior to help reduce
+incoming link spam and malicious activity.
 
 Bad Behavior complements other link spam solutions by acting as a gatekeeper,
 preventing spammers from ever delivering their junk, and in many cases, from
@@ -40,9 +44,12 @@ Installing and configuring Bad Behavior on most platforms is simple and takes
 only a few minutes. In most cases, no configuration at all is needed. Simply
 turn it on and stop worrying about spam!
 
-The core of Bad Behavior is free software released under the GNU Lesser General
-Public License. (On some non-free platforms, special license terms exist for
-Bad Behavior's platform connector.)
+The core of Bad Behavior is free software released under the GNU General
+Public License, version 2, or at your option, any later version. (On some
+non-free platforms, special license terms exist for Bad Behavior's platform
+connector.) The development version of Bad Behavior is free software released
+under the GNU Lesser General Public License, version 3, or at your option,
+any later version.
 
 == Installation ==
 
@@ -67,7 +74,7 @@ the following:
 	include( './extensions/Bad-Behavior/bad-behavior-mediawiki.php' );
 
 For complete documentation and installation instructions, please visit
-http://www.bad-behavior.ioerror.us/
+http://bad-behavior.ioerror.us/
 
 == Screenshots ==
 
@@ -75,6 +82,10 @@ http://www.bad-behavior.ioerror.us/
 winds up here, a way out is provided. This may involve removing malicious
 software from the user's computer, changing firewall settings or other simple
 fixes which will immediately grant access again.
+
+2. Bad Behavior's built in log viewer (WordPress) shows why requests were
+blocked and allows you to click on any IP address, user-agent string or
+block reason to filter results.
 
 == Release Notes ==
 
