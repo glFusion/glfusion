@@ -666,8 +666,8 @@ function USER_subscriptionPanel($U)
     $uid = $U['uid'];
 
     // set template
-    $preferences = new Template ($_CONF['path_layout'] . 'preferences');
-    $preferences->set_file ('subscriptions','subscriptionblock.thtml');
+    $preferences = new Template ($_CONF['path_layout'] . 'admin/user/');
+    $preferences->set_file ('subscriptions','subscriptionpanel.thtml');
 
     // subscription block
     $csscounter = 1;
