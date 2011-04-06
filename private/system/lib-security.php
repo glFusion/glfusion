@@ -123,10 +123,10 @@ function SEC_getUserGroups($uid='')
         return $runonce[$uid];
     }
 
-    $result = DB_query("SELECT ug_main_grp_id,grp_name FROM {$_TABLES["group_assignments"]},{$_TABLES["groups"]}"
-            . " WHERE grp_id = ug_main_grp_id AND ug_uid = ".intval($uid),1);
+    $result = DB_query("SELECT ug_main_grp_id,grp_name FROM {$_TABLES['group_assignments']},{$_TABLES['groups']}"
+            . " WHERE grp_id = ug_main_grp_id AND ug_uid = ".(int) $uid,1);
 
-    if ($result == -1) {
+    if ($result == FALSE) {
         $runonce[$uid] = $groups;
         return $groups;
     }
