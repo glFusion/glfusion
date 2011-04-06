@@ -491,7 +491,7 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
     global $_CONF, $_TABLES, $_USER;
 
     $userphoto = '';
-    $uid = intval($uid);
+    $uid = (int) $uid;
 
     if ($_CONF['allow_user_photo'] == 1) {
 
@@ -638,10 +638,10 @@ function USER_addGroup ($groupid, $uid = '')
             $uid = $_USER['uid'];
         }
     } else {
-        $uid = intval($uid);
+        $uid = (int) $uid;
     }
 
-    $groupid = intval($groupid);
+    $groupid = (int) $groupid;
 
     if (($groupid < 1) || SEC_inGroup ($groupid, $uid)) {
         return false;
@@ -677,10 +677,10 @@ function  USER_delGroup ($groupid, $uid = '')
             $uid = $_USER['uid'];
         }
     } else {
-        $uid = intval($uid);
+        $uid = (int) $uid;
     }
 
-    $groupid = intval($groupid);
+    $groupid = (int) $groupid;
 
     if (($groupid > 0) && SEC_inGroup ($groupid, $uid)) {
         DB_query ("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = '$groupid' AND ug_uid = $uid");

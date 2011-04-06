@@ -116,7 +116,7 @@ function SEC_getUserGroups($uid='')
             $uid = $_USER['uid'];
         }
     } else {
-        $uid = intval($uid);
+        $uid = (int) $uid;
     }
 
     if (array_key_exists($uid, $runonce)) {
@@ -797,7 +797,7 @@ function SEC_checkUserStatus($userid)
     global $_CONF, $_TABLES;
 
     // Check user status
-    $status = DB_getItem($_TABLES['users'], 'status', "uid=".intval($userid));
+    $status = DB_getItem($_TABLES['users'], 'status', "uid=".(int) $userid);
 
     // only do redirects if we aren't on users.php in a valid mode (logout or
     // default)
@@ -811,7 +811,7 @@ function SEC_checkUserStatus($userid)
         }
     }
     if ($status == USER_ACCOUNT_AWAITING_ACTIVATION) {
-        DB_change($_TABLES['users'], 'status', USER_ACCOUNT_ACTIVE, 'uid', intval($userid));
+        DB_change($_TABLES['users'], 'status', USER_ACCOUNT_ACTIVE, 'uid', (int) $userid);
     } elseif ($status == USER_ACCOUNT_AWAITING_APPROVAL) {
         // If we aren't on users.php with a default action then go to it
         if ($redirect) {

@@ -437,9 +437,9 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
 
     // retrieve the query_limit
     if ( isset($_GET['query_limit']) ) {
-        $query_limit = intval(COM_applyFilter ($_GET['query_limit'], true));
+        $query_limit = COM_applyFilter ($_GET['query_limit'], true);
     } else if ( isset($_POST['query_limit']) ) {
-        $query_limit = intval(COM_applyFilter ($_POST['query_limit'], true));
+        $query_limit = COM_applyFilter ($_POST['query_limit'], true);
     } else {
         $query_limit = 50;
     }
@@ -448,10 +448,10 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     // component, i.e. the plugin/function calling this here to avoid overlap
     // the default page number is 1
     if (isset($_GET[$component . 'listpage'])) {
-        $page = intval(COM_applyFilter ($_GET[$component . 'listpage'], true));
+        $page = COM_applyFilter ($_GET[$component . 'listpage'], true);
         $curpage = $page;
     } else if ( isset($_POST[$component . 'listpage'])) {
-        $page = intval(COM_applyFilter ($_POST[$component . 'listpage'], true));
+        $page = COM_applyFilter ($_POST[$component . 'listpage'], true);
         $curpage = $page;
     } else {
         $page ='';

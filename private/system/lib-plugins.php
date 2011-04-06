@@ -3299,7 +3299,19 @@ function PLG_sendSubscriptionNotification($type,$category,$track_id,$post_id,$po
         return false;
     }
 
-    $sql    = "SELECT {$_TABLES['subscriptions']}.uid,email FROM {$_TABLES['subscriptions']} LEFT JOIN {$_TABLES['users']} ON {$_TABLES['subscriptions']}.uid={$_TABLES['users']}.uid WHERE {$_TABLES['users']}.status=".USER_ACCOUNT_ACTIVE." AND category='".DB_escapeString($category)."' AND id='".DB_escapeString($track_id)."' AND type='".DB_escapeString($type)."'";
+    if ( $track_id == 0 ) {
+        $sql    = "SELECT {$_TABLES['subscriptions']}.uid,email,id FROM {$_TABLES['subscriptions']} LEFT JOIN {$_TABLES['users']} ON {$_TABLES['subscriptions']}.uid={$_TABLES['users']}.uid" .
+                  " WHERE {$_TABLES['users']}.status=".USER_ACCOUNT_ACTIVE.
+                  " AND category='".DB_escapeString($category)."'".
+                  " AND type='".DB_escapeString($type)."'";
+    } else {
+        $sql    = "SELECT {$_TABLES['subscriptions']}.uid,email,id FROM {$_TABLES['subscriptions']} LEFT JOIN {$_TABLES['users']} ON {$_TABLES['subscriptions']}.uid={$_TABLES['users']}.uid" .
+                  " WHERE {$_TABLES['users']}.status=".USER_ACCOUNT_ACTIVE.
+                  " AND category='".DB_escapeString($category)."'".
+                  " AND id='".DB_escapeString($track_id)."'".
+                  " AND type='".DB_escapeString($type)."'";
+    }
+
     $result = DB_query($sql);
     $nrows  = DB_numRows($result);
 
@@ -3316,6 +3328,9 @@ function PLG_sendSubscriptionNotification($type,$category,$track_id,$post_id,$po
 
     while (($S = DB_fetchArray($result)) != NULL ) {
         if ( $S['uid'] == $post_uid ) {  // skip author
+            continue;
+        }
+        if ( $S['id'] < 0 ) {   // allows exclude records...
             continue;
         }
         $to[] = $S['email'];
