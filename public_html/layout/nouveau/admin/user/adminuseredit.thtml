@@ -24,6 +24,7 @@ window.addEvent('domready',function() {
     {layout_panel}
     {content_panel}
     {privacy_panel}
+    {subscription_panel}
     {plugin_panel}
     <p class="aligncenter" id="save_button">
       <input type="submit" value="{lang_save}" name="save"{xhtml}>

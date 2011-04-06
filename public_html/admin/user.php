@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -300,6 +300,10 @@ function USER_edit($uid = '', $msg = '')
     $userform->set_var('privacy_panel',USER_privacyPanel($U));
     if (!empty($uid) && $uid > 1 ) {
         $userform->set_var('plugin_panel',PLG_profileEdit($uid));
+    }
+
+    if ( isset($LANG_MYACCOUNT['pe_subscriptions']) ) {
+        $userform->set_var('subscription_panel',USER_subscriptionPanel($U));
     }
 
     if (!empty($uid) && ($uid != $_USER['uid']) && SEC_hasRights('user.delete')) {
@@ -653,6 +657,41 @@ function USER_userinfoPanel($U, $newuser = 0)
     $retval = $userform->finish ($userform->parse ('output', 'user'));
     return $retval;
 }
+
+function USER_subscriptionPanel($U)
+{
+    global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG_MYACCOUNT, $LANG04,
+           $LANG_confignames,  $LANG_configselects;
+
+    $uid = $U['uid'];
+
+    // set template
+    $preferences = new Template ($_CONF['path_layout'] . 'preferences');
+    $preferences->set_file ('subscriptions','subscriptionblock.thtml');
+
+    // subscription block
+    $csscounter = 1;
+    $res = DB_query("SELECT * FROM {$_TABLES['subscriptions']} WHERE uid=".(int) $uid . " ORDER BY type,category ASC");
+    $preferences->set_block('subscriptions', 'subrows', 'srow');
+    while ( ($S = DB_fetchArray($res) ) != NULL ) {
+        $cssstyle = ($csscounter % 2) + 1;
+        $preferences->set_var('subid',$S['sub_id']);
+        $preferences->set_var('sub_type',$S['type']);
+        $preferences->set_var('sub_category',$S['category_desc']);
+        $preferences->set_var('sub_description',$S['id_desc']);
+        $preferences->set_var('csscounter',$cssstyle);
+        if ( $S['id'] < 0 ) {
+            $preferences->set_var('row_class','pluginRowExclude');
+        } else {
+            $preferences->set_var('row_class','pluginRow');
+        }
+        $preferences->parse('srow', 'subrows',true);
+        $csscounter++;
+    }
+    $preferences->parse ('subscriptions_block','subscriptions',true);
+    return $preferences->finish ($preferences->parse ('output', 'subscriptions_block'));
+}
+
 
 function USER_layoutPanel($U, $newuser = 0)
 {
@@ -1804,6 +1843,14 @@ function USER_save($uid)
                     $sql = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ($userGroup, $uid)";
                     DB_query ($sql);
                 }
+            }
+        }
+
+        // subscriptions
+        $subscription_deletes  = @array_values($_POST['subdelete']);
+        if ( is_array($subscription_deletes) ) {
+            foreach ( $subscription_deletes AS $subid ) {
+                DB_delete($_TABLES['subscriptions'],'sub_id',(int) $subid);
             }
         }
 
