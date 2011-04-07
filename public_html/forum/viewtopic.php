@@ -271,28 +271,28 @@ if ($mode != 'preview') {
         /* Check for a un-subscribe record */
         $ntopicid = -$showtopic;  // Negative value
 
-        if (DB_count($_TABLES['gf_watch'], array('forum_id', 'topic_id', 'uid'), array($forumid, $ntopicid,$_USER['uid'])) > 0) {
+        if (DB_count($_TABLES['subscriptions'], array('type','category','id', 'uid'), array('forum',$forumid, $ntopicid,$_USER['uid'])) > 0) {
             $notifylinkimg = '<img src="'.gf_getImage('notify_on').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg62'].'" title="'.$LANG_GF02['msg62'].'"' . XHTML . '>';
-            $notifylink = "{$_CONF['site_url']}/forum/notify.php?forum=$forumid&amp;submit=save&amp;id=$showtopic";
+            $notifylink = "{$_CONF['site_url']}/forum/notify.php?forum=$forumid&amp;submit=save&amp;topic=$showtopic";
             $topicnavbar->set_var ('LANG_notify', $LANG_GF01['SubscribeLink']);
 
         /* Check if user has subscribed to complete forum */
-        } elseif (DB_count($_TABLES['gf_watch'], array('forum_id', 'topic_id', 'uid'), array($forumid, '0',$_USER['uid'])) > 0) {
-            $notifyID = DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forumid' AND topic_id='0' AND uid='{$_USER['uid']}'");
+        } elseif (DB_count($_TABLES['subscriptions'], array('type','category', 'id', 'uid'), array('forum',$forumid, '0',$_USER['uid'])) > 0) {
+            $notifyID = DB_getItem($_TABLES['subscriptions'],'sub_id', "type='forum' AND category=".(int)$forumid." AND id=0 AND uid=".(int)$_USER['uid']);
             $notifylinkimg = '<img src="'.gf_getImage('notify_off').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg137'].'" title="'.$LANG_GF02['msg137'].'"' . XHTML . '>';
             $notifylink = "{$_CONF['site_url']}/forum/notify.php?submit=delete2&amp;id=$notifyID&amp;forum=$forumid&amp;topic=$showtopic";
             $topicnavbar->set_var ('LANG_notify', $LANG_GF01['unSubscribeLink']);
 
         /* Check if user is subscribed to this specific topic */
-        } elseif (DB_count($_TABLES['gf_watch'], array('forum_id', 'topic_id', 'uid'), array($forumid, $showtopic,$_USER['uid'])) > 0) {
-            $notifyID = DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forumid' AND topic_id='$showtopic' AND uid='{$_USER['uid']}'");
+        } elseif (DB_count($_TABLES['subscriptions'], array('type','category', 'id', 'uid'), array('forum',$forumid, $showtopic,$_USER['uid'])) > 0) {
+            $notifyID = DB_getItem($_TABLES['subscriptions'],'sub_id', "type='forum' AND category=".(int)$forumid." AND id=".(int)$showtopic." AND uid=".(int)$_USER['uid']);
             $notifylinkimg = '<img src="'.gf_getImage('notify_off').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg137'].'" title="'.$LANG_GF02['msg137'].'"' . XHTML . '>';
             $notifylink = "{$_CONF['site_url']}/forum/notify.php?submit=delete2&amp;id=$notifyID&amp;forum=$forumid&amp;topic=$showtopic";
             $topicnavbar->set_var ('LANG_notify', $LANG_GF01['unSubscribeLink']);
 
         } else {
             $notifylinkimg = '<img src="'.gf_getImage('notify_on').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg62'].'" title="'.$LANG_GF02['msg62'].'"' . XHTML . '>';
-            $notifylink = "{$_CONF['site_url']}/forum/notify.php?forum=$forumid&amp;submit=save&amp;id=$showtopic";
+            $notifylink = "{$_CONF['site_url']}/forum/notify.php?forum=$forumid&amp;submit=save&amp;topic=$showtopic";
             $topicnavbar->set_var ('LANG_notify', $LANG_GF01['SubscribeLink']);
         }
 

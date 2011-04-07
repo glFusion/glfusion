@@ -1350,6 +1350,10 @@ color:#000;
 line-height:120%;
 }
 
+.subexclude td {
+    color: #FF0000 !important;
+}
+
 .pluginLinks A:hover {
 color:#000;
 font-style:normal;

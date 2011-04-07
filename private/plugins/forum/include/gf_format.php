@@ -1646,4 +1646,17 @@ function get_preg_expression($mode)
 
 	return '';
 }
+
+function FF_isSubscribed( $forum_id, $topic_id, $uid = 0 )
+{
+    global $_TABLES;
+
+    $sql = "SELECT id FROM {$_TABLES['subscriptions']} WHERE ((type='forum' AND id=".(int) $topic_id." AND uid=".(int) $uid .") ";
+    $sql .= "OR (type='forum' AND category=".(int) $forum_id." AND id=0 and uid=".(int) $uid."))";
+    $result = DB_query($sql);
+    if ( DB_numRows($result) > 0 ) {
+        return true;
+    }
+    return false;
+}
 ?>

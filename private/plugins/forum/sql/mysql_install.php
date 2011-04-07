@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -164,23 +164,6 @@ $_SQL['gf_userprefs'] = "CREATE TABLE {$_TABLES['gf_userprefs']} (
   topic_order varchar(10) NOT NULL default 'ASC',
   use_wysiwyg_editor tinyint(3) NOT NULL DEFAULT '1',
   PRIMARY KEY  (uid)
-) ENGINE=MyISAM;";
-# --------------------------------------------------------
-
-#
-# Table structure for table `forum_watch`
-#
-
-$_SQL['gf_watch'] = "CREATE TABLE {$_TABLES['gf_watch']} (
-  id mediumint(8) NOT NULL auto_increment,
-  forum_id mediumint(8) NOT NULL default '0',
-  topic_id mediumint(8) NOT NULL default '0',
-  uid mediumint(8) NOT NULL default '0',
-  date_added date NOT NULL default '0000-00-00',
-  PRIMARY KEY  (id),
-  KEY uid (uid),
-  KEY forum_id (forum_id),
-  KEY topic_id (topic_id)
 ) ENGINE=MyISAM;";
 # --------------------------------------------------------
 

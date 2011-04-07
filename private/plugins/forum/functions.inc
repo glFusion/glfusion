@@ -238,7 +238,7 @@ function plugin_user_create_forum ($uid)
 }
 
 /**
-* Called if admin deletes a user - Removes any moderator and Watch Records for user
+* Called if admin deletes a user - Removes any moderator records for user
 */
 function plugin_user_delete_forum ($uid)
 {
@@ -247,7 +247,6 @@ function plugin_user_delete_forum ($uid)
     $username = DB_getItem($_TABLES['users'], "username", "uid=$uid");
     $username = DB_escapeString($username);
     DB_query("DELETE FROM {$_TABLES['gf_moderators']} WHERE mod_username='$username'");
-    DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid ='$uid'");
     DB_query("DELETE FROM {$_TABLES['gf_userinfo']} WHERE uid ='$uid'");
     DB_query("DELETE FROM {$_TABLES['gf_userprefs']} WHERE uid ='$uid'");
     DB_query("DELETE FROM {$_TABLES['gf_log']} WHERE uid ='$uid'");
@@ -879,7 +878,7 @@ function forum_deleteForum($id) {
     DB_query("DELETE FROM {$_TABLES['gf_forums']} WHERE forum_id='$id'");
     DB_query("DELETE FROM {$_TABLES['gf_topic']} WHERE forum='$id'");
     DB_query("DELETE FROM {$_TABLES['gf_moderators']} WHERE mod_forum='$id'");
-    DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE forum_id ='$id'");
+    DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND category=".(int)$id);
     return true;
 }
 

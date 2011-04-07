@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -131,6 +131,11 @@ function forum_upgrade() {
             $c->add('bbcode_disabled', 0, 'select', 0, 2, 6, 165, true, 'forum');
             $c->add('smilies_disabled', 0, 'select', 0, 2, 6, 170, true, 'forum');
             $c->add('urlparse_disabled', 0, 'select', 0, 2, 6, 175, true, 'forum');
+        case '3.2.0' :
+            // convert watch records
+            _forum_cvt_watch();
+            // drop watch table
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.3.0',pi_gl_version='1.3.0' WHERE pi_name = 'forum'");
 
         default :
             DB_query("ALTER TABLE {$_TABLES['gf_forums']} DROP INDEX forum_id",1);
@@ -272,6 +277,63 @@ function upgrade_30() {
 
     COM_errorLog("Success - Completed Forum plugin version 3.0 update",1);
     return 0;
+}
 
+function _forum_cvt_watch() {
+    global $_CONF, $_TABLES, $LANG_GF02;
+
+    $converted = 0;
+
+    $complete = DB_getItem($_TABLES['vars'],'value','name="watchcvt"');
+    if ( $complete == 1 ) {
+        return $converted;
+    }
+
+    $dt = new Date('now',$_CONF['timezone']);
+
+    $processed = array();
+
+    $sql = "SELECT * FROM {$_TABLES['gf_topic']} WHERE pid=0";
+    $result = DB_query($sql);
+    while ( ( $T = DB_fetchArray($result) ) != NULL ) {
+        $pids[] = $T['id'];
+    }
+
+    $sql = "SELECT * FROM {$_TABLES['gf_watch']}";
+    $result = DB_query($sql);
+
+    while ( ( $W = DB_fetchArray($result) ) != NULL ) {
+
+        $forum_name = DB_getItem($_TABLES['gf_forums'],'forum_name','forum_id='.(int)$W['forum_id']);
+        if ( $W['topic_id'] != 0 ) {
+            if ( $W['topic_id'] < 0 ) {
+                $searchID = abs($W['topic_id']);
+            } else {
+                $searchID = $W['topic_id'];
+            }
+            $topic_name = DB_getItem($_TABLES['gf_topic'],'subject','id='.(int)$searchID);
+        } else {
+            $topic_name = $LANG_GF02['msg138'];
+        }
+
+        if ( in_array($searchID,$pids) && !isset($processed[$W['topic_id']])) {
+            $sql="INSERT INTO {$_TABLES['subscriptions']} ".
+                 "(type,uid,category,id,date_added,category_desc,id_desc) VALUES " .
+                 "('forum',".
+                 (int)$W['uid'].",'".
+                 DB_escapeString($W['forum_id'])."','".
+                 DB_escapeString($W['topic_id'])."','".
+                 $dt->toMySQL(true)."','".
+                 DB_escapeString($forum_name)."','".
+                 DB_escapeString($topic_name)."')";
+            DB_query($sql,1);
+            $processed[$W['topic_id']] = 1;
+            $converted++;
+        }
+    }
+    $sql = "INSERT INTO {$_TABLES['vars']} (name,value) VALUES ('watchcvt','1')";
+    DB_query($sql);
+
+    return $converted;
 }
 ?>

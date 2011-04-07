@@ -654,9 +654,70 @@ function glfusion_130()
         DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $grp_id)", 1);
     }
 
+    _forum_cvt_watch();
+
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.3.0',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.3.0' WHERE name='glfusion'",1);
+}
+
+
+function _forum_cvt_watch() {
+    global $_CONF, $_TABLES, $LANG_GF02;
+
+    $converted = 0;
+
+    $complete = DB_getItem($_TABLES['vars'],'value','name="watchcvt"');
+    if ( $complete == 1 ) {
+        return $converted;
+    }
+
+    $dt = new Date('now',$_CONF['timezone']);
+
+    $processed = array();
+
+    $sql = "SELECT * FROM {$_TABLES['gf_topic']} WHERE pid=0";
+    $result = DB_query($sql);
+    while ( ( $T = DB_fetchArray($result) ) != NULL ) {
+        $pids[] = $T['id'];
+    }
+
+    $sql = "SELECT * FROM {$_TABLES['gf_watch']}";
+    $result = DB_query($sql);
+
+    while ( ( $W = DB_fetchArray($result) ) != NULL ) {
+
+        $forum_name = DB_getItem($_TABLES['gf_forums'],'forum_name','forum_id='.(int)$W['forum_id']);
+        if ( $W['topic_id'] != 0 ) {
+            if ( $W['topic_id'] < 0 ) {
+                $searchID = abs($W['topic_id']);
+            } else {
+                $searchID = $W['topic_id'];
+            }
+            $topic_name = DB_getItem($_TABLES['gf_topic'],'subject','id='.(int)$searchID);
+        } else {
+            $topic_name = $LANG_GF02['msg138'];
+        }
+
+        if ( in_array($searchID,$pids) && !isset($processed[$W['topic_id']])) {
+            $sql="INSERT INTO {$_TABLES['subscriptions']} ".
+                 "(type,uid,category,id,date_added,category_desc,id_desc) VALUES " .
+                 "('forum',".
+                 (int)$W['uid'].",'".
+                 DB_escapeString($W['forum_id'])."','".
+                 DB_escapeString($W['topic_id'])."','".
+                 $dt->toMySQL(true)."','".
+                 DB_escapeString($forum_name)."','".
+                 DB_escapeString($topic_name)."')";
+            DB_query($sql,1);
+            $processed[$W['topic_id']] = 1;
+            $converted++;
+        }
+    }
+    $sql = "INSERT INTO {$_TABLES['vars']} (name,value) VALUES ('watchcvt','1')";
+    DB_query($sql);
+
+    return $converted;
 }
 
 $retval .= 'Performing database upgrades if necessary...<br />';

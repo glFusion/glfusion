@@ -64,7 +64,6 @@ $INSTALL_plugin['forum'] = array(
   array('type' => 'table', 'table' => $_TABLES['gf_log'], 'sql' => $_SQL['gf_log']),
   array('type' => 'table', 'table' => $_TABLES['gf_moderators'], 'sql' => $_SQL['gf_moderators']),
   array('type' => 'table', 'table' => $_TABLES['gf_userprefs'], 'sql' => $_SQL['gf_userprefs']),
-  array('type' => 'table', 'table' => $_TABLES['gf_watch'], 'sql' => $_SQL['gf_watch']),
   array('type' => 'table', 'table' => $_TABLES['gf_banned_ip'], 'sql' => $_SQL['gf_banned_ip']),
   array('type' => 'table', 'table' => $_TABLES['gf_userinfo'], 'sql' => $_SQL['gf_userinfo']),
   array('type' => 'table', 'table' => $_TABLES['gf_bookmarks'], 'sql' => $_SQL['gf_bookmarks']),
@@ -158,7 +157,7 @@ function plugin_autouninstall_forum ()
 {
     $out = array (
         /* give the name of the tables, without $_TABLES[] */
-        'tables' => array('gf_topic','gf_categories','gf_forums','gf_settings','gf_watch','gf_moderators','gf_banned_ip', 'gf_log', 'gf_userprefs','gf_userinfo','gf_attachments','gf_bookmarks','gf_rating_assoc'),
+        'tables' => array('gf_topic','gf_categories','gf_forums','gf_settings','gf_moderators','gf_banned_ip', 'gf_log', 'gf_userprefs','gf_userinfo','gf_attachments','gf_bookmarks','gf_rating_assoc'),
         /* give the full name of the group, as in the db */
         'groups' => array('forum Admin'),
         /* give the full name of the feature, as in the db */

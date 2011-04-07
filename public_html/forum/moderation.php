@@ -83,7 +83,7 @@ function moderator_deletePost($topic_id,$topic_parent_id,$forum_id)
         }
         DB_query("DELETE FROM {$_TABLES['gf_topic']} WHERE (id=$topic_id)");
         DB_query("DELETE FROM {$_TABLES['gf_topic']} WHERE (pid=$topic_id)");
-        DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE (id=$topic_id)");
+        DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE (type='forum' AND id=".(int)$topic_id.")");
         $postCount = DB_Count($_TABLES['gf_topic'],'forum',$forum_id);
         $topicsQuery = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE forum=$forum_id and pid=0");
         $topicCount = DB_numRows($topicsQuery);
@@ -252,7 +252,11 @@ function moderator_movePost($topic_id,$topic_parent_id,$forum_id, $move_to_forum
             DB_query("UPDATE {$_TABLES['gf_topic']} SET forum=$move_to_forum WHERE id={$movetopic['id']}");
         }
         // Update any topic subscription records - need to change the forum ID record
-        DB_query("UPDATE {$_TABLES['gf_watch']} SET forum_id=$move_to_forum WHERE topic_id=$topic_id");
+        if ( DB_count($_TABLES['subscriptions'],array('type,category,id'),array('forum',$move_to_forum,0)) == 0 ) {
+            DB_query("UPDATE {$_TABLES['subscriptions']} SET category=$move_to_forum WHERE type='forum' AND id=".(int)$topic_id);
+        } else {
+            DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND id=".(int)$topic_id);
+        }
         // this moves the parent record.
         DB_query("UPDATE {$_TABLES['gf_topic']} SET forum=$move_to_forum, moved='1' WHERE id=$topic_id");
 
@@ -331,7 +335,12 @@ function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_foru
             }
         }
         // Update any topic subscription records - need to change the forum ID record
-        DB_query("UPDATE {$_TABLES['gf_watch']} SET forum_id=$move_to_forum WHERE topic_id=$topic_id");
+//check if the whole forum is already subscribed to?
+        if ( DB_count($_TABLES['subscriptions'],array('type,category,id'),array('forum',$move_to_forum,0)) == 0 ) {
+            DB_query("UPDATE {$_TABLES['subscriptions']} SET category=$move_to_forum WHERE type='forum' AND id=".(int)$topic_id);
+        } else {
+            DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND id=".(int)$topic_id);
+        }
         // this moves the parent record.
         DB_query("UPDATE {$_TABLES['gf_topic']} SET forum=$move_to_forum,pid=$move_to_topic,subject='$subject' WHERE id=$topic_id");
         $topicDate = DB_getItem($_TABLES['gf_topic'],'date','id='.$topic_id);

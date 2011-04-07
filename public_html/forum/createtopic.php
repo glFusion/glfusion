@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -47,7 +47,6 @@ if (!in_array('forum', $_PLUGINS)) {
 require_once $_CONF['path'] . 'plugins/forum/include/gf_showtopic.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 require_once $_CONF['path'] . 'plugins/forum/include/lib-uploadfiles.php';
-require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
 
 $retval = '';
 $forumfiles = array();
@@ -148,12 +147,12 @@ if ( COM_isAnonUser() ) {
     $uid = $_USER['uid'];
 }
 
-if ( intval($forum) == 0 && intval($id) != 0 ) {
-    $forum = DB_getItem($_TABLES['gf_topic'],'forum','id='.intval($id));
+if ( (int) $forum == 0 && (int) $id != 0 ) {
+    $forum = DB_getItem($_TABLES['gf_topic'],'forum','id='.(int) $id);
 }
 
 // final permission check....
-$result = DB_query("SELECT forum_id AS forum,is_readonly,grp_id,rating_post FROM {$_TABLES['gf_forums']} WHERE forum_id=".intval($forum));
+$result = DB_query("SELECT forum_id AS forum,is_readonly,grp_id,rating_post FROM {$_TABLES['gf_forums']} WHERE forum_id=".(int) $forum);
 $forumArray = DB_fetchArray($result);
 if ( !forum_canPost($forumArray) ) {
     echo '<br/>';
@@ -239,7 +238,7 @@ if ((isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_
             // This is needed in case user had used the file bbcode tag and then removed it
             $imagerecs = '';
             $imagerecs = implode(',',$forumfiles);
-            $sql = "UPDATE {$_TABLES['gf_attachments']} SET show_inline = 0 WHERE topic_id=".intval($editid)." ";
+            $sql = "UPDATE {$_TABLES['gf_attachments']} SET show_inline = 0 WHERE topic_id=".(int) $editid." ";
             if ($imagerecs != '') $sql .= "AND id NOT IN ($imagerecs)";
             DB_query($sql);
 
@@ -250,34 +249,40 @@ if ((isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_
             if ($topicparent == 0) {
                 $topicparent = $editid;
             }
-
             //NOTIFY - Checkbox variable in form set to "on" when checked and they don't already have subscribed to forum or topic
             $nid = -$topicparent;  // Negative Topic ID Value
-            $currentForumNotifyRecID   = (int) DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=0 AND uid='".DB_escapeString($uid)."'");
-            $currentTopicNotifyRecID   = (int) DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=$topicparent AND uid='".DB_escapeString($uid)."'");
-            $currentTopicUnNotifyRecID = (int) DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=$nid AND uid='".DB_escapeString($uid)."'");
+            $currentForumNotifyRecID   = (int) DB_getItem($_TABLES['subscriptions'],'sub_id', "type='forum' AND category='$forum' AND id=0 AND uid='".DB_escapeString($uid)."'");
+            $currentTopicNotifyRecID   = (int) DB_getItem($_TABLES['subscriptions'],'sub_id', "type='forum' AND category='$forum' AND id=$topicparent AND uid='".DB_escapeString($uid)."'");
+            $currentTopicUnNotifyRecID = (int) DB_getItem($_TABLES['subscriptions'],'sub_id', "type='forum' AND category='$forum' AND id=$nid AND uid='".DB_escapeString($uid)."'");
+            $forum_name = DB_getItem($_TABLES['gf_forums'],'forum_name','forum_id='.(int)$forum);
+            $topic_name = $subject;
 
             if ($notify == 'on' AND ($currentForumNotifyRecID < 1 AND $currentTopicNotifyRecID < 1 ) ) {
-                $sql = "INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) ";
-                $sql .= "VALUES ('".DB_escapeString($forum)."','".DB_escapeString($topicparent)."','$_USER[uid]',now() )";
+                $sql = "INSERT INTO {$_TABLES['subscriptions']} (type,category,category_desc,id,id_desc,uid,date_added) ";
+                $sql .= "VALUES ('forum','".DB_escapeString($forum)."','".DB_escapeString($forum_name)."','".DB_escapeString($topicparent)."','".$subject."','$_USER[uid]',now() )";
                 DB_query($sql);
             } elseif ($notify == 'on' AND $currentTopicUnNotifyRecID > 1) { // Had un-subcribed to topic and now wants to subscribe
-                DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE id=$currentTopicUnNotifyRecID");
+                DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE sub_id=$currentTopicUnNotifyRecID");
             } elseif ($notify == '' AND $currentTopicNotifyRecID > 1) { // Subscribed to topic - but does not want to be notified anymore
-                DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='".DB_escapeString($forum)."' and topic_id = '".DB_escapeString($topicparent)."'");
+                DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid='$uid' AND category='".DB_escapeString($forum)."' and id = '".DB_escapeString($topicparent)."'");
             } elseif ($notify == '' AND $currentForumNotifyRecID > 1) { // Subscribed to forum - but does not want to be notified about this topic
-                DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='".DB_escapeString($forum)."' and topic_id = '".DB_escapeString($topicparent)."'");
-                DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='".DB_escapeString($forum)."' and topic_id = '".DB_escapeString($nid)."'");
-                DB_query("INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) VALUES ('".DB_escapeString($forum)."','".DB_escapeString($nid)."','$uid',now() )");
+                DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid='$uid' AND category='".DB_escapeString($forum)."' and id = '".DB_escapeString($topicparent)."'");
+                DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid='$uid' AND category='".DB_escapeString($forum)."' and id = '".DB_escapeString($nid)."'");
+                DB_query("INSERT INTO {$_TABLES['subscriptions']} (type,category,category_desc,id,id_desc,uid,date_added) VALUES ('forum','".DB_escapeString($forum)."','".DB_escapeString($forum_name)."','".DB_escapeString($nid)."','".$subject."','$uid',now() )");
             }
 
             // if user has un-checked the Silent option then they want to have user alerted of the edit and update the topic timestamp
             if ($_POST['silentedit'] != 1) {
-                DB_query("UPDATE {$_TABLES['gf_topic']} SET lastupdated = $date WHERE id=".intval($topicparent));
+                DB_query("UPDATE {$_TABLES['gf_topic']} SET lastupdated = $date WHERE id=".(int) $topicparent);
                 //Remove any lastviewed records in the log so that the new updated topic indicator will appear
-                DB_query("DELETE FROM {$_TABLES['gf_log']} WHERE topic=".intval($topicparent)." and time > 0");
+                DB_query("DELETE FROM {$_TABLES['gf_log']} WHERE topic=".(int) $topicparent." and time > 0");
                 // Check for any users subscribed notifications
                 gf_chknotifications($forum,$editid,$uid);
+// send category subscriptions
+//PLG_sendSubscriptionNotification('forum',$forum,0,$editit,$uid);
+
+// send specific topic subscriptions
+//PLG_sendSubscriptionNotification('forum',$forum,$topicparent,$editit,$uid);
             }
             $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$topicparent&topic=$editid#$editid";
             forum_statusMessage($LANG_GF02['msg19'],$link,$LANG_GF02['msg19']);
@@ -381,34 +386,40 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                     // This is needed in case user had used the file bbcode tag and then removed it
                     $imagerecs = '';
                     $imagerecs = implode(',',$forumfiles);
-                    $sql = "UPDATE {$_TABLES['gf_attachments']} SET show_inline = 0 WHERE topic_id=".intval($lastid)." ";
+                    $sql = "UPDATE {$_TABLES['gf_attachments']} SET show_inline = 0 WHERE topic_id=".(int) $lastid." ";
                     if ($imagerecs != '') $sql .= "AND id NOT IN ($imagerecs)";
                     DB_query($sql);
 
                     // Update forums record
-                    DB_query("UPDATE {$_TABLES['gf_forums']} SET post_count=post_count+1, topic_count=topic_count+1, last_post_rec=$lastid WHERE forum_id=".intval($forum));
+                    DB_query("UPDATE {$_TABLES['gf_forums']} SET post_count=post_count+1, topic_count=topic_count+1, last_post_rec=$lastid WHERE forum_id=".(int) $forum);
 
                     // Check for any users subscribed notifications - would only be for users subscribed to the forum
                     gf_chknotifications($forum,$lastid,$uid,"forum");
 
+//PLG_sendSubscriptionNotification('forum',$forum,0,$lastid,$uid);
+
                     //NOTIFY - Checkbox variable in form set to "on" when checked and they don't already have subscribed to forum or topic
                     $nid = -$lastid;  // Negative Topic ID Value
-                    $currentForumNotifyRecID   = (int) DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=0 AND uid='".DB_escapeString($uid)."'");
-                    $currentTopicNotifyRecID   = (int) DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=$lastid AND uid='".DB_escapeString($uid)."'");
-                    $currentTopicUnNotifyRecID = (int) DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=$nid AND uid='".DB_escapeString($uid)."'");
+                    $currentForumNotifyRecID   = (int) DB_getItem($_TABLES['subscriptions'],'sub_id', "type='forum' AND category=".(int) $forum." AND id=0 AND uid='".DB_escapeString($uid)."'");
+                    $currentTopicNotifyRecID   = (int) DB_getItem($_TABLES['subscriptions'],'sub_id', "type='forum' AND category=".(int) $forum." AND id=".(int) $lastid." AND uid='".DB_escapeString($uid)."'");
+                    $currentTopicUnNotifyRecID = (int) DB_getItem($_TABLES['subscriptions'],'sub_id', "type='forum' AND category=".(int) $forum." AND id=$nid AND uid='".DB_escapeString($uid)."'");
 
                     if ($notify == 'on' AND ($currentForumNotifyRecID < 1 AND $currentTopicNotifyRecID < 1 ) ) {
-                        $sql = "INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) ";
-                        $sql .= "VALUES ('".DB_escapeString($forum)."','".DB_escapeString($lastid)."','$_USER[uid]',now() )";
+                        $forum_name = DB_getItem($_TABLES['gf_forums'],'forum_name','forum_id='.(int)$forum);
+                        $topic_name = $subject;
+                        $sql = "INSERT INTO {$_TABLES['subscriptions']} (type,category,category_desc,id,id_desc,uid,date_added) ";
+                        $sql .= "VALUES ('forum','".DB_escapeString($forum)."','".DB_escapeString($forum_name)."','".DB_escapeString($lastid)."','".$topic_name."','$_USER[uid]',now() )";
                         DB_query($sql);
                     } elseif ($notify == 'on' AND $currentTopicUnNotifyRecID > 1) { // Had un-subcribed to topic and now wants to subscribe
-                        DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE id=$currentTopicUnNotifyRecID");
+                        DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE sub_id=$currentTopicUnNotifyRecID");
                     } elseif ($notify == '' AND $currentTopicNotifyRecID > 1) { // Subscribed to topic - but does not want to be notified anymore
-                        DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='".DB_escapeString($forum)."' and topic_id = '".DB_escapeString($lastid)."'");
+                        DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid='$uid' AND category='".DB_escapeString($forum)."' and id = '".DB_escapeString($lastid)."'");
                     } elseif ($notify == '' AND $currentForumNotifyRecID > 1) { // Subscribed to forum - but does not want to be notified about this topic
-                        DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='".DB_escapeString($forum)."' and topic_id = '".DB_escapeString($lastid)."'");
-                        DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='".DB_escapeString($forum)."' and topic_id = '".DB_escapeString($nid)."'");
-                        DB_query("INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) VALUES ('".DB_escapeString($forum)."','".DB_escapeString($nid)."','$uid',now() )");
+                        DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid='$uid' AND category='".DB_escapeString($forum)."' and id = '".DB_escapeString($lastid)."'");
+                        DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid='$uid' AND category='".DB_escapeString($forum)."' and id = '".DB_escapeString($nid)."'");
+                        $forum_name = DB_getItem($_TABLES['gf_forums'],'forum_name','forum_id='.(int)$forum);
+                        $topic_name = $subject;
+                        DB_query("INSERT INTO {$_TABLES['subscriptions']} (type,category,category_desc,id,id_desc,uid,date_added) VALUES ('forum','".(int) $forum."','".DB_escapeString($forum_name)."','".DB_escapeString($nid)."','".$subject."','$uid',now() )");
                     }
                     PLG_itemSaved($lastid,'forum');
                     CACHE_remove_instance('forumcb');
@@ -524,21 +535,27 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
 
                     //NOTIFY - Checkbox variable in form set to "on" when checked and they don't already have subscribed to forum or topic
                     $nid = -$id;  // Negative Topic ID Value
-                    $currentForumNotifyRecID   = (int) DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=0 AND uid='".DB_escapeString($uid)."'");
-                    $currentTopicNotifyRecID   = (int) DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=$id AND uid='".DB_escapeString($uid)."'");
-                    $currentTopicUnNotifyRecID = (int) DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=$nid AND uid='".DB_escapeString($uid)."'");
+                    $currentForumNotifyRecID   = (int) DB_getItem($_TABLES['subscriptions'],'sub_id', "type='forum' AND category=".(int)$forum." AND id=0 AND uid=".(int) $uid);
+                    $currentTopicNotifyRecID   = (int) DB_getItem($_TABLES['subscriptions'],'sub_id', "type='forum' AND category=".(int)$forum." AND id=".(int)$id." AND uid=".(int)$uid);
+                    $currentTopicUnNotifyRecID = (int) DB_getItem($_TABLES['subscriptions'],'sub_id', "type='forum' AND category=".(int)$forum." AND id=$nid AND uid=".(int) $uid);
                     if ($notify == 'on' AND ($currentForumNotifyRecID < 1 AND $currentTopicNotifyRecID < 1 ) ) {
-                        $sql = "INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) ";
-                        $sql .= "VALUES ('".DB_escapeString($forum)."','".DB_escapeString($id)."','$_USER[uid]',now() )";
+                        $forum_name = DB_getItem($_TABLES['gf_forums'],'forum_name','forum_id='.(int)$forum);
+                        $topic_name = $subject;
+
+                        $sql = "INSERT INTO {$_TABLES['subscriptions']} (type,category,category_desc,id,id_desc,uid,date_added) ";
+                        $sql .= "VALUES ('forum',".(int)$forum.",'".DB_escapeString($forum_name)."',".(int) $id.",'".$subject."',".(int) $_USER[uid].",now() )";
                         DB_query($sql);
                     } elseif ($notify == 'on' AND $currentTopicUnNotifyRecID > 1) { // Had un-subcribed to topic and now wants to subscribe
-                        DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE id=$currentTopicUnNotifyRecID");
+                        DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE sub_id=$currentTopicUnNotifyRecID");
                     } elseif ($notify == '' AND $currentTopicNotifyRecID > 1) { // Subscribed to topic - but does not want to be notified anymore
-                        DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='".DB_escapeString($forum)."' and topic_id = '".DB_escapeString($id)."'");
+                        DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid=".(int)$uid." AND category=".(int) $forum." AND id = ".(int) $id);
                     } elseif ($notify == '' AND $currentForumNotifyRecID > 1) { // Subscribed to forum - but does not want to be notified about this topic
-                        DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='".DB_escapeString($forum)."' and topic_id = '".DB_escapeString($id)."'");
-                        DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='".DB_escapeString($forum)."' and topic_id = '".DB_escapeString($nid)."'");
-                        DB_query("INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) VALUES ('".DB_escapeString($forum)."','".DB_escapeString($nid)."','$uid',now() )");
+                        $forum_name = DB_getItem($_TABLES['gf_forums'],'forum_name','forum_id='.(int)$forum);
+                        $topic_name = $subject;
+
+                        DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid=".(int) $uid." AND category=".(int) $forum." AND id = ".(int) $id);
+                        DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid=".(int) $uid." AND category=".(int) $forum." AND id = '".DB_escapeString($nid)."'");
+                        DB_query("INSERT INTO {$_TABLES['subscriptions']} (type,category,category_desc,id,id_desc,uid,date_added) VALUES ('forum',".(int) $forum.",'".DB_escapeString($forum_name)."','".DB_escapeString($nid)."','".$subject."',".(int) $uid.",now() )");
                     }
                     PLG_itemSaved($lastid,'forum');
                     CACHE_remove_instance('forumcb');
@@ -546,6 +563,10 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                     COM_updateSpeedlimit ('forum');
                     // Check for any users subscribed notifications
                     gf_chknotifications($forum,$id,$uid);
+
+//PLG_sendSubscriptionNotification('forum',$forum,0,$lastid,$uid);
+//PLG_sendSubscriptionNotification('forum',$forum,$id,$lastid,$uid);
+
                     $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$id&lastpost=true#$lastid";
                     forum_statusMessage($LANG_GF02['msg19'],$link,$LANG_GF02['msg19'],true,$forum);
                 }
@@ -601,12 +622,12 @@ if ($method == 'edit') {
     // Moderator or logged-in User is editing their topic post
     if ($_USER['uid'] > 1 AND $editAllowed) {
         // Check to see if user has this topic or complete forum is selected for notifications
-        $fields1 = array( 'topic_id','uid' );
-        $values1 = array( $id,$edittopic['uid'] );
-        $fields2 = array( 'topic_id','forum_id','uid' );
-        $values2 = array( 0,$edittopic['forum'],$edittopic['uid']);
+        $fields1 = array( 'type,id','uid' );
+        $values1 = array( 'forum',$id,$edittopic['uid'] );
+        $fields2 = array( 'type,id','category','uid' );
+        $values2 = array( 'forum',0,$edittopic['forum'],$edittopic['uid']);
         // Check if there are any notification records for the topic or the forum - topic_id = 0
-        if ((DB_count($_TABLES['gf_watch'],$fields1,$values1) > 0) OR (DB_count($_TABLES['gf_watch'],$fields2,$values2) > 0)) {
+        if ((DB_count($_TABLES['subscriptions'],$fields1,$values1) > 0) OR (DB_count($_TABLES['subscriptions'],$fields2,$values2) > 0)) {
             $notify_val= 'checked="checked"';
         }
     } else {
@@ -1084,24 +1105,15 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
         } else {
             $notifyTopicid = $id;
         }
-        if ($CONF_FORUM['mysql4+']) {
-            $sql  = "(SELECT id FROM {$_TABLES['gf_watch']} WHERE ((topic_id='$notifyTopicid' AND uid='$uid')) ) UNION ALL ";
-            $sql .= "(SELECT id FROM {$_TABLES['gf_watch']} WHERE ((forum_id='{$edittopic['forum']}') AND (topic_id='0') and (uid='$uid')) ) ";
-            $notifyquery = DB_query($sql);
-        } else {
-            if ( !isset($edittopic['forum']) ) {
-                $edittopic['forum'] = '';
-            }
-            $sql = "SELECT id FROM {$_TABLES['gf_watch']} WHERE ((topic_id='$notifyTopicid' AND uid='$uid') ";
-            $sql .= "OR ((forum_id='{$edittopic['forum']}') AND (topic_id='0') and (uid='$uid')))";
-            $notifyquery = DB_query($sql);
-        }
 
-        if (DB_getItem($_TABLES['gf_userprefs'],'alwaysnotify', "uid='$uid'") == 1 OR DB_numRows($notifyquery) > 0) {
+        if ( !isset($edittopic['forum']) ) {
+            $edittopic['forum'] = '';
+        }
+        if (DB_getItem($_TABLES['gf_userprefs'],'alwaysnotify', "uid='$uid'") == 1 OR FF_isSubscribed( $edittopic['forum'], $notifyTopicid, $uid )) {
             $notify = 'on';
             // check and see if user has un-subscribed to this topic
             $nid = -$notifyTopicid;
-            if ($notifyTopicid > 0 AND DB_getItem($_TABLES['gf_watch'],'id', "forum_id='{$edittopic['forum']}' AND topic_id=$nid AND uid='$uid'") > 1) {
+            if ($notifyTopicid > 0 AND (DB_getItem($_TABLES['subscriptions'],'id', "type='forum' AND category=".(int)$edittopic['forum']." AND id=$nid AND uid=$uid") > 1)) {
                 $notify = '';
             }
         } else {
@@ -1327,6 +1339,8 @@ gf_siteFooter();
 function gf_chknotifications($forumid,$topicid,$userid,$type='topic') {
     global $_TABLES,$LANG_GF01,$LANG_GF02,$_CONF,$CONF_FORUM;
 
+    $msgData = array();
+
     if (!$CONF_FORUM['allow_notification']) {
         return;
     }
@@ -1340,13 +1354,13 @@ function gf_chknotifications($forumid,$topicid,$userid,$type='topic') {
         $grp_id = 1;
     }
 
-    $sql = "SELECT * FROM {$_TABLES['gf_watch']} WHERE ((topic_id=".(int) $pid.") OR ((forum_id=".(int) $forumid.") AND (topic_id=0) )) GROUP BY uid";
+    $sql = "SELECT * FROM {$_TABLES['subscriptions']} WHERE ((type='forum' AND id=".(int) $pid.") OR ((type='forum' AND category=".(int) $forumid.") AND (id=0) )) GROUP BY uid";
     $sqlresult = DB_query($sql);
     $postername = COM_getDisplayName($userid);
     $nrows = DB_numRows($sqlresult);
 
     $messageBody = '';
-    if ( $nrows > 0 ) {
+    if ( $nrows > 0 ) { // we have some subscription records, build the emails
         $topicrec = DB_query("SELECT subject,name,forum,last_reply_rec FROM {$_TABLES['gf_topic']} WHERE id=".(int)$pid);
         $A = DB_fetchArray($topicrec);
         $forum_name = DB_getItem($_TABLES['gf_forums'],'forum_name',"forum_id=". (int) $forumid);
@@ -1375,12 +1389,24 @@ function gf_chknotifications($forumid,$topicid,$userid,$type='topic') {
     } else {
         return;
     }
+
+    $msgDataDigest['subject']     = $digestSubject;
+    $msgDataDigest['from']        = $_CONF['noreply_mail'];
+    $msgDataDigest['htmlmessage'] = $digestMessage;
+    $msgDataDigest['textmessage'] = $digestMessageText;
+    $toDigest = array();
+
+    $msgDataNotify['subject'] = "{$_CONF['site_name']} {$LANG_GF02['msg22']}";
+    $msgDataNotify['from']    = $_CONF['noreply_mail'];
+    $msgDataNotify['textmessage'] = $messageBody;
+    $toNotify = array();
+
     for ($i =1; $i <= $nrows; $i++) {
         $N = DB_fetchArray($sqlresult);
         // Don't need to send a notification to the user that posted this message and users with NOTIFY disabled
-        if ($N['uid'] > 1 AND $N['uid'] != $userid AND $CONF_FORUM['allow_notification'] == '1' ) {
+        if ( $N['uid'] > 1 AND $N['uid'] != $userid ) {
             // if the topic_id is 0 for this record - user has subscribed to complete forum. Check if they have opted out of this forum topic.
-            if (DB_count($_TABLES['gf_watch'],array('uid','forum_id','topic_id'),array($N['uid'],$forumid,-$topicid)) == 0) {
+            if (DB_count($_TABLES['subscriptions'],array('type','uid','category','id'),array('forum',$N['uid'],$forumid,-$topicid)) == 0) {
                 // Check if user does not want to receive multiple notifications for same topic and already has been notified
                 $userNotifyOnceOption = DB_getItem($_TABLES['gf_userprefs'],'notify_once',"uid=".(int)$N['uid']);
                 // Retrieve the log record for this user if it exists then check if user has viewed this topic yet
@@ -1399,28 +1425,26 @@ function gf_chknotifications($forumid,$topicid,$userid,$type='topic') {
                     $B = DB_fetchArray($userrec);
 
                     if ($B['status'] == USER_ACCOUNT_ACTIVE && SEC_inGroup($grp_id,(int)$N['uid'])) {
-                        $subjectline = "{$_CONF['site_name']} {$LANG_GF02['msg22']}";
-                        $message  = "{$LANG_GF01['HELLO']} {$B['username']},\n\n" . $messageBody;
                         if ($nologRecord and $userNotifyOnceOption == 1 ) {
                             DB_query("INSERT INTO {$_TABLES['gf_log']} (uid,forum,topic,time) VALUES (".(int)$N['uid'].", ".(int) $forumid.", ".(int)$topicid.",'0') ");
                         }
-                        $to = array();
-                        $to = COM_formatEmailAddress('',$B['email']);
-                        $from = array();
-                        $from = COM_formatEmailAddress('',$_CONF['noreply_mail']);
                         $notifyfull = DB_getItem($_TABLES['gf_userprefs'],'notify_full',"uid=".(int)$N['uid']);
                         if ( $notifyfull ) {
-                            COM_mail($to,$digestSubject, $digestMessage,$from,true,0,'',$digestMessageText);
+                            $toDigest[] = $B['email'];
                         } else {
-                            COM_mail($to,$subjectline,$message,$from);
+                            $toNotify[] = $B['email'];
                         }
                     } else {
                         // remove the watch entry since this user can no longer access the forum.
-                        DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid=".$N['uid']." AND ((topic_id=".(int) $pid.") OR ((forum_id=".(int) $forumid.") AND (topic_id=0) ))");
+                        DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid=".$N['uid']." AND ((id=".(int) $pid.") OR ((category=".(int) $forumid.") AND (id=0) ))");
                     }
                 }
             }
         }
     }
+    $msgDataDigest['to'] = $toDigest;
+    $msgDataNotify['to'] = $toNotify;
+    COM_emailNotification($msgDataDigest);
+    COM_emailNotification($msgDataNotify);
 }
 ?>

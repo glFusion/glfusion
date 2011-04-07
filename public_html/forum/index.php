@@ -615,9 +615,10 @@ if ($op == 'lastx') {
 if ($op == 'subscribe') {
     echo gf_siteHeader();
     if ($forum != 0) {
-        DB_query("INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) VALUES ('$forum','0','{$_USER['uid']}', now() )");
+        $forum_name = DB_getItem($_TABLES['gf_forums'],'forum_name','forum_id='.(int)$forum);
+        DB_query("INSERT INTO {$_TABLES['subscriptions']} (type,category,category_desc,id,id_desc,uid,date_added) VALUES ('forum',".(int)$forum.",'".DB_escapeString($forum_name)."',0,'".$LANG_GF02['msg138']."',".(int)$_USER['uid'].", now() )");
         // Delete all individual topic notification records
-        DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='{$_USER['uid']}' AND forum_id='$forum' and topic_id > '0' " );
+        DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid=".(int)$_USER['uid']." AND category=".(int)$forum." AND id > 0" );
         forum_statusMessage($LANG_GF02['msg134'],$_CONF['site_url'] .'/forum/index.php?forum=' .$forum,$LANG_GF02['msg135']);
     } else {
         BlockMessage($LANG_GF01['ERROR'],$LANG_GF02['msg136'],false);
@@ -986,7 +987,7 @@ if ($forum > 0) {
     $subscribe = '';
     if (!COM_isAnonUser()) {
         // Check for user subscription status
-        $sub_check = DB_getITEM($_TABLES['gf_watch'],"id","forum_id='$forum' AND topic_id=0 AND uid='{$_USER['uid']}'");
+        $sub_check = DB_getITEM($_TABLES['subscriptions'],"sub_id","type='forum' AND category=".(int)$forum." AND id=0 AND uid=".(int)$_USER['uid']);
         if ($sub_check == '') {
             $subscribelinkimg = '<img src="'.gf_getImage('forumnotify_on').'" style="vertical-align:middle;" alt="'.$LANG_GF01['FORUMSUBSCRIBE'].'" title="'.$LANG_GF01['FORUMSUBSCRIBE'].'"/>';
             $subscribelink = "{$_CONF['site_url']}/forum/index.php?op=subscribe&amp;forum=$forum";

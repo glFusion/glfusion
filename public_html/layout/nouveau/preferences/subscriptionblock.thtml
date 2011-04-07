@@ -12,7 +12,7 @@
   </tr>
 
   <!-- BEGIN subrows -->
-  <tr class="pluginRow{csscounter}" onmouseover="className='pluginRollOver';" onmouseout="className='pluginRow{csscounter}';">
+  <tr class="pluginRow{csscounter} {excludeclass}" onmouseover="className='pluginRollOver {excludeclass}';" onmouseout="className='pluginRow{csscounter} {excludeclass}';">
     <td><input type="checkbox" name="subdelete[]" value="{subid}" style="text-align:center;" /></td>
     <td>{sub_type}</td>
     <td>{sub_category}</td>
