@@ -2551,7 +2551,7 @@ function plugin_showstats_mediagallery($showsitestats) {
                     continue;
                 $aid = $A['album_id'];
                 $previd = $A['media_id'];
-                if ( $A['media_id'] != '' && $MG_albums[$aid]->access > 0 ) {
+                if ( $A['media_id'] != '' && isset($MG_albums[$aid]) && $MG_albums[$aid]->access > 0 ) {
                     $loopcounter++;
 
                     if ( $A['media_title'] == '' || $A['media_title'] == " ") {
