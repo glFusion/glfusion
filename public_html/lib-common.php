@@ -4171,7 +4171,8 @@ function COM_emailUserTopics()
                 }
             }
 
-            $story_date = strftime( $_CONF['date'], strtotime( $S['day' ]));
+            $dt = new Date($S['day'], $_CONF['timezone']);
+            $story_date = $dt->format($_CONF['date'], true);
 
             if ( $_CONF['emailstorieslength'] > 0 ) {
                 $storytext      = COM_undoSpecialChars( strip_tags( PLG_replaceTags( $S['introtext'],'glfusion','story')));
