@@ -505,26 +505,25 @@ function SYND_updateFeed( $fid )
             /* Gather any other stuff */
             $feed->namespaces = PLG_getFeedNSExtensions($A['type'], $format[0], $format[1], $A['topic'], $fid);
             /* If the feed is RSS, and trackback is enabled */
-            if( $_CONF['trackback_enabled'] && ($format[0] == 'RSS') )
-            {
+            if( $_CONF['trackback_enabled'] && ($format[0] == 'RSS') ) {
                 /* Check to see if an article has trackbacks enabled, and if
                  * at least one does, then include the trackback namespace:
                  */
                 $trackbackenabled = false;
-                foreach($content as $item)
-                {
-                    if( array_key_exists('extensions', $item) &&
-                        array_key_exists('trackbacktag', $item['extensions'])
-                        )
-                    {
-                        // Found at least one article, with a trackbacktag
-                        // in it's extensions tag.
-                        $trackbackenabled = true;
-                        break;
+                if ( is_array($content) ) {
+                    foreach($content as $item) {
+                        if( array_key_exists('extensions', $item) &&
+                            array_key_exists('trackbacktag', $item['extensions'])
+                            )
+                        {
+                            // Found at least one article, with a trackbacktag
+                            // in it's extensions tag.
+                            $trackbackenabled = true;
+                            break;
+                        }
                     }
                 }
-                if( $trackbackenabled )
-                {
+                if ( $trackbackenabled ) {
                     $feed->namespaces[] = 'xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"';
                 }
             }

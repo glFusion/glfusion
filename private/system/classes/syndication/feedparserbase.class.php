@@ -153,8 +153,7 @@ if (!defined ('GVERSION')) {
     function createFeed( $fileName, $limit='' )
     {
       /* If we have no items, return false */
-      if( count( $this->articles ) == 0 )
-      {
+      if( count( $this->articles ) == 0 ) {
         return false;
       } else {
         /* Start the XML Feed formating */
@@ -163,18 +162,17 @@ if (!defined ('GVERSION')) {
         /* Start with a limit of the size of the array, then, if we have a
          * specific max length use that unless it's bigger than our count */
         $count = count( $this->articles );
-        if( $limit )
-        {
-          if( $limit < $count )
-          {
+        if ( $limit ) {
+          if( $limit < $count ) {
             $count = $limit;
           }
         }
 
         /* Put the first $count items into the xml, using formatArticle */
-        for( $i = 0; $i < $count; $i++ )
-        {
-          $xml .= $this->_formatArticle( $this->articles[$i] );
+        for ( $i = 0; $i < $count; $i++ ) {
+            if ( isset($this->articles[$i]) ) {
+               $xml .= $this->_formatArticle( $this->articles[$i] );
+            }
         }
 
         /* Close off the feed */
