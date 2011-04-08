@@ -3292,7 +3292,7 @@ function PLG_sendSubscriptionNotification($type,$category,$track_id,$post_id,$po
         $args[1] = $category;
         $args[2] = $track_id;
         $args[3] = $post_id;
-        $args[4] = $uid;
+        $args[4] = $post_uid;
         list($htmlmsg,$textmsg,$imageData) = PLG_callFunctionForOnePlugin($function,$args);
     } else {
         COM_errorLog("PLG_sendSubscriptionNotification() - No plugin_subscription_email_format_ defined");
