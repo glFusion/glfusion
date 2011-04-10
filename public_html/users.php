@@ -646,7 +646,7 @@ function createuser ($username, $email, $email_conf, $passwd='', $passwd_conf=''
     $email_conf = trim ($email_conf);
 
     if ( $_CONF['registration_type'] == 1 ) {
-        if ( $passwd != $passwd_conf ) {
+        if ( empty($passwd) || ($passwd != $passwd_conf) ) {
             $retval .= COM_siteHeader('menu',$LANG04[22]);
             if ($_CONF['custom_registration'] && function_exists ('CUSTOM_userForm')) {
                 $retval .= CUSTOM_userForm($MESSAGE[67]);
