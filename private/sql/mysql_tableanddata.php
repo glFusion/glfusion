@@ -410,15 +410,15 @@ CREATE TABLE {$_TABLES['storysubmission']} (
 $_SQL[] = "
 CREATE TABLE {$_TABLES['subscriptions']} (
   sub_id int(11) NOT NULL AUTO_INCREMENT,
-  type varchar(255) NOT NULL,
-  category varchar(255) NOT NULL DEFAULT '',
+  type varchar(128) NOT NULL,
+  category varchar(128) NOT NULL DEFAULT '',
   category_desc varchar(255) NOT NULL DEFAULT '',
   id varchar(40) NOT NULL,
   id_desc varchar(255) NOT NULL DEFAULT '',
   uid int(11) NOT NULL,
   date_added datetime NOT NULL,
-  PRIMARY KEY (sub_id),
-  UNIQUE KEY descriptor (type,category,id,uid),
+  PRIMARY KEY (`sub_id`),
+  UNIQUE KEY type (type,category,id,uid),
   KEY uid (uid)
 ) ENGINE=MyISAM
 ";
