@@ -598,6 +598,21 @@ function SESS_getVar($name)
 
 
 /**
+* Check if session variable is set
+*
+* Check if session variable is set
+*
+* @param    string  $name     session variable name
+* @return   bool    true if set / false if not
+*
+*/
+function SESS_isSet($name)
+{
+    return isset($_SESSION[$name]);
+}
+
+
+/**
 * Check IPs for match
 *
 * Checks a portion (or the entire) IP to determine if they match
