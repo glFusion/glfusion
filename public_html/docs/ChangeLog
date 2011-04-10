@@ -2,6 +2,12 @@ glFusion ChangeLog
 
 v1.3.0 (Trunk Development Branch)
 ------
+- Calendar Plugin: Fixed admin edit to display appropriate errors and the
+  input form properly (with previously entered data) when submission
+  fails (Mark)
+- New SESS API - SESS_isSet() checks to see if session variable is set (Mark)
+- General code cleanup in lib-common.php - removed unused code and unreferenced
+  items in COM_siteHeader / COM_siteFooter (Mark)
 - Made SEC_inGroup comparison case insensitive (Mark H.)
 - Implemented subscription / notification system (Mark)
 - Do not allow remote users to be members of admin groups (Mark)
@@ -28,8 +34,16 @@ v1.3.0 (Trunk Development Branch)
 - Removed wiki text formatting (Mark)
 - Removed storybodytext.thtml / featuredbodytext.thtml templates (Mark)
 
+v1.2.1.pl7
+----------
+- Fixed bug where user's password was not properly checked to determine if blank
+  when registering a new user (Mark)
+
 v1.2.1.pl6
 ----------
+- Updated Bad Behavior Plugion to v2.0.43 (Mark)
+- Fixed typo in lib-security (Mark H.)
+- Fixed issue with token expiration when in admin functions (Mark)
 - Fixed permission check for story edit (Mark)
 - Calendar: Fixed permission check for anon users adding master cal
   events (Mark)
