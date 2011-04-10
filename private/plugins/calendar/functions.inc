@@ -487,7 +487,11 @@ function plugin_savesubmission_calendar($A)
 {
     global $_CONF, $_CA_CONF, $_TABLES, $_USER, $LANG12, $LANG_CAL_1;
 
-    $A['start_ampm'] = COM_applyFilter($A['startampm_selection']);
+    if ( isset($A['startampm_selection']) ) {
+        $A['start_ampm'] = COM_applyFilter($A['startampm_selection']);
+    } else {
+        $A['start_ampm'] =     'am';
+    }
 
     $A['title'] = strip_tags (COM_checkWords ($A['title']));
     $A['start_year'] = COM_applyFilter ($A['start_year'], true);

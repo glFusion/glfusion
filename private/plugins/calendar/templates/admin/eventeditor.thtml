@@ -37,7 +37,7 @@ function toggleTOD() {
 -->
 </script>
 <form action="{site_admin_url}/plugins/calendar/index.php" name="events" id="eventeditor" method="post">
-    <div class="form-description">{lang_eventtitle}:</div>
+    <div class="form-description">*{lang_eventtitle}:</div>
     <div class="form-field"><input class="fValidate['required']" type="text" size="48" maxlength="128" name="title" value="{event_title}" {xhtml}></div>
     <div class="clear-left"></div>
     <div class="form-description">{lang_eventtype}:</div>

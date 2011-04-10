@@ -40,7 +40,7 @@ function toggleTOD() {
 </script>
 <form class="form-theme" action="{site_url}{submit_url}" id="submitevent" method="post">
   <div style="margin:15px 0 15px 0;border-bottom:1px solid #cccccc"></div>
-    <div class="form-description">{lang_title}:</div>
+    <div class="form-description">*{lang_title}:</div>
     <div class="form-field"><input class="fValidate['required']" type="text" size="48" maxlength="128" name="title" value="{title}" {xhtml}></div>
     <div class="clear-left"></div>
     <div class="form-description">{lang_eventtype}:</div>
