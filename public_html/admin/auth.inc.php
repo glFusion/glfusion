@@ -211,7 +211,7 @@ if ($status == USER_ACCOUNT_ACTIVE) {
     $_POST = unserialize($postdata);
     $_GET =  unserialize($getdata);
     // refresh the token (easier to create new one than try to fake referer)
-    if ( array_key_exists(CSRF_TOKEN, $_POST) || array_key_exists(CSRF_TOKEN,$_GET) ) {
+    if ( @array_key_exists(CSRF_TOKEN, $_POST) || @array_key_exists(CSRF_TOKEN,$_GET) ) {
         $newToken = SEC_createToken();
         $_POST[CSRF_TOKEN] = $newToken;
         $_GET[CSRF_TOKEN] = $newToken;
