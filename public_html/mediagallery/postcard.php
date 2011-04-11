@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2010 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -289,13 +289,19 @@ function MG_sendPostCard() {
     if (empty($message)) {
         $errCount++;
     }
+    $captchaString = isset($_POST['captcha']) ? $_POST['captcha'] : '';
+    $msg = PLG_itemPreSave('mediagallery', $captchaString);
+    if ( $msg != '' ) {
+        $errCount++;
+    }
+/*
     if ( function_exists('plugin_itemPreSave_captcha') ) {
-        $msg = plugin_itemPreSave_captcha('mediagallery',$_POST['captcha']);
+        $msg = plugin_itemPreSave_captcha('mediagallery',$captchaString);
         if ( $msg != '' ) {
             $errCount++;
         }
     }
-
+*/
     if ( $errCount > 0 ) {
         return (MG_editPostCard('edit',$mid,$msg));
     }
@@ -342,7 +348,7 @@ function MG_sendPostCard() {
     if ($_USER['uid'] < 2 ) {
         $uid = 1;
     } else {
-        $uid        = intval($_USER['uid']);
+        $uid        = (int) $_USER['uid'];
     }
 
     $sql = "INSERT INTO {$_TABLES['mg_postcard']} (pc_id,mid,to_name,to_email,from_name,from_email,subject,message,pc_time,uid) VALUES ('$pcId','".DB_escapeString($mid)."','".DB_escapeString($toname)."','".DB_escapeString($toemail)."','".DB_escapeString($fromname)."','".DB_escapeString($fromemail)."','$newsubject','$newmessage',$pc_time,$uid)";
@@ -388,7 +394,7 @@ function MG_sendPostCard() {
         'mid'               =>  $mid,
         'media_title'       =>  $M['media_title'],
         'alt_media_title'   =>  htmlspecialchars(strip_tags($M['media_title'])),
-        'media_description' =>  $M['media_description'],
+        'media_description' =>  isset($M['media_description']) ? $M['media_description'] : '',
         'media_url'         =>  $_MG_CONF['site_url'] . '/media.php?s=' . $mid,
         'media_image'       =>  $_MG_CONF['mediaobjects_url'] . '/disp/' . $M['media_filename'][0] . '/' . $M['media_filename'] . '.jpg',
         'site_url'          =>  $_MG_CONF['site_url'] . '/',
@@ -418,54 +424,38 @@ function MG_sendPostCard() {
     $T->parse('output','postcard');
     $retval .= $T->finish($T->get_var('output'));
 
-    $mail = new PHPMailer();
-
-    $mail->CharSet = $charset;
-
-    if ($_CONF['mail_backend'] == 'smtp' ) {
-        $mail->Host     = $_CONF['mail_smtp_host'] . ':' . $_CONF['mail_smtp_port'];
-        $mail->SMTPAuth = $_CONF['mail_smtp_auth'];
-        $mail->Username = $_CONF['mail_smtp_username'];
-        $mail->Password = $_CONF['mail_smtp_password'];
-        $mail->Mailer = "smtp";
-    } elseif ($_CONF['mail_backend'] == 'sendmail') {
-        $mail->Mailer = "sendmail";
-        $mail->Sendmail = $_CONF['mail_sendmail_path'];
-    } else {
-        $mail->Mailer = "mail";
-    }
-
-    $mail->From = $fromemail;
-    $mail->FromName = $fromname;
-    $mail->AddAddress($toemail, $toname);
+    $msgData['subject'] = htmlspecialchars($subject);
+    $msgData['htmlmessage'] = $retval;
+    $msgData['textmessage'] = sprintf($LANG_MG03['text_body_email'], $fromname, $alternate_link);
+    $msgData['from']['email'] = $fromemail;
+    $msgData['from']['name'] = $fromname;
+    $msgData['to'][] = array('email'=> $toemail,'name'=>$toname);
     if ( $ccself ) {
-        $mail->AddBCC($fromemail,$fromname);
+        $msgData['to'][] = array('email'=>$fromemail,'name'=>$fromname);
     }
-
-    $mail->WordWrap = 76;
-    $mail->IsHTML(true);
-
     foreach ($_MG_CONF['validExtensions'] as $tnext ) {
         if ( file_exists($_MG_CONF['path_mediaobjects'] . 'disp/' . $M['media_filename'][0] . '/' . $M['media_filename'] . $tnext) ) {
-            $mail->AddEmbeddedImage($_MG_CONF['path_mediaobjects'] . 'disp/' . $M['media_filename'][0] . '/' . $M['media_filename'] . $tnext,"pc-image",$M['media_original_filename'],'base64',$M['mime_type']);
-            break;
+            $msgData['embeddedImage'][] = array(
+                    'file' => $_MG_CONF['path_mediaobjects'] . 'disp/' . $M['media_filename'][0] . '/' . $M['media_filename'] . $tnext,
+                    'name' => "pc-image",
+                    'filename' => $M['media_original_filename'],
+                    'encoding' => 'base64',
+                    'mime'     => $M['mime_type']
+            );
         }
     }
-    $mail->AddEmbeddedImage(MG_getImageFilePath('stamp.gif'),"stamp",'stamp.gif','base64','image/gif');
-
-    $mail->Subject = htmlspecialchars($subject);
-    $mail->Body    = $retval;
-    $mail->AltBody = sprintf($LANG_MG03['text_body_email'], $fromname, $alternate_link);
-
-    if(!$mail->Send()) {
-        COM_errorLog("Media Gallery: Error - Unable to send PostCard email - error:" . $mail->ErrorInfo);
-        $msgNo = 9;
-    } else {
-        $msgNo = 8;
-        // update the sent post card database...Or maybe just log it in an error log?
-        $logentry = $fromname . " sent a postcard to " . $toname . " (" . $toemail . ") using media id " . $mid;
-        MG_postcardLog( $logentry );
-    }
+    $msgData['embeddedImage'][] = array(
+            'file' => MG_getImageFilePath('stamp.gif'),
+            'name' => "stamp",
+            'filename' => 'stamp.gif',
+            'encoding' => 'base64',
+            'mime'     => 'image/gif'
+    );
+    COM_emailNotification( $msgData );
+    $msgNo = 8;
+    // update the sent post card database...Or maybe just log it in an error log?
+    $logentry = $fromname . " sent a postcard to " . $toname . " (" . $toemail . ") using media id " . $mid;
+    MG_postcardLog( $logentry );
     COM_updateSpeedlimit ('mgpostcard');
 
     header("Location: " . $_MG_CONF['site_url'] . '/media.php?msg=' . $msgNo . '&s=' . $mid);

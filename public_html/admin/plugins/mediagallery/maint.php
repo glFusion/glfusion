@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | Media Gallery Maintenance Routines                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -98,14 +98,12 @@ if ( $mode == 'thumbs' ) {
     switch ( $step ) {
         case 'one' :
             $display = COM_siteHeader();
-            $T = new Template($_MG_CONF['template_path']);
+            $T = new Template($_MG_CONF['template_path'].'/admin');
             $T->set_file (array ('admin' => 'administration.thtml'));
-            $T->set_var('xhtml',XHTML);
-            $B = new Template($_MG_CONF['template_path']);
+            $B = new Template($_MG_CONF['template_path'].'/admin');
             $B->set_file (array ('admin' => 'thumbs.thtml'));
             $B->set_var('site_url', $_CONF['site_url']);
             $B->set_var('site_admin_url', $_CONF['site_admin_url']);
-            $B->set_var('xhtml',XHTML);
             // display the album list...
             $B->set_var(array(
                 'lang_title'            =>  $LANG_MG01['rebuild_thumb'],
@@ -124,8 +122,8 @@ if ( $mode == 'thumbs' ) {
                 'mg_navigation'     => MG_navigation(),
                 'title'             => $LANG_MG01['rebuild_thumb'],
                 'lang_admin'        => $LANG_MG00['admin'],
-                'version'           => $_MG_CONF['version'],
-                'lang_help'     => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"' . XHTML . '>',
+                'version'           => $_MG_CONF['pi_version'],
+                'lang_help'     => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"/>',
                 'help_url'      => $_MG_CONF['site_url'] . '/docs/usage.html#Rebuild_Thumbs',
             ));
             $T->parse('output', 'admin');
@@ -202,10 +200,9 @@ if ( $mode == 'thumbs' ) {
     switch ( $step ) {
         case 'one' :
             $display = COM_siteHeader();
-            $T = new Template($_MG_CONF['template_path']);
+            $T = new Template($_MG_CONF['template_path'].'/admin');
             $T->set_file (array ('admin' => 'administration.thtml'));
-            $T->set_var('xhtml',XHTML);
-            $B = new Template($_MG_CONF['template_path']);
+            $B = new Template($_MG_CONF['template_path'].'/admin');
             $B->set_file (array ('admin' => 'thumbs.thtml'));
             $B->set_var('site_url', $_CONF['site_url']);
             $B->set_var('site_admin_url', $_CONF['site_admin_url']);
@@ -216,7 +213,6 @@ if ( $mode == 'thumbs' ) {
                 'lang_cancel'           =>  $LANG_MG01['cancel'],
                 'lang_help'             =>  $LANG_MG01['resize_help'],
                 'lang_details'          =>  $LANG_MG01['resize_details'],
-                'xhtml'                 =>  XHTML,
             ));
             $B->parse('output', 'admin');
             $T->set_var(array(
@@ -227,7 +223,7 @@ if ( $mode == 'thumbs' ) {
                 'title'             => $LANG_MG01['resize_display'],
                 'lang_admin'        => $LANG_MG00['admin'],
                 'version'           => $_MG_CONF['version'],
-                'lang_help'     => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"' . XHTML . '>',
+                'lang_help'     => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"/>',
                 'help_url'      => $_MG_CONF['site_url'] . '/docs/usage.html#Resize_Images',
             ));
             $T->parse('output', 'admin');
@@ -316,10 +312,9 @@ if ( $mode == 'thumbs' ) {
             }
 
             $display = COM_siteHeader();
-            $T = new Template($_MG_CONF['template_path']);
+            $T = new Template($_MG_CONF['template_path'].'/admin');
             $T->set_file (array ('admin' => 'administration.thtml'));
-            $T->set_var('xhtml',XHTML);
-            $B = new Template($_MG_CONF['template_path']);
+            $B = new Template($_MG_CONF['template_path'].'/admin');
             $B->set_file (array ('admin' => 'thumbs.thtml'));
             $B->set_var('site_url', $_CONF['site_url']);
             $B->set_var('site_admin_url', $_CONF['site_admin_url']);
@@ -330,7 +325,6 @@ if ( $mode == 'thumbs' ) {
                 'lang_cancel'           =>  $LANG_MG01['cancel'],
                 'lang_help'             =>  $LANG_MG01['remove_help'],
                 'lang_details'          =>  $LANG_MG01['remove_details'],
-                'xhtml'                 =>  XHTML,
             ));
             $B->parse('output', 'admin');
             $T->set_var(array(
@@ -341,7 +335,7 @@ if ( $mode == 'thumbs' ) {
                 'title'             => $LANG_MG01['discard_originals'],
                 'lang_admin'        => $LANG_MG00['admin'],
                 'version'           => $_MG_CONF['version'],
-                'lang_help'     => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"' . XHTML . '>',
+                'lang_help'     => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"/>',
                 'help_url'      => $_MG_CONF['site_url'] . '/docs/usage.html#Discard_Original_Images',
             ));
             $T->parse('output', 'admin');
@@ -370,7 +364,6 @@ if ( $mode == 'thumbs' ) {
                             break;
                         }
                     }
-//                    $imageDisplay = $_MG_CONF['path_mediaobjects'] . 'disp/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.jpg';
                     $mimeExt = $row['media_mime_ext'];
                     DB_query("INSERT INTO {$_TABLES['mg_session_items']} (session_id,mid,aid,data,data2,data3,status) VALUES('$session_id','',{$row['album_id']},'" . $srcImage . "','" . $imageDisplay . "','" . $mimeExt . "',0)");
                 }

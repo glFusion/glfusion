@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | edit user album info.                                                    |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -63,7 +63,7 @@ function MG_editUser( $uid ) {
         $quota  = $_MG_CONF['member_quota'] / 1048576;
     }
 
-    $T = new Template($_MG_CONF['template_path']);
+    $T = new Template($_MG_CONF['template_path'].'/admin');
     $T->set_file ('admin','useredit.thtml');
     $T->set_var('site_url', $_CONF['site_url']);
     $T->set_var('site_admin_url', $_CONF['site_admin_url']);
@@ -123,7 +123,7 @@ if (isset ($_POST['mode'])) {
 }
 
 $display = COM_siteHeader();
-$T = new Template($_MG_CONF['template_path']);
+$T = new Template($_MG_CONF['template_path'].'/admin');
 $T->set_file (array ('admin' => 'administration.thtml'));
 
 $T->set_var(array(
@@ -131,7 +131,7 @@ $T->set_var(array(
     'site_url'          => $_MG_CONF['site_url'],
     'mg_navigation'     => MG_navigation(),
     'lang_admin'        => $LANG_MG00['admin'],
-    'version'           => $_MG_CONF['version'],
+    'version'           => $_MG_CONF['pi_version'],
 
 ));
 

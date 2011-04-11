@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | Edit Media Gallery Default Settings.                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -52,14 +52,13 @@ function MG_editDefaults( ) {
     global $glversion,$LANG04;
 
     $retval = '';
-    $T = new Template($_MG_CONF['template_path']);
+    $T = new Template($_MG_CONF['template_path'].'/admin');
 
     $T->set_file(array(
         'admin'         =>  'editdefaults.thtml',
         'admin_formats' =>  'editalbum_formats.thtml',
 
     ));
-    $T->set_var('xhtml',XHTML);
 
     $T->set_var('site_url', $_MG_CONF['site_url']);
     $T->set_var('site_admin_url', $_CONF['site_admin_url']);
@@ -97,18 +96,18 @@ function MG_editDefaults( ) {
     $ranking_select .= '<option value="2"' . ($_MG_CONF['ad_enable_rating']==2 ? 'selected="selected"' : '') . '>' . $LANG_MG01['always'] . '</option>';
     $ranking_select .= '</select>';
 
-    $mp3ribbon_select = '<input type="checkbox" name="mp3ribbon" value="1" ' . ($_MG_CONF['ad_mp3ribbon'] ? ' checked="checked"' : '') . XHTML . '>';
-    $rsschildren_select = '<input type="checkbox" name="rsschildren" value="1" ' . ($_MG_CONF['ad_rsschildren'] ? ' checked="checked"' : '') . XHTML . '>';
+    $mp3ribbon_select   = '<input type="checkbox" name="mp3ribbon" value="1" />';
+    $rsschildren_select = '<input type="checkbox" name="rsschildren" value="1" />';
 
     $themes = MG_getThemes();
     $album_theme_select = '<select name="album_theme">';
     for ( $i = 0; $i < count($themes); $i++ ) {
-    	$album_theme_select .= '<option value="' . $themes[$i] . '"' . ($_MG_CONF['ad_skin'] == $themes[$i] ? 'selected="selected"' : '') . '>' . $themes[$i] . '</option>';
+    	$album_theme_select .= '<option value="' . $themes[$i] . '"' . ($_MG_CONF['ad_album_skin'] == $themes[$i] ? 'selected="selected"' : '') . '>' . $themes[$i] . '</option>';
     }
     $album_theme_select .= '</select>';
 
-    $comment_select = '<input type="checkbox" name="enable_comments" value="1" ' . ($_MG_CONF['ad_enable_comments'] ? ' checked="checked"' : '') . XHTML . '>';
-    $podcast_select = '<input type="checkbox" name="podcast" value="1" ' . ($_MG_CONF['ad_podcast'] ? ' checked="checked"' : '') . XHTML . '>';
+    $comment_select = '<input type="checkbox" name="enable_comments" value="1" ' . ($_MG_CONF['ad_enable_comments'] ? ' checked="checked"' : '') . '/>';
+    $podcast_select = '<input type="checkbox" name="podcast" value="1" />';
 
     $ss_select      = '<select name="enable_slideshow">';
     $ss_select      .= '<option value="0" ' . ($_MG_CONF['ad_enable_slideshow'] == 0 ? ' selected="selected"' : '') . '>' . $LANG_MG01['disabled'] . '</option>';
@@ -118,13 +117,13 @@ function MG_editDefaults( ) {
     $ss_select      .= '<option value="4"' . ($_MG_CONF['ad_enable_slideshow'] == 4 ? ' selected="selected"' : '') . '>' . $LANG_MG01['flash_slideshow_full'] . '</option>';
     $ss_select      .= '</select>';
 
-    $ri_select      = '<input type="checkbox" name="enable_random" value="1" ' . ($_MG_CONF['ad_enable_random'] ? ' checked="checked"' : '') . XHTML . '>';
-    $sf_select      = '<input type="checkbox" name="enable_shutterfly" value="1" ' . ($_MG_CONF['ad_enable_shutterfly'] ? ' checked="checked"' : '') . XHTML . '>';
-    $views_select   = '<input type="checkbox" name="enable_views" value="1" ' . ($_MG_CONF['ad_enable_views'] ? ' checked="checked"' : '') . XHTML . '>';
-    $keywords_select   = '<input type="checkbox" name="enable_keywords" value="1" ' . ($_MG_CONF['ad_enable_keywords'] ? ' checked="checked"' : '') . XHTML . '>';
-    $sort_select    = '<input type="checkbox" name="enable_sort" value="1" ' . ($_MG_CONF['ad_enable_sort'] ? ' checked="checked"' : '') . XHTML . '>';
+    $ri_select      = '<input type="checkbox" name="enable_random" value="1" ' . ($_MG_CONF['ad_enable_random'] ? ' checked="checked"' : '') . '/>';
+    $sf_select      = '<input type="checkbox" name="enable_shutterfly" value="1" ' . ($_MG_CONF['ad_enable_shutterfly'] ? ' checked="checked"' : '') . '/>';
+    $views_select   = '<input type="checkbox" name="enable_views" value="1" ' . ($_MG_CONF['ad_enable_views'] ? ' checked="checked"' : '') . '/>';
+    $keywords_select   = '<input type="checkbox" name="enable_keywords" value="1" ' . ($_MG_CONF['ad_enable_keywords'] ? ' checked="checked"' : '') . '/>';
+    $sort_select    = '<input type="checkbox" name="enable_sort" value="1" ' . ($_MG_CONF['ad_enable_sort'] ? ' checked="checked"' : '') . '/>';
 
-    $rss_select     = '<input type="checkbox" name="enable_rss" value="1" ' . ($_MG_CONF['ad_enable_rss'] ? ' checked="checked"' : '') . XHTML . '>';
+    $rss_select     = '<input type="checkbox" name="enable_rss" value="1" ' . ($_MG_CONF['ad_enable_rss'] ? ' checked="checked"' : '') . '/>';
 
     $postcard_select  = '<select name="enable_postcard">';
     $postcard_select .= '<option value="0"' . ($_MG_CONF['ad_enable_postcard']==0 ? 'selected="selected"' : '') . '>' . $LANG_MG01['disabled'] . '</option>';
@@ -132,8 +131,8 @@ function MG_editDefaults( ) {
     $postcard_select .= '<option value="2"' . ($_MG_CONF['ad_enable_postcard']==2 ? 'selected="selected"' : '') . '>' . $LANG_MG01['all_users'] . '</option>';
     $postcard_select .= '</select>';
 
-    $afirst_select   = '<input type="checkbox" name="albums_first" value="1" ' . ($_MG_CONF['ad_albums_first'] ? ' checked="checked"' : '') . XHTML . '>';
-    $album_views_select   = '<input type="checkbox" name="enable_album_views" value="1" ' . ($_MG_CONF['ad_enable_album_views'] ? ' checked="checked"' : '') . XHTML . '>';
+    $afirst_select   = '<input type="checkbox" name="albums_first" value="1" ' . ($_MG_CONF['ad_albums_first'] ? ' checked="checked"' : '') . '/>';
+    $album_views_select   = '<input type="checkbox" name="enable_album_views" value="1" ' . ($_MG_CONF['ad_enable_album_views'] ? ' checked="checked"' : '') . '/>';
 
     $tn_size_select  = '<select name="tn_size">';
     $tn_size_select .= '<option value="0"' . ($_MG_CONF['ad_tn_size']==0 ? 'selected="selected"' : '') . '>' . $LANG_MG01['small'] . '</option>';
@@ -142,8 +141,8 @@ function MG_editDefaults( ) {
     $tn_size_select .= '<option value="3"' . ($_MG_CONF['ad_tn_size']==3 ? 'selected="selected"' : '') . '>' . $LANG_MG01['custom'] . '</option>';
     $tn_size_select .= '</select>';
 
-    $tnheight_input = '<input type="text" size="3" name="tnheight" value="' . $_MG_CONF['ad_tn_height'] . '"' . XHTML . '>';
-    $tnwidth_input  = '<input type="text" size="3" name="tnwidth" value="' . $_MG_CONF['ad_tn_width'] . '"' . XHTML . '>';
+    $tnheight_input = '<input type="text" size="3" name="tnheight" value="' . $_MG_CONF['ad_tn_height'] . '"' . '/>';
+    $tnwidth_input  = '<input type="text" size="3" name="tnwidth" value="' . $_MG_CONF['ad_tn_width'] . '"' . '/>';
 
     $display_image_size_select  = '<select name="display_image_size">';
     $display_image_size_select .= '<option value="0"' . ($_MG_CONF['ad_display_image_size']==0 ? 'selected="selected"' : '') . '>' . $LANG_MG01['size_500x375'] . '</option>';
@@ -158,19 +157,19 @@ function MG_editDefaults( ) {
     $display_image_size_select .= '<option value="9"' . ($_MG_CONF['ad_display_image_size']==9 ? 'selected="selected"' : '') . '>' . $LANG_MG01['custom'] . ' - ' . $_MG_CONF['custom_image_width'] . 'x' . $_MG_CONF['custom_image_height'] . '</option>';
     $display_image_size_select .= '</select>';
 
-    $rows_input = '<input type="text" size="3" name="display_rows" value="' . $_MG_CONF['ad_display_rows'] . '"' . XHTML . '>';
-    $columns_input = '<input type="text" size="3" name="display_columns" value="' . $_MG_CONF['ad_display_columns'] . '"' . XHTML . '>';
+    $rows_input = '<input type="text" size="3" name="display_rows" value="' . $_MG_CONF['ad_display_rows'] . '"' . '/>';
+    $columns_input = '<input type="text" size="3" name="display_columns" value="' . $_MG_CONF['ad_display_columns'] . '"' . '/>';
 
-    $max_image_height_input = '<input type="text" size="4" name="max_image_height" value="' . $_MG_CONF['ad_max_image_height'] . '"' . XHTML . '>';
-    $max_image_width_input = '<input type="text" size="4" name="max_image_width" value="' . $_MG_CONF['ad_max_image_width'] . '"' . XHTML . '>';
+    $max_image_height_input = '<input type="text" size="4" name="max_image_height" value="' . $_MG_CONF['ad_max_image_height'] . '"' . '/>';
+    $max_image_width_input = '<input type="text" size="4" name="max_image_width" value="' . $_MG_CONF['ad_max_image_width'] . '"' . '/>';
     if ($_MG_CONF['ad_max_filesize'] != 0 ) {
         $max_filesize = $_MG_CONF['ad_max_filesize'] / 1024;
     } else {
         $max_filesize = 0;
     }
-    $max_filesize_input = '<input type="text" size="10" name="max_filesize" value="' . $max_filesize . '"' . XHTML . '>';
+    $max_filesize_input = '<input type="text" size="10" name="max_filesize" value="' . $max_filesize . '"' . '/>';
 
-    $email_mod_select = '<input type="checkbox" name="email_mod" value="1" ' . ($_MG_CONF['ad_email_mod'] ? ' checked="checked"' : '') . XHTML . '>';
+    $email_mod_select = '<input type="checkbox" name="email_mod" value="1" ' . ($_MG_CONF['ad_email_mod'] ? ' checked="checked"' : '') . '/>';
 
     $playback_type  = '<select name="playback_type">';
     $playback_type .= '<option value="0"' . ($_MG_CONF['ad_playback_type']==0 ? 'selected="selected"' : '') . '>' . $LANG_MG01['play_in_popup'] . '</option>';
@@ -189,10 +188,10 @@ function MG_editDefaults( ) {
     $album_sort_select .= '<option value="6"' . ($_MG_CONF['ad_album_sort_order']==6 ? 'selected="selected"' : '') . '>' . $LANG_MG03['sort_alpha_asc'] . '</option>';
     $album_sort_select .= '</select>';
 
-    $display_album_desc_select  = '<input type="checkbox" name="display_album_desc" value="1" ' . ($_MG_CONF['ad_display_album_desc'] ? ' checked="checked"' : '') . XHTML . '>';
+    $display_album_desc_select  = '<input type="checkbox" name="display_album_desc" value="1" ' . ($_MG_CONF['ad_display_album_desc'] ? ' checked="checked"' : '') . '/>';
 
     // watermark stuff...
-    $wm_auto_select     = '<input type="checkbox" name="wm_auto" value="1" ' . ($_MG_CONF['ad_wm_auto'] ? ' checked="checked"' : '') . XHTML . '>';
+    $wm_auto_select     = '<input type="checkbox" name="wm_auto" value="1" ' . ($_MG_CONF['ad_wm_auto'] ? ' checked="checked"' : '') . '/>';
 
     $wm_opacity_select  = '<select name="wm_opacity">';
     $wm_opacity_select .= '<option value="10"' . ($_MG_CONF['ad_wm_opacity']==10 ? 'selected="selected"' : '') . '>10%</option>';
@@ -232,19 +231,19 @@ function MG_editDefaults( ) {
     $wm_select =  '<select name="wm_id"  onchange="javascript:change(this)">';
     $wm_select .= '<option value="blank.png">' . $LANG_MG01['no_watermark'] . '</option>';
 
-    $wm_current = '<img src="' . $_MG_CONF['site_url'] . '/watermarks/blank.png" name="myImage" alt=""' . XHTML . '>';
+    $wm_current = '<img src="' . $_MG_CONF['site_url'] . '/watermarks/blank.png" name="myImage" alt=""' . '/>';
 
     for ($i=0;$i<$nRows;$i++) {
         $row = DB_fetchArray($result);
         $wm_select .= '<option value="' . $row['filename'] . '"' . ($_MG_CONF['ad_wm_id']==$row['wm_id'] ? 'selected="selected"' : '') . '>' . $row['filename'] . '</option>';
         if ( $_MG_CONF['ad_wm_id'] == $row['wm_id']) {
-            $wm_current = '<img src="' . $_MG_CONF['site_url'] . '/watermarks/' . $row['filename'] . '" name="myImage" alt=""' . XHTML . '>';
+            $wm_current = '<img src="' . $_MG_CONF['site_url'] . '/watermarks/' . $row['filename'] . '" name="myImage" alt=""' . '/>';
         }
     }
     $wm_select .= '</select>';
 
-    $allow_download_select     = '<input type="checkbox" name="allow_download" value="1" ' . ($_MG_CONF['ad_allow_download'] ? ' checked="checked"' : '') . XHTML . '>';
-    $filename_title_select     = '<input type="checkbox" name="filename_title" value="1" ' . ($_MG_CONF['ad_filename_title'] ? ' checked="checked"' : '') . XHTML . '>';
+    $allow_download_select     = '<input type="checkbox" name="allow_download" value="1" ' . ($_MG_CONF['ad_allow_download'] ? ' checked="checked"' : '') . '/>';
+    $filename_title_select     = '<input type="checkbox" name="filename_title" value="1" ' . ($_MG_CONF['ad_filename_title'] ? ' checked="checked"' : '') . '/>';
 
 
     // permission template
@@ -281,8 +280,8 @@ function MG_editDefaults( ) {
     $groupdd .= '</select>';
     $moddd .= '</select>';
 
-    $upload_select   = '<input type="checkbox" name="uploads" value="1" ' . ($_MG_CONF['ad_member_uploads'] ? ' checked="checked"' : '') . XHTML . '>';
-    $moderate_select = '<input type="checkbox" name="moderate" value="1" ' . ($_MG_CONF['ad_moderate'] ? ' checked="checked"' : '') . XHTML . '>';
+    $upload_select   = '<input type="checkbox" name="uploads" value="1" ' . ($_MG_CONF['ad_member_uploads'] ? ' checked="checked"' : '') . '/>';
+    $moderate_select = '<input type="checkbox" name="moderate" value="1" ' . ($_MG_CONF['ad_moderate'] ? ' checked="checked"' : '') . '/>';
 
     $frames = new mgFrame();
     $skins = array();
@@ -656,7 +655,7 @@ if ( $glversion[1] < 4 ) {
     $display = COM_siteHeader('menu','');
 }
 
-$T = new Template($_MG_CONF['template_path']);
+$T = new Template($_MG_CONF['template_path'].'/admin');
 $T->set_file (array ('admin' => 'administration.thtml'));
 
 $T->set_var(array(
@@ -664,8 +663,7 @@ $T->set_var(array(
     'site_url'          => $_MG_CONF['site_url'],
     'mg_navigation'     => MG_navigation(),
     'lang_admin'        => $LANG_MG00['admin'],
-    'version'           => $_MG_CONF['version'],
-    'xhtml'             => XHTML,
+    'version'           => $_MG_CONF['pi_version'],
 ));
 
 if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {   // save the config
@@ -679,7 +677,7 @@ if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {   // save the 
     $T->set_var(array(
         'admin_body'    => MG_editDefaults(),
         'title'         => $LANG_MG01['album_default_editor'],
-        'lang_help'     => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"' . XHTML . '>',
+        'lang_help'     => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"' . '/>',
         'help_url'      => $_MG_CONF['site_url'] . '/docs/usage.html#Album_Defaults',
     ));
 }

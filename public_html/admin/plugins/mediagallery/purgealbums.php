@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | Batch Purge Member Albums                                                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -61,11 +61,10 @@ function MG_selectAlbums() {
     }
 
     $retval = '';
-    $T = new Template($_MG_CONF['template_path']);
+    $T = new Template($_MG_CONF['template_path'].'/admin');
     $T->set_file ('admin','purgealbums.thtml');
     $T->set_var('site_url', $_CONF['site_url']);
     $T->set_var('site_admin_url', $_CONF['site_admin_url']);
-    $T->set_var('xhtml',XHTML);
 
     $T->set_block('admin', 'UserRow', 'uRow');
     $rowcounter = 0;
@@ -152,7 +151,7 @@ if (isset ($_POST['mode'])) {
 }
 
 $display = COM_siteHeader();
-$T = new Template($_MG_CONF['template_path']);
+$T = new Template($_MG_CONF['template_path'].'/admin');
 $T->set_file (array ('admin' => 'administration.thtml'));
 
 $T->set_var(array(
@@ -160,8 +159,7 @@ $T->set_var(array(
     'site_url'          => $_MG_CONF['site_url'],
     'mg_navigation'     => MG_navigation(),
     'lang_admin'        => $LANG_MG00['admin'],
-    'version'           => $_MG_CONF['version'],
-    'xhtml'             => XHTML,
+    'version'           => $_MG_CONF['pi_version'],
 ));
 
 if ($mode == $LANG_MG01['delete'] && !empty ($LANG_MG01['delete'])) {
@@ -175,7 +173,7 @@ if ($mode == $LANG_MG01['delete'] && !empty ($LANG_MG01['delete'])) {
     $T->set_var(array(
         'admin_body'    => MG_selectAlbums(),
         'title'         => $LANG_MG01['purge_mem_albums_help'],
-        'lang_help'     => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"' . XHTML . '>',
+        'lang_help'     => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"/>',
         'help_url'      => $_MG_CONF['site_url'] . '/docs/usage.html#Purge_Member_Albums',
     ));
 }

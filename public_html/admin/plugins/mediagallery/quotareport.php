@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | Quota report.                                                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -54,7 +54,7 @@ function MG_quotaReport($page,$quotaquery,$usedquery) {
     $start = $page * 50;
     $end   = 50;
 
-    $T = new Template($_MG_CONF['template_path']);
+    $T = new Template($_MG_CONF['template_path'].'/admin');
     $T->set_file (array ('report' => 'quotareport.thtml'));
 
     $retval .= COM_startBlock ('', '',COM_getBlockTemplate ('_admin_block', 'header'));
@@ -160,14 +160,14 @@ $quota  = isset($_POST['quota']) ? COM_applyFilter($_POST['quota'],true) : 0;
 $used   = isset($_POST['used']) ? COM_applyFilter($_POST['used'],true) : 0;
 
 $display = COM_siteHeader($LANG_MG01['quota_report']);
-$T = new Template($_MG_CONF['template_path']);
+$T = new Template($_MG_CONF['template_path'].'/admin');
 $T->set_file (array ('admin' => 'administration.thtml'));
 $T->set_var(array(
     'site_admin_url'    => $_MG_CONF['admin_url'],
     'site_url'          => $_MG_CONF['site_url'],
     'mg_navigation'     => MG_navigation(),
     'lang_admin'        => $LANG_MG00['admin'],
-    'version'           => $_MG_CONF['version'],
+    'version'           => $_MG_CONF['pi_version'],
 
 ));
 

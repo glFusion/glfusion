@@ -476,7 +476,7 @@ function MG_getTemplatePath( $aid, $path = '')
 {
     global $MG_albums, $_MG_CONF, $_CONF;
 
-    if ( $MG_albums[$aid]->skin == 'default' || $MG_albums[$aid]->skin == '' ) {
+    if ( $aid < 0 || $MG_albums[$aid]->skin == 'default' || $MG_albums[$aid]->skin == '' ) {
         return $_MG_CONF['template_path'];
     }
     return (array($path != '' ? $path : '',$_MG_CONF['template_path'] . '/themes/' . $MG_albums[$aid]->skin,$_MG_CONF['template_path']));

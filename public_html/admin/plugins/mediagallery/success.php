@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | Upgrade Successful Page                                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -88,7 +88,7 @@ if ( $memory_limit < 50331648 ) {
     $memoryCheck = '<div style="vertical-align:middle;padding:5px;"><img src="check.png" alt="OK" style="padding:5px;vertical-align:middle;">' . $LANG_MG00['ml_ok'] . '</div>';
 }
 
-$T = new Template($_MG_CONF['template_path']);
+$T = new Template($_MG_CONF['template_path'].'/admin');
 $T->set_file (array ('admin' => 'success.thtml'));
 
 $T->set_var(array(
@@ -98,8 +98,7 @@ $T->set_var(array(
     'memory_check'      => $memoryCheck,
     'mg_navigation'     => MG_navigation(),
     'lang_admin'        => $LANG_MG00['admin'],
-    'version'           => $_MG_CONF['version'],
-    'xhtml'             => XHTML,
+    'version'           => $_MG_CONF['pi_version'],
     'thank_you'         => $LANG_MG00['thank_you'],
     'support'           => $LANG_MG00['support'],
     'success_upgrade'   => $LANG_MG00['success_upgrade'],

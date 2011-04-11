@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | Administer Media Gallery categories.                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -50,7 +50,7 @@ function MG_massDelete() {
     global $MG_albums, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01;
 
     $retval = '';
-    $T = new Template($_MG_CONF['template_path']);
+    $T = new Template($_MG_CONF['template_path'].'/admin');
     $T->set_file ('admin','massdelete.thtml');
     $T->set_var('site_url', $_CONF['site_url']);
     $T->set_var('site_admin_url', $_CONF['site_admin_url']);
@@ -185,14 +185,14 @@ if (isset ($_POST['mode'])) {
 }
 
 $display = COM_siteHeader();
-$T = new Template($_MG_CONF['template_path']);
+$T = new Template($_MG_CONF['template_path'].'/admin');
 $T->set_file (array ('admin' => 'administration.thtml'));
 $T->set_var(array(
     'site_admin_url'    => $_CONF['site_admin_url'],
     'site_url'          => $_MG_CONF['site_url'],
     'mg_navigation'     => MG_navigation(),
     'lang_admin'        => $LANG_MG00['admin'],
-    'version'           => $_MG_CONF['version'],
+    'version'           => $_MG_CONF['pi_version'],
 ));
 
 if ($mode == $LANG_MG01['delete'] && !empty ($LANG_MG01['delete'])) {

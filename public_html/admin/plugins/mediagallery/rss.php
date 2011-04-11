@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | Set configuration options for Media Gallery Plugin.                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -52,11 +52,10 @@ function MG_editRSS( ) {
     global $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG00, $LANG_MG01;
 
     $retval = '';
-    $T = new Template($_MG_CONF['template_path']);
+    $T = new Template($_MG_CONF['template_path'].'/admin');
     $T->set_file ('admin','rssedit.thtml');
     $T->set_var('site_url', $_CONF['site_url']);
     $T->set_var('site_admin_url', $_CONF['site_admin_url']);
-    $T->set_var('xhtml',XHTML);
     $rss_full_select = '<input type="checkbox" name="rss_full_enabled" value="1" ' . ($_MG_CONF['rss_full_enabled'] ? ' checked="checked"' : '') .'/>';
 
     $rss_type_select =  "<select name='rss_feed_type'>";
@@ -138,7 +137,7 @@ if (isset ($_POST['mode'])) {
 }
 
 $display = COM_siteHeader();
-$T = new Template($_MG_CONF['template_path']);
+$T = new Template($_MG_CONF['template_path'].'/admin');
 $T->set_file (array ('admin' => 'administration.thtml'));
 
 $T->set_var(array(
@@ -146,8 +145,7 @@ $T->set_var(array(
     'site_url'          => $_MG_CONF['site_url'],
     'mg_navigation'     => MG_navigation(),
     'lang_admin'        => $LANG_MG00['admin'],
-    'version'           => $_MG_CONF['version'],
-    'xhtml'             => XHTML,
+    'version'           => $_MG_CONF['pi_version'],
 ));
 
 if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {   // save the config
@@ -162,7 +160,7 @@ if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {   // save the 
     $T->set_var(array(
         'admin_body'    => MG_editRSS(),
         'title'         => $LANG_MG01['rss_options'],
-        'lang_help'     => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"' . XHTML . '>',
+        'lang_help'     => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"/>',
         'help_url'      => $_MG_CONF['site_url'] . '/docs/usage.html#RSS_Feed_Options',
     ));
 }

@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | Export routine for Media Gallery.                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -73,7 +73,7 @@ function MG_exportAlbums( $aid, $path, $srcRoot, $destRoot ) {
 	$nrows    = count($children);
 
 	if ($aid != 0 ) {
-        $file_name = stripslashes($MG_albums[$aid]->title);
+        $file_name = $MG_albums[$aid]->title;
         $file_name = MG_replace_accents($file_name);
         if ( $unix == 1 ) {
         	$file_name = preg_replace("#[ ]#","_",$file_name);  // change spaces to underscore
@@ -182,7 +182,7 @@ if ( $mode == 'download' ) {
 }
 // none of the above so display input screen...
 $display = COM_siteHeader();
-$T = new Template($_MG_CONF['template_path']);
+$T = new Template($_MG_CONF['template_path'].'/admin');
 $T->set_file( 'page','export.thtml');
 $T->set_var(array(
     'site_url'          =>  $_CONF['site_url'],

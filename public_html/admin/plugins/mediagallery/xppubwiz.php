@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -281,15 +281,7 @@ if ($step == "options") {
     if ( $album_count == 0 ) {
         $album_select = $LANG_MG06['no_albums'];
     }
-/* ---
-    $album_jumpbox = '';
-    $level = 0;
-    $MG_albums[0]->buildJumpBox($album_id,3);
-    $album_select = $album_jumpbox;
-    if ($album_count == 0 ) {
-        $album_select = $LANG_MG06['no_albums'];
-    }
---- */
+
     MG_xpPubHeader();
     $T = new Template($_MG_CONF['template_path']);
     $T->set_file ('wizard','xplist.thtml');

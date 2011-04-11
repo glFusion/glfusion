@@ -337,8 +337,7 @@ $T->set_var(array(
     'site_url'          => $_MG_CONF['site_url'],
     'mg_navigation'     => MG_navigation(),
     'lang_admin'        => $LANG_MG00['admin'],
-    'version'           => $_MG_CONF['version'],
-    'xhtml'             => XHTML,
+    'version'           => $_MG_CONF['pi_version'],
 ));
 
 if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {   // save the config
@@ -353,7 +352,7 @@ if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {   // save the 
     $T->set_var(array(
         'admin_body'    => MG_editAVDefaults(),
         'title'         => $LANG_MG01['av_default_editor'],
-        'lang_help'     => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"' . XHTML . '>',
+        'lang_help'     => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"/>',
         'help_url'      => $_MG_CONF['site_url'] . '/docs/usage.html#Audio__Video_Defaults',
 
     ));

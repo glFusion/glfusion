@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | Sort albums based on user selected field.                                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -140,7 +140,7 @@ function MG_staticSortAlbumOptions( ) {
     global $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG03, $LANG_MG01, $MG_albums, $album_jumpbox;
 
     $retval = '';
-    $T = new Template($_MG_CONF['template_path']);
+    $T = new Template($_MG_CONF['template_path'].'/admin');
     $T->set_file ('admin','staticsortalbums.thtml');
     $T->set_var('site_url', $_CONF['site_url']);
     $T->set_var('site_admin_url', $_CONF['site_admin_url']);
@@ -195,7 +195,7 @@ if (isset ($_POST['mode'])) {
 }
 
 
-$T = new Template($_MG_CONF['template_path']);
+$T = new Template($_MG_CONF['template_path'].'/admin');
 $T->set_file (array ('admin' => 'administration.thtml'));
 
 $T->set_var(array(
@@ -203,7 +203,7 @@ $T->set_var(array(
     'site_url'          => $_MG_CONF['site_url'],
     'mg_navigation'     => MG_navigation(),
     'lang_admin'        => $LANG_MG00['admin'],
-    'version'           => $_MG_CONF['version'],
+    'version'           => $_MG_CONF['pi_version'],
 
 ));
 

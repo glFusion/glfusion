@@ -2552,8 +2552,6 @@ function plugin_showstats_mediagallery($showsitestats) {
                 $aid = $A['album_id'];
                 $previd = $A['media_id'];
                 if ( $A['media_id'] != '' && isset($MG_albums[$aid]) && $MG_albums[$aid]->access > 0 ) {
-                    $loopcounter++;
-
                     if ( $A['media_title'] == '' || $A['media_title'] == " ") {
                         if ( $A['media_original_filename'] == '' ) {
                             $title = '<b>' . $LANG_MG00['album'] . '</b>' . '<em>' . strip_tags($MG_albums[$aid]->title) . ' - ' . $LANG_MG00['no_title'] . '</em>';
@@ -2566,6 +2564,7 @@ function plugin_showstats_mediagallery($showsitestats) {
                     $S['title'] = '<a href="' . $_MG_CONF['site_url'] . '/media.php?s=' . $A['media_id'] . '">' . $title . '</a>';
                     $S['views']  = $A['media_views'];
                     $data_arr[$loopcounter] = $S;
+                    $loopcounter++;
                 }
                 if ( $loopcounter > 10 )
                     break;
@@ -3846,11 +3845,11 @@ function plugin_subscription_email_format_mediagallery($category,$track_id,$post
 
         foreach ($_MG_CONF['validExtensions'] as $tnext ) {
             if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $A['media_filename'][0] . '/' . $A['media_filename'] . $tnext) ) {
-                $imageData['file'] = $_MG_CONF['path_mediaobjects'] . 'tn/' . $A['media_filename'][0] . '/' . $A['media_filename'] . $tnext;
-                $imageData['name'] = "pc-image";
-                $imageData['filename'] = $A['media_original_filename'];
-                $imageData['encoding'] = 'base64';
-                $imageData['mime'] = $A['mime_type'];
+                $imageData[0]['file'] = $_MG_CONF['path_mediaobjects'] . 'tn/' . $A['media_filename'][0] . '/' . $A['media_filename'] . $tnext;
+                $imageData[0]['name'] = "pc-image";
+                $imageData[0]['filename'] = $A['media_original_filename'];
+                $imageData[0]['encoding'] = 'base64';
+                $imageData[0]['mime'] = $A['mime_type'];
             }
         }
 

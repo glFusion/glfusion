@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | Restores all Media Gallery configuration options install defaults        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -72,11 +72,10 @@ switch ($step) {
         exit;
     default :
         $display = COM_siteHeader();
-        $T = new Template($_MG_CONF['template_path']);
+        $T = new Template($_MG_CONF['template_path'].'/admin');
         $T->set_file (array ('admin' => 'administration.thtml'));
-        $T->set_var('xhtml',XHTML);
 
-        $B = new Template($_MG_CONF['template_path']);
+        $B = new Template($_MG_CONF['template_path'].'/admin');
         $B->set_file (array ('admin' => 'thumbs.thtml'));
         $B->set_var('site_url', $_CONF['site_url']);
         $B->set_var('site_admin_url', $_CONF['site_admin_url']);
@@ -87,7 +86,6 @@ switch ($step) {
             'lang_next'             =>  $LANG_MG01['next'],
             'lang_cancel'           =>  $LANG_MG01['cancel'],
             'lang_details'          =>  $LANG_MG01['reset_defaults_details'],
-            'xhtml'                 =>  XHTML,
         ));
         $B->parse('output', 'admin');
 
@@ -98,8 +96,8 @@ switch ($step) {
             'mg_navigation'     => MG_navigation(),
             'title'             => $LANG_MG01['reset_defaults'],
             'lang_admin'        => $LANG_MG00['admin'],
-            'version'           => $_MG_CONF['version'],
-            'lang_help'         => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"' . XHTML . '>',
+            'version'           => $_MG_CONF['pi_version'],
+            'lang_help'         => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"/>',
             'help_url'          => $_MG_CONF['site_url'] . '/docs/usage.html#Reset_System_Options',
 
 

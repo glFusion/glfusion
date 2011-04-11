@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | Set configuration options for Media Gallery Plugin.                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -50,11 +50,10 @@ function MG_editConfig( ) {
     global $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG00, $LANG_MG01, $LANG_DIRECTION,$LANG04,$glversion;
 
     $retval = '';
-    $T = new Template($_MG_CONF['template_path']);
+    $T = new Template($_MG_CONF['template_path'].'/admin');
     $T->set_file ('admin','cfgedit.thtml');
     $T->set_var('site_url', $_MG_CONF['site_url']);
     $T->set_var('site_admin_url', $_CONF['site_admin_url']);
-    $T->set_var('xhtml',XHTML);
 
     if (!isset($_MG_CONF['rating_max']) ) {
         $_MG_CONF['rating_max'] = 5;
@@ -109,9 +108,6 @@ function MG_editConfig( ) {
     } else {
         $T->set_var('ut_no_checked',' checked="checked"');
     }
-
-    // new in v1.3.6
-
     if ($_MG_CONF['preserve_filename'] == 1 ) {
         $T->set_var('pf_yes_checked', ' checked="checked"');
     } else {
@@ -198,7 +194,6 @@ function MG_editConfig( ) {
     } else {
         $T->set_var('gallery_only_no_checked', ' checked="checked"');
     }
-
 
     $search_playback_type  = '<select name="search_playback_type">';
     $search_playback_type .= '<option value="0"' . ($_MG_CONF['search_playback_type']==0 ? 'selected="selected"' : '') . '>' . $LANG_MG01['play_in_popup'] . '</option>';
@@ -313,73 +308,11 @@ function MG_editConfig( ) {
     }
 
     if ( ini_get('safe_mode') != 1 && $_MG_CONF['skip_file_find'] == 0 ) {  // don't check in safe mode, the file_exists() will fail
-
-        // see if we can find some paths to jhead and jpegtran...
-/* --------------------------------
-        if (PHP_OS == "WINNT") {
-            $binary = "/jhead.exe";
-        } else {
-            $binary = "/jhead";
-        }
-
-        clearstatcache();
-        if ( file_exists( $_MG_CONF['jhead_path'] . $binary ) ) {
-            // do nothing..
-        } else {
-            clearstatcache();
-            $_MG_CONF['jhead_path'] = '/usr/bin';
-            if ( file_exists( $_MG_CONF['jhead_path'] . $binary ) ) {
-                // do nothing..
-            } else {
-                clearstatcache();
-                $_MG_CONF['jhead_path'] = '/usr/local/bin';
-                if ( file_exists( $_MG_CONF['jhead_path'] . $binary ) ) {
-                    // do nothing..
-                } else {
-                    clearstatcache();
-                    $_MG_CONF['jhead_path'] = '/usr/X11R6/bin';
-                    if ( file_exists( $_MG_CONF['jhead_path'] . $binary ) ) {
-                        // do nothing..
-                    }
-                }
-            }
-        }
-
-        if (PHP_OS == "WINNT") {
-            $binary = "/jpegtran.exe";
-        } else {
-            $binary = "/jpegtran";
-        }
-
-        clearstatcache();
-        if ( file_exists( $_MG_CONF['jpegtran_path'] . $binary ) ) {
-            // do nothing..
-        } else {
-            clearstatcache();
-            $_MG_CONF['jpegtran_path'] = '/usr/bin';
-            if ( file_exists( $_MG_CONF['jpegtran_path'] . $binary ) ) {
-                // do nothing..
-            } else {
-                clearstatcache();
-                $_MG_CONF['jpegtran_path'] = '/usr/local/bin';
-                if ( file_exists( $_MG_CONF['jpegtran_path'] . $binary ) ) {
-                    // do nothing..
-                } else {
-                    clearstatcache();
-                    $_MG_CONF['jpegtran_path'] = '/usr/X11R6/bin';
-                    if ( file_exists( $_MG_CONF['jpegtran_path'] . $binary ) ) {
-                        // do nothing..
-                    }
-                }
-            }
-        }
---------------------------------- */
         if (PHP_OS == "WINNT") {
             $binary = "/unzip.exe";
         } else {
             $binary = "/unzip";
         }
-
         clearstatcache();
         if ( file_exists( $_MG_CONF['zip_path'] . $binary ) ) {
             // do nothing..
@@ -458,7 +391,7 @@ function MG_editConfig( ) {
 	}
 	$theme_select .= '</select>';
 
-    include_once($_CONF['path_system']."classes/navbar.class.php");
+    require_once $_CONF['path_system'].'classes/navbar.class.php';
 
     $navbar = new navbar;
     $navbar->add_menuitem($LANG_MG01['general_options'],'showhideMGAdminEditorDiv("general",0);return false;',true);
@@ -616,6 +549,7 @@ function MG_editConfig( ) {
 
     $T->parse('output', 'admin');
     $retval .= $T->finish($T->get_var('output'));
+
     return $retval;
 }
 
@@ -627,10 +561,6 @@ function MG_saveConfig( ) {
     $album_display_rows     = COM_applyFilter($_POST['albumdisplayrows'],true);
     $loginrequired          = COM_applyFilter($_POST['loginrequired'],true);
     $anonymous_uploads      = isset($_POST['anonymousuploads'])  ? COM_applyFilter($_POST['anonymousuploads'],true) : 0;
-//    $graphicspackage        = COM_applyFilter($_POST['graphicspackage'],true);
-//    $graphicspackage_path   = COM_applyFilter($_POST['graphicspackage_path']);
-//    $jhead_path             = COM_applyFilter($_POST['jhead_path']);
-//    $jpegtran_path          = COM_applyFilter($_POST['jpegtran_path']);
     $zip_path               = COM_applyFilter($_POST['zip_path']);
     $ffmpeg_path            = COM_applyFilter($_POST['ffmpeg_path']);
     $tmp_path               = COM_applyFilter($_POST['tmp_path']);
@@ -799,8 +729,6 @@ function MG_saveConfig( ) {
     DB_save($_TABLES['mg_config'],"config_name, config_value","'anonymous_uploads',     '$anonymous_uploads'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'album_display_columns', '$album_display_columns'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'album_display_rows',    '$album_display_rows'");
-//    DB_save($_TABLES['mg_config'],"config_name, config_value","'graphicspackage',       '$graphicspackage'");
-//    DB_save($_TABLES['mg_config'],"config_name, config_value","'graphicspackage_path',  '$graphicspackage_path'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'displayblocks',         '$displayblocks'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'usage_tracking',        '$usage_tracking'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'dfid',                  '$dfid'");
@@ -814,30 +742,19 @@ function MG_saveConfig( ) {
     DB_save($_TABLES['mg_config'],"config_name, config_value","'gallery_tn_size',       '$gallery_tn_size'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'gallery_tn_height',     '$gallery_tn_height'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'gallery_tn_width',      '$gallery_tn_width'");
-//    DB_save($_TABLES['mg_config'],"config_name, config_value","'mp3_player',            '$mp3_player'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'use_flowplayer',        '$flv_player'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'seperator',             '$seperator'");
-
     DB_save($_TABLES['mg_config'],"config_name, config_value","'up_display_rows_enabled',   '$up_display_rows_enabled'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'up_display_columns_enabled','$up_display_columns_enabled'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'up_mp3_player_enabled',     '$up_mp3_player_enabled'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'up_av_playback_enabled',    '$up_av_playback_enabled'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'up_thumbnail_size_enabled', '$up_thumbnail_size_enabled'");
-
-//    DB_save($_TABLES['mg_config'],"config_name, config_value","'jpegtran_enabled',      '$enable_jpegtran'");
-//    DB_save($_TABLES['mg_config'],"config_name, config_value","'jhead_enabled',         '$enable_jhead'");
-//    DB_save($_TABLES['mg_config'],"config_name, config_value","'jhead_path',            '$jhead_path'");
-//    DB_save($_TABLES['mg_config'],"config_name, config_value","'jpegtran_path',         '$jpegtran_path'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'zip_enabled',           '$enable_zip'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'zip_path',              '$zip_path'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'tmp_path',              '$tmp_path'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'ftp_path',              '$ftp_path'");
-
     DB_save($_TABLES['mg_config'],"config_name, config_value","'ffmpeg_enabled', '$enable_ffmpeg'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'ffmpeg_path', '$ffmpeg_path'");
-
-
-
     DB_save($_TABLES['mg_config'],"config_name, config_value","'preserve_filename',' $preserve_filename'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'discard_original','$discard_originals'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'verbose','$verbose'");
@@ -846,11 +763,9 @@ function MG_saveConfig( ) {
     DB_save($_TABLES['mg_config'],"config_name, config_value","'full_in_popup','$fip'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'commentbar','$cmtbar'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'title_length','$wn_length'");
-
     DB_save($_TABLES['mg_config'],"config_name, config_value","'custom_image_height','$custom_image_height'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'custom_image_width','$custom_image_width'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'random_width','$random_width'");
-
     DB_save($_TABLES['mg_config'],"config_name, config_value","'def_refresh_rate','$refresh_rate'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'def_time_limit','$time_limit'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'def_item_limit','$item_limit'");
@@ -862,7 +777,6 @@ function MG_saveConfig( ) {
     DB_save($_TABLES['mg_config'],"config_name, config_value","'popup_from_album','$popup_from_album'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'autotag_caption','$autotag_caption'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'indextheme','$indextheme'");
-
     DB_save($_TABLES['mg_config'],"config_name, config_value","'at_border','$at_border'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'at_align','$at_align'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'at_width','$at_width'");
@@ -872,13 +786,11 @@ function MG_saveConfig( ) {
     DB_save($_TABLES['mg_config'],"config_name, config_value","'at_enable_link','$at_enable_link'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'at_delay','$at_delay'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'at_showtitle','$at_showtitle'");
-
     DB_save($_TABLES['mg_config'],"config_name, config_value","'search_columns','$search_columns'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'search_rows','$search_rows'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'search_playback_type','$search_playback_type'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'search_enable_views','$search_enable_views'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'search_enable_rating','$search_enable_rating'");
-
     DB_save($_TABLES['mg_config'],"config_name, config_value","'gallery_only','$gallery_only'");
 
     // now reset anything in the prefs that need to be reset...
@@ -929,22 +841,16 @@ if (isset ($_POST['mode'])) {
     $mode = '';
 }
 
-if ( $glversion[1] < 4 ) {
-    $display = COM_siteHeader();
-} else {
-    $display = COM_siteHeader('menu','');
-}
-$T = new Template($_MG_CONF['template_path']);
-$T->set_file (array ('admin' => 'administration.thtml'));
+$display = COM_siteHeader('menu','');
 
+$T = new Template($_MG_CONF['template_path'].'/admin');
+$T->set_file ('admin','administration.thtml');
 $T->set_var(array(
     'site_admin_url'    => $_CONF['site_admin_url'],
     'site_url'          => $_MG_CONF['site_url'],
     'mg_navigation'     => MG_navigation(),
     'lang_admin'        => $LANG_MG00['admin'],
     'version'           => $_MG_CONF['pi_version'],
-    'xhtml'             => XHTML,
-
 ));
 
 if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {   // save the config
@@ -974,6 +880,7 @@ if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {   // save the 
 
 $T->parse('output', 'admin');
 $display .= $T->finish($T->get_var('output'));
+
 $display .= COM_siteFooter();
 echo $display;
 exit;

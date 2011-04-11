@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | Edit Media Gallery Member Albums defaults.                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -51,13 +51,12 @@ function MG_editMemberDefaults( ) {
     global $album_jumpbox, $album_selectbox, $MG_albums, $glversion,$LANG04;
 
     $retval = '';
-    $T = new Template($_MG_CONF['template_path']);
+    $T = new Template($_MG_CONF['template_path'].'/admin');
 
     $T->set_file(array(
         'admin'         =>  'editmember.thtml',
         'admin_formats' =>  'editalbum_formats.thtml',
     ));
-    $T->set_var('xhtml',XHTML);
 
     include_once($_CONF['path_system']."classes/navbar.class.php");
 
@@ -117,9 +116,9 @@ function MG_editMemberDefaults( ) {
     ));
     $T->parse('valid_formats','admin_formats');
 
-    $member_albums   = '<input type="checkbox" name="member_albums" value="1" ' . ($_MG_CONF['member_albums'] ? ' checked="checked"' : '') . XHTML . '>';
-    $auto_create     = '<input type="checkbox" name="auto_create" value="1" '   . ($_MG_CONF['member_auto_create'] ? ' checked="checked"' : '') . XHTML . '>';
-    $allow_create    = '<input type="checkbox" name="allow_create" value="1" '  . ($_MG_CONF['member_create_new'] ? ' checked="checked"' : '') . XHTML . '>';
+    $member_albums   = '<input type="checkbox" name="member_albums" value="1" ' . ($_MG_CONF['member_albums'] ? ' checked="checked"' : '') . '/>';
+    $auto_create     = '<input type="checkbox" name="auto_create" value="1" '   . ($_MG_CONF['member_auto_create'] ? ' checked="checked"' : '') . '/>';
+    $allow_create    = '<input type="checkbox" name="allow_create" value="1" '  . ($_MG_CONF['member_create_new'] ? ' checked="checked"' : '') . '/>';
 
     $album_jumpbox = '';
     $MG_albums[0]->buildJumpBox($_MG_CONF['member_album_root']);
@@ -138,11 +137,11 @@ function MG_editMemberDefaults( ) {
     $T->set_var('site_url', $_CONF['site_url']);
     $T->set_var('site_admin_url', $_CONF['site_admin_url']);
 
-    $ri_select              = '<input type="checkbox" name="enable_random" value="1" ' . ($_MG_CONF['member_enable_random'] ? ' checked="checked"' : '') . XHTML . '>';
-    $max_image_height_input = '<input type="text" size="4" name="max_image_height" value="' . $_MG_CONF['member_max_height'] . '"' . XHTML . '>';
-    $max_image_width_input  = '<input type="text" size="4" name="max_image_width" value="' . $_MG_CONF['member_max_width'] . '"' . XHTML . '>';
-    $max_filesize_input     = '<input type="text" size="10" name="max_filesize" value="' . $_MG_CONF['member_max_filesize'] . '"' . XHTML . '>';
-    $email_mod_select       = '<input type="checkbox" name="email_mod" value="1" ' . ($_MG_CONF['member_email_mod'] ? ' checked="checked"' : '') . XHTML . '>';
+    $ri_select              = '<input type="checkbox" name="enable_random" value="1" ' . ($_MG_CONF['member_enable_random'] ? ' checked="checked"' : '') . '/>';
+    $max_image_height_input = '<input type="text" size="4" name="max_image_height" value="' . $_MG_CONF['member_max_height'] . '"' . '/>';
+    $max_image_width_input  = '<input type="text" size="4" name="max_image_width" value="' . $_MG_CONF['member_max_width'] . '"' . '/>';
+    $max_filesize_input     = '<input type="text" size="10" name="max_filesize" value="' . $_MG_CONF['member_max_filesize'] . '"' . '/>';
+    $email_mod_select       = '<input type="checkbox" name="email_mod" value="1" ' . ($_MG_CONF['member_email_mod'] ? ' checked="checked"' : '') . '/>';
 
     // permission template
 
@@ -179,21 +178,21 @@ function MG_editMemberDefaults( ) {
     $groupdd .= '</select>';
     $moddd .= '</select>';
 
-    $upload_select   = '<input type="checkbox" name="uploads" value="1" ' . ($_MG_CONF['member_uploads'] ? ' checked="checked"' : '') . XHTML . '>';
-    $moderate_select = '<input type="checkbox" name="moderate" value="1" ' . ($_MG_CONF['member_moderate'] ? ' checked="checked"' : '') . XHTML . '>';
+    $upload_select   = '<input type="checkbox" name="uploads" value="1" ' . ($_MG_CONF['member_uploads'] ? ' checked="checked"' : '') . '/>';
+    $moderate_select = '<input type="checkbox" name="moderate" value="1" ' . ($_MG_CONF['member_moderate'] ? ' checked="checked"' : '') . '/>';
 
     if ( !isset($_MG_CONF['member_use_fullname']) ) {
         $_MG_CONF['member_use_fullname'] = 0;
     }
-    $fullname_select = '<input type="checkbox" name="member_use_fullname" value="1" ' . ($_MG_CONF['member_use_fullname'] ? ' checked="checked"' : '') . XHTML . '>';
+    $fullname_select = '<input type="checkbox" name="member_use_fullname" value="1" ' . ($_MG_CONF['member_use_fullname'] ? ' checked="checked"' : '') . '/>';
     if ( !isset($_MG_CONF['feature_member_album']) ) {
         $_MG_CONF['feature_member_album'] = 0;
     }
-    $feature_select = '<input type="checkbox" name="feature_member_album" value="1" ' . ($_MG_CONF['feature_member_album'] ? ' checked="checked"' : '') . XHTML . '>';
+    $feature_select = '<input type="checkbox" name="feature_member_album" value="1" ' . ($_MG_CONF['feature_member_album'] ? ' checked="checked"' : '') . '/>';
     if ( !isset($_MG_CONF['allow_remote']) ) {
         $_MG_CONF['allow_remote'] = 0;
     }
-    $allow_remote = '<input type="checkbox" name="allow_remote" value="1" ' . ($_MG_CONF['allow_remote'] ? ' checked="checked"' : '') . XHTML . '>';
+    $allow_remote = '<input type="checkbox" name="allow_remote" value="1" ' . ($_MG_CONF['allow_remote'] ? ' checked="checked"' : '') . '/>';
 
     $T->set_var(array(
         'site_url'              => $_MG_CONF['site_url'],
@@ -352,7 +351,7 @@ if ( $glversion[1] < 4 ) {
     $display = COM_siteHeader('menu','');
 }
 
-$T = new Template($_MG_CONF['template_path']);
+$T = new Template($_MG_CONF['template_path'].'/admin');
 $T->set_file (array ('admin' => 'administration.thtml'));
 
 $T->set_var(array(
@@ -360,8 +359,7 @@ $T->set_var(array(
     'site_url'          => $_MG_CONF['site_url'],
     'mg_navigation'     => MG_navigation(),
     'lang_admin'        => $LANG_MG00['admin'],
-    'version'           => $_MG_CONF['version'],
-    'xhtml'             => XHTML,
+    'version'           => $_MG_CONF['pi_version'],
 ));
 
 if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {   // save the config
@@ -375,7 +373,7 @@ if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {   // save the 
     $T->set_var(array(
         'admin_body'    => MG_editMemberDefaults(),
         'title'         => $LANG_MG01['member_album_options'],
-        'lang_help'     => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"' . XHTML . '>',
+        'lang_help'     => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"' . '/>',
         'help_url'      => $_MG_CONF['site_url'] . '/docs/usage.html#Member_Album_Options',
 
     ));
