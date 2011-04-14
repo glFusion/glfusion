@@ -36,7 +36,7 @@ mediagalleryCommand.GetState=function() {
 mediagalleryCommand.Execute=function() {
     //open a popup window when the button is clicked
 
-    window.open(FCKPlugins.Items['mediagallery'].Path + 'mediagallery.php?i=' + FCK.Name, 'mediagallery', 'width=600,height=650,resizable=yes,scrollbars=yes,scrolling=yes,location=no,toolbar=no');
+    window.open(FCKPlugins.Items['mediagallery'].Path + 'mediagallery.php?i=' + FCK.Name, 'mediagallery', 'width=600,height=700,resizable=yes,scrollbars=yes,scrolling=yes,location=no,toolbar=no');
 }
 
 FCKCommands.RegisterCommand('mediagallery', mediagalleryCommand ); //otherwise our command will not be found

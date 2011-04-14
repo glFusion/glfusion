@@ -1,7 +1,5 @@
 <script type="text/javascript">
 var FCK = opener.FCKeditorAPI.GetInstance('{instance}') ;
-</script>
-<script type="text/javascript">
 function dodisabled(){
 	var autotag = '';
     // see which auto tag is selected, if any
@@ -135,7 +133,6 @@ function dodisabled(){
     }
 }
 </script>
-
 <form name="mediabrowser" method="post" action="{s_form_action}">
 <input type="hidden" name="i" value="{instance}">
 <input type="hidden" name="refresh" value="1">
@@ -143,36 +140,47 @@ function dodisabled(){
   <legend>{lang_current_album}</legend>
   {jumpbox}
 </fieldset>
-<p>
+
+<fieldset>
+  <legend>{lang_thumbnails}</legend>
+  {album_body}
+</fieldset>
+
 <fieldset>
   <legend>{lang_autotag_attr}</legend>
+  <p>
   <input type="radio" name="autotag" value="album" onChange="dodisabled()" {albumon}>&nbsp;{lang_album}&nbsp;&nbsp;
   <input type="radio" name="autotag" value="slideshow" onChange="dodisabled()" {slideshowon}>&nbsp;{lang_slideshow}&nbsp;&nbsp;
   <input type="radio" name="autotag" value="fslideshow" onChange="dodisabled()" {fslideshowon}>&nbsp;{lang_fslideshow}&nbsp;&nbsp;
   <input type="radio" name="autotag" value="media" onChange="dodisabled()" {mediaon}>&nbsp;{lang_media}&nbsp;&nbsp;
+  </p>
   <p>
   <input type="radio" name="autotag" value="mlink" onChange="dodisabled()" {mlinkon}>&nbsp;{lang_mlink}&nbsp;&nbsp;
   <input type="radio" name="autotag" value="img" onChange="dodisabled()" {imgon}>&nbsp;{lang_img}&nbsp;&nbsp;
   <input type="radio" name="autotag" value="video" onChange="dodisabled()" {videoon}>&nbsp;{lang_video}&nbsp;&nbsp;
   <input type="radio" name="autotag" value="audio" onChange="dodisabled()" {audioon}>&nbsp;{lang_audio}&nbsp;&nbsp;
   <input type="radio" name="autotag" value="playall" onChange="dodisabled()" {playallon}>&nbsp;{lang_playall}
+  </p>
   <p>
   {lang_width} <input type="text" name="width" size="3" maxlength="3" value="{width}">&nbsp;&nbsp;
   {lang_height} <input type="text" name="height" size="3" maxlength="3" value="{height}">&nbsp;&nbsp;
 
-  {lang_border} <select name="border">
-                  <option value="0" {border_no}>{lang_no}</option>
-                  <option value="1" {border_yes}>{lang_yes}</option>
-                </select>
-                &nbsp;&nbsp;
+  {lang_border}
+  <select name="border">
+    <option value="0" {border_no}>{lang_no}</option>
+    <option value="1" {border_yes}>{lang_yes}</option>
+  </select>
+  &nbsp;&nbsp;
 
-  {lang_alignment} <select name="alignment">
-                     <option value="auto" {align_auto}>{lang_auto}</option>
-                     <option value="none" {align_none}>{lang_none}</option>
-                     <option value="left" {align_left}>{lang_left}</option>
-                     <option value="right" {align_right}>{lang_right}</option>
-                   </select>
-                   &nbsp;&nbsp;
+  {lang_alignment}
+  <select name="alignment">
+    <option value="auto" {align_auto}>{lang_auto}</option>
+    <option value="none" {align_none}>{lang_none}</option>
+    <option value="left" {align_left}>{lang_left}</option>
+    <option value="right" {align_right}>{lang_right}</option>
+  </select>
+  &nbsp;&nbsp;
+  </p>
   <p>
   {lang_source} <select name="source">
                   <option value="tn" {src_tn}>{lang_thumbnail}</option>
@@ -220,26 +228,20 @@ function dodisabled(){
      </select>&nbsp;&nbsp;
  </p>
  <p>
-
-
   {destination}
-
   {lang_alturl}
-                  <select name="alturl">
-                    <option value="0" {alturl_no}>{lang_no}</option>
-                    <option value="1" {alturl_yes}>{lang_yes}</option>
-                  </select>
-                  &nbsp;&nbsp;
+  <select name="alturl">
+    <option value="0" {alturl_no}>{lang_no}</option>
+    <option value="1" {alturl_yes}>{lang_yes}</option>
+  </select>
+  &nbsp;&nbsp;
+  </p>
 
 <p>
 {lang_caption} <input type="text" name="caption" size="80" maxlength="120" value="{caption}">
+</p>
 </fieldset>
-<p>
-<fieldset>
-  <legend>{lang_thumbnails}</legend>
-  {album_body}
-</fieldset>
-<p>
+
 <fieldset>
   <legend>{lang_navigation}</legend>
   {bottom_pagination}
@@ -247,4 +249,5 @@ function dodisabled(){
 <p>
 <input type="button" name="button" value="{lang_insert}" onClick="return insertImage(this.form);">
 <input type="button" name="cancel" value="{lang_cancel}" onClick="javascript:window.close();">
+</p>
 </form>

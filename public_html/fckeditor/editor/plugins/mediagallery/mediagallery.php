@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2006-2010 by the following authors:                        |
+// | Copyright (C) 2006-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -30,6 +30,7 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../../../../lib-common.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/init.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/classMedia.php';
 
 $mb_base_path = '/fckeditor/editor/plugins/mediagallery';
@@ -69,45 +70,33 @@ function MG_popupHeader($pagetitle = '') {
     // the current theme only needs the default variable substitutions
 
 	$header = new Template($_CONF['path_html'] . $mb_base_path . '/templates');
-    $header->set_file( array(
-        'header'        => 'mb_header.thtml',
-    ));
+    $header->set_file('header','mb_header.thtml');
 
-    if( empty( $pagetitle ) && isset( $_CONF['pagetitle'] ))
-    {
+    if( empty( $pagetitle ) && isset( $_CONF['pagetitle'] )) {
         $pagetitle = $_CONF['pagetitle'];
     }
     $header->set_var( 'page_title', $_CONF['site_name'] . ' :: ' . $pagetitle );
 
-
-    $header->set_var( 'site_url', $_CONF['site_url'] );
     $header->set_var( 'site_name', $_CONF['site_name'] );
     $header->set_var( 'css_url', $_CONF['site_url'] . $mb_base_path . '/css/style.css' );
     $header->set_var( 'js_lang_url', $_CONF['site_url'] . $mb_base_path . '/langs/' . $jslangfile);
     $header->set_var( 'js_url', $_CONF['site_url'] . $mb_base_path . '/jscripts/functions.js');
 
-    if( empty( $LANG_CHARSET ))
-    {
+    if ( empty( $LANG_CHARSET ) ) {
         $charset = $_CONF['default_charset'];
 
-        if( empty( $charset ))
-        {
+        if ( empty( $charset ) ) {
             $charset = 'iso-8859-1';
         }
-    }
-    else
-    {
+    } else {
         $charset = $LANG_CHARSET;
     }
 
     $header->set_var( 'charset', $charset );
-    if( empty( $LANG_DIRECTION ))
-    {
+    if( empty( $LANG_DIRECTION )) {
         // default to left-to-right
         $header->set_var( 'direction', 'ltr' );
-    }
-    else
-    {
+    } else {
         $header->set_var( 'direction', $LANG_DIRECTION );
     }
 
@@ -117,14 +106,14 @@ function MG_popupHeader($pagetitle = '') {
     return $retval;
 }
 
-function MG_popupFooter() {
+function MG_popupFooter()
+{
 
 	$retval = '</body></html>';
 	return $retval;
 }
 
-
-if (!function_exists('MG_usage')) {
+if (!in_array('mediagallery', $_PLUGINS)) {
     // The plugin is disabled
     $display = MG_popupHeader();
     $display .= COM_startBlock('Plugin disabled');
@@ -135,7 +124,7 @@ if (!function_exists('MG_usage')) {
     exit;
 }
 
-if ( $_USER['uid'] < 2 && $_MG_CONF['loginrequired'] == 1) {
+if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1) {
     $display = MG_popupHeader();
     $display .= 'Site Configuration requires that you login before using this feature';
     $display .= MG_popupFooter();
@@ -146,6 +135,8 @@ if ( $_USER['uid'] < 2 && $_MG_CONF['loginrequired'] == 1) {
 /*
 * Main Function
 */
+
+MG_initAlbums();
 
 $album_id  = (isset($_REQUEST['aid']) ? COM_applyFilter($_REQUEST['aid'],true) : 0);
 $page      = (isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'],true) : 0);
@@ -169,7 +160,7 @@ if ( $MG_albums[$album_id]->access == 0 || ($MG_albums[$album_id]->hidden == 1 &
 }
 
 $columns_per_page   = 5;
-$rows_per_page      = 3;
+$rows_per_page      = 2;
 
 $media_per_page     = $columns_per_page * $rows_per_page;
 
@@ -180,7 +171,6 @@ $MG_albums[0]->buildJumpBox($album_id);
 $album_jumpbox .= '</select>';
 $album_jumpbox .= '&nbsp;<input type="submit" value="' . $LANG_mgMB['go'] . '" />';
 $album_jumpbox .= '<input type="hidden" name="page" value="1">';
-//$album_jumpbox .= '</form>';
 
 if ($album_id == 0 ) {
 	if ( !empty($MG_albums[0]->children)) {
@@ -222,7 +212,7 @@ $MG_media = array();
 $orderBy = MG_getSortOrder($album_id,'');
 
 $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
-        " ON ma.media_id=m.media_id WHERE ma.album_id=" . $album_id . $orderBy . ' LIMIT ' . $begin . ',' . $end;
+        " ON ma.media_id=m.media_id WHERE ma.album_id=" . (int) $album_id . $orderBy . ' LIMIT ' . $begin . ',' . $end;
 
 $result = DB_query( $sql );
 $nRows  = DB_numRows( $result );
@@ -263,13 +253,6 @@ $T->set_file (array(
     'page'      => 'mb.thtml',
     'body'		=> 'mb_body.thtml',
 ));
-
-$aOffset = $MG_albums[$album_id]->getOffset();
-if ( $aOffset > 0 ) {
-    $aPage = intval(($aOffset)  / ($_MG_CONF['album_display_columns'] * $_MG_CONF['album_display_rows'])) + 1;
-} else {
-    $aPage = 1;
-}
 
 $birdseed = $MG_albums[$album_id]->getPath(0,'');
 
@@ -328,7 +311,6 @@ if ( $refresh != 1 ) {	// initial call
 	    'caption'				=> $_POST['caption']
 	));
 }
-
 
 $T->set_var(array(
 	's_form_action'			=> $_SERVER['PHP_SELF'],
@@ -390,9 +372,7 @@ $T->set_var(array(
 ));
 
 if ( $total_media == 0 ) {
-    $T->set_var(array(
-        'lang_no_image'       =>  $LANG_MG03['no_media_objects']
-    ));
+    $T->set_var('lang_no_image',$LANG_MG03['no_media_objects']);
     $T->parse('album_noimages', 'noitems');
 }
 
@@ -407,20 +387,17 @@ if ( $total_media > 0 ) {
         $T->set_var('IDetail','');
         $T->set_var('IColumn','');
         for ($j = $i; $j < ($i + $columns_per_page); $j++) {
-            if ($j >= $total_media)
-            {
+            if ($j >= $total_media) {
                 $k = ($i+$columns_per_page) - $j;
                 $m = $k % $columns_per_page;
                 break;
             }
             $previous_image = $i - 1;
-            if ( $previous_image < 0 )
-            {
+            if ( $previous_image < 0 ) {
                 $previous_image = -1;
             }
             $next_image = $i + 1;
-            if ( $next_image >= $total_media - 1 )
-            {
+            if ( $next_image >= $total_media - 1 ) {
                 $next_image = -1;
             }
             $z = ($j+$start);
