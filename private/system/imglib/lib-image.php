@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -128,61 +128,6 @@ function IMG_getMediaMetaData( $filename ) {
             }
         }
     }
-
-    /*
-     * Check to see if we failed on getting the mime type and do the additional checks here
-     */
-/* --- DO NOT USE EXTENSION CHECKING - TOO DANGEROUS!
-    if ( !isset($ThisFileInfo['mime_type']) || $ThisFileInfo['mime_type'] == '' || $ThisFileInfo['mime_type'] == 'application/octet-stream' ) {
-        $file_extension = strtolower(substr(strrchr($filename,"."),1));
-        switch ($file_extension) {
-            case 'flv':
-                $ThisFileInfo['mime_type'] = 'video/x-flv';
-                break;
-            case 'wma' :
-                $ThisFileInfo['mime_type'] = 'audio/x-ms-wma';
-                break;
-            case 'jpg' :
-                $ThisFileInfo['mime_type'] = 'image/jpeg';
-                break;
-            case 'png' :
-                $ThisFileInfo['mime_type'] = 'image/png';
-                break;
-            case 'bmp' :
-                $ThisFileInfo['mime_type'] = 'image/bmp';
-                break;
-            case 'gif' :
-                $ThisFileInfo['mime_type'] = 'image/gif';
-                break;
-            case "exe":
-                $ThisFileInfo['mime_type'] = 'application/octet-stream';
-                break;
-            case "zip":
-                $ThisFileInfo['mime_type'] = 'application/zip';
-                break;
-            case "mp3":
-                $ThisFileInfo['mime_type'] = 'audio/mpeg';
-                break;
-            case "mpg":
-                $ThisFileInfo['mime_type'] = 'video/mpeg';
-                break;
-            case "avi":
-                $ThisFileInfo['mime_type'] = 'video/x-msvideo';
-                break;
-            case 'tga' :
-                $ThisFileInfo['mime_type'] = 'image/tga';
-                break;
-            case 'psd' :
-                $ThisFileInfo['mime_type'] = 'image/psd';
-                break;
-            default:
-                $ThisFileInfo['mime_type'] = 'application/octet-stream';
-                break;
-        }
-
-        COM_errorLog("IMG_getMediaMetaData: getID3() failed to return mime type, using file extension check.  Mime type detected is " . $ThisFileInfo['mime_type']);
-    }
-    ---------- */
     return $ThisFileInfo;
 }
 
@@ -388,3 +333,4 @@ function IMG_watermarkImage( $origImage, $watermarkImage, $opacity, $location ) 
     list($rc,$msg) = _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $mimeType );
     return array($rc,$msg);
 }
+?>
