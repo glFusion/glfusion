@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2010 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -38,6 +38,9 @@ if (!in_array('mediagallery', $_PLUGINS)) {
 if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
     exit;
 }
+
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
+MG_initAlbums();
 
 function MG_getItems ($mode='sv')
 {
@@ -73,7 +76,7 @@ function MG_getItems ($mode='sv')
 			$orderBy = MG_getSortOrder($aid, 0);
 
 			$sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
-			        " ON ma.media_id=m.media_id WHERE ma.album_id=" . intval($aid) . " AND m.include_ss=1 " . $orderBy;
+			        " ON ma.media_id=m.media_id WHERE ma.album_id=" . (int) $aid . " AND m.include_ss=1 " . $orderBy;
 
 			$result = DB_query( $sql );
 			$nRows  = DB_numRows( $result );

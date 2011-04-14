@@ -9,7 +9,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
+// | Copyright (C) 2009-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -186,7 +186,7 @@ function _MG_getFile( $filename, $file, $albums, $caption = '', $description = '
 
     $media_user_id = $userid;
 
-    $mimeInfo = MG_getMediaMetaData( $filename );
+    $mimeInfo = IMG_getMediaMetaData( $filename );
     $mimeExt = strtolower(substr(strrchr($file,"."),1));
     $mimeInfo['type'] = $mimeExt;
 

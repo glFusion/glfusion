@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
+// | Copyright (C) 2009-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -30,9 +30,18 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
+MG_initAlbums();
 
-$id = COM_applyFilter($_GET['id'],true);
-$aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_escapeString($id) . '"');
+$id   = COM_applyFilter($_GET['id'],true);
+$aid  = (int) DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_escapeString($id) . '"');
+
+$tablename = $_TABLES['mg_media'];
+
+if ( $aid == 0 ) {
+    $aid  = (int) DB_getItem($_TABLES['mg_media_album_queue'], 'album_id','media_id="' . DB_escapeString($id) . '"');
+    $tablename = $_TABLES['mg_mediaqueue'];
+}
 
 if ( $MG_albums[$aid]->access == 0 ) {
     COM_errorLog("access was denied to the album");
@@ -41,9 +50,10 @@ if ( $MG_albums[$aid]->access == 0 ) {
 	exit(0);
 }
 
-$sql = "SELECT * FROM {$_TABLES['mg_media']} WHERE media_id='".DB_escapeString($id)."'";
+$sql = "SELECT * FROM {$tablename} WHERE media_id='".DB_escapeString($id)."'";
 $result = DB_query( $sql );
 $nRows = DB_numRows( $result );
+
 if ( $nRows > 0 ) {
     $row = DB_fetchArray($result);
 

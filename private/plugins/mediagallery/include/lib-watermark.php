@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: lib-watermark.php 2869 2008-07-31 14:38:32Z mevans0263            $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -484,7 +484,7 @@ function MG_watermark( $origImage, $aid, $runJhead ) {
             break;
     }
 
-    $rc = MG_watermarkImage( $origImage, $watermarkImage, $opacity, $location );
+    $rc = IMG_watermarkImage( $origImage, $watermarkImage, $opacity, $location );
     return $rc;
 }
 

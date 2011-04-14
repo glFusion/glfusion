@@ -34,8 +34,6 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-require_once $_CONF['path'] . 'plugins/mediagallery/include/classFrame.php';
-
 function MG_index() {
 	global $_USER, $_MG_CONF, $_CONF, $_TABLES, $MG_albums, $LANG_MG00, $LANG_MG01, $LANG_MG02, $LANG_MG03, $themeStyle;
 
@@ -92,7 +90,7 @@ function MG_index() {
 	if ( $_MG_CONF['rss_full_enabled'] ) {
 	    $feedUrl = MG_getFeedUrl($_MG_CONF['rss_feed_name'].'.rss');
 	    $rsslink = '<a href="' . $feedUrl . '"' . ' type="application/rss+xml">';
-	    $rsslink .= '<img src="' . MG_getImageFile('feed.png') . '" alt="" style="border:none;"' . XHTML . '></a>';
+	    $rsslink .= '<img src="' . MG_getImageFile('feed.png') . '" alt="" style="border:none;"/></a>';
 	    $T->set_var('rsslink', $rsslink);
 	} else {
 	    $T->set_var('rsslink','');
@@ -135,8 +133,8 @@ function MG_index() {
 	}
 
 	$admin_box .= '</select>' . LB;
-	$admin_box .= '<input type="hidden" name="album_id" value="0"' . XHTML . '>' . LB;
-	$admin_box .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '"' . XHTML . '>' . LB;
+	$admin_box .= '<input type="hidden" name="album_id" value="0"/>' . LB;
+	$admin_box .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '"/>' . LB;
 	$admin_box .= '</div>';
 	$admin_box .= '</form>';
 
@@ -405,8 +403,8 @@ function MG_index() {
 
 	                if ( $_MG_CONF['subalbum_select'] == 1 ) {
 	                    $subAlbumDisplay .= '</optgroup></select>';
-	                    $subAlbumDisplay .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '" ' . XHTML . '>';
-	                    $subAlbumDisplay .= '<input type="hidden" name="page" value="1"' . XHTML . '>';
+	                    $subAlbumDisplay .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '" />';
+	                    $subAlbumDisplay .= '<input type="hidden" name="page" value="1"/>';
 	                    $subAlbumDisplay .= '</form>';
 	                }
 
@@ -473,7 +471,6 @@ function MG_index() {
 	                'media_tag'             => strip_tags($MG_albums[$achild[$indexCounter]]->title),
 	                'frWidth'               =>  $newwidth  - $MG_albums[0]->afrWidth,
 	                'frHeight'              =>  $newheight - $MG_albums[0]->afrHeight,
-	                'xhtml'                 => XHTML,
 	            ));
 
 	            $F->parse('media','media_frame');

@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2010 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -45,6 +45,8 @@ if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
     echo $display;
     exit;
 }
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
+MG_initAlbums();
 
 /*
 * Main Function
@@ -63,7 +65,6 @@ $T->set_file (array(
     'page'  =>  'slideshow.thtml',
     'empty' =>  'slideshow_empty.thtml'
 ));
-$T->set_var('xhtml',XHTML);
 $T->set_var('header', $LANG_MG00['plugin']);
 $T->set_var('site_url',$_MG_CONF['site_url']);
 $T->set_var('plugin','mediagallery');

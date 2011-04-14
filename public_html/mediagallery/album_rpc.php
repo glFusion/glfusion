@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2010 by the following authors:                        |
+// | Copyright (C) 2009-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -31,6 +31,7 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
 
 global $_CONF, $_MG_CONF, $MG_albums;
 

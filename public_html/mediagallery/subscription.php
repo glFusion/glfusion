@@ -44,6 +44,8 @@ if ( COM_isAnonUser() )  {
     echo $display;
     exit;
 }
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
+MG_initAlbums();
 
 function handleSubscribe($album_id)
 {

@@ -57,19 +57,19 @@ function MG_getMemberPermissionsHTML($perm_members,$perm_anon) {
         . '</tr>' . LB . '<tr>' . LB;
 
     // Member Permissions
-    $retval .= '<td align="center"><b>R</b><br' . XHTML . '><input type="checkbox" name="perm_members[]" value="2"';
+    $retval .= '<td align="center"><b>R</b><br/><input type="checkbox" name="perm_members[]" value="2"';
     if ($perm_members == 2) {
         $retval .= ' checked="checked"';
     }
-    $retval .= XHTML . '></td>' . LB;
+    $retval .= '/></td>' . LB;
 
     // Anonymous Permissions
 
-    $retval .= '<td align="center"><b>R</b><br' . XHTML . '><input type="checkbox" name="perm_anon[]" value="2"';
+    $retval .= '<td align="center"><b>R</b><br/><input type="checkbox" name="perm_anon[]" value="2"';
     if ($perm_anon == 2) {
         $retval .= ' checked="checked"';
     }
-    $retval .= XHTML . '></td>' . LB;
+    $retval .= '/></td>' . LB;
 
     // Finish off and return
 
@@ -214,7 +214,6 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         'admin_attr'   =>  'editalbum_admin.thtml',
         'admin_formats'=>  'editalbum_formats.thtml',
     ));
-    $T->set_var('xhtml',XHTML);
 
     // construct the album jumpbox...
 
@@ -249,19 +248,17 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     $full_select .= '<option value="2"' . ($A['full_display']==2 ? 'selected="selected"' : '') . '>' . $LANG_MG01['disabled'] . '</option>';
     $full_select .= '</select>';
 
-//    $ranking_select = '<input type="checkbox" name="enable_rating" value="1" ' . ($A['enable_rating'] ? ' checked="checked"' : '') . XHTML . '>';
-
     $ranking_select = '<select name="enable_rating">';
     $ranking_select .= '<option value="0"' . ($A['enable_rating']==0 ? 'selected="selected"' : '') . '>' . $LANG_MG01['disabled'] . '</option>';
     $ranking_select .= '<option value="1"' . ($A['enable_rating']==1 ? 'selected="selected"' : '') . '>' . $LANG_MG01['members_only'] . '</option>';
     $ranking_select .= '<option value="2"' . ($A['enable_rating']==2 ? 'selected="selected"' : '') . '>' . $LANG_MG01['always'] . '</option>';
     $ranking_select .= '</select>';
 
-    $podcast_select = '<input type="checkbox" name="podcast" value="1" ' . ($A['podcast'] ? ' checked="checked"' : '') . XHTML .  '>';
-    $mp3ribbon_select = '<input type="checkbox" name="mp3ribbon" value="1" ' . ($A['mp3ribbon'] ? ' checked="checked"' : '') . XHTML . '>';
-    $rsschildren_select = '<input type="checkbox" name="rsschildren" value="1" ' . ($A['rsschildren'] ? ' checked="checked"' : '') . XHTML . '>';
+    $podcast_select = '<input type="checkbox" name="podcast" value="1" ' . ($A['podcast'] ? ' checked="checked"' : '') . '/>';
+    $mp3ribbon_select = '<input type="checkbox" name="mp3ribbon" value="1" ' . ($A['mp3ribbon'] ? ' checked="checked"' : '') . '/>';
+    $rsschildren_select = '<input type="checkbox" name="rsschildren" value="1" ' . ($A['rsschildren'] ? ' checked="checked"' : '') . '/>';
 
-    $comment_select = '<input type="checkbox" name="enable_comments" value="1" ' . ($A['enable_comments'] ? ' checked="checked"' : '') . XHTML . '>';
+    $comment_select = '<input type="checkbox" name="enable_comments" value="1" ' . ($A['enable_comments'] ? ' checked="checked"' : '') . '/>';
 
     $ss_select		= '<select name="enable_slideshow">';
     $ss_select		.= '<option value="0" ' . ($A['enable_slideshow'] == 0 ? ' selected="selected"' : '') . '>' . $LANG_MG01['disabled'] . '</option>';
@@ -272,11 +269,11 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     $ss_select		.= '<option value="5"' . ($A['enable_slideshow'] == 5 ? ' selected="selected"' : '') . '>' . $LANG_MG01['mp3_jukebox'] . '</option>';
     $ss_select      .= '</select>';
 
-    $sf_select      = '<input type="checkbox" name="enable_shutterfly" value="1" ' . ($A['enable_shutterfly'] ? ' checked="checked"' : '') . XHTML . '>';
-    $views_select   = '<input type="checkbox" name="enable_views" value="1" ' . ($A['enable_views'] ? ' checked="checked"' : '') . XHTML . '>';
-    $keywords_select = '<input type="checkbox" name="enable_keywords" value="1" ' . ($A['enable_keywords'] ? ' checked="checked"' : '') . XHTML . '>';
-    $sort_select    = '<input type="checkbox" name="enable_sort" value="1" ' . ($A['enable_sort'] ? ' checked="checked"' : '') . XHTML . '>';
-    $rss_select     = '<input type="checkbox" name="enable_rss" value="1" ' . ($A['enable_rss'] ? ' checked="checked"' : '') . XHTML . '>';
+    $sf_select      = '<input type="checkbox" name="enable_shutterfly" value="1" ' . ($A['enable_shutterfly'] ? ' checked="checked"' : '') . '/>';
+    $views_select   = '<input type="checkbox" name="enable_views" value="1" ' . ($A['enable_views'] ? ' checked="checked"' : '') . '/>';
+    $keywords_select = '<input type="checkbox" name="enable_keywords" value="1" ' . ($A['enable_keywords'] ? ' checked="checked"' : '') . '/>';
+    $sort_select    = '<input type="checkbox" name="enable_sort" value="1" ' . ($A['enable_sort'] ? ' checked="checked"' : '') . '/>';
+    $rss_select     = '<input type="checkbox" name="enable_rss" value="1" ' . ($A['enable_rss'] ? ' checked="checked"' : '') . '/>';
 
     $postcard_select  = '<select name="enable_postcard">';
     $postcard_select .= '<option value="0"' . ($A['enable_postcard']==0 ? 'selected="selected"' : '') . '>' . $LANG_MG01['disabled'] . '</option>';
@@ -284,10 +281,10 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     $postcard_select .= '<option value="2"' . ($A['enable_postcard']==2 ? 'selected="selected"' : '') . '>' . $LANG_MG01['all_users'] . '</option>';
     $postcard_select .= '</select>';
 
-    $afirst_select   = '<input type="checkbox" name="albums_first" value="1" ' . ($A['albums_first'] ? ' checked="checked"' : '') . XHTML . '>';
-    $usealternate_select   = '<input type="checkbox" name="usealternate" value="1" ' . ($A['usealternate'] ? ' checked="checked"' : '') . XHTML . '>';
-    $album_views_select   = '<input type="checkbox" name="enable_album_views" value="1" ' . ($A['enable_album_views'] ? ' checked="checked"' : '') . XHTML . '>';
-    $display_album_desc_select   = '<input type="checkbox" name="display_album_desc" value="1" ' . ($A['display_album_desc'] ? ' checked="checked"' : '') . XHTML . '>';
+    $afirst_select   = '<input type="checkbox" name="albums_first" value="1" ' . ($A['albums_first'] ? ' checked="checked"' : '') . '/>';
+    $usealternate_select   = '<input type="checkbox" name="usealternate" value="1" ' . ($A['usealternate'] ? ' checked="checked"' : '') . '/>';
+    $album_views_select   = '<input type="checkbox" name="enable_album_views" value="1" ' . ($A['enable_album_views'] ? ' checked="checked"' : '') . '/>';
+    $display_album_desc_select   = '<input type="checkbox" name="display_album_desc" value="1" ' . ($A['display_album_desc'] ? ' checked="checked"' : '') . '/>';
 
     $tn_size_select  = '<select name="tn_size">';
     $tn_size_select .= '<option value="0"' . ($A['tn_size']==0 ? 'selected="selected"' : '') . '>' . $LANG_MG01['small'] . '</option>';
@@ -309,21 +306,21 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     $display_image_size_select .= '<option value="9"' . ($A['display_image_size']==9 ? 'selected="selected"' : '') . '>' . $LANG_MG01['size_custom'] . $_MG_CONF['custom_image_width'] . 'x' . $_MG_CONF['custom_image_height'] . '</option>';
     $display_image_size_select .= '</select>';
 
-    $rows_input = '<input type="text" size="3" name="display_rows" value="' . $A['display_rows'] . '"' . XHTML . '>';
-    $columns_input = '<input type="text" size="3" name="display_columns" value="' . $A['display_columns'] . '"' . XHTML . '>';
+    $rows_input = '<input type="text" size="3" name="display_rows" value="' . $A['display_rows'] . '"/>';
+    $columns_input = '<input type="text" size="3" name="display_columns" value="' . $A['display_columns'] . '"/>';
 
-    $max_image_height_input = '<input type="text" size="4" name="max_image_height" value="' . $A['max_image_height'] . '"' . XHTML . '>';
-    $max_image_width_input = '<input type="text" size="4" name="max_image_width" value="' . $A['max_image_width'] . '"' . XHTML . '>';
+    $max_image_height_input = '<input type="text" size="4" name="max_image_height" value="' . $A['max_image_height'] . '"/>';
+    $max_image_width_input = '<input type="text" size="4" name="max_image_width" value="' . $A['max_image_width'] . '"/>';
 
-    $tnheight_input = '<input type="text" size="3" name="tnheight" value="' . $A['tnheight'] . '"' . XHTML . '>';
-    $tnwidth_input  = '<input type="text" size="3" name="tnwidth" value="' . $A['tnwidth'] . '"' . XHTML . '>';
+    $tnheight_input = '<input type="text" size="3" name="tnheight" value="' . $A['tnheight'] . '"/>';
+    $tnwidth_input  = '<input type="text" size="3" name="tnwidth" value="' . $A['tnwidth'] . '"/>';
 
     if ( $A['max_filesize'] != 0 ) {
         $A['max_filesize'] = $A['max_filesize'] / 1024;
     }
-    $max_filesize_input = '<input type="text" size="10" name="max_filesize" value="' . $A['max_filesize'] . '"' . XHTML . '>';
+    $max_filesize_input = '<input type="text" size="10" name="max_filesize" value="' . $A['max_filesize'] . '"/>';
 
-    $email_mod_select = '<input type="checkbox" name="email_mod" value="1" ' . ($A['email_mod'] ? ' checked="checked"' : '') . XHTML . '>';
+    $email_mod_select = '<input type="checkbox" name="email_mod" value="1" ' . ($A['email_mod'] ? ' checked="checked"' : '') . '/>';
 
     $playback_type  = '<select name="playback_type">';
     $playback_type .= '<option value="0"' . ($A['playback_type']==0 ? 'selected="selected"' : '') . '>' . $LANG_MG01['play_in_popup'] . '</option>';
@@ -339,7 +336,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     }
     $album_theme_select .= '</select>';
 
-    $attach_select = '<input type="checkbox" name="attach_tn" value="1" ' . ($A['tn_attached'] ? ' checked="checked"' : '') . XHTML . '>';
+    $attach_select = '<input type="checkbox" name="attach_tn" value="1" ' . ($A['tn_attached'] ? ' checked="checked"' : '') . '/>';
 
     $result = DB_query("SELECT * FROM {$_TABLES['users']}");
     $nRows  = DB_numRows($result);
@@ -362,8 +359,6 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     $album_sort_select .= '<option value="4"' . ($A['album_sort_order']==4 ? 'selected="selected"' : '') . '>' . $LANG_MG03['sort_upload'] . '</option>';
     $album_sort_select .= '<option value="5"' . ($A['album_sort_order']==5 ? 'selected="selected"' : '') . '>' . $LANG_MG03['sort_alpha'] . '</option>';
     $album_sort_select .= '<option value="6"' . ($A['album_sort_order']==6 ? 'selected="selected"' : '') . '>' . $LANG_MG03['sort_alpha_asc'] . '</option>';
-//    $album_sort_select .= '<option value="7"' . ($A['album_sort_order']==7 ? 'selected="selected"' : '') . '>' . $LANG_MG03['sort_rating'] . '</option>';
-//    $album_sort_select .= '<option value="8"' . ($A['album_sort_order']==8 ? 'selected="selected"' : '') . '>' . $LANG_MG03['sort_rating_asc'] . '</option>';
 
     $album_sort_select .= '</select>';
 
@@ -373,7 +368,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         // -- build the featured selects and info...
         //
 
-        $featured_select = '<input type="checkbox" name="featured" value="1" ' . ($A['featured'] ? ' checked="checked"' : '') . XHTML . '>';
+        $featured_select = '<input type="checkbox" name="featured" value="1" ' . ($A['featured'] ? ' checked="checked"' : '') . '/>';
 
         // build featurepage select...
 
@@ -404,7 +399,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         ));
         $T->parse('featureselect', 'falbum');
 
-        $ri_select      = '<input type="checkbox" name="enable_random" value="1" ' . ($A['enable_random'] ? ' checked="checked"' : '') . XHTML . '>';
+        $ri_select      = '<input type="checkbox" name="enable_random" value="1" ' . ($A['enable_random'] ? ' checked="checked"' : '') . '/>';
 
         $T->set_var(array(
             'height_input'          => $max_image_height_input,
@@ -472,17 +467,17 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
                 $album_last_image = $_MG_CONF['mediaobjects_url'] . '/covers/cover_' . $A['album_id'] . $ext;
                 $media_size = @getimagesize($_MG_CONF['path_mediaobjects'] . 'covers/cover_' . $A['album_id'] . $ext);
                 if ( $media_size != false ) {
-                    $T->set_var('thumbnail','<img src="' . $_MG_CONF['mediaobjects_url'] . '/covers/cover_' . $A['album_id'] . $ext . '?r=' . $r . '" alt=""' . XHTML . '>');
+                    $T->set_var('thumbnail','<img src="' . $_MG_CONF['mediaobjects_url'] . '/covers/cover_' . $A['album_id'] . $ext . '?r=' . $r . '" alt=""/>');
                 }
                 break;
             }
         }
 //        $T->set_var('thumbnail','<img src="' . $_MG_CONF['mediaobjects_url'] . '/covers/cover_' . $A['album_id'] . '.jpg?r=' . $r . '" alt="">');
     }
-    $filename_title_select     = '<input type="checkbox" name="filename_title" value="1" ' . ($A['filename_title'] ? ' checked="checked"' : '') . XHTML . '>';
+    $filename_title_select     = '<input type="checkbox" name="filename_title" value="1" ' . ($A['filename_title'] ? ' checked="checked"' : '') . '/>';
 
     // watermark stuff...
-    $wm_auto_select     = '<input type="checkbox" name="wm_auto" value="1" ' . ($A['wm_auto'] ? ' checked="checked"' : '') . XHTML . '>';
+    $wm_auto_select     = '<input type="checkbox" name="wm_auto" value="1" ' . ($A['wm_auto'] ? ' checked="checked"' : '') . '/>';
 
     $wm_opacity_select  = '<select name="wm_opacity">';
     $wm_opacity_select .= '<option value="10"' . ($A['opacity']==10 ? 'selected="selected"' : '') . '>10%</option>';
@@ -522,13 +517,13 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     $wm_select =  '<select name="wm_id"  onchange="change(this)">';
     $wm_select .= '<option value="blank.png">' . $LANG_MG01['no_watermark'] . '</option>';
 
-    $wm_current = '<img src="' . $_MG_CONF['site_url'] . '/watermarks/blank.png" name="myImage" alt=""' . XHTML . '>';
+    $wm_current = '<img src="' . $_MG_CONF['site_url'] . '/watermarks/blank.png" name="myImage" alt=""/>';
 
     for ($i=0;$i<$nRows;$i++) {
         $row = DB_fetchArray($result);
         $wm_select .= '<option value="' . $row['filename'] . '"' . ($A['wm_id']==$row['wm_id'] ? 'selected="selected"' : '') . '>' . $row['filename'] . '</option>';
         if ( $A['wm_id'] == $row['wm_id']) {
-            $wm_current = '<img src="' . $_MG_CONF['site_url'] . '/watermarks/' . $row['filename'] . '" name="myImage" alt=""' . XHTML . '>';
+            $wm_current = '<img src="' . $_MG_CONF['site_url'] . '/watermarks/' . $row['filename'] . '" name="myImage" alt=""/>';
         }
     }
     $wm_select .= '</select>';
@@ -563,7 +558,6 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
             $moddd   .= '<option value="' . $usergroups[key($usergroups)] . '"';
             if ($A['group_id'] == $usergroups[key($usergroups)]) {
                 $groupdd .= ' selected="selected"';
-//                $groupname = key($usergroups);
             }
             if ($A['mod_group_id'] == $usergroups[key($usergroups)]) {
                 $moddd   .= ' selected="selected"';
@@ -576,11 +570,11 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     $groupdd .= '</select>';
     $moddd .= '</select>';
 
-    $upload_select   = '<input type="checkbox" name="uploads" value="1" ' . ($A['member_uploads'] ? ' checked="checked"' : '') . XHTML . '>';
-    $moderate_select = '<input type="checkbox" name="moderate" value="1" ' . ($A['moderate'] ? ' checked="checked"' : '') . XHTML . '>';
-    $child_update_select = '<input type="checkbox" name="force_child_update" value="1"' . XHTML . '>';
-    $hidden_select = '<input type="checkbox" name="hidden" value="1" ' . ($A['hidden'] ? ' checked="checked"' : '' ) . XHTML . '>';
-    $allow_download_select = '<input type="checkbox" name="allow_download" value="1" ' . ($A['allow_download'] ? ' checked="checked"' : '') . XHTML . '>';
+    $upload_select   = '<input type="checkbox" name="uploads" value="1" ' . ($A['member_uploads'] ? ' checked="checked"' : '') . '/>';
+    $moderate_select = '<input type="checkbox" name="moderate" value="1" ' . ($A['moderate'] ? ' checked="checked"' : '') . '/>';
+    $child_update_select = '<input type="checkbox" name="force_child_update" value="1"/>';
+    $hidden_select = '<input type="checkbox" name="hidden" value="1" ' . ($A['hidden'] ? ' checked="checked"' : '' ) . '/>';
+    $allow_download_select = '<input type="checkbox" name="allow_download" value="1" ' . ($A['allow_download'] ? ' checked="checked"' : '') . '/>';
 
     if ( SEC_hasRights('mediagallery.admin')) {
         $perm_editor = SEC_getPermissionsHTML($A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
@@ -600,7 +594,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         'lang_hidden'           => $LANG_MG01['hidden'],
         'permissions_msg'       => $LANG_ACCESS['permmsg'],
         'permissions_editor'    => $perm_editor,
-        'origaid'               => '<input type="hidden" name="origaid" value="' . $oldaid . '"' . XHTML . '>',
+        'origaid'               => '<input type="hidden" name="origaid" value="' . $oldaid . '"/>',
         'group_dropdown'        => $groupdd,
         'mod_dropdown'          => $moddd,
         'lang_member_upload'    => $LANG_MG01['member_upload'],

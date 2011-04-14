@@ -29,9 +29,12 @@
 
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
-require_once $_MG_CONF['path_admin'] . 'envcheck.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/init.php';
+//require_once $_MG_CONF['path_admin'] . 'envcheck.php';
 require_once $_MG_CONF['path_admin'] . 'navigation.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/classFrame.php';
+
+MG_initAlbums();
 
 // Only let admin users access this page
 if (!SEC_hasRights('mediagallery.config')) {
@@ -820,7 +823,7 @@ function MG_saveConfig( ) {
 
     // now check and see if the configuration is OK...
 
-    $display .= MG_checkEnvironment();
+//    $display .= MG_checkEnvironment();
     $display .= MG_siteFooter();
     echo $display;
     exit;

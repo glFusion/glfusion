@@ -30,7 +30,6 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
-require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-batch.php';
 
 if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
@@ -46,6 +45,10 @@ if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
     echo $display;
     exit;
 }
+
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-batch.php';
+MG_initAlbums();
 
 /**
 * Main

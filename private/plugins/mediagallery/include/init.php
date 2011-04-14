@@ -2,7 +2,7 @@
 // +--------------------------------------------------------------------------+
 // | Media Gallery Plugin - glFusion CMS                                      |
 // +--------------------------------------------------------------------------+
-// | common.php                                                               |
+// | init.php                                                                 |
 // |                                                                          |
 // | Startup and general purpose routines                                     |
 // +--------------------------------------------------------------------------+
@@ -30,244 +30,13 @@
 // +--------------------------------------------------------------------------+
 
 // this file can't be used on its own
-if (!defined ('GVERSION'))
-{
+if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-define("MG_JPG",1);
-define("MG_PNG",2);
-define("MG_TIF",4);
-define("MG_GIF",8);
-define("MG_BMP",16);
-define("MG_TGA",32);
-define("MG_PSD",64);
-define("MG_MP3",128);
-define("MG_OGG",256);
-define("MG_ASF",512);
-define("MG_SWF",1024);
-define("MG_MOV",2048);
-define("MG_MP4",4096);
-define("MG_MPG",8192);
-define("MG_ZIP",16384);
-define("MG_OTHER",32768);
-define("MG_PDF"  ,65536);
-define("MG_FLV"  ,131072);
-define("MG_RFLV" ,262144);
-define("MG_EMB"  ,524288);
+require_once $_CONF['path'].'plugins/mediagallery/include/classMedia.php';
+require_once $_CONF['path'].'plugins/mediagallery/include/classFrame.php';
 
-// Mootools global
-if (!isset($gllabsMooToolsLoaded) ) {
-    $gllabsMooToolsLoaded = 0;
-}
-
-// This is a list of valid extensions for image media thumbnails / display images
-$_MG_CONF['validExtensions'] = array('.jpg','.png','.gif','.bmp');
-
-// placeholder until implemented
-$_MG_CONF['ad_shopping_cart'] = 0;
-
-$swfjsinclude = 0;
-$mgLightBox = 0;
-$themeStyle = '';
-
-$_MG_CONF['random_skin'] = 'default';
-
-// Read config data
-
-$_MG_CONF['tmp_path'] = $_CONF['path'] . 'plugins/mediagallery/tmp/';
-
-$result = DB_query("SELECT * FROM " . $_TABLES['mg_config'],1);
-while ($row = DB_fetchArray($result)) {
-    $_MG_CONF[$row['config_name']] = $row['config_value'];
-}
-
-if ( $_CONF['loginrequired'] == 1 ) {
-    $_MG_CONF['loginrequired'] = 1;
-}
-
-$_MG_CONF['up_mp3_player_enabled'] = 0;
-
-$_MG_CONF['dateformat'] = array();
-// let's load all the dataformats in memory so we do not have to keep processing it over and over...
-$result = DB_query("SELECT * FROM {$_TABLES['dateformats']}",1);
-while ($row = DB_fetchArray($result)) {
-    $_MG_CONF['dateformat'][$row['dfid']] = $row['format'];
-}
-
-// read user prefs, if any...
-if ( !COM_isAnonUser() ) {
-    $result = DB_query("SELECT * FROM " . $_TABLES['mg_userprefs'] . " WHERE uid='" . $_USER['uid']."'", 1);
-    $nRows  = DB_numRows($result);
-    if ( $nRows > 0 ) {
-        $_MG_USERPREFS = DB_fetchArray($result);
-    }
-}
-
-// safety checks....
-if ( $_MG_CONF['album_display_columns'] < 1 ) {
-    $_MG_CONF['album_display_columns'] = 1;
-}
-if ( $_MG_CONF['album_display_rows'] < 1 ) {
-    $_MG_CONF['album_display_rows'] = 9;
-}
-
-$result = DB_query("SELECT pi_version FROM {$_TABLES['plugins']} WHERE pi_name='mediagallery'",1);
-$row = DB_fetchArray($result,true);
-$mg_installed_version = $row[0];
-
-/*
- * Pull all rated media
- */
-
-$ratedIds = array();
-$ratedIds = RATING_getRatedIds('mediagallery');
-
-function MG_initAlbums() {
-    global $_GROUPS, $_MG_CONF, $MG_albums, $_TABLES, $_USER, $_DB_dbms;
-
-    $mgadmin = SEC_hasRights('mediagallery.admin');
-    $root    = SEC_inGroup('Root');
-
-    if (empty($_USER['uid']) ) {
-        $uid = 1;
-    } else {
-        $uid = $_USER['uid'];
-    }
-
-    $groups = $_GROUPS;
-    $sql        = "SELECT * FROM " . $_TABLES['mg_albums'] . " ORDER BY album_order DESC";
-    $result     = DB_query( $sql, 1);
-    $MG_albums = array();
-    $album = new mgAlbum();
-    $album->id = 0;
-    $album->title = 'root album';
-    $album->owner_id = $mgadmin;
-    $album->group_id = $root;
-    $album->skin     = isset($_MG_CONF['indextheme']) ? $_MG_CONF['indextheme'] : 'default';
-    if ( $mgadmin ) {
-        $album->access = 3;
-    }
-    $MG_albums[$album->id] = $album;
-
-    while ($A = DB_fetchArray($result) ) {
-        $album  = new mgAlbum();
-        $album->constructor($A,$mgadmin,$root,$groups);
-
-        /*
-         * We include hidden albums in the array since they
-         * can be used in auto tags which a user will have
-         * access to.
-         */
-
-        if ( $album->access > 0 ) {
-                $MG_albums[$album->id] = $album;
-        }
-    }
-
-    foreach( $MG_albums as $id => $album) {
-        if ($id != 0 && isset($MG_albums[$album->parent]->id) ) {
-            $MG_albums[$album->parent]->setChild($id);
-        }
-    }
-}
-
-function MG_getSortOrder( $aid, $sortOrder ) {
-    global $MG_albums;
-
-    if ($MG_albums[$aid]->enable_sort == 0 ) {
-        return " ORDER BY ma.media_order DESC";
-    }
-
-    switch ( $sortOrder ) {
-        case 0 :    // default
-            $orderBy = ' ORDER BY ma.media_order DESC';
-            break;
-        case 1 :    // default, reverse order
-            $orderBy = ' ORDER BY ma.media_order ASC';
-            break;
-        case 2 :    //  upload time, DESC
-            $orderBy = ' ORDER BY m.media_upload_time DESC';
-            break;
-        case 3 :
-            $orderBy = ' ORDER BY m.media_upload_time ASC';
-            break;
-        case 4 :    // capture time, DESC
-            $orderBy = ' ORDER BY m.media_time DESC';
-            break;
-        case 5 :
-            $orderBy = ' ORDER BY m.media_time ASC';
-            break;
-        case 6 :
-            $orderBy = ' ORDER BY m.media_rating DESC';
-            break;
-        case 7 :
-            $orderBy = ' ORDER BY m.media_rating ASC';
-            break;
-        case 8 :
-            $orderBy = ' ORDER BY m.media_views DESC';
-            break;
-        case 9 :
-            $orderBy = ' ORDER BY m.media_views ASC';
-            break;
-        case 10 :
-            $orderBy = ' ORDER BY m.media_title DESC';
-            break;
-        case 11 :
-            $orderBy = ' ORDER BY m.media_title ASC';
-            break;
-        default :
-            $orderBy = ' ORDER BY ma.media_order DESC';
-            break;
-    }
-    return $orderBy;
-}
-
-
-function MG_siteHeader($title='', $meta='') {
-    global $_MG_CONF;
-
-    switch( $_MG_CONF['displayblocks'] ) {
-        case 0 : // left only
-        case 2 :
-            return( COM_siteHeader('menu',$title,$meta) );
-            break;
-        case 1 : // right only
-        case 3 :
-            return ( COM_siteHeader('none',$title,$meta) );
-            break;
-        default :
-            return ( COM_siteHeader('menu',$title,$meta) );
-            break;
-    }
-}
-
-function MG_siteFooter() {
-    global $_CONF, $_MG_CONF;
-
-    $retval = '<br /><div style="text-align:center;"><a href="http://www.glfusion.org"><img src="' . MG_getImageFile('powerby_mg.png') . '" alt="" style="border:none;" /></a></div><br />';
-
-    switch( $_MG_CONF['displayblocks'] ) {
-        case 0 : // left only
-        case 3 : // none
-            $retval .= COM_siteFooter();
-            break;
-        case 1 : // right only
-        case 2 : // left and right
-            $retval .= COM_siteFooter( true );
-            break;
-        default :
-            $retval .= COM_siteFooter();
-            break;
-    }
-
-    // DEBUG
-//    if ( function_exists('xdebug_peak_memory_usage') ) {
-//        $retval .= '<br>Peak Memory: ' . (xdebug_peak_memory_usage() / 1024) / 1024 . ' mb';
-//    }
-
-    return $retval;
-}
 
 function MG_quotaUsage( $uid ) {
     global $_MG_CONF, $_TABLES;
@@ -321,16 +90,16 @@ function MG_usage( $application, $album_title, $media_title, $media_id ) {
     }
 
     $log_time = $now;
-    $user_id  = intval($_USER['uid']);
+    $user_id  = (int) $_USER['uid'];
     $user_ip  = DB_escapeString($REMOTE_ADDR);
     $user_name = DB_escapeString($_USER['username']);
 
     $title  = DB_escapeString($album_title);
     $ititle = DB_escapeString($media_title);
 
-    $sql = "INSERT INTO " . $_TABLES['mg_usage_tracking'] .
-            " (time,user_id,user_ip, user_name,application, album_title, media_title,media_id)
-              VALUES ($log_time, $user_id, '$user_ip', '$user_name', '$application', '$title', '$ititle', '$media_id')";
+    $sql = "INSERT INTO " . $_TABLES['mg_usage_tracking']
+         . " (time,user_id,user_ip, user_name,application, album_title, media_title,media_id)"
+         . " VALUES ($log_time, $user_id, '$user_ip', '$user_name', '$application', '$title', '$ititle', '$media_id')";
 
     DB_query( $sql );
 }
@@ -397,8 +166,7 @@ function generate_pic_pagination($base_url, $num_items, $per_page, $start_item, 
 
     $total_pages = ceil($num_items/$per_page);
 
-    if ( $total_pages == 1 )
-    {
+    if ( $total_pages == 1 ) {
         return '';
     }
 
@@ -406,10 +174,8 @@ function generate_pic_pagination($base_url, $num_items, $per_page, $start_item, 
 
     $page_string = '';
 
-    if ( $add_prevnext_text )
-    {
-        if ( $on_page > 1 )
-        {
+    if ( $add_prevnext_text ) {
+        if ( $on_page > 1 ) {
             $offset = (( $on_page - 2) * $per_page);
             if ($hasargs ) {
                 $page_string = ' <a href="' . $base_url . "&amp;s=" . ( ( $on_page - 2 ) * $per_page )  . '">' . $LANG_MG03['previous'] . '</a>&nbsp;&nbsp;';
@@ -477,9 +243,9 @@ function MG_getTemplatePath( $aid, $path = '')
     global $MG_albums, $_MG_CONF, $_CONF;
 
     if ( $aid < 0 || $MG_albums[$aid]->skin == 'default' || $MG_albums[$aid]->skin == '' ) {
-        return $_MG_CONF['template_path'];
+        return array($_MG_CONF['template_path'],$_MG_CONF['template_path'].'/admin/');
     }
-    return (array($path != '' ? $path : '',$_MG_CONF['template_path'] . '/themes/' . $MG_albums[$aid]->skin,$_MG_CONF['template_path']));
+    return (array($path != '' ? $path : '',$_MG_CONF['template_path'] . '/themes/' . $MG_albums[$aid]->skin,$_MG_CONF['template_path'],$_MG_CONF['template_path'].'/admin/'));
 }
 
 function MG_getThemeJS( $aid ) {
@@ -522,10 +288,8 @@ function MG_getThemes() {
 
     $fd = opendir( $_MG_CONF['template_path'] . '/themes/' );
 
-    while(( $dir = @readdir( $fd )) == TRUE )
-    {
-        if( is_dir( $_MG_CONF['template_path'] . '/themes/' . $dir) && $dir <> '.' && $dir <> '..' && $dir <> 'CVS' && substr( $dir, 0 , 1 ) <> '.' )
-        {
+    while(( $dir = @readdir( $fd )) == TRUE ) {
+        if( is_dir( $_MG_CONF['template_path'] . '/themes/' . $dir) && $dir <> '.' && $dir <> '..' && $dir <> 'CVS' && substr( $dir, 0 , 1 ) <> '.' ) {
             clearstatcache();
             $skins[$index] = $dir;
             $index++;
@@ -535,16 +299,17 @@ function MG_getThemes() {
     return $skins;
 }
 
-function MG_get_size($size) {
-$bytes = array('B','KB','MB','GB','TB');
-  foreach($bytes as $val) {
-   if($size > 1024){
-    $size = $size / 1024;
-   }else{
-    break;
-   }
-  }
-  return round($size, 2)." ".$val;
+function MG_get_size( $size )
+{
+    $bytes = array('B','KB','MB','GB','TB');
+    foreach ( $bytes as $val ) {
+        if ( $size > 1024 ) {
+            $size = $size / 1024;
+        } else {
+            break;
+        }
+    }
+    return round($size, 2)." ".$val;
 }
 
 /**

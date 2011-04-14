@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2010 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -30,8 +30,6 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
-require_once $_CONF['path'] . 'plugins/mediagallery/include/classMedia.php';
-require_once $_CONF['path'] . 'plugins/mediagallery/include/classFrame.php';
 
 if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
@@ -46,18 +44,16 @@ if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
     exit;
 }
 
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
+MG_initAlbums();
+
 function MG_displaySearchBox($msg = '') {
     global $_CONF, $_MG_CONF, $_TABLES, $LANG_MG01, $LANG_MG03;
 
     $retval = '';
 
     $T = new Template( MG_getTemplatePath(0) );
-
-    $T->set_file (array(
-        'search'    =>  'search.thtml',
-    ));
-    $T->set_var('site_url', $_CONF['site_url']);
-    $T->set_var('xhtml',XHTML);
+    $T->set_file ('search','search.thtml');
 
     $cat_select = '<select name="cat_id">';
     $cat_select .= '<option value="">' . $LANG_MG03['all_categories'] . '</option>';
@@ -68,7 +64,6 @@ function MG_displaySearchBox($msg = '') {
         $cat_select .= '<option value="' . $row['cat_id'] . '">' . $row['cat_name'] . '</option>';
     }
     $cat_select .= '</select>';
-
     $keytype = '<select name="keyType">';
     $keytype .= '<option value="phrase">' . $LANG_MG03['exact_phrase'] . '</option>';
     $keytype .= '<option value="all">' . $LANG_MG03['all'] . '</option>';
@@ -238,7 +233,6 @@ function MG_search($id,$page) {
         'return_url'            => $S['referer'] == '' ? $_MG_CONF['site_url'] : htmlentities($S['referer'], ENT_QUOTES, COM_getEncodingt()),
         'search_keywords'       => $S['keywords'],
         'lang_search'           => $LANG_MG01['search'],
-        'xhtml'                 => XHTML,
     ));
 
     $howmany = $mediaRows - ($page * $numresults);
@@ -334,11 +328,9 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
         'media_cell_keywords'   => 'album_page_body_media_cell_keywords.thtml',
         'mp3_podcast'			=> 'mp3_podcast.thtml',
     ));
-    $T->set_var('xhtml',XHTML);
 
     $F = new Template($_MG_CONF['template_path']);
     $F->set_var('media_frame',$imageFrameTemplate); //$MG_albums[0]->imageFrameTemplate);
-    $F->set_var('xhtml',XHTML);
     // --- set the default thumbnail
 
     $default_thumbnail = 'generic.png';
@@ -583,7 +575,7 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
         // check to see if comments and rating are enabled, if not, put a link to edit...
         if ( $MG_albums[0]->access == 3 ) {
     		$T->set_var(array(
-    			'edit_link'		=> '<br' . XHTML . '><a href="' . $_MG_CONF['site_url'] . '/admin.php?mode=mediaedit&amp;s=1&amp;album_id=' . $M['album_id'] . '&amp;mid=' . $M['media_id'] . '">' . $LANG_MG01['edit'] . '</a>',
+    			'edit_link'		=> '<br/><a href="' . $_MG_CONF['site_url'] . '/admin.php?mode=mediaedit&amp;s=1&amp;album_id=' . $M['album_id'] . '&amp;mid=' . $M['media_id'] . '">' . $LANG_MG01['edit'] . '</a>',
     		));
 		} else {
     		$T->set_var(array(
@@ -681,55 +673,54 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
     	));
 	}
 
-    	/*
-    	 * build the small rating bar
-    	 *
-    	 */
+	/*
+	 * build the small rating bar
+	 *
+	 */
 
-        if ( $MG_albums[$M['album_id']]->enable_rating > 0 ) {
-            $ip     = $_SERVER['REMOTE_ADDR'];
-            $uid    = isset($_USER['uid']) ? $_USER['uid'] : 1;
-            $static = false;
-            // check to see if we are the owner, if so, no rating for us...
-            if (isset($_USER['uid']) && $_USER['uid'] == $M['owner_id'] ) {
+    if ( $MG_albums[$M['album_id']]->enable_rating > 0 ) {
+        $ip     = $_SERVER['REMOTE_ADDR'];
+        $uid    = isset($_USER['uid']) ? $_USER['uid'] : 1;
+        $static = false;
+        // check to see if we are the owner, if so, no rating for us...
+        if (isset($_USER['uid']) && $_USER['uid'] == $M['owner_id'] ) {
+            $static = true;
+        } else {
+            if (in_array($M['media_id'], $ratedIds)) {
                 $static = true;
             } else {
-                if (in_array($M['media_id'], $ratedIds)) {
-                    $static = true;
-                } else {
-                    $static = '';
-                }
+                $static = '';
             }
-            if ( $MG_albums[$M['album_id']]->enable_rating == 1 && (!isset($_USER['uid']) || $_USER['uid'] < 2) ) {
-                $static = 'static';
-            }
-            $rating_box = RATING_ratingBar('mediagallery',$M['media_id'], $M['media_votes'], ($M['media_rating']*$M['media_votes'])/2, $static, 5,'','sm');
-        } else {
-            $rating_box = '';
         }
-
-        $T->set_var('rating_box',$rating_box);
-
-        if ( $M['media_type'] == 0 ) {
-            $direct_url = 'disp/' . $M['media_filename'][0] . '/' . $M['media_filename'] . '.' . $M['media_mime_ext'];
-            if ( !file_exists($_MG_CONF['path_mediaobjects'] . $direct_url) ) {
-                $direct_url = $_MG_CONF['mediaobjects_url'] . '/' . 'disp/' . $M['media_filename'][0] . '/' . $M['media_filename'] . '.jpg';
-            } else {
-                $direct_url = $_MG_CONF['mediaobjects_url'] . '/' . $direct_url;
-            }
-        } else {
-            $direct_url = $media_thumbnail;
+        if ( $MG_albums[$M['album_id']]->enable_rating == 1 && (!isset($_USER['uid']) || $_USER['uid'] < 2) ) {
+            $static = 'static';
         }
+        $rating_box = RATING_ratingBar('mediagallery',$M['media_id'], $M['media_votes'], ($M['media_rating']*$M['media_votes'])/2, $static, 5,'','sm');
+    } else {
+        $rating_box = '';
+    }
 
-        if ($MG_albums[$M['album_id']]->access == 3 ) {
-            $edit_item = '<a href="' . $_MG_CONF['site_url'] . '/admin.php?mode=mediaedit&amp;s=1&amp;album_id=' . $M['album_id'] . '&amp;mid=' . $M['media_id'] . '">' . $LANG_MG01['edit'] . '</a>';
+    $T->set_var('rating_box',$rating_box);
+
+    if ( $M['media_type'] == 0 ) {
+        $direct_url = 'disp/' . $M['media_filename'][0] . '/' . $M['media_filename'] . '.' . $M['media_mime_ext'];
+        if ( !file_exists($_MG_CONF['path_mediaobjects'] . $direct_url) ) {
+            $direct_url = $_MG_CONF['mediaobjects_url'] . '/' . 'disp/' . $M['media_filename'][0] . '/' . $M['media_filename'] . '.jpg';
         } else {
-            $edit_item = '';
+            $direct_url = $_MG_CONF['mediaobjects_url'] . '/' . $direct_url;
         }
+    } else {
+        $direct_url = $media_thumbnail;
+    }
+
+    if ($MG_albums[$M['album_id']]->access == 3 ) {
+        $edit_item = '<a href="' . $_MG_CONF['site_url'] . '/admin.php?mode=mediaedit&amp;s=1&amp;album_id=' . $M['album_id'] . '&amp;mid=' . $M['media_id'] . '">' . $LANG_MG01['edit'] . '</a>';
+    } else {
+        $edit_item = '';
+    }
 
 	$L = new Template( MG_getTemplatePath(0) );
 	$L->set_file('media_link','medialink.thtml');
-	$L->set_var('xhtml',XHTML);
 	$L->set_var('href',$url_media_item);
 	$L->set_var('hrefdirect',$direct_url);
 	$L->set_var('caption',PLG_replaceTags($M['media_title'],'mediagallery','media_title'));
@@ -777,9 +768,7 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
     $F->parse('media','media_frame');
     $media_item_thumbnail = $F->finish($F->get_var('media'));
 
-    $T->set_var(array(
-        'media_item_thumbnail' => $media_item_thumbnail,
-    ));
+    $T->set_var('media_item_thumbnail',$media_item_thumbnail);
 
     if ( !empty($M['media_keywords'] ) ) {
         $kwText = '';
@@ -992,7 +981,7 @@ if (($mode == $LANG_MG01['search'] && !empty ($LANG_MG01['search'])) || $mode ==
     exit;
 } elseif (isset($_GET['id']) ) {
     $id = COM_applyFilter($_GET['id']);
-    $page = intval(COM_applyFilter($_GET['page'],true));
+    $page = COM_applyFilter($_GET['page'],true);
     if ( $page < 1 )
       $page = 1;
     $display .= MG_search($id,$page);

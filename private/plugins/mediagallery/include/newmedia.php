@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: newmedia.php 3070 2008-09-07 02:40:49Z mevans0263                 $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -115,7 +115,7 @@ function MG_SWFUpload( $album_id ) {
     $album_jumpbox .= $LANG_MG03['jump_to'] . ':&nbsp;<select name="aid" onChange="forms[\'jumpbox\'].submit()">';
     $MG_albums[0]->buildJumpBox($album_id);
     $album_jumpbox .= '</select>';
-    $album_jumpbox .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '"' . XHTML . '>';
+    $album_jumpbox .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '"/>';
     $album_jumpbox .= '<input type="hidden" name="page" value="1">';
     $album_jumpbox .= '</form>';
 
@@ -255,7 +255,7 @@ function MG_SWFUpload( $album_id ) {
             if ( $disk_used+$filesize > $user_quota) {
                 COM_errorLog("MG Upload: File " . $filename . " would exceeds the users quota");
                 $tmpmsg = sprintf($LANG_MG02['upload_exceeds_quota'], $filename);
-                $statusMsg .= $tmpmsg . '<br' . XHTML . '>';
+                $statusMsg .= $tmpmsg . '<br/>';
                 return $tmpmsg;
             }
         }
@@ -336,7 +336,6 @@ function MG_userUpload( $album_id ) {
     $T = new Template( MG_getTemplatePath($album_id) );
     $T->set_file ('mupload','userupload.thtml');
     $T->set_var('site_url', $_MG_CONF['site_url']);
-    $T->set_var('xhtml',XHTML);
 
     $user_quota = MG_getUserQuota( $_USER['uid'] );
     if ( $user_quota > 0 ) {
@@ -363,7 +362,7 @@ function MG_userUpload( $album_id ) {
         's_form_action'     => $_MG_CONF['site_url'] .'/admin.php',
         'lang_upload_help'  => $LANG_MG03['upload_help'],
         'lang_upload_size'  => $msg_upload_size,
-        'lang_zip_help'     => ($_MG_CONF['zip_enabled'] == 1 ? $LANG_MG03['zip_file_help'] . '<br' . XHTML . '><br' . XHTML . '>' : ''),
+        'lang_zip_help'     => ($_MG_CONF['zip_enabled'] == 1 ? $LANG_MG03['zip_file_help'] . '<br/><br/>' : ''),
         'lang_media_upload' => $LANG_MG01['upload_media'],
         'lang_caption'      => $LANG_MG01['title'],
         'lang_file'         => $LANG_MG01['file'],
@@ -380,7 +379,7 @@ function MG_userUpload( $album_id ) {
         'cat_select'        => $cat_select,
         'album_id'          => $album_id,
         'action'            => 'upload',
-        'max_file_size'     => '<input type="hidden" name="MAX_FILE_SIZE" value="' . $html_max_filesize .'"' . XHTML . '>',
+        'max_file_size'     => '<input type="hidden" name="MAX_FILE_SIZE" value="' . $html_max_filesize .'"/>',
         'lang_quota'        => $quota,
         'album_select'      => $album_selectbox,
         'max_upload_size'   => $max_upload_size,
@@ -444,7 +443,7 @@ function MG_saveUserUpload( $album_id ) {
         if ( $MG_albums[$album_id]->max_filesize != 0 && $filesize > $MG_albums[$album_id]->max_filesize ) {
             COM_errorLog("MG Upload: File " . $filename . " exceeds maximum allowed filesize for this album");
             $tmpmsg = sprintf($LANG_MG02['upload_exceeds_max_filesize'], $filename);
-            $statusMsg .= $tmpmsg . '<br' . XHTML . '>';
+            $statusMsg .= $tmpmsg . '<br/>';
             continue;
         }
 
@@ -458,29 +457,29 @@ function MG_saveUserUpload( $album_id ) {
             switch( $error ) {
                 case 1 :
                     $tmpmsg = sprintf($LANG_MG02['upload_too_big'],$filename);
-                    $statusMsg .= $tmpmsg . '<br' . XHTML . '>';
+                    $statusMsg .= $tmpmsg . '<br/>';
                     COM_errorLog('MediaGallery:  Error - ' .$tmpmsg);
                     break;
                 case 2 :
                     $tmpmsg = sprintf($LANG_MG02['upload_too_big_html'], $filename);
-                    $statusMsg .= $tmpmsg  . '<br' . XHTML . '>';
+                    $statusMsg .= $tmpmsg  . '<br/>';
                     COM_errorLog('MediaGallery: Error - ' .$tmpmsg);
                     break;
                 case 3 :
                     $tmpmsg = sprintf($LANG_MG02['partial_upload'], $filename);
-                    $statusMsg .= $tmpmsg  . '<br' . XHTML . '>';
+                    $statusMsg .= $tmpmsg  . '<br/>';
                     COM_errorLog('MediaGallery: Error - ' .$tmpmsg);
                     break;
                 case 4 :
                     break;
                 case 6 :
-                    $statusMsg .= $LANG_MG02['missing_tmp'] . '<br' . XHTML . '>';
+                    $statusMsg .= $LANG_MG02['missing_tmp'] . '<br/>';
                     break;
                 case 7 :
-                    $statusMsg .= $LANG_MG02['disk_fail'] . '<br' . XHTML . '>';
+                    $statusMsg .= $LANG_MG02['disk_fail'] . '<br/>';
                     break;
                 default :
-                    $statusMsg .= $LANG_MG02['unknown_err'] . '<br' . XHTML . '>';
+                    $statusMsg .= $LANG_MG02['unknown_err'] . '<br/>';
                     break;
             }
             continue;
@@ -493,7 +492,7 @@ function MG_saveUserUpload( $album_id ) {
             if ( $disk_used+$filesize > $user_quota) {
                 COM_errorLog("MG Upload: File " . $filename . " would exceeds the users quota");
                 $tmpmsg = sprintf($LANG_MG02['upload_exceeds_quota'], $filename);
-                $statusMsg .= $tmpmsg . '<br' . XHTML . '>';
+                $statusMsg .= $tmpmsg . '<br/>';
                 continue;
             }
         }
@@ -503,7 +502,7 @@ function MG_saveUserUpload( $album_id ) {
 
         // process the uploaded files
         list($rc,$msg) = MG_getFile( $filetmp, $filename, $albums, $caption, $description, 1, 0, $filetype, $attach_tn, $thumbnail, $keywords, $category, $dnc,0 );
-        $statusMsg .= $filename . " " . $msg . '<br' . XHTML . '>';
+        $statusMsg .= $filename . " " . $msg . '<br/>';
         if ( $rc == true ) {
             $successfull_upload++;
         }
@@ -550,9 +549,7 @@ function MG_xppub($album_id) {
     $T->set_file (array(
         'page'          => 'xppublish.thtml',
     ));
-    $T->set_var('site_url',$_CONF['site_url']);
     $T->set_var('admin_url', $_MG_CONF['admin_url']);
-    $T->set_var('xhtml',XHTML);
 
     $reg_url = sprintf($LANG_MG03['xp_pub_url'], $_MG_CONF['admin_url'] . 'xppubwiz.php?step=reg');
     $reg_url_vista = sprintf($LANG_MG03['vista_pub_url'], $_MG_CONF['admin_url'] . 'xppubwiz.php?step=regvista');
@@ -581,9 +578,7 @@ function MG_galleryRemote($album_id) {
     $T->set_file (array(
         'page'          => 'xppublish.thtml',
     ));
-    $T->set_var('site_url',$_CONF['site_url']);
     $T->set_var('admin_url', $_MG_CONF['admin_url']);
-    $T->set_var('xhtml',XHTML);
 
     $T->set_var(array(
         'lang_help1'    =>  $LANG_MG03['gremote_msg'],

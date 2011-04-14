@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | 4Images import wizard (written for 4Image 1.7.3)                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -29,6 +29,7 @@
 
 require_once '../../../../../lib-common.php';
 require_once '../../../../auth.inc.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/init.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-batch.php';
 
@@ -453,7 +454,7 @@ function MG_buildImportAlbums( ) {
 function MG_importSelectAlbums( ) {
     global $mgAlbums, $_TABLES, $_CONF, $_MG_CONF, $LANG_MG02, $_USER, $_POST, $storeConfig;
 
-    $T = new Template($_MG_CONF['template_path']);
+    $T = new Template($_MG_CONF['template_path'].'/import/');
     $T->set_file (array('page' => 'import_select_items.thtml'));
 
     MG_buildImportAlbums();
@@ -602,7 +603,7 @@ function MG_importFiles( $album_id, $import_album_id, $galleryDir, $session_id )
 // -- main processing here...
 
 $display = '';
-
+MG_initAlbums();
 if (isset($_POST['mode']) ) {
 	$mode 	    = COM_applyFilter($_POST['mode']);
 
@@ -660,7 +661,7 @@ if (isset($_POST['mode']) ) {
 }
 
 $display  = MG_siteHeader();
-$T = new Template($_MG_CONF['template_path']);
+$T = new Template($_MG_CONF['template_path'].'/import/');
 $T->set_file (array('page' => 'convert_4images_settings.thtml'));
 $T->set_var('form_action',$_CONF['site_admin_url'] . '/plugins/mediagallery/importers/4images/index.php');
 $T->set_var('dbprefix','4images_');

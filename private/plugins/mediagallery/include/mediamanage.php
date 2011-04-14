@@ -61,10 +61,7 @@ function MG_imageAdmin( $album_id, $page, $actionURL = '' ) {
         'empty'     =>  'album_page_noitems.thtml',
         'media'     =>  'mediaitems.thtml'
     ));
-
-    $T->set_var('site_url', $_CONF['site_url']);
     $T->set_var('album_id',$album_id);
-    $T->set_var('xhtml',XHTML);
 
     // -- Get Album Cover Info..
     if ( $MG_albums[$album_id]->access != 3) {
@@ -184,16 +181,16 @@ function MG_imageAdmin( $album_id, $page, $actionURL = '' ) {
                     } else {
                         $album_cover_check = "";
                     }
-                    $radio_box ='<input type="radio" name="cover" value="' . $row['media_id'] . '" ' . $album_cover_check . XHTML . '>';
+                    $radio_box ='<input type="radio" name="cover" value="' . $row['media_id'] . '" ' . $album_cover_check . '/>';
                 } else {
                     $radio_box = '&nbsp;';
                 }
 
                 if ( $row['media_type'] == 0 ) {
                     if ( $row['include_ss'] == 1 ) {
-                        $include_ss = '<input type="checkbox" name="ss[' . $counter . ']" value="1" checked="checked"' . XHTML . '>';
+                        $include_ss = '<input type="checkbox" name="ss[' . $counter . ']" value="1" checked="checked"/>';
                     } else {
-                        $include_ss = '<input type="checkbox" name="ss[' . $counter . ']" value="1"' . XHTML . '>';
+                        $include_ss = '<input type="checkbox" name="ss[' . $counter . ']" value="1"/>';
                     }
                 } else {
                     $include_ss = '&nbsp;';
@@ -252,7 +249,7 @@ function MG_imageAdmin( $album_id, $page, $actionURL = '' ) {
                 $cat_select .= '</select>';
 
                 $T->set_var(array(
-                    'lang_category' =>      '<br' . XHTML . '>' . $LANG_MG01['category'] . '&nbsp;',
+                    'lang_category' =>      '<br/>' . $LANG_MG01['category'] . '&nbsp;',
                     'cat_select'    =>      $cat_select,
                     'row_class'     =>      ($rowclass % 2) ? '1' : '2',
                     'media_id'      =>      $row['media_id'],
@@ -462,6 +459,11 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
     $preview = '';
     $preview_end = '';
 
+    $srcURL = '';
+    if ( $view ) {
+        $srcURL = '&amp;s=1';
+    }
+
     $T = new Template( MG_getTemplatePath($album_id) );
     $T->set_file (array(
         'admin'         =>  'mediaedit.thtml',
@@ -471,9 +473,7 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         'mov_options'   =>  'edit_mov_options.thtml',
         'flv_options'   =>  'edit_flv_options.thtml',
     ));
-    $T->set_var('site_url', $_CONF['site_url']);
     $T->set_var('album_id',$album_id);
-    $T->set_var('xhtml',XHTML);
 
     // a little sanity check, make sure the media item really belongs to the passed album.
 
@@ -482,7 +482,7 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
     // Find which albums this image is already in...
 
     $sql = "SELECT album_id FROM " .
-            $_TABLES['mg_media_albums'] .
+            ($mqueue ? $_TABLES['mg_media_album_queue'] : $_TABLES['mg_media_albums']) .
             " WHERE media_id='" . DB_escapeString($media_id) ."'";
 
     $result = DB_query($sql);
@@ -500,15 +500,10 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
 
     // pull the media information from the database...
 
-    if ($_DB_dbms == "mssql" ) {
-        $sql = "SELECT *,CAST(media_desc AS TEXT) as media_desc FROM " .
-                ($mqueue ? $_TABLES['mg_mediaqueue'] : $_TABLES['mg_media']) .
-                " WHERE media_id='" . DB_escapeString($media_id) . "'";
-    } else {
-        $sql = "SELECT * FROM " .
-                ($mqueue ? $_TABLES['mg_mediaqueue'] : $_TABLES['mg_media']) .
-                " WHERE media_id='" . DB_escapeString($media_id) . "'";
-    }
+    $sql = "SELECT * FROM " .
+            ($mqueue ? $_TABLES['mg_mediaqueue'] : $_TABLES['mg_media']) .
+            " WHERE media_id='" . DB_escapeString($media_id) . "'";
+
     $result = DB_query($sql);
     $row    = DB_fetchArray($result);
 
@@ -592,8 +587,8 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
 	            $rotate_right = '';
 	            $rotate_left  = '';
             } else {
-            	$rotate_right   = '<a href="' . $_MG_CONF['site_url'] . '/admin.php?mode=rotate&amp;action=right&amp;media_id=' . $row['media_id'] . '&amp;album_id=' . $album_id . '">' . '<img src="' . $_MG_CONF['site_url'] . '/images/rotate_right_icon.gif"  alt="' . $LANG_MG01['rotate_left']  . '" style="border:none;"' . XHTML . '></a>';
-            	$rotate_left    = '<a href="' . $_MG_CONF['site_url'] . '/admin.php?mode=rotate&amp;action=left&amp;media_id=' . $row['media_id'] . '&amp;album_id=' . $album_id . '">'  . '<img src="' . $_MG_CONF['site_url'] . '/images/rotate_left_icon.gif" alt="' . $LANG_MG01['rotate_right'] . '" style="border:none;"' . XHTML . '></a>';
+            	$rotate_right   = '<a href="' . $_MG_CONF['site_url'] . '/admin.php?mode=rotate&amp;action=right'.$srcURL.'&amp;queue='.$mqueue.'&amp;media_id=' . $row['media_id'] . '&amp;album_id=' . $album_id . '">' . '<img src="' . $_MG_CONF['site_url'] . '/images/rotate_right_icon.gif"  alt="' . $LANG_MG01['rotate_left']  . '" style="border:none;"/></a>';
+            	$rotate_left    = '<a href="' . $_MG_CONF['site_url'] . '/admin.php?mode=rotate&amp;action=left'.$srcURL.'&amp;queue='.$mqueue.'&amp;media_id=' . $row['media_id'] . '&amp;album_id=' . $album_id . '">'  . '<img src="' . $_MG_CONF['site_url'] . '/images/rotate_left_icon.gif" alt="' . $LANG_MG01['rotate_right'] . '" style="border:none;"/></a>';
         	}
             break;
         case 1 :
@@ -713,7 +708,7 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
 	    	$atnsize = '';
     	}
         $T->set_var(array(
-            'attached_thumbnail' => '<img src="' . $_MG_CONF['mediaobjects_url'] . '/tn/' . $row['media_filename'][0] . '/tn_' . $row['media_filename'] . $ext . '" alt="" ' . $atnsize . XHTML . '>',
+            'attached_thumbnail' => '<img src="' . $_MG_CONF['mediaobjects_url'] . '/tn/' . $row['media_filename'][0] . '/tn_' . $row['media_filename'] . $ext . '" alt="" ' . $atnsize . '/>',
         ));
     }
 
@@ -1011,6 +1006,7 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         'at_tn_checked'     =>  $row['media_tn_attached'] == 1 ? ' checked="checked"' : '',
         'album_id'          =>  $album_id,
         'media_thumbnail'   =>  $thumbnail,
+        'nocache'           =>  time(),
         'media_id'          =>  $row['media_id'],
         'media_title'       =>  $row['media_title'],
         'media_desc'        =>  $row['media_desc'],

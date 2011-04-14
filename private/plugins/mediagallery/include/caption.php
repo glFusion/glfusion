@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: caption.php 3070 2008-09-07 02:40:49Z mevans0263                  $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -101,9 +101,7 @@ function MG_batchCaptionEdit( $album_id, $start, $actionURL = '' ) {
         'media'     =>  'batch_caption_media_items.thtml'
     ));
 
-    $T->set_var('site_url', $_CONF['site_url']);
     $T->set_var('album_id',$album_id);
-    $T->set_var('xhtml',XHTML);
 
     if ( $_DB_dbms == "mssql" ) {
         $sql = "SELECT *,CAST(media_desc AS TEXT) as media_desc FROM " .
@@ -256,7 +254,7 @@ function MG_batchCaptionEdit( $album_id, $start, $actionURL = '' ) {
         'start'             => $start,
         'lang_cancel'       => $LANG_MG01['cancel'],
         'lang_save_exit'    => $LANG_MG01['save_exit'],
-        'input_next'        => ($start >= $A['media_count'] ? '' : '<input type="submit" name="mode" value="' . $LANG_MG01['save_next_batch'] . '"' . XHTML .'>'),
+        'input_next'        => ($start >= $A['media_count'] ? '' : '<input type="submit" name="mode" value="' . $LANG_MG01['save_next_batch'] . '"/>'),
         'lang_save_next_batch' => $LANG_MG01['save_next_batch'],
         'lang_batch_caption_help' => $LANG_MG01['batch_caption_help']
     ));
@@ -267,7 +265,7 @@ function MG_batchCaptionEdit( $album_id, $start, $actionURL = '' ) {
 
 
 function MG_batchCaptionSave( $album_id, $start, $actionURL ) {
-    global $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $_POST;
+    global $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01;
 
     $media_title = array();
     $media_desc  = array();
@@ -280,6 +278,12 @@ function MG_batchCaptionSave( $album_id, $start, $actionURL ) {
     $total_media = count($media_id);
 
     for ($i=0; $i < $total_media; $i++ ) {
+        $queue = DB_count($_TABLES['mg_mediaqueue'],'media_id',DB_escapeString($media_id[$i]));
+        if ( $queue ) {
+            $tablename = $_TABLES['mg_mediaqueue'];
+        } else {
+            $tablename = $_TABLES['mg_media'];
+        }
         if ( $_MG_CONF['htmlallowed'] ) {
             $title    = DB_escapeString(COM_checkWords($media_title[$i]));
             $desc     = DB_escapeString(COM_checkWords($media_desc[$i]));
@@ -288,7 +292,7 @@ function MG_batchCaptionSave( $album_id, $start, $actionURL ) {
             $desc     = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords($media_desc[$i]))));
         }
 
-        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_title='" . $title . "', `media_desc` ='" . $desc  . "' WHERE media_id='" . DB_escapeString(COM_applyFilter($media_id[$i])) ."'";
+        $sql = "UPDATE " . $tablename . " SET media_title='" . $title . "', `media_desc` ='" . $desc  . "' WHERE media_id='" . DB_escapeString(COM_applyFilter($media_id[$i])) ."'";
         DB_query($sql);
         PLG_itemSaved($media_id[$i],'mediagallery');
 

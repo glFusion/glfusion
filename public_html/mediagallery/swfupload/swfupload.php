@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2010 by the following authors:                        |
+// | Copyright (C) 2009-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -41,6 +41,8 @@ if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
     exit;
 }
+
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
 
 $uid = (isset($_POST['uid'])) ? COM_applyFilter( $_POST['uid'], true ) : '';
 $sid = (isset($_POST['sid'])) ? COM_applyFilter( $_POST['sid'], false ) : '';

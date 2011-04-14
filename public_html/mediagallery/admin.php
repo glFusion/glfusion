@@ -30,6 +30,7 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
 
 if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
@@ -44,6 +45,8 @@ if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
     exit;
 }
 
+MG_initAlbums();
+
 function MG_invalidRequest( ) {
     global $LANG_MG02,$_CONF, $_MG_CONF;
 
@@ -52,8 +55,6 @@ function MG_invalidRequest( ) {
     $retval .= COM_startBlock ($LANG_MG02['error_header'], '',COM_getBlockTemplate ('_admin_block', 'header'));
     $T = new Template($_MG_CONF['template_path']);
     $T->set_file('admin','error.thtml');
-    $T->set_var('site_url', $_CONF['site_url']);
-    $T->set_var('site_admin_url', $_CONF['site_admin_url']);
     $T->set_var('errormessage',$LANG_MG02['generic_error']);
     $T->parse('output', 'admin');
     $retval .= $T->finish($T->get_var('output'));
@@ -367,12 +368,6 @@ if (($mode == 'edit') ) {
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/ftpmedia.php';
                 $display .= MG_ftpProcess($album_id);
                 break;
-            case 'moderate' :
-                require_once $_CONF['path'] . 'plugins/mediagallery/include/moderate.php';
-                $display = MG_siteHeader();
-                $display .= MG_saveModeration( $album_id, $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id  );
-                CACHE_remove_instance('whatsnew');
-                break;
             case 'media' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/mediamanage.php';
                 $display  = MG_siteHeader();
@@ -580,7 +575,8 @@ if (($mode == 'edit') ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/mediamanage.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $media_id = COM_applyFilter($_GET['mid'],true);
-        if ( isset($_GET['s']) ) {
+        $srcURL   = COM_applyFilter($_GET['s'],true);
+        if ( $srcURL ) {
             $actionURL = $_MG_CONF['site_url'] . '/admin.php';
             $back = $_MG_CONF['site_url'] . '/media.php?f=0&sort=0&s=' . $media_id;
         } else {
@@ -588,7 +584,7 @@ if (($mode == 'edit') ) {
             $back = '';
         }
         $display = MG_siteHeader();
-        $display .= MG_mediaEdit( $album_id, $media_id,$actionURL,0,0,$back );
+        $display .= MG_mediaEdit( $album_id, $media_id,$actionURL,0,$srcURL,$back );
     } else {
         $display = MG_siteHeader();
         $display .= MG_invalidRequest();
@@ -608,20 +604,15 @@ if (($mode == 'edit') ) {
     }
     $display .= MG_siteFooter();
     echo $display;
-
-// maybe we want to add a new entry here, modall and modalbum help with the return stuff...
-
 } else if ( $mode == 'moderate' ) {  // handle the moderation queue
     if ( isset($_GET['album_id']) ) {
-        require_once $_CONF['path'] . 'plugins/mediagallery/include/moderate.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
         if ( $album_id == -1) {
-            $actionURL = $_MG_CONF['admin_url'] . 'index.php';
-        } else {
-            $actionURL = $_MG_CONF['site_url'] . '/admin.php?album_id=' . $album_id;
+            echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
+            exit;
         }
-        $display = MG_siteHeader();
-        $display .= MG_userModerate( $album_id, $actionURL );
+        echo COM_refresh($_CONF['site_admin_url'] . '/moderation.php');
+        exit;
     } else {
         $display = MG_siteHeader();
         $display .= MG_invalidRequest();
@@ -684,7 +675,14 @@ if (($mode == 'edit') ) {
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $media_id = COM_applyFilter($_GET['media_id']);
         $direction = COM_applyFilter($_GET['action']);
-        $actionURL = $_MG_CONF['site_url'] . '/admin.php?mode=mediaedit&mid=' . $media_id . '&album_id=' . $album_id;
+        $queue     = COM_applyFilter($_GET['queue'],true);
+        $srcFrom   = COM_applyFilter($_GET['s'],true);
+        $srcURL = '';
+        if ( $srcFrom ) {
+            $srcURL = '&amp;s=1';
+        }
+        $eMode = ($queue == 0) ? 'mediaedit' : 'mediaeditq';
+        $actionURL = $_MG_CONF['site_url'] . '/admin.php?mode='.$eMode.$srcURL.'&mid=' . $media_id . '&album_id=' . $album_id;
         $display = MG_siteHeader();
         MG_rotateMedia( $album_id, $media_id, $direction, $actionURL);
     } else {

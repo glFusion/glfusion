@@ -30,8 +30,6 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
-require_once $_CONF['path'] . 'plugins/mediagallery/include/classMedia.php';
-require_once $_CONF['path'] . 'lib/phpmailer/class.phpmailer.php';
 
 if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
@@ -45,8 +43,11 @@ if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
     exit;
 }
 
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
+MG_initAlbums();
+
 function MG_previewPostCard() {
-    global $MG_albums, $_MG_CONF, $_CONF, $_TABLES, $_USER, $LANG_MG03, $LANG_ACCESS, $LANG_MG00, $_POST;
+    global $MG_albums, $_MG_CONF, $_CONF, $_TABLES, $_USER, $LANG_MG03, $LANG_ACCESS, $LANG_MG00;
 
     $mid        = COM_applyFilter($_POST['mid']);
     $toname     = COM_applyFilter($_POST['toname']);
@@ -60,18 +61,18 @@ function MG_previewPostCard() {
     // do some validation
     $errMsg = '';
     if ( !COM_isEmail( $toemail )) {
-        $errMsg .= $LANG_MG03['invalid_to_email'] . '<br' . XHTML . '>';
+        $errMsg .= $LANG_MG03['invalid_to_email'] . '<br/>';
         $toemail = '<span style="color:#ff0000;">' . $LANG_MG03['invalid_email'] . '</span>';
 
     }
     if ( !COM_isEmail( $fromemail) ) {
-        $errMsg .= $LANG_MG03['invalid_from_email'] . '<br' . XHTML . '>';
+        $errMsg .= $LANG_MG03['invalid_from_email'] . '<br/>';
     }
     if (empty($subject)) {
-        $errMsg .= $LANG_MG03['invalid_subject'] . '<br' . XHTML . '>';
+        $errMsg .= $LANG_MG03['invalid_subject'] . '<br/>';
     }
     if (empty($message)) {
-        $errMsg .= $LANG_MG03['invalid_message'] . '<br' . XHTML . '>';
+        $errMsg .= $LANG_MG03['invalid_message'] . '<br/>';
     }
 
     $retval = '';
@@ -81,7 +82,7 @@ function MG_previewPostCard() {
     if ( $MG_albums[$aid]->access == 0 || $MG_albums[$aid]->enable_postcard == 0 || ($_USER['uid'] < 2 && $MG_albums[$aid]->enable_postcard != 2)) {
         $retval  = MG_siteHeader();
         $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-                 . '<br' . XHTML . '>' . $LANG_MG00['access_denied_msg']
+                 . '<br/>' . $LANG_MG00['access_denied_msg']
                  . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
         $retval .= MG_siteFooter();
         echo $retval;
@@ -95,7 +96,7 @@ function MG_previewPostCard() {
     if ( $nRows < 1 ) {
         $retval  = MG_siteHeader();
         $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-                 . '<br' . XHTML . '>' . $LANG_MG00['access_denied_msg']
+                 . '<br/>' . $LANG_MG00['access_denied_msg']
                  . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
         $retval .= MG_siteFooter();
         echo $retval;
@@ -106,7 +107,6 @@ function MG_previewPostCard() {
     // build the template...
     $T = new Template( MG_getTemplatePath($aid) );
     $T->set_file ('postcard', 'pc_preview.thtml');
-    $T->set_var('xhtml',XHTML);
 
     $media_size        = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $M['media_filename'][0] . '/' . $M['media_filename'] . '.jpg');
 
@@ -168,16 +168,16 @@ function MG_editPostCard( $mode, $mid, $msg='' ) {
 
         // do some validation
         if ( !COM_isEmail( $toemail )) {
-            $errMsg .= $LANG_MG03['invalid_to_email'] . '<br' . XHTML . '>';
+            $errMsg .= $LANG_MG03['invalid_to_email'] . '<br/>';
         }
         if ( !COM_isEmail( $fromemail) ) {
-            $errMsg .= $LANG_MG03['invalid_from_email'] . '<br' . XHTML . '>';
+            $errMsg .= $LANG_MG03['invalid_from_email'] . '<br/>';
         }
         if (empty($subject)) {
-            $errMsg .= $LANG_MG03['invalid_subject'] . '<br' . XHTML . '>';
+            $errMsg .= $LANG_MG03['invalid_subject'] . '<br/>';
         }
         if (empty($message)) {
-            $errMsg .= $LANG_MG03['invalid_message'] . '<br' . XHTML . '>';
+            $errMsg .= $LANG_MG03['invalid_message'] . '<br/>';
         }
         if ( $msg != '' ) {
             $errMsg .= $msg;
@@ -191,7 +191,7 @@ function MG_editPostCard( $mode, $mid, $msg='' ) {
     if ( $MG_albums[$aid]->access == 0 || $MG_albums[$aid]->enable_postcard == 0 || ($_USER['uid'] < 2 && $MG_albums[$aid]->enable_postcard != 2)) {
         $retval = MG_siteHeader();
         $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-                 . '<br' . XHTML . '>' . $LANG_MG00['access_denied_msg']
+                 . '<br/>' . $LANG_MG00['access_denied_msg']
                  . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
         $retval .= MG_siteFooter();
         echo $retval;
@@ -205,7 +205,7 @@ function MG_editPostCard( $mode, $mid, $msg='' ) {
     if ( $nRows < 1 ) {
         $retval = MG_siteHeader();
         $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-                 . '<br' . XHTML . '>' . $LANG_MG00['access_denied_msg']
+                 . '<br/>' . $LANG_MG00['access_denied_msg']
                  . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
         $retval .= MG_siteFooter();
         echo $retval;
@@ -216,7 +216,6 @@ function MG_editPostCard( $mode, $mid, $msg='' ) {
     // build the template...
     $T = new Template( MG_getTemplatePath($aid) );
     $T->set_file ('postcard', 'pc_edit.thtml');
-    $T->set_var('xhtml',XHTML);
 
     $media_size        = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $M['media_filename'][0] . '/' . $M['media_filename'] . '.jpg');
 
@@ -313,7 +312,7 @@ function MG_sendPostCard() {
     if ( $MG_albums[$aid]->access == 0 || $MG_albums[$aid]->enable_postcard == 0 || ( $_USER['uid'] < 2 && $MG_albums[$aid]->enable_postcard != 2)) {
         $retval = MG_siteHeader();
         $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-                 . '<br' . XHTML . '>' . $LANG_MG00['access_denied_msg']
+                 . '<br/>' . $LANG_MG00['access_denied_msg']
                  . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
         $retval .= MG_siteFooter();
         echo $retval;
@@ -327,7 +326,7 @@ function MG_sendPostCard() {
     if ( $nRows < 1 ) {
         $retval = MG_siteHeader();
         $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-                 . '<br' . XHTML . '>' . $LANG_MG00['access_denied_msg']
+                 . '<br/>' . $LANG_MG00['access_denied_msg']
                  . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
         $retval .= MG_siteFooter();
         echo $retval;
@@ -368,7 +367,6 @@ function MG_sendPostCard() {
     // build the template...
     $T = new Template( MG_getTemplatePath($aid) );
     $T->set_file ('postcard', 'postcard.thtml');
-    $T->set_var('xhtml',XHTML);
 
     $media_size        = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $M['media_filename'][0] . '/' . $M['media_filename'] . '.jpg');
 
@@ -478,25 +476,19 @@ function MG_postcardLog( $logentry )
 
     $retval = '';
 
-    if( !empty( $logentry ))
-    {
-        $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),
-                                 $logentry );
+    if( !empty( $logentry )) {
+        $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),$logentry );
 
         $timestamp = strftime( '%c' );
         $logfile = $_CONF['path_log'] . 'postcard.log';
 
-        if( !$file = fopen( $logfile, 'a' ))
-        {
+        if( !$file = fopen( $logfile, 'a' )) {
             return $LANG01[33] . $logfile . ' (' . $timestamp . ')<br>' . LB;
         }
 
-        if( isset( $_USER['uid'] ))
-        {
+        if( isset( $_USER['uid'] )) {
             $byuser = $_USER['uid'] . '@' . $_SERVER['REMOTE_ADDR'];
-        }
-        else
-        {
+        } else {
             $byuser = 'anon@' . $_SERVER['REMOTE_ADDR'];
         }
 
@@ -520,7 +512,7 @@ if ($mode == $LANG_MG03['send'] && !empty ($LANG_MG03['send'])) {
 } elseif ($mode == $LANG_MG03['preview']) {
     $mid = COM_applyFilter($_POST['mid']);
     $display .= MG_previewPostCard();
-    $display .= '<br' . XHTML . '><br' . XHTML . '><br' . XHTML . '>';
+    $display .= '<br/><br/><br/>';
     $display .= MG_editPostCard('edit',$mid);
 } elseif ($mode == $LANG_MG03['cancel']) {
     $mid = COM_applyFilter($_POST['mid']);

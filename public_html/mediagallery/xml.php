@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2010 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -35,6 +35,9 @@ if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
     exit;
 }
+
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
+MG_initAlbums();
 
 function MG_getAlbumList ()
 {

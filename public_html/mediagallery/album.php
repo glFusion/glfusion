@@ -30,14 +30,11 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
-require_once $_CONF['path'].'plugins/mediagallery/include/classMedia.php';
-require_once $_CONF['path'].'plugins/mediagallery/include/classFrame.php';
 
 if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
     exit;
 }
-
 if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
     $display = MG_siteHeader();
     $display .= SEC_loginRequiredForm();
@@ -46,6 +43,8 @@ if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
     exit;
 }
 
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
+MG_initAlbums();
 
 /*
 * Main Function
@@ -142,7 +141,6 @@ if ( $errorMessage != '' ) {
     $display .= COM_startBlock ($LANG_MG02['error_header'], '',COM_getBlockTemplate ('_admin_block', 'header'));
     $T = new Template($_MG_CONF['template_path']);
     $T->set_file('error','error.thtml');
-    $T->set_var('site_url', $_CONF['site_url']);
     $T->set_var('errormessage',$errorMessage);
     $T->parse('output', 'error');
     $display .= $T->finish($T->get_var('output'));
@@ -190,8 +188,8 @@ $album_jumpbox = '<form name="jumpbox" id="jumpbox" action="' . $_MG_CONF['site_
 $album_jumpbox .= $LANG_MG03['jump_to'] . ':&nbsp;<select name="aid" onchange="forms[\'jumpbox\'].submit()">';
 $MG_albums[0]->buildJumpBox($album_id);
 $album_jumpbox .= '</select>';
-$album_jumpbox .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '"' . XHTML . '>';
-$album_jumpbox .= '<input type="hidden" name="page" value="1"' . XHTML . '>';
+$album_jumpbox .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '"/>';
+$album_jumpbox .= '<input type="hidden" name="page" value="1"/>';
 $album_jumpbox .= '</div></form>';
 
 // initialize our variables
@@ -404,7 +402,7 @@ switch ( $MG_albums[$album_id]->enable_slideshow ) {
 
 $admin_box = '';
 $admin_box = '<form name="adminbox" id="adminbox" action="' . $_MG_CONF['site_url'] . '/admin.php" method="get" style="margin:0;padding:0">';
-$admin_box .= '<div><input type="hidden" name="album_id" value="' . $album_id . '"' . XHTML . '>';
+$admin_box .= '<div><input type="hidden" name="album_id" value="' . $album_id . '"/>';
 $admin_box .= '<select name="mode" onchange="forms[\'adminbox\'].submit()">';
 $admin_box .= '<option label="Options" value="">' . $LANG_MG01['options'] .'</option>';
 $admin_box .= '<option value="search">' . $LANG_MG01['search'] . '</option>';
@@ -426,7 +424,7 @@ if ( $MG_albums[0]->owner_id ) {
             $adminMenu  = 1;
         }
     }
-} else if ( $MG_albums[$album_id]->member_uploads == 1 && isset($_USER['uid']) && $_USER['uid'] >= 2 ) {
+} else if ( $MG_albums[$album_id]->member_uploads == 1 && !COM_isAnonUser() ) {
     $uploadMenu = 1;
     $adminMenu  = 0;
 }
@@ -445,19 +443,9 @@ if ( $adminMenu == 1 ) {
     $admin_box .= '<option value="create">' . $LANG_MG01['create_album'] . '</option>';
     $adminMenu = 1;
 }
-// now check for moderation capabilities....
-if ( $MG_albums[$album_id]->member_uploads == 1 && $MG_albums[$album_id]->moderate == 1 ){
-    // check to see if we are in the album_mod_group
-    if ( SEC_inGroup($MG_albums[$album_id]->mod_group_id) || $MG_albums[0]->owner_id /*SEC_hasRights('mediagallery.admin')*/ ) {
-        $queue_count = DB_count($_TABLES['mg_media_album_queue'],'album_id',$album_id);
-        $admin_box .= '<option value="moderate">' . $LANG_MG01['media_queue'] . ' (' . $queue_count . ')</option>';
-        $adminMenu = 1;
-    }
-}
 
 $admin_box .= '</select>';
-$admin_box .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '" style="padding:0px;margin:0px;"' . XHTML . '>';
-
+$admin_box .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '" style="padding:0px;margin:0px;"/>';
 $admin_box .= '</div></form>';
 
 if ( $uploadMenu == 0 && $adminMenu == 0 ) {
@@ -466,8 +454,8 @@ if ( $uploadMenu == 0 && $adminMenu == 0 ) {
 
 if ( $MG_albums[$album_id]->enable_sort == 1 ) {
     $sort_box = '<form name="sortbox" id="sortbox" action="' . $_MG_CONF['site_url'] . '/album.php" method="get" style="margin:0;padding:0"><div>';
-    $sort_box .= '<input type="hidden" name="aid" value="' . $album_id . '"' . XHTML . '>';
-    $sort_box .= '<input type="hidden" name="page" value="' . $page . '"' . XHTML . '>';
+    $sort_box .= '<input type="hidden" name="aid" value="' . $album_id . '"/>';
+    $sort_box .= '<input type="hidden" name="page" value="' . $page . '"/>';
     $sort_box .= $LANG_MG03['sort_by'] . '&nbsp;<select name="sort" onchange="forms[\'sortbox\'].submit()">';
     $sort_box .= '<option value="0" ' . ($sortOrder==0 ? ' selected="selected" ' : '') . '>' . $LANG_MG03['sort_default'] . '</option>';
     $sort_box .= '<option value="1" ' . ($sortOrder==1 ? ' selected="selected" ' : '') . '>' . $LANG_MG03['sort_default_asc'] . '</option>';
@@ -483,7 +471,7 @@ if ( $MG_albums[$album_id]->enable_sort == 1 ) {
     $sort_box .= '<option value="11" ' . ($sortOrder==11 ? ' selected="selected" ' : '') . '>' . $LANG_MG03['sort_alpha_asc'] . '</option>';
 
     $sort_box .= '</select>';
-    $sort_box .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '"' . XHTML . '>';
+    $sort_box .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '"/>';
     $sort_box .= '</div></form>';
 } else {
     $sort_box = '';
@@ -526,14 +514,13 @@ $T->set_var(array(
 	'album_owner'			=> $ownername,
 	'media_count'			=> $MG_albums[$album_id]->getMediaCount(),
 	'lang_search'           => $LANG_MG01['search'],
-	'xhtml'                 => XHTML,
 ));
 
 if ( $MG_albums[$album_id]->enable_rss ) {
     $rssfeedname = sprintf($_MG_CONF['rss_feed_name'] . "%06d", $album_id);
     $feedUrl = MG_getFeedUrl($rssfeedname.'.rss');
     $rsslink = '<a href="' . $feedUrl . '"' . ' type="application/rss+xml">';
-    $rsslink .= '<img src="' . MG_getImageFile('feed.png')  . '" style="border:none;" alt=""' . XHTML . '></a>';
+    $rsslink .= '<img src="' . MG_getImageFile('feed.png')  . '" style="border:none;" alt=""/></a>';
     $T->set_var('rsslink', $rsslink);
 } else {
 	$T->set_var('rsslink','');

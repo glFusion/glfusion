@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | Gallery v1.x Import Script                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -29,6 +29,7 @@
 
 require_once '../../../../../lib-common.php';
 require_once '../../../../auth.inc.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/init.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-batch.php';
 
@@ -490,9 +491,9 @@ function MG_buildImportAlbums( $galleryDir ) {
 }
 
 function MG_importSelectAlbums($galleryDir ) {
-	global $mgAlbums, $_TABLES, $_CONF, $_MG_CONF, $LANG_MG02, $_USER, $_POST;
+	global $mgAlbums, $_TABLES, $_CONF, $_MG_CONF, $LANG_MG02, $_USER;
 
-    $T = new Template($_MG_CONF['template_path']);
+    $T = new Template($_MG_CONF['template_path'].'/import/');
     $T->set_file (array('page' => 'import_select_items.thtml'));
 
 	MG_buildImportAlbums($galleryDir,0);
@@ -633,7 +634,7 @@ function MG_importFiles( $album_id, $import_album_id, $galleryDir, $session_id )
 // -- main processing here...
 
 $display = '';
-
+MG_initAlbums();
 if (isset($_POST['mode']) ) {
 	$mode 	    	= COM_applyFilter($_POST['mode']);
 	$galleryDir    	= COM_applyFilter($_POST['gallerydir']);
@@ -686,7 +687,7 @@ if (isset($_POST['mode']) ) {
 }
 
 $display = MG_siteHeader();
-$T = new Template($_MG_CONF['template_path']);
+$T = new Template($_MG_CONF['template_path'].'/import/');
 $T->set_file (array('page' => 'import_gallery_dir.thtml'));
 $T->set_var('form_action',$_MG_CONF['admin_url'] . '/importers/Gallery1/index.php');
 $T->set_var('import_wizard','Galleryv1');

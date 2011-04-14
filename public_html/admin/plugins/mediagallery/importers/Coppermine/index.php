@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | Coppermine v1.4x Import Script                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -29,8 +29,9 @@
 
 require_once '../../../../../lib-common.php';
 require_once '../../../../auth.inc.php';
-require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
-require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-batch.php';
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
+require_once $_CONF['path'].'plugins/mediagallery/include/lib-upload.php';
+require_once $_CONF['path'].'plugins/mediagallery/include/lib-batch.php';
 
 class mgAlbumCPG {
     var $id;
@@ -501,7 +502,7 @@ function MG_importSelectAlbums($configdir ) {
 
     $display = '';
 
-    $T = new Template($_MG_CONF['template_path']);
+    $T = new Template($_MG_CONF['template_path'].'/import/');
     $T->set_file (array('page' => 'import_select_items.thtml'));
 
 	MG_buildImportAlbums($configdir,0);
@@ -711,7 +712,7 @@ function convert_datetime($str) {
 // -- main processing here...
 
 $display = '';
-
+MG_initAlbums();
 if (isset($_POST['mode']) ) {
 	$mode 	    	= COM_applyFilter($_POST['mode']);
 	$configDir    	= COM_applyFilter($_POST['gallerydir']);
@@ -762,7 +763,7 @@ if (isset($_POST['mode']) ) {
 }
 
 $display = MG_siteHeader();
-$T = new Template($_MG_CONF['template_path']);
+$T = new Template($_MG_CONF['template_path'].'/import/');
 $T->set_file (array('page' => 'import_coppermine.thtml'));
 $T->set_var('form_action',$_MG_CONF['admin_url'] . '/importers/Coppermine/index.php');
 $T->set_var('import_wizard','Coppermine');

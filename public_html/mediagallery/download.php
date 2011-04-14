@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2010 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -48,6 +48,9 @@ if ( !isset($_GET['mid'] ) ) {
     return;
 }
 
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
+MG_initAlbums();
+
 // Implements a poor mans hotlink protection, if the request
 // did not originate at our site, don't allow it.
 $allowblank = 1;
@@ -73,7 +76,6 @@ for($y=0;$y<$domains;$y++) {
 if ( $allowed == 0 ) {
     return;
 }
-
 
 $mid = COM_applyFilter($_GET['mid']);
 

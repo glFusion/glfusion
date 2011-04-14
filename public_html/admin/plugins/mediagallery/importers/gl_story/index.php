@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | glFUsion Story Image Import                                              |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -29,6 +29,7 @@
 
 require_once '../../../../../lib-common.php';
 require_once '../../../../auth.inc.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/init.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-batch.php';
 
@@ -411,30 +412,6 @@ function _MG_remove_images($sid, $intro, $body, $usage='html') {
     }
     for ($i = 1; $i <= $nrows; $i++) {
         $A = DB_fetchArray($result);
-/* ---
-        $lLinkPrefix = '';
-        $lLinkSuffix = '';
-        if ($_CONF['keep_unscaled_image'] == 1) {
-            $lFilename_large = substr_replace ($A['ai_filename'], '_original.',
-                    strrpos ($A['ai_filename'], '.'), 1);
-            $lFilename_large_complete = $_CONF['path_images'] . 'articles/'
-                                      . $lFilename_large;
-            if ($stdImageLoc) {
-                $imgpath = substr ($_CONF['path_images'],
-                                   strlen ($_CONF['path_html']));
-                $lFilename_large_URL = $_CONF['site_url'] . '/' . $imgpath
-                                     . 'articles/' . $lFilename_large;
-            } else {
-                $lFilename_large_URL = $_CONF['site_url']
-                    . '/getimage.php?mode=show&amp;image=' . $lFilename_large;
-            }
-            if (file_exists ($lFilename_large_complete)) {
-                $lLinkPrefix = '<a href="' . $lFilename_large_URL
-                             . '" title="' . $LANG24[57] . '">';
-                $lLinkSuffix = '</a>';
-            }
-        }
---- */
         $norm  = '[image' . $i . ']';
         $left  = '[image' . $i . '_left]';
         $right = '[image' . $i . '_right]';
@@ -651,7 +628,7 @@ function MG_importFiles( $album_id, $import_album_id, $session_id ) {
 
 
 // -- main processing here...
-
+MG_initAlbums();
 $display = '';
 
 if (isset($_POST['mode']) ) {

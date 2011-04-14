@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2010 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -32,8 +32,6 @@
 global $_MG_CONF, $_USER, $LANG_LOGIN;
 
 require_once '../lib-common.php';
-require_once $_CONF['path'].'plugins/mediagallery/include/classAlbum.php';
-require_once $_CONF['path'].'plugins/mediagallery/include/lib-media.php';
 
 if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
@@ -48,9 +46,14 @@ if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
     exit;
 }
 
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
+require_once $_CONF['path'].'plugins/mediagallery/include/lib-media.php';
+
 /*
 * Main Function
 */
+
+MG_initAlbums();
 
 ob_start();
 

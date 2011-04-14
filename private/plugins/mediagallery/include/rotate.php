@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: rotate.php 3070 2008-09-07 02:40:49Z mevans0263                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -36,12 +36,17 @@ if (!defined ('GVERSION')) {
 
 
 function MG_rotateMedia( $album_id, $media_id, $direction, $actionURL='') {
-    global $_TABLES, $_MG_CONF, $_POST;
+    global $_TABLES, $_MG_CONF;
 
-    $sql = "SELECT * FROM " . $_TABLES['mg_media'] . " WHERE media_id='" . DB_escapeString($media_id) . "'";
-    $result=DB_query($sql);
-    $row = DB_fetchArray($result);
-    if ( DB_error() != 0 )  {
+    $sql    = "SELECT * FROM " . $_TABLES['mg_media'] . " WHERE media_id='" . DB_escapeString($media_id) . "'";
+    $result = DB_query($sql);
+    $numRows = DB_numRows($result);
+    if ($numRows == 0 ) {
+        $sql    = "SELECT * FROM " . $_TABLES['mg_mediaqueue'] . " WHERE media_id='" . DB_escapeString($media_id) . "'";
+        $result = DB_query($sql);
+        $numRows = DB_numRows($result);
+    }
+    if ( $numRows == 0 )  {
         COM_errorLog("MG_rotateMedia: Unable to retrieve media object data");
         if ( $actionURL == '' ) {
             return false;
@@ -49,6 +54,9 @@ function MG_rotateMedia( $album_id, $media_id, $direction, $actionURL='') {
         echo COM_refresh( $actionURL );
         exit;
     }
+
+    $row = DB_fetchArray($result);
+
     $filename = $row['media_filename'];
 
     $media_size = false;
@@ -61,9 +69,9 @@ function MG_rotateMedia( $album_id, $media_id, $direction, $actionURL='') {
     }
     $orig   = $_MG_CONF['path_mediaobjects'] . 'orig/' . $filename[0] . '/' . $filename . '.' . $row['media_mime_ext'];
 
-    list($rc,$msg) = MG_rotateImage( $tn, $direction );
-    list($rc,$msg) = MG_rotateImage( $disp, $direction );
-    list($rc,$msg) = MG_rotateImage( $orig, $direction );
+    list($rc,$msg) = IMG_rotateImage( $tn, $direction );
+    list($rc,$msg) = IMG_rotateImage( $disp, $direction );
+    list($rc,$msg) = IMG_rotateImage( $orig, $direction );
 
     if ( $actionURL == -1 || $actionURL == '' )
         return true;

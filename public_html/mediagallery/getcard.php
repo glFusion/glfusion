@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2010 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -30,7 +30,7 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
-require_once $_CONF['path'] . 'plugins/mediagallery/include/classMedia.php';
+
 
 if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
@@ -44,6 +44,9 @@ if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
     echo $display;
     exit;
 }
+
+require_once $_CONF['path'] . 'plugins/mediagallery/include/init.php';
+MG_initAlbums();
 
 $pcid = COM_applyFilter($_GET['id']);
 
@@ -84,7 +87,7 @@ $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_esc
 if ( $MG_albums[$aid]->access == 0 ) {
     $display  = MG_siteHeader();
     $display .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-             . '<br' . XHTML . '>' . $LANG_MG00['access_denied_msg']
+             . '<br/>' . $LANG_MG00['access_denied_msg']
              . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     $display .= MG_siteFooter();
     echo $display;
@@ -98,7 +101,7 @@ $nRows = DB_numRows( $result );
 if ( $nRows < 1 ) {
     $display  = MG_siteHeader();
     $display .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-             . '<br' . XHTML . '>' . $LANG_MG00['access_denied_msg']
+             . '<br/>' . $LANG_MG00['access_denied_msg']
              . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     $display .= MG_siteFooter();
     echo $display;

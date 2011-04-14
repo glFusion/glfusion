@@ -9,7 +9,7 @@
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
 // |                                                                          |
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -125,7 +125,7 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
         case 'user':
             $retval =  '<img src="' . $_CONF['layout_url']
             . '/images/admin/user.' . $_IMAGE_TYPE
-            . '" style="vertical-align:bottom;"' . XHTML . '>&nbsp;' . $fieldvalue;
+            . '" style="vertical-align:bottom;"/>&nbsp;' . $fieldvalue;
             break;
 
         case 'day':
@@ -428,13 +428,13 @@ function MODERATE_itemList($type='', $token)
                         . $_CONF['layout_url'] . '/images/admin/accept.' . $_IMAGE_TYPE
                         . '" style="vertical-align:bottom;" title="' . $LANG29[44]
                         . '" onclick="return confirm(\'' . $LANG29[45] . '\');"'
-                        . XHTML . '>&nbsp;' . $LANG29[1];
+                        . '/>&nbsp;' . $LANG29[1];
                     $actions .= '&nbsp;&nbsp;&nbsp;&nbsp;';
                     $actions .= '<input name="delbutton" type="image" src="'
                         . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
                         . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
                         . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
-                        . XHTML . '>&nbsp;' . $LANG_ADMIN['delete'];
+                        . '/>&nbsp;' . $LANG_ADMIN['delete'];
 
                     $options = array('chkselect' => true,
                                      'chkfield' => 'uid',
@@ -444,10 +444,10 @@ function MODERATE_itemList($type='', $token)
                                      'chkactions' => $actions
                                      );
 
-                    $form_arr['bottom'] = '<input type="hidden" name="type" value="user"' . XHTML . '>' . LB
-                            . '<input type="hidden" name="' . CSRF_TOKEN . '" value="' . $token . '"'. XHTML . '>' . LB
-                            . '<input type="hidden" name="moderation" value="x"' . XHTML . '>' . LB
-                            . '<input type="hidden" name="count" value="' . $nrows . '"' . XHTML . '>';
+                    $form_arr['bottom'] = '<input type="hidden" name="type" value="user"/>' . LB
+                            . '<input type="hidden" name="' . CSRF_TOKEN . '" value="' . $token . '"/>' . LB
+                            . '<input type="hidden" name="moderation" value="x"/>' . LB
+                            . '<input type="hidden" name="count" value="' . $nrows . '"/>';
 
                     $retval = ADMIN_simpleList('MODERATE_getListField', $header_arr,
                                           $text_arr, $data_arr, $options, $form_arr, $token);
@@ -493,13 +493,13 @@ function MODERATE_itemList($type='', $token)
                         . $_CONF['layout_url'] . '/images/admin/accept.' . $_IMAGE_TYPE
                         . '" style="vertical-align:bottom;" title="' . $LANG29[44]
                         . '" onclick="return confirm(\'' . $LANG29[45] . '\');"'
-                        . XHTML . '>&nbsp;' . $LANG29[1];
+                        . '/>&nbsp;' . $LANG29[1];
                         $actions .= '&nbsp;&nbsp;&nbsp;&nbsp;';
                     $actions .= '<input name="delbutton" type="image" src="'
                         . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
                         . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
                         . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
-                        . XHTML . '>&nbsp;' . $LANG_ADMIN['delete'];
+                        . '/>&nbsp;' . $LANG_ADMIN['delete'];
 
                     $options = array('chkselect' => true,
                                      'chkfield' => 'id',
@@ -509,9 +509,9 @@ function MODERATE_itemList($type='', $token)
                                      'chkactions' => $actions,
                                      );
 
-                    $form_arr['bottom'] = '<input type="hidden" name="type" value="draftstory"' . XHTML . '>' . LB
-                            . '<input type="hidden" name="' . CSRF_TOKEN . '" value="' . $token . '"'. XHTML . '>' . LB
-                            . '<input type="hidden" name="count" value="' . $nrows . '"' . XHTML . '>';
+                    $form_arr['bottom'] = '<input type="hidden" name="type" value="draftstory"/>' . LB
+                            . '<input type="hidden" name="' . CSRF_TOKEN . '" value="' . $token . '"/>' . LB
+                            . '<input type="hidden" name="count" value="' . $nrows . '"/>';
 
                     $retval .= ADMIN_simpleList('MODERATE_getListField', $header_arr,
                                               $text_arr, $data_arr, $options, $form_arr, $token);
@@ -617,13 +617,13 @@ function MODERATE_itemList($type='', $token)
                         . $_CONF['layout_url'] . '/images/admin/accept.' . $_IMAGE_TYPE
                         . '" style="vertical-align:bottom;" title="' . $LANG29[44]
                         . '" onclick="return confirm(\'' . $LANG29[45] . '\');"'
-                        . XHTML . '>&nbsp;' . $LANG29[1];
+                        . '/>&nbsp;' . $LANG29[1];
                     $actions .= '&nbsp;&nbsp;&nbsp;&nbsp;';
                     $actions .= '<input name="delbutton" type="image" src="'
                         . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
                         . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
                         . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
-                        . XHTML . '>&nbsp;' . $LANG_ADMIN['delete'];
+                        . '/>&nbsp;' . $LANG_ADMIN['delete'];
 
                     $options = array('chkselect' => true,
                                      'chkfield' => 'id',
@@ -633,10 +633,10 @@ function MODERATE_itemList($type='', $token)
                                      'chkactions' => $actions,
                                      );
 
-                    $form_arr['bottom'] = '<input type="hidden" name="type" value="' . $type . '"' . XHTML . '>' . LB
-                            . '<input type="hidden" name="' . CSRF_TOKEN . '" value="' . $token . '"'. XHTML . '>' . LB
-                            . '<input type="hidden" name="moderation" value="x"' . XHTML . '>' . LB
-                            . '<input type="hidden" name="count" value="' . $nrows . '"' . XHTML . '>';
+                    $form_arr['bottom'] = '<input type="hidden" name="type" value="' . $type . '"/>' . LB
+                            . '<input type="hidden" name="' . CSRF_TOKEN . '" value="' . $token . '"/>' . LB
+                            . '<input type="hidden" name="moderation" value="x"/>' . LB
+                            . '<input type="hidden" name="count" value="' . $nrows . '"/>';
 
                     $retval .= ADMIN_simpleList('MODERATE_getListField', $header_arr,
                                               $text_arr, $data_arr, $options, $form_arr, $token);
@@ -688,7 +688,7 @@ function MODERATE_submissions()
     $retval .= PLG_showModerationList($token);
 
     // if empty at this point, we have no submissions to moderate
-    $retval .= (empty($retval)) ? '<br ' . XHTML . '><p>' . $LANG29[39] . '</p>' : '';
+    $retval .= (empty($retval)) ? '<br /><p>' . $LANG29[39] . '</p>' : '';
 
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 

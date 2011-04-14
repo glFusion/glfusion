@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2010 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -30,7 +30,7 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
-require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-exif.php';
+
 
 if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
@@ -45,10 +45,14 @@ if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
     exit;
 }
 
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-exif.php';
+MG_initAlbums();
+
 $mid = COM_applyFilter($_REQUEST['mid']);
 
 $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_escapeString($mid) . '"');
-$result = DB_query("SELECT * FROM {$_TABLES['mg_albums']} WHERE album_id=" . intval($aid));
+$result = DB_query("SELECT * FROM {$_TABLES['mg_albums']} WHERE album_id=" . (int) $aid);
 $row    = DB_fetchArray($result);
 $access = SEC_hasAccess ($row['owner_id'],$row['group_id'],$row['perm_owner'],$row['perm_group'],$row['perm_members'],$row['perm_anon']);
 if ( $access == 0 ) {
@@ -80,7 +84,7 @@ $T->set_file (array ('property' => 'property.thtml'));
 $exifInfo = MG_readEXIF( $mid, 1 );
 
 $T->set_var(array(
-    'media_thumbnail'   => '<img src="' . $_MG_CONF['mediaobjects_url'] . '/tn/' . $media_filename[0] .'/' . $media_filename . '.' . 'jpg' . '" alt=""' . XHTML . '>',
+    'media_thumbnail'   => '<img src="' . $_MG_CONF['mediaobjects_url'] . '/tn/' . $media_filename[0] .'/' . $media_filename . '.' . 'jpg' . '" alt=""/>',
     'exif_info'         => $exifInfo,
     'lang_close'        => $LANG_MG03['close'],
 ));

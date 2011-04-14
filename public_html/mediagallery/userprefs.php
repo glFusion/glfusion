@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2010 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -44,6 +44,8 @@ if ( COM_isAnonUser() )  {
     exit;
 }
 
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
+
 $mode = isset($_REQUEST['mode']) ? COM_applyFilter ($_REQUEST['mode']) : '';
 $display = '';
 
@@ -52,12 +54,12 @@ if ($mode == $LANG_MG01['cancel'] ) {
 }
 
 if ( $mode == $LANG_MG01['submit'] && !empty($LANG_MG01['submit']) ) {
-    $display_rows    = intval(COM_applyFilter($_POST['display_rows'],true));
-    $display_columns = intval(COM_applyFilter($_POST['display_columns'],true));
-    $mp3_player      = intval(COM_applyFilter($_POST['mp3_player'],true));
-    $playback_mode   = intval(COM_applyFilter($_POST['playback_mode'],true));
-    $tn_size         = intval(COM_applyFilter($_POST['tn_size'],true));
-    $uid             = intval($_USER['uid']);
+    $display_rows    = COM_applyFilter($_POST['display_rows'],true);
+    $display_columns = COM_applyFilter($_POST['display_columns'],true);
+    $mp3_player      = COM_applyFilter($_POST['mp3_player'],true);
+    $playback_mode   = COM_applyFilter($_POST['playback_mode'],true);
+    $tn_size         = COM_applyFilter($_POST['tn_size'],true);
+    $uid             = (int) $_USER['uid'];
 
     if ( $display_columns < 0 || $display_columns > 5 ) {
         $display_columns = 3;
@@ -102,8 +104,7 @@ if ( $mode == $LANG_MG01['submit'] && !empty($LANG_MG01['submit']) ) {
     }
 
     $T = new Template( MG_getTemplatePath(0) );
-    $T->set_file (array ('admin' => 'userprefs.thtml'));
-    $T->set_var('xhtml',XHTML);
+    $T->set_file ('admin','userprefs.thtml');
     $T->set_block('admin', 'prefRow', 'pRow');
 
     // build select boxes
@@ -132,7 +133,7 @@ if ( $mode == $LANG_MG01['submit'] && !empty($LANG_MG01['submit']) ) {
     if ( $_MG_CONF['up_display_rows_enabled'] ) {
         $T->set_var(array(
             'lang_prompt'   => $LANG_MG01['display_rows_prompt'],
-            'input_field'   => '<input type="text" size="3" name="display_rows" value="' . $_MG_USERPREFS['display_rows'] . '"' . XHTML . '>',
+            'input_field'   => '<input type="text" size="3" name="display_rows" value="' . $_MG_USERPREFS['display_rows'] . '"/>',
             'lang_help'     => $LANG_MG01['display_rows_help'],
             'rowcounter' => $x++ % 2,
         ));
@@ -141,7 +142,7 @@ if ( $mode == $LANG_MG01['submit'] && !empty($LANG_MG01['submit']) ) {
     if ( $_MG_CONF['up_display_columns_enabled'] ) {
         $T->set_var(array(
             'lang_prompt'   => $LANG_MG01['display_columns_prompt'],
-            'input_field'   => '<input type="text" size="3" name="display_columns" value="' . $_MG_USERPREFS['display_columns'] . '"' . XHTML . '>',
+            'input_field'   => '<input type="text" size="3" name="display_columns" value="' . $_MG_USERPREFS['display_columns'] . '"/>',
             'lang_help'     => $LANG_MG01['display_columns_help'],
         ));
         $T->parse('pRow', 'prefRow',true);

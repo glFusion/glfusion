@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2010 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -34,7 +34,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-require_once $_CONF['path'] . 'plugins/mediagallery/include/classFrame.php';
+//require_once $_CONF['path'].'plugins/mediagallery/include/classFrame.php';
 
 /*
  * Generate the prev and next links for media browsing.
@@ -52,17 +52,14 @@ function MG_getNextandPrev($base_url, $num_items, $per_page, $start_item, $media
 
     $total_pages = ceil($num_items/$per_page);
 
-    if ( $total_pages == 1 )
-    {
+    if ( $total_pages == 1 ) {
         return array('','');
     }
 
     $on_page = floor($start_item / $per_page) + 1;
 
-    if ( $add_prevnext_text )
-    {
-        if ( $on_page > 1 )
-        {
+    if ( $add_prevnext_text ) {
+        if ( $on_page > 1 ) {
             $offset = (( $on_page - 2) * $per_page);
             if ($hasargs ) {
                 $prev_string = $base_url . "&amp;s=" . $media[$offset]['media_id'];
@@ -71,8 +68,7 @@ function MG_getNextandPrev($base_url, $num_items, $per_page, $start_item, $media
             }
         }
 
-        if ( $on_page < $total_pages )
-        {
+        if ( $on_page < $total_pages ) {
             $offset = ( $on_page * $per_page);
             if ($hasargs ) {
                 $next_string = $base_url . "&amp;s=" . $media[$offset]['media_id'];
@@ -191,7 +187,6 @@ function MG_displayASF( $aid, $I, $full ) {
                 'enablecontextmenu0' => ($playback_options['enablecontextmenu'] ? '1' : '0'),
                 'stretchtofit0'      => ($playback_options['stretchtofit'] ? '1' : '0'),
                 'showstatusbar0'     => ($playback_options['showstatusbar'] ? '1' : '0'),
-                'xhtml'              => XHTML,
             ));
             switch ($playback_options['uimode'] ) {
                 case 'mini' :
@@ -246,12 +241,10 @@ function MG_displayASF( $aid, $I, $full ) {
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
-        'xhtml'             =>  XHTML,
     ));
     $F->parse('media','media_frame');
     $retval .= $F->finish($F->get_var('media'));
     return array($retval,$u_image,$imageWidth,$imageHeight,$raw_link_url);
-//    return $retval;
 }
 
 function MG_displayMOV( $aid, $I, $full ) {
@@ -356,7 +349,6 @@ function MG_displayMOV( $aid, $I, $full ) {
                 'movie'         => $_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'],
                 'filename'      => $I['media_original_filename'],
                 'lang_noquicktime' => $LANG_MG03['no_quicktime'],
-                'xhtml'         => XHTML,
             ));
             $V->parse('output','video');
             $u_image = $V->finish($V->get_var('output'));
@@ -384,12 +376,10 @@ function MG_displayMOV( $aid, $I, $full ) {
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
-        'xhtml'             =>  XHTML,
     ));
     $F->parse('media','media_frame');
     $retval .= $F->finish($F->get_var('media'));
     return array($retval,$u_image,$imageWidth,$imageHeight,$u_pic);
-//    return $retval;
 }
 
 function MG_displaySWF( $aid, $I, $full ) {
@@ -501,7 +491,6 @@ function MG_displaySWF( $aid, $I, $full ) {
                 'id'        => 'swf' . rand(),
                 'id2'       => 'swf2' . rand(),
                 'movie'     => $_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'],
-                'xhtml'     => XHTML,
             ));
 
             $flasharray = array();
@@ -548,13 +537,11 @@ function MG_displaySWF( $aid, $I, $full ) {
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
-        'xhtml'             =>  XHTML,
 
     ));
     $F->parse('media','media_frame');
     $retval .= $F->finish($F->get_var('media'));
     return array($retval,$u_image,$imageWidth,$imageHeight,$u_pic);
-//    return $retval;
 }
 
 
@@ -675,7 +662,6 @@ function MG_displayFLV ( $aid, $I, $full ) {
 
             $V = new Template( MG_getTemplatePath($aid) );
     		$V->set_file('video','view_flv.thtml');
-    		$V->set_var('xhtml',XHTML);
 
             // now the player specific items.
     		$F = new Template( MG_getTemplatePath($aid) );
@@ -684,7 +670,6 @@ function MG_displayFLV ( $aid, $I, $full ) {
             } else {
             	$F->set_file(array('player' => 'flvmg.thtml'));
             }
-            $F->set_var('xhtml',XHTML);
 
         	if ( $playback_options['play'] == 1 ) {  // auto start
         		$playButton = '';
@@ -724,7 +709,6 @@ function MG_displayFLV ( $aid, $I, $full ) {
 		        $videoFile            = $basefilename;
 	           	$streamingServerURL   = "streamingServerURL: '" . $urlParts['scheme'] . '://' . $urlParts['host'] . $pPath . "',";
 	           	$streamingServer      = "streamingServer: 'fms',";
-//	           	$streamingServerURLmg = "streamingServerUrl=" . $urlParts['scheme'] . '://' . $urlParts['host'] . $pPath . "&";
 	           	$streamingServerURLmg = 'flashvars.streamingServerUrl="' . $urlParts['scheme'] . '://' . $urlParts['host'] . $pPath . '";';
     		} else {
     			$streamingServerURL   = '';
@@ -797,7 +781,6 @@ function MG_displayFLV ( $aid, $I, $full ) {
 			));
             $V->parse('output','video');
             $u_image .= $V->finish($V->get_var('output'));
-//            return $u_image;
             return array($u_image,'',$resolution_x,$resolution_y,'');
 			break;
     }
@@ -822,12 +805,10 @@ function MG_displayFLV ( $aid, $I, $full ) {
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
-        'xhtml'             =>  XHTML,
     ));
     $F->parse('media','media_frame');
     $retval .= $F->finish($F->get_var('media'));
     return array($retval,$u_image,$imageWidth,$imageHeight,$u_pic);
-//    return $retval;
 }
 
 function MG_displayMP3( $aid, $I, $full ) {
@@ -890,7 +871,7 @@ function MG_displayMP3( $aid, $I, $full ) {
                 $u_tn = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
                 $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
                 $border_width = $media_size_disp[0] + 15;
-                $u_pic = '<div class=out style="width:' . $border_width . 'px"><div class="in ltin tpin"><img src="' . $u_tn . '"' . XHTML . '></div></div>';
+                $u_pic = '<div class=out style="width:' . $border_width . 'px"><div class="in ltin tpin"><img src="' . $u_tn . '"/></div></div>';
                 $playback_options['height'] = 50;
                 $playback_options['width']  = 300;
             } else {
@@ -907,7 +888,6 @@ function MG_displayMP3( $aid, $I, $full ) {
             if ( $I['mime_type'] == 'audio/x-ms-wma' ) {
                 $tfile = 'view_mp3_wmp.thtml';
             }
-            $V->set_var('xhtml',XHTML);
 
             require_once $_CONF['path'] . '/lib/getid3/getid3.php';
             $getID3 = new getID3;
@@ -934,7 +914,6 @@ function MG_displayMP3( $aid, $I, $full ) {
             $S->set_file(array('swf' => 'swfobject.thtml'));
             $S->set_var(array(
                 'site_url'  => $_MG_CONF['site_url'],
-                'xhtml'     => XHTML,
             ));
             $S->parse('output','swf');
             $u_image = $S->finish($S->get_var('output'));
@@ -1005,7 +984,6 @@ function MG_displayMP3( $aid, $I, $full ) {
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
-        'xhtml'             =>  XHTML,
     ));
     $F->parse('media','media_frame');
     $retval = $F->finish($F->get_var('media'));
@@ -1047,7 +1025,6 @@ function MG_displayOGG( $aid, $I, $full ) {
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
-        'xhtml'             =>  XHTML,
     ));
     $F->parse('media','media_frame');
     $retval = $F->finish($F->get_var('media'));
@@ -1104,7 +1081,6 @@ function MG_displayGeneric( $aid, $I, $full ) {
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
-        'xhtml'             =>  XHTML,
     ));
     $F->parse('media','media_frame');
     $retval = $F->finish($F->get_var('media'));
@@ -1151,7 +1127,6 @@ function MG_displayTGA($aid,$I,$full,$mediaObject) {
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
-        'xhtml'             =>  XHTML,
     ));
     $F->parse('media','media_frame');
     $retval = $F->finish($F->get_var('media'));
@@ -1195,7 +1170,6 @@ function MG_displayPSD($aid,$I,$full,$mediaObject) {
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
-        'xhtml'             =>  XHTML,
     ));
     $F->parse('media','media_frame');
     $retval = $F->finish($F->get_var('media'));
@@ -1240,7 +1214,6 @@ function MG_displayEmbed($aid,$I,$full,$mediaObject) {
 		    	'embed_string'		=>  $I['remote_url'],
 		        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title'],'mediagallery','media_title') : '',
 		        'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
-		        'xhtml'             =>  XHTML,
 		    ));
 		    $F->parse('media','media_frame');
 		    $retval = $F->finish($F->get_var('media'));
@@ -1265,7 +1238,6 @@ function MG_displayEmbed($aid,$I,$full,$mediaObject) {
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
-        'xhtml'             =>  XHTML,
     ));
     $F->parse('media','media_frame');
     $retval .= $F->finish($F->get_var('media'));
@@ -1365,7 +1337,6 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
-        'xhtml'             =>  XHTML,
     ));
     if ( $imageWidth > 0 && $imageHeight > 0 ) {
         $F->set_var(array(
@@ -1380,7 +1351,7 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
 
 
 function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sortID=0,$spage=0) {
-    global $MG_albums, $_POST, $_TABLES, $_CONF, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG03, $LANG_MG04, $LANG_ACCESS, $LANG01, $album_jumpbox, $glversion, $_USER, $_MG_USERPREFS;
+    global $MG_albums, $_TABLES, $_CONF, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG03, $LANG_MG04, $LANG_ACCESS, $LANG01, $album_jumpbox, $glversion, $_USER, $_MG_USERPREFS;
     global $_DB_dbms, $mgLightBox, $LANG04,$ratedIds;
 
     $retval = '';
@@ -1481,7 +1452,6 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
     $T->set_var('header', $LANG_MG00['plugin']);
     $T->set_var('site_url',$_MG_CONF['site_url']);
     $T->set_var('plugin','mediagallery');
-    $T->set_var('xhtml', XHTML);
 
     // construct the album jumpbox...
     $level = 0;
@@ -1489,13 +1459,13 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
     $album_jumpbox .= $LANG_MG03['jump_to'] . ':&nbsp;<select name="aid" onchange="forms[\'jumpbox\'].submit()">';
     $MG_albums[0]->buildJumpBox($aid);
     $album_jumpbox .= '</select>';
-    $album_jumpbox .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '"' . XHTML . '>';
-    $album_jumpbox .= '<input type="hidden" name="page" value="1"' . XHTML . '>';
+    $album_jumpbox .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '"/>';
+    $album_jumpbox .= '<input type="hidden" name="page" value="1"/>';
     $album_jumpbox .= '</div></form>';
 
     // Update the views count... But only for non-admins
 
-    if (!$MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/) {
+    if (!$MG_albums[0]->owner_id) {
         $media_views = $media[$mediaObject]['media_views'] + 1;
         DB_query("UPDATE " . $_TABLES['mg_media'] . " SET media_views=" . $media_views . " WHERE media_id='" . DB_escapeString($media[$mediaObject]['media_id']) . "'");
     }
@@ -1529,7 +1499,6 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         $disp = 'disp';
     }
 
-//    $aOffset = $MG_albums[$aid]->getOffset();
     $aPage = intval(($aOffset)  / ($_MG_CONF['album_display_columns'] * $_MG_CONF['album_display_rows'])) + 1;
     if ( $sortID > 0 ) {
         $birdseed = '<a href="' . $_CONF['site_url'] . '/index.php">' . $LANG_MG03['home'] . '</a> ' .
@@ -1669,7 +1638,6 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
             }
         }
 
-
         if ( $MG_albums[$aid]->enable_rating == 1 && (!isset($_USER['uid']) || $_USER['uid'] < 2) ) {
             $static = true;
             $voted = 0;
@@ -1724,10 +1692,9 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
                 'sf_picture'            =>  $sf_picture,
                 'sf_title'              =>  $media[$mediaObject]['media_title'],
                 'lang_print_digibug'    =>  $LANG_MG03['print_digibug'],
-                'lang_print_shutterfly' => $LANG_MG03['print_shutterfly'],
+                'lang_print_shutterfly' =>  $LANG_MG03['print_shutterfly'],
             ));
             $T->parse('shutterfly_submit','shutterfly');
-
         }
     }
 
@@ -1739,7 +1706,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     $media_desc = PLG_replaceTags(nl2br($media[$mediaObject]['media_desc']),'mediagallery','media_description');
     if ( strlen($media_desc) > 0 ) {
-        $media_desc .= '<br' . XHTML . '><br' . XHTML . '>';
+        $media_desc .= '<br/><br/>';
     }
 
     // start of the lightbox slideshow code
@@ -1794,7 +1761,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     $T->set_var(array(
         'birdseed'      =>  $birdseed,
-        'slide_show'    =>  isset($url_slideshow) ? $url_slideshow : '', //$MG_albums[$aid]->enable_slideshow ? '<a href="' . $_MG_CONF['site_url'] . '/slideshow.php?aid=' . $aid . '&amp;sort=' . $sortOrder . '"><b>' . $LANG_MG03['slide_show'] . '</b></a>' : '',
+        'slide_show'    =>  isset($url_slideshow) ? $url_slideshow : '',
         'image_detail'  =>  $u_image,
         'border_height' =>  $raw_image_height + 30,
         'border_width'  =>  $raw_image_width + 30,
@@ -1825,7 +1792,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         'lang_of'       =>  $LANG_MG03['of'],
         'album_link'    =>  $album_link,
     ));
-// print_r($T->get_vars());exit;
+
     $getid3link = '';
     $getid3linkend = '';
 
@@ -1930,7 +1897,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
         if ( ($MG_albums[$aid]->enable_postcard == 1 && isset($_USER['uid']) && $_USER['uid'] > 1 ) || ($MG_albums[$aid]->enable_postcard == 2)  ) {
             if ( $media[$mediaObject]['media_type'] == 0 ) {
-                $postcard_link = '<a href="' . $_MG_CONF['site_url'] . '/postcard.php?mode=edit&amp;mid=' . $media[$mediaObject]['media_id'] . '"><img src="' . MG_getImageFile('icon_envelopeSmall.gif') . '" alt="' . $LANG_MG03['send_postcard'] . '" style="border:none;"' . XHTML . '></a>';
+                $postcard_link = '<a href="' . $_MG_CONF['site_url'] . '/postcard.php?mode=edit&amp;mid=' . $media[$mediaObject]['media_id'] . '"><img src="' . MG_getImageFile('icon_envelopeSmall.gif') . '" alt="' . $LANG_MG03['send_postcard'] . '" style="border:none;"/></a>';
                 $T->set_var('postcard_link', $postcard_link);
             }
         }

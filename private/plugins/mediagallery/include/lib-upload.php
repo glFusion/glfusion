@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: lib-upload.php 2963 2008-08-23 17:38:32Z mevans0263               $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -45,7 +45,7 @@ function MG_videoThumbnail($aid, $srcImage, $media_filename ) {
 
         $ffmpeg_cmd = sprintf('"' . $_MG_CONF['ffmpeg_path'] . "/ffmpeg" . '" ' . $_MG_CONF['ffmpeg_command_args'],$srcImage, $thumbNail);
 
-        $rc = MG_execWrapper($ffmpeg_cmd);
+        $rc = UTL_execWrapper($ffmpeg_cmd);
         COM_errorLog("MG Upload: FFMPEG returned: " . $rc);
         if ( $rc != 1 ) {
             @unlink ($thumbNail);
@@ -89,7 +89,7 @@ function MG_processOriginal( $srcImage, $mimeExt, $mimeType, $aid, $baseFilename
                 $newheight = $MG_albums[$aid]->max_image_height;
                 $newwidth = round($imgwidth / $ratio);
             }
-            list($rc,$msg) = MG_resizeImage($srcImage, $srcImage, $newheight, $newwidth,$mimeType,0);
+            list($rc,$msg) = IMG_resizeImage($srcImage, $srcImage, $newheight, $newwidth,$mimeType,0);
         }
     }
     return array($rc,$msg);
@@ -163,15 +163,15 @@ function MG_convertImage( $srcImage, $imageThumb, $imageDisplay, $mimeExt, $mime
          $mimeType == 'application/psd' ||
          $mimeType == 'image/tiff' ) {
         $tmpImage = $_MG_CONF['tmp_path'] . '/wip' . rand() . '.jpg';
-        list($rc,$msg) = MG_convertImageFormat($srcImage, $tmpImage, 'image/jpeg',0);
+        list($rc,$msg) = IMG_convertImageFormat($srcImage, $tmpImage, 'image/jpeg',0);
         if ( $rc == false ) {
             COM_errorLog("MG_convertImage: Error converting uploaded image to jpeg format.");
             @unlink($srcImage);
             return array(false,$msg);
         }
-        list($rc,$msg) = MG_resizeImage($tmpImage,$imageThumb,$tnHeight,$tnWidth,'',0);
+        list($rc,$msg) = IMG_resizeImage($tmpImage,$imageThumb,$tnHeight,$tnWidth,'',0);
     } else {
-        list($rc,$msg) = MG_resizeImage($srcImage, $imageThumb, $tnHeight, $tnWidth, $mimeType, 0 );
+        list($rc,$msg) = IMG_resizeImage($srcImage, $imageThumb, $tnHeight, $tnWidth, $mimeType, 0 );
     }
     if ( $rc == false ) {
         COM_errorLog("MG_convertImage: Error resizing uploaded image to thumbnail size.");
@@ -241,9 +241,9 @@ function MG_convertImage( $srcImage, $imageThumb, $imageDisplay, $mimeExt, $mime
         $imgheight = base_convert(bin2hex(strrev(substr($data,12,2))),16,10);
     }
     if ( $tmpImage != '' ) {
-        list($rc,$msg) = MG_resizeImage($tmpImage, $imageDisplay, $dImageHeight, $dImageWidth, '', 0 );
+        list($rc,$msg) = IMG_resizeImage($tmpImage, $imageDisplay, $dImageHeight, $dImageWidth, '', 0 );
     } else {
-        list($rc,$msg) = MG_resizeImage($srcImage, $imageDisplay, $dImageHeight, $dImageWidth, $mimeType, 0 );
+        list($rc,$msg) = IMG_resizeImage($srcImage, $imageDisplay, $dImageHeight, $dImageWidth, $mimeType, 0 );
     }
     if ( $rc == false ) {
         @unlink($srcImage);
@@ -280,7 +280,7 @@ function MG_processZip ($filename, $album_id, $purgefiles, $tmpdir ) {
         return $status;
     }
 
-    $rc = MG_execWrapper('"' . $_MG_CONF['zip_path'] . "/unzip" . '"' . " -d " . $_MG_CONF['tmp_path'] . '/' . $tmpdir . " " . $filename);
+    $rc = UTL_execWrapper('"' . $_MG_CONF['zip_path'] . "/unzip" . '"' . " -d " . $_MG_CONF['tmp_path'] . '/' . $tmpdir . " " . $filename);
 
     $status = MG_processDir ($_MG_CONF['tmp_path'] . '/' . $tmpdir, $album_id, $purgefiles,1 );
     MG_deleteDir($_MG_CONF['tmp_path'] . '/' . $tmpdir);
@@ -328,7 +328,7 @@ function MG_processDir ($dir, $album_id, $purgefiles, $recurse ) {
 
             if ( $MG_albums[$album_id]->max_filesize != 0 && filesize($filetmp) > $MG_albums[$album_id]->max_filesize) {
                 COM_errorLog("MG Upload: File " . $file . " exceeds maximum filesize for this album.");
-                $statusMsg = sprintf($LANG_MG02['upload_exceeds_max_filesize'] . '<br' . XHTML . '>',$file);
+                $statusMsg = sprintf($LANG_MG02['upload_exceeds_max_filesize'] . '<br/>',$file);
                 continue;
             }
 
@@ -355,7 +355,7 @@ function MG_processDir ($dir, $album_id, $purgefiles, $recurse ) {
 
             list($rc,$msg) = MG_getFile( $filetmp, $file, $album_id, '', '', 0, $purgefiles, $filetype,0,'','',0,0,0 );
 
-            $statusMsg .= $file . " " . $msg . "<br" . XHTML . ">";
+            $statusMsg .= $file . " " . $msg . "<br/>";
         }
     }
     closedir($dh);
@@ -540,7 +540,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         $media_user_id = $_USER['uid'];
     }
 
-    $mimeInfo = MG_getMediaMetaData( $filename );
+    $mimeInfo = IMG_getMediaMetaData( $filename );
     $mimeExt = strtolower(substr(strrchr($file,"."),1));
     $mimeInfo['type'] = $mimeExt;
 
@@ -882,7 +882,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
                          $mimeType == 'image/png'  || $mimeType == 'image/bmp' ||
                          $mimeType == 'image/gif' )) {
                         if ( $_MG_CONF['jhead_enabled'] && ($mimeType == 'image/jpeg' || $mimeType == 'image/jpg')) {
-                            $rc = MG_execWrapper('"' . $_MG_CONF['jhead_path'] . "/jhead" . '"' . " -te " . $media_orig . " " . $media_disp);
+                            $rc = UTL_execWrapper('"' . $_MG_CONF['jhead_path'] . "/jhead" . '"' . " -te " . $media_orig . " " . $media_disp);
                         }
                         @unlink( $media_orig );
                     }
@@ -1288,7 +1288,7 @@ function MG_attachThumbnail( $aid, $thumbnail, $mediaFilename ) {
     	$tnWidth = 200;
     }
 --- */
-    $tn_mime_type = MG_getMediaMetaData($thumbnail);
+    $tn_mime_type = IMG_getMediaMetaData($thumbnail);
     if ( !isset($tn_mime_type['mime_type']) ) {
         $tn_mime_type['mime_type'] = '';
     }
@@ -1311,7 +1311,7 @@ function MG_attachThumbnail( $aid, $thumbnail, $mediaFilename ) {
             return false;
     }
     $attach_tn   = $mediaFilename . $tnExt;
-    list($rc,$msg) = MG_resizeImage($thumbnail, $attach_tn, $tnHeight, $tnWidth, $tn_mime_type['mime_type'], 1 );
+    list($rc,$msg) = IMG_resizeImage($thumbnail, $attach_tn, $tnHeight, $tnWidth, $tn_mime_type['mime_type'], 1 );
 
     return true;
 }

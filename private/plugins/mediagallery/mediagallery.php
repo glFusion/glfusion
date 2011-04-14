@@ -41,13 +41,13 @@ $_MG_CONF = array();
 
 $_MG_CONF['pi_name']            = 'mediagallery';
 $_MG_CONF['pi_display_name']    = 'Media Gallery';
-$_MG_CONF['pi_version']         = '1.6.10';
-$_MG_CONF['gl_version']         = '1.2.1';
+$_MG_CONF['pi_version']         = '2.0.0';
+$_MG_CONF['gl_version']         = '1.3.0';
 $_MG_CONF['pi_url']             = 'http://www.glfusion.org/';
 
 $_MG_table_prefix = $_DB_table_prefix;
 
-// Add to $_TABLES array the tables your plugin uses
+// Media Gallery tables
 
 $_TABLES['mg_albums']           = $_MG_table_prefix . 'mg_albums';
 $_TABLES['mg_media_albums']     = $_MG_table_prefix . 'mg_media_albums';

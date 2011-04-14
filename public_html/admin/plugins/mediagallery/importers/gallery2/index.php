@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | Gallery 2 import wizard (written for Gallery 2.1)                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2010 by the following authors:                        |
+// | Copyright (C) 2005-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -29,6 +29,7 @@
 
 require_once '../../../../../lib-common.php';
 require_once '../../../../auth.inc.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/init.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-batch.php';
 
@@ -494,7 +495,7 @@ function MG_buildImportAlbums( $galleryDir ) {
 function MG_importSelectAlbums($galleryDir ) {
     global $mgAlbums, $_TABLES, $_CONF, $_MG_CONF, $LANG_MG02, $_USER, $_POST,$storeConfig;
 
-    $T = new Template($_MG_CONF['template_path']);
+    $T = new Template($_MG_CONF['template_path'].'/import/');
     $T->set_file (array('page' => 'import_select_items.thtml'));
 
     MG_buildImportAlbums($galleryDir,0);
@@ -655,7 +656,7 @@ function MG_importFiles( $album_id, $import_album_id, $galleryDir, $session_id )
 }
 
 // -- main processing here...
-
+MG_initAlbums();
 $display = '';
 
 if (isset($_POST['mode']) ) {
@@ -720,7 +721,7 @@ if (isset($_POST['mode']) ) {
 
 $display  = MG_siteHeader();
 
-$T = new Template($_MG_CONF['template_path']);
+$T = new Template($_MG_CONF['template_path'].'/import/');
 
 $T->set_file (array('page' => 'import_gallery2_parms.thtml'));
 $T->set_var('form_action',$_CONF['site_admin_url'] . '/plugins/mediagallery/importers/gallery2/index.php');

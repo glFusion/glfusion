@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2010 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -43,6 +43,9 @@ if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
     echo $display;
     exit;
 }
+
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
+MG_initAlbums();
 
 if( empty( $LANG_CHARSET )) {
     $charset = $_CONF['default_charset'];
@@ -98,8 +101,8 @@ if ( $nRows > 0 ) {
 
     switch ( $row['mime_type'] ) {
 	    case 'embed' :
-		    $T->set_file (array ('video'=>'embed.thtml'));
 		    $T->set_var(array(
+		        'video'             =>  'embed.thtml',
 		    	'embed_string'		=>  $row['remote_url'],
 		        'media_title'       =>  PLG_replaceTags($row['media_title'],'mediagallery','media_title'),
 		        'media_tag'         =>  strip_tags($row['media_title']),
@@ -107,7 +110,7 @@ if ( $nRows > 0 ) {
 		    break;
 
         case 'application/x-shockwave-flash' :
-            $T->set_file (array ('video'=>'swf.thtml'));
+            $T->set_file ('video','swf.thtml');
             $T->set_var('movie',$_MG_CONF['mediaobjects_url'] . '/orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
             $T->set_var('title',$row['media_title']);
             $playback_options['play']   = $_MG_CONF['swf_play'];

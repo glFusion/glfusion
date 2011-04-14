@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2010 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -44,6 +44,9 @@ if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
     exit;
 }
 
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
+MG_initAlbums();
+
 /*
 * Main Function
 */
@@ -55,7 +58,6 @@ $T = new Template( MG_getTemplatePath($album_id) );
 $T->set_file (array(
     'page'  =>  'playall_xspf.thtml',
 ));
-$T->set_var( 'xhtml', XHTML );
 
 if ($MG_albums[$album_id]->access == 0 ) {
     $display .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))

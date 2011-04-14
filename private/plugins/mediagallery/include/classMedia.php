@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: classMedia.php 2869 2008-07-31 14:38:32Z mevans0263               $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -325,7 +325,7 @@ class Media {
                             $size = @filesize($_MG_CONF['path_mediaobjects'] . 'orig/' . $this->filename[0] . '/' . $this->filename . '.' . $this->mime_ext);
                             // skip files over 8M in size..
                             if ( $size < 8388608 ) {
-    		                    $ThisFileInfo = MG_getMediaMetaData($_MG_CONF['path_mediaobjects'] . 'orig/' . $this->filename[0] . '/' . $this->filename . '.' . $this->mime_ext);
+    		                    $ThisFileInfo = IMG_getMediaMetaData($_MG_CONF['path_mediaobjects'] . 'orig/' . $this->filename[0] . '/' . $this->filename . '.' . $this->mime_ext);
     		                    if ( $ThisFileInfo['video']['resolution_x'] < 1 || $ThisFileInfo['video']['resolution_y'] < 1 ) {
     		                        if (isset($ThisFileInfo['meta']['onMetaData']['width']) && isset($ThisFileInfo['meta']['onMetaData']['height']) ) {
     		                            $resolution_x = $ThisFileInfo['meta']['onMetaData']['width'];

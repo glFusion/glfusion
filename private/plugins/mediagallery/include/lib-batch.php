@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: lib-batch.php 2869 2008-07-31 14:38:32Z mevans0263                $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -190,15 +190,15 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                      $mimeType == 'application/photoshop' ||
                      $mimeType == 'application/psd' ) {
                     $tmpImage = $_MG_CONF['tmp_path'] . '/wip' . rand() . '.jpg';
-                    $rc = MG_convertImageFormat($srcImage, $tmpImage, 'image/jpeg',0);
+                    $rc = IMG_convertImageFormat($srcImage, $tmpImage, 'image/jpeg',0);
                     if ( $rc == false ) {
                         COM_errorLog("MG_convertImage: Error converting uploaded image to jpeg format.");
                         @unlink($srcImage);
                         return false;
                     }
-                    $rc = MG_resizeImage($tmpImage,$imageThumb,$tnHeight,$tnWidth,$mimeType,0);
+                    $rc = IMG_resizeImage($tmpImage,$imageThumb,$tnHeight,$tnWidth,$mimeType,0);
                 } else {
-                    $rc = MG_resizeImage($srcImage, $imageThumb, $tnHeight, $tnWidth, $mimeType, 0 );
+                    $rc = IMG_resizeImage($srcImage, $imageThumb, $tnHeight, $tnWidth, $mimeType, 0 );
                 }
                 if ( $rc == false ) {
                     COM_errorLog("MG_convertImage: Error resizing uploaded image to thumbnail size.");
@@ -226,7 +226,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                      $mimeType == 'application/psd' ||
                      $mimeType == 'image/tiff' ) {
                     $tmpImage = $_MG_CONF['tmp_path'] . '/wip' . rand() . '.jpg';
-                    list($rc,$msg) = MG_convertImageFormat($srcImage, $tmpImage, 'image/jpeg',0);
+                    list($rc,$msg) = IMG_convertImageFormat($srcImage, $tmpImage, 'image/jpeg',0);
                     if ( $rc == false ) {
                         COM_errorLog("MG_libBatch: Error converting uploaded image to jpeg format.");
                     }
@@ -295,9 +295,9 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     }
                 }
                 if ( $tmpImage != '' ) {
-                    list($rc,$msg) = MG_resizeImage($tmpImage, $imageDisplay, $dImageHeight, $dImageWidth, $mimeType, 0 );
+                    list($rc,$msg) = IMG_resizeImage($tmpImage, $imageDisplay, $dImageHeight, $dImageWidth, $mimeType, 0 );
                 } else {
-                    list($rc,$msg) = MG_resizeImage($srcImage, $imageDisplay, $dImageHeight, $dImageWidth, $mimeType, 0 );
+                    list($rc,$msg) = IMG_resizeImage($srcImage, $imageDisplay, $dImageHeight, $dImageWidth, $mimeType, 0 );
                 }
                 if ( $tmpImage != '' ) {
                     @unlink($tmpImage);
@@ -306,7 +306,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
             case 'droporiginal' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
                 if ( $_MG_CONF['jhead_enabled'] == 1 ) {
-                    MG_execWrapper('"' . $_MG_CONF['jhead_path'] . "/jhead" . '"' . " -te " . $row['data'] . " " . $row['data2']);
+                    UTL_execWrapper('"' . $_MG_CONF['jhead_path'] . "/jhead" . '"' . " -te " . $row['data'] . " " . $row['data2']);
                 }
                 @unlink($row['data']);
                 break;

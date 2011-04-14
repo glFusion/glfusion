@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2010 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -43,6 +43,8 @@ if ( COM_isAnonUser() )  {
     echo $display;
     exit;
 }
+
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
 
 function MG_enroll( ) {
     global $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG03;
@@ -97,7 +99,7 @@ function MG_saveEnroll() {
         $_MG_CONF['member_quota'] = 0;
     }
 
-    $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE owner_id=" . $_USER['uid'] . " AND album_parent=" . $_MG_CONF['member_album_root'];
+    $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE owner_id=" . (int) $_USER['uid'] . " AND album_parent=" . $_MG_CONF['member_album_root'];
     $result = DB_query($sql);
     $nRows = DB_numRows($result);
     if ( $nRows > 0 ) {
@@ -110,7 +112,7 @@ function MG_saveEnroll() {
         exit;
     }
 
-    $uid = $_USER['uid'];
+    $uid = (int) $_USER['uid'];
     $aid = plugin_user_create_mediagallery($uid,1);
     $result = DB_query("UPDATE {$_TABLES['mg_userprefs']} SET member_gallery=1,quota=".$_MG_CONF['member_quota']." WHERE uid=" . $uid,1);
     $affected = DB_affectedRows($result);

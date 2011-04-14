@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2010 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -41,12 +41,12 @@ if (!in_array('mediagallery', $_PLUGINS)) {
     exit;
 }
 
-require_once $_CONF['path_system']  . 'lib-user.php';
-require_once $_CONF['path_system']  . 'lib-security.php';
-require_once $_CONF['path'] . 'plugins/mediagallery/include/classAlbum.php';
-require_once $_CONF['path'] . 'plugins/mediagallery/include/classMedia.php';
-require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
-require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
+MG_initAlbums();
+USES_lib_user();
+USES_lib_security();
+require_once $_CONF['path'].'plugins/mediagallery/include/lib-upload.php';
+require_once $_CONF['path'].'plugins/mediagallery/include/sort.php';
 
 $_SYSTEM['nohttponly'] = 1;
 
@@ -74,11 +74,10 @@ define('GR_STAT_ROTATE_IMAGE_FAILED',504);
 
 define('GR_SERVER_VERSION', '2.15');
 
-
 function _mg_gr_checkuser( ) {
     global $_USER, $_CONF;
 
-    if (!isset($_USER['uid']) || $_USER['uid'] < 2 )  {
+    if ( COM_isAnonUser() )  {
         _mg_gr_finish(GR_STAT_LOGIN_MISSING,'Login session has expired','Login has expired');
     }
 }
@@ -124,7 +123,7 @@ function _mg_gr_finish($code, $body = NULL, $message = NULL) {
 }
 
 function _mg_gr_login( $loginname, $passwd ) {
-	global $_CONF, $_USER, $_TABLES, $_SERVER, $_COOKIE, $_GROUPS, $_RIGHTS, $VERBOSE;
+	global $_CONF, $_USER, $_TABLES, $_GROUPS, $_RIGHTS, $VERBOSE;
 
 	$retval = 'server_version='. GR_SERVER_VERSION."\n";
 
@@ -134,7 +133,7 @@ function _mg_gr_login( $loginname, $passwd ) {
         $status = -1;
     }
 
-    if ($status == USER_ACCOUNT_ACTIVE) { // logged in AOK.
+    if ($status == USER_ACCOUNT_ACTIVE) {
         SESS_completeLogin($uid);
         $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
         $_RIGHTS = explode( ',', SEC_getUserPermissions() );
@@ -206,7 +205,6 @@ function _mg_gr_fetch_albums($refnum, $check_writeable) {
             $create_sub = 'false';
         }
       	$retval .= 'album.perms.create_sub.'.$aid.'='.$create_sub."\n";
-//      	$retval .= 'album.info.extrafields.'.$aid."=Summary\n";
       	$nalbums++;
 
       	$subs = $MG_albums[$children[$i]]->getChildren();
@@ -247,7 +245,6 @@ function _mg_recurse_children( $album_id, $counter, $check_writable, $refnum = 0
       	} else {
       	    $retval .= 'album.parent.'.$aid.'='.$MG_albums[$MG_albums[$children[$i]]->parent]->id."\n";
         }
-//      	$retval .= 'album.parent.'.$aid.'='.$MG_albums[$MG_albums[$children[$i]]->parent]->id."\n";
       	$retval .= 'album.resize_size.'.$aid.'='.'0'."\n";
       	$retval .= 'album.max_size.'.$aid.'='.'0'."\n";
       	$retval .= 'album.thumb_size.'.$aid.'='.'200'."\n";
@@ -262,7 +259,6 @@ function _mg_recurse_children( $album_id, $counter, $check_writable, $refnum = 0
       	$retval .= 'album.perms.del_item.'.$aid.'='.($MG_albums[$children[$i]]->access == 3 ? 'true' : 'false')."\n";
       	$retval .= 'album.perms.del_alb.'.$aid.'='.($MG_albums[$children[$i]]->access == 3 ? 'true' : 'false')."\n";
       	$retval .= 'album.perms.create_sub.'.$aid.'='.(($MG_albums[$children[$i]]->access == 3  && $_MG_USERPREFS['active'] == 1) || $MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/  ? 'true' : 'false')."\n";
-//      	$retval .= 'album.info.extrafields.'.$aid."=Summary\n";
       	$counter++;
       	list($counter, $clist) = _mg_recurse_children( $MG_albums[$children[$i]]->id, $counter, $check_writable);
       	$retval .= $clist;
@@ -283,7 +279,7 @@ function _mg_gr_fetch_album_images($aid, $albumstoo) {
 
     $arrayCounter = 0;
     $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
-            " ON ma.media_id=m.media_id WHERE m.media_type=0 AND ma.album_id=" . intval($aid);
+            " ON ma.media_id=m.media_id WHERE m.media_type=0 AND ma.album_id=" . (int) $aid;
 
     $result = DB_query( $sql );
     $nRows  = DB_numRows( $result );
@@ -545,7 +541,7 @@ function _mg_gr_move_album($albname, $destaname) {
     if ( ($MG_albums[$albname]->access != 3 || $MG_albums[$destaname]->access != 3) && !$MG_albums[0]->owner_id ) {
         _mg_gr_finish(GR_STAT_NO_WRITE_PERMISSION, $retval,'No write permissions');
     }
-    $sql = "UPDATE {$_TABLES['mg_albums']} SET album_parent=" . intval($destaname) . " WHERE album_id=" . intval($albname);
+    $sql = "UPDATE {$_TABLES['mg_albums']} SET album_parent=" . (int) $destaname . " WHERE album_id=" . (int) $albname;
     DB_query($sql);
     _mg_gr_finish(GR_STAT_SUCCESS, $retval, 'Album reparented');
 }
