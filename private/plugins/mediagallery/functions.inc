@@ -1051,6 +1051,7 @@ function plugin_moderationapprove_mediagallery($id)
     global $_CONF, $_TABLES, $_MG_CONF, $LANG_MG01;
 
     require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
+    require_once $_CONF['path'] . 'lib/html2text/html2text.php';
 
     $result = DB_query("SELECT * FROM {$_TABLES['mg_media']} WHERE media_id='".DB_escapeString($id)."'");
     if ( DB_numRows($result) > 0 ) {
@@ -1107,7 +1108,9 @@ function plugin_moderationapprove_mediagallery($id)
 
                     $msgData = array();
                     $msgData['subject'] = $LANG_MG01['upload_approved'];
-                    $msgData['textmessage'] = $body;
+                    $msgData['htmlmessage'] = $body;
+                    $html2txt = new html2text($body,false);
+                    $msgData['textmessage'] = $html2txt->get_text();
                     $msgData['from'] = $_CONF['noreply_mail'];
                     $msgData['to']   = array('email' => $email, 'name' => $username);
                     COM_emailNotification($msgData);
@@ -1150,7 +1153,6 @@ function plugin_moderationdelete_mediagallery($id)
     }
     return;
 }
-
 
 
 function plugin_upgrade_mediagallery()
@@ -1252,14 +1254,14 @@ function plugin_canuserrate_mediagallery($item_id, $uid)
     if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
         return $retval;
     }
-    $result = DB_query("SELECT * FROM {$_TABLES['mg_media']} AS m LEFT JOIN {$_TABLES['mg_media_albums']} AS ma ON m.media_id=ma.media_id WHERE m.media_id='".DB_escapeString($item_id)."'");
+    $result = DB_query("SELECT m.media_user_id,ma.album_id,a.enable_rating FROM {$_TABLES['mg_media']} AS m LEFT JOIN {$_TABLES['mg_media_albums']} AS ma ON m.media_id=ma.media_id LEFT JOIN {$_TABLES['mg_albums']} AS a ON ma.album_id=a.album_id WHERE m.media_id='".DB_escapeString($item_id)."'");
     if ( DB_numRows($result) > 0 ) {
         $row = DB_fetchArray($result);
-        if ($MG_albums[$row['album_id']]->enable_rating > 0 ) {
-            if ($uid == $row['owner_id'] ) {
+        if ($row['enable_rating'] > 0 ) {
+            if ($uid == $row['media_user_id'] ) {
                 return false;
             }
-            if ( $MG_albums[$row['album_id']]->enable_rating == 1 && COM_isAnonUser() ) {
+            if ( $row['enable_rating'] == 1 && COM_isAnonUser() ) {
                 return false;
             }
         } else {
@@ -1285,6 +1287,8 @@ function plugin_subscription_email_format_mediagallery($category,$track_id,$post
 {
     global $_CONF, $_MG_CONF, $_TABLES, $MG_albums, $LANG_MG01,$LANG01, $LANG03;
 
+    require_once $_CONF['path'] . 'lib/html2text/html2text.php';
+    MG_initAlbums();
     $dt = new Date('now',$_CONF['timezone']);
     $permalink = 'Not defined';
 
@@ -1380,7 +1384,7 @@ function plugin_subscription_email_format_mediagallery($category,$track_id,$post
 function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array())
 {
     global $_CONF, $_TABLES, $MG_albums, $_MG_CONF, $LANG_MG00;
-
+    MG_initAlbums();
     $properties = explode(',', $what);
     $fields = array();
     foreach ($properties as $p) {
@@ -1746,6 +1750,7 @@ function MG_initAlbums() {
     if ( isset($MG_albums) ) {
         return;
     }
+
     $_MG_CONF['dateformat'] = array();
     // let's load all the dataformats in memory so we do not have to keep processing it over and over...
     $result = DB_query("SELECT * FROM {$_TABLES['dateformats']}",1);
