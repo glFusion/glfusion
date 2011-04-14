@@ -2,6 +2,9 @@
 <noscript><div class="pluginAlert" style="padding:10px;">{no_javascript_warning}</div></noscript>
 <script type="text/javascript" src="{site_url}/js/admin_editor.js"></script>
 {configuration_check}
+{!if feedback}
+<span class="info">{feedback}</span>
+{!endif}
 <div id="pe_navbar" class="jsenabled_show" style="display:none">{navbar}</div>
 <div style="clear:both;"></div>
 <form method="post" action="{s_form_action}" name="mg_config_form" enctype="multipart/form-data" id="mg_config_form">

@@ -30,7 +30,6 @@
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/init.php';
-//require_once $_MG_CONF['path_admin'] . 'envcheck.php';
 require_once $_MG_CONF['path_admin'] . 'navigation.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/classFrame.php';
 
@@ -49,14 +48,16 @@ if (!SEC_hasRights('mediagallery.config')) {
     exit;
 }
 
-function MG_editConfig( ) {
+function MG_editConfig( $msgString = '' ) {
     global $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG00, $LANG_MG01, $LANG_DIRECTION,$LANG04,$glversion;
 
     $retval = '';
     $T = new Template($_MG_CONF['template_path'].'/admin');
     $T->set_file ('admin','cfgedit.thtml');
     $T->set_var('site_url', $_MG_CONF['site_url']);
-    $T->set_var('site_admin_url', $_CONF['site_admin_url']);
+    if ( $msgString != '' ) {
+        $T->set_var('feedback',$msgString);
+    }
 
     if (!isset($_MG_CONF['rating_max']) ) {
         $_MG_CONF['rating_max'] = 5;
@@ -557,7 +558,7 @@ function MG_editConfig( ) {
 }
 
 function MG_saveConfig( ) {
-    global $display, $_CONF, $_MG_CONF, $_TABLES, $_USER, $_POST;
+    global $display, $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG09;
 
     $gallery_only           = COM_applyFilter($_POST['gallery_only'],true);
     $album_display_columns  = COM_applyFilter($_POST['albumdisplaycolumns'],true);
@@ -821,12 +822,7 @@ function MG_saveConfig( ) {
         $_MG_CONF[$row['config_name']] = $row['config_value'];
     }
 
-    // now check and see if the configuration is OK...
-
-//    $display .= MG_checkEnvironment();
-    $display .= MG_siteFooter();
-    echo $display;
-    exit;
+    return MG_editConfig($LANG_MG09[2]);
 }
 
 /**
@@ -864,11 +860,6 @@ if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {   // save the 
 } elseif ($mode == $LANG_MG01['cancel']) {
     echo COM_refresh ($_MG_CONF['admin_url'] . 'index.php');
     exit;
-} elseif ($mode == $LANG_MG01['recheck']) {
-    $T->set_var(array(
-        'admin_body'    => MG_checkEnvironment(),
-        'mg_navigation' => MG_navigation()
-    ));
 } elseif ($mode == $LANG_MG01['continue']) {
     echo COM_refresh ($_MG_CONF['admin_url'] . 'index.php?msg=2');
     exit;
