@@ -216,7 +216,7 @@ if ($status == USER_ACCOUNT_ACTIVE) {
         $_POST[CSRF_TOKEN] = $newToken;
         $_GET[CSRF_TOKEN] = $newToken;
     }
-    $_REQUEST = array_merge($_GET, $_POST);
+    $_REQUEST = @array_merge($_GET, $_POST);
 
   // we have a logged in user - make sure they have permissions to be here...
 } else if (!SEC_isModerator() && !SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR')
