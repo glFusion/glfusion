@@ -293,7 +293,9 @@ function MG_SWFUpload( $album_id ) {
     }
     MG_SortMedia( $album_id );
 
-    return 'FILEID:'.$new_media_id;
+    $queue = DB_count($_TABLES['mg_mediaqueue'],'media_id',$new_media_id);
+
+    return 'FILEID:'.$new_media_id.'|'.$queue;
 }
 /**
 * Browser upload form

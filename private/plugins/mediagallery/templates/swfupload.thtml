@@ -441,7 +441,9 @@ function uploadSuccess(file, serverData) {
         var progress = new FileProgress(file, this.customSettings.progressTarget);
         progress.setComplete();
         if (serverData.substring(0, 7) === "FILEID:") {
-    	    addImage("{site_url}/thumbnail.php?id=" + serverData.substring(7),serverData.substring(7), file.name );
+            srvResponse = serverData.split("|");
+//    	    addImage("{site_url}/thumbnail.php?id=" + serverData.substring(7),serverData.substring(7), file.name,srvResponse[1] );
+    	    addImage("{site_url}/thumbnail.php?id=" + srvResponse[0].substring(7),srvResponse[0].substring(7), file.name,srvResponse[1] );
     	    progress.setStatus("{swfupload_complete}.");
     	    progress.toggleCancel(false);
     	} else {
@@ -454,7 +456,7 @@ function uploadSuccess(file, serverData) {
     }
 }
 
-function addImage(src, id, filename ) {
+function addImage(src, id, filename, queue ) {
     var newImg   = document.createElement("img");
     var imgDiv   = document.createElement("div");
     var newDiv   = document.createElement("div");
@@ -469,7 +471,12 @@ function addImage(src, id, filename ) {
     imgDiv.setAttribute('style','float:left;width:210px;height:220px;text-align:center;margin-right:5px;');
     inputDiv.setAttribute('style','float:left');
 
-    imgDiv.innerHTML = '<span style="font-weight:bold;vertical-align:top;">' + filename + '</span>';
+    if ( queue > 0 ) {
+        imgDiv.innerHTML = '<span style="font-weight:bold;vertical-align:top;">{$LANG_MG01[queued]}</span>';
+    } else {
+        imgDiv.innerHTML = '<span style="font-weight:bold;vertical-align:top;">' + filename + '</span>';
+    }
+
     inputDiv.innerHTML = '<span style="font-weight:bold;vertical-align:top;">{$LANG_MG01[title]}</span><br /><textarea rows="2" cols="60" name="media_title[]" style="width:80%;"></textarea><br /><span style="font-weight:bold;vertical-align:top;">{$LANG_MG01[description]}</span><br /><textarea rows="2" cols="60" name="media_desc[]" style="width:80%;"></textarea><input type="hidden" name="media_id[]" value="' + id + '" />';
 
     clrDiv.setAttribute('style','clear:both;border-bottom:1px solid;border-bottom-color:#D9E4FF;margin-bottom:5px;');

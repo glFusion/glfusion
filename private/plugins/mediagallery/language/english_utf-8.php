@@ -726,6 +726,7 @@ $LANG_MG01 = array (
     'lightbox'                  => 'Lightbox',
     'submissions'               => 'Media Gallery Submissions',
     'lightbox_image'            => 'Click for full image',
+    'queued'                    => 'Queued for Moderator Approval',
 );
 
 // error messages
