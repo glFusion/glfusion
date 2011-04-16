@@ -808,7 +808,7 @@ class mbElement {
                         $menuitems = array ();
                         for ($i = 0; $i < $nrows; $i++) {
                             $A = DB_fetchArray ($result);
-                            $url = COM_buildURL ($_CONF['site_url'] . '/staticpages/index.php?page=' . $A['sp_id']);
+                            $url = COM_buildURL ($_CONF['site_url'] . '/page.php?page=' . $A['sp_id']);
                             $label = $A['sp_label'];
                             $menu .= '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
                         }
@@ -853,7 +853,7 @@ class mbElement {
                 }
                 break;
             case '5' : // static page
-                $this->url = COM_buildURL ($_CONF['site_url'] . '/staticpages/index.php?page=' . $this->subtype);
+                $this->url = COM_buildURL ($_CONF['site_url'] . '/page.php?page=' . $this->subtype);
                 break;
             case '6' : // external URL
                 /*
