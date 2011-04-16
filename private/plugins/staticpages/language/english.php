@@ -39,14 +39,14 @@ global $LANG32;
 $LANG_STATIC = array(
     'newpage' => 'New Page',
     'adminhome' => 'Admin Home',
-    'staticpages' => 'Static Pages',
-    'staticpageeditor' => 'Static Page Editor',
+    'staticpages' => 'Pages',
+    'staticpageeditor' => 'Page Editor',
     'writtenby' => 'Author',
     'date' => 'Last Updated',
     'title' => 'Title',
     'content' => 'Content',
     'hits' => 'Hits',
-    'staticpagelist' => 'Static Page List',
+    'staticpagelist' => 'Page List',
     'url' => 'URL',
     'edit' => 'Edit',
     'lastupdated' => 'Last Updated',
@@ -57,15 +57,15 @@ $LANG_STATIC = array(
     'leftblocks' => 'Left Blocks',
     'addtomenu' => 'Add To Menu',
     'label' => 'Label',
-    'nopages' => 'No static pages are in the system yet',
+    'nopages' => 'No pages are in the system yet',
     'save' => 'save',
     'preview' => 'preview',
     'delete' => 'delete',
     'cancel' => 'cancel',
     'access_denied' => 'Access Denied',
-    'access_denied_msg' => 'You are illegally trying access one of the Static Pages administration pages.  Please note that all attempts to illegally access this page are logged',
+    'access_denied_msg' => 'You are illegally trying access one of the Pages administration pages.  Please note that all attempts to illegally access this page are logged',
     'all_html_allowed' => 'All HTML is allowed',
-    'results' => 'Static Pages Results',
+    'results' => 'Pages Results',
     'author' => 'Author',
     'no_title_or_content' => 'You must at least fill in the <b>Title</b> and <b>Content</b> fields.',
     'no_such_page_anon' => 'Please log in..',
@@ -75,15 +75,15 @@ $LANG_STATIC = array(
     'exit_msg' => 'Exit Type: ',
     'exit_info' => 'Enable for Login Required Message.  Leave unchecked for normal security check and message.',
     'deny_msg' => 'Access to this page is denied.  Either the page has been moved/removed or you do not have sufficient permissions.',
-    'stats_headline' => 'Top Ten Static Pages',
+    'stats_headline' => 'Top Ten Pages',
     'stats_page_title' => 'Page Title',
     'stats_hits' => 'Hits',
-    'stats_no_hits' => 'It appears that there are no static pages on this site or no one has ever viewed them.',
+    'stats_no_hits' => 'It appears that there are no pages on this site or no one has ever viewed them.',
     'id' => 'ID',
-    'duplicate_id' => 'The ID you chose for this static page is already in use. Please select another ID.',
-    'instructions' => 'To modify or delete a static page, click on that page\'s edit icon below. To view a static page, click on the title of the page you wish to view. To create a new static page, click on "Create New" above. Click on on the copy icon to create a copy of an existing page.',
+    'duplicate_id' => 'The ID you chose for this page is already in use. Please select another ID.',
+    'instructions' => 'To modify or delete a page, click on that page\'s edit icon below. To view a page, click on the title of the page you wish to view. To create a new page, click on "Create New" above. Click on on the copy icon to create a copy of an existing page.',
     'centerblock' => 'Centerblock: ',
-    'centerblock_msg' => 'When checked, this Static Page will be displayed as a center block on the index page.',
+    'centerblock_msg' => 'When checked, this Page will be displayed as a center block on the index page.',
     'topic' => 'Topic: ',
     'position' => 'Position: ',
     'all_topics' => 'All',
@@ -101,14 +101,14 @@ $LANG_STATIC = array(
     'centerblock_entire' => 'Entire Page',
     'centerblock_nonews' => 'If No News',
     'inblock_msg' => 'In a block: ',
-    'inblock_info' => 'Wrap Static Page in a block.',
+    'inblock_info' => 'Wrap Page in a block.',
     'title_edit' => 'Edit page',
     'title_copy' => 'Make a copy of this page',
     'title_display' => 'Display page',
     'select_php_none' => 'do not execute PHP',
     'select_php_return' => 'execute PHP (return)',
     'select_php_free' => 'execute PHP',
-    'php_not_activated' => "The use of PHP in static pages is not activated. Please see the <a href=\"{$_CONF['site_url']}/docs/staticpages.html#php\">documentation</a> for details.",
+    'php_not_activated' => "The use of PHP in pages is not activated. Please see the <a href=\"{$_CONF['site_url']}/docs/staticpages.html#php\">documentation</a> for details.",
     'printable_format' => 'Printable Format',
     'copy' => 'Copy',
     'limit_results' => 'Limit Results',
@@ -127,8 +127,8 @@ $PLG_staticpages_MESSAGE3002 = $LANG32[9];
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['staticpages'] = array(
-    'label' => 'Static Pages',
-    'title' => 'Static Pages Configuration'
+    'label' => 'Pages',
+    'title' => 'Pages Configuration'
 );
 
 $LANG_confignames['staticpages'] = array(
@@ -154,7 +154,7 @@ $LANG_configsubgroups['staticpages'] = array(
 );
 
 $LANG_fs['staticpages'] = array(
-    'fs_main' => 'Static Pages Main Settings',
+    'fs_main' => 'Pages Main Settings',
     'fs_permissions' => 'Default Permissions'
 );
 

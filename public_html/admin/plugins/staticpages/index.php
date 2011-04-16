@@ -191,7 +191,7 @@ function PAGE_form($A, $error = false)
         $sp_template->set_var('sp_id', $A['sp_id']);
         $sp_template->set_var('sp_old_id', $A['sp_old_id']);
         $sp_template->set_var ('example_url', COM_buildURL ($_CONF['site_url']
-                               . '/staticpages/index.php?page=' . $A['sp_id']));
+                               . '/page.php?page=' . $A['sp_id']));
 
         $sp_template->set_var ('lang_centerblock', $LANG_STATIC['centerblock']);
         $sp_template->set_var ('lang_centerblock_help', $LANG_ADMIN['help_url']);
@@ -567,7 +567,7 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             if ($enabled) {
                 $url = COM_buildUrl(
                     $_CONF['site_url'] .
-                    '/staticpages/index.php?page=' . $A['sp_id']);
+                    '/page.php?page=' . $A['sp_id']);
                 $retval = COM_createLink(
                     $sp_title, $url,
                     array('title'=>$LANG_STATIC['title_display']));

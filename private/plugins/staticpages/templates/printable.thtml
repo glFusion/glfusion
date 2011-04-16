@@ -13,7 +13,9 @@
     <p>{site_name}<br{xhtml}>
         <a href="{sp_url}">{sp_url}</a>
     </p>
+{!if comments_text}
 ({comments_text})
+{!endif}
 </body>
 </html>
 {# end {templatelocation} #}

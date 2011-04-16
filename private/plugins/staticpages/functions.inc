@@ -3,10 +3,6 @@
 // | Static Pages Plugin - glFusion CMS                                       |
 // +--------------------------------------------------------------------------+
 // | functions.inc                                                            |
-// |                                                                          |
-// | This file does two things: 1) it implements the necessary glFusion Plugin|
-// | API method and 2) implements all the common code needed by the Static    |
-// | Pages' PHP files.                                                        |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
@@ -113,7 +109,7 @@ function plugin_getmenuitems_staticpages()
     $menuitems = array ();
     for ($i = 0; $i < $nrows; $i++) {
         $A = DB_fetchArray ($result);
-        $menuitems[$A['sp_label']] = COM_buildURL ($_CONF['site_url'] . '/staticpages/index.php?page=' . $A['sp_id']);
+        $menuitems[$A['sp_label']] = COM_buildURL ($_CONF['site_url'] . '/page.php?page=' . $A['sp_id']);
     }
 
     return $menuitems;
@@ -137,7 +133,7 @@ function plugin_commentsupport_staticpages()
 function plugin_getcommenturlid_staticpages( ) {
     global $_CONF;
     $retval = array();
-    $retval[] = $_CONF['site_url'] . '/staticpages/index.php';
+    $retval[] = $_CONF['site_url'] . '/page.php';
     $retval[] = 'page';
     $retval[] = 'cmtpage=';
     return $retval;
@@ -217,7 +213,7 @@ function plugin_savecomment_staticpages($title, $comment, $id, $pid, $postmode)
                                    $LANG03[14], $postmode)
                 . COM_siteFooter();
     } else { // success
-        $url = COM_buildUrl($_CONF['site_url'] . '/staticpages/index.php?page='
+        $url = COM_buildUrl($_CONF['site_url'] . '/page.php?page='
                             . $id);
 		CACHE_remove_instance('whatsnew_');
 		echo COM_refresh($url);
@@ -249,7 +245,7 @@ function plugin_deletecomment_staticpages($cid, $id)
             $A['group_id'], $A['perm_owner'], $A['perm_group'],
             $A['perm_members'], $A['perm_anon']) == 3) {
         CMT_deleteComment($cid, $id, 'staticpages');
-        $url = COM_buildUrl($_CONF['site_url'] . '/staticpages/index.php?page='
+        $url = COM_buildUrl($_CONF['site_url'] . '/page.php?page='
                             . $id);
         $retval .= COM_refresh($url);
     } else {
@@ -295,7 +291,7 @@ function plugin_getwhatsnewcomment_staticpages()
         for ($x = 0; $x < $nrows; $x++ ) {
             $A = DB_fetchArray($result);
 
-            $cmtReturn['url'] = COM_buildUrl($_CONF['site_url'].'/staticpages/index.php?page='.$A['sid']).'#comments';
+            $cmtReturn['url'] = COM_buildUrl($_CONF['site_url'].'/page.php?page='.$A['sid']).'#comments';
             $cmtReturn['type'] = 'staticpage';
             $cmtReturn['dups'] = $A['dups'];
             $cmtReturn['title'] = $A['title'];
@@ -343,8 +339,8 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
 
     $retval = '';
 
-    $sp_url = COM_buildUrl($_CONF['site_url'] . '/staticpages/index.php?page='.$page);
-    $headercode = '<link rel="canonical" href="' . $sp_url . '"' . XHTML . '>'.LB;
+    $sp_url = COM_buildUrl($_CONF['site_url'] . '/page.php?page='.$page);
+    $headercode = '<link rel="canonical" href="' . $sp_url . '"/>'.LB;
 
     if ($A['sp_format'] == 'allblocks' OR $A['sp_format'] == 'leftblocks') {
         $retval .= COM_siteHeader('menu', $A['sp_title'], $headercode);
@@ -359,9 +355,6 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
     }
 
     $spage = new Template( $_CONF['path'] . 'plugins/staticpages/templates/' );
-    $spage->set_var('xhtml', XHTML);
-    $spage->set_var('site_url', $_CONF['site_url']);
-    $spage->set_var('layout_url', $_CONF['layout_url']);
     $spage->set_var('site_admin_url', $_CONF['site_admin_url']);
     $spage -> set_file( array('page'=>'staticpage.thtml',
         'comments' => 'spcomments.thtml'));
@@ -372,8 +365,8 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
             $attr = array('title' => $LANG_STATIC['printable_format']);
             $printicon = COM_createImage($icon_url, $LANG01[65], $attr);
             $print_url = COM_buildURL ($_CONF['site_url']
-                . '/staticpages/index.php?page=' . $page . '&amp;disp_mode=print');
-            $icon = COM_createLink($printicon, $print_url);
+                . '/page.php?page=' . $page . '&amp;disp_mode=print');
+            $icon = COM_createLink($printicon, $print_url,array('rel' => 'nofollow'));
             $spage->set_var('print_icon', $icon);
         }
         if ((SEC_hasAccess ($A['owner_id'], $A['group_id'], $A['perm_owner'],
@@ -382,7 +375,7 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
             $icon_url = $_CONF['layout_url'] . '/images/edit.' . $_IMAGE_TYPE;
             $attr = array('title' => $LANG_STATIC['edit']);
             $editiconhtml = COM_createImage($icon_url, $LANG_STATIC['edit'], $attr);
-            $attr = array('class' => 'editlink','title' => $LANG_STATIC['edit']);
+            $attr = array('rel' => 'nofollow','class' => 'editlink','title' => $LANG_STATIC['edit']);
             $url = $_CONF['site_admin_url']
                 . '/plugins/staticpages/index.php?edit=x&amp;sp_id=' . $page;
             $icon =
@@ -475,39 +468,40 @@ function SP_printPage ($page, $A)
     $template_path = staticpages_templatePath ();
     $print = new Template ($template_path);
     $print->set_file (array ('print' => 'printable.thtml'));
-    $print->set_var ('site_url', $_CONF['site_url']);
     $print->set_var ('site_name', $_CONF['site_name']);
     $print->set_var ('site_slogan', $_CONF['site_slogan']);
-    $print->set_var('xhtml', XHTML);
 
     $print->set_var ('page_title', $_CONF['site_name'] . ' - '
                                    . $A['sp_title']);
     $sp_url = COM_buildUrl ($_CONF['site_url']
-                               . '/staticpages/index.php?page=' . $page);
+                               . '/page.php?page=' . $page);
     $print->set_var ('sp_url', $sp_url);
     $print->set_var ('sp_title', $A['sp_title']);
     $print->set_var ('sp_content',
             SP_render_content ($A['sp_content'], $A['sp_php']));
     $print->set_var ('sp_hits', COM_numberFormat ($A['sp_hits']));
     $printable = COM_buildURL($_CONF['site_url']
-               . '/staticpages/index.php?page=' . $page . '&amp;mode=print');
+               . '/page.php?page=' . $page . '&amp;mode=print');
     $print->set_var('printable_url', $printable);
     if ($A['commentcode'] >= 0) {
         $commentsUrl = $sp_url . '#comments';
-        $comments = DB_count($_TABLES['comments'],
+        $comments = (int) DB_count($_TABLES['comments'],
                              array('sid', 'type'), array(DB_escapeString($page), 'staticpages'));
-        $numComments = COM_numberFormat ($comments);
-        $print->set_var ('story_comments', $numComments);
-        $print->set_var ('comments_url', $commentsUrl);
-        $print->set_var ('comments_text', $numComments . ' ' . $LANG01[3]);
-        $print->set_var ('comments_count', $numComments);
-        $print->set_var ('lang_comments', $LANG01[3]);
-        $comments_with_count = sprintf ($LANG01[121], $numComments);
+        if ($comments > 0 ) {
+            $numComments = COM_numberFormat ($comments);
+            $print->set_var ('story_comments', $numComments);
+            $print->set_var ('comments_url', $commentsUrl);
+            $print->set_var ('comments_text', $numComments . ' ' . $LANG01[3]);
+            $print->set_var ('comments_count', $numComments);
+            $print->set_var ('lang_comments', $LANG01[3]);
+            $comments_with_count = sprintf ($LANG01[121], $numComments);
 
-        if ($comments > 0) {
-            $comments_with_count = COM_createLink($comments_with_count, $commentsUrl);
+            if ($comments > 0) {
+                $comments_with_count = COM_createLink($comments_with_count, $commentsUrl);
+            }
+            $print->set_var ('comments_with_count', $comments_with_count);
         }
-        $print->set_var ('comments_with_count', $comments_with_count);
+
     }
     $print->parse ('output', 'print');
 
@@ -586,7 +580,7 @@ function plugin_showstats_staticpages($showsitestats)
             $A = DB_fetchArray ($result);
             $A['sp_title'] = $A['sp_title'];
             $A['sid'] = COM_createLink($A['sp_title'], COM_buildUrl ($_CONF['site_url']
-                      . "/staticpages/index.php?page={$A['sp_id']}"));
+                      . "/page.php?page={$A['sp_id']}"));
             $A['sp_hits'] = COM_NumberFormat ($A['sp_hits']);
             $data_arr[$i] = $A;
         }
@@ -653,7 +647,7 @@ function plugin_dopluginsearch_staticpages($query, $datestart, $dateend, $topic,
     // Make sure the query is SQL safe
     $query = trim(DB_escapeString($query));
 
-    $sql = "SELECT sp.sp_id AS id, sp.sp_title AS title, sp.sp_content AS description, UNIX_TIMESTAMP(sp.sp_date) AS date, sp.sp_uid AS uid, sp.sp_hits AS hits, CONCAT('/staticpages/index.php?page=', sp.sp_id) AS url ";
+    $sql = "SELECT sp.sp_id AS id, sp.sp_title AS title, sp.sp_content AS description, UNIX_TIMESTAMP(sp.sp_date) AS date, sp.sp_uid AS uid, sp.sp_hits AS hits, CONCAT('/page.php?page=', sp.sp_id) AS url ";
     $sql .= "FROM {$_TABLES['staticpage']} AS sp,{$_TABLES['users']} AS u ";
     $sql .= "WHERE (sp.sp_uid = u.uid) AND (sp_php <> 1) AND (sp_search = 1) AND (sp_status = 1) ";
     $sql .= COM_getPermSQL('AND') . COM_getLangSQL('sp_id', 'AND', 'sp') . ' ';
@@ -693,7 +687,7 @@ function plugin_dopluginsearch_comment_staticpages($query, $datestart, $dateend,
     $query = trim(DB_escapeString(htmlspecialchars($query)));
 
     $sql =  "SELECT c.cid AS id1, c.sid AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
-    $sql .= "CONCAT('/staticpages/index.php?page=', c.sid,'#comments') AS url ";
+    $sql .= "CONCAT('/page.php?page=', c.sid,'#comments') AS url ";
     $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
     $sql .= "LEFT JOIN {$_TABLES['staticpage']} s ON c.cid=s.sp_id ";
     $sql .= "WHERE (c.type='staticpages') AND (u.uid = c.uid) ";
@@ -883,9 +877,6 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
 
             $spage = new Template( $_CONF['path'] . 'plugins/staticpages/templates/' );
             $spage->set_file( array('page'=>'centerblock.thtml'));
-            $spage->set_var('xhtml', XHTML);
-            $spage->set_var('site_url', $_CONF['site_url']);
-            $spage->set_var('layout_url', $_CONF['layout_url']);
             $spage->set_var('site_admin_url', $_CONF['site_admin_url']);
 
             if ($_CONF['hideprintericon'] == 0) {
@@ -893,8 +884,8 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
                 $attr = array('title' => $LANG_STATIC['printable_format']);
                 $printicon = COM_createImage($icon_url, $LANG01[65], $attr);
                 $print_url = COM_buildURL ($_CONF['site_url']
-                    . '/staticpages/index.php?page=' . $S['sp_id'] . '&amp;mode=print');
-                $icon = COM_createLink($printicon, $print_url);
+                    . '/page.php?page=' . $S['sp_id'] . '&amp;mode=print');
+                $icon = COM_createLink($printicon, $print_url,array('rel'=>'nofollow'));
                 $spage->set_var('print_icon', $icon);
             }
             if ((SEC_hasAccess ($S['owner_id'], $S['group_id'], $S['perm_owner'],
@@ -905,7 +896,7 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
                 $editiconhtml = COM_createImage($icon_url, $LANG_STATIC['edit'], $attr);
                 $url = $_CONF['site_admin_url']
                     . '/plugins/staticpages/index.php?edit=x&amp;sp_id=' . $S['sp_id'];
-                $attr = array('class' => 'editlink','title' => $LANG_STATIC['edit']);
+                $attr = array('class' => 'editlink','title' => $LANG_STATIC['edit'],'rel'=>'nofollow');
                 $icon =
                     '&nbsp;' . COM_createLink(
                     $editiconhtml, //display
@@ -1036,7 +1027,7 @@ function plugin_autotags_staticpages($op, $content = '', $autotag = '')
             $S = DB_fetchArray($result);
             if (($autotag['tag'] == 'staticpage')) {
                 $url = COM_buildUrl($_CONF['site_url']
-                                    . '/staticpages/index.php?page=' . $sp_id);
+                                    . '/page.php?page=' . $sp_id);
                 if (empty($autotag['parm2'])) {
                     $linktext = $S['sp_title'];
                 } else {
@@ -1219,9 +1210,9 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
                     break;
                 case 'url':
                     if (empty($A['sp_id'])) {
-                        $props['url'] = COM_buildUrl($_CONF['site_url'].'/staticpages/index.php?page=' . $id);
+                        $props['url'] = COM_buildUrl($_CONF['site_url'].'/page.php?page=' . $id);
                     } else {
-                        $props['url'] = COM_buildUrl($_CONF['site_url'].'/staticpages/index.php?page='.$A['sp_id']);
+                        $props['url'] = COM_buildUrl($_CONF['site_url'].'/page.php?page='.$A['sp_id']);
                     }
                     break;
                 case 'label':

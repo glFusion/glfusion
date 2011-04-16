@@ -50,8 +50,8 @@ $_TABLES['staticpage']          = $_DB_table_prefix . 'staticpage';
 // Plugin info
 
 $_SP_CONF['pi_name']            = 'staticpages';
-$_SP_CONF['pi_display_name']    = 'Static Pages';
-$_SP_CONF['pi_version']         = '1.5.5';
-$_SP_CONF['gl_version']         = '1.2.1';
+$_SP_CONF['pi_display_name']    = 'Pages';
+$_SP_CONF['pi_version']         = '1.6.0';
+$_SP_CONF['gl_version']         = '1.3.0';
 $_SP_CONF['pi_url']             = 'http://www.glfusion.org/';
 ?>

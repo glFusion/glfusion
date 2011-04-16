@@ -2,12 +2,15 @@
 // +--------------------------------------------------------------------------+
 // | Static Pages Plugin - glFusion CMS                                       |
 // +--------------------------------------------------------------------------+
-// | index.php                                                                |
+// | page.php                                                                 |
 // |                                                                          |
 // | This is the main page for the glFusion Static Pages Plugin               |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2011 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -33,15 +36,12 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once '../lib-common.php';
+require_once 'lib-common.php';
 
 if (!in_array('staticpages', $_PLUGINS)) {
     COM_404();
     exit;
 }
-
-// MAIN
-
 $page = '';
 $comment_order = '';
 $comment_mode  = '';
@@ -51,66 +51,32 @@ $display_mode = '';
 COM_setArgNames(array('page', 'disp_mode'));
 $page = COM_applyFilter(COM_getArgument('page'));
 $display_mode = COM_applyFilter(COM_getArgument('disp_mode'));
-
 if ($page == '' && isset($_POST['page']) ) {
     $page = COM_applyFilter($_POST['page']);
 }
-
 // from comments display refresh:
 if (isset($_POST['order'])) {
-    $comment_order = COM_applyFilter($_POST['order']);
-    $comment_mode  = COM_applyFilter($_POST['mode']);
-    $cmt_page = COM_applyFilter($_POST['cmtpage']);
-    if ((strcasecmp($comment_order, 'ASC') != 0) &&
-            (strcasecmp($comment_order, 'DESC') != 0)) {
-        $comment_order = '';
+    $comment_order =  $_POST['order'] == 'ASC' ? 'ASC' : 'DESC';
+    if ( isset($_POST['mode']) ) {
+        $comment_mode  = COM_applyFilter($_POST['mode']);
+    }
+    if ( isset($_POST['cmtpage']) ) {
+        $cmt_page      = COM_applyFilter($_POST['cmtpage']);
     }
 } else {
     if (isset($_GET['order']) ) {
         $comment_order =  $_GET['order'] == 'ASC' ? 'ASC' : 'DESC';
-    } else {
-        $comment_order = '';
     }
     if ( isset($_GET['mode']) ) {
         $comment_mode = COM_applyFilter($_GET['mode']);
-    } else {
-        $comment_mode = '';
     }
     if ( isset($_GET['cmtpage']) ) {
         $cmt_page = COM_applyFilter($_GET['cmtpage']);
     }
-
 }
 if ($display_mode != 'print') {
     $display_mode = '';
 }
-$pageArgument = '?page='.$page;
-$dmArgument   = empty($display_mode) ? '' : '&disp_mode='.$display_mode;
-
-$cmtOrderArgument = empty($comment_order) ? '' : 'order='.$comment_order;
-$cmtModeArgument  = empty($comment_mode)  ? '' : 'mode='.$comment_mode;
-$cmtPageArgument  = empty($cmt_page)      ? '' : 'cmtpage='.$cmt_page;
-
-$baseURL = COM_buildURL($_CONF['site_url'].'/page.php' . $pageArgument . $dmArgument);
-if (strpos($baseURL, '?') === false) {
-    $sep = '?';
-} else {
-    $sep = '&';
-}
-if ( $cmtOrderArgument != '' ) {
-    $baseURL = $baseURL . $sep . $cmtOrderArgument;
-    $sep = '&';
-}
-if ( $cmtModeArgument != '' ) {
-    $baseURL = $baseURL . $sep . $cmtModeArgument;
-    $sep = '&';
-}
-if ( $cmtPageArgument != '' ) {
-    $baseURL = $baseURL . $sep . $cmtPageArgument;
-}
-
-// Permanent redirection
-header("HTTP/1.1 301 Moved Permanently");
-header("Location: ".$baseURL);
-exit();
+$retval = SP_returnStaticpage($page, $display_mode, $comment_order, $comment_mode);
+echo $retval;
 ?>
