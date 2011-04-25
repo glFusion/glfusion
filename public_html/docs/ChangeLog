@@ -13,7 +13,6 @@ v1.3.0 (Trunk Development Branch)
 - Do not allow remote users to be members of admin groups (Mark)
 - Fix layout bug when forum signature is present in a fixed width site with
   rightblocks. (Eric)
-- Updated install lib to handle MySQL ENGINE keyword (Mark)
 - Implemented new date / time class / handling (Mark)
 - Implemented improved session handling (Mark)
 - Fixed bug in requesting a new verification email (Mark)
@@ -34,10 +33,18 @@ v1.3.0 (Trunk Development Branch)
 - Removed wiki text formatting (Mark)
 - Removed storybodytext.thtml / featuredbodytext.thtml templates (Mark)
 
-v1.2.1.pl7
-----------
-- Fixed bug where user's password was not properly checked to determine if blank
-  when registering a new user (Mark)
+v1.2.2
+------
+- Updated Czech language files from Ivan (Mark)
+- Fixed hard coded language string (Groups) in admin/user.php (Mark)
+- Mail to user (admin user edit screen) did not work properly (Mark)
+- German language update from André (Mark)
+- FileMgmt - Display max allowed filesize in admin upload screen (Mark / André)
+- Updates to better support MySQL 5.5 (Mark)
+- Do not show Awaiting Verification in user edit as an option when user does
+  not enter their own password (Mark)
+- Fixed bug where user's password was not properly checked to determine if
+  blank when registering a new user (Mark)
 
 v1.2.1.pl6
 ----------
