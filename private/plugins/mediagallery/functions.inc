@@ -579,7 +579,7 @@ function plugin_getwhatsnew_mediagallery()
     if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
         return;
     }
-
+    MG_initAlbums();
     $newMediaCount    = 0;
     $newCommentCount = 0;
 
