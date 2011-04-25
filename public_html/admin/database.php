@@ -271,7 +271,7 @@ function DBADMIN_exec($cmd) {
     $results=array();
 
     if (!empty($_DB_pass)) {
-        $log_command = str_replace(" -p\"$_DB_pass\"", ' -p*****', $cmd);
+        $log_command = str_replace($_DB_pass,'*****', $cmd);
     }
     COM_errorLog(sprintf("DBADMIN_exec: Executing: %s",$log_command));
 
