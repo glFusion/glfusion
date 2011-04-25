@@ -71,7 +71,7 @@ if (!SEC_hasRights('user.edit')) {
 */
 function USER_edit($uid = '', $msg = '')
 {
-    global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG_MYACCOUNT, $LANG04, $LANG28, $LANG_ADMIN,
+    global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG_MYACCOUNT, $LANG01, $LANG04, $LANG28, $LANG_ADMIN,
            $LANG_configselects, $LANG_confignames,$LANG_ACCESS,$MESSAGE,$_IMAGE_TYPE;
 
     $retval = '';
@@ -133,7 +133,7 @@ function USER_edit($uid = '', $msg = '')
                 $navbar->add_menuitem($label,'showhideProfileEditorDiv("'.$id.'",'.$cnt.');return false;',true);
                 $cnt++;
                 if ( $id == 'pe_namepass' ) {
-                    $navbar->add_menuitem('Groups','showhideProfileEditorDiv("'.'pe_usergroup'.'",'.$cnt.');return false;',true);
+                    $navbar->add_menuitem($LANG01[96],'showhideProfileEditorDiv("'.'pe_usergroup'.'",'.$cnt.');return false;',true);
                     $cnt++;
                 }
             }
