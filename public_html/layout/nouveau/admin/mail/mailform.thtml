@@ -55,7 +55,7 @@
 {!endif}
         <tr>
             <td class="alignright" style="vertical-align:top;">{lang_body}:</td>
-            <td><textarea rows="12" name="message" cols="40" style="width:85%;"></textarea></td>
+            <td><textarea rows="12" name="message" cols="40" style="width:85%;">{message_text}</textarea></td>
         </tr>
         <tr>
             <td>&nbsp;</td>

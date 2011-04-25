@@ -8,6 +8,10 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2010-2011      by the following authors:                   |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Mark Howard            mark AT usable-web DOT com                        |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2001-2008 by the following authors:                        |
@@ -38,7 +42,7 @@ require_once 'auth.inc.php';
 $display = '';
 
 // Make sure user has rights to access this page
-if (!SEC_inGroup ('Mail Admin') && !SEC_hasrights ('user.mail')) {
+if (!SEC_hasrights ('user.mail')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_startBlock ($MESSAGE[30], '',
                                COM_getBlockTemplate ('_msg_block', 'header'));
@@ -58,7 +62,7 @@ if (!SEC_inGroup ('Mail Admin') && !SEC_hasrights ('user.mail')) {
 * @return   string      HTML for the email form
 *
 */
-function MAIL_displayForm( $uid=0, $grp_id=0, $from='', $replyto='', $subject='' )
+function MAIL_displayForm( $uid=0, $grp_id=0, $from='', $replyto='', $subject='', $message='' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG31, $LANG03, $LANG_ADMIN;
 
@@ -93,9 +97,6 @@ function MAIL_displayForm( $uid=0, $grp_id=0, $from='', $replyto='', $subject=''
     $mail_templates->set_var('lang_postmode', $LANG03[2]);
     $mail_templates->set_var('postmode_options', COM_optionList($_TABLES['postmodes'],'code,name',$postmode));
 
-    $mail_templates->set_var ('site_url', $_CONF['site_url']);
-    $mail_templates->set_var ('site_admin_url', $_CONF['site_admin_url']);
-    $mail_templates->set_var ('layout_url', $_CONF['layout_url']);
     $mail_templates->set_var ('startblock_email', COM_startBlock ($LANG31[1],
             '', COM_getBlockTemplate ('_admin_block', 'header')));
     $mail_templates->set_var ('php_self', $_CONF['site_admin_url']
@@ -126,13 +127,13 @@ function MAIL_displayForm( $uid=0, $grp_id=0, $from='', $replyto='', $subject=''
         $lang_warning = $LANG31[29];
         $warning = '';
         // get the user data, and check the privacy settings
-        $result = DB_query("SELECT username,fullname,email FROM {$_TABLES['users']} WHERE uid ='$uid'");
+        $result = DB_query("SELECT username,fullname,email FROM {$_TABLES['users']} WHERE uid = ". (int) $uid);
         $nrows = DB_numRows($result);
         if ($nrows > 0) {
             $A = DB_fetchArray($result);
             $username = ($_CONF['show_fullname']) ? $A['fullname'] : $A['username'];
             $to_user = $username . ' (' . $A['email'] . ')';
-            $emailfromadmin = DB_getItem( $_TABLES['userprefs'], 'emailfromadmin', "uid = '$uid'");
+            $emailfromadmin = DB_getItem( $_TABLES['userprefs'], 'emailfromadmin', "uid = " . (int) $uid);
             $warning = ($emailfromadmin == 1) ? '' : $LANG31[30];
         }
         $mail_templates->set_var ('to_user', $to_user);
@@ -177,6 +178,8 @@ function MAIL_displayForm( $uid=0, $grp_id=0, $from='', $replyto='', $subject=''
     $mail_templates->set_var ('subject', $subject);
 
     $mail_templates->set_var ('lang_body', $LANG31[5]);
+    $mail_templates->set_var ('message_text', $message);
+    $mail_templates->set_var ('message_html', $message);
     $mail_templates->set_var ('lang_sendto', $LANG31[6]);
     $mail_templates->set_var ('lang_allusers', $LANG31[7]);
     $mail_templates->set_var ('lang_admin', $LANG31[8]);
@@ -228,14 +231,25 @@ function MAIL_sendMessages($vars)
         $message = $vars['message'];
     }
 
+    $usermode = ((int) $vars['to_uid'] > 0 && (int) $vars['to_group'] == 0) ? true : false;
+
     if (empty ($vars['fra']) OR empty ($vars['fraepost']) OR
             empty ($vars['subject']) OR empty ($message) OR
-            empty ($vars['to_group'])) {
+            ( empty ($vars['to_group']) && empty($vars['to_uid']) )) {
         $retval .= COM_startBlock ($LANG31[1], '',
                         COM_getBlockTemplate ('_msg_block', 'header'));
         $retval .= $LANG31[26];
         $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
 
+        if ( $vars['postmode'] == 'html' ) {
+            $msg = htmlspecialchars($vars['message_html'],ENT_COMPAT,COM_getEncodingt());
+        } else {
+            $msg = htmlspecialchars($vars['message_text'],ENT_COMPAT,COM_getEncodingt());
+        }
+        $subject = htmlspecialchars($vars['subject'],ENT_COMPAT,COM_getEncodingt());
+        $fra     = htmlspecialchars($vars['fra'],ENT_COMPAT,COM_getEncodingt());
+        $fraepost = htmlspecialchars($vars['fraepost'],ENT_COMPAT,COM_getEncodingt());
+        $retval .= MAIL_displayForm( $vars['to_uid'], $vars['to_group'], $fra, $fraepost, $subject, $msg );
         return $retval;
     }
 
@@ -245,23 +259,41 @@ function MAIL_sendMessages($vars)
     } else {
         $priority = 0;
     }
+    $toUsers = array();
+    if ( $usermode ) {
 
-    $groupList = implode (',', USER_getChildGroups($vars['to_group']));
-
-    // and now mail it
-    if (isset ($vars['overstyr'])) {
-        $sql = "SELECT DISTINCT username,fullname,email FROM {$_TABLES['users']},{$_TABLES['group_assignments']} WHERE uid > 1";
-        $sql .= " AND {$_TABLES['users']}.status = 3 AND ((email is not null) and (email != ''))";
-        $sql .= " AND {$_TABLES['users']}.uid = ug_uid AND ug_main_grp_id IN ({$groupList})";
+        $result = DB_query("SELECT email,username FROM {$_TABLES['users']} WHERE uid=".(int) COM_applyFilter($vars['to_uid'],true));
+        if ( DB_numRows($result) > 0 ) {
+            list($email,$username) = DB_fetchArray($result);
+            $toUsers[] = COM_formatEmailAddress ( $username, $email );
+        }
     } else {
-        $sql = "SELECT DISTINCT username,fullname,email,emailfromadmin FROM {$_TABLES['users']},{$_TABLES['userprefs']},{$_TABLES['group_assignments']} WHERE {$_TABLES['users']}.uid > 1";
-        $sql .= " AND {$_TABLES['users']}.status = 3 AND ((email is not null) and (email != ''))";
-        $sql .= " AND {$_TABLES['users']}.uid = {$_TABLES['userprefs']}.uid AND emailfromadmin = 1";
-        $sql .= " AND ug_uid = {$_TABLES['users']}.uid AND ug_main_grp_id IN ({$groupList})";
+        $groupList = implode (',', USER_getChildGroups((int) COM_applyFilter($vars['to_group'],true)));
+
+        // and now mail it
+        if (isset ($vars['overstyr'])) {
+            $sql = "SELECT DISTINCT username,fullname,email FROM {$_TABLES['users']},{$_TABLES['group_assignments']} WHERE uid > 1";
+            $sql .= " AND {$_TABLES['users']}.status = 3 AND ((email is not null) and (email != ''))";
+            $sql .= " AND {$_TABLES['users']}.uid = ug_uid AND ug_main_grp_id IN ({$groupList})";
+        } else {
+            $sql = "SELECT DISTINCT username,fullname,email,emailfromadmin FROM {$_TABLES['users']},{$_TABLES['userprefs']},{$_TABLES['group_assignments']} WHERE {$_TABLES['users']}.uid > 1";
+            $sql .= " AND {$_TABLES['users']}.status = 3 AND ((email is not null) and (email != ''))";
+            $sql .= " AND {$_TABLES['users']}.uid = {$_TABLES['userprefs']}.uid AND emailfromadmin = 1";
+            $sql .= " AND ug_uid = {$_TABLES['users']}.uid AND ug_main_grp_id IN ({$groupList})";
+        }
+
+        $result = DB_query ($sql);
+        $nrows = DB_numRows ($result);
+        for ($i = 0; $i < $nrows; $i++) {
+            $A = DB_fetchArray ($result);
+            if (empty ($A['fullname'])) {
+                $toUsers[] = COM_formatEmailAddress ($A['username'], $A['email']);
+            } else {
+                $toUsers[] = COM_formatEmailAddress ($A['fullname'], $A['email']);
+            }
+        }
     }
 
-    $result = DB_query ($sql);
-    $nrows = DB_numRows ($result);
     $from = array();
     $from = COM_formatEmailAddress ($vars['fra'], $vars['fraepost']);
     $subject = $vars['subject'];
@@ -269,15 +301,8 @@ function MAIL_sendMessages($vars)
     // Loop through and send the messages!
     $successes = array ();
     $failures = array ();
-    $to = array();
-    for ($i = 0; $i < $nrows; $i++) {
-        $A = DB_fetchArray ($result);
-        if (empty ($A['fullname'])) {
-            $to = COM_formatEmailAddress ($A['username'], $A['email']);
-        } else {
-            $to = COM_formatEmailAddress ($A['fullname'], $A['email']);
-        }
 
+    foreach ($toUsers AS $to ) {
         if ( defined('DEMO_MODE') ) {
             $successes[] = htmlspecialchars ($to[0]);
         } else {
@@ -377,7 +402,7 @@ switch ($action) {
         break;
 
     default:
-        $display .= MAIL_displayForm( $uid, $grp_id, $from, $replyto, $subject );
+        $display .= MAIL_displayForm( $uid, $grp_id, $from, $replyto, $subject, '' );
         break;
 
 }
