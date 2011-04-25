@@ -3,7 +3,7 @@
 ###############################################################################
 # czech_utf-8.php
 #
-# This is the English language file for the glFusion Polls plugin
+# This is the Czech language file for the glFusion Polls plugin
 #
 # Copyright (C) 2001 Tony Bibbs
 # tony AT tonybibbs DOT com

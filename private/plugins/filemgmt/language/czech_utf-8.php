@@ -56,8 +56,8 @@ $LANG_FM00 = array (
     'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Plugin is installed and enabled.<br>Disable first if you want to De-Install it.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Plugin Editor</a></div',
     'WhatsNewLabel'    => 'Soubory',
     'WhatsNewPeriod'   => ' za posledních %s dní',
-    'new_upload'        => 'New File submitted at ',
-    'new_upload_body'   => 'A new file has been submitted to the upload queue at ',
+    'new_upload'        => 'Nový soubor odeslán v ',
+    'new_upload_body'   => 'Nový soubor byl odeslán do fronty v ',
     'details'           => 'Podrobnosti',
     'filename'          => 'Jméno souboru',
     'uploaded_by'       => 'Přidal',
@@ -65,34 +65,34 @@ $LANG_FM00 = array (
 
 // Admin Navbar
 $LANG_FM02 = array(
-    'nav1'  => 'Settings',
-    'nav2'  => 'Categories',
-    'nav3'  => 'Add File',
-    'nav4'  => 'Downloads (%s)',
-    'nav5'  => 'Broken Files (%s)'
+    'nav1'  => 'Nastavení',
+    'nav2'  => 'Kategorie',
+    'nav3'  => 'Přidej soubor',
+    'nav4'  => 'Staženo (%s)',
+    'nav5'  => 'Poškozené soubory (%s)'
 );
 
 $LANG_FILEMGMT = array(
-    'newpage' => "New Page",
+    'newpage' => "Nová strana",
     'adminhome' => "Admin Home",
     'plugin_name' => "Správa souborů",
     'searchlabel' => "Výpis souborů",
     'searchlabel_results' => "Výsledek výpisu souborů",
-    'downloads' => "My Downloads",
-    'report' => "Top Downloads",
+    'downloads' => "Má stahování",
+    'report' => "Nejstahovanější",
     'usermenu1' => "Downloads",
-    'usermenu2' => "&nbsp;&nbsp;Top Rated",
-    'usermenu3' => "Upload a file",
+    'usermenu2' => "&nbsp;&nbsp;Nejlépe hodnocené",
+    'usermenu3' => "Nahraj soubor",
     'admin_menu' => "Filemgmt Admin",
-    'writtenby' => "Written By",
-    'date' => "Last Updated",
+    'writtenby' => "Zapsáno",
+    'date' => "Naposledy aktualizováno",
     'title' => "Název",
     'content' => "Obsah",
     'hits' => "Hity",
     'Filelisting' => "Výpis souborů",
     'DownloadReport' => "Download History for single file",
-    'StatsMsg1' => "Top Ten Accessed Files in Repository",
-    'StatsMsg2' => "It appears there are no files defined for the filemgmt plugin on this site or no one has ever accessed them.",
+    'StatsMsg1' => "Top Ten přístupných souborů v úložišti",
+    'StatsMsg2' => "Vypadá to, že v úložišti (filemgmt plugin) nejsou na těchto stránkách žádné soubory nebo k nim není přístup.",
     'usealtheader' => "Use Alt. Header",
     'url' => "URL",
     'edit' => "Edit",
@@ -104,7 +104,7 @@ $LANG_FILEMGMT = array(
     'leftblocks' => "Left Blocks",
     'addtomenu' => 'Add To Menu',
     'label' => 'Label',
-    'nofiles' => 'Number of files in our repository (Downloads)',
+    'nofiles' => 'Počet souborů v úložišti (celkem staženo)',
     'save' => 'save',
     'preview' => 'preview',
     'delete' => 'delete',
@@ -137,7 +137,7 @@ $LANG_FILEMGMT = array(
 // Localization of the Admin Configuration UI
 $LANG_configsections['filemgmt'] = array(
     'label'                 => 'FileMgmt',
-    'title'                 => 'FileMgmt Configuration'
+    'title'                 => 'FileMgmt - Konfigurace'
 );
 $LANG_confignames['filemgmt'] = array(
     'whatsnew'              => 'Enable WhatsNew Listing',
@@ -220,8 +220,8 @@ define("_MD_UPTHISWEEK","Aktualizované v tomto týdnu");
 
 define("_MD_POPULARITYLTOM","Obliba (hity vzestupně)");
 define("_MD_POPULARITYMTOL","Obliba (hity sestupně)");
-define("_MD_TITLEATOZ","Názvu (A to Z)");
-define("_MD_TITLEZTOA","Názvu (Z to A)");
+define("_MD_TITLEATOZ","Názvu (A-Ž)");
+define("_MD_TITLEZTOA","Názvu (Ž-A)");
 define("_MD_DATEOLD","Datumu (od nejstaršího)");
 define("_MD_DATENEW","Datumu (od nejnovějšího)");
 define("_MD_RATINGLTOH","Hodnocení (od nejnižšího)");
@@ -263,17 +263,17 @@ define("_MD_LATESTLIST","Poslední výpisy");
 
 define("_MD_REQUESTMOD","Request Download Modification");
 define("_MD_FILE","Soubor");
-define("_MD_FILEID","File ID: ");
-define("_MD_FILETITLE","Title: ");
+define("_MD_FILEID","ID souboru: ");
+define("_MD_FILETITLE","Název: ");
 define("_MD_DLURL","Download URL: ");
 define("_MD_HOMEPAGEC","Home Page: ");
-define("_MD_VERSIONC","Version: ");
-define("_MD_FILESIZEC","File Size: ");
-define("_MD_NUMBYTES","%s bytes");
+define("_MD_VERSIONC","Verze: ");
+define("_MD_FILESIZEC","Velikost souboru: ");
+define("_MD_NUMBYTES","%s bytů");
 define("_MD_PLATFORMC","Platform: ");
 define("_MD_CONTACTEMAIL","Contact Email: ");
-define("_MD_SHOTIMAGE","Thumbnail Img: ");
-define("_MD_SENDREQUEST","Send Request");
+define("_MD_SHOTIMAGE","Obr.náhledu: ");
+define("_MD_SENDREQUEST","Pošli požadavek");
 
 define("_MD_VOTEAPPRE","Váš hlas byl přijat.");
 define("_MD_THANKYOU","Díky za váš čas při hlasování na %s"); // %s is your site name
@@ -287,14 +287,14 @@ define("_MD_RATEIT","Spočti to!");
 define("_MD_INTFILEAT","Zajímavý soubor ke stažení na %s"); // %s is your site name
 define("_MD_INTFILEFOUND","Na %s je zajímavý soubor"); // %s is your site name
 
-define("_MD_RECEIVED","We received your download information. Thanks!");
-define("_MD_WHENAPPROVED","You'll receive an E-mail when it's approved.");
-define("_MD_SUBMITONCE","Submit your file/script only once.");
-define("_MD_APPROVED", "Your file has been approved");
-define("_MD_ALLPENDING","All file/script information are posted pending verification.");
-define("_MD_DONTABUSE","Username and IP are recorded, so please don't abuse the system.");
-define("_MD_TAKEDAYS","It may take several days for your file/script to be added to our database.");
-define("_MD_FILEAPPROVED", "Your file has been added to the file repository");
+define("_MD_RECEIVED","Dostali jsme Vaši informaci o stažení. Díky!");
+define("_MD_WHENAPPROVED","Po schválení obdržíte email.");
+define("_MD_SUBMITONCE","Pošli svůj soubor/skript jen jednou.");
+define("_MD_APPROVED", "Váš soubor byl schválen");
+define("_MD_ALLPENDING","Každá informace o souboru/skriptu je odeslána k ověření.");
+define("_MD_DONTABUSE","Uživ. jméno a IP adresa je zaznamenána, tak prosím nezneužívejte systém.");
+define("_MD_TAKEDAYS","Může to trvat i několik dní, něž bude soubor/skript přidán do naší databáze.");
+define("_MD_FILEAPPROVED", "Váš soubor byl přidán do úložiště souborů");
 
 define("_MD_RANK","Rank");
 define("_MD_CATEGORY","Kategorie");
@@ -322,27 +322,27 @@ define("_MD_CANCEL","Stornuj");
 
 define("_MD_BYTES","Bytů");
 define("_MD_ALREADYREPORTED","You have already submitted a broken report for this resource.");
-define("_MD_MUSTREGFIRST","Sorry, you don't have the permission to perform this action.<br>Please register or login first!");
+define("_MD_MUSTREGFIRST","Bohužel nemáte oprávnění pro tuto akci.<br>Nejprve se, prosím, přihlašte!");
 define("_MD_NORATING","Nebylo vybráno hodnocení.");
-define("_MD_CANTVOTEOWN","You cannot vote on the resource you submitted.<br>All votes are logged and reviewed.");
+define("_MD_CANTVOTEOWN","Nemůžete hlasovat pro vámi zaslaný soubor.<br>Všechny hlasy jsou zaznamenány a revidovány.");
 
 // Language variables used by the plugin - Admin code.
 
 define("_MD_RATEFILETITLE","Zaznamenej své hodnocení souboru");
 define("_MD_ADMINTITLE","File Management Administration");
-define("_MD_UPLOADTITLE","File Management - Add new file");
+define("_MD_UPLOADTITLE","File Mngmt - Přidej nový soubor");
 define("_MD_CATEGORYTITLE","Výpis souborů - Kategorie");
 define("_MD_DLCONF","Downloads Configuration");
 define("_MD_GENERALSET","Configuration Settings");
-define("_MD_ADDMODFILENAME","Add new file");
+define("_MD_ADDMODFILENAME","Přidej nový soubor");
 define ("_MD_ADDCATEGORYSNAP", 'Optional Image:<div style="font-size:8pt;">Top Level Categories only</div>');
 define ("_MD_ADDIMAGENOTE", '<span style="font-size:8pt;">Image height will be resized to 50</span>');
 define("_MD_ADDMODCATEGORY","<b>Categories:</b> Add, Modify, and Delete Categories");
 define("_MD_DLSWAITING","Downloads Waiting for Validation");
-define("_MD_BROKENREPORTS","Broken File Reports");
+define("_MD_BROKENREPORTS","Zprávy o porušených souborech");
 define("_MD_MODREQUESTS","Download Info Modification Requests");
 define("_MD_EMAILOPTION","Email submitter if file approved: ");
-define("_MD_COMMENTOPTION","Enable comments:");
+define("_MD_COMMENTOPTION","Komentáře možné:");
 define("_MD_SUBMITTER","Uložil: ");
 define("_MD_DOWNLOAD","Stáhni si");
 define("_MD_FILELINK","Link na soubor");
@@ -351,18 +351,18 @@ define("_MD_APPROVE","Schválil");
 define("_MD_DELETE","Smaž");
 define("_MD_NOSUBMITTED","No New Submitted Downloads.");
 define("_MD_ADDMAIN","Add MAIN Category");
-define("_MD_TITLEC","Title: ");
-define("_MD_CATSEC", "View Access: ");
-define("_MD_UPLOADSEC", "Upload Access: ");
+define("_MD_TITLEC","Název: ");
+define("_MD_CATSEC", "Smí prohlížet: ");
+define("_MD_UPLOADSEC", "Smí přidávat: ");
 define("_MD_IMGURL","<br>Image Filename <font size='-2'> (located in your filemgmt_data/category_snaps directory - Image height will be resized to 50)</font>");
-define("_MD_ADD","Add");
-define("_MD_ADDSUB","Add SUB-Category");
-define("_MD_IN","in");
-define("_MD_ADDNEWFILE","Add New File");
-define("_MD_MODCAT","Modify Category");
-define("_MD_MODDL","Modify Download Info");
-define("_MD_USER","User");
-define("_MD_IP","IP Address");
+define("_MD_ADD","Přidej");
+define("_MD_ADDSUB","Přidej SUB-kategorii");
+define("_MD_IN","v");
+define("_MD_ADDNEWFILE","Přidej nový soubor");
+define("_MD_MODCAT","Změň iiategory");
+define("_MD_MODDL","Změň info o stažení");
+define("_MD_USER","Uživatel");
+define("_MD_IP","IP adresa");
 define("_MD_USERAVG","User AVG Rating");
 define("_MD_TOTALRATE","Total Ratings");
 define("_MD_NOREGVOTES","No Registered User Votes");
@@ -373,37 +373,37 @@ define("_MD_IGNOREDESC","Ignore (Ignores the report and only deletes this report
 define("_MD_DELETEDESC","Delete (Deletes <b>the reported file entry in the repository</b> but not the actual file)");
 define("_MD_REPORTER","Report Sender");
 define("_MD_FILESUBMITTER","File Submitter");
-define("_MD_IGNORE","Ignore");
-define("_MD_FILEDELETED","File Deleted.");
+define("_MD_IGNORE","Ignoruj");
+define("_MD_FILEDELETED","Soubor smazán.");
 define("_MD_FILENOTDELETED","Record was removed but File was not Deleted.<p>More then 1 record pointing to same file.");
-define("_MD_BROKENDELETED","Broken file report deleted.");
+define("_MD_BROKENDELETED","Upozornění na poškozený soubor bylo smazáno.");
 define("_MD_USERMODREQ","User Download Info Modification Requests");
-define("_MD_ORIGINAL","Original");
-define("_MD_PROPOSED","Proposed");
-define("_MD_OWNER","Owner: ");
+define("_MD_ORIGINAL","Originál");
+define("_MD_PROPOSED","Návrh");
+define("_MD_OWNER","Vlastník: ");
 define("_MD_NOMODREQ","No Download Modification Request.");
-define("_MD_DBUPDATED","Database Updated Successfully!");
+define("_MD_DBUPDATED","Database byla úspěšně aktualizována!");
 define("_MD_MODREQDELETED","Modification Request Deleted.");
 define("_MD_IMGURLMAIN",'Image<div style="font-size:8pt;">Image height will be resized to 50px</div>');
-define("_MD_PARENT","Parent Category:");
-define("_MD_SAVE","Save Changes");
-define("_MD_CATDELETED","Category Deleted.");
-define("_MD_WARNING","WARNING: Are you sure you want to delete this Category and ALL its Files and Comments?");
-define("_MD_YES","Yes");
-define("_MD_NO","No");
-define("_MD_NEWCATADDED","New Category Added Successfully!");
-define("_MD_CONFIGUPDATED","New configuration saved");
-define("_MD_ERROREXIST","ERROR: The download info you provided is already in the database!");
-define("_MD_ERRORNOFILE","ERROR: File not found on record in the database!");
-define("_MD_ERRORTITLE","ERROR: You need to enter TITLE!");
-define("_MD_ERRORDESC","ERROR: You need to enter DESCRIPTION!");
+define("_MD_PARENT","Rodičovská kategorie:");
+define("_MD_SAVE","Ulož změny");
+define("_MD_CATDELETED","Kategorie smazána.");
+define("_MD_WARNING","VAROVÁNÍ: OPRAVDU chceš tuto kategorii zrušit včetně všech souborů a komentářů?");
+define("_MD_YES","Ano");
+define("_MD_NO","Ne");
+define("_MD_NEWCATADDED","Nová Kategorie byla úspěšně přidána!");
+define("_MD_CONFIGUPDATED","Nová konfigurace uložena");
+define("_MD_ERROREXIST","CHYBA: The download info you provided is already in the database!");
+define("_MD_ERRORNOFILE","CHYBA: V databázi nebyl nalezen záznam o souboru!");
+define("_MD_ERRORTITLE","CHYBA: Je třeba zadat NÁZEV!");
+define("_MD_ERRORDESC","CHYBA: Je třeba zadat POPIS!");
 define("_MD_NEWDLADDED","New download added to the database.");
-define("_MD_NEWDLADDED_DUPFILE","Warning: Duplicate File. New download added to the database.");
+define("_MD_NEWDLADDED_DUPFILE","Pozor: Duplikovaný Soubor. New download added to the database.");
 define("_MD_NEWDLADDED_DUPSNAP","Warning: Duplicate Snap. New download added to the database.");
-define("_MD_HELLO","Hello %s");
+define("_MD_HELLO","Ahoj %s");
 define("_MD_WEAPPROVED","We approved your download submission to our downloads section. The file name is: ");
-define("_MD_THANKSSUBMIT","Thanks for your submission!");
-define("_MD_UPLOADAPPROVED","Your uploaded file was approved");
+define("_MD_THANKSSUBMIT","Díky za váš příspěvek!");
+define("_MD_UPLOADAPPROVED","Váš uploadovaný soubor byl schválen");
 define("_MD_DLSPERPAGE","Displayed Downloads per Page: ");
 define("_MD_HITSPOP","Hits to be Popular: ");
 define("_MD_DLSNEW","Number of Downloads as New on Top Page: ");
@@ -424,25 +424,25 @@ define("_MD_YOURFILEAT","Your file submitted at %s"); // this is an approved mai
 define("_MD_VISITAT","Visit our downloads section at %s");
 define("_MD_DLRATINGS","Download Rating (total votes: %s)");
 define("_MD_CONFUPDATED","Configuration Updated Successfully!");
-define("_MD_NOFILES","No Files Found");
-define("_MD_APPROVEREQ","* Upload needs to be approved in this category");
-define("_MD_REQUIRED","* Required field");
-define("_MD_SILENTEDIT","Silent Edit: ");
+define("_MD_NOFILES","Soubory nebyly nalezeny");
+define("_MD_APPROVEREQ","* Soubory poslané do označených kat. budou schvalovány");
+define("_MD_REQUIRED","* Vyžadované pole");
+define("_MD_SILENTEDIT","Editace na pozadí: ");
 
 // Additional glFusion Defines
-define("_MD_NOVOTE","Not rated yet");
-define("_IFNOTRELOAD","If the page does not automatically reload, please click <a href=\"%s\">here</a>");
-define("_GL_ERRORNOACCESS","ERROR: No access to this Document Repository Section");
-define("_GL_ERRORNOUPLOAD","ERROR: You do not have upload privilages");
-define("_GL_ERRORNOADMIN","ERROR: This function is restricted");
+define("_MD_NOVOTE","Ještě nehodnoceno");
+define("_IFNOTRELOAD","Pokus se stránka automaticky neobnoví, klikněte prosím <a href=\"%s\">zde</a>");
+define("_GL_ERRORNOACCESS","ERROR: Do této sekce úložiště není přístup");
+define("_GL_ERRORNOUPLOAD","ERROR: Nemáte prava pro ukládání souborů");
+define("_GL_ERRORNOADMIN","ERROR: Tato funkce je zakázána");
 define("_GL_NOUSERACCESS","does not have access to the Document Repository");
 define("_MD_ERRUPLOAD","Filemgmt: Unable to upload - check permissions for the file store directories");
-define("_MD_DLFILENAME","Filename: ");
-define("_MD_REPLFILENAME","Replacement  File: ");
+define("_MD_DLFILENAME","Název souboru: ");
+define("_MD_REPLFILENAME","Nahrazující soubor: ");
 define("_MD_SCREENSHOT","Screenshot");
 define("_MD_SCREENSHOT_NA",'&nbsp;');
-define("_MD_COMMENTSWANTED","Comments are appreciated");
+define("_MD_COMMENTSWANTED","Komentáře jsou ceněny");
 define("_MD_CLICK2SEE","Klikni a prohlédni si: ");
 define("_MD_CLICK2DL","Klikni a stáhni si: ");
-define("_MD_ORDERBY","Order By: ");
+define("_MD_ORDERBY","Seřaď dle: ");
 ?>

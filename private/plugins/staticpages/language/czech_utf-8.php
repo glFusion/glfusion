@@ -1,12 +1,11 @@
 <?php
 ###############################################################################
-# czech_utf-8.php
+# czech.php
 # This is the cz language page for the glFusion Static Page Plug-in!
 #
 # Copyright (C) 2002 hermes_trismegistos
 # hermes_trismegistos@hermetik.net
-# (c) 2010 Ivan Simunek
-# ivsi AT post DOT cz
+# 2010 ivsi(at)post.cz
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -60,7 +59,7 @@ $LANG_STATIC = array(
     'label' => 'Název položky',
     'nopages' => 'Žádné stránky zde nejsou',
     'save' => 'uložit',
-    'preview' => 'preview',
+    'preview' => 'náhled',
     'delete' => 'smazat',
     'cancel' => 'zrušit akci',
     'access_denied' => 'Přístup odepřen',
@@ -69,53 +68,51 @@ $LANG_STATIC = array(
     'results' => 'Statické stránky - ',
     'author' => 'Autor',
     'no_title_or_content' => 'Musíte vyplnit alespoň pole <b>Titulek</b> a <b>Obsah</b>.',
-    'no_such_page_anon' => 'Please log in..',
-    'no_page_access_msg' => "This could be because you're not logged in, or not a member of {$_CONF['site_name']}. Please <a href=\"{$_CONF['site_url']}/users.php?mode=new\"> become a member</a> of {$_CONF['site_name']} to receive full membership access",
+    'no_such_page_anon' => 'Prosím přihlašte se..',
+    'no_page_access_msg' => "Mohlo se to stát, protože nejste přihlášen/a nebo nejste uživatel {$_CONF['site_name']}. Přihlašte se prosím o členství a <a href=\"{$_CONF['site_url']}/users.php?mode=new\"> staňte se uživatelem</a> {$_CONF['site_name']} pro získání plného přístupu",
     'php_msg' => 'PHP: ',
-    'php_warn' => 'Warning: PHP code in your page will be evaluated if you enable this option. Use with caution !!',
-    'exit_msg' => 'Exit Type: ',
-    'exit_info' => 'Enable for Login Required Message.  Leave unchecked for normal security check and message.',
+    'php_warn' => 'Varování: Povolení PHP umožní provedení PHP kódu na vaší stránce. Používejte s rozvahou !!',
+    'exit_msg' => 'Typ výstupu: ',
+    'exit_info' => 'Zaškrtni pro zprávy vyžadující přihlášení.  Ponech nezaškrtnuto pro normální bezpečnostní kontrolu a zprávu.',
     'deny_msg' => 'Přístup na tuto stránku není povolen.  Buď byla stránka odstraněna či přesunuta nebo nemáš dostatečná práva.',
-    'stats_headline' => 'Top Ten Static Pages',
-    'stats_page_title' => 'Page Title',
-    'stats_hits' => 'Hits',
-    'stats_no_hits' => 'It appears that there are no static pages on this site or no one has ever viewed them.',
+    'stats_headline' => 'Top Ten statických stránek',
+    'stats_page_title' => 'Název stránky',
+    'stats_hits' => 'Hitů',
+    'stats_no_hits' => 'Vypadá to, že zde statické stránky nejsou nebo se na ně nikdo nepodíval.',
     'id' => 'ID',
-    'duplicate_id' => 'The ID you chose for this static page is already in use. Please select another ID.',
-    'instructions' => 'To modify or delete a static page, click on that page\'s number below. To view a static page, click on the title of the page you wish to view. To create a new static page click on new page above. Click on [C] to create a copy of an existing page.',
+    'duplicate_id' => 'Vybrané ID pro tuto statickou stránku již existuje. Prosím, vyberte jiné ID.',
+    'instructions' => 'Pro změnu nebo vymazání statické stránky klikni příslušnou ikonku níže. Prohlédnout statickou stránku si můžeš po kliknutí na její název. Pro vytvoření nové statické stránky klikni na &quot;Přidat&quot; výše. Pro vytvoření kopie existující stránky klikni na ikonu &quot;Kopie&quot;.',
     'centerblock' => 'Centerblock: ',
-    'centerblock_msg' => 'When checked, this Static Page will be displayed as a center block on the index page.',
-    'topic' => 'Topic: ',
-    'position' => 'Position: ',
-    'all_topics' => 'All',
-    'no_topic' => 'Homepage Only',
-    'position_top' => 'Top Of Page',
-    'position_feat' => 'After Featured Story',
-    'position_bottom' => 'Bottom Of Page',
-    'position_entire' => 'Entire Page',
-    'position_nonews' => 'Only if No Other News',
-    'head_centerblock' => 'Centerblock',
-    'centerblock_no' => 'No',
-    'centerblock_top' => 'Top',
-    'centerblock_feat' => 'Feat. Story',
-    'centerblock_bottom' => 'Bottom',
-    'centerblock_entire' => 'Entire Page',
-    'centerblock_nonews' => 'If No News',
-    'inblock_msg' => 'In a block: ',
-    'inblock_info' => 'Wrap Static Page in a block.',
-    'title_edit' => 'Edit page',
-    'title_copy' => 'Make a copy of this page',
-    'title_display' => 'Display page',
-    'select_php_none' => 'do not execute PHP',
-    'select_php_return' => 'execute PHP (return)',
-    'select_php_free' => 'execute PHP',
-    'php_not_activated' => "The use of PHP in static pages is not activated. Please see the <a href=\"{$_CONF['site_url']}/docs/staticpages.html#php\">documentation</a> for details.",
-    'printable_format' => 'Printable Format',
-    'copy' => 'Copy',
-    'limit_results' => 'Limit Results',
-    'search' => 'Search',
-    'submit' => 'Submit',
-    'delete_confirm' => 'OPRAVDU chceš smazat tuto stránku?',
+    'centerblock_msg' => 'Pokud je zaškrtnuto, bude statická stránka zobrazena jako střední blok na hlavní straně (sekce).',
+    'topic' => 'Sekce: ',
+    'position' => 'Posice: ',
+    'all_topics' => 'Všechny',
+    'no_topic' => 'Pouze na Hlavní straně',
+    'position_top' => 'Nahoře',
+    'position_feat' => 'Po zdůrazněném článku',
+    'position_bottom' => 'Dole',
+    'position_entire' => 'Celá stránka',
+    'head_centerblock' => 'Střední blok',
+    'centerblock_no' => 'Ne',
+    'centerblock_top' => 'Nahoře',
+    'centerblock_feat' => 'Zdůrazněný článek',
+    'centerblock_bottom' => 'Dole',
+    'centerblock_entire' => 'Celá stránka',
+    'inblock_msg' => 'Do bloku: ',
+    'inblock_info' => 'Zarovnej (wrap) statickou stránku do bloku.',
+    'title_edit' => 'Editace',
+    'title_copy' => 'Vytvoř kopii stránky',
+    'title_display' => 'Zobraz stránku',
+    'select_php_none' => 'neprovádět PHP',
+    'select_php_return' => 'provést PHP (return)',
+    'select_php_free' => 'provést PHP',
+    'php_not_activated' => "Použití PHP na statických stránkách není aktivováno. Prosím podívejte se na detaily v <a href=\"{$_CONF['site_url']}/docs/staticpages.html#php\">documentaci</a>.",
+    'printable_format' => 'Tisknutelný formát',
+    'copy' => 'Kopie',
+    'limit_results' => 'Počet výsledků',
+    'search' => 'Hledej',
+    'submit' => 'Pošli',
+    'delete_confirm' => 'Opravdu chceš vymazat tuto stránku?',
     'allnhp_topics' => 'All Topics (No Homepage)',
 );
 
@@ -128,8 +125,8 @@ $PLG_staticpages_MESSAGE3002 = $LANG32[9];
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['staticpages'] = array(
-    'label' => 'Static Pages',
-    'title' => 'Static Pages Configuration'
+    'label' => 'Statické stránky',
+    'title' => 'Statické stránky - Konfigurace'
 );
 
 $LANG_confignames['staticpages'] = array(

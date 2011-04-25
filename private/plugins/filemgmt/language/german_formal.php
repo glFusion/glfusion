@@ -376,7 +376,7 @@ define("_MD_DELETEDESC","Löschen (Löscht <b>den gemeldeten Dateieintrag in dem A
 define("_MD_REPORTER","Bericht-Einsender");
 define("_MD_FILESUBMITTER","Datei-Einsender");
 define("_MD_IGNORE","Ignorieren");
-define("_MD_FILEDELETED","Date gelöscht.");
+define("_MD_FILEDELETED","Datei gelöscht.");
 define("_MD_FILENOTDELETED","Eintrag wurde entfernt, die Datei aber nicht gelöscht.<p>Mehr als ein Eintrag verweisen auf die selbe Datei.");
 define("_MD_BROKENDELETED","Fehlerhafte-Datei-Bericht gelöscht.");
 define("_MD_USERMODREQ","Download-Info-ändern Anforderung");
