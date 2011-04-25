@@ -288,7 +288,7 @@ function newfileConfigAdmin(){
     $display .= filemgmt_navbar($LANG_FM02['nav3']);
     $display .= '<form method="post" enctype="multipart/form-data" action="index.php" style="margin:0px;">';
     $display .= '<table width="100%" border="0" class="plugin">';
-    $display .= '<tr><td colspan="2" class="pluginHeader" style="width:100%;padding:5px;">' . _MD_ADDNEWFILE . '</td></tr>';
+    $display .= '<tr><td colspan="2" class="pluginHeader" style="width:100%;padding:5px;">' . _MD_ADDNEWFILE ."&nbsp; &nbsp;" .'<b>(max:'."&nbsp;" . ini_get('upload_max_filesize') . ')</b></td></tr>';
     $display .= '<tr><td align="right">'._MD_FILETITLE.'</td><td>';
     $display .= '<input type="text" name="title" size="50" maxlength="100"' . XHTML . '>';
 
@@ -357,7 +357,7 @@ function modDownload() {
     $pathstring .= "<a href=\"{$_CONF['site_url']}/filemgmt/index.php?id=$lid\">{$title}</a>";
 
     $display .= '<tr><td colspan="3" width="100%" style="padding:5px;">' . $pathstring. '</td></tr>';
-    $display .= '<tr><td colspan="3" width="100%" class="pluginHeader" style="padding:5px;">' . _MD_MODDL. '</td></tr>';
+    $display .= '<tr><td colspan="3" width="100%" class="pluginHeader" style="padding:5px;">' . _MD_MODDL. "&nbsp; &nbsp;" .'<b>(max:'."&nbsp;" . ini_get('upload_max_filesize') . ')</b></td></tr>';
 
     $url = rawurldecode($myts->makeTboxData4Edit($url));
     $homepage = $myts->makeTboxData4Edit($homepage);
