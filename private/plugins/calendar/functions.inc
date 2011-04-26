@@ -122,7 +122,7 @@ function phpblock_calendar( $help='', $title='' )
         }
         $dateonly = $_CONF['dateonly'];
         if( empty( $dateonly )) {
-            $dateonly = '%d-%b'; // fallback: day - abbrev. month name
+            $dateonly = 'd-M'; // fallback: day - abbrev. month name
         }
 
         if( empty( $title )) {
@@ -215,14 +215,14 @@ function phpblock_calendar( $help='', $title='' )
                     $startDate = $theEvent['datestart'];
                     $theTime1 = strtotime( $startDate );
                     $dt->setTimestamp($theTime1);
-                    $dayName1 = $dt->format('%A', true );
+                    $dayName1 = $dt->format('l', true );
                     $abbrDate1 = $dt->format( $dateonly, true );
 
                     // End Date strings...
                     $endDate = $theEvent['dateend'];
                     $theTime2 = strtotime( $endDate );
                     $dt->setTimestamp($theTime2);
-                    $dayName2 = $dt->format( '%A', true );
+                    $dayName2 = $dt->format( 'l', true );
                     $abbrDate2 = $dt->format( $dateonly, true );
 
                     if ( COM_getCharset() == 'utf-8' ) {
