@@ -1166,7 +1166,7 @@ function plugin_upgrade_mediagallery()
 
 function plugin_user_create_mediagallery( $uid, $force = 0 )
 {
-    global $_TABLES, $_MG_CONF, $LANG_MG01;
+    global $_CONF, $_TABLES, $_MG_CONF, $LANG_MG01;
 
     require_once $_CONF['path'].'plugins/mediagallery/include/profile.inc.php';
     return _mg_user_create( $uid, $force );
