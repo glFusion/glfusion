@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
+// | Copyright (C) 2009-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Josh Pendergrass       cendent AT syndicate-gaming DOT com               |
@@ -30,8 +30,22 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once 'gf_functions.php';
-require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
+require_once '../../../lib-common.php';
+require_once '../../auth.inc.php';
+
+if (!SEC_hasRights('forum.edit')) {
+  $display = COM_siteHeader();
+  $display .= COM_startBlock($LANG_GF00['access_denied']);
+  $display .= $LANG_GF00['admin_only'];
+  $display .= COM_endBlock();
+  $display .= COM_siteFooter(true);
+  echo $display;
+  exit();
+}
+
+USES_forum_functions();
+USES_forum_format();
+USES_forum_admin();
 
 /**
  * used for the list of users in admin/user.php
@@ -106,7 +120,7 @@ function _listUsers( )
         'help_url'   => ''
     );
 
-    $sql = "SELECT {$_TABLES['users']}.uid, username,fullname,email,status,rating FROM {$_TABLES['users']} LEFT JOIN {$_TABLES['gf_userinfo']} on {$_TABLES['users']}.uid={$_TABLES['gf_userinfo']}.uid";
+    $sql = "SELECT {$_TABLES['users']}.uid, username,fullname,email,status,rating FROM {$_TABLES['users']} LEFT JOIN {$_TABLES['ff_userinfo']} on {$_TABLES['users']}.uid={$_TABLES['ff_userinfo']}.uid";
     $query_arr = array('table' => 'users',
                        'sql' => $sql,
                        'query_fields' => array($_TABLES['users'].'.username', $_TABLES['users'].'.email', $_TABLES['users'].'.fullname'),
@@ -125,12 +139,12 @@ function _listUsers( )
  */
 
 if ( isset($_POST['submit']) && $_POST['submit'] == 'submit' ) {
-	$res = DB_query("SELECT u.uid,rating FROM {$_TABLES['users']} AS u LEFT JOIN {$_TABLES['gf_userinfo']} AS gu ON u.uid=gu.uid");
+	$res = DB_query("SELECT u.uid,rating FROM {$_TABLES['users']} AS u LEFT JOIN {$_TABLES['ff_userinfo']} AS gu ON u.uid=gu.uid");
 	while($row = DB_fetchArray($res)) {
 	    if ( isset($_POST["new_rating-{$row['uid']}"]) && $_POST["new_rating-{$row['uid']}"] != $row['rating'] ) {
 		    $rating = intval(COM_applyFilter($_POST["new_rating-{$row['uid']}"],true));
-    		DB_query("REPLACE INTO {$_TABLES['gf_userinfo']} (uid,rating) VALUES ({$row['uid']},$rating)");
-    		DB_query("INSERT INTO {$_TABLES['gf_rating_assoc']} (user_id,voter_id,grade,topic_id) VALUES({$row['uid']},{$_USER['uid']},$rating,-1)");
+    		DB_query("REPLACE INTO {$_TABLES['ff_userinfo']} (uid,rating) VALUES ({$row['uid']},$rating)");
+    		DB_query("INSERT INTO {$_TABLES['ff_rating_assoc']} (user_id,voter_id,grade,topic_id) VALUES({$row['uid']},{$_USER['uid']},$rating,-1)");
     	}
 	}
 }
@@ -140,7 +154,7 @@ $display = '';
 $display = COM_siteHeader();
 $display .= COM_startBlock($LANG_GF98['user_rating_title'], '',
                               COM_getBlockTemplate('_admin_block', 'header'));
-$display .= glfNavbar($navbarMenu,$LANG_GF06['8']);
+$display .= FF_Navbar($navbarMenu,$LANG_GF06['8']) . '<br/>';
 $display .= _listUsers( );
 $display .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 $display .= COM_siteFooter();

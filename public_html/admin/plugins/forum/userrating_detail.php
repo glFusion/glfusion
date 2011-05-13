@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2010 by the following authors:                        |
+// | Copyright (C) 2009-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Josh Pendergrass       cendent AT syndicate-gaming DOT com               |
@@ -30,8 +30,22 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once 'gf_functions.php';
-require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
+require_once '../../../lib-common.php';
+require_once '../../auth.inc.php';
+
+if (!SEC_hasRights('forum.edit')) {
+  $display = COM_siteHeader();
+  $display .= COM_startBlock($LANG_GF00['access_denied']);
+  $display .= $LANG_GF00['admin_only'];
+  $display .= COM_endBlock();
+  $display .= COM_siteFooter(true);
+  echo $display;
+  exit();
+}
+
+USES_forum_functions();
+USES_forum_format();
+USES_forum_admin();
 
 /**
  * used for the list of users in admin/user.php
@@ -39,7 +53,7 @@ require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
  */
 function ADMIN_getListField_ratings($fieldname, $fieldvalue, $A, $icon_arr)
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $LANG_GF98,$CONF_FORUM;
+    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $LANG_GF98,$_FF_CONF;
 
     $retval = '';
 
@@ -67,11 +81,11 @@ function ADMIN_getListField_ratings($fieldname, $fieldvalue, $A, $icon_arr)
             break;
         case 'topic_id' :
             if ( intval($A['topic_id']) > 0 ) {
-                $res = DB_query("SELECT id,pid,forum,subject,comment,status FROM {$_TABLES['gf_topic']} WHERE id=".$A['topic_id']);
+                $res = DB_query("SELECT id,pid,forum,subject,comment,status FROM {$_TABLES['ff_topic']} WHERE id=".$A['topic_id']);
                 list($id,$pid,$forum,$subject,$comment,$status) = DB_fetchArray($res);
-                $testText        = gf_formatTextBlock($comment,'text','text',$status);
+                $testText        = FF_formatTextBlock($comment,'text','text',$status);
                 $testText        = strip_tags($testText);
-                $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')),ENT_QUOTES,COM_getEncodingt());
+                $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$_FF_CONF['contentinfo_numchars']). '...')),ENT_QUOTES,COM_getEncodingt());
                 if ( $subject == '' ) {
                     $subject = '<em>'.$LANG_GF98['no_subject_defined'].'</em>';
                 }
@@ -135,9 +149,9 @@ function _listUserDetail( $uid )
         'help_url'   => ''
     );
 
-    $sql = "SELECT * FROM {$_TABLES['gf_rating_assoc']} WHERE user_id=".$uid;
+    $sql = "SELECT * FROM {$_TABLES['ff_rating_assoc']} WHERE user_id=".$uid;
 
-    $query_arr = array('table' => 'gf_rating_assoc',
+    $query_arr = array('table' => 'ff_rating_assoc',
                        'sql' => $sql,
                        'query_fields' => array('uid'),
                        'default_filter' => " WHERE user_id = ".$uid);
@@ -187,9 +201,9 @@ function _listUserVotes( $uid )
         'help_url'   => ''
     );
 
-    $sql = "SELECT * FROM {$_TABLES['gf_rating_assoc']} WHERE voter_id = ".$uid;
+    $sql = "SELECT * FROM {$_TABLES['ff_rating_assoc']} WHERE voter_id = ".$uid;
 
-    $query_arr = array('table' => 'gf_rating_assoc',
+    $query_arr = array('table' => 'ff_rating_assoc',
                        'sql' => $sql,
                        'query_fields' => array('uid'),
                        'default_filter' => " WHERE voter_id = ".$uid);
@@ -207,12 +221,12 @@ $display = COM_siteHeader();
 if ( isset($_GET['uid']) ) {
     $display .= COM_startBlock($LANG_GF98['user_rating_details'].DB_getItem($_TABLES['users'],'username','uid='.intval($_GET['uid'])), '',
                               COM_getBlockTemplate('_admin_block', 'header'));
-    $display .= glfNavbar($navbarMenu,$LANG_GF06['8']);
+    $display .= FF_Navbar($navbarMenu,$LANG_GF06['8']).'<br/>';
     $display .= _listUserDetail( intval($_GET['uid']) );
 } elseif ( isset($_GET['vid']) ) {
     $display .= COM_startBlock($LANG_GF98['user_voting_details'].DB_getItem($_TABLES['users'],'username','uid='.intval($_GET['vid'])), '',
                               COM_getBlockTemplate('_admin_block', 'header'));
-    $display .= glfNavbar($navbarMenu,$LANG_GF06['8']);
+    $display .= FF_Navbar($navbarMenu,$LANG_GF06['8']).'<br/>';
     $display .= _listUserVotes( intval($_GET['vid']) );
 }
 $display .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));

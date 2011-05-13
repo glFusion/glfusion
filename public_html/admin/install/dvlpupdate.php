@@ -71,7 +71,7 @@ function glfusion_110() {
 
     $_SQL[] = "ALTER TABLE {$_TABLES['blocks']} DROP INDEX blocks_bid";
     $_SQL[] = "ALTER TABLE {$_TABLES['events']} DROP INDEX events_eid";
-    $_SQL[] = "ALTER TABLE {$_TABLES['gf_forums']} DROP INDEX forum_id";
+    $_SQL[] = "ALTER TABLE {$_TABLES['ff_forums']} DROP INDEX forum_id";
     $_SQL[] = "ALTER TABLE {$_TABLES['group_assignments']} DROP INDEX ug_main_grp_id";
     $_SQL[] = "ALTER TABLE {$_TABLES['polltopics']} DROP INDEX pollquestions_pid";
     $_SQL[] = "ALTER TABLE {$_TABLES['sessions']} DROP INDEX sess_id";
@@ -245,11 +245,11 @@ function glfusion_115()
     $c->add('enable_user_rating_system',FALSE, 'select', 0,0,0,22, TRUE, 'forum');
     $c->add('bbcode_signature', TRUE, 'select',0, 0, 0, 37, true, 'forum');
     $c->add('use_wysiwyg_editor', false, 'select', 0, 2, 0, 85, true, 'forum');
-    DB_query("ALTER TABLE {$_TABLES['gf_forums']} ADD `rating_view` INT( 8 ) NOT NULL ,ADD `rating_post` INT( 8 ) NOT NULL",1);
-    DB_query("ALTER TABLE {$_TABLES['gf_userinfo']} ADD `rating` INT( 8 ) NOT NULL ",1);
-    DB_query("ALTER TABLE {$_TABLES['gf_userinfo']} ADD signature MEDIUMTEXT NOT NULL",1 );
-    DB_query("ALTER TABLE {$_TABLES['gf_userprefs']} ADD notify_full tinyint(1) NOT NULL DEFAULT '0' AFTER alwaysnotify",1);
-    $sql = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_rating_assoc']} ( "
+    DB_query("ALTER TABLE {$_TABLES['ff_forums']} ADD `rating_view` INT( 8 ) NOT NULL ,ADD `rating_post` INT( 8 ) NOT NULL",1);
+    DB_query("ALTER TABLE {$_TABLES['ff_userinfo']} ADD `rating` INT( 8 ) NOT NULL ",1);
+    DB_query("ALTER TABLE {$_TABLES['ff_userinfo']} ADD signature MEDIUMTEXT NOT NULL",1 );
+    DB_query("ALTER TABLE {$_TABLES['ff_userprefs']} ADD notify_full tinyint(1) NOT NULL DEFAULT '0' AFTER alwaysnotify",1);
+    $sql = "CREATE TABLE IF NOT EXISTS {$_TABLES['ff_rating_assoc']} ( "
             . "`user_id` mediumint( 9 ) NOT NULL , "
             . "`voter_id` mediumint( 9 ) NOT NULL , "
             . "`grade` smallint( 6 ) NOT NULL  , "
@@ -257,7 +257,7 @@ function glfusion_115()
             . " KEY `user_id` (`user_id`), "
             . " KEY `voter_id` (`voter_id`) );";
     DB_query($sql);
-    DB_query("ALTER TABLE {$_TABLES['gf_rating_assoc']} ADD topic_id int(11) NOT NULL AFTER grade",1);
+    DB_query("ALTER TABLE {$_TABLES['ff_rating_assoc']} ADD topic_id int(11) NOT NULL AFTER grade",1);
     // add forum.html feature
     DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('forum.html','Can post using HTML',0)",1);
     $ft_id = DB_insertId();
@@ -445,9 +445,9 @@ function glfusion_120()
     $c->add('displayblocks',0, 'select', 0, 0, 13, 85, true, 'polls');
 
     // Forum user pref for topic order
-    DB_query("ALTER TABLE {$_TABLES['gf_userprefs']} ADD topic_order varchar(10) NOT NULL DEFAULT 'ASC' AFTER notify_once",1);
-    DB_query("ALTER TABLE {$_TABLES['gf_userprefs']} ADD use_wysiwyg_editor tinyint(3) NOT NULL DEFAULT '1' AFTER topic_order",1);
-    DB_query("ALTER TABLE {$_TABLES['gf_topic']} ADD `status` int(10) unsigned NOT NULL DEFAULT '0' AFTER locked",1);
+    DB_query("ALTER TABLE {$_TABLES['ff_userprefs']} ADD topic_order varchar(10) NOT NULL DEFAULT 'ASC' AFTER notify_once",1);
+    DB_query("ALTER TABLE {$_TABLES['ff_userprefs']} ADD use_wysiwyg_editor tinyint(3) NOT NULL DEFAULT '1' AFTER topic_order",1);
+    DB_query("ALTER TABLE {$_TABLES['ff_topic']} ADD `status` int(10) unsigned NOT NULL DEFAULT '0' AFTER locked",1);
 
     DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.2.0',pi_gl_version='1.2.0' WHERE pi_name = 'forum'");
 
@@ -654,7 +654,23 @@ function glfusion_130()
         DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $grp_id)", 1);
     }
 
+    $c->del('pre2.5_mode', 'forum');
+    $c->del('mysql4+', 'forum');
+
     _forum_cvt_watch();
+
+    // attachment handling...
+    DB_query("ALTER TABLE {$_TABLES['ff_topic']} ADD attachments INT NOT NULL DEFAULT '0' AFTER views",1);
+    $sql = "SELECT id FROM {$_TABLES['ff_topic']} WHERE pid=0";
+    $result = DB_query($sql,1);
+    while ( $F = DB_fetchArray($result) ) {
+        $sql = "SELECT count(*) AS count FROM {$_TABLES['ff_topic']} topic left join {$_TABLES['ff_attachments']} att ON topic.id=att.topic_id WHERE (topic.id=".(int) $F['id']. " OR topic.pid=".$F['id'].") and att.filename <> ''";
+        $attResult = DB_query($sql,1);
+        if ( DB_numRows($attResult) > 0 ) {
+            list($attCount) = DB_fetchArray($attResult);
+            DB_query("UPDATE {$_TABLES['ff_topic']} SET attachments=".$attCount." WHERE id=".(int) $F['id'],1);
+        }
+    }
 
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.3.0',name='glfusion'",1);
@@ -676,25 +692,25 @@ function _forum_cvt_watch() {
 
     $processed = array();
 
-    $sql = "SELECT * FROM {$_TABLES['gf_topic']} WHERE pid=0";
+    $sql = "SELECT * FROM {$_TABLES['ff_topic']} WHERE pid=0";
     $result = DB_query($sql);
     while ( ( $T = DB_fetchArray($result) ) != NULL ) {
         $pids[] = $T['id'];
     }
 
-    $sql = "SELECT * FROM {$_TABLES['gf_watch']}";
+    $sql = "SELECT * FROM {$_TABLES['ff_watch']}";
     $result = DB_query($sql);
 
     while ( ( $W = DB_fetchArray($result) ) != NULL ) {
 
-        $forum_name = DB_getItem($_TABLES['gf_forums'],'forum_name','forum_id='.(int)$W['forum_id']);
+        $forum_name = DB_getItem($_TABLES['ff_forums'],'forum_name','forum_id='.(int)$W['forum_id']);
         if ( $W['topic_id'] != 0 ) {
             if ( $W['topic_id'] < 0 ) {
                 $searchID = abs($W['topic_id']);
             } else {
                 $searchID = $W['topic_id'];
             }
-            $topic_name = DB_getItem($_TABLES['gf_topic'],'subject','id='.(int)$searchID);
+            $topic_name = DB_getItem($_TABLES['ff_topic'],'subject','id='.(int)$searchID);
         } else {
             $topic_name = $LANG_GF02['msg138'];
         }

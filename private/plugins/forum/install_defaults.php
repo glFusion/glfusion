@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -38,7 +38,7 @@ if (!defined ('GVERSION')) {
 /*
  * Forum default settings
  *
- * Initial Installation Defaults used when loading the online configuration
+ * Initial installation defaults used when loading the online configuration
  * records. These settings are only used during the initial installation
  * and not referenced any more once the plugin is installed
  *
@@ -98,8 +98,6 @@ $_FF_DEFAULT['level4name']             = 'Regular Member';
 $_FF_DEFAULT['level5name']             = 'Active Member';
 $_FF_DEFAULT['showblocks']              = 'leftblocks';     // noblocks, leftblocks, rightblocks
 $_FF_DEFAULT['usermenu']                = 'navbar';         // blockmenu, navbar, none
-$_FF_DEFAULT['mysql4+']                 = false;
-$_FF_DEFAULT['pre2.5_mode']             = false;
 $_FF_DEFAULT['silent_edit_default']     = true;
 $_FF_DEFAULT['avatar_width']            = 115;
 $_FF_DEFAULT['allow_img_bbcode']        = true;
@@ -187,7 +185,6 @@ $_FF_DEFAULT['inlineimageypes']    = array(
         'image/png'                         => '.png',
         'image/x-png'                       => '.png'
 );
-// new in v3.1.1
 $_FF_DEFAULT['enable_fm_integration'] = false;
 $_FF_DEFAULT['allow_memberlist']      = false;
 
@@ -197,10 +194,10 @@ $_FF_DEFAULT['allow_memberlist']      = false;
 global $_FF_CONF;
 $_FF_CONF = array();
 
-$_TABLES['gf_settings']     = $_DB_table_prefix . 'forum_settings';
+$_TABLES['ff_settings']     = $_DB_table_prefix . 'forum_settings';
 
-if ( isset($_TABLES['gf_settings']) ) {
-    $result = DB_query("SELECT * FROM {$_TABLES['gf_settings']}",1);
+if ( isset($_TABLES['ff_settings']) ) {
+    $result = DB_query("SELECT * FROM {$_TABLES['ff_settings']}",1);
     $numRows = DB_numRows($result);
     if ( $numRows > 0 ) {
         $A = DB_fetchArray($result);
@@ -362,10 +359,6 @@ function plugin_initconfig_forum()
                 0, 0, 3, 120, true, 'forum');
         $c->add('usermenu', $_FF_DEFAULT['usermenu'], 'select',
                 0, 0, 4, 130, true, 'forum');
-        $c->add('mysql4+', $_FF_DEFAULT['mysql4+'], 'select',
-                0, 0, 0, 140, true, 'forum');
-        $c->add('pre2.5_mode', $_FF_DEFAULT['pre2.5_mode'], 'select',
-                0, 0, 0, 150, true, 'forum');
         $c->add('silent_edit_default', $_FF_DEFAULT['silent_edit_default'], 'select',
                 0, 0, 0, 160, true, 'forum');
         $c->add('avatar_width', $_FF_DEFAULT['avatar_width'], 'text',

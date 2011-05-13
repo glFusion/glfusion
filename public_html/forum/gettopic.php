@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2010 by the following authors:                             |
+// | Copyright (C) 2010-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -30,7 +30,6 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
-require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 
 if (!in_array('forum', $_PLUGINS)) {
     COM_404();
@@ -42,12 +41,17 @@ if ( COM_isAnonUser() ) {
     exit;
 }
 
-function ADMIN_getListField_gettopic($fieldname, $fieldvalue, $A, $icon_arr)
+USES_forum_functions();
+USES_forum_format();
+
+function _ff_getListField_gettopic($fieldname, $fieldvalue, $A, $icon_arr)
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
-    global $CONF_FORUM,$_SYSTEM,$LANG_GF02, $LANG_GF03;
+    global $_FF_CONF,$_SYSTEM,$LANG_GF02, $LANG_GF03;
 
     USES_lib_html2text();
+
+    $dt = new Date('now',$_CONF['timezone']);
 
     $retval = '';
 
@@ -56,23 +60,19 @@ function ADMIN_getListField_gettopic($fieldname, $fieldvalue, $A, $icon_arr)
             $retval = $A['name'];
             break;
         case 'date':
-            $retval = @strftime( $CONF_FORUM['default_Datetime_format'], $fieldvalue );
-            if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
-                $retval = iconv('ISO-8859-1','UTF-8',$retval);
-            }
+            $dt->setTimestamp($fieldvalue);
+            $retval = $dt->format($_FF_CONF['default_Datetime_format'],true);
             break;
         case 'lastupdated':
-            $retval = @strftime( $CONF_FORUM['default_Datetime_format'], $fieldvalue );
-            if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
-                $retval = iconv('ISO-8859-1','UTF-8',$retval);
-            }
+            $dt->setTimestamp($fieldvalue);
+            $retval = $dt->format($_FF_CONF['default_Datetime_format'],true);
             break;
         case 'subject':
-            $testText        = gf_formatTextBlock($A['comment'],'text','text',$A['status']);
+            $testText        = FF_formatTextBlock($A['comment'],'text','text',$A['status']);
             $testText        = strip_tags($testText);
             $html2txt        = new html2text($testText,false);
             $testText        = trim($html2txt->get_text());
-            $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')),ENT_QUOTES,COM_getEncodingt());
+            $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$_FF_CONF['contentinfo_numchars']). '...')),ENT_QUOTES,COM_getEncodingt());
             $retval = '<span class="gf_mootip" style="text-decoration:none;" title="' . $A['subject'] . '::' . $lastpostinfogll . '">' . $fieldvalue . '</span>';
             break;
         case 'select' :
@@ -123,15 +123,15 @@ $T->set_var('js_cache_url',$js_cache_url);
 $T->set_var('theme',$_CONF['theme']);
 
 $forumList = array();
-$categoryResult = DB_query("SELECT * FROM {$_TABLES['gf_categories']} ORDER BY cat_order ASC");
+$categoryResult = DB_query("SELECT * FROM {$_TABLES['ff_categories']} ORDER BY cat_order ASC");
 while($A = DB_fetchArray($categoryResult)) {
     $cat_id = $A['cat_name'];
 
     if ( SEC_inGroup('Root') ) {
-        $sql = "SELECT forum_id,forum_name,forum_dscp FROM {$_TABLES['gf_forums']} WHERE forum_cat ='{$A['id']}' ORDER BY forum_order ASC";
+        $sql = "SELECT forum_id,forum_name,forum_dscp FROM {$_TABLES['ff_forums']} WHERE forum_cat =".(int) $A['id']." ORDER BY forum_order ASC";
     } else {
-        $sql = "SELECT * FROM {$_TABLES['gf_moderators']} a , {$_TABLES['gf_forums']} b ";
-        $sql .= "WHERE b.forum_cat='{$A['id']}' AND a.mod_forum = b.forum_id AND (a.mod_uid='{$_USER['uid']}' OR a.mod_groupid in ($modgroups)) ORDER BY forum_order ASC";
+        $sql = "SELECT * FROM {$_TABLES['ff_moderators']} a , {$_TABLES['ff_forums']} b ";
+        $sql .= "WHERE b.forum_cat=".(int)$A['id']." AND a.mod_forum = b.forum_id AND (a.mod_uid=".(int) $_USER['uid']." OR a.mod_groupid in ($modgroups)) ORDER BY forum_order ASC";
     }
     $forumResult = DB_query($sql);
 
@@ -164,7 +164,7 @@ $header_arr = array(      # display 'text' and use table field 'field'
 
 $text_arr = array(
     'has_extras' => true,
-    'form_url'   => $_CONF['site_url'] . '/forum/gettopic.php?fid='.$forum_id.'&amp;query_limit=20',
+    'form_url'   => $_CONF['site_url'] . '/forum/gettopic.php?fid='.$forum_id.'&amp;pid='.$topic_parent_id.'&amp;query_limit=20',
     'help_url'   => '',
     'nowrap'     => 'date'
 );
@@ -179,14 +179,14 @@ foreach ($usergroups as $group) {
 }
 $grouplist = implode(',',$groups);
 
-$sql = "SELECT * FROM {$_TABLES['gf_topic']} WHERE pid=0 AND id<> ".$topic_parent_id." AND forum=".$forum_id;
+$sql = "SELECT * FROM {$_TABLES['ff_topic']} WHERE pid=0 AND id<> ".(int) $topic_parent_id." AND forum=".(int) $forum_id;
 
 $query_arr = array('table'          => 'topic',
                    'sql'            => $sql,
                    'query_fields'   => array('subject','comment'),
                    'default_filter' => '');
 
-$retval .= ADMIN_list('topics', 'ADMIN_getListField_gettopic', $header_arr,
+$retval .= ADMIN_list('topics', '_ff_getListField_gettopic', $header_arr,
                       $text_arr, $query_arr, $defsort_arr);
 
 $T->set_var('topic_parent_id',$topic_parent_id);

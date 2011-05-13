@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2011 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Forum Plugin for Geeklog CMS                                |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -32,23 +35,34 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once '../lib-common.php'; // Path to your lib-common.php
-require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
+require_once '../lib-common.php';
+if (!in_array('forum', $_PLUGINS)) {
+    exit;
+}
+
+USES_forum_functions();
+USES_forum_format();
 
 $deleteid = COM_applyFilter($_GET['id'],true);
 $topic    = COM_applyFilter($_GET['topic'],true);
 
-$query  = DB_query("SELECT uid,forum,date FROM {$_TABLES['gf_topic']} WHERE id=$topic");
+$query  = DB_query("SELECT uid,forum,date FROM {$_TABLES['ff_topic']} WHERE id=".(int) $topic);
 $edittopic = DB_fetchArray($query,false);
 $editAllowed = false;
 
-if (forum_modPermission($edittopic['forum'],$_USER['uid'],'mod_edit')) {
+if ( COM_isAnonUser() ) {
+    $uid = 1;
+} else {
+    $uid = $_USER['uid'];
+}
+
+if (forum_modPermission($edittopic['forum'],$uid,'mod_edit')) {
     $editAllowed = true;
-} elseif ($edittopic['uid'] > 1 AND $edittopic['uid'] == $_USER['uid']) {
+} elseif ($edittopic['uid'] > 1 AND $edittopic['uid'] == $uid) {
     // User is trying to edit their topic post - this is allowed
     if ($edittopic['date'] > 0 ) {
-        if ($CONF_FORUM['allowed_editwindow'] > 0) {   // Check if edit timeframe is still valid
-            $t2 = $CONF_FORUM['allowed_editwindow'];
+        if ($_FF_CONF['allowed_editwindow'] > 0) {   // Check if edit timeframe is still valid
+            $t2 = $_FF_CONF['allowed_editwindow'];
             $time = time();
             if ((time() - $t2) < $edittopic['date']) {
                 $editAllowed = true;
@@ -57,7 +71,7 @@ if (forum_modPermission($edittopic['forum'],$_USER['uid'],'mod_edit')) {
             $editAllowed = true;
         }
     }
-} elseif (DB_getItem($_TABLES['gf_attachments'],'tempfile',"id=$deleteid") == 1) {
+} elseif (DB_getItem($_TABLES['ff_attachments'],'tempfile',"id=".(int) $deleteid) == 1) {
     $editAllowed = true;
 }
 // Moderator or logged-in User is editing their topic post
@@ -67,7 +81,7 @@ if ($editAllowed) {
     COM_errorLog("Forum warning, invalid attempt to delete an attachment - topic:$topic, user:{$_USER['uid']}");
 }
 
-$retval = gf_showattachments($topic,'edit');
+$retval = _ff_showattachments($topic,'edit');
 
 print $retval;
 exit;

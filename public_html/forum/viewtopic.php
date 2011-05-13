@@ -38,134 +38,132 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
-require_once $_CONF['path_system'] . 'classes/timer.class.php';
 
 if (!in_array('forum', $_PLUGINS)) {
     COM_404();
     exit;
 }
 
+USES_forum_functions();
+USES_forum_format();
+USES_forum_topic();
+require_once $_CONF['path_system'] . 'classes/timer.class.php';
+
+$display = '';
+
 $mytimer = new timerobject();
-$mytimer->setPercision(2);
 $mytimer->startTimer();
 
-require_once $_CONF['path'] . 'plugins/forum/include/gf_showtopic.php';
-require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
-require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
+$showtopic = isset($_GET['showtopic']) ? COM_applyFilter($_GET['showtopic'],true) : 0;
+$show      = isset($_GET['show'])      ? COM_applyFilter($_GET['show'],true) : 0;
+$page      = isset($_GET['page'])      ? COM_applyFilter($_GET['page'],true) : 0;
+$mode      = isset($_GET['mode'])      ? COM_applyFilter($_GET['mode']) : '';
+$highlight = isset($_GET['query'])     ? COM_applyFilter($_GET['query']) : '';
+$topic     = isset($_GET['topic'])     ? COM_applyFilter($_GET['topic'],true) : 0;
+$iframe    = isset($_GET['onlytopic']) ? 1 : 0;
 
-$mytimer = new timerobject();
-$mytimer->startTimer();
-
-// Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
-$showtopic = isset($_REQUEST['showtopic']) ? intval(COM_applyFilter($_REQUEST['showtopic'],true)) : 0;
-$show      = isset($_REQUEST['show']) ? intval(COM_applyFilter($_REQUEST['show'],true)) : 0;
-$page      = isset($_REQUEST['page']) ? intval(COM_applyFilter($_REQUEST['page'],true)) : 0;
-$mode      = isset($_REQUEST['mode']) ? COM_applyFilter($_REQUEST['mode']) : '';
-$highlight = isset($_REQUEST['query']) ? COM_applyFilter($_REQUEST['query']) : '';
-$topic     = isset($_REQUEST['topic']) ? COM_applyFilter($_REQUEST['topic'],true) : 0;
-
+// if no showtopic is provided, use the topic instead
 if ( $showtopic == 0 ) {
     $showtopic = $topic;
 }
 
 if ( $showtopic == 0 ) {
-    echo COM_siteHeader();
-    echo COM_startBlock();
-    alertMessage($LANG_GF02['msg172'],$LANG_GF02['msg171']);
-    echo COM_endBlock();
-    echo COM_siteFooter();
+    $display  = FF_siteHeader();
+    $display .= COM_startBlock();
+    $display .= _ff_alertMessage($LANG_GF02['msg172'],$LANG_GF02['msg171']);
+    $display .= COM_endBlock();
+    $display .= FF_siteFooter();
+    echo $display;
     exit;
 }
 
-$result = DB_query("SELECT forum, pid, subject FROM {$_TABLES['gf_topic']} WHERE id=$showtopic");
+$result = DB_query("SELECT forum, pid, subject FROM {$_TABLES['ff_topic']} WHERE id=".(int) $showtopic);
 list($forum, $topic_pid, $subject) = DB_fetchArray($result);
 
 if ($topic_pid == '') {
-    echo COM_siteHeader();
-    echo COM_startBlock();
-    alertMessage($LANG_GF02['msg172'],$LANG_GF02['msg171']);
-    echo COM_endBlock();
-    echo COM_siteFooter();
+    $display  = FF_siteHeader();
+    $display .= COM_startBlock();
+    $display .= _ff_alertMessage($LANG_GF02['msg172'],$LANG_GF02['msg171']);
+    $display .= COM_endBlock();
+    $display .= FF_siteFooter();
+    echo $display;
     exit;
 }
 if ($topic_pid != 0) {
     $showtopic = $topic_pid;
 }
-// Check if the number of records was specified to show
-if (empty($show) AND $CONF_FORUM['show_posts_perpage'] > 0) {
-    $show = $CONF_FORUM['show_posts_perpage'];
+
+if (empty($show) AND $FF_userprefs['postsperpage'] > 0) {
+    $show = $FF_userprefs['postsperpage'];
 } elseif (empty($show)) {
     $show = 20;
 }
 
 $sql  = "SELECT a.forum,a.pid,a.locked,a.subject,a.replies,b.forum_cat,b.forum_name,b.is_readonly,b.grp_id,b.rating_post,c.cat_name,c.id ";
-$sql .= "FROM {$_TABLES['gf_topic']} a ";
-$sql .= "LEFT JOIN {$_TABLES['gf_forums']} b ON b.forum_id=a.forum ";
-$sql .= "LEFT JOIN {$_TABLES['gf_categories']} c on c.id=b.forum_cat ";
-$sql .= "WHERE a.id=$showtopic";
+$sql .= "FROM {$_TABLES['ff_topic']} a ";
+$sql .= "LEFT JOIN {$_TABLES['ff_forums']} b ON b.forum_id=a.forum ";
+$sql .= "LEFT JOIN {$_TABLES['ff_categories']} c on c.id=b.forum_cat ";
+$sql .= "WHERE a.id=".(int) $showtopic;
 $viewtopic = DB_fetchArray(DB_query($sql),false);
-$canPost = forum_canPost($viewtopic);
 
-$sql = "SELECT COUNT(pid) as replies FROM {$_TABLES['gf_topic']} WHERE pid=" . $showtopic;
-$res = DB_query($sql);
-list($replies) = DB_fetchArray($res);
+$canPost = _ff_canPost( $viewtopic );
+
+$replies  = $viewtopic['replies'];
 $numpages = ceil(($replies+1) / $show);
 
-if ($CONF_FORUM['use_censor']) {
+if ($_FF_CONF['use_censor']) {
     $viewtopic['subject'] = COM_checkWords($viewtopic['subject']);
 }
 
-if(isset($_REQUEST['onlytopic']) && $_REQUEST['onlytopic'] == 1) {
-    // Send out the HTML headers and load the stylesheet for the iframe preview
-    echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' . LB;
-    echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">' . LB;
-    echo '<head>' . LB;
-    echo '<title></title>' . LB;
-    if ( $_SYSTEM['use_direct_style_js'] ) {
-        echo '<link rel="stylesheet" type="text/css" href="'.$_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css?t='.$_CONF['theme'] . '" />' . LB;
-    } else {
-        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$_CONF['site_url']}/css.php?t={$_CONF['theme']}\" />" . LB;
-    }
-    echo '</head>' . LB;
-    echo '<body class="sitebody">';
-} else {
-    $pageTitle = strip_tags(COM_checkWords($subject));
+$topicTemplate = new Template($_CONF['path'] . 'plugins/forum/templates/');
+$topicTemplate->set_file ('topictemplate','topic_full.thtml');
 
-    $canonical = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$showtopic";
-    if ( $page > 1 ) {
-        $canonical .= "&amp;page=$page";
-    }
-    $headercode = '<link rel="canonical" href="' . $canonical . '" />';
-    gf_siteHeader($pageTitle,$headercode);
-    //Check is anonymous users can access
-    forum_chkUsercanAccess();
-    // Now display the forum header
-    ForumHeader($forum,$showtopic);
+if ( !$iframe ) {
+    $topicTemplate->set_var('full',1);
+} else if ( $iframe ) {
+    $topicTemplate->set_var('iframe',1);
+} else {
+    $topicTemplate->set_var('full',1);
 }
 
-if (isset($_REQUEST['lastpost']) && $_REQUEST['lastpost']) {
-    if($page == 0) {
+if ( !$iframe )  {
+    $pageTitle = strip_tags(COM_checkWords($subject));
+    $canonical = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$showtopic;
+    if ( $page > 1 ) {
+        $canonical .= '&amp;page='.$page;
+    }
+    $headercode = '<link rel="canonical" href="' . $canonical . '" />';
+    $display .= FF_siteHeader($pageTitle,$headercode);
+    $display .= FF_ForumHeader($forum,$showtopic);
+} else {
+    if ( $_SYSTEM['use_direct_style_js'] ) {
+        $csslink = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css?t='.$_CONF['theme'];
+    } else {
+        $csslink = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'];
+    }
+    $topicTemplate->set_var('csslink',$csslink);
+}
+
+if (isset($_GET['lastpost']) && $_GET['lastpost']) {
+    if ( $page == 0 ) {
         $page = $numpages;
     }
-    if (isset($_REQUEST['onlytopic']) && $_REQUEST['onlytopic'] == 1) {
-        $order = $CONF_FORUM['showtopic_review_order'];
+    if ( isset($_GET['onlytopic']) && $_GET['onlytopic'] == 1 ) {
+        $order = $_FF_CONF['showtopic_review_order'];
         $page = 1;
     } else {
-        $order = $CONF_FORUM['topic_order']; //'ASC';
+        $order = $FF_userprefs['topic_order']; //'ASC';
     }
-    if ($page > 1) {
+    if ( $page > 1 ) {
         $offset = ($page - 1) * $show;
     } else {
         $offset = 0;
     }
-
-    $base_url = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$showtopic&amp;mode=$mode&amp;show=$show";
+    $base_url = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$showtopic.'&amp;mode='.$mode.'&amp;show='.$show;
 } else {
     if ( $topic != 0 ) {
-
-        $order = $CONF_FORUM['topic_order'];
-
-        $sql = "SELECT id FROM {$_TABLES['gf_topic']} WHERE pid=".$showtopic." ORDER BY date " . $order;
+        $order = $FF_userprefs['topic_order'];
+        $sql = "SELECT id FROM {$_TABLES['ff_topic']} WHERE pid=".(int) $showtopic." ORDER BY date " . $order;
         $idResult = DB_query($sql);
         $ids = array();
         while ( $I = DB_fetchArray($idResult)) {
@@ -176,271 +174,158 @@ if (isset($_REQUEST['lastpost']) && $_REQUEST['lastpost']) {
         $page = intval($key / $show) + 1;
     }
 
-    if ($page == 0) {
+    if ( $page == 0 ) {
         $page = 1;
     }
-    if ($page > 1) {
+    if ( $page > 1 ) {
         $offset = ($page - 1) * $show;
     } else {
         $offset = 0;
     }
 
-    $base_url = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$showtopic&amp;mode=$mode&amp;show=$show";
+    $base_url = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$showtopic.'&amp;mode='.$mode.'&amp;show='.$show;
 
-    if (isset($_REQUEST['onlytopic']) && $_REQUEST['onlytopic'] == 1) {
-        $order = $CONF_FORUM['showtopic_review_order'];
+    if ( isset($_GET['onlytopic']) && $_GET['onlytopic'] == 1 ) {
+        $order = $_FF_CONF['showtopic_review_order'];
     } else {
-        $order = $CONF_FORUM['topic_order']; // 'ASC';
+        $order = $FF_userprefs['topic_order']; // 'ASC';
     }
 }
 
-$forum_outline_header = new Template($_CONF['path'] . 'plugins/forum/templates/');
-$forum_outline_header->set_file (array ('forum_outline_header'=>'forum_outline_header.thtml'));
-$forum_outline_header->set_var('xhtml',XHTML);
-$forum_outline_header->parse ('output', 'forum_outline_header');
-echo $forum_outline_header->finish($forum_outline_header->get_var('output'));
-
-if ($mode != 'preview') {
-
-    $topicnavbar = new Template($_CONF['path'] . 'plugins/forum/templates/');
-    $topicnavbar->set_file (array ('topicnavbar'=>'topic_navbar.thtml',
-            'subscribe' => 'links/subscribe.thtml',
-            'print' => 'links/print.thtml',
-            'prev' => 'links/prevtopic.thtml',
-            'next' => 'links/nexttopic.thtml',
-            'new' => 'links/newtopic.thtml',
-            'reply' => 'links/replytopic.thtml'));
-
-    $topicnavbar->set_var('xhtml',XHTML);
-    $topicnavbar->set_var('layout_url', $_CONF['layout_url']);
-    $topicnavbar->set_var('site_url', $_CONF['site_url']);
-
-
-    $printlink = "{$_CONF['site_url']}/forum/print.php?id=$showtopic";
-    $printlinkimg = '<img src="'.gf_getImage('print').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF01['PRINTABLE'].'" title="'.$LANG_GF01['PRINTABLE'].'"' . XHTML . '>';
-
-    if ($topic_pid > 0) {
-        $replytopic_id = $topic_pid;
-    } else {
-        $replytopic_id = $showtopic;
-    }
+if ( !$iframe ) {
+    $topicTemplate->clear_var(array('replytopiclink','replytopiclinkimg','LANG_reply'));
+    $printlink = $_CONF['site_url'].'/forum/print.php?id='.$showtopic;
+    $printlinkimg = '<img src="'._ff_getImage('print').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF01['PRINTABLE'].'" title="'.$LANG_GF01['PRINTABLE'].'"/>';
 
     if ( $canPost != 0 ) {
-        $newtopiclink = "{$_CONF['site_url']}/forum/createtopic.php?method=newtopic&amp;forum=$forum";
-        $newtopiclinkimg = '<img src="'.gf_getImage('post_newtopic').'" style="border:none;" alt="'.$LANG_GF01['NEWTOPIC'].'" title="'.$LANG_GF01['NEWTOPIC'].'"' . XHTML . '>';
-        if($viewtopic['locked'] != 1) {
-            $replytopiclink = "{$_CONF['site_url']}/forum/createtopic.php?method=postreply&amp;forum=$forum&amp;id=$replytopic_id";
-            $replytopiclinkimg = '<img src="'.gf_getImage('post_reply').'" style="border:none;" alt="'.$LANG_GF01['POSTREPLY'].'" title="'.$LANG_GF01['POSTREPLY'].'"' . XHTML . '>';
-            $topicnavbar->set_var ('replytopiclink', $replytopiclink);
-            $topicnavbar->set_var ('replytopiclinkimg', $replytopiclinkimg);
-            $topicnavbar->set_var ('LANG_reply', $LANG_GF01['POSTREPLY']);
-            $topicnavbar->parse ('replytopic_link', 'reply');
+        $newtopiclink = $_CONF['site_url'].'/forum/createtopic.php?mode=newtopic&amp;forum='.$forum;
+        $newtopiclinkimg = '<img src="'._ff_getImage('post_newtopic').'" style="border:none;" alt="'.$LANG_GF01['NEWTOPIC'].'" title="'.$LANG_GF01['NEWTOPIC'].'"/>';
+        if ( $viewtopic['locked'] != 1 ) {
+            $replytopiclink = $_CONF['site_url'].'/forum/createtopic.php?mode=newreply&amp;forum='.$forum.'&amp;id='.$showtopic;
+            $replytopiclinkimg = '<img src="'._ff_getImage('post_reply').'" style="border:none;" alt="'.$LANG_GF01['POSTREPLY'].'" title="'.$LANG_GF01['POSTREPLY'].'"/>';
+            $topicTemplate->set_var (array(
+                'replytopiclink'    => $replytopiclink,
+                'replytopiclinkimg' => $replytopiclinkimg,
+                'LANG_reply'        => $LANG_GF01['POSTREPLY']
+            ));
         }
     } else {
         $newtopiclink = '';
         $newtopiclinkimg = '';
     }
-
-
-    $prev_sql = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE (forum='$forum') AND (pid=0) AND (id < '$showtopic') ORDER BY date DESC LIMIT 1");
-    $P = DB_fetchArray($prev_sql);
-    if ($P['id'] != "") {
-        $prevlink = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic={$P['id']}";
-        $prevlinkimg = '<img src="'.gf_getImage('prev').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF01['PREVTOPIC'].'" title="'.$LANG_GF01['PREVTOPIC'].'"' . XHTML . '>';
-        $topicnavbar->set_var ('prevlinkimg', $prevlinkimg);
-        $topicnavbar->set_var ('prevlink', $prevlink);
-        $topicnavbar->set_var ('LANG_prevlink',$LANG_GF01['PREVTOPIC']);
-        $topicnavbar->parse ('prevtopic_link', 'prev');
-    }
-
-    $next_sql = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE (forum='$forum') AND (pid=0) AND (id > '$showtopic') ORDER BY date ASC LIMIT 1");
-    $N = DB_fetchArray($next_sql);
-    if ($N['id'] > 0) {
-        $nextlink = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic={$N['id']}";
-        $nextlinkimg = '<img src="'.gf_getImage('next').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF01['NEXTTOPIC'].'" title="'.$LANG_GF01['NEXTTOPIC'].'"' . XHTML . '>';
-        $topicnavbar->set_var ('nextlinkimg', $nextlinkimg);
-        $topicnavbar->set_var ('nextlink', $nextlink);
-        $topicnavbar->set_var ('LANG_nextlink',$LANG_GF01['NEXTTOPIC']);
-        $topicnavbar->parse ('nexttopic_link', 'next');
-    }
-
-    // Enable TOPIC NOTIFY IF THE USER IS A MEMBER
-    if (isset($_USER['uid']) AND $_USER['uid'] > 1) {
+    // Enable subscriptions if member
+    if ( !COM_isAnonUser() ) {
         $forumid = $viewtopic['forum'];
 
         /* Check for a un-subscribe record */
-        $ntopicid = -$showtopic;  // Negative value
+        $ntopicid = -$showtopic;
 
-        if (DB_count($_TABLES['subscriptions'], array('type','category','id', 'uid'), array('forum',$forumid, $ntopicid,$_USER['uid'])) > 0) {
-            $notifylinkimg = '<img src="'.gf_getImage('notify_on').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg62'].'" title="'.$LANG_GF02['msg62'].'"' . XHTML . '>';
-            $notifylink = "{$_CONF['site_url']}/forum/notify.php?forum=$forumid&amp;submit=save&amp;topic=$showtopic";
-            $topicnavbar->set_var ('LANG_notify', $LANG_GF01['SubscribeLink']);
+        if (DB_count($_TABLES['subscriptions'], array('type','category','id', 'uid'), array('forum',(int) $forumid, $ntopicid,(int) $_USER['uid'])) > 0) {
+            $notifylinkimg = '<img src="'._ff_getImage('notify_on').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg62'].'" title="'.$LANG_GF02['msg62'].'"/>';
+            $notifylink = $_CONF['site_url'].'/forum/notify.php?forum='.$forumid.'&amp;submit=save&amp;topic='.$showtopic;
+            $topicTemplate->set_var ('LANG_notify', $LANG_GF01['SubscribeLink']);
 
         /* Check if user has subscribed to complete forum */
-        } elseif (DB_count($_TABLES['subscriptions'], array('type','category', 'id', 'uid'), array('forum',$forumid, '0',$_USER['uid'])) > 0) {
+        } elseif (DB_count($_TABLES['subscriptions'], array('type','category', 'id', 'uid'), array('forum',(int) $forumid, '0',(int) $_USER['uid'])) > 0) {
             $notifyID = DB_getItem($_TABLES['subscriptions'],'sub_id', "type='forum' AND category=".(int)$forumid." AND id=0 AND uid=".(int)$_USER['uid']);
-            $notifylinkimg = '<img src="'.gf_getImage('notify_off').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg137'].'" title="'.$LANG_GF02['msg137'].'"' . XHTML . '>';
-            $notifylink = "{$_CONF['site_url']}/forum/notify.php?submit=delete2&amp;id=$notifyID&amp;forum=$forumid&amp;topic=$showtopic";
-            $topicnavbar->set_var ('LANG_notify', $LANG_GF01['unSubscribeLink']);
+            $notifylinkimg = '<img src="'._ff_getImage('notify_off').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg137'].'" title="'.$LANG_GF02['msg137'].'"/>';
+            $notifylink = $_CONF['site_url'].'/forum/notify.php?submit=delete2&amp;id='.$notifyID.'&amp;forum='.$forumid.'&amp;topic='.$showtopic;
+            $topicTemplate->set_var ('LANG_notify', $LANG_GF01['unSubscribeLink']);
 
         /* Check if user is subscribed to this specific topic */
-        } elseif (DB_count($_TABLES['subscriptions'], array('type','category', 'id', 'uid'), array('forum',$forumid, $showtopic,$_USER['uid'])) > 0) {
+        } elseif (DB_count($_TABLES['subscriptions'], array('type','category', 'id', 'uid'), array('forum',(int) $forumid, (int) $showtopic,(int) $_USER['uid'])) > 0) {
             $notifyID = DB_getItem($_TABLES['subscriptions'],'sub_id', "type='forum' AND category=".(int)$forumid." AND id=".(int)$showtopic." AND uid=".(int)$_USER['uid']);
-            $notifylinkimg = '<img src="'.gf_getImage('notify_off').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg137'].'" title="'.$LANG_GF02['msg137'].'"' . XHTML . '>';
-            $notifylink = "{$_CONF['site_url']}/forum/notify.php?submit=delete2&amp;id=$notifyID&amp;forum=$forumid&amp;topic=$showtopic";
-            $topicnavbar->set_var ('LANG_notify', $LANG_GF01['unSubscribeLink']);
+            $notifylinkimg = '<img src="'._ff_getImage('notify_off').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg137'].'" title="'.$LANG_GF02['msg137'].'"/>';
+            $notifylink = $_CONF['site_url'].'/forum/notify.php?submit=delete2&amp;id='.$notifyID.'&amp;forum='.$forumid.'&amp;topic='.$showtopic;
+            $topicTemplate->set_var ('LANG_notify', $LANG_GF01['unSubscribeLink']);
 
         } else {
-            $notifylinkimg = '<img src="'.gf_getImage('notify_on').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg62'].'" title="'.$LANG_GF02['msg62'].'"' . XHTML . '>';
-            $notifylink = "{$_CONF['site_url']}/forum/notify.php?forum=$forumid&amp;submit=save&amp;topic=$showtopic";
-            $topicnavbar->set_var ('LANG_notify', $LANG_GF01['SubscribeLink']);
+            $notifylinkimg = '<img src="'._ff_getImage('notify_on').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg62'].'" title="'.$LANG_GF02['msg62'].'"/>';
+            $notifylink = $_CONF['site_url'].'/forum/notify.php?forum='.$forumid.'&amp;submit=save&amp;topic='.$showtopic;
+            $topicTemplate->set_var ('LANG_notify', $LANG_GF01['SubscribeLink']);
         }
 
-        $topicnavbar->set_var ('notifylinkimg', $notifylinkimg);
-        $topicnavbar->set_var ('notifylink', $notifylink);
-        $topicnavbar->parse ('subscribe_link', 'subscribe');
-
+        $topicTemplate->set_var (array(
+            'notifylinkimg' => $notifylinkimg,
+            'notifylink'    => $notifylink
+        ));
     }
 
-    $topicnavbar->set_var ('printlink', $printlink);
-    $topicnavbar->set_var ('printlinkimg', $printlinkimg);
-    $topicnavbar->set_var ('LANG_print', $LANG_GF01['PRINTABLE']);
-    $topicnavbar->parse ('print_link', 'print');
-
-    $cat_name = DB_getItem($_TABLES['gf_categories'],"cat_name","id={$viewtopic['forum_cat']}");
-
-    $topicnavbar->set_var ('navbreadcrumbsimg','<img src="'.gf_getImage('nav_breadcrumbs').'" style="border:none;vertical-align:middle;" alt=""' . XHTML . '>');
-    $topicnavbar->set_var ('navtopicimg','<img src="'.gf_getImage('nav_topic').'" style="border:none;vertical-align:middle;" alt=""' . XHTML . '>');
-    $topicnavbar->set_var('forum_home',$LANG_GF01['INDEXPAGE']);
-    $topicnavbar->set_var ('cat_name', $cat_name);
-    $topicnavbar->set_var ('cat_id',$viewtopic['forum_cat']);
-    $topicnavbar->set_var ('forum_id', $forum);
-    $topicnavbar->set_var ('forum_name', $viewtopic['forum_name']);
-
-    $topicnavbar->set_var ('topic_id', $replytopic_id);
-
-    $topicnavbar->set_var ('newtopiclink', $newtopiclink);
-    $topicnavbar->set_var ('newtopiclinkimg', $newtopiclinkimg);
-    $topicnavbar->set_var ('LANG_newtopic', $LANG_GF01['NEWTOPIC']);
-    $topicnavbar->parse ('newtopic_link', 'new');
-
-    $topicnavbar->set_var ('LANG_next', $LANG_GF01['NEXT']);
-    $topicnavbar->set_var ('LANG_TOP', $LANG_GF01['TOP']);
-    $topicnavbar->set_var ('subject', $viewtopic['subject']);
-    $topicnavbar->set_var ('LANG_HOME', $LANG_GF01['HOMEPAGE']);
-    $topicnavbar->set_var ('pagenavigation', COM_printPageNavigation($base_url,$page,$numpages));
-    $topicnavbar->parse ('output', 'topicnavbar');
-    echo $topicnavbar->finish($topicnavbar->get_var('output'));
-} else {
-    $preview_header = new Template($_CONF['path'] . 'plugins/forum/templates/');
-    $preview_header->set_file ('header', 'topicpreview_header.thtml');
-    $preview_header->set_var ('xhtml',XHTML);
-    $preview_header->parse ('output', 'header');
-    echo $preview_header->finish($preview_header->get_var('output'));
+    $topicTemplate->set_var (array(
+        'printlink'     => $printlink,
+        'printlinkimg'  => $printlinkimg,
+        'LANG_print'    => $LANG_GF01['PRINTABLE'],
+        'navbreadcrumbsimg' => '<img src="'._ff_getImage('nav_breadcrumbs').'" style="border:none;vertical-align:middle;" alt=""/>',
+        'navtopicimg'   => '<img src="'._ff_getImage('nav_topic').'" style="border:none;vertical-align:middle;" alt=""/>',
+        'forum_home'    => $LANG_GF01['INDEXPAGE'],
+        'cat_name'      => $viewtopic['cat_name'],
+        'cat_id'        => $viewtopic['forum_cat'],
+        'forum_id'      => $forum,
+        'forum_name'    => $viewtopic['forum_name'],
+        'topic_id'      => $showtopic,
+        'newtopiclink'  => $newtopiclink,
+        'newtopiclinkimg'   => $newtopiclinkimg,
+        'LANG_newtopic' => $LANG_GF01['NEWTOPIC'],
+        'LANG_next'     => $LANG_GF01['NEXT'],
+        'LANG_TOP'      => $LANG_GF01['TOP'],
+        'subject'       => $viewtopic['subject'],
+        'LANG_HOME'     => $LANG_GF01['HOMEPAGE']
+    ));
 }
-
-// Update the topic view counter and user access log
-DB_query("UPDATE {$_TABLES['gf_topic']} SET views=views+1 WHERE id='$showtopic'");
-if(isset($_USER['uid']) && $_USER['uid'] > 1 ) {
-    $query = DB_query("SELECT pid,forum FROM {$_TABLES['gf_topic']} WHERE id={$showtopic}");
-    list ($showtopicpid,$forumid) = DB_fetchArray($query);
-    if ($showtopicpid == 0 ) {
-        $showtopicpid = $showtopic;
-    }
-
-    $lrows = DB_count($_TABLES['gf_log'],array('uid','topic'),array($_USER['uid'],$showtopicpid));
-    $logtime = time();
-    if ($lrows < 1) {
-        DB_query("INSERT INTO {$_TABLES['gf_log']} (uid,forum,topic,time) VALUES ('$_USER[uid]','$forum','$showtopicpid','$logtime')");
-    } else {
-        DB_query("UPDATE {$_TABLES['gf_log']} SET time=$logtime WHERE uid=$_USER[uid] AND topic=$showtopicpid");
-    }
-}
-
-$sql = "SELECT * FROM {$_TABLES['gf_topic']} WHERE id='$showtopic' OR pid='$showtopic' ORDER BY date $order LIMIT $offset, $show";
+$sql = "SELECT * FROM {$_TABLES['ff_topic']} WHERE id=".(int) $showtopic." OR pid=".(int) $showtopic." ORDER BY date $order LIMIT $offset, $show";
 $result  = DB_query($sql);
 
 // Display each post in this topic
 $onetwo = 1;
 $cantView = 0;
-while($topicRec = DB_fetchArray($result)) {
-    if ($CONF_FORUM['show_anonymous_posts'] == 0 AND $topicRec['uid'] == 1) {
-       echo '<div class="pluginAlert" style="padding:10px;margin:10px;">Your preferences have block anonymous posts enabled</div>';
-        break;
-       //Do nothing - but this way I don't always have to do this check
-	} else if(!can_view_forum($forum)) {
+
+$topicTemplate->set_block('topictemplate', 'topicrow', 'trow');
+
+while ($topicRec = DB_fetchArray($result) ) {
+    if ($FF_userprefs['viewanonposts'] == 0 AND $topicRec['uid'] == 1) {
+       $display .= '<div class="pluginAlert" style="padding:10px;margin:10px;">Your preferences have block anonymous posts enabled</div>';
+       break;
+	} else if ( !_ff_canUserViewRating($forum) ) {
 	    if ( $cantView == 0 ) {
-    		echo '<div class="pluginAlert" style="padding:10px;margin:10px;">'.$LANG_GF02['rate_too_low_thread'].'</div>';
+    		$display .= '<div class="pluginAlert" style="padding:10px;margin:10px;">'.$LANG_GF02['rate_too_low_thread'].'</div>';
     	}
     	$cantView++;
     } else {
-        echo showtopic($topicRec,$mode,$onetwo,$page);
+        $topicRec['is_readonly'] = $viewtopic['is_readonly'];
+        $topicRec['locked'] = $viewtopic['locked'];
+        FF_showtopic($topicRec,$mode,$onetwo,$page,$topicTemplate);
+        $topicTemplate->parse('trow', 'topicrow',true);
         $onetwo = ($onetwo == 1) ? 2 : 1;
     }
 }
 
-if ($mode != 'preview') {
-    $topic_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
-    $topic_footer->set_file (array ('topicfooter'=>'topicfooter.thtml',
-            'new' => 'links/newtopic.thtml',
-            'reply' => 'links/replytopic.thtml'
-    ));
-    $topic_footer->set_var('xhtml',XHTML);
-
-    if ( $canPost != 0 ) {
-        $newtopiclink = "{$_CONF['site_url']}/forum/createtopic.php?method=newtopic&amp;forum=$forum";
-        $newtopiclinkimg = '<img src="'.gf_getImage('post_newtopic').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF01['NEWTOPIC'].'" title="'.$LANG_GF01['NEWTOPIC'].'"' . XHTML . '>';
-        $topic_footer->set_var('layout_url', $_CONF['layout_url']);
-        $topicDisplayTime = $mytimer->stopTimer();
-        $topic_footer->set_var ('page_generated_time', sprintf($LANG_GF02['msg179'],$topicDisplayTime));
-        $topic_footer->set_var ('newtopiclink', $newtopiclink);
-        $topic_footer->set_var ('newtopiclinkimg', $newtopiclinkimg);
-        $topic_footer->set_var ('LANG_newtopic', $LANG_GF01['NEWTOPIC']);
-        $topic_footer->parse ('newtopic_link', 'new');
-        if($viewtopic['locked'] != 1) {
-            $replytopiclink = "{$_CONF['site_url']}/forum/createtopic.php?method=postreply&amp;forum=$forum&amp;id=$replytopic_id";
-            $replytopiclinkimg = '<img src="'.gf_getImage('post_reply').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF01['POSTREPLY'].'" title="'.$LANG_GF01['POSTREPLY'].'"' . XHTML . '>';
-            $topic_footer->set_var ('replytopiclink', $replytopiclink);
-            $topic_footer->set_var ('replytopiclinkimg', $replytopiclinkimg);
-            $topic_footer->set_var ('LANG_reply', $LANG_GF01['POSTREPLY']);
-            $topic_footer->parse ('replytopic_link', 'reply');
+if (!$iframe) {
+    DB_query("UPDATE {$_TABLES['ff_topic']} SET views=views+1 WHERE id=".(int) $showtopic);
+//@TODO look at optimizing this better
+    if ( !COM_isAnonUser() ) {
+        $showtopicpid = $showtopic;
+        $forumid      = $viewtopic['forum'];
+        $lrows = DB_count($_TABLES['ff_log'],array('uid','topic'),array((int) $_USER['uid'], (int) $showtopic));
+        $logtime = time();
+        if ($lrows < 1) {
+            DB_query("INSERT INTO {$_TABLES['ff_log']} (uid,forum,topic,time) VALUES (".(int) $_USER['uid'].",".(int) $forumid.",". (int) $showtopicpid.",".$logtime.")");
+        } else {
+            DB_query("UPDATE {$_TABLES['ff_log']} SET time=".$logtime." WHERE uid=".(int) $_USER['uid'] ." AND topic=".(int) $showtopic);
         }
     }
 } else {
     $base_url .= '&amp;onlytopic=1';
-    $topic_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
-    $topic_footer->set_file (array ('topicfooter'=>'topicfooter_preview.thtml'));
-    $topic_footer->set_var('xhtml',XHTML);
 }
+$topicTemplate->set_var(array(
+        'pagenavigation'  => COM_printPageNavigation($base_url,$page,$numpages),
+        'page_generated_time',sprintf($LANG_GF02['msg179'],$mytimer->stopTimer())));
 
-if ( !isset($cat_name) ) {
-    $cat_name = DB_getItem($_TABLES['gf_categories'],"cat_name","id={$viewtopic['forum_cat']}");
+$topicTemplate->parse ('output', 'topictemplate');
+$display .= $topicTemplate->finish($topicTemplate->get_var('output'));
+
+if( !$iframe ) {
+    $display .= FF_BaseFooter();
+    $display .= FF_siteFooter();
 }
-
-$topic_footer->set_var('forum_home',$LANG_GF01['INDEXPAGE']);
-$topic_footer->set_var ('cat_name', $cat_name); // DB_getItem($_TABLES['gf_categories'],"cat_name","id={$viewtopic['forum_cat']}"));
-$topic_footer->set_var ('cat_id',$viewtopic['forum_cat']);
-$topic_footer->set_var ('forum_id', $forum);
-$topic_footer->set_var ('forum_name', $viewtopic['forum_name']);
-
-$topic_footer->set_var ('pagenavigation', COM_printPageNavigation($base_url,$page, $numpages));
-$topic_footer->set_var ('forum_id', $forum);
-$topic_footer->parse ('output', 'topicfooter');
-echo $topic_footer->finish($topic_footer->get_var('output'));
-
-$forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
-$forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
-$forum_outline_footer->set_var ('xhtml',XHTML);
-$forum_outline_footer->parse ('output', 'forum_outline_footer');
-echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
-
-$intervalTime = $mytimer->stopTimer();
-
-if(!isset($_REQUEST['onlytopic']) || $_REQUEST['onlytopic'] != 1) {
-    echo BaseFooter();
-    gf_siteFooter();
-} else {
-    echo '</body>' . LB;
-    echo '</html>' . LB;
-}
+echo $display;
 ?>

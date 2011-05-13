@@ -1,9 +1,0 @@
-{# begin {templatelocation} #}
-<tr class="pluginRollOut pluginLinks" onmouseover="className='pluginRollOver pluginLinks';" onmouseout="className='pluginRollOut pluginLinks';">
-    <td style="width:25px;vertical-align:top;">{folderimg}</td>
-    <td class="alignleft pluginCellText" style="width:60%;vertical-align:top;" onmouseover="this.style.cursor='pointer';" onclick="window.location.href='index.php?forum={forum_id}'; this.style.cursor='pointer';"><a class="pluginLinks" style="text-decoration:none;" href="index.php?forum={forum_id}">{forum_name}</a><div style="text-align:left">{forum_desc}</div>{moderator}</td>
-    <td class="aligncenter pluginCellText" style="width:5%;vertical-align:top;">{topics}</td>
-    <td class="aligncenter pluginCellText" style="width:5%;vertical-align:top;">{posts}</td>
-    <td class="alignleft pluginCellText" style="width:5%;vertical-align:top;white-space:nowrap;" onmouseover="this.style.cursor='pointer';" onclick="window.location.href='viewtopic.php?showtopic={topic_id}&amp;lastpost=true#{lastpostid}'; this.style.cursor='pointer';">{lastpostmsgDate}<br{xhtml}>{lastpostmsgTopic}<br{xhtml}>{lastpostmsgBy}</td>
-</tr>
-{# end {templatelocation} #}

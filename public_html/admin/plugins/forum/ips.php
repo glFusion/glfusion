@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -37,31 +37,45 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once 'gf_functions.php';
-require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
+require_once '../../../lib-common.php';
+require_once '../../auth.inc.php';
 
-$ip = COM_applyFilter($_REQUEST['ip']);
-$forum = COM_applyFilter($_REQUEST['forum'],true);
-$op = COM_applyFilter($_REQUEST['op']);
+if (!SEC_hasRights('forum.edit')) {
+  $display = COM_siteHeader();
+  $display .= COM_startBlock($LANG_GF00['access_denied']);
+  $display .= $LANG_GF00['admin_only'];
+  $display .= COM_endBlock();
+  $display .= COM_siteFooter(true);
+  echo $display;
+  exit();
+}
 
-echo COM_siteHeader();
-echo COM_startBlock($LANG_GF96['gfipman']);
-echo glfNavbar($navbarMenu,$LANG_GF06['7']);
+USES_forum_functions();
+USES_forum_format();
+USES_forum_admin();
+
+$ip     = isset($_REQUEST['ip']) ? COM_applyFilter($_REQUEST['ip']) : '';
+$forum  = isset($_REQUEST['forum']) ? COM_applyFilter($_REQUEST['forum'],true) : 0;
+$op     = isset($_REQUEST['op']) ? COM_applyFilter($_REQUEST['op']) : '';
+
+$dipslay  = FF_siteHeader();
+$display .=  COM_startBlock($LANG_GF96['gfipman']);
+$display .= FF_Navbar($navbarMenu,$LANG_GF06['7']);
 
 if (($op == 'banip') && ($ip != '')) {
     if($_POST['sure'] == 'yes') {
-        DB_query("INSERT INTO {$_TABLES['gf_banned_ip']} (host_ip) VALUES ('$ip')");
-        forum_statusMessage($LANG_GF96['ipbanned'],$_CONF['site_admin_url'] .'/plugins/forum/ips.php',$LANG_GF96['ipbanned']);
-        echo COM_endBlock();
-        echo adminfooter();
-        echo COM_siteFooter();
+        DB_query("INSERT INTO {$_TABLES['ff_banned_ip']} (host_ip) VALUES ('".DB_escapeString($ip)."')");
+        $display .= FF_statusMessage($LANG_GF96['ipbanned'],$_CONF['site_admin_url'] .'/plugins/forum/ips.php',$LANG_GF96['ipbanned']);
+        $display .= COM_endBlock();
+        $display .= FF_adminfooter();
+        $display .= FF_siteFooter();
+        echo $display;
         exit;
     }
 
     if ($_POST['sure'] != 'yes') {
-//        $ips_unban = new Template($_CONF['path_layout'] . 'forum/layout/admin');
         $ips_unban = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
-        $ips_unban->set_file (array ('ips_unban'=>'ips_unban.thtml'));
+        $ips_unban->set_file ('ips_unban','ips_unban.thtml');
         $ips_unban->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/ips.php');
         $ips_unban->set_var ('deletenote1', sprintf($LANG_GF93['deleteforumnote1'], $forumname));
         $ips_unban->set_var ('deletenote2', $LANG_GF93['deleteforumnote21']);
@@ -72,47 +86,47 @@ if (($op == 'banip') && ($ip != '')) {
         $ips_unban->set_var ('msg2', sprintf($LANG_GF96['banipmsg'], $ip));
         $ips_unban->set_var ('ban', $LANG_GF96['ban']);
         $ips_unban->parse ('output', 'ips_unban');
-        echo $ips_unban->finish ($ips_unban->get_var('output'));
-        echo COM_endBlock();
-        echo adminfooter();
-        echo COM_siteFooter();
+        $display .= $ips_unban->finish ($ips_unban->get_var('output'));
+        $display .= COM_endBlock();
+        $display .= FF_adminfooter();
+        $display .= FF_siteFooter();
+        echo $display;
         exit;
     }
 
 } elseif (($op == 'banip') && ($ip == '')) {
-//    $messagetemplate = new Template($_CONF['path_layout'] . 'forum/layout/admin');
     $messagetemplate = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
     $messagetemplate->set_file (array ('messagetemplate'=>'message.thtml'));
     $messagetemplate->set_var ('message', $LANG_GF01['ERROR']);
     $messagetemplate->set_var ('transfer', $LANG_GF96['specip']);
     $messagetemplate->parse ('output', 'messagetemplate');
-    echo $messagetemplate->finish ($messagetemplate->get_var('output'));
-    echo COM_endBlock();
-    echo adminfooter();
-    echo COM_siteFooter(true);
+    $display .= $messagetemplate->finish ($messagetemplate->get_var('output'));
+    $display .= COM_endBlock();
+    $display .= FF_adminfooter();
+    $display .= FF_siteFooter();
+    echo $display;
     exit();
 }
 
 if (($op == 'unban') && ($ip != '')) {
-    DB_query ("DELETE FROM {$_TABLES['gf_banned_ip']} WHERE (host_ip='$ip')");
-    forum_statusMessage($LANG_GF96['ipunbanned'],$_CONF['site_admin_url'] .'/plugins/forum/ips.php',$LANG_GF96['ipunbanned']);
-    echo COM_endBlock();
-    echo adminfooter();
-    echo COM_siteFooter();
+    DB_query ("DELETE FROM {$_TABLES['ff_banned_ip']} WHERE (host_ip='".DB_escapeString($ip)."')");
+    $display .= FF_statusMessage($LANG_GF96['ipunbanned'],$_CONF['site_admin_url'] .'/plugins/forum/ips.php',$LANG_GF96['ipunbanned']);
+    $display .= COM_endBlock();
+    $display .= FF_adminfooter();
+    $display .= FF_siteFooter();
 }
 
 
 if (!empty($forum)) {
-    $theforum = "WHERE forum='$forum'";
+    $theforum = "WHERE forum=".(int) $forum;
 } else {
     $theforum = '';
 }
 
 
 if ($op == '') {
-    $bannedsql = DB_query("SELECT * FROM {$_TABLES['gf_banned_ip']} ORDER BY host_ip DESC");
+    $bannedsql = DB_query("SELECT * FROM {$_TABLES['ff_banned_ip']} ORDER BY host_ip DESC");
     $bannum = DB_numRows($bannedsql);
-//    $p = new Template($_CONF['path_layout'] . 'forum/layout/admin');
     $p = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
     $p->set_file (array ('page' => 'banip_mgmt.thtml', 'records' => 'ip_records.thtml'));
     if ($bannum == 0) {
@@ -133,11 +147,11 @@ if ($op == '') {
         $i = ($i == 1 ) ? 2 : 1;
     }
     $p->parse ('output', 'page');
-    echo $p->finish ($p->get_var('output'));
+    $display .= $p->finish ($p->get_var('output'));
 }
 
-echo COM_endBlock();
-echo adminfooter();
-echo COM_siteFooter();
-
+$display .= COM_endBlock();
+$display .= FF_adminfooter();
+$display .= FF_siteFooter();
+echo $display;
 ?>

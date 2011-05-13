@@ -1,10 +1,8 @@
 <?php
+$_SQL[] = "ALTER TABLE {$_TABLES['ff_topic']} DROP cat";
+$_SQL[] = "ALTER TABLE {$_TABLES['ff_topic']} DROP topicimg";
 
-
-$_SQL[] = "ALTER TABLE {$_TABLES['gf_topic']} DROP cat";
-$_SQL[] = "ALTER TABLE {$_TABLES['gf_topic']} DROP topicimg";
-
-$_SQL[] = "CREATE TABLE {$_TABLES['gf_userinfo']} (
+$_SQL[] = "CREATE TABLE {$_TABLES['ff_userinfo']} (
   `uid` mediumint(8) NOT NULL default '0',
   `location` varchar(128) NOT NULL default '',
   `aim` varchar(128) NOT NULL default '',
@@ -14,6 +12,6 @@ $_SQL[] = "CREATE TABLE {$_TABLES['gf_userinfo']} (
   `interests` varchar(255) NOT NULL default '',
   `occupation` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`uid`)
-) TYPE=MyISAM COMMENT='Forum Extra User Profile Information';";
+) ENGINE=MyISAM COMMENT='Forum Extra User Profile Information';";
 
 ?>

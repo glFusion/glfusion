@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2011 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Forum Plugin for Geeklog CMS                                |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -33,20 +36,27 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
-require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
-$id = COM_applyFilter($_GET['id'],true);
 
-if (!COM_isAnonUser()) {
-    if (DB_count($_TABLES['gf_bookmarks'],array('uid','topic_id'),array($_USER['uid'],$id))) {
-        $bookmarkimg = '<img src="'.gf_getImage('star_off_sm').'" title="'.$LANG_GF02['msg203'].'" alt="' . $LANG_GF02['msg203'] .'" />';
-        DB_query("DELETE FROM {$_TABLES['gf_bookmarks']} WHERE uid={$_USER['uid']} AND topic_id=$id");
-    } elseif (DB_count($_TABLES['gf_bookmarks'],array('uid','pid'),array($_USER['uid'],$id))) {
-        $bookmarkimg = '<img src="'.gf_getImage('star_off_sm').'" title="'.$LANG_GF02['msg203'].'" alt="'.$LANG_GF02['msg203'].'"/>';
-        DB_query("DELETE FROM {$_TABLES['gf_bookmarks']} WHERE uid={$_USER['uid']} AND pid=$id");
+if (!in_array('forum', $_PLUGINS)) {
+    exit;
+}
+
+USES_forum_functions();
+USES_forum_format();
+
+$id = isset($_GET['id']) ? COM_applyFilter($_GET['id'],true) : 0;
+
+if (!COM_isAnonUser() && $id != 0) {
+    if (DB_count($_TABLES['ff_bookmarks'],array('uid','topic_id'),array((int)$_USER['uid'],(int)$id))) {
+        $bookmarkimg = '<img src="'._ff_getImage('star_off_sm').'" title="'.$LANG_GF02['msg203'].'" alt="' . $LANG_GF02['msg203'] .'" />';
+        DB_query("DELETE FROM {$_TABLES['ff_bookmarks']} WHERE uid=".(int) $_USER['uid']." AND topic_id=".(int)$id);
+    } elseif (DB_count($_TABLES['ff_bookmarks'],array('uid','pid'),array($_USER['uid'],$id))) {
+        $bookmarkimg = '<img src="'._ff_getImage('star_off_sm').'" title="'.$LANG_GF02['msg203'].'" alt="'.$LANG_GF02['msg203'].'"/>';
+        DB_query("DELETE FROM {$_TABLES['ff_bookmarks']} WHERE uid=".(int) $_USER['uid']." AND pid=".(int)$id);
     } else {
-        $bookmarkimg = '<img src="'.gf_getImage('star_on_sm').'" TITLE="'.$LANG_GF02['msg204'].'">';
-        $pid = DB_getItem($_TABLES['gf_topic'],'pid',"id=$id");
-        DB_query("INSERT INTO {$_TABLES['gf_bookmarks']} (uid,topic_id,pid) VALUES ({$_USER['uid']},$id,$pid)");
+        $bookmarkimg = '<img src="'._ff_getImage('star_on_sm').'" title="'.$LANG_GF02['msg204'].'">';
+        $pid = DB_getItem($_TABLES['ff_topic'],'pid',"id=".(int) $id);
+        DB_query("INSERT INTO {$_TABLES['ff_bookmarks']} (uid,topic_id,pid) VALUES (".(int) $_USER['uid'].",".(int)$id.",".(int)$pid.")");
     }
     $html = '<a href="#" onclick="ajax_toggleForumBookmark('.$id.');return false;">'.$bookmarkimg.'</a>';
     $html = htmlentities ($html);

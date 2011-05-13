@@ -37,26 +37,40 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once 'gf_functions.php';
-require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
+require_once '../../../lib-common.php';
+require_once '../../auth.inc.php';
 
-$forum = COM_applyFilter($_REQUEST['forum'],true);
-$op = COM_applyFilter($_REQUEST['op']);
-$id = COM_applyFilter($_REQUEST['id'],true);
-$member = COM_applyFilter($_REQUEST['member'],true);
-$parentonly = COM_applyFilter($_REQUEST['parentonly'],true);
-$show = COM_applyFilter($_REQUEST['show'],true);
-$page = COM_applyFilter($_REQUEST['page'],true);
+if (!SEC_hasRights('forum.edit')) {
+  $display = COM_siteHeader();
+  $display .= COM_startBlock($LANG_GF00['access_denied']);
+  $display .= $LANG_GF00['admin_only'];
+  $display .= COM_endBlock();
+  $display .= COM_siteFooter(true);
+  echo $display;
+  exit();
+}
+
+USES_forum_functions();
+USES_forum_format();
+USES_forum_admin();
+
+$forum      = isset($_REQUEST['forum']) ? COM_applyFilter($_REQUEST['forum'],true) : 0;
+$op         = isset($_REQUEST['op']) ? COM_applyFilter($_REQUEST['op']) : '';
+$id         = isset($_REQUEST['id']) ? COM_applyFilter($_REQUEST['id'],true) : 0;
+$member     = isset($_REQUEST['member']) ? COM_applyFilter($_REQUEST['member'],true) : 0;
+$parentonly = isset($_REQUEST['parentonly']) ? COM_applyFilter($_REQUEST['parentonly'],true) : 0;
+$show       = isset($_REQUEST['show']) ? COM_applyFilter($_REQUEST['show'],true) : 0;
+$page       = isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'],true) : 0;
 
 function selectHTML_forum($selected='') {
     global $_CONF,$_TABLES;
     $selectHTML = '';
-    $asql = DB_query("SELECT * FROM {$_TABLES['gf_categories']} ORDER BY cat_order ASC");
+    $asql = DB_query("SELECT * FROM {$_TABLES['ff_categories']} ORDER BY cat_order ASC");
     while($A = DB_fetchArray($asql)) {
         $firstforum=true;
-        $bsql = DB_query("SELECT * FROM {$_TABLES['gf_forums']} WHERE forum_cat='$A[id]' ORDER BY forum_order ASC");
+        $bsql = DB_query("SELECT * FROM {$_TABLES['ff_forums']} WHERE forum_cat=".(int) $A['id']." ORDER BY forum_order ASC");
         while($B = DB_fetchArray($bsql)) {
-            $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='{$B['grp_id']}'");
+            $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id=".(int) $B['grp_id']);
             if (SEC_inGroup($groupname)) {
                 if ($firstforum) {
                     $selectHTML .= '<option value="-1">-------------------</option>';
@@ -77,7 +91,7 @@ function selectHTML_forum($selected='') {
 function selectHTML_members($selected='') {
     global $_CONF,$_TABLES,$LANG_GF02;
     $selectHTML = '';
-    $sql  = "SELECT  user.uid,user.username FROM {$_TABLES[users]} user, {$_TABLES[gf_topic]} topic ";
+    $sql  = "SELECT  user.uid,user.username FROM {$_TABLES['users']} user, {$_TABLES['ff_topic']} topic ";
     $sql .= "WHERE user.uid <> 1 AND user.uid=topic.uid GROUP by uid ORDER BY user.username";
     $memberlistsql = DB_query($sql);
     if ($selected == 1) {
@@ -100,16 +114,18 @@ function selectHTML_members($selected='') {
 if ($op == 'delchecked') {
     foreach ($_POST['chkrecid'] as $id) {
         $id = COM_applyFilter($id,true);
-        DB_query("DELETE FROM {$_TABLES['gf_topic']} WHERE ID='$id'");
+        DB_query("DELETE FROM {$_TABLES['ff_topic']} WHERE id=".(int) $id);
     }
+    gf_resyncforum($forum);
 } elseif ($op == 'delrecord') {
-   DB_query("DELETE FROM {$_TABLES['gf_topic']} WHERE ID='$id'");
+    DB_query("DELETE FROM {$_TABLES['ff_topic']} WHERE id=".(int) $id);
+    gf_resyncforum($forum);
 }
 
 // Page Navigation Logic
 
 if (empty($show)) {
-    $show = $CONF_FORUM['show_messages_perpage'];
+    $show = $_FF_CONF['show_messages_perpage'];
 }
 // Check if this is the first page.
 if (empty($page)) {
@@ -120,8 +136,8 @@ $whereSQL = '';
 $forumname = '';
 
 if ($forum > 0) {
-    $whereSQL = " WHERE forum='$forum'";
-    $forumname = stripslashes(DB_getItem($_TABLES['gf_forums'],'forum_name',"forum_id='{$forum}'"));
+    $whereSQL = " WHERE forum=".(int) $forum;
+    $forumname = DB_getItem($_TABLES['ff_forums'],'forum_name',"forum_id=".(int) $forum);
 }
 if ($member > 1) {
     if ($whereSQL == '') {
@@ -129,7 +145,7 @@ if ($member > 1) {
     } else {
         $whereSQL .= ' AND ';
     }
-    $whereSQL .= " uid='$member'";
+    $whereSQL .= " uid=".(int) $member;
 }
 if ($parentonly == 1) {
     if ($whereSQL == '') {
@@ -137,14 +153,13 @@ if ($parentonly == 1) {
     } else {
         $whereSQL .= ' AND ';
     }
-    $whereSQL .= " pid='0'";
+    $whereSQL .= " pid=0";
 }
-$sql = "SELECT * FROM {$_TABLES['gf_topic']} $whereSQL ORDER BY id DESC";
+$sql = "SELECT * FROM {$_TABLES['ff_topic']} $whereSQL ORDER BY id DESC";
 $result = DB_query($sql);
 $num_messages = DB_numRows($result);
 
-echo COM_siteHeader();
-///$report = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+$display = FF_siteHeader();
 $report = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
 $report->set_file (array ('messages'=>'messages.thtml', 'records' => 'message_line.thtml'));
 $report->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/messages.php');
@@ -165,9 +180,9 @@ $report->set_var ('LANG_Delete', $LANG_GF01['DELETE']);
 
 $report->set_var ('select_forum',selectHTML_forum($forum));
 $report->set_var ('select_member',selectHTML_members($member));
-$report->set_var('navbar', glfNavbar($navbarMenu,$LANG_GF06['6']));
+$report->set_var('navbar', FF_Navbar($navbarMenu,$LANG_GF06['6']));
 if ($parentonly == 1) {
-    $report->set_var('chk_parentonly', 'CHECKED=CHECKED');
+    $report->set_var('chk_parentonly', 'checked="checked"');
 }
 
 if ($num_messages == 0) {
@@ -190,7 +205,7 @@ if ($num_messages == 0) {
     $base_url = $_CONF['site_admin_url'] . '/plugins/forum/messages.php?forum='.$forum;
     $report->set_var ('pagenav', COM_printPageNavigation($base_url,$page, $numpages));
 
-    $query = DB_query("SELECT * FROM {$_TABLES['gf_topic']} $whereSQL ORDER BY id DESC LIMIT $offset, $show");
+    $query = DB_query("SELECT * FROM {$_TABLES['ff_topic']} $whereSQL ORDER BY id DESC LIMIT $offset, $show");
     $csscode = 1;
     while($A = DB_fetchArray($query)){
         $report->set_var ('id', $A['id']);
@@ -223,8 +238,8 @@ if ($num_messages == 0) {
 
 
 $report->parse ('output', 'messages');
-echo $report->finish ($report->get_var('output'));
-echo COM_siteFooter();
-
-
+$display .= $report->finish ($report->get_var('output'));
+$display .= FF_adminfooter();
+$display .= FF_siteFooter();
+echo $display;
 ?>

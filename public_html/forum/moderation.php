@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -38,8 +38,6 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
-require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
-require_once $_CONF['path'] . 'plugins/forum/include/gf_showtopic.php';
 
 if (!in_array('forum', $_PLUGINS)) {
     COM_404();
@@ -51,6 +49,10 @@ if ( COM_isAnonUser() ) {
     echo COM_refresh($_CONF['site_url'].'/users.php');
     exit;
 }
+
+USES_forum_functions();
+USES_forum_format();
+USES_forum_topic();
 
 /**
   * Delete forum post(s)
@@ -66,43 +68,50 @@ if ( COM_isAnonUser() ) {
   */
 function moderator_deletePost($topic_id,$topic_parent_id,$forum_id)
 {
-    global $_CONF, $_USER, $_TABLES, $CONF_FORUM, $LANG_GF02;
+    global $_CONF, $_USER, $_TABLES, $_FF_CONF, $LANG_GF02;
 
     $retval = '';
 
-    $topicparent = DB_getItem($_TABLES['gf_topic'],"pid","id='$topic_id'");
+    $topicparent = DB_getItem($_TABLES['ff_topic'],"pid","id=". (int) $topic_id);
     if ($topicparent == 0) {
         // Need to check for any attachments and delete if required
-        $q1 = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE pid=$topic_id OR id=$topic_id");
+        $q1 = DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE pid=".(int) $topic_id." OR id=".(int) $topic_id);
         while($A = DB_fetchArray($q1)) {
-            $q2 = DB_query("SELECT id FROM {$_TABLES['gf_attachments']} WHERE topic_id={$A['id']}");
+            $q2 = DB_query("SELECT id FROM {$_TABLES['ff_attachments']} WHERE topic_id=".(int) $A['id']);
             while ($B = DB_fetchArray($q2)) {
                 forum_delAttachment($B['id']);
             }
             PLG_itemDeleted($A['id'],'forum');
         }
-        DB_query("DELETE FROM {$_TABLES['gf_topic']} WHERE (id=$topic_id)");
-        DB_query("DELETE FROM {$_TABLES['gf_topic']} WHERE (pid=$topic_id)");
+        DB_query("DELETE FROM {$_TABLES['ff_topic']} WHERE id=".(int) $topic_id);
+        DB_query("DELETE FROM {$_TABLES['ff_topic']} WHERE pid=".(int) $topic_id);
         DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE (type='forum' AND id=".(int)$topic_id.")");
-        $postCount = DB_Count($_TABLES['gf_topic'],'forum',$forum_id);
-        $topicsQuery = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE forum=$forum_id and pid=0");
+        $postCount = DB_Count($_TABLES['ff_topic'],'forum',(int) $forum_id);
+        $topicsQuery = DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE forum=".(int) $forum_id." AND pid=0");
         $topicCount = DB_numRows($topicsQuery);
-        DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=$topicCount,post_count=$postCount WHERE forum_id=$forum_id");
+        DB_query("UPDATE {$_TABLES['ff_forums']} SET topic_count=".(int) $topicCount.",post_count=".(int) $postCount." WHERE forum_id=".(int) $forum_id);
         // Remove any lastviewed records in the log so that the new updated topic indicator will appear
-        DB_query("DELETE FROM {$_TABLES['gf_log']} WHERE topic=$topicparent");
+        DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE topic=".(int) $topicparent);
     } else {
         // Need to check for any attachments and delete if required
-        $q1 = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE id=$topic_id");
+        $q1 = DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE id=".(int) $topic_id);
         while($A = DB_fetchArray($q1)) {
-            $q2 = DB_query("SELECT id FROM {$_TABLES['gf_attachments']} WHERE topic_id={$A['id']}");
+            $q2 = DB_query("SELECT id FROM {$_TABLES['ff_attachments']} WHERE topic_id=".(int) $A['id']);
             while ($B = DB_fetchArray($q2)) {
                 forum_delAttachment($B['id']);
             }
         }
-        DB_query("UPDATE {$_TABLES['gf_topic']} SET replies=replies-1 WHERE (id=$topicparent)");
-        DB_query("DELETE FROM {$_TABLES['gf_topic']} WHERE (id='$topic_id')");
-        $postCount = DB_Count($_TABLES['gf_topic'],'forum',$forum_id);
-        DB_query("UPDATE {$_TABLES['gf_forums']} SET post_count=$postCount WHERE forum_id=$forum_id");
+        DB_query("UPDATE {$_TABLES['ff_topic']} SET replies=replies-1 WHERE id=".(int) $topicparent);
+        DB_query("DELETE FROM {$_TABLES['ff_topic']} WHERE id=".(int) $topic_id);
+        $postCount = DB_Count($_TABLES['ff_topic'],'forum',(int) $forum_id);
+        DB_query("UPDATE {$_TABLES['ff_forums']} SET post_count=".(int) $postCount." WHERE forum_id=".(int) $forum_id);
+
+        $sql = "SELECT count(*) AS count FROM {$_TABLES['ff_topic']} topic left join {$_TABLES['ff_attachments']} att ON topic.id=att.topic_id WHERE (topic.id=".(int) $topicparent. " OR topic.pid=".(int) $topicparent.") and att.filename <> ''";
+        $result = DB_query($sql);
+        if ( DB_numRows($result) > 0 ) {
+            list($attCount) = DB_fetchArray($result);
+            DB_query("UPDATE {$_TABLES['ff_topic']} SET attachments=".(int) $attCount." WHERE id=".(int) $topicparent);
+        }
         PLG_itemDeleted($topic_id,'forum');
     }
     if ( $topicparent == 0 ) {
@@ -115,11 +124,11 @@ function moderator_deletePost($topic_id,$topic_parent_id,$forum_id)
     CACHE_remove_instance('forumcb');
 
     if ($topicparent == $topic_id ) {
-        $link = "{$_CONF['site_url']}/forum/index.php?forum=$forum_id";
-        $retval .= forum_statusMessage($LANG_GF02['msg55'],$link,$LANG_GF02['msg55'],true,$forum_id,true);
+        $link = $_CONF['site_url'].'/forum/index.php?forum='.$forum_id;
+        $retval .= FF_statusMessage($LANG_GF02['msg55'],$link,$LANG_GF02['msg55'],true,$forum_id,true);
     } else {
-        $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$topicparent";
-        $retval .= forum_statusMessage($LANG_GF02['msg55'],$link,$LANG_GF02['msg55'],true,$forum_id,true);
+        $link = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$topicparent;
+        $retval .= FF_statusMessage($LANG_GF02['msg55'],$link,$LANG_GF02['msg55'],true,$forum_id,true);
     }
 
     return $retval;
@@ -140,15 +149,15 @@ function moderator_deletePost($topic_id,$topic_parent_id,$forum_id)
   */
 function moderator_banIP($topic_id,$topic_parent_id,$forum_id,$hostip)
 {
-    global $_CONF, $_USER, $_TABLES, $CONF_FORUM, $LANG_GF02;
+    global $_CONF, $_USER, $_TABLES, $_FF_CONF, $LANG_GF02;
 
     $retval = '';
 
-    DB_query("INSERT INTO {$_TABLES['gf_banned_ip']} (host_ip) VALUES ('".DB_escapeString($hostip)."')");
+    DB_query("INSERT INTO {$_TABLES['ff_banned_ip']} (host_ip) VALUES ('".DB_escapeString($hostip)."')");
 
     $link = $_CONF['site_url']."/forum/viewtopic.php?showtopic=$topic_id";
 
-    $retval .= forum_statusMessage($LANG_GF02['msg56'],$link,$LANG_GF02['msg56'],false,'',true);
+    $retval .= FF_statusMessage($LANG_GF02['msg56'],$link,$LANG_GF02['msg56'],false,'',true);
 
     return $retval;
 }
@@ -171,85 +180,109 @@ function moderator_banIP($topic_id,$topic_parent_id,$forum_id,$hostip)
   */
 function moderator_movePost($topic_id,$topic_parent_id,$forum_id, $move_to_forum, $new_topic_title,$splittype)
 {
-    global $_CONF, $_USER, $_TABLES, $CONF_FORUM, $LANG_GF02;
+    global $_CONF, $_USER, $_TABLES, $_FF_CONF, $LANG_GF02;
 
     $retval = '';
 
     $date = time();
-    $movetitle = gf_preparefordb($new_topic_title,text);
+    $movetitle = _ff_preparefordb($new_topic_title,'text');
     $newforumid = $move_to_forum;
     /* Check and see if we are splitting this forum thread */
 
     if ($splittype != '') {
-        $curpostpid = DB_getItem($_TABLES['gf_topic'],"pid","id=$topic_id");
+        $curpostpid = DB_getItem($_TABLES['ff_topic'],"pid","id=".(int) $topic_id);
         if ( $curpostpid == '' || $curpostpid == 0 ) {
-            echo COM_refresh($_CONF['site_url']."/forum/viewtopic.php?showtopic=$topic_id");
+            echo COM_refresh($_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$topic_id);
             exit();
         }
         if ($splittype == 'single' ) {  // Move only the single post - create a new topic
-            $topicdate = DB_getItem($_TABLES['gf_topic'],"date","id=$topic_id");
-            $sql  = "UPDATE {$_TABLES['gf_topic']} SET forum=$move_to_forum, pid=0,lastupdated='$topicdate', ";
-            $sql .= "subject='$movetitle', replies = '0' WHERE id=$topic_id ";
+            $topicdate = DB_getItem($_TABLES['ff_topic'],"date","id=".(int) $topic_id);
+            $sql  = "UPDATE {$_TABLES['ff_topic']} SET forum=".(int) $move_to_forum.", pid=0,lastupdated='".DB_escapeString($topicdate)."', ";
+            $sql .= "subject='".DB_escapeString($movetitle)."', replies=0 WHERE id=".(int) $topic_id;
             DB_query($sql);
-            DB_query("UPDATE {$_TABLES['gf_topic']} SET replies=replies-1 WHERE id=$curpostpid ");
+            DB_query("UPDATE {$_TABLES['ff_topic']} SET replies=replies-1 WHERE id=".(int) $curpostpid);
 
             // Update Topic and Post Count for the effected forums
             // new forum
-            $postCount   = DB_Count($_TABLES['gf_topic'],'forum',$move_to_forum);
-            $topicsQuery = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE forum=$move_to_forum and pid=0");
+            $postCount   = DB_Count($_TABLES['ff_topic'],'forum',(int) $move_to_forum);
+            $topicsQuery = DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE forum=".(int) $move_to_forum." AND pid=0");
             $topicCount  = DB_numRows($topicsQuery);
-            DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=$topicCount, post_count=$postCount WHERE forum_id=$move_to_forum");
+            DB_query("UPDATE {$_TABLES['ff_forums']} SET topic_count=".(int)$topicCount.", post_count=".(int)$postCount." WHERE forum_id=".(int)$move_to_forum);
             //oldforum
-            $postCount = DB_Count($_TABLES['gf_topic'],'forum',$forum_id);
-		    $topicsQuery = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE forum=$forum_id and pid=0");
+            $postCount = DB_Count($_TABLES['ff_topic'],'forum',(int)$forum_id);
+		    $topicsQuery = DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE forum=".(int) $forum_id." AND pid=0");
 		    $topic_count = DB_numRows($topicsQuery);
-            DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=$topic_count, post_count=$postCount WHERE forum_id=$forum_id");
+            DB_query("UPDATE {$_TABLES['ff_forums']} SET topic_count=".(int)$topic_count.", post_count=".(int)$postCount." WHERE forum_id=".(int)$forum_id);
 
             // Update the Forum and topic indexes
             gf_updateLastPost($forum_id,$curpostpid);
             gf_updateLastPost($move_to_forum,$topic_id);
 
+            $sql = "SELECT count(*) AS count FROM {$_TABLES['ff_topic']} topic LEFT JOIN {$_TABLES['ff_attachments']} att ON topic.id=att.topic_id WHERE (topic.id=".(int) $curpostpid. " OR topic.pid=".(int) $curpostpid.") and att.filename <> ''";
+            $result = DB_query($sql);
+            if ( DB_numRows($result) > 0 ) {
+                list($attCount) = DB_fetchArray($result);
+                DB_query("UPDATE {$_TABLES['ff_topic']} SET attachments=".(int) $attCount." WHERE id=".(int) $curpostpid);
+            }
+            $sql = "SELECT count(*) AS count FROM {$_TABLES['ff_topic']} topic LEFT JOIN {$_TABLES['ff_attachments']} att ON topic.id=att.topic_id WHERE (topic.id=".(int) $topic_id. " OR topic.pid=".(int) $topic_id.") and att.filename <> ''";
+            $result = DB_query($sql);
+            if ( DB_numRows($result) > 0 ) {
+                list($attCount) = DB_fetchArray($result);
+                DB_query("UPDATE {$_TABLES['ff_topic']} SET attachments=".(int) $attCount." WHERE id=".(int) $topic_id);
+            }
         } else { // move all posts from this point forward.
-            $movesql = DB_query("SELECT id,date FROM {$_TABLES['gf_topic']} WHERE pid=$curpostpid AND id >= $topic_id");
+            $movesql = DB_query("SELECT id,date FROM {$_TABLES['ff_topic']} WHERE pid=".(int) $curpostpid." AND id >= ".(int) $topic_id);
             $numreplies = DB_numRows($movesql); // how many replies are being moved.
             $topicparent = 0;
             while($movetopic = DB_fetchArray($movesql)) {
                 if ($topicparent == 0) {
-                    $sql  = "UPDATE {$_TABLES['gf_topic']} SET forum=$move_to_forum, pid=0,lastupdated='{$movetopic['date']}', ";
-                    $sql .= "replies=$numreplies - 1, subject='$movetitle' WHERE id={$movetopic['id']}";
+                    $sql  = "UPDATE {$_TABLES['ff_topic']} SET forum=".(int)$move_to_forum.", pid=0,lastupdated='".DB_escapeString($movetopic['date'])."', ";
+                    $sql .= "replies=".(int) ($numreplies-1).", subject='".DB_escapeString($movetitle)."' WHERE id=".(int)$movetopic['id'];
                     DB_query($sql);
                     $topicparent = $movetopic['id'];
                 } else {
-                    $sql  = "UPDATE {$_TABLES['gf_topic']} SET forum=$move_to_forum, pid=$topicparent, ";
-                    $sql .= "subject='$movetitle' WHERE id='{$movetopic['id']}'";
+                    $sql  = "UPDATE {$_TABLES['ff_topic']} SET forum=".(int)$move_to_forum.", pid=".(int)$topicparent.", ";
+                    $sql .= "subject='".DB_escapeString($movetitle)."' WHERE id=".(int)$movetopic['id'];
                     DB_query($sql);
-                    $topicdate = DB_getItem($_TABLES['gf_topic'],"date","id={$movetopic['id']}");
-                    DB_query("UPDATE {$_TABLES['gf_topic']} SET lastupdated='$topicdate' WHERE id=$topicparent");
+                    $topicdate = DB_getItem($_TABLES['ff_topic'],"date","id=".(int)$movetopic['id']);
+                    DB_query("UPDATE {$_TABLES['ff_topic']} SET lastupdated='".DB_escapeString($topicdate)."' WHERE id=".(int)$topicparent);
                 }
             }
             // update counters
             // new forum
-            $postCount = DB_Count($_TABLES['gf_topic'],'forum',$move_to_forum);
-            $topicsQuery = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE forum=$move_to_forum and pid=0");
+            $postCount = DB_Count($_TABLES['ff_topic'],'forum',(int) $move_to_forum);
+            $topicsQuery = DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE forum=".(int)$move_to_forum." AND pid=0");
             $topicCount = DB_numRows($topicsQuery);
-            DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=$topicCount, post_count=$postCount WHERE forum_id=$move_to_forum");
-            //oldforum
-            $postCount = DB_Count($_TABLES['gf_topic'],'forum',$forum);
-		    $topicsQuery = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE forum=$forum_id and pid=0");
-		    $topic_count = DB_numRows($topicsQuery);
-            DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=$topic_count, post_count=$postCount WHERE forum_id=$forum_id");
+            DB_query("UPDATE {$_TABLES['ff_forums']} SET topic_count=".(int)$topicCount.", post_count=".(int)$postCount." WHERE forum_id=".(int)$move_to_forum);
 
+            $sql = "SELECT count(*) AS count FROM {$_TABLES['ff_topic']} topic left join {$_TABLES['ff_attachments']} att ON topic.id=att.topic_id WHERE (topic.id=".(int) $topicparent. " OR topic.pid=".(int) $topicparent.") and att.filename <> ''";
+            $result = DB_query($sql);
+            if ( DB_numRows($result) > 0 ) {
+                list($attCount) = DB_fetchArray($result);
+                DB_query("UPDATE {$_TABLES['ff_topic']} SET attachments=".(int) $attCount." WHERE id=".(int) $topicparent);
+            }
+            //oldforum
+            $postCount = DB_Count($_TABLES['ff_topic'],'forum',(int)$forum_id);
+		    $topicsQuery = DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE forum=".(int)$forum_id." AND pid=0");
+		    $topic_count = DB_numRows($topicsQuery);
+            DB_query("UPDATE {$_TABLES['ff_forums']} SET topic_count=$topic_count, post_count=$postCount WHERE forum_id=$forum_id");
+            $sql = "SELECT count(*) AS count FROM {$_TABLES['ff_topic']} topic left join {$_TABLES['ff_attachments']} att ON topic.id=att.topic_id WHERE (topic.id=".(int) $curpostpid. " OR topic.pid=".(int) $curpostpid.") and att.filename <> ''";
+            $result = DB_query($sql);
+            if ( DB_numRows($result) > 0 ) {
+                list($attCount) = DB_fetchArray($result);
+                DB_query("UPDATE {$_TABLES['ff_topic']} SET attachments=".$attCount." WHERE id=".(int) $curpostpid);
+            }
             // Update the Forum and topic indexes
             gf_updateLastPost($forum_id,$curpostpid);
             gf_updateLastPost($move_to_forum,$topicparent);
         }
         $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$topic_id";
-        $retval .= forum_statusMessage(sprintf($LANG_GF02['msg183'],$move_to_forum),$link,$LANG_GF02['msg183'],false,'',true);
+        $retval .= FF_statusMessage(sprintf($LANG_GF02['msg183'],$move_to_forum),$link,$LANG_GF02['msg183'],false,'',true);
     } else {  // Move complete topic
-        $moveResult = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE pid=$topic_id");
+        $moveResult = DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE pid=".(int) $topic_id);
         $postCount = DB_numRows($moveResult)+1;  // Need to account for the parent post
         while($movetopic = DB_fetchArray($moveResult)) {
-            DB_query("UPDATE {$_TABLES['gf_topic']} SET forum=$move_to_forum WHERE id={$movetopic['id']}");
+            DB_query("UPDATE {$_TABLES['ff_topic']} SET forum=$move_to_forum WHERE id={$movetopic['id']}");
         }
         // Update any topic subscription records - need to change the forum ID record
         if ( DB_count($_TABLES['subscriptions'],array('type,category,id'),array('forum',$move_to_forum,0)) == 0 ) {
@@ -258,27 +291,26 @@ function moderator_movePost($topic_id,$topic_parent_id,$forum_id, $move_to_forum
             DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND id=".(int)$topic_id);
         }
         // this moves the parent record.
-        DB_query("UPDATE {$_TABLES['gf_topic']} SET forum=$move_to_forum, moved='1' WHERE id=$topic_id");
-
+        DB_query("UPDATE {$_TABLES['ff_topic']} SET forum=".(int) $move_to_forum.", moved=1 WHERE id=".(int)$topic_id);
         // new forum
-        $postCount = DB_Count($_TABLES['gf_topic'],'forum',$newforumid);
-        $topicsQuery = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE forum=$move_to_forum and pid=0");
+        $postCount = DB_Count($_TABLES['ff_topic'],'forum',(int) $newforumid);
+        $topicsQuery = DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE forum=".(int) $move_to_forum." AND pid=0");
         $topicCount = DB_numRows($topicsQuery);
-        DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=$topicCount, post_count=$postCount WHERE forum_id=$move_to_forum");
+        DB_query("UPDATE {$_TABLES['ff_forums']} SET topic_count=".(int)$topicCount.", post_count=".(int)$postCount." WHERE forum_id=".(int)$move_to_forum);
         //oldforum
-        $postCount = DB_Count($_TABLES['gf_topic'],'forum',$forum_id);
-	    $topicsQuery = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE forum=$forum_id and pid=0");
+        $postCount = DB_Count($_TABLES['ff_topic'],'forum',(int) $forum_id);
+	    $topicsQuery = DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE forum=".(int) $forum_id." AND pid=0");
 	    $topic_count = DB_numRows($topicsQuery);
-        DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=$topic_count, post_count=$postCount WHERE forum_id=$forum_id");
+        DB_query("UPDATE {$_TABLES['ff_forums']} SET topic_count=".(int)$topic_count.", post_count=".(int)$postCount." WHERE forum_id=".(int)$forum_id);
 
         // Update the Last Post Information
         gf_updateLastPost($move_to_forum,$topic_id);
         gf_updateLastPost($forum_id);
 
         // Remove any lastviewed records in the log so that the new updated topic indicator will appear
-        DB_query("DELETE FROM {$_TABLES['gf_log']} WHERE topic=$topic_id");
-        $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$topic_id";
-        $retval .= forum_statusMessage($LANG_GF02['msg163'],$link,$LANG_GF02['msg163'],false,'',true);
+        DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE topic=".(int) $topic_id);
+        $link = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$topic_id;
+        $retval .= FF_statusMessage($LANG_GF02['msg163'],$link,$LANG_GF02['msg163'],false,'',true);
     }
     CACHE_remove_instance('forumcb');
 
@@ -288,7 +320,7 @@ function moderator_movePost($topic_id,$topic_parent_id,$forum_id, $move_to_forum
 
 function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_forum, $move_to_topic,$splittype)
 {
-    global $_CONF, $_USER, $_TABLES, $CONF_FORUM, $LANG_GF02;
+    global $_CONF, $_USER, $_TABLES, $_FF_CONF, $LANG_GF02;
 
     $retval = '';
 
@@ -299,13 +331,13 @@ function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_foru
         exit();
     }
 
-    $curpostpid = DB_getItem($_TABLES['gf_topic'],"pid","id=$topic_id");
+    $curpostpid = DB_getItem($_TABLES['ff_topic'],"pid","id=".(int)$topic_id);
     if ( $curpostpid == '' ) {
         echo COM_refresh($_CONF['site_url']."/forum/viewtopic.php?showtopic=$topic_id");
         exit();
     }
 
-    $move_to_forum = DB_getItem($_TABLES['gf_topic'],"forum","id=$move_to_topic");
+    $move_to_forum = DB_getItem($_TABLES['ff_topic'],"forum","id=".(int)$move_to_topic);
 
     if ( $move_to_forum == 0 || $move_to_forum == '' ) {
         echo COM_refresh($_CONF['site_url']."/forum/viewtopic.php?showtopic=$topic_id");
@@ -313,98 +345,128 @@ function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_foru
     }
 
     // ensure move_to_topic is a parent id
-    $move_to_topic_pid = DB_getItem($_TABLES['gf_topic'],'pid','id='.$move_to_topic);
+    $move_to_topic_pid = DB_getItem($_TABLES['ff_topic'],'pid','id='.(int) $move_to_topic);
     if ( $move_to_topic_pid != 0 && $move_to_topic_pid != '' ) {
         $move_to_topic = $move_to_topic_pid;
     }
 
     if ($curpostpid == 0 ) {
-        $subject = DB_escapeString(DB_getItem($_TABLES['gf_topic'],'subject','id='.$move_to_topic));
-        $pidDate = DB_getItem($_TABLES['gf_topic'],'date','id='.$move_to_topic);
-        $moveResult = DB_query("SELECT id,date FROM {$_TABLES['gf_topic']} WHERE pid=$topic_id");
+        $subject = DB_escapeString(DB_getItem($_TABLES['ff_topic'],'subject','id='.(int) $move_to_topic));
+        $pidDate = DB_getItem($_TABLES['ff_topic'],'date','id='.(int) $move_to_topic);
+        $moveResult = DB_query("SELECT id,date FROM {$_TABLES['ff_topic']} WHERE pid=".(int) $topic_id);
         $postCount = DB_numRows($moveResult)+1;  // Need to account for the parent post
         while($movetopic = DB_fetchArray($moveResult)) {
-            DB_query("UPDATE {$_TABLES['gf_topic']} SET forum=$move_to_forum,pid=$move_to_topic,subject='$subject' WHERE id={$movetopic['id']}");
+            DB_query("UPDATE {$_TABLES['ff_topic']} SET forum=".(int)$move_to_forum.",pid=".(int)$move_to_topic.",subject='".$subject."' WHERE id=".(int) $movetopic['id']);
             // check to see if we need to swap pids
             if ( $movetopic['date'] < $pidDate ) {
-                DB_query("UPDATE {$_TABLES['gf_topic']} SET pid=".$movetopic['id']." WHERE id=".$move_to_topic);
-                DB_query("UPDATE {$_TABLES['gf_topic']} SET pid=0 WHERE id=".$movetopic['id']);
-                DB_query("UPDATE {$_TABLES['gf_topic']} SET pid=".$movetopic['id']." WHERE pid=".$move_to_topic);
+                DB_query("UPDATE {$_TABLES['ff_topic']} SET pid=".(int) $movetopic['id']." WHERE id=".(int) $move_to_topic);
+                DB_query("UPDATE {$_TABLES['ff_topic']} SET pid=0 WHERE id=".(int) $movetopic['id']);
+                DB_query("UPDATE {$_TABLES['ff_topic']} SET pid=".(int)$movetopic['id']." WHERE pid=".(int)$move_to_topic);
                 $move_to_topic = $movetopic['id'];
                 $pidDate = $movetopic['date'];
             }
         }
         // Update any topic subscription records - need to change the forum ID record
-//check if the whole forum is already subscribed to?
-        if ( DB_count($_TABLES['subscriptions'],array('type,category,id'),array('forum',$move_to_forum,0)) == 0 ) {
-            DB_query("UPDATE {$_TABLES['subscriptions']} SET category=$move_to_forum WHERE type='forum' AND id=".(int)$topic_id);
+        //check if the whole forum is already subscribed to?
+        if ( DB_count($_TABLES['subscriptions'],array('type,category,id'),array('forum',(int) $move_to_forum,0)) == 0 ) {
+            DB_query("UPDATE {$_TABLES['subscriptions']} SET category=".(int)$move_to_forum." WHERE type='forum' AND id=".(int)$topic_id);
         } else {
             DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND id=".(int)$topic_id);
         }
         // this moves the parent record.
-        DB_query("UPDATE {$_TABLES['gf_topic']} SET forum=$move_to_forum,pid=$move_to_topic,subject='$subject' WHERE id=$topic_id");
-        $topicDate = DB_getItem($_TABLES['gf_topic'],'date','id='.$topic_id);
+        DB_query("UPDATE {$_TABLES['ff_topic']} SET forum=".(int)$move_to_forum.",pid=".(int)$move_to_topic.",subject='".$subject."' WHERE id=".(int)$topic_id);
+        $topicDate = DB_getItem($_TABLES['ff_topic'],'date','id='.(int) $topic_id);
         if ( $topicDate < $pidDate ) {
-            DB_query("UPDATE {$_TABLES['gf_topic']} SET pid=".$topic_id." WHERE id=".$move_to_topic);
-            DB_query("UPDATE {$_TABLES['gf_topic']} SET pid=0 WHERE id=".$topic_id);
-            DB_query("UPDATE {$_TABLES['gf_topic']} SET pid=".$topic_id." WHERE pid=".$move_to_topic);
+            DB_query("UPDATE {$_TABLES['ff_topic']} SET pid=".(int) $topic_id." WHERE id=".(int) $move_to_topic);
+            DB_query("UPDATE {$_TABLES['ff_topic']} SET pid=0 WHERE id=".(int) $topic_id);
+            DB_query("UPDATE {$_TABLES['ff_topic']} SET pid=".(int) $topic_id." WHERE pid=".(int) $move_to_topic);
             $move_to_topic = $topic_id;
             $pidDate = $topicDate;
         }
         // new forum
-        $postCount = DB_Count($_TABLES['gf_topic'],'forum',$move_to_forum);
-        $topicsQuery = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE forum=$move_to_forum and pid=0");
+        $postCount = DB_Count($_TABLES['ff_topic'],'forum',(int) $move_to_forum);
+        $topicsQuery = DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE forum=".(int) $move_to_forum." AND pid=0");
         $topicCount = DB_numRows($topicsQuery);
-        DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=$topicCount, post_count=$postCount WHERE forum_id=$move_to_forum");
+        DB_query("UPDATE {$_TABLES['ff_forums']} SET topic_count=".(int)$topicCount.", post_count=".(int)$postCount." WHERE forum_id=".(int)$move_to_forum);
+
+        $sql = "SELECT count(*) AS count FROM {$_TABLES['ff_topic']} topic LEFT JOIN {$_TABLES['ff_attachments']} att ON topic.id=att.topic_id WHERE (topic.id=".(int) $move_to_topic. " OR topic.pid=".(int) $move_to_topic.") and att.filename <> ''";
+        $result = DB_query($sql);
+        if ( DB_numRows($result) > 0 ) {
+            list($attCount) = DB_fetchArray($result);
+            DB_query("UPDATE {$_TABLES['ff_topic']} SET attachments=".$attCount." WHERE id=".(int) $move_to_topic);
+        }
+
         //oldforum
-        $postCount = DB_Count($_TABLES['gf_topic'],'forum',$forum_id);
-	    $topicsQuery = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE forum=$forum_id and pid=0");
+        $postCount = DB_Count($_TABLES['ff_topic'],'forum',(int) $forum_id);
+	    $topicsQuery = DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE forum=".(int) $forum_id." AND pid=0");
 	    $topic_count = DB_numRows($topicsQuery);
-        DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=$topic_count, post_count=$postCount WHERE forum_id=$forum_id");
+        DB_query("UPDATE {$_TABLES['ff_forums']} SET topic_count=".(int) $topic_count.", post_count=".(int)$postCount." WHERE forum_id=".(int)$forum_id);
+
+        $sql = "SELECT count(*) AS count FROM {$_TABLES['ff_topic']} topic LEFT JOIN {$_TABLES['ff_attachments']} att ON topic.id=att.topic_id WHERE (topic.id=".(int) $topic_id. " OR topic.pid=".(int) $topic_id.") and att.filename <> ''";
+        $result = DB_query($sql);
+        if ( DB_numRows($result) > 0 ) {
+            list($attCount) = DB_fetchArray($result);
+            DB_query("UPDATE {$_TABLES['ff_topic']} SET attachments=".(int) $attCount." WHERE id=".(int) $topic_id);
+        }
 
         // Update the Last Post Information
         gf_updateLastPost($move_to_forum,$topic_id);
         gf_updateLastPost($forum_id);
 
         // Remove any lastviewed records in the log so that the new updated topic indicator will appear
-        DB_query("DELETE FROM {$_TABLES['gf_log']} WHERE topic=$topic_id");
-        $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$topic_id";
-        $retval .= forum_statusMessage($LANG_GF02['msg163'],$link,$LANG_GF02['msg163'],false,'',true);
+        DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE topic=".(int)$topic_id);
+        $link = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$topic_id;
+        $retval .= FF_statusMessage($LANG_GF02['msg163'],$link,$LANG_GF02['msg163'],false,'',true);
     } else {
-        $subject = DB_escapeString(DB_getItem($_TABLES['gf_topic'],'subject','id='.$move_to_topic));
+        $subject = DB_escapeString(DB_getItem($_TABLES['ff_topic'],'subject','id='.(int) $move_to_topic));
 
-        $sql  = "UPDATE {$_TABLES['gf_topic']} SET forum=$move_to_forum, pid=$move_to_topic, subject='$subject' WHERE id=$topic_id ";
+        $sql  = "UPDATE {$_TABLES['ff_topic']} SET forum=".(int) $move_to_forum.", pid=".(int) $move_to_topic.", subject='".$subject."' WHERE id=".(int)$topic_id;
         DB_query($sql);
-        DB_query("UPDATE {$_TABLES['gf_topic']} SET replies=replies-1 WHERE id=$curpostpid ");
+        DB_query("UPDATE {$_TABLES['ff_topic']} SET replies=replies-1 WHERE id=".(int)$curpostpid);
 
-        $movedDate = DB_getItem($_TABLES['gf_topic'],'date','id='.$topic_id);
-        $targetDate = DB_getItem($_TABLES['gf_topic'],'date','id='.$move_to_topic);
+        $movedDate = DB_getItem($_TABLES['ff_topic'],'date','id='.(int)$topic_id);
+        $targetDate = DB_getItem($_TABLES['ff_topic'],'date','id='.(int) $move_to_topic);
         if ( $movedDate < $targetDate ) {
-            DB_query("UPDATE {$_TABLES['gf_topic']} SET pid=".$topic_id." WHERE id=".$move_to_topic);
-            DB_query("UPDATE {$_TABLES['gf_topic']} SET pid=0 WHERE id=".$topic_id);
-            DB_query("UPDATE {$_TABLES['gf_topic']} SET pid=".$topic_id." WHERE pid=".$move_to_topic);
+            DB_query("UPDATE {$_TABLES['ff_topic']} SET pid=".(int)$topic_id." WHERE id=".(int)$move_to_topic);
+            DB_query("UPDATE {$_TABLES['ff_topic']} SET pid=0 WHERE id=".(int)$topic_id);
+            DB_query("UPDATE {$_TABLES['ff_topic']} SET pid=".(int)$topic_id." WHERE pid=".(int)$move_to_topic);
             $move_to_topic = $topic_id;
             $pidDate = $movedDate;
         }
 
         // Update Topic and Post Count for the effected forums
         // new forum
-        $postCount   = DB_Count($_TABLES['gf_topic'],'forum',$move_to_forum);
-        $topicsQuery = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE forum=$move_to_forum and pid=0");
+        $postCount   = DB_Count($_TABLES['ff_topic'],'forum',(int) $move_to_forum);
+        $topicsQuery = DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE forum=".(int)$move_to_forum." AND pid=0");
         $topicCount  = DB_numRows($topicsQuery);
-        DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=$topicCount, post_count=$postCount WHERE forum_id=$move_to_forum");
+        DB_query("UPDATE {$_TABLES['ff_forums']} SET topic_count=".(int)$topicCount.", post_count=".(int)$postCount." WHERE forum_id=".(int)$move_to_forum);
+
+        $sql = "SELECT count(*) AS count FROM {$_TABLES['ff_topic']} topic left join {$_TABLES['ff_attachments']} att ON topic.id=att.topic_id WHERE (topic.id=".(int) $move_to_topic. " OR topic.pid=".(int) $move_to_topic.") and att.filename <> ''";
+        $result = DB_query($sql);
+        if ( DB_numRows($result) > 0 ) {
+            list($attCount) = DB_fetchArray($result);
+            DB_query("UPDATE {$_TABLES['ff_topic']} SET attachments=".$attCount." WHERE id=".(int) $move_to_topic);
+        }
+
         //oldforum
-        $postCount = DB_Count($_TABLES['gf_topic'],'forum',$forum_id);
-        $topicsQuery = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE forum=$forum_id and pid=0");
+        $postCount = DB_Count($_TABLES['ff_topic'],'forum',(int) $forum_id);
+        $topicsQuery = DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE forum=".(int) $forum_id." AND pid=0");
         $topic_count = DB_numRows($topicsQuery);
-        DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=$topic_count, post_count=$postCount WHERE forum_id=$forum_id");
+        DB_query("UPDATE {$_TABLES['ff_forums']} SET topic_count=".(int) $topic_count.", post_count=".(int)$postCount." WHERE forum_id=".(int)$forum_id);
+
+        $sql = "SELECT count(*) AS count FROM {$_TABLES['ff_topic']} topic left join {$_TABLES['ff_attachments']} att ON topic.id=att.topic_id WHERE (topic.id=".(int) $curpostpid. " OR topic.pid=".(int) $curpostpid.") and att.filename <> ''";
+        $result = DB_query($sql);
+        if ( DB_numRows($result) > 0 ) {
+            list($attCount) = DB_fetchArray($result);
+            DB_query("UPDATE {$_TABLES['ff_topic']} SET attachments=".$attCount." WHERE id=".(int) $curpostpid);
+        }
 
         // Update the Forum and topic indexes
         gf_updateLastPost($forum_id,$curpostpid);
         gf_updateLastPost($move_to_forum, $move_to_topic);
 
         $link = $_CONF['site_url']."/forum/viewtopic.php?showtopic=$topic_id";
-        $retval .= forum_statusMessage($LANG_GF02['msg163'],$link,$LANG_GF02['msg163'],false,'',true);
+        $retval .= FF_statusMessage($LANG_GF02['msg163'],$link,$LANG_GF02['msg163'],false,'',true);
     }
     CACHE_remove_instance('forumcb');
     return $retval;
@@ -412,12 +474,12 @@ function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_foru
 
 function moderator_confirmDelete($topic_id,$topic_parent_id,$forum_id)
 {
-    global $_CONF, $_USER, $_TABLES, $CONF_FORUM, $LANG_GF01, $LANG_GF02;
+    global $_CONF, $_USER, $_TABLES, $_FF_CONF, $LANG_GF01, $LANG_GF02;
 
     $retval = '';
     $message = '';
 
-    $subject = DB_getItem($_TABLES['gf_topic'],"subject","id=$topic_id");
+    $subject = DB_getItem($_TABLES['ff_topic'],"subject","id=".(int) $topic_id);
 
     $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
 
@@ -446,14 +508,14 @@ function moderator_confirmDelete($topic_id,$topic_parent_id,$forum_id)
 
 function moderator_confirmMove($topic_id,$topic_parent_id,$forum_id)
 {
-    global $_CONF, $_USER, $_TABLES, $CONF_FORUM, $LANG_GF01, $LANG_GF02, $LANG_GF03;
+    global $_CONF, $_USER, $_TABLES, $_FF_CONF, $LANG_GF01, $LANG_GF02, $LANG_GF03;
 
     $retval = '';
     $message = '';
 
     $modfunction = COM_applyFilter($_POST['modfunction']);
 
-    $subject = DB_getItem($_TABLES['gf_topic'],"subject","id=$topic_id");
+    $subject = DB_getItem($_TABLES['ff_topic'],"subject","id=".(int) $topic_id);
 
     $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
 
@@ -478,15 +540,15 @@ function moderator_confirmMove($topic_id,$topic_parent_id,$forum_id)
     }
 
     $forumList = array();
-    $categoryResult = DB_query("SELECT * FROM {$_TABLES['gf_categories']} ORDER BY cat_order ASC");
+    $categoryResult = DB_query("SELECT * FROM {$_TABLES['ff_categories']} ORDER BY cat_order ASC");
     while($A = DB_fetchArray($categoryResult)) {
         $cat_id = $A['cat_name'];
 
         if ( SEC_inGroup('Root') ) {
-            $sql = "SELECT forum_id,forum_name,forum_dscp FROM {$_TABLES['gf_forums']} WHERE forum_cat ='{$A['id']}' ORDER BY forum_order ASC";
+            $sql = "SELECT forum_id,forum_name,forum_dscp FROM {$_TABLES['ff_forums']} WHERE forum_cat=".(int)$A['id']." ORDER BY forum_order ASC";
         } else {
-            $sql = "SELECT * FROM {$_TABLES['gf_moderators']} a , {$_TABLES['gf_forums']} b ";
-            $sql .= "WHERE b.forum_cat='{$A['id']}' AND a.mod_forum = b.forum_id AND (a.mod_uid='{$_USER['uid']}' OR a.mod_groupid in ($modgroups)) ORDER BY forum_order ASC";
+            $sql = "SELECT * FROM {$_TABLES['ff_moderators']} a , {$_TABLES['ff_forums']} b ";
+            $sql .= "WHERE b.forum_cat=".(int) $A['id']." AND a.mod_forum = b.forum_id AND (a.mod_uid=".(int) $_USER['uid']." OR a.mod_groupid in ($modgroups)) ORDER BY forum_order ASC";
         }
         $forumResult = DB_query($sql);
 
@@ -523,12 +585,12 @@ function moderator_confirmMove($topic_id,$topic_parent_id,$forum_id)
         $T->set_var('move_title',$subject);
 
         /* Check and see request to move complete topic or split the topic */
-        if (DB_getItem($_TABLES['gf_topic'],"pid","id='$topic_id'") == 0) {
+        if (DB_getItem($_TABLES['ff_topic'],"pid","id=".(int) $topic_id) == 0) {
             $message .= sprintf($LANG_GF03['movetopicmsg'],$subject);
             $button_text = $LANG_GF03['movetopic'];
         } else {
-            $poster   = DB_getItem($_TABLES['gf_topic'],"name","id='$topic_id'");
-            $postdate = COM_getUserDateTimeFormat(DB_getItem($_TABLES['gf_topic'],"date","id='$topic_id'"));
+            $poster   = DB_getItem($_TABLES['ff_topic'],"name","id=".(int) $topic_id);
+            $postdate = COM_getUserDateTimeFormat(DB_getItem($_TABLES['ff_topic'],"date","id=".(int)$topic_id));
             $button_text = $LANG_GF03['movetopic'];
             $message .= sprintf($LANG_GF03['splittopicmsg'],$subject,$poster,$postdate[0]);
             $T->set_var('split',1);
@@ -545,18 +607,18 @@ function moderator_confirmMove($topic_id,$topic_parent_id,$forum_id)
 
 function moderator_confirmBan($topic_id,$topic_parent_id,$forum_id)
 {
-    global $_CONF, $_USER, $_TABLES, $CONF_FORUM, $LANG_GF01, $LANG_GF02;
+    global $_CONF, $_USER, $_TABLES, $_FF_CONF, $LANG_GF01, $LANG_GF02;
 
     $retval = '';
     $message = '';
 
-    $subject = DB_getItem($_TABLES['gf_topic'],"subject","id=$topic_id");
+    $subject = DB_getItem($_TABLES['ff_topic'],"subject","id=".(int)$topic_id);
 
     $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
 
     $T->set_file('confirm','mod_confirm.thtml');
 
-    $iptobansql = DB_query("SELECT ip FROM {$_TABLES['gf_topic']} WHERE id='$topic_id'");
+    $iptobansql = DB_query("SELECT ip FROM {$_TABLES['ff_topic']} WHERE id=".(int)$topic_id);
     $forumpostipnum = DB_fetchArray($iptobansql);
     if ($forumpostipnum['ip'] == '') {
         $retval .= alertMessage($LANG_GF02['msg174'],'','',true);
@@ -586,17 +648,17 @@ function moderator_confirmBan($topic_id,$topic_parent_id,$forum_id)
 
 function moderator_confirmMerge($topic_id,$topic_parent_id,$forum_id)
 {
-    global $_CONF, $_USER, $_TABLES, $CONF_FORUM, $LANG_GF01, $LANG_GF02, $LANG_GF03;
+    global $_CONF, $_USER, $_TABLES, $_FF_CONF, $LANG_GF01, $LANG_GF02, $LANG_GF03;
 
     $retval = '';
     $message = '';
 
-    $pid = DB_getItem($_TABLES['gf_topic'],'pid','id='.$topic_id);
+    $pid = DB_getItem($_TABLES['ff_topic'],'pid','id='.(int) $topic_id);
     if ( $pid == 0 ) {
         $message .= '<p style="padding-bottom:10px;">'.$LANG_GF03['mergeparent'].'<br /></p>';
     }
 
-    $subject = DB_getItem($_TABLES['gf_topic'],"subject","id=$topic_id");
+    $subject = DB_getItem($_TABLES['ff_topic'],"subject","id=".(int) $topic_id);
 
     $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
 
@@ -628,25 +690,25 @@ function moderator_error($type)
 {
     global $forum_id, $_CONF, $LANG_GF02, $LANG_GF01;
 
+    $display = '';
+
     if ( $type == ACCESS_DENIED ) {
         echo COM_refresh($_CONF['site_url'].'/forum/index.php');
         exit;
     }
-    $retval = alertMessage($LANG_GF02['msg166'],$LANG_GF01['WARNING'],'',true);
-    gf_siteHeader();
-    ForumHeader($forum_id,'');
-    echo $retval;
-    gf_siteFooter();
+    $display  = FF_siteHeader();
+    $display .= FF_ForumHeader($forum_id,'');
+    $display .= alertMessage($LANG_GF02['msg166'],$LANG_GF01['WARNING'],'',true);
+    $display .= FF_siteFooter();
+    echo $display;
     exit;
 }
 
-$retval = '';
-$modfunction     = COM_applyFilter($_POST['modfunction']);
-
-// - these three must always be defined....
-$topic_id        = COM_applyFilter($_POST['topic_id'],true);  // the topic id we are working on
-$topic_parent_id = COM_applyFilter($_POST['topic_parent_id'],true); // the parent id
-$forum_id        = COM_applyFilter($_POST['forum_id'],true); // the forum where topic resides
+$pageBody = '';
+$modfunction     = isset($_POST['modfunction']) ? COM_applyFilter($_POST['modfunction']) : '';
+$topic_id        = isset($_POST['topic_id']) ? COM_applyFilter($_POST['topic_id'],true) : 0;  // the topic id we are working on
+$topic_parent_id = isset($_POST['topic_parent_id']) ? COM_applyFilter($_POST['topic_parent_id'],true) : 0; // the parent id
+$forum_id        = isset($_POST['forum_id']) ? COM_applyFilter($_POST['forum_id'],true) : 0; // the forum where topic resides
 
 // check to see if we at least have some type of moderator access...
 if (!forum_modPermission($forum_id,$_USER['uid'])) {
@@ -657,20 +719,25 @@ if (!forum_modPermission($forum_id,$_USER['uid'])) {
 if (isset($_POST['cancel']) ) {
     if ($modfunction == 'modconfirmdelete' && $topic_id != '') {
         echo COM_refresh($_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$topic_id);
+        exit;
     } else if ($modfunction == 'confirmbanip' ) {
         echo COM_refresh($_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$topic_id);
+        exit;
     } else if ($modfunction == 'confirm_move' && $topic_id != 0) {
         echo COM_refresh($_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$topic_id);
+        exit;
     } else if ($modfunction == 'confirm_merge' && $topic_id != 0 ) {
         echo COM_refresh($_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$topic_id);
+        exit;
     } else {
         echo COM_refresh($_CONF['site_url'].'/forum/index.php');
+        exit;
     }
     exit;
 }
 
 if ($forum_id == 0) {
-    $retval .= alertMessage($LANG_GF02['msg71'],'','',true);
+    $pageBody .= alertMessage($LANG_GF02['msg71'],'','',true);
 } else {
     switch ( $modfunction ) {
         case 'deletepost' :
@@ -680,7 +747,7 @@ if ($forum_id == 0) {
             if ( $topic_id == 0 ) {
                 moderator_error(ERROR_TOPIC_ID);
             }
-            $retval .= moderator_ConfirmDelete($topic_id,$topic_parent_id,$forum_id);
+            $pageBody .= moderator_ConfirmDelete($topic_id,$topic_parent_id,$forum_id);
             break;
         case 'editpost' :
             if ( ! forum_modPermission($forum_id,$_USER['uid'],'mod_edit')) {
@@ -689,8 +756,8 @@ if ($forum_id == 0) {
             if ( $topic_id == 0 ) {
                 moderator_error(ERROR_TOPIC_ID);
             }
-            $page = COM_applyFilter($_POST['page'],true);
-            echo COM_refresh($_CONF['site_url']."/forum/createtopic.php?method=edit&amp;id=$topic_id&amp;page=$page");
+            $page = isset($_POST['page']) ? COM_applyFilter($_POST['page'],true) : 0;
+            echo COM_refresh($_CONF['site_url']."/forum/createtopic.php?mode=edittopic&amp;id=$topic_id&amp;page=$page");
             exit;
             break;
         case 'movetopic' :
@@ -700,7 +767,7 @@ if ($forum_id == 0) {
             if ( $topic_id == 0) {
                 moderator_error(ERROR_TOPIC_ID);
             }
-            $retval .= moderator_confirmMove($topic_id,$topic_parent_id,$forum_id);
+            $pageBody .= moderator_confirmMove($topic_id,$topic_parent_id,$forum_id);
             break;
         case 'mergetopic' :
             if ( ! forum_modPermission($forum_id,$_USER['uid'],'mod_move') ) {
@@ -709,7 +776,7 @@ if ($forum_id == 0) {
             if ( $topic_id == 0) {
                 moderator_error(ERROR_TOPIC_ID);
             }
-            $retval .= moderator_confirmMerge($topic_id,$topic_parent_id,$forum_id);
+            $pageBody .= moderator_confirmMerge($topic_id,$topic_parent_id,$forum_id);
             break;
         case 'banip' :
             if ( ! forum_modPermission($forum_id,$_USER['uid'],'mod_ban') ) {
@@ -718,7 +785,7 @@ if ($forum_id == 0) {
             if ( $topic_id == 0) {
                 moderator_error(ERROR_TOPIC_ID);
             }
-            $retval .= moderator_confirmBan($topic_id,$topic_parent_id,$forum_id);
+            $pageBody .= moderator_confirmBan($topic_id,$topic_parent_id,$forum_id);
             break;
         case 'modconfirmdelete' :
             if ( !forum_modPermission($forum_id,$_USER['uid'],'mod_delete') ) {
@@ -727,7 +794,7 @@ if ($forum_id == 0) {
             if ( $topic_id == 0 ) {
                 moderator_error(ERROR_TOPIC_ID);
             }
-            $retval .= moderator_deletePost($topic_id,$topic_parent_id,$forum_id);
+            $pageBody .= moderator_deletePost($topic_id,$topic_parent_id,$forum_id);
             break;
         case 'confirm_move' :
             if ( ! forum_modPermission($forum_id,$_USER['uid'],'mod_move') ) {
@@ -736,9 +803,9 @@ if ($forum_id == 0) {
             if ( $topic_id == 0) {
                 moderator_error(ERROR_TOPIC_ID);
             }
-            $move_to_forum  = COM_applyFilter($_POST['movetoforum'],true);
-            $move_title     = COM_applyFilter($_POST['movetitle']);
-            $splittype      = COM_applyFilter($_POST['splittype']);
+            $move_to_forum  = isset($_POST['movetoforum']) ? COM_applyFilter($_POST['movetoforum'],true) : 0;
+            $move_title     = isset($_POST['movetitle']) ? COM_applyFilter($_POST['movetitle']) : '';
+            $splittype      = isset($_POST['splittype']) ? COM_applyFilter($_POST['splittype']) : '';
 
             if ( !forum_modPermission($move_to_forum,$_USER['uid'],'mod_move') ) {
                 moderator_error(ACCESS_DENIED);
@@ -746,7 +813,7 @@ if ($forum_id == 0) {
             if ( $splittype != 'single' && $splittype != 'remaining' ) {
                 $splittype = '';
             }
-            $retval .= moderator_movePost($topic_id,$topic_parent_id,$forum_id,$move_to_forum,$move_title,$splittype);
+            $pageBody .= moderator_movePost($topic_id,$topic_parent_id,$forum_id,$move_to_forum,$move_title,$splittype);
             break;
         case 'confirm_merge' :
             if ( ! forum_modPermission($forum_id,$_USER['uid'],'mod_move') ) {
@@ -755,9 +822,9 @@ if ($forum_id == 0) {
             if ( $topic_id == 0) {
                 moderator_error(ERROR_TOPIC_ID);
             }
-            $move_to_topic  = COM_applyFilter($_POST['mergetopic'],true);
+            $move_to_topic  = isset($_POST['mergetopic']) ? COM_applyFilter($_POST['mergetopic'],true) : 0;
             $splittype = '';
-            $move_to_forum = DB_getItem($_TABLES['gf_topic'],'forum','id='.(int)$move_to_topic);
+            $move_to_forum = DB_getItem($_TABLES['ff_topic'],'forum','id='.(int)$move_to_topic);
             if ( $move_to_forum == '' ) {
                 moderator_error(ACCESS_DENIED);
             }
@@ -768,7 +835,7 @@ if ($forum_id == 0) {
             if ( $splittype != 'single' && $splittype != 'remaining' ) {
                 $splittype = '';
             }
-            $retval .= moderator_mergePost($topic_id,$topic_parent_id,$forum_id,$move_to_forum,$move_to_topic,$splittype);
+            $pageBody .= moderator_mergePost($topic_id,$topic_parent_id,$forum_id,$move_to_forum,$move_to_topic,$splittype);
             break;
         case 'confirmbanip' :
             if ( ! forum_modPermission($forum_id,$_USER['uid'],'mod_ban') ) {
@@ -778,22 +845,21 @@ if ($forum_id == 0) {
                 moderator_error(ERROR_TOPIC_ID);
             }
 
-            $hostip = COM_applyFilter($_POST['hostip']);
+            $hostip = isset($_POST['hostip']) ? COM_applyFilter($_POST['hostip']) : '';
 
-            $retval .= moderator_banIP($topic_id,$topic_parent_id,$forum_id, $hostip);
+            $pageBody .= moderator_banIP($topic_id,$topic_parent_id,$forum_id, $hostip);
             break;
         default :
-            $retval .= alertMessage($LANG_GF02['msg71'],'','',true);
+            $pageBody .= alertMessage($LANG_GF02['msg71'],'','',true);
             break;
     }
 }
 
 // Display Common headers
-gf_siteHeader();
-ForumHeader($forum_id,'');
-
-echo $retval;
-
-gf_siteFooter();
+$display  = FF_siteHeader();
+$display .= FF_ForumHeader($forum_id,'');
+$display .= $pageBody;
+$display .= FF_siteFooter();
+echo $display;
 exit;
 ?>

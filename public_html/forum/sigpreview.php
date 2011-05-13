@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
+// | Copyright (C) 2009-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -30,23 +30,24 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
-require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 
 if (!in_array('forum', $_PLUGINS)) {
     COM_404();
     exit;
 }
 
-if ( COM_isAnonUser() || $CONF_FORUM['bbcode_signature'] == 0 ) {
+if ( COM_isAnonUser() || $_FF_CONF['bbcode_signature'] == 0 ) {
     return '';
 }
 
+USES_forum_functions();
+USES_forum_format();
 USES_lib_bbcode();
 
 $retval = '';
 
 if ( isset($_POST['signature']) ) {
-    $signature = COM_stripslashes($_POST['signature']);
+    $signature = $_POST['signature'];
 } else {
     $signature = '';
 }

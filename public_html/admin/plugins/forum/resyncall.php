@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -36,77 +36,75 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../../../lib-common.php';
+require_once '../../auth.inc.php';
 
-require_once 'gf_functions.php';
-require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
-require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
-
-// Only let admin users access this page
 if (!SEC_hasRights('forum.edit')) {
-    // Someone is trying to illegally access this page
-    COM_errorLog("Someone has tried to illegally access the Forum Resync All page.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: " . $_SERVER['REMOTE_ADDR'],1);
-    $display  = COM_siteHeader();
-    $display .= COM_startBlock('Access Denied');
-    $display .= 'Access Denied';
-    $display .= COM_endBlock();
-    $display .= COM_siteFooter(true);
-    echo $display;
-    exit;
+  $display = COM_siteHeader();
+  $display .= COM_startBlock($LANG_GF00['access_denied']);
+  $display .= $LANG_GF00['admin_only'];
+  $display .= COM_endBlock();
+  $display .= COM_siteFooter(true);
+  echo $display;
+  exit();
 }
 
-echo COM_siteHeader();
-echo COM_startBlock('Forum Re-Sync Utility');
+USES_forum_functions();
+USES_forum_format();
+USES_forum_admin();
 
-$query = DB_query("SELECT forum_name,forum_id FROM {$_TABLES['gf_forums']} ORDER BY forum_order");
+$display = FF_siteHeader();
+$display .= COM_startBlock('Forum Re-Sync Utility');
+
+$query = DB_query("SELECT forum_name,forum_id FROM {$_TABLES['ff_forums']} ORDER BY forum_order");
 while (list($forum_name,$id) = DB_fetchArray($query)) {
-    echo "<br>Re-Syncing Forum:$forum_name";
+    $display .= "<br/>Re-Syncing Forum:$forum_name";
     // Update all the Topics lastupdated timestamp to that of the last posted comment
-    $topicsQuery = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE forum=$id and pid=0");
+    $topicsQuery = DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE forum=$id and pid=0");
     $numTopics   = DB_numRows($topicsQuery);
-    DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count = '$numTopics' WHERE forum_id=$id");
+    DB_query("UPDATE {$_TABLES['ff_forums']} SET topic_count = '$numTopics' WHERE forum_id=$id");
 
-    $topicsQuery = DB_query("SELECT MAX(id) as maxid FROM {$_TABLES['gf_topic']} WHERE forum=$id");
+    $topicsQuery = DB_query("SELECT MAX(id) as maxid FROM {$_TABLES['ff_topic']} WHERE forum=$id");
     $lasttopic = 0;
     if ( DB_numRows($topicsQuery) > 0 ) {
         $lasttopic   = DB_fetchArray($topicsQuery);
         if ( $lasttopic == NULL || $lasttopic['maxid'] == '' ) {
             $lasttopic['maxid'] = 0;
         }
-        DB_query("UPDATE {$_TABLES['gf_forums']} SET last_post_rec = {$lasttopic['maxid']} WHERE forum_id=$id");
+        DB_query("UPDATE {$_TABLES['ff_forums']} SET last_post_rec = {$lasttopic['maxid']} WHERE forum_id=$id");
     } else {
-        DB_query("UPDATE {$_TABLES['gf_forums']} SET last_post_rec = 0 WHERE forum_id=$id");
+        DB_query("UPDATE {$_TABLES['ff_forums']} SET last_post_rec = 0 WHERE forum_id=$id");
     }
 
     // Update the forum definition record to know the number of topics
 
-    $postCount = DB_Count($_TABLES['gf_topic'],'forum',$id);
+    $postCount = DB_Count($_TABLES['ff_topic'],'forum',$id);
     // Update the forum definition record to know the number of posts
     if ( $postCount == NULL || $postCount == '' ) {
         $postCount = 0;
     }
-    DB_query("UPDATE {$_TABLES['gf_forums']} SET post_count = '$postCount' WHERE forum_id=$id");
+    DB_query("UPDATE {$_TABLES['ff_forums']} SET post_count = '$postCount' WHERE forum_id=$id");
 
-    $topicsQuery = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE forum=$id and pid=0");
+    $topicsQuery = DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE forum=$id and pid=0");
 
     while($trecord = DB_fetchArray($topicsQuery)){
         // Retrieve the oldest post records for this topic and update the lastupdated time in the parent topic record
-        $lsql = DB_query("SELECT MAX(id)as maxid FROM {$_TABLES['gf_topic']} WHERE pid={$trecord['id']}");
+        $lsql = DB_query("SELECT MAX(id)as maxid FROM {$_TABLES['ff_topic']} WHERE pid={$trecord['id']}");
         $lastrec = DB_fetchArray($lsql);
         if ($lastrec['maxid'] != NULL) {
-            $postCount($_TABLES['gf_topic'],'forum',$id);
-            $latest = DB_getITEM($_TABLES['gf_topic'],date,"id={$lastrec['maxid']}");
-            DB_query("UPDATE {$_TABLES['gf_topic']} SET lastupdated = '$latest' where id='{$trecord['id']}'");
+            $postCount = DB_count($_TABLES['ff_topic'],'forum',$id);
+            $latest = DB_getITEM($_TABLES['ff_topic'],'date',"id={$lastrec['maxid']}");
+            DB_query("UPDATE {$_TABLES['ff_topic']} SET lastupdated = '$latest' where id='{$trecord['id']}'");
         } else {
-            $latest = DB_getITEM($_TABLES['gf_topic'],date,"id={$trecord['id']}");
-            DB_query("UPDATE {$_TABLES['gf_topic']} SET lastupdated = '$latest' WHERE id='{$trecord['id']}'");
+            $latest = DB_getITEM($_TABLES['ff_topic'],'date',"id={$trecord['id']}");
+            DB_query("UPDATE {$_TABLES['ff_topic']} SET lastupdated = '$latest' WHERE id='{$trecord['id']}'");
         }
         // Recalculate and Update the number of replies
-        $numreplies = DB_Count($_TABLES['gf_topic'], "pid", $trecord['id']);
-        DB_query("UPDATE {$_TABLES['gf_topic']} SET replies = '$numreplies' WHERE id='{$trecord['id']}'");
+        $numreplies = DB_Count($_TABLES['ff_topic'], "pid", $trecord['id']);
+        DB_query("UPDATE {$_TABLES['ff_topic']} SET replies = '$numreplies' WHERE id='{$trecord['id']}'");
     }
 }
 
-echo COM_endBlock();
-echo COM_siteFooter();
-
+$display .= COM_endBlock();
+$display .= FF_siteFooter();
+echo $display;
 ?>

@@ -1,7 +1,0 @@
-{# begin {templatelocation} #}
-<a href="{printlink}" rel="nofollow">{LANG_print}</a>
-{#   Alternative layout to use Images #}
-{#
-<a href="{printlink}" rel="nofollow">{printlinkimg}</a>
-#}
-{# end {templatelocation} #}

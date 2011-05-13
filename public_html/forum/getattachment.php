@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2011 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Forum Plugin for Geeklog CMS                                |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -35,7 +38,7 @@
 require_once '../lib-common.php';
 
 $id = COM_applyFilter($_GET['id'], true);
-$sql = "SELECT filename,repository_id FROM {$_TABLES['gf_attachments']} WHERE id=".intval($id).";";
+$sql = "SELECT filename,repository_id FROM {$_TABLES['ff_attachments']} WHERE id=".(int) $id.";";
 $res = DB_query($sql);
 $A = DB_fetchArray($res);
 
@@ -53,7 +56,7 @@ if ($A['repository_id'] > 0) {
 $filedata = explode(':', $A['filename']);
 $filename = $filedata[0];
 $realname = $filedata[1];
-$filepath = "{$CONF_FORUM['uploadpath']}/$filename";
+$filepath = "{$_FF_CONF['uploadpath']}/$filename";
 
 if ( file_exists($filepath) ) {
     if ($fd = fopen ($filepath, "rb")) {

@@ -2,13 +2,13 @@
 // +--------------------------------------------------------------------------+
 // | Forum Plugin for glFusion CMS                                            |
 // +--------------------------------------------------------------------------+
-// | lib-uploadfiles.php                                                      |
+// | upload.inc.php                                                           |
 // |                                                                          |
-// | library of functions for uploading files                                 |
+// | functions for uploading attachments                                      |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -40,13 +40,13 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-function gf_check4files($id,$tempfile=false) {
-    global $_FILES,$_CONF,$_TABLES,$_USER,$CONF_FORUM,$LANG_GF00,
-           $_FM_TABLES,$CONF_FORUM,$filemgmt_FileStore;
+function _ff_check4files($id,$tempfile=false) {
+    global $_FILES,$_CONF,$_TABLES,$_USER,$_FF_CONF,$LANG_GF00,
+           $_FM_TABLES,$_FF_CONF,$filemgmt_FileStore;
 
     $retval = '';
 
-    for ( $z = 1; $z <= $CONF_FORUM['maxattachments']; $z++ ) {
+    for ( $z = 1; $z <= $_FF_CONF['maxattachments']; $z++ ) {
         $filelinks = '';
         $varName = 'file_forum'.$z;
         $chk_usefilemgmt = 'chk_usefilemgmt'.$z;
@@ -69,16 +69,16 @@ function gf_check4files($id,$tempfile=false) {
                 $filename = "{$uploadfilename}.{$ext}";
             }
             $set_chk_usefilemgmt = (isset($_POST[$chk_usefilemgmt]) ? (int) $_POST[$chk_usefilemgmt] : 0);
-            if ( gf_uploadfile($filename,$uploadfile,$CONF_FORUM['allowablefiletypes'],$set_chk_usefilemgmt) ) {
-                if (array_key_exists($uploadfile['type'],$CONF_FORUM['inlineimageypes'])) {
-                    if ($_POST[$chk_usefilemgmt] == 1) {
+            if ( _ff_uploadfile($filename,$uploadfile,$_FF_CONF['allowablefiletypes'],$set_chk_usefilemgmt) ) {
+                if (array_key_exists($uploadfile['type'],$_FF_CONF['inlineimageypes'])) {
+                    if (isset($_POST[$chk_usefilemgmt]) && $_POST[$chk_usefilemgmt] == 1) {
                         $srcImage = "{$filemgmt_FileStore}{$filename}";
-                        $destImage = "{$CONF_FORUM['uploadpath']}/tn/{$filename}";
+                        $destImage = "{$_FF_CONF['uploadpath']}/tn/{$filename}";
                     } else {
-                        $srcImage = "{$CONF_FORUM['uploadpath']}/{$filename}";
-                        $destImage = "{$CONF_FORUM['uploadpath']}/tn/{$uploadfilename}.{$ext}";
+                        $srcImage = "{$_FF_CONF['uploadpath']}/{$filename}";
+                        $destImage = "{$_FF_CONF['uploadpath']}/tn/{$uploadfilename}.{$ext}";
                     }
-                    $ret = IMG_resizeImage($srcImage,$destImage,$CONF_FORUM['inlineimage_height'],$CONF_FORUM['inlineimage_width']);
+                    $ret = IMG_resizeImage($srcImage,$destImage,$_FF_CONF['inlineimage_height'],$_FF_CONF['inlineimage_width']);
                 }
                 // Store both the created filename and the real file source filename
                 $realfilename = $filename;
@@ -94,33 +94,33 @@ function gf_check4files($id,$tempfile=false) {
                     $sql .= "VALUES ('".DB_escapeString($cid)."', '".DB_escapeString($realfilename)."', '".DB_escapeString($realfilename)."', '".DB_escapeString($uploadfile['size'])."', '{$_USER['uid']}', 1, UNIX_TIMESTAMP())";
                     DB_query($sql);
                     $newid = DB_insertID();
-                    DB_query("INSERT INTO {$_TABLES['gf_attachments']} (topic_id,repository_id,filename,tempfile)
+                    DB_query("INSERT INTO {$_TABLES['ff_attachments']} (topic_id,repository_id,filename,tempfile)
                         VALUES ('".DB_escapeString($id)."',$newid,'".DB_escapeString($filename)."',$temp)");
                     $description = glfPrepareForDB($_POST[$filemgmt_desc]);
                     DB_query("INSERT INTO {$_FM_TABLES['filemgmt_filedesc']} (lid, description) VALUES ($newid, '$description')");
                 } else {
-                    DB_query("INSERT INTO {$_TABLES['gf_attachments']} (topic_id,filename,tempfile)
+                    DB_query("INSERT INTO {$_TABLES['ff_attachments']} (topic_id,filename,tempfile)
                         VALUES ('".DB_escapeString($id)."','".DB_escapeString($filename)."',$temp)");
                 }
 
             } else {
-                COM_errorlog("upload error:" . $GLOBALS['gf_errmsg']);
-                $retval .= $GLOBALS['gf_errmsg'];
+                COM_errorlog("upload error:" . $GLOBALS['ff_errmsg']);
+                $retval .= $GLOBALS['ff_errmsg'];
                 $filelinks = -1;
             }
         }
     }
 
-    if (!$tempfile AND isset($_POST['uniqueid']) AND $_POST['uniqueid'] > 0 AND DB_COUNT($_TABLES['gf_topic'],'id',intval($id))) {
-        DB_query("UPDATE {$_TABLES['gf_attachments']} SET topic_id=$id, tempfile=0 WHERE topic_id=".intval($_POST['uniqueid']));
+    if (!$tempfile AND isset($_POST['uniqueid']) AND $_POST['uniqueid'] > 0 AND DB_COUNT($_TABLES['ff_topic'],'id',intval($id))) {
+        DB_query("UPDATE {$_TABLES['ff_attachments']} SET topic_id=$id, tempfile=0 WHERE topic_id=".intval($_POST['uniqueid']));
     }
 
     return $retval;
 }
 
 
-function gf_uploadfile($filename,&$upload_file,$allowablefiletypes,$use_filemgmt=0) {
-    global $_FILES,$_CONF,$_TABLES,$CONF_FORUM,$LANG_GF00,$filemgmt_FileStore;
+function _ff_uploadfile($filename,&$upload_file,$allowablefiletypes,$use_filemgmt=0) {
+    global $_FILES,$_CONF,$_TABLES,$_FF_CONF,$LANG_GF00,$filemgmt_FileStore;
 
     include_once $_CONF['path_system'] . 'classes/upload.class.php';
 
@@ -128,22 +128,22 @@ function gf_uploadfile($filename,&$upload_file,$allowablefiletypes,$use_filemgmt
     if ($use_filemgmt == 1) {
         $upload->setPath($filemgmt_FileStore);
     } else {
-        $upload->setPath($CONF_FORUM['uploadpath']);
+        $upload->setPath($_FF_CONF['uploadpath']);
     }
     $upload->setLogging(true);
     $upload->setAllowedMimeTypes($allowablefiletypes);
     // Set max dimensions as well in case user is uploading a full size image
-    $upload->setMaxDimensions ($CONF_FORUM['max_uploadimage_width'], $CONF_FORUM['max_uploadimage_height']);
-    if ( $CONF_FORUM['max_uploadimage_size'] == 0 ) {
+    $upload->setMaxDimensions ($_FF_CONF['max_uploadimage_width'], $_FF_CONF['max_uploadimage_height']);
+    if ( $_FF_CONF['max_uploadimage_size'] == 0 ) {
         $upload->setMaxFileSize(100000000);
     } else {
-        $upload->setMaxFileSize($CONF_FORUM['max_uploadimage_size']);
+        $upload->setMaxFileSize($_FF_CONF['max_uploadimage_size']);
     }
     $upload->setAutomaticResize(true);
 
     if (strlen($upload_file['name']) > 0) {
         $upload->setFileNames($filename);
-        $upload->setPerms( $CONF_FORUM['fileperms'] );
+        $upload->setPerms( $_FF_CONF['fileperms'] );
         $upload->_currentFile = $upload_file;
 
         // Verify file meets size limitations
@@ -162,7 +162,7 @@ function gf_uploadfile($filename,&$upload_file,$allowablefiletypes,$use_filemgmt
         if ($upload->areErrors() AND !$upload->_continueOnError) {
             $errmsg = "Forum Upload Attachment Error:" . $upload->printErrors(false);
             COM_errorlog($errmsg);
-            $GLOBALS['gf_errmsg'] = $LANG_GF00['uploaderr'] .':<br/>' . $upload->printErrors(false);
+            $GLOBALS['ff_errmsg'] = $LANG_GF00['uploaderr'] .':<br/>' . $upload->printErrors(false);
             return false;
         }
         return true;
@@ -173,21 +173,40 @@ function gf_uploadfile($filename,&$upload_file,$allowablefiletypes,$use_filemgmt
     return false;
 }
 
-function gf_FileCleanup($uniqueid)
+function _ff_FileCleanup($uniqueid)
 {
-    global $_TABLES,$CONF_FORUM,$filemgmt_FileStore;
+    global $_TABLES,$_FF_CONF,$filemgmt_FileStore;
 
-    $sql = "SELECT * FROM {$_TABLES['gf_attachments']} WHERE tempfile=1 AND topic_id=".(int)$uniqueid;
+    $sql = "SELECT * FROM {$_TABLES['ff_attachments']} WHERE tempfile=1 AND topic_id=".(int)$uniqueid;
     $result = DB_query($sql);
     while ($F = DB_fetchArray($result) ) {
         $filedata = explode(':', $F['filename']);
         $filename = $filedata[0];
         $realname = $filedata[1];
-        $filepath = "{$CONF_FORUM['uploadpath']}/$filename";
-        $tnpath   = $CONF_FORUM['uploadpath'].'/tn/'.$filename;
+        $filepath = "{$_FF_CONF['uploadpath']}/$filename";
+        $tnpath   = $_FF_CONF['uploadpath'].'/tn/'.$filename;
         @unlink($filepath);
         @unlink($tnpath);
-        DB_delete($_TABLES['gf_attachments'],'id',$F['id']);
+        DB_delete($_TABLES['ff_attachments'],'id',$F['id']);
     }
+}
+
+function glfRandomFilename() {
+    $length=10;
+    srand((double)microtime()*1000000);
+    $possible_charactors = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    $string = "";
+    while(strlen($string)<$length) {
+        $string .= substr($possible_charactors, rand()%(strlen($possible_charactors)),1);
+    }
+    $string .= date('mdHms');   // Now add the numerical MonthDayHourSecond just to ensure no possible duplicate
+    return($string);
+
+}
+function glfPrepareForDB($var) {
+    // Need to call DB_escapeString again as COM_checkHTML stips it out
+    $var = COM_checkHTML($var);
+    $var = DB_escapeString($var);
+    return $var;
 }
 ?>

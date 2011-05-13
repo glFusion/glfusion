@@ -40,7 +40,7 @@
 #
 # Table structure for table `forum_categories`
 #
-$_SQL['gf_categories'] = "CREATE TABLE {$_TABLES['gf_categories']} (
+$_SQL['ff_categories'] = "CREATE TABLE {$_TABLES['ff_categories']} (
   cat_order smallint(4) NOT NULL default '0',
   cat_name varchar(255) NOT NULL default '',
   cat_dscp text NOT NULL,
@@ -53,7 +53,7 @@ $_SQL['gf_categories'] = "CREATE TABLE {$_TABLES['gf_categories']} (
 # Table structure for table `forum_forums`
 #
 
-$_SQL['gf_forums'] = "CREATE TABLE {$_TABLES['gf_forums']} (
+$_SQL['ff_forums'] = "CREATE TABLE {$_TABLES['ff_forums']} (
   forum_order int(4) NOT NULL default '0',
   forum_name varchar(255) NOT NULL default '0',
   forum_dscp text NOT NULL,
@@ -78,7 +78,7 @@ $_SQL['gf_forums'] = "CREATE TABLE {$_TABLES['gf_forums']} (
 # Table structure for table `forum_topic`
 #
 
-$_SQL['gf_topic'] = "CREATE TABLE {$_TABLES['gf_topic']} (
+$_SQL['ff_topic'] = "CREATE TABLE {$_TABLES['ff_topic']} (
   id mediumint(8) NOT NULL auto_increment,
   forum int(3) NOT NULL default '0',
   pid mediumint(8) NOT NULL default '0',
@@ -94,6 +94,7 @@ $_SQL['gf_topic'] = "CREATE TABLE {$_TABLES['gf_topic']} (
   postmode varchar(10) NOT NULL default '',
   replies bigint(10) NOT NULL default '0',
   views bigint(10) NOT NULL default '0',
+  attachments int(11) NOT NULL default '0',
   ip varchar(255) default NULL,
   mood varchar(100) default 'indifferent',
   sticky tinyint(1) NOT NULL default '0',
@@ -113,7 +114,7 @@ $_SQL['gf_topic'] = "CREATE TABLE {$_TABLES['gf_topic']} (
 # Table structure for table `forum_log`
 #
 
-$_SQL['gf_log'] = "CREATE TABLE {$_TABLES['gf_log']} (
+$_SQL['ff_log'] = "CREATE TABLE {$_TABLES['ff_log']} (
   uid mediumint(8) NOT NULL default '0',
   forum mediumint(3) NOT NULL default '0',
   topic mediumint(3) NOT NULL default '0',
@@ -128,7 +129,7 @@ $_SQL['gf_log'] = "CREATE TABLE {$_TABLES['gf_log']} (
 # Table structure for table `forum_moderators`
 #
 
-$_SQL['gf_moderators'] = "CREATE TABLE {$_TABLES['gf_moderators']} (
+$_SQL['ff_moderators'] = "CREATE TABLE {$_TABLES['ff_moderators']} (
   mod_id int(11) NOT NULL auto_increment,
   mod_uid mediumint(8) NOT NULL default '0',
   mod_groupid mediumint(8) NOT NULL default '0',
@@ -147,7 +148,7 @@ $_SQL['gf_moderators'] = "CREATE TABLE {$_TABLES['gf_moderators']} (
 # Table structure for table `forum_userprefs`
 #
 
-$_SQL['gf_userprefs'] = "CREATE TABLE {$_TABLES['gf_userprefs']} (
+$_SQL['ff_userprefs'] = "CREATE TABLE {$_TABLES['ff_userprefs']} (
   uid mediumint(8) NOT NULL default '0',
   topicsperpage int(3) NOT NULL default '5',
   postsperpage int(3) NOT NULL default '5',
@@ -170,7 +171,7 @@ $_SQL['gf_userprefs'] = "CREATE TABLE {$_TABLES['gf_userprefs']} (
 #
 # Table structure for table `forum_banned_ip`
 #
-$_SQL['gf_banned_ip'] = "CREATE TABLE {$_TABLES['gf_banned_ip']} (
+$_SQL['ff_banned_ip'] = "CREATE TABLE {$_TABLES['ff_banned_ip']} (
   host_ip varchar(255) default NULL,
   KEY index1 (host_ip)
 ) ENGINE=MyISAM;";
@@ -182,7 +183,7 @@ $_SQL['gf_banned_ip'] = "CREATE TABLE {$_TABLES['gf_banned_ip']} (
 # Table structure for table `forum_userinfo`
 #
 
-$_SQL['gf_userinfo'] = "CREATE TABLE {$_TABLES['gf_userinfo']} (
+$_SQL['ff_userinfo'] = "CREATE TABLE {$_TABLES['ff_userinfo']} (
   `uid` mediumint(8) NOT NULL default '0',
   `rating` mediumint(8) NOT NULL default '0',
   `location` varchar(128) NOT NULL default '',
@@ -200,7 +201,7 @@ $_SQL['gf_userinfo'] = "CREATE TABLE {$_TABLES['gf_userinfo']} (
 #
 # Table structure for table `forum_bookmarks`
 #
-$_SQL['gf_bookmarks'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_bookmarks']} (
+$_SQL['ff_bookmarks'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['ff_bookmarks']} (
   `uid` mediumint(8) NOT NULL,
   `topic_id` int(11) NOT NULL,
   `pid` int(11) NOT NULL default '0',
@@ -212,7 +213,7 @@ $_SQL['gf_bookmarks'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_bookmarks']} (
 #
 # Table structure for table `forum_attachments`
 #
-$_SQL['gf_attachments'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_attachments']} (
+$_SQL['ff_attachments'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['ff_attachments']} (
   `id` int(11) NOT NULL auto_increment,
   `topic_id` int(11) NOT NULL,
   `repository_id` int(11) default NULL,
@@ -227,7 +228,7 @@ $_SQL['gf_attachments'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_attachments'
 # Table structures for table 'forum_rating_assoc'
 #
 
-$_SQL['gf_rating_assoc'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_rating_assoc']} (
+$_SQL['ff_rating_assoc'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['ff_rating_assoc']} (
   `user_id` mediumint(9) NOT NULL,
   `voter_id` mediumint(9) NOT NULL,
   `grade` smallint(6) NOT NULL,
@@ -237,9 +238,9 @@ $_SQL['gf_rating_assoc'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_rating_asso
 ) ENGINE=MyISAM ; ";
 
 
-$_SQL['d1'] = "INSERT INTO {$_TABLES['gf_categories']} (`cat_order`, `cat_name`, `cat_dscp`, `id`) VALUES (0,'General','General News and Discussions',1);";
-$_SQL['d2'] = "INSERT INTO {$_TABLES['gf_forums']} (`forum_order`, `forum_name`, `forum_dscp`, `forum_id`, `forum_cat`, `grp_id`, `use_attachment_grpid`, `is_hidden`, `is_readonly`, `no_newposts`, `topic_count`, `post_count`, `last_post_rec`) VALUES (0,'News and Announcements','Site News and Special Announcements',1,1,2,1,0,1,0,1,1,1);";
-$_SQL['d3'] = "INSERT INTO {$_TABLES['gf_moderators']} (`mod_id`, `mod_uid`, `mod_groupid`, `mod_username`, `mod_forum`, `mod_delete`, `mod_ban`, `mod_edit`, `mod_move`, `mod_stick`) VALUES (1,2,0,'Admin','1',1,1,1,1,1);";
-$_SQL['d4'] = "INSERT INTO {$_TABLES['gf_topic']} (`id`, `forum`, `pid`, `uid`, `name`, `date`, `lastupdated`, `last_reply_rec`, `email`, `website`, `subject`, `comment`, `postmode`, `replies`, `views`, `ip`, `mood`, `sticky`, `moved`, `locked`) VALUES (1,1,0,2,'Admin','1211775931','1211775931',0,NULL,'','Welcome to glFusion','Welcome to glFusion!  We hope you enjoy using your new glFusion site.\r\n\r\nglFusion is designed to provide you with features, functionality, and style, all in an easy to use package.\r\n\r\nYou can visit the [url=http://www.glfusion.org/wiki/]glFusion Wiki[/url] for the latest information on features and how to use them.\r\n\r\nThanks and enjoy!\r\nThe glFusion Team\r\n','text',0,1,'127.0.0.1','',0,0,0);";
+$_SQL['d1'] = "INSERT INTO {$_TABLES['ff_categories']} (`cat_order`, `cat_name`, `cat_dscp`, `id`) VALUES (0,'General','General News and Discussions',1);";
+$_SQL['d2'] = "INSERT INTO {$_TABLES['ff_forums']} (`forum_order`, `forum_name`, `forum_dscp`, `forum_id`, `forum_cat`, `grp_id`, `use_attachment_grpid`, `is_hidden`, `is_readonly`, `no_newposts`, `topic_count`, `post_count`, `last_post_rec`) VALUES (0,'News and Announcements','Site News and Special Announcements',1,1,2,1,0,1,0,1,1,1);";
+$_SQL['d3'] = "INSERT INTO {$_TABLES['ff_moderators']} (`mod_id`, `mod_uid`, `mod_groupid`, `mod_username`, `mod_forum`, `mod_delete`, `mod_ban`, `mod_edit`, `mod_move`, `mod_stick`) VALUES (1,2,0,'Admin','1',1,1,1,1,1);";
+$_SQL['d4'] = "INSERT INTO {$_TABLES['ff_topic']} (`id`, `forum`, `pid`, `uid`, `name`, `date`, `lastupdated`, `last_reply_rec`, `email`, `website`, `subject`, `comment`, `postmode`, `replies`, `views`, `ip`, `mood`, `sticky`, `moved`, `locked`) VALUES (1,1,0,2,'Admin','1211775931','1211775931',0,NULL,'','Welcome to glFusion','Welcome to glFusion!  We hope you enjoy using your new glFusion site.\r\n\r\nglFusion is designed to provide you with features, functionality, and style, all in an easy to use package.\r\n\r\nYou can visit the [url=http://www.glfusion.org/wiki/]glFusion Wiki[/url] for the latest information on features and how to use them.\r\n\r\nThanks and enjoy!\r\nThe glFusion Team\r\n','text',0,1,'127.0.0.1','',0,0,0);";
 
 ?>

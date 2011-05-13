@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
+// | Copyright (C) 2009-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Josh Pendergrass       cendent AT syndicate-gaming DOT com               |
@@ -30,21 +30,34 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once 'gf_functions.php';
-require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
+require_once '../../../lib-common.php';
+require_once '../../auth.inc.php';
 
-if ( !$CONF_FORUM['enable_user_rating_system'] ) {
+if (!SEC_hasRights('forum.edit')) {
+  $display = COM_siteHeader();
+  $display .= COM_startBlock($LANG_GF00['access_denied']);
+  $display .= $LANG_GF00['admin_only'];
+  $display .= COM_endBlock();
+  $display .= COM_siteFooter(true);
+  echo $display;
+  exit();
+}
+
+if ( !$_FF_CONF['enable_user_rating_system'] ) {
     echo COM_refresh($_CONF['site_url'].'/forum/index.php');
     exit;
 }
 
+USES_forum_functions();
+USES_forum_format();
+USES_forum_admin();
 USES_lib_admin();
 
 $retval = '';
 
-echo COM_siteHeader();
-echo COM_startBlock($LANG_GF93['gfboard']);
-echo glfNavbar($navbarMenu,$LANG_GF06['8']);
+$display  = FF_siteHeader();
+$display .=  COM_startBlock($LANG_GF93['gfboard']);
+$display .= FF_Navbar($navbarMenu,$LANG_GF06['8']) . '<br/>';
 
 $menu_arr = array (
     array('url'  => $_CONF['site_admin_url'].'/plugins/forum/userrating.php',
@@ -53,20 +66,19 @@ $menu_arr = array (
           'text' => $LANG_ADMIN['admin_home'])
 );
 
-$retval .= ADMIN_createMenu(
+$display .= ADMIN_createMenu(
     $menu_arr,
     $LANG_GF98['forum_settings'],
     $_CONF['site_url'] . '/forum/images/forum.png'
 );
-echo $retval;
 
 if(isset($_POST['save_changes'])) {
 	//Save changes to forum requirements
-	$res = DB_query("SELECT forum_id FROM {$_TABLES['gf_forums']}");
+	$res = DB_query("SELECT forum_id FROM {$_TABLES['ff_forums']}");
 	while( $row = DB_fetchArray($res) ) {
 		$rating_view = COM_applyFilter($_POST["viewRating-". $row['forum_id']],true);
 		$rating_post = COM_applyFilter($_POST["postRating-". $row['forum_id']],true);
-		DB_query("UPDATE {$_TABLES['gf_forums']} SET rating_view = '".intval($rating_view)."', rating_post = '".intval($rating_post)."' WHERE forum_id = ". $row['forum_id'] ."");
+		DB_query("UPDATE {$_TABLES['ff_forums']} SET rating_view = '".(int) $rating_view."', rating_post = '".(int) $rating_post."' WHERE forum_id = ". (int) $row['forum_id'] ."");
 	}
 }
 
@@ -79,14 +91,14 @@ $boards->set_file (array (
 $boards->set_var ('self_url', $_CONF['site_admin_url'].'/plugins/forum/rating.php');
 
 /* Display each Forum Category */
-$asql = DB_query("SELECT * FROM {$_TABLES['gf_categories']} ORDER BY cat_order");
+$asql = DB_query("SELECT * FROM {$_TABLES['ff_categories']} ORDER BY cat_order");
 while ($A = DB_FetchArray($asql)) {
     $boards->set_var ('catid', $A['id']);
     $boards->set_var ('catname', $A['cat_name']);
     $boards->set_var ('order', $A['cat_order']);
 
     /* Display each forum within this category */
-    $bsql = DB_query("SELECT * FROM {$_TABLES['gf_forums']} WHERE forum_cat={$A['id']} ORDER BY forum_order");
+    $bsql = DB_query("SELECT * FROM {$_TABLES['ff_forums']} WHERE forum_cat=".(int) $A['id']." ORDER BY forum_order");
     $bnrows = DB_numRows($bsql);
 
     for ($j = 1; $j <= $bnrows; $j++) {
@@ -97,7 +109,7 @@ while ($A = DB_FetchArray($asql)) {
 		$boards->set_var ('postRating', $B['rating_post']);
         /* Check if this is a private forum */
         if ($B['grp_id'] != '2') {
-            $grp_name = DB_getItem($_TABLES['groups'],'grp_name', "grp_id='{$B['grp_id']}'");
+            $grp_name = DB_getItem($_TABLES['groups'],'grp_name', "grp_id=".(int) $B['grp_id']);
             $boards->set_var ('forumdscp', "[{$LANG_GF93['private']}&nbsp;-&nbsp;{$grp_name}]<br" . XHTML . ">{$B['forum_dscp']}");
         } else {
             $boards->set_var ('forumdscp', $B['forum_dscp']);
@@ -116,11 +128,12 @@ while ($A = DB_FetchArray($asql)) {
     }  else {
         $boards->set_var('hide_options','');
     }
-    echo $boards->parse ('forum_listing_records', 'categories',true);
+    $display .= $boards->parse ('forum_listing_records', 'categories',true);
 }
-echo $boards->parse('output', 'rating_bottom');
+$display .= $boards->parse('output', 'rating_bottom');
 
-echo COM_endBlock();
-echo adminfooter();
-echo COM_siteFooter();
+$display .= COM_endBlock();
+$display .= FF_adminfooter();
+$display .= FF_siteFooter();
+echo $display;
 ?>

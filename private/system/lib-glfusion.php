@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -121,13 +121,13 @@ function glfusion_SecurityCheck() {
     }
     return $retval;
 }
-
+/*
 function glfusion_SubmissionsCheck()
 {
     $retval = '';
     return $retval;
 }
-
+*/
 function phpblock_blogroll ()
 {
     global $_CONF, $_TABLES, $_ST_CONF;
@@ -316,92 +316,5 @@ function CTL_clearCache($plugin='')
 
     css_out();
     js_out();
-}
-
-// +-------------------------------------------------------------------------+
-// | Copyright (C) 2004 by Consult4Hire Inc.                                 |
-// | From lib-portalparts.php                                                |
-// | Author:                                                                 |
-// | Blaine Lang                 -    blaine@portalparts.com                 |
-// +-------------------------------------------------------------------------+
-
-function glfGetUserBlocks(&$blocks) {
-    global $_TABLES, $_CONF, $_USER, $LANG21, $topic, $page, $newstories;
-
-    $retval = '';
-    $sql = "SELECT name,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['blocks']} WHERE onleft = 1 AND is_enabled = 1";
-
-    // Get user preferences on blocks
-    if( !isset( $_USER['noboxes'] ) || !isset( $_USER['boxes'] )) {
-        if( !empty( $_USER['uid'] )) {
-            $result = DB_query( "SELECT boxes,noboxes FROM {$_TABLES['userindex']} WHERE uid = {$_USER['uid']}" );
-            list($_USER['boxes'], $_USER['noboxes']) = DB_fetchArray( $result );
-        } else {
-            $_USER['boxes'] = '';
-            $_USER['noboxes'] = 0;
-        }
-    }
-    $sql .= " AND (tid = 'all' AND type <> 'layout')";
-    if( !empty( $_USER['boxes'] )) {
-        $BOXES = str_replace( ' ', ',', trim($_USER['boxes']) );
-        $sql .= " AND (bid NOT IN ($BOXES) OR bid = '-1')";
-    }
-
-    $sql .= ' ORDER BY blockorder,title asc';
-    $result = DB_query( $sql );
-    $nrows = DB_numRows( $result );
-
-    for( $i = 1; $i <= $nrows; $i++ ) {
-        $A = DB_fetchArray( $result );
-        if( SEC_hasAccess( $A['owner_id'], $A['group_id'], $A['perm_owner'], $A['perm_group'], $A['perm_members'], $A['perm_anon']) > 0 ) {
-            $blocks[] = $A['name'];
-        }
-    }
-    return $blocks;
-}
-
-function glfRandomFilename() {
-    $length=10;
-    srand((double)microtime()*1000000);
-    $possible_charactors = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    $string = "";
-    while(strlen($string)<$length) {
-        $string .= substr($possible_charactors, rand()%(strlen($possible_charactors)),1);
-    }
-    $string .= date('mdHms');   // Now add the numerical MonthDayHourSecond just to ensure no possible duplicate
-    return($string);
-
-}
-function glfPrepareForDB($var) {
-    // Need to call DB_escapeString again as COM_checkHTML stips it out
-    $var = COM_checkHTML($var);
-    $var = DB_escapeString($var);
-    return $var;
-}
-function glfNavbar ($menuitems, $selected='', $parms='') {
-    global $_CONF;
-
-    $navbar = new Template($_CONF['path_layout'] . 'navbar');
-    $navbar->set_file (array (
-        'navbar'       => 'navbar.thtml',
-        'menuitem'     => 'menuitem.thtml',
-        ));
-    for ($i=1; $i <= count($menuitems); $i++)  {
-        $parms = explode( "=",current($menuitems) );
-        $navbar->set_var( 'link',   current($menuitems));
-        if (key($menuitems) == $selected) {
-            $navbar->set_var( 'cssactive', 'id="active"');
-            $navbar->set_var( 'csscurrent','id="current"');
-        } else {
-            $navbar->set_var( 'cssactive', '');
-            $navbar->set_var( 'csscurrent','');
-        }
-        $navbar->set_var( 'label',  key($menuitems));
-        $navbar->parse( 'menuitems', 'menuitem', true );
-        next($menuitems);
-    }
-    $navbar->parse ('output', 'navbar');
-    $retval = $navbar->finish($navbar->get_var('output'));
-    return $retval;
 }
 ?>

@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
+// | Copyright (C) 2009-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -58,17 +58,17 @@ $INSTALL_plugin['forum'] = array(
         'ver' => $_FF_CONF['pi_version'], 'gl_ver' => $_FF_CONF['gl_version'],
         'url' => $_FF_CONF['pi_url'], 'display' => $_FF_CONF['pi_display_name']),
 
-  array('type' => 'table', 'table' => $_TABLES['gf_categories'], 'sql' => $_SQL['gf_categories']),
-  array('type' => 'table', 'table' => $_TABLES['gf_forums'], 'sql' => $_SQL['gf_forums']),
-  array('type' => 'table', 'table' => $_TABLES['gf_topic'], 'sql' => $_SQL['gf_topic']),
-  array('type' => 'table', 'table' => $_TABLES['gf_log'], 'sql' => $_SQL['gf_log']),
-  array('type' => 'table', 'table' => $_TABLES['gf_moderators'], 'sql' => $_SQL['gf_moderators']),
-  array('type' => 'table', 'table' => $_TABLES['gf_userprefs'], 'sql' => $_SQL['gf_userprefs']),
-  array('type' => 'table', 'table' => $_TABLES['gf_banned_ip'], 'sql' => $_SQL['gf_banned_ip']),
-  array('type' => 'table', 'table' => $_TABLES['gf_userinfo'], 'sql' => $_SQL['gf_userinfo']),
-  array('type' => 'table', 'table' => $_TABLES['gf_bookmarks'], 'sql' => $_SQL['gf_bookmarks']),
-  array('type' => 'table', 'table' => $_TABLES['gf_attachments'], 'sql' => $_SQL['gf_attachments']),
-  array('type' => 'table', 'table' => $_TABLES['gf_rating_assoc'], 'sql' => $_SQL['gf_rating_assoc']),
+  array('type' => 'table', 'table' => $_TABLES['ff_categories'], 'sql' => $_SQL['ff_categories']),
+  array('type' => 'table', 'table' => $_TABLES['ff_forums'], 'sql' => $_SQL['ff_forums']),
+  array('type' => 'table', 'table' => $_TABLES['ff_topic'], 'sql' => $_SQL['ff_topic']),
+  array('type' => 'table', 'table' => $_TABLES['ff_log'], 'sql' => $_SQL['ff_log']),
+  array('type' => 'table', 'table' => $_TABLES['ff_moderators'], 'sql' => $_SQL['ff_moderators']),
+  array('type' => 'table', 'table' => $_TABLES['ff_userprefs'], 'sql' => $_SQL['ff_userprefs']),
+  array('type' => 'table', 'table' => $_TABLES['ff_banned_ip'], 'sql' => $_SQL['ff_banned_ip']),
+  array('type' => 'table', 'table' => $_TABLES['ff_userinfo'], 'sql' => $_SQL['ff_userinfo']),
+  array('type' => 'table', 'table' => $_TABLES['ff_bookmarks'], 'sql' => $_SQL['ff_bookmarks']),
+  array('type' => 'table', 'table' => $_TABLES['ff_attachments'], 'sql' => $_SQL['ff_attachments']),
+  array('type' => 'table', 'table' => $_TABLES['ff_rating_assoc'], 'sql' => $_SQL['ff_rating_assoc']),
 
   array('type' => 'group', 'group' => 'forum Admin', 'desc' => 'Users in this group can administer the Forum plugin',
         'variable' => 'admin_group_id', 'addroot' => true, 'admin' => true),
@@ -157,7 +157,7 @@ function plugin_autouninstall_forum ()
 {
     $out = array (
         /* give the name of the tables, without $_TABLES[] */
-        'tables' => array('gf_topic','gf_categories','gf_forums','gf_settings','gf_moderators','gf_banned_ip', 'gf_log', 'gf_userprefs','gf_userinfo','gf_attachments','gf_bookmarks','gf_rating_assoc'),
+        'tables' => array('ff_topic','ff_categories','ff_forums','ff_settings','ff_moderators','ff_banned_ip', 'ff_log', 'ff_userprefs','ff_userinfo','ff_attachments','ff_bookmarks','ff_rating_assoc'),
         /* give the full name of the group, as in the db */
         'groups' => array('forum Admin'),
         /* give the full name of the feature, as in the db */

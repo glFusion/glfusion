@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
+// | Copyright (C) 2009-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -30,28 +30,30 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../../../lib-common.php';
-require_once 'gf_functions.php';
+require_once '../../auth.inc.php';
 
 if (!SEC_inGroup('Root')) {
-    echo COM_siteHeader();
-    echo COM_startBlock("Error");
-    echo 'You do not have permission to perform this operation';
-    echo COM_endBlock();
-    echo COM_siteFooter();
-    exit();
+  $display = COM_siteHeader();
+  $display .= COM_startBlock($LANG_GF00['access_denied']);
+  $display .= $LANG_GF00['admin_only'];
+  $display .= COM_endBlock();
+  $display .= COM_siteFooter(true);
+  echo $display;
+  exit();
 }
 
-echo COM_siteHeader();
-echo COM_startBlock($LANG_GF06[9]);
+USES_forum_functions();
+USES_forum_format();
+USES_forum_admin();
 
-echo glfNavbar($navbarMenu,$LANG_GF06[9]);
-
-echo '<ul style="list-style-type:disc;list-style-position:inside;margin-left:15px;padding-right:2px;">';
-echo '<li><a href="'.$_CONF['site_admin_url'].'/plugins/forum/phpbb3_migrate.php">phpBB3 Import</a></li>';
-echo '</ul>';
-
-echo COM_endBlock();
-echo adminfooter();
-
-echo COM_siteFooter();
+$display = FF_siteHeader();
+$display .= COM_startBlock($LANG_GF06[9]);
+$display .= FF_Navbar($navbarMenu,$LANG_GF06[9]);
+$display .= '<ul style="list-style-type:disc;list-style-position:inside;margin-left:15px;padding-right:2px;">';
+$display .= '<li><a href="'.$_CONF['site_admin_url'].'/plugins/forum/phpbb3_migrate.php">phpBB3 Import</a></li>';
+$display .= '</ul>';
+$display .= COM_endBlock();
+$display .= FF_adminfooter();
+$display .= FF_siteFooter();
+echo $display;
 ?>

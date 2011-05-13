@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -37,6 +37,7 @@
 
 
 require_once '../../../lib-common.php';
+require_once '../../auth.inc.php';
 require_once $_CONF['path'].'/plugins/forum/autoinstall.php';
 
 USES_lib_install();

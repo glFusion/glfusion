@@ -1,5 +1,0 @@
-{# begin {templatelocation} #}
-{# <a {next_link}{LANG_nextlink}</a> #}
-{#   Alternative layout to use Images #}  
-{# <a href="{nextlink}">{nextlinkimg}</a> #}
-{# end {templatelocation} #}

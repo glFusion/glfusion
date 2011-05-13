@@ -37,34 +37,21 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once '../lib-common.php'; // Path to your lib-common.php
+require_once '../lib-common.php';
 
 if (!in_array('forum', $_PLUGINS)) {
     COM_404();
     exit;
 }
 
-require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
-require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
-require_once $_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php';
+USES_forum_functions();
+USES_forum_format();
+USES_forum_topic();
 
-function gf_FormatForPrint( $str, $postmode='html', $status=0 ) {
-    global $CONF_FORUM;
+function ff_FormatForPrint( $str, $postmode='html', $status=0 ) {
+    global $_FF_CONF;
 
-    // Handle Pre ver 2.5 quoting and New Line Formatting - consider adding this to a migrate function
-    if ($CONF_FORUM['pre2.5_mode']) {
-        if ( stristr($str,'[code') == false ) {
-            $str = str_replace('<pre>','[code]',$str);
-            $str = str_replace('</pre>','[/code]',$str);
-        }
-        $str = str_replace(array("<br />\r\n","<br />\n\r","<br />\r","<br />\n"), '<br />', $str );
-        $str = preg_replace("/\[QUOTE\sBY=\s(.+?)\]/i","[QUOTE] Quote by $1:",$str);
-        /* Reformat code blocks - version 2.3.3 and prior */
-        $str = str_replace( '<pre class="forumCode">', '[code]', $str );
-        $str = preg_replace("/\[QUOTE\sBY=(.+?)\]/i","[QUOTE] Quote by $1:",$str);
-    }
-
-    $str = gf_formatTextBlock($str,$postmode,'preview',$status);
+    $str = FF_formatTextBlock($str,$postmode,'preview',$status);
 
     $str = str_replace('{','&#123;',$str);
     $str = str_replace('}','&#125;',$str);
@@ -74,11 +61,9 @@ function gf_FormatForPrint( $str, $postmode='html', $status=0 ) {
     return $str;
 }
 
-// Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
-$id = intval(COM_applyFilter($_REQUEST['id'],true));
+$id = COM_applyFilter($_REQUEST['id'],true);
 
-//Check is anonymous users can access
-if ($CONF_FORUM['registration_required'] && $_USER['uid'] < 2) {
+if ($_FF_CONF['registration_required'] && COM_isAnonUser()) {
     echo COM_siteHeader();
     echo COM_startBlock();
     alertMessage($LANG_GF02['msg01'],$LANG_GF02['msg171']);
@@ -87,38 +72,37 @@ if ($CONF_FORUM['registration_required'] && $_USER['uid'] < 2) {
     exit;
 }
 
-
 //Check is anonymous users can access
-if ($id == 0 OR DB_count($_TABLES['gf_topic'],"id",$id) == 0) {
-        echo COM_siteHeader();
-        forum_statusMessage($LANG_GF02['msg166'], $_CONF['site_url'] . "/forum/index.php?forum=$forum",$LANG_GF02['msg166']);
-        echo COM_siteFooter();
-        exit;
+if ($id == 0 OR DB_count($_TABLES['ff_topic'],"id",(int) $id) == 0) {
+    echo COM_siteHeader();
+    echo FF_statusMessage($LANG_GF02['msg166'], $_CONF['site_url'] . "/forum/index.php?forum=$forum",$LANG_GF02['msg166']);
+    echo COM_siteFooter();
+    exit;
 }
 
-$forum = DB_getItem($_TABLES['gf_topic'],"forum","id=$id");
-$query = DB_query("SELECT grp_name from {$_TABLES['groups']} groups, {$_TABLES['gf_forums']} forum WHERE forum.forum_id='{$forum}' AND forum.grp_id=groups.grp_id");
+$forum = DB_getItem($_TABLES['ff_topic'],"forum","id=".(int)$id);
+$query = DB_query("SELECT grp_name from {$_TABLES['groups']} groups, {$_TABLES['ff_forums']} forum WHERE forum.forum_id=".(int) $forum." AND forum.grp_id=groups.grp_id");
 list ($groupname) = DB_fetchArray($query);
 if (!SEC_inGroup($groupname) AND $grp_id != 2) {
-        echo COM_siteHeader();
-        alertMessage($LANG_GF02['msg02'],$LANG_GF02['msg171']);
-        echo COM_siteFooter();
-        exit;
+    echo COM_siteHeader();
+    echo FF_alertMessage($LANG_GF02['msg02'],$LANG_GF02['msg171']);
+    echo COM_siteFooter();
+    exit;
 }
 
-if (!can_view_forum($forum)) {
-        echo COM_siteHeader();
-        alertMessage($LANG_GF02['msg02'],$LANG_GF02['msg171']);
-        echo COM_siteFooter();
-        exit;
+if (!_ff_canUserViewRating($forum)) {
+    echo COM_siteHeader();
+    echo FF_alertMessage($LANG_GF02['msg02'],$LANG_GF02['msg171']);
+    echo COM_siteFooter();
+    exit;
 }
 
-$result = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE (id=$id)");
+$result = DB_query("SELECT * FROM {$_TABLES['ff_topic']} WHERE (id=".(int)$id.")");
 $A = DB_fetchArray($result);
 
-if ($CONF_FORUM['allow_smilies']) {
-        $search = array(":D", ":)", ":(", "8O", ":?", "B)", ":lol:", ":x", ":P" ,":oops:", ":o",":cry:", ":evil:", ":twisted:", ":roll:", ";)", ":!:", ":question:", ":idea:", ":arrow:", ":|", ":mrgreen:",":mrt:",":love:",":cat:");
-        $replace = array("<img style=\"vertical-align:middle;\" src='images/smilies/biggrin.gif' alt='Big Grin'/>", "<img style=\"vertical-align:middle;\" src='images/smilies/smile.gif' alt='Smile'/>", "<img style=\"vertical-align:middle;\" src='images/smilies/frown.gif' alt='Frown'/>","<img style=\"vertical-align:middle;\" src='images/smilies/eek.gif' alt='Eek!'/>","<img style=\"vertical-align:middle;\" src='images/smilies/confused.gif' alt='Confused'/>", "<img style=\"vertical-align:middle;\" src='images/smilies/cool.gif' alt='Cool'/>", "<img style=\"vertical-align:middle;\" src='images/smilies/lol.gif' alt='Laughing Out Loud'/>","<img style=\"vertical-align:middle;\" src='images/smilies/mad.gif' alt='Angry'/>", "<img style=\"vertical-align:middle;\" src='images/smilies/razz.gif' alt='Razz'/>","<img style=\"vertical-align:middle;\" src='images/smilies/redface.gif' alt='Oops!'/>","<img style=\"vertical-align:middle;\" src='images/smilies/surprised.gif' alt='Surprised!'/>","<img style=\"vertical-align:middle;\" src='images/smilies/cry.gif' alt='Cry'/>","<img style=\"vertical-align:middle;\" src='images/smilies/evil.gif' alt='Evil'/>","<img style=\"vertical-align:middle;\" src='images/smilies/twisted.gif' alt='Twisted Evil'/>","<img style=\"vertical-align:middle;\" src='images/smilies/rolleyes.gif' alt='Rolling Eyes'/>","<img style=\"vertical-align:middle;\" src='images/smilies/wink.gif' alt='Wink'/>","<img style=\"vertical-align:middle;\" src='images/smilies/exclaim.gif' alt='Exclaimation'/>", "<img style=\"vertical-align:middle;\" src='images/smilies/question.gif' alt='Question'/>", "<img style=\"vertical-align:middle;\" src='images/smilies/idea.gif' alt='Idea'/>", "<img style=\"vertical-align:middle;\" src='images/smilies/arrow.gif' alt='Arrow'/>", "<img style=\"vertical-align:middle;\" src='images/smilies/neutral.gif' alt='Neutral'/>", "<img style=\"vertical-align:middle;\" src='images/smilies/mrgreen.gif' alt='Mr. Green'/>","<img style=\"vertical-align:middle;\" src='images/smilies/mrt.gif' alt='Mr. T'/>","<img style=\"vertical-align:middle;\" src='images/smilies/heart.gif' alt='Love'/>","<img style=\"vertical-align:middle;\" src='images/smilies/cat.gif' alt='Kitten'/>");
+if ($_FF_CONF['allow_smilies']) {
+    $search = array(":D", ":)", ":(", "8O", ":?", "B)", ":lol:", ":x", ":P" ,":oops:", ":o",":cry:", ":evil:", ":twisted:", ":roll:", ";)", ":!:", ":question:", ":idea:", ":arrow:", ":|", ":mrgreen:",":mrt:",":love:",":cat:");
+    $replace = array("<img style=\"vertical-align:middle;\" src='images/smilies/biggrin.gif' alt='Big Grin'/>", "<img style=\"vertical-align:middle;\" src='images/smilies/smile.gif' alt='Smile'/>", "<img style=\"vertical-align:middle;\" src='images/smilies/frown.gif' alt='Frown'/>","<img style=\"vertical-align:middle;\" src='images/smilies/eek.gif' alt='Eek!'/>","<img style=\"vertical-align:middle;\" src='images/smilies/confused.gif' alt='Confused'/>", "<img style=\"vertical-align:middle;\" src='images/smilies/cool.gif' alt='Cool'/>", "<img style=\"vertical-align:middle;\" src='images/smilies/lol.gif' alt='Laughing Out Loud'/>","<img style=\"vertical-align:middle;\" src='images/smilies/mad.gif' alt='Angry'/>", "<img style=\"vertical-align:middle;\" src='images/smilies/razz.gif' alt='Razz'/>","<img style=\"vertical-align:middle;\" src='images/smilies/redface.gif' alt='Oops!'/>","<img style=\"vertical-align:middle;\" src='images/smilies/surprised.gif' alt='Surprised!'/>","<img style=\"vertical-align:middle;\" src='images/smilies/cry.gif' alt='Cry'/>","<img style=\"vertical-align:middle;\" src='images/smilies/evil.gif' alt='Evil'/>","<img style=\"vertical-align:middle;\" src='images/smilies/twisted.gif' alt='Twisted Evil'/>","<img style=\"vertical-align:middle;\" src='images/smilies/rolleyes.gif' alt='Rolling Eyes'/>","<img style=\"vertical-align:middle;\" src='images/smilies/wink.gif' alt='Wink'/>","<img style=\"vertical-align:middle;\" src='images/smilies/exclaim.gif' alt='Exclaimation'/>", "<img style=\"vertical-align:middle;\" src='images/smilies/question.gif' alt='Question'/>", "<img style=\"vertical-align:middle;\" src='images/smilies/idea.gif' alt='Idea'/>", "<img style=\"vertical-align:middle;\" src='images/smilies/arrow.gif' alt='Arrow'/>", "<img style=\"vertical-align:middle;\" src='images/smilies/neutral.gif' alt='Neutral'/>", "<img style=\"vertical-align:middle;\" src='images/smilies/mrgreen.gif' alt='Mr. Green'/>","<img style=\"vertical-align:middle;\" src='images/smilies/mrt.gif' alt='Mr. T'/>","<img style=\"vertical-align:middle;\" src='images/smilies/heart.gif' alt='Love'/>","<img style=\"vertical-align:middle;\" src='images/smilies/cat.gif' alt='Kitten'/>");
 }
 
 $A["name"] = COM_checkWords($A["name"]);
@@ -127,7 +111,7 @@ $A["name"] = @htmlspecialchars($A["name"],ENT_QUOTES,COM_getEncodingt());
 $A["subject"] = COM_checkWords($A["subject"]);
 $A["subject"] = stripslashes(@htmlspecialchars($A["subject"],ENT_QUOTES,COM_getEncodingt()));
 
-$A['comment'] = gf_FormatForPrint( $A['comment'], $A['postmode'],'',$A['status'] );
+$A['comment'] = ff_FormatForPrint( $A['comment'], $A['postmode'],'',$A['status'] );
 
 $date = strftime('%B %d %Y @ %I:%M %p', $A['date']);
 echo"
@@ -153,7 +137,7 @@ echo"
         <br>
 ";
 
-$result2 = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE (pid=$id)");
+$result2 = DB_query("SELECT * FROM {$_TABLES['ff_topic']} WHERE (pid=".(int)$id.")");
 while($B = DB_fetchArray($result2)){
 $date = strftime('%B %d %Y @ %I:%M %p', $B['date']);
 
@@ -166,7 +150,7 @@ echo"
             <br>
             <br>
             <b>{$LANG_GF01['CONTENT']}:</b>
-            <p>" . gf_FormatForPrint( $B['comment'], $B['postmode'] ) . "</p>
+            <p>" . ff_FormatForPrint( $B['comment'], $B['postmode'] ) . "</p>
             <hr width=\"25%\" align=\"left\">
 
 ";

@@ -1,3 +1,0 @@
-{# begin {templatelocation} #}
-<a href="{newtopiclink}" rel="nofollow">{newtopiclinkimg}</a>
-{# end {templatelocation} #}

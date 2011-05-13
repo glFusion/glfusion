@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -39,23 +39,25 @@
 
 
 require_once '../lib-common.php';
-require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
-USES_lib_admin();
 
 if (!in_array('forum', $_PLUGINS)) {
     COM_404();
     exit;
 }
 
-if ( !$CONF_FORUM['allow_memberlist'] || COM_isAnonUser() ) {
+USES_lib_admin();
+USES_forum_functions();
+USES_forum_format();
+
+if ( !$_FF_CONF['allow_memberlist'] || COM_isAnonUser() ) {
     echo COM_refresh($_CONF['site_url'] .'/forum/index.php');
     exit;
 }
 
-function ADMIN_getListField_memberlist($fieldname, $fieldvalue, $A, $icon_arr)
+function _ff_getListField_memberlist($fieldname, $fieldvalue, $A, $icon_arr)
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
-    global $CONF_FORUM,$_SYSTEM,$LANG_GF02;
+    global $_FF_CONF,$_SYSTEM,$LANG_GF02;
 
     if ( !isset($A['status']) ) {
         $A['status'] = 0;
@@ -65,11 +67,11 @@ function ADMIN_getListField_memberlist($fieldname, $fieldvalue, $A, $icon_arr)
 
     switch ($fieldname) {
         case 'username' :
-            $url = $_CONF['site_url'].'/users.php?mode=profile&uid='.$A['uid'];
+            $url = $_CONF['site_url'].'/users.php?mode=profile&amp;uid='.$A['uid'];
             $retval = COM_createLink($fieldvalue,$url);
             break;
         case 'posts' :
-            $posts = DB_count($_TABLES['gf_topic'],'uid',$A['uid']);
+            $posts = DB_count($_TABLES['ff_topic'],'uid',$A['uid']);
             $retval = $posts;
             break;
         case 'homepage' :
@@ -79,31 +81,31 @@ function ADMIN_getListField_memberlist($fieldname, $fieldvalue, $A, $icon_arr)
                 if(!preg_match("/http/i",$homepage)) {
                     $homepage = 'http://' .$homepage;
                 }
-                $retval = '<a href="'.$homepage.'"><img src="'.gf_getImage('home').'"/></a>';
+                $retval = '<a href="'.$homepage.'"><img src="'._ff_getImage('home').'" alt="Website"/></a>';
             }
             break;
         case 'email' :
             if($A['emailfromuser'] == '1') {
-                $retval = '<a href="'.$_CONF['site_url'].'/profiles.php?uid='.$A['uid'].'"><img src="'.gf_getImage('email').'"/></a>';
+                $retval = '<a href="'.$_CONF['site_url'].'/profiles.php?uid='.$A['uid'].'"><img src="'._ff_getImage('email').'" alt="email"/></a>';
             }
             break;
         case 'pm' :
-            if ($CONF_FORUM['use_pm_plugin']) {
+            if ($_FF_CONF['use_pm_plugin']) {
                 $pmplugin_link = forumPLG_getPMlink($siteMembers['username']);
-                $retval = '<a href="'.$pmplugin_link.'"><img src="'.gf_getImage('pm').'"/></a>';
+                $retval = '<a href="'.$pmplugin_link.'"><img src="'._ff_getImage('pm').'" alt="PM"/></a>';
             }
             break;
         case 'lastpost' :
-            $A['posts'] = DB_count($_TABLES['gf_topic'],'uid',$A['uid']);
+            $A['posts'] = DB_count($_TABLES['ff_topic'],'uid',$A['uid']);
             if ($A['posts'] > 0) {
                 $reportlinkURL = $_CONF['site_url'] .'/forum/memberlist.php?op=last10posts&amp;showuser='.$A['uid'];
-                $retval = '<a href="'.$reportlinkURL.'"><img src="'.gf_getImage('latestposts').'"/></a>';
+                $retval = '<a href="'.$reportlinkURL.'"><img src="'._ff_getImage('latestposts').'" alt="LatestPosts"/></a>';
             }
             break;
         case 'regdate':
             $phpdate = strtotime( $fieldvalue );
             $dt = new Date($phpdate,$_CONF['timezone']);
-            $retval = $dt->format($CONF_FORUM['default_Datetime_format'],true);
+            $retval = $dt->format($_FF_CONF['default_Datetime_format'],true);
             break;
         default:
             $retval = $fieldvalue;
@@ -133,15 +135,17 @@ if ( isset($_GET['op'] ) ) {
     $op = '';
 }
 
+$display = '';
 
-// Display Common headers
-gf_siteHeader();
 
 //Check is anonymous users can access
 forum_chkUsercanAccess();
 
-if ($CONF_FORUM['usermenu'] == 'navbar') {
-   echo forumNavbarMenu($LANG_GF02['msg200']);;
+// Display Common headers
+$display .= FF_siteHeader();
+
+if ($_FF_CONF['usermenu'] == 'navbar') {
+   $display .= FF_NavbarMenu($LANG_GF02['msg200']);;
 }
 
 if ($op == "last10posts") {
@@ -177,10 +181,10 @@ if ($op == "last10posts") {
     $order      = 1;
     $direction  = "DESC";
 
-    $sql = "SELECT a.uid,a.status,a.date,a.subject,a.comment,a.replies,a.views,a.id,a.forum,b.forum_name,a.lastupdated,b.forum_id FROM {$_TABLES['gf_topic']} a ";
-    $sql .= "LEFT JOIN {$_TABLES['gf_forums']} b ON a.forum=b.forum_id ";
+    $sql = "SELECT a.uid,a.status,a.date,a.subject,a.comment,a.replies,a.views,a.id,a.forum,b.forum_name,a.lastupdated,b.forum_id FROM {$_TABLES['ff_topic']} a ";
+    $sql .= "LEFT JOIN {$_TABLES['ff_forums']} b ON a.forum=b.forum_id ";
     $sql .= "WHERE (a.uid = ".(int) $showuser.") AND b.grp_id IN ($grouplist) ";
-    $sql .= "ORDER BY a.date DESC LIMIT {$CONF_FORUM['show_last_post_count']}";
+    $sql .= "ORDER BY a.date DESC LIMIT {$_FF_CONF['show_last_post_count']}";
 
     $result = DB_query($sql);
 
@@ -189,9 +193,9 @@ if ($op == "last10posts") {
     $displayrecs = 0;
     for ($i = 1; $i <= $nrows; $i++) {
         $P = DB_fetchArray($result);
-        $userlogtime = DB_getItem($_TABLES['gf_log'],"time", "uid=$_USER[uid] AND topic={$P['id']}");
+        $userlogtime = DB_getItem($_TABLES['ff_log'],"time", "uid=".(int) $_USER['uid']." AND topic=".(int) $P['id']);
         if ($userlogtime == NULL OR $P['lastupdated'] > $userlogtime) {
-            if ($CONF_FORUM['use_censor']) {
+            if ($_FF_CONF['use_censor']) {
                 $P['subject'] = COM_checkWords($P['subject']);
                 $P['comment'] = COM_checkWords($P['comment']);
             }
@@ -199,9 +203,9 @@ if ($op == "last10posts") {
             $displayrecs++;
 
             $dt->setTimestamp($P['date']);
-            $firstdate = $dt->format($CONF_FORUM['default_Datetime_format'],true);
+            $firstdate = $dt->format($_FF_CONF['default_Datetime_format'],true);
             $dt->setTimestamp($P['lastupdated']);
-            $lastdate = $dt->format($CONF_FORUM['default_Datetime_format'],true);
+            $lastdate = $dt->format($_FF_CONF['default_Datetime_format'],true);
 
             if ($P['uid'] > 1) {
                 $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($P['uid']) . ', ';
@@ -217,9 +221,9 @@ if ($op == "last10posts") {
                 $testText = strip_tags($testText);
                 $html2txt = new html2text($testText,false);
                 $testText = trim($html2txt->get_text());
-                $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
+                $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$_FF_CONF['contentinfo_numchars']). '...')));
             } else {
-                $qlreply = DB_query("SELECT id,uid,name,comment,date,status FROM {$_TABLES['gf_topic']} WHERE id={$P['last_reply_rec']}");
+                $qlreply = DB_query("SELECT id,uid,name,comment,date,status FROM {$_TABLES['ff_topic']} WHERE id=".(int) $P['last_reply_rec']);
                 $B = DB_fetchArray($qlreply);
                 $lastid = $B['id'];
                 $lastcomment = $B['comment'];
@@ -233,14 +237,14 @@ if ($op == "last10posts") {
                 $testText = strip_tags($testText);
                 $html2txt = new html2text($testText,false);
                 $testText = trim($html2txt->get_text());
-                $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
+                $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$_FF_CONF['contentinfo_numchars']). '...')));
             }
             $link = '<a class="gf_mootip" style="text-decoration:none; white-space:nowrap;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $topic_id . '&amp;lastpost=true#' . $lastid . '" title="' . htmlspecialchars($P['subject']) . '::' . $lastpostinfogll . '" rel="nofollow">';
 
             $topiclink = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] .'/forum/viewtopic.php?showtopic=' . $topic_id . '" title="' . htmlspecialchars($P['subject']) . '::' . $topicinfo . '">' . $P['subject'] . '</a>';
 
             $dt->setTimestamp($P['date']);
-            $tdate = $dt->format($CONF_FORUM['default_Datetime_format'],true);
+            $tdate = $dt->format($_FF_CONF['default_Datetime_format'],true);
 
             $data_arr[] = array('forum'   => '<a href="'.$_CONF['site_url'].'/forum/index.php?forum='.$P['forum_id'].'">'.$P['forum_name'].'</a>',
                                 'subject' => $topiclink,
@@ -255,7 +259,7 @@ if ($op == "last10posts") {
 
     $retval .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
-    echo $retval;
+    $display .= $retval;
 } else {
     $retval = '';
 
@@ -282,7 +286,7 @@ if ($op == "last10posts") {
 
     if ($chkactivity) {
         $sql = "SELECT user.uid,user.uid,user.username,user.regdate,user.email,user.homepage, count(*) as posts, userprefs.emailfromuser ";
-        $sql .= " FROM {$_TABLES['users']} user, {$_TABLES['userprefs']} userprefs, {$_TABLES['gf_topic']} topic WHERE";
+        $sql .= " FROM {$_TABLES['users']} user, {$_TABLES['userprefs']} userprefs, {$_TABLES['ff_topic']} topic WHERE";
         $sql .= " user.uid <> 1 AND user.status = 3 AND user.uid=topic.uid AND user.uid=userprefs.uid ";
         $sql .= "GROUP by user.uid ";
     } else {
@@ -309,14 +313,15 @@ if ($op == "last10posts") {
     $retval .= COM_startBlock($LANG_GF02['msg200'], '',
                               COM_getBlockTemplate('_admin_block', 'header'));
 
-    $retval .= ADMIN_list('popular', 'ADMIN_getListField_memberlist', $header_arr,
+    $retval .= ADMIN_list('popular', '_ff_getListField_memberlist', $header_arr,
                           $text_arr, $query_arr, $defsort_arr, $filter);
 
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
-    echo $retval;
+    $display .= $retval;
 }
 
-gf_siteFooter();
+$display .= FF_siteFooter();
+echo $display;
 
 ?>

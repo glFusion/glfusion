@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
+// | Copyright (C) 2009-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -30,28 +30,32 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
-require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
+if (!in_array('forum', $_PLUGINS)) {
+    exit;
+}
 
-if ( !$CONF_FORUM['enable_user_rating_system'] ) {
+USES_forum_functions();
+USES_forum_format();
+
+if ( !$_FF_FORUM['enable_user_rating_system'] ) {
     die;
 }
 
-$vid  = isset($_GET['vid']) ? intval(COM_applyFilter($_GET['vid'],true)) : 0;
-$pid  = isset($_GET['pid']) ? intval(COM_applyFilter($_GET['pid'],true)) : 0;
-$tid  = isset($_GET['tid']) ? intval(COM_applyFilter($_GET['tid'],true)) : 0;
-$vote = isset($_GET['vote']) ? intval(COM_applyFilter($_GET['vote'],true)) : 0;
-$mode = isset($_GET['mode']) ? intval(COM_applyFilter($_GET['mode'],true)) : 0;
+$vid  = isset($_GET['vid']) ? COM_applyFilter($_GET['vid'],true) : 0;
+$pid  = isset($_GET['pid']) ? COM_applyFilter($_GET['pid'],true) : 0;
+$tid  = isset($_GET['tid']) ? COM_applyFilter($_GET['tid'],true) : 0;
+$vote = isset($_GET['vote']) ? COM_applyFilter($_GET['vote'],true) : 0;
+$mode = isset($_GET['mode']) ? COM_applyFilter($_GET['mode'],true) : 0;
 
 if (!COM_isAnonUser() && $_USER['uid'] == $vid && $pid >= 1) {
     if ( $mode == 1 ) {
     	if ($_USER['uid'] == $pid) {
     		exit;
     	}
-
-    	$user_already_voted_res = DB_query("SELECT * FROM {$_TABLES['gf_rating_assoc']} WHERE user_id = $pid AND voter_id = {$_USER['uid']}");
+    	$user_already_voted_res = DB_query("SELECT * FROM {$_TABLES['ff_rating_assoc']} WHERE user_id=".(int) $pid." AND voter_id=".(int) $_USER['uid']);
     	if (DB_numRows($user_already_voted_res) < 1) {
         	//Increate or decrease user rating
-        	$user_rating_res = DB_query("SELECT rating FROM {$_TABLES['gf_userinfo']} WHERE uid = $pid");
+        	$user_rating_res = DB_query("SELECT rating FROM {$_TABLES['ff_userinfo']} WHERE uid=".(int) $pid);
         	$user_rating_row = DB_fetchArray($user_rating_res);
         	$user_rating = $user_rating_row['rating'];
         	if ( $vote > 0 ) {
@@ -61,21 +65,21 @@ if (!COM_isAnonUser() && $_USER['uid'] == $vid && $pid >= 1) {
         		$user_rating--;
         		$grade = -1;
         	}
-        	DB_query("UPDATE {$_TABLES['gf_userinfo']} SET rating = $user_rating WHERE uid = $pid");
-        	DB_query("INSERT INTO {$_TABLES['gf_rating_assoc']} (user_id, voter_id, grade,topic_id)
-        						VALUES ($pid, {$_USER['uid']}, $grade,$tid)");
+        	DB_query("UPDATE {$_TABLES['ff_userinfo']} SET rating = $user_rating WHERE uid=".(int)$pid);
+        	DB_query("INSERT INTO {$_TABLES['ff_rating_assoc']} (user_id, voter_id, grade,topic_id)
+        						VALUES (".(int) $pid.", ".(int)$_USER['uid'].", ".(int)$grade.",".(int)$tid.")");
         } else {
             // get user_rating;
-        	$user_rating_res = DB_query("SELECT rating FROM {$_TABLES['gf_userinfo']} WHERE uid = $pid");
+        	$user_rating_res = DB_query("SELECT rating FROM {$_TABLES['ff_userinfo']} WHERE uid = ".(int)$pid);
         	$user_rating_row = DB_fetchArray($user_rating_res);
         	$user_rating = $user_rating_row['rating'];
         }
     } elseif( $mode == 0 ) {
         // validate an entry exists
-        $res1 = DB_query("SELECT * FROM {$_TABLES['gf_rating_assoc']} WHERE user_id = $pid AND voter_id = {$_USER['uid']}");
+        $res1 = DB_query("SELECT * FROM {$_TABLES['ff_rating_assoc']} WHERE user_id = ".(int) $pid ." AND voter_id = ".(int)$_USER['uid']);
         if ( DB_numRows($res1) > 0 ) {
         	//Increate or decrease user rating
-        	$user_rating_res = DB_query("SELECT rating FROM {$_TABLES['gf_userinfo']} WHERE uid = $pid");
+        	$user_rating_res = DB_query("SELECT rating FROM {$_TABLES['ff_userinfo']} WHERE uid = ".(int)$pid);
         	$user_rating_row = DB_fetchArray($user_rating_res);
         	$user_rating = $user_rating_row['rating'];
         	if ( $vote > 0 ) {
@@ -83,13 +87,13 @@ if (!COM_isAnonUser() && $_USER['uid'] == $vid && $pid >= 1) {
         	} else {
         		$user_rating--;
         	}
-        	DB_query("UPDATE {$_TABLES['gf_userinfo']} SET rating = $user_rating WHERE uid = $pid");
+        	DB_query("UPDATE {$_TABLES['ff_userinfo']} SET rating = ".(int)$user_rating." WHERE uid = ".(int)$pid);
         	//Delete Their vote in the associative table
-        	DB_query("DELETE FROM {$_TABLES['gf_rating_assoc']} WHERE user_id = $pid AND voter_id = {$_USER['uid']}");
+        	DB_query("DELETE FROM {$_TABLES['ff_rating_assoc']} WHERE user_id = ".(int) $pid." AND voter_id = ".(int)$_USER['uid']);
         }
     }
    	// grab the poster's current rating...
-	$rating = DB_getItem($_TABLES['gf_userinfo'],'rating','uid='.intval($pid));
+	$rating = DB_getItem($_TABLES['ff_userinfo'],'rating','uid='.(int) $pid);
 	if ($rating > 0) {
 		$grade = '+'. $rating;
 	} else {
@@ -98,7 +102,7 @@ if (!COM_isAnonUser() && $_USER['uid'] == $vid && $pid >= 1) {
 
 	//Find out if user has rights to increase / decrease score
 	if ( $_USER['uid'] > 1 && $_USER['uid'] != $pid ) { //Can't vote for yourself & must be logged in
-		$user_already_voted_res = DB_query("SELECT grade FROM {$_TABLES['gf_rating_assoc']} WHERE user_id = {$pid} AND voter_id = {$_USER['uid']}");
+		$user_already_voted_res = DB_query("SELECT grade FROM {$_TABLES['ff_rating_assoc']} WHERE user_id=".(int)$pid." AND voter_id=".(int) $_USER['uid']);
 		if (DB_numRows($user_already_voted_res) <= 0 ) {
 		// user has never voted for this poster
 		    $vote_language = $LANG_GF01['grade_user'];

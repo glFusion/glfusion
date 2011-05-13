@@ -1,3 +1,0 @@
-{# begin {templatelocation} #}
-<td><a href="{quotelink}" rel="nofollow">{quotelinkimg}</a></td>
-{# end {templatelocation} #}

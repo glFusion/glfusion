@@ -41,14 +41,13 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-require_once $_CONF['path'].'plugins/forum/config.php';
 require_once $_CONF['path'].'plugins/forum/forum.php';
 
 /**
 * Called by the plugin Editor to run the SQL Update for a plugin update
 */
 function forum_upgrade() {
-    global $_CONF, $_TABLES, $CONF_FORUM, $_FF_CONF;
+    global $_CONF, $_TABLES, $_FF_CONF, $_FF_CONF;
 
     require_once $_CONF['path_system'] . 'classes/config.class.php';
 
@@ -99,11 +98,11 @@ function forum_upgrade() {
             $c->add('enable_user_rating_system',FALSE, 'select', 0,0,0,22, TRUE, 'forum');
             $c->add('bbcode_signature', TRUE, 'select',0, 0, 0, 37, true, 'forum');
             $c->add('use_wysiwyg_editor', false, 'select', 0, 2, 0, 85, true, 'forum');
-            DB_query("ALTER TABLE {$_TABLES['gf_forums']} ADD `rating_view` INT( 8 ) NOT NULL ,ADD `rating_post` INT( 8 ) NOT NULL",1);
-            DB_query("ALTER TABLE {$_TABLES['gf_userinfo']} ADD `rating` INT( 8 ) NOT NULL ");
-            DB_query("ALTER TABLE {$_TABLES['gf_userinfo']} ADD signature MEDIUMTEXT" );
-            DB_query("ALTER TABLE {$_TABLES['gf_userprefs']} ADD notify_full tinyint(1) NOT NULL DEFAULT '0' AFTER alwaysnotify");
-            $sql = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_rating_assoc']} ( "
+            DB_query("ALTER TABLE {$_TABLES['ff_forums']} ADD `rating_view` INT( 8 ) NOT NULL ,ADD `rating_post` INT( 8 ) NOT NULL",1);
+            DB_query("ALTER TABLE {$_TABLES['ff_userinfo']} ADD `rating` INT( 8 ) NOT NULL ");
+            DB_query("ALTER TABLE {$_TABLES['ff_userinfo']} ADD signature MEDIUMTEXT" );
+            DB_query("ALTER TABLE {$_TABLES['ff_userprefs']} ADD notify_full tinyint(1) NOT NULL DEFAULT '0' AFTER alwaysnotify");
+            $sql = "CREATE TABLE IF NOT EXISTS {$_TABLES['ff_rating_assoc']} ( "
                     . "`user_id` mediumint( 9 ) NOT NULL , "
                     . "`voter_id` mediumint( 9 ) NOT NULL , "
                     . "`grade` smallint( 6 ) NOT NULL  , "
@@ -118,14 +117,14 @@ function forum_upgrade() {
             DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $grp_id)", 1);
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.1.4',pi_gl_version='1.1.5' WHERE pi_name = 'forum'");
         case '3.1.4' :
-            DB_query("ALTER TABLE {$_TABLES['gf_rating_assoc']} DROP PRIMARY KEY",1);
+            DB_query("ALTER TABLE {$_TABLES['ff_rating_assoc']} DROP PRIMARY KEY",1);
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.1.5',pi_gl_version='1.1.6' WHERE pi_name = 'forum'");
         case '3.1.5' :
         case '3.1.6' :
         case '3.1.7' :
-            DB_query("ALTER TABLE {$_TABLES['gf_userprefs']} ADD topic_order varchar(10) NOT NULL DEFAULT 'ASC' AFTER notify_once");
-            DB_query("ALTER TABLE {$_TABLES['gf_userprefs']} ADD use_wysiwyg_editor tinyint(3) NOT NULL DEFAULT '1' AFTER topic_order");
-            DB_query("ALTER TABLE {$_TABLES['gf_topic']} ADD `status` int(10) unsigned NOT NULL DEFAULT '0' AFTER locked");
+            DB_query("ALTER TABLE {$_TABLES['ff_userprefs']} ADD topic_order varchar(10) NOT NULL DEFAULT 'ASC' AFTER notify_once");
+            DB_query("ALTER TABLE {$_TABLES['ff_userprefs']} ADD use_wysiwyg_editor tinyint(3) NOT NULL DEFAULT '1' AFTER topic_order");
+            DB_query("ALTER TABLE {$_TABLES['ff_topic']} ADD `status` int(10) unsigned NOT NULL DEFAULT '0' AFTER locked");
 
             $c = config::get_instance();
             $c->add('bbcode_disabled', 0, 'select', 0, 2, 6, 165, true, 'forum');
@@ -133,13 +132,30 @@ function forum_upgrade() {
             $c->add('urlparse_disabled', 0, 'select', 0, 2, 6, 175, true, 'forum');
         case '3.2.0' :
             // convert watch records
+            $c->del('pre2.5_mode', 'forum');
+            $c->del('mysql4+', 'forum');
+
             _forum_cvt_watch();
             // drop watch table
+
+            // attachment handling...
+            DB_query("ALTER TABLE {$_TABLES['ff_topic']} ADD attachments INT NOT NULL DEFAULT '0' AFTER views");
+            $sql = "SELECT id FROM {$_TABLES['ff_topic']} WHERE pid=0";
+            $result = DB_query($sql);
+            while ( $F = DB_fetchArray($result) ) {
+                $sql = "SELECT count(*) AS count FROM {$_TABLES['ff_topic']} topic left join {$_TABLES['ff_attachments']} att ON topic.id=att.topic_id WHERE (topic.id=".(int) $F['id']. " OR topic.pid=".$F['id'].") and att.filename <> ''";
+                $attResult = DB_query($sql);
+                if ( DB_numRows($attResult) > 0 ) {
+                    list($attCount) = DB_fetchArray($attResult);
+                    DB_query("UPDATE {$_TABLES['ff_topic']} SET attachments=".$attCount." WHERE id=".(int) $F['id']);
+                }
+            }
+
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.3.0',pi_gl_version='1.3.0' WHERE pi_name = 'forum'");
 
         default :
-            DB_query("ALTER TABLE {$_TABLES['gf_forums']} DROP INDEX forum_id",1);
-            DB_query("ALTER TABLE {$_TABLES['gf_rating_assoc']} DROP PRIMARY KEY",1);
+            DB_query("ALTER TABLE {$_TABLES['ff_forums']} DROP INDEX forum_id",1);
+            DB_query("ALTER TABLE {$_TABLES['ff_rating_assoc']} DROP PRIMARY KEY",1);
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '".$_FF_CONF['pi_version']."',pi_gl_version='".$_FF_CONF['gl_version']."' WHERE pi_name = 'forum'");
             return true;
     }
@@ -152,26 +168,26 @@ function upgrade_232() {
 
 
     // Version 2.3 to 2.3.2 added one field - Add if this field does not exist
-    $fields = DB_query("SHOW COLUMNS FROM {$_TABLES['gf_userprefs']}");
+    $fields = DB_query("SHOW COLUMNS FROM {$_TABLES['ff_userprefs']}");
     while ($A = DB_fetchArray($fields)) {
         if (in_array($A['Field'],array('enablenotify'))) {
             $fieldfound = true;
         }
     }
     if (!$fieldfound) {
-        $_SQL[] = "ALTER TABLE {$_TABLES['gf_userprefs']} ADD enablenotify tinyint(1) DEFAULT '1' NOT NULL AFTER viewanonposts";
+        $_SQL[] = "ALTER TABLE {$_TABLES['ff_userprefs']} ADD enablenotify tinyint(1) DEFAULT '1' NOT NULL AFTER viewanonposts";
     }
 
     /* Add new forum table fields */
-    $_SQL[] = "ALTER TABLE {$_TABLES['gf_forums']} ADD is_hidden tinyint(1) DEFAULT '0' NOT NULL AFTER grp_id";
-    $_SQL[] = "ALTER TABLE {$_TABLES['gf_forums']} ADD is_readonly tinyint(1) DEFAULT '0' NOT NULL AFTER is_hidden";
-    $_SQL[] = "ALTER TABLE {$_TABLES['gf_forums']} ADD no_newposts tinyint(1) DEFAULT '0' NOT NULL AFTER is_readonly";
+    $_SQL[] = "ALTER TABLE {$_TABLES['ff_forums']} ADD is_hidden tinyint(1) DEFAULT '0' NOT NULL AFTER grp_id";
+    $_SQL[] = "ALTER TABLE {$_TABLES['ff_forums']} ADD is_readonly tinyint(1) DEFAULT '0' NOT NULL AFTER is_hidden";
+    $_SQL[] = "ALTER TABLE {$_TABLES['ff_forums']} ADD no_newposts tinyint(1) DEFAULT '0' NOT NULL AFTER is_readonly";
 
-    $_SQL[] = "ALTER TABLE {$_TABLES['gf_moderators']} ADD mod_uid mediumint(8) DEFAULT '0' NOT NULL AFTER mod_id";
-    $_SQL[] = "ALTER TABLE {$_TABLES['gf_moderators']} ADD mod_groupid mediumint(8) DEFAULT '0' NOT NULL AFTER mod_uid";
+    $_SQL[] = "ALTER TABLE {$_TABLES['ff_moderators']} ADD mod_uid mediumint(8) DEFAULT '0' NOT NULL AFTER mod_id";
+    $_SQL[] = "ALTER TABLE {$_TABLES['ff_moderators']} ADD mod_groupid mediumint(8) DEFAULT '0' NOT NULL AFTER mod_uid";
 
     /* Add new userprefs field */
-    $_SQL[] = "ALTER TABLE {$_TABLES['gf_userprefs']} ADD notify_once tinyint(1) DEFAULT '0' NOT NULL AFTER showiframe";
+    $_SQL[] = "ALTER TABLE {$_TABLES['ff_userprefs']} ADD notify_once tinyint(1) DEFAULT '0' NOT NULL AFTER showiframe";
 
     /* Execute SQL now to perform the upgrade */
     for ($i = 1; $i <= count($_SQL); $i++) {
@@ -194,11 +210,11 @@ function upgrade_232() {
     }
 
     // Update the moderator records - now that we have a uid field
-    $query = DB_query("SELECT mod_id,mod_username FROM {$_TABLES['gf_moderators']}");
+    $query = DB_query("SELECT mod_id,mod_username FROM {$_TABLES['ff_moderators']}");
     while ($A = DB_fetchArray($query)) {
         $mod_uid = DB_getItem($_TABLES['users'],'uid',"username='{$A['mod_username']}'");
         if ($mod_uid > 0) {
-            DB_query("UPDATE {$_TABLES['gf_moderators']} SET mod_uid = $mod_uid WHERE mod_id={$A['mod_id']}");
+            DB_query("UPDATE {$_TABLES['ff_moderators']} SET mod_uid = $mod_uid WHERE mod_id={$A['mod_id']}");
         }
     }
     COM_errorLog("Success - Completed Forum plugin version 2.5 update",1);
@@ -212,10 +228,10 @@ function upgrade_25() {
     $_SQL = array();
 
     /* Add new fields */
-    $_SQL[] = "ALTER TABLE {$_TABLES['gf_forums']} ADD topic_count mediumint(8) DEFAULT '0' NOT NULL AFTER no_newposts";
-    $_SQL[] = "ALTER TABLE {$_TABLES['gf_forums']} ADD post_count mediumint(8) DEFAULT '0' NOT NULL AFTER topic_count";
-    $_SQL[] = "ALTER TABLE {$_TABLES['gf_forums']} ADD last_post_rec mediumint(8) DEFAULT '0' NOT NULL AFTER post_count";
-    $_SQL[] = "ALTER TABLE {$_TABLES['gf_topic']} ADD last_reply_rec mediumint(8) DEFAULT '0' NOT NULL AFTER lastupdated";
+    $_SQL[] = "ALTER TABLE {$_TABLES['ff_forums']} ADD topic_count mediumint(8) DEFAULT '0' NOT NULL AFTER no_newposts";
+    $_SQL[] = "ALTER TABLE {$_TABLES['ff_forums']} ADD post_count mediumint(8) DEFAULT '0' NOT NULL AFTER topic_count";
+    $_SQL[] = "ALTER TABLE {$_TABLES['ff_forums']} ADD last_post_rec mediumint(8) DEFAULT '0' NOT NULL AFTER post_count";
+    $_SQL[] = "ALTER TABLE {$_TABLES['ff_topic']} ADD last_reply_rec mediumint(8) DEFAULT '0' NOT NULL AFTER lastupdated";
 
     /* Execute SQL now to perform the upgrade */
     for ($i = 1; $i <= count($_SQL); $i++) {
@@ -239,17 +255,17 @@ function upgrade_30() {
 
     $_SQL = array();
 
-    $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_bookmarks']} (
+    $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['ff_bookmarks']} (
       `uid` mediumint(8) NOT NULL,
       `topic_id` int(11) NOT NULL,
       `pid` int(11) NOT NULL default '0',
       KEY `topic_id` (`topic_id`),
       KEY `pid` (`pid`),
       KEY `uid` (`uid`)
-    ) TYPE=MyISAM ;";
+    ) ENGINE=MyISAM ;";
 
 
-    $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_attachments']} (
+    $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['ff_attachments']} (
       `id` int(11) NOT NULL auto_increment,
       `topic_id` int(11) NOT NULL,
       `repository_id` int(11) default NULL,
@@ -258,10 +274,10 @@ function upgrade_30() {
       `show_inline` tinyint(4) NOT NULL default '0',
       PRIMARY KEY  (`id`),
       KEY `topic_id` (`topic_id`)
-    ) Type=MyISAM;";
+    ) ENGINE=MyISAM;";
 
     // Set default access to use attachments to be the Root group
-    $_SQL[] = "ALTER TABLE {$_TABLES['gf_forums']} ADD use_attachment_grpid mediumint(8) DEFAULT '1' NOT NULL AFTER grp_id";
+    $_SQL[] = "ALTER TABLE {$_TABLES['ff_forums']} ADD use_attachment_grpid mediumint(8) DEFAULT '1' NOT NULL AFTER grp_id";
 
     /* Execute SQL now to perform the upgrade */
     for ($i = 1; $i <= count($_SQL); $i++) {
@@ -293,25 +309,25 @@ function _forum_cvt_watch() {
 
     $processed = array();
 
-    $sql = "SELECT * FROM {$_TABLES['gf_topic']} WHERE pid=0";
+    $sql = "SELECT * FROM {$_TABLES['ff_topic']} WHERE pid=0";
     $result = DB_query($sql);
     while ( ( $T = DB_fetchArray($result) ) != NULL ) {
         $pids[] = $T['id'];
     }
 
-    $sql = "SELECT * FROM {$_TABLES['gf_watch']}";
+    $sql = "SELECT * FROM {$_TABLES['ff_watch']}";
     $result = DB_query($sql);
 
     while ( ( $W = DB_fetchArray($result) ) != NULL ) {
 
-        $forum_name = DB_getItem($_TABLES['gf_forums'],'forum_name','forum_id='.(int)$W['forum_id']);
+        $forum_name = DB_getItem($_TABLES['ff_forums'],'forum_name','forum_id='.(int)$W['forum_id']);
         if ( $W['topic_id'] != 0 ) {
             if ( $W['topic_id'] < 0 ) {
                 $searchID = abs($W['topic_id']);
             } else {
                 $searchID = $W['topic_id'];
             }
-            $topic_name = DB_getItem($_TABLES['gf_topic'],'subject','id='.(int)$searchID);
+            $topic_name = DB_getItem($_TABLES['ff_topic'],'subject','id='.(int)$searchID);
         } else {
             $topic_name = $LANG_GF02['msg138'];
         }

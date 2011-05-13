@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -37,27 +37,41 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once 'gf_functions.php';
+require_once '../../../lib-common.php';
+require_once '../../auth.inc.php';
 
-echo COM_siteHeader();
-echo COM_startBlock($LANG_GF91['gfstats']);
+if (!SEC_hasRights('forum.edit')) {
+  $display = COM_siteHeader();
+  $display .= COM_startBlock($LANG_GF00['access_denied']);
+  $display .= $LANG_GF00['admin_only'];
+  $display .= COM_endBlock();
+  $display .= COM_siteFooter(true);
+  echo $display;
+  exit();
+}
 
-echo glfNavbar($navbarMenu,$LANG_GF06['1']);
+USES_forum_functions();
+USES_forum_admin();
+
+$display = FF_siteHeader();
+$display .= COM_startBlock($LANG_GF91['gfstats']);
+
+$display .= FF_navbar($navbarMenu,$LANG_GF06['1']);
 
 // CATEGORIES
-$numcats=DB_query("SELECT id FROM {$_TABLES['gf_categories']}");
+$numcats=DB_query("SELECT id FROM {$_TABLES['ff_categories']}");
 $totalcats=DB_numRows($numcats);
 // FORUMS
-$numforums=DB_query("SELECT forum_id FROM {$_TABLES['gf_forums']}");
+$numforums=DB_query("SELECT forum_id FROM {$_TABLES['ff_forums']}");
 $totalforums=DB_numRows($numforums);
 // TOPICS
-$numtopics=DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE pid = 0");
+$numtopics=DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE pid = 0");
 $totaltopics=DB_numRows($numtopics);
 // POSTS
-$numposts=DB_query("SELECT id FROM {$_TABLES['gf_topic']}");
+$numposts=DB_query("SELECT id FROM {$_TABLES['ff_topic']}");
 $totalposts=DB_numRows($numposts);
 // VIEWS
-$numviews=DB_query("SELECT SUM(views) AS TOTAL FROM {$_TABLES['gf_topic']}");
+$numviews=DB_query("SELECT SUM(views) AS TOTAL FROM {$_TABLES['ff_topic']}");
 $totalviews=DB_fetchArray($numviews);
 
 // AVERAGE POSTS
@@ -89,40 +103,38 @@ if ($totalviews['TOTAL'] != 0) {
     $avgtviews = 0;
 }
 
+$indextemplate = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
+$indextemplate->set_file ('indextemplate', 'index.thtml');
 
-    $indextemplate = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
-    $indextemplate->set_file (array ('indextemplate'=>'index.thtml'));
+$indextemplate->set_var (array(
+    'statsmsg'      => $LANG_GF91['statsmsg'],
+    'totalcatsmsg'  => $LANG_GF91['totalcats'],
+    'totalcats'     => $totalcats,
+    'totalforumsmsg'=> $LANG_GF91['totalforums'],
+    'totalforums'   => $totalforums,
+    'totaltopicsmsg'=> $LANG_GF91['totaltopics'],
+    'totaltopics'   => $totaltopics,
+    'totalpostsmsg' => $LANG_GF91['totalposts'],
+    'totalposts'    => $totalposts,
+    'totalviewsmsg' => $LANG_GF91['totalviews'],
+    'totalviews'    => $totalviews['TOTAL'],
+    'category'      => $LANG_GF91['category'],
+    'forum'         => $LANG_GF91['forum'],
+    'topic'         => $LANG_GF91['topic'],
+    'avgpmsg'       => $LANG_GF91['avgpmsg'],
+    'avgcposts'     => $avgcposts,
+    'avgfposts'     => $avgfposts,
+    'avgtposts'     => $avgtposts,
+    'avgvmsg'       => $LANG_GF91['avgvmsg'],
+    'avgcviews'     => $avgcviews,
+    'avgfviews'     => $avgfviews,
+    'avgtviews'     => $avgtviews));
 
-    $indextemplate->set_var ('statsmsg', $LANG_GF91['statsmsg']);
-    $indextemplate->set_var ('totalcatsmsg', $LANG_GF91['totalcats']);
-    $indextemplate->set_var ('totalcats', $totalcats);
-    $indextemplate->set_var ('totalforumsmsg', $LANG_GF91['totalforums']);
-    $indextemplate->set_var ('totalforums', $totalforums);
-    $indextemplate->set_var ('totaltopicsmsg', $LANG_GF91['totaltopics']);
-    $indextemplate->set_var ('totaltopics', $totaltopics);
-    $indextemplate->set_var ('totalpostsmsg', $LANG_GF91['totalposts']);
-    $indextemplate->set_var ('totalposts', $totalposts);
-    $indextemplate->set_var ('totalviewsmsg', $LANG_GF91['totalviews']);
-    $indextemplate->set_var ('totalviews', $totalviews['TOTAL']);
-    $indextemplate->set_var ('category', $LANG_GF91['category']);
-    $indextemplate->set_var ('forum', $LANG_GF91['forum']);
-    $indextemplate->set_var ('topic', $LANG_GF91['topic']);
-    $indextemplate->set_var ('avgpmsg', $LANG_GF91['avgpmsg']);
-    $indextemplate->set_var ('avgcposts', $avgcposts);
-    $indextemplate->set_var ('avgfposts', $avgfposts);
-    $indextemplate->set_var ('avgtposts', $avgtposts);
-    $indextemplate->set_var ('avgvmsg', $LANG_GF91['avgvmsg']);
-    $indextemplate->set_var ('avgcviews', $avgcviews);
-    $indextemplate->set_var ('avgfviews', $avgfviews);
-    $indextemplate->set_var ('avgtviews', $avgtviews);
+$indextemplate->parse ('output', 'indextemplate');
+$display .= $indextemplate->finish ($indextemplate->get_var('output'));
 
-    $indextemplate->parse ('output', 'indextemplate');
-    echo $indextemplate->finish ($indextemplate->get_var('output'));
-
-
-echo COM_endBlock();
-echo adminfooter();
-
-echo COM_siteFooter();
-
+$display .= COM_endBlock();
+$display .= FF_adminfooter();
+$display .= FF_siteFooter();
+echo $display;
 ?>

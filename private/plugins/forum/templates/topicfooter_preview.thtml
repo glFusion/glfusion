@@ -1,8 +1,0 @@
-{# begin {templatelocation} #}
-</table>
-<table width="100%" border="0" cellspacing="0" cellpadding="4">
-        <tr>
-           <td class="aligncenter" style="white-space:nowrap;">{pagenavigation}</td>
-        </tr>
-</table>
-{# end {templatelocation} #}

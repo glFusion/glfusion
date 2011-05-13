@@ -15,18 +15,6 @@
         <td><input type="text" id="xpostsperpage" name="xpostsperpage" size="3" maxlength="11" value="{postsperpage}"{xhtml}></td>
       </tr>
       <tr>
-        <td style="width:100px;"><label for="xpopularlimit">{LANG_GF02[msg122]}</label></td>
-        <td><input type="text" id="xpopularlimit" name="xpopularlimit" size="3" maxlength="11" value="{popularlimit}"{xhtml}></td>
-      </tr>
-      <tr>
-        <td style="width:100px;"><label for="xsearchlines">{LANG_GF02[msg126]}</label></td>
-        <td><input type="text" id="xsearchlines" name="xsearchlines" size="3" maxlength="11" value="{searchlines}"{xhtml}></td>
-      </tr>
-      <tr>
-        <td style="width:100px;"><label for="xmembersperpage">{LANG_GF02[msg128]}</label></td>
-        <td><input type="text" id="xmembersperpage" name="xmembersperpage" size="3" maxlength="11" value="{membersperpage}"{xhtml}></td>
-      </tr>
-      <tr>
         <td style="width:100px;"><label for="xviewanonposts">{LANG_GF02[msg130]}</label></td>
         <td><input type="checkbox" id="xviewanonposts" name="xviewanonposts" {viewanonposts_checked}{xhtml}></td>
       </tr>
