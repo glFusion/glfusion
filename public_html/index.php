@@ -328,11 +328,11 @@ if ( !empty($topic) ) {
     $orderBy = ' date DESC';
 }
 
-$msql = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
+$msql = "SELECT s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
          . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
          . $userfields . ", t.topic, t.imageurl "
-         . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, "
-         . "{$_TABLES['topics']} AS t WHERE (s.uid = u.uid) AND (s.tid = t.tid) AND"
+         . "FROM {$_TABLES['stories']} AS s LEFT JOIN {$_TABLES['users']} AS u ON s.uid=u.uid "
+         . "LEFT JOIN {$_TABLES['topics']} AS t on s.tid=t.tid WHERE "
          . $sql . "ORDER BY featured DESC," . $orderBy . " LIMIT $offset, $limit";
 
 $result = DB_query ($msql);
