@@ -653,12 +653,10 @@ function glfusion_130()
         $grp_id = (int) DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'Root'");
         DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $grp_id)", 1);
     }
-
+    // forum update
     $c->del('pre2.5_mode', 'forum');
     $c->del('mysql4+', 'forum');
-
     _forum_cvt_watch();
-
     // attachment handling...
     DB_query("ALTER TABLE {$_TABLES['ff_topic']} ADD attachments INT NOT NULL DEFAULT '0' AFTER views",1);
     $sql = "SELECT id FROM {$_TABLES['ff_topic']} WHERE pid=0";
@@ -671,6 +669,7 @@ function glfusion_130()
             DB_query("UPDATE {$_TABLES['ff_topic']} SET attachments=".$attCount." WHERE id=".(int) $F['id'],1);
         }
     }
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.3.0',pi_gl_version='1.3.0' WHERE pi_name = 'forum'");
 
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.3.0',name='glfusion'",1);

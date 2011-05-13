@@ -132,6 +132,7 @@ function forum_upgrade() {
             $c->add('urlparse_disabled', 0, 'select', 0, 2, 6, 175, true, 'forum');
         case '3.2.0' :
             // convert watch records
+            $c = config::get_instance();
             $c->del('pre2.5_mode', 'forum');
             $c->del('mysql4+', 'forum');
 
