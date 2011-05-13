@@ -491,7 +491,7 @@ function plugin_dopluginsearch_comment_filemgmt($query, $datestart, $dateend, $t
 
     $query = trim(DB_escapeString(htmlspecialchars($query)));
 
-    $sql =  "SELECT c.cid AS id1, a.lid AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
+    $sql =  "SELECT a.lid AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
     $sql .= "CONCAT('/filemgmt/index.php?id=',a.lid,'#comments') AS url ";
     $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
     $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_filedetail']} a ON c.sid=CONCAT('fileid_',a.lid) ";
