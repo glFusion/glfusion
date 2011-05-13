@@ -94,32 +94,6 @@ $_TABLES['userprefs']           = $_DB_table_prefix . 'userprefs';
 $_TABLES['users']               = $_DB_table_prefix . 'users';
 $_TABLES['vars']                = $_DB_table_prefix . 'vars';
 
-
-// Tables used by the bundled plugins
-
-// Calendar plugin
-$_TABLES['events']              = $_DB_table_prefix . 'events';
-$_TABLES['eventsubmission']     = $_DB_table_prefix . 'eventsubmission';
-$_TABLES['personal_events']     = $_DB_table_prefix . 'personal_events';
-
-// Links plugin
-$_TABLES['linkcategories']      = $_DB_table_prefix . 'linkcategories';
-$_TABLES['links']               = $_DB_table_prefix . 'links';
-$_TABLES['linksubmission']      = $_DB_table_prefix . 'linksubmission';
-
-// Polls plugin
-$_TABLES['pollanswers']         = $_DB_table_prefix . 'pollanswers';
-$_TABLES['pollquestions']       = $_DB_table_prefix . 'pollquestions';
-$_TABLES['polltopics']          = $_DB_table_prefix . 'polltopics';
-$_TABLES['pollvoters']          = $_DB_table_prefix . 'pollvoters';
-
-// Spam-X plugin
-$_TABLES['spamx']               = $_DB_table_prefix . 'spamx';
-
-// Static Pages plugin
-$_TABLES['staticpage']          = $_DB_table_prefix . 'staticpage';
-
-
 // These tables aren't used by glFusion any more, but the table names are still
 // needed when upgrading from old versions
 $_TABLES['commentspeedlimit']   = $_DB_table_prefix . 'commentspeedlimit';
