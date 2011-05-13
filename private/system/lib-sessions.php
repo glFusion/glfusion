@@ -529,7 +529,7 @@ function SESS_completeLogin($uid)
     // initialize session counter
     SESS_setVar('session.counter',1);
 
-    if ( isset($_USER['tzid']) ) {
+    if ( isset($_USER['tzid']) && !empty($_USER['tzid']) ) {
         $_CONF['timezone'] = $_USER['tzid'];
     }
 
