@@ -933,6 +933,11 @@ class upload
         }
         $metaData = IMG_getMediaMetaData( $this->_currentFile['tmp_name'] );
 
+        if ( !isset($metaData['mime_type']) ) {
+            $this->_addError('Unable to determine mime type for ' . $this->_currentFile['name']);
+            return false;
+        }
+
         if ( $metaData['mime_type'] != '' ) {
             $this->_currentFile['type'] = $metaData['mime_type'];
         } else {
