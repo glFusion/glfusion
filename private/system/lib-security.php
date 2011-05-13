@@ -1642,6 +1642,9 @@ function SEC_reauthform($desturl, $message = '',$method = '', $postdata = '', $g
 
     $hidden = '';
 
+    if ( $desturl != '' ) {
+        $hidden .= '<input type="hidden" name="token_returnurl" value="'.urlencode($desturl).'"/>' . LB;
+    }
     $hidden .= '<input type="hidden" name="token_postdata" value="'.urlencode($postdata).'"/>' . LB;
     $hidden .= '<input type="hidden" name="token_getdata" value="'.urlencode($getdata).'"/>' . LB;
     $hidden .= '<input type="hidden" name="token_filedata" value="'.urlencode($filedata).'"/>' . LB;
