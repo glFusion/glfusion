@@ -321,7 +321,7 @@ class Search {
                 $searchusers[$A['uid']] = $A['uid'];
             }
             if (in_array('forum', $_PLUGINS)) {
-                $result = DB_query("SELECT DISTINCT uid FROM {$_TABLES['gf_topic']}");
+                $result = DB_query("SELECT DISTINCT uid FROM {$_TABLES['ff_topic']}");
                 while ( $A = DB_fetchArray($result)) {
                     $searchusers[$A['uid']] = $A['uid'];
                 }
@@ -459,7 +459,7 @@ class Search {
         // Make sure the query is SQL safe
         $query = trim(DB_escapeString(htmlspecialchars($this->_query)));
 
-        $sql = "SELECT c.cid AS id1, s.sid AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
+        $sql = "SELECT s.sid AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
 
         if ( $_CONF['url_rewrite'] ) {
             $sql .= "CONCAT('/article.php/',s.sid,'#comments') AS url ";
@@ -473,9 +473,9 @@ class Search {
         $sql .= "WHERE (u.uid = c.uid) AND (s.draft_flag = 0) AND (s.commentcode >= 0) AND (s.date <= NOW()) ";
 
         if (!empty($this->_topic))
-            $sql .= "AND (s.tid = '$this->_topic') ";
+            $sql .= "AND (s.tid = '".DB_escapeString($this->_topic)."') ";
         if (!empty($this->_author))
-            $sql .= "AND (c.uid = '$this->_author') ";
+            $sql .= "AND (c.uid = ".(int) $this->_author.") ";
 
         $search = new SearchCriteria('comments', $LANG09[65] . ' > '. $LANG09[66]);
         $columns = array('comment','c.title');
@@ -556,7 +556,7 @@ class Search {
         $show_hits = $_CONF['search_show_hits'];
         $style = isset($_CONF['search_style']) ? $_CONF['search_style'] : 'google';
         if ( !COM_isAnonUser() ) {
-            $userStyle = DB_getItem($_TABLES['userprefs'],'search_result_format','uid='.$_USER['uid']);
+            $userStyle = DB_getItem($_TABLES['userprefs'],'search_result_format','uid='.(int) $_USER['uid']);
             if ( $userStyle != '' ) {
                 $style = $userStyle;
             }

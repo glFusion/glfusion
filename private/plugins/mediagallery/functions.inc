@@ -341,7 +341,7 @@ function plugin_dopluginsearch_comment_mediagallery($query, $datestart, $dateend
 
     $query = trim(DB_escapeString(htmlspecialchars($query)));
 
-    $sql =  "SELECT c.cid AS id1, ma.media_id AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
+    $sql =  "SELECT ma.media_id AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
     $sql .= "CONCAT('/mediagallery/media.php?s=',ma.media_id,'#comments') AS url ";
     $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
     $sql .= "LEFT JOIN {$_TABLES['mg_media_albums']} AS ma ON c.sid=ma.media_id ";
@@ -389,7 +389,7 @@ function plugin_dopluginsearch_mediagallery($query, $datestart, $dateend, $topic
 
     $query = trim(DB_escapeString(htmlspecialchars($query)));
 
-    $sql = "SELECT DISTINCT a.*,ma.album_id,a.perm_anon, m.media_id AS id,m.media_user_id AS uid,m.media_desc AS description ,m.media_title AS title,m.media_time AS date,m.media_views AS hits, CONCAT('/mediagallery/media.php?s=',m.media_id) AS url  FROM " .
+    $sql = "SELECT DISTINCT m.media_id AS id,m.media_title AS title,m.media_desc AS description,m.media_time AS date,m.media_user_id AS uid,m.media_views AS hits, CONCAT('/mediagallery/media.php?s=',m.media_id) AS url  FROM " .
             $_TABLES['mg_media'] . " as m " .
             " INNER JOIN " . $_TABLES['mg_media_albums'] . " as ma " .
             " ON m.media_id=ma.media_id " .
@@ -999,7 +999,13 @@ function _mg_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 */
 function plugin_ismoderator_mediagallery() {
 
-    global $_TABLES;
+    global $_TABLES, $_USER;
+
+    if ( COM_isAnonUser() ) {
+        $uid = 1;
+    } else {
+        $uid = $_USER['uid'];
+    }
 
     $_GROUPS = SEC_getUserGroups($uid);
     $groupsql = '';

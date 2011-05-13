@@ -446,12 +446,12 @@ function plugin_dopluginsearch_filemgmt($query, $datestart, $dateend, $topic, $t
 {
     global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_FM_TABLES, $_CONF, $filemgmt_FileStoreURL;
 
-    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
+    if ( COM_isAnonUser() && $mydownloads_publicpriv != 1 )  {
         return '';
     }
     $query = trim(DB_escapeString(htmlspecialchars($query)));
 
-    $sql  = "SELECT a.lid AS id, a.cid, a.title,submitter AS uid,comments,hits,date,description, CONCAT('/filemgmt/index.php?id=',a.lid) AS url ";
+    $sql  = "SELECT a.lid AS id, a.title, description, date, submitter AS uid, hits, CONCAT('/filemgmt/index.php?id=',a.lid) AS url ";
     $sql .= "FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
     $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON b.cid=a.cid ";
     $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_filedesc']} c ON c.lid=a.lid ";

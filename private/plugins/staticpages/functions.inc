@@ -686,7 +686,7 @@ function plugin_dopluginsearch_comment_staticpages($query, $datestart, $dateend,
 
     $query = trim(DB_escapeString(htmlspecialchars($query)));
 
-    $sql =  "SELECT c.cid AS id1, c.sid AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
+    $sql =  "SELECT c.sid AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
     $sql .= "CONCAT('/page.php?page=', c.sid,'#comments') AS url ";
     $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
     $sql .= "LEFT JOIN {$_TABLES['staticpage']} s ON c.cid=s.sp_id ";
@@ -694,7 +694,7 @@ function plugin_dopluginsearch_comment_staticpages($query, $datestart, $dateend,
     $sql .= COM_getPermSQL('AND') . COM_getLangSQL('sp_id', 'AND', 's') . ' ';
 
     if (!empty($author)) {
-        $sql .= "AND (c.uid = '$author') ";
+        $sql .= "AND (c.uid = ".(int) $author.") ";
     }
 
     $search_c = new SearchCriteria('comments', $LANG_STATIC['staticpages'] . ' > ' . $LANG09[66]);
