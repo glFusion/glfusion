@@ -2,6 +2,18 @@ glFusion ChangeLog
 
 v1.3.0 (Trunk Development Branch)
 ------
+- Forum Plugin: General code clean up / optimizations / template consolidation
+  (Mark)
+- Removed bundled plugin table definitions from lib-database - now part of
+  each plugin (Mark)
+- Cleaned up search queries so all now retrieve the same set of vars and
+  no longer retrieve unused variables (Mark)
+- Implemented new $_PLUGIN_INFO[] array - this contains ['pi_name'] = pi_version
+  This allows the plugin to check the installed version without having
+  to hit the database. (Mark)
+- upload.class.php - log error if unable to determine mime type (Mark)
+- Fixed issue where 'All but Homepage' block setting did not display properly
+  when topic was not empty (Mark)
 - Calendar Plugin: Fixed admin edit to display appropriate errors and the
   input form properly (with previously entered data) when submission
   fails (Mark)
