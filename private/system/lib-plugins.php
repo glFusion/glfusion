@@ -61,18 +61,28 @@ define('PLG_RET_PERMISSION_DENIED',   -2);  // access to item or object denied
 define('PLG_RET_AUTH_FAILED',         -3);  // authentication failed
 define('PLG_RET_PRECONDITION_FAILED', -4);  // a precondition was not met
 
+/**
+ * Centerblock locations
+ */
+define('CENTERBLOCK_TOP',               1);
+define('CENTERBLOCK_AFTER_FEATURED',    2);
+define('CENTERBLOCK_BOTTOM',            3);
+define('CENTERBLOCK_FORCE',             4);
+
 // buffer for function names for the center block API
 $PLG_bufferCenterAPI = array ();
 $PLG_buffered = false;
 
 // buffer enabled plugins
-$result = DB_query("SELECT pi_name FROM {$_TABLES['plugins']} WHERE pi_enabled = 1");
+$result = DB_query("SELECT pi_name,pi_version FROM {$_TABLES['plugins']} WHERE pi_enabled = 1");
 /**
 * @global array List of all active plugins
 */
 $_PLUGINS = array();
+$_PLUGIN_INFO = array();
 while ($A = DB_fetchArray($result)) {
     $_PLUGINS[] = $A['pi_name'];
+    $_PLUGIN_INFO[$A['pi_name']] = $A['pi_version'];
 }
 
 /**
@@ -388,7 +398,7 @@ function PLG_uninstall ($type)
 */
 function PLG_enableStateChange ($type, $enable)
 {
-   global $_CONF, $_TABLES, $_DB_table_prefix;
+   global $_CONF, $_TABLES, $_PLUGIN_INFO, $_USER, $_DB_table_prefix;
 
     $args[1] = $enable;
 
