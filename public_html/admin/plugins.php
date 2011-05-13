@@ -627,13 +627,14 @@ function PLUGINS_list($token)
 */
 function PLUGINS_toggleStatus($plugin_name_arr, $pluginarray)
 {
-    global $_TABLES, $_DB_table_prefix;
+    global $_TABLES, $_PLUGIN_INFO, $_DB_table_prefix;
 
     if (isset($pluginarray) && is_array($pluginarray) ) {
         foreach ($pluginarray AS $plugin => $junk ) {
             $plugin = COM_applyFilter($plugin);
             if ( isset($plugin_name_arr[$plugin]) ) {
                 DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '1' WHERE pi_name = '".DB_escapeString($plugin)."'");
+                $_PLUGIN_INFO[$plugin] = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='".DB_escapeString($plugin)."'");
                 PLG_enableStateChange ($plugin, true);
             } else {
                 $rc = PLG_enableStateChange ($plugin, false);
