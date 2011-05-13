@@ -2735,7 +2735,7 @@ function COM_checkWords( $Message )
 
     if ( $_CONF['censormode'] != 0 && is_array( $_CONF['censorlist'] ) ) {
         $Replacement = $_CONF['censorreplace'];
-        $unicode = ((version_compare(PHP_VERSION, '5.1.0', '>=') || (version_compare(PHP_VERSION, '5.0.0-dev', '<=') && version_compare(PHP_VERSION, '4.4.0', '>='))) && @preg_match('/\p{L}/u', 'a') !== false) ? true : false;
+        $unicode = (@preg_match('/\p{L}/u', 'a') !== false) ? true : false;
         foreach ($_CONF['censorlist'] AS $word ) {
 			if ($unicode) {
 				// Unescape the asterisk to simplify further conversions
@@ -3446,7 +3446,7 @@ function COM_showBlocks( $side, $topic='', $name='all' )
     }
 
     if ( !empty( $topic )) {
-        $commonsql .= " AND (tid = '".DB_escapeString($topic)."' OR tid = 'all')";
+        $commonsql .= " AND (tid = '".DB_escapeString($topic)."' OR tid = 'all' OR tid = 'allnhp' )";
     } else {
         if ( COM_onFrontpage() ) {
             $commonsql .= " AND (tid = 'homeonly' OR tid = 'all')";
@@ -5675,10 +5675,9 @@ function COM_onFrontpage()
 
     preg_match( '/\/\/[^\/]*(.*)/', $_CONF['site_url'], $pathonly );
     if (( $scriptName == $pathonly[1] . '/index.php' ) &&
-            empty( $topic ) && ( $page == 1 ) && !$newstories ) {
+             empty($topic) && (empty($page) || ($page == 1)) && !$newstories) {
         $onFrontpage = true;
     }
-
     return $onFrontpage;
 }
 
