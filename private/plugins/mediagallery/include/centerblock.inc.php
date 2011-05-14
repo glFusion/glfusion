@@ -61,7 +61,7 @@ function _mg_centerblock( $where=1, $page=1, $topic ='' ) {
     }
 
     if ($_MG_CONF['feature_member_album'] == 1 && $_MG_CONF['member_albums'] == 1 && $_USER['uid'] > 1 && $where == 1) {
-        $cbpos = 1; //top of page
+        $cbpos = CENTERBLOCK_TOP; //top of page
         $cbpage = 'none';
 
         if ($cbpage == 'none' && ($page > 1 OR $topic != "")){
@@ -242,7 +242,7 @@ function _mg_centerblock( $where=1, $page=1, $topic ='' ) {
                     'column_width'      => $newwidth + 30,
                     'u_viewalbum'       => $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id . '&amp;page=1',
                     'lang_album'        => $LANG_MG00['album'],
-                    'featured_album'    => $LANG_MG03['your_member_album'], // $LANG_MG03['featured_album']
+                    'featured_album'    => $LANG_MG03['your_member_album'],
                 ));
 
                 $T->parse('output','page');
@@ -264,7 +264,7 @@ function _mg_centerblock( $where=1, $page=1, $topic ='' ) {
             $cbenable = 0;
         } elseif ($cbpage == 'allnhp' && COM_onFrontpage() ) {
             $cbenable = 0;
-        } elseif ($cbpage != 'allnhp' && $cbpage != 'none' && $cbpage != 'all' && $cbpage != $topic) { // $cbpage != $topic) {
+        } elseif ($cbpage != 'allnhp' && $cbpage != 'none' && $cbpage != 'all' && $cbpage != $topic) {
             $cbenable = 0;
         } else
             $cbenable = 1;
@@ -273,8 +273,6 @@ function _mg_centerblock( $where=1, $page=1, $topic ='' ) {
             MG_initAlbums();
             $T = new Template( MG_getTemplatePath(0) );
             $T->set_file ('page', 'cb_featured_album.thtml');
-
-//            require_once $_CONF['path'] . 'plugins/mediagallery/include/classAlbum.php';
 
             if ($MG_albums[$album_id]->last_update > 0 ) {
                 $album_last_update = MG_getUserDateTimeFormat($MG_albums[$album_id]->last_update);
