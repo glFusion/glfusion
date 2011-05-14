@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -78,7 +78,7 @@ if( $microsummary ) {
     }
 
     if ($topic != $archivetid) {
-        $sql .= " AND s.tid != '{$archivetid}' ";
+        $sql .= " AND s.tid != '".DB_escapeString($archivetid)."' ";
     }
 
     $sql .= COM_getPermSQL ('AND', 0, 2, 's');
@@ -126,7 +126,7 @@ $display = '';
 
 if (!$newstories && !$displayall) {
     // give plugins a chance to replace this page entirely
-    $newcontent = PLG_showCenterblock (0, $page, $topic);
+    $newcontent = PLG_showCenterblock (CENTERBLOCK_FULLPAGE, $page, $topic);
     if (!empty ($newcontent)) {
         echo $newcontent;
         exit;
@@ -162,7 +162,7 @@ if (isset ($_GET['msg'])) {
 
 // Show any Plugin formatted blocks
 // Requires a plugin to have a function called plugin_centerblock_<plugin_name>
-$displayBlock = PLG_showCenterblock (1, $page, $topic); // top blocks
+$displayBlock = PLG_showCenterblock (CENTERBLOCK_TOP, $page, $topic); // top blocks
 if (!empty ($displayBlock)) {
     $display .= $displayBlock;
     // Check if theme has added the template which allows the centerblock
@@ -170,10 +170,6 @@ if (!empty ($displayBlock)) {
     if (file_exists($_CONF['path_layout'] . 'topcenterblock-span.thtml')) {
             $topspan = new Template($_CONF['path_layout']);
             $topspan->set_file (array ('topspan'=>'topcenterblock-span.thtml'));
-            $topspan->set_var( 'xhtml', XHTML );
-            $topspan->set_var( 'site_url', $_CONF['site_url'] );
-            $topspan->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
-            $topspan->set_var( 'layout_url', $_CONF['layout_url'] );
             $topspan->parse ('output', 'topspan');
             $display .= $topspan->finish ($topspan->get_var('output'));
             $GLOBALS['centerspan'] = true;
@@ -235,14 +231,14 @@ $asql .= 'WHERE (expire <= NOW()) AND (statuscode = ' . STORY_DELETE_ON_EXPIRE;
 if (empty ($archivetid)) {
     $asql .= ')';
 } else {
-    $asql .= ' OR statuscode = ' . STORY_ARCHIVE_ON_EXPIRE . ") AND tid != '$archivetid'";
+    $asql .= ' OR statuscode = ' . STORY_ARCHIVE_ON_EXPIRE . ") AND tid != '".DB_escapeString($archivetid)."'";
 }
 $expiresql = DB_query ($asql);
 while (list ($sid, $expiretopic, $title, $expire, $statuscode) = DB_fetchArray ($expiresql)) {
     if ($statuscode == STORY_ARCHIVE_ON_EXPIRE) {
         if (!empty ($archivetid) ) {
             COM_errorLOG("Archive Story: $sid, Topic: $archivetid, Title: $title, Expired: $expire");
-            DB_query ("UPDATE {$_TABLES['stories']} SET tid = '$archivetid', frontpage = '0', featured = '0' WHERE sid='".DB_escapeString($sid)."'");
+            DB_query ("UPDATE {$_TABLES['stories']} SET tid = '".DB_escapeString($archivetid)."', frontpage = '0', featured = '0' WHERE sid='".DB_escapeString($sid)."'");
             CACHE_remove_instance('story_'.$sid);
             CACHE_remove_instance('whatsnew');
         }
@@ -270,7 +266,7 @@ if (!empty($topic)) {
 }
 
 if ($topic != $archivetid) {
-    $sql .= " AND s.tid != '{$archivetid}' ";
+    $sql .= " AND s.tid != '".DB_escapeString($archivetid)."' ";
 }
 
 $sql .= COM_getPermSQL ('AND', 0, 2, 's');
@@ -354,9 +350,9 @@ if ( $A = DB_fetchArray( $result ) ) {
     // display first article
     if ($story->DisplayElements('featured') == 1) {
         $display .= STORY_renderArticle ($story, 'y');
-        $display .= PLG_showCenterblock (2, $page, $topic);
+        $display .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
     } else {
-        $display .= PLG_showCenterblock (2, $page, $topic);
+        $display .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
         $display .= STORY_renderArticle ($story, 'y');
     }
 
@@ -368,7 +364,7 @@ if ( $A = DB_fetchArray( $result ) ) {
     }
 
     // get plugin center blocks that follow articles
-    $display .= PLG_showCenterblock (3, $page, $topic); // bottom blocks
+    $display .= PLG_showCenterblock (CENTERBLOCK_BOTTOM, $page, $topic); // bottom blocks
 
     // Print Google-like paging navigation
     if (!isset ($_CONF['hide_main_page_navigation']) ||
@@ -384,12 +380,12 @@ if ( $A = DB_fetchArray( $result ) ) {
         $display .= COM_printPageNavigation ($base_url, $page, $num_pages);
     }
 } else { // no stories to display
-    $display .= PLG_showCenterblock (2, $page, $topic);
-    $display .= PLG_showCenterblock (3, $page, $topic); // bottom blocks
+    $display .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
+    $display .= PLG_showCenterblock (CENTERBLOCK_BOTTOM, $page, $topic); // bottom blocks
     if ( (!isset ($_CONF['hide_no_news_msg']) ||
             ($_CONF['hide_no_news_msg'] == 0)) && $display == '') {
         // If there's still nothing to display, show any default centerblocks.
-        $display .= PLG_showCenterblock(4, $page, $topic);
+        $display .= PLG_showCenterblock(CENTERBLOCK_NONEWS, $page, $topic);
         if ($display == '') {
             // If there's *still* nothing to show, show the stock message
             $display .= COM_startBlock ($LANG05[1], '',
@@ -401,9 +397,7 @@ if ( $A = DB_fetchArray( $result ) ) {
             }
             $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
         }
-
     }
-
 }
 
 $display .= COM_siteFooter (true); // The true value enables right hand blocks.

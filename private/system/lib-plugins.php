@@ -64,10 +64,12 @@ define('PLG_RET_PRECONDITION_FAILED', -4);  // a precondition was not met
 /**
  * Centerblock locations
  */
+define('CENTERBLOCK_FULLPAGE',          0);
 define('CENTERBLOCK_TOP',               1);
 define('CENTERBLOCK_AFTER_FEATURED',    2);
 define('CENTERBLOCK_BOTTOM',            3);
-define('CENTERBLOCK_FORCE',             4);
+define('CENTERBLOCK_NONEWS',            4);
+define('CENTERBLOCK_FORCE',             5);
 
 // buffer for function names for the center block API
 $PLG_bufferCenterAPI = array ();
