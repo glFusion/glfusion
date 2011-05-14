@@ -217,7 +217,7 @@ if ($op == "last10posts") {
 
             if (empty ($P['last_reply_rec']) || $P['last_reply_rec'] < 1) {
                 $lastid = $P['id'];
-                $testText = gf_formatTextBlock($P['comment'],'text','text',$P['status']);
+                $testText = FF_formatTextBlock($P['comment'],'text','text',$P['status']);
                 $testText = strip_tags($testText);
                 $html2txt = new html2text($testText,false);
                 $testText = trim($html2txt->get_text());
@@ -233,7 +233,7 @@ if ($op == "last10posts") {
                 } else {
                     $topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],$B['name']);
                 }
-                $testText = gf_formatTextBlock($B['comment'],'text','text',$B['status']);
+                $testText = FF_formatTextBlock($B['comment'],'text','text',$B['status']);
                 $testText = strip_tags($testText);
                 $html2txt = new html2text($testText,false);
                 $testText = trim($html2txt->get_text());
