@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -363,9 +363,9 @@ class ListFactory {
             $order_sql = ' ORDER BY ' . DB_escapeString($ord) . ' ' . DB_escapeString(strtoupper($this->_sort_arr['direction']));
         }
         if ( isset($_POST['results']) ) {
-            $this->_per_page = intval(COM_applyFilter($_POST['results'], true));
+            $this->_per_page = COM_applyFilter($_POST['results'], true);
         } elseif (isset($_GET['results']) ) {
-            $this->_per_page = intval(COM_applyFilter($_GET['results'], true));
+            $this->_per_page = COM_applyFilter($_GET['results'], true);
         }
         $keyType = 'any';
         if ( isset($_POST['keyType']) ) {
@@ -379,9 +379,9 @@ class ListFactory {
         $pp_total = count($this->_preset_rows);
 
         if ( isset($_POST['page']) ) {
-            $this->_page = intval(COM_applyFilter($_POST['page'], true));
+            $this->_page = COM_applyFilter($_POST['page'], true);
         } elseif (isset($_GET['page']) ) {
-            $this->_page = intval(COM_applyFilter($_GET['page'], true));
+            $this->_page = COM_applyFilter($_GET['page'], true);
         } else {
             $this->_page = 1;
         }
@@ -459,7 +459,7 @@ class ListFactory {
              */
             $name = $limits[$i]['name'];
             if ( isset($_post_offset[$name]) && isset($_REQUEST['np']) && $_REQUEST['np'] == 1 ) {
-                $limits[$i]['offset'] = intval(COM_applyFilter($_post_offset[$name],true)) + intval(COM_applyFilter($_post_pp[$name],true));
+                $limits[$i]['offset'] = COM_applyFilter($_post_offset[$name],true) + COM_applyFilter($_post_pp[$name],true);
             } else {
                 $limits[$i]['offset'] = ($this->_page - 1) * $limits[$i]['pp'];
                 if ( $limits[$i]['offset'] < 0 ) {
@@ -531,7 +531,7 @@ class ListFactory {
                 continue;
             }
             if ($this->_query_arr[$i]['type'] == 'sql' ) {
-                $limit_sql = " LIMIT ".intval($limits[$i]['offset']).",".intval($limits[$i]['limit']);
+                $limit_sql = " LIMIT ".(int) $limits[$i]['offset'].",".(int) $limits[$i]['limit'];
                 if (is_array($this->_query_arr[$i]['sql'])) {
                     $this->_query_arr[$i]['sql']['mysql'] .= $order_sql . $limit_sql;
                     $this->_query_arr[$i]['sql']['mssql'] .= $order_sql . $limit_sql;
