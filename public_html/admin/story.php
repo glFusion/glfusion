@@ -810,13 +810,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
             $post_options .= '<option value="adveditor">'.$LANG24[86].'</option>';
         }
     }
-    if ($_CONF['wikitext_editor']) {
-        if ($story->EditElements('postmode') == 'wikitext') {
-            $post_options .= '<option value="wikitext" selected="selected">'.$LANG24[88].'</option>';
-        } else {
-            $post_options .= '<option value="wikitext">'.$LANG24[88].'</option>';
-        }
-    }
+
     $story_templates->set_var('post_options',$post_options );
     $story_templates->set_var('lang_allowed_html', COM_allowedHTML(SEC_getUserPermissions(),false,'glfusion','story'));
     if ($story->EditElements('advanced_editor_mode') == 1 OR $story->EditElements('postmode') == 'adveditor' OR $story->EditElements('postmode') == 'plaintext') {
