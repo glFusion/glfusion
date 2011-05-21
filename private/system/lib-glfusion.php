@@ -34,10 +34,10 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-$TEMPLATE_OPTIONS['hook']['set_root'] = 'glf_template_set_root';
+$TEMPLATE_OPTIONS['hook']['set_root'] = '_template_set_root';
 $TEMPLATE_OPTIONS['default_vars']['digg_enabled'] = $_CONF['digg_enabled'];
 
-function glf_template_set_root($root) {
+function _template_set_root($root) {
     global $_CONF;
 
     $retval = array();
@@ -130,11 +130,11 @@ function glfusion_SubmissionsCheck()
 */
 function phpblock_blogroll ()
 {
-    global $_CONF, $_TABLES, $_ST_CONF;
+    global $_CONF, $_TABLES;
 
     // configuration options:
 
-    $cat = $_ST_CONF['blogroll_category']; // Category to take links from
+    $cat = 'blog-roll'; // Category to take links from
     $directlink = false;    // Use direct links (true) or portal.php (false)
     $random = false;        // Random order (true) or sort by $sort (false)
     $sort = 'date';         // Sort by ... e.g. 'date', 'title', 'url'

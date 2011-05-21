@@ -1,18 +1,16 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | Site Tailor Plugin - glFusion CMS                                        |
+// | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
-// | install.php                                                              |
+// | getorder.php                                                             |
 // |                                                                          |
-// | This file installs and removes the data structures for the               |
-// | Site Tailor plugin for glFusion.                                         |
+// | AJAX server to return available menu options                             |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Eric Warren            eric AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -31,51 +29,42 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once '../../../lib-common.php';
-require_once $_CONF['path'].'/plugins/sitetailor/autoinstall.php';
+require_once '../lib-common.php';
 
-USES_lib_install();
+header("Cache-Control: no-cache");
+header("Pragma: nocache");
 
-if (!SEC_inGroup('Root')) {
-    // Someone is trying to illegally access this page
-    COM_errorLog("Someone has tried to illegally access the Site Tailor install/uninstall page.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
-    $display = COM_siteHeader ('menu', $LANG_ACCESS['accessdenied'])
-             . COM_startBlock ($LANG_ACCESS['accessdenied'])
-             . $LANG_ACCESS['plugin_access_denied_msg']
-             . COM_endBlock ()
-             . COM_siteFooter ();
-    echo $display;
+// Only let admin users access this page
+if (!SEC_hasRights('menu.admin')) {
+    echo "";
     exit;
 }
 
-/**
-* Main Function
-*/
-
-if (SEC_checkToken()) {
-    $action = COM_applyFilter($_GET['action']);
-    if ($action == 'install') {
-        if (plugin_install_sitetailor()) {
-    		// Redirects to the plugin editor
-    		echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=44');
-    		exit;
-        } else {
-    		echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=72');
-    		exit;
-        }
-    } else if ($action == 'uninstall') {
-    	if (plugin_uninstall_sitetailor('installed')) {
-    		/**
-    		* Redirects to the plugin editor
-    		*/
-    		echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=45');
-    		exit;
-    	} else {
-    		echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=73');
-    		exit;
-    	}
-    }
+if (!isset($_REQUEST['optionid']) ) {
+    echo "";
+    exit;
+}
+if (!isset($_REQUEST['menuid']) ) {
+    echo "";
+    exit;
+}
+if ( isset($_REQUEST['edit']) ) {
+    $edit = 1;
+} else {
+    $edit = 0;
 }
 
-echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php');
+//getting the values
+$id_sent    = preg_replace("/[^0-9a-zA-Z]/","",$_REQUEST['optionid']);
+$menu       = preg_replace("/[^0-9a-zA-Z]/","",$_REQUEST['menuid']);
+
+$order_select = '<label for="menuorder">' . $LANG_MB01['display_after'] . ':</label>';
+$order_select .= '<select id="menuorder" name="menuorder">' . LB;
+$order_select .= '<option value="0">' . $LANG_MB01['first_position'] . '</option>' . LB;
+$result = DB_query("SELECT id,element_label,element_order FROM {$_TABLES['menu_elements']} WHERE menu_id='" . (int) $menu . "' AND pid=" . (int) $id_sent . ' ORDER BY element_order ASC');
+while ($row = DB_fetchArray($result)) {
+    $order_select .= '<option value="' . $row['id'] . '">' . $row['element_label'] . '</option>' . LB;
+}
+$order_select .= '</select>' . LB;
+echo $order_select;
 ?>

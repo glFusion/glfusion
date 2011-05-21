@@ -1,7 +1,7 @@
 {# begin {templatelocation} #}
 {# Hide the menu builder as Javascript is required. If JS is enabled then the JS below will un-hide it #}
 <script type="text/javascript">
-    document.getElementById('sitetailor').style.display=''
+    document.getElementById('menubuilder').style.display=''
 </script>
 <script type="text/javascript">
 <!--
@@ -9,16 +9,25 @@ window.addEvent('load',function() {
     $('menutype').addEvent('change',toggleFields);
     $('pid').addEvent('change',function(){
          var option_id = this.getValue();
-         var menu_id = {menu};
-         var url = 'getorder.php?optionid='+option_id+'&menuid='+menu_id+'&edit=1';
+         var menu_id = {menuid};
+         var url = 'getorder.php?optionid='+option_id+'&menuid='+menu_id;
          new Ajax(url, {
               method: 'get',
               update: $('displayafter')
          }).request();
     });
-    toggleFields();
-});
+    $('urldiv').style.display='';
+    $('targetdiv').style.display='none';
+    $('glcorediv').style.display='none';
+    $('plugin').style.display='none';
+    $('staticpage').style.display='none';
+    $('glfunctions').style.display='none';
+    $('phpdiv').style.display='none';
+    $('topic').style.display='none';
 
+    var myValidator = new fValidator("newitem");
+
+});
 function toggleFields() {
     selected = $('menutype').getValue();
 
@@ -29,7 +38,7 @@ function toggleFields() {
             $('glcorediv').style.display='none';
             $('plugin').style.display='none';
             $('staticpage').style.display='none';
-            $('glfunc').style.display='none';
+            $('glfunctions').style.display='none';
             $('phpdiv').style.display='none';
             $('topic').style.display='none';
             break;
@@ -39,7 +48,7 @@ function toggleFields() {
             $('glcorediv').style.display='none';
             $('plugin').style.display='none';
             $('staticpage').style.display='none';
-            $('glfunc').style.display='';
+            $('glfunctions').style.display='';
             $('phpdiv').style.display='none';
             $('topic').style.display='none';
             break;
@@ -49,7 +58,7 @@ function toggleFields() {
             $('glcorediv').style.display='';
             $('plugin').style.display='none';
             $('staticpage').style.display='none';
-            $('glfunc').style.display='none';
+            $('glfunctions').style.display='none';
             $('phpdiv').style.display='none';
             $('topic').style.display='none';
             break;
@@ -59,7 +68,7 @@ function toggleFields() {
             $('glcorediv').style.display='none';
             $('plugin').style.display='';
             $('staticpage').style.display='none';
-            $('glfunc').style.display='none';
+            $('glfunctions').style.display='none';
             $('phpdiv').style.display='none';
             $('topic').style.display='none';
             break;
@@ -69,7 +78,7 @@ function toggleFields() {
             $('glcorediv').style.display='none';
             $('plugin').style.display='none';
             $('staticpage').style.display='';
-            $('glfunc').style.display='none';
+            $('glfunctions').style.display='none';
             $('phpdiv').style.display='none';
             $('topic').style.display='none';
             break;
@@ -79,7 +88,7 @@ function toggleFields() {
             $('glcorediv').style.display='none';
             $('plugin').style.display='none';
             $('staticpage').style.display='none';
-            $('glfunc').style.display='none';
+            $('glfunctions').style.display='none';
             $('phpdiv').style.display='none';
             $('topic').style.display='none';
             break;
@@ -89,7 +98,7 @@ function toggleFields() {
             $('glcorediv').style.display='none';
             $('plugin').style.display='none';
             $('staticpage').style.display='none';
-            $('glfunc').style.display='none';
+            $('glfunctions').style.display='none';
             $('phpdiv').style.display='';
             $('topic').style.display='none';
             break;
@@ -99,102 +108,99 @@ function toggleFields() {
             $('glcorediv').style.display='none';
             $('plugin').style.display='none';
             $('staticpage').style.display='none';
-            $('glfunc').style.display='none';
+            $('glfunctions').style.display='none';
             $('phpdiv').style.display='none';
             $('topic').style.display='none';
             break;
-        case '9' :
+        case '9' : // topic
             $('urldiv').style.display='none';
             $('targetdiv').style.display='none';
             $('glcorediv').style.display='none';
             $('plugin').style.display='none';
             $('staticpage').style.display='none';
-            $('glfunc').style.display='none';
+            $('glfunctions').style.display='none';
             $('phpdiv').style.display='none';
             $('topic').style.display='';
             break;
-
     }
 }
 -->
 </script>
 
-
-<div class="glfform">
-  <form method="post" action="{form_action}">
-    <input type="hidden" id="menu" name="menu" value="{menu}"{xhtml}>
-    <input type="hidden" id="id" name="id" value="{mid}"{xhtml}>
-
-      <div class="required">
-        <label for="pid">{$LANG_ST01[parent]}:</label>
+  <div class="input-form">
+    <form method="post" action="{form_action}" id="newitem">
+    <div>
+    <input type="hidden" id="menunid" name="menuid" value="{menuid}" />
+      <div id="parentdiv" class="required">
+        <label for="pid">{$LANG_MB01[parent]}:</label>
         {parent_select}
       </div>
-
       <div class="required">
-        <label for="menulabel">{$LANG_ST01[elementlabel]}:</label>
-        <input type="text" id="menulabel" name="menulabel" size="48" value="{menulabel}"{xhtml}>
+        <label for="menulabel">{$LANG_MB01[elementlabel]}:</label>
+        <input class="fValidate['required']" type="text" id="menulabel" name="menulabel" size="48" value="{menulabel}" />
       </div>
       <div id="displayafter" class="required">
-        <label for="menuorder">{$LANG_ST01[display_after]}:</label>
+        <label for="menuorder">{$LANG_MB01[display_after]}:</label>
         {order_select}
       </div>
       <div class="required">
-        <label for="menutype">{$LANG_ST01[type]}:</label>
+        <label for="menutype">{$LANG_MB01[type]}:</label>
         {type_select}
       </div>
       <div id="urldiv" class="required">
-        <label for="menuurl">{$LANG_ST01[url]}:</label>
-        <input type="text" id="menuurl" name="menuurl" size="48" value="{menuurl}"{xhtml}>
+        <label for="menuurl">{$LANG_MB01[url]}:</label>
+        <input type="text" id="menuurl" name="menuurl" size="48" value="{menuurl}" />
       </div>
 
       <div id="targetdiv" class="required">
-        <label for="urltarget">{$LANG_ST01[target]}:</label>
-        {target_select}
+        <label for="urltarget">{$LANG_MB01[target]}:</label>
+        <select id="urltarget" name="urltarget">
+          <option value="">{$LANG_MB01[same_window]}</option>
+          <option value="_blank">{$LANG_MB01[new_window]}</option>
+        </select>
       </div>
 
       <div id="phpdiv" class="required">
-        <label for="phpfunction">{$LANG_ST01[php]}:</label>
-        <input type="text" id="phpfunction" name="phpfunction" size="48" value="{phpfunction}"{xhtml}>
+        <label for="phpfunction">{$LANG_MB01[php]}:</label>
+        <input type="text" id="phpfunction" name="phpfunction" size="48" value="{phpfunction}" />
       </div>
-      <div id="glcorediv" class="optional required">
-        <label for="gltype">{$LANG_ST01[coretype]}:</label>
+      <div id="glcorediv" class="optional">
+        <label for="gltype">{$LANG_MB01[coretype]}:</label>
         {gl_select}
       </div>
-
-      <div id="plugin" class="optional required">
-        <label for="gltype">{$LANG_ST01[plugins]}:</label>
+      <div id="plugin" class="optional">
+        <label for="gltype">{$LANG_MB01[plugins]}:</label>
         {plugin_select}
       </div>
-
-      <div id="staticpage" class="optional required">
-        <label for="spname">{$LANG_ST01[static_pages]}:</label>
-        {sp_select}
+      <div id="staticpage" class="optional">
+        {!if sp_select}
+          <label for="spname">{$LANG_MB01[static_pages]}:</label>
+          {sp_select}
+        {!endif}
       </div>
-
-      <div id="topic" class="optional required">
-        <label for="topicname">{$LANG_ST01['topic']}:</label>
-        {topic_select}
+      <div id="topic" class="optional">
+        {!if topic_select}
+          <label for="topicname">{$LANG_MB01[topic]}:</label>
+          {topic_select}
+        {!endif}
       </div>
-
-      <div id="glfunc" class="optional required">
-        <label for="spname">{$LANG_ST01[glfusion_function]}:</label>
+      <div id="glfunctions" class="optional">
+        <label for="glfunction">{$LANG_MB01[glfusion_function]}:</label>
         {glfunction_select}
       </div>
-
       <div class="required">
-        <label for="menuactive">{$LANG_ST01[active]}:</label>
-        <input type="checkbox" id="menuactive" name="menuactive" value="1" {active_selected} {xhtml}>
+        <label for="menuactive">{$LANG_MB01[active]}:</label>
+        <input type="checkbox" id="menuactive" name="menuactive" value="1" />
       </div>
-
       <div class="required">
-        <label for="group">{$LANG_ST01[permission]}:</label>
+        <label for="group">{$LANG_MB01[permission]}:</label>
         {group_select}
       </div>
     <div style="text-align:center;padding-top:20px;padding-bottom:10px;">
-      <input type="hidden" id="mode" name="mode" value="saveedit"{xhtml}>
-      <input type="submit" id="execute" name="execute" value="{$LANG_ST01[save]}"{xhtml}>&nbsp;&nbsp;
-      <input type="submit" id="cancel" name="cancel" value="{$LANG_ST01[cancel]}"{xhtml}>
+      <input type="hidden" id="mode" name="mode" value="save" />
+      <input type="submit" id="execute" name="execute" value="{$LANG32[23]}" />&nbsp;&nbsp;
     </div>
+  </div>
   </form>
-</div>
+  </div>
 {# end {templatelocation} #}

@@ -191,6 +191,7 @@ function install_config($site_url)
     $c->add('hidenewtrackbacks',0,'select',3,15,0,1030,TRUE);
     $c->add('hidenewplugins',0,'select',3,15,0,1040,TRUE);
     $c->add('title_trim_length',20,'text',3,15,NULL,1050,TRUE);
+    $c->add('whatsnew_cache_time',3600,'text',3,15,NULL,1060,TRUE);
 
     // Subgroup: Users and Submissions
     $c->add('sg_users', NULL, 'subgroup', 4, 0, NULL, 0, TRUE);
@@ -253,7 +254,6 @@ function install_config($site_url)
     $c->add('speedlimit',45,'text',4,20,NULL,820,TRUE);
     $c->add('skip_preview',0,'select',4,20,0,830,TRUE);
     $c->add('advanced_editor',TRUE,'select',4,20,1,840,TRUE);
-    $c->add('wikitext_editor',FALSE,'select',4,20,1,850,TRUE);
 
     $c->add('fs_comments', NULL, 'fieldset', 4, 21, NULL, 0, TRUE);
     $c->add('commentspeedlimit',45,'text',4,21,NULL,1640,TRUE);
@@ -309,13 +309,15 @@ function install_config($site_url)
     $c->add('use_gravatar',FALSE,'select',5,27,1,1600,TRUE);
     $c->add('gravatar_rating','R','text',5,27,NULL,1610,FALSE);
 
+    $c->add('fs_logo', NULL, 'fieldset', 5, 28, NULL, 0, TRUE);
+    $c->add('max_logo_height',150,'text',5,28,NULL,1630,TRUE);
+    $c->add('max_logo_width',500,'text',5,28,NULL,1640,TRUE);
+
     // Subgroup: Languages and Locale
     $c->add('sg_locale', NULL, 'subgroup', 6, 0, NULL, 0, TRUE);
 
     $c->add('fs_language', NULL, 'fieldset', 6, 28, NULL, 0, TRUE);
     $c->add('language','english','select',6,28,NULL,350,TRUE);
-//    $c->add('language_files',array('en'=>'english_utf-8', 'de'=>'german_formal_utf-8'),'*text',6,28,NULL,470,FALSE);
-//    $c->add('languages',array('en'=>'English', 'de'=>'Deutsch'),'*text',6,28,NULL,480,FALSE);
 
     $c->add('fs_locale', NULL, 'fieldset', 6, 29, NULL, 0, TRUE);
     $c->add('locale','en_GB','text',6,29,NULL,360,TRUE);

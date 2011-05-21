@@ -79,7 +79,7 @@ function render_cc_item (&$template, $url = '', $image = '', $label = '')
 */
 function commandcontrol()
 {
-    global $_CONF, $_TABLES, $LANG01, $LANG29, $LANG_LOGVIEW,$_IMAGE_TYPE, $_DB_dbms;
+    global $_CONF, $_TABLES, $LANG01, $LANG_MB01, $LANG_AM, $LANG_LOGO, $LANG29, $LANG_LOGVIEW,$_IMAGE_TYPE, $_DB_dbms;
 
     $retval = '';
 
@@ -87,9 +87,6 @@ function commandcontrol()
     $admin_templates->set_file (array ('cc'     => 'moderation.thtml',
                                        'ccrow'  => 'ccrow.thtml',
                                        'ccitem' => 'ccitem.thtml'));
-    $admin_templates->set_var('xhtml', XHTML);
-    $admin_templates->set_var('layout_url', $_CONF['layout_url']);
-    $admin_templates->set_var('site_url', $_CONF['site_url']);
     $admin_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
 
     $retval .= COM_startBlock ('glFusion ' . GVERSION . PATCHLEVEL . ' -- ' . $LANG29[34], '',
@@ -135,9 +132,15 @@ function commandcontrol()
                   array('condition' => SEC_inGroup('Root'),
                         'url' => $_CONF['site_admin_url'] . '/logview.php',
                         'lang' => $LANG_LOGVIEW['logview'], 'image' => '/images/icons/logview.'),
-                  array('condition' => SEC_inGroup('Root'),
-                        'url' => $_CONF['site_admin_url'] . '/atperm.php',
-                        'lang' => $LANG01['autotag_perms'], 'image' => '/images/icons/atperm.')
+                  array('condition' => SEC_hasRights('menu.admin'),
+                        'url' => $_CONF['site_admin_url'] . '/menu.php',
+                        'lang' => $LANG_MB01['menu_builder'], 'image' => '/images/icons/menubuilder.'),
+                  array('condition' => SEC_hasRights('logo.admin'),
+                        'url' => $_CONF['site_admin_url'] . '/logo.php',
+                        'lang' => $LANG_LOGO['logo_admin'], 'image' => '/images/icons/logo.'),
+                  array('condition' => SEC_hasRights('autotag.admin'),
+                        'url' => $_CONF['site_admin_url'] . '/autotag.php',
+                        'lang' => $LANG_AM['title'], 'image' => '/images/icons/autotag.')
     );
     $admin_templates->set_var('cc_icon_width', floor(100/ICONS_PER_ROW));
 

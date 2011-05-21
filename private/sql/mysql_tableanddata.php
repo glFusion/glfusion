@@ -282,27 +282,27 @@ CREATE TABLE {$_TABLES['postmodes']} (
 ";
 
 $_SQL[] = "CREATE TABLE {$_TABLES['rating']} (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `type` varchar(254) NOT NULL DEFAULT '',
-  `item_id` varchar(40) NOT NULL,
-  `votes` int(11) NOT NULL,
-  `rating` decimal(4,2) NOT NULL,
-  KEY `id` (`id`)
+  id int(11) unsigned NOT NULL AUTO_INCREMENT,
+  type varchar(254) NOT NULL DEFAULT '',
+  item_id varchar(40) NOT NULL,
+  votes int(11) NOT NULL,
+  rating decimal(4,2) NOT NULL,
+  KEY id (id)
 ) ENGINE=MyISAM
 ";
 
 $_SQL[] = "CREATE TABLE {$_TABLES['rating_votes']} (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `type` varchar(254) NOT NULL DEFAULT '',
-  `item_id` varchar(40) NOT NULL,
-  `rating` int(11) unsigned NOT NULL DEFAULT '0',
-  `uid` mediumint(8) NOT NULL,
-  `ip_address` varchar(14) NOT NULL,
-  `ratingdate` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `uid` (`uid`),
-  KEY `ip_address` (`ip_address`),
-  KEY `type` (`type`)
+  id int(11) unsigned NOT NULL AUTO_INCREMENT,
+  type varchar(254) NOT NULL DEFAULT '',
+  item_id varchar(40) NOT NULL,
+  rating int(11) unsigned NOT NULL DEFAULT '0',
+  uid mediumint(8) NOT NULL,
+  ip_address varchar(14) NOT NULL,
+  ratingdate int(11) NOT NULL,
+  PRIMARY KEY (id),
+  KEY uid (uid),
+  KEY ip_address (ip_address),
+  KEY type (type)
 ) ENGINE=MyISAM
 ";
 
@@ -604,8 +604,63 @@ CREATE TABLE {$_TABLES['vars']} (
 ) ENGINE=MyISAM
 ";
 
+$_SQL[] = "CREATE TABLE {$_TABLES['logo']} (
+  id int(11) NOT NULL auto_increment,
+  config_name varchar(255) default NULL,
+  config_value varchar(255) NOT NULL,
+  PRIMARY KEY  (id),
+  UNIQUE KEY config_name (config_name)
+) ENGINE=MyISAM;
+";
 
+$_SQL[] = "CREATE TABLE {$_TABLES['menu']} (
+  id int(11) NOT NULL auto_increment,
+  menu_name varchar(64) NOT NULL,
+  menu_type tinyint(4) NOT NULL,
+  menu_active tinyint(3) NOT NULL,
+  group_id mediumint(9) NOT NULL,
+  PRIMARY KEY  (id),
+  KEY menu_name (menu_name)
+) ENGINE=MyISAM;
+";
 
+$_SQL[] = "CREATE TABLE {$_TABLES['menu_config']} (
+  id int(11) NOT NULL auto_increment,
+  menu_id int(11) NOT NULL,
+  conf_name varchar(64) NOT NULL,
+  conf_value varchar(64) NOT NULL,
+  PRIMARY KEY  (id),
+  UNIQUE KEY Config (menu_id,conf_name),
+  KEY menu_id (menu_id)
+) ENGINE=MyISAM;
+";
+
+$_SQL[] = "CREATE TABLE {$_TABLES['menu_elements']} (
+  id int(11) NOT NULL auto_increment,
+  pid int(11) NOT NULL,
+  menu_id int(11) NOT NULL default '0',
+  element_label varchar(255) NOT NULL,
+  element_type int(11) NOT NULL,
+  element_subtype varchar(255) NOT NULL,
+  element_order int(11) NOT NULL,
+  element_active tinyint(4) NOT NULL,
+  element_url varchar(255) NOT NULL,
+  element_target varchar(255) NOT NULL,
+  group_id mediumint(9) NOT NULL,
+  PRIMARY KEY( id ),
+  INDEX ( pid )
+) ENGINE=MyISAM;
+";
+
+$_SQL[] = "CREATE TABLE {$_TABLES['autotags']} (
+  tag varchar( 24 ) NOT NULL DEFAULT '',
+  description varchar( 128 ) DEFAULT '',
+  is_enabled tinyint( 1 ) NOT NULL DEFAULT '0',
+  is_function tinyint( 1 ) NOT NULL DEFAULT '0',
+  replacement text,
+  PRIMARY KEY ( tag )
+) ENGINE=MYISAM;
+";
 
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (1,3) ";
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (2,3) ";
@@ -625,7 +680,10 @@ $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (15,
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (16,4) ";
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (17,1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (17,13) ";
-$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (18,1) ";
+$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (18,14) ";
+$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (19,14) ";
+$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (20,16) ";
+$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (21,15) ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (1,1,'user_block','gldefault','My Account','all',4,'','','0000-00-00 00:00:00',1,'',4,2,3,3,2,2) ";
 $_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (2,1,'admin_block','gldefault','Admins Only','all',3,'','','0000-00-00 00:00:00',1,'',4,2,3,3,2,2) ";
@@ -690,7 +748,10 @@ $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (15,'group.delete','Ability to delete groups',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (16,'block.delete','Ability to delete a block',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (17,'stats.view','Ability to view the stats page',1) ";
-$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (18,'autotag_perm.admin','AutoTag Permission Administrator',1) ";
+$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (18,'autotag.admin','Ability to create / edit autotags',1) ";
+$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (19,'autotag.PHP','Ability to create / edit autotags utilizing PHP functions',1) ";
+$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (20,'logo.admin','Ability to modify the site logo',1) ";
+$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (21,'menu.admin','Ability to create/edit site menus',1) ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['frontpagecodes']} (code, name) VALUES (0,'Show Only in Topic') ";
 $_DATA[] = "INSERT INTO {$_TABLES['frontpagecodes']} (code, name) VALUES (1,'Show on Front Page') ";
@@ -739,6 +800,9 @@ $_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_g
 $_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (11,'Group Admin','Is a User Admin with access to groups, too',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (12,'Mail Admin','Can use Mail Utility',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (13,'Logged-in Users','All registered members',1) ";
+$_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (14,'Autotag Admin','Has full access to create and modify autotags',1) ";
+$_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (15,'Menu Admin','Has full access to create and modify menus',1) ";
+$_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (16,'Logo Admin','Can modify the site logo',1) ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['maillist']} (code, name) VALUES (0,'Don\'t Email') ";
 $_DATA[] = "INSERT INTO {$_TABLES['maillist']} (code, name) VALUES (1,'Email Headlines Each Night') ";
@@ -786,5 +850,104 @@ $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion','1.3
 
 $_DATA[] = "INSERT INTO {$_TABLES['trackbackcodes']} (code, name) VALUES (0,'Trackback Enabled') ";
 $_DATA[] = "INSERT INTO {$_TABLES['trackbackcodes']} (code, name) VALUES (-1,'Trackback Disabled') ";
+
+#
+# Default logo / menu data
+#
+
+$_DATA[] = "INSERT INTO {$_TABLES['logo']} (id, config_name, config_value) VALUES
+(1, 'use_graphic_logo', '0'),
+(2, 'display_site_slogan', '1'),
+(3, 'logo_name', 'logo1234.png');
+";
+
+$_DATA[] = "INSERT INTO {$_TABLES['menu']} (id, menu_name, menu_type, menu_active, group_id) VALUES
+(1, 'navigation', 1, 1, 2),
+(2, 'footer', 2, 1, 2),
+(3, 'block', 3, 1, 2);
+";
+
+$_DATA[] = "INSERT INTO {$_TABLES['menu_config']} (id, menu_id, conf_name, conf_value) VALUES
+(1, 1, 'main_menu_bg_color', '#151515'),
+(2, 1, 'main_menu_hover_bg_color', '#3667c0'),
+(3, 1, 'main_menu_text_color', '#CCCCCC'),
+(4, 1, 'main_menu_hover_text_color', '#FFFFFF'),
+(5, 1, 'submenu_text_color', '#FFFFFF'),
+(6, 1, 'submenu_hover_text_color', '#679EF1'),
+(7, 1, 'submenu_background_color', '#151515'),
+(8, 1, 'submenu_hover_bg_color', '#333333'),
+(9, 1, 'submenu_highlight_color', '#333333'),
+(10, 1, 'submenu_shadow_color', '#000000'),
+(11, 1, 'use_images', '1'),
+(12, 1, 'menu_bg_filename', 'menu_bg.gif'),
+(13, 1, 'menu_hover_filename', 'menu_hover_bg.gif'),
+(14, 1, 'menu_parent_filename', 'menu_parent.png'),
+(15, 1, 'menu_alignment', '1'),
+(16, 2, 'main_menu_bg_color', '#000000'),
+(17, 2, 'main_menu_hover_bg_color', '#000000'),
+(18, 2, 'main_menu_text_color', '#3677c0'),
+(19, 2, 'main_menu_hover_text_color', '#679ef1'),
+(20, 2, 'submenu_text_color', '#000000'),
+(21, 2, 'submenu_hover_text_color', '#000000'),
+(22, 2, 'submenu_background_color', '#000000'),
+(23, 2, 'submenu_hover_bg_color', '#000000'),
+(24, 2, 'submenu_highlight_color', '#999999'),
+(25, 2, 'submenu_shadow_color', '#000000'),
+(26, 2, 'menu_alignment', '0'),
+(27, 2, 'use_images', '0'),
+(28, 3, 'main_menu_bg_color', '#DDDDDD'),
+(29, 3, 'main_menu_hover_bg_color', '#BBBBBB'),
+(30, 3, 'main_menu_text_color', '#0000ff'),
+(31, 3, 'main_menu_hover_text_color', '#FFFFFF'),
+(32, 3, 'submenu_text_color', '#0000FF'),
+(33, 3, 'submenu_hover_text_color', '#FFFFFF'),
+(34, 3, 'submenu_background_color', '#DDDDDD'),
+(35, 3, 'submenu_hover_bg_color', '#BBBBBB'),
+(36, 3, 'submenu_highlight_color', '#999999'),
+(37, 3, 'submenu_shadow_color', '#999999'),
+(38, 3, 'menu_alignment', '1'),
+(39, 3, 'use_images', '1'),
+(40, 3, 'menu_bg_filename', 'menu_bg.gif'),
+(41, 3, 'menu_hover_filename', 'menu_hover_bg.gif'),
+(42, 3, 'menu_parent_filename', 'vmenu_parent.gif');
+";
+
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (id, pid, menu_id, element_label, element_type, element_subtype, element_order, element_active, element_url, element_target, group_id) VALUES
+(1, 0, 1, 'Home', 2, '0', 10, 1, '', '', 2),
+(2, 0, 1, 'Contribute', 2, '1', 20, 1, '', '', 13),
+(3, 0, 1, 'Search', 2, '4', 30, 1, '', '', 2),
+(4, 0, 1, 'Directory', 2, '2', 40, 1, '', '', 2),
+(5, 0, 1, 'Topics', 3, '3', 50, 1, '', '', 2),
+(6, 0, 1, 'Extras', 3, '5', 60, 1, '', '', 2),
+(17, 0, 1, 'Site Stats', 2, '5', 90, 1, '', '', 2),
+(18, 0, 1, 'My Account', 3, '1', 100, 1, '', '', 13),
+(19, 0, 1, 'Admins Only', 3, '2', 110, 1, '', '', 1),
+(20, 0, 2, 'Home', 2, '0', 10, 1, '', '', 2),
+(21, 0, 2, 'Contribute', 2, '1', 30, 1, '', '', 13),
+(22, 0, 2, 'Search', 2, '4', 20, 1, '', '', 2),
+(23, 0, 2, 'Site Stats', 2, '5', 40, 1, '', '', 2),
+(24, 0, 2, 'Contact Us', 6, '%site_url%/profiles.php?uid=2', 50, 1, '%site_url%/profiles.php?uid=2', '', 2),
+(25, 0, 2, 'Top', 6, '#top', 60, 1, '#top', '', 2),
+(26, 0, 3, 'Home', 2, '0', 10, 1, '', '', 2),
+(27, 0, 3, 'Downloads', 4, 'filemgmt', 20, 1, '', '', 2),
+(28, 0, 3, 'Forums', 4, 'forum', 30, 1, '', '', 2),
+(29, 0, 3, 'Topic Menu', 3, '3', 40, 1, '', '', 2),
+(30, 0, 3, 'User Menu', 3, '1', 50, 1, '', '', 13),
+(31, 0, 3, 'Admin Options', 3, '2', 60, 1, '', '', 1),
+(32, 0, 3, 'Logout', 6, '%site_url%/users.php?mode=logout', 70, 1, '%site_url%/users.php?mode=logout', '', 13);
+";
+
+#
+# Default autotags
+#
+
+$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('cipher', '{$LANG_AM['desc_cipher']}', 1, 1, NULL)";
+$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('topic', '{$LANG_AM['desc_topic']}', 1, 1, NULL)";
+$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('glfwiki', '{$LANG_AM['desc_glfwiki']}', 1, 1, NULL)";
+$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('lang', '{$LANG_AM['desc_lang']}', 0, 1, NULL)";
+$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('conf', '{$LANG_AM['desc_conf']}', 0, 1, NULL)";
+$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('user', '{$LANG_AM['desc_user']}', 0, 1, NULL)";
+$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('wikipedia', '{$LANG_AM['desc_wikipedia']}', 1, 1, NULL)";
+$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('youtube', '{$LANG_AM['desc_youtube']}', 1, 0, '<object width=\"425\" height=\"350\"><param name=\"movie\" value=\"http://www.youtube.com/v/%1%\"></param><param name=\"wmode\" value=\"transparent\"></param><embed src=\"http://www.youtube.com/v/%1%\" type=\"application/x-shockwave-flash\" wmode=\"transparent\" width=\"425\" height=\"350\"></embed></object>')";
 
 ?>

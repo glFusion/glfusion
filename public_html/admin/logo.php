@@ -1,14 +1,12 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | Site Tailor Plugin - glFusion CMS                                        |
+// | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
 // | logo.php                                                                 |
-// |                                                                          |
-// | Logo Administrator.                                                      |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -29,28 +27,28 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once '../../../lib-common.php';
-require_once '../../auth.inc.php';
+require_once '../lib-common.php';
+require_once 'auth.inc.php';
 
 USES_lib_admin();
 
 $display = '';
 
 // Only let admin users access this page
-if (!SEC_hasRights('sitetailor.admin')) {
-    // Someone is trying to illegally access this page
-    COM_errorLog("Someone has tried to illegally access the Site Tailor Administration page.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: " . $_SERVER['REMOTE_ADDR'],1);
-    $display  = COM_siteHeader();
-    $display .= COM_startBlock($LANG_ST00['access_denied']);
-    $display .= $LANG_ST00['access_denied_msg'];
-    $display .= COM_endBlock();
-    $display .= COM_siteFooter(true);
+if (!SEC_hasRights('logo.admin')) {
+    $display .= COM_siteHeader ('menu', $MESSAGE[30]);
+    $display .= COM_startBlock ($MESSAGE[30], '',
+               COM_getBlockTemplate ('_msg_block', 'header'));
+    $display .= $MESSAGE[37];
+    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_siteFooter ();
+    COM_accessLog("User {$_USER['username']} tried to illegally access the logo administration screen.");
     echo $display;
     exit;
 }
 
-function ST_logoEdit() {
-    global $_CONF, $_TABLES, $_ST_CONF, $LANG_ST01, $LANG_ADMIN;
+function _logoEdit() {
+    global $_CONF, $_LOGO, $_TABLES, $LANG_ADMIN, $LANG_LOGO, $_IMAGE_TYPE;
 
     $retval = '';
 
@@ -58,29 +56,25 @@ function ST_logoEdit() {
             array('url'  => $_CONF['site_admin_url'],
                   'text' => $LANG_ADMIN['admin_home']),
     );
-    $retval  .= COM_startBlock($LANG_ST01['logo_options'],'', COM_getBlockTemplate('_admin_block', 'header'));
-    $retval  .= ADMIN_createMenu($menu_arr, $LANG_ST01['instructions'],
-                                $_CONF['site_admin_url'] . '/plugins/sitetailor/images/sitetailor.png');
+    $retval  .= COM_startBlock($LANG_LOGO['logo_options'],'', COM_getBlockTemplate('_admin_block', 'header'));
+    $retval  .= ADMIN_createMenu($menu_arr, $LANG_LOGO['instructions'],
+                                $_CONF['layout_url'] . '/images/icons/logo.' . $_IMAGE_TYPE);
 
 
-    if ( file_exists($_CONF['path_html'] . '/images/' . $_ST_CONF['logo_name'] ) ) {
-        $current_logo = '<img src="' . $_CONF['site_url'] . '/images/' . $_ST_CONF['logo_name'] . '" alt="" border="0"' . XHTML . '>';
+    if ( file_exists($_CONF['path_html'] . '/images/' . $_LOGO['logo_name'] ) ) {
+        $current_logo = '<img src="' . $_CONF['site_url'] . '/images/' . $_LOGO['logo_name'] . '" alt="" border="0"/>';
     } else {
-        $current_logo = $LANG_ST01['no_logo_graphic'];
+        $current_logo = $LANG_LOGO['no_logo_graphic'];
     }
 
-    $T = new Template($_CONF['path'] . 'plugins/sitetailor/templates/');
-    $T->set_file( array( 'admin' => 'logo.thtml'));
-
+    $T = new Template(($_CONF['path_layout'] . 'admin/logo/'));
+    $T->set_file('admin','logo.thtml');
     $T->set_var(array(
-        'site_admin_url'        => $_CONF['site_admin_url'],
-        'site_url'              => $_CONF['site_url'],
-        's_form_action'         => $_CONF['site_admin_url'] . '/plugins/sitetailor/logo.php',
-        'xhtml'                 => XHTML,
-        'graphic_logo_selected' => $_ST_CONF['use_graphic_logo'] == 1 ? ' checked="checked"' : '',
-        'text_logo_selected'    => $_ST_CONF['use_graphic_logo'] == 0 ? ' checked="checked"' : '',
-        'no_logo_selected'      => $_ST_CONF['use_graphic_logo'] == -1 ? ' checked="checked"' : '',
-        'slogan_selected'       => $_ST_CONF['display_site_slogan'] == 1 ? ' checked="checked"' : '',
+        's_form_action'         => $_CONF['site_admin_url'] . '/logo.php',
+        'graphic_logo_selected' => $_LOGO['use_graphic_logo'] == 1 ? ' checked="checked"' : '',
+        'text_logo_selected'    => $_LOGO['use_graphic_logo'] == 0 ? ' checked="checked"' : '',
+        'no_logo_selected'      => $_LOGO['use_graphic_logo'] == -1 ? ' checked="checked"' : '',
+        'slogan_selected'       => $_LOGO['display_site_slogan'] == 1 ? ' checked="checked"' : '',
         'current_logo_graphic'  => $current_logo,
     ));
     $T->parse('output', 'admin');
@@ -90,14 +84,14 @@ function ST_logoEdit() {
     return $retval;
 }
 
-function ST_saveLogo() {
-    global $_CONF, $_TABLES, $_ST_CONF, $LANG_ST01;
+function _saveLogo() {
+    global $_CONF, $_TABLES, $_LOGO, $LANG_LOGO;
 
     $retval = 1;
 
     $logo   = isset($_POST['usegraphic']) ? COM_applyFilter($_POST['usegraphic'],true) : 0;
     $slogan = isset($_POST['siteslogan']) ? COM_applyFilter($_POST['siteslogan'],true) : 0;
-    $logo_name = $_ST_CONF['logo_name'];
+    $logo_name = $_LOGO['logo_name'];
 
     $file = array();
     $file = $_FILES['newlogo'];
@@ -122,26 +116,26 @@ function ST_saveLogo() {
         }
         if ( $ext != 'unknown' ) {
             $imgInfo = @getimagesize($file['tmp_name']);
-            if ( $imgInfo[0] > $_ST_CONF['max_logo_width'] || $imgInfo[1] > $_ST_CONF['max_logo_height'] ) {
+            if ( $imgInfo[0] > $_LOGO['max_logo_width'] || $imgInfo[1] > $_LOGO['max_logo_height'] ) {
                 $retval = 4;
             } else {
                 $newlogoname = 'logo' . substr(md5(uniqid(rand())),0,8) . $ext;
                 $rc = move_uploaded_file($file['tmp_name'], $_CONF['path_html'] . 'images/' . $newlogoname);
                 @chmod($_CONF['path_html'] . 'images/' . $newlogoname,0644);
                 if ( $rc ) {
-                    @unlink($_CONF['path_html'] . '/images/' . $_ST_CONF['logo_name']);
+                    @unlink($_CONF['path_html'] . '/images/' . $_LOGO['logo_name']);
                     $logo_name = $newlogoname;
                 }
             }
         }
     }
-    DB_save($_TABLES['st_config'],"config_name,config_value","'use_graphic_logo','$logo'");
-    DB_save($_TABLES['st_config'],"config_name,config_value","'display_site_slogan','$slogan'");
-    DB_save($_TABLES['st_config'],"config_name,config_value","'logo_name','$logo_name'");
+    DB_save($_TABLES['logo'],"config_name,config_value","'use_graphic_logo','$logo'");
+    DB_save($_TABLES['logo'],"config_name,config_value","'display_site_slogan','$slogan'");
+    DB_save($_TABLES['logo'],"config_name,config_value","'logo_name','$logo_name'");
 
-    $_ST_CONF['use_graphic_logo'] = $logo;
-    $_ST_CONF['display_site_slogan'] = $slogan;
-    $_ST_CONF['logo_name'] = $logo_name;
+    $_LOGO['use_graphic_logo'] = $logo;
+    $_LOGO['display_site_slogan'] = $slogan;
+    $_LOGO['logo_name'] = $logo_name;
 
     return $retval;
 }
@@ -150,10 +144,9 @@ function ST_saveLogo() {
  * Main processing loop
  */
 
+$msg = 0;
 if (isset($_GET['msg']) ) {
     $msg = COM_applyFilter($_GET['msg'],true);
-} else {
-    $msg = 0;
 }
 
 if ( isset($_GET['mode']) ) {
@@ -167,30 +160,30 @@ if ( isset($_GET['mode']) ) {
 if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !isset($_POST['defaults'])) {
     switch ( $mode ) {
         case 'logo' :
-            $content    = ST_logoEdit ( );
-            $currentSelect = $LANG_ST01['logo'];
+            $content    = _logoEdit ( );
+            $currentSelect = $LANG_LOGO['logo'];
             break;
         case 'savelogo' :
-            $rc = ST_saveLogo();
-            $content = COM_showMessage( $rc, 'sitetailor' );
-            $content .= ST_logoEdit( );
-            $currentSelect = $LANG_ST01['logo'];
+            $rc = _saveLogo();
+            $content = COM_showMessageText( $LANG_LOGO['logo_saved'], 'Logo Administration' );
+            $content .= _logoEdit( );
+            $currentSelect = $LANG_LOGO['logo_admin'];
             break;
         default :
-            $content    = ST_logoEdit ( );
+            $content    = _logoEdit ( );
             break;
     }
 } else {
-    $content    = ST_logoEdit ( );
+    $content    = _logoEdit ( );
 }
 
 $display = COM_siteHeader();
 $display .= '<noscript>' . LB;
 $display .= '    <div class="pluginAlert aligncenter" style="border:1px dashed #ccc;margin-top:10px;padding:15px;">' . LB;
-$display .= '    <p>' . $LANG_ST01['javascript_required'] . '</p>' . LB;
+$display .= '    <p>' . $LANG_LOGO['javascript_required'] . '</p>' . LB;
 $display .= '    </div>' . LB;
 $display .= '</noscript>' . LB;
-$display .= '<div id="sitetailor" style="display:none;">' . LB;
+$display .= '<div id="logoadmin" style="display:none;">' . LB;
 
 $display .= $content;
 $display .= '</div>';

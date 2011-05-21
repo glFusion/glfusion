@@ -127,6 +127,14 @@ if ( !isset($_SYSTEM['admin_session']) ) {
     $_SYSTEM['admin_session'] = 1200;
 }
 
+$_LOGO = array();
+$result = DB_query("SELECT * FROM {$_TABLES['logo']}",1);
+if ( $result ) {
+    while ($row = DB_fetchArray($result)) {
+        $_LOGO[$row['config_name']] = $row['config_value'];
+    }
+}
+
 // Before we do anything else, check to ensure site is enabled
 
 if (isset($_SYSTEM['site_enabled']) && !$_SYSTEM['site_enabled']) {
@@ -247,17 +255,6 @@ require_once $_CONF['path_system'].'lib-syndication.php';
 require_once $_CONF['path_system'].'lib-glfusion.php';
 
 /**
-* This is the custom library.
-*
-* It is the sandbox for every glFusion Admin to play in.
-* We will never modify this file.  This should hold all custom
-* hacks to make upgrading easier.
-*
-*/
-
-require_once $_CONF['path_system'].'lib-custom.php';
-
-/**
 * Include plugin class.
 *
 */
@@ -290,6 +287,19 @@ require_once $_CONF['path_system'].'imglib/lib-image.php';
 */
 
 require_once $_CONF['path_system'].'lib-rating.php';
+
+require_once $_CONF['path_system'].'lib-autotag.php';
+
+/**
+* This is the custom library.
+*
+* It is the sandbox for every glFusion Admin to play in.
+* We will never modify this file.  This should hold all custom
+* hacks to make upgrading easier.
+*
+*/
+
+require_once $_CONF['path_system'].'lib-custom.php';
 
 // Set theme
 // Need to modify this code to check if theme was cached in user cookie.  That
@@ -581,6 +591,8 @@ if ( !COM_isAnonUser() ) {
 */
 
 $_RIGHTS = explode( ',', SEC_getUserPermissions() );
+
+require_once $_CONF['path_system'].'lib-menu.php';
 
 if ( isset( $_GET['topic'] )) {
     $topic = COM_applyFilter( $_GET['topic'] );
@@ -957,7 +969,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 {
     global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG01, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $theme_what, $theme_pagetitle,
-           $theme_headercode, $theme_layout,$stMenu,$themeAPI;
+           $theme_headercode, $theme_layout,$mbMenu,$themeAPI;
 
     $function = $_CONF['theme'] . '_siteHeader';
 
@@ -1190,7 +1202,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG12, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $_PAGE_TIMER, $theme_what,
            $theme_pagetitle, $theme_headercode, $theme_layout,$mbMenuConfig,
-           $_ST_CONF,$stMenu, $themeAPI;
+           $_LOGO,$mbMenu, $themeAPI;
 
     // If the theme implemented this for us then call their version instead.
 
@@ -1249,7 +1261,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_var( 'background_image', $_CONF['layout_url']
                                           . '/images/bg.' . $_IMAGE_TYPE );
     $theme->set_var( 'site_mail', "mailto:{$_CONF['site_mail']}" );
-    if ($_ST_CONF['display_site_slogan']) {
+    if ($_LOGO['display_site_slogan']) {
         $theme->set_var( 'site_slogan', $_CONF['site_slogan'] );
     }
     $msg = $LANG01[67] . ' ' . $_CONF['site_name'];
@@ -1264,17 +1276,17 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_var( 'welcome_msg', $msg );
     $theme->set_var( 'datetime', $curtime );
 
-    if ( $_ST_CONF['use_graphic_logo'] == 1 && file_exists($_CONF['path_html'] . '/images/' . $_ST_CONF['logo_name']) ) {
+    if ( $_LOGO['use_graphic_logo'] == 1 && file_exists($_CONF['path_html'] . '/images/' . $_LOGO['logo_name']) ) {
         $L = new Template( $_CONF['path_layout'] );
         $L->set_file( array(
             'logo'          => 'logo-graphic.thtml',
         ));
 
-        $imgInfo = @getimagesize($_CONF['path_html'] . '/images/' . $_ST_CONF['logo_name']);
+        $imgInfo = @getimagesize($_CONF['path_html'] . '/images/' . $_LOGO['logo_name']);
         $dimension = $imgInfo[3];
 
         $L->set_var( 'site_name', $_CONF['site_name'] );
-        $site_logo = $_CONF['site_url'] . '/images/' . $_ST_CONF['logo_name'];
+        $site_logo = $_CONF['site_url'] . '/images/' . $_LOGO['logo_name'];
         $L->set_var( 'site_logo', $site_logo);
         $L->set_var( 'dimension', $dimension );
         if ( $imgInfo[1] != 100 ) {
@@ -1284,18 +1296,18 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         } else {
             $L->set_var('delta','');
         }
-        if ($_ST_CONF['display_site_slogan']) {
+        if ($_LOGO['display_site_slogan']) {
             $L->set_var( 'site_slogan', $_CONF['site_slogan'] );
         }
         $L->parse('output','logo');
         $theme->set_var('logo_block',$L->finish($L->get_var('output')));
-    } else if ( $_ST_CONF['use_graphic_logo'] == 0 ) {
+    } else if ( $_LOGO['use_graphic_logo'] == 0 ) {
         $L = new Template( $_CONF['path_layout'] );
         $L->set_file( array(
             'logo'          => 'logo-text.thtml',
         ));
         $L->set_var( 'site_name', $_CONF['site_name'] );
-        if ($_ST_CONF['display_site_slogan']) {
+        if ($_LOGO['display_site_slogan']) {
             $L->set_var( 'site_slogan', $_CONF['site_slogan'] );
         }
         $L->parse('output','logo');
@@ -1314,11 +1326,11 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     ));
 
     // build the site tailor menus
-    if ( function_exists('st_getMenu') ) {
-        $theme->set_var('st_hmenu',st_getMenu('navigation',"gl_moomenu","gl_moomenu",'',"parent"));
-        $theme->set_var('st_footer_menu',st_getMenu('footer','st-fmenu','','','','st-f-last'));
-        $theme->set_var('st_header_menu',st_getMenu('header','st-fmenu','','','','st-f-last'));
-    }
+//    if ( function_exists('mb_getMenu') ) {
+        $theme->set_var('st_hmenu',mb_getMenu('navigation',"gl_moomenu","gl_moomenu",'',"parent"));
+        $theme->set_var('st_footer_menu',mb_getMenu('footer','st-fmenu','','','','st-f-last'));
+        $theme->set_var('st_header_menu',mb_getMenu('header','st-fmenu','','','','st-f-last'));
+//    }
 
     // Get plugin menu options
     $plugin_menu = PLG_getMenuItems();
@@ -2340,7 +2352,7 @@ function COM_userMenu( $help='', $title='', $position='' )
 
 function COM_adminMenu( $help = '', $title = '', $position = '' )
 {
-    global $_TABLES, $_USER, $_CONF, $LANG01, $LANG_ADMIN, $_BLOCK_TEMPLATE,
+    global $_TABLES, $_USER, $_CONF, $LANG01, $LANG_ADMIN, $LANG_AM, $_BLOCK_TEMPLATE,
            $_DB_dbms, $config, $LANG29;
 
     $retval = '';
@@ -2474,10 +2486,10 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $link_array[$LANG01[12]] = $menu_item;
         }
 
-        if ( SEC_hasRights( 'autotag_perm.admin' )) {
-            $url = $_CONF['site_admin_url'] . '/atperm.php';
+        if ( SEC_hasRights( 'autotag.admin' )) {
+            $url = $_CONF['site_admin_url'] . '/autotag.php';
             $adminmenu->set_var( 'option_url', $url );
-            $adminmenu->set_var( 'option_label', $LANG01['autotag_perms'] );
+            $adminmenu->set_var( 'option_label', $LANG_AM['title'] );
             $adminmenu->set_var( 'option_count', 'n/a');
 
             $menu_item = $adminmenu->parse( 'item',
@@ -4119,10 +4131,10 @@ function COM_emailUserTopics()
 function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG_WHATSNEW, $page, $newstories;
-    global $_ST_CONF, $_PLUGINS;
+    global $_PLUGINS;
 
-    if ( !isset($_ST_CONF['whatsnew_cache_time']) ) {
-        $_ST_CONF['whatsnew_cache_time'] = 3600;
+    if ( !isset($_CONF['whatsnew_cache_time']) ) {
+        $_CONF['whatsnew_cache_time'] = 3600;
     }
 
     $cacheInstance = 'whatsnew__' . CACHE_security_hash() . '__' . $_CONF['theme'];
@@ -4130,7 +4142,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
     if ( $retval ) {
         $lu = CACHE_get_instance_update($cacheInstance, 0);
         $now = time();
-        if (( $now - $lu ) < $_ST_CONF['whatsnew_cache_time'] ) {
+        if (( $now - $lu ) < $_CONF['whatsnew_cache_time'] ) {
             return $retval;
         }
     }
@@ -4412,7 +4424,7 @@ function COM_showMessageText($message, $title = '', $persist = false)
                                   COM_getBlockTemplate($msg_block, 'header'))
                 . '<p class="sysmessage"><img src="' . $_CONF['layout_url']
                 . '/images/sysmessage.' . $_IMAGE_TYPE . '" alt="" '
-                . '>' . $message . '</p>'
+                . '/>' . $message . '</p>'
                 . COM_endBlock(COM_getBlockTemplate($msg_block, 'footer'));
     }
 
@@ -6727,7 +6739,7 @@ function _commentsort($a, $b)
 function css_out()
 {
     global $_CONF, $_SYSTEM, $_PLUGINS, $_TABLES;
-    global $_ST_CONF, $stMenu, $themeAPI, $themeStyle;
+    global $mbMenu, $themeAPI, $themeStyle;
 
     if ( !isset($_CONF['css_cache_filename']) ) {
         $_CONF['css_cache_filename'] = 'stylecache_';
@@ -6766,6 +6778,14 @@ function css_out()
             foreach($customCSS AS $item => $file) {
                 $files[] = $file;
             }
+        }
+    }
+
+// get the menu builder css
+    $menuBuildCSS =  mb_getheadercss();
+    if ( is_array($menuBuildCSS) ) {
+        foreach($menuBuildCSS AS $item => $file) {
+            $files[] = $file;
         }
     }
 
@@ -6920,6 +6940,14 @@ function js_out()
     if ( $themeAPI < 2 ) {
         $files[] = $_CONF['path_html'] . 'javascript/sitetailor_ie6vertmenu.js';
     }
+
+    $mbJS = mb_getheaderjs();
+    if ( is_array($mbJS) ) {
+        foreach($mbJS AS $item => $file ) {
+            $files[] = $file;
+        }
+    }
+
     /*
      * Check to see if the theme has any JavaScript to include...
      */

@@ -94,6 +94,13 @@ $_TABLES['userprefs']           = $_DB_table_prefix . 'userprefs';
 $_TABLES['users']               = $_DB_table_prefix . 'users';
 $_TABLES['vars']                = $_DB_table_prefix . 'vars';
 
+$_TABLES['menu']                = $_DB_table_prefix . 'menu';
+$_TABLES['menu_config']         = $_DB_table_prefix . 'menu_config';
+$_TABLES['menu_elements']       = $_DB_table_prefix . 'menu_elements';
+$_TABLES['logo']                = $_DB_table_prefix . 'logo';
+
+$_TABLES['autotags']            = $_DB_table_prefix . 'autotags';
+
 // These tables aren't used by glFusion any more, but the table names are still
 // needed when upgrading from old versions
 $_TABLES['commentspeedlimit']   = $_DB_table_prefix . 'commentspeedlimit';

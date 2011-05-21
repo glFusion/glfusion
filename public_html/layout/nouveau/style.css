@@ -296,19 +296,19 @@ height:40px;
 width:100%;
 }
 
-glfform.* {
+input-form.* {
   margin: 0;
   padding: 0;
 }
 
-div.glfform form {
+div.input-form form {
   margin: 0;
   padding: 0;
   font-size: 100%;
   min-width: 560px;
 }
 
-div.glfform form fieldset {
+div.input-form form fieldset {
   clear: both;
   font-size: 100%;
   border-color: #000000;
@@ -318,7 +318,7 @@ div.glfform form fieldset {
   margin: 0 0 0 0;
 }
 
-div.glfform form fieldset legend {
+div.input-form form fieldset legend {
   font-size: 150%;
   font-weight: normal;
   color: #000000;
@@ -326,26 +326,26 @@ div.glfform form fieldset legend {
   padding: 0 5px;
 }
 
-div.glfform label {
+div.input-form label {
   font-size: 100%;
 }
 
-div.glfform label u {
+div.input-form label u {
   font-style: normal;
   text-decoration: underline;
 }
 
-div.glfform input, div.glfform select, div.glfform textarea {
+div.input-form input, div.input-form select, div.input-form textarea {
   font-family: Tahoma, Arial, sans-serif;
   font-size: 100%;
   color: #000000;
 }
 
-div.glfform textarea {
+div.input-form textarea {
   overflow: auto;
 }
 
-div.glfform form div {
+div.input-form form div {
   clear: left;
   display: block;
 /*  width: 354px; */
@@ -354,7 +354,7 @@ div.glfform form div {
   padding: 1px 3px;
 }
 
-div.glfform form fieldset div.notes {
+div.input-form form fieldset div.notes {
   float: right;
   width: 158px;
   height: auto;
@@ -366,7 +366,7 @@ div.glfform form fieldset div.notes {
   font-size: 88%;
 }
 
-div.glfform form fieldset div.notes h4 {
+div.input-form form fieldset div.notes h4 {
   background-image: url(layout/nouveau/images/info.png);
   background-repeat: no-repeat;
   background-position: top left;
@@ -378,16 +378,16 @@ div.glfform form fieldset div.notes h4 {
   font-size: 110%;
 }
 
-div.glfform form fieldset div.notes p {
+div.input-form form fieldset div.notes p {
   margin: 0em 0em 1.2em 0em;
   color: #666666;
 }
 
-div.glfform form fieldset div.notes p.last {
+div.input-form form fieldset div.notes p.last {
   margin: 0em;
 }
 
-div.glfform form div fieldset {
+div.input-form form div fieldset {
   clear: none;
   border-width: 1px;
   border-style: solid;
@@ -397,16 +397,16 @@ div.glfform form div fieldset {
   width: 197px;
 }
 
-div.glfform form div fieldset legend {
+div.input-form form div fieldset legend {
   font-size: 100%;
   padding: 0 3px 0 9px;
 }
 
-div.glfform form div.required fieldset legend {
+div.input-form form div.required fieldset legend {
   font-weight: bold;
 }
 
-div.glfform form div label {
+div.input-form form div label {
   display: block;
   float: left;
   width: 230px;
@@ -415,15 +415,15 @@ div.glfform form div label {
   text-align: right;
 }
 
-div.glfform form div.optional label, label.optional {
+div.input-form form div.optional label, label.optional {
   font-weight: normal;
 }
 
-div.glfform form div.required label, label.required {
+div.input-form form div.required label, label.required {
   font-weight: bold;
 }
 
-div.glfform form div label.labelCheckbox, form div label.labelRadio {
+div.input-form form div label.labelCheckbox, form div label.labelRadio {
   float: none;
   display: block;
   width: 200px;
@@ -433,16 +433,16 @@ div.glfform form div label.labelCheckbox, form div label.labelRadio {
   text-align: left;
 }
 
-div.glfform form div fieldset label.labelCheckbox, form div fieldset label.labelRadio {
+div.input-form form div fieldset label.labelCheckbox, form div fieldset label.labelRadio {
   margin: 0 0 5px 0;
   width: 170px;
 }
 
-div.glfform form div img {
+div.input-form form div img {
 
 }
 
-div.glfform p.error {
+div.input-form p.error {
   background-color: #ff0000;
   background-image: url(layout/nouveau/images/alert-small.png);
   background-repeat: no-repeat;
@@ -453,7 +453,7 @@ div.glfform p.error {
   margin: auto 100px;
 }
 
-div.glfform form div.error {
+div.input-form form div.error {
   background-color: #ffffe1;
   background-repeat: no-repeat;
   background-position: top left;
@@ -461,7 +461,7 @@ div.glfform form div.error {
   border: 1px solid #ff0000;
 }
 
-div.glfform form div.error p.error {
+div.input-form form div.error p.error {
   background-image: url(layout/nouveau/images/alert-small.png);
   background-position: top left;
   background-color: transparent;
@@ -473,28 +473,28 @@ div.glfform form div.error p.error {
   color: #ff0000;
 }
 
-div.glfform form div select, form div textarea {
+div.input-form form div select, form div textarea {
   width: 200px;
   padding: 1px 3px;
   margin: 0 0 0 0;
 }
 
-div.glfform form div input.inputText, form div input.inputPassword {
+div.input-form form div input.inputText, form div input.inputPassword {
   width: 200px;
   padding: 1px 3px;
   margin: 0 0 0 0;
 }
 
-div.glfform form div input.inputFile {
+div.input-form form div input.inputFile {
   width: 211px;
 }
 
-div.glfform form div select.selectOne, form div select.selectMultiple {
+div.input-form form div select.selectOne, form div select.selectMultiple {
   width: 211px;
   padding: 1px 3px;
 }
 
-div.glfform form div input.inputCheckbox, form div input.inputRadio, input.inputCheckbox, input.inputRadio {
+div.input-form form div input.inputCheckbox, form div input.inputRadio, input.inputCheckbox, input.inputRadio {
   display: inline;
   height: auto;
   width: auto;
@@ -504,12 +504,12 @@ div.glfform form div input.inputCheckbox, form div input.inputRadio, input.input
   margin: 0 0 0 140px;
 }
 
-div.glfform form div.submit {
+div.input-form form div.submit {
   width: 214px;
   padding: 0 0 0 146px;
 }
 
-div.glfform form div.submit div {
+div.input-form form div.submit div {
   display: inline;
   float: left;
   text-align: left;
@@ -518,7 +518,7 @@ div.glfform form div.submit div {
   margin: 0;
 }
 
-div.glfform form div input.inputSubmit, form div input.inputButton, input.inputSubmit, input.inputButton {
+div.input-form form div input.inputSubmit, form div input.inputButton, input.inputSubmit, input.inputButton {
   background-color: #cccccc;
   color: #000000;
   width: auto;
@@ -526,12 +526,12 @@ div.glfform form div input.inputSubmit, form div input.inputButton, input.inputS
   margin: 0;
 }
 
-div.glfform form div.submit div input.inputSubmit, form div.submit div input.inputButton {
+div.input-form form div.submit div input.inputSubmit, form div.submit div input.inputButton {
   float: right;
   margin: 0 0 0 5px;
 }
 
-div.glfform form div small {
+div.input-form form div small {
   display: block;
   margin: 0 0 5px 142px;
   padding: 1px 3px;
@@ -539,7 +539,7 @@ div.glfform form div small {
   height: expression('1%');
 }
 
-div.glfform form div.fValidator-msg {
+div.input-form form div.fValidator-msg {
 margin-left: 235px;
 color: #DF3737;
 }

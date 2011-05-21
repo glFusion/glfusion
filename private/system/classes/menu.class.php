@@ -1,14 +1,14 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | Site Tailor Plugin - glFusion CMS                                        |
+// | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
-// | classMenuElement.php                                                     |
+// | menu.class.php                                                           |
 // |                                                                          |
 // | Menu elements class / functions                                          |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C)  2008-2010 by the following authors:                       |
+// | Copyright (C)  2008-2011 by the following authors:                       |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -34,7 +34,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-class mbElement {
+class menuElement {
     var $id;                // item id
     var $pid;               // parent id (0 = root level)
     var $menu_id;           // which menu does this belong to?
@@ -50,7 +50,7 @@ class mbElement {
     var $children;          // this elements child elements
     var $hidden;            // I have no idea -- Joe
 
-    function mbElement () {
+    function menuElement () {
         $this->children         = array();
         $this->id               = 0;
         $this->menu_id          = 0;
@@ -77,30 +77,30 @@ class mbElement {
     }
 
     function saveElement( ) {
-        global $_TABLES, $stMenu;
+        global $_TABLES, $mbMenu;
 
         $this->label            = DB_escapeString($this->label);
         $this->url              = DB_escapeString($this->url);
 
         $sqlFieldList  = 'id,pid,menu_id,element_label,element_type,element_subtype,element_order,element_active,element_url,element_target,group_id';
         $sqlDataValues = "$this->id,$this->pid,'".DB_escapeString($this->menu_id)."','$this->label',$this->type,'$this->subtype',$this->order,$this->active,'$this->url','$this->target',$this->group_id";
-        DB_save($_TABLES['st_menu_elements'], $sqlFieldList, $sqlDataValues);
+        DB_save($_TABLES['menu_elements'], $sqlFieldList, $sqlDataValues);
     }
 
     function reorderMenu( ) {
-        global $_TABLES, $stMenu;
+        global $_TABLES, $mbMenu;
 
-        $pid = intval($this->id);
-        $menu_id = intval($this->menu_id);
+        $pid = (int) $this->id;
+        $menu_id = (int) $this->menu_id;
 
         $orderCount = 10;
 
-        $sql = "SELECT id,`element_order` FROM {$_TABLES['st_menu_elements']} WHERE menu_id=".$menu_id." AND pid=" . $pid . " ORDER BY `element_order` ASC";
+        $sql = "SELECT id,`element_order` FROM {$_TABLES['menu_elements']} WHERE menu_id=".$menu_id." AND pid=" . $pid . " ORDER BY `element_order` ASC";
         $result = DB_query($sql);
         while ($M = DB_fetchArray($result)) {
             $M['element_order'] = $orderCount;
             $orderCount += 10;
-            DB_query("UPDATE {$_TABLES['st_menu_elements']} SET `element_order`=" . $M['element_order'] . " WHERE menu_id=".$menu_id." AND id=" . $M['id'] );
+            DB_query("UPDATE {$_TABLES['menu_elements']} SET `element_order`=" . $M['element_order'] . " WHERE menu_id=".$menu_id." AND id=" . (int) $M['id'] );
         }
     }
 
@@ -108,7 +108,7 @@ class mbElement {
     function createElementID( $menu_id ) {
         global $_TABLES;
 
-        $sql = "SELECT MAX(id) + 1 AS next_id FROM " . $_TABLES['st_menu_elements'];
+        $sql = "SELECT MAX(id) + 1 AS next_id FROM " . $_TABLES['menu_elements'];
         $result = DB_query( $sql );
         $row = DB_fetchArray( $result );
         $id = $row['next_id'];
@@ -116,7 +116,7 @@ class mbElement {
             $id = 1;
         }
         if ( $id == 0 ) {
-            COM_errorLog("Site Tailor: Error - Returned 0 as element id");
+            COM_errorLog("MenuBuilder: Error - Returned 0 as element id");
             $id = 1;
         }
         return $id;
@@ -124,7 +124,7 @@ class mbElement {
 
 
     function setAccessRights( $meadmin, $root, $groups ) {
-        global $_USER, $stMenu;
+        global $_USER, $mbMenu;
 
         if ($meadmin || $root) {
             $this->access = 3;
@@ -148,15 +148,15 @@ class mbElement {
     }
 
     function getChildcount() {
-        global $stMenu;
+        global $mbMenu;
 
         $numChildren = 0;
         $children = $this->getChildren();
         $x = count($children);
         for ($i=0; $i < $x; $i++ ) {
-            if ( $stMenu[$this->menu_id]['elements'][$children[$i]]->active > 0 ) {
-                if ( $stMenu[$this->menu_id]['elements'][$children[$i]]->hidden == 1 ) {
-                    if ( $stMenu[$this->menu_id]['elements'][$children[$i]]->access == 3 ) {
+            if ( $mbMenu[$this->menu_id]['elements'][$children[$i]]->active > 0 ) {
+                if ( $mbMenu[$this->menu_id]['elements'][$children[$i]]->hidden == 1 ) {
+                    if ( $mbMenu[$this->menu_id]['elements'][$children[$i]]->access == 3 ) {
                         $numChildren++;
                     }
                 } else {
@@ -170,10 +170,10 @@ class mbElement {
 // This will build the actual edit tree line.  It will be a table, where each row
 
     function editTree( $depth, $count ) {
-        global $_CONF, $stMenu, $level;
-        global $LANG_ST01, $LANG_ST_TYPES,$LANG_ST_GLTYPES,$LANG_ST_GLFUNCTION;
+        global $_CONF, $mbMenu, $level;
+        global $LANG_MB01, $LANG_MB_TYPES,$LANG_MB_GLTYPES,$LANG_MB_GLFUNCTION;
 
-        $plugin_menus = _stPLG_getMenuItems();
+        $plugin_menus = _mbPLG_getMenuItems();
 
         static $count;
         $retval = '';
@@ -188,50 +188,50 @@ class mbElement {
             $retval .= '<td>';
 
             $elementDetails = $this->label . '::';
-            $elementDetails .= '<b>' . $LANG_ST01['type'] . ':</b> ' . $LANG_ST_TYPES[$this->type] . '<br' . XHTML . '>';
+            $elementDetails .= '<b>' . $LANG_MB01['type'] . ':</b> ' . $LANG_MB_TYPES[$this->type] . '<br/>';
             switch ($this->type) {
                 case 1 :
                     break;
                 case 2 :
-                    $elementDetails .= '<b>' . $LANG_ST_TYPES[$this->type] . '</b> ' . $LANG_ST_GLFUNCTION[$this->subtype] . '<br' . XHTML . '>';
+                    $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . '</b> ' . $LANG_MB_GLFUNCTION[$this->subtype] . '<br/>';
                     break;
                 case 3 :
-                    $elementDetails .= '<b>' . $LANG_ST_TYPES[$this->type] . ':</b> ' . $LANG_ST_GLTYPES[$this->subtype] . '<br' . XHTML . '>';
+                    $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . ':</b> ' . $LANG_MB_GLTYPES[$this->subtype] . '<br/>';
                     break;
                 case 4 :
-                    $elementDetails .= '<b>' . $LANG_ST_TYPES[$this->type] . ':</b> ' . $this->subtype . '<br' . XHTML . '>';
+                    $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . ':</b> ' . $this->subtype . '<br/>';
                     break;
                 case 5 :
-                    $elementDetails .= '<b>' . $LANG_ST_TYPES[$this->type] . ':</b> UNDEFINED <br' . XHTML . '>';
+                    $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . ':</b> UNDEFINED <br/>';
                     break;
                 case 6 :
-                    $elementDetails .= '<b>' . $LANG_ST_TYPES[$this->type] . ':</b> ' . $this->url . '<br' . XHTML . '>';
+                    $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . ':</b> ' . $this->url . '<br/>';
                     break;
                 case 7 :
-                    $elementDetails .= '<b>' . $LANG_ST_TYPES[$this->type] . ':</b> ' . $this->subtype . '<br' . XHTML . '>';
+                    $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . ':</b> ' . $this->subtype . '<br/>';
                     break;
                 case 9 :
-                    $elementDetails .= '<b>' . $LANG_ST_TYPES[$this->type] . ':</b> ' . $this->subtype . '<br />'   ;
+                    $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . ':</b> ' . $this->subtype . '<br />'   ;
             }
 
-            $moveup     = '<a href="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=move&amp;where=up&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
-            $movedown   = '<a href="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=move&amp;where=down&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
-            $edit       = '<a href="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=edit&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
-            $delete     = '<a href="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=delete&amp;mid=' . $this->id . '&amp;menuid='.$this->menu_id.'" onclick="return confirm(\'' . $LANG_ST01['confirm_delete'] . '\');">';
-            $info       = '<a class="gl_mootip" title="' . $elementDetails . '" href="#"><img src="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/images/info.png" alt=""' . XHTML . '></a>';
+            $moveup     = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=move&amp;where=up&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
+            $movedown   = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=move&amp;where=down&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
+            $edit       = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=edit&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
+            $delete     = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=delete&amp;mid=' . $this->id . '&amp;menuid='.$this->menu_id.'" onclick="return confirm(\'' . $LANG_MB01['confirm_delete'] . '\');">';
+            $info       = '<a class="gl_mootip" title="' . $elementDetails . '" href="#"><img src="' . $_CONF['layout_url'] . '/images/info.png" alt=""/></a>';
 
             $retval .= "<div style=\"padding:0 5px;margin-left:" . $px . "px;\">" . ($this->type == 1 ? '<b>' : '') . strip_tags($this->label) . ($this->type == 1 ? '</b>' : '') . '</div>' . LB;
 
             $retval .= '</td>';
             $retval .= '<td class="aligncenter">';
-            $retval .=  '<input type="checkbox" name="enableditem[' . $this->id . ']" onclick="submit()" value="1"' . ($this->active == 1 ? ' checked="checked"' : '') . XHTML . '>';
+            $retval .=  '<input type="checkbox" name="enableditem[' . $this->id . ']" onclick="submit()" value="1"' . ($this->active == 1 ? ' checked="checked"' : '') . '/>';
             $retval .= '</td>';
             $retval .= '<td class="aligncenter">';
             $retval .= $info;
             $retval .= '</td>';
-            $retval .= '<td class="aligncenter">' . $edit . '<img src="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/images/edit.png" alt="' . $LANG_ST01['edit'] . '"' . XHTML . '></a></td>';
-            $retval .= '<td class="aligncenter">' . $delete . '<img src="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/images/delete.png" alt="' . $LANG_ST01['delete'] . '"' . XHTML . '></a></td>';
-            $retval .= '<td class="aligncenter">' . $moveup . '<img src="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/images/up.png" alt="' . $LANG_ST01['move_up'] . '"' . XHTML . '></a></td><td class="aligncenter">' . $movedown . '<img src="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/images/down.png" alt="' . $LANG_ST01['move_down'] . '"' . XHTML . '></a></td>';
+            $retval .= '<td class="aligncenter">' . $edit . '<img src="' . $_CONF['layout_url'] . '/images/edit.png" alt="' . $LANG_MB01['edit'] . '"/></a></td>';
+            $retval .= '<td class="aligncenter">' . $delete . '<img src="' . $_CONF['layout_url'] . '/images/delete.png" alt="' . $LANG_MB01['delete'] . '"/></a></td>';
+            $retval .= '<td class="aligncenter">' . $moveup . '<img src="' . $_CONF['layout_url'] . '/images/up.png" alt="' . $LANG_MB01['move_up'] . '"/></a></td><td class="aligncenter">' . $movedown . '<img src="' . $_CONF['layout_url'] . '/images/down.png" alt="' . $LANG_MB01['move_down'] . '"/></a></td>';
             $retval .= '</tr>';
             $count++;
 
@@ -241,8 +241,8 @@ class mbElement {
             $children = $this->getChildren();
             foreach($children as $child) {
                 $level++;
-                if ( isset($stMenu[$this->menu_id]['elements'][$child]) ) {
-                    $retval .= $stMenu[$this->menu_id]['elements'][$child]->editTree($depth,$count);
+                if ( isset($mbMenu[$this->menu_id]['elements'][$child]) ) {
+                    $retval .= $mbMenu[$this->menu_id]['elements'][$child]->editTree($depth,$count);
                 }
                 $level--;
             }
@@ -251,10 +251,10 @@ class mbElement {
     }
 
     function isLastChild() {
-        global $stMenu;
+        global $mbMenu;
 
         $pid = $this->pid;
-        $children = $stMenu[$this->menu_id]['elements'][$pid]->getChildren();
+        $children = $mbMenu[$this->menu_id]['elements'][$pid]->getChildren();
         $arrayIndex = count($children)-1;
         if ( $this->id == $children[$arrayIndex] ) {
             return true;
@@ -271,8 +271,8 @@ class mbElement {
     }
 
     function showTree( $depth,$ulclass='',$liclass='',$parentaclass='',$lastclass,$selected='' ) {
-        global $_SP_CONF,$_USER, $_TABLES, $LANG01, $LANG29, $_CONF,$meLevel,
-               $_DB_dbms,$_GROUPS, $config,$stMenu;
+        global $_SP_CONF,$_USER, $_TABLES, $LANG01, $LANG_MB01, $LANG_LOGO, $LANG_AM, $LANG29, $_CONF,$meLevel,
+               $_DB_dbms,$_GROUPS, $config,$mbMenu;
 
         $oulclass       = $ulclass;
         $oliclass       = $liclass;
@@ -532,7 +532,6 @@ class mbElement {
                                     $label .= ' (' . COM_numberFormat($numstories) . ')';
                                     $link_array[$LANG01[11]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
                                 }
-
                                 if( SEC_hasRights( 'block.edit' )) {
                                     $result = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['blocks']}" . COM_getPermSql());
                                     list( $count ) = DB_fetchArray( $result );
@@ -541,17 +540,26 @@ class mbElement {
                                     $label = $LANG01[12] . ' (' . COM_numberFormat($count) . ')';
                                     $link_array[$LANG01[12]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
                                 }
-                                if( SEC_hasRights( 'autotag_perm.admin' )) {
-                                    $url = $_CONF['site_admin_url'] . '/atperm.php';
-                                    $label =  $LANG01['autotag_perms'];
-                                    $link_array[$LANG01['autotag_perms']] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                if ( SEC_hasRights('autotag.admin') ) {
+                                    $url = $_CONF['site_admin_url'] . '/autotag.php';
+                                    $label = $LANG_AM['title'];
+                                    $link_array[$LANG_AM['title']] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
                                 }
                                 if( SEC_inGroup( 'Root' )) {
                                     $url = $_CONF['site_admin_url'] . '/clearctl.php';
                                     $label =  $LANG01['ctl'];
                                     $link_array[$LANG01['ctl']] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
                                 }
-
+                                if( SEC_inGroup( 'Root' )) {
+                                    $url = $_CONF['site_admin_url'] . '/menu.php';
+                                    $label =  $LANG_MB01['menu_builder'];
+                                    $link_array[$LANG_MB01['menu_builder']] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                }
+                                if( SEC_inGroup( 'Root' )) {
+                                    $url = $_CONF['site_admin_url'] . '/logo.php';
+                                    $label =  $LANG_LOGO['logo_admin'];
+                                    $link_array[$LANG_LOGO['logo_admin']] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                }
                                 if( SEC_hasRights( 'topic.edit' )) {
                                     $result = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['topics']}" . COM_getPermSql());
                                     list( $count ) = DB_fetchArray( $result );
@@ -845,7 +853,7 @@ class mbElement {
                 }
                 break;
             case '4' : // plugin
-                $plugin_menus = _stPLG_getMenuItems();
+                $plugin_menus = _mbPLG_getMenuItems();
                 if ( isset($plugin_menus[$this->subtype]) ) {
                     $this->url = $plugin_menus[$this->subtype];
                 } else {
@@ -915,7 +923,7 @@ class mbElement {
                 }
                 foreach($children as $child) {
                     $meLevel++;
-                    $retval .= $stMenu[$this->menu_id]['elements'][$child]->showTree($depth,$oulclass,$oliclass,$oparentaclass,$olastclass,$selected);
+                    $retval .= $mbMenu[$this->menu_id]['elements'][$child]->showTree($depth,$oulclass,$oliclass,$oparentaclass,$olastclass,$selected);
                     $meLevel--;
                 }
                 if ( $this->id == 0 ) {

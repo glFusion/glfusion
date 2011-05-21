@@ -80,7 +80,7 @@ define('USER_ACCOUNT_AWAITING_VERIFICATION', 4); // Account waiting for user to 
 
 /* Constant for Security Token */
 if (!defined('CSRF_TOKEN')) {
-    define('CSRF_TOKEN', '_glsectoken');
+    define('CSRF_TOKEN', '_sectoken');
 }
 
 /**

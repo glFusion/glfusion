@@ -6,7 +6,7 @@ window.addEvent('domready',function() {
 });
 -->
 </script>
-<div class="glfform">
+<div class="input-form">
   <form action="{site_url}/profiles.php" method="post" id="contact">
     <div class="pluginInfo" style="margin-bottom:10px;">{lang_description}</div>
     <div>

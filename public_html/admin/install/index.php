@@ -1483,7 +1483,6 @@ function INST_installAndContentPlugins()
     INST_pluginAutoInstall('bad_behavior2');
     INST_pluginAutoInstall('captcha');
     INST_pluginAutoInstall('commentfeeds');
-    INST_pluginAutoInstall('sitetailor');
     INST_pluginAutoInstall('spamx');
     INST_pluginAutoInstall('staticpages');
 
@@ -1841,11 +1840,6 @@ function INST_doPluginUpgrade()
         $error .= sprintf($LANG_INSTALL['plugin_upgrade_error'],'Static Pages');
         $upgradeError = 1;
     }
-    $rc = INST_pluginAutoUpgrade('sitetailor',1);
-    if ( $rc == false ) {
-        $error .= sprintf($LANG_INSTALL['plugin_upgrade_error'],'Site Tailor');
-        $upgradeError = 1;
-    }
     $rc = INST_pluginAutoUpgrade('captcha',1);
     if ( $rc == false ) {
         $error .= sprintf($LANG_INSTALL['plugin_upgrade_error'],'CAPTCHA');
@@ -1877,7 +1871,7 @@ function INST_doPluginUpgrade()
         $upgradeError = 1;
     }
 
-    $stdPlugins=array('staticpages','spamx','links','polls','calendar','sitetailor','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
+    $stdPlugins=array('staticpages','spamx','links','polls','calendar','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
     foreach ($stdPlugins AS $pi_name) {
         DB_query("UPDATE {$_TABLES['plugins']} SET pi_gl_version='".GVERSION."', pi_homepage='http://www.glfusion.org' WHERE pi_name='".$pi_name."'",1);
     }
