@@ -636,7 +636,7 @@ function INST_updateDB($_SQL,$use_innodb)
 function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 {
     global $_TABLES, $_CONF, $_SYSTEM, $_SP_CONF, $_DB, $_DB_dbms, $_DB_table_prefix,
-           $dbconfig_path, $siteconfig_path, $html_path,$LANG_INSTALL;
+           $LANG_AM, $dbconfig_path, $siteconfig_path, $html_path,$LANG_INSTALL;
 
     $rc = true;
     $errors = '';
@@ -935,7 +935,19 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
             $current_fusion_version = '1.2.1';
         case '1.2.1' :
+        case '1.2.2' :
             $_SQL = array();
+
+            $_SQL[] = "CREATE TABLE {$_TABLES['autotags']} (
+              tag varchar( 24 ) NOT NULL DEFAULT '',
+              description varchar( 128 ) DEFAULT '',
+              is_enabled tinyint( 1 ) NOT NULL DEFAULT '0',
+              is_function tinyint( 1 ) NOT NULL DEFAULT '0',
+              replacement text,
+              PRIMARY KEY ( tag )
+            ) ENGINE=MYISAM;
+            ";
+
             $_SQL[] = "CREATE TABLE {$_TABLES['autotag_perm']} (
               autotag_id varchar(128) NOT NULL,
               autotag_namespace varchar(128) NOT NULL,
@@ -949,7 +961,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
               autotag_allowed tinyint(1) NOT NULL DEFAULT '1',
               usage_namespace varchar(128) NOT NULL,
               usage_operation varchar(128) NOT NULL,
-              KEY `autotag_id (autotag_id)
+              KEY autotag_id (autotag_id)
             ) ENGINE=MyISAM
             ";
 
@@ -966,6 +978,54 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
               UNIQUE KEY descriptor (type,category,id,uid),
               KEY uid (uid)
             ) ENGINE=MyISAM
+            ";
+
+            $_SQL[] = "CREATE TABLE {$_TABLES['logo']} (
+              id int(11) NOT NULL auto_increment,
+              config_name varchar(255) default NULL,
+              config_value varchar(255) NOT NULL,
+              PRIMARY KEY  (id),
+              UNIQUE KEY config_name (config_name)
+            ) ENGINE=MyISAM;
+            ";
+
+            $_SQL[] = "CREATE TABLE {$_TABLES['menu']} (
+              id int(11) NOT NULL auto_increment,
+              menu_name varchar(64) NOT NULL,
+              menu_type tinyint(4) NOT NULL,
+              menu_active tinyint(3) NOT NULL,
+              group_id mediumint(9) NOT NULL,
+              PRIMARY KEY  (id),
+              KEY menu_name (menu_name)
+            ) ENGINE=MyISAM;
+            ";
+
+            $_SQL[] = "CREATE TABLE {$_TABLES['menu_config']} (
+              id int(11) NOT NULL auto_increment,
+              menu_id int(11) NOT NULL,
+              conf_name varchar(64) NOT NULL,
+              conf_value varchar(64) NOT NULL,
+              PRIMARY KEY  (id),
+              UNIQUE KEY Config (menu_id,conf_name),
+              KEY menu_id (menu_id)
+            ) ENGINE=MyISAM;
+            ";
+
+            $_SQL[] = "CREATE TABLE {$_TABLES['menu_elements']} (
+              id int(11) NOT NULL auto_increment,
+              pid int(11) NOT NULL,
+              menu_id int(11) NOT NULL default '0',
+              element_label varchar(255) NOT NULL,
+              element_type int(11) NOT NULL,
+              element_subtype varchar(255) NOT NULL,
+              element_order int(11) NOT NULL,
+              element_active tinyint(4) NOT NULL,
+              element_url varchar(255) NOT NULL,
+              element_target varchar(255) NOT NULL,
+              group_id mediumint(9) NOT NULL,
+              PRIMARY KEY( id ),
+              INDEX ( pid )
+            ) ENGINE=MyISAM;
             ";
 
             $_SQL[] = "ALTER TABLE {$_TABLES['sessions']} ADD browser varchar(255) default '' AFTER sess_id";
@@ -991,19 +1051,41 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             foreach ($_SQL as $sql) {
                 DB_query($sql,1);
             }
-            $result = DB_query("SELECT * FROM {$_TABLES['features']} WHERE ft_name='autotag_perm.admin'",1);
-            if ( DB_numRows($result) < 1 ) {
-                DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('autotag_perm.admin','AutoTag Permissions Admin',1)",1);
-                $ft_id  = DB_insertId();
-                $grp_id = (int) DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'Root'");
-                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $grp_id)", 1);
+            // move sitetailor data over
+            $complete = DB_getItem($_TABLES['vars'],'value','name="stcvt"');
+            if ( $complete != 1 ) {
+                if (!in_array('sitetailor', $_PLUGINS)) {
+                    $_TABLES['st_config']       = $_DB_table_prefix . 'st_config';
+                    $_TABLES['st_menus']        = $_DB_table_prefix . 'st_menus';
+                    $_TABLES['st_menus_config'] = $_DB_table_prefix . 'st_menus_config';
+                    $_TABLES['st_menu_elements']= $_DB_table_prefix . 'st_menu_elements';
+                }
+
+                $_SQL[] = "INSERT INTO {$_TABLES['logo']} SELECT * FROM {$_TABLES['st_config']}";
+                $_SQL[] = "INSERT INTO {$_TABLES['menu']} SELECT * FROM {$_TABLES['st_menus']}";
+                $_SQL[] = "INSERT INTO {$_TABLES['menu_config']} SELECT * FROM {$_TABLES['st_menus_config']}";
+                $_SQL[] = "INSERT INTO {$_TABLES['menu_elements']} SELECT * FROM {$_TABLES['st_menu_elements']}";
+
+                DB_query("UPDATE {$_TABLES['plugins']} SET pi_enabled=0 WHERE pi_name='sitetailor'",1);
+                DB_query("INSERT INTO {$_TABLES['vars']} (name,value) VALUES ('stcvt','1')",1);
             }
 
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
 
+            // logo
+            $c->add('fs_logo', NULL, 'fieldset', 5, 28, NULL, 0, TRUE);
+            $c->add('max_logo_height',150,'text',5,28,NULL,1630,TRUE);
+            $c->add('max_logo_width', 500,'text',5,28,NULL,1640,TRUE);
+
+            // whats new cache time
+            $c->add('whatsnew_cache_time',3600,'text',3,15,NULL,1060,TRUE);
+
             // add user photo option to whosonline block
             $c->add('whosonline_photo',FALSE,'select',3,14,0,930,TRUE);
+
+            // remove old wikitext configuration
+            $c->del('wikitext_editor','Core');
 
             // add oauth user_login_method
             $c->del('user_login_method', 'Core');
@@ -1031,6 +1113,124 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('shortdate','m/d/y','text',6,29,NULL,390,TRUE);
             $c->add('dateonly','d-M','text',6,29,NULL,400,TRUE);
             $c->add('timeonly','H:iA','text',6,29,NULL,410,TRUE);
+
+
+            // add new logo.admin permission
+            $result = DB_query("SELECT * FROM {$_TABLES['features']} WHERE ft_name='logo.admin'");
+            if ( DB_numRows($result) == 0 ) {
+                DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('logo.admin','Ability to modify site logo',1)",1);
+                $ft_id  = DB_insertId();
+                $grp_id = (int) DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'Root'");
+                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $grp_id)", 1);
+            }
+
+            // add new menu.admin permission
+            $result = DB_query("SELECT * FROM {$_TABLES['features']} WHERE ft_name='menu.admin'");
+            if ( DB_numRows($result) == 0 ) {
+                DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('menu.admin','Ability to create/edit site menus',1)",1);
+                $ft_id  = DB_insertId();
+                $grp_id = (int) DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'Root'");
+                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $grp_id)", 1);
+            }
+
+            // autotag
+
+            $_TABLES['am_autotags'] = $_DB_table_prefix . 'am_autotags';
+
+            if ( DB_checkTableExists('am_autotags') ) {
+                // we have an installed version of autotags plugin....
+                DB_query("INSERT INTO {$_TABLES['autotags']} SELECT * FROM " . $_TABLES['am_autotags'],1);
+
+                // delete the old autotag plugin
+                require_once $_CONF['path_system'].'lib-install.php';
+                $remvars = array (
+                    /* give the name of the tables, without $_TABLES[] */
+                    'tables' => array ( 'am_autotags' ),
+                    /* give the full name of the group, as in the db */
+                    'groups' => array('AutoTag Admin','AutoTag Users'),
+                    /* give the full name of the feature, as in the db */
+                    'features' => array('autotag.admin','autotag.user', 'autotag.PHP'),
+                    /* give the full name of the block, including 'phpblock_', etc */
+                    'php_blocks' => array(),
+                    /* give all vars with their name */
+                    'vars'=> array()
+                );
+                // removing tables
+                for ($i=0; $i < count($remvars['tables']); $i++) {
+                    DB_query ("DROP TABLE {$_TABLES[$remvars['tables'][$i]]}", 1    );
+                }
+
+                // removing variables
+                for ($i = 0; $i < count($remvars['vars']); $i++) {
+                    DB_delete($_TABLES['vars'], 'name', $remvars['vars'][$i]);
+                }
+
+                // removing groups
+                for ($i = 0; $i < count($remvars['groups']); $i++) {
+                    $grp_id = DB_getItem ($_TABLES['groups'], 'grp_id',
+                                          "grp_name = '{$remvars['groups'][$i]}'");
+                    if (!empty ($grp_id)) {
+                        DB_delete($_TABLES['groups'], 'grp_id', $grp_id);
+                        DB_delete($_TABLES['group_assignments'], 'ug_main_grp_id', $grp_id);
+                    }
+                }
+
+                // removing features
+                for ($i = 0; $i < count($remvars['features']); $i++) {
+                    $access_id = DB_getItem ($_TABLES['features'], 'ft_id',"ft_name = '{$remvars['features'][$i]}'");
+                    if (!empty ($access_id)) {
+                        DB_delete($_TABLES['access'], 'acc_ft_id', $access_id);
+                        DB_delete($_TABLES['features'], 'ft_name', $remvars['features'][$i]);
+                    }
+                }
+                if ($c->group_exists('autotag')) {
+                    $c->delGroup('autotag');
+                }
+                DB_delete($_TABLES['plugins'], 'pi_name', 'autotag');
+            } else {
+                $_DATA = array();
+                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('cipher', '{$LANG_AM['desc_cipher']}', 1, 1, NULL)";
+                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('topic', '{$LANG_AM['desc_topic']}', 1, 1, NULL)";
+                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('glfwiki', '{$LANG_AM['desc_glfwiki']}', 1, 1, NULL)";
+                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('lang', '{$LANG_AM['desc_lang']}', 0, 1, NULL)";
+                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('conf', '{$LANG_AM['desc_conf']}', 0, 1, NULL)";
+                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('user', '{$LANG_AM['desc_user']}', 0, 1, NULL)";
+                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('wikipedia', '{$LANG_AM['desc_wikipedia']}', 1, 1, NULL)";
+                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('youtube', '{$LANG_AM['desc_youtube']}', 1, 0, '<object width=\"425\" height=\"350\"><param name=\"movie\" value=\"http://www.youtube.com/v/%1%\"></param><param name=\"wmode\" value=\"transparent\"></param><embed src=\"http://www.youtube.com/v/%1%\" type=\"application/x-shockwave-flash\" wmode=\"transparent\" width=\"425\" height=\"350\"></embed></object>')";
+                foreach ($_DATA as $sql) {
+                    DB_query($sql,1);
+                }
+            }
+
+            // add new autotag features
+            $autotag_admin_ft_id = 0;
+            $autotag_php_ft_id   = 0;
+            $autotag_group_id    = 0;
+            $result = DB_query("SELECT * FROM {$_TABLES['features']} WHERE ft_name='autotag.admin'");
+            if ( DB_numRows($result) == 0 ) {
+                DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('autotag.admin','Ability to create / edit autotags',1)",1);
+                $autotag_admin_ft_id  = DB_insertId();
+            }
+            $result = DB_query("SELECT * FROM {$_TABLES['features']} WHERE ft_name='autotag.PHP'");
+            if ( DB_numRows($result) == 0 ) {
+                DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('autotag.PHP','Ability to create / edit autotags utilizing PHP functions',1)",1);
+                $autotag_php_ft_id  = DB_insertId();
+            }
+            // now check for the group
+            $result = DB_query("SELECT * FROM {$_TABLES['groups']} WHERE grp_name='Autotag Admin'");
+            if ( DB_numRows($result) == 0 ) {
+                DB_query("INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr, grp_gl_core, grp_default) VALUES ('Autotag Admin','Has full access to create and modify autotags',1,0)",1);
+                $autotag_group_id  = DB_insertId();
+            }
+            if ( $autotag_admin_ft_id != 0 && $autotag_group_id != 0 ) {
+                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (".$autotag_admin_ft_id.",".$autotag_group_id.")",1);
+            }
+            if ( $autotag_php_ft_id != 0 && $autotag_group_id != 0 ) {
+                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (".$autotag_php_ft_id.",".$autotag_group_id.")",1);
+            }
+            if ( $autotag_group_id != 0 ) {
+                DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_grp_id) VALUES (".$autotag_group_id.",1)");
+            }
 
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.3.0',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.3.0' WHERE name='glfusion'",1);

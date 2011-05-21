@@ -580,7 +580,7 @@ function glfusion_130()
       autotag_allowed tinyint(1) NOT NULL DEFAULT '1',
       usage_namespace varchar(128) NOT NULL,
       usage_operation varchar(128) NOT NULL,
-      KEY `autotag_id (autotag_id)
+      KEY autotag_id (autotag_id)
     ) ENGINE=MyISAM";
 
     $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['subscriptions']} (
