@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -131,6 +131,11 @@ $LANG_FILEMGMT = array(
     'no_new_files' => 'Sin nuevos eventos',
     'no_comments' => 'Sin nuevos comentarios',
     'more' => '<em>m&aacute;s ...</em>'
+);
+
+$LANG_FILEMGMT_AUTOTAG = array(
+    'desc_file'                 => 'Link: to a File download detail page.  link_text defaults to the file title. usage: [file:<i>file_id</i> {link_text}]',
+    'desc_file_download'        => 'Link: to a direct File download.  link_text defaults to the file title. usage: [file_download:<i>file_id</i> {link_text}]',
 );
 
 $PLG_filemgmt_MESSAGE1 = 'El proceso de instalaci&oacute;n de Componente de Gestor de Ficheros (Filemgmt) fue interrumpido<br' . XHTML . '>Fichero: plugins/filemgmt/filemgmt.php sin atributos de escritura.';

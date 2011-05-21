@@ -229,6 +229,10 @@ $LANG_LINKS_STATUS = array(
     999 => 'Ühenduse ajapiir'
 );
 
+$LANG_LI_AUTOTAG = array(
+    'desc_link' => 'Link: to the detail page for a Link on this site; link_text defaults to the link name. usage: [link:<i>link_id</i> {link_text}]'
+);
+
 // Localization of the Admin Configuration UI
 $LANG_configsections['links'] = array(
     'label' => 'Lingid',

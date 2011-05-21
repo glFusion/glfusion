@@ -111,6 +111,15 @@ $LANG25 = array(
     42 => 'Are you absolutely sure you want to delete this Poll?  All questions, answers and comments that are associated with this Poll will also be permanently deleted from the database.'
 );
 
+###############################################################################
+# autotag descriptions
+
+$LANG_PO_AUTOTAG = array(
+    'desc_poll' => 'Link: to a Poll on this site.  link_text defaults to the Poll topic.  usage: [poll:<i>poll_id</i> {link_text}]',
+    'desc_poll_result' => 'HTML: renders the results of a Poll on this site.  usage: [poll_result:<i>poll_id</i>]',
+    'desc_poll_vote' => 'HTML: renders a voting block for a Poll on this site.  usage: [poll_vote:<i>poll_id</i>]'
+);
+
 $PLG_polls_MESSAGE19 = 'Ваше опитування успішно збережено.';
 $PLG_polls_MESSAGE20 = 'Ваше опитування успішно вилучено.';
 

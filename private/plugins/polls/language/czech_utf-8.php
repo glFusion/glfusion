@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # czech_utf-8.php
 #
@@ -34,33 +33,39 @@ if (!defined ('GVERSION')) {
 
 global $LANG32;
 
+###############################################################################
+# Array Format:
+# $LANGXX[YY]:  $LANG - variable name
+#               XX    - file id number
+#               YY    - phrase id number
+###############################################################################
+
 $LANG_POLLS = array(
-    'polls'             => 'Hlasování',
-    'results'           => 'Výsledky',
-    'pollresults'       => 'Výsledky hlasování',
-    'votes'             => 'hlasy',
-    'vote'              => 'Hlasuj',
-    'pastpolls'         => 'Pozdní hlasování',
-    'savedvotetitle'    => 'Hlasování uloženo',
-    'savedvotemsg'      => 'Váš hlas byl uložen',
-    'pollstitle'        => 'Hlasování na webu',
-    'polltopics'        => 'Jiné ankety',
-    'stats_top10'       => 'Top Ten hlasování',
-    'stats_topics'      => 'Poll Topic',
-    'stats_votes'       => 'Hlasy',
-    'stats_none'        => 'Vypadá to, že tu nejsou žádná hlasování nebo nikdo nehlasoval.',
-    'stats_summary'     => 'Volby (odpovědi) v systému',
-    'open_poll'         => 'Otevřeno pro hlasování',
-    'answer_all'        => 'Prosím dpovězte na všechny zbývající otázky',
-    'not_saved'         => 'Výsledek neuložen',
-    'upgrade1'          => 'You installed a new version of the Polls plugin. Please',
-    'upgrade2'          => 'upgrade',
-    'editinstructions'  => 'Please fill in the Poll ID, at least one question and two answers for it.',
-    'pollclosed'        => 'This poll is closed for voting.', 
-    'pollhidden'        => 'You have already voted. This poll results will only be shown when voting is closed.', 
-    'start_poll'        => 'Zahaj hlasování',
+    'polls' => 'Hlasování',
+    'results' => 'Výsledky',
+    'pollresults' => 'Výsledky hlasování',
+    'votes' => 'hlasy',
+    'vote' => 'Hlasuj',
+    'pastpolls' => 'Pozdní hlasování',
+    'savedvotetitle' => 'Hlasování uloženo',
+    'savedvotemsg' => 'Váš hlas byl uložen',
+    'pollstitle' => 'Hlasování na webu',
+    'polltopics' => 'Jiné ankety',
+    'stats_top10' => 'Top Ten hlasování',
+    'stats_topics' => 'Poll Topic',
+    'stats_votes' => 'Hlasy',
+    'stats_none' => 'Vypadá to, že tu nejsou žádná hlasování nebo nikdo nehlasoval.',
+    'stats_summary' => 'Volby (odpovědi) v systému',
+    'open_poll' => 'Otevřeno pro hlasování',
+    'answer_all' => 'Prosím dpovězte na všechny zbývající otázky',
+    'not_saved' => 'Výsledek neuložen',
+    'upgrade1' => 'You installed a new version of the Polls plugin. Please',
+    'upgrade2' => 'upgrade',
+    'editinstructions' => 'Please fill in the Poll ID, at least one question and two answers for it.',
+    'pollclosed' => 'This poll is closed for voting.',
+    'pollhidden' => 'You have already voted. This poll results will only be shown when voting is closed.',
+    'start_poll' => 'Zahaj hlasování',
     'deny_msg' => 'Přístup k tomuto hlasování je odepřen. Buď bylo hlasování přesunuto či odstraněno nebo nemáte dostatečná práva.'
-    
 );
 
 ###############################################################################
@@ -70,15 +75,15 @@ $LANG25 = array(
     1 => 'Mode',
     2 => 'Please enter a topic, at least one question and at least one answer for that question.',
     3 => 'Poll Created',
-    4 => "Poll %s saved",
+    4 => 'Poll %s saved',
     5 => 'Edit Poll',
     6 => 'Poll ID',
     7 => '(do not use spaces)',
     8 => 'Appears on Pollblock',
     9 => 'Topic',
     10 => 'Answers / Votes / Remark',
-    11 => "There was an error getting poll answer data about the poll %s",
-    12 => "There was an error getting poll question data about the poll %s",
+    11 => 'There was an error getting poll answer data about the poll %s',
+    12 => 'There was an error getting poll question data about the poll %s',
     13 => 'Create Poll',
     14 => 'save',
     15 => 'cancel',
@@ -106,7 +111,18 @@ $LANG25 = array(
     37 => 'Hide results while poll is open',
     38 => 'While the poll is open, only the owner &amp; root can see the results',
     39 => 'The topic will be only displayed if there are more than 1 questions.',
-    40 => 'See all answers to this poll'
+    40 => 'See all answers to this poll',
+    41 => 'Are you sure you want to delete this Poll?',
+    42 => 'Are you absolutely sure you want to delete this Poll?  All questions, answers and comments that are associated with this Poll will also be permanently deleted from the database.'
+);
+
+###############################################################################
+# autotag descriptions
+
+$LANG_PO_AUTOTAG = array(
+    'desc_poll' => 'Link: to a Poll on this site.  link_text defaults to the Poll topic.  usage: [poll:<i>poll_id</i> {link_text}]',
+    'desc_poll_result' => 'HTML: renders the results of a Poll on this site.  usage: [poll_result:<i>poll_id</i>]',
+    'desc_poll_vote' => 'HTML: renders a voting block for a Poll on this site.  usage: [poll_vote:<i>poll_id</i>]'
 );
 
 $PLG_polls_MESSAGE19 = 'Your poll has been successfully saved.';
@@ -115,7 +131,6 @@ $PLG_polls_MESSAGE20 = 'Your poll has been successfully deleted.';
 // Messages for the plugin upgrade
 $PLG_polls_MESSAGE3001 = 'Plugin upgrade not supported.';
 $PLG_polls_MESSAGE3002 = $LANG32[9];
-
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['polls'] = array(
@@ -134,7 +149,7 @@ $LANG_confignames['polls'] = array(
     'delete_polls' => 'Delete Polls with Owner',
     'aftersave' => 'After Saving Poll',
     'default_permissions' => 'Poll Default Permissions',
-    'displayblocks' => 'Display glFusion Blocks',
+    'displayblocks' => 'Display glFusion Blocks'
 );
 
 $LANG_configsubgroups['polls'] = array(
@@ -149,7 +164,7 @@ $LANG_fs['polls'] = array(
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['polls'] = array(
     0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => TRUE, 'False' => FALSE),
+    1 => array('True' => true, 'False' => false),
     2 => array('As Submitted' => 'submitorder', 'By Votes' => 'voteorder'),
     9 => array('Forward to Poll' => 'item', 'Display Admin List' => 'list', 'Display Public List' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),

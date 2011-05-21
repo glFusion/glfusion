@@ -38,7 +38,6 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
@@ -47,7 +46,6 @@ if (!defined ('GVERSION')) {
 
 $LANG_GF00 = array(
     'admin_only' => 'Sorry Admins Only. If you are an Admin please login first.',
-    'plugin' => 'Plugin',
     'pluginlabel' => 'Forum',
     'searchlabel' => 'Forum',
     'statslabel' => 'Počet příspěvků',
@@ -55,26 +53,11 @@ $LANG_GF00 = array(
     'statsheading2' => 'Top 10 s nejvíce odpověďmi',
     'statsheading3' => 'Není co reportovat',
     'searchresults' => 'Výsledek prohledávání fora %s',
-    'useradminmenu' => 'Nastavení fora',
-    'useradmintitle' => 'Nastavení uživatele fora',
     'access_denied' => 'Přístup nepovolen',
-    'access_denied_msg' => 'Na tuto stránku má přístup Root.  Byla zaznamenána vaše IP adresa a přihlašovací jméno.',
-    'admin' => 'Plugin Admin',
-    'install_header' => 'Install/Uninstall Plugin',
-    'installed' => 'The Plugin and Block are now installed',
-    'uninstalled' => 'The Plugin is Not Installed',
-    'install_success' => "Installation Successful<p><b>Next Steps</b>:\n        <ol><li>Use the Forum Admin to configure your new forum\n        <li>Review Forum Settings and personalize\n        <li>Create at least one Forum and one Category</ol>\n        <p>Review the <a href=\"%s\">Install Notes</a> for more information.",
-    'install_failed' => 'Installation Failed -- See your error log to find out why.',
-    'uninstall_msg' => 'Plugin Successfully Uninstalled',
-    'install' => 'Install',
-    'uninstall' => 'UnInstall',
-    'enabled' => '<br' . XHTML . '>Plugin is installed and enabled.<br' . XHTML . '>Disable first if you want to De-Install it.<p>',
-    'warning' => 'Forum De-Install Warning',
     'uploaderr' => 'File Upload Error'
 );
 
 $LANG_GF01 = array(
-    'LOGIN' => 'Login',
     'FORUM' => 'Forum',
     'ALL' => 'Vše',
     'YES' => 'Ano',
@@ -87,14 +70,10 @@ $LANG_GF01 = array(
     'UPDATE' => 'Update',
     'SAVE' => 'Ulož',
     'CANCEL' => 'Storno',
-    'CLOSE' => 'Zavři',
     'ON' => 'došlo: ',
     'ON2' => '&nbsp;&nbsp;<b>došlo: </b>',
-    'ON3' => 'v',
-    'IN' => 'In: ',
     'BY' => 'Od: ',
     'RE' => 'Re: ',
-    'NA' => 'N/A',
     'DATE' => 'Datum',
     'VIEWS' => 'Čtení',
     'REPLIES' => 'Odpovědí',
@@ -103,30 +82,18 @@ $LANG_GF01 = array(
     'TOPIC' => 'Námět',
     'TOPICS' => 'Náměty',
     'TOPICSUBJECT' => 'Hlavní námět',
-    'FROM' => 'Od',
-    'REPLY' => 'Re',
-    'PM' => 'PM\'s',
-    'HOME' => 'Prohlédni si fora',
     'HOMEPAGE' => 'Domů',
     'SUBJECT' => 'Předmět',
-    'HELLO' => 'Ahoj ',
-    'MEMBERS' => 'Členové',
     'MOVED' => 'Přesunuto',
     'REMOVE' => 'Přesuň',
-    'CURRENT' => 'Stávající',
     'STARTEDBY' => 'Začal:',
     'POSTS' => 'Příspěvek',
     'LASTPOST' => 'Poslední Příspěvek',
     'POSTEDON' => 'Posláno na',
     'POSTEDBY' => 'Poslal',
-    'PAGE' => 'Strana',
     'PAGES' => 'Stran',
-    'ANONYMOUS' => 'Anonym:',
     'TODAY' => 'Dnes ve ',
-    'WELCOME' => 'Vítej ',
-    'REGISTER' => 'Register',
     'REGISTERED' => 'Registrován',
-    'MOSTPOPULAR' => 'Nejpopulárnější',
     'ORDERBY' => 'Seřazeno podle:&nbsp;',
     'ORDER' => 'Pořadí:',
     'USER' => 'Uživatel',
@@ -134,32 +101,13 @@ $LANG_GF01 = array(
     'ANON' => 'Anonym: ',
     'ADMIN' => 'Admin',
     'AUTHOR' => 'Autor',
-    'LOCATION' => 'Lokace',
-    'WEBSITE' => 'Website',
-    'EMAIL' => 'Email',
-    'MOOD' => 'Nálada',
     'NOMOOD' => 'Bez nálady',
-    'REQUIRED' => '[Vyžadováno]',
-    'OPTIONAL' => '[Volitelné]',
     'SUBMIT' => 'Pošli',
     'PREVIEW' => 'Náhled',
-    'NOTIFY' => 'Oznam:',
-    'KEYWORDS' => 'Klíčová slova',
     'EDIT' => 'Edit',
     'DELETE' => 'Vymaž',
-    'MESSAGE' => 'Zpráva:',
     'OPTIONS' => 'Volby:',
     'MISSINGSUBJECT' => 'Chybí předmět',
-    'MAY' => 'smí',
-    'IS' => 'je',
-    'FOR' => 'pro',
-    'ARE' => 'jsou',
-    'NOT' => 'ne',
-    'YOU' => 'Vy',
-    'HTML' => 'HTML',
-    'FULLHTML' => 'Plné HTML',
-    'WORDS' => 'Slov',
-    'SMILIES' => 'Smilies',
     'MIGRATE_NOW' => 'Migrate Now',
     'FILTERLIST' => 'Filter List',
     'SELECTFORUM' => 'Vyber forum',
@@ -173,31 +121,15 @@ $LANG_GF01 = array(
     'CENSOR_PERM_MSG' => 'Kontrola obsahu',
     'ANON_PERM_MSG' => 'Číst může kdokoli',
     'POST_PERM_MSG1' => 'Lze přispívat',
-    'POST_PERM_MSG2' => 'Anonym může přispět',
-    'CENSORED' => 'censorováno',
-    'ALLOWED' => 'povoleno',
     'GO' => 'GO',
     'STATUS' => 'Stav:',
     'ONLINE' => 'online',
     'OFFLINE' => 'offline',
-    'back2parent' => 'Na předmět výše',
     'forumname' => '',
     'category' => 'Kategorie: ',
-    'loginreqview' => '<B>Sorry you must %s register</A> or %s login </A> to use these forums</B>',
-    'loginreqpost' => '<B>Sorry you must register or login to post on these forums</B>',
-    'searchresults' => '<b>»</b> Your search for <b>%s</b> %s author returned <b>%s</b> results:</b><br' . XHTML . '><br' . XHTML . '>',
-    'feature_not_on' => 'Feature not enabled',
     'nolastpostmsg' => 'N/A',
     'no_one' => 'No one.',
-    'popular' => 'Popular',
-    'notify' => 'Notifications',
-    'NEW_PM' => 'New PM',
-    'DELALL_PM' => 'Delete All',
-    'DELOLDER_PM' => 'Delete older',
-    'members' => 'Members',
-    'save_sucess' => 'Save Sucessful',
     'back2top' => 'Back to top',
-    'POSTMODE' => 'Post Mode:',
     'TEXTMODE' => 'Text Mode:',
     'HTMLMODE' => 'HTML Mode:',
     'TopicPreview' => 'Náhled námětu',
@@ -277,7 +209,7 @@ $LANG_GF01 = array(
     'VIOLET' => 'Violet',
     'WHITE' => 'White',
     'BLACK' => 'Black',
-    'ID'    => 'ID',
+    'ID' => 'ID',
     'b_help' => 'Bold text: [b]text[/b]',
     'i_help' => 'Italic text: [i]text[/i]',
     'u_help' => 'Underline text: [u]text[/u]',
@@ -294,25 +226,21 @@ $LANG_GF01 = array(
     't_help' => 'Use [file]#[/file] to embed an attached image in the post',
     'e_help' => 'List item: [*]text',
     'smiley' => 'Smajlíci',
-    /* --- Community moderation tags --- */
-    'grade'         => '<br /><b>Group Comfort<br />Level:</b>',
-    'grade_user'    => '<br /><b>Evaluate User</b>',
+    'grade' => '<br /><b>Group Comfort<br />Level:</b>',
+    'grade_user' => '<br /><b>Evaluate User</b>',
     'retract_grade' => '<br /><b>Retract Evaluation</b>',
-    'rate_too_low'  => 'Your rating level is too low for posting to this forum',
+    'rate_too_low' => 'Your rating level is too low for posting to this forum',
     'rate_too_low_forum' => 'Your rating level is not high enough to view this forum',
     'rate_too_low_thread' => 'Your rating level is not high enough to view this thread',
-    /* --- bbcode signature --- */
     'signature' => 'Forum Signature',
     'edit_signature' => 'Edit BBcode Signature',
     'signature_preview' => 'Signature Preview',
     'cancel_confirm' => 'OPRAVDU chceš zrušit tento příspěvek?',
-    /* --- topic features --- */
     'disable_bbcode' => 'Disable BBCode:',
     'disable_smilies' => 'Disable Smilies:',
     'disable_urlparse' => 'Do not parse URLs:',
     'features' => 'Features:',
-    /* --- rss feature --- */
-    'rss_link' => 'Odebírat příspěvky z tohoto fora pomocí RSS.',
+    'rss_link' => 'Odebírat příspěvky z tohoto fora pomocí RSS.'
 );
 
 $LANG_GF02 = array(
@@ -517,7 +445,7 @@ $LANG_GF02 = array(
     'EditTopic' => 'Edituj předmět',
     'quietforum' => 'Ve foru není žádný předmět',
     'notify_full' => 'Include full post in notification',
-    'view_online' => 'If this email doesn\'t display correctly, <a href="%s">view the online version</a>.',
+    'view_online' => 'If this email doesn\'t display correctly, <a href="%s">view the online version</a>.'
 );
 
 $LANG_GF03 = array(
@@ -538,14 +466,14 @@ $LANG_GF03 = array(
     'splitheading' => 'Split thread option:',
     'splitopt1' => 'Move all posts from this point',
     'splitopt2' => 'Move only this one post',
-    'merge_post'  => 'Merge Post',
+    'merge_post' => 'Merge Post',
     'merge_topic' => 'Merge Topic',
     'mergetopicmsg' => 'You can merge selected post(s) into another topic. These posts will not be reordered and will appear as if the users posted them to the new topic. Please enter the destination topic id or click on "Select topic" to search for one.',
     'mergeparent' => 'You have selected the option to merge <strong>all</strong> posts in this topic into another topic.',
-    'select'    => 'Select',
+    'select' => 'Select',
     'select_forum' => 'Select Forum Topic',
     'destination_topic' => 'Destination Topic ID:',
-    'select_topic' => 'Select Topic',
+    'select_topic' => 'Select Topic'
 );
 
 $LANG_GF04 = array(
@@ -574,7 +502,6 @@ $LANG_GF05 = array(
     'yim_alttext' => 'YIM:&nbsp;'
 );
 
-// Admin Navbar
 $LANG_GF06 = array(
     1 => 'Statistics',
     2 => 'Settings',
@@ -584,10 +511,9 @@ $LANG_GF06 = array(
     6 => 'Messages',
     7 => 'IP Mgmt',
     8 => 'Community Moderation',
-    9 => 'Import',
+    9 => 'Import'
 );
 
-// User Functions Navbar
 $LANG_GF07 = array(
     1 => 'Číst forum',
     2 => 'Preference',
@@ -596,14 +522,12 @@ $LANG_GF07 = array(
     5 => 'Členové'
 );
 
-// Forum User Features
 $LANG_GF08 = array(
     1 => 'Topic Notifications',
     2 => 'Track Forum Notifications',
     3 => 'Topic Exception Notifications'
 );
 
-// Attachment support feature
 $LANG_GF10 = array(
     'attachments' => 'Přílohy',
     'maxattachments' => 'Nejvýše %s je povoleno',
@@ -639,8 +563,21 @@ $LANG_GF91 = array(
     'avgvmsg' => 'Average views per:'
 );
 
-// Settings.php
 $LANG_GF92 = array(
+    'topicspp' => 'Topics Per Page',
+    'showiframe' => 'Show Topic Review',
+    'showiframedscp' => 'Show Topic Review (Iframe) at bottom when replying to a topic',
+    'forum_prefs' => 'Forum Preferences',
+    'forumprefs_help_title' => 'Forum Prefs Help',
+    'forumprefs_help' => 'Modify the Forum Plugin user preferences.<ul><li>Number of topics to display when viewing the forum index.</li><li>Number of posts to show per page.</li><li>Number of posts before calling a topic popular.</li><li>Number of lines to display in search results.</li><li>For the Members listing screen</li><li>Hide posts from anonymous users.</li><li>Enable auto notifications.</li><li>Only send one notification.</li><li>Show topic review (iframe) at bottom when replying.</li></ul>',
+    'topic_order' => 'Pořadí témat',
+    'editor_type' => 'Typ editoru',
+    'bbcode' => 'BBCode',
+    'wysiwyg' => 'WYSIWYG',
+    'ascending' => 'Vzestupně',
+    'descending' => 'Sestupně',
+    'sb_latestposts' => 'Last Post',
+    'setsavemsg' => 'Settings saved.',
     'gfsettings' => 'Discussion Forum Settings',
     'gensettings' => 'General Settings',
     'topicsettings' => 'Topic Posting Settings',
@@ -661,8 +598,6 @@ $LANG_GF92 = array(
     'allowsmiliesdscp' => 'Enable smilies to be used',
     'allownotify' => 'Allow Notification',
     'allownotifydscp' => 'Do you want to allow people to be notified?',
-    'showiframe' => 'Show Topic Review',
-    'showiframedscp' => 'Show Topic Review (Iframe) at bottom when replying to a topic',
     'autorefresh' => 'Auto Refresh',
     'autorefreshdscp' => 'Automatically refresh page after a submission',
     'refreshdelay' => 'Pause Delay',
@@ -671,7 +606,6 @@ $LANG_GF92 = array(
     'xtrausersettingsdscp' => 'Enable optional extra user settings',
     'titleleng' => 'Title Length',
     'titlelengdscp' => 'Maximum length (characters) for the topic subject',
-    'topicspp' => 'Topics Per Page',
     'topicsppdscp' => 'Number of topics to display when viewing the forum index',
     'postspp' => 'Posts Per Page',
     'postsppdscp' => 'Number of posts to show per page',
@@ -691,7 +625,6 @@ $LANG_GF92 = array(
     'lev5' => 'Level 5',
     'lev5dscp' => 'Rank 5 - Desciption and post threshold',
     'setsave' => 'Settings Saved',
-    'setsavemsg' => 'Settings saved.',
     'defaultmode' => 'Default Post Mode',
     'defaultmodedscp' => 'Enable HTML Mode as default - set to Yes.<br' . XHTML . '>Enable Text mode as default (safest) - set to No',
     'cbsettings' => 'Centerblock Settings',
@@ -731,7 +664,6 @@ $LANG_GF92 = array(
     'sb_subjectsizedscp' => 'Number of characters allowed in displayed subject',
     'sb_numposts' => 'Number of posts',
     'sb_numpostsdscp' => 'Number of posts to show in latestposts block',
-    'sb_latestposts' => 'Last Post',
     'sb_latestpostsdscp' => 'Only show the latest post per topic',
     'userdatefmt' => 'Date Format',
     'userdatefmtdscp' => 'Use the user defined preference for Date/Time format where required',
@@ -744,19 +676,9 @@ $LANG_GF92 = array(
     'geshiformat' => 'Code Formatting',
     'geshiformatdscp' => 'Use the Geshi Code Formatting Feature',
     'edit_timewindow' => 'Edit Timeframe',
-    'edit_timewindowdscp' => 'Allowed time (min) to allow members to edit their posts',
-    'forum_prefs' => 'Forum Preferences',
-    'forumprefs_help_title' => 'Forum Prefs Help',
-    'forumprefs_help' => 'Modify the Forum Plugin user preferences.<ul><li>Number of topics to display when viewing the forum index.</li><li>Number of posts to show per page.</li><li>Number of posts before calling a topic popular.</li><li>Number of lines to display in search results.</li><li>For the Members listing screen</li><li>Hide posts from anonymous users.</li><li>Enable auto notifications.</li><li>Only send one notification.</li><li>Show topic review (iframe) at bottom when replying.</li></ul>',
-    'topic_order' => 'Pořadí témat',
-    'editor_type' => 'Typ editoru',
-    'bbcode'    => 'BBCode',
-    'wysiwyg'   => 'WYSIWYG',
-    'ascending' => 'Vzestupně',
-    'descending' => 'Sestupně',
+    'edit_timewindowdscp' => 'Allowed time (min) to allow members to edit their posts'
 );
 
-// Board Admin
 $LANG_GF93 = array(
     'gfboard' => 'Discussion Forum Board Admin',
     'vieworder' => 'View Order',
@@ -766,6 +688,7 @@ $LANG_GF93 = array(
     'catorder' => 'Category Order',
     'forumorder' => 'Forum Order',
     'catadded' => 'Category Added.',
+    'catadderror' => 'Error Adding Category.',
     'catdeleted' => 'Category Deleted',
     'catedited' => 'Category Edited.',
     'forumadded' => 'Forum Added.',
@@ -882,12 +805,12 @@ $LANG_GF97 = array(
 );
 
 $LANG_GF98 = array(
-    'user_ratings'  => 'User Ratings',
+    'user_ratings' => 'User Ratings',
     'forum_settings' => 'Community Moderation Forum Settings.  Define the minimum user rating to view and post in the forums.',
     'board_ratings' => 'Board Rating Settings',
     'user_ratings_desc' => 'Community Moderation user ratings.  You can modify the user settings or view who a user has rated or see a user\'s rating',
-    'rating'    => 'Rating',
-    'uid'       => 'UID',
+    'rating' => 'Rating',
+    'uid' => 'UID',
     'user_rating_title' => 'Community Moderation User Ratings',
     'no_subject_defined' => 'No subject defined',
     'admin_set_value' => 'Administrator set new user rating',
@@ -898,10 +821,13 @@ $LANG_GF98 = array(
     'user_votes_desc' => 'This screen shows how the user has voted (rated) other users.',
     'user_rating_details' => 'User Rating Details for: ',
     'user_voting_details' => 'User Voting Details for: ',
-    'save_changes'  => 'Save Changes',
+    'save_changes' => 'Save Changes'
 );
 
-###############################################################################
+$LANG_FF_AUTOTAG = array(
+    'desc_forum' => 'Link: to a Forum post.  link_text defaults to the post topic. usage: [forum:<i>post_id</i> {link_text}]'
+);
+
 $PLG_forum_MESSAGE1 = 'Forum Plugin Upgrade completed - no errors';
 $PLG_forum_MESSAGE2 = 'Forum Plugin upgrade: We are unable to update this version automatically. Refer to the plugin documentation.';
 $PLG_forum_MESSAGE5 = 'Forum Plugin Upgrade failed - check error.log';
@@ -993,7 +919,7 @@ $LANG_confignames['forum'] = array(
     'use_wysiwyg_editor' => 'Enable WYSIWYG HTML Editor',
     'bbcode_disabled' => 'Default Setting for BBCode Disabled Box',
     'smilies_disabled' => 'Default Setting for Smilies Disabled Box',
-    'urlparse_disabled' => 'Default Setting for URL Parse Disabled Box',
+    'urlparse_disabled' => 'Default Setting for URL Parse Disabled Box'
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -1009,11 +935,12 @@ $LANG_fs['forum'] = array(
     'ff_attachments_settings' => 'Attachment Settings'
 );
 
+// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['forum'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => true, 'False' => false),
     2 => array('Top of Page' => 1, 'After Featured Story' => 2, 'Bottom of Page' => 3),
-     3 => array('No Blocks' => 'noblocks', 'Left Blocks' => 'leftblocks', 'Right Blocks' => 'rightblocks', 'Right / Left Blocks' => 'allblocks'),
+    3 => array('No Blocks' => 'noblocks', 'Left Blocks' => 'leftblocks', 'Right Blocks' => 'rightblocks', 'Right / Left Blocks' => 'allblocks'),
     4 => array('Block Menu' => 'blockmenu', 'Nav Bar' => 'navbar', 'None' => 'none'),
     5 => array('Descending' => 'DESC', 'Ascending' => 'ASC'),
     6 => array('Checked' => 1, 'Unchecked' => 0)

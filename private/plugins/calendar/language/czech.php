@@ -60,7 +60,7 @@ $LANG_CAL_1 = array(
     20 => 'Titulek',
     21 => 'Poèáteèní datum',
     22 => 'URL',
-    23 => '<hr>...soukromé',
+    23 => '<hr' . XHTML . '>...soukromé',
     24 => '...veøejné',
     25 => '®ádné blí¾ící se události',
     26 => 'Poslat událost',
@@ -89,7 +89,7 @@ $LANG_CAL_1 = array(
     49 => '®ádné události.',
     50 => 'Události',
     51 => 'Vymazat',
-    52 => 'Pøidal(a)',
+    52 => 'Pøidal(a)'
 );
 
 $_LANG_CAL_SEARCH = array(
@@ -161,9 +161,8 @@ $LANG_CAL_ADMIN = array(
     25 => 'Koncové datum je pøed datem zaèátku.',
     26 => 'Dávkové zpracování',
     27 => 'Tohle jsou události star¹í ne¾ ',
-    28 => ' months. Please click on the trashcan Icon on the bottom to delete them, or select a different timespan:<br' . XHTML . '>Find all entries that are older than ',
-     28 => ' mìsícù. Pokud chce¹, zmìò délku období a pak klikni na Obnov výpis. Pro odstranìní z databáze vyber jednu nebo více událostí  a pak klikni na ikonu pro vymazání. Budou vymazány pouze vybrané události ze zobrazených.',
-    29 => ' mìsícù.',
+    28 => ' mìsícù. Pokud chce¹, zmìò délku období a pak klikni na Obnov výpis. Pro odstranìní z databáze vyber jednu nebo více událostí  a pak klikni na ikonu pro vymazání. Budou vymazány pouze vybrané události ze zobrazených.',
+    29 => '',
     30 => 'Obnov výpis',
     31 => 'Are You sure you want to permanently delete ALL selected users?',
     32 => 'Vypsat v¹e',
@@ -173,7 +172,11 @@ $LANG_CAL_ADMIN = array(
     36 => 'Úspì¹nì vymazáno',
     37 => 'Moderate Event',
     38 => 'Batch Event Admin',
-    39 => 'Event Admin',
+    39 => 'Event Admin'
+);
+
+$LANG_CAL_AUTOTAG = array(
+    'desc_calendar' => 'Link: to a Calendar event on this site; link_text defaults to event title: [calendar:<i>event_id</i> {link_text}]'
 );
 
 $LANG_CAL_MESSAGE = array(
@@ -184,7 +187,7 @@ $LANG_CAL_MESSAGE = array(
     'removed' => 'Událost byla odstranìna z va¹eho osobního kalendáøe',
     'noprivate' => 'Bohu¾el, osobní kalendáøe tento server nepodporuje',
     'unauth' => 'Bohu¾el, nemáte administrátorský pøístup. Tento vá¹ pokus byl zalogován',
-    'delete_confirm' => 'OPRAVDU chce¹ vymazat tuto událost?'   
+    'delete_confirm' => 'OPRAVDU chce¹ vymazat tuto událost?'
 );
 
 $PLG_calendar_MESSAGE4 = "Dìkujeme za odeslání události pro {$_CONF['site_name']}.  Nyní oèekává potvrzení.  Jakmile bude potvrzena, naleznete ji v <a href=\"{$_CONF['site_url']}/calendar/index.php\">kalendáøi</a>.";
@@ -217,7 +220,7 @@ $LANG_confignames['calendar'] = array(
     'aftersave' => 'After Saving Event',
     'default_permissions' => 'Event Default Permissions',
     'only_admin_submit' => 'Pøidat událost smí jen Admin',
-    'displayblocks' => 'Display glFusion Blocks',
+    'displayblocks' => 'Display glFusion Blocks'
 );
 
 $LANG_configsubgroups['calendar'] = array(

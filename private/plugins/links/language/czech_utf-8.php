@@ -101,7 +101,7 @@ $LANG_LINKS_SUBMIT = array(
     9 => 'URL',
     10 => 'Kategorie',
     11 => 'Požadavky odkazů',
-    12 => 'Přidáno',
+    12 => 'Přidáno'
 );
 
 ###############################################################################
@@ -183,7 +183,7 @@ $LANG_LINKS_ADMIN = array(
     62 => 'Last Updated',
     63 => 'Are you sure you want to delete this link?',
     64 => 'Are you sure you want to delete this category?',
-    65 => 'Moderate Link',
+    65 => 'Moderate Link'
 );
 
 
@@ -231,6 +231,10 @@ $LANG_LINKS_STATUS = array(
     999 => 'Connection Timed out'
 );
 
+$LANG_LI_AUTOTAG = array(
+    'desc_link' => 'Link: to the detail page for a Link on this site; link_text defaults to the link name. usage: [link:<i>link_id</i> {link_text}]'
+);
+
 // Localization of the Admin Configuration UI
 $LANG_configsections['links'] = array(
     'label' => 'Links',
@@ -253,7 +257,7 @@ $LANG_confignames['links'] = array(
     'root' => 'ID of Root Category',
     'default_permissions' => 'Link Default Permissions',
     'target_blank' => 'Open Links in New Window',
-    'displayblocks' => 'Display glFusion Blocks',
+    'displayblocks' => 'Display glFusion Blocks'
 );
 
 $LANG_configsubgroups['links'] = array(
@@ -272,7 +276,7 @@ $LANG_configselects['links'] = array(
     1 => array('True' => true, 'False' => false),
     9 => array('Forward to Linked Site' => 'item', 'Display Admin List' => 'list', 'Display Public List' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
-    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3),
+    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
 );
 
 ?>

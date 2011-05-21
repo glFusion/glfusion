@@ -121,6 +121,14 @@ $LANG_STATIC = array(
     'delete_confirm' => 'Möchtest Du diese Seite wirklich löschen?',
     'allnhp_topics' => 'All Topics (No Homepage)'
 );
+###############################################################################
+# autotag descriptions
+
+$LANG_SP_AUTOTAG = array(
+    'desc_staticpage' => 'Link: to a staticpage on this site; link_text defaults to staticpage title. usage: [staticpage:<i>page_id</i> {link_text}]',
+    'desc_staticpage_content' => 'HTML: renders the content of a staticpage.  usage: [staticpage_content:<i>page_id</i>]'
+);
+
 
 $PLG_staticpages_MESSAGE19 = '';
 $PLG_staticpages_MESSAGE20 = '';

@@ -60,7 +60,7 @@ $LANG_CAL_1 = array(
     20 => 'Titulek',
     21 => 'Počáteční datum',
     22 => 'URL',
-    23 => '<hr>...soukromé',
+    23 => '<hr' . XHTML . '>...soukromé',
     24 => '...veřejné',
     25 => 'Žádné blížící se události',
     26 => 'Poslat událost',
@@ -89,7 +89,7 @@ $LANG_CAL_1 = array(
     49 => 'Žádné události.',
     50 => 'Události',
     51 => 'Vymazat',
-    52 => 'Přidal(a)',
+    52 => 'Přidal(a)'
 );
 
 $_LANG_CAL_SEARCH = array(
@@ -161,9 +161,8 @@ $LANG_CAL_ADMIN = array(
     25 => 'Koncové datum je před datem začátku.',
     26 => 'Dávkové zpracování',
     27 => 'Tohle jsou události starší než ',
-    28 => ' months. Please click on the trashcan Icon on the bottom to delete them, or select a different timespan:<br' . XHTML . '>Find all entries that are older than ',
     28 => ' měsíců. Pokud chceš, změň délku období a pak klikni na Obnov výpis. Pro odstranění z databáze vyber jednu nebo více událostí  a pak klikni na ikonu pro vymazání. Budou vymazány pouze vybrané události ze zobrazených.',
-    29 => ' měsíců.',
+    29 => '',
     30 => 'Obnov výpis',
     31 => 'Are You sure you want to permanently delete ALL selected users?',
     32 => 'Vypsat vše',
@@ -173,7 +172,11 @@ $LANG_CAL_ADMIN = array(
     36 => 'Úspěšně vymazáno',
     37 => 'Moderate Event',
     38 => 'Batch Event Admin',
-    39 => 'Event Admin',
+    39 => 'Event Admin'
+);
+
+$LANG_CAL_AUTOTAG = array(
+    'desc_calendar' => 'Link: to a Calendar event on this site; link_text defaults to event title: [calendar:<i>event_id</i> {link_text}]'
 );
 
 $LANG_CAL_MESSAGE = array(
@@ -217,7 +220,7 @@ $LANG_confignames['calendar'] = array(
     'aftersave' => 'After Saving Event',
     'default_permissions' => 'Event Default Permissions',
     'only_admin_submit' => 'Přidat událost smí jen Admin',
-    'displayblocks' => 'Display glFusion Blocks',
+    'displayblocks' => 'Display glFusion Blocks'
 );
 
 $LANG_configsubgroups['calendar'] = array(

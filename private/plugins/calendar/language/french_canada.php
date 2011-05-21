@@ -177,6 +177,10 @@ $LANG_CAL_ADMIN = array(
     39 => 'Event Admin'
 );
 
+$LANG_CAL_AUTOTAG = array(
+    'desc_calendar' => 'Link: to a Calendar event on this site; link_text defaults to event title: [calendar:<i>event_id</i> {link_text}]'
+);
+
 $LANG_CAL_MESSAGE = array(
     'save' => 'Évènement ajouté avec succès.',
     'delete' => 'Évènement effacé avec succès.',

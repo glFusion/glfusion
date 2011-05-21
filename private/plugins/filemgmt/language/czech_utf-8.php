@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Czech language file                                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Ivan Simunek  (2010)   ivsi AT post DOT cz                               |
@@ -133,6 +133,10 @@ $LANG_FILEMGMT = array(
     'more'          => '<em>další ...</em>'
 );
 
+$LANG_FILEMGMT_AUTOTAG = array(
+    'desc_file'                 => 'Link: to a File download detail page.  link_text defaults to the file title. usage: [file:<i>file_id</i> {link_text}]',
+    'desc_file_download'        => 'Link: to a direct File download.  link_text defaults to the file title. usage: [file_download:<i>file_id</i> {link_text}]',
+);
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['filemgmt'] = array(

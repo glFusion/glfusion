@@ -235,7 +235,11 @@ $LANG01 = array(
     'jpegtran_not_found' => 'Unable to locate the jpegtran executable.',
     'jpegtran_ok' => 'The jpegtran executable is installed.',
     'show_phpinfo' => 'Show Full PHP Info',
-    'hide_phpinfo' => 'Hide Full PHP Info'
+    'hide_phpinfo' => 'Hide Full PHP Info',
+    'autotag_perms' => 'Autotag Permissions',
+    'subscribe' => 'Subscribe',
+    'unsubscribe' => 'Unsubscribe',
+    'view_online' => 'Click here %s to view online'
 );
 
 ###############################################################################
@@ -282,7 +286,12 @@ $LANG03 = array(
     38 => 'Someone has replied to your comment.',
     39 => 'You may view the comment thread at the following address: ',
     40 => 'If you wish to recieve no further notifications of replies, visit the following link: ',
-    41 => 'Edit a Comment'
+    41 => 'Edit a Comment',
+    42 => 'New Comment Notification',
+    43 => 'Posted By',
+    44 => 'Post Date',
+    45 => 'You are receiving this email because you have chosen to be notified when a new comment has been posted.',
+    46 => 'To unsubscribe to this comment feed, please click this link: %s'
 );
 
 ###############################################################################
@@ -460,7 +469,14 @@ $LANG04 = array(
     174 => 'Thank you for registering.',
     175 => 'To request a new activation token, please enter your username and password below and a new activation eMail will be sent to you.',
     176 => 'Confirm Password',
-    177 => 'Your account is currently awaiting verification.<br />You will not be able to login until your account has been verified by following the link in the activation eMail.'
+    177 => 'Your account is currently awaiting verification.<br />You will not be able to login until your account has been verified by following the link in the activation eMail.',
+    178 => 'Resynchronize Remote Account',
+    179 => 'Delete',
+    180 => 'Type',
+    181 => 'Category',
+    182 => 'Description',
+    183 => 'Notification Subscriptions',
+    184 => 'New Post Notification'
 );
 
 ###############################################################################
@@ -473,7 +489,8 @@ $LANG_MYACCOUNT = array(
     'pe_userinfo' => 'About You',
     'pe_layout' => 'Layout &amp; Language',
     'pe_content' => 'Content',
-    'pe_privacy' => 'Privacy'
+    'pe_privacy' => 'Privacy',
+    'pe_subscriptions' => 'Subscriptions'
 );
 
 ###############################################################################
@@ -1277,7 +1294,10 @@ $LANG32 = array(
     81 => 'Maintainer',
     82 => 'Requires',
     83 => 'Info',
-    84 => 'Bundled'
+    84 => 'Bundled',
+    85 => 'Upload Autotag',
+    86 => 'Automated Autotag Installer Error',
+    87 => 'Autotag Installer'
 );
 
 ###############################################################################
@@ -1376,7 +1396,7 @@ $MESSAGE = array(
     33 => 'Du äger inte tillgång till blockadministrationen.  Denna incident har loggats.',
     34 => '',
     35 => '',
-    36 => '',
+    36 => 'The Autotag permissions have been successfully saved.',
     37 => 'Du äger inte tillgång till användaradministrationen.  Denna incident har loggats.',
     38 => 'Du äger inte tillgång till insticksmodulsadministrationen.  Denna incident har loggats.',
     39 => 'Du äger inte tillgång till epostadministrationen.  Denna incident har loggats.',
@@ -1441,6 +1461,12 @@ $MESSAGE = array(
     98 => 'The plugin was successfully uploaded.',
     99 => 'The plugin already exists.',
     100 => 'The plugin file you uploaded was not a GZip or Zip compressed archive.',
+    110 => 'Unable to retrieve OAuth authentication URL.',
+    111 => 'OAuth authentication error.',
+    112 => 'OAuth certification has been cancelled.',
+    113 => 'Your account has been created successfully. {site_url}',
+    114 => 'Warning: Resynchronization with your remote OAuth account has failed but your other account information has been successfully saved.',
+    115 => 'Warning: The remote OAuth authentication service has been disabled.',
     200 => 'Sorry, you do not have access to this page.  Please note that all attempts to access unauthorized features are logged.',
     500 => 'The Template Cache has been successfully cleared',
     501 => 'Security Token is Invalid - Possible session timeout.',
@@ -1459,7 +1485,11 @@ $MESSAGE = array(
     514 => 'Remote service cannot be empty.',
     515 => 'Thank you, your account has now been activated.',
     516 => 'Your activation token has expired.',
-    517 => 'This account has already been activated, please login below.'
+    517 => 'This account has already been activated, please login below.',
+    518 => 'You must login to subscribe to a notification feed.',
+    519 => 'You are already subscribed to this notification feed.',
+    520 => 'You have been subscribed to this notification feed.',
+    521 => 'You have been successfully un-subscribed from the notification feed.'
 );
 
 ###############################################################################
@@ -1830,7 +1860,19 @@ $LANG_MONTH = array(
     9 => 'september',
     10 => 'oktober',
     11 => 'november',
-    12 => 'december'
+    12 => 'december',
+    13 => 'Jan',
+    14 => 'Feb',
+    15 => 'Mar',
+    16 => 'Apr',
+    17 => 'May',
+    18 => 'Jun',
+    19 => 'Jul',
+    20 => 'Aug',
+    21 => 'Sep',
+    22 => 'Oct',
+    23 => 'Nov',
+    24 => 'Dec'
 );
 
 ###############################################################################
@@ -1843,7 +1885,14 @@ $LANG_WEEK = array(
     4 => 'onsdag',
     5 => 'torsdag',
     6 => 'fredag',
-    7 => 'lördag'
+    7 => 'lördag',
+    8 => 'Sun',
+    9 => 'Mon',
+    10 => 'Tue',
+    11 => 'Wed',
+    12 => 'Thu',
+    13 => 'Fri',
+    14 => 'Sat'
 );
 
 ###############################################################################
@@ -1889,6 +1938,291 @@ $LANG_ADMIN = array(
     'name' => 'Name',
     'submissions' => 'Submissions',
     'moderate' => 'Save & Approve'
+);
+
+###############################################################################
+# Menu Builder
+
+$LANG_MB01 = array(
+    'javascript_required' => 'Menu Builder requires that you have JavaScript enabled.',
+    'create_element' => 'Create Menu Element',
+    'add_new' => 'Add New Menu Item',
+    'add_newmenu' => 'Create New Menu',
+    'edit_menu' => 'Edit Menu',
+    'menu_list' => 'Menu Listing',
+    'configuration' => 'Configuration',
+    'edit_element' => 'Edit Menu Item',
+    'menu_element' => 'Menu Element',
+    'menu_type' => 'Menu Type',
+    'elements' => 'Elements',
+    'enabled' => 'Enabled',
+    'edit' => 'Edit',
+    'delete' => 'Delete',
+    'move_up' => 'Move Up',
+    'move_down' => 'Move Down',
+    'order' => 'Order',
+    'id' => 'ID',
+    'parent' => 'Parent',
+    'label' => 'Menu Name',
+    'elementlabel' => 'Element Name',
+    'display_after' => 'Display After',
+    'type' => 'Type',
+    'url' => 'URL',
+    'php' => 'PHP Function',
+    'coretype' => 'glFusion Menu',
+    'group' => 'Group',
+    'permission' => 'Visible To',
+    'active' => 'Active',
+    'top_level' => 'Top Level Menu',
+    'confirm_delete' => 'Are you sure you want to delete this menu item?',
+    'type_submenu' => 'Sub Menu',
+    'type_url_same' => 'Parent Window',
+    'type_url_new' => 'New Window with navigation',
+    'type_url_new_nn' => 'New Window without navigation',
+    'type_core' => 'glFusion Menu',
+    'type_php' => 'PHP Function',
+    'gl_user_menu' => 'User Menu',
+    'gl_admin_menu' => 'Admin Menu',
+    'gl_topics_menu' => 'Topics Menu',
+    'gl_sp_menu' => 'Static Pages Menu',
+    'gl_plugin_menu' => 'Plugin Menu',
+    'gl_header_menu' => 'Header Menu',
+    'plugins' => 'Plugin',
+    'static_pages' => 'Static Pages',
+    'glfusion_function' => 'glFusion Function',
+    'cancel' => 'Cancel',
+    'action' => 'Action',
+    'first_position' => 'First Position',
+    'info' => 'Info',
+    'non-logged-in' => 'Non Logged-In Users Only',
+    'target' => 'URL Window',
+    'same_window' => 'Same Window',
+    'new_window' => 'New Window',
+    'menu_color_options' => 'Menu Color Options',
+    'top_menu_bg' => 'Main Menu BG',
+    'top_menu_hover' => 'Main Menu Hover',
+    'top_menu_text' => 'Main Menu Text',
+    'top_menu_text_hover' => 'Main Menu Text Hover / Sub Menu Text',
+    'sub_menu_text_hover' => 'Sub Menu Text Hover',
+    'sub_menu_text' => 'Sub Menu Text Color',
+    'sub_menu_bg' => 'Sub Menu BG',
+    'sub_menu_hover_bg' => 'Sub Menu Hover BG',
+    'sub_menu_highlight' => 'Sub Menu Highlight',
+    'sub_menu_shadow' => 'Sub Menu Shadow',
+    'menu_builder' => 'Menu Builder',
+    'logo' => 'Logo',
+    'menu_colors' => 'Menu Options',
+    'options' => 'Options',
+    'menu_graphics' => 'Menu Graphics',
+    'graphics_or_colors' => 'Use Graphics or Colors?',
+    'graphics' => 'Graphics',
+    'colors' => 'Colors',
+    'menu_bg_image' => 'Main Menu BG Image',
+    'currently' => 'Currently',
+    'menu_hover_image' => 'Main Menu Hover Image',
+    'parent_item_image' => 'Sub Menu Parent Indicator',
+    'not_used' => 'Not used if Use Graphics is selected below.',
+    'select_color' => 'Select Color',
+    'menu_alignment' => 'Menu Alignment',
+    'alignment_question' => 'Align the Menu to the',
+    'align_left' => 'Left',
+    'align_right' => 'Right',
+    'blocks' => 'Block Styles',
+    'reset' => 'Reset Form',
+    'defaults' => 'Reset To Default Values',
+    'confirm_reset' => 'This will reset the menu colors and graphics to the installation values and automatically clear the Template Cache. Are you sure you want to continue? When done, make sure to clear your local browser cache as well.',
+    'menu_properties' => 'Menu Properties for',
+    'disabled_plugin' => 'Not found or disabled plugin',
+    'clone' => 'Copy',
+    'clone_menu_label' => 'Name for Cloned Menu',
+    'topic' => 'Topics'
+);
+
+###############################################################################
+# menu.php
+
+$LANG_HC = array(
+    'main_menu_bg_color' => 'Main Menu BG',
+    'main_menu_hover_bg_color' => 'Main Menu Hover',
+    'main_menu_text_color' => 'Main Menu Text',
+    'main_menu_hover_text_color' => 'Main Menu Text Hover / Sub Menu Text',
+    'submenu_hover_text_color' => 'Sub Menu Text Hover',
+    'submenu_background_color' => 'Sub Menu BG',
+    'submenu_hover_bg_color' => 'Sub Menu Hover BG',
+    'submenu_highlight_color' => 'Sub Menu Highlight',
+    'submenu_shadow_color' => 'Sub Menu Shadow',
+    'menu_bg_filename' => 'Menu Background Filename',
+    'menu_hover_filename' => 'Menu Hover Filename',
+    'menu_parent_filename' => 'Menu Parent Filename',
+    'menu_alignment' => 'Menu Alignment',
+    'use_images' => 'Use Images'
+);
+
+###############################################################################
+# menu.php
+
+$LANG_HS = array(
+    'main_menu_text_color' => 'Text',
+    'main_menu_hover_text_color' => 'Hover',
+    'submenu_highlight_color' => 'Seperator'
+);
+
+###############################################################################
+# menu.php
+
+$LANG_VC = array(
+    'main_menu_bg_color' => 'Menu BG',
+    'main_menu_hover_bg_color' => 'Menu BG Hover',
+    'main_menu_text_color' => 'Menu Text',
+    'main_menu_hover_text_color' => 'Menu Text Hover',
+    'submenu_text_color' => 'Sub Menu Text',
+    'submenu_hover_text_color' => 'Sub Menu Text Hover',
+    'submenu_highlight_color' => 'Border'
+);
+
+###############################################################################
+# menu.php
+
+$LANG_VS = array(
+    'main_menu_bg_color' => 'Menu BG',
+    'main_menu_hover_bg_color' => 'Menu BG Hover',
+    'main_menu_text_color' => 'Menu Text',
+    'main_menu_hover_text_color' => 'Menu Text Hover',
+    'submenu_text_color' => 'Sub Menu Text',
+    'submenu_hover_text_color' => 'Sub Menu Text Hover',
+    'submenu_highlight_color' => 'Border'
+);
+
+###############################################################################
+# menu.php
+
+$LANG_MB_MENU_TYPES = array(
+    1 => 'Horizontal - Cascading',
+    2 => 'Horizontal - Simple',
+    3 => 'Vertical - Cascading',
+    4 => 'Vertical - Simple'
+);
+
+###############################################################################
+# menu.php
+
+$LANG_MB_TYPES = array(
+    1 => 'Sub Menu',
+    2 => 'glFusion Action',
+    3 => 'glFusion Menu',
+    4 => 'Plugin',
+    5 => 'Static Page',
+    6 => 'External URL',
+    7 => 'PHP Function',
+    8 => 'Label',
+    9 => 'Topic'
+);
+
+###############################################################################
+# menu.php
+
+$LANG_MB_TARGET = array(
+    1 => 'Parent Window',
+    2 => 'New Window with navigation',
+    3 => 'New Window without navigation'
+);
+
+###############################################################################
+# menu.php
+
+$LANG_MB_FUNCTION = array(
+    0 => 'Home',
+    1 => 'Contribute',
+    2 => 'Directory',
+    3 => 'Preferences',
+    4 => 'Search',
+    5 => 'Site Stats'
+);
+
+###############################################################################
+# menu.php
+
+$LANG_MB_GLTYPES = array(
+    1 => 'User Menu',
+    2 => 'Admin Menu',
+    3 => 'Topics Menu',
+    4 => 'Static Pages Menu',
+    5 => 'Plugin Menu',
+    6 => 'Header Menu'
+);
+
+###############################################################################
+# menu.php
+
+$LANG_MB_ADMIN = array(
+    1 => 'Menu Builder allows you to create and edit menus for your site. To add a new menu, click the Create New Menu link above. To edit a menu\'s items, click the icon under the Elements column. To change the menu colors, click the icon under the Options column.',
+    2 => 'To create a new menu, specify a Menu Name and Menu type below. You can also set the active status, and what group of users will be able to see the menu, with the Active and Visible To fields.',
+    3 => 'Click on the icon under the Edit column to edit a menu item\'s properties. Arrange the items by moving them up or down with the arrows under the Order column.',
+    4 => 'To create a new menu element, specify its details and permissions below.',
+    5 => 'Once an element is created, you can always go back and edit its details and permissions below.',
+    6 => 'Menu Builder allows you to easily customize the look and feel of your menus. Adjust the values below to create a unique menu style.'
+);
+
+###############################################################################
+# logo.php
+
+$LANG_LOGO = array(
+    'logo_admin' => 'Logo',
+    'instructions' => 'Logo Administration allows you to easily customize your site logo and control the display of the site slogan.',
+    'javascript_required' => 'Logo Administration requires that you have JavaScript enabled.',
+    'logo_options' => 'glFusion Logo Options',
+    'use_graphic_logo' => 'Use Graphic Logo',
+    'use_text_logo' => 'Use Text Logo',
+    'use_no_logo' => 'Do Not Display a Logo',
+    'display_site_slogan' => 'Display Site Slogan',
+    'upload_logo' => 'Upload New Logo',
+    'current_logo' => 'Current Logo',
+    'no_logo_graphic' => 'No Logo Graphic available',
+    'logo_help' => 'Uploaded graphic logo images are not resized, the standard size for glFusion logo is 100 pixels tall and should be less than 500 pixels wide.  You can upload larger images, but you will need to modify the site CSS in styles.css to ensure it displays properly.',
+    'logo_saved' => 'Logo options successfully saved.'
+);
+
+###############################################################################
+# autotag.php
+
+$LANG_AM = array(
+    'plugin' => 'autotag',
+    'title' => 'Autotag Manager',
+    'menulabel' => 'Autotags',
+    'public_title' => 'Autotag List',
+    'tag' => 'Tag',
+    'type' => 'Type',
+    'module' => 'Module',
+    'description' => 'Description',
+    'replacement' => 'Replacement',
+    'enabled' => 'Enabled?',
+    'click_to_enable' => 'Click to enable.',
+    'click_to_disable' => 'Click to disable.',
+    'function' => 'PHPfn?',
+    'autotag_editor' => 'Autotag Editor',
+    'autotag_list' => 'Autotag List',
+    'edit' => 'Edit',
+    'save' => 'Save',
+    'delete' => 'Delete',
+    'cancel' => 'Cancel',
+    'confirm' => 'Are you sure you want to delete this Autotag?',
+    'access_denied' => 'Access Denied',
+    'access_denied_msg' => 'You are illegally trying access one of the Autotag Manager administration pages.  Please note that all attempts to illegally access this page are logged',
+    'php_msg_enabled' => 'If checked, the PHP class <b>{tag}.class.php</b> will be called to expand the tag. The <b>Replacement</b> text will be ignored.',
+    'php_msg_norights' => '<br />NOTE: PHP Autotags are enabled, however the current user has not been assigned the \'autotag.PHP\' feature, and therefore cannot create new PHP Autotags and/or enable or disable existing PHP Autotags.',
+    'php_msg_disabled' => 'PHP Autotags have been disabled.<br />To enable, you must set the \'Allow PHP in Autotags\' setting to \'True\' in the Autotag Manager plugin configuration panel.',
+    'disallowed_tag' => 'The tag you have chosen is restricted and not available for use. Choose another tag.',
+    'duplicate_tag' => 'The tag you have chosen is already in use. Please choose another tag name or edit the existing tag.',
+    'no_tag_or_replacement' => 'You must at least fill in the <b>Tag</b> and <b>Replacement</b> fields.',
+    'phpfn_missing' => 'The class: \'%s.class.php\' does not exist in the autotag/ directory.',
+    'phpfn_must_exist' => 'You must create this class and place it in system/autotag/ directory before defining the associated PHP-based Autotag.',
+    'phpfn_replace' => 'This tag will be expanded by a call to the PHP class {tag}.class.php.',
+    'html_allowed' => '(HTML:OK)',
+    'instructions' => 'To modify or delete an Autotag, click on that tag\'s edit icon below. To create a new Autotag, click on "Create New" above. <p>If there are PHP function-based Autotags below that you cannot edit or enable, it is because 1) you do not have access to the autotag.PHP feature and/or 2) PHP Autotags are disabled in the Autotag Manager plugin configuration panel.</p>',
+    'public_instructions' => 'The complete list of Autotags that are currently available and enabled on this site are displayed below.  For each Autotag, the contributing glFusion Module is displayed, as well as the Type and Description.  Usage examples are provided with the <i>required</i> and {optional} parameters.  Where multiple options are available, a link to the glFusion.org wiki documentation is provided.',
+    'replace_explain' => 'Autotags take the form <b>[tag:{p1} {p2}]</b>. In the <b>Replacement</b> field you can use any valid HTML. You can include {p1} and/or {p2} parameters in your replacement string by using the replacement macros %1% and %2% respectively.<p>Autotags are commonly used to create links. A <b>Replacement</b> field of <b>&lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</b> when combined with this tag: <b>[tag:foo This is a link]</b> will result in the string <b>&lt;a href="http://path.to.somewhere/foo"&gt;This is a link&lt;/a&gt;</b></p><p>You may also use %0% to represent the entire string after the first colon, this is handy when you want to use only a single parameter, and the value will contain whitespace which would otherwise be interpreted as a delimiter between multiple parameters.  The %site_url% and $site_admin_url% macros can also be used, and will be replaced by the base url and admin url respectively.</p>',
+    'autotagpermmsg' => 'Select which features (operations) you want to allow the autotag to be used.',
+    'autotag' => 'Autotag'
 );
 
 ###############################################################################
@@ -2019,6 +2353,15 @@ $LANG_confignames['Core'] = array(
     'show_servicename' => 'Show Service Name',
     'custom_registration' => 'Enable Custom Registration',
     'user_login_method' => 'User Login Method',
+    'facebook_login' => 'Enable Facebook OAuth Login Method',
+    'facebook_consumer_key' => 'Facebook OAuth Application ID',
+    'facebook_consumer_secret' => 'Facebook OAuth Application Secret',
+    'linkedin_login' => 'Enable LinkedIn OAuth Login Method',
+    'linkedin_consumer_key' => 'LinkedIn OAuth API Key',
+    'linkedin_consumer_secret' => 'LinkedIn OAuth Secret Key',
+    'twitter_login' => 'Enable Twitter OAuth Login Method',
+    'twitter_consumer_key' => 'Twitter OAuth Consumer Key',
+    'twitter_consumer_secret' => 'Twitter OAuth Consumer Secret',
     'spamx' => 'Spam-X Actions',
     'sort_admin' => 'Sort Links',
     'language' => 'Language',
@@ -2077,6 +2420,7 @@ $LANG_confignames['Core'] = array(
     'hide_home_link' => 'Hide Home Link?',
     'whosonline_threshold' => 'Session Threshold',
     'whosonline_anonymous' => 'Hide Names from Guests?',
+    'whosonline_photo' => 'Display User Photo Thumbnail?',
     'emailstories' => 'Daily Digest Enabled?',
     'emailstorieslength' => 'Length of Stories',
     'emailstoriesperdefault' => 'Enable for New Users?',
@@ -2219,7 +2563,10 @@ $LANG_confignames['Core'] = array(
     'article_comment_close_enabled' => 'Automatically close comments (default)',
     'registration_type' => 'Registration Type',
     'comment_postmode' => 'Comment Postmode',
-    'comment_editor' => 'Comment Editor'
+    'comment_editor' => 'Comment Editor',
+    'max_logo_width' => 'Max logo width',
+    'max_logo_height' => 'Max logo height',
+    'whatsnew_cache_time' => 'Time between forced rebuild of the What\'s New cache (in seconds)'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2276,7 +2623,8 @@ $LANG_fs['Core'] = array(
     'fs_perm_block' => 'Block Default Permission',
     'fs_webservices' => 'Webservices',
     'fs_caching' => 'Caching',
-    'fs_mulitlanguage' => 'Multiple Language Support - See <a href="http://www.glfusion.org/wiki/doku.php/glfusion:language#multilingual_sites" target=_blank>Multi-Language Documentation</a>'
+    'fs_mulitlanguage' => 'Multiple Language Support - See <a href="http://www.glfusion.org/wiki/doku.php/glfusion:language#multilingual_sites" target=_blank>Multi-Language Documentation</a>',
+    'fs_logo' => 'Logo Options'
 );
 
 $LANG_configselects['Core'] = array(

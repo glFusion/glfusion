@@ -2,12 +2,12 @@
 // +--------------------------------------------------------------------------+
 // | FileMgmt Plugin - glFusion CMS                                           |
 // +--------------------------------------------------------------------------+
-// | german.php                                                         |
+// | german.php                                                               |
 // |                                                                          |
 // | German language file                                                     |
 // | Modifiziert: August 09 Tony Kluever									  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -133,6 +133,10 @@ $LANG_FILEMGMT = array(
     'more'          => '<em>mehr ...</em>'
 );
 
+$LANG_FILEMGMT_AUTOTAG = array(
+    'desc_file'                 => 'Link: to a File download detail page.  link_text defaults to the file title. usage: [file:<i>file_id</i> {link_text}]',
+    'desc_file_download'        => 'Link: to a direct File download.  link_text defaults to the file title. usage: [file_download:<i>file_id</i> {link_text}]',
+);
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['filemgmt'] = array(
