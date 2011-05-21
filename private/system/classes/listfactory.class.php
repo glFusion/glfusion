@@ -550,7 +550,7 @@ class ListFactory {
                             if ($field['name'] == '_html') {
                                 $col[$field['name']] = $field['format'];
                             } else {
-                                $col[ $field['name'] ] = $A[ $field['name'] ];
+                                $col[ $field['name'] ] = isset($A[$field['name']]) ? $A[ $field['name'] ] : '';
                             }
                         }
                     }
