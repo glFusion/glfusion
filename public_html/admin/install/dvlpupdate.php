@@ -661,6 +661,11 @@ function glfusion_130()
     $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='d/m/y H:i' WHERE dfid=17";
     $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='D d M h:iA' WHERE dfid=18";
 
+
+    foreach ($_SQL as $sql) {
+        DB_query($sql,1);
+    }
+
     $complete = DB_getItem($_TABLES['vars'],'value','name="stcvt"');
     if ( $complete != 1 ) {
         if (!in_array('sitetailor', $_PLUGINS)) {
@@ -679,9 +684,6 @@ function glfusion_130()
         DB_query("INSERT INTO {$_TABLES['vars']} (name,value) VALUES ('stcvt','1')",1);
     }
 
-    foreach ($_SQL as $sql) {
-        DB_query($sql,1);
-    }
 
     // new config options
     require_once $_CONF['path_system'].'classes/config.class.php';
