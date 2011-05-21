@@ -995,7 +995,7 @@ function plugin_chkVersion_staticpages()
 */
 function plugin_autotags_staticpages($op, $content = '', $autotag = '')
 {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES, $LANG_SP_AUTOTAG;
 
     if ($op == 'tagname' ) {
         return array('staticpage', 'staticpage_content');
@@ -1004,6 +1004,18 @@ function plugin_autotags_staticpages($op, $content = '', $autotag = '')
             array('namespace' => 'staticpages','usage' => 'page')
         );
         return $tagUsage;
+    } else if ($op == 'desc') {
+        switch ($content) {
+            case 'staticpage' :
+                return $LANG_SP_AUTOTAG['desc_staticpage'];
+                break;
+            case 'staticpage_content' :
+                return $LANG_SP_AUTOTAG['desc_staticpage_content'];
+                break;
+            default :
+                return '';
+                break;
+        }
     } else if ($op == 'parse') {
         if (($autotag['tag'] == 'staticpage') || ($autotag['tag'] == 'staticpage_content' )) {
             $sp_id = COM_applyFilter($autotag['parm1']);

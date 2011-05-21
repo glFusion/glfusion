@@ -1075,7 +1075,7 @@ function plugin_submissioncount_calendar()
 */
 function plugin_autotags_calendar ($op, $content = '', $autotag = '')
 {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES, $LANG_CAL_AUTOTAG;
 
     if ($op == 'tagname' ) {
         return 'calendar';
@@ -1084,6 +1084,15 @@ function plugin_autotags_calendar ($op, $content = '', $autotag = '')
             array('namespace' => 'calendar','usage' => 'description')
         );
         return $tagUsage;
+    } else if ($op == 'desc' ) {
+        switch ($content) {
+            case 'calendar' :
+                return $LANG_CAL_AUTOTAG['desc_calendar'];
+                break;
+            default :
+                return '';
+                break;
+       }
     } else if ($op == 'parse') {
         if (($autotag['tag'] == 'calendar')) {
             $eid = COM_applyFilter ($autotag['parm1']);

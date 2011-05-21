@@ -599,12 +599,27 @@ function plugin_upgrade_polls()
 */
 function plugin_autotags_polls($op, $content = '', $autotag = '')
 {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES, $LANG_PO_AUTOTAG;
 
     $skip = 0;
 
     if ($op == 'tagname' ) {
         return array('poll_vote', 'poll_result', 'poll');
+    } elseif ( $op == 'desc' ) {
+        switch($content) {
+            case 'poll_vote' :
+                return $LANG_PO_AUTOTAG['desc_poll_vote'];
+                break;
+            case 'poll_result' :
+                return $LANG_PO_AUTOTAG['desc_poll_result'];
+                break;
+            case 'poll' :
+                return $LANG_PO_AUTOTAG['desc_poll'];
+                break;
+            default :
+                return '';
+                break;
+        }
     } elseif ($op == 'parse') {
         $tag = str_replace('&nbsp;',' ',$autotag['tagstr']);
         $parms = explode (' ', $tag);

@@ -138,7 +138,7 @@ function plugin_getmenuitems_forum()
 }
 
 function plugin_autotags_forum($op,$content='',$autotag='') {
-    global $_CONF;
+    global $_CONF, $LANG_FF_AUTOTAG;
 
     if ($op == 'tagname' ) {
         return 'forum';
@@ -148,6 +148,9 @@ function plugin_autotags_forum($op,$content='',$autotag='') {
             array('namespace' => 'forum','usage' => 'post')
         );
         return $tagUsage;
+    } elseif ( $op == 'desc' ) {
+        $tagDescription = $LANG_FF_AUTOTAG['desc_forum'];
+        return $tagDescription;
     } elseif ($op == 'parse') {
         if ($autotag['parm2'] == '') {
             $autotag['parm2'] = 'here';

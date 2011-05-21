@@ -126,7 +126,7 @@ function plugin_autouninstall_sitetailor ()
         /* give the full name of the feature, as in the db */
         'features' => array('sitetailor.admin'),
         /* give the full name of the block, including 'phpblock_', etc */
-        'php_blocks' => array('phpblock_getMenu(block)'),
+        'php_blocks' => array(),
         /* give all vars with their name */
         'vars'=> array()
     );

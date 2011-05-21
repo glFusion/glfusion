@@ -66,10 +66,10 @@ define("MG_MP4",4096);
 define("MG_MPG",8192);
 define("MG_ZIP",16384);
 define("MG_OTHER",32768);
-define("MG_PDF"  ,65536);
-define("MG_FLV"  ,131072);
-define("MG_RFLV" ,262144);
-define("MG_EMB"  ,524288);
+define("MG_PDF",65536);
+define("MG_FLV",131072);
+define("MG_RFLV",262144);
+define("MG_EMB",524288);
 
 USES_lib_image();
 /*
@@ -79,7 +79,7 @@ require_once $_CONF['path'].'plugins/mediagallery/mediagallery.php';
 require_once $_CONF['path'].'plugins/mediagallery/config.php';
 require_once $_CONF['path'].'plugins/mediagallery/include/classAlbum.php';
 
-$mg_installed_version = DB_getItem($_TABLES['plugins'],'pi_version','pi_name="mediagallery"');
+$mg_installed_version = $_PLUGIN_INFO['mediagallery'];
 
 // This is a list of valid extensions for image media thumbnails / display images
 $_MG_CONF['validExtensions'] = array('.jpg','.png','.gif','.bmp');
@@ -118,7 +118,7 @@ function plugin_chkVersion_mediagallery() {
 }
 
 function plugin_autotags_mediagallery ( $op, $content = '', $autotag = '') {
-    global $_CONF, $_TABLES, $_MG_CONF;
+    global $_CONF, $_TABLES, $_MG_CONF, $LANG_MG_AUTOTAG;
 
     if ($op == 'tagname' ) {
         return array('album','media','img','slideshow','fslideshow','video','audio','download',
@@ -133,6 +133,50 @@ function plugin_autotags_mediagallery ( $op, $content = '', $autotag = '') {
             array('namespace' => 'mediagallery','usage' => 'category_description')
         );
         return $tagUsage;
+    } else if ($op == 'desc' ) {
+        switch ($content) {
+            case 'album' :
+                return $LANG_MG_AUTOTAG['desc_album'];
+                beak;
+            case 'media' :
+                return $LANG_MG_AUTOTAG['desc_media'];
+                break;
+            case 'img' :
+                return $LANG_MG_AUTOTAG['desc_img'];
+                break;
+            case 'slideshow' :
+                return $LANG_MG_AUTOTAG['desc_slideshow'];
+                break;
+            case 'fslideshow' :
+                return $LANG_MG_AUTOTAG['desc_fslideshow'];
+                break;
+            case 'video' :
+                return $LANG_MG_AUTOTAG['desc_video'];
+                break;
+            case 'audio' :
+                return $LANG_MG_AUTOTAG['desc_audio'];
+                break;
+            case 'download' :
+                return $LANG_MG_AUTOTAG['desc_download'];
+                break;
+            case 'image' :
+                return $LANG_MG_AUTOTAG['desc_image'];
+                break;
+            case 'oimage' :
+                return $LANG_MG_AUTOTAG['desc_oimage'];
+                break;
+            case 'mlink' :
+                return $LANG_MG_AUTOTAG['desc_mlink'];
+                break;
+            case 'alink' :
+                return $LANG_MG_AUTOTAG['desc_alink'];
+                break;
+            case 'playall' :
+                return $LANG_MG_AUTOTAG['desc_playall'];
+                break;
+            default :
+                return '';
+        }
     } else if ($op == 'parse') {
         require_once $_CONF['path'].'plugins/mediagallery/include/autotag.inc.php';
         return _mg_autotags( $op, $content, $autotag );
@@ -709,11 +753,17 @@ function plugin_moderationvalues_mediagallery()
 */
 function plugin_itemlist_mediagallery($token)
 {
-    global $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG02,$LANG_MG10;
+    global $_CONF, $_TABLES, $_USER, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG02,$LANG_MG10;
     global $LANG01, $LANG24, $LANG29, $LANG_ADMIN, $_IMAGE_TYPE;
 
     $retval = '';
     $key='media_id';
+
+    if ( COM_isAnonUser() ) {
+        $uid = 1;
+    } else {
+        $uid = $_USER['uid'];
+    }
 
     $_GROUPS = SEC_getUserGroups($uid);
     $groupsql = '';
@@ -761,9 +811,9 @@ function plugin_itemlist_mediagallery($token)
 
     $text_arr = array('has_menu'    => false,
                       'title'       => $LANG_MG01['submissions'],
-                      'help_url'    => $section_help,
-                      'no_data'   => $LANG29[39],
-                      'form_url'  => "{$_CONF['site_admin_url']}/moderation.php"
+                      'help_url'    => '',
+                      'no_data'     => $LANG29[39],
+                      'form_url'    => "{$_CONF['site_admin_url']}/moderation.php"
     );
 
     $actions = '<input name="approve" type="image" src="'
@@ -1073,8 +1123,8 @@ function plugin_moderationapprove_mediagallery($id)
             $row = DB_fetchArray($result);
             $sql = "INSERT INTO {$_TABLES['mg_media_albums']} (album_id,media_id,media_order) "
                    . "VALUES ('" .
-                   $row['album_id'] . "','" .
-                   $row['media_id'] . "',32000)";
+                   (int) $row['album_id'] . "','" .
+                   (int) $row['media_id'] . "',32000)";
 
             DB_query($sql);
             $sql = "DELETE FROM " . $_TABLES['mg_media_album_queue'] . " WHERE media_id='" . DB_escapeString($id) . "'";
@@ -1091,8 +1141,8 @@ function plugin_moderationapprove_mediagallery($id)
                      " WHERE album_id='" . $row['album_id'] . "'");
 
             if ( $album_cover == -1 && $media_type == 0 ) {
-                DB_query("UPDATE {$_TABLES['mg_albums']} SET album_cover_filename='" . $media_filename . "'" .
-                         " WHERE album_id=" . $row['album_id'] );
+                DB_query("UPDATE {$_TABLES['mg_albums']} SET album_cover_filename='" . DB_escapeString($media_filename) . "'" .
+                         " WHERE album_id=" . (int) $row['album_id'] );
             }
             CACHE_remove_instance('whatsnew');
 
@@ -1766,7 +1816,7 @@ function MG_initAlbums() {
 
     // read user prefs, if any...
     if ( !COM_isAnonUser() ) {
-        $result = DB_query("SELECT * FROM " . $_TABLES['mg_userprefs'] . " WHERE uid='" . $_USER['uid']."'", 1);
+        $result = DB_query("SELECT * FROM " . $_TABLES['mg_userprefs'] . " WHERE uid='" . (int) $_USER['uid']."'", 1);
         $nRows  = DB_numRows($result);
         if ( $nRows > 0 ) {
             $_MG_USERPREFS = DB_fetchArray($result);

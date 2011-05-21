@@ -189,7 +189,7 @@ function plugin_getwhatsnew_links()
 */
 function plugin_autotags_links($op, $content = '', $autotag = '')
 {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES, $LANG_LI_AUTOTAG;
 
     if ($op == 'tagname' ) {
         return 'link';
@@ -198,6 +198,9 @@ function plugin_autotags_links($op, $content = '', $autotag = '')
             array('namespace' => 'links','usage' => 'description')
         );
         return $tagUsage;
+    } elseif ( $op == 'desc' ) {
+        $tagDescription = $LANG_LI_AUTOTAG['desc_link'];
+        return $tagDescription;
     } else if ($op == 'parse') {
         $lid = COM_applyFilter($autotag['parm1']);
         $url = COM_buildUrl($_CONF['site_url']

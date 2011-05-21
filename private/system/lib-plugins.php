@@ -1720,7 +1720,7 @@ function PLG_getHeaderCode()
 */
 function PLG_collectTags($namespace='',$operation='')
 {
-    global $_CONF, $_PLUGINS;
+    global $_CONF, $_PLUGINS, $_AUTOTAGS;
 
     if (isset($_CONF['disable_autolinks']) && ($_CONF['disable_autolinks'] == 1)) {
         // autolinks are disabled - return an empty array
@@ -1738,7 +1738,7 @@ function PLG_collectTags($namespace='',$operation='')
     //                        'tag'   => 'module'
     $autolinkModules = array();
 
-    $coreTags = array ('story' => 'glfusion','story_introtext' => 'glfusion', 'showblock' => 'glfusion');
+    $coreTags = array ('story' => 'glfusion','story_introtext' => 'glfusion', 'showblock' => 'glfusion','hmenu' => 'glfusion', 'vmenu' => 'glfusion');
     foreach ($coreTags as $tag => $pi_name) {
         $permCheck = $tag.$postFix;
         if ( empty($postFix) || !isset($autoTagPerms[$permCheck]) || $autoTagPerms[$permCheck] == 1 ) {
@@ -1757,7 +1757,7 @@ function PLG_collectTags($namespace='',$operation='')
                         $autolinkModules[$tag] = $pi_name;
                     }
                 }
-            } else {
+            } else if ( $autotag != '' ) {
                 $permCheck = $autotag.$postFix;
                 if ( empty($postFix) || !isset($autoTagPerms[$permCheck]) || $autoTagPerms[$permCheck] == 1 ) {
                     $autolinkModules[$autotag] = $pi_name;
@@ -1765,7 +1765,16 @@ function PLG_collectTags($namespace='',$operation='')
             }
         }
     }
-
+    // process user auto tags
+    $at = array_keys($_AUTOTAGS);
+    if ( is_array($at) ) {
+        foreach($at AS $tag) {
+            $permCheck = $tag.$postFix;
+            if ( empty($postFix) || !isset($autoTagPerms[$permCheck]) || $autoTagPerms[$permCheck] == 1 ) {
+                $autolinkModules[$tag] = 'glfusion';
+            }
+        }
+    }
     return $autolinkModules;
 }
 
@@ -1855,7 +1864,7 @@ function PLG_autoTagPerms()
 */
 function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
 {
-    global $_CONF, $_TABLES, $_BLOCK_TEMPLATE, $LANG32, $autoTagUsage;
+    global $_CONF, $_TABLES, $_BLOCK_TEMPLATE, $LANG32, $_AUTOTAGS, $mbMenu, $autoTagUsage;
 
     if (isset ($_CONF['disable_autolinks']) && ($_CONF['disable_autolinks'] == 1)) {
         // autolinks are disabled - return $content unchanged
@@ -1945,7 +1954,6 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
         foreach ($tags as $autotag) {
             $permCheck = $autotag['tag'].$postFix;
             if ( empty($postFix) || !isset($autoTagUsage[$permCheck]) || $autoTagUsage[$permCheck] == 1 ) {
-
                 $function = 'plugin_autotags_' . $autotag['module'];
                 if (($autotag['module'] == 'glfusion') AND
                         (empty ($plugin) OR ($plugin == 'glfusion'))) {
@@ -2059,6 +2067,28 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
                         } else {
                             $content = str_replace($autotag['tagstr'],'',$content);
                         }
+                    }
+                    if ( $autotag['tag'] == 'hmenu' ) {
+                        $menu = '';
+                        $menuID = trim($autotag['parm1']);
+                        $id = DB_getItem($_TABLES['st_menus'],'id','menu_name="'.DB_escapeString($menuID).'"');
+                        if ( $id > 0 ) {
+                            if ( $mbMenu[$id]['menu_type'] == 1 ) {
+                                $menu = mb_getMenu($menuID,"gl_moomenu","gl_moomenu",'',"parent");
+                            } else {
+                                $menu = mb_getMenu($menuID,'st-fmenu','','','','st-f-last');
+                            }
+                            $content = str_replace($autotag['tagstr'],$menu,$content);
+                        } else {
+                            $content = str_replace($autotag['tagstr'],$menu,$content);
+                        }
+                    }
+                    if ( $autotag['tag'] == 'vmenu' ) {
+                        $menu = phpblock_getMenu('',trim($autotag['parm1']));
+                        $content = str_replace($autotag['tagstr'],$menu,$content);
+                    }
+                    if (isset($_AUTOTAGS[$autotag['tag']])) {
+                        $content = autotags_autotag('parse', $content, $autotag);
                     }
                 } else if (function_exists ($function) AND
                         (empty ($plugin) OR ($plugin == $autotag['module']))) {

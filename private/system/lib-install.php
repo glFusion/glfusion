@@ -512,4 +512,416 @@ function INSTALLER_applyGroupDefault($grp_id, $add = true)
 
 } //!defined('INSTALLER_VERSION')
 
+/**
+* Creates a unique temporary directory
+*
+* Creates a temp directory int he $_CONF['path_data] directory
+*
+* @return   bool              True on success, false on fail
+*
+*/
+function _io_mktmpdir() {
+    global $_CONF;
+
+    $base = $_CONF['path_data'];
+    $dir  = md5(uniqid(mt_rand(), true));
+    $tmpdir = $base.$dir;
+
+    if(fusion_io_mkdir_p($tmpdir)) {
+        return($dir);
+    } else {
+        return false;
+    }
+}
+
+/**
+* Creates a directory
+*
+* @parm     string  $target   Directory to create.
+* @return   bool              True on success, false on fail
+*
+*/
+function fusion_io_mkdir_p($target){
+    global $_CONF;
+
+    if (@is_dir($target)||empty($target)) return 1; // best case check first
+
+    if (@file_exists($target) && !@is_dir($target)) return 0;
+
+    if (fusion_io_mkdir_p(substr($target,0,strrpos($target,'/')))){
+        $ret = @mkdir($target,0755);
+        @chmod($target, 0755);
+        return $ret;
+    }
+    return 0;
+}
+
+
+/**
+* Deletes a directory (with recursive sub-directory support)
+*
+* @parm     string            Path of directory to remove
+* @return   bool              True on success, false on fail
+*
+*/
+function _pi_deleteDir($path) {
+    if (!is_string($path) || $path == "") return false;
+    if ( function_exists('set_time_limit') ) {
+        @set_time_limit( 30 );
+    }
+    if (@is_dir($path)) {
+      if (!$dh = @opendir($path)) return false;
+
+      while ($f = readdir($dh)) {
+        if ($f == '..' || $f == '.') continue;
+        _pi_deleteDir("$path/$f");
+      }
+
+      closedir($dh);
+      return @rmdir($path);
+    } else {
+      return @unlink($path);
+    }
+
+    return false;
+}
+
+
+function _pi_parseXML($tmpDirectory)
+{
+    global $_CONF, $pluginData;
+
+    if (!$dh = @opendir($tmpDirectory)) {
+        return false;
+    }
+   while ( ( $file = readdir($dh) ) != false ) {
+        if ( $file == '..' || $file == '.' ) {
+            continue;
+        }
+        if ( @is_dir($tmpDirectory . '/' . $file) ) {
+            $filename = $tmpDirectory . '/' . $file . '/plugin.xml';
+            break;
+        }
+    }
+    closedir($dh);
+
+    if (!($fp=@fopen($filename, "r"))) {
+        return -1;
+    }
+
+    $pluginData = array();
+
+    if (!($xml_parser = xml_parser_create()))
+        return false;
+
+    xml_set_element_handler($xml_parser,"_pi_startElementHandler","_pi_endElementHandler");
+    xml_set_character_data_handler( $xml_parser, "_pi_characterDataHandler");
+
+    while( $data = fread($fp, 4096)){
+        if(!xml_parse($xml_parser, $data, feof($fp))) {
+            break;
+        }
+    }
+    xml_parser_free($xml_parser);
+}
+
+/**
+* XML startElement callback
+*
+* used for plugin.xml parsing
+*
+* @param    object $parser  Handle to the parser object
+* @param    string $name    Name of element
+* @param    array  $attrib  array of attributes for element
+* @return   none
+*
+*/
+function _pi_startElementHandler ($parser,$name,$attrib) {
+    global $pluginData;
+    global $state;
+
+    switch ($name) {
+        case 'ID' :
+            $state = 'id';
+            break;
+        case 'NAME' :
+            $state = 'pluginname';
+            break;
+        case 'VERSION' :
+            $state = 'pluginversion';
+            break;
+        case 'GLFUSIONVERSION' :
+            $state = 'glfusionversion';
+            break;
+        case 'PHPVERSION' :
+            $state = 'phpversion';
+            break;
+        case 'DESCRIPTION' :
+            $state = 'description';
+            break;
+        case 'URL' :
+            $state = 'url';
+            break;
+        case 'MAINTAINER' :
+            $state = 'maintainer';
+            break;
+        case 'DATABASE' :
+            $state = 'database';
+            break;
+        case 'REQUIRES' :
+            $state = 'requires';
+            break;
+        case 'DATAPROXYDRIVER' :
+            $state = 'dataproxydriver';
+            break;
+        case 'LAYOUT' :
+            $state = 'layout';
+            break;
+        case 'RENAMEDIST' :
+            $state = 'renamedist';
+            break;
+    }
+}
+
+function _pi_endElementHandler ($parser,$name){
+    global $pluginData;
+    global $state;
+
+    $state='';
+}
+
+function _pi_characterDataHandler ($parser, $data) {
+    global $pluginData;
+    global $state;
+
+
+    if (!$state) {
+        return;
+    }
+
+    switch ($state) {
+        case 'id' :
+            $pluginData['id'] = $data;
+            break;
+        case 'pluginname' :
+            $pluginData['name'] = $data;
+            break;
+        case 'pluginversion' :
+            $pluginData['version'] = $data;
+            break;
+        case 'glfusionversion' :
+            $pluginData['glfusionversion'] = $data;
+            break;
+        case 'phpversion' :
+            $pluginData['phpversion'] = $data;
+            break;
+        case 'description' :
+            $pluginData['description'] = $data;
+            break;
+        case 'url' :
+            $pluginData['url'] = $data;
+            break;
+        case 'maintainer' :
+            $pluginData['author'] = $data;
+            break;
+        case 'database' :
+            $pluginData['database'] = $data;
+            break;
+        case 'requires' :
+            $pluginData['requires'][] = $data;
+            break;
+        case 'dataproxydriver' :
+            $pluginData['dataproxydriver'] = $data;
+            break;
+        case 'layout' :
+            $pluginData['layout'] = $data;
+            break;
+        case 'renamedist' :
+            $pluginData['renamedist'][] = $data;
+            break;
+    }
+}
+
+
+/**
+* Copies srcdir to destdir (recursive)
+*
+* @param    string  $srcdir Source Directory
+* @param    string  $dstdir Destination Directory
+*
+* @return   string          comma delimited list success,fail,size,failedfiles
+*                           5,2,150000,\SOMEPATH\SOMEFILE.EXT|\SOMEPATH\SOMEOTHERFILE.EXT
+*
+*/
+function _pi_dir_copy($srcdir, $dstdir )
+{
+    $num = 0;
+    $fail = 0;
+    $sizetotal = 0;
+    $fifail = '';
+    if (!@is_dir($dstdir)) fusion_io_mkdir_p($dstdir);
+    if ($curdir = @opendir($srcdir)) {
+        while ($file = readdir($curdir)) {
+            if ($file != '.' && $file != '..') {
+                $srcfile = $srcdir . '/' . $file;
+                $dstfile = $dstdir . '/' . $file;
+                if (is_file($srcfile)) {
+                    if (@copy($srcfile, $dstfile)) {
+                        @touch($dstfile, filemtime($srcfile)); $num++;
+                        @chmod($dstfile, 0644);
+                        $sizetotal = ($sizetotal + filesize($dstfile));
+                    } else {
+                        COM_errorLog("PLG-INSTALL: File '$srcfile' could not be copied!");
+                        $fail++;
+                        $fifail = $fifail.$srcfile.'|';
+                    }
+                }
+                else if (@is_dir($srcfile)) {
+                    $res = explode(',',$ret);
+                    $ret = _pi_dir_copy($srcfile, $dstfile, $verbose);
+                    $mod = explode(',',$ret);
+                    $imp = array($res[0] + $mod[0],$mod[1] + $res[1],$mod[2] + $res[2],$mod[3].$res[3]);
+                    $ret = implode(',',$imp);
+                }
+            }
+        }
+        closedir($curdir);
+    } else {
+        COM_errorLog("PLG-INSTALL: Unable to open temporary directory: " . $srcdir);
+        $ret ='0,1,0,Unable to open temp. directory';
+        return $ret;
+    }
+    $red = explode(',',$ret);
+    $ret = ($num + $red[0]).','.($fail + $red[1]).','.($sizetotal + $red[2]).','.$fifail.$red[3];
+    return $ret;
+}
+
+
+/**
+* Copies srcfile to destdir
+*
+* @param    string  $srcdir Source Directory
+* @param    string  $dstdir Destination Directory
+*
+* @return   string          comma delimited list success,fail,size,failedfiles
+*                           5,2,150000,\SOMEPATH\SOMEFILE.EXT|\SOMEPATH\SOMEOTHERFILE.EXT
+*
+*/
+function _pi_file_copy($srcfile, $dstdir )
+{
+    if (!@is_dir($dstdir)) fusion_io_mkdir_p($dstdir);
+    if (is_file($srcfile)) {
+        $dstfile = $dstdir . '/' . basename($srcfile);
+        if (@copy($srcfile, $dstfile)) {
+            @touch($dstfile, filemtime($srcfile));
+            @chmod($dstfile, 0644);
+        } else {
+            COM_errorLog("INSTALL: File '$srcfile' could not be copied!");
+            return false;
+        }
+    } else {
+        COM_errorLog("INSTALL: Unable to open temporary file: " . $srcfile);
+        return false;
+    }
+    return true;
+}
+
+function _pi_test_copy($srcdir, $dstdir)
+{
+    $num        = 0;
+    $fail       = 0;
+    $sizetotal  = 0;
+    $fifail     = '';
+    $createdDst = 0;
+
+    $failedFiles = array();
+
+    if(!@is_dir($dstdir)) {
+        $rc = fusion_io_mkdir_p($dstdir);
+        if ($rc == false ) {
+            $failedFiles[] = $dstdir;
+            COM_errorLog("PLG-INSTALL: Error: Unable to create directory " . $dstdir);
+            return array(1,$failedFiles);
+        }
+        $createdDst = 1;
+    }
+
+    if($curdir = @opendir($srcdir)) {
+        while($file = readdir($curdir)) {
+            if($file != '.' && $file != '..') {
+                $srcfile = $srcdir . '/' . $file;
+                $dstfile = $dstdir . '/' . $file;
+                if(is_file($srcfile)) {
+                    if ( !COM_isWritable($dstfile) ) {
+                        $failedFiles[] = $dstfile;
+                        COM_errorLog("PLG-INSTALL: Error: File '$dstfile' cannot be written");
+                        $fail++;
+                        $fifail = $fifail.$srcfile.'|';
+                    }
+                } else if(@is_dir($srcfile)) {
+                    $res = explode(',',$ret);
+                    list($ret,$failed) = _pi_test_copy($srcfile, $dstfile, $verbose);
+                    $failedFiles = array_merge($failedFiles,$failed);
+                    $mod = explode(',',$ret);
+                    $imp = array($res[0] + $mod[0],$mod[1] + $res[1],$mod[2] + $res[2],$mod[3].$res[3]);
+                    $ret = implode(',',$imp);
+                }
+            }
+        }
+        closedir($curdir);
+    }
+    if ($createdDst == 1) {
+        @rmdir($dstdir);
+    }
+
+    $red = explode(',',$ret);
+    $ret = ($num + $red[0]).','.($fail + $red[1]).','.($sizetotal + $red[2]).','.$fifail.$red[3];
+    return array($fail,$failedFiles);
+}
+
+
+function _pi_errorBox( $errMsg )
+{
+    global $_CONF,$LANG32;
+
+    $retval = '';
+/*
+    $retval .= '<h1>'.$LANG32[56].'</h1>';
+    $retval .= $errMsg;
+    $retval .= '<form action="'.$_CONF['site_admin_url'] . '/plugins.php" method="get">';
+    $retval .= '&nbsp;&nbsp;&nbsp;<input type="submit" name="cont" value="Continue" />';
+    $retval .= '</form>';
+    return $retval;
+*/
+    $retval .= '<div id="msgbox" style="width:95%;margin:10px;border:1px solid black;">';
+    $retval .= '<div style="padding:5px;font-weight:bold;color:#FFFFFF;background:url('.$_CONF['layout_url'].'/images/header-bg.png) #1A3955;">';
+    $retval .= $LANG32[56];
+    $retval .= '</div>';
+    $retval .= '<div style="padding:5px 15px 15px 15px;border-top:3px solid black;background:#E7E7E7;">';
+    $retval .= $errMsg;
+    $retval .= '</div>';
+    $retval .= '</div>';
+    $retval .= '<form action="'.$_CONF['site_admin_url'] . '/plugins.php" method="get">';
+    $retval .= '&nbsp;&nbsp;&nbsp;<input type="submit" name="cont" value="'.$LANG32[71].'" />';
+    $retval .= '</form>';
+
+    return $retval;
+}
+
+
+function _pi_Header()
+{
+    global $_CONF, $LANG_ADMIN,$LANG32;
+
+    $retval = '';
+
+    $retval .= COM_startBlock($LANG32[73], '',
+                              COM_getBlockTemplate('_admin_block', 'header'));
+
+    $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
+
+
+    return $retval;
+}
+
 ?>

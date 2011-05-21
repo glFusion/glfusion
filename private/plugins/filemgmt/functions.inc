@@ -817,7 +817,7 @@ function plugin_getwhatsnew_filemgmt() {
 */
 function plugin_autotags_filemgmt ($op, $content = '', $autotag = '')
 {
-    global $_USER, $mydownloads_publicpriv, $_CONF, $_FM_TABLES;
+    global $_USER, $mydownloads_publicpriv, $_CONF, $_FM_TABLES, $LANG_FILEMGMT_AUTOTAG;
 
     if ($op == 'tagname' ) {
         return array('file', 'file_download');
@@ -826,6 +826,18 @@ function plugin_autotags_filemgmt ($op, $content = '', $autotag = '')
             array('namespace' => 'filemgmt','usage' => 'description')
         );
         return $tagUsage;
+    } else if ($op == 'desc' ) {
+        switch ($content) {
+            case 'file' :
+                return $LANG_FILEMGMT_AUTOTAG['desc_file'];
+                break;
+            case 'file_download' :
+                return $LANG_FILEMGMT_AUTOTAG['desc_file_download'];
+                break;
+            default :
+                return '';
+                break;
+        }
     } else if ($op == 'parse') {
         if (($autotag['tag'] == 'file') || ($autotag['tag'] == 'file_download') ) {
             $target = '';
