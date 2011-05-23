@@ -101,7 +101,7 @@ class getid3_shorten
 				//		$SeekTableEntry['offset1'][$j] = getid3_lib::LittleEndian2Int(substr($SeekTableData, $SeekTableOffset, 4));
 				//		$SeekTableOffset += 4;
 				//	}
-                //
+				//
 				//	$ThisFileInfo['shn']['seektable']['entries'][] = $SeekTableEntry;
 				//}
 
@@ -109,7 +109,7 @@ class getid3_shorten
 
 		}
 
-		if ((bool) ini_get('safe_mode')) {
+		if (preg_match('#(1|ON)#i', ini_get('safe_mode'))) {
 			$ThisFileInfo['error'][] = 'PHP running in Safe Mode - backtick operator not available, cannot run shntool to analyze Shorten files';
 			return false;
 		}
@@ -128,15 +128,15 @@ class getid3_shorten
 
 		} else {
 
-	        static $shorten_present;
-	        if (!isset($shorten_present)) {
-                $shorten_present = file_exists('/usr/local/bin/shorten') || `which shorten`;
-            }
-            if (!$shorten_present) {
-                $ThisFileInfo['error'][] = 'shorten binary was not found in path or /usr/local/bin';
-                return false;
-            }
-            $commandline = (file_exists('/usr/local/bin/shorten') ? '/usr/local/bin/' : '' ) . 'shorten -x '.escapeshellarg($ThisFileInfo['filenamepath']).' - | head -c 64';
+			static $shorten_present;
+			if (!isset($shorten_present)) {
+				$shorten_present = file_exists('/usr/local/bin/shorten') || `which shorten`;
+			}
+			if (!$shorten_present) {
+				$ThisFileInfo['error'][] = 'shorten binary was not found in path or /usr/local/bin';
+				return false;
+			}
+			$commandline = (file_exists('/usr/local/bin/shorten') ? '/usr/local/bin/' : '' ) . 'shorten -x '.escapeshellarg($ThisFileInfo['filenamepath']).' - | head -c 64';
 
 		}
 

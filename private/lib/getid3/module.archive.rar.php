@@ -25,7 +25,7 @@ class getid3_rar
 
 		if ($this->option_use_rar_extension === true) {
 			if (function_exists('rar_open')) {
-				if ($rp = rar_open($ThisFileInfo['filename'])) {
+				if ($rp = rar_open($ThisFileInfo['filenamepath'])) {
 					$ThisFileInfo['rar']['files'] = array();
 					$entries = rar_list($rp);
 					foreach ($entries as $entry) {

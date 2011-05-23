@@ -9,13 +9,237 @@
 //                                                            ///
 /////////////////////////////////////////////////////////////////
 
-        ª  denotes a major feature addition/change
+        ª denotes a major feature addition/change
         §  denotes a change in the returned structure
         !  denotes a cry for help from developers
 * Bugfix:  denotes a fixed bug
 
 Version History
 ===============
+
+1.8.5: [2011-02-18] James Heinrich
+    ª support >2GB files on 64-bit PHP
+      - note current unofficial 64-bit PHP builds for Windows
+        do not actually support 64-bit integers so are still
+        subject to normal 32-bit limits (2GB) for file functions
+    ª PHP v5.0.5 now minimum required version.
+      Removed obsolte functions from getid3.lib.php:
+        md5_file, sha1_file, image_type_to_mime_type
+    ª IDivX tags now parsed on AVI files
+    § embedded image data is returned inside [comments][picture]
+      in a 2-element array (data, image_mime) for all formats
+    * $this->overwrite_tags=false is now known to be buggy and
+      has been disabled for this version until a full review
+      of tag writing can be completed. Certainly affects ID3v2,
+      the other writable tag formats may or may not be broken
+    * getID3 constructor no longer checks for (or sets) timezone
+    * demo.browse.php now shows cover art as inline images
+      rather than dumped to separate files
+    * [audio][streams][x][language] now set when known
+    * Bugfix: RIFF-AVI "JUNK" chunks are now parsed properly,
+      including zero-sized ones (no more false errors)
+    * Bugfix: msoffice documents now return correct error message
+    * Bugfix: demo.browse.php now encodes data according to
+      current page encoding (default=UTF-8)
+    * Bugfix: (#1120) sometimes incorrect ID3v2 genre parsing
+    * Bugfix: (#1116) possibly incorrect warnings (or lack of)
+      for RIFFs > 2GB.
+    * Bugfix: (#1115) wrong RIFFtype in RIFF files
+    * Bugfix: (#1114) wrong MIME type may be set for Matroska
+    * Bugfix: (#1113) support DSS v3 files
+    * Bugfix: (#1111) cover art in APE tags now supported
+    * Bugfix: (#1091) RemoveID3v1() unitialized variables
+    * Bugfix: (# 504) do not set Quicktime resolution if
+      'tkhd' atom is disabled
+    * Bugfix: (#  95) return [quicktime][controller] if known
+
+
+1.8.4: [2011-02-03] James Heinrich
+    * change default encoding in ID3v2 writing to UTF16-LE+BOM
+      (or ISO-8859-1 where possible) for better compatability
+      with broken versions of Windows Media Player and iTunes
+    * Bugfix: [FLV] incorrect overall bitrate in some files
+    * Bugfix: (#1102) missing parentheses in write[.id3v2].php
+    * Bugfix: (#510) undefined IsValidDottedIP() in write.id3v2.php
+
+
+1.8.3: [2011-01-18] James Heinrich
+    ª magic_quotes_gpc must now be disabled to use getID3
+    ª replace all error-suppressing @$variable calls with
+      isset() or empty() as appropriate for some configurations
+      where @ does not act to suppress warnings of undefined
+      variables (e.g. support forum thread #798)
+    * remove SafeStripSlashes() and FixTextFields functions
+    * [quicktime] use fourcc if codec name zero-length
+    * [quicktime] support "iods" atom
+    * Bugfix: (#1099) sometimes incorrect detection of safe_mode
+    * Bugfix: (#1095) more robust setting of temp dir
+    * Bugfix: (#1093) add support for ClusterSimpleBlock to
+      prevent "Undefined index: track_data_offsets" errors
+      in Matroska files
+    * Bugfix: [riff] prevent errors when RIFF.WAVE.BEXT chunk
+      contains null date/time  (thanks moysevichÿgmail*com)
+    * Bugfix: [quicktime] prevent divide-by-zero errors if
+      time_to_sample_table has zero-sample entry
+      (thanks moysevichÿgmail*com)
+
+
+1.8.2: [2010-12-06] James Heinrich
+    * include startup warning for PHP < v5
+    * magic_quotes_runtime must now be disabled to use getID3
+    § MusicBrainz / AmpliFIND data more accessible in returned data
+      from Quicktime-style files (e.g. MP4/AAC)
+    * Bugfix: (#1079) wrong encoding might be used for ID3v2
+        text data, and/or garbage data prepended before text
+        data; DataLengthIndicator value was being ignored
+    * Bugfix: (#1055) clearer warnings on non-EXIF contents in
+      JPEG [APP1]
+    * Bugfix: (#999) ID3v2 UFID data was missing
+
+
+1.8.1: [2010-11-25] James Heinrich
+    * replaced calls to deprecated mysql_escape_string() with
+      mysql_real_escape_string()
+    * Bugfix: (#1072) memory limit not handled correctly if
+      in gigabytes in php.ini (e.g. "2G")
+    * Bugfix: (#1068) wrong encoding for Quicktime tags
+    * Bugfix: (#1040) possible infinite loop in genre parsing
+    * Bugfix: (#1036) helperapps directory not resolving 8.3
+        path names correctly
+    * Bugfix: (#1023) dbm cache extension not correctly handling
+        types other than "db3"
+    * Bugfix: (#1023) mysql cache extension now base64_encodes
+        data to make binary-safe. Existing cached data must be
+        purged from your database cache
+    * Bugfix: (#1007) ClosestStandardMP3Bitrate() not selecting
+        most appropriate value
+    * Bugfix: (#996) inefficient and buggy ID3v1 and ID3v2
+        genre parsing
+    * Bugfix: (#974) track number handled incorrectly in
+        demo.write.php
+    * Bugfix: (#969) tempnam() calls failing with open_basedir
+    * Bugfix: (#955) UTF-16LE text files could be falsely
+        identified as corrupt mp3 files
+    * Bugfix: (#877) detect if mbstring.func_overload is set in php.ini
+    * Bugfix: (#858) PHP safe_mode setting in php.ini incorrectly
+        handled if set to "Off"
+    * Bugfix: (#838) prevent warnings with assorted unhandled
+        Quicktime atoms
+
+
+1.8.0: [2010-11-23] James Heinrich
+    ª Changes required for PHP v5.3+ compatability, including:
+      - change ereg* functions to preg_* equivalents
+      - declare functions static as needed
+      note: users of PHP v4.x may need to stay with getID3 v1.7.x
+    ª Added CUE (cuesheet) support
+      new file: module.misc.cue.php
+      (thanks Nigel Barnes ngbarnesÿhotmail*com)
+    ª Added XMP (Adobe Extensible Metadata Platform) support
+      currently used with module.graphic.jpg.php
+      new file: module.tag.xmp.php
+      (thanks Nigel Barnes ngbarnesÿhotmail*com)
+    § [jpg][exif][GPS][computed] now exists when possible with
+      calculated values (decimal latitude, longitude, altitude, time)
+    § Prevent clobbering WMA artist with albumartist value; added WMA
+      partofset tag; added WMA tag picture data to WMA comments
+      (thanks ngbarnesÿhotmail*com)
+    § RIFF.WAVE.SNDM (SoundMiner) metadata now parsed
+      (thanks emerrittÿwbgu*bgsu*edu)
+    § FLAC embedded pictures now return [data_length] key
+      (thanks darrenburnhillÿhotmail*com)
+    * added support for a number of new comment atom types added in
+      iTunes v4.0-v7.0  (thanks ngbarnesÿhotmail*com)
+    * demo.browse.php now shows video resolution and framerate (if no
+      artist or title info present)
+    * additional FLV details parsed, may be faster as well
+      (thanks ngbarnesÿhotmail*com)
+    * Bugfix: DSS files longer than 60 seconds had wrong playtime
+    * Bugfix: possible empty array encountered in APE tags
+      (thanks csnaitsirchÿweb*de)
+    * Bugfix: prevent fatal error when calling BigEndian2Int() on
+      zero-length string  (thanks taylor*fausakÿgmail*com)
+    * Bugfix: prevent errors when parsing invalid Vorbis comments
+      (thanks dr*dieselÿgmail*com)
+    * Bugfix: files could not be analyzed from Windows shares
+      (e.g. \\SERVER\Directory\Filename.mp3)
+    * Bugfix: RAR file opening should use 'filenamepath'
+      (thanks adrien*gibratÿgmail*com)
+    * Bugfix: [asf][codec_list_object][codec_entries][x][description]
+      not containing expected comma-seperated values no longer aborts
+      (thanks larry_globusÿyahoo*com)
+    * Bugfix: [id3v2] UFID was not returning data
+      (thanks joostÿdecock*org)
+
+1.7.9: [2009-03-08] James Heinrich
+    ª Added DSS (Digital Speech Standard) support
+      new file: module.audio.dss.php
+      (thanks luke*wilkinsÿdtsam*com)
+    ª Added MPC (Musepack) SV8 support
+      (thanks WaldoMonster)
+    § some MPC [header] keys renamed to be the same between SV7/SV8
+    § start aligning demos CSS styling with v2.x styles
+      new file: demos/getid3.css
+    § JPEG now returns parsed IPTC tags in [iptc]
+    § getid3_lib::GetDataImageSize now requires $imageinfo parameter
+    § better support for Matroska files with AC3/DTS/MP3/OGG audio
+      (support still lacking for AAC)
+    § standardize ID3v2 TCMP key to 'part_of_a_set' between reading
+      and writing  (thanks aaron_stormÿyahoo*com)
+    § added ID3v2 keys 'TCMP','TCP' to for writing iTunes-style tags
+      (thanks aaron_stormÿyahoo*com)
+    § back-ported PICTURE tag handling in FLAC tags
+      (thanks WaldoMonster)
+    § added alternate method to get [video][frame_rate] from QuickTime
+    * added partial support for "TCMP"/"TCP" ID3v2 frames (iTunes
+      non-standard part-of-a-compilation tag)
+      (thanks aaron_stormÿyahoo*com)
+    * slightly improved scanning through FLV files speed
+      (thanks franki)
+    * faster Matroska scanning by stopping at cluster chunks once
+      needed header chunks are found (much faster for large files)
+    * added workaround for broken tagging programs that miss terminating
+      null byte for numeric ID3v2.4 genres
+      (thanks yam655ÿgmail*com)
+    * Bugfix: MultiByteCharString2HTML() did not escape common HTML
+      special characters like & and ?
+    * Bugfix: cleaned up some malformed HTML errors in demo.browse.php
+    * Bugfix: under Windows files >2GB might not be processed due to
+      "dir" command not finding file with double directory slashes
+    * Bugfix: "MODule (assorted sub-formats)" was falsely matching
+      some random files (e.g. JPEGs)  (thanks qwertywin)
+    * Bugfix: suppress PHP_notice on failed SWF-compressed
+      decompression failure  (thanks mkron)
+
+
+1.7.8b3: [2008-07-13] James Heinrich
+    ª Experimental partial support for files > 2GB (gets filesize
+      from shell call to "dir" or "ls", parse files with PHP only
+      up to 2GB limit). See readme.txt for details on what formats
+      work properly and other limitations
+    ª Initial support for Matroska. Has only been tested with a
+      limited number of sample files, please report any bugs
+    ª Experimental support for PHP-RAR reading. Known buggy, disabled
+      by default, enable with care
+    § getid3_lib::CastAsInt() now returns ints up to 2^31 (not 2^30)
+    § Quicktime: [video] now returns [frame_rate] and [fourcc] for MP4
+      video files
+    * MP3: headerless VBR files now only have up to 10 blocks of 5000
+      frames each scanned by default and bitrate extrapolated from that
+      distribution for speed  (thanks glau*stuffÿridiculousprods*com)
+    * Quicktime: support "co64" atom
+    * SWF: lower memory use when compressed SWF files processed
+      (thanks doughammondÿblueyonder*co*uk)
+    * Bugfix: FLV height and width was calculated incorrectly
+      (thanks moysevichÿgmail*com)
+    * Bugfix: FLV GETID3_FLV_TAG_META parsed incorrectly
+      (thanks moysevichÿgmail*com)
+    * Bugfix: Quicktime: 'tkhd' matrix_v and matrix_d were switched
+      (thanks rjjmoroÿhotmail*com)
+    * Bugfix: Quicktime: frame_rate was often incorrect for MP4 video
+    * Bugfix: getid3_lib::CastAsInt returned -2147483648 when passed
+      2147483648 (0x80000000)
+
 
 1.7.8b2: [2007-10-15] James Heinrich, Allan Hansen
     * Video bitrate now calculated even if not explicitly stated in
@@ -56,7 +280,7 @@ Version History
     ª Tagwriter requires metaflac 1.1.1+ in order to write FLAC tags.
     ª Removed broken and non-fixable tagwriting module for real format.
     ! Developers please help fix the above module:
-      http://www.getid3.org/phpBB2/viewtopic.php?t=677
+      http://www.getid3.org/phpBB3/viewtopic.php?t=677
     ª Avoided security issues with demo.browse.php, demo.write.php and
       demo.mysql.php. These demos are now disabled by default and has
       to be enabled in the source.
@@ -1541,7 +1765,7 @@ Version History
      have tried to make the detection accurate, but I have a limited
      number of AAC test files to play with so if you have an AAC file
      that gets detected as MP3/MP2 (or vice-versa), please send me
-     the details via email at getid3ÿsilisoftware*com
+     the details via email at infoÿgetid3ÿorg
      ADTS format is very slow to parse because to get the bitrate of
      VBR files the whole file has to be stepped through frame by
      frame (getID3() scans up to the first 1000 frames and assumes
@@ -1608,11 +1832,11 @@ Version History
      color PNG. This function requires GD v2.0+
      Note: Untested on 16-bit and 32-bit BMPs because I couldn't find
      any sample files - if you know of a program that can create such
-     files, please email getid3ÿsilisoftware*com
+     files, please email infoÿgetid3ÿorg
      Note: Support for RGB (uncompressed), RLE8 and RLE4 is included
      and tested. BITFIELDS support is also included for 16- & 32-bit
      formats, but it's untested, so if anybody has any test files
-     please send them to getid3ÿsilisoftware*com
+     please send them to infoÿgetid3ÿorg
      Note: Support currently only for Windows-format BMPs, and trying
      to parse an OS/2-format bitmap leads to unpredictable/invalid
      results.
@@ -1711,7 +1935,7 @@ Version History
      complexity. The naming convention for the images is
      filename.ext.[byte offset of APIC data].[jpg|gif|png]
      If anybody still has any problems with corrupted images please
-     let me know at getid3ÿsilisoftware*com
+     let me know at infoÿgetid3ÿorg
    ª Support for extended Xing/LAME tag
      (see http://users.belgacom.net/gc247244/extra/tag.html)
      Data is returned in ['mpeg']['audio']['LAME']
@@ -1893,7 +2117,7 @@ Version History
      and later (see http://www.php.net/manual/en/ref.zip.php)
      NOTE: currently untested as I'm unable to find php_zip.dll for
      PHP/Win32 - if someone has a copy of this file, please email me:
-     getid3ÿsilisoftware*com
+     infoÿgetid3ÿorg
    ª Parses JPEG files (requires GD installed)
    ª Parses PNG files  (requires GD v1.6+ installed)
    ª Parses GIF files  (requires GD < v1.6 installed)
@@ -2250,7 +2474,7 @@ Version History
      Note: While I've included support for 22 FrameIDs as defined in
      the specs, I don't have test files for all of them. If anyone
      knows of programs that generate any of the untested tags, please
-     email getid3ÿsilisoftware*com ! Here's what's tested and not:
+     email infoÿgetid3ÿorg ! Here's what's tested and not:
        Tested: T??, COM
      Untested: UFI, TXX, W??, WXX, IPL, MCI, ETC, MLL, STC, ULT, SLT,
                RVA, EQU, REV, PIC, GEO, CNT, POP, BUF, CRM, CRA, LNK
@@ -2291,7 +2515,7 @@ Version History
      Note: While I've included support for 30 FrameIDs as defined in
      the specs, I don't have test files for all of them. If anyone
      knows of programs that generate any of the untested tags, please
-     email getid3ÿsilisoftware*com ! Here's what's tested and not:
+     email infoÿgetid3ÿorg ! Here's what's tested and not:
        Tested: UFID, T???, WXXX, USLT, SYLT, COMM, APIC, GEOB
      Untested: TXXX, W???, MCDI, ETCO, MLLT, SYTC, RVA2, EQU2, RVRB,
                PCNT, POPM, RBUF, AENC, USER, OWNE, COMR, ENCR, GRID,

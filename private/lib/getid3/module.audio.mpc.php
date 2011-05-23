@@ -30,12 +30,12 @@ class getid3_mpc
 		fseek($fd, $ThisFileInfo['avdataoffset'], SEEK_SET);
 		$MPCheaderData = fread($fd, 4);
 		$ThisFileInfo['mpc']['header']['preamble'] = substr($MPCheaderData, 0, 4); // should be 'MPCK' (SV8) or 'MP+' (SV7), otherwise possible stream data (SV4-SV6)
-		if (ereg('^MPCK', $ThisFileInfo['mpc']['header']['preamble'])) {
+		if (preg_match('#^MPCK#', $ThisFileInfo['mpc']['header']['preamble'])) {
 
 			// this is SV8
 			return $this->ParseMPCsv8($fd, $ThisFileInfo);
 
-		} elseif (ereg('^MP\+', $ThisFileInfo['mpc']['header']['preamble'])) {
+		} elseif (preg_match('#^MP\+#', $ThisFileInfo['mpc']['header']['preamble'])) {
 
 			// this is SV7
 			return $this->ParseMPCsv7($fd, $ThisFileInfo);
@@ -321,12 +321,12 @@ class getid3_mpc
 		$thisfile_mpc_header = &$ThisFileInfo['mpc']['header'];
 		$offset = 0;
 
-        $thisfile_mpc_header['size'] = 8;
+		$thisfile_mpc_header['size'] = 8;
 		fseek($fd, $ThisFileInfo['avdataoffset'], SEEK_SET);
 		$MPCheaderData = fread($fd, $thisfile_mpc_header['size']);
 
-        // add size of file header to avdataoffset - calc bitrate correctly + MD5 data
-	    $ThisFileInfo['avdataoffset'] += $thisfile_mpc_header['size'];
+		// add size of file header to avdataoffset - calc bitrate correctly + MD5 data
+		$ThisFileInfo['avdataoffset'] += $thisfile_mpc_header['size'];
 
 		// Most of this code adapted from Jurgen Faul's MPEGplus source code - thanks Jurgen! :)
 		$HeaderDWORD[0] = getid3_lib::LittleEndian2Int(substr($MPCheaderData, 0, 4));

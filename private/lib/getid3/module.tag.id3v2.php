@@ -120,10 +120,10 @@ class getid3_id3v2
 	//        Flags         $xx xx
 
 		$sizeofframes = $thisfile_id3v2['headerlength'] - 10; // not including 10-byte initial header
-		if (@$thisfile_id3v2['exthead']['length']) {
+		if (!empty($thisfile_id3v2['exthead']['length'])) {
 			$sizeofframes -= ($thisfile_id3v2['exthead']['length'] + 4);
 		}
-		if (@$thisfile_id3v2_flags['isfooter']) {
+		if (!empty($thisfile_id3v2_flags['isfooter'])) {
 			$sizeofframes -= 10; // footer takes last 10 bytes of ID3v2 header, after frame data, before audio
 		}
 		if ($sizeofframes > 0) {
@@ -131,7 +131,7 @@ class getid3_id3v2
 			$framedata = fread($fd, $sizeofframes); // read all frames from file into $framedata variable
 
 			//    if entire frame data is unsynched, de-unsynch it now (ID3v2.3.x)
-			if (@$thisfile_id3v2_flags['unsynch'] && ($id3v2_majorversion <= 3)) {
+			if (!empty($thisfile_id3v2_flags['unsynch']) && ($id3v2_majorversion <= 3)) {
 				$framedata = $this->DeUnsynchronise($framedata);
 			}
 			//        [in ID3v2.4.0] Unsynchronisation [S:6.1] is done on frame level, instead
@@ -141,12 +141,12 @@ class getid3_id3v2
 			//        the frame header [S:4.1.2] indicates unsynchronisation.
 
 
-			//$framedataoffset = 10 + (@$thisfile_id3v2['exthead']['length'] ? $thisfile_id3v2['exthead']['length'] + 4 : 0); // how many bytes into the stream - start from after the 10-byte header (and extended header length+4, if present)
+			//$framedataoffset = 10 + ($thisfile_id3v2['exthead']['length'] ? $thisfile_id3v2['exthead']['length'] + 4 : 0); // how many bytes into the stream - start from after the 10-byte header (and extended header length+4, if present)
 			$framedataoffset = 10; // how many bytes into the stream - start from after the 10-byte header
 
 
 			//    Extended Header
-			if (@$thisfile_id3v2_flags['exthead']) {
+			if (!empty($thisfile_id3v2_flags['exthead'])) {
 				$extended_header_offset = 0;
 
 				if ($id3v2_majorversion == 3) {
@@ -370,9 +370,9 @@ class getid3_id3v2
 								break;
 						}
 
-					} elseif ($frame_size > strlen(@$framedata)){
+					} elseif (!isset($framedata) || ($frame_size > strlen($framedata))) {
 
-						$ThisFileInfo['error'][] = 'error parsing "'.$frame_name.'" ('.$framedataoffset.' bytes into the ID3v2.'.$id3v2_majorversion.' tag). (ERROR: $frame_size ('.$frame_size.') > strlen($framedata) ('.strlen($framedata).')).';
+						$ThisFileInfo['error'][] = 'error parsing "'.$frame_name.'" ('.$framedataoffset.' bytes into the ID3v2.'.$id3v2_majorversion.' tag). (ERROR: $frame_size ('.$frame_size.') > strlen($framedata) ('.(isset($framedata) ? strlen($framedata) : 'null').')).';
 
 					} else {
 
@@ -417,7 +417,7 @@ class getid3_id3v2
 		if (isset($thisfile_id3v2['comments']['genre'])) {
 			foreach ($thisfile_id3v2['comments']['genre'] as $key => $value) {
 				unset($thisfile_id3v2['comments']['genre'][$key]);
-				$thisfile_id3v2['comments'] = getid3_lib::array_merge_noclobber($thisfile_id3v2['comments'], $this->ParseID3v2GenreString($value));
+				$thisfile_id3v2['comments'] = getid3_lib::array_merge_noclobber($thisfile_id3v2['comments'], array('genre'=>$this->ParseID3v2GenreString($value)));
 			}
 		}
 
@@ -429,7 +429,7 @@ class getid3_id3v2
 			}
 		}
 
-		if (!isset($thisfile_id3v2['comments']['year']) && ereg('^([0-9]{4})', trim(@$thisfile_id3v2['comments']['recording_time'][0]), $matches)) {
+		if (!isset($thisfile_id3v2['comments']['year']) && !empty($thisfile_id3v2['comments']['recording_time'][0]) && preg_match('#^([0-9]{4})#', trim($thisfile_id3v2['comments']['recording_time'][0]), $matches)) {
 			$thisfile_id3v2['comments']['year'] = array($matches[1]);
 		}
 
@@ -448,61 +448,22 @@ class getid3_id3v2
 		// Parse genres into arrays of genreName and genreID
 		// ID3v2.2.x, ID3v2.3.x: '(21)' or '(4)Eurodisco' or '(51)(39)' or '(55)((I think...)'
 		// ID3v2.4.x: '21' $00 'Eurodisco' $00
-
-		$genrestring = trim($genrestring);
-		$returnarray = array();
-		if (strpos($genrestring, "\x00") !== false) {
-			$unprocessed = trim($genrestring); // trailing nulls will cause an infinite loop.
-			$genrestring = '';
-			while (strpos($unprocessed, "\x00") !== false) {
-				// convert null-seperated v2.4-format into v2.3 ()-seperated format
-				$endpos = strpos($unprocessed, "\x00");
-				$genrestring .= '('.substr($unprocessed, 0, $endpos).')';
-				$unprocessed = substr($unprocessed, $endpos + 1);
-			}
-			unset($unprocessed);
-        } elseif (eregi('^([0-9]+|CR|RX)$', $genrestring)) {
-        	// some tagging program (including some that use TagLib) fail to include null byte after numeric genre
-			$genrestring = '('.$genrestring.')';
-        }
-		if (getid3_id3v1::LookupGenreID($genrestring)) {
-
-			$returnarray['genre'][] = $genrestring;
-
-		} else {
-
-			while (strpos($genrestring, '(') !== false) {
-
-				$startpos = strpos($genrestring, '(');
-				$endpos   = strpos($genrestring, ')');
-				if (substr($genrestring, $startpos + 1, 1) == '(') {
-					$genrestring = substr($genrestring, 0, $startpos).substr($genrestring, $startpos + 1);
-					$endpos--;
-				}
-				$element     = substr($genrestring, $startpos + 1, $endpos - ($startpos + 1));
-				$genrestring = substr($genrestring, 0, $startpos).substr($genrestring, $endpos + 1);
-				if (getid3_id3v1::LookupGenreName($element)) { // $element is a valid genre id/abbreviation
-
-					if (empty($returnarray['genre']) || !in_array(getid3_id3v1::LookupGenreName($element), $returnarray['genre'])) { // avoid duplicate entires
-						$returnarray['genre'][] = getid3_id3v1::LookupGenreName($element);
-					}
-
+		$clean_genres = array();
+		if (strpos($genrestring, "\x00") === false) {
+			$genrestring = preg_replace('#\(([0-9]{1,3})\)#', '$1'."\x00", $genrestring);
+		}
+		$genre_elements = explode("\x00", $genrestring);
+		foreach ($genre_elements as $element) {
+			$element = trim($element);
+			if ($element) {
+				if (preg_match('#^[0-9]{1,3}#', $element)) {
+					$clean_genres[] = getid3_id3v1::LookupGenreName($element);
 				} else {
-
-					if (empty($returnarray['genre']) || !in_array($element, $returnarray['genre'])) { // avoid duplicate entires
-						$returnarray['genre'][] = $element;
-					}
-
+					$clean_genres[] = str_replace('((', '(', $element);
 				}
 			}
 		}
-		if ($genrestring) {
-			if (empty($returnarray['genre']) || !in_array($genrestring, $returnarray['genre'])) { // avoid duplicate entires
-				$returnarray['genre'][]   = $genrestring;
-			}
-		}
-
-		return $returnarray;
+		return $clean_genres;
 	}
 
 
@@ -547,6 +508,14 @@ class getid3_id3v2
 				if ($parsedFrame['flags']['Unsynchronisation']) {
 					$parsedFrame['data'] = $this->DeUnsynchronise($parsedFrame['data']);
 				}
+
+				if ($parsedFrame['flags']['DataLengthIndicator']) {
+					$parsedFrame['data_length_indicator'] = getid3_lib::BigEndian2Int(substr($parsedFrame['data'], 0, 4), 1);
+					$parsedFrame['data']                  =                           substr($parsedFrame['data'], 4);
+					if ($parsedFrame['data_length_indicator'] != strlen($parsedFrame['data'])) {
+						$ThisFileInfo['warning'][] = 'ID3v2 frame "'.$parsedFrame['frame_name'].'" should be '.$parsedFrame['data_length_indicator'].' bytes long according to DataLengthIndicator, but found '.strlen($parsedFrame['data']).' bytes of data';
+					}
+				}
 			}
 
 			//    Frame-level de-compression
@@ -554,10 +523,16 @@ class getid3_id3v2
 				$parsedFrame['decompressed_size'] = getid3_lib::BigEndian2Int(substr($parsedFrame['data'], 0, 4));
 				if (!function_exists('gzuncompress')) {
 					$ThisFileInfo['warning'][] = 'gzuncompress() support required to decompress ID3v2 frame "'.$parsedFrame['frame_name'].'"';
-				} elseif ($decompresseddata = @gzuncompress(substr($parsedFrame['data'], 4))) {
-					$parsedFrame['data'] = $decompresseddata;
 				} else {
-					$ThisFileInfo['warning'][] = 'gzuncompress() failed on compressed contents of ID3v2 frame "'.$parsedFrame['frame_name'].'"';
+					ob_start();
+					if ($decompresseddata = gzuncompress(substr($parsedFrame['data'], 4))) {
+						ob_end_clean();
+						$parsedFrame['data'] = $decompresseddata;
+					} else {
+						$errormessage = ob_get_contents();
+						ob_end_clean();
+						$ThisFileInfo['warning'][] = 'gzuncompress() failed on compressed contents of ID3v2 frame "'.$parsedFrame['frame_name'].'"';
+					}
 				}
 			}
 		}
@@ -582,13 +557,10 @@ class getid3_id3v2
 			// <Header for 'Unique file identifier', ID: 'UFID'>
 			// Owner identifier        <text string> $00
 			// Identifier              <up to 64 bytes binary data>
-
-			$frame_terminatorpos = strpos($parsedFrame['data'], "\x00");
-			$frame_idstring = substr($parsedFrame['data'], 0, $frame_terminatorpos);
-			$parsedFrame['ownerid'] = $frame_idstring;
-			$parsedFrame['data'] = substr($parsedFrame['data'], $frame_terminatorpos + strlen("\x00"));
+			$exploded = explode("\x00", $parsedFrame['data'], 2);
+			$parsedFrame['ownerid'] = (isset($exploded[0]) ? $exploded[0] : '');
+			$parsedFrame['data']    = (isset($exploded[1]) ? $exploded[1] : '');
 			unset($parsedFrame['data']);
-
 
 		} elseif ((($id3v2_majorversion >= 3) && ($parsedFrame['frame_name'] == 'TXXX')) || // 4.2.2 TXXX User defined text information frame
 				(($id3v2_majorversion == 2) && ($parsedFrame['frame_name'] == 'TXX'))) {    // 4.2.2 TXX  User defined text information frame
@@ -605,9 +577,9 @@ class getid3_id3v2
 			if ((($id3v2_majorversion <= 3) && ($frame_textencoding > 1)) || (($id3v2_majorversion == 4) && ($frame_textencoding > 3))) {
 				$ThisFileInfo['warning'][] = 'Invalid text encoding byte ('.$frame_textencoding.') in frame "'.$parsedFrame['frame_name'].'" - defaulting to ISO-8859-1 encoding';
 			}
-			$frame_terminatorpos = @strpos($parsedFrame['data'], $this->TextEncodingTerminatorLookup($frame_textencoding), $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], $this->TextEncodingTerminatorLookup($frame_textencoding), $frame_offset);
 			if (ord(substr($parsedFrame['data'], $frame_terminatorpos + strlen($this->TextEncodingTerminatorLookup($frame_textencoding)), 1)) === 0) {
-				$frame_terminatorpos++; // @strpos() fooled because 2nd byte of Unicode chars are often 0x00
+				$frame_terminatorpos++; // strpos() fooled because 2nd byte of Unicode chars are often 0x00
 			}
 			$frame_description = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 			if (ord($frame_description) === 0) {
@@ -645,10 +617,10 @@ class getid3_id3v2
 			if (!empty($parsedFrame['framenameshort']) && !empty($parsedFrame['data'])) {
 
 				// remove possible terminating \x00 (put by encoding id or software bug)
-                $string = getid3_lib::iconv_fallback($parsedFrame['encoding'], $ThisFileInfo['id3v2']['encoding'], $parsedFrame['data']);
-                if ($string[strlen($string) - 1] == "\x00") {
-                    $string = substr($string, 0, strlen($string) - 1);
-                }
+				$string = getid3_lib::iconv_fallback($parsedFrame['encoding'], $ThisFileInfo['id3v2']['encoding'], $parsedFrame['data']);
+				if ($string[strlen($string) - 1] == "\x00") {
+					$string = substr($string, 0, strlen($string) - 1);
+				}
 				$ThisFileInfo['id3v2']['comments'][$parsedFrame['framenameshort']][] = $string;
 				unset($string);
 			}
@@ -667,9 +639,9 @@ class getid3_id3v2
 			if ((($id3v2_majorversion <= 3) && ($frame_textencoding > 1)) || (($id3v2_majorversion == 4) && ($frame_textencoding > 3))) {
 				$ThisFileInfo['warning'][] = 'Invalid text encoding byte ('.$frame_textencoding.') in frame "'.$parsedFrame['frame_name'].'" - defaulting to ISO-8859-1 encoding';
 			}
-			$frame_terminatorpos = @strpos($parsedFrame['data'], $this->TextEncodingTerminatorLookup($frame_textencoding), $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], $this->TextEncodingTerminatorLookup($frame_textencoding), $frame_offset);
 			if (ord(substr($parsedFrame['data'], $frame_terminatorpos + strlen($this->TextEncodingTerminatorLookup($frame_textencoding)), 1)) === 0) {
-				$frame_terminatorpos++; // @strpos() fooled because 2nd byte of Unicode chars are often 0x00
+				$frame_terminatorpos++; // strpos() fooled because 2nd byte of Unicode chars are often 0x00
 			}
 			$frame_description = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 
@@ -808,7 +780,7 @@ class getid3_id3v2
 
 
 		} elseif ((($id3v2_majorversion >= 3) && ($parsedFrame['frame_name'] == 'SYTC')) || // 4.7   SYTC Synchronised tempo codes
-				(($id3v2_majorversion == 2) && ($parsedFrame['frame_name'] == 'STC'))) {     // 4.8   STC  Synchronised tempo codes
+				  (($id3v2_majorversion == 2) && ($parsedFrame['frame_name'] == 'STC'))) {  // 4.8   STC  Synchronised tempo codes
 			//   There may only be one 'SYTC' frame in each tag
 			// <Header for 'Synchronised tempo codes', ID: 'SYTC'>
 			// Time stamp format   $xx
@@ -849,9 +821,9 @@ class getid3_id3v2
 			}
 			$frame_language = substr($parsedFrame['data'], $frame_offset, 3);
 			$frame_offset += 3;
-			$frame_terminatorpos = @strpos($parsedFrame['data'], $this->TextEncodingTerminatorLookup($frame_textencoding), $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], $this->TextEncodingTerminatorLookup($frame_textencoding), $frame_offset);
 			if (ord(substr($parsedFrame['data'], $frame_terminatorpos + strlen($this->TextEncodingTerminatorLookup($frame_textencoding)), 1)) === 0) {
-				$frame_terminatorpos++; // @strpos() fooled because 2nd byte of Unicode chars are often 0x00
+				$frame_terminatorpos++; // strpos() fooled because 2nd byte of Unicode chars are often 0x00
 			}
 			$frame_description = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 			if (ord($frame_description) === 0) {
@@ -953,9 +925,9 @@ class getid3_id3v2
 				}
 				$frame_language = substr($parsedFrame['data'], $frame_offset, 3);
 				$frame_offset += 3;
-				$frame_terminatorpos = @strpos($parsedFrame['data'], $this->TextEncodingTerminatorLookup($frame_textencoding), $frame_offset);
+				$frame_terminatorpos = strpos($parsedFrame['data'], $this->TextEncodingTerminatorLookup($frame_textencoding), $frame_offset);
 				if (ord(substr($parsedFrame['data'], $frame_terminatorpos + strlen($this->TextEncodingTerminatorLookup($frame_textencoding)), 1)) === 0) {
-					$frame_terminatorpos++; // @strpos() fooled because 2nd byte of Unicode chars are often 0x00
+					$frame_terminatorpos++; // strpos() fooled because 2nd byte of Unicode chars are often 0x00
 				}
 				$frame_description = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 				if (ord($frame_description) === 0) {
@@ -996,23 +968,29 @@ class getid3_id3v2
 			}
 			$frame_remainingdata = substr($parsedFrame['data'], $frame_terminatorpos + strlen("\x00"));
 			$parsedFrame['description'] = $frame_idstring;
-			while (strlen($frame_remainingdata)) {
+			$RVA2channelcounter = 0;
+			while (strlen($frame_remainingdata) >= 5) {
 				$frame_offset = 0;
 				$frame_channeltypeid = ord(substr($frame_remainingdata, $frame_offset++, 1));
-				$parsedFrame[$frame_channeltypeid]['channeltypeid']  = $frame_channeltypeid;
-				$parsedFrame[$frame_channeltypeid]['channeltype']    = $this->RVA2ChannelTypeLookup($frame_channeltypeid);
-				$parsedFrame[$frame_channeltypeid]['volumeadjust']   = getid3_lib::BigEndian2Int(substr($frame_remainingdata, $frame_offset, 2), false, true); // 16-bit signed
+				$parsedFrame[$RVA2channelcounter]['channeltypeid']  = $frame_channeltypeid;
+				$parsedFrame[$RVA2channelcounter]['channeltype']    = $this->RVA2ChannelTypeLookup($frame_channeltypeid);
+				$parsedFrame[$RVA2channelcounter]['volumeadjust']   = getid3_lib::BigEndian2Int(substr($frame_remainingdata, $frame_offset, 2), false, true); // 16-bit signed
 				$frame_offset += 2;
-				$parsedFrame[$frame_channeltypeid]['bitspeakvolume'] = ord(substr($frame_remainingdata, $frame_offset++, 1));
-				$frame_bytespeakvolume = ceil($parsedFrame[$frame_channeltypeid]['bitspeakvolume'] / 8);
-				$parsedFrame[$frame_channeltypeid]['peakvolume']     = getid3_lib::BigEndian2Int(substr($frame_remainingdata, $frame_offset, $frame_bytespeakvolume));
+				$parsedFrame[$RVA2channelcounter]['bitspeakvolume'] = ord(substr($frame_remainingdata, $frame_offset++, 1));
+				if (($parsedFrame[$RVA2channelcounter]['bitspeakvolume'] < 1) || ($parsedFrame[$RVA2channelcounter]['bitspeakvolume'] > 4)) {
+					$ThisFileInfo['warning'][] = 'ID3v2::RVA2 frame['.$RVA2channelcounter.'] contains invalid '.$parsedFrame[$RVA2channelcounter]['bitspeakvolume'].'-byte bits-representing-peak value';
+					break;
+				}
+				$frame_bytespeakvolume = ceil($parsedFrame[$RVA2channelcounter]['bitspeakvolume'] / 8);
+				$parsedFrame[$RVA2channelcounter]['peakvolume']     = getid3_lib::BigEndian2Int(substr($frame_remainingdata, $frame_offset, $frame_bytespeakvolume));
 				$frame_remainingdata = substr($frame_remainingdata, $frame_offset + $frame_bytespeakvolume);
+				$RVA2channelcounter++;
 			}
 			unset($parsedFrame['data']);
 
 
 		} elseif ((($id3v2_majorversion == 3) && ($parsedFrame['frame_name'] == 'RVAD')) || // 4.12  RVAD Relative volume adjustment (ID3v2.3 only)
-				(($id3v2_majorversion == 2) && ($parsedFrame['frame_name'] == 'RVA'))) {     // 4.12  RVA  Relative volume adjustment (ID3v2.2 only)
+				  (($id3v2_majorversion == 2) && ($parsedFrame['frame_name'] == 'RVA'))) {  // 4.12  RVA  Relative volume adjustment (ID3v2.2 only)
 			//   There may only be one 'RVA' frame in each tag
 			// <Header for 'Relative volume adjustment', ID: 'RVA'>
 			// ID3v2.2 => Increment/decrement     %000000ba
@@ -1114,7 +1092,7 @@ class getid3_id3v2
 
 			$frame_offset = 0;
 			$frame_interpolationmethod = ord(substr($parsedFrame['data'], $frame_offset++, 1));
-			$frame_terminatorpos = @strpos($parsedFrame['data'], "\x00", $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], "\x00", $frame_offset);
 			$frame_idstring = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 			if (ord($frame_idstring) === 0) {
 				$frame_idstring = '';
@@ -1216,7 +1194,7 @@ class getid3_id3v2
 				if (strtolower($frame_imagetype) == 'ima') {
 					// complete hack for mp3Rage (www.chaoticsoftware.com) that puts ID3v2.3-formatted
 					// MIME type instead of 3-char ID3v2.2-format image type  (thanks xbhoffØpacbell*net)
-					$frame_terminatorpos = @strpos($parsedFrame['data'], "\x00", $frame_offset);
+					$frame_terminatorpos = strpos($parsedFrame['data'], "\x00", $frame_offset);
 					$frame_mimetype = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 					if (ord($frame_mimetype) === 0) {
 						$frame_mimetype = '';
@@ -1231,7 +1209,7 @@ class getid3_id3v2
 				}
 			}
 			if ($id3v2_majorversion > 2 && strlen($parsedFrame['data']) > $frame_offset) {
-				$frame_terminatorpos = @strpos($parsedFrame['data'], "\x00", $frame_offset);
+				$frame_terminatorpos = strpos($parsedFrame['data'], "\x00", $frame_offset);
 				$frame_mimetype = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 				if (ord($frame_mimetype) === 0) {
 					$frame_mimetype = '';
@@ -1241,9 +1219,9 @@ class getid3_id3v2
 
 			$frame_picturetype = ord(substr($parsedFrame['data'], $frame_offset++, 1));
 
-			$frame_terminatorpos = @strpos($parsedFrame['data'], $this->TextEncodingTerminatorLookup($frame_textencoding), $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], $this->TextEncodingTerminatorLookup($frame_textencoding), $frame_offset);
 			if (ord(substr($parsedFrame['data'], $frame_terminatorpos + strlen($this->TextEncodingTerminatorLookup($frame_textencoding)), 1)) === 0) {
-				$frame_terminatorpos++; // @strpos() fooled because 2nd byte of Unicode chars are often 0x00
+				$frame_terminatorpos++; // strpos() fooled because 2nd byte of Unicode chars are often 0x00
 			}
 			$frame_description = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 			if (ord($frame_description) === 0) {
@@ -1262,6 +1240,7 @@ class getid3_id3v2
 			$parsedFrame['description']      = $frame_description;
 			$parsedFrame['data']             = substr($parsedFrame['data'], $frame_terminatorpos + strlen($this->TextEncodingTerminatorLookup($frame_textencoding)));
 
+			$parsedFrame['image_mime'] = '';
 			$imageinfo = array();
 			$imagechunkcheck = getid3_lib::GetDataImageSize($parsedFrame['data'], $imageinfo);
 			if (($imagechunkcheck[2] >= 1) && ($imagechunkcheck[2] <= 3)) {
@@ -1275,6 +1254,12 @@ class getid3_id3v2
 				$parsedFrame['image_bytes']      = strlen($parsedFrame['data']);
 			}
 
+			if (!empty($parsedFrame['framenameshort']) && !empty($parsedFrame['data'])) {
+				if (!isset($ThisFileInfo['id3v2']['comments']['picture'])) {
+					$ThisFileInfo['id3v2']['comments']['picture'] = array();
+				}
+				$ThisFileInfo['id3v2']['comments']['picture'][] = array('data'=>$parsedFrame['data'], 'image_mime'=>$parsedFrame['image_mime']);
+			}
 
 		} elseif ((($id3v2_majorversion >= 3) && ($parsedFrame['frame_name'] == 'GEOB')) || // 4.15  GEOB General encapsulated object
 				(($id3v2_majorversion == 2) && ($parsedFrame['frame_name'] == 'GEO'))) {     // 4.16  GEO  General encapsulated object
@@ -1292,16 +1277,16 @@ class getid3_id3v2
 			if ((($id3v2_majorversion <= 3) && ($frame_textencoding > 1)) || (($id3v2_majorversion == 4) && ($frame_textencoding > 3))) {
 				$ThisFileInfo['warning'][] = 'Invalid text encoding byte ('.$frame_textencoding.') in frame "'.$parsedFrame['frame_name'].'" - defaulting to ISO-8859-1 encoding';
 			}
-			$frame_terminatorpos = @strpos($parsedFrame['data'], "\x00", $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], "\x00", $frame_offset);
 			$frame_mimetype = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 			if (ord($frame_mimetype) === 0) {
 				$frame_mimetype = '';
 			}
 			$frame_offset = $frame_terminatorpos + strlen("\x00");
 
-			$frame_terminatorpos = @strpos($parsedFrame['data'], $this->TextEncodingTerminatorLookup($frame_textencoding), $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], $this->TextEncodingTerminatorLookup($frame_textencoding), $frame_offset);
 			if (ord(substr($parsedFrame['data'], $frame_terminatorpos + strlen($this->TextEncodingTerminatorLookup($frame_textencoding)), 1)) === 0) {
-				$frame_terminatorpos++; // @strpos() fooled because 2nd byte of Unicode chars are often 0x00
+				$frame_terminatorpos++; // strpos() fooled because 2nd byte of Unicode chars are often 0x00
 			}
 			$frame_filename = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 			if (ord($frame_filename) === 0) {
@@ -1309,9 +1294,9 @@ class getid3_id3v2
 			}
 			$frame_offset = $frame_terminatorpos + strlen($this->TextEncodingTerminatorLookup($frame_textencoding));
 
-			$frame_terminatorpos = @strpos($parsedFrame['data'], $this->TextEncodingTerminatorLookup($frame_textencoding), $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], $this->TextEncodingTerminatorLookup($frame_textencoding), $frame_offset);
 			if (ord(substr($parsedFrame['data'], $frame_terminatorpos + strlen($this->TextEncodingTerminatorLookup($frame_textencoding)), 1)) === 0) {
-				$frame_terminatorpos++; // @strpos() fooled because 2nd byte of Unicode chars are often 0x00
+				$frame_terminatorpos++; // strpos() fooled because 2nd byte of Unicode chars are often 0x00
 			}
 			$frame_description = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 			if (ord($frame_description) === 0) {
@@ -1350,7 +1335,7 @@ class getid3_id3v2
 			// Counter         $xx xx xx xx (xx ...)
 
 			$frame_offset = 0;
-			$frame_terminatorpos = @strpos($parsedFrame['data'], "\x00", $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], "\x00", $frame_offset);
 			$frame_emailaddress = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 			if (ord($frame_emailaddress) === 0) {
 				$frame_emailaddress = '';
@@ -1390,11 +1375,11 @@ class getid3_id3v2
 			// Encrypted datablock   <binary data>
 
 			$frame_offset = 0;
-			$frame_terminatorpos = @strpos($parsedFrame['data'], "\x00", $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], "\x00", $frame_offset);
 			$frame_ownerid = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 			$frame_offset = $frame_terminatorpos + strlen("\x00");
 
-			$frame_terminatorpos = @strpos($parsedFrame['data'], "\x00", $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], "\x00", $frame_offset);
 			$frame_description = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 			if (ord($frame_description) === 0) {
 				$frame_description = '';
@@ -1418,7 +1403,7 @@ class getid3_id3v2
 			// Encryption info    <binary data>
 
 			$frame_offset = 0;
-			$frame_terminatorpos = @strpos($parsedFrame['data'], "\x00", $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], "\x00", $frame_offset);
 			$frame_ownerid = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 			if (ord($frame_ownerid) === 0) {
 				$frame_ownerid == '';
@@ -1452,7 +1437,7 @@ class getid3_id3v2
 				$frame_offset += 4;
 			}
 
-			$frame_terminatorpos = @strpos($parsedFrame['data'], "\x00", $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], "\x00", $frame_offset);
 			$frame_url = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 			if (ord($frame_url) === 0) {
 				$frame_url = '';
@@ -1522,7 +1507,7 @@ class getid3_id3v2
 			$parsedFrame['encodingid'] = $frame_textencoding;
 			$parsedFrame['encoding']   = $this->TextEncodingNameLookup($frame_textencoding);
 
-			$frame_terminatorpos = @strpos($parsedFrame['data'], "\x00", $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], "\x00", $frame_offset);
 			$frame_pricepaid = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 			$frame_offset = $frame_terminatorpos + strlen("\x00");
 
@@ -1560,7 +1545,7 @@ class getid3_id3v2
 				$ThisFileInfo['warning'][] = 'Invalid text encoding byte ('.$frame_textencoding.') in frame "'.$parsedFrame['frame_name'].'" - defaulting to ISO-8859-1 encoding';
 			}
 
-			$frame_terminatorpos = @strpos($parsedFrame['data'], "\x00", $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], "\x00", $frame_offset);
 			$frame_pricestring = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 			$frame_offset = $frame_terminatorpos + strlen("\x00");
 			$frame_rawpricearray = explode('/', $frame_pricestring);
@@ -1573,15 +1558,15 @@ class getid3_id3v2
 			$frame_datestring = substr($parsedFrame['data'], $frame_offset, 8);
 			$frame_offset += 8;
 
-			$frame_terminatorpos = @strpos($parsedFrame['data'], "\x00", $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], "\x00", $frame_offset);
 			$frame_contacturl = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 			$frame_offset = $frame_terminatorpos + strlen("\x00");
 
 			$frame_receivedasid = ord(substr($parsedFrame['data'], $frame_offset++, 1));
 
-			$frame_terminatorpos = @strpos($parsedFrame['data'], $this->TextEncodingTerminatorLookup($frame_textencoding), $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], $this->TextEncodingTerminatorLookup($frame_textencoding), $frame_offset);
 			if (ord(substr($parsedFrame['data'], $frame_terminatorpos + strlen($this->TextEncodingTerminatorLookup($frame_textencoding)), 1)) === 0) {
-				$frame_terminatorpos++; // @strpos() fooled because 2nd byte of Unicode chars are often 0x00
+				$frame_terminatorpos++; // strpos() fooled because 2nd byte of Unicode chars are often 0x00
 			}
 			$frame_sellername = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 			if (ord($frame_sellername) === 0) {
@@ -1589,9 +1574,9 @@ class getid3_id3v2
 			}
 			$frame_offset = $frame_terminatorpos + strlen($this->TextEncodingTerminatorLookup($frame_textencoding));
 
-			$frame_terminatorpos = @strpos($parsedFrame['data'], $this->TextEncodingTerminatorLookup($frame_textencoding), $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], $this->TextEncodingTerminatorLookup($frame_textencoding), $frame_offset);
 			if (ord(substr($parsedFrame['data'], $frame_terminatorpos + strlen($this->TextEncodingTerminatorLookup($frame_textencoding)), 1)) === 0) {
-				$frame_terminatorpos++; // @strpos() fooled because 2nd byte of Unicode chars are often 0x00
+				$frame_terminatorpos++; // strpos() fooled because 2nd byte of Unicode chars are often 0x00
 			}
 			$frame_description = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 			if (ord($frame_description) === 0) {
@@ -1599,7 +1584,7 @@ class getid3_id3v2
 			}
 			$frame_offset = $frame_terminatorpos + strlen($this->TextEncodingTerminatorLookup($frame_textencoding));
 
-			$frame_terminatorpos = @strpos($parsedFrame['data'], "\x00", $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], "\x00", $frame_offset);
 			$frame_mimetype = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 			$frame_offset = $frame_terminatorpos + strlen("\x00");
 
@@ -1629,7 +1614,7 @@ class getid3_id3v2
 			// Encryption data     <binary data>
 
 			$frame_offset = 0;
-			$frame_terminatorpos = @strpos($parsedFrame['data'], "\x00", $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], "\x00", $frame_offset);
 			$frame_ownerid = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 			if (ord($frame_ownerid) === 0) {
 				$frame_ownerid = '';
@@ -1652,7 +1637,7 @@ class getid3_id3v2
 			// Group dependent data  <binary data>
 
 			$frame_offset = 0;
-			$frame_terminatorpos = @strpos($parsedFrame['data'], "\x00", $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], "\x00", $frame_offset);
 			$frame_ownerid = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 			if (ord($frame_ownerid) === 0) {
 				$frame_ownerid = '';
@@ -1672,7 +1657,7 @@ class getid3_id3v2
 			// The private data      <binary data>
 
 			$frame_offset = 0;
-			$frame_terminatorpos = @strpos($parsedFrame['data'], "\x00", $frame_offset);
+			$frame_terminatorpos = strpos($parsedFrame['data'], "\x00", $frame_offset);
 			$frame_ownerid = substr($parsedFrame['data'], $frame_offset, $frame_terminatorpos - $frame_offset);
 			if (ord($frame_ownerid) === 0) {
 				$frame_ownerid = '';
@@ -2175,7 +2160,7 @@ class getid3_id3v2
 
 
 
-	function LanguageLookup($languagecode, $casesensitive=false) {
+	static function LanguageLookup($languagecode, $casesensitive=false) {
 
 		if (!$casesensitive) {
 			$languagecode = strtolower($languagecode);
@@ -2631,10 +2616,10 @@ class getid3_id3v2
 	}
 
 
-	function ETCOEventLookup($index) {
-        if (($index >= 0x17) && ($index <= 0xDF)) {
-		    return 'reserved for future use';
-	    }
+	static function ETCOEventLookup($index) {
+		if (($index >= 0x17) && ($index <= 0xDF)) {
+			return 'reserved for future use';
+		}
 		if (($index >= 0xE0) && ($index <= 0xEF)) {
 			return 'not predefined synch 0-F';
 		}
@@ -2674,7 +2659,7 @@ class getid3_id3v2
 		return (isset($EventLookup[$index]) ? $EventLookup[$index] : '');
 	}
 
-	function SYTLContentTypeLookup($index) {
+	static function SYTLContentTypeLookup($index) {
 		static $SYTLContentTypeLookup = array(
 			0x00 => 'other',
 			0x01 => 'lyrics',
@@ -2690,7 +2675,7 @@ class getid3_id3v2
 		return (isset($SYTLContentTypeLookup[$index]) ? $SYTLContentTypeLookup[$index] : '');
 	}
 
-	function APICPictureTypeLookup($index, $returnarray=false) {
+	static function APICPictureTypeLookup($index, $returnarray=false) {
 		static $APICPictureTypeLookup = array(
 			0x00 => 'Other',
 			0x01 => '32x32 pixels \'file icon\' (PNG only)',
@@ -2720,7 +2705,7 @@ class getid3_id3v2
 		return (isset($APICPictureTypeLookup[$index]) ? $APICPictureTypeLookup[$index] : '');
 	}
 
-	function COMRReceivedAsLookup($index) {
+	static function COMRReceivedAsLookup($index) {
 		static $COMRReceivedAsLookup = array(
 			0x00 => 'Other',
 			0x01 => 'Standard CD album with other songs',
@@ -2736,7 +2721,7 @@ class getid3_id3v2
 		return (isset($COMRReceivedAsLookup[$index]) ? $COMRReceivedAsLookup[$index] : '');
 	}
 
-	function RVA2ChannelTypeLookup($index) {
+	static function RVA2ChannelTypeLookup($index) {
 		static $RVA2ChannelTypeLookup = array(
 			0x00 => 'Other',
 			0x01 => 'Master volume',
@@ -2752,7 +2737,7 @@ class getid3_id3v2
 		return (isset($RVA2ChannelTypeLookup[$index]) ? $RVA2ChannelTypeLookup[$index] : '');
 	}
 
-	function FrameNameLongLookup($framename) {
+	static function FrameNameLongLookup($framename) {
 
 		$begin = __LINE__;
 
@@ -2936,7 +2921,7 @@ class getid3_id3v2
 	}
 
 
-	function FrameNameShortLookup($framename) {
+	static function FrameNameShortLookup($framename) {
 
 		$begin = __LINE__;
 
@@ -3115,40 +3100,47 @@ class getid3_id3v2
 		return getid3_lib::EmbeddedLookup($framename, $begin, __LINE__, __FILE__, 'id3v2-framename_short');
 	}
 
-	function TextEncodingTerminatorLookup($encoding) {
+	static function TextEncodingTerminatorLookup($encoding) {
 		// http://www.id3.org/id3v2.4.0-structure.txt
 		// Frames that allow different types of text encoding contains a text encoding description byte. Possible encodings:
-		// $00  ISO-8859-1. Terminated with $00.
-		// $01  UTF-16 encoded Unicode with BOM. All strings in the same frame SHALL have the same byteorder. Terminated with $00 00.
-		// $02  UTF-16BE encoded Unicode without BOM. Terminated with $00 00.
-		// $03  UTF-8 encoded Unicode. Terminated with $00.
-
-		static $TextEncodingTerminatorLookup = array(0=>"\x00", 1=>"\x00\x00", 2=>"\x00\x00", 3=>"\x00", 255=>"\x00\x00");
-
-		return @$TextEncodingTerminatorLookup[$encoding];
+		static $TextEncodingTerminatorLookup = array(
+			0   => "\x00",     // $00  ISO-8859-1. Terminated with $00.
+			1   => "\x00\x00", // $01  UTF-16 encoded Unicode with BOM. All strings in the same frame SHALL have the same byteorder. Terminated with $00 00.
+			2   => "\x00\x00", // $02  UTF-16BE encoded Unicode without BOM. Terminated with $00 00.
+			3   => "\x00",     // $03  UTF-8 encoded Unicode. Terminated with $00.
+			255 => "\x00\x00"
+		);
+		return (isset($TextEncodingTerminatorLookup[$encoding]) ? $TextEncodingTerminatorLookup[$encoding] : '');
 	}
 
-	function TextEncodingNameLookup($encoding) {
+	static function TextEncodingNameLookup($encoding) {
 		// http://www.id3.org/id3v2.4.0-structure.txt
-		static $TextEncodingNameLookup = array(0=>'ISO-8859-1', 1=>'UTF-16', 2=>'UTF-16BE', 3=>'UTF-8', 255=>'UTF-16BE');
+		// Frames that allow different types of text encoding contains a text encoding description byte. Possible encodings:
+		static $TextEncodingNameLookup = array(
+			0   => 'ISO-8859-1', // $00  ISO-8859-1. Terminated with $00.
+			1   => 'UTF-16',     // $01  UTF-16 encoded Unicode with BOM. All strings in the same frame SHALL have the same byteorder. Terminated with $00 00.
+			2   => 'UTF-16BE',   // $02  UTF-16BE encoded Unicode without BOM. Terminated with $00 00.
+			3   => 'UTF-8',      // $03  UTF-8 encoded Unicode. Terminated with $00.
+			255 => 'UTF-16BE'
+		);
 		return (isset($TextEncodingNameLookup[$encoding]) ? $TextEncodingNameLookup[$encoding] : 'ISO-8859-1');
 	}
 
-	function IsValidID3v2FrameName($framename, $id3v2majorversion) {
+	static function IsValidID3v2FrameName($framename, $id3v2majorversion) {
 		switch ($id3v2majorversion) {
 			case 2:
-				return ereg('[A-Z][A-Z0-9]{2}', $framename);
+				return preg_match('#[A-Z][A-Z0-9]{2}#', $framename);
 				break;
 
 			case 3:
 			case 4:
-				return ereg('[A-Z][A-Z0-9]{3}', $framename);
+				return preg_match('#[A-Z][A-Z0-9]{3}#', $framename);
 				break;
 		}
 		return false;
 	}
 
-	function IsANumber($numberstring, $allowdecimal=false, $allownegative=false) {
+	static function IsANumber($numberstring, $allowdecimal=false, $allownegative=false) {
 		for ($i = 0; $i < strlen($numberstring); $i++) {
 			if ((chr($numberstring{$i}) < chr('0')) || (chr($numberstring{$i}) > chr('9'))) {
 				if (($numberstring{$i} == '.') && $allowdecimal) {
@@ -3163,7 +3155,7 @@ class getid3_id3v2
 		return true;
 	}
 
-	function IsValidDateStampString($datestamp) {
+	static function IsValidDateStampString($datestamp) {
 		if (strlen($datestamp) != 8) {
 			return false;
 		}
@@ -3191,7 +3183,7 @@ class getid3_id3v2
 		return true;
 	}
 
-	function ID3v2HeaderLength($majorversion) {
+	static function ID3v2HeaderLength($majorversion) {
 		return (($majorversion == 2) ? 6 : 10);
 	}
 

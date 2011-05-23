@@ -156,9 +156,9 @@ class getid3_ogg
 
 		// Last Page - Number of Samples
 
-		if ($ThisFileInfo['avdataend'] >= pow(2, 31)) {
+		if (!getid3_lib::intValueSupported($ThisFileInfo['avdataend'])) {
 
-			$ThisFileInfo['warning'][] = 'Unable to parse Ogg end chunk file (PHP does not support file operations beyond 2GB)';
+			$ThisFileInfo['warning'][] = 'Unable to parse Ogg end chunk file (PHP does not support file operations beyond '.round(PHP_INT_MAX / 1073741824).'GB)';
 
 		} else {
 
@@ -223,7 +223,7 @@ class getid3_ogg
 		return true;
 	}
 
-	function ParseVorbisPageHeader(&$filedata, &$filedataoffset, &$ThisFileInfo, &$oggpageinfo) {
+	static function ParseVorbisPageHeader(&$filedata, &$filedataoffset, &$ThisFileInfo, &$oggpageinfo) {
 		$ThisFileInfo['audio']['dataformat'] = 'vorbis';
 		$ThisFileInfo['audio']['lossless']   = false;
 
@@ -270,7 +270,7 @@ class getid3_ogg
 		return true;
 	}
 
-	function ParseOggPageHeader(&$fd) {
+	static function ParseOggPageHeader(&$fd) {
 		// http://xiph.org/ogg/vorbis/doc/framing.html
 		$oggheader['page_start_offset'] = ftell($fd); // where we started from in the file
 
@@ -322,7 +322,7 @@ class getid3_ogg
 	}
 
 
-	function ParseVorbisCommentsFilepointer(&$fd, &$ThisFileInfo) {
+	static function ParseVorbisCommentsFilepointer(&$fd, &$ThisFileInfo) {
 
 		$OriginalOffset = ftell($fd);
 		$CommentStartOffset = $OriginalOffset;
@@ -367,11 +367,12 @@ class getid3_ogg
 		$ThisFileInfo['avdataoffset'] = $CommentStartOffset + $commentdataoffset;
 
 		$basicfields = array('TITLE', 'ARTIST', 'ALBUM', 'TRACKNUMBER', 'GENRE', 'DATE', 'DESCRIPTION', 'COMMENT');
+		$ThisFileInfo_ogg_comments_raw = &$ThisFileInfo['ogg']['comments_raw'];
 		for ($i = 0; $i < $CommentsCount; $i++) {
 
-			$ThisFileInfo['ogg']['comments_raw'][$i]['dataoffset'] = $CommentStartOffset + $commentdataoffset;
+			$ThisFileInfo_ogg_comments_raw[$i]['dataoffset'] = $CommentStartOffset + $commentdataoffset;
 
-			if (ftell($fd) < ($ThisFileInfo['ogg']['comments_raw'][$i]['dataoffset'] + 4)) {
+			if (ftell($fd) < ($ThisFileInfo_ogg_comments_raw[$i]['dataoffset'] + 4)) {
 				$VorbisCommentPage++;
 
 				$oggpageinfo = getid3_ogg::ParseOggPageHeader($fd);
@@ -394,15 +395,15 @@ class getid3_ogg
 				$commentdata .= fread($fd, getid3_ogg::OggPageSegmentLength($ThisFileInfo['ogg']['pageheader'][$VorbisCommentPage], 1));
 
 			}
-			$ThisFileInfo['ogg']['comments_raw'][$i]['size']       = getid3_lib::LittleEndian2Int(substr($commentdata, $commentdataoffset, 4));
+			$ThisFileInfo_ogg_comments_raw[$i]['size'] = getid3_lib::LittleEndian2Int(substr($commentdata, $commentdataoffset, 4));
 
 			// replace avdataoffset with position just after the last vorbiscomment
-			$ThisFileInfo['avdataoffset'] = $ThisFileInfo['ogg']['comments_raw'][$i]['dataoffset'] + $ThisFileInfo['ogg']['comments_raw'][$i]['size'] + 4;
+			$ThisFileInfo['avdataoffset'] = $ThisFileInfo_ogg_comments_raw[$i]['dataoffset'] + $ThisFileInfo_ogg_comments_raw[$i]['size'] + 4;
 
 			$commentdataoffset += 4;
-			while ((strlen($commentdata) - $commentdataoffset) < $ThisFileInfo['ogg']['comments_raw'][$i]['size']) {
-				if (($ThisFileInfo['ogg']['comments_raw'][$i]['size'] > $ThisFileInfo['avdataend']) || ($ThisFileInfo['ogg']['comments_raw'][$i]['size'] < 0)) {
-					$ThisFileInfo['error'][] = 'Invalid Ogg comment size (comment #'.$i.', claims to be '.number_format($ThisFileInfo['ogg']['comments_raw'][$i]['size']).' bytes) - aborting reading comments';
+			while ((strlen($commentdata) - $commentdataoffset) < $ThisFileInfo_ogg_comments_raw[$i]['size']) {
+				if (($ThisFileInfo_ogg_comments_raw[$i]['size'] > $ThisFileInfo['avdataend']) || ($ThisFileInfo_ogg_comments_raw[$i]['size'] < 0)) {
+					$ThisFileInfo['warning'][] = 'Invalid Ogg comment size (comment #'.$i.', claims to be '.number_format($ThisFileInfo_ogg_comments_raw[$i]['size']).' bytes) - aborting reading comments';
 					break 2;
 				}
 
@@ -425,12 +426,21 @@ class getid3_ogg
 				$commentdata .= $AsYetUnusedData;
 
 				//$commentdata .= fread($fd, $ThisFileInfo['ogg']['pageheader'][$oggpageinfo['page_seqno']]['page_length']);
-				$commentdata .= fread($fd, getid3_ogg::OggPageSegmentLength($ThisFileInfo['ogg']['pageheader'][$VorbisCommentPage], 1));
+				if (!isset($ThisFileInfo['ogg']['pageheader'][$VorbisCommentPage])) {
+					$ThisFileInfo['warning'][] = 'undefined Vorbis Comment page "'.$VorbisCommentPage.'" at offset '.ftell($fd);
+					break;
+				}
+				$readlength = getid3_ogg::OggPageSegmentLength($ThisFileInfo['ogg']['pageheader'][$VorbisCommentPage], 1);
+				if ($readlength <= 0) {
+					$ThisFileInfo['warning'][] = 'invalid length Vorbis Comment page "'.$VorbisCommentPage.'" at offset '.ftell($fd);
+					break;
+				}
+				$commentdata .= fread($fd, $readlength);
 
 				//$filebaseoffset += $oggpageinfo['header_end_offset'] - $oggpageinfo['page_start_offset'];
 			}
-			$commentstring = substr($commentdata, $commentdataoffset, $ThisFileInfo['ogg']['comments_raw'][$i]['size']);
-			$commentdataoffset += $ThisFileInfo['ogg']['comments_raw'][$i]['size'];
+			$commentstring = substr($commentdata, $commentdataoffset, $ThisFileInfo_ogg_comments_raw[$i]['size']);
+			$commentdataoffset += $ThisFileInfo_ogg_comments_raw[$i]['size'];
 
 			if (!$commentstring) {
 
@@ -440,18 +450,26 @@ class getid3_ogg
 			} elseif (strstr($commentstring, '=')) {
 
 				$commentexploded = explode('=', $commentstring, 2);
-				$ThisFileInfo['ogg']['comments_raw'][$i]['key']   = strtoupper($commentexploded[0]);
-				$ThisFileInfo['ogg']['comments_raw'][$i]['value'] = @$commentexploded[1];
-				$ThisFileInfo['ogg']['comments_raw'][$i]['data']  = base64_decode($ThisFileInfo['ogg']['comments_raw'][$i]['value']);
+				$ThisFileInfo_ogg_comments_raw[$i]['key']   = strtoupper($commentexploded[0]);
+				$ThisFileInfo_ogg_comments_raw[$i]['value'] = (isset($commentexploded[1]) ? $commentexploded[1] : '');
+				$ThisFileInfo_ogg_comments_raw[$i]['data']  = base64_decode($ThisFileInfo_ogg_comments_raw[$i]['value']);
 
-				$ThisFileInfo['ogg']['comments'][strtolower($ThisFileInfo['ogg']['comments_raw'][$i]['key'])][] = $ThisFileInfo['ogg']['comments_raw'][$i]['value'];
-
-				$imageinfo = array();
-				$imagechunkcheck = getid3_lib::GetDataImageSize($ThisFileInfo['ogg']['comments_raw'][$i]['data'], $imageinfo);
-				$ThisFileInfo['ogg']['comments_raw'][$i]['image_mime'] = getid3_lib::image_type_to_mime_type($imagechunkcheck[2]);
-				if (!$ThisFileInfo['ogg']['comments_raw'][$i]['image_mime'] || ($ThisFileInfo['ogg']['comments_raw'][$i]['image_mime'] == 'application/octet-stream')) {
-					unset($ThisFileInfo['ogg']['comments_raw'][$i]['image_mime']);
-					unset($ThisFileInfo['ogg']['comments_raw'][$i]['data']);
+				if (preg_match('#^(BM|GIF|\xFF\xD8\xFF|\x89\x50\x4E\x47\x0D\x0A\x1A\x0A|II\x2A\x00|MM\x00\x2A)#s', $ThisFileInfo_ogg_comments_raw[$i]['data'])) {
+					$imageinfo = array();
+					$imagechunkcheck = getid3_lib::GetDataImageSize($ThisFileInfo_ogg_comments_raw[$i]['data'], $imageinfo);
+					unset($imageinfo);
+					if (!empty($imagechunkcheck)) {
+						$ThisFileInfo_ogg_comments_raw[$i]['image_mime'] = image_type_to_mime_type($imagechunkcheck[2]);
+						if ($ThisFileInfo_ogg_comments_raw[$i]['image_mime'] && ($ThisFileInfo_ogg_comments_raw[$i]['image_mime'] != 'application/octet-stream')) {
+							unset($ThisFileInfo_ogg_comments_raw[$i]['value']);
+						}
+					}
+				}
+				if (isset($ThisFileInfo_ogg_comments_raw[$i]['value'])) {
+					unset($ThisFileInfo_ogg_comments_raw[$i]['data']);
+					$ThisFileInfo['ogg']['comments'][strtolower($ThisFileInfo_ogg_comments_raw[$i]['key'])][] = $ThisFileInfo_ogg_comments_raw[$i]['value'];
+				} else {
+					$ThisFileInfo['ogg']['comments']['picture'][] = array('data'=>$ThisFileInfo_ogg_comments_raw[$i]['data'], 'image_mime'=>$ThisFileInfo_ogg_comments_raw[$i]['image_mime']);
 				}
 
 			} else {
@@ -503,7 +521,7 @@ class getid3_ogg
 		return true;
 	}
 
-	function SpeexBandModeLookup($mode) {
+	static function SpeexBandModeLookup($mode) {
 		static $SpeexBandModeLookup = array();
 		if (empty($SpeexBandModeLookup)) {
 			$SpeexBandModeLookup[0] = 'narrow';
@@ -514,7 +532,7 @@ class getid3_ogg
 	}
 
 
-	function OggPageSegmentLength($OggInfoArray, $SegmentNumber=1) {
+	static function OggPageSegmentLength($OggInfoArray, $SegmentNumber=1) {
 		for ($i = 0; $i < $SegmentNumber; $i++) {
 			$segmentlength = 0;
 			foreach ($OggInfoArray['segment_table'] as $key => $value) {
@@ -528,7 +546,7 @@ class getid3_ogg
 	}
 
 
-	function get_quality_from_nominal_bitrate($nominal_bitrate) {
+	static function get_quality_from_nominal_bitrate($nominal_bitrate) {
 
 		// decrease precision
 		$nominal_bitrate = $nominal_bitrate / 1000;
