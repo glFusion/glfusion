@@ -81,6 +81,12 @@ if ( $_CONF['loginrequired'] == 1 ) {
     $_FF_CONF['registration_required'] = 1;
 }
 
+$FF_userprefs['topicsperpage']  = $_FF_CONF['show_topics_perpage'];
+$FF_userprefs['postsperpage']   = $_FF_CONF['show_posts_perpage'];
+$FF_userprefs['showiframe']     = $_FF_CONF['show_topicreview'];
+$FF_userprefs['viewanonposts']  = $_FF_CONF['show_anonymous_posts'];
+$FF_userprefs['topic_order']    = $_FF_CONF['topic_order'];
+
 if ( !COM_isAnonUser() ) {
     $result = DB_query("SELECT * FROM {$_TABLES['ff_userprefs']} where uid = ".(int) $_USER['uid'],1);
     if ( DB_numRows($result) > 0 ) {
@@ -89,12 +95,6 @@ if ( !COM_isAnonUser() ) {
             $_FF_CONF['use_wysiwyg_editor'] = $userprefs['use_wysiwyg_editor'];
         }
     }
-} else {
-    $FF_userprefs['topicsperpage']  = $_FF_CONF['show_topics_perpage'];
-    $FF_userprefs['postsperpage']   = $_FF_CONF['show_posts_perpage'];
-    $FF_userprefs['showiframe']     = $_FF_CONF['show_topicreview'];
-    $FF_userprefs['viewanonposts']  = $_FF_CONF['show_anonymous_posts'];
-    $FF_userprefs['topic_order']    = $_FF_CONF['topic_order'];
 }
 
 $_FF_CONF['use_glfilter'] = 1; // always use the filter...
