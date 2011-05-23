@@ -135,11 +135,9 @@ function forum_upgrade() {
             $c = config::get_instance();
             $c->del('pre2.5_mode', 'forum');
             $c->del('mysql4+', 'forum');
-            $c->add('date','l, F d Y @ h:i A T','text',6,29,NULL,370,TRUE);
-            $c->add('daytime','m/d h:iA','text',6,29,NULL,380,TRUE);
-            $c->add('shortdate','m/d/y','text',6,29,NULL,390,TRUE);
-            $c->add('dateonly','d-M','text',6,29,NULL,400,TRUE);
-            $c->add('timeonly','H:iA','text',6,29,NULL,410,TRUE);
+
+            DB_query("UPDATE {$_TABLES['conf_values']} SET value='m/d/y h:i a' WHERE name='default_Datetime_format' AND group_name='forum'");
+            DB_query("UPDATE {$_TABLES['conf_values']} SET value='M d Y H:i a' WHERE name='default_Topic_Datetime_format' AND group_name='forum'");
 
             _forum_cvt_watch();
             // drop watch table
