@@ -116,7 +116,7 @@ function _saveLogo() {
         }
         if ( $ext != 'unknown' ) {
             $imgInfo = @getimagesize($file['tmp_name']);
-            if ( $imgInfo[0] > $_LOGO['max_logo_width'] || $imgInfo[1] > $_LOGO['max_logo_height'] ) {
+            if ( $imgInfo[0] > $_CONF['max_logo_width'] || $imgInfo[1] > $_CONF['max_logo_height'] ) {
                 $retval = 4;
             } else {
                 $newlogoname = 'logo' . substr(md5(uniqid(rand())),0,8) . $ext;

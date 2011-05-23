@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.3.0 (Trunk Development Branch)
 ------
+- Updated getID3() library to latest production release. (Mark)
 - Integrated Site Tailor plugin (menu editor / logo admin) into the glFusion
   core code. The Site Tailor plugin has been retired. (Mark)
 - Forum Plugin: General code clean up / optimizations / template consolidation

@@ -833,6 +833,7 @@ function _pi_test_copy($srcdir, $dstdir)
     $sizetotal  = 0;
     $fifail     = '';
     $createdDst = 0;
+    $ret        = '';
 
     $failedFiles = array();
 
@@ -875,7 +876,9 @@ function _pi_test_copy($srcdir, $dstdir)
     }
 
     $red = explode(',',$ret);
-    $ret = ($num + $red[0]).','.($fail + $red[1]).','.($sizetotal + $red[2]).','.$fifail.$red[3];
+    if ( count($red) > 1 ) {
+        $ret = ($num + $red[0]).','.($fail + $red[1]).','.($sizetotal + $red[2]).','.$fifail.$red[3];
+    }
     return array($fail,$failedFiles);
 }
 

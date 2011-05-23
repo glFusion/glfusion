@@ -63,6 +63,7 @@ function processAutotagUpload()
 
     $retval = '';
     $upgrade = false;
+    $errors = '';
 
     if (count($_FILES) > 0 && $_FILES['autotagfile']['error'] != UPLOAD_ERR_NO_FILE) {
         require_once $_CONF['path_system'] . 'classes/upload.class.php';
