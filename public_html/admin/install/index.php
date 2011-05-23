@@ -71,7 +71,7 @@ if( function_exists('set_error_handler') ) {
 
 $_GLFUSION = array();
 
-$glFusionVars = array('language','method','migrate','expire','dbconfig_path','log_path','lang_path','backup_path','data_path','db_type','innodb','db_host','db_name','db_user','db_pass','db_prefix','site_name','site_slogan','site_url','site_admin_url','site_mail','noreply_mail','utf8');
+$glFusionVars = array('language','method','migrate','expire','dbconfig_path','log_path','lang_path','backup_path','data_path','db_type','innodb','db_host','db_name','db_user','db_pass','db_prefix','site_name','site_slogan','site_url','site_admin_url','site_mail','noreply_mail','utf8','original_version');
 
 if ( is_array($_POST) ) {
     foreach ($_POST AS $name => $value) {
@@ -2462,6 +2462,7 @@ switch($mode) {
         // at this point we have a fully updated database and core environment
     case 'dopluginupgrade' :
         require '../../lib-common.php';
+        $pageBody = INST_doPrePluginUpgrade();
         $pageBody = INST_doPluginUpgrade();
         break;
     case 'done' :

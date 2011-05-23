@@ -43,8 +43,12 @@ if (!defined('LB')) {
     define('LB', "\n");
 }
 if (!defined('SUPPORTED_PHP_VER')) {
-    define('SUPPORTED_PHP_VER', '4.3.0');
+    define('SUPPORTED_PHP_VER', '5.2.0');
 }
+if (!defined('SUPPORTED_MYSQL_VER')) {
+    define('SUPPORTED_MYSQL_VER', '4.0.18');
+}
+
 if (empty($LANG_DIRECTION)) {
     $LANG_DIRECTION = 'ltr';
 }
@@ -131,12 +135,17 @@ function php_v()
  */
 function INST_phpOutOfDate()
 {
+    $minv = explode('.', SUPPORTED_PHP_VER);
+
     $phpv = php_v();
-    if (($phpv[0] < 4) || (($phpv[0] == 4) && ($phpv[1] < 1))) {
+
+    if (($phpv[0] <  $minv[0]) ||
+     (($phpv[0] == $minv[0]) && ($phpv[1] <  $minv[1])) ||
+     (($phpv[0] == $minv[0]) && ($phpv[1] == $minv[1]) && ($phpv[2] < $minv[2]))) {
+
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 /**
@@ -177,14 +186,16 @@ function mysql_v($_DB_host, $_DB_user, $_DB_pass)
  */
 function INST_mysqlOutOfDate($db)
 {
+    $minv = explode('.', SUPPORTED_MYSQL_VER);
+
     if ($db['type'] == 'mysql' || $db['type'] == 'mysql-innodb') {
         $myv = mysql_v($db['host'], $db['user'], $db['pass']);
-        if (($myv[0] < 3) || (($myv[0] == 3) && ($myv[1] < 23)) ||
-                (($myv[0] == 3) && ($myv[1] == 23) && ($myv[2] < 2))) {
+        if (($myv[0] <  $minv[0]) || (($myv[0] == $minv[0]) && ($myv[1] <  $minv[1])) ||
+          (($myv[0] == $minv[0]) && ($myv[1] == $minv[1]) && ($myv[2] < $minv[2]))) {
             return true;
         }
-        return false;
     }
+    return false;
 }
 
 
@@ -637,6 +648,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 {
     global $_TABLES, $_CONF, $_SYSTEM, $_SP_CONF, $_DB, $_DB_dbms, $_DB_table_prefix,
            $LANG_AM, $dbconfig_path, $siteconfig_path, $html_path,$LANG_INSTALL;
+    global $_GLFUSION;
 
     $rc = true;
     $errors = '';
@@ -936,157 +948,23 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '1.2.1';
         case '1.2.1' :
         case '1.2.2' :
-            $_SQL = array();
-
-            $_SQL[] = "CREATE TABLE {$_TABLES['autotags']} (
-              tag varchar( 24 ) NOT NULL DEFAULT '',
-              description varchar( 128 ) DEFAULT '',
-              is_enabled tinyint( 1 ) NOT NULL DEFAULT '0',
-              is_function tinyint( 1 ) NOT NULL DEFAULT '0',
-              replacement text,
-              PRIMARY KEY ( tag )
-            ) ENGINE=MYISAM;
-            ";
-
-            $_SQL[] = "CREATE TABLE {$_TABLES['autotag_perm']} (
-              autotag_id varchar(128) NOT NULL,
-              autotag_namespace varchar(128) NOT NULL,
-              autotag_name varchar(128) NOT NULL,
-              PRIMARY KEY (autotag_id)
-            ) ENGINE=MyISAM
-            ";
-
-            $_SQL[] = "CREATE TABLE {$_TABLES['autotag_usage']} (
-              autotag_id varchar(128) NOT NULL,
-              autotag_allowed tinyint(1) NOT NULL DEFAULT '1',
-              usage_namespace varchar(128) NOT NULL,
-              usage_operation varchar(128) NOT NULL,
-              KEY autotag_id (autotag_id)
-            ) ENGINE=MyISAM
-            ";
-
-            $_SQL[] = "CREATE TABLE {$_TABLES['subscriptions']} (
-              sub_id int(11) NOT NULL AUTO_INCREMENT,
-              type varchar(255) NOT NULL,
-              category varchar(255) NOT NULL DEFAULT '',
-              category_desc varchar(255) NOT NULL DEFAULT '',
-              id varchar(40) NOT NULL,
-              id_desc varchar(255) NOT NULL DEFAULT '',
-              uid int(11) NOT NULL,
-              date_added datetime NOT NULL,
-              PRIMARY KEY (sub_id),
-              UNIQUE KEY descriptor (type,category,id,uid),
-              KEY uid (uid)
-            ) ENGINE=MyISAM
-            ";
-
-            $_SQL[] = "CREATE TABLE {$_TABLES['logo']} (
-              id int(11) NOT NULL auto_increment,
-              config_name varchar(255) default NULL,
-              config_value varchar(255) NOT NULL,
-              PRIMARY KEY  (id),
-              UNIQUE KEY config_name (config_name)
-            ) ENGINE=MyISAM;
-            ";
-
-            $_SQL[] = "CREATE TABLE {$_TABLES['menu']} (
-              id int(11) NOT NULL auto_increment,
-              menu_name varchar(64) NOT NULL,
-              menu_type tinyint(4) NOT NULL,
-              menu_active tinyint(3) NOT NULL,
-              group_id mediumint(9) NOT NULL,
-              PRIMARY KEY  (id),
-              KEY menu_name (menu_name)
-            ) ENGINE=MyISAM;
-            ";
-
-            $_SQL[] = "CREATE TABLE {$_TABLES['menu_config']} (
-              id int(11) NOT NULL auto_increment,
-              menu_id int(11) NOT NULL,
-              conf_name varchar(64) NOT NULL,
-              conf_value varchar(64) NOT NULL,
-              PRIMARY KEY  (id),
-              UNIQUE KEY Config (menu_id,conf_name),
-              KEY menu_id (menu_id)
-            ) ENGINE=MyISAM;
-            ";
-
-            $_SQL[] = "CREATE TABLE {$_TABLES['menu_elements']} (
-              id int(11) NOT NULL auto_increment,
-              pid int(11) NOT NULL,
-              menu_id int(11) NOT NULL default '0',
-              element_label varchar(255) NOT NULL,
-              element_type int(11) NOT NULL,
-              element_subtype varchar(255) NOT NULL,
-              element_order int(11) NOT NULL,
-              element_active tinyint(4) NOT NULL,
-              element_url varchar(255) NOT NULL,
-              element_target varchar(255) NOT NULL,
-              group_id mediumint(9) NOT NULL,
-              PRIMARY KEY( id ),
-              INDEX ( pid )
-            ) ENGINE=MyISAM;
-            ";
-
-            $_SQL[] = "ALTER TABLE {$_TABLES['sessions']} ADD browser varchar(255) default '' AFTER sess_id";
-
-            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='l F d, Y @h:iA' WHERE dfid=1";
-            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='l F d, Y @H:i' WHERE dfid=2";
-            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='l F d @H:i' WHERE dfid=4";
-            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='H:i d F Y' WHERE dfid=5";
-            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='H:i l d F Y' WHERE dfid=6";
-            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='h:iA -- l F d Y' WHERE dfid=7";
-            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='D F d, h:iA' WHERE dfid=8";
-            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='D F d, H:i' WHERE dfid=9";
-            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='m-d-y H:i' WHERE dfid=10";
-            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='d-m-y H:i' WHERE dfid=11";
-            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='m-d-y h:iA' WHERE dfid=12";
-            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='h:iA  F d, Y' WHERE dfid=13";
-            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='D M d, \'y h:iA' WHERE dfid=14";
-            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='Day z, h ish' WHERE dfid=15";
-            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='y-m-d h:i' WHERE dfid=16";
-            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='d/m/y H:i' WHERE dfid=17";
-            $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='D d M h:iA' WHERE dfid=18";
-
-            foreach ($_SQL as $sql) {
-                DB_query($sql,1);
+            require_once $_CONF['path'] . 'sql/updates/mysql_1.2.2_to_1.3.0.php';
+            list($rc,$errors) = INST_updateDB($_SQL);
+            if ( $rc === false ) {
+                return array($rc,$errors);
             }
-            // move sitetailor data over
-            $complete = DB_getItem($_TABLES['vars'],'value','name="stcvt"');
-            if ( $complete != 1 ) {
-                if (!in_array('sitetailor', $_PLUGINS)) {
-                    $_TABLES['st_config']       = $_DB_table_prefix . 'st_config';
-                    $_TABLES['st_menus']        = $_DB_table_prefix . 'st_menus';
-                    $_TABLES['st_menus_config'] = $_DB_table_prefix . 'st_menus_config';
-                    $_TABLES['st_menu_elements']= $_DB_table_prefix . 'st_menu_elements';
-                }
-
-                $_SQL[] = "INSERT INTO {$_TABLES['logo']} SELECT * FROM {$_TABLES['st_config']}";
-                $_SQL[] = "INSERT INTO {$_TABLES['menu']} SELECT * FROM {$_TABLES['st_menus']}";
-                $_SQL[] = "INSERT INTO {$_TABLES['menu_config']} SELECT * FROM {$_TABLES['st_menus_config']}";
-                $_SQL[] = "INSERT INTO {$_TABLES['menu_elements']} SELECT * FROM {$_TABLES['st_menu_elements']}";
-
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_enabled=0 WHERE pi_name='sitetailor'",1);
-                DB_query("INSERT INTO {$_TABLES['vars']} (name,value) VALUES ('stcvt','1')",1);
-            }
-
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
-
             // logo
             $c->add('fs_logo', NULL, 'fieldset', 5, 28, NULL, 0, TRUE);
             $c->add('max_logo_height',150,'text',5,28,NULL,1630,TRUE);
             $c->add('max_logo_width', 500,'text',5,28,NULL,1640,TRUE);
-
             // whats new cache time
             $c->add('whatsnew_cache_time',3600,'text',3,15,NULL,1060,TRUE);
-
             // add user photo option to whosonline block
             $c->add('whosonline_photo',FALSE,'select',3,14,0,930,TRUE);
-
             // remove old wikitext configuration
             $c->del('wikitext_editor','Core');
-
             // add oauth user_login_method
             $c->del('user_login_method', 'Core');
             $standard = ($_CONF['user_login_method']['standard']) ? true : false;
@@ -1094,7 +972,6 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $thirdparty = ($_CONF['user_login_method']['3rdparty']) ? true: false;
             $oauth = false;
             $c->add('user_login_method',array('standard' => $standard , 'openid' => $openid , '3rdparty' => $thirdparty , 'oauth' => $oauth),'@select',4,16,1,320,TRUE);
-
             // OAuth configuration settings
             $c->add('facebook_login',0,'select',4,16,1,350,TRUE);
             $c->add('facebook_consumer_key','not configured yet','text',4,16,NULL,351,TRUE);
@@ -1105,15 +982,12 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('twitter_login',0,'select',4,16,1,356,TRUE);
             $c->add('twitter_consumer_key','not configured yet','text',4,16,NULL,357,TRUE);
             $c->add('twitter_consumer_secret','not configured yet','text',4,16,NULL,358,TRUE);
-
             // date / time format changes
-
             $c->add('date','l, F d Y @ h:i A T','text',6,29,NULL,370,TRUE);
             $c->add('daytime','m/d h:iA','text',6,29,NULL,380,TRUE);
             $c->add('shortdate','m/d/y','text',6,29,NULL,390,TRUE);
             $c->add('dateonly','d-M','text',6,29,NULL,400,TRUE);
             $c->add('timeonly','H:iA','text',6,29,NULL,410,TRUE);
-
 
             // add new logo.admin permission
             $result = DB_query("SELECT * FROM {$_TABLES['features']} WHERE ft_name='logo.admin'");
@@ -1131,75 +1005,6 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                 $ft_id  = DB_insertId();
                 $grp_id = (int) DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'Root'");
                 DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $grp_id)", 1);
-            }
-
-            // autotag
-
-            $_TABLES['am_autotags'] = $_DB_table_prefix . 'am_autotags';
-
-            if ( DB_checkTableExists('am_autotags') ) {
-                // we have an installed version of autotags plugin....
-                DB_query("INSERT INTO {$_TABLES['autotags']} SELECT * FROM " . $_TABLES['am_autotags'],1);
-
-                // delete the old autotag plugin
-                require_once $_CONF['path_system'].'lib-install.php';
-                $remvars = array (
-                    /* give the name of the tables, without $_TABLES[] */
-                    'tables' => array ( 'am_autotags' ),
-                    /* give the full name of the group, as in the db */
-                    'groups' => array('AutoTag Admin','AutoTag Users'),
-                    /* give the full name of the feature, as in the db */
-                    'features' => array('autotag.admin','autotag.user', 'autotag.PHP'),
-                    /* give the full name of the block, including 'phpblock_', etc */
-                    'php_blocks' => array(),
-                    /* give all vars with their name */
-                    'vars'=> array()
-                );
-                // removing tables
-                for ($i=0; $i < count($remvars['tables']); $i++) {
-                    DB_query ("DROP TABLE {$_TABLES[$remvars['tables'][$i]]}", 1    );
-                }
-
-                // removing variables
-                for ($i = 0; $i < count($remvars['vars']); $i++) {
-                    DB_delete($_TABLES['vars'], 'name', $remvars['vars'][$i]);
-                }
-
-                // removing groups
-                for ($i = 0; $i < count($remvars['groups']); $i++) {
-                    $grp_id = DB_getItem ($_TABLES['groups'], 'grp_id',
-                                          "grp_name = '{$remvars['groups'][$i]}'");
-                    if (!empty ($grp_id)) {
-                        DB_delete($_TABLES['groups'], 'grp_id', $grp_id);
-                        DB_delete($_TABLES['group_assignments'], 'ug_main_grp_id', $grp_id);
-                    }
-                }
-
-                // removing features
-                for ($i = 0; $i < count($remvars['features']); $i++) {
-                    $access_id = DB_getItem ($_TABLES['features'], 'ft_id',"ft_name = '{$remvars['features'][$i]}'");
-                    if (!empty ($access_id)) {
-                        DB_delete($_TABLES['access'], 'acc_ft_id', $access_id);
-                        DB_delete($_TABLES['features'], 'ft_name', $remvars['features'][$i]);
-                    }
-                }
-                if ($c->group_exists('autotag')) {
-                    $c->delGroup('autotag');
-                }
-                DB_delete($_TABLES['plugins'], 'pi_name', 'autotag');
-            } else {
-                $_DATA = array();
-                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('cipher', '{$LANG_AM['desc_cipher']}', 1, 1, NULL)";
-                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('topic', '{$LANG_AM['desc_topic']}', 1, 1, NULL)";
-                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('glfwiki', '{$LANG_AM['desc_glfwiki']}', 1, 1, NULL)";
-                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('lang', '{$LANG_AM['desc_lang']}', 0, 1, NULL)";
-                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('conf', '{$LANG_AM['desc_conf']}', 0, 1, NULL)";
-                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('user', '{$LANG_AM['desc_user']}', 0, 1, NULL)";
-                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('wikipedia', '{$LANG_AM['desc_wikipedia']}', 1, 1, NULL)";
-                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('youtube', '{$LANG_AM['desc_youtube']}', 1, 0, '<object width=\"425\" height=\"350\"><param name=\"movie\" value=\"http://www.youtube.com/v/%1%\"></param><param name=\"wmode\" value=\"transparent\"></param><embed src=\"http://www.youtube.com/v/%1%\" type=\"application/x-shockwave-flash\" wmode=\"transparent\" width=\"425\" height=\"350\"></embed></object>')";
-                foreach ($_DATA as $sql) {
-                    DB_query($sql,1);
-                }
             }
 
             // add new autotag features
@@ -1251,6 +1056,120 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
     return array($rc,$errors);
 }
+
+function INST_doPrePluginUpgrade()
+{
+    global $_TABLES, $_CONF, $_SYSTEM, $_SP_CONF, $_DB, $_DB_dbms, $_DB_table_prefix,
+           $LANG_AM, $dbconfig_path, $siteconfig_path, $html_path,$LANG_INSTALL, $_GLFUSION;
+
+    $retval = '';
+
+    switch ($_GLFUSION['original_version']) {
+        case '1.0.0':
+        case '1.0.1':
+        case '1.0.2':
+        case '1.1.0' :
+        case '1.1.1' :
+        case '1.1.2' :
+        case '1.1.3' :
+        case '1.1.4' :
+        case '1.1.5' :
+        case '1.1.6' :
+        case '1.1.7' :
+        case '1.1.8' :
+        case '1.2.0' :
+        case '1.2.1' :
+        case '1.2.2' :
+            // move sitetailor data over
+            $complete = DB_getItem($_TABLES['vars'],'value','name="stcvt"');
+            if ( $complete != 1 ) {
+                $_TABLES['st_config']       = $_DB_table_prefix . 'st_config';
+                $_TABLES['st_menus']        = $_DB_table_prefix . 'st_menus';
+                $_TABLES['st_menus_config'] = $_DB_table_prefix . 'st_menus_config';
+                $_TABLES['st_menu_elements']= $_DB_table_prefix . 'st_menu_elements';
+                if ( DB_checkTableExists('st_config') ) {
+                    DB_query("INSERT INTO {$_TABLES['logo']} SELECT * FROM {$_TABLES['st_config']}");
+                    DB_query("INSERT INTO {$_TABLES['menu']} SELECT * FROM {$_TABLES['st_menus']}");
+                    DB_query("INSERT INTO {$_TABLES['menu_config']} SELECT * FROM {$_TABLES['st_menus_config']}");
+                    DB_query("INSERT INTO {$_TABLES['menu_elements']} SELECT * FROM {$_TABLES['st_menu_elements']}");
+                    DB_query("UPDATE {$_TABLES['plugins']} SET pi_enabled=0 WHERE pi_name='sitetailor'",1);
+                    DB_query("INSERT INTO {$_TABLES['vars']} (name,value) VALUES ('stcvt','1')",1);
+                }
+            }
+
+            $_TABLES['am_autotags'] = $_DB_table_prefix . 'am_autotags';
+
+            if ( DB_checkTableExists('am_autotags') ) {
+                // we have an installed version of autotags plugin....
+                DB_query("INSERT INTO {$_TABLES['autotags']} SELECT * FROM " . $_TABLES['am_autotags'],1);
+
+                // delete the old autotag plugin
+                require_once $_CONF['path_system'].'lib-install.php';
+                $remvars = array (
+                    /* give the name of the tables, without $_TABLES[] */
+                    'tables' => array ( 'am_autotags' ),
+                    /* give the full name of the group, as in the db */
+                    'groups' => array('AutoTag Users'),
+                    /* give the full name of the feature, as in the db */
+                    'features' => array('autotag.admin', 'autotag.PHP'),
+                    /* give the full name of the block, including 'phpblock_', etc */
+                    'php_blocks' => array(),
+                    /* give all vars with their name */
+                    'vars'=> array()
+                );
+                // removing tables
+                for ($i=0; $i < count($remvars['tables']); $i++) {
+                    DB_query ("DROP TABLE {$_TABLES[$remvars['tables'][$i]]}", 1    );
+                }
+
+                // removing variables
+                for ($i = 0; $i < count($remvars['vars']); $i++) {
+                    DB_delete($_TABLES['vars'], 'name', $remvars['vars'][$i]);
+                }
+
+                // removing groups
+                for ($i = 0; $i < count($remvars['groups']); $i++) {
+                    $grp_id = DB_getItem ($_TABLES['groups'], 'grp_id',
+                                          "grp_name = '{$remvars['groups'][$i]}'");
+                    if (!empty ($grp_id)) {
+                        DB_delete($_TABLES['groups'], 'grp_id', $grp_id);
+                        DB_delete($_TABLES['group_assignments'], 'ug_main_grp_id', $grp_id);
+                    }
+                }
+
+                // removing features
+                for ($i = 0; $i < count($remvars['features']); $i++) {
+                    $access_id = DB_getItem ($_TABLES['features'], 'ft_id',"ft_name = '{$remvars['features'][$i]}'");
+                    if (!empty ($access_id)) {
+                        DB_delete($_TABLES['access'], 'acc_ft_id', $access_id);
+                        DB_delete($_TABLES['features'], 'ft_name', $remvars['features'][$i]);
+                    }
+                }
+                if ($c->group_exists('autotag')) {
+                    $c->delGroup('autotag');
+                }
+                DB_delete($_TABLES['plugins'], 'pi_name', 'autotag');
+            } else {
+                $_DATA = array();
+                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('cipher', '{$LANG_AM['desc_cipher']}', 1, 1, NULL)";
+                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('topic', '{$LANG_AM['desc_topic']}', 1, 1, NULL)";
+                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('glfwiki', '{$LANG_AM['desc_glfwiki']}', 1, 1, NULL)";
+                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('lang', '{$LANG_AM['desc_lang']}', 0, 1, NULL)";
+                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('conf', '{$LANG_AM['desc_conf']}', 0, 1, NULL)";
+                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('user', '{$LANG_AM['desc_user']}', 0, 1, NULL)";
+                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('wikipedia', '{$LANG_AM['desc_wikipedia']}', 1, 1, NULL)";
+                $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('youtube', '{$LANG_AM['desc_youtube']}', 1, 0, '<object width=\"425\" height=\"350\"><param name=\"movie\" value=\"http://www.youtube.com/v/%1%\"></param><param name=\"wmode\" value=\"transparent\"></param><embed src=\"http://www.youtube.com/v/%1%\" type=\"application/x-shockwave-flash\" wmode=\"transparent\" width=\"425\" height=\"350\"></embed></object>')";
+                foreach ($_DATA as $sql) {
+                    DB_query($sql,1);
+                }
+            }
+            break;
+        default :
+            break;
+    }
+    return $retval;
+}
+
 
 /**
  * Check for InnoDB table support (usually as of MySQL 4.0, but may be
@@ -1443,7 +1362,7 @@ function INST_clearCache($plugin='')
  */
 function INST_identifyglFusionVersion ()
 {
-    global $_TABLES, $_DB, $_DB_dbms, $_CONF, $dbconfig_path, $siteconfig_path;
+    global $_GLFUSION, $_TABLES, $_DB, $_DB_dbms, $_CONF, $dbconfig_path, $siteconfig_path;
 
     $_DB->setDisplayError(true);
 
@@ -1476,6 +1395,7 @@ function INST_identifyglFusionVersion ()
             $row = DB_fetchArray($result);
             if ( $row['value'] == '1.1.3' ) {
                 $version = $row['value'];
+                $_GLFUSION['original_version'] = $version;
                 return $version;
             }
         }
@@ -1486,6 +1406,7 @@ function INST_identifyglFusionVersion ()
         if ( DB_numRows($result) > 0 ) {
             $row = DB_fetchArray($result);
             $version = $row['value'];
+            $_GLFUSION['original_version'] = $version;
             return $version;
         }
     }
@@ -1531,7 +1452,7 @@ function INST_identifyglFusionVersion ()
             }
         }
     }
-
+    $_GLFUSION['original_version'] = $version;
     return $version;
 }
 
