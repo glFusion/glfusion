@@ -1064,6 +1064,9 @@ function INST_doPrePluginUpgrade()
 
     $retval = '';
 
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+
     switch ($_GLFUSION['original_version']) {
         case '1.0.0':
         case '1.0.1':
