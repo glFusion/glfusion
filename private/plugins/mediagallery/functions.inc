@@ -776,6 +776,9 @@ function plugin_itemlist_mediagallery($token)
     $sql = "SELECT * FROM {$_TABLES['mg_albums']} WHERE " . $groupsql;
     $result = DB_query($sql);
     $albumCount = DB_numRows($result);
+    if ( $albumCount < 1 ) {
+        return;
+    }
     $modAlbums = array();
     for ( $i=0; $i < $albumCount; $i++ ) {
         $A = DB_fetchArray($result);
