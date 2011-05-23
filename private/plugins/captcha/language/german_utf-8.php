@@ -108,7 +108,7 @@ $LANG_confignames['captcha'] = array(
     'enable_links' => 'Für Links-Plugin',
     'enable_calendar' => 'Für Kalender-Plugin',
     'expire' => 'Wieviele Sekunden eine CAPTCHA-Session gültig ist',
-    'publickey' => 'reCAPTCHA Public Key - <a href="http://recaptcha.net/api/getkey?app=php">reCAPTCHA Signup</a>',
+    'publickey' => 'reCAPTCHA Public Key - <a href="https://www.google.com/recaptcha/admin/create">reCAPTCHA Signup</a>',
     'privatekey' => 'reCAPTCHA Private Key',
     'recaptcha_theme' => 'reCAPTCHA Theme'
 );

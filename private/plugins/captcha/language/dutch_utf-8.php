@@ -109,7 +109,7 @@ $LANG_confignames['captcha'] = array(
     'enable_links' => 'Bij Links Plugin Inschakelen',
     'enable_calendar' => 'Bij Kalender Plugin Inschakelen',
     'expire' => 'Aantal seconden dat een CAPTCHA Sessie geldig is',
-    'publickey' => 'reCAPTCHA Public Key - <a href="http://recaptcha.net/api/getkey?app=php">reCAPTCHA Signup</a>',
+    'publickey' => 'reCAPTCHA Public Key - <a href="https://www.google.com/recaptcha/admin/create">reCAPTCHA Signup</a>',
     'privatekey' => 'reCAPTCHA Private Key',
     'recaptcha_theme' => 'reCAPTCHA Theme'
 );
