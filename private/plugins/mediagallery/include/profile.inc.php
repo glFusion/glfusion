@@ -34,7 +34,7 @@ if (!defined ('GVERSION')) {
 require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
 MG_initAlbums();
 
-function _mg_create( $uid, $force = 0 ) {
+function _mg_user_create( $uid, $force = 0 ) {
     global $_TABLES, $_MG_CONF, $LANG_MG01;
 
     $sql = "INSERT INTO {$_TABLES['mg_userprefs']} (uid, active, display_rows, display_columns, mp3_player, playback_mode, tn_size, quota, member_gallery) VALUES (" . (int) $uid . ",1,0,0,-1,-1,-1," . $_MG_CONF['member_quota'] . ",0)";
