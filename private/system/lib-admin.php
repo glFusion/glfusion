@@ -198,7 +198,7 @@ function ADMIN_listArray($component, $fieldfunction, $header_arr, $text_arr,
         if ($chkall) {
             $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form, \'' . $chkname . '\');"' . XHTML . '>');
         } else {
-            $admin_templates->set_var('header_text', '<input type="checkbox" name="disabled" value="x" style="visibility:hidden" DISABLED'.XHTML.'>');
+            $admin_templates->set_var('header_text', '<input type="checkbox" name="disabled" value="x" style="visibility:hidden" disabled="disabled"/>');
         }
         $admin_templates->set_var('class', 'admin-list-field');
         $admin_templates->set_var('header_column_style', 'style="text-align:center;width:25px;"'); // always center checkbox
@@ -312,7 +312,7 @@ function ADMIN_listArray($component, $fieldfunction, $header_arr, $text_arr,
                 if ($chkfunction($A)) {
                     $admin_templates->set_var('itemtext', '<input type="checkbox" name="' . $chkname . '[]" value="' . $A[$chkfield] . '" title="' . $LANG_ADMIN['select'] . '"' . XHTML . '>');
                 } else {
-                    $admin_templates->set_var('itemtext', '<input type="checkbox" name="disabled" value="x" style="visibility:hidden" DISABLED'.XHTML.'>');
+                    $admin_templates->set_var('itemtext', '<input type="checkbox" name="disabled" value="x" style="visibility:hidden" disabled="disabled" />');
                 }
                 $admin_templates->parse('item_field', 'field', true);
             }
@@ -513,7 +513,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         if ($chkall) {
             $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form,\'' . $chkname . '\');"' . XHTML . '>');
         } else {
-            $admin_templates->set_var('header_text', '<input type="checkbox" name="disabled" value="x" style="visibility:hidden" DISABLED'.XHTML.'>');
+            $admin_templates->set_var('header_text', '<input type="checkbox" name="disabled" value="x" style="visibility:hidden" disabled="disabled" />');
         }
         $admin_templates->set_var('class', 'admin-list-field');
         $admin_templates->set_var('header_column_style', 'style="text-align:center;width:25px;"'); // always center checkbox
@@ -699,7 +699,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
             if ($chkfunction($A)) {
                 $admin_templates->set_var('itemtext', '<input type="checkbox" name="' . $chkname . '[]" value="' . $A[$chkfield] . '" title="' . $LANG_ADMIN['select'] . '"' . XHTML . '>');
             } else {
-                $admin_templates->set_var('itemtext', '<input type="checkbox" name="disabled" value="x" style="visibility:hidden" DISABLED'.XHTML.'>');
+                $admin_templates->set_var('itemtext', '<input type="checkbox" name="disabled" value="x" style="visibility:hidden" disabled="disabled" />');
             }
             $admin_templates->parse('item_field', 'field', true);
         }
