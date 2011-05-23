@@ -135,6 +135,11 @@ function forum_upgrade() {
             $c = config::get_instance();
             $c->del('pre2.5_mode', 'forum');
             $c->del('mysql4+', 'forum');
+            $c->add('date','l, F d Y @ h:i A T','text',6,29,NULL,370,TRUE);
+            $c->add('daytime','m/d h:iA','text',6,29,NULL,380,TRUE);
+            $c->add('shortdate','m/d/y','text',6,29,NULL,390,TRUE);
+            $c->add('dateonly','d-M','text',6,29,NULL,400,TRUE);
+            $c->add('timeonly','H:iA','text',6,29,NULL,410,TRUE);
 
             _forum_cvt_watch();
             // drop watch table
@@ -151,9 +156,7 @@ function forum_upgrade() {
                     DB_query("UPDATE {$_TABLES['ff_topic']} SET attachments=".$attCount." WHERE id=".(int) $F['id']);
                 }
             }
-
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.3.0',pi_gl_version='1.3.0' WHERE pi_name = 'forum'");
-
         default :
             DB_query("ALTER TABLE {$_TABLES['ff_forums']} DROP INDEX forum_id",1);
             DB_query("ALTER TABLE {$_TABLES['ff_rating_assoc']} DROP PRIMARY KEY",1);
