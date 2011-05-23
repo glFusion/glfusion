@@ -196,7 +196,7 @@ function ADMIN_listArray($component, $fieldfunction, $header_arr, $text_arr,
 
     if ($nrows > $chkminimum AND $chkselect) {
         if ($chkall) {
-            $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form, \'' . $chkname . '\');"' . XHTML . '>');
+            $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form, \'' . $chkname . '\');"/>');
         } else {
             $admin_templates->set_var('header_text', '<input type="checkbox" name="disabled" value="x" style="visibility:hidden" disabled="disabled"/>');
         }
@@ -310,7 +310,7 @@ function ADMIN_listArray($component, $fieldfunction, $header_arr, $text_arr,
                 $admin_templates->set_var('class', 'admin-list-field');
                 $admin_templates->set_var('column_style', 'style="text-align:center;"'); // always center checkbox
                 if ($chkfunction($A)) {
-                    $admin_templates->set_var('itemtext', '<input type="checkbox" name="' . $chkname . '[]" value="' . $A[$chkfield] . '" title="' . $LANG_ADMIN['select'] . '"' . XHTML . '>');
+                    $admin_templates->set_var('itemtext', '<input type="checkbox" name="' . $chkname . '[]" value="' . $A[$chkfield] . '" title="' . $LANG_ADMIN['select'] . '"/>');
                 } else {
                     $admin_templates->set_var('itemtext', '<input type="checkbox" name="disabled" value="x" style="visibility:hidden" disabled="disabled" />');
                 }
@@ -376,14 +376,14 @@ function ADMIN_listArray($component, $fieldfunction, $header_arr, $text_arr,
     // actions row for all selected items. provide a delete action as a minimum
     if ($nrows > $chkminimum AND $chkselect) {
         $actions = '<td style="text-align:center;">'
-            . '<img src="' . $_CONF['layout_url'] . '/images/admin/action.' . $_IMAGE_TYPE . '"></td>';
+            . '<img src="' . $_CONF['layout_url'] . '/images/admin/action.' . $_IMAGE_TYPE . '" alt="" /></td>';
         $actions .= '<td colspan="' . $ncols . '">' . $LANG_ADMIN['action'] . '&nbsp;&nbsp;&nbsp;';
         if (empty($chkactions)) {
             $actions .= '<input name="delbutton" type="image" src="'
             . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
             . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
             . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
-            . XHTML . '>&nbsp;' . $LANG_ADMIN['delete'];
+            . '/>&nbsp;' . $LANG_ADMIN['delete'];
         } else {
             $actions .= $chkactions;
         }
@@ -511,7 +511,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     // Check if the delete checkbox and support for the delete all feature should be displayed
     if ($chkselect) {
         if ($chkall) {
-            $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form,\'' . $chkname . '\');"' . XHTML . '>');
+            $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form,\'' . $chkname . '\');"/>');
         } else {
             $admin_templates->set_var('header_text', '<input type="checkbox" name="disabled" value="x" style="visibility:hidden" disabled="disabled" />');
         }
@@ -697,7 +697,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
             $admin_templates->set_var('class', 'admin-list-field');
             $admin_templates->set_var('column_style', 'style="text-align:center;"'); // always center checkbox
             if ($chkfunction($A)) {
-                $admin_templates->set_var('itemtext', '<input type="checkbox" name="' . $chkname . '[]" value="' . $A[$chkfield] . '" title="' . $LANG_ADMIN['select'] . '"' . XHTML . '>');
+                $admin_templates->set_var('itemtext', '<input type="checkbox" name="' . $chkname . '[]" value="' . $A[$chkfield] . '" title="' . $LANG_ADMIN['select'] . '"/>');
             } else {
                 $admin_templates->set_var('itemtext', '<input type="checkbox" name="disabled" value="x" style="visibility:hidden" disabled="disabled" />');
             }
@@ -764,14 +764,14 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     // actions row for all selected items. provide a delete action as a minimum
     if ($nrows > 0 AND $chkselect ) {
         $actions = '<td style="text-align:center;">'
-            . '<img src="' . $_CONF['layout_url'] . '/images/admin/action.' . $_IMAGE_TYPE . '"></td>';
+            . '<img src="' . $_CONF['layout_url'] . '/images/admin/action.' . $_IMAGE_TYPE . '" alt="" /></td>';
         $actions .= '<td colspan="' . $ncols . '">' . $LANG_ADMIN['action'] . '&nbsp;&nbsp;&nbsp;';
         if (empty($chkactions)) {
             $actions .= '<input name="delbutton" type="image" src="'
             . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
             . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
             . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
-            . XHTML . '>&nbsp;' . $LANG_ADMIN['delete'];
+            . '/>&nbsp;' . $LANG_ADMIN['delete'];
         } else {
             $actions .= $chkactions;
         }

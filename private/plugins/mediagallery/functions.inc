@@ -796,7 +796,7 @@ function plugin_itemlist_mediagallery($token)
     $data_arr = array();
     for ($i = 0; $i < $nrows; $i++) {
         $A = DB_fetchArray($result);
-        $A['edit'] = $_MG_CONF['site_url'] . '/admin.php?mode=mediaeditq&mid=' . $A['id'] . '&album_id=' . $A['album_id'] .  '&t=' . time();
+        $A['edit'] = $_MG_CONF['site_url'] . '/admin.php?mode=mediaeditq&amp;mid=' . $A['id'] . '&amp;album_id=' . $A['album_id'] .  '&amp;t=' . time();
         $A['_type_']  = 'mediagallery';
         $A['_key_']   = $key;      // name of key/id field
         $data_arr[$i] = $A;     // push row data into array
@@ -968,7 +968,7 @@ function _mg_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             if ( $dImage != '' ) {
                 $retval .= '<a href="'.$dImage.'" rel="lightbox" target="_new">';
             }
-            $retval .= '<img title="'.$LANG_MG01['lightbox_image'].'" style="float:left;padding:5px;" src="'.$thumbnail.'" height="'.$height.'" width="'.$width.'">';
+            $retval .= '<img title="'.$LANG_MG01['lightbox_image'].'" style="float:left;padding:5px;" src="'.$thumbnail.'" height="'.$height.'" width="'.$width.'" alt="" />';
             if ( $dImage != '' ) {
                 $retval .= '</a>';
             }
