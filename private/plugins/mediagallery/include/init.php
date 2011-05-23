@@ -312,43 +312,7 @@ function MG_get_size( $size )
     return round($size, 2)." ".$val;
 }
 
-/**
-* Get the path of the feed directory or a specific feed file
-*
-* @param    string  $feedfile   (option) feed file name
-* @return   string              path of feed directory or file
-*
-*/
-function MG_getFeedPath( $feedfile = '' )
-{
-    global $_CONF;
 
-    $feedpath = $_CONF['rdf_file'];
-    $pos = strrpos( $feedpath, '/' );
-    $feed = substr( $feedpath, 0, $pos + 1 );
-    $feed .= $feedfile;
-
-    return $feed;
-}
-
-/**
-* Get the URL of the feed directory or a specific feed file
-*
-* @param    string  $feedfile   (option) feed file name
-* @return   string              URL of feed directory or file
-*
-*/
-function MG_getFeedUrl( $feedfile = '' )
-{
-    global $_CONF;
-
-    $feedpath = SYND_getFeedPath();
-    $url = substr_replace ($feedpath, $_CONF['site_url'], 0,
-                           strlen ($_CONF['path_html']) - 1);
-    $url .= $feedfile;
-
-    return $url;
-}
 
 /**
 * Convert k/m/g size string to number of bytes
