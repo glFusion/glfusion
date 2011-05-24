@@ -22,5 +22,5 @@ Currently, glFusion uses the following PEAR packages:
 - XML_RPC
 - XML_Util
 
-The Archive and Console packages are included as they are used by the base PEAR
-package (e.g. when you try to update PEAR) but are not used by glFusion itself.
+The Console package is included as they are used by the base PEAR package
+(e.g. when you try to update PEAR) but are not used by glFusion itself.
