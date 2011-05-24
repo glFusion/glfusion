@@ -1,0 +1,53 @@
+<form name="rating" action="{self_url}" method="post">
+  <!-- BEGIN catrows -->
+  <table width="100%" border="0" cellspacing="0" cellpadding="3" style="margin-top:10px; margin-bottom:20px;">
+    <tr>
+      <td>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td style="width:10px;height:18px;">
+              <img src="{site_url}/forum/images/forumindex.png" style="border:none;" alt="" />
+            </td>
+            <td class="pluginHeader alignleft" style="white-space:nowrap;">&nbsp;{catname}</td>
+          </tr>
+          <tr>
+            <td style="padding:0px;" colspan='2'>
+              <table style="width:100%;border:none;" cellspacing="1" cellpadding="3" class="pluginSolidOutline">
+                <tr>
+                  <td class="pluginCellTitle" style="wdith:70%;">
+                    {$LANG_GF01[DESCRIPTION]}
+                  </td>
+                  <td class="pluginCellTitle" style="width:15%;white-space:nowrap;">
+                    {$LANG_GF98[view_rating]}
+                  </td>
+                  <td class="pluginCellTitle" style="width:15%;">
+                    {$LANG_GF98[post_rating]}
+                  </td>
+                </tr>
+                <!-- BEGIN forumrows -->
+                <tr style="padding:0px 0px 5px 2px;">
+                  <td class="pluginCellText pluginCellFill" style="vertical-align:top;text-align:left;">
+                    <strong>{forumname}</strong>
+                    <br />{forumdscp}
+                  </td>
+                  <td class="pluginCellText pluginCellFill" style="white-space:nowrap;">
+                    <input type="text" size="5" name="viewRating-{forumid}" value="{viewRating}" />
+                  </td>
+                  <td class="pluginCellText pluginCellFill" style="white-space:nowrap;">
+                    <input type="text" size="5" name="postRating-{forumid}" value="{postRating}" />
+                  </td>
+                </tr>
+                <!-- END forumrows -->
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <!-- END catrows -->
+  <div style="text-align:center;">
+    <input type="hidden" name="save_changes" value="true" />
+    <input type='submit' value='{$LANG_GF98[save_changes]}' />
+  </div>
+</form>

@@ -83,15 +83,13 @@ if(isset($_POST['save_changes'])) {
 }
 
 $boards = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
-$boards->set_file (array (
-    'categories'    => 'rating_board_categories.thtml',
-    'forums'        => 'rating_board_forums.thtml',
-    'rating_bottom' => 'rating_bottom.thtml')
-);
+$boards->set_file('rating','rating.thtml');
+
 $boards->set_var ('self_url', $_CONF['site_admin_url'].'/plugins/forum/rating.php');
 
 /* Display each Forum Category */
 $asql = DB_query("SELECT * FROM {$_TABLES['ff_categories']} ORDER BY cat_order");
+
 while ($A = DB_FetchArray($asql)) {
     $boards->set_var ('catid', $A['id']);
     $boards->set_var ('catname', $A['cat_name']);
@@ -101,12 +99,18 @@ while ($A = DB_FetchArray($asql)) {
     $bsql = DB_query("SELECT * FROM {$_TABLES['ff_forums']} WHERE forum_cat=".(int) $A['id']." ORDER BY forum_order");
     $bnrows = DB_numRows($bsql);
 
+    $boards->set_block('rating', 'catrows', 'crow');
+    $boards->clear_var('frow');
+    $boards->set_block('rating', 'forumrows', 'frow');
+
     for ($j = 1; $j <= $bnrows; $j++) {
-        $B = DB_FetchArray($bsql);
-        $boards->set_var ('forumname', $B['forum_name']);
-        $boards->set_var ('forumid', $B['forum_id']);
-		$boards->set_var ('viewRating', $B['rating_view']);
-		$boards->set_var ('postRating', $B['rating_post']);
+        $B = DB_fetchArray($bsql);
+        $boards->set_var (array(
+                'forumname' => $B['forum_name'],
+                'forumid'   => $B['forum_id'],
+		        'viewRating'=> $B['rating_view'],
+		        'postRating'=> $B['rating_post']));
+
         /* Check if this is a private forum */
         if ($B['grp_id'] != '2') {
             $grp_name = DB_getItem($_TABLES['groups'],'grp_name', "grp_id=".(int) $B['grp_id']);
@@ -115,22 +119,12 @@ while ($A = DB_FetchArray($asql)) {
             $boards->set_var ('forumdscp', $B['forum_dscp']);
         }
         $boards->set_var ('forumorder', $B['forum_order']);
-        if ($j == 1) {
-            $boards->parse ('forum_records', 'forums');
-        } else {
-            $boards->parse ('forum_records', 'forums',true);
-        }
+        $boards->parse('frow', 'forumrows',true);
     }
-
-    if ($bnrows == 0) {
-        $boards->set_var('hide_options','none');
-        $boards->parse ('forum_records', '');
-    }  else {
-        $boards->set_var('hide_options','');
-    }
-    $display .= $boards->parse ('forum_listing_records', 'categories',true);
+    $boards->parse('crow', 'catrows',true);
 }
-$display .= $boards->parse('output', 'rating_bottom');
+$boards->parse ('output', 'rating');
+$display .= $boards->finish ($boards->get_var('output'));
 
 $display .= COM_endBlock();
 $display .= FF_adminfooter();

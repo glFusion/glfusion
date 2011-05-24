@@ -1,5 +1,0 @@
-<div style="text-align:center;">
-  <input type="hidden" name="save_changes" value="true" />
-  <input type='submit' value='{$LANG_GF98[save_changes]}' />
-</div>
-</form>

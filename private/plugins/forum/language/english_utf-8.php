@@ -834,6 +834,8 @@ $LANG_GF98 = array(
     'user_rating_details' => 'User Rating Details for: ',
     'user_voting_details' => 'User Voting Details for: ',
     'save_changes'  => 'Save Changes',
+    'view_rating' => 'View Rating',
+    'post_rating' => 'Post Rating',
 );
 
 $LANG_FF_AUTOTAG = array(
