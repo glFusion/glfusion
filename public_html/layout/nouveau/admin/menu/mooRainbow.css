@@ -30,12 +30,12 @@ width: 11px; /* if you want a bigger or smaller slider... */
 height: 148px;
 }
 .moor-cursor {
-background: url(../layout/nouveau/images/moor_cursor.gif);
+background: url(images/menu/moor_cursor.gif);
 width: 8px;
 height: 8px;
 }
 .moor-arrows {
-background: url(../layout/nouveau/images/moor_arrows.gif) top center no-repeat;
+background: url(images/menu/moor_arrows.gif) top center no-repeat;
 top: 9px;
 left: 152px;
 width: 19px;

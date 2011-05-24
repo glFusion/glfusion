@@ -1224,25 +1224,33 @@ function MB_menuConfig( $mid ) {
         case 1: // horizontal cascading...
             foreach ($HCattributes AS $name) {
                 $menuAttributes[$name] = 'show';
-                $T->set_var('lang_'.$name,$LANG_HC[$name]);
+                if ( isset($LANG_HC[$name]) ) {
+                    $T->set_var('lang_'.$name,$LANG_HC[$name]);
+                }
             }
             break;
         case 2: // horizontal simple
             foreach ($HSattributes AS $name) {
                 $menuAttributes[$name] = 'show';
-                $T->set_var('lang_'.$name,$LANG_HS[$name]);
+                if ( isset($LANG_HS[$name]) ) {
+                    $T->set_var('lang_'.$name,$LANG_HS[$name]);
+                }
             }
             break;
         case 3: // vertical cascading
             foreach ($VCattributes AS $name) {
                 $menuAttributes[$name] = 'show';
-                $T->set_var('lang_'.$name,$LANG_VC[$name]);
+                if ( isset($LANG_VC[$name]) ) {
+                    $T->set_var('lang_'.$name,$LANG_VC[$name]);
+                }
             }
             break;
         case 4: // vertical simple
             foreach ($VSattributes AS $name) {
                 $menuAttributes[$name] = 'show';
-                $T->set_var('lang_'.$name,$LANG_VS[$name]);
+                if ( isset($LANG_VS[$name]) ) {
+                    $T->set_var('lang_'.$name,$LANG_VS[$name]);
+                }
             }
             break;
     }
