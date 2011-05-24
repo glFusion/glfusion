@@ -339,7 +339,7 @@ class config {
                        serialize($default_value));
         $Qargs = array_map('DB_escapeString', $Qargs);
 
-        $sql = "DELETE FROM {$_TABLES['conf_values']} WHERE name = '{$Qargs[0]}' AND group_name = '{$Qargs[4]}' AND subgrou={$Qargs[3]}";
+        $sql = "DELETE FROM {$_TABLES['conf_values']} WHERE name = '{$Qargs[0]}' AND group_name = '{$Qargs[4]}' AND subgroup={$Qargs[3]}";
         $this->_DB_escapedQuery($sql);
 
         $sql = "INSERT INTO {$_TABLES['conf_values']} (name, value, type, " .
