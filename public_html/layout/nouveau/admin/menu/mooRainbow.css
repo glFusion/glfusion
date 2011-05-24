@@ -5,11 +5,11 @@
  *NOTE: paths specified below are relative to the site root (http://www.mysite.com/)
  */
 
-#mooRainbow { 
+#mooRainbow {
 font-size: 11px; color: #000;
 }
 .moor-box {
-width: 212px; 
+width: 212px;
 height: 175px;
 margin-top:-20px;
 margin-left:30px;
@@ -19,7 +19,7 @@ border:1px solid #707070;
 }
 .moor-overlayBox {
 width: 144px; /* Width and Height of the overlay must be setted here: default 256x256 */
-height: 148px; 
+height: 148px;
 margin-left: 4px;
 border: 1px solid #000;
 }
@@ -30,13 +30,13 @@ width: 11px; /* if you want a bigger or smaller slider... */
 height: 148px;
 }
 .moor-cursor {
-background: url(admin/plugins/sitetailor/images/moor_cursor.gif); 
+background: url(../layout/nouveau/images/moor_cursor.gif);
 width: 8px;
 height: 8px;
 }
 .moor-arrows {
-background: url(admin/plugins/sitetailor/images/moor_arrows.gif) top center no-repeat;
-top: 9px; 
+background: url(../layout/nouveau/images/moor_arrows.gif) top center no-repeat;
+top: 9px;
 left: 152px;
 width: 19px;
 height: 5px;
@@ -44,8 +44,8 @@ z-index:100;
 margin-top:3px;
 }
 .moor-chooseColor { /* Top Box Color, the choosen one */
-margin-left: 173px; 
-width: 32px; 
+margin-left: 173px;
+width: 32px;
 height: 148px;
 border: 1px solid #000;
 }

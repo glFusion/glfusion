@@ -6,7 +6,7 @@
 <div class="plugin">
 <span>
 <a href="{site_admin_url}/index.php">
-  <img style="vertical-align:middle;padding-right:10px;float:left;" src="{site_admin_url}/plugins/sitetailor/images/sitetailor.png" alt="" />
+  <img style="vertical-align:middle;padding-right:10px;float:left;" src="{layout_url}/images/icons/menubuilder.png" alt="" />
 </a>
 </span>
 <h1 style="float:left">{birdseed}</h1>
