@@ -339,7 +339,7 @@ class config {
                        serialize($default_value));
         $Qargs = array_map('DB_escapeString', $Qargs);
 
-        $sql = "DELETE FROM {$_TABLES['conf_values']} WHERE name = '{$Qargs[0]}' AND group_name = '{$Qargs[4]}'";
+        $sql = "DELETE FROM {$_TABLES['conf_values']} WHERE name = '{$Qargs[0]}' AND group_name = '{$Qargs[4]}' AND subgrou={$Qargs[3]}";
         $this->_DB_escapedQuery($sql);
 
         $sql = "INSERT INTO {$_TABLES['conf_values']} (name, value, type, " .
@@ -633,7 +633,7 @@ class config {
                                                    $e['selectionArray'], false,
                                                    $e['reset']);
                 }
-                $this->_UI_get_fs($grp, $fs_contents, $fset, $t);
+                $this->_UI_get_fs($grp, $sg, $fs_contents, $fset, $t);
             }
         }
 
@@ -663,7 +663,7 @@ class config {
         }
     }
 
-    function _UI_get_fs($group, $contents, $fs_id, &$t)
+    function _UI_get_fs($group, $sg, $contents, $fs_id, &$t)
     {
         global $_TABLES, $LANG_fs;
 
@@ -672,7 +672,7 @@ class config {
         }
         $t->set_var('fs_contents', $contents);
         $fs_index = DB_getItem($_TABLES['conf_values'], 'name',
-                        "type = 'fieldset' AND fieldset = $fs_id AND group_name = '$group'");
+                        "type = 'fieldset' AND fieldset = $fs_id AND group_name = '$group' AND subgroup=".$sg);
         if (empty($fs_index)) {
             $t->set_var('fs_display', $LANG_fs[$group][$fs_id]);
         } else if (isset($LANG_fs[$group][$fs_index])) {
