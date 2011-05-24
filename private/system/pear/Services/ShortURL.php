@@ -7,19 +7,19 @@
  *
  * LICENSE: This source file is subject to the New BSD license that is
  * available through the world-wide-web at the following URI:
- * http://www.opensource.org/licenses/bsd-license.php. If you did not receive  
- * a copy of the New BSD License and are unable to obtain it through the web, 
+ * http://www.opensource.org/licenses/bsd-license.php. If you did not receive
+ * a copy of the New BSD License and are unable to obtain it through the web,
  * please send a note to license@php.net so we can mail you a copy immediately.
  *
  * @category  Services
  * @package   Services_ShortURL
- * @author    Joe Stump <joe@joestump.net> 
- * @copyright 2009 Joe Stump <joe@joestump.net> 
+ * @author    Joe Stump <joe@joestump.net>
+ * @copyright 2009 Joe Stump <joe@joestump.net>
  * @license   http://tinyurl.com/new-bsd New BSD License
  * @version   CVS: $Id:$
  * @link      http://pear.php.net/package/Services_ShortURL
  * @link      http://github.com/joestump/services_shorturl
- */     
+ */
 
 require_once 'Net/URL2.php';
 require_once 'Services/ShortURL/Exception.php';
@@ -33,7 +33,7 @@ require_once 'Services/ShortURL/Exception.php';
  * @license  http://tinyurl.com/new-bsd New BSD License
  * @link     http://pear.php.net/package/Services_ShortURL
  * @link     http://github.com/joestump/services_shorturl
- */             
+ */
 abstract class Services_ShortURL
 {
     /**
@@ -60,6 +60,7 @@ abstract class Services_ShortURL
         'tinyurl.com' => 'TinyURL',
         'digg.com'    => 'Digg',
         'tr.im'       => 'Trim',
+        'goo.gl'      => 'Googl',
         'short.ie'    => 'Shortie'
     );
 
@@ -77,7 +78,7 @@ abstract class Services_ShortURL
         if (!in_array($service, self::$services)) {
             throw new Services_ShortURL_Exception(
                 'Service ' . $service . ' is invalid'
-            ); 
+            );
         }
 
         $file = 'Services/ShortURL/' . $service . '.php';
@@ -87,7 +88,7 @@ abstract class Services_ShortURL
         if (!class_exists($class, false)) {
             throw new Services_ShortURL_Exception(
                 'Service class invalid or missing'
-            ); 
+            );
         }
 
         if (empty($options) && isset(self::$options[$service])) {
@@ -98,7 +99,7 @@ abstract class Services_ShortURL
         if (!$instance instanceof Services_ShortURL_Interface) {
             throw new Services_ShortURL_Exception(
                 'Service instance is invalid'
-            ); 
+            );
         }
 
         return $instance;
@@ -142,8 +143,8 @@ abstract class Services_ShortURL
     static public function extract($string)
     {
         $m      = array();
-        $regExp = '#(?P<url>http://(' . 
-                  implode('|', array_keys(self::$services)) . 
+        $regExp = '#(?P<url>http://(' .
+                  implode('|', array_keys(self::$services)) .
                   ')/[a-z0-9A-Z]+)\b#';
 
         if (!preg_match_all($regExp, $string, $m)) {
@@ -195,7 +196,7 @@ abstract class Services_ShortURL
     }
 
     /**
-     * Constructor 
+     * Constructor
      *
      * @access private
      * @return void

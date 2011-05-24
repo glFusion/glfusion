@@ -1,24 +1,21 @@
 <?php
-/*
- *  License Information:
- *
- *    Net_DNS:  A resolver library for PHP
- *    Copyright (c) 2002-2003 Eric Kilfoil eric@ypass.net
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License as published by the Free Software Foundation; either
- *    version 2.1 of the License, or (at your option) any later version.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
+/**
+*  License Information:
+*
+*  Net_DNS:  A resolver library for PHP
+*  Copyright (c) 2002-2003 Eric Kilfoil eric@ypass.net
+*  Maintainers:
+*  Marco Kaiser <bate@php.net>
+*  Florian Anderiasch <fa@php.net>
+*
+* PHP versions 4 and 5
+*
+* LICENSE: This source file is subject to version 3.01 of the PHP license
+* that is available through the world-wide-web at the following URI:
+* http://www.php.net/license/3_01.txt.  If you did not receive a copy of
+* the PHP License and are unable to obtain it through the web, please
+* send a note to license@php.net so we can mail you a copy immediately.
+*/
 
 /* Net_DNS_RR_SOA definition {{{ */
 /**
@@ -56,8 +53,10 @@ class Net_DNS_RR_SOA extends Net_DNS_RR
 
         if ($offset) {
             if ($this->rdlength > 0) {
-                list($mname, $offset) = Net_DNS_Packet::dn_expand($data, $offset);
-                list($rname, $offset) = Net_DNS_Packet::dn_expand($data, $offset);
+                $packet = new Net_DNS_Packet();
+
+                list($mname, $offset) = $packet->dn_expand($data, $offset);
+                list($rname, $offset) = $packet->dn_expand($data, $offset);
 
                 $a = unpack("@$offset/N5soavals", $data);
                 $this->mname = $mname;
@@ -68,11 +67,19 @@ class Net_DNS_RR_SOA extends Net_DNS_RR
                 $this->expire = $a['soavals4'];
                 $this->minimum = $a['soavals5'];
             }
+        } elseif (is_array($data)) {
+            $this->mname = $data['mname'];
+            $this->rname = $data['rname'];
+            $this->serial = $data['serial'];
+            $this->refresh = $data['refresh'];
+            $this->retry = $data['retry'];
+            $this->expire = $data['expire'];
+            $this->minimum = $data['minimum'];
         } else {
-            if (ereg("([^ \t]+)[ \t]+([^ \t]+)[ \t]+([0-9]+)[^ \t]+([0-9]+)[^ \t]+([0-9]+)[^ \t]+([0-9]+)[^ \t]*$", $string, $regs))
+            if (preg_match("/([^ \t]+)[ \t]+([^ \t]+)[ \t]+([0-9]+)[ \t]+([0-9]+)[ \t]+([0-9]+)[ \t]+([0-9]+)[ \t]+([0-9]+)[ \t]*$/", $data, $regs))
             {
-                $this->mname = ereg_replace('(.*)\.$', '\\1', $regs[1]);
-                $this->rname = ereg_replace('(.*)\.$', '\\1', $regs[2]);
+                $this->mname = preg_replace('/(.*)\.$/', '\\1', $regs[1]);
+                $this->rname = preg_replace('/(.*)\.$/', '\\1', $regs[2]);
                 $this->serial = $regs[3];
                 $this->refresh = $regs[4];
                 $this->retry = $regs[5];

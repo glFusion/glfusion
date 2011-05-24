@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2008, 2009, Alexey Borzov <avb@php.net>
+ * Copyright (c) 2008-2011, Alexey Borzov <avb@php.net>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,7 @@
  * @package    HTTP_Request2
  * @author     Alexey Borzov <avb@php.net>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id: Request2.php 298246 2010-04-21 10:41:16Z avb $
+ * @version    SVN: $Id: Request2.php 308735 2011-02-27 20:31:28Z avb $
  * @link       http://pear.php.net/package/HTTP_Request2
  */
 
@@ -57,7 +57,7 @@ require_once 'HTTP/Request2/Exception.php';
  * @category   HTTP
  * @package    HTTP_Request2
  * @author     Alexey Borzov <avb@php.net>
- * @version    Release: 0.5.2
+ * @version    Release: 2.0.0RC1
  * @link       http://tools.ietf.org/html/rfc2616#section-5
  */
 class HTTP_Request2 implements SplSubject
@@ -206,6 +206,11 @@ class HTTP_Request2 implements SplSubject
     */
     protected $adapter;
 
+   /**
+    * Cookie jar to persist cookies between requests
+    * @var HTTP_Request2_CookieJar
+    */
+    protected $cookieJar = null;
 
    /**
     * Constructor. Can set request URL, method and configuration array.
@@ -225,7 +230,7 @@ class HTTP_Request2 implements SplSubject
         if (!empty($method)) {
             $this->setMethod($method);
         }
-        $this->setHeader('user-agent', 'HTTP_Request2/0.5.2 ' .
+        $this->setHeader('user-agent', 'HTTP_Request2/2.0.0RC1 ' .
                          '(http://pear.php.net/package/http_request2) ' .
                          'PHP/' . phpversion());
     }
@@ -239,7 +244,7 @@ class HTTP_Request2 implements SplSubject
     *
     * @param    string|Net_URL2 Request URL
     * @return   HTTP_Request2
-    * @throws   HTTP_Request2_Exception
+    * @throws   HTTP_Request2_LogicException
     */
     public function setUrl($url)
     {
@@ -249,7 +254,10 @@ class HTTP_Request2 implements SplSubject
             );
         }
         if (!$url instanceof Net_URL2) {
-            throw new HTTP_Request2_Exception('Parameter is not a valid HTTP URL');
+            throw new HTTP_Request2_LogicException(
+                'Parameter is not a valid HTTP URL',
+                HTTP_Request2_Exception::INVALID_ARGUMENT
+            );
         }
         // URL contains username / password?
         if ($url->getUserinfo()) {
@@ -281,13 +289,16 @@ class HTTP_Request2 implements SplSubject
     *
     * @param    string
     * @return   HTTP_Request2
-    * @throws   HTTP_Request2_Exception if the method name is invalid
+    * @throws   HTTP_Request2_LogicException if the method name is invalid
     */
     public function setMethod($method)
     {
         // Method name should be a token: http://tools.ietf.org/html/rfc2616#section-5.1.1
         if (preg_match(self::REGEXP_INVALID_TOKEN, $method)) {
-            throw new HTTP_Request2_Exception("Invalid request method '{$method}'");
+            throw new HTTP_Request2_LogicException(
+                "Invalid request method '{$method}'",
+                HTTP_Request2_Exception::INVALID_ARGUMENT
+            );
         }
         $this->method = $method;
 
@@ -350,7 +361,7 @@ class HTTP_Request2 implements SplSubject
     *                           ('parameter name' => 'parameter value')
     * @param    mixed           parameter value if $nameOrConfig is not an array
     * @return   HTTP_Request2
-    * @throws   HTTP_Request2_Exception If the parameter is unknown
+    * @throws   HTTP_Request2_LogicException If the parameter is unknown
     */
     public function setConfig($nameOrConfig, $value = null)
     {
@@ -361,8 +372,9 @@ class HTTP_Request2 implements SplSubject
 
         } else {
             if (!array_key_exists($nameOrConfig, $this->config)) {
-                throw new HTTP_Request2_Exception(
-                    "Unknown configuration parameter '{$nameOrConfig}'"
+                throw new HTTP_Request2_LogicException(
+                    "Unknown configuration parameter '{$nameOrConfig}'",
+                    HTTP_Request2_Exception::INVALID_ARGUMENT
                 );
             }
             $this->config[$nameOrConfig] = $value;
@@ -377,15 +389,16 @@ class HTTP_Request2 implements SplSubject
     * @param    string  parameter name
     * @return   mixed   value of $name parameter, array of all configuration
     *                   parameters if $name is not given
-    * @throws   HTTP_Request2_Exception If the parameter is unknown
+    * @throws   HTTP_Request2_LogicException If the parameter is unknown
     */
     public function getConfig($name = null)
     {
         if (null === $name) {
             return $this->config;
         } elseif (!array_key_exists($name, $this->config)) {
-            throw new HTTP_Request2_Exception(
-                "Unknown configuration parameter '{$name}'"
+            throw new HTTP_Request2_LogicException(
+                "Unknown configuration parameter '{$name}'",
+                HTTP_Request2_Exception::INVALID_ARGUMENT
             );
         }
         return $this->config[$name];
@@ -447,18 +460,21 @@ class HTTP_Request2 implements SplSubject
     *
     * @param    string|array    header name, header string ('Header: value')
     *                           or an array of headers
-    * @param    string|null     header value, header will be removed if null
+    * @param    string|array|null header value if $name is not an array,
+    *                           header will be removed if value is null
+    * @param    bool            whether to replace previous header with the
+    *                           same name or append to its value
     * @return   HTTP_Request2
-    * @throws   HTTP_Request2_Exception
+    * @throws   HTTP_Request2_LogicException
     */
-    public function setHeader($name, $value = null)
+    public function setHeader($name, $value = null, $replace = true)
     {
         if (is_array($name)) {
             foreach ($name as $k => $v) {
                 if (is_string($k)) {
-                    $this->setHeader($k, $v);
+                    $this->setHeader($k, $v, $replace);
                 } else {
-                    $this->setHeader($v);
+                    $this->setHeader($v, null, $replace);
                 }
             }
         } else {
@@ -467,14 +483,27 @@ class HTTP_Request2 implements SplSubject
             }
             // Header name should be a token: http://tools.ietf.org/html/rfc2616#section-4.2
             if (preg_match(self::REGEXP_INVALID_TOKEN, $name)) {
-                throw new HTTP_Request2_Exception("Invalid header name '{$name}'");
+                throw new HTTP_Request2_LogicException(
+                    "Invalid header name '{$name}'",
+                    HTTP_Request2_Exception::INVALID_ARGUMENT
+                );
             }
             // Header names are case insensitive anyway
             $name = strtolower($name);
             if (null === $value) {
                 unset($this->headers[$name]);
+
             } else {
-                $this->headers[$name] = $value;
+                if (is_array($value)) {
+                    $value = implode(', ', array_map('trim', $value));
+                } elseif (is_string($value)) {
+                    $value = trim($value);
+                }
+                if (!isset($this->headers[$name]) || $replace) {
+                    $this->headers[$name] = $value;
+                } else {
+                    $this->headers[$name] .= ', ' . $value;
+                }
             }
         }
 
@@ -495,21 +524,39 @@ class HTTP_Request2 implements SplSubject
     }
 
    /**
-    * Appends a cookie to "Cookie:" header
+    * Adds a cookie to the request
+    *
+    * If the request does not have a CookieJar object set, this method simply
+    * appends a cookie to "Cookie:" header.
+    *
+    * If a CookieJar object is available, the cookie is stored in that object.
+    * Data from request URL will be used for setting its 'domain' and 'path'
+    * parameters, 'expires' and 'secure' will be set to null and false,
+    * respectively. If you need further control, use CookieJar's methods.
     *
     * @param    string  cookie name
     * @param    string  cookie value
     * @return   HTTP_Request2
-    * @throws   HTTP_Request2_Exception
+    * @throws   HTTP_Request2_LogicException
+    * @see      setCookieJar()
     */
     public function addCookie($name, $value)
     {
-        $cookie = $name . '=' . $value;
-        if (preg_match(self::REGEXP_INVALID_COOKIE, $cookie)) {
-            throw new HTTP_Request2_Exception("Invalid cookie: '{$cookie}'");
+        if (!empty($this->cookieJar)) {
+            $this->cookieJar->store(array('name' => $name, 'value' => $value),
+                                    $this->url);
+
+        } else {
+            $cookie = $name . '=' . $value;
+            if (preg_match(self::REGEXP_INVALID_COOKIE, $cookie)) {
+                throw new HTTP_Request2_LogicException(
+                    "Invalid cookie: '{$cookie}'",
+                    HTTP_Request2_Exception::INVALID_ARGUMENT
+                );
+            }
+            $cookies = empty($this->headers['cookie'])? '': $this->headers['cookie'] . '; ';
+            $this->setHeader('cookie', $cookies . $cookie);
         }
-        $cookies = empty($this->headers['cookie'])? '': $this->headers['cookie'] . '; ';
-        $this->setHeader('cookie', $cookies . $cookie);
 
         return $this;
     }
@@ -517,26 +564,29 @@ class HTTP_Request2 implements SplSubject
    /**
     * Sets the request body
     *
-    * @param    string  Either a string with the body or filename containing body
+    * If you provide file pointer rather than file name, it should support
+    * fstat() and rewind() operations.
+    *
+    * @param    string|resource|HTTP_Request2_MultipartBody  Either a string
+    *               with the body or filename containing body or pointer to
+    *               an open file or object with multipart body data
     * @param    bool    Whether first parameter is a filename
     * @return   HTTP_Request2
-    * @throws   HTTP_Request2_Exception
+    * @throws   HTTP_Request2_LogicException
     */
     public function setBody($body, $isFilename = false)
     {
-        if (!$isFilename) {
+        if (!$isFilename && !is_resource($body)) {
             if (!$body instanceof HTTP_Request2_MultipartBody) {
                 $this->body = (string)$body;
             } else {
                 $this->body = $body;
             }
         } else {
-            if (!($fp = @fopen($body, 'rb'))) {
-                throw new HTTP_Request2_Exception("Cannot open file {$body}");
-            }
-            $this->body = $fp;
+            $fileData = $this->fopenWrapper($body, empty($this->headers['content-type']));
+            $this->body = $fileData['fp'];
             if (empty($this->headers['content-type'])) {
-                $this->setHeader('content-type', self::detectMimeType($body));
+                $this->setHeader('content-type', $fileData['type']);
             }
         }
         $this->postParams = $this->uploads = array();
@@ -554,7 +604,7 @@ class HTTP_Request2 implements SplSubject
         if (self::METHOD_POST == $this->method &&
             (!empty($this->postParams) || !empty($this->uploads))
         ) {
-            if ('application/x-www-form-urlencoded' == $this->headers['content-type']) {
+            if (0 === strpos($this->headers['content-type'], 'application/x-www-form-urlencoded')) {
                 $body = http_build_query($this->postParams, '', '&');
                 if (!$this->getConfig('use_brackets')) {
                     $body = preg_replace('/%5B\d+%5D=/', '=', $body);
@@ -562,7 +612,7 @@ class HTTP_Request2 implements SplSubject
                 // support RFC 3986 by not encoding '~' symbol (request #15368)
                 return str_replace('%7E', '~', $body);
 
-            } elseif ('multipart/form-data' == $this->headers['content-type']) {
+            } elseif (0 === strpos($this->headers['content-type'], 'multipart/form-data')) {
                 require_once 'HTTP/Request2/MultipartBody.php';
                 return new HTTP_Request2_MultipartBody(
                     $this->postParams, $this->uploads, $this->getConfig('use_brackets')
@@ -581,25 +631,28 @@ class HTTP_Request2 implements SplSubject
     * If you just want to send the contents of a file as the body of HTTP
     * request you should use setBody() method.
     *
+    * If you provide file pointers rather than file names, they should support
+    * fstat() and rewind() operations.
+    *
     * @param    string  name of file-upload field
-    * @param    mixed   full name of local file
+    * @param    string|resource|array   full name of local file, pointer to
+    *               open file or an array of files
     * @param    string  filename to send in the request
     * @param    string  content-type of file being uploaded
     * @return   HTTP_Request2
-    * @throws   HTTP_Request2_Exception
+    * @throws   HTTP_Request2_LogicException
     */
     public function addUpload($fieldName, $filename, $sendFilename = null,
                               $contentType = null)
     {
         if (!is_array($filename)) {
-            if (!($fp = @fopen($filename, 'rb'))) {
-                throw new HTTP_Request2_Exception("Cannot open file {$filename}");
-            }
+            $fileData = $this->fopenWrapper($filename, empty($contentType));
             $this->uploads[$fieldName] = array(
-                'fp'        => $fp,
-                'filename'  => empty($sendFilename)? basename($filename): $sendFilename,
-                'size'      => filesize($filename),
-                'type'      => empty($contentType)? self::detectMimeType($filename): $contentType
+                'fp'        => $fileData['fp'],
+                'filename'  => !empty($sendFilename)? $sendFilename
+                                :(is_string($filename)? basename($filename): 'anonymous.blob') ,
+                'size'      => $fileData['size'],
+                'type'      => empty($contentType)? $fileData['type']: $contentType
             );
         } else {
             $fps = $names = $sizes = $types = array();
@@ -607,13 +660,12 @@ class HTTP_Request2 implements SplSubject
                 if (!is_array($f)) {
                     $f = array($f);
                 }
-                if (!($fp = @fopen($f[0], 'rb'))) {
-                    throw new HTTP_Request2_Exception("Cannot open file {$f[0]}");
-                }
-                $fps[]   = $fp;
-                $names[] = empty($f[1])? basename($f[0]): $f[1];
-                $sizes[] = filesize($f[0]);
-                $types[] = empty($f[2])? self::detectMimeType($f[0]): $f[2];
+                $fileData = $this->fopenWrapper($f[0], empty($f[2]));
+                $fps[]   = $fileData['fp'];
+                $names[] = !empty($f[1])? $f[1]
+                            :(is_string($f[0])? basename($f[0]): 'anonymous.blob');
+                $sizes[] = $fileData['size'];
+                $types[] = empty($f[2])? $fileData['type']: $f[2];
             }
             $this->uploads[$fieldName] = array(
                 'fp' => $fps, 'filename' => $names, 'size' => $sizes, 'type' => $types
@@ -722,6 +774,8 @@ class HTTP_Request2 implements SplSubject
     *                                   data is the headers sent (string)</li>
     *   <li>'sentBodyPart'            - after sending a part of the request body,
     *                                   data is the length of that part (int)</li>
+    *   <li>'sentBody'                - after sending the whole request body,
+    *                                   data is request body length (int)</li>
     *   <li>'receivedHeaders'         - after receiving the response headers,
     *                                   data is HTTP_Request2_Response object</li>
     *   <li>'receivedBodyPart'        - after receiving a part of the response
@@ -755,7 +809,7 @@ class HTTP_Request2 implements SplSubject
     *
     * @param    string|HTTP_Request2_Adapter
     * @return   HTTP_Request2
-    * @throws   HTTP_Request2_Exception
+    * @throws   HTTP_Request2_LogicException
     */
     public function setAdapter($adapter)
     {
@@ -768,17 +822,65 @@ class HTTP_Request2 implements SplSubject
                     include_once str_replace('_', DIRECTORY_SEPARATOR, $adapter) . '.php';
                 }
                 if (!class_exists($adapter, false)) {
-                    throw new HTTP_Request2_Exception("Class {$adapter} not found");
+                    throw new HTTP_Request2_LogicException(
+                        "Class {$adapter} not found",
+                        HTTP_Request2_Exception::MISSING_VALUE
+                    );
                 }
             }
             $adapter = new $adapter;
         }
         if (!$adapter instanceof HTTP_Request2_Adapter) {
-            throw new HTTP_Request2_Exception('Parameter is not a HTTP request adapter');
+            throw new HTTP_Request2_LogicException(
+                'Parameter is not a HTTP request adapter',
+                HTTP_Request2_Exception::INVALID_ARGUMENT
+            );
         }
         $this->adapter = $adapter;
 
         return $this;
+    }
+
+   /**
+    * Sets the cookie jar
+    *
+    * A cookie jar is used to maintain cookies across HTTP requests and
+    * responses. Cookies from jar will be automatically added to the request
+    * headers based on request URL.
+    *
+    * @param HTTP_Request2_CookieJar|bool   Existing CookieJar object, true to
+    *                                       create a new one, false to remove
+    */
+    public function setCookieJar($jar = true)
+    {
+        if (!class_exists('HTTP_Request2_CookieJar', false)) {
+            require_once 'HTTP/Request2/CookieJar.php';
+        }
+
+        if ($jar instanceof HTTP_Request2_CookieJar) {
+            $this->cookieJar = $jar;
+        } elseif (true === $jar) {
+            $this->cookieJar = new HTTP_Request2_CookieJar();
+        } elseif (!$jar) {
+            $this->cookieJar = null;
+        } else {
+            throw new HTTP_Request2_LogicException(
+                'Invalid parameter passed to setCookieJar()',
+                HTTP_Request2_Exception::INVALID_ARGUMENT
+            );
+        }
+
+        return $this;
+    }
+
+   /**
+    * Returns current CookieJar object or null if none
+    *
+    * @return HTTP_Request2_CookieJar|null
+    */
+    public function getCookieJar()
+    {
+        return $this->cookieJar;
     }
 
    /**
@@ -790,12 +892,17 @@ class HTTP_Request2 implements SplSubject
     public function send()
     {
         // Sanity check for URL
-        if (!$this->url instanceof Net_URL2) {
-            throw new HTTP_Request2_Exception('No URL given');
-        } elseif (!$this->url->isAbsolute()) {
-            throw new HTTP_Request2_Exception('Absolute URL required');
-        } elseif (!in_array(strtolower($this->url->getScheme()), array('https', 'http'))) {
-            throw new HTTP_Request2_Exception('Not a HTTP URL');
+        if (!$this->url instanceof Net_URL2
+            || !$this->url->isAbsolute()
+            || !in_array(strtolower($this->url->getScheme()), array('https', 'http'))
+        ) {
+            throw new HTTP_Request2_LogicException(
+                'HTTP_Request2 needs an absolute HTTP(S) request URL, '
+                . ($this->url instanceof Net_URL2
+                   ? 'none' : "'" . $this->url->__toString() . "'")
+                . ' given',
+                HTTP_Request2_Exception::INVALID_ARGUMENT
+            );
         }
         if (empty($this->adapter)) {
             $this->setAdapter($this->getConfig('adapter'));
@@ -828,6 +935,53 @@ class HTTP_Request2 implements SplSubject
             throw $e;
         }
         return $response;
+    }
+
+   /**
+    * Wrapper around fopen()/fstat() used by setBody() and addUpload()
+    *
+    * @param  string|resource file name or pointer to open file
+    * @param  bool            whether to try autodetecting MIME type of file,
+    *                         will only work if $file is a filename, not pointer
+    * @return array array('fp' => file pointer, 'size' => file size, 'type' => MIME type)
+    * @throws HTTP_Request2_LogicException
+    */
+    protected function fopenWrapper($file, $detectType = false)
+    {
+        if (!is_string($file) && !is_resource($file)) {
+            throw new HTTP_Request2_LogicException(
+                "Filename or file pointer resource expected",
+                HTTP_Request2_Exception::INVALID_ARGUMENT
+            );
+        }
+        $fileData = array(
+            'fp'   => is_string($file)? null: $file,
+            'type' => 'application/octet-stream',
+            'size' => 0
+        );
+        if (is_string($file)) {
+            $track = @ini_set('track_errors', 1);
+            if (!($fileData['fp'] = @fopen($file, 'rb'))) {
+                $e = new HTTP_Request2_LogicException(
+                    $php_errormsg, HTTP_Request2_Exception::READ_ERROR
+                );
+            }
+            @ini_set('track_errors', $track);
+            if (isset($e)) {
+                throw $e;
+            }
+            if ($detectType) {
+                $fileData['type'] = self::detectMimeType($file);
+            }
+        }
+        if (!($stat = fstat($fileData['fp']))) {
+            throw new HTTP_Request2_LogicException(
+                "fstat() call failed", HTTP_Request2_Exception::READ_ERROR
+            );
+        }
+        $fileData['size'] = $stat['size'];
+
+        return $fileData;
     }
 
    /**

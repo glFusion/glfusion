@@ -1,25 +1,21 @@
 <?php
-/*
- *  License Information:
- *
- *    Net_DNS:  A resolver library for PHP
- *    Copyright (c) 2002-2003 Eric Kilfoil eric@ypass.net
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License as published by the Free Software Foundation; either
- *    version 2.1 of the License, or (at your option) any later version.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
-
+/**
+*  License Information:
+*
+*  Net_DNS:  A resolver library for PHP
+*  Copyright (c) 2002-2003 Eric Kilfoil eric@ypass.net
+*  Maintainers:
+*  Marco Kaiser <bate@php.net>
+*  Florian Anderiasch <fa@php.net>
+*
+* PHP versions 4 and 5
+*
+* LICENSE: This source file is subject to version 3.01 of the PHP license
+* that is available through the world-wide-web at the following URI:
+* http://www.php.net/license/3_01.txt.  If you did not receive a copy of
+* the PHP License and are unable to obtain it through the web, please
+* send a note to license@php.net so we can mail you a copy immediately.
+*/
 
 /* Net_DNS_RR_AAAA object definition {{{ */
 /**
@@ -51,6 +47,8 @@ class Net_DNS_RR_AAAA extends Net_DNS_RR
 
         if ($offset) {
             $this->address = Net_DNS_RR_AAAA::ipv6_decompress(substr($this->rdata, 0, $this->rdlength));
+        } elseif (is_array($data)) {
+            $this->address = $data['address'];
         } else {
             if (strlen($data)) {
                 if (count($adata = explode(':', $data, 8)) >= 3) {
@@ -59,7 +57,7 @@ class Net_DNS_RR_AAAA extends Net_DNS_RR
                     $this->address = trim($data);
                 }
             }
-        } 
+        }
     }
 
     /* }}} */
@@ -83,12 +81,14 @@ class Net_DNS_RR_AAAA extends Net_DNS_RR
     function ipv6_compress($addr)
     {
         $numparts = count(explode(':', $addr));
-        if ($numparts < 3 || $numparts > 8 ||
-            !preg_match('/^([0-9A-F]{0,4}:){0,7}(:[0-9A-F]{0,4}){0,7}$/i', $addr)) {
+		if ($numparts < 3 || $numparts > 8 ) {
             /* Non-sensical IPv6 address */
             return pack('n8', 0, 0, 0, 0, 0, 0, 0, 0);
         }
         if (strpos($addr, '::') !== false) {
+			if (!preg_match('/^([0-9A-F]{0,4}:){0,7}(:[0-9A-F]{0,4}){0,7}$/i', $addr)) {
+				return pack('n8', 0, 0, 0, 0, 0, 0, 0, 0);
+			}
             /* First we have to normalize the address, turn :: into :0:0:0:0: */
             $filler = str_repeat(':0', 9 - $numparts) . ':';
             if (substr($addr, 0, 2) == '::') {
@@ -98,7 +98,10 @@ class Net_DNS_RR_AAAA extends Net_DNS_RR
                 $filler .= '0';
             }
             $addr = str_replace('::', $filler, $addr);
-        }
+        } elseif (!preg_match('/^([0-9A-F]{0,4}:){7}[0-9A-F]{0,4}$/i', $addr)) {
+			return pack('n8', 0, 0, 0, 0, 0, 0, 0, 0);
+		}
+
         $aparts = explode(':', $addr);
         return pack('n8', hexdec($aparts[0]), hexdec($aparts[1]), hexdec($aparts[2]), hexdec($aparts[3]),
                           hexdec($aparts[4]), hexdec($aparts[5]), hexdec($aparts[6]), hexdec($aparts[7]));

@@ -1,24 +1,21 @@
 <?php
-/*
- *  License Information:
- *
- *    Net_DNS:  A resolver library for PHP
- *    Copyright (c) 2002-2003 Eric Kilfoil eric@ypass.net
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License as published by the Free Software Foundation; either
- *    version 2.1 of the License, or (at your option) any later version.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
+/**
+*  License Information:
+*
+*  Net_DNS:  A resolver library for PHP
+*  Copyright (c) 2002-2003 Eric Kilfoil eric@ypass.net
+*  Maintainers:
+*  Marco Kaiser <bate@php.net>
+*  Florian Anderiasch <fa@php.net>
+*
+* PHP versions 4 and 5
+*
+* LICENSE: This source file is subject to version 3.01 of the PHP license
+* that is available through the world-wide-web at the following URI:
+* http://www.php.net/license/3_01.txt.  If you did not receive a copy of
+* the PHP License and are unable to obtain it through the web, please
+* send a note to license@php.net so we can mail you a copy immediately.
+*/
 
 /* Net_DNS_RR_NAPTR definition {{{ */
 /**
@@ -35,12 +32,12 @@ class Net_DNS_RR_NAPTR extends Net_DNS_RR
     var $ttl;
     var $rdlength;
     var $rdata;
-	var $order;
-	var $preference;
-	var $flags;
-	var $services;
-	var $regex;
-	var $replacement;
+    var $order;
+    var $preference;
+    var $flags;
+    var $services;
+    var $regex;
+    var $replacement;
 
     /* }}} */
     /* class constructor - RR(&$rro, $data, $offset = '') {{{ */
@@ -57,10 +54,12 @@ class Net_DNS_RR_NAPTR extends Net_DNS_RR
             if ($this->rdlength > 0) {
                 $a = unpack("@$offset/norder/npreference", $data);
                 $offset += 4;
+                $packet = new Net_DNS_Packet();
+
                 list($flags, $offset) = Net_DNS_Packet::label_extract($data, $offset);
                 list($services, $offset) = Net_DNS_Packet::label_extract($data, $offset);
                 list($regex, $offset) = Net_DNS_Packet::label_extract($data, $offset);
-                list($replacement, $offset) = Net_DNS_Packet::dn_expand($data, $offset);
+                list($replacement, $offset) = $packet->dn_expand($data, $offset);
 
                 $this->order = $a['order'];
                 $this->preference = $a['preference'];
@@ -69,10 +68,17 @@ class Net_DNS_RR_NAPTR extends Net_DNS_RR
                 $this->regex = $regex;
                 $this->replacement = $replacement;
             }
+        } elseif (is_array($data)) {
+            $this->order = $data['order'];
+            $this->preference = $data['preference'];
+            $this->flags = $data['flags'];
+            $this->services = $data['services'];
+            $this->regex = $data['regex'];
+            $this->replacement = $data['replacement'];
         } else {
             $data = str_replace('\\\\', chr(1) . chr(1), $data); /* disguise escaped backslash */
             $data = str_replace('\\"', chr(2) . chr(2), $data); /* disguise \" */
-            ereg('([0-9]+)[ \t]+([0-9]+)[ \t]+("[^"]*"|[^ \t]*)[ \t]+("[^"]*"|[^ \t]*)[ \t]+("[^"]*"|[^ \t]*)[ \t]+(.*?)[ \t]*$', $data, $regs);
+            preg_match('/([0-9]+)[ \t]+([0-9]+)[ \t]+("[^"]*"|[^ \t]*)[ \t]+("[^"]*"|[^ \t]*)[ \t]+("[^"]*"|[^ \t]*)[ \t]+(.*?)[ \t]*$/', $data, $regs);
             $this->preference = $regs[1];
             $this->weight = $regs[2];
             foreach($regs as $idx => $value) {
@@ -92,7 +98,7 @@ class Net_DNS_RR_NAPTR extends Net_DNS_RR
     function rdatastr()
     {
         if ($this->rdata) {
-            return intval($this->order) . ' ' . intval($this->preference) . ' "' . addslashes($this->flags) . '" "' . 
+            return intval($this->order) . ' ' . intval($this->preference) . ' "' . addslashes($this->flags) . '" "' .
                    addslashes($this->services) . '" "' . addslashes($this->regex) . '" "' . addslashes($this->replacement) . '"';
         } else return '; no data';
     }

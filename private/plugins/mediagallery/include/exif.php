@@ -447,7 +447,7 @@ function formatData($type,$tag,$intel,$data) {
 			if($data==2) $data = $LANG_MG04['datum_point'];
 		} else if ($tag == '8822') { // ExposureProgram
 			if($data==1) $data = $LANG_MG04['manual'];
-			else if($data==2) $data = $LANG_MG04['program'];
+			else if($data==2) $data = $LANG_MG04['Program'];
 			else if($data==3) $data = $LANG_MG04['aperature_priority'];
 			else if($data==4) $data = $LANG_MG04['shutter_priority'];
 			else if($data==5) $data = $LANG_MG04['program_creative'];

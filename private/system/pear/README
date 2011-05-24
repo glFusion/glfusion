@@ -5,16 +5,22 @@ here.
 
 Currently, glFusion uses the following PEAR packages:
 
-- PEAR
-- Date
+- Archive_Tar
+- Auth_SASL
+- Console_Getopt
+- HTTP_OAuth
 - HTTP_Request
-- Mail
+- HTTP_Request2
+- Net_DNS
 - Net_SMTP
 - Net_Socket
 - Net_URL
-- PHP_Compat
-- Text_Wiki
+- Net_URL2
+- PEAR
+- Services_ShortURL
+- Structures_Graph
 - XML_RPC
+- XML_Util
 
 The Archive and Console packages are included as they are used by the base PEAR
 package (e.g. when you try to update PEAR) but are not used by glFusion itself.

@@ -11,7 +11,8 @@
  * @category   Web Services
  * @package    XML_RPC
  * @author     Christian Weiske <cweiske@php.net>
- * @version    CVS: $Id$
+ * @license    http://www.php.net/license/3_01.txt  PHP License
+ * @version    SVN: $Id$
  * @link       http://pear.php.net/package/XML_RPC
  */
 
@@ -42,7 +43,8 @@ function XML_RPC_Dump($value)
  * @category   Web Services
  * @package    XML_RPC
  * @author     Christian Weiske <cweiske@php.net>
- * @version    Release: 1.5.1
+ * @license    http://www.php.net/license/3_01.txt  PHP License
+ * @version    Release: @package_version@
  * @link       http://pear.php.net/package/XML_RPC
  */
 class XML_RPC_Dump
@@ -69,7 +71,7 @@ class XML_RPC_Dump
      */
     function generateDump($value, $nLevel = 0)
     {
-        if (!is_object($value) && get_class($value) != 'xml_rpc_value') {
+        if (!is_object($value) || strtolower(get_class($value)) != 'xml_rpc_value') {
             require_once 'PEAR.php';
             PEAR::raiseError('Tried to dump non-XML_RPC_Value variable' . "\r\n",
                              0, PEAR_ERROR_PRINT);

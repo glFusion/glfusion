@@ -1,24 +1,21 @@
 <?php
-/*
- *  License Information:
- *
- *    Net_DNS:  A resolver library for PHP
- *    Copyright (c) 2002-2003 Eric Kilfoil eric@ypass.net
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License as published by the Free Software Foundation; either
- *    version 2.1 of the License, or (at your option) any later version.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
+/**
+*  License Information:
+*
+*  Net_DNS:  A resolver library for PHP
+*  Copyright (c) 2002-2003 Eric Kilfoil eric@ypass.net
+*  Maintainers:
+*  Marco Kaiser <bate@php.net>
+*  Florian Anderiasch <fa@php.net>
+*
+* PHP versions 4 and 5
+*
+* LICENSE: This source file is subject to version 3.01 of the PHP license
+* that is available through the world-wide-web at the following URI:
+* http://www.php.net/license/3_01.txt.  If you did not receive a copy of
+* the PHP License and are unable to obtain it through the web, please
+* send a note to license@php.net so we can mail you a copy immediately.
+*/
 
 /* Include files {{{ */
 require_once("Net/DNS/RR/A.php");
@@ -33,6 +30,8 @@ require_once("Net/DNS/RR/TXT.php");
 require_once("Net/DNS/RR/HINFO.php");
 require_once("Net/DNS/RR/SRV.php");
 require_once("Net/DNS/RR/NAPTR.php");
+require_once("Net/DNS/RR/RP.php");
+require_once("Net/DNS/RR/SPF.php");
 /* }}} */
 /* Net_DNS_RR object definition {{{ */
 /**
@@ -92,7 +91,7 @@ class Net_DNS_RR
     /* Net_DNS_RR::new_from_data($name, $ttl, $rrtype, $rrclass, $rdlength, $data, $offset) {{{ */
     function &new_from_data($name, $rrtype, $rrclass, $ttl, $rdlength, $data, $offset)
     {
-        $rr = &new Net_DNS_RR('getRR');
+        $rr = new Net_DNS_RR('getRR');
         $rr->name = $name;
         $rr->type = $rrtype;
         $rr->class = $rrclass;
@@ -110,13 +109,13 @@ class Net_DNS_RR
     /* Net_DNS_RR::new_from_string($rrstring, $update_type = '') {{{ */
     function &new_from_string($rrstring, $update_type = '')
     {
-        $rr = &new Net_DNS_RR('getRR');
+        $rr = new Net_DNS_RR('getRR');
         $ttl = 0;
         $parts = preg_split('/[\s]+/', $rrstring);
         while (count($parts) > 0) {
-			$s = array_shift($parts);
+            $s = array_shift($parts);
             if (!isset($name)) {
-                $name = ereg_replace('\.+$', '', $s);
+                $name = preg_replace('/\.+$/', '', $s);
             } else if (preg_match('/^\d+$/', $s)) {
                 $ttl = $s;
             } else if (!isset($rrclass) && ! is_null(Net_DNS::classesbyname(strtoupper($s)))) {
@@ -190,20 +189,23 @@ class Net_DNS_RR
 
             if (class_exists('Net_DNS_RR_' . $rrtype)) {
                 $scn = 'Net_DNS_RR_' . $rrtype;
-                return new $scn($rr, $rdata);
-            } else {
-                return $rr;
+
+                $obj = new $scn($rr, $rdata);
+                return $obj;
             }
-        } else {
-            return null;
+
+            return $rr;
+
         }
+
+        return null;
     }
 
     /* }}} */
     /* Net_DNS_RR::new_from_array($rrarray) {{{ */
     function &new_from_array($rrarray)
     {
-        $rr = &new Net_DNS_RR('getRR');
+        $rr = new Net_DNS_RR('getRR');
         foreach ($rrarray as $k => $v) {
             $rr->{strtolower($k)} = $v;
         }
@@ -223,12 +225,14 @@ class Net_DNS_RR
         if (strlen($rr->rdata)) {
             $rr->rdlength = strlen($rr->rdata);
         }
-        if (class_exists('Net_DNS_RR_' . $rr->rrtype)) {
-            $scn = 'Net_DNS_RR_' . $rr->rrtype;
-            return new $scn($rr, $rr->rdata);
-        } else {
-            return $rr;
+        if (class_exists('Net_DNS_RR_' . $rr->type)) {
+            $scn = 'Net_DNS_RR_' . $rr->type;
+
+            $obj = new $scn($rr, !empty($rr->rdata) ? $rr->rdata : $rrarray);
+            return $obj;
         }
+
+        return $rr;
     }
 
     /* }}} */

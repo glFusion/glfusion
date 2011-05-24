@@ -47,7 +47,7 @@ implements Services_ShortURL_Interface
      *
      * @var string $api The URL for the API
      */
-    protected $api = 'http://api.bit.ly';
+    protected $api = 'http://api.bitly.com';
 
     /**
      * Constructor
@@ -74,6 +74,9 @@ implements Services_ShortURL_Interface
                 'An apiKey is required for bit.ly'
             );
         }
+        if (!isset($this->options['domain'])) {
+            $this->options['domain'] = 'bit.ly';
+        }
     }
 
     /**
@@ -94,15 +97,60 @@ implements Services_ShortURL_Interface
             'login'   => $this->options['login'],
             'apiKey'  => $this->options['apiKey']        
         );
+        $params = array(
+            'version' => 'v3',
+            'format'  => 'xml',
+            'longUrl' => $url,
+            'domain'  => $this->options['domain'],
+            'login'   => $this->options['login'],
+            'apiKey'  => $this->options['apiKey']
+        );
+
 
         $sets = array();
         foreach ($params as $key => $val) {
-            $sets[] = $key . '=' . $val;
+            if ($key != 'version') {
+                $sets[] = $key . '=' . $val;
+            }
         }
 
-        $url = $this->api . '/shorten?' . implode('&', $sets);
+        $url = $this->api . '/' . $params['version']. '/shorten?' . implode('&', $sets);
         $xml = $this->sendRequest($url);
-        return (string)$xml->results->nodeKeyVal->shortUrl;
+        return (string)$xml->data->url;
+    }
+
+    /**
+     * Validate login credentials {@link http://bit.ly}
+     *
+     * @throws {@link Services_ShortURL_Exception}
+     * @return boolean True if credentials are valid/work.
+     * @see Services_ShortURL_Bitly::sendRequest()
+     */
+    public function validate()
+    {
+        $params = array(
+            'version'  => 'v3',
+            'format'   => 'xml',
+            'x_login'  => 'notbilytapi',
+            'x_apiKey' => 'not_apikey',
+            'login'    => $this->options['login'],
+            'apiKey'   => $this->options['apiKey']
+        );
+
+        $sets = array();
+        foreach ($params as $key => $val) {
+            if ($key != 'version') {
+            $sets[] = $key . '=' . $val;
+        }
+        }
+
+        $url = $this->api . '/' . $params['version']. '/validate?' . implode('&', $sets);
+        $xml = $this->sendRequest($url);
+        if ($xml->status_txt == 'OK') {
+            return true;
+        } else {
+            throw new Services_ShortURL_Exception($xml->status_txt);
+        }
     }
 
     /**

@@ -1,24 +1,21 @@
 <?php
-/*
- *  License Information:
- *
- *    Net_DNS:  A resolver library for PHP
- *    Copyright (c) 2002-2003 Eric Kilfoil eric@ypass.net
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License as published by the Free Software Foundation; either
- *    version 2.1 of the License, or (at your option) any later version.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
+/**
+*  License Information:
+*
+*  Net_DNS:  A resolver library for PHP
+*  Copyright (c) 2002-2003 Eric Kilfoil eric@ypass.net
+*  Maintainers:
+*  Marco Kaiser <bate@php.net>
+*  Florian Anderiasch <fa@php.net>
+*
+* PHP versions 4 and 5
+*
+* LICENSE: This source file is subject to version 3.01 of the PHP license
+* that is available through the world-wide-web at the following URI:
+* http://www.php.net/license/3_01.txt.  If you did not receive a copy of
+* the PHP License and are unable to obtain it through the web, please
+* send a note to license@php.net so we can mail you a copy immediately.
+*/
 
 /*  Net_DNS_Header object definition {{{ */
 /**
@@ -132,7 +129,7 @@ class Net_DNS_Header
     /* class constructor - Net_DNS_Header($data = "") {{{ */
     /**
      * Initializes the default values for the Header object.
-     * 
+     *
      * Builds a header object from either default values, or from a DNS
      * packet passed into the constructor as $data
      *
@@ -142,14 +139,28 @@ class Net_DNS_Header
      */
     function Net_DNS_Header($data = '')
     {
-        if ($data != '') {
+        if (empty($data)) {
+            $this->id      = Net_DNS_Resolver::nextid();
+            $this->qr      = 0;
+            $this->opcode  = 0;
+            $this->aa      = 0;
+            $this->tc      = 0;
+            $this->rd      = 1;
+            $this->ra      = 0;
+            $this->rcode   = 0;
+            $this->qdcount = 1;
+            $this->ancount = 0;
+            $this->nscount = 0;
+            $this->arcount = 0;
+        } else {
             /*
              * The header MUST be at least 12 bytes.
              * Passing the full datagram to this constructor
              * will examine only the header section of the DNS packet
              */
-            if (strlen($data) < 12)
+            if (strlen($data) < 12) {
                 return false;
+            }
 
             $a = unpack('nid/C2flags/n4counts', $data);
             $this->id      = $a['id'];
@@ -165,26 +176,14 @@ class Net_DNS_Header
             $this->nscount = $a['counts3'];
             $this->arcount = $a['counts4'];
         }
-        else {
-            $this->id      = Net_DNS_Resolver::nextid();
-            $this->qr      = 0;
-            $this->opcode  = 0;
-            $this->aa      = 0;
-            $this->tc      = 0;
-            $this->rd      = 1;
-            $this->ra      = 0;
-            $this->rcode   = 0;
-            $this->qdcount = 1;
-            $this->ancount = 0;
-            $this->nscount = 0;
-            $this->arcount = 0;
-        }
 
-        if (Net_DNS::opcodesbyval($this->opcode)) {
-            $this->opcode = Net_DNS::opcodesbyval($this->opcode);
+
+        $dns = new Net_DNS();
+        if ($dns->opcodesbyval($this->opcode)) {
+            $this->opcode = $dns->opcodesbyval($this->opcode);
         }
-        if (Net_DNS::rcodesbyval($this->rcode)) {
-            $this->rcode = Net_DNS::rcodesbyval($this->rcode);
+        if ($dns->rcodesbyval($this->rcode)) {
+            $this->rcode = $dns->rcodesbyval($this->rcode);
         }
     }
 
@@ -217,7 +216,7 @@ class Net_DNS_Header
             $retval .= ';; qr = ' . $this->qr . '    ' .
                 'opcode = ' . $this->opcode . '    '   .
                 'rcode = ' . $this->rcode . "\n";
-            $retval .= ';; zocount = ' . $this->qdcount . '  ' .  
+            $retval .= ';; zocount = ' . $this->qdcount . '  ' .
                 'prcount = ' . $this->ancount . '  '           .
                 'upcount = ' . $this->nscount . '  '           .
                 'adcount = ' . $this->arcount . "\n";
@@ -252,8 +251,9 @@ class Net_DNS_Header
      */
     function data()
     {
-        $opcode = Net_DNS::opcodesbyname($this->opcode);
-        $rcode  = Net_DNS::rcodesbyname($this->rcode);
+        $dns = new Net_DNS();
+        $opcode = $dns->opcodesbyname($this->opcode);
+        $rcode  = $dns->rcodesbyname($this->rcode);
 
         $byte2 = ($this->qr << 7)
             | ($opcode << 3)

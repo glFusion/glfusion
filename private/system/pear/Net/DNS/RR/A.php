@@ -1,25 +1,21 @@
 <?php
-/*
- *  License Information:
- *
- *    Net_DNS:  A resolver library for PHP
- *    Copyright (c) 2002-2003 Eric Kilfoil eric@ypass.net
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License as published by the Free Software Foundation; either
- *    version 2.1 of the License, or (at your option) any later version.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
-
+/**
+*  License Information:
+*
+*  Net_DNS:  A resolver library for PHP
+*  Copyright (c) 2002-2003 Eric Kilfoil eric@ypass.net
+*  Maintainers:
+*  Marco Kaiser <bate@php.net>
+*  Florian Anderiasch <fa@php.net>
+*
+* PHP versions 4 and 5
+*
+* LICENSE: This source file is subject to version 3.01 of the PHP license
+* that is available through the world-wide-web at the following URI:
+* http://www.php.net/license/3_01.txt.  If you did not receive a copy of
+* the PHP License and are unable to obtain it through the web, please
+* send a note to license@php.net so we can mail you a copy immediately.
+*/
 
 /* Net_DNS_RR_A object definition {{{ */
 /**
@@ -60,8 +56,10 @@ class Net_DNS_RR_A extends Net_DNS_RR
                     $aparts['b4'];
                 $this->address = $addr;
             }
+        } elseif (is_array($data)) {
+            $this->address = $data['address'];
         } else {
-            if (strlen($data) && ereg("([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)[ \t]*$", $data, $regs)) {
+            if (strlen($data) && preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)[ \t]*$/", $data, $regs)) {
                 if (($regs[1] >= 0 && $regs[1] <= 255) &&
                         ($regs[2] >= 0 && $regs[2] <= 255) &&
                         ($regs[3] >= 0 && $regs[3] <= 255) &&
@@ -69,7 +67,7 @@ class Net_DNS_RR_A extends Net_DNS_RR
                     $this->address = $regs[1] . '.' . $regs[2] . '.' . $regs[3] . '.' .$regs[4];
                 }
             }
-        } 
+        }
     }
 
     /* }}} */
@@ -85,7 +83,7 @@ class Net_DNS_RR_A extends Net_DNS_RR
     /* Net_DNS_RR_A::rr_rdata($packet, $offset) {{{ */
     function rr_rdata($packet, $offset)
     {
-        $aparts = split('\.', $this->address);
+        $aparts = explode('.', $this->address);
         if (count($aparts) == 4) {
             return pack('c4', $aparts[0], $aparts[1], $aparts[2], $aparts[3]);
         }

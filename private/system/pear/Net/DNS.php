@@ -34,7 +34,7 @@
 * @author     Eric Kilfoil <edk@ypass.net>
 * @author     Marco Kaiser <bate@php.net>
 * @author     Florian Anderiasch <fa@php.net>
-* @copyright  1997-2005 The PHP Group
+* @copyright  The PHP Group
 * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
 * @version    CVS: $Id$
 * @link       http://pear.php.net/package/Net_DNS
@@ -87,13 +87,13 @@ class Net_DNS
     /* }}} */
     /* class constructor - Net_DNS() {{{ */
 
-	/**
+    /**
      * Initializes a resolver object
      *
      * @see Net_DNS_Resolver
-	 * @param array $defaults
-	 * @return Net_DNS
-	 */
+     * @param array $defaults
+     * @return Net_DNS
+     */
     function Net_DNS($defaults = array())
     {
         $this->resolver = new Net_DNS_Resolver($defaults);
@@ -280,6 +280,7 @@ class Net_DNS
      *   <li>ATMA
      *   <li>NAPTR
      *   <li>TSIG
+     *   <li>SPF
      *   <li>UINFO
      *   <li>UID
      *   <li>GID
@@ -333,6 +334,7 @@ class Net_DNS
                 'SRV'           => 33,
                 'ATMA'          => 34,
                 'NAPTR'         => 35,
+                'SPF'           => 99,
                 'UINFO'         => 100,
                 'UID'           => 101,
                 'GID'           => 102,
@@ -399,6 +401,7 @@ class Net_DNS
                 33 => 'SRV',
                 34 => 'ATMA',
                 35 => 'NAPTR',
+                99 => 'SPF',
                 100 => 'UINFO',
                 101 => 'UID',
                 102 => 'GID',
