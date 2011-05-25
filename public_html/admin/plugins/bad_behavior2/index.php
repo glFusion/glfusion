@@ -9,9 +9,9 @@
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
-// | Copyright (C) 2005-2008 Michael Hampton                                  |
+// | Copyright (C) 2005-2011 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -37,7 +37,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once ('../../../lib-common.php');
+require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
 
 $display = '';
@@ -54,6 +54,8 @@ if (!SEC_inGroup ('Bad Behavior2 Admin')) {
     exit;
 }
 
+USES_lib_admin();
+
 require_once $_CONF['path_html'] . '/bad_behavior2/bad-behavior-glfusion.php';
 
 /**
@@ -63,9 +65,9 @@ require_once $_CONF['path_html'] . '/bad_behavior2/bad-behavior-glfusion.php';
 * @return   string          HTML for list of entries
 *
 */
-function listEntries ($page = 1, $msg = '')
+function _bb_listEntries ($page = 1, $msg = '')
 {
-    global $_CONF, $LANG_BAD_BEHAVIOR, $LANG_BB2_RESPONSE;
+    global $_CONF, $_TABLES, $LANG_BAD_BEHAVIOR, $LANG_BB2_RESPONSE, $LANG_ADMIN;
 
     $retval = '';
 
@@ -80,8 +82,27 @@ function listEntries ($page = 1, $msg = '')
         $page = 1;
     }
 
-    $retval .= COM_startBlock ($LANG_BAD_BEHAVIOR['block_title_list'], '',
+    $donate = $LANG_BAD_BEHAVIOR['description'];
+    if (DB_getItem ($_TABLES['vars'], 'value',"name = 'bad_behavior2.donate'") == 1) {
+        $donate .= '<p>' . $LANG_BAD_BEHAVIOR['donate_msg'] . '</p>' . LB;
+    }
+
+    // writing the menu on top
+    $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
+
+    $retval .= COM_startBlock ($LANG_BAD_BEHAVIOR['plugin_display_name'] . ' - ' . $LANG_BAD_BEHAVIOR['block_title_list'], '',
                                COM_getBlockTemplate ('_admin_block', 'header'));
+
+    $retval .= ADMIN_createMenu(
+        $menu_arr,
+        $donate,
+        $_CONF['site_url'] . '/bad_behavior2/images/bad_behavior2.png'
+    );
+    $retval .= '<br />';
+
 
     if (!empty ($msg)) {
         $retval .= COM_showMessage ($msg, 'bad_behavior2');
@@ -89,24 +110,22 @@ function listEntries ($page = 1, $msg = '')
 
     $templates = new Template ($_CONF['path'] . 'plugins/'
                                . BAD_BEHAVIOR_PLUGIN . '/templates');
-    $templates->set_file (array ('list' => 'log.thtml',
-                                 'row'  => 'logitem.thtml'
-                         ));
-    $templates->set_var ('site_url', $_CONF['site_url']);
-    $templates->set_var ('site_admin_url', $_CONF['site_admin_url']);
-    $templates->set_var ('layout_url', $_CONF['layout_url']);
+    $templates->set_file ('list','log.thtml');
 
-    $templates->set_var ('lang_ip', $LANG_BAD_BEHAVIOR['row_ip']);
-    $templates->set_var ('lang_user_agent', $LANG_BAD_BEHAVIOR['row_user_agent']);
-    $templates->set_var ('lang_referer', $LANG_BAD_BEHAVIOR['row_referer']);
-    $templates->set_var ('lang_reason', $LANG_BAD_BEHAVIOR['row_reason']);
-    $templates->set_var ('lang_response', $LANG_BAD_BEHAVIOR['row_response']);
-    $templates->set_var ('lang_method', $LANG_BAD_BEHAVIOR['row_method']);
-    $templates->set_var ('lang_protocol', $LANG_BAD_BEHAVIOR['row_protocol']);
-    $templates->set_var ('lang_date', $LANG_BAD_BEHAVIOR['row_date']);
+    $templates->set_var (array(
+            'lang_ip'   => $LANG_BAD_BEHAVIOR['row_ip'],
+            'lang_user_agent'   => $LANG_BAD_BEHAVIOR['row_user_agent'],
+            'lang_referer'      => $LANG_BAD_BEHAVIOR['row_referer'],
+            'lang_reason'       => $LANG_BAD_BEHAVIOR['row_reason'],
+            'lang_response'     => $LANG_BAD_BEHAVIOR['row_response'],
+            'lang_method'       => $LANG_BAD_BEHAVIOR['row_method'],
+            'lang_protocol'     => $LANG_BAD_BEHAVIOR['row_protocol'],
+            'lang_date'         => $LANG_BAD_BEHAVIOR['row_date']));
 
     $result = DB_query ("SELECT id,ip,date,request_method,request_uri,server_protocol,http_headers,user_agent,request_entity,`key` FROM " . WP_BB_LOG . " ORDER BY date DESC LIMIT $start,50");
     $num = DB_numRows ($result);
+
+    $templates->set_block('list','logrow','lrow');
 
     for ($i = 0; $i < $num; $i++) {
         $A = DB_fetchArray ($result);
@@ -116,18 +135,19 @@ function listEntries ($page = 1, $msg = '')
             $A[$key] = htmlspecialchars ($val);
         }
 
-        $templates->set_var ('row_num', $lcount);
-        $templates->set_var ('cssid', ($i % 2) + 1);
-        $templates->set_var ('id', $A['id']);
-        $templates->set_var ('ip', $A['ip']);
-        $templates->set_var ('request_method', $A['request_method']);
-        $templates->set_var ('http_host', $A['request_uri']);
-        $templates->set_var ('server_protocol', $A['server_protocol']);
-        $templates->set_var ('http_referer', $A['http_headers']);
-        $templates->set_var ('reason', $LANG_BB2_RESPONSE[$A['key']]);
-        $templates->set_var ('http_user_agent', $A['user_agent']);
-        $templates->set_var ('http_response', $A['request_entity']);
-        $templates->set_var ('date_and_time', $A['date']);
+        $templates->set_var (array(
+                'row_num'           => $lcount,
+                'cssid'             => ($i % 2) + 1,
+                'id'                => $A['id'],
+                'ip'                => $A['ip'],
+                'request_method'    => $A['request_method'],
+                'http_host'         => $A['request_uri'],
+                'server_protocol'   => $A['server_protocol'],
+                'http_referer'      => $A['http_headers'],
+                'reason'            => $LANG_BB2_RESPONSE[$A['key']],
+                'http_user_agent'   => $A['user_agent'],
+                'http_response'     => $A['request_entity'],
+                'date_and_time'     => $A['date']));
 
         $url = $_CONF['site_admin_url'] . '/plugins/' . BAD_BEHAVIOR_PLUGIN
              . '/index.php?mode=view&amp;id=' . $A['id'];
@@ -149,8 +169,9 @@ function listEntries ($page = 1, $msg = '')
             $templates->set_var ('end_ip_lookup_anchortag', '');
         }
 
-        $templates->parse ('log_row', 'row', true);
+        $templates->parse('lrow', 'logrow',true);
     }
+
     if ($entries > 50) {
         $baseurl = $_CONF['site_admin_url'] . '/plugins/' . BAD_BEHAVIOR_PLUGIN
                  . '/index.php?mode=list';
@@ -175,22 +196,45 @@ function listEntries ($page = 1, $msg = '')
 * @return   string          HTML for the entry details
 *
 */
-function viewEntry ($id, $page = 1)
+function _bb_viewEntry ($id, $page = 1)
 {
-    global $_CONF, $LANG_BAD_BEHAVIOR,$LANG_BB2_RESPONSE;
+    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_BAD_BEHAVIOR,$LANG_BB2_RESPONSE;
 
     $retval = '';
 
-    $retval .= COM_startBlock ($LANG_BAD_BEHAVIOR['block_title_entry'], '',
-                               COM_getBlockTemplate ('_admin_block', 'header'));
-    $templates = new Template ($_CONF['path'] . 'plugins/'
-                               . BAD_BEHAVIOR_PLUGIN . '/templates');
-    $templates->set_file (array ('entry' => 'entry.thtml'));
-    $templates->set_var ('site_url', $_CONF['site_url']);
-    $templates->set_var ('site_admin_url', $_CONF['site_admin_url']);
-    $templates->set_var ('layout_url', $_CONF['layout_url']);
-    $templates->set_var ('id', $id);
+    $donate = $LANG_BAD_BEHAVIOR['description'];
 
+    if (DB_getItem ($_TABLES['vars'], 'value',"name = 'bad_behavior2.donate'") == 1) {
+        $donate .= '<p>' . $LANG_BAD_BEHAVIOR['donate_msg'] . '</p>' . LB;
+    }
+
+    $backlink = $_CONF['site_admin_url'] . '/plugins/' . BAD_BEHAVIOR_PLUGIN
+                . '/index.php?mode=list';
+    if ($page > 1) {
+        $backlink .= '&amp;page=' . $page;
+    }
+
+    // writing the menu on top
+    $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/plugins/bad_behavior2/index.php?mode=list',
+              'text' => 'Log Entries'),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
+
+    $retval .= COM_startBlock ($LANG_BAD_BEHAVIOR['plugin_display_name'] . ' - ' . $LANG_BAD_BEHAVIOR['block_title_entry'], '',
+                               COM_getBlockTemplate ('_admin_block', 'header'));
+
+    $retval .= ADMIN_createMenu(
+        $menu_arr,
+        $donate,
+        $_CONF['site_url'] . '/bad_behavior2/images/bad_behavior2.png'
+    );
+    $retval .= '<br />';
+
+    $templates = new Template ($_CONF['path'] . 'plugins/'. BAD_BEHAVIOR_PLUGIN . '/templates');
+    $templates->set_file ('entry','entry.thtml');
+    $templates->set_var ('id', $id);
     $templates->set_var ('lang_ip', $LANG_BAD_BEHAVIOR['row_ip']);
     $templates->set_var ('lang_user_agent', $LANG_BAD_BEHAVIOR['row_user_agent']);
     $templates->set_var ('lang_referer', $LANG_BAD_BEHAVIOR['row_referer']);
@@ -232,15 +276,6 @@ function viewEntry ($id, $page = 1)
         $templates->set_var ('end_ip_lookup_anchortag', '');
     }
 
-    $backlink = $_CONF['site_admin_url'] . '/plugins/' . BAD_BEHAVIOR_PLUGIN
-                . '/index.php?mode=list';
-    if ($page > 1) {
-        $backlink .= '&amp;page=' . $page;
-    }
-    $templates->set_var ('start_backlink_anchortag', '<a href="' . $backlink
-                                                      . '">');
-    $templates->set_var ('end_backlink_anchortag', '</a>');
-
     $templates->parse('output', 'entry');
     $retval .= $templates->finish($templates->get_var('output'));
     $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
@@ -255,34 +290,19 @@ $display .= COM_siteHeader ('menu', $LANG_BAD_BEHAVIOR['page_title']);
 if ( isset($_GET['mode']) ) {
     $mode = COM_applyFilter ($_GET['mode']);
 } else {
-    $mode = '';
+    $mode = 'list';
 }
+
 if ($mode == 'list') {
     $page = isset($_GET['page']) ? COM_applyFilter ($_GET['page'], true) : 0;
-    $display .= listEntries ($page);
+    $display .= _bb_listEntries ($page);
 } else if ($mode == 'view') {
     $id = isset($_GET['id']) ? COM_applyFilter ($_GET['id'], true) : 0;
     $page = isset($_GET['page']) ? COM_applyFilter ($_GET['page'], true) : 0;
-    $display .= viewEntry ($id, $page);
+    $display .= _bb_viewEntry ($id, $page);
 } else {
-    $rightblocks = true;
-    $display .= COM_startBlock ($LANG_BAD_BEHAVIOR['block_title_admin'], '',
-                            COM_getBlockTemplate ('_admin_block', 'header'));
-    $entries = DB_count (WP_BB_LOG);
-    if ($entries > 0) {
-        $display .= '<p><a href="' . $_CONF['site_admin_url'] . '/plugins/' . BAD_BEHAVIOR_PLUGIN . '/index.php?mode=list">' . sprintf ($LANG_BAD_BEHAVIOR['list_entries'], $entries) . '</a></p>' . LB;
-    } else {
-        $display .= '<p>' . $LANG_BAD_BEHAVIOR['list_no_entries'] . '</p>' . LB;
-    }
-    $display .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
-
-    if (DB_getItem ($_TABLES['vars'], 'value',
-            "name = 'bad_behavior2.donate'") == 1) {
-        $display .= COM_startBlock ($LANG_BAD_BEHAVIOR['block_title_donate'], '', COM_getBlockTemplate ('_admin_block', 'header'));
-        $display .= '<p>' . $LANG_BAD_BEHAVIOR['donate_msg'] . '</p>' . LB;
-        $display .= COM_endBlock (COM_getBlockTemplate ('_admin_block',
-                                                        'footer'));
-    }
+    $page = isset($_GET['page']) ? COM_applyFilter ($_GET['page'], true) : 0;
+    $display .= _bb_listEntries ($page);
 }
 
 $display .= COM_siteFooter ($rightblocks);

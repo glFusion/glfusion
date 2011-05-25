@@ -7,6 +7,25 @@
         <th align="left">{lang_user_agent}</th>
         <th align="left">{lang_reason}</th>
     </tr>
+<!-- BEGIN logrow -->
+    <tr class="pluginRow{cssid}" onMouseOver="className='pluginRollOver';" onMouseOut="className='pluginRow{cssid}';">
+        <td align="right">
+            {start_headers_anchortag}{row_num}{end_headers_anchortag}
+        </td>
+        <td align="left">
+            {start_ip_lookup_anchortag}{ip}{end_ip_lookup_anchortag}
+        </td>
+        <td align="left">
+            {date_and_time}
+        </td>
+        <td align="left">
+            {http_user_agent}
+        </td>
+        <td align="left">
+            {reason}
+        </td>
+    </tr>
+<!-- END logrow -->
 {log_row}
 </table>
 {google_paging}

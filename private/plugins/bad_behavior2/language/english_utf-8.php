@@ -11,7 +11,7 @@
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2009 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -45,7 +45,8 @@ $LANG_BAD_BEHAVIOR = array (
     'plugin_display_name'   => 'Bad Behavior2',
     'page_title'            => 'Bad Behavior2',
     'block_title_admin'     => 'Bad Behavior2 Administration',
-    'block_title_list'      => 'Bad Behavior2 Log entries',
+    'description'           => 'Bad Behavior complements other link spam solutions by acting as a gatekeeper, preventing spammers from ever delivering their junk, and in many cases, from ever reading your site in the first place. This keeps your site\'s load down, makes your site logs cleaner, and can help prevent denial of service conditions caused by spammers.',
+    'block_title_list'      => 'Log entries',
     'block_title_entry'     => 'Entry details',
     'block_title_donate'    => 'Donate',
     'list_entries'          => 'Show log entries (%d)',

@@ -6,6 +6,4 @@
 <pre>{http_headers}</pre>
 {lang_response}:<br>
 <pre>{http_response}</pre>
-
-<p>{start_backlink_anchortag}{lang_back}{end_backlink_anchortag}</p>
 {# end {templatelocation} #}
