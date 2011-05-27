@@ -65,11 +65,18 @@ $LANG_FM00 = array(
 );
 
 $LANG_FM02 = array(
+    'instructions' => 'To modify or delete a file, click on the files\'s edit icon below. To view or modify categories, select the Categories option above.',
     'nav1' => 'Configuraci&oacute;n',
     'nav2' => 'Categor&iacute;as',
     'nav3' => 'A&ntilde;adir fichero',
     'nav4' => 'Descargas (%s)',
-    'nav5' => 'Ficheros rotos (%s)'
+    'nav5' => 'Ficheros rotos (%s)',
+    'edit'  => 'Edit',
+    'file'  => 'Filename',
+    'category' => 'Category Name',
+    'version' => 'Version',
+    'size'  => 'Size',
+    'date' => 'Date',
 );
 
 $LANG_FILEMGMT = array(

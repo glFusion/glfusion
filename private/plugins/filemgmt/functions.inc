@@ -140,7 +140,7 @@ function plugin_chkVersion_filemgmt() {
 * Called by the plugin Editor to run the SQL Update for a plugin update
 */
 function plugin_upgrade_filemgmt() {
-    global $_CONF, $_TABLES,$_FM_TABLES,$CONF_FM;
+    global $_CONF, $_TABLES,$_TABLES,$CONF_FM;
 
     require_once $_CONF['path'] . 'plugins/filemgmt/upgrade.php';
 
@@ -188,7 +188,7 @@ function plugin_commentsupport_filemgmt()
  * @return  mixed   HTML string (redirect?) for success or comment form if failure.
  */
 function plugin_savecomment_filemgmt($title,$comment,$id,$pid,$postmode) {
-    global $_CONF,$_FM_TABLES, $LANG03, $_TABLES;
+    global $_CONF,$_TABLES, $LANG03, $_TABLES;
 
     $title = strip_tags ($title);
     $pid = COM_applyFilter ($pid, true);
@@ -203,7 +203,7 @@ function plugin_savecomment_filemgmt($title,$comment,$id,$pid,$postmode) {
             . COM_siteFooter();
     } else { // success
         $comments = DB_count ($_TABLES['comments'], 'sid', DB_escapeString($id));
-        DB_change($_FM_TABLES['filemgmt_filedetail'],'comments', $comments, 'lid',DB_escapeString($id));
+        DB_change($_TABLES['filemgmt_filedetail'],'comments', $comments, 'lid',DB_escapeString($id));
         return (COM_refresh (COM_buildUrl ($_CONF['site_url']
             . "/filemgmt/index.php?id=$id")) );
     }
@@ -223,7 +223,7 @@ function plugin_editcomment_filemgmt($cid,$id) {
  * @param   string  $id     Item id to which $cid belongs
  * @return  mixed   false for failure, HTML string (redirect?) for success
  */function plugin_deletecomment_filemgmt($cid,$id) {
-    global $_CONF,$_FM_TABLES, $_TABLES;
+    global $_CONF,$_TABLES, $_TABLES;
 
     if (SEC_hasRights("filemgmt.edit")) {
         if (CMT_deleteComment($cid, $id, 'filemgmt') == 0) {
@@ -252,7 +252,7 @@ function plugin_editcomment_filemgmt($cid,$id) {
  * @return  mixed   results of calling the CMT_userComments function
  */
 function plugin_displaycomment_filemgmt($id,$commentid,$title,$order,$format,$page,$view) {
-    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_FM_TABLES, $_CONF, $LANG01,$_DB_name;
+    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_TABLES, $_CONF, $LANG01,$_DB_name;
 
 
     if ( COM_isAnonUser() && $mydownloads_publicpriv != 1 )  {
@@ -269,14 +269,14 @@ function plugin_displaycomment_filemgmt($id,$commentid,$title,$order,$format,$pa
     $comments = true;   // Checked in filemgmt code in dlformat.php
 
     $myts = new MyTextSanitizer; // MyTextSanitizer object
-    $mytree = new XoopsTree($_DB_name,$_FM_TABLES['filemgmt_cat'],"cid","pid");
+    $mytree = new XoopsTree($_DB_name,$_TABLES['filemgmt_cat'],"cid","pid");
 
     $display = COM_startBlock("<b>". $LANG_FILEMGMT['plugin_name'] ."</b>");
     $fields = 'd.lid, d.cid, d.title, d.url, d.homepage, d.version, d.size, d.logourl,';
     $fields .= 'd.submitter, d.status, d.date, d.hits, d.rating, d.votes, t.description';
 
-    $sql = "SELECT $fields FROM {$_FM_TABLES['filemgmt_filedetail']} d, ";
-    $sql .= "{$_FM_TABLES['filemgmt_filedesc']} t ";
+    $sql = "SELECT $fields FROM {$_TABLES['filemgmt_filedetail']} d, ";
+    $sql .= "{$_TABLES['filemgmt_filedesc']} t ";
     $sql .= "WHERE d.lid='".DB_escapeString($id)."' AND d.lid=t.lid AND status > 0";
     $result=DB_query($sql);
     list($lid, $cid, $dtitle, $url, $homepage, $version, $size, $logourl, $submitter, $status, $time, $hits, $rating, $votes, $description)=DB_fetchARRAY($result);
@@ -335,14 +335,14 @@ function plugin_displaycomment_filemgmt($id,$commentid,$title,$order,$format,$pa
 
 function plugin_statssummary_filemgmt ()
 {
-    global $_USER, $mydownloads_publicpriv, $_FM_TABLES, $LANG_FILEMGMT;
+    global $_USER, $mydownloads_publicpriv, $_TABLES, $LANG_FILEMGMT;
 
     if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
         return '';
     }
 
-    $sql = "SELECT COUNT(*), SUM(hits) FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
-    $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
+    $sql = "SELECT COUNT(*), SUM(hits) FROM {$_TABLES['filemgmt_filedetail']} a ";
+    $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
     $sql .= filemgmt_buildAccessSql('WHERE');
     list($total_files,$total_downloads) = DB_fetchArray( DB_query($sql));
 
@@ -360,7 +360,7 @@ function plugin_statssummary_filemgmt ()
 */
 function plugin_showstats_filemgmt($showsitestats)
 {
-    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_FM_TABLES, $_CONF;
+    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_CONF;
 
     if ( COM_isAnonUser() && $mydownloads_publicpriv != 1 )  {
         return '';
@@ -372,8 +372,8 @@ function plugin_showstats_filemgmt($showsitestats)
     $stat_templates->set_file(array('itemstats'=>'itemstatistics.thtml',
                             'statrow'=>'singlestat.thtml'));
     if ($showsitestats == 1) {
-        $sql = "SELECT COUNT(*), SUM(hits) FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
-        $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
+        $sql = "SELECT COUNT(*), SUM(hits) FROM {$_TABLES['filemgmt_filedetail']} a ";
+        $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
         $sql .= filemgmt_buildAccessSql('WHERE');
         list($total_files,$total_downloads) = DB_fetchArray( DB_query($sql));
         $retval = "<table border = '0' width='100%' cellspacing='0' cellpadding='0'>";
@@ -389,8 +389,8 @@ function plugin_showstats_filemgmt($showsitestats)
                           'title'        => 'Top Ten Downloaded Files',
         );
 
-        $sql  = "SELECT a.lid, a.title, hits from {$_FM_TABLES['filemgmt_filedetail']} a ";
-        $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
+        $sql  = "SELECT a.lid, a.title, hits from {$_TABLES['filemgmt_filedetail']} a ";
+        $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
         $sql .= filemgmt_buildAccessSql('WHERE');
         $sql .= " AND hits > 0 ORDER BY hits desc LIMIT 10";
         $result = DB_query($sql);
@@ -444,7 +444,7 @@ function plugin_searchtypes_filemgmt()
 */
 function plugin_dopluginsearch_filemgmt($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
 {
-    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_FM_TABLES, $_CONF, $filemgmt_FileStoreURL;
+    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_TABLES, $_CONF, $filemgmt_FileStoreURL;
 
     if ( COM_isAnonUser() && $mydownloads_publicpriv != 1 )  {
         return '';
@@ -452,9 +452,9 @@ function plugin_dopluginsearch_filemgmt($query, $datestart, $dateend, $topic, $t
     $query = trim(DB_escapeString(htmlspecialchars($query)));
 
     $sql  = "SELECT a.lid AS id, a.title, description, date, submitter AS uid, hits, CONCAT('/filemgmt/index.php?id=',a.lid) AS url ";
-    $sql .= "FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
-    $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON b.cid=a.cid ";
-    $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_filedesc']} c ON c.lid=a.lid ";
+    $sql .= "FROM {$_TABLES['filemgmt_filedetail']} a ";
+    $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON b.cid=a.cid ";
+    $sql .= "LEFT JOIN {$_TABLES['filemgmt_filedesc']} c ON c.lid=a.lid ";
     $sql .= filemgmt_buildAccessSql('WHERE');
     $sql .= " AND a.status > 0 ";
 
@@ -487,15 +487,15 @@ function plugin_dopluginsearch_filemgmt($query, $datestart, $dateend, $topic, $t
 */
 function plugin_dopluginsearch_comment_filemgmt($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
 {
-    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_FM_TABLES, $_CONF, $filemgmt_FileStoreURL, $LANG09;
+    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_TABLES, $_CONF, $filemgmt_FileStoreURL, $LANG09;
 
     $query = trim(DB_escapeString(htmlspecialchars($query)));
 
     $sql =  "SELECT a.lid AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
     $sql .= "CONCAT('/filemgmt/index.php?id=',a.lid,'#comments') AS url ";
     $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
-    $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_filedetail']} a ON c.sid=CONCAT('fileid_',a.lid) ";
-    $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON b.cid=a.cid ";
+    $sql .= "LEFT JOIN {$_TABLES['filemgmt_filedetail']} a ON c.sid=CONCAT('fileid_',a.lid) ";
+    $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON b.cid=a.cid ";
     $sql .= "WHERE (c.type='filemgmt') AND (u.uid = c.uid) ";
     $sql .= filemgmt_buildAccessSql('AND');
     $sql .= " AND a.status > 0 ";
@@ -538,11 +538,11 @@ function plugin_cclabel_filemgmt()
 */
 
 function plugin_getuseroption_filemgmt() {
-    global $_CONF, $_FM_TABLES, $_TABLES, $LANG_FILEMGMT,$mydownloads_uploadselect;
+    global $_CONF, $_TABLES, $_TABLES, $LANG_FILEMGMT,$mydownloads_uploadselect;
 
     if (SEC_hasRights('filemgmt.upload') OR $mydownloads_uploadselect == 1) {
         $groupsql = filemgmt_buildAccessSql();
-        $sql = "SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_cat']} WHERE pid=0 ";
+        $sql = "SELECT COUNT(*) FROM {$_TABLES['filemgmt_cat']} WHERE pid=0 ";
         $sql .= $groupsql;
         list($catAccessCnt) = DB_fetchArray( DB_query($sql));
         if ( $catAccessCnt > 0 ) {
@@ -561,9 +561,9 @@ function plugin_getuseroption_filemgmt() {
 
 function plugin_getadminoption_filemgmt()
 {
-    global $_CONF, $_FM_TABLES, $LANG_FILEMGMT;
+    global $_CONF, $_TABLES, $LANG_FILEMGMT;
     if (SEC_hasRights('filemgmt.edit')) {
-        $result = DB_query("SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE status=0");
+        $result = DB_query("SELECT COUNT(*) FROM {$_TABLES['filemgmt_filedetail']} WHERE status=0");
         list($submittedfiles) = DB_fetchARRAY($result);
         return array($LANG_FILEMGMT['admin_menu'], $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php', $submittedfiles);
     }
@@ -592,11 +592,11 @@ function filemgmt_buildAccessSql($clause='AND') {
 
 function plugin_getfeednames_filemgmt ()
 {
-    global $_FM_TABLES;
+    global $_TABLES;
 
     $feeds = array ();
     $groupsql = filemgmt_buildAccessSql('WHERE');
-    $result = DB_query ("SELECT cid,title FROM {$_FM_TABLES['filemgmt_cat']} $groupsql ORDER BY title ASC");
+    $result = DB_query ("SELECT cid,title FROM {$_TABLES['filemgmt_cat']} $groupsql ORDER BY title ASC");
     $num = DB_numRows ($result);
 
     if ($num > 0) {
@@ -652,21 +652,21 @@ function filemgmt_buildSql ($topic, $limits)
 
 function plugin_getfeedcontent_filemgmt ($feed, &$link, &$update)
 {
-    global $_CONF, $_TABLES, $_FM_TABLES;
+    global $_CONF, $_TABLES, $_TABLES;
 
     $content = array ();
     $lids = array ();
 
     $result = DB_query ("SELECT topic,limits,content_length FROM {$_TABLES['syndication']} WHERE fid = $feed");
     $F = DB_fetchArray ($result);
-    $sql  = "SELECT *,cat.title as cat_title,filedetail.title as file_title FROM {$_FM_TABLES['filemgmt_filedetail']} filedetail LEFT JOIN {$_FM_TABLES['filemgmt_cat']} cat ON filedetail.cid=cat.cid ";
+    $sql  = "SELECT *,cat.title as cat_title,filedetail.title as file_title FROM {$_TABLES['filemgmt_filedetail']} filedetail LEFT JOIN {$_TABLES['filemgmt_cat']} cat ON filedetail.cid=cat.cid ";
     $sql .= filemgmt_buildSql( $F['topic'],'' );
 
     $result = DB_query ($sql);
     $num = DB_numRows ($result);
     for ($i = 0; $i < $num; $i++) {
         $A = DB_fetchArray ($result);
-        $desc = DB_getItem ($_FM_TABLES['filemgmt_filedesc'], 'description',
+        $desc = DB_getItem ($_TABLES['filemgmt_filedesc'], 'description',
                             "lid = {$A['lid']}");
         $filelink = $_CONF['site_url'] . '/filemgmt/index.php?id='
                   . $A['lid'];
@@ -692,11 +692,11 @@ function plugin_getfeedcontent_filemgmt ($feed, &$link, &$update)
 
 function plugin_feedupdatecheck_filemgmt ($feed, $topic, $update_data, $limit)
 {
-    global $_FM_TABLES;
+    global $_TABLES;
 
     $is_current = true;
 
-    $sql  = "SELECT *,cat.title as cat_title,filedetail.title as file_title FROM {$_FM_TABLES['filemgmt_filedetail']} filedetail LEFT JOIN {$_FM_TABLES['filemgmt_cat']} cat ON filedetail.cid=cat.cid ";
+    $sql  = "SELECT *,cat.title as cat_title,filedetail.title as file_title FROM {$_TABLES['filemgmt_filedetail']} filedetail LEFT JOIN {$_TABLES['filemgmt_cat']} cat ON filedetail.cid=cat.cid ";
     $sql .= filemgmt_buildSql( $topic,$limit );
 
     $result = DB_query ($sql);
@@ -737,15 +737,15 @@ function plugin_whatsnewsupported_filemgmt() {
   * API function provides the content of our "What's New" feed
 */
 function plugin_getwhatsnew_filemgmt() {
-    global $_TABLES, $_FM_TABLES, $_CONF, $LANG_FILEMGMT, $LANG01;
+    global $_TABLES, $_TABLES, $_CONF, $LANG_FILEMGMT, $LANG01;
     global $filemgmtWhatsNewTitleLength,$filemgmtWhatsNewPeriodDays,$filemgmt_showWhatsNewComments,$mydownloads_publicpriv;
 
     $retval = '';
 
     $items = array();
     if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
-        $sql  = "SELECT a.lid, a.title FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
-        $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
+        $sql  = "SELECT a.lid, a.title FROM {$_TABLES['filemgmt_filedetail']} a ";
+        $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
         $sql .= "WHERE date >= UNIX_TIMESTAMP( DATE_SUB(NOW(), INTERVAL $filemgmtWhatsNewPeriodDays DAY )) ";
         $sql .= filemgmt_buildAccessSql();
         $sql .= "AND STATUS=1 ORDER  BY date DESC LIMIT 15 ";
@@ -769,8 +769,8 @@ function plugin_getwhatsnew_filemgmt() {
         }
         if ($filemgmt_showWhatsNewComments) {
             // Search for new comments
-            $sql  = "SELECT a.lid,a.title,c.title FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
-            $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
+            $sql  = "SELECT a.lid,a.title,c.title FROM {$_TABLES['filemgmt_filedetail']} a ";
+            $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
             $sql .= "LEFT JOIN {$_TABLES['comments']} c ON c.sid = concat('fileid_' ,a.lid )";
             $sql .= filemgmt_buildAccessSql('WHERE');
             $sql .= " AND c.date >=  DATE_SUB(NOW(), INTERVAL $filemgmtWhatsNewPeriodDays DAY ) AND c.type='filemgmt' ";
@@ -817,7 +817,7 @@ function plugin_getwhatsnew_filemgmt() {
 */
 function plugin_autotags_filemgmt ($op, $content = '', $autotag = '')
 {
-    global $_USER, $mydownloads_publicpriv, $_CONF, $_FM_TABLES, $LANG_FILEMGMT_AUTOTAG;
+    global $_USER, $mydownloads_publicpriv, $_CONF, $_TABLES, $LANG_FILEMGMT_AUTOTAG;
 
     if ($op == 'tagname' ) {
         return array('file', 'file_download');
@@ -849,8 +849,8 @@ function plugin_autotags_filemgmt ($op, $content = '', $autotag = '')
 
             if ( !empty($file_id) ) {
                 // do a quick perm check to make sure everything is good!
-                $sql  = "SELECT a.lid, a.title FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
-                $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
+                $sql  = "SELECT a.lid, a.title FROM {$_TABLES['filemgmt_filedetail']} a ";
+                $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
                 $sql .= "WHERE a.lid='".DB_escapeString($file_id)."' AND status=1 ";
                 $sql .= filemgmt_buildAccessSql();
                 $result = DB_query( $sql );
@@ -920,16 +920,16 @@ function plugin_autotags_filemgmt ($op, $content = '', $autotag = '')
 
 function plugin_itemrated_filemgmt($lid, $rating, $votes)
 {
-    global $_FM_TABLES;
+    global $_TABLES;
 
-    $sql = "UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET rating = '".DB_escapeString($rating). "', votes=".$votes . " WHERE lid=".$lid;
+    $sql = "UPDATE {$_TABLES['filemgmt_filedetail']} SET rating = '".DB_escapeString($rating). "', votes=".$votes . " WHERE lid=".$lid;
     DB_query($sql);
     return true;
 }
 
 function plugin_canuserrate_filemgmt($item_id, $uid)
 {
-    global $_FM_TABLES, $FilemgmtUser;
+    global $_TABLES, $FilemgmtUser;
 
     $retval = false;
 
@@ -940,7 +940,7 @@ function plugin_canuserrate_filemgmt($item_id, $uid)
     }
     // Check if Download POSTER is voting (UNLESS Anonymous users allowed to post)
     if ($ratinguser != 0) {
-        $result=DB_query("SELECT submitter FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='".DB_escapeString($item_id)."'");
+        $result=DB_query("SELECT submitter FROM {$_TABLES['filemgmt_filedetail']} WHERE lid='".DB_escapeString($item_id)."'");
         while(list($ratinguserDB)=DB_fetchARRAY($result)) {
             if ($ratinguserDB==$ratinguser) {
                 return false;

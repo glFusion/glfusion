@@ -2,7 +2,7 @@
 // +--------------------------------------------------------------------------+
 // | FileMgmt Plugin - glFusion CMS                                           |
 // +--------------------------------------------------------------------------+
-// | calendar.php                                                             |
+// | filemgmt.php                                                             |
 // |                                                                          |
 // | Plugin system integration options                                        |
 // +--------------------------------------------------------------------------+
@@ -49,13 +49,6 @@ $CONF_FM['gl_version']         = '1.3.0';
 $CONF_FM['pi_url']             = 'http://www.glfusion.org/';
 
 // Database Tables
-
-$_FM_TABLES['filemgmt_cat']         = $_DB_table_prefix . 'filemgmt_category';
-$_FM_TABLES['filemgmt_filedetail']  = $_DB_table_prefix . 'filemgmt_filedetail';
-$_FM_TABLES['filemgmt_filedesc']    = $_DB_table_prefix . 'filemgmt_filedesc';
-$_FM_TABLES['filemgmt_brokenlinks'] = $_DB_table_prefix . 'filemgmt_broken';
-$_FM_TABLES['filemgmt_votedata']    = $_DB_table_prefix . 'filemgmt_votedata';
-$_FM_TABLES['filemgmt_history']     = $_DB_table_prefix . 'filemgmt_downloadhistory';
 
 $_TABLES['filemgmt_cat']         = $_DB_table_prefix . 'filemgmt_category';
 $_TABLES['filemgmt_filedetail']  = $_DB_table_prefix . 'filemgmt_filedetail';

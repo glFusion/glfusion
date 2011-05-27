@@ -65,11 +65,18 @@ $LANG_FM00 = array (
 
 // Admin Navbar
 $LANG_FM02 = array(
+    'instructions' => 'To modify or delete a file, click on the files\'s edit icon below. To view or modify categories, select the Categories option above.',
     'nav1'  => 'Nastavení',
     'nav2'  => 'Kategorie',
     'nav3'  => 'Přidej soubor',
     'nav4'  => 'Staženo (%s)',
-    'nav5'  => 'Poškozené soubory (%s)'
+    'nav5'  => 'Poškozené soubory (%s)',
+    'edit'  => 'Edit',
+    'file'  => 'Filename',
+    'category' => 'Category Name',
+    'version' => 'Version',
+    'size'  => 'Size',
+    'date' => 'Date',
 );
 
 $LANG_FILEMGMT = array(

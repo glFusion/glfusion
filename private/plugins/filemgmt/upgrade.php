@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -43,7 +43,7 @@ if (!defined ('GVERSION')) {
 */
 function filemgmt_upgrade()
 {
-    global $_TABLES,$_CONF,$_FM_TABLES,$CONF_FM, $_DB_table_prefix;;
+    global $_TABLES,$_CONF,$_TABLES,$CONF_FM, $_DB_table_prefix;;
 
     include $_CONF['path'].'/plugins/filemgmt/config.php';
     include $_CONF['path'].'/plugins/filemgmt/filemgmt.php';
@@ -54,7 +54,7 @@ function filemgmt_upgrade()
 
     switch ( $cur_version ) {
         case '1.3' :
-            DB_query("ALTER TABLE {$_FM_TABLES['filemgmt_cat']} ADD `grp_access` mediumint(8) DEFAULT '2' NOT NULL AFTER imgurl");
+            DB_query("ALTER TABLE {$_TABLES['filemgmt_cat']} ADD `grp_access` mediumint(8) DEFAULT '2' NOT NULL AFTER imgurl");
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5' WHERE pi_name = 'filemgmt'");
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_gl_version = '1.0.0' WHERE pi_name = 'filemgmt'");
 
@@ -71,7 +71,7 @@ function filemgmt_upgrade()
         case '1.5.1' :
         case '1.5.2' :
         case '1.5.3' :
-            DB_query("ALTER TABLE {$_FM_TABLES['filemgmt_cat']} ADD `grp_writeaccess` MEDIUMINT( 8 ) NOT NULL DEFAULT '1'");
+            DB_query("ALTER TABLE {$_TABLES['filemgmt_cat']} ADD `grp_writeaccess` MEDIUMINT( 8 ) NOT NULL DEFAULT '1'");
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.6' WHERE pi_name = 'filemgmt'");
         case '1.6' :
         case '1.6.0' :
@@ -87,8 +87,8 @@ function filemgmt_upgrade()
         case '1.7.2' :
         case '1.7.3' :
         case '1.7.4' :
-            DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} set rating = rating / 2",1);
-            $result = DB_query("SELECT * FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE votes > 0");
+            DB_query("UPDATE {$_TABLES['filemgmt_filedetail']} set rating = rating / 2",1);
+            $result = DB_query("SELECT * FROM {$_TABLES['filemgmt_filedetail']} WHERE votes > 0");
             while ( $F = DB_fetchArray($result) ) {
                 $item_id = $F['lid'];
                 $votes   = $F['votes'];
@@ -96,7 +96,7 @@ function filemgmt_upgrade()
                 DB_query("INSERT INTO {$_TABLES['rating']} (type,item_id,votes,rating) VALUES ('filemgmt','".$item_id."',$votes,$rating);",1);
             }
 
-            $result = DB_query("SELECT * FROM {$_FM_TABLES['filemgmt_votedata']}");
+            $result = DB_query("SELECT * FROM {$_TABLES['filemgmt_votedata']}");
             while ( $H = DB_fetchArray($result) ) {
                 $item_id = $H['lid'];
                 $user_id = $H['ratinguser'];

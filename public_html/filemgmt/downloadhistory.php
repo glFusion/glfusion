@@ -51,10 +51,10 @@ if (!SEC_hasRights("filemgmt.edit")) {
 }
 $lid = COM_applyFilter($_GET['lid'],true);
 
-$result=DB_query("SELECT title FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='".DB_escapeString($lid)."'");
+$result=DB_query("SELECT title FROM {$_TABLES['filemgmt_filedetail']} WHERE lid='".DB_escapeString($lid)."'");
 list($dtitle)=DB_fetchARRAY($result);
 
-$result=DB_query("SELECT date,uid,remote_ip FROM {$_FM_TABLES['filemgmt_history']} WHERE lid='".DB_escapeString($lid)."'");
+$result=DB_query("SELECT date,uid,remote_ip FROM {$_TABLES['filemgmt_history']} WHERE lid='".DB_escapeString($lid)."'");
 $display = COM_siteHeader('none');
 
 $display .= "<table width='100%' border='0' cellspacing='1' cellpadding='4' class='plugin'><tr>";

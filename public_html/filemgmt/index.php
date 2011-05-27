@@ -70,7 +70,7 @@ if ( COM_isAnonUser() && $mydownloads_publicpriv != 1 )  {
     $p->set_var ('site_admin_url',$_CONF['site_admin_url']);
 
     $myts = new MyTextSanitizer;
-    $mytree = new XoopsTree($_DB_name,$_FM_TABLES['filemgmt_cat'],"cid","pid");
+    $mytree = new XoopsTree($_DB_name,$_TABLES['filemgmt_cat'],"cid","pid");
     $mytree->setGroupAccessFilter($_GROUPS);
 
     COM_setArgNames( array('id') );
@@ -86,12 +86,12 @@ if ( COM_isAnonUser() && $mydownloads_publicpriv != 1 )  {
 
     $groupsql = filemgmt_buildAccessSql();
 
-    $sql = "SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
-    $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
+    $sql = "SELECT COUNT(*) FROM {$_TABLES['filemgmt_filedetail']} a ";
+    $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
     $sql .= "WHERE a.lid='".DB_escapeString($lid)."' $groupsql AND a.status > 0";
     list($fileAccessCnt) = DB_fetchArray( DB_query($sql));
 
-    if ($fileAccessCnt > 0 AND DB_count($_FM_TABLES['filemgmt_filedetail'],"lid",DB_escapeString($lid) ) == 1) {
+    if ($fileAccessCnt > 0 AND DB_count($_TABLES['filemgmt_filedetail'],"lid",DB_escapeString($lid) ) == 1) {
 
         $p->set_var('block_header', COM_startBlock("<b>". $LANG_FILEMGMT['plugin_name'] ."</b>"));
         $p->set_var('block_footer', COM_endBlock());
@@ -99,8 +99,8 @@ if ( COM_isAnonUser() && $mydownloads_publicpriv != 1 )  {
         USES_lib_comment();
 
         $sql = "SELECT d.lid, d.cid, d.title, d.url, d.homepage, d.version, d.size, d.logourl, d.submitter, d.status, d.date, ";
-        $sql .= "d.hits, d.rating, d.votes, d.comments, t.description FROM {$_FM_TABLES['filemgmt_filedetail']} d, ";
-        $sql .= "{$_FM_TABLES['filemgmt_filedesc']} t WHERE d.lid='".DB_escapeString($lid)."' AND d.lid=t.lid AND status > 0";
+        $sql .= "d.hits, d.rating, d.votes, d.comments, t.description FROM {$_TABLES['filemgmt_filedetail']} d, ";
+        $sql .= "{$_TABLES['filemgmt_filedesc']} t WHERE d.lid='".DB_escapeString($lid)."' AND d.lid=t.lid AND status > 0";
 
         $result = DB_query($sql);
         list($lid, $cid, $dtitle, $url, $homepage, $version, $size, $logourl, $submitter, $status, $time, $hits, $rating, $votes, $comments, $description) = DB_fetchArray($result);
@@ -185,14 +185,14 @@ if ( COM_isAnonUser() && $mydownloads_publicpriv != 1 )  {
         $show = $mydownloads_perpage;
 
         $groupsql = filemgmt_buildAccessSql();
-        $sql = "SELECT cid, title, imgurl,grp_access FROM {$_FM_TABLES['filemgmt_cat']} WHERE pid = 0 ";
+        $sql = "SELECT cid, title, imgurl,grp_access FROM {$_TABLES['filemgmt_cat']} WHERE pid = 0 ";
         $sql .= $groupsql . ' ORDER BY CID';
         $result = DB_query($sql);
         $nrows = DB_numRows($result);
 
         // Need to use a SQL stmt that does a join on groups user has access to  - for file count
-        $sql  = "SELECT count(*)  FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
-        $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid WHERE status > 0 ";
+        $sql  = "SELECT count(*)  FROM {$_TABLES['filemgmt_filedetail']} a ";
+        $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid WHERE status > 0 ";
         $sql .= $groupsql;
         $countsql = DB_query($sql);
         list($maxrows) = DB_fetchArray($countsql);
@@ -267,12 +267,12 @@ if ( COM_isAnonUser() && $mydownloads_publicpriv != 1 )  {
         $offset = ($page - 1) * $show;
 
         $sql = "SELECT d.lid, d.cid, d.title, url, homepage, version, size, platform, submitter, logourl, status, ";
-        $sql .= "date, hits, rating, votes, comments, description, grp_access FROM ({$_FM_TABLES['filemgmt_filedetail']} d, ";
-        $sql .= "{$_FM_TABLES['filemgmt_filedesc']} t) LEFT JOIN {$_FM_TABLES['filemgmt_cat']} c ON d.cid=c.cid ";
+        $sql .= "date, hits, rating, votes, comments, description, grp_access FROM ({$_TABLES['filemgmt_filedetail']} d, ";
+        $sql .= "{$_TABLES['filemgmt_filedesc']} t) LEFT JOIN {$_TABLES['filemgmt_cat']} c ON d.cid=c.cid ";
         $sql .= "WHERE status > 0 ".$groupsql." AND d.lid=t.lid ORDER BY date DESC LIMIT $offset, $show";
         $result = DB_query($sql);
         $numrows = DB_numROWS($result);
-        $countsql = DB_query("SELECT COUNT(*) FROM ".$_FM_TABLES['filemgmt_filedetail']." WHERE status > 0");
+        $countsql = DB_query("SELECT COUNT(*) FROM ".$_TABLES['filemgmt_filedetail']." WHERE status > 0");
 
         $p->set_var('listing_heading', _MD_LATESTLISTING);
         if ($numrows > 0 ) {

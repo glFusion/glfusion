@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
+// | Copyright (C) 2009-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -56,12 +56,12 @@ $INSTALL_plugin['filemgmt'] = array(
         'ver' => $CONF_FM['pi_version'], 'gl_ver' => $CONF_FM['gl_version'],
         'url' => $CONF_FM['pi_url'], 'display' => $CONF_FM['pi_display_name']),
 
-  array('type' => 'table', 'table' => $_FM_TABLES['filemgmt_cat'], 'sql' => $_SQL['filemgmt_cat']),
-  array('type' => 'table', 'table' => $_FM_TABLES['filemgmt_filedetail'], 'sql' => $_SQL['filemgmt_filedetail']),
-  array('type' => 'table', 'table' => $_FM_TABLES['filemgmt_filedesc'], 'sql' => $_SQL['filemgmt_filedesc']),
-  array('type' => 'table', 'table' => $_FM_TABLES['filemgmt_brokenlinks'], 'sql' => $_SQL['filemgmt_brokenlinks']),
-  array('type' => 'table', 'table' => $_FM_TABLES['filemgmt_votedata'], 'sql' => $_SQL['filemgmt_votedata']),
-  array('type' => 'table', 'table' => $_FM_TABLES['filemgmt_history'], 'sql' => $_SQL['filemgmt_history']),
+  array('type' => 'table', 'table' => $_TABLES['filemgmt_cat'], 'sql' => $_SQL['filemgmt_cat']),
+  array('type' => 'table', 'table' => $_TABLES['filemgmt_filedetail'], 'sql' => $_SQL['filemgmt_filedetail']),
+  array('type' => 'table', 'table' => $_TABLES['filemgmt_filedesc'], 'sql' => $_SQL['filemgmt_filedesc']),
+  array('type' => 'table', 'table' => $_TABLES['filemgmt_brokenlinks'], 'sql' => $_SQL['filemgmt_brokenlinks']),
+  array('type' => 'table', 'table' => $_TABLES['filemgmt_votedata'], 'sql' => $_SQL['filemgmt_votedata']),
+  array('type' => 'table', 'table' => $_TABLES['filemgmt_history'], 'sql' => $_SQL['filemgmt_history']),
 
   array('type' => 'group', 'group' => 'filemgmt Admin', 'desc' => 'Users in this group can administer the FileMgmt plugin',
         'variable' => 'admin_group_id', 'addroot' => true, 'admin' => true),

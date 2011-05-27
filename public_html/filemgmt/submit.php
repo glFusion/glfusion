@@ -218,11 +218,11 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
 
     $myts = new MyTextSanitizer; // MyTextSanitizer object
     $eh = new ErrorHandler; //ErrorHandler object
-    $mytree = new XoopsTree($_DB_name,$_FM_TABLES['filemgmt_cat'],"cid","pid");
+    $mytree = new XoopsTree($_DB_name,$_TABLES['filemgmt_cat'],"cid","pid");
     $mytree->setGroupAccessFilter($_GROUPS);
 
     $groupsql = filemgmt_buildAccessSql();
-    $sql = "SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_cat']} WHERE pid=0 ";
+    $sql = "SELECT COUNT(*) FROM {$_TABLES['filemgmt_cat']} WHERE pid=0 ";
     $sql .= $groupsql;
     list($catAccessCnt) = DB_fetchArray( DB_query($sql));
 
@@ -261,7 +261,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         $uploadfilename = $myts->makeTboxData4Save($_FILES['newfile']['name']);
 
         // Check if file is already on file
-        if (DB_COUNT($_FM_TABLES['filemgmt_filedetail'], 'url', $uploadfilename) > 0) {
+        if (DB_COUNT($_TABLES['filemgmt_filedetail'], 'url', $uploadfilename) > 0) {
             $eh->show("1108");
         }
 
@@ -283,7 +283,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         $tmpfilename = randomfilename();
 
         // Determine write group access to this category
-        $grp_writeaccess = DB_getItem($_FM_TABLES['filemgmt_cat'],'grp_writeaccess',"cid=$cid");
+        $grp_writeaccess = DB_getItem($_TABLES['filemgmt_cat'],'grp_writeaccess',"cid=$cid");
         if (SEC_inGroup($grp_writeaccess)) {
             $directUploadAccess = true;
         } else {
@@ -389,11 +389,11 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
                 $status = 0;
             }
             $fields = 'cid,title,url,homepage,version,size,platform,logourl,submitter,status,date,hits,rating,votes,comments';
-            $sql = "INSERT INTO {$_FM_TABLES['filemgmt_filedetail']} ($fields) VALUES ";
+            $sql = "INSERT INTO {$_TABLES['filemgmt_filedetail']} ($fields) VALUES ";
             $sql .= "($cid,'$title','$url','$homepage','$version','$size','$tmpfilename','$logourl',$submitter,$status,'$date',0,0,0,$comments)";
             DB_query($sql) or $eh->show("0013");
             $newid = DB_insertID();
-            DB_query("INSERT INTO {$_FM_TABLES['filemgmt_filedesc']} (lid, description) VALUES ($newid, '$description')") or $eh->show("0013");
+            DB_query("INSERT INTO {$_TABLES['filemgmt_filedesc']} (lid, description) VALUES ($newid, '$description')") or $eh->show("0013");
             if ($directUploadAccess) {
                 CACHE_remove_instance('whatsnew');
                 redirect_header("index.php",2,_MD_FILEAPPROVED);
@@ -426,7 +426,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         $display .= "</td></tr>";
         $display .= "<tr><td align=\"right\" style=\"white-space:nowrap;\"><b>"._MD_CATEGORY."</b></td><td>";
 
-        $sql = "SELECT cid,title,grp_writeaccess FROM {$_FM_TABLES['filemgmt_cat']} WHERE pid=0 ";
+        $sql = "SELECT cid,title,grp_writeaccess FROM {$_TABLES['filemgmt_cat']} WHERE pid=0 ";
         if (count($_GROUPS) == 1) {
             $sql .= " AND grp_access = '" . current($_GROUPS) ."' ";
         } else {

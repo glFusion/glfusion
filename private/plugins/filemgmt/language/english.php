@@ -66,11 +66,18 @@ $LANG_FM00 = array (
 
 // Admin Navbar
 $LANG_FM02 = array(
+    'instructions' => 'To modify or delete a file, click on the files\'s edit icon below. To view or modify categories, select the Categories option above.',
     'nav1'  => 'Settings',
     'nav2'  => 'Categories',
     'nav3'  => 'Add File',
     'nav4'  => 'Downloads (%s)',
-    'nav5'  => 'Broken Files (%s)'
+    'nav5'  => 'Broken Files (%s)',
+    'edit'  => 'Edit',
+    'file'  => 'Filename',
+    'category' => 'Category Name',
+    'version' => 'Version',
+    'size'  => 'Size',
+    'date' => 'Date',
 );
 
 $LANG_FILEMGMT = array(
@@ -138,6 +145,7 @@ $LANG_FILEMGMT_AUTOTAG = array(
     'desc_file'                 => 'Link: to a File download detail page.  link_text defaults to the file title. usage: [file:<i>file_id</i> {link_text}]',
     'desc_file_download'        => 'Link: to a direct File download.  link_text defaults to the file title. usage: [file_download:<i>file_id</i> {link_text}]',
 );
+
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['filemgmt'] = array(

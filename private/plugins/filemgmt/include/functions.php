@@ -72,8 +72,8 @@ function popgraphic($hits) {
 
 //updates rating data in itemtable for a given item
 function updaterating($sel_id){
-    global $_FM_TABLES;
-    $voteresult = DB_query("select rating FROM {$_FM_TABLES['filemgmt_votedata']} WHERE lid = '$sel_id'");
+    global $_TABLES;
+    $voteresult = DB_query("select rating FROM {$_TABLES['filemgmt_votedata']} WHERE lid = '$sel_id'");
     $votesDB = DB_numROWS($voteresult);
     $totalrating = 0;
     if ($votesDB > 0) {
@@ -83,24 +83,24 @@ function updaterating($sel_id){
         $finalrating = $totalrating/$votesDB;
     }
     $finalrating = number_format($finalrating, 4);
-    DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET rating='$finalrating', votes='$votesDB' WHERE lid = '$sel_id'");
+    DB_query("UPDATE {$_TABLES['filemgmt_filedetail']} SET rating='$finalrating', votes='$votesDB' WHERE lid = '$sel_id'");
 }
 
 //returns the total number of items in items table that are accociated with a given table $table id
 function getTotalItems($sel_id, $status=''){
-    global $_FM_TABLES,$mytree;
+    global $_TABLES,$mytree;
     $count = 0;
     $arr = array();
-    $sql = "SELECT count(*) from {$_FM_TABLES['filemgmt_filedetail']} a ";
-    $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
+    $sql = "SELECT count(*) from {$_TABLES['filemgmt_filedetail']} a ";
+    $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
     $sql .= "WHERE  a.cid='$sel_id' and a.status='$status' $mytree->filtersql";
     list($thing) = DB_fetchArray(DB_query($sql));
     $count = $thing;
     $arr = $mytree->getAllChildId($sel_id);
     $size = sizeof($arr);
     for($i=0;$i<$size;$i++){
-        $sql = "SELECT count(*) from {$_FM_TABLES['filemgmt_filedetail']} a ";
-        $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
+        $sql = "SELECT count(*) from {$_TABLES['filemgmt_filedetail']} a ";
+        $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
         $sql .= "WHERE  a.cid='{$arr[$i]}}'and a.status='$status' $mytree->filtersql";
         list($thing) = DB_fetchArray(DB_query($sql));
         $count += $thing;
