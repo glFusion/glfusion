@@ -641,6 +641,7 @@ class mgAlbum {
 
         $z = 1;
         $retval = '';
+        $block = '';
         $px = ($level - 1 ) * 15;
 
         if ( $this->id != 0 && $this->access > 0 ) {

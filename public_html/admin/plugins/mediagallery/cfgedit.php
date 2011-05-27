@@ -49,7 +49,7 @@ if (!SEC_hasRights('mediagallery.config')) {
 }
 
 function MG_editConfig( $msgString = '' ) {
-    global $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG00, $LANG_MG01, $LANG_DIRECTION,$LANG04,$glversion;
+    global $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG00, $LANG_MG01, $LANG_DIRECTION,$LANG04;
 
     $retval = '';
     $T = new Template($_MG_CONF['template_path'].'/admin');

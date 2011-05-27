@@ -151,6 +151,7 @@ function MG_staticSortMediaOptions( ) {
     global $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG03, $LANG_MG01, $MG_albums, $album_jumpbox;
 
     $retval = '';
+    $valid_albums = 0;
     $T = new Template($_MG_CONF['template_path'].'/admin');
     $T->set_file ('admin','staticsortmedia.thtml');
     $T->set_var('site_url', $_CONF['site_url']);
@@ -196,7 +197,7 @@ function MG_staticSortMediaOptions( ) {
 * Main
 */
 
-$mode = COM_applyFilter ($_REQUEST['mode']);
+$mode = isset($_REQUEST['mode']) ? COM_applyFilter ($_REQUEST['mode']) : '';
 $display = '';
 $mode = '';
 

@@ -32,10 +32,17 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
+
+MG_initAlbums();
+
+$TEMPLATE_OPTIONS['default_vars'] = array_merge($TEMPLATE_OPTIONS['default_vars'],array('true_site_admin_url' => $_CONF['site_admin_url']));
+
 function MG_navigation() {
     global $_MG_CONF, $_CONF, $_TABLES, $LANG_MG01;
 
     $retval = '';
+
     $T = new Template($_MG_CONF['template_path'].'/admin');
     $T->set_file ('admin','mg_navigation.thtml');
 
@@ -51,7 +58,6 @@ function MG_navigation() {
         'lang_system_defaults'      => $LANG_MG01['system_default_editor'],
         'lang_album_defaults'       => $LANG_MG01['album_default_editor'],
         'lang_av_defaults'          => $LANG_MG01['av_default_editor'],
-        'lang_media_queue'          => sprintf("%s (%d)",$LANG_MG01['media_queue'],$queue_count),
         'lang_reports'              => $LANG_MG01['reports'],
         'lang_usage_reports'        => $LANG_MG01['usage_reports'],
         'lang_quota_reports'        => $LANG_MG01['quota_reports'],

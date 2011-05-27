@@ -48,7 +48,9 @@ if (!SEC_hasRights('mediagallery.config')) {
 
 function MG_editMemberDefaults( ) {
     global $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG00, $LANG_MG01, $LANG_MG03, $LANG_ACCESS, $LANG_DIRECTION;
-    global $album_jumpbox, $album_selectbox, $MG_albums, $glversion,$LANG04;
+    global $album_jumpbox, $album_selectbox, $MG_albums, $LANG04;
+
+    MG_initAlbums();
 
     $retval = '';
     $T = new Template($_MG_CONF['template_path'].'/admin');
@@ -345,11 +347,7 @@ if (isset ($_POST['mode'])) {
     $mode = COM_applyFilter($_GET['mode']);
 }
 
-if ( $glversion[1] < 4 ) {
-    $display = COM_siteHeader();
-} else {
-    $display = COM_siteHeader('menu','');
-}
+$display = COM_siteHeader('menu','');
 
 $T = new Template($_MG_CONF['template_path'].'/admin');
 $T->set_file (array ('admin' => 'administration.thtml'));

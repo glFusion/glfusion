@@ -45,9 +45,10 @@ if (!SEC_hasRights('mediagallery.config')) {
 }
 
 function MG_quotaReport($page,$quotaquery,$usedquery) {
-    global $glversion,$_TABLES, $_MG_CONF, $_CONF, $LANG_MG01,$LANG_MG03;
+    global $_TABLES, $_MG_CONF, $_CONF, $LANG_MG01,$LANG_MG03;
 
     $counter = 0;
+    $rowcounter = 1;
 
     $retval = '';
 

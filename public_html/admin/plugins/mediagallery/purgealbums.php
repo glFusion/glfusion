@@ -45,15 +45,12 @@ if (!SEC_hasRights('mediagallery.config')) {
 }
 
 function MG_selectAlbums() {
-    global $MG_albums, $glversion, $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG00, $LANG_MG01, $LANG_MG07;
+    global $MG_albums, $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG00, $LANG_MG01, $LANG_MG07;
 
     // start by building an array of all site users (active)
 
-    if ( $glversion[1] < 4 ) {
-        $result = DB_query("SELECT * FROM {$_TABLES['users']} AS users LEFT JOIN {$_TABLES['userinfo']} AS userinfo ON users.uid=userinfo.uid");
-    } else {
-        $result = DB_query("SELECT * FROM {$_TABLES['users']} AS users LEFT JOIN {$_TABLES['userinfo']} AS userinfo ON users.uid=userinfo.uid WHERE users.status=3");
-    }
+    $result = DB_query("SELECT * FROM {$_TABLES['users']} AS users LEFT JOIN {$_TABLES['userinfo']} AS userinfo ON users.uid=userinfo.uid WHERE users.status=3");
+
     while ( $U = DB_fetchArray($result)) {
         $siteUsers[$U['uid']]['lastlogin'] = $U['lastlogin'];
         $siteUsers[$U['uid']]['username']  = $U['username'];

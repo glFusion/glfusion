@@ -45,7 +45,7 @@ if (!SEC_hasRights('mediagallery.config')) {
 }
 
 function MG_selectUsers($page) {
-    global $glversion, $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG00, $LANG_MG01;
+    global $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG00, $LANG_MG01;
 
     $retval = '';
     $T = new Template($_MG_CONF['template_path'].'/admin');
@@ -69,9 +69,6 @@ function MG_selectUsers($page) {
     $nRows = DB_numRows($result);
     for ($x=0; $x< $nRows; $x++) {
         $row = DB_fetchArray($result);
-        if ( $glversion[1] < 4 ) {
-            $row['status'] = 3;
-        }
         $uid = $row['uid'];
         $remote = (SEC_inGroup("Remote Users",$uid) ? '(r)' : '');
         $username = $row['username'];

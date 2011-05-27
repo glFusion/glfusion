@@ -27,16 +27,6 @@
       </ul>
     </td>
   </tr>
-  <tr>
-    <td class="pluginCellTitle">{lang_media_queue}</td>
-  </tr>
-  <tr>
-    <td>
-      <ul>
-        <li><a href="{admin_url}queue.php">{lang_media_queue}</a></li>
-      </ul>
-    </td>
-  </tr>
    <tr>
      <td class="pluginCellTitle">{lang_member_albums}</td>
    </tr>

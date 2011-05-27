@@ -97,7 +97,7 @@ $T->set_var(array(
     'lang_admin'        => $LANG_MG00['admin'],
     'version'           => $_MG_CONF['pi_version'],
     'admin_body'        => plugin_showstats_mediagallery(0),
-    'xhtml'             => XHTML,
+    'title'             => $LANG_MG00['admin'],
 ));
 
 $T->parse('output', 'admin');

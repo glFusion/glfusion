@@ -89,7 +89,7 @@ function MG_rebuildQuota() {
     exit;
 }
 
-$mode = COM_applyFilter ($_REQUEST['mode']);
+$mode = isset($_REQUEST['mode']) ? COM_applyFilter ($_REQUEST['mode']) : '';
 $display = '';
 $mode = '';
 

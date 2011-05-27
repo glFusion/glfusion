@@ -36,7 +36,7 @@ if (!defined ('GVERSION')) {
 
 require_once $_CONF['path'] . 'lib/feedcreator/feedcreator.class.php';
 
-
+MG_initAlbums();
 
 function MG_buildAlbumRSS( $aid ) {
     global $MG_albums, $_MG_CONF, $_CONF, $_TABLES;
@@ -44,7 +44,6 @@ function MG_buildAlbumRSS( $aid ) {
     $feedpath = MG_getFeedPath();
 
     $fname = sprintf($_MG_CONF['rss_feed_name'] . "%06d.rss", $aid);
-//    $feedname = $_MG_CONF['path_html'] . "rss/" . $fname;
     $feedname = $feedpath . '/' . $fname;
 
     if ( $MG_albums[$aid]->enable_rss != 1 ) {
@@ -72,7 +71,6 @@ function MG_buildAlbumRSS( $aid ) {
                 break;
             }
         }
-//        $imgurl = $_MG_CONF['mediaobjects_url'] . '/tn/' . $filename[3] . '/' . 'tn_' . $filename . '.jpg';
     } elseif ($filename != '') {
         foreach ($_MG_CONF['validExtensions'] as $ext ) {
             if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $filename[0] . '/' . $filename . $ext) ) {
@@ -80,7 +78,6 @@ function MG_buildAlbumRSS( $aid ) {
                 break;
             }
         }
-//        $imgurl = $_MG_CONF['mediaobjects_url'] . '/tn/' . $filename[0] . '/' . $filename . '.jpg';
     } else {
         $imgurl = '';
     }
@@ -91,7 +88,6 @@ function MG_buildAlbumRSS( $aid ) {
                 break;
             }
         }
-//	    $imgurl = $_MG_CONF['mediaobjects_url'] . '/covers/cover_' . $aid . '.jpg';
     }
 
 	$image->url = $imgurl;
@@ -116,18 +112,9 @@ function MG_buildAlbumRSS( $aid ) {
 	        $rss->podcast->owner_name = 'anonymous';
         }
 		$rss->podcast->summary = $MG_albums[$aid]->description;
-//		$rss->podcast->keywords = "php podcast rss itunes";
-//		$rss->podcast->owner_email = "owner@example.com";
-
-		// file this podcast under Technology->Computers
-//		$podcast_tech_category = new PodcastCategory('Technology');
-//		$podcast_comp_category = new PodcastCategory('Computers');
-//		$podcast_tech_category->addCategory($podcast_comp_category);
-//		$podcast_comp_category->addCategory($podcast_tech_category);
  	}
 
     $rss->link = $_MG_CONF['site_url'];
-//    $rss->syndicationURL = $_MG_CONF['site_url'] . '/rss/' . $fname;
     $rss->syndicationURL = $feedpath . '/' . $fname;
 
     MG_processAlbumFeedItems( $rss, $aid );
@@ -192,13 +179,6 @@ function MG_processAlbumFeedItems( &$rss, $aid ) {
             if ( $row['media_keywords'] != '' ) {
                 $item->podcast->keywords = $row['media_keywords'];
             }
-/* ---
-            if ( $row['media_user_id'] != '' && $row['media_user_id'] > 1 ) {
-	        	$res = DB_query("SELECT * FROM {$_TABLES['users']} WHERE uid='" . $row['media_user_id'] . "'");
-	        	$uRow = DB_fetchArray($res);
-                $item->author = $_MG_CONF['hide_author_email'] == 0 ? $uRow['email'] : '' . ' (' . $uRow['fullname'] . ')';
-            }
---- */
             $rss->addItem($item);
         }
     }
@@ -240,7 +220,6 @@ function MG_parseAlbumsRSS( &$rss, $aid ) {
                             break;
                         }
                     }
-//                    $description .= '<img src="' . $_MG_CONF['mediaobjects_url'] . '/tn/' . $filename[3] . '/' . $filename . '.jpg" align="left">';
                 } elseif ($filename != '') {
                     foreach ($_MG_CONF['validExtensions'] as $ext ) {
                         if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $filename[0] . '/' . $filename . $ext) ) {
@@ -248,7 +227,6 @@ function MG_parseAlbumsRSS( &$rss, $aid ) {
                             break;
                         }
                     }
-//                    $description .= '<img src="' . $_MG_CONF['mediaobjects_url'] . '/tn/' . $filename[0] . '/' . $filename . '.jpg" align="left">';
                 }
                 $description .= $MG_albums[$aid]->description;
                 $item->description = $description;
@@ -281,7 +259,6 @@ function MG_buildFullRSS( ) {
     $feedpath = MG_getFeedPath();
 
     if ( $_MG_CONF['rss_full_enabled'] != 1 ) {
-//        @unlink($_MG_CONF['path_html'] . "rss/" . $_MG_CONF['rss_feed_name'] . '.rss');
         @unlink($feedpath . '/' . $_MG_CONF['rss_feed_name'] . '.rss');
         return;
     }
@@ -296,9 +273,7 @@ function MG_buildFullRSS( ) {
     MG_parseAlbumsRSS($rss, 0);
     // valid format strings are: RSS0.91, RSS1.0, RSS2.0, PIE0.1 (deprecated),
     // MBOX, OPML, ATOM, ATOM0.3, HTML, JS
-//    $rss->saveFeed($_MG_CONF['rss_feed_type'], $_MG_CONF['path_html'] . "rss/" . $_MG_CONF['rss_feed_name'] . '.rss',0);
     $rss->saveFeed($_MG_CONF['rss_feed_type'], $feedpath . "/" . $_MG_CONF['rss_feed_name'] . '.rss',0);
-//    @chmod($_MG_CONF['path_html'] . 'rss/' . $_MG_CONF['rss_feed_name'] . '.rss', 0664);
     @chmod($feedpath . '/' . $_MG_CONF['rss_feed_name'] . '.rss', 0664);
 
     return;

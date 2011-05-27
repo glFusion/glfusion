@@ -78,7 +78,7 @@ $LANG_MG00 = array (
     'overview'          => 'Media Gallery is a native glFusion plugin that provides a full featured multi-media gallery for your glFusion powered website.  Media Gallery supports multiple image, video and audio formats and has many advanced features to make presenting your multi-media items in a robust environment simple and easy to maintain.',
     'preinstall_check'  => 'Media Gallery has the following requirements:',
     'geeklog_check'     => 'glFusion v1.0.0 or greater, version reported is <b>%s</b>.',
-    'php_check'         => 'PHP v4.3.0 or greater, version reported is <b>%s</b>.',
+    'php_check'         => 'PHP v5.2.0 or greater, version reported is <b>%s</b>.',
     'preinstall_confirm' => "For full details on installing Media Gallery, please refer to the <a href=\"{$_CONF['site_admin_url']}/plugins/mediagallery/install_doc.html\">Installation Manual</a>.",
     'filecheck'         => 'FileCheck Utility',
     'filecheck_disclaimer' => 'FileCheck will scan the Media Gallery directories and provide a list of files that exist in the directories that are not included in the Media Gallery distribution.  These files may be old, obsolete files that are no longer needed.  <b>Use Caution</b> and ensure these files are not needed by your web server.  <br/><b>YOU SHOULD HAVE A CURRENT BACKUP BEFORE RUNNING THIS UTILITY!</b>',
@@ -94,11 +94,12 @@ $LANG_MG00 = array (
     'ml_ok'             => 'php.ini <strong>memory_limit</strong> is 48M or greater.',
     'recheck_env'       => 'Recheck Environment',
     'fix_install'       => 'Please fix the issues above before installing.',
-    'need_cache'        => 'Media Gallery v1.6 requires that you have the <a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:templatecache">Caching Template Library Enhancement</a> installed.  Please download and install the library.',
-    'need_memory'       => 'Media Gallery v1.6 recommends that you have at least 48M of memory configured for the <strong>memory_limit</strong> setting in php.ini.',
+    'need_cache'        => 'Media Gallery requires that you have the <a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:templatecache">Caching Template Library Enhancement</a> installed.  Please download and install the library.',
+    'need_memory'       => 'Media Gallery recommends that you have at least 48M of memory configured for the <strong>memory_limit</strong> setting in php.ini.',
     'thank_you'         => 'Thank you for upgrading to the latest release of Media Gallery. Please double check your System Configuration Options, there are many new features in this release that you may need to configure.',
     'support'           => 'For support, questions or enhancement requests, please visit <a href="http://www.glfusion.org">glFusion Web Site</a>.  For the latest documentation, please visist the <a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:mediagallery">glFusion Wiki</a>.',
     'success_upgrade'   => 'Media Gallery Successfully Upgraded',
+    'instructions'      => 'This screen allows you to configure and administer the Media Gallery plugin.',
 );
 
 // administration items....

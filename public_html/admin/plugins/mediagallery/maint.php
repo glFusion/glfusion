@@ -222,7 +222,7 @@ if ( $mode == 'thumbs' ) {
                 'mg_navigation'     => MG_navigation(),
                 'title'             => $LANG_MG01['resize_display'],
                 'lang_admin'        => $LANG_MG00['admin'],
-                'version'           => $_MG_CONF['version'],
+                'version'           => $_MG_CONF['pi_version'],
                 'lang_help'     => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"/>',
                 'help_url'      => $_MG_CONF['site_url'] . '/docs/usage.html#Resize_Images',
             ));
