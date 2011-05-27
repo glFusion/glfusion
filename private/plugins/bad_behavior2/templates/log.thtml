@@ -8,7 +8,7 @@
         <th align="left">{lang_reason}</th>
     </tr>
 <!-- BEGIN logrow -->
-    <tr class="pluginRow{cssid}" onMouseOver="className='pluginRollOver';" onMouseOut="className='pluginRow{cssid}';">
+    <tr class="pluginRow{cssid}" onmouseover="className='pluginRollOver';" onmouseout="className='pluginRow{cssid}';">
         <td align="right">
             {start_headers_anchortag}{row_num}{end_headers_anchortag}
         </td>
