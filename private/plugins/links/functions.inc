@@ -458,8 +458,12 @@ function plugin_user_delete_links ($uid)
         $rootgroup = DB_getItem ($_TABLES['groups'], 'grp_id',
                                  "grp_name = 'Root'");
         $result = DB_query ("SELECT DISTINCT ug_uid FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $rootgroup ORDER BY ug_uid LIMIT 1");
-        $A = DB_fetchArray ($result);
-        $rootuser = $A['ug_uid'];
+        if ( DB_numRows($result) > 0 ) {
+            $A = DB_fetchArray ($result);
+            $rootuser = $A['ug_uid'];
+        } else {
+            $rootuser = 2;
+        }
         DB_query ("UPDATE {$_TABLES['links']} SET owner_id = $rootuser WHERE owner_id = $uid");
     }
 }
