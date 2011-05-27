@@ -56,21 +56,9 @@ USES_lib_admin();
 $retval = '';
 
 $display  = FF_siteHeader();
+$navbarMenu = array_merge($navbarMenu,array($LANG_GF98['user_ratings'] => $_CONF['site_admin_url'].'/plugins/forum/userrating.php'));
+$display .= FF_Navbar($navbarMenu,$LANG_GF06['8']);
 $display .=  COM_startBlock($LANG_GF93['gfboard']);
-$display .= FF_Navbar($navbarMenu,$LANG_GF06['8']) . '<br/>';
-
-$menu_arr = array (
-    array('url'  => $_CONF['site_admin_url'].'/plugins/forum/userrating.php',
-          'text' => $LANG_GF98['user_ratings']),
-    array('url' => $_CONF['site_admin_url'],
-          'text' => $LANG_ADMIN['admin_home'])
-);
-
-$display .= ADMIN_createMenu(
-    $menu_arr,
-    $LANG_GF98['forum_settings'],
-    $_CONF['site_url'] . '/forum/images/forum.png'
-);
 
 if(isset($_POST['save_changes'])) {
 	//Save changes to forum requirements

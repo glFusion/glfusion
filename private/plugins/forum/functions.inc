@@ -1780,30 +1780,43 @@ function FF_sigEditorProfile( $signature = '', $errors = array() )
 }
 
 function FF_navbar ($menuitems, $selected='', $parms='') {
-    global $_CONF;
+    global $_CONF, $_FF_CONF,$LANG_ADMIN, $LANG_GF00,$LANG_GF06;
 
-    $navbar = new Template($_CONF['path_layout'] . 'navbar');
-    $navbar->set_file (array (
-        'navbar'       => 'navbar.thtml',
-        'menuitem'     => 'menuitem.thtml',
-        ));
+    USES_lib_admin();
+
+    $retval = '';
+
+    $menu_arr = array();
+
+    $instructions = $LANG_GF00['instructions'];
 
     for ( $i=1; $i <= count($menuitems); $i++ )  {
         $parms = explode( "=",current($menuitems) );
-        $navbar->set_var( 'link',   current($menuitems));
-        if (key($menuitems) == $selected) {
-            $navbar->set_var( 'cssactive', 'id="active"');
-            $navbar->set_var( 'csscurrent','id="current"');
-        } else {
-            $navbar->set_var( 'cssactive', '');
-            $navbar->set_var( 'csscurrent','');
+        if ( key($menuitems) != $selected ) {
+            $url = current($menuitems);
+            $label = key($menuitems);
+            $menu_arr = array_merge($menu_arr,array (
+                array('url' => $url,
+                      'text'=> $label)
+            ));
         }
-        $navbar->set_var( 'label',  key($menuitems));
-        $navbar->parse( 'menuitems', 'menuitem', true );
         next($menuitems);
     }
-    $navbar->parse ('output', 'navbar');
-    $retval = $navbar->finish($navbar->get_var('output'));
+
+    $menu_arr = array_merge($menu_arr,array (
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    ));
+
+    $retval .= COM_startBlock ($LANG_GF06[10], '',COM_getBlockTemplate ('_admin_block', 'header'));
+    $retval .= ADMIN_createMenu(
+        $menu_arr,
+        $instructions,
+        $_CONF['site_url'] . '/forum/images/forum.png'
+    );
+
+    $retval .= COM_endBlock();
+
     return $retval;
 }
 

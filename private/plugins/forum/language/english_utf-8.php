@@ -54,7 +54,8 @@ $LANG_GF00 = array(
     'statsheading3' => 'No topics to report on',
     'searchresults' => 'Forum Search Results %s',
     'access_denied' => 'Access Denied',
-    'uploaderr' => 'File Upload Error'
+    'uploaderr' => 'File Upload Error',
+    'instructions' => 'Select the option above to create / modify categories and forum. You can also setup forum moderators, import glFusion stories into the forum and administer the community moderation settings.',
 );
 
 $LANG_GF01 = array(
@@ -518,6 +519,7 @@ $LANG_GF06 = array(
     7 => 'IP Mgmt',
     8 => 'Community Moderation',
     9 => 'Import',
+    10 => 'Forum Administration',
 );
 
 // User Functions Navbar

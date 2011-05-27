@@ -63,8 +63,8 @@ $catorder   = isset($_POST['catorder']) ? COM_applyFilter($_POST['catorder'],tru
 $display = '';
 
 $display .= FF_siteHeader();
-$display .= COM_startBlock($LANG_GF93['gfboard']);
 $display .= FF_navbar($navbarMenu,$LANG_GF06['3']);
+$display .= COM_startBlock($LANG_GF93['gfboard']);
 
 $grouplist = '';
 $ugrouplist = '';

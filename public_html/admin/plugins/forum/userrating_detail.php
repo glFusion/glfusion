@@ -119,21 +119,6 @@ function _listUserDetail( $uid )
 
     $retval = '';
 
-    $menu_arr = array (
-        array('url'  => $_CONF['site_admin_url'].'/plugins/forum/rating.php',
-              'text' => $LANG_GF98['board_ratings']),
-        array('url'  => $_CONF['site_admin_url'].'/plugins/forum/userrating.php',
-              'text' => $LANG_GF98['user_ratings']),
-        array('url' => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home'])
-    );
-
-    $retval .= ADMIN_createMenu(
-        $menu_arr,
-        'This screen displays the details of all users who have rated this user.',
-        $_CONF['site_url'] . '/forum/images/forum.png'
-    );
-
     $header_arr = array(      # display 'text' and use table field 'field'
                     array('text' => $LANG_GF98['voter'], 'field' => 'voter_id', 'sort' => false),
                     array('text' => $LANG_GF98['grade'], 'field' => 'grade', 'sort' => false),
@@ -171,21 +156,6 @@ function _listUserVotes( $uid )
 
     $retval = '';
 
-    $menu_arr = array (
-        array('url'  => $_CONF['site_admin_url'].'/plugins/forum/rating.php',
-              'text' => $LANG_GF98['board_ratings']),
-        array('url'  => $_CONF['site_admin_url'].'/plugins/forum/userrating.php',
-              'text' => $LANG_GF98['user_ratings']),
-        array('url' => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home'])
-    );
-
-    $retval .= ADMIN_createMenu(
-        $menu_arr,
-        $LANG_GF98['user_votes_desc'],
-        $_CONF['site_url'] . '/forum/images/forum.png'
-    );
-
     $header_arr = array(
                     array('text' => 'User Rated', 'field' => 'user_id', 'sort' => false),
                     array('text' => 'Grade', 'field' => 'grade', 'sort' => false),
@@ -218,15 +188,18 @@ $display = '';
 
 $display = COM_siteHeader();
 
+$navbarMenu = array_merge($navbarMenu,array($LANG_GF98['board_ratings']  => $_CONF['site_admin_url'].'/plugins/forum/rating.php'));
+$navbarMenu = array_merge($navbarMenu,array($LANG_GF98['user_ratings']  => $_CONF['site_admin_url'].'/plugins/forum/userrating.php'));
+
 if ( isset($_GET['uid']) ) {
+    $display .= FF_Navbar($navbarMenu,$LANG_GF06['8']);
     $display .= COM_startBlock($LANG_GF98['user_rating_details'].DB_getItem($_TABLES['users'],'username','uid='.intval($_GET['uid'])), '',
                               COM_getBlockTemplate('_admin_block', 'header'));
-    $display .= FF_Navbar($navbarMenu,$LANG_GF06['8']).'<br/>';
     $display .= _listUserDetail( intval($_GET['uid']) );
 } elseif ( isset($_GET['vid']) ) {
+    $display .= FF_Navbar($navbarMenu,$LANG_GF06['8']);
     $display .= COM_startBlock($LANG_GF98['user_voting_details'].DB_getItem($_TABLES['users'],'username','uid='.intval($_GET['vid'])), '',
                               COM_getBlockTemplate('_admin_block', 'header'));
-    $display .= FF_Navbar($navbarMenu,$LANG_GF06['8']).'<br/>';
     $display .= _listUserVotes( intval($_GET['vid']) );
 }
 $display .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));

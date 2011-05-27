@@ -54,9 +54,10 @@ USES_forum_functions();
 USES_forum_admin();
 
 $display = FF_siteHeader();
-$display .= COM_startBlock($LANG_GF91['gfstats']);
 
 $display .= FF_navbar($navbarMenu,$LANG_GF06['1']);
+
+$display .= COM_startBlock($LANG_GF91['gfstats']);
 
 // CATEGORIES
 $numcats=DB_query("SELECT id FROM {$_TABLES['ff_categories']}");

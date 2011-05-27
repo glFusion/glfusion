@@ -55,8 +55,8 @@ USES_forum_format();
 USES_forum_admin();
 
 $display = FF_siteHeader();
-$display .=  COM_startBlock($LANG_GF94['mod_title']);
 $display .= FF_Navbar($navbarMenu,$LANG_GF06['4']);
+$display .=  COM_startBlock($LANG_GF94['mod_title']);
 
 if(DB_count($_TABLES['ff_forums']) == 0) {
     $display .= '<table width="100%" border="0" cellspacing="0" cellpadding="0">';

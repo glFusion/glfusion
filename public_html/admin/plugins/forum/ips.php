@@ -59,8 +59,8 @@ $forum  = isset($_REQUEST['forum']) ? COM_applyFilter($_REQUEST['forum'],true) :
 $op     = isset($_REQUEST['op']) ? COM_applyFilter($_REQUEST['op']) : '';
 
 $dipslay  = FF_siteHeader();
-$display .=  COM_startBlock($LANG_GF96['gfipman']);
 $display .= FF_Navbar($navbarMenu,$LANG_GF06['7']);
+$display .=  COM_startBlock($LANG_GF96['gfipman']);
 
 if (($op == 'banip') && ($ip != '')) {
     if($_POST['sure'] == 'yes') {

@@ -260,8 +260,8 @@ if (empty($page) || $page < 1) {
     $page = 1;
 }
 
-$display .= COM_startBlock($LANG_GF02['msg193']);
 $display .= FF_Navbar($navbarMenu,$LANG_GF06['5']);
+$display .= COM_startBlock($LANG_GF02['msg193']);
 
 $p = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
 $p->set_file (array ('page'=>'migratestories.thtml','records' => 'migrate_records.thtml'));

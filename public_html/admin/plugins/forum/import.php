@@ -47,8 +47,8 @@ USES_forum_format();
 USES_forum_admin();
 
 $display = FF_siteHeader();
-$display .= COM_startBlock($LANG_GF06[9]);
 $display .= FF_Navbar($navbarMenu,$LANG_GF06[9]);
+$display .= COM_startBlock($LANG_GF06[9]);
 $display .= '<ul style="list-style-type:disc;list-style-position:inside;margin-left:15px;padding-right:2px;">';
 $display .= '<li><a href="'.$_CONF['site_admin_url'].'/plugins/forum/phpbb3_migrate.php">phpBB3 Import</a></li>';
 $display .= '</ul>';

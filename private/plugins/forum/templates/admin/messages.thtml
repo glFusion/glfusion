@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
-{startblock}
 {navbar}
+{startblock}
 <form  name="frm_messages" action="{phpself}" method="post" style="margin:0px;">
 <input type="hidden" name="op" value=""{xhtml}>
 <table cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top:25px; margin-bottom:15px;">
