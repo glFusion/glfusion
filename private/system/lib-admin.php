@@ -538,7 +538,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $orderbyidx = '';
     } else {
         $orderbyidx = COM_applyFilter($_GET['orderby'], true); // set - retrieve and clean
-        $orderidx_link = "&amp;order=$orderbyidx"; // preserve the value for paging
+        $orderidx_link = "&amp;orderby=$orderbyidx"; // preserve the value for paging
         $orderby = $header_arr[$orderbyidx]['field']; // get the field name to sort by
     }
 
