@@ -2,6 +2,11 @@ glFusion ChangeLog
 
 v1.3.0 (Trunk Development Branch)
 ------
+- Implemented consistent admin interface for
+   - Bad Behavior2 Plugin
+   - FileMgmt Plugin
+   - Forum Plugin
+   - Media Gallery Plugin
 - Updated PEAR modules to latest releases (Mark)
 - Updated getID3() library to latest production release. (Mark)
 - Integrated Site Tailor plugin (menu editor / logo admin) into the glFusion
