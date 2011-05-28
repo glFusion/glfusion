@@ -1215,7 +1215,7 @@ function FF_previewPost( $postData, $mode )
     }
 
     $previewTemplate = new Template($_CONF['path'] . 'plugins/forum/templates/');
-    $previewTemplate->set_file ('preview','topic_full.thtml');
+    $previewTemplate->set_file ('preview','topic_preview.thtml');
 
     if ( $UploadErrors ) {
         $previewTemplate->set_var('error_msg',$UploadErrors);
@@ -1223,27 +1223,11 @@ function FF_previewPost( $postData, $mode )
     if ( !isset($postData['date']) ) {
         $postData['date'] = time();
     }
-    $previewTemplate->set_block('topictemplate', 'topicrow', 'trow');
     FF_showtopic($postData,'preview',1,0,$previewTemplate);
-    $previewTemplate->parse('trow', 'topicrow',true);
     $previewTemplate->parse ('output', 'preview');
 
     $retval .= $previewTemplate->finish ($previewTemplate->get_var('output'));
 
-/* ----------------
-    // If Moderator and editing the parent topic - see if form has skicky or locked checkbox on
-    $editmoderator = FALSE;
-    if ($editmoderator AND $editpid == 0) {
-        if($mode == 'edittopic') {
-            if($_POST['locked_switch'] == 1 ) {
-                $locked_val = 'checked="checked"';
-            }
-            if($_POST['sticky_switch'] == 1 ) {
-                $sticky_val = 'checked="checked"';
-            }
-        }
-    }
------------------ */
     return $retval;
 }
 
