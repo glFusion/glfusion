@@ -76,7 +76,7 @@
 
 {!if iframe}
     <tr class="pluginHeader" style="display:{show_previewheader};">
-        <td colspan="2" style="padding:5px 0px 5px 10px;">{lang_postpreview}</td>
+        <td colspan="2" style="padding:5px 0px 5px 10px;">{$LANG_GF02[msg145]}</td>
     </tr>
 {!endif}
 
