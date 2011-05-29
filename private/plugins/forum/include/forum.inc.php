@@ -144,7 +144,7 @@ function FF_ForumHeader($forum,$showtopic) {
         }
         $groupname = _ff_getGroup($grp_id);
         if (!SEC_inGroup($groupname)) {
-            $retval .= BlockMessage($LANG_GF01['ACCESSERROR'],$LANG_GF02['msg77'],false);
+            $retval .= FF_BlockMessage($LANG_GF01['ACCESSERROR'],$LANG_GF02['msg77'],false);
             $retval .= FF_siteFooter();
             echo $retval;
             exit;
