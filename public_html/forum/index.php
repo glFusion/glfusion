@@ -114,7 +114,7 @@ if ($op == 'subscribe') {
         DB_query("INSERT INTO {$_TABLES['subscriptions']} (type,category,category_desc,id,id_desc,uid,date_added) VALUES ('forum',".(int)$forum.",'".DB_escapeString($forum_name)."',0,'".$LANG_GF02['msg138']."',".(int)$_USER['uid'].", now() )");
         // Delete all individual topic notification records
         DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid=".(int)$_USER['uid']." AND category=".(int)$forum." AND id > 0" );
-        forum_statusMessage($LANG_GF02['msg134'],$_CONF['site_url'] .'/forum/index.php?forum=' .$forum,$LANG_GF02['msg135']);
+        $display .= FF_statusMessage($LANG_GF02['msg134'],$_CONF['site_url'] .'/forum/index.php?forum=' .$forum,$LANG_GF02['msg135']);
     } else {
         $display .= FF_BlockMessage($LANG_GF01['ERROR'],$LANG_GF02['msg136'],false);
     }
