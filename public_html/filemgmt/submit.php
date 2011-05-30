@@ -209,6 +209,11 @@ function FM_getGroupList ($basegroup)
 
 $display = '';
 
+if ( defined('DEMO_MODE') ) {
+    redirect_header($_CONF['site_url']."/filemgmt/index.php",10,'Uploads are disabled in demo mode');
+    exit;
+}
+
 if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
 
     $logourl = '';

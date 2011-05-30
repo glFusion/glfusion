@@ -398,8 +398,12 @@ function categoryConfigAdmin(){
 function newfileConfigAdmin(){
     global $_CONF,$myts,$eh,$mytree,$LANG_FM02;
 
+    if ( defined('DEMO_MODE') ) {
+        redirect_header($_CONF['site_admin_url']."/plugins/filemgmt/index.php",10,'Uploads are disabled in demo mode');
+        exit;
+    }
+
     $display = COM_siteHeader('menu');
-//    $display .= COM_startBlock("<b>"._MD_ADMINTITLE."</b>");
     $display .= filemgmt_navbar($LANG_FM02['nav3']);
     $display .= '<form method="post" enctype="multipart/form-data" action="index.php" style="margin:0px;">';
     $display .= '<table width="100%" border="0" class="plugin">';
@@ -711,6 +715,11 @@ function delVote() {
 
 function modDownloadS() {
     global $_CONF,$_TABLES,$myts,$eh,$filemgmt_SnapStore,$filemgmt_FileStore,$_FMDOWNLOAD;
+
+    if ( defined('DEMO_MODE') ) {
+        redirect_header($_CONF['site_admin_url']."/plugins/filemgmt/index.php",10,'Uploads and file edits are disabled in demo mode');
+        exit;
+    }
 
     $cid = $_POST["cid"];
 
@@ -1107,7 +1116,7 @@ function delCat() {
 }
 
 function addCat() {
-    global $_CONF, $_TABLES, $filemgmt_SnapCat,$filemgmt_SnapCatURL,$myts,$eh;
+    global $_CONF, $_TABLES, $LANG24, $filemgmt_SnapCat,$filemgmt_SnapCatURL,$myts,$eh;
 
     $pid = $_POST['cid'];
     $title = $_POST['title'];
@@ -1186,6 +1195,11 @@ function addCat() {
 function addDownload() {
     global $_CONF,$_USER,$_TABLES,$filemgmt_FileStoreURL,$filemgmt_FileSnapURL,$filemgmt_FileStore,$filemgmt_SnapStore;
     global $myts,$eh,$_FMDOWNLOAD,$filemgmtFilePermissions;
+
+    if ( defined('DEMO_MODE') ) {
+        redirect_header($_CONF['site_url']."/index.php",10,'Uploads are disabled in demo mode');
+        exit;
+    }
 
     $title = $myts->makeTboxData4Save($_POST['title']);
     $homepage = $myts->makeTboxData4Save($_POST['homepage']);
