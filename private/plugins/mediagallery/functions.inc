@@ -178,6 +178,7 @@ function plugin_autotags_mediagallery ( $op, $content = '', $autotag = '') {
                 return '';
         }
     } else if ($op == 'parse') {
+        require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
         require_once $_CONF['path'].'plugins/mediagallery/include/autotag.inc.php';
         return _mg_autotags( $op, $content, $autotag );
     }
