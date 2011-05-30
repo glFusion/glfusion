@@ -261,13 +261,31 @@ function configmanager_rdf_file_validate($value)
 function configmanager_select_timezone_helper()
 {
     $locations = array();
-    $zones = timezone_identifiers_list();
-    foreach ($zones as $zone) {
-        $zone = explode('/', $zone);
-        if ($zone[0] == 'Africa' || $zone[0] == 'America' || $zone[0] == 'Antarctica' || $zone[0] == 'Arctic' || $zone[0] == 'Asia' || $zone[0] == 'Atlantic' || $zone[0] == 'Australia' || $zone[0] == 'Europe' || $zone[0] == 'Indian' || $zone[0] == 'Pacific') {
-            if (isset($zone[1]) != '') {
-                $tzname = $zone[0].'/'.$zone[1];
-                $locations[$tzname] = $tzname;
+    $all = timezone_identifiers_list();
+    $i = 0;
+    foreach($all AS $zone) {
+        $zone = explode('/',$zone);
+        $zonen[$i]['continent'] = isset($zone[0]) ? $zone[0] : '';
+        $zonen[$i]['city'] = isset($zone[1]) ? $zone[1] : '';
+        $zonen[$i]['subcity'] = isset($zone[2]) ? $zone[2] : '';
+        $i++;
+    }
+    asort($zonen);
+    $structure = '';
+    foreach($zonen AS $zone) {
+        extract($zone);
+        if($continent == 'Africa' || $continent == 'America' || $continent == 'Antarctica' || $continent == 'Arctic' || $continent == 'Asia' || $continent == 'Atlantic' || $continent == 'Australia' || $continent == 'Europe' || $continent == 'Indian' || $continent == 'Pacific') {
+            if (isset($city) != '') {
+                if (!empty($subcity) != '') {
+                    $city = $city . '/'. $subcity;
+                }
+                $tzname = $continent.'/'.$city;
+                $locations[$tzname] = $continent.'/'.str_replace('_',' ',$city);
+            } else {
+                if (!empty($subcity) != '') {
+                    $city = $city . '/'. $subcity;
+                }
+                $locations[$tzname] = $continent.'/'.str_replace('_',' ',$city);
             }
         }
     }

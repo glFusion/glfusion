@@ -452,9 +452,8 @@ class Date extends DateTime
      * @param   array   attributes i.e.; array('name'=>'tzid','id'=>'tzid')
      * @return  string  HTML select box
      */
-    public function getTimeZoneDropDown($selected = '', $attributes = array())
+    public function getTimeZoneDropDown($selectedzone = '', $attributes = array())
     {
-        $zones = timezone_identifiers_list();
 
         $select = '<select';
         foreach ($attributes as $name => $value) {
@@ -462,16 +461,35 @@ class Date extends DateTime
         }
         $select .= '>' . LB;
 
-        foreach ($zones as $zone) {
-            $zone = explode('/', $zone);
-            if ($zone[0] == 'Africa' || $zone[0] == 'America' || $zone[0] == 'Antarctica' || $zone[0] == 'Arctic' || $zone[0] == 'Asia' || $zone[0] == 'Atlantic' || $zone[0] == 'Australia' || $zone[0] == 'Europe' || $zone[0] == 'Indian' || $zone[0] == 'Pacific') {
-                if (isset($zone[1]) != '') {
-                    $tzname = $zone[0].'/'.$zone[1];
-                    $select .= '<option value="'.$tzname.'"'.($tzname == $selected ? ' selected="selected"' : '') .'>'.str_replace('_', ' ', $tzname).'</option>' . LB;
-                }
-            }
+        $all = timezone_identifiers_list();
+
+        $i = 0;
+        foreach($all AS $zone) {
+            $zone = explode('/',$zone);
+            $zonen[$i]['continent'] = isset($zone[0]) ? $zone[0] : '';
+            $zonen[$i]['city'] = isset($zone[1]) ? $zone[1] : '';
+            $zonen[$i]['subcity'] = isset($zone[2]) ? $zone[2] : '';
+            $i++;
         }
 
+        asort($zonen);
+        foreach( $zonen AS $zone ) {
+            extract($zone);
+            if ($continent == 'Africa' || $continent == 'America' || $continent == 'Antarctica' || $continent == 'Arctic' || $continent == 'Asia' || $continent == 'Atlantic' || $continent == 'Australia' || $continent == 'Europe' || $continent == 'Indian' || $continent == 'Pacific') {
+                if (isset($city) != '') {
+                    if (!empty($subcity) != '') {
+                        $city = $city . '/'. $subcity;
+                    }
+                    $select .= "<option ".((($continent.'/'.$city)==$selectedzone)?'selected="selected "':'')." value=\"".($continent.'/'.$city)."\">".$continent.'/'.str_replace('_',' ',$city)."</option>"; //Timezone
+                } else {
+                    if (!empty($subcity) != ''){
+                        $city = $city . '/'. $subcity;
+                    }
+                }
+
+                $selectcontinent = $continent;
+            }
+        }
         $select .= '</select>' . LB;
         return $select;
     }
