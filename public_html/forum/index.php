@@ -400,7 +400,7 @@ if ($forum == 0) {
         	    }
            		$numForumsDisplayed ++;
             	if ($postCount > 0) {
-            	    $B['subject'] = COM_truncate($B['subject'],25);
+            	    $B['subject'] = COM_truncate($B['subject'],40);
         	        if ($_FF_CONF['use_censor']) {
             	        $B['subject'] = COM_checkWords($B['subject']);
                 	}
