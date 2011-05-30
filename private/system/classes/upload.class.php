@@ -1181,7 +1181,7 @@ class upload
                 $this->_currentFile['_data_dir'] = isset($this->_filesToUpload["_data_dir"]) ? $this->_filesToUpload["_data_dir"] : '' ;
 
                 $metaData = IMG_getMediaMetaData( $this->_currentFile['tmp_name'] );
-                if ( $metaData['mime_type'] != '' ) {
+                if ( isset($metaData['mime_type']) && $metaData['mime_type'] != '' ) {
                     $this->_currentFile['type'] = $metaData['mime_type'];
                 } else {
                     $this->_currentFile['type'] = 'application/octet-stream';

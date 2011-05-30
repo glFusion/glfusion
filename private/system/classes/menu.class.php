@@ -58,7 +58,7 @@ class menuElement {
     }
 
     function constructor( $element, $meadmin, $root, $groups ) {
-        $this->id               = $element['id'];
+        $this->id               = isset($element['id']) ? $element['id'] : '';
         $this->pid              = $element['pid'];
         $this->menu_id          = $element['menu_id'];
         $this->label            = (!empty($element['element_label']) && $element['element_label'] != ' ') ? $element['element_label'] : '';
