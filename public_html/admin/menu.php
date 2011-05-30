@@ -178,7 +178,7 @@ function MB_saveCloneMenu( ) {
         $result = DB_query($sql);
         while ($M = DB_fetchArray($result)) {
             $M['menu_id'] = $menu_id;
-            $element            = new mbElement();
+            $element            = new menuElement();
             $element->constructor( $M, $meadmin, $root, $groups );
             $element->id        = $element->createElementID($M['menu_id']);
             $element->saveElement();
@@ -652,7 +652,7 @@ function MB_saveNewMenuElement ( ) {
      * build our class
      */
 
-    $element            = new mbElement();
+    $element            = new menuElement();
     $element->constructor( $E, $meadmin, $root, $groups );
     $element->id        = $element->createElementID($E['menu_id']);
     $element->saveElement();
