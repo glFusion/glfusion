@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.3.0 (Trunk Development Branch)
 ------
+- Added halo skin to Media Gallery (compliments of Walter Rowe) (Mark)
 - Implemented consistent admin interface for
    - Bad Behavior2 Plugin
    - FileMgmt Plugin
