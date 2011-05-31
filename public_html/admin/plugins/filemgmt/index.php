@@ -1136,7 +1136,7 @@ function addCat() {
             $tmp  = $_FILES["uploadfile"]['tmp_name'];    // temporary name of file in temporary directory on server
             $imgurl = rawurlencode($myts->makeTboxData4Save($name));
 
-            require_once ($_CONF['path_system'] . 'classes/upload.class.php');
+            require_once $_CONF['path_system'] . 'classes/upload.class.php';
             $upload = new upload();
 
             $upload->setAutomaticResize (true);
@@ -1174,8 +1174,7 @@ function addCat() {
                 $display .= COM_startBlock ($LANG24[30], '',
                         COM_getBlockTemplate ('_msg_block', 'header'));
                 $display .= $upload->printErrors (false);
-                $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block',
-                                                                'footer'));
+                $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block','footer'));
                 $display .= COM_siteFooter ();
                 echo $display;
                 exit; // don't return
