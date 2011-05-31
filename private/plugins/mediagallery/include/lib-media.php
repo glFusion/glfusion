@@ -1940,7 +1940,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
                     $commode = '';
                 }
                 $commentbar = CMT_userComments ($cid,$media[$mediaObject]['media_title'],
-                              'mediagallery',$comorder,$commode,0,$page,false,$delete_option);
+                              'mediagallery',$comorder,$commode,0,$page,false,$delete_option, 0, $media[$mediaObject]['media_user_id']);
                 $retval    .= $commentbar;
             } else {
                 $retval .= ' <center><a href="' . $_CONF['site_url'] . '/comment.php?sid=' . $mid . '&amp;title=' . $title . '&amp;pid=0&amp;type=mediagallery' . '">' . $LANG01[60] . '</a></center>';
