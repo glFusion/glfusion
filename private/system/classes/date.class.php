@@ -207,15 +207,8 @@ class Date extends DateTime
      */
     public function setTimestamp ( $unixtimestamp )
     {
-        $year  = date('Y',$unixtimestamp);
-        $month = date('m',$unixtimestamp);
-        $day   = date('d',$unixtimestamp);
-        $hour  = date('G',$unixtimestamp);
-        $min   = date('i',$unixtimestamp);
-        $sec   = date('s',$unixtimestamp);
-
-        parent::setDate ( $year , $month , $day );
-        parent::setTime ( $hour , $min, $sec );
+        $tdt = new Date($unixtimestamp,$this->_tz);
+        $this->setDateTimestamp($tdt->year,$tdt->month,$tdt->day,$tdt->hour,$tdt->minute,$tdt->second);
     }
 
 
