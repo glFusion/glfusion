@@ -70,7 +70,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
     }
 
     $min_height = 50;     // Base minimum  height of topic - will increase if avatar or sig is used
-    $dt->setTimestamp($showtopic['date']);
+    $dt = new Date($showtopic['date'],$_CONF['timezone']);
     $date = $dt->format($_FF_CONF['default_Topic_Datetime_format'],true);
 
     $foundUser = 0;
@@ -253,7 +253,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
         $date = COM_getUserDateTimeFormat($showtopic['date']);
         $topictemplate->set_var ('posted_date', $date[0]);
     } else {
-        $dt->setTimestamp($showtopic['date']);
+        $dt = new Date($showtopic['date'],$_CONF['timezone']);
         $date = $dt->format($_FF_CONF['default_Topic_Datetime_format'],true);
         $topictemplate->set_var ('posted_date', $date);
     }

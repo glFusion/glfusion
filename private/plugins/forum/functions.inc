@@ -794,7 +794,7 @@ function phpblock_forum_newposts() {
     if ( COM_isAnonUser() && $_FF_CONF['registration_required'] == 1 )  {
         return;
     }
-    $dt = new Date('now',$_CONF['timezone']);
+//    $dt = new Date('now',$_CONF['timezone']);
     $post_limit = $_FF_CONF['sideblock_numposts'];
     if ( isset($_GET['mode']) ) {
         $mode = COM_applyFilter($_GET['mode']);
@@ -916,7 +916,7 @@ function phpblock_forum_newposts() {
                 $block->set_var ('LANG_REPLIES', $LANG_GF01['REPLIES']);
                 $block->set_var ('views', $A['views']);
                 $block->set_var ('replies', $A['replies']);
-                $dt->setTimestamp($postdate);
+                $dt = new Date($postdata,$_CONF['timezone']);
                 if ($_FF_CONF['allow_user_dateformat']) {
                     $date = $dt->format($dt->getUserFormat(),true);
                     $block->set_var ('date', $date);
@@ -977,7 +977,6 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
     }
 
     $dt = new Date('now',$_CONF['timezone']);
-
     USES_forum_format();
 
     $retval = '';
@@ -1047,9 +1046,9 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 $A['subject'] = substr ($A['subject'], 0, $_FF_CONF['cb_subject_size']);
                 $A['subject'] .= '...';
             }
-            $dt->setTimestamp($A['date']);
+            $dt = new Date($A['date'],$_CONF['timezone']);
             $firstdate = $dt->format($_FF_CONF['default_Datetime_format'],true);
-            $dt->setTimestamp($A['lastupdated']);
+            $dt = new Date($A['lastupdated'],$_CONF['timezone']);
             $lastdate = $dt->format($_FF_CONF['default_Datetime_format'],true);
 
             $topicinfo = "{$LANG_GF01['STARTEDBY']} " . $A['name'].', ';
