@@ -840,7 +840,9 @@ function FF_saveTopic( $forumData, $postData, $action )
     $forumfiles = array();
 
     $okToSave = true;
-    $date = time();
+    $dt = new Date('now',$_CONF['timezone']);
+    $date = $dt->toUnix();
+
     $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
 
     if (COM_isAnonUser() ) {
