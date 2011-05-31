@@ -52,7 +52,7 @@ function _checkEnvironment()
 {
     global $_CONF, $_TABLES, $_PLUGINS, $_SYSTEM, $LANG_ADMIN, $LANG01,
            $filemgmt_FileStore, $filemgmt_SnapStore, $filemgmt_SnapCat,
-           $CONF_FORUM, $_MG_CONF, $LANG_FILECHECK;
+           $_FF_CONF, $_MG_CONF, $LANG_FILECHECK;
 
     $retval = '';
     $permError = 0;
@@ -403,8 +403,8 @@ function _checkEnvironment()
                     );
 
     $forum_file_list = array(
-                        $CONF_FORUM['uploadpath'].'/',
-                        $CONF_FORUM['uploadpath'].'/tn/',
+                        $_FF_CONF['uploadpath'].'/',
+                        $_FF_CONF['uploadpath'].'/tn/',
                       );
 
 
