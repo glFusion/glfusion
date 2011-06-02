@@ -2379,12 +2379,13 @@ function PLG_getWhatsNew()
 
     foreach ($_PLUGINS as $pi_name) {
         $fn_head = 'plugin_whatsnewsupported_' . $pi_name;
+        $fn_new = 'plugin_getwhatsnew_' . $pi_name;
         if (function_exists($fn_head)) {
+            // Old style- Separate functions to get header & content
             $supported = $fn_head();
             if (is_array($supported)) {
                 list($headline, $byline) = $supported;
 
-                $fn_new = 'plugin_getwhatsnew_' . $pi_name;
                 if (function_exists($fn_new)) {
                     $whatsnew = $fn_new ();
                     $newcontent[] = $whatsnew;
@@ -2392,22 +2393,39 @@ function PLG_getWhatsNew()
                     $newbylines[] = $byline;
                 }
             }
+        } elseif (function_exists($fn_new)) {
+            // 1.3.0 style- get all 3 elements from one function
+            $whatsnew = $fn_new();
+            if (is_array($whatsnew) && !empty($whatsnew)) {
+                $newheadlines[] = $whatsnew[0];
+                $newbylines[] = $whatsnew[1];
+                $newcontent[] = $whatsnew[2];
+            }
         }
     }
 
     $fn_head = 'CUSTOM_whatsnewsupported';
+    $fn_new = 'CUSTOM_getwhatsnew';
     if (function_exists($fn_head)) {
+        // Old style- Separate functions to get header & content
         $supported = $fn_head();
         if (is_array($supported)) {
             list($headline, $byline) = $supported;
 
-            $fn_new = 'CUSTOM_getwhatsnew';
             if (function_exists($fn_new)) {
                 $whatsnew = $fn_new ();
                 $newcontent[] = $whatsnew;
                 $newheadlines[] = $headline;
                 $newbylines[] = $byline;
             }
+        }
+    } elseif (function_exists($fn_new)) {
+        // 1.3.0 style- get all 3 elements from one function
+        $whatsnew = $fn_new();
+        if (is_array($whatsnew) && !empty($whatsnew)) {
+            $newheadlines[] = $whatsnew[0];
+            $newbylines[] = $whatsnew[1];
+            $newcontent[] = $whatsnew[2];
         }
     }
 
