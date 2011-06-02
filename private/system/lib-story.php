@@ -134,9 +134,6 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
     if ( $index == 'p' || !empty($query) || !$article->check_instance($instance_id,$article_filevar)) {
     // end of instance cache
         $article->set_var('article_filevar','');
-        $article->set_var( 'layout_url', $_CONF['layout_url'] );
-        $article->set_var( 'site_url', $_CONF['site_url'] );
-        $article->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
         $article->set_var( 'site_name', $_CONF['site_name'] );
         if ( $_CONF['hidestorydate'] != 1 ) {
             $article->set_var( 'story_date_short', $story->DisplayElements('shortdate') );
@@ -182,7 +179,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 $article->set_var('author_photo', $photo);
                 $camera_icon = '<img src="' . $_CONF['layout_url']
                              . '/images/smallcamera.' . $_IMAGE_TYPE . '" alt=""'
-                             . XHTML . '>';
+                             . '/>';
                 $article->set_var('camera_icon',
                                   COM_createLink($camera_icon, $profileUrl));
             } else {
@@ -205,7 +202,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 $article->set_var( 'story_topic_image_url', $imageurl );
                 $topicimage = '<img src="' . $imageurl . '" class="float'
                             . $_CONF['article_image_align'] . '" alt="'
-                            . $topicname . '" title="' . $topicname . '"' . XHTML . '>';
+                            . $topicname . '" title="' . $topicname . '" />';
                 $article->set_var( 'story_anchortag_and_image',
                     COM_createLink(
                         $topicimage,
@@ -215,7 +212,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 );
                 $article->set_var( 'story_topic_image', $topicimage );
                 $topicimage_noalign = '<img src="' . $imageurl . '" alt="'
-                            . $topicname . '" title="' . $topicname . '"' . XHTML . '>';
+                            . $topicname . '" title="' . $topicname . '" />';
                 $article->set_var( 'story_anchortag_and_image_no_align',
                     COM_createLink(
                         $topicimage_noalign,
@@ -300,7 +297,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                     $article->set_var( 'story_page', $story_page );
                 }
 
-                $article->set_var( 'story_introtext', $introtext . '<br' . XHTML . '>'
+                $article->set_var( 'story_introtext', $introtext . '<br />'
                                    . $bodytext );
                 $article->set_var( 'story_text_no_br', $introtext . $bodytext );
             }
@@ -316,7 +313,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 );
                 $pingico = '<img src="' . $_CONF['layout_url'] . '/images/sendping.'
                     . $_IMAGE_TYPE . '" alt="' . $LANG_TRB['send_trackback']
-                    . '" title="' . $LANG_TRB['send_trackback'] . '"' . XHTML . '>';
+                    . '" title="' . $LANG_TRB['send_trackback'] . '" />';
                 $article->set_var( 'send_trackback_icon',
                     COM_createLink($pingico, $url)
                 );
@@ -419,7 +416,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                         . '/trackback.php?mode=sendall&amp;id=' . $story->getSid();
                     $pingico = '<img src="' . $_CONF['layout_url'] . '/images/sendping.'
                         . $_IMAGE_TYPE . '" alt="' . $LANG_TRB['send_trackback']
-                        . '" title="' . $LANG_TRB['send_trackback'] . '"' . XHTML . '>';
+                        . '" title="' . $LANG_TRB['send_trackback'] . '" />';
                     $article->set_var( 'send_trackback_icon',
                         COM_createLink($pingico, $pingurl)
                     );
@@ -449,7 +446,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                           . '&amp;what=emailstory';
                 $emailicon = '<img src="' . $_CONF['layout_url'] . '/images/mail.'
                     . $_IMAGE_TYPE . '" alt="' . $LANG01[64] . '" title="'
-                    . $LANG11[2] . '"' . XHTML . '>';
+                    . $LANG11[2] . '" />';
                 $article->set_var( 'email_icon',
                     COM_createLink($emailicon, $emailUrl)
                 );
@@ -464,7 +461,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             } else {
                 $printicon = '<img src="' . $_CONF['layout_url']
                     . '/images/print.' . $_IMAGE_TYPE . '" alt="' . $LANG01[65]
-                    . '" title="' . $LANG11[3] . '"' . XHTML . '>';
+                    . '" title="' . $LANG11[3] . '" />';
                 $article->set_var( 'print_icon',
                     COM_createLink($printicon, $printUrl, array('rel' => 'nofollow'))
                 );
@@ -486,7 +483,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 if ( $feeds > 0 ) {
                     $feedicon = '<img src="'. $_CONF['layout_url'] . '/images/rss_small.'
                              . $_IMAGE_TYPE . '" alt="'. $feedTitle
-                             .'" title="'. $feedTitle .'"' . XHTML . '>';
+                             .'" title="'. $feedTitle .'" />';
                     $article->set_var( 'feed_icon',COM_createLink($feedicon, $feedUrl,array("type" =>"application/rss+xml")));
                 } else {
                     $article->set_var( 'feed_icon', '' );
@@ -514,7 +511,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                     . '/story.php?edit=x&amp;sid=' . $story->getSid() );
             $article->set_var( 'lang_edit_text',  $LANG01[4] );
             $editicon = $_CONF['layout_url'] . '/images/edit.' . $_IMAGE_TYPE;
-            $editiconhtml = '<img src="' . $editicon . '" alt="' . $LANG01[4] . '" title="' . $LANG01[4] . '"' . XHTML . '>';
+            $editiconhtml = '<img src="' . $editicon . '" alt="' . $LANG01[4] . '" title="' . $LANG01[4] . '" />';
             $article->set_var( 'edit_icon',
                 COM_createLink(
                     $editiconhtml,
@@ -544,16 +541,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         } else {
             $article->set_var('rating_bar','',false,true );
         }
-/* ---------NOT REALLY USED???
-        if( $story->DisplayElements('featured') == 1 ) {
-            $article->set_var( 'lang_todays_featured_article', $LANG05[4] );
-            $article->parse( 'story_bodyhtml', 'featuredbodytext', true );
-        } elseif( $story->DisplayElements('statuscode') == 10 AND $story->DisplayElements('expire') <= time() ) {
-            $article->parse( 'story_bodyhtml', 'archivestorybodytext', true );
-        } else {
-            $article->parse( 'story_bodyhtml', 'bodytext', true );
-        }
----------------- */
+
         if ($index != 'p') {
             $article->create_instance($instance_id,$article_filevar);
         }
@@ -1316,7 +1304,7 @@ function service_submit_story($args, &$output, &$svc_msg)
                                 COM_getBlockTemplate ('_msg_block', 'header'));
                 $output .= $LANG24[55] . '<p>';
                 for ($i = 1; $i <= count($errors); $i++) {
-                    $output .= current($errors) . '<br' . XHTML . '>';
+                    $output .= current($errors) . '<br />';
                     next($errors);
                 }
                 $output .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
