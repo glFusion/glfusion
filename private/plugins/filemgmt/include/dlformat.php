@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: dlformat.php 3155 2008-09-16 02:13:18Z mevans0263                 $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2010 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -162,7 +162,10 @@ if ($FilemgmtAdmin) {
 
 $static = false;
 $voted  = 0;
-if (isset($_USER['uid']) && $_USER['uid'] == $submitter ) {
+if ( COM_isAnonUser() ) {
+        $static = true;
+        $voted = 1;
+} else if (isset($_USER['uid']) && $_USER['uid'] == $submitter ) {
     $static = true;
     $voted = 0;
 } else {
@@ -174,6 +177,7 @@ if (isset($_USER['uid']) && $_USER['uid'] == $submitter ) {
         $voted = 0;
     }
 }
+
 if ( $_FM_CONF['enable_rating'] ) {
     $rating_box = RATING_ratingBar( 'filemgmt',$lid, $votes,$rating, $voted ,5,$static,'sm');
     $p->set_var('rating_bar',$rating_box);
