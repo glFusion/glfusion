@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.3.0 (Trunk Development Branch)
 ------
+- Highlight comments in Media Gallery when posted by media owner (Mark)
 - Added halo skin to Media Gallery (compliments of Walter Rowe) (Mark)
 - Implemented consistent admin interface for
    - Bad Behavior2 Plugin
