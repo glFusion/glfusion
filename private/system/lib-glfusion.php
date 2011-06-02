@@ -35,7 +35,6 @@ if (!defined ('GVERSION')) {
 }
 
 $TEMPLATE_OPTIONS['hook']['set_root'] = '_template_set_root';
-$TEMPLATE_OPTIONS['default_vars']['digg_enabled'] = $_CONF['digg_enabled'];
 
 function _template_set_root($root) {
     global $_CONF;
@@ -221,7 +220,7 @@ function phpblock_blogroll ()
 function phpblock_storypicker() {
     global $_TABLES, $_CONF, $topic;
 
-    $LANG_STORYPICKER = Array('choose' => 'Choose a story');
+    $LANG_STORYPICKER = array('choose' => 'Choose a story');
     $max_stories = 5; //how many stories to display in the list
 
     $topicsql = '';
