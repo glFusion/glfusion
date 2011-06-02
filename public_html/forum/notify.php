@@ -48,7 +48,10 @@ USES_forum_functions();
 USES_forum_format();
 
 if ( COM_isAnonUser() ) {
-    echo COM_refresh($_CONF['site_url'].'/forum/index.php');
+    $display  = COM_siteHeader();
+    $display .= SEC_loginRequiredForm();
+    $display .= COM_siteFooter();
+    echo $display;
     exit;
 }
 
