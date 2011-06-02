@@ -336,10 +336,7 @@ function _ff_alertMessage($message,$title='',$prompt='') {
     global $_CONF, $_FF_CONF,$LANG_GF02;
 
     $alertmsg = new Template($_CONF['path'] . 'plugins/forum/templates/');
-    $alertmsg->set_file (array (
-        'outline_header'=>'forum_outline_header.thtml',
-        'alertmsg'=>'alertmsg.thtml',
-        'outline_footer'=>'forum_outline_footer.thtml'));
+    $alertmsg->set_file ('alertmsg','alertmsg.thtml');
 
     $alertmsg->set_var ('alert_title', $title);
     $alertmsg->set_var ('alert_message', $message);
