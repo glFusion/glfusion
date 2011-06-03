@@ -185,20 +185,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
         $moodimage = '<img align="middle" src="'._ff_getImage($showtopic['mood'],'moods') .'" title="'.$showtopic['mood'].'" alt=""/><br/>';
         $min_height = $min_height + 30;
     }
-/*
-    // Check and see if there are now no [file] bbcode tags in content and reset the show_inline value
-    // This is needed in case user had used the file bbcode tag and then removed it
-    if ($mode == 'preview' && strpos($showtopic['comment'],'[file]') === false) {
-        $usql = "UPDATE {$_TABLES['ff_attachments']} SET show_inline = 0 ";
-        if (isset($_POST['uniqueid']) AND $_POST['uniqueid'] > 0) {  // User is previewing a new post
-            $uniqueid = COM_applyFilter($_POST['uniqueid'],true);
-            $usql .= "WHERE topic_id = ".(int) $uniqueid ." AND tempfile=1 ";
-        } else if(isset($showtopic['id'])) {
-             $usql .= "WHERE topic_id = ".(int) $showtopic['id']." ";
-        }
-        DB_query($usql);
-    }
-*/
+
     $showtopic['comment'] = FF_formatTextBlock($showtopic['comment'],$showtopic['postmode'],$mode,$showtopic['status']);
     $showtopic['subject'] = htmlspecialchars(strip_tags($showtopic['subject']),ENT_QUOTES,COM_getEncodingt());
     $showtopic['subject'] = COM_truncate($showtopic['subject'],$_FF_CONF['show_subject_length'],'...');

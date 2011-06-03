@@ -56,7 +56,7 @@ if ($A['repository_id'] > 0) {
 $filedata = explode(':', $A['filename']);
 $filename = $filedata[0];
 $realname = $filedata[1];
-$filepath = "{$_FF_CONF['uploadpath']}/$filename";
+$filepath = $_FF_CONF['uploadpath'].'/'.$filename;
 
 if ( file_exists($filepath) ) {
     if ($fd = fopen ($filepath, "rb")) {

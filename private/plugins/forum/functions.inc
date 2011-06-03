@@ -61,7 +61,6 @@ if (file_exists($langfile)) {
     }
 }
 
-//$pi_version = DB_getItem($_TABLES['plugins'], 'pi_version', "pi_name='forum'");
 $pi_version = $_PLUGIN_INFO['forum'];
 
 require_once $_CONF['path'].'plugins/forum/forum.php';
@@ -1074,7 +1073,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                     }
                 }
                 $shortComment = trim($shortComment).$tailString;
-                $lastpostinfo = htmlspecialchars(preg_replace('#\r?\n#','<br />',strip_tags($shortComment)),ENT_COMPAT,COM_getEncodingt());
+                $lastpostinfo = htmlspecialchars(preg_replace('#\r?\n#',' ',strip_tags($shortComment)),ENT_COMPAT,COM_getEncodingt());
             } else {
                 $qlreply = DB_query("SELECT id,uid,name,comment FROM {$_TABLES['ff_topic']} WHERE id={$A['last_reply_rec']}");
                 $B = DB_fetchArray($qlreply);
@@ -1103,7 +1102,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                     }
                 }
                 $shortComment = trim($shortComment).$tailString;
-                $lastpostinfo = htmlspecialchars(preg_replace('#\r?\n#','<br />',strip_tags($shortComment)),ENT_COMPAT,COM_getEncodingt());
+                $lastpostinfo = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags($shortComment)),ENT_COMPAT,COM_getEncodingt());
             }
             $cssid = ($cssid ==1) ? 2: 1;
             $block->set_var (array(
@@ -1493,7 +1492,6 @@ function forum_modPermission($forum,$uid='',$permission='') {
 
 }
 
-// $forum is an array
 function _ff_canPost( $forum ) {
     global $_CONF, $_FF_CONF,$_USER, $_TABLES;
 

@@ -195,11 +195,6 @@ if ($op == 'search') {
         $inforum = "";
     }
 
-//    $sql = " (SELECT * FROM {$_TABLES['ff_topic']} WHERE (subject LIKE '%$query%') $inforum ) ";
-//    $sql .= "UNION ALL (SELECT * FROM {$_TABLES['ff_topic']} WHERE (comment LIKE '%$query%') ";
-//    $sql .= "$inforum) ORDER BY $orderby $direction LIMIT 100";
-//    $result = DB_query($sql);
-
     $sql  = "SELECT * FROM {$_TABLES['ff_topic']} WHERE (subject LIKE '%$query%') $inforum OR ";
     $sql .= "(comment LIKE '%$query%') $inforum GROUP BY $orderby ORDER BY $orderby $direction LIMIT 100";
     $result = DB_query($sql);
@@ -485,9 +480,7 @@ if ($forum == 0) {
     $display .= $forumlisting->finish ($forumlisting->get_var('output'));
 }
 
-// *** END OF CATEGORY LIST *** //
-
- // Display Forums
+// Display Forums
 if ($forum > 0) {
     $skipForum = false;
     if ( !_ff_canUserViewRating($forum) ) {

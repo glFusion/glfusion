@@ -430,8 +430,6 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         } else {
             $disable_urlparse_val = '';
         }
-        // seems to me we need to check notify, sticky, and locked too.
-        // postmode done up above
     }
     // create our template
     $peTemplate = new Template($_CONF['path'] . 'plugins/forum/templates/');
@@ -441,10 +439,6 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         $peTemplate->set_var('preview_post',FF_previewPost( $postData, $action ));
     }
 
-// uniqueid is used when entering a new topic so we'll have a way
-// to tie file uploads to it.
-// i think this gets overwrritten later on, we need to check
-// i think we only need this for new or reply not edit
     $uniqueid = isset($postData['uniqueid']) ? COM_applyFilter($postData['uniqueid'],true) : mt_rand();
     $peTemplate->set_var('uniqueid',$uniqueid);
 
@@ -475,13 +469,12 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         } elseif ($postData['uid'] > 1) {
             $username = COM_getDisplayName($postData['uid']);
         }
-// do we really need this??
+
         $postData['comment'] = str_ireplace('</textarea>','&lt;/textarea&gt;',$postData['comment']);
 
         $peTemplate->set_var ('hidden_editpid', $postData['pid']);
         $peTemplate->set_var ('hidden_editid',  $postData['id']);
 
-// i don't like html in the code - how do we get this in the template?
         $edit_prompt = $LANG_GF02['msg190'] . '<br/><input type="checkbox" name="silentedit" ';
         if ((isset($postData['silentedit']) && $postData['silentedit'] == 1) OR ( !isset($postData['modedit']) AND $_FF_CONF['silent_edit_default'])) {
              $edit_prompt .= 'checked="checked" ';
@@ -531,7 +524,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         $peTemplate->set_var ('member_user',true);
         $peTemplate->set_var ('post_message', $postmessage);
         $peTemplate->set_var ('LANG_NAME', $LANG_GF02['msg33']);
-/* --------------- need to fix this --- */
+
         if (!isset($username) OR $username == '') {
             if ($action == 'edittopic') {
                 if ( $editmoderator ) {
@@ -597,14 +590,14 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
             $postData['forum'] = '';
         }
         if (DB_getItem($_TABLES['ff_userprefs'],'alwaysnotify', "uid=".(int) $uid) == 1 OR FF_isSubscribed( $postData['forum'], $notifyTopicid, $uid )) {
-            $notify = 'on';
+            $postData['notify'] = 'on';
             // check and see if user has un-subscribed to this topic
             $nid = -$notifyTopicid;
             if ($notifyTopicid > 0 AND (DB_getItem($_TABLES['subscriptions'],'id', "type='forum' AND category=".(int)$postData['forum']." AND id=$nid AND uid=$uid") > 1)) {
-                $notify = '';
+                $postData['notify'] = '';
             }
         } else {
-            $notify = '';
+            $postData['notify'] = '';
         }
     }
 
@@ -689,10 +682,8 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         $peTemplate->set_var('bbcodeeditor',true);
     }
 
-//@@@Subject
     $postData['subject'] = str_replace('"', '&quot;',$postData['subject']);
 
-//@@@Smilies
     if(!$_FF_CONF['allow_smilies']) {
         $smilies = '';
     } else {
@@ -813,7 +804,6 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
     $peTemplate->parse ('output', 'posteditor');
     $retval .= $peTemplate->finish($peTemplate->get_var('output'));
 
-    //Topic Review
     if ( !isset($_POST['editpost']) ) {
         $_POST['editpost'] = '';
     }
@@ -823,8 +813,6 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
             $retval .= "<iframe src=\"{$_CONF['site_url']}/forum/viewtopic.php?mode=preview&amp;showtopic=".$postData['id']."&amp;onlytopic=1&amp;lastpost=true\" height=\"300\" width=\"100%\"></iframe>";
         }
     }
-
-    // need to finish the template and return it....
     return $retval;
 }
 
@@ -851,9 +839,14 @@ function FF_saveTopic( $forumData, $postData, $action )
         $uid = $_USER['uid'];
     }
 
-    // perform permission checks
-
-    // NEED TO VALIDATE POSTMODE
+    // verify postmode is allowed
+    if ( strtolower($postData['postmode']) == 'html' ) {
+        if ($_FF_CONF['allow_html'] || SEC_inGroup( 'Root' ) || SEC_hasRights('forum.html')) {
+            $postData['postmode'] = 'html';
+        } else {
+            $postData['postmode'] = 'text';
+        }
+    }
 
     // is forum readonly?
     if ( $forumData['is_readonly'] == 1 ) {
@@ -1109,7 +1102,7 @@ function FF_saveTopic( $forumData, $postData, $action )
 
         if ( !COM_isAnonUser() ) {
             //NOTIFY - Checkbox variable in form set to "on" when checked and they don't already have subscribed to forum or topic
-            $nid = -$topicPID;  // Negative Topic ID Value
+            $nid = -$topicPID;
             $currentForumNotifyRecID   = (int) DB_getItem($_TABLES['subscriptions'],'sub_id', "type='forum' AND category='".DB_escapeString($forum)."' AND id=0 AND uid=".(int) $uid);
             $currentTopicNotifyRecID   = (int) DB_getItem($_TABLES['subscriptions'],'sub_id', "type='forum' AND category='".DB_escapeString($forum)."' AND id='".DB_escapeString($topicPID)."' AND uid=".(int) $uid);
             $currentTopicUnNotifyRecID = (int) DB_getItem($_TABLES['subscriptions'],'sub_id', "type='forum' AND category='".DB_escapeString($forum)."' AND id='".DB_escapeString($nid)."' AND uid=".(int) $uid);
@@ -1130,8 +1123,9 @@ function FF_saveTopic( $forumData, $postData, $action )
                 DB_query("INSERT INTO {$_TABLES['subscriptions']} (type,category,category_desc,id,id_desc,uid,date_added) VALUES ('forum','".DB_escapeString($forum)."','".DB_escapeString($forum_name)."','".DB_escapeString($nid)."','".$subject."',".(int)$uid.",now() )");
             }
         }
-
-        _ff_chknotifications($forum,$savedPostID,$uid);
+        if ( $action != 'saveedit' ) {
+            _ff_chknotifications($forum,$savedPostID,$uid);
+        }
 
         $link = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$topicPID.'&topic='.$savedPostID.'#'.$savedPostID;
         if ( $uploadErrors != '' ) {
