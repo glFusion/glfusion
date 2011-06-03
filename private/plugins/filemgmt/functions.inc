@@ -933,7 +933,11 @@ function plugin_canuserrate_filemgmt($item_id, $uid)
 
     $retval = false;
 
-    if (!$FilemgmtUser){
+    if ( COM_isAnonUser() ) {
+        return false;
+    }
+
+    if (!$FilemgmtUser) {
         $ratinguser = 0;
     } else {
         $ratinguser = $uid;
