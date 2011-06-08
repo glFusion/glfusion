@@ -1325,12 +1325,9 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         'lang_newuser'      => $LANG12[3],
     ));
 
-    // build the site tailor menus
-//    if ( function_exists('mb_getMenu') ) {
-        $theme->set_var('st_hmenu',mb_getMenu('navigation',"gl_moomenu","gl_moomenu",'',"parent"));
-        $theme->set_var('st_footer_menu',mb_getMenu('footer','st-fmenu','','','','st-f-last'));
-        $theme->set_var('st_header_menu',mb_getMenu('header','st-fmenu','','','','st-f-last'));
-//    }
+    $theme->set_var('st_hmenu',mb_getMenu('navigation',"gl_moomenu","gl_moomenu",'',"parent"));
+    $theme->set_var('st_footer_menu',mb_getMenu('footer','st-fmenu','','','','st-f-last'));
+    $theme->set_var('st_header_menu',mb_getMenu('header','st-fmenu','','','','st-f-last'));
 
     // Get plugin menu options
     $plugin_menu = PLG_getMenuItems();
@@ -6833,9 +6830,11 @@ function css_out()
         $css = css_compress($css);
     }
     // save cache file
-    $fp = fopen($cacheFile,'w');
-    fwrite($fp,$css);
-    fclose($fp);
+    $fp = @fopen($cacheFile,'w');
+    if ( $fp !== false ) {
+        fwrite($fp,$css);
+        fclose($fp);
+    }
     return $cacheURL;
 }
 
@@ -6915,10 +6914,10 @@ function js_out()
     }
 
     if ( $_SYSTEM['use_direct_style_js'] ) {
-        $cacheFile = $_CONF['path_html'].'/'.$_CONF['js_cache_filename'].$_CONF['theme'].'.js';
+        $cacheFile = $_CONF['path_html'].$_CONF['js_cache_filename'].$_CONF['theme'].'.js';
         $cacheURL  = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].'.js?t='.$_CONF['theme'];
     } else {
-        $cacheFile = $_CONF['path'].'/data/layout_cache/'.$_CONF['js_cache_filename'].$_CONF['theme'].'.js';
+        $cacheFile = $_CONF['path'].'data/layout_cache/'.$_CONF['js_cache_filename'].$_CONF['theme'].'.js';
         $cacheURL  = $_CONF['site_url'].'/js.php?t='.$_CONF['theme'];
     }
 
@@ -7053,9 +7052,11 @@ function js_out()
     $js .= "\n"; // https://bugzilla.mozilla.org/show_bug.cgi?id=316033
 
     // save cache file
-    $fp = fopen($cacheFile,'w');
-    fwrite($fp,$js);
-    fclose($fp);
+    $fp = @fopen($cacheFile,"w");
+    if ( $fp !== false ) {
+        fwrite($fp,$js);
+        fclose($fp);
+    }
     return $cacheURL;
 }
 
