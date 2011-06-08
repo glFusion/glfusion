@@ -307,6 +307,9 @@ function _forum_cvt_watch() {
         return $converted;
     }
 
+    $fName = array();
+    $tName = array();
+
     $dt = new Date('now',$_CONF['timezone']);
 
     $processed = array();
@@ -317,24 +320,35 @@ function _forum_cvt_watch() {
         $pids[] = $T['id'];
     }
 
-    $sql = "SELECT * FROM {$_TABLES['ff_watch']}";
+    $sql = "SELECT * FROM {$_TABLES['ff_watch']} ORDER BY topic_id ASC";
     $result = DB_query($sql);
 
     while ( ( $W = DB_fetchArray($result) ) != NULL ) {
 
-        $forum_name = DB_getItem($_TABLES['ff_forums'],'forum_name','forum_id='.(int)$W['forum_id']);
+        if ( !isset($fName[$W['forum_id']]) ) {
+           $forum_name = DB_getItem($_TABLES['ff_forums'],'forum_name','forum_id='.(int)$W['forum_id']);
+           $fName[$W['forum_id']] = $forum_name;
+        } else {
+            $forum_name = $fName[$W['forum_id']];
+        }
+
         if ( $W['topic_id'] != 0 ) {
             if ( $W['topic_id'] < 0 ) {
                 $searchID = abs($W['topic_id']);
             } else {
                 $searchID = $W['topic_id'];
             }
-            $topic_name = DB_getItem($_TABLES['ff_topic'],'subject','id='.(int)$searchID);
+            if ( !isset($tName[$searchID]) ) {
+                $topic_name = DB_getItem($_TABLES['ff_topic'],'subject','id='.(int)$searchID);
+                $tName[$searchID] = $topic_name;
+            } else {
+                $topic_name = $tName[$searchID];
+            }
         } else {
             $topic_name = $LANG_GF02['msg138'];
         }
 
-        if ( in_array($searchID,$pids) && !isset($processed[$W['topic_id']])) {
+        if ( $W['topic_id'] == 0 || (in_array($searchID,$pids) && !isset($processed[$W['topic_id']]))) {
             $sql="INSERT INTO {$_TABLES['subscriptions']} ".
                  "(type,uid,category,id,date_added,category_desc,id_desc) VALUES " .
                  "('forum',".
