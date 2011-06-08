@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: classFrame.php 3082 2008-09-09 01:31:30Z mevans0263               $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -90,7 +90,7 @@ class mgFrame {
 		        $retval = '<div class="out" style="width:{border_width}px;">' . LB;
 		        $retval .= '<div class="in ltin tpin">' . LB;
 		        $retval .= '{media_link_start}';
-                $retval .= '<img src="{media_thumbnail}" alt="{media_tag}" title="{media_tag}" style="width: {media_width}px; height: {media_height}px; border: none;"' . XHTML . '>' . LB;
+                $retval .= '<img src="{media_thumbnail}" alt="{media_tag}" title="{media_tag}" style="width: {media_width}px; height: {media_height}px; border: none;"/>' . LB;
                 $retval .= '{media_link_end}' . LB;
 		        $retval .= '</div>' . LB;
 		        $retval .= '</div>' . LB;
@@ -102,7 +102,7 @@ class mgFrame {
 		        $retval .= '<div class="in2">' . LB;
 		        $retval .= '<div class="in">' . LB;
 		        $retval .= '{media_link_start}' . LB;
-                $retval .= '<img src="{media_thumbnail}" alt="" style="width: {media_width}px; height: {media_height}px; border: none;"' . XHTML . '>' . LB;
+                $retval .= '<img src="{media_thumbnail}" alt="" style="width: {media_width}px; height: {media_height}px; border: none;"/>' . LB;
                 $retval .= '{media_link_end}' . LB;
         		$retval .= '</div>' . LB;
 		        $retval .= '</div>' . LB;
@@ -112,7 +112,7 @@ class mgFrame {
 
 	        if ( $this->name == 'none' ) {
 		        $retval  = '{media_link_start}' . LB;
-                $retval .= '<img src="{media_thumbnail}" alt="" style="width: {media_width}px; height: {media_height}px; border: none;"' . XHTML . '>' . LB;
+                $retval .= '<img src="{media_thumbnail}" alt="" style="width: {media_width}px; height: {media_height}px; border: none;"/>' . LB;
                 $retval .= '{media_link_end}' . LB;
                 return $retval;
 			}
@@ -153,7 +153,7 @@ class mgFrame {
             $retval .= '<td rowspan="' . $this->frame['rowspan'] . '" colspan="' . $this->frame['colspan'] . '" class="IMG">' . LB;
 
             $retval .= '{media_link_start}' . LB;
-            $retval .= '<img src="{media_thumbnail}" alt="{media_tag}" title="{media_tag}" class="ImageFrame_image" style="width: {media_width}px; height: {media_height}px; border: none;"' . XHTML . '>' . LB;
+            $retval .= '<img src="{media_thumbnail}" alt="{media_tag}" title="{media_tag}" class="ImageFrame_image" style="width: {media_width}px; height: {media_height}px; border: none;"/>' . LB;
 			$retval .= '{media_link_end}' . LB;
             $retval .= '</td>' . LB;
 
@@ -222,7 +222,7 @@ class mgFrame {
               <div class=out style="width:{border_width}px;">
               <div class="in ltin tpin">
               {media_link_start}
-              <img src="{media_thumbnail}" alt="{media_tag}" title="{media_tag}" style="width:{media_width}px; height:{media_height}px; border: none;"' . XHTML . '>
+              <img src="{media_thumbnail}" alt="{media_tag}" title="{media_tag}" style="width:{media_width}px; height:{media_height}px; border: none;"/>
               {media_link_end}
               </div>
               </div>';

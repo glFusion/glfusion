@@ -65,7 +65,6 @@ function MG_watermarkManage( $actionURL = '' ) {
         'lang_checkall'     => $LANG_MG01['check_all'],
         'lang_uncheckall'   => $LANG_MG01['uncheck_all'],
         'lang_preview'      => $LANG_MG01['preview'],
-        'xhtml'             => XHTML,
     ));
 
     if ( $MG_albums[0]->access != 3 && !$MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/) {
@@ -256,9 +255,6 @@ function MG_watermarkUpload( $actionURL = '') {
         'upload'    =>  'wm_upload.thtml',
     ));
 
-    $T->set_var('site_url', $_CONF['site_url']);
-    $T->set_var('xhtml',XHTML);
-
     if ( $MG_albums[0]->access != 3 && !$MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/) {
         COM_errorLog("Someone has tried to illegally edit media in Media Gallery.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
         return(MG_genericError($LANG_MG00['access_denied_msg']));
@@ -283,12 +279,12 @@ function MG_watermarkUpload( $actionURL = '') {
         'lang_save'             => $LANG_MG01['save'],
         'lang_cancel'           => $LANG_MG01['cancel'],
         'lang_reset'            => $LANG_MG01['reset'],
-        'max_file_size'         => '<input type="hidden" name="MAX_FILE_SIZE" value="' . $html_max_filesize .'"' . XHTML . '>',
+        'max_file_size'         => '<input type="hidden" name="MAX_FILE_SIZE" value="' . $html_max_filesize .'"/>',
         'lang_warning'          => $warning
     ));
 
     if ( $MG_albums[0]->owner_id ) {
-        $public = '<label for="wm_public">' . $LANG_MG01['public_access'] . ':&nbsp;&nbsp;</label><input type="checkbox" name="wm_public" id="wm_public" value="1"' . XHTML . '><br' . XHTML . '><br' . XHTML . '>';
+        $public = '<label for="wm_public">' . $LANG_MG01['public_access'] . ':&nbsp;&nbsp;</label><input type="checkbox" name="wm_public" id="wm_public" value="1"/><br/><br/>';
         $T->set_var('public', $public);
     }
 
@@ -306,8 +302,6 @@ function MG_watermarkUploadSave() {
 
     $T = new Template( MG_getTemplatePath(0) );
     $T->set_file ('mupload','useruploadstatus.thtml');
-    $T->set_var('site_url', $_CONF['site_url']);
-    $T->set_var('xhtml',XHTML);
 
     $statusMsg = '';
     $errors = 0;
@@ -327,7 +321,7 @@ function MG_watermarkUploadSave() {
         if ( $filesize > 65536 ) { // right now we hard coded 64kb
             COM_errorLog("MG Upload: File " . $filename . " exceeds maximum allowed filesize for this album");
             $tmpmsg = sprintf($LANG_MG02['upload_exceeds_max_filesize'], $filename);
-            $statusMsg .= $tmpmsg . '<br' . XHTML . '>';
+            $statusMsg .= $tmpmsg . '<br/>';
             continue;
         }
 
@@ -335,29 +329,29 @@ function MG_watermarkUploadSave() {
             switch( $error ) {
                 case 1 :
                     $tmpmsg = sprintf($LANG_MG02['upload_too_big'],$filename);
-                    $statusMsg .= $tmpmsg . '<br' . XHTML . '>';
+                    $statusMsg .= $tmpmsg . '<br/>';
                     COM_errorLog('Media Gallery Error - ' .$tmpmsg);
                     break;
                 case 2 :
                     $tmpmsg = sprintf($LANG_MG02['upload_too_big_html'], $filename);
-                    $statusMsg .= $tmpmsg  . '<br' . XHTML . '>';
+                    $statusMsg .= $tmpmsg  . '<br />';
                     COM_errorLog('Media Gallery Error - ' .$tmpmsg);
                     break;
                 case 3 :
                     $tmpmsg = sprintf($LANG_MG02['partial_upload'], $filename);
-                    $statusMsg .= $tmpmsg  . '<br' . XHTML . '>';
+                    $statusMsg .= $tmpmsg  . '<br />';
                     COM_errorLog('Media Gallery Error - ' .$tmpmsg);
                     break;
                 case 4 :
                     break;
                 case 6 :
-                    $statusMsg .= $LANG_MG02['missing_tmp'] . '<br' . XHTML . '>';
+                    $statusMsg .= $LANG_MG02['missing_tmp'] . '<br />';
                     break;
                 case 7 :
-                    $statusMsg .= $LANG_MG02['disk_fail'] . '<br' . XHTML . '>';
+                    $statusMsg .= $LANG_MG02['disk_fail'] . '<br />';
                     break;
                 default :
-                    $statusMsg .= $LANG_MG02['unknown_err'] . '<br' . XHTML . '>';
+                    $statusMsg .= $LANG_MG02['unknown_err'] . '<br />';
                     break;
             }
             continue;

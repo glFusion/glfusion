@@ -1114,8 +1114,13 @@ function plugin_moderationapprove_mediagallery($id)
 {
     global $_CONF, $_TABLES, $_MG_CONF, $LANG_MG01;
 
+    $statusReport = '';
+
+    require_once $_CONF['path'] . 'plugins/mediagallery/include/init.php';
     require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
     require_once $_CONF['path'] . 'lib/html2text/html2text.php';
+
+    MG_initAlbums();
 
     $result = DB_query("SELECT * FROM {$_TABLES['mg_media']} WHERE media_id='".DB_escapeString($id)."'");
     if ( DB_numRows($result) > 0 ) {
@@ -1123,6 +1128,7 @@ function plugin_moderationapprove_mediagallery($id)
         $owner_uid = $media['media_user_id'];
         $media_upload_time = $media['media_upload_time'];
         $media_filename = $media['media_filename'];
+        $media_type = $media['media_type'];
 
         $sql = "SELECT * FROM " . $_TABLES['mg_media_album_queue'] . " WHERE media_id='" . DB_escapeString($id) . "'";
         $result = DB_query($sql);

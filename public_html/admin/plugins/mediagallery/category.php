@@ -93,7 +93,6 @@ function MG_editCategory( $cat_id, $mode ) {
     ));
 
     $T->set_var(array(
-        'xhtml'                 => XHTML,
         'action'                => 'category',
         'cat_id'                => $A['cat_id'],
         'cat_name'              => $A['cat_name'],
@@ -207,7 +206,6 @@ function MG_displayCategories( ) {
     $T->set_var(array(
         'lang_checkall'     => $LANG_MG01['check_all'],
         'lang_uncheckall'   => $LANG_MG01['uncheck_all'],
-        'xhtml'             => XHTML,
     ));
 
     $sql = "SELECT * FROM {$_TABLES['mg_category']} ORDER BY cat_id ASC";
@@ -319,7 +317,7 @@ if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {
     $T->set_var(array(
         'admin_body'    => MG_displayCategories(),
         'title'         => $LANG_MG01['category_manage_help'],
-        'lang_help'     => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"' . XHTML . '>',
+        'lang_help'     => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"/>',
         'help_url'      => $_MG_CONF['site_url'] . '/docs/usage.html#Category_Maintenance',
 
     ));

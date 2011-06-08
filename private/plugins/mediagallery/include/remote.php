@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: remote.php 3070 2008-09-07 02:40:49Z mevans0263                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -108,7 +108,6 @@ function MG_remoteUpload( $album_id ) {
             'album_id'          => $album_id,
             'action'            => 'remoteupload',
             'album_select'      => $album_selectbox,
-            'xhtml'             => XHTML,
     ));
 
     $allow_url_fopen =  @ini_get('allow_url_fopen');

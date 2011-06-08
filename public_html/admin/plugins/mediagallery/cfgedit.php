@@ -268,8 +268,8 @@ function MG_editConfig( $msgString = '' ) {
     $gallery_tn_size_select .= '<option value="3"' . ($_MG_CONF['gallery_tn_size']==3 ? 'selected="selected"' : '') . '>' . $LANG_MG01['custom'] . '</option>';
     $gallery_tn_size_select .= '</select>';
 
-    $gallery_tnheight_input = '<input type="text" size="3" name="tnheight" value="' . $_MG_CONF['gallery_tn_height'] . '"' . XHTML . '>';
-    $gallery_tnwidth_input  = '<input type="text" size="3" name="tnwidth" value="'  . $_MG_CONF['gallery_tn_width'] . '"' . XHTML . '>';
+    $gallery_tnheight_input = '<input type="text" size="3" name="tnheight" value="' . $_MG_CONF['gallery_tn_height'] . '" />';
+    $gallery_tnwidth_input  = '<input type="text" size="3" name="tnwidth" value="'  . $_MG_CONF['gallery_tn_width'] . '" />';
 
     $mp3_select  = '<select name="mp3_player">';
     $mp3_select .= '<option value="0"' . ($_MG_CONF['mp3_player']==0 ? 'selected="selected"' : '') . '>' . $LANG_MG01['windows_media_player'] . '</option>';
@@ -867,7 +867,7 @@ if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {   // save the 
     $T->set_var(array(
         'admin_body'    => MG_editConfig(),
         'title'         => $LANG_MG01['system_options'],
-        'lang_help'     => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?"' . XHTML . '>',
+        'lang_help'     => '<img src="' . MG_getImageFile('button_help.png') . '" style="border:none;" alt="?" />',
         'help_url'      => $_MG_CONF['site_url'] . '/docs/usage.html#System_Options',
     ));
 }

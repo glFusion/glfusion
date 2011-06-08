@@ -1,38 +1,31 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | Media Gallery Plugin 1.6                                                  |
-// +---------------------------------------------------------------------------+
-// | $Id:: spanish_utf-8.php 2832 2008-07-24 02:27:18Z mevans0263             $|
-// | This is the English language page for the Media Gallery Plugin            |
-// +---------------------------------------------------------------------------|
-// | Copyright (C) 2002,2005,2006 by the following authors:                    |
-// |                                                                           |
-// | Author:                                                                   |
-// | Mark R. Eavns               -    mark@glfusion.org                        |
-// |                                                                           |
-// | Traducción:                                                               |
-// | S.V.P. / T.R.G. (México)                                                  |
-// +---------------------------------------------------------------------------|
-// |                                                                           |
-// | Si usted traduce este archivo, favor de considerar cargar una copia en    |
-// |    http://www.glfusion.org  para que otros se beneficen  de su            |
-// |    traducción. Gracias!                                                   |
-// |                                                                           |
-// | Este programa es software libre; lo puede usted redistribuir y/o          |
-// | modificarlo bajo los término GNU General Public License                   |
-// | como lo establece la fundación de software libre; ya sea la versión 2     |
-// | de la Licencia, o (a su opción) cualquier versión posterior.              |
-// |                                                                           |
-// | Este programa es distribuido con la esperanza que será útil,              |
-// | pero SIN GARANTÍA; sin la garantía implícita de                           |
-// | COMERCIABILIDAD o AJUSTE PARA UN PROPÓSITO EN PARTICULAR. Ver la          |
-// | GNU General Public License para mayores detalles.                         |
-// |                                                                           |
-// | Usted debe de recibir una copia de la GNU General Public License          |
-// | junto con el programa; si no, escribir a la  Free Software                |
-// | Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA|
-// |                                                                           |
-// +---------------------------------------------------------------------------|
+// +--------------------------------------------------------------------------+
+// | Media Gallery Plugin - glFusion CMS                                      |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------|
+// | Copyright (C) 2002-2011 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Translator:                                                              |
+// | S.V.P. / T.R.G. (México)                                                 |
+// +--------------------------------------------------------------------------|
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -49,7 +42,7 @@ $LANG_MG00 = array(
     'install_header' => 'Media Gallery Instalar/Desinstalar',
     'installed' => 'El Media Gallery esta Instalado',
     'uninstalled' => 'El Media Gallery no esta Instalado',
-    'install_success' => ' Instalación Exitosa del Media Gallery.<br' . XHTML . '><br' . XHTML . '>Favor de revisar los documentos del sistema y visitar la  <a href="%s">sección de administración</a> para asegurarse de que los ajustes vayan de acuerdo al ambiente de hosteo.',
+    'install_success' => ' Instalación Exitosa del Media Gallery.<br /><br />Favor de revisar los documentos del sistema y visitar la  <a href="%s">sección de administración</a> para asegurarse de que los ajustes vayan de acuerdo al ambiente de hosteo.',
     'install_failed' => 'Fallo en la Instalación – Ver sus errores log  para saber porque.',
     'uninstall_msg' => 'El Plugin ha sido Exitosamente Desinstalado',
     'install' => 'Instalar',
@@ -63,8 +56,8 @@ $LANG_MG00 = array(
     'media_col_header' => 'Media Item',
     'stats_title' => 'Los Top Ten Media Items Vistos',
     'items_in' => 'Items en',
-    'no_album_objects' => '<br' . XHTML . '>No hay Albumes para Desplegar<br' . XHTML . '><br' . XHTML . '>No existen álbumes para mostrar. Puede que no existan álbumes o que sus preferencias de usuario esten restringidas para este album.',
-    'no_media_objects' => '<br' . XHTML . '>Este album no tiene contenido.',
+    'no_album_objects' => '<br />No hay Albumes para Desplegar<br /><br />No existen álbumes para mostrar. Puede que no existan álbumes o que sus preferencias de usuario esten restringidas para este album.',
+    'no_media_objects' => '<br />Este album no tiene contenido.',
     'results' => 'Media Gallery Resultados de Busqueda',
     'titlemsg' => 'Título',
     'urlmsg' => 'Fecha',
@@ -87,7 +80,7 @@ $LANG_MG00 = array(
     'php_check' => 'PHP v4.3.0 o mayor, la versión reportada es <b>%s</b>.',
     'preinstall_confirm' => "Para ver todos los detalles de la instalacion del Media Gallery, favor de referirse al <a href=\"{$_CONF['site_admin_url']}/plugins/mediagallery/install_doc.html\">Manual de Instalación</a>.",
     'filecheck' => 'Utilidad del FileCheck ',
-    'filecheck_disclaimer' => 'El FileCheck revisará los directorios del Media Gallery y proporcionará una lista de archivos que existen en los directorios y que no estan incluidos en la distribucion del Media Gallery. Puede ser que estos archivos sean antiguos u obsoletos y que ya no sean necesarios.  <b>Precauciones de Uso</b> asegurarse que los archivos no sean necesarios para su servidor web.  <br' . XHTML . '><b>DEBES DE TENER RESPALDO ANTES DE CONTINUAR CON ESTA UTILERIA!</b>',
+    'filecheck_disclaimer' => 'El FileCheck revisará los directorios del Media Gallery y proporcionará una lista de archivos que existen en los directorios y que no estan incluidos en la distribucion del Media Gallery. Puede ser que estos archivos sean antiguos u obsoletos y que ya no sean necesarios.  <b>Precauciones de Uso</b> asegurarse que los archivos no sean necesarios para su servidor web.  <br /><b>DEBES DE TENER RESPALDO ANTES DE CONTINUAR CON ESTA UTILERIA!</b>',
     'mg_enroll_header' => 'Enrolamiento del Album',
     'whatsnew_title' => 'MEDIA GALLERY',
     'template_cache' => 'Template Cache Library Installed',
@@ -170,7 +163,7 @@ $LANG_MG01 = array(
     'left_right_blocks' => 'Bloques de izquierda y derecha',
     'none' => 'Ninguno',
     'no_media_objects' => 'No hay items en este álbum',
-    'media_manage_help' => 'Mover y Borrar efectuará operaciones en los items seleccionados. El guardar mantendrá la secuencia, cubierta del álbum y títulos.<br' . XHTML . '><b> El borrar es permanente! No hay deshacer!</b>',
+    'media_manage_help' => 'Mover y Borrar efectuará operaciones en los items seleccionados. El guardar mantendrá la secuencia, cubierta del álbum y títulos.<br /><b> El borrar es permanente! No hay deshacer!</b>',
     'usage_report_help' => 'Generar Reportes de Usuario del Media Gallery. Usted puede seleccionar a todos los usuarios para una fecha específica, o un usuario específico por fecha o todas las fechas. Favor de no correr todos los usuarios para todas las fechas, son demasiados datos!',
     'all_dates' => 'Todas las Fechas',
     'select_user' => 'Seleccionar Usuario',
@@ -304,10 +297,10 @@ $LANG_MG01 = array(
     'tn_size_help' => 'Seleccionar tamaño de thumbnails en álbum a desplegar',
     'globalattr' => 'Edición Global del  Album',
     'global_attr_editor' => 'Editor de Atributos Globales del Album',
-    'global_attr_help' => 'Esto cambiará los atributos para <b>TODOS</b> sus álbumes, usar con cuidado!<br' . XHTML . '><br' . XHTML . '>Seleccionar los campos que desee actualizar al escoger su valor y seleccionar el checkbox <b>Actualizar</b>.',
+    'global_attr_help' => 'Esto cambiará los atributos para <b>TODOS</b> sus álbumes, usar con cuidado!<br /><br />Seleccionar los campos que desee actualizar al escoger su valor y seleccionar el checkbox <b>Actualizar</b>.',
     'globalperm' => 'Editar Permisos Globales',
     'global_perm_editor' => 'Editor de Permisos Globales del  Album',
-    'global_perm_help' => 'Esto cambiará los permisos para <b>TODOS</b> sus álbumes, usar con cuidado!<br' . XHTML . '><br' . XHTML . '>Seleccionar cuáles campos desea actualizar al seleccionar su valor y seleccionar el checkbox de <b>Actualizar</b>.',
+    'global_perm_help' => 'Esto cambiará los permisos para <b>TODOS</b> sus álbumes, usar con cuidado!<br /><br />Seleccionar cuáles campos desea actualizar al seleccionar su valor y seleccionar el checkbox de <b>Actualizar</b>.',
     'attribute' => 'Atributo',
     'value' => 'Valor',
     'update' => 'Actualizar',
@@ -367,7 +360,7 @@ $LANG_MG01 = array(
     'rebuild_confirm' => 'Estás seguro de reconstruir todos los thumbnails para este álbum?',
     'remove_originals' => 'Borrar / Remover las imágenes cargadas originalmente',
     'remove_help' => 'Remover la imagen original del Media Gallery.',
-    'remove_details' => 'Este proceso removerá todas las imágenes cargadas originalmente, dejando solo la imagen desplegada y el thumbnail.<br' . XHTML . '><br' . XHTML . '><b>No hay DESHACER, debes de estar seguro que esto es lo que quieres hacer!</b>',
+    'remove_details' => 'Este proceso removerá todas las imágenes cargadas originalmente, dejando solo la imagen desplegada y el thumbnail.<br /><br /><b>No hay DESHACER, debes de estar seguro que esto es lo que quieres hacer!</b>',
     'processing_complete' => 'El proceso se ha completado exitosamente',
     'reset_maint' => 'Atributos de Mantenimiento para Reajustar imágenes',
     'reset_help' => 'Esto reajustará la bandera de mantenimiento en los media items para que puedan ser procesados de nuevo',
@@ -426,7 +419,7 @@ $LANG_MG01 = array(
     'watermark' => 'Marca de Agua',
     'no_watermarks' => 'No hay imágenes con marca de agua disponibles',
     'upload' => 'cargar',
-    'watermark_manage_help' => 'Permitirle añadir / borrar marcas de agua en imágenes. El tamaño máximo del archivo de marca de agua es 64kb.<br' . XHTML . '><b>El Borrar es permanente! No hay deshacer!</b>',
+    'watermark_manage_help' => 'Permitirle añadir / borrar marcas de agua en imágenes. El tamaño máximo del archivo de marca de agua es 64kb.<br /><b>El Borrar es permanente! No hay deshacer!</b>',
     'watermark_upload' => 'Cargar la Marca de Agua',
     'public_access' => 'Acceso Público',
     'top_left' => 'Arriba Izquierda',
@@ -445,8 +438,8 @@ $LANG_MG01 = array(
     'watermark_image' => 'Imagen de la Marca de Agua',
     'watermark_redirect' => 'Clic <a href="%s">Aquí</a> para regresar al manejo de la Marca de Agua.',
     'preview' => 'Pre-visualización',
-    'wm_upload_help' => 'Clic para localizar el medio a cargar – Tipos de Archivos Soportados: .GIF, .PNG, .JPG. <br' . XHTML . '><br' . XHTML . '><b>El tamaño máximo de la marca de agua soportada es de 64kb.</b>',
-    'no_applet' => 'Su browser no soporta applets. O lo ha deshabilitado en sus opciones.<br' . XHTML . '> Para usar este applet, favor de instalar la versión más nueva de Sun\'s java. La puede obtener de <a href="http://www.java.com/">java.com</a>',
+    'wm_upload_help' => 'Clic para localizar el medio a cargar – Tipos de Archivos Soportados: .GIF, .PNG, .JPG. <br /><br /><b>El tamaño máximo de la marca de agua soportada es de 64kb.</b>',
+    'no_applet' => 'Su browser no soporta applets. O lo ha deshabilitado en sus opciones.<br /> Para usar este applet, favor de instalar la versión más nueva de Sun\'s java. La puede obtener de <a href="http://www.java.com/">java.com</a>',
     'watermarked' => 'WM',
     'category' => 'Categoría',
     'category_manage_help' => 'Mantenimiento de Categoría',
@@ -527,7 +520,7 @@ $LANG_MG01 = array(
     'size_custom' => 'A la Medida - ',
     'characters' => 'Caracteres',
     'zero_unlimited' => '0 = Sin límite',
-    'user_quota' => 'Tu cuota es de %d Kb y has utilizado %d Kb con %d Kb remanentes<br' . XHTML . '><br' . XHTML . '>',
+    'user_quota' => 'Tu cuota es de %d Kb y has utilizado %d Kb con %d Kb remanentes<br /><br />',
     'member_album_options' => 'Opciones del Album de los Miembros',
     'member_albums' => 'Albumes de los Miembros',
     'enable_member_albums' => 'Habilitar Albumes de Miembros',
@@ -644,7 +637,7 @@ $LANG_MG01 = array(
     'replace_file' => 'Reemplazar Archivo',
     'autotag_caption' => 'Uso del Medio / título del álbum como capturado para autotags',
     'popup_from_album' => 'Play audio / video de medios directamente del álbum',
-    'out_of_date' => 'Su instalación no parece estar actualizada. Las actualizaciones estan disponibles para su versión del Media Gallery, favor de visitar <a href="http://www.glfusion.org">http://www.glfusion.org/</a> para obtener la última versión.<br' . XHTML . '><br' . XHTML . '>La última versión es Media Gallery %s Esta usted corriendo Media Gallery %s',
+    'out_of_date' => 'Su instalación no parece estar actualizada. Las actualizaciones estan disponibles para su versión del Media Gallery, favor de visitar <a href="http://www.glfusion.org">http://www.glfusion.org/</a> para obtener la última versión.<br /><br />La última versión es Media Gallery %s Esta usted corriendo Media Gallery %s',
     'jpg_quality' => 'Display JPG Quality',
     'js_slideshow' => 'JavaScript',
     'lightbox' => 'LightBox',
@@ -733,9 +726,9 @@ $LANG_MG02 = array(
     'directory_error' => 'No se puede abrir el directorio para extraer el medio',
     'album_not_found' => 'Álbum No Enontrado',
     'usage_report_error1' => 'No puede seleccionar TODOS LOS USUARIOS y TODAS LAS FECHAS. Favor de corregir y re-intentar.',
-    'unknown_filetype' => ' Tipo de Archivo Irreconocible.<br' . XHTML . '>',
-    'move_error' => ' Error al mover / copiando archivo cargado %s<br' . XHTML . '>',
-    'convert_error' => ' Error al convertir archivo cargado %s<br' . XHTML . '>',
+    'unknown_filetype' => ' Tipo de Archivo Irreconocible.<br />',
+    'move_error' => ' Error al mover / copiando archivo cargado %s<br />',
+    'convert_error' => ' Error al convertir archivo cargado %s<br />',
     'perm_error' => ' No se puede abrir el archivo (Permiso Denegado)',
     'album_nonexist' => 'El álbum no existe, no es posible procesar la carga',
     'upload_not_found' => 'No es posible localizar el archivo cargado. Revisar por errores y asegurarse de que sus parámetros de post_max_size y max_upload_size en php.ini estan ajustados para un archivo mayor del que intenta cargar.',
@@ -746,7 +739,7 @@ $LANG_MG02 = array(
     'upload_exceeds_max_filesize' => '%s – Excede el máximo tamaño del archivo configurado para este álbum',
     'unsupported_wm_type' => ' - Tipo de marca de agua no soportao',
     'wm_aleady_exists' => ' todavía existe en el directorio de marca de agua',
-    'wm_success' => ' - Marca de Agua exitosamente cargada<br' . XHTML . '>',
+    'wm_success' => ' - Marca de Agua exitosamente cargada<br />',
     'upload_exceeds_quota' => '%s – Esta carga exedería su cuota de uso.',
     'postcard_speedlimit' => "Recién envió una Postal hace %s segundos. Este sitio requiere por lo menos {$_CONF['commentspeedlimit']} segundos entre envíos de Postales",
     'error_create_tmp' => 'Error al crear directorio temporal. Favor de contactar al administrador del sitio',
@@ -764,7 +757,7 @@ $LANG_MG02 = array(
 $LANG_MG03 = array(
     'featured_album' => ' Media Album Destacado',
     'updated_prompt' => 'Actualizado ',
-    'no_album_objects' => '<br' . XHTML . '>No hay ábum(es) para Desplegar.<br' . XHTML . '><br' . XHTML . '> Puede ser que no exista(n) álbum(es) o que sus preferencias de usuario sean demasiado restrictivas para este álbum.',
+    'no_album_objects' => '<br />No hay ábum(es) para Desplegar.<br /><br /> Puede ser que no exista(n) álbum(es) o que sus preferencias de usuario sean demasiado restrictivas para este álbum.',
     'no_media_objects' => '<h2>Este álbum no contiene imágenes de medios</h2>',
     'next' => 'Siguiente',
     'previous' => 'Previo',
@@ -860,7 +853,7 @@ $LANG_MG03 = array(
     'cancel' => 'cancelar',
     'preview' => 'Vista Previa',
     'error_postcard' => 'Error al extraer su Postal Electrónica',
-    'error_retrieve_text' => 'La Postal que intenta ver ya no esta disponible.<br' . XHTML . '>Postal\es  disponibles hasta por  %d días posterior a ser enviadas.',
+    'error_retrieve_text' => 'La Postal que intenta ver ya no esta disponible.<br />Postal\es  disponibles hasta por  %d días posterior a ser enviadas.',
     'thank_you' => 'Gracias',
     'zip_file_help' => 'Los archivos .ZIP  serán extraidos y los contenidos cargados dentro de su álbum posterior a ser cargados.',
     'xp_pub_title' => 'Media Gallery Windows XP Publishing',
@@ -876,12 +869,12 @@ $LANG_MG03 = array(
     'member_album_terms' => 'Al presionar abajo el botón de Acepto, usted esta de acuerdo en obedecer los términos y condiciones aquí establecidos por los administradores del sitio. Si usted abusa o le da un uso inapropiado a su Álbum de Miembro,  su cuenta podrá ser suspendida.',
     'agree' => 'Acepto',
     'existing_member_album' => 'Al parecer usted ya cuenta con un Álbum de Miembro y solo puede obtener 1 directamente afuera del album raiz de los miembros. Si usted percibe que esto es un error, favor de contactar al administrador del sitio.',
-    'member_album_signup' => 'Obtén tu propio album en nuestros medios Gallery.<br' . XHTML . '><br' . XHTML . '><center><a href="%s">Firmar Aqui</a></center>',
+    'member_album_signup' => 'Obtén tu propio album en nuestros medios Gallery.<br /><br /><center><a href="%s">Firmar Aqui</a></center>',
     'unable_to_view_postcard' => 'Usar este enlace si usted no puede ver la postal.',
     'album_id_display' => ' ID del Album: ',
     'text_body_email' => 'Usted ha recibido una Postal Electrónica de %s. Si no puede ver el mensaje de abajo, visitar %s para ver',
     'gremote_msg' => 'Gallery Remoto es una aplicación Java que corre en su escritorio y provee una interfase apropiada para el Media Gallery.  Con Gallery Remoto usted puede jalar y soltar las fotos para ser cargadas en el Media Gallery, rotar y cambiar tamaño antes de cargar. Usted debe de instalar Gallery Remoto 1.4 o version más nueva para ser empleada con esta version de Media Gallery.',
-    'gremote_url' => '<a href="http://gallery.sourceforge.net/gallery_remote.php">Descargar Gallery Remoto</a>',
+    'gremote_url' => '<a href="http://sourceforge.net/projects/gallery/files/gallery%20remote/">Descargar Gallery Remoto</a>',
     'upload_help' => 'Cargar archivos directamente desde su computadora. Ingresar la localizacion al archivo y titulo opcional / descripcin /palabras clave en las espacios de abajo.',
     'upload_size' => '<b>Nota:</b> Usted puede cargar hasta %s megabytes a la vez.  Ningún archivo individual puede ser mas grande de %s megabytes. Si usted desea cargar más de eso, debe de cargar los archivos por separado, usar un formato diferente, o preguntar al administrador del sitio para permitir cargas mayores.',
     'ftp_help' => 'Transferir archivos que estan en su sistema dentro del Media Gallery. Los archivos deben de estar cargados en su servidor de alguna otra forma (como FTP) y deben de ser colocados en el directorio en donde hay accesibilidad por el servidor web.',
@@ -904,7 +897,7 @@ $LANG_MG03 = array(
     'click_here' => 'clic aquí',
     'published' => 'Publicado por',
     'on' => 'Encendido',
-    'no_flash' => '<div style="width:200px;border:1px solid;text-align:center;">Al parecer usted no tiene el Flash Plugin instalado, o la version con la que cuenta esta caduca y no puede mostrar el contenido.<br' . XHTML . '><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Obtener Adobe Flash player" style="border:none;" /></a></p></div>',
+    'no_flash' => '<div style="width:200px;border:1px solid;text-align:center;">Al parecer usted no tiene el Flash Plugin instalado, o la version con la que cuenta esta caduca y no puede mostrar el contenido.<br /><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Obtener Adobe Flash player" style="border:none;" /></a></p></div>',
     'tagline' => 'Galería  powered by <a href="http://www.glfusion.org" target="_new">Media Gallery</a>',
     'xp_pub_url' => 'Descargar<a href="%s">xppubwiz.reg (Windows XP)</a>',
     'vista_pub_url' => 'Descargar <a href="%s">xppubwiz.reg (Windows Vista)</a>',
@@ -1279,7 +1272,7 @@ $LANG_MG07 = array(
 $LANG_MG08 = array(
     'success' => 'El Media Gallery Plugin ha sido instalado exitosamente.',
     'review' => 'Favor de revisar las <b>Opciones del Sistema</b> y los <b>Predefinidos del Sistema</b> para completar la instalación y configuración.',
-    'support' => 'Para Soporte del Media Gallery, favor de visitar el sitio web  de los glFusion en <a href="http://www.glfusion.org">www.glfusion.org</a>.<br' . XHTML . '><br' . XHTML . '>También disponible en el sitio de Soporte del Media Gallery:<ul><li>Documentación Wiki</li><li>Foros de Soporte</li><li>Lista de Comunicados por Correo para <b>seguridad</b>, comunicados de actualizaciones</li><li>... y mucho más</li></ul>'
+    'support' => 'Para Soporte del Media Gallery, favor de visitar el sitio web  de los glFusion en <a href="http://www.glfusion.org">www.glfusion.org</a>.<br /><br />También disponible en el sitio de Soporte del Media Gallery:<ul><li>Documentación Wiki</li><li>Foros de Soporte</li><li>Lista de Comunicados por Correo para <b>seguridad</b>, comunicados de actualizaciones</li><li>... y mucho más</li></ul>'
 );
 
 $LANG_MG09 = array(

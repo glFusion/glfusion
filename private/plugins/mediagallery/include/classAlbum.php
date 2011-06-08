@@ -1046,13 +1046,11 @@ class mgAlbum {
             'media_tag'             => $this->title,
             'frWidth'               => $newwidth  - $MG_albums[$this->parent]->afrWidth,
             'frHeight'              => $newheight - $MG_albums[$this->parent]->afrHeight,
-            'xhtml'                 => XHTML,
         ));
 
         $F->parse('media','media_frame');
         $media_item_thumbnail = $F->finish($F->get_var('media'));
 
-//        $C = new Template($_MG_CONF['template_path']);
         $C = new Template( MG_getTemplatePath($this->parent) );
         if ( $this->parent != 0 && $MG_albums[$this->parent]->display_columns == 1 ) {
 	        $C->set_file('cell','album_page_body_album_cell_1.thtml' );
@@ -1079,8 +1077,6 @@ class mgAlbum {
             'lang_album'        => $LANG_MG00['album'],
             'lang_views'        => $LANG_MG03['views'],
             'views'             => $this->views,
-            'xhtml'             => XHTML,
-
         ));
         if ( $this->enable_album_views ) {
             $C->set_var(array(

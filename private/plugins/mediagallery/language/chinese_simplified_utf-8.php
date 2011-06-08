@@ -1,33 +1,31 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | 媒体画廊 Plugin 1.6                                                         |
-// +---------------------------------------------------------------------------+
-// | $Id:: chinese_simplified_utf-8.php 2832 2008-07-24 02:27:18Z mevans0263  $|
-// | This is the Chinese Simplified UTF-8 language page                        |
-// | for the 媒体画廊 Plug-in!                                                  |
-// +---------------------------------------------------------------------------|
-// | Copyright (C) 2002 by the following authors:                              |
-// |                                                                           |
-// | Author:                                                                   |
-// | Mark R. Evans               -    mark@glfusion.org                        |
-// | Translator:                                                               |
-// | Samuel M. Stone             -    sam@stonemicro.com                       |
-// +---------------------------------------------------------------------------|
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software               |
-// | Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA|
-// |                                                                           |
-// +---------------------------------------------------------------------------|
+// +--------------------------------------------------------------------------+
+// | Media Gallery Plugin - glFusion CMS                                      |
+// +--------------------------------------------------------------------------+
+// | $Id:: chinese_simplified_utf-8.php 2832 2008-07-24 02:27:18Z mevans0263 $|
+// +--------------------------------------------------------------------------|
+// | Copyright (C) 2002-2011 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Translator:                                                              |
+// | Samuel M. Stone        sam AT stonemicro DOT comcom                      |
+// +--------------------------------------------------------------------------|
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -44,7 +42,7 @@ $LANG_MG00 = array(
     'install_header' => '安装/卸载插件',
     'installed' => '插件已安装好',
     'uninstalled' => '插件没有安装',
-    'install_success' => '媒体画廊安装成功。<br' . XHTML . '><br' . XHTML . '>请看系统说明书及浏览 <a href="%s">管理处</a> 来肯确定所设定的是否附合你的系统环境。',
+    'install_success' => '媒体画廊安装成功。<br /><br />请看系统说明书及浏览 <a href="%s">管理处</a> 来肯确定所设定的是否附合你的系统环境。',
     'install_failed' => '安装失败 – 请看你的错误记录 error.log 来找原因。',
     'uninstall_msg' => '插件成功地卸载',
     'install' => '安装',
@@ -58,8 +56,8 @@ $LANG_MG00 = array(
     'media_col_header' => '媒体项目',
     'stats_title' => '头十个最被注视的媒体项目。',
     'items_in' => '项目在于',
-    'no_album_objects' => '<br' . XHTML . '>没有影集可显<br' . XHTML . '><br' . XHTML . '>没有影集可显示.  也许这网站没有影集 或你在用户风格选择里限制了这影集的显示.',
-    'no_media_objects' => '<br' . XHTML . '>这影集里没有任何媒体对象.',
+    'no_album_objects' => '<br />没有影集可显<br /><br />没有影集可显示.  也许这网站没有影集 或你在用户风格选择里限制了这影集的显示.',
+    'no_media_objects' => '<br />这影集里没有任何媒体对象.',
     'results' => '媒体画廊搜寻结果',
     'titlemsg' => '标题',
     'urlmsg' => '日期',
@@ -82,7 +80,7 @@ $LANG_MG00 = array(
     'php_check' => 'PHP v4.3.0 或以上, 你现在的版本是 <b>%s</b>.',
     'preinstall_confirm' => "关于怎么安装或详细资料, 请看 <a href=\"{$_CONF['site_admin_url']}/plugins/mediagallery/install_doc.html\">安装手册</a>.",
     'filecheck' => 'Fileheck 文件检查工具',
-    'filecheck_disclaimer' => '文件检查工具 会细察你的媒体画廊档案录，然后列出一个不属于此版本档案清单．  <b>请小心</b>而在删除它们以前确定它们不是网站服务器里需要的档案.  <br' . XHTML . '><b>你应该在用这工具以前作个现有数据的备份!</b>',
+    'filecheck_disclaimer' => '文件检查工具 会细察你的媒体画廊档案录，然后列出一个不属于此版本档案清单．  <b>请小心</b>而在删除它们以前确定它们不是网站服务器里需要的档案.  <br /><b>你应该在用这工具以前作个现有数据的备份!</b>',
     'mg_enroll_header' => '影集登记',
     'whatsnew_title' => 'Media Gallery',
     'template_cache' => '有安装 Template Cache Library',
@@ -152,7 +150,7 @@ $LANG_MG01 = array(
     'configuration_help' => '调整媒体画廊各种设定来更改此插件的本位动作.',
     'media_edit_help' => '执行修改媒体对象的特征. 要想放大请按一下图像。',
     'album_edit_help' => '调整影集的特征, 包括权限, 重要状况, 标题及描述.',
-    'album_delete_help' => '这将删除这影集及附属它的影集。小心选择。<br' . XHTML . '><b>此动作后不能再恢复</b>',
+    'album_delete_help' => '这将删除这影集及附属它的影集。小心选择。<br /><b>此动作后不能再恢复</b>',
     'configuration_title' => '媒体画廊设定',
     'configuration_header' => '媒体画廊设定选项',
     'album_maintenance' => '媒体画廊影集维护',
@@ -165,7 +163,7 @@ $LANG_MG01 = array(
     'left_right_blocks' => '显左右组件',
     'none' => '无',
     'no_media_objects' => '在这影集里找不到任何媒体对象',
-    'media_manage_help' => '搬移 或 删除 将会在所选的项目上执行分批性作用. 保存 会更新系列、影集封面、及媒体标题。<br' . XHTML . '><b>删除是永恒的! 无法再恢复!</b>',
+    'media_manage_help' => '搬移 或 删除 将会在所选的项目上执行分批性作用. 保存 会更新系列、影集封面、及媒体标题。<br /><b>删除是永恒的! 无法再恢复!</b>',
     'usage_report_help' => '产生媒体画廊的用量报告。 你可选所有用户的某某日期，或一个用户的某某日期或所有日期。 请不要执行所有用户的所有日期，因为太多数据!',
     'all_dates' => '所有的日期',
     'select_user' => '选择用户',
@@ -362,7 +360,7 @@ $LANG_MG01 = array(
     'rebuild_confirm' => '你肯定要重建这影集里所有的缩图吗?',
     'remove_originals' => '删除原载图象',
     'remove_help' => '从媒体画廊里删除原载图象.',
-    'remove_details' => '此功能会将所有的原载图象删除掉, 只剩下显示图象和缩图.<br' . XHTML . '><br' . XHTML . '><b>此动作不能恢复!</b>',
+    'remove_details' => '此功能会将所有的原载图象删除掉, 只剩下显示图象和缩图.<br /><br /><b>此动作不能恢复!</b>',
     'processing_complete' => '处理成功',
     'reset_maint' => '复位图象属性管理',
     'reset_help' => '这将重设媒体管理标志，让你能够再次处理',
@@ -421,7 +419,7 @@ $LANG_MG01 = array(
     'watermark' => '水印',
     'no_watermarks' => '没有水印图',
     'upload' => '上载',
-    'watermark_manage_help' => '这让你处理水印图. 水印图限制 64kb.<br' . XHTML . '><b>删除后不能恢复!</b>',
+    'watermark_manage_help' => '这让你处理水印图. 水印图限制 64kb.<br /><b>删除后不能恢复!</b>',
     'watermark_upload' => '水印上载',
     'public_access' => '公用',
     'top_left' => '左上',
@@ -440,8 +438,8 @@ $LANG_MG01 = array(
     'watermark_image' => '水印图',
     'watermark_redirect' => '点击<a href="%s">此处</a>来回到水印管理处.',
     'preview' => '预览',
-    'wm_upload_help' => '点击此处来找一个要上载的媒体 - 允许的媒体种类: .GIF, .PNG, .JPG. <br' . XHTML . '><br' . XHTML . '><b>最大水印档案大小是 64kb.</b>',
-    'no_applet' => '你的浏览器不支持JAVA程序. 也许你将此功能关闭.<br' . XHTML . '> 你必需安装最新的JAVA，取自于 <a href="http://www.java.com/">java.com</a>',
+    'wm_upload_help' => '点击此处来找一个要上载的媒体 - 允许的媒体种类: .GIF, .PNG, .JPG. <br /><br /><b>最大水印档案大小是 64kb.</b>',
+    'no_applet' => '你的浏览器不支持JAVA程序. 也许你将此功能关闭.<br /> 你必需安装最新的JAVA，取自于 <a href="http://www.java.com/">java.com</a>',
     'watermarked' => 'WM',
     'category' => '类别',
     'category_manage_help' => '类别管理',
@@ -522,7 +520,7 @@ $LANG_MG01 = array(
     'size_custom' => '自定 - ',
     'characters' => '字数',
     'zero_unlimited' => '0 = 无限',
-    'user_quota' => '你的限额是 %d Kb 而你已用了 %d Kb 还有 %d Kb 剩下<br' . XHTML . '><br' . XHTML . '>',
+    'user_quota' => '你的限额是 %d Kb 而你已用了 %d Kb 还有 %d Kb 剩下<br /><br />',
     'member_album_options' => ' 影集选项',
     'member_albums' => '会员 影集s',
     'enable_member_albums' => '允许 会员 影集s',
@@ -639,7 +637,7 @@ $LANG_MG01 = array(
     'replace_file' => '替换档案',
     'autotag_caption' => '用媒体 / 影集标题来作自动插图的标题',
     'popup_from_album' => '播放音 / 影媒体 在影集中',
-    'out_of_date' => '你的安装不是最新的. 有新的媒体画廊版本可下载, 请到 <a href="http://www.glfusion.org">http://www.glfusion.org/</a> 来下载新软件.<br' . XHTML . '><br' . XHTML . '>最新的媒体画廊是 %s 你是在用 %s',
+    'out_of_date' => '你的安装不是最新的. 有新的媒体画廊版本可下载, 请到 <a href="http://www.glfusion.org">http://www.glfusion.org/</a> 来下载新软件.<br /><br />最新的媒体画廊是 %s 你是在用 %s',
     'jpg_quality' => '显示 JPG 质量',
     'js_slideshow' => 'Java程序',
     'lightbox' => '光框',
@@ -728,9 +726,9 @@ $LANG_MG02 = array(
     'directory_error' => '无法打开目录来找媒体',
     'album_not_found' => '影集找不到',
     'usage_report_error1' => '你不能同时选择 ‘所有用户’跟‘所有日期’。请改正后再式一次。',
-    'unknown_filetype' => ' 不认可的档案种类。<br' . XHTML . '>',
-    'move_error' => ' 移动 / 拷贝 %s 档案时除了错误<br' . XHTML . '>',
-    'convert_error' => ' 转变上载的 %s 档案时除了错误<br' . XHTML . '>',
+    'unknown_filetype' => ' 不认可的档案种类。<br />',
+    'move_error' => ' 移动 / 拷贝 %s 档案时除了错误<br />',
+    'convert_error' => ' 转变上载的 %s 档案时除了错误<br />',
     'perm_error' => ' 无法打开档案 (Permission Denied)',
     'album_nonexist' => '影集不存在，无法处理上载',
     'upload_not_found' => '无法找到上载的档案。 请检查你的服务器的错误纪录 error logs 同时也肯定 php.ini 里所指定的 post_max_size 和 max_upload_size 超过你上载的档案大小。',
@@ -741,7 +739,7 @@ $LANG_MG02 = array(
     'upload_exceeds_max_filesize' => '%s - 超过了这影集所规定的最大档案限度',
     'unsupported_wm_type' => ' - 不支持的水印档案种类',
     'wm_aleady_exists' => ' 已在水印目录里有',
-    'wm_success' => ' - 水印成功的上载了<br' . XHTML . '>',
+    'wm_success' => ' - 水印成功的上载了<br />',
     'upload_exceeds_quota' => '%s - 这上载将超过你的限额.',
     'postcard_speedlimit' => "你在 %s 秒钟前才寄过一个明信片. 你不需等 {$_CONF['commentspeedlimit']} 秒钟才可在寄一份",
     'error_create_tmp' => '建立临时目录时出了差错. 请联络管理员',
@@ -759,7 +757,7 @@ $LANG_MG02 = array(
 $LANG_MG03 = array(
     'featured_album' => '主要媒体影集',
     'updated_prompt' => '上载:',
-    'no_album_objects' => '<br' . XHTML . '>美影集可显示<br' . XHTML . '><br' . XHTML . '>美影集可显示。可能是没有影集，或你在用户风格选择里限制了这影集的显示。',
+    'no_album_objects' => '<br />美影集可显示<br /><br />美影集可显示。可能是没有影集，或你在用户风格选择里限制了这影集的显示。',
     'no_media_objects' => '<h2>这影集是空的</h2>',
     'next' => '下页',
     'previous' => '上页',
@@ -855,7 +853,7 @@ $LANG_MG03 = array(
     'cancel' => '取消',
     'preview' => '预览',
     'error_postcard' => '索取明信片时出了错误．',
-    'error_retrieve_text' => '你要看的明信片已不存在.<br' . XHTML . '>明信片只有  日的期限.',
+    'error_retrieve_text' => '你要看的明信片已不存在.<br />明信片只有  日的期限.',
     'thank_you' => '谢谢',
     'zip_file_help' => '.ZIP 档案将会自动开放而里面的媒体回自动上载到你的影集里.',
     'xp_pub_title' => '媒体画廊的窗口 XP 公布器',
@@ -871,12 +869,12 @@ $LANG_MG03 = array(
     'member_album_terms' => '在你点击“同意” Agree 时，你同意管理员所规定的一切条件.  若滥用你的会员会被停止.',
     'agree' => '同意',
     'existing_member_album' => '你已有会员影集.  你意味这是错误，请联络管理员.',
-    'member_album_signup' => '拥有一个你自己的影集在这媒体画廊里.<br' . XHTML . '><br' . XHTML . '><center><a href="%s">在这儿参加</a></center>',
+    'member_album_signup' => '拥有一个你自己的影集在这媒体画廊里.<br /><br /><center><a href="%s">在这儿参加</a></center>',
     'unable_to_view_postcard' => '若你不能看见明信片点击这连接来打开.',
     'album_id_display' => '影集ID: ',
     'text_body_email' => '你收到一个电子明信片来自 %s. 若你不能看以下的信息, 请浏览 %s ',
     'gremote_msg' => 'Gallery Remote 是个 Java 程序可在你的计算机桌面上运作，来上载你的媒体到媒体画廊. 你要先下载 Gallery Remote 1.4 最新版本.',
-    'gremote_url' => '<a href="http://gallery.sourceforge.net/gallery_remote.php">下载 Gallery Remote</a>',
+    'gremote_url' => '<a href="http://sourceforge.net/projects/gallery/files/gallery%20remote/">下载 Gallery Remote</a>',
     'upload_help' => '从你的计算机里上载媒体档案. 请输入档案的路径然后在下面提供标题和描述.',
     'upload_size' => '<b>注:</b> 你的媒体不可超过 %s mb.',
     'ftp_help' => '传送网站服务器里已经有的档案到媒体画廊里. 档案必需要已经经过 FTP 或其它方法传送到网站服务器里，而且路径必需已公开给服务器进入.',
@@ -899,7 +897,7 @@ $LANG_MG03 = array(
     'click_here' => '点击此处',
     'published' => '上载于',
     'on' => '在',
-    'no_flash' => '<div style="width:200px;">你没有安装 Flash Plugin, 或者你的版本已经太老而不能播放此媒体.请点击下面来安装新的 Flash Plugin.<br' . XHTML . '><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
+    'no_flash' => '<div style="width:200px;">你没有安装 Flash Plugin, 或者你的版本已经太老而不能播放此媒体.请点击下面来安装新的 Flash Plugin.<br /><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
     'tagline' => '这媒体文库动力于 <a href="http://www.glfusion.org" target="_new">媒体画廊</a>',
     'xp_pub_url' => '下载 <a href="%s">xppubwiz.reg (Windows XP)</a>',
     'vista_pub_url' => '下载 <a href="%s">xppubwiz.reg (Windows Vista)</a>',
@@ -1274,7 +1272,7 @@ $LANG_MG07 = array(
 $LANG_MG08 = array(
     'success' => '媒体画廊插件已成功安装.',
     'review' => '起读<b>系统选项</b> 和 <b>系统默认</b> 来完成安装和设置.',
-    'support' => '媒体画廊的科技支持, 请浏览 <a href="http://www.glfusion.org">www.glfusion.org</a>.<br' . XHTML . '><br' . XHTML . '>这媒体画廊的网站也有:<ul><li>说明书 Wiki</li><li>论坛</li><li> 通知 <b>安全</b> 的电信和更新通告</li><li>... 等等</li></ul>'
+    'support' => '媒体画廊的科技支持, 请浏览 <a href="http://www.glfusion.org">www.glfusion.org</a>.<br /><br />这媒体画廊的网站也有:<ul><li>说明书 Wiki</li><li>论坛</li><li> 通知 <b>安全</b> 的电信和更新通告</li><li>... 等等</li></ul>'
 );
 
 $LANG_MG09 = array(

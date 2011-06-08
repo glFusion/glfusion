@@ -1,35 +1,31 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | Media Gallery Plugin 1.6                                                  |
-// +---------------------------------------------------------------------------+
-// | $Id:: hebrew_utf-8.php 2832 2008-07-24 02:27:18Z mevans0263              $|
-// | This is the Hebrew language page for the Media Gallery Plugin             |
-// +---------------------------------------------------------------------------|
-// | Copyright (C) 2002,2005,2006 by the following authors:                    |
-// |                                                                           |
-// | Author:
-// | http://lior.weissbrod.com                                                 |
-// +---------------------------------------------------------------------------|
-// |                                                                           |
-// | If you translate this file, please consider uploading a copy at           |
-// |    http://www.glfusion.org so others can benefit from your                  |
-// |    translation.  Thank you!                                               |
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software               |
-// | Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA|
-// |                                                                           |
-// +---------------------------------------------------------------------------|
+// +--------------------------------------------------------------------------+
+// | Media Gallery Plugin - glFusion CMS                                      |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------|
+// | Copyright (C) 2002-2011 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Translator:                                                              |
+// | http://lior.weissbrod.com                                                |
+// +--------------------------------------------------------------------------|
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -46,7 +42,7 @@ $LANG_MG00 = array(
     'install_header' => 'התקנת/הסרת Plugin',
     'installed' => 'ה-Plugin הותקן',
     'uninstalled' => 'ה-Plugin לא מותקן',
-    'install_success' => 'גלריית המדיה הותקנה בהצלחה.<br' . XHTML . '><br' . XHTML . '>אנא עיברו על הדוקומונטציה של המערכת וגם בקרו <a href="%s">במדור הניהול</a> כדי לוודא שההגדרות אכן מתאימות לסביבת השרת.',
+    'install_success' => 'גלריית המדיה הותקנה בהצלחה.<br /><br />אנא עיברו על הדוקומונטציה של המערכת וגם בקרו <a href="%s">במדור הניהול</a> כדי לוודא שההגדרות אכן מתאימות לסביבת השרת.',
     'install_failed' => 'ההתקנה נכשלה -- ראו את ה-error log שלכם כדי לגלות מדוע.',
     'uninstall_msg' => 'ה-Plugin הוסר בהצלחה',
     'install' => 'התקנה',
@@ -60,8 +56,8 @@ $LANG_MG00 = array(
     'media_col_header' => 'פריט מדיה',
     'stats_title' => 'עשרת פריטי המדיה הנצפים ביותר',
     'items_in' => 'פריטים ב:',
-    'no_album_objects' => '<br' . XHTML . '>אין אלבומים להציג<br' . XHTML . '><br' . XHTML . '>אין שום אלבומים להציג.  ייתכן שאין אלבומים או שהרשאות המשתמש שלך לא מספיקות בשביל אלבום זה.',
-    'no_media_objects' => '<br' . XHTML . '>אין פריטי מדיה באלבום זה.',
+    'no_album_objects' => '<br />אין אלבומים להציג<br /><br />אין שום אלבומים להציג.  ייתכן שאין אלבומים או שהרשאות המשתמש שלך לא מספיקות בשביל אלבום זה.',
+    'no_media_objects' => '<br />אין פריטי מדיה באלבום זה.',
     'results' => 'תוצאות גלרייה מדיה',
     'titlemsg' => 'כותרת',
     'urlmsg' => 'תאריך',
@@ -84,7 +80,7 @@ $LANG_MG00 = array(
     'php_check' => 'PHP v4.3.0 או חדש יותר, הגירסה המדווחת היא <b>%s</b>.',
     'preinstall_confirm' => "בשביל פרטים מלאים על התקנת גלריית המדיה, אנא פנו <a href=\"{$_CONF['site_admin_url']}/plugins/mediagallery/install_doc.html\">למסמך ההתקנה</a>.",
     'filecheck' => 'כלי בדיקת קבצים',
-    'filecheck_disclaimer' => 'בדיקת קבצים תסרוק את ספריות גלריית המדיה ותחזיר רשימת קבצים שקיימים בספריות שלא כלולים בהתקנת גלריית המדיה. קבצים אלו עשויים להיות קבצים ישנים שלא בשימוש וכבר לא נחוצים יותר. <br' . XHTML . '>השתמשו בזהירות</a> וודאו שקבצים אלו לא נחוצים על ידי שרת הרשת שלכם.   <br' . XHTML . '><b>*צריך להיות בידיכם גיבוי מעודכן לפני שהנכם מריצים כלי זה!</b>',
+    'filecheck_disclaimer' => 'בדיקת קבצים תסרוק את ספריות גלריית המדיה ותחזיר רשימת קבצים שקיימים בספריות שלא כלולים בהתקנת גלריית המדיה. קבצים אלו עשויים להיות קבצים ישנים שלא בשימוש וכבר לא נחוצים יותר. <br />השתמשו בזהירות</a> וודאו שקבצים אלו לא נחוצים על ידי שרת הרשת שלכם.   <br /><b>*צריך להיות בידיכם גיבוי מעודכן לפני שהנכם מריצים כלי זה!</b>',
     'mg_enroll_header' => 'רישום אלבום',
     'whatsnew_title' => 'גלריית המדיה',
     'template_cache' => 'Template Cache Library Installed',
@@ -154,7 +150,7 @@ $LANG_MG01 = array(
     'configuration_help' => 'קביעת האפשרויות השונות של גלרייה המדיה כדי לשנות את דרך הפעולה הסטנדרטית של ה-Plugin גלרייה המדיה.',
     'media_edit_help' => 'ביצוע עריכות לפריט המדיה הספציפי והמאפיינים שלו. כדי לקבל מבט יותר רחב על פריט המדיה, ליחצו על התמונה שלהלן ותמונה גדולה יותר תיפתח בחלון פופ אפ.',
     'album_edit_help' => 'קביעת מאפייני אלבום, כולל הרשאות, מצב תצוגה, כותרת ותיאור.',
-    'album_delete_help' => 'אופציה זו תמחק את האלבום ואת כל תת האלבומים שלו. הינכם חייבים לבחור אם להעביר את פריטי המדיה לספרייה אחרת או למחוק אותם לצמיתות.<br' . XHTML . '><b>אי אפשר לשחזר מחיקה</b>',
+    'album_delete_help' => 'אופציה זו תמחק את האלבום ואת כל תת האלבומים שלו. הינכם חייבים לבחור אם להעביר את פריטי המדיה לספרייה אחרת או למחוק אותם לצמיתות.<br /><b>אי אפשר לשחזר מחיקה</b>',
     'configuration_title' => 'כיוון גלריית המדיה',
     'configuration_header' => 'אפשרויות כיוון גלריית המדיה',
     'album_maintenance' => 'תיחזוק אלבום בגלרייה המדיה',
@@ -167,7 +163,7 @@ $LANG_MG01 = array(
     'left_right_blocks' => 'קוביות מידע ימניות ושמאליות',
     'none' => 'שום דבר',
     'no_media_objects' => 'שום פריטי מדיה לא נמצאו באלבום זה',
-    'media_manage_help' => 'הזזה ומחיקה יבצעו פעולה קבוצתית על הפריטים הנבחרים. שמירה תעדכן את הסדר, עמודי השער של האלבומים ואת כותרות המדיה.<br' . XHTML . '><b>מחיקות הן סופיות! אי אפשר לשחזר!</b>',
+    'media_manage_help' => 'הזזה ומחיקה יבצעו פעולה קבוצתית על הפריטים הנבחרים. שמירה תעדכן את הסדר, עמודי השער של האלבומים ואת כותרות המדיה.<br /><b>מחיקות הן סופיות! אי אפשר לשחזר!</b>',
     'usage_report_help' => 'יצירת דיווחי שימוש בגלריית התמונות. הנכם יכולים לבחור את כל המשתמשים לגבי תאריך ספציפי, או משתמש ספציפי לגבי תאריך ספציפי או כל התאריכים. אנא אל תריצו את כל המשתמשים לגבי כל התאריכים, העומס יהיה גדול מדי!',
     'all_dates' => 'כל התאריכים',
     'select_user' => 'ביחרו משתמש',
@@ -301,10 +297,10 @@ $LANG_MG01 = array(
     'tn_size_help' => 'ביחרו את גודל התמונות המוקטנות בתצוגת אלבום',
     'globalattr' => 'עריכת אלבום גלובלית',
     'global_attr_editor' => 'עורך מאפייני אלבום גלובלי',
-    'global_attr_help' => 'זה ישנה את המאפיינים של <b>כל</b> האלבומים שלכם, השתמשו בזהירות!<br' . XHTML . '><br' . XHTML . '>ביחרו אילו שדות הינכם רוצים לעדכן על ידי בחירת הערכים שלהם וסימון האפשרות של <b>עידכון</b>.',
+    'global_attr_help' => 'זה ישנה את המאפיינים של <b>כל</b> האלבומים שלכם, השתמשו בזהירות!<br /><br />ביחרו אילו שדות הינכם רוצים לעדכן על ידי בחירת הערכים שלהם וסימון האפשרות של <b>עידכון</b>.',
     'globalperm' => 'עריכת הרשאות גלובלית',
     'global_perm_editor' => 'עורך הרשאות אלבום גלובלי',
-    'global_perm_help' => 'זה ישנה את ההרשאות של <b>כל</b> האלבומים שלכם, השתמשו בזהירות!<br' . XHTML . '><br' . XHTML . '>ביחרו אילו שדות הינכם רוצים לעדכן על ידי בחירת הערכים שלהם וסימון האפשרות של <b>עידכון</b>.',
+    'global_perm_help' => 'זה ישנה את ההרשאות של <b>כל</b> האלבומים שלכם, השתמשו בזהירות!<br /><br />ביחרו אילו שדות הינכם רוצים לעדכן על ידי בחירת הערכים שלהם וסימון האפשרות של <b>עידכון</b>.',
     'attribute' => 'מאפיין',
     'value' => 'ערך',
     'update' => 'עידכון',
@@ -364,7 +360,7 @@ $LANG_MG01 = array(
     'rebuild_confirm' => 'האם הנכם בטוחים שאתם רוצים לבנות מחדש את כל התמונות המוקטנות באלבום זה?',
     'remove_originals' => 'מחיקה / הסרה של התמונות שהועלו במקור',
     'remove_help' => 'הסרת התמונות המקוריות מגלרייה המדיה.',
-    'remove_details' => 'תהליך זה יסיר את כל התמונות שהועלו במקור, כך שישארו רק התמונות המוצגות והתמונות המוקטנות.<br' . XHTML . '><br' . XHTML . '><b>אין תהליך *UNDO*, לכן היו בטוחים שזה מה שאתם  רוצים לעשות!</b>',
+    'remove_details' => 'תהליך זה יסיר את כל התמונות שהועלו במקור, כך שישארו רק התמונות המוצגות והתמונות המוקטנות.<br /><br /><b>אין תהליך *UNDO*, לכן היו בטוחים שזה מה שאתם  רוצים לעשות!</b>',
     'processing_complete' => 'העיבוד הושלם בהצלחה',
     'reset_maint' => 'איפוס הגדרת התחזוקה בתמונות',
     'reset_help' => 'איפוס הגדרת התחזוקה של פריטי המדיה כדי שיוכלו להיות מעובדים שוב',
@@ -423,7 +419,7 @@ $LANG_MG01 = array(
     'watermark' => 'סימן מים',
     'no_watermarks' => 'אין שום תמונות סימני מים',
     'upload' => 'העלאה',
-    'watermark_manage_help' => 'מאפשר לכם להעלות / למחוק תמונות סימני מים. גודל קובץ סימן המים המקסימלי הוא 64kb.<br' . XHTML . '><b>מחיקות הן סופניות! אין undo!</b>',
+    'watermark_manage_help' => 'מאפשר לכם להעלות / למחוק תמונות סימני מים. גודל קובץ סימן המים המקסימלי הוא 64kb.<br /><b>מחיקות הן סופניות! אין undo!</b>',
     'watermark_upload' => 'העלאת סימן מים',
     'public_access' => 'גישה פומבית',
     'top_left' => 'למעלה משמאל',
@@ -442,8 +438,8 @@ $LANG_MG01 = array(
     'watermark_image' => 'תמונת סימן מים',
     'watermark_redirect' => 'ליחצו <a href="%s">כאן</a> כדי לחזור להנהלת סימני המים.',
     'preview' => 'תצוגה מקדימה',
-    'wm_upload_help' => 'ליחצו על Browse כדי לאתר מדיה להעלאה - סוגי הקבצים הנתמכים: .GIF, .PNG, .JPG. <br' . XHTML . '><br' . XHTML . '><b>גודל קובץ סימן המים המקסימלי הוא 64kb.</b>',
-    'no_applet' => 'הדפדפן שלכם אינו תומך ב-applets או שביטלתם את אפשרות ה-applets באפשרויות שלכם.<br' . XHTML . '> כדי להשתמש ב-applet זו, אנא התקינו את הגירסה החדשה ביותר של java של Sun. הנכם יכולים להשיגה ב-<a href="http://www.java.com/">java.com</a>',
+    'wm_upload_help' => 'ליחצו על Browse כדי לאתר מדיה להעלאה - סוגי הקבצים הנתמכים: .GIF, .PNG, .JPG. <br /><br /><b>גודל קובץ סימן המים המקסימלי הוא 64kb.</b>',
+    'no_applet' => 'הדפדפן שלכם אינו תומך ב-applets או שביטלתם את אפשרות ה-applets באפשרויות שלכם.<br /> כדי להשתמש ב-applet זו, אנא התקינו את הגירסה החדשה ביותר של java של Sun. הנכם יכולים להשיגה ב-<a href="http://www.java.com/">java.com</a>',
     'watermarked' => 'סומן בסימן מים',
     'category' => 'קטגוריה',
     'category_manage_help' => 'ניהול קטגוריות',
@@ -524,7 +520,7 @@ $LANG_MG01 = array(
     'size_custom' => 'מותאם - ',
     'characters' => 'תווים',
     'zero_unlimited' => '0 = ללא הגבלה',
-    'user_quota' => 'המכסה שלכם היא %d Kb והשתמשתם ב-%d Kb כך שנשארו %d Kb<br' . XHTML . '><br' . XHTML . '>',
+    'user_quota' => 'המכסה שלכם היא %d Kb והשתמשתם ב-%d Kb כך שנשארו %d Kb<br /><br />',
     'member_album_options' => 'אפשרויות אלבום משתמש',
     'member_albums' => 'אלבומי משתמשים',
     'enable_member_albums' => 'איפשור אלבומי משתמשים',
@@ -641,7 +637,7 @@ $LANG_MG01 = array(
     'replace_file' => 'החלפת קובץ',
     'autotag_caption' => 'השתמשו בכותרת מדיה / אלבום כטקסט לתגים האוטומטיים',
     'popup_from_album' => 'נגנו מדיית אודיו / וידאו ישר מהצגת האלבום',
-    'out_of_date' => 'ההתקנה שלכם לא נראית מעודכנת. שידרוגים קיימים לגירסה שלכם של גלריית המדיה, אנא בקרו את <a href="http://www.glfusion.org">http://www.glfusion.org/</a> כדי להשיג את הגירסה הכי מעודכנת.<br' . XHTML . '><br' . XHTML . '>הגירסה הכי אחרונה היא גלריית המדיה %s אתם מריצים את גלריית המדיה %s',
+    'out_of_date' => 'ההתקנה שלכם לא נראית מעודכנת. שידרוגים קיימים לגירסה שלכם של גלריית המדיה, אנא בקרו את <a href="http://www.glfusion.org">http://www.glfusion.org/</a> כדי להשיג את הגירסה הכי מעודכנת.<br /><br />הגירסה הכי אחרונה היא גלריית המדיה %s אתם מריצים את גלריית המדיה %s',
     'jpg_quality' => 'הצגת איכות JPG',
     'js_slideshow' => 'JavaScript',
     'lightbox' => 'קופסה בהירה',
@@ -730,9 +726,9 @@ $LANG_MG02 = array(
     'directory_error' => 'נכשל הנסיון לפתוח את ספרייה כדי לסרוק בה מדיה',
     'album_not_found' => 'האלבום לא נמצא',
     'usage_report_error1' => 'אינכם יכולים לבחור ALL USERS וגם ALL DATES. אנא תקנו ונסו שנית.',
-    'unknown_filetype' => ' סיומת קובץ לא ידועה.<br' . XHTML . '>',
-    'move_error' => ' שגיאה בהזזת / העתקת קובץ מועלה %s<br' . XHTML . '>',
-    'convert_error' => ' שגיאה בהמרת הקובץ המועלה %s<br' . XHTML . '>',
+    'unknown_filetype' => ' סיומת קובץ לא ידועה.<br />',
+    'move_error' => ' שגיאה בהזזת / העתקת קובץ מועלה %s<br />',
+    'convert_error' => ' שגיאה בהמרת הקובץ המועלה %s<br />',
     'perm_error' => ' שגיאה בפתיחת הקובץ (הגישה נדחתה)',
     'album_nonexist' => 'האלבום לא קיים, לא ניתן לעבד העלאות',
     'upload_not_found' => 'אין אפשרות לאתר את הקובץ שהועלה. בידקו את יומני הטעויות של השרת שלכם וודאו שהפרמטרים post_max_size ו-max_upload_size ב-php.ini שלכם הם גדולים מהקובץ שהנכם מנסים להעלות.',
@@ -743,7 +739,7 @@ $LANG_MG02 = array(
     'upload_exceeds_max_filesize' => '%s - חריגה ממקסימום המקום שמוגדר לאלבום זה',
     'unsupported_wm_type' => ' - קובץ סימן מים לא נתמך',
     'wm_aleady_exists' => ' כבר קיים בספריית סימני המים',
-    'wm_success' => ' - סימן המים הועלה בהצלחה<br' . XHTML . '>',
+    'wm_success' => ' - סימן המים הועלה בהצלחה<br />',
     'upload_exceeds_quota' => '%s - העלאה זו תעלה על המכסה המקסימלית.',
     'postcard_speedlimit' => "שלחתם פעם אחרונה גלויה לפני %s שניות. אתר זה דורש לפחות {$_CONF['commentspeedlimit']} שניות בין גלויות",
     'error_create_tmp' => 'שגיאה בעת יצירת ספרייה זמנית. אנא צרו קשר עם מנהלי האתר',
@@ -761,7 +757,7 @@ $LANG_MG02 = array(
 $LANG_MG03 = array(
     'featured_album' => 'אלבום מדיה מוצג',
     'updated_prompt' => 'עודכן ',
-    'no_album_objects' => '<br' . XHTML . '>אין אלבומים להצגה<br' . XHTML . '><br' . XHTML . '>אין שום אלבומים להצגה.  יכול להיות שאין אלבומים שהגדרות המשתמש שלך מוגבלות מדי לאלבום זה.',
+    'no_album_objects' => '<br />אין אלבומים להצגה<br /><br />אין שום אלבומים להצגה.  יכול להיות שאין אלבומים שהגדרות המשתמש שלך מוגבלות מדי לאלבום זה.',
     'no_media_objects' => '<h2>האלבום הזה ריק</h2>',
     'next' => 'הבא',
     'previous' => 'הקודם',
@@ -857,7 +853,7 @@ $LANG_MG03 = array(
     'cancel' => 'ביטול',
     'preview' => 'תצוגה מקדימה',
     'error_postcard' => 'שגיאה בעת קבלת הגלויה האלקטרונית שלכם',
-    'error_retrieve_text' => 'הגלויה שהנכם מנסים לראות כבר לא זמינה יותר.<br' . XHTML . '>גלויות זמינות עד ל-%d ימים לאחר שנשלחו.',
+    'error_retrieve_text' => 'הגלויה שהנכם מנסים לראות כבר לא זמינה יותר.<br />גלויות זמינות עד ל-%d ימים לאחר שנשלחו.',
     'thank_you' => 'תודה לכם',
     'zip_file_help' => 'קבצי ZIP יפתחו והתכנים ייטענו לתוך האלבום שלכם לאחר ההעלאה.',
     'xp_pub_title' => 'שימוש ב-Windows XP Publishing בגלריית המדיה',
@@ -873,12 +869,12 @@ $LANG_MG03 = array(
     'member_album_terms' => 'על ידי לחיצה על כפתור ההסכמה, הנכם מסכימים לשמור על המונחים והתנאים שנקבעו להלן על ידי מנהלי האתר. אם תפגעו או תשתמשו לרעה באלבום המשתמש שלכם, חשבונכם עלול להיות מושהה.',
     'agree' => 'אנו מסכימים',
     'existing_member_album' => 'נראה שכבר יש לכם אלבום משתמש ויכול להיות לכם רק אלבום משתמש אחד ישירות מתחת לאלבום המשתמשים הראשי. אם הנכם מרגישים שזו טעות, אנא צרו קשר עם מנהלי האתר.',
-    'member_album_signup' => 'פיתחו אלבום משלכם בגלריית המדיה.<br' . XHTML . '><br' . XHTML . '><center><a href="%s">הירשמו כאן</a></center>',
+    'member_album_signup' => 'פיתחו אלבום משלכם בגלריית המדיה.<br /><br /><center><a href="%s">הירשמו כאן</a></center>',
     'unable_to_view_postcard' => 'השתמשו בקישור זה אם אינכם מצליחים לצפות בגלויה.',
     'album_id_display' => 'קוד זיהוי אלבום: ',
     'text_body_email' => 'קיבלתם גלויה אלקטרונית מאת %s. אם אינכם מסוגלים לראות את ההודעה שלהלן, אנא בקרו את %s בשביל לצפות בה',
     'gremote_msg' => 'Gallery Remote היא תוכנת Java שרצה במחשב שלכם ומספקת ממשק עשיר באפשרויות לגלריית המדיה. עם ה-Gallery Remote הנכם יכולים לעשות drag and drop לתמונות ולהעלות אותן לגלריית המדיה, לסובב ולשנות את גודלן של התמונות לפני ההעלאה. הנכם חייבים להתקין את ה-Gallery Remote 1.4 או יותר חדש כדי להשתמש בה בגירסה זו של גלריית המדיה.',
-    'gremote_url' => '<a href="http://gallery.sourceforge.net/gallery_remote.php">הורידו את ה-Gallery Remote</a>',
+    'gremote_url' => '<a href="http://sourceforge.net/projects/gallery/files/gallery%20remote/">הורידו את ה-Gallery Remote</a>',
     'upload_help' => 'ליחצו על ה-<b>Browse</b> כדי לבחור מדיה להעלאה',
     'upload_size' => '<b>הערה:</b> הנכם יכולים להעלות עד %s מגה בפעם אחת. שום קובץ אינדיבידואלי אינו יכול להיות יותר מ-%s מגה. אם הנכם רוצים להעלות יותר מזה, הנכם חייבים להעלות את הקבצים באופן נפרד, להשתמש בפורמט העלאה אחר, או לבקש ממנהלי המערכת שלכם לאפשר העלאות גדולות יותר.',
     'ftp_help' => 'העבירו קבצים שכבר בשרת שלכם לגלריית המדיה. הקבצים חייבים להיות כבר מועלים לשרת שלכם בדרך אחרת (למשל FTP) וחייבים להיות ממוקמים בספרייה שנגישה לשרת האתר.',
@@ -901,7 +897,7 @@ $LANG_MG03 = array(
     'click_here' => 'ליחצו כאן',
     'published' => 'פורסם על ידי',
     'on' => 'ב:',
-    'no_flash' => '<div style="width:200px;border:1px solid;text-align:center;">כנראה שאין לכם את plugin הפלאש מותקן, או שהגירסה שיש לכם אינה מעודכנת ולא יכולה לנגן את הפריט המבוקש.<br' . XHTML . '><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
+    'no_flash' => '<div style="width:200px;border:1px solid;text-align:center;">כנראה שאין לכם את plugin הפלאש מותקן, או שהגירסה שיש לכם אינה מעודכנת ולא יכולה לנגן את הפריט המבוקש.<br /><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
     'tagline' => 'הגלריה פועלת על <a href="http://www.glfusion.org" target="_new">Media Gallery</a>',
     'xp_pub_url' => 'הורדת <a href="%s">xppubwiz.reg (Windows XP)</a>',
     'vista_pub_url' => 'הורדת <a href="%s">xppubwiz.reg (Windows Vista)</a>',
@@ -1276,7 +1272,7 @@ $LANG_MG07 = array(
 $LANG_MG08 = array(
     'success' => 'Plugin גלריית המדיה הותקן בהצלחה.',
     'review' => 'אנא עיברו על <b>אפשרויות המערכת</b> ועל <b>ברירות מחדל המערכת</b> כדי להשלים את ההתקנה והכיוון.',
-    'support' => 'בשביל תמיכה בגלריית המדיה, אנא בקרו באתר glFusion שב-<a href="http://www.glfusion.org">www.glfusion.org</a>.<br' . XHTML . '><br' . XHTML . '>באתר התמיכה של גלריית המדיה ניתנים גם:<ul><li>דוקומנטציית Wiki</li><li>פורומי תמיכה</li><li>רשימת תפוצה של הכרזות <b>ביטחון</b> והכרזות עידכונים</li><li>... ועוד הרבה דברים</li></ul>'
+    'support' => 'בשביל תמיכה בגלריית המדיה, אנא בקרו באתר glFusion שב-<a href="http://www.glfusion.org">www.glfusion.org</a>.<br /><br />באתר התמיכה של גלריית המדיה ניתנים גם:<ul><li>דוקומנטציית Wiki</li><li>פורומי תמיכה</li><li>רשימת תפוצה של הכרזות <b>ביטחון</b> והכרזות עידכונים</li><li>... ועוד הרבה דברים</li></ul>'
 );
 
 $LANG_MG09 = array(

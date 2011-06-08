@@ -131,10 +131,8 @@ class Media {
             'media_cell_keywords'   => 'album_page_body_media_cell_keywords.thtml',
             'mp3_podcast'			=> 'mp3_podcast.thtml',
         ));
-        $T->set_var('xhtml',XHTML);
 
         $F = new Template($_MG_CONF['template_path']);
-        $F->set_var('xhtml',XHTML);
         $F->set_var('media_frame',$MG_albums[$this->album_id]->imageFrameTemplate);
 
         // --- set the default thumbnail
@@ -380,7 +378,7 @@ class Media {
 
 	        if ( $MG_albums[$this->album_id]->access == 3 ) {
 	    		$T->set_var(array(
-	    			'edit_link'		=> '<br' . XHTML . '><a href="' . $_MG_CONF['site_url'] . '/admin.php?mode=mediaedit&amp;s=1&amp;album_id=' . $this->album_id . '&amp;mid=' . $this->id . '">' . $LANG_MG01['edit'] . '</a>',
+	    			'edit_link'		=> '<br/><a href="' . $_MG_CONF['site_url'] . '/admin.php?mode=mediaedit&amp;s=1&amp;album_id=' . $this->album_id . '&amp;mid=' . $this->id . '">' . $LANG_MG01['edit'] . '</a>',
 	    		));
     		} else {
 	    		$T->set_var(array(
@@ -552,7 +550,6 @@ class Media {
 
     	$L = new Template( MG_getTemplatePath($this->album_id) );
     	$L->set_file('media_link','medialink.thtml');
-    	$L->set_var('xhtml',XHTML);
     	$L->set_var('href',$url_media_item);
     	if ( $this->type == 0 ) {
     	    if ( $this->remote == 1 ) {
@@ -565,7 +562,7 @@ class Media {
         $caption = PLG_replaceTags(str_replace('$','&#36;',$this->title),'mediagallery','media_description');
         if ($this->owner_id == $_USER['uid'] ||
                 SEC_hasRights('mediagallery.admin')) {
-            $caption .= '<br '.XHTML.'>('.$this->id.')';
+            $caption .= '<br />('.$this->id.')';
         }
         $L->set_var('caption', $caption);
     	$L->set_var('id','id' . rand());
@@ -817,7 +814,7 @@ class Media {
             $newwidth = round($media_size[0] / $ratio);
         }
         $media_dim = 'width="' . $newwidth . '" height="' . $newheight . '"';
-        return '<img src="' .$media_thumbnail . '" ' . $media_dim . ' style="border:none;" alt="' . strip_tags($this->title) . '" title="' . strip_tags($this->title) . '"' . XHTML . '>';
+        return '<img src="' .$media_thumbnail . '" ' . $media_dim . ' style="border:none;" alt="' . strip_tags($this->title) . '" title="' . strip_tags($this->title) . '"/>';
     }
 
     function displayRaw( $namesOnly=0 ) {
@@ -944,7 +941,7 @@ class Media {
         }
         return $media_thumbnail;
         $media_dim = 'width="' . $newwidth . '" height="' . $newheight . '"';
-        return '<img src="' .$media_thumbnail . '" ' . $media_dim . ' style="border:none;" alt="' . strip_tags($this->title) . '" title="' . strip_tags($this->title) . '"' . XHTML . '>';
+        return '<img src="' .$media_thumbnail . '" ' . $media_dim . ' style="border:none;" alt="' . strip_tags($this->title) . '" title="' . strip_tags($this->title) . '"/>';
     }
 }
 ?>

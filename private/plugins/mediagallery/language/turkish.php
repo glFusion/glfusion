@@ -1,30 +1,31 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | Media Gallery Plugin 1.6                                                  |
-// +---------------------------------------------------------------------------+
-// | $Id:: turkish.php 2832 2008-07-24 02:27:18Z mevans0263                   $|
-// | This is the English language page for the Media Gallery Plug-in!          |
-// +---------------------------------------------------------------------------|
-// | Copyright (C) 2002 by the following authors:                              |
-// | Translated by Kemal CELLAT   kemal@moderntalking.biz                      |
-// | Author:                                                                   |
-// | Mark R. Evans               -    mark@glfusion.org                        |
-// +---------------------------------------------------------------------------|
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software               |
-// | Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA|
-// |                                                                           |
-// +---------------------------------------------------------------------------|
+// +--------------------------------------------------------------------------+
+// | Media Gallery Plugin - glFusion CMS                                      |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------|
+// | Copyright (C) 2002-2011 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Translator:                                                              |
+// | Kemal CELLAT           kemal AT moderntalking DOT biz                    |
+// +--------------------------------------------------------------------------|
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -55,8 +56,8 @@ $LANG_MG00 = array(
     'media_col_header' => 'Media Öðesi',
     'stats_title' => 'Top 10 Media Öðeleri',
     'items_in' => 'Öðeler içinde',
-    'no_album_objects' => '<br' . XHTML . '>Album Görüntülenmiyor<br' . XHTML . '><br' . XHTML . '>Görüntülenecek album yok.  Böyle bir album yok veya bu albume eriþim izniniz bulunmamaktadýr.',
-    'no_media_objects' => '<br' . XHTML . '>Bu albumde görüntülenecek media öðesi bulunmamaktadýr.',
+    'no_album_objects' => '<br />Album Görüntülenmiyor<br /><br />Görüntülenecek album yok.  Böyle bir album yok veya bu albume eriþim izniniz bulunmamaktadýr.',
+    'no_media_objects' => '<br />Bu albumde görüntülenecek media öðesi bulunmamaktadýr.',
     'results' => 'Media Gallery Sonuçlarý',
     'titlemsg' => 'Baþlýk',
     'urlmsg' => 'Tarih',
@@ -636,7 +637,7 @@ $LANG_MG01 = array(
     'replace_file' => 'Replace File',
     'autotag_caption' => 'Use media / album title as caption for autotags',
     'popup_from_album' => 'Play audio / video media directly from album view',
-    'out_of_date' => 'Your installation does not seem to be up to date. Updates are available for your version of Media Gallery, please visit <a href="http://www.glfusion.org">http://www.glfusion.org/</a> to obtain the latest version.<br' . XHTML . '><br' . XHTML . '>The latest available version is Media Gallery %s You are running Media Gallery %s',
+    'out_of_date' => 'Your installation does not seem to be up to date. Updates are available for your version of Media Gallery, please visit <a href="http://www.glfusion.org">http://www.glfusion.org/</a> to obtain the latest version.<br /><br />The latest available version is Media Gallery %s You are running Media Gallery %s',
     'jpg_quality' => 'Display JPG Quality',
     'js_slideshow' => 'JavaScript',
     'lightbox' => 'LightBox',
@@ -756,7 +757,7 @@ $LANG_MG02 = array(
 $LANG_MG03 = array(
     'featured_album' => 'Öncelikli Media Album',
     'updated_prompt' => 'Güncelleme:',
-    'no_album_objects' => '<br' . XHTML . '>Görüntülenecek Album yok<br' . XHTML . '><br' . XHTML . '>There are no albums to display.  There may be no albums or your user preferences may be too restrictive for this album.',
+    'no_album_objects' => '<br />Görüntülenecek Album yok<br /><br />There are no albums to display.  There may be no albums or your user preferences may be too restrictive for this album.',
     'no_media_objects' => '<h2>Bu albüm BOÞ</h2>',
     'next' => 'Sonraki',
     'previous' => 'Önceki',
@@ -873,7 +874,7 @@ $LANG_MG03 = array(
     'album_id_display' => 'Album ID: ',
     'text_body_email' => 'You received an Electronic PostCard from %s. If you are unable to see the message below, visit %s to view',
     'gremote_msg' => 'Gallery Remote is a Java application that runs on your desktop computer and provides a rich interface to Media Gallery. With Gallery Remote you can drag and drop photos to upload them to Media Gallery, rotate and resize your images before uploading. You must install Gallery Remote 1.4 or newer to use it with this version of Media Gallery.',
-    'gremote_url' => '<a href="http://gallery.sourceforge.net/gallery_remote.php">Download Gallery Remote</a>',
+    'gremote_url' => '<a href="http://sourceforge.net/projects/gallery/files/gallery%20remote/">Download Gallery Remote</a>',
     'upload_help' => 'Media Upload etmek için <b>Gözat</b> Butonuna týklayýnýz',
     'upload_size' => '<b>Note:</b> You can upload up to %s megabytes at one time. No individual file may be larger than %s megabytes. If you want to upload more than that, you must upload the files separately, use a different upload format, or ask your system administrator to allow larger uploads.',
     'ftp_help' => 'Transfer files that are already on your server into Media Gallery. The files must already have been uploaded to your server some other way (like FTP) and must be placed in a directory where they are accessibly by the web server.',
@@ -896,7 +897,7 @@ $LANG_MG03 = array(
     'click_here' => 'click here',
     'published' => 'Published by',
     'on' => 'On',
-    'no_flash' => '<div style="width:200px;">It appears you do not have the Flash Plugin installed, or the version you have is out of date and cannot play the requested content.<br' . XHTML . '><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
+    'no_flash' => '<div style="width:200px;">It appears you do not have the Flash Plugin installed, or the version you have is out of date and cannot play the requested content.<br /><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
     'tagline' => 'Gallery powered by <a href="http://www.glfusion.org" target="_new">Media Gallery</a>',
     'xp_pub_url' => 'Download <a href="%s">xppubwiz.reg (Windows XP)</a>',
     'vista_pub_url' => 'Download <a href="%s">xppubwiz.reg (Windows Vista)</a>',
@@ -1271,7 +1272,7 @@ $LANG_MG07 = array(
 $LANG_MG08 = array(
     'success' => 'Media Gallery Eklentisi Baþarýyla kuruldu.',
     'review' => 'Please review the <b>System Ayarlarý</b> and the <b>System Defaults</b> to complete the installation and configuration.',
-    'support' => 'For Media Gallery Support, please visit the glFusion Website at <a href="http://www.glfusion.org">www.glfusion.org</a>.<br' . XHTML . '><br' . XHTML . '>Also available at the Media Gallery Support Site is:<ul><li>Documentation Wiki</li><li>Support Forums</li><li>Announcement Mailing List for <b>security</b> and update announcements</li><li>... and much more</li></ul>'
+    'support' => 'For Media Gallery Support, please visit the glFusion Website at <a href="http://www.glfusion.org">www.glfusion.org</a>.<br /><br />Also available at the Media Gallery Support Site is:<ul><li>Documentation Wiki</li><li>Support Forums</li><li>Announcement Mailing List for <b>security</b> and update announcements</li><li>... and much more</li></ul>'
 );
 
 $LANG_MG09 = array(

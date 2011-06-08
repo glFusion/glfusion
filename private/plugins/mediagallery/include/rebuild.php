@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: rebuild.php 3070 2008-09-07 02:40:49Z mevans0263                  $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -61,7 +61,6 @@ function MG_albumResizeConfirm( $aid, $actionURL ) {
         'lang_process'  =>  $LANG_MG01['process'],
         'action'        =>  'doresize',
         's_form_action' =>  $_MG_CONF['site_url'] . '/admin.php',
-        'xhtml'         =>  XHTML,
     ));
 
     $T->parse('output','admin');
@@ -165,7 +164,6 @@ function MG_albumRebuildConfirm( $aid, $actionURL ) {
         'lang_process'  =>  $LANG_MG01['process'],
         'action'        =>  'dorebuild',
         's_form_action' =>  $_MG_CONF['site_url'] . '/admin.php',
-        'xhtml'         =>  XHTML,
     ));
 
     $T->parse('output','admin');

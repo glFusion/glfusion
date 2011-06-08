@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: sort.php 3070 2008-09-07 02:40:49Z mevans0263                     $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -96,7 +96,6 @@ function MG_sortAlbums( $parent=0, $actionURL ) {
     $T->set_var('site_url', $_CONF['site_url']);
     $T->set_var('site_admin_url', $_CONF['site_admin_url']);
     $T->set_var(array(
-        'xhtml'                 => XHTML,
         'lang_new_album'        => $LANG_MG01['new_album'],
         'lang_upload_media'     => $LANG_MG01['upload_media'],
         'lang_ftp_media'        => $LANG_MG01['ftp_media'],
@@ -253,7 +252,6 @@ function MG_staticSortMedia( $album_id, $actionURL='' ) {
     $T->set_file ('admin','staticsort.thtml');
     $T->set_var('site_url', $_CONF['site_url']);
     $T->set_var('album_id',$album_id);
-    $T->set_var('xhtml',XHTML);
 
     // check permissions...
 

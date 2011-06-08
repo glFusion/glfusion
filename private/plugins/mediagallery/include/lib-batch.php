@@ -915,7 +915,6 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
 
     $T = new Template( MG_getTemplatePath(0) );
     $T->set_file('batch','batch_progress.thtml');
-    $T->set_var('xhtml',XHTML);
     $processing_messages = '<span style="font-weight:bold;">';
     $processing_messages .= ( $timer_expired ) ? sprintf($LANG_MG01['timer_expired'], $timer_expired_secs) : '';
     $processing_messages .= '</span>';
@@ -944,7 +943,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
 
         // create the meta tag for refresh
         $T->set_var(array(
-            "META" => '<meta http-equiv="refresh" content="'.$refresh_rate.';url='.$form_action.'"' . XHTML . '>')
+            "META" => '<meta http-equiv="refresh" content="'.$refresh_rate.';url='.$form_action.'"/>')
         );
     } else {
         if ( $item_limit == 0 ) {

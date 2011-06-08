@@ -1,32 +1,31 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | Media Gallery Plugin 1.6                                                  |
-// +---------------------------------------------------------------------------+
-// | $Id:: japanese.php 2832 2008-07-24 02:27:18Z mevans0263                  $|
-// | This is the Japanese_UTF-8 language page for the Media Gallery Plug-in    |
-// +---------------------------------------------------------------------------|
-// | Copyright (C) 2002,2005,2006 by the following authors:                    |
-// |                                                                           |
-// | Author:                                                                   |
-// | Mark R. Eavns               -    mark@glfusion.org                        |
-// | Translator:                                                               |
-// | mystral_kk                  -    mystral_kk AT ddlinks DOT net            |
-// +---------------------------------------------------------------------------|
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software               |
-// | Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA|
-// |                                                                           |
-// +---------------------------------------------------------------------------|
+// +--------------------------------------------------------------------------+
+// | Media Gallery Plugin - glFusion CMS                                      |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------|
+// | Copyright (C) 2002-2011 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Translator:                                                              |
+// | mystral_kk             mystral_kk AT ddlinks DOT net                     |
+// +--------------------------------------------------------------------------|
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -43,7 +42,7 @@ $LANG_MG00 = array(
     'install_header' => 'е╫еще░едеєд╬едеєе╣е╚б╝еы/евеєедеєе╣е╚б╝еы',
     'installed' => 'д│д╬е╫еще░едеєд╧едеєе╣е╚б╝еыд╡дьд╞ддд▐д╣бг',
     'uninstalled' => 'д│д╬е╫еще░едеєд╧едеєе╣е╚б╝еыд╡дьд╞ддд▐д╗дєбг',
-    'install_success' => 'есе╟егевеоеуещеъд╬едеєе╣е╚б╝еыд╦└о╕∙д╖д▐д╖д┐бг<br' . XHTML . '><br' . XHTML . '>е╖е╣е╞ерд╦┼║╔╒д╡дьд╞дддые╔енехесеєе╚дЄ╞╔д▀бд<a href="%s">┤╔═¤╝╘есе╦ехб╝</a>длдщ└▀─ъдме█е╣е╚┤─╢нд╚└░╣чд╖д╞дддыдл│╬╟зд╖д╞дпд└д╡ддбг',
+    'install_success' => 'есе╟егевеоеуещеъд╬едеєе╣е╚б╝еыд╦└о╕∙д╖д▐д╖д┐бг<br /><br />е╖е╣е╞ерд╦┼║╔╒д╡дьд╞дддые╔енехесеєе╚дЄ╞╔д▀бд<a href="%s">┤╔═¤╝╘есе╦ехб╝</a>длдщ└▀─ъдме█е╣е╚┤─╢нд╚└░╣чд╖д╞дддыдл│╬╟зд╖д╞дпд└д╡ддбг',
     'install_failed' => 'едеєе╣е╚б╝еыд╦╝║╟╘д╖д▐д╖д┐бгеиещб╝еэе░дЄ╕лд╞дпд└д╡ддбг',
     'uninstall_msg' => 'д│д╬е╫еще░едеєд╧днд┴дєд╚евеєедеєе╣е╚б╝еыд╡дьд▐д╖д┐бг',
     'install' => 'едеєе╣е╚б╝еы',
@@ -57,8 +56,8 @@ $LANG_MG00 = array(
     'media_col_header' => 'есе╟егевеведе╞ер',
     'stats_title' => '▒▄═ў╛х░╠10░╠',
     'items_in' => 'Items in',
-    'no_album_objects' => '<br' . XHTML . '>╔╜╝ид╣дыевеые╨ердмдвдъд▐д╗дєбг<br' . XHTML . '><br' . XHTML . '>╔╜╝ид╣дыевеые╨ердмдвдъд▐д╗дєбг╦▄┼Ўд╦евеые╨ердмд╩дддлбдд│д╬евеые╨ердЄ╔╜╝ид╖д╩дддшджецб╝е╢б╝└▀─ъд╟└й╕┬д╖д╞дддыд╬длдтд╖дьд▐д╗дєбг',
-    'no_media_objects' => '<br' . XHTML . '>д│д╬евеые╨ерд╦д╧еведе╞ердмдвдъд▐д╗дєбг',
+    'no_album_objects' => '<br />╔╜╝ид╣дыевеые╨ердмдвдъд▐д╗дєбг<br /><br />╔╜╝ид╣дыевеые╨ердмдвдъд▐д╗дєбг╦▄┼Ўд╦евеые╨ердмд╩дддлбдд│д╬евеые╨ердЄ╔╜╝ид╖д╩дддшджецб╝е╢б╝└▀─ъд╟└й╕┬д╖д╞дддыд╬длдтд╖дьд▐д╗дєбг',
+    'no_media_objects' => '<br />д│д╬евеые╨ерд╦д╧еведе╞ердмдвдъд▐д╗дєбг',
     'results' => 'есе╟егевеоеуещеъд╬╕б║ў╖ы▓╠',
     'titlemsg' => 'е┐еде╚еы',
     'urlmsg' => '╞№╔╒',
@@ -151,7 +150,7 @@ $LANG_MG01 = array(
     'configuration_help' => 'есе╟егевеоеуещеъе╫еще░едеєд╬╔╕╜р┼кд╩╞░║юдЄ╩╤╣╣д╣дыд╦д╧бдеке╫е╖ечеєдЄ└▀─ъд╖д╞дпд└д╡ддбг',
     'media_edit_help' => '╕─б╣д╬есе╟егевеведе╞ерд╚┬░└ндЄ╩╘╜╕д╖д▐д╣бгесе╟егевдЄ│╚┬ч╔╜╝ид╣дыд╦д╧бд▓╝д╬▓ш┴№дЄепеъе├епд╣дьд╨бде▌е├е╫еве├е╫ежегеєе╔еждм│лднд▐д╣бг',
     'album_edit_help' => '╕в╕┬бд├э╠▄е╣е╞б╝е┐е╣бде┐еде╚еыбг└т╠└дЄ┤▐дсд╞евеые╨ер┬░└ндЄ└▀─ъд╖д▐д╣бг',
-    'album_delete_help' => 'д│д╬евеые╨ерд╚┴┤д╞д╬╗╥евеые╨ердм║я╜№д╡дьд▐д╣бгесе╟егевеведе╞ердЄ┐╖д╖дде╒ейеые└д╦░▄╞░д╡д╗дыдлбд┤░┴┤д╦║я╜№д╣дыдлдЄ┴к┬Єд╖д╞дпд└д╡ддбг<br' . XHTML . '><b>ддд├д┐дє║я╜№д╣дыд╚бд╝шдъ╛├д╗д▐д╗дєбг</b>',
+    'album_delete_help' => 'д│д╬евеые╨ерд╚┴┤д╞д╬╗╥евеые╨ердм║я╜№д╡дьд▐д╣бгесе╟егевеведе╞ердЄ┐╖д╖дде╒ейеые└д╦░▄╞░д╡д╗дыдлбд┤░┴┤д╦║я╜№д╣дыдлдЄ┴к┬Єд╖д╞дпд└д╡ддбг<br /><b>ддд├д┐дє║я╜№д╣дыд╚бд╝шдъ╛├д╗д▐д╗дєбг</b>',
     'configuration_title' => 'есе╟егевеоеуещеъд╬└▀─ъ',
     'configuration_header' => 'есе╟егевеоеуещеъ└▀─ъеке╫е╖ечеє',
     'album_maintenance' => 'есе╟егевеоеуещеъд╬евеые╨ердЄесеєе╞е╩еєе╣',
@@ -164,7 +163,7 @@ $LANG_MG01 = array(
     'left_right_blocks' => '║╕▒же╓еэе├еп',
     'none' => 'д╩д╖',
     'no_media_objects' => 'д│д╬евеые╨ерд╦д╧еведе╞ердмдвдъд▐д╗дєбг',
-    'media_manage_help' => 'б╓░▄╞░б╫д╚б╓║я╜№б╫д╧┴к┬Єд╖д┐▓ш┴№д╦┬╨д╖д╞е╨е├е┴╜ш═¤дЄ╣╘ддд▐д╣бгб╓╩▌┬╕б╫д╦дшдъ╜ш═¤дм╣╘дядьбдевеые╨ер╔╜╗цд╚есе╟егеве┐еде╚еыдм╣╣┐╖д╡дьд▐д╣бг<br' . XHTML . '><b>ддд├д┐дєб╓║я╜№б╫дЄ╝┬╣╘д╣дыд╚бд╞є┼┘д╚╕╡д╦д╧╠сд╗д▐д╗дєбк</b>',
+    'media_manage_help' => 'б╓░▄╞░б╫д╚б╓║я╜№б╫д╧┴к┬Єд╖д┐▓ш┴№д╦┬╨д╖д╞е╨е├е┴╜ш═¤дЄ╣╘ддд▐д╣бгб╓╩▌┬╕б╫д╦дшдъ╜ш═¤дм╣╘дядьбдевеые╨ер╔╜╗цд╚есе╟егеве┐еде╚еыдм╣╣┐╖д╡дьд▐д╣бг<br /><b>ддд├д┐дєб╓║я╜№б╫дЄ╝┬╣╘д╣дыд╚бд╞є┼┘д╚╕╡д╦д╧╠сд╗д▐д╗дєбк</b>',
     'usage_report_help' => 'есе╟егевеоеуещеъд╬╗╚═╤╛ї╢╖еье▌б╝е╚дЄ║ю└од╖д▐д╣бг╞№╔╒дЄд╖д╞д╖д╞┴┤ецб╝е╢б╝дЄ┴к┬Єд╖д╞дтдшддд╖бдецб╝е╢б╝дЄ╗╪─ъд╖д╞╞├─ъд╬╞№╔╒д╩ддд╖┴┤д╞д╬╞№дЄ┴к┬Єд╣дыд│д╚дтд╟днд▐д╣бге╟б╝е┐дм┬┐д╣додыд╬д╟бд┴┤ецб╝е╢б╝д╬┴┤╔Їд╬╞№╔╒д╧╗╪─ъд╖д╩ддд╟дпд└д╡ддбг',
     'all_dates' => '┴┤д╞д╬╞№╔╒',
     'select_user' => 'ецб╝е╢б╝┴к┬Є',
@@ -298,10 +297,10 @@ $LANG_MG01 = array(
     'tn_size_help' => 'евеые╨ерд╟╔╜╝ид╡дьдые╡ере═б╝еы▓ш┴№д╬е╡еде║',
     'globalattr' => 'евеые╨ер┬░└ндЄ╩╘╜╕б╩┴┤┬╬б╦',
     'global_attr_editor' => 'евеые╨ер┬░└ндЄ╩╘╜╕б╩┴┤┬╬б╦',
-    'global_attr_help' => '<b>┴┤╔Їд╬</b>евеые╨ерд╦┬╨д╣ды┬░└ндЄ╩╤╣╣д╣дыд╬д╟бд┐╡╜┼д╦╗╚═╤д╖д╞дпд└д╡ддбг<br' . XHTML . '><br' . XHTML . '>╣╣┐╖д╖д┐дд┬░└нд╬├═дЄ┴кд╙бд<b>╣╣┐╖</b>дЄе┴езе├епд╖д╞дпд└д╡ддбг',
+    'global_attr_help' => '<b>┴┤╔Їд╬</b>евеые╨ерд╦┬╨д╣ды┬░└ндЄ╩╤╣╣д╣дыд╬д╟бд┐╡╜┼д╦╗╚═╤д╖д╞дпд└д╡ддбг<br /><br />╣╣┐╖д╖д┐дд┬░└нд╬├═дЄ┴кд╙бд<b>╣╣┐╖</b>дЄе┴езе├епд╖д╞дпд└д╡ддбг',
     'globalperm' => 'евеые╨ер╕в╕┬дЄ╩╘╜╕б╩┴┤┬╬б╦',
     'global_perm_editor' => 'евеые╨ер╕в╕┬д╬╩╘╜╕б╩┴┤┬╬б╦',
-    'global_perm_help' => '<b>┴┤╔Їд╬</b>╕в╕┬дЄ╩╤╣╣д╣дыд╬д╟бд┐╡╜┼д╦╗╚═╤д╖д╞дпд└д╡ддбг<br' . XHTML . '><br' . XHTML . '>╣╣┐╖д╖д┐дд┬░└нд╬├═дЄ┴кд╙бд<b>╣╣┐╖</b>дЄе┴езе├епд╖д╞дпд└д╡ддбг',
+    'global_perm_help' => '<b>┴┤╔Їд╬</b>╕в╕┬дЄ╩╤╣╣д╣дыд╬д╟бд┐╡╜┼д╦╗╚═╤д╖д╞дпд└д╡ддбг<br /><br />╣╣┐╖д╖д┐дд┬░└нд╬├═дЄ┴кд╙бд<b>╣╣┐╖</b>дЄе┴езе├епд╖д╞дпд└д╡ддбг',
     'attribute' => '┬░└н',
     'value' => '├═',
     'update' => '╣╣┐╖',
@@ -361,7 +360,7 @@ $LANG_MG01 = array(
     'rebuild_confirm' => 'д│д╬евеые╨ерд╬е╡ере═б╝еы▓ш┴№дЄ┴┤д╞║юдъ─╛д╖д▐д╣длбй',
     'remove_originals' => 'еве├е╫еэб╝е╔д╡дьд┐╕╡▓ш┴№дЄ║я╜№',
     'remove_help' => 'есе╟егевеоеуещеъдлдщ╕╡▓ш┴№дЄ║я╜№',
-    'remove_details' => 'д│д╬╜ш═¤д╦дшдъеве├е╫еэб╝е╔д╡дьд┐╕╡▓ш┴№дм┴┤╔Ї║я╜№д╡дьбд╔╜╝и═╤▓ш┴№д╚е╡ере═б╝еы▓ш┴№д└д▒дм╗─дъд▐д╣бг<br' . XHTML . '><br' . XHTML . '><b>д│д╬╜ш═¤дЄ╝шдъ╛├д╣д│д╚д╧д╟днд╩ддд╬д╟бд┐╡╜┼д╦дк┤ъддд╖д▐д╣бг</b>',
+    'remove_details' => 'д│д╬╜ш═¤д╦дшдъеве├е╫еэб╝е╔д╡дьд┐╕╡▓ш┴№дм┴┤╔Ї║я╜№д╡дьбд╔╜╝и═╤▓ш┴№д╚е╡ере═б╝еы▓ш┴№д└д▒дм╗─дъд▐д╣бг<br /><br /><b>д│д╬╜ш═¤дЄ╝шдъ╛├д╣д│д╚д╧д╟днд╩ддд╬д╟бд┐╡╜┼д╦дк┤ъддд╖д▐д╣бг</b>',
     'processing_complete' => '╜ш═¤дмднд┴дєд╚┤░╬╗д╖д▐д╖д┐бг',
     'reset_maint' => '▓ш┴№д╬есеєе╞е╩еєе╣┬░└ндЄеъе╗е├е╚',
     'reset_help' => 'есе╟егевеведе╞ерд╬есеєе╞е╩еєе╣е╒еще░дЄеъе╗е├е╚д╖д╞бд║╞д╙╜ш═¤д╟дндыдшджд╦д╖д▐д╣бг',
@@ -638,7 +637,7 @@ $LANG_MG01 = array(
     'replace_file' => 'Replace File',
     'autotag_caption' => 'Use media / album title as caption for autotags',
     'popup_from_album' => 'Play audio / video media directly from album view',
-    'out_of_date' => 'Your installation does not seem to be up to date. Updates are available for your version of Media Gallery, please visit <a href="http://www.glfusion.org">http://www.glfusion.org/</a> to obtain the latest version.<br' . XHTML . '><br' . XHTML . '>The latest available version is Media Gallery %s You are running Media Gallery %s',
+    'out_of_date' => 'Your installation does not seem to be up to date. Updates are available for your version of Media Gallery, please visit <a href="http://www.glfusion.org">http://www.glfusion.org/</a> to obtain the latest version.<br /><br />The latest available version is Media Gallery %s You are running Media Gallery %s',
     'jpg_quality' => 'Display JPG Quality',
     'js_slideshow' => 'JavaScript',
     'lightbox' => 'LightBox',
@@ -727,9 +726,9 @@ $LANG_MG02 = array(
     'directory_error' => 'е╟егеьепе╚еъдЄекб╝е╫еєд╖д╞есе╟егевдЄе╣енеуеєд╟днд▐д╗дєд╟д╖д┐бг',
     'album_not_found' => 'евеые╨ердмдвдъд▐д╗дєбг',
     'usage_report_error1' => '┴┤╔Їд╬ецб╝е╢б╝д╚┴┤д╞д╬╞№╔╒дЄ╞▒╗■д╦┴к┬Єд╣дыд│д╚д╧д╟днд▐д╗дєбгдфдъ─╛д╖д╞дпд└д╡ддбг',
-    'unknown_filetype' => ' ╟з╝▒д╟днд╩дде╒ебедеые┐еде╫д╟д╣бг<br' . XHTML . '>',
-    'move_error' => ' еве├е╫еэб╝е╔д╡дьд┐е╒ебедеы %s дЄ░▄╞░/е│е╘б╝├цд╦еиещб╝дм╚п└╕д╖д▐д╖д┐бг<br' . XHTML . '>',
-    'convert_error' => ' еве├е╫еэб╝е╔д╡дьд┐е╒ебедеы %s дЄ╩╤┤╣├цд╦еиещб╝дм╚п└╕д╖д▐д╖д┐бг<br' . XHTML . '>',
+    'unknown_filetype' => ' ╟з╝▒д╟днд╩дде╒ебедеые┐еде╫д╟д╣бг<br />',
+    'move_error' => ' еве├е╫еэб╝е╔д╡дьд┐е╒ебедеы %s дЄ░▄╞░/е│е╘б╝├цд╦еиещб╝дм╚п└╕д╖д▐д╖д┐бг<br />',
+    'convert_error' => ' еве├е╫еэб╝е╔д╡дьд┐е╒ебедеы %s дЄ╩╤┤╣├цд╦еиещб╝дм╚п└╕д╖д▐д╖д┐бг<br />',
     'perm_error' => ' е╒ебедеыдЄ│лд▒д▐д╗дє(╕в╕┬дмдвдъд▐д╗дє)',
     'album_nonexist' => 'евеые╨ердмд╩ддд┐дсбдеве├е╫еэб╝е╔д╡дьд┐е╒ебедеыдЄ╜ш═¤д╟днд▐д╗дєбг',
     'upload_not_found' => 'еве├е╫еэб╝е╔д╡дьд┐е╒ебедеыдм╕лд─длдъд▐д╗дєбгWebе╡б╝е╨б╝д╬еиещб╝еэе░дЄе┴езе├епд╖бдеве├е╫еэб╝е╔д╣дые╒ебедеыд╬┐Ї├═дшдъ┬чдндпд╩дыдшджбдphp.iniд╬ post_max_sizeе╤ещесб╝е┐д╚max_upload_sizeе╤ещесб╝е┐дЄ└▀─ъд╖д╞дпд└д╡ддбг',
@@ -758,7 +757,7 @@ $LANG_MG02 = array(
 $LANG_MG03 = array(
     'featured_album' => '├э╠▄евеые╨ер',
     'updated_prompt' => '╣╣┐╖ ',
-    'no_album_objects' => '<br' . XHTML . '>╔╜╝ид╣дыевеые╨ердмдвдъд▐д╗дєбг<br' . XHTML . '><br' . XHTML . '>╔╜╝ид╣дыевеые╨ердмдвдъд▐д╗дєбг╦▄┼Ўд╦евеые╨ердмд╩ддд╬длбдд│д╬евеые╨ердЄ╔╜╝ид╖д╩дддшджецб╝е╢б╝└▀─ъд╟└й╕┬д╖д╞дддыд╬длдтд╖дьд▐д╗дєбг',
+    'no_album_objects' => '<br />╔╜╝ид╣дыевеые╨ердмдвдъд▐д╗дєбг<br /><br />╔╜╝ид╣дыевеые╨ердмдвдъд▐д╗дєбг╦▄┼Ўд╦евеые╨ердмд╩ддд╬длбдд│д╬евеые╨ердЄ╔╜╝ид╖д╩дддшджецб╝е╢б╝└▀─ъд╟└й╕┬д╖д╞дддыд╬длдтд╖дьд▐д╗дєбг',
     'no_media_objects' => '<h2>д│д╬евеые╨ерд╦д╧▓ш┴№есе╟егевдмдвдъд▐д╗дєбгбг</h2>',
     'next' => '╝бд╪',
     'previous' => '┴░д╪',
@@ -875,7 +874,7 @@ $LANG_MG03 = array(
     'album_id_display' => 'Album ID: ',
     'text_body_email' => 'You received an Electronic PostCard from %s. If you are unable to see the message below, visit %s to view',
     'gremote_msg' => 'Gallery Remote is a Java application that runs on your desktop computer and provides a rich interface to Media Gallery. With Gallery Remote you can drag and drop photos to upload them to Media Gallery, rotate and resize your images before uploading. You must install Gallery Remote 1.4 or newer to use it with this version of Media Gallery.',
-    'gremote_url' => '<a href="http://gallery.sourceforge.net/gallery_remote.php">Download Gallery Remote</a>',
+    'gremote_url' => '<a href="http://sourceforge.net/projects/gallery/files/gallery%20remote/">Download Gallery Remote</a>',
     'upload_help' => '<b>╗▓╛╚</b>дЄепеъе├епд╖д╞бдеве├е╫еэб╝е╔д╣дыесе╟егевдЄ╗╪─ъд╖д╞д',
     'upload_size' => '<b>Note:</b> You can upload up to %s megabytes at one time. No individual file may be larger than %s megabytes. If you want to upload more than that, you must upload the files separately, use a different upload format, or ask your system administrator to allow larger uploads.',
     'ftp_help' => 'Transfer files that are already on your server into Media Gallery. The files must already have been uploaded to your server some other way (like FTP) and must be placed in a directory where they are accessibly by the web server.',
@@ -898,7 +897,7 @@ $LANG_MG03 = array(
     'click_here' => 'click here',
     'published' => 'Published by',
     'on' => 'On',
-    'no_flash' => '<div style="width:200px;">It appears you do not have the Flash Plugin installed, or the version you have is out of date and cannot play the requested content.<br' . XHTML . '><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
+    'no_flash' => '<div style="width:200px;">It appears you do not have the Flash Plugin installed, or the version you have is out of date and cannot play the requested content.<br /><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
     'tagline' => 'Gallery powered by <a href="http://www.glfusion.org" target="_new">Media Gallery</a>',
     'xp_pub_url' => 'Download <a href="%s">xppubwiz.reg (Windows XP)</a>',
     'vista_pub_url' => 'Download <a href="%s">xppubwiz.reg (Windows Vista)</a>',
@@ -1273,7 +1272,7 @@ $LANG_MG07 = array(
 $LANG_MG08 = array(
     'success' => 'Media Gallery Plugin has been successfully installed.',
     'review' => 'Please review the <b>System Options</b> and the <b>System Defaults</b> to complete the installation and configuration.',
-    'support' => 'For Media Gallery Support, please visit the glFusion Website at <a href="http://www.glfusion.org">www.glfusion.org</a>.<br' . XHTML . '><br' . XHTML . '>Also available at the Media Gallery Support Site is:<ul><li>Documentation Wiki</li><li>Support Forums</li><li>Announcement Mailing List for <b>security</b> and update announcements</li><li>... and much more</li></ul>'
+    'support' => 'For Media Gallery Support, please visit the glFusion Website at <a href="http://www.glfusion.org">www.glfusion.org</a>.<br /><br />Also available at the Media Gallery Support Site is:<ul><li>Documentation Wiki</li><li>Support Forums</li><li>Announcement Mailing List for <b>security</b> and update announcements</li><li>... and much more</li></ul>'
 );
 
 $LANG_MG09 = array(

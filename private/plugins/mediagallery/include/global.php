@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: global.php 3070 2008-09-07 02:40:49Z mevans0263                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -73,7 +73,6 @@ function MG_globalAlbumPermEditor($adminMenu=0) {
     $T->set_file(array(
         'admin' =>  'global_album_perm.thtml'
     ));
-    $T->set_var('xhtml',XHTML);
 
     $usergroups = SEC_getUserGroups();
     for ($i = 0; $i < count($usergroups); $i++) {
@@ -263,7 +262,6 @@ function MG_globalAlbumAttributeEditor($adminMenu=0) {
     $T->set_file(array(
         'admin' =>  'global_album_attr.thtml'
     ));
-    $T->set_var('xhtml',XHTML);
 
     // build exif select box...
 
@@ -286,26 +284,26 @@ function MG_globalAlbumAttributeEditor($adminMenu=0) {
     $ranking_select .= '<option value="2"' . ($A['enable_rating']==2 ? 'selected="selected"' : '') . '>' . $LANG_MG01['always'] . '</option>';
     $ranking_select .= '</select>';
 
-    $podcast_select = '<input type="checkbox" name="podcast" value="1" ' . ($A['podcast'] ? ' checked="checked"' : '') . XHTML .  '>';
-    $mp3ribbon_select = '<input type="checkbox" name="mp3ribbon" value="1" ' . ($A['mp3ribbon'] ? ' checked="checked"' : '') . XHTML . '>';
-    $rsschildren_select = '<input type="checkbox" name="rsschildren" value="1" ' . ($A['rsschildren'] ? ' checked="checked"' : '') . XHTML . '>';
+    $podcast_select = '<input type="checkbox" name="podcast" value="1" ' . ($A['podcast'] ? ' checked="checked"' : '') . '/>';
+    $mp3ribbon_select = '<input type="checkbox" name="mp3ribbon" value="1" ' . ($A['mp3ribbon'] ? ' checked="checked"' : '') . '/>';
+    $rsschildren_select = '<input type="checkbox" name="rsschildren" value="1" ' . ($A['rsschildren'] ? ' checked="checked"' : '') . '/>';
 
-    $filename_title_select = '<input type="checkbox" name="filename_title" value="1"' . XHTML . '>';
+    $filename_title_select = '<input type="checkbox" name="filename_title" value="1" />';
 
-    $comment_select = '<input type="checkbox" name="enable_comments" value="1"' . XHTML . '>';
+    $comment_select = '<input type="checkbox" name="enable_comments" value="1" />';
     $ss_select		= '<select name="enable_slideshow">';
     $ss_select		.= '<option value="0">' . $LANG_MG01['disabled'] . '</option>';
     $ss_select		.= '<option value="1">' . $LANG_MG01['js_slideshow'] . '</option>';
     $ss_select		.= '<option value="2">' . $LANG_MG01['lightbox'] . '</option>';
     $ss_select      .= '</select>';
 
-    $ri_select      = '<input type="checkbox" name="enable_random" value="1"' . XHTML . '>';
-    $sf_select      = '<input type="checkbox" name="enable_shutterfly" value="1"' . XHTML . '>';
-    $views_select   = '<input type="checkbox" name="enable_views" value="1"' . XHTML . '>';
-    $keywords_select = '<input type="checkbox" name="enable_keywords" value="1"' . XHTML . '>';
-    $sort_select    = '<input type="checkbox" name="enable_sort" value="1"' . XHTML . '>';
-    $afirst_select  = '<input type="checkbox" name="albums_first" value="1"' . XHTML . '>';
-    $album_views_select   = '<input type="checkbox" name="enable_album_views" value="1"' . XHTML . '>';
+    $ri_select      = '<input type="checkbox" name="enable_random" value="1" />';
+    $sf_select      = '<input type="checkbox" name="enable_shutterfly" value="1" />';
+    $views_select   = '<input type="checkbox" name="enable_views" value="1" />';
+    $keywords_select = '<input type="checkbox" name="enable_keywords" value="1" />';
+    $sort_select    = '<input type="checkbox" name="enable_sort" value="1" />';
+    $afirst_select  = '<input type="checkbox" name="albums_first" value="1" />';
+    $album_views_select   = '<input type="checkbox" name="enable_album_views" value="1" />';
 
     $tn_size_select  = '<select name="tn_size">';
     $tn_size_select .= '<option value="0">' . $LANG_MG01['small'] . '</option>';
@@ -314,8 +312,8 @@ function MG_globalAlbumAttributeEditor($adminMenu=0) {
     $tn_size_select .= '<option value="3">' . $LANG_MG01['custom'] . '</option>';
     $tn_size_select .= '</select>';
 
-    $tnheight_input = '<input type="text" size="3" name="tnheight" value=""' . XHTML . '>';
-    $tnwidth_input  = '<input type="text" size="3" name="tnwidth" value=""' . XHTML . '>';
+    $tnheight_input = '<input type="text" size="3" name="tnheight" value="" />';
+    $tnwidth_input  = '<input type="text" size="3" name="tnwidth" value="" />';
 
     $display_image_size_select  = '<select name="display_image_size">';
     $display_image_size_select .= '<option value="0">' . $LANG_MG01['size_500x375'] . '</option>';
@@ -330,12 +328,12 @@ function MG_globalAlbumAttributeEditor($adminMenu=0) {
     $display_image_size_select .= '<option value="9">' . $LANG_MG01['size_custom'] . $_MG_CONF['custom_image_width'] . 'x' . $_MG_CONF['custom_image_height'] . '</option>';
     $display_image_size_select .= '</select>';
 
-    $max_image_height_input = '<input type="text" size="4" name="max_image_height" value="0"' . XHTML .'>';
-    $max_image_width_input  = '<input type="text" size="4" name="max_image_width" value="0"' . XHTML . '>';
-    $max_filesize_input     = '<input type="text" size="10" name="max_filesize" value="0"' . XHTML . '>';
+    $max_image_height_input = '<input type="text" size="4" name="max_image_height" value="0"' . '/>';
+    $max_image_width_input  = '<input type="text" size="4" name="max_image_width" value="0" />';
+    $max_filesize_input     = '<input type="text" size="10" name="max_filesize" value="0" />';
 
-    $rows_input      = '<input type="text" size="3" name="display_rows" value="' . $_MG_CONF['display_rows'] . '"' . XHTML . '>';
-    $columns_input   = '<input type="text" size="3" name="display_columns" value="' . $_MG_CONF['display_columns'] . '"' . XHTML . '>';
+    $rows_input      = '<input type="text" size="3" name="display_rows" value="' . $_MG_CONF['display_rows'] . '" />';
+    $columns_input   = '<input type="text" size="3" name="display_columns" value="' . $_MG_CONF['display_columns'] . '" />';
 
     $playback_type  = '<select name="playback_type">';
     $playback_type .= '<option value="0">' . $LANG_MG01['play_in_popup'] . '</option>';
@@ -344,8 +342,8 @@ function MG_globalAlbumAttributeEditor($adminMenu=0) {
     $playback_type .= '<option value="3">' . $LANG_MG01['use_mms'] . '</option>';
     $playback_type .= '</select>';
 
-    $rss_select     = '<input type="checkbox" name="enable_rss" value="1"' . XHTML . '>';
-    $display_album_desc_select     = '<input type="checkbox" name="display_album_desc" value="1"' . XHTML . '>';
+    $rss_select     = '<input type="checkbox" name="enable_rss" value="1" />';
+    $display_album_desc_select     = '<input type="checkbox" name="display_album_desc" value="1" />';
 
     $postcard_select  = '<select name="enable_postcard">';
     $postcard_select .= '<option value="0">' . $LANG_MG01['disabled'] . '</option>';
@@ -353,7 +351,7 @@ function MG_globalAlbumAttributeEditor($adminMenu=0) {
     $postcard_select .= '<option value="2">' . $LANG_MG01['all_users'] . '</option>';
     $postcard_select .= '</select>';
 
-    $allow_download_select     = '<input type="checkbox" name="allow_download" value="1"' . XHTML . '>';
+    $allow_download_select     = '<input type="checkbox" name="allow_download" value="1" />';
 
     // build album list for starting point...
 

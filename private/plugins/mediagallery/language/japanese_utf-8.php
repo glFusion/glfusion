@@ -1,32 +1,31 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | Media Gallery Plugin 1.6                                                  |
-// +---------------------------------------------------------------------------+
-// | $Id:: japanese_utf-8.php 2832 2008-07-24 02:27:18Z mevans0263            $|
-// | This is the Japanese_UTF-8 language page for the Media Gallery Plug-in    |
-// +---------------------------------------------------------------------------|
-// | Copyright (C) 2002,2005,2006 by the following authors:                    |
-// |                                                                           |
-// | Author:                                                                   |
-// | Mark R. Eavns               -    mark@glfusion.org                        |
-// | Translator:                                                               |
-// | mystral_kk                  -    mystral_kk AT ddlinks DOT net            |
-// +---------------------------------------------------------------------------|
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software               |
-// | Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA|
-// |                                                                           |
-// +---------------------------------------------------------------------------|
+// +--------------------------------------------------------------------------+
+// | Media Gallery Plugin - glFusion CMS                                      |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------|
+// | Copyright (C) 2002-2011 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Translator:                                                              |
+// | mystral_kk             mystral_kk AT ddlinks DOT net                     |
+// +--------------------------------------------------------------------------|
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -43,7 +42,7 @@ $LANG_MG00 = array(
     'install_header' => 'プラグインのインストール/アンインストール',
     'installed' => 'このプラグインはインストールされています。',
     'uninstalled' => 'このプラグインはインストールされていません。',
-    'install_success' => 'メディアギャラリのインストールに成功しました。<br' . XHTML . '><br' . XHTML . '>システムに添付されているドキュメントを読み，<a href="%s">管理者メニュー</a>から設定がホスト環境と整合しているか確認してください。',
+    'install_success' => 'メディアギャラリのインストールに成功しました。<br /><br />システムに添付されているドキュメントを読み，<a href="%s">管理者メニュー</a>から設定がホスト環境と整合しているか確認してください。',
     'install_failed' => 'インストールに失敗しました。エラーログを見てください。',
     'uninstall_msg' => 'このプラグインはきちんとアンインストールされました。',
     'install' => 'インストール',
@@ -57,8 +56,8 @@ $LANG_MG00 = array(
     'media_col_header' => 'メディアアイテム',
     'stats_title' => '閲覧上位10位',
     'items_in' => 'Items in',
-    'no_album_objects' => '<br' . XHTML . '><br' . XHTML . '>表示するアルバムがありません。本当にアルバムがないか、このアルバムを表示しないようユーザー設定で制限しているのかもしれません。',
-    'no_media_objects' => '<br' . XHTML . '>このアルバムにはアイテムがありません。',
+    'no_album_objects' => '<br /><br />表示するアルバムがありません。本当にアルバムがないか、このアルバムを表示しないようユーザー設定で制限しているのかもしれません。',
+    'no_media_objects' => '<br />このアルバムにはアイテムがありません。',
     'results' => 'メディアギャラリの検索結果',
     'titlemsg' => 'タイトル',
     'urlmsg' => '日付',
@@ -151,7 +150,7 @@ $LANG_MG01 = array(
     'configuration_help' => 'メディアギャラリプラグインの標準的な動作を変更するには，オプションを設定してください。',
     'media_edit_help' => '個々のメディアアイテムと属性を編集します。メディアを拡大表示するには，下の画像をクリックすれば，ポップアップウィンドウが開きます。',
     'album_edit_help' => '権限，注目ステータス，タイトル。説明を含めてアルバム属性を設定します。',
-    'album_delete_help' => 'このアルバムと全ての子アルバムが削除されます。メディアアイテムを新しいフォルダに移動させるか，完全に削除するかを選択してください。<br' . XHTML . '><b>いったん削除すると，取り消せません。</b>',
+    'album_delete_help' => 'このアルバムと全ての子アルバムが削除されます。メディアアイテムを新しいフォルダに移動させるか，完全に削除するかを選択してください。<br /><b>いったん削除すると，取り消せません。</b>',
     'configuration_title' => 'メディアギャラリの設定',
     'configuration_header' => 'メディアギャラリ設定オプション',
     'album_maintenance' => 'メディアギャラリのアルバムをメンテナンス',
@@ -164,7 +163,7 @@ $LANG_MG01 = array(
     'left_right_blocks' => '左右ブロック',
     'none' => 'なし',
     'no_media_objects' => 'このアルバムにはアイテムがありません。',
-    'media_manage_help' => '「移動」と「削除」は選択した画像に対してバッチ処理を行います。「保存」により処理が行われ，アルバム表紙とメディアタイトルが更新されます。<br' . XHTML . '><b>いったん「削除」を実行すると，二度と元には戻せません！</b>',
+    'media_manage_help' => '「移動」と「削除」は選択した画像に対してバッチ処理を行います。「保存」により処理が行われ，アルバム表紙とメディアタイトルが更新されます。<br /><b>いったん「削除」を実行すると，二度と元には戻せません！</b>',
     'usage_report_help' => 'メディアギャラリの使用状況レポートを作成します。日付をしてして全ユーザーを選択してもよいし，ユーザーを指定して特定の日付ないし全ての日を選択することもできます。データが多すぎるので，全ユーザーの全部の日付は指定しないでください。',
     'all_dates' => '全ての日付',
     'select_user' => 'ユーザー選択',
@@ -298,10 +297,10 @@ $LANG_MG01 = array(
     'tn_size_help' => 'アルバムで表示されるサムネイル画像のサイズ',
     'globalattr' => 'アルバム属性を編集（全体）',
     'global_attr_editor' => 'アルバム属性を編集（全体）',
-    'global_attr_help' => '<b>全部の</b>アルバムに対する属性を変更するので，慎重に使用してください。<br' . XHTML . '><br' . XHTML . '>更新したい属性の値を選び，<b>更新</b>をチェックしてください。',
+    'global_attr_help' => '<b>全部の</b>アルバムに対する属性を変更するので，慎重に使用してください。<br /><br />更新したい属性の値を選び，<b>更新</b>をチェックしてください。',
     'globalperm' => 'アルバム権限を編集（全体）',
     'global_perm_editor' => 'アルバム権限の編集（全体）',
-    'global_perm_help' => '<b>全部の</b>権限を変更するので，慎重に使用してください。<br' . XHTML . '><br' . XHTML . '>更新したい属性の値を選び，<b>更新</b>をチェックしてください。',
+    'global_perm_help' => '<b>全部の</b>権限を変更するので，慎重に使用してください。<br /><br />更新したい属性の値を選び，<b>更新</b>をチェックしてください。',
     'attribute' => '属性',
     'value' => '値',
     'update' => '更新',
@@ -361,7 +360,7 @@ $LANG_MG01 = array(
     'rebuild_confirm' => 'このアルバムのサムネイル画像を全て作り直しますか？',
     'remove_originals' => 'アップロードされた元画像を削除',
     'remove_help' => 'メディアギャラリから元画像を削除',
-    'remove_details' => 'この処理によりアップロードされたオリジナル画像はすべて削除され、表示用画像とサムネイル画像だけが残ります。<br' . XHTML . '><br' . XHTML . '><b>この処理を取り消すことはできないので慎重にお願いします。</b>',
+    'remove_details' => 'この処理によりアップロードされたオリジナル画像はすべて削除され、表示用画像とサムネイル画像だけが残ります。<br /><br /><b>この処理を取り消すことはできないので慎重にお願いします。</b>',
     'processing_complete' => '処理がきちんと完了しました。',
     'reset_maint' => '画像のメンテナンス属性をリセット',
     'reset_help' => 'メディアアイテムのメンテナンスフラグをリセットして、再び処理できるようにします。',
@@ -496,7 +495,7 @@ $LANG_MG01 = array(
     'utilities' => 'Utilities',
     'gallery_v2_import' => 'Gallery v2',
     'batch_rotate_images' => '画像の回転処理をします アルバム: %s',
-    'batch_watermark_images' => '透かし処理をします アルバム: %s<br' . XHTML . '><br' . XHTML . '><font color=#ff0000>透かし処理はオリジナルの画像に対しても行われます。注意してください！</font>',
+    'batch_watermark_images' => '透かし処理をします アルバム: %s<br /><br /><font color=#ff0000>透かし処理はオリジナルの画像に対しても行われます。注意してください！</font>',
     'batch_resize_images' => 'リサイズ処理をします アルバム: %s',
     'batch_rebuild_thumbs' => 'サムネイル画像の再作成を行います アルバム: %s',
     'queue_delete' => ' removed from queue and deleted',
@@ -638,7 +637,7 @@ $LANG_MG01 = array(
     'replace_file' => '置き換えるファイル',
     'autotag_caption' => 'Use media / album title as caption for autotags',
     'popup_from_album' => '音楽/ビデオをアルバムから直接再生する',
-    'out_of_date' => 'Your installation does not seem to be up to date. Updates are available for your version of Media Gallery, please visit <a href="http://www.glfusion.org">http://www.glfusion.org/</a> to obtain the latest version.<br' . XHTML . '><br' . XHTML . '>The latest available version is Media Gallery %s You are running Media Gallery %s',
+    'out_of_date' => 'Your installation does not seem to be up to date. Updates are available for your version of Media Gallery, please visit <a href="http://www.glfusion.org">http://www.glfusion.org/</a> to obtain the latest version.<br /><br />The latest available version is Media Gallery %s You are running Media Gallery %s',
     'jpg_quality' => '表示する時のJPEGクオリティ',
     'js_slideshow' => 'JavaScript',
     'lightbox' => 'LightBox',
@@ -727,9 +726,9 @@ $LANG_MG02 = array(
     'directory_error' => 'ディレクトリをオープンしてメディアをスキャンできませんでした。',
     'album_not_found' => 'アルバムがありません。',
     'usage_report_error1' => '全部のユーザーと全ての日付を同時に選択することはできません。やり直してください。',
-    'unknown_filetype' => ' 認識できないファイルタイプです。<br' . XHTML . '>',
-    'move_error' => ' アップロードされたファイル %s を移動/コピー中にエラーが発生しました。<br' . XHTML . '>',
-    'convert_error' => ' アップロードされたファイル %s を変換中にエラーが発生しました。<br' . XHTML . '>',
+    'unknown_filetype' => ' 認識できないファイルタイプです。<br />',
+    'move_error' => ' アップロードされたファイル %s を移動/コピー中にエラーが発生しました。<br />',
+    'convert_error' => ' アップロードされたファイル %s を変換中にエラーが発生しました。<br />',
     'perm_error' => ' ファイルを開けません(権限がありません)',
     'album_nonexist' => 'アルバムがないため，アップロードされたファイルを処理できません。',
     'upload_not_found' => 'アップロードされたファイルが見つかりません。Webサーバーのエラーログをチェックし，アップロードするファイルの数値より大きくなるよう，php.iniの post_max_sizeパラメータとmax_upload_sizeパラメータを設定してください。',
@@ -758,7 +757,7 @@ $LANG_MG02 = array(
 $LANG_MG03 = array(
     'featured_album' => '注目アルバム',
     'updated_prompt' => '更新 ',
-    'no_album_objects' => '<br' . XHTML . '><br' . XHTML . '>表示するアルバムがありません。本当にアルバムがないか、このアルバムを表示しないようユーザー設定で制限しているのかもしれません。',
+    'no_album_objects' => '<br /><br />表示するアルバムがありません。本当にアルバムがないか、このアルバムを表示しないようユーザー設定で制限しているのかもしれません。',
     'no_media_objects' => '<h2>このアルバムには画像メディアがありません。</h2>',
     'next' => '次へ',
     'previous' => '前へ',
@@ -875,7 +874,7 @@ $LANG_MG03 = array(
     'album_id_display' => 'アルバム ID: ',
     'text_body_email' => 'You received an Electronic PostCard from %s. If you are unable to see the message below, visit %s to view',
     'gremote_msg' => 'Gallery Remote is a Java application that runs on your desktop computer and provides a rich interface to Media Gallery. With Gallery Remote you can drag and drop photos to upload them to Media Gallery, rotate and resize your images before uploading. You must install Gallery Remote 1.4 or newer to use it with this version of Media Gallery.',
-    'gremote_url' => '<a href="http://gallery.sourceforge.net/gallery_remote.php">Download Gallery Remote</a>',
+    'gremote_url' => '<a href="http://sourceforge.net/projects/gallery/files/gallery%20remote/">Download Gallery Remote</a>',
     'upload_help' => '<b>参照</b>をクリックして，アップロードするメディアを指定してください。',
     'upload_size' => '<b>Note:</b> You can upload up to %s megabytes at one time. No individual file may be larger than %s megabytes. If you want to upload more than that, you must upload the files separately, use a different upload format, or ask your system administrator to allow larger uploads.',
     'ftp_help' => 'Transfer files that are already on your server into Media Gallery. The files must already have been uploaded to your server some other way (like FTP) and must be placed in a directory where they are accessibly by the web server.',
@@ -898,7 +897,7 @@ $LANG_MG03 = array(
     'click_here' => 'click here',
     'published' => 'Published by',
     'on' => 'On',
-    'no_flash' => '<div style="width:200px;">It appears you do not have the Flash Plugin installed, or the version you have is out of date and cannot play the requested content.<br' . XHTML . '><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
+    'no_flash' => '<div style="width:200px;">It appears you do not have the Flash Plugin installed, or the version you have is out of date and cannot play the requested content.<br /><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
     'tagline' => 'Gallery powered by <a href="http://www.glfusion.org" target="_new">Media Gallery</a>',
     'xp_pub_url' => 'Download <a href="%s">xppubwiz.reg (Windows XP)</a>',
     'vista_pub_url' => 'Download <a href="%s">xppubwiz.reg (Windows Vista)</a>',

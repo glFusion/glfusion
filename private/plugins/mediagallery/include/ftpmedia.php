@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: ftpmedia.php 3070 2008-09-07 02:40:49Z mevans0263                 $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -52,7 +52,6 @@ function MG_ftpUpload( $album_id ) {
     $T->set_file ('mupload','ftpupload.thtml');
     $T->set_var('site_url', $_CONF['site_url']);
     $T->set_var('album_id',$album_id);
-    $T->set_var('xhtml',XHTML);
 
     if ( $MG_albums[$album_id]->access == 3 || SEC_hasRights('mediagallery.admin') || ($MG_albums[$album_id]->member_uploads==1 && $_USER['uid'] >= 2)) {
         $T->set_var(array(
@@ -135,10 +134,7 @@ function MG_listDir ($dir, $album_id, $purgefiles, $recurse ) {
 
     $T = new Template( MG_getTemplatePath($album_id) );
     $T->set_file (array ('admin' => 'filelist.thtml'));
-    $T->set_var('xhtml',XHTML);
 
-    $T->set_var('site_url', $_CONF['site_url']);
-    $T->set_var('site_admin_url', $_CONF['site_admin_url']);
     $T->set_var(array(
         'lang_put_files'    => $LANG_MG01['put_files'],
         'lang_into_album'   => $LANG_MG01['into_album'],
@@ -257,10 +253,10 @@ function MG_listDir ($dir, $album_id, $purgefiles, $recurse ) {
 
         $T->set_var(array(
             'row_class'     => ($rowcounter % 2) ? '2' : '1',
-            'checkbox'      => '<input type="checkbox" name="pic[]" value="' . $pvalue . '"' . XHTML . '>',
-            'palbum'        => '<input type="hidden" name="album_lb_id_' . $pvalue . '" value="' . $dest . '"' . XHTML . '>',
-            'pfile'         => '<input type="hidden" name="picfile_' . $pvalue . '" value="' . $filetmp . '"' . XHTML . '>',
-            'dirid'         => '<input type="hidden" name="dest" value="' . $dest . '"' . XHTML . '>',
+            'checkbox'      => '<input type="checkbox" name="pic[]" value="' . $pvalue . '"/>',
+            'palbum'        => '<input type="hidden" name="album_lb_id_' . $pvalue . '" value="' . $dest . '"/>',
+            'pfile'         => '<input type="hidden" name="picfile_' . $pvalue . '" value="' . $filetmp . '"/>',
+            'dirid'         => '<input type="hidden" name="dest" value="' . $dest . '"/>',
             'filename'      => ($isadirectory ? $dirlink : $filename),
             'fullname'      => $filetmp,
             'filesize'      => COM_numberFormat((filesize($filetmp))/1024) . ' kB',
@@ -342,10 +338,6 @@ function MG_FTPpickFiles( $album_id, $dir, $purgefiles, $recurse ) {
 
     $T = new Template( MG_getTemplatePath($album_id) );
     $T->set_file (array ('admin' => 'ftpimport.thtml'));
-    $T->set_var('xhtml',XHTML);
-
-    $T->set_var('site_url', $_CONF['site_url']);
-    $T->set_var('site_admin_url', $_CONF['site_admin_url']);
 
     $T->set_var(array(
         'lang_title'        => $LANG_MG01['title'],
