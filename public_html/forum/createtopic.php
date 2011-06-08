@@ -1111,7 +1111,7 @@ function FF_saveTopic( $forumData, $postData, $action )
 
             if ($notify == 'on' AND ($currentForumNotifyRecID < 1 AND $currentTopicNotifyRecID < 1 ) ) {
                 $sql = "INSERT INTO {$_TABLES['subscriptions']} (type,category,category_desc,id,id_desc,uid,date_added) ";
-                $sql .= "VALUES ('forum','".DB_escapeString($forum)."','".DB_escapeString($forum_name)."','".DB_escapeString($topicparent)."','".$subject."',".(int) $uid .",now() )";
+                $sql .= "VALUES ('forum','".DB_escapeString($forum)."','".DB_escapeString($forum_name)."','".DB_escapeString($topicPID)."','".$subject."',".(int) $uid .",now() )";
                 DB_query($sql);
             } elseif ($notify == 'on' AND $currentTopicUnNotifyRecID > 1) { // Had un-subcribed to topic and now wants to subscribe
                 DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE sub_id=".(int) $currentTopicUnNotifyRecID);
