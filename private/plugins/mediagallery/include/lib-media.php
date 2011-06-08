@@ -1116,7 +1116,7 @@ function MG_displayTGA($aid,$I,$full,$mediaObject) {
     $F->set_var(array(
         'media_link_start'  => $media_link_start,
         'media_link_end'    => $media_link_end,
-        'url_media_item'    =>  $u_pic,         // FIXME! Is this right or does it need the < ahref stuff
+        'url_media_item'    =>  $u_pic,
         'media_thumbnail'   =>  $u_image,
         'media_size'        =>  'width="' . $imageWidth . '" height="' . $imageHeight . '"',
         'media_height'      =>  $imageHeight,
@@ -1379,13 +1379,9 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     $orderBy = MG_getSortOrder($aid,$sortOrder);
 
-    if ( $_DB_dbms == "mssql" ) {
-        $sql = "SELECT *,CAST(media_desc AS TEXT) AS media_desc FROM {$_TABLES['mg_media_albums']} as ma LEFT JOIN " . $_TABLES['mg_media'] . " as m " .
+    $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma LEFT JOIN " . $_TABLES['mg_media'] . " as m " .
                 " ON ma.media_id=m.media_id WHERE ma.album_id=" . $aid . $orderBy;
-    } else {
-        $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma LEFT JOIN " . $_TABLES['mg_media'] . " as m " .
-                " ON ma.media_id=m.media_id WHERE ma.album_id=" . $aid . $orderBy;
-    }
+
     $result = DB_query( $sql );
     $nRows = DB_numRows( $result );
 
@@ -1768,6 +1764,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         'media_title'   =>  (isset($media[$mediaObject]['media_title']) && $media[$mediaObject]['media_title'] != ' ' ) ? PLG_replaceTags($media[$mediaObject]['media_title'],'mediagallery','media_title') : '',
         'album_title'   =>  ($sortID > 0 ? $LANG_MG03['search_results'] : $MG_albums[$aid]->title),
         'media_desc'    =>  (isset($media[$mediaObject]['media_desc']) && $media[$mediaObject]['media_desc'] != ' ' ) ? $media_desc : '',
+        'artist'        =>  (isset($media[$mediaObject]['artist']) ? $media[$mediaObject]['artist'] : '',
         'media_time'    =>  $media_date[0],
         'media_views'   =>  ($MG_albums[$aid]->enable_views ? $media[$mediaObject]['media_views'] : ''),
         'media_comments' => ($MG_albums[$aid]->enable_comments ? $media[$mediaObject]['media_comments'] . '<br />' : ''),
@@ -1913,7 +1910,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         $mid = $media[$mediaObject]['media_id'];
         if ($MG_albums[$aid]->enable_comments == 1) {
             USES_lib_comment();
-            if ($MG_albums[$aid]->access == 3 || $MG_albums[0]->owner_id){
+            if ($MG_albums[$aid]->access == 3 || $MG_albums[0]->owner_id) {
                 $delete_option = true;
             } else {
                 $delete_option = false;
