@@ -1042,7 +1042,8 @@ function saveuser($A)
                     } else {
                         $cooktime = -1000;
                     }
-                    SEC_setCookie($_CONF['cookie_password'], $passwd,
+                    $ltToken = SEC_createTokenGeneral('ltc',$token_ttl);
+                    SEC_setCookie($_CONF['cookie_password'], $ltToken,
                                   time() + $cooktime);
                 } elseif (!SEC_check_hash($A['old_passwd'],$current_password) ) {
                     return COM_refresh ($_CONF['site_url'].'/usersettings.php?msg=68');
@@ -1057,7 +1058,8 @@ function saveuser($A)
             } else {
                 $cooktime = -1000;
             }
-            SEC_setCookie($_CONF['cookie_password'], $passwd, time() + $cooktime);
+            $ltToken = SEC_createTokenGeneral('ltc',$cooktime);
+            SEC_setCookie($_CONF['cookie_password'], $ltToken, time() + $cooktime);
         }
 
         if ($_US_VERBOSE) {
