@@ -240,11 +240,11 @@ function DIR_navBar ($topic, $year, $month = 0)
 */
 function DIR_displayMonth ($topic, $year, $month, $main = false)
 {
-    global $_CONF, $_TABLES, $LANG_MONTH, $LANG_DIR;
+    global $_CONF, $_USER, $_TABLES, $LANG_MONTH, $LANG_DIR;
 
     $retval = '';
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     if ($main) {
         $retval .= '<div><h2>' . $LANG_MONTH[$month]

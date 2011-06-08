@@ -95,7 +95,7 @@ function MODERATE_submissioncount_draftstory() {
  */
 function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG28, $LANG29, $_IMAGE_TYPE;
+    global $_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG28, $LANG29, $_IMAGE_TYPE;
 
     $retval = '';
 
@@ -106,7 +106,7 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
         return $retval; // we can't work without an item type
     }
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     $field = $fieldname;
     $field = ($type == 'user' && $fieldname == 1) ? 'user' : $field;

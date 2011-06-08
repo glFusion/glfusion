@@ -234,11 +234,17 @@ if (DB_count($_TABLES['plugins'], array("pi_name","pi_enabled"),array("bad_behav
 require_once $_CONF['path_system'].'lib-security.php';
 
 /**
+* Session management library
+*
+*/
+
+require_once $_CONF['path_system'].'lib-sessions.php';
+
+/**
 * This is the date / time library used for formatting
 *
 */
 require_once $_CONF['path_system'] . 'classes/date.class.php';
-
 
 /**
 * This is the syndication library used to offer (RSS) feeds.
@@ -261,12 +267,6 @@ require_once $_CONF['path_system'].'lib-glfusion.php';
 
 require_once $_CONF['path_system'].'lib-plugins.php';
 
-/**
-* Session management library
-*
-*/
-
-require_once $_CONF['path_system'].'lib-sessions.php';
 
 /**
 * Multibyte functions
@@ -310,16 +310,14 @@ $usetheme = '';
 if ( isset( $_POST['usetheme'] )) {
     $usetheme = COM_sanitizeFilename($_POST['usetheme'], true);
 }
-if ( !empty( $usetheme ) && is_dir( $_CONF['path_themes'] . $usetheme )) {
-    $_CONF['theme'] = $usetheme;
-    $_CONF['path_layout'] = $_CONF['path_themes'] . $_CONF['theme'] . '/';
-    $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_CONF['theme'];
-}
-else if ( $_CONF['allow_user_themes'] == 1 ) {
+if ( $_CONF['allow_user_themes'] && !empty( $usetheme ) && is_dir( $_CONF['path_themes'] . $usetheme )) {
+    $_USER['theme'] = $usetheme;
+    $_CONF['path_layout'] = $_CONF['path_themes'] . $_USER['theme'] . '/';
+    $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_USER['theme'];
+} else if ( $_CONF['allow_user_themes'] == 1 ) {
     if ( isset( $_COOKIE[$_CONF['cookie_theme']] ) && empty( $_USER['theme'] )) {
         $theme = COM_sanitizeFilename($_COOKIE[$_CONF['cookie_theme']], true);
-        if ( is_dir( $_CONF['path_themes'] . $theme ))
-        {
+        if ( is_dir( $_CONF['path_themes'] . $theme )) {
             $_USER['theme'] = $theme;
         }
     }
@@ -335,11 +333,9 @@ else if ( $_CONF['allow_user_themes'] == 1 ) {
     }
 
     if ( !empty( $_USER['theme'] )) {
-        if ( is_dir( $_CONF['path_themes'] . $_USER['theme'] ))
-        {
-            $_CONF['theme'] = $_USER['theme'];
-            $_CONF['path_layout'] = $_CONF['path_themes'] . $_CONF['theme'] . '/';
-            $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_CONF['theme'];
+        if ( is_dir( $_CONF['path_themes'] . $_USER['theme'] )) {
+            $_CONF['path_layout'] = $_CONF['path_themes'] . $_USER['theme'] . '/';
+            $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_USER['theme'];
         } else {
             $_USER['theme'] = $_CONF['theme'];
         }
@@ -348,8 +344,8 @@ else if ( $_CONF['allow_user_themes'] == 1 ) {
     if (DB_count($_TABLES['plugins'], array("pi_name","pi_enabled"),array("chameleon","1")) < 1) {
         $_USER['theme'] = 'nouveau';
         $_CONF['theme'] = 'nouveau';
-        $_CONF['path_layout'] = $_CONF['path_themes'] . $_CONF['theme'] . '/';
-        $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_CONF['theme'];
+        $_CONF['path_layout'] = $_CONF['path_themes'] . $_USER['theme'] . '/';
+        $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_USER['theme'];
     }
 }
 $TEMPLATE_OPTIONS['default_vars']['layout_url'] = $_CONF['layout_url'];
@@ -971,13 +967,13 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $theme_what, $theme_pagetitle,
            $theme_headercode, $theme_layout,$mbMenu,$themeAPI;
 
-    $function = $_CONF['theme'] . '_siteHeader';
+    $function = $_USER['theme'] . '_siteHeader';
 
     if ( function_exists( $function )) {
         return $function( $what, $pagetitle, $headercode );
     }
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     static $headerCalled = 0;
 
@@ -1001,11 +997,11 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         SESS_setVar('cacheID',$cacheID);
     }
 
-    $header->set_var('cacheid',$_CONF['theme'].$cacheID);
+    $header->set_var('cacheid',$_USER['theme'].$cacheID);
 
     // give the theme a chance to load stuff....
 
-    $function = $_CONF['theme'] . '_headerVars';
+    $function = $_USER['theme'] . '_headerVars';
     if ( function_exists( $function )) {
         $function( $header );
     }
@@ -1145,14 +1141,14 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     $msg = $LANG01[67] . ' ' . $_CONF['site_name'];
 
     $header->set_var( 'css_url', $_CONF['layout_url'] . '/style.css' );
-    $header->set_var( 'theme', $_CONF['theme'] );
+    $header->set_var( 'theme', $_USER['theme'] );
 
     if ( $_SYSTEM['use_direct_style_js'] ) {
-        $style_cache_url = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css?t='.$_CONF['theme'].'&amp;i='.$cacheID;
-        $js_cache_url    = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].$_CONF['theme'].'.js?t='.$_CONF['theme'].'&amp;i='.$cacheID;
+        $style_cache_url = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'].'&amp;i='.$cacheID;
+        $js_cache_url    = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].$_USER['theme'].'.js?t='.$_USER['theme'].'&amp;i='.$cacheID;
     } else {
-        $style_cache_url = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'].'&amp;i='.$cacheID;
-        $js_cache_url    = $_CONF['site_url'].'/js.php?t='.$_CONF['theme'].'&amp;i='.$cacheID;
+        $style_cache_url = $_CONF['site_url'].'/css.php?t='.$_USER['theme'].'&amp;i='.$cacheID;
+        $js_cache_url    = $_CONF['site_url'].'/js.php?t='.$_USER['theme'].'&amp;i='.$cacheID;
     }
 
     $header->set_var('style_cache_url',$style_cache_url);
@@ -1208,12 +1204,12 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     COM_hit();
 
-    $function = $_CONF['theme'] . '_siteFooter';
+    $function = $_USER['theme'] . '_siteFooter';
     if ( function_exists( $function )) {
         return $function( $rightblock, $custom );
     }
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     $what       = $theme_what;
     $pagetitle  = $theme_pagetitle;
@@ -3937,7 +3933,7 @@ function COM_hit()
 
 function COM_emailUserTopics()
 {
-    global $_CONF, $_TABLES, $LANG04, $LANG08, $LANG24;
+    global $_CONF, $_USER, $_TABLES, $LANG04, $LANG08, $LANG24;
 
     if ($_CONF['emailstories'] == 0) {
         return;
@@ -4055,7 +4051,7 @@ function COM_emailUserTopics()
                 }
             }
 
-            $dt = new Date($S['day'], $_CONF['timezone']);
+            $dt = new Date($S['day'], $_USER['tzid']);
             $story_date = $dt->format($_CONF['date'], true);
 
             if ( $_CONF['emailstorieslength'] > 0 ) {
@@ -4134,7 +4130,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         $_CONF['whatsnew_cache_time'] = 3600;
     }
 
-    $cacheInstance = 'whatsnew__' . CACHE_security_hash() . '__' . $_CONF['theme'];
+    $cacheInstance = 'whatsnew__' . CACHE_security_hash() . '__' . $_USER['theme'];
     $retval = CACHE_check_instance($cacheInstance, 0);
     if ( $retval ) {
         $lu = CACHE_get_instance_update($cacheInstance, 0);
@@ -4405,11 +4401,11 @@ function COM_formatTimeString( $time_string, $time, $type = '', $amount = 0 )
 */
 function COM_showMessageText($message, $title = '', $persist = false)
 {
-    global $_CONF, $MESSAGE, $_IMAGE_TYPE;
+    global $_CONF, $_USER, $MESSAGE, $_IMAGE_TYPE;
 
     $retval = '';
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     if (!empty($message)) {
         if (empty($title)) {
@@ -4600,7 +4596,7 @@ function COM_getUserDateTimeFormat( $date='now' )
 {
     global $_TABLES, $_USER, $_CONF, $_SYSTEM;
 
-    $dtObject = new Date($date,$_CONF['timezone']);
+    $dtObject = new Date($date,$_USER['tzid']);
 
     // Get display format for time
 
@@ -6735,7 +6731,7 @@ function _commentsort($a, $b)
 
 function css_out()
 {
-    global $_CONF, $_SYSTEM, $_PLUGINS, $_TABLES;
+    global $_CONF, $_SYSTEM, $_USER, $_PLUGINS, $_TABLES;
     global $mbMenu, $themeAPI, $themeStyle;
 
     if ( !isset($_CONF['css_cache_filename']) ) {
@@ -6743,14 +6739,14 @@ function css_out()
     }
 
     if ( $_SYSTEM['use_direct_style_js'] ) {
-        $cacheFile = $_CONF['path_html'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css';
-        $cacheURL  = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css?t='.$_CONF['theme'];
+        $cacheFile = $_CONF['path_html'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css';
+        $cacheURL  = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'];
     } else {
-        $cacheFile = $_CONF['path'].'/data/layout_cache/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css';
-        $cacheURL  = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'];
+        $cacheFile = $_CONF['path'].'/data/layout_cache/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css';
+        $cacheURL  = $_CONF['site_url'].'/css.php?t='.$_USER['theme'];
     }
 
-    $cacheURL  = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'];
+    $cacheURL  = $_CONF['site_url'].'/css.php?t='.$_USER['theme'];
 
     $files   = array();
 
@@ -6907,18 +6903,18 @@ function css_comment_cb( $matches )
 
 function js_out()
 {
-    global $_CONF, $_SYSTEM, $_PLUGINS, $themeAPI;
+    global $_CONF, $_SYSTEM, $_USER, $_PLUGINS, $themeAPI;
 
     if ( !isset($_CONF['js_cache_filename']) ) {
         $_CONF['js_cache_filename'] = 'jscache_';
     }
 
     if ( $_SYSTEM['use_direct_style_js'] ) {
-        $cacheFile = $_CONF['path_html'].$_CONF['js_cache_filename'].$_CONF['theme'].'.js';
-        $cacheURL  = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].'.js?t='.$_CONF['theme'];
+        $cacheFile = $_CONF['path_html'].$_CONF['js_cache_filename'].$_USER['theme'].'.js';
+        $cacheURL  = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].'.js?t='.$_USER['theme'];
     } else {
-        $cacheFile = $_CONF['path'].'data/layout_cache/'.$_CONF['js_cache_filename'].$_CONF['theme'].'.js';
-        $cacheURL  = $_CONF['site_url'].'/js.php?t='.$_CONF['theme'];
+        $cacheFile = $_CONF['path'].'data/layout_cache/'.$_CONF['js_cache_filename'].$_USER['theme'].'.js';
+        $cacheURL  = $_CONF['site_url'].'/js.php?t='.$_USER['theme'];
     }
 
     /*
@@ -7024,9 +7020,9 @@ function js_out()
     print "var glfusionLayoutUrl     = '".$_CONF['layout_url']."';" . LB;
 
     if ( $_SYSTEM['use_direct_style_js'] ) {
-        print "var glfusionStyleCSS      = '".$_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css?t='.$_CONF['theme'] . "';" . LB;
+        print "var glfusionStyleCSS      = '".$_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'] . "';" . LB;
     } else {
-        print "var glfusionStyleCSS      = '".$_CONF['site_url']."/css.php?t=" . $_CONF['theme'] . "';" . LB;
+        print "var glfusionStyleCSS      = '".$_CONF['site_url']."/css.php?t=" . $_USER['theme'] . "';" . LB;
     }
 
     // send any global plugin JS vars

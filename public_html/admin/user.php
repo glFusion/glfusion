@@ -1181,18 +1181,13 @@ function USER_getGroupListField($fieldname, $fieldvalue, $A, $icon_arr, $al_sele
  */
 function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
+    global $_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
 
     $retval = '';
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     switch ($fieldname) {
-
-//        case 'delete':
-//            $retval = '<input type="checkbox" name="delitem[]" checked="checked"' . XHTML . '>';
-//            break;
-
         case 'edit':
             $attr['title'] = $LANG_ADMIN['edit'];
             $retval = COM_createLink($icon_arr['edit'],

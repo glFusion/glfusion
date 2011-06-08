@@ -312,4 +312,7 @@ if ( $_SYSTEM['admin_session'] != 0 ) {
         }
     }
 }
+if ( $_CONF['allow_user_themes'] == 0 ) {
+    $_USER['theme'] = $_CONF['theme'];
+}
 ?>

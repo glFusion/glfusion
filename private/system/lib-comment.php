@@ -54,9 +54,9 @@ USES_lib_user();
 
 function plugin_subscription_email_format_comment($category,$track_id,$post_id,$uid)
 {
-    global $_CONF, $_TABLES, $LANG01, $LANG03;
+    global $_CONF, $_USER, $_TABLES, $LANG01, $LANG03;
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
     $permalink = 'Not defined';
 
     $post_id = COM_applyFilter($post_id,true);
@@ -387,7 +387,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                 $editname = DB_getItem($_TABLES['users'], 'username', "uid=".(int) $B['uid']);
             }
             //add edit info to text
-            $dtObject = new Date($B['time'],$_CONF['timezone']);
+            $dtObject = new Date($B['time'],$_USER['tzid']);
             $A['comment'] .= LB . '<div class="comment-edit">' . $LANG03[30] . ' '
                               . $dtObject->format($_CONF['date'],true) . ' ' . $LANG03[31] . ' '
                               . $editname . '</div><!-- /COMMENTEDIT -->';
@@ -513,7 +513,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             $template->set_var('parent_link', '');
         }
 
-        $dtObject = new Date($A['nice_date'],$_CONF['timezone']);
+        $dtObject = new Date($A['nice_date'],$_USER['tzid']);
 
         $template->set_var( 'date', $dtObject->format($_CONF['date'],true));
         $template->set_var( 'sid', $A['sid'] );

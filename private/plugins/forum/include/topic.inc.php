@@ -52,7 +52,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
 
     $retval = '';
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     static $cacheUserArray = array();
     static $_user_already_voted = array();

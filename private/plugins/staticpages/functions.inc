@@ -807,12 +807,12 @@ function SP_getPerms ($table = '', $access = '2', $u_id = '')
 */
 function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
 {
-    global $_CONF, $_TABLES, $_SP_CONF, $LANG_STATIC, $_IMAGE_TYPE, $LANG01;
+    global $_CONF, $_TABLES, $_USER, $_SP_CONF, $LANG_STATIC, $_IMAGE_TYPE, $LANG01;
 
     $retval = '';
     $moresql = "(sp_where = " . (int) $where . ") AND (sp_status = 1) AND ";
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     if( !COM_onFrontpage() ) {
         $hpsql = " OR (sp_tid = 'allnhp') ";

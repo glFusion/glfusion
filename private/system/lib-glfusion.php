@@ -37,7 +37,7 @@ if (!defined ('GVERSION')) {
 $TEMPLATE_OPTIONS['hook']['set_root'] = '_template_set_root';
 
 function _template_set_root($root) {
-    global $_CONF;
+    global $_CONF, $_USER;
 
     $retval = array();
 
@@ -50,15 +50,16 @@ function _template_set_root($root) {
             $r = substr($r, 0, -1);
         }
         if ( strpos($r,"plugins") != 0 ) {
-            $p = str_replace($_CONF['path'],$_CONF['path_themes'] . $_CONF['theme'] . '/', $r);
+            $p = str_replace($_CONF['path'],$_CONF['path_themes'] . $_USER['theme'] . '/', $r);
             $x = str_replace("/templates", "",$p);
             $retval[] = $x;
         }
         if ( $r != '' ) {
             $retval[] = $r . '/custom';
             $retval[] = $r;
-            $retval[] = $_CONF['path_themes'] . 'nouveau/' .
-                substr($r, strlen($_CONF['path_layout']));
+            if ( $_USER['theme'] != 'nouveau' ) {
+                $retval[] = $_CONF['path_themes'] . 'nouveau/' .substr($r, strlen($_CONF['path_layout']));
+            }
         }
     }
     return $retval;

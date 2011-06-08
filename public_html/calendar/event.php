@@ -66,11 +66,11 @@ if (COM_isAnonUser() &&
 */
 function CALENDAR_addUserEvent($eid)
 {
-    global $_CONF, $_TABLES, $LANG_CAL_1;
+    global $_CONF, $_USER, $_TABLES, $LANG_CAL_1;
 
     $retval = '';
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     $eventsql = "SELECT * FROM {$_TABLES['events']} WHERE eid='".DB_escapeString($eid)."'" . COM_getPermSql ('AND');
     $result = DB_query($eventsql);
@@ -223,9 +223,9 @@ function CALENDAR_saveUserEvent($eid)
 */
 function CALENDAR_editPersonalEvent($A)
 {
-    global $_CONF, $_CA_CONF, $LANG_CAL_1;
+    global $_CONF, $_USER, $_CA_CONF, $LANG_CAL_1;
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     $cal_templates = new Template($_CONF['path'] . 'plugins/calendar/templates/');
     $cal_templates->set_file('form','editpersonalevent.thtml');
@@ -366,7 +366,7 @@ function CALENDAR_editPersonalEvent($A)
 
 $display = '';
 
-$dt = new Date('now',$_CONF['timezone']);
+$dt = new Date('now',$_USER['tzid']);
 
 $action = '';
 if (isset ($_REQUEST['action'])) {
@@ -566,7 +566,7 @@ default:
         $display .= $cal_templates->finish($cal_templates->get_var('output'));
         $display .= $LANG_CAL_1[2];
     } else {
-        $dt = new Date('now',$_CONF['timezone']);
+        $dt = new Date('now',$_USER['tzid']);
 
         $currentmonth = '';
         for ($i = 0; $i < $nrows; $i++) {

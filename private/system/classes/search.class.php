@@ -751,9 +751,9 @@ class Search {
      */
     function searchFormatCallBack($preSort, $row)
     {
-        global $_CONF;
+        global $_CONF, $_USER;
 
-        $dt = new Date('now',$_CONF['timezone']);
+        $dt = new Date('now',$_USER['tzid']);
 
         if ($preSort) {
             $row[SQL_TITLE] = is_array($row[SQL_TITLE]) ? implode($_CONF['search_separator'],$row[SQL_TITLE]) : $row[SQL_TITLE];

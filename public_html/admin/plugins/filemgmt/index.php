@@ -194,12 +194,12 @@ function _fm_getChildrenCat( $pid,$indent,$current_cat ) {
 
 function _fm_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
+    global $_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
     global $_FF_CONF,$_SYSTEM,$LANG_GF02;
 
     $retval = '';
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     switch ($fieldname) {
         case 'date':

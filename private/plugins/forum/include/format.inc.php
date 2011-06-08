@@ -445,9 +445,9 @@ function _ff_FormatForEmail( $str, $postmode='html' ) {
 }
 
 function gfm_getoutput( $id ) {
-    global $_TABLES,$LANG_GF01,$LANG_GF02,$_CONF,$_FF_CONF;
+    global $_TABLES,$LANG_GF01,$LANG_GF02,$_CONF,$_FF_CONF,$_USER;
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     $id = COM_applyFilter($id,true);
     $result = DB_query("SELECT * FROM {$_TABLES['ff_topic']} WHERE id=".(int) $id);

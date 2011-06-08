@@ -745,6 +745,41 @@ function SEC_getFeatureGroup ($feature, $uid = '')
 * @return   int                 user status, -1 for fail.
 *
 */
+function SEC_authenticateUser($username, $password, $service, &$uid)
+{
+    global $_CONF, $_SYSTEM, $_TABLES, $LANG01;
+
+    $rc = -1;
+    $options = array();
+    $credentials = array();
+    $credentials['username'] = isset($username) ? $username : '';
+    $credentials['password'] = isset($password) ? $password : '';
+
+    $service = preg_replace( '/[^a-zA-Z0-9\-_]/', '',$service );
+
+    if ( file_exists($_CONF['path'].'lib/authentication/'.$service.'/'.$service.'.class.php') ) {
+        require_once $_CONF['path'].'lib/authentication/'.$service.'/'.$service.'.class.php';
+
+    	$className = 'Authenticate'.$service;
+        $authenticate = new $className();
+        $rc = $authenticate->onUserAuthenticate($credentials,$options,$uid);
+    }
+    return $rc;
+}
+
+/**
+* Attempt to login a user.
+*
+* Checks a users username and password against the database. Returns
+* users status.
+*
+* @param    string  $username   who is logging in?
+* @param    string  $password   what they claim is their password
+* @param    int     $uid        This is an OUTPUT param, pass by ref,
+*                               sends back UID inside it.
+* @return   int                 user status, -1 for fail.
+*
+*/
 function SEC_authenticate($username, $password, &$uid)
 {
     global $_CONF, $_SYSTEM, $_TABLES, $LANG01;

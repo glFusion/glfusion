@@ -268,7 +268,7 @@ $uid = 1;
 if ( !COM_isAnonUser() && isset($_USER['uid']) ) {
     $uid = $_USER['uid'];
 }
-$dt = new Date('now',$_CONF['timezone']);
+$dt = new Date('now',$_USER['tzid']);
 
 //Display Categories
 if ($forum == 0) {
@@ -412,7 +412,7 @@ if ($forum == 0) {
 	                }
 	                $dt->setTimestamp($B['date']);
                     $lastdate1 = $dt->format('Y-m-d',true);
-                    $dtNow = new Date('now',$_CONF['timezone']);
+                    $dtNow = new Date('now',$_USER['tzid']);
         	        if ($dt->isToday()) {
         	            $lasttime = $dt->format('h:i a',true);
                 	    $lastdate = $LANG_GF01['TODAY'] .$lasttime;
@@ -509,7 +509,7 @@ if ($forum > 0) {
  	$base_url = $_CONF['site_url'] . '/forum/index.php?forum='.$forum.'&amp;show='.$show;
     $displaypostpages = '';
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     $topiclisting = new Template( $_CONF['path'] . 'plugins/forum/templates/' );
     $topiclisting->set_file ('topiclisting','topiclisting.thtml');

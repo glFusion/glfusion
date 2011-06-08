@@ -532,7 +532,7 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         $exif_info = '';
     }
 
-    $dtObject = new Date($row['media_time'],$_CONF['timezone']);
+    $dtObject = new Date($row['media_time'],$_USER['tzid']);
 
     $media_time_month  = $dtObject->month;
     $media_time_day    = $dtObject->day;
@@ -1271,7 +1271,7 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
     $musicalbum = DB_escapeString(COM_applyFilter($_POST['musicalbum'] ) );
     $genre = DB_escapeString(COM_applyFilter($_POST['genre'] ) );
 
-    $dtObject = new Date('now',$_CONF['timezone']);
+    $dtObject = new Date('now',$_USER['tzid']);
 	$dtObject->setDateTimestamp ( $media_time_year,$media_time_month,$media_time_day,$media_time_hour,$media_time_minute,0 );
     $media_time = $dtObject->toUnix();
 

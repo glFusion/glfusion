@@ -72,14 +72,14 @@ if (!SEC_hasRights('calendar.edit')) {
 */
 function CALENDAR_edit($action, $A, $msg = '')
 {
-    global $_CONF, $_GROUPS, $_TABLES, $_USER, $_CA_CONF, $LANG_CAL_1,
+    global $_CONF, $_USER, $_GROUPS, $_TABLES, $_USER, $_CA_CONF, $LANG_CAL_1,
            $LANG_CAL_ADMIN, $LANG10, $LANG12, $LANG_ACCESS, $LANG_ADMIN,
            $MESSAGE;
 
     $retval = '';
 
-    $dtStart = new Date('now',$_CONF['timezone']);
-    $dtEnd   = new Date('now',$_CONF['timezone']);
+    $dtStart = new Date('now',$_USER['tzid']);
+    $dtEnd   = new Date('now',$_USER['tzid']);
 
     switch ($action) {
 

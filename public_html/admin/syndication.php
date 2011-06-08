@@ -140,12 +140,12 @@ function FEED_getArticleFeeds()
  */
 function FEED_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG33, $_IMAGE_TYPE;
+    global $_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG33, $_IMAGE_TYPE;
 
     $retval = '';
     $enabled = ($A['is_enabled'] == 1) ? true : false;
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     switch($fieldname) {
 

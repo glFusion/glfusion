@@ -124,7 +124,7 @@ function MG_errorHandler( $message ) {
 }
 
 function MG_getUserDateTimeFormat($date = 'now'){
-    global $_TABLES, $_CONF, $_MG_CONF, $_SYSTEM;
+    global $_TABLES, $_CONF, $_USER, $_MG_CONF, $_SYSTEM;
 
     if ( $date == '99')
         return '';
@@ -137,7 +137,7 @@ function MG_getUserDateTimeFormat($date = 'now'){
         $dateformat = $_MG_CONF['dateformat'][$dfid];
     }
 
-    $dtObject = new Date($date,$_CONF['timezone']);
+    $dtObject = new Date($date,$_USER['tzid']);
 
     if ( empty( $date ) || $date == 'now') {
         // Date is empty, get current date/time

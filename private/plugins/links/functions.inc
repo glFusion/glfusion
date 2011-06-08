@@ -1047,11 +1047,11 @@ function plugin_geticon_links ()
 
 function plugin_getListField_links($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
-    global $_CONF, $LANG_ACCESS, $LANG_LINKS_ADMIN, $LANG_ADMIN;
+    global $_CONF, $_USER, $LANG_ACCESS, $LANG_LINKS_ADMIN, $LANG_ADMIN;
 
     $retval = '';
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
     if ($access > 0) {
@@ -1129,11 +1129,11 @@ function plugin_getListField_links($fieldname, $fieldvalue, $A, $icon_arr, $toke
 
 function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
 {
-    global $_CONF, $_TABLES, $LANG_ACCESS, $LANG_ADMIN, $LANG_LINKS_ADMIN;
+    global $_CONF, $_USER, $_TABLES, $LANG_ACCESS, $LANG_ADMIN, $LANG_LINKS_ADMIN;
 
     $retval = '';
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
 

@@ -315,6 +315,7 @@ if (array_key_exists('form_submit', $_POST) && $tokenstate) {
         /*
          * An ugly hack to get the proper theme selected
          */
+/* ----------------------------------------------------------------
         if( $_CONF['allow_user_themes'] == 1 ) {
             if( isset( $_COOKIE[$_CONF['cookie_theme']] ) && empty( $_USER['theme'] )) {
                 $theme = COM_sanitizeFilename($_COOKIE[$_CONF['cookie_theme']], true);
@@ -333,6 +334,7 @@ if (array_key_exists('form_submit', $_POST) && $tokenstate) {
                 }
             }
         }
+---------------------------------- */
     }
     $sub_group = array_key_exists('sub_group', $_POST) ? COM_applyFilter($_POST['sub_group']) : null;
     echo $config->get_ui($conf_group, $sub_group, $result);

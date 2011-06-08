@@ -527,14 +527,14 @@ function PAGE_submit($sp_id, $sp_status, $sp_uid, $sp_title, $sp_content, $sp_hi
 
 function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
-    global $_CONF, $LANG_ADMIN, $LANG_STATIC, $LANG_ACCESS, $_TABLES;
+    global $_CONF, $_USER, $LANG_ADMIN, $LANG_STATIC, $LANG_ACCESS, $_TABLES;
 
     $retval = '';
     $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],
                             $A['perm_group'],$A['perm_members'],$A['perm_anon']);
     $enabled = ($A['sp_status'] == 1) ? true : false;
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     switch($fieldname) {
 

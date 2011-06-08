@@ -112,9 +112,9 @@ function getTotalItems($sel_id, $status=''){
 * Function to display formatted times in user timezone
 */
 function formatTimestamp($usertimestamp) {
-    global $_CONF;
+    global $_CONF, $_USER;
 
-    $dt = new Date($usertimestamp,$_CONF['timezone']);
+    $dt = new Date($usertimestamp,$_USER['tzid']);
     $datetime = $dt->format('M.d.y',true);
     return $datetime;
 }

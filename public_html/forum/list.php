@@ -75,7 +75,7 @@ function FF_newPosts($forum = 0)
     USES_lib_admin();
     USES_lib_html2text();
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     $header_arr = array(
         array('text' => $LANG_GF01['FORUM'],  'field' => 'forum'),
@@ -321,7 +321,7 @@ function FF_lastx()
     USES_lib_admin();
     USES_lib_html2text();
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     $header_arr = array(
         array('text' => $LANG_GF01['FORUM'],  'field' => 'forum'),
@@ -429,7 +429,7 @@ function FF_lastx()
 
 function _ff_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
+    global $_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
     global $_FF_CONF,$_SYSTEM,$LANG_GF02;
 
     if ( !isset($A['status']) ) {
@@ -440,7 +440,7 @@ function _ff_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
 
     $retval = '';
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     switch ($fieldname) {
         case 'date':

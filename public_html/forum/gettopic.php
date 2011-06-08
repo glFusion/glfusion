@@ -46,12 +46,12 @@ USES_forum_format();
 
 function _ff_getListField_gettopic($fieldname, $fieldvalue, $A, $icon_arr)
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
+    global $_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
     global $_FF_CONF,$_SYSTEM,$LANG_GF02, $LANG_GF03;
 
     USES_lib_html2text();
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     $retval = '';
 
@@ -103,9 +103,9 @@ if ( !isset($_CONF['css_cache_filename']) ) {
 }
 
 if ( $_SYSTEM['use_direct_style_js'] ) {
-    $cacheURL = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css?t='.$_CONF['theme'].'&amp;i='.$cacheID;
+    $cacheURL = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'].'&amp;i='.$cacheID;
 } else {
-    $cacheURL = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'].'&amp;i='.$cacheID;
+    $cacheURL = $_CONF['site_url'].'/css.php?t='.$_USER['theme'].'&amp;i='.$cacheID;
 }
 
 $T->set_var('style_cache_url',$cacheURL);
@@ -114,13 +114,13 @@ if ( !isset($_CONF['js_cache_filename']) ) {
 }
 
 if ( $_SYSTEM['use_direct_style_js'] ) {
-    $js_cache_url    = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].$_CONF['theme'].'.js?t='.$_CONF['theme'].'&amp;i='.$cacheID;
+    $js_cache_url    = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].$_USER['theme'].'.js?t='.$_USER['theme'].'&amp;i='.$cacheID;
 } else {
-    $js_cache_url    = $_CONF['site_url'].'/js.php?t='.$_CONF['theme'].'&amp;i='.$cacheID;
+    $js_cache_url    = $_CONF['site_url'].'/js.php?t='.$_USER['theme'].'&amp;i='.$cacheID;
 }
 
 $T->set_var('js_cache_url',$js_cache_url);
-$T->set_var('theme',$_CONF['theme']);
+$T->set_var('theme',$_USER['theme']);
 
 $forumList = array();
 $categoryResult = DB_query("SELECT * FROM {$_TABLES['ff_categories']} ORDER BY cat_order ASC");

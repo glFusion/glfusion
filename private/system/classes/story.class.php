@@ -449,9 +449,9 @@ class Story
     {
         global $_TABLES, $_CONF, $_USER, $_GROUPS;
 
-        $dtPublish  = new Date('now',$_CONF['timezone']);
-        $dtExpire   = new Date('now',$_CONF['timezone']);
-        $dtCmtclose = new Date('now',$_CONF['timezone']);
+        $dtPublish  = new Date('now',$_USER['tzid']);
+        $dtExpire   = new Date('now',$_USER['tzid']);
+        $dtCmtclose = new Date('now',$_USER['tzid']);
 
         $sid = DB_escapeString(COM_applyFilter($sid));
 
@@ -905,7 +905,7 @@ class Story
     {
         global $_USER, $_CONF, $_TABLES;
 
-        $dt = new Date('now',$_CONF['timezone']);
+        $dt = new Date('now',$_USER['tzid']);
 
         if (COM_isAnonUser()) {
             $this->_uid = 1;
@@ -945,11 +945,11 @@ class Story
      */
     function loadSubmission()
     {
-        global $_CONF;
+        global $_CONF, $_USER;
 
-        $dtPublish  = new Date('now',$_CONF['timezone']);
-        $dtExpire   = new Date('now',$_CONF['timezone']);
-        $dtCmtClose = new Date('now',$_CONF['timezone']);
+        $dtPublish  = new Date('now',$_USER['tzid']);
+        $dtExpire   = new Date('now',$_USER['tzid']);
+        $dtCmtClose = new Date('now',$_USER['tzid']);
 
         $array = $_POST;
 
@@ -1029,7 +1029,7 @@ class Story
     {
         global $_USER, $_CONF, $_TABLES;
 
-        $dt = new Date('now',$_CONF['timezone']);
+        $dt = new Date('now',$_USER['tzid']);
 
         $this->_sid = COM_makeSid();
 
@@ -1417,15 +1417,15 @@ class Story
      */
     function EditElements($item = 'title')
     {
-        global $_CONF;
+        global $_CONF, $_USER;
 
-        $dtPublish  = new Date($this->_date,$_CONF['timezone']);
-        $dtExpire   = new Date($this->_expire,$_CONF['timezone']);
+        $dtPublish  = new Date($this->_date,$_USER['tzid']);
+        $dtExpire   = new Date($this->_expire,$_USER['tzid']);
 
         if (isset($this->_comment_expire) && $this->_comment_expire != 0) {
-            $dtCmtClose = new Date($this->_comment_expire,$_CONF['timezone']);
+            $dtCmtClose = new Date($this->_comment_expire,$_USER['tzid']);
         } else {
-            $dtCmtClose = new Date($this->_date + ($_CONF['article_comment_close_days']*86400),$_CONF['timezone']);
+            $dtCmtClose = new Date($this->_date + ($_CONF['article_comment_close_days']*86400),$_USER['tzid']);
         }
 
         switch (strtolower($item)) {
@@ -1570,14 +1570,14 @@ class Story
      */
     function DisplayElements($item = 'title')
     {
-        global $_CONF, $_TABLES;
+        global $_CONF, $_USER, $_TABLES;
 
-        $dtObject = new Date($this->_date,$_CONF['timezone']);
+        $dtObject = new Date($this->_date,$_USER['tzid']);
 
         if (isset($this->_expire) && $this->_expire != 0) {
-            $dtExpire = new Date($this->_expire,$_CONF['timezone']);
+            $dtExpire = new Date($this->_expire,$_USER['tzid']);
         } else {
-            $dtExpire = new Date($this->_date + (7*86400),$_CONF['timezone']);
+            $dtExpire = new Date($this->_date + (7*86400),$_USER['tzid']);
         }
 
         $return = '';
@@ -1840,7 +1840,7 @@ class Story
      */
     function _loadBasics(&$array)
     {
-        global $_CONF;
+        global $_CONF, $_USER;
 
         /* For the really, really basic stuff, we can very easily load them
          * based on an array that defines how to COM_applyFilter them.
@@ -1926,7 +1926,7 @@ class Story
         if (isset($array['publish_day'])) {
             $publish_day = COM_applyFilter($array['publish_day'], true);
         }
-        $dtPublish = new Date('now',$_CONF['timezone']);
+        $dtPublish = new Date('now',$_USER['tzid']);
         $dtPublish->setDateTimestamp ( $publish_year,$publish_month,$publish_day,$publish_hour,$publish_minute,$publish_second );
         $this->_date = $dtPublish->toUnix();
         $archiveflag = 0;
@@ -1938,7 +1938,7 @@ class Story
         if ($archiveflag != 1) {
             $this->_statuscode = 0;
         }
-        $dtExpire = new Date('now',$_CONF['timezone']);
+        $dtExpire = new Date('now',$_USER['tzid']);
         if (array_key_exists('expire_ampm', $array)) {
             $expire_ampm = COM_applyFilter($array['expire_ampm']);
             $expire_hour = COM_applyFilter($array['expire_hour'], true);
@@ -1966,7 +1966,7 @@ class Story
 
         $this->_expire = $expiredate;
 
-        $dtCmtClose = new Date('now',$_CONF['timezone']);
+        $dtCmtClose = new Date('now',$_USER['tzid']);
         //comment expire time
         if (isset($array['cmt_close_flag'])) {
             $cmt_close_ampm = COM_applyFilter($array['cmt_close_ampm']);

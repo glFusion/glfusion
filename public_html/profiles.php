@@ -326,7 +326,7 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG08;
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     $storyurl = COM_buildUrl($_CONF['site_url'] . '/article.php?story=' . $sid);
     if ($_CONF['url_rewrite']) {

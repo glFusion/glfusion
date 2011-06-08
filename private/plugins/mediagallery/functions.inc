@@ -511,7 +511,7 @@ function plugin_getadminoption_mediagallery()
 
 function plugin_getheadercss_mediagallery()
 {
-    global $_CONF, $_MG_CONF, $mgLightBox, $swfjsinclude,$themeStyle;
+    global $_CONF, $_MG_CONF, $_USER, $mgLightBox, $swfjsinclude,$themeStyle;
 
     $styles = array();
 
@@ -525,7 +525,7 @@ function plugin_getheadercss_mediagallery()
 	$styles[] = $styleFile;
 
     // check for random skin css
-    $cacheInstance = 'mgrs' . $_MG_CONF['random_skin'] . '__' . $_CONF['theme'];
+    $cacheInstance = 'mgrs' . $_MG_CONF['random_skin'] . '__' . $_USER['theme'];
     $retval = CACHE_check_instance($cacheInstance, 0);
     if ( $retval !== false) {
         $styles[] = CACHE_instance_filename($cacheInstance,0);
@@ -860,7 +860,7 @@ function plugin_itemlist_mediagallery($token)
  */
 function _mg_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
-    global $_CONF, $_TABLES, $_MG_CONF, $MG_albums, $LANG_ADMIN, $LANG28, $LANG29, $LANG_MG01, $_IMAGE_TYPE;
+    global $_CONF, $_USER, $_TABLES, $_MG_CONF, $MG_albums, $LANG_ADMIN, $LANG28, $LANG29, $LANG_MG01, $_IMAGE_TYPE;
 
     $retval = '';
 
@@ -871,7 +871,7 @@ function _mg_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
         return $retval; // we can't work without an item type
     }
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     $field = $fieldname;
 
@@ -1355,11 +1355,11 @@ function plugin_itemrated_mediagallery($media_id, $rating, $votes)
 
 function plugin_subscription_email_format_mediagallery($category,$track_id,$post_id,$uid)
 {
-    global $_CONF, $_MG_CONF, $_TABLES, $MG_albums, $LANG_MG01,$LANG01, $LANG03;
+    global $_CONF, $_USER, $_MG_CONF, $_TABLES, $MG_albums, $LANG_MG01,$LANG01, $LANG03;
 
     require_once $_CONF['path'] . 'lib/html2text/html2text.php';
     MG_initAlbums();
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
     $permalink = 'Not defined';
 
     $aid = 0;

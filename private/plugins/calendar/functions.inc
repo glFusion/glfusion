@@ -113,7 +113,7 @@ function phpblock_calendar( $help='', $title='' )
 
     $retval = '';
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     if( !$_USER['noboxes'] && $_CA_CONF['showupcomingevents'] ) {
         $range = $_CA_CONF['upcomingeventsrange'];
@@ -779,7 +779,7 @@ function plugin_submit_calendar($mode = 'master',$A = array())
 {
     global $_CONF, $_USER, $_CA_CONF, $LANG_CAL_1;
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     if (isset($_POST['calendar_type'])) {
         $mode = $_POST['calendar_type'];

@@ -56,7 +56,7 @@ if ( !$_FF_CONF['allow_memberlist'] || COM_isAnonUser() ) {
 
 function _ff_getListField_memberlist($fieldname, $fieldvalue, $A, $icon_arr)
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
+    global $_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
     global $_FF_CONF,$_SYSTEM,$LANG_GF02;
 
     if ( !isset($A['status']) ) {
@@ -104,7 +104,7 @@ function _ff_getListField_memberlist($fieldname, $fieldvalue, $A, $icon_arr)
             break;
         case 'regdate':
             $phpdate = strtotime( $fieldvalue );
-            $dt = new Date($phpdate,$_CONF['timezone']);
+            $dt = new Date($phpdate,$_USER['tzid']);
             $retval = $dt->format($_FF_CONF['default_Datetime_format'],true);
             break;
         default:
@@ -155,7 +155,7 @@ if ($op == "last10posts") {
 
     $retval = '';
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     $header_arr = array(
         array('text' => $LANG_GF01['FORUM'],  'field' => 'forum'),

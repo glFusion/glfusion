@@ -141,10 +141,10 @@ if ( $_CONF['rating_enabled'] != 0 ) {
 if($topic) {
     $header = '<link rel="microsummary" href="' . $_CONF['site_url']
             . '/index.php?display=microsummary&amp;topic=' . urlencode($topic)
-            . '" title="Microsummary"' . XHTML . '>';
+            . '" title="Microsummary" />';
 } else {
     $header = '<link rel="microsummary" href="' . $_CONF['site_url']
-            . '/index.php?display=microsummary" title="Microsummary"' . XHTML . '>';
+            . '/index.php?display=microsummary" title="Microsummary" />';
 }
 $display .= COM_siteHeader('menu', '', $header);
 

@@ -182,7 +182,6 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
     if (file_exists ($_CONF['path_data'] . 'welcome_email.txt')) {
         $template = new Template ($_CONF['path_data']);
         $template->set_file (array ('mail' => 'welcome_email.txt'));
-        $template->set_var ( 'xhtml', XHTML );
         $template->set_var ('auth_info',
                             "$LANG04[2]: $username\n$LANG04[4]: $passwd");
         $template->set_var ('site_url', $_CONF['site_url']);
@@ -274,8 +273,6 @@ function USER_sendActivationEmail ($username, $useremail)
     if (file_exists ($_CONF['path_data'] . 'activation_email.txt')) {
         $template = new Template ($_CONF['path_data']);
         $template->set_file (array ('mail' => 'activation_email.txt'));
-        $template->set_var ( 'xhtml', XHTML );
-        $template->set_var ('site_url', $_CONF['site_url']);
         $template->set_var ('site_name', $_CONF['site_name']);
         $template->set_var ('site_slogan', $_CONF['site_slogan']);
         $template->set_var ('lang_text1', $LANG04[15]);
@@ -324,9 +321,9 @@ function USER_sendActivationEmail ($username, $useremail)
 */
 function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $homepage = '', $remoteusername = '', $service = '')
 {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_USER, $_TABLES;
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     $queueUser = false;
     $username = DB_escapeString ($username);
@@ -366,7 +363,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
             $values .= ',' . USER_ACCOUNT_AWAITING_APPROVAL;
         }
     } else {
-        if ($_CONF['registration_type'] == 1 && (empty($remoteusername) || empty($server))) {
+        if ($_CONF['registration_type'] == 1 ) { // && (empty($remoteusername) || empty($service))) {
             $fields .= ',status';
             $values .= ',' . USER_ACCOUNT_AWAITING_VERIFICATION;
         }
@@ -447,9 +444,9 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
 */
 function USER_sendNotification ($username, $email, $uid, $mode='inactive')
 {
-    global $_CONF, $_TABLES, $LANG01, $LANG04, $LANG08, $LANG28, $LANG29;
+    global $_CONF, $_USER, $_TABLES, $LANG01, $LANG04, $LANG08, $LANG28, $LANG29;
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     $mailbody = "$LANG04[2]: $username\n"
               . "$LANG04[5]: $email\n"
@@ -572,7 +569,7 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
             if ($width > 0) {
                 $userphoto .= ' width="' . $width . '"';
             }
-            $userphoto .= ' alt="" class="userphoto"' . XHTML . '>';
+            $userphoto .= ' alt="" class="userphoto" />';
         }
     }
 

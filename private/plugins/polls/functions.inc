@@ -1495,7 +1495,7 @@ function POLLS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                              $A['perm_members'], $A['perm_anon']);
     if ($access > 0) {
 
-        $dt = new Date('now',$_CONF['timezone']);
+        $dt = new Date('now',$_USER['tzid']);
 
         switch($fieldname) {
 

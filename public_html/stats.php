@@ -45,7 +45,7 @@ if ( !SEC_hasRights('stats.view') ) {
 
 // MAIN
 
-$dt = new Date('now',$_CONF['timezone']);
+$dt = new Date('now',$_USER['tzid']);
 
 $display .= COM_siteHeader ('menu', $LANG10[1]);
 

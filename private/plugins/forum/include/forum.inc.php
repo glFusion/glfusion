@@ -446,9 +446,9 @@ function f_forumjump($action='',$selected=0) {
 }
 
 function f_forumtime() {
-    global $_FF_CONF, $_CONF,$_TABLES,$LANG_GF01,$LANG_GF02,$forum;
+    global $_USER, $_FF_CONF, $_CONF,$_TABLES,$LANG_GF01,$LANG_GF02,$forum;
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
     $tz = $dt->getTimezone();
 
     $forum_time = new Template($_CONF['path'] . 'plugins/forum/templates/footer');

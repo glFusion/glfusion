@@ -76,7 +76,7 @@ if (!SEC_hasRights('story.edit')) {
  */
 function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG24, $LANG_ACCESS, $_IMAGE_TYPE;
+    global $_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG24, $LANG_ACCESS, $_IMAGE_TYPE;
 
     static $topics;
 
@@ -176,7 +176,7 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case "unixdate":
-            $dt = new Date($A['unixdate'],$_CONF['timezone']);
+            $dt = new Date($A['unixdate'],$_USER['tzid']);
             $retval = $dt->format($_CONF['daytime'],true);
             break;
 

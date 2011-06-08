@@ -52,7 +52,7 @@ function COM_siteHeaderv1( $what = 'menu', $pagetitle = '', $headercode = '' )
 
     // If the theme implemented this for us then call their version instead.
 
-    $function = $_CONF['theme'] . '_siteHeader';
+    $function = $_USER['theme'] . '_siteHeader';
 
     if( function_exists( $function ))
     {
@@ -288,8 +288,8 @@ function COM_siteHeaderv1( $what = 'menu', $pagetitle = '', $headercode = '' )
     $header->set_var( 'datetime', $curtime[0] );
     $header->set_var( 'site_logo', $_CONF['layout_url']
                                    . '/images/logo.' . $_IMAGE_TYPE );
-    $header->set_var( 'css_url', $_CONF['site_url'].'/css.php?t='.$_CONF['theme'].'&amp;i='.$cacheID);
-    $header->set_var( 'theme', $_CONF['theme'] );
+    $header->set_var( 'css_url', $_CONF['site_url'].'/css.php?t='.$_USER['theme'].'&amp;i='.$cacheID);
+    $header->set_var( 'theme', $_USER['theme'] );
 
     $header->set_var( 'charset', COM_getCharset());
     if( empty( $LANG_DIRECTION ))
@@ -501,11 +501,11 @@ function COM_siteHeaderv1( $what = 'menu', $pagetitle = '', $headercode = '' )
 */
 function COM_siteFooterv1( $rightblock = -1, $custom = '' )
 {
-    global $_CONF, $_TABLES, $LANG01, $_PAGE_TIMER, $topic, $LANG_BUTTONS;
+    global $_CONF, $_TABLES, $_USER, $LANG01, $_PAGE_TIMER, $topic, $LANG_BUTTONS;
 
     // If the theme implemented this for us then call their version instead.
 
-    $function = $_CONF['theme'] . '_siteFooter';
+    $function = $_USER['theme'] . '_siteFooter';
 
     if( function_exists( $function ))
     {

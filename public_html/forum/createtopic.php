@@ -828,7 +828,7 @@ function FF_saveTopic( $forumData, $postData, $action )
     $forumfiles = array();
 
     $okToSave = true;
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
     $date = $dt->toUnix();
 
     $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];

@@ -44,7 +44,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-$dt = new Date('now',$_CONF['timezone']);
+$dt = new Date('now',$_USER['tzid']);
 
 
 $path = $mytree->getPathFromId($cid, "title");

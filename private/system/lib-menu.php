@@ -133,7 +133,7 @@ function mb_initMenu($skipCache=false) {
 
 
 function mb_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$parentclass='',$lastclass='',$selected='',$noid=0) {
-    global $mbMenu, $_CONF;
+    global $mbMenu, $_CONF, $_USER;
 
     $optionHash = md5($wrapper.$ulclass.$liclass.$parentclass.$lastclass.$selected);
 
@@ -143,7 +143,7 @@ function mb_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$pare
     if (!empty($lang)) {
         $mlname = $name . '_'.$lang;
 
-        $cacheInstance = 'mbmenu_' . $mlname . '_' . CACHE_security_hash() . '_' . $optionHash . '__' . $_CONF['theme'];
+        $cacheInstance = 'mbmenu_' . $mlname . '_' . CACHE_security_hash() . '_' . $optionHash . '__' . $_USER['theme'];
 
         $retval = CACHE_check_instance($cacheInstance, 0);
         if ( $retval && $noid == 0) {
@@ -160,7 +160,7 @@ function mb_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$pare
         }
     }
     if ( $menuID == '' ) {
-        $cacheInstance = 'mbmenu_' . $name . '_' . CACHE_security_hash() . '_' . $optionHash . '__' . $_CONF['theme'];
+        $cacheInstance = 'mbmenu_' . $name . '_' . CACHE_security_hash() . '_' . $optionHash . '__' . $_USER['theme'];
         $retval = CACHE_check_instance($cacheInstance, 0);
         if ( $retval && $noid == 0) {
             return $retval;
@@ -269,14 +269,14 @@ function _mbPLG_getMenuItems()
 
 
 function mb_getheadercss() {
-    global $_CONF, $_MB_CONF, $mbMenu, $themeAPI, $themeStyle;
+    global $_CONF, $_USER, $_MB_CONF, $mbMenu, $themeAPI, $themeStyle;
 
     $st_header = array();
     $fCSS = '';
     $st_header[] = $_CONF['path_layout'] . 'admin/menu/mooRainbow.css';
 
     if ( is_array($mbMenu) ) {
-        $cacheInstance = 'mbmenu_css' . '__' . $_CONF['theme'];
+        $cacheInstance = 'mbmenu_css' . '__' . $_USER['theme'];
         $retval = CACHE_check_instance($cacheInstance, 0);
         if ( $retval ) {
             $st_header[] = CACHE_instance_filename($cacheInstance,0);
@@ -356,13 +356,13 @@ function mb_getheadercss() {
 }
 
 function mb_getheaderjs() {
-    global $_CONF, $mbMenu;
+    global $_CONF, $_USER, $mbMenu;
 
     $mb_js = array();
     $js = '';
 
     if ( is_array($mbMenu) ) {
-        $cacheInstance = 'mbmenu_js' .'__' . $_CONF['theme'];
+        $cacheInstance = 'mbmenu_js' .'__' . $_USER['theme'];
         $retval = CACHE_check_instance($cacheInstance, 0);
         if ( $retval ) {
             $mb_js[] = CACHE_instance_filename($cacheInstance,0);

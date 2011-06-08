@@ -137,9 +137,9 @@ if ( !$iframe )  {
     $display .= FF_ForumHeader($forum,$showtopic);
 } else {
     if ( $_SYSTEM['use_direct_style_js'] ) {
-        $csslink = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css?t='.$_CONF['theme'];
+        $csslink = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'];
     } else {
-        $csslink = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'];
+        $csslink = $_CONF['site_url'].'/css.php?t='.$_USER['theme'];
     }
     $topicTemplate->set_var('csslink',$csslink);
 }

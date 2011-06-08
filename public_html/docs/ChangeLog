@@ -2,6 +2,10 @@ glFusion ChangeLog
 
 v1.3.0 (Trunk Development Branch)
 ------
+- Initialize $_USER for all users (including anonymous) (Mark)
+- Modified to now check $_USER for user preferences (Mark)
+- Fixed race condition when creating menu cache files (menu/css/js) (Mark)
+- Updated phpmailer to latest release (Mark)
 - Highlight comments in Media Gallery when posted by media owner (Mark)
 - Added halo skin to Media Gallery (compliments of Walter Rowe) (Mark)
 - Implemented consistent admin interface for

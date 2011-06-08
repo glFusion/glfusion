@@ -298,7 +298,7 @@ function upgrade_30() {
 }
 
 function _forum_cvt_watch() {
-    global $_CONF, $_TABLES, $LANG_GF02;
+    global $_CONF, $_USER, $_TABLES, $LANG_GF02;
 
     $converted = 0;
 
@@ -310,7 +310,7 @@ function _forum_cvt_watch() {
     $fName = array();
     $tName = array();
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
 
     $processed = array();
 

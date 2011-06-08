@@ -84,6 +84,15 @@ function SESS_sessionCheck()
 
     unset($_USER);
     $userdata = array();
+
+    // initialize the standard user record data
+    $userdata['uid'] = 1;
+    $userdata['theme'] = $_CONF['theme'];
+    $userdata['tzid'] = $_CONF['timezone'];
+    $userdata['language'] = $_CONF['language'];
+
+    $_USER = $userdata;
+
     $userid = 0;
     $sessid = _createID();
     $mintime = time() - $_CONF['session_cookie_timeout'];
@@ -104,8 +113,6 @@ function SESS_sessionCheck()
             } else {
                 $userid = 0;
             }
-        } else if ( $userid == 1 ) {
-            $_USER['uid'] = 1;
         }
     }
 
@@ -148,7 +155,6 @@ function SESS_sessionCheck()
                     die('ERROR: Unable to create session');
                 }
             }
-            $_USER['uid'] = 1;
         }
     }
 
@@ -160,9 +166,15 @@ function SESS_sessionCheck()
     SESS_setVar('session.counter',$count);
     $gc_check = $count % 10;
 
-    if ( isset($_USER['tzid']) && !empty($_USER['tzid']) ) {
-        $_CONF['timezone'] = $_USER['tzid'];
+    // failsafe
+    if ( $_CONF['allow_user_themes'] == 0 ) {
+        $_USER['theme'] = $_CONF['theme'];
     }
+
+/* no longer override core configuration settings */
+//    if ( isset($_USER['tzid']) && !empty($_USER['tzid']) ) {
+//        $_CONF['timezone'] = $_USER['tzid'];
+//    }
 
     if ( $gc_check == 0 ) {
         $expirytime = (string) (time() - $_CONF['session_cookie_timeout']);
@@ -170,11 +182,7 @@ function SESS_sessionCheck()
         $delresult = DB_query($deleteSQL,1);
     }
 
-    if (isset($_USER)) {
-        return $_USER;
-    } else {
-        return NULL;
-    }
+    return $_USER;
 }
 
 
@@ -275,14 +283,6 @@ function SESS_newSession($userid, $remote_ip, $lifespan)
     }
 
     if ( $userid > 1 ) {
-        /* ---
-        DB_query("DELETE FROM {$_TABLES['sessions']} WHERE uid = ".(int) $userid,1);
-        if ( DB_error() ) {
-            DB_query("REPAIR TABLE {$_TABLES['sessions']}",1);
-            COM_errorLog("***** REPAIR SESSIONS TABLE *****");
-        }
-        --- */
-
         $deleteSQL = "DELETE FROM {$_TABLES['sessions']} WHERE (start_time < $expirytime)";
         $delresult = DB_query($deleteSQL,1);
         if ( DB_error() ) {
@@ -529,8 +529,8 @@ function SESS_completeLogin($uid)
     // initialize session counter
     SESS_setVar('session.counter',1);
 
-    if ( isset($_USER['tzid']) && !empty($_USER['tzid']) ) {
-        $_CONF['timezone'] = $_USER['tzid'];
+    if ( !isset($_USER['tzid']) || empty($_USER['tzid']) ) {
+        $_USER['tzid'] = $_CONF['timezone'];
     }
 
     // Let plugins act on login event

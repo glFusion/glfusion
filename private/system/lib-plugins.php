@@ -3241,9 +3241,9 @@ function PLG_subscribe($type,$category,$id,$uid = 0,$cat_desc='',$id_desc='')
 {
     global $_CONF, $_TABLES, $_USER;
 
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new Date('now',$_USER['tzid']);
     if ( $uid == 0 ) {
-        if ( isset($_USER['uid']) ) {
+        if ( !COM_isAnonUser() ) {
             $uid = $_USER['uid'];
         } else {
             return false;

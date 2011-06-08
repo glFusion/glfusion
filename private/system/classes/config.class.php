@@ -876,13 +876,10 @@ class config {
 
         if ($group == 'Core') {
             /**
-             * $_CONF['theme'] and $_CONF['language'] are overwritten with
+             * $_CONF['language'] are overwritten with
              * the user's preferences in lib-common.php. Re-read values from
              * the database so that we're comparing the correct values below.
              */
-            $value = DB_getItem($_TABLES['conf_values'], 'value',
-                                "group_name='Core' AND name='theme'");
-            $this->config_array['Core']['theme'] = unserialize($value);
             $value = DB_getItem($_TABLES['conf_values'], 'value',
                                 "group_name='Core' AND name='language'");
             $this->config_array['Core']['language'] = unserialize($value);
