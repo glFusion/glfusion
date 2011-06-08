@@ -767,6 +767,7 @@ function glfusion_130()
     $c->del('pre2.5_mode', 'forum');
     $c->del('mysql4+', 'forum');
     _forum_cvt_watch();
+    _forum_fix_watch();
     // attachment handling...
     DB_query("ALTER TABLE {$_TABLES['ff_topic']} ADD attachments INT NOT NULL DEFAULT '0' AFTER views",1);
     $sql = "SELECT id FROM {$_TABLES['ff_topic']} WHERE pid=0";
@@ -909,9 +910,13 @@ function _forum_cvt_watch() {
 
     $converted = 0;
 
+    $fName = array();
+    $tName = array();
+
+
     $complete = DB_getItem($_TABLES['vars'],'value','name="watchcvt"');
     if ( $complete == 1 ) {
-        return $converted;
+        DB_query("DELETE FROM {$_TABLES['vars']} WHERE name=\"watchcvt\"");
     }
 
     $dt = new Date('now',$_CONF['timezone']);
@@ -923,25 +928,35 @@ function _forum_cvt_watch() {
     while ( ( $T = DB_fetchArray($result) ) != NULL ) {
         $pids[] = $T['id'];
     }
-
-    $sql = "SELECT * FROM {$_TABLES['ff_watch']}";
+    // grab all the full forum subscriptions first...
+    $sql = "SELECT * FROM {$_TABLES['ff_watch']} ORDER BY topic_id ASC";
     $result = DB_query($sql);
 
     while ( ( $W = DB_fetchArray($result) ) != NULL ) {
+        if ( !isset($fName[$W['forum_id']]) ) {
+           $forum_name = DB_getItem($_TABLES['ff_forums'],'forum_name','forum_id='.(int)$W['forum_id']);
+           $fName[$W['forum_id']] = $forum_name;
+        } else {
+            $forum_name = $fName[$W['forum_id']];
+        }
 
-        $forum_name = DB_getItem($_TABLES['ff_forums'],'forum_name','forum_id='.(int)$W['forum_id']);
         if ( $W['topic_id'] != 0 ) {
             if ( $W['topic_id'] < 0 ) {
                 $searchID = abs($W['topic_id']);
             } else {
                 $searchID = $W['topic_id'];
             }
-            $topic_name = DB_getItem($_TABLES['ff_topic'],'subject','id='.(int)$searchID);
+            if ( !isset($tName[$searchID]) ) {
+                $topic_name = DB_getItem($_TABLES['ff_topic'],'subject','id='.(int)$searchID);
+                $tName[$searchID] = $topic_name;
+            } else {
+                $topic_name = $tName[$searchID];
+            }
         } else {
             $topic_name = $LANG_GF02['msg138'];
         }
 
-        if ( in_array($searchID,$pids) && !isset($processed[$W['topic_id']])) {
+        if ( $W['topic_id'] == 0 || (in_array($searchID,$pids) && !isset($processed[$W['topic_id']]))) {
             $sql="INSERT INTO {$_TABLES['subscriptions']} ".
                  "(type,uid,category,id,date_added,category_desc,id_desc) VALUES " .
                  "('forum',".
@@ -960,6 +975,42 @@ function _forum_cvt_watch() {
     DB_query($sql);
 
     return $converted;
+}
+
+function _forum_fix_watch() {
+    global $_CONF, $_TABLES, $LANG_GF02;
+
+    $converted = 0;
+
+    $fName = array();
+    $tName = array();
+
+
+    $dt = new Date('now',$_CONF['timezone']);
+
+    $processed = array();
+
+    // process by user....
+
+
+    $sql = "SELECT * FROM {$_TABLES['subscriptions']} where type='forum' AND id=0 ORDER BY uid ASC";
+    $result = DB_query($sql);
+
+    $prevuid = 0;
+
+    while ( ( $W = DB_fetchArray($result) ) != NULL ) {
+        if ( $W['uid'] != $prevuid && $prevuid != 0 ) {
+            // we have a uid change... do the delete now
+            DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid=".(int) $prevuid." AND id <> 0 AND category in (".$catlist .")",1);
+            $catlist = '';
+        }
+        if ( $catlist != '' ) {
+            $catlist .= ',';
+        }
+        $catlist .= $W['category'];
+        $prevuid = $W['uid'];
+    }
+    return;
 }
 
 $retval .= 'Performing database upgrades if necessary...<br />';
