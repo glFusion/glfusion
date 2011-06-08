@@ -131,9 +131,9 @@ function userprofile($user, $msg = 0, $plugin = '')
     $fullname = htmlspecialchars($fullname,ENT_COMPAT,COM_getEncodingt());
 
     if ($A['status'] == USER_ACCOUNT_DISABLED) {
-        $username = sprintf ('<s title="%s">%s</s>', $LANG28[42], $username);
+        $username = sprintf ('%s - %s', $username, $LANG28[42]);
         if (!empty ($fullname)) {
-            $fullname = sprintf ('<s title="%s">%s</s>', $LANG28[42], $fullname);
+            $fullname = sprintf ('% - %s', $fullname, $LANG28[42]);
         }
     }
 
@@ -145,7 +145,7 @@ function userprofile($user, $msg = 0, $plugin = '')
 
         $edit_icon = '<img src="' . $_CONF['layout_url'] . '/images/edit.'
                    . $_IMAGE_TYPE . '" alt="' . $LANG_ADMIN['edit']
-                   . '" title="' . $LANG_ADMIN['edit'] . '"' . XHTML . '>';
+                   . '" title="' . $LANG_ADMIN['edit'] . '" />';
         if ($_USER['uid'] == $A['uid']) {
             $edit_url = "{$_CONF['site_url']}/usersettings.php";
         } else {
@@ -382,7 +382,7 @@ function emailpassword ($username, $passwd = '', $msg = 0)
 
     $username = DB_escapeString ($username);
     // don't retrieve any remote users!
-    $result = DB_query ("SELECT uid,email,status FROM {$_TABLES['users']} WHERE username = '$username' AND ((remoteservice is null) OR (remoteservice = ''))");
+    $result = DB_query ("SELECT uid,email,status FROM {$_TABLES['users']} WHERE username = '".$username."' AND ((remoteservice is null) OR (remoteservice = ''))");
     $nrows = DB_numRows ($result);
     if ($nrows == 1) {
         $A = DB_fetchArray ($result);
@@ -428,7 +428,7 @@ function requestpassword ($username, $msg = 0)
 
     // no remote users!
     $username = DB_escapeString($username);
-    $result = DB_query ("SELECT uid,email,passwd,status FROM {$_TABLES['users']} WHERE username = '$username' AND ((remoteservice IS NULL) OR (remoteservice=''))");
+    $result = DB_query ("SELECT uid,email,passwd,status FROM {$_TABLES['users']} WHERE username = '".$username."' AND ((remoteservice IS NULL) OR (remoteservice=''))");
     $nrows = DB_numRows ($result);
     if ($nrows == 1) {
         $A = DB_fetchArray ($result);
@@ -487,21 +487,16 @@ function newpasswordform ($uid, $requestid)
     global $_CONF, $_TABLES, $LANG04;
 
     $pwform = new Template ($_CONF['path_layout'] . 'users');
-    $pwform->set_file (array ('newpw' => 'newpassword.thtml'));
-    $pwform->set_var ( 'xhtml', XHTML );
-    $pwform->set_var ('site_url', $_CONF['site_url']);
-    $pwform->set_var ('layout_url', $_CONF['layout_url']);
-
-    $pwform->set_var ('user_id', $uid);
-    $pwform->set_var ('user_name', DB_getItem ($_TABLES['users'], 'username',
-                                               "uid = ".(int)$uid));
-    $pwform->set_var ('request_id', $requestid);
-
-    $pwform->set_var ('lang_explain', $LANG04[90]);
-    $pwform->set_var ('lang_username', $LANG04[2]);
-    $pwform->set_var ('lang_newpassword', $LANG04[4]);
-    $pwform->set_var ('lang_newpassword_conf', $LANG04[108]);
-    $pwform->set_var ('lang_setnewpwd', $LANG04[91]);
+    $pwform->set_file ('newpw','newpassword.thtml');
+    $pwform->set_var (array(
+            'user_id'       => $uid,
+            'user_name'     => DB_getItem ($_TABLES['users'], 'username',"uid = ".(int)$uid),
+            'request_id'    => $requestid,
+            'lang_explain'  => $LANG04[90],
+            'lang_username' => $LANG04[2],
+            'lang_newpassword'  => $LANG04[4],
+            'lang_newpassword_conf' => $LANG04[108],
+            'lang_setnewpwd'    => $LANG04[91]));
 
     $retval = COM_startBlock ($LANG04[92]);
     $retval .= $pwform->finish ($pwform->parse ('output', 'newpw'));
@@ -529,7 +524,7 @@ function requesttoken ($uid, $msg = 0)
     $retval = '';
     // no remote users!
     $uid = (int) $uid;
-    $result = DB_query ("SELECT uid,username,email,passwd,status FROM {$_TABLES['users']} WHERE uid = $uid AND ((remoteservice IS NULL) OR (remoteservice=''))");
+    $result = DB_query ("SELECT uid,username,email,passwd,status FROM {$_TABLES['users']} WHERE uid = ".(int)$uid." AND ((remoteservice IS NULL) OR (remoteservice=''))");
     $nrows = DB_numRows ($result);
     if ($nrows == 1) {
         $A = DB_fetchArray ($result);
@@ -577,7 +572,6 @@ function requesttoken ($uid, $msg = 0)
         echo COM_refresh ($_CONF['site_url'] .'/users.php?mode=getnewtoken' );
         exit;
     }
-
     return $retval;
 }
 
@@ -593,14 +587,13 @@ function newtokenform ($uid)
     global $_CONF, $_TABLES, $LANG04;
 
     $tokenform = new Template ($_CONF['path_layout'] . 'users');
-    $tokenform->set_file (array ('newtoken' => 'newtoken.thtml'));
-
-    $tokenform->set_var ('user_id', $uid);
-
-    $tokenform->set_var ('lang_explain',  $LANG04[175]);
-    $tokenform->set_var ('lang_username', $LANG04[2]);
-    $tokenform->set_var ('lang_password', $LANG04[4]);
-    $tokenform->set_var ('lang_submit', $LANG04[169]);
+    $tokenform->set_file ('newtoken', 'newtoken.thtml');
+    $tokenform->set_var (array(
+            'user_id'       => $uid,
+            'lang_explain'  => $LANG04[175],
+            'lang_username' => $LANG04[2],
+            'lang_password' => $LANG04[4],
+            'lang_submit'   => $LANG04[169]));
 
     $retval = COM_startBlock ($LANG04[169]);
     $retval .= $tokenform->finish ($tokenform->parse ('output', 'newtoken'));
