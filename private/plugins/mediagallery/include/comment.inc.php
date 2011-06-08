@@ -31,6 +31,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+MG_initAlbums();
+
 /**
  * Plugin function to delete a comment
  * $cid    Comment to be deleted

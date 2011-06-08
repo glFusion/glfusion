@@ -277,6 +277,7 @@ function plugin_deletecomment_mediagallery($cid,$id)
 {
     global $_CONF, $_MG_CONF, $_TABLES, $MG_albums;
 
+    require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
     require_once $_CONF['path'].'plugins/mediagallery/include/comment.inc.php';
 
     return _mg_deletecomment($cid,$id);
@@ -300,7 +301,9 @@ function plugin_displaycomment_mediagallery($id,$commentid,$title,$order,$format
         echo SEC_loginRequiredForm();
         exit;
     }
+    require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
     require_once $_CONF['path'].'plugins/mediagallery/include/comment.inc.php';
+
     return _mg_displaycomment($id,$commentid,$title,$order,$format,$page,$view);
 }
 
@@ -320,6 +323,7 @@ function plugin_savecomment_mediagallery($title,$comment,$id,$pid,$postmode)
 {
     global $_CONF, $_MG_CONF, $_TABLES, $LANG03;
 
+    require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
     require_once $_CONF['path'].'plugins/mediagallery/include/comment.inc.php';
     return _mg_savecomment($title,$comment,$id,$pid,$postmode);
 }
