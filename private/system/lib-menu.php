@@ -38,7 +38,7 @@ require_once $_CONF['path_system'] . 'classes/menu.class.php';
 function mb_initMenu($skipCache=false) {
     global $mbMenu,$_GROUPS, $_TABLES, $_USER;
 
-    $cacheInstance = 'mbmenu_' . CACHE_security_hash() . '__data';
+    $cacheInstance = 'mbmenu_menu_' . CACHE_security_hash() . '__data';
     $usedCache = 0;
     if ( $skipCache == false ) {
         $retval = CACHE_check_instance($cacheInstance, 0);
@@ -123,7 +123,6 @@ function mb_initMenu($skipCache=false) {
             }
         }
     }
-    CACHE_remove_instance('mbmenu');
     $cacheMenu = serialize($mbMenu);
     CACHE_create_instance($cacheInstance, $cacheMenu, 0);
 }
@@ -273,16 +272,17 @@ function mb_getheadercss() {
     global $_CONF, $_MB_CONF, $mbMenu, $themeAPI, $themeStyle;
 
     $st_header = array();
+    $fCSS = '';
     $st_header[] = $_CONF['path_layout'] . 'admin/menu/mooRainbow.css';
 
     if ( is_array($mbMenu) ) {
-        foreach ($mbMenu AS $menu) {
-            if ( $menu['active'] == 1 ) {
-                $cacheInstance = 'mbmenu_css_' . $menu['menu_id'] . '__' . $_CONF['theme'];
-                $retval = CACHE_check_instance($cacheInstance, 0);
-                if ( $retval ) {
-                    $st_header[] = CACHE_instance_filename($cacheInstance,0);
-                } else {
+        $cacheInstance = 'mbmenu_css' . '__' . $_CONF['theme'];
+        $retval = CACHE_check_instance($cacheInstance, 0);
+        if ( $retval ) {
+            $st_header[] = CACHE_instance_filename($cacheInstance,0);
+        } else {
+            foreach ($mbMenu AS $menu) {
+                if ( $menu['active'] == 1 ) {
                     $ms = new Template( $_CONF['path_layout'] . 'menu' );
                     $under = 0;
                     $over = 0;
@@ -306,9 +306,7 @@ function mb_getheadercss() {
                             $stylefile = 'horizontal-cascading.thtml';
                             break;
                     }
-                    $ms->set_file( array(
-                        'style'        => $stylefile,
-                    ));
+                    $ms->set_file('style',$stylefile);
                     $ms->set_var('menu_id',$menu['menu_id']);
                     if ( is_array($menu['config']) ) {
                         foreach ($menu['config'] AS $name => $value ) {
@@ -347,11 +345,11 @@ function mb_getheadercss() {
                     }
 
                     $ms->parse ('output', 'style');
-                    $fCSS = $ms->finish ($ms->get_var('output'));
-                    CACHE_create_instance($cacheInstance, $fCSS, 0);
-                    $st_header[] = CACHE_instance_filename($cacheInstance,0);
+                    $fCSS .= $ms->finish ($ms->get_var('output')) . LB;
                 }
             }
+            CACHE_create_instance($cacheInstance, $fCSS, 0);
+            $st_header[] = CACHE_instance_filename($cacheInstance,0);
         }
     }
     return $st_header;
@@ -361,24 +359,23 @@ function mb_getheaderjs() {
     global $_CONF, $mbMenu;
 
     $mb_js = array();
+    $js = '';
 
     if ( is_array($mbMenu) ) {
-        foreach ($mbMenu AS $menu) {
-            if ( $menu['active'] == 1 && $menu['menu_type'] == 1) {
-                $cacheInstance = 'mbmenu_js_' . $menu['menu_id'] . '__' . $_CONF['theme'];
-                $retval = CACHE_check_instance($cacheInstance, 0);
-                if ( $retval ) {
-                    $mb_js[] = CACHE_instance_filename($cacheInstance,0);
-                } else {
-                    $ms = new Template( $_CONF['path_layout'] . 'menu' );
-                    $ms->set_file('js','animate.thtml');
-                    $ms->set_var('menu_id',$menu['menu_id']);
-                    $ms->parse ('output', 'js');
-                    $js = $ms->finish ($ms->get_var('output'));
-                    CACHE_create_instance($cacheInstance, $js, 0);
-                    $mb_js[] = CACHE_instance_filename($cacheInstance,0);
-                }
+        $cacheInstance = 'mbmenu_js' .'__' . $_CONF['theme'];
+        $retval = CACHE_check_instance($cacheInstance, 0);
+        if ( $retval ) {
+            $mb_js[] = CACHE_instance_filename($cacheInstance,0);
+        } else {
+            foreach ($mbMenu AS $menu) {
+                $ms = new Template( $_CONF['path_layout'] . 'menu' );
+                $ms->set_file('js','animate.thtml');
+                $ms->set_var('menu_id',$menu['menu_id']);
+                $ms->parse ('output', 'js');
+                $js .= $ms->finish ($ms->get_var('output')) . LB;
             }
+            CACHE_create_instance($cacheInstance, $js, 0);
+            $mb_js[] = CACHE_instance_filename($cacheInstance,0);
         }
     }
     return $mb_js;
