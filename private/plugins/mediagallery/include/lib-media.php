@@ -1764,7 +1764,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         'media_title'   =>  (isset($media[$mediaObject]['media_title']) && $media[$mediaObject]['media_title'] != ' ' ) ? PLG_replaceTags($media[$mediaObject]['media_title'],'mediagallery','media_title') : '',
         'album_title'   =>  ($sortID > 0 ? $LANG_MG03['search_results'] : $MG_albums[$aid]->title),
         'media_desc'    =>  (isset($media[$mediaObject]['media_desc']) && $media[$mediaObject]['media_desc'] != ' ' ) ? $media_desc : '',
-        'artist'        =>  (isset($media[$mediaObject]['artist']) ? $media[$mediaObject]['artist'] : '',
+        'artist'        =>  (isset($media[$mediaObject]['artist'])) ? $media[$mediaObject]['artist'] : '',
         'media_time'    =>  $media_date[0],
         'media_views'   =>  ($MG_albums[$aid]->enable_views ? $media[$mediaObject]['media_views'] : ''),
         'media_comments' => ($MG_albums[$aid]->enable_comments ? $media[$mediaObject]['media_comments'] . '<br />' : ''),
