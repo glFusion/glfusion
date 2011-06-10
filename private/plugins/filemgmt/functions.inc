@@ -715,7 +715,7 @@ function plugin_feedupdatecheck_filemgmt ($feed, $topic, $update_data, $limit)
   * Whats New Block API Support
   * Return the Headline and Byline for the new section in the Whatsnew Block
 */
-function plugin_whatsnewsupported_filemgmt() {
+function plugin_whatsnewsupported_filemgmtxx() {
     global $_USER, $mydownloads_publicpriv, $_CONF, $LANG_FM00,$mydownloads_whatsnew,$filemgmtWhatsNewPeriodDays;
 
     if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
@@ -737,13 +737,14 @@ function plugin_whatsnewsupported_filemgmt() {
   * API function provides the content of our "What's New" feed
 */
 function plugin_getwhatsnew_filemgmt() {
-    global $_TABLES, $_TABLES, $_CONF, $LANG_FILEMGMT, $LANG01;
+    global $_TABLES, $_TABLES, $_CONF, $LANG_FILEMGMT,$LANG_FM00, $LANG01;
     global $filemgmtWhatsNewTitleLength,$filemgmtWhatsNewPeriodDays,$filemgmt_showWhatsNewComments,$mydownloads_publicpriv;
+    global $mydownloads_whatsnew;
 
     $retval = '';
 
     $items = array();
-    if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
+    if ((SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) AND $mydownloads_whatsnew == 1) {
         $sql  = "SELECT a.lid, a.title FROM {$_TABLES['filemgmt_filedetail']} a ";
         $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
         $sql .= "WHERE date >= UNIX_TIMESTAMP( DATE_SUB(NOW(), INTERVAL $filemgmtWhatsNewPeriodDays DAY )) ";
@@ -801,14 +802,12 @@ function plugin_getwhatsnew_filemgmt() {
         }
 
         if ($nrows1 == 0 and $nrows2 == 0) {
-            return $retval;
+            return '';
         } else {
-            return $items;
+            return array($LANG_FM00['WhatsNewLabel'],sprintf($LANG_FM00['WhatsNewPeriod'], $filemgmtWhatsNewPeriodDays),$items);
         }
-    } else {
-        $retval .= $LANG_FILEMGMT['no_new_files'] . '<br' . XHTML . '>' . LB;
-        return $retval;
     }
+    return '';
 }
 
 /**

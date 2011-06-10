@@ -105,27 +105,6 @@ function plugin_getmenuitems_links()
     return $menuitems;
 }
 
-/**
-* Return headlines for New Links section in the What's New block, if enabled
-*
-* @return   mixed       array(headline, byline), or boolean false if disabled
-*
-*/
-function plugin_whatsnewsupported_links()
-{
-    global $_LI_CONF, $LANG_LINKS, $LANG_WHATSNEW;
-
-    if ( $_LI_CONF['hidenewlinks'] == 0 ) {
-        $retval = array( $LANG_LINKS[84],
-                         COM_formatTimeString( $LANG_WHATSNEW['new_last'],
-                                               $_LI_CONF['newlinksinterval'] )
-                       );
-    } else {
-        $retval = false;
-    }
-
-    return $retval;
-}
 
 /**
 * Return new links for the What's New block
@@ -145,6 +124,9 @@ function plugin_getwhatsnew_links()
     $nrows = DB_numRows($result);
 
     if ($nrows > 0) {
+        $wntitle = $LANG_LINKS[84];
+        $wnlabel = COM_formatTimeString( $LANG_WHATSNEW['new_last'],$_LI_CONF['newlinksinterval'] );
+
         $newlinks = array();
         for ($x = 0; $x < $nrows; $x++) {
             $A = DB_fetchArray($result);
@@ -170,12 +152,11 @@ function plugin_getwhatsnew_links()
             $newlinks[] = COM_createLink($title, $lcount, $attr) . LB;
         }
 
-        $retval .= COM_makeList($newlinks, 'list-new-plugins');
-    } else {
-        $retval .= $LANG_LINKS[88] . '<br' . XHTML . '>' . LB;
+        $itemList = COM_makeList($newlinks, 'list-new-plugins');
+        return array($wntitle,$wnlabel,$itemList);
     }
 
-    return $retval;
+    return '';
 }
 
 /**

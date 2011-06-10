@@ -238,6 +238,7 @@ $LANG01 = array(
     'subscribe'                 => 'Subscribe',
     'unsubscribe'               => 'Unsubscribe',
     'view_online'               => 'Click here %s to view online',
+    'no_new_items'              => 'No New Items',
 );
 
 ###############################################################################
@@ -2547,6 +2548,7 @@ $LANG_confignames['Core'] = array(
     'max_logo_width' =>  'Max logo width',
     'max_logo_height' => 'Max logo height',
     'whatsnew_cache_time' => 'Time between forced rebuild of the What\'s New cache (in seconds)',
+    'hideemptyblock' => 'Hide What\'s New Block when empty',
 );
 
 $LANG_configsubgroups['Core'] = array(

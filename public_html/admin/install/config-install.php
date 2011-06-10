@@ -190,6 +190,7 @@ function install_config($site_url)
     $c->add('hidenewcomments',0,'select',3,16,0,1020,TRUE);
     $c->add('hidenewtrackbacks',0,'select',3,16,0,1030,TRUE);
     $c->add('hidenewplugins',0,'select',3,16,0,1040,TRUE);
+    $c->add('hideemptyblock',0,'select',3,16,0,1045,TRUE);
     $c->add('title_trim_length',20,'text',3,16,NULL,1050,TRUE);
     $c->add('whatsnew_cache_time',3600,'text',3,16,NULL,1060,TRUE);
 

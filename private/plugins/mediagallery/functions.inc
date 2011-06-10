@@ -584,36 +584,11 @@ function plugin_getheadercode_mediagallery()
 }
 
 /**
-  * Whats New Block API Support
-  * Return the Headline and Byline for the new section in the Whatsnew Block
-*/
-function plugin_whatsnewsupported_mediagallery()
-{
-    global $_CONF, $_MG_CONF, $LANG_MG00,$mg_installed_version;
-
-
-    if ( $_MG_CONF['whatsnew'] == 0 ) {
-        return '';
-    }
-
-    if ( $mg_installed_version != $_MG_CONF['pi_version'] ) {
-        return '';
-    }
-
-    if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
-        return '';
-    }
-
-    $label = sprintf($LANG_MG00['whatsnew_prompt'],$_MG_CONF['whatsnew_time']);
-
-    return array($LANG_MG00['whatsnew_title'],$label);
-}
-/**
   * API function provides the content of our "What's New" feed
 */
 function plugin_getwhatsnew_mediagallery()
 {
-    global $MG_albums, $_TABLES, $_CONF, $_MG_CONF, $_USER, $LANG_MG03, $mg_installed_version;
+    global $MG_albums, $_TABLES, $_CONF, $_MG_CONF, $_USER, $LANG_MG00,$LANG_MG03, $mg_installed_version;
 
     $retval = '';
 
@@ -682,14 +657,16 @@ function plugin_getwhatsnew_mediagallery()
                 }
             }
         }
-        if ( $newCommentCount == 0 ) {
-            $retval .= $LANG_MG03['no_comments'] . '<br />' . LB;
-        }
+//        if ( $newCommentCount == 0 ) {
+//            $retval .= $LANG_MG03['no_comments'] . '<br />' . LB;
+//        }
     }
+    $label = sprintf($LANG_MG00['whatsnew_prompt'],$_MG_CONF['whatsnew_time']);
+
     if ( $newMediaCount == 0 && $newCommentCount == 0 ) {
         return $retval;
     } else {
-        return $items;
+        return array($LANG_MG00['whatsnew_title'],$label,$items);
     }
 }
 

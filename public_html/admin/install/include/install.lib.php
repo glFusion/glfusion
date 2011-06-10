@@ -988,6 +988,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('shortdate','m/d/y','text',6,29,NULL,390,TRUE);
             $c->add('dateonly','d-M','text',6,29,NULL,400,TRUE);
             $c->add('timeonly','H:iA','text',6,29,NULL,410,TRUE);
+            // hide what's new if empty
+            $c->add('hideemptyblock',0,'select',3,15,0,1045,TRUE);
 
             // add new logo.admin permission
             $result = DB_query("SELECT * FROM {$_TABLES['features']} WHERE ft_name='logo.admin'");

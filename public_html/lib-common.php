@@ -4130,8 +4130,7 @@ function COM_emailUserTopics()
 
 function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 {
-    global $_CONF, $_TABLES, $_USER, $LANG01, $LANG_WHATSNEW, $page, $newstories;
-    global $_PLUGINS;
+    global $_CONF, $_TABLES, $_USER, $_PLUGINS, $LANG01, $LANG_WHATSNEW, $page, $newstories;
 
     if ( !isset($_CONF['whatsnew_cache_time']) ) {
         $_CONF['whatsnew_cache_time'] = 3600;
@@ -4146,7 +4145,8 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
             return $retval;
         }
     }
-    $retval = COM_startBlock( $title, $help,
+    $retval = '';
+    $header = COM_startBlock( $title, $help,
                        COM_getBlockTemplate( 'whats_new_block', 'header', $position ), 'whats_new_block' );
 
     $topicsql = '';
@@ -4173,10 +4173,9 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
             $title = DB_getItem( $_TABLES['blocks'], 'title', "name='whats_new_block'" );
         }
 
-        // Any late breaking news stories?
-        $retval .= '<h3>' . $LANG01[99] . '</h3>';
-
         if ( $nrows > 0 ) {
+            // Any late breaking news stories?
+            $retval .= '<h3>' . $LANG01[99] . '</h3>';
             $newmsg = COM_formatTimeString( $LANG_WHATSNEW['new_string'],
                         $_CONF['newstoriesinterval'], $LANG01[11], $nrows);
 
@@ -4194,23 +4193,11 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                 }
                 $retval .= COM_makeList( $newstory, 'list-new-articles' );
             }
-        } else {
-            $retval .= $LANG01[100] . '<br/>';
-        }
-
-        if (( $_CONF['hidenewcomments'] == 0 ) || ( $_CONF['trackback_enabled']
-                && ( $_CONF['hidenewtrackbacks'] == 0 ))
-                || ( $_CONF['hidenewplugins'] == 0 )) {
-            $retval .= '<br/>';
         }
     }
 
     if ( $_CONF['hidenewcomments'] == 0 ) {
         // Go get the newest comments
-        $retval .= '<h3>' . $LANG01[83] . ' <small>'
-                . COM_formatTimeString( $LANG_WHATSNEW['new_last'],
-                                        $_CONF['newcommentsinterval'] )
-                . '</small></h3>';
 
         $newcomments = array();
         $commentrow  = array();
@@ -4231,6 +4218,11 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         $nrows = DB_numRows( $result );
 
         if ( $nrows > 0 ) {
+            $retval .= '<h3>' . $LANG01[83] . ' <small>'
+                    . COM_formatTimeString( $LANG_WHATSNEW['new_last'],
+                                            $_CONF['newcommentsinterval'] )
+                    . '</small></h3>';
+
             for ($x = 0; $x < $nrows; $x++ ) {
                 $A = DB_fetchArray($result);
                 $A['url'] = COM_buildUrl( $_CONF['site_url']
@@ -4265,28 +4257,21 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
             }
 
             $retval .= COM_makeList( $newcomments, 'list-new-comments' );
-        } else {
-            $retval .= $LANG01[86] . '<br/>' . LB;
-        }
-
-        if (( $_CONF['hidenewplugins'] == 0 )
-                || ( $_CONF['trackback_enabled']
-                && ( $_CONF['hidenewtrackbacks'] == 0 ))) {
-            $retval .= '<br/>';
         }
     }
 
     if ( $_CONF['trackback_enabled'] && ( $_CONF['hidenewtrackbacks'] == 0 )) {
-        $retval .= '<h3>' . $LANG01[114] . ' <small>'
-                . COM_formatTimeString( $LANG_WHATSNEW['new_last'],
-                                        $_CONF['newtrackbackinterval'] )
-                . '</small></h3>';
 
         $sql = "SELECT DISTINCT COUNT(*) AS count,{$_TABLES['stories']}.title,t.sid,max(t.date) AS lastdate FROM {$_TABLES['trackback']} AS t,{$_TABLES['stories']} WHERE (t.type = 'article') AND (t.sid = {$_TABLES['stories']}.sid) AND (t.date >= (DATE_SUB(NOW(), INTERVAL {$_CONF['newtrackbackinterval']} SECOND)))" . COM_getPermSQL( 'AND', 0, 2, $_TABLES['stories'] ) . " AND ({$_TABLES['stories']}.draft_flag = 0) AND ({$_TABLES['stories']}.trackbackcode = 0)" . $topicsql . COM_getLangSQL( 'sid', 'AND', $_TABLES['stories'] ) . " GROUP BY t.sid, {$_TABLES['stories']}.title ORDER BY lastdate DESC LIMIT 15";
         $result = DB_query( $sql );
 
         $nrows = DB_numRows( $result );
         if ( $nrows > 0 ) {
+            $retval .= '<h3>' . $LANG01[114] . ' <small>'
+                    . COM_formatTimeString( $LANG_WHATSNEW['new_last'],
+                                            $_CONF['newtrackbackinterval'] )
+                    . '</small></h3>';
+
             $newcomments = array();
 
             for( $i = 0; $i < $nrows; $i++ ) {
@@ -4309,12 +4294,6 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
             }
 
             $retval .= COM_makeList( $newcomments, 'list-new-trackbacks' );
-        } else {
-            $retval .= $LANG01[115] . '<br/>' . LB;
-        }
-
-        if ( $_CONF['hidenewplugins'] == 0 ) {
-            $retval .= '<br/>';
         }
     }
 
@@ -4338,7 +4317,15 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         }
     }
 
-    $retval .= COM_endBlock( COM_getBlockTemplate( 'whats_new_block', 'footer', $position ));
+    if ( $retval != '' ) {
+        $retval = $header . $retval;
+        $retval .= COM_endBlock( COM_getBlockTemplate( 'whats_new_block', 'footer', $position ));
+    } else {
+        if ( $_CONF['hideemptyblock'] != TRUE ) {
+            $retval = $header . $LANG01['no_new_items'];
+            $retval .= COM_endBlock( COM_getBlockTemplate( 'whats_new_block', 'footer', $position ));
+        }
+    }
     CACHE_create_instance($cacheInstance, $retval, 0);
 
     return $retval;
