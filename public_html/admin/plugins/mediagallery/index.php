@@ -69,18 +69,6 @@ if ( isset($_GET['mode']) ) {
     $mode = '';
 }
 
-if (isset($_GET['msg']) ) {
-    $msg = COM_applyFilter($_GET['msg'],true);
-} else {
-    $msg = 0;
-}
-
-if ( $msg > 0 ) {
-    $statusMsg = $LANG_MG09[$msg];
-} else {
-    $statusMsg = '';
-}
-
 USES_lib_admin();
 
 $T = new Template($_MG_CONF['template_path'].'/admin');
@@ -89,7 +77,6 @@ $T->set_file (array ('admin' => 'administration.thtml'));
 $T->set_var(array(
     'site_url'          => $_MG_CONF['site_url'],
     'site_admin_url'    => $_MG_CONF['admin_url'],
-    'status_msg'        => $statusMsg,
     'mg_navigation'     => MG_navigation(),
     'lang_admin'        => $LANG_MG00['admin'],
     'version'           => $_MG_CONF['pi_version'],
@@ -99,6 +86,10 @@ $T->set_var(array(
 
 $T->parse('output', 'admin');
 $display = COM_siteHeader();
+if ( isset($_GET['msg']) ) {
+    $msg = COM_applyFilter($_GET['msg'],true);
+    $display .= COM_showMessageText($LANG_MG09[$msg],'mediagallery');
+}
 $display .= $T->finish($T->get_var('output'));
 $display .= COM_siteFooter();
 echo $display;
