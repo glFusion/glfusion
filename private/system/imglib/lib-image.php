@@ -224,7 +224,7 @@ function IMG_rotateImage( $srcImage, $direction ) {
      * Check image format, jpegtan will only work for JPG images
      */
 
-    if ( $_CONF['jpegtran_enabled'] == 1 && ($mimeType == 'image/jpeg' || $mimeType == 'image/jpg') ) {
+    if ( $_CONF['jpegtrans_enabled'] == 1 && ($mimeType == 'image/jpeg' || $mimeType == 'image/jpg') ) {
         switch( $direction ) {
             case 'right' :
                 $JT_rotate = "90";
@@ -238,7 +238,7 @@ function IMG_rotateImage( $srcImage, $direction ) {
         }
         $tmpImage   = $srcImage . '.rt';
 
-        $rc = UTL_execWrapper('"' . $_CONF['path_to_jpegtran'] . "/jpegtran" . '"' . " -rotate " . $JT_rotate . " -trim \"$srcImage\" > \"$tmpImage\"");
+        $rc = UTL_execWrapper('"' . $_CONF['path_to_jpegtrans'] . "/jpegtran" . '"' . " -rotate " . $JT_rotate . " -trim \"$srcImage\" > \"$tmpImage\"");
 
         if ( $rc != true ) {
             @unlink($tmpImage);
