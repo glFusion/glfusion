@@ -611,6 +611,20 @@ function SESS_isSet($name)
     return isset($_SESSION[$name]);
 }
 
+/**
+* Remove a session variable
+*
+* remove a session variable
+*
+* @param    string  $name     session variable name
+* @return   none
+*
+*/
+function SESS_unSet($name)
+{
+    unset ($_SESSION[$name]);
+}
+
 
 /**
 * Check IPs for match
