@@ -106,7 +106,7 @@ function SEC_getUserGroups($uid='')
     if ($_SEC_VERBOSE) {
         COM_errorLog("****************in getusergroups(uid=$uid,usergroups=$usergroups,cur_grp_id=$cur_grp_id)***************",1);
     }
-
+    $cache = false;
     $groups = array();
 
     if (empty($uid)) {
@@ -114,6 +114,7 @@ function SEC_getUserGroups($uid='')
             $uid = 1;
         } else {
             $uid = $_USER['uid'];
+            $cache = true;
         }
     } else {
         $uid = (int) $uid;
@@ -123,7 +124,7 @@ function SEC_getUserGroups($uid='')
         return $runonce[$uid];
     }
 
-    if ( SESS_isSet('glfusion.user_groups.'.$uid) ) {
+    if ( $cache && SESS_isSet('glfusion.user_groups.'.$uid) ) {
         return unserialize(SESS_getVar('glfusion.user_groups.'.$uid));
     }
 
@@ -176,7 +177,9 @@ function SEC_getUserGroups($uid='')
     }
 
     $runonce[$uid] = $groups;
-    SESS_setVar('glfusion.user_groups.'.$uid,serialize($groups) );
+    if ( $cache ) {
+        SESS_setVar('glfusion.user_groups.'.$uid,serialize($groups) );
+    }
     return $groups;
 }
 
