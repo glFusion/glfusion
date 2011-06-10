@@ -227,7 +227,7 @@ if (isset ($_POST['mode'])) {
     $mode = COM_applyFilter($_GET['mode']);
 }
 
-$display = COM_siteHeader();
+
 $T = new Template($_MG_CONF['template_path'].'/admin');
 $T->set_file (array ('admin' => 'administration.thtml'));
 
@@ -257,6 +257,7 @@ if ($mode == $LANG_MG01['submit'] && !empty ($LANG_MG01['submit'])) {
 }
 
 $T->parse('output', 'admin');
+$display = COM_siteHeader();
 $display .= $T->finish($T->get_var('output'));
 $display .= COM_siteFooter();
 echo $display;

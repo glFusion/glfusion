@@ -97,7 +97,6 @@ if ( $mode == 'thumbs' ) {
     $step = COM_applyFilter($_GET['step']);
     switch ( $step ) {
         case 'one' :
-            $display = COM_siteHeader();
             $T = new Template($_MG_CONF['template_path'].'/admin');
             $T->set_file (array ('admin' => 'administration.thtml'));
             $B = new Template($_MG_CONF['template_path'].'/admin');
@@ -127,6 +126,7 @@ if ( $mode == 'thumbs' ) {
                 'help_url'      => $_MG_CONF['site_url'] . '/docs/usage.html#Rebuild_Thumbs',
             ));
             $T->parse('output', 'admin');
+            $display = COM_siteHeader();
             $display .= $T->finish($T->get_var('output'));
             $display .= COM_siteFooter();
             echo $display;
@@ -199,7 +199,6 @@ if ( $mode == 'thumbs' ) {
     $step = COM_applyFilter($_GET['step']);
     switch ( $step ) {
         case 'one' :
-            $display = COM_siteHeader();
             $T = new Template($_MG_CONF['template_path'].'/admin');
             $T->set_file (array ('admin' => 'administration.thtml'));
             $B = new Template($_MG_CONF['template_path'].'/admin');
@@ -227,6 +226,7 @@ if ( $mode == 'thumbs' ) {
                 'help_url'      => $_MG_CONF['site_url'] . '/docs/usage.html#Resize_Images',
             ));
             $T->parse('output', 'admin');
+            $display = COM_siteHeader();
             $display .= $T->finish($T->get_var('output'));
             $display .= COM_siteFooter();
             echo $display;
@@ -311,7 +311,6 @@ if ( $mode == 'thumbs' ) {
                 exit;
             }
 
-            $display = COM_siteHeader();
             $T = new Template($_MG_CONF['template_path'].'/admin');
             $T->set_file (array ('admin' => 'administration.thtml'));
             $B = new Template($_MG_CONF['template_path'].'/admin');
@@ -339,6 +338,7 @@ if ( $mode == 'thumbs' ) {
                 'help_url'      => $_MG_CONF['site_url'] . '/docs/usage.html#Discard_Original_Images',
             ));
             $T->parse('output', 'admin');
+            $display = COM_siteHeader();
             $display .= $T->finish($T->get_var('output'));
             $display .= COM_siteFooter();
             echo $display;

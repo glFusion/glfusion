@@ -514,8 +514,8 @@ function MG_saveDefaults( ) {
     $image_skin             = COM_applyFilter($_POST['skin']);
     $album_skin             = COM_applyFilter($_POST['askin']);
     $display_skin           = COM_applyFilter($_POST['dskin']);
-    $mp3ribbon              = COM_applyFilter($_POST['mp3ribbon'],true);
-    $rsschildren            = COM_applyFilter($_POST['rsschildren'],true);
+    $mp3ribbon              = isset($_POST['mp3ribbon']) ? COM_applyFilter($_POST['mp3ribbon'],true) : 0;
+    $rsschildren            = isset($_POST['rsschildren']) ? COM_applyFilter($_POST['rsschildren'],true) : 0;
     $album_theme            = COM_applyFilter($_POST['album_theme']);
     // Convert array values to numeric permission values
     $tperm_owner                 = isset($_POST['perm_owner']) ? $_POST['perm_owner'] : 0;                             // admin only
@@ -544,27 +544,7 @@ function MG_saveDefaults( ) {
     $format_flv                 = isset($_POST['format_flv']) ? COM_applyFilter($_POST['format_flv'],true) : 0;
     $format_rflv                = isset($_POST['format_rflv']) ? COM_applyFilter($_POST['format_rflv'],true) : 0;
     $format_emb                 = isset($_POST['format_emb']) ? COM_applyFilter($_POST['format_emb'],true) : 0;
-/* ---
-    $format_jpg             = COM_applyFilter($_POST['format_jpg'],true);
-    $format_png             = COM_applyFilter($_POST['format_png'],true);
-    $format_tif             = COM_applyFilter($_POST['format_tif'],true);
-    $format_gif             = COM_applyFilter($_POST['format_gif'],true);
-    $format_bmp             = COM_applyFilter($_POST['format_bmp'],true);
-    $format_tga             = COM_applyFilter($_POST['format_tga'],true);
-    $format_psd             = COM_applyFilter($_POST['format_psd'],true);
-    $format_mp3             = COM_applyFilter($_POST['format_mp3'],true);
-    $format_ogg             = COM_applyFilter($_POST['format_ogg'],true);
-    $format_asf             = COM_applyFilter($_POST['format_asf'],true);
-    $format_swf             = COM_applyFilter($_POST['format_swf'],true);
-    $format_mov             = COM_applyFilter($_POST['format_mov'],true);
-    $format_mp4             = COM_applyFilter($_POST['format_mp4'],true);
-    $format_mpg             = COM_applyFilter($_POST['format_mpg'],true);
-    $format_zip             = COM_applyFilter($_POST['format_zip'],true);
-    $format_flv             = COM_applyFilter($_POST['format_flv'],true);
-    $format_rflv            = COM_applyFilter($_POST['format_rflv'],true);
-    $format_emb             = COM_applyFilter($_POST['format_emb'],true);
-    $format_other           = COM_applyFilter($_POST['format_other'],true);
---- */
+
     $valid_formats = ($format_jpg + $format_png + $format_tif + $format_gif + $format_bmp + $format_tga + $format_psd + $format_mp3 + $format_ogg + $format_asf + $format_swf + $format_mov + $format_mp4 + $format_mpg + $format_zip + $format_other + $format_flv + $format_rflv + $format_emb);
 
     // put any error checking / validation here
@@ -649,8 +629,6 @@ if (isset ($_POST['mode'])) {
 } else if (isset ($_GET['mode'])) {
     $mode = COM_applyFilter($_GET['mode']);
 }
-$display = COM_siteHeader('menu','');
-
 $T = new Template($_MG_CONF['template_path'].'/admin');
 $T->set_file (array ('admin' => 'administration.thtml'));
 
@@ -678,6 +656,7 @@ if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {   // save the 
     ));
 }
 $T->parse('output', 'admin');
+$display = COM_siteHeader('menu','');
 $display .= $T->finish($T->get_var('output'));
 $display .= COM_siteFooter();
 echo $display;

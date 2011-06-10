@@ -320,7 +320,6 @@ function MG_imageAdmin( $album_id, $page, $actionURL = '' ) {
 
     $T->parse('output','admin');
     $retval .= $T->finish($T->get_var('output'));
-//    $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
     return $retval;
 }
 

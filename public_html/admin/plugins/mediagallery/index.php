@@ -75,9 +75,6 @@ if (isset($_GET['msg']) ) {
     $msg = 0;
 }
 
-$display = COM_siteHeader();
-
-
 if ( $msg > 0 ) {
     $statusMsg = $LANG_MG09[$msg];
 } else {
@@ -101,6 +98,7 @@ $T->set_var(array(
 ));
 
 $T->parse('output', 'admin');
+$display = COM_siteHeader();
 $display .= $T->finish($T->get_var('output'));
 $display .= COM_siteFooter();
 echo $display;

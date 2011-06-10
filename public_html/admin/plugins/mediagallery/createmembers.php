@@ -103,6 +103,11 @@ function MG_selectUsers($page) {
 function MG_createUsers() {
     global $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG00, $LANG_MG01, $_POST;
 
+    if ( !isset($_POST['user']) ) {
+        echo COM_refresh($_MG_CONF['admin_url'] . 'createmembers.php');
+        exit;
+    }
+
     $numItems = count($_POST['user']);
     for ($i=0; $i < $numItems; $i++) {
         plugin_user_create_mediagallery( $_POST['user'][$i],1);
@@ -124,7 +129,6 @@ if (isset ($_POST['mode'])) {
     $mode = COM_applyFilter($_GET['mode']);
 }
 
-$display = COM_siteHeader();
 $T = new Template($_MG_CONF['template_path'].'/admin');
 $T->set_file (array ('admin' => 'administration.thtml'));
 
@@ -137,7 +141,6 @@ $T->set_var(array(
 ));
 
 if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {   // save the config
-
     MG_createUsers();
     exit;
 } elseif ($mode == $LANG_MG01['cancel']) {
@@ -161,6 +164,7 @@ if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {   // save the 
 }
 
 $T->parse('output', 'admin');
+$display = COM_siteHeader();
 $display .= $T->finish($T->get_var('output'));
 $display .= COM_siteFooter();
 echo $display;

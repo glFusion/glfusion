@@ -275,8 +275,9 @@ if ( isset($_REQUEST['mode']) ) {
     $mode = '';
 }
 $display = '';
+$retval = '';
 
-$display = COM_siteHeader();
+
 $T = new Template($_MG_CONF['template_path'].'/admin');
 $T->set_file (array ('admin' => 'administration.thtml'));
 $T->set_var(array(
@@ -324,6 +325,7 @@ if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {
 }
 
 $T->parse('output', 'admin');
+$display = COM_siteHeader();
 $display .= $T->finish($T->get_var('output'));
 $display .= COM_siteFooter();
 echo $display;

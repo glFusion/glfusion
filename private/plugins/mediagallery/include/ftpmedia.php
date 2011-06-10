@@ -335,6 +335,7 @@ function MG_FTPpickFiles( $album_id, $dir, $purgefiles, $recurse ) {
     $pCount       = 0;
 
     $retval = '';
+    $valid_albums = '';
 
     $T = new Template( MG_getTemplatePath($album_id) );
     $T->set_file (array ('admin' => 'ftpimport.thtml'));
@@ -353,7 +354,7 @@ function MG_FTPpickFiles( $album_id, $dir, $purgefiles, $recurse ) {
         'album_id'          => $album_id,
     ));
 
-    $filelist = MG_listDir ($dir, $album_id, $purgefiles, $recurse, $session_id );
+    $filelist = MG_listDir ($dir, $album_id, $purgefiles, $recurse );
 
     $level = 0;
     $album_jumpbox  = '<select name="parentaid">';

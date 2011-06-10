@@ -337,7 +337,6 @@ function MG_userUpload( $album_id ) {
 
     $T = new Template( MG_getTemplatePath($album_id) );
     $T->set_file ('mupload','userupload.thtml');
-    $T->set_var('site_url', $_MG_CONF['site_url']);
 
     $user_quota = MG_getUserQuota( $_USER['uid'] );
     if ( $user_quota > 0 ) {
@@ -402,7 +401,7 @@ function MG_userUpload( $album_id ) {
 *
 */
 function MG_saveUserUpload( $album_id ) {
-    global $MG_albums, $_FILES, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG02, $LANG_MG03, $new_media_id;
+    global $MG_albums, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG02, $LANG_MG03, $new_media_id;
 
     $retval = '';
     $retval .= COM_startBlock ($LANG_MG03['upload_results'], '',
@@ -410,7 +409,6 @@ function MG_saveUserUpload( $album_id ) {
 
     $T = new Template( MG_getTemplatePath($album_id) );
     $T->set_file ('mupload','useruploadstatus.thtml');
-    $T->set_var('site_url', $_CONF['site_url']);
 
     $statusMsg = '';
     $file = array();
@@ -519,11 +517,11 @@ function MG_saveUserUpload( $album_id ) {
     // equal the actual count of items shown in the database, if not, fix the counts and log
     // the error
 
-    $dbCount = DB_count($_TABLES['mg_media_albums'],'album_id',intval($album_id));
-    $aCount  = DB_getItem($_TABLES['mg_albums'],'media_count',"album_id=".intval($album_id));
+    $dbCount = DB_count($_TABLES['mg_media_albums'],'album_id',(int) $album_id);
+    $aCount  = DB_getItem($_TABLES['mg_albums'],'media_count',"album_id=".(int) $album_id);
     if ( $dbCount != $aCount) {
         DB_query("UPDATE " . $_TABLES['mg_albums'] . " SET media_count=" . $dbCount .
-                 " WHERE album_id=" . intval($album_id) );
+                 " WHERE album_id=" . (int) $album_id );
         COM_errorLog("MediaGallery: Upload processing - Counts don't match - dbCount = " . $dbCount . " aCount = " . $aCount);
     }
 

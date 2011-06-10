@@ -154,28 +154,28 @@ function MG_saveGlobalAlbumPerm() {
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
 
-    $A['group_id']          = COM_applyFilter($_POST['group_id'],true);
-    $A['member_uploads']    = COM_applyFilter($_POST['member_upload'],true);
-    $A['moderate']          = COM_applyFilter($_POST['moderation'],true);
-    $A['mod_group_id']      = COM_applyFilter($_POST['mod_id'],true);
-    $A['email_mod']         = COM_applyFilter($_POST['email_mod'],true);
-    $adminMenu              = COM_applyFilter($_POST['admin_menu'],true);
+    $A['group_id']          = isset($_POST['group_id']) ? COM_applyFilter($_POST['group_id'],true) : 0;
+    $A['member_uploads']    = isset($_POST['member_upload']) ? COM_applyFilter($_POST['member_upload'],true) : 0;
+    $A['moderate']          = isset($_POST['moderation']) ? COM_applyFilter($_POST['moderation'],true) : 0;
+    $A['mod_group_id']      = isset($_POST['mod_id']) ? COM_applyFilter($_POST['mod_id'],true) : 0;
+    $A['email_mod']         = isset($_POST['email_mod']) ? COM_applyFilter($_POST['email_mod'],true) : 0;
+    $adminMenu              = isset($_POST['admin_menu']) ? COM_applyFilter($_POST['admin_menu'],true) : 0;
 
-    $perm_owner     = $_POST['perm_owner'];
-    $perm_group     = $_POST['perm_group'];
-    $perm_members   = $_POST['perm_members'];
-    $perm_anon      = $_POST['perm_anon'];
-    $group_id       = $_POST['group_id'];
+    $perm_owner     = isset($_POST['perm_owner']) ? $_POST['perm_owner'] : '';
+    $perm_group     = isset($_POST['perm_group']) ? $_POST['perm_group'] : '';
+    $perm_members   = isset($_POST['perm_members']) ? $_POST['perm_members'] : '';
+    $perm_anon      = isset($_POST['perm_anon']) ? $_POST['perm_anon'] : '';
+    $group_id       = isset($_POST['group_id']) ? $_POST['group_id'] : '';
 
     // Convert array values to numeric permission values
     list($A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']) = SEC_getPermissionValues($perm_owner,$perm_group,$perm_members,$perm_anon);
 
-    $group_active           = COM_applyFilter($_POST['group_active'],true);
-    $perm_active            = COM_applyFilter($_POST['perm_active'],true);
-    $upload_active          = COM_applyFilter($_POST['upload_active'],true);
-    $moderate_active        = COM_applyFilter($_POST['moderate_active'],true);
-    $mod_group_active       = COM_applyFilter($_POST['mod_group_active'],true);
-    $email_mod_active       = COM_applyFilter($_POST['email_mod_active'],true);
+    $group_active           = isset($_POST['group_active']) ? COM_applyFilter($_POST['group_active'],true) : 0;
+    $perm_active            = isset($_POST['perm_active']) ? COM_applyFilter($_POST['perm_active'],true) : 0;
+    $upload_active          = isset($_POST['upload_active']) ? COM_applyFilter($_POST['upload_active'],true) : 0;
+    $moderate_active        = isset($_POST['moderate_active']) ? COM_applyFilter($_POST['moderate_active'],true) : 0;
+    $mod_group_active       = isset($_POST['mod_group_active']) ? COM_applyFilter($_POST['mod_group_active'],true) : 0;
+    $email_mod_active       = isset($_POST['email_mod_active']) ? COM_applyFilter($_POST['email_mod_active'],true) : 0;
 
     $updateSQL = '';
     $updateSQL .= ($group_active     ? "group_id=$group_id" : '');

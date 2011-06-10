@@ -160,7 +160,6 @@ if ( $page <= 0 ) {
 $quota  = isset($_POST['quota']) ? COM_applyFilter($_POST['quota'],true) : 0;
 $used   = isset($_POST['used']) ? COM_applyFilter($_POST['used'],true) : 0;
 
-$display = COM_siteHeader($LANG_MG01['quota_report']);
 $T = new Template($_MG_CONF['template_path'].'/admin');
 $T->set_file (array ('admin' => 'administration.thtml'));
 $T->set_var(array(
@@ -182,6 +181,7 @@ $T->set_var(array(
 
 
 $T->parse('output', 'admin');
+$display = COM_siteHeader($LANG_MG01['quota_report']);
 $display .= $T->finish($T->get_var('output'));
 $display .= COM_siteFooter();
 echo $display;

@@ -161,7 +161,7 @@ function MG_massDeleteAlbums( $aid ) {
     $numItems = count($children);
     for ($x=0; $x < $numItems; $x++) {
         $i = $MG_albums[$children[$x]]->id;
-        if ( $_POST['album'][$i] == 1 ) {
+        if ( isset($_POST['album'][$i]) && $_POST['album'][$i] == 1 ) {
             MG_MassdeleteAlbum($MG_albums[$children[$x]]->id);
         } else {
             MG_massDeleteAlbums($MG_albums[$children[$x]]->id);
@@ -184,7 +184,6 @@ if (isset ($_POST['mode'])) {
     $mode = $_GET['mode'];
 }
 
-$display = COM_siteHeader();
 $T = new Template($_MG_CONF['template_path'].'/admin');
 $T->set_file (array ('admin' => 'administration.thtml'));
 $T->set_var(array(
@@ -211,8 +210,8 @@ if ($mode == $LANG_MG01['delete'] && !empty ($LANG_MG01['delete'])) {
 
     ));
 }
-
 $T->parse('output', 'admin');
+$display = COM_siteHeader();
 $display .= $T->finish($T->get_var('output'));
 $display .= COM_siteFooter();
 echo $display;

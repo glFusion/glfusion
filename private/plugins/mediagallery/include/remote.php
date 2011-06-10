@@ -251,7 +251,7 @@ function MG_saveRemoteUpload( $albumId ) {
         }
 
 		list($rc,$msg) = MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywords,$category,$attachedThumbnail,$thumbnail,$resolution_x,$resolution_y);
-        $statusMsg .= $videoFile . " " . $msg . "<br />";
+        $statusMsg .=  $msg . "<br />";
         if ( $rc == true ) {
             $successfull_upload++;
         }
@@ -577,9 +577,11 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
 function MG_getRemoteThumbnail( $remotefile, $localfile ) {
     global $MG_albums, $_CONF, $_MG_CONF, $_USER, $_TABLES, $LANG_MG00, $LANG_MG01, $LANG_MG02, $new_media_id;
 
-    if ( !isset($_MG_CONF['enable_remote_images']) || $_MG_CONF['enabled_remote_images'] == false ) {
-        return false;
-    }
+    return false;
+
+//    if ( !isset($_MG_CONF['enable_remote_images']) || $_MG_CONF['enabled_remote_images'] == false ) {
+//        return false;
+//    }
 
     if ($_MG_CONF['verbose']) {
         COM_errorLog("Entering MG getRemoteThumbnail");

@@ -840,8 +840,6 @@ if (isset ($_POST['mode'])) {
     $mode = '';
 }
 
-$display = COM_siteHeader('menu','');
-
 $T = new Template($_MG_CONF['template_path'].'/admin');
 $T->set_file ('admin','administration.thtml');
 $T->set_var(array(
@@ -873,8 +871,8 @@ if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {   // save the 
 }
 
 $T->parse('output', 'admin');
+$display = COM_siteHeader('menu','');
 $display .= $T->finish($T->get_var('output'));
-
 $display .= COM_siteFooter();
 echo $display;
 exit;

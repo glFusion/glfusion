@@ -116,152 +116,172 @@ if ( COM_isAnonUser() )  {
 */
 
 $display = '';
+$retval  = '';
 
 if (($mode == 'edit') ) {
+    $retval = '';
     if (!function_exists('MG_editAlbum')) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/albumedit.php';
     }
     if ( isset($_GET['album_id']) ) {
         $album_id = COM_applyFilter($_GET['album_id'],true);
-        $display = MG_siteHeader();
-        $display .= MG_editAlbum( $album_id,'edit', $_MG_CONF['site_url'] . '/admin.php', $album_id );
+        $retval .= MG_editAlbum( $album_id,'edit', $_MG_CONF['site_url'] . '/admin.php', $album_id );
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( $mode == 'browser' ) {
+    $retval = '';
     if ( isset($_GET['album_id']) ) {
         if ( !function_exists('MG_userUpload')) {
             require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
         }
         $album_id = COM_applyFilter($_GET['album_id'],true);
-        $display  = MG_siteHeader();
-        $display .= MG_navbar($LANG_MG01['browser_upload'],$album_id);
-        $display .= MG_userUpload( $album_id );
+        $retval .= MG_navbar($LANG_MG01['browser_upload'],$album_id);
+        $retval .= MG_userUpload( $album_id );
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( $mode == 'gremote' ) {
+    $retval = '';
     if ( isset($_GET['album_id']) ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
-        $display  = MG_siteHeader();
-        $display .= MG_navbar($LANG_MG01['gallery_remote'],$album_id);
-        $display .= MG_galleryRemote( $album_id );
+        $retval .= MG_navbar($LANG_MG01['gallery_remote'],$album_id);
+        $retval .= MG_galleryRemote( $album_id );
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
 } else if ( $mode == 'xppub' ) {
+    $retval = '';
     if ( isset($_GET['album_id']) ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
-        $display  = MG_siteHeader();
-        $display .= MG_navbar($LANG_MG01['xp_pub'],$album_id);
-        $display .= MG_xppub( $album_id );
+        $retval .= MG_navbar($LANG_MG01['xp_pub'],$album_id);
+        $retval .= MG_xppub( $album_id );
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( $mode == 'import' ) {
+    $retval = '';
     if ( isset($_GET['album_id']) ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/ftpmedia.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
-        $display  = MG_siteHeader();
-        $display .= MG_navbar($LANG_MG01['ftp_media'],$album_id);
-        $display .= MG_ftpUpload( $album_id );
+        $retval .= MG_navbar($LANG_MG01['ftp_media'],$album_id);
+        $retval .= MG_ftpUpload( $album_id );
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( $mode == 'globalattr' ) {
+    $retval = '';
     require_once $_CONF['path'] . 'plugins/mediagallery/include/global.php';
     if ( isset($_GET['album_id']) ) {
         $album_id = COM_applyFilter($_GET['album_id'],true);
-        $admin_menu = COM_applyFilter($_GET['a'],true);
-        $display = MG_siteHeader();
-        $display .= MG_globalAlbumAttributeEditor($admin_menu);
+        $admin_menu = (isset($_GET['a']) ? COM_applyFilter($_GET['a'],true) : 0);
+        $retval .= MG_globalAlbumAttributeEditor($admin_menu);
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( $mode == 'globalperm' ) {
+    $retval = '';
     if (!function_exists('MG_globalAlbumPermEditor') ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/global.php';
     }
-
     if ( isset($_GET['album_id']) ) {
         $album_id = COM_applyFilter($_GET['album_id'],true);
-        $admin_menu = COM_applyFilter($_GET['a'],true);
-        $display = MG_siteHeader();
-        $display .= MG_globalAlbumPermEditor($admin_menu);
+        $admin_menu = (isset($_GET['a']) ? COM_applyFilter($_GET['a'],true) : 0);
+        $retval .= MG_globalAlbumPermEditor($admin_menu);
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( $mode == 'wmmanage' ) {
+    $retval = '';
     if ( !function_exists('MG_getFile')) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
     }
     if ( !function_exists('MG_watermarkManage')) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-watermark.php';
     }
+    $retval .= MG_watermarkManage();
     $display = MG_siteHeader();
-    $display .= MG_watermarkManage();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
-
+    exit;
 } else if ( $mode == 'batchcaption' ) {
+    $retval = '';
     if ( isset($_GET['album_id']) ) {
         if ( !function_exists('MG_batchCaptionEdit') ) {
             require_once $_CONF['path'] . 'plugins/mediagallery/include/caption.php';
         }
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $start    = isset($_GET['start']) ? COM_applyFilter($_GET['start'],true) : 0;
-        $display = MG_siteHeader();
-        $display .= MG_batchCaptionEdit( $album_id, $start);
+        $retval .= MG_batchCaptionEdit( $album_id, $start);
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( $mode == $LANG_MG01['save_exit'] ) {
+    $retval = '';
     if ( isset($_GET['album_id']) ) {
         if ( !function_exists('MG_batchCaptionEdit') ) {
             require_once $_CONF['path'] . 'plugins/mediagallery/include/caption.php';
         }
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $start    = isset($_GET['start']) ? COM_applyFilter($_GET['start'],true) : 0;
-        $display = MG_siteHeader();
         if ( $album_id == 0 ) {
             $actionURL = $_MG_CONF['site_url'] . '/index.php';
         } else {
             $actionURL = $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id;
         }
-        $display .= MG_batchCaptionSave( $album_id,$start,$actionURL);
+        $retval .= MG_batchCaptionSave( $album_id,$start,$actionURL);
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( $mode == $LANG_MG01['save_next_batch'] ) {
+    $retval = '';
     if ( isset($_GET['album_id']) ) {
         if ( !function_exists('MG_batchCaptionEdit')) {
             require_once $_CONF['path'] . 'plugins/mediagallery/include/caption.php';
@@ -269,308 +289,320 @@ if (($mode == 'edit') ) {
 
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $start    = COM_applyFilter($_GET['start'],true);
-        $display = MG_siteHeader();
-        $display .= MG_batchCaptionSave( $album_id, $start,$_MG_CONF['site_url'] . '/admin.php?mode=batchcaption&album_id=' . $album_id . '&start=' . $start);
+        $retval .= MG_batchCaptionSave( $album_id, $start,$_MG_CONF['site_url'] . '/admin.php?mode=batchcaption&album_id=' . $album_id . '&start=' . $start);
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( $mode == 'create' ) {
+    $retval = '';
     if (!function_exists('MG_editAlbum')) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/albumedit.php';
     }
     if ( isset($_GET['album_id']) ) {
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $actionURL = $_MG_CONF['site_url'] . '/admin.php';
-        $display = MG_siteHeader();
-        $display .= MG_editAlbum(0,'create', $actionURL, $album_id);
+        $retval .= MG_editAlbum(0,'create', $actionURL, $album_id);
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ($mode == $LANG_MG01['reset_rating'] && !empty($LANG_MG01['reset_rating'])) {
+    $retval = '';
     if ( !function_exists('MG_imageAdmin')) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/mediamanage.php';
     }
     $album_id = COM_applyFilter($_POST['album_id']);
     $mid      = COM_applyFilter($_POST['mid']);
     $mqueue   = COM_applyFilter($_POST['queue']);
+    $retval .= MG_mediaResetRating( $album_id, $mid, $mqueue );
     $display = MG_siteHeader();
-    $display .= MG_mediaResetRating( $album_id, $mid, $mqueue );
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ($mode == $LANG_MG01['reset_views'] && !empty($LANG_MG01['reset_views'])) {
+    $retval = '';
     if ( !function_exists('MG_imageAdmin')) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/mediamanage.php';
     }
     $album_id = COM_applyFilter($_POST['album_id']);
     $mid      = COM_applyFilter($_POST['mid']);
     $mqueue   = COM_applyFilter($_POST['queue']);
+    $retval .= MG_mediaResetViews( $album_id, $mid, $mqueue );
     $display = MG_siteHeader();
-    $display .= MG_mediaResetViews( $album_id, $mid, $mqueue );
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( $mode == 'list' ) {
+    $retval = '';
     require_once $_CONF['path'] . 'plugins/mediagallery/include/ftpmedia.php';
     $album_id   = COM_applyFilter($_GET['album_id'],true);
     $dir        = urldecode($_GET['dir']);
     $purgefiles = COM_applyFilter($_GET['purgefiles'],true);
-    $display = MG_siteHeader();
     if ( strstr($dir, "..") ) {
-        $display .= MG_errorHandler("Invalid input received");
+        $retval .= MG_errorHandler("Invalid input received");
     } else {
-        $display .= MG_navbar($LANG_MG01['ftp_media'],$album_id);
-        $display .= MG_FTPpickFiles($album_id,$dir,$purgefiles,$recurse);
+        $retval .= MG_navbar($LANG_MG01['ftp_media'],$album_id);
+        $retval .= MG_FTPpickFiles($album_id,$dir,$purgefiles,$recurse);
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {    // save the album...
+    $retval = '';
     // OK, we have a save, now we need to see what we are saving...
     if ( isset($_POST['action']) && isset($_POST['album_id']) ) {
         $action   = COM_applyFilter($_POST['action']);
         $album_id = COM_applyFilter($_POST['album_id']);
-
         switch ($action) {
             case 'album' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/albumedit.php';
-                $display = MG_siteHeader();
-                $display .= MG_saveAlbum( $album_id, $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id );
+                $retval .= MG_saveAlbum( $album_id, $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id );
                 CACHE_remove_instance('whatsnew');
                 break;
             case 'remoteupload' :
             	require_once $_CONF['path'] . 'plugins/mediagallery/include/remote.php';
-            	$display = MG_siteHeader();
-            	$display .= MG_saveRemoteUpload($album_id);
+            	$retval = MG_saveRemoteUpload($album_id);
             	break;
             case 'upload' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
-                $display = MG_siteHeader();
-                $display .= MG_saveUserUpload($album_id);
+                $retval = MG_saveUserUpload($album_id);
                 break;
             case 'ftp' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/ftpmedia.php';
                 $dir        = $_REQUEST['directory'];
-                $purgefiles = $_REQUEST['purgefiles'];
-                $recurse    = $_REQUEST['recurse'];
-                $display = MG_siteHeader();
+                $purgefiles = (isset($_REQUEST['purgefiles']) ? $_REQUEST['purgefiles'] : 0);
+                $recurse    = (isset($_REQUEST['recurse']) ? $_REQUEST['recurse'] :  0);
                 if ( strstr($dir, "..") ) {
-                    $display .= MG_errorHandler("Invalid input received");
+                    $retval .= MG_errorHandler("Invalid input received");
                 } else {
-                    $display .= MG_navbar($LANG_MG01['ftp_media'],$album_id);
-                    $display .= MG_FTPpickFiles($album_id,$dir,$purgefiles,$recurse);
+                    $retval .= MG_navbar($LANG_MG01['ftp_media'],$album_id);
+                    $retval .= MG_FTPpickFiles($album_id,$dir,$purgefiles,$recurse);
                 }
                 break;
             case 'ftpprocess' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/ftpmedia.php';
-                $display .= MG_ftpProcess($album_id);
+                $retval .= MG_ftpProcess($album_id);
                 break;
             case 'media' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/mediamanage.php';
-                $display  = MG_siteHeader();
-                $display .= MG_saveMedia( $album_id, $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id );
+                $retval .= MG_saveMedia( $album_id, $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id );
                 CACHE_remove_instance('whatsnew');
                 break;
             case 'albumsort' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
-                $display  = MG_siteHeader();
-                $display .= MG_saveAlbumSort( $album_id, $_MG_CONF['site_url'] . '/index.php' );
+                $retval .= MG_saveAlbumSort( $album_id, $_MG_CONF['site_url'] . '/index.php' );
                 break;
             case 'staticsort' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
-                $display = MG_siteHeader();
-                $display .= MG_saveStaticSortMedia($album_id,   $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id );
+                $retval .= MG_saveStaticSortMedia($album_id,   $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id );
                 break;
             case 'savemedia' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/mediamanage.php';
-                $display = MG_siteHeader();
                 $media_id = $_POST['mid'];
-                $display .= MG_saveMediaEdit( $album_id, $media_id, $_MG_CONF['site_url'] . '/admin.php?mode=media&album_id=' . $album_id);
-                CACHE_remove_instance('whatsnew');
+                $retval = MG_saveMediaEdit( $album_id, $media_id, $_MG_CONF['site_url'] . '/admin.php?mode=media&album_id=' . $album_id);
                 break;
             case 'globalattr' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/global.php';
-                $display = MG_siteHeader();
-                $display .= MG_saveGlobalAlbumAttr();
+                $retval .= MG_saveGlobalAlbumAttr();
                 break;
             case 'globalperm' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/global.php';
-                $display = MG_siteHeader();
-                $display .= MG_saveGlobalAlbumPerm();
+                $retval .= MG_saveGlobalAlbumPerm();
                 CACHE_remove_instance('whatsnew');
                 break;
             case 'watermark' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-watermark.php';
-                $display = MG_siteHeader();
-                $display .= MG_watermarkSave();
+                $retval .= MG_watermarkSave();
                 break;
             case 'wm_upload' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-watermark.php';
-                $display = MG_siteHeader();
-                $display .= MG_watermarkUploadSave();
+                $retval .= MG_watermarkUploadSave();
                 break;
         }
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval = MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ($mode == $LANG_MG01['delete'] && !empty ($LANG_MG01['delete'])) {
     if ( isset($_POST['action']) && isset($_POST['album_id']) ) {
+        $retval = '';
         $action   = COM_applyFilter($_POST['action']);
         $album_id = COM_applyFilter($_POST['album_id']);
-
         switch ($action) {
             case 'media' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/batch.php';
-                $display = MG_siteHeader();
-                $display .= MG_batchDeleteMedia( $album_id, $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id );
+                $retval .= MG_batchDeleteMedia( $album_id, $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id );
                 CACHE_remove_instance('whatsnew');
                 break;
             case 'album' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/batch.php';
-                $display = MG_siteHeader();
-                $display .= MG_deleteAlbumConfirm( $album_id, $_MG_CONF['site_url'] . '/admin.php');
+                $retval .= MG_deleteAlbumConfirm( $album_id, $_MG_CONF['site_url'] . '/admin.php');
                 break;
             case 'confalbum' :
                 if ( isset($_POST['target'])) {
                     require_once $_CONF['path'] . 'plugins/mediagallery/include/batch.php';
                     $target_id = COM_applyFilter($_POST['target'], true);
-                    $display = MG_siteHeader();
-                    $display .= MG_deleteAlbum($album_id, $target_id, $_MG_CONF['site_url'] . '/index.php');
+                    $retval .= MG_deleteAlbum($album_id, $target_id, $_MG_CONF['site_url'] . '/index.php');
                     CACHE_remove_instance('whatsnew');
                 } else {
-                    $display .= MG_errorHandler( $LANG_MG02['no_target_album']);
+                    $retval .= MG_errorHandler( $LANG_MG02['no_target_album']);
                 }
                 break;
             case 'watermark' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-watermark.php';
-                $display = MG_siteHeader();
-                $display .= MG_watermarkDelete();
+                $retval .= MG_watermarkDelete();
                 break;
         }
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( ($mode == $LANG_MG01['upload'] && !empty ($LANG_MG01['upload'])) || ($mode == 'upload') ) {
     if ( isset($_POST['action']) ) {
         $action = COM_applyFilter($_POST['action']);
     } else {
         $action = '';
     }
+    $retval = '';
     if ( $action == 'watermark') {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
         require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-watermark.php';
-        $display = MG_siteHeader();
-        $display .= MG_watermarkUpload();
+        $retval .= MG_watermarkUpload();
     } else if ( isset($_GET['album_id']) ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
-        $display  = MG_siteHeader();
-        $display .= MG_navbar($LANG_MG01['swfupload_media'],$album_id);
-        $display .= MG_SWFUpload( $album_id );
+        $retval .= MG_navbar($LANG_MG01['swfupload_media'],$album_id);
+        $retval .= MG_SWFUpload( $album_id );
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( $mode == 'remote' ) {
+    $retval = '';
 	if ( isset($_GET['album_id']) ) {
 		require_once $_CONF['path'] . 'plugins/mediagallery/include/remote.php';
 		$album_id = COM_applyFilter($_GET['album_id'],true);
-		$display  = MG_siteHeader();
-		$display .= MG_navbar($LANG_MG01['remote_media'],$album_id);
-		$display .= MG_remoteUpload($album_id);
+		$retval .= MG_navbar($LANG_MG01['remote_media'],$album_id);
+		$retval .= MG_remoteUpload($album_id);
 	} else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( $mode == 'media' ) { // manage the media items...
+    $retval = '';
     if ( isset($_GET['album_id']) ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/mediamanage.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $page     = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
-        $display = MG_siteHeader();
-        $display .= MG_imageAdmin( $album_id, $page, $_MG_CONF['site_url'] . '/admin.php?aid=' . $album_id  );
+        $retval .= MG_imageAdmin( $album_id, $page, $_MG_CONF['site_url'] . '/admin.php?aid=' . $album_id  );
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( $mode == 'resize' ) {
+    $retval = '';
     if ( isset($_GET['album_id']) ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/rebuild.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
-        $display = MG_siteHeader();
-        $display .= MG_albumResizeConfirm( $album_id, $_MG_CONF['site_url'] . '/admin.php?aid=' . $album_id  );
+        $retval .= MG_albumResizeConfirm( $album_id, $_MG_CONF['site_url'] . '/admin.php?aid=' . $album_id  );
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( $mode == $LANG_MG01['process'] && !empty($LANG_MG01['process']) ) {
+    $retval = '';
     if ( isset($_POST['action'] )) {
         $action = $_POST['action'];
         require_once $_CONF['path'] . 'plugins/mediagallery/include/rebuild.php';
         if ( $action == 'doresize' ) {
             if ( isset($_POST['aid']) ) {
                 $album_id = COM_applyFilter($_POST['aid'],true);
-                $display .= MG_albumResizeDisplay( $album_id, $_MG_CONF['site_url'] . '/admin.php?aid=' . $album_id  );
+                $retval .= MG_albumResizeDisplay( $album_id, $_MG_CONF['site_url'] . '/admin.php?aid=' . $album_id  );
             }
         } else if ($action == 'dorebuild' ) {
             if ( isset( $_POST['aid'] ) ) {
                 $aid = COM_applyFilter($_POST['aid'],true);
-                $display .= MG_albumRebuildThumbs( $aid, $_MG_CONF['site_url'] . '/admin.php?aid=' . $aid  );
+                $retval .= MG_albumRebuildThumbs( $aid, $_MG_CONF['site_url'] . '/admin.php?aid=' . $aid  );
             }
         }
     } else {
-        $display = MG_siteHeader();
-
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( $mode == 'rebuild' ) {
+    $retval = '';
     if ( isset($_GET['album_id']) ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/rebuild.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
-        $display = MG_siteHeader();
-        $display .= MG_albumRebuildConfirm( $album_id, $_MG_CONF['site_url'] . '/admin.php?aid=' . $album_id  );
+        $retval .= MG_albumRebuildConfirm( $album_id, $_MG_CONF['site_url'] . '/admin.php?aid=' . $album_id  );
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( $mode == 'dorebuild' ) {
+    $retval = '';
     if ( isset($_POST['aid']) ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/rebuild.php';
         $album_id = COM_applyFilter($_POST['aid'],true);
-        $display = MG_siteHeader();
-        $display .= MG_albumRebuildThumbs( $aid, $_MG_CONF['site_url'] . '/admin.php?aid=' . $album_id  );
+        $retval .= MG_albumRebuildThumbs( $aid, $_MG_CONF['site_url'] . '/admin.php?aid=' . $album_id  );
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
-
+    exit;
 } else if ( $mode == 'mediaedit' ) { // edit a media item...
+    $retval = '';
     if ( isset($_GET['album_id']) && isset($_GET['mid'])) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/mediamanage.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
@@ -583,28 +615,32 @@ if (($mode == 'edit') ) {
             $actionURL = $_MG_CONF['site_url'] . '/admin.php';
             $back = '';
         }
-        $display = MG_siteHeader();
-        $display .= MG_mediaEdit( $album_id, $media_id,$actionURL,0,$srcURL,$back );
+        $retval .= MG_mediaEdit( $album_id, $media_id,$actionURL,0,$srcURL,$back );
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( $mode == 'mediaeditq' ) { // edit a media item...
+    $retval = '';
     if ( isset($_GET['album_id']) && isset($_GET['mid'])) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/mediamanage.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $media_id = COM_applyFilter($_GET['mid'],true);
-        $display = MG_siteHeader();
-        $display .= MG_mediaEdit( $album_id, $media_id,$_MG_CONF['site_url'] . '/admin.php?album_id=1&mode=moderate', 1  );
+        $retval .= MG_mediaEdit( $album_id, $media_id,$_MG_CONF['site_url'] . '/admin.php?album_id=1&mode=moderate', 1  );
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( $mode == 'moderate' ) {  // handle the moderation queue
+    $retval = '';
     if ( isset($_GET['album_id']) ) {
         $album_id = COM_applyFilter($_GET['album_id'],true);
         if ( $album_id == -1) {
@@ -614,62 +650,69 @@ if (($mode == 'edit') ) {
         echo COM_refresh($_CONF['site_admin_url'] . '/moderation.php');
         exit;
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ($mode == $LANG_MG01['batch_process'] && !empty ($LANG_MG01['batch_process'])) {
     if ( isset($_POST['album_id']) ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/batch.php';
         $album_id = COM_applyFilter($_POST['album_id'],true);
         $action = COM_applyFilter($_POST['batchOption']);
-        $display .= MG_batchProcess( $album_id, $action, $_MG_CONF['site_url'] . '/admin.php?mode=media&album_id=' . $album_id);
+        MG_batchProcess( $album_id, $action, $_MG_CONF['site_url'] . '/admin.php?mode=media&album_id=' . $album_id);
     } else {
         $display = MG_siteHeader();
         $display .= MG_invalidRequest();
     }
     $display .= MG_siteFooter();
     echo $display;
-
-
 } else if ($mode == $LANG_MG01['move'] && !empty ($LANG_MG01['move'])) {
+    $retval = '';
     if ( isset($_POST['album_id']) ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/batch.php';
         $album_id = COM_applyFilter($_POST['album_id'],true);
-        $display = MG_siteHeader();
-        $display .= MG_batchMoveMedia( $album_id, $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id  );
+        $retval .= MG_batchMoveMedia( $album_id, $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id  );
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( $mode == 'albumsort' ) {
+    $retval = '';
     require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
     if ( isset($_GET['album_id']) ) {
         $album_id = COM_applyFilter($_GET['album_id'],true);
-        $display = MG_siteHeader();
-        $display .= MG_sortAlbums( $album_id, $_MG_CONF['site_url'] . '/admin.php' );
+        $retval .= MG_sortAlbums( $album_id, $_MG_CONF['site_url'] . '/admin.php' );
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( $mode == 'staticsort' ) {
+    $retval = '';
     if ( isset($_GET['album_id']) ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
-        $display = MG_siteHeader();
-        $display .= MG_staticSortMedia( $album_id, $_MG_CONF['site_url'] . '/admin.php' );
+        $retval .= MG_staticSortMedia( $album_id, $_MG_CONF['site_url'] . '/admin.php' );
     } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
+        $retval .= MG_invalidRequest();
     }
+    $display = MG_siteHeader();
+    $display .= $retval;
     $display .= MG_siteFooter();
     echo $display;
+    exit;
 } else if ( $mode == 'rotate' ) {
+    $retval = '';
     if ( isset($_GET['album_id']) && isset($_GET['media_id']) && isset($_GET['action']) ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/rotate.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
@@ -683,7 +726,6 @@ if (($mode == 'edit') ) {
         }
         $eMode = ($queue == 0) ? 'mediaedit' : 'mediaeditq';
         $actionURL = $_MG_CONF['site_url'] . '/admin.php?mode='.$eMode.$srcURL.'&mid=' . $media_id . '&album_id=' . $album_id;
-        $display = MG_siteHeader();
         MG_rotateMedia( $album_id, $media_id, $direction, $actionURL);
     } else {
         $display = MG_siteHeader();

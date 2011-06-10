@@ -83,7 +83,6 @@ switch ($step) {
         echo COM_refresh($_MG_CONF['admin_url'] . 'index.php?msg=14');
         exit;
     default :
-        $display = COM_siteHeader();
         $T = new Template($_MG_CONF['template_path'].'/admin');
         $T->set_file (array ('admin' => 'administration.thtml'));
         $B = new Template($_MG_CONF['template_path'].'/admin');
@@ -114,6 +113,7 @@ switch ($step) {
 
         ));
         $T->parse('output', 'admin');
+        $display = COM_siteHeader();
         $display .= $T->finish($T->get_var('output'));
         $display .= COM_siteFooter();
         echo $display;
