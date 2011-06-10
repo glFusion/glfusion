@@ -115,7 +115,9 @@ $LANG_STATIC = array(
     'search' => 'Hledej',
     'submit' => 'Pošli',
     'delete_confirm' => 'Opravdu chceš vymazat tuto stránku?',
-    'allnhp_topics' => 'All Topics (No Homepage)'
+    'allnhp_topics' => 'All Topics (No Homepage)',
+    'page_list' => 'Page List',
+    'instructions_edit' => 'This screen allows you to create / edit a new static page. Pages can contain PHP code and HTML code.'
 );
 ###############################################################################
 # autotag descriptions

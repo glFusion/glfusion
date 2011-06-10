@@ -179,7 +179,9 @@ $LANG_LINKS_ADMIN = array(
     62 => 'Last Updated',
     63 => 'Soll dieser Link wirklich gelöscht werden?',
     64 => 'Soll diese Kategorie wirklich gelöscht werden?',
-    65 => 'Moderate Link'
+    65 => 'Moderate Link',
+    66 => 'This screen allows you to create / edit links.',
+    67 => 'This screen allows you to create / edit a links category.'
 );
 
 

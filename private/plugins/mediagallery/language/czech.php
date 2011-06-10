@@ -97,7 +97,8 @@ $LANG_MG00 = array(
     'need_memory' => 'Media Gallery v1.6 recommends that you have at least 48M of memory configured for the <strong>memory_limit</strong> setting in php.ini.',
     'thank_you' => 'Thank you for upgrading to the latest release of Media Gallery. Please double check your System Configuration Options, there are many new features in this release that you may need to configure.',
     'support' => 'For support, questions or enhancement requests, please visit <a href="http://www.glfusion.org">glFusion Web Site</a>.  For the latest documentation, please visist the <a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:mediagallery">glFusion Wiki</a>.',
-    'success_upgrade' => 'Media Gallery Successfully Upgraded'
+    'success_upgrade' => 'Media Gallery Successfully Upgraded',
+    'instructions' => 'This screen allows you to configure and administer the Media Gallery plugin.'
 );
 
 ###############################################################################

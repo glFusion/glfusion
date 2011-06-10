@@ -119,7 +119,9 @@ $LANG_STATIC = array(
     'search' => 'Suchen',
     'submit' => 'Absenden',
     'delete_confirm' => 'Möchten Sie diese Seite wirklich löschen?',
-    'allnhp_topics' => 'All Topics (No Homepage)'
+    'allnhp_topics' => 'All Topics (No Homepage)',
+    'page_list' => 'Page List',
+    'instructions_edit' => 'This screen allows you to create / edit a new static page. Pages can contain PHP code and HTML code.'
 );
 ###############################################################################
 # autotag descriptions

@@ -125,7 +125,8 @@ $LANG_SX00 = array(
     'stats_header' => 'HTTP-заголовки',
     'stats_deleted' => 'Пости, вилучені як спам',
     'plugin_name' => 'Spam-X',
-    'slvwhitelist' => 'Білий список SLV'
+    'slvwhitelist' => 'Білий список SLV',
+    'instructions' => 'Spam-X allows you to define words, URLs, and other items that can be used to block spam posts on your site.'
 );
 
 // Define Messages that are shown when Spam-X module action is taken

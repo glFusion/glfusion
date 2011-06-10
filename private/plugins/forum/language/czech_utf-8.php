@@ -54,7 +54,8 @@ $LANG_GF00 = array(
     'statsheading3' => 'Není co reportovat',
     'searchresults' => 'Výsledek prohledávání fora %s',
     'access_denied' => 'Přístup nepovolen',
-    'uploaderr' => 'File Upload Error'
+    'uploaderr' => 'File Upload Error',
+    'instructions' => 'Select the option above to create / modify categories and forum. You can also setup forum moderators, import glFusion stories into the forum and administer the community moderation settings.'
 );
 
 $LANG_GF01 = array(
@@ -511,7 +512,8 @@ $LANG_GF06 = array(
     6 => 'Messages',
     7 => 'IP Mgmt',
     8 => 'Community Moderation',
-    9 => 'Import'
+    9 => 'Import',
+    10 => 'Forum Administration'
 );
 
 $LANG_GF07 = array(
@@ -821,7 +823,9 @@ $LANG_GF98 = array(
     'user_votes_desc' => 'This screen shows how the user has voted (rated) other users.',
     'user_rating_details' => 'User Rating Details for: ',
     'user_voting_details' => 'User Voting Details for: ',
-    'save_changes' => 'Save Changes'
+    'save_changes' => 'Save Changes',
+    'view_rating' => 'View Rating',
+    'post_rating' => 'Post Rating'
 );
 
 $LANG_FF_AUTOTAG = array(

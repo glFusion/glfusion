@@ -856,7 +856,9 @@ $LANG21 = array(
     67 => 'Ankreuzen, um Autotags zu interpretieren',
     68 => 'Der Newsfeed für diesen Block ist zu lang, um angezeigt werden zu können. Bitte im Block-Editor eine maximale Anzahl Artikel zum Import vorgeben, oder ein übergeordnetes Maximum im der Konfiguration.',
     69 => 'Diesen Block wirklich löschen?',
-    70 => 'Block Name darf nicht leer sein und darf keine Leerzeichen enthalten oder die folgenden Zeichen: < > \' " % & * / oder Backslash'
+    70 => 'Block Name darf nicht leer sein und darf keine Leerzeichen enthalten oder die folgenden Zeichen: < > \' " % & * / oder Backslash',
+    71 => 'This screen allows you to create a new block or edit an existing block that will be displayed on either the left or right navigation bars.',
+    72 => 'This screen allows you to edit a glFusion core block.'
 );
 
 ###############################################################################
@@ -953,7 +955,8 @@ $LANG24 = array(
     88 => 'Format im Wiki-Stil ',
     89 => 'Diesen Artikel wirklich löschen?',
     90 => 'Moderate Story',
-    91 => 'Moderate Draft Story'
+    91 => 'Moderate Draft Story',
+    92 => 'Enter the story information below and save.'
 );
 
 ###############################################################################
@@ -1015,7 +1018,8 @@ $LANG27 = array(
     53 => 'Einreichungen/Vorlagen',
     54 => 'Admin Blöcke',
     55 => 'Syndication Admin',
-    56 => 'Drücke auf Abbrechen und dann auf Bearbeiten dieser Kategorie, zur Ansicht von Details wie die Gesamtzahl der Objekte in der Datenbank.'
+    56 => 'Drücke auf Abbrechen und dann auf Bearbeiten dieser Kategorie, zur Ansicht von Details wie die Gesamtzahl der Objekte in der Datenbank.',
+    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.'
 );
 
 ###############################################################################
@@ -1354,7 +1358,9 @@ $LANG33 = array(
     53 => 'Alle auf der Startseite',
     54 => 'Bitte wähle die Art des Newsfeeds aus.',
     55 => 'Artikel',
-    56 => 'Dieses Newsfeed wirklich löschen?'
+    56 => 'Dieses Newsfeed wirklich löschen?',
+    57 => 'Syndication List',
+    58 => 'To create / edit a feed, modify the fields below and save'
 );
 
 ###############################################################################
@@ -1806,7 +1812,10 @@ $LANG_TRB = array(
     'pbtarget_missing' => 'Keine Pingback-URL',
     'pbtarget_required' => 'Gib bitte die Pingback-URL ein',
     'pb_error_details' => 'Fehler beim Senden des Pingbacks:',
-    'delete_trackback' => 'Trackback direkt löschen: '
+    'delete_trackback' => 'Trackback direkt löschen: ',
+    'edit_explain' => 'This screen allows you to create or edit a new trackback or ping service.',
+    'ping_explain' => 'This screen allows you to send pingback requests for your stories.',
+    'trb_explain' => 'This screen allows you to send trackback requests.'
 );
 
 ###############################################################################
@@ -1937,7 +1946,12 @@ $LANG_ADMIN = array(
     'select' => 'Select',
     'name' => 'Name',
     'submissions' => 'Submissions',
-    'moderate' => 'Save & Approve'
+    'moderate' => 'Save & Approve',
+    'story_list' => 'Story List',
+    'block_list' => 'Block List',
+    'topic_list' => 'Topic List',
+    'tb_list' => 'Trackback List',
+    'custom_autotag' => 'Custom Autotags'
 );
 
 ###############################################################################
@@ -2222,7 +2236,11 @@ $LANG_AM = array(
     'public_instructions' => 'The complete list of Autotags that are currently available and enabled on this site are displayed below.  For each Autotag, the contributing glFusion Module is displayed, as well as the Type and Description.  Usage examples are provided with the <i>required</i> and {optional} parameters.  Where multiple options are available, a link to the glFusion.org wiki documentation is provided.',
     'replace_explain' => 'Autotags take the form <b>[tag:{p1} {p2}]</b>. In the <b>Replacement</b> field you can use any valid HTML. You can include {p1} and/or {p2} parameters in your replacement string by using the replacement macros %1% and %2% respectively.<p>Autotags are commonly used to create links. A <b>Replacement</b> field of <b>&lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</b> when combined with this tag: <b>[tag:foo This is a link]</b> will result in the string <b>&lt;a href="http://path.to.somewhere/foo"&gt;This is a link&lt;/a&gt;</b></p><p>You may also use %0% to represent the entire string after the first colon, this is handy when you want to use only a single parameter, and the value will contain whitespace which would otherwise be interpreted as a delimiter between multiple parameters.  The %site_url% and $site_admin_url% macros can also be used, and will be replaced by the base url and admin url respectively.</p>',
     'autotagpermmsg' => 'Select which features (operations) you want to allow the autotag to be used.',
-    'autotag' => 'Autotag'
+    'autotag' => 'Autotag',
+    'desc_story' => 'Link: to a story on this site; link_text defaults to story title.  usage: [story:<i>story_id</i> {link_text}]',
+    'desc_story_introtext' => 'HTML: renders story content, up to and including only introduction text.  usage: [story_introtext:<i>story_id</i>]',
+    'desc_vmenu' => 'HTML: renders a JS-enhanced vertical menu. usage: [vmenu:<i>menu_id</id>]',
+    'desc_hmenu' => 'HTML: renders a JS-enhanced horizontal menu.  usage: [hmenu:<i>menu_id</i>]'
 );
 
 ###############################################################################

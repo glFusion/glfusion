@@ -54,7 +54,8 @@ $LANG_GF00 = array(
     'statsheading3' => 'Keine Themen zum melden',
     'searchresults' => 'Suchergebnisse %s',
     'access_denied' => 'Zugriff verweigert',
-    'uploaderr' => 'Datei-Upload-Fehler'
+    'uploaderr' => 'Datei-Upload-Fehler',
+    'instructions' => 'Select the option above to create / modify categories and forum. You can also setup forum moderators, import glFusion stories into the forum and administer the community moderation settings.'
 );
 
 $LANG_GF01 = array(
@@ -511,7 +512,8 @@ $LANG_GF06 = array(
     6 => 'Beiträge',
     7 => 'IP-Verwaltung',
     8 => 'Community-Moderation',
-    9 => 'Import'
+    9 => 'Import',
+    10 => 'Forum Administration'
 );
 
 $LANG_GF07 = array(
@@ -821,7 +823,9 @@ $LANG_GF98 = array(
     'user_votes_desc' => 'Dieser Bildschirm zeigt, wie Benutzer über andere Benutzer abgestimmt (sie bewertet) haben.',
     'user_rating_details' => 'Details - Benutzerbewertung für: ',
     'user_voting_details' => 'Details - Benutzerabstimmung für: ',
-    'save_changes' => 'Änderungen speichern'
+    'save_changes' => 'Änderungen speichern',
+    'view_rating' => 'View Rating',
+    'post_rating' => 'Post Rating'
 );
 
 $LANG_FF_AUTOTAG = array(

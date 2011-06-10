@@ -128,7 +128,8 @@ $LANG_SX00 = array(
     'stats_header' => 'HTTPヘッダ',
     'stats_deleted' => 'スパム投稿削除数',
     'plugin_name' => 'Spam-X',
-    'slvwhitelist' => 'SLVホワイトリスト'
+    'slvwhitelist' => 'SLVホワイトリスト',
+    'instructions' => 'Spam-X allows you to define words, URLs, and other items that can be used to block spam posts on your site.'
 );
 
 // Define Messages that are shown when Spam-X module action is taken

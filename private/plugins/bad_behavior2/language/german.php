@@ -47,8 +47,8 @@ if (!defined ('GVERSION')) {
 $LANG_BAD_BEHAVIOR = array(
     'plugin_display_name' => 'Bad Behavior2',
     'page_title' => 'Bad Behavior2',
-    'description' => 'Bad Behavior complements other link spam solutions by acting as a gatekeeper, preventing spammers from ever delivering their junk, and in many cases, from ever reading your site in the first place. This keeps your site\'s load down, makes your site logs cleaner, and can help prevent denial of service conditions caused by spammers.',
     'block_title_admin' => 'Bad Behavior2-Administration',
+    'description' => 'Bad Behavior complements other link spam solutions by acting as a gatekeeper, preventing spammers from ever delivering their junk, and in many cases, from ever reading your site in the first place. This keeps your site\'s load down, makes your site logs cleaner, and can help prevent denial of service conditions caused by spammers.',
     'block_title_list' => 'Logdatei-Einträge',
     'block_title_entry' => 'Detailansicht',
     'block_title_donate' => 'Spende',
@@ -82,7 +82,7 @@ $LANG_BAD_BEHAVIOR = array(
 );
 
 $LANG_BB2_RESPONSE = array(
-    00000000 => 'Anforderung übergeben - Keine User Agent angegeben',
+    00000000 => 'Request Passed - No User Agent Specified',
     '136673cd' => 'IP-Adresse in externer Blacklist',
     17566707 => 'Benötigte Header \'Accept \' fehlt',
     '17f4e8c8' => 'User-Agent wurde in Blacklist gefunden',

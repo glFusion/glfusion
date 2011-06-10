@@ -117,7 +117,9 @@ $LANG_STATIC = array(
     'search' => '搜尋',
     'submit' => '提交',
     'delete_confirm' => 'Are you sure you want to delete this page?',
-    'allnhp_topics' => 'All Topics (No Homepage)'
+    'allnhp_topics' => 'All Topics (No Homepage)',
+    'page_list' => 'Page List',
+    'instructions_edit' => 'This screen allows you to create / edit a new static page. Pages can contain PHP code and HTML code.'
 );
 ###############################################################################
 # autotag descriptions

@@ -97,7 +97,8 @@ $LANG_MG00 = array(
     'need_memory' => '媒体画廊 v1.6 建议最少要有 48M 的记忆力设定在 php.ini 的 <strong>memory_limit</strong>.',
     'thank_you' => '谢谢你更新到最新的媒体画廊. 请注意察看 系统设定选项, 那有很多的新功能可能需要你设定.',
     'support' => '若需要科技帮助, 有疑问或提供建议, 请浏览 <a href="http://www.glfusion">glFusion Site</a>.  若需要最新的使用说明, 请浏览<a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:mediagallery">glFusion Wiki</a>.',
-    'success_upgrade' => '媒体画廊以更新成功。'
+    'success_upgrade' => '媒体画廊以更新成功。',
+    'instructions' => 'This screen allows you to configure and administer the Media Gallery plugin.'
 );
 
 ###############################################################################
