@@ -1871,6 +1871,7 @@ $LANG_ADMIN = array(
     'block_list' => 'Block List',
     'topic_list' => 'Topic List',
     'tb_list' => 'Trackback List',
+    'custom_autotag' => 'Custom Autotags',
 );
 
 ###############################################################################

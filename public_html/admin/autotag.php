@@ -89,7 +89,7 @@ $LANG_AM['instructions_edit'] = 'This screen allows you to create a custom autot
         $form->set_file('form', 'autotag.thtml');
 
         $menu_arr = array (
-            array('url' => $_CONF['site_admin_url'] . '/autotag.php?list=x','text' => 'Custom Autotags'),
+            array('url' => $_CONF['site_admin_url'] . '/autotag.php?list=x','text' => $LANG_ADMIN['custom_autotag']),
             array('url' => $self_url, 'text' => $LANG_AM['public_title']),
             array('url' => $cc_url, 'text' => $LANG_ADMIN['admin_home']),
         );
@@ -344,7 +344,7 @@ function AT_list()
 
     if (SEC_hasRights('autotag.admin')) {
         $menu_arr = array (
-            array('url' => $_CONF['site_admin_url'] . '/autotag.php?list=x','text' => 'Custom Autotags'),
+            array('url' => $_CONF['site_admin_url'] . '/autotag.php?list=x','text' => $LANG_ADMIN['custom_autotag']),
             array('url' => $_CONF['site_admin_url'] . '/index.php', 'text' => $LANG_ADMIN['admin_home']),
         );
     } else {
