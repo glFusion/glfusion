@@ -156,7 +156,7 @@ function FILECHECK_scanNegative()
             // ostensibly, this file was not found - get the dir and file parts
             $pathinfo = pathinfo($rdir);
             $dirname = $pathinfo['dirname'];
-            $filename = $pathinfo['filename'].'.'.$pathinfo['extension'];
+            $filename = $pathinfo['filename']. (isset($pathinfo['extension']) ? '.'.$pathinfo['extension'] : '');
 
             // check to see if we were allowed to recurse into this dir
             if ($test == 'R') {
@@ -412,7 +412,7 @@ function FILECHECK_getListField($fieldname, $fieldvalue, $A, $icon_arr)
             break;
 
         case 'delta':
-            $retval .= ($fieldvalue<>'-') ? $type . ' ' . $LANG_FILECHECK['added'] : $type . ' ' . $LANG_FILECHECK['missing'];
+            $retval .= ($fieldvalue<>'-') ? $A['type'] . ' ' . $LANG_FILECHECK['added'] : $A['type'] . ' ' . $LANG_FILECHECK['missing'];
             break;
 
         default:
@@ -446,6 +446,7 @@ function FILECHECK_scan()
 
     $retval = false;
     $data_arr = array();
+    $form_arr = array();
 
     // detect unbundled plugins
     FILECHECK_addPlugins();
