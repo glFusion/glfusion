@@ -17,6 +17,7 @@ window.addEvent('domready',function() {
 </script>
 <script type="text/javascript" src="{site_url}/javascript/blocks_fckeditor.js"></script>
 {start_block_editor}
+{admin_menu}
 <form id="block" action="{site_admin_url}/block.php" method="post">
 <table cellspacing="0" cellpadding="3" width="100%">
 <tr>

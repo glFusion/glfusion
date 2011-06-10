@@ -856,6 +856,8 @@ $LANG21 = array(
     68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.',
     69 => 'Are you sure you want to delete this Block?',
     70 => 'Block name cannot be blank and cannot contain spaces or the following characters: < > \' " % & * / or backslash',
+    71 => 'This screen allows you to create a new block or edit an existing block that will be displayed on either the left or right navigation bars.',
+    72 => 'This screen allows you to edit a glFusion core block.',
 );
 
 ###############################################################################
@@ -953,6 +955,7 @@ $LANG24 = array(
     89 => 'Are you sure you want to delete this Story?',
     90 => 'Moderate Story',
     91 => 'Moderate Draft Story',
+    92 => 'Enter the story information below and save.',
 );
 
 ###############################################################################
@@ -1015,6 +1018,7 @@ $LANG27 = array(
     54 => 'Block Admin',
     55 => 'Syndication Admin',
     56 => 'Press Cancel and then Edit this topic to view details including the total number of objects in the database that are associated with this topic.',
+    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.',
 );
 
 ###############################################################################
@@ -1353,7 +1357,9 @@ $LANG33 = array(
     53 => 'All Frontpage Stories',
     54 => 'Please select the type of feed to create.',
     55 => 'Articles',
-    56 => 'Are you sure you want to delete this Feed?'
+    56 => 'Are you sure you want to delete this Feed?',
+    57 => 'Syndication List',
+    58 => 'To create / edit a feed, modify the fields below and save',
 );
 
 ###############################################################################
@@ -1725,7 +1731,10 @@ $LANG_TRB = array(
     'pbtarget_missing' => 'No Pingback URL',
     'pbtarget_required' => 'Please enter a pingback URL',
     'pb_error_details' => 'Error when sending the pingback:',
-    'delete_trackback' => 'To delete this Trackback click: '
+    'delete_trackback' => 'To delete this Trackback click: ',
+    'edit_explain' => 'This screen allows you to create or edit a new trackback or ping service.',
+    'ping_explain' => 'This screen allows you to send pingback requests for your stories.',
+    'trb_explain' => 'This screen allows you to send trackback requests.',
 );
 
 ###############################################################################
@@ -1858,6 +1867,10 @@ $LANG_ADMIN = array(
     'name' => 'Name',
     'submissions' => 'Submissions',
     'moderate' => 'Save & Approve',
+    'story_list' => 'Story List',
+    'block_list' => 'Block List',
+    'topic_list' => 'Topic List',
+    'tb_list' => 'Trackback List',
 );
 
 ###############################################################################

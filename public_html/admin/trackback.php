@@ -75,7 +75,9 @@ USES_lib_story();
 */
 function TRACKBACK_edit($target = '', $url = '', $title = '', $excerpt = '', $blog = '')
 {
-    global $_CONF, $LANG_TRB;
+    global $_CONF, $LANG_TRB, $LANG_ADMIN, $_IMAGE_TYPE;
+
+    USES_lib_admin();
 
     $retval = '';
 
@@ -113,6 +115,18 @@ function TRACKBACK_edit($target = '', $url = '', $title = '', $excerpt = '', $bl
     $retval .= COM_startBlock($LANG_TRB['editor_title'], $_CONF['site_url']
                                . '/docs/trackback.html#trackback',
                                COM_getBlockTemplate ('_admin_block', 'header'));
+
+    $menu_arr = array(
+        array('url' => $_CONF['site_admin_url'] . '/trackback.php',
+              'text' => $LANG_ADMIN['tb_list']),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home']));
+
+    $retval .= ADMIN_createMenu(
+        $menu_arr,
+        $LANG_TRB['trb_explain'],
+        $_CONF['layout_url'] . '/images/icons/trackback.' . $_IMAGE_TYPE
+    );
 
     $template = new Template($_CONF['path_layout'] . 'admin/trackback');
     $template->set_file(array ('editor' => 'trackbackeditor.thtml'));
@@ -239,10 +253,6 @@ function TRACKBACK_sendPingbacks($type, $id)
         $template = new Template($_CONF['path_layout'] . 'admin/trackback');
         $template->set_file(array ('list' => 'pingbacklist.thtml',
                                     'item' => 'pingbackitem.thtml'));
-        $template->set_var('xhtml', XHTML);
-        $template->set_var('site_url', $_CONF['site_url']);
-        $template->set_var('site_admin_url', $_CONF['site_admin_url']);
-        $template->set_var('layout_url', $_CONF['layout_url']);
         $template->set_var('lang_resend', $LANG_TRB['resend']);
         $template->set_var('lang_results', $LANG_TRB['pingback_results']);
 
@@ -281,12 +291,27 @@ function TRACKBACK_sendPingbacks($type, $id)
 
 function TRACKBACK_pingForm($targetUrl = '')
 {
-    global $_CONF, $LANG_TRB;
+    global $_CONF, $LANG_TRB, $LANG_ADMIN, $_IMAGE_TYPE;
+
+    USES_lib_admin();
 
     $retval = '';
     $retval .= COM_startBlock($LANG_TRB['pingback_button'],
                                $_CONF['site_url'] . '/docs/trackback.html',
                                COM_getBlockTemplate ('_admin_block', 'header'));
+
+    $menu_arr = array(
+        array('url' => $_CONF['site_admin_url'] . '/trackback.php',
+              'text' => $LANG_ADMIN['tb_list']),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home']));
+
+    $retval .= ADMIN_createMenu(
+        $menu_arr,
+        $LANG_TRB['ping_explain'],
+        $_CONF['layout_url'] . '/images/icons/trackback.' . $_IMAGE_TYPE
+    );
+
 
     $template = new Template($_CONF['path_layout'] . 'admin/trackback');
     $template->set_file(array('list' => 'pingbackform.thtml'));
@@ -605,7 +630,9 @@ function TRACKBACK_serviceList()
 */
 function TRACKBACK_editService($pid, $msg = '', $new_name = '', $new_site_url = '', $new_ping_url = '', $new_method = '', $new_enabled = -1)
 {
-    global $_CONF, $_TABLES, $LANG_TRB, $LANG_ADMIN, $MESSAGE;
+    global $_CONF, $_TABLES, $LANG_TRB, $LANG_ADMIN, $MESSAGE, $_IMAGE_TYPE;
+
+    USES_lib_admin();
 
     $retval = '';
 
@@ -642,6 +669,18 @@ function TRACKBACK_editService($pid, $msg = '', $new_name = '', $new_site_url = 
     $retval .= COM_startBlock($LANG_TRB['edit_service'], $_CONF['site_url']
                                . '/docs/trackback.html#ping',
                                COM_getBlockTemplate ('_admin_block', 'header'));
+
+    $menu_arr = array(
+        array('url' => $_CONF['site_admin_url'] . '/trackback.php',
+              'text' => $LANG_ADMIN['tb_list']),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home']));
+
+    $retval .= ADMIN_createMenu(
+        $menu_arr,
+        $LANG_TRB['edit_explain'],
+        $_CONF['layout_url'] . '/images/icons/trackback.' . $_IMAGE_TYPE
+    );
 
     $template = new Template($_CONF['path_layout'] . 'admin/trackback');
     $template->set_file(array ('editor' => 'serviceeditor.thtml'));
@@ -819,6 +858,7 @@ function TRACKBACK_freshTrackback()
     $retval .= COM_startBlock($LANG_TRB['trackback'],
                                $_CONF['site_url'] . '/docs/trackback.html',
                                COM_getBlockTemplate ('_admin_block', 'header'));
+
     $retval .= sprintf($LANG_TRB['trackback_note'], $freshurl);
     $retval .= COM_endBlock();
 
@@ -840,6 +880,7 @@ function TRACKBACK_freshPingback()
     $retval .= COM_startBlock($LANG_TRB['pingback'],
                                $_CONF['site_url'] . '/docs/trackback.html',
                                COM_getBlockTemplate('_admin_block', 'header'));
+
     $retval .= sprintf($LANG_TRB['pingback_note'], $freshurl);
     $retval .= COM_endBlock();
 
@@ -1051,10 +1092,6 @@ if (($mode == 'delete') && SEC_checkToken()) {
 
     $template = new Template($_CONF['path_layout'] . 'admin/trackback');
     $template->set_file(array ('form' => 'pingform.thtml'));
-    $template->set_var('xhtml', XHTML);
-    $template->set_var('site_url', $_CONF['site_url']);
-    $template->set_var('site_admin_url', $_CONF['site_admin_url']);
-    $template->set_var('layout_url', $_CONF['layout_url']);
     $template->set_var('php_self', $_CONF['site_admin_url']
                                     . '/trackback.php');
     $template->set_var('lang_may_take_a_while', $LANG_TRB['may_take_a_while']);

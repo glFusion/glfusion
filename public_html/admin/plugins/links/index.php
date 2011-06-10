@@ -94,26 +94,32 @@ function LINK_edit($action, $lid = '')
     global $_CONF, $_GROUPS, $_TABLES, $_USER, $_LI_CONF,
            $LANG_LINKS_ADMIN, $LANG_ACCESS, $LANG_ADMIN, $MESSAGE;
 
+    USES_lib_admin();
 
     $retval = '';
+
     switch ($action) {
+        case 'edit':
+            $blocktitle = $LANG_LINKS_ADMIN[1];     // Link Editor
+            $saveoption = $LANG_ADMIN['save'];      // Save
+            break;
+        case 'moderate':
+            $blocktitle = $LANG_LINKS_ADMIN[65];    // Moderate Link
+            $saveoption = $LANG_ADMIN['moderate'];  // Save & Approve
+            break;
+    }
 
-    case 'edit':
-        $blocktitle = $LANG_LINKS_ADMIN[1];     // Link Editor
-        $saveoption = $LANG_ADMIN['save'];      // Save
-        break;
 
-    case 'moderate':
-        $blocktitle = $LANG_LINKS_ADMIN[65];    // Moderate Link
-        $saveoption = $LANG_ADMIN['moderate'];  // Save & Approve
-        break;
-}
-
+    $menu_arr = array(
+        array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php',
+        'text' => $LANG_LINKS_ADMIN[53]),
+        array('url' => $_CONF['site_admin_url'],
+          'text' => $LANG_ADMIN['admin_home'])
+    );
 
 
     $link_templates = new Template($_CONF['path'] . 'plugins/links/templates/admin/');
     $link_templates->set_file('editor','linkeditor.thtml');
-    $link_templates->set_var( 'xhtml', XHTML );
 
     $link_templates->set_var('lang_pagetitle', $LANG_LINKS_ADMIN[28]);
     $link_templates->set_var('lang_link_list', $LANG_LINKS_ADMIN[53]);
@@ -166,6 +172,8 @@ function LINK_edit($action, $lid = '')
     }
     $retval .= COM_startBlock ($blocktitle, '',
                                COM_getBlockTemplate ('_admin_block', 'header'));
+
+    $retval .= ADMIN_createMenu($menu_arr, $LANG_LINKS_ADMIN[66], plugin_geticon_links());
 
     $link_templates->set_var('link_id', $A['lid']);
     if (!empty($lid) && SEC_hasRights('links.edit')) {

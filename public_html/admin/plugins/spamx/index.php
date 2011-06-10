@@ -36,7 +36,6 @@
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
 
-
 // Only let admin users access this page
 if (!SEC_hasRights ('spamx.admin')) {
     // Someone is trying to illegally access this page
@@ -55,23 +54,20 @@ if (!SEC_hasRights ('spamx.admin')) {
 * Main
 */
 
-$display = COM_siteHeader ('menu', $LANG_SX00['plugin_name']);
-$T = new Template ($_CONF['path'] . 'plugins/spamx/templates');
-$T->set_file ('admin', 'admin.thtml');
-$T->set_var ( 'xhtml', XHTML );
-$T->set_var ('site_url', $_CONF['site_url']);
-$T->set_var ('site_admin_url', $_CONF['site_admin_url']);
-$T->set_var ('header', $LANG_SX00['admin']);
-$T->set_var ('plugin_name', $LANG_SX00['plugin_name']);
-$T->set_var ('plugin', 'spamx');
-$T->parse ('output', 'admin');
-$display .= $T->finish ($T->get_var ('output'));
+USES_lib_admin();
+
+$retval = '';
+
+$menu_arr = array (
+    array('url' => $_CONF['site_admin_url'] . '/index.php','text' => $LANG_ADMIN['admin_home']),
+);
+
+$retval .= ADMIN_createMenu($menu_arr, $LANG_SX00['instructions'],$_CONF['site_admin_url'] . '/plugins/spamx/images/spamx.png');
 
 $files = array ();
 if ($dir = @opendir ($_CONF['path'] . 'plugins/spamx/')) {
     while (($file = readdir ($dir)) !== false) {
-        if (is_file ($_CONF['path'] . 'plugins/spamx/' . $file))
-        {
+        if (is_file ($_CONF['path'] . 'plugins/spamx/' . $file)) {
             if (substr ($file, -16) == '.Admin.class.php') {
                 $tmp = str_replace ('.Admin.class.php', '', $file);
                 array_push ($files, $tmp);
@@ -80,24 +76,27 @@ if ($dir = @opendir ($_CONF['path'] . 'plugins/spamx/')) {
     }
     closedir ($dir);
 }
-$display .= '<p><b>' . $LANG_SX00['adminc'] . '</b></p><ul>';
+$retval .= '<p><b>' . $LANG_SX00['adminc'] . '</b></p><ul>';
 
 foreach ($files as $file) {
     require_once ($_CONF['path'] . 'plugins/spamx/' . $file . '.Admin.class.php');
     $CM = new $file;
-    $display .= '<li>' . COM_createLink($CM->link (), $_CONF['site_admin_url']
+    $retval .= '<li>' . COM_createLink($CM->link (), $_CONF['site_admin_url']
              . '/plugins/spamx/index.php?command=' . $file) . '</li>';
 }
-$display .= '<li>' . COM_createLink($LANG_SX00['documentation'],
+$retval .= '<li>' . COM_createLink($LANG_SX00['documentation'],
             $_CONF['site_url'] . '/docs/english/spamx.html') . '</li>';
-$display .= '</ul>';
+$retval .= '</ul>';
+
+$display = COM_siteHeader ('menu', $LANG_SX00['plugin_name']);
+
+$display .= $retval;
 
 if (isset ($_REQUEST['command'])) {
     $CM = new $_REQUEST['command'];
     $display .= $CM->display ();
 }
-$display .= COM_siteFooter (true);
 
+$display .= COM_siteFooter ();
 echo $display;
-
 ?>

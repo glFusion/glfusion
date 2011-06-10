@@ -303,7 +303,9 @@ function FEED_list()
 */
 function FEED_edit($fid = 0, $type = '')
 {
-    global $_CONF, $_TABLES, $LANG33, $LANG_ADMIN, $MESSAGE;
+    global $_CONF, $_TABLES, $LANG33, $LANG_ADMIN, $MESSAGE,$_IMAGE_TYPE;
+
+    USES_lib_admin();
 
     if ($fid > 0) {
         $result = DB_query ("SELECT *,UNIX_TIMESTAMP(updated) AS date FROM {$_TABLES['syndication']} WHERE fid = '$fid'");
@@ -336,13 +338,15 @@ function FEED_edit($fid = 0, $type = '')
 
     $retval = '';
 
+    $menu_arr = array (
+                    array('url' => $_CONF['site_admin_url'].'/syndication.php',
+                          'text' => $LANG33[57]),
+                    array('url' => $_CONF['site_admin_url'],
+                          'text' => $LANG_ADMIN['admin_home'])
+    );
+
     $feed_template = new Template ($_CONF['path_layout'] . 'admin/syndication');
     $feed_template->set_file ('editor', 'feededitor.thtml');
-
-    $feed_template->set_var ( 'xhtml', XHTML );
-    $feed_template->set_var ('site_url', $_CONF['site_url']);
-    $feed_template->set_var ('site_admin_url', $_CONF['site_admin_url']);
-    $feed_template->set_var ('layout_url', $_CONF['layout_url']);
 
     $feed_template->set_var ('start_feed_editor', COM_startBlock ($LANG33[24],
             '', COM_getBlockTemplate ('_admin_block', 'header')));
@@ -364,6 +368,7 @@ function FEED_edit($fid = 0, $type = '')
     $feed_template->set_var ('lang_charset', $LANG33[31]);
     $feed_template->set_var ('lang_language', $LANG33[32]);
     $feed_template->set_var ('lang_topic', $LANG33[33]);
+    $feed_template->set_var ('admin_menu', ADMIN_createMenu($menu_arr,$LANG33[58],$_CONF['layout_url'] . '/images/icons/syndication.' . $_IMAGE_TYPE));
 
     if ($A['header_tid'] == 'all') {
         $feed_template->set_var('all_selected', 'selected="selected"');
@@ -476,8 +481,7 @@ function FEED_edit($fid = 0, $type = '')
     $feed_template->set_var('gltoken_name', CSRF_TOKEN);
     $feed_template->set_var('gltoken', SEC_createToken());
 
-    $retval .= $feed_template->finish ($feed_template->parse ('output',
-                                                              'editor'));
+    $retval .= $feed_template->finish ($feed_template->parse ('output','editor'));
     return $retval;
 }
 
@@ -491,7 +495,9 @@ function FEED_edit($fid = 0, $type = '')
 */
 function FEED_newFeed()
 {
-    global $_CONF, $LANG33;
+    global $_CONF, $LANG33, $LANG_ADMIN,$_IMAGE_TYPE;
+
+    USES_lib_admin();
 
     $retval = '';
 
@@ -512,25 +518,24 @@ function FEED_newFeed()
         }
         $selection .= '</select>' . LB;
 
-        $feed_template = new Template ($_CONF['path_layout']
-                                       . 'admin/syndication');
+        $menu_arr = array (
+                        array('url' => $_CONF['site_admin_url'].'/syndication.php',
+                              'text' => $LANG33[57]),
+                        array('url' => $_CONF['site_admin_url'],
+                              'text' => $LANG_ADMIN['admin_home'])
+        );
+
+        $feed_template = new Template ($_CONF['path_layout'].'admin/syndication');
         $feed_template->set_file ('type', 'selecttype.thtml');
-
-        $feed_template->set_var ( 'xhtml', XHTML );
-        $feed_template->set_var ('site_url', $_CONF['site_url']);
-        $feed_template->set_var ('site_admin_url', $_CONF['site_admin_url']);
-        $feed_template->set_var ('layout_url', $_CONF['layout_url']);
-
         $feed_template->set_var ('type_selection', $selection);
-
         $feed_template->set_var ('lang_explain', $LANG33[54]);
         $feed_template->set_var ('lang_go', $LANG33[1]);
-
         $retval .= COM_siteHeader ('menu', $LANG33[11]);
         $retval .= COM_startBlock ($LANG33[36], '',
                 COM_getBlockTemplate ('_admin_block', 'header'));
-        $retval .= $feed_template->finish ($feed_template->parse ('output',
-                                                                  'type'));
+        $retval .= ADMIN_createMenu($menu_arr,$LANG33[54],$_CONF['layout_url'] . '/images/icons/syndication.' . $_IMAGE_TYPE);
+
+        $retval .= $feed_template->finish ($feed_template->parse ('output','type'));
         $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
         $retval .= COM_siteFooter ();
     }

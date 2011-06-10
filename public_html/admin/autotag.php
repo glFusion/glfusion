@@ -75,13 +75,24 @@ function AT_mergeAllTags()
 
 function AT_adminForm($A, $error = false)
 {
-    global $_CONF, $LANG_AM, $_AM_CONF;
+    global $_CONF, $LANG_AM, $_AM_CONF, $LANG_ADMIN, $_IMAGE_TYPE;
+    global $self_url, $cc_url;
+
+$LANG_AM['instructions_edit'] = 'This screen allows you to create a custom autotag.';
+
+    USES_lib_admin();
 
     if ($error) {
         $retval = $error . '<br/><br/>';
     } else {
         $form = new Template($_CONF['path_layout'] .'admin/autotag/');
         $form->set_file('form', 'autotag.thtml');
+
+        $menu_arr = array (
+            array('url' => $_CONF['site_admin_url'] . '/autotag.php?list=x','text' => 'Custom Autotags'),
+            array('url' => $self_url, 'text' => $LANG_AM['public_title']),
+            array('url' => $cc_url, 'text' => $LANG_ADMIN['admin_home']),
+        );
 
         $form->set_var(array(
                 'start_block_editor'=> COM_startBlock($LANG_AM['autotag_editor']), '', COM_getBlockTemplate('_admin_block', 'header'),
@@ -104,6 +115,7 @@ function AT_adminForm($A, $error = false)
                 'lang_enabled'      => $LANG_AM['enabled'],
                 'lang_replacement'  => $LANG_AM['replacement'],
                 'lang_replace_explain'  => $LANG_AM['replace_explain'],
+                'admin_menu' => ADMIN_createMenu($menu_arr, $LANG_AM['instructions_edit'],$_CONF['layout_url'] . '/images/icons/autotag.' . $_IMAGE_TYPE),
         ));
 
         if (isset($A['is_enabled']) && $A['is_enabled'] == 1) {
@@ -551,7 +563,7 @@ function ATP_edit($autotag_id = '')
     $retval .= ADMIN_createMenu(
         $menu_arr,
         $LANG_AM['autotagpermmsg'],
-        $_CONF['layout_url'] . '/images/icons/atperm.' . $_IMAGE_TYPE
+        $_CONF['layout_url'] . '/images/icons/autotag.' . $_IMAGE_TYPE
     );
 
     $retval .= '<form action="'.$_CONF['site_admin_url'].'/autotag.php" method="post">';

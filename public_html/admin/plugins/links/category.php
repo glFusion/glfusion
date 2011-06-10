@@ -158,6 +158,8 @@ function LINK_CAT_edit($cid, $pid)
     global $_CONF, $_TABLES, $_USER, $MESSAGE,
            $LANG_LINKS_ADMIN, $LANG_ADMIN, $LANG_ACCESS, $_LI_CONF;
 
+    USES_lib_admin();
+
     $retval = '';
 
     $cid = DB_escapeString($cid);
@@ -191,8 +193,19 @@ function LINK_CAT_edit($cid, $pid)
         return COM_showMessage(6, 'links');
     }
 
+    $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/plugins/links/category.php',
+              'text' => $LANG_LINKS_ADMIN[50]),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php',
+              'text' => $LANG_LINKS_ADMIN[53]),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
+
     $retval .= COM_startBlock($LANG_LINKS_ADMIN[56], '',
                               COM_getBlockTemplate('_admin_block', 'header'));
+
+    $retval .= ADMIN_createMenu($menu_arr, $LANG_LINKS_ADMIN[67], plugin_geticon_links());
 
     $T = new Template($_CONF['path'] . 'plugins/links/templates/admin');
     $T->set_file(array('page' => 'categoryeditor.thtml'));

@@ -94,12 +94,19 @@ function BLOCK_hasTopicAccess ($tid)
 */
 function BLOCK_editDefault($A, $access)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG21, $LANG_ACCESS, $LANG_ADMIN;
+    global $_CONF, $_TABLES, $_USER, $LANG21, $LANG_ACCESS, $LANG_ADMIN,$_IMAGE_TYPE;
 
     $retval = '';
 
-    $retval .= COM_startBlock ($LANG21[3], '',
-                               COM_getBlockTemplate ('_admin_block', 'header'));
+    $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/block.php',
+              'text' => $LANG_ADMIN['block_list']),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
+
+    $retval .= COM_startBlock ($LANG21[3], '',COM_getBlockTemplate ('_admin_block', 'header'));
+    $retval .= ADMIN_createMenu($menu_arr,$LANG21[72],$_CONF['layout_url'] . '/images/icons/block.'. $_IMAGE_TYPE);
 
     $block_templates = new Template($_CONF['path_layout'] . 'admin/block');
     $block_templates->set_file('editor','defaultblockeditor.thtml');
@@ -191,18 +198,19 @@ function BLOCK_editDefault($A, $access)
 function BLOCK_edit($bid = '', $B = array())
 {
     global $_CONF, $_GROUPS, $_TABLES, $_USER, $LANG01, $LANG21, $LANG24,$LANG_ACCESS,
-           $LANG_ADMIN, $LANG_postmodes,$MESSAGE;
+           $LANG_ADMIN, $LANG_postmodes,$MESSAGE,$_IMAGE_TYPE;
+
+    USES_lib_admin();
 
     $retval = '';
     $A = array();
 
     if (!empty($bid)) {
-        $result = DB_query("SELECT * FROM {$_TABLES['blocks']} WHERE bid ='$bid'");
+        $result = DB_query("SELECT * FROM {$_TABLES['blocks']} WHERE bid ='".DB_escapeString($bid)."'");
         $A = DB_fetchArray($result);
         $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
         if ($access == 2 || $access == 0 || BLOCK_hasTopicAccess($A['tid']) < 3) {
-            $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',
-                               COM_getBlockTemplate ('_msg_block', 'header'))
+            $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '', COM_getBlockTemplate ('_msg_block', 'header'))
                     . $LANG21[45]
                     . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
             COM_accessLog("User {$_USER['username']} tried to illegally create or edit block $bid.");
@@ -249,6 +257,13 @@ function BLOCK_edit($bid = '', $B = array())
         }
         $access = 3;
     }
+
+    $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/block.php',
+              'text' => $LANG_ADMIN['block_list']),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
 
     $block_templates = new Template($_CONF['path_layout'] . 'admin/block');
 
@@ -401,6 +416,7 @@ function BLOCK_edit($bid = '', $B = array())
     }
     $block_templates->set_var('gltoken_name', CSRF_TOKEN);
     $block_templates->set_var('gltoken', SEC_createToken());
+    $block_templates->set_var('admin_menu', ADMIN_createMenu($menu_arr,$LANG21[71],$_CONF['layout_url'] . '/images/icons/block.'. $_IMAGE_TYPE));
     $block_templates->set_var ('end_block',
             COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer')));
     $block_templates->parse('output', 'editor');

@@ -126,6 +126,7 @@ function GROUP_edit($grp_id = '')
         // new group, so it's obviously not a core group
         $A['grp_gl_core'] = 0;
         $A['grp_default'] = 0;
+        $A['grp_name'] = '';
     }
 
     if ( $A['grp_name'] == 'Logged-in Users' || $A['grp_name'] == 'All Users' || $A['grp_name'] == 'Root' ) {

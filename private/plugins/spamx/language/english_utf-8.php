@@ -101,8 +101,8 @@ $LANG_SX00 = array (
 	'note4'		=> 'come back here and have Spam-X check the latest comments for spam.</li></ul><p>Comments ',
 	'note5'		=> 'are checked from newest comment to oldest -- checking more comments ',
 	'note6'		=> 'requires more time for the check.</p>',
-	'masshead'	=> '<hr' . XHTML . '><h1 align="center">Mass Delete Spam Comments</h1>',
-	'masstb' => '<hr' . XHTML . '><h1 align="center">Mass Delete Trackback Spam</h1>',
+	'masshead'	=> '<hr/><h1 align="center">Mass Delete Spam Comments</h1>',
+	'masstb' => '<hr/><h1 align="center">Mass Delete Trackback Spam</h1>',
 	'comdel'	=> ' comments deleted.',
     'initial_Pimport' => '<p>Personal Blacklist Import"',
     'initial_import' => 'Initial MT-Blacklist Import',
@@ -128,7 +128,8 @@ $LANG_SX00 = array (
     'stats_deleted' => 'Posts deleted as spam',
 
     'plugin_name' => 'Spam-X',
-    'slvwhitelist' => 'SLV Whitelist'
+    'slvwhitelist' => 'SLV Whitelist',
+    'instructions' => 'Spam-X allows you to define words, URLs, and other items that can be used to block spam posts on your site.',
 );
 
 

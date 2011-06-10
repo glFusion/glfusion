@@ -228,6 +228,8 @@ $LANG_LINKS_ADMIN = array(
     63 => 'Are you sure you want to delete this link?',
     64 => 'Are you sure you want to delete this category?',
     65 => 'Moderate Link',
+    66 => 'This screen allows you to create / edit links.',
+    67 => 'This screen allows you to create / edit a links category.',
 );
 
 $LANG_LINKS_STATUS = array(

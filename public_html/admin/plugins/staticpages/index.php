@@ -68,6 +68,15 @@ function PAGE_form($A, $error = false)
            $LANG21, $LANG_STATIC, $LANG_ACCESS, $LANG_ADMIN, $LANG24,
            $LANG_postmodes, $MESSAGE;
 
+    USES_lib_admin();
+
+    $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/plugins/staticpages/index.php',
+              'text' => $LANG_STATIC['page_list']),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
+
     $template_path = staticpages_templatePath ('admin');
     if (!empty($sp_id) && ($action=='edit' || $action =='clone' )) {
         $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
@@ -94,7 +103,7 @@ function PAGE_form($A, $error = false)
     }
 
     if ($error) {
-        $retval .= $error . '<br' . XHTML . '><br' . XHTML . '>';
+        $retval .= $error . '<br/><br/>';
     } else {
         $sp_template = new Template ($template_path);
         if (isset ($_CONF['advanced_editor']) && ($_CONF['advanced_editor'] == 1) ) {
@@ -303,7 +312,7 @@ function PAGE_form($A, $error = false)
         $sp_template->set_var('exit_msg',$LANG_STATIC['exit_msg']);
         $sp_template->set_var('exit_info',$LANG_STATIC['exit_info']);
 
-        if ($A['sp_inblock'] == 1) {
+        if (isset($A['sp_inblock']) && $A['sp_inblock'] == 1) {
             $sp_template->set_var ('inblock_checked', 'checked="checked"');
         } else {
             $sp_template->set_var ('inblock_checked', '');
@@ -392,6 +401,7 @@ function PAGE_form($A, $error = false)
 
         $sp_template->set_var( 'gltoken_name', CSRF_TOKEN );
         $sp_template->set_var( 'gltoken', SEC_createToken() );
+        $sp_template->set_var( 'admin_menu',ADMIN_createMenu($menu_arr, $LANG_STATIC['instructions_edit'], plugin_geticon_staticpages()));
         $retval .= $sp_template->parse('output','form');
     }
 

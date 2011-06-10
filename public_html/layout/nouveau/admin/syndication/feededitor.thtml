@@ -1,5 +1,6 @@
 {# begin {templatelocation} #}
 {start_feed_editor}
+{admin_menu}
 <form action="{site_admin_url}/syndication.php" method="post">
     <table cellspacing="0" cellpadding="3" width="100%">
         <tr>

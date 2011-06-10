@@ -35,6 +35,7 @@ function enablearchive(obj) {
 }
 //]]>
 </script>
+{admin_menu}
 <div style="border-bottom:1px solid #cccccc"></div>
 <form name="frmstory" action="{site_admin_url}/story.php" method="post" enctype="multipart/form-data">
     <table cellspacing="0" cellpadding="3" width="100%">

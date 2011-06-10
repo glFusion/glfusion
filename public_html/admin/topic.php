@@ -65,7 +65,9 @@ if (!SEC_hasRights('topic.edit')) {
 function TOPIC_edit ($tid = '', $T = array(), $msg = '')
 {
     global $_CONF, $_GROUPS, $_TABLES, $_USER, $LANG27, $LANG_ACCESS,
-           $LANG_ADMIN, $MESSAGE;
+           $LANG_ADMIN, $MESSAGE, $_IMAGE_TYPE;
+
+    USES_lib_admin();
 
     $retval = '';
     $topicEdit = 0;
@@ -134,13 +136,16 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
         $A['group_id']      = isset($T['group_id']) ? $T['group_id'] : '';
         $A['imageurl']      = isset($T['imageurl']) ? $T['imageurl'] : '';
 
-    if ( $A['sortnum'] != '' ) {
-        $tidSortNumber = DB_getItem($_TABLES['topics'],'sortnum','tid="'.DB_escapeString($A['sortnum']).'"');
-        $newSortNum = $tidSortNumber;
-    } else {
-        $newSortNum = 0;
-    }
-    $A['sortnum'] = $newSortNum;
+        $assoc_stories_submitted = 0;
+        $assoc_blocks = 0;
+        $assoc_feeds = 0;
+        if ( $A['sortnum'] != '' ) {
+            $tidSortNumber = DB_getItem($_TABLES['topics'],'sortnum','tid="'.DB_escapeString($A['sortnum']).'"');
+            $newSortNum = $tidSortNumber;
+        } else {
+            $newSortNum = 0;
+        }
+        $A['sortnum'] = $newSortNum;
 
         // an empty owner_id signifies this is a new block, set to current user
         // this will also set the default values for group_id as well as the
@@ -361,6 +366,20 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
     }
 
     $retval .= COM_startBlock ($LANG27[1], '',COM_getBlockTemplate ('_admin_block', 'header'));
+
+    $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/topic.php',
+              'text' => $LANG_ADMIN['topic_list']),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
+
+    $retval .= ADMIN_createMenu(
+        $menu_arr,
+        $LANG27[57],
+        $_CONF['layout_url'] . '/images/icons/topic.' . $_IMAGE_TYPE
+    );
+
     $retval .= $topic_templates->finish($topic_templates->get_var('output'));
     $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
 

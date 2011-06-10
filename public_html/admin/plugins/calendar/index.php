@@ -76,7 +76,20 @@ function CALENDAR_edit($action, $A, $msg = '')
            $LANG_CAL_ADMIN, $LANG10, $LANG12, $LANG_ACCESS, $LANG_ADMIN,
            $MESSAGE;
 
+    USES_lib_admin();
+
     $retval = '';
+
+    $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/plugins/calendar/index.php',
+              'text' => $LANG_CAL_ADMIN[40]),
+        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
+              'text' => $LANG_ADMIN['submissions']),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/calendar/index.php?batchadmin=x',
+              'text' => $LANG_CAL_ADMIN[38]),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
 
     $dtStart = new Date('now',$_USER['tzid']);
     $dtEnd   = new Date('now',$_USER['tzid']);
@@ -143,6 +156,8 @@ function CALENDAR_edit($action, $A, $msg = '')
 
     $retval .= COM_startBlock($blocktitle, '',
                               COM_getBlockTemplate('_admin_block', 'header'));
+
+    $retval .= ADMIN_createMenu($menu_arr, $LANG_CAL_ADMIN[41], plugin_geticon_calendar());
 
     if (!empty($A['eid'])) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']

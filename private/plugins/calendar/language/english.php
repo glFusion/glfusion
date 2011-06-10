@@ -176,6 +176,8 @@ $LANG_CAL_ADMIN = array(
     37 => 'Moderate Event',
     38 => 'Batch Event Admin',
     39 => 'Event Admin',
+    40 => 'Event List',
+    41 => 'This screen allows you to edit / create events. Edit the fields below and save.',
 );
 
 $LANG_CAL_AUTOTAG = array(

@@ -11,6 +11,7 @@
 <script type="text/javascript" src="{site_url}/javascript/staticpages_fckeditor.js"></script>
 
 {start_block_editor}
+{admin_menu}
 <form action="{site_admin_url}/plugins/staticpages/index.php" method="post" onsubmit='set_postcontent();'>
     <table border="0" cellspacing="0" cellpadding="3" width="100%">
         <tr>

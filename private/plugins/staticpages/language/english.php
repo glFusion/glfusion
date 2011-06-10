@@ -116,6 +116,8 @@ $LANG_STATIC = array(
     'submit' => 'Submit',
     'delete_confirm' => 'Are you sure you want to delete this page?',
     'allnhp_topics' => 'All Topics (No Homepage)',
+    'page_list' => 'Page List',
+    'instructions_edit' => 'This screen allows you to create / edit a new static page. Pages can contain PHP code and HTML code.',
 );
 
 $LANG_SP_AUTOTAG = array(
