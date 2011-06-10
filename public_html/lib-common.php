@@ -218,11 +218,26 @@ require_once $_CONF['path_system'].'classes/template.class.php';
 require_once $_CONF['path_system'].'lib-database.php';
 
 /**
+* Buffer all enabled plugins
+*
+*/
+
+$result       = DB_query("SELECT pi_name,pi_version FROM {$_TABLES['plugins']} WHERE pi_enabled = 1");
+$_PLUGINS     = array();
+$_PLUGIN_INFO = array();
+
+while ($A = DB_fetchArray($result)) {
+    $_PLUGINS[] = $A['pi_name'];
+    $_PLUGIN_INFO[$A['pi_name']] = $A['pi_version'];
+}
+
+/**
 * Check to see if the Bad Behavior2 Security Plugin is enabled, if yes
 * then include the necessary files.
 *
 */
-if (DB_count($_TABLES['plugins'], array("pi_name","pi_enabled"),array("bad_behavior2","1")) > 0) {
+
+if (in_array('bad_behavior2', $_PLUGINS)) {
     require_once $_CONF['path_html'].'bad_behavior2/bad-behavior-glfusion.php';
 }
 
@@ -3858,7 +3873,7 @@ function COM_getDisplayName( $uid = '', $username='', $fullname='', $remoteusern
 {
     global $_CONF, $_TABLES, $_USER;
 
-    static $cache = Array();
+    static $cache = array();
 
     if ($uid == '') {
         if (COM_isAnonUser()) {
@@ -4328,9 +4343,6 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 
     return $retval;
 }
-
-
-
 
 
 /**
@@ -7019,7 +7031,7 @@ function js_out()
 
     // send any global plugin JS vars
 
-    if ( is_array($pluginJSvars) ) {
+    if ( isset($pluginJSvars) && is_array($pluginJSvars) ) {
         foreach ($pluginJSvars AS $name => $value) {
             print "var " . $name . " = '".$value."';";
         }
@@ -7338,9 +7350,7 @@ function USES_class_upload() {
 // Now include all plugin functions
 if ( is_array($_PLUGINS) ) {
     foreach( $_PLUGINS as $pi_name ) {
-        if (@file_exists($_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc') ) {
-            require_once $_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc';
-        } else {
+        if ( !@include_once $_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc' ) {
             unset($_PLUGINS[array_search($pi_name, $_PLUGINS)]);
         }
     }
@@ -7352,7 +7362,7 @@ if ( @file_exists($_CONF['path_language'].'custom') ) {
     $langfiles = @glob($langfilespec, GLOB_NOESCAPE|GLOB_NOSORT);
     if (@is_array($langfiles)) {
         foreach($langfiles as $langfile) {
-            require_once $langfile;
+            include_once $langfile;
         }
     }
 }

@@ -75,18 +75,6 @@ define('CENTERBLOCK_FORCE',             5);
 $PLG_bufferCenterAPI = array ();
 $PLG_buffered = false;
 
-// buffer enabled plugins
-$result = DB_query("SELECT pi_name,pi_version FROM {$_TABLES['plugins']} WHERE pi_enabled = 1");
-/**
-* @global array List of all active plugins
-*/
-$_PLUGINS = array();
-$_PLUGIN_INFO = array();
-while ($A = DB_fetchArray($result)) {
-    $_PLUGINS[] = $A['pi_name'];
-    $_PLUGIN_INFO[$A['pi_name']] = $A['pi_version'];
-}
-
 /**
 * Calls a function for all enabled plugins
 *

@@ -176,9 +176,10 @@ if (!empty ($displayBlock)) {
     }
 }
 
-if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
-    $result = DB_query("SELECT maxstories,tids,aids FROM {$_TABLES['userindex']} WHERE uid = {$_USER['uid']}");
-    $U = DB_fetchArray($result);
+if (!COM_isAnonUser()) {
+    $U['maxstories'] = $_USER['maxstories'];
+    $U['aids'] = $_USER['aids'];
+    $U['tids'] = $_USER['tids'];
 } else {
     $U['maxstories'] = 0;
     $U['aids'] = '';
