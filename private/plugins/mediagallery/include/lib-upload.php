@@ -1323,6 +1323,8 @@ function MG_notifyModerators( $aid ) {
         return true;
     }
 
+    $body = '';
+
     require_once $_CONF['path'] . 'lib/phpmailer/class.phpmailer.php';
 
     $media_user_id = $_USER['uid'];
