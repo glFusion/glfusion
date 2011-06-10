@@ -279,13 +279,13 @@ function configmanager_select_timezone_helper()
                 if (!empty($subcity) != '') {
                     $city = $city . '/'. $subcity;
                 }
-                $tzname = $continent.'/'.$city;
-                $locations[$tzname] = $continent.'/'.str_replace('_',' ',$city);
+                $tzname = $continent.'/'.str_replace('_',' ',$city);
+                $locations[$tzname] = $continent.'/'.$city;
             } else {
                 if (!empty($subcity) != '') {
                     $city = $city . '/'. $subcity;
                 }
-                $locations[$tzname] = $continent.'/'.str_replace('_',' ',$city);
+                $locations[$tzname] = $continent.'/'.$city;
             }
         }
     }
