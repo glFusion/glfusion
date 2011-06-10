@@ -997,7 +997,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         SESS_setVar('cacheID',$cacheID);
     }
 
-    $header->set_var('cacheid',$_USER['theme'].$cacheID);
+
 
     // give the theme a chance to load stuff....
 
@@ -1131,17 +1131,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     } else {
         $header->set_var( 'advanced_editor', '' );
     }
-    $header->set_var( 'site_name', $_CONF['site_name'] );
-    $header->set_var( 'site_slogan', $_CONF['site_slogan'] );
-    $rdf = substr_replace( $_CONF['rdf_file'], $_CONF['site_url'], 0,
-                           strlen( $_CONF['path_html'] ) - 1 ) . LB;
-    $header->set_var( 'rdf_file', $rdf );
-    $header->set_var( 'rss_url', $rdf );
-
-    $msg = $LANG01[67] . ' ' . $_CONF['site_name'];
-
-    $header->set_var( 'css_url', $_CONF['layout_url'] . '/style.css' );
-    $header->set_var( 'theme', $_USER['theme'] );
+    $rdf = substr_replace( $_CONF['rdf_file'], $_CONF['site_url'], 0,strlen( $_CONF['path_html'] ) - 1 ) . LB;
 
     if ( $_SYSTEM['use_direct_style_js'] ) {
         $style_cache_url = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'].'&amp;i='.$cacheID;
@@ -1151,20 +1141,20 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         $js_cache_url    = $_CONF['site_url'].'/js.php?t='.$_USER['theme'].'&amp;i='.$cacheID;
     }
 
-    $header->set_var('style_cache_url',$style_cache_url);
-    $header->set_var('js_cache_url',$js_cache_url);
-
-    $header->set_var( 'charset', COM_getCharset());
-    if ( empty( $LANG_DIRECTION )) {
-        // default to left-to-right
-        $header->set_var( 'direction', 'ltr' );
-    } else {
-        $header->set_var( 'direction', $LANG_DIRECTION );
-    }
-
-    // Call any plugin that may want to include extra Meta tags
-    // or Javascript functions
-    $header->set_var( 'plg_headercode', $headercode . PLG_getHeaderCode() );
+    $header->set_var(array(
+        'site_name'     => $_CONF['site_name'],
+        'site_slogan'   => $_CONF['site_slogan'],
+        'rdf_file'      => $rdf,
+        'rss_url'       => $rdf,
+        'css_url'       => $_CONF['layout_url'] . '/style.css',
+        'theme'         => $_USER['theme'],
+        'style_cache_url'   => $style_cache_url,
+        'js_cache_url'      => $js_cache_url,
+        'charset'       => COM_getCharset(),
+        'cacheid'       => $_USER['theme'].$cacheID,
+        'direction'     => (empty($LANG_DIRECTION) ? 'ltr' : $LANG_DIRECTION),
+        'plg_headercode'    => $headercode . PLG_getHeaderCode()
+    ));
 
     // Call to plugins to set template variables in the header
     PLG_templateSetVars( 'header', $header );
@@ -1254,8 +1244,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     $loggedInUser = !COM_isAnonUser();
     $theme->set_var( 'site_name', $_CONF['site_name']);
-    $theme->set_var( 'background_image', $_CONF['layout_url']
-                                          . '/images/bg.' . $_IMAGE_TYPE );
+    $theme->set_var( 'background_image', $_CONF['layout_url'].'/images/bg.' . $_IMAGE_TYPE );
     $theme->set_var( 'site_mail', "mailto:{$_CONF['site_mail']}" );
     if ($_LOGO['display_site_slogan']) {
         $theme->set_var( 'site_slogan', $_CONF['site_slogan'] );
@@ -2701,13 +2690,16 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
 *
 * @param        string      $url        URL to send user to
 * @return   string          HTML meta redirect
-* @note     This does not need to be XHTML compliant. It may also be used
-*           in situations where the XHTML constant is not defined yet ...
 *
 */
 function COM_refresh($url)
 {
-    return "<html><head><meta http-equiv=\"refresh\" content=\"0; URL=$url\"/></head></html>\n";
+    if ( headers_sent() ) {
+        return "<html><head><meta http-equiv=\"refresh\" content=\"0; URL=$url\"/></head></html>\n";
+    } else {
+        header("Location:".htmlspecialchars_decode($url));
+        exit;
+    }
 }
 
 /**
