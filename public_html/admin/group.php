@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2010 by the following authors:                        |
+// | Copyright (C) 2009-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -113,8 +113,8 @@ function GROUP_edit($grp_id = '')
     $group_templates = new Template($_CONF['path_layout'] . 'admin/group');
     $group_templates->set_file('editor','groupeditor.thtml');
 
-    if (!empty ($grp_id)) {
-        $result = DB_query("SELECT grp_id,grp_name,grp_descr,grp_gl_core,grp_default FROM {$_TABLES['groups']} WHERE grp_id ='$grp_id'");
+    if (!empty ($grp_id) && $grp_id != 0 ) {
+        $result = DB_query("SELECT grp_id,grp_name,grp_descr,grp_gl_core,grp_default FROM {$_TABLES['groups']} WHERE grp_id = ".(int)$grp_id);
         $A = DB_fetchArray ($result);
         if ($A['grp_gl_core'] > 0) {
             $group_templates->set_var ('chk_adminuse', 'checked="checked"');
@@ -154,11 +154,11 @@ function GROUP_edit($grp_id = '')
     $group_templates->set_var('show_all', $showall);
 
 
-    if (!empty($grp_id)) {
+    if (!empty($grp_id) && $grp_id != 0 ) {
         // Groups tied to glFusion's functionality shouldn't be deleted
         if ($A['grp_gl_core'] != 1) {
             $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
-                       . '" name="delete"%s' . XHTML . '>';
+                       . '" name="delete"%s />';
             $jsconfirm = ' onclick="return confirm(\'' . $LANG_ACCESS['confirm1'] . '\');"';
             $group_templates->set_var ('delete_option',
                                        sprintf ($delbutton, $jsconfirm));
@@ -177,7 +177,7 @@ function GROUP_edit($grp_id = '')
     $group_templates->set_var('lang_groupname', $LANG_ACCESS['groupname']);
 
     // if the group name is set, do not allow it to change ...  we need to do this better in the future ...
-    if (isset($A['grp_name'])) {
+    if (isset($A['grp_name']) && $A['grp_name'] != '') {
         $group_templates->set_var('group_name', $A['grp_name']);
 
         // determine whether the group offers the option to make it a 'default group' for new users ...
@@ -1236,7 +1236,9 @@ switch ($action) {
         } else {
             COM_accessLog("User {$_USER['username']} tried to illegally edit group $grp_id and failed CSRF checks.");
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
+            exit;
         }
+        SESS_unSet('glfusion.user_groups.'.$_USER['uid']);
         break;
 
     case 'delete':

@@ -119,6 +119,7 @@ function SEC_getUserGroups($uid='')
     } else {
         $uid = (int) $uid;
     }
+    if ($uid == 1 ) $cache = true;
 
     if (array_key_exists($uid, $runonce)) {
         return $runonce[$uid];
