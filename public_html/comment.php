@@ -57,7 +57,7 @@ require_once 'lib-common.php';
 /**
  * glFusion comment function library
  */
-require_once $_CONF['path_system'] . 'lib-comment.php';
+USES_lib_comment();
 
 // Uncomment the line below if you need to debug the HTTP variables being passed
 // to the script.  This will sometimes cause errors but it will allow you to see
@@ -95,8 +95,14 @@ function handleSubmit()
                 $comment, $sid, COM_applyFilter ($_POST['pid'], true),
                 'article', COM_applyFilter ($_POST['postmode']));
 
-            if ( $ret > 0 ) { // failure //FIXME: some failures should not return to comment form
+            if ( $ret > 0 ) {
+                $msg = '';
+                if ( SESS_isSet('glfusion.commentpresave.error') ) {
+                    $msg = COM_showMessageText(SESS_getVar('glfusion.commentpresave.error'));
+                    SESS_unSet('glfusion.commentpresave.error');
+                }
                 $display .= COM_siteHeader ('menu', $LANG03[1])
+                         . $msg
                          . CMT_commentForm (strip_tags($_POST['title']), $comment,
                            $sid, COM_applyFilter($_POST['pid']), $type,
                            $LANG03[14], COM_applyFilter($_POST['postmode']))

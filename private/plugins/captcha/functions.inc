@@ -235,10 +235,16 @@ function plugin_commentPreSave_captcha($uid, $title, $comment, $sid, $pid, $type
             $str = '';
         }
         list( $rc, $msg) = CAPTCHA_checkInput( $str, 'comment' );
-        if ( $rc == 1 )
+        if ( $rc == 1 ) {
             return 0;
-        else
+        } else {
+            if ( SESS_isSet('glfusion.commentpresave.error') ) {
+                $msg = SESS_getVar('glfusion.commentpresave.error') . '<br/>' . $msg;
+            }
+            SESS_setVar('glfusion.commentpresave.error',$msg);
             return 1;
+        }
+
     }
     return 0;
 }

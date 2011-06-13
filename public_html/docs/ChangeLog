@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.3.0 (Trunk Development Branch)
 ------
+- Comment entry now displays appropriate errors when a comment entry
+  fails (Mark)
 - Implement new What's New options - no longer display an item
   if not new items are available.  New config option to hide
   What's New block if no entries to display (Mark/Lee)
