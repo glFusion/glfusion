@@ -867,7 +867,7 @@ function FF_saveTopic( $forumData, $postData, $action )
             $editAllowed = true;
         } else {
             if ($_FF_CONF['allowed_editwindow'] > 0) {
-                $t1 = DB_getItem($_TABLES['ff_topic'],'date',"id='".DB_escapeString($postData['id'])."'");
+                $t1 = DB_getItem($_TABLES['ff_topic'],'date',"id=".(int) $postData['id']);
                 $t2 = $_FF_CONF['allowed_editwindow'];
                 $time = time();
                 if ((time() - $t2) < $t1) {
@@ -882,7 +882,7 @@ function FF_saveTopic( $forumData, $postData, $action )
             $retval .= FF_BlockMessage('',$LANG_GF02['msg18'],false);
             $okToSave = false;
         } elseif (!$editAllowed) {
-            $link = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$postData['$id'];
+            $link = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.(int) $postData['$id'];
             $retval.= _ff_alertMessage('',$LANG_GF02['msg189'], sprintf($LANG_GF02['msg187'],$link));
             $okToSave = false;
         }
@@ -894,7 +894,7 @@ function FF_saveTopic( $forumData, $postData, $action )
         }
         $msg = plugin_itemPreSave_captcha('forum',$postData['captcha']);
         if ( $msg != '' ) {
-            $errorMessages .= $msg .'<br />';
+            $errorMessages .= $msg .'<br/>';
             $okToSave = false;
         }
     }
@@ -902,14 +902,14 @@ function FF_saveTopic( $forumData, $postData, $action )
     if (strlen(trim($postData['name'])) < $_FF_CONF['min_username_length'] ||
         strlen(trim($postData['subject'])) < $_FF_CONF['min_subject_length'] ||
         strlen(trim($postData['comment'])) < $_FF_CONF['min_comment_length']) {
-        $errorMessages .= $LANG_GF02['msg18'] . '<br />';
+        $errorMessages .= $LANG_GF02['msg18'] . '<br/>';
         $okToSave = false;
     }
     // speed limit check
     COM_clearSpeedlimit ($_FF_CONF['post_speedlimit'], 'forum');
     $last = COM_checkSpeedlimit ('forum');
     if ($last > 0) {
-        $errorMessages .= sprintf($LANG_GF01['SPEEDLIMIT'],$last,$_FF_CONF['post_speedlimit']) . '<br />';
+        $errorMessages .= sprintf($LANG_GF01['SPEEDLIMIT'],$last,$_FF_CONF['post_speedlimit']) . '<br/>';
         $okToSave = false;
     }
     // spamx check
@@ -1245,7 +1245,8 @@ function _ff_chknotifications($forumid,$topicid,$userid,$type='topic') {
         $grp_id = 1;
     }
 
-    $sql = "SELECT * FROM {$_TABLES['subscriptions']} WHERE ((type='forum' AND id=".(int) $pid.") OR ((type='forum' AND category=".(int) $forumid.") AND (id=0) )) GROUP BY uid";
+    $sql = "SELECT * FROM {$_TABLES['subscriptions']} WHERE type='forum' AND ((category=".(int)$forumid." AND id=".(int) $pid.") OR (category=".(int) $forumid." AND id=0 )) GROUP BY uid";
+
     $sqlresult = DB_query($sql);
     $postername = COM_getDisplayName($userid);
     $nrows = DB_numRows($sqlresult);

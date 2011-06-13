@@ -111,8 +111,9 @@ function _ff_check4files($id,$tempfile=false) {
         }
     }
 
-    if (!$tempfile AND isset($_POST['uniqueid']) AND $_POST['uniqueid'] > 0 AND DB_COUNT($_TABLES['ff_topic'],'id',intval($id))) {
-        DB_query("UPDATE {$_TABLES['ff_attachments']} SET topic_id=$id, tempfile=0 WHERE topic_id=".intval($_POST['uniqueid']));
+    if (!$tempfile AND isset($_POST['uniqueid']) AND COM_applyFilter($_POST['uniqueid'],true) > 0 AND DB_COUNT($_TABLES['ff_topic'],'id',(int) $id)) {
+        $tid = COM_applyFilter($_POST['uniqueid']);
+        DB_query("UPDATE {$_TABLES['ff_attachments']} SET topic_id=".(int)$id.", tempfile=0 WHERE topic_id=".(int) $tid);
     }
 
     return $retval;
@@ -122,7 +123,7 @@ function _ff_check4files($id,$tempfile=false) {
 function _ff_uploadfile($filename,&$upload_file,$allowablefiletypes,$use_filemgmt=0) {
     global $_FILES,$_CONF,$_TABLES,$_FF_CONF,$LANG_GF00,$filemgmt_FileStore;
 
-    include_once $_CONF['path_system'] . 'classes/upload.class.php';
+    USES_class_upload();
 
     $upload = new upload();
     if ($use_filemgmt == 1) {

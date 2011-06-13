@@ -156,9 +156,9 @@ function do_bbcode_file ($action, $attributes, $content, $params, $node_object) 
     while (list($id,$fileinfo,$repository_id,$showinline,$topicid) = DB_fetchArray($query)) {
         if ($i == $content) {
             if ($showinline == 0) {
-                DB_query("UPDATE {$_TABLES['ff_attachments']} SET show_inline = 1 WHERE id=$id");
+                DB_query("UPDATE {$_TABLES['ff_attachments']} SET show_inline = 1 WHERE id=".(int)$id);
             }
-            $forumfiles[$i] = $id;   // uses to track attachments used inline and reset others in case user is changing them
+            $forumfiles[$i] = $id;   // used to track attachments used inline and reset others in case user is changing them
             $fileparts = explode(':',$fileinfo);
             $pos = strrpos($fileparts[0],'.');
             $filename = substr($fileparts[0], 0,$pos);
