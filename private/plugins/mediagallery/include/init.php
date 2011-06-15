@@ -242,7 +242,12 @@ function MG_getTemplatePath( $aid, $path = '')
 {
     global $MG_albums, $_MG_CONF, $_CONF;
 
-    if ( $aid < 0 || $MG_albums[$aid]->skin == 'default' || $MG_albums[$aid]->skin == '' ) {
+    $skin = '';
+    if ( isset($MG_albums[$aid]) ) {
+        $skin = $MG_albums[$aid]->skin;
+    }
+
+    if ( $aid < 0 || $skin == 'default' || $skin == '' ) {
         return array($_MG_CONF['template_path'],$_MG_CONF['template_path'].'/admin/');
     }
     return (array($path != '' ? $path : '',$_MG_CONF['template_path'] . '/themes/' . $MG_albums[$aid]->skin,$_MG_CONF['template_path'],$_MG_CONF['template_path'].'/admin/'));
