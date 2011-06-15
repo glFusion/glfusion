@@ -356,7 +356,7 @@ if ($type == "forum") {
         }
         $catSelect = '<select name="category">';
         $catResult = DB_query("SELECT * FROM {$_TABLES['ff_categories']} ORDER BY cat_order ASC");
-        while ( ($C = DB_fetchArray($catResult)) != NULL ) {
+        while ( ($C = DB_fetchArray($catResult)) != FALSE ) {
             $catSelect .= '<option value="'.$C['id'].'" '.($C['id'] == $forum_category ? ' selected="selected"' : '').'>'.$C['cat_name'].'</option>';
         }
         $catSelect .= '</select>';

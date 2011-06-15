@@ -375,6 +375,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
     }
 
     $row = 1;
+
     do {
         //check for comment edit
         $commentedit = DB_query("SELECT cid,uid,UNIX_TIMESTAMP(time) as time FROM {$_TABLES['commentedits']} WHERE cid = ".(int) $A['cid']);
@@ -633,6 +634,9 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         } else {
             $template->set_var( 'pid', $A['cid'] );
             $retval .= $template->parse( 'output', 'comment' );
+        }
+        if ( $preview ) {
+            return $retval;
         }
         $row++;
     } while( $A = DB_fetchArray( $comments ));
@@ -952,8 +956,7 @@ $retval .= PLG_displayComment($type, $sid, '', '', '', '', '', '');
                     $A['username'] = DB_getItem ($_TABLES['users'], 'username',
                                                  "uid = ".(int) $uid);
                 }
-                $thecomments = CMT_getComment ($A, 'flat', $type, 'ASC', false,
-                                               true);
+                $thecomments = CMT_getComment ($A, 'flat', $type, 'ASC', false, true);
 
                 $start->set_var( 'comments', $thecomments );
                 $retval .= COM_startBlock ($LANG03[14])

@@ -2985,7 +2985,6 @@ function COM_undoSpecialChars( $string )
 function COM_makesid()
 {
     $sid = date( 'YmdHis' );
-//    srand(( double ) microtime() * 1000000 );
     $sid .= mt_rand( 0, 999 );
 
     return $sid;
@@ -4257,6 +4256,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
             }
 
             $retval .= COM_makeList( $newcomments, 'list-new-comments' );
+            $retval .= '<br />';
         }
     }
 

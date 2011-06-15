@@ -144,8 +144,10 @@ class database {
             $this->dbError();
         }
 
-        if ($this->_mysql_version >= 40100) {
-            if (strcasecmp($this->_charset, 'utf-8') == 0) {
+        if ($this->_charset == 'utf-8') {
+            if (($this->_mysql_version >= 50007) && function_exists('mysql_set_charset') ) {
+                @mysql_set_charset('utf8',$this->_db);
+            } else {
                 @mysql_query ("SET NAMES 'utf8'", $this->_db);
             }
         }
@@ -178,7 +180,7 @@ class database {
         $this->_pass = $dbpass;
         $this->_verbose = false;
         $this->_errorlog_fn = $errorlogfn;
-        $this->_charset = $charset;
+        $this->_charset = strtolower($charset);
         $this->_mysql_version = 0;
 
         $this->_connect();

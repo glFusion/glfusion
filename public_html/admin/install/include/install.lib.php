@@ -46,7 +46,7 @@ if (!defined('SUPPORTED_PHP_VER')) {
     define('SUPPORTED_PHP_VER', '5.2.0');
 }
 if (!defined('SUPPORTED_MYSQL_VER')) {
-    define('SUPPORTED_MYSQL_VER', '4.0.18');
+    define('SUPPORTED_MYSQL_VER', '4.1.3');
 }
 
 if (empty($LANG_DIRECTION)) {

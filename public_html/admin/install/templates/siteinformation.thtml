@@ -21,6 +21,7 @@
         <select name="dbtype">
           <option value="mysql" {noinnodb_selected}>MySQL</option>
           <option value="mysql-innodb" {innodb_selected}>MySQL with InnoDB Table support</option>
+          <option value="mysqli" {mysqli_selected}>MySQLi</option>
         </select>
         <label style="font-weight:normal;">&nbsp;{lang_utf8}:</label>
         <input type="checkbox" name="use_utf8" checked="checked" class="box"/>

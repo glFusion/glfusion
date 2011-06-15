@@ -1072,7 +1072,7 @@ switch ($action) {
                     $html = false;
                 }
             } else {
-                $content = $_POST['content'];
+                $content = isset($_POST['content']) ? $_POST['content'] : '';
             }
 
             $rdfurl         = isset ($_POST['rdfurl'])         ? COM_applyFilter($_POST['rdfurl']) : '';

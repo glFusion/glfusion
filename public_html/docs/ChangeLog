@@ -2,8 +2,13 @@ glFusion ChangeLog
 
 v1.3.0 (Trunk Development Branch)
 ------
-- Comment entry now displays appropriate errors when a comment entry
-  fails (Mark)
+- New SESS API - SESS_unSet() removes a session variable is set (Mark)
+- CAPTCHA now displays appropriate feedback when invalid CAPTCHA entered
+  on comment entry form (Mark)
+- Cache $_GROUP data in session variable to reduce SQL calls (Mark)
+- E_ALL fix when saving comments (Mark)
+- Improved COM_refresh() to use header() call when appropriate (Mark)
+- Support for MySQLi interface (Mark)
 - Implement new What's New options - no longer display an item
   if not new items are available.  New config option to hide
   What's New block if no entries to display (Mark/Lee)

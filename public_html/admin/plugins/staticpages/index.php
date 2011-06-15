@@ -887,7 +887,7 @@ switch ($action) {
             $_POST['perm_group'] = $perm_group;
             $_POST['perm_members'] = $perm_members;
             $_POST['perm_anon'] = $perm_anon;
-            $sp_centerblock = $_POST['sp_centerblock'];
+            $sp_centerblock = isset($_POST['sp_centerblock']) ? $_POST['sp_centerblock'] : '';
             $sp_help = '';
             if (!empty($_POST['sp_help'])) {
                 $sp_help = $_POST['sp_help'];

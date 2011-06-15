@@ -1009,9 +1009,15 @@ function INST_getSiteInformation()
     if ( isset($_GLFUSION['innodb']) && $_GLFUSION['innodb'] ) {
         $T->set_var('innodb_selected',' selected="selected"');
         $T->set_var('noinnodb_selected','');
+        $T->set_var('mysqli_selected','');
+    } elseif ($_GLFUSION['db_type'] == 'mysqli' ) {
+        $T->set_var('mysqli_selected',' selected="selected"');
+        $T->set_var('innodb_selected','');
+        $T->set_var('noinnodb_selected','');
     } else {
         $T->set_var('noinnodb_selected',' selected="selected"');
         $T->set_var('innodb_selected','');
+        $T->set_var('mysqli_selected','');
     }
 
     $T->set_var(array(
@@ -1133,6 +1139,14 @@ function INST_gotSiteInformation()
             $innodb = true;
             $db_type = 'mysql';
         case 'mysql' :
+            $db_type = 'mysql';
+            break;
+        case 'mysqli' :
+            if ( class_exists('MySQLi') ) {
+                $db_type = 'mysqli';
+            } else {
+                $db_type = 'mysql';
+            }
             break;
     }
 
@@ -1358,7 +1372,7 @@ function INST_installAndContentPlugins()
                 'user' => (isset($_GLFUSION['db_user']) ? $_GLFUSION['db_user'] : $_DB_user),
                 'pass' => (isset($_GLFUSION['db_pass']) ? $_GLFUSION['db_pass'] : $_DB_pass),
                 'table_prefix' => (isset($_GLFUSION['db_prefix']) ? $_GLFUSION['db_prefix'] : $_DB_table_prefix),
-                'type' => 'mysql');
+                'type' => (isset($_GLFUSION['db_type']) ? $_GLFUSION['db_type'] : $_DB_type));
 
     $dbconfig_file = fopen($config_file, 'r');
     $dbconfig_data = fread($dbconfig_file, filesize($config_file));
@@ -1369,7 +1383,7 @@ function INST_installAndContentPlugins()
     $dbconfig_data = str_replace("\$_DB_user = '" . $_DB_user . "';", "\$_DB_user = '" . $_GLFUSION['db_user'] . "';", $dbconfig_data); // Username
     $dbconfig_data = str_replace("\$_DB_pass = '" . $_DB_pass . "';", "\$_DB_pass = '" . $_GLFUSION['db_pass'] . "';", $dbconfig_data); // Password
     $dbconfig_data = str_replace("\$_DB_table_prefix = '" . $_DB_table_prefix . "';", "\$_DB_table_prefix = '" . $_GLFUSION['db_prefix'] . "';", $dbconfig_data); // Table prefix
-    $dbconfig_data = str_replace("\$_DB_dbms = '" . $_DB_dbms . "';", "\$_DB_dbms = '" . 'mysql' . "';", $dbconfig_data); // Database type
+    $dbconfig_data = str_replace("\$_DB_dbms = '" . $_DB_dbms . "';", "\$_DB_dbms = '" . $_GLFUSION['db_type'] . "';", $dbconfig_data); // Database type
 
     // Write changes to db-config.php
     $dbconfig_file = fopen($config_file, 'w');
@@ -2160,7 +2174,7 @@ function INST_gotGeeklogPathSetting($dbc_path = '')
                 'user' => $_DB_user,
                 'pass' => $_DB_pass,
                 'table_prefix' => $_DB_table_prefix,
-                'type' => 'mysql');
+                'type' => $_DB_type);
 
     $dbconfig_file = fopen($config_file, 'r');
     $dbconfig_data = fread($dbconfig_file, filesize($config_file));
