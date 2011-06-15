@@ -1898,7 +1898,7 @@ function COM_errorLog( $logentry, $actionid = '' )
         $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),
                                  $logentry );
 
-        $timestamp = strftime( '%c' );
+        $timestamp = @strftime( '%c' );
 
         if (!isset($_CONF['path_layout']) &&
                 (($actionid == 2) || empty($actionid))) {

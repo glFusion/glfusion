@@ -1397,7 +1397,7 @@ function INST_installAndContentPlugins()
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
     }
     require $_CONF['path_system'].'lib-database.php';
-
+    if ( $_DB_dbms == 'mysqli' ) $_DB_dbms = 'mysql';
     list($rc,$errors) = INST_createDatabaseStructures($use_innodb);
     if ( $rc != true ) {
         return _displayError(DB_NO_CONNECT,'getsiteinformation',$errors);
@@ -1487,12 +1487,13 @@ function INST_installAndContentPlugins()
     @touch($log_path.'captcha.log');
     @touch($log_path.'spamx.log');
 
-    global $_CONF, $_SYSTEM, $_DB, $_GROUPS, $_RIGHTS, $TEMPLATE_OPTIONS;
+    global $_CONF, $_SYSTEM, $_DB, $_DB_dbms, $_GROUPS, $_RIGHTS, $TEMPLATE_OPTIONS;
 
     if ( !file_exists($_CONF['path_html'].'lib-common.php') ) {
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
     }
     require $_CONF['path_html'].'lib-common.php';
+    if ( $_DB_dbms == 'mysqli') $_DB_dbms = 'mysql';
 
     INST_pluginAutoInstall('bad_behavior2');
     INST_pluginAutoInstall('captcha');

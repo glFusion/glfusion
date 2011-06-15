@@ -118,7 +118,9 @@ $_TABLES['userevent']           = $_DB_table_prefix . 'userevent';
 *
 */
 require_once $_CONF['path_system'] . 'databases/'. $_DB_dbms . '.class.php';
-
+if ( $_DB_dbms == 'mysqli' ) {
+    $_DB_dbms = 'mysql';
+}
 // Instantiate the database object
 $_DB = new database($_DB_host, $_DB_name, $_DB_user, $_DB_pass, 'COM_errorLog',
                     $_CONF['default_charset']);
@@ -545,7 +547,7 @@ function DB_checkTableExists($table)
 
     $exists = false;
 
-    if ($_DB_dbms == 'mysql') {
+    if ($_DB_dbms == 'mysql' || $_DB_dbms == 'mysqli' ) {
         $result = DB_query ("SHOW TABLES LIKE '{$_TABLES[$table]}'");
         if (DB_numRows ($result) > 0) {
             $exists = true;

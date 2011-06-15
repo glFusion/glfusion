@@ -487,7 +487,7 @@ class database
         }
 
         // return only if recordset exists, otherwise 0
-        if (strcasecmp(get_class($recordset), 'MySQLi_Result') === 0) {
+        if (is_object($recordset) && strcasecmp(get_class($recordset), 'MySQLi_Result') === 0) {
             if ($this->_verbose) {
                 $this->_errorlog('DEBUG: mysqli - got ' . $recordset->num_rows . ' rows');
                 $this->_errorlog("DEBUG: mysqli - Leaving database->dbNumRows");
