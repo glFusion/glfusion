@@ -356,7 +356,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
     }
 
     if ( SEC_inGroup('Root') && function_exists('plugin_cclabel_nettools') && isset($showtopic['ip']) ) {
-        $iplink = '<a href="' . $_CONF['site_url'] . '/nettools/whois.php?domain=' . $showtopic['ip'] . '">' . $showtopic['ip'] . '</a>';
+        $iplink = '<a href="' . $_CONF['site_admin_url'] . '/plugins/nettools/whois.php?domain=' . $showtopic['ip'] . '" target="_new">' . $showtopic['ip'] . '</a>';
         $topictemplate->set_var('ipaddress',$iplink);
     } else {
         $topictemplate->set_var('ipaddress','');
