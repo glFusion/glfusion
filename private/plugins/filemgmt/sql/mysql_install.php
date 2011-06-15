@@ -39,13 +39,13 @@ if (!defined ('GVERSION')) {
 # Table structure for filemgmt categories - Top Level and subcategories
 #
 
-$_SQL['filemgmt_cat'] = "CREATE TABLE {$_FM_TABLES['filemgmt_cat']} (
+$_SQL['filemgmt_cat'] = "CREATE TABLE {$_TABLES['filemgmt_cat']} (
   cid int(5) unsigned NOT NULL auto_increment,
   pid int(5) unsigned NOT NULL default '0',
   title varchar(50) NOT NULL default '',
   imgurl varchar(150) NOT NULL default '',
-  `grp_access` mediumint(8) NOT NULL default '0',
-  `grp_writeaccess` mediumint(8) NOT NULL default '0',
+  grp_access mediumint(8) NOT NULL default '0',
+  grp_writeaccess mediumint(8) NOT NULL default '0',
   PRIMARY KEY  (cid),
   KEY pid (pid)
 ) ENGINE=MyISAM";
@@ -54,7 +54,7 @@ $_SQL['filemgmt_cat'] = "CREATE TABLE {$_FM_TABLES['filemgmt_cat']} (
 # Table structure for filemgmt file details - main table
 #
 
-$_SQL['filemgmt_filedetail'] = "CREATE TABLE {$_FM_TABLES['filemgmt_filedetail']} (
+$_SQL['filemgmt_filedetail'] = "CREATE TABLE {$_TABLES['filemgmt_filedetail']} (
   lid int(11) unsigned NOT NULL auto_increment,
   cid int(5) unsigned NOT NULL default '0',
   title varchar(100) NOT NULL default '',
@@ -81,7 +81,7 @@ $_SQL['filemgmt_filedetail'] = "CREATE TABLE {$_FM_TABLES['filemgmt_filedetail']
 # Table structure for filemgmt description details
 #
 
-$_SQL['filemgmt_filedesc'] = "CREATE TABLE {$_FM_TABLES['filemgmt_filedesc']} (
+$_SQL['filemgmt_filedesc'] = "CREATE TABLE {$_TABLES['filemgmt_filedesc']} (
   lid int(11) unsigned NOT NULL default '0',
   description text NOT NULL,
   KEY lid (lid)
@@ -90,7 +90,7 @@ $_SQL['filemgmt_filedesc'] = "CREATE TABLE {$_FM_TABLES['filemgmt_filedesc']} (
 #
 # Table structure for table to hold reported broken links
 #
-$_SQL['filemgmt_brokenlinks'] = "CREATE TABLE {$_FM_TABLES['filemgmt_brokenlinks']} (
+$_SQL['filemgmt_brokenlinks'] = "CREATE TABLE {$_TABLES['filemgmt_brokenlinks']} (
   reportid int(5) NOT NULL auto_increment,
   lid int(11) NOT NULL default '0',
   sender int(11) NOT NULL default '0',
@@ -106,7 +106,7 @@ $_SQL['filemgmt_brokenlinks'] = "CREATE TABLE {$_FM_TABLES['filemgmt_brokenlinks
 # Table structure for filemgmt voting detail records
 #
 
-$_SQL['filemgmt_votedata'] = "CREATE TABLE {$_FM_TABLES['filemgmt_votedata']} (
+$_SQL['filemgmt_votedata'] = "CREATE TABLE {$_TABLES['filemgmt_votedata']} (
   ratingid int(11) unsigned NOT NULL auto_increment,
   lid int(11) unsigned NOT NULL default '0',
   ratinguser int(11) NOT NULL default '0',
@@ -123,7 +123,7 @@ $_SQL['filemgmt_votedata'] = "CREATE TABLE {$_FM_TABLES['filemgmt_votedata']} (
 # Table structure for filemgmt download history
 #
 
-$_SQL['filemgmt_history'] = "CREATE TABLE {$_FM_TABLES['filemgmt_history']} (
+$_SQL['filemgmt_history'] = "CREATE TABLE {$_TABLES['filemgmt_history']} (
   uid mediumint(8) NOT NULL default '0',
   lid int(11) NOT NULL default '0',
   remote_ip varchar(15) NOT NULL default '',
@@ -133,7 +133,7 @@ $_SQL['filemgmt_history'] = "CREATE TABLE {$_FM_TABLES['filemgmt_history']} (
 ) ENGINE=MyISAM";
 
 
-$_SQL['d1'] = "INSERT INTO {$_FM_TABLES['filemgmt_cat']} (`cid`, `pid`, `title`, `imgurl`, `grp_access`, `grp_writeaccess`) VALUES (1,0,'General','',2,2);";
-$_SQL['d2'] = "INSERT INTO {$_FM_TABLES['filemgmt_filedesc']} (`lid`, `description`) VALUES (1,'Yahoo User Interface Grids CSS framework cheat sheet in .pdf format.');";
-$_SQL['d3'] = "INSERT INTO {$_FM_TABLES['filemgmt_filedetail']} (`lid`, `cid`, `title`, `url`, `homepage`, `version`, `size`, `platform`, `logourl`, `submitter`, `status`, `date`, `hits`, `rating`, `votes`, `comments`) VALUES (1,1,'YUI Grids CSS Cheat Sheet','css.pdf','http://developer.yahoo.com/yui/grids/','v2.6',131072 ,'','',2,1,NOW(),0,0.0000,0,1);";
+$_SQL['d1'] = "INSERT INTO {$_TABLES['filemgmt_cat']} ('cid', 'pid', 'title', 'imgurl', 'grp_access', 'grp_writeaccess') VALUES (1,0,'General','',2,2);";
+$_SQL['d2'] = "INSERT INTO {$_TABLES['filemgmt_filedesc']} ('lid', 'description') VALUES (1,'Yahoo User Interface Grids CSS framework cheat sheet in .pdf format.');";
+$_SQL['d3'] = "INSERT INTO {$_TABLES['filemgmt_filedetail']} ('lid', 'cid', 'title', 'url', 'homepage', 'version', 'size', 'platform', 'logourl', 'submitter', 'status', 'date', 'hits', 'rating', 'votes', 'comments') VALUES (1,1,'YUI Grids CSS Cheat Sheet','css.pdf','http://developer.yahoo.com/yui/grids/','v2.6',131072 ,'','',2,1,NOW(),0,0.0000,0,1);";
 ?>
