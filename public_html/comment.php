@@ -536,7 +536,11 @@ case $LANG03[29]: //Submit Changes
     break;
 
 case $LANG03[11]: // Submit Comment
-    $display .= handleSubmit();  // moved to function for readibility
+    if ( SEC_checkToken() ) {
+        $display .= handleSubmit();  // moved to function for readibility
+    } else {
+        $display .= COM_refresh($_CONF['site_url'] . '/index.php');
+    }
     break;
 
 case 'delete':
@@ -628,7 +632,7 @@ default:  // New Comment
             $title = str_replace ( '&gt;', '>', $title );
         }
         $pid = isset($_REQUEST['pid']) ? COM_applyFilter($_REQUEST['pid'],true) : 0;
-        $noindex = '<meta name="robots" content="noindex"'.XHTML.'>'.LB;
+        $noindex = '<meta name="robots" content="noindex"/>'.LB;
         $display .= COM_siteHeader('menu', $LANG03[1], $noindex)
              . CMT_commentForm ($title, '', $sid,
                     $pid, $type, $mode,

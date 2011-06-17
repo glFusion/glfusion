@@ -876,10 +876,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             //not edit mode or preview changes
             $last = COM_checkSpeedlimit ('comment');
         }
-/*
-//($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
-$retval .= PLG_displayComment($type, $sid, '', '', '', '', '', '');
-*/
+
         if ($last > 0) {
             $retval .= COM_startBlock ($LANG12[26], '',
                                COM_getBlockTemplate ('_msg_block', 'header'))
@@ -922,9 +919,6 @@ $retval .= PLG_displayComment($type, $sid, '', '', '', '', '', '');
             if (($mode == $LANG03[14] || $mode == $LANG03[28]) && !empty($title) && !empty($comment) ) {
                 $start = new Template( $_CONF['path_layout'] . 'comment' );
                 $start->set_file( array( 'comment' => 'startcomment.thtml' ));
-                $start->set_var( 'site_url', $_CONF['site_url'] );
-                $start->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
-                $start->set_var( 'layout_url', $_CONF['layout_url'] );
                 $start->set_var( 'hide_if_preview', 'style="display:none"' );
 
                 // Clean up all the vars
@@ -936,8 +930,7 @@ $retval .= PLG_displayComment($type, $sid, '', '', '', '', '', '');
                         // these have already been filtered above
                         $A[$key] = $_POST[$key];
                     } else if ($key == 'username') {
-                        $A[$key] = htmlspecialchars(COM_checkWords(strip_tags(
-                                    $_POST[$key])));
+                        $A[$key] = htmlspecialchars(COM_checkWords(strip_tags($_POST[$key])));
                     } else {
                         $A[$key] = COM_applyFilter($_POST[$key]);
                     }
@@ -978,7 +971,7 @@ $retval .= PLG_displayComment($type, $sid, '', '', '', '', '', '');
                 } else {
                     $ae_uid = (int) COM_applyFilter($_USER['uid'],true);
                 }
-                $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
+                $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=".(int)$ae_uid." AND urlfor='advancededitor'";
                 DB_query($sql,1);
             } else {
                 $comment_template->set_file('form','commentform.thtml');
@@ -988,9 +981,6 @@ $retval .= PLG_displayComment($type, $sid, '', '', '', '', '', '');
             } else {
                 $comment_template->set_var('glfusionStyleBasePath',$_CONF['site_url'] . '/fckeditor');
             }
-            $comment_template->set_var('site_url', $_CONF['site_url']);
-            $comment_template->set_var('site_admin_url', $_CONF['site_admin_url']);
-            $comment_template->set_var('layout_url', $_CONF['layout_url']);
             $comment_template->set_var('start_block_postacomment', COM_startBlock($LANG03[1]));
             if ($_CONF['show_fullname'] == 1) {
                 $comment_template->set_var('lang_username', $LANG_ACCESS['name']);
@@ -1009,9 +999,9 @@ $retval .= PLG_displayComment($type, $sid, '', '', '', '', '', '');
                 $comment_template->set_var('start_block_postacomment', COM_startBlock($LANG03[1]));
             	$comment_template->set_var('cid', '');
             }
-
+          	$comment_template->set_var('CSRF_TOKEN', SEC_createToken());
+          	$comment_template->set_var('token_name', CSRF_TOKEN);
             if (! COM_isAnonUser()) {
-            	$comment_template->set_var('CSRF_TOKEN', SEC_createToken());
                 $comment_template->set_var('uid', $_USER['uid']);
                 $name = COM_getDisplayName($_USER['uid'], $_USER['username'],$_USER['fullname']);
                 $comment_template->set_var('username', $name);
@@ -1054,6 +1044,7 @@ $retval .= PLG_displayComment($type, $sid, '', '', '', '', '', '');
             $comment_template->set_var('lang_instr_line3', $LANG03[21]);
             $comment_template->set_var('lang_instr_line4', $LANG03[22]);
             $comment_template->set_var('lang_instr_line5', $LANG03[23]);
+
 
             if ($mode == 'edit' || $mode == $LANG03[28]) {
                 //editing comment or preview changes
@@ -1374,8 +1365,6 @@ function CMT_reportAbusiveComment ($cid, $type)
 
     $start = new Template($_CONF['path_layout'] . 'comment');
     $start->set_file(array('report' => 'reportcomment.thtml'));
-    $start->set_var('site_url', $_CONF['site_url']);
-    $start->set_var('layout_url', $_CONF['layout_url']);
     $start->set_var('lang_report_this', $LANG03[25]);
     $start->set_var('lang_send_report', $LANG03[10]);
     $start->set_var('cid', $cid);
