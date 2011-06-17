@@ -1664,7 +1664,7 @@ function phpblock_forum_menu() {
         $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/notify.php' . '" title="' . $LANG_GF01['SUBSCRIPTIONS'] . '">' . $LANG_GF01['SUBSCRIPTIONS'] . '</a></li>';
         $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/list.php?op=bookmarks' . '" title="' . $LANG_GF01['BOOKMARKS'] . '">' . $LANG_GF01['BOOKMARKS'] . '</a></li>';
     }
-    if ( $_FF_CONF['allow_memberlist'] && $_USER['uid'] > 1) {
+    if ( $_FF_CONF['allow_memberlist'] && !COM_isAnonUser() ) {
         $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/memberlist.php" title="' . $LANG_GF02['msg88'] . '">' . $LANG_GF02['msg88'] . '</a></li>';
     }
     $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/list.php?op=lastx" title="' . $LANG_GF01['LASTX'] . '">' . $LANG_GF01['LASTX'] . '</a></li>';

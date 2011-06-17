@@ -373,7 +373,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
     			$grade = $rating;
     		}
     		//Find out if user has rights to increase / decrease score
-    		if ( $_USER['uid'] > 1 && $_USER['uid'] != $showtopic['uid'] ) { //Can't vote for yourself & must be logged in
+    		if ( !COM_isAnonUser() && $_USER['uid'] != $showtopic['uid'] ) { //Can't vote for yourself & must be logged in
                 if ( !isset($_user_already_voted[$showtopic['uid']] ) ) {
                     $_user_already_voted[$showtopic['uid']] = DB_getItem($_TABLES['ff_rating_assoc'],'grade',"user_id = ".(int) $showtopic['uid'].' AND voter_id = '.(int) $_USER['uid']);
                 }
@@ -444,7 +444,7 @@ function _ff_getmodFunctions($showtopic)
 
     $retval = '';
     $options = '';
-    if ( !isset($_USER['uid']) ) {
+    if ( COM_isAnonUser() ) {
         $_USER['uid'] = 1;
     }
     if (forum_modPermission($showtopic['forum'],$_USER['uid'],'mod_edit')) {

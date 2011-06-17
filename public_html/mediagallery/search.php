@@ -163,7 +163,7 @@ function MG_search($id,$page) {
     }
     $S = DB_fetchArray($result);
 
-    if ( !isset($_USER['uid']) || $_USER['uid'] < 2 ) {
+    if ( COM_isAnonUser() ) {
         $sort_user = 1;
     } else {
         $sort_user = $_USER['uid'];
@@ -680,7 +680,7 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
 
     if ( $MG_albums[$M['album_id']]->enable_rating > 0 ) {
         $ip     = $_SERVER['REMOTE_ADDR'];
-        $uid    = isset($_USER['uid']) ? $_USER['uid'] : 1;
+        $uid    = COM_isAnonUser() ? 1 : $_USER['uid'];
         $static = false;
         // check to see if we are the owner, if so, no rating for us...
         if (isset($_USER['uid']) && $_USER['uid'] == $M['owner_id'] ) {
@@ -692,7 +692,7 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
                 $static = '';
             }
         }
-        if ( $MG_albums[$M['album_id']]->enable_rating == 1 && (!isset($_USER['uid']) || $_USER['uid'] < 2) ) {
+        if ( $MG_albums[$M['album_id']]->enable_rating == 1 && (COM_isAnonUser() ) ) {
             $static = 'static';
         }
         $rating_box = RATING_ratingBar('mediagallery',$M['media_id'], $M['media_votes'], ($M['media_rating']*$M['media_votes'])/2, $static, 5,'','sm');
@@ -954,7 +954,7 @@ if (($mode == $LANG_MG01['search'] && !empty ($LANG_MG01['search'])) || $mode ==
     $sqltmp = DB_escapeString($sqltmp);
 
     $sort_id = COM_makesid();
-    if ( !isset($_USER['uid']) || $_USER['uid'] < 2 ) {
+    if ( COM_isAnonUser() ) {
         $sort_user = 1;
     } else {
         $sort_user = $_USER['uid'];

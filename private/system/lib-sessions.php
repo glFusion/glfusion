@@ -171,11 +171,6 @@ function SESS_sessionCheck()
         $_USER['theme'] = $_CONF['theme'];
     }
 
-/* no longer override core configuration settings */
-//    if ( isset($_USER['tzid']) && !empty($_USER['tzid']) ) {
-//        $_CONF['timezone'] = $_USER['tzid'];
-//    }
-
     if ( $gc_check == 0 ) {
         $expirytime = (string) (time() - $_CONF['session_cookie_timeout']);
         $deleteSQL = "DELETE FROM {$_TABLES['sessions']} WHERE (start_time < $expirytime)";

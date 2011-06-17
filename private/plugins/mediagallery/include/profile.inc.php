@@ -134,7 +134,7 @@ function _mg_profileblocksdisplay( $uid ) {
         return '';
     }
 
-    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $_MG_CONF['loginrequired'] == 1) {
+    if ( COM_isAnonUser()  && $_MG_CONF['loginrequired'] == 1) {
         return '';
     }
 

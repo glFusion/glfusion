@@ -534,7 +534,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
     $media_time = time();
     $media_upload_time = time();
 
-    if ( !isset($_USER['uid']) || $_USER['uid'] < 1 ) {
+    if ( COM_isAnonUser() ) {
         $media_user_id = 1;
     } else {
         $media_user_id = $_USER['uid'];
@@ -1365,7 +1365,7 @@ function MG_notifyModerators( $aid ) {
         $mail->IsHTML(true);
         $mail->Subject = $LANG_MG01['new_upload_subject'] . $_CONF['site_name'];
 
-        if (!isset($_USER['uid']) || $_USER['uid'] < 2  ) {
+        if ( COM_isAnonUser() ) {
             $uname = 'Anonymous';
         } else {
             $uname = DB_getItem($_TABLES['users'],'username','uid=' . $media_user_id);

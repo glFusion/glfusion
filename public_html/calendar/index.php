@@ -546,7 +546,7 @@ case 'day':
         );
     } else {
         $cal_templates->set_var('calendar_title', '[' . $_CONF['site_name'] . ' ' . $LANG_CAL_2[29]);
-        if (!empty($_USER['uid']) AND $_CA_CONF['personalcalendars'] == 1) {
+        if (!COM_isAnonUser() AND $_CA_CONF['personalcalendars'] == 1) {
             $cal_templates->set_var('calendar_toggle', '|&nbsp;'
                 . COM_createLink($LANG_CAL_2[12], $_CONF['site_url']
                     . "/calendar/index.php?mode=personal&amp;view=day&amp;month=$month&amp;day=$day&amp;year=$year") . ']'
@@ -686,7 +686,7 @@ case 'week':
         );
     } else {
         $cal_templates->set_var('calendar_title', '[' . $_CONF['site_name'] . ' ' . $LANG_CAL_2[29]);
-        if (!empty($_USER['uid']) AND $_CA_CONF['personalcalendars'] == 1) {
+        if (!COM_isAnonUser() AND $_CA_CONF['personalcalendars'] == 1) {
             $cal_templates->set_var('calendar_toggle', '|&nbsp;'
                 . COM_createLink($LANG_CAL_2[12], $_CONF['site_url']
                     . "/calendar/index.php?mode=personal&amp;view=week&amp;month=$month&amp;day=$day&amp;year=$year") . ']'
@@ -1088,8 +1088,7 @@ if ($mode == 'personal') {
     $cal_templates->set_var('lang_mastercal', $LANG_CAL_2[25] . $LANG_CAL_2[11]);
     $cal_templates->parse('master_calendar_option','mastercal',true);
 } else {
-    if (isset ($_USER['uid']) && ($_USER['uid'] > 1) &&
-            ($_CA_CONF['personalcalendars'] == 1)) {
+    if (!COM_isAnonUser() && ($_CA_CONF['personalcalendars'] == 1)) {
         $cal_templates->set_var('lang_mycalendar', $LANG_CAL_2[12]);
         $cal_templates->parse('personal_calendar_option','personalcal',true);
     } else {

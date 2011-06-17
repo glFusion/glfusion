@@ -445,7 +445,7 @@ class mgAlbum {
         if ($mgadmin || $root) {
             $this->access = 3;
         } else {
-            if (empty($_USER['uid'])) {
+            if (COM_isAnonUser()) {
                 $uid = 1;
             } else {
                 $uid = $_USER['uid'];
@@ -939,8 +939,8 @@ class mgAlbum {
             }
             $lang_updated = ($_MG_CONF['dfid']=='99' ? '' : $LANG_MG03['updated_prompt']);
 
-            if (isset($_USER['uid']) && $_USER['uid'] > 1) {
-                $lastlogin = DB_getItem ($_TABLES['userinfo'], 'lastlogin', "uid = '" . $_USER['uid'] . "'");
+            if (!COM_isAnonUser() ) {
+                $lastlogin = DB_getItem ($_TABLES['userinfo'], 'lastlogin', "uid = '" . (int) $_USER['uid'] . "'");
                 if ($this->last_update > $lastlogin) {
                     $album_last_update[0] = '<font color="red">' . $album_last_update[0] . '</font>';
                 }

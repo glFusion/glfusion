@@ -235,14 +235,11 @@ if ($A['count'] > 0) {
         $story_template = new Template($_CONF['path_layout'] . 'article');
         $story_template->set_file('article','article.thtml');
 
-        $story_template->set_var('xhtml', XHTML);
-        $story_template->set_var('site_url', $_CONF['site_url']);
         $story_template->set_var('site_admin_url', $_CONF['site_admin_url']);
-        $story_template->set_var('layout_url', $_CONF['layout_url']);
         $story_template->set_var('story_id', $story->getSid());
         $story_template->set_var('story_title', $pagetitle);
         $story_options = array ();
-        if (($_CONF['hideemailicon'] == 0) && (!empty ($_USER['username']) ||
+        if (($_CONF['hideemailicon'] == 0) && (!COM_isAnonUser() ||
                 (($_CONF['loginrequired'] == 0) &&
                  ($_CONF['emailstoryloginrequired'] == 0)))) {
             $emailUrl = $_CONF['site_url'] . '/profiles.php?sid=' . $story->getSid()

@@ -501,7 +501,7 @@ class Media {
     	 *
     	 */
         if ( $MG_albums[$this->album_id]->enable_rating > 0 ) {
-            $uid    = isset($_USER['uid']) ? $_USER['uid'] : 1;
+            $uid    = COM_isAnonUser() ? 1 : $_USER['uid'];
             $static = false;
 
             // check to see if we are the owner, if so, no rating for us...
@@ -518,7 +518,7 @@ class Media {
                 }
             }
 
-            if ( $MG_albums[$this->album_id]->enable_rating == 1 && (!isset($_USER['uid']) || $_USER['uid'] < 2) ) {
+            if ( $MG_albums[$this->album_id]->enable_rating == 1 && COM_isAnonUser() ) {
                 $static = true;
             }
             if ( $_MG_CONF['use_large_stars'] == 1 ) {

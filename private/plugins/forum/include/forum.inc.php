@@ -513,7 +513,7 @@ function f_whosonline(){
 function f_forumrules() {
     global $_CONF,$_USER,$FF_userprefs, $LANG_GF01,$LANG_GF02,$_FF_CONF,$canPost;
 
-    if ( ($_FF_CONF['registered_to_post'] AND ($_USER['uid'] < 2 OR empty($_USER['uid'])) ) || $canPost == 0 ) {
+    if ( ($_FF_CONF['registered_to_post'] AND (COM_isAnonUser() ) ) || $canPost == 0 ) {
         $postperm_msg = $LANG_GF01['POST_PERM_MSG1'];
         $post_perm_image = '<img src="'._ff_getImage('red_dot').'" alt=""/>';
     } else {
@@ -633,8 +633,8 @@ function forum_showBlocks($showblocks)
 
     $retval = '';
     if( !isset( $_USER['noboxes'] )) {
-        if( !empty( $_USER['uid'] )) {
-            $noboxes = DB_getItem( $_TABLES['userindex'], 'noboxes', "uid = {$_USER['uid']}" );
+        if ( !COM_isAnonUser() ) {
+            $noboxes = DB_getItem( $_TABLES['userindex'], 'noboxes', "uid=".(int) $_USER['uid']);
         } else {
             $noboxes = 0;
         }

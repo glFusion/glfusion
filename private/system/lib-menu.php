@@ -51,7 +51,7 @@ function mb_initMenu($skipCache=false) {
     $mbadmin = SEC_hasRights('menu.admin');
     $root    = SEC_inGroup('Root');
 
-    if (empty($_USER['uid']) ) {
+    if (COM_isAnonUser()) {
         $uid = 1;
     } else {
         $uid = $_USER['uid'];

@@ -115,7 +115,7 @@ function plugin_getmenuitems_filemgmt()
 {
     global $_USER, $mydownloads_publicpriv, $_CONF, $LANG_FILEMGMT;
 
-    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
+    if ( (COM_isAnonUser() ) && $mydownloads_publicpriv != 1 )  {
         return '';
     }
 
@@ -337,7 +337,7 @@ function plugin_statssummary_filemgmt ()
 {
     global $_USER, $mydownloads_publicpriv, $_TABLES, $LANG_FILEMGMT;
 
-    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
+    if ( (COM_isAnonUser() ) && $mydownloads_publicpriv != 1 )  {
         return '';
     }
 
@@ -420,7 +420,7 @@ function plugin_searchtypes_filemgmt()
 {
     global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT;
 
-    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
+    if ( (COM_isAnonUser() ) && $mydownloads_publicpriv != 1 )  {
         return '';
     }
 
@@ -574,7 +574,7 @@ function plugin_getadminoption_filemgmt()
 function filemgmt_buildAccessSql($clause='AND') {
     global $_TABLES,$_USER;
 
-    if (isset($_USER['uid']) AND $_USER['uid'] > 1) {
+    if (!COM_isAnonUser() ) {
         $uid = $_USER['uid'];
     } else {
         $uid = 1;
@@ -718,7 +718,7 @@ function plugin_feedupdatecheck_filemgmt ($feed, $topic, $update_data, $limit)
 function plugin_whatsnewsupported_filemgmtxx() {
     global $_USER, $mydownloads_publicpriv, $_CONF, $LANG_FM00,$mydownloads_whatsnew,$filemgmtWhatsNewPeriodDays;
 
-    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
+    if ( (COM_isAnonUser() ) && $mydownloads_publicpriv != 1 )  {
         return '';
     }
 

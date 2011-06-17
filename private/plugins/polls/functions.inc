@@ -90,7 +90,7 @@ function plugin_getmenuitems_polls()
 {
     global $_CONF, $_USER, $_PO_CONF, $LANG_POLLS;
 
-    $anon = (empty ($_USER['uid']) || ($_USER['uid'] <= 1)) ? true : false;
+    $anon = (COM_isAnonUser()) ? true : false;
     if (($_PO_CONF['hidepollsmenu'] == 1) || ($anon &&
                 ($_CONF['loginrequired'] || $_PO_CONF['pollsloginrequired']))) {
         return false;

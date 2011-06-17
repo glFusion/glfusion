@@ -241,9 +241,9 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
 
     if ( isset($_POST['submit']) && SEC_checkToken()){
 
-        if(isset($_USER['uid']) AND $_USER['uid'] > 1 ) {
+        if (!COM_isAnonUser() ) {
             $submitter = (int) $_USER['uid'];
-        }else{
+        } else {
             $submitter = 1;
         }
         // Check if Title entered

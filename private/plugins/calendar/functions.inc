@@ -87,7 +87,7 @@ function plugin_getmenuitems_calendar ()
 {
     global $_CONF, $_USER, $_CA_CONF, $LANG_CAL_1;
 
-    $anon = (empty ($_USER['uid']) || ($_USER['uid'] <= 1)) ? true : false;
+    $anon = (COM_isAnonUser() ) ? true : false;
     if (($_CA_CONF['hidecalendarmenu'] == 1) || ($anon &&
             ($_CONF['loginrequired'] || $_CA_CONF['calendarloginrequired']))) {
         return false;
@@ -139,7 +139,7 @@ function phpblock_calendar( $help='', $title='' )
         }
         $eventSql .= 'ORDER BY datestart,timestart';
 
-        if(( $_CA_CONF['personalcalendars'] == 1 ) && !empty( $_USER['uid'] )) {
+        if(( $_CA_CONF['personalcalendars'] == 1 ) && !COM_isAnonUser() ) {
             $personaleventsql = 'SELECT eid,title,url,datestart,dateend,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon '
             . "FROM {$_TABLES['personal_events']} ";
             if($_DB_dbms == 'mssql') {

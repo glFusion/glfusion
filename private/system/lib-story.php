@@ -437,7 +437,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             }
 
             if(( $_CONF['hideemailicon'] == 1 ) ||
-               ( empty( $_USER['username'] ) &&
+               ( COM_isAnonUser() &&
                     (( $_CONF['loginrequired'] == 1 ) ||
                      ( $_CONF['emailstoryloginrequired'] == 1 )))) {
                 $article->set_var( 'email_icon', '' );

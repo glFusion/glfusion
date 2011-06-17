@@ -200,7 +200,7 @@ function CALENDAR_saveUserEvent($eid)
             $savesql = "INSERT INTO {$_TABLES['personal_events']} "
              . "(eid,status,uid,title,event_type,datestart,dateend,timestart,timeend,allday,location,address1,address2,city,state,"
              . "zipcode,url,description,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon) "
-             . " SELECT eid, status,".$_USER['uid'].",title,event_type,datestart,dateend,timestart,timeend,allday,location,address1,address2,"
+             . " SELECT eid, status,".(int)$_USER['uid'].",title,event_type,datestart,dateend,timestart,timeend,allday,location,address1,address2,"
              . "city,state,zipcode,url,description,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon FROM "
              . "{$_TABLES['events']} WHERE eid = '".DB_escapeString($eid)."'";
 
@@ -407,8 +407,7 @@ case 'saveuserevent':
     break;
 
 case $LANG_CAL_1[45]: // save edited personal event
-    if (!empty($LANG_CAL_1[45]) && ($_CA_CONF['personalcalendars'] == 1) &&
-            (!empty ($_USER['uid']) && ($_USER['uid'] > 1)) &&
+    if (!empty($LANG_CAL_1[45]) && ($_CA_CONF['personalcalendars'] == 1) && (!COM_isAnonUser()) &&
             (isset ($_POST['calendar_type']) &&
              ($_POST['calendar_type'] == 'personal')) && SEC_checkToken()) {
         $display = plugin_savesubmission_calendar ($_POST);
@@ -421,7 +420,7 @@ case 'deleteevent':
 case $LANG_CAL_1[51]:
     if (($_CA_CONF['personalcalendars'] == 1) && SEC_checkToken()) {
         $eid = COM_applyFilter ($_REQUEST['eid']);
-        if (!empty ($eid) && (isset ($_USER['uid']) && ($_USER['uid'] > 1))) {
+        if (!empty ($eid) && (!COM_isAnonUser() )) {
             DB_query ("DELETE FROM {$_TABLES['personal_events']} WHERE uid={$_USER['uid']} AND eid='".DB_escapeString($eid)."'");
             $display .= COM_refresh ($_CONF['site_url']
                      . '/calendar/index.php?mode=personal&amp;msg=26');
@@ -436,7 +435,7 @@ case $LANG_CAL_1[51]:
 case 'edit':
     if ($_CA_CONF['personalcalendars'] == 1) {
         $eid = COM_applyFilter ($_GET['eid']);
-        if (!empty ($eid) && (isset ($_USER['uid']) && ($_USER['uid'] > 1))) {
+        if (!empty ($eid) && (!COM_isAnonUser())) {
             $result = DB_query ("SELECT * FROM {$_TABLES['personal_events']} WHERE (eid = '".DB_escapeString($eid)."') AND (uid = {$_USER['uid']})");
             if (DB_numRows ($result) == 1) {
                 $A = DB_fetchArray ($result);
@@ -471,7 +470,7 @@ default:
     }
     if (!empty ($eid)) {
         if (($mode == 'personal') && ($_CA_CONF['personalcalendars'] == 1) &&
-                (isset ($_USER['uid']) && ($_USER['uid'] > 1))) {
+                (!COM_isAnonUser() )) {
             $datesql = "SELECT * FROM {$_TABLES['personal_events']} "
                      . "WHERE (eid = '$eid') AND (uid = {$_USER['uid']}) AND status = 1";
             $pagetitle = $LANG_CAL_2[28] . ' ' . COM_getDisplayName();

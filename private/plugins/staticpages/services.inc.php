@@ -442,7 +442,7 @@ function service_delete_staticpages($args, &$output, &$svc_msg)
         $output .= $LANG_STATIC['access_denied_msg'];
         $output .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
         $output .= COM_siteFooter ();
-        if ($_USER['uid'] > 1) {
+        if (!COM_isAnonUser()) {
             return PLG_RET_PERMISSION_DENIED;
         } else {
             return PLG_RET_AUTH_FAILED;

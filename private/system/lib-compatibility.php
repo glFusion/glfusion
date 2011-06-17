@@ -276,7 +276,7 @@ function COM_siteHeaderv1( $what = 'menu', $pagetitle = '', $headercode = '' )
 
     $msg = rtrim($LANG01[67]) . ' ' . $_CONF['site_name'];
 
-    if( !empty( $_USER['username'] ))
+    if( !COM_isAnonUser())
     {
         $msg .= ', ' . COM_getDisplayName( $_USER['uid'], $_USER['username'],
                                            $_USER['fullname'] );

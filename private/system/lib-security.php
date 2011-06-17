@@ -110,7 +110,7 @@ function SEC_getUserGroups($uid='')
     $groups = array();
 
     if (empty($uid)) {
-        if (empty($_USER['uid'])) {
+        if (COM_isAnonUser()) {
             $uid = 1;
         } else {
             $uid = $_USER['uid'];
@@ -240,7 +240,7 @@ function SEC_inGroup($grp_to_verify,$uid='',$cur_grp_id='')
     global $_TABLES, $_USER, $_SEC_VERBOSE, $_GROUPS;
 
     if (empty ($uid)) {
-        if (empty ($_USER['uid'])) {
+        if (COM_isAnonUser()) {
             $uid = 1;
         } else {
             $uid = $_USER['uid'];
@@ -378,7 +378,7 @@ function SEC_hasAccess($owner_id,$group_id,$perm_owner,$perm_group,$perm_members
     global $_USER;
 
     // Cache current user id
-    if (empty($_USER['uid'])) {
+    if (COM_isAnonUser()) {
         $uid = 1;
     } else {
         $uid = $_USER['uid'];
@@ -550,7 +550,7 @@ function SEC_getUserPermissions($grp_id='',$uid='')
 
     // Get user ID if we don't already have it
     if (empty ($uid)) {
-        if (empty ($_USER['uid'])) {
+        if (COM_isAnonUser()) {
             $uid = 1;
         } else {
             $uid = $_USER['uid'];
@@ -706,7 +706,7 @@ function SEC_getFeatureGroup ($feature, $uid = '')
     $ugroups = array ();
 
     if (empty ($uid)) {
-        if (empty ($_USER['uid'])) {
+        if (COM_isAnonUser()) {
             $uid = 1;
         } else {
             $uid = $_USER['uid'];
@@ -1745,7 +1745,7 @@ function SEC_tokenreauthform($message = '')
 
     COM_clearSpeedlimit($_CONF['login_speedlimit'], 'tokenexpired');
 
-    if ( !isset($_USER['uid']) || $_USER['uid'] == 1 || !empty($_USER['remoteusername']) ) {
+    if ( COM_isAnonUser() || !empty($_USER['remoteusername']) ) {
         return _sec_reauthOther($message);
     }
 

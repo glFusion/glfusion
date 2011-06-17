@@ -79,7 +79,7 @@ function MG_previewPostCard() {
 
     $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_escapeString($mid) . '"');
 
-    if ( $MG_albums[$aid]->access == 0 || $MG_albums[$aid]->enable_postcard == 0 || ($_USER['uid'] < 2 && $MG_albums[$aid]->enable_postcard != 2)) {
+    if ( $MG_albums[$aid]->access == 0 || $MG_albums[$aid]->enable_postcard == 0 || (COM_isAnonUser() && $MG_albums[$aid]->enable_postcard != 2)) {
         $retval  = MG_siteHeader();
         $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
                  . '<br/>' . $LANG_MG00['access_denied_msg']
@@ -188,7 +188,7 @@ function MG_editPostCard( $mode, $mid, $msg='' ) {
     }
 
     $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_escapeString($mid) . '"');
-    if ( $MG_albums[$aid]->access == 0 || $MG_albums[$aid]->enable_postcard == 0 || ($_USER['uid'] < 2 && $MG_albums[$aid]->enable_postcard != 2)) {
+    if ( $MG_albums[$aid]->access == 0 || $MG_albums[$aid]->enable_postcard == 0 || (COM_isAnonUser() && $MG_albums[$aid]->enable_postcard != 2)) {
         $retval = MG_siteHeader();
         $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
                  . '<br/>' . $LANG_MG00['access_denied_msg']
@@ -309,7 +309,7 @@ function MG_sendPostCard() {
 
     $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_escapeString($mid) . '"');
 
-    if ( $MG_albums[$aid]->access == 0 || $MG_albums[$aid]->enable_postcard == 0 || ( $_USER['uid'] < 2 && $MG_albums[$aid]->enable_postcard != 2)) {
+    if ( $MG_albums[$aid]->access == 0 || $MG_albums[$aid]->enable_postcard == 0 || ( COM_isAnonUser() && $MG_albums[$aid]->enable_postcard != 2)) {
         $retval = MG_siteHeader();
         $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
                  . '<br/>' . $LANG_MG00['access_denied_msg']
@@ -344,7 +344,7 @@ function MG_sendPostCard() {
     $newmessage    = DB_escapeString($message);
     $pcId       = COM_makesid();
     $pc_time    = time();
-    if ($_USER['uid'] < 2 ) {
+    if (COM_isAnonUser() ) {
         $uid = 1;
     } else {
         $uid        = (int) $_USER['uid'];
@@ -486,7 +486,7 @@ function MG_postcardLog( $logentry )
             return $LANG01[33] . $logfile . ' (' . $timestamp . ')<br>' . LB;
         }
 
-        if( isset( $_USER['uid'] )) {
+        if ( !COM_isAnonUser() ) {
             $byuser = $_USER['uid'] . '@' . $_SERVER['REMOTE_ADDR'];
         } else {
             $byuser = 'anon@' . $_SERVER['REMOTE_ADDR'];

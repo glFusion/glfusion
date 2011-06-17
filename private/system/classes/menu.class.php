@@ -388,7 +388,7 @@ class menuElement {
                         } else {
                             $menu .= '<ul>' . LB;
                         }
-                        if( !empty( $_USER['uid'] ) && ( $_USER['uid'] > 1 )) {
+                        if ( !COM_isAnonUser() ) {
                             $plugin_options = PLG_getAdminOptions();
                             $num_plugins = count($plugin_options);
                             if (SEC_isModerator() OR
@@ -714,9 +714,9 @@ class menuElement {
                         }
 
                         $sql = "SELECT tid,topic,imageurl FROM {$_TABLES['topics']}" . $langsql;
-                        if( !empty( $_USER['uid'] ) && ( $_USER['uid'] > 1 )) {
+                        if ( !COM_isAnonUser() ) {
                             $tids = DB_getItem( $_TABLES['userindex'], 'tids',
-                                                "uid = {$_USER['uid']}" );
+                                                "uid=".(int) $_USER['uid']);
                             if( !empty( $tids )) {
                                 $sql .= " $op (tid NOT IN ('" . str_replace( ' ', "','", $tids )
                                      . "'))" . COM_getPermSQL( 'AND' );

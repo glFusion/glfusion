@@ -105,7 +105,7 @@ while ( $row = DB_fetchArray( $result ) ) {
 }
 $noFullOption = 0;
 
-if ( $MG_albums[$album_id]->full == 2 || $_MG_CONF['discard_original'] == 1 || ( $MG_albums[$album_id]->full == 1 && (!isset($_USER['uid']) || $_USER['uid'] < 2 ))) {
+if ( $MG_albums[$album_id]->full == 2 || $_MG_CONF['discard_original'] == 1 || ( $MG_albums[$album_id]->full == 1 && (COM_isAnonUser() ))) {
     $full = 0;
     $noFullOption = 1;
 }

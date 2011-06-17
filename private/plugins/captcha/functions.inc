@@ -186,11 +186,11 @@ function plugin_templatesetvars_captcha($ctype, &$template) {
             return;
             break;
     }
-    if ( !isset($_USER['uid']) ) {
+    if ( COM_isAnonUser() ) {
         $_USER['uid'] = 1;
     }
 
-    if ( $ctype == 'token' || ($_CP_CONF['anonymous_only'] && $_USER['uid'] < 2) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
+    if ( $ctype == 'token' || ($_CP_CONF['anonymous_only'] && COM_isAnonUser() ) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
 
         // expire stale CAPTCHA sessions
         CAPTCHA_expireSessions();
@@ -308,10 +308,10 @@ function plugin_itemPreSave_captcha( $ctype='registration', $content='' ) {
         default :
             return '';
     }
-    if ( !isset($_USER['uid']) ) {
+    if ( COM_isAnonUser() ) {
         $_USER['uid'] = 1;
     }
-    if ( ($_CP_CONF['anonymous_only'] && $_USER['uid'] < 2) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
+    if ( ($_CP_CONF['anonymous_only'] && COM_isAnonUser() ) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
         if ( isset($_POST['captcha']) ) {
             $response = COM_applyFilter($_POST['captcha']);
         } else {

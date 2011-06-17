@@ -111,7 +111,7 @@ function MG_index() {
 	$admin_box .= '<select onchange="javascript:forms[\'adminbox\'].submit();" name="mode">' . LB;
 	$admin_box .= '<option label="Options" value="">' . $LANG_MG01['options'] . '</option>' . LB;
 
-	if ( ($MG_albums[0]->member_uploads || $MG_albums[0]->access == 3) && (isset($_USER['uid']) && $_USER['uid'] > 1 ) )  {
+	if ( ($MG_albums[0]->member_uploads || $MG_albums[0]->access == 3) && (!COM_isAnonUser() ) )  {
 	    $admin_box .= '<option value="upload">' . $LANG_MG01['add_media'] . '</option>' . LB;
 	    $showAdminBox = 1;
 	}
@@ -127,7 +127,7 @@ function MG_index() {
 	} elseif ( $MG_albums[0]->access == 3 ) {
 	    $admin_box .= '<option value="create">' . $LANG_MG01['create_album'] . '</option>' . LB;
 	    $showAdminBox = 1;
-	} elseif ( $_MG_CONF['member_albums'] == 1 && ( isset($_USER['uid']) && $_USER['uid'] > 1 ) && $_MG_CONF['member_album_root'] == 0 && $_MG_CONF['member_create_new']) {
+	} elseif ( $_MG_CONF['member_albums'] == 1 && ( !COM_isAnonUser() ) && $_MG_CONF['member_album_root'] == 0 && $_MG_CONF['member_create_new']) {
 	    $admin_box .= '<option value="create">' . $LANG_MG01['create_album'] . '</option>' . LB;
 	    $showAdminBox = 1;
 	}
@@ -154,7 +154,7 @@ function MG_index() {
 	if ( COM_isAnonUser() ) {
 	    $lastlogin = time();
 	} else {
-	    if ( isset($_USER['uid']) && $_USER['uid'] > 1 ) {
+	    if ( !COM_isAnonUser() ) {
 	        $lastlogin = $_USER['lastlogin'];
 	    } else {
 	        $lastlogin = time();

@@ -433,11 +433,11 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
 
     if ($A['sp_format'] <> 'blankpage') {
         if (!isset($_USER['noboxes'])) {
-            if (empty($_USER['uid']) || ($_USER['uid'] == 1)) {
+            if ( COM_isAnonUser() ) {
                 $_USER['noboxes'] = 0;
             } else {
                 $_USER['noboxes'] = DB_getItem($_TABLES['userindex'],
-                                        'noboxes', "uid = {$_USER['uid']}");
+                                        'noboxes', "uid=".(int)$_USER['uid']);
             }
         }
 
@@ -770,7 +770,7 @@ function SP_getPerms ($table = '', $access = '2', $u_id = '')
     if ($table != '') { $table .= '.'; }
 
     if ($u_id == '') {
-        if (isset ($_USER['uid'])) {
+        if (!COM_isAnonUser()) {
             $uid = $_USER['uid'];
         } else {
             $uid = 1;

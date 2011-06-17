@@ -56,7 +56,7 @@ function MG_enroll( ) {
         exit;
     }
 
-    $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE owner_id=" . $_USER['uid'] . " AND album_parent=" . $_MG_CONF['member_album_root'];
+    $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE owner_id=" . (int) $_USER['uid'] . " AND album_parent=" . $_MG_CONF['member_album_root'];
     $result = DB_query($sql);
     $nRows = DB_numRows($result);
     if ( $nRows > 0 ) {

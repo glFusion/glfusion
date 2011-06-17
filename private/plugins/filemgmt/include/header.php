@@ -60,7 +60,7 @@ if ( (COM_isAnonUser()) && $mydownloads_publicpriv != 1 )  {
 if (SEC_hasRights("filemgmt.edit")) {
     $FilemgmtAdmin = true;
 }
-if (isset($_USER['uid'])) {
+if (!COM_isAnonUser() ) {
     $uid=$_USER['uid'];
 } else {
     $uid=1;    // Set to annonymous User ID

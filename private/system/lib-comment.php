@@ -852,7 +852,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
     $retval = '';
 
     // never trust $uid ...
-    if (empty ($_USER['uid'])) {
+    if (COM_isAnonUser()) {
         $uid = 1;
     } else {
         $uid = $_USER['uid'];
@@ -1503,7 +1503,7 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
         }
     }
 
-    if (empty ($_USER['uid'])) {
+    if (COM_isAnonUser()) {
         $uid = 1;
     } elseif ($edit && is_numeric($cid) ){
         //if comment moderator

@@ -77,7 +77,7 @@ function MG_watermarkManage( $actionURL = '' ) {
     if ( $MG_albums[0]->owner_id) {
         $whereClause .= "1=1";
     } else {
-        $whereClause .= "owner_id=" . intval($_USER['uid']);
+        $whereClause .= "owner_id=" . (int) $_USER['uid'];
     }
 
     $sql = "SELECT * FROM {$_TABLES['mg_watermarks']} " . $whereClause . " ORDER BY owner_id";

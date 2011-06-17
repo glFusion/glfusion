@@ -180,13 +180,10 @@ function submitstory($topic = '')
             $storyform->set_var ('show_htmleditor', 'none');
         }
     }
-    $storyform->set_var ('xhtml', XHTML);
-    $storyform->set_var ('site_url', $_CONF['site_url']);
     $storyform->set_var ('site_admin_url', $_CONF['site_admin_url']);
-    $storyform->set_var ('layout_url', $_CONF['layout_url']);
     $storyform->set_var ('lang_username', $LANG12[27]);
 
-    if (!empty($_USER['username'])) {
+    if (!COM_isAnonUser()) {
         $storyform->set_var('story_username', $_USER['username']);
         $storyform->set_var('author', COM_getDisplayName ());
         $storyform->set_var('status_url', $_CONF['site_url']

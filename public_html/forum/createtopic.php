@@ -357,7 +357,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
     $wysiwyg        = 0;
     $numAttachments = 0;
 
-    if ( !isset($_USER['uid']) ) {
+    if ( COM_isAnonUser() ) {
         $uid = 1;
     } else {
         $uid = $_USER['uid'];

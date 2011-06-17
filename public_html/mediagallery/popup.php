@@ -51,7 +51,7 @@ if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
 require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
 MG_initAlbums();
 
-if ( !isset($_USER['uid']) ) {
+if ( COM_isAnonUser() ) {
     $_USER['uid'] = 1;
 }
 
@@ -70,7 +70,7 @@ if ( $MG_albums[$aid]->access == 0 ) {
     exit;
 }
 
-if ( $MG_albums[$aid]->full == 2 || $_MG_CONF['discard_original'] == 1 || ( $MG_albums[$aid]->full == 1 && $_USER['uid'] < 2 )) {
+if ( $MG_albums[$aid]->full == 2 || $_MG_CONF['discard_original'] == 1 || ( $MG_albums[$aid]->full == 1 && COM_isAnonUser() )) {
     $display  = MG_siteHeader();
     $display .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
              . '<br />' . $LANG_MG00['access_denied_msg']

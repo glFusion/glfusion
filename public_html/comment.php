@@ -371,7 +371,7 @@ function handleEditSubmit()
     $postmode   = COM_applyFilter ($_POST['postmode']);
 
     $commentuid = DB_getItem ($_TABLES['comments'], 'uid', "cid = $cid");
-    if ( empty($_USER['uid'])) {
+    if ( COM_isAnonUser() ) {
         $uid = 1;
     } else {
         $uid = $_USER['uid'];

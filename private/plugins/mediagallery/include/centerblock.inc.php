@@ -60,7 +60,7 @@ function _mg_centerblock( $where=1, $page=1, $topic ='' ) {
         $_MG_CONF['feature_member_album'] = 1;
     }
 
-    if ($_MG_CONF['feature_member_album'] == 1 && $_MG_CONF['member_albums'] == 1 && $_USER['uid'] > 1 && $where == 1) {
+    if ($_MG_CONF['feature_member_album'] == 1 && $_MG_CONF['member_albums'] == 1 && !COM_isAnonUser() && $where == 1) {
         $cbpos = CENTERBLOCK_TOP; //top of page
         $cbpage = 'none';
 
@@ -75,7 +75,7 @@ function _mg_centerblock( $where=1, $page=1, $topic ='' ) {
 
         if ( $cbenable == 1 ) {
             MG_initAlbums();
-            $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE owner_id=" . $_USER['uid'] . " AND album_parent='" . $_MG_CONF['member_album_root'] . "' LIMIT 1";
+            $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE owner_id=" . (int) $_USER['uid'] . " AND album_parent='" . $_MG_CONF['member_album_root'] . "' LIMIT 1";
             $result = DB_query($sql);
             $numRows = DB_numRows($result);
             if ( $numRows > 0 ) {

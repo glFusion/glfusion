@@ -1097,7 +1097,7 @@ function MG_displayTGA($aid,$I,$full,$mediaObject) {
 
     $media_size_disp = @getimagesize($_MG_CONF['path_mediaobjects'] . 'disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.jpg');
 
-    if ( $MG_albums[$aid]->full == 2 || $_MG_CONF['discard_original'] == 1 || ( $MG_albums[$aid]->full == 1 && $_USER['uid'] > 1 )) {
+    if ( $MG_albums[$aid]->full == 2 || $_MG_CONF['discard_original'] == 1 || ( $MG_albums[$aid]->full == 1 && !COM_isAnonUser() )) {
         $u_pic = '#';
         $media_link_start = '';
     } else {
@@ -1142,7 +1142,7 @@ function MG_displayPSD($aid,$I,$full,$mediaObject) {
 
     $media_size_disp = @getimagesize($_MG_CONF['path_mediaobjects'] . 'disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.jpg');
 
-    if ( $MG_albums[$aid]->full == 2 || $_MG_CONF['discard_original'] == 1 || ( $MG_albums[$aid]->full == 1 && $_USER['uid'] > 1 )) {
+    if ( $MG_albums[$aid]->full == 2 || $_MG_CONF['discard_original'] == 1 || ( $MG_albums[$aid]->full == 1 && !COM_isAnonUser() )) {
         $u_pic = '';
         $media_link_start = '';
     } else {
@@ -1273,7 +1273,7 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
     $media_link_start = '';
     $media_link_end   = '';
 
-    if ( $media_size_orig == FALSE || $MG_albums[$aid]->full == 2 || $_MG_CONF['discard_original'] == 1 || ( $MG_albums[$aid]->full == 1 && (!isset($_USER['uid']) || $_USER['uid'] < 2 ) )) {
+    if ( $media_size_orig == FALSE || $MG_albums[$aid]->full == 2 || $_MG_CONF['discard_original'] == 1 || ( $MG_albums[$aid]->full == 1 && COM_isAnonUser() )) {
         $u_pic = '#';
         $media_link_start = '';
         $raw_link_url = '';
@@ -1617,7 +1617,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     // build the rating bar if rating is enabled.
     if ( $MG_albums[$aid]->enable_rating > 0 ) {
-        $uid    = isset($_USER['uid']) ? $_USER['uid'] : 1;
+        $uid    = COM_isAnonUser() ? 1 : $_USER['uid'];
         $static = false;
         $voted  = 0;
         // check to see if we are the owner, if so, no rating for us...
@@ -1634,7 +1634,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
             }
         }
 
-        if ( $MG_albums[$aid]->enable_rating == 1 && (!isset($_USER['uid']) || $_USER['uid'] < 2) ) {
+        if ( $MG_albums[$aid]->enable_rating == 1 && (COM_isAnonUser() ) ) {
             $static = true;
             $voted = 0;
         }
@@ -1892,7 +1892,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     if ( $sortID == 0 ) {
 
-        if ( ($MG_albums[$aid]->enable_postcard == 1 && isset($_USER['uid']) && $_USER['uid'] > 1 ) || ($MG_albums[$aid]->enable_postcard == 2)  ) {
+        if ( ($MG_albums[$aid]->enable_postcard == 1 && !COM_isAnonUser() ) || ($MG_albums[$aid]->enable_postcard == 2)  ) {
             if ( $media[$mediaObject]['media_type'] == 0 ) {
                 $postcard_link = '<a href="' . $_MG_CONF['site_url'] . '/postcard.php?mode=edit&amp;mid=' . $media[$mediaObject]['media_id'] . '"><img src="' . MG_getImageFile('icon_envelopeSmall.gif') . '" alt="' . $LANG_MG03['send_postcard'] . '" style="border:none;"/></a>';
                 $T->set_var('postcard_link', $postcard_link);

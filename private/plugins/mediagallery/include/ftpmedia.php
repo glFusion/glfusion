@@ -53,7 +53,7 @@ function MG_ftpUpload( $album_id ) {
     $T->set_var('site_url', $_CONF['site_url']);
     $T->set_var('album_id',$album_id);
 
-    if ( $MG_albums[$album_id]->access == 3 || SEC_hasRights('mediagallery.admin') || ($MG_albums[$album_id]->member_uploads==1 && $_USER['uid'] >= 2)) {
+    if ( $MG_albums[$album_id]->access == 3 || SEC_hasRights('mediagallery.admin') || ($MG_albums[$album_id]->member_uploads==1 && !COM_isAnonUser() )) {
         $T->set_var(array(
             's_form_action'     => $_MG_CONF['site_url'] .'/admin.php',
             'lang_upload_help'  => $LANG_MG03['upload_help'],
