@@ -1228,7 +1228,6 @@ function SEC_createToken($ttl = 1200)
 * to re-authenticate and resends the request if authentication was successful.
 *
 * @return   boolean     true if the token is valid; does not return if not!
-* @see      SECINT_checkToken
 *
 */
 function SEC_checkToken()

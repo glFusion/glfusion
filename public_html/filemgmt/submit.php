@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -51,6 +51,8 @@ function FM_notifyAdmins( $filename,$file_user_id,$description ) {
     global $LANG_DIRECTION, $LANG_CHARSET, $LANG_FM00, $_USER, $_FM_CONF, $_CONF, $_TABLES;
 
     require_once $_CONF['path'].'lib/phpmailer/class.phpmailer.php';
+
+    $body = '';
 
     if( empty( $LANG_DIRECTION )) {
         // default to left-to-right
@@ -237,7 +239,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         exit;
     }
 
-    if ( isset($_POST['submit']) ){
+    if ( isset($_POST['submit']) && SEC_checkToken()){
 
         if(isset($_USER['uid']) AND $_USER['uid'] > 1 ) {
             $submitter = (int) $_USER['uid'];
@@ -248,6 +250,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         if (!isset($_POST['title']) || $_POST["title"] == '') {
             $eh->show("1001");
         }
+
         // Check if filename entered
         if ($_FILES['newfile']['name'] != '') {
             $name = ($_FILES['newfile']['name']);
@@ -319,23 +322,33 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
                 $tmpfilename = $tmpfilename . ".$fileExtension";
             }
             $tmp  = $_FILES["newfile"]['tmp_name'];    // temporary name of file in temporary directory on server
-            if (is_uploaded_file ($tmp)) {                               // is this temporary file really uploaded?
+            $returnMove = false;
+            if (isset($_FILES["newfile"]['_data_dir']) && file_exists($tmp)) {
+                if ($directUploadAccess) {
+                    $returnMove = @copy($tmp, "{$filemgmt_FileStore}{$name}");
+                    @unlink($tmp);
+                } else {
+                    $returnMove = @copy($tmp, $filemgmt_FileStore."tmp/".$tmpfilename);
+                    @unlink($tmp);
+                    FM_notifyAdmins($name,$submitter,$description);
+                }
+            } elseif (is_uploaded_file ($tmp)) {                               // is this temporary file really uploaded?
                 if ($directUploadAccess) {
                     $returnMove = move_uploaded_file($tmp, "{$filemgmt_FileStore}{$name}");             // move file to your upload directory
                 } else {
                     $returnMove = move_uploaded_file($tmp, $filemgmt_FileStore."tmp/".$tmpfilename);    // move temporary file to your upload directory
                     FM_notifyAdmins($name,$submitter,$description);
                 }
-                if (!$returnMove) {
-                    if ($directUploadAccess) {
-                        COM_errorLOG("Filemgmt submit error: Direct upload, file could not be created: $tmp to {$filemgmt_FileStore}{$name}");
-                    } else {
-                        COM_errorLOG("Filemgmt submit error: Temporary file could not be created: $tmp to {$filemgmt_FileStore}tmp}/{$tmpfilename}");
-                    }
-                    $eh->show("1102");
+            }
+            if (!$returnMove) {
+                if ($directUploadAccess) {
+                    COM_errorLOG("Filemgmt submit error: Direct upload, file could not be created: $tmp to {$filemgmt_FileStore}{$name}");
                 } else {
-                    $AddNewFile = true;
+                    COM_errorLOG("Filemgmt submit error: Temporary file could not be created: $tmp to {$filemgmt_FileStore}tmp}/{$tmpfilename}");
                 }
+                $eh->show("1102");
+            } else {
+                $AddNewFile = true;
             }
         }
 
@@ -425,9 +438,9 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         $display .= "<form action=\"submit.php\" method=\"post\" enctype='multipart/form-data'> \n";
         $display .= "<table width=\"80%\"><tr>";
         $display .= "<td align=\"right\" style=\"white-space:nowrap;\"><b>"._MD_FILETITLE."</b></td><td>";
-        $display .= "<input type=\"text\" name=\"title\" size=\"50\" maxlength=\"100\"" . XHTML . ">";
+        $display .= "<input type=\"text\" name=\"title\" size=\"50\" maxlength=\"100\" />";
         $display .= "</td></tr><tr><td align=\"right\" style=\"white-space:nowrap;\"><b>"._MD_DLFILENAME."</b></td><td>";
-        $display .= "<input type=\"file\" name=\"newfile\" size=\"50\" maxlength=\"100\"" . XHTML . ">";
+        $display .= "<input type=\"file\" name=\"newfile\" size=\"50\" maxlength=\"100\" />";
         $display .= "</td></tr>";
         $display .= "<tr><td align=\"right\" style=\"white-space:nowrap;\"><b>"._MD_CATEGORY."</b></td><td>";
 
@@ -467,24 +480,25 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         $display .= '<span class="pluginTinyText" style="padding-left:5px;">' ._MD_APPROVEREQ ."</span></td></tr>\n";
 
         $display .= "<tr><td align=\"right\" style=\"white-space:nowrap;\"><b>"._MD_HOMEPAGEC."</b></td><td>\n";
-        $display .= "<input type=\"text\" name=\"homepage\" size=\"50\" maxlength=\"100\"" . XHTML . "></td></tr>\n";
+        $display .= "<input type=\"text\" name=\"homepage\" size=\"50\" maxlength=\"100\" /></td></tr>\n";
         $display .= "<tr><td align=\"right\" style=\"white-space:nowrap;\"><b>"._MD_VERSIONC."</b></td><td>\n";
-        $display .= "<input type=\"text\" name=\"version\" size=\"10\" maxlength=\"10\"" . XHTML . "></td></tr>\n";
+        $display .= "<input type=\"text\" name=\"version\" size=\"10\" maxlength=\"10\" /></td></tr>\n";
         $display .= "<tr><td align=\"right\" valign=\"top\" style=\"white-space:nowrap;\"><b>"._MD_DESCRIPTIONC."</b></td><td>\n";
         $display .= "<textarea name=\"description\" cols=\"50\" rows=\"6\"></textarea>\n";
         $display .= "</td></tr>\n";
         $display .= "<tr><td align=\"right\" style=\"white-space:nowrap;\"><b>"._MD_SHOTIMAGE."</b></td><td>\n";
-        $display .= "<input type=\"file\" name=\"newfileshot\" size=\"50\" maxlength=\"60\"" . XHTML . "></td></tr>\n";
+        $display .= "<input type=\"file\" name=\"newfileshot\" size=\"50\" maxlength=\"60\" /></td></tr>\n";
         $display .= "<tr><td align=\"right\"></td><td>";
         $display .= "</td></tr><tr><td style=\"text-align:right;\"><b>"._MD_COMMENTOPTION."</b></td><td>";
-        $display .= "<input type=\"radio\" name=\"commentoption\" value=\"1\" checked=\"checked\"" . XHTML . ">&nbsp;" ._MD_YES."&nbsp;";
-        $display .= "<input type=\"radio\" name=\"commentoption\" value=\"0\"" . XHTML . ">&nbsp;" ._MD_NO."&nbsp;";
+        $display .= "<input type=\"radio\" name=\"commentoption\" value=\"1\" checked=\"checked\" />&nbsp;" ._MD_YES."&nbsp;";
+        $display .= "<input type=\"radio\" name=\"commentoption\" value=\"0\" />&nbsp;" ._MD_NO."&nbsp;";
         $display .= "</td></tr>\n";
         $display .= "</table>\n";
-        $display .= "<br" . XHTML . ">";
-        $display .= "<input type=\"hidden\" name=\"submitter\" value=\"".$uid."\"". XHTML. ">";
+        $display .= "<br />";
+        $display .= "<input type=\"hidden\" name=\"submitter\" value=\"".$uid."\" />";
         $display .= "<center><input type=\"submit\" name=\"submit\" class=\"button\" value=\""._MD_SUBMIT."\"" . XHTML. ">\n";
-        $display .= "&nbsp;<input type=\"button\" value=\""._MD_CANCEL."\" onclick=\"javascript:history.go(-1)\"" . XHTML . "></center>\n";
+        $display .= "&nbsp;<input type=\"button\" value=\""._MD_CANCEL."\" onclick=\"javascript:history.go(-1)\" /></center>\n";
+        $display .= "<input type=\"hidden\" name=\"".CSRF_TOKEN."\" value=\"".SEC_createToken()."\"/>";
         $display .= "</form>\n";
         $display .= "</td></tr></table>";
         $display .= COM_endBlock();

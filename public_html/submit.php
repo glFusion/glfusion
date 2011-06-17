@@ -153,7 +153,7 @@ function submitstory($topic = '')
         } else {
             $ae_uid = (int) COM_applyFilter($_USER['uid'],true);
         }
-        $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
+        $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=".(int)$ae_uid." AND urlfor='advancededitor'";
         DB_Query($sql,1);
         if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
             $storyform->set_var('glfusionStyleBasePath',$_CONF['layout_url']);
@@ -440,7 +440,7 @@ if (($mode == $LANG12[8]) && !empty ($LANG12[8])) { // submit
     if ( !isset($_USER['uid'] ) ) {
         $_USER['uid'] = 1;
     }
-    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'";
+    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=".(int)$_USER['uid']." AND urlfor='advancededitor'";
     DB_Query($sql,1);
     if (COM_isAnonUser() &&
         (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {
