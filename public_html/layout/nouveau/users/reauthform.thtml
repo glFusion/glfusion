@@ -4,11 +4,10 @@
     <p style="font-size:.8em;">{lang_message}</p>
     <form id="login" name="login" action="{form_action}" method="post" style="margin-top:1em; margin-bottom:1em;">
       {hidden}
-      <div style="padding:1em; width:35em; margin:auto; background:#f2f2f2; border:1px solid #ccc; font-size:.8em;">
-        <img class="floatleft" style="width:128px;" src="{layout_url}/images/lock.png" alt="" />
+      <div style="padding:1em; width:29em; margin:auto; background:#f2f2f2; border:1px solid #ccc; font-size:.8em;">
         {captcha}
-        <p style="text-align:right;">
-          <input style="margin-top:.5em;" type="submit" value="{lang_login}"{xhtml}>
+        <p style="text-align:center;">
+          <input style="margin-top:.5em;" type="submit" value="{lang_login}"/>
         </p>
         {!if footer_message}
         <div style="margin-top:1.2em; padding-top:.5em; border-top:1px solid #ccc">

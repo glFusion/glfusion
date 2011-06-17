@@ -3889,7 +3889,7 @@ function COM_getDisplayName( $uid = '', $username='', $fullname='', $remoteusern
     }
 
     if (empty($username)) {
-        $query = DB_query("SELECT username, fullname, remoteusername, remoteservice FROM {$_TABLES['users']} WHERE uid=$uid");
+        $query = DB_query("SELECT username, fullname, remoteusername, remoteservice FROM {$_TABLES['users']} WHERE uid=".(int)$uid);
         list($username, $fullname, $remoteusername, $remoteservice) = DB_fetchArray($query);
     }
     $ret = $username;
@@ -4190,7 +4190,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                     $url = COM_buildUrl($_CONF['site_url'] . '/article.php?story=' . $A['sid']);
                     $newstory[] = COM_createLink($titletouse,$url,$attr);
                 }
-                $retval .= COM_makeList( $newstory, 'list-new-articles' );
+                $retval .= COM_makeList( $newstory, 'list-new-articles' ) .'<br/>';
             }
         }
     }

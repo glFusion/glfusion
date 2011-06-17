@@ -1593,7 +1593,7 @@ $LANG_ACCESS = array(
     'confirm1' => 'Are you sure you want to delete this Group?',
     'confirm2' => 'Are you absolutely sure you want to delete this Group?  This will affect any Users or Groups that are associated with this Group!  Press Cancel and then Edit this Group if you wish to view the details.',
     'token_expired' => 'The security token has expired. Please validate your session below.',
-    'token_expired_footer' => 'The security token for this operation has expired, please re-authenticate',
+    'token_expired_footer' => 'The security token for this operation has expired, please re-validate',
     'validation_failed' => 'Validation Failed - Please retry.',
 );
 

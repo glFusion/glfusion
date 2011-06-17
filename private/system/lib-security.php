@@ -2119,11 +2119,11 @@ function _sec_rebuild_file_request()
     global $_CONF;
 
     $filedata = '';
+    $file_array = '';
     if ( isset($_POST['glfusion_auth_file']) ) {
         $filedata = $_POST['glfusion_auth_file'];
+        $file_array = unserialize($filedata);
     }
-    $file_array = unserialize($filedata);
-
     if (empty($_FILES) && is_array($file_array) ) {
         foreach ($file_array as $fkey => $file) {
             if ( isset($file['name']) && is_array($file['name']) ) {
