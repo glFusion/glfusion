@@ -718,15 +718,13 @@ if (isset($_POST['type'])) {
     $type = COM_applyFilter($_GET['type']);
 }
 
-$validtoken = SEC_checkToken();
-
 $display .= COM_siteHeader ('menu', $LANG01[10]);
 
 switch ($action) {
 
     case 'delete':
     case 'delbutton_x':
-        if ($validtoken) {
+        if (SEC_checkToken()) {
             $display .= ($action=='delete') ? MODERATE_item($action, $type, $id) : MODERATE_selectedItems('delete', $type);
         } else {
             COM_accessLog('User ' . $_USER['username'] . ' tried to illegally delete submission(s) and failed CSRF checks.');
@@ -736,7 +734,7 @@ switch ($action) {
 
     case 'approve':
     case 'approve_x':
-        if ($validtoken) {
+        if (SEC_checkToken()) {
             $display .= ($action == 'approve') ? MODERATE_item($action, $type, $id) : MODERATE_selectedItems('approve', $type);
         } else {
             COM_accessLog('User ' . $_USER['username'] . ' tried to illegally approve submission(s) and failed CSRF checks.');

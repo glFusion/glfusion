@@ -735,11 +735,8 @@ if (isset($_POST['tag'])) {
     $tag = COM_applyFilter($_GET['tag']);
 }
 
-// retrieve the authentication token (once) for later check
 
-$validtoken = SEC_checkToken();
-
-if (isset($_POST['tagenabler']) && $validtoken) {
+if (isset($_POST['tagenabler']) && SEC_checkToken()) {
     $enabledtags = array();
     if (isset($_POST['enabledtags'])) {
         $enabledtags = $_POST['enabledtags'];
@@ -774,7 +771,7 @@ switch ($action) {
         break;
 
     case 'save':
-        if ($validtoken) {
+        if (SEC_checkToken()) {
             if (!empty($tag)) {
                 $display = AT_save($tag,
                              COM_applyFilter($_POST['old_tag']),
@@ -793,7 +790,7 @@ switch ($action) {
         break;
 
     case 'psave':
-        if ($validtoken) {
+        if (SEC_checkToken()) {
             $perms = array();
             $perms = (isset($_POST['perms']) ? $_POST['perms'] : array());
             $display .= ATP_save($autotag_id,$perms);
@@ -804,7 +801,7 @@ switch ($action) {
         break;
 
     case 'delete':
-        if ($validtoken) {
+        if (SEC_checkToken()) {
             $filename = $tag . '.class.php';
             DB_delete($_TABLES['autotags'], 'tag', DB_escapeString($tag), $self_url);
             // need to check and see if it is a PHP function

@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.3.0 (Trunk Development Branch)
 ------
+- Implemented re-validation when security token has expired (Mark)
 - New SESS API - SESS_unSet() removes a session variable is set (Mark)
 - CAPTCHA now displays appropriate feedback when invalid CAPTCHA entered
   on comment entry form (Mark)

@@ -983,8 +983,6 @@ $msg = (isset($_GET['msg'])) ? COM_applyFilter($_GET['msg']) : '';
 $topic = (isset($_GET['topic'])) ? COM_applyFilter($_GET['topic']) : '';
 $type = (isset($_POST['type'])) ? COM_applyFilter($_POST['type']) : '';
 
-$validtoken = SEC_checkToken();
-
 switch ($action) {
 
     case 'edit':
@@ -1024,7 +1022,7 @@ switch ($action) {
         // purge any tokens we created for the advanced editor
         DB_query("DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'",1);
 
-        if ($validtoken) {
+        if (SEC_checkToken()) {
             $display = STORY_submit();
         } else {
             SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
@@ -1055,14 +1053,14 @@ switch ($action) {
             if (SEC_hasTopicAccess($tid) < 3) {
                 COM_accessLog ('User ' . $_USER['username'] . ' had insufficient rights to delete a story submission, sid=' . $sid);
                 $display = COM_refresh($_CONF['site_admin_url'] . '/index.php');
-            } elseif ($validtoken) {
+            } elseif (SEC_checkToken()) {
                 DB_delete ($_TABLES['storysubmission'], 'sid', $sid,
                            $_CONF['site_admin_url'] . '/moderation.php');
             } else {
                 COM_accessLog ("User {$_USER['username']} tried to illegally delete a story submission, sid=$sid and failed CSRF checks.");
                 $display = COM_refresh($_CONF['site_admin_url'] . '/index.php');
             }
-        } else if ($validtoken) {
+        } else if (SEC_checkToken()) {
             $display .= STORY_deleteStory($sid);
         } else {
             COM_accessLog ("User {$_USER['username']} tried to a delete a story, sid=$sid and failed CSRF checks");

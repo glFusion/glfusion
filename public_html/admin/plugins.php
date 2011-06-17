@@ -667,9 +667,7 @@ if (isset($_POST['pi_name'])) {
     $pi_name = COM_applyFilter($_GET['pi_name']);
 }
 
-$validtoken = SEC_checkToken();
-
-if (isset ($_POST['pluginenabler']) && $validtoken) {
+if (isset ($_POST['pluginenabler']) && SEC_checkToken()) {
     $enabledplugins = array();
     if (isset($_POST['enabledplugins'])) {
         $enabledplugins = $_POST['enabledplugins'];
@@ -692,7 +690,7 @@ if (isset ($_POST['pluginenabler']) && $validtoken) {
 switch ($action) {
 
     case 'update':
-        if ($validtoken) {
+        if (SEC_checkToken()) {
             $display .= COM_siteHeader ('menu', $LANG32[13]);
             $display .= PLUGINS_update($pi_name);
             $display .= COM_siteFooter();
@@ -703,7 +701,7 @@ switch ($action) {
         break;
 
     case 'delete':
-        if ($validtoken) {
+        if (SEC_checkToken()) {
             $display .= COM_siteHeader ('menu', $LANG32[30]);
             $display .= PLUGINS_unInstall($pi_name);
             $token = SEC_createToken();

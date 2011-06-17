@@ -1029,9 +1029,7 @@ if (isset($_POST['where'])) {
     $where = COM_applyFilter($_GET['where']);
 }
 
-$validtoken = SEC_checkToken();
-
-if (isset($_POST['blockenabler']) && $validtoken) {
+if (isset($_POST['blockenabler']) && SEC_checkToken()) {
     $side = COM_applyFilter($_POST['blockenabler'], true);
     $enabledblocks = array();
     if (isset($_POST['enabledblocks'])) {
@@ -1056,7 +1054,7 @@ switch ($action) {
         break;
 
     case 'save':
-        if ($validtoken) {
+        if (SEC_checkToken()) {
             $help = '';
             if (isset ($_POST['help'])) {
                 $help = COM_sanitizeUrl ($_POST['help'], array ('http', 'https'));
@@ -1124,7 +1122,7 @@ switch ($action) {
 
     case 'move':
         $display .= COM_siteHeader('menu', $LANG21[19]);
-        if($validtoken) {
+        if(SEC_checkToken()) {
             $display .= BLOCK_move($bid, $where);
         }
         $display .= BLOCK_list();
@@ -1135,7 +1133,7 @@ switch ($action) {
         if (!isset ($bid) || empty ($bid) || ($bid == 0)) {
             COM_errorLog('Attempted to delete block, bid empty or null, value =' . $bid);
             $display .= COM_refresh($_CONF['site_admin_url'] . '/block.php');
-        } elseif ($validtoken) {
+        } elseif (SEC_checkToken()) {
             $display .= BLOCK_delete($bid);
         } else {
             COM_accessLog("User {$_USER['username']} tried to illegally delete block $bid and failed CSRF checks.");

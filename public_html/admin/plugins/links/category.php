@@ -511,8 +511,6 @@ if (isset($_POST['pid'])) {
 
 $msg = (isset($_GET['msg'])) ? COM_applyFilter($_GET['msg']) : '';
 
-$validtoken = SEC_checkToken();
-
 $root = $_LI_CONF['root'];
 
 switch ($action) {
@@ -541,7 +539,7 @@ switch ($action) {
         if (!isset ($cid) || empty ($cid)) {
             COM_errorLog ('User ' . $_USER['username'] . ' attempted to delete link category, cid is null');
             $display .= COM_refresh ($_CONF['site_admin_url'] . '/plugins/links/category.php');
-        } elseif ($validtoken) {
+        } elseif (SEC_checkToken()) {
             $msg = LINK_CAT_delete($cid);
             $display .= COM_siteHeader('menu', $LANG_LINKS_ADMIN[11]);
             $display .= COM_showMessage($msg, 'links');

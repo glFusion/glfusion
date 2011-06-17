@@ -680,9 +680,7 @@ if (isset($_POST['fid'])) {
     $fid = COM_applyFilter($_GET['fid'], true);
 }
 
-$validtoken = SEC_checkToken();
-
-if ($_CONF['backend'] && isset($_POST['feedenabler']) && $validtoken) {
+if ($_CONF['backend'] && isset($_POST['feedenabler']) && SEC_checkToken()) {
     $enabledfeeds = array();
     if (isset($_POST['enabledfeeds'])) {
         $enabledfeeds = $_POST['enabledfeeds'];
@@ -713,7 +711,7 @@ switch ($action) {
         break;
 
     case 'save':
-        if ($validtoken) {
+        if (SEC_checkToken()) {
             $display .= FEED_save($_POST);
         } else {
             COM_accessLog("User {$_USER['username']} tried to illegally edit feed $fid and failed CSRF checks.");
@@ -722,7 +720,7 @@ switch ($action) {
         break;
 
     case 'delete':
-        if ($validtoken) {
+        if (SEC_checkToken()) {
             $display .= FEED_delete($fid);
         } else {
             COM_accessLog("User {$_USER['username']} tried to illegally delete feed $fid and failed CSRF checks.");

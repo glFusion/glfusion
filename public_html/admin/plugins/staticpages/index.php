@@ -770,9 +770,7 @@ if (isset($_POST['sp_id'])) {
     $sp_id = COM_applyFilter($_GET['sp_id']);
 }
 
-$validtoken = SEC_checkToken();
-
-if (isset ($_POST['staticpageenabler']) && $validtoken) {
+if (isset ($_POST['staticpageenabler']) && SEC_checkToken()) {
     $enabledstaticpages = array();
     if (isset($_POST['enabledstaticpages'])) {
         $enabledstaticpages = $_POST['enabledstaticpages'];
@@ -816,7 +814,7 @@ switch ($action) {
         break;
 
     case 'save':
-        if ( $validtoken ) {
+        if ( SEC_checkToken() ) {
             // purge any tokens we created for the advanced editor
             $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'";
             DB_query($sql,1);
@@ -925,7 +923,7 @@ switch ($action) {
         if (empty($sp_id) || (is_numeric ($sp_id) && ($sp_id == 0))) {
             COM_errorLog('Attempted to delete staticpage, sp_id empty or null, value =' . $sp_id);
             $display .= COM_refresh($_CONF['site_admin_url'] . '/plugins/staticpages/index.php');
-        } elseif ($validtoken) {
+        } elseif (SEC_checkToken()) {
             $args = array(
                         'sp_id' => $sp_id
                          );

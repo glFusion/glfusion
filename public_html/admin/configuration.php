@@ -292,10 +292,8 @@ function configmanager_select_timezone_helper()
     return $locations;
 }
 
-$tokenstate = SEC_checkToken();
-
 // MAIN
-if (array_key_exists('set_action', $_POST) && $tokenstate){
+if (array_key_exists('set_action', $_POST) && SEC_checkToken()){
     if (SEC_inGroup('Root')) {
         if ($_POST['set_action'] == 'restore') {
             $name = COM_applyFilter($_POST['name']);
@@ -307,7 +305,7 @@ if (array_key_exists('set_action', $_POST) && $tokenstate){
     }
 }
 
-if (array_key_exists('form_submit', $_POST) && $tokenstate) {
+if (array_key_exists('form_submit', $_POST) && SEC_checkToken()) {
     $result = null;
     if (! array_key_exists('form_reset', $_POST)) {
         $result = $config->updateConfig($_POST, $conf_group);

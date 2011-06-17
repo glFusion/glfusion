@@ -311,12 +311,10 @@ foreach($expected as $provided) {
     }
 }
 
-$validtoken = SEC_checkToken();
-
 switch ($action) {
 
     case 'backup':
-        if ($validtoken) {
+        if (SEC_checkToken()) {
             $display .= DBADMIN_backup();
         } else {
             COM_accessLog("User {$_USER['username']} tried to illegally backup the database and failed CSRF checks.");
@@ -340,7 +338,7 @@ switch ($action) {
         break;
 
     case 'delete':
-        if (isset($_POST['delitem']) AND $validtoken) {
+        if (isset($_POST['delitem']) AND SEC_checkToken()) {
             foreach ($_POST['delitem'] as $delfile) {
                 $file = preg_replace('/[^a-zA-Z0-9\-_\.]/', '', COM_applyFilter($delfile));
                 $file = str_replace('..', '', $file);

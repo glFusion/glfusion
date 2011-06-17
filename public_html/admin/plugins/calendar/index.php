@@ -1036,9 +1036,9 @@ if (isset($_POST['eid'])) {
 $msg = (isset($_GET['msg'])) ? COM_applyFilter($_GET['msg']) : '';
 $type = (isset($_POST['type'])) ? COM_applyFilter($_POST['type']) : '';
 
-$validtoken = SEC_checkToken();
+//$validtoken = SEC_checkToken();
 
-if (isset($_POST['eventenabler']) && $validtoken) {
+if (isset($_POST['eventenabler']) && SEC_checkToken()) {
     $enabledevents = array();
     if (isset($_POST['enabledevents'])) {
         $enabledevents = $_POST['enabledevents'];
@@ -1102,7 +1102,7 @@ switch ($action) {
         break;
 
     case 'save':
-        if ($validtoken) {
+        if (SEC_checkToken()) {
             $allday = (isset($_POST['allday'])) ? COM_applyFilter($_POST['allday']) : '';
             $hour_mode = (isset($_POST['hour_mode']) && ($_POST['hour_mode'] == 24)) ? 24 : 12;
             if ($hour_mode == 24) {
@@ -1121,7 +1121,7 @@ switch ($action) {
         if (!isset ($eid) || empty ($eid) || ($eid == 0)) {
             COM_errorLog ('User ' . $_USER['username'] . ' attempted to delete event, eid empty, null, or is 0');
             $display .= COM_refresh($_CONF['site_admin_url'] . '/plugins/calendar/index.php');
-        } elseif ($validtoken) {
+        } elseif (SEC_checkToken()) {
             $display .= CALENDAR_delete($eid, $type);
         } else {
             COM_accessLog("User {$_USER['username']} tried to illegally delete event $eid and failed CSRF checks.");
@@ -1137,7 +1137,7 @@ switch ($action) {
         break;
 
     case 'delbutton_x':
-        if ($validtoken) {
+        if (SEC_checkToken()) {
             $msg = CALENDAR_batchDelete();
             $display .= COM_siteHeader ('menu', $LANG_CAL_ADMIN[11])
                 . COM_showMessageText($msg)

@@ -567,8 +567,6 @@ if (isset($_POST['msg'])) {
     $msg = COM_applyFilter($_GET['msg'], true);
 }
 
-$validtoken = SEC_checktoken();
-
 switch ($action) {
 
     case 'edit':
@@ -578,7 +576,7 @@ switch ($action) {
         break;
 
     case 'save':
-        if ($validtoken) {
+        if (SEC_checktoken()) {
           $old_pid = (isset($_POST['old_pid'])) ? COM_applyFilter($_POST['old_pid']): '';
           if (empty($pid) && !empty($old_pid)) {
               $pid = $old_pid;
@@ -618,7 +616,7 @@ switch ($action) {
         if (empty($pid)) {
             COM_errorLog ('Ignored possibly manipulated request to delete a poll.');
             $display .= COM_refresh ($_CONF['site_admin_url'] . '/plugins/polls/index.php');
-        } elseif ($validtoken) {
+        } elseif (SEC_checktoken()) {
             $display .= POLLS_delete($pid);
         } else {
             COM_accessLog("User {$_USER['username']} tried to illegally delete poll $pid and failed CSRF checks.");

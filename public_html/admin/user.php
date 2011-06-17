@@ -2506,8 +2506,6 @@ if (isset ($_GET['msg'])) {
     $msg = COM_applyFilter ($_GET['msg'], true);
 }
 
-$validtoken = SEC_checkToken();
-
 switch($action) {
 
     case 'edit':
@@ -2524,7 +2522,7 @@ switch($action) {
         break;
 
     case 'save':
-        if ($validtoken) {
+        if (SEC_checkToken()) {
             $delphoto = '';
             if (isset ($_POST['delete_photo'])) {
                 $delphoto = $_POST['delete_photo'];
@@ -2566,7 +2564,7 @@ switch($action) {
          if (!isset ($uid) || empty ($uid) || ($uid <= 1)) {
             COM_errorLog('User ' . $_USER['username'] . ' attempted to delete user, uid empty, null, or is <= 1');
             $display .= COM_refresh($_CONF['site_admin_url'] . '/user.php');
-        } elseif ($validtoken) {
+        } elseif (SEC_checkToken()) {
             $display .= USER_delete($uid);
         } else {
             COM_accessLog('User ' . $_USER['username'] . ' tried to illegally delete user ' . $uid . ' and failed CSRF checks.');
@@ -2585,7 +2583,7 @@ switch($action) {
         break;
 
     case 'importexec':
-        if ($validtoken) {
+        if (SEC_checkToken()) {
             $display .= USER_importExec();
         } else {
             COM_accessLog('User ' . $_USER['username'] . ' tried to illegally import users and failed CSRF checks.');
@@ -2608,7 +2606,7 @@ switch($action) {
         break;
 
     case 'delbutton_x':
-        if ($validtoken) {
+        if (SEC_checkToken()) {
             $msg = USER_batchDeleteExec();
             $display .= COM_siteHeader ('menu', $LANG28[11])
                 . COM_showMessageText($msg)
@@ -2621,7 +2619,7 @@ switch($action) {
         break;
 
     case 'reminder_x':
-        if ($validtoken) {
+        if (SEC_checkToken()) {
             $msg = USER_sendReminders();
             $display .= COM_siteHeader ('menu', $LANG28[11])
                 . COM_showMessageText($msg)

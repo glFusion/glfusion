@@ -553,8 +553,6 @@ $msg = (isset($_GET['msg'])) ? COM_applyFilter($_GET['msg']) : '';
 $validate = (isset($_GET['validate'])) ? true : false;
 $type = (isset($_POST['type'])) ? COM_applyFilter($_POST['type']) : '';
 
-$validtoken = SEC_checkToken();
-
 switch ($action) {
 
     case 'edit':
@@ -566,7 +564,7 @@ switch ($action) {
         break;
 
     case 'save':
-        if ($validtoken) {
+        if (SEC_checkToken()) {
             $display .= LINK_save($lid,
                     COM_applyFilter($_POST['old_lid']),
                     $cid,
@@ -593,7 +591,7 @@ switch ($action) {
         if (!isset ($lid) || empty ($lid)) {
             COM_errorLog ('User ' . $_USER['username'] . ' attempted to delete link, lid is null');
             $display .= COM_refresh ($_CONF['site_admin_url'] . '/plugins/links/index.php');
-        } elseif ($validtoken) {
+        } elseif (SEC_checkToken()) {
             $display .= LINK_delete($lid, $type);
         } else {
             COM_accessLog("User {$_USER['username']} tried to illegally delete link $lid and failed CSRF checks.");

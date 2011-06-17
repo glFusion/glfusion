@@ -1209,8 +1209,6 @@ if (isset($_POST['grp_id'])) {
     $grp_id = COM_applyFilter($_GET['grp_id'], true);
 }
 
-$validtoken = SEC_checkToken();
-
 switch ($action) {
 
     case 'edit':
@@ -1220,7 +1218,7 @@ switch ($action) {
         break;
 
     case 'save':
-        if ($validtoken) {
+        if (SEC_checkToken()) {
             $grp_gl_core = COM_applyFilter($_POST['grp_gl_core'], true);
             $grp_default = (isset($_POST['chk_grpdefault'])) ? 1 : 0;
             $grp_applydefault = (isset($_POST['chk_applydefault'])) ? 1 : 0;
@@ -1245,7 +1243,7 @@ switch ($action) {
         if (!isset ($grp_id) || empty ($grp_id) || ($grp_id == 0)) {
             COM_errorLog('Attempted to delete group, grp_id empty or null, value =' . $grp_id);
             $display .= COM_refresh($_CONF['site_admin_url'] . '/group.php');
-        } elseif ($validtoken) {
+        } elseif (SEC_checkToken()) {
             $display .= GROUP_delete($grp_id);
         } else {
             COM_accessLog("User {$_USER['username']} tried to illegally delete group $grp_id and failed CSRF checks.");
@@ -1254,7 +1252,7 @@ switch ($action) {
         break;
 
     case 'savegroup':
-        if ($validtoken) {
+        if (SEC_checkToken()) {
             $grp_members = $_POST['groupmembers'];
             $display .= GROUP_saveUsers($grp_id, $grp_members);
         } else {

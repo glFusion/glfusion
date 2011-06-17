@@ -1219,6 +1219,75 @@ function SEC_createToken($ttl = 1200)
     return $token;
 }
 
+
+/**
+* Check a security token.
+*
+* Checks the POST and GET data for a security token, if one exists, validates
+* that it's for this user and URL. If the token is not valid, it asks the user
+* to re-authenticate and resends the request if authentication was successful.
+*
+* @return   boolean     true if the token is valid; does not return if not!
+* @see      SECINT_checkToken
+*
+*/
+function SEC_checkToken()
+{
+    global $_CONF, $LANG20, $LANG_ADMIN;
+
+    if (_sec_checkToken()) {
+        _sec_rebuild_file_request();
+        return true;
+    }
+
+    // determine the destination of this request
+    $destination = COM_getCurrentURL();
+    // validate the destination is not blank and is part of our site...
+    if ( $destination == '' ) {
+        $destination = $_CONF['site_url'] . '/index.php';
+    }
+    if ( substr($destination, 0,strlen($_CONF['site_url'])) != $_CONF['site_url']) {
+        $destination = $_CONF['site_url'] . '/index.php';
+    }
+    $method   = strtoupper($_SERVER['REQUEST_METHOD']) == 'GET' ? 'GET' : 'POST';
+    $postdata = serialize($_POST);
+    $getdata  = serialize($_GET);
+    $filedata = '';
+    if (! empty($_FILES)) {
+        foreach ($_FILES as $key => $file) {
+            if ( is_array($file['name']) ) {
+                foreach ($file['name'] as $offset => $filename) {
+                    if ( !empty($file['name'][$offset]) ) {
+                        $filename = basename($file['tmp_name'][$offset]);
+                        move_uploaded_file($file['tmp_name'][$offset],$_CONF['path_data'] . 'temp/'. $filename);
+                        $_FILES[$key]['tmp_name'][$offset] = $filename;
+                    }
+                }
+            } else {
+                if (! empty($file['name']) && !empty($file['tmp_name'])) {
+                    $filename = basename($file['tmp_name']);
+                    move_uploaded_file($file['tmp_name'],$_CONF['path_data'] . 'temp/'. $filename);
+                    $_FILES[$key]['tmp_name'] = $filename;
+                }
+            }
+        }
+        $filedata = serialize($_FILES);
+    }
+    SESS_setVar('glfusion.auth.method',$method);
+    SESS_setVar('glfusion.auth.dest',$destination);
+    SESS_setVar('glfusion.auth.post',$postdata);
+    SESS_setVar('glfusion.auth.get',$getdata);
+    if ( !empty($filedata) ) {
+        SESS_setVar('glfusion.auth.file',$filedata);
+    }
+
+    $display = COM_siteHeader();
+    $display .= SEC_tokenreauthForm('');
+    $display .= COM_siteFooter();
+    echo $display;
+    exit;
+}
+
 /**
   * Check a security token.
   *
@@ -1227,7 +1296,7 @@ function SEC_createToken($ttl = 1200)
   *
   * @return boolean     true if the token is valid and for this user.
   */
-function SEC_checkToken()
+function _sec_checkToken()
 {
     global $_CONF, $_SYSTEM, $_USER, $_TABLES, $_DB_dbms;
 
@@ -1246,7 +1315,7 @@ function SEC_checkToken()
         $token = COM_applyFilter($_POST[CSRF_TOKEN]);
     }
 
-    if(trim($token) != '') {
+    if (trim($token) != '') {
         $sql = "SELECT ((DATE_ADD(created, INTERVAL ttl SECOND) < NOW()) AND ttl > 0) as expired, owner_id, urlfor FROM "
            . "{$_TABLES['tokens']} WHERE token='".DB_escapeString($token)."'";
         $tokens = DB_query($sql);
@@ -1274,7 +1343,6 @@ function SEC_checkToken()
             } else {
                 $return = true; // Everything is AOK in only one condition...
             }
-
             // It's a one time token. So eat it.
             $sql = "DELETE FROM {$_TABLES['tokens']} WHERE token='".DB_escapeString($token)."'";
             DB_query($sql);
@@ -1670,6 +1738,76 @@ function _unique_id($extra = 'c')
 
 
 /**
+* Display validation form and ask user to re-validate token
+*
+* @param    string  $message    Message to display
+* @return   string              HTML for the validation form
+*
+*/
+function SEC_tokenreauthform($message = '')
+{
+    global $_CONF, $_USER, $LANG20, $LANG_ACCESS, $LANG_ADMIN;
+
+    COM_clearSpeedlimit($_CONF['login_speedlimit'], 'tokenexpired');
+
+    if ( !isset($_USER['uid']) || $_USER['uid'] == 1 || !empty($_USER['remoteusername']) ) {
+        return _sec_reauthOther($message);
+    }
+
+    $hidden = '';
+
+    $hidden .= '<input type="hidden" name="type" value="user"/>' . LB;
+
+    $options = array(
+        'forgotpw_link'   => false,
+        'newreg_link'     => false,
+        'openid_login'    => false,
+        'oauth_login'     => false,
+        'plugin_vars'     => false,
+        '3rdparty_login'  => false,
+        'prefill_user'    => COM_isAnonUser() ? false : true,
+        'title'           => $LANG_ACCESS['token_expired'],
+        'message'         => $message,
+        'footer_message'  => $LANG_ACCESS['token_expired_footer'],
+        'button_text'     => $LANG_ADMIN['authenticate'],
+        'form_action'     => $_CONF['site_url'].'/validate.php',
+        'hidden_fields'   => $hidden
+    );
+    return SEC_loginForm($options);
+}
+
+
+/**
+* Display CAPTCHA validation form and ask user to re-validate token
+*
+* @param    string  $message    Message to display
+* @return   string              HTML for the validation form
+*
+*/
+function _sec_reauthOther( $message = '' )
+{
+    global $_CONF, $LANG20, $LANG_ACCESS, $LANG_ADMIN;
+
+    $hidden = '';
+    $retval = '';
+    $hidden .= '<input type="hidden" name="type" value="other"/>' . LB;
+    $reauthform = new Template($_CONF['path_layout'] . 'users');
+    $reauthform->set_file('login', 'reauthform.thtml');
+    $reauthform->set_var('form_action', $_CONF['site_url'].'/validate.php');
+    $reauthform->set_var('footer_message',$LANG_ACCESS['token_expired_footer']);
+    $reauthform->set_var('start_block_loginagain',COM_startBlock($LANG_ACCESS['token_expired']));
+    $reauthform->set_var('lang_message', $message);
+    $reauthform->set_var('lang_login', 'Validate');
+    $reauthform->set_var('end_block', COM_endBlock());
+    PLG_templateSetVars ('token', $reauthform);
+    $reauthform->set_var('hidden', $hidden);
+    $reauthform->parse('output', 'login');
+    $retval .= $reauthform->finish($reauthform->get_var('output'));
+    return $retval;
+}
+
+
+/**
 * Display login form and ask user to re-authenticate
 *
 * @param    string  $desturl    URL to return to after authentication
@@ -1967,6 +2105,66 @@ function SEC_collectRemoteOAuthModules()
     }
 
     return $modules;
+}
+
+
+/**
+* Rebuilds the $_FILE array
+*
+* @return   nothing
+*
+*/
+function _sec_rebuild_file_request()
+{
+    global $_CONF;
+
+    $filedata = '';
+    if ( isset($_POST['glfusion_auth_file']) ) {
+        $filedata = $_POST['glfusion_auth_file'];
+    }
+    $file_array = unserialize($filedata);
+
+    if (empty($_FILES) && is_array($file_array) ) {
+        foreach ($file_array as $fkey => $file) {
+            if ( isset($file['name']) && is_array($file['name']) ) {
+                foreach($file AS $key => $data) {
+                    foreach ($data AS $offset => $value) {
+                        if ( $key == 'tmp_name' ) {
+                            $filename = COM_sanitizeFilename(basename($value), true);
+                            $value = $_CONF['path_data'] . 'temp/'.$filename;
+                            if ( $filename == '' ) {
+                                $value = '';
+                            }
+                            $_FILES[$fkey]['_data_dir'][$offset] = true;
+                        }
+                        $_FILES[$fkey][$key][$offset] = $value;
+                        if (!isset($_FILES[$fkey]['tmp_name'][$offset]) || ! file_exists($_FILES[$fkey]['tmp_name'][$offset])) {
+                            $_FILES[$fkey]['tmp_name'][$offset] = '';
+                            $_FILES[$fkey]['error'][$offset] = 4;
+                        }
+                    }
+                }
+            } else {
+                foreach($file AS $key => $value) {
+                    if ($key == 'tmp_name' ) {
+                        $filename = COM_sanitizeFilename(basename($value), true);
+                        $value = $_CONF['path_data'] . 'temp/'.$filename;
+                        if ( $filename == '' ) {
+                            $value = '';
+                        }
+                        // set _data_dir attribute to key upload class to not use move_uploaded_file()
+                        $_FILES[$fkey]['_data_dir'] = true;
+                    }
+                    $_FILES[$fkey][$key] = $value;
+
+                }
+                if (! file_exists($_FILES[$fkey]['tmp_name'])) {
+                    $_FILES[$fkey]['tmp_name'] = '';
+                    $_FILES[$fkey]['error'] = 4;
+                }
+            }
+        }
+    }
 }
 
 ?>

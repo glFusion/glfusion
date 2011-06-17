@@ -391,8 +391,6 @@ if (isset($_POST['subject'])) {
     $subject = COM_applyFilter($_GET['subject']);
 }
 
-$validtoken = SEC_checkToken();
-
 $display .= COM_siteHeader ('menu', $LANG31[1]);
 
 switch ($action) {

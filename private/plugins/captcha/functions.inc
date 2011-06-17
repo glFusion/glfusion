@@ -170,6 +170,8 @@ function plugin_templatesetvars_captcha($ctype, &$template) {
                 return;
             }
             break;
+        case 'token' :
+            break;
 
         // for the 'general' content type case, there is no template var, and we are returning raw CAPTCHA_html
 
@@ -188,7 +190,7 @@ function plugin_templatesetvars_captcha($ctype, &$template) {
         $_USER['uid'] = 1;
     }
 
-    if ( ($_CP_CONF['anonymous_only'] && $_USER['uid'] < 2) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
+    if ( $ctype == 'token' || ($_CP_CONF['anonymous_only'] && $_USER['uid'] < 2) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
 
         // expire stale CAPTCHA sessions
         CAPTCHA_expireSessions();
@@ -300,6 +302,7 @@ function plugin_itemPreSave_captcha( $ctype='registration', $content='' ) {
                 return '';
             }
             break;
+        case 'token' :
         case 'general' :
             break;
         default :
@@ -414,6 +417,9 @@ function CAPTCHA_getHTML($csid, $ctype='general' ) {
             break;
         case 'mediagallery' :
             $T->set_file('page', 'captcha_mediagallery.thtml');
+            break;
+        case 'token' :
+            $T->set_file('page','captcha_token.thtml');
             break;
         case 'general' :
             $T->set_file('page', 'captcha.thtml');
