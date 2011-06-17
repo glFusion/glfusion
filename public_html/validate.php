@@ -192,7 +192,7 @@ switch ($mode) {
             $str = '';
         }
         COM_updateSpeedlimit('tokenexpired');
-        list( $rc, $msg) = CAPTCHA_checkInput( $str, 'general' );
+        list( $rc, $msg) = CAPTCHA_checkInput( $str, 'token' );
         if ( $rc == 1 ) {
             TOKEN_resend_request();
         }

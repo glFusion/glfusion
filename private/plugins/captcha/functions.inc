@@ -196,7 +196,7 @@ function plugin_templatesetvars_captcha($ctype, &$template) {
         CAPTCHA_expireSessions();
 
         // create a CAPTCHA session, or use the existing session if user entry failed
-        $csid = CAPTCHA_getSession();
+        $csid = CAPTCHA_getSession($ctype);
 
         // retrieve the CAPTCHA challenge in HTML form.  pass the CAPTCHA session id (csid)
         // and the format of the challenge is controlled by template selected by content type (ctype)
@@ -347,14 +347,22 @@ function CAPTCHA_sid() {
 
 // creates a new (or refreshes existing) CAPTCHA session, the session identifier (csid) is returned
 
-function CAPTCHA_getSession() {
+function CAPTCHA_getSession($ctype = '') {
     global $_TABLES;
 
-    // if (csid) is in POST array, this is a reuse of an old session, else create a new one
-    if ( isset($_POST['csid']) ) {
-        $csid = COM_applyFilter($_POST['csid']);
+    if ( $ctype == 'token' ) {
+        if ( isset($_POST['csidt']) ) {
+            $csid = COM_applyFilter($_POST['csidt']);
+        } else {
+            $csid    = CAPTCHA_sid();
+        }
     } else {
-        $csid    = CAPTCHA_sid();
+        // if (csid) is in POST array, this is a reuse of an old session, else create a new one
+        if ( isset($_POST['csid']) ) {
+            $csid = COM_applyFilter($_POST['csid']);
+        } else {
+            $csid    = CAPTCHA_sid();
+        }
     }
 
     // set the current time
@@ -486,8 +494,13 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
     // expire stale CAPTCHA sessions
     CAPTCHA_expireSessions();
 
-    if ( !isset($_POST['csid']) || $response == '' ) {
-        if ( !isset($_POST['csid']) ) {
+    $csid_name = 'csid';
+    if ( $ctype == 'token' ) {
+        $csid_name = 'csidt';
+    }
+
+    if ( !isset($_POST[$csid_name]) || $response == '' ) {
+        if ( !isset($_POST[$csid_name]) ) {
             CAPTCHA_errorLog("CAPTCHA: Detected an attempt to bypass CAPTCHA (no session id) in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
         } else {
             CAPTCHA_errorLog("CAPTCHA: Detected an attempt to bypass CAPTCHA (blank input string) in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
@@ -495,7 +508,7 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
         $msg = $LANG_CP00['bypass_error_blank'];
         $rc = 0;
     } else {
-        $csid = COM_applyFilter($_POST['csid']);
+        $csid = COM_applyFilter($_POST[$csid_name]);
         // check the time
         $cTime = DB_getItem($_TABLES['cp_sessions'],'cptime',"session_id='" . DB_escapeString($csid) . "'");
         $now = time();
