@@ -378,7 +378,11 @@ if (($mode == 'edit') ) {
             	break;
             case 'upload' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
-                $retval = MG_saveUserUpload($album_id);
+                if ( SEC_checkToken() ) {
+                    $retval = MG_saveUserUpload($album_id);
+                } else {
+                    $retval = MG_errorHandler("Invalid input received");
+                }
                 break;
             case 'ftp' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/ftpmedia.php';

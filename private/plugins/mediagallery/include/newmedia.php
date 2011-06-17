@@ -385,6 +385,8 @@ function MG_userUpload( $album_id ) {
         'album_select'      => $album_selectbox,
         'max_upload_size'   => $max_upload_size,
         'post_max_size'     => $post_max_size,
+        'csrf_token'        => CSRF_TOKEN,
+        'csrf_token_value'  => SEC_createToken(),
 
     ));
 
@@ -418,12 +420,15 @@ function MG_saveUserUpload( $album_id ) {
     $albums = $album_id;
 
     $successfull_upload = 0;
-
+    $upload = 1;
+    $purge  = 0;
     foreach ($file['name'] as $key=>$name) {
         $filename    = $file['name'][$key];
         $filetype    = $file['type'][$key];
         $filesize    = $file['size'][$key];
         $filetmp     = $file['tmp_name'][$key];
+        $upload      = isset($file['_data_dir']) ? 0 : 1;
+        $purge       = isset($file['_data_dir']) ? 1 : 0;
         $error       = $file['error'][$key];
         $caption     = $_POST['caption'][$key];
         $description = $_POST['description'][$key];
@@ -485,7 +490,7 @@ function MG_saveUserUpload( $album_id ) {
             continue;
         }
 
-        // check user quota -- do we have one????
+        // check user quota -- do we have one?
         $user_quota = MG_getUserQuota( $_USER['uid'] );
         if ( $user_quota > 0 ) {
             $disk_used = MG_quotaUsage( $_USER['uid'] );
@@ -501,7 +506,7 @@ function MG_saveUserUpload( $album_id ) {
         $filetype = MG_getFileTypeFromExt( $filename, $filetype );
 
         // process the uploaded files
-        list($rc,$msg) = MG_getFile( $filetmp, $filename, $albums, $caption, $description, 1, 0, $filetype, $attach_tn, $thumbnail, $keywords, $category, $dnc,0 );
+        list($rc,$msg) = MG_getFile( $filetmp, $filename, $albums, $caption, $description, $upload, $purge, $filetype, $attach_tn, $thumbnail, $keywords, $category, $dnc,0 );
         $statusMsg .= $filename . " " . $msg . '<br/>';
         if ( $rc == true ) {
             $successfull_upload++;

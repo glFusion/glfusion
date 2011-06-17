@@ -493,10 +493,6 @@ function SEC_getPermissionsHTML($perm_owner,$perm_group,$perm_members,$perm_anon
     $perm_templates = new Template($_CONF['path_layout'] . 'admin/common');
     $perm_templates->set_file(array('editor'=>'edit_permissions.thtml'));
 
-    $perm_templates->set_var ( 'xhtml', XHTML );
-    $perm_templates->set_var ('site_url', $_CONF['site_url']);
-    $perm_templates->set_var ('site_admin_url', $_CONF['site_admin_url']);
-    $perm_templates->set_var ('layout_url', $_CONF['layout_url']);
     $perm_templates->set_var ('owner', $LANG_ACCESS['owner']);
     $perm_templates->set_var ('group', $LANG_ACCESS['group']);
     $perm_templates->set_var ('members', $LANG_ACCESS['members']);
@@ -1142,7 +1138,7 @@ function SEC_getGroupDropdown ($group_id, $access)
         $groupdd .= DB_getItem ($_TABLES['groups'], 'grp_name',
                                 "grp_id = '".DB_escapeString($group_id)."'")
                  . '<input type="hidden" name="group_id" value="' . $group_id
-                 . '"' . XHTML . '>';
+                 . '"/>';
     }
 
     return $groupdd;
@@ -1900,7 +1896,7 @@ function SEC_loginForm($use_options = array())
         'newreg_link'       => true,    // $_CONF['disable_new_user_registration']
         'verification_link' => false,   // resend verification?
         'plugin_vars'       => true,    // call PLG_templateSetVars?
-        'prefill_user'      => false,
+        'prefill_user'      => false,   // prefill username of current user
 
         // default texts
         'title'             => $LANG04[65], // Try Logging in Again
@@ -1920,8 +1916,7 @@ function SEC_loginForm($use_options = array())
     $loginform->set_var('form_action', $options['form_action']);
     $loginform->set_var('footer_message',$options['footer_message']);
 
-    $loginform->set_var('start_block_loginagain',
-                        COM_startBlock($options['title']));
+    $loginform->set_var('start_block_loginagain',COM_startBlock($options['title']));
     $loginform->set_var('lang_message', $options['message']);
     if ($options['newreg_link'] == false || $_CONF['disable_new_user_registration']) {
         $loginform->set_var('lang_newreglink', '');

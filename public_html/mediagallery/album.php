@@ -42,7 +42,6 @@ if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
     echo $display;
     exit;
 }
-
 require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
 MG_initAlbums();
 
@@ -50,28 +49,23 @@ MG_initAlbums();
 * Main Function
 */
 
+$album_id = 0;
 if ( isset($_GET['aid']) ) {
     $album_id  = (int) COM_applyFilter($_GET['aid'],true);
-} else {
-    $album_id = 0;
 }
-
+$page = 0;
 if (isset($_GET['page']) ) {
     $page      = (int) COM_applyFilter($_GET['page'],true);
-} else {
-    $page = 0;
+} else if (SESS_isSet('mediagallery.album.page') ) {
+    $page = SESS_getVar('mediagallery.album.page');
 }
-
+$sortOrder = 0;
 if ( isset($_GET['sort']) ) {
     $sortOrder = (int) COM_applyFilter($_GET['sort'],true);
-} else {
-    $sortOrder = 0;
 }
-
+$media_id = 0;
 if ( isset($_GET['s']) ) {
     $media_id = COM_applyFilter($_GET['s'],true);
-} else {
-    $media_id = 0;
 }
 
 if ( $page != 0 ) {
@@ -84,7 +78,7 @@ if ( $page != 0 ) {
     $orderBy = MG_getSortOrder($aid,$sortOrder);
 
     $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma LEFT JOIN " . $_TABLES['mg_media'] . " as m " .
-            " ON ma.media_id=m.media_id WHERE ma.album_id=" . $aid . $orderBy;
+            " ON ma.media_id=m.media_id WHERE ma.album_id=" . (int) $aid . $orderBy;
     $result = DB_query( $sql );
     $nRows  = DB_numRows( $result );
     $total_media = $nRows;
@@ -265,7 +259,7 @@ if ( $MG_albums[$album_id]->enable_slideshow == 2 ) {
 $orderBy = MG_getSortOrder($album_id, $sortOrder);
 
 $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
-        " ON ma.media_id=m.media_id WHERE ma.album_id=" . $album_id . $orderBy;
+        " ON ma.media_id=m.media_id WHERE ma.album_id=" . (int) $album_id . $orderBy;
 
 $sql .= ' LIMIT ' . $begin . ',' . $end;
 
@@ -366,13 +360,13 @@ switch ( $MG_albums[$album_id]->enable_slideshow ) {
         $lang_slideshow = '';
         break;
     case 1 :
-        $url_slideshow = $_MG_CONF['site_url'] . '/slideshow.php?aid=' . $album_id . '&amp;sort=' . $sortOrder;
+        $url_slideshow = $_MG_CONF['site_url'] . '/slideshow.php?aid=' . (int) $album_id . '&amp;sort=' . (int) $sortOrder;
         $lang_slideshow = $LANG_MG03['slide_show'];
         break;
     case 2:
         $lbss_count = DB_count($_TABLES['mg_media'],'media_type',0);
         $sql = "SELECT COUNT(m.media_id) as lbss_count FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
-                                " ON ma.media_id=m.media_id WHERE m.media_type = 0 AND ma.album_id=" . $album_id;
+                                " ON ma.media_id=m.media_id WHERE m.media_type = 0 AND ma.album_id=" . (int) $album_id;
         $res = DB_query($sql);
         list($lbss_count) = DB_fetchArray($res);
     	if ( $lbss_count != 0 ) {
@@ -401,7 +395,7 @@ switch ( $MG_albums[$album_id]->enable_slideshow ) {
 // now build the admin select...
 
 $admin_box = '';
-$admin_box = '<form name="adminbox" id="adminbox" action="' . $_MG_CONF['site_url'] . '/admin.php" method="get" style="margin:0;padding:0">';
+$admin_box  = '<form name="adminbox" id="adminbox" action="' . $_MG_CONF['site_url'] . '/admin.php" method="get" style="margin:0;padding:0">';
 $admin_box .= '<div><input type="hidden" name="album_id" value="' . $album_id . '"/>';
 $admin_box .= '<select name="mode" onchange="forms[\'adminbox\'].submit()">';
 $admin_box .= '<option label="Options" value="">' . $LANG_MG01['options'] .'</option>';
@@ -491,7 +485,7 @@ $T->set_file (array(
     'page'      => 'album_page.thtml',
     'noitems'   => 'album_page_noitems.thtml',
 ));
-
+SESS_setVar('mediagallery.album.page',$page+1);
 $T->set_var(array(
     'site_url'              => $_MG_CONF['site_url'],
     'birdseed'              => $birdseed,

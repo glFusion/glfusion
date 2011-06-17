@@ -418,6 +418,7 @@ function savesubmission($type, $A)
 // MAIN
 
 $display = '';
+$pagetitle = '';
 
 $type = '';
 // note that 'type' _may_ come in through $_GET even when the
