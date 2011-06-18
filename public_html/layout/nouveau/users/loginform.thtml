@@ -2,21 +2,23 @@
 <div style="width:100%; text-align:center;">
   <div style="font-size:1.2em;">{start_block_loginagain}</div>
   <p style="font-size:.8em;">{lang_message}</p>
-  <form id="login" name="login" action="{form_action}" method="post" style="margin-top:1em; margin-bottom:1em;">
     <div style="padding:1em; width:45em; margin:auto; background:#f2f2f2; border:1px solid #ccc; font-size:.8em;">
+    <form id="login" name="login" action="{form_action}" method="post" style="margin-top:1em; margin-bottom:1em;">
       <div style="float:left;width:10em;">
-        <img class="floatleft" style="width:128px;" src="{layout_url}/images/lock.png" alt=""{xhtml}>
+        <img class="floatleft" style="width:128px;" src="{layout_url}/images/lock.png" alt="" />
       </div>
       <div style="float:left;">
         <p style="text-align:right;">
-          <b><label for="loginname">{lang_username}:</label></b>&nbsp;&nbsp;<input type="text" size="25" name="loginname" value="{loginname}" id="loginname" style="width:12em;"{xhtml}><br{xhtml}>
+          <b><label for="loginname">{lang_username}:</label></b>&nbsp;&nbsp;<input type="text" size="25" name="loginname" value="{loginname}" id="loginname" style="width:12em;"/>
+          <br/>
         </p>
         <p style="text-align:right;">
-          <b><label for="passwd">{lang_password}:</label></b>&nbsp;&nbsp;<input type="password" size="25" name="passwd" id="passwd" style="width:12em;"{xhtml}><br{xhtml}>
+          <b><label for="passwd">{lang_password}:</label></b>&nbsp;&nbsp;<input type="password" size="25" name="passwd" id="passwd" style="width:12em;" />
+          <br/>
           {services}
         </p>
         <p style="text-align:right;">
-          <input style="margin-top:.5em;" type="submit" value="{lang_login}"{xhtml}>
+          <input style="margin-top:.5em;" type="submit" value="{lang_login}" />
         </p>
         <p style="text-align:right; padding-top:1em;">
           {lang_newreglink}
@@ -31,6 +33,7 @@
           &nbsp;
         </p>
       </div>
+      </form>
       {!if oauth_login}
       <div style="float:right;padding-right:10px;;padding-top:20px;">
         {oauth_login}
@@ -44,7 +47,6 @@
       </div>
       {!endif}
     </div>
-  </form>
   {end_block}
 </div>
 <script type="text/javascript">
