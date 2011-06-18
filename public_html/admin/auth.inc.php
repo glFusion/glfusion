@@ -66,7 +66,7 @@ if ( substr($destination, 0,strlen($_CONF['site_url'])) != $_CONF['site_url']) {
     $destination = $_CONF['site_admin_url'] . '/index.php';
 }
 
-if ( isset($_USER['uid']) ) {
+if ( !COM_isAnonUser() ) {
     $currentUID = $_USER['uid'];
 } else {
     $currentUID = 1;
@@ -104,9 +104,7 @@ if ( isset($_POST['loginname']) && !empty($_POST['loginname']) && isset($_POST['
         }
     }
 }
-
 if ($status == USER_ACCOUNT_ACTIVE) {
-
     SESS_completeLogin($uid);
     $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
     if (!SEC_isModerator() && !SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR')
@@ -145,7 +143,6 @@ if ($status == USER_ACCOUNT_ACTIVE) {
         echo COM_refresh($destination);
         exit;
     }
-
     $method = '';
     if (isset($_POST['token_requestmethod'])) {
         $method = COM_applyFilter($_POST['token_requestmethod']);
@@ -163,7 +160,6 @@ if ($status == USER_ACCOUNT_ACTIVE) {
         $filedata = urldecode($_POST['token_filedata']);
         $file_array = unserialize($filedata);
     }
-
     if (empty($_FILES) && is_array($file_array) ) {
         foreach ($file_array as $fkey => $file) {
             if ( isset($file['name']) && is_array($file['name']) ) {
@@ -196,7 +192,6 @@ if ($status == USER_ACCOUNT_ACTIVE) {
                         $_FILES[$fkey]['_data_dir'] = true;
                     }
                     $_FILES[$fkey][$key] = $value;
-
                 }
                 if (! file_exists($_FILES[$fkey]['tmp_name'])) {
                     $_FILES[$fkey]['tmp_name'] = '';
@@ -227,7 +222,6 @@ if ($status == USER_ACCOUNT_ACTIVE) {
             $filedata = urldecode($_POST['token_filedata']);
             SEC_cleanupFiles($filedata);
         }
-
         $retval = COM_siteHeader('menu', $LANG12[26])
                 . COM_startBlock($LANG12[26], '')
                 . $LANG04[112]
@@ -261,7 +255,6 @@ if ( $_SYSTEM['admin_session'] != 0 ) {
         $postdata = serialize($_POST);
         $getdata  = serialize($_GET);
         $filedata = '';
-
         if (! empty($_FILES)) {
             foreach ($_FILES as $key => $file) {
                 if ( is_array($file['name']) ) {
