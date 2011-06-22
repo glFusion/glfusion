@@ -1693,19 +1693,11 @@ function _hash_crypt_private($password, $setting, &$itoa64)
     * consequently in lower iteration counts and hashes that are
     * quicker to crack (by non-PHP code).
     */
-    if (PHP_VERSION >= 5) {
-        $hash = md5($salt . $password, true);
-        do {
-            $hash = md5($hash . $password, true);
-        }
-        while (--$count);
-    } else {
-        $hash = pack('H*', md5($salt . $password));
-        do {
-            $hash = pack('H*', md5($hash . $password));
-        }
-        while (--$count);
+    $hash = md5($salt . $password, true);
+    do {
+        $hash = md5($hash . $password, true);
     }
+    while (--$count);
 
     $output = substr($setting, 0, 12);
     $output .= _hash_encode64($hash, 16, $itoa64);

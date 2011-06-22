@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -67,7 +67,6 @@ function _img_RotateImage($srcImage, $direction,$mimeType)
             return array(false,'Invalid direction passed to rotate, must be left or right');
     }
 
-//    $tmpImage = $srcImage . '.rt';
     $tmp = pathinfo($srcImage);
     $tmpImage = $tmp['dirname'] .'/' . $tmp['filename'] . '_RT.' . $tmp['extension'];
 
