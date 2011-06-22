@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -54,7 +54,7 @@ function edituser()
 {
     global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG_MYACCOUNT, $LANG04, $LANG_ADMIN;
 
-    $result = DB_query("SELECT fullname,cookietimeout,email,homepage,sig,emailstories,about,location,pgpkey,photo,remoteservice FROM {$_TABLES['users']},{$_TABLES['userprefs']},{$_TABLES['userinfo']} WHERE {$_TABLES['users']}.uid = {$_USER['uid']} AND {$_TABLES['userprefs']}.uid = {$_USER['uid']} AND {$_TABLES['userinfo']}.uid = {$_USER['uid']}");
+    $result = DB_query("SELECT fullname,cookietimeout,email,homepage,sig,emailstories,about,location,pgpkey,photo,remoteservice FROM {$_TABLES['users']},{$_TABLES['userprefs']},{$_TABLES['userinfo']} WHERE {$_TABLES['users']}.uid = {$_USER['uid']} AND {$_TABLES['userprefs']}.uid = {$_USER['uid']} AND {$_TABLES['userinfo']}.uid=".(int)$_USER['uid']);
     $A = DB_fetchArray ($result);
 
     $preferences = new Template ($_CONF['path_layout'] . 'preferences');
@@ -152,10 +152,6 @@ function edituser()
 
     $display_name = COM_getDisplayName ($_USER['uid']);
 
-    //$preferences->set_var ('start_block_profile',
-    //        COM_startBlock ($LANG04[1] . ' ' . $display_name));
-    //$preferences->set_var ('end_block', COM_endBlock ());
-
     $preferences->set_var ('profile_headline',
                            $LANG04[1] . ' ' . $display_name);
 
@@ -211,10 +207,10 @@ function edituser()
             $preferences->set_var ('display_photo', '');
         } else {
             if (empty ($A['photo'])) { // external avatar
-                $photo = '<br' . XHTML . '>' . $photo;
+                $photo = '<br />' . $photo;
             } else { // uploaded photo - add delete option
-                $photo = '<br' . XHTML . '>' . $photo . '<br' . XHTML . '>' . $LANG04[79]
-                       . '&nbsp;<input type="checkbox" name="delete_photo"' . XHTML . '>'
+                $photo = '<br />' . $photo . '<br />' . $LANG04[79]
+                       . '&nbsp;<input type="checkbox" name="delete_photo" />'
                        . LB;
             }
             $preferences->set_var ('display_photo', $photo);
@@ -227,11 +223,11 @@ function edituser()
     $preferences->set_var('plugin_namepass_pwdemail',PLG_profileEdit($_USER['uid'],'namepass','pwdemail'));
     $preferences->set_var('plugin_namepass',PLG_profileEdit($_USER['uid'],'namepass'));
 
-    $result = DB_query("SELECT about,pgpkey FROM {$_TABLES['userinfo']} WHERE uid = {$_USER['uid']}");
+    $result = DB_query("SELECT about,pgpkey FROM {$_TABLES['userinfo']} WHERE uid=".(int)$_USER['uid']);
     $A = DB_fetchArray($result);
 
     $reqid = substr (md5 (uniqid (rand (), 1)), 1, 16);
-    DB_change ($_TABLES['users'], 'pwrequestid', DB_escapeString($reqid), 'uid', $_USER['uid']);
+    DB_change ($_TABLES['users'], 'pwrequestid', DB_escapeString($reqid), 'uid', (int) $_USER['uid']);
 
     $preferences->set_var ('about_value', htmlspecialchars ($A['about']));
     $preferences->set_var ('pgpkey_value', htmlspecialchars ($A['pgpkey']));
@@ -284,22 +280,21 @@ function confirmAccountDelete ($form_reqid)
 {
     global $_CONF, $_TABLES, $_USER, $LANG04;
 
-    if (DB_count ($_TABLES['users'], array ('pwrequestid', 'uid'), array (DB_escapeString($form_reqid), $_USER['uid'])) != 1) {
+    if (DB_count ($_TABLES['users'], array ('pwrequestid', 'uid'), array (DB_escapeString($form_reqid), (int) $_USER['uid'])) != 1) {
         // not found - abort
         return COM_refresh ($_CONF['site_url'] . '/index.php');
     }
 
     // to change the password, email address, or cookie timeout,
     // we need the user's current password
-    $current_password = DB_getItem($_TABLES['users'],'passwd',"uid={$_USER['uid']}");
+    $current_password = DB_getItem($_TABLES['users'],'passwd',"uid=".(int)$_USER['uid']);
     if (empty($_POST['old_passwd']) || !SEC_check_hash(trim($_POST['old_passwd']),$current_password)) {
          return COM_refresh($_CONF['site_url']
                             . '/usersettings.php?msg=84');
     }
 
-    $reqid = substr (md5 (uniqid (rand (), 1)), 1, 16);
-    DB_change ($_TABLES['users'], 'pwrequestid', "$reqid",
-                                  'uid', $_USER['uid']);
+    $reqid = DB_escapeString(substr (md5 (uniqid (rand (), 1)), 1, 16));
+    DB_change ($_TABLES['users'], 'pwrequestid', "$reqid",'uid', (int)$_USER['uid']);
 
     $retval = '';
 
@@ -310,10 +305,10 @@ function confirmAccountDelete ($form_reqid)
     $retval .= '<form action="' . $_CONF['site_url']
             . '/usersettings.php" method="post"><div>' . LB;
     $retval .= '<p align="center"><input type="submit" name="btnsubmit" value="'
-            . $LANG04[96] . '"' . XHTML . '></p>' . LB;
-    $retval .= '<input type="hidden" name="mode" value="deleteconfirmed"' . XHTML . '>' . LB;
+            . $LANG04[96] . '" /></p>' . LB;
+    $retval .= '<input type="hidden" name="mode" value="deleteconfirmed" />' . LB;
     $retval .= '<input type="hidden" name="account_id" value="' . $reqid
-            . '"' . XHTML . '>' . LB;
+            . '" />' . LB;
     $retval .= '</div></form>' . LB;
     $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     $retval .= COM_siteFooter ();
@@ -605,7 +600,7 @@ function editpreferences()
 
     // subscription block
     $csscounter = 1;
-    $res = DB_query("SELECT * FROM {$_TABLES['subscriptions']} WHERE uid=".$_USER['uid'] . " ORDER BY type,category ASC");
+    $res = DB_query("SELECT * FROM {$_TABLES['subscriptions']} WHERE uid=".(int)$_USER['uid'] . " ORDER BY type,category ASC");
     $preferences->set_block('subscriptions', 'subrows', 'srow');
     while ( ($S = DB_fetchArray($res) ) != NULL ) {
         $cssstyle = ($csscounter % 2) + 1;
@@ -674,8 +669,7 @@ function editpreferences()
 
     // daily digest block
     if ($_CONF['emailstories'] == 1) {
-        $user_etids = DB_getItem ($_TABLES['userindex'], 'etids',
-                                  "uid = {$_USER['uid']}");
+        $user_etids = DB_getItem ($_TABLES['userindex'], 'etids',"uid=".(int) $_USER['uid']);
         if (empty ($user_etids)) { // an empty string now means "all topics"
             $user_etids = USER_buildTopicList ();
         } elseif ($user_etids == '-') { // this means "no topics"
@@ -1000,10 +994,10 @@ function saveuser($A)
     $profile = '<h1>' . $LANG04[1] . ' ' . $_USER['username'] . '</h1><p>';
     // this is a hack, for some reason remoteservice links made SPAMX SLV check barf
     if (empty($service)) {
-        $profile .= COM_createLink($A['homepage'], $A['homepage']) . '<br' . XHTML . '>';
+        $profile .= COM_createLink($A['homepage'], $A['homepage']) . '<br />';
     }
-    $profile .= $A['location'] . '<br' . XHTML . '>' . $A['sig'] . '<br' . XHTML . '>'
-                . $A['about'] . '<br' . XHTML . '>' . $A['pgpkey'] . '</p>';
+    $profile .= $A['location'] . '<br />' . $A['sig'] . '<br />'
+                . $A['about'] . '<br />' . $A['pgpkey'] . '</p>';
     $result = PLG_checkforSpam ($profile, $_CONF['spamx']);
     if ($result > 0) {
         COM_displayMessageAndAbort ($result, 'spamx', 403, 'Forbidden');
@@ -1076,12 +1070,17 @@ function saveuser($A)
         SEC_setCookie ($_CONF['cookie_name'], $_USER['uid'], $cookie_timeout,
                        $_CONF['cookie_path'], $_CONF['cookiedomain'],
                        $_CONF['cookiesecure'],true);
-
-        $ltToken = SEC_createTokenGeneral('ltc',$token_ttl);
-        SEC_setCookie ($_CONF['cookie_password'], $ltToken, $cookie_timeout,
-                       $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                       $_CONF['cookiesecure'],true);
-
+        DB_query("DELETE FROM {$_TABLES['tokens']} WHERE owner_id=".(int)$_USER['uid']." AND urlfor='ltc'");
+        if ( $cookie_timeout > 0 ) {
+            $ltToken = SEC_createTokenGeneral('ltc',$token_ttl);
+            SEC_setCookie ($_CONF['cookie_password'], $ltToken, $cookie_timeout,
+                           $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                           $_CONF['cookiesecure'],true);
+        } else {
+            SEC_setCookie ($_CONF['cookie_password'], '', -10000,
+                           $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                           $_CONF['cookiesecure'],true);
+        }
         if ($_CONF['allow_user_photo'] == 1) {
             $delete_photo = '';
             if (isset ($A['delete_photo'])) {
@@ -1222,9 +1221,6 @@ function userprofile ($user, $msg = 0)
                                       'email'   => 'email.thtml',
                                       'row'     => 'commentrow.thtml',
                                       'strow'   => 'storyrow.thtml'));
-    $user_templates->set_var ( 'xhtml', XHTML );
-    $user_templates->set_var ('site_url', $_CONF['site_url']);
-    $user_templates->set_var ('layout_url', $_CONF['layout_url']);
     $user_templates->set_var ('start_block_userprofile',
             COM_startBlock ($LANG04[1] . ' ' . $display_name));
     $user_templates->set_var ('end_block', COM_endBlock ());
@@ -1241,7 +1237,7 @@ function userprofile ($user, $msg = 0)
         global $_IMAGE_TYPE, $LANG_ADMIN;
         $edit_icon = '<img src="' . $_CONF['layout_url'] . '/images/edit.'
              . $_IMAGE_TYPE . '" alt="' . $LANG_ADMIN['edit']
-             . '" title="' . $LANG_ADMIN['edit'] . '"' . XHTML . '>';
+             . '" title="' . $LANG_ADMIN['edit'] . '" />';
         $edit_link_url = '<li>' . COM_createLink(
             $edit_icon,
             "{$_CONF['site_admin_url']}/user.php?edit=x&amp;uid={$A['uid']}"
