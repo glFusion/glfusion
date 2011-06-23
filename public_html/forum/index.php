@@ -54,6 +54,7 @@ $page       = isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'],true)
 $order      = isset($_REQUEST['order']) ? COM_applyFilter($_REQUEST['order'],true) : 0;
 $sort       = isset($_REQUEST['sort']) ? COM_applyFilter($_REQUEST['sort'],true) : 0;
 $cat_id     = isset($_REQUEST['cat_id']) ? COM_applyFilter($_REQUEST['cat_id'],true) : 0;
+$forum_id   = isset($_REQUEST['forum_id']) ? COM_applyFilter($_REQUEST['forum_id'],true) : 0;
 $op         = isset($_REQUEST['op']) ? COM_applyFilter($_REQUEST['op']) : '';
 
 //Check is anonymous users can access
@@ -79,7 +80,7 @@ forum_chkUsercanAccess();
 if (!COM_isAnonUser() && $op == 'markallread') {
     $now = time();
     $categories = array();
-    if ($cat_id == 0) {
+    if ($cat_id == 0 && $forum_id == 0) {
         $csql = DB_query("SELECT id FROM {$_TABLES['ff_categories']} ORDER BY id");
         while (list ($categoryID) = DB_fetchArray($csql)) {
             $categories[] = $categoryID;
@@ -89,7 +90,11 @@ if (!COM_isAnonUser() && $op == 'markallread') {
     }
 
     foreach ($categories as $category) {
-        $fsql = DB_query("SELECT forum_id,grp_id FROM {$_TABLES['ff_forums']} WHERE forum_cat=".(int) $category);
+        $extraWhere = '';
+        if ( $forum_id != 0 ) {
+            $extraWhere = ' AND forum_id='.(int)$forum_id.' ';
+        }
+        $fsql = DB_query("SELECT forum_id,grp_id FROM {$_TABLES['ff_forums']} WHERE forum_cat=".(int) $category . $extraWhere);
         while($frecord = DB_fetchArray($fsql)){
             if (SEC_inGroup($frecord['grp_id'])) {
                 DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE uid=".(int) $_USER['uid']." AND forum=".(int)$frecord['forum_id']."");
@@ -103,7 +108,11 @@ if (!COM_isAnonUser() && $op == 'markallread') {
             }
         }
     }
-    echo COM_refresh($_CONF['site_url'] .'/forum/index.php');
+    if ( $extraWhere != '' ) {
+        echo COM_refresh($_CONF['site_url'].'/forum/index.php?forum='.(int) $forum_id);
+    } else {
+        echo COM_refresh($_CONF['site_url'] .'/forum/index.php');
+    }
     exit();
 }
 
@@ -622,6 +631,13 @@ if ($forum > 0) {
                                 'subscribelink'     => $subscribelink,
                                 'subscribelinkimg'  => $subscribelinkimg,
                                 'LANG_subscribe'    => $subcribelanguage));
+    }
+    if (!COM_isAnonUser()) {
+        $link = '<a href="'.$_CONF['site_url'].'/forum/index.php?op=markallread&amp;cat_id='.$category['id'].'&amp;forum_id='.(int)$forum.'">';
+        $topiclisting->set_var (array(
+                'markreadlink'  => $link,
+                'LANG_markread' => $LANG_GF02['msg84']
+        ));
     }
     $rssFeed = DB_getItem($_TABLES['syndication'],'filename','type="forum" AND topic='.(int) $forum.' AND is_enabled=1');
     if ( ($rssFeed != '' || $rssFeed != NULL) && $skipForum == false ) {
