@@ -258,7 +258,7 @@ function MG_getThemeJS( $aid ) {
 
     $js = '';
 
-    if ( $MG_albums[$aid]->skin == 'default' || $MG_albums[$aid]->skin == '' ) {
+    if ( !isset($MG_albums[$aid]) || $MG_albums[$aid]->skin == 'default' || $MG_albums[$aid]->skin == '' ) {
         return '';
     }
     if ( file_exists ($_MG_CONF['template_path'] . '/themes/' . $MG_albums[$aid]->skin . '/javascript.js') ) {
@@ -273,7 +273,7 @@ function MG_getThemeCSS( $aid ) {
     $css = '';
     $css = MG_getThemeJS($aid);
 
-    if ( $MG_albums[$aid]->skin == 'default' || $MG_albums[$aid]->skin == '' ) {
+    if ( !isset($MG_albums[$aid]) || $MG_albums[$aid]->skin == 'default' || $MG_albums[$aid]->skin == '' ) {
         return '';
     }
     if ( file_exists ($_MG_CONF['template_path'] . '/themes/' . $MG_albums[$aid]->skin . '/style.css') ) {

@@ -247,7 +247,9 @@
 </div>
 
 <div style="text-align:center;">
-  <input type="submit" value="{lang_save}" name="mode" /> <input type="submit" value="{lang_cancel}" name="mode" />
+  <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
+  <input type="submit" value="{lang_save}" name="save" />
+  <input type="submit" value="{lang_cancel}" name="cancel" />
 </div>
 </form>
 {# JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor #}

@@ -1,12 +1,12 @@
 {# begin {templatelocation} #}
-<br{xhtml}>
+<br />
 {lang_cat_edit_help}
-<br{xhtml}>
-<br{xhtml}>
+<br />
+<br />
 <form enctype="multipart/form-data"  method="post" action="{s_form_action}">
 <div>
-<input type="hidden" name="cat_id" value={cat_id}{xhtml}>
-<input type="hidden" name="action" value="{action}"{xhtml}>
+<input type="hidden" name="cat_id" value={cat_id} />
+<input type="hidden" name="action" value="{action}" />
     <table width="100%" border="0" cellspacing="0" cellpadding="5">
       <tr>
         <th colspan="2">
@@ -27,9 +27,9 @@
       </tr>
     </table>
 <div style="text-align:center;">
-    <input type="submit" value="{lang_save}"   name="mode"{xhtml}>
-    <input type="submit" value="{lang_delete}" name="mode"{xhtml}>
-    <input type="submit" value="{lang_cancel}" name="mode"{xhtml}>
+  <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
+  <input type="submit" value="{lang_save}" name="save" />
+  <input type="submit" value="{lang_cancel}" name="cancel" />
 </div>
 </div>
 </form>

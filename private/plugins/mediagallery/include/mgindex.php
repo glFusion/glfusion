@@ -34,6 +34,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+MG_initAlbums();
+
 function MG_index() {
 	global $_USER, $_MG_CONF, $_CONF, $_TABLES, $MG_albums, $LANG_MG00, $LANG_MG01, $LANG_MG02, $LANG_MG03, $themeStyle;
 
