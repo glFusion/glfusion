@@ -39,10 +39,7 @@ $display = '';
 // Only let admin users access this page
 if (!SEC_hasRights('menu.admin')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
-    $display .= COM_startBlock ($MESSAGE[30], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= $MESSAGE[37];
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_showMessageText($MESSAGE[37],$MESSAGE[30],true);
     $display .= COM_siteFooter ();
     COM_accessLog ("User {$_USER['username']} tried to illegally access the menu editor administration screen.");
     echo $display;
@@ -1433,12 +1430,7 @@ function MB_hexrgb($hexstr, $rgb) {
 /*
  * Main processing loop
  */
-
-if (isset($_GET['msg']) ) {
-    $msg = COM_applyFilter($_GET['msg'],true);
-} else {
-    $msg = 0;
-}
+$msg = COM_getMessage();
 
 if ( isset($_GET['mode']) ) {
     $mode = COM_applyFilter($_GET['mode']);

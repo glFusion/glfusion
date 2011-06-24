@@ -36,17 +36,14 @@ $display = '';
 
 if (!SEC_hasrights ('autotag.admin')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
-    $display .= COM_startBlock ($MESSAGE[30], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= $MESSAGE[38];
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_showMessageText($MESSAGE[38], $MESSAGE[30],true);
     $display .= COM_siteFooter ();
     COM_accessLog ("User {$_USER['username']} tried to illegally access the autotag administration screen.");
     echo $display;
     exit;
 }
 
-require_once $_CONF['path_system'].'lib-install.php';
+USES_lib_install();
 
 /**
 * Main driver to handle the uploaded autotag

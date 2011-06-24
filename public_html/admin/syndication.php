@@ -44,10 +44,7 @@ $display = '';
 // Make sure user has rights to access this page
 if (!SEC_hasRights ('syndication.edit')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30])
-        . COM_startBlock ($MESSAGE[30], '',
-                          COM_getBlockTemplate ('_msg_block', 'header'))
-        . $MESSAGE[34]
-        . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
+        . COM_showMessageText($MESSAGE[34],$MESSAGE[30],true)
         . COM_siteFooter ();
     COM_accessLog("User {$_USER['username']} tried to illegally access the content syndication administration screen.");
     echo $display;
@@ -454,9 +451,9 @@ function FEED_edit($fid = 0, $type = '')
         if($result)
         {
             $P = DB_fetchArray($result);
-            if($P['pi_enabled'] == 0)
-            {
-                echo COM_refresh($_CONF['site_admin_url'].'/syndication.php?msg=80');
+            if($P['pi_enabled'] == 0) {
+                COM_setMessage(80);
+                echo COM_refresh($_CONF['site_admin_url'].'/syndication.php');
                 exit;
             }
         }
@@ -566,10 +563,7 @@ function FEED_save($A)
     if (empty ($A['title']) || empty ($A['description']) ||
             empty ($A['filename'])) {
         $retval = COM_siteHeader ('menu', $LANG33[38])
-                . COM_startBlock ($LANG33[38], '',
-                        COM_getBlockTemplate ('_msg_block', 'header'))
-                . $LANG33[39]
-                . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
+                . COM_showMessageText($LANG33[39],$LANG33[38],true)
                 . FEED_edit($A['fid'], $A['type'])
                 . COM_siteFooter ();
         return $retval;
@@ -579,10 +573,7 @@ function FEED_save($A)
     $C = DB_fetchArray($result);
     if ($C['count'] > 0) {
         $retval = COM_siteHeader ('menu', $LANG33[52])
-                . COM_startBlock ($LANG33[52], '',
-                        COM_getBlockTemplate ('_msg_block', 'header'))
-                . $LANG33[51]
-                . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
+                . COM_showMessageText($LANG33[51],$LANG33[52],true)
                 . FEED_edit($A['fid'], $A['type'])
                 . COM_siteFooter ();
         return $retval;
@@ -590,10 +581,7 @@ function FEED_save($A)
 
     if ($A['limits'] <= 0) {
         $retval = COM_siteHeader ('menu', $LANG33[38])
-                . COM_startBlock ($LANG33[38], '',
-                        COM_getBlockTemplate ('_msg_block', 'header'))
-                . $LANG33[40]
-                . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
+                . COM_showMessageText($LANG33[40],$LANG33[38],true)
                 . FEED_edit($A['fid'], $A['type'])
                 . COM_siteFooter ();
         return $retval;
@@ -631,7 +619,8 @@ function FEED_save($A)
     }
     SYND_updateFeed ($A['fid']);
     CACHE_remove_instance('story');
-    return COM_refresh ($_CONF['site_admin_url'] . '/syndication.php?msg=58');
+    COM_setMessage(58);
+    return COM_refresh ($_CONF['site_admin_url'] . '/syndication.php');
 }
 
 /**
@@ -653,8 +642,9 @@ function FEED_delete($fid)
         }
         DB_delete($_TABLES['syndication'], 'fid', $fid);
         CACHE_remove_instance('story');
+        COM_setMessage(59);
         return COM_refresh ($_CONF['site_admin_url']
-                            . '/syndication.php?msg=59');
+                            . '/syndication.php');
     }
 
     return COM_refresh ($_CONF['site_admin_url'] . '/syndication.php');
@@ -730,13 +720,7 @@ switch ($action) {
 
     default:
         $display .= COM_siteHeader ('menu', $LANG33[10]);
-        if (isset ($_POST['msg'])) {
-            $msg = COM_applyFilter ($_POST['msg'], true);
-        } elseif (isset ($_GET['msg'])) {
-            $msg = COM_applyFilter ($_GET['msg'], true);
-        } else {
-            $msg = 0;
-        }
+        $msg = COM_getMessage();
         $display .= ($msg > 0) ? COM_showMessage($msg) : '';
         $display .= FEED_list();
         $display .= COM_siteFooter ();

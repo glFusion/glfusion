@@ -59,10 +59,7 @@ $display = '';
 
 if (!SEC_hasRights('story.edit')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
-    $display .= COM_startBlock ($MESSAGE[30], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= $MESSAGE[31];
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_showMessageText($MESSAGE[31],$MESSAGE[30],true);
     $display .= COM_siteFooter ();
     COM_accessLog("User {$_USER['username']} tried to illegally access the story administration screen.");
     echo $display;
@@ -385,10 +382,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     }
 
     if (!empty ($errormsg)) {
-        $display .= COM_startBlock($LANG24[25], '',
-                            COM_getBlockTemplate ('_msg_block', 'header'));
-        $display .= $errormsg;
-        $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $display .= COM_showMessageText($errormsg,$LANG24[25],true);
     }
 
     if (!empty ($currenttopic)) {
@@ -419,17 +413,11 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
 
     if( ($result == STORY_PERMISSION_DENIED) || ($result == STORY_NO_ACCESS_PARAMS) )
     {
-        $display .= COM_startBlock($LANG_ACCESS['accessdenied'], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-        $display .= $LANG24[42];
-        $display .= COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
+        $display .= COM_showMessageText($LANG24[42],$LANG_ACCESS['accessdenied'],true);
         COM_accessLog("User {$_USER['username']} tried to illegally access story $sid. - STORY_PERMISSION_DENIED or STORY_NO_ACCESS_PARAMS - ".$result);
         return $display;
     } elseif( ($result == STORY_EDIT_DENIED) || ($result == STORY_EXISTING_NO_EDIT_PERMISSION) ) {
-        $display .= COM_startBlock($LANG_ACCESS['accessdenied'], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-        $display .= $LANG24[41];
-        $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $display .= COM_showMessageText($LANG24[41],$LANG_ACCESS['accessdenied'],true);
         $display .= STORY_renderArticle ($story, 'p');
         COM_accessLog("User {$_USER['username']} tried to illegally edit story $sid. - STORY_EDIT_DENIED or STORY_EXISTING_NO_EDIT_PERMISSION");
         return $display;
@@ -459,10 +447,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     }
     if ( $allowedTopicList == '' )
     {
-        $display .= COM_startBlock($LANG_ACCESS['accessdenied'], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-        $display .= $LANG24[42];
-        $display .= COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
+        $display .= COM_showMessageText($LANG24[42],$LANG_ACCESS['accessdenied'],true);
         COM_accessLog("User {$_USER['username']} tried to illegally access story $sid. No allowed topics.");
         return $display;
     }
@@ -978,8 +963,8 @@ if (isset($_POST['editopt'])) {
 if ($editopt == 'default') {
     $_CONF['advanced_editor'] = false;
 }
+$msg = COM_getMessage();
 
-$msg = (isset($_GET['msg'])) ? COM_applyFilter($_GET['msg']) : '';
 $topic = (isset($_GET['topic'])) ? COM_applyFilter($_GET['topic']) : '';
 $type = (isset($_POST['type'])) ? COM_applyFilter($_POST['type']) : '';
 

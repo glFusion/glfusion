@@ -39,10 +39,7 @@ require_once $_CONF['path_system'] . 'lib-admin.php';
 
 if (!SEC_inGroup('Root')) {
     $display = COM_siteHeader ('menu');
-    $display .= COM_startBlock ($LANG27[12], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= $LANG27[12];
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_showMessageText($LANG27[12],$LANG27[12],true);
     $display .= COM_siteFooter ();
     COM_accessLog ("User {$_USER['username']} tried to illegally access the log viewer utility.");
     echo $display;

@@ -44,10 +44,7 @@ $display = '';
 // Make sure user has rights to access this page
 if (!SEC_hasrights ('user.mail')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
-    $display .= COM_startBlock ($MESSAGE[30], '',
-                               COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= $MESSAGE[39];
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_showMessageText($MESSAGE[39],$MESSAGE[30],true);
     $display .= COM_siteFooter ();
     COM_accessLog ("User {$_USER['username']} tried to illegally access the mail administration screen.");
     echo $display;
@@ -236,10 +233,8 @@ function MAIL_sendMessages($vars)
     if (empty ($vars['fra']) OR empty ($vars['fraepost']) OR
             empty ($vars['subject']) OR empty ($message) OR
             ( empty ($vars['to_group']) && empty($vars['to_uid']) )) {
-        $retval .= COM_startBlock ($LANG31[1], '',
-                        COM_getBlockTemplate ('_msg_block', 'header'));
-        $retval .= $LANG31[26];
-        $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+
+        $retval .= COM_showMessageText($LANG31[26],$LANG31[1],true);
 
         if ( $vars['postmode'] == 'html' ) {
             $msg = htmlspecialchars($vars['message_html'],ENT_COMPAT,COM_getEncodingt());

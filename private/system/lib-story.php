@@ -1258,7 +1258,10 @@ function service_submit_story($args, &$output, &$svc_msg)
         	        }
 
             for ($z = 0; $z < $_CONF['maximagesperarticle']; $z++ ) {
-                $curfile['name'] = $_FILES['file']['name'][$z];
+                $curfile['name'] = '';
+                if ( isset($_FILES['file']['name'][$z]) ) {
+                    $curfile['name'] = $_FILES['file']['name'][$z];
+                }
                 if (!empty($curfile['name'])) {
                     $pos = strrpos($curfile['name'],'.') + 1;
                     $fextension = substr($curfile['name'], $pos);
@@ -1331,7 +1334,8 @@ function service_submit_story($args, &$output, &$svc_msg)
         COM_olderStuff ();
 
         if ($story->type == 'submission') {
-            $output = COM_refresh ($_CONF['site_admin_url'] . '/moderation.php?msg=9');
+            COM_setMessage(9);
+            $output = COM_refresh ($_CONF['site_admin_url'] . '/moderation.php');
         } else {
             $output = PLG_afterSaveSwitch($_CONF['aftersave_story'],
                     COM_buildURL("{$_CONF['site_url']}/article.php?story=$sid"),
@@ -1393,8 +1397,8 @@ function service_delete_story($args, &$output, &$svc_msg)
     // update RSS feed and Older Stories block
     COM_rdfUpToDateCheck ();
     COM_olderStuff ();
-
-    $output = COM_refresh ($_CONF['site_admin_url'] . '/story.php?msg=10');
+    COM_setMessage(10);
+    $output = COM_refresh ($_CONF['site_admin_url'] . '/story.php');
 
     return PLG_RET_OK;
 }

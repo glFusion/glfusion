@@ -209,7 +209,7 @@ function SESS_checkRememberMe()
                 $result          = DB_query("SELECT remote_ip FROM {$_TABLES['users']} WHERE uid=".(int) $userid,1);
                 $rip             = DB_fetchArray($result);
                 $server_ip       = $rip['remote_ip'];
-                $cookie_token    = COM_applyFilter($_COOKIE[$_CONF['cookie_password']]);
+                $cookie_token    = isset($_COOKIE['cookie_password']) ? COM_applyFilter($_COOKIE[$_CONF['cookie_password']]) : '';
                 $remote_ip_array = explode('.',$remote_ip);
                 $server_ip_array = explode('.',$request_ip);
                 $ipmatch = false;

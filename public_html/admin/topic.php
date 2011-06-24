@@ -44,10 +44,7 @@ USES_lib_story();
 
 if (!SEC_hasRights('topic.edit')) {
     $display = COM_siteHeader ('menu', $MESSAGE[30]);
-    $display .= COM_startBlock ($MESSAGE[30], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= $MESSAGE[32];
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_showMessageText($MESSAGE[32],$MESSAGE[30],true);
     $display .= COM_siteFooter ();
     COM_accessLog("User {$_USER['username']} tried to illegally access the topic administration screen.");
     echo $display;
@@ -84,9 +81,7 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
         $A = DB_fetchArray($result);
         $access = (SEC_inGroup('Topic Admin')) ? 3 : SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
         if ($access == 0 OR $access == 2) {
-            $retval .= COM_startBlock ($LANG27[12], '',COM_getBlockTemplate ('_msg_block', 'header'));
-            $retval .= $LANG27[13];
-            $retval .= COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
+            $retval .= COM_showMessageText($LANG27[13],$LANG27[12],true);
             COM_accessLog("User {$_USER['username']} tried to illegally create or edit topic $tid.");
             return $retval;
         }
@@ -483,10 +478,7 @@ function TOPIC_save($T)
     }
     if (($access < 3) || !SEC_inGroup ($group_id)) {
         $retval .= COM_siteHeader ('menu', $MESSAGE[30]);
-        $retval .= COM_startBlock ($MESSAGE[30], '',
-                            COM_getBlockTemplate ('_msg_block', 'header'));
-        $retval .= $MESSAGE[32];
-        $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= COM_showMessageText($MESSAGE[32],MESSAGE[30],true);
         $retval .= COM_siteFooter ();
         COM_accessLog("User {$_USER['username']} tried to illegally create or edit topic $tid.");
     } elseif (!empty($tid) && !empty($topic)) {
@@ -534,7 +526,8 @@ function TOPIC_save($T)
         COM_rdfUpToDateCheck ('article', $tid);
         COM_olderStuff ();
         CACHE_remove_instance('stmenu');
-        $retval = COM_refresh ($_CONF['site_admin_url'] . '/topic.php?msg=13');
+        COM_setMessage(13);
+        $retval = COM_refresh ($_CONF['site_admin_url'] . '/topic.php');
     } else {
         $retval .= COM_siteHeader('menu', $LANG27[1]);
         $retval .= COM_errorLog($LANG27[7], 2);
@@ -751,7 +744,8 @@ function TOPIC_delete($tid)
     COM_rdfUpToDateCheck ('article');
     COM_olderStuff ();
     CACHE_remove_instance('stmenu');
-    return COM_refresh ($_CONF['site_admin_url'] . '/topic.php?msg=14');
+    COM_setMessage(14);
+    return COM_refresh ($_CONF['site_admin_url'] . '/topic.php');
 }
 
 /**
@@ -784,12 +778,8 @@ function TOPIC_iconUpload($tid)
                                          'image/png'   => '.png'
                                  )      );
     if (!$upload->setPath ($_CONF['path_images'] . 'topics')) {
-        $display = COM_siteHeader ('menu', $LANG27[29]);
-        $display .= COM_startBlock ($LANG27[29], '',
-                COM_getBlockTemplate ('_msg_block', 'header'));
-        $display .= $upload->printErrors (false);
-        $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block',
-                                                        'footer'));
+        $display  = COM_siteHeader ('menu', $LANG27[29]);
+        $display .= COM_showMessageText($upload->printErrors (false),$LANG27[29],true);
         $display .= COM_siteFooter ();
         echo $display;
         exit; // don't return
@@ -828,11 +818,7 @@ function TOPIC_iconUpload($tid)
 
         if ($upload->areErrors ()) {
             $display = COM_siteHeader ('menu', $LANG27[29]);
-            $display .= COM_startBlock ($LANG27[29], '',
-                    COM_getBlockTemplate ('_msg_block', 'header'));
-            $display .= $upload->printErrors (false);
-            $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block',
-                                                            'footer'));
+            $display .= COM_showMessageText($upload->printErrors (false),$LANG27[29],true);
             $display .= COM_siteFooter ();
             echo $display;
             exit; // don't return
@@ -932,12 +918,7 @@ switch ($action) {
 
     default:
         $display .= COM_siteHeader('menu', $LANG27[8]);
-        $msg = 0;
-        if (isset($_POST['msg'])) {
-            $msg = COM_applyFilter($_POST['msg'],true);
-        } elseif (isset($_GET['msg'])) {
-            $msg = COM_applyFilter($_GET['msg'],true);
-        }
+        $msg = COM_getMessage();
         $display .= ($msg > 0) ? COM_showMessage($msg) : '';
         $display .= TOPIC_list();
         $display .= COM_siteFooter();

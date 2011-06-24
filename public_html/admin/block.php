@@ -48,10 +48,7 @@ $display = '';
 // Make sure user has rights to access this page
 if (!SEC_hasRights ('block.edit')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30])
-        . COM_startBlock ($MESSAGE[30], '',
-                          COM_getBlockTemplate ('_msg_block', 'header'))
-        . $MESSAGE[33]
-        . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
+        . COM_showMessageText($MESSAGE[33],$MESSAGE[30],true)
         . COM_siteFooter ();
     COM_accessLog ("User {$_USER['username']} tried to illegally access the block administration screen");
     echo $display;
@@ -210,11 +207,8 @@ function BLOCK_edit($bid = '', $B = array())
         $A = DB_fetchArray($result);
         $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
         if ($access == 2 || $access == 0 || BLOCK_hasTopicAccess($A['tid']) < 3) {
-            $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '', COM_getBlockTemplate ('_msg_block', 'header'))
-                    . $LANG21[45]
-                    . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-            COM_accessLog("User {$_USER['username']} tried to illegally create or edit block $bid.");
-
+            $retval .= COM_showMessageText($LANG21[45],$LANG_ACCESS['accessdenied'],true);
+            COM_accessLog("User {$_USER['username']} tried to illegally create or edit block ".$bid);
             return $retval;
         }
         if ($A['type'] == 'gldefault') {
@@ -250,7 +244,7 @@ function BLOCK_edit($bid = '', $B = array())
         if ( isset($B['perm_owner']) ) {
             $A['perm_owner'] = SEC_getPermissionValue($B['perm_owner']);
             $A['perm_group'] = SEC_getPermissionValue($B['perm_group']);
-            $A['perm_member'] = SEC_getPermissionValue($B['perm_member']);
+            $A['perm_members'] = SEC_getPermissionValue($B['perm_members']);
             $A['perm_anon'] = SEC_getPermissionValue($B['perm_anon']);
         } else {
             SEC_setDefaultPermissions ($A, $_CONF['default_permissions_block']);
@@ -697,9 +691,7 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
                         time() + 1200, $_CONF['cookie_path'],
                         $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
         $retval .= COM_siteHeader ('menu', $LANG21[63])
-                . COM_startBlock ($LANG21[63], '', COM_getBlockTemplate ('_msg_block', 'header'))
-                . $msg
-                . COM_endBlock (COM_getBlockTemplate ('_msg_block','footer'))
+                . COM_showMessageText($msg,$LANG21[63],true)
                 . BLOCK_edit($bid,$B)
                 . COM_siteFooter ();
         return $retval;
@@ -721,10 +713,7 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
     }
     if (($access < 3) || !BLOCK_hasTopicAccess($tid) || !SEC_inGroup ($group_id)) {
         $retval .= COM_siteHeader('menu', $MESSAGE[30]);
-        $retval .= COM_startBlock ($MESSAGE[30], '',
-                            COM_getBlockTemplate ('_msg_block', 'header'));
-        $retval .= $MESSAGE[33];
-        $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= COM_showMessageText($MESSAGE[33],$MESSAGE[30],true);
         $retval .= COM_siteFooter();
         COM_accessLog("User {$_USER['username']} tried to illegally create or edit block $bid.");
 
@@ -773,11 +762,7 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
             // the arbitrary execution of code
             if (!(stristr($phpblockfn,'phpblock_'))) {
                 $retval .= COM_siteHeader ('menu', $LANG21[37])
-                        . COM_startBlock ($LANG21[37], '',
-                                  COM_getBlockTemplate ('_msg_block', 'header'))
-                        . $LANG21[38]
-                        . COM_endBlock (COM_getBlockTemplate ('_msg_block',
-                                                              'footer'))
+                        . COM_showMessageText($LANG21[38],$LANG21[37],true)
                         . BLOCK_edit($bid,$B)
                         . COM_siteFooter ();
                 return $retval;
@@ -820,33 +805,33 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
             COM_olderStuff ();
         }
         CTL_clearCache();
-        return COM_refresh ($_CONF['site_admin_url'] . '/block.php?msg=11');
+        COM_setMessage(11);
+        return COM_refresh ($_CONF['site_admin_url'] . '/block.php');
     } else {
-        $retval .= COM_siteHeader ('menu', $LANG21[32])
-                . COM_startBlock ($LANG21[32], '',
-                          COM_getBlockTemplate ('_msg_block', 'header'));
-        if ($type == 'portal') {
-            // Portal block is missing fields
-            $retval .= $LANG21[33];
-        } else if ($type == 'phpblock') {
-            // PHP Block is missing field
-            $retval .= $LANG21[34];
-        } else if ($type == 'normal') {
-            // Normal block is missing field
-            $retval .= $LANG21[35];
-        } else if ($type == 'gldefault') {
-            // Default glFusion field missing
-            $retval .= $LANG21[42];
-        } else {
-            // Layout block missing content
-            $retval .= $LANG21[36];
-        }
         SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
                         time() + 1200, $_CONF['cookie_path'],
                         $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
-        $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
-                . BLOCK_edit($bid,$B)
-                . COM_siteFooter ();
+
+        $retval .= COM_siteHeader ('menu', $LANG21[32]);
+        if ($type == 'portal') {
+            // Portal block is missing fields
+            $msg = $LANG21[33];
+        } else if ($type == 'phpblock') {
+            // PHP Block is missing field
+            $msg = $LANG21[34];
+        } else if ($type == 'normal') {
+            // Normal block is missing field
+            $msg = $LANG21[35];
+        } else if ($type == 'gldefault') {
+            // Default glFusion field missing
+            $msg = $LANG21[42];
+        } else {
+            // Layout block missing content
+            $msg = $LANG21[36];
+        }
+        $retval .= COM_showMessageText($msg,$LANG21[32],true);
+        $retval .= BLOCK_edit($bid,$B);
+        $retval .= COM_siteFooter ();
     }
 
     return $retval;
@@ -1143,12 +1128,7 @@ switch ($action) {
 
     default:
         $display .= COM_siteHeader ('menu', $LANG21[19]);
-        $msg = 0;
-        if (isset ($_POST['msg'])) {
-            $msg = COM_applyFilter ($_POST['msg'], true);
-        } else if (isset ($_GET['msg'])) {
-            $msg = COM_applyFilter ($_GET['msg'], true);
-        }
+        $msg = COM_getMessage();
         $display .= ($msg > 0) ? COM_showMessage($msg) : '';
         $display .= BLOCK_list();
         $display .= COM_siteFooter();

@@ -152,12 +152,13 @@ $display .= glfusion_UpgradeCheck();
 
 $display .= glfusion_SecurityCheck();
 
-if (isset ($_GET['msg'])) {
+$msg = COM_getMessage();
+if ( $msg > 0 ) {
     $plugin = '';
     if (isset ($_GET['plugin'])) {
         $plugin = COM_applyFilter ($_GET['plugin']);
     }
-    $display .= COM_showMessage (COM_applyFilter ($_GET['msg'], true), $plugin);
+    $display .= COM_showMessage ($msg, $plugin);
 }
 
 // Show any Plugin formatted blocks

@@ -1231,7 +1231,6 @@ function SEC_checkToken()
     global $_CONF, $LANG20, $LANG_ADMIN;
 
     if (_sec_checkToken()) {
-        _sec_rebuild_file_request();
         return true;
     }
 
@@ -1277,7 +1276,7 @@ function SEC_checkToken()
     }
 
     $display = COM_siteHeader();
-    $display .= SEC_tokenreauthForm('');
+    $display .= SEC_tokenreauthForm('',$destination);
     $display .= COM_siteFooter();
     echo $display;
     exit;
@@ -1731,19 +1730,20 @@ function _unique_id($extra = 'c')
 * @return   string              HTML for the validation form
 *
 */
-function SEC_tokenreauthform($message = '')
+function SEC_tokenreauthform($message = '',$destination = '')
 {
     global $_CONF, $_USER, $LANG20, $LANG_ACCESS, $LANG_ADMIN;
 
     COM_clearSpeedlimit($_CONF['login_speedlimit'], 'tokenexpired');
 
     if ( COM_isAnonUser() || !empty($_USER['remoteusername']) ) {
-        return _sec_reauthOther($message);
+        return _sec_reauthOther($message,$destination);
     }
 
     $hidden = '';
 
     $hidden .= '<input type="hidden" name="type" value="user"/>' . LB;
+    $hidden .= '<input type="hidden" name="token_revalidate" value="true"/>' . LB;
 
     $options = array(
         'forgotpw_link'   => false,
@@ -1757,7 +1757,7 @@ function SEC_tokenreauthform($message = '')
         'message'         => $message,
         'footer_message'  => $LANG_ACCESS['token_expired_footer'],
         'button_text'     => $LANG_ADMIN['authenticate'],
-        'form_action'     => $_CONF['site_url'].'/validate.php',
+        'form_action'     => $destination,
         'hidden_fields'   => $hidden
     );
     return SEC_loginForm($options);
@@ -1771,16 +1771,17 @@ function SEC_tokenreauthform($message = '')
 * @return   string              HTML for the validation form
 *
 */
-function _sec_reauthOther( $message = '' )
+function _sec_reauthOther( $message = '',$destination = '' )
 {
     global $_CONF, $LANG20, $LANG_ACCESS, $LANG_ADMIN;
 
     $hidden = '';
     $retval = '';
     $hidden .= '<input type="hidden" name="type" value="other"/>' . LB;
+    $hidden .= '<input type="hidden" name="token_revalidate" value="true"/>' . LB;
     $reauthform = new Template($_CONF['path_layout'] . 'users');
     $reauthform->set_file('login', 'reauthform.thtml');
-    $reauthform->set_var('form_action', $_CONF['site_url'].'/validate.php');
+    $reauthform->set_var('form_action', $destination);
     $reauthform->set_var('footer_message',$LANG_ACCESS['token_expired_footer']);
     $reauthform->set_var('start_block_loginagain',COM_startBlock($LANG_ACCESS['token_expired']));
     $reauthform->set_var('lang_message', $message);
@@ -2092,65 +2093,4 @@ function SEC_collectRemoteOAuthModules()
 
     return $modules;
 }
-
-
-/**
-* Rebuilds the $_FILE array
-*
-* @return   nothing
-*
-*/
-function _sec_rebuild_file_request()
-{
-    global $_CONF;
-
-    $filedata = '';
-    $file_array = '';
-    if ( isset($_POST['glfusion_auth_file']) ) {
-        $filedata = $_POST['glfusion_auth_file'];
-        $file_array = unserialize($filedata);
-    }
-    if (empty($_FILES) && is_array($file_array) ) {
-        foreach ($file_array as $fkey => $file) {
-            if ( isset($file['name']) && is_array($file['name']) ) {
-                foreach($file AS $key => $data) {
-                    foreach ($data AS $offset => $value) {
-                        if ( $key == 'tmp_name' ) {
-                            $filename = COM_sanitizeFilename(basename($value), true);
-                            $value = $_CONF['path_data'] . 'temp/'.$filename;
-                            if ( $filename == '' ) {
-                                $value = '';
-                            }
-                            $_FILES[$fkey]['_data_dir'][$offset] = true;
-                        }
-                        $_FILES[$fkey][$key][$offset] = $value;
-                        if (!isset($_FILES[$fkey]['tmp_name'][$offset]) || ! file_exists($_FILES[$fkey]['tmp_name'][$offset])) {
-                            $_FILES[$fkey]['tmp_name'][$offset] = '';
-                            $_FILES[$fkey]['error'][$offset] = 4;
-                        }
-                    }
-                }
-            } else {
-                foreach($file AS $key => $value) {
-                    if ($key == 'tmp_name' ) {
-                        $filename = COM_sanitizeFilename(basename($value), true);
-                        $value = $_CONF['path_data'] . 'temp/'.$filename;
-                        if ( $filename == '' ) {
-                            $value = '';
-                        }
-                        // set _data_dir attribute to key upload class to not use move_uploaded_file()
-                        $_FILES[$fkey]['_data_dir'] = true;
-                    }
-                    $_FILES[$fkey][$key] = $value;
-
-                }
-                if (! file_exists($_FILES[$fkey]['tmp_name'])) {
-                    $_FILES[$fkey]['tmp_name'] = '';
-                    $_FILES[$fkey]['error'] = 4;
-                }
-            }
-        }
-    }
-}
-
 ?>

@@ -43,7 +43,8 @@ require_once '../lib-common.php';
 
 $display = '';
 if (!SEC_isModerator()) {
-    $display = COM_refresh($_CONF['site_url'] . '?msg=200');
+    COM_setMessage(200);
+    $display = COM_refresh($_CONF['site_url']);
     echo $display;
     exit;
 }
@@ -743,7 +744,7 @@ switch ($action) {
         break;
 }
 
-$msg = (isset($_GET['msg'])) ? COM_applyFilter($_GET['msg'], true) : 0;
+$msg = COM_getMessage();
 $plugin = (isset($_GET['plugin'])) ? COM_applyFilter($_GET['plugin']) : '';
 $display .= ($msg > 0) ? COM_showMessage($msg, $plugin) : '';
 

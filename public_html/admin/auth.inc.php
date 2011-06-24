@@ -174,7 +174,7 @@ if ($status == USER_ACCOUNT_ACTIVE) {
                             $_FILES[$fkey]['_data_dir'][$offset] = true;
                         }
                         $_FILES[$fkey][$key][$offset] = $value;
-                        if (! file_exists($_FILES[$fkey]['tmp_name'][$offset])) {
+                        if (!isset($_FILES[$fkey]['tmp_name']) || !isset($_FILES[$fkey]['tmp_name'][$offset]) || ! file_exists($_FILES[$fkey]['tmp_name'][$offset])) {
                             $_FILES[$fkey]['tmp_name'][$offset] = '';
                             $_FILES[$fkey]['error'][$offset] = 4;
                         }

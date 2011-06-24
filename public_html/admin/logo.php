@@ -37,10 +37,7 @@ $display = '';
 // Only let admin users access this page
 if (!SEC_hasRights('logo.admin')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
-    $display .= COM_startBlock ($MESSAGE[30], '',
-               COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= $MESSAGE[37];
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_showMessageText($MESSAGE[37],$MESSAGE[30],true);
     $display .= COM_siteFooter ();
     COM_accessLog("User {$_USER['username']} tried to illegally access the logo administration screen.");
     echo $display;
@@ -144,10 +141,7 @@ function _saveLogo() {
  * Main processing loop
  */
 
-$msg = 0;
-if (isset($_GET['msg']) ) {
-    $msg = COM_applyFilter($_GET['msg'],true);
-}
+$msg = COM_getMessage();
 
 if ( isset($_GET['mode']) ) {
     $mode = COM_applyFilter($_GET['mode']);

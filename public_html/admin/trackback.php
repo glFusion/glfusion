@@ -48,10 +48,7 @@ $display = '';
 
 if (!SEC_hasRights ('story.ping')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
-    $display .= COM_startBlock ($MESSAGE[30], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= $MESSAGE[34];
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_showMessageText($MESSAGE[34],$MESSAGE[30],true);
     $display .= COM_siteFooter ();
     COM_accessLog("User {$_USER['username']} tried to illegally access the trackback administration screen.");
     echo $display;
@@ -193,12 +190,7 @@ function TRACKBACK_delete($id)
     } else {
         $msg = 63;
     }
-    if (strpos($url, '?') === false) {
-        $url .= '?msg=' . $msg;
-    } else {
-        $url .= '&amp;msg=' . $msg;
-    }
-
+    COM_setMessage($msg);
     return COM_refresh($url);
 }
 
@@ -214,11 +206,7 @@ function TRACKBACK_showMessage($title, $message)
 {
     $retval = '';
 
-    $retval .= COM_startBlock($title, '',
-                               COM_getBlockTemplate('_msg_block', 'header'))
-            . $message
-            . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
-
+    $retval .= COM_showMessageText($message,$title,true);
     return $retval;
 }
 
@@ -816,8 +804,9 @@ function TRACKBACK_saveService($pid, $name, $site_url, $ping_url, $method, $enab
                  "'$name','$site_url','$ping_url','$method','$enabled'");
     }
 
+    COM_setMessage(65);
     return COM_refresh ($_CONF['site_admin_url']
-                        . '/trackback.php?mode=listservice&amp;msg=65');
+                        . '/trackback.php?mode=listservice');
 }
 
 /**
@@ -1211,11 +1200,9 @@ if (($mode == 'delete') && SEC_checkToken()) {
 } else if (($mode == 'fresh') || ($mode == 'preview')) {
     $display .= COM_siteHeader('menu', $LANG_TRB['trackback']);
 
-    if (isset ($_REQUEST['msg'])) {
-        $msg = COM_applyFilter($_REQUEST['msg'], true);
-        if ($msg > 0) {
-            $display .= COM_showMessage($msg);
-        }
+    $msg = COM_getMessage();
+    if ( $msg > 0 ) {
+        $display .= COM_showMessage($msg);
     }
 
     $target = '';
@@ -1275,8 +1262,9 @@ if (($mode == 'delete') && SEC_checkToken()) {
     $pid = COM_applyFilter ($_POST['service_id'], true);
     if ($pid > 0) {
         DB_delete($_TABLES['pingservice'], 'pid', $pid);
+        COM_setMessage(66);
         $display = COM_refresh($_CONF['site_admin_url']
-                 . '/trackback.php?mode=listservice&amp;msg=66');
+                 . '/trackback.php?mode=listservice');
     } else {
         $display = COM_refresh($_CONF['site_admin_url'] . '/index.php');
     }
@@ -1299,8 +1287,9 @@ if (($mode == 'delete') && SEC_checkToken()) {
     $display .= TRACKBACK_editService($pid);
 } else if ($mode == 'listservice') {
     $display .= COM_siteHeader('menu', $LANG_TRB['services_headline']);
-    if (isset ($_REQUEST['msg'])) {
-        $display .= COM_showMessage(COM_applyFilter($_REQUEST['msg'], true));
+    $msg = COM_getMessage();
+    if ( $msg > 0 ) {
+        $display .= COM_showMessage(COM_applyFilter($msg, true));
     }
     $display .= TRACKBACK_serviceList();
     $display .= COM_siteFooter();

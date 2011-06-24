@@ -1890,15 +1890,17 @@ function COM_rdfUpToDateCheck( $updated_type = '', $updated_topic = '', $updated
 
 function COM_errorLog( $logentry, $actionid = '' )
 {
-    global $_CONF, $LANG01;
+    global $_CONF, $LANG01, $REMOTE_ADDR;
 
     $retval = '';
+    USES_class_date();
+    $dt = new Date('now',$_CONF['timezone']);
 
     if ( !empty( $logentry )) {
-        $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),
-                                 $logentry );
+        $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),$logentry );
 
-        $timestamp = @strftime( '%c' );
+        $timestamp = $dt->format('d M Y H:i:s',true);
+        $ipaddress = $REMOTE_ADDR;
 
         if (!isset($_CONF['path_layout']) &&
                 (($actionid == 2) || empty($actionid))) {
@@ -1915,7 +1917,7 @@ function COM_errorLog( $logentry, $actionid = '' )
                 if ( !$file = fopen( $logfile, 'a' )) {
                     $retval .= $LANG01[33] . ' ' . $logfile . ' (' . $timestamp . ')<br/>' . LB;
                 } else {
-                    fputs( $file, "$timestamp - $logentry \n" );
+                    fputs( $file, "$timestamp - $ipaddress: $logentry \n" );
                 }
                 break;
 
@@ -1941,7 +1943,7 @@ function COM_errorLog( $logentry, $actionid = '' )
                 if ( !$file = fopen( $logfile, 'a' )) {
                     $retval .= $LANG01[33] . ' ' . $logfile . ' (' . $timestamp . ')<br/>' . LB;
                 } else {
-                    fputs( $file, "$timestamp - $logentry \n" );
+                    fputs( $file, "$timestamp - $ipaddress: $logentry \n" );
                     if ( class_exists('Template') ) {
                         $retval .= COM_startBlock( $LANG01[34] . ' - ' . $timestamp,
                                        '', COM_getBlockTemplate( '_msg_block',
@@ -4378,6 +4380,37 @@ function COM_formatTimeString( $time_string, $time, $type = '', $amount = 0 )
     }
 
     return $retval;
+}
+
+
+/**
+* Sets session variable for a message to display on next page load
+*
+* @param    int     $msg            number of the message to set
+*/
+function COM_setMessage( $msg = 0 )
+{
+    SESS_setVar('glfusion.infomessage',$msg);
+}
+
+
+/**
+* Returns message number if set
+*
+* @return    int     $msg           message number to display or 0
+*/
+function COM_getMessage()
+{
+    $msg = 0;
+    if ( isset($_POST['msg']) ) {
+        $msg = COM_applyFilter($_POST['msg'],true);
+    } elseif ( isset($_GET['msg']) ) {
+        $msg = COM_applyFilter($_GET['msg'],true);
+    } elseif ( SESS_isSet('glfusion.infomessage') ) {
+        $msg = COM_applyFilter(SESS_getVar('glfusion.infomessage'),true);
+        SESS_unSet('glfusion.infomessage');
+    }
+    return $msg;
 }
 
 
@@ -7066,7 +7099,6 @@ function js_load($file)
  */
 function js_cacheok($cache,$files)
 {
-
     $ctime = @filemtime($cache);
     if (!$ctime)
         return false; //There is no cache
@@ -7321,6 +7353,10 @@ function USES_class_navbar() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'classes/navbar.class.php';
 }
+function USES_class_date() {
+    global $_CONF;
+    require_once $_CONF['path_system'] . 'classes/date.class.php';
+}
 function USES_class_search() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'classes/search.class.php';
@@ -7395,5 +7431,9 @@ js_out();
 
 if ( function_exists('CUSTOM_splashpage') ) {
     CUSTOM_splashpage();
+}
+
+if ( isset($_POST['token_revalidate']) ) {
+    require_once $_CONF['path_html'].'revalidate.inc.php';
 }
 ?>

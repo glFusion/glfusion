@@ -41,14 +41,11 @@ $display = '';
 
 // Make sure user has access to this page
 if (!SEC_hasRights('user.edit')) {
-    $retval .= COM_siteHeader ('menu', $MESSAGE[30]);
-    $retval .= COM_startBlock ($MESSAGE[30], '',
-               COM_getBlockTemplate ('_msg_block', 'header'));
-    $retval .= $MESSAGE[37];
-    $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-    $retval .= COM_siteFooter ();
+    $display .= COM_siteHeader ('menu', $MESSAGE[30]);
+    $display .= COM_showMessageText($MESSAGE[37],$MESSAGE[30],true);
+    $display .= COM_siteFooter ();
     COM_accessLog("User {$_USER['username']} tried to illegally access the user administration screen.");
-    echo $retval;
+    echo $display;
     exit;
 }
 
@@ -412,7 +409,8 @@ function applyPreferences()
         DB_query($sql);
     }
 
-    echo COM_refresh($_CONF['site_url'].'/admin/user.php?msg=510');
+    COM_setMessage(501);
+    echo COM_refresh($_CONF['site_url'].'/admin/user.php');
     exit;
 }
 

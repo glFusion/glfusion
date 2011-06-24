@@ -38,9 +38,7 @@ $display = '';
 
 if (!SEC_inGroup ('Root')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30])
-        . COM_startBlock ($MESSAGE[30], '',COM_getBlockTemplate ('_msg_block', 'header'))
-        . $MESSAGE[200]
-        . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
+        . COM_showMessageText($MESSAGE[200],$MESSAGE[30],true)
         . COM_siteFooter ();
     COM_accessLog ("User {$_USER['username']} tried to illegally access the hosting environment check screen");
     echo $display;

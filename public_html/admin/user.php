@@ -51,10 +51,7 @@ $display = '';
 // Make sure user has access to this page
 if (!SEC_hasRights('user.edit')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
-    $display .= COM_startBlock ($MESSAGE[30], '',
-               COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= $MESSAGE[37];
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_showMessageText($MESSAGE[37], $MESSAGE[30], true);
     $display .= COM_siteFooter ();
     COM_accessLog("User {$_USER['username']} tried to illegally access the user administration screen.");
     echo $display;
@@ -144,10 +141,7 @@ function USER_edit($uid = '', $msg = '')
     $userform->set_var('no_javascript_warning',$LANG04[150]);
 
     if (!empty ($msg)) {
-        $retval .= COM_startBlock ($LANG28[22], '',
-                           COM_getBlockTemplate ('_msg_block', 'header'))
-                . $MESSAGE[$msg]
-                . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= COM_showMessageText($MESSAGE[$msg],$LANG28[22],false);
     }
 
     if (!empty ($msg) && !empty ($uid) && ($uid > 1)) {
@@ -169,11 +163,8 @@ function USER_edit($uid = '', $msg = '')
         if (SEC_inGroup('Root',$uid) AND !SEC_inGroup('Root')) {
             // the current admin user isn't Root but is trying to change
             // a root account.  Deny them and log it.
-            $retval .= COM_startBlock ($LANG28[1], '',
-                               COM_getBlockTemplate ('_msg_block', 'header'));
-            $retval .= $LANG_ACCESS['editrootmsg'];
+            $retval .= COM_showMessageText($LANG_ACCESS['editrootmsg'], $LANG28[1], true);
             COM_accessLog("User {$_USER['username']} tried to edit a Root account with insufficient privileges.");
-            $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
             return $retval;
         }
         $curtime = COM_getUserDateTimeFormat($U['regdate']);
@@ -2263,11 +2254,8 @@ function USER_importExec()
         }
     } else {
         // A problem occurred, print debug information
-        $retval = COM_siteHeader ('menu', $LANG28[22]);
-        $retval .= COM_startBlock ($LANG28[24], '',
-                COM_getBlockTemplate ('_msg_block', 'header'));
-        $retval .= $upload->printErrors(false);
-        $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval  = COM_siteHeader ('menu', $LANG28[22]);
+        $retval .= COM_showMessageText($upload->printErrors(false),$LANG27[24],true);
         $retval .= COM_siteFooter();
         return $retval;
     }
@@ -2392,7 +2380,8 @@ function USER_delete($uid)
         return COM_refresh ($_CONF['site_admin_url'] . '/user.php');
     }
     CACHE_remove_instance('stmenu');
-    return COM_refresh ($_CONF['site_admin_url'] . '/user.php?msg=22');
+    COM_setMessage(22);
+    return COM_refresh ($_CONF['site_admin_url'] . '/user.php');
 }
 
 /**
@@ -2501,10 +2490,7 @@ if (isset($_POST['grp_id'])) {
     $grp_id = COM_applyFilter($_GET['grp_id'], true);
 }
 
-$msg = '';
-if (isset ($_GET['msg'])) {
-    $msg = COM_applyFilter ($_GET['msg'], true);
-}
+$msg = COM_getMessage();
 
 switch($action) {
 

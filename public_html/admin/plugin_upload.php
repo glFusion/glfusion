@@ -36,10 +36,7 @@ $display = '';
 
 if (!SEC_hasrights ('plugin.edit')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
-    $display .= COM_startBlock ($MESSAGE[30], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= $MESSAGE[38];
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_showMessageText($MESSAGE[38],$MESSAGE[30],true);
     $display .= COM_siteFooter ();
     COM_accessLog ("User {$_USER['username']} tried to illegally access the plugin administration screen.");
     echo $display;
@@ -197,7 +194,8 @@ function processOldPluginInstall(  )
 
     if ( defined('DEMO_MODE') ) {
         _pi_deleteDir($tmp);
-        echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=503');
+        COM_setMessage(503);
+        echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php');
         exit;
     }
 
@@ -280,7 +278,8 @@ function processOldPluginInstall(  )
     }
     _pi_deleteDir($tmp);
 
-    echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=502');
+    COM_setMessage(502);
+    echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php');
     exit;
 }
 
@@ -516,7 +515,8 @@ function post_uploadProcess() {
 
     if ( defined('DEMO_MODE') ) {
         _pi_deleteDir($tmp);
-        echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=503');
+        COM_setMessage(503);
+        echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php');
         exit;
     }
     if ( function_exists('set_time_limit') ) {
@@ -735,7 +735,8 @@ function post_uploadProcess() {
 
             if ( $ret == 0 ) {
                 CTL_clearCache();
-                echo COM_refresh ($_CONF['site_admin_url']. '/plugins.php?msg=44');
+                COM_setMessage(44);
+                echo COM_refresh ($_CONF['site_admin_url']. '/plugins.php');
                 exit;
             } else {
                 return _pi_errorBox($LANG32[54]);
@@ -769,22 +770,18 @@ function pi_update ($pi_name)
     $retval = '';
 
     if (strlen ($pi_name) == 0) {
-        $retval .= COM_startBlock ($LANG32[13], '',
-                            COM_getBlockTemplate ('_msg_block', 'header'));
-        $retval .= COM_errorLog ($LANG32[12]);
-        $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-
+        $retval .= COM_showMessageText($LANG32[12],$LANG32[13],true);
+        COM_errorLog ($LANG32[12]);
         return $retval;
     }
     $result = PLG_upgrade ($pi_name);
     if ($result > 0 ) {
         if ($result === TRUE) { // Catch returns that are just true/false
-            $retval .= COM_refresh ($_CONF['site_admin_url']
-                    . '/plugins.php?msg=60');
+            COM_setMessage(60);
+            $retval .= COM_refresh ($_CONF['site_admin_url'].'/plugins.php');
         } else {  // Plugin returned a message number
-            $retval = COM_refresh ($_CONF['site_admin_url']
-                    . '/plugins.php?msg=' . $result . '&amp;plugin='
-                    . $pi_name);
+            COM_setMessage($result);
+            $retval = COM_refresh ($_CONF['site_admin_url'].'/plugins.php?plugin='.$pi_name);
         }
     } else {  // Plugin function returned a false
         $retval .= COM_showMessage(95);

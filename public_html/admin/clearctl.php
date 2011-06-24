@@ -35,10 +35,7 @@ $display = '';
 
 if (!SEC_inGroup ('Root')) {
     $display .= COM_siteHeader ('menu');
-    $display .= COM_startBlock ($LANG20[1], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= '<p>' . $LANG20[6] . '</p>';
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_showMessageText($LANG20[6],$LANG20[1],true);
     $display .= COM_siteFooter ();
     echo $display;
     exit;
@@ -59,14 +56,7 @@ if ( substr($referer,0,$sLength) != $_CONF['site_url'] ) {
     $referer = $_CONF['site_url'];
 }
 
-$hasargs = strstr( $referer, '?' );
-if ( $hasargs ) {
-    $sep = '&amp;';
-} else {
-    $sep = '?';
-}
-
 CTL_clearCache();
-
-echo COM_refresh($referer . $sep . 'msg=500');
+COM_setMessage(500);
+echo COM_refresh($referer);
 ?>
