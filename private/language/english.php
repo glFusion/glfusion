@@ -2274,10 +2274,19 @@ $LANG_AM = array (
                                 .'<p>You may also use %0% to represent the entire string after the first colon, this is handy when you want to use only a single parameter, and the value will contain whitespace which would otherwise be interpreted as a delimiter between multiple parameters.  The %site_url% and $site_admin_url% macros can also be used, and will be replaced by the base url and admin url respectively.</p>',
     'autotagpermmsg'            => 'Select which features (operations) you want to allow the autotag to be used.',
     'autotag'                   => 'Autotag',
+
     'desc_story'                => 'Link: to a story on this site; link_text defaults to story title.  usage: [story:<i>story_id</i> {link_text}]',
     'desc_story_introtext'      => 'HTML: renders story content, up to and including only introduction text.  usage: [story_introtext:<i>story_id</i>]',
     'desc_vmenu'                => 'HTML: renders a JS-enhanced vertical menu. usage: [vmenu:<i>menu_id</id>]',
     'desc_hmenu'                => 'HTML: renders a JS-enhanced horizontal menu.  usage: [hmenu:<i>menu_id</i>]',
+    'desc_cipher'               => 'Text: substitution cipher. Usage example is [wikipedia:ROT13]: [cipher:<i>nopqrstuvwxyzabcdefghijklm</i> <i>text_to_encode</i>]',
+    'desc_topic'                => 'Link: to home page to display specified topic: link_text defaults to description. usage: [topic:<i>topic_id</i> {link_text}]',
+    'desc_glfwiki'              => 'Link: to the glfusion.or wiki search result for the text specified. usage: [glfwiki:<i>text</i>]',
+    'desc_lang'                 => 'Text: expands \$LANG global var, eg. [lang:p1 p2] -> value of \$LANGp1[p2] or \$LANG_p1[p2]',
+    'desc_conf'                 => 'Text: expands \$_CONF global var, eg. [conf:p1] -> value of \$_CONF[p1]',
+    'desc_user'                 => 'Text: expands \$_USER global var, eg. [user:p1] -> value of \$_USER[p1]',
+    'desc_wikipedia'            => 'Link: to the wikipedia search result for the text specified. usage: [wikipedia:<i>text</i>]',
+    'desc_youtube'              => 'HTML: embeds a youtube.com video object. usage: [youtube:<i>video_id</i>]',
 );
 
 ###############################################################################

@@ -553,7 +553,7 @@ function glfusion_121()
 
 function glfusion_130()
 {
-    global $_TABLES, $_CONF, $_PLUGINS, $LANG_LM, $_DB_table_prefix;
+    global $_TABLES, $_CONF, $_PLUGINS, $LANG_AM, $_DB_table_prefix;
 
     $_SQL = array();
 
@@ -703,11 +703,11 @@ function glfusion_130()
     $c->del('wikitext_editor','Core');
 
     // add oauth user_login_method
-    $c->del('user_login_method', 'Core');
     $standard = ($_CONF['user_login_method']['standard']) ? true : false;
     $openid = ($_CONF['user_login_method']['openid']) ? true : false;
     $thirdparty = ($_CONF['user_login_method']['3rdparty']) ? true: false;
     $oauth = false;
+    $c->del('user_login_method', 'Core');
     $c->add('user_login_method',array('standard' => $standard , 'openid' => $openid , '3rdparty' => $thirdparty , 'oauth' => $oauth),'@select',4,16,1,320,TRUE);
 
     // OAuth configuration settings
@@ -928,14 +928,19 @@ function _forum_cvt_watch() {
 
     $sql = "SELECT * FROM {$_TABLES['ff_topic']} WHERE pid=0";
     $result = DB_query($sql);
-    while ( ( $T = DB_fetchArray($result) ) != NULL ) {
+    while ( ( $T = DB_fetchArray($result) ) != FALSE ) {
         $pids[] = $T['id'];
     }
     // grab all the full forum subscriptions first...
     $sql = "SELECT * FROM {$_TABLES['ff_watch']} ORDER BY topic_id ASC";
-    $result = DB_query($sql);
+    $result = DB_query($sql,1);
+    if ( $result === FALSE ) {
+        $sql = "INSERT INTO {$_TABLES['vars']} (name,value) VALUES ('watchcvt','1')";
+        DB_query($sql);
+        return 0;
+    }
 
-    while ( ( $W = DB_fetchArray($result) ) != NULL ) {
+    while ( ( $W = DB_fetchArray($result) ) != FALSE ) {
         if ( !isset($fName[$W['forum_id']]) ) {
            $forum_name = DB_getItem($_TABLES['ff_forums'],'forum_name','forum_id='.(int)$W['forum_id']);
            $fName[$W['forum_id']] = $forum_name;
@@ -987,7 +992,7 @@ function _forum_fix_watch() {
 
     $fName = array();
     $tName = array();
-
+    $catlist = '';
 
     $dt = new Date('now',$_CONF['timezone']);
 
@@ -1001,7 +1006,7 @@ function _forum_fix_watch() {
 
     $prevuid = 0;
 
-    while ( ( $W = DB_fetchArray($result) ) != NULL ) {
+    while ( ( $W = DB_fetchArray($result) ) != FALSE ) {
         if ( $W['uid'] != $prevuid && $prevuid != 0 ) {
             // we have a uid change... do the delete now
             DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid=".(int) $prevuid." AND id <> 0 AND category in (".$catlist .")",1);
