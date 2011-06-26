@@ -971,7 +971,7 @@ function service_submit_story($args, &$output, &$svc_msg)
 
     if (!SEC_hasRights('story.edit')) {
         $output .= COM_siteHeader('menu', $MESSAGE[30])
-                . COM_showMessageText($MESSAGE[31], $MESSAGE[30])
+                . COM_showMessageText($MESSAGE[31], $MESSAGE[30],true)
                 . COM_siteFooter();
 
         return PLG_RET_AUTH_FAILED;
@@ -1037,8 +1037,7 @@ function service_submit_story($args, &$output, &$svc_msg)
 
     if (empty($args['tid'])) {
         // see if we have a default topic
-        $topic = DB_getItem($_TABLES['topics'], 'tid',
-                            'is_default = 1' . COM_getPermSQL('AND'));
+        $topic = DB_getItem($_TABLES['topics'], 'tid','is_default = 1' . COM_getPermSQL('AND'));
         if (!empty($topic)) {
             $args['tid'] = $topic;
         } else {
@@ -1155,7 +1154,7 @@ function service_submit_story($args, &$output, &$svc_msg)
             if ( $args['type'] == 'submission' ) {
                 $output .= STORY_edit($sid,'moderate');
             } else {
-                $output .= STORY_edit($sid);
+                $output .= STORY_edit($sid,'error');
             }
         }
         $output .= COM_siteFooter ();
@@ -1176,7 +1175,7 @@ function service_submit_story($args, &$output, &$svc_msg)
         $output .= COM_siteHeader('menu');
         $output .= COM_errorLog($LANG24[31],2);
         if (!$args['gl_svc']) {
-            $output .= STORY_edit($sid);
+            $output .= STORY_edit($sid,'error');
         }
         $output .= COM_siteFooter();
         return PLG_RET_ERROR;
@@ -1230,9 +1229,7 @@ function service_submit_story($args, &$output, &$svc_msg)
             $upload->setFieldName('file');
             if (!$upload->setPath($_CONF['path_images'] . 'articles')) {
                 $output = COM_siteHeader ('menu', $LANG24[30]);
-                $output .= COM_startBlock ($LANG24[30], '', COM_getBlockTemplate ('_msg_block', 'header'));
-                $output .= $upload->printErrors (false);
-                $output .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+                $output .= COM_showMessageText($upload->printErrors(false),$LANG24[30],true);
                 $output .= COM_siteFooter ();
                 echo $output;
                 exit;
@@ -1277,10 +1274,8 @@ function service_submit_story($args, &$output, &$svc_msg)
 
             if ($upload->areErrors()) {
                 $retval = COM_siteHeader('menu', $LANG24[30]);
-                $retval .= COM_startBlock ($LANG24[30], '',
-                            COM_getBlockTemplate ('_msg_block', 'header'));
-                $retval .= $upload->printErrors(false);
-                $retval .= COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
+                $retval .= COM_showMessageText($upload->printErrors(false),$LANG24[30],true);
+                $retval .= STORY_edit($sid,'error');
                 $retval .= COM_siteFooter();
                 echo $retval;
                 exit;
@@ -1303,15 +1298,13 @@ function service_submit_story($args, &$output, &$svc_msg)
             $errors = $story->insertImages();
             if (count($errors) > 0) {
                 $output = COM_siteHeader ('menu', $LANG24[54]);
-                $output .= COM_startBlock ($LANG24[54], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-                $output .= $LANG24[55] . '<p>';
+                $eMsg = $LANG24[55] . '<p>';
                 for ($i = 1; $i <= count($errors); $i++) {
-                    $output .= current($errors) . '<br />';
+                    $eMsg .= current($errors) . '<br />';
                     next($errors);
                 }
-                $output .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-                $output .= STORY_edit($sid);
+                $output .= COM_showMessageText($eMsg,$LANG24[54],true);
+                $output .= STORY_edit($sid,'error');
                 $output .= COM_siteFooter();
                 echo $output;
                 exit;

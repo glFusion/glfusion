@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.3.0 (Trunk Development Branch)
 ------
+- Saving a story with invalid data returned to story list instead of the
+  story editor with the appropriate error message (Mark)
+- No news message did not always display when it should (Mark)
 - If user changes remember me settings, ensure they are implemented
   immediately (Mark)
 - Implemented re-validation when security token has expired (Mark)

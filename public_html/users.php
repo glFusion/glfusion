@@ -815,10 +815,7 @@ function newuserform ($msg = '')
     $retval = '';
 
     if (!empty ($msg)) {
-        $retval .= COM_startBlock ($LANG04[21], '',
-                           COM_getBlockTemplate ('_msg_block', 'header'))
-                . $msg
-                . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= COM_showMessageText($msg,$LANG04[21],false);
     }
     $user_templates = new Template($_CONF['path_layout'] . 'users');
     $user_templates->set_file('regform', 'registrationform.thtml');
@@ -922,10 +919,7 @@ function defaultform ($msg)
     $retval = '';
 
     if (!empty ($msg)) {
-        $retval .= COM_startBlock ($LANG04[21], '',
-                           COM_getBlockTemplate ('_msg_block', 'header'))
-                . $msg
-                . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= COM_showMessageText($msg,$LANG04[21],false);
     }
 
     $retval .= loginform (true);
@@ -961,10 +955,7 @@ function displayLoginErrorAndAbort($msg, $message_title, $message_text)
         header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden');
         header('Status: 403 Forbidden');
         $retval = COM_siteHeader('menu', $message_title)
-                . COM_startBlock($message_title, '',
-                                 COM_getBlockTemplate('_msg_block', 'header'))
-                . $message_text
-                . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
+                . COM_showMessageText($message_text,$message_title,true)
                 . COM_siteFooter();
         echo $retval;
     }
@@ -1051,10 +1042,7 @@ case 'user':
 case 'create':
     if ($_CONF['disable_new_user_registration']) {
         $display .= COM_siteHeader ('menu', $LANG04[22]);
-        $display .= COM_startBlock ($LANG04[22], '',
-                            COM_getBlockTemplate ('_msg_block', 'header'))
-                 . $LANG04[122]
-                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $display .= COM_showMessageText($LANG04[122],$LANG04[22],true);
         $display .= COM_siteFooter ();
     } else {
         $passwd = '';
@@ -1081,10 +1069,7 @@ case 'getpassword':
     COM_clearSpeedlimit ($_CONF['passwordspeedlimit'], 'password');
     $last = COM_checkSpeedlimit ('password',4);
     if ($last > 0) {
-        $display .= COM_startBlock ($LANG12[26], '',
-                            COM_getBlockTemplate ('_msg_block', 'header'))
-                 . sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit'])
-                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $display .= COM_showMessageText(sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit']),$LANG12[26],false);
     } else {
         $display .= getpasswordform ();
     }
@@ -1158,10 +1143,7 @@ case 'emailpasswd':
     $last = COM_checkSpeedlimit ('password');
     if ($last > 0) {
         $display .= COM_siteHeader ('menu', $LANG12[26])
-                 . COM_startBlock ($LANG12[26], '',
-                           COM_getBlockTemplate ('_msg_block', 'header'))
-                 . sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit'])
-                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
+                 . COM_showMessageText(sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit']),$LANG12[26],true)
                  . COM_siteFooter ();
     } else {
         $username = $_POST['username'];
@@ -1183,10 +1165,7 @@ case 'emailpasswd':
 case 'new':
     $display .= COM_siteHeader ('menu', $LANG04[22]);
     if ($_CONF['disable_new_user_registration']) {
-        $display .= COM_startBlock ($LANG04[22], '',
-                            COM_getBlockTemplate ('_msg_block', 'header'))
-                 . $LANG04[122]
-                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $display .= COM_showMessageText($LANG04[122],$LANG04[22],true);
     } else {
         // Call custom registration and account record create function
         // if enabled and exists
@@ -1264,10 +1243,7 @@ case 'getnewtoken':
     $last = COM_checkSpeedlimit ('verifytoken');
     if ($last > 0) {
         $display .= COM_siteHeader ('menu', $LANG12[26])
-                 . COM_startBlock ($LANG12[26], '',
-                           COM_getBlockTemplate ('_msg_block', 'header'))
-                 . sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit'])
-                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
+                 . COM_showMessageText(sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit']),$LANG12[26],true)
                  . COM_siteFooter ();
     } else {
         $username = (isset($_POST['username']) ? $_POST['username'] : '');

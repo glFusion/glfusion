@@ -36,11 +36,9 @@ $display = '';
 // Only let admin users access this page
 if (!SEC_hasRights('mediagallery.config')) {
     // Someone is trying to illegally access this page
-    COM_errorLog("Someone has tried to illegally access the Media Gallery Configuration page.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: " . $_SERVER['REMOTE_ADDR'],1);
+    COM_errorLog("Someone has tried to illegally access the Media Gallery Configuration page.  User id: {$_USER['uid']}, Username: {$_USER['username']}",1);
     $display  = COM_siteHeader();
-    $display .= COM_startBlock($LANG_MG00['access_denied']);
-    $display .= $LANG_MG00['access_denied_msg'];
-    $display .= COM_endBlock();
+    $display .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_MG00['access_denied'],true);
     $display .= COM_siteFooter(true);
     echo $display;
     exit;
@@ -75,7 +73,7 @@ function MG_editCategory( $cat_id, $mode ) {
     } else {
         $A['cat_id'] = $cat_id;
         // pull info from DB
-        $sql = "SELECT * FROM {$_TABLES['mg_category']} WHERE cat_id=" . $cat_id;
+        $sql = "SELECT * FROM {$_TABLES['mg_category']} WHERE cat_id=" . (int) $cat_id;
         $result = DB_query($sql);
         $numRows = DB_numRows($result);
         if ( $numRows > 0 ) {
@@ -106,6 +104,8 @@ function MG_editCategory( $cat_id, $mode ) {
         'lang_cancel'           => $LANG_MG01['cancel'],
         'lang_delete'           => $LANG_MG01['delete'],
         'lang_delete_confirm'   => $LANG_MG01['delete_item_confirm'],
+        'gltoken_name'          => CSRF_TOKEN,
+        'gltoken'               => SEC_createToken(),
     ));
 
     if ( $_MG_CONF['htmlallowed'] == 1 ) {
@@ -156,7 +156,7 @@ function MG_saveCategory( $cat_id ) {
     $A['cat_name'] = substr($A['cat_name'],0,254);
 
     if ( $A['cat_id'] == 0 ) {
-        COM_errorLog("Media Gallery Internal Error - cat_id = 0 - Contact mark@gllabs.org  ");
+        COM_errorLog("Media Gallery Internal Error - cat_id = 0 - Contact support@glfusion.org  ");
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
 
@@ -269,14 +269,19 @@ function MG_displayCategories( ) {
 * Main
 */
 
-if ( isset($_REQUEST['mode']) ) {
-    $mode = COM_applyFilter ($_REQUEST['mode']);
-} else {
-    $mode = '';
+$mode = '';
+if ( isset($_POST['save']) ) {
+    $mode = 'save';
 }
+if ( isset($_POST['cancel']) ) {
+    $mode = 'cancel';
+}
+if ( isset($_REQUEST['mode']) ) {
+    $mode = COM_applyFilter($_REQUEST['mode']);
+}
+
 $display = '';
 $retval = '';
-
 
 $T = new Template($_MG_CONF['template_path'].'/admin');
 $T->set_file (array ('admin' => 'administration.thtml'));
@@ -288,12 +293,12 @@ $T->set_var(array(
     'version'           => $_MG_CONF['pi_version'],
 ));
 
-if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {
+if ($mode == 'save' && SEC_checkToken() ) {
     $cat_id = COM_applyFilter($_POST['cat_id'],true);
     $T->set_var(array(
         'admin_body'    => MG_saveCategory($cat_id),
     ));
-} elseif ($mode == $LANG_MG01['cancel']) {
+} elseif ($mode == 'cancel' ) {
     echo COM_refresh ($_MG_CONF['admin_url'] . 'index.php');
     exit;
 } elseif ($mode == $LANG_MG01['create'] && !empty ($LANG_MG01['create'])) {

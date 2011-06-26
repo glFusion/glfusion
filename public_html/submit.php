@@ -70,12 +70,7 @@ function submissionform($type='story', $mode = '', $topic = '')
     $last = COM_checkSpeedlimit ('submit');
 
     if ($last > 0) {
-        $retval .= COM_startBlock($LANG12[26], '',
-                           COM_getBlockTemplate ('_msg_block', 'header'))
-            . $LANG12[30]
-            . $last
-            . $LANG12[31]
-            . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= COM_showMessageText($LANG12[30].$last.$LANG12[31], $LANG12[26],false);
     } else {
         if (COM_isAnonUser() &&
             (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {
@@ -365,14 +360,9 @@ function savesubmission($type, $A)
     $last = COM_checkSpeedlimit ('submit');
 
     if ($last > 0) {
-        $retval = COM_siteHeader ();
-        $retval .= COM_startBlock ($LANG12[26], '',
-                           COM_getBlockTemplate ('_msg_block', 'header'))
-            . $LANG12[30]
-            . $last
-            . $LANG12[31]
-            . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
-            . COM_siteFooter ();
+        $retval  = COM_siteHeader ();
+        $retval .= COM_showMessageText($LANG12[30].$last.$LANG12[31],$LANG12[26],false);
+        $retval .= COM_siteFooter ();
 
         return $retval;
     }
@@ -401,12 +391,9 @@ function savesubmission($type, $A)
         $retval = savestory ($A);
     } else {
         $retval = COM_siteHeader ();
-        $retval .= COM_startBlock ($LANG12[22], '',
-                           COM_getBlockTemplate ('_msg_block', 'header'))
-            . $LANG12[23] // return missing fields error
-            . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
-            . submissionform($type)
-            . COM_siteFooter ();
+        $retval .= COM_showMessageText($LANG12[23], $LANG12[22], false);
+        $retval .= submissionform($type);
+        $retval .= COM_siteFooter ();
     }
 
     return $retval;

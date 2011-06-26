@@ -36,11 +36,9 @@ $display = '';
 // Only let admin users access this page
 if (!SEC_hasRights('mediagallery.config')) {
     // Someone is trying to illegally access this page
-    COM_errorLog("Someone has tried to illegally access the Media Gallery Configuration page.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: " . $_SERVER['REMOTE_ADDR'],1);
+    COM_errorLog("Someone has tried to illegally access the Media Gallery Configuration page.  User id: {$_USER['uid']}, Username: {$_USER['username']}",1);
     $display  = COM_siteHeader();
-    $display .= COM_startBlock($LANG_MG00['access_denied']);
-    $display .= $LANG_MG00['access_denied_msg'];
-    $display .= COM_endBlock();
+    $display .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_MG00['access_denied'],true);
     $display .= COM_siteFooter(true);
     echo $display;
     exit;
@@ -86,8 +84,8 @@ $T->set_var(array(
 
 $T->parse('output', 'admin');
 $display = COM_siteHeader();
-if ( isset($_GET['msg']) ) {
-    $msg = COM_applyFilter($_GET['msg'],true);
+$msg = COM_getMessage();
+if ( $msg > 0 ) {
     $display .= COM_showMessageText($LANG_MG09[$msg],'mediagallery');
 }
 $display .= $T->finish($T->get_var('output'));

@@ -154,8 +154,7 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
         case 'tid':
             if (!isset ($topics[$A['tid']])) {
-                $topics[$A['tid']] = DB_getItem ($_TABLES['topics'], 'topic',
-                                                 "tid = '".DB_escapeString($A['tid'])."'");
+                $topics[$A['tid']] = DB_getItem ($_TABLES['topics'], 'topic',"tid = '".DB_escapeString($A['tid'])."'");
             }
             $retval = $topics[$A['tid']];
             break;
@@ -354,6 +353,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         case 'clone' :
         case 'edit':
         case 'preview':
+        case 'error' :
             $title = $LANG24[5];
             $saveoption = $LANG_ADMIN['save'];
             $submission = false;
@@ -396,7 +396,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     }
 
     $story = new Story();
-    if ($action == 'preview') {
+    if ($action == 'preview' || $action == 'error') {
         while (list($key, $value) = each($_POST)) {
             if (!is_array($value)) {
                 $_POST[$key] = $value;
@@ -411,8 +411,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         $result = $story->loadFromDatabase($sid, $action);
     }
 
-    if( ($result == STORY_PERMISSION_DENIED) || ($result == STORY_NO_ACCESS_PARAMS) )
-    {
+    if( ($result == STORY_PERMISSION_DENIED) || ($result == STORY_NO_ACCESS_PARAMS) ) {
         $display .= COM_showMessageText($LANG24[42],$LANG_ACCESS['accessdenied'],true);
         COM_accessLog("User {$_USER['username']} tried to illegally access story $sid. - STORY_PERMISSION_DENIED or STORY_NO_ACCESS_PARAMS - ".$result);
         return $display;
@@ -422,8 +421,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         COM_accessLog("User {$_USER['username']} tried to illegally edit story $sid. - STORY_EDIT_DENIED or STORY_EXISTING_NO_EDIT_PERMISSION");
         return $display;
     } elseif( $result == STORY_INVALID_SID ) {
-        if( $action == 'moderate' )
-        {
+        if ( $action == 'moderate' ) {
             // that submission doesn't seem to be there any more (may have been
             // handled by another Admin) - take us back to the moderation page
             return COM_refresh( $_CONF['site_admin_url'] . '/moderation.php' );
@@ -435,8 +433,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     }
 
     if(empty($currenttopic) && ($story->EditElements('tid') == '')) {
-        $story->setTid( DB_getItem ($_TABLES['topics'], 'tid',
-                                'is_default = 1' . COM_getPermSQL ('AND')));
+        $story->setTid( DB_getItem ($_TABLES['topics'], 'tid','is_default = 1' . COM_getPermSQL ('AND')));
     } else if ($story->EditElements('tid') == '') {
         $story->setTid($currenttopic);
     }
@@ -445,8 +442,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     } else {
         $allowedTopicList = COM_topicList ('tid,topic', $story->EditElements('tid'), 1, true,3);
     }
-    if ( $allowedTopicList == '' )
-    {
+    if ( $allowedTopicList == '' ) {
         $display .= COM_showMessageText($LANG24[42],$LANG_ACCESS['accessdenied'],true);
         COM_accessLog("User {$_USER['username']} tried to illegally access story $sid. No allowed topics.");
         return $display;
@@ -544,8 +540,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     }
 
     // start generating the story editor block
-    $display .= COM_startBlock ($title, '',
-                        COM_getBlockTemplate ('_admin_block', 'header'));
+    $display .= COM_startBlock ($title, '',COM_getBlockTemplate ('_admin_block', 'header'));
     $oldsid = $story->EditElements('originalSid');
     if (!empty ($oldsid)) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
@@ -576,7 +571,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     $ownername = COM_getDisplayName ($story->EditElements('owner_id'));
     $story_templates->set_var( 'owner_username', DB_getItem ($_TABLES['users'],
                               'username', 'uid = ' .
-                              $story->EditElements( 'owner_id' ) ) );
+                              (int) $story->EditElements( 'owner_id' ) ) );
     $story_templates->set_var('owner_name', $ownername);
     $story_templates->set_var('owner', $ownername);
     $story_templates->set_var('owner_id', $story->EditElements('owner_id'));
@@ -595,7 +590,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
                                   SEC_getGroupDropdown ($story->EditElements('group_id'), 3));
     } else {
         $gdrpdown = '<input type="hidden" name="group_id" value="'.$story->EditElements('group_id').'"/>';
-        $grpddown .= DB_getItem($_TABLES['groups'],'grp_name','grp_id='.$story->EditElements('group_id'));
+        $grpddown .= DB_getItem($_TABLES['groups'],'grp_name','grp_id='.(int) $story->EditElements('group_id'));
         $story_templates->set_var('group_dropdown',$grpddown);
     }
     $story_templates->set_var('lang_permissions', $LANG_ACCESS['permissions']);
@@ -820,9 +815,9 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     $saved_images = '';
     if ($_CONF['maximagesperarticle'] > 0) {
         $story_templates->set_var('lang_images', $LANG24[47]);
-        $icount = DB_count($_TABLES['article_images'],'ai_sid', $story->getSid());
+        $icount = DB_count($_TABLES['article_images'],'ai_sid', DB_escapeString($story->getSid()));
         if ($icount > 0) {
-            $result_articles = DB_query("SELECT * FROM {$_TABLES['article_images']} WHERE ai_sid = '".$story->getSid()."'");
+            $result_articles = DB_query("SELECT * FROM {$_TABLES['article_images']} WHERE ai_sid = '".DB_escapeString($story->getSid())."'");
             for ($z = 1; $z <= $icount; $z++) {
                 $I = DB_fetchArray($result_articles);
                 $saved_images .= $z . ') '
@@ -1005,7 +1000,7 @@ switch ($action) {
 
     case 'save':
         // purge any tokens we created for the advanced editor
-        DB_query("DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'",1);
+        DB_query("DELETE FROM {$_TABLES['tokens']} WHERE owner_id=".(int) $_USER['uid']." AND urlfor='advancededitor'",1);
 
         if (SEC_checkToken()) {
             $display = STORY_submit();
@@ -1034,12 +1029,12 @@ switch ($action) {
             COM_errorLog('User ' . $_USER['username'] . ' attempted to delete a story, sid empty or null, sid=' . $sid);
             $display = COM_refresh($_CONF['site_admin_url'] . '/story.php');
         } elseif ($type == 'submission') {
-            $tid = DB_getItem($_TABLES['storysubmission'], 'tid', "sid = '$sid'");
+            $tid = DB_getItem($_TABLES['storysubmission'], 'tid', "sid = '".DB_escapeString($sid)."'");
             if (SEC_hasTopicAccess($tid) < 3) {
                 COM_accessLog ('User ' . $_USER['username'] . ' had insufficient rights to delete a story submission, sid=' . $sid);
                 $display = COM_refresh($_CONF['site_admin_url'] . '/index.php');
             } elseif (SEC_checkToken()) {
-                DB_delete ($_TABLES['storysubmission'], 'sid', $sid,
+                DB_delete ($_TABLES['storysubmission'], 'sid', DB_escapeString($sid),
                            $_CONF['site_admin_url'] . '/moderation.php');
             } else {
                 COM_accessLog ("User {$_USER['username']} tried to illegally delete a story submission, sid=$sid and failed CSRF checks.");
@@ -1055,7 +1050,7 @@ switch ($action) {
 
     default:
         // purge any tokens we created for the advanced editor
-        DB_query("DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'",1);
+        DB_query("DELETE FROM {$_TABLES['tokens']} WHERE owner_id=".(int) $_USER['uid']." AND urlfor='advancededitor'",1);
         if (($action == 'cancel') && ($type == 'submission')) {
             $display = COM_refresh($_CONF['site_admin_url'] . '/moderation.php');
         } else {

@@ -1995,6 +1995,18 @@ class Story
 
 
         /* Then grab the permissions */
+        if ( !isset($array['perm_anon']) ) {
+            $array['perm_anon'] = array();
+        }
+        if ( !isset($array['perm_members']) ) {
+            $array['perm_members'] = array();
+        }
+        if ( !isset($array['perm_group']) ) {
+            $array['perm_group'] = array();
+        }
+        if ( !isset($array['perm_owner']) ) {
+            $array['perm_owner'] = array();
+        }
 
         // Convert array values to numeric permission values
         if (is_array($array['perm_owner']) || is_array($array['perm_group']) ||

@@ -36,11 +36,9 @@ $display = '';
 // Only let admin users access this page
 if (!SEC_hasRights('mediagallery.config')) {
     // Someone is trying to illegally access this page
-    COM_errorLog("Someone has tried to illegally access the Media Gallery Configuration page.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: " . $_SERVER['REMOTE_ADDR'],1);
+    COM_errorLog("Someone has tried to illegally access the Media Gallery Configuration page.  User id: {$_USER['uid']}, Username: {$_USER['username']}",1);
     $display  = COM_siteHeader();
-    $display .= COM_startBlock($LANG_MG00['access_denied']);
-    $display .= $LANG_MG00['access_denied_msg'];
-    $display .= COM_endBlock();
+    $dipslay .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_MG00['access_denied'],true);
     $display .= COM_siteFooter(true);
     echo $display;
     exit;
@@ -224,6 +222,8 @@ function MG_editAVDefaults( ) {
         'swf_codebase'                  => $_MG_CONF['swf_version'],
         'swf_version'                   => $_MG_CONF['swf_version'],
         'rtl'                           => $LANG_DIRECTION == "rtl" ? "rtl" : "",
+        'gltoken_name'                  => CSRF_TOKEN,
+        'gltoken'                       => SEC_createToken(),
     ));
 
     $T->parse('output', 'admin');
@@ -310,7 +310,8 @@ function MG_saveAVDefaults( ) {
     DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_width','$swf_width'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_bgcolor','$swf_bgcolor'");
 
-    echo COM_refresh($_MG_CONF['admin_url'] . 'index.php?msg=5');
+    COM_setMessage(5);
+    echo COM_refresh($_MG_CONF['admin_url'] . 'index.php');
     exit;
 }
 
@@ -321,10 +322,11 @@ function MG_saveAVDefaults( ) {
 $display = '';
 $mode = '';
 
-if (isset ($_POST['mode'])) {
-    $mode = COM_applyFilter($_POST['mode']);
-} else if (isset ($_GET['mode'])) {
-    $mode = COM_applyFilter($_GET['mode']);
+if (isset ($_POST['save'])) {
+    $mode = 'save';
+}
+if (isset ($_POST['cancel'])) {
+    $mode = 'cancel';
 }
 
 $T = new Template($_MG_CONF['template_path'].'/admin');
@@ -338,12 +340,12 @@ $T->set_var(array(
     'version'           => $_MG_CONF['pi_version'],
 ));
 
-if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {   // save the config
+if ($mode == 'save' && SEC_checkToken() ) {
     $T->set_var(array(
         'admin_body'    => MG_saveAVDefaults(),
         'title'         => $LANG_MG01['av_default_editor'],
     ));
-} elseif ($mode == $LANG_MG01['cancel']) {
+} elseif ($mode == 'cancel') {
     echo COM_refresh ($_MG_CONF['admin_url'] . 'index.php');
     exit;
 } else {

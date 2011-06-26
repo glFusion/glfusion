@@ -255,10 +255,7 @@ function handleView($view = true)
                                 $format, $cid, $page, $view, $delete_option,
                                 $B['commentcode']);
             } else {
-                $display .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',
-                                    COM_getBlockTemplate ('_msg_block', 'header'))
-                         . $LANG_ACCESS['storydenialmsg']
-                         . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+                $display .= COM_showMessageText($LANG_ACCESS['storydenialmsg'], $LANG_ACCESS['accessdenied'], true);
             }
             break;
 

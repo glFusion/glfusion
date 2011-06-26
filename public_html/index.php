@@ -382,24 +382,25 @@ if ( $A = DB_fetchArray( $result ) ) {
         $display .= COM_printPageNavigation ($base_url, $page, $num_pages);
     }
 } else { // no stories to display
-    $display .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
-    $display .= PLG_showCenterblock (CENTERBLOCK_BOTTOM, $page, $topic); // bottom blocks
+    $cbDisplay = '';
+    $cbDisplay .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
+    $cbDisplay .= PLG_showCenterblock (CENTERBLOCK_BOTTOM, $page, $topic); // bottom blocks
     if ( (!isset ($_CONF['hide_no_news_msg']) ||
-            ($_CONF['hide_no_news_msg'] == 0)) && $display == '') {
+            ($_CONF['hide_no_news_msg'] == 0)) && $cbDisplay == '') {
         // If there's still nothing to display, show any default centerblocks.
-        $display .= PLG_showCenterblock(CENTERBLOCK_NONEWS, $page, $topic);
-        if ($display == '') {
+        $cbDisplay .= PLG_showCenterblock(CENTERBLOCK_NONEWS, $page, $topic);
+        if ($cbDisplay == '') {
             // If there's *still* nothing to show, show the stock message
-            $display .= COM_startBlock ($LANG05[1], '',
-                    COM_getBlockTemplate ('_msg_block', 'header')) . $LANG05[2];
+            $eMsg = $LANG05[2];
             if (!empty ($topic)) {
                 $topicname = DB_getItem ($_TABLES['topics'], 'topic',
                                          "tid = '".DB_escapeString($topic)."'");
-                $display .= sprintf ($LANG05[3], $topicname);
+                $eMsg .= sprintf ($LANG05[3], $topicname);
             }
-            $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+            $cbDisplay .= COM_showMessageText($eMsg, $LANG05[1],true);
         }
     }
+    $display .= $cbDisplay;
 }
 
 $display .= COM_siteFooter (true); // The true value enables right hand blocks.

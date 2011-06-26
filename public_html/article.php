@@ -132,10 +132,7 @@ if ($A['count'] > 0) {
     }
     if ($output == STORY_PERMISSION_DENIED) {
         $display .= COM_siteHeader ('menu', $LANG_ACCESS['accessdenied'])
-                 . COM_startBlock ($LANG_ACCESS['accessdenied'], '',
-                           COM_getBlockTemplate ('_msg_block', 'header'))
-                 . $LANG_ACCESS['storydenialmsg']
-                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
+                 . COM_showMessageText($LANG_ACCESS['storydenialmsg'], $LANG_ACCESS['accessdenied'], true)
                  . COM_siteFooter ();
     } elseif ( $output == STORY_INVALID_SID ) {
         $display .= COM_refresh($_CONF['site_url'] . '/index.php');
@@ -370,7 +367,7 @@ if ($A['count'] > 0) {
         $display .= COM_siteFooter ();
     }
 } else {
-    $display .= COM_refresh($_CONF['site_url'] . '/index.php');
+    $display = COM_refresh($_CONF['site_url'] . '/index.php');
 }
 
 echo $display;

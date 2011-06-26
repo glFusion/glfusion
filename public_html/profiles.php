@@ -290,11 +290,7 @@ function contactform ($uid, $subject = '', $message = '')
             $retval .= $mail_template->finish ($mail_template->get_var ('output'));
             $retval .= COM_endBlock ();
         } else {
-            $retval = COM_startBlock ($LANG08[10] . ' ' . $displayname, '',
-                              COM_getBlockTemplate ('_msg_block', 'header'));
-            $retval .= $LANG08[35];
-            $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block',
-                                                           'footer'));
+            $retval = COM_showMessageText($LANG08[35],$LANG08[10],false);
         }
     }
 
