@@ -366,12 +366,7 @@ if ( isset($_POST['addevent']) || isset($_POST['addpersonalevent']) ) {
     COM_clearSpeedlimit ($_CONF['speedlimit'], 'submit');
     $last = COM_checkSpeedlimit ('submit');
     if ($last > 0) {
-        $slerror .= COM_startBlock ($LANG12[26], '',
-                           COM_getBlockTemplate ('_msg_block', 'header'))
-            . $LANG12[30]
-            . $last
-            . $LANG12[31]
-            . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $slerror .= COM_showMessageText($LANG12[30].$last.$LANG12[31],$LANG12[26],true);
     }
 
     echo CALENDAR_siteHeader();

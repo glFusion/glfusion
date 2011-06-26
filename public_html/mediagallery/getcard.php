@@ -86,9 +86,7 @@ $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_esc
 
 if ( $MG_albums[$aid]->access == 0 ) {
     $display  = MG_siteHeader();
-    $display .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-             . '<br/>' . $LANG_MG00['access_denied_msg']
-             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
     $display .= MG_siteFooter();
     echo $display;
     exit;
@@ -100,9 +98,7 @@ $result = DB_query( $sql );
 $nRows = DB_numRows( $result );
 if ( $nRows < 1 ) {
     $display  = MG_siteHeader();
-    $display .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-             . '<br/>' . $LANG_MG00['access_denied_msg']
-             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
     $display .= MG_siteFooter();
     echo $display;
     exit;

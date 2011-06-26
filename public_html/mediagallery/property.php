@@ -38,9 +38,7 @@ if (!in_array('mediagallery', $_PLUGINS)) {
 }
 
 if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
-    $display = COM_startBlock ($LANG_ACCESS['accessdenied'], '',
-               COM_getBlockTemplate ('_msg_block', 'header'))
-             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
     echo $display;
     exit;
 }
@@ -56,10 +54,7 @@ $result = DB_query("SELECT * FROM {$_TABLES['mg_albums']} WHERE album_id=" . (in
 $row    = DB_fetchArray($result);
 $access = SEC_hasAccess ($row['owner_id'],$row['group_id'],$row['perm_owner'],$row['perm_group'],$row['perm_members'],$row['perm_anon']);
 if ( $access == 0 ) {
-    $display = COM_startBlock ($LANG_ACCESS['accessdenied'], '',
-               COM_getBlockTemplate ('_msg_block', 'header'))
-             . $LANG_MG00['access_denied']
-             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display = COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
     echo $display;
     exit;
 }
@@ -69,10 +64,7 @@ $display = '';
 $media_filename = DB_getItem($_TABLES['mg_media'],'media_filename',"media_id='" .DB_escapeString($mid)."'");
 
 if ( $media_filename == '' ) {
-    $display = COM_startBlock ($LANG_ACCESS['accessdenied'], '',
-               COM_getBlockTemplate ('_msg_block', 'header'))
-             . $LANG_MG00['access_denied']
-             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display = COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
     echo $display;
     exit;
 }

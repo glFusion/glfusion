@@ -797,11 +797,8 @@ function plugin_savesubmission_links($A)
                 !empty ($A['url'])) {
         $retval = plugin_save_submit_links ($A);
     } else {
-        $retval = COM_startBlock ($LANG12[22], '',
-                           COM_getBlockTemplate ('_msg_block', 'header'))
-            . $LANG12[23]
-            . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
-            . plugin_submit_links($A);
+        $retval .= COM_showMessageText($LANG12[23],$LANG12[22],true)
+                . plugin_submit_links($A);
     }
 
     return $retval;
@@ -872,10 +869,7 @@ function plugin_save_submit_links($A)
     /* check CAPTCHA */
     $msg = PLG_itemPreSave ('links', $A);
     if (!empty ($msg)) {
-        $retval = COM_startBlock($LANG12[22], '',
-                       COM_getBlockTemplate('_msg_block', 'header'))
-                . $msg
-                . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
+        $retval .= COM_showMessageText($msg,$LANG12[22],true)
                 . plugin_submit_links($A);
 
         return $retval;
@@ -906,10 +900,7 @@ function plugin_save_submit_links($A)
     $urlregex2 = "/^(https?|ftp)\:\/\//i";
     if ( !preg_match($urlregex2,$A['url']) ) {
 //    if (!preg_match("/^(http(s?):\\/\\/|ftp:\\/\\/{1})((\w+\.)+)\w{2,}(\/?)$/i", $A['url'])) {
-        $retval .= COM_startBlock($LANG_LINKS['error_header'], '',
-                       COM_getBlockTemplate('_msg_block', 'header'))
-                . $LANG_LINKS['verification_failed']
-                . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
+        $retval .= COM_showMessageText($LANG_LINKS['verification_failed'],$LANG_LINKS['error_header'],true)
                 . plugin_submit_links($A);
 
         return $retval;
@@ -917,10 +908,7 @@ function plugin_save_submit_links($A)
 
 
     if (!$validcat) {
-        $retval = COM_startBlock($LANG_LINKS['error_header'], '',
-                       COM_getBlockTemplate('_msg_block', 'header'))
-                . $LANG_LINKS['category_not_found']
-                . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
+        $retval .= COM_showMessageText($LANG_LINKS['category_not_found'],$LANG_LINKS['error_header'],true)
                 . plugin_submit_links($A);
 
         return $retval;

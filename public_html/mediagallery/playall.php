@@ -60,9 +60,7 @@ $T->set_file (array(
 ));
 
 if ($MG_albums[$album_id]->access == 0 ) {
-    $display .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-                . '<br />' . $LANG_MG00['access_denied_msg']
-                . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
     $display .= MG_siteFooter();
     echo $display;
     exit;

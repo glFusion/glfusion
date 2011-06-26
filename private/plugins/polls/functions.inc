@@ -522,10 +522,7 @@ function plugin_displaycomment_polls($id, $cid, $title, $order, $format, $page, 
                                      $cid, $page, $view, $delete_option,
                                      $A['commentcode']);
     } else {
-        $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',
-                        COM_getBlockTemplate ('_msg_block', 'header'))
-                . $LANG_POLLS['deny_msg']
-                . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= COM_showMessageText($LANG_POLLS['deny_msg'],$LANG_ACCESS['accessdenied'],true);
     }
 
     return $retval;
@@ -1197,13 +1194,10 @@ function POLLS_saveVote($pid, $aid)
 
     // This always does an insert so no need to provide key_field and key_value args
     DB_save($_TABLES['pollvoters'],'ipaddress,date,pid',"'".DB_escapeString($_SERVER['REMOTE_ADDR'])."'," . time() . ",'".DB_escapeString($pid)."'");
-    $retval .= COM_startBlock ($LANG_POLLS['savedvotetitle'], '',
-                       COM_getBlockTemplate ('_msg_block', 'header'))
-        . $LANG_POLLS['savedvotemsg'] . ' "'
-        . DB_getItem ($_TABLES['polltopics'], 'topic', "pid = '".DB_escapeString($pid)."'")
-        . '"'
-        . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
-        . POLLS_pollResults($pid);
+    $eMsg = $LANG_POLLS['savedvotemsg'] . ' "'
+        . DB_getItem ($_TABLES['polltopics'], 'topic', "pid = '".DB_escapeString($pid)."'").'"';
+    $retval .= COM_showMessageText($eMsg,$LANG_POLLS['savedvotetitle'],false)
+            . POLLS_pollResults($pid);
 
     return $retval;
 }

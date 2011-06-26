@@ -153,7 +153,7 @@ function plugin_getcommenturlid_staticpages( ) {
 */
 function plugin_displaycomment_staticpages ($id, $cid, $title, $order, $format, $page, $view)
 {
-    global $_TABLES, $LANG_ACCESS;
+    global $_TABLES, $LANG_STATIC, $LANG_ACCESS;
 
     $retval = '';
 
@@ -175,10 +175,7 @@ function plugin_displaycomment_staticpages ($id, $cid, $title, $order, $format, 
                                      $cid, $page, $view, $delete_option,
                                      $A['commentcode'],$A['sp_uid']);
     } else {
-        $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',
-                        COM_getBlockTemplate ('_msg_block', 'header'))
-                . $LANG_ACCESS['storydenialmsg']
-                . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= COM_showMessageText($LANG_STATIC['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
     }
 
     return $retval;

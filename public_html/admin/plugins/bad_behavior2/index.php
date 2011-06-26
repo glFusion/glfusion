@@ -44,12 +44,8 @@ $display = '';
 
 if (!SEC_inGroup ('Bad Behavior2 Admin')) {
     $display .= COM_siteHeader ('menu');
-    $display .= COM_startBlock ($LANG20[1], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= '<p>' . $LANG20[6] . '</p>';
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_showMessageText($LANG20[6],$LANG20[1],true);
     $display .= COM_siteFooter ();
-
     echo $display;
     exit;
 }

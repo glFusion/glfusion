@@ -61,9 +61,7 @@ function MG_enroll( ) {
     $nRows = DB_numRows($result);
     if ( $nRows > 0 ) {
         $display = MG_siteHeader();
-        $display .= COM_startBlock ('', '',COM_getBlockTemplate ('_msg_block', 'header'));
-        $display .= $LANG_MG03['existing_member_album'];
-        $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $display .= COM_showMessageText($LANG_MG03['existing_member_album'],'',true);
         $display .= MG_siteFooter();
         echo $display;
         exit;
@@ -104,9 +102,7 @@ function MG_saveEnroll() {
     $nRows = DB_numRows($result);
     if ( $nRows > 0 ) {
         $display = MG_siteHeader();
-        $display .= COM_startBlock ('', '',COM_getBlockTemplate ('_msg_block', 'header'));
-        $display .= $LANG_MG03['existing_member_album'];
-        $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $display .= COM_showMessageText($LANG_MG03['existing_member_album'],'',true);
         $display .= MG_siteFooter();
         echo $display;
         exit;

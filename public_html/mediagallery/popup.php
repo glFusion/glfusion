@@ -41,9 +41,7 @@ if (!in_array('mediagallery', $_PLUGINS)) {
 */
 
 if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
-    $display = COM_startBlock ($LANG_ACCESS['accessdenied'], '',
-               COM_getBlockTemplate ('_msg_block', 'header'))
-             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
     echo $display;
     exit;
 }
@@ -62,9 +60,7 @@ $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_esc
 
 if ( $MG_albums[$aid]->access == 0 ) {
     $display  = MG_siteHeader();
-    $display .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-             . '<br />' . $LANG_MG00['access_denied_msg']
-             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
     $display .= MG_siteFooter();
     echo $display;
     exit;
@@ -72,9 +68,7 @@ if ( $MG_albums[$aid]->access == 0 ) {
 
 if ( $MG_albums[$aid]->full == 2 || $_MG_CONF['discard_original'] == 1 || ( $MG_albums[$aid]->full == 1 && COM_isAnonUser() )) {
     $display  = MG_siteHeader();
-    $display .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-             . '<br />' . $LANG_MG00['access_denied_msg']
-             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
     $display .= MG_siteFooter();
     echo $display;
     exit;
@@ -100,9 +94,7 @@ for ($i=0; $i < $nRows; $i++ ) {
 $key = array_search($mid,$ids);
 if ( $key === false ) {
     $display  = MG_siteHeader();
-    $display .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-             . '<br />' . $LANG_MG00['access_denied_msg']
-             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
     $display .= MG_siteFooter();
     echo $display;
     exit;

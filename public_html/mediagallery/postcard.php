@@ -81,9 +81,7 @@ function MG_previewPostCard() {
 
     if ( $MG_albums[$aid]->access == 0 || $MG_albums[$aid]->enable_postcard == 0 || (COM_isAnonUser() && $MG_albums[$aid]->enable_postcard != 2)) {
         $retval  = MG_siteHeader();
-        $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-                 . '<br/>' . $LANG_MG00['access_denied_msg']
-                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
         $retval .= MG_siteFooter();
         echo $retval;
         exit;
@@ -95,9 +93,7 @@ function MG_previewPostCard() {
     $nRows = DB_numRows( $result );
     if ( $nRows < 1 ) {
         $retval  = MG_siteHeader();
-        $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-                 . '<br/>' . $LANG_MG00['access_denied_msg']
-                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
         $retval .= MG_siteFooter();
         echo $retval;
         exit;
@@ -190,9 +186,7 @@ function MG_editPostCard( $mode, $mid, $msg='' ) {
     $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_escapeString($mid) . '"');
     if ( $MG_albums[$aid]->access == 0 || $MG_albums[$aid]->enable_postcard == 0 || (COM_isAnonUser() && $MG_albums[$aid]->enable_postcard != 2)) {
         $retval = MG_siteHeader();
-        $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-                 . '<br/>' . $LANG_MG00['access_denied_msg']
-                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
         $retval .= MG_siteFooter();
         echo $retval;
         exit;
@@ -204,9 +198,7 @@ function MG_editPostCard( $mode, $mid, $msg='' ) {
     $nRows = DB_numRows( $result );
     if ( $nRows < 1 ) {
         $retval = MG_siteHeader();
-        $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-                 . '<br/>' . $LANG_MG00['access_denied_msg']
-                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
         $retval .= MG_siteFooter();
         echo $retval;
         exit;
@@ -311,9 +303,7 @@ function MG_sendPostCard() {
 
     if ( $MG_albums[$aid]->access == 0 || $MG_albums[$aid]->enable_postcard == 0 || ( COM_isAnonUser() && $MG_albums[$aid]->enable_postcard != 2)) {
         $retval = MG_siteHeader();
-        $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-                 . '<br/>' . $LANG_MG00['access_denied_msg']
-                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
         $retval .= MG_siteFooter();
         echo $retval;
         exit;
@@ -325,9 +315,7 @@ function MG_sendPostCard() {
     $nRows = DB_numRows( $result );
     if ( $nRows < 1 ) {
         $retval = MG_siteHeader();
-        $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-                 . '<br/>' . $LANG_MG00['access_denied_msg']
-                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
         $retval .= MG_siteFooter();
         echo $retval;
         exit;

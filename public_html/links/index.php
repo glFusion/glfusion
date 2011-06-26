@@ -127,10 +127,7 @@ function links_list($message)
     $display .= LINKS_siteHeader ($page_title);
 
     if (is_array($message) && !empty($message[0])) {
-        $display .= COM_startBlock($message[0], '',
-                                 COM_getBlockTemplate('_msg_block', 'header'));
-        $display .= $message[1];
-        $display .= COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
+        $display .= COM_showMessageText($message[1],$message[0],true);
     } else if (isset($_REQUEST['msg'])) {
         $msg = COM_applyFilter($_REQUEST['msg'], true);
         if ($msg > 0) {
@@ -422,11 +419,7 @@ if ( $mode == 'submit' ) {
     COM_clearSpeedlimit ($_CONF['speedlimit'], 'submit');
     $last = COM_checkSpeedlimit ('submit');
     if ($last > 0) {
-        $slerror .= COM_startBlock ($LANG12[26], '',COM_getBlockTemplate ('_msg_block', 'header'))
-            . $LANG12[30]
-            . $last
-            . $LANG12[31]
-            . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $slerror .= COM_showMessageText($LANG12[30].$last.$LANG12[31],$LANG12[26],true);
     }
 
     echo LINKS_siteHeader();

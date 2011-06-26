@@ -99,10 +99,7 @@ $access = SEC_hasAccess ($row['owner_id'],
 
 if ( $access == 0 ) {
     $display .= COM_siteHeader ('menu')
-             . COM_startBlock ($LANG_ACCESS['accessdenied'], '',
-               COM_getBlockTemplate ('_msg_block', 'header'))
-             . $LANG_ACCESS['storydenialmsg']
-             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
+             . COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true)
              . COM_siteFooter ();
     echo $display;
     exit;

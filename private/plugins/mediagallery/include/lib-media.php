@@ -1369,9 +1369,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         $aOffset = -1;
     }
     if ( $aOffset == -1 || $MG_albums[$aid]->access == 0 ) {
-        $retval = COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-                 . '<br />' . $LANG_MG00['access_denied_msg']
-                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
         return array($LANG_MG00['access_denied_msg'],$retval);
     }
 
@@ -1394,9 +1392,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     $key = array_search($mid,$ids);
     if ( $key === false ) {
-        $retval  = COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-                 . '<br />' . $LANG_MG00['access_denied_msg']
-                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
         return array($LANG_MG00['access_denited_msg'], $retval);
     }
 

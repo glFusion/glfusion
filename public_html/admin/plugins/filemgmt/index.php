@@ -1003,11 +1003,7 @@ function modCatS() {
                                      )      );
         if (!$upload->setPath ($filemgmt_SnapCat)) {
             $display = COM_siteHeader ('menu', $LANG24[30]);
-            $display .= COM_startBlock ($LANG24[30], '',
-                    COM_getBlockTemplate ('_msg_block', 'header'));
-            $display .= $upload->printErrors (false);
-            $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block',
-                                                            'footer'));
+            $display .= COM_showMessageText($upload->printErrors (false),$LANG24[30],true);
             $display .= COM_siteFooter ();
             echo $display;
             exit; // don't return
@@ -1021,11 +1017,7 @@ function modCatS() {
 
         if ($upload->areErrors ()) {
             $display = COM_siteHeader ('menu', $LANG24[30]);
-            $display .= COM_startBlock ($LANG24[30], '',
-                    COM_getBlockTemplate ('_msg_block', 'header'));
-            $display .= $upload->printErrors (false);
-            $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block',
-                                                            'footer'));
+            $display .= COM_showMessageText($upload->printErrors (false),$LANG24[30],true);
             $display .= COM_siteFooter ();
             echo $display;
             exit; // don't return
@@ -1154,11 +1146,7 @@ function addCat() {
                                          )      );
             if (!$upload->setPath ($filemgmt_SnapCat)) {
                 $display = COM_siteHeader ('menu', $LANG24[30]);
-                $display .= COM_startBlock ($LANG24[30], '',
-                        COM_getBlockTemplate ('_msg_block', 'header'));
-                $display .= $upload->printErrors (false);
-                $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block',
-                                                                'footer'));
+                $display .= COM_showMessageText($upload->printErrors (false),$LANG24[30],true);
                 $display .= COM_siteFooter ();
                 echo $display;
                 exit; // don't return
@@ -1171,10 +1159,7 @@ function addCat() {
 
             if ($upload->areErrors ()) {
                 $display = COM_siteHeader ('menu', $LANG24[30]);
-                $display .= COM_startBlock ($LANG24[30], '',
-                        COM_getBlockTemplate ('_msg_block', 'header'));
-                $display .= $upload->printErrors (false);
-                $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block','footer'));
+                $display .= COM_showMessageText($upload->printErrors (false),$LANG24[30],true);
                 $display .= COM_siteFooter ();
                 echo $display;
                 exit; // don't return
@@ -1183,7 +1168,7 @@ function addCat() {
             $imgurl = '';
         }
         $sql = "INSERT INTO {$_TABLES['filemgmt_cat']} (pid, title, imgurl,grp_access,grp_writeaccess) ";
-        $sql .= "VALUES ('".DB_escapeString($pid)."', '".DB_escapeString($title)."', '".DB_escapeString($imgurl)."',$grp_access,$write_access)";
+        $sql .= "VALUES ('".DB_escapeString($pid)."', '".DB_escapeString($title)."', '".DB_escapeString($imgurl)."',".(int)$grp_access.",".(int)$write_access.")";
         DB_query($sql);
     }
     CACHE_remove_instance('whatsnew');
