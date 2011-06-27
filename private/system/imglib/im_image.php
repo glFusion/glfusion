@@ -37,6 +37,8 @@ function _img_getIMversion()
 {
     global $_CONF;
 
+    $version = '';
+
     // get im version
     list($results, $status) = UTL_exec($_CONF['path_to_mogrify'] . '/identify');
 
@@ -83,13 +85,17 @@ function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $d
 {
     global $_CONF;
 
+    $noLayers = 1;
+
     $version = _img_getIMversion();
 
-    $rc = version_compare($version[1],"6.3.4");
-    if ( $rc == -1 ) {
-        $noLayers = 1;
-    } else {
-        $noLayers = 0;
+    if ( is_array($version) ) {
+        $rc = version_compare($version[1],"6.3.4");
+        if ( $rc == -1 ) {
+            $noLayers = 1;
+        } else {
+            $noLayers = 0;
+        }
     }
 
     $JpegQuality = 85;
