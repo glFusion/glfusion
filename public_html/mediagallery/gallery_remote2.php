@@ -44,7 +44,7 @@ if (!in_array('mediagallery', $_PLUGINS)) {
 require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
 MG_initAlbums();
 USES_lib_user();
-USES_lib_security();
+
 require_once $_CONF['path'].'plugins/mediagallery/include/lib-upload.php';
 require_once $_CONF['path'].'plugins/mediagallery/include/sort.php';
 
@@ -83,49 +83,49 @@ function _mg_gr_checkuser( ) {
 }
 
 function _mg_gr_finish($code, $body = NULL, $message = NULL) {
-	static $gr_messages;
+    static $gr_messages;
 
-  	if (!isset($gr_messages)) {
-    	$gr_messages = array(
-  			GR_STAT_SUCCESS => 'Successful',
-  			GR_STAT_PROTO_MAJ_VER_INVAL => 'The protocol major version the client is using is not supported.',
-  			GR_STAT_PROTO_MIN_VER_INVAL => 'The protocol minor version the client is using is not supported.',
-  			GR_STAT_PROTO_VER_FMT_INVAL => 'The format of the protocol version string the client sent in the request is invalid.',
-  			GR_STAT_PROTO_VER_MISSING => 'The request did not contain the required protocol_version key.',
-  			GR_STAT_PASSWD_WRONG => 'The password and/or username the client send in the request is invalid.',
-  			GR_STAT_LOGIN_MISSING => 'The client used the login command in the request but failed to include either the username or password (or both) in the request.',
-  			GR_STAT_UNKNOWN_CMD => 'The value of the cmd key is not valid.',
-  			GR_STAT_NO_ADD_PERMISSION => 'The user does not have permission to add an item to the gallery.',
-  			GR_STAT_NO_FILENAME => 'No filename was specified.',
-  			GR_STAT_UPLOAD_PHOTO_FAIL => 'The file was received, but could not be processed or added to the album.',
-  			GR_STAT_NO_WRITE_PERMISSION => 'No write permission to destination album.',
-  			GR_STAT_NO_CREATE_ALBUM_PERMISSION => 'A new album could not be created because the user does not have permission to do so.',
-  			GR_STAT_CREATE_ALBUM_FAILED => 'A new album could not be created, for a different reason (name conflict, missing data, permissions...).',
-  			GR_STAT_MOVE_ALBUM_FAILED => 'The album could not be moved.',
-    	);
-  	}
-  	if (!isset($message)) {
-    	$message = $gr_messages[$code];
-    	if (!isset($message)) {
-      		$message = 'Undefined error code';
-    	}
-  	}
-  	if ($code != GR_STAT_SUCCESS) {
-  		$msg = sprintf("Request failure: %s, %s", $code, $message);
-  	}
-  	header("Content-Type: text/plain");
+    if (!isset($gr_messages)) {
+        $gr_messages = array(
+            GR_STAT_SUCCESS => 'Successful',
+            GR_STAT_PROTO_MAJ_VER_INVAL => 'The protocol major version the client is using is not supported.',
+            GR_STAT_PROTO_MIN_VER_INVAL => 'The protocol minor version the client is using is not supported.',
+            GR_STAT_PROTO_VER_FMT_INVAL => 'The format of the protocol version string the client sent in the request is invalid.',
+            GR_STAT_PROTO_VER_MISSING => 'The request did not contain the required protocol_version key.',
+            GR_STAT_PASSWD_WRONG => 'The password and/or username the client send in the request is invalid.',
+            GR_STAT_LOGIN_MISSING => 'The client used the login command in the request but failed to include either the username or password (or both) in the request.',
+            GR_STAT_UNKNOWN_CMD => 'The value of the cmd key is not valid.',
+            GR_STAT_NO_ADD_PERMISSION => 'The user does not have permission to add an item to the gallery.',
+            GR_STAT_NO_FILENAME => 'No filename was specified.',
+            GR_STAT_UPLOAD_PHOTO_FAIL => 'The file was received, but could not be processed or added to the album.',
+            GR_STAT_NO_WRITE_PERMISSION => 'No write permission to destination album.',
+            GR_STAT_NO_CREATE_ALBUM_PERMISSION => 'A new album could not be created because the user does not have permission to do so.',
+            GR_STAT_CREATE_ALBUM_FAILED => 'A new album could not be created, for a different reason (name conflict, missing data, permissions...).',
+            GR_STAT_MOVE_ALBUM_FAILED => 'The album could not be moved.',
+        );
+    }
+    if (!isset($message)) {
+        $message = $gr_messages[$code];
+        if (!isset($message)) {
+            $message = 'Undefined error code';
+        }
+    }
+    if ($code != GR_STAT_SUCCESS) {
+        $msg = sprintf("Request failure: %s, %s", $code, $message);
+    }
+    header("Content-Type: text/plain");
 
-  	echo 	"#__GR2PROTO__\n" .
-    	     $body .
-       		"status=$code\n" .
-       		"status_text=$message\n";
-  	exit;
+    echo    "#__GR2PROTO__\n" .
+             $body .
+            "status=$code\n" .
+            "status_text=$message\n";
+    exit;
 }
 
 function _mg_gr_login( $loginname, $passwd ) {
-	global $_CONF, $_USER, $_TABLES, $_GROUPS, $_RIGHTS, $VERBOSE;
+    global $_CONF, $_USER, $_TABLES, $_GROUPS, $_RIGHTS, $VERBOSE;
 
-	$retval = 'server_version='. GR_SERVER_VERSION."\n";
+    $retval = 'server_version='. GR_SERVER_VERSION."\n";
 
     if (!empty($loginname) && !empty($passwd)) {
         $status = SEC_authenticate($loginname, $passwd, $uid);
@@ -139,61 +139,61 @@ function _mg_gr_login( $loginname, $passwd ) {
         $_RIGHTS = explode( ',', SEC_getUserPermissions() );
         _mg_gr_finish(GR_STAT_SUCCESS, $retval);
     } else {
-	    _mg_gr_finish(GR_STAT_PASSWD_WRONG, $retval);
+        _mg_gr_finish(GR_STAT_PASSWD_WRONG, $retval);
     }
 }
 
 
 function _mg_gr_fetch_albums($refnum, $check_writeable) {
-	global $MG_albums, $_MG_USERPREFS, $_MG_CONF, $_USER;
+    global $MG_albums, $_MG_USERPREFS, $_MG_CONF, $_USER;
 
     _mg_gr_checkuser( );
 
-  	$retval = '';
-  	$nalbums = 0;
-  	$children = $MG_albums[0]->getChildren();
-	$nrows = count($children);
-	for ($i=0;$i<$nrows;$i++) {
-    	if ( $MG_albums[$children[$i]]->access == 0 ) {
-        	continue;
-    	}
-		$aid = $MG_albums[$children[$i]]->id;
-		$aid = $nalbums+1;
-		$MG_albums[$children[$i]]->gid = $aid;
-		$retval .= 'album.name.'.$aid.'=' . $MG_albums[$children[$i]]->id ."\n";
-		if ( $MG_albums[$children[$i]]->title != '' )
-      	    $retval .= 'album.title.'.$aid.'='.$MG_albums[$children[$i]]->title."\n";
+    $retval = '';
+    $nalbums = 0;
+    $children = $MG_albums[0]->getChildren();
+    $nrows = count($children);
+    for ($i=0;$i<$nrows;$i++) {
+        if ( $MG_albums[$children[$i]]->access == 0 ) {
+            continue;
+        }
+        $aid = $MG_albums[$children[$i]]->id;
+        $aid = $nalbums+1;
+        $MG_albums[$children[$i]]->gid = $aid;
+        $retval .= 'album.name.'.$aid.'=' . $MG_albums[$children[$i]]->id ."\n";
+        if ( $MG_albums[$children[$i]]->title != '' )
+            $retval .= 'album.title.'.$aid.'='.$MG_albums[$children[$i]]->title."\n";
         if ( $MG_albums[$children[$i]]->description != '' )
-      	    $retval .= 'album.summary.'.$aid.'='.$MG_albums[$children[$i]]->description."\n";
+            $retval .= 'album.summary.'.$aid.'='.$MG_albums[$children[$i]]->description."\n";
         if ( $refnum ) {
-      	    $retval .= 'album.parent.'.$aid.'='.$MG_albums[$children[$i]]->gid."\n";
-      	} else {
+            $retval .= 'album.parent.'.$aid.'='.$MG_albums[$children[$i]]->gid."\n";
+        } else {
             $retval .= 'album.parent.'.$aid.'='.$MG_albums[$children[$i]]->parent."\n";
         }
-      	$retval .= 'album.resize_size.'.$aid.'='.'0'."\n";
-      	$maxsize = $MG_albums[$children[$i]]->max_image_width;
-      	if ( $MG_albums[$children[$i]]->max_image_height > $MG_albums[$children[$i]]->max_image_width ) {
-          	$maxsize = $MG_albums[$children[$i]]->max_image_height;
-      	}
-      	if ( isset($maxsize) && $maxsize != 0 && $maxsize != '' ) {
-      	    $retval .= 'album.max_size.'.$aid.'='.$maxsize."\n";
-      	}
+        $retval .= 'album.resize_size.'.$aid.'='.'0'."\n";
+        $maxsize = $MG_albums[$children[$i]]->max_image_width;
+        if ( $MG_albums[$children[$i]]->max_image_height > $MG_albums[$children[$i]]->max_image_width ) {
+            $maxsize = $MG_albums[$children[$i]]->max_image_height;
+        }
+        if ( isset($maxsize) && $maxsize != 0 && $maxsize != '' ) {
+            $retval .= 'album.max_size.'.$aid.'='.$maxsize."\n";
+        }
 
         if (($_MG_CONF['member_albums'] && $MG_albums[$children[$i]]->isMemberAlbum() && $MG_albums[$children[$i]]->owner_id == $_USER['uid'] && $_MG_USERPREFS['active']) ||
            ( $MG_albums[$children[$i]]->member_uploads && $MG_albums[$children[$i]]->access >= 2 ) ||
            ( $MG_albums[$children[$i]]->access >= 3 ) ||
-           ( $MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/ ) ) {
+           ( $MG_albums[0]->owner_id ) ) {
                $add = 'true';
         } else {
             $add = 'false';
-  	    }
-      	$retval .= 'album.perms.add.'.$aid.'='. $add ."\n";
-      	$retval .= 'album.perms.write.'.$aid.'='.(($MG_albums[$children[$i]]->access == 3  && $_MG_USERPREFS['active'] == 1) || $MG_albums[0]->owner_id /*SEC_hasRights('mediagallery.admin')*/ || ($MG_albums[$children[$i]]->member_uploads==1) ? 'true' : 'false')."\n";
+        }
+        $retval .= 'album.perms.add.'.$aid.'='. $add ."\n";
+        $retval .= 'album.perms.write.'.$aid.'='.(($MG_albums[$children[$i]]->access == 3  && $_MG_USERPREFS['active'] == 1) || $MG_albums[0]->owner_id /*SEC_hasRights('mediagallery.admin')*/ || ($MG_albums[$children[$i]]->member_uploads==1) ? 'true' : 'false')."\n";
 
-      	$retval .= 'album.perms.del_item.'.$aid.'='.($MG_albums[$children[$i]]->access == 3 ? 'true' : 'false')."\n";
-      	$retval .= 'album.perms.del_alb.'.$aid.'='.($MG_albums[$children[$i]]->access == 3 ? 'true' : 'false')."\n";
+        $retval .= 'album.perms.del_item.'.$aid.'='.($MG_albums[$children[$i]]->access == 3 ? 'true' : 'false')."\n";
+        $retval .= 'album.perms.del_alb.'.$aid.'='.($MG_albums[$children[$i]]->access == 3 ? 'true' : 'false')."\n";
 
-      	$create_sub = 'false';
+        $create_sub = 'false';
         if (( $_MG_CONF['member_albums'] && $_MG_CONF['member_album_root'] == $MG_albums[$children[$i]]->id && $_MG_CONF['member_create_new'] && $_MG_USERPREFS['active']) ||
             ( $MG_albums[$children[$i]]->access >= 3 )) {
             if ( !$MG_albums[$children[$i]]->hidden || ( $MG_albums[$children[$i]]->hidden && ($MG_albums[0]->owner_id /*SEC_hasRights('mediagallery.admin')*/ ) ) ) {
@@ -204,19 +204,19 @@ function _mg_gr_fetch_albums($refnum, $check_writeable) {
         } else {
             $create_sub = 'false';
         }
-      	$retval .= 'album.perms.create_sub.'.$aid.'='.$create_sub."\n";
-      	$nalbums++;
+        $retval .= 'album.perms.create_sub.'.$aid.'='.$create_sub."\n";
+        $nalbums++;
 
-      	$subs = $MG_albums[$children[$i]]->getChildren();
-      	if ( count($subs) > 0 ) {
+        $subs = $MG_albums[$children[$i]]->getChildren();
+        if ( count($subs) > 0 ) {
             list($nalbums, $clist) = _mg_recurse_children( $MG_albums[$children[$i]]->id, $nalbums, $check_writable, $refnum);
             $retval .= $clist;
         }
-	}
+    }
 
-	$retval .= 'album_count='.$nalbums."\n";
-  	$retval .= 'can_create_root='. ($MG_albums[0]->owner_id ? 'yes' : 'no') ."\n";
-  	_mg_gr_finish(GR_STAT_SUCCESS, $retval,'Fetch albums successful.');
+    $retval .= 'album_count='.$nalbums."\n";
+    $retval .= 'can_create_root='. ($MG_albums[0]->owner_id ? 'yes' : 'no') ."\n";
+    _mg_gr_finish(GR_STAT_SUCCESS, $retval,'Fetch albums successful.');
 }
 
 function _mg_recurse_children( $album_id, $counter, $check_writable, $refnum = 0 ) {
@@ -224,46 +224,46 @@ function _mg_recurse_children( $album_id, $counter, $check_writable, $refnum = 0
 
     $retval = '';
 
-  	$children = $MG_albums[$album_id]->getChildren();
+    $children = $MG_albums[$album_id]->getChildren();
     $nrows = count($children);
 
     for ($i=0;$i<$nrows;$i++) {
-    	if ( $MG_albums[$children[$i]]->access == 0 ) {
-        	continue;
-    	}
-		$aid = $counter+1;
-		$MG_albums[$children[$i]]->gid = $aid;
-		$retval .= 'album.name.'.$aid.'=' . $MG_albums[$children[$i]]->id ."\n";
-		if ( $MG_albums[$children[$i]]->title != '' ) {
-      	    $retval .= 'album.title.'.$aid.'='.$MG_albums[$children[$i]]->title."\n";
-      	}
-      	if ( $MG_albums[$children[$i]]->summary != '' ) {
-      	    $retval .= 'album.summary.'.$aid.'='.$MG_albums[$children[$i]]->description."\n";
-      	}
-      	if ( $refnum) {
-          	$retval .= 'album.parent.'.$aid.'='.$MG_albums[$MG_albums[$children[$i]]->parent]->gid."\n";
-      	} else {
-      	    $retval .= 'album.parent.'.$aid.'='.$MG_albums[$MG_albums[$children[$i]]->parent]->id."\n";
+        if ( $MG_albums[$children[$i]]->access == 0 ) {
+            continue;
         }
-      	$retval .= 'album.resize_size.'.$aid.'='.'0'."\n";
-      	$retval .= 'album.max_size.'.$aid.'='.'0'."\n";
-      	$retval .= 'album.thumb_size.'.$aid.'='.'200'."\n";
+        $aid = $counter+1;
+        $MG_albums[$children[$i]]->gid = $aid;
+        $retval .= 'album.name.'.$aid.'=' . $MG_albums[$children[$i]]->id ."\n";
+        if ( $MG_albums[$children[$i]]->title != '' ) {
+            $retval .= 'album.title.'.$aid.'='.$MG_albums[$children[$i]]->title."\n";
+        }
+        if ( $MG_albums[$children[$i]]->summary != '' ) {
+            $retval .= 'album.summary.'.$aid.'='.$MG_albums[$children[$i]]->description."\n";
+        }
+        if ( $refnum) {
+            $retval .= 'album.parent.'.$aid.'='.$MG_albums[$MG_albums[$children[$i]]->parent]->gid."\n";
+        } else {
+            $retval .= 'album.parent.'.$aid.'='.$MG_albums[$MG_albums[$children[$i]]->parent]->id."\n";
+        }
+        $retval .= 'album.resize_size.'.$aid.'='.'0'."\n";
+        $retval .= 'album.max_size.'.$aid.'='.'0'."\n";
+        $retval .= 'album.thumb_size.'.$aid.'='.'200'."\n";
         if ( ($MG_albums[$children[$i]]->access == 3  && $_MG_USERPREFS['active'] == 1) || $MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/ || ($MG_albums[$children[$i]]->member_uploads==1) ) {
-          	$add = 'true';
-      	} else {
-          	$add = 'false';
-      	}
-      	$retval .= 'album.perms.add.'.$aid.'='.$add."\n";
-      	$retval .= 'album.perms.write.'.$aid.'='.(($MG_albums[$children[$i]]->access == 3  && $_MG_USERPREFS['active'] == 1) || $MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/ || ($MG_albums[$children[$i]]->member_uploads==1) ? 'true' : 'false')."\n";
+            $add = 'true';
+        } else {
+            $add = 'false';
+        }
+        $retval .= 'album.perms.add.'.$aid.'='.$add."\n";
+        $retval .= 'album.perms.write.'.$aid.'='.(($MG_albums[$children[$i]]->access == 3  && $_MG_USERPREFS['active'] == 1) || $MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/ || ($MG_albums[$children[$i]]->member_uploads==1) ? 'true' : 'false')."\n";
 
-      	$retval .= 'album.perms.del_item.'.$aid.'='.($MG_albums[$children[$i]]->access == 3 ? 'true' : 'false')."\n";
-      	$retval .= 'album.perms.del_alb.'.$aid.'='.($MG_albums[$children[$i]]->access == 3 ? 'true' : 'false')."\n";
-      	$retval .= 'album.perms.create_sub.'.$aid.'='.(($MG_albums[$children[$i]]->access == 3  && $_MG_USERPREFS['active'] == 1) || $MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/  ? 'true' : 'false')."\n";
-      	$counter++;
-      	list($counter, $clist) = _mg_recurse_children( $MG_albums[$children[$i]]->id, $counter, $check_writable);
-      	$retval .= $clist;
-	}
-	return array( $counter, $retval );
+        $retval .= 'album.perms.del_item.'.$aid.'='.($MG_albums[$children[$i]]->access == 3 ? 'true' : 'false')."\n";
+        $retval .= 'album.perms.del_alb.'.$aid.'='.($MG_albums[$children[$i]]->access == 3 ? 'true' : 'false')."\n";
+        $retval .= 'album.perms.create_sub.'.$aid.'='.(($MG_albums[$children[$i]]->access == 3  && $_MG_USERPREFS['active'] == 1) || $MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/  ? 'true' : 'false')."\n";
+        $counter++;
+        list($counter, $clist) = _mg_recurse_children( $MG_albums[$children[$i]]->id, $counter, $check_writable);
+        $retval .= $clist;
+    }
+    return array( $counter, $retval );
 }
 
 function _mg_gr_fetch_album_images($aid, $albumstoo) {
@@ -548,47 +548,47 @@ function _mg_gr_move_album($albname, $destaname) {
 
 // ** Main Processing
 
-$cmd = $_POST['cmd'];
+$cmd = isset($_POST['cmd']) ? $_POST['cmd'] : '';
 $numref = FALSE;
 
 switch($cmd) {
-	case 'login':
-  		_mg_gr_login($_POST['uname'], $_POST['password']);
-  		break;
-	case 'fetch-albums':
-  		$numref = TRUE;
-	case 'fetch-albums-prune':
-  		$check_writeable = ($_POST['check-writeable'] == 'yes') ? TRUE : FALSE;
-  		_mg_gr_fetch_albums($numref, $check_writeable);
-  		break;
-	case 'fetch-album-images':
-  		$albums_too = ($_POST['albums_too'] == 'yes') ? TRUE : FALSE;
-  		_mg_gr_fetch_album_images($_POST['set_albumName'],$albums_too);
-  		break;
-	case 'new-album':
-  		_mg_gr_add_album($_POST['set_albumName'],
-  		                        $_POST['newAlbumName'],
-        		                $_POST['newAlbumTitle'],
-                	            $_POST['newAlbumDesc']);
-  		break;
-	case 'move-album':
-  		_mg_gr_move_album($_POST['set_albumName'],
-        	                     $_POST['set_destalbumName']);
-  		break;
-	case 'add-item':
-  		_mg_gr_add_image($_POST['set_albumName'],$_POST['caption'], $_POST['extrafield_Summary']);
-  		break;
-	case '':
+    case 'login':
+        _mg_gr_login($_POST['uname'], $_POST['password']);
+        break;
+    case 'fetch-albums':
+        $numref = TRUE;
+    case 'fetch-albums-prune':
+        $check_writeable = ($_POST['check-writeable'] == 'yes') ? TRUE : FALSE;
+        _mg_gr_fetch_albums($numref, $check_writeable);
+        break;
+    case 'fetch-album-images':
+        $albums_too = ($_POST['albums_too'] == 'yes') ? TRUE : FALSE;
+        _mg_gr_fetch_album_images($_POST['set_albumName'],$albums_too);
+        break;
+    case 'new-album':
+        _mg_gr_add_album($_POST['set_albumName'],
+                         $_POST['newAlbumName'],
+                         $_POST['newAlbumTitle'],
+                         $_POST['newAlbumDesc']);
+        break;
+    case 'move-album':
+        _mg_gr_move_album($_POST['set_albumName'],
+                                 $_POST['set_destalbumName']);
+        break;
+    case 'add-item':
+        _mg_gr_add_image($_POST['set_albumName'],$_POST['caption'], $_POST['extrafield_Summary']);
+        break;
+    case '':
         $display  = COM_siteHeader();
         $display .= COM_startBlock('');
-        $display .= 'For more information about Gallery Remote, see Gallery\'s website located at <a href="http://gallery.sourceforge.net">http://gallery.sourceforge.net</a>';
+        $display .= 'For more information about Gallery Remote, see Gallery\'s website located at <a href="http://sourceforge.net/projects/gallery/files/gallery%20remote/">http://sourceforge.net/projects/gallery/files/gallery%20remote/</a>';
         $display .= COM_endBlock();
         $display .= COM_siteFooter(true);
         echo $display;
         exit;
     default:
-  		_mg_gr_finish(GR_STAT_UNKNOWN_CMD, '', 'Unknown command "%cmd"', array('%cmd' => theme('placeholder', $cmd)));
-  		break;
+        _mg_gr_finish(GR_STAT_UNKNOWN_CMD, '', 'Unknown command "%cmd"', array('%cmd' => theme('placeholder', $cmd)));
+        break;
 }
 exit;
 ?>

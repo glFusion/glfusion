@@ -48,7 +48,7 @@ if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
 require_once $_CONF['path'] . 'plugins/mediagallery/include/init.php';
 MG_initAlbums();
 
-$pcid = COM_applyFilter($_GET['id']);
+$pcid = isset($_GET['id']) ? COM_applyFilter($_GET['id']) : 0;
 
 $result = DB_query("SELECT * FROM {$_TABLES['mg_postcard']} WHERE pc_id='" . DB_escapeString($pcid) . "'");
 $numRows = DB_numRows($result);

@@ -48,29 +48,24 @@ function MG_getItems ($mode='sv')
 
     $retval = '';
 
+    $aid = 0;
     if ( isset($_REQUEST['aid']) ) {
 	    $aid = COM_applyFilter($_REQUEST['aid'],true);
-	} else {
-	    $aid = 0;
 	}
+	$src = 'disp';
 	if ( isset($_REQUEST['src']) ) {
 	    $src = COM_applyFilter($_REQUEST['src']);
-	} else {
-	    $src = 'disp';
 	}
+	$type = 'mini';
 	if ( isset($_REQUEST['type']) ) {
 	    $type = COM_applyFilter($_REQUEST['type']);
-	} else {
-	    $type = 'mini';
 	}
-
 	if ( $src != 'disp' && $src != 'orig' ) {
 		$src = 'tn';
 	}
 	if ( $type != 'full' || $type != 'mini' ) {
 	    $type = 'mini';
 	}
-
 	if ( isset($MG_albums[$aid]->id ) ) {
         if ( $MG_albums[$aid]->access >= 1 ) {
 			$orderBy = MG_getSortOrder($aid, 0);
@@ -115,10 +110,9 @@ function MG_getItems ($mode='sv')
 function MG_xml() {
 	global $MG_albums,$_MG_CONF,$LANG_CHARSET;
 
+    $aid = 0;
     if ( isset($_REQUEST['aid']) ) {
 	    $aid = COM_applyFilter($_REQUEST['aid'],true);
-	} else {
-	    $aid = 0;
 	}
 	$xml = '';
 	header( "Content-type: text/xml" );

@@ -51,34 +51,28 @@ MG_initAlbums();
 * Main Function
 */
 
-$album_id    = COM_applyFilter($_GET['aid'],true);
-$src         = COM_applyFilter($_GET['src']);
+$album_id  = COM_applyFilter($_GET['aid'],true);
+$src       = COM_applyFilter($_GET['src']);
+$sortOrder = 0;
 if ( isset($_GET['sort'])) {
     $sortOrder = COM_applyFilter($_GET['sort'],true);
-} else {
-    $sortOrder = 0;
 }
-
+$full = 0;
 if ( isset($_GET['f']) ) {
     $full = COM_applyFilter($_GET['f'],true);
-} else {
-    $full = 0;
 }
-
 
 if ( $src != 'disp' && $src != 'orig' ) {
     $src = 'disp';
 }
-
+$noFullOption = 0;
 if ( $MG_albums[$album_id]->full == 2 || $_MG_CONF['discard_original'] == 1 || ( $MG_albums[$album_id]->full == 1 && empty($_USER['username']))) {
     $src = 'disp';
     $noFullOption = 1;
-} else {
-    $noFullOption = 0;
 }
 
 $themeStyle = MG_getThemeCSS($album_id);
-$display = MG_siteHeader(strip_tags($MG_albums[$album_id]->title));
+$display = MG_siteHeader(strip_tags($MG_albums[$album_id]->title),$themeStyle);
 
 $T = new Template( MG_getTemplatePath($album_id) );
 $T->set_file (array(

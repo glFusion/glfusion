@@ -555,8 +555,7 @@ if ( $total_media > 0 ) {
     for ( $i = 0; $i < ($media_per_page ); $i += $columns_per_page ) {
 
         for ($j = $i; $j < ($i + $columns_per_page); $j++) {
-            if ($j >= $total_media)
-            {
+            if ($j >= $total_media) {
                 $k = ($i+$columns_per_page) - $j;
                 $m = $k % $columns_per_page;
                 for ( $z = $m; $z > 0; $z--) {
@@ -574,13 +573,11 @@ if ( $total_media > 0 ) {
 	            break;
             }
             $previous_image = $i - 1;
-            if ( $previous_image < 0 )
-            {
+            if ( $previous_image < 0 ) {
                 $previous_image = -1;
             }
             $next_image = $i + 1;
-            if ( $next_image >= $total_media - 1 )
-            {
+            if ( $next_image >= $total_media - 1 ) {
                 $next_image = -1;
             }
             if ( $MG_media[$j]->type == -1 ) {  // A sub album

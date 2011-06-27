@@ -57,7 +57,6 @@ MG_initAlbums();
 $mode = COM_applyFilter ($_REQUEST['mode']);
 
 $display = '';
-$display = MG_siteHeader();
 
 if ( isset ($_POST['cancel_button'] ) ) {
     $session_id = COM_applyFilter($_GET['sid']);
@@ -80,6 +79,8 @@ if ( isset ($_POST['cancel_button'] ) ) {
     echo COM_refresh($session['session_origin']);
     exit;
 }
+
+$display = MG_siteHeader();
 
 if (($mode == 'continue') ) {
     if ( isset($_GET['sid']) ) {

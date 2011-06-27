@@ -66,7 +66,7 @@ if (!SEC_hasRights('mediagallery.admin')) {
 
 // only take media ids, we'll build the path
 
-$mid = COM_applyFilter($_REQUEST['mid']);
+$mid = isset($_REQUEST['mid']) ? COM_applyFilter($_REQUEST['mid']) : 0;
 $sql = "SELECT * FROM {$_TABLES['mg_media']} WHERE media_id='" . DB_escapeString($mid) . "'";
 $result = DB_query($sql);
 $numRows = DB_numRows($result);

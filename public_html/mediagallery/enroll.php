@@ -124,14 +124,15 @@ function MG_saveEnroll() {
 // --- Main Processing Loop
 
 $mode = COM_applyFilter ($_REQUEST['mode']);
+if ($mode == $LANG_MG03['cancel']) {
+    echo COM_refresh ($_MG_CONF['site_url'] . '/index.php');
+    exit;
+}
 
 $display  = MG_siteHeader();
 
 if ($mode == $LANG_MG03['agree'] && !empty ($LANG_MG03['agree'])) {
     $display .= MG_saveEnroll();
-} elseif ($mode == $LANG_MG03['cancel']) {
-    echo COM_refresh ($_MG_CONF['site_url'] . '/index.php');
-    exit;
 } else {
     $display .= MG_enroll();
 }
