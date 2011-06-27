@@ -319,7 +319,7 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
     if ( $postmode != 'html' && $postmode != 'HTML') {
         $bbcode->addParser(array('block','inline','link','listitem'), 'nl2br');
     }
-    $bbcode->addParser(array('block','inline','link','listitem'), 'PLG_replacetags');
+    $bbcode->addParser(array('block','inline','link','listitem'), '_ff_replacetags');
     if ( ! ($status & DISABLE_SMILIES ) ) {
         $bbcode->addParser(array('block','inline','link','listitem'), '_ff_replacesmilie');      // calls replacesmilie on all text blocks
     }
@@ -554,6 +554,10 @@ function _ff_fixtemplate($text) {
     $text = str_replace('}','&#125;',$text);
 
     return $text;
+}
+
+function _ff_replaceTags($text) {
+    return PLG_replaceTags($text,'forum','post');
 }
 
 function _ff_preparefordb($message,$postmode) {
