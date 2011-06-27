@@ -1175,9 +1175,14 @@ function SEC_createToken($ttl = 1200)
 {
     global $_CONF, $_SYSTEM, $_USER, $_TABLES, $_DB_dbms;
 
-    static $tokenKey;
+    static $_tokenKey;
 
-    if (isset($tokenKey) && !empty($tokenKey) ) {
+    if ( $ttl == -1 ) {
+        $tokenKey = '';
+        return;
+    }
+
+    if (isset($_tokenKey) && !empty($_tokenKey) ) {
         return $tokenKey;
     }
 
@@ -1231,6 +1236,7 @@ function SEC_checkToken()
     global $_CONF, $LANG20, $LANG_ADMIN;
 
     if (_sec_checkToken()) {
+        SEC_createToken(-1);
         return true;
     }
 
@@ -1303,7 +1309,7 @@ function _sec_checkToken()
         $referCheck = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
     }
 
-    if(array_key_exists(CSRF_TOKEN, $_GET)) {
+    if (array_key_exists(CSRF_TOKEN, $_GET)) {
         $token = COM_applyFilter($_GET[CSRF_TOKEN]);
     } else if(array_key_exists(CSRF_TOKEN, $_POST)) {
         $token = COM_applyFilter($_POST[CSRF_TOKEN]);
