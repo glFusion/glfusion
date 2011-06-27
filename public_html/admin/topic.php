@@ -478,7 +478,7 @@ function TOPIC_save($T)
     }
     if (($access < 3) || !SEC_inGroup ($group_id)) {
         $retval .= COM_siteHeader ('menu', $MESSAGE[30]);
-        $retval .= COM_showMessageText($MESSAGE[32],MESSAGE[30],true);
+        $retval .= COM_showMessageText($MESSAGE[32],$MESSAGE[30],true);
         $retval .= COM_siteFooter ();
         COM_accessLog("User {$_USER['username']} tried to illegally create or edit topic $tid.");
     } elseif (!empty($tid) && !empty($topic)) {
