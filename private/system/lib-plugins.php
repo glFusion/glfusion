@@ -2059,7 +2059,7 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
                     if ( $autotag['tag'] == 'hmenu' ) {
                         $menu = '';
                         $menuID = trim($autotag['parm1']);
-                        $id = DB_getItem($_TABLES['st_menus'],'id','menu_name="'.DB_escapeString($menuID).'"');
+                        $id = DB_getItem($_TABLES['menu'],'id','menu_name="'.DB_escapeString($menuID).'"');
                         if ( $id > 0 ) {
                             if ( $mbMenu[$id]['menu_type'] == 1 ) {
                                 $menu = mb_getMenu($menuID,"gl_moomenu","gl_moomenu",'',"parent");
