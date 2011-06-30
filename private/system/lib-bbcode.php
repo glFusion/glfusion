@@ -63,7 +63,7 @@ function BBC_formatTextBlock( $str, $postmode='html', $parser = array(), $code =
         $bbcode->addParser(array('block','inline','link','listitem'), 'COM_checkHTML');
     }
 
-    $bbcode->addParser(array('block','inline','link','listitem'), 'PLG_replacetags');
+    $bbcode->addParser(array('block','inline','link','listitem'), '_bcode_replacetags');
 
     $bbcode->addParser ('list', '_bbcode_stripcontents');
 
@@ -289,16 +289,16 @@ function _bbcode_url ($action, $attributes, $content, $params, $node_object) {
         return true;
     }
     if (!isset ($attributes['default'])) {
-        if ( stristr($content,'http') ) {
+        if ( stristr($content,'http') || stristr($content,'mailto') ) {
             return '<a href="'._bbcode_cleanHTML($content).'" rel="nofollow">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
         } else {
             return '<a href="http://'._bbcode_cleanHTML($content).'" rel="nofollow">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
         }
     }
-    if ( stristr($attributes['default'],'http') ) {
-        return '<a href="'._bbcode_cleanHTML($attributes['default']).'" rel="nofollow">'.$content.'</a>';
+    if ( stristr($attributes['default'],'http') || stristr($attributes['default'],'mailto') ) {
+        return '<a href="'._bbcode_cleanHTML($attributes['default']).'" rel="nofollow">'.@htmlspecialchars($content,ENT_QUOTES,COM_getEncodingt()).'</a>';
     } else {
-        return '<a href="http://'._bbcode_cleanHTML($attributes['default']).'" rel="nofollow">'.$content.'</a>';
+        return '<a href="http://'._bbcode_cleanHTML($attributes['default']).'" rel="nofollow">'.@htmlspecialchars($content,ENT_QUOTES,COM_getEncodingt()).'</a>';
     }
 }
 
@@ -399,6 +399,10 @@ function _bbcode_cleanHTML($str) {
                         );
 
     return htmLawed($str,$configArray);
+}
+
+function _bbcode_replaceTags($text) {
+    return PLG_replaceTags($text,'bbcode','post');
 }
 
 function _geshi($str,$type='PHP') {
