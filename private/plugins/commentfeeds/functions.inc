@@ -122,8 +122,7 @@ function plugin_getfeedcontent_commentfeeds ($feed, &$link, &$update)
            .COM_getPermSQL('AND', 1, 2, 't')
            ." AND type='article' ";
 
-    if( $S['topic'] != 'all' )
-    {
+    if( $S['topic'] != 'all' ) {
         $sql .= " AND topic='{$S['topic']}' ";
     }
     $sql .= " ORDER BY modified DESC  LIMIT 0, ".intval($S['limits'])." ";
@@ -134,13 +133,12 @@ function plugin_getfeedcontent_commentfeeds ($feed, &$link, &$update)
     $cids = array();
     $nrows = DB_numRows( $result );
 
-    for( $i = 0; $i < $nrows; $i++ )
-    {
+    for( $i = 0; $i < $nrows; $i++ ) {
         $row = DB_fetchArray( $result );
         $cids[] = $row['cid'];
 
-        $title = stripslashes( $row['title'] );
-        $body = stripslashes( $row['comment'] );
+        $title =  $row['title'];
+        $body = $row['comment'];
         $body = SYND_truncateSummary( $body, $S['content_length'] );
         $articleLink = COM_buildUrl( $_CONF['site_url']
                   ."/article.php?story={$row['sid']}");
