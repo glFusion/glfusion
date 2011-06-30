@@ -111,6 +111,10 @@ $canPost = _ff_canPost( $viewtopic );
 $replies  = $viewtopic['replies'];
 $numpages = ceil(($replies+1) / $show);
 
+if ( $page > $numpages ) {
+    $page = $numpages;
+}
+
 if ($_FF_CONF['use_censor']) {
     $viewtopic['subject'] = COM_checkWords($viewtopic['subject']);
 }
