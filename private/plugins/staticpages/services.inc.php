@@ -418,8 +418,6 @@ function service_delete_staticpages($args, &$output, &$svc_msg)
     global $_CONF, $_TABLES, $_USER, $LANG_ACCESS, $LANG12, $LANG_STATIC,
            $LANG_LOGIN;
 
-    $output = COM_refresh($_CONF['site_admin_url'] . '/plugins/staticpages/index.php');
-
     if (empty($args['sp_id']) && !empty($args['id']))
         $args['sp_id'] = $args['id'];
 
@@ -446,6 +444,8 @@ function service_delete_staticpages($args, &$output, &$svc_msg)
     DB_delete ($_TABLES['staticpage'], 'sp_id', $sp_id);
     DB_delete($_TABLES['comments'], array('sid',  'type'),array($sp_id, 'staticpages'));
     PLG_itemDeleted($sp_id, 'staticpages');
+
+    $output = COM_refresh($_CONF['site_admin_url'] . '/plugins/staticpages/index.php');
 
     return PLG_RET_OK;
 }
