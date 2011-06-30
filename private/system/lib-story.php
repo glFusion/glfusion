@@ -1151,7 +1151,7 @@ function service_submit_story($args, &$output, &$svc_msg)
         $output .= COM_siteHeader ('menu', $LANG24[5]);
         $output .= COM_errorLog ($LANG24[24], 2);
         if (!$args['gl_svc']) {
-            if ( $args['type'] == 'submission' ) {
+            if ( isset($args['type']) && $args['type'] == 'submission' ) {
                 $output .= STORY_edit($sid,'moderate');
             } else {
                 $output .= STORY_edit($sid,'error');
