@@ -1877,35 +1877,35 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
 
     // For each supported module, scan the content looking for any AutoLink tags
     $tags = array ();
-    $contentlen = MBYTE_strlen ($content);
-    $content_lower = MBYTE_strtolower ($content);
+    $contentlen = utf8_strlen ($content);
+    $content_lower = utf8_strtolower ($content);
     foreach ($autolinkModules as $moduletag => $module) {
         $autotag_prefix = '['. $moduletag . ':';
         $offset = 0;
         $prev_offset = 0;
         while ($offset < $contentlen) {
-            $start_pos = MBYTE_strpos ($content_lower, $autotag_prefix,
+            $start_pos = utf8_strpos ($content_lower, $autotag_prefix,
                                        $offset);
             if ($start_pos === false) {
                 break;
             } else {
-                $end_pos  = MBYTE_strpos ($content_lower, ']', $start_pos);
-                $next_tag = MBYTE_strpos ($content_lower, '[', $start_pos + 1);
+                $end_pos  = utf8_strpos ($content_lower, ']', $start_pos);
+                $next_tag = utf8_strpos ($content_lower, '[', $start_pos + 1);
                 if (($end_pos > $start_pos) AND
                         (($next_tag === false) OR ($end_pos < $next_tag))) {
                     $taglength = $end_pos - $start_pos + 1;
-                    $tag = MBYTE_substr ($content, $start_pos, $taglength);
+                    $tag = utf8_substr ($content, $start_pos, $taglength);
                     $parms = explode (' ', $tag);
 
                     // Extra test to see if autotag was entered with a space
                     // after the module name
-                    if (MBYTE_substr ($parms[0], -1) == ':') {
-                        $startpos = MBYTE_strlen ($parms[0]) + MBYTE_strlen ($parms[1]) + 2;
-                        $label = str_replace (']', '', MBYTE_substr ($tag, $startpos));
+                    if (utf8_substr ($parms[0], -1) == ':') {
+                        $startpos = utf8_strlen ($parms[0]) + utf8_strlen ($parms[1]) + 2;
+                        $label = str_replace (']', '', utf8_substr ($tag, $startpos));
                         $tagid = $parms[1];
                     } else {
                         $label = str_replace (']', '',
-                                 MBYTE_substr ($tag, MBYTE_strlen ($parms[0]) + 1));
+                                 utf8_substr ($tag, utf8_strlen ($parms[0]) + 1));
                         $parms = explode (':', $parms[0]);
                         if (count ($parms) > 2) {
                             // whoops, there was a ':' in the tag id ...

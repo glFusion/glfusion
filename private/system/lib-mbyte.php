@@ -114,77 +114,23 @@ function MBYTE_checkEnabled($test = '', $enabled = true)
 
 function MBYTE_strlen($str)
 {
-    static $mb_enabled;
-
-    if (!isset($mb_enabled)) {
-        $mb_enabled = MBYTE_checkEnabled();
-    }
-    if ($mb_enabled) {
-        $result = mb_strlen($str);
-    } else {
-        $result = strlen($str);
-    }
-
-    return $result;
+    return utf8_strlen($str);
 }
 
 function MBYTE_substr($str, $start, $length = NULL)
 {
-    static $mb_enabled;
-
-    if (!isset($mb_enabled)) {
-        $mb_enabled = MBYTE_checkEnabled();
-    }
-    if ($mb_enabled) {
-        if( $length === NULL )
-        {
-            $result = mb_substr($str, $start);
-        } else {
-            $result = mb_substr($str, $start, $length);
-        }
-    } else {
-        if( $length === NULL )
-        {
-            $result = substr($str, $start);
-        } else {
-            $result = substr($str, $start, $length);
-        }
-    }
-
-    return $result;
+    return utf8_substr($str,$start,$length);
 }
 
 function MBYTE_strpos($haystack, $needle, $offset = NULL)
 {
-    static $mb_enabled;
-
-    if (!isset($mb_enabled)) {
-        $mb_enabled = MBYTE_checkEnabled();
-    }
-    if ($mb_enabled) {
-        $result = mb_strpos($haystack, $needle, $offset);
-    } else {
-        $result = strpos($haystack, $needle, $offset);
-    }
-
-    return $result;
+    return utf8_strpos($haystack,$needle,$offset);
 }
 
 
 function MBYTE_strtolower($str)
 {
-    static $mb_enabled;
-
-    if (!isset($mb_enabled)) {
-        $mb_enabled = MBYTE_checkEnabled();
-    }
-    if ($mb_enabled) {
-        $result = mb_strtolower($str);
-    } else {
-        $result = strtolower($str);
-    }
-
-    return $result;
+    return utf8_strtolower($str);
 }
 
 function MBYTE_eregi($pattern, $str, $regs = NULL)
@@ -258,42 +204,12 @@ function MBYTE_substr_count($hay, $needle)
 
 function MBYTE_strtoupper($str)
 {
-    static $mb_enabled;
-
-    if (!isset($mb_enabled)) {
-        $mb_enabled = MBYTE_checkEnabled();
-    }
-    if ($mb_enabled) {
-        $result = mb_strtoupper($str, 'utf-8');
-    } else {
-        $result = strtoupper($str);
-    }
-
-    return $result;
+    return utf8_strtoupper($str);
 }
 
-function MBYTE_strrpos($haystack, $needle, $offset = NULL)
+function MBYTE_strrpos($haystack, $needle, $offset = FALSE)
 {
-    static $mb_enabled;
-
-    if (!isset($mb_enabled)) {
-        $mb_enabled = MBYTE_checkEnabled();
-    }
-    if ($mb_enabled) {
-        if ($offset === NULL) {
-            $result = mb_strrpos($haystack, $needle);
-        } else {
-            $result = mb_strrpos($haystack, $needle, $offset);
-        }
-    } else {
-        if ($offset === NULL) {
-            $result = strrpos($haystack, $needle);
-        } else {
-            $result = strrpos($haystack, $needle, $offset);
-        }
-    }
-
-    return $result;
+    return utf8_strrpos($haystack,$needle,$offset);
 }
 
 function MBYTE_mail($to, $subj, $mess, $header = NULL, $param = NULL)

@@ -86,8 +86,8 @@ function TRACKBACK_edit($target = '', $url = '', $title = '', $excerpt = '', $bl
         $p_blog = TRB_filterBlogname($blog);
 
         // MT and other weblogs will shorten the excerpt like this
-        if (MBYTE_strlen($p_excerpt) > 255) {
-            $p_excerpt = MBYTE_substr($p_excerpt, 0, 252) . '...';
+        if (utf8_strlen($p_excerpt) > 255) {
+            $p_excerpt = utf8_substr($p_excerpt, 0, 252) . '...';
         }
 
         $retval .= COM_startBlock($LANG_TRB['preview']);
@@ -95,7 +95,6 @@ function TRACKBACK_edit($target = '', $url = '', $title = '', $excerpt = '', $bl
         $preview = new Template($_CONF['path_layout'] . 'trackback');
         $preview->set_file(array ('comment' => 'trackbackcomment.thtml'));
         $comment = TRB_formatComment($url, $p_title, $p_blog, $p_excerpt);
-        $preview->set_var('xhtml', XHTML);
         $preview->set_var('formatted_comment', $comment);
         $preview->parse('output', 'comment');
         $retval .= $preview->finish($preview->get_var ('output'));
@@ -515,7 +514,7 @@ function TRACKBACK_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 $title = 'title="' . $LANG_ADMIN['enable'] . '" ';
             }
             $retval = '<input type="checkbox" name="changedservices[' . $A['pid'] . ']" ' . $title
-                        . 'onclick="submit()" value="' . $A['pid'] . '"' . $switch . XHTML . '>';
+                        . 'onclick="submit()" value="' . $A['pid'] . '"' . $switch . '/>';
             $retval .= '<input type="hidden" name="tbarray[' . $A['pid'] . ']" value="1" />';
             break;
 
@@ -688,7 +687,7 @@ function TRACKBACK_editService($pid, $msg = '', $new_name = '', $new_site_url = 
 
     if ($pid > 0) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
-                   . '" name="servicemode[2]"%s' . XHTML . '>';
+                   . '" name="servicemode[2]"%s' . '/>';
         $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
         $template->set_var('delete_option',
                             sprintf ($delbutton, $jsconfirm));
@@ -994,7 +993,7 @@ if (($mode == 'delete') && SEC_checkToken()) {
             $display .= TRACKBACK_edit();
         } else {
             $message = '<p>' . $LANG_TRB['send_error_details']
-                     . '<br' . XHTML . '><span class="warningsmall">'
+                     . '<br/><span class="warningsmall">'
                      . htmlspecialchars($result,ENT_COMPAT,COM_getEncodingt()) . '</span></p>';
             $display .= TRACKBACK_showMessage($LANG_TRB['send_error'], $message);
 
@@ -1095,7 +1094,7 @@ if (($mode == 'delete') && SEC_checkToken()) {
             $template->set_var('lang_pingback_short',
                                 $LANG_TRB['pingback_short']);
             $button = '<input type="submit" name="what[0]" value="'
-                    . $LANG_TRB['pingback_button'] . '"' . XHTML . '>';
+                    . $LANG_TRB['pingback_button'] . '"/>';
             $template->set_var('pingback_button', $button);
         }
     } else {
@@ -1106,7 +1105,7 @@ if (($mode == 'delete') && SEC_checkToken()) {
             $template->set_var('lang_ping_button', $LANG_TRB['ping_button']);
             $template->set_var('lang_ping_short', $LANG_TRB['ping_short']);
             $button = '<input type="submit" name="what[1]" value="'
-                    . $LANG_TRB['ping_button'] . '"' . XHTML . '>';
+                    . $LANG_TRB['ping_button'] . '"/>';
             $template->set_var('ping_button', $button);
         }
     } else {
@@ -1119,7 +1118,7 @@ if (($mode == 'delete') && SEC_checkToken()) {
             $template->set_var('lang_trackback_short',
                                 $LANG_TRB['trackback_short']);
             $button = '<input type="submit" name="what[2]" value="'
-                    . $LANG_TRB['trackback_button'] . '"' . XHTML . '>';
+                    . $LANG_TRB['trackback_button'] . '"/>';
             $template->set_var('trackback_button', $button);
         }
     } else {
@@ -1128,17 +1127,17 @@ if (($mode == 'delete') && SEC_checkToken()) {
 
     $hidden = '';
     if ($pingback_sent) {
-        $hidden .= '<input type="hidden" name="pingback_sent" value="1"' . XHTML . '>';
+        $hidden .= '<input type="hidden" name="pingback_sent" value="1"/>';
     }
     if ($ping_sent) {
-        $hidden .= '<input type="hidden" name="ping_sent" value="1"' . XHTML . '>';
+        $hidden .= '<input type="hidden" name="ping_sent" value="1"/>';
     }
     if ($trackback_sent) {
-        $hidden .= '<input type="hidden" name="trackback_sent" value="1"' . XHTML . '>';
+        $hidden .= '<input type="hidden" name="trackback_sent" value="1" />';
     }
-    $hidden .= '<input type="hidden" name="id" value="' . $id . '"' . XHTML . '>';
-    $hidden .= '<input type="hidden" name="type" value="' . $type . '"' . XHTML . '>';
-    $hidden .= '<input type="hidden" name="mode" value="sendall"' . XHTML . '>';
+    $hidden .= '<input type="hidden" name="id" value="' . $id . '" />';
+    $hidden .= '<input type="hidden" name="type" value="' . $type . '" />';
+    $hidden .= '<input type="hidden" name="mode" value="sendall" />';
     $template->set_var('hidden_input_fields', $hidden);
 
     $template->parse('output', 'form');
@@ -1309,7 +1308,7 @@ if (($mode == 'delete') && SEC_checkToken()) {
             $display .= COM_showMessage(74);
             $target = '';
         } else {
-            $message = '<p>' . $LANG_TRB['pb_error_details'] . '<br' . XHTML . '>'
+            $message = '<p>' . $LANG_TRB['pb_error_details'] . '<br />'
                      . '<span class="warningsmall">'
                      . htmlspecialchars($result,ENT_COMPAT,COM_getEncodingt()) . '</span></p>';
             $display .= TRACKBACK_showMessage($LANG_TRB['send_error'], $message);

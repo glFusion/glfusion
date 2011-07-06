@@ -221,12 +221,6 @@ if ($limit < 1) {
 // that any such articles have now been published
 COM_rdfUpToDateCheck();
 
-// For similar reasons, we need to see if there are currently two featured
-// articles.  Can only have one but you can have one current featured article
-// and one for the future...this check will set the latest one as featured
-// solely
-//STORY_featuredCheck();
-
 // Scan for any stories that have expired and should be archived or deleted
 $asql = "SELECT sid,tid,title,expire,statuscode FROM {$_TABLES['stories']} ";
 $asql .= 'WHERE (expire <= NOW()) AND (statuscode = ' . STORY_DELETE_ON_EXPIRE;

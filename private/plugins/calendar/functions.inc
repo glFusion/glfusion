@@ -226,10 +226,10 @@ function phpblock_calendar( $help='', $title='' )
                     $abbrDate2 = $dt->format( $dateonly, true );
 
                     if ( COM_getCharset() == 'utf-8' ) {
-                        if ( !MBYTE_is_utf8($dayName1) ) {
+                        if ( !utf8_is_valid($dayName1) ) {
                             $dayName1 = utf8_encode($dayName1);
                         }
-                        if ( !MBYTE_is_utf8($dayName2) ) {
+                        if ( !utf8_is_valid($dayName2) ) {
                             $dayName2 = utf8_encode($dayName2);
                         }
                     }
@@ -1160,7 +1160,7 @@ function plugin_getfeedcontent_calendar( $feed, &$link, &$update, $feedType, $fe
 
             $eventtitle = $row['title'];
 
-            $eventtext = SYND_truncateSummary( $row['description'], MBYTE_strlen($row['description']));
+            $eventtext = SYND_truncateSummary( $row['description'], utf8_strlen($row['description']));
             $eventlink  = $_CONF['site_url'] . '/calendar/event.php?eid='
                         . $row['eid'];
 
@@ -1225,7 +1225,7 @@ function plugin_getfeedcontent_calendar( $feed, &$link, &$update, $feedType, $fe
             $eids[] = $row['eid'];
 
             $eventtitle =  $row['title'];
-            $eventtext = SYND_truncateSummary( $row['description'], MBYTE_strlen($row['description']));
+            $eventtext = SYND_truncateSummary( $row['description'], utf8_strlen($row['description']));
             $eventlink  = $_CONF['site_url'] . '/calendar/event.php?eid='
                         . $row['eid'];
 
@@ -1253,7 +1253,7 @@ function plugin_getfeedcontent_calendar( $feed, &$link, &$update, $feedType, $fe
         $link = $_CONF['site_url'] . '/calendar/index.php';
         $update = implode( ',', $eids );
     }
-
+    $update = trim($update);
     return $content;
 }
 
@@ -1275,21 +1275,15 @@ function plugin_feedupdatecheck_calendar ($feed, $topic, $update_data, $limit,
     global $_CONF, $_TABLES, $_SYND_DEBUG;
 
     $where = '';
-    if( !empty( $limit ))
-    {
-        if( substr( $limit, -1 ) == 'h' ) // next xx hours
-        {
+    if ( !empty( $limit )) {
+        if( substr( $limit, -1 ) == 'h' ) { // next xx hours
             $limitsql = '';
             $hours = substr( $limit, 0, -1 );
             $where = " AND (datestart <= DATE_ADD(NOW(), INTERVAL $hours HOUR))";
-        }
-        else
-        {
+        } else {
             $limitsql = ' LIMIT ' . intval($limit);
         }
-    }
-    else
-    {
+    } else {
         $limitsql = ' LIMIT 10';
     }
 
@@ -1297,25 +1291,25 @@ function plugin_feedupdatecheck_calendar ($feed, $topic, $update_data, $limit,
     $nrows = DB_numRows( $result );
 
     $eids = array();
-    for( $i = 0; $i < $nrows; $i++ )
-    {
+    for( $i = 0; $i < $nrows; $i++ ) {
         $A = DB_fetchArray( $result );
 
-        if( $A['eid'] == $updated_id )
-        {
+        if ( $A['eid'] == $updated_id ) {
             // no need to look any further - this feed has to be updated
             return false;
         }
 
         $eids[] = $A['eid'];
     }
-    $current = implode( ',', $eids );
+    $current = trim(implode( ',', $eids ));
 
     if ($_SYND_DEBUG) {
         COM_errorLog ("Update check for events: comparing new list ($current) with old list ($update_info)", 1);
     }
 
-    return ( $current != $update_data ) ? false : true;
+    $rc = ( $current != $update_data ) ? false : true;
+
+    return $rc;
 }
 
 

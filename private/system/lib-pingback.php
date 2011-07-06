@@ -248,8 +248,8 @@ function PNB_makeExcerpt($html, $url, $xlen = 255)
     $fill_start = '[...] ';
     $fill_end   = ' [...]';
 
-    $f1len = MBYTE_strlen($fill_start);
-    $f2len = MBYTE_strlen($fill_end);
+    $f1len = utf8_strlen($fill_start);
+    $f2len = utf8_strlen($fill_end);
 
     // extract all links
     preg_match_all("/<a[^>]*href=[\"']([^\"']*)[\"'][^>]*>(.*?)<\/a>/i",
@@ -261,19 +261,19 @@ function PNB_makeExcerpt($html, $url, $xlen = 255)
     $num_matches = count($matches[0]);
     for ($i = 0; $i < $num_matches; $i++) {
         if ($matches[1][$i] == $url) {
-            $pos = MBYTE_strpos($html, $matches[0][$i]);
-            $before = strip_tags(MBYTE_substr($html, 0, $pos));
+            $pos = utf8_strpos($html, $matches[0][$i]);
+            $before = strip_tags(utf8_substr($html, 0, $pos));
 
-            $pos += MBYTE_strlen($matches[0][$i]);
-            $after = strip_tags(MBYTE_substr($html, $pos));
+            $pos += utf8_strlen($matches[0][$i]);
+            $after = strip_tags(utf8_substr($html, $pos));
 
             $linktext = trim(strip_tags($matches[2][$i]));
             break;
         }
     }
 
-    $bspace = (MBYTE_substr($before, -1) == ' ' ? true : false);
-    $aspace = (MBYTE_substr($after, 0, 1) == ' ' ? true : false);
+    $bspace = (utf8_substr($before, -1) == ' ' ? true : false);
+    $aspace = (utf8_substr($after, 0, 1) == ' ' ? true : false);
 
     $before = trim($before);
     $after = trim($after);
@@ -285,13 +285,13 @@ function PNB_makeExcerpt($html, $url, $xlen = 255)
     $linktext = preg_replace($pat, $rep, $linktext);
     $after    = preg_replace($pat, $rep, $after);
 
-    $tlen = MBYTE_strlen($linktext);
+    $tlen = utf8_strlen($linktext);
     if ($tlen >= $xlen) {
         // Special case: The actual link text is already longer (or as long) as
         // requested. We don't use the "fillers" here but only return the
         // (shortened) link text itself.
         if ($tlen > $xlen) {
-            $retval = MBYTE_substr($linktext, 0, $xlen - 3) . '...';
+            $retval = utf8_substr($linktext, 0, $xlen - 3) . '...';
         } else {
             $retval = $linktext;
         }
@@ -307,13 +307,13 @@ function PNB_makeExcerpt($html, $url, $xlen = 255)
         $rest = ($xlen - $tlen) / 2;
 
         // format "before" text
-        $blen = MBYTE_strlen($before);
+        $blen = utf8_strlen($before);
         if ($blen < $rest) {
             // if "before" text is too short, make "after" text longer
             $rest += ($rest - $blen);
             $retval .= $before;
         } else if ($blen > $rest) {
-            $work = MBYTE_substr($before, -($rest * 2));
+            $work = utf8_substr($before, -($rest * 2));
             $w = explode(' ', $work);
             array_shift($w); // drop first word, as it's probably truncated
             $w = array_reverse($w);
@@ -321,7 +321,7 @@ function PNB_makeExcerpt($html, $url, $xlen = 255)
             $fill = $rest - $f1len;
             $b = '';
             foreach ($w as $word) {
-                if (MBYTE_strlen($b) + MBYTE_strlen($word) + 1 > $fill) {
+                if (utf8_strlen($b) + utf8_strlen($word) + 1 > $fill) {
                     break;
                 }
                 $b = $word . ' ' . $b;
@@ -330,7 +330,7 @@ function PNB_makeExcerpt($html, $url, $xlen = 255)
 
             $retval .= $fill_start . $b;
 
-            $blen = MBYTE_strlen($b);
+            $blen = utf8_strlen($b);
             if ($blen < $fill) {
                 $rest += ($fill - $blen);
             }
@@ -347,16 +347,16 @@ function PNB_makeExcerpt($html, $url, $xlen = 255)
 
         // format "after" text
         if (!empty($after)) {
-            $alen = MBYTE_strlen($after);
+            $alen = utf8_strlen($after);
             if ($alen > $rest) {
-                $work = MBYTE_substr($after, 0, ($rest * 2));
+                $work = utf8_substr($after, 0, ($rest * 2));
                 $w = explode(' ', $work);
                 array_pop($w); // drop last word, as it's probably truncated
 
                 $fill = $rest - $f2len;
                 $a = '';
                 foreach ($w as $word) {
-                    if (MBYTE_strlen($a) + MBYTE_strlen($word) + 1 > $fill) {
+                    if (utf8_strlen($a) + utf8_strlen($word) + 1 > $fill) {
                         break;
                     }
                     $a .= $word . ' ';

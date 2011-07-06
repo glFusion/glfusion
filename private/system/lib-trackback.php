@@ -275,8 +275,8 @@ function TRB_saveTrackbackComment ($sid, $type, $url, $title = '', $blog = '', $
     $excerpt = TRB_filterExcerpt ($excerpt);
 
     // MT does that, so follow its example ...
-    if (MBYTE_strlen ($excerpt) > 255) {
-        $excerpt = MBYTE_substr ($excerpt, 0, 252) . '...';
+    if (utf8_strlen ($excerpt) > 255) {
+        $excerpt = utf8_substr ($excerpt, 0, 252) . '...';
     }
 
     $title   = str_replace (array ('$',     '{',      '}'),
@@ -785,7 +785,7 @@ function TRB_sendTrackbackPing ($targeturl, $url, $title, $excerpt, $blog = '')
     fputs ($sock, 'Host: ' . $target['host'] . "\r\n");
     fputs ($sock, 'Content-type: application/x-www-form-urlencoded; charset='
                   . $charset . "\r\n");
-    fputs ($sock, 'Content-length: ' . MBYTE_strlen ($toSend) . "\r\n");
+    fputs ($sock, 'Content-length: ' . utf8_strlen ($toSend) . "\r\n");
     fputs ($sock, 'User-Agent: glFusion/' . GVERSION . "\r\n");
     fputs ($sock, "Connection: close\r\n\r\n");
     fputs ($sock, $toSend);
