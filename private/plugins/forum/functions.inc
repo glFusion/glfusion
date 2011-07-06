@@ -576,20 +576,23 @@ function plugin_getfeedcontent_forum ($feed, &$link, &$update)
         // we don't have a stylesheet in the news feed, so replace our div with the style...
         $comment = str_replace('<div class="quotemain">','<div style="border: 1px dotted #000;border-left: 4px solid #8394B2;color:#465584;  padding: 4px;  margin: 5px auto 8px auto;">',$comment);
 
-        $desc = $preface . $comment;
-
+//        $desc = $preface . $comment;
+        $desc = $comment;
+        $guid = $_CONF['site_url'].'/forum/viewtopic.php?topic='.$A['id'];
         $link = $_CONF['site_url'].'/forum/viewtopic.php?topic='.$A['id'].'#'.$A['id'];
 
         if ($_FF_CONF['use_censor']) {
             $A['subject'] = COM_checkWords($A['subject']);
         }
-        $content[] = array ('title'     => $A['forum_name'] . ' :: ' . $A['subject'],
+        $content[] = array ('author'    => $A['name'],
+                            'title'     => $A['forum_name'] . ' :: ' . $A['subject'],
                             'summary'   => $desc,
                             'text'      => $desc,
                             'link'      => $link,
                             'uid'       => $A['uid'],
                             'date'      => $A['date'],
                             'format'    => $A['postmode'],
+                            'guid'      => $guid,
                            );
         $ids[] = $A['id'];
     }
@@ -626,7 +629,8 @@ function plugin_feedupdatecheck_forum ($feed, $topic, $update_data, $limit)
     }
     $current = implode (',', $ids);
 
-    return ( $current != $update_data ) ? false : true;
+    $rc = ( $current != $update_data ) ? false : true;
+    return $rc;
 }
 
 /* End of RSS Feed Related Functions */

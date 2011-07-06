@@ -95,8 +95,7 @@ function SYND_feedUpdateCheckAll( $frontpage_only, $update_info, $limit, $update
     if ($frontpage_only) {
         $where .= ' AND frontpage = 1';
     }
-
-    $result = DB_query( "SELECT sid FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() $where AND perm_anon > 0 ORDER BY date DESC $limitsql" );
+    $result = DB_query( "SELECT sid FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() $where AND perm_anon > 0 ORDER BY date DESC, sid ASC $limitsql" );
     $nrows = DB_numRows( $result );
 
     $sids = array ();
@@ -118,7 +117,9 @@ function SYND_feedUpdateCheckAll( $frontpage_only, $update_info, $limit, $update
         COM_errorLog ("Update check for all stories: comparing new list ($current) with old list ($update_info)", 1);
     }
 
-    return ( $current != $update_info ) ? false : true;
+    $rc = ( $current != $update_info ) ? false : true;
+
+    return $rc;
 }
 
 /**
@@ -176,8 +177,8 @@ function SYND_feedUpdateCheckTopic( $tid, $update_info, $limit, $updated_topic =
     if ($_SYND_DEBUG) {
         COM_errorLog ("Update check for topic $tid: comparing new list ($current) with old list ($update_info)", 1);
     }
-
-    return ( $current != $update_info ) ? false : true;
+    $rc = ( $current != $update_info ) ? false : true;
+    return $rc;
 }
 
 /**
@@ -359,8 +360,7 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
     if ($frontpage_only) {
         $where .= ' AND frontpage = 1';
     }
-
-    $result = DB_query( "SELECT sid,tid,uid,title,introtext,bodytext,postmode,UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() $where AND perm_anon > 0 ORDER BY date DESC $limitsql" );
+    $result = DB_query( "SELECT sid,tid,uid,title,introtext,bodytext,postmode,UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() $where AND perm_anon > 0 ORDER BY date DESC, sid ASC $limitsql" );
 
     $content = array();
     $sids = array();
@@ -426,8 +426,6 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
 
 /**
 * Update a feed.
-* Re-written by Michael Jervis (mike AT fuckingbrit DOT com)
-* to use the new architecture
 *
 * @param   int   $fid   feed id
 *
@@ -436,148 +434,94 @@ function SYND_updateFeed( $fid )
 {
     global $_CONF, $_TABLES, $_SYND_DEBUG;
 
+    require_once $_CONF['path'].'/lib/feedcreator/feedcreator.class.php';
+
     $result = DB_query( "SELECT * FROM {$_TABLES['syndication']} WHERE fid = '".DB_escapeString($fid)."'");
     $A = DB_fetchArray( $result );
-    if( $A['is_enabled'] == 1 )
-    {
-        // Import the feed handling classes:
-        require_once $_CONF['path_system']
-                     . '/classes/syndication/parserfactory.class.php';
-        require_once $_CONF['path_system']
-                     . '/classes/syndication/feedparserbase.class.php';
 
-        // Load the actual feed handlers:
-        $factory = new FeedParserFactory( $_CONF['path_system']
-                                          . '/classes/syndication/' );
+    if ( $A['is_enabled'] == 1 ) {
         $format = explode( '-', $A['format'] );
-        $feed = $factory->writer( $format[0], $format[1] );
 
-        if( $feed )
-        {
-            $feed->encoding = $A['charset'];
-            $feed->lang = $A['language'];
-
-            if ($A['type'] == 'article') {
-                if ($A['topic'] == '::all') {
-                    $content = SYND_getFeedContentAll(false, $A['limits'],
-                                    $link, $data, $A['content_length'],
-                                    $format[0], $format[1], $fid);
-                } elseif ($A['topic'] == '::frontpage') {
-                    $content = SYND_getFeedContentAll(true, $A['limits'],
-                                    $link, $data, $A['content_length'],
-                                    $format[0], $format[1], $fid);
-                } else { // feed for a single topic only
-                    $content = SYND_getFeedContentPerTopic($A['topic'],
-                                    $A['limits'], $link, $data,
-                                    $A['content_length'], $format[0],
-                                    $format[1], $fid);
-                }
-            } else {
-                $content = PLG_getFeedContent($A['type'], $fid, $link, $data, $format[0], $format[1]);
-
-                // can't randomly change the api to send a max length, so
-                // fix it here:
-                if ($A['content_length'] != 1) {
-                    $count = count($content);
-                    for ($i = 0; $i < $count; $i++ ) {
-                        $content[$i]['summary'] = COM_truncateHTML(
-                                    $content[$i]['text'], $A['content_length'],'...');
-                    }
-                }
-            }
-            if (empty($link)) {
-                $link = $_CONF['site_url'];
-            }
-
-            $feed->title = $A['title'];
-            $feed->description = $A['description'];
-            if( empty( $A['feedlogo'] )) {
-                $feed->feedlogo = '';
-            } else {
-                $feed->feedlogo = $_CONF['site_url'] . $A['feedlogo'];
-            }
-            $feed->sitelink = $link;
-            $feed->copyright = 'Copyright ' . strftime( '%Y' ) . ' '
-                             . $_CONF['site_name'];
-            $feed->sitecontact = $_CONF['site_mail'];
-            $feed->system = 'glFusion';
-
-            /* Gather any other stuff */
-            $feed->namespaces = PLG_getFeedNSExtensions($A['type'], $format[0], $format[1], $A['topic'], $fid);
-            /* If the feed is RSS, and trackback is enabled */
-            if( $_CONF['trackback_enabled'] && ($format[0] == 'RSS') ) {
-                /* Check to see if an article has trackbacks enabled, and if
-                 * at least one does, then include the trackback namespace:
-                 */
-                $trackbackenabled = false;
-                if ( is_array($content) ) {
-                    foreach($content as $item) {
-                        if( array_key_exists('extensions', $item) &&
-                            array_key_exists('trackbacktag', $item['extensions'])
-                            )
-                        {
-                            // Found at least one article, with a trackbacktag
-                            // in it's extensions tag.
-                            $trackbackenabled = true;
-                            break;
-                        }
-                    }
-                }
-                if ( $trackbackenabled ) {
-                    $feed->namespaces[] = 'xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"';
-                }
-            }
-
-            /* Inject the namespace for Atom into RSS feeds. Illogical?
-             * Well apparantly not:
-             * http://feedvalidator.org/docs/warning/MissingAtomSelfLink.html
-             */
-            if( $format[0] == 'RSS' )
-            {
-                $feed->namespaces[] = 'xmlns:atom="http://www.w3.org/2005/Atom"';
-            }
-
-            if( !empty( $A['filename'] ))
-            {
-                $filename = $A['filename'];
-            }
-            else
-            {
-                $pos = strrpos( $_CONF['rdf_file'], '/' );
-                $filename = substr( $_CONF['rdf_file'], $pos + 1 );
-            }
-            $feed->url = SYND_getFeedUrl( $filename );
-
-            $feed->extensions = PLG_getFeedExtensionTags($A['type'], $format[0], $format[1], $A['topic'], $fid, $feed);
-
-            /* Inject the self reference for Atom into RSS feeds. Illogical?
-             * Well apparantly not:
-             * http://feedvalidator.org/docs/warning/MissingAtomSelfLink.html
-             */
-            if( $format[0] == 'RSS' )
-            {
-                $feed->extensions[] = '<atom:link href="' . $feed->url .'" rel="self" type="application/rss+xml" />';
-            }
-            $feed->articles = $content;
-
-            $feed->createFeed( SYND_getFeedPath( $filename ));
+        $rss = new UniversalFeedCreator();
+        if ( $A['content_length'] > 1 ) {
+            $rss->descriptionTruncSize = $A['content_length'];
         }
-        else
-        {
-            COM_errorLog( "Unable to get a feed writer for {$format[0]} version {$format[1]}.", 1);
+        $rss->descriptionHtmlSyndicated = false;
+        $rss->encoding = $A['charset'];
+        $rss->language = $A['language'];
+        $rss->title = $A['title'];
+        $rss->description = $A['description'];
+
+        $imgurl = '';
+        if ($A['feedlogo'] != '' ) {
+        	$image = new FeedImage();
+        	$image->title = $A['title'];
+        	$image->url = $_CONF['site_url'] . $A['feedlogo'];
+    	    $image->link = $_CONF['site_url'];
+        	$rss->image = $image;
+        }
+        $rss->link = $_CONF['site_url'];
+        if ( !empty( $A['filename'] )) {
+            $filename = $A['filename'];
+        } else {
+            $pos = strrpos( $_CONF['rdf_file'], '/' );
+            $filename = substr( $_CONF['rdf_file'], $pos + 1 );
+        }
+        $rss->syndicationURL = SYND_getFeedUrl( $filename );
+        $rss->copyright = 'Copyright ' . strftime( '%Y' ) . ' '.$_CONF['site_name'];
+
+        if ($A['type'] == 'article') {
+            if ($A['topic'] == '::all') {
+                $content = SYND_getFeedContentAll(false, $A['limits'],
+                                $link, $data, $A['content_length'],
+                                $format[0], $format[1], $fid);
+            } elseif ($A['topic'] == '::frontpage') {
+                $content = SYND_getFeedContentAll(true, $A['limits'],
+                                $link, $data, $A['content_length'],
+                                $format[0], $format[1], $fid);
+            } else { // feed for a single topic only
+                $content = SYND_getFeedContentPerTopic($A['topic'],
+                                $A['limits'], $link, $data,
+                                $A['content_length'], $format[0],
+                                $format[1], $fid);
+            }
+        } else {
+            $content = PLG_getFeedContent($A['type'], $fid, $link, $data, $format[0], $format[1]);
         }
 
-        if( empty( $data ))
-        {
+        if ( is_array($content) ) {
+            foreach ( $content AS $feedItem ) {
+                $item = new FeedItem();
+
+                foreach($feedItem as $var => $value) {
+                    if ( $var == 'date') {
+                        $dt = new Date($value,$_CONF['timezone']);
+                        $item->date = $dt->toISO8601(true);
+                    } else if ( $var == 'summary' ) {
+                        $item->description = $value;
+                    } else if ( $var == 'link' ) {
+                        $item->guid = $value;
+                        $item->$var = $value;
+                    } else {
+                        $item->$var = $value;
+                    }
+                }
+                $rss->addItem($item);
+            }
+        }
+        if (empty($link)) {
+            $link = $_CONF['site_url'];
+        }
+
+        $rss->editor = $_CONF['site_mail'];
+        $rc = $rss->saveFeed($format[0].'-'.$format[1], SYND_getFeedPath( $filename ) ,0);
+
+        if( empty( $data )) {
             $data = 'NULL';
-        }
-        else
-        {
+        } else {
             $data = "'" . $data . "'";
         }
-
-        if ($_SYND_DEBUG)
-        {
+        if ($_SYND_DEBUG) {
             COM_errorLog ("update_info for feed $fid is $data", 1);
         }
 

@@ -62,7 +62,7 @@ function MG_buildAlbumRSS( $aid ) {
     $imgurl = '';
 
 	$image = new FeedImage();
-	$image->title = $MG_albums[$aid]->title;
+	$image->title = $_CONF['site_name'] . '::' . $MG_albums[$aid]->title;
     $filename = $MG_albums[$aid]->findCover();
     if ( substr($filename,0,3) == 'tn_') {
         foreach ($_MG_CONF['validExtensions'] as $ext ) {
@@ -115,7 +115,8 @@ function MG_buildAlbumRSS( $aid ) {
  	}
 
     $rss->link = $_MG_CONF['site_url'];
-    $rss->syndicationURL = $feedpath . '/' . $fname;
+    $feedurl = SYND_getFeedUrl ();
+    $rss->syndicationURL = $feedurl.$fname;
 
     MG_processAlbumFeedItems( $rss, $aid );
     if ( !empty($MG_albums[$aid]->children) && $MG_albums[$aid]->rssChildren ) {
@@ -144,7 +145,7 @@ function MG_buildAlbumRSS( $aid ) {
  */
 
 function MG_processAlbumFeedItems( &$rss, $aid ) {
-    global $MG_albums, $_MG_CONF, $_CONF, $_TABLES;
+    global $MG_albums, $_MG_CONF, $_CONF, $_TABLES, $LANG_MG00;
 
     $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
             " ON ma.media_id=m.media_id WHERE ma.album_id=" . (int) $aid . ' ORDER BY m.media_upload_time DESC';
@@ -155,8 +156,13 @@ function MG_processAlbumFeedItems( &$rss, $aid ) {
     if ( $nRows > 0 ) {
         while ( $row = DB_fetchArray($result)) {
             $item = new FeedItem();
-            $item->title = $row['media_title'];
-            $item->link =  $_MG_CONF['site_url'] . '/media.php?s=' . $row['media_id'];
+            if ( $row['media_title'] != '' ) {
+                $item->title = $row['media_title'];
+            } else {
+                $item->title = $LANG_MG00['no_title'];
+            }
+            $item->link = $_MG_CONF['site_url'] . '/media.php?s=' . $row['media_id'];
+            $item->guid = $_MG_CONF['site_url'] . '/media.php?s=' . $row['media_id'];
 
 		    if ( $MG_albums[$aid]->podcast ) {
 				// optional -- applies only if this is a podcast
@@ -319,7 +325,8 @@ function MG_parseAlbumsRSS( &$rss, $aid ) {
             if ( $_MG_CONF['rss_anonymous_only'] == 1 && $MG_albums[$aid]->perm_anon > 0 ) {
                 $item = new FeedItem();
                 $item->title = $MG_albums[$aid]->title;
-                $item->link =  $_MG_CONF['site_url'] . '/album.php?aid=' . $aid;
+                $item->link = $_MG_CONF['site_url'] . '/album.php?aid=' . $aid;
+                $item->guid = $_MG_CONF['site_url'] . '/album.php?aid=' . $aid;
                 $description = '';
                 $childCount = $MG_albums[$aid]->getChildcount();
                 $description = 'Album contains ' . $MG_albums[$aid]->media_count . ' item and ' . $childCount . ' sub-albums.<br /><br />';
@@ -380,10 +387,9 @@ function MG_buildFullRSS( ) {
     $rss->descriptionHtmlSyndicated = true;
     $rss->encoding = strtoupper ($_CONF['default_charset']);
     $rss->link = $_CONF['site_url'];
-    $rss->syndicationURL = $_CONF['site_url'] . $_SERVER["PHP_SELF"];
+    $feedurl = SYND_getFeedUrl ();
+    $rss->syndicationURL = $feedurl. $_MG_CONF['rss_feed_name'] . '.rss';
     MG_parseAlbumsRSS($rss, 0);
-    // valid format strings are: RSS0.91, RSS1.0, RSS2.0, PIE0.1 (deprecated),
-    // MBOX, OPML, ATOM, ATOM0.3, HTML, JS
     $rss->saveFeed($_MG_CONF['rss_feed_type'], $feedpath . "/" . $_MG_CONF['rss_feed_name'] . '.rss',0);
     @chmod($feedpath . '/' . $_MG_CONF['rss_feed_name'] . '.rss', 0664);
 

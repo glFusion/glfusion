@@ -287,6 +287,8 @@ require_once $_CONF['path_system'].'lib-plugins.php';
 * Multibyte functions
 *
 */
+require_once $_CONF['path'].'lib/utf8/utf8.php';
+// backward compatibility
 require_once $_CONF['path_system'].'lib-mbyte.php';
 
 /**
@@ -604,6 +606,7 @@ if ( !COM_isAnonUser() ) {
 $_RIGHTS = explode( ',', SEC_getUserPermissions() );
 
 require_once $_CONF['path_system'].'lib-menu.php';
+mb_initMenu();
 
 if ( isset( $_GET['topic'] )) {
     $topic = COM_applyFilter( $_GET['topic'] );
@@ -1328,33 +1331,6 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_var('st_hmenu',mb_getMenu('navigation',"gl_moomenu","gl_moomenu",'',"parent"));
     $theme->set_var('st_footer_menu',mb_getMenu('footer','st-fmenu','','','','st-f-last'));
     $theme->set_var('st_header_menu',mb_getMenu('header','st-fmenu','','','','st-f-last'));
-
-    // Get plugin menu options
-    $plugin_menu = PLG_getMenuItems();
-
-    if ( $_COM_VERBOSE ) {
-        COM_errorLog( 'num plugin menu items in header = ' . count( $plugin_menu ), 1 );
-    }
-
-    // Now add nested template for menu items
-    COM_renderMenu( $theme, $plugin_menu );
-
-    if ( count( $plugin_menu ) == 0 ) {
-        $theme->parse( 'plg_menu_elements', 'menuitem_none', true );
-    } else {
-        $count_plugin_menu = count( $plugin_menu );
-        for( $i = 1; $i <= $count_plugin_menu; $i++ ) {
-            $theme->set_var( 'menuitem_url', current( $plugin_menu ));
-            $theme->set_var( 'menuitem_text', key( $plugin_menu ));
-
-            if ( $i == $count_plugin_menu ) {
-                $theme->parse( 'plg_menu_elements', 'menuitem_last', true );
-            } else {
-                $theme->parse( 'plg_menu_elements', 'menuitem', true );
-            }
-            next( $plugin_menu );
-        }
-    }
 
     $lblocks = '';
 
@@ -2833,23 +2809,23 @@ function COM_checkHTML( $str, $permissions = 'story.edit' )
 
     // handle [code] ... [/code]
     do {
-        $start_pos = MBYTE_strpos( MBYTE_strtolower( $str ), '[code]' );
+        $start_pos = utf8_strpos( utf8_strtolower( $str ), '[code]' );
         if ( $start_pos !== false ) {
-            $end_pos = MBYTE_strpos( MBYTE_strtolower( $str ), '[/code]' );
+            $end_pos = utf8_strpos( utf8_strtolower( $str ), '[/code]' );
             if ( $end_pos !== false ) {
-                $encoded = COM_handleCode( MBYTE_substr( $str, $start_pos + 6,
+                $encoded = COM_handleCode( utf8_substr( $str, $start_pos + 6,
                         $end_pos - ( $start_pos + 6 )));
                 $encoded = '<pre><code>' . $encoded . '</code></pre>';
-                $str = MBYTE_substr( $str, 0, $start_pos ) . $encoded
-                     . MBYTE_substr( $str, $end_pos + 7 );
+                $str = utf8_substr( $str, 0, $start_pos ) . $encoded
+                     . utf8_substr( $str, $end_pos + 7 );
             } else { // missing [/code]
                 // Treat the rest of the text as code (so as not to lose any
                 // special characters). However, the calling entity should
                 // better be checking for missing [/code] before calling this
                 // function ...
-                $encoded = COM_handleCode( MBYTE_substr( $str, $start_pos + 6 ));
+                $encoded = COM_handleCode( utf8_substr( $str, $start_pos + 6 ));
                 $encoded = '<pre><code>' . $encoded . '</code></pre>';
-                $str = MBYTE_substr( $str, 0, $start_pos ) . $encoded;
+                $str = utf8_substr( $str, 0, $start_pos ) . $encoded;
             }
         }
     }
@@ -2857,27 +2833,27 @@ function COM_checkHTML( $str, $permissions = 'story.edit' )
 
     // handle [raw] ... [/raw]
     do {
-        $start_pos = MBYTE_strpos( MBYTE_strtolower( $str ), '[raw]' );
+        $start_pos = utf8_strpos( utf8_strtolower( $str ), '[raw]' );
         if ( $start_pos !== false ) {
-            $end_pos = MBYTE_strpos( MBYTE_strtolower( $str ), '[/raw]' );
+            $end_pos = utf8_strpos( utf8_strtolower( $str ), '[/raw]' );
             if ( $end_pos !== false ) {
-                $encoded = COM_handleCode( MBYTE_substr( $str, $start_pos + 5,
+                $encoded = COM_handleCode( utf8_substr( $str, $start_pos + 5,
                         $end_pos - ( $start_pos + 5 )));
                 // [raw2] to avoid infinite loop. Not HTML comment as we strip
                 // them later.
                 $encoded = '[raw2]' . $encoded . '[/raw2]';
-                $str = MBYTE_substr( $str, 0, $start_pos ) . $encoded
-                     . MBYTE_substr( $str, $end_pos + 6 );
+                $str = utf8_substr( $str, 0, $start_pos ) . $encoded
+                     . utf8_substr( $str, $end_pos + 6 );
             } else { // missing [/raw]
                 // Treat the rest of the text as raw (so as not to lose any
                 // special characters). However, the calling entity should
                 // better be checking for missing [/raw] before calling this
                 // function ...
-                $encoded = COM_handleCode( MBYTE_substr( $str, $start_pos + 5 ));
+                $encoded = COM_handleCode( utf8_substr( $str, $start_pos + 5 ));
                 // [raw2] to avoid infinite loop. Not HTML comment as we strip
                 // them later.
                 $encoded = '[raw2]' . $encoded . '[/raw2]';
-                $str = MBYTE_substr( $str, 0, $start_pos ) . $encoded;
+                $str = utf8_substr( $str, 0, $start_pos ) . $encoded;
             }
         }
     }
@@ -3673,28 +3649,19 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
 {
     global $_CONF, $_TABLES, $LANG21;
 
-    // Import the feed handling classes:
-    require_once $_CONF['path_system']
-                 . '/classes/syndication/parserfactory.class.php';
-    require_once $_CONF['path_system']
-                 . '/classes/syndication/feedparserbase.class.php';
+    require_once $_CONF['path'].'/lib/simplepie/simplepie.php';
 
     $result = DB_query("SELECT rdf_last_modified, rdf_etag FROM {$_TABLES['blocks']} WHERE bid = ".(int)$bid);
     list($last_modified, $etag) = DB_fetchArray($result);
 
     // Load the actual feed handlers:
-    $factory = new FeedParserFactory($_CONF['path_system']
-                                     . '/classes/syndication/');
-    $factory->userAgent = 'glFusion/' . GVERSION;
-    if (!empty($last_modified) && !empty($etag)) {
-        $factory->lastModified = $last_modified;
-        $factory->eTag = $etag;
-    }
-
-    // Aquire a reader:
-    $feed = $factory->reader($rdfurl, $_CONF['default_charset']);
-
-    if ($feed) {
+    $feed = new SimplePie();
+    $feed->set_useragent('glFusion/' . GVERSION.' '.SIMPLEPIE_USERAGENT);
+    $feed->set_feed_url($rdfurl);
+    $feed->set_cache_location($_CONF['path'].'/data/layout_cache');
+    $rc = $feed->init();
+    if ( $rc == true ) {
+        $feed->handle_content_type();
         /* We have located a reader, and populated it with the information from
          * the syndication file. Now we will sort out our display, and update
          * the block.
@@ -3702,45 +3669,38 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
         if ($maxheadlines == 0) {
             if (!empty($_CONF['syndication_max_headlines'])) {
                 $maxheadlines = $_CONF['syndication_max_headlines'];
-            } else {
-                $maxheadlines = count($feed->articles);
             }
         }
 
-        $update = date('Y-m-d H:i:s');
-        $last_modified = '';
-        if (!empty($factory->lastModified)) {
-            $last_modified = DB_escapeString($factory->lastModified);
+        if ( $maxheadlines == 0 ) {
+            $number_of_items = $feed->get_item_quantity();
+        } else{
+            $number_of_items = $feed->get_item_quantity($maxheadlines);
         }
         $etag = '';
-        if (!empty($factory->eTag)) {
-            $etag = DB_escapeString($factory->eTag);
-        }
+        $update = date('Y-m-d H:i:s');
+        $last_modified = $update;
+        $last_modified = DB_escapeString($last_modified);
 
-        if (empty($last_modified) || empty($etag)) {
+        if (empty($last_modified)) {
             DB_query("UPDATE {$_TABLES['blocks']} SET rdfupdated = '$update', rdf_last_modified = NULL, rdf_etag = NULL WHERE bid = ".(int) $bid);
         } else {
             DB_query("UPDATE {$_TABLES['blocks']} SET rdfupdated = '$update', rdf_last_modified = '$last_modified', rdf_etag = '$etag' WHERE bid = ".(int) $bid);
         }
 
-        $charset = COM_getCharset();
-
-        // format articles for display
-        $readmax = min($maxheadlines, count($feed->articles));
-        for ($i = 0; $i < $readmax; $i++) {
-            if (empty($feed->articles[$i]['title'])) {
-                $feed->articles[$i]['title'] = $LANG21[61];
+        for ( $i = 0; $i < $number_of_items; $i++ ) {
+            $item = $feed->get_item($i);
+            $title = $item->get_title();
+            if (empty($title)) {
+                $title = $LANG21[61];
             }
+            $link      = $item->get_permalink();
+            $enclosure = $item->get_enclosure();
 
-            if ($charset == 'utf-8') {
-                $title = $feed->articles[$i]['title'];
-            } else {
-                $title = utf8_decode($feed->articles[$i]['title']);
-            }
-            if ($feed->articles[$i]['link'] != '') {
-                $content = COM_createLink($title, $feed->articles[$i]['link'], $attr = array('target' => '_blank'));
-            } elseif ($feed->articles[$i]['enclosureurl'] != '') {
-                $content = COM_createLink($title, $feed->articles[$i]['enclosureurl'], $attr = array('target' => '_blank'));
+            if ($link != '') {
+                $content = COM_createLink($title, $link, $attr = array('target' => '_blank'));
+            } elseif ($enclosure != '') {
+                $content = COM_createLink($title, $enclosure, $attr = array('target' => '_blank'));
             } else {
                 $content = $title;
             }
@@ -3758,13 +3718,10 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
         // Standard theme based function to put it in the block
         $result = DB_change($_TABLES['blocks'], 'content',
                             DB_escapeString($content), 'bid', (int) $bid);
-    } else if ($factory->errorStatus !== false) {
-        // failed to aquire info, 0 out the block and log an error
-        COM_errorLog("Unable to aquire feed reader for $rdfurl", 1);
-        COM_errorLog($factory->errorStatus[0] . ' ' .
-                     $factory->errorStatus[1] . ' ' .
-                     $factory->errorStatus[2]);
-        $content = DB_escapeString($LANG21[4]);
+    } else {
+        $err = $feed->error();
+        COM_errorLog($err);
+        $content = DB_escapeString($err);
         DB_query("UPDATE {$_TABLES['blocks']} SET content = '$content', rdf_last_modified = NULL, rdf_etag = NULL WHERE bid = ".(int) $bid);
     }
 }
@@ -5390,11 +5347,11 @@ function COM_sanitizeUrl( $url, $allowed_protocols = array('http','https','ftp')
 
     $url = strip_tags( $url );
     if ( !empty( $url )) {
-        $pos = MBYTE_strpos( $url, ':' );
+        $pos = utf8_strpos( $url, ':' );
         if ( $pos === false ) {
             $url = $default_protocol . '//' . $url;
         } else {
-            $protocol = MBYTE_substr( $url, 0, $pos + 1 );
+            $protocol = utf8_substr( $url, 0, $pos + 1 );
             $found_it = false;
             foreach( $allowed_protocols as $allowed ) {
                 if ( substr( $allowed, -1 ) != ':' ) {
@@ -5406,7 +5363,7 @@ function COM_sanitizeUrl( $url, $allowed_protocols = array('http','https','ftp')
                 }
             }
             if ( !$found_it ) {
-                $url = $default_protocol . MBYTE_substr( $url, $pos + 1 );
+                $url = $default_protocol . utf8_substr( $url, $pos + 1 );
             }
         }
     }
@@ -6126,17 +6083,17 @@ function COM_switchLocaleSettings()
 function COM_truncateHTML ( $htmltext, $maxlen, $filler = '', $endchars = 0 )
 {
 
-    $newlen = $maxlen - MBYTE_strlen($filler);
-    $len = MBYTE_strlen($htmltext);
+    $newlen = $maxlen - utf8_strlen($filler);
+    $len = utf8_strlen($htmltext);
     if ($len > $maxlen) {
-        $htmltext = MBYTE_substr($htmltext, 0, $newlen - $endchars);
+        $htmltext = utf8_substr($htmltext, 0, $newlen - $endchars);
 
         // Strip any mangled tags off the end
-        if (MBYTE_strrpos($htmltext, '<' ) > MBYTE_strrpos($htmltext, '>')) {
-            $htmltext = MBYTE_substr($htmltext, 0, MBYTE_strrpos($htmltext, '<'));
+        if (utf8_strrpos($htmltext, '<' ) > utf8_strrpos($htmltext, '>')) {
+            $htmltext = utf8_substr($htmltext, 0, utf8_strrpos($htmltext, '<'));
         }
 
-        $htmltext = $htmltext . $filler . MBYTE_substr($htmltext, $len - $endchars, $endchars);
+        $htmltext = $htmltext . $filler . utf8_substr($htmltext, $len - $endchars, $endchars);
 
         // put all opened tags into an array
         preg_match_all ( "#<([a-z]+)( .*)?(?!/)>#iU", $htmltext, $result );
@@ -6191,11 +6148,11 @@ function COM_truncateHTML ( $htmltext, $maxlen, $filler = '', $endchars = 0 )
 */
 function COM_truncate( $text, $maxlen, $filler = '', $tip = false )
 {
-    $newlen = $maxlen - MBYTE_strlen( $filler );
-    $len = MBYTE_strlen( $text );
+    $newlen = $maxlen - utf8_strlen( $filler );
+    $len = utf8_strlen( $text );
     if ( $len > $maxlen ) {
         $retval = ($tip) ? '<span title="' . $text . '">' : '';
-        $retval .= MBYTE_substr( $text, 0, $newlen ) . $filler;
+        $retval .= utf8_substr( $text, 0, $newlen ) . $filler;
         $retval .= ($tip) ? '</span>' : '';
         return $retval;
     } else {
@@ -6750,6 +6707,52 @@ function _commentsort($a, $b)
         return 0;
     }
     return ($b['lastdate'] < $a['lastdate']) ? -1 : 1;
+}
+
+
+function CTL_clearCacheDirectories($path, $needle = '')
+{
+    if ( $path[strlen($path)-1] != '/' ) {
+        $path .= '/';
+    }
+    if ($dir = @opendir($path)) {
+        while ($entry = readdir($dir)) {
+            if ($entry == '.' || $entry == '..' || is_link($entry) || $entry == '.svn' || $entry == 'index.html') {
+                continue;
+            } elseif (is_dir($path . $entry)) {
+                CTL_clearCacheDirectories($path . $entry, $needle);
+                @rmdir($path . $entry);
+            } elseif (empty($needle) || strpos($entry, $needle) !== false) {
+                @unlink($path . $entry);
+            }
+        }
+        @closedir($dir);
+    }
+}
+
+
+function CTL_clearCache($plugin='')
+{
+    global $TEMPLATE_OPTIONS, $_CONF, $_SYSTEM;
+
+    if (!empty($plugin)) {
+        $plugin = '__' . $plugin . '__';
+    }
+
+    CTL_clearCacheDirectories($_CONF['path_data'] . 'layout_cache/', $plugin);
+
+    if ( empty($plugin) ) {
+        if ( $_SYSTEM['use_direct_style_js'] ) {
+            foreach (glob($_CONF['path_html'].$_CONF['css_cache_filename']."*.*") as $filename) {
+                @unlink($filename);
+            }
+            foreach (glob($_CONF['path_html'].$_CONF['js_cache_filename']."*.*") as $filename) {
+                @unlink($filename);
+            }
+        }
+        css_out();
+        js_out();
+    }
 }
 
 

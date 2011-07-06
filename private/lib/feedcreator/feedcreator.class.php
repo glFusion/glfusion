@@ -1,4 +1,45 @@
 <?php
+// +--------------------------------------------------------------------------+
+// | FeedCreator class (unofficial)                                           |
+// +--------------------------------------------------------------------------+
+// | feedcreator.class.php                                                    |
+// |                                                                          |
+// | glFusion syndication library.                                            |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | Based on the original Feed Creator Class                                 |
+// | Copyright (C) 2003-2004 by the following authors:                        |
+// |                                                                          |
+// | originally (c) Kai Blankenhorn - www.bitfolge.de - kaib@bitfolge.de      |
+// | v1.3 work by Scott Reynen (scott@randomchaos.com) and Kai Blankenhorn    |
+// | v1.5 OPML support by Dirk Clemens                                        |
+// | v1.7.3 podcast support by Steve Blinch                                   |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
+
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own!');
+}
+
+
 /***************************************************************************
 
 FeedCreator class v1.7.3 (unofficial)
@@ -164,15 +205,10 @@ echo $rss->saveFeed("RSS1.0", "news/feed.xml");
 // your local timezone, set to "" to disable or for GMT
 define("TIME_ZONE","+01:00");
 
-
-
-
 /**
  * Version string.
  **/
-define("FEEDCREATOR_VERSION", "FeedCreator 1.7.3");
-
-
+define("FEEDCREATOR_VERSION", "FeedCreator 1.7.4");
 
 /**
  * A FeedItem is a part of a FeedCreator feed.
@@ -189,7 +225,7 @@ class FeedItem extends HtmlDescribable {
 	/**
 	 * Optional attributes of an item.
 	 */
-	var $author, $authorEmail, $image, $category, $comments, $guid, $source, $creator;
+	var $author, $authorEmail, $image, $category, $comments, $guid, $source, $creator,$dtstart,$dtend,$location,$categories;
 
 	/**
 	 * Publishing date of an item. May be in one of the following formats:
@@ -227,7 +263,6 @@ class FeedItem extends HtmlDescribable {
 	// on hold
 	// var $source;
 }
-
 
 
 /**
@@ -356,21 +391,25 @@ class UniversalFeedCreator extends FeedCreator {
 
 			case "2.0":
 				// fall through
-			case "RSS2.0":
+			case "RSS-2.0":
 				$this->_feed = new RSSCreator20();
 				break;
 
 			case "1.0":
 				// fall through
-			case "RSS1.0":
+			case "RSS-1.0":
 				$this->_feed = new RSSCreator10();
 				break;
 
 			case "0.91":
 				// fall through
-			case "RSS0.91":
+			case "RSS-0.91":
 				$this->_feed = new RSSCreator091();
 				break;
+
+			case "ICS-1.0" :
+			    $this->_feed = new ICALCreator();
+			    break;
 
 			case "PIE0.1":
 				$this->_feed = new PIECreator01();
@@ -384,10 +423,10 @@ class UniversalFeedCreator extends FeedCreator {
 				$this->_feed = new OPMLCreator();
 				break;
 
-			case "ATOM":
+			case "ATOM-1.0":
 				// fall through: always the latest ATOM version
 
-			case "ATOM0.3":
+			case "ATOM-0.3":
 				$this->_feed = new AtomCreator03();
 				break;
 
@@ -424,7 +463,7 @@ class UniversalFeedCreator extends FeedCreator {
 	 *			"PIE0.1", "mbox", "RSS0.91", "RSS1.0", "RSS2.0", "OPML", "ATOM0.3", "HTML", "JS"
 	 * @return    string    the contents of the feed.
 	 */
-	function createFeed($format = "RSS0.91") {
+	function createFeed($format = "RSS-0.91") {
 		$this->_setFormat($format);
 		return $this->_feed->createFeed();
 	}
@@ -441,7 +480,7 @@ class UniversalFeedCreator extends FeedCreator {
 	 * @param	string	filename	optional	the filename where a recent version of the feed is saved. If not specified, the filename is $_SERVER["PHP_SELF"] with the extension changed to .xml (see _generateFilename()).
 	 * @param	boolean	displayContents	optional	send the content of the file or not. If true, the file will be sent in the body of the response.
 	 */
-	function saveFeed($format="RSS0.91", $filename="", $displayContents=true) {
+	function saveFeed($format="RSS-0.91", $filename="", $displayContents=true) {
 		$this->_setFormat($format);
 		$this->_feed->saveFeed($filename, $displayContents);
 	}
@@ -459,7 +498,7 @@ class UniversalFeedCreator extends FeedCreator {
     * @param filename   string   optional the filename where a recent version of the feed is saved. If not specified, the filename is $_SERVER["PHP_SELF"] with the extension changed to .xml (see _generateFilename()).
     * @param timeout int      optional the timeout in seconds before a cached version is refreshed (defaults to 3600 = 1 hour)
     */
-   function useCached($format="RSS0.91", $filename="", $timeout=3600) {
+   function useCached($format="RSS-0.91", $filename="", $timeout=3600) {
       $this->_setFormat($format);
       $this->_feed->useCached($filename, $timeout);
    }
@@ -547,8 +586,9 @@ class FeedCreator extends HtmlDescribable {
 	 * Specifies the generator of the feed.
 	 * @since 1.7.3
 	 **/
-	var $generator = FEEDCREATOR_VERSION;
+	var $generator = 'glFusion v1.3.0';
 
+    var $cssStyleSheet = '';
 
 	/**
 	 * Adds an FeedItem to the feed.
@@ -940,6 +980,9 @@ class RSSCreator091 extends FeedCreator {
 		$this->_setRSSVersion("0.91");
 		$this->contentType = "application/rss+xml";
 		$this->namespaces = array();
+
+        $this->addNameSpace('xmlns:atom','http://www.w3.org/2005/Atom');
+        $this->addNameSpace('xmlns:dc','http://purl.org/dc/elements/1.1/');
 	}
 
 	/**
@@ -980,6 +1023,7 @@ class RSSCreator091 extends FeedCreator {
 		$this->descriptionTruncSize = 500;
 		$feed.= "        <description>".$this->getDescription()."</description>\n";
 		$feed.= "        <link>".$this->link."</link>\n";
+        $feed.= "        <atom:link href=\"".$this->syndicationURL."\" rel=\"self\" type=\"application/rss+xml\" />\n";
 		$now = new FeedDate();
 		$feed.= "        <lastBuildDate>".htmlspecialchars($now->rfc822())."</lastBuildDate>\n";
 		$feed.= "        <generator>".$this->generator."</generator>\n";
@@ -1044,7 +1088,8 @@ class RSSCreator091 extends FeedCreator {
 			$feed.= "            <description>".$this->items[$i]->getDescription()."</description>\n";
 
 			if ($this->items[$i]->author!="") {
-				$feed.= "            <author>".htmlspecialchars($this->items[$i]->author)."</author>\n";
+				$feed.= "        <dc:creator>".htmlspecialchars($this->items[$i]->author)."</dc:creator>\n";
+//				$feed.= "            <author>".htmlspecialchars($this->items[$i]->author)."</author>\n";
 			}
 			/*
 			// on hold
@@ -1087,6 +1132,8 @@ class RSSCreator20 extends RSSCreator091 {
 
     function RSSCreator20() {
         parent::_setRSSVersion("2.0");
+        parent::addNameSpace('xmlns:atom','http://www.w3.org/2005/Atom');
+        parent::addNameSpace('xmlns:dc','http://purl.org/dc/elements/1.1/');
     }
 
 }
@@ -1359,6 +1406,53 @@ class OPMLCreator extends FeedCreator {
 	}
 }
 
+
+/**
+ * ICAL is a FeedCreator that implements the ical specification,
+ * as in http://?????.
+ *
+ * @see FeedCreator#additionalElements
+ * @since 1.6
+ * @author Mark R. Evans <mark AT glfusion DOT org>
+ */
+class ICALcreator extends FeedCreator {
+
+	function ICALcreator() {
+//		$this->contentType = "application/atom+xml";
+//		$this->encoding = "utf-8";
+	}
+
+	function createFeed() {
+        $feed  = "BEGIN:VCALENDAR\n";
+        $feed .= "PRODID:glFusion/".GVERSION." Calendar\n";
+        $feed .= "VERSION:1.0\n";
+
+		for ($i=0;$i<count($this->items);$i++) {
+            $feed  .= "BEGIN:VEVENT\n";
+            if ( isset($this->items[$i]->title) ) {
+                $feed .= "SUMMARY:".htmlspecialchars( $this->items[$i]->title )."\n";
+            }
+            if ( isset($this->items[$i]->summary) ) {
+                $feed .= "DESCRIPTION:".htmlspecialchars($this->items[$i]->summary)."\n";
+            }
+            if ( isset($this->items[$i]->dtstart) ) {
+                $feed .= "DTSTART:" . htmlspecialchars( $this->items[$i]->dtstart ) . "\n";
+            }
+            if ( isset($this->items[$i]->dtend) ) {
+                $feed .= "DTEND:" . htmlspecialchars($this->items[$i]->dtend ) . "\n";
+            }
+            if ( isset($this->items[$i]->location) ) {
+                $feed .= "LOCATION:" . htmlspecialchars($this->items[$i]->location ) . "\n";
+            }
+            if ( isset($this->items[$i]->categories) ) {
+                $feed .= "CATEGORIES:" . htmlspecialchars($this->items[$i]->categories ) . "\n";
+            }
+            $feed .= "END:VEVENT\n";
+    	}
+        $feed .= "END:VCALENDAR\n";
+		return $feed;
+	}
+}
 
 
 /**

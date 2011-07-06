@@ -66,9 +66,9 @@ function FEED_toggleStatus($fid_arr, $feedarray)
         foreach ($feedarray AS $feed => $junk ) {
             $feed = intval($feed);
             if ( isset($fid_arr[$feed]) ) {
-                DB_query ("UPDATE {$_TABLES['syndication']} SET is_enabled = '1' WHERE fid = $feed");
+                DB_query ("UPDATE {$_TABLES['syndication']} SET is_enabled = '1' WHERE fid = ".(int) $feed);
             } else {
-                DB_query ("UPDATE {$_TABLES['syndication']} SET is_enabled = '0' WHERE fid = $feed");
+                DB_query ("UPDATE {$_TABLES['syndication']} SET is_enabled = '0' WHERE fid = ".(int) $feed);
             }
         }
         CACHE_remove_instance('story');
@@ -86,12 +86,22 @@ function FEED_findFormats()
 {
     global $_CONF;
 
-    // Import the feed handling classes:
-    require_once $_CONF['path_system']
-                 . '/classes/syndication/parserfactory.class.php';
+    $formats = array();
+/*
+    $formats[] = array('name'=>'RSS','version'=>'0.9x');
+    $formats[] = array('name'=>'RSS','version'=>'2.0');
+    $formats[] = array('name'=>'RDF','version'=>'1.0');
+    $formats[] = array('name'=>'Atom','version'=>'0.3');
+    $formats[] = array('name'=>'Atom','version'=>'1.0');
+    $formats[] = array('name'=>'ICS','version'=>'1.0');
+*/
+    $formats[] = array('name'=>'RSS','version'=>'0.91');
+    $formats[] = array('name'=>'RSS','version'=>'1.0');
+    $formats[] = array('name'=>'RSS','version'=>'2.0');
+    $formats[] = array('name'=>'ATOM','version'=>'0.3');
+    $formats[] = array('name'=>'ATOM','version'=>'1.0');
+    $formats[] = array('name'=>'ICS','version'=>'1.0');
 
-    $factory = new FeedParserFactory ();
-    $formats = $factory->getFeedTypes ();
     sort ($formats);
 
     return $formats;
@@ -190,8 +200,8 @@ function FEED_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             }
             $switch = ($enabled) ? ' checked="checked"' : '';
             $retval = '<input type="checkbox" name="enabledfeeds[' . $A['fid'] . ']" ' . $title
-                . 'onclick="submit()" value="' . $A['fid'] . '"' . $switch . XHTML . '>';
-            $retval .= '<input type="hidden" name="feedarray[' . $A['fid'] . ']" value="1" ' . XHTML . '>';
+                . 'onclick="submit()" value="' . $A['fid'] . '"' . $switch . '/>';
+            $retval .= '<input type="hidden" name="feedarray[' . $A['fid'] . ']" value="1" ' . '/>';
             break;
 
         case 'header_tid':
@@ -382,7 +392,7 @@ function FEED_edit($fid = 0, $type = '')
     $feed_template->set_var('lang_cancel', $LANG_ADMIN['cancel']);
     if ($A['fid'] > 0) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
-                   . '" name="mode"%s' . XHTML . '>';
+                   . '" name="mode"%s' . '/>';
         $jsconfirm = ' onclick="return confirm(\'' . $LANG33[56] . '\');"';
         $feed_template->set_var ('delete_option',
                                  sprintf ($delbutton, $jsconfirm));

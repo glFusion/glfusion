@@ -59,13 +59,12 @@ function MG_editRSS( ) {
     $rss_full_select = '<input type="checkbox" name="rss_full_enabled" value="1" ' . ($_MG_CONF['rss_full_enabled'] ? ' checked="checked"' : '') .'/>';
 
     $rss_type_select =  "<select name='rss_feed_type'>";
-    $rss_type_select .= "<option value='RSS2.0'"  . ($_MG_CONF['rss_feed_type'] == "RSS2.0" ? ' selected="selected"' : "") . ">RSS2.0</option>";
-    $rss_type_select .= "<option value='RSS1.0'"  . ($_MG_CONF['rss_feed_type'] == "RSS1.0" ? ' selected="selected"' : "") . ">RSS1.0</option>";
-    $rss_type_select .= "<option value='RSS0.91'" . ($_MG_CONF['rss_feed_type'] == "RSS0.91" ? ' selected="selected"' : "") . ">RSS0.91</option>";
-    $rss_type_select .= "<option value='PIE0.1'"  . ($_MG_CONF['rss_feed_type'] == "PIE0.1" ? ' selected="selected"' : "") . ">PIE0.1</option>";
-    $rss_type_select .= "<option value='OPML'"    . ($_MG_CONF['rss_feed_type'] == "OPML" ? ' selected="selected"' : "") . ">OPML</option>";
-    $rss_type_select .= "<option value='ATOM'"    . ($_MG_CONF['rss_feed_type'] == "ATOM" ? ' selected="selected"' : "") . ">ATOM</option>";
-    $rss_type_select .= "<option value='ATOM0.3'" . ($_MG_CONF['rss_feed_type'] == "ATOM0.3" ? ' selected="selected"' : "") . ">ATOM0.3</option>";
+    $rss_type_select .= "<option value='RSS-2.0'"  . ($_MG_CONF['rss_feed_type'] == "RSS-2.0" ? ' selected="selected"' : "") . ">RSS2.0</option>";
+    $rss_type_select .= "<option value='RSS-1.0'"  . ($_MG_CONF['rss_feed_type'] == "RSS-1.0" ? ' selected="selected"' : "") . ">RSS1.0</option>";
+    $rss_type_select .= "<option value='RSS-0.91'" . ($_MG_CONF['rss_feed_type'] == "RSS-0.91" ? ' selected="selected"' : "") . ">RSS0.91</option>";
+    $rss_type_select .= "<option value='PIE-0.1'"  . ($_MG_CONF['rss_feed_type'] == "PIE-0.1" ? ' selected="selected"' : "") . ">PIE0.1</option>";
+    $rss_type_select .= "<option value='ATOM-1.0'" . ($_MG_CONF['rss_feed_type'] == "ATOM-1.0" ? ' selected="selected"' : "") . ">ATOM</option>";
+    $rss_type_select .= "<option value='ATOM-0.3'" . ($_MG_CONF['rss_feed_type'] == "ATOM-0.3" ? ' selected="selected"' : "") . ">ATOM0.3</option>";
     $rss_type_select .= "</select>";
 
     $hide_email_select = '<input type="checkbox" name="hide_email" value="1" ' . ($_MG_CONF['hide_author_email'] ? ' checked="checked"' : '') .'/>';

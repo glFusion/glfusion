@@ -902,6 +902,14 @@ function glfusion_130()
         DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_grp_id) VALUES (".$autotag_group_id.",1)");
     }
 
+    // update syndication feeds
+    DB_query("UPDATE {$_TABLES['syndication']} set format='RSS-0.91' WHERE format='RSS-09x'",1);
+    DB_query("UPDATE {$_TABLES['syndication']} set format='RDF-1.0' WHERE format='RSS-1.0'",1);
+
+    DB_query("UPDATE {$_TABLES['mg_config']} set rss_feed_type='RSS-2.0' WHERE rss_feed_type='RSS2.0'",1);
+    DB_query("UPDATE {$_TABLES['mg_config']} set rss_feed_type='RSS-1.0' WHERE rss_feed_type='RSS1.0'",1);
+    DB_query("UPDATE {$_TABLES['mg_config']} set rss_feed_type='RSS-0.91' WHERE rss_feed_type='RSS0.91'",1);
+
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.3.0',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.3.0' WHERE name='glfusion'",1);
