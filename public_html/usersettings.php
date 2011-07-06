@@ -1163,6 +1163,9 @@ function saveuser($A)
             }
         }
 
+        PLG_profileExtrasSave ();
+        PLG_profileSave();
+
         if ($_US_VERBOSE) {
             COM_errorLog('**** Leaving saveuser in usersettings.php ****', 1);
         }
@@ -1596,8 +1599,6 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
     case 'saveuser':
         savepreferences ($_POST);
         $display .= saveuser($_POST);
-        PLG_profileExtrasSave ();
-        PLG_profileSave();
         break;
 
     case 'savepreferences':
