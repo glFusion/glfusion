@@ -1,28 +1,28 @@
 {# begin {templatelocation} #}
+<div style="float:right;">{google_paging}</div>
 <table border="0" cellspacing="1" cellpadding="3" width="100%">
     <tr>
-        <th align="right">#</th>
-        <th align="left">{lang_ip}</th>
-        <th align="left">{lang_date}</th>
-        <th align="left">{lang_user_agent}</th>
-        <th align="left">{lang_reason}</th>
+        <th align="left" width="30%">{lang_ip_date}</th>
+        <th align="left">{lang_headers}</th>
     </tr>
 <!-- BEGIN logrow -->
     <tr class="pluginRow{cssid}" onmouseover="className='pluginRollOver';" onmouseout="className='pluginRow{cssid}';">
-        <td align="right">
-            {start_headers_anchortag}{row_num}{end_headers_anchortag}
-        </td>
-        <td align="left">
+        <td align="left" style="border-bottom:1px solid black;vertical-align:top;">
             {start_ip_lookup_anchortag}{ip}{end_ip_lookup_anchortag}
+            &nbsp;&nbsp;[ <a href="{site_url}/search.php?mode=search&amp;type=bad_behavior2&amp;query={ip}">{lang_search}</a> ]
+            <br/><br/>
+            {date_and_time}<br/><br/>
+            <span style="color:red;">{reason}</span>
         </td>
-        <td align="left">
-            {date_and_time}
-        </td>
-        <td align="left">
-            {http_user_agent}
-        </td>
-        <td align="left">
-            {reason}
+        <td align="left" style="border-bottom:1px solid black;line-height:150%">
+          <div style="width:600px;overflow:auto;">
+          {http_referer}
+          </div>
+          {!if http_response}
+          <div style="width:600px;overflow:auto;">
+           <br /><strong>{lang_response}</strong><br />{http_response}
+          </div>
+          {!endif}
         </td>
     </tr>
 <!-- END logrow -->

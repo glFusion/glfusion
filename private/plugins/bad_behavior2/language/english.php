@@ -75,7 +75,9 @@ $LANG_BAD_BEHAVIOR = array (
     'stats_blocked'         => 'Blocked',
     'stats_no_hits'         => 'No entries.',
     'blocked_ips'           => 'Blocked unique IP addresses',
-    'unblock'               => 'Unblock IP address'
+    'unblock'               => 'Unblock IP address',
+    'ip_date'               => 'IP / Date / Status',
+    'headers'               => 'Headers',
 );
 
 $LANG_BB2_RESPONSE = array (
@@ -94,6 +96,7 @@ $LANG_BB2_RESPONSE = array (
     '582ec5e4' => '"Header \'TE\' present but TE not specified in \'Connection\' header',
     '69920ee5' => 'Header \'Referer\' present but blank',
     '6c502ff1' => 'Bot not fully compliant with RFC 2965',
+	'71436a15' => 'User-Agent claimed to be Yahoo, claim appears to be false',
     '799165c2' => 'Rotating user-agents detected',
     '7a06532b' => 'Required header \'Accept-Encoding\' missing',
     '7ad04a8a' => 'Prohibited header \'Range\' present',
@@ -115,7 +118,8 @@ $LANG_BB2_RESPONSE = array (
     'e87553e1' => 'I know you and I don\'t like you, dirty spammer.',
     'f0dcb3fd' => 'Web browser attempted to send a trackback',
     'f1182195' => 'User-Agent claimed to be Googlebot, claim appears to be false.',
-    'f9f2b8b9' => 'A User-Agent is required but none was provided.'
+    'f9f2b8b9' => 'A User-Agent is required but none was provided.',
+    'f9f3b8b0' => 'Question mark at end of query.',
 );
 
 

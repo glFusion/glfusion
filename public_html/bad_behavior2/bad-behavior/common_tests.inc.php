@@ -50,6 +50,15 @@ function bb2_misc_headers($settings, $package)
 		return "dfd9b1ad";
 	}
 
+    // glFusion customization - check for multiple ? in the query string.
+
+	if ( ($firstPos = strpos($package['request_uri'],'?')) !== FALSE ) {
+	    $lastPos = strrpos($package['request_uri'],'?');
+ 	    if ( $firstPos != $lastPos ) {
+	        return "f9f3b8b0";
+	    }
+	}
+
 	// Range: field exists and begins with 0
 	// Real user-agents do not start ranges at 0
 	// NOTE: this blocks the whois.sc bot. No big loss.
@@ -107,7 +116,7 @@ function bb2_misc_headers($settings, $package)
 			return "a52f0448";
 		}
 	}
-	
+
 
 	// Headers which are not seen from normal user agents; only malicious bots
 	if (array_key_exists('X-Aaaaaaaaaaaa', $package['headers_mixed']) || array_key_exists('X-Aaaaaaaaaa', $package['headers_mixed'])) {
@@ -131,7 +140,7 @@ function bb2_misc_headers($settings, $package)
 			return "45b35e30";
 		}
 	}
-	
+
 	// "uk" is not a language (ISO 639) nor a country (ISO 3166)
 	// oops, yes it is :( Please shoot any Ukrainian spammers you see.
 #	if (preg_match('/\buk\b/', $package['headers_mixed']['Accept-Language'])) {

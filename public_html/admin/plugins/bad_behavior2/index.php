@@ -116,7 +116,11 @@ function _bb_listEntries ($page = 1, $msg = '')
             'lang_response'     => $LANG_BAD_BEHAVIOR['row_response'],
             'lang_method'       => $LANG_BAD_BEHAVIOR['row_method'],
             'lang_protocol'     => $LANG_BAD_BEHAVIOR['row_protocol'],
-            'lang_date'         => $LANG_BAD_BEHAVIOR['row_date']));
+            'lang_date'         => $LANG_BAD_BEHAVIOR['row_date'],
+            'lang_search'       => $LANG_BAD_BEHAVIOR['search'],
+            'lang_ip_date'      => $LANG_BAD_BEHAVIOR['ip_date'],
+            'lang_headers'      => $LANG_BAD_BEHAVIOR['headers'],
+            ));
 
     $result = DB_query ("SELECT id,ip,date,request_method,request_uri,server_protocol,http_headers,user_agent,request_entity,`key` FROM " . WP_BB_LOG . " ORDER BY date DESC LIMIT $start,50");
     $num = DB_numRows ($result);
@@ -131,6 +135,20 @@ function _bb_listEntries ($page = 1, $msg = '')
             $A[$key] = htmlspecialchars ($val);
         }
 
+        $headers = str_replace("\n", "<br/>\n", $A['http_headers']);
+		$headers = str_replace("User-Agent:","<strong>User-Agent:</strong>",$headers);
+		$headers = str_replace("Host:","<strong>Host:</strong>",$headers);
+		$headers = str_replace("POST ","<strong>POST</strong> ",$headers);
+		$headers = str_replace("GET ","<strong>GET</strong> ",$headers);
+		$headers = str_replace("Connection:","<strong>Connection:</strong>",$headers);
+		$headers = str_replace("Language:","<strong>Language:</strong>",$headers);
+		$headers = str_replace("Accept:","<strong>Accept:</strong>",$headers);
+		$headers = str_replace("Cache-Control:","<strong>Cache-Control:</strong>",$headers);
+		$headers = str_replace("Referer:","<strong>Referer:</strong>",$headers);
+		$headers = str_replace("Proxy-","<strong>Proxy-</strong>",$headers);
+
+		$entity = str_replace("\n", "<br/>\n", $A["request_entity"]);
+
         $templates->set_var (array(
                 'row_num'           => $lcount,
                 'cssid'             => ($i % 2) + 1,
@@ -139,11 +157,12 @@ function _bb_listEntries ($page = 1, $msg = '')
                 'request_method'    => $A['request_method'],
                 'http_host'         => $A['request_uri'],
                 'server_protocol'   => $A['server_protocol'],
-                'http_referer'      => $A['http_headers'],
+                'http_referer'      => $headers,
                 'reason'            => $LANG_BB2_RESPONSE[$A['key']],
                 'http_user_agent'   => $A['user_agent'],
-                'http_response'     => $A['request_entity'],
-                'date_and_time'     => $A['date']));
+                'http_response'     => $entity,
+                'date_and_time'     => $A['date'])
+        );
 
         $url = $_CONF['site_admin_url'] . '/plugins/' . BAD_BEHAVIOR_PLUGIN
              . '/index.php?mode=view&amp;id=' . $A['id'];
@@ -158,7 +177,7 @@ function _bb_listEntries ($page = 1, $msg = '')
             $iplookup = str_replace ('*', $A['ip'], $_CONF['ip_lookup']);
             $templates->set_var ('start_ip_lookup_anchortag', '<a href="'
                     . $iplookup . '" title="'
-                    . $LANG_BAD_BEHAVIOR['title_lookup_ip'] . '">');
+                    . $LANG_BAD_BEHAVIOR['title_lookup_ip'] . '" target="_new">');
             $templates->set_var ('end_ip_lookup_anchortag', '</a>');
         } else {
             $templates->set_var ('start_ip_lookup_anchortag', '');
@@ -183,6 +202,7 @@ function _bb_listEntries ($page = 1, $msg = '')
 
     return $retval;
 }
+
 
 /**
 * View details of an entry
