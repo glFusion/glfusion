@@ -846,19 +846,35 @@ switch ($action) {
                 if (!isset ($_POST['postmode'])) {
                     $_POST['postmode'] = '';
                 }
-                $display .= PAGE_submit($sp_id, isset($_POST['sp_status']) ? 1 : 0, $sp_uid, $_POST['sp_title'],
-                    $_POST['sp_content'], COM_applyFilter ($_POST['sp_hits'], true),
-                    COM_applyFilter ($_POST['sp_format']), $_POST['sp_onmenu'],
-                    $_POST['sp_label'], COM_applyFilter ($_POST['commentcode'], true),
-                    COM_applyFilter ($_POST['owner_id'], true),
-                    COM_applyFilter ($_POST['group_id'], true), $_POST['perm_owner'],
-                    $_POST['perm_group'], $_POST['perm_members'], $_POST['perm_anon'],
-                    $_POST['sp_php'], $_POST['sp_nf'],
-                    COM_applyFilter ($_POST['sp_old_id']), $_POST['sp_centerblock'],
-                    $sp_help, COM_applyFilter ($_POST['sp_tid']),
-                    COM_applyFilter ($_POST['sp_where'], true), $_POST['sp_inblock'],
-                    COM_applyFilter ($_POST['postmode']),
-                    isset($_POST['sp_search']) ? 1 : 0);
+
+                $display .= PAGE_submit(
+                    $sp_id,
+                    isset($_POST['sp_status']) ? 1 : 0,
+                    $sp_uid,
+                    isset($_POST['sp_title']) ? $_POST['sp_title'] : '',
+                    isset($_POST['sp_content']) ? $_POST['sp_content'] : '',
+                    isset($_POST['sp_hits']) ? COM_applyFilter ($_POST['sp_hits'], true) : 0,
+                    isset($_POST['sp_format']) ? COM_applyFilter ($_POST['sp_format']) : '',
+                    isset($_POST['sp_onmenu']) ? $_POST['sp_onmenu'] : '',
+                    isset($_POST['sp_lable']) ? $_POST['sp_label'] : '',
+                    isset($_POST['commentcode']) ? COM_applyFilter ($_POST['commentcode'], true) : 0,
+                    isset($_POST['owner_id']) ? COM_applyFilter ($_POST['owner_id'], true) : 2,
+                    isset($_POST['group_id']) ? COM_applyFilter ($_POST['group_id'], true) : 0,
+                    isset($_POST['perm_owner']) ? $_POST['perm_owner'] : '',
+                    isset($_POST['perm_group']) ? $_POST['perm_group'] : '',
+                    isset($_POST['perm_members']) ? $_POST['perm_members'] : '',
+                    isset($_POST['perm_anon']) ? $_POST['perm_anon'] : '',
+                    isset($_POST['sp_php']) ? $_POST['sp_php'] : '',
+                    isset($_POST['sp_nf']) ? $_POST['sp_nf'] : '',
+                    isset($_POST['sp_old_id']) ? COM_applyFilter ($_POST['sp_old_id']) : '',
+                    isset($_POST['sp_nf']) ? $_POST['sp_centerblock'] : '',
+                    $sp_help,
+                    isset($_POST['sp_tid']) ? COM_applyFilter ($_POST['sp_tid']) : '',
+                    isset($_POST['sp_where']) ? COM_applyFilter ($_POST['sp_where'], true) : 0,
+                    isset($_POST['sp_inblock']) ? $_POST['sp_inblock'] : '',
+                    isset($_POST['postmode']) ? COM_applyFilter ($_POST['postmode']) : '',
+                    isset($_POST['sp_search']) ? 1 : 0
+                );
             } else {
                 $display = COM_refresh ($_CONF['site_admin_url'] . '/index.php');
             }
