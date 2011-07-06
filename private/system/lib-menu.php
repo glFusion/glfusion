@@ -139,12 +139,10 @@ function mb_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$pare
 
     $menuID = '';
     $lang = COM_getLanguageId();
-
     if (!empty($lang)) {
         $mlname = $name . '_'.$lang;
 
-        $cacheInstance = 'mbmenu_' . $mlname . '_' . CACHE_security_hash() . '_' . $optionHash . '__' . $_USER['theme'];
-
+        $cacheInstance = 'mbmenu_' . $_USER['uid'].'_'.$mlname . '_' . CACHE_security_hash() . '_' . $optionHash . '__' . $_USER['theme'];
         $retval = CACHE_check_instance($cacheInstance, 0);
         if ( $retval && $noid == 0) {
             return $retval;
@@ -160,7 +158,7 @@ function mb_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$pare
         }
     }
     if ( $menuID == '' ) {
-        $cacheInstance = 'mbmenu_' . $name . '_' . CACHE_security_hash() . '_' . $optionHash . '__' . $_USER['theme'];
+        $cacheInstance = 'mbmenu_' . $_USER['uid'].'_'.$name . '_' . CACHE_security_hash() . '_' . $optionHash . '__' . $_USER['theme'];
         $retval = CACHE_check_instance($cacheInstance, 0);
         if ( $retval && $noid == 0) {
             return $retval;
@@ -381,6 +379,6 @@ function mb_getheaderjs() {
     return $mb_js;
 }
 
-mb_initMenu();
+//mb_initMenu();
 
 ?>

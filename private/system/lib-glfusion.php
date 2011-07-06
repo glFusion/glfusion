@@ -274,47 +274,5 @@ function phpblock_storypicker() {
     return $list;
 }
 
-function CTL_clearCacheDirectories($path, $needle = '')
-{
-    if ( $path[strlen($path)-1] != '/' ) {
-        $path .= '/';
-    }
-    if ($dir = @opendir($path)) {
-        while ($entry = readdir($dir)) {
-            if ($entry == '.' || $entry == '..' || is_link($entry) || $entry == '.svn' || $entry == 'index.html') {
-                continue;
-            } elseif (is_dir($path . $entry)) {
-                CTL_clearCacheDirectories($path . $entry, $needle);
-                @rmdir($path . $entry);
-            } elseif (empty($needle) || strpos($entry, $needle) !== false) {
-                @unlink($path . $entry);
-            }
-        }
-        @closedir($dir);
-    }
-}
 
-
-function CTL_clearCache($plugin='')
-{
-    global $TEMPLATE_OPTIONS, $_CONF, $_SYSTEM;
-
-    if (!empty($plugin)) {
-        $plugin = '__' . $plugin . '__';
-    }
-
-    CTL_clearCacheDirectories($_CONF['path_data'] . 'layout_cache/', $plugin);
-
-    if ( $_SYSTEM['use_direct_style_js'] ) {
-        foreach (glob($_CONF['path_html'].$_CONF['css_cache_filename']."*.*") as $filename) {
-            @unlink($filename);
-        }
-        foreach (glob($_CONF['path_html'].$_CONF['js_cache_filename']."*.*") as $filename) {
-            @unlink($filename);
-        }
-    }
-
-    css_out();
-    js_out();
-}
 ?>
