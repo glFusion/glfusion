@@ -147,7 +147,7 @@ function MG_processAlbumFeedItems( &$rss, $aid ) {
     global $MG_albums, $_MG_CONF, $_CONF, $_TABLES;
 
     $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
-            " ON ma.media_id=m.media_id WHERE ma.album_id=" . intval($aid) . ' ORDER BY m.media_time DESC';
+            " ON ma.media_id=m.media_id WHERE ma.album_id=" . (int) $aid . ' ORDER BY m.media_upload_time DESC';
 
     $result = DB_query( $sql );
     $nRows  = DB_numRows( $result );
@@ -157,10 +157,6 @@ function MG_processAlbumFeedItems( &$rss, $aid ) {
             $item = new FeedItem();
             $item->title = $row['media_title'];
             $item->link =  $_MG_CONF['site_url'] . '/media.php?s=' . $row['media_id'];
-	        $description = '';
-            $item->description = $description . $row['media_desc'];
-            $item->descriptionTruncSize = 500;
-            $item->descriptionHtmlSyndicated = true;
 
 		    if ( $MG_albums[$aid]->podcast ) {
 				// optional -- applies only if this is a podcast
@@ -169,8 +165,8 @@ function MG_processAlbumFeedItems( &$rss, $aid ) {
 			    $item->podcast->enclosure_length = @filesize($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
 			    $item->podcast->enclosure_type = $row['mime_type'];
 			}
-
-            $item->date = strftime("%a, %d %b %Y %H:%M:%S %z",$row['media_time']);
+            $dt = new Date($row['media_upload_time'],$_CONF['timezone']);
+            $item->date = $dt->toRFC822(true);
             $item->source = $_CONF['site_url'];
             if ( $row['artist'] != '' ) {
                 $item->author = $row['artist'];
@@ -179,6 +175,121 @@ function MG_processAlbumFeedItems( &$rss, $aid ) {
             if ( $row['media_keywords'] != '' ) {
                 $item->podcast->keywords = $row['media_keywords'];
             }
+            switch( $row['media_type'] ) {
+                case 0 :    // standard image
+                    $default_thumbnail = 'tn/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.jpg';
+                    foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                        if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/'.  $row['media_filename'][0] . '/' . $row['media_filename'] . $ext) ) {
+                            $default_thumbnail      = 'tn/'.  $row['media_filename'][0] . '/' . $row['media_filename'] . $ext;
+                            break;
+                        }
+                    }
+                    break;
+                case 1 :    // video file
+                    switch ( $row['mime_type'] ) {
+                        case 'video/x-flv' :
+                            $default_thumbnail = 'flv.png';
+                            break;
+                        case 'application/x-shockwave-flash' :
+                            $default_thumbnail = 'flash.png';
+                            break;
+                            break;
+                        case 'video/mpeg' :
+                        case 'video/x-motion-jpeg' :
+                        case 'video/quicktime' :
+                        case 'video/mpeg' :
+                        case 'video/x-mpeg' :
+                        case 'video/x-mpeq2a' :
+                        case 'video/x-qtc' :
+                        case 'video/x-m4v' :
+                            $default_thumbnail = 'quicktime.png';
+                            break;
+                        case 'video/x-ms-asf' :
+                        case 'video/x-ms-asf-plugin' :
+                        case 'video/avi' :
+                        case 'video/msvideo' :
+                        case 'video/x-msvideo' :
+                        case 'video/avs-video' :
+                        case 'video/x-ms-wmv' :
+                        case 'video/x-ms-wvx' :
+                        case 'video/x-ms-wm' :
+                        case 'application/x-troff-msvideo' :
+                        case 'application/x-ms-wmz' :
+                        case 'application/x-ms-wmd' :
+                            $default_thumbnail = 'wmp.png';
+                            break;
+                        default :
+                            $default_thumbnail = 'video.png';
+                            break;
+                    }
+                    break;
+                case 2 :    // music file
+                    $default_thumbnail = 'audio.png';
+                    break;
+                case 4 :    // other files
+                    switch ( $row['mime_type'] ) {
+                        case 'application/zip' :
+                        case 'application/x-gzip' :
+                        case 'application/x-tar' :
+                        case 'arj' :
+                        case 'rar' :
+                        case 'gz'  :
+                            $default_thumbnail = 'zip.png';
+                            break;
+                        case 'application/pdf' :
+                        case 'pdf' :
+                            $default_thumbnail = 'pdf.png';
+                            break;
+                        case 'application/octet-stream' :
+                            if ( $row['mime_ext'] == 'pdf' ) {
+                                $default_thumbnail = 'pdf.png';
+                            } else if ( $row['mime_ext'] == 'arj' ) {
+                                $default_thumbnail = 'zip.png';
+                            } else if ( $row['mime_ext'] == 'rar' ) {
+                                $default_thumbnail = 'zip.png';
+                            } else {
+                                $default_thumbnail = 'generic.png';
+                            }
+                            break;
+                        default :
+                            $default_thumbnail = 'generic.png';
+                            break;
+                    }
+                    break;
+        		case 5 :
+                    $default_thumbnail = 'remote.png';
+                    break;
+            }
+
+            if ( $row['media_tn_attached'] == 1 ) {
+                $media_thumbnail = '';
+                $media_thumbnail_file = '';
+                foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                    if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/'.  $row['media_filename'][0] . '/tn_' . $row['media_filename'] . $ext) ) {
+                        $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/tn/'.  $row['media_filename'][0] . '/tn_' . $row['media_filename'] . $ext;
+                        $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . 'tn/'.  $row['media_filename'][0] . '/tn_' . $row['media_filename'] . $ext;
+                        break;
+                    }
+                }
+            } else {
+                $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
+                $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
+            }
+
+            $media_size        = @getimagesize($media_thumbnail_file);
+
+            if ( $media_thumbnail == '' || $media_size == false ) {
+                $default_thumbnail    = 'generic.png';
+                $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
+                $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
+                $media_size           = @getimagesize($media_thumbnail_file);
+            }
+
+          	$imgurl = $media_thumbnail;
+            $description = "<img width=\"".$media_size[0]."\" vspace=\"5\" hspace=\"5\" height=\"".$media_size[1]."\" border=\"1\" align=\"left\" src=\"".$imgurl."\" alt=\"\" />\n";
+            $item->description = $description . $row['media_desc'];
+            $item->descriptionTruncSize = 500;
+            $item->descriptionHtmlSyndicated = true;
             $rss->addItem($item);
         }
     }
