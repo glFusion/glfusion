@@ -63,7 +63,7 @@ require_once $_CONF['path_html'] . '/bad_behavior2/bad-behavior-glfusion.php';
 */
 function _bb_listEntries ($page = 1, $msg = '')
 {
-    global $_CONF, $_TABLES, $LANG_BAD_BEHAVIOR, $LANG_BB2_RESPONSE, $LANG_ADMIN;
+    global $_CONF, $_USER, $_TABLES, $LANG_BAD_BEHAVIOR, $LANG_BB2_RESPONSE, $LANG_ADMIN;
 
     $retval = '';
 
@@ -135,6 +135,8 @@ function _bb_listEntries ($page = 1, $msg = '')
             $A[$key] = htmlspecialchars ($val);
         }
 
+        $dt = new Date($A['date'],$_USER['tzid']);
+
         $headers = str_replace("\n", "<br/>\n", $A['http_headers']);
 		$headers = str_replace("User-Agent:","<strong>User-Agent:</strong>",$headers);
 		$headers = str_replace("Host:","<strong>Host:</strong>",$headers);
@@ -161,8 +163,8 @@ function _bb_listEntries ($page = 1, $msg = '')
                 'reason'            => $LANG_BB2_RESPONSE[$A['key']],
                 'http_user_agent'   => $A['user_agent'],
                 'http_response'     => $entity,
-                'date_and_time'     => $A['date'])
-        );
+                'date_and_time'     => $dt->toRFC822(true) // $A['date']
+        ));
 
         $url = $_CONF['site_admin_url'] . '/plugins/' . BAD_BEHAVIOR_PLUGIN
              . '/index.php?mode=view&amp;id=' . $A['id'];
