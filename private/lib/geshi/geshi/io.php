@@ -67,7 +67,7 @@ $language_data = array (
             'Fnmatch', 'Font', 'Future', 'GL', 'GLE', 'GLScissor', 'GLU', 'GLUCylinder',
             'GLUQuadric', 'GLUSphere', 'GLUT', 'Host', 'Image', 'Importer', 'LinkList', 'List',
             'Lobby', 'Locals', 'MD5', 'MP3Decoder', 'MP3Encoder', 'Map', 'Message', 'Movie',
-            'NULL', 'Nil', 'Nop', 'Notifiction', 'Number', 'Object', 'OpenGL', 'Point', 'Protos',
+            'NULL', 'Nil', 'Nop', 'Notification', 'Number', 'Object', 'OpenGL', 'Point', 'Protos',
             'Regex', 'SGMLTag', 'SQLite', 'Server', 'ShowMessage', 'SleepyCat', 'SleepyCatCursor',
             'Socket', 'SocketManager', 'Sound', 'Soup', 'Store', 'String', 'Tree', 'UDPSender',
             'UDPReceiver', 'URL', 'User', 'Warning', 'WeakLink'
