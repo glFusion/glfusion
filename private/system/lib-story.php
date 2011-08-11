@@ -45,12 +45,7 @@ if (!defined ('GVERSION')) {
 
 USES_class_story();
 
-/* Check for PHP5 */
-if (PHP_VERSION < 5) {
-    $_CONF['disable_webservices'] = true;
-} else {
-    require_once $_CONF['path_system'] . '/lib-webservices.php';
-}
+require_once $_CONF['path_system'] . '/lib-webservices.php';
 
 if ($_CONF['allow_user_photo']) {
     // only needed for the USER_getPhoto function
@@ -501,8 +496,9 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
 
         $access = $story->checkAccess();
         $storyAccess = min($access, SEC_hasTopicAccess($story->DisplayElements('tid')));
-
-        if( ($storyAccess == 3 || SEC_hasrights( 'story.edit' )) AND ( $index != 'p' )) {
+        if (($index != 'p') AND SEC_hasRights('story.edit') AND
+          ($story->checkAccess() == 3) AND
+          (SEC_hasTopicAccess($story->DisplayElements('tid')) == 3)) {
             $article->set_var( 'edit_link',
                 COM_createLink($LANG01[4], $_CONF['site_admin_url']
                     . '/story.php?edit=x&amp;sid=' . $story->getSid())
@@ -1205,7 +1201,7 @@ function service_submit_story($args, &$output, &$svc_msg)
         }
 
         if (count($_FILES) > 0 AND $_CONF['maximagesperarticle'] > 0) {
-            require_once($_CONF['path_system'] . 'classes/upload.class.php');
+            require_once $_CONF['path_system'].'classes/upload.class.php';
             $upload = new upload();
 
             if (isset ($_CONF['debug_image_upload']) && $_CONF['debug_image_upload']) {

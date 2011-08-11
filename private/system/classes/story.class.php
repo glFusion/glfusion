@@ -749,6 +749,7 @@ class Story
         $this->_rating = $rating;
         $this->_votes = $votes;
 
+//@TODO - remove this call on save
         // Get the related URLs
         $this->_related = implode("\n", STORY_extractLinks("{$this->_introtext} {$this->_bodytext}"));
         $sql = 'REPLACE INTO ' . $_TABLES['stories'] . ' (';
@@ -838,16 +839,15 @@ class Story
                 $article = DB_fetchArray($result);
                 /* Check Security */
 
-                if ( SEC_hasRights('story.edit') ) {
+                if ((SEC_hasRights('story.edit')) AND
+                  ($this->checkAccess() == 3) AND
+                  (SEC_hasTopicAccess($this->DisplayElements('tid')) == 3)) {
                     $access = 3;
-                } else {
-                    $access = SEC_hasAccess($article['owner_id'], $article['group_id'], $article['perm_owner'], $article['perm_group'],
-                                        $article['perm_members'], $article['perm_anon']);
-                    $taccess = min($access, SEC_hasTopicAccess($this->_tid));
-                    if ( $taccess < 3 ) {
-                        return STORY_EXISTING_NO_EDIT_PERMISSION;
-                    }
                 }
+                if ( $access < 3 ) {
+                    return STORY_EXISTING_NO_EDIT_PERMISSION;
+                }
+
                 if ( !empty($array['owner_id']) ) {
                     $this->_owner_id = $array['owner_id'];
                 } else {
@@ -2044,7 +2044,7 @@ class Story
         global $_CONF;
 
         // fix for bug in advanced editor
-        if ($_CONF['advanced_editor'] && ($body == '<br' . XHTML . '>')) {
+        if ($_CONF['advanced_editor'] && ($body == '<br />')) {
             $body = '';
         }
 
