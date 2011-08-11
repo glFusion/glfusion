@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2006-2010 by the following authors:                        |
+// | Copyright (C) 2006-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -36,6 +36,86 @@ if (!defined ('GVERSION')) {
 
 if (!class_exists('StringParser') ) {
     require_once $_CONF['path'].'lib/bbcode/stringparser_bbcode.class.php';
+}
+
+/**
+ * Parse text block and interpret BBcodes
+ *
+ * @param   string  $str        text to parse
+ * @param   string  $postmode   Either html or text
+ * @param   array   $parser     Additional parsers for the bbcode interpreter
+ * @param   array   $code       Additional bbcodes
+ * @return  string              the formatted string
+ */
+function FUSION_formatTextBlock( $str, $postmode='html', $parser = array(), $code = array() )
+{
+    global $_CONF;
+
+    $postmode = strtolower($postmode);
+
+    $bbcode = new StringParser_BBCode ();
+    $bbcode->setGlobalCaseSensitive (false);
+
+    if ( $postmode == 'text') {
+        $bbcode->addParser (array ('block', 'inline', 'link', 'listitem'), '_bbcode_htmlspecialchars');
+        $bbcode->addParser(array('block','inline','link','listitem'), 'nl2br');
+    } else {
+        $bbcode->addParser(array('block','inline','link','listitem'), 'COM_checkHTML');
+    }
+
+    // add a parser to handle the [imageX_????] tags
+
+    $bbcode->addParser(array('block','inline','link','listitem'), '_bcode_replacetags');
+
+    $bbcode->addParser ('list', '_bbcode_stripcontents');
+
+    if ( is_array($parser) && count($parser) > 0 ) {
+        foreach ($parser AS $extraparser) {
+            if ( isset($extraparser[0]) ) {
+                $parm1 = $extraparser[0];
+            } else {
+                $parm1 = '';
+            }
+            if ( isset($extraparser[1]) ) {
+                $parm2 = $extraparser[1];
+            } else {
+                $parm2 = '';
+            }
+            $bbcode->addParser($parm1,$parm2);
+        }
+    }
+
+    $bbcode->addCode ('code', 'usecontent', '_bbcode_code', array ('usecontent_param' => 'default'),
+                      'code', array ('listitem', 'block', 'inline', 'link'), array ());
+
+    if ( is_array($code) && count($code) > 0 ) {
+        foreach ($code AS $extracode) {
+            $bbcode->addCode(
+                $extracode[0],
+                $extracode[1],
+                $extracode[2],
+                $extracode[3],
+                $extracode[4],
+                $extracode[5],
+                $extracode[6]
+            );
+        }
+    }
+
+    $bbcode->setCodeFlag ('quote', 'paragraph_type', BBCODE_PARAGRAPH_ALLOW_INSIDE);
+    $bbcode->setCodeFlag ('*', 'closetag', BBCODE_CLOSETAG_OPTIONAL);
+    $bbcode->setCodeFlag ('*', 'paragraphs', true);
+    $bbcode->setCodeFlag ('list', 'opentag.before.newline', BBCODE_NEWLINE_DROP);
+    $bbcode->setCodeFlag ('list', 'closetag.before.newline', BBCODE_NEWLINE_DROP);
+
+    $bbcode->setRootParagraphHandling (true);
+
+    if ($_CONF['censormode']) {
+        $str = COM_checkWords($str);
+    }
+    $str = $bbcode->parse ($str);
+
+    return $str;
 }
 
 /**
@@ -288,17 +368,23 @@ function _bbcode_url ($action, $attributes, $content, $params, $node_object) {
     if ($action == 'validate') {
         return true;
     }
+    if ( stristr($content,'http') || stristr($content,'mailto') ) {
+        $content = _bbcode_cleanHTML($content);
+    } else {
+        $content = _bbcode_htmlspecialchars($content);
+    }
+
     if (!isset ($attributes['default'])) {
         if ( stristr($content,'http') || stristr($content,'mailto') ) {
-            return '<a href="'._bbcode_cleanHTML($content).'" rel="nofollow">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
+            return '<a href="'._bbcode_cleanHTML($content).'" rel="nofollow">'.$content.'</a>';
         } else {
-            return '<a href="http://'._bbcode_cleanHTML($content).'" rel="nofollow">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
+            return '<a href="http://'._bbcode_cleanHTML($content).'" rel="nofollow">'.$content.'</a>';
         }
     }
     if ( stristr($attributes['default'],'http') || stristr($attributes['default'],'mailto') ) {
-        return '<a href="'._bbcode_cleanHTML($attributes['default']).'" rel="nofollow">'.@htmlspecialchars($content,ENT_QUOTES,COM_getEncodingt()).'</a>';
+        return '<a href="'._bbcode_cleanHTML($attributes['default']).'" rel="nofollow">'.$content.'</a>';
     } else {
-        return '<a href="http://'._bbcode_cleanHTML($attributes['default']).'" rel="nofollow">'.@htmlspecialchars($content,ENT_QUOTES,COM_getEncodingt()).'</a>';
+        return '<a href="http://'._bbcode_cleanHTML($attributes['default']).'" rel="nofollow">'.$content.'</a>';
     }
 }
 
@@ -346,8 +432,11 @@ function _bbcode_img ($action, $attributes, $content, $params, $node_object) {
     } else {
         $align = '';
     }
-
-    return '<img src="'._bbcode_cleanHTML(htmlspecialchars($content,ENT_QUOTES, COM_getEncodingt())).'" ' . $dim . $align . ' alt=""' . XHTML . '>';
+    if ( stristr($content,'http') || stristr($content,'mailto') ) {
+        return '<img src="'._bbcode_cleanHTML($content).'" ' . $dim . $align . ' alt="" />';
+    } else {
+        return '<img src="'._bbcode_cleanHTML(_bbcode_htmlspecialchars($content)).'" ' . $dim . $align . ' alt="" />';
+    }
 }
 
 function _bbcode_size  ($action, $attributes, $content, $params, $node_object) {
