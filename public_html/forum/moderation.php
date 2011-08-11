@@ -538,7 +538,13 @@ function moderator_confirmMove($topic_id,$topic_parent_id,$forum_id)
           $modgroups .= ",$key";
       }
     }
-
+	$splitTopic = false;    
+	/* Check and see request to move complete topic or split the topic */
+	if (DB_getItem($_TABLES['ff_topic'],"pid","id=".(int) $topic_id) == 0) {
+		$splitTopic = false;
+	} else {
+		$splitTopic = true;
+	}
     $forumList = array();
     $categoryResult = DB_query("SELECT * FROM {$_TABLES['ff_categories']} ORDER BY cat_order ASC");
     while($A = DB_fetchArray($categoryResult)) {
@@ -553,13 +559,7 @@ function moderator_confirmMove($topic_id,$topic_parent_id,$forum_id)
         $forumResult = DB_query($sql);
 
         while($B = DB_fetchArray($forumResult)) {
-            if ( $modfunction == 'movetopic' ) {
-                if ( $B['forum_id'] != $forum_id ) {
-                    $forumList[$cat_id][$B['forum_id']] = $B['forum_name'];
-                }
-            } else {
-                $forumList[$cat_id][$B['forum_id']] = $B['forum_name'];
-            }
+            $forumList[$cat_id][$B['forum_id']] = $B['forum_name'];
         }
     }
 
@@ -570,7 +570,15 @@ function moderator_confirmMove($topic_id,$topic_parent_id,$forum_id)
             $target = 1;
             $destination_forum_select .= '<optgroup label="'.$category.'">' . LB;
             foreach ($forums AS $id => $name ) {
-                $destination_forum_select .= '<option value="'.$id.'">'.$name.'</option>'. LB;
+            	if ( $splitTopic == false ) {
+            		if ( $id != $forum_id ) {
+            			$destination_forum_select .= '<option value="'.$id.'">'.$name.'</option>'. LB;
+            		} else {
+            			$destination_forum_select .= '<option value="'.$id.'" disabled="disabled">'.$name.'</option>'. LB;	
+            		}
+            	} else {
+	                $destination_forum_select .= '<option value="'.$id.'">'.$name.'</option>'. LB;
+	            }
             }
             $destination_forum_select .= '</optgroup>' . LB;
         }
@@ -585,7 +593,7 @@ function moderator_confirmMove($topic_id,$topic_parent_id,$forum_id)
         $T->set_var('move_title',$subject);
 
         /* Check and see request to move complete topic or split the topic */
-        if (DB_getItem($_TABLES['ff_topic'],"pid","id=".(int) $topic_id) == 0) {
+ 		if ( $splitTopic == false ) {
             $message .= sprintf($LANG_GF03['movetopicmsg'],$subject);
             $button_text = $LANG_GF03['movetopic'];
         } else {
