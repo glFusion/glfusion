@@ -277,6 +277,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
             $cid = (int) COM_applyFilter($_POST['cid'],true);
         } else {
             $cid = 0;
+            $eh->show("1109");
         }
 
         $AddNewFile = false;    // Set true if fileupload was sucessfull
@@ -291,7 +292,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         $tmpfilename = randomfilename();
 
         // Determine write group access to this category
-        $grp_writeaccess = DB_getItem($_TABLES['filemgmt_cat'],'grp_writeaccess',"cid=$cid");
+        $grp_writeaccess = DB_getItem($_TABLES['filemgmt_cat'],'grp_writeaccess',"cid=".(int) $cid);
         if (SEC_inGroup($grp_writeaccess)) {
             $directUploadAccess = true;
         } else {

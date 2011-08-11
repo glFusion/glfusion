@@ -103,8 +103,10 @@ class ErrorHandler {
             "1106" => "Upload Add Error: The new file was not created. Check error.log",
             "1107" => "Upload Add Error: The temporary file was not found. Check error.log",
             "1108" => "Duplicate file - already existing in filestore",
+            "1109" => "File type not allowed",
+            "1110" => "You must define and select a category for the uploaded file",
 
-            "9999" => "OOPS! God Knows"
+            "9999" => "Unknown Error"
         );
 
         // determine the destination of this request

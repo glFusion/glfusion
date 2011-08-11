@@ -1210,9 +1210,10 @@ function addDownload() {
     }
 
     if ( !empty($_POST['cid']) ) {
-           $cid = $_POST['cid'];
+        $cid = $_POST['cid'];
     } else {
         $cid = 0;
+        $eh->show("1110");
     }
 
     $filename = ''; //$myts->makeTboxData4Save($_FILES['newfile']['name']);

@@ -46,7 +46,7 @@ include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
 USES_lib_image();
 
 if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
-    COM_errorLOG("Visit.php => FileMgmt Plugin Access denied. Attempted download of file ID:{$lid}");
+    COM_errorLog("Visit.php => FileMgmt Plugin Access denied. Attempted download of file ID:{$lid}");
     redirect_header($_CONF['site_url']."/index.php",1,_GL_ERRORNOACCESS);
     exit();
 } else {
@@ -77,7 +77,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
     list($testaccess_cnt) = DB_fetchArray( DB_query($sql));
 
     if ($testaccess_cnt == 0 OR DB_count($_TABLES['filemgmt_filedetail'],"lid",DB_escapeString($lid) ) == 0) {
-        COM_errorLOG("filemgmt visit.php ERROR: Invalid attempt to download a file. User:{$_USER['username']}, IP:{$_SERVER['REMOTE_ADDR']}, File ID:{$lid}");
+        COM_errorLOG("filemgmt visit.php ERROR: Invalid attempt to download a file. User:{$_USER['username']}, File ID:{$lid}");
         echo COM_refresh($_CONF['site_url'] . '/filemgmt/index.php');
         exit;
     } else {
@@ -92,8 +92,8 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
         }
         $allowed_protocols = array('http','https','ftp');
         $found_it = false;
-        COM_accessLOG("Visit.php => Download File:{$url}, User ID is:{$uid}, Remote address is: {$_SERVER['REMOTE_ADDR']}");
-        $pos = MBYTE_strpos( $url, ':' );
+        COM_accessLog("Visit.php => Download File:{$url}, User ID is:{$uid}");
+        $pos = utf8_strpos( $url, ':' );
         if( $pos === false ) {
             if ( $_FM_CONF['outside_webroot'] == 1 ) {
                 if ( $tempFile == 1 ) {
@@ -124,7 +124,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
                 exit();
             }
         } else {
-            $protocol = MBYTE_substr( $url, 0, $pos + 1 );
+            $protocol = utf8_substr( $url, 0, $pos + 1 );
             $found_it = false;
             foreach( $allowed_protocols as $allowed ) {
                 if( substr( $allowed, -1 ) != ':' ) {
