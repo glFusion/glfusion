@@ -218,6 +218,12 @@ require_once $_CONF['path_system'].'classes/template.class.php';
 require_once $_CONF['path_system'].'lib-database.php';
 
 /**
+* This is the date / time library used for formatting
+*
+*/
+require_once $_CONF['path_system'] . 'classes/date.class.php';
+
+/**
 * Buffer all enabled plugins
 *
 */
@@ -254,12 +260,6 @@ require_once $_CONF['path_system'].'lib-security.php';
 */
 
 require_once $_CONF['path_system'].'lib-sessions.php';
-
-/**
-* This is the date / time library used for formatting
-*
-*/
-require_once $_CONF['path_system'] . 'classes/date.class.php';
 
 /**
 * This is the syndication library used to offer (RSS) feeds.
@@ -2779,8 +2779,8 @@ function COM_killJS( $Message )
 */
 function COM_handleCode( $str )
 {
-return $str;
-
+    return $str;
+/* -- no longer doing translation -- */
     $search  = array( '&',     '\\',    '<',    '>',    '[',     ']'     );
     $replace = array( '&amp;', '&#92;', '&lt;', '&gt;', '&#91;', '&#93;' );
 
