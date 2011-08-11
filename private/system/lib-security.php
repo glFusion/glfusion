@@ -1112,10 +1112,11 @@ function SEC_removeFeatureFromDB ($feature_name, $logging = false)
 *
 * @param    int     $group_id   current group id (to be selected)
 * @param    int     $access     access permission
+* @param    string  $var_name   Optional variable name, "group_id" if empty
 * @return   string              HTML for the dropdown
 *
 */
-function SEC_getGroupDropdown ($group_id, $access)
+function SEC_getGroupDropdown ($group_id, $access, $var_name='group_id')
 {
     global $_TABLES;
 
@@ -1124,7 +1125,7 @@ function SEC_getGroupDropdown ($group_id, $access)
     if ($access == 3) {
         $usergroups = SEC_getUserGroups ();
 
-        $groupdd .= '<select name="group_id">' . LB;
+        $groupdd .= '<select name="' . $var_name . '">' . LB;
         foreach ($usergroups as $ug_name => $ug_id) {
             $groupdd .= '<option value="' . $ug_id . '"';
             if ($group_id == $ug_id) {
