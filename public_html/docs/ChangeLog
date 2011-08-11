@@ -2,6 +2,13 @@ glFusion ChangeLog
 
 v1.3.0 (Trunk Development Branch)
 ------
+- StaticPages: Display 404 page if user does not have permission to view
+  static page (Mark)
+- Allow [img] code in [url][/url] set (Mark)
+- Improved permission check on story edit - only show when appropriate (Mark)
+- Forum: Current forum was not available as a select option when spliting a
+  topic (Mark)
+- FileMgmt: If no category is selected, display error and abort upload (Mark)
 - Improved UTF-8 handling - works whether mbtye extension is installed
   in PHP or not (Mark)
 - Improved user menu caching - ensure no user specific data is cached (Mark)
