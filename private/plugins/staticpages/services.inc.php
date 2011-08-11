@@ -58,7 +58,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
     $output = '';
 
     if (!SEC_hasRights('staticpages.edit')) {
-        $output = COM_siteHeader('menu', $LANG_STATIC['access_denied']);
+        $output  = COM_siteHeader('menu', $LANG_STATIC['access_denied']);
         $retval .= COM_showMessageText($LANG_STATIC['access_denied_msg'],$LANG_STATIC['access_denied'],true);
         $output .= COM_siteFooter();
 
@@ -554,16 +554,9 @@ function service_get_staticpages($args, &$output, &$svc_msg)
                 }
             } else {
                 if ($mode !== 'autotag') {
-                    $output = COM_siteHeader ('menu');
-                }
-                $output .= COM_startBlock ($LANG_ACCESS['accessdenied'], '');
-                $output .= $LANG_STATIC['deny_msg'];
-                $output .= COM_endBlock ();
-                if ($mode !== 'autotag') {
-                    $output .= COM_siteFooter (true);
+                    COM_404();
                 }
             }
-
             return PLG_RET_ERROR;
         }
 
