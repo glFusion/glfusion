@@ -910,6 +910,9 @@ function glfusion_130()
     DB_query("UPDATE {$_TABLES['mg_config']} set rss_feed_type='RSS-1.0' WHERE rss_feed_type='RSS1.0'",1);
     DB_query("UPDATE {$_TABLES['mg_config']} set rss_feed_type='RSS-0.91' WHERE rss_feed_type='RSS0.91'",1);
 
+    // remove microsummary feature
+    $c->del('microsummary_short', 'Core');
+
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.3.0',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.3.0' WHERE name='glfusion'",1);

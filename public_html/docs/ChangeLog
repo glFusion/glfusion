@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.3.0 (Trunk Development Branch)
 ------
+- Remove deprecated microsummary feature (Mark H.)
 - StaticPages: Display 404 page if user does not have permission to view
   static page (Mark)
 - Allow [img] code in [url][/url] set (Mark)

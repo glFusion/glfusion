@@ -49,7 +49,6 @@ function install_config($site_url)
     $c->add('site_admin_url','','text',0,0,NULL,30,TRUE);
     $c->add('site_name','','text',0,0,NULL,60,TRUE);
     $c->add('site_slogan','','text',0,0,NULL,70,TRUE);
-    $c->add('microsummary_short','GL: ','text',0,0,NULL,80,TRUE);
     $site_disabled_msg = urldecode($site_url) . '/sitedown.html';
     $c->add('site_disabled_msg',$site_disabled_msg,'text',0,0,NULL,510,TRUE);
     $c->add('maintenance_mode',0,'select',0,0,0,520,TRUE);

@@ -47,72 +47,17 @@ USES_lib_story();
 
 $newstories = false;
 $displayall = false;
-$microsummary = false;
+
 if (isset ($_GET['display'])) {
     if (($_GET['display'] == 'new') && (empty ($topic))) {
         $newstories = true;
     } else if (($_GET['display'] == 'all') && (empty ($topic))) {
         $displayall = true;
-    } else if ($_GET['display'] == 'microsummary') {
-        $microsummary = true;
     }
 }
 
 // Retrieve the archive topic - currently only one supported
 $archivetid = DB_getItem ($_TABLES['topics'], 'tid', "archive_flag=1");
-
-// Microsummary support:
-// see: http://wiki.mozilla.org/Microsummaries
-if( $microsummary ) {
-    $sql = " (UNIX_TIMESTAMP(s.date) <= NOW()) AND (draft_flag <> 1)";
-
-    if (empty ($topic)) {
-        $sql .= COM_getLangSQL ('tid', 'AND', 's');
-    }
-
-    // if a topic was provided only select those stories.
-    if (!empty($topic)) {
-        $sql .= " AND s.tid = '".DB_escapeString($topic)."' ";
-    } elseif (!$newstories) {
-        $sql .= " AND frontpage <> 0 ";
-    }
-
-    if ($topic != $archivetid) {
-        $sql .= " AND s.tid != '".DB_escapeString($archivetid)."' ";
-    }
-
-    $sql .= COM_getPermSQL ('AND', 0, 2, 's');
-    $sql .= COM_getTopicSQL ('AND', 0, 's') . ' ';
-
-    $msql = "SELECT s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
-            . "UNIX_TIMESTAMP(s.expire) as expireunix, u.uid, u.username, "
-            . "u.fullname, u.photo, t.topic, t.imageurl "
-            . "FROM {$_TABLES['stories']} AS s LEFT JOIN {$_TABLES['users']} AS u "
-            . "ON s.uid=u.uid LEFT JOIN  {$_TABLES['topics']} AS t ON "
-            . "s.tid=t.tid WHERE "
-            . $sql . " ORDER BY featured DESC, date DESC LIMIT 0, 1";
-
-    $result = DB_query($msql);
-
-    if ( $A = DB_fetchArray( $result ) ) {
-        $pagetitle = $_CONF['microsummary_short'].$A['title'];
-    } else {
-        if(isset( $_CONF['pagetitle'] )) {
-            $pagetitle = $_CONF['pagetitle'];
-        }
-        if( empty( $pagetitle )) {
-            if( empty( $topic )) {
-                $pagetitle = $_CONF['site_slogan'];
-            } else {
-                $pagetitle = DB_getItem( $_TABLES['topics'], 'topic',
-                                                       "tid = '".DB_escapeString($topic)."'" );
-            }
-        }
-        $pagetitle = $_CONF['site_name'] . ' - ' . $pagetitle;
-    }
-    die($pagetitle);
-}
-
 
 $page = 1;
 if (isset ($_GET['page'])) {
@@ -138,15 +83,7 @@ if ( $_CONF['rating_enabled'] != 0 ) {
     $ratedIds = RATING_getRatedIds('article');
 }
 
-if($topic) {
-    $header = '<link rel="microsummary" href="' . $_CONF['site_url']
-            . '/index.php?display=microsummary&amp;topic=' . urlencode($topic)
-            . '" title="Microsummary" />';
-} else {
-    $header = '<link rel="microsummary" href="' . $_CONF['site_url']
-            . '/index.php?display=microsummary" title="Microsummary" />';
-}
-$display .= COM_siteHeader('menu', '', $header);
+$display .= COM_siteHeader();           // begin generating output: site header
 
 $display .= glfusion_UpgradeCheck();
 
