@@ -175,6 +175,15 @@ function _checkEnvironment()
     $T->parse('env','envs',true);
     $classCounter++;
 
+    $max_execution_time = ini_get('max_execution_time');
+    $T->set_var('item', 'max_execution_time');
+    $T->set_var('status', $max_execution_time < 30 ? '<span class="notok">' . $max_execution_time . ' secs</span>' : '<span class="yes">' . $max_execution_time . ' secs</span>');
+    $T->set_var('recommended', '30 secs');
+    $T->set_var('notes',$LANG01['max_execution_time']);
+    $T->set_var('rowclass',($classCounter % 2)+1);
+    $T->parse('env','envs',true);
+    $classCounter++;
+
     $T->set_block('page','libs','lib');
 
     if ( $sm != 1 && $open_basedir_restriction != 1 ) {

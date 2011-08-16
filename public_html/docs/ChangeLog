@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.3.0 (Trunk Development Branch)
 ------
+- Add max_execution_time to environment check (Mark H.)
 - Remove deprecated microsummary feature (Mark H.)
 - StaticPages: Display 404 page if user does not have permission to view
   static page (Mark)
