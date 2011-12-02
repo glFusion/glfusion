@@ -319,10 +319,7 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
     if ( $postmode != 'html' && $postmode != 'HTML') {
         $bbcode->addParser(array('block','inline','link','listitem'), 'nl2br');
     }
-    $bbcode->addParser(array('block','inline','link','listitem'), '_ff_replacetags');
-    if ( ! ($status & DISABLE_SMILIES ) ) {
-        $bbcode->addParser(array('block','inline','link','listitem'), '_ff_replacesmilie');      // calls replacesmilie on all text blocks
-    }
+
     $bbcode->addParser(array('block','inline','link','listitem'), '_ff_fixtemplate');
 
     if ( ! ($status & DISABLE_BBCODE ) ) {
@@ -363,6 +360,11 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
         $bbcode->setCodeFlag ('*', 'paragraphs', true);
         $bbcode->setCodeFlag ('list', 'opentag.before.newline', BBCODE_NEWLINE_DROP);
         $bbcode->setCodeFlag ('list', 'closetag.before.newline', BBCODE_NEWLINE_DROP);
+    }
+    $bbcode->addParser(array('block','inline','link','listitem'), '_ff_replacetags');
+
+    if ( ! ($status & DISABLE_SMILIES ) ) {
+        $bbcode->addParser(array('block','inline','link','listitem'), '_ff_replacesmilie');      // calls replacesmilie on all text blocks
     }
 
     $bbcode->setRootParagraphHandling (true);

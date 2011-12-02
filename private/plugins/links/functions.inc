@@ -114,7 +114,7 @@ function plugin_getmenuitems_links()
 */
 function plugin_getwhatsnew_links()
 {
-    global $_CONF, $_TABLES, $_USER, $_LI_CONF, $LANG_LINKS;
+    global $_CONF, $_TABLES, $_USER, $_LI_CONF, $LANG_LINKS, $LANG_WHATSNEW;
 
     $retval = '';
 

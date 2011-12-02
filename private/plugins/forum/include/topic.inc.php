@@ -51,8 +51,11 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
     global $canPost;
 
     $retval = '';
-
-    $dt = new Date('now',$_USER['tzid']);
+    if ( isset($showtopic['date']) ) {
+        $dt = new Date($showtopic['date'],$_USER['tzid']);
+    } else {
+        $dt = new Date('now',$_USER['tzid']);
+    }
 
     static $cacheUserArray = array();
     static $_user_already_voted = array();
@@ -70,8 +73,6 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
     }
 
     $min_height = 50;     // Base minimum  height of topic - will increase if avatar or sig is used
-    $dt->setTimeStamp($showtopic['date']);
-    $date = $dt->format($_FF_CONF['default_Topic_Datetime_format'],true);
 
     $foundUser = 0;
     if ( $showtopic['uid'] > 1 ) {
@@ -143,9 +144,8 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
                 if ( SEC_inGroup('Root') && function_exists('plugin_cclabel_nettools') && isset($showtopic['ip']) ) {
                     $min_height = $min_height + 5;
                 }
-                $dt->setTimestamp(strtotime($userarray['regdate']));
-
-                $regdate = $LANG_GF01['REGISTERED']. ': ' . $dt->format('m/d/y',true) . '<br/>';
+                $udt = new Date(strtotime($userarray['regdate']),$_USER['tzid']);
+                $regdate = $LANG_GF01['REGISTERED']. ': ' . $udt->format('m/d/y',true) . '<br/>';
                 $numposts = $LANG_GF01['POSTS']. ': ' .$posts;
                 if ( DB_count( $_TABLES['sessions'], 'uid', (int) $showtopic['uid']) > 0 AND DB_getItem($_TABLES['userprefs'],'showonline',"uid=".(int) $showtopic['uid']."") == 1) {
                     $avatar .= '<br/>' .$LANG_GF01['STATUS']. ' ' .$LANG_GF01['ONLINE'];
@@ -235,15 +235,12 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
         $replytopicid = $showtopic['pid'];
         $topictemplate->set_var ('read_msg','');
     }
-
     if ($_FF_CONF['allow_user_dateformat']) {
-        $date = COM_getUserDateTimeFormat($showtopic['date']);
-        $topictemplate->set_var ('posted_date', $date[0]);
+        $date = $dt->format($dt->getUserFormat(),true);
     } else {
-        $dt->setTimeStamp($showtopic['date']);
         $date = $dt->format($_FF_CONF['default_Topic_Datetime_format'],true);
-        $topictemplate->set_var ('posted_date', $date);
     }
+    $topictemplate->set_var ('posted_date', $date);
 
     if ($mode != 'preview') {
         if (!COM_isAnonUser() ) {

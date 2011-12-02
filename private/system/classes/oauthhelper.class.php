@@ -310,7 +310,7 @@ class OAuthConsumerBaseClass {
         $sql = "UPDATE {$_TABLES['users']} SET remoteusername = '".DB_escapeString($users['remoteusername'])."', remoteservice = '".DB_escapeString($users['remoteservice'])."', status = 3";
         if (!empty($users['remotephoto'])) {
             // COM_errorLog("saving userphoto");
-            $save_img = $_CONF['path_images'] . 'userphotos/' . $users['loginname'];
+            $save_img = $_CONF['path_images'] . 'userphotos/' . $uid ;
             // COM_errorLog("from={$users['remotephoto']} to={$save_img}");
             $imgsize = $this->_saveUserPhoto($users['remotephoto'], $save_img);
             // COM_errorLog("imgsize={$imgsize}");
@@ -323,7 +323,7 @@ class OAuthConsumerBaseClass {
                     unlink($image);
                 }
                 rename($save_img, $image);
-                $imgname = $users['loginname'] . $ext;
+                $imgname = $uid . $ext;
                 $sql .= ", photo = '".DB_escapeString($imgname)."'";
             }
         }
@@ -364,7 +364,7 @@ class OAuthConsumerBaseClass {
     }
 
     protected function _getImageExt($img, $dot = true) {
-        $size = getimagesize($img);
+        $size = @getimagesize($img);
         switch ($size['mime']) {
             case 'image/gif':
                 $ext = 'gif';

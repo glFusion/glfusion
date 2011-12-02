@@ -887,8 +887,35 @@ function FF_saveTopic( $forumData, $postData, $action )
             $okToSave = false;
         }
     }
+
+    if (isset($postData['name']) && $postData['name'] != '') {
+        $name = _ff_preparefordb(_ff_checkHTML(strip_tags(trim(COM_checkWords(USER_sanitizeName($postData['name']))))),'text');
+        $name = urldecode($name);
+    } else {
+        $okToSave = false;
+        $errorMessages .= 'No name or name blank' . '<br />';
+    }
+
+    // speed limit check
+    if ( !SEC_hasRights('forum.edit') ) {
+        COM_clearSpeedlimit ($_FF_CONF['post_speedlimit'], 'forum');
+        $last = COM_checkSpeedlimit ('forum');
+        if ($last > 0) {
+            $errorMessages .= sprintf($LANG_GF01['SPEEDLIMIT'],$last,$_FF_CONF['post_speedlimit']) . '<br/>';
+            $okToSave = false;
+        }
+    }
+
+    // standard edit checks
+    if (strlen(trim($postData['name'])) < $_FF_CONF['min_username_length'] ||
+        strlen(trim($postData['subject'])) < $_FF_CONF['min_subject_length'] ||
+        strlen(trim($postData['comment'])) < $_FF_CONF['min_comment_length']) {
+        $errorMessages .= $LANG_GF02['msg18'] . '<br/>';
+        $okToSave = false;
+    }
+
     // CAPTCHA check
-    if ( function_exists('plugin_itemPreSave_captcha') ) {
+    if ( function_exists('plugin_itemPreSave_captcha') && $okToSave == true) {
         if ( !isset($postData['captcha']) ) {
             $postData['captcha'] = '';
         }
@@ -898,22 +925,19 @@ function FF_saveTopic( $forumData, $postData, $action )
             $okToSave = false;
         }
     }
-    // standard edit checks
-    if (strlen(trim($postData['name'])) < $_FF_CONF['min_username_length'] ||
-        strlen(trim($postData['subject'])) < $_FF_CONF['min_subject_length'] ||
-        strlen(trim($postData['comment'])) < $_FF_CONF['min_comment_length']) {
-        $errorMessages .= $LANG_GF02['msg18'] . '<br/>';
-        $okToSave = false;
-    }
-    // speed limit check
-    COM_clearSpeedlimit ($_FF_CONF['post_speedlimit'], 'forum');
-    $last = COM_checkSpeedlimit ('forum');
-    if ($last > 0) {
-        $errorMessages .= sprintf($LANG_GF01['SPEEDLIMIT'],$last,$_FF_CONF['post_speedlimit']) . '<br/>';
-        $okToSave = false;
-    }
+
     // spamx check
-    if ($_FF_CONF['use_spamx_filter'] == 1) {
+    if ($_FF_CONF['use_spamx_filter'] == 1 && $okToSave == true) {
+        // Stop Forum Spam check
+        if ( function_exists('plugin_itemPreSave_spamx') ) {
+            $msg = plugin_itemPreSave_spamx('forum',$name);
+            if ( $msg != '' ) {
+                // then tell them to get lost ...
+                $errorMessages .= $msg;
+                $okToSave = false;
+                return $errorMessage;
+            }
+        }
         // Check for SPAM
         $spamcheck = '<h1>' . $postData['subject'] . '</h1><p>' . $postData['comment'] . '</p>';
         $result = PLG_checkforSpam($spamcheck, $_CONF['spamx']);
@@ -923,13 +947,6 @@ function FF_saveTopic( $forumData, $postData, $action )
             $errorMessages .= 'Your post was detected as spam.';
             $okToSave = false;
         }
-    }
-    if (isset($postData['name']) && $postData['name'] != '') {
-        $name = _ff_preparefordb(_ff_checkHTML(strip_tags(trim(COM_checkWords(USER_sanitizeName($postData['name']))))),'text');
-        $name = urldecode($name);
-    } else {
-        $okToSave = false;
-        $errorMessages .= 'No name or name blank' . '<br />';
     }
 
     if ( $okToSave == false ) {
@@ -1097,6 +1114,7 @@ function FF_saveTopic( $forumData, $postData, $action )
             }
             $topicparent = $topicPID;
         }
+        COM_updateSpeedLimit('forum');
         PLG_itemSaved($savedPostID,'forum');
         CACHE_remove_instance('forumcb');
 

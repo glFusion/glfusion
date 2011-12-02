@@ -130,6 +130,7 @@ $LANG_SX00 = array (
     'plugin_name' => 'Spam-X',
     'slvwhitelist' => 'SLV Whitelist',
     'instructions' => 'Spam-X allows you to define words, URLs, and other items that can be used to block spam posts on your site.',
+    'invalid_email_or_ip'   => 'Invalid e-mail address or IP address has been blocked',
 );
 
 

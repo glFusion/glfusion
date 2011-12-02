@@ -342,4 +342,24 @@ function plugin_geticon_spamx ()
 
     return $_CONF['site_admin_url'] . '/plugins/spamx/images/spamx.png';
 }
+
+function plugin_itemPreSave_spamx($type, $username)
+{
+    global $_CONF, $LANG_SX00;
+
+    if ($type == 'registration' || $type == 'forum' ) {
+        $email = '';
+        if ( isset($_POST['email']) ) {
+            $email = $_POST['email'];
+        }
+        require_once $_CONF['path'].'/plugins/spamx/SFS.Misc.class.php';
+        $EX = new SFS;
+        $res = $EX->execute($email, $_SERVER['REMOTE_ADDR']);
+        if ($res > 0) {
+            return $LANG_SX00['invalid_email_or_ip'];
+        }
+    }
+
+    return '';
+}
 ?>

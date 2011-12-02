@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -173,8 +173,8 @@ $LANG_INSTALL = array(
     'data_path'                 => 'Data Path',
     'language_support'          => 'Language Support',
     'language_pack'             => 'glFusion ships in English, but after installation you can download and install the <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Language Pack</a> which contains the language files for all supported languages.',
-/* --- New in glFusion v1.1.4 --- */
     'libcustom_not_found'       => 'Unable to located lib-custom.php.dist.',
+    'no_db_driver'              => 'You must have the MySQL extension loaded in PHP to install glFusion',
 );
 
 // +---------------------------------------------------------------------------+

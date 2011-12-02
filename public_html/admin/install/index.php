@@ -61,6 +61,7 @@ define('PLUGIN_UPGRADE_ERROR',     17);
 define('INVALID_GEEKLOG_VERSION',  18);
 define('NO_MIGRATE_GLFUSION',      19);
 define('FILE_INCLUDE_ERROR',       20);
+define('NO_DB_DRIVER',             21);
 
 require_once 'include/install.lib.php';
 require_once 'include/template-lite.class.php';
@@ -304,6 +305,9 @@ function _displayError($error,$step,$errorText='')
             break;
         case FILE_INCLUDE_ERROR :
             $T->set_var('text','Internal Error - please contact support@glfusion.org');
+            break;
+        case NO_DB_DRIVER :
+            $T->set_var('text',$LANG_INSTALL['no_db_driver']);
             break;
         default :
             $T->set_var('text',$errorText);
@@ -1220,6 +1224,10 @@ function INST_gotSiteInformation()
 
     if ( $numErrors > 0 ) {
         return _displayError(SITE_DATA_ERROR,'getsiteinformation',$errText);
+    }
+
+    if ( !function_exists('mysql_connect') ) {
+        return _displayError(NO_DB_DRIVER,'getsiteinformation');
     }
 
     $db_handle = @mysql_connect($db_host, $db_user, $db_pass);
