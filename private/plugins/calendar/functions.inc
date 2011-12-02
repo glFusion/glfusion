@@ -60,6 +60,11 @@ if (file_exists($langfile)) {
         include_once $custfile;
     }
 }
+
+// we need a utf8 validation function for the phpblock
+
+require_once $_CONF['path'].'lib/utf8/utils/validation.php';
+
 /*
 * Check and see if we need to load the plugin configuration
 */

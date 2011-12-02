@@ -425,6 +425,55 @@ function PLUGINS_unInstall($pi_name)
 }
 
 /**
+* Remove a plugin that is sitting in the public/private tree.
+* If they exist, the following directories are deleted recursively:
+*
+* 1. public_html/admin/plugins/{pi_name}
+* 2. public_html/{pi_name}
+* 3. private/plugins/{pi_name}
+*
+* @param    pi_name   string   name of the plugin to remove
+* @return             string   HTML for error or success message
+*
+*/
+function PLUGINS_remove($pi_name)
+{
+    global $_CONF, $LANG32;
+
+    $retval = '';
+
+    if (strlen ($pi_name) == 0) {
+        $retval .= COM_showMessageText($LANG32[12],$LANG32[13],true);
+        COM_errorLog ($LANG32[12]);
+        return $retval;
+    }
+
+    COM_errorLog( "Removing the {$pi_name} plugin file structure");
+
+    $msg = '';
+    if (PLG_remove($pi_name)) {
+        COM_errorLog("Plugin removal was successful.");
+        $msg = 116;
+        $retval .= COM_showMessage(116);
+    } else {
+        COM_errorLog("Error removing the plugin file structure - the web server may not have sufficient permissions");
+        $msg = 95;
+        $retval .= COM_showMessage(95);
+    }
+    CTL_clearCache();
+
+    if ( $msg != '' ) {
+        COM_setMessage($msg);
+        $refreshURL = $_CONF['site_admin_url'].'/plugins.php';
+    } else {
+        $refreshURL = $_CONF['site_admin_url'].'/plugins.php';
+    }
+
+    echo COM_refresh($refreshURL);
+    exit;
+}
+
+/**
  * used for the list of plugins in admin/plugins.php
  *
  */
@@ -532,7 +581,13 @@ function PLUGINS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                     . '&amp;pi_name=' . $A['pi_name']
                     . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
             } else {
-                $retval = '';
+                $attr['title'] = $LANG32[79];
+                $attr['onclick'] = 'return doubleconfirm(\'' . $LANG32[88] . '\',\'' . $LANG32[89] . '\');';
+                $retval = COM_createLink($icon_arr['delete'],
+                    $_CONF['site_admin_url'] . '/plugins.php'
+                    . '?remove=x'
+                    . '&amp;pi_name=' . $A['pi_name']
+                    . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
             }
             break;
 
@@ -642,12 +697,12 @@ function PLUGINS_toggleStatus($plugin_name_arr, $pluginarray)
 // MAIN ========================================================================
 
 $action = '';
-$expected = array('update','delete','cancel');
+$expected = array('update','delete','cancel','remove');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
     } elseif (isset($_GET[$provided])) {
-	$action = $provided;
+        $action = $provided;
     }
 }
 
@@ -698,9 +753,21 @@ switch ($action) {
             $token = SEC_createToken();
             $display .= PLUGINS_list($token);
             $display .= COM_siteFooter ();
-            $display .= COM_siteFooter ();
         } else {
             COM_accessLog("User {$_USER['username']} tried to illegally delete plugin $pi_name and failed CSRF checks.");
+            echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
+        }
+        break;
+
+    case 'remove':
+        if (SEC_checkToken()) {
+            $display .= COM_siteHeader ('menu', $LANG32[30]);
+            $display .= PLUGINS_remove($pi_name);
+            $token = SEC_createToken();
+            $display .= PLUGINS_list($token);
+            $display .= COM_siteFooter ();
+        } else {
+            COM_accessLog("User {$_USER['username']} tried to illegally remove plugin $pi_name and failed CSRF checks.");
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;

@@ -110,9 +110,11 @@ CREATE TABLE {$_TABLES['linksubmission']} (
 ) ENGINE=MyISAM
 ";
 
-$_SQL['d1'] = "INSERT INTO {$_TABLES['linkcategories']} (cid, pid, category, description, tid, created, modified, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('site', 'root', 'Root', 'Website root', '', NOW(), NOW(), #group#, 2, 3, 3, 2, 2)";
-$_SQL['d2'] = "INSERT INTO {$_TABLES['linkcategories']} (cid, pid, category, description, tid, created, modified, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('glfusion-sites', 'site', 'glFusion Sites', 'Sites using or related to the glFusion CMS', NULL, NOW(), NOW(), #group#, 2, 3, 3, 2, 2)";
-$_SQL['d3'] = "INSERT INTO {$_TABLES['links']} (lid, cid, url, description, title, hits, date, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('glfusion.org', 'glfusion-sites', 'http://www.glfusion.org/', 'Visit the glFusion homepage for support, FAQs, updates, add-ons, and a great community.', 'glFusion Project Homepage', 123, NOW(), 1, #group#, 3, 3, 2, 2);";
+// Links Default Data
 
+$_SQL['links_data'][] = "INSERT INTO {$_TABLES['linkcategories']} (cid, pid, category, description, tid, created, modified, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('site', 'root', 'Root', 'Website root', NULL, NOW(), NOW(), 2, %%admin_group_id%%, 3, 3, 2, 2);";
+$_SQL['links_data'][] = "INSERT INTO {$_TABLES['linkcategories']} (cid, pid, category, description, tid, created, modified, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('blog-roll', 'site', 'Blog Roll', 'glFusion Related Sites', NULL, NOW(), NOW(), 2, %%admin_group_id%%, 3, 3, 2, 2);";
+$_SQL['links_data'][] = "INSERT INTO {$_TABLES['links']} (lid, cid, url, description, title, hits, date, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('glfusion.org', 'blog-roll', 'http://www.glfusion.org/', 'Visit glFusion - A site dedicated to enhancing glFusion.', 'glFusion - Enhancing glFusion', 1, NOW(), 2, %%admin_group_id%%, 3, 3, 2, 2);";
+$_SQL['links_data'][] = "INSERT INTO {$_TABLES['links']} (lid, cid, url, description, title, hits, date, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('glfusion_wiki', 'blog-roll', 'http://www.glfusion.org/wiki/doku.php?id=glfusion:start', 'The glFusion documentation wiki.', 'glFusion Wiki', 1, NOW(), 2, %%admin_group_id%%, 3, 3, 2, 2);";
 
 ?>

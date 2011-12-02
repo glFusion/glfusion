@@ -44,6 +44,11 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
     die('This file can not be used on its own!');
 }
 
+// we must have PHP v5.0 or greater
+if (version_compare(PHP_VERSION,'5.2.0','<')) {
+    die('Sorry, glFusion requires PHP version 5.2.0 or greater.');
+}
+
 /**
 * This is the common library for glFusion.  Through our code, you will see
 * functions with the COM_ prefix (e.g. COM_siteHeader()).  Any such functions
@@ -109,6 +114,14 @@ if ( function_exists('set_error_handler') ) {
     $defaultErrorHandler = set_error_handler('COM_handleError', error_reporting());
 }
 
+/**
+  * Load the site configuration.  This is done in three steps:
+  *
+  * 1) siteconfig.php - instantiates _CONF & _SYSTEM arrays, sets
+  * 2) config->load_baseconfig() - loads db-config.php, initializes database & config
+  * 3) config->get_config('Core') - loads config pairs for group 'core'
+  *
+  */
 require_once 'siteconfig.php' ;
 require_once $_CONF['path_system'] . 'classes/config.class.php';
 
@@ -119,6 +132,9 @@ $config->initConfig();
 
 $_CONF = $config->get_config('Core');
 
+/**
+  * Make sure some config values are set properly
+  */
 if ( !isset($_CONF['default_photo']) || $_CONF['default_photo'] == '' ) {
     $_CONF['default_photo'] = $_CONF['site_url'].'/images/userphotos/default.jpg';
 }
@@ -6586,7 +6602,8 @@ function COM_decompress($file, $target)
     return false;
 }
 
-function COM_isWritable($path) {
+function COM_isWritable($path)
+{
     if ($path{strlen($path)-1}=='/')
         return COM_isWritable($path.uniqid(mt_rand()).'.tmp');
 
@@ -6602,6 +6619,22 @@ function COM_isWritable($path) {
     @fclose($f);
     @unlink($path);
     return true;
+}
+
+function COM_recursiveDelete($path)
+{
+    if(is_file($path)){
+        if ($COM_VERBOSE) COM_errorLog("COM_recursiveDelete(file): {$path}");
+        return @unlink($path);
+    }
+    elseif(is_dir($path)){
+        $scan = glob(rtrim($path,'/').'/*');
+        foreach($scan as $index => $file){
+            COM_recursiveDelete($file);
+        }
+        if ($COM_VERBOSE) COM_errorLog("COM_recursiveDelete(dir): {$path}");
+        return @rmdir($path);
+    }
 }
 
 function COM_buildOwnerList($fieldName,$owner_id=2)

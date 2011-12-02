@@ -188,18 +188,68 @@ function INSTALLER_install_table($step, &$vars)
     return "DROP TABLE {$step['table']}";
 }
 
+function INSTALLER_extract_params($str, $delim)
+{
+    $params = Array();
+    for ($i=0; $i < strlen($str);) {
+        $j = strpos($str, $delim, $i);
+        if ($j > 0) {
+            $j = $j + strlen($delim);
+            $k = strpos($str, $delim, $j);
+            if ($k > 0) {
+                $l = $k - $j;
+                $params[] = substr($str, $j, $l);
+                $i = $k + strlen($delim);
+            } else {
+                break;
+            }
+        } else {
+            break;
+        }
+    }
+    return $params;
+}
+
 function INSTALLER_install_sql($step, &$vars)
 {
     if (isset($step['log'])) {
         COM_errorLog("AutoInstall: ".$step['log']);
     }
 
-    DB_query($step['sql'], 1);
-    if (DB_error()) {
-        COM_errorLog("AutoInstall: SQL failed! ".htmlspecialchars($step['sql']));
-        return 1;
+    if (array_key_exists('sql', $step)) {
+        $query = (is_array($step['sql'])) ? $step['sql'] : Array($step['sql']);
+        foreach ($query as $sql) {
+            // check for replaceable parameters
+            $params = INSTALLER_extract_params($sql,'%%');
+            // replace any that correspond to a $vars key with the assoc value
+            foreach($params as $param) {
+                $sql = (array_key_exists($param, $vars)) ? str_replace('%%'.$param.'%%', $vars[$param], $sql) : $sql;
+            }
+            DB_query($sql, 1);
+            if (DB_error()) {
+                COM_errorLog("AutoInstall: SQL failed! ".htmlspecialchars($step['sql']));
+                return 1;
+            }
+        }
     }
+
     return isset($step['rev']) ? $step['rev'] : '';
+}
+
+function INSTALLER_fail_sql($step, &$vars)
+{
+    if (array_key_exists('rev', $step)) {
+        $query = (is_array($step['rev'])) ? $step['rev'] : Array($step['rev']);
+        foreach ($query as $sql) {
+            // check for replaceable parameters
+            $params = INSTALLER_extract_params($sql,'%%');
+            // replace any that correspond to a $vars key with the assoc value
+            foreach($params as $param) {
+                $sql = (array_key_exists($param, $vars)) ? str_replace('%%'.$param.'%%', $vars[$param], $sql) : $sql;
+            }
+            DB_query($sql, 1);
+        }
+    }
 }
 
 function INSTALLER_install_block($step, &$vars)
@@ -262,11 +312,7 @@ function INSTALLER_install_createvar($step, &$vars)
 function INSTALLER_install_mkdir($step, &$vars)
 {
     if (array_key_exists('dirs', $step)) {
-        if (!is_array($step['dirs'])) {
-            $dirs = Array($step['dirs']);
-        } else {
-            $dirs = $step['dirs'];
-        }
+        $dirs = (is_array($step['dirs'])) ? $step['dirs'] : Array($step['dirs']);
         foreach ($dirs as $path) {
             COM_errorlog("AutoInstall: Creating directory $path");
             $ret = @mkdir($path);
@@ -279,11 +325,7 @@ function INSTALLER_install_mkdir($step, &$vars)
 function INSTALLER_fail_rmdir($step)
 {
     if (array_key_exists('dirs', $step)) {
-        if (!is_array($step['dirs'])) {
-            $dirs = Array($step['dirs']);
-        } else {
-            $dirs = $step['dirs'];
-        }
+        $dirs = (is_array($step['dirs'])) ? $step['dirs'] : Array($step['dirs']);
         foreach ($dirs as $path) {
             COM_errorlog("AutoInstall: FAIL: removing directory $path");
             @rmdir($path);

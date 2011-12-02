@@ -1170,4 +1170,261 @@ class config {
         @unlink($cache_file);
     }
 }
+
+/**
+* Helper function: Provide language dropdown
+*
+* @return   Array   Array of (filename, displayname) pairs
+*
+* @note     Note that key/value are being swapped!
+*
+*/
+
+function configmanager_select_language_helper()
+{
+    global $_CONF;
+
+    return array_flip(MBYTE_languageList($_CONF['default_charset']));
+}
+
+/**
+* Helper function: Provide themes dropdown
+*
+* @return   Array   Array of (filename, displayname) pairs
+*
+* @note     Beautifying code duplicated from usersettings.php
+*
+*/
+function configmanager_select_theme_helper()
+{
+    $themes = array();
+
+    $themeFiles = COM_getThemes(true);
+
+    usort($themeFiles,
+          create_function('$a,$b', 'return strcasecmp($a,$b);'));
+
+    foreach ($themeFiles as $theme) {
+        $words = explode ('_', $theme);
+        $bwords = array ();
+        foreach ($words as $th) {
+            if ((strtolower ($th{0}) == $th{0}) &&
+                (strtolower ($th{1}) == $th{1})) {
+                $bwords[] = strtoupper ($th{0}) . substr ($th, 1);
+            } else {
+                $bwords[] = $th;
+            }
+        }
+
+        $themes[implode(' ', $bwords)] = $theme;
+    }
+    return $themes;
+}
+
+
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_path_html_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] != '/' ) {
+        return $value . '/';
+    }
+    return $value;
+}
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_path_log_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] != '/' ) {
+        return $value . '/';
+    }
+    return $value;
+}
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_path_language_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] != '/' ) {
+        return $value . '/';
+    }
+    return $value;
+}
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_backup_path_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] != '/' ) {
+        return $value . '/';
+    }
+    return $value;
+}
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_path_data_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] != '/' ) {
+        return $value . '/';
+    }
+    return $value;
+}
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_path_images_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] != '/' ) {
+        return $value . '/';
+    }
+    return $value;
+}
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_path_pear_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] != '/' ) {
+        return $value . '/';
+    }
+    return $value;
+}
+
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_path_themes_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] != '/' ) {
+        return $value . '/';
+    }
+    return $value;
+}
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_site_url_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] == '/' ) {
+        return (substr($value,0,strlen($value)-1));
+    }
+    return $value;
+}
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_site_admin_url_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] == '/' ) {
+        return (substr($value,0,strlen($value)-1));
+    }
+    return $value;
+}
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_rdf_file_validate($value)
+{
+    $value = trim($value);
+    return $value;
+}
+
+/**
+* Helper function: Provide timezone dropdown
+*
+* @return   array   Array of (timezone-long-name, timezone-short-name) pairs
+*
+*/
+
+function configmanager_select_timezone_helper()
+{
+    $locations = array();
+    $all = timezone_identifiers_list();
+    $i = 0;
+    foreach($all AS $zone) {
+        $zone = explode('/',$zone);
+        $zonen[$i]['continent'] = isset($zone[0]) ? $zone[0] : '';
+        $zonen[$i]['city'] = isset($zone[1]) ? $zone[1] : '';
+        $zonen[$i]['subcity'] = isset($zone[2]) ? $zone[2] : '';
+        $i++;
+    }
+    asort($zonen);
+    $structure = '';
+    foreach($zonen AS $zone) {
+        extract($zone);
+        if($continent == 'Africa' || $continent == 'America' || $continent == 'Antarctica' || $continent == 'Arctic' || $continent == 'Asia' || $continent == 'Atlantic' || $continent == 'Australia' || $continent == 'Europe' || $continent == 'Indian' || $continent == 'Pacific') {
+            if (isset($city) != '') {
+                if (!empty($subcity) != '') {
+                    $city = $city . '/'. $subcity;
+                }
+                $tzname = $continent.'/'.str_replace('_',' ',$city);
+                $locations[$tzname] = $continent.'/'.$city;
+            } else {
+                if (!empty($subcity) != '') {
+                    $city = $city . '/'. $subcity;
+                }
+                $locations[$tzname] = $continent.'/'.$city;
+            }
+        }
+    }
+    return $locations;
+}
+
 ?>

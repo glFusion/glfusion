@@ -33,12 +33,7 @@
 
 require_once '../../lib-common.php';
 
-/* Check for PHP5 */
-if (PHP_VERSION < 5) {
-    $_CONF['disable_webservices'] = true;
-} else {
-    require_once $_CONF['path_system'] . '/lib-webservices.php';
-}
+require_once $_CONF['path_system'] . '/lib-webservices.php';
 
 /* Check if WS component is enabled */
 if ($_CONF['disable_webservices']) {

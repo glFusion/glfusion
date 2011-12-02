@@ -83,6 +83,10 @@ $INSTALL_plugin['links'] = array(
         'log' => 'Adding feature to the admin group'),
   array('type' => 'mapping', 'group' => 'admin_group_id', 'feature' => 'submit_feature_id',
         'log' => 'Adding feature to the admin group'),
+  array('type' => 'block', 'name' => 'blogroll_block', 'title' => 'Blog Roll',
+        'phpblockfn' => 'phpblock_blogroll', 'block_type' => 'phpblock',
+        'group_id' => 'admin_group_id'),
+  array('type' => 'sql', 'sql' => $_SQL['links_data'], 'log' => 'Adding default links data'),
 );
 
 
@@ -151,7 +155,7 @@ function plugin_autouninstall_links ()
         /* give the full name of the feature, as in the db */
         'features' => array('links.edit', 'links.moderate', 'links.submit'),
         /* give the full name of the block, including 'phpblock_', etc */
-        'php_blocks' => array(),
+        'php_blocks' => array('phpblock_blogroll'),
         /* give all vars with their name */
         'vars'=> array()
     );

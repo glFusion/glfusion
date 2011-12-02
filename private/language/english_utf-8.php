@@ -1246,7 +1246,7 @@ $LANG32 = array(
     28 => 'Installed Version',
     29 => 'glFusion Version',
     30 => 'Delete Plugin?',
-    31 => 'Are you you absolutely sure you want to uninstall this Plugin?  By doing so you will permanently remove all of the data that is associated with this Plugin from the database.',
+    31 => 'Are you you absolutely sure you want to uninstall this Plugin?  By doing so you will permanently remove all of the data that is associated with this Plugin from the database, however the Plugin files and directory structure will be retained.',
     32 => '<p><b>Error AutoLink tag not correct format</b></p>',
     33 => 'Code',
     34 => 'Update',
@@ -1303,6 +1303,8 @@ $LANG32 = array(
     85 => 'Upload Autotag',
     86 => 'Automated Autotag Installer Error',
     87 => 'Autotag Installer',
+    88 => 'Are you sure you want to remove this plugin?',
+    89 => 'Are you absolutely sure you want to remove this plugin?  This will result in the deletion of all of the files and directories relating to this plugin, and to re-install this plugin, you will have to upload another copy.',
 );
 
 ###############################################################################
@@ -1424,7 +1426,7 @@ $MESSAGE = array(
     42 => 'Your word has been successfully saved.',
     43 => 'The word has been successfully deleted.',
     44 => 'The plugin was successfully installed!',
-    45 => 'The plugin was successfully uninstalled.  The plugin file structure will remain and can be reinstalled unless it is manually removed.',
+    45 => 'The plugin was successfully uninstalled.  The plugin file structure will remain and can be reinstalled unless the plugin is removed.',
     46 => 'Sorry, you do not have access to the database backup utility.  Please note that all attempts to access unauthorized features are logged',
     47 => 'This functionality only works under *nix.  If you are running *nix as your operating system then your cache has been successfully cleared. If you are on Windows, you will need to search for files name adodb_*.php and remove them manually.',
     48 => "Thank you for applying for a membership with {$_CONF['site_name']}. Our team will review your application. If approved, your password will be eMailed to you at the eMail address you just entered.",
@@ -1486,6 +1488,7 @@ $MESSAGE = array(
     113 => 'Your account has been created successfully. {site_url}',
     114 => 'Warning: Resynchronization with your remote OAuth account has failed but your other account information has been successfully saved.',
     115 => 'Warning: The remote OAuth authentication service has been disabled.',
+    116 => "The plugin's files and related directories were successfully removed.",
     200 => 'Sorry, you do not have access to this page.  Please note that all attempts to access unauthorized features are logged.',
     500 => 'The Template Cache has been successfully cleared',
     501 => 'Security Token is Invalid - Possible session timeout.',
@@ -2231,6 +2234,8 @@ $LANG_LOGO = array(
     'no_logo_graphic'   => 'No Logo Graphic available',
     'logo_help'         => 'Uploaded graphic logo images are not resized, the standard size for glFusion logo is 100 pixels tall and should be less than 500 pixels wide.  You can upload larger images, but you will need to modify the site CSS in styles.css to ensure it displays properly.',
     'logo_saved'        => 'Logo options successfully saved.',
+    'invalid_type'      => 'Invalid image type, only JPG, PNG, and GIF are allowed',
+    'invalid_size'      => 'Uploaded logo larger than allowed size of ',
 );
 
 ###############################################################################

@@ -2,6 +2,20 @@ glFusion ChangeLog
 
 v1.3.0 (Trunk Development Branch)
 ------
+- Fixed grp_id not passed in pagination links User Admin when group selection
+  filter is applied.  (Mark H.)
+- Links: Fixed autoinstall code - example data will now be correctly restored
+  when uninstalling and then reinstalling the plugin.  Also fix example data
+  group ownership during site installation.  Tweaked lib-install to allow
+  passage of arrays to raw sql auto-installation options. (Mark H.)
+- Feature: Uninstalled plugins can now be completely removed from the site
+  by clicking the 'Delete' icon again after uninstalling.  (Mark H.)
+- Improved error trapping / messages on logo upload (Mark)
+- Add check to validate timezone in date/time class (Mark)
+- Add check for MySQL extension in the installation routine (Mark)
+- Move config helper/validation functions to config class to ensure they are
+  loaded and available to all scripts instantiating the class (Mark H.)
+- Add global var to test for development mode (Mark H.)
 - Add max_execution_time to environment check (Mark H.)
 - Remove deprecated microsummary feature (Mark H.)
 - StaticPages: Display 404 page if user does not have permission to view

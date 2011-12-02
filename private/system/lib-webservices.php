@@ -47,11 +47,6 @@ $WS_TEXT = '';
 // Set = true to enable verbose logging (in error.log)
 $WS_VERBOSE = false;
 
-/* Check for PHP5 */
-if (PHP_VERSION < 5) {
-    $_CONF['disable_webservices'] = true;
-}
-
 /**
  * Displays an error message with the appropriate HTTP error-code
  *

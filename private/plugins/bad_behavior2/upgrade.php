@@ -11,7 +11,7 @@
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2009 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+

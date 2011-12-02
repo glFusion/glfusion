@@ -84,6 +84,13 @@ function _logoEdit() {
 function _saveLogo() {
     global $_CONF, $_TABLES, $_LOGO, $LANG_LOGO;
 
+    // return values:
+    // 1 = OK
+    // 2 = Unknown file type
+    // 3 = no file available
+    // 4 = invalid size
+
+
     $retval = 1;
 
     $logo   = isset($_POST['usegraphic']) ? COM_applyFilter($_POST['usegraphic'],true) : 0;
@@ -125,14 +132,22 @@ function _saveLogo() {
                 }
             }
         }
+    } else {
+        $retval = 3;
     }
-    DB_save($_TABLES['logo'],"config_name,config_value","'use_graphic_logo','$logo'");
-    DB_save($_TABLES['logo'],"config_name,config_value","'display_site_slogan','$slogan'");
-    DB_save($_TABLES['logo'],"config_name,config_value","'logo_name','$logo_name'");
 
     $_LOGO['use_graphic_logo'] = $logo;
     $_LOGO['display_site_slogan'] = $slogan;
     $_LOGO['logo_name'] = $logo_name;
+
+    $logo = DB_escapeString($logo);
+    $slogan = DB_escapeString($slogan);
+    $logo_name = DB_escapeString($logo_name);
+
+    DB_save($_TABLES['logo'],"config_name,config_value","'use_graphic_logo','$logo'");
+    DB_save($_TABLES['logo'],"config_name,config_value","'display_site_slogan','$slogan'");
+    DB_save($_TABLES['logo'],"config_name,config_value","'logo_name','$logo_name'");
+
 
     return $retval;
 }
@@ -159,7 +174,19 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             break;
         case 'savelogo' :
             $rc = _saveLogo();
-            $content = COM_showMessageText( $LANG_LOGO['logo_saved'], 'Logo Administration' );
+            switch ( $rc ) {
+                case 2:
+                    $message = $LANG_LOGO['invalid_type'];
+                    break;
+                case 4 :
+                    $message = $LANG_LOGO['invalid_size'].$_CONF['max_logo_height'].'x'.$_CONF['max_logo_width'].'px';
+                    break;
+                default :
+                    $message = $LANG_LOGO['logo_saved'];
+                    break;
+            }
+
+            $content = COM_showMessageText( $message, 'Logo Administration' );
             $content .= _logoEdit( );
             $currentSelect = $LANG_LOGO['logo_admin'];
             break;

@@ -1412,6 +1412,7 @@ function USER_list($grp_id)
 
     if ($grp_id > 0) {
         $groups = USER_getGroupList ($grp_id);
+        $text_arr['form_url'] .= '?grp_id=' . $grp_id;
         $groupList = implode (',', $groups);
         $sql = "SELECT DISTINCT {$_TABLES['users']}.uid,username,fullname,email,photo,regdate,status$select_userinfo "
               ."FROM {$_TABLES['group_assignments']},{$_TABLES['users']} $join_userinfo "

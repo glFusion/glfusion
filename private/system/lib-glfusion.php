@@ -97,7 +97,7 @@ function glfusion_UpgradeCheck() {
 function glfusion_SecurityCheck() {
     global $_CONF,$_SYSTEM,$LANG01;
 
-    if (!SEC_inGroup ('Root')) {
+    if (!SEC_inGroup ('Root') OR (isset($_SYSTEM['development_mode']) AND $_SYSTEM['development_mode'])) {
         return;
     }
 
@@ -128,81 +128,6 @@ function glfusion_SubmissionsCheck()
     return $retval;
 }
 */
-function phpblock_blogroll ()
-{
-    global $_CONF, $_TABLES;
-
-    // configuration options:
-
-    $cat = 'blog-roll'; // Category to take links from
-    $directlink = false;    // Use direct links (true) or portal.php (false)
-    $random = false;        // Random order (true) or sort by $sort (false)
-    $sort = 'date';         // Sort by ... e.g. 'date', 'title', 'url'
-
-    // === you shouldn't need to change anything below this line ==============
-    $retval = '';
-
-    if ( function_exists('LINKS_countLinksAndClicks') ) {
-
-        $result = DB_query ("SELECT lid,url,title,description,hits FROM {$_TABLES['links']} WHERE cid = '".DB_escapeString($cat)."'" . COM_getPermSql ('AND') . " ORDER BY $sort");
-        $numLinks = DB_numRows ($result);
-
-        $links = array ();
-        for ($i = 0; $i < $numLinks; $i++) {
-            $A = DB_fetchArray ($result);
-
-            if ($directlink) {
-                $url = $A['url'];
-                $link = '<a href="' . $url . '">';
-
-            } else {
-                $url = $_CONF['site_url']
-                     . COM_buildUrl ('/links/portal.php?what=link&amp;item=' . $A['lid']);
-                $link = '<a href="' . $url . '" title="' . $A['url'] . '">';
-
-            }
-            $links[] = $link . COM_truncate($A['title'],25,'...') . '</a>'; // . ' (' . ($A['hits']) . ')' . '<br' . XHTML . '><em>' . ($A['description']) . '</em><br' . XHTML . '><br' . XHTML . '>';
-        }
-
-        if (count ($links) > 0) {
-
-            if ($random) {
-                $min = 0;
-                $max = count ($links) - 1;
-
-                $newlist = array ();
-                do {
-                    $r = rand ($min, $max);
-
-                    if (!empty ($links[$r])) {
-                        $newlist[] = $links[$r];
-                        unset ($links[$r]);
-                    }
-
-                    if ($r == $min) {
-                        $min = $r + 1;
-                    } else if ($r == $max) {
-                        $max = $r - 1;
-                    }
-                    if ($min == $max) {
-                        if (!empty ($links[$min])) {
-                            $newlist[] = $links[$min];
-                        }
-                        break;
-                    }
-                }
-                while ($max > $min);
-
-                $retval = COM_makeList ($newlist, 'list-blogroll');
-            } else {
-                $retval = COM_makeList ($links, 'list-blogroll');
-            }
-        }
-    }
-
-    return $retval;
-}
-
 /*
  *  Story Picker Block - by Joe Mucchiello
  *  Make a list of n number of story headlines linked to their articles.

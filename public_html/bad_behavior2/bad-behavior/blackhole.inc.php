@@ -22,7 +22,7 @@ function bb2_blackhole($package) {
 //		"list.dsbl.org",	// Old useless data.
 //		"dnsbl.ioerror.us",	// Bad Behavior Blackhole
 	);
-	
+
 	// Things that shouldn't be blocked, from aggregate lists
 	$bb2_blackhole_exceptions = array(
 		"sbl-xbl.spamhaus.org" => array("127.0.0.4"),	// CBL is problematic

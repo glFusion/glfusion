@@ -3387,4 +3387,34 @@ function PLG_sendSubscriptionNotification($type,$category,$track_id,$post_id,$po
     COM_emailNotification($messageData);
     return true;
 }
+
+/**
+* Remove the file structure(s) associated with a plugin
+*
+* @param    string  $type     plugin name
+* @return   boolean           true on success, false on fail
+* @since    glFusion v1.3.0
+*
+*/
+
+function PLG_remove($pi_name)
+{
+    global $_CONF;
+
+    $p = array();
+    $p['admin'] = $_CONF['path_html'] . 'admin/plugins/' . $pi_name;
+    $p['public'] = $_CONF['path_html'] . $pi_name;
+    $p['private'] =  $_CONF['path'] . 'plugins/' . $pi_name;
+
+    foreach($p as $location => $path ) {
+        if (is_dir($path)) {
+            COM_errorLog("Removing {$location} files ...");
+            if (!COM_recursiveDelete($path)){
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
 ?>

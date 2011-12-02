@@ -1480,11 +1480,7 @@ function SEC_setCookie($name, $value, $expire = 0, $path = '', $domain = '', $se
     }
 
     if ( $httponly ) {
-        if (version_compare(PHP_VERSION, '5.2.0', '>=')) {
-            $retval = @setcookie($name, $value, $expire, $path, $domain, $secure, true);
-        } else {
-            $retval = @setcookie($name, $value, $expire, $path, $domain . '; httponly', $secure);
-        }
+        $retval = @setcookie($name, $value, $expire, $path, $domain, $secure, true);
     } else {
         $retval = @setcookie($name, $value, $expire, $path, $domain, $secure);
     }
@@ -1622,7 +1618,7 @@ function _hash_gensalt_private($input, &$itoa64, $iteration_count_log2 = 6)
     }
 
     $output = '$H$';
-    $output .= $itoa64[min($iteration_count_log2 + ((PHP_VERSION >= 5) ? 5 : 3), 30)];
+    $output .= $itoa64[min($iteration_count_log2 + 5, 30)];
     $output .= _hash_encode64($input, 6, $itoa64);
 
     return $output;
