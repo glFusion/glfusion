@@ -353,6 +353,10 @@ function editpreferences()
 
     $A = DB_fetchArray($result);
 
+    if ( $A['tzid'] == '' ) {
+        $A['tzid'] = $_CONF['timezone'];
+    }
+
     // 'maxstories' may be 0, in which case it will pick up the default
     // setting for the current topic or $_CONF['limitnews'] (see index.php)
     if (empty ($A['maxstories'])) {
