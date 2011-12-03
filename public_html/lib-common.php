@@ -4527,7 +4527,7 @@ function COM_printPageNavigation( $base_url, $curpage, $num_pages,
     }
 
     if ( $curpage > 1 ) {
-        $retval .= COM_createLink($LANG05[7], $base_url) . ' | ';
+        $retval .= COM_createLink($LANG05[7], $base_url . $sep . $page_str . '1') . ' | ';
         $pg = '';
         if ( ( $curpage - 1 ) > 1 ) {
             $pg = $sep . $page_str . ( $curpage - 1 );
@@ -4546,11 +4546,7 @@ function COM_printPageNavigation( $base_url, $curpage, $num_pages,
         if ( $pgcount == $curpage ) {
             $retval .= '<b>' . $pgcount . '</b> ';
         } else {
-            $pg = '';
-            if ( $pgcount > 1 )
-            {
-                $pg = $sep . $page_str . $pgcount;
-            }
+            $pg = $sep . $page_str . $pgcount;
             $retval .= COM_createLink($pgcount, $base_url . $pg) . ' ';
         }
     }
