@@ -311,10 +311,7 @@ function MG_index() {
                 }
 
                 // a little fail safe here to make sure we don't show empty boxes...
-//                if ( $media_size === false ) {
-//                    $media_size[0] = 0;
-//                    $media_size[1] = 0;
-//                }
+
                 if ( $media_size === false || $media_size[0] == 0 || $media_size[1] == 0 ) {
                     $album_last_image = $_MG_CONF['mediaobjects_url'] . '/empty.png';
                     $media_size = @getimagesize($_MG_CONF['path_mediaobjects'] . 'empty.png');
