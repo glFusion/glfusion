@@ -918,7 +918,7 @@ function phpblock_forum_newposts() {
                 $block->set_var ('LANG_REPLIES', $LANG_GF01['REPLIES']);
                 $block->set_var ('views', $A['views']);
                 $block->set_var ('replies', $A['replies']);
-                $dt = new Date($postdata,$_USER['tzid']);
+                $dt = new Date($postdate,$_USER['tzid']);
                 if ($_FF_CONF['allow_user_dateformat']) {
                     $date = $dt->format($dt->getUserFormat(),true);
                     $block->set_var ('date', $date);
