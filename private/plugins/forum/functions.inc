@@ -190,9 +190,11 @@ function plugin_getadminoption_forum()
 
 function plugin_user_create_forum ($uid)
 {
-    global $_TABLES;
+    global $_TABLES,$FF_userprefs;
 
     DB_query ("INSERT INTO {$_TABLES['ff_userinfo']} (uid,rating,signature) VALUES (".(int) $uid.",0,'')");
+    DB_query ("INSERT INTO {$_TABLES['ff_userprefs']} (uid,topicsperpage,postsperpage) VALUES (".(int)$uid.",".
+               (int)$FF_userprefs['topicsperpage'].",".(int)$FF_userprefs['postsperpage'].")");
 }
 
 /**
@@ -365,9 +367,9 @@ function plugin_getheadercode_forum() {
     $gf_header .= '<style>'. file_get_contents($_CONF['path'] . 'plugins/forum/css/style.css') . '</style>';
 
     $gf_header .= '<script type="text/javascript">' . LB;
-    $gf_header .= '	window.addEvent(\'load\', function() {' . LB;
-    $gf_header .= '		var gfTips = new Tips($$(\'.gf_mootip\'), { maxTitleChars: 50, className: \'gftool\' });' . LB;
-    $gf_header .= '	});' . LB;
+    $gf_header .= ' window.addEvent(\'load\', function() {' . LB;
+    $gf_header .= '     var gfTips = new Tips($$(\'.gf_mootip\'), { maxTitleChars: 50, className: \'gftool\' });' . LB;
+    $gf_header .= ' });' . LB;
     $gf_header .= '</script>' . LB;
 
     return $gf_header;
@@ -1156,10 +1158,10 @@ function plugin_profileedit_forum($uid,$panel,$fieldset)
     // Get user specific settings from database
     $result = DB_query("SELECT * FROM {$_TABLES['ff_userprefs']} WHERE uid=".(int) $uid);
     $nrows = DB_numRows($result);
-
     if ($nrows == 0) {
         // Insert a new blank record. Defaults are set in SQL Defintion for table.
-        DB_query("INSERT INTO {$_TABLES['ff_userprefs']} (uid) VALUES (".(int)$uid.")");
+        DB_query("INSERT INTO {$_TABLES['ff_userprefs']} (uid,topicsperpage,postsperpage) VALUES (".(int)$uid.",".
+            (int)$FF_userprefs['topicsperpage'].",".(int)$FF_userprefs['postsperpage'].")");
         $result = DB_query("SELECT * FROM {$_TABLES['ff_userprefs']} WHERE uid=".(int) $uid);
     }
 
@@ -1521,22 +1523,22 @@ function _ff_canPost( $forum ) {
         return false;
     }
     if ( $_FF_CONF['enable_user_rating_system'] ) {
-    	if ( COM_isAnonUser() ) {
-    		//Annon user can only post in forums with 0 or less
-    		if ( $forum['rating_post'] < 1 ) {
-    			return true;
-    		} else {
-    			return false;
-    		}
-    	}
-    	//get users forum rating
-    	$user_score_res = DB_query("SELECT rating FROM {$_TABLES['ff_userinfo']} WHERE uid = {$_USER['uid']}");
-    	$user_score_row = DB_fetchArray($user_score_res);
-    	if ( $forum['rating_post'] > intval($user_score_row['rating']) ) {
-    		return false;
-    	} else {
-    		return true;
-    	}
+        if ( COM_isAnonUser() ) {
+            //Annon user can only post in forums with 0 or less
+            if ( $forum['rating_post'] < 1 ) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        //get users forum rating
+        $user_score_res = DB_query("SELECT rating FROM {$_TABLES['ff_userinfo']} WHERE uid = {$_USER['uid']}");
+        $user_score_row = DB_fetchArray($user_score_res);
+        if ( $forum['rating_post'] > intval($user_score_row['rating']) ) {
+            return false;
+        } else {
+            return true;
+        }
     }
     return true;
 }
@@ -1686,37 +1688,37 @@ function _ff_canUserViewRating( $forum_id ) {
     static $user_rate = array();
 
     if ( !$_FF_CONF['enable_user_rating_system'] || SEC_inGroup('Root') || SEC_inGroup('forum Admin')) {
-	    return true;
-	}
+        return true;
+    }
 
-	$uid = COM_isAnonUser() ? 1 : $_USER['uid'];
+    $uid = COM_isAnonUser() ? 1 : $_USER['uid'];
 
-	if ( isset($forum_req[$forum_id]) && $uid == 1 ) {
-	    if ( $forum_req[$forum_id] < 1 ) {
-	        return true;
-	    } else {
-	        return false;
-	    }
-	}
+    if ( isset($forum_req[$forum_id]) && $uid == 1 ) {
+        if ( $forum_req[$forum_id] < 1 ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     if ( !isset($forum_req[$forum_id]) ) {
-    	$forum_requirment_res = DB_query("SELECT rating_view FROM {$_TABLES['ff_forums']} WHERE forum_id = ". (int) $forum_id);
-    	$forum_requirement_row = DB_fetchArray($forum_requirment_res);
-    	$forum_req[$forum_id] = $forum_requirement_row['rating_view'];
-    	if (COM_isAnonUser() ) {
-    		//Annon user can only view forums with 0 or less
-    		if ($forum_requirement_row['rating_view'] < 1)
-    			return true;
-    		else
-    			return false;
-    	}
+        $forum_requirment_res = DB_query("SELECT rating_view FROM {$_TABLES['ff_forums']} WHERE forum_id = ". (int) $forum_id);
+        $forum_requirement_row = DB_fetchArray($forum_requirment_res);
+        $forum_req[$forum_id] = $forum_requirement_row['rating_view'];
+        if (COM_isAnonUser() ) {
+            //Annon user can only view forums with 0 or less
+            if ($forum_requirement_row['rating_view'] < 1)
+                return true;
+            else
+                return false;
+        }
     }
     $user_rate = _ff_getUserRating($uid);
 
-	if ($forum_req[$forum_id] > (int) $user_rate ) {
-		return false;
-	} else {
-		return true;
-	}
+    if ($forum_req[$forum_id] > (int) $user_rate ) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 function _ff_getUserRating( $uid = 1 )
@@ -1726,12 +1728,12 @@ function _ff_getUserRating( $uid = 1 )
     static $_user_rate = array();
 
     if ( !$_FF_CONF['enable_user_rating_system'] ) {
-	    return;
-	}
-	if ( !isset($_user_rate[$uid]) ) {
-	    $_user_rate[$uid] = (int) DB_getItem($_TABLES['ff_userinfo'],'rating','uid='.(int) $uid);
-	}
-	return $_user_rate[$uid];
+        return;
+    }
+    if ( !isset($_user_rate[$uid]) ) {
+        $_user_rate[$uid] = (int) DB_getItem($_TABLES['ff_userinfo'],'rating','uid='.(int) $uid);
+    }
+    return $_user_rate[$uid];
 }
 
 function _ff_cacheBookMarks( $uid )
