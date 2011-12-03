@@ -136,8 +136,8 @@ function forum_upgrade() {
             $c->del('pre2.5_mode', 'forum');
             $c->del('mysql4+', 'forum');
 
-            DB_query("UPDATE {$_TABLES['conf_values']} SET value='m/d/y h:i a' WHERE name='default_Datetime_format' AND group_name='forum'");
-            DB_query("UPDATE {$_TABLES['conf_values']} SET value='M d Y H:i a' WHERE name='default_Topic_Datetime_format' AND group_name='forum'");
+            DB_query("UPDATE {$_TABLES['conf_values']} SET value='s:11:\"m/d/y h:i a\";' WHERE name='default_Datetime_format' AND group_name='forum'");
+            DB_query("UPDATE {$_TABLES['conf_values']} SET value='s:11:\"M d Y H:i a\";' WHERE name='default_Topic_Datetime_format' AND group_name='forum'");
 
             _forum_cvt_watch();
             // drop watch table
