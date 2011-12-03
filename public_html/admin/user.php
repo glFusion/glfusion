@@ -1478,8 +1478,8 @@ function USER_save($uid)
     $sig            = trim($_POST['sig']);
     $about          = trim($_POST['about']);
     $pgpkey         = trim($_POST['pgpkey']);
-    $language       = trim(COM_applyFilter($_POST['language']));
-    $theme          = trim(COM_applyFilter($_POST['theme']));
+    $language       = isset($_POST['language']) ? trim(COM_applyFilter($_POST['language'])) : '';
+    $theme          = isset($_POST['theme']) ? trim(COM_applyFilter($_POST['theme'])) : '';
     $maxstories     = COM_applyFilter($_POST['maxstories'],true);
     $tzid           = COM_applyFilter($_POST['tzid']);
     $dfid           = COM_applyFilter($_POST['dfid'],true);
@@ -2071,7 +2071,7 @@ function USER_batchAdmin()
 
     $token = SEC_createToken();
     $form_arr['bottom'] = "<input type=\"hidden\" name=\"" . CSRF_TOKEN
-                        . "\" value=\"{$token}\"" . /">";
+                        . "\" value=\"{$token}\"" . "/>";
 
     $display .= ADMIN_list('user', 'USER_getListField', $header_arr,
                            $text_arr, $query_arr, $defsort_arr, '', $token,
