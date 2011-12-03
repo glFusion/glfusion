@@ -90,6 +90,16 @@ $themeStyle = '';
 
 $_MG_CONF['random_skin'] = 'default';
 $_MG_CONF['zip_enabled'] = 0;
+$_MG_CONF['popup_from_album'] = 0;
+$_MG_CONF['autotag_caption'] = 0;
+$_MG_CONF['jhead_enabled'] = 0;
+$_MG_CONF['jpegtran_enabled'] = 0;
+$_MG_CONF['ffmpeg_enabled'] = 0;
+$_MG_CONF['zip_path'] = '';
+$_MG_CONF['ffmpeg_path'] = '';
+$_MG_CONF['indextheme'] = '';
+$_MG_CONF['jhead_path'] = '';
+$_MG_CONF['jpegtran_path'] = '';
 
 // Read config data
 $result = DB_query("SELECT * FROM " . $_TABLES['mg_config'],1);
@@ -632,6 +642,7 @@ function plugin_getwhatsnew_mediagallery()
     if ( $newMediaCount == 0 ) {
         $retval .= $LANG_MG03['no_new_items'] . '<br />' . LB;
     }
+
     if ( $_MG_CONF['disable_whatsnew_comments'] == 0 ) {
         $sql = "SELECT * FROM {$_TABLES['comments']} AS c LEFT JOIN {$_TABLES['mg_media_albums']} AS ma ON c.sid=ma.media_id LEFT JOIN {$_TABLES['mg_albums']} AS a ON ma.album_id=a.album_id WHERE c.date >=  DATE_SUB(NOW(), INTERVAL " . $_MG_CONF['whatsnew_time'] . " DAY ) AND c.type='mediagallery' GROUP BY c.sid ORDER BY c.date DESC LIMIT 15";
 
@@ -663,7 +674,6 @@ function plugin_getwhatsnew_mediagallery()
 //        }
     }
     $label = sprintf($LANG_MG00['whatsnew_prompt'],$_MG_CONF['whatsnew_time']);
-
     if ( $newMediaCount == 0 && $newCommentCount == 0 ) {
         return $retval;
     } else {
