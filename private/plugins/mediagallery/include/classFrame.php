@@ -240,7 +240,6 @@ class mgFrame {
                 return '';
             }
 
-//            $retval .= '<style type="text/css">' . LB;
             $retval .= 'img.ImageFrame_image { vertical-align:bottom; border:none; }' . LB;
             $retval .= 'img.ImageFrame_solid { border: 1px solid black !important }' . LB;
 
@@ -313,7 +312,6 @@ class mgFrame {
             $retval .= 'table.mgFrame_' . $this->name . ' td { font-size:1px } /* For IE */' . LB;
             $retval .= 'td div.H { width:1px; height:0; }' . LB;
             $retval .= 'td div.V { width:0; height:1px; }'. LB;
-//            $retval .= '</style>' . LB;
         }
         return $retval;
     }

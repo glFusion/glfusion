@@ -100,7 +100,7 @@ function _mg_displaycomment($id,$commentid,$title,$order,$format,$page,$view)
     require_once $_CONF['path'].'plugins/mediagallery/include/lib-media.php';
     list($ptitle,$retval,$themeCSS,$album_id) =  MG_displayMediaImage( $id, 0, 0, 0 );
 
-    $retval = $themeCSS . $retval;
+    $retval = $retval .= '<style type="text/css">' . LB . $themeCSS .'</style>' . LB . $retval;
     if (SEC_hasRights('mediagallery.admin')) {
         $delete_option = true;
     } else {
