@@ -856,7 +856,7 @@ switch ($action) {
                     isset($_POST['sp_hits']) ? COM_applyFilter ($_POST['sp_hits'], true) : 0,
                     isset($_POST['sp_format']) ? COM_applyFilter ($_POST['sp_format']) : '',
                     isset($_POST['sp_onmenu']) ? $_POST['sp_onmenu'] : '',
-                    isset($_POST['sp_lable']) ? $_POST['sp_label'] : '',
+                    isset($_POST['sp_label']) ? $_POST['sp_label'] : '',
                     isset($_POST['commentcode']) ? COM_applyFilter ($_POST['commentcode'], true) : 0,
                     isset($_POST['owner_id']) ? COM_applyFilter ($_POST['owner_id'], true) : 2,
                     isset($_POST['group_id']) ? COM_applyFilter ($_POST['group_id'], true) : 0,
