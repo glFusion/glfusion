@@ -89,6 +89,7 @@ $mgLightBox = 0;
 $themeStyle = '';
 
 $_MG_CONF['random_skin'] = 'default';
+$_MG_CONF['zip_enabled'] = 0;
 
 // Read config data
 $result = DB_query("SELECT * FROM " . $_TABLES['mg_config'],1);

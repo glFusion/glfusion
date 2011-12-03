@@ -121,7 +121,7 @@ function FILECHECK_scanNegative()
 
             case 'R':
                 // we recursed here, unpinged dirs must be missing
-                if (!eregi('!',$value)) {
+                if (stristr('!',$value)) {
                     $data_arr[] = array(
                         'where'     => $where,
                         'type'  => 'D',
@@ -150,7 +150,7 @@ function FILECHECK_scanNegative()
 
         // ok now check for unpinged files that are not set to be ignored
         $test = $value[0];
-        if ((!eregi('!',$value)) && ($test <> 'I')) {
+        if ((!stristr('!',$value)) && ($test <> 'I')) {
             // ostensibly, this file was not found - get the dir and file parts
             $pathinfo = pathinfo($rdir);
             $dirname = $pathinfo['dirname'];

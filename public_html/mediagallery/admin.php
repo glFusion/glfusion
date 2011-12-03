@@ -94,8 +94,10 @@ function MG_navbar($selected='',$album_id) {
     return $retval;
 }
 
-
-$mode = COM_applyFilter ($_REQUEST['mode']);
+$mode = '';
+if ( isset($_REQUEST['mode']) ) {
+    $mode = COM_applyFilter ($_REQUEST['mode']);
+}
 if ( $mode == 'search' ) {
     echo COM_refresh($_MG_CONF['site_url'] . "/search.php");
     exit;

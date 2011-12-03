@@ -612,6 +612,10 @@ class Search {
         $old_api = 0;
         $num_results = 0;
 
+        if ( !isset($_CONF['search_use_fulltext']) ) {
+            $_CONF['search_use_fulltext'] = false;
+        }
+
         foreach ($result_plugins as $result) {
             if (is_a($result, 'SearchCriteria')) {
                 $debug_info .= $result->getName() . " using APIv2, ";

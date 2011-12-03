@@ -306,7 +306,7 @@ function MG_search($id,$page) {
 
 
 function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
-    global $_CONF, $_MG_CONF, $MG_albums, $_TABLES, $_MG_USERPREFS, $LANG_MG03, $LANG_MG01, $ratedIds;
+    global $_CONF, $_USER, $_MG_CONF, $MG_albums, $_TABLES, $_MG_USERPREFS, $LANG_MG03, $LANG_MG01, $ratedIds;
 
     $playback_type = $_MG_CONF['search_playback_type'];
 
@@ -683,7 +683,7 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
         $uid    = COM_isAnonUser() ? 1 : $_USER['uid'];
         $static = false;
         // check to see if we are the owner, if so, no rating for us...
-        if (isset($_USER['uid']) && $_USER['uid'] == $M['owner_id'] ) {
+        if (isset($_USER['uid']) && $_USER['uid'] == $M['media_user_id'] ) {
             $static = true;
         } else {
             if (in_array($M['media_id'], $ratedIds)) {

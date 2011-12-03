@@ -167,7 +167,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         $A['display_columns']   = $_MG_CONF['ad_display_columns'];
         $A['valid_formats']     = $_MG_CONF['ad_valid_formats'];
         $A['filename_title']    = $_MG_CONF['ad_filename_title'];
-        $A['shopping_cart']     = $_MG_CONF['ad_shopping_cart'];
+//        $A['shopping_cart']     = $_MG_CONF['ad_shopping_cart'];
         $A['wm_auto']           = $_MG_CONF['ad_wm_auto'];
         $A['wm_id']             = $_MG_CONF['ad_wm_id'];
         $A['opacity']           = $_MG_CONF['ad_wm_opacity'];
@@ -1230,7 +1230,7 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
 
     // do any album sorting here...
 
-    if ( $MG_albums[$aid]->parent == 0 ) {
+    if ( isset($MG_albums[$aid]) && $MG_albums[$aid]->parent == 0 ) {
         switch( $MG_albums[$aid]->album_sort_order ) {
             case 0 :
                 break;

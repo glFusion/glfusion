@@ -298,7 +298,7 @@ function USER_edit($uid = '', $msg = '')
     }
 
     if (!empty($uid) && ($uid != $_USER['uid']) && SEC_hasRights('user.delete')) {
-        $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete'] . '" name="delete"%s' . XHTML . '>';
+        $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete'] . '" name="delete"%s />';
         $jsconfirm = ' onclick="return doubleconfirm(\'' . $LANG28[104] . '\',\'' . $LANG28[109] . '\');"';
         $userform->set_var('delete_option',sprintf ($delbutton, $jsconfirm));
         $userform->set_var('delete_option_no_confirmation',sprintf ($delbutton, ''));
@@ -582,7 +582,7 @@ function USER_groupPanel($U, $newuser = 0)
         // user doesn't have the rights to edit a user's groups so set to -1
         // so we know not to handle the groups array when we save
         $userform->set_var('group_edit',
-                '<input type="hidden" name="groups" value="-1"' . XHTML . '>');
+                '<input type="hidden" name="groups" value="-1" />');
     }
     $retval = $userform->finish ($userform->parse ('output', 'user'));
     return $retval;
@@ -1141,15 +1141,15 @@ function USER_getGroupListField($fieldname, $fieldvalue, $A, $icon_arr, $al_sele
                 ($A['grp_name'] == 'Logged-in Users') ||
                 ($A['grp_name'] == 'Remote Users')) {
                 $retval = '<input type="checkbox" disabled="disabled"'
-                        . $checked . XHTML . '>'
+                        . $checked . '/>'
                         . '<input type="hidden" name="groups[]" value="'
-                        . $A['grp_id'] . '"' . $checked . XHTML . '>';
+                        . $A['grp_id'] . '"' . $checked . '/>';
             } else {
                 if ( $A['grp_gl_core'] > 0 && SEC_isRemoteUser($uid) ) {
                     $checked = ' disabled="disabled"';
                 }
                 $retval = '<input type="checkbox" name="groups[]" value="'
-                        . $A['grp_id'] . '"' . $checked . XHTML . '>';
+                        . $A['grp_id'] . '"' . $checked . '/>';
             }
             break;
 
@@ -1198,7 +1198,7 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             $photoico = '';
             if (!empty ($A['photo'])) {
                 $photoico = "&nbsp;<img src=\"{$_CONF['layout_url']}/images/smallcamera."
-                          . $_IMAGE_TYPE . '" alt="{$LANG04[77]}"' . XHTML . '>';
+                          . $_IMAGE_TYPE . '" alt="{$LANG04[77]}"' . '/>';
             } else {
                 $photoico = '';
             }
@@ -1940,8 +1940,6 @@ function USER_batchAdmin()
     $user_templates->set_file (array ('form' => 'batchadmin.thtml',
                                       'options' => 'batchadmin_options.thtml'
                                       ));
-    $user_templates->set_var( 'xhtml', XHTML );
-    $user_templates->set_var('site_url', $_CONF['site_url']);
     $user_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
     $user_templates->set_var('layout_url', $_CONF['layout_url']);
     $user_templates->set_var('usr_type', $usr_type);
@@ -2039,13 +2037,13 @@ function USER_batchAdmin()
         . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
         . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
         . '" onclick="return doubleconfirm(\'' . $LANG28[73] . '\',\'' . $LANG28[110] . '\');"'
-        . XHTML . '>&nbsp;' . $LANG_ADMIN['delete'];
+        . '/>&nbsp;' . $LANG_ADMIN['delete'];
     $actions .= '&nbsp;&nbsp;&nbsp;&nbsp;';
     $actions .= '<input name="reminder" type="image" src="'
         . $_CONF['layout_url'] . '/images/admin/mail.' . $_IMAGE_TYPE
         . '" style="vertical-align:bottom;" title="' . $LANG28[78]
         . '" onclick="return confirm(\'' . $LANG28[100] . '\');"'
-        . XHTML . '>&nbsp;' . $LANG28[77];
+        . '/>&nbsp;' . $LANG28[77];
 
     $options = array('chkselect' => true, 'chkfield' => 'uid', 'chkactions' => $actions);
 
@@ -2073,7 +2071,7 @@ function USER_batchAdmin()
 
     $token = SEC_createToken();
     $form_arr['bottom'] = "<input type=\"hidden\" name=\"" . CSRF_TOKEN
-                        . "\" value=\"{$token}\"" . XHTML . ">";
+                        . "\" value=\"{$token}\"" . /">";
 
     $display .= ADMIN_list('user', 'USER_getListField', $header_arr,
                            $text_arr, $query_arr, $defsort_arr, '', $token,
@@ -2102,7 +2100,7 @@ function USER_batchDeleteExec()
 
     $nusers = count($user_list);
     if ($nusers == 0) {
-        $msg = $LANG28[72] . '<br' . XHTML . '>';
+        $msg = $LANG28[72] . '<br/>';
     } else {
         $c = 0;
 
@@ -2110,7 +2108,7 @@ function USER_batchDeleteExec()
             foreach($user_list as $delitem) {
                 $delitem = COM_applyFilter($delitem);
                 if (!USER_deleteAccount ($delitem)) {
-                    $msg .= "<strong>{$LANG28[2]} $delitem {$LANG28[70]}</strong><br" . XHTML . ">\n";
+                    $msg .= "<strong>{$LANG28[2]} $delitem {$LANG28[70]}</strong><br/>\n";
                 } else {
                     $c++; // count the deleted users
                 }
@@ -2120,7 +2118,7 @@ function USER_batchDeleteExec()
         CACHE_remove_instance('stmenu');
 
         COM_numberFormat($c); // just in case we have more than 999 ...
-        $msg .= "{$LANG28[71]}: $c {$LANG28[102]}.<br" . XHTML . ">\n";
+        $msg .= "{$LANG28[71]}: $c {$LANG28[102]}.<br/>\n";
     }
 
     return $msg;
@@ -2146,7 +2144,7 @@ function USER_sendReminders()
     $nusers = count($user_list);
 
     if (count($user_list) == 0) {
-        $msg = $LANG28[79] . '<br' . XHTML . '>';
+        $msg = $LANG28[79] . '<br/>';
     } else {
         $c = 0;
 
@@ -2205,7 +2203,7 @@ function USER_sendReminders()
         }
 
         COM_numberFormat($c); // just in case we have more than 999)..
-        $msg .= "{$LANG28[80]}: $c<br" . XHTML . ">\n";
+        $msg .= "{$LANG28[80]}: $c<br/>\n";
     }
 
     return $msg;
@@ -2283,7 +2281,7 @@ function USER_importExec()
         $email = COM_applyFilter ($email);
 
         if ($verbose_import) {
-            $retval .="<br" . XHTML . "><b>Working on username=$u_name, fullname=$full_name, and email=$email</b><br" . XHTML . ">\n";
+            $retval .="<br/><b>Working on username=$u_name, fullname=$full_name, and email=$email</b><br/>\n";
             COM_errorLog ("Working on username=$u_name, fullname=$full_name, and email=$email",1);
         }
 
@@ -2307,25 +2305,25 @@ function USER_importExec()
                 $result = USER_createAndSendPassword ($userName, $emailAddr, $uid);
 
                 if ($result && $verbose_import) {
-                    $retval .= "<br" . XHTML . "> Account for <b>$u_name</b> created successfully.<br" . XHTML . ">\n";
+                    $retval .= "<br/> Account for <b>$u_name</b> created successfully.<br/>\n";
                     COM_errorLog("Account for $u_name created successfully",1);
                 } else if ($result) {
                     $successes++;
                 } else {
                     // user creation failed
-                    $retval .= "<br" . XHTML . ">ERROR: There was a problem creating the account for <b>$u_name</b>.<br" . XHTML . ">\n";
+                    $retval .= "<br/>ERROR: There was a problem creating the account for <b>$u_name</b>.<br/>\n";
                     COM_errorLog("ERROR: here was a problem creating the account for $u_name.",1);
                 }
             } else {
                 if ($verbose_import) {
-                    $retval .= "<br" . XHTML . "><b>$u_name</b> or <b>$email</b> already exists, account not created.<br" . XHTML . ">\n"; // user already exists
+                    $retval .= "<br/><b>$u_name</b> or <b>$email</b> already exists, account not created.<br/>\n"; // user already exists
                     COM_errorLog("$u_name,$email: username or email already exists, account not created",1);
                 }
                 $failures++;
             } // end if $ucount == 0 && ecount == 0
         } else {
             if ($verbose_import) {
-                $retval .= "<br" . XHTML . "><b>$email</b> is not a valid email address, account not created<br" . XHTML . ">\n"; // malformed email
+                $retval .= "<br/><b>$email</b> is not a valid email address, account not created<br/>\n"; // malformed email
                 COM_errorLog("$email is not a valid email address, account not created",1);
             }
             $failures++;
@@ -2357,11 +2355,11 @@ function USER_import()
             . '/user.php" method="post" enctype="multipart/form-data"><div>'
             . $LANG28[29]
             . ': <input type="file" dir="ltr" name="importfile" size="40"'
-            . XHTML . '>'
-            . '<input type="hidden" name="importexec" value="x"' . XHTML . '>'
+            . '/>'
+            . '<input type="hidden" name="importexec" value="x" />'
             . '<input type="submit" name="submit" value="' . $LANG28[30]
-            . '"' . XHTML . '><input type="hidden" name="' . CSRF_TOKEN
-            . "\" value=\"{$token}\"" . XHTML . '></div></form>';
+            . '"' . '/><input type="hidden" name="' . CSRF_TOKEN
+            . "\" value=\"{$token}\"" . '/></div></form>';
 
     return $retval;
 }
@@ -2563,7 +2561,7 @@ switch($action) {
         $display .= COM_siteHeader('menu', $LANG28[24]);
         $display .= COM_startBlock ($LANG28[24], '',
                             COM_getBlockTemplate ('_admin_block', 'header'));
-        $display .= $LANG28[25] . '<br' . XHTML . '><br' . XHTML . '>';
+        $display .= $LANG28[25] . '<br/><br/>';
         $display .= USER_import();
         $display .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
         $display .= COM_siteFooter();
@@ -2580,7 +2578,7 @@ switch($action) {
 
     case 'batchadmin':
         if (!$_CONF['lastlogin']) {
-            $msg = '<br' . XHTML . '>'. $LANG28[55];
+            $msg = '<br/>'. $LANG28[55];
             $display .= COM_siteHeader('menu', $LANG28[11])
             . COM_showMessageText($msg)
             . USER_list($grp_id)

@@ -433,7 +433,10 @@ function MG_saveUserUpload( $album_id ) {
         $caption     = $_POST['caption'][$key];
         $description = $_POST['description'][$key];
         $keywords    = $_POST['keywords'][$key];
-        $category    = COM_applyFilter($_POST['cat_id'][$key],true);
+        $category    = 0;
+        if ( isset($_POST['cat_id']) ) {
+            $category    = COM_applyFilter($_POST['cat_id'][$key],true);
+        }
         $attachtn    = isset($_POST['attachtn'][$key]) ? $_POST['attachtn'][$key] : '';
         $thumbnail   = isset($thumbs['tmp_name'][$key]) ? $thumbs['tmp_name'][$key] : '';
         if ( isset($_POST['dnc'][$key]) && $_POST['dnc'][$key] == 'on' ) {
