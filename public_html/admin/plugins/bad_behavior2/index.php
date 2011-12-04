@@ -132,7 +132,7 @@ function _bb_listEntries ($page = 1, $msg = '')
         $lcount = (50 * ($page - 1)) + $i + 1;
 
         foreach ($A as $key => $val) {
-            $A[$key] = htmlspecialchars ($val);
+            $A[$key] = htmlspecialchars ($val,ENT_QUOTES,COM_getEncodingt());
         }
 
         $dt = new Date($A['date'],$_USER['tzid']);
@@ -142,13 +142,19 @@ function _bb_listEntries ($page = 1, $msg = '')
 		$headers = str_replace("Host:","<strong>Host:</strong>",$headers);
 		$headers = str_replace("POST ","<strong>POST</strong> ",$headers);
 		$headers = str_replace("GET ","<strong>GET</strong> ",$headers);
+		$headers = str_replace("Accept-Language:","<strong>Accept-Language:</strong> ",$headers);
+		$headers = str_replace("Accept-Encoding:","<strong>Accept-Encoding:</strong> ",$headers);
+		$headers = str_replace("Accept-Charset:","<strong>Accept-Charset:</strong> ",$headers);
+		$headers = str_replace("X-Forwarded-For:","<strong>X-Forwarded-For:</strong> ",$headers);
+		$headers = str_replace("Cookie:","<strong>Cookie:</strong> ",$headers);
+		$headers = str_replace("Via:","<strong>Via:</strong> ",$headers);
 		$headers = str_replace("Connection:","<strong>Connection:</strong>",$headers);
 		$headers = str_replace("Language:","<strong>Language:</strong>",$headers);
 		$headers = str_replace("Accept:","<strong>Accept:</strong>",$headers);
 		$headers = str_replace("Cache-Control:","<strong>Cache-Control:</strong>",$headers);
 		$headers = str_replace("Referer:","<strong>Referer:</strong>",$headers);
+		$headers = str_replace("Pragma:","<strong>Pragma:</strong>",$headers);
 		$headers = str_replace("Proxy-","<strong>Proxy-</strong>",$headers);
-
 		$entity = str_replace("\n", "<br/>\n", $A["request_entity"]);
 
         $templates->set_var (array(
