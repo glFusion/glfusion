@@ -33,7 +33,7 @@ function new_captcha()
             thesrc = document.getElementById("captcha_image").src;
             thesrc = thesrc.substring(0,thesrc.lastIndexOf(".")+4);
             // add ?(random) to prevent browser/isp caching
-            document.getElementById("captcha_image").src = thesrc+"?"+Math.round(Math.random()*100000);
+            document.getElementById("captcha_image").src = thesrc+"&"+Math.round(Math.random()*100000);
         }
     } else {
          alert("{lang_reload_failed}");
