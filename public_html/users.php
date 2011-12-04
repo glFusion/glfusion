@@ -1449,7 +1449,7 @@ default:
                     exit;
                 } else {
                     // COM_errorLog("attempting remote service login");
-                     COM_errorLog("redirecting to authentication URL={$url}");
+                    // COM_errorLog("redirecting to authentication URL={$url}");
                     header('Location: ' . $url); // refresh to the OAuth remote service authentication dialog
                     exit;
                 }
@@ -1489,8 +1489,7 @@ default:
     } else {
         $status = -2;
     }
-
-    if ($status == USER_ACCOUNT_ACTIVE) { // logged in AOK.
+    if ($status == USER_ACCOUNT_ACTIVE || $status == USER_ACCOUNT_AWAITING_ACTIVATION ) { // logged in AOK.
         SESS_completeLogin($uid);
         $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
         $_RIGHTS = explode( ',', SEC_getUserPermissions() );
