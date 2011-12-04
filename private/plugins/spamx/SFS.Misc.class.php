@@ -79,9 +79,9 @@ class SFS extends BaseCommand {
 
 // for local development you need to uncomment this - stopforumspam.com
 //  thinks that 127.0.0.1 is a spammer address
-        if ( $_SERVER['REMOTE_ADDR'] == '127.0.0.1' ) {
-            return 0;
-        }
+//        if ( $_SERVER['REMOTE_ADDR'] == '127.0.0.1' ) {
+//            return 0;
+//        }
 
         $em = urlencode($email);
 
