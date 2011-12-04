@@ -157,7 +157,6 @@ function SESS_sessionCheck()
             }
         }
     }
-
     session_id($sessid);
     session_start();
 
@@ -169,6 +168,9 @@ function SESS_sessionCheck()
     // failsafe
     if ( $_CONF['allow_user_themes'] == 0 ) {
         $_USER['theme'] = $_CONF['theme'];
+    }
+    if ($_USER['tzid'] == '' ) {
+        $_USER['tzid'] = $_CONF['timezone'];
     }
 
     if ( $gc_check == 0 ) {
