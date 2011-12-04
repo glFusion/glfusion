@@ -1,7 +1,16 @@
 glFusion ChangeLog
 
-v1.3.0 (Trunk Development Branch)
+v1.3.0
 ------
+- Fixed Static Page label field was not being saved (Mark)
+- Fixed bug in new date class - Unix timestamp coversion did not use proper
+  timezone (Mark)
+- Media Gallery: When viewing an image by following the What's New comment
+  link, CSS was displayed at the top of the image (Mark)
+- Fixed quotes handling in Group and Block admin description fields (Mark H.)
+- Media Gallery: Fixed paging error when paging through albums (Mark)
+- Forum Plugin: Default topics / posts per page were not properly set
+  for new users (Mark)
 - Fixed grp_id not passed in pagination links User Admin when group selection
   filter is applied.  (Mark H.)
 - Links: Fixed autoinstall code - example data will now be correctly restored
