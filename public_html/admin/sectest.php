@@ -247,15 +247,16 @@ function checkDefaultPassword ()
     // check to see if any account still has 'password' as its password.
     $pwdRoot = 0;
     $pwdUser = 0;
-    $result = DB_query("SELECT uid FROM {$_TABLES['users']} WHERE passwd='" . SEC_encryptPassword('password') . "'");
-    $numPwd = DB_numRows($result);
-    if ($numPwd > 0) {
-        for ($i = 0; $i < $numPwd; $i++) {
-            list($uid) = DB_fetchArray($result);
-            if (SEC_inGroup('Root', $uid)) {
+    $rootUsers = 0;
+
+    $sql = "SELECT ug_uid,passwd FROM {$_TABLES['group_assignments']} AS g LEFT JOIN {$_TABLES['users']} AS u ON g.ug_uid=u.uid WHERE g.ug_main_grp_id = 1";
+    $result = DB_query($sql);
+    $rootUsers = DB_numRows($result);
+    if ( $rootUsers > 0 ) {
+        for ($i=0; $i < $rootUsers; $i++) {
+            list($uid,$hash) = DB_fetchArray($result);
+            if ( SEC_check_hash('password', $hash) ) {
                 $pwdRoot++;
-            } else {
-                $pwdUser++;
             }
         }
     }
