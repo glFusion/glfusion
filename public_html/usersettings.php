@@ -1029,8 +1029,10 @@ function saveuser($A)
                     DB_change($_TABLES['users'], 'passwd', DB_escapeString($passwd),"uid", (int)$_USER['uid']);
                     if ($A['cooktime'] > 0) {
                         $cooktime = $A['cooktime'];
+                        $token_ttl = $A['cooktime'];
                     } else {
                         $cooktime = -1000;
+                        $token_ttl = 14400;
                     }
                     $ltToken = SEC_createTokenGeneral('ltc',$token_ttl);
                     SEC_setCookie($_CONF['cookie_password'], $ltToken,
