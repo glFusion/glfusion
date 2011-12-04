@@ -211,8 +211,10 @@ class Date extends DateTime
      */
     public function setTimestamp ( $unixtimestamp )
     {
-        $tdt = new Date($unixtimestamp,$this->_tz);
-        $this->setDateTimestamp($tdt->year,$tdt->month,$tdt->day,$tdt->hour,$tdt->minute,$tdt->second);
+        parent::setTimezone(self::$gmt);
+        $date = getdate( (int) $unixtimestamp );
+        parent::setDate( $date['year'] , $date['mon'] , $date['mday'] );
+        parent::setTime( $date['hours'] , $date['minutes'] , $date['seconds'] );
     }
 
 
