@@ -193,7 +193,7 @@ function GROUP_edit($grp_id = '')
     }
 
     if (isset($A['grp_descr'])) {
-        $group_templates->set_var('group_description', $A['grp_descr']);
+        $group_templates->set_var('group_description', htmlspecialchars($A['grp_descr'],ENT_QUOTES,COM_getEncodingt()));
     } else {
         $group_templates->set_var('group_description', '');
     }

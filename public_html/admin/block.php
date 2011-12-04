@@ -118,7 +118,7 @@ function BLOCK_editDefault($A, $access)
     $block_templates->set_var('lang_cancel', $LANG_ADMIN['cancel']);
     $block_templates->set_var('lang_blocktype', $LANG_ADMIN['type']);
 
-    $block_templates->set_var('block_title', $A['title']);
+    $block_templates->set_var('block_title', htmlspecialchars($A['title'],ENT_QUOTES,COM_getEncodingt()));
     if ($A['is_enabled'] == 1) {
         $block_templates->set_var('is_enabled', 'checked="checked"');
     } else {
@@ -316,7 +316,7 @@ function BLOCK_edit($bid = '', $B = array())
     $block_templates->set_var('lang_blocktype', $LANG_ADMIN['type']);
     $block_templates->set_var('lang_allowed_html', $LANG01[123]);
 
-    $block_templates->set_var('block_title', $A['title']);
+    $block_templates->set_var('block_title', htmlspecialchars($A['title'],ENT_QUOTES,COM_getEncodingt()));
     $block_templates->set_var('lang_enabled', $LANG21[53]);
     if ($A['is_enabled'] == 1) {
         $block_templates->set_var('is_enabled', 'checked="checked"');
@@ -398,11 +398,11 @@ function BLOCK_edit($bid = '', $B = array())
     $block_templates->set_var ('lang_autotags', $LANG21[66]);
     $block_templates->set_var ('lang_use_autotags', $LANG21[67]);
     $block_templates->set_var ('block_content',
-                               htmlspecialchars ($A['content']));
+                               htmlspecialchars ($A['content'],ENT_QUOTES,COM_getEncodingt()));
     $block_templates->set_var ('block_text',
-                               htmlspecialchars ($A['content']));
+                               htmlspecialchars ($A['content'],ENT_QUOTES,COM_getEncodingt()));
     $block_templates->set_var ('block_html',
-                               htmlspecialchars ($A['content']));
+                               htmlspecialchars ($A['content'],ENT_QUOTES,COM_getEncodingt()));
     if ($A['allow_autotags'] == 1) {
         $block_templates->set_var ('allow_autotags', 'checked="checked"');
     } else {
