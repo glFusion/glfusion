@@ -209,6 +209,7 @@ function BBC_formatTextBlock( $str, $postmode='html', $parser = array(), $code =
     $bbcode->setCodeFlag ('*', 'paragraphs', true);
     $bbcode->setCodeFlag ('list', 'opentag.before.newline', BBCODE_NEWLINE_DROP);
     $bbcode->setCodeFlag ('list', 'closetag.before.newline', BBCODE_NEWLINE_DROP);
+    $bbcode->addParser(array('block','inline','link','listitem'), '_bbcode_replacetags');
 
     $bbcode->setRootParagraphHandling (true);
 
