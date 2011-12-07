@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.3.0
 ------
+- Fixed issue with auto tags not expanded in the BB code library (Mark)
+- Updated Bad Behavior to v2.0.45 (Mark)
 - Fixed Static Page label field was not being saved (Mark)
 - Fixed bug in new date class - Unix timestamp coversion did not use proper
   timezone (Mark)
