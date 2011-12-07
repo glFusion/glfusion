@@ -54,7 +54,7 @@ function edituser()
 {
     global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG_MYACCOUNT, $LANG04, $LANG_ADMIN;
 
-    $result = DB_query("SELECT fullname,cookietimeout,email,homepage,sig,emailstories,about,location,pgpkey,photo,remoteservice FROM {$_TABLES['users']},{$_TABLES['userprefs']},{$_TABLES['userinfo']} WHERE {$_TABLES['users']}.uid = {$_USER['uid']} AND {$_TABLES['userprefs']}.uid = {$_USER['uid']} AND {$_TABLES['userinfo']}.uid=".(int)$_USER['uid']);
+    $result = DB_query("SELECT fullname,cookietimeout,email,homepage,sig,emailstories,about,location,pgpkey,photo,remoteservice,account_type FROM {$_TABLES['users']},{$_TABLES['userprefs']},{$_TABLES['userinfo']} WHERE {$_TABLES['users']}.uid = {$_USER['uid']} AND {$_TABLES['userprefs']}.uid = {$_USER['uid']} AND {$_TABLES['userinfo']}.uid=".(int)$_USER['uid']);
     $A = DB_fetchArray ($result);
 
     $preferences = new Template ($_CONF['path_layout'] . 'preferences');
@@ -164,7 +164,8 @@ function edituser()
     $preferences->set_var ('new_username_value',
                            htmlspecialchars ($_USER['username']));
 
-    if ($A['remoteservice'] == '') {
+    if ( $A['account_type'] & LOCAL_USER ) {
+//    if ($A['remoteservice'] == '') {
         $preferences->set_var ('password_value', '');
         $preferences->parse ('current_password_option', 'current_password', true);
         $preferences->parse ('password_option', 'password', true);
@@ -172,6 +173,8 @@ function edituser()
     } else {
         $preferences->set_var ('current_password_option', '');
         $preferences->set_var ('password_option', '');
+     }
+     if ( $A['account_type'] & REMOTE_USER ) {
         if ($_CONF['user_login_method']['oauth'] && (strpos($_USER['remoteservice'], 'oauth.') === 0)) { // OAuth only supports re-synch at the moment
             $preferences->set_var ('resynch_checked', '');
             $preferences->parse ('resynch_option', 'resynch', true);
@@ -915,6 +918,7 @@ function saveuser($A)
 
     // to change the password, email address, or cookie timeout,
     // we need the user's current password
+    $account_type = DB_getItem ($_TABLES['users'], 'account_type', "uid = {$_USER['uid']}");
     $service = DB_getItem ($_TABLES['users'], 'remoteservice', "uid = {$_USER['uid']}");
     if ($service == '') {
         $current_password = DB_getItem($_TABLES['users'], 'passwd',

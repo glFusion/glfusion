@@ -238,7 +238,7 @@ class OAuthConsumerBaseClass {
 
     public function doAction($info) {
 
-        global $_TABLES, $status, $uid, $_CONF;
+        global $_TABLES, $status, $uid, $_CONF, $checkMerge;
 
         // COM_errorLog("doAction() method ------------------");
 
@@ -257,6 +257,7 @@ class OAuthConsumerBaseClass {
         // COM_errorLog("DB_numRows={$nrows}");
         if (empty($tmp) && $nrows == 1) {
             list($uid, $status) = DB_fetchArray($result);
+            $checkMerge = false;
             // COM_errorLog("user found!  uid={$uid} status={$status}");
         } else {
             // COM_errorLog("user not found - creating new account");
@@ -292,7 +293,7 @@ class OAuthConsumerBaseClass {
             // COM_errorLog("adding uid={$uid} to Remote Users group");
             $remote_grp = DB_getItem($_TABLES['groups'], 'grp_id', "grp_name = 'Remote Users'");
             DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ($remote_grp, $uid)");
-
+            $checkMerge = true;
             // usercreate after trigger
             if (method_exists($this, '_after_trigger')) {
                 $this->_after_trigger($uid, $users, $userinfo);
@@ -385,12 +386,16 @@ class OAuthConsumerBaseClass {
     protected function _shorten($url) {
         $this->request->setUrl($this->shortapi.'?url='.$url);
         $this->request->setMethod('GET');
-        $response = $this->request->send();
-        if ($response->getStatus() !== 200) {
-            return $url;
-        } else {
-            $xml = @simplexml_load_string($response->getBody());
-            return $xml->url;
+        try {
+            $response = $this->request->send();
+            if ($response->getStatus() !== 200) {
+                return $url;
+            } else {
+                $xml = @simplexml_load_string($response->getBody());
+                return $xml->url;
+            }
+        } catch (HTTP_Request2_Exception $e) {
+            COM_errorLog($e->getMessage());
         }
     }
 

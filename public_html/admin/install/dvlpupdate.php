@@ -913,6 +913,9 @@ function glfusion_130()
     // remove microsummary feature
     $c->del('microsummary_short', 'Core');
 
+    // alter the users table
+    DB_query("ALTER TABLE {$_TABLES['users']} ADD account_type smallint(5) NOT NULL default '1' AFTER status",1);
+
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.3.0',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.3.0' WHERE name='glfusion'",1);

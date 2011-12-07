@@ -477,6 +477,10 @@ $LANG04 = array(
     182 => 'Description',
     183 => 'Notification Subscriptions',
     184 => 'New Post Notification',
+    185 => 'There is a local account with the same email address as your Facebook eMail. Would you like to merge these accounts?',
+    186 => 'If you do not wish to merge the accounts, please select the Cancel button below.',
+    187 => 'Enter the password above for the local account and hit the Merge button.',
+    188 => 'Merge',
 );
 
 ###############################################################################
@@ -1078,7 +1082,7 @@ $LANG28 = array(
     49 => 'Admin Group',
     50 => 'Check to allow filtering this group as an Admin Use Group',
     51 => 'Online Days',
-    52 => '<br' . XHTML . '>Note: "Online Days" is the number of days between the first registration and the last login.',
+    52 => '<br/>Note: "Online Days" is the number of days between the first registration and the last login.',
     53 => 'Reg',
     54 => 'Batch Admin',
     55 => 'This only works if you have enabled the \'Record Last Login\' option in the Configuration admin panel.',
@@ -1225,7 +1229,7 @@ $LANG32 = array(
     7 => 'The plugin you are trying to install already exists.  Please delete the plugin before re-installing it',
     8 => 'Plugin Compatibility Check Failed',
     9 => 'This plugin requires a newer version of glFusion. Either upgrade your copy of <a href="http://www.gllabs.org">glFusion</a> or get a newer version of the plugin.',
-    10 => '<br' . XHTML . '><b>There are no plugins currently installed.</b><br' . XHTML . '><br' . XHTML . '>',
+    10 => '<br/><b>There are no plugins currently installed.</b><br/><br/>',
     11 => 'To enable or disable installed plugins, click the associated checkbox in the Control column.  Plugins that have been uploaded to your system may be installed by clicking the Install icon in the Control column.  To update a plugin, click the Update icon that is displayed in the Version column.  To uninstall a plugin, click the icon in the UnPlug column.',
     12 => 'No plugin name provided to plugineditor()',
     13 => 'Plugin Editor',
@@ -1609,7 +1613,7 @@ $LANG_DB_BACKUP = array(
     'do_backup' => 'Do Backup',
     'backup_successful' => 'Database back up was successful.',
     'db_explanation' => 'To create a new backup of your site\'s database, click on "Create New" above. Click on a file name to download that backup.',
-    'not_found' => "Incorrect path, security restriction in effect or mysqldump utility not executable.<br" . XHTML . "> Check <strong>mysqldump_path</strong> definition in the Configuration.<br" . XHTML . "> Check <a href=\"http://www.php.net/manual/en/features.safe-mode.php#ini.open-basedir\">open_basedir</a> settings in PHP.<br" . XHTML . "> Path currently defined as: <var>{$_DB_mysqldump_path}</var>",
+    'not_found' => "Incorrect path, security restriction in effect or mysqldump utility not executable.<br/> Check <strong>mysqldump_path</strong> definition in the Configuration.<br/> Check <a href=\"http://www.php.net/manual/en/features.safe-mode.php#ini.open-basedir\">open_basedir</a> settings in PHP.<br/> Path currently defined as: <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'Backup Failed: Filesize was 0 bytes',
     'path_not_found' => "{$_CONF['backup_path']} does not exist or is not a directory",
     'no_access' => "ERROR: Directory {$_CONF['backup_path']} is not accessible.",

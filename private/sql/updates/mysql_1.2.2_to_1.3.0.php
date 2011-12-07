@@ -128,6 +128,8 @@ $_SQL[] = "CREATE TABLE {$_TABLES['menu_elements']} (
 
 $_SQL[] = "ALTER TABLE {$_TABLES['sessions']} ADD browser varchar(255) default '' AFTER sess_id";
 
+$_SQL[] = "ALTER TABLE {$_TABLES['users']} ADD account_type smallint(5) NOT NULL default '1' AFTER status";
+
 $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='l F d, Y @h:iA' WHERE dfid=1";
 $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='l F d, Y @H:i' WHERE dfid=2";
 $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='l F d @H:i' WHERE dfid=4";

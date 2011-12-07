@@ -78,6 +78,11 @@ define('USER_ACCOUNT_AWAITING_APPROVAL', 2); // Account awaiting moderator appro
 define('USER_ACCOUNT_ACTIVE', 3); // active account
 define('USER_ACCOUNT_AWAITING_VERIFICATION', 4); // Account waiting for user to complete verification
 
+
+/* Constants for account types */
+define('LOCAL_USER',1);
+define('REMOTE_USER',2);
+
 /* Constant for Security Token */
 if (!defined('CSRF_TOKEN')) {
     define('CSRF_TOKEN', '_sectoken');
@@ -317,6 +322,15 @@ function SEC_isAdmin()
     return SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR') OR (count(PLG_getAdminOptions()) > 0) OR SEC_inGroup('Root');
 }
 
+
+/**
+* Determines if user id is a remote user
+*
+* Checks to see if this user is a remote user
+*
+* @return   boolean     returns true if user is a remote user
+*
+*/
 function SEC_isRemoteUser($uid)
 {
     global $_TABLES;
@@ -324,10 +338,40 @@ function SEC_isRemoteUser($uid)
     static $remotecheck = array();
 
     if ( !isset($remotecheck[$uid])) {
-        $remoteusername = DB_getItem($_TABLES['users'],'remoteusername','uid='.(int) $uid);
-        $remotecheck[$uid] = $remoteusername;
+        $remoteuserstatus[$uid] = 0;
+        $remoteuserstatus = DB_getItem($_TABLES['users'],'account_type','uid='.(int) $uid);
+        if ( $remoteuserstatus & REMOTE_USER ) {
+            $remotecheck[$uid] = 1;
+        }
     }
-    if ( $remotecheck[$uid] != '' ) {
+    if ( $remotecheck[$uid] == 1 ) {
+        return true;
+    }
+    return false;
+}
+
+/**
+* Determines if user id is a local user
+*
+* Checks to see if this user is a local user
+*
+* @return   boolean     returns true if user is a local user
+*
+*/
+function SEC_isLocalUser($uid)
+{
+    global $_TABLES;
+
+    static $localcheck = array();
+
+    if ( !isset($localcheck[$uid])) {
+        $localusercheck[$uid] = 0;
+        $localuserstatus = DB_getItem($_TABLES['users'],'account_type','uid='.(int) $uid);
+        if ( $localuserstatus & LOCAL_USER ) {
+            $localcheck[$uid] = 1;
+        }
+    }
+    if ( $localcheck[$uid] == 1 ) {
         return true;
     }
     return false;
@@ -792,7 +836,7 @@ function SEC_authenticate($username, $password, &$uid)
     $escaped_name = DB_escapeString(trim($username));
     $password = trim(str_replace(array("\015", "\012"), '', $password));
 
-    $result = DB_query("SELECT status, passwd, email, uid FROM {$_TABLES['users']} WHERE username='$escaped_name' AND ((remoteservice is null) or (remoteservice = ''))");
+    $result = DB_query("SELECT status, passwd, email, uid FROM {$_TABLES['users']} WHERE username='$escaped_name' AND (account_type & ".LOCAL_USER.")");
     $tmp = DB_error();
     $nrows = DB_numRows($result);
 

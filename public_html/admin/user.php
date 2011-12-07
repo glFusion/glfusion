@@ -384,7 +384,7 @@ function USER_accountPanel($U,$newuser = 0)
     $userform->set_var('fullname_value', htmlspecialchars($U['fullname']));
 
     // remote services
-    if ( $U['uid'] != '' && $U['remoteservice'] == '' ) {
+    if ( $U['uid'] != '' && $U['account_type'] & LOCAL_USER /*$U['remoteservice'] == ''*/ ) {
         $allow_remote_user = 0;
     } else {
         $allow_remote_user = 1;
@@ -393,9 +393,11 @@ function USER_accountPanel($U,$newuser = 0)
     $remote_user_checked = '';
     $pwd_disabled = '';
     $remote_user_edit = 0;
-    if (($_CONF['user_login_method']['openid'] || $_CONF['user_login_method']['3rdparty'] || $_CONF['user_login_method']['oauth'] ) && $allow_remote_user ) {
+    if (($_CONF['user_login_method']['openid'] ||
+      $_CONF['user_login_method']['3rdparty'] ||
+      $_CONF['user_login_method']['oauth'] ) && $U['account_type'] & REMOTE_USER /*$allow_remote_user */) {
         $modules = array();
-        if ( ($U['remoteusername'] != '' && $U['remoteservice'] != '') || $U['remoteuser'] == 1) {
+        if ($U['account_type'] & REMOTE_USER) { //  ($U['remoteusername'] != '' && $U['remoteservice'] != '') || $U['remoteuser'] == 1) {
             $remote_user_checked = ' checked="checked"';
             $pwd_disabled = ' disabled="disabled"';
             $remote_user_display = '';
@@ -440,7 +442,9 @@ function USER_accountPanel($U,$newuser = 0)
         if ( $remote_user_edit == 1 ) {
             $userform->set_var('remote_user_disabled',' disabled="disabled"');
         }
-        $userform->set_var('pwd_disabled',$pwd_disabled);
+        if ( !($U['account_type'] & LOCAL_USER) ) {
+            $userform->set_var('pwd_disabled',$pwd_disabled);
+        }
     } else {
         $userform->set_var('remoteuserenable','');
         $userform->set_var('remoteusername','');
@@ -1145,7 +1149,7 @@ function USER_getGroupListField($fieldname, $fieldvalue, $A, $icon_arr, $al_sele
                         . '<input type="hidden" name="groups[]" value="'
                         . $A['grp_id'] . '"' . $checked . '/>';
             } else {
-                if ( $A['grp_gl_core'] > 0 && SEC_isRemoteUser($uid) ) {
+                if ( $A['grp_gl_core'] > 0 && !SEC_isLocalUser($uid) ) {
                     $checked = ' disabled="disabled"';
                 }
                 $retval = '<input type="checkbox" name="groups[]" value="'

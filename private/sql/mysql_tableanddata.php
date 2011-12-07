@@ -584,6 +584,7 @@ CREATE TABLE {$_TABLES['users']} (
   act_token varchar(32) NOT NULL default '',
   act_time datetime NOT NULL default '0000-00-00 00:00:00',
   status smallint(5) unsigned NOT NULL default '1',
+  account_type smallint(5) unsigned NOT NULL default '1',
   num_reminders tinyint(1) NOT NULL default 0,
   remote_ip varchar(15) NOT NULL default '',
   PRIMARY KEY  (uid),

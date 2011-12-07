@@ -40,9 +40,9 @@ require_once 'HTTP/OAuth/Consumer.php';
 class twitterConsumer extends OAuthConsumerBaseClass {
     public $consumer_key = ''; // <-- Consumer key
     public $consumer_secret = '';  // <-- Consumer secret
-    public $url_requestToken = 'https://twitter.com/oauth/request_token';
-    public $url_authorize = 'https://twitter.com/oauth/authorize';
-    public $url_accessToken = 'https://twitter.com/oauth/access_token';
+    public $url_requestToken = 'https://api.twitter.com/oauth/request_token';
+    public $url_authorize = 'https://api.twitter.com/oauth/authorize';
+    public $url_accessToken = 'https://api.twitter.com/oauth/access_token';
     public $url_userinfo = 'http://twitter.com/account/verify_credentials.xml';
 
     protected function _getCreateUserInfo($info) {
@@ -69,7 +69,10 @@ class twitterConsumer extends OAuthConsumerBaseClass {
     }
 
     protected function _after_trigger($uid, $users, $userinfo) {
-        global $_CONF, $MESSAGE;
+        global $_CONF, $MESSAGE,$newTwitter;
+
+        $newTwitter = true;
+        return;
 
         $url = $this->_shorten($_CONF['site_url']);
         // twitter send message

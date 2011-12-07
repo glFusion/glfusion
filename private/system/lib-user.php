@@ -348,6 +348,8 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
         $fields .= ',homepage';
         $values .= ",'$homepage'";
     }
+    $account_type = LOCAL_USER;
+
     if (($_CONF['usersubmission'] == 1) && !SEC_hasRights ('user.edit')) {
         $queueUser = true;
         if (!empty ($_CONF['allow_domains'])) {
@@ -370,12 +372,16 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
         if (!empty($remoteusername)) {
             $fields .= ',remoteusername';
             $values .= ",'".DB_escapeString($remoteusername)."'";
+            $account_type = REMOTE_USER;
         }
         if (!empty($service)) {
             $fields .= ',remoteservice';
             $values .= ",'".DB_escapeString($service)."'";
         }
     }
+
+    $fields .= ',account_type';
+    $values .= ','.$account_type;
 
     DB_query ("INSERT INTO {$_TABLES['users']} ($fields) VALUES ($values)");
     // Get the uid of the user, possibly given a service:
