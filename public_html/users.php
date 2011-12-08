@@ -1130,7 +1130,7 @@ function mergeaccounts()
             $display .= COM_showMessageText(sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit']),$LANG12[26],false);
         } else {
             COM_updateSpeedlimit ('login');
-            $display .= mergeAccountForm($LANG20[3]);
+            $display = mergeAccountForm($LANG20[3]);
             echo $display;
             exit;
         }
@@ -1677,6 +1677,7 @@ default:
                 SEC_setCookie('token',$admin_token,0,$_CONF['cookie_path'],$_CONF['cookiedomain'],$_CONF['cookiesecure'],true);
             }
         }
+        $_USER['theme'] = $_CONF['theme'];
         COM_resetSpeedlimit('login');
         // let's see if we need to merge accounts
         if ( $checkMerge ) {
