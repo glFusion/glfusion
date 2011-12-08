@@ -213,6 +213,9 @@ if ($A['count'] > 0) {
                 header ('X-Pingback: ' . $_CONF['site_url'] . '/pingback.php');
             }
         }
+        $headercode .= '<meta property="og:title" content="'.$pagetitle.'" />' . LB;
+        $headercode .= '<meta property="og:type" content="article" />' . LB;
+        $headercode .= '<meta property="og:url" content="'.$permalink.'" />' . LB;
         $display .= COM_siteHeader('menu', $pagetitle, $headercode);
 
         if (isset($_GET['msg'])) {

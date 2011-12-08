@@ -91,7 +91,13 @@ if ($themeCSS != '') {
     $themeCSS = '<style type="text/css">'.$themeCSS.'</style>';
 }
 
-$display = MG_siteHeader($ptitle,$themeCSS);
+$permalink = COM_buildUrl($_MG_CONF['site_url'] . '/media.php?s='.$mediaObject);
+$headercode  = '<link rel="canonical" href="'.$permalink.'"/>' . LB;
+$headercode .= '<meta property="og:title" content="'.$ptitle.'" />' . LB;
+$headercode .= '<meta property="og:type" content="article" />' . LB;
+$headercode .= '<meta property="og:url" content="'.$permalink.'" />' . LB;
+
+$display = MG_siteHeader($ptitle,$headercode . $themeCSS);
 
 if ( $msg != '' ) {
     $display .= COM_showMessage( $msg, 'mediagallery' );
