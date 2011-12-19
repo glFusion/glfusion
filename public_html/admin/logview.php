@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -82,6 +82,7 @@ if ($dir = @opendir($_CONF['path_log'])) {
     }
     closedir($dir);
 }
+sort($files);
 $retval .= '<select name="log">';
 if (empty($log)) {
     $log = $files[0];
