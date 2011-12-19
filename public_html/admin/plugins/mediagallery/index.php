@@ -28,6 +28,12 @@
 //
 
 require_once '../../../lib-common.php';
+
+if (!in_array('mediagallery', $_PLUGINS)) {
+    COM_404();
+    exit;
+}
+
 require_once '../../auth.inc.php';
 require_once $_MG_CONF['path_admin'] . 'navigation.php';
 

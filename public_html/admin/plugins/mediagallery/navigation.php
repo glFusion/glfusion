@@ -32,6 +32,11 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+if (!in_array('mediagallery', $_PLUGINS)) {
+    COM_404();
+    exit;
+}
+
 require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
 
 MG_initAlbums();
