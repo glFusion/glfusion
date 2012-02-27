@@ -572,4 +572,36 @@ function CUSTOM_handleError($errno, $errstr, $errfile, $errline, $errcontext)
 }
 ------ */
 
+/**
+* This function calls a block only when on any page
+* in the "forum" sub-directory. For example:
+* http://yoursite.com/forum/index.php
+* http://yoursite.com/forum/createtopic.php
+* Do not forget to create the php block in the Block Manager.
+*/
+
+/* -------- REMOVE COMMENTS TO ENABLE...
+function phpblock_forumonlyblock() {
+    if(preg_match('/\/forum\//',$_SERVER['REQUEST_URI']))
+        $retval = 'block content only for the forum';
+    return $retval;
+}
+------ */
+
+/**
+* This function calls a block only when on a page that
+* contains "stats" anywhere in the URL. For example:
+* http://yoursite.com/stats.php
+* http://yoursite.com/staticpages/index.php?page=stats
+* Do not forget to create the php block in the Block Manager.
+*/
+
+/* -------- REMOVE COMMENTS TO ENABLE...
+function phpblock_statsblock() {
+    if(preg_match('/stats/',$_SERVER['REQUEST_URI']))
+        $retval = 'block content only for the stats page';
+    return $retval;
+}
+------ */
+
 ?>
