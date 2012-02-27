@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.3.0
 ------
+- Added example phpblock functions to lib-custom (Eric)
 - Fixed pwd strength meter on My Account/Username & Password panel (Mark H.)
 - Implemented Facebook account merge (Mark)
 - Fixed issue with auto tags not expanded in the BB code library (Mark)
