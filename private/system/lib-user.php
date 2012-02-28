@@ -357,7 +357,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
                 $queueUser = false;
             }
         }
-        if ( !emtpy($remoteusername) && !emtpy(!$service) ) {
+        if ( !empty($remoteusername) && !emtpy(!$service) ) {
             $queueUser = false;
         }
         if ($queueUser) {
