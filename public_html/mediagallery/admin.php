@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -613,7 +613,7 @@ if (($mode == 'edit') ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/mediamanage.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $media_id = COM_applyFilter($_GET['mid'],true);
-        $srcURL   = COM_applyFilter($_GET['s'],true);
+        $srcURL   = isset($_GET['s']) ? COM_applyFilter($_GET['s'],true) : 0;
         if ( $srcURL ) {
             $actionURL = $_MG_CONF['site_url'] . '/admin.php';
             $back = $_MG_CONF['site_url'] . '/media.php?f=0&sort=0&s=' . $media_id;
@@ -725,7 +725,7 @@ if (($mode == 'edit') ) {
         $media_id = COM_applyFilter($_GET['media_id']);
         $direction = COM_applyFilter($_GET['action']);
         $queue     = COM_applyFilter($_GET['queue'],true);
-        $srcFrom   = COM_applyFilter($_GET['s'],true);
+        $srcFrom   = isset($_GET['s']) ? COM_applyFilter($_GET['s'],true) : 0;
         $srcURL = '';
         if ( $srcFrom ) {
             $srcURL = '&amp;s=1';
