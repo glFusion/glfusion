@@ -106,6 +106,10 @@ function install_config($site_url)
     $c->add('search_separator',' &gt; ','text',0,6,NULL,750,TRUE);
     $c->add('search_def_keytype','phrase','select',0,6,19,760,TRUE);
 
+    $c->add('fs_update', NULL, 'fieldset', 0, 7, NULL, 0, TRUE);
+    $c->add('update_check_interval','86400','select',0,7,29,765,TRUE);
+    $c->add('send_site_data',TRUE,'select',0,7,1,770,TRUE);
+
     // Subgroup: Stories and Trackback
     $c->add('sg_stories', NULL, 'subgroup', 1, 0, NULL, 0, TRUE);
 

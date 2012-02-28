@@ -732,6 +732,11 @@ function glfusion_130()
     // hide what's new if empty
     $c->add('hideemptyblock',0,'select',3,15,0,1045,TRUE);
 
+    // update check
+    $c->add('fs_update', NULL, 'fieldset', 0, 7, NULL, 0, TRUE);
+    $c->add('update_check_interval','86400','select',0,7,29,765,TRUE);
+    $c->add('send_site_data',TRUE,'select',0,7,1,770,TRUE);
+
     // add new logo.admin permission
     $result = DB_query("SELECT * FROM {$_TABLES['features']} WHERE ft_name='logo.admin'");
     if ( DB_numRows($result) > 0 ) {

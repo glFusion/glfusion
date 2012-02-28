@@ -2300,6 +2300,32 @@ $LANG_AM = array (
 );
 
 ###############################################################################
+# admin/vercheck.php - version checker
+$LANG_UPGRADE = array(
+    'recheck'       => 'Recheck Version',
+    'desc'          => 'Ensure your glFusion software and plugins are up-to-date. The upgrade / version checker will query the glFusion.org web site to retrieve the latest version of all software and compare to your installed version.',
+    'title'         => 'glFusion CMS Upgrade Checker',
+    'upgrade_title' => 'Upgrade Recommended',
+    'upgrade'       => 'The glFusion CMS version you are running, %s is out of date. <span class="b">We recommend upgrading to the current version, %s, as soon as possible.</span> The latest version of glFusion is available at the <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">glFusion CMS Support Site</a>.',
+    'uptodate_title'=> 'Congratulations, your glFusion installation is up-to-date.',
+    'uptodate'      => 'Your current glFusion CMS installation is running the latest production release. We do recommend that you subscribe to the <a href="https://lists.sourceforge.net/lists/listinfo/glfusion-announce" target="_blank">glFusion Announcments Mailing List</a> to receive immediate information about updates and security issues.',
+    'unknown_title' => 'Unable to determine glFusion version status',
+    'unknown'       => 'We were unable to match your current glFusion version of %s to any released versions. If you are running a development snapshot, it is recommended that you subscribe to the <a href="http://glfusion.org/mailman/listinfo/glfusion-devel_glfusion.org" target="_blank">glFusion Development Mailing List</a>. You are are not running a development snapshot, please use the <a href="http://www.glfusion.org/forum/index.php?forum=28" target="blank">glFusion Support Forums</a> for assistance.',
+    'error_title'   => 'An error has occured while processing your request.',
+    'error'         => 'We were unable to retrieve the version data from glFusion.org. If this problem persists, please visit <a href="http://www.glfusion.org/forum/index.php?forum=28" target="blank">the glFusion CMS Support Forum</a> to discover how you can get support.',
+    'was_released'  => 'Version %s was released on %s.',
+    'plugin_uptodate' => 'Up To Date',
+    'plugin_newer'  => 'You are running a newer version of the plugin.',
+    'no_data'       => 'No data available.',
+    'updates_available' => 'There are updates available - Please use the <a href="'.$_CONF['site_admin_url'].'/vercheck.php">Version Checker</a> to see available updates.',
+    'plugin_title'  => 'Plugin Version Check',
+    'plugin'        => 'Plugin',
+    'installed_version' => 'Installed Version',
+    'latest_version' => 'Latest Version',
+    'notes'         => 'Notes',
+);
+
+###############################################################################
 # Localization of the Admin Configuration UI
 
 $LANG_CONFIG = array(
@@ -2571,6 +2597,8 @@ $LANG_confignames['Core'] = array(
     'max_logo_height' => 'Max logo height',
     'whatsnew_cache_time' => 'Time between forced rebuild of the What\'s New cache (in seconds)',
     'hideemptyblock' => 'Hide What\'s New Block when empty',
+    'update_check_interval' => 'Update Check Interval',
+    'send_site_data' => 'Send Site Data',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2629,6 +2657,7 @@ $LANG_fs['Core'] = array(
     'fs_caching' => 'Caching',
     'fs_mulitlanguage' => 'Multiple Language Support - See <a href="http://www.glfusion.org/wiki/doku.php/glfusion:language#multilingual_sites" target=_blank>Multi-Language Documentation</a>',
     'fs_logo' => 'Logo Options',
+    'fs_update' => 'Update Checker',
 );
 
 $LANG_configselects['Core'] = array(
@@ -2661,6 +2690,7 @@ $LANG_configselects['Core'] = array(
     26 => array('None' => 0, 'A.B' => 1, 'A.B.C' => 2, 'All' => 3),
     27 => array('Generate Password' => 0, 'User Enters Password' => 1),
     28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
+    29 => array('Daily' => 86400, 'Weekly' => 604800, 'Hourly' => 3600, 'Always' => 0),
 );
 
 ?>

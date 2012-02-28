@@ -46,6 +46,26 @@ if (isset($_GET['mode']) && ($_GET['mode'] == 'logout')) {
 // this defines the amount of icons displayed next to another in the CC-block
 define ('ICONS_PER_ROW', 6);
 
+function _checkUpgrades()
+{
+    global $_CONF, $_TABLES, $LANG_UPGRADE;
+
+    $retval = '';
+
+    $lastrun = DB_getItem( $_TABLES['vars'], 'value', "name = 'updatecheck'" );
+    if ( $lastrun + $_CONF['update_check_interval'] <= time() ) {
+        // run version check
+        list($upToDate,$pluginsUpToDate,$pluginData) = _checkVersion();
+        if ( $upToDate == 0 || $pluginsUpToDate == 0 ) {
+            $retval = '<p style="width:100%;text-align:center;"><span class="alert pluginAlert" style="text-align:center;font-size:1.5em;">' . $LANG_UPGRADE['updates_available'] . '</span></p>';
+        }
+        DB_query("REPLACE INTO {$_TABLES['vars']} (name, value) VALUES ('updatecheck',UNIX_TIMESTAMP())");
+    }
+    return $retval;
+}
+
+
+
 /**
 * Renders an entry (icon) for the "Command and Control" center
 *
@@ -181,7 +201,8 @@ function commandcontrol()
             'lang' => $LANG01[113], 'image' => '/images/icons/docs.'),
         array('condition' => (SEC_inGroup ('Root') &&
                               ($_CONF['link_versionchecker'] == 1)),
-            'url' => 'http://www.glfusion.org/versionchecker.php?version=' . GVERSION . PATCHLEVEL,
+'url' => $_CONF['site_admin_url'].'/vercheck.php',
+//            'url' => 'http://www.glfusion.org/versionchecker.php?version=' . GVERSION . PATCHLEVEL,
             'lang' => $LANG01[107], 'image' => '/images/icons/versioncheck.'),
         array('condition' => (SEC_inGroup ('Root')),
             'url'=>$_CONF['site_admin_url'] . '/configuration.php',
@@ -272,6 +293,8 @@ if ($msg > 0) {
     }
     $display .= COM_showMessage($msg, $plugin);
 }
+
+$display .= _checkUpgrades();
 
 $display .= security_check_reminder();
 $display .= commandcontrol();

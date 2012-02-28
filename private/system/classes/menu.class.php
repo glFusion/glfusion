@@ -666,7 +666,7 @@ class menuElement {
                                 }
 
                                 if( SEC_inGroup( 'Root' )) {
-                                    $url = 'http://www.glfusion.org/versionchecker.php?version=' . GVERSION . PATCHLEVEL;
+                                    $url = $_CONF['site_admin_url'] . '/vercheck.php';
                                     $label = $LANG01[107] . ' (' . GVERSION . PATCHLEVEL . ')';
                                     $link_array[$LANG01[107]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
                                 }

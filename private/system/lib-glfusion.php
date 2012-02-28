@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -121,13 +121,7 @@ function glfusion_SecurityCheck() {
     }
     return $retval;
 }
-/*
-function glfusion_SubmissionsCheck()
-{
-    $retval = '';
-    return $retval;
-}
-*/
+
 /*
  *  Story Picker Block - by Joe Mucchiello
  *  Make a list of n number of story headlines linked to their articles.
@@ -199,5 +193,269 @@ function phpblock_storypicker() {
     return $list;
 }
 
+require_once 'HTTP/Request2.php';
+
+function xml2array($contents, $get_attributes = 1, $priority = 'tag')
+{
+    if (!function_exists('xml_parser_create')) {
+        return array ();
+    }
+    $parser = xml_parser_create('');
+
+    xml_parser_set_option($parser, XML_OPTION_TARGET_ENCODING, "UTF-8");
+    xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
+    xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 1);
+    xml_parse_into_struct($parser, trim($contents), $xml_values);
+    xml_parser_free($parser);
+    if (!$xml_values)
+        return;
+    $xml_array = array ();
+    $parents = array ();
+    $opened_tags = array ();
+    $arr = array ();
+    $current = & $xml_array;
+    $repeated_tag_index = array ();
+    foreach ($xml_values as $data) {
+        unset ($attributes, $value);
+        extract($data);
+        $result = array ();
+        $attributes_data = array ();
+        if (isset ($value)) {
+            if ($priority == 'tag') {
+                $result = $value;
+            } else {
+                $result['value'] = $value;
+            }
+        }
+        if (isset ($attributes) and $get_attributes) {
+            foreach ($attributes as $attr => $val) {
+                if ($priority == 'tag') {
+                    $attributes_data[$attr] = $val;
+                } else {
+                    $result['attr'][$attr] = $val;
+                }
+            }
+        }
+        if ($type == "open") {
+            $parent[$level -1] = & $current;
+            if (!is_array($current) or (!in_array($tag, array_keys($current)))) {
+                $current[$tag] = $result;
+                if ($attributes_data) {
+                    $current[$tag . '_attr'] = $attributes_data;
+                }
+                $repeated_tag_index[$tag . '_' . $level] = 1;
+                $current = & $current[$tag];
+            } else {
+                if (isset ($current[$tag][0])) {
+                    $current[$tag][$repeated_tag_index[$tag . '_' . $level]] = $result;
+                    $repeated_tag_index[$tag . '_' . $level]++;
+                } else {
+                    $current[$tag] = array (
+                        $current[$tag],
+                        $result
+                    );
+                    $repeated_tag_index[$tag . '_' . $level] = 2;
+                    if (isset ($current[$tag . '_attr'])) {
+                        $current[$tag]['0_attr'] = $current[$tag . '_attr'];
+                        unset ($current[$tag . '_attr']);
+                    }
+                }
+                $last_item_index = $repeated_tag_index[$tag . '_' . $level] - 1;
+                $current = & $current[$tag][$last_item_index];
+            }
+        } elseif ($type == "complete") {
+            if (!isset ($current[$tag])) {
+                $current[$tag] = $result;
+                $repeated_tag_index[$tag . '_' . $level] = 1;
+                if ($priority == 'tag' and $attributes_data)
+                    $current[$tag . '_attr'] = $attributes_data;
+            } else {
+                if (isset ($current[$tag][0]) and is_array($current[$tag])) {
+                    $current[$tag][$repeated_tag_index[$tag . '_' . $level]] = $result;
+                    if ($priority == 'tag' and $get_attributes and $attributes_data) {
+                        $current[$tag][$repeated_tag_index[$tag . '_' . $level] . '_attr'] = $attributes_data;
+                    }
+                    $repeated_tag_index[$tag . '_' . $level]++;
+                } else {
+                    $current[$tag] = array (
+                        $current[$tag],
+                        $result
+                    );
+                    $repeated_tag_index[$tag . '_' . $level] = 1;
+                    if ($priority == 'tag' and $get_attributes) {
+                        if (isset ($current[$tag . '_attr'])) {
+                            $current[$tag]['0_attr'] = $current[$tag . '_attr'];
+                            unset ($current[$tag . '_attr']);
+                        }
+                        if ($attributes_data) {
+                            $current[$tag][$repeated_tag_index[$tag . '_' . $level] . '_attr'] = $attributes_data;
+                        }
+                    }
+                    $repeated_tag_index[$tag . '_' . $level]++; //0 and 1 index is already taken
+                }
+            }
+        } elseif ($type == 'close') {
+            $current = & $parent[$level -1];
+        }
+    }
+    return ($xml_array);
+}
+
+function _upToDate($currentVersion,$installedVersion)
+{
+    $upToDate = 0;
+
+    list($latestMajor,$latestMinor,$latestRev,$latestExtra)     = explode('.',$currentVersion.'....');
+    list($currentMajor,$currentMinor,$currentRev,$currentExtra) = explode('.',$installedVersion.'....');
+
+    if ( $currentMajor >= $latestMajor ) {
+        if ( $currentMajor > $latestMajor ) {
+            $upToDate = 2;
+        } else if ( $currentMinor >= $latestMinor ) {
+            if ( $currentMinor > $latestMinor ) {
+                $upToDate = 2;
+            } else if ( $currentRev >= $latestRev ) {
+                if ($currentRev > $latestRev ) {
+                    $upToDate = 2;
+                } else if ( $currentExtra != '' || $latestExtra != '' ) {
+                    if ( strcmp($currentExtra,$latestExtra) == 0 ) {
+                        $upToDate = 1;
+                    }
+                } else {
+                    $upToDate = 1;
+                }
+            }
+        }
+    }
+    return $upToDate;
+}
+
+function _checkVersion()
+{
+    global $_CONF, $_USER, $_PLUGIN_INFO;
+
+    // build XML request
+
+    $request = new HTTP_Request2('http://www.glfusion.org/versions/index.php');
+    $request->setMethod(HTTP_Request2::METHOD_POST);
+    $request->addPostParameter('v', GVERSION.PATCHLEVEL);
+    if ( $_CONF['send_site_data'] ) {
+        $request->addPostParameter('s', $_CONF['site_url']);
+    }
+    $url = $request->getUrl();
+    $response = $request->send();
+    if ( $response->getStatus() != 200 ) {
+        return array(-1,-1,array());
+    }
+    $result = $response->getBody();
+
+    if (!$result) {
+        return array(-1,-1,array());
+    }
+
+    // parse XML response
+
+    $response = xml2array($result);
+
+    if ( isset( $response['response'] ) ) {
+        if ( isset($response['response']['glfusion'] ) ) {
+            $latest = $response['response']['glfusion']['version'];
+        } else {
+            $latest = 'unknown';
+        }
+        if ( isset($response['response']['glfusion']['date']) ) {
+            $releaseDate = $response['response']['glfusion']['date'];
+        } else {
+            $releaseDate = 'unknown';
+        }
+    }
+
+    // check glFusion CMS version
+
+    $current = GVERSION.PATCHLEVEL;
+
+    list($latestMajor,$latestMinor,$latestRev,$latestExtra)     = explode('.',$latest.'....');
+    list($currentMajor,$currentMinor,$currentRev,$currentExtra) = explode('.',$current.'....');
+
+    $glFusionUpToDate = 0;
+
+    if ( $currentMajor >= $latestMajor ) {
+        if ( $currentMajor > $latestMajor ) {
+            $glFusionUpToDate = 2;
+        } else if ( $currentMinor >= $latestMinor ) {
+            if ( $currentMinor > $latestMinor ) {
+                $glFusionUpToDate = 2;
+            } else if ( $currentRev >= $latestRev ) {
+                if ($currentRev > $latestRev ) {
+                    $glFusionUpToDate = 2;
+                } else if ( $currentExtra != '' || $latestExtra != '' ) {
+                    if ( strcmp($currentExtra,$latestExtra) == 0 ) {
+                        $glFusionUpToDate = 1;
+                    }
+                } else {
+                    $glFusionUpToDate = 1;
+                }
+            }
+        }
+    }
+
+    // run through all our active plugins and see if any are out of date
+
+    $pluginsUpToDate = 1;
+    $done = 0;
+
+    if ( is_array($response['response']['plugin'] ) ) {
+        foreach ($_PLUGIN_INFO AS $iPlugin => $iPluginVer ) {
+            $upToDate = 0;
+            foreach ($response['response']['plugin'] AS $plugin ) {
+                if ( strcmp($plugin['name'],$iPlugin) == 0 ) {
+                    if ( _upToDate($plugin['version'],$iPluginVer) == 0 ) {
+                        $pluginsUpToDate = 0;
+                        $done = 1;
+                        break;
+                    }
+                }
+            }
+            if ( $done ) {
+                break;
+            }
+        }
+    }
+
+    // build data if we need it...
+
+    $pluginData = array();
+
+    $pluginData['glfusioncms']['plugin'] = 'glfusioncms';
+    $pluginData['glfusioncms']['installed_version'] = $current;
+    $pluginData['glfusioncms']['display_name'] = '';
+    $pluginData['glfusioncms']['latest_version'] = $latest;
+    $pluginData['glfusioncms']['release_date'] = $releaseDate;
+    $pluginData['glfusioncms']['url'] = '';
+
+    if ( is_array($response['response']['plugin'] ) ) {
+        foreach ($_PLUGIN_INFO AS $iPlugin => $iPluginVer ) {
+            $upToDate = 0;
+            $pluginData[$iPlugin]['plugin'] = $iPlugin;
+            $pluginData[$iPlugin]['installed_version'] = $iPluginVer;
+            $pluginData[$iPlugin]['display_name'] = $iPlugin;
+            $pluginData[$iPlugin]['latest_version'] = 0;
+            $pluginData[$iPlugin]['release_date'] = 0;
+            $pluginData[$iPlugin]['url'] = '';
+            foreach ($response['response']['plugin'] AS $plugin ) {
+                if ( strcmp($plugin['name'],$iPlugin) == 0 ) {
+                    $pluginData[$iPlugin]['display_name'] = $plugin['displayname'];
+                    $pluginData[$iPlugin]['latest_version'] = $plugin['version'];
+                    $pluginData[$iPlugin]['release_date'] = $plugin['date'];
+                    if (isset($plugin['url']) ) {
+                        $pluginData[$iPlugin]['url'] = $plugin['url'];
+                    }
+                }
+            }
+        }
+    }
+
+    return array($glFusionUpToDate,$pluginsUpToDate,$pluginData);
+}
 
 ?>
