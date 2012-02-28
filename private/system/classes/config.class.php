@@ -673,7 +673,7 @@ class config {
         $t->set_var('fs_contents', $contents);
         $fs_index = DB_getItem($_TABLES['conf_values'], 'name',
                         "type = 'fieldset' AND fieldset = $fs_id AND group_name = '$group' AND subgroup=".$sg);
-        if (empty($fs_index)) {
+        if (empty($fs_index) && isset($LANG_fs[$group][$fs_id])) {
             $t->set_var('fs_display', $LANG_fs[$group][$fs_id]);
         } else if (isset($LANG_fs[$group][$fs_index])) {
             $t->set_var('fs_display', $LANG_fs[$group][$fs_index]);
