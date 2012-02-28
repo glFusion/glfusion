@@ -252,7 +252,7 @@ function plugin_commentPreSave_captcha($uid, $title, $comment, $sid, $pid, $type
 }
 
 function plugin_itemPreSave_captcha( $ctype='registration', $content='' ) {
-    global $_CP_CONF, $_USER, $_POST;
+    global $_CP_CONF, $_USER;
 
     $msg = '';
 
