@@ -343,7 +343,11 @@ function _checkVersion()
         $request->addPostParameter('s', $_CONF['site_url']);
     }
     $url = $request->getUrl();
-    $response = $request->send();
+    try {
+        $response = $request->send();
+    } catch (Exception $e) {
+        return array(-1,-1,array());
+    }
     if ( $response->getStatus() != 200 ) {
         return array(-1,-1,array());
     }
