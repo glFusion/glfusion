@@ -345,18 +345,23 @@ function plugin_geticon_spamx ()
 
 function plugin_itemPreSave_spamx($type, $username)
 {
-    global $_CONF, $LANG_SX00;
+    global $_CONF, $LANG_SX00, $REMOTE_ADDR;
 
-    if ($type == 'registration' || $type == 'forum' ) {
+    if ($type == 'registration') {
         $email = '';
         if ( isset($_POST['email']) ) {
             $email = $_POST['email'];
         }
-        require_once $_CONF['path'].'/plugins/spamx/SFS.Misc.class.php';
-        $EX = new SFS;
-        $res = $EX->execute($email, $_SERVER['REMOTE_ADDR']);
-        if ($res > 0) {
-            return $LANG_SX00['invalid_email_or_ip'];
+        if ( @file_exists($_CONF['path'].'/plugins/spamx/SFS.Misc.class.php') ) {
+            require_once $_CONF['path'].'/plugins/spamx/SFS.Misc.class.php';
+            $EX = new SFSreg;
+            $res = $EX->execute($email, $REMOTE_ADDR);
+            if ($res > 0) {
+                SPAMX_log ($type . ' - Found ' . $type . ' matching ' . 'Stop Forum Spam (SFS)'.
+                       'for email '  . $email .
+                       $LANG_SX00['foundspam3'] . $_SERVER['REMOTE_ADDR']);
+                return $LANG_SX00['invalid_email_or_ip'];
+            }
         }
     }
 

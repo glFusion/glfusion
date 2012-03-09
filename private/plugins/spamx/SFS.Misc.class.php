@@ -31,7 +31,7 @@ require_once $_CONF['path'] . 'plugins/spamx/' . 'BaseCommand.class.php';
 * @package Spam-X
 *
 */
-class SFS extends BaseCommand {
+class SFSreg extends BaseCommand {
     /**
      * No Constructor - use BaseCommand constructor
      */
@@ -62,20 +62,9 @@ class SFS extends BaseCommand {
      */
     function _process($email, $ip)
     {
-        global $_TABLES;
+        global $_TABLES, $LANG_SX00;
 
         require_once 'HTTP/Request2.php';
-
-        $db_email = DB_escapeString($email);
-        $db_ip = DB_escapeString($ip);
-        //  Include Blacklist Data
-        //  Check for IP address
-        $result = DB_query("SELECT value FROM {$_TABLES['spamx']}
-                WHERE name='IP' AND value='$db_ip'
-                OR name='email' AND value='$db_email'", 1);
-        if (DB_numRows($result) > 0) {
-            return 1;
-        }
 
 // for local development you need to uncomment this - stopforumspam.com
 //  thinks that 127.0.0.1 is a spammer address
@@ -98,25 +87,20 @@ class SFS extends BaseCommand {
         }
         $url->setQueryVariables($checkData);
         $url->setQueryVariable('cmd', 'display');
-        $result = @unserialize($request->send()->getBody());
+        try {
+            $response = $request->send();
+        } catch (Exception $e) {
+            return 0;
+        }
+        $result = @unserialize($response->getBody());
 
         if (!$result) return 0;     // invalid data, assume ok
 
-        if (isset($result['email']) && $result['email']['appears'] == 1)
-            $value_arr[] = "('email', '$db_email')";
-        if ($result['ip']['appears'] == 1)
-            $value_arr[] = "('IP', '$db_ip')";
-        if (!empty($value_arr)) {
-            $values = implode(',', $value_arr);
-            $sql = "INSERT INTO {$_TABLES['spamx']} (name, value)
-                    VALUES $values";
-            DB_query($sql);
-            COM_errorLog("SPAMX: stopforumspam.com reported that $email or $ip is a spammer");
+        if ( (isset($result['email']) && $result['email']['appears'] == 1) ||
+           ($result['ip']['appears'] == 1 ) ) {
             return 1;
         }
-
         // Passed the checks
-        COM_errorLog("SPAMX: stopforumspam.com passed email: $email and IP: $ip");
         return 0;
     }
 }
