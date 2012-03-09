@@ -9,7 +9,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -602,7 +602,7 @@ function plugin_getfeedcontent_forum ($feed, &$link, &$update)
     if ($F['topic'] == 0) {
         $link = $_CONF['site_url'].'/forum/index.php';
     } else {
-        $link = $_CONF['site_url'].'/forum/index.php.php?forum='.$F['topic'];
+        $link = $_CONF['site_url'].'/forum/index.php?forum='.$F['topic'];
     }
 
     if (count($ids) > 0 ) {
@@ -680,6 +680,24 @@ function forum_chkUsercanPost() {
         echo $display;
         exit;
     }
+
+    /* ---
+    if ($_FF_CONF['use_sfs'] == 1 ) {
+        // Stop Forum Spam check
+        if ( @file_exists($_CONF['path'].'/plugins/spamx/SFS.Misc.class.php') ) {
+            require_once $_CONF['path'].'/plugins/spamx/SFS.Misc.class.php';
+            $EX = new SFSreg;
+            $res = $EX->execute('');
+            if ($res > 0) {
+                // sleep - slows down the spammer / bot
+                sleep(30);
+                die('IP listed in Stop Forum Spam database');
+                exit();
+            }
+        }
+    }
+    --- */
+
     // Check if IP of user has been banned
     $isBanned = DB_count($_TABLES['ff_banned_ip'],'host_ip',DB_escapeString($remote_ip));
     if ( $isBanned > 0 ) {
@@ -1078,7 +1096,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                     }
                 }
                 $shortComment = trim($shortComment).$tailString;
-                $lastpostinfo = htmlspecialchars(preg_replace('#\r?\n#',' ',strip_tags($shortComment)),ENT_COMPAT,COM_getEncodingt());
+                $lastpostinfo = @htmlspecialchars(preg_replace('#\r?\n#',' ',strip_tags($shortComment)),ENT_COMPAT,COM_getEncodingt());
             } else {
                 $qlreply = DB_query("SELECT id,uid,name,comment FROM {$_TABLES['ff_topic']} WHERE id={$A['last_reply_rec']}");
                 $B = DB_fetchArray($qlreply);
@@ -1107,7 +1125,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                     }
                 }
                 $shortComment = trim($shortComment).$tailString;
-                $lastpostinfo = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags($shortComment)),ENT_COMPAT,COM_getEncodingt());
+                $lastpostinfo = @htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags($shortComment)),ENT_COMPAT,COM_getEncodingt());
             }
             $cssid = ($cssid ==1) ? 2: 1;
             $block->set_var (array(

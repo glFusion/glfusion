@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -135,6 +135,7 @@ function forum_upgrade() {
             $c = config::get_instance();
             $c->del('pre2.5_mode', 'forum');
             $c->del('mysql4+', 'forum');
+            $c->add('use_sfs', true, 'select',0, 2, 0, 135, true, 'forum');
 
             DB_query("UPDATE {$_TABLES['conf_values']} SET value='s:11:\"m/d/y h:i a\";' WHERE name='default_Datetime_format' AND group_name='forum'");
             DB_query("UPDATE {$_TABLES['conf_values']} SET value='s:11:\"M d Y H:i a\";' WHERE name='default_Topic_Datetime_format' AND group_name='forum'");
@@ -258,24 +259,24 @@ function upgrade_30() {
     $_SQL = array();
 
     $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['ff_bookmarks']} (
-      `uid` mediumint(8) NOT NULL,
-      `topic_id` int(11) NOT NULL,
-      `pid` int(11) NOT NULL default '0',
-      KEY `topic_id` (`topic_id`),
-      KEY `pid` (`pid`),
-      KEY `uid` (`uid`)
+      uid mediumint(8) NOT NULL,
+      topic_id int(11) NOT NULL,
+      pid int(11) NOT NULL default '0',
+      KEY topic_id (`topic_id`),
+      KEY pid (pid),
+      KEY uid (uid)
     ) ENGINE=MyISAM ;";
 
 
     $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['ff_attachments']} (
-      `id` int(11) NOT NULL auto_increment,
-      `topic_id` int(11) NOT NULL,
-      `repository_id` int(11) default NULL,
-      `filename` varchar(255) NOT NULL,
-      `tempfile` tinyint(1) NOT NULL default '0',
-      `show_inline` tinyint(4) NOT NULL default '0',
-      PRIMARY KEY  (`id`),
-      KEY `topic_id` (`topic_id`)
+      id` int(11) NOT NULL auto_increment,
+      topic_id int(11) NOT NULL,
+      repository_id int(11) default NULL,
+      filename varchar(255) NOT NULL,
+      tempfile tinyint(1) NOT NULL default '0',
+      show_inline tinyint(4) NOT NULL default '0',
+      PRIMARY KEY  (id),
+      KEY topic_id (topic_id)
     ) ENGINE=MyISAM;";
 
     // Set default access to use attachments to be the Root group

@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -538,7 +538,7 @@ function moderator_confirmMove($topic_id,$topic_parent_id,$forum_id)
           $modgroups .= ",$key";
       }
     }
-	$splitTopic = false;    
+	$splitTopic = false;
 	/* Check and see request to move complete topic or split the topic */
 	if (DB_getItem($_TABLES['ff_topic'],"pid","id=".(int) $topic_id) == 0) {
 		$splitTopic = false;
@@ -574,7 +574,7 @@ function moderator_confirmMove($topic_id,$topic_parent_id,$forum_id)
             		if ( $id != $forum_id ) {
             			$destination_forum_select .= '<option value="'.$id.'">'.$name.'</option>'. LB;
             		} else {
-            			$destination_forum_select .= '<option value="'.$id.'" disabled="disabled">'.$name.'</option>'. LB;	
+            			$destination_forum_select .= '<option value="'.$id.'" disabled="disabled">'.$name.'</option>'. LB;
             		}
             	} else {
 	                $destination_forum_select .= '<option value="'.$id.'">'.$name.'</option>'. LB;

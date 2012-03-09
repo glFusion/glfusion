@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -77,6 +77,7 @@ $_FF_DEFAULT['post_speedlimit']        = 60;
 $_FF_DEFAULT['use_smilies_plugin']     = false;
 $_FF_DEFAULT['use_pm_plugin']          = false;
 $_FF_DEFAULT['use_spamx_filter']       = true;
+$_FF_DEFAULT['use_sfs']                = true;
 $_FF_DEFAULT['show_centerblock']       = true;
 $_FF_DEFAULT['centerblock_homepage']   = true;
 $_FF_DEFAULT['centerblock_where']      = 2;
@@ -438,6 +439,8 @@ function plugin_initconfig_forum()
                 0, 2, 0, 120, true, 'forum');
         $c->add('use_spamx_filter', $_FF_DEFAULT['use_spamx_filter'], 'select',
                 0, 2, 0, 130, true, 'forum');
+        $c->add('use_sfs', $_FF_DEFAULT['use_sfs'], 'select',
+                0, 2, 0, 135, true, 'forum');
         $c->add('show_moods', $_FF_DEFAULT['show_moods'], 'select',
                 0, 2, 0, 140, true, 'forum');
         $c->add('allow_smilies', $_FF_DEFAULT['allow_smilies'], 'select',

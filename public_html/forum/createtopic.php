@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -180,6 +180,7 @@ switch ( $mode ) {
         $postData['id']       = 0;
         $postData['pid']      = 0;
         $postData['subject']  = '';
+        $postData['email']    = '';
         // ensure user can post to readonly forum.
         if ( $postData['is_readonly'] == 1 ) {
             // Check if this user has moderation rights now to allow a post to a locked topic
@@ -208,6 +209,7 @@ switch ( $mode ) {
             $postData['id'] = (int) $id;
             $postData['comment'] = '';
             $postData['name'] = '';
+            $postData['email'] = '';
             $postData['mood'] = '';
             $postData['moved'] = 0;
             $postData['replies'] = 0;
@@ -267,13 +269,13 @@ switch ( $mode ) {
                     if ((time() - $t2) < $postData['date']) {
                         $editAllowed = true;
                     } else {
-                        $editfailedreason = 'too late, edit time passed';
+                        $editfailedreason = $LANG_GF02['edit_time_passed'];
                     }
                 } else {
                     $editAllowed = true;
                 }
             } else {
-                $editfailedreason = 'not your post buddy';
+                $editfailedreason = $LANG_GF02['not_your_post'];
             }
         }
         if ( $editAllowed == false ) {
@@ -304,7 +306,7 @@ switch ( $mode ) {
             list($rc,$txt) = FF_saveTopic($forumData,$postData,$mode);
         } else {
             $rc   = false;
-            $txt .= FF_BlockMessage('','Invalid Security Token',false);
+            $txt .= FF_BlockMessage('',$LANG_GF02['invalid_token'],false);
         }
         if ( $rc !== false ) {
             $body .= $txt;
@@ -350,7 +352,8 @@ function _ff_accessError()
 
 function FF_postEditor( $postData, $forumData, $action, $viewMode )
 {
-    global $_CONF, $_TABLES, $_FF_CONF, $FF_userprefs, $_USER, $LANG_GF01, $LANG_GF02, $LANG_GF10;
+    global $_CONF, $_TABLES, $_FF_CONF, $FF_userprefs, $_USER,
+           $LANG_GF01, $LANG_GF02, $LANG_GF10;
 
     $retval         = '';
     $editmoderator  = false;
@@ -384,7 +387,8 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
     // check postmode
     if ( isset($postData['postmode']) ) {  // this means we are editing or previewing (or both)
         if ( isset($postData['postmode_switch']) ) { // means they selected a switch
-            $chkpostmode = _ff_chkpostmode($postData['postmode'],$postData['postmode_switch']);
+            $chkpostmode = _ff_chkpostmode($postData['postmode'],
+                                        $postData['postmode_switch']);
             if ($chkpostmode != $postData['postmode']) {
                 $postData['postmode'] = $chkpostmode;
                 $postData['postmode_switch'] = 0;
@@ -472,7 +476,9 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
 
         $postData['comment'] = str_ireplace('</textarea>','&lt;/textarea&gt;',$postData['comment']);
 
-        $peTemplate->set_var ('hidden_editpid', $postData['pid']);
+        if ( isset($postData['pid']) ) {
+            $peTemplate->set_var ('hidden_editpid', $postData['pid']);
+        }
         $peTemplate->set_var ('hidden_editid',  $postData['id']);
 
         $edit_prompt = $LANG_GF02['msg190'] . '<br/><input type="checkbox" name="silentedit" ';
@@ -515,11 +521,19 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         $postData['editpid'] = $postData['id'];
     }
 
+    if ( $_FF_CONF['use_sfs'] ) {
+        $peTemplate->set_var ('usesfs',1);
+    }
+
     if (COM_isAnonUser()) {
+        if ( !$_FF_CONF['use_sfs']) {
+            $postData['email'] = '';
+        }
         $peTemplate->set_var ('anonymous_user',true);
         $peTemplate->set_var ('post_message', $postmessage);
         $peTemplate->set_var ('LANG_NAME', $LANG_GF02['msg33']);
         $peTemplate->set_var ('name', _ff_checkHTML(strip_tags(COM_checkWords(trim(USER_sanitizeName(isset($postData['name']) ? $postData['name'] : ''))))));
+        $peTemplate->set_var ('email',strip_tags($postData['email']));
     } else {
         $peTemplate->set_var ('member_user',true);
         $peTemplate->set_var ('post_message', $postmessage);
@@ -610,15 +624,15 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         $notify_prompt = $LANG_GF02['msg38']. '<br/><input type="checkbox" name="notify" ' .$notify_val. '/>';
 
         // check that this is the parent topic - only able to make it skicky or locked
-        if ( $postData['pid'] == 0 ) {
+        if ( !isset($postData['pid']) || $postData['pid'] == 0 ) {
             if (!isset($locked_val) and !isset($sticky_val) AND $action == 'edittopic') {
-                if( (!isset($postData['locked_switch']) AND $postData['locked'] == 1) OR (isset($postData['locked_switch']) && $postData['locked_switch'] == 1) ) {
+                if( (!isset($postData['locked_switch']) AND (isset($postData['locked']) && $postData['locked'] == 1)) OR (isset($postData['locked_switch']) && $postData['locked_switch'] == 1) ) {
                     $locked_val = 'checked="checked"';
                 } else {
                     $locked_val = '';
                 }
 
-                if( (!isset($postData['sticky_switch']) AND $postData['sticky'] == 1) OR (isset($postData['sticky_switch']) && $postData['sticky_switch'] == 1) ) {
+                if( (!isset($postData['sticky_switch']) AND (isset($postData['sticky']) && $postData['sticky'] == 1)) OR (isset($postData['sticky_switch']) && $postData['sticky_switch'] == 1) ) {
                     $sticky_val = 'checked="checked"';
                 } else {
                     $sticky_val = '';
@@ -820,10 +834,11 @@ function FF_saveTopic( $forumData, $postData, $action )
 {
     global $_CONF, $_TABLES, $_FF_CONF, $_USER, $LANG03, $LANG_GF01, $LANG_GF02;
 
-    $retval = '';
-    $uploadErrors = '';
-    $msg = '';
+    $retval        = '';
+    $uploadErrors  = '';
+    $msg           = '';
     $errorMessages = '';
+    $email         = '';
 
     $forumfiles = array();
 
@@ -886,14 +901,25 @@ function FF_saveTopic( $forumData, $postData, $action )
             $retval.= _ff_alertMessage('',$LANG_GF02['msg189'], sprintf($LANG_GF02['msg187'],$link));
             $okToSave = false;
         }
+    } else {
+        if ( COM_isAnonUser() && $_FF_CONF['use_sfs']) {
+            if ( isset($postData['email']) && $postData['email'] != '' && COM_isEmail($postData['email']) ) {
+                $email = _ff_preparefordb(strip_tags(trim($postData['email'])),'text');
+                $email = urldecode($email);
+            } else {
+                $okToSave = false;
+                $errorMessages .= $LANG_GF02['invalid_email'] . '<br />';
+            }
+        } else {
+            $email = isset($_USER['email']) ? $_USER['email'] : '';
+        }
     }
-
     if (isset($postData['name']) && $postData['name'] != '') {
         $name = _ff_preparefordb(_ff_checkHTML(strip_tags(trim(COM_checkWords(USER_sanitizeName($postData['name']))))),'text');
         $name = urldecode($name);
     } else {
         $okToSave = false;
-        $errorMessages .= 'No name or name blank' . '<br />';
+        $errorMessages .= $LANG_GF02['invalid_name'] . '<br />';
     }
 
     // speed limit check
@@ -928,23 +954,24 @@ function FF_saveTopic( $forumData, $postData, $action )
 
     // spamx check
     if ($_FF_CONF['use_spamx_filter'] == 1 && $okToSave == true) {
-        // Stop Forum Spam check
-        if ( function_exists('plugin_itemPreSave_spamx') ) {
-            $msg = plugin_itemPreSave_spamx('forum',$name);
-            if ( $msg != '' ) {
-                // then tell them to get lost ...
-                $errorMessages .= $msg;
-                $okToSave = false;
-                return $errorMessage;
-            }
-        }
         // Check for SPAM
         $spamcheck = '<h1>' . $postData['subject'] . '</h1><p>' . $postData['comment'] . '</p>';
         $result = PLG_checkforSpam($spamcheck, $_CONF['spamx']);
         // Now check the result and redirect to index.php if spam action was taken
         if ($result > 0) {
             // then tell them to get lost ...
-            $errorMessages .= 'Your post was detected as spam.';
+            $errorMessages .= $LANG_GF02['spam_detected'];
+            $okToSave = false;
+        }
+    }
+
+    // hook directly into SFS
+    // check the email address too...
+    if ( $_FF_CONF['use_sfs'] == 1 && COM_isAnonUser() ) {
+        $result = _ff_stopforumspam($postData['name'],$email,$REMOTE_ADDR);
+        if ($result > 0) {
+            // then tell them to get lost ...
+            $errorMessages .= $LANG_GF02['spam_detected'];
             $okToSave = false;
         }
     }
@@ -1000,10 +1027,11 @@ function FF_saveTopic( $forumData, $postData, $action )
         }
 
         if ( $action == 'savetopic' ) {
-            $fields = "forum,name,date,lastupdated,subject,comment,postmode,ip,mood,uid,pid,sticky,locked,status";
+            $fields = "forum,name,email,date,lastupdated,subject,comment,postmode,ip,mood,uid,pid,sticky,locked,status";
             $sql  = "INSERT INTO {$_TABLES['ff_topic']} ($fields) ";
             $sql .= "VALUES (".(int) $forum."," .
                     "'".DB_escapeString($name)."'," .
+                    "'".DB_escapeString($email)."',".
                     "'".DB_escapeString($date)."'," .
                     "'".DB_escapeString($date)."'," .
                     "'".$subject."'," .
@@ -1040,10 +1068,11 @@ function FF_saveTopic( $forumData, $postData, $action )
             }
         } else if ( $action == 'savereply' ) {
 
-            $fields = "name,date,subject,comment,postmode,ip,mood,uid,pid,forum,status";
+            $fields = "name,email,date,subject,comment,postmode,ip,mood,uid,pid,forum,status";
             $sql  = "INSERT INTO {$_TABLES['ff_topic']} ($fields) ";
             $sql .= "VALUES  (" .
                     "'".DB_escapeString($name)."'," .
+                    "'".DB_escapeString($email)."',".
                     "'".DB_escapeString($date)."'," .
                     "'$subject'," .
                     "'$comment'," .
@@ -1355,5 +1384,59 @@ function _ff_chknotifications($forumid,$topicid,$userid,$type='topic') {
     $msgDataNotify['to'] = $toNotify;
     COM_emailNotification($msgDataDigest);
     COM_emailNotification($msgDataNotify);
+}
+
+function _ff_stopforumspam($username='',$email='',$ip='')
+{
+    global $_CONF;
+
+    require_once 'HTTP/Request2.php';
+
+// for local development you need to uncomment this - stopforumspam.com
+//  thinks that 127.0.0.1 is a spammer address
+//        if ( $_SERVER['REMOTE_ADDR'] == '127.0.0.1' ) {
+//            return 0;
+//        }
+
+    $em = urlencode($email);
+
+    $request = new HTTP_Request2('http://www.stopforumspam.com/api',
+                                 HTTP_Request2::METHOD_GET, array('use_brackets' => true));
+    $url = $request->getUrl();
+
+    $checkData['f'] = 'serial';
+    if ( $ip != '' ) {
+        $checkData['ip'] = $ip;
+    }
+    if ( $em != '' ) {
+        $checkData['email'] = urlencode($email);
+    }
+    if ( $username != '' ) {
+        $checkData['username'] = urlencode($username);
+    }
+
+    $url->setQueryVariables($checkData);
+    $url->setQueryVariable('cmd', 'display');
+
+    try {
+        $response = $request->send();
+    } catch (Exception $e) {
+        return 0;
+    }
+    $result = @unserialize($response->getBody());
+
+    if (!$result) {
+        return 0;     // invalid data, assume ok
+    }
+
+    if (
+       (isset($result['email']) && $result['email']['appears'] == 1) ||
+       ($result['ip']['appears'] == 1 ) ||
+       (isset($result['username']) && $result['username']['appears'] == 1 )
+       ) {
+        return 1;
+    }
+    // Passed the checks
+    return 0;
 }
 ?>

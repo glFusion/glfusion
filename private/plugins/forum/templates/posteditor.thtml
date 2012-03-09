@@ -110,6 +110,16 @@ glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
           &nbsp;&nbsp;
         </td>
       </tr>
+
+      <tr>
+{!if usesfs}
+        <td class="pluginCellSubTitle" width="20%">&nbsp;{$LANG_GF01[EmailLink]}:</td>
+        <td class="pluginCellText pluginCellFill">
+          <input type="text" name="email" value="{email}" size="40" maxlength="50" tabindex="1"/>
+          &nbsp;&nbsp;
+        </td>
+      </tr>
+{!endif}
 {!endif}
 
 {!if member_user}

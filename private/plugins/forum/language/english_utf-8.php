@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -452,6 +452,12 @@ $LANG_GF02 = array(
     'quietforum' => 'Forum has no new topics',
     'notify_full' => 'Include full post in notification',
     'view_online' => 'If this email doesn\'t display correctly, <a href="%s">view the online version</a>.',
+    'invalid_token' => 'Invalid Security Token',
+    'edit_time_passed' => 'The allowed time to edit your post has expired',
+    'not_your_post' => 'You donot appear to be the author of this post.',
+    'spam_detected' => 'Your post has been identified as a spam message',
+    'invalid_email' => 'Email empty or not a valid email address',
+    'invalid_name'  => 'No name or name blank',
 );
 
 $LANG_GF03 = array(
@@ -937,6 +943,7 @@ $LANG_confignames['forum'] = array(
     'bbcode_disabled' => 'Default Setting for BBCode Disabled Box',
     'smilies_disabled' => 'Default Setting for Smilies Disabled Box',
     'urlparse_disabled' => 'Default Setting for URL Parse Disabled Box',
+    'use_sfs' => 'Enable Stop Forum Spam Checks for new posts',
 );
 
 $LANG_configsubgroups['forum'] = array(
