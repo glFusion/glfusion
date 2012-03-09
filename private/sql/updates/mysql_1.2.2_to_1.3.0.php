@@ -65,8 +65,8 @@ $_SQL[] = "CREATE TABLE {$_TABLES['autotag_usage']} (
 
 $_SQL[] = "CREATE TABLE {$_TABLES['subscriptions']} (
   sub_id int(11) NOT NULL AUTO_INCREMENT,
-  type varchar(255) NOT NULL,
-  category varchar(255) NOT NULL DEFAULT '',
+  type varchar(50) NOT NULL,
+  category varchar(128) NOT NULL DEFAULT '',
   category_desc varchar(255) NOT NULL DEFAULT '',
   id varchar(40) NOT NULL,
   id_desc varchar(255) NOT NULL DEFAULT '',
