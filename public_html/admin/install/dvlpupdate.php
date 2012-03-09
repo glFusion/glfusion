@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -774,6 +774,8 @@ function glfusion_130()
     // forum update
     $c->del('pre2.5_mode', 'forum');
     $c->del('mysql4+', 'forum');
+    $c->add('use_sfs', true, 'select',0, 2, 0, 135, true, 'forum');
+
     _forum_cvt_watch();
     _forum_fix_watch();
     // attachment handling...
