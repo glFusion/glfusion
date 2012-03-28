@@ -1632,27 +1632,28 @@ USES_lib_story();
 USES_class_story();
 
     $retval = '';
+    // display story
+    $sql   = "SELECT s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
+             . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
+             . "u.uid, u.username, u.fullname, t.topic, t.imageurl "
+             . "FROM {$_TABLES['stories']} AS s LEFT JOIN {$_TABLES['users']} AS u ON s.uid=u.uid "
+             . "LEFT JOIN {$_TABLES['topics']} AS t on s.tid=t.tid "
+             . "WHERE (sid = '".DB_escapeString($id)."') "
+             . 'AND (draft_flag = 0) AND (commentcode >= 0) AND (date <= NOW())' . COM_getPermSQL('AND',0,2, 's')
+             . COM_getTopicSQL('AND',0,'t') . ' GROUP BY sid,owner_id, group_id, perm_owner, s.perm_group,s.perm_members, s.perm_anon ';
 
-$sql   = "SELECT s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
-         . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
-         . "u.uid, u.username, u.fullname, t.topic, t.imageurl "
-         . "FROM {$_TABLES['stories']} AS s LEFT JOIN {$_TABLES['users']} AS u ON s.uid=u.uid "
-         . "LEFT JOIN {$_TABLES['topics']} AS t on s.tid=t.tid "
-         . "WHERE (sid = '".DB_escapeString($id)."') "
-         . 'AND (draft_flag = 0) AND (commentcode >= 0) AND (date <= NOW())' . COM_getPermSQL('AND')
-         . COM_getTopicSQL('AND') . ' GROUP BY sid,owner_id, group_id, perm_owner, perm_group,perm_members, perm_anon ';
 
-$result = DB_query ($sql);
+    $result = DB_query ($sql);
 
-$nrows = DB_numRows ($result);
-if ( $A = DB_fetchArray( $result ) ) {
+    $nrows = DB_numRows ($result);
+    if ( $A = DB_fetchArray( $result ) ) {
 
-    $story = new Story();
-    $story->loadFromArray($A);
-    $retval .= STORY_renderArticle ($story, 'n');
-}
-
-     $sql = 'SELECT COUNT(*) AS count, commentcode, owner_id, group_id, perm_owner, perm_group, '
+        $story = new Story();
+        $story->loadFromArray($A);
+        $retval .= STORY_renderArticle ($story, 'n');
+    }
+    // end
+    $sql = 'SELECT COUNT(*) AS count, commentcode, owner_id, group_id, perm_owner, perm_group, '
          . "perm_members, perm_anon FROM {$_TABLES['stories']} "
          . "WHERE (sid = '".DB_escapeString($id)."') "
          . 'AND (draft_flag = 0) AND (commentcode >= 0) AND (date <= NOW())' . COM_getPermSQL('AND')
