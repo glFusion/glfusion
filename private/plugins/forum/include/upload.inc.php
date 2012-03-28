@@ -135,7 +135,7 @@ function _ff_uploadfile($filename,&$upload_file,$allowablefiletypes,$use_filemgm
     $upload->setAllowedMimeTypes($allowablefiletypes);
     // Set max dimensions as well in case user is uploading a full size image
     $upload->setMaxDimensions ($_FF_CONF['max_uploadimage_width'], $_FF_CONF['max_uploadimage_height']);
-    if ( $_FF_CONF['max_uploadimage_size'] == 0 ) {
+    if ( !isset($_FF_CONF['max_uploadimage_size']) || $_FF_CONF['max_uploadimage_size'] == 0 ) {
         $upload->setMaxFileSize(100000000);
     } else {
         $upload->setMaxFileSize($_FF_CONF['max_uploadimage_size']);
