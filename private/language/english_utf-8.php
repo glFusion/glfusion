@@ -212,7 +212,7 @@ $LANG01 = array(
     'ok'                        => 'OK',
     'on'                        => 'On',
     'open_basedir'              => 'If <strong>open_basedir</strong> restrictions are enabled on your site, it may cause permission problems during the install. The File System Check below should point out any issues.',
-    'php_req_version'           => 'glFusion requires PHP version 4.3.0 or newer.',
+    'php_req_version'           => 'glFusion requires PHP version 5.2.0 or newer.',
     'php_settings'              => 'PHP Settings',
     'php_version'               => 'PHP Version',
     'php_warning'               => 'If any of the items below are marked in <span class="no">red</span>, you may encounter problems with your glFusion site.  Check with your hosting provider for information on changing any of these PHP settings.',
