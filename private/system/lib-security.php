@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2011 by the following authors:                        |
+// | Copyright (C) 2009-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -371,7 +371,7 @@ function SEC_isLocalUser($uid)
             $localcheck[$uid] = 1;
         }
     }
-    if ( $localcheck[$uid] == 1 ) {
+    if ( isset($localcheck[$uid]) && $localcheck[$uid] == 1 ) {
         return true;
     }
     return false;
@@ -837,8 +837,14 @@ function SEC_authenticate($username, $password, &$uid)
     $password = trim(str_replace(array("\015", "\012"), '', $password));
 
     $result = DB_query("SELECT status, passwd, email, uid FROM {$_TABLES['users']} WHERE username='$escaped_name' AND (account_type & ".LOCAL_USER.")");
-    $tmp = DB_error();
-    $nrows = DB_numRows($result);
+    $tmp    = DB_error();
+    $nrows  = DB_numRows($result);
+
+    if ( $nrows == 0 ) {
+        $result = DB_query("SELECT status, passwd, email, uid FROM {$_TABLES['users']} WHERE email='$escaped_name' AND (account_type & ".LOCAL_USER.")");
+        $tmp    = DB_error();
+        $nrows  = DB_numRows($result);
+    }
 
     if (($tmp == 0) && ($nrows == 1)) {
         $U = DB_fetchArray($result);
@@ -861,7 +867,7 @@ function SEC_authenticate($username, $password, &$uid)
             return $U['status']; // just return their status
         }
     } else {
-        $tmp = $LANG01[32] . ": '" . $username . "' - IP: " . $_SERVER['REMOTE_ADDR'];
+        $tmp = $LANG01[32] . ": '" . $username;
         COM_errorLog($tmp, 1);
         return -1;
     }
@@ -1365,8 +1371,12 @@ function _sec_checkToken()
            . "{$_TABLES['tokens']} WHERE token='".DB_escapeString($token)."'";
         $tokens = DB_query($sql);
         $numberOfTokens = DB_numRows($tokens);
-        if($numberOfTokens != 1) {
-            COM_errorLog("CheckToken: Token failed - no token found or more than 1 token found in database");
+        if ( $numberOfTokens != 1 ) {
+            if ( $numberOfTokens == 0 ) {
+                COM_errorLog("CheckToken: Token failed - no token found in database");
+            } else {
+                COM_errorLog("CheckToken: Token failed - more than 1 token found in database");
+            }
             $return = false; // none, or multiple tokens. Both are invalid. (token is unique key...)
         } else {
             $tokendata = DB_fetchArray($tokens);
@@ -1459,7 +1469,12 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
 
         $tokens = DB_Query($sql);
         $numberOfTokens = DB_numRows($tokens);
-        if($numberOfTokens != 1) {
+        if ( $numberOfTokens != 1 ) {
+            if ( $numberOfTokens == 0 ) {
+                COM_errorLog("CheckTokenGeneral: Token failed - no token found in the database");
+            } else {
+                COM_errorLog("CheckTokenGeneral: Token failed - more than one token found in the database");
+            }
             $return = false; // none, or multiple tokens. Both are invalid. (token is unique key...)
         } else {
             $tokendata = DB_fetchArray($tokens);
@@ -1468,12 +1483,12 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
              *  token is not expired.
              */
             if( $uid != $tokendata['owner_id'] ) {
-                COM_errorLog("CheckToken: Token failed - userid does not match token owner id");
+                COM_errorLog("CheckTokenGeneral: Token failed - userid does not match token owner id");
                 $return = false;
             } else if($tokendata['expired']) {
                 $return = false;
             } else if($tokendata['urlfor'] != $action) {
-                COM_errorLog("CheckToken: Token failed - token action does not match referer action.");
+                COM_errorLog("CheckTokenGeneral: Token failed - token action does not match referer action.");
                 COM_errorLog("Token Action: " . $tokendata['urlfor'] . " - ACTION: " . $action);
                 $return = false;
             } else {
@@ -1783,7 +1798,29 @@ function SEC_tokenreauthform($message = '',$destination = '')
 
     COM_clearSpeedlimit($_CONF['login_speedlimit'], 'tokenexpired');
 
-    if ( COM_isAnonUser() || !empty($_USER['remoteusername']) ) {
+    $userid = 0;
+    if (isset ($_COOKIE[$_CONF['cookie_name']])) {
+        $userid = COM_applyFilter($_COOKIE[$_CONF['cookie_name']]);
+        if (empty ($userid) || ($userid == 'deleted')) {
+            $userid = 0;
+        } else {
+            $userid = (int) COM_applyFilter ($userid, true);
+        }
+    } elseif ( isset($_POST['token_ref']) ) {
+        $userid = COM_applyFilter($_POST['token_ref']);
+        if (empty ($userid) || ($userid == 'deleted')) {
+            $userid = 0;
+        } else {
+            $userid = (int) COM_applyFilter ($userid, true);
+        }
+    }
+
+    $is_anonUser = COM_isAnonUser();
+    if ( $userid > 1 ) {
+        $is_anonUser = 0;
+    }
+
+    if ( $is_anonUser || !SEC_isLocalUser($_USER['uid']) ) {
         return _sec_reauthOther($message,$destination);
     }
 
@@ -1791,6 +1828,7 @@ function SEC_tokenreauthform($message = '',$destination = '')
 
     $hidden .= '<input type="hidden" name="type" value="user"/>' . LB;
     $hidden .= '<input type="hidden" name="token_revalidate" value="true"/>' . LB;
+    $hidden .= '<input type="hidden" name="token_ref" value="'.$userid.'"/>' . LB;
 
     $options = array(
         'forgotpw_link'   => false,
