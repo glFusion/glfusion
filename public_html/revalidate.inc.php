@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2011 by the following authors:                             |
+// | Copyright (C) 2011-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -86,8 +86,11 @@ switch ($mode) {
             $status = SEC_authenticate($loginname, $passwd, $uid);
         }
         if ( $status == USER_ACCOUNT_ACTIVE ) {
+            $uid = DB_getItem($_TABLES['users'],'uid','username="'.DB_escapeString($loginname).'"');
+            SESS_completeLogin($uid);
             _rebuild_data();
             unset($_POST['loginname']);
+            COM_clearSpeedlimit(0, 'tokenexpired');
         } else {
             $display .= COM_siteHeader();
             $display .= SEC_tokenreauthForm($LANG_ACCESS['validation_failed'],$desturl);
@@ -98,7 +101,7 @@ switch ($mode) {
         break;
     case 'other' :
         COM_clearSpeedlimit($_CONF['login_speedlimit'], 'tokenexpired');
-        if (COM_checkSpeedlimit('tokenexpired', $_CONF['login_attempts']) > 0) {
+        if (COM_checkSpeedlimit('tokenexpired', 5) > 0) {
             echo COM_refresh($_CONF['site_url']);
             exit;
         }
@@ -112,6 +115,7 @@ switch ($mode) {
         if ( $rc == 1 ) {
             _rebuild_data();
             unset($_POST['loginname']);
+            COM_clearSpeedlimit(0, 'tokenexpired');
             return;
         }
         $display  = COM_siteHeader();
