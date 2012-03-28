@@ -252,7 +252,7 @@ function plugin_editcomment_filemgmt($cid,$id) {
  * @return  mixed   results of calling the CMT_userComments function
  */
 function plugin_displaycomment_filemgmt($id,$commentid,$title,$order,$format,$page,$view) {
-    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_TABLES, $_CONF, $LANG01,$_DB_name;
+    global $_USER, $_FM_CONF, $filemgmt_FileSnapURL, $FilemgmtAdmin ,$mydownloads_dlreport ,$mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_TABLES, $_CONF, $LANG01,$_DB_name;
 
 
     if ( COM_isAnonUser() && $mydownloads_publicpriv != 1 )  {
@@ -301,7 +301,7 @@ function plugin_displaycomment_filemgmt($id,$commentid,$title,$order,$format,$pa
     $homepage = $myts->makeTboxData4Show($homepage);
     $version = $myts->makeTboxData4Show($version);
     $size = $myts->makeTboxData4Show($size);
-    $platform = $myts->makeTboxData4Show($platform);
+//    $platform = $myts->makeTboxData4Show($platform);
     $logourl = $myts->makeTboxData4Show($logourl);
     $datetime = formatTimestamp($time);
     $description = $myts->makeTareaData4Show($description,0); //no html
