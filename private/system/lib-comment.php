@@ -146,6 +146,7 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
 
     $parts = explode( '/', $_SERVER['PHP_SELF'] );
     $page = array_pop( $parts );
+
     $nrows = DB_count( $_TABLES['comments'], array( 'sid', 'type' ),
                        array( DB_escapeString($sid), DB_escapeString($type) ));
 
@@ -154,6 +155,10 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
     $commentbar->set_var( 'site_url', $_CONF['site_url'] );
     $commentbar->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
     $commentbar->set_var( 'layout_url', $_CONF['layout_url'] );
+
+    if ( $page != 'comment.php' ) {
+        $commentbar->set_var('noentry',1);
+    }
 
     $commentbar->set_var( 'lang_comments', $LANG01[3] );
     $commentbar->set_var( 'lang_refresh', $LANG01[39] );
@@ -166,7 +171,7 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
 
     if ( !COM_isAnonUser() ) {
         if ( PLG_isSubscribed('comment',$type,$sid) ) {
-        $commentbar->set_var( 'subscribe','[<a href="'.$_CONF['site_url'].'/comment.php?mode=unsubscribe&amp;type='.htmlentities($type).'&amp;sid='.htmlentities($sid).'">'.$LANG01['unsubscribe'].'</a>]&nbsp;');
+            $commentbar->set_var( 'subscribe','[<a href="'.$_CONF['site_url'].'/comment.php?mode=unsubscribe&amp;type='.htmlentities($type).'&amp;sid='.htmlentities($sid).'">'.$LANG01['unsubscribe'].'</a>]&nbsp;');
         } else {
             $commentbar->set_var( 'subscribe','[<a href="'.$_CONF['site_url'].'/comment.php?mode=subscribe&amp;type='.htmlentities($type).'&amp;sid='.htmlentities($sid).'">'.$LANG01['subscribe'].'</a>]&nbsp;');
         }
@@ -186,7 +191,7 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
     $commentbar->set_var('story_title', $cmt_title);
     // Article's are pre-escaped.
     if ($type != 'article') {
-        $cmt_title = htmlspecialchars($cmt_title,ENT_COMPAT,COM_getEncodingt());
+        $cmt_title = @htmlspecialchars($cmt_title,ENT_COMPAT,COM_getEncodingt());
     }
     $commentbar->set_var('comment_title', $cmt_title);
 
@@ -248,15 +253,16 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
         $commentbar->set_var( 'parent_url',
                               $_CONF['site_url'] . '/comment.php' );
         $hidden = '';
-        if( $_REQUEST['mode'] == 'view' ) {
+        $hmode = isset($_REQUEST['mode']) ? COM_applyFilter($_REQUEST['mode']) : 'entry';
+        if( $hmode == 'view' ) {
             $hidden .= '<input type="hidden" name="cid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['cid']),ENT_COMPAT,COM_getEncodingt()) . '"/>';
             $hidden .= '<input type="hidden" name="pid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['cid']),ENT_COMPAT,COM_getEncodingt()) . '"/>';
         }
-        else if( $_REQUEST['mode'] == 'display' ) {
+        else if( $hmode == 'display' ) {
             $hidden .= '<input type="hidden" name="pid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['pid']),ENT_COMPAT,COM_getEncodingt()) . '"/>';
         }
         $commentbar->set_var( 'hidden_field', $hidden .
-                '<input type="hidden" name="mode" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['mode']),ENT_COMPAT,COM_getEncodingt()) . '"/>' );
+                '<input type="hidden" name="mode" value="' . htmlspecialchars($hmode,ENT_COMPAT,COM_getEncodingt()) . '"/>' );
     } else if( $type == 'article' ) {
         $commentbar->set_var( 'parent_url',
                               $_CONF['site_url'] . '/article.php#comments' );
@@ -612,7 +618,8 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
          ($_CONF['commentsloginrequired'] == 0 || !COM_isAnonUser())) {
             $reply_link = $_CONF['site_url'] . '/comment.php?sid=' . $A['sid']
                         . '&amp;pid=' . $A['cid'] . '&amp;title='
-                        . urlencode($A['title']) . '&amp;type=' . $A['type'];
+                        . urlencode($A['title']) . '&amp;type=' . $A['type']
+                        . '#comment_entry';
             $reply_option = COM_createLink($LANG01[43], $reply_link,
                                            array('rel' => 'nofollow')) . ' | ';
             $template->set_var('reply_option', $reply_option);
@@ -1515,5 +1522,158 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
     }
 
     return $comment;
+}
+
+
+/**
+ * article: saves a comment
+ *
+ * @param   string  $title  comment title
+ * @param   string  $comment comment text
+ * @param   string  $id     Item id to which $cid belongs
+ * @param   int     $pid    comment parent
+ * @param   string  $postmode 'html' or 'text'
+ * @return  mixed   false for failure, HTML string (redirect?) for success
+ */
+function plugin_savecomment_article($title, $comment, $id, $pid, $postmode)
+{
+    global $_CONF, $_TABLES, $LANG03, $_USER;
+
+    $retval = '';
+
+    $commentcode = DB_getItem($_TABLES['stories'], 'commentcode',
+                "(sid = '".DB_escapeString($id)."') AND (draft_flag = 0) AND (date <= NOW())"
+                . COM_getPermSQL('AND'));
+    if (!isset($commentcode) || ($commentcode != 0)) {
+        return COM_refresh($_CONF['site_url'] . '/index.php');
+    }
+
+    $ret = CMT_saveComment($title, $comment, $id, $pid, 'article', $postmode);
+    if ($ret > 0) { // failure
+        $msg = '';
+        if ( SESS_isSet('glfusion.commentpresave.error') ) {
+            $msg = COM_showMessageText(SESS_getVar('glfusion.commentpresave.error'));
+            SESS_unSet('glfusion.commentpresave.error');
+        }
+        $retval .= COM_siteHeader ('menu', $LANG03[1])
+                 . $msg
+                 . CMT_commentForm ($title,$comment,$id,$pid,'article',
+                                    $LANG03[14],$postmode)
+                . COM_siteFooter();
+    } else { // success
+        $comments = DB_count($_TABLES['comments'], array('type', 'sid'), array('article', $id));
+        DB_change($_TABLES['stories'], 'comments', $comments, 'sid', $id);
+        COM_olderStuff(); // update comment count in Older Stories block
+        $retval = COM_refresh(COM_buildUrl($_CONF['site_url']
+                              . "/article.php?story=$id"));
+    }
+
+    return $retval;
+}
+
+
+
+
+
+/**
+ * article: delete a comment
+ *
+ * @param   int     $cid    Comment to be deleted
+ * @param   string  $id     Item id to which $cid belongs
+ * @return  mixed   false for failure, HTML string (redirect?) for success
+ */
+function plugin_deletecomment_article($cid, $id)
+{
+    global $_CONF, $_TABLES, $_USER;
+
+    $retval = '';
+
+    $has_editPermissions = SEC_hasRights ('story.edit');
+    $result = DB_query ("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon "
+                      . "FROM {$_TABLES['stories']} WHERE sid = '".DB_escapeString($id)."'");
+    $A = DB_fetchArray ($result);
+
+    if ($has_editPermissions && SEC_hasAccess ($A['owner_id'],
+            $A['group_id'], $A['perm_owner'], $A['perm_group'],
+            $A['perm_members'], $A['perm_anon']) == 3) {
+        CMT_deleteComment($cid, $id, 'article');
+        $comments = DB_count ($_TABLES['comments'], 'sid', DB_escapeString($id));
+        DB_change ($_TABLES['stories'], 'comments', $comments, 'sid', DB_escapeString($id));
+        CACHE_remove_instance('whatsnew');
+        $retval .= COM_refresh(COM_buildUrl($_CONF['site_url']
+                 . "/article.php?story=$id") . '#comments');
+    } else {
+        COM_errorLog ("User {$_USER['username']} "
+                    . "did not have permissions to delete comment $cid from $type $id");
+        $retval .= COM_refresh ($_CONF['site_url'] . '/index.php');
+    }
+
+    return $retval;
+}
+
+
+/**
+ * article: display comment(s)
+ *
+ * @param   string  $id     Unique idenifier for item comment belongs to
+ * @param   int     $cid    Comment id to display (possibly including sub-comments)
+ * @param   string  $title  Page/comment title
+ * @param   string  $order  'ASC' or 'DESC' or blank
+ * @param   string  $format 'threaded', 'nested', or 'flat'
+ * @param   int     $page   Page number of comments to display
+ * @param   boolean $view   True to view comment (by cid), false to display (by $pid)
+ * @return  mixed   results of calling the plugin_displaycomment_ function
+*/
+function plugin_displaycomment_article($id, $cid, $title, $order, $format, $page, $view)
+{
+    global $_CONF, $_TABLES, $LANG_ACCESS;
+
+USES_lib_story();
+USES_class_story();
+
+    $retval = '';
+
+$sql   = "SELECT s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
+         . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
+         . "u.uid, u.username, u.fullname, t.topic, t.imageurl "
+         . "FROM {$_TABLES['stories']} AS s LEFT JOIN {$_TABLES['users']} AS u ON s.uid=u.uid "
+         . "LEFT JOIN {$_TABLES['topics']} AS t on s.tid=t.tid "
+         . "WHERE (sid = '".DB_escapeString($id)."') "
+         . 'AND (draft_flag = 0) AND (commentcode >= 0) AND (date <= NOW())' . COM_getPermSQL('AND')
+         . COM_getTopicSQL('AND') . ' GROUP BY sid,owner_id, group_id, perm_owner, perm_group,perm_members, perm_anon ';
+
+$result = DB_query ($sql);
+
+$nrows = DB_numRows ($result);
+if ( $A = DB_fetchArray( $result ) ) {
+
+    $story = new Story();
+    $story->loadFromArray($A);
+    $retval .= STORY_renderArticle ($story, 'n');
+}
+
+     $sql = 'SELECT COUNT(*) AS count, commentcode, owner_id, group_id, perm_owner, perm_group, '
+         . "perm_members, perm_anon FROM {$_TABLES['stories']} "
+         . "WHERE (sid = '".DB_escapeString($id)."') "
+         . 'AND (draft_flag = 0) AND (commentcode >= 0) AND (date <= NOW())' . COM_getPermSQL('AND')
+         . COM_getTopicSQL('AND') . ' GROUP BY sid,owner_id, group_id, perm_owner, perm_group,perm_members, perm_anon ';
+
+    $result = DB_query ($sql);
+    $B = DB_fetchArray ($result);
+    $allowed = $B['count'];
+
+    if ( $allowed == 1 ) {
+        $delete_option = ( SEC_hasRights( 'story.edit' ) &&
+            ( SEC_hasAccess( $B['owner_id'], $B['group_id'],
+                $B['perm_owner'], $B['perm_group'], $B['perm_members'],
+                $B['perm_anon'] ) == 3 ) );
+        $retval .= CMT_userComments ($id, $title, 'article', $order,
+                        $format, $cid, $page, $view, $delete_option,
+                        $B['commentcode']);
+
+    } else {
+        $retval .= COM_showMessageText($LANG_ACCESS['storydenialmsg'], $LANG_ACCESS['accessdenied'], true);
+    }
+    return $retval;
 }
 ?>

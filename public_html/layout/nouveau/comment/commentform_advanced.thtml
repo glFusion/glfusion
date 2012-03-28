@@ -6,7 +6,8 @@
 </script>
 <script type="text/javaScript" src="{site_url}/javascript/submitcomment_fckeditor.js"></script>
 {start_block_postacomment}
-  <form action="{site_url}/comment.php" method="post" onsubmit='set_postcontent();'>
+<a name="comment_entry"></a>
+  <form action="{site_url}/comment.php#comment_entry" method="post" onsubmit='set_postcontent();'>
     <table cellspacing="0" cellpadding="3" width="100%">
       <tr>
         <td class="alignright" style="width:10%;"><b>{lang_username}:</b></td>
@@ -22,7 +23,7 @@
       </tr>
       <tr>
         <td class="alignright"><b>{lang_title}:</b></td>
-        <td><input type="text" name="title" size="32" value="{title}" maxlength="96" /></td>
+        <td><input type="text" name="title" size="64" value="{title}" maxlength="96" /></td>
       </tr>
       <tr>
         <td class="alignright" style="vertical-align:top;"><b>{lang_comment}:</b></td>

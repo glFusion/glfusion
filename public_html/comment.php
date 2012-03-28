@@ -80,7 +80,7 @@ function handleSubmit()
     $type = COM_applyFilter ($_POST['type']);
     $sid = COM_applyFilter ($_POST['sid']);
     switch ( $type ) {
-        case 'article':
+        case 'articleXX':
             $commentcode = DB_getItem ($_TABLES['stories'], 'commentcode',
                                        "sid = '".DB_escapeString($sid)."'" . COM_getPermSQL('AND')
                                        . " AND (draft_flag = 0) AND (date <= NOW()) "
@@ -151,7 +151,7 @@ function handleDelete()
     }
 
     switch ($type) {
-    case 'article':
+    case 'articleXX':
         $has_editPermissions = SEC_hasRights('story.edit');
         $result = DB_query("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['stories']} WHERE sid = '".DB_escapeString($sid)."'");
         $A = DB_fetchArray($result);
@@ -209,7 +209,7 @@ function handleView($view = true)
         return COM_refresh($_CONF['site_url'] . '/index.php');
     }
 
-    $sql = "SELECT sid, title, type FROM {$_TABLES['comments']} WHERE cid = $cid";
+    $sql = "SELECT sid, title, type FROM {$_TABLES['comments']} WHERE cid = " . (int) $cid;
     $A = DB_fetchArray( DB_query($sql) );
     $sid   = $A['sid'];
     $title = $A['title'];
@@ -229,7 +229,7 @@ function handleView($view = true)
     }
 
     switch ( $type ) {
-        case 'article':
+        case 'articleXX':
             $sql = 'SELECT COUNT(*) AS count, commentcode, owner_id, group_id, perm_owner, perm_group, '
                  . "perm_members, perm_anon FROM {$_TABLES['stories']} WHERE (sid = '".DB_escapeString($sid)."') "
                  . 'AND (draft_flag = 0) AND (commentcode >= 0) AND (date <= NOW())' . COM_getPermSQL('AND')
@@ -516,6 +516,10 @@ case $LANG03[14]: // Preview
     $comment = $_POST['comment_text'];
 
     $display .= COM_siteHeader('menu', $LANG03[14])
+
+ . PLG_displayComment(COM_applyFilter ($_POST['type']), COM_applyFilter ($_POST['sid']), 0, strip_tags ($_POST['title']), '', '', 0, 0)
+
+
              . CMT_commentForm (strip_tags ($_POST['title']), $comment,
                     COM_applyFilter ($_POST['sid']),
                     (int) COM_applyFilter ($_POST['pid'], true),
@@ -604,8 +608,8 @@ case 'unsubscribe' :
 
 
 default:  // New Comment
-    $sid = COM_applyFilter ($_REQUEST['sid']);
-    $type = COM_applyFilter ($_REQUEST['type']);
+    $sid   = isset($_REQUEST['sid']) ? COM_applyFilter ($_REQUEST['sid']) : '';
+    $type  = isset($_REQUEST['type']) ? COM_applyFilter ($_REQUEST['type']) : '';
     $title = '';
     if (isset ($_REQUEST['title'])) {
         $title = strip_tags ($_REQUEST['title']);
@@ -631,10 +635,11 @@ default:  // New Comment
         $pid = isset($_REQUEST['pid']) ? COM_applyFilter($_REQUEST['pid'],true) : 0;
         $noindex = '<meta name="robots" content="noindex"/>'.LB;
         $display .= COM_siteHeader('menu', $LANG03[1], $noindex)
-             . CMT_commentForm ($title, '', $sid,
-                    $pid, $type, $mode,
-                    $postmode)
-             . COM_siteFooter();
+                    . PLG_displayComment($type, $sid, 0, $title, '', '', 0, 0)
+                    . CMT_commentForm ($title, '', $sid,
+                                       $pid, $type, $mode,
+                                       $postmode)
+                    . COM_siteFooter();
     } else {
         $display .= COM_refresh($_CONF['site_url'].'/index.php');
     }

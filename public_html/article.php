@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -50,10 +50,10 @@
 * glFusion common function library
 */
 require_once 'lib-common.php';
-require_once $_CONF['path_system'] . 'lib-story.php';
+USES_lib_story();
 
 if ($_CONF['trackback_enabled']) {
-    require_once $_CONF['path_system'] . 'lib-trackback.php';
+    USES_lib_trackback();
 }
 
 // MAIN
@@ -139,7 +139,6 @@ if ($A['count'] > 0) {
     } elseif (($mode == 'print') && ($_CONF['hideprintericon'] == 0)) {
         $story_template = new Template($_CONF['path_layout'] . 'article');
         $story_template->set_file('article', 'printable.thtml');
-        $story_template->set_var('xhtml', XHTML);
         $story_template->set_var('direction', $LANG_DIRECTION);
         $story_template->set_var('page_title',
                 $_CONF['site_name'] . ': ' . $story->displayElements('title'));
@@ -216,7 +215,29 @@ if ($A['count'] > 0) {
         $headercode .= '<meta property="og:title" content="'.$pagetitle.'" />' . LB;
         $headercode .= '<meta property="og:type" content="article" />' . LB;
         $headercode .= '<meta property="og:url" content="'.$permalink.'" />' . LB;
-        $display .= COM_siteHeader('menu', $pagetitle, $headercode);
+
+        USES_lib_html2text();
+        $metaDesc = $story->DisplayElements('introtext');
+        $metaDesc = strip_tags($metaDesc);
+        $html2txt = new html2text($metaDesc,false);
+        $metaDesc = trim($html2txt->get_text());
+        $shortComment = '';
+        $metaArray = explode(' ',$metaDesc);
+        $wordCount = count($metaArray);
+        $lengthCount = 0;
+        $tailString = '';
+        foreach ($metaArray AS $word) {
+            $lengthCount = $lengthCount + strlen($word);
+            $shortComment .= $word.' ';
+            if ( $lengthCount >= 100 ) {
+                $tailString = '...';
+                break;
+            }
+        }
+        $metaDesc = trim($shortComment).$tailString;
+        $meta = '<meta name="description" content="'.htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()).'"/>' . LB;
+
+        $display .= COM_siteHeader('menu', $pagetitle, $meta . $headercode);
 
         if (isset($_GET['msg'])) {
             $msg = (int) COM_applyFilter($_GET['msg'], true);

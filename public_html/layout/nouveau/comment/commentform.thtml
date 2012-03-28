@@ -1,6 +1,7 @@
 {# begin {templatelocation} #}
 {start_block_postacomment}
-<form action="{site_url}/comment.php" method="post">
+<a name="comment_entry"></a>
+<form action="{site_url}/comment.php#comment_entry" method="post">
     <table cellspacing="0" cellpadding="3" width="95%">
         <tr>
             <td class="alignright"><b>{lang_username}:</b></td>
@@ -15,7 +16,7 @@
         </tr>
         <tr>
             <td class="alignright"><b>{lang_title}:</b></td>
-            <td><input type="text" name="title" size="32" value="{title}" maxlength="96" /></td>
+            <td><input type="text" name="title" size="64" value="{title}" maxlength="96" /></td>
         </tr>
         <tr>
             <td class="alignright" style="vertical-align:top;"><b>{lang_comment}:</b></td>
