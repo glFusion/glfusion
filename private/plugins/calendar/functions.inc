@@ -10,6 +10,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2010-2012 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -60,11 +63,6 @@ if (file_exists($langfile)) {
         include_once $custfile;
     }
 }
-
-// we need a utf8 validation function for the phpblock
-
-require_once $_CONF['path'].'lib/utf8/utils/validation.php';
-
 /*
 * Check and see if we need to load the plugin configuration
 */
@@ -118,8 +116,6 @@ function phpblock_calendar( $help='', $title='' )
 
     $retval = '';
 
-    $dt = new Date('now',$_USER['tzid']);
-
     if( !$_USER['noboxes'] && $_CA_CONF['showupcomingevents'] ) {
         $range = $_CA_CONF['upcomingeventsrange'];
         if( $range == 0 ) {
@@ -127,7 +123,7 @@ function phpblock_calendar( $help='', $title='' )
         }
         $dateonly = $_CONF['dateonly'];
         if( empty( $dateonly )) {
-            $dateonly = 'd-M'; // fallback: day - abbrev. month name
+            $dateonly = '%d-%b'; // fallback: day - abbrev. month name
         }
 
         if( empty( $title )) {
@@ -219,22 +215,26 @@ function phpblock_calendar( $help='', $title='' )
                     // Start Date strings...
                     $startDate = $theEvent['datestart'];
                     $theTime1 = strtotime( $startDate );
-                    $dt->setTimestamp($theTime1);
-                    $dayName1 = $dt->format('l', true );
-                    $abbrDate1 = $dt->format( $dateonly, true );
+                    $dayName1 = strftime( '%A', $theTime1 );
+                    if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+                        $dayName1 = iconv('ISO-8859-1','UTF-8',$dayName1);
+                    }
+                    $abbrDate1 = strftime( $dateonly, $theTime1 );
 
                     // End Date strings...
                     $endDate = $theEvent['dateend'];
                     $theTime2 = strtotime( $endDate );
-                    $dt->setTimestamp($theTime2);
-                    $dayName2 = $dt->format( 'l', true );
-                    $abbrDate2 = $dt->format( $dateonly, true );
+                    $dayName2 = strftime( '%A', $theTime2 );
+                    if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+                        $dayName2 = iconv('ISO-8859-1','UTF-8',$dayName2);
+                    }
+                    $abbrDate2 = strftime( $dateonly, $theTime2 );
 
                     if ( COM_getCharset() == 'utf-8' ) {
-                        if ( !utf8_is_valid($dayName1) ) {
+                        if ( !MBYTE_is_utf8($dayName1) ) {
                             $dayName1 = utf8_encode($dayName1);
                         }
-                        if ( !utf8_is_valid($dayName2) ) {
+                        if ( !MBYTE_is_utf8($dayName2) ) {
                             $dayName2 = utf8_encode($dayName2);
                         }
                     }
@@ -778,8 +778,6 @@ function plugin_submit_calendar($mode = 'master',$A = array())
 {
     global $_CONF, $_USER, $_CA_CONF, $LANG_CAL_1;
 
-    $dt = new Date('now',$_USER['tzid']);
-
     if (isset($_POST['calendar_type'])) {
         $mode = $_POST['calendar_type'];
     } else if (isset($_REQUEST['mode']) && ($_REQUEST['mode'] == 'personal')) {
@@ -797,22 +795,22 @@ function plugin_submit_calendar($mode = 'master',$A = array())
         if (isset ($_REQUEST['year'])) {
             $year = COM_applyFilter ($_REQUEST['year'], true);
         } else {
-            $year = $dt->year;
+            $year = date ('Y', time ());
         }
         if (isset ($_REQUEST['month'])) {
             $month = COM_applyFilter ($_REQUEST['month'], true);
         } else {
-            $month = $dt->month;
+            $month = date ('m', time ());
         }
         if (isset ($_REQUEST['day'])) {
             $day = COM_applyFilter ($_REQUEST['day'], true);
         } else {
-            $day = $dt->day;
+            $day = date ('d', time ());
         }
         if (isset ($_REQUEST['hour'])) {
             $hour = COM_applyFilter ($_REQUEST['hour'], true);
         } else {
-            $hour = $dt->hour;
+            $hour = date ('H', time ());
         }
         $startat = '';
         if ($year > 0) {
@@ -832,22 +830,22 @@ function plugin_submit_calendar($mode = 'master',$A = array())
     if (isset ($_REQUEST['year'])) {
         $year = COM_applyFilter ($_REQUEST['year'], true);
     } else {
-        $year = $dt->year;
+        $year = date ('Y', time ());
     }
     if (isset ($_REQUEST['month'])) {
         $month = COM_applyFilter ($_REQUEST['month'], true);
     } else {
-        $month = $dt->month;
+        $month = date ('m', time ());
     }
     if (isset ($_REQUEST['day'])) {
         $day = COM_applyFilter ($_REQUEST['day'], true);
     } else {
-        $day = $dt->day;
+        $day = date ('d', time ());
     }
     if (isset ($_REQUEST['hour'])) {
         $hour = COM_applyFilter ($_REQUEST['hour'], true);
     } else {
-        $hour = $dt->hour;
+        $hour = date ('H', time ());
     }
 
     // Pull all the POST data so we can pre-fill the form.
@@ -906,13 +904,13 @@ function plugin_submit_calendar($mode = 'master',$A = array())
     $eventform->set_var('lang_starttime', $LANG_CAL_1[30]);
 
     if (empty ($start_month) || $start_month == 0) {
-        $start_month = $dt->month;
+        $start_month = date ('m', time ());
     }
     if (empty ($start_day) || $start_day == 0) {
-        $start_day = $dt->day;
+        $start_day = date ('d', time ());
     }
     if (empty ($start_year)) {
-        $start_year = $dt->year;
+        $start_year = date ('Y', time ());
     }
     $eventform->set_var ('start_month_options', COM_getMonthFormOptions ($start_month));
     $eventform->set_var ('start_day_options', COM_getDayFormOptions ($start_day));
@@ -920,20 +918,20 @@ function plugin_submit_calendar($mode = 'master',$A = array())
 
 
     if (empty ($end_month)) {
-        $end_month = $dt->month;
+        $end_month = date ('m', time ());
     }
     if (empty ($end_day)) {
-        $end_day = $dt->day;
+        $end_day = date ('d', time ());
     }
     if (empty ($end_year)) {
-        $end_year = $dt->year;
+        $end_year = date ('Y', time ());
     }
     $eventform->set_var ('end_month_options', COM_getMonthFormOptions ($end_month));
     $eventform->set_var ('end_day_options', COM_getDayFormOptions ($end_day));
     $eventform->set_var ('end_year_options', COM_getYearFormOptions ($end_year));
 
     if (empty ($start_hour) || ($start_hour < 0)) {
-        $start_hour = $dt->hour;
+        $start_hour = date ('H', time ());
     }
     $start_hour_24 = $start_hour % 24;
     if ($start_hour >= 12) {
@@ -959,7 +957,7 @@ function plugin_submit_calendar($mode = 'master',$A = array())
                              COM_getHourFormOptions ($start_hour));
     }
     if ( empty($start_minute) ) {
-        $cur_min = intval ($dt->minute / 15) * 15;
+        $cur_min = intval (date ('i') / 15) * 15;
     } else {
         $cur_min = $start_minute;
     }
@@ -968,7 +966,7 @@ function plugin_submit_calendar($mode = 'master',$A = array())
 
     // end hours
     if (empty ($end_hour) || ($end_hour < 0)) {
-        $end_hour = $dt->hour;
+        $end_hour = date ('H', time ());
     }
     $end_hour_24 = $end_hour % 24;
     if ($end_hour >= 12) {
@@ -994,7 +992,7 @@ function plugin_submit_calendar($mode = 'master',$A = array())
     }
 
     if (empty($end_minute) ) {
-        $end_min = intval ($dt->minute / 15) * 15;
+        $end_min = intval (date ('i') / 15) * 15;
     } else {
         $end_min = $end_minute;
     }
@@ -1165,7 +1163,7 @@ function plugin_getfeedcontent_calendar( $feed, &$link, &$update, $feedType, $fe
 
             $eventtitle = $row['title'];
 
-            $eventtext = SYND_truncateSummary( $row['description'], utf8_strlen($row['description']));
+            $eventtext = SYND_truncateSummary( $row['description'], MBYTE_strlen($row['description']));
             $eventlink  = $_CONF['site_url'] . '/calendar/event.php?eid='
                         . $row['eid'];
 
@@ -1229,8 +1227,8 @@ function plugin_getfeedcontent_calendar( $feed, &$link, &$update, $feedType, $fe
             $row = DB_fetchArray( $result );
             $eids[] = $row['eid'];
 
-            $eventtitle =  $row['title'];
-            $eventtext = SYND_truncateSummary( $row['description'], utf8_strlen($row['description']));
+            $eventtitle = stripslashes( $row['title'] );
+            $eventtext = SYND_truncateSummary( $row['description'], MBYTE_strlen($row['description']));
             $eventlink  = $_CONF['site_url'] . '/calendar/event.php?eid='
                         . $row['eid'];
 
@@ -1935,5 +1933,45 @@ function CALENDAR_setLanguage(&$aCalendar)
     $aCalendar->setLanguage($lang_days, $lang_months, $_CONF['week_start']);
 }
 
+/**
+* Returns formatted date/time for user
+*
+* This function takes a date in either unixtimestamp or in english and
+* formats it to the users preference.  If the user didn't specify a format
+* the format in the config file is used.  This returns an array where array[0]
+* is the formatted date and array[1] is the unixtimestamp
+*
+* @param        string      $date       date to format, otherwise we format current date/time
+* @return   array   array[0] is the formatted date and array[1] is the unixtimestamp.
+*/
+
+function CAL_getUserDateTimeFormat( $date='' )
+{
+    global $_TABLES, $_USER, $_CONF, $_SYSTEM;
+
+    $dateformat = "%A, %B %d %Y @ %I:%M %p";
+
+    // date         : %A, %B %d %Y @ %I:%M %p %Z";
+    // timeonly     : %I:%M%p
+    // daytime      : %m/%d/%Y %I:%M%p
+    // short date   : %x
+    // date only    : %d-%b
+
+    if( empty( $date )) {
+        // Date is empty, get current date/time
+        $stamp = time();
+    } else if( is_numeric( $date )) {
+        // This is a timestamp
+        $stamp = $date;
+    } else {
+        // This is a string representation of a date/time
+        $stamp = strtotime( $date );
+    }
+
+    // Format the date
+    $date = strftime( $dateformat, $stamp );
+
+    return array( $date, $stamp );
+}
 
 ?>

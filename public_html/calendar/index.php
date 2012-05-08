@@ -550,7 +550,7 @@ case 'day':
             $cal_templates->set_var('calendar_toggle', ']');
         }
     }
-    $thedate = COM_getUserDateTimeFormat(mktime(0,0,0,$month,$day,$year));
+    $thedate = CAL_getUserDateTimeFormat(mktime(0,0,0,$month,$day,$year));
     $cal_templates->set_var('week_num',@strftime('%V',$thedate[1]));
     if ($mode == 'personal') {
         $calsql = "SELECT eid,title,datestart,dateend,timestart,timeend,allday,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['personal_events']} "
@@ -603,9 +603,9 @@ case 'day':
             for ($j = 1; $j <= $numevents; $j++) {
                 $A = current ($thedata);
                 $cal_templates->set_var ('event_time',
-                    strftime ($_CONF['timeonly'], strtotime ($A['datestart']
+                    strftime ('%I:%M%p', strtotime ($A['datestart']
                             . ' ' . $A['timestart'])) . '-'
-                    . strftime ($_CONF['timeonly'], strtotime ($A['dateend']
+                    . strftime ('%I:%M%p', strtotime ($A['dateend']
                             . ' ' . $A['timeend'])));
                 $cal_templates->set_var('delete_imagelink',
                                         getDeleteImageLink($mode, $A, $token));
@@ -637,7 +637,7 @@ case 'day':
         } else {
             $link = '<a href="' . $_CONF['site_url'] . '/calendar/index.php?op=add&amp;mode='.$mode.'&amp;month='.$month.'&amp;day='.$day.'&amp;year='.$year.'&amp;hour='.$i.'">';
         }
-        $link .= strftime ($_CONF['timeonly'], mktime ($i, 0));
+        $link .= strftime ('%I:%M%p', mktime ($i, 0));
         if ( $mode != 'personal' ) {
             if ( $_CA_CONF['only_admin_submit'] == 1 ) {
                 if ( SEC_hasRights('calendar.edit') ) {
@@ -735,9 +735,9 @@ case 'week':
     }
     $cal_templates->set_var('date_range', $date_range);
     if ($_CONF['week_start'] == 'Mon') {
-        $thedate = COM_getUserDateTimeFormat (mktime (0, 0, 0, $month, $day + 1,$year));
+        $thedate = CAL_getUserDateTimeFormat (mktime (0, 0, 0, $month, $day + 1,$year));
     } else {
-        $thedate = COM_getUserDateTimeFormat (mktime (0, 0, 0, $month, $day, $year));
+        $thedate = CAL_getUserDateTimeFormat (mktime (0, 0, 0, $month, $day, $year));
     }
     $cal_templates->set_var('week_num',$thedate[1]);
     for ($i = 1; $i <= 7; $i++) {
@@ -838,7 +838,7 @@ case 'week':
             $cal_templates->parse('events_day'.$i,'events',true);
         }
         // Go to next day
-        $thedate = COM_getUserDateTimeFormat(mktime(0,0,0,$monthnum, $daynum + 1, $yearnum));
+        $thedate = CAL_getUserDateTimeFormat(mktime(0,0,0,$monthnum, $daynum + 1, $yearnum));
     }
 
     $display .= $cal_templates->parse('output','week');

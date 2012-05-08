@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -87,9 +87,6 @@ function CALENDAR_edit($action, $A, $msg = '')
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
-
-    $dtStart = new Date('now',$_USER['tzid']);
-    $dtEnd   = new Date('now',$_USER['tzid']);
 
     switch ($action) {
 
@@ -210,27 +207,25 @@ function CALENDAR_edit($action, $A, $msg = '')
     // Combine date/time for easier manipulation
     $A['datestart'] = trim ($A['datestart'] . ' ' . $A['timestart']);
     if (empty ($A['datestart'])) {
-        $start_stamp = $dtStart->toUnix();
+        $start_stamp = time ();
     } else {
         $start_stamp = strtotime ($A['datestart']);
-        $dtStart->setTimestamp($start_stamp);
     }
     $A['dateend'] = trim ($A['dateend'] . ' ' . $A['timeend']);
     if (empty ($A['dateend'])) {
-        $end_stamp = $dtEnd->toUnix();
+        $end_stamp = time ();
     } else {
         $end_stamp = strtotime ($A['dateend']);
-        $dtEnd->setTimestamp($end_stamp);
     }
-    $start_month = $dtStart->month;
-    $start_day = $dtStart->day;
-    $start_year = $dtStart->year;
-    $end_month = $dtEnd->month;
-    $end_day = $dtEnd->day;
-    $end_year = $dtEnd->year;
+    $start_month = date('m', $start_stamp);
+    $start_day = date('d', $start_stamp);
+    $start_year = date('Y', $start_stamp);
+    $end_month = date('m', $end_stamp);
+    $end_day = date('d', $end_stamp);
+    $end_year = date('Y', $end_stamp);
 
-    $start_hour = $dtStart->hour;
-    $start_minute = intval ($dtStart->minute / 15) * 15;
+    $start_hour = date ('H', $start_stamp);
+    $start_minute = intval (date ('i', $start_stamp) / 15) * 15;
     if ($start_hour >= 12) {
         $startampm = 'pm';
     } else {
@@ -243,8 +238,8 @@ function CALENDAR_edit($action, $A, $msg = '')
         $start_hour = 12;
     }
 
-    $end_hour = $dtEnd->hour;
-    $end_minute = intval ($dtEnd->minute / 15) * 15;
+    $end_hour = date('H', $end_stamp);
+    $end_minute = intval (date('i', $end_stamp) / 15) * 15;
     if ($end_hour >= 12) {
         $endampm = 'pm';
     } else {
@@ -519,7 +514,7 @@ function CALENDAR_save( $eid, $C )
         $description = COM_checkHTML (COM_checkWords ($description));
     } else {
         $postmode = 'plaintext';
-        $description = htmlspecialchars (COM_checkWords ($description));
+        $description = @htmlspecialchars (COM_checkWords ($description));
     }
     $description = DB_escapeString ($description);
     $title       = DB_escapeString (COM_checkHTML (COM_checkWords ($title)));
