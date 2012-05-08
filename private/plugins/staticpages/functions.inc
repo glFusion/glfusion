@@ -6,7 +6,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -157,27 +157,7 @@ function plugin_displaycomment_staticpages ($id, $cid, $title, $order, $format, 
 
     $retval = '';
 
-    $sql = "SELECT COUNT(*) AS count, commentcode, sp_uid,owner_id, group_id, perm_owner, "
-        . "perm_group, perm_members, perm_anon "
-        . "FROM {$_TABLES['staticpage']} "
-        . "WHERE (sp_id = '".DB_escapeString($id)."') AND (sp_status = 1)" . COM_getPermSQL('AND')
-        . ' GROUP BY sp_id';
-    $result = DB_query ($sql);
-    $A = DB_fetchArray ($result);
-    $allowed = $A['count'];
-
-    if ($allowed == 1) {
-        $delete_option = (SEC_hasRights ('staticpages.edit') &&
-                (SEC_hasAccess ($A['owner_id'], $A['group_id'],
-                    $A['perm_owner'], $A['perm_group'], $A['perm_members'],
-                    $A['perm_anon']) == 3));
-        $retval .= CMT_userComments ($id, $title, 'staticpages', $order, $format,
-                                     $cid, $page, $view, $delete_option,
-                                     $A['commentcode'],$A['sp_uid']);
-    } else {
-        $retval .= COM_showMessageText($LANG_STATIC['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
-    }
-
+    $retval = SP_returnStaticpage($id,'autotag', $order,$format);
     return $retval;
 }
 
