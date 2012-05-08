@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -55,6 +55,8 @@ function MB_displayMenuList( ) {
 
     $retval = '';
 
+    $toolTipStyle = COM_getTooltipStyle();
+
     $menu_arr = array(
             array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=newmenu',
                   'text' => $LANG_MB01['add_newmenu']),
@@ -81,7 +83,7 @@ function MB_displayMenuList( ) {
             $T->set_var('menu_tree',isset($mbMenu[$id]['elements']) ? $mbMenu[$id]['elements'][0]->editTree(0,2) : '');
             $elementDetails = $menu['menu_name'] . '::';
             $elementDetails .= '<b>' . $LANG_MB01['type'] . ':</b><br />' . $LANG_MB_MENU_TYPES[$menu['menu_type']] . '<br/>';
-            $info       = '<a class="gl_mootip" title="' . $elementDetails . '" href="#">'.$menu['menu_name'].'</a>';
+            $info       = '<a class="'.$toolTipStyle.'" title="' . $elementDetails . '" href="#">'.$menu['menu_name'].'</a>';
             $T->set_var('info',$info);
             $T->set_var('rowclass',($rowCounter % 2)+1);
             $T->parse('mrow','menurow',true);
