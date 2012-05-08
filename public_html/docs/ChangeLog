@@ -2,6 +2,18 @@ glFusion ChangeLog
 
 v1.3.0
 ------
+- Improved comment entry / viewing (Mark)
+- Removed 'View Members' option from group editor (Mark)
+- User admin / profile editor - reworked the password form fields to
+  be more user friendly for password managers (Mark)
+- PLG_createUser() was called too early in the creation process (Mark)
+- Forum: Implemented Stop Forum Spam for anonymous posts (Mark)
+- New update checker (Mark)
+- Implemented full support for StopForumSpam in Spam-X (Mark)
+- Error check to ensure Media Gallery plugin is enabled before calling
+  init routines (Mark)
+- Open Graph Support (Mark)
+- meta description support for articles (Mark)
 - Added example phpblock functions to lib-custom (Eric)
 - Fixed pwd strength meter on My Account/Username & Password panel (Mark H.)
 - Implemented Facebook account merge (Mark)
@@ -117,6 +129,32 @@ v1.3.0
 - Removed PHP4 items (Mark)
 - Removed wiki text formatting (Mark)
 - Removed storybodytext.thtml / featuredbodytext.thtml templates (Mark)
+
+v1.2.2.pl3 (not released)
+----------
+- Forum Plugin: Fixed error where some autotags did not display properly in
+  forum posts (Mark)
+- Story edit permissions allowed anyone with story.edit feature to edit
+  stories (Mark)
+- Forum Plugin: Convert story to forum post did not properly handle
+  topic selection (Mark)
+
+v1.2.2.pl2
+----------
+- When entering/editing a story - if there were errors on save, such as
+  missing fields, the user is returned to the story list instead of the
+  story editor (Mark)
+- Added mailto: to the allowed protocoles in bbcode editor (Mark)
+- Security improvements in RSS processing (Mark)
+
+v1.2.2.pl1
+----------
+- Initialize $_USER theme,language,tzid (Mark)
+- Fixed race condition in Site Tailor menu style generation which caused
+  menu to display incorrectly (Mark)
+- Fixed issue where blocks did not always display properly when using
+  'All But Homepage' location (mark)
+- Demo mode security update for FileMgmt plugin
 
 v1.2.2
 ------
