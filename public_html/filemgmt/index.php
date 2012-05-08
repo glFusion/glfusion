@@ -200,7 +200,7 @@ if ($fileAccessCnt > 0 AND DB_count($_TABLES['filemgmt_filedetail'],"lid",DB_esc
                 if ( $mydownloads_useshots && $myrow['imgurl'] && $myrow['imgurl'] != "http://") {
                     $imgurl = $myts->makeTboxData4Edit($myrow['imgurl']);
                     $category_image_link = '<a href="' .$_CONF['site_url'] .'/filemgmt/viewcat.php?cid=' .$myrow['cid'] .'">';
-                    $category_image_link .= '<img src="' .$filemgmt_SnapCatURL.$imgurl .'" width="'.$mydownloads_shotwidth.'" border="0" alt="'.$myts->makeTboxData4Show($myrow['title']).'"' . XHTML . '></a>';
+                    $category_image_link .= '<img src="' .$filemgmt_SnapCatURL.$imgurl .'" width="'.$mydownloads_shotwidth.'" border="0" alt="'.$myts->makeTboxData4Show($myrow['title']).'" /></a>';
                     $p->set_var('category_link',$category_image_link);
                 } else {
                     $p->set_var('category_link','&nbsp;');
