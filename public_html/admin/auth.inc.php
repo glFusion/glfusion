@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2011 by the following authors:                             |
+// | Copyright (C) 2011-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -238,7 +238,7 @@ if ($status == USER_ACCOUNT_ACTIVE) {
     exit;
 } else {
     if ( isset($_COOKIE['token']) ) {
-        $token = $_COOKIE['token'];
+        $token = COM_applyFilter($_COOKIE['token']);
         if ( $message == '' )
             $message = $LANG20[8];
     } else {
