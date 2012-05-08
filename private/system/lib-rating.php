@@ -110,12 +110,12 @@ function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $uni
 
     if ( $static ) {
         $static_rater = '';
-    	$static_rater .= '<div class="'.$type.'-ratingbar">';
+    	$static_rater .= '<div class="ratingbar">';
     	$static_rater .= '<div id="unit_long'.$id.'">';
     	if ( $size == 'sm' ) {
-    	    $static_rater .= '<ul id="unit_ul'.$id.'" class="'.$type.'-small-rating-unit" style="width:'.$rating_unitwidth*$units.'px;">';
+    	    $static_rater .= '<ul id="unit_ul'.$id.'" class="small-rating-unit" style="width:'.$rating_unitwidth*$units.'px;">';
     	} else {
-    	    $static_rater .= '<ul id="unit_ul'.$id.'" class="'.$type.'-rating-unit" style="width:'.$rating_unitwidth*$units.'px;">';
+    	    $static_rater .= '<ul id="unit_ul'.$id.'" class="rating-unit" style="width:'.$rating_unitwidth*$units.'px;">';
     	}
     	$static_rater .= '<li class="current-rating" style="width:'.$rating_width.'px;">'.$LANG13['currently'].' '.$rating2.'/'.$units.'</li>';
     	$static_rater .= '</ul>';
@@ -125,12 +125,12 @@ function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $uni
     	return $static_rater;
     } else {
         $rater ='';
-        $rater.='<div class="'.$type.'-ratingbar">';
+        $rater.='<div class="ratingbar">';
         $rater.='<div id="unit_long'.$id.'">';
         if ( $size == 'sm' ) {
-            $rater.='  <ul id="unit_ul'.$id.'" class="'.$type.'-small-rating-unit" style="width:'.$rating_unitwidth*$units.'px;">';
+            $rater.='  <ul id="unit_ul'.$id.'" class="small-rating-unit" style="width:'.$rating_unitwidth*$units.'px;">';
         } else {
-            $rater.='  <ul id="unit_ul'.$id.'" class="'.$type.'-rating-unit" style="width:'.$rating_unitwidth*$units.'px;">';
+            $rater.='  <ul id="unit_ul'.$id.'" class="rating-unit" style="width:'.$rating_unitwidth*$units.'px;">';
         }
         $rater.='     <li class="current-rating" style="width:'.$rating_width.'px;">'.$LANG13['currently'].' '.$rating2.'/'.$units.'</li>';
 
@@ -427,9 +427,9 @@ function RATING_getRatedIds($type)
 
     $ratedIds = array();
     if ( $uid == 1 ) {
-        $sql = "SELECT item_id FROM {$_TABLES['rating_votes']} WHERE type='".$type."' AND (ip_address='$ip')";
+        $sql = "SELECT item_id FROM {$_TABLES['rating_votes']} WHERE type='".$type."' AND (ip_address='".DB_escapeString($ip)."')";
     } else {
-        $sql = "SELECT item_id FROM {$_TABLES['rating_votes']} WHERE type='".$type."' AND (uid='$uid' OR ip_address='$ip')";
+        $sql = "SELECT item_id FROM {$_TABLES['rating_votes']} WHERE type='".$type."' AND (uid=".(int)$uid." OR ip_address='".DB_escapeString($ip)."')";
     }
     $result = DB_query($sql,1);
     while ( $row = DB_fetchArray($result) ) {
