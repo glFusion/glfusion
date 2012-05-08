@@ -117,7 +117,8 @@ function glfusion_SecurityCheck() {
         $msg .= $LANG01[503].'<br />';
     }
     if ( $msg != '' ) {
-        $retval = '<p style="width:100%;text-align:center;"><span class="alert pluginAlert" style="text-align:center;font-size:1.5em;">' . $msg . '</span></p>';
+
+        $retval = COM_showMessageText($msg,'',true, 'error');
     }
     return $retval;
 }
