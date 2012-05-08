@@ -13,6 +13,7 @@
         <td class="alignright" style="width:10%;"><b>{lang_username}:</b></td>
         <td>
           {cid}
+          <input type="hidden" name="mode" value="{mode}" />
           <input type="hidden" name="sid" value="{sid}" />
           <input type="hidden" name="pid" value="{pid}" />
           <input type="hidden" name="type" value="{type}" />
@@ -45,7 +46,14 @@
           <span class="warningsmall">{allowed_html}</span>
         </td>
       </tr>
+{!if captcha}
+      <tr>
+      <td></td>
+      <td>
       {captcha}
+      </td>
+      </tr>
+{!endif}
       <tr>
         <td colspan="2"><div style="border-bottom:1px solid #cccccc"></div></td>
       </tr>
@@ -59,8 +67,9 @@
             <li>{lang_instr_line5}</li>
           </ul>
           <br />
-          <input type="submit" name="mode" value="{lang_preview}" />
+          <input type="submit" name="preview" value="{lang_preview}" />
           {save_option}
+          <input type="submit" name="cancel" value="{$LANG32[24]}" />
         </td>
       </tr>
     </table>

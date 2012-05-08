@@ -19,11 +19,7 @@ you can also duplicate the php code and add another group name and css class to 
   </div>
   <div style="padding-bottom:10px; float:right; clear:both;">
    <span {hide_if_preview}>
-    [ {reply_option} {parent_link} {delete_option}
-{!if nodisplay}
-    <a href="{site_url}/comment.php?mode=view&amp;cid={cid}" rel="self bookmark" title="{lang_permlink}">#</a>
-{!endif}
-  ]
+    [ {reply_option} {parent_link} {delete_option} ]
    </span>
   </div>
 </div>

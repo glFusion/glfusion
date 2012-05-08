@@ -1,4 +1,11 @@
 {# begin {templatelocation} #}
+{!if advanced_editor}
+ <script type="text/javascript">
+    glfusionEditorBasePath = "{site_url}/fckeditor/" ;
+    glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
+</script>
+<script type="text/javascript" src="{site_url}/javascript/submitcomment_fckeditor.js"></script>
+{!endif}
 {start_block_postacomment}
 <a name="comment_entry"></a>
 <form action="{site_url}/comment.php#comment_entry" method="post">
@@ -7,6 +14,7 @@
             <td class="alignright"><b>{lang_username}:</b></td>
             <td>
                 {cid}
+                <input type="hidden" name="mode" value="{mode}" />
                 <input type="hidden" name="sid" value="{sid}" />
                 <input type="hidden" name="pid" value="{pid}" />
                 <input type="hidden" name="type" value="{type}" />
@@ -18,20 +26,49 @@
             <td class="alignright"><b>{lang_title}:</b></td>
             <td><input type="text" name="title" size="64" value="{title}" maxlength="96" /></td>
         </tr>
+
         <tr>
             <td class="alignright" style="vertical-align:top;"><b>{lang_comment}:</b></td>
-            <td><textarea name="comment_text" rows="10" style="width:90%">{comment}</textarea></td>
+            <td>
+                <div id="text_editor" style="display:{show_texteditor};">
+                    <textarea id="comment_text" name="comment_text" cols="60" rows="10" style="width:90%;">{comment}</textarea>
+                </div>
+{!if advanced_editor}
+               <div  id="html_editor" style="display:{show_htmleditor};margin-right:20px;">
+                   <textarea id="comment_html" name="comment_html" rows="10" cols="60" style="width:90%;">{comment}</textarea>
+              </div>
+{!endif}
+            </td>
         </tr>
+
         <tr>
             <td class="alignright" style="vertical-align:top;"><b>{lang_postmode}:</b></td>
             <td style="vertical-align:top;">
-                <select name="postmode">
+                <select name="postmode"
+{!if advanced_editor}
+        onchange="change_editmode(this);
+{!endif}
+                ">
                     {postmode_options}
                 </select><br/>
                 <span class="warningsmall">{allowed_html}</span>
             </td>
         </tr>
-        {captcha}
+{!if suballowed}
+        <tr>
+            <td class="alignright" style="vertical-align:top;"><b>{$LANG01[subscribe]}:</b></td>
+            <td>
+                <input type="checkbox" name="subscribe" value="1" {subchecked} />&nbsp;
+                {$LANG03[47]}
+            </td>
+        </tr>
+{!endif}
+        <tr>
+            <td></td>
+            <td>
+                {captcha}
+            </td>
+        </tr>
         <tr>
             <td colspan="2"><div style="border-bottom:1px solid #cccccc"></div></td>
         </tr>
@@ -45,8 +82,9 @@
                 <li>{lang_instr_line5}</li>
               </ul>
               <br/>
-              <input type="submit" name="mode" value="{lang_preview}" />
+              <input type="submit" name="preview" value="{lang_preview}" />
               {save_option}
+              <input type="submit" name="cancel" value="{$LANG32[24]}" />
             </td>
         </tr>
     </table>
