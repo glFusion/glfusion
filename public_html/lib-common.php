@@ -6,7 +6,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -70,6 +70,8 @@ define('PATCHLEVEL','.svn');
 
 //define('DEMO_MODE',true);
 
+//define('DVLP_DEBUG',true);
+
 /**
 * Turn this on to get various debug messages from the code in this library
 * @global Boolean $_COM_VERBOSE
@@ -131,6 +133,35 @@ $config->load_baseconfig();
 $config->initConfig();
 
 $_CONF = $config->get_config('Core');
+
+
+/* ------- Development Code - need to update conf_values ---- */
+$_CONF['enable_facebook'] = true;
+$_CONF['enable_twitter']  = true;
+$_CONF['enable_plusone']  = true;
+
+$_CONF['facebooklike_enable'] = true;
+$_CONF['faceblooklike_url']   = '';
+$_CONF['twitterfollow_enable']    = true;
+$_CONF['twitterfollow_url']       = '';
+/* ------ End of Development Code --- */
+
+
+// set default UI styles
+$uiStyles = array(
+    'full_content' => array('left_class' => '',
+                            'content_class' => 'gl_content-full',
+                            'right_class' => ''),
+    'left_content' => array('left_class' => '',
+                            'content_class' => 'gl_content-wide-left',
+                            'right_class' => ''),
+    'left_content_right' => array('left_class' => '',
+                                  'content_class' => 'gl_content',
+                                  'right_class' => ''),
+    'content_right' => array('left_class' => '',
+                             'content_class' => 'gl_content-wide-right',
+                             'right_class'  => '')
+);
 
 /**
   * Make sure some config values are set properly
@@ -238,6 +269,12 @@ require_once $_CONF['path_system'].'lib-database.php';
 *
 */
 require_once $_CONF['path_system'] . 'classes/date.class.php';
+
+/**
+* This is the output library used to control JS / CSS
+*
+*/
+require_once $_CONF['path_system'].'classes/output.class.php';
 
 /**
 * Buffer all enabled plugins
@@ -1001,6 +1038,10 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $theme_what, $theme_pagetitle,
            $theme_headercode, $theme_layout,$mbMenu,$themeAPI;
 
+    if ( !isset($_USER['theme']) || $_USER['theme'] == '' ) {
+        $_USER['theme'] = $_CONF['theme'];
+    }
+
     $function = $_USER['theme'] . '_siteHeader';
 
     if ( function_exists( $function )) {
@@ -1030,8 +1071,6 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         $cacheID = DB_getItem($_TABLES['vars'],'value','name="cacheid"');
         SESS_setVar('cacheID',$cacheID);
     }
-
-
 
     // give the theme a chance to load stuff....
 
@@ -1197,7 +1236,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     $retval = $header->finish( $header->get_var( 'index_header' ));
 
     // send out the charset header
-    header( 'Content-Type: text/html; charset=' . COM_getCharset());
+//    header( 'Content-Type: text/html; charset=' . COM_getCharset());
     echo $retval;
 
     // Start caching / capturing output from glFusion / plugins
@@ -1222,9 +1261,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG12, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $_PAGE_TIMER, $theme_what,
            $theme_pagetitle, $theme_headercode, $theme_layout,$mbMenuConfig,
-           $_LOGO,$mbMenu, $themeAPI;
-
-    // If the theme implemented this for us then call their version instead.
+           $_LOGO,$mbMenu, $themeAPI,$uiStyles;
 
     COM_hit();
 
@@ -1344,8 +1381,10 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         'lang_newuser'      => $LANG12[3],
     ));
 
-    $theme->set_var('st_hmenu',mb_getMenu('navigation',"gl_moomenu","gl_moomenu",'',"parent"));
-    $theme->set_var('st_footer_menu',mb_getMenu('footer','st-fmenu','','','','st-f-last'));
+    $st_hmenu = mb_getMenu('navigation',"gl_moomenu","gl_moomenu",'',"parent",'',1);
+    $theme->set_var('st_hmenu',$st_hmenu);
+    $st_footer_menu = mb_getMenu('footer',"st-fmenu",'','',"st-f-last");
+    $theme->set_var('st_footer_menu',$st_footer_menu);
     $theme->set_var('st_header_menu',mb_getMenu('header','st-fmenu','','','','st-f-last'));
 
     $lblocks = '';
@@ -1401,6 +1440,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_var( 'powered_by', $LANG01[95]);
     $theme->set_var( 'glfusion_url', 'http://www.glfusion.org/' );
     $theme->set_var( 'glfusion_version', GVERSION );
+    $theme->set_var('direction',(empty($LANG_DIRECTION) ? 'ltr' : $LANG_DIRECTION));
 
     /* Check if an array has been passed that includes the name of a plugin
      * function or custom function.
@@ -1420,25 +1460,37 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
             $theme->set_var( 'glfusion_rblocks', '');
             $theme->set_var( 'right_blocks','');
             if ( empty($lblocks) ) {
-                $theme->set_var( 'centercolumn','gl_content-full' );
+                $theme->set_var( 'centercolumn',$uiStyles['full_content']['content_class'] );
+                $theme->set_var( 'footercolumn-l',$uiStyles['full_content']['left_class']);
+                $theme->set_var( 'footercolumn-r',$uiStyles['full_content']['right_class']);
             } else {
-                $theme->set_var( 'centercolumn','gl_content-wide-left' );
+                $theme->set_var( 'centercolumn',$uiStyles['left_content']['content_class'] );
+                $theme->set_var( 'footercolumn-l',$uiStyles['left_content']['left_class']);
+                $theme->set_var( 'footercolumn-r',$uiStyles['left_content']['right_class']);
             }
         } else {
             $theme->set_var( 'glfusion_rblocks', $rblocks);
             if ( empty($lblocks) ) {
-                $theme->set_var( 'centercolumn','gl_content-wide-right' );
+                $theme->set_var( 'centercolumn',$uiStyles['content_right']['content_class'] );
+                $theme->set_var( 'footercolumn-l',$uiStyles['content_right']['left_class']);
+                $theme->set_var( 'footercolumn-r',$uiStyles['content_right']['right_class']);
             } else {
-                $theme->set_var( 'centercolumn','gl_content' );
+                $theme->set_var( 'centercolumn',$uiStyles['left_content_right']['content_class'] );
+                $theme->set_var( 'footercolumn-l',$uiStyles['left_content_right']['left_class']);
+                $theme->set_var( 'footercolumn-r',$uiStyles['left_content_right']['right_class']);
             }
         }
     } else {
         $theme->set_var( 'glfusion_rblocks', '');
         $theme->set_var( 'right_blocks', '' );
         if ( empty( $lblocks )) {
-            $theme->set_var( 'centercolumn','gl_content-full' );
+            $theme->set_var( 'centercolumn',$uiStyles['full_content']['content_class'] );
+            $theme->set_var( 'footercolumn-l',$uiStyles['full_content']['left_class']);
+            $theme->set_var( 'footercolumn-r',$uiStyles['full_content']['right_class']);
         } else {
-            $theme->set_var( 'centercolumn','gl_content-wide-left' );
+            $theme->set_var( 'centercolumn',$uiStyles['left_content']['content_class'] );
+            $theme->set_var( 'footercolumn-l',$uiStyles['left_content']['left_class']);
+            $theme->set_var( 'footercolumn-r',$uiStyles['left_content']['right_class']);
         }
     }
 
@@ -1458,6 +1510,15 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_var( 'execution_textandtime', $exectext );
 
     $theme->set_var('content',$content);
+
+    // grab header data from outputHandler
+    $outputHandle = outputHandler::getInstance();
+    $theme->set_var(array(
+                'meta-header'  => $outputHandle->renderHeader('meta'),
+                'css-header'   => $outputHandle->renderHeader('style'),
+                'js-header'    => $outputHandle->renderHeader('script'),
+                'raw-header'   => $outputHandle->renderHeader('raw'),
+    ));
 
     // Call to plugins to set template variables in the footer
     PLG_templateSetVars( 'header', $theme );
@@ -4393,10 +4454,11 @@ function COM_getMessage()
 * @param    string  $message    Message text; may contain HTML
 * @param    string  $title      (optional) alternative block title
 * @param	string	$boolean	(optional) whether message should be persistent
+* @param    string  $type       (optional) type of message to display
 * @return   string              HTML block with message
 *
 */
-function COM_showMessageText($message, $title = '', $persist = false)
+function COM_showMessageText($message, $title = '', $persist = false, $type='')
 {
     global $_CONF, $_USER, $MESSAGE, $_IMAGE_TYPE;
 
@@ -4409,15 +4471,23 @@ function COM_showMessageText($message, $title = '', $persist = false)
             $title = $MESSAGE[40];
         }
         $timestamp = $dt->format($_CONF['daytime'],true);
-        $msg_block = ($persist) ? '_persistent_msg_block' : '_msg_block';
-        $retval .= COM_startBlock($title . ' - ' . $timestamp, '',
-                                  COM_getBlockTemplate($msg_block, 'header'))
-                . '<p class="sysmessage"><img src="' . $_CONF['layout_url']
-                . '/images/sysmessage.' . $_IMAGE_TYPE . '" alt="" '
-                . '/>' . $message . '</p>'
-                . COM_endBlock(COM_getBlockTemplate($msg_block, 'footer'));
-    }
 
+        $T = new Template( $_CONF['path_layout'] );
+        $T->set_file('message','sysmessage.thtml');
+        $T->set_var(array(
+                    'title'         => $title,
+                    'timestamp'     => $timestamp,
+                    'message'       => $message,
+                    'icon_url'      => $_CONF['layout_url'].'/images/sysmessage.'.$_IMAGE_TYPE,
+                    'class'         => '',
+                    'block_title'   => $title . '-' . $timestamp,
+                    'fade'          => (($persist) ? '' : true),
+                    'type'          => $type,
+                    'persist'       => $persist,
+        ));
+        $T->parse( 'final', 'message' );
+        $retval = $T->finish( $T->get_var( 'final' ));
+    }
     return $retval;
 }
 
@@ -4504,7 +4574,7 @@ function COM_showMessageFromParameter()
 */
 function COM_printPageNavigation( $base_url, $curpage, $num_pages,
                                   $page_str='page=', $do_rewrite=false, $msg='',
-                                  $open_ended = '')
+                                  $open_ended = '',$suffix='')
 {
     global $LANG05;
 
@@ -4527,12 +4597,12 @@ function COM_printPageNavigation( $base_url, $curpage, $num_pages,
     }
 
     if ( $curpage > 1 ) {
-        $retval .= COM_createLink($LANG05[7], $base_url . $sep . $page_str . '1') . ' | ';
+        $retval .= COM_createLink($LANG05[7], $base_url . $sep . $page_str . '1' . $suffix) . ' | ';
         $pg = '';
         if ( ( $curpage - 1 ) > 1 ) {
             $pg = $sep . $page_str . ( $curpage - 1 );
         }
-        $retval .= COM_createLink($LANG05[6], $base_url . $pg ) . ' | ';
+        $retval .= COM_createLink($LANG05[6], $base_url . $pg . $suffix) . ' | ';
     } else {
         $retval .= $LANG05[7] . ' | ' ;
         $retval .= $LANG05[6] . ' | ' ;
@@ -4547,7 +4617,7 @@ function COM_printPageNavigation( $base_url, $curpage, $num_pages,
             $retval .= '<b>' . $pgcount . '</b> ';
         } else {
             $pg = $sep . $page_str . $pgcount;
-            $retval .= COM_createLink($pgcount, $base_url . $pg) . ' ';
+            $retval .= COM_createLink($pgcount, $base_url . $pg . $suffix) . ' ';
         }
     }
 
@@ -4558,16 +4628,16 @@ function COM_printPageNavigation( $base_url, $curpage, $num_pages,
         $retval .= '| ' . $LANG05[8];
     } else {
         $retval .= '| ' . COM_createLink($LANG05[5], $base_url . $sep
-                                         . $page_str . ($curpage + 1));
+                                         . $page_str . ($curpage + 1) . $suffix);
         $retval .= ' | ' . COM_createLink($LANG05[8], $base_url . $sep
-                                          . $page_str . $num_pages);
+                                          . $page_str . $num_pages . $suffix);
     }
 
     if ( !empty( $retval )) {
         if ( !empty( $msg )) {
             $msg .=  ' ';
         }
-        $retval = '<div class="pagenav">' . $msg . $retval . '</div>';
+        $retval = '<span class="pagenav">' . $msg . $retval . '</span>';
     }
 
     return $retval;
@@ -6296,12 +6366,50 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
                     message!!!</h2>');
                 }
             }
-            echo('<pre>');
-            ob_start();
-            var_dump($errcontext);
-            $errcontext = htmlspecialchars(ob_get_contents(),ENT_COMPAT,COM_getEncodingt());
-            ob_end_clean();
-            echo("$errcontext</pre></body></html>");
+
+            if (@ini_get('xdebug.default_enable') == 1) {
+                ob_start();
+                var_dump($errcontext);
+                $errcontext = ob_get_contents();
+                ob_end_clean();
+                echo "$errcontext</body></html>";
+            } else {
+                $btr = debug_backtrace();
+                if (count($btr) > 0) {
+                    if ($btr[0]['function'] == 'COM_handleError') {
+                        array_shift($btr);
+                    }
+                }
+                if (count($btr) > 0) {
+                    echo "<font size='1'><table class='xdebug-error' dir='ltr' border='1' cellspacing='0' cellpadding='1'>\n";
+                    echo "<tr><th align='left' bgcolor='#e9b96e' colspan='5'>Call Stack</th></tr>\n";
+                    echo "<tr><th align='right' bgcolor='#eeeeec'>#</th><th align='left' bgcolor='#eeeeec'>Function</th><th align='left' bgcolor='#eeeeec'>File</th><th align='right' bgcolor='#eeeeec'>Line</th></tr>\n";
+                    $i = 1;
+                    foreach ($btr as $b) {
+                        $f = '';
+                        if (! empty($b['file'])) {
+                            $f = $b['file'];
+                        }
+                        $l = '';
+                        if (! empty($b['line'])) {
+                            $l = $b['line'];
+                        }
+                        echo "<tr><td bgcolor='#eeeeec' align='right'>$i</td><td bgcolor='#eeeeec'>{$b['function']}</td><td bgcolor='#eeeeec'>{$f}</td><td bgcolor='#eeeeec' align='right'>{$l}</td></tr>\n";
+                        $i++;
+                        if ($i > 100) {
+                            echo "<tr><td bgcolor='#eeeeec' align='left' colspan='4'>Possible recursion - aborting.</td></tr>\n";
+                            break;
+                        }
+                    }
+                    echo "</table></font>\n";
+                }
+                echo '<pre>';
+                ob_start();
+                var_dump($errcontext);
+                $errcontext = htmlspecialchars(ob_get_contents());
+                ob_end_clean();
+                echo "$errcontext</pre></body></html>";
+            }
             exit;
         }
     }
@@ -6562,6 +6670,8 @@ function COM_decompress($file, $target)
 {
     global $_CONF;
 
+$ok = 0;
+
     // decompression library doesn't like target folders ending in "/"
     if (substr($target, -1) == "/") $target = substr($target, 0, -1);
     $ext = substr($file, strrpos($file,'.')+1);
@@ -6571,16 +6681,12 @@ function COM_decompress($file, $target)
 
         require_once 'Archive/Tar.php';
 
-        if (strpos($ext, 'bz') !== false) $compress_type = COMPRESS_BZIP;
-        else if (strpos($ext,'gz') !== false) $compress_type = COMPRESS_GZIP;
-        else $compress_type = COMPRESS_NONE;
-
         $tar = new Archive_Tar($file);
+
         $ok = $tar->extract($target);
-        if ($ok == '' ){
+        if ( $ok ) {
             $ok = 1;
         }
-
         return ($ok<1?false:true);
 
     } else if ($ext == 'zip') {
@@ -6687,6 +6793,18 @@ function COM_getTextContent($text)
     return trim($text);
 }
 
+function COM_getTooltipStyle()
+{
+    global $_CONF;
+
+    $retval = 'gl_mootip';
+
+    if ( function_exists('THEME_getToolTipStyle') ) {
+        $retval = THEME_getToolTipStyle();
+    }
+    return $retval;
+}
+
 /*
  * For backward compatibility
  */
@@ -6779,6 +6897,8 @@ function CTL_clearCache($plugin='')
                 @unlink($filename);
             }
         }
+        $_SYSTEM['jquery_loaded']   = false;
+        $_SYSTEM['mootools_loaded'] = false;
         css_out();
         js_out();
     }
@@ -6817,7 +6937,6 @@ function css_out()
     } else {
         $files[] = $_CONF['path_layout'] . 'style-colors.css';
     }
-
     /*
      * Check to see if there are any custom CSS files to include
      */
@@ -6978,25 +7097,24 @@ function js_out()
      */
 
     $files = array(
-        $_CONF['path_html'] . 'javascript/mootools/mootools-release-1.11.packed.js',
         $_CONF['path_html'] . 'fckeditor/fckeditor.js',
         $_CONF['path_html'] . 'javascript/common.js',
-        $_CONF['path_html'] . 'javascript/fValidator.js',
-        $_CONF['path_html'] . 'javascript/mootools/gl_mooreflection.js',
-        $_CONF['path_html'] . 'javascript/mootools/gl_moomenu.js',
-        $_CONF['path_html'] . 'javascript/mootools/moorating.js',
 
     );
 
-    if ( $themeAPI < 2 ) {
-        $files[] = $_CONF['path_html'] . 'javascript/sitetailor_ie6vertmenu.js';
+    if ( !isset($_SYSTEM['disable_mootools']) || $_SYSTEM['disable_mootools'] == false ) {
+        $files[] = $_CONF['path_html'] . 'javascript/mootools/mootools-release-1.11.packed.js';
+        $files[] = $_CONF['path_html'] . 'javascript/fValidator.js';
+        $files[] = $_CONF['path_html'] . 'javascript/mootools/gl_mooreflection.js';
+        $files[] = $_CONF['path_html'] . 'javascript/mootools/gl_moomenu.js';
+        $files[] = $_CONF['path_html'] . 'javascript/mootools/moorating.js';
+    } else {
+        $files[] = $_CONF['path_html'] . 'javascript/rating/behavior.js';
+        $files[] = $_CONF['path_html'] . 'javascript/rating/rating.js';
     }
 
-    $mbJS = mb_getheaderjs();
-    if ( is_array($mbJS) ) {
-        foreach($mbJS AS $item => $file ) {
-            $files[] = $file;
-        }
+    if ( $themeAPI < 2 ) {
+        $files[] = $_CONF['path_html'] . 'javascript/sitetailor_ie6vertmenu.js';
     }
 
     /*
@@ -7060,6 +7178,13 @@ function js_out()
                     }
                 }
             }
+        }
+    }
+
+    $mbJS = mb_getheaderjs();
+    if ( is_array($mbJS) ) {
+        foreach($mbJS AS $item => $file ) {
+            $files[] = $file;
         }
     }
 
