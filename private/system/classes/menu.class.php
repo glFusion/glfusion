@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C)  2008-2011 by the following authors:                       |
+// | Copyright (C)  2008-2012 by the following authors:                       |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -270,7 +270,8 @@ class menuElement {
         return;
     }
 
-    function showTree( $depth,$ulclass='',$liclass='',$parentaclass='',$lastclass,$selected='' ) {
+    function showTree( $depth,$ulclass='',$liclass='',$parentaclass='',$lastclass,$selected='',$noid=0 ) {
+
         global $_SP_CONF,$_USER, $_TABLES, $LANG01, $LANG_MB01, $LANG_LOGO, $LANG_AM, $LANG29, $_CONF,$meLevel,
                $_DB_dbms,$_GROUPS, $config,$mbMenu;
 
@@ -279,13 +280,13 @@ class menuElement {
         $oparentaclass  = $parentaclass;
         $olastclass     = $lastclass;
 
-        if ( $ulclass != '' )
+        if ( $ulclass != '' && $noid == 0)
             $ulclass = $ulclass . $this->menu_id;
-        if ( $liclass != '' )
+        if ( $liclass != '' && $noid == 0)
             $liclass = $liclass . $this->menu_id;
-        if ( $parentaclass != '' )
+        if ( $parentaclass != '' && $noid == 0)
             $parentaclass = $parentaclass . $this->menu_id;
-        if ( $lastclass != '' )
+        if ( $lastclass != '' && $noid == 0)
             $lastclass = $lastclass . $this->menu_id;
 
         $retval = '';
@@ -381,7 +382,7 @@ class menuElement {
                         if ( $this->id != 0 && $this->access > 0 && $parentaclass != '' ) {
                             $menu .= "<li>" . '<a class="' . $parentaclass . '" name="'.$parentaclass.'" href="#">' . strip_tags($this->label) . '</a>' . LB;
                         } else {
-                            $menu .= "<li>" . '<a href="#">' . strip_tags($this->label) . '</a></li>' . LB;
+                            $menu .= "<li>" . '<a href="#">' . strip_tags($this->label) . '</a>' . LB;
                         }
                         if ( $this->id == 0 && $ulclass != '' ) {
                             $menu .= '<ul class="' . $ulclass . '">' . LB;
@@ -442,7 +443,7 @@ class menuElement {
                             if ( $this->id != 0 && $this->access > 0 && $parentaclass != '' ) {
                                 $menu .= "<li>" . '<a class="' . $parentaclass . '" name="'.$parentaclass.'" href="#">' . strip_tags($this->label) . '</a>' . LB;
                             } else {
-                                $menu .= "<li>" . '<a href="#">' . strip_tags($this->label) . '</a></li>' . LB;
+                                $menu .= "<li>" . '<a href="#">' . strip_tags($this->label) . '</a>' .  LB;
                             }
                             if ( $this->id == 0 && $ulclass != '' ) {
                                 $menu .= '<ul class="' . $ulclass . '">' . LB;
@@ -699,7 +700,7 @@ class menuElement {
                         if ( $this->id != 0 && $this->access > 0 && $parentaclass != '' ) {
                             $menu .= "<li>" . '<a class="' . $parentaclass . '" name="'.$parentaclass.'" href="#">' . strip_tags($this->label) . '</a>' . LB;
                         } else {
-                            $menu .= "<li>" . '<a href="#">' . strip_tags($this->label) . '</a></li>' . LB;
+                            $menu .= "<li>" . '<a href="#">' . strip_tags($this->label) . '</a>' . LB;
                         }
                         if ( $this->id == 0 && $ulclass != '' ) {
                             $menu .= '<ul class="' . $ulclass . '">' . LB;
@@ -791,7 +792,7 @@ class menuElement {
                         if ( $this->id != 0 && $this->access > 0 && $parentaclass != '' ) {
                             $menu .= "<li>" . '<a class="' . $parentaclass . '" href="#">' . strip_tags($this->label) . '</a>' . LB;
                         } else {
-                            $menu .= "<li>" . '<a href="#">' . strip_tags($this->label) . '</a></li>' . LB;
+                            $menu .= "<li>" . '<a href="#">' . strip_tags($this->label) . '</a>' . LB;
                         }
                         if ( $this->id == 0 && $ulclass != '' ) {
                             $menu .= '<ul class="' . $ulclass . '">' . LB;
@@ -905,9 +906,9 @@ class menuElement {
                     $retval .= "<li".$lastClass.">" . '<a class="' . $parentaclass . '" name="'.$parentaclass.'" href="' . ($this->url == '' ? '#' : $this->url) . '">' . strip_tags($this->label) . '</a>' . LB;
                 } else {
                     if ($this->type == 8 ) {
-                        $retval .= "<li".$lastClass.'><a><strong>' . strip_tags($this->label) . '</strong></a></li>' . LB;
+                        $retval .= "<li".$lastClass.'><a><strong>' . strip_tags($this->label) . '</strong></a>' . LB;
                     } else {
-                        $retval .= "<li".$lastClass.">" . '<a href="' . $this->url . '"' . ($this->target != '' ? ' target="' . $this->target . '"' : '') . '>' . strip_tags($this->label) . '</a></li>' . LB;
+                        $retval .= "<li".$lastClass.">" . '<a href="' . $this->url . '"' . ($this->target != '' ? ' target="' . $this->target . '"' : '') . '>' . strip_tags($this->label) . '</a>' . LB;
                     }
                 }
             }
@@ -923,7 +924,7 @@ class menuElement {
                 }
                 foreach($children as $child) {
                     $meLevel++;
-                    $retval .= $mbMenu[$this->menu_id]['elements'][$child]->showTree($depth,$oulclass,$oliclass,$oparentaclass,$olastclass,$selected);
+                    $retval .= $mbMenu[$this->menu_id]['elements'][$child]->showTree($depth,$oulclass,$oliclass,$oparentaclass,$olastclass,$selected,$noid);
                     $meLevel--;
                 }
                 if ( $this->id == 0 ) {
@@ -933,11 +934,15 @@ class menuElement {
                 }
             }
         } else {
-            if ($parentaclass != '' && $this->type == 1) {
+//            if ($this->type == 1) {
+            if ($this->type != 3 && $this->type != 7) {
+
                 $retval .= '</li>';
             }
         }
         return $retval;
     }
+
+
 }
 ?>
