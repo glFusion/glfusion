@@ -5,12 +5,12 @@
 
           <tr>
             <td class="alignright" style="font-weight:bold;">{lang_userid}:</td>
-            <td>{user_id}<input type="hidden" name="uid" value="{user_id}"{xhtml}></td>
+            <td>{user_id}<input type="hidden" name="uid" value="{user_id}"/></td>
           </tr>
           <tr>
             <td class="alignright" style="font-weight:bold;">{lang_regdate}:</td>
             <td>
-              <input type="hidden" name="regdate" value="{regdate_timestamp}"{xhtml}>{user_regdate}
+              <input type="hidden" name="regdate" value="{regdate_timestamp}"/>{user_regdate}
             </td>
           </tr>
           <tr>
@@ -25,7 +25,7 @@
           </tr>
           <tr>
             <td style="width:150px;"><label for="fullname">{lang_fullname}:</label></td>
-            <td><input type="text" id="fullname" name="fullname" size="60" maxlength="80" value="{fullname_value}"{xhtml}></td>
+            <td><input type="text" id="fullname" name="fullname" size="60" maxlength="80" value="{fullname_value}"/></td>
           </tr>
           {!if remoteuserenable}
           <tr>
@@ -65,12 +65,12 @@
       <fieldset style="margin-top:10px;"><legend>{lang_password_email_legend}</legend>
         <table class="inputTable" border="0">
           <tr>
-            <td style="width:150px;"><label for="passwd">{lang_password}:</label></td>
-            <td><input type="password" id="passwd" name="passwd" size="32" maxlength="32" value="{password_value}" {pwd_disabled} onkeyup="runPassword(this.value, 'mypassword');"{xhtml}></td>
+            <td style="width:150px;"><label for="newp">{lang_password}:</label></td>
+            <td><input type="password" id="newp" name="newp" size="32" maxlength="32" value="{password_value}" {pwd_disabled} onkeyup="runPassword(this.value, 'mypassword');"/></td>
           </tr>
           <tr>
-            <td><label for="passwd_conf">{lang_password_conf}:</label></td>
-            <td><input type="password" id="passwd_conf" name="passwd_conf" size="32" maxlength="32" value="{password_value}" {pwd_disabled} {xhtml}></td>
+            <td><label for="newp_conf">{lang_password_conf}:</label></td>
+            <td><input type="password" id="newp_conf" name="newp_conf" size="32" maxlength="32" value="{password_value}" {pwd_disabled} /></td>
           </tr>
           <tr>
             <td style="width:150px;">
@@ -87,11 +87,11 @@
           </tr>
           <tr>
             <td><label for="email">{lang_email}:</label></td>
-            <td><input class="fValidate['required']" type="text" id="email" name="email" size="50" maxlength="96" value="{email_value}"{xhtml}></td>
+            <td><input class="fValidate['required']" type="text" id="email" name="email" size="50" maxlength="96" value="{email_value}"/></td>
           </tr>
           <tr>
             <td><label for="email_conf">{lang_email_conf}:</label></td>
-            <td><input class="fValidate['required','confirm']" type="text" id="email_conf" name="email_conf" size="50" maxlength="96" value="{email_value}"{xhtml}></td>
+            <td><input class="fValidate['required','confirm']" type="text" id="email_conf" name="email_conf" size="50" maxlength="96" value="{email_value}"/></td>
           </tr>
           {plugin_namepass_pwdemail}
         </table>
@@ -106,13 +106,13 @@ function aptoggle() {
     if (document.getElementById("remoteuser").checked == true) {
       document.getElementById("remoteuserinfo").style.display = "";
       document.getElementById("emailuser").disabled=true;
-      document.getElementById("passwd").disabled=true;
-      document.getElementById("passwd_conf").disabled=true;
+      document.getElementById("newp").disabled=true;
+      document.getElementById("newp_conf").disabled=true;
     } else {
       document.getElementById("remoteuserinfo").style.display = "none";
       document.getElementById("emailuser").disabled=false;
-      document.getElementById("passwd").disabled=false;
-      document.getElementById("passwd_conf").disabled=false;
+      document.getElementById("newp").disabled=false;
+      document.getElementById("newp_conf").disabled=false;
     }
   }
 }

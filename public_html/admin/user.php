@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -198,6 +198,7 @@ function USER_edit($uid = '', $msg = '')
         $U['cookietimeout'] = $_CONF['session_cookie_timeout'];// 2678400;
         $U['etids'] = '-';
         $U['status'] = USER_ACCOUNT_AWAITING_ACTIVATION;
+        $U['account_type'] = LOCAL_USER;
         $U['emailfromadmin'] = 1;
         $U['emailfromuser'] = 1;
         $U['showonline'] = 1;
@@ -381,22 +382,18 @@ function USER_accountPanel($U,$newuser = 0)
     }
 
     $userform->set_var('user_name',$U['username']);
-    $userform->set_var('fullname_value', htmlspecialchars($U['fullname']));
+    $userform->set_var('fullname_value', @htmlspecialchars($U['fullname'],ENT_NOQUOTES,COM_getEncodingt()));
 
-    // remote services
-    if ( $U['uid'] != '' && $U['account_type'] & LOCAL_USER /*$U['remoteservice'] == ''*/ ) {
-        $allow_remote_user = 0;
-    } else {
-        $allow_remote_user = 1;
-    }
     $remote_user_display = 'none';
     $remote_user_checked = '';
     $pwd_disabled = '';
     $remote_user_edit = 0;
+
     if (($_CONF['user_login_method']['openid'] ||
       $_CONF['user_login_method']['3rdparty'] ||
-      $_CONF['user_login_method']['oauth'] ) && $U['account_type'] & REMOTE_USER /*$allow_remote_user */) {
+      $_CONF['user_login_method']['oauth'] ) ) { // && $U['account_type'] & REMOTE_USER /*$allow_remote_user */) {
         $modules = array();
+
         if ($U['account_type'] & REMOTE_USER) { //  ($U['remoteusername'] != '' && $U['remoteservice'] != '') || $U['remoteuser'] == 1) {
             $remote_user_checked = ' checked="checked"';
             $pwd_disabled = ' disabled="disabled"';
@@ -430,7 +427,7 @@ function USER_accountPanel($U,$newuser = 0)
             }
         }
         $service_select .= '</select>'.LB;
-        $userform->set_var('remoteusername',htmlspecialchars($U['remoteusername'],ENT_NOQUOTES,COM_getEncodingt()));
+        $userform->set_var('remoteusername',@htmlspecialchars($U['remoteusername'],ENT_NOQUOTES,COM_getEncodingt()));
         $userform->set_var('remoteservice_select',$service_select);
         $userform->set_var('remote_user_checked',$remote_user_checked);
         $userform->set_var('remote_user_display',$remote_user_display);
@@ -439,9 +436,9 @@ function USER_accountPanel($U,$newuser = 0)
         $userform->set_var('lang_remoteusername',$LANG04[164]);
         $userform->set_var('lang_remoteservice',$LANG04[165]);
         $userform->set_var('lang_remoteuserdata',$LANG04[166]);
-        if ( $remote_user_edit == 1 ) {
+//        if ( $remote_user_edit == 1 ) {
             $userform->set_var('remote_user_disabled',' disabled="disabled"');
-        }
+//        }
         if ( !($U['account_type'] & LOCAL_USER) ) {
             $userform->set_var('pwd_disabled',$pwd_disabled);
         }
@@ -451,6 +448,7 @@ function USER_accountPanel($U,$newuser = 0)
         $userform->set_var('remoteservice_select','');
         $userform->set_var('remote_user_checked',$remote_user_checked);
         $userform->set_var('remote_user_display',$remote_user_display);
+        $userform->set_var('remote_user_disabled',' disabled="disabled"');
     }
 
 
@@ -459,7 +457,7 @@ function USER_accountPanel($U,$newuser = 0)
     $selection .= '</select>';
 
     $userform->set_var('cooktime_selector', $selection);
-    $userform->set_var('email_value', htmlspecialchars ($U['email']));
+    $userform->set_var('email_value', @htmlspecialchars ($U['email'],ENT_NOQUOTES,COM_getEncodingt()));
 
     $statusarray = array(USER_ACCOUNT_AWAITING_ACTIVATION   => $LANG28[43],
                          USER_ACCOUNT_AWAITING_VERIFICATION => $LANG28[16],
@@ -561,7 +559,7 @@ function USER_groupPanel($U, $newuser = 0)
                           'inline' => true
         );
 
-        $sql = "SELECT grp_id, grp_name, grp_descr, grp_gl_core	FROM {$_TABLES['groups']} WHERE " . $where;
+        $sql = "SELECT grp_id, grp_name, grp_descr, grp_gl_core, " . $U['account_type'] . " AS account_type FROM {$_TABLES['groups']} WHERE " . $where;
         $query_arr = array('table' => 'groups',
                            'sql' => $sql,
                            'query_fields' => array('grp_name'),
@@ -618,11 +616,11 @@ function USER_userinfoPanel($U, $newuser = 0)
         $userform->set_var('lang_userphoto',$LANG04[77]);
     }
 
-    $userform->set_var('homepage_value',htmlspecialchars (COM_killJS ($U['homepage'])));
-    $userform->set_var('location_value',htmlspecialchars (strip_tags ($U['location'])));
-    $userform->set_var('signature_value',htmlspecialchars ($U['sig']));
-    $userform->set_var('about_value', htmlspecialchars ($U['about']));
-    $userform->set_var('pgpkey_value', htmlspecialchars ($U['pgpkey']));
+    $userform->set_var('homepage_value',@htmlspecialchars (COM_killJS ($U['homepage']),ENT_NOQUOTES,COM_getEncodingt()));
+    $userform->set_var('location_value',@htmlspecialchars (strip_tags ($U['location']),ENT_NOQUOTES,COM_getEncodingt()));
+    $userform->set_var('signature_value',@htmlspecialchars ($U['sig'],ENT_NOQUOTES,COM_getEncodingt()));
+    $userform->set_var('about_value', @htmlspecialchars ($U['about'],ENT_NOQUOTES,COM_getEncodingt()));
+    $userform->set_var('pgpkey_value', @htmlspecialchars ($U['pgpkey'],ENT_NOQUOTES,COM_getEncodingt()));
 
     if ($_CONF['allow_user_photo'] == 1) {
         if ( !empty($uid) && $uid > 1 ) {
@@ -1149,7 +1147,7 @@ function USER_getGroupListField($fieldname, $fieldvalue, $A, $icon_arr, $al_sele
                         . '<input type="hidden" name="groups[]" value="'
                         . $A['grp_id'] . '"' . $checked . '/>';
             } else {
-                if ( $A['grp_gl_core'] > 0 && !SEC_isLocalUser($uid) ) {
+                if ( $A['grp_gl_core'] > 0 && !($A['account_type'] & LOCAL_USER) /*!SEC_isLocalUser($uid) */ ) {
                     $checked = ' disabled="disabled"';
                 }
                 $retval = '<input type="checkbox" name="groups[]" value="'
@@ -1469,8 +1467,8 @@ function USER_save($uid)
     $fullname       = COM_truncate(trim(USER_sanitizeName($_POST['fullname'])),80);
     $userstatus     = COM_applyFilter($_POST['userstatus'],true);
     $oldstatus      = COM_applyFilter($_POST['oldstatus'],true);
-    $passwd         = (isset($_POST['passwd'])) ? trim($_POST['passwd']) : '';
-    $passwd_conf    = (isset($_POST['passwd_conf']) ) ? trim($_POST['passwd_conf']) : '';
+    $passwd         = (isset($_POST['newp'])) ? trim($_POST['newp']) : '';
+    $passwd_conf    = (isset($_POST['newp_conf']) ) ? trim($_POST['newp_conf']) : '';
     $cooktime       = COM_applyFilter($_POST['cooktime'],true);
     $email          = trim($_POST['email']);
     $email_conf     = trim($_POST['email_conf']);
@@ -1847,6 +1845,8 @@ function USER_save($uid)
 
         if ( $newuser == 0 ) {
             PLG_profileSave('',$uid);
+        } else {
+            PLG_createUser( $uid );
         }
 
         if ($userChanged) {
@@ -2525,8 +2525,8 @@ switch($action) {
 
             $username = (isset($_POST['username']) ? trim($_POST['username']) : '');
             $fullname = (isset($_POST['fullname']) ? $_POST['fullname'] : '');
-            $passwd   = (isset($_POST['passwd'])   ? trim($_POST['passwd']) : '');
-            $passwd_conf = (isset($_POST['passwd_conf']) ? trim($_POST['passwd_conf']) : '');
+            $passwd   = (isset($_POST['newp'])   ? trim($_POST['newp']) : '');
+            $passwd_conf = (isset($_POST['newp_conf']) ? trim($_POST['newp_conf']) : '');
             $email = (isset($_POST['email']) ? trim($_POST['email']) : '');
             $regdate = (isset($_POST['regdate']) ? $_POST['regdate'] : '');
             $homepage = (isset($_POST['homepage']) ? $_POST['homepage'] : '');

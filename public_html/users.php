@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2011 by the following authors:                        |
+// | Copyright (C) 2009-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -382,7 +382,8 @@ function emailpassword ($username, $passwd = '', $msg = 0)
 
     $username = DB_escapeString ($username);
     // don't retrieve any remote users!
-    $result = DB_query ("SELECT uid,email,status FROM {$_TABLES['users']} WHERE username = '".$username."' AND ((remoteservice is null) OR (remoteservice = ''))");
+//    $result = DB_query ("SELECT uid,email,status FROM {$_TABLES['users']} WHERE username = '".$username."' AND ((remoteservice is null) OR (remoteservice = ''))");
+    $result = DB_query ("SELECT uid,email,status FROM {$_TABLES['users']} WHERE username = '".$username."' AND (account_type & ".LOCAL_USER.")");
     $nrows = DB_numRows ($result);
     if ($nrows == 1) {
         $A = DB_fetchArray ($result);
@@ -428,7 +429,8 @@ function requestpassword ($username, $msg = 0)
 
     // no remote users!
     $username = DB_escapeString($username);
-    $result = DB_query ("SELECT uid,email,passwd,status FROM {$_TABLES['users']} WHERE username = '".$username."' AND ((remoteservice IS NULL) OR (remoteservice=''))");
+//    $result = DB_query ("SELECT uid,email,passwd,status FROM {$_TABLES['users']} WHERE username = '".$username."' AND ((remoteservice IS NULL) OR (remoteservice=''))");
+    $result = DB_query ("SELECT uid,email,passwd,status FROM {$_TABLES['users']} WHERE username = '".$username."' AND (account_type & ".LOCAL_USER.")");
     $nrows = DB_numRows ($result);
     if ($nrows == 1) {
         $A = DB_fetchArray ($result);
@@ -524,7 +526,8 @@ function requesttoken ($uid, $msg = 0)
     $retval = '';
     // no remote users!
     $uid = (int) $uid;
-    $result = DB_query ("SELECT uid,username,email,passwd,status FROM {$_TABLES['users']} WHERE uid = ".(int)$uid." AND ((remoteservice IS NULL) OR (remoteservice=''))");
+//    $result = DB_query ("SELECT uid,username,email,passwd,status FROM {$_TABLES['users']} WHERE uid = ".(int)$uid." AND ((remoteservice IS NULL) OR (remoteservice=''))");
+    $result = DB_query ("SELECT uid,username,email,passwd,status FROM {$_TABLES['users']} WHERE uid = ".(int)$uid." AND (account_type & ".LOCAL_USER.")");
     $nrows = DB_numRows ($result);
     if ($nrows == 1) {
         $A = DB_fetchArray ($result);

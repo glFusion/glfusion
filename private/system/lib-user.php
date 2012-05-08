@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2011 by the following authors:                        |
+// | Copyright (C) 2009-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -243,7 +243,7 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
     $to   = COM_formatEmailAddress( $username,$useremail );
     $subject    = COM_undoSpecialChars(strip_tags($subject));
 
-    return COM_mail ($to, $subject, $mailtext, $from);
+    return COM_mail ($to, $subject, $mailtext, $from,true);
 }
 
 function USER_createActivationToken($uid,$username)
@@ -423,7 +423,6 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
     if ( function_exists('CUSTOM_userCreateHook') ) {
         CUSTOM_userCreateHook($uid);
     }
-    PLG_createUser ($uid);
 
     // Notify the admin?
     if (isset ($_CONF['notification']) &&
@@ -527,19 +526,21 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
 
         $img = '';
         if (empty ($photo) || ($photo == '(none)') || $photo == '' ) {
-            // no photo - try gravatar.com, if allowed
+           // no photo - try gravatar.com, if allowed
             if ($_CONF['use_gravatar']) {
-                $img = 'http://www.gravatar.com/avatar.php?gravatar_id='
-                     . md5 ($email);
+                $img = 'http://www.gravatar.com/avatar/'.md5( $email );
+                $url_parms = array();
                 if ($width > 0) {
-                    $img .= '&amp;size=' . $width;
+                    $url_parms[] = 's=' . $width;
                 }
-                if (!empty ($_CONF['gravatar_rating'])) {
-                    $img .= '&amp;rating=' . $_CONF['gravatar_rating'];
+                if ( ! empty($_CONF['gravatar_rating']) ) {
+                    $url_parms[] = 'r=' . $_CONF['gravatar_rating'];
                 }
-                if (!empty ($_CONF['default_photo'])) {
-                    $img .= '&amp;default='
-                         . urlencode ($_CONF['default_photo']);
+                if ( ! empty($_CONF['default_photo']) ) {
+                    $url_parms[] = 'd=' . urlencode($_CONF['default_photo']);
+                }
+                if (count($url_parms) > 0) {
+                    $img .= '?' . implode('&amp;', $url_parms);
                 }
             }
         } else {
