@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -68,6 +68,7 @@ if (isset ($_GET['page'])) {
 }
 
 $display = '';
+$pageBody = '';
 
 if (!$newstories && !$displayall) {
     // give plugins a chance to replace this page entirely
@@ -83,11 +84,9 @@ if ( $_CONF['rating_enabled'] != 0 ) {
     $ratedIds = RATING_getRatedIds('article');
 }
 
-$display .= COM_siteHeader();           // begin generating output: site header
+$pageBody .= glfusion_UpgradeCheck();
 
-$display .= glfusion_UpgradeCheck();
-
-$display .= glfusion_SecurityCheck();
+$pageBody .= glfusion_SecurityCheck();
 
 $msg = COM_getMessage();
 if ( $msg > 0 ) {
@@ -95,21 +94,21 @@ if ( $msg > 0 ) {
     if (isset ($_GET['plugin'])) {
         $plugin = COM_applyFilter ($_GET['plugin']);
     }
-    $display .= COM_showMessage ($msg, $plugin);
+    $pageBody .= COM_showMessage ($msg, $plugin);
 }
 
 // Show any Plugin formatted blocks
 // Requires a plugin to have a function called plugin_centerblock_<plugin_name>
 $displayBlock = PLG_showCenterblock (CENTERBLOCK_TOP, $page, $topic); // top blocks
 if (!empty ($displayBlock)) {
-    $display .= $displayBlock;
+    $pageBody .= $displayBlock;
     // Check if theme has added the template which allows the centerblock
     // to span the top over the rightblocks
     if (file_exists($_CONF['path_layout'] . 'topcenterblock-span.thtml')) {
             $topspan = new Template($_CONF['path_layout']);
             $topspan->set_file (array ('topspan'=>'topcenterblock-span.thtml'));
             $topspan->parse ('output', 'topspan');
-            $display .= $topspan->finish ($topspan->get_var('output'));
+            $pageBody .= $topspan->finish ($topspan->get_var('output'));
             $GLOBALS['centerspan'] = true;
     }
 }
@@ -282,22 +281,22 @@ if ( $A = DB_fetchArray( $result ) ) {
 
     // display first article
     if ($story->DisplayElements('featured') == 1) {
-        $display .= STORY_renderArticle ($story, 'y');
-        $display .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
+        $pageBody .= STORY_renderArticle ($story, 'y');
+        $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
     } else {
-        $display .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
-        $display .= STORY_renderArticle ($story, 'y');
+        $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
+        $pageBody .= STORY_renderArticle ($story, 'y');
     }
 
     // get remaining stories
     while ($A = DB_fetchArray ($result)) {
         $story = new Story();
         $story->loadFromArray($A);
-        $display .= STORY_renderArticle ($story, 'y');
+        $pageBody .= STORY_renderArticle ($story, 'y');
     }
 
     // get plugin center blocks that follow articles
-    $display .= PLG_showCenterblock (CENTERBLOCK_BOTTOM, $page, $topic); // bottom blocks
+    $pageBody .= PLG_showCenterblock (CENTERBLOCK_BOTTOM, $page, $topic); // bottom blocks
 
     // Print Google-like paging navigation
     if (!isset ($_CONF['hide_main_page_navigation']) ||
@@ -310,7 +309,7 @@ if ( $A = DB_fetchArray( $result ) ) {
         } else {
             $base_url = $_CONF['site_url'] . '/index.php?topic=' . $topic;
         }
-        $display .= COM_printPageNavigation ($base_url, $page, $num_pages);
+        $pageBody .= COM_printPageNavigation ($base_url, $page, $num_pages);
     }
 } else { // no stories to display
     $cbDisplay = '';
@@ -331,9 +330,11 @@ if ( $A = DB_fetchArray( $result ) ) {
             $cbDisplay .= COM_showMessageText($eMsg, $LANG05[1],true);
         }
     }
-    $display .= $cbDisplay;
+    $pageBody .= $cbDisplay;
 }
 
+$display = COM_siteHeader();
+$display .= $pageBody;
 $display .= COM_siteFooter (true); // The true value enables right hand blocks.
 
 // Output page
