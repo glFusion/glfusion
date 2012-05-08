@@ -82,7 +82,7 @@ if ( $_FM_CONF['enable_rating'] ) {
     }
 }
 if ($logourl != '') {
-    $p->set_var('snapshot_icon','<img src="'.$_CONF['site_url'] .'/filemgmt/images/screenshoticon.gif" width="14" height="14" alt="" border="0"' . XHTML . '>');
+    $p->set_var('snapshot_icon','<img src="'.$_CONF['site_url'] .'/filemgmt/images/screenshoticon.gif" width="14" height="14" alt="" border="0" />');
     $p->set_var('snapshot_url',$filemgmt_FileSnapURL . $logourl);
     $p->set_var('LANG_CLICK2SEE', _MD_CLICK2SEE.$logourl);
     $p->set_var('show_snapshoticon','');
