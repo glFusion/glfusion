@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -43,6 +43,8 @@ if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
     echo $display;
     exit;
 }
+
+$pageBody = '';
 
 require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
 MG_initAlbums();
@@ -835,8 +837,6 @@ if ( isset($_SERVER['HTTP_REFERER']) ) {
 
 $themeStyle = MG_getThemeCSS(0);
 
-$display  = MG_siteHeader($LANG_MG00['results'],$themeStyle);
-
 if (($mode == $LANG_MG01['search'] && !empty ($LANG_MG01['search'])) || $mode == 'search') {
     $keywords       = isset($_REQUEST['keywords']) ? COM_applyFilter($_REQUEST['keywords']) : '';
     $stype          = isset($_REQUEST['keyType']) ? COM_applyFilter($_REQUEST['keyType']) : '';
@@ -848,6 +848,7 @@ if (($mode == $LANG_MG01['search'] && !empty ($LANG_MG01['search'])) || $mode ==
     $sortdirection  = 'DESC';
 
     if ( $keywords == '' ) {
+        $display  = MG_siteHeader();
         $display .= MG_errorHandler( $LANG_MG03['search_error'] );
         $display .= MG_siteFooter();
         echo $display;
@@ -974,7 +975,7 @@ if (($mode == $LANG_MG01['search'] && !empty ($LANG_MG01['search'])) || $mode ==
     $sort_purge = time() - 3660; // 43200;
     DB_query("DELETE FROM {$_TABLES['mg_sort']} WHERE sort_datetime < " . $sort_purge);
 
-    $display .= MG_search($sort_id,1);
+    $pageBody .= MG_search($sort_id,1);
 
 } elseif ($mode == $LANG_MG01['cancel']) {
     echo COM_refresh ($_MG_CONF['site_url'] . '/index.php');
@@ -984,11 +985,13 @@ if (($mode == $LANG_MG01['search'] && !empty ($LANG_MG01['search'])) || $mode ==
     $page = COM_applyFilter($_GET['page'],true);
     if ( $page < 1 )
       $page = 1;
-    $display .= MG_search($id,$page);
+    $pageBody .= MG_search($id,$page);
 } else {
-    $display .= MG_displaySearchBox('');
+    $pageBody .= MG_displaySearchBox('');
 }
 
+$display  = MG_siteHeader($LANG_MG00['results']);
+$display .= $pageBody;
 $display .= MG_siteFooter();
 echo $display;
 

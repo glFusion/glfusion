@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -37,17 +37,27 @@ if (!in_array('mediagallery', $_PLUGINS)) {
 }
 
 if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
-    $display = MG_siteHeader();
+    $display  = MG_siteHeader();
     $display .= SEC_loginRequiredForm();
     $display .= COM_siteFooter();
     echo $display;
     exit;
 }
 
+
 require_once $_CONF['path'] . 'plugins/mediagallery/include/init.php';
-require_once $_CONF['path'] . 'plugins/mediagallery/include/mgindex.php';
+
+if ( isset($_MG_CONF['index_all']) && $_MG_CONF['index_all'] == 1 ) {
+    require_once $_CONF['path'] . 'plugins/mediagallery/include/mgindex-all.php';
+} else {
+    require_once $_CONF['path'] . 'plugins/mediagallery/include/mgindex.php';
+}
 
 MG_initAlbums();
 
-MG_index();
+if ($_MG_CONF['index_all'] == 1 ) {
+    MG_indexAll();
+} else {
+    MG_index();
+}
 ?>

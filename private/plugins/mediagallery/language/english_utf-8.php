@@ -729,6 +729,7 @@ $LANG_MG01 = array (
     'submissions'               => 'Media Gallery Submissions',
     'lightbox_image'            => 'Click for full image',
     'queued'                    => 'Queued for Moderator Approval',
+    'index_all'                 => 'Use Summary Index instead of standard album index',
 );
 
 // error messages

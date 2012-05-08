@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: mgindex.php 2869 2008-07-31 14:38:32Z mevans0263                  $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -497,11 +497,12 @@ function MG_index() {
     }
     $T->parse('output','page');
     $nCSS = $nFrame->getCSS();
-    $css = '';
     if ( $nCSS != '' ) {
-        $css = '<style type="text/css">'.$nCSS.'</style>';
+        $outputHandle = outputHandler::getInstance();
+        $outputHandle->addStyle($nCSS);
     }
-    $display .= MG_siteHeader($LANG_MG00['plugin'],$css);
+
+    $display .= MG_siteHeader($LANG_MG00['plugin']);
     $display .= $T->finish($T->get_var('output'));
     $display .= MG_siteFooter();
     echo $display;

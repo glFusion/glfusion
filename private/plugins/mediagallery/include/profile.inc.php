@@ -400,7 +400,7 @@ function _mg_profileedit($uid,$panel,$fieldset)
         if ( DB_numRows($result) > 0 ) {
             $_PREFS = DB_fetchArray($result);
         } else {
-            $_PREFS = array('mp3_player' => -1, 'playback_mod' => 1, 'tn_size' => -1, 'display_rows' => 0, 'display_columns' => 0);
+            $_PREFS = array('mp3_player' => -1, 'playback_mode' => 1, 'tn_size' => -1, 'display_rows' => 0, 'display_columns' => 0);
         }
     } else {
         $_PREFS = $_MG_USERPREFS;
@@ -552,7 +552,7 @@ function _mg_profilesave($uid = 0)
     }
     $active = 1;
     // Let's see if user exists in table already
-    $result = DB_query("SELECT * FROM ".$_TABLES['mg_userprefs']." WHERE uid=".$uid);
+    $result = DB_query("SELECT * FROM ".$_TABLES['mg_userprefs']." WHERE uid=".(int) $uid);
     if ( DB_numRows($result) > 0 ) {
         $row = DB_fetchArray($result);
         $quota = $row['quota'];

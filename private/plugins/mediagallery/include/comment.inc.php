@@ -100,7 +100,8 @@ function _mg_displaycomment($id,$commentid,$title,$order,$format,$page,$view)
     require_once $_CONF['path'].'plugins/mediagallery/include/lib-media.php';
     list($ptitle,$retval,$themeCSS,$album_id) =  MG_displayMediaImage( $id, 0, 0, 0 );
 
-    $retval = '<style type="text/css">' . LB . $themeCSS .'</style>' . LB . $retval;
+    $retval = $themeCSS . $retval;
+
     if (SEC_hasRights('mediagallery.admin')) {
         $delete_option = true;
     } else {
@@ -140,7 +141,7 @@ function _mg_savecomment($title,$comment,$id,$pid,$postmode)
     } else {
         $comments = DB_count ($_TABLES['comments'], array('sid','type'), array(DB_escapeString($id), 'mediagallery'));
         DB_change($_TABLES['mg_media'],'media_comments', $comments, 'media_id',DB_escapeString($id));
-        return (COM_refresh ($_MG_CONF['site_url'] . "/media.php?s=$id") );
+        return (COM_refresh ($_MG_CONF['site_url'] . "/media.php?s=$id#comments") );
     }
 }
 ?>

@@ -57,7 +57,7 @@ require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
 
 MG_initAlbums();
 
-$display = COM_siteHeader();
+// $display = COM_siteHeader();
 
 if ( ( !isset($_GET['aid'])) || (!isset($_GET['mid'])) ) {
     die("Invalid Input Received");

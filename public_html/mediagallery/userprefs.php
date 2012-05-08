@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -92,7 +92,6 @@ if ( $mode == $LANG_MG01['submit'] && !empty($LANG_MG01['submit']) ) {
 } else {
 
     $x = 0;
-    $display = MG_siteHeader();
 
     // let's see if anything is actually set...
     if ( !isset($_MG_USERPREFS['mp3_player']) ) {
@@ -181,8 +180,9 @@ if ( $mode == $LANG_MG01['submit'] && !empty($LANG_MG01['submit']) ) {
         'lang_cancel'           => $LANG_MG01['cancel'],
     ));
     $T->parse('output', 'admin');
-    $display .= $T->finish($T->get_var('output'));
 
+    $display = MG_siteHeader();
+    $display .= $T->finish($T->get_var('output'));
     $display .= MG_siteFooter();
     echo $display;
 }

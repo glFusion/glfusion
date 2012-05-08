@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -87,17 +87,7 @@ if ( isset($_REQUEST['p'])) {
 list($ptitle,$retval,$themeCSS,$album_id) = MG_displayMediaImage( $mediaObject, $full, $sortOrder,1,$sortID,$page );
 $themeStyle = MG_getThemeCSS($album_id);
 
-if ($themeCSS != '') {
-    $themeCSS = '<style type="text/css">'.$themeCSS.'</style>';
-}
-
-$permalink = COM_buildUrl($_MG_CONF['site_url'] . '/media.php?s='.$mediaObject);
-$headercode  = '<link rel="canonical" href="'.$permalink.'"/>' . LB;
-$headercode .= '<meta property="og:title" content="'.$ptitle.'" />' . LB;
-$headercode .= '<meta property="og:type" content="article" />' . LB;
-$headercode .= '<meta property="og:url" content="'.$permalink.'" />' . LB;
-
-$display = MG_siteHeader($ptitle,$headercode . $themeCSS);
+$display = MG_siteHeader($ptitle);
 
 if ( $msg != '' ) {
     $display .= COM_showMessage( $msg, 'mediagallery' );

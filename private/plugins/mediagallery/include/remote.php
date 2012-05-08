@@ -56,6 +56,7 @@ function MG_remoteUpload( $album_id ) {
     $album_selectbox .= '</select>';
 
     // build category list...
+    $catRow = array();
     $result = DB_query("SELECT * FROM {$_TABLES['mg_category']} ORDER BY cat_id ASC");
     $nRows = DB_numRows($result);
     for ( $i=0; $i < $nRows; $i++ ) {

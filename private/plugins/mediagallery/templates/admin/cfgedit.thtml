@@ -23,6 +23,15 @@
           <input type="radio" name="gallery_only" value="1" {gallery_only_yes_checked} />{lang_yes}
         </td>
       </tr>
+
+      <tr class="pluginRow2">
+        <td style="width:50%;" class="mgAdminAlignRight">{lang_index_all}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="radio" name="index_all" value="0" {index_all_no_checked} />{lang_no}&nbsp;&nbsp;
+          <input type="radio" name="index_all" value="1" {index_all_yes_checked} />{lang_yes}
+        </td>
+      </tr>
+
       <tr class="pluginRow1">
         <td style="width:50%;" class="mgAdminAlignRight">{lang_loginrequired}</td>
         <td class="mgAdminAlignLeft">

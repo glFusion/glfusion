@@ -82,6 +82,12 @@ function MG_editConfig( $msgString = '' ) {
 
     $dfid_select   = '<select name="dfid"><option value="99">' . $LANG_MG00['no_date'] . '</option>' . COM_optionList ($_TABLES['dateformats'], 'dfid,description',$_MG_CONF['dfid'],0) . '</select>';
 
+    if ( isset($_MG_CONF['index_all']) && $_MG_CONF['index_all'] == 1 ) {
+        $T->set_var('index_all_yes_checked', ' checked="checked"');
+    } else {
+        $T->set_var('index_all_no_checked', ' checked="checked"');
+    }
+
     if ($_MG_CONF['loginrequired'] == 1 ) {
         $T->set_var('lr_yes_checked', ' checked="checked"');
     } else {
@@ -547,6 +553,7 @@ function MG_editConfig( $msgString = '' ) {
         'lang_gallery_only'         => $LANG_MG01['gallery_only'],
         'lang_tnheight'			    => $LANG_MG01['tn_height'],
         'lang_tnwidth'			    => $LANG_MG01['tn_width'],
+        'lang_index_all'            => $LANG_MG01['index_all'],
         'gltoken_name'              => CSRF_TOKEN,
         'gltoken'                   => SEC_createToken(),
     ));
@@ -561,6 +568,7 @@ function MG_saveConfig( ) {
     global $display, $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG09;
 
     $gallery_only           = COM_applyFilter($_POST['gallery_only'],true);
+    $index_all              = COM_applyFilter($_POST['index_all'],true);
     $album_display_columns  = COM_applyFilter($_POST['albumdisplaycolumns'],true);
     $album_display_rows     = COM_applyFilter($_POST['albumdisplayrows'],true);
     $loginrequired          = COM_applyFilter($_POST['loginrequired'],true);
@@ -796,6 +804,7 @@ function MG_saveConfig( ) {
     DB_save($_TABLES['mg_config'],"config_name, config_value","'search_enable_views','$search_enable_views'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'search_enable_rating','$search_enable_rating'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'gallery_only','$gallery_only'");
+    DB_save($_TABLES['mg_config'],"config_name, config_value","'index_all','$index_all'");
 
     // now reset anything in the prefs that need to be reset...
 

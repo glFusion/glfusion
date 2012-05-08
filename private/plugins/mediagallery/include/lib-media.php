@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -33,8 +33,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
-//require_once $_CONF['path'].'plugins/mediagallery/include/classFrame.php';
 
 /*
  * Generate the prev and next links for media browsing.
@@ -1355,6 +1353,9 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
     global $_DB_dbms, $mgLightBox, $LANG04,$ratedIds;
 
     $retval = '';
+    $srcID  = $mediaObject;
+
+    $outputHandle = outputHandler::getInstance();
 
     $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_escapeString($mediaObject) . '"');
 
@@ -1414,7 +1415,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         $MG_albums[$aid]->enable_slideshow = 0;
     }
 
-
+    $themeCSS = '';
     $nFrame = new mgFrame();
     $nFrame->constructor( $MG_albums[$aid]->display_skin );
     $MG_albums[$aid]->displayFrameTemplate = $nFrame->getTemplate();
@@ -1422,22 +1423,45 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
     $MG_albums[$aid]->dfrHeight = $nFrame->frame['hVT'] + $nFrame->frame['hVB'];
     $themeCSS = $nFrame->getCSS();
 
+    if ($themeCSS != '') {
+        $outputHandle->addStyle($themeCSS);
+        $themeCSS = '';
+    }
+
 	$T = new Template( MG_getTemplatePath($aid) );
     switch ( $media[$mediaObject]['media_type'] ) {
     	case '0':		// image
     		$T->set_file('page','view_image.thtml');
+    		$ogType = 'article';
     		break;
     	case '1' :		// video
     	case '5' : 		// embedded video
     		$T->set_file('page','view_video.thtml');
+    		$ogType = 'video.movie';
     		break;
  		case '2' :		// audio
  			$T->set_file('page','view_audio.thtml');
+ 			$ogType = 'music.song';
  			break;
  		default:
  			$T->set_file('page','view_image.thtml');
+ 			$ogType = 'article';
  			break;
  	}
+
+    $ptitle = (isset($media[$mediaObject]['media_title']) && $media[$mediaObject]['media_title'] != ' ' ) ? PLG_replaceTags($media[$mediaObject]['media_title'],'mediagallery','media_title') : '';
+
+    $permalink = COM_buildUrl($_MG_CONF['site_url'] . '/media.php?s='.$srcID);
+    $outputHandle->addLink("canonical",$permalink);
+//    $themeCSS .= '<link rel="canonical" href="'.$permalink.'"/>' . LB;
+
+    $outputHandle->addMeta('property','og:title',$ptitle);
+//    $themeCSS .= '<meta property="og:title" content="'.$ptitle.'" />' . LB;
+    $outputHandle->addMeta('property','og:type',$ogType);
+//    $themeCSS .= '<meta property="og:type" content="'.$ogType.'" />' . LB;
+    $outputHandle->addMeta('property','og:url',$permalink);
+//    $themeCSS .= '<meta property="og:url" content="'.$permalink.'" />' . LB;
+    $T->set_var('permalink',$permalink);
     $T->set_file (array(
         'shutterfly'    => 'digibug.thtml',
     ));
@@ -1674,6 +1698,8 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
             }
         }
 
+//        $themeCSS .= '<meta property="og:image" content="'.$tnImage.'"/>' . LB;
+$outputHandle->addMeta('property','og:image',$tnImage);
         if ( $media_size_orig != false && $media_size_tn != false ) {
             $T->set_var(array(
                 'sf_height'             =>  $media_size_orig[1],
@@ -1698,6 +1724,27 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     $media_desc = PLG_replaceTags(nl2br($media[$mediaObject]['media_desc']),'mediagallery','media_description');
     if ( strlen($media_desc) > 0 ) {
+        USES_lib_html2text();
+        $metaDesc = $media_desc;
+        $metaDesc = strip_tags($metaDesc);
+        $html2txt = new html2text($metaDesc,false);
+        $metaDesc = trim($html2txt->get_text());
+        $shortComment = '';
+        $metaArray = explode(' ',$metaDesc);
+        $wordCount = count($metaArray);
+        $lengthCount = 0;
+        $tailString = '';
+        foreach ($metaArray AS $word) {
+            $lengthCount = $lengthCount + strlen($word);
+            $shortComment .= $word.' ';
+            if ( $lengthCount >= 100 ) {
+                $tailString = '...';
+                break;
+            }
+        }
+        $metaDesc = trim($shortComment).$tailString;
+$outputHandle->addMeta('name','description',htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()));
+//        $themeCSS .= '<meta name="description" content="'.htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()).'"/>' . LB;
         $media_desc .= '<br/><br/>';
     }
 
@@ -1928,9 +1975,9 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
                 } else {
                     $commode = '';
                 }
-                $valid_cmt_modes = array('flat','nested','nocomment','threaded');
+                $valid_cmt_modes = array('flat','nested','nocomment','nobar');
                 if ( !in_array($commode,$valid_cmt_modes) ) {
-                    $commode = '';
+                    $commode = 'nested';
                 }
                 $commentbar = CMT_userComments ($cid,$media[$mediaObject]['media_title'],
                               'mediagallery',$comorder,$commode,0,$page,false,$delete_option, 0, $media[$mediaObject]['media_user_id']);
@@ -1941,6 +1988,6 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         }
     }
 
-    return array(strip_tags($media[$mediaObject]['media_title']),$retval,$themeCSS,$aid);
+    return array(strip_tags($media[$mediaObject]['media_title']),$retval,'',$aid);
 }
 ?>

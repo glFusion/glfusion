@@ -305,12 +305,22 @@ function setCaption(text) {
         preload_photo(1);
         /* Start the show. */
 
+        function initSS () {
+            changeElementText("stopOrStartText", "{stop}");
+            onoff = 1;
+            status = "{ss_running}";
+            go_to_next_photo();
+        };
+        window.onload = initSS;
+
+/*
         window.addEvent('load', function () {
                                     changeElementText("stopOrStartText", "{stop}");
                                     onoff = 1;
                                     status = "{ss_running}";
                                     go_to_next_photo();
                                     });
+*/
         //]]>
         </script>
       </td>

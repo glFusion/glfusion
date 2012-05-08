@@ -6,7 +6,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -554,20 +554,27 @@ function plugin_getheadercss_mediagallery()
 
 function plugin_getheaderjs_mediagallery()
 {
-    global $_CONF, $_MG_CONF, $mgLightBox, $swfjsinclude,$themeStyle;
+    global $_CONF, $_MG_CONF, $_SYSTEM, $mgLightBox, $swfjsinclude,$themeStyle;
 
     $js = array();
 
     // the order is important here.  swfobject must be 'sandwiched' between
     // swfupload.js and swupload.swfobject.js.
+
     $js[] = $_MG_CONF['path_html'] . 'swfupload/swfupload.js';
     $js[] = $_MG_CONF['path_html'] . 'js/swfobject.js';
     $js[] = $_MG_CONF['path_html'] . 'swfupload/swfupload.swfobject.js';
+
     $js[] = $_MG_CONF['path_html'] . 'js/mediagallery.js';
-    if ( $_MG_CONF['disable_lightbox'] != true ) {
-        $js[] = $_MG_CONF['path_html'] . 'js/slimbox.js';
+
+    if ( !isset($_SYSTEM['disable_mootools']) || $_SYSTEM['disable_mootools'] == false ) {
+
+        if ( $_MG_CONF['disable_lightbox'] != true ) {
+            $js[] = $_MG_CONF['path_html'] . 'js/slimbox.js';
+        }
+        $js[] = $_MG_CONF['path_html'] . 'js/slideshow.js';
+
     }
-    $js[] = $_MG_CONF['path_html'] . 'js/slideshow.js';
 
 	return ($js);
 }

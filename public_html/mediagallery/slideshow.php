@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -58,7 +58,6 @@ $full        = COM_applyFilter(COM_getArgument('f'),true);
 $sortOrder   = COM_applyFilter(COM_getArgument('sort'),true);
 
 $themeStyle = MG_getThemeCSS($album_id);
-$display = MG_siteHeader(strip_tags($MG_albums[$album_id]->title));
 
 $T = new Template( MG_getTemplatePath($album_id) );
 $T->set_file (array(
@@ -70,6 +69,7 @@ $T->set_var('site_url',$_MG_CONF['site_url']);
 $T->set_var('plugin','mediagallery');
 
 if ($MG_albums[$album_id]->access == 0 ) {
+    $display = MG_siteHeader();
     $display .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
     $display .= MG_siteFooter();
     echo $display;
@@ -244,6 +244,7 @@ if ( $total_media > 0 ) {
 } else {
     $T->parse('output','empty');
 }
+$display = MG_siteHeader(strip_tags($MG_albums[$album_id]->title));
 $display .= $T->finish($T->get_var('output'));
 $display .= MG_siteFooter();
 

@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -129,14 +129,14 @@ if ($mode == $LANG_MG03['cancel']) {
     exit;
 }
 
-$display  = MG_siteHeader();
-
 if ($mode == $LANG_MG03['agree'] && !empty ($LANG_MG03['agree'])) {
-    $display .= MG_saveEnroll();
+    $pageBody = MG_saveEnroll();
 } else {
-    $display .= MG_enroll();
+    $pageBody = MG_enroll();
 }
 
+$display  = MG_siteHeader();
+$display .= $pageBody;
 $display .= MG_siteFooter();
 echo $display;
 ?>

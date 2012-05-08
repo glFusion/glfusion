@@ -610,6 +610,50 @@ function queueComplete(numFilesUploaded) {
 	}
 }
 
+var xmlhttp = null;
+
+function onAlbumChange() {
+  var aid_index = document.form_album.album_id.selectedIndex;
+  var aid = document.form_album.album_id.value;
+  var uid = "{user_id}";
+  var sid = "{user_token}";
+  var file_types = "{swfupload_file_types}";
+  var file_types_desc = "{swfupload_types_desc}";
+  var file_types_span = document.getElementById("swfu_file_types");
+  var size_limit_span = document.getElementById("swfu_size_limit");
+  var size_limit = "{swfupload_size_limit}";
+  var post_params = { "uid" : uid, "sid" : sid, "aid": aid };
+  var url = "{site_url}/album_rpc.php";
+  var query = "?aid=" + aid;
+
+  if ( aid_index == undefined ) {
+    aid_index = 1;
+  }
+
+  if (aid_index >= 0) {
+
+        xmlhttp = new XMLHttpRequest();
+
+        xmlhttp.open('GET', url + query, true);
+        xmlhttp.onreadystatechange = function() {
+           if (xmlhttp.readyState == 4) {
+
+                var response = xmlhttp.responseText.split( "%" );
+                size_limit_display = (response[0] / 1024 ) / 1024 + " M";
+                size_limit = response[0];
+                file_types = response[1];
+                swfu.setPostParams( post_params );
+                file_types_span.innerHTML = file_types;
+                swfu.setFileTypes( file_types, file_types_desc );
+                size_limit_span.innerHTML = size_limit_display;
+                swfu.setFileSizeLimit( size_limit );
+              }
+       };
+        xmlhttp.send(null);
+    }
+  return;
+}
+
 /* this is where all of the exciting things happen */
 
 var swfu;
@@ -666,48 +710,11 @@ var settings = {
     };
 
     swfu = new SWFUpload(settings);
+    onAlbumChange();
 });
 addLoadEvent(onAlbumChange);
 addLoadEvent(onAlbumChange);
 
-function onAlbumChange() {
-  var aid_index = document.form_album.album_id.selectedIndex;
-  var aid = document.form_album.album_id.value;
-  var uid = "{user_id}";
-  var sid = "{user_token}";
-  var file_types = "{swfupload_file_types}";
-  var file_types_desc = "{swfupload_types_desc}";
-  var file_types_span = document.getElementById("swfu_file_types");
-  var size_limit_span = document.getElementById("swfu_size_limit");
-  var size_limit = "{swfupload_size_limit}";
-  var post_params = { "uid" : uid, "sid" : sid, "aid": aid };
-  var url = "{site_url}/album_rpc.php";
-  var query = "aid=" + aid;
-
-  if (aid_index >= 0) {
-
-    /* retrieve the parameters that change on a per-album basis */
-
-    /* this is the mootools 1.1 XHR method */
-
-    var myXHR = new XHR( {
-      onSuccess: function() {
-        var responsetext = myXHR.response.text;
-        var response = responsetext.split( "%" );
-        size_limit_display = (response[0] / 1024 ) / 1024 + " M";
-        size_limit = response[0];
-        file_types = response[1];
-        swfu.setPostParams( post_params );
-        file_types_span.innerHTML = file_types;
-        swfu.setFileTypes( file_types, file_types_desc );
-        size_limit_span.innerHTML = size_limit_display;
-        swfu.setFileSizeLimit( size_limit );
-      }
-    }).send( url, query );
-
-  }
-  return;
-}
 
 </script>
 <div id="divSWFUploadMessage">
@@ -776,4 +783,6 @@ function onAlbumChange() {
 </div>
 <hr />
 <div style="float:right;">{jumpbox}</div>
+<script>onAlbumChange();</script>
+
 {# end {templatelocation} #}

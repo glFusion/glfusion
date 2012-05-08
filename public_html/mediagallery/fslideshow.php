@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -52,7 +52,7 @@ MG_initAlbums();
 */
 
 $album_id  = COM_applyFilter($_GET['aid'],true);
-$src       = COM_applyFilter($_GET['src']);
+$src       = isset($_GET['src']) ? COM_applyFilter($_GET['src']) : 'disp';
 $sortOrder = 0;
 if ( isset($_GET['sort'])) {
     $sortOrder = COM_applyFilter($_GET['sort'],true);
@@ -72,7 +72,6 @@ if ( $MG_albums[$album_id]->full == 2 || $_MG_CONF['discard_original'] == 1 || (
 }
 
 $themeStyle = MG_getThemeCSS($album_id);
-$display = MG_siteHeader(strip_tags($MG_albums[$album_id]->title),$themeStyle);
 
 $T = new Template( MG_getTemplatePath($album_id) );
 $T->set_file (array(
@@ -84,6 +83,7 @@ $T->set_var('site_url',$_MG_CONF['site_url']);
 $T->set_var('plugin','mediagallery');
 
 if ($MG_albums[$album_id]->access == 0 ) {
+    $display  = MG_siteHeader(strip_tags($MG_albums[$album_id]->title));
     $display .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
     $display .= MG_siteFooter();
     echo $display;
@@ -164,6 +164,7 @@ $T->set_var(array(
 
 $T->parse('output','page');
 
+$display = MG_siteHeader(strip_tags($MG_albums[$album_id]->title));
 $display .= $T->finish($T->get_var('output'));
 $display .= MG_siteFooter();
 

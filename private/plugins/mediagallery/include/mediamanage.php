@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: mediamanage.php 3070 2008-09-07 02:40:49Z mevans0263              $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -77,6 +77,7 @@ function MG_imageAdmin( $album_id, $page, $actionURL = '' ) {
 
     $result = DB_query("SELECT * FROM {$_TABLES['mg_category']} ORDER BY cat_id ASC");
     $nRows = DB_numRows($result);
+    $catRow = array();
     for ( $i=0; $i < $nRows; $i++ ) {
         $catRow[$i] = DB_fetchArray($result);
     }

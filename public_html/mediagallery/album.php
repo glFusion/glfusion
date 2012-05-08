@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -524,11 +524,17 @@ $subscribe = '';
 if ( !COM_isAnonUser() ) {
     if ( PLG_isSubscribed('mediagallery','',$album_id,$_USER['uid']) ) {
         $subscribe = '<a class="subscribelink" href="'.$_MG_CONF['site_url'].'/subscription.php?op=unsubscribe&amp;sid='.$album_id.'">'.$LANG01['unsubscribe'].'</a>';
+        $subscribe_url = $_MG_CONF['site_url'].'/subscription.php?op=unsubscribe&amp;sid='.$album_id;
+        $subscribe_text = $LANG01['unsubscribe'];
     } else {
         $subscribe = '<a class="subscribelink" href="'.$_MG_CONF['site_url'].'/subscription.php?op=subscribe&amp;sid='.$album_id.'">'.$LANG01['subscribe'].'</a>';
+        $subscribe_url = $_MG_CONF['site_url'].'/subscription.php?op=subscribe&amp;sid='.$album_id;
+        $subscribe_text = $LANG01['subscribe'];
     }
+    $T->set_var('subscribe', $subscribe);
+    $T->set_var('subscribe_url',$subscribe_url);
+    $T->set_var('subscribe_text',$subscribe_text);
 }
-$T->set_var('subscribe', $subscribe);
 
 PLG_templateSetVars('mediagallery',$T);
 
@@ -612,16 +618,17 @@ if ( $total_media > 0 ) {
 
 $T->parse('output','page');
 $themeStyle = MG_getThemeCSS($album_id);
-
+$outputHandle = outputHandler::getInstance();
 $fCSS= $nFrame->getCSS();
 if ($nFrame->name != $aFrame->name ) {
     $fCSS .= $aFrame->getCSS();
 }
 if ( $fCSS != '' ) {
-    $fCSS = '<style type="text/css">'.$fCSS.'</style>';
+//    $fCSS = '<style type="text/css">'.$fCSS.'</style>';
+    $outputHandle->addStyle($fCSS);
 }
 
-$display = MG_siteHeader(strip_tags($MG_albums[$album_id]->title),$fCSS);
+$display = MG_siteHeader(strip_tags($MG_albums[$album_id]->title),/*$fCSS*/'');
 
 $display .= $T->finish($T->get_var('output'));
 $display .= MG_siteFooter();

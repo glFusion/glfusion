@@ -1022,10 +1022,16 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                     if ( $newwidth > $maxwidth ) {
                         $maxwidth  = $newwidth;
                     }
+
+                    $active = '';
+                    if ( $counter == 1 ) {
+                        $active = ' active ';
+                    }
+
                     if ( $MG_albums[$parm1]->hidden == 1 || $enable_link == 0 ) {
-                        $pics .= '<img class="slideshowThumbnail' . $ss_count . '" src="' . $_MG_CONF['mediaobjects_url'] . '/' . $src . '/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $ext . '" alt="" style="width:' . $newwidth . 'px;height:' . $newheight . 'px;border:none;position:absolute;left:0px;top:0px;" />' . LB;
+                        $pics .= '<img class="slideshowThumbnail' . $ss_count . $active . '" src="' . $_MG_CONF['mediaobjects_url'] . '/' . $src . '/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $ext . '" alt="" style="width:' . $newwidth . 'px;height:' . $newheight . 'px;border:none;position:absolute;left:0px;top:0px;" />' . LB;
                     } else {
-                        $pics .= '<img class="slideshowThumbnail' . $ss_count . '" src="' . $_MG_CONF['mediaobjects_url'] . '/' . $src . '/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $ext . '" alt="" style="width:' . $newwidth . 'px;height:' . $newheight . 'px;border:none;position:absolute;left:0px;top:0px;" />' . LB;
+                        $pics .= '<img class="slideshowThumbnail' . $ss_count . $active .  '" src="' . $_MG_CONF['mediaobjects_url'] . '/' . $src . '/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $ext . '" alt="" style="width:' . $newwidth . 'px;height:' . $newheight . 'px;border:none;position:absolute;left:0px;top:0px;" />' . LB;
                     }
                 }
                 if ( $delay <= 0 ) {

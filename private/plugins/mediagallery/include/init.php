@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -42,7 +42,7 @@ function MG_quotaUsage( $uid ) {
     global $_MG_CONF, $_TABLES;
 
     $quota = 0;
-    $result = DB_query("SELECT album_disk_usage FROM {$_TABLES['mg_albums']} WHERE owner_id=" . intval($uid));
+    $result = DB_query("SELECT album_disk_usage FROM {$_TABLES['mg_albums']} WHERE owner_id=" . (int) $uid);
     while ($A=DB_fetchArray($result)) {
         $quota += $A['album_disk_usage'];
     }
@@ -52,7 +52,7 @@ function MG_quotaUsage( $uid ) {
 function MG_getUserQuota( $uid ) {
     global $_TABLES;
 
-    $result = DB_query("SELECT quota FROM {$_TABLES['mg_userprefs']} WHERE uid=" . intval($uid));
+    $result = DB_query("SELECT quota FROM {$_TABLES['mg_userprefs']} WHERE uid=" . (int) $uid);
     $nRows  = DB_numRows($result);
     if ( $nRows > 0 ) {
         $row = DB_fetchArray($result);
@@ -64,7 +64,7 @@ function MG_getUserQuota( $uid ) {
 function MG_getUserActive( $uid ) {
     global $_TABLES;
 
-    $result = DB_query("SELECT active FROM {$_TABLES['mg_userprefs']} WHERE uid=" . intval($uid));
+    $result = DB_query("SELECT active FROM {$_TABLES['mg_userprefs']} WHERE uid=" . (int) $uid);
     $nRows  = DB_numRows($result);
     if ( $nRows > 0 ) {
         $row = DB_fetchArray($result);
@@ -254,7 +254,7 @@ function MG_getTemplatePath( $aid, $path = '')
 }
 
 function MG_getThemeJS( $aid ) {
-    global $MG_albums, $_MG_CONF, $glversion;
+    global $MG_albums, $_MG_CONF;
 
     $js = '';
 
@@ -268,7 +268,7 @@ function MG_getThemeJS( $aid ) {
 }
 
 function MG_getThemeCSS( $aid ) {
-    global $MG_albums, $_MG_CONF, $glversion;
+    global $MG_albums, $_MG_CONF;
 
     $css = '';
     $css = MG_getThemeJS($aid);
