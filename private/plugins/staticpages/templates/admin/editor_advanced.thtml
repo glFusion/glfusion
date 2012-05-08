@@ -109,7 +109,7 @@
         </tr>
         <tr id="html_editarea" style="display:{show_htmleditor};">
             <td colspan="2" style="border:1px solid #CCC;">
-                <textarea id="html_content" name="sp_content" cols="45" rows="24" style="width:99%">{sp_content}</textarea>
+                <textarea id="html_content" name="sp_content" cols="45" rows="24" style="width:99%;font-family:courier new;font-size:1.2em;">{sp_content}</textarea>
                 <div class="warningsmall" style="padding:10px;">{lang_allowedhtml}</div>
             </td>
         </tr>
