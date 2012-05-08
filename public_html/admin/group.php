@@ -732,6 +732,8 @@ function GROUP_getListField1($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case 'grp_name':
+            $retval .= ucwords($fieldvalue);
+            /*
             $attr['title'] = $LANG_ACCESS['listusers'];
             $url = $_CONF['site_admin_url'] . '/user.php?grp_id=' . $A['grp_id'];
             $url .= ($showall) ? '&amp;chk_showall=1' : '';
@@ -739,6 +741,7 @@ function GROUP_getListField1($fieldname, $fieldvalue, $A, $icon_arr, $token)
             $retval .= '&nbsp;&nbsp;';
             $attr['style'] = 'vertical-align:top;';
             $retval .= COM_createLink(ucwords($fieldvalue), $url, $attr);
+            */
             break;
 
         case 'grp_gl_core':
