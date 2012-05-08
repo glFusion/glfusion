@@ -341,6 +341,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                         . $articleUrl . '" class="story-read-more-link">');
                 $article->set_var('end_readmore_anchortag', '</a>');
                 $article->set_var('read_more_class', 'class="story-read-more-link"');
+                $article->set_var('readmore_url',$articleUrl);
             }
 
             if(( $story->DisplayElements('commentcode') >= 0 ) and ( $show_comments )) {
@@ -386,6 +387,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                                        '<a href="' . $postCommentUrl
                                        . '" rel="nofollow">' );
                     $article->set_var( 'end_post_comment_anchortag', '</a>' );
+                    $article->set_var( 'post_comment_url', $postCommentUrl);
                 }
             }
 
