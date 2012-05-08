@@ -292,6 +292,8 @@ $LANG03 = array(
     44 => 'Post Date',
     45 => 'You are receiving this email because you have chosen to be notified when a new comment has been posted.',
     46 => 'To unsubscribe to this comment feed, please click this link: %s',
+    47 => 'Notify me via eMail when new comments or replies are posted for this item.',
+    48 => 'Click <a href="javascript:history.back()">here</a> to return',
 );
 
 ###############################################################################
@@ -1161,7 +1163,7 @@ $LANG29 = array(
     16 => 'Username',
     17 => 'Full Name',
     18 => 'eMail',
-    34 => 'Command & Control',
+    34 => 'Command &amp; Control',
     35 => 'Story Submissions',
     36 => 'Comment',
     37 => 'Time',
@@ -1913,7 +1915,6 @@ $LANG_commentcodes = array(
 $LANG_commentmodes = array(
     'flat' => 'Flat',
     'nested' => 'Nested',
-    'threaded' => 'Threaded',
     'nocomment' => 'No Comments'
 );
 
@@ -2672,7 +2673,7 @@ $LANG_configselects['Core'] = array(
     8 => array('Right' => 'right', 'Left' => 'left'),
     9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
     10 => array('Netpbm' => 'netpbm', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
-    11 => array('Flat' => 'flat', 'Nested' => 'nested', 'Threaded' => 'threaded', 'No Comments' => 'nocomment'),
+    11 => array('Flat' => 'flat', 'Nested' => 'nested', 'No Comments' => 'nocomment'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
     13 => array('Skip' => 0, 'Allow, with speedlimit' => 1, 'Allow, no speedlimit' => 2),
     14 => array('Sunday' => 'Sun', 'Monday' => 'Mon'),
