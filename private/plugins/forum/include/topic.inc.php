@@ -145,13 +145,11 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
                     $min_height = $min_height + 5;
                 }
                 $udt = new Date(strtotime($userarray['regdate']),$_USER['tzid']);
-                $regdate = $LANG_GF01['REGISTERED']. ': ' . $udt->format('m/d/y',true) . '<br/>';
-                $numposts = $LANG_GF01['POSTS']. ': ' .$posts;
+                $regdate = $udt->format('m/d/y',true) . '<br/>';
+                $numposts = $posts;
                 if ( DB_count( $_TABLES['sessions'], 'uid', (int) $showtopic['uid']) > 0 AND DB_getItem($_TABLES['userprefs'],'showonline',"uid=".(int) $showtopic['uid']."") == 1) {
-                    $avatar .= '<br/>' .$LANG_GF01['STATUS']. ' ' .$LANG_GF01['ONLINE'];
                     $onlinestatus = $LANG_GF01['ONLINE'];
                 } else {
-                    $avatar .= '<br/>' .$LANG_GF01['STATUS']. ' ' .$LANG_GF01['OFFLINE'];
                     $onlinestatus = $LANG_GF01['OFFLINE'];
                 }
                 $userarray['avatar'] = $avatar;
@@ -171,14 +169,13 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
         $userlink .= 'class="authorname '.$onetwo.'" rel="nofollow"><strong>'.$username.'</strong></a>';
         $uservalid = true;
         if ( $userarray['sig'] != '' || $userarray['signature'] != '' ) {
-            $sig  = '<hr style="width:95%;color=:black;text-align:left;margin-left:0; margin-bottom:5;padding:0" noshade="noshade"/>';
+            $sig = '';
             $sig .= FF_getSignature( $userarray['sig'],$userarray['signature'], 'html' );
             $min_height = $min_height + 30;
         }
     } else {
         $uservalid = false;
-        $userlink = '<strong>' .$showtopic['name']. '</strong>';
-        $userlink = '<font size="-2">' .$LANG_GF01['ANON']. '</font>' .$showtopic['name'];
+        $userlink = $LANG_GF01['ANON'].$showtopic['name'];
     }
 
     if ($_FF_CONF['show_moods'] &&  $showtopic['mood'] != "") {

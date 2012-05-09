@@ -348,15 +348,15 @@ function plugin_getheadercss_forum() {
 }
 
 function plugin_getheaderjs_forum() {
-    global $_CONF;
+    global $_CONF, $_SYSTEM;
 
     $js = array();
-    $js[] = $_CONF['path'] . 'plugins/forum/js/mootips.js';
+
     return($js);
 }
 
 function plugin_getheadercode_forum() {
-    global $_CONF, $_FF_CONF, $themeAPI;
+    global $_CONF, $_SYSTEM, $_FF_CONF, $themeAPI;
 
     $gf_header = '';
 
@@ -365,12 +365,6 @@ function plugin_getheadercode_forum() {
     }
 
     $gf_header .= '<style>'. file_get_contents($_CONF['path'] . 'plugins/forum/css/style.css') . '</style>';
-
-    $gf_header .= '<script type="text/javascript">' . LB;
-    $gf_header .= ' window.addEvent(\'load\', function() {' . LB;
-    $gf_header .= '     var gfTips = new Tips($$(\'.gf_mootip\'), { maxTitleChars: 50, className: \'gftool\' });' . LB;
-    $gf_header .= ' });' . LB;
-    $gf_header .= '</script>' . LB;
 
     return $gf_header;
 }
@@ -1023,6 +1017,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         if ( $retval ) {
             return $retval;
         }
+
         USES_lib_html2text();
         $block = new Template($_CONF['path'] . 'plugins/forum/templates/blocks/');
         $block->set_file ('block','centerblock.thtml');
@@ -1147,6 +1142,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         }
         $block->parse ('output', 'block');
         $retval .= $block->finish ($block->get_var ('output'));
+
         CACHE_create_instance($cacheInstance, $retval, 0);
     }
     return $retval;
@@ -1156,7 +1152,7 @@ $LANG_MYACCOUNT['pe_forumprefs'] = $LANG_GF92['forum_prefs'];
 
 function plugin_profileedit_forum($uid,$panel,$fieldset)
 {
-    global $_CONF, $_FF_CONF, $_TABLES, $_USER, $LANG_GF01,$LANG_GF02,$LANG_GF92;
+    global $_CONF, $_FF_CONF, $FF_userprefs, $_TABLES, $_USER, $LANG_GF01,$LANG_GF02,$LANG_GF92;
 
     $retval = '';
 

@@ -9,28 +9,6 @@
   margin: 0px;
   padding: 0px;
 }
-.gftool-tip {
-  color:#fff;
-  width:200px;
-  overflow:hidden;
-  z-index:13000;
-}
-
-.gftool-title {
-  font-weight:700;
-  font-size:11px;
-  color:#679EF1;
-  background:url(forum/images/gl_mootip_bg200.png) top left;
-  margin:0;
-  padding:8px 8px 4px;
-}
-
-.gftool-text {
-  font-size:11px;
-  background:url(forum/images/gl_mootip_bg200.png) bottom right;
-  padding:4px 8px 8px;
-}
-
 .top-link {
   float:right;
 }

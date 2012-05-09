@@ -621,7 +621,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         } else {
             $notify_val = '';
         }
-        $notify_prompt = $LANG_GF02['msg38']. '<br/><input type="checkbox" name="notify" ' .$notify_val. '/>';
+        $notify_prompt = $LANG_GF02['msg38']. '<br/><input type="checkbox" name="notify" value="on" ' . $notify_val. '/>';
 
         // check that this is the parent topic - only able to make it skicky or locked
         if ( !isset($postData['pid']) || $postData['pid'] == 0 ) {

@@ -635,6 +635,7 @@ if ($forum > 0) {
     if (!COM_isAnonUser()) {
         $link = '<a href="'.$_CONF['site_url'].'/forum/index.php?op=markallread&amp;cat_id='.$category['id'].'&amp;forum_id='.(int)$forum.'">';
         $topiclisting->set_var (array(
+                'markreadurl'   => $_CONF['site_url'].'/forum/index.php?op=markallread&amp;cat_id='.$category['id'].'&amp;forum_id='.(int)$forum,
                 'markreadlink'  => $link,
                 'LANG_markread' => $LANG_GF02['msg84']
         ));
@@ -710,7 +711,7 @@ if ($forum > 0) {
                     $displaypageslink .= '</a>';
                     break;
                 }
-                $displaypageslink .= '&nbsp';
+                $displaypageslink .= '&nbsp;';
             }
         }
 
