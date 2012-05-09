@@ -688,18 +688,27 @@ function MG_indexAll()
 
     $orderBy = ' ORDER BY m.media_upload_time '.$sortOrder;
 
-    $sql = "SELECT COUNT(*) AS total FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
-            " ON ma.media_id=m.media_id WHERE ma.album_id IN (".$albumList.") " . $orderBy;
-    $result = DB_query($sql);
-    $row    = DB_fetchArray($result);
-    $cCount = $row['total'];
+    if ( $albumList != '' ) {
+        $sql = "SELECT COUNT(*) AS total FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
+                " ON ma.media_id=m.media_id WHERE ma.album_id IN (".$albumList.") " . $orderBy;
+        $result = DB_query($sql);
+        $row    = DB_fetchArray($result);
+        $cCount = $row['total'];
+    } else {
+        $cCount = 0;
+    }
 
-    $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
-            " ON ma.media_id=m.media_id WHERE ma.album_id IN (".$albumList.") " . $orderBy;
-    $sql .= ' LIMIT ' . $begin . ',' . $end;
+    if ( $albumList != '' ) {
 
-    $result = DB_query( $sql );
-    $nRows  = DB_numRows( $result );
+        $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
+                " ON ma.media_id=m.media_id WHERE ma.album_id IN (".$albumList.") " . $orderBy;
+        $sql .= ' LIMIT ' . $begin . ',' . $end;
+
+        $result = DB_query( $sql );
+        $nRows  = DB_numRows( $result );
+    } else {
+        $nRows = 0;
+    }
     $mediaRows = 0;
     $lbss_count = 0;
     $posCount = 0;
