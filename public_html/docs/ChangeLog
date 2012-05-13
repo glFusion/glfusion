@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.3.0
 ------
+- Fixed hard-coded admin url reference (Eric)
 - Improved comment entry / viewing (Mark)
 - Removed 'View Members' option from group editor (Mark)
 - User admin / profile editor - reworked the password form fields to
