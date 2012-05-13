@@ -17,7 +17,7 @@ window.addEvent('domready',function() {
 </div>
 
 <div class="clearboth" style="min-width:600px;">
-  <form id="profileform" name="profileform" action="{site_url}/admin/user.php" method="post" {enctype}>
+  <form id="profileform" name="profileform" action="{site_admin_url}/user.php" method="post" {enctype}>
     {account_panel}
     {group_panel}
     {userinfo_panel}
