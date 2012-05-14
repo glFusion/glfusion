@@ -410,7 +410,7 @@ function applyPreferences()
     }
 
     COM_setMessage(501);
-    echo COM_refresh($_CONF['site_url'].'/admin/user.php');
+    echo COM_refresh($_CONF['site_admin_url'].'/user.php');
     exit;
 }
 
