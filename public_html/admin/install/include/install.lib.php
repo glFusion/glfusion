@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric Warren            eric AT glfusion DOT org                          |
@@ -1017,27 +1017,28 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $autotag_admin_ft_id = 0;
             $autotag_php_ft_id   = 0;
             $autotag_group_id    = 0;
-            $result = DB_query("SELECT * FROM {$_TABLES['features']} WHERE ft_name='autotag.admin'");
-            if ( DB_numRows($result) == 0 ) {
+
+            $tmp_admin_ft_id = DB_getItem ($_TABLES['features'], 'ft_id',"ft_name = 'autotag.admin'");
+            if (empty ($tmp_admin_ft_id)) {
                 DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('autotag.admin','Ability to create / edit autotags',1)",1);
                 $autotag_admin_ft_id  = DB_insertId();
             }
-            $result = DB_query("SELECT * FROM {$_TABLES['features']} WHERE ft_name='autotag.PHP'");
-            if ( DB_numRows($result) == 0 ) {
+            $tmp_php_ft_id = DB_getItem ($_TABLES['features'], 'ft_id',"ft_name = 'autotag.PHP'");
+            if (empty ($tmp_php_ft_id)) {
                 DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('autotag.PHP','Ability to create / edit autotags utilizing PHP functions',1)",1);
                 $autotag_php_ft_id  = DB_insertId();
             }
             // now check for the group
             $result = DB_query("SELECT * FROM {$_TABLES['groups']} WHERE grp_name='Autotag Admin'");
             if ( DB_numRows($result) == 0 ) {
-                DB_query("INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr, grp_gl_core, grp_default) VALUES ('Autotag Admin','Has full access to create and modify autotags',1,0)",1);
+                DB_query("INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr, grp_gl_core, grp_default) VALUES ('Autotag Admin','Has full access to create and modify autotags',1,0)");
                 $autotag_group_id  = DB_insertId();
             }
             if ( $autotag_admin_ft_id != 0 && $autotag_group_id != 0 ) {
-                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (".$autotag_admin_ft_id.",".$autotag_group_id.")",1);
+                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (".$autotag_admin_ft_id.",".$autotag_group_id.")");
             }
             if ( $autotag_php_ft_id != 0 && $autotag_group_id != 0 ) {
-                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (".$autotag_php_ft_id.",".$autotag_group_id.")",1);
+                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (".$autotag_php_ft_id.",".$autotag_group_id.")");
             }
             if ( $autotag_group_id != 0 ) {
                 DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_grp_id) VALUES (".$autotag_group_id.",1)");
@@ -1089,6 +1090,8 @@ function INST_doPrePluginUpgrade()
         case '1.2.0' :
         case '1.2.1' :
         case '1.2.2' :
+            require_once $_CONF['path_system'].'lib-install.php';
+
             // move sitetailor data over
             $complete = DB_getItem($_TABLES['vars'],'value','name="stcvt"');
             if ( $complete != 1 ) {
@@ -1103,6 +1106,48 @@ function INST_doPrePluginUpgrade()
                     DB_query("INSERT INTO {$_TABLES['menu_elements']} SELECT * FROM {$_TABLES['st_menu_elements']}");
                     DB_query("UPDATE {$_TABLES['plugins']} SET pi_enabled=0 WHERE pi_name='sitetailor'",1);
                     DB_query("INSERT INTO {$_TABLES['vars']} (name,value) VALUES ('stcvt','1')",1);
+
+                    $remvars = array (
+                        /* give the name of the tables, without $_TABLES[] */
+                        'tables' => array('st_config','st_menus','st_menu_config','st_menu_elements'),
+                        /* give the full name of the group, as in the db */
+                        'groups' => array('sitetailor Admin'),
+                        /* give the full name of the feature, as in the db */
+                        'features' => array('sitetailor.admin'),
+                        /* give the full name of the block, including 'phpblock_', etc */
+                        'php_blocks' => array(''),
+                        /* give all vars with their name */
+                        'vars'=> array()
+                    );
+                    // removing tables
+                    for ($i=0; $i < count($remvars['tables']); $i++) {
+                        DB_query ("DROP TABLE {$_TABLES[$remvars['tables'][$i]]}", 1    );
+                    }
+                    // removing variables
+                    for ($i = 0; $i < count($remvars['vars']); $i++) {
+                        DB_delete($_TABLES['vars'], 'name', $remvars['vars'][$i]);
+                    }
+                    // removing groups
+                    for ($i = 0; $i < count($remvars['groups']); $i++) {
+                        $grp_id = DB_getItem ($_TABLES['groups'], 'grp_id',
+                                              "grp_name = '{$remvars['groups'][$i]}'");
+                        if (!empty ($grp_id)) {
+                            DB_delete($_TABLES['groups'], 'grp_id', $grp_id);
+                            DB_delete($_TABLES['group_assignments'], 'ug_main_grp_id', $grp_id);
+                        }
+                    }
+                    // removing features
+                    for ($i = 0; $i < count($remvars['features']); $i++) {
+                        $access_id = DB_getItem ($_TABLES['features'], 'ft_id',"ft_name = '{$remvars['features'][$i]}'");
+                        if (!empty ($access_id)) {
+                            DB_delete($_TABLES['access'], 'acc_ft_id', $access_id);
+                            DB_delete($_TABLES['features'], 'ft_name', $remvars['features'][$i]);
+                        }
+                    }
+                    if ($c->group_exists('sitetailor')) {
+                        $c->delGroup('sitetailor');
+                    }
+                    DB_delete($_TABLES['plugins'], 'pi_name', 'sitetailor');
                 }
             }
 
@@ -1113,14 +1158,13 @@ function INST_doPrePluginUpgrade()
                 DB_query("INSERT INTO {$_TABLES['autotags']} SELECT * FROM " . $_TABLES['am_autotags'],1);
 
                 // delete the old autotag plugin
-                require_once $_CONF['path_system'].'lib-install.php';
                 $remvars = array (
                     /* give the name of the tables, without $_TABLES[] */
                     'tables' => array ( 'am_autotags' ),
                     /* give the full name of the group, as in the db */
                     'groups' => array('AutoTag Users'),
                     /* give the full name of the feature, as in the db */
-                    'features' => array('autotag.admin', 'autotag.PHP'),
+                    'features' => array(),
                     /* give the full name of the block, including 'phpblock_', etc */
                     'php_blocks' => array(),
                     /* give all vars with their name */
@@ -1158,6 +1202,7 @@ function INST_doPrePluginUpgrade()
                     $c->delGroup('autotag');
                 }
                 DB_delete($_TABLES['plugins'], 'pi_name', 'autotag');
+
             } else {
                 $_DATA = array();
                 $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('cipher', '{$LANG_AM['desc_cipher']}', 1, 1, NULL)";
