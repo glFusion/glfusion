@@ -507,3 +507,143 @@ a.SWFUProgressCancel:hover {
 }
 
 /* end of SWF-based multiple file upload */
+
+/* new styles for glfusion 1.3.0 */
+
+
+.gainlayout { zoom: 1; }
+.gainlayout { min-height: 0; }
+
+.center {
+    margin:auto 0;
+    text-align:center;
+}
+
+.image {
+    padding-top:20px;
+    padding-bottom:20px;
+}
+
+.album {
+    padding:10px;
+}
+
+.album input {
+    margin:0;
+    padding:0;
+}
+
+.album-body {
+    text-align:center;
+    overflow:auto;
+    display:block;
+    margin:auto;
+}
+
+.item {
+    text-align:center;
+    margin:auto 0;
+    height:25em;
+    width:20em;
+    float:left;
+    border:none;
+    padding:5px;
+}
+
+.item table {
+    margin:auto;
+}
+
+.mg-matrix table {
+    width:100%;
+    border:1px solid black;
+    text-align:center;
+}
+
+.mediacell {
+    height:15em;
+}
+
+.mediacell table {
+    margin:auto;
+}
+
+.item table {
+    margin:auto;
+}
+
+.out {
+    margin:auto;
+}
+
+.clear {
+    clear:both;
+}
+
+.album-header {
+
+}
+
+.title-line {
+    display:table;
+    width:100%;
+    background:#4D77CC;
+    color:white;
+    padding:5px;
+    overflow:auto;
+}
+
+.title-line input {
+    padding:0;
+    margin:0;
+}
+
+.album-items {
+    display:table;
+    width:100%;
+    margin:auto 0;
+    text-align:center;
+}
+
+
+.album-title {
+    font-weight: 700;
+    font-size:1.1em;
+}
+
+.album-header .breadcrumb {
+    padding:5px;
+    font-size:1.01em;
+}
+
+.album-header .controls,
+.album-footer .controls {
+    display:table;
+    width:100%;
+    background:#eee;
+    padding:5px;
+    height: 100%;
+}
+
+.controls form {
+display: inline;
+}
+
+.album-footer .pages {
+    display:table;
+    width:100%;
+    background:#4D77CC;
+    color:white;
+    padding:5px;
+    text-align:center;
+    font-weight:700;
+    height: 100%;
+}
+
+.album-items {
+    margin:0;
+    padding:0;
+}
+
+/* end of new styles */
+
