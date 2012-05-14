@@ -1726,7 +1726,7 @@ function PLG_collectTags($namespace='',$operation='')
     //                        'tag'   => 'module'
     $autolinkModules = array();
 
-    $coreTags = array ('story' => 'glfusion','story_introtext' => 'glfusion', 'showblock' => 'glfusion','hmenu' => 'glfusion', 'vmenu' => 'glfusion');
+    $coreTags = array ('story' => 'glfusion','story_introtext' => 'glfusion', 'showblock' => 'glfusion','hmenu' => 'glfusion', 'vmenu' => 'glfusion', 'menu' => 'glfusion');
     foreach ($coreTags as $tag => $pi_name) {
         $permCheck = $tag.$postFix;
         if ( empty($postFix) || !isset($autoTagPerms[$permCheck]) || $autoTagPerms[$permCheck] == 1 ) {
@@ -2055,6 +2055,15 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
                         } else {
                             $content = str_replace($autotag['tagstr'],'',$content);
                         }
+                    }
+/* ---
+  New menu auto tag
+  --- */
+                    if ( $autotag['tag'] == 'menu' ) {
+                        $menu = '';
+                        $menuID = trim($autotag['parm1']);
+                        $menuHTML = mb_getMenu($menuID,'','','','','','',1);
+                        $content = str_replace($autotag['tagstr'],$menuHTML,$content);
                     }
                     if ( $autotag['tag'] == 'hmenu' ) {
                         $menu = '';

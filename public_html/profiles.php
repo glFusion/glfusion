@@ -290,7 +290,7 @@ function contactform ($uid, $subject = '', $message = '')
             $retval .= $mail_template->finish ($mail_template->get_var ('output'));
             $retval .= COM_endBlock ();
         } else {
-            $retval = COM_showMessageText($LANG08[35],$LANG08[10],false);
+            $retval = COM_showMessageText($LANG08[35],$LANG08[10],false,'error');
         }
     }
 
@@ -462,7 +462,7 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
     }
 
     if ($msg > 0) {
-        $retval .= COM_showMessage ($msg);
+        $retval .= COM_showMessage ($msg,'','',0,'info');
     }
 
     if (empty ($from) && empty ($fromemail)) {

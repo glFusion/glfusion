@@ -94,7 +94,7 @@ if ( $msg > 0 ) {
     if (isset ($_GET['plugin'])) {
         $plugin = COM_applyFilter ($_GET['plugin']);
     }
-    $pageBody .= COM_showMessage ($msg, $plugin);
+    $pageBody .= COM_showMessage ($msg, $plugin,'',0,'info');
 }
 
 // Show any Plugin formatted blocks
@@ -327,7 +327,7 @@ if ( $A = DB_fetchArray( $result ) ) {
                                          "tid = '".DB_escapeString($topic)."'");
                 $eMsg .= sprintf ($LANG05[3], $topicname);
             }
-            $cbDisplay .= COM_showMessageText($eMsg, $LANG05[1],true);
+            $cbDisplay .= COM_showMessageText($eMsg, $LANG05[1],true,'info');
         }
     }
     $pageBody .= $cbDisplay;

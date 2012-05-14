@@ -4466,10 +4466,33 @@ function COM_showMessageText($message, $title = '', $persist = false, $type='')
 
     $dt = new Date('now',$_USER['tzid']);
 
+    $id = rand();
+
+    if ( $type == '' ) {
+        $type = 'info';
+    }
+
+    switch ($type) {
+        case 'success' :
+            $class = 'alert-success';
+            break;
+        case 'error' :
+            $class = 'alert-error';
+            break;
+        case 'info' :
+            $class = 'alert-info';
+            break;
+        case 'warning' :
+            $class = 'alert-block';
+            break;
+        default :
+            $type  = 'info';
+            $class = 'alert-info';
+            break;
+    }
+
     if (!empty($message)) {
-        if (empty($title)) {
-            $title = $MESSAGE[40];
-        }
+
         $timestamp = $dt->format($_CONF['daytime'],true);
 
         $T = new Template( $_CONF['path_layout'] );
@@ -4479,11 +4502,12 @@ function COM_showMessageText($message, $title = '', $persist = false, $type='')
                     'timestamp'     => $timestamp,
                     'message'       => $message,
                     'icon_url'      => $_CONF['layout_url'].'/images/sysmessage.'.$_IMAGE_TYPE,
-                    'class'         => '',
+                    'class'         => $class,
                     'block_title'   => $title . '-' . $timestamp,
                     'fade'          => (($persist) ? '' : true),
                     'type'          => $type,
                     'persist'       => $persist,
+                    'id'            => $id,
         ));
         $T->parse( 'final', 'message' );
         $retval = $T->finish( $T->get_var( 'final' ));
@@ -4504,7 +4528,7 @@ function COM_showMessageText($message, $title = '', $persist = false, $type='')
 * @param	string	$boolean	(optional) whether message should be persistent
 * @return   string              HTML block with message
 */
-function COM_showMessage($msg, $plugin = '', $title = '', $persist = false)
+function COM_showMessage($msg, $plugin = '', $title = '', $persist = false,$type='')
 {
     global $MESSAGE;
 
@@ -4525,7 +4549,7 @@ function COM_showMessage($msg, $plugin = '', $title = '', $persist = false)
         }
 
         if (!empty($message)) {
-            $retval .= COM_showMessageText($message, $title, $persist);
+            $retval .= COM_showMessageText($message, $title, $persist,$type);
         }
     }
 
@@ -4552,7 +4576,7 @@ function COM_showMessageFromParameter()
 			$plugin = (isset($_GET['plugin'])) ? COM_applyFilter($_GET['plugin']) : '';
 			$title = (isset($_GET['title'])) ? COM_applyFilter($_GET['title']) : '';
 			$persist = (isset($_GET['persist'])) ? true : false;
-            $retval .= COM_showMessage($msg, $plugin, $title, $persist);
+            $retval .= COM_showMessage($msg, $plugin, $title, $persist,'info');
         }
     }
 
@@ -5875,7 +5899,7 @@ function COM_getImgSizeAttributes( $file )
 function COM_displayMessageAndAbort( $msg, $plugin = '', $http_status = 200, $http_text = 'OK')
 {
     $display = COM_siteHeader( 'menu' )
-             . COM_showMessage( $msg, $plugin )
+             . COM_showMessage( $msg, $plugin,'',1,'error' )
              . COM_siteFooter( true );
 
     echo $display;
@@ -6937,6 +6961,9 @@ function css_out()
     } else {
         $files[] = $_CONF['path_layout'] . 'style-colors.css';
     }
+    if ( file_exists($_CONF['path_layout'] .'custom.css') ) {
+        $files[] = $_CONF['path_layout'] . 'custom.css';
+    }
     /*
      * Check to see if there are any custom CSS files to include
      */
@@ -7108,9 +7135,6 @@ function js_out()
         $files[] = $_CONF['path_html'] . 'javascript/mootools/gl_mooreflection.js';
         $files[] = $_CONF['path_html'] . 'javascript/mootools/gl_moomenu.js';
         $files[] = $_CONF['path_html'] . 'javascript/mootools/moorating.js';
-    } else {
-        $files[] = $_CONF['path_html'] . 'javascript/rating/behavior.js';
-        $files[] = $_CONF['path_html'] . 'javascript/rating/rating.js';
     }
 
     if ( $themeAPI < 2 ) {

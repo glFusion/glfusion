@@ -97,7 +97,7 @@ function userprofile($user, $msg = 0, $plugin = '')
 
     $retval .= COM_siteHeader ('menu', $LANG04[1] . ' ' . $display_name);
     if ($msg > 0) {
-        $retval .= COM_showMessage($msg, $plugin);
+        $retval .= COM_showMessage($msg, $plugin,'',0,'info');
     }
 
     // format date/time to user preference
@@ -818,7 +818,7 @@ function newuserform ($msg = '')
     $retval = '';
 
     if (!empty ($msg)) {
-        $retval .= COM_showMessageText($msg,$LANG04[21],false);
+        $retval .= COM_showMessageText($msg,$LANG04[21],false,'info');
     }
     $user_templates = new Template($_CONF['path_layout'] . 'users');
     $user_templates->set_file('regform', 'registrationform.thtml');
@@ -922,7 +922,7 @@ function defaultform ($msg)
     $retval = '';
 
     if (!empty ($msg)) {
-        $retval .= COM_showMessageText($msg,$LANG04[21],false);
+        $retval .= COM_showMessageText($msg,$LANG04[21],false,'info');
     }
 
     $retval .= loginform (true);
@@ -958,7 +958,7 @@ function displayLoginErrorAndAbort($msg, $message_title, $message_text)
         header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden');
         header('Status: 403 Forbidden');
         $retval = COM_siteHeader('menu', $message_title)
-                . COM_showMessageText($message_text,$message_title,true)
+                . COM_showMessageText($message_text,$message_title,true,'error')
                 . COM_siteFooter();
         echo $retval;
     }
@@ -989,7 +989,7 @@ function mergeAccountForm($msg='')
         $page = $T->finish( $T->get_var( 'page' ));
         $display = COM_siteHeader();
         if ( $msg != '' ) {
-            $display .= COM_showMessageText($msg,false);
+            $display .= COM_showMessageText($msg,'',false,'info');
         }
         $display .= $page;
         $display .= COM_siteFooter();
@@ -1130,7 +1130,7 @@ function mergeaccounts()
         COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
         $last = COM_checkSpeedlimit ('login_speedlimit',4);
         if ($last > 0) {
-            $display .= COM_showMessageText(sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit']),$LANG12[26],false);
+            $display .= COM_showMessageText(sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit']),$LANG12[26],false,'error');
         } else {
             COM_updateSpeedlimit ('login');
             $display = mergeAccountForm($LANG20[3]);
@@ -1220,7 +1220,7 @@ case 'user':
 case 'create':
     if ($_CONF['disable_new_user_registration']) {
         $display .= COM_siteHeader ('menu', $LANG04[22]);
-        $display .= COM_showMessageText($LANG04[122],$LANG04[22],true);
+        $display .= COM_showMessageText($LANG04[122],$LANG04[22],true,'error');
         $display .= COM_siteFooter ();
     } else {
         $passwd = '';
@@ -1247,7 +1247,7 @@ case 'getpassword':
     COM_clearSpeedlimit ($_CONF['passwordspeedlimit'], 'password');
     $last = COM_checkSpeedlimit ('password',4);
     if ($last > 0) {
-        $display .= COM_showMessageText(sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit']),$LANG12[26],false);
+        $display .= COM_showMessageText(sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit']),$LANG12[26],false,'error');
     } else {
         $display .= getpasswordform ();
     }
@@ -1269,7 +1269,7 @@ case 'newpwd':
             $display .= COM_siteFooter ();
         } else { // request invalid or expired
             $display .= COM_siteHeader ('menu', $LANG04[25]);
-            $display .= COM_showMessage (54);
+            $display .= COM_showMessage (54,'','',1,'error');
             $display .= getpasswordform ();
             $display .= COM_siteFooter ();
         }
@@ -1302,7 +1302,7 @@ case 'setnewpwd':
                 $display = COM_refresh ($_CONF['site_url'] . '/users.php?msg=53');
             } else { // request invalid or expired
                 $display .= COM_siteHeader ('menu', $LANG04[25]);
-                $display .= COM_showMessage (54);
+                $display .= COM_showMessage (54,'','',1,'error');
                 $display .= getpasswordform ();
                 $display .= COM_siteFooter ();
             }
@@ -1321,7 +1321,7 @@ case 'emailpasswd':
     $last = COM_checkSpeedlimit ('password');
     if ($last > 0) {
         $display .= COM_siteHeader ('menu', $LANG12[26])
-                 . COM_showMessageText(sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit']),$LANG12[26],true)
+                 . COM_showMessageText(sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit']),$LANG12[26],true,'error')
                  . COM_siteFooter ();
     } else {
         $username = $_POST['username'];
@@ -1343,7 +1343,7 @@ case 'emailpasswd':
 case 'new':
     $display .= COM_siteHeader ('menu', $LANG04[22]);
     if ($_CONF['disable_new_user_registration']) {
-        $display .= COM_showMessageText($LANG04[122],$LANG04[22],true);
+        $display .= COM_showMessageText($LANG04[122],$LANG04[22],true,'error');
     } else {
         // Call custom registration and account record create function
         // if enabled and exists
@@ -1378,7 +1378,7 @@ case 'verify':
         if ($valid == 1) {
             DB_query("UPDATE {$_TABLES['users']} SET status=".USER_ACCOUNT_AWAITING_ACTIVATION.",act_time='0000-00-00 00:00:00' WHERE uid=".$uid);
             $display .= COM_siteHeader ('menu');
-            $display .= COM_showMessage (515);
+            $display .= COM_showMessage (515,'','',0,'success');
             $display .= SEC_loginForm();
             $display .= COM_siteFooter ();
         } else { // request invalid or expired
@@ -1389,11 +1389,11 @@ case 'verify':
                 switch ($U['status']) {
                     case USER_ACCOUNT_AWAITING_ACTIVATION :
                     case USER_ACCOUNT_ACTIVE :
-                        $display .= COM_showMessage(517);
+                        $display .= COM_showMessage(517,'','',0,'info');
                         $display .= SEC_loginForm();
                         break;
                     case USER_ACCOUNT_AWAITING_VERIFICATION :
-                        $display .= COM_showMessage(516);
+                        $display .= COM_showMessage(516,'','',1,'error');
                         $display .= newtokenform($uid);
                         break;
                     default :
@@ -1421,7 +1421,7 @@ case 'getnewtoken':
     $last = COM_checkSpeedlimit ('verifytoken');
     if ($last > 0) {
         $display .= COM_siteHeader ('menu', $LANG12[26])
-                 . COM_showMessageText(sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit']),$LANG12[26],true)
+                 . COM_showMessageText(sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit']),$LANG12[26],true,'error')
                  . COM_siteFooter ();
     } else {
         $username = (isset($_POST['username']) ? $_POST['username'] : '');
@@ -1722,7 +1722,7 @@ default:
             $msg = 0;
         }
         if ($msg > 0) {
-            $display .= COM_showMessage($msg);
+            $display .= COM_showMessage($msg,'','',0,'info');
         }
 
         switch ($mode) {

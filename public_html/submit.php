@@ -70,7 +70,7 @@ function submissionform($type='story', $mode = '', $topic = '')
     $last = COM_checkSpeedlimit ('submit');
 
     if ($last > 0) {
-        $retval .= COM_showMessageText($LANG12[30].$last.$LANG12[31], $LANG12[26],false);
+        $retval .= COM_showMessageText($LANG12[30].$last.$LANG12[31], $LANG12[26],false,'error');
     } else {
         if (COM_isAnonUser() &&
             (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {
@@ -134,7 +134,7 @@ function submitstory($topic = '')
 
     // no topics
     if ( $topicList == '' ) {
-        $retval = COM_showMessageText($LANG24[66]);
+        $retval = COM_showMessageText($LANG24[66],'',1,'error');
         return $retval;
     }
 
@@ -361,7 +361,7 @@ function savesubmission($type, $A)
 
     if ($last > 0) {
         $retval  = COM_siteHeader ();
-        $retval .= COM_showMessageText($LANG12[30].$last.$LANG12[31],$LANG12[26],false);
+        $retval .= COM_showMessageText($LANG12[30].$last.$LANG12[31],$LANG12[26],false,'error');
         $retval .= COM_siteFooter ();
 
         return $retval;
@@ -391,7 +391,7 @@ function savesubmission($type, $A)
         $retval = savestory ($A);
     } else {
         $retval = COM_siteHeader ();
-        $retval .= COM_showMessageText($LANG12[23], $LANG12[22], false);
+        $retval .= COM_showMessageText($LANG12[23], $LANG12[22], false,'error');
         $retval .= submissionform($type);
         $retval .= COM_siteFooter ();
     }

@@ -132,7 +132,7 @@ if ($A['count'] > 0) {
     }
     if ($output == STORY_PERMISSION_DENIED) {
         $display .= COM_siteHeader ('menu', $LANG_ACCESS['accessdenied'])
-                 . COM_showMessageText($LANG_ACCESS['storydenialmsg'], $LANG_ACCESS['accessdenied'], true)
+                 . COM_showMessageText($LANG_ACCESS['storydenialmsg'], $LANG_ACCESS['accessdenied'], true,'error')
                  . COM_siteFooter ();
     } elseif ( $output == STORY_INVALID_SID ) {
         $display .= COM_refresh($_CONF['site_url'] . '/index.php');
@@ -246,7 +246,7 @@ if ($A['count'] > 0) {
                 if (isset($_GET['plugin'])) {
                     $plugin = COM_applyFilter($_GET['plugin']);
                 }
-                $display .= COM_showMessage($msg, $plugin);
+                $display .= COM_showMessage($msg, $plugin,'',0,'info');
             }
         }
         DB_query ("UPDATE {$_TABLES['stories']} SET hits = hits + 1 WHERE (sid = '".DB_escapeString($story->getSid())."') AND (date <= NOW()) AND (draft_flag = 0)");

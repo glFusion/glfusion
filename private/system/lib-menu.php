@@ -172,6 +172,7 @@ function mb_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$pare
                 $lastclass  = $menuStyles['horizontal_simple']['lastclass'];
                 $selected   = $menuStyles['horizontal_simple']['selected'];
             } else if ($mbMenu[$menuID]['menu_type'] == 3 ) {
+                $wrapper    = $menuStyles['vertical_cascading']['ulclass'];
                 $ulclass    = $menuStyles['vertical_cascading']['ulclass'];
                 $liclass    = $menuStyles['vertical_cascading']['liclass'];
                 $parentclass = $menuStyles['vertical_cascading']['parentclass'];

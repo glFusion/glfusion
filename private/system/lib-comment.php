@@ -1579,11 +1579,11 @@ function plugin_savecomment_article($title, $comment, $id, $pid, $postmode)
     if ($ret > 0) { // failure
         $msg = '';
         if ( SESS_isSet('glfusion.commentpresave.error') ) {
-            $msg = COM_showMessageText(SESS_getVar('glfusion.commentpresave.error'));
+            $msg = COM_showMessageText(SESS_getVar('glfusion.commentpresave.error'),'',1,'error');
             SESS_unSet('glfusion.commentpresave.error');
         } else {
             if ( empty($title) || empty($comment) ) {
-                $msg = COM_showMessageText($LANG03[12]);
+                $msg = COM_showMessageText($LANG03[12],'',1,'error');
             }
         }
         $retval .= $msg . CMT_commentForm ($title,$comment,$id,$pid,'article',$LANG03[14],$postmode);
