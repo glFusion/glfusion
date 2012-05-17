@@ -55,7 +55,7 @@ if ( isset($_MG_CONF['index_all']) && $_MG_CONF['index_all'] == 1 ) {
 
 MG_initAlbums();
 
-if ($_MG_CONF['index_all'] == 1 ) {
+if (isset($_MG_CONF['index_all']) && $_MG_CONF['index_all'] == 1 ) {
     MG_indexAll();
 } else {
     MG_index();
