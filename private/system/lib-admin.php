@@ -368,8 +368,8 @@ function ADMIN_listArray($component, $fieldfunction, $header_arr, $text_arr,
             }
             $admin_templates->clear_var('item_field');
         }
-    $footer_cols = ($chkselect) ? $ncols + 1 : $ncols;
-    $admin_templates->set_var('footer_row', '<tr><td colspan="' . $footer_cols . '"><div style="margin:2px 0 2px 0;border-top:1px solid #cccccc"></div></td></tr>');
+//    $footer_cols = ($chkselect) ? $ncols + 1 : $ncols;
+//    $admin_templates->set_var('footer_row', '<tr><td colspan="' . $footer_cols . '"><div style="margin:2px 0 2px 0;border-top:1px solid #cccccc"></div></td></tr>');
     }
 
     // if we displayed data, and chkselect option is available, display the
@@ -756,8 +756,8 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $message = (isset($no_data)) ? $text_arr['no_data'] : $LANG_ADMIN['no_results'];
         $admin_templates->set_var('message', $message);
     } else {
-        $footer_cols = ($chkselect) ? $ncols + 1 : $ncols;
-        $admin_templates->set_var('footer_row', '<tr><td colspan="' . $footer_cols . '"><div style="margin:2px 0 2px 0;border-top:1px solid #cccccc"></div></td></tr>');
+//        $footer_cols = ($chkselect) ? $ncols + 1 : $ncols;
+//        $admin_templates->set_var('footer_row', '<tr><td colspan="' . $footer_cols . '"><div style="margin:2px 0 2px 0;border-top:1px solid #cccccc"></div></td></tr>');
     }
 
     // if we displayed data, and chkselect option is available, display the
