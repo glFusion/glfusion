@@ -105,7 +105,7 @@ function _displayVersionData()
     ));
 
     if ( $pluginsUpToDate != -1 ) {
-        $pluginInfo .= '<div><h1>'.$LANG_UPGRADE['plugin_title'].'</h1>';
+        $pluginInfo .= '<div style="margin-top:10px;"><h3>'.$LANG_UPGRADE['plugin_title'].'</h3>';
         $dt = new Date('now',$_USER['tzid']);
 
         $data_arr = array();
