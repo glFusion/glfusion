@@ -36,6 +36,54 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
+/*
+ * provides a generic interface to the widget library
+ * to allow plugins to specify their own functions.
+ */
+
+function WIDGET_interface($function_name, $args='')
+{
+    $retval = '';
+
+    $function = 'WIDGET_' . $function_name;
+    if (function_exists($function)) {
+        switch (count($args)) {
+        case 0:
+        case 1:
+            $retval .= $function();
+            break;
+        case 2:
+            $retval .= $function($args[1]);
+            break;
+        case 3:
+            $retval .= $function($args[1], $args[2]);
+            break;
+        case 4:
+            $retval .= $function($args[1], $args[2], $args[3]);
+            break;
+        case 5:
+            $retval .= $function($args[1], $args[2], $args[3], $args[4]);
+            break;
+        case 6:
+            $retval .= $function($args[1], $args[2], $args[3], $args[4], $args[5]);
+            break;
+        case 7:
+            $retval .= $function($args[1], $args[2], $args[3], $args[4], $args[5], $args[6]);
+            break;
+        case 8:
+            $retval .= $function($args[1], $args[2], $args[3], $args[4], $args[5], $args[6], $args[7]);
+            break;
+        case 9:
+            $retval .= $function($args[1], $args[2], $args[3], $args[4], $args[5], $args[6], $args[7], $args[8]);
+            break;
+        default:
+            $retval .= $function($args);
+            break;
+        }
+    }
+    return $retval;
+}
+
 function WIDGET_mooslide($page_ids, $width = 550, $height = 160, $id = 'gl_', $slide_interval = 0)
 /*  Sample standalone staticpage:
 
