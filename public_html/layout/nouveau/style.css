@@ -2563,7 +2563,7 @@ position:absolute;
 /* start gl_mootip css */
 .tool-tip {
 color:#fff;
-width:150px;
+width:200px;
 z-index:13000;
 }
 
@@ -2571,15 +2571,16 @@ z-index:13000;
 font-weight:700;
 font-size:11px;
 color:#679EF1;
-background:url(layout/nouveau/images/gl_mootip_bg.png) top left;
+background:url(layout/nouveau/images/gl_mootip_bg200.png) top left;
 margin:0;
 padding:8px 8px 4px;
 }
 
 .tool-text {
 font-size:11px;
-background:url(layout/nouveau/images/gl_mootip_bg.png) bottom right;
+background:url(layout/nouveau/images/gl_mootip_bg200.png) bottom right;
 padding:4px 8px 8px;
+overflow:hidden;
 }
 
 /* Auto Translations css */
