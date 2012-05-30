@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: albumedit.php 3070 2008-09-07 02:40:49Z mevans0263                $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -167,7 +167,6 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         $A['display_columns']   = $_MG_CONF['ad_display_columns'];
         $A['valid_formats']     = $_MG_CONF['ad_valid_formats'];
         $A['filename_title']    = $_MG_CONF['ad_filename_title'];
-//        $A['shopping_cart']     = $_MG_CONF['ad_shopping_cart'];
         $A['wm_auto']           = $_MG_CONF['ad_wm_auto'];
         $A['wm_id']             = $_MG_CONF['ad_wm_id'];
         $A['opacity']           = $_MG_CONF['ad_wm_opacity'];

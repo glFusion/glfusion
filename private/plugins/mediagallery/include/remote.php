@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: remote.php 3070 2008-09-07 02:40:49Z mevans0263                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -112,11 +112,6 @@ function MG_remoteUpload( $album_id ) {
     ));
 
     $allow_url_fopen =  @ini_get('allow_url_fopen');
-/* --------
-    if ( !function_exists('curl_init') && $allow_url_fopen != 1 ) {
-        $T->set_var('enable_remote_images','');
-    } else
- ---------- */
     if ( $_MG_CONF['enable_remote_images'] == 1 ) {
         $T->set_var('enable_remote_images','true');
     } else {
@@ -167,7 +162,6 @@ function MG_saveRemoteUpload( $albumId ) {
         $description = $_POST['description'][$i];
         $keywords    = $_POST['keywords'][$i];
         $category    = COM_applyFilter($_POST['cat_id'][$i],true);
-//        $remotethumbnail   = COM_applyFilter($_POST['remotethumbnail'][$i]);
         $thumbnail   = $file['tmp_name'][$i];
         $resolution_x = isset($_POST['width'][$i]) ? COM_applyFilter($_POST['width'][$i],true) : 0;
         $resolution_y = isset($_POST['height'][$i]) ? COM_applyFilter($_POST['height'][$i],true) : 0;
@@ -244,9 +238,6 @@ function MG_saveRemoteUpload( $albumId ) {
                 return $retval;
                 exit;
         }
-//        if ( $remotethumbnail != '' ) {
-//	        $thumbnail = $remotethumbnail;
-//        }
         if ( $errorFound ) {
 	        continue;
         }
@@ -579,10 +570,6 @@ function MG_getRemoteThumbnail( $remotefile, $localfile ) {
     global $MG_albums, $_CONF, $_MG_CONF, $_USER, $_TABLES, $LANG_MG00, $LANG_MG01, $LANG_MG02, $new_media_id;
 
     return false;
-
-//    if ( !isset($_MG_CONF['enable_remote_images']) || $_MG_CONF['enabled_remote_images'] == false ) {
-//        return false;
-//    }
 
     if ($_MG_CONF['verbose']) {
         COM_errorLog("Entering MG getRemoteThumbnail");

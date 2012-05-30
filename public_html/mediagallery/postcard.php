@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -285,14 +285,7 @@ function MG_sendPostCard() {
     if ( $msg != '' ) {
         $errCount++;
     }
-/*
-    if ( function_exists('plugin_itemPreSave_captcha') ) {
-        $msg = plugin_itemPreSave_captcha('mediagallery',$captchaString);
-        if ( $msg != '' ) {
-            $errCount++;
-        }
-    }
-*/
+
     if ( $errCount > 0 ) {
         return (MG_editPostCard('edit',$mid,$msg));
     }

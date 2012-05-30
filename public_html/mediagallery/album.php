@@ -624,11 +624,10 @@ if ($nFrame->name != $aFrame->name ) {
     $fCSS .= $aFrame->getCSS();
 }
 if ( $fCSS != '' ) {
-//    $fCSS = '<style type="text/css">'.$fCSS.'</style>';
     $outputHandle->addStyle($fCSS);
 }
 
-$display = MG_siteHeader(strip_tags($MG_albums[$album_id]->title),/*$fCSS*/'');
+$display = MG_siteHeader(strip_tags($MG_albums[$album_id]->title),'');
 
 $display .= $T->finish($T->get_var('output'));
 $display .= MG_siteFooter();

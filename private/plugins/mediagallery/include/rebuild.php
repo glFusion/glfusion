@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: rebuild.php 3070 2008-09-07 02:40:49Z mevans0263                  $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -222,14 +222,6 @@ function MG_albumRebuildThumbs( $aid, $actionURL ) {
                 continue;
             }
         }
-/* --------------------------
-        foreach ($_MG_CONF['validExtensions'] as $ext ) {
-            if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $row['media_filename'][0] . '/' . $row['media_filename'] . $ext) ) {
-                $imageDisplay = $_MG_CONF['path_mediaobjects'] . 'tn/' . $row['media_filename'][0] . '/' . $row['media_filename'] . $ext;
-                break;
-            }
-        }
------------------------------ */
         $mimeExt = $row['media_mime_ext'];
         $mimeType = $row['mime_type'];
         DB_query("INSERT INTO {$_TABLES['mg_session_items']} (session_id,mid,aid,data,data2,data3,status) VALUES('$session_id','$mimeType',$aid,'" . $srcImage . "','" . $imageDisplay . "','" . $mimeExt . "',0)");

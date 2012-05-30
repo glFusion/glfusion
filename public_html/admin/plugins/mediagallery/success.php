@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | Upgrade Successful Page                                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2011 by the following authors:                        |
+// | Copyright (C) 2005-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+

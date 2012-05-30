@@ -508,3 +508,4 @@ function MG_index() {
     echo $display;
     exit;
 }
+?>

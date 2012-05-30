@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: classFrame.php 3082 2008-09-09 01:31:30Z mevans0263               $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |

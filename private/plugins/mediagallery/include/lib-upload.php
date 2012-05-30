@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: lib-upload.php 2963 2008-08-23 17:38:32Z mevans0263               $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -388,32 +388,6 @@ function MG_deleteDir($dir) {
    return false;
 }
 
-/*================================================
-function MG_getMimeType( $filename ) {
-    global $_MG_CONF;
-
-    // include getID3() library (can be in a different directory if full path is specified)
-    require_once($_MG_CONF['path_html'] . '/getid3/getid3/getid3.php');
-    // Needed for windows only
-    define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
-
-    $getID3 = new getID3;
-
-    // Analyze file and store returned data in $ThisFileInfo
-    $ThisFileInfo = $getID3->analyze($filename);
-    getid3_lib::CopyTagsToComments($ThisFileInfo);
-
-    $format['type']     = isset($ThisFileInfo['fileformat']) ? $ThisFileInfo['fileformat'] : '';
-    $format['mimetype'] = isset($ThisFileInfo['mime_type'])  ? $ThisFileInfo['mime_type'] : '';
-
-    if ( $_MG_CONF['verbose'] ) {
-        COM_errorLog("MG Upload: getID3 analyzing file: " . $filename);
-        COM_errorLog("MG Upload: getID3 found mime_type: " . $format['mimetype']);
-    }
-
-    return $ThisFileInfo;
-}
-===================== */
 function MG_file_exists( $potential_file ) {
     global $_MG_CONF;
 
@@ -1279,15 +1253,7 @@ function MG_attachThumbnail( $aid, $thumbnail, $mediaFilename ) {
         	$tnWidth = 200;
         }
     }
-/* ---
-    if ( $MG_albums[$aid]->tn_size == 3 ) {
-    	$tnHeight = $MG_albums[$aid]->tnHeight;
-    	$tnWidth  = $MG_albums[$aid]->tnWidth;
-    } else {
-    	$tnHeight = 200;
-    	$tnWidth = 200;
-    }
---- */
+
     $tn_mime_type = IMG_getMediaMetaData($thumbnail);
     if ( !isset($tn_mime_type['mime_type']) ) {
         $tn_mime_type['mime_type'] = '';

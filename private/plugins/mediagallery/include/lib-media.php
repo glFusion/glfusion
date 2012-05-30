@@ -1249,7 +1249,6 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
     $retval = '';
     $media_size_disp = @getimagesize($_MG_CONF['path_mediaobjects'] . 'disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
 
-// Modified by Jon Deliz
     if ($I['remote_media'] == 1 ) {
         if ( $I['media_resolution_x'] != 0 && $I['media_resolution_y'] != 0 ) {
     	    $media_size_disp[0] = $I['media_resolution_x'];
@@ -1299,7 +1298,6 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
             $media_size_disp[0] = 200;
             $media_size_disp[1] = 150;
         } else {
-//Modified by Jon Deliz
             if ($I['remote_media'] == 1 ) {
 		        $u_image = $I['remote_url'];
             } else {
@@ -1453,14 +1451,9 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     $permalink = COM_buildUrl($_MG_CONF['site_url'] . '/media.php?s='.$srcID);
     $outputHandle->addLink("canonical",$permalink);
-//    $themeCSS .= '<link rel="canonical" href="'.$permalink.'"/>' . LB;
-
     $outputHandle->addMeta('property','og:title',$ptitle);
-//    $themeCSS .= '<meta property="og:title" content="'.$ptitle.'" />' . LB;
     $outputHandle->addMeta('property','og:type',$ogType);
-//    $themeCSS .= '<meta property="og:type" content="'.$ogType.'" />' . LB;
     $outputHandle->addMeta('property','og:url',$permalink);
-//    $themeCSS .= '<meta property="og:url" content="'.$permalink.'" />' . LB;
     $T->set_var('permalink',$permalink);
     $T->set_file (array(
         'shutterfly'    => 'digibug.thtml',
@@ -1743,8 +1736,7 @@ $outputHandle->addMeta('property','og:image',$tnImage);
             }
         }
         $metaDesc = trim($shortComment).$tailString;
-$outputHandle->addMeta('name','description',htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()));
-//        $themeCSS .= '<meta name="description" content="'.htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()).'"/>' . LB;
+        $outputHandle->addMeta('name','description',htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()));
         $media_desc .= '<br/><br/>';
     }
 

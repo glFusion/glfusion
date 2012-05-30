@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -319,7 +319,6 @@ if ( $nRows > 0 ) {
 		        $videoFile            = $basefilename;
 	           	$streamingServerURL   = "streamingServerURL: '" . $urlParts['scheme'] . '://' . $urlParts['host'] . $pPath . "',";
 	           	$streamingServer      = "streamingServer: 'fms',";
-//	           	$streamingServerURLmg = "streamingServerUrl=" . $urlParts['scheme'] . '://' . $urlParts['host'] . $pPath . "&";
 	           	$streamingServerURLmg = 'flashvars.streamingServerUrl="' . $urlParts['scheme'] . '://' . $urlParts['host'] . $pPath . '";';
     		} else {
     			$streamingServerURL   = '';

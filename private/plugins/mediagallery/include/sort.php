@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: sort.php 3070 2008-09-07 02:40:49Z mevans0263                     $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -409,10 +409,6 @@ function MG_reorderMedia($album_id) {
 function MG_SortMedia( $album_id ) {
     global $MG_albums, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG03;
 
-    //
-    // -- get the sort options
-    //
-
     if ($MG_albums[$album_id]->album_sort_order == 0 ) {
         return;
     }
@@ -436,12 +432,6 @@ function MG_SortMedia( $album_id ) {
         case '6' :  // title
             $sql_sort_by = " ORDER BY m.media_title DESC";
             break;
-//        case '7' :  // title
-//            $sql_sort_by = " ORDER BY m.media_rating ASC";
-//            break;
-//        case '8' :  // title
-//            $sql_sort_by = " ORDER BY m.media_rating DESC";
-//            break;
     }
 
     $sql = "SELECT  *

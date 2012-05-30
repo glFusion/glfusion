@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2011 by the following authors:                        |
+// | Copyright (C) 2005-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -191,7 +191,6 @@ if ($step == 'process_login' ) {
                                $_CONF['cookiedomain'], $_CONF['cookiesecure']);
                 }
             } else {
-//                $userid = $HTTP_COOKIE_VARS[$_CONF['cookie_name']];
                 $userid = $_COOKIE[$_CONF['cookie_name']];
 
                 if (empty ($userid) || ($userid == 'deleted')) {

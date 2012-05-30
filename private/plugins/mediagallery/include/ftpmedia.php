@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: ftpmedia.php 3070 2008-09-07 02:40:49Z mevans0263                 $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -197,15 +197,8 @@ function MG_listDir ($dir, $album_id, $purgefiles, $recurse ) {
             continue;
         }
         $filename = $file;
-/*
-        if (PHP_OS == "WINNT") {
-            $filetmp = $directory . "\\" . $file;
-        } else {
-            $filetmp  = $directory . '/' . $file;
-        }
-*/
-        $filetmp = $directory . $file;
 
+        $filetmp = $directory . $file;
 
         $filename = basename($file);
         $file_extension = strtolower(substr(strrchr($filename,"."),1));

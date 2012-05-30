@@ -676,9 +676,6 @@ function plugin_getwhatsnew_mediagallery()
                 }
             }
         }
-//        if ( $newCommentCount == 0 ) {
-//            $retval .= $LANG_MG03['no_comments'] . '<br />' . LB;
-//        }
     }
     $label = sprintf($LANG_MG00['whatsnew_prompt'],$_MG_CONF['whatsnew_time']);
     if ( $newMediaCount == 0 && $newCommentCount == 0 ) {
