@@ -71,7 +71,7 @@ function bb2_whitelist($package)
 		if (strpos($package['request_uri'], "?") === FALSE) {
 			$request_uri = $package['request_uri'];
 		} else {
-			$request_uri = substr($package['request_uri'], 0, strpos($settings['request_uri'], "?"));
+			$request_uri = substr($package['request_uri'], 0, strpos($package['request_uri'], "?"));
 		}
 		foreach ($bb2_whitelist_urls as $url) {
 			if (!strcmp($request_uri, $url)) return true;

@@ -48,6 +48,7 @@ $bb2_settings_defaults = array(
 	'httpbl_threat' => '25',
 	'httpbl_maxage' => '30',
 	'offsite_forms' => false,
+	'eu_cookie'     => false,
 );
 
 // Bad Behavior callback functions.
@@ -127,6 +128,7 @@ function bb2_read_settings() {
 			     'httpbl_maxage'  => $bb2_settings_defaults['httpbl_maxage'],
 			     'strict'         => $bb2_settings_defaults['strict'],
 			     'offsite_forms'  => $bb2_settings_defaults['offsite_forms'],
+			     'eu_cookie'      => $bb2_settings_defaults['eu_cookie'],
 			     'is_installed'   => $isInstalled );
 }
 

@@ -9,9 +9,9 @@
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
-// | Copyright (C) 2005-2009 Michael Hampton                                  |
+// | Copyright (C) 2005-2012 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -41,19 +41,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-if (!defined ('BAD_BEHAVIOR_PLUGIN')) {
-    define('BAD_BEHAVIOR_PLUGIN', 'bad_behavior2');
-}
-if (!defined ('BAD_BEHAVIOR_VERSION')) {
-    define ('BAD_BEHAVIOR_VERSION', '2.0.45');
-}
-
-define('WP_BB_LOG', $_DB_table_prefix . 'bad_behavior2');
-
-$langfile = $_CONF['path'] . 'plugins/' . BAD_BEHAVIOR_PLUGIN
-    . '/language/' . $_CONF['language'] . '.php';
-$custfile = $_CONF['path'] . 'plugins/' . BAD_BEHAVIOR_PLUGIN
-    . '/language/custom/' . $_CONF['language'] . '.php';
+$langfile = $_CONF['path'].'plugins/bad_behavior2/language/'.$_CONF['language'].'.php';
+$custfile = $_CONF['path'].'plugins/bad_behavior2/language/custom/'.$_CONF['language'].'.php';
 
 if (file_exists($langfile)) {
     include_once $langfile;
@@ -61,10 +50,8 @@ if (file_exists($langfile)) {
         include_once $custfile;
     }
 } else {
-    $langfile = $_CONF['path'].'plugins/' . BAD_BEHAVIOR_PLUGIN
-        . '/language/english.php';
-    $custfile = $_CONF['path'].'plugins/' . BAD_BEHAVIOR_PLUGIN
-        . '/language/custom/english.php';
+    $langfile = $_CONF['path'].'plugins/bad_behavior2/language/english.php';
+    $custfile = $_CONF['path'].'plugins/bad_behavior2/language/custom/english.php';
     include_once $langfile;
     if (file_exists($custfile)) {
         include_once $custfile;
@@ -73,14 +60,22 @@ if (file_exists($langfile)) {
 
 require_once $_CONF['path'].'plugins/bad_behavior2/bad_behavior2.php';
 
+if (!defined ('BAD_BEHAVIOR_VERSION')) {
+    define ('BAD_BEHAVIOR_VERSION', $_BB2_CONF['pi_version']);
+}
+if (!defined ('BAD_BEHAVIOR_PLUGIN')) {
+    define('BAD_BEHAVIOR_PLUGIN', 'bad_behavior2');
+}
+define('WP_BB_LOG', $_TABLES['bad_behavior2']);
+
+
 function plugin_cclabel_bad_behavior2 ()
 {
     global $_CONF, $LANG_BAD_BEHAVIOR;
 
     if (SEC_inGroup ('Bad Behavior2 Admin') && function_exists('bb2_insert_head') ) {
         return array ($LANG_BAD_BEHAVIOR['plugin_display_name'],
-                $_CONF['site_admin_url'] . '/plugins/' . BAD_BEHAVIOR_PLUGIN
-                                         . '/index.php',
+                $_CONF['site_admin_url'] . '/plugins/bad_behavior2/index.php',
                 plugin_geticon_bad_behavior2 ());
     }
 
@@ -89,18 +84,19 @@ function plugin_cclabel_bad_behavior2 ()
 
 function plugin_getadminoption_bad_behavior2 ()
 {
-    global $_CONF, $LANG_BAD_BEHAVIOR;
+    global $_CONF, $_TABLES, $LANG_BAD_BEHAVIOR;
 
     if (SEC_inGroup ('Bad Behavior2 Admin') && function_exists('bb2_insert_head') ) {
         return array ($LANG_BAD_BEHAVIOR['plugin_display_name'],
-                      $_CONF['site_admin_url'] . '/plugins/'
-                            . BAD_BEHAVIOR_PLUGIN . '/index.php?mode=list', DB_count (WP_BB_LOG));
+                      $_CONF['site_admin_url'] . '/plugins/bad_behavior2/index.php?mode=list', DB_count ($_TABLES['bad_behavior2']));
     }
 }
 
 function plugin_chkversion_bad_behavior2 ()
 {
-    return BAD_BEHAVIOR_VERSION;
+	global $_BB2_CONF;
+
+	return $_BB2_CONF['pi_version'];
 }
 
 function plugin_upgrade_bad_behavior2 ()
@@ -131,8 +127,7 @@ function plugin_geticon_bad_behavior2 ()
 {
     global $_CONF;
 
-    return $_CONF['site_url'] . '/' . BAD_BEHAVIOR_PLUGIN
-                              . '/images/bad_behavior2.png';
+    return $_CONF['site_url'] . '/bad_behavior2/images/bad_behavior2.png';
 }
 
 /**
@@ -143,7 +138,9 @@ function plugin_geticon_bad_behavior2 ()
 */
 function BB_countBlockedIPs ()
 {
-    $result = DB_query ("SELECT COUNT(DISTINCT ip) AS count FROM " . WP_BB_LOG);
+	global $_TABLES;
+
+    $result = DB_query ("SELECT COUNT(DISTINCT ip) AS count FROM " . $_TABLES['bad_behavior2']);
     list($blocked_ips) = DB_fetchArray ($result);
 
     return $blocked_ips;
@@ -151,16 +148,16 @@ function BB_countBlockedIPs ()
 
 function plugin_showstats_bad_behavior2 ($showsitestats)
 {
-    global $_CONF, $LANG_BAD_BEHAVIOR, $LANG_BB2_RESPONSE;
+    global $_CONF, $_TABLES, $LANG_BAD_BEHAVIOR, $LANG_BB2_RESPONSE;
 
     $retval = '';
 
     if (SEC_inGroup ('Bad Behavior2 Admin') && function_exists('bb2_insert_head')) {
-        $result = DB_query ("SELECT `key`,COUNT(`key`) AS count FROM " . WP_BB_LOG . " GROUP BY `key` ORDER BY 2 DESC,`key` LIMIT 10");
+        $result = DB_query ("SELECT `key`,COUNT(`key`) AS count FROM " . $_TABLES['bad_behavior2'] . " GROUP BY `key` ORDER BY 2 DESC,`key` LIMIT 10");
         $nrows  = DB_numRows ($result);
         if ($nrows > 0) {
 
-            require_once ($_CONF['path_system'] . 'lib-admin.php');
+            USES_lib_admin();
 
             $header_arr = array(
                 array ('text'         => $LANG_BAD_BEHAVIOR['stats_reason'],
@@ -257,7 +254,7 @@ function plugin_dopluginsearch_bad_behavior2($query, $datestart, $dateend, $topi
     // Build search SQL
     $sql = 'SELECT id, ip AS title, http_headers AS description,UNIX_TIMESTAMP(date) AS date,"" AS uid, 0 AS hits, ';
     $sql .= "CONCAT('{$_CONF['site_admin_url']}/plugins/bad_behavior2/index.php?mode=view&amp;id=',id) AS url ";
-    $sql .= 'FROM ' . WP_BB_LOG . ' WHERE 1=1 ';
+    $sql .= 'FROM ' . $_TABLES['bad_behavior2'] . ' WHERE 1=1 ';
 
     // Create a SearchCriteria instance with the name of the plugin
     $search = new SearchCriteria('bad_behavior2', $LANG_BAD_BEHAVIOR['results']);
