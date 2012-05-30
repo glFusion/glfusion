@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.3.0
 ------
+- General BB2 code cleanup, upgrade to core 2.0.48 (Mark)
 - Fixed hard-coded admin url reference (Eric)
 - Improved comment entry / viewing (Mark)
 - Removed 'View Members' option from group editor (Mark)
@@ -131,7 +132,7 @@ v1.3.0
 - Removed wiki text formatting (Mark)
 - Removed storybodytext.thtml / featuredbodytext.thtml templates (Mark)
 
-v1.2.2.pl3 (not released)
+v1.2.2.pl3
 ----------
 - Forum Plugin: Fixed error where some autotags did not display properly in
   forum posts (Mark)
