@@ -56,7 +56,7 @@ function glfusion_110() {
       uid mediumint(8) NOT NULL,
       time datetime NOT NULL,
       PRIMARY KEY (cid)
-    ) TYPE=MYISAM
+    ) ENGINE=MYISAM
     ";
     $_SQL[] = "ALTER TABLE {$_TABLES['comments']} ADD name varchar(32) default NULL AFTER indent";
     $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD comment_expire datetime NOT NULL default '0000-00-00 00:00:00' AFTER comments";
@@ -291,7 +291,7 @@ function glfusion_117()
                 `votes` int(11) NOT NULL,
                 `rating` decimal(4,2) NOT NULL,
                 KEY `id` (`id`)
-              ) Type=MyISAM;";
+              ) ENGINE=MyISAM;";
 
     $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['rating_votes']} (
                  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -304,7 +304,7 @@ function glfusion_117()
                  KEY `uid` (`uid`),
                  KEY `ip_address` (`ip_address`),
                  KEY `type` (`type`)
-               ) TYPE=MyISAM;";
+               ) ENGINE=MyISAM;";
 
     /* Execute SQL now to perform the upgrade */
     for ($i = 1; $i <= count($_SQL); $i++) {
@@ -706,20 +706,35 @@ function glfusion_130()
     $standard = ($_CONF['user_login_method']['standard']) ? true : false;
     $openid = ($_CONF['user_login_method']['openid']) ? true : false;
     $thirdparty = ($_CONF['user_login_method']['3rdparty']) ? true: false;
-    $oauth = false;
+    if ( isset($_CONF['user_login_method']['oauth'] ) ) {
+        $oauth = $_CONF['user_login_method']['oauth'];
+    } else {
+        $oauth = false;
+    }
     $c->del('user_login_method', 'Core');
     $c->add('user_login_method',array('standard' => $standard , 'openid' => $openid , '3rdparty' => $thirdparty , 'oauth' => $oauth),'@select',4,16,1,320,TRUE);
 
     // OAuth configuration settings
-    $c->add('facebook_login',0,'select',4,16,1,350,TRUE);
-    $c->add('facebook_consumer_key','not configured yet','text',4,16,NULL,351,TRUE);
-    $c->add('facebook_consumer_secret','not configured yet','text',4,16,NULL,352,TRUE);
+
+    if ( !isset($_CONF['facebook_login']) ) {
+        $c->add('facebook_login',0,'select',4,16,1,350,TRUE);
+        $c->add('facebook_consumer_key','not configured yet','text',4,16,NULL,351,TRUE);
+        $c->add('facebook_consumer_secret','not configured yet','text',4,16,NULL,352,TRUE);
+    }
+/*
     $c->add('linkedin_login',0,'select',4,16,1,353,TRUE);
     $c->add('linkedin_consumer_key','not configured yet','text',4,16,NULL,354,TRUE);
     $c->add('linkedin_consumer_secret','not configured yet','text',4,16,NULL,355,TRUE);
     $c->add('twitter_login',0,'select',4,16,1,356,TRUE);
     $c->add('twitter_consumer_key','not configured yet','text',4,16,NULL,357,TRUE);
     $c->add('twitter_consumer_secret','not configured yet','text',4,16,NULL,358,TRUE);
+*/
+    $c->del('linkedin_login','Core');
+    $c->del('linkedin_consumer_key','Core');
+    $c->del('linkedin_consumer_secret','Core');
+    $c->del('twitter_login','Core');
+    $c->del('twitter_consumer_key','Core');
+    $c->del('twitter_consumer_secret','Core');
 
     // date / time format changes
 
