@@ -127,8 +127,8 @@ function userprofile($user, $msg = 0, $plugin = '')
         $username = $A['username'];
         $fullname = '';
     }
-    $username = htmlspecialchars($username,ENT_COMPAT,COM_getEncodingt());
-    $fullname = htmlspecialchars($fullname,ENT_COMPAT,COM_getEncodingt());
+    $username = @htmlspecialchars($username,ENT_COMPAT,COM_getEncodingt());
+    $fullname = @htmlspecialchars($fullname,ENT_COMPAT,COM_getEncodingt());
 
     if ($A['status'] == USER_ACCOUNT_DISABLED) {
         $username = sprintf ('%s - %s', $username, $LANG28[42]);
@@ -846,7 +846,7 @@ function newuserform ($msg = '')
     if (!empty ($_POST['username'])) {
         $username = trim ( $_POST['username'] );
     }
-    $user_templates->set_var ('username', htmlentities($username,ENT_COMPAT,COM_getEncodingt()));
+    $user_templates->set_var ('username', @htmlentities($username,ENT_COMPAT,COM_getEncodingt()));
 
     $fullname = '';
     if (!empty ($_POST['fullname'])) {
@@ -854,7 +854,7 @@ function newuserform ($msg = '')
     }
     $fullname = USER_sanitizeName($fullname);
 
-    $user_templates->set_var ('fullname', htmlentities($fullname,ENT_COMPAT,COM_getEncodingt()));
+    $user_templates->set_var ('fullname', @htmlentities($fullname,ENT_COMPAT,COM_getEncodingt()));
     switch ($_CONF['user_reg_fullname']) {
     case 2:
         $user_templates->set_var('require_fullname', 'true');
@@ -973,7 +973,7 @@ function mergeAccountForm($msg='')
 
     // we should have the user's email in $_USER['email'];
     $remoteEmail = $_USER['email'];
-    $sql = "SELECT * FROM {$_TABLES['users']} WHERE (remoteservice='' OR remoteservice IS NULL) AND email='".DB_escapeString($remoteEmail)."'";
+    $sql = "SELECT * FROM {$_TABLES['users']} WHERE (remoteservice='' OR remoteservice IS NULL) AND email='".DB_escapeString($remoteEmail)."' AND uid > 1";
     $result = DB_query($sql);
     $numRows = DB_numRows($result);
     if ( $numRows > 0 ) {
