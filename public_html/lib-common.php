@@ -134,19 +134,6 @@ $config->initConfig();
 
 $_CONF = $config->get_config('Core');
 
-
-/* ------- Development Code - need to update conf_values ---- */
-$_CONF['enable_facebook'] = true;
-$_CONF['enable_twitter']  = true;
-$_CONF['enable_plusone']  = true;
-
-$_CONF['facebooklike_enable'] = true;
-$_CONF['faceblooklike_url']   = '';
-$_CONF['twitterfollow_enable']    = true;
-$_CONF['twitterfollow_url']       = '';
-/* ------ End of Development Code --- */
-
-
 // set default UI styles
 $uiStyles = array(
     'full_content' => array('left_class' => '',
@@ -357,6 +344,11 @@ require_once $_CONF['path_system'].'imglib/lib-image.php';
 */
 
 require_once $_CONF['path_system'].'lib-rating.php';
+
+/**
+* Autotag library
+*
+*/
 
 require_once $_CONF['path_system'].'lib-autotag.php';
 
@@ -2408,6 +2400,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
            $_DB_dbms, $config, $LANG29;
 
     $retval = '';
+    $link_array = array();
 
     if ( COM_isAnonUser()) {
         return $retval;
@@ -4622,10 +4615,7 @@ function COM_printPageNavigation( $base_url, $curpage, $num_pages,
 
     if ( $curpage > 1 ) {
         $retval .= COM_createLink($LANG05[7], $base_url . $sep . $page_str . '1' . $suffix) . ' | ';
-        $pg = '';
-        if ( ( $curpage - 1 ) > 1 ) {
-            $pg = $sep . $page_str . ( $curpage - 1 );
-        }
+        $pg = $sep . $page_str . ( $curpage - 1 );
         $retval .= COM_createLink($LANG05[6], $base_url . $pg . $suffix) . ' | ';
     } else {
         $retval .= $LANG05[7] . ' | ' ;
@@ -6823,8 +6813,8 @@ function COM_getTooltipStyle()
 
     $retval = 'gl_mootip';
 
-    if ( function_exists('THEME_getToolTipStyle') ) {
-        $retval = THEME_getToolTipStyle();
+    if ( function_exists('theme_getToolTipStyle') ) {
+        $retval = theme_getToolTipStyle();
     }
     return $retval;
 }
