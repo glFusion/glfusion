@@ -11,7 +11,7 @@
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2008 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -93,7 +93,7 @@ $LANG_BB2_RESPONSE = array (
     '41feed15' => 'Header \'Pragma\' without \'Cache-Control\' prohibited for HTTP/1.1 requests',
     '45b35e30' => 'Header \'Referer\' is corrupt',
     '57796684' => 'Prohibited header \'X-Aaaaaaaaaa\' or \'X-Aaaaaaaaaaaa\' present',
-    '582ec5e4' => '"Header \'TE\' present but TE not specified in \'Connection\' header',
+    '582ec5e4' => 'Header \'TE\' present but TE not specified in \'Connection\' header',
     '69920ee5' => 'Header \'Referer\' present but blank',
     '6c502ff1' => 'Bot not fully compliant with RFC 2965',
 	'71436a15' => 'User-Agent claimed to be Yahoo, claim appears to be false',

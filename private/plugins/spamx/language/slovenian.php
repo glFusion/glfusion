@@ -129,7 +129,8 @@ $LANG_SX00 = array(
     'stats_deleted' => 'Posts deleted as spam',
     'plugin_name' => 'Spam-X',
     'slvwhitelist' => 'SLV Whitelist',
-    'instructions' => 'Spam-X allows you to define words, URLs, and other items that can be used to block spam posts on your site.'
+    'instructions' => 'Spam-X allows you to define words, URLs, and other items that can be used to block spam posts on your site.',
+    'invalid_email_or_ip' => 'Invalid e-mail address or IP address has been blocked'
 );
 
 // Define Messages that are shown when Spam-X module action is taken

@@ -239,7 +239,9 @@ $LANG01 = array(
     'autotag_perms' => 'Autotag Permissions',
     'subscribe' => 'Subscribe',
     'unsubscribe' => 'Unsubscribe',
-    'view_online' => 'Click here %s to view online'
+    'view_online' => 'Click here %s to view online',
+    'no_new_items' => 'No New Items',
+    'max_execution_time' => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.'
 );
 
 ###############################################################################
@@ -291,7 +293,9 @@ $LANG03 = array(
     43 => 'Posted By',
     44 => 'Post Date',
     45 => 'You are receiving this email because you have chosen to be notified when a new comment has been posted.',
-    46 => 'To unsubscribe to this comment feed, please click this link: %s'
+    46 => 'To unsubscribe to this comment feed, please click this link: %s',
+    47 => 'Notify me via eMail when new comments or replies are posted for this item.',
+    48 => 'Click <a href="javascript:history.back()">here</a> to return'
 );
 
 ###############################################################################
@@ -476,7 +480,11 @@ $LANG04 = array(
     181 => 'Category',
     182 => 'Description',
     183 => 'Notification Subscriptions',
-    184 => 'New Post Notification'
+    184 => 'New Post Notification',
+    185 => 'There is a local account with the same email address as your Facebook eMail. Would you like to merge these accounts?',
+    186 => 'If you do not wish to merge the accounts, please select the Cancel button below.',
+    187 => 'Enter the password above for the local account and hit the Merge button.',
+    188 => 'Merge'
 );
 
 ###############################################################################
@@ -1301,7 +1309,9 @@ $LANG32 = array(
     84 => 'Bundled',
     85 => 'Upload Autotag',
     86 => 'Automated Autotag Installer Error',
-    87 => 'Autotag Installer'
+    87 => 'Autotag Installer',
+    88 => 'Are you sure you want to remove this plugin?',
+    89 => 'Are you absolutely sure you want to remove this plugin?  This will result in the deletion of all of the files and directories relating to this plugin, and to re-install this plugin, you will have to upload another copy.'
 );
 
 ###############################################################################
@@ -1473,6 +1483,7 @@ $MESSAGE = array(
     113 => 'Your account has been created successfully. {site_url}',
     114 => 'Warning: Resynchronization with your remote OAuth account has failed but your other account information has been successfully saved.',
     115 => 'Warning: The remote OAuth authentication service has been disabled.',
+    116 => 'The plugin\'s files and related directories were successfully removed.',
     200 => 'Sorry, you do not have access to this page.  Please note that all attempts to access unauthorized features are logged.',
     500 => 'The Template Cache has been successfully cleared',
     501 => 'Security Token is Invalid - Possible session timeout.',
@@ -1671,7 +1682,10 @@ $LANG_ACCESS = array(
     'editinguser' => 'Editing User: ',
     'createnewuser' => 'Creating New Account',
     'confirm1' => 'Are you sure you want to delete this group?',
-    'confirm2' => 'Are you absolutely sure you want to delete this group?  This will affect any users or groups that are associated with this group!  Press Cancel and then Edit this group if you wish to view the details.'
+    'confirm2' => 'Are you absolutely sure you want to delete this group?  This will affect any users or groups that are associated with this group!  Press Cancel and then Edit this group if you wish to view the details.',
+    'token_expired' => 'The security token has expired. Please validate your session below.',
+    'token_expired_footer' => 'The security token for this operation has expired, please re-validate',
+    'validation_failed' => 'Validation Failed - Please retry.'
 );
 
 ###############################################################################
@@ -2193,7 +2207,9 @@ $LANG_LOGO = array(
     'current_logo' => 'Current Logo',
     'no_logo_graphic' => 'No Logo Graphic available',
     'logo_help' => 'Uploaded graphic logo images are not resized, the standard size for glFusion logo is 100 pixels tall and should be less than 500 pixels wide.  You can upload larger images, but you will need to modify the site CSS in styles.css to ensure it displays properly.',
-    'logo_saved' => 'Logo options successfully saved.'
+    'logo_saved' => 'Logo options successfully saved.',
+    'invalid_type' => 'Invalid image type, only JPG, PNG, and GIF are allowed',
+    'invalid_size' => 'Uploaded logo larger than allowed size of '
 );
 
 ###############################################################################
@@ -2240,7 +2256,15 @@ $LANG_AM = array(
     'desc_story' => 'Link: to a story on this site; link_text defaults to story title.  usage: [story:<i>story_id</i> {link_text}]',
     'desc_story_introtext' => 'HTML: renders story content, up to and including only introduction text.  usage: [story_introtext:<i>story_id</i>]',
     'desc_vmenu' => 'HTML: renders a JS-enhanced vertical menu. usage: [vmenu:<i>menu_id</id>]',
-    'desc_hmenu' => 'HTML: renders a JS-enhanced horizontal menu.  usage: [hmenu:<i>menu_id</i>]'
+    'desc_hmenu' => 'HTML: renders a JS-enhanced horizontal menu.  usage: [hmenu:<i>menu_id</i>]',
+    'desc_cipher' => 'Text: substitution cipher. Usage example is [wikipedia:ROT13]: [cipher:<i>nopqrstuvwxyzabcdefghijklm</i> <i>text_to_encode</i>]',
+    'desc_topic' => 'Link: to home page to display specified topic: link_text defaults to description. usage: [topic:<i>topic_id</i> {link_text}]',
+    'desc_glfwiki' => 'Link: to the glfusion.or wiki search result for the text specified. usage: [glfwiki:<i>text</i>]',
+    'desc_lang' => 'Text: expands \$LANG global var, eg. [lang:p1 p2] -> value of \$LANGp1[p2] or \$LANG_p1[p2]',
+    'desc_conf' => 'Text: expands \$_CONF global var, eg. [conf:p1] -> value of \$_CONF[p1]',
+    'desc_user' => 'Text: expands \$_USER global var, eg. [user:p1] -> value of \$_USER[p1]',
+    'desc_wikipedia' => 'Link: to the wikipedia search result for the text specified. usage: [wikipedia:<i>text</i>]',
+    'desc_youtube' => 'HTML: embeds a youtube.com video object. usage: [youtube:<i>video_id</i>]'
 );
 
 ###############################################################################
@@ -2270,7 +2294,6 @@ $LANG_commentcodes = array(
 $LANG_commentmodes = array(
     'flat' => '平面的',
     'nested' => '嵌套的',
-    'threaded' => '线状的',
     'nocomment' => '无评论'
 );
 
@@ -2584,7 +2607,10 @@ $LANG_confignames['Core'] = array(
     'comment_editor' => 'Comment Editor',
     'max_logo_width' => 'Max logo width',
     'max_logo_height' => 'Max logo height',
-    'whatsnew_cache_time' => 'Time between forced rebuild of the What\'s New cache (in seconds)'
+    'whatsnew_cache_time' => 'Time between forced rebuild of the What\'s New cache (in seconds)',
+    'hideemptyblock' => 'Hide What\'s New Block when empty',
+    'update_check_interval' => 'Update Check Interval',
+    'send_site_data' => 'Send Site Data'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2642,7 +2668,8 @@ $LANG_fs['Core'] = array(
     'fs_webservices' => 'Webservices',
     'fs_caching' => 'Caching',
     'fs_mulitlanguage' => 'Multiple Language Support - See <a href="http://www.glfusion.org/wiki/doku.php/glfusion:language#multilingual_sites" target=_blank>Multi-Language Documentation</a>',
-    'fs_logo' => 'Logo Options'
+    'fs_logo' => 'Logo Options',
+    'fs_update' => 'Update Checker'
 );
 
 $LANG_configselects['Core'] = array(
@@ -2674,7 +2701,8 @@ $LANG_configselects['Core'] = array(
     25 => array('No' => 0, 'Optional' => 1, 'Required' => 2),
     26 => array('None' => 0, 'A.B' => 1, 'A.B.C' => 2, 'All' => 3),
     27 => array('Generate Password' => 0, 'User Enters Password' => 1),
-    28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1)
+    28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
+    29 => array('Daily' => 86400, 'Weekly' => 604800, 'Hourly' => 3600, 'Always' => 0)
 );
 
 ?>

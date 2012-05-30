@@ -11,7 +11,7 @@
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2009 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -78,8 +78,8 @@ $LANG_BAD_BEHAVIOR = array(
     'stats_no_hits' => 'No entries.',
     'blocked_ips' => 'Blocked unique IP addresses',
     'unblock' => 'Unblock IP address',
-    'ip_date'               => 'IP / Date / Status',
-    'headers'               => 'Headers',
+    'ip_date' => 'IP / Date / Status',
+    'headers' => 'Headers'
 );
 
 $LANG_BB2_RESPONSE = array(
@@ -95,10 +95,10 @@ $LANG_BB2_RESPONSE = array(
     '41feed15' => 'Header \'Pragma\' without \'Cache-Control\' prohibited for HTTP/1.1 requests',
     '45b35e30' => 'Header \'Referer\' is corrupt',
     '57796684' => 'Prohibited header \'X-Aaaaaaaaaa\' or \'X-Aaaaaaaaaaaa\' present',
-    '582ec5e4' => '"Header \'TE\' present but TE not specified in \'Connection\' header',
+    '582ec5e4' => 'Header \'TE\' present but TE not specified in \'Connection\' header',
     '69920ee5' => 'Header \'Referer\' present but blank',
     '6c502ff1' => 'Bot not fully compliant with RFC 2965',
-	'71436a15' => 'User-Agent claimed to be Yahoo, claim appears to be false',
+    '71436a15' => 'User-Agent claimed to be Yahoo, claim appears to be false',
     '799165c2' => 'Rotating user-agents detected',
     '7a06532b' => 'Required header \'Accept-Encoding\' missing',
     '7ad04a8a' => 'Prohibited header \'Range\' present',
@@ -120,7 +120,8 @@ $LANG_BB2_RESPONSE = array(
     'e87553e1' => 'I know you and I don\'t like you, dirty spammer.',
     'f0dcb3fd' => 'Web browser attempted to send a trackback',
     'f1182195' => 'User-Agent claimed to be Googlebot, claim appears to be false.',
-    'f9f2b8b9' => 'A User-Agent is required but none was provided.'
+    'f9f2b8b9' => 'A User-Agent is required but none was provided.',
+    'f9f3b8b0' => 'Question mark at end of query.'
 );
 
 $PLG_bad_behavior_MESSAGE1 = 'If you see this message, then Bad Behavior2 is <b>not</b> installed correctly! Please read the installation instructions again carefully.';

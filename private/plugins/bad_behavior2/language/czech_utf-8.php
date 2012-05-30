@@ -11,7 +11,7 @@
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2011 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -78,8 +78,8 @@ $LANG_BAD_BEHAVIOR = array(
     'stats_no_hits' => '6ádné záznamy.',
     'blocked_ips' => 'Blokovaná unikátní IP adresa',
     'unblock' => 'Odblokovat IP adresu',
-    'ip_date'               => 'IP / Date / Status',
-    'headers'               => 'Headers',
+    'ip_date' => 'IP / Date / Status',
+    'headers' => 'Headers'
 );
 
 $LANG_BB2_RESPONSE = array(
@@ -95,10 +95,10 @@ $LANG_BB2_RESPONSE = array(
     '41feed15' => 'Záhlaví \'Pragma\' bez \'Cache-Control\' je zakázáno pro požadavky HTTP/1.1',
     '45b35e30' => 'Záhlaví \'Referer\' je poškozeno',
     '57796684' => 'Přítomno zakázané záhlaví \'X-Aaaaaaaaaa\' nebo \'X-Aaaaaaaaaaaa\'',
-    '582ec5e4' => '"Záhlaví \'TE\' je přítomno, ale TE není specifikováno v \'Connection\' záhlaví',
+    '582ec5e4' => 'Záhlaví \'TE\' je přítomno, ale TE není specifikováno v \'Connection\' záhlaví',
     '69920ee5' => 'Záhlaví \'Referer\' je přítomno, ale prázdné',
     '6c502ff1' => 'Bot nevyhovuje plně RFC 2965',
-	'71436a15' => 'User-Agent claimed to be Yahoo, claim appears to be false',
+    '71436a15' => 'User-Agent claimed to be Yahoo, claim appears to be false',
     '799165c2' => 'Detekováno cyklování prohlížeče',
     '7a06532b' => 'Vyžadované záhlaví \'Accept-Encoding\' chybí',
     '7ad04a8a' => 'Přítomno zakázané záhlaví \'Range\'',
@@ -120,7 +120,8 @@ $LANG_BB2_RESPONSE = array(
     'e87553e1' => 'Znám tě a nemám tě rád, všivej spamere.',
     'f0dcb3fd' => 'Prohlížeč se pokusil poslat trackback',
     'f1182195' => 'Prohlížeč se neúspěšně tvářil, že je Googlebot.',
-    'f9f2b8b9' => 'User-Agent je vyžadováno, ale žádný nebyl poskytnutý.'
+    'f9f2b8b9' => 'User-Agent je vyžadováno, ale žádný nebyl poskytnutý.',
+    'f9f3b8b0' => 'Question mark at end of query.'
 );
 
 $PLG_bad_behavior_MESSAGE1 = 'Pokud vidíte tuto zprávu, tak Bad Behavior2 <b>není</b> správně nainstalován! Přečtěte si prosím znovu pozorně instalační pokyny.';

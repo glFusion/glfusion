@@ -11,7 +11,7 @@
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2008 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -79,8 +79,8 @@ $LANG_BAD_BEHAVIOR = array(
     'stats_no_hits' => 'Keine Einträge.',
     'blocked_ips' => 'Abgeblockte Requests nach IP-Adresse',
     'unblock' => 'IP-Adresse freigeben',
-    'ip_date'               => 'IP / Date / Status',
-    'headers'               => 'Headers',
+    'ip_date' => 'IP / Date / Status',
+    'headers' => 'Headers'
 );
 
 $LANG_BB2_RESPONSE = array(
@@ -99,7 +99,7 @@ $LANG_BB2_RESPONSE = array(
     '582ec5e4' => 'Header \'TE \' vorhanden, aber nicht in TE angegeben \'Connection \'Kopfzeile',
     '69920ee5' => 'Header \'Referer\' vorhanden, aber leer',
     '6c502ff1' => 'Bot nicht vollständig konform mit RFC 2965',
-	'71436a15' => 'User-Agent claimed to be Yahoo, claim appears to be false',
+    '71436a15' => 'User-Agent claimed to be Yahoo, claim appears to be false',
     '799165c2' => 'Rotierende User-Agents erkannt',
     '7a06532b' => 'Benötigte Header \'Accept-Encoding\' fehlt',
     '7ad04a8a' => 'Verbotene Header \'Range\' erhalten',
@@ -121,7 +121,8 @@ $LANG_BB2_RESPONSE = array(
     'e87553e1' => 'Ich weiß, Sie und ich mag dich nicht, schmutzig Spammer.',
     'f0dcb3fd' => 'Web-Browser versucht, einen Trackback senden',
     'f1182195' => 'User-Agent behauptete Googlebot scheint falsch zu sein.',
-    'f9f2b8b9' => 'Ein User-Agent ist erforderlich aber keiner war vorgesehen.'
+    'f9f2b8b9' => 'Ein User-Agent ist erforderlich aber keiner war vorgesehen.',
+    'f9f3b8b0' => 'Question mark at end of query.'
 );
 
 $PLG_bad_behavior_MESSAGE1 = 'Wenn Du diesen Hinweis siehst, dann ist Bad Behavior <b>nicht</b> korrekt installiert. Bitte lies Dir die Installationsanleitung noch einmal sorgfältig durch.';
