@@ -1030,7 +1030,8 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 'LANG_TOPIC'    => $LANG_GF01['TOPIC'],
                 'LANG_LASTPOST' => $LANG_GF01['LASTPOST'],
                 'LANG_viewlastpost' => $LANG_GF02['msg160'],
-                'LANG_forumjump'    => $LANG_GF02['msg195']
+                'LANG_forumjump'    => $LANG_GF02['msg195'],
+                'tooltip_style' => COM_getToolTipStyle()
         ));
         $groups = array ();
         $usergroups = SEC_getUserGroups();
