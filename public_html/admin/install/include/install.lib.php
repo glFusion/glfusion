@@ -66,13 +66,11 @@ if ($LANG_DIRECTION == 'rtl') {
 
 if (!function_exists('INST_stripslashes') ) {
     if (get_magic_quotes_gpc() == 1) {
-        function INST_stripslashes($text)
-        {
+        function INST_stripslashes($text) {
             return stripslashes($text);
         }
     } else {
-        function INST_stripslashes($text)
-        {
+        function INST_stripslashes($text) {
             return $text;
         }
     }
@@ -388,7 +386,7 @@ function INST_fixPathsAndUrls($path, $path_html, $site_url, $site_admin_url)
 
         if (! file_exists($path_html . 'layout/' . $_CONF['theme']
                                                  . '/header.thtml')) {
-            $config->set('theme', 'professional');
+            $config->set('theme', 'nouveau');
         }
     }
     if (! file_exists($_CONF['path_images'] . 'articles')) {
@@ -976,12 +974,14 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('facebook_login',0,'select',4,16,1,350,TRUE);
             $c->add('facebook_consumer_key','not configured yet','text',4,16,NULL,351,TRUE);
             $c->add('facebook_consumer_secret','not configured yet','text',4,16,NULL,352,TRUE);
+/*
             $c->add('linkedin_login',0,'select',4,16,1,353,TRUE);
             $c->add('linkedin_consumer_key','not configured yet','text',4,16,NULL,354,TRUE);
             $c->add('linkedin_consumer_secret','not configured yet','text',4,16,NULL,355,TRUE);
             $c->add('twitter_login',0,'select',4,16,1,356,TRUE);
             $c->add('twitter_consumer_key','not configured yet','text',4,16,NULL,357,TRUE);
             $c->add('twitter_consumer_secret','not configured yet','text',4,16,NULL,358,TRUE);
+*/
             // date / time format changes
             $c->add('date','l, F d Y @ h:i A T','text',6,29,NULL,370,TRUE);
             $c->add('daytime','m/d h:iA','text',6,29,NULL,380,TRUE);
