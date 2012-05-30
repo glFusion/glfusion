@@ -140,7 +140,7 @@ $page  = isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'],true) : 0;
 if ( (int) $forum == 0 && (int) $id != 0 ) {
     $forum = DB_getItem($_TABLES['ff_topic'],'forum','id='.(int) $id);
 }
-$result = DB_query("SELECT forum_id AS forum,is_readonly,grp_id,rating_post FROM {$_TABLES['ff_forums']} WHERE forum_id=".(int) $forum);
+$result = DB_query("SELECT forum_id AS forum,forum_cat,is_readonly,grp_id,rating_post FROM {$_TABLES['ff_forums']} WHERE forum_id=".(int) $forum);
 if ( DB_numRows($result) == 0 ) {
     _ff_accessError();
 }
@@ -763,6 +763,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
             'referer'           => $forumData['referer'],
             'forum_id'          => $forumData['forum'],
             'cat_name'          => $postData['cat_name'],
+            'cat_id'            => $forumData['forum_cat'],
             'forum_name'        => $postData['forum_name'],
             'subject'           => _ff_checkHTML($postData['subject']),
             'LANG_HOME'         => $LANG_GF01['HOMEPAGE'],
