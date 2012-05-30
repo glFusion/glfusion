@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -72,6 +72,7 @@ if ($_FF_CONF['registration_required'] && COM_isAnonUser()) {
 
 $canPost = 0;
 $display = '';
+$pageBody = '';
 $todaysdate=date("l, F d, Y");
 
 forum_chkUsercanAccess();
@@ -269,8 +270,6 @@ if ($op == 'search') {
 $mytimer = new timerobject();
 $mytimer->startTimer();
 
-$display  = FF_siteHeader($LANG_GF01['INDEXPAGE']);
-$display .= FF_ForumHeader($forum,0);
 $errMsg = '';
 
 $uid = 1;
@@ -480,13 +479,13 @@ if ($forum == 0) {
     }
 
     if ($numCategories == 0 ) {         // Do we have any categories defined yet
-        $display .= '<h1 style="padding:10px; color:#F00; background-color:#000">No Categories or Forums Defined</h1>';
+        $pageBody .= '<h1 style="padding:10px; color:#F00; background-color:#000">No Categories or Forums Defined</h1>';
     }
 
     $DisplayTime = $mytimer->stopTimer();
 
     $forumlisting->parse ('output', 'forumlisting');
-    $display .= $forumlisting->finish ($forumlisting->get_var('output'));
+    $pageBody .= $forumlisting->finish ($forumlisting->get_var('output'));
 }
 
 // Display Forums
@@ -537,6 +536,7 @@ if ($forum > 0) {
                     'img_desc3'             => '<img src="'._ff_getImage('desc').'" border="0" alt=""/>',
                     'img_desc4'             => '<img src="'._ff_getImage('desc').'" border="0" alt=""/>',
                     'img_desc5'             => '<img src="'._ff_getImage('desc').'" border="0" alt=""/>',
+                    'tooltip_style'         => COM_getToolTipStyle()
     ));
 
     switch($sort) {
@@ -687,8 +687,10 @@ if ($forum > 0) {
 
     $topiclisting->set_block('topiclisting', 'topicrows', 'trow');
     $displayCount = 0;
+    if ( $FF_userprefs['postsperpage'] <= 0 ) {
+        $FF_userprefs['postsperpage'] = 20;
+    }
     while (($record = DB_fetchArray($topicResults,false)) != NULL ) {
-
         if ( ( $record['replies']+1 ) <= $FF_userprefs['postsperpage'] ) {
             $displaypageslink = "";
             $gotomsg = "";
@@ -840,8 +842,13 @@ if ($forum > 0) {
     }
     $topiclisting->parse ('output', 'topiclisting');
 
-    $display .= $topiclisting->finish ($topiclisting->get_var('output'));
+    $pageBody .= $topiclisting->finish ($topiclisting->get_var('output'));
 }
+
+$display  = FF_siteHeader($LANG_GF01['INDEXPAGE']);
+$display .= FF_ForumHeader($forum,0);
+
+$display .= $pageBody;
 
 $display .= FF_BaseFooter();
 $display .= FF_siteFooter();
