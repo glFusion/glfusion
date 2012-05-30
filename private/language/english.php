@@ -293,6 +293,7 @@ $LANG03 = array(
     45 => 'You are receiving this email because you have chosen to be notified when a new comment has been posted.',
     46 => 'To unsubscribe to this comment feed, please click this link: %s',
     47 => 'Notify me via eMail when new comments or replies are posted for this item.',
+    48 => 'Click <a href="javascript:history.back()">here</a> to return',
 );
 
 ###############################################################################
@@ -1162,7 +1163,7 @@ $LANG29 = array(
     16 => 'Username',
     17 => 'Full Name',
     18 => 'eMail',
-    34 => 'Command & Control',
+    34 => 'Command &amp; Control',
     35 => 'Story Submissions',
     36 => 'Comment',
     37 => 'Time',
