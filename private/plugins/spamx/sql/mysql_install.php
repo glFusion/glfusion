@@ -40,7 +40,7 @@ CREATE TABLE {$_TABLES['spamx']} (
   name varchar(20) NOT NULL default '',
   value varchar(255) NOT NULL default '',
   INDEX spamx_name(name)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 ?>

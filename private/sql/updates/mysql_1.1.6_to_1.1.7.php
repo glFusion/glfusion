@@ -41,7 +41,7 @@ $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['rating']} (
   `votes` int(11) NOT NULL,
   `rating` decimal(4,2) NOT NULL,
   KEY `id` (`id`)
-) Type=MyISAM;";
+) ENGINE=MyISAM;";
 
 $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['rating_votes']} (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -55,7 +55,7 @@ $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['rating_votes']} (
   KEY `uid` (`uid`),
   KEY `ip_address` (`ip_address`),
   KEY `type` (`type`)
-) TYPE=MyISAM;";
+) ENGINE=MyISAM;";
 
 $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `rating` float NOT NULL DEFAULT '0' AFTER hits";
 $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `votes` int(11) NOT NULL DEFAULT '0' AFTER rating";

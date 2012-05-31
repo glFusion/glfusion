@@ -35,7 +35,7 @@ CREATE TABLE {$_TABLES['tokens']} (
     urlfor varchar(255) NOT NULL,
     ttl mediumint(8) unsigned NOT NULL default '1',
     PRIMARY KEY (token)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 
@@ -54,7 +54,7 @@ function create_ConfValues()
       selectionArray int(11) default NULL,
       sort_order int(11) default NULL,
       fieldset int(11) default NULL
-    ) TYPE=MyISAM");
+    ) ENGINE=MyISAM");
 
     require_once $_CONF['path_system'] . 'classes/config.class.php';
 
@@ -390,7 +390,7 @@ function upgrade_PollsPlugin()
           pid varchar(20) NOT NULL,
           question varchar(255) NOT NULL,
           PRIMARY KEY (qid, pid)
-        ) TYPE=MyISAM";
+        ) ENGINE=MyISAM";
     // in 1.4.1, "don't display poll" was equivalent to "closed"
     $P_SQL[] = "UPDATE {$_TABLES['polltopics']} SET is_open = 0 WHERE display = 0";
     $P_SQL[] = "UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.1', pi_gl_version = '1.5.0' WHERE pi_name = 'polls'";
@@ -590,7 +590,7 @@ function upgrade_LinksPlugin()
       perm_anon tinyint(1) unsigned NOT NULL default '2',
       PRIMARY KEY (cid),
       KEY links_pid (pid)
-    ) TYPE=MyISAM
+    ) ENGINE=MyISAM
     ";
 
     $blockadmin_id = DB_getItem($_TABLES['groups'], 'grp_id',
