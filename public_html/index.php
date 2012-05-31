@@ -309,7 +309,7 @@ if ( $A = DB_fetchArray( $result ) ) {
         } else {
             $base_url = $_CONF['site_url'] . '/index.php?topic=' . $topic;
         }
-        $pageBody .= COM_printPageNavigation ($base_url, $page, $num_pages);
+        $pageBody .= '<div class="aligncenter">'.COM_printPageNavigation ($base_url, $page, $num_pages).'</div>';
     }
 } else { // no stories to display
     $cbDisplay = '';
