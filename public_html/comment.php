@@ -425,7 +425,6 @@ CMT_updateCommentcodes();
 
 $display = '';
 $pageBody = '';
-$noindex = '';
 $pageTitle = '';
 
 // If reply specified, force comment submission form
@@ -597,7 +596,8 @@ if ( isset($_POST['cancel'] ) ) {
                         $title = str_replace ( '&lt;', '<', $title );
                         $title = str_replace ( '&gt;', '>', $title );
                     }
-                    $noindex = '<meta name="robots" content="noindex"/>'.LB;
+                    $outputHandle = outputHandler::getInstance();
+                    $outputHandle->addMeta('name','robots','noindex');
                     $pageBody .= PLG_displayComment($type, $sid, 0, $title, '', 'nobar', 0, 0)
                               .  CMT_commentForm ($title, '', $sid,$pid, $type, $mode,$postmode);
                 } else {
@@ -609,7 +609,7 @@ if ( isset($_POST['cancel'] ) ) {
     }
 }
 
-echo COM_siteHeader('menu',$pageTitle,$noindex);
+echo COM_siteHeader('menu',$pageTitle);
 echo $pageBody;
 echo COM_siteFooter();
 ?>

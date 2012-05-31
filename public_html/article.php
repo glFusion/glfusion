@@ -58,6 +58,9 @@ if ($_CONF['trackback_enabled']) {
 
 // MAIN
 $display = '';
+$pageBody = '';
+$pagetitle = '';
+$pingback = false;
 
 $order = '';
 $query = '';
@@ -131,11 +134,14 @@ if ($A['count'] > 0) {
        $story->_fullname = $output['fullname'];
     }
     if ($output == STORY_PERMISSION_DENIED) {
-        $display .= COM_siteHeader ('menu', $LANG_ACCESS['accessdenied'])
+        $display = COM_siteHeader ('menu', $LANG_ACCESS['accessdenied'])
                  . COM_showMessageText($LANG_ACCESS['storydenialmsg'], $LANG_ACCESS['accessdenied'], true,'error')
                  . COM_siteFooter ();
+        echo $display;
+        exit;
     } elseif ( $output == STORY_INVALID_SID ) {
-        $display .= COM_refresh($_CONF['site_url'] . '/index.php');
+        echo COM_refresh($_CONF['site_url'] . '/index.php');
+        exit;
     } elseif (($mode == 'print') && ($_CONF['hideprintericon'] == 0)) {
         $story_template = new Template($_CONF['path_layout'] . 'article');
         $story_template->set_file('article', 'printable.thtml');
@@ -143,9 +149,8 @@ if ($A['count'] > 0) {
         $story_template->set_var('page_title',
                 $_CONF['site_name'] . ': ' . $story->displayElements('title'));
         $story_template->set_var ( 'story_title', $story->DisplayElements( 'title' ) );
-        header ('Content-Type: text/html; charset=' . COM_getCharset ());
 
-        if ( $_CONF['hidestorydate'] != 1 ) {
+         if ( $_CONF['hidestorydate'] != 1 ) {
             $story_template->set_var ('story_date', $story->displayElements('date'));
         }
 
@@ -192,29 +197,32 @@ if ($A['count'] > 0) {
         COM_setLangIdAndAttribute($story_template);
 
         $story_template->parse('output', 'article');
-        $display = $story_template->finish($story_template->get_var('output'));
+        header ('Content-Type: text/html; charset=' . COM_getCharset ());
+        echo $story_template->finish($story_template->get_var('output'));
+        exit;
     } else {
         // Set page title
         $pagetitle = $story->DisplayElements('title');
 
-        $headercode = '';
+        $outputHandle = outputHandler::getInstance();
+
         $permalink = COM_buildUrl($_CONF['site_url'] . '/article.php?story='
                                   . $story->getSid());
-        $headercode .= '<link rel="canonical" href="'.$permalink.'"'.XHTML.'>';
+        $outputHandle->addLink('canonical',$permalink);
+
         if ($story->DisplayElements('trackbackcode') == 0) {
             if ($_CONF['trackback_enabled']) {
                 $trackbackurl = TRB_makeTrackbackUrl($story->getSid());
-                $headercode .= LB . '<!--' . LB
+
+                $outputHandle->addRaw(LB . '<!--' . LB
                      . TRB_trackbackRdf($permalink, $pagetitle, $trackbackurl)
-                     . LB . '-->' . LB;
+                     . LB . '-->' . LB);
             }
-            if ($_CONF['pingback_enabled']) {
-                header ('X-Pingback: ' . $_CONF['site_url'] . '/pingback.php');
-            }
+            $pingback = true;
         }
-        $headercode .= '<meta property="og:title" content="'.$pagetitle.'" />' . LB;
-        $headercode .= '<meta property="og:type" content="article" />' . LB;
-        $headercode .= '<meta property="og:url" content="'.$permalink.'" />' . LB;
+        $outputHandle->addMeta('property','og:title',$pagetitle);
+        $outputHandle->addMeta('property','og:type','article');
+        $outputHandle->addMeta('property','og:url',$permalink);
 
         USES_lib_html2text();
         $metaDesc = $story->DisplayElements('introtext');
@@ -235,9 +243,7 @@ if ($A['count'] > 0) {
             }
         }
         $metaDesc = trim($shortComment).$tailString;
-        $meta = '<meta name="description" content="'.htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()).'"/>' . LB;
-
-        $display .= COM_siteHeader('menu', $pagetitle, $meta . $headercode);
+        $outputHandle->addMeta('name','description',@htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()));
 
         if (isset($_GET['msg'])) {
             $msg = (int) COM_applyFilter($_GET['msg'], true);
@@ -246,7 +252,7 @@ if ($A['count'] > 0) {
                 if (isset($_GET['plugin'])) {
                     $plugin = COM_applyFilter($_GET['plugin']);
                 }
-                $display .= COM_showMessage($msg, $plugin,'',0,'info');
+                $pageBody .= COM_showMessage($msg, $plugin,'',0,'info');
             }
         }
         DB_query ("UPDATE {$_TABLES['stories']} SET hits = hits + 1 WHERE (sid = '".DB_escapeString($story->getSid())."') AND (date <= NOW()) AND (draft_flag = 0)");
@@ -387,13 +393,16 @@ if ($A['count'] > 0) {
         } else {
             $story_template->set_var ('trackback', '');
         }
-        $display .= $story_template->finish ($story_template->parse ('output', 'article'));
-        $display .= COM_siteFooter ();
+        $pageBody .= $story_template->finish ($story_template->parse ('output', 'article'));
     }
 } else {
-    $display = COM_refresh($_CONF['site_url'] . '/index.php');
+    echo COM_refresh($_CONF['site_url'] . '/index.php');
 }
 
-echo $display;
-
+if ($pingback == true && $_CONF['pingback_enabled']) {
+    header ('X-Pingback: ' . $_CONF['site_url'] . '/pingback.php');
+}
+echo COM_siteHeader('menu', $pagetitle);
+echo $pageBody;
+echo COM_siteFooter();
 ?>
