@@ -2167,8 +2167,6 @@ function SEC_collectRemoteOAuthModules()
                                     }
                                 }
                             }
-                        } else {
-                            $modules[] = $mod;
                         }
                     }
                 }
