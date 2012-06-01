@@ -759,6 +759,9 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
             case 'status' :
                 $fields[] = 'draft_flag';
                 break;
+            case 'author' :
+                $fields[] = 'uid';
+                break;
             default:
                 break;
         }
@@ -852,6 +855,9 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
                         $props['status'] = 0;
                     }
                     break;
+                case 'author' :
+                    $props['author'] = $A['uid'];
+                    break;
                 default:
                     $props[$p] = '';
                     break;
@@ -878,7 +884,8 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
     }
 
     if (($sid != '*') && (count($retval) == 1)) {
-        $retval = $retval[0];
+        $tRet = array_values($retval);
+        $retval = $tRet[0];
     }
 
     return $retval;

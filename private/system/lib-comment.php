@@ -938,7 +938,10 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                     $A['username'] = DB_getItem ($_TABLES['users'], 'username',
                                                  "uid = ".(int) $uid);
                 }
-                $thecomments = CMT_getComment ($A, 'flat', $type, 'ASC', false, true,0,$uid);
+
+                $author_id = PLG_getItemInfo($type, $sid, 'author');
+
+                $thecomments = CMT_getComment ($A, 'flat', $type, 'ASC', false, true,0,$author_id);
 
                 $start->set_var( 'comments', $thecomments );
                 $retval .= COM_startBlock ($LANG03[14])
