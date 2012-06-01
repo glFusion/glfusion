@@ -8,9 +8,9 @@
 
     <p>{sp_content}</p>
 
-    <hr{xhtml}>
+    <hr />
 
-    <p>{site_name}<br{xhtml}>
+    <p>{site_name}<br />
         <a href="{sp_url}">{sp_url}</a>
     </p>
 {!if comments_text}

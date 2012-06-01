@@ -8,27 +8,27 @@
 <body>
 <div>
 <object classid="CLSID:6BF52A52-394A-11D3-B153-00C04F79FAA6" width="{width}" height="{height}">
-  <param name="src" value="{movie}"{xhtml}>
-  <param name="Filename" value="{movie}"{xhtml}>
-  <param name="URL" value="{movie}"{xhtml}>
-  <param name="ShowStatusBar" value= "{showstatusbar}"{xhtml}>
-  <param name="autoStart" value="{autostart}"{xhtml}>
-  <param name="ShowControls" value="{showcontrols}"{xhtml}>
-  <param name="ShowDisplay" value="{showdisplay}"{xhtml}>
-  <param name="Volume" value="-1"{xhtml}>
-  <param name="playCount" value={playcount}{xhtml}>
-  <param name="stretchToFit" value="{stretchtofit}"{xhtml}>
-  <param name="enableContextMenu" value="{enablecontextmenu}"{xhtml}>
+  <param name="src" value="{movie}" />
+  <param name="Filename" value="{movie}" />
+  <param name="URL" value="{movie}" />
+  <param name="ShowStatusBar" value= "{showstatusbar}" />
+  <param name="autoStart" value="{autostart}" />
+  <param name="ShowControls" value="{showcontrols}" />
+  <param name="ShowDisplay" value="{showdisplay}" />
+  <param name="Volume" value="-1" />
+  <param name="playCount" value={playcount} />
+  <param name="stretchToFit" value="{stretchtofit}" />
+  <param name="enableContextMenu" value="{enablecontextmenu}" />
 <!--<[if gte IE 7]>
   <object type="video/x-ms-wmv" data="{movie}" width="{width}" height="{height}">
-    <param name="ShowStatusBar" value= "{showstatusbar0}"{xhtml}>
-    <param name="autoStart" value="{autostart0}"{xhtml}>
-    <param name="ShowControls" value="{showcontrols0}"{xhtml}>
-    <param name="ShowDisplay" value="{showdisplay0}"{xhtml}>
-    <param name="Volume" value="-1"{xhtml}>
-    <param name="playCount" value={playcount}{xhtml}>
-    <param name="stretchToFit" value="{stretchtofit0}"{xhtml}>
-    <param name="enableContextMenu" value="{enablecontextmenu0}"{xhtml}>
+    <param name="ShowStatusBar" value= "{showstatusbar0}" />
+    <param name="autoStart" value="{autostart0}" />
+    <param name="ShowControls" value="{showcontrols0}" />
+    <param name="ShowDisplay" value="{showdisplay0}" />
+    <param name="Volume" value="-1" />
+    <param name="playCount" value={playcount} />
+    <param name="stretchToFit" value="{stretchtofit0}" />
+    <param name="enableContextMenu" value="{enablecontextmenu0}" />
    alt : <a href="{movie}">Download</a>
   </object>
   <!--<![endif]-->

@@ -18,6 +18,6 @@
   <div class="mgMediaEdit">{alt_edit_link}</div>
   {!endif}
   </div>
-  <hr{xhtml}>
+  <hr />
   <div style="clear:both;"></div>
   {# end {templatelocation} #}

@@ -10,19 +10,19 @@
           <tr>
             <td style="width:110px;" class="pluginCellSubTitle">{LANG_NAME}</td>
             <td class="pluginCellText pluginCellFill" style="white-space:nowrap;">
-              <input type="text" name="name" value="{catname}" size="70"{xhtml}>
+              <input type="text" name="name" value="{catname}" size="70" />
             </td>
           </tr>
           <tr>
             <td class="pluginCellSubTitle" style="white-space:nowrap;">{LANG_ORDER}&nbsp;</td>
             <td class="pluginCellText pluginCellFill" style="white-space:nowrap;width:25px;">
-              <input type="text" name="catorder" value="{catorder}" size="5"{xhtml}>
+              <input type="text" name="catorder" value="{catorder}" size="5" />
             </td>
           </tr>
           <tr>
             <td class="pluginCellSubTitle">{LANG_DESCRIPTION}</td>
             <td class="pluginCellText pluginCellFill">
-              <input type="text" name="dscp" value="{catdscp}" size="70"{xhtml}>
+              <input type="text" name="dscp" value="{catdscp}" size="70" />
             </td>
           </tr>
         </table>
@@ -33,12 +33,12 @@
         <table width="100%" border="0" cellspacing="1" cellpadding="3">
           <tr>
             <td>
-              <input type="hidden" name="type" value="category"{xhtml}>
-              <input type="hidden" name="id" value="{id}"{xhtml}>
-              <input type="hidden" name="confirm" value="{confirm}"{xhtml}>
-              <input type="hidden" name="mode" value="{mode}"{xhtml}>
-              <input type="submit" name="submit" value="{LANG_SAVE}"{xhtml}>&nbsp;
-              <input type="button" value="{LANG_CANCEL}" onclick="javascript:history.go(-1)"{xhtml}>
+              <input type="hidden" name="type" value="category" />
+              <input type="hidden" name="id" value="{id}" />
+              <input type="hidden" name="confirm" value="{confirm}" />
+              <input type="hidden" name="mode" value="{mode}" />
+              <input type="submit" name="submit" value="{LANG_SAVE}" />&nbsp;
+              <input type="button" value="{LANG_CANCEL}" onclick="javascript:history.go(-1)" />
             </td>
           </tr>
         </table>

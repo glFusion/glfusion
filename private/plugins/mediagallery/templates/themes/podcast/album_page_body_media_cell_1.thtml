@@ -34,6 +34,6 @@
 </table>
 <div style="clear:both;"></div>
 {mp3_podcast}
-<hr{xhtml}>
+<hr />
 <div style="clear:both;"></div>
 {# end {templatelocation} #}

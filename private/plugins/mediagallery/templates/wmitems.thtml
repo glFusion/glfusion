@@ -10,8 +10,8 @@
 <!-- BEGIN ImageColumn -->
   <tr class="pluginRow{row_class}">
     <td style="text-align:center;">
-        <input type="checkbox" name="sel[]" value="{wm_id}"{xhtml}>
-        <input type="hidden" name="wid[]" value="{wm_id}"{xhtml}>
+        <input type="checkbox" name="sel[]" value="{wm_id}" />
+        <input type="hidden" name="wid[]" value="{wm_id}" />
     </td>
     <td style="text-align:center;">
     	{media_zoom}{lang_preview}</a>
@@ -24,8 +24,8 @@
 <!-- END ImageColumn -->
 <!-- END ImageRow -->
    <tr><td colspan="5" align="left">
-   <input onclick="javascript:doCheckAll()" type="button" value="{lang_checkall}"{xhtml}>
-   <input onclick="javascript:doUnCheckAll()" type="button" value="{lang_uncheckall}"{xhtml}>
+   <input onclick="javascript:doCheckAll()" type="button" value="{lang_checkall}" />
+   <input onclick="javascript:doUnCheckAll()" type="button" value="{lang_uncheckall}" />
    </td></tr>
  </table>
  {# end {templatelocation} #}

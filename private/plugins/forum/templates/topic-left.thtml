@@ -7,7 +7,7 @@
   <td style="padding-left:6px; padding-right:6px;">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
-        <td style="width:8px;" class="aligncenter"><a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}&amp;lastpost=true#{topic_id}"><img src="{site_url}/forum/images/icon_minipost.gif" alt="{$LANG_GF01[PERMLINK]}" title="{$LANG_GF01[PERMLINK]}"{xhtml}></a></td>
+        <td style="width:8px;" class="aligncenter"><a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}&amp;lastpost=true#{topic_id}"><img src="{site_url}/forum/images/icon_minipost.gif" alt="{$LANG_GF01[PERMLINK]}" title="{$LANG_GF01[PERMLINK]}" /></a></td>
         {# <td nowrap>&nbsp;{posted_date}{preview_topic_subject}&nbsp;{read_msg}&nbsp;{locked_icon} #}
         <td>
           {$LANG_GF01[BY]} {userlink} ({onlinestatus})&nbsp;{$LANG_GF01[ON3]}&nbsp;{posted_date}{preview_topic_subject}&nbsp;{read_msg}&nbsp;{locked_icon}
@@ -30,7 +30,7 @@
 <tr class="pluginRow{csscode}">
   <td style="vertical-align:top; padding:6px;white-space:nowrap;">
     <div>
-      {user_level}<br{xhtml}>
+      {user_level}<br />
       {user_levelname}
     </div>
     <div>
@@ -42,8 +42,8 @@
       {member_badge}
       <p>
       {regdate}
-      {numposts}<br{xhtml}>
-      {location}<br{xhtml}>
+      {numposts}<br />
+      {location}<br />
       {ipaddress}
       </p>
     </div>
@@ -56,7 +56,7 @@
     <div style="clear:both;"></div>
     {attachments}
     <div style="min-height:45px;padding-top:10px;display:{show_sig};">
-      {sig}<br{xhtml}>
+      {sig}<br />
       {remote_ip}
     </div>
   </td>

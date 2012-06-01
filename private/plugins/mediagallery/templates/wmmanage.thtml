@@ -50,28 +50,28 @@ else{
 jkpopwin.resizeTo(popwidth, popheight+30)
 }
 jkpopwin.document.open()
-jkpopwin.document.write('<html><title>'+windowtitle+'</title><body '+bodyattribute+'><img src="'+imgpath+'" style="margin-bottom: 0.5em"><br{xhtml}>'+textdescription+'</body></html>')
+jkpopwin.document.write('<html><title>'+windowtitle+'</title><body '+bodyattribute+'><img src="'+imgpath+'" style="margin-bottom: 0.5em"><br />'+textdescription+'</body></html>')
 jkpopwin.document.close()
 jkpopwin.focus()
 }
 //]]>
 </script>
 
-<br{xhtml}>
+<br />
 {lang_watermark_manage_help}
-<br{xhtml}><br{xhtml}>
+<br /><br />
 <form name="watermark" method="post" action="{s_form_action}">
 <div>
-<input type="hidden" name="album_id" value="0"{xhtml}>
+<input type="hidden" name="album_id" value="0" />
 {noitems}
 {mediaitems}
-<br{xhtml}>
+<br />
 <div style="text-align:center;">
-<input type="hidden" name="action" value="watermark"{xhtml}>
-<input type="submit" name="mode"   value="{lang_save}"{xhtml}>
-<input type="submit" name="mode"   value="{lang_cancel}"{xhtml}>
-<input type="submit" name="mode"   value="{lang_delete}"{xhtml}>
-<input type="submit" name="mode"   value="{lang_upload}"{xhtml}>
+<input type="hidden" name="action" value="watermark" />
+<input type="submit" name="mode"   value="{lang_save}" />
+<input type="submit" name="mode"   value="{lang_cancel}" />
+<input type="submit" name="mode"   value="{lang_delete}" />
+<input type="submit" name="mode"   value="{lang_upload}" />
 </div>
 </div>
 </form>

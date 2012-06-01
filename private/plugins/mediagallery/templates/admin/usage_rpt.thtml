@@ -27,7 +27,7 @@
   </tr>
   <tr>
 	  <td colspan="5" align="center">
-		<input type="submit" name="return" value="{lang_new_report}"{xhtml}>
+		<input type="submit" name="return" value="{lang_new_report}" />
 	  </td>
   </table>
 </form>

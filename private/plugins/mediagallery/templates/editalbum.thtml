@@ -13,14 +13,14 @@ function change(what) {
 
   <form enctype="multipart/form-data" method="post" action="{s_form_action}">
   <div>
-  <input type="hidden" name="album_id" value="{album_id}"{xhtml}>
-  <input type="hidden" name="cover" value="{album_cover}"{xhtml}>
-  <input type="hidden" name="owner" value="{album_owner}"{xhtml}>
-  <input type="hidden" name="order" value="{album_order}"{xhtml}>
-  <input type="hidden" name="album_cover_filename" value="{album_cover_filename}"{xhtml}>
-  <input type="hidden" name="last_update" value="{last_update}"{xhtml}>
-  <input type="hidden" name="media_count" value="{media_count}"{xhtml}>
-  <input type="hidden" name="action" value="{action}"{xhtml}> {origaid}
+  <input type="hidden" name="album_id" value="{album_id}" />
+  <input type="hidden" name="cover" value="{album_cover}" />
+  <input type="hidden" name="owner" value="{album_owner}" />
+  <input type="hidden" name="order" value="{album_order}" />
+  <input type="hidden" name="album_cover_filename" value="{album_cover_filename}" />
+  <input type="hidden" name="last_update" value="{last_update}" />
+  <input type="hidden" name="media_count" value="{media_count}" />
+  <input type="hidden" name="action" value="{action}" /> {origaid}
 
   <table width="100%" border="0" cellspacing="0" cellpadding="5">
     <tr>
@@ -227,7 +227,7 @@ function change(what) {
     <tr class="pluginRow2">
       <td style="width:30%;" class="mgAdminAlignRight">{lang_thumbnail}</td>
       <td style="text-align:left;">
-        <input type="file" dir="ltr" name="thumbnail"{xhtml}>
+        <input type="file" dir="ltr" name="thumbnail" />
       </td>
     </tr>
     <tr>
@@ -315,15 +315,15 @@ function change(what) {
       </td>
     </tr>
   </table>
-<br{xhtml}>
+<br />
 {valid_formats}
-<br{xhtml}>
+<br />
 {perm_editor}
-<br{xhtml}>
+<br />
 <div style="text-align:center;">
-  <input type="submit" value="{lang_save}" name="mode"{xhtml}>
-  <input type="submit" value="{lang_delete}" name="mode"{xhtml}>
-  <input type="submit" value="{lang_cancel}" name="mode"{xhtml}>
+  <input type="submit" value="{lang_save}" name="mode" />
+  <input type="submit" value="{lang_delete}" name="mode" />
+  <input type="submit" value="{lang_cancel}" name="mode" />
 </div>
 </div>
 </form>

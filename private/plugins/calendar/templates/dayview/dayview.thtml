@@ -6,7 +6,7 @@
     <td width="33%" align="center"><a href="{site_url}/calendar/index.php?mode={mode}">{lang_month}</a></td>
   </tr>
 </table>
-<br{xhtml}>
+<br />
 <table cellpadding="2" cellspacing="1" border="0" width="100%" class="cal-dayx-body">
     <tr>
         <td colspan="2" class="cal-dayx-cur"><table width="100%" border="0">
@@ -122,6 +122,6 @@
         {23_cols}
     </tr>
 </table>
-<br{xhtml}>
+<br />
 {quickadd_form}
 {# end {templatelocation} #}

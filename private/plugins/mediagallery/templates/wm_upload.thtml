@@ -1,11 +1,11 @@
 {# begin {templatelocation} #}
 {lang_wmupload_help}
-<br{xhtml}><br{xhtml}>
+<br /><br />
 <form method="post" enctype="multipart/form-data" name="watermarkupload" action="{s_form_action}">
 <div>
 {max_file_size}
-<input type="hidden" name="album_id" value="0"{xhtml}>
-<input type="hidden" name="action" value="{action}"{xhtml}>
+<input type="hidden" name="album_id" value="0" />
+<input type="hidden" name="action" value="{action}" />
     <table width="100%" border="0" cellspacing="0" cellpadding="5">
       <tr>
         <th colspan="2" style="width:100%;">
@@ -16,7 +16,7 @@
         <td class="required mgAdminAlignRight" style="width:20%;">{lang_file}</td>
         <td class="mgAdminAlignLeft">
 		  {max_file_size}
-	      <input type="file" dir="ltr" name="newmedia[]" size="45"{xhtml}>
+	      <input type="file" dir="ltr" name="newmedia[]" size="45" />
 	    </td>
       </tr>
       <tr class="pluginRow2">
@@ -31,8 +31,8 @@
     </table>
 
 <div style="text-align:center;">
-  <input type="submit" value="{lang_save}" name="mode"{xhtml}>
-  <input type="submit" value="{lang_cancel}" name="mode"{xhtml}>
+  <input type="submit" value="{lang_save}" name="mode" />
+  <input type="submit" value="{lang_cancel}" name="mode" />
 </div>
 </div>
 </form>

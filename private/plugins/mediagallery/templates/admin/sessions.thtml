@@ -28,10 +28,10 @@ function doUnCheckAll()
 {sessitems}
 <p>&nbsp;</p>
 <div style="text-align:center;">
-<input type="hidden" name="action" value="sessions"{xhtml}>
-<input type="submit" name="mode"   value="{lang_save}"{xhtml}>
-<input type="submit" name="mode"   value="{lang_cancel}"{xhtml}>
-<input type="submit" name="mode"   value="{lang_delete}"{xhtml}>
+<input type="hidden" name="action" value="sessions" />
+<input type="submit" name="mode"   value="{lang_save}" />
+<input type="submit" name="mode"   value="{lang_cancel}" />
+<input type="submit" name="mode"   value="{lang_delete}" />
 </div>
 </form>
 {# end {templatelocation} #}

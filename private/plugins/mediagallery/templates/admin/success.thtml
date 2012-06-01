@@ -6,7 +6,7 @@
 	    <tr>
 	      <td rowspan="2" align="left" style="width:60px">
 	        <a href="{site_admin_url}/plugins/mediagallery/index.php">
-	          <img src="{site_url}/images/mediagallery.png" style="border:none;" alt=""{xhtml}>
+	          <img src="{site_url}/images/mediagallery.png" style="border:none;" alt="" />
 	        </a>
 	      </td>
 	      <td align="left"><h1>{success_upgrade}</h1></td>
@@ -21,14 +21,14 @@
     <td style="vertical-align:top;width:75%;">
         {cache_check}
         {memory_check}
-       <br{xhtml}>
+       <br />
         {need_cache}
-        <br{xhtml}>
+        <br />
         {need_memory}
-        <br{xhtml}>
+        <br />
         {thank_you}
-        <br{xhtml}>
-        <br{xhtml}>
+        <br />
+        <br />
         {support}
     </td>
     <td class="plugin" style="vertical-align:top;">

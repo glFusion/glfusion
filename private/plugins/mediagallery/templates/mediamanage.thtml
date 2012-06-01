@@ -50,28 +50,28 @@ else{
 jkpopwin.resizeTo(popwidth, popheight+30)
 }
 jkpopwin.document.open()
-jkpopwin.document.write('<html><title>'+windowtitle+'</title><body '+bodyattribute+'><img src="'+imgpath+'" style="margin-bottom: 0.5em"><br{xhtml}>'+textdescription+'</body></html>')
+jkpopwin.document.write('<html><title>'+windowtitle+'</title><body '+bodyattribute+'><img src="'+imgpath+'" style="margin-bottom: 0.5em"><br />'+textdescription+'</body></html>')
 jkpopwin.document.close()
 jkpopwin.focus()
 }
 //]]>
 </script>
 
-<br{xhtml}>
+<br />
 {lang_media_manage_help}
-<br{xhtml}><br{xhtml}>
+<br /><br />
 <form name="media" method="post" action="{s_form_action}">
-<input type="hidden" name="album_id" value="{album_id}"{xhtml}>
+<input type="hidden" name="album_id" value="{album_id}" />
 {noitems}
 {mediaitems}
-<br{xhtml}><br{xhtml}>
+<br /><br />
 <span style="text-align:center;">{bottom_pagination}</span>
-<br{xhtml}><br{xhtml}>
+<br /><br />
 <div style="text-align:center;">
-<input type="hidden" name="action" value="media"{xhtml}>
-<input type="submit" name="mode"   value="{lang_save}"{xhtml}>
-<input type="submit" name="mode"   value="{lang_cancel}"{xhtml}>
-<input type="submit" name="mode"   value="{lang_delete}"   onclick="return confirm('{lang_delete_confirm}');"{xhtml}>
+<input type="hidden" name="action" value="media" />
+<input type="submit" name="mode"   value="{lang_save}" />
+<input type="submit" name="mode"   value="{lang_cancel}" />
+<input type="submit" name="mode"   value="{lang_delete}"   onclick="return confirm('{lang_delete_confirm}');" />
 </div>
 </form>
 {# end {templatelocation} #}

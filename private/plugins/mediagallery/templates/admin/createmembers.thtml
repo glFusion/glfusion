@@ -35,19 +35,19 @@ function doUnCheckAll()
     <!-- END UserRow -->
     <tr>
       <td colspan="2" align="left">
-        <input onclick="javascript:doCheckAll()" type="button" value="{lang_checkall}"{xhtml}>
-        <input onclick="javascript:doUnCheckAll()" type="button" value="{lang_uncheckall}"{xhtml}>
+        <input onclick="javascript:doCheckAll()" type="button" value="{lang_checkall}" />
+        <input onclick="javascript:doUnCheckAll()" type="button" value="{lang_uncheckall}" />
       </td>
     </tr>
   </table>
 <div style="text-align:center;">
 {pagenav}
 </div>
-<br{xhtml}>
+<br />
 <div style="text-align:center;">
-<input type="submit" value="{lang_save}"  name="mode"{xhtml}>
-<input type="submit" value="{lang_cancel}" name="mode"{xhtml}>
-<input type="reset"  value="{lang_reset}"  name="mode"{xhtml}>
+<input type="submit" value="{lang_save}"  name="mode" />
+<input type="submit" value="{lang_cancel}" name="mode" />
+<input type="reset"  value="{lang_reset}"  name="mode" />
 </div>
 </form>
 {# end {templatelocation} #}

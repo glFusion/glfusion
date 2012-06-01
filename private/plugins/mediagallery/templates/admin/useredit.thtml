@@ -21,7 +21,7 @@
       </td>
     </tr>
   </table>
-<br{xhtml}>
+<br />
 <div style="text-align:center;">
 <input type="submit" value="{lang_save}"   name="mode">
 <input type="submit" value="{lang_cancel}" name="mode">

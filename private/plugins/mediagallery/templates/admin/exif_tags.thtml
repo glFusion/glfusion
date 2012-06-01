@@ -35,8 +35,8 @@ function doUnCheckAll()
     <!-- BEGIN exifRow -->
     <tr class="pluginRow{rowcounter}">
       <td align="center">
-        <input type="checkbox" name="sel[]" value="{tag}" {selected}{xhtml}>
-        <input type="hidden"   name="tag[]" value="{tag}"{xhtml}>
+        <input type="checkbox" name="sel[]" value="{tag}" {selected} />
+        <input type="hidden"   name="tag[]" value="{tag}" />
       </td>
       <td align="left">
         {exif_tag}
@@ -45,8 +45,8 @@ function doUnCheckAll()
    <!-- END exifRow -->
    <tr>
      <td colspan="2" align="left">
-       <input onclick="javascript:doCheckAll()" type="button" value="{lang_check_all}"{xhtml}>
-       <input onclick="javascript:doUnCheckAll()" type="button" value="{lang_uncheck_all}"{xhtml}>
+       <input onclick="javascript:doCheckAll()" type="button" value="{lang_check_all}" />
+       <input onclick="javascript:doUnCheckAll()" type="button" value="{lang_uncheck_all}" />
      </td>
    </tr>
    <tr>
@@ -56,8 +56,8 @@ function doUnCheckAll()
    </tr>
    <tr>
      <td colspan="2" align="center">
-     <input type="submit" name="mode" value="{lang_save}"{xhtml}>&nbsp;&nbsp;&nbsp;
-     <input type="submit" name="mode" value="{lang_cancel}"{xhtml}>
+     <input type="submit" name="mode" value="{lang_save}" />&nbsp;&nbsp;&nbsp;
+     <input type="submit" name="mode" value="{lang_cancel}" />
      </td>
    </tr>
  </table>

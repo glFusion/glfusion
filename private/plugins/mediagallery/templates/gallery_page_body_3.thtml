@@ -27,5 +27,5 @@
     <!-- END AlbumRow -->
 </table>
 <div class="pluginRow2" style="vertical-align:middle;padding:5px;text-align:center;">{bottom_pagination}</div>
-<br{xhtml}>
+<br />
 {# end {templatelocation} #}

@@ -12,7 +12,7 @@
     {month_select}&nbsp;
 	{day_select}&nbsp;
 	{year_select}&nbsp;&nbsp;
-	<input type="checkbox" name="alldates"{xhtml}><span style="font-weight:bold;">{lang_all_dates}</span>
+	<input type="checkbox" name="alldates" /><span style="font-weight:bold;">{lang_all_dates}</span>
   </td>
 </tr>
 <tr>
@@ -25,7 +25,7 @@
 </tr>
 <tr>
   <td colspan="2" align="center">
-    <input type="submit" name="mode" value="{lang_submit}"{xhtml}>
+    <input type="submit" name="mode" value="{lang_submit}" />
   </td>
 </tr>
 </table>

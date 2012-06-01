@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<br{xhtml}>
+<br />
 <form method="post" action="{s_form_action}" name="mg_static_album_sort" ENCTYPE="multipart/form-data">
   <div class="plugin">
   <table width="100%" border="0" cellspacing="0" cellpadding="5">
@@ -35,7 +35,7 @@
     </tr>
   </table>
   </div>
-<br{xhtml}>
+<br />
 <center>
 <input type="submit" value="{lang_save}"  name="mode">
 <input type="submit" value="{lang_cancel}" name="mode">

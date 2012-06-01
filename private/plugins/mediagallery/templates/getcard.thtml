@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<br{xhtml}>
+<br />
 <table border="0" cellspacing="0" cellpadding="1" align="center" bgcolor="#eaeaea">
   <tr>
     <td>
@@ -50,7 +50,7 @@
         <span style="text-align:center;">
            <a href="{media_url}">
              <img src="{media_image}" style="border:1px solid;" alt="{alt_media_title}"></a>
-             <br{xhtml}>
+             <br />
              <span style="width: 500px; text-align: center;font-style: italic;font-size: smaller;text-indent: 0;">
                {media_title}&nbsp;
              </span>

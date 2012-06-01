@@ -17,6 +17,6 @@
 {rating_box}
 {!endif}
 </div>
-<hr{xhtml}>
+<hr />
 <div style="clear:both;"></div>
 {# end {templatelocation} #}

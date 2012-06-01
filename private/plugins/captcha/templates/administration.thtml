@@ -6,7 +6,7 @@
 	<tr>
 	  <td rowspan="2" align="left" style="width:60px">
 	    <a href="{site_admin_url}/plugins/captcha/index.php">
-	      <img src="{site_url}/captcha/captcha.png" style="border:none;" alt=""{xhtml}>
+	      <img src="{site_url}/captcha/captcha.png" style="border:none;" alt="" />
 	    </a>
 	  </td>
 	  <td style="text-align:left;"><span style="font-size:1.2em;"><b>{lang_admin}</b></span></td>
@@ -21,8 +21,8 @@
   <td valign="top" bgcolor="#FBFBFB" style="width:75%">
      {version_msg}
      {admin_body}
-     <br{xhtml}>
-     <br{xhtml}>
+     <br />
+     <br />
      <center><h2>{status_msg}</h2></center>
   </td>
   </tr>

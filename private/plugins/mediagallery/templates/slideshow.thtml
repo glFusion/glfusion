@@ -266,7 +266,7 @@ function setCaption(text) {
 			    }
 			    //]]>
 			    </script>
-			    &nbsp;{loop}:<input type="checkbox" name="loopCheck"  onclick='toggleLoop();' {xhtml}>
+			    &nbsp;{loop}:<input type="checkbox" name="loopCheck"  onclick='toggleLoop();'  />
             </td>
           </tr>
         </table>

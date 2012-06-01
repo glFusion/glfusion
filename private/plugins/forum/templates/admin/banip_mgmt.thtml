@@ -2,7 +2,7 @@
 {startblock}
 {navbar}
 <form  name="frm_messages" action="{phpself}" method="post" style="margin:0px;">
-<input type="hidden" name="op" value=""{xhtml}>
+<input type="hidden" name="op" value="" />
 <table cellspacing="1" cellpadding="3" class="pluginSolidOutline" style="width:100%;border:none;margin-top:25px;">
     <tr>
         <td class="pluginTitle" style="width:90%;">{LANG_IP}</td>

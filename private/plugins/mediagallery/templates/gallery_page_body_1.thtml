@@ -15,7 +15,7 @@
 		{!else}
 		<td colspan="2" style="vertical-align:top;">
 		{!endif}
-		  <br{xhtml}>
+		  <br />
           <div style="padding-top:5px;padding-bottom:5px;"><span style="font-weight:bold;">{album_title}</span> ({subalbum_media_count})</div>
           <div style="padding-bottom:5px;">{album_desc}</div>
           <div style="padding-bottom:5px;"><span style="font-weight:bold;">{updated_prompt}</span> {album_last_update}</div>
@@ -23,7 +23,7 @@
         </td>
         {!if lang_subalbums}
         <td style="text-align:left;vertical-align:top;">
-          <br{xhtml}>
+          <br />
           <span style="font-weight:bold;">{lang_subalbums}</span> {subalbumcount}&nbsp;
           <div class="pluginSmallText">
             {saulstart}{subalbumlist}{saulend}

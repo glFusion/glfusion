@@ -20,18 +20,18 @@ function doUnCheckAll()
 }
 // End script --></script>
 
-<br{xhtml}>
-<br{xhtml}>
+<br />
+<br />
 {lang_filecheck_disclaimer}
-<br{xhtml}>
-<br{xhtml}>
+<br />
+<br />
 <form name="filecheck" method="post" action="{s_form_action}">
 {noitems}
 {filelist}
    <input onclick="doCheckAll();" type="button" value="{lang_checkall}" />
    <input onclick="doUnCheckAll();" type="button" value="{lang_uncheckall}" />
 
-<br{xhtml}>
+<br />
 <center>
 <input type="hidden" name="action" value="category">
 <input type="submit" name="mode"   value="{lang_cancel}">

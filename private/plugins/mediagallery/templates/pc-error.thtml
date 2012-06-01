@@ -6,9 +6,9 @@
   </tr>
   <tr>
     <td class="pluginRow1" align="center">
-      <br{xhtml}>
+      <br />
       <div class="pluginAlert">{lang_error_retrieve_text}</div>
-      <br{xhtml}>
+      <br />
       <span class="pluginMediumText">{lang_thank_you}</span>
     </td>
   </tr>

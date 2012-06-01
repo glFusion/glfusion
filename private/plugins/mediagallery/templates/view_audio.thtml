@@ -17,10 +17,10 @@ function popitup(url)
     <td class="pluginCellTitle" style="text-align:right;">
       <form name="mgsearch" method="post" action="{site_url}/search.php" style="margin:0;padding:0">
       <div>
-      <input type="text" name="keywords" value="{keywords}"{xhtml}>
-      <input type="hidden" name="mode" value="search"{xhtml}>
-      <input type="hidden" name="swhere" value="0"{xhtml}>
-      <input type="submit" value="{lang_search}"{xhtml}>
+      <input type="text" name="keywords" value="{keywords}" />
+      <input type="hidden" name="mode" value="search" />
+      <input type="hidden" name="swhere" value="0" />
+      <input type="submit" value="{lang_search}" />
       </div>
       </form>
     </td>
@@ -48,9 +48,9 @@ function popitup(url)
 
   <tr>
     <td align="center" colspan="3" style="width:100%;">
-      <br{xhtml}>
+      <br />
       {image_detail}
-      <br{xhtml}>
+      <br />
     </td>
   </tr>
 
@@ -59,11 +59,11 @@ function popitup(url)
   </tr>
   <tr class="pluginRow2">
     <td style="width:33%;vertical-align:top;">&nbsp;&nbsp;{media_number}
-	  <br{xhtml}>&nbsp;&nbsp;{media_id}<br{xhtml}>
+	  <br />&nbsp;&nbsp;{media_id}<br />
 	  {getid3}{media_properties}{getid3end}
     </td>
     <td align="center" style="width:34%;vertical-align:top;">
-      {media_time}<br{xhtml}>
+      {media_time}<br />
       {lang_comments} {media_comments}
       {lang_views} {media_views}
       {rating_box}
@@ -72,7 +72,7 @@ function popitup(url)
       <div>{edit_item}</div>
     </td>
     <td style="width:33%;text-align:right;vertical-align:top;white-space:nowrap;">
-  	  <span style="font-weight:bold;">{lang_uploaded_by}:</span>&nbsp;{owner_username}&nbsp;&nbsp;<br{xhtml}><br{xhtml}>
+  	  <span style="font-weight:bold;">{lang_uploaded_by}:</span>&nbsp;{owner_username}&nbsp;&nbsp;<br /><br />
   	  {download}
 	  {shutterfly_submit}&nbsp;
     </td>

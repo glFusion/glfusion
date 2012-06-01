@@ -39,15 +39,15 @@
     <tr class="pluginRow2">
       <td style="width:50%;" class="mgAdminAlignRight">{lang_rss_feed_name}</td>
       <td class="mgAdminAlignLeft">
-        <input type="text" name="rss_feed_name" size="20" value="{rss_feed_name}"{xhtml}>
+        <input type="text" name="rss_feed_name" size="20" value="{rss_feed_name}" />
       </td>
     </tr>
   </table>
 <p>&nbsp;</p>
 <div style="text-align:center;">
-<input type="submit" value="{lang_save}"  name="mode"{xhtml}>
-<input type="submit" value="{lang_cancel}" name="mode"{xhtml}>
-<input type="reset"  value="{lang_reset}"  name="mode"{xhtml}>
+<input type="submit" value="{lang_save}"  name="mode" />
+<input type="submit" value="{lang_cancel}" name="mode" />
+<input type="reset"  value="{lang_reset}"  name="mode" />
 </div>
 </form>
 {# end {templatelocation} #}

@@ -38,14 +38,14 @@ function toggleTOD() {
 -->
 </script>
                             <form action="{site_url}/calendar/event.php" id="editpersonalevent" method="post">
-                                <input type="hidden" name="calendar_type" value="personal"{xhtml}>
-                                <input type="hidden" name="hour_mode" value="{hour_mode}"{xhtml}>
-                                <input type="hidden" name="eid" value="{eid}"{xhtml}>
-                                <input type="hidden" name="uid" value="{uid}"{xhtml}>
+                                <input type="hidden" name="calendar_type" value="personal" />
+                                <input type="hidden" name="hour_mode" value="{hour_mode}" />
+                                <input type="hidden" name="eid" value="{eid}" />
+                                <input type="hidden" name="uid" value="{uid}" />
                                 <table border="0" cellspacing="0" cellpadding="3">
                                     <tr>
                                         <td align="right"><b>{lang_title}:</b></td>
-                                        <td><input class="fValidate['required']" type="text" size="36" maxlength="96" name="title" value="{event_title}"{xhtml}></td>
+                                        <td><input class="fValidate['required']" type="text" size="36" maxlength="96" name="title" value="{event_title}" /></td>
                                     </tr>
                                     <tr>
                                         <td align="right"><b>{lang_eventtype}:</b></td>
@@ -58,7 +58,7 @@ function toggleTOD() {
                                     </tr>
                                     <tr>
                                         <td align="right"><b>{lang_alldayevent}:</b></td>
-                                        <td><input type="checkbox" name="allday" {allday_checked}{xhtml}></td>
+                                        <td><input type="checkbox" name="allday" {allday_checked} /></td>
                                     </tr>
                                     <tr>
                                         <td align="right"><b>{lang_startdate}:</b></td>
@@ -77,7 +77,7 @@ function toggleTOD() {
                                             </select>
                                             {# nogray calendar - must be replaced in 1.2.0 #}
                                                     <a href="#" id="toggler1">
-                                                    <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:text-top;border:none;"{xhtml}>
+                                                    <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:text-top;border:none;" />
                                                     </a>
                                                     <span id="calendar1"></span>
                                             {# nogray calendar - must be replaced in 1.2.0 #}
@@ -113,7 +113,7 @@ function toggleTOD() {
                                             </select>
                                             {# nogray calendar - must be replaced in 1.2.0 #}
                                                     <a href="#" id="toggler2">
-                                                    <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:text-top;border:none;"{xhtml}>
+                                                    <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:text-top;border:none;" />
                                                     </a>
                                                     <span id="calendar2"></span>
                                             {# nogray calendar - must be replaced in 1.2.0 #}
@@ -140,27 +140,27 @@ function toggleTOD() {
                                     </tr>
                                     <tr>
                                         <td align="right"><b>{lang_addressline1}:</b></td>
-                                        <td><input type="text" name="address1" size="36" value="{event_address1}"{xhtml}></td>
+                                        <td><input type="text" name="address1" size="36" value="{event_address1}" /></td>
                                     </tr>
                                     <tr>
                                         <td align="right"><b>{lang_addressline2}:</b></td>
-                                        <td><input type="text" name="address2" size="36" value="{event_address2}"{xhtml}></td>
+                                        <td><input type="text" name="address2" size="36" value="{event_address2}" /></td>
                                     </tr>
                                     <tr>
                                         <td align="right"><b>{lang_city}:</b></td>
-                                        <td><input type="text" name="city" size="36" value="{event_city}"{xhtml}></td>
+                                        <td><input type="text" name="city" size="36" value="{event_city}" /></td>
                                     </tr>
                                     <tr>
                                         <td align="right"><b>{lang_state}:</b></td>
-                                        <td><input type="text" name="state" size="36" value="{event_state}"{xhtml}></td>
+                                        <td><input type="text" name="state" size="36" value="{event_state}" /></td>
                                     </tr>
                                     <tr>
                                         <td align="right"><b>{lang_zipcode}:</b></td>
-                                        <td><input type="text" name="zipcode" size="5" maxlength="5" value="{event_zipcode}"{xhtml}></td>
+                                        <td><input type="text" name="zipcode" size="5" maxlength="5" value="{event_zipcode}" /></td>
                                     </tr>
                                     <tr>
                                         <td align="right"><b>{lang_link}:</b></td>
-                                        <td><input type="text" size="36" maxlength="128" name="url" value="{event_url}"{xhtml}></td>
+                                        <td><input type="text" size="36" maxlength="128" name="url" value="{event_url}" /></td>
                                     </tr>
                                     <tr>
                                         <td align="right" valign="top"><b>{lang_description}:</b></td>
@@ -171,10 +171,10 @@ function toggleTOD() {
                                     </tr>
                                     <tr>
                                         <td align="center" colspan="2">
-                                            <input type="hidden" name="type" value="event"{xhtml}>
-                                            <input type="submit" name="action" value="{lang_submit}"{xhtml}>
-                                            <input type="submit" name="action" value="{lang_delete}"{xhtml}>
-                                            <input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}>
+                                            <input type="hidden" name="type" value="event" />
+                                            <input type="submit" name="action" value="{lang_submit}" />
+                                            <input type="submit" name="action" value="{lang_delete}" />
+                                            <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
                                         </td>
                                     </tr>
                                 </table>

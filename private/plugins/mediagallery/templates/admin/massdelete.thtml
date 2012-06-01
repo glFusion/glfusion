@@ -14,10 +14,10 @@
     </tr>
   </table>
   </div>
-<br{xhtml}>
+<br />
 <center>
-<input type="submit" name="mode"   value="{lang_delete}"  onclick="return confirm('{lang_delete_confirm}');"{xhtml}>
-<input type="submit" name="mode"   value="{lang_cancel}"{xhtml}>
+<input type="submit" name="mode"   value="{lang_delete}"  onclick="return confirm('{lang_delete_confirm}');" />
+<input type="submit" name="mode"   value="{lang_cancel}" />
 </center>
 </form>
 {# end {templatelocation} #}

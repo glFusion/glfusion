@@ -22,11 +22,11 @@
 <form name="storymigrate" action="{action_url}" method="post">
 <table cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top:25px; margin-bottom:15px;">
     <tr>
-        <td width="50%" style="padding-left:10px;">{filter_topic_selection}&nbsp;<input type="submit" value="{LANG_filterlist}"{xhtml}></td>
+        <td width="50%" style="padding-left:10px;">{filter_topic_selection}&nbsp;<input type="submit" value="{LANG_filterlist}" /></td>
         <td style="text-align:right;"><select name="selforum"><option value="0">{LANG_selectforum}</option>{select_filter_options}</select></td>
-        <td>&nbsp;<input type="submit" name="migrate" value="{LANG_migrate}"{xhtml}></td>
+        <td>&nbsp;<input type="submit" name="migrate" value="{LANG_migrate}" /></td>
         <td class="alignright" style="padding-right:10px;white-space:nowrap;">
-          <input type="checkbox" name="delPostMigrate" value="1"{xhtml}>&nbsp;{LANG_deleteafter}
+          <input type="checkbox" name="delPostMigrate" value="1" />&nbsp;{LANG_deleteafter}
         </td>
     </tr>
 </table>
@@ -36,7 +36,7 @@
     </tr>
     <tr>
         <td width="5%"  class="pluginCellTitle" style="white-space:nowrap;">
-          <input type="checkbox" name="cb_migrateall" value="y" onclick="if(!allChecked) checkAll(document.storymigrate.elements['cb_chkentry[]']); else uncheckAll(document.storymigrate.elements['cb_chkentry[]']);"{xhtml}>&nbsp;{LANG_all}
+          <input type="checkbox" name="cb_migrateall" value="y" onclick="if(!allChecked) checkAll(document.storymigrate.elements['cb_chkentry[]']); else uncheckAll(document.storymigrate.elements['cb_chkentry[]']);" />&nbsp;{LANG_all}
         </td>
         <td width="15%" class="pluginCellTitle aligncenter" style="padding-top:5px;">{LANG_topic}</td>
         <td width="45%" class="pluginCellTitle" style="padding-top:5px;">{LANG_title}</td>

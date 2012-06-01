@@ -4,7 +4,7 @@
   	<!-- BEGIN ImageColumn -->
     <tr class="pluginRow{rowclass}">
       <td class="pluginRow2" style="text-align:center;vertical-align:middle;">
-        <img src="{u_thumbnail}" height="{height}" width="{width}" alt=""{xhtml}>
+        <img src="{u_thumbnail}" height="{height}" width="{width}" alt="" />
       </td>
       <td style="vertical-align:top;">
         <table width="100%" border="0">
@@ -12,7 +12,7 @@
             <td class="mgAdminAlignRight"><span style="font-weight:bold;">{lang_title}</span></td>
             <td class="mgAdminAlignLeft">
               <textarea name="media_title[]" cols="40" rows="2">{media_title}</textarea>
-              <input type="hidden" name="media_id[]" value="{media_id}"{xhtml}>
+              <input type="hidden" name="media_id[]" value="{media_id}" />
             </td>
           </tr>
           <tr>

@@ -12,7 +12,7 @@
     {lang_description}
   </div>
   <div style="clear:both;"></div>
-  <br{xhtml}>
+  <br />
 
   <div style="height:25px;width:20%;float:left;white-space:nowrap;">
     <label>{lang_auto_start}</label>
@@ -25,7 +25,7 @@
     {lang_auto_start_help}
   </div>
   <div style="clear:both;"></div>
-  <br{xhtml}>
+  <br />
 
   <div style="height:25px;width:20%;float:left;white-space:nowrap;">
     <label>{lang_enable_context_menu}</label>
@@ -38,7 +38,7 @@
     {lang_enable_context_menu_help}
   </div>
   <div style="clear:both;"></div>
-  <br{xhtml}>
+  <br />
 
   <div style="height:25px;width:20%;float:left;white-space:nowrap;">
     <label>{lang_stretch_to_fit}</label>
@@ -51,7 +51,7 @@
     {lang_stretch_to_fit_help}
   </div>
   <div style="clear:both;"></div>
-  <br{xhtml}>
+  <br />
 
   <div style="height:25px;width:20%;float:left;white-space:nowrap;">
     <label>{lang_status_bar}</label>
@@ -64,7 +64,7 @@
     {lang_status_bar_help}
   </div>
   <div style="clear:both;"></div>
-  <br{xhtml}>
+  <br />
 
   <div style="height:25px;width:20%;float:left;white-space:nowrap;">
     <label>{lang_ui_mode}</label>
@@ -76,7 +76,7 @@
     {lang_ui_mode_help}
   </div>
   <div style="clear:both;"></div>
-  <br{xhtml}>
+  <br />
 
   <div style="height:25px;width:20%;float:left;white-space:nowrap;">
     <label>{lang_playcount}</label>
@@ -88,7 +88,7 @@
     {lang_playcount_help}
   </div>
   <div style="clear:both;"></div>
-  <br{xhtml}>
+  <br />
 
   <div style="height:25px;width:20%;float:left;white-space:nowrap;">
     <label>{lang_bgcolor}</label>
@@ -100,7 +100,7 @@
     {lang_bgcolor_help}
   </div>
   <div style="clear:both;"></div>
-  <br{xhtml}>
+  <br />
 
   <div style="height:25px;width:20%;float:left;white-space:nowrap;">
     <label for="width">{lang_width}</label>
@@ -112,7 +112,7 @@
       {lang_width_help}
   </div>
  <div style="clear:both;"></div>
-  <br{xhtml}>
+  <br />
 
   <div style="height:25px;width:20%;float:left;white-space:nowrap;">
     <label for="height">{lang_height}</label>
@@ -124,6 +124,6 @@
       {lang_height_help}
   </div>
  <div style="clear:both;"></div>
-  <br{xhtml}>
+  <br />
 </fieldset>
 {# end {templatelocation} #}

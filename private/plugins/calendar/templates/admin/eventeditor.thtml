@@ -38,7 +38,7 @@ function toggleTOD() {
 </script>
 <form action="{site_admin_url}/plugins/calendar/index.php" name="events" id="eventeditor" method="post">
     <div class="form-description">*{lang_eventtitle}:</div>
-    <div class="form-field"><input class="fValidate['required']" type="text" size="48" maxlength="128" name="title" value="{event_title}" {xhtml}></div>
+    <div class="form-field"><input class="fValidate['required']" type="text" size="48" maxlength="128" name="title" value="{event_title}"  /></div>
     <div class="clear-left"></div>
     <div class="form-description">{lang_eventtype}:</div>
     <div class="form-field">
@@ -49,16 +49,16 @@ function toggleTOD() {
     </div>
     <div class="clear-left"></div>
     <div class="form-description">{$LANG_ADMIN[enabled]}:</div>
-    <div class="form-field"><input type="checkbox" name="status" id="status" value="1"{status_checked}{xhtml}></div>
+    <div class="form-field"><input type="checkbox" name="status" id="status" value="1"{status_checked} /></div>
     <div class="clear-left"></div>
     <div class="form-description">{lang_eventurl}:</div>
-    <div class="form-field"><input type="text" dir="ltr" size="48" maxlength="{max_url_length}" name="url" value="{event_url}"{xhtml}>{lang_includehttp}</div>
+    <div class="form-field"><input type="text" dir="ltr" size="48" maxlength="{max_url_length}" name="url" value="{event_url}" />{lang_includehttp}</div>
     <div class="clear-left"></div>
 
   <div style="margin:5px 0 10px 0;border-bottom:1px solid #cccccc"></div>
 
     <div class="form-description">{lang_alldayevent}:</div>
-    <div class="form-field"><input type="checkbox" name="allday" id="allday" {allday_checked}{xhtml}></div>
+    <div class="form-field"><input type="checkbox" name="allday" id="allday" {allday_checked} /></div>
     <div class="clear-left"></div>
     <div class="form-description">{lang_eventstartdate}:</div>
     <div class="form-field">
@@ -77,7 +77,7 @@ function toggleTOD() {
 {# nogray calendar - must be replaced in 1.2.0 #}
 <span id="cal1">
         <a href="#" id="toggler1">
-        <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:text-top;border:none;"{xhtml}>
+        <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:text-top;border:none;" />
         </a>
 </span>
         <span id="calendar1"></span>
@@ -115,7 +115,7 @@ function toggleTOD() {
 {# nogray calendar - must be replaced in 1.2.0 #}
 <span id="cal2">
         <a href="#" id="toggler2">
-        <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:text-top;border:none;"{xhtml}>
+        <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:text-top;border:none;" />
         </a>
 </span>
         <span id="calendar2"></span>
@@ -141,19 +141,19 @@ function toggleTOD() {
     <div class="form-field"><textarea name="location" cols="45" rows="2">{event_location}</textarea></div>
     <div class="clear-left"></div>
     <div class="form-description">{lang_addressline1}:</div>
-    <div class="form-field"><input type="text" name="address1" value="{event_address1}" size="40"{xhtml}></div>
+    <div class="form-field"><input type="text" name="address1" value="{event_address1}" size="40" /></div>
     <div class="clear-left"></div>
     <div class="form-description">{lang_addressline2}:</div>
-    <div class="form-field"><input type="text" name="address2" value="{event_address2}" size="40"{xhtml}></div>
+    <div class="form-field"><input type="text" name="address2" value="{event_address2}" size="40" /></div>
     <div class="clear-left"></div>
     <div class="form-description">{lang_city}:</div>
-    <div class="form-field"><input type="text" name="city" size="40" value="{event_city}" maxlength="60"{xhtml}></div>
+    <div class="form-field"><input type="text" name="city" size="40" value="{event_city}" maxlength="60" /></div>
     <div class="clear-left"></div>
     <div class="form-description">{lang_state}:</div>
-    <div class="form-field"><input type="text" name="state" value="{event_state}" size="40"{xhtml}></div>
+    <div class="form-field"><input type="text" name="state" value="{event_state}" size="40" /></div>
     <div class="clear-left"></div>
     <div class="form-description">{lang_zipcode}:</div>
-    <div class="form-field"><input type="text" name="zipcode" size="5" value="{event_zipcode}" maxlength="5"{xhtml}></div>
+    <div class="form-field"><input type="text" name="zipcode" size="5" value="{event_zipcode}" maxlength="5" /></div>
     <div class="clear-left"></div>
 
   <div style="margin:5px 0 10px 0;border-bottom:1px solid #cccccc"></div>
@@ -183,7 +183,7 @@ function toggleTOD() {
   <div style="margin:5px 0 10px 0;border-bottom:1px solid #cccccc"></div>
 
     <div class="form-description">{lang_owner}:</div>
-    <div class="form-field">{owner_name}<input type="hidden" name="owner_id" value="{owner_id}"{xhtml}></div>
+    <div class="form-field">{owner_name}<input type="hidden" name="owner_id" value="{owner_id}" /></div>
     <div class="form-description">{lang_group}:</div>
     <div class="form-field">
         {group_dropdown}
@@ -198,13 +198,13 @@ function toggleTOD() {
   <div style="margin:5px 0 10px 0;border-bottom:1px solid #cccccc"></div>
 
     <div style="margin:5px;padding-top:5px;">
-      <input type="submit" value="{lang_save}" name="save"{xhtml}>
-      <input type="submit" value="{lang_cancel}" name="cancel"{xhtml}>
-      <input type="hidden" name="eid" value="{event_id}"{xhtml}>
-      <input type="hidden" name="hour_mode" value="{hour_mode}"{xhtml}>
+      <input type="submit" value="{lang_save}" name="save" />
+      <input type="submit" value="{lang_cancel}" name="cancel" />
+      <input type="hidden" name="eid" value="{event_id}" />
+      <input type="hidden" name="hour_mode" value="{hour_mode}" />
       {delete_option}
       {submission_option}
-      <input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}>
+      <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
     </div>
   <div class="clear-left"></div>
 </form>

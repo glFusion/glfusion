@@ -8,17 +8,17 @@
   <tr>
     <td align="center" style="width:100%;vertical-align:middle;">
       <span style="font-weight:bold;">{lang_album} {album_title}</span> ({subalbum_media_count})
-      <br{xhtml}>
+      <br />
       <span class="pluginSmallText">{album_desc}</span>
-      <br{xhtml}><br{xhtml}>
+      <br /><br />
       {!if updated}
       <span style="font-weight:bold;">{updated}</span> {album_last_update}
       {!endif}
       {!if lang_views}
-      <br{xhtml}><span style="font-weight:bold;">{lang_views}</span> {views}
+      <br /><span style="font-weight:bold;">{lang_views}</span> {views}
       {!endif}
       {!if lang_subalbums}
-      <br{xhtml}><span style="font-weight:bold;">{lang_subalbums}</span> {subalbumcount}
+      <br /><span style="font-weight:bold;">{lang_subalbums}</span> {subalbumcount}
       {!endif}
     </td>
   </tr>

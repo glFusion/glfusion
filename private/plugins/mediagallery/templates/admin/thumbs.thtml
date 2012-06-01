@@ -8,8 +8,8 @@
 </tr>
 <tr>
   <td align="left">
-    <input type="submit" name="submit" value="{lang_next}"{xhtml}>&nbsp;
-    <input type="submit" name="submit" value="{lang_cancel}"{xhtml}>
+    <input type="submit" name="submit" value="{lang_next}" />&nbsp;
+    <input type="submit" name="submit" value="{lang_cancel}" />
   </td>
 </tr>
 </table>

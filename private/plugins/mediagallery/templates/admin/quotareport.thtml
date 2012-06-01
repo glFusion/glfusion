@@ -3,7 +3,7 @@
   <table width="100%" border="0" cellspacing="0" cellpadding="5">
     <tr>
       <td>{lang_quota} >=</td>
-      <td><input type="text" name="quota" value="{quota}" size="3"{xhtml}>&nbsp;Mb</td>
+      <td><input type="text" name="quota" value="{quota}" size="3" />&nbsp;Mb</td>
       <td rowspan="2" style="vertical-align:middle;"><input type="submit" value="{lang_go}" name="go"></td>
     </tr>
 

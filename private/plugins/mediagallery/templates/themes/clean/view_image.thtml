@@ -22,10 +22,10 @@ function popitup(url)
       <td class="pluginRow2" align="right" style="width:40%;padding:5px;">
         <form name="mgsearch" id="mgsearch" method="post" action="{site_url}/search.php" style="margin:0;padding:0">
         <div>
-        <input type="text" name="keywords" value="{keywords}"{xhtml}>
-        <input type="hidden" name="mode" value="search"{xhtml}>
-        <input type="hidden" name="swhere" value="0"{xhtml}>
-        <input type="submit" value="{lang_search}"{xhtml}>
+        <input type="text" name="keywords" value="{keywords}" />
+        <input type="hidden" name="mode" value="search" />
+        <input type="hidden" name="swhere" value="0" />
+        <input type="submit" value="{lang_search}" />
         </div>
         </form>
       </td>
@@ -37,14 +37,14 @@ function popitup(url)
   <div class="gallery-photo">
     {!if prev_link}
       <a href="{prev_link}" id="prevArrow" style="position: absolute; margin: 30px 0 0 30px; visibility: hidden"onmouseover="document.getElementById('prevArrow').style.visibility='visible'"onmouseout="document.getElementById('prevArrow').style.visibility='hidden'">
-        <img src="/mediagallery/images/arrow-left.gif" alt="" width="20" height="17"{xhtml}>
+        <img src="/mediagallery/images/arrow-left.gif" alt="" width="20" height="17" />
       </a>
     {!endif}
     <img src="{raw_image}" width="{image_width}" height="{image_height}" class="gallery-photo"
-     usemap="#prevnext" alt="Next Image"{xhtml}>
+     usemap="#prevnext" alt="Next Image" />
     {!if next_link}
       <a href="{next_link}"id="nextArrow" style="position:absolute; margin: 30px 0 0 -50px; visibility: hidden"onmouseover="document.getElementById('nextArrow').style.visibility='visible'"onmouseout="document.getElementById('nextArrow').style.visibility='hidden'">
-        <img src="/mediagallery/images/arrow-right.gif" alt="" width="20" height="17"{xhtml}>
+        <img src="/mediagallery/images/arrow-right.gif" alt="" width="20" height="17" />
       </a>
     {!endif}
     <map id="prevnext" name="prevnext">
@@ -53,14 +53,14 @@ function popitup(url)
         href="{prev_link}"
         alt="Previous Image"
         onmouseover="document.getElementById('prevArrow').style.visibility='visible'"
-        onmouseout="document.getElementById('prevArrow').style.visibility='hidden'"{xhtml}>
+        onmouseout="document.getElementById('prevArrow').style.visibility='hidden'" />
     {!endif}
     {!if next_link}
       <area shape="rect" coords="{right_side},0,{image_width},{image_height}"
         href="{next_link}"
         alt="Next Image"
         onmouseover="document.getElementById('nextArrow').style.visibility='visible'"
-        onmouseout="document.getElementById('nextArrow').style.visibility='hidden'"{xhtml}>
+        onmouseout="document.getElementById('nextArrow').style.visibility='hidden'" />
     {!endif}
     </map>
     {!if rating_box}

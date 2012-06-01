@@ -38,7 +38,7 @@
     <tr class="pluginRow1">
       <td  style="width:50%;" class="mgAdminAlignRight">{lang_member_quota}</td>
       <td class="mgAdminAlignLeft">
-        <input type="text" size="5" name="member_quota" value="{member_quota}"{xhtml}>&nbsp;Mb&nbsp;&nbsp;{lang_zero_unlimited}
+        <input type="text" size="5" name="member_quota" value="{member_quota}" />&nbsp;Mb&nbsp;&nbsp;{lang_zero_unlimited}
       </td>
     </tr>
     <tr class="pluginRow2">
@@ -98,7 +98,7 @@
     <tr class="pluginRow2">
       <td  style="width:50%;" class="mgAdminAlignRight">{lang_max_filesize}</td>
       <td class="mgAdminAlignLeft">
-        <input type="text" size="5" name="max_filesize" value="{max_filesize}"{xhtml}>&nbsp;Kb&nbsp;&nbsp;{lang_zero_unlimited}
+        <input type="text" size="5" name="max_filesize" value="{max_filesize}" />&nbsp;Kb&nbsp;&nbsp;{lang_zero_unlimited}
       </td>
     </tr>
   </table>
@@ -154,7 +154,7 @@
   </table>
 </div>
 <div style="text-align:center;">
-  <input type="submit" value="{lang_save}" name="mode"{xhtml}> <input type="submit" value="{lang_cancel}" name="mode"{xhtml}>
+  <input type="submit" value="{lang_save}" name="mode" /> <input type="submit" value="{lang_cancel}" name="mode" />
 </div>
 </form>
 {# JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor #}

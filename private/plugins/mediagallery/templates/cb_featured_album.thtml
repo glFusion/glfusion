@@ -19,18 +19,18 @@
     				<div class="out" style="width:{border_width}px">
     				<div class="in2">
     				<div class="in">
-    				<a href="{u_viewalbum}"><img src="{album_last_image}" {media_size}  style="border:none;" alt=""{xhtml}></a>
+    				<a href="{u_viewalbum}"><img src="{album_last_image}" {media_size}  style="border:none;" alt="" /></a>
     				</div></div></div>
     				</td>
-    				<td style="vertical-align:top;width:40%;text-align:left;"><br{xhtml}>
+    				<td style="vertical-align:top;width:40%;text-align:left;"><br />
                       <span style="font-weight:bold;">{album_title}</span> ({subalbum_media_count})
-                      <br{xhtml}><br{xhtml}>
+                      <br /><br />
                       {album_desc}
-                      <br{xhtml}><br{xhtml}>
+                      <br /><br />
                       <span style="font-weight:bold;">{updated_prompt}</span> {album_last_update}
                     </td>
-                    <td style="vertical-align:top;text-align:left;"><br{xhtml}>
-                      <span style="font-weight:bold;">{lang_subalbums}</span> {subalbumcount}<br{xhtml}>&nbsp;<div class="pluginSmallText">{saulstart}{subalbumlist}{saulend}</div>
+                    <td style="vertical-align:top;text-align:left;"><br />
+                      <span style="font-weight:bold;">{lang_subalbums}</span> {subalbumcount}<br />&nbsp;<div class="pluginSmallText">{saulstart}{subalbumlist}{saulend}</div>
                     </td>
                     </tr>
                     </table>
@@ -40,6 +40,6 @@
         </td>
       </tr>
     </table>
-    <br{xhtml}>
+    <br />
 </div>
 {# end {templatelocation} #}

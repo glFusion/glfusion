@@ -16,7 +16,7 @@
               </div>
           </td>
           <td style="text-align:right;vertical-align:top;" rowspan="4">
-            <div style="text-align:right;"><img src="{site_url}/images/stamp.gif" border="0" alt=""{xhtml}></div>
+            <div style="text-align:right;"><img src="{site_url}/images/stamp.gif" border="0" alt="" /></div>
           </td>
         </tr>
         <tr>
@@ -50,18 +50,18 @@
           </td>
         </tr>
       </table>
-      <hr style="width:100%;"{xhtml}>
+      <hr style="width:100%;" />
         <div style="text-align:center;">
            <a href="{media_url}">
-             <img src="{media_image}" alt="" style="border:1px solid;"{xhtml}></a>
-             <br{xhtml}>
+             <img src="{media_image}" alt="" style="border:1px solid;" /></a>
+             <br />
              <div style="text-align:center;">
                <div style="width: 500px; text-align: center;font-style: italic;font-size: smaller;text-indent: 0;">{media_title}</div>
              </div>
         </div>
-      <hr style="width:100%;"{xhtml}>
+      <hr style="width:100%;" />
           {postcard_message}
-	  <hr style="width:100%;"{xhtml}>
+	  <hr style="width:100%;" />
 <p style="text-align:center;"><a href="{site_url}"><span style="font-weight:bold;">{lang_visit} {site_name} - {site_slogan}</span></a></p>
 </td>
 </tr>

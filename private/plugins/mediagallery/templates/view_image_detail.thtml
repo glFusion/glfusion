@@ -4,7 +4,7 @@
 <div class="in ltin tpin">
 {!endif}
 {url_link}
-<img src="{u_image}" border="0" alt="{media_tag}" title="{media_tag}" vspace="10" {media_size}{xhtml}>
+<img src="{u_image}" border="0" alt="{media_tag}" title="{media_tag}" vspace="10" {media_size} />
 {url_close}
 {!if border_width}
 </div>

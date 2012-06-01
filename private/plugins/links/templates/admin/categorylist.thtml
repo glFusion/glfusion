@@ -2,7 +2,7 @@
 <h2>{lang_pagetitle}</h2>
 
 <div class="admin-list-icon">
-    <img src="http://localhost/dev/public_html/links/images/links.png" alt=""{xhtml}>
+    <img src="http://localhost/dev/public_html/links/images/links.png" alt="" />
 </div>
 
 <a href="{site_admin_url}/plugins/links/index.php">{lang_link_list}</a> |
@@ -11,7 +11,7 @@
 <a href="{site_admin_url}/plugins/links/category.php?mode=edit">{lang_new_category}</a> |
 <a href="{site_admin_url}/moderation.php">{lang_admin_home}</a>
 
-<br style="clear:both"{xhtml}>
+<br style="clear:both" />
 
 <h3>{lang_sitecategories}</h3>
 
@@ -25,7 +25,7 @@
             </tr>
             <tr{rowcolor}>
                 <td width="20" class="box">-</td>
-                <td width="20" class="box"><a href="{site_admin_url}/plugins/links/category.php?mode=edit&amp;pid={root_cid}" title="{add_text}"><img src="{layout_url}/images/addchild.png" alt="{add_text}"{xhtml}></a></td>
+                <td width="20" class="box"><a href="{site_admin_url}/plugins/links/category.php?mode=edit&amp;pid={root_cid}" title="{add_text}"><img src="{layout_url}/images/addchild.png" alt="{add_text}" /></a></td>
                 <td class="box" width="200">{lang_root}</td>
                 <td class="box"></td>
                 <td width="20" class="box"></td>

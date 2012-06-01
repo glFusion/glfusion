@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 <tr class="pluginRow{csscode} pluginLinks">
-    <td><input type="checkbox" name="chkrecid[]" value="{id}"{xhtml}></td>
+    <td><input type="checkbox" name="chkrecid[]" value="{id}" /></td>
     <td>{name}</td>
     <td>{subject}</td>
     <td class="aligncenter">{views}</td>

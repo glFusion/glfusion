@@ -1,4 +1,4 @@
 {# begin {templatelocation} #}
-<br{xhtml}><br{xhtml}>
+<br /><br />
 {errormessage}
 {# end {templatelocation} #}

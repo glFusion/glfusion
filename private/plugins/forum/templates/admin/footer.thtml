@@ -1,4 +1,4 @@
 {# begin {templatelocation} #}
-<br{xhtml}>
+<br />
 {forumname}
 {# end {templatelocation} #}

@@ -14,8 +14,8 @@
 </table>
 <p>&nbsp;</p>
 <div style="text-align:center;">
-  <input type="submit" name="mode" value="{lang_submit}"{xhtml}>&nbsp;&nbsp;
-  <input type="submit" name="mode" value="{lang_cancel}"{xhtml}>
+  <input type="submit" name="mode" value="{lang_submit}" />&nbsp;&nbsp;
+  <input type="submit" name="mode" value="{lang_cancel}" />
 </div>
 </form>
 {# end {templatelocation} #}

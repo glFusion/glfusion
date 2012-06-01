@@ -6,16 +6,16 @@
                 </tr>
                 <tr>
                    <td class="pluginCellText pluginCellFill" style="text-align:center;padding:10px;">
-                        <input type="hidden" name="type" value="{type}"{xhtml}>
-                        <input type="hidden" name="confirm" value="1"{xhtml}>
-                        <input type="hidden" name="id" value="{id}"{xhtml}>
+                        <input type="hidden" name="type" value="{type}" />
+                        <input type="hidden" name="confirm" value="1" />
+                        <input type="hidden" name="id" value="{id}" />
                         {deletenote2}
                    </td>
                  </tr>
                  <tr>
                    <td class="pluginCellText pluginCellFill" style="text-align:center;padding:10px;">
-                        <input type="submit" name="mode" value="{LANG_DELETE}"{xhtml}>&nbsp;
-                        <input type="button" value="{LANG_CANCEL}" onclick="javascript:history.go(-1)"{xhtml}>
+                        <input type="submit" name="mode" value="{LANG_DELETE}" />&nbsp;
+                        <input type="button" value="{LANG_CANCEL}" onclick="javascript:history.go(-1)" />
                    </td>
                 </tr>
              </table>

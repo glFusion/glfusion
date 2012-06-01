@@ -3,13 +3,13 @@
 <div class="mgPluginMeta">
 {updated} {album_last_update}
 </div>
-<br{xhtml}>
+<br />
 <div class="mgPluginMI" style="float:left;padding-right:3px;">{media_item_thumbnail}</div>
 {album_desc}
 <div style="clear:both;"></div>
 <div class="pluginItemFooter">
 <span style="font-weight:bold;">{lang_subalbums}</span> {subalbumcount}
 </div>
-<hr{xhtml}>
+<hr />
 <div style="clear:both;"></div>
 {# end {templatelocation} #}
