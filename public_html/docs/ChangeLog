@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.3.0
 ------
+- Removed unused templates in private/plugins/filemgmt/templates/ (Eric)
 - Removed public_html/layout/nouveau/comment/commentform_advanced.thtml
   (no longer needed per Mark) (Eric)
 - General BB2 code cleanup, upgrade to core 2.0.48 (Mark)
