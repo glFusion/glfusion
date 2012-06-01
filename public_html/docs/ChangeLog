@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.3.0
 ------
+- Removed public_html/layout/nouveau/comment/commentform_advanced.thtml
+  (no longer needed per Mark) (Eric)
 - General BB2 code cleanup, upgrade to core 2.0.48 (Mark)
 - Fixed hard-coded admin url reference (Eric)
 - Improved comment entry / viewing (Mark)

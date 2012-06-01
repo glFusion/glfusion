@@ -3346,7 +3346,6 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/comment/comment.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/comment/commentbar.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/comment/commentform.thtml' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/comment/commentform_advanced.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/comment/custom/index.html' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/comment/index.html' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/comment/reportcomment.thtml' ),
