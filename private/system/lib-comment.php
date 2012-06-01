@@ -944,6 +944,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 $thecomments = CMT_getComment ($A, 'flat', $type, 'ASC', false, true,0,$author_id);
 
                 $start->set_var( 'comments', $thecomments );
+                $retval .= '<a name="comment_entry"></a>';
                 $retval .= COM_startBlock ($LANG03[14])
                         . $start->finish( $start->parse( 'output', 'comment' ))
                         . COM_endBlock ();
@@ -957,10 +958,13 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
 
             if ($mode == 'preview_new' ) {
                 $comment_template->set_var('mode','new');
+                $comment_template->set_var('show_anchor','');
             } else if ($mode == 'preview_edit' ) {
                 $comment_template->set_var('mode','edit');
+                $comment_template->set_var('show_anchor','');
             } else {
                 $comment_template->set_var('mode',$mode);
+                $comment_template->set_var('show_anchor',1);
             }
 
             if ( $_CONF['comment_editor'] == 1 ) {

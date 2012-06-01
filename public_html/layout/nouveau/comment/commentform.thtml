@@ -7,7 +7,9 @@
 <script type="text/javascript" src="{site_url}/javascript/submitcomment_fckeditor.js"></script>
 {!endif}
 {start_block_postacomment}
+{!if show_anchor}
 <a name="comment_entry"></a>
+{!endif}
 <form action="{site_url}/comment.php#comment_entry" method="post">
     <table cellspacing="0" cellpadding="3" width="95%">
         <tr>
