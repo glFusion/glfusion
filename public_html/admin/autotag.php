@@ -113,7 +113,7 @@ $LANG_AM['instructions_edit'] = 'This screen allows you to create a custom autot
                 'lang_enabled'      => $LANG_AM['enabled'],
                 'lang_replacement'  => $LANG_AM['replacement'],
                 'lang_replace_explain'  => $LANG_AM['replace_explain'],
-                'admin_menu' => ADMIN_createMenu($menu_arr, $LANG_AM['instructions_edit'],$_CONF['layout_url'] . '/images/icons/autotag.' . $_IMAGE_TYPE),
+                'admin_menu' => ADMIN_createMenu($menu_arr, $LANG_AM['instructions_edit'],$_CONF['admin_url'] . '/images/autotag.' . $_IMAGE_TYPE),
         ));
 
         if (isset($A['is_enabled']) && $A['is_enabled'] == 1) {

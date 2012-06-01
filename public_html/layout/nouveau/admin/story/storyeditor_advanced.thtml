@@ -32,11 +32,11 @@
       </tr>
       <tr>
         <td class="alignright">{lang_title}:</td>
-        <td><input type="text" size="48" maxlength="128" name="title" value="{story_title}"{xhtml}></td>
+        <td><input type="text" size="48" maxlength="128" name="title" value="{story_title}" /></td>
       </tr>
       <tr>
         <td class="alignright" style="vertical-align:top;">{lang_sid}:</td>
-        <td><input type="text" dir="ltr" size="48" maxlength="40" name="sid" value="{story_id}"{xhtml}></td>
+        <td><input type="text" dir="ltr" size="48" maxlength="40" name="sid" value="{story_id}" /></td>
       </tr>
       <tr>
         <td class="alignright">{lang_topic}:</td>
@@ -52,11 +52,11 @@
           <table cellspacing="0" cellpadding="3">
             <tr>
               <td class="alignright">{lang_hits}:</td>
-              <td><input type="hidden" name="hits" value="{story_hits}"{xhtml}>{story_hits}</td>
+              <td><input type="hidden" name="hits" value="{story_hits}" />{story_hits}</td>
               <td class="alignright">{lang_comments}:</td>
-              <td><input type="hidden" name="comments" value="{story_comments}"{xhtml}>{story_comments}</td>
+              <td><input type="hidden" name="comments" value="{story_comments}" />{story_comments}</td>
               <td class="alignright">{lang_emails}:</td>
-              <td><input type="hidden" name="numemails" value="{story_emails}"{xhtml}>{story_emails}</td>
+              <td><input type="hidden" name="numemails" value="{story_emails}" />{story_emails}</td>
 {!if rating}
               <td class="alignright">{$LANG13[rating]}:</td>
               <td>
@@ -73,21 +73,21 @@
         </td>
       </tr>
       <tr>
-        <td class="alignright">{lang_show_topic_icon}:<input type="checkbox" name="show_topic_icon" {show_topic_icon_checked}{xhtml}> </td>
-        <td style="padding-left:25px;">{lang_draft}:<input type="checkbox" name="draft_flag" {is_checked}{xhtml}><span style="padding-left:30px;">{lang_postmode}:</span>&nbsp;<select id="sel_editmode" name="postmode" {change_editormode}>{post_options}</select></td>
+        <td class="alignright">{lang_show_topic_icon}:<input type="checkbox" name="show_topic_icon" {show_topic_icon_checked} /> </td>
+        <td style="padding-left:25px;">{lang_draft}:<input type="checkbox" name="draft_flag" {is_checked} /><span style="padding-left:30px;">{lang_postmode}:</span>&nbsp;<select id="sel_editmode" name="postmode" {change_editormode}>{post_options}</select></td>
       </tr>
     </table>
     {# Basic textarea field - no editor #}
     <div id="text_editor" style="width:98%;margin-top:10px;padding:10px;display:{show_texteditor};">
       {lang_introtext}:
-      <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="{lang_expandhelp}" alt="" onclick="changeTextAreaSize('introtext','larger');"{xhtml}>
-      <img src="{layout_url}/images/collapse.png" style="vertical-align:middle;" title="{lang_reducehelp}" alt="" onclick="changeTextAreaSize('introtext','smaller');"{xhtml}>
+      <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="{lang_expandhelp}" alt="" onclick="changeTextAreaSize('introtext','larger');" />
+      <img src="{layout_url}/images/collapse.png" style="vertical-align:middle;" title="{lang_reducehelp}" alt="" onclick="changeTextAreaSize('introtext','smaller');" />
       <div style="width:99%; padding-bottom:10px;">
-        <textarea id="introtext"  style="width:98%;padding:5px 5px 5px 10px;" name="introtext" cols="45" rows="14">{story_introtext}</textarea><br{xhtml}>
+        <textarea id="introtext"  style="width:98%;padding:5px 5px 5px 10px;" name="introtext" cols="45" rows="14">{story_introtext}</textarea><br />
       </div>
       {lang_bodytext}:
-      <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="{lang_expandhelp}" alt="" onclick="changeTextAreaSize('bodytext','larger');"{xhtml}>
-      <img src="{layout_url}/images/collapse.png" style="vertical-align:middle;" title="{lang_reducehelp}" alt="" onclick="changeTextAreaSize('bodytext','smaller');"{xhtml}>
+      <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="{lang_expandhelp}" alt="" onclick="changeTextAreaSize('bodytext','larger');" />
+      <img src="{layout_url}/images/collapse.png" style="vertical-align:middle;" title="{lang_reducehelp}" alt="" onclick="changeTextAreaSize('bodytext','smaller');" />
       <div style="width:99%;">
         <textarea id="bodytext" style="width:98%;padding:5px 5px 5px 10px;" name="bodytext" cols="45" rows="14">{story_bodytext}</textarea>
       </div>
@@ -95,8 +95,8 @@
     {# HTML Editor #}
     <div id="html_editor" style="margin-top:10px; padding:5px; border:1px solid #ECE9D8;display:{show_htmleditor};">
       {lang_introtext}:
-      <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="{lang_expandhelp}" alt="" onclick="changeHTMLTextAreaSize('introhtml','larger');"{xhtml}>
-      <img src="{layout_url}/images/collapse.png" style="vertical-align:middle;" title="{lang_reducehelp}" alt="" onclick="changeHTMLTextAreaSize('introhtml','smaller');"{xhtml}>
+      <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="{lang_expandhelp}" alt="" onclick="changeHTMLTextAreaSize('introhtml','larger');" />
+      <img src="{layout_url}/images/collapse.png" style="vertical-align:middle;" title="{lang_reducehelp}" alt="" onclick="changeHTMLTextAreaSize('introhtml','smaller');" />
       <span style="padding-left:15px;">
         {lang_toolbar}:&nbsp;
         <select id="fckeditor_toolbar_selector" name="fckeditor_toolbar_selector" onchange="changeToolbar(this.value);">
@@ -107,11 +107,11 @@
         </select>
       </span>
       <div style="padding:5px;">
-        <textarea id="introhtml" style="width:98%;padding:5px 5px 5px 10px;" name="introhtml" cols="80" rows="12">{story_introtext}</textarea><br{xhtml}>
+        <textarea id="introhtml" style="width:98%;padding:5px 5px 5px 10px;" name="introhtml" cols="80" rows="12">{story_introtext}</textarea><br />
       </div>
       {lang_bodytext}:
-      <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="lang_expandhelp" alt="" onclick="changeHTMLTextAreaSize('bodyhtml','larger');"{xhtml}>
-      <img src="{layout_url}/images/collapse.png" style="vertical-align:middle;" title="{lang_reducehelp}" alt="" onclick="changeHTMLTextAreaSize('bodyhtml','smaller');"{xhtml}>
+      <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="lang_expandhelp" alt="" onclick="changeHTMLTextAreaSize('bodyhtml','larger');" />
+      <img src="{layout_url}/images/collapse.png" style="vertical-align:middle;" title="{lang_reducehelp}" alt="" onclick="changeHTMLTextAreaSize('bodyhtml','smaller');" />
       <div>
         <textarea id="bodyhtml" style="width:98%;padding:5px 5px 5px 10px;" name="bodyhtml" cols="80" rows="12">{story_bodytext}</textarea>
       </div>
@@ -143,7 +143,7 @@
                   </select>
                   <span id="cale1">
                     <a href="#" id="toggler">
-                      <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:middle;border:none;"{xhtml}>
+                      <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:middle;border:none;" />
                     </a>
                   </span>
                   <span id="calendar1"></span>
@@ -156,10 +156,10 @@
                     {publish_minute_options}
                   </select>
                   {publishampm_selection}
-                  <input type="hidden" name="publish_second" value="{publish_second}"{xhtml}>
+                  <input type="hidden" name="publish_second" value="{publish_second}" />
                 </span>
-                <br{xhtml}>
-                <br{xhtml}>
+                <br />
+                <br />
                 {publish_date_explanation}
               </td>
             </tr>
@@ -193,7 +193,7 @@
             </tr>
             <tr>
               <td>{lang_cmt_disable}:</td>
-              <td class="alignleft" style="vertical-align:top;" colspan="1">{lang_enabled}:<input type="checkbox" name="cmt_close_flag" value="1" {is_checked5} onclick="enablecmtclose(this);"{xhtml}>
+              <td class="alignleft" style="vertical-align:top;" colspan="1">{lang_enabled}:<input type="checkbox" name="cmt_close_flag" value="1" {is_checked5} onclick="enablecmtclose(this);" />
                 <span dir="ltr">
                   <select id="cmt_close_month" name="cmt_close_month">
                     {cmt_close_month_options}
@@ -209,7 +209,7 @@
                   &nbsp;&nbsp;
                   <span id="cale2">
                     <a href="#" id="toggler1">
-                      <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:middle;border:none;"{xhtml}>
+                      <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:middle;border:none;" />
                     </a>
                   </span>
                   <span id="calendar2"></span>
@@ -223,9 +223,9 @@
                     {cmt_close_minute_options}
                   </select>
                   {cmt_close_ampm_selection}
-                  <input type="hidden" name="cmt_close_second" value="{cmt_close_second}"{xhtml}>
+                  <input type="hidden" name="cmt_close_second" value="{cmt_close_second}" />
                 </span>
-                <br{xhtml}>
+                <br />
               </td>
             </tr>
           </table>
@@ -246,14 +246,14 @@
           <table cellspacing="0" cellpadding="3" style="width:100%;">
             <tr>
               <td class="alignright" style="width:20%; padding-right:5px;">{lang_option}:</td>
-              <td style="width:20%;">{lang_enabled}:<input type="checkbox" name="archiveflag" value="1" {is_checked2} onclick="enablearchive(this);"{xhtml}></td>
+              <td style="width:20%;">{lang_enabled}:<input type="checkbox" name="archiveflag" value="1" {is_checked2} onclick="enablearchive(this);" /></td>
               <td class="alignleft">
                 <label for="storycode10">
-                 <input type="radio" name="statuscode" id="storycode10" value="10" {is_checked3}{xhtml}>{lang_optionarchive}
+                 <input type="radio" name="statuscode" id="storycode10" value="10" {is_checked3} />{lang_optionarchive}
                 </label>
                 &nbsp;
                 <label for="storycode11">
-                 <input type="radio" name="statuscode" id="storycode11" value="11" {is_checked4}{xhtml}>{lang_optiondelete}
+                 <input type="radio" name="statuscode" id="storycode11" value="11" {is_checked4} />{lang_optiondelete}
                 </label>
               </td>
             </tr>
@@ -278,9 +278,9 @@
                     {expire_minute_options}
                   </select>
                   {expireampm_selection}
-                  <input type="hidden" name="expire_second" value="{expire_second}"{xhtml}>
+                  <input type="hidden" name="expire_second" value="{expire_second}" />
                 </span>
-                <br{xhtml}>
+                <br />
               </td>
             </tr>
           </table>
@@ -299,18 +299,18 @@
     </div>
 
     <div id="se_bottom" style="width:100%; padding:3px; margin-top:20px;display:{show_submitoptions}">
-      <input type="submit" value="{lang_save}" name="save"{xhtml}>
+      <input type="submit" value="{lang_save}" name="save" />
       <span style="padding-right:10px;padding-left:10px;">
-        <input type="submit" value="{lang_preview}" name="previewstory"{xhtml}>
+        <input type="submit" value="{lang_preview}" name="previewstory" />
       </span>
       <span style="padding-right:50px;">
-        <input type="submit" value="{lang_cancel}" name="cancel"{xhtml}>
+        <input type="submit" value="{lang_cancel}" name="cancel" />
       </span>
       {delete_option}
       {submission_option}
-      <input type="hidden" name="old_sid" value="{old_story_id}"{xhtml}>
-      <input type="hidden" name="hour_mode" value="{hour_mode}"{xhtml}>
-      <input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}>
+      <input type="hidden" name="old_sid" value="{old_story_id}" />
+      <input type="hidden" name="hour_mode" value="{hour_mode}" />
+      <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
     </div>
   </form>
   <div id="preview" style="width:96%; border:1px dashed grey;padding:5px;margin:10px;display:{show_preview};">

@@ -2,5 +2,5 @@
                                 <div>
                                     {item_field}
                                 </div>
-                                <br{xhtml}>
+                                <br />
 {# end {templatelocation} #}

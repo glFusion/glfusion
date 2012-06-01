@@ -14,7 +14,7 @@ window.addEvent('domready',function() {
     <table cellspacing="0" cellpadding="2" width="100%">
         <tr>
             <td width="20%" class="alignright">{lang_topicname}:</td>
-            <td width="80%"><input class="fValidate['required']" type="text" size="48" name="topic" id="topic" value="{topic_name}"{xhtml}></td>
+            <td width="80%"><input class="fValidate['required']" type="text" size="48" name="topic" id="topic" value="{topic_name}" /></td>
         </tr>
         <tr>
             <td class="alignright">{lang_topicid}:</td>
@@ -22,7 +22,7 @@ window.addEvent('domready',function() {
         </tr>
         <tr>
             <td class="alignright">{lang_topicimage}:</td>
-            <td><input type="text" dir="ltr" size="48" maxlength="{max_url_length}" name="imageurl" value="{image_url}"{xhtml}></td>
+            <td><input type="text" dir="ltr" size="48" maxlength="{max_url_length}" name="imageurl" value="{image_url}" /></td>
         </tr>
 
         {!if topicimage}
@@ -36,7 +36,7 @@ window.addEvent('domready',function() {
 
         <tr>
             <td class="alignright">{lang_uploadimage}:</td>
-            <td><input type="file" name="newicon"{xhtml}> ({lang_maxsize} {icon_dimensions})</td>
+            <td><input type="file" name="newicon" /> ({lang_maxsize} {icon_dimensions})</td>
         </tr>
         <tr>
             <td class="alignright">{lang_sortorder}:</td>
@@ -44,7 +44,7 @@ window.addEvent('domready',function() {
         </tr>
         <tr>
             <td class="alignright">{lang_storiesperpage}:</td>
-            <td><input type="text" size="3" maxlength="3" name="limitnews" value="{story_limit}"{xhtml}> ({lang_defaultis} {default_limit})</td>
+            <td><input type="text" size="3" maxlength="3" name="limitnews" value="{story_limit}" /> ({lang_defaultis} {default_limit})</td>
         </tr>
         <tr>
           <td class="alignright">{lang_sort_story_by}:</td>
@@ -56,11 +56,11 @@ window.addEvent('domready',function() {
         </tr>
         <tr>
             <td class="alignright">{lang_defaulttopic}:</td>
-            <td><input type="checkbox" name="is_default" {default_checked}{xhtml}> ({lang_defaulttext})</td>
+            <td><input type="checkbox" name="is_default" {default_checked} /> ({lang_defaulttext})</td>
         </tr>
         <tr>
             <td class="alignright">{lang_archivetopic}:</td>
-            <td><input type="checkbox" name="archive_flag" {archive_checked} {archive_disabled}{xhtml}> ({lang_archivetext})</td>
+            <td><input type="checkbox" name="archive_flag" {archive_checked} {archive_disabled} /> ({lang_archivetext})</td>
         </tr>
         <tr>
             <td colspan="2"><div style="margin:10px 0 5px 0;border-bottom:1px solid #cccccc"></div></td>
@@ -159,10 +159,10 @@ window.addEvent('domready',function() {
         </tr>
         <tr>
             <td colspan="2">
-                <input type="submit" value="{lang_save}" name="save"{xhtml}>
-                <input type="submit" value="{lang_cancel}" name="cancel"{xhtml}>
+                <input type="submit" value="{lang_save}" name="save" />
+                <input type="submit" value="{lang_cancel}" name="cancel" />
                 {!if delete_option}{delete_option}{!endif}
-                <input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}>
+                <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
             </td>
         </tr>
     </table>

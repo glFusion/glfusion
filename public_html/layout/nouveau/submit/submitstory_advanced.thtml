@@ -13,7 +13,7 @@
                 </tr>
                 <tr>
                     <td class="alignright"><b>{lang_title}:</b></td>
-                    <td><input type="text" size="36" maxlength="96" name="title" value="{story_title}"{xhtml}></td>
+                    <td><input type="text" size="36" maxlength="96" name="title" value="{story_title}" /></td>
                 </tr>
                 <tr>
                     <td class="alignright"><b>{lang_topic}:</b></td>
@@ -29,7 +29,7 @@
                         <select id="sel_editmode" name="postmode" {change_editormode}>
                             {story_postmode_options}
                         </select>
-                        <br{xhtml}><span class="warningsmall">{allowed_html}</span>
+                        <br /><span class="warningsmall">{allowed_html}</span>
                     </td>
                 </tr>
                 <tr>
@@ -44,12 +44,12 @@
                     {# HTML Editor #}
                     <div id="html_editor" style="margin-right:20px;display:{show_htmleditor};">
                         <div style="vertical-align:top;">
-                          {lang_introtext}:<br{xhtml}>
+                          {lang_introtext}:<br />
                           <textarea id="introhtml" style="width:90%;padding:5px 10px 5px 10px;" name="introhtml" cols="45" rows="12">{story_introtext}</textarea>
                         </div>
                         <div style="clear:both;"></div>
                         <div style="vertical-align:top;">
-                          {lang_bodytext}:<br{xhtml}>
+                          {lang_bodytext}:<br />
                           <textarea id="bodyhtml" style="width:90%;padding:5px 10px 5px 10px;" name="bodyhtml" cols="45" rows="20">{story_bodytext}</textarea>
                         </div>
                     </div>
@@ -58,12 +58,12 @@
                 {captcha}
                 <tr>
                     <td class="aligncenter" colspan="2">
-                        <input type="hidden" name="type" value="story"{xhtml}>
-                        <input type="hidden" name="uid" value="{story_uid}"{xhtml}>
-                        <input type="hidden" name="sid" value="{story_sid}"{xhtml}>
-                        <input type="hidden" name="date" value="{story_date}"{xhtml}>
+                        <input type="hidden" name="type" value="story" />
+                        <input type="hidden" name="uid" value="{story_uid}" />
+                        <input type="hidden" name="sid" value="{story_sid}" />
+                        <input type="hidden" name="date" value="{story_date}" />
                         {save_button}
-                        <input name="mode" type="submit" value="{lang_preview}"{xhtml}>
+                        <input name="mode" type="submit" value="{lang_preview}" />
                     </td>
                 </tr>
             </table>

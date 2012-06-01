@@ -8,7 +8,7 @@
   {item_row}
 </table>
 <p class="aligncenter" style="{show_message}"><strong>{message}</strong></p>
-<br{xhtml}>
+<br />
 <p class="aligncenter">{google_paging}</p>
 {list_bottom}
 {# end {templatelocation} #}

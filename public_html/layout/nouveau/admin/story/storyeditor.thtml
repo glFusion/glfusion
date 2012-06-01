@@ -66,14 +66,14 @@ function enablearchive(obj) {
                     {publish_minute_options}
                 </select>
                 {publishampm_selection}
-                <input type="hidden" name="publish_second" value="{publish_second}"{xhtml}>
-              </span><br{xhtml}>
+                <input type="hidden" name="publish_second" value="{publish_second}" />
+              </span><br />
               {publish_date_explanation}
             </td>
         </tr>
         <tr>
             <td class="alignright">{lang_title}:</td>
-            <td><input type="text" size="48" maxlength="128" name="title" value="{story_title}"{xhtml}></td>
+            <td><input type="text" size="48" maxlength="128" name="title" value="{story_title}" /></td>
         </tr>
         <tr>
             <td class="alignright">{lang_topic}:</td>
@@ -86,12 +86,12 @@ function enablearchive(obj) {
         <tr>
             <td class="alignright">{lang_show_topic_icon}:</td>
             <td>
-                <input type="checkbox" name="show_topic_icon" {show_topic_icon_checked}{xhtml}>
+                <input type="checkbox" name="show_topic_icon" {show_topic_icon_checked} />
             </td>
         </tr>
         <tr>
             <td class="alignright">{lang_draft}:</td>
-            <td><input type="checkbox" name="draft_flag" {is_checked}{xhtml}></td>
+            <td><input type="checkbox" name="draft_flag" {is_checked} /></td>
         </tr>
         {!if rating}
         <tr>
@@ -114,13 +114,13 @@ function enablearchive(obj) {
                     </tr>
                     <tr>
                         <td class="alignright" style="padding-right:5px; width:20%">{lang_option}:</td>
-                        <td style="width:20%">{lang_enabled}:<input type="checkbox" name="archiveflag" value="1" {is_checked2} onclick="enablearchive(this);"{xhtml}></td>
+                        <td style="width:20%">{lang_enabled}:<input type="checkbox" name="archiveflag" value="1" {is_checked2} onclick="enablearchive(this);" /></td>
                         <td class="alignleft">
                             <label for="storycode10">
-                                <input type="radio" name="statuscode" id="storycode10" value="10" {is_checked3}{xhtml}>{lang_optionarchive}
+                                <input type="radio" name="statuscode" id="storycode10" value="10" {is_checked3} />{lang_optionarchive}
                             </label>&nbsp;
                             <label for="storycode11">
-                                <input type="radio" name="statuscode" id="storycode11" value="11" {is_checked4}{xhtml}>{lang_optiondelete}
+                                <input type="radio" name="statuscode" id="storycode11" value="11" {is_checked4} />{lang_optiondelete}
                             </label>
                         </td>
                     </tr>
@@ -147,8 +147,8 @@ function enablearchive(obj) {
                                 {expire_minute_options}
                             </select>
                             {expireampm_selection}
-                            <input type="hidden" name="expire_second" value="{expire_second}"{xhtml}>
-                          </span><br{xhtml}>
+                            <input type="hidden" name="expire_second" value="{expire_second}" />
+                          </span><br />
                         </td>
                     </tr>
                 </table>
@@ -172,7 +172,7 @@ function enablearchive(obj) {
         </tr>
         <tr>
             <td class="alignright" style="vertical-align:top;">{lang_cmt_disable}:</td>
-            <td class="alignleft" style="vertical-align:top;" colspan="1">{lang_enabled}:<input type="checkbox" name="cmt_close_flag" value="1" {is_checked5} onclick="enablecmtclose(this);"{xhtml}>
+            <td class="alignleft" style="vertical-align:top;" colspan="1">{lang_enabled}:<input type="checkbox" name="cmt_close_flag" value="1" {is_checked5} onclick="enablecmtclose(this);" />
                 <span dir="ltr">
                     <select name="cmt_close_month">
                         {cmt_close_month_options}
@@ -193,13 +193,13 @@ function enablearchive(obj) {
                          {cmt_close_minute_options}
                      </select>
                          {cmt_close_ampm_selection}
-                      <input type="hidden" name="cmt_close_second" value="{cmt_close_second}"{xhtml}>
-                          </span><br{xhtml}>
+                      <input type="hidden" name="cmt_close_second" value="{cmt_close_second}" />
+                          </span><br />
             </td>
         </tr>
         <tr>
             <td class="alignright" style="vertical-align:top;">{lang_sid}:</td>
-            <td><input type="text" dir="ltr" size="40" maxlength="40" name="sid" value="{story_id}"{xhtml}></td>
+            <td><input type="text" dir="ltr" size="40" maxlength="40" name="sid" value="{story_id}" /></td>
         </tr>
         <tr>
             <td class="alignright" style="vertical-align:top;">{lang_introtext}:</td>
@@ -215,7 +215,7 @@ function enablearchive(obj) {
                 <select name="postmode">
                     {post_options}
                 </select>
-                <br{xhtml}>
+                <br />
                 {lang_allowed_html}
             </td>
         </tr>
@@ -232,10 +232,10 @@ function enablearchive(obj) {
                 <table cellspacing="0" cellpadding="0" width="100%">
                     <tr>
                         <td class="alignleft">
-                            <input type="hidden" name="hits" value="{story_hits}"{xhtml}>{story_hits}
-                            <input type="hidden" name="comments" value="{story_comments}"{xhtml}>
-                            <input type="hidden" name="trackbacks" value="{story_trackbacks}"{xhtml}>
-                            <input type="hidden" name="numemails" value="{story_emails}"{xhtml}>
+                            <input type="hidden" name="hits" value="{story_hits}" />{story_hits}
+                            <input type="hidden" name="comments" value="{story_comments}" />
+                            <input type="hidden" name="trackbacks" value="{story_trackbacks}" />
+                            <input type="hidden" name="numemails" value="{story_emails}" />
                         </td>
                         <td>{lang_comments}:{story_comments}</td>
                         <td>{lang_trackbacks}:{story_trackbacks}</td>
@@ -280,15 +280,15 @@ function enablearchive(obj) {
         <tr><td colspan="2">&nbsp;</td></tr>
         <tr>
             <td colspan="2">
-                <input type="submit" value="{lang_save}" name="save"{xhtml}>
-                <input type="submit" value="{lang_preview}" name="previewstory"{xhtml}>
-                <input type="submit" value="{lang_cancel}" name="cancel"{xhtml}>
+                <input type="submit" value="{lang_save}" name="save" />
+                <input type="submit" value="{lang_preview}" name="previewstory" />
+                <input type="submit" value="{lang_cancel}" name="cancel" />
                 {delete_option}
                 {submission_option}
-                <input type="hidden" name="old_sid" value="{old_story_id}"{xhtml}>
-                <input type="hidden" name="editopt" value="default"{xhtml}>
-                <input type="hidden" name="hour_mode" value="{hour_mode}"{xhtml}>
-                <input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}>
+                <input type="hidden" name="old_sid" value="{old_story_id}" />
+                <input type="hidden" name="editopt" value="default" />
+                <input type="hidden" name="hour_mode" value="{hour_mode}" />
+                <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
             </td>
         </tr>
     </table>

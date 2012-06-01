@@ -11,15 +11,15 @@ window.addEvent('domready',function() {
     <div class="pluginInfo" style="margin-bottom:10px;">{lang_description}</div>
     <div>
       <label for="author">{lang_username}</label>
-      <input class="fValidate['required']" type="text" id="author" name="author" size="32" value="{username}" maxlength="32"{xhtml}>
+      <input class="fValidate['required']" type="text" id="author" name="author" size="32" value="{username}" maxlength="32" />
     </div>
     <div>
       <label for="authoremail">{lang_useremail}</label>
-      <input class="fValidate['required','email']" type="text" id="authoremail" name="authoremail" size="32" value="{useremail}" maxlength="96"{xhtml}>
+      <input class="fValidate['required','email']" type="text" id="authoremail" name="authoremail" size="32" value="{useremail}" maxlength="96" />
     </div>
     <div>
       <label for="subject">{lang_subject}</label>
-      <input class="fValidate['required']" type="text" id="subject" name="subject" size="32" maxlength="96" value="{subject}"{xhtml}>
+      <input class="fValidate['required']" type="text" id="subject" name="subject" size="32" maxlength="96" value="{subject}" />
     </div>
     <div>
       <label for="message">{lang_message}</label>
@@ -27,11 +27,11 @@ window.addEvent('domready',function() {
     </div>
     <div style="margin-left:95px;font-weight:bold;">{lang_nohtml}</div>
     <div style="margin-top:10px;margin-bottom:10px;">{captcha}</div>
-    <br{xhtml}>
+    <br />
     <div style="padding:5px;">
-      <input type="hidden" name="what" value="contact"{xhtml}>
-      <input type="hidden" name="uid" value="{uid}"{xhtml}>
-      <input type="submit" value="{lang_submit}"{xhtml}>
+      <input type="hidden" name="what" value="contact" />
+      <input type="hidden" name="uid" value="{uid}" />
+      <input type="submit" value="{lang_submit}" />
     </div>
   </form>
 </div>

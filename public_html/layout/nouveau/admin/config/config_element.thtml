@@ -1,12 +1,12 @@
 {# begin {templatelocation} #}
 <!-- BEGIN delete-button -->
-<input type="button" class="del-link" value="x" onclick="glfremove(this);"{xhtml}>
+<input type="button" class="del-link" value="x" onclick="glfremove(this);" />
 <!-- END delete-button -->
 
 <!-- BEGIN text-element -->
 <tr><td class="key">{display_name} {doc_link} {unset_link}</td>
 <td>
-<input type="text" class="opt" name="{name}" style="width:300px" value="{value}"{xhtml}>
+<input type="text" class="opt" name="{name}" style="width:300px" value="{value}" />
 {delete}
 </td></tr>
 <!-- END text-element -->
@@ -14,14 +14,14 @@
 <!-- BEGIN passwd-element -->
 <tr><td class="key">{display_name} {doc_link} {unset_link}</td>
 <td>
-<input type="password" class="opt" name="{name}" style="width:300px" value="{value}"{xhtml}>
+<input type="password" class="opt" name="{name}" style="width:300px" value="{value}" />
 {delete}
 </td></tr>
 <!-- END passwd-element -->
 
 <!-- BEGIN placeholder-element -->
 <tr><td class="key">{display_name}</td><td>
-<input type="hidden" name="{name}" value="{value}"{xhtml}>
+<input type="hidden" name="{name}" value="{value}" />
 {delete}
 </td></tr>
 <!-- END placeholder-element -->
@@ -45,12 +45,12 @@
 <!-- BEGIN list-element -->
 <tr><td class="key" style="vertical-align:top">{display_name} {doc_link} {unset_link}</td>
 <td>
-<input type="button" value="+" onclick="hide_show_tbl(selectChildByID(this.parentNode, 'arr_table{arr_name}'), this);"{xhtml}>
+<input type="button" value="+" onclick="hide_show_tbl(selectChildByID(this.parentNode, 'arr_table{arr_name}'), this);" />
 {delete}
-<input type="hidden" value="true" name="{name}[placeholder]"{xhtml}>
+<input type="hidden" value="true" name="{name}[placeholder]" />
 <table style="display:none" id="arr_table{arr_name}">
-<col width="100%"{xhtml}>
-<col width="100%"{xhtml}>
+<col width="100%" />
+<col width="100%" />
 {my_elements}
 {my_add_element_button}
 </table>
@@ -59,13 +59,13 @@
 
 <!-- BEGIN keyed-add-button -->
 <tr><td colspan="2">
-<input type="button" value="{lang_add_element}" class="add_ele_input" onclick="handleAdd(this, '{array_type}', '{arr_name}')"{xhtml}><input style="width: 65px"{xhtml}>
+<input type="button" value="{lang_add_element}" class="add_ele_input" onclick="handleAdd(this, '{array_type}', '{arr_name}')" /><input style="width: 65px" />
 </td></tr>
 <!-- END keyed-add-button -->
 
 <!-- BEGIN unkeyed-add-button -->
 <tr><td colspan="2">
-<input type="button" value="{lang_add_element}" class="add_ele_input" onclick="handleAdd(this, '{array_type}', '{arr_name}')"{xhtml}>
+<input type="button" value="{lang_add_element}" class="add_ele_input" onclick="handleAdd(this, '{array_type}', '{arr_name}')" />
 </td></tr>
 <!-- END unkeyed-add-button -->
 {# end {templatelocation} #}

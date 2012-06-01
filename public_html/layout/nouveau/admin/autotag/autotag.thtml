@@ -45,7 +45,7 @@
               <td><table><tr>{is_function_checkbox}<td><span id="php-msg">{php_msg}</span></td></tr></table></td>
           </tr>
           <tr>
-              <td class="alignright" style="vertical-align:top;white-space:nowrap;padding-top:7px;">{lang_replacement}:<br {xhtml}><br {xhtml}>{html_allowed}</td>
+              <td class="alignright" style="vertical-align:top;white-space:nowrap;padding-top:7px;">{lang_replacement}:<br  /><br  />{html_allowed}</td>
               <td style="vertical-align:top">
                   <textarea id="replacement" name="replacement" cols="75" rows="5">{replacement}</textarea>
                   <div id="replacement-help" style="margin-top:15px;">{lang_replace_explain}</div>

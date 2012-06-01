@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.3.0
 ------
+- Replaced {xhtml} tags with " /" as HTML5 validates by ignoring auto-closing
+  tags (ex: <br />) (Eric)
 - Removed unused templates in private/plugins/filemgmt/templates/ (Eric)
 - Removed public_html/layout/nouveau/comment/commentform_advanced.thtml
   (no longer needed per Mark) (Eric)

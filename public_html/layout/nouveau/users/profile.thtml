@@ -18,13 +18,13 @@ function popitup(url)
               {!else}
                 {username}
               {!endif}
-               :: {lang_membersince}<br{xhtml}>{user_regdate}
+               :: {lang_membersince}<br />{user_regdate}
                {!if user_lastlogin}
-                 <br{xhtml}><br{xhtml}>{$LANG28[35]}<br{xhtml}>{user_lastlogin}
+                 <br /><br />{$LANG28[35]}<br />{user_lastlogin}
                {!else}
                  &nbsp;
                {!endif}
-               "{xhtml}>
+               " />
             {!else}
               <div class="profile-image"><span class="b">
                 {!if user_fullname}
@@ -32,9 +32,9 @@ function popitup(url)
                 {!else}
                   {username}
                 {!endif}
-                </span><br{xhtml}><br{xhtml}>{lang_membersince}<br{xhtml}>{user_regdate}
+                </span><br /><br />{lang_membersince}<br />{user_regdate}
                 {!if user_lastlogin}
-                  <br{xhtml}><br{xhtml}>{$LANG28[35]}<br{xhtml}>{user_lastlogin}
+                  <br /><br />{$LANG28[35]}<br />{user_lastlogin}
                 {!else}
                   &nbsp;
                 {!endif}
@@ -45,7 +45,7 @@ function popitup(url)
                     {!if user_edit}
                     <li>
                         <a href="{user_edit}">
-                            <img src="{layout_url}/images/edit.png" alt="{$LANG_ADMIN[edit]}" title="{$LANG_ADMIN[edit]}"{xhtml}>
+                            <img src="{layout_url}/images/edit.png" alt="{$LANG_ADMIN[edit]}" title="{$LANG_ADMIN[edit]}" />
                         </a>
                     </li>
                     {!endif}
@@ -53,31 +53,31 @@ function popitup(url)
                     {!if user_homepage}
                     <li>
                         <a href="{user_homepage}" target="_blank">
-                            <img src="{layout_url}/images/home.png" alt="{lang_homepage}: {user_homepage}" title="{lang_homepage}: {user_homepage}"{xhtml}>
+                            <img src="{layout_url}/images/home.png" alt="{lang_homepage}: {user_homepage}" title="{lang_homepage}: {user_homepage}" />
                         </a>
                     </li>
                     {!endif}
                     {!if user_location}
                     <li>
-                        <img src="{layout_url}/images/location.png" alt="{lang_location}: {user_location}" title="{lang_location}: {user_location}"{xhtml}>
+                        <img src="{layout_url}/images/location.png" alt="{lang_location}: {user_location}" title="{lang_location}: {user_location}" />
                     </li>
                     {!endif}
                     {!if user_pgp}
                     <li>
                         <a href="#" onclick="return popitup('{site_url}/pgp.php?uid={user_id}')">
-                          <img src="{layout_url}/images/pgpkey.png" alt="{lang_pgpkey}" title="{lang_pgpkey}"{xhtml}>
+                          <img src="{layout_url}/images/pgpkey.png" alt="{lang_pgpkey}" title="{lang_pgpkey}" />
                         </a>
                     </li>
                     {!endif}
                     {!if online}
                     <li>
-                        <img src="{layout_url}/images/online.png" alt="{lang_online}" title="{lang_online}"{xhtml}>
+                        <img src="{layout_url}/images/online.png" alt="{lang_online}" title="{lang_online}" />
                     </li>
                     {!endif}
                     <!-- BEGIN profileicon -->
                     <li>
                         <a href="{profile_icon_url}">
-                        <img src="{profile_icon_icon}" alt="{profile_icon_text}" title="{profile_icon_text}"{xhtml}>
+                        <img src="{profile_icon_icon}" alt="{profile_icon_text}" title="{profile_icon_text}" />
                         </a>
                     </li>
                     <!-- END profileicon -->
@@ -85,7 +85,7 @@ function popitup(url)
             </div> {# end profile-meta #}
             {!if user_bio}
             <div class="profile-bio">
-                <b>{lang_bio} {username}</b><br{xhtml}>
+                <b>{lang_bio} {username}</b><br />
                 <p>{user_bio}</p>
             </div>
             {!endif}

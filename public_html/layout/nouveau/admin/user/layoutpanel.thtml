@@ -19,15 +19,15 @@
           </tr>
           <tr>
             <td style="width:120px;"><label for="noicons">{lang_noicons}:</label></td>
-            <td><input type="checkbox" id="noicons" name="noicons" {noicons_checked}{xhtml}></td>
+            <td><input type="checkbox" id="noicons" name="noicons" {noicons_checked} /></td>
           </tr>
           <tr>
             <td style="width:100px;"><label for="noboxes">{lang_noboxes}:</label></td>
-            <td><input type="checkbox" id="noboxes" name="noboxes" {noboxes_checked}{xhtml}></td>
+            <td><input type="checkbox" id="noboxes" name="noboxes" {noboxes_checked} /></td>
           </tr>
           <tr>
             <td style="width:100px;"><label for="maxstories">{lang_maxstories}:</label></td>
-            <td><input type="text" size="3" maxlength="3" id="maxstories" name="maxstories" value="{maxstories_value}"{xhtml}></td>
+            <td><input type="text" size="3" maxlength="3" id="maxstories" name="maxstories" value="{maxstories_value}" /></td>
           </tr>
         </table>
         <table class="inputTable">
@@ -66,7 +66,7 @@
           </tr>
           <tr>
             <td><label for="commentlimit">{lang_commentlimit}:</label></td>
-            <td><input type="text" id="commentlimit" name="commentlimit" size="5" maxlength="5" value="{commentlimit_value}"{xhtml}></td>
+            <td><input type="text" id="commentlimit" name="commentlimit" size="5" maxlength="5" value="{commentlimit_value}" /></td>
           </tr>
           {plugin_layout_comment}
         </table>

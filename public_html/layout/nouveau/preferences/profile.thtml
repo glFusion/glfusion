@@ -20,7 +20,7 @@
                 {username_option}
                 <tr>
                     <td style="width:150px;"><label for="fullname">{lang_fullname}:</label></td>
-                    <td><input type="text" id="fullname" name="fullname" size="60" maxlength="80" value="{fullname_value}"{xhtml}></td>
+                    <td><input type="text" id="fullname" name="fullname" size="60" maxlength="80" value="{fullname_value}" /></td>
                 </tr>
                 {plugin_namepass_name}
             </table>
@@ -29,7 +29,7 @@
             <div class="notes">
                 <h4>{lang_password_help_title}</h4>
                 <p class="last">
-                    <span class="warningsmall">{lang_enter_current_password}</span><br{xhtml}><br{xhtml}>
+                    <span class="warningsmall">{lang_enter_current_password}</span><br /><br />
                     {lang_password_help}
                 </p>
             </div>
@@ -43,11 +43,11 @@
                 </tr>
                 <tr>
                     <td><label for="email">{lang_email}:</label></td>
-                    <td><input type="text" id="email" name="email" size="50" maxlength="96" value="{email_value}"{xhtml}></td>
+                    <td><input type="text" id="email" name="email" size="50" maxlength="96" value="{email_value}" /></td>
                 </tr>
                 <tr>
                     <td><label for="email_conf">{lang_email_conf}:</label></td>
-                    <td><input type="text" id="email_conf" name="email_conf" size="50" maxlength="96" value="{email_value}"{xhtml}></td>
+                    <td><input type="text" id="email_conf" name="email_conf" size="50" maxlength="96" value="{email_value}" /></td>
                 </tr>
                 {plugin_namepass_pwdemail}
             </table>
@@ -64,12 +64,12 @@
             <table class="inputTable">
                 <tr>
                     <td style="width:100px;"><label for="homepage">{lang_homepage}:</label></td>
-                    <td><input type="text" id="homepage" name="homepage" size="48" maxlength="128" value="{homepage_value}"{xhtml}></td>
+                    <td><input type="text" id="homepage" name="homepage" size="48" maxlength="128" value="{homepage_value}" /></td>
                 </tr>
                 {customfields}
                 <tr>
                     <td style="width:100px;"><label for="location">{lang_location}:</label></td>
-                    <td><input type="text" id="location" name="location" size="48" maxlength="96" value="{location_value}"{xhtml}></td>
+                    <td><input type="text" id="location" name="location" size="48" maxlength="96" value="{location_value}" /></td>
                 </tr>
                 {userphoto_option}
                 <tr>
@@ -95,11 +95,11 @@
     {plugin_panel}
 
     <p class="aligncenter" id="save_button">
-        <input type="hidden" name="uid" value="{uid_value}"{xhtml}>
-        <input type="hidden" name="mode" value="saveuser"{xhtml}>
-        <input type="hidden" name="username" value="{username_value}"{xhtml}>
-        <span style="padding-right:50px;"><input type="submit" name="btnsubmit" value="{lang_submit}"{xhtml}></span>
-        <input type="submit" name="btncancel" value="{lang_cancel}"{xhtml}>
+        <input type="hidden" name="uid" value="{uid_value}" />
+        <input type="hidden" name="mode" value="saveuser" />
+        <input type="hidden" name="username" value="{username_value}" />
+        <span style="padding-right:50px;"><input type="submit" name="btnsubmit" value="{lang_submit}" /></span>
+        <input type="submit" name="btncancel" value="{lang_cancel}" />
     </p>
 </form>
 </div>

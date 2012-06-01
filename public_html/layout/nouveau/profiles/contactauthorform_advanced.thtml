@@ -14,19 +14,19 @@ window.addEvent('domready',function() {
 <table cellspacing="0" cellpadding="3" width="100%">
       <tr>
         <td class="alignright" style="width:20%;"><b>{lang_fromname}:</b></td>
-        <td><input class="fValidate['required']" type="text" id="from" name="from" size="40" value="{name}" maxlength="96"{xhtml}></td>
+        <td><input class="fValidate['required']" type="text" id="from" name="from" size="40" value="{name}" maxlength="96" /></td>
       </tr>
       <tr>
         <td class="alignright"><b>{lang_fromemailaddress}:</b></td>
-        <td><input class="fValidate['required','email']" type="text" id="fromemail" name="fromemail" size="40" value="{email}" maxlength="96"{xhtml}></td>
+        <td><input class="fValidate['required','email']" type="text" id="fromemail" name="fromemail" size="40" value="{email}" maxlength="96" /></td>
       </tr>
       <tr>
         <td class="alignright"><b>{lang_toname}:</b></td>
-        <td><input class="fValidate['required']" type="text" id="to" name="to" size="32" value="{toname}" maxlength="96"{xhtml}></td>
+        <td><input class="fValidate['required']" type="text" id="to" name="to" size="32" value="{toname}" maxlength="96" /></td>
       </tr>
       <tr>
         <td class="alignright"><b>{lang_toemailaddress}:</b></td>
-        <td><input class="fValidate['required','email']" type="text" id="toemail" name="toemail" size="40" value="{toemail}" maxlength="96"{xhtml}></td>
+        <td><input class="fValidate['required','email']" type="text" id="toemail" name="toemail" size="40" value="{toemail}" maxlength="96" /></td>
       </tr>
 
       <tr>
@@ -46,7 +46,7 @@ window.addEvent('domready',function() {
           <select id="sel_editmode" name="postmode" onchange="change_editmode(this);">
            {postmode_options}
           </select>
-          <br{xhtml}>
+          <br />
           <span class="warningsmall">{lang_warning}</span>
         </td>
       </tr>
@@ -56,9 +56,9 @@ window.addEvent('domready',function() {
       </tr>
       <tr>
         <td colspan="2">
-          <input type="hidden" name="sid" value="{story_id}"{xhtml}>
-          <input type="hidden" name="what" value="sendstory"{xhtml}>
-          <input type="submit" value="{lang_sendmessage}"{xhtml}>
+          <input type="hidden" name="sid" value="{story_id}" />
+          <input type="hidden" name="what" value="sendstory" />
+          <input type="submit" value="{lang_sendmessage}" />
         </td>
       </tr>
     </table>

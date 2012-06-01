@@ -10,19 +10,19 @@ window.addEvent('domready',function() {
                                 <table cellspacing="0" cellpadding="3" width="100%">
                                     <tr>
                                         <td class="alignright">{lang_blocktitle}:</td>
-                                        <td><input class="fValidate['required']" type="text" name="title" value="{block_title}" size="48" maxlength="48" {xhtml}></td>
+                                        <td><input class="fValidate['required']" type="text" name="title" value="{block_title}" size="48" maxlength="48"  /></td>
                                     </tr>
                                     <tr>
                                         <td class="alignright">{lang_blockname}:</td>
-                                        <td>{block_name}<input type="hidden" name="name" value="{block_name}"{xhtml}></td>
+                                        <td>{block_name}<input type="hidden" name="name" value="{block_name}" /></td>
                                     </tr>
                                     <tr>
                                         <td class="alignright">{lang_enabled}:</td>
-                                        <td><input type="checkbox" name="is_enabled" {is_enabled}{xhtml}></td>
+                                        <td><input type="checkbox" name="is_enabled" {is_enabled} /></td>
                                     </tr>
                                     <tr>
                                         <td class="alignright" style="vertical-align:top;">{lang_blockhelpurl}:</td>
-                                        <td><input type="text" dir="ltr" name="help" value="{block_help}" size="48" maxlength="{max_url_length}"{xhtml}> {lang_includehttp}<br{xhtml}>{lang_explanation}</td>
+                                        <td><input type="text" dir="ltr" name="help" value="{block_help}" size="48" maxlength="{max_url_length}" /> {lang_includehttp}<br />{lang_explanation}</td>
                                     </tr>
                                     <tr>
                                         <td class="alignright">{lang_topic}:</td>
@@ -46,11 +46,11 @@ window.addEvent('domready',function() {
                                     </tr>
                                     <tr>
                                         <td class="alignright">{lang_blockorder}:</td>
-                                        <td><input type="text" size="4" name="blockorder" value="{block_order}"{xhtml}> 0 - 9999</td>
+                                        <td><input type="text" size="4" name="blockorder" value="{block_order}" /> 0 - 9999</td>
                                     </tr>
                                     <tr>
                                         <td class="alignright">{lang_blocktype}:</td>
-                                        <td>gldefault<input type="hidden" name="type" value="gldefault"{xhtml}></td>
+                                        <td>gldefault<input type="hidden" name="type" value="gldefault" /></td>
                                     </tr>
                                     <tr>
                                         <td colspan="2"><div style="margin:10px 0 5px 0;border-bottom:1px solid #cccccc"></div></td>
@@ -60,7 +60,7 @@ window.addEvent('domready',function() {
                                     </tr>
                                     <tr>
                                         <td class="alignright">{lang_owner}:</td>
-                                        <td>{owner_name}<input type="hidden" name="owner_id" value="{owner_id}"{xhtml}></td>
+                                        <td>{owner_name}<input type="hidden" name="owner_id" value="{owner_id}" /></td>
                                     </tr>
                                     <tr>
                                         <td class="alignright">{lang_group}:</td>
@@ -87,10 +87,10 @@ window.addEvent('domready',function() {
                                     <tr><td>&nbsp;</td></tr>
                                     <tr>
                                         <td colspan="2">
-                                            <input type="submit" value="{lang_save}" name="save"{xhtml}>
-                                            <input type="submit" value="{lang_cancel}" name="cancel"{xhtml}>
-                                            <input type="hidden" name="bid" value="{block_id}"{xhtml}>
-                                            <input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}>
+                                            <input type="submit" value="{lang_save}" name="save" />
+                                            <input type="submit" value="{lang_cancel}" name="cancel" />
+                                            <input type="hidden" name="bid" value="{block_id}" />
+                                            <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
                                         </td>
                                     </tr>
                                 </table>

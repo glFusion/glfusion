@@ -9,12 +9,12 @@
         <table class="inputTable">
           <tr>
             <td style="width:100px;"><label for="homepage">{lang_homepage}:</label></td>
-            <td><input type="text" id="homepage" name="homepage" size="48" maxlength="128" value="{homepage_value}"{xhtml}></td>
+            <td><input type="text" id="homepage" name="homepage" size="48" maxlength="128" value="{homepage_value}" /></td>
           </tr>
           {customfields}
           <tr>
             <td style="width:100px;"><label for="location">{lang_location}:</label></td>
-            <td><input type="text" id="location" name="location" size="48" maxlength="96" value="{location_value}"{xhtml}></td>
+            <td><input type="text" id="location" name="location" size="48" maxlength="96" value="{location_value}" /></td>
           </tr>
           {!if lang_userphoto}
            <tr>

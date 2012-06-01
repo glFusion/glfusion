@@ -14,9 +14,9 @@
 
     <p>{comments_with_count}</p>
 
-    <hr{xhtml}>
+    <hr />
 
-    <p>{site_name}<br{xhtml}>
+    <p>{site_name}<br />
         <a href="{article_url}">{article_url}</a>
     </p>
 

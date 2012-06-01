@@ -13,9 +13,9 @@ function clearsearch() {
     <div class="admin-list-search">
         {filter}
         {!if lang_search}
-        {lang_search}: <input type="text" id="admin-list-search" size="20" name="q" value="{last_query}"{xhtml}>
-        <input type="submit" value="{lang_submit}"{xhtml}>
-        <input type="submit" value="X" title="Clear" onclick="clearsearch();"{xhtml}>
+        {lang_search}: <input type="text" id="admin-list-search" size="20" name="q" value="{last_query}" />
+        <input type="submit" value="{lang_submit}" />
+        <input type="submit" value="X" title="Clear" onclick="clearsearch();" />
         {!endif}
         {!if lang_limit_results}
         &nbsp;&nbsp;&nbsp;&nbsp;{lang_limit_results}:

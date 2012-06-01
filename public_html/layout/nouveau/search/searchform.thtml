@@ -1,10 +1,10 @@
 {# begin {templatelocation} #}
 <h2>{$LANG09[1]}</h2>
-<img style="float:left;padding-right:10px;" src="{layout_url}/images/search.png" alt="{$LANG09[10]}" title="{$LANG09[10]}"{xhtml}>
+<img style="float:left;padding-right:10px;" src="{layout_url}/images/search.png" alt="{$LANG09[10]}" title="{$LANG09[10]}" />
 <form method="get" action="{site_url}/search.php">
     <br />
-    <input type="hidden" name="mode" value="search"{xhtml}>
-    <input type="text" name="query" id="query" size="80" value="{query}"{xhtml}>&nbsp;<input type="submit" name="submit" value="{$LANG09[10]}"{xhtml}>&nbsp;&nbsp;<a href="#" id="toggleV">{$LANG09[2]}</a>
+    <input type="hidden" name="mode" value="search" />
+    <input type="text" name="query" id="query" size="80" value="{query}" />&nbsp;<input type="submit" name="submit" value="{$LANG09[10]}" />&nbsp;&nbsp;<a href="#" id="toggleV">{$LANG09[2]}</a>
 
 <script type="text/javascript">
 window.addEvent('load', function() {
