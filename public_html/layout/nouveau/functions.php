@@ -41,9 +41,6 @@ $themeAPI = 2;
 
 $_IMAGE_TYPE = 'png';
 
-if (!defined ('XHTML')) {
-    define('XHTML',' /'); // change this to ' /' for XHTML, and '' for HTML. Don't forget to update your doctype in htmlheader.thtml.
-}
 $lang = COM_getLanguageId();
 if (empty($lang)) {
     $result = DB_query("SELECT onleft,name FROM {$_TABLES['blocks']} WHERE is_enabled = 1");
