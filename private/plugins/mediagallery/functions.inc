@@ -1470,6 +1470,9 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
             case 'status' :
                 $fields[] = 'a.media_id';
                 break;
+            case 'author' :
+                $fields[] = 'a.media_user_id';
+                break;
             default:
                 break;
         }
@@ -1535,6 +1538,9 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
                         break;
                     case 'status':
                         $props['status'] = 1; // stub - default
+                        break;
+                    case 'author' :
+                        $props['author'] = $A['media_user_id'];
                         break;
                     default:
                         $props[$p] = '';
