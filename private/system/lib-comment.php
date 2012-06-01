@@ -91,7 +91,7 @@ function plugin_subscription_email_format_comment($category,$track_id,$post_id,$
         // Replace any plugin autolink tags
         $A['comment'] = PLG_replaceTags( $A['comment'],'glfusion','comment' );
 
-        $notifymsg = sprintf($LANG03[46],'<a href="'.$_CONF['site_url'].'/comment.php?mode=unsubscribe&sid='.htmlentities($track_id).'&type='.$A['type'].'">'.$LANG01['unsubscribe'].'</a>');
+        $notifymsg = sprintf($LANG03[46],'<a href="'.$_CONF['site_url'].'/comment.php?mode=unsubscribe&sid='.htmlentities($track_id).'&type='.$A['type'].'" rel="nofollow">'.$LANG01['unsubscribe'].'</a>');
 
         $dt->setTimestamp(strtotime($A['date']));
         $date = $dt->format('F d Y @ h:i a');
@@ -163,11 +163,11 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
 
     if ( !COM_isAnonUser() ) {
         if ( PLG_isSubscribed('comment',$type,$sid) ) {
-            $commentbar->set_var( 'subscribe','[<a href="'.$_CONF['site_url'].'/comment.php?mode=unsubscribe&amp;type='.htmlentities($type).'&amp;sid='.htmlentities($sid).'">'.$LANG01['unsubscribe'].'</a>]&nbsp;');
+            $commentbar->set_var( 'subscribe','[<a href="'.$_CONF['site_url'].'/comment.php?mode=unsubscribe&amp;type='.htmlentities($type).'&amp;sid='.htmlentities($sid).'" rel="nofollow">'.$LANG01['unsubscribe'].'</a>]&nbsp;');
             $commentbar->set_var( 'subscribe_url' , $_CONF['site_url'].'/comment.php?mode=unsubscribe&amp;type='.htmlentities($type).'&amp;sid='.htmlentities($sid));
             $commentbar->set_var( 'subscribe_text', $LANG01['unsubscribe']);
         } else {
-            $commentbar->set_var( 'subscribe','[<a href="'.$_CONF['site_url'].'/comment.php?mode=subscribe&amp;type='.htmlentities($type).'&amp;sid='.htmlentities($sid).'">'.$LANG01['subscribe'].'</a>]&nbsp;');
+            $commentbar->set_var( 'subscribe','[<a href="'.$_CONF['site_url'].'/comment.php?mode=subscribe&amp;type='.htmlentities($type).'&amp;sid='.htmlentities($sid).'" rel="nofollow">'.$LANG01['subscribe'].'</a>]&nbsp;');
             $commentbar->set_var( 'subscribe_url', $_CONF['site_url'].'/comment.php?mode=subscribe&amp;type='.htmlentities($type).'&amp;sid='.htmlentities($sid));
             $commentbar->set_var( 'subscribe_text', $LANG01['subscribe']);
         }
@@ -938,7 +938,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                     $A['username'] = DB_getItem ($_TABLES['users'], 'username',
                                                  "uid = ".(int) $uid);
                 }
-                $thecomments = CMT_getComment ($A, 'flat', $type, 'ASC', false, true);
+                $thecomments = CMT_getComment ($A, 'flat', $type, 'ASC', false, true,0,$uid);
 
                 $start->set_var( 'comments', $thecomments );
                 $retval .= COM_startBlock ($LANG03[14])
@@ -1681,7 +1681,7 @@ function plugin_displaycomment_article($id, $cid, $title, $order, $format, $page
         $retval .= STORY_renderArticle ($story, 'n');
     }
     // end
-    $sql = 'SELECT COUNT(*) AS count, commentcode, owner_id, group_id, perm_owner, perm_group, '
+    $sql = 'SELECT COUNT(*) AS count, commentcode, uid, owner_id, group_id, perm_owner, perm_group, '
          . "perm_members, perm_anon FROM {$_TABLES['stories']} "
          . "WHERE (sid = '".DB_escapeString($id)."') "
          . 'AND (draft_flag = 0) AND (commentcode >= 0) AND (date <= NOW())' . COM_getPermSQL('AND')
@@ -1698,7 +1698,7 @@ function plugin_displaycomment_article($id, $cid, $title, $order, $format, $page
                 $B['perm_anon'] ) == 3 ) );
         $retval .= CMT_userComments ($id, $title, 'article', $order,
                         $format, $cid, $page, $view, $delete_option,
-                        $B['commentcode']);
+                        $B['commentcode'],$B['uid']);
 
     } else {
         $retval .= COM_showMessageText($LANG_ACCESS['storydenialmsg'], $LANG_ACCESS['accessdenied'], true);
