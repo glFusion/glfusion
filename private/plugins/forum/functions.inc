@@ -1343,6 +1343,9 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
             case 'url':
                 $fields[] = 'a.id';
                 break;
+            case 'author' :
+                $fields[] = 'a.uid';
+                break;
             default:
                 break;
         }
@@ -1423,6 +1426,9 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
                 case 'status':
                     $props['status'] = 1; // stub - default
                     break;
+                case 'author' :
+                    $props['author'] = $A['uid'];
+                    break;
                 default:
                     $props[$p] = '';
                     break;
@@ -1451,7 +1457,8 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
     }
 
     if (($id != '*') && (count($retval) == 1)) {
-        $retval = $retval[0];
+        $tRet = array_values($retval);
+        $retval = $tRet[0];
     }
 
     return $retval;

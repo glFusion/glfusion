@@ -1701,6 +1701,9 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
             $fields[] = 'eid';
             $fields[] = 'status';
             break;
+        case 'author' :
+            $fields[] = 'owner_id';
+            break;
         default:
             break;
         }
@@ -1766,6 +1769,9 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
             case 'status':
                 $props['status'] = $A['status'];
                 break;
+            case 'author' :
+                $props['author'] = $A['owner_id'];
+                break;
             default:
                 $props[$p] = '';
                 break;
@@ -1792,7 +1798,8 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
     }
 
     if (($eid != '*') && (count($retval) == 1)) {
-        $retval = $retval[0];
+        $tRet = array_values($retval);
+        $retval = $tRet[0];
     }
 
     return $retval;
