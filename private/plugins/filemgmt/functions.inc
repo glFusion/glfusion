@@ -324,9 +324,9 @@ function plugin_displaycomment_filemgmt($id,$commentid,$title,$order,$format,$pa
     }
 
     if ($view == 1) {
-        $display .= CMT_userComments ("fileid_$id", $title, 'filemgmt',$order,$format,$commentid,$page,true,$delete_option);
+        $display .= CMT_userComments ("fileid_$id", $title, 'filemgmt',$order,$format,$commentid,$page,true,$delete_option,0,$submitter);
     } else {
-        $display .= CMT_userComments ("fileid_$id", $title, 'filemgmt',$order,$format,$commentid,$page,false,$delete_option);
+        $display .= CMT_userComments ("fileid_$id", $title, 'filemgmt',$order,$format,$commentid,$page,false,$delete_option,0,$submitter);
     }
 
     return $display;
@@ -994,6 +994,9 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
             case 'status' :
                 $fields[] = 'detail.lid';
                 break;
+            case 'author' :
+                $fields[] = 'detail.submitter';
+                break;
             default:
                 break;
         }
@@ -1062,6 +1065,9 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
                     break;
                 case 'status':
                     $props['status'] = 1; // stub - default
+                    break;
+                case 'author' :
+                    $props['author'] = $A['submitter'];
                     break;
                 default:
                     $props[$p] = '';

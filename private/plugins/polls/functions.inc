@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -746,6 +746,9 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
                 $fields[] = 'pid';
                 $fields[] = 'hideresults';
                 break;
+            case 'author' :
+                $fields[] = 'owner_id';
+                break;
             default:
                 break;
         }
@@ -812,6 +815,9 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
                 case 'status':
                     $props['status'] = 1; // stub - default
                     break;
+                case 'author':
+                    $props['author'] = $A['owner_id'];
+                    break;
                 default:
                     $props[$p] = '';
                     break;
@@ -838,7 +844,8 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
     }
 
     if (($id != '*') && (count($retval) == 1)) {
-        $retval = $retval[0];
+        $tRet = array_values($retval);
+        $retval = $tRet[0];
     }
 
     return $retval;

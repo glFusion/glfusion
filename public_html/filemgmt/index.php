@@ -143,12 +143,12 @@ if ($fileAccessCnt > 0 AND DB_count($_TABLES['filemgmt_filedetail'],"lid",DB_esc
         } else {
             $cmt_mode = '';
         }
-        $valid_cmt_modes = array('flat','nested','nocomment','threaded');
+        $valid_cmt_modes = array('flat','nested','nocomment','threaded','nobar');
         if ( !in_array($cmt_mode,$valid_cmt_modes) ) {
             $cmt_mode = '';
         }
 
-        $p->set_var('comment_records', CMT_userComments( "fileid_{$lid}", $title, 'filemgmt',$cmt_order,$cmt_mode,0,$cmt_page,false,$delete_option));
+        $p->set_var('comment_records', CMT_userComments( "fileid_{$lid}", $title, 'filemgmt',$cmt_order,$cmt_mode,0,$cmt_page,false,$delete_option,0,$submitter));
     } else {
         $p->set_var('comment_records','');
     }
