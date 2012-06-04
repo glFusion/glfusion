@@ -1124,6 +1124,13 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
     if (empty ($sid) || empty ($title) || empty ($comment) || empty ($type) ) {
         COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to submit a comment with one or more missing values.');
+       if ( SESS_isSet('glfusion.commentpresave.error') ) {
+            $msg = SESS_getVar('glfusion.commentpresave.error') . '<br/>' . $LANG03[12];
+        } else {
+            $msg = $LANG03[12];
+        }
+        SESS_setVar('glfusion.commentpresave.error',$msg);
+
         return $ret = 1;
     }
 

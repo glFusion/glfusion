@@ -148,10 +148,8 @@ function plugin_savecomment_polls($title, $comment, $id, $pid, $postmode)
 
     $ret = CMT_saveComment ($title, $comment, $id, $pid, 'polls', $postmode);
     if ($ret > 0) {
-        $retval .= COM_siteHeader('menu', $LANG03[1])
-                . CMT_commentForm ($title, $comment, $id, $pid, 'polls',
-                                   $LANG03[14], $postmode)
-                . COM_siteFooter();
+        $retval .= CMT_commentForm ($title, $comment, $id, $pid, 'polls',
+                                   $LANG03[14], $postmode);
     } else { // success
         $retval = COM_refresh ($_CONF['site_url']
                                 . "/polls/index.php?pid=$id");
@@ -163,8 +161,7 @@ function plugin_savecomment_polls($title, $comment, $id, $pid, $postmode)
 function plugin_editcomment_polls($cid,$id) {
     global $_CONF;
 
-    echo COM_refresh ($_CONF['site_url']
-                                . "/polls/index.php?pid=$id");
+    echo COM_refresh ($_CONF['site_url']."/polls/index.php?pid=$id");
     exit;
 }
 

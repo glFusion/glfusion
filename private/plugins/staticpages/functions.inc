@@ -185,10 +185,8 @@ function plugin_savecomment_staticpages($title, $comment, $id, $pid, $postmode)
 
     $ret = CMT_saveComment ($title, $comment, $id, $pid, 'staticpages', $postmode);
     if ($ret > 0) { // failure //FIXME: some failures should not return to comment form
-        $retval .= COM_siteHeader('menu', $LANG03[1])
-                . CMT_commentForm ($title, $comment, $id, $pid, 'staticpages',
-                                   $LANG03[14], $postmode)
-                . COM_siteFooter();
+        $retval .= CMT_commentForm ($title, $comment, $id, $pid, 'staticpages',
+                                   $LANG03[14], $postmode);
     } else { // success
         $url = COM_buildUrl($_CONF['site_url'] . '/page.php?page='
                             . $id);

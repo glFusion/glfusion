@@ -190,6 +190,8 @@ function plugin_commentsupport_filemgmt()
 function plugin_savecomment_filemgmt($title,$comment,$id,$pid,$postmode) {
     global $_CONF,$_TABLES, $LANG03, $_TABLES;
 
+    $retval = '';
+
     $title = strip_tags ($title);
     $pid = COM_applyFilter ($pid, true);
     $postmode = COM_applyFilter ($postmode);
@@ -197,15 +199,16 @@ function plugin_savecomment_filemgmt($title,$comment,$id,$pid,$postmode) {
     $ret = CMT_saveComment ( $title, $comment, $id, $pid, 'filemgmt',$postmode);
 
     if ( $ret > 0 ) { // failure
-        return COM_siteHeader()
-            . CMT_commentform ($title, $comment, $id, $pid,
-                    'filemgmt', $LANG03[14], $postmode)
-            . COM_siteFooter();
+        if ( SESS_isSet('glfusion.commentpresave.error') ) {
+            $retval = COM_showMessageText(SESS_getVar('glfusion.commentpresave.error'), '', true);
+            SESS_unSet('glfusion.commentpresave.error');
+        }
+        $retval .= CMT_commentform ($title, $comment, $id, $pid,'filemgmt', $LANG03[14], $postmode);
+        return $retval;
     } else { // success
         $comments = DB_count ($_TABLES['comments'], 'sid', DB_escapeString($id));
         DB_change($_TABLES['filemgmt_filedetail'],'comments', $comments, 'lid',DB_escapeString($id));
-        return (COM_refresh (COM_buildUrl ($_CONF['site_url']
-            . "/filemgmt/index.php?id=$id")) );
+        echo COM_refresh (COM_buildUrl ($_CONF['site_url']."/filemgmt/index.php?id=$id"));
     }
 }
 function plugin_editcomment_filemgmt($cid,$id) {
