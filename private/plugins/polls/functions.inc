@@ -1250,7 +1250,12 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
     } else {
         if ($displaytype == 2) {
             $retval = '<div class="poll-autotag-message">' . $LANG_POLLS['pollhidden']. "</div>";
+        } else if ($displaytype == 1 ) {
+            $retval = '';
+        } else {
+            $retval = COM_showMessageText($LANG_POLLS['pollhidden'],'', true);
         }
+
         return $retval;
     }
 
