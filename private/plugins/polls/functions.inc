@@ -154,7 +154,7 @@ function plugin_savecomment_polls($title, $comment, $id, $pid, $postmode)
                 . COM_siteFooter();
     } else { // success
         $retval = COM_refresh ($_CONF['site_url']
-                                . "/polls/index.php?pid=$id&amp;aid=-1");
+                                . "/polls/index.php?pid=$id");
     }
     CACHE_remove_instance('whatsnew_');
     return $retval;
@@ -164,7 +164,7 @@ function plugin_editcomment_polls($cid,$id) {
     global $_CONF;
 
     echo COM_refresh ($_CONF['site_url']
-                                . "/polls/index.php?pid=$id&amp;aid=-1");
+                                . "/polls/index.php?pid=$id");
     exit;
 }
 
@@ -190,7 +190,7 @@ function plugin_deletecomment_polls($cid, $id)
             $A['perm_members'], $A['perm_anon']) == 3) {
         CMT_deleteComment($cid, $id, 'polls');
         $retval .= COM_refresh ($_CONF['site_url']
-                                 . "/polls/index.php?pid=$id&amp;aid=-1");
+                                 . "/polls/index.php?pid=$id");
     } else {
         COM_errorLog ("User {$_USER['username']} (IP: {$_SERVER['REMOTE_ADDR']}) "
                     . "tried to illegally delete comment $cid from poll $id");
@@ -520,7 +520,7 @@ function plugin_displaycomment_polls($id, $cid, $title, $order, $format, $page, 
                     $A['perm_anon']) == 3));
         $retval .= CMT_userComments ($id, $title, 'polls', $order, $format,
                                      $cid, $page, $view, $delete_option,
-                                     $A['commentcode']);
+                                     $A['commentcode'],$A['owner_id']);
     } else {
         $retval .= COM_showMessageText($LANG_POLLS['deny_msg'],$LANG_ACCESS['accessdenied'],true);
     }
@@ -1054,13 +1054,13 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
                     } else {
                         $mode = '';
                     }
-                    $valid_cmt_modes = array('flat','nested','nocomment','threaded');
+                    $valid_cmt_modes = array('flat','nested','nocomment','threaded','nobar');
                     if ( !in_array($mode,$valid_cmt_modes) ) {
                         $mode = '';
                     }
                     $retval .= CMT_userComments($pid, $P['topic'], 'polls',
                                                 $order, $mode, 0, $page, false,
-                                                $delete_option, $P['commentcode']);
+                                                $delete_option, $P['commentcode'],$P['owner_id']);
                 }
             }
         }
@@ -1240,7 +1240,6 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
         $P['perm_group'], $P['perm_members'], $P['perm_anon']) == 0 ) {
         return $retval;
     }
-
     if ((
             $P['hideresults'] == 0
         ) || (
@@ -1255,7 +1254,6 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
         if ($displaytype == 2) {
             $retval = '<div class="poll-autotag-message">' . $LANG_POLLS['pollhidden']. "</div>";
         }
-
         return $retval;
     }
 
@@ -1407,7 +1405,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
                 }
                 $retval .= CMT_userComments($pid, $P['topic'], 'polls',
                                             $order, $mode, 0, $page, false,
-                                            $delete_option, $P['commentcode']);
+                                            $delete_option, $P['commentcode'],$P['owner_id']);
             }
         }
     }
