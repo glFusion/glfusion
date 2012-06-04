@@ -130,6 +130,8 @@ function _mg_savecomment($title,$comment,$id,$pid,$postmode)
 {
     global $_CONF, $_MG_CONF, $_TABLES, $LANG03;
 
+    $retval = '';
+
     $title = strip_tags ($title);
     $pid = COM_applyFilter ($pid, true);
     $postmode = COM_applyFilter ($postmode);
@@ -137,7 +139,13 @@ function _mg_savecomment($title,$comment,$id,$pid,$postmode)
     $ret = CMT_saveComment ( $title, $comment, $id, $pid, 'mediagallery',$postmode);
 
     if ( $ret > 0 ) {
-        return COM_siteHeader() . CMT_commentform ($title, $comment, $id, $pid, 'mediagallery', $LANG03[14], $postmode) . COM_siteFooter();
+        $retval = '';
+        if ( SESS_isSet('glfusion.commentpresave.error') ) {
+            $retval = COM_showMessageText(SESS_getVar('glfusion.commentpresave.error'), '', true);
+            SESS_unSet('glfusion.commentpresave.error');
+        }
+        $retval .= CMT_commentform ($title, $comment, $id, $pid, 'mediagallery', $LANG03[14], $postmode);
+        return $retval;
     } else {
         $comments = DB_count ($_TABLES['comments'], array('sid','type'), array(DB_escapeString($id), 'mediagallery'));
         DB_change($_TABLES['mg_media'],'media_comments', $comments, 'media_id',DB_escapeString($id));

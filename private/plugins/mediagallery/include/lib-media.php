@@ -1690,9 +1690,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
                 break;
             }
         }
-
-//        $themeCSS .= '<meta property="og:image" content="'.$tnImage.'"/>' . LB;
-$outputHandle->addMeta('property','og:image',$tnImage);
+        $outputHandle->addMeta('property','og:image',$tnImage);
         if ( $media_size_orig != false && $media_size_tn != false ) {
             $T->set_var(array(
                 'sf_height'             =>  $media_size_orig[1],
