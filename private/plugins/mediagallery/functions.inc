@@ -1794,19 +1794,21 @@ function phpblock_mg_randommedia($parm1=array(),$parm2=''){
 }
 
 function phpblock_mg_maenroll(){
-    global $_CONF, $_MG_CONF, $_MG_USERPREFS, $_TABLES, $_USER, $LANG_MG03;
+    global $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG03;
 
     if ( COM_isAnonUser() )  {
         return;
     }
-
-    if ( $_MG_CONF['member_albums'] != 1 || $_MG_USERPREFS['member_gallery'] == 1 || $_USER['uid'] < 3) {
+    if ( $_MG_CONF['member_albums'] != 1 || $_USER['uid'] < 3 ) {
         return;
     }
-    if ( SEC_inGroup("Remote Users") && $_MG_CONF['allow_remote'] != 1 ) {
+    if ( !($_USER['account_type'] & LOCAL_USER) && $_MG_CONF['allow_remote'] != 1 ) {
         return;
     }
-
+    $mg = (int) DB_getItem($_TABLES['mg_userprefs'],'member_gallery','uid='.(int) $_USER['uid']);
+    if ( $mg == 1 ) {
+        return;
+    }
     $url = sprintf($LANG_MG03['member_album_signup'], $_MG_CONF['site_url'] . '/enroll.php');
     return $url;
 }
