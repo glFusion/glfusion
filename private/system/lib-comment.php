@@ -593,6 +593,9 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 
         // Replace any plugin autolink tags
         $A['comment'] = PLG_replaceTags( $A['comment'],'glfusion','comment' );
+        if (function_exists('msg_replaceEmoticons'))  {
+            $A['comment'] = msg_replaceEmoticons($A['comment']);
+        }
 
         // create a reply to link
         $reply_link = '';
@@ -1064,7 +1067,6 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             $comment_template->set_var('lang_instr_line4', $LANG03[22]);
             $comment_template->set_var('lang_instr_line5', $LANG03[23]);
 
-
             if ($mode == 'edit' || $mode == 'preview_edit') {
                 //editing comment or preview changes
                 $comment_template->set_var('lang_preview', $LANG03[28]);
@@ -1072,6 +1074,12 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             	//new comment
                 $comment_template->set_var('lang_preview', $LANG03[14]);
             }
+
+            if (function_exists('msg_replaceEmoticons'))  {
+                $comment_template->set_var('smilies',msg_showsmilies());
+            }
+
+
 
             if ($mode == 'preview_edit' || ($mode == 'edit' && $_CONF['skip_preview'] == 1) ) {
                 //for editing
