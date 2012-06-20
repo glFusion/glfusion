@@ -991,7 +991,7 @@ class menuElement {
                                 $url = $_CONF['site_admin_url'] . '/index.php';
                                 $label = $LANG29[34];
                                 $cc_item = array('label' => $LANG29[34], 'url' => $url);
-                                $item_array = array($cc_item) + $item_array;
+                                $item_array = array_merge(array($cc_item),$item_array);
                                 $itemCount = count($item_array);
                                 $lastItem = $itemCount - 1;
                                 for ( $i=0; $i<$itemCount; $i++ ) {
