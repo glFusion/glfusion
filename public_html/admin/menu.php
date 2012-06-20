@@ -233,35 +233,49 @@ function MB_displayMenuList( ) {
     $retval  .= COM_startBlock($LANG_MB01['menu_builder'],'', COM_getBlockTemplate('_admin_block', 'header'));
     $retval  .= ADMIN_createMenu($menu_arr, $LANG_MB_ADMIN[1],
                                 $_CONF['layout_url'] . '/images/icons/menubuilder.png');
+    $data_arr = array();
+    $text_arr = array();
+    $options  = array();
 
-    $T = new Template($_CONF['path_layout'] . 'admin/menu');
-    $T->set_file ('admin','menulist.thtml');
-    $T->set_block('admin', 'menurow', 'mrow');
-    $rowCounter = 0;
+    $header_arr = array(
+        array('text' => $LANG_MB01['label'], 'field' => 'menu_name'),
+        array('text' => $LANG_MB01['clone'], 'field' => 'copy','align' => 'center' ),
+        array('text' => $LANG_MB01['active'], 'field' => 'active','align' => 'center'),
+        array('text' => $LANG_MB01['elements'], 'field' => 'elements', 'align' => 'center' ),
+        array('text' => $LANG_MB01['options'], 'field'=> 'options', 'align' => 'center'),
+        array('text' => $LANG_MB01['delete'], 'field' => 'delete', 'align' => 'center')
+    );
+
+    $text_arr = array('has_menu'    => false,
+                      'title'       => '',
+                      'help_url'    => '',
+                      'no_data'     => $LANG_MB01['no_elements'],
+                      'form_url'    => "{$_CONF['site_admin_url']}/menu.php"
+    );
+
+    $form_arr['bottom'] = '
+    <input type="hidden" name="mode" value="menuactivate" />
+    <script type="text/javascript">
+        document.getElementById(\'menubuilder\').style.display=\'\'
+    </script>
+    ';
+
     if ( is_array($menuArray) ) {
         foreach ($menuArray AS $menu) {
-            $id = $menu['menu_id'];
-            $T->set_var('menu_id',$menu['menu_id']);
-            $T->set_var('menu_name',$menu['menu_name']);
-            $T->set_var('menuactive','<input type="checkbox" name="enabledmenu[' . $menu['menu_id'] . ']" onclick="submit()" value="1"' . ($menu['active'] == 1 ? ' checked="checked"' : '') . '/>');
-            if ( $menu['menu_name'] != 'header' && $menu['menu_name'] != 'footer' && $menu['menu_name'] != 'navigation' ) {
-                $T->set_var('delete_menu','<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=deletemenu&amp;id=' . $menu['menu_id'] . '" onclick="return confirm(\'' . $LANG_MB01['confirm_delete'] . '\');"><img src="' . $_CONF['layout_url'] . '/images/delete.png" alt="' . $LANG_MB01['delete'] . '"' . '/></a>');
-            }
-            $elementDetails = $menu['menu_name'] . '::';
-            $elementDetails .= '<b>' . $LANG_MB01['type'] . ':</b><br />' . $LANG_MB_MENU_TYPES[$menu['menu_type']] . '<br/>';
-            $info       = '<a class="'.$toolTipStyle.'" title="' . $elementDetails . '" href="#">'.$menu['menu_name'].'</a>';
-            $T->set_var('info',$info);
-            $T->set_var('rowclass',($rowCounter % 2)+1);
-            $T->parse('mrow','menurow',true);
-            $rowCounter++;
+            $menu_entry['menu_id'] = $menu['menu_id'];
+            $menu_entry['menu_name'] = $menu['menu_name'];
+            $menu_entry['copy'] = $menu['menu_id'];
+            $menu_entry['active'] = $menu['active'];
+            $menu_entry['elements'] = $menu['menu_id'];
+            $menu_entry['options'] = $menu['menu_id'];
+            $menu_entry['delete'] = $menu['menu_id'];
+            $menu_entry['menu_type'] = $menu['menu_type'];
+            $menu_entry['info']   = $menu['menu_name'] . '::'
+                                  . '<b>' . $LANG_MB01['type'] . ':</b><br />' . $LANG_MB_MENU_TYPES[$menu['menu_type']] . '<br/>';
+            $data_arr[] = $menu_entry;
         }
     }
-    $T->set_var(array(
-        'lang_admin'        => $LANG_MB01['menu_builder'],
-    ));
-    $T->parse('output', 'admin');
-    $retval .= $T->finish($T->get_var('output'));
-
+    $retval .= ADMIN_simpleList("_mb_getListField_menulist", $header_arr, $text_arr, $data_arr,$options,$form_arr);
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
     return $retval;
@@ -1672,6 +1686,46 @@ function _mb_getListField_menu($fieldname, $fieldvalue, $A, $icon_arr)
     }
     return $retval;
 }
+
+function _mb_getListField_menulist($fieldname, $fieldvalue, $A, $icon_arr)
+{
+    global $_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG_MB01, $LANG_MB_ADMIN, $LANG_ADMIN,$LANG_MB_MENU_TYPES;
+
+    $retval = '';
+
+    switch ($fieldname) {
+        case 'menu_name':
+            $elementDetails = $A['menu_name'] . '::';
+            $elementDetails .= '<b>' . $LANG_MB01['type'] . ':</b><br />' . $LANG_MB_MENU_TYPES[$A['menu_type']] . '<br/>';
+            $retval = '<a class="'.COM_getToolTipStyle().'" title="' . $elementDetails . '" href="#">'.$A['menu_name'].'</a>';
+            break;
+        case 'copy' :
+            $retval = '<a href="'.$_CONF['site_admin_url'].'/menu.php?mode=clone&amp;id='.$fieldvalue.'">'
+                    . '<img src="'.$_CONF['layout_url'].'/images/copy.png" alt="'.$LANG_MB01['clone'].'" />';
+            break;
+        case 'active' :
+            $retval = '<input type="checkbox" name="enabledmenu[' . $A['menu_id'] . ']" onclick="submit()" value="1"' . ($A['active'] == 1 ? ' checked="checked"' : '') . '/>';
+            break;
+        case 'elements' :
+            $retval = '<a href="'.$_CONF['site_admin_url'].'/menu.php?mode=menu&amp;menu='.$A['menu_id'].'">'
+            . '<img src="'.$_CONF['layout_url'].'/images/edit.png" alt="'.$LANG_MB01['edit'].'" />';
+            break;
+        case 'options' :
+            $retval = '<a href="'.$_CONF['site_admin_url'].'/menu.php?mode=menuconfig&amp;menuid='.$A['menu_id'].'">'
+            . '<img src="'.$_CONF['layout_url'].'/images/rainbow.png" alt="'.$LANG_MB01['options'].'" />';
+            break;
+        case 'delete' :
+            if ( $A['menu_id'] != 1 && $A['menu_id'] != 2 && $A['menu_id'] != 3 ) {
+                $retval = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=deletemenu&amp;id=' . $A['menu_id'] . '" onclick="return confirm(\'' . $LANG_MB01['confirm_delete'] . '\');"><img src="' . $_CONF['layout_url'] . '/images/delete.png" alt="' . $LANG_MB01['delete'] . '"' . '/></a>';
+            }
+            break;
+        default :
+            $retval = $fieldvalue;
+            break;
+    }
+    return $retval;
+}
+
 
 
 /*
