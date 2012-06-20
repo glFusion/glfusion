@@ -713,8 +713,6 @@ var settings = {
     onAlbumChange();
 });
 addLoadEvent(onAlbumChange);
-addLoadEvent(onAlbumChange);
-
 
 </script>
 <div id="divSWFUploadMessage">
