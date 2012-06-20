@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -32,6 +32,29 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
+
+define('MENU_TOP_LEVEL',-1);
+define('MENU_HORIZONTAL_CASCADING',1);
+define('MENU_HORIZONTAL_SIMPLE',2);
+define('MENU_VERTICAL_CASCADING',3);
+define('MENU_VERTICAL_SIMPLE',4);
+
+define('ET_SUB_MENU',1);
+define('ET_FUSION_ACTION',2);
+define('ET_FUSION_MENU',3);
+define('ET_PLUGIN',4);
+define('ET_STATICPAGE',5);
+define('ET_URL',6);
+define('ET_PHP',7);
+define('ET_LABEL',8);
+define('ET_TOPIC',9);
+
+define('USER_MENU',1);
+define('ADMIN_MENU',2);
+define('TOPIC_MENU',3);
+define('STATICPAGE_MENU',4);
+define('PLUGIN_MENU',5);
+define('HEADER_MENU',6);
 
 require_once $_CONF['path_system'] . 'classes/menu.class.php';
 
@@ -57,7 +80,7 @@ function mb_initMenu($skipCache=false) {
         $uid = $_USER['uid'];
     }
 
-    $result = DB_query("SELECT * FROM {$_TABLES['menu']}",1);
+    $result = DB_query("SELECT * FROM {$_TABLES['menu']} WHERE menu_active=1",1);
     while ( $menu = DB_fetchArray($result) ) {
         $menuID = $menu['id'];
         $mbMenu[$menu['id']]['menu_name']   = $menu['menu_name'];
@@ -88,7 +111,7 @@ function mb_initMenu($skipCache=false) {
             $mbMenu[$menu['id']]['config'][$cfgRow['conf_name']] = $cfgRow['conf_value'];
         }
 
-        $sql = "SELECT * FROM {$_TABLES['menu_elements']} WHERE menu_id=".(int) $menuID." ORDER BY element_order ASC";
+        $sql = "SELECT * FROM {$_TABLES['menu_elements']} WHERE menu_id=".(int) $menuID." AND element_active = 1 ORDER BY element_order ASC";
         $elementResult      = DB_query( $sql, 1);
         $element            = new menuElement();
         $element->id        = 0;
@@ -131,12 +154,13 @@ function mb_initMenu($skipCache=false) {
  * This function will return the HTML (using <ul><li></ul>) structure
  */
 
-
-function mb_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$parentclass='',$lastclass='',$selected='',$noid=0) {
+function mb_getMenu($name, $selected='') {
     global $mbMenu, $menuStyles, $_CONF, $_USER;
 
-    $retval = '';
-    $menuID = '';
+    $retval  = '';
+    $menuID  = '';
+    $id      = '';
+    $wrapper = '';
 
     $lang = COM_getLanguageId();
     if (!empty($lang)) {
@@ -152,270 +176,109 @@ function mb_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$pare
             }
         }
     }
-    if ( $menuID != '' ) {
 
-        if ( isset($menuStyles) && is_array($menuStyles) ) {
-            if ( $mbMenu[$menuID]['menu_type']  == 1 ) {
-                $ulclass     = $menuStyles['horizontal_cascading']['ulclass'];
-                $liclass     = $menuStyles['horizontal_cascading']['liclass'];
-                $parentclass = $menuStyles['horizontal_cascading']['parentclass'];
-                $lastclass   = $menuStyles['horizontal_cascading']['lastclass'];
-                $selected    = $menuStyles['horizontal_cascading']['selected'];
-                $noid        = $menuStyles['horizontal_cascading']['noid'];
-                if ( $mbMenu[$menuID]['config']['menu_alignment'] == 0 ) {
-                    $ulclass = $ulclass . ' ' . $ulclass.'-right';
-                }
-            } else if ($mbMenu[$menuID]['menu_type'] == 2 ) {
-                $ulclass    = $menuStyles['horizontal_simple']['ulclass'];
-                $liclass    = $menuStyles['horizontal_simple']['liclass'];
-                $parentclass = $menuStyles['horizontal_simple']['parentclass'];
-                $lastclass  = $menuStyles['horizontal_simple']['lastclass'];
-                $selected   = $menuStyles['horizontal_simple']['selected'];
-            } else if ($mbMenu[$menuID]['menu_type'] == 3 ) {
-                $wrapper    = $menuStyles['vertical_cascading']['ulclass'];
-                $ulclass    = $menuStyles['vertical_cascading']['ulclass'];
-                $liclass    = $menuStyles['vertical_cascading']['liclass'];
-                $parentclass = $menuStyles['vertical_cascading']['parentclass'];
-                $lastclass  = $menuStyles['vertical_cascading']['lastclass'];
-                $selected   = $menuStyles['vertical_cascading']['selected'];
-                if ( $mbMenu[$menuID]['config']['menu_alignment'] == 0 ) {
-                    $ulclass = $ulclass . ' ' . $ulclass.'-right';
-                }
-            } else if ($mbMenu[$menuID]['menu_type'] == 4 ) {
-                $ulclass    = $menuStyles['vertical_simple']['ulclass'];
-                $liclass    = $menuStyles['vertical_simple']['liclass'];
-                $parentclass = $menuStyles['vertical_simple']['parentclass'];
-                $lastclass  = $menuStyles['vertical_simple']['lastclass'];
-                $selected   = $menuStyles['vertical_simple']['selected'];
-            }
-            $api = 2;
-        } else {
-            // put default old styles here;
-            switch ( $mbMenu[$menuID]['menu_type'] ) {
-                case 1 :
-                    $wrapper = "gl_moomenu";
-                    $ulclass = "gl_moomenu";
-                    $liclass = '';
-                    $parentclass = 'parent';
-                    $lastclass = '';
-                    $selected = '';
-                    $noid = 0;
-                    break;
-                case 2 :
-                    $wrapper = 'st-fmenu';
-                    $ulclass = '';
-                    $liclass = '';
-                    $parentclass = 'parent';
-                    $lastclass = 'st-f-last';
-                    $selected = '';
-                    $noid = 0;
-                    break;
-                case 3:
-                    $wrapper = 'gl_moomenu-vert';
-                    $ulclass = 'gl_moomenu-vert';
-                    $liclass = '';
-                    $parentclass = 'parent-l';
-                    $lastclass = '';
-                    $selected = '';
-                    $noid = 0;
-                    break;
-                case 4 :
-                    $wrapper = 'st-vmenu';
-                    $ulclass = '';
-                    $liclass = '';
-                    $parentclass = '';
-                    $lastclass = '';
-                    $selected = '';
-                    $noid = 0;
-                    break;
-            }
-            $api = 1;
-        }
-    } else {
-        return ''; // menu not found.
+    if ( $menuID == '' ) {
+        return;
     }
 
-    $optionHash = md5($menuName.$wrapper);
+    $defaultStyles = array(
+        'horizontal_cascading'  => array('ulclass' => 'menu-horizontal-cascading',
+                                         'liclass' => '',
+                                         'parentclass' => 'parent',
+                                         'lastclass' => '',
+                                         'selclass' => ''
+                                         ),
+        'horizontal_simple'     => array('ulclass' => 'menu-horizontal-simple',
+                                         'liclass' => '',
+                                         'parentclass' => 'parent',
+                                         'lastclass' => 'last',
+                                         'selclass' => ''
+                                         ),
+        'vertical_cascading'    => array('ulclass' => 'menu-vertical-cascading',
+                                         'liclass' => '',
+                                         'parentclass' => 'parent',
+                                         'lastclass' => '',
+                                         'selclass' => ''
+                                        ),
+        'vertical_simple'       => array('ulclass' => 'menu-vertical-simple',
+                                         'liclass' => '',
+                                         'parentclass' => '',
+                                         'lastclass' => '',
+                                         'selclass' => ''
+                                         )
+    );
+    if (!isset($menuStyles) || !is_array($menuStyles)) {
+        $menuStyles = $defaultStyles;
+    }
 
-    $cacheInstance = 'mbmenu_' . $_USER['uid'].'_'.$menuName . '_' . CACHE_security_hash() . '_' . $optionHash . '__' . $_USER['theme'];
+    if ( $mbMenu[$menuID]['menu_type']  == MENU_HORIZONTAL_CASCADING ) {
+        $ulclass     = $menuStyles['horizontal_cascading']['ulclass'];
+        $liclass     = $menuStyles['horizontal_cascading']['liclass'];
+        $parentclass = $menuStyles['horizontal_cascading']['parentclass'];
+        $lastclass   = $menuStyles['horizontal_cascading']['lastclass'];
+        $selclass    = $menuStyles['horizontal_cascading']['selclass'];
+        if ( $mbMenu[$menuID]['config']['menu_alignment'] == 0 ) {
+            $ulclass = $ulclass . ' ' . $ulclass.'-right';
+        }
+    } else if ($mbMenu[$menuID]['menu_type'] == MENU_HORIZONTAL_SIMPLE ) {
+        $ulclass    = $menuStyles['horizontal_simple']['ulclass'];
+        $liclass    = $menuStyles['horizontal_simple']['liclass'];
+        $parentclass = $menuStyles['horizontal_simple']['parentclass'];
+        $lastclass  = $menuStyles['horizontal_simple']['lastclass'];
+        $selclass   = $menuStyles['horizontal_simple']['selclass'];
+    } else if ($mbMenu[$menuID]['menu_type'] == MENU_VERTICAL_CASCADING ) {
+        $wrapper    = $menuStyles['vertical_cascading']['ulclass'];
+        $ulclass    = $menuStyles['vertical_cascading']['ulclass'];
+        $liclass    = $menuStyles['vertical_cascading']['liclass'];
+        $parentclass = $menuStyles['vertical_cascading']['parentclass'];
+        $lastclass  = $menuStyles['vertical_cascading']['lastclass'];
+        $selclass   = $menuStyles['vertical_cascading']['selclass'];
+        if ( $mbMenu[$menuID]['config']['menu_alignment'] == 0 ) {
+            $ulclass = $ulclass . ' ' . $ulclass.'-right';
+        }
+    } else if ($mbMenu[$menuID]['menu_type'] == MENU_VERTICAL_SIMPLE ) {
+        $ulclass    = $menuStyles['vertical_simple']['ulclass'];
+        $liclass    = $menuStyles['vertical_simple']['liclass'];
+        $parentclass = $menuStyles['vertical_simple']['parentclass'];
+        $lastclass  = $menuStyles['vertical_simple']['lastclass'];
+        $selclass   = $menuStyles['vertical_simple']['selclass'];
+    }
+
+    $noSpaceName = strtolower(str_replace(" ","_",$menuName));
+
+    // check the cache
+    $cacheInstance = 'mbmenu_' . $_USER['uid'].'_'.$noSpaceName . '_' . CACHE_security_hash() . '__' . $_USER['theme'];
     $retval = CACHE_check_instance($cacheInstance, 0);
     if ( $retval != '' ) {
         return $retval;
     }
-
     if ( $menuID != '' && $mbMenu[$menuID]['active'] == 1 && $mbMenu[$menuID]['menu_perm'] == 3) {
-
-        if ( $mbMenu[$menuID]['menu_type'] == 1 && $api == 1) {
-            $retval .= '<div id="gl_moomenu'.($noid == 0 ? $menuID : '').'">'. LB;
-        }
-
-        $retval .= '<div class="menu_'.$menuID.'">';
+        $retval .= '<div class="menu_'.$noSpaceName.'">';
 
         if ( $wrapper != '' ) {
-            $retval .= '<div class="'.$wrapper.($noid == 0 ? $menuID : '').'">' . LB;
+            $retval .= '<div class="'.$wrapper.'">' . LB;
         }
 
-        $retval .= $mbMenu[$menuID]['elements'][0]->showTree(0,$ulclass,$liclass,$parentclass,$lastclass,$selected,$noid);
+        $retval .= $mbMenu[$menuID]['elements'][0]->showTree(0,$ulclass,$liclass,$parentclass,$lastclass,$selected);
 
         if ( $wrapper != '' ) {
             $retval .= '</div>' . LB;
         }
-
-        if ( $mbMenu[$menuID]['menu_type'] == 1 && $api == 1) {
-            $retval .= '</div>'. LB;
-        }
-
         $retval .= '</div><div style="clear:both;"></div>';
 
     } else {
         return '';
     }
-    if ( $noid == 0 )
-        CACHE_create_instance($cacheInstance, $retval, 0);
+    CACHE_create_instance($cacheInstance, $retval, 0);
 
     return $retval;
 }
 
-function phpblock_getMenu( $arg1, $arg2 ) {
-    global $mbMenu, $menuStyles, $_GROUPS, $_CONF;
-
-    $retval = '';
-    $menuID = '';
-
-    $lang = COM_getLanguageId();
-    if (!empty($lang)) {
-        $menuName = $arg2 . '_'.$lang;
-    } else {
-        $menuName = $arg2;
-    }
-    if ( is_array($mbMenu) ) {
-        foreach($mbMenu AS $id) {
-           if ( strcasecmp(trim($id['menu_name']), trim($menuName)) == 0 ) {
-                $menuID = $id['menu_id'];
-                break;
-            }
-        }
-    }
-
-    if ( $menuID != '' ) {
-
-        if ( isset($menuStyles) && is_array($menuStyles) ) {
-            if ( $mbMenu[$menuID]['menu_type']  == 1 ) {
-                $ulclass    = $menuStyles['horizontal_cascading']['ulclass'];
-                $liclass    = $menuStyles['horizontal_cascading']['liclass'];
-                $parentclass = $menuStyles['horizontal_cascading']['parentclass'];
-                $lastclass  = $menuStyles['horizontal_cascading']['lastclass'];
-                $selected   = $menuStyles['horizontal_cascading']['selected'];
-            } else if ($mbMenu[$menuID]['menu_type'] == 2 ) {
-                $ulclass    = $menuStyles['horizontal_simple']['ulclass'];
-                $liclass    = $menuStyles['horizontal_simple']['liclass'];
-                $parentclass = $menuStyles['horizontal_simple']['parentclass'];
-                $lastclass  = $menuStyles['horizontal_simple']['lastclass'];
-                $selected   = $menuStyles['horizontal_simple']['selected'];
-            } else if ($mbMenu[$menuID]['menu_type'] == 3 ) {
-                $ulclass    = $menuStyles['vertical_cascading']['ulclass'];
-                $liclass    = $menuStyles['vertical_cascading']['liclass'];
-                $parentclass = $menuStyles['vertical_cascading']['parentclass'];
-                $lastclass  = $menuStyles['vertical_cascading']['lastclass'];
-                $selected   = $menuStyles['vertical_cascading']['selected'];
-            } else if ($mbMenu[$menuID]['menu_type'] == 4 ) {
-                $ulclass    = $menuStyles['vertical_simple']['ulclass'];
-                $liclass    = $menuStyles['vertical_simple']['liclass'];
-                $parentclass = $menuStyles['vertical_simple']['parentclass'];
-                $lastclass  = $menuStyles['vertical_simple']['lastclass'];
-                $selected   = $menuStyles['vertical_simple']['selected'];
-            }
-            $api = 2;
-        } else {
-            // put default old styles here;
-            switch ( $mbMenu[$menuID]['menu_type'] ) {
-                case 1 :
-                    $wrapper = "gl_moomenu";
-                    $ulclass = "gl_moomenu";
-                    $liclass = '';
-                    $parentclass = 'parent';
-                    $lastclass = '';
-                    $selected = '';
-                    break;
-                case 2 :
-                    $wrapper = 'footer';
-                    $ulclass = 'st-fmenu';
-                    $liclass = '';
-                    $parentclass = '';
-                    $lastclass = 'st-f-last';
-                    $selected = '';
-                    break;
-                case 3:
-                    $wrapper = 'gl_moomenu-vert';
-                    $ulclass = 'gl_moomenu-vert';
-                    $liclass = '';
-                    $parentclass = 'parent';
-                    $lastclass = '';
-                    $selected = '';
-                    break;
-                case 4 :
-                    $wrapper = 'st-vmenu';
-                    $ulclass = '';
-                    $liclass = '';
-                    $parentclass = '';
-                    $lastclass = '';
-                    $selected = '';
-                    break;
-            }
-            $api = 1;
-        }
-    } else {
-        return ''; // menu not found.
-    }
-
-    if ( $mbMenu[$menuID]['active'] != 1 || $mbMenu[$menuID]['menu_perm'] == 0) {
-        return;
-    }
-
-    if ( $mbMenu[$menuID]['menu_type'] == 4 ) {
-        $menu = mb_getMenu($arg2,'st-vmenu','','','');
-        if ( $menu != '' ) {
-            $retval = $menu;
-        } else {
-            $retval = '';
-        }
-        return $retval;
-    }
-    if ( $api == 1 ) {
-        if ( $mbMenu[$menuID]['config']['menu_alignment'] == 1 ) {
-            $parent = $parentclass . '-l'; //'parent-l';
-            $class  = $ulclass . '-l'; //'gl_moomenu-vert-l';
-        } else {
-            $parent = $parentclass . '-r'; //'parent-r';
-            $class  = $ulclass . '-r'; //'gl_moomenu-vert-r';
-        }
-    } else {
-        $parent = $parentclass;
-        $class = $ulclass;
-        if ( $mbMenu[$menuID]['config']['menu_alignment'] == 0 ) {
-            $class = $class.' '.$class.'-right';
-        }
-    }
-
-    $menu = mb_getMenu($arg2,$class,'','',$parent,'','',1);
-
-    if ( $menu != '' ) {
-        $retval = '<div id="'.$class.$menuID.'">';
-        $retval .= $menu;
-        $retval .= '</div>';
-    } else {
-        $retval = '';
-    }
-
-    return $retval;
+function phpblock_getMenu( $arg1, $arg2 )
+{
+    return( mb_getMenu($arg2));
 }
-/* -------------
-function mb_getImageFile($image) {
-	global $_CONF;
 
-    return $_CONF['site_admin_url'] . '/plugins/sitetailor/images/' . $image;
-}
--------------- */
 function _mbPLG_getMenuItems()
 {
     global $_PLUGINS;
@@ -440,15 +303,15 @@ function _mbPLG_getMenuItems()
 function mb_getheadercss() {
     global $_CONF, $_USER, $_MB_CONF, $mbMenu, $themeAPI, $themeStyle;
 
-    $st_header = array();
+    $mb_header = array();
     $fCSS = '';
-    $st_header[] = $_CONF['path_layout'] . 'admin/menu/mooRainbow.css';
+    $mb_header[] = $_CONF['path_layout'] . 'admin/menu/mooRainbow.css';
 
     if ( is_array($mbMenu) ) {
         $cacheInstance = 'mbmenu_css' . '__' . $_USER['theme'];
         $retval = CACHE_check_instance($cacheInstance, 0);
         if ( $retval ) {
-            $st_header[] = CACHE_instance_filename($cacheInstance,0);
+            $mb_header[] = CACHE_instance_filename($cacheInstance,0);
         } else {
             foreach ($mbMenu AS $menu) {
                 if ( $menu['active'] == 1 ) {
@@ -456,47 +319,41 @@ function mb_getheadercss() {
                     $under = 0;
                     $over = 0;
                     switch ($menu['menu_type']) {
-                        case 1 :    // horizontal with multi-level
-                            $stylefile = 'horizontal-cascading.thtml';
+                        case 1 :
+                            $stylefile = 'horizontal-cascading.css';
                             $under = 50;
                             $over = 51;
                             break;
-                        case 2 :    // horizontal with no cascading menus
-                            $stylefile = 'horizontal-simple.thtml';
+                        case 2 :
+                            $stylefile = 'horizontal-simple.css';
                             break;
                         case 3 :
-                            $stylefile = 'vertical-cascading.thtml';
+                            $stylefile = 'vertical-cascading.css';
                             $under = 40;
                             break;
                         case 4 :
-                            $stylefile = 'vertical-simple.thtml';
+                            $stylefile = 'vertical-simple.css';
                             break;
                         default :
-                            $stylefile = 'horizontal-cascading.thtml';
+                            $stylefile = 'horizontal-cascading.css';
                             break;
                     }
                     $ms->set_file('style',$stylefile);
                     $ms->set_var('menu_id',$menu['menu_id']);
-                    if ( is_array($menu['config']) ) {
+                    $ms->set_var('menuname','.menu_'.$menu['menu_name']);
+                    if ( isset($menu['config']) && is_array($menu['config']) ) {
                         foreach ($menu['config'] AS $name => $value ) {
-                            if ( $name == 'use_images' && $value == 0 ) {
-                                continue;
+                            if ( $value != '' ) {
+                                $ms->set_var($name,$value);
                             }
-                            $ms->set_var($name,$value);
                         }
                     }
-                    if ( $menu['config']['menu_alignment'] == 1 ) {
+                    if ( isset($menu['config']['menu_alignment']) && $menu['config']['menu_alignment'] == 1 ) {
                         $ms->set_var('alignment','left');
+                        $ms->set_var('right_align','');
                     } else {
                         $ms->set_var('alignment','right');
-                    }
-                    if ( $themeAPI > 1 ) {
-                        $ms->set_var('themeapi','');
-                    } else {
-                        $ms->set_var('themeapi','1');
-                    }
-                    if ( $themeStyle == 'table' ) {
-                        $ms->set_var('themeapi','1');
+                        $ms->set_var('right_align',true);
                     }
                     if ( $menu['menu_id'] < 4 ) {
                         $under *= 10;
@@ -512,16 +369,22 @@ function mb_getheadercss() {
                     } else {
                         $ms->set_var('over',50);
                     }
-
+                    if ( isset($menu['config']['ch_menu_element_width']) ) {
+                        if ( strstr($menu['config']['ch_menu_element_width'],'em') !== FALSE ) {
+                            $emwidth = intval($menu['config']['ch_menu_element_width']);
+                            $pxwidth = (int) ($emwidth * 12.16);
+                            $ms->set_var('iefixwidth',$pxwidth);
+                        }
+                    }
                     $ms->parse ('output', 'style');
                     $fCSS .= $ms->finish ($ms->get_var('output')) . LB;
                 }
             }
             CACHE_create_instance($cacheInstance, $fCSS, 0);
-            $st_header[] = CACHE_instance_filename($cacheInstance,0);
+            $mb_header[] = CACHE_instance_filename($cacheInstance,0);
         }
     }
-    return $st_header;
+    return $mb_header;
 }
 
 function mb_getheaderjs() {
@@ -541,6 +404,7 @@ function mb_getheaderjs() {
                     $ms = new Template( $_CONF['path_layout'] . 'menu' );
                     $ms->set_file('js','animate.thtml');
                     $ms->set_var('menu_id',$menu['menu_id']);
+                    $ms->set_var('menu_name',strtolower(str_replace(" ","_",$menu['menu_name'])));
                     $ms->parse ('output', 'js');
                     $js .= $ms->finish ($ms->get_var('output')) . LB;
                 }
@@ -552,6 +416,9 @@ function mb_getheaderjs() {
     return $mb_js;
 }
 
-//mb_initMenu();
+function _mb_cmp($a,$b)
+{
+    return strcasecmp($a['label'],$b['label']);
+}
 
 ?>

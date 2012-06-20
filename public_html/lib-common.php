@@ -1373,11 +1373,12 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         'lang_newuser'      => $LANG12[3],
     ));
 
-    $st_hmenu = mb_getMenu('navigation',"gl_moomenu","gl_moomenu",'',"parent",'',1);
+    $st_hmenu = mb_getMenu('navigation','');
+
     $theme->set_var('st_hmenu',$st_hmenu);
-    $st_footer_menu = mb_getMenu('footer',"st-fmenu",'','',"st-f-last");
+    $st_footer_menu = mb_getMenu('footer');
     $theme->set_var('st_footer_menu',$st_footer_menu);
-    $theme->set_var('st_header_menu',mb_getMenu('header','st-fmenu','','','','st-f-last'));
+    $theme->set_var('st_header_menu',mb_getMenu('header'));
 
     $lblocks = '';
 
@@ -4534,8 +4535,7 @@ function COM_showMessage($msg, $plugin = '', $title = '', $persist = false,$type
             if (isset($$var)) {
                 $message = $$var;
             } else {
-                $message = sprintf($MESSAGE[61], $plugin);
-                COM_errorLog($message . ": " . $var, 1);
+                $message = $MESSAGE[$msg];
             }
         } else {
             $message = $MESSAGE[$msg];

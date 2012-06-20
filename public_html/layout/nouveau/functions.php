@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -69,6 +69,32 @@ $_BLOCK_TEMPLATE['forum_menu'] = 'blockheader-left.thtml,blockfooter-left.thtml'
 // $_BLOCK_TEMPLATE['configmanager_block'] = 'blockheader-left.thtml,blockfooter-left.thtml';
 // $_BLOCK_TEMPLATE['configmanager_subblock'] = 'blockheader-left.thtml,blockfooter-left.thtml';
 
+$menuStyles = array(
+    'horizontal_cascading'  => array('ulclass' => 'menu-horizontal-cascading',
+                                     'liclass' => '',
+                                     'parentclass' => 'parent',
+                                     'lastclass' => '',
+                                     'selclass' => ''
+                                     ),
+    'horizontal_simple'     => array('ulclass' => 'menu-horizontal-simple',
+                                     'liclass' => '',
+                                     'parentclass' => 'parent',
+                                     'lastclass' => 'last',
+                                     'selclass' => ''
+                                     ),
+    'vertical_cascading'    => array('ulclass' => 'menu-vertical-cascading',
+                                     'liclass' => '',
+                                     'parentclass' => 'parent',
+                                     'lastclass' => '',
+                                     'selclass' => ''
+                                    ),
+    'vertical_simple'       => array('ulclass' => 'menu-vertical-simple',
+                                     'liclass' => '',
+                                     'parentclass' => '',
+                                     'lastclass' => '',
+                                     'selclass' => ''
+                                     )
+);
 
 function theme_themeJS() {
     global $_CONF;

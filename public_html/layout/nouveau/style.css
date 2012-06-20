@@ -2883,3 +2883,319 @@ background:#d8e5f8 !important;
 border:1px solid #629de3 !important;
 color:#0055bb !important;
 }
+
+
+/* horizontal cascading menu CSS - left alignment is default */
+
+.menu-horizontal-cascading,
+.menu-horizontal-cascading * {
+    margin: 0;
+    padding:0;
+    list-style: none;
+}
+
+/* general style for menu */
+.menu-horizontal-cascading {
+    width:100%;
+    height:auto;
+    z-index:500;
+    background:#151515; /* url(images/menu/menu_bg.gif) repeat; */
+}
+
+/* general link styles */
+.menu-horizontal-cascading a {
+    text-decoration:    none;
+    white-space:        nowrap;
+    display:            block;
+    float:              left;
+    line-height:        2.2em;
+    font-weight:        700;
+    height:             2.2em;
+    font-size:          1em;
+    padding:            0 1.2em;
+    color:              #ccc;  /*Top Menu Text*/
+}
+
+/* top level UL */
+.menu-horizontal-cascading ul {
+    position:   absolute;
+    top:        -999em;
+    width:      14.74em;
+}
+
+/* top level li elements */
+.menu-horizontal-cascading li {
+    list-style: none;
+    position:   relative;
+    display:    block;
+    margin:     0;
+    padding:    0;
+    float:      left;  /*Top Menu alignment*/
+}
+
+/* second level UL elements */
+.menu-horizontal-cascading ul ul {
+    border-left:    1px solid #333;
+    border-right:   1px solid #000;
+}
+
+/* second level LI elements */
+.menu-horizontal-cascading li li {
+    background:     none;
+    margin:         0;
+    position:       relative;
+    float:          none;
+    width:          100%;
+    background:     #151515;
+    border-top:     1px solid #333333;  /*Sub Menu Highlight*/
+    border-bottom:  1px solid #000000;  /*Sub Menu Shadow*/
+}
+
+/* second level LI element href hover */
+.menu-horizontal-cascading li li a:hover {
+    background: none;
+}
+
+/* second level LI element href */
+.menu-horizontal-cascading li li a {
+    font-family:    Helvetica, Arial, sans-serif;
+    font-size:      100%;
+    font-weight:    400;
+    display:        block;
+    text-decoration:none;
+    float:          none;
+    height:         2.3em;
+    line-height:    2.3em;
+    text-indent:    1.3em;
+    width:          98%;
+    margin-left:    1%;
+    padding:        0;
+}
+
+/* hover item for li (all levels) */
+.menu-horizontal-cascading li:hover {
+    z-index:        510;
+    background:     #3667c0; /* url(images/menu/menu_hover_bg.gif) repeat; */
+    color:          #fff;
+
+}
+
+/* second level (and below) ul (child of a li) */
+.menu-horizontal-cascading li ul {
+    float:          none;
+    left:           -999em;
+    position:       absolute;
+    width:          14.6em;
+    z-index:        500;
+}
+
+.menu-horizontal-cascading li:hover ul,
+.menu-horizontal-cascading li.sfHover ul {
+    left:           -1px;
+    top:            2.2em;  /* calculated from line height or main menu */
+}
+
+.menu-horizontal-cascading li:hover li ul,
+.menu-horizontal-cascading li.sfHover li ul,
+.menu-horizontal-cascading li li:hover li ul,
+.menu-horizontal-cascading li li.sfHover li ul,
+.menu-horizontal-cascading li li li:hover li ul,
+.menu-horizontal-cascading li li li.sfHover li ul {
+    top:            -999em;
+}
+.menu-horizontal-cascading li li:hover ul,
+.menu-horizontal-cascading li li.sfHover ul,
+.menu-horizontal-cascading li li li:hover ul,
+.menu-horizontal-cascading li li li.sfHover ul,
+.menu-horizontal-cascading li li li li:hover ul,
+.menu-horizontal-cascading li li li li.sfHover ul {
+    left:           14.65em;
+    top:            -1px;
+    z-index:        500;
+}
+
+.menu-horizontal-cascading li:hover a,
+.menu-horizontal-cascading li.sfHover a,
+.menu-horizontal-cascading li:hover a:hover,
+.menu-horizontal-cascading li.sfHover a:hover {
+    color:          #fff;  /*Top Menu Text Hover / Sub Menu Text*/
+}
+
+.menu-horizontal-cascading li:hover li:hover a:hover,
+.menu-horizontal-cascading li.sfHover li.sfHover a:hover {
+    color:          #fff;     /* Sub Menu Text Hover */
+}
+
+.menu-horizontal-cascading ul ul {
+    background:     #151515;  /*Sub Menu BG*/
+    border-left:    1px solid #333;  /*Sub Menu Highlight*/
+    border-right:   1px solid #000;  /*Sub Menu Shadow*/
+}
+
+.menu-horizontal-cascading li li a.parent,
+.menu-horizontal-cascading li li a.parent:hover {
+/*    background:transparent url(images/menu/menu_parent.png) no-repeat scroll 95% 50%; */
+}
+.menu-horizontal-cascading {
+    float:          left;
+}
+
+/* for right aligned menus */
+.menu-horizontal-cascading-right li {
+    float:          right;
+}
+
+<!--[if IE 7]>
+.menu-horizontal-cascading {
+    width:          100%;
+}
+.menu-horizontal-cascading li ul {
+    width:          177px;
+}
+<![endif]-->
+/*
+.dummyclass1 {
+} */
+/* end of horizontal cascading menu */
+
+/* begin vertical cascading menu */
+.menu-vertical-cascading {
+	margin:             0 auto;
+}
+.menu-vertical-cascading {
+    margin-left:        -8px;
+    padding-left:       0px;
+}
+.menu-vertical-cascading {
+	text-align:         left;
+}
+.menu-vertical-cascading ul {
+	margin:             0;
+	padding:            0;
+	list-style:         none;
+}
+.menu-vertical-cascading ul {
+	width:              156px;
+	border-bottom:      1px solid #999999;
+}
+.menu-vertical-cascading ul li {
+	position:           relative;
+	z-index:            400;
+	width:              100%;
+	margin:             0;
+    padding:            0;
+}
+.menu-vertical-cascading li ul {
+	position:           absolute;
+	top:                0;
+	display:            block;
+	margin:             0;
+    padding:            0;
+}
+.menu-vertical-cascading li ul {
+    left:               155px;
+}
+.menu-vertical-cascading li li ul {
+    left:               155px;
+}
+.menu-vertical-cascading li:hover ul {
+	display:            block;
+}
+.menu-vertical-cascading li:hover>ul {
+	visibility:         visible;
+}
+.menu-vertical-cascading ul ul {
+	visibility:         hidden;
+}
+/* Fix IE. Hide from IE Mac \*/
+* html .menu-vertical-cascading ul li {
+	float:              left;
+	height:             1%;
+}
+* html .menu-vertical-cascading ul li a {
+	height:             1%;
+}
+/* End of IE fix */
+.menu-vertical-cascading ul {
+	margin:             0;
+}
+.menu-vertical-cascading ul a {
+	display:            block;
+	text-decoration:    none;
+}
+.menu-vertical-cascading ul a {
+	color:              #0000ff;
+	background:         #DDDDDD;
+	padding:            3px 6px;
+    border-top:         1px solid #999999;
+    border-left:        1px solid #999999;
+    border-right:       1px solid #999999;
+	border-bottom:      0;
+}
+.menu-vertical-cascading ul a:hover {
+	color:              #FFFFFF;
+	background:         #BBBBBB;
+}
+.menu-vertical-cascading li ul a {
+	text-decoration:    none;
+}
+.menu-vertical-cascading li ul a {
+	color:              #0000FF;
+	background:         #DDDDDD;
+	padding:            3px 6px;
+    border-top:         1px solid #999999;
+    border-left:        1px solid #999999;
+    border-right:       1px solid #999999;
+	border-bottom:      0;
+}
+.menu-vertical-cascading li ul a:hover {
+	color:              #FFFFFF;
+	background:         #BBBBBB;
+}
+.menu-vertical-cascading ul a.parent {
+	background:         #DDDDDD    url(images/menu/vmenu_parent.gif) no-repeat scroll 95% 50%;
+}
+.menu-vertical-cascading ul a.parent:hover {
+	background:         #BBBBBB    url(images/menu/vmenu_parent.gif) no-repeat scroll 95% 50%;
+}
+.menu-vertical-cascading li ul a.parent {
+	background:         #DDDDDD    url(images/menu/vmenu_parent.gif) no-repeat scroll 95% 50%;
+}
+.menu-vertical-cascading li ul a.parent:hover {
+	background:         #BBBBBB    url(images/menu/vmenu_parent.gif) no-repeat scroll 95% 50%;
+}
+/* end of vertical cascading */
+
+/* horizontal menu (no cascading) */
+.menu-horizontal-simple {
+    margin:             1em;
+    padding:            0;
+    clear:              both;
+    text-align:         center; /* options are left - center - right */
+    color:              #3677c0;
+    list-style-type:    disc;
+    list-style-image:   none;
+    list-style-position:outside;
+}
+
+.menu-horizontal-simple li {
+    border-right:       1px solid #999999;
+    display:            inline;
+    padding:            0 1.1em 0 .8em;
+}
+
+.menu-horizontal-simple li.last {
+    border-right:       0;
+}
+
+.menu-horizontal-simple a:link,
+.menu-horizontal-simple a:visited {
+    color:              #3677c0;
+    text-decoration:    none;
+}
+
+.menu-horizontal-simple a:hover {
+    color:              #679ef1;
+    text-decoration:    underline;
+}
+/* end of horizontal simple menu CSS */

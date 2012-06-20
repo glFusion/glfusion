@@ -2056,31 +2056,28 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
                             $content = str_replace($autotag['tagstr'],'',$content);
                         }
                     }
-/* ---
-  New menu auto tag
-  --- */
                     if ( $autotag['tag'] == 'menu' ) {
                         $menu = '';
                         $menuID = trim($autotag['parm1']);
-                        $menuHTML = mb_getMenu($menuID,'','','','','','',1);
+                        $menuHTML = mb_getMenu($menuID,'');
                         $content = str_replace($autotag['tagstr'],$menuHTML,$content);
                     }
-                    if ( $autotag['tag'] == 'hmenu' ) {
+                    if ( $autotag['tag'] == 'hmenu' ) { // depreciated
                         $menu = '';
                         $menuID = trim($autotag['parm1']);
                         $id = DB_getItem($_TABLES['menu'],'id','menu_name="'.DB_escapeString($menuID).'"');
                         if ( $id > 0 ) {
                             if ( $mbMenu[$id]['menu_type'] == 1 ) {
-                                $menu = mb_getMenu($menuID,"gl_moomenu","gl_moomenu",'',"parent");
+                                $menu = mb_getMenu($menuID,'');
                             } else {
-                                $menu = mb_getMenu($menuID,'st-fmenu','','','','st-f-last');
+                                $menu = mb_getMenu($menuID,'');
                             }
                             $content = str_replace($autotag['tagstr'],$menu,$content);
                         } else {
                             $content = str_replace($autotag['tagstr'],$menu,$content);
                         }
                     }
-                    if ( $autotag['tag'] == 'vmenu' ) {
+                    if ( $autotag['tag'] == 'vmenu' ) { // depreciated
                         $menu = phpblock_getMenu('',trim($autotag['parm1']));
                         $content = str_replace($autotag['tagstr'],$menu,$content);
                     }

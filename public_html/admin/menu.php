@@ -35,27 +35,194 @@ require_once $_CONF['path_system'] . 'classes/menu.class.php';
 
 USES_lib_admin();
 $display = '';
+$content = '';
 
 // Only let admin users access this page
 if (!SEC_hasRights('menu.admin')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_showMessageText($MESSAGE[37],$MESSAGE[30],true);
     $display .= COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to illegally access the menu editor administration screen.");
+    COM_accessLog ("User {$_USER['username']} unauthorized user tried to access the menu editor administration screen.");
     echo $display;
     exit;
 }
+
+$menuAttributes = array();
+
+    $hc_menu_defaults = array(
+    'tl_menu_background_color'              => '#151515',
+    'tl_menu_background_color_hover'        => '#3667c0',
+    'tl_menu_text_color'                    => '#CCCCCC',
+    'tl_menu_text_color_hover'              => '#ffffff',
+    'tl_menu_font_family'                   => '',
+    'tl_menu_font_size'                     => '1.0em',
+    'tl_menu_font_weight'                   => '700',
+    'tl_menu_line_height'                   => '2.2em',
+    'tl_menu_element_width'                 => '14.74em',
+    'tl_menu_element_padding'               => '0 1.2em',
+    'tl_menu_element_border_top_width'      => '',
+    'tl_menu_element_border_top_color'      => '',
+    'tl_menu_element_border_bottom_width'   => '',
+    'tl_menu_element_border_bottom_color'   => '',
+    'tl_menu_element_border_left_width'     => '',
+    'tl_menu_element_border_left_color'     => '',
+    'tl_menu_element_border_right_width'    => '',
+    'tl_menu_element_border_right_color'    => '',
+    'tl_menu_element_text_indent'           => '1.2em',
+    'ch_menu_background_color'              => '#151515',
+    'ch_menu_background_color_hover'        => '#3667c0',
+    'ch_menu_text_color'                    => '#ffffff',
+    'ch_menu_text_color_hover'              => '#ffffff',
+    'ch_menu_font_family'                   => 'Helvetica, Arial, sans-serif',
+    'ch_menu_font_size'                     => '100%',
+    'ch_menu_offset'                        => '2.2em',
+    'ch_menu_font_weight'                   => '400',
+    'ch_menu_line_height'                   => '2.3em',
+    'ch_menu_submenu_offset'                => '14.65em',
+    'ch_menu_element_width'                 => '14.6em',
+    'ch_menu_element_border_top_width'      => '1px solid',
+    'ch_menu_element_border_top_color'      => '#333333',
+    'ch_menu_element_border_bottom_width'   => '1px solid',
+    'ch_menu_element_border_bottom_color'   => '#000000',
+    'ch_menu_element_border_left_width'     => '',
+    'ch_menu_element_border_left_color'     => '',
+    'ch_menu_element_border_right_width'    => '',
+    'ch_menu_element_border_right_color'    => '',
+    'ch_menu_element_text_indent'           => '',
+    );
+
+    $hs_menu_defaults = array(
+    'tl_menu_background_color'              => '',
+    'tl_menu_background_color_hover'        => '',
+    'tl_menu_text_color'                    => '#3677c0',
+    'tl_menu_text_color_hover'              => '#679ef1',
+    'tl_menu_font_family'                   => '',
+    'tl_menu_font_size'                     => '',
+    'tl_menu_font_weight'                   => '',
+    'tl_menu_line_height'                   => '',
+    'tl_menu_element_width'                 => '',
+    'tl_menu_element_padding'               => '',
+    'tl_menu_element_border_top_width'      => '',
+    'tl_menu_element_border_top_color'      => '',
+    'tl_menu_element_border_bottom_width'   => '',
+    'tl_menu_element_border_bottom_color'   => '',
+    'tl_menu_element_border_left_width'     => '',
+    'tl_menu_element_border_left_color'     => '',
+    'tl_menu_element_border_right_width'    => '1px solid',
+    'tl_menu_element_border_right_color'    => '#999999',
+    'tl_menu_element_text_indent'           => '',
+    );
+
+    $vc_menu_defaults = array(
+    'tl_menu_background_color'              => '#dddddd',
+    'tl_menu_background_color_hover'        => '#bbbbbb',
+    'tl_menu_text_color'                    => '#0000ff',
+    'tl_menu_text_color_hover'              => '#ffffff',
+    'tl_menu_font_family'                   => '',
+    'tl_menu_font_size'                     => '',
+    'tl_menu_font_weight'                   => '',
+    'tl_menu_line_height'                   => '',
+    'tl_menu_element_width'                 => '156px',
+    'tl_menu_element_padding'               => '3px 6px',
+    'tl_menu_element_border_top_width'      => '1px solid',
+    'tl_menu_element_border_top_color'      => '#999999',
+    'tl_menu_element_border_bottom_width'   => '',
+    'tl_menu_element_border_bottom_color'   => '',
+    'tl_menu_element_border_left_width'     => '1px solid',
+    'tl_menu_element_border_left_color'     => '#999999',
+    'tl_menu_element_border_right_width'    => '1px solid',
+    'tl_menu_element_border_right_color'    => '#999999',
+    'tl_menu_element_text_indent'           => '',
+    'ch_menu_background_color'              => '#dddddd',
+    'ch_menu_background_color_hover'        => '#bbbbbb',
+    'ch_menu_text_color'                    => '#0000ff',
+    'ch_menu_text_color_hover'              => '#ffffff',
+    'ch_menu_font_family'                   => '',
+    'ch_menu_font_size'                     => '',
+    'ch_menu_offset'                        => '',
+    'ch_menu_font_weight'                   => '',
+    'ch_menu_line_height'                   => '',
+    'ch_menu_submenu_offset'                => '155px',
+    'ch_menu_element_width'                 => '',
+    'ch_menu_element_border_top_width'      => '1px solid',
+    'ch_menu_element_border_top_color'      => '#999999',
+    'ch_menu_element_border_bottom_width'   => '1px solid',
+    'ch_menu_element_border_bottom_color'   => '#999999',
+    'ch_menu_element_border_left_width'     => '1px solid',
+    'ch_menu_element_border_left_color'     => '#999999',
+    'ch_menu_element_border_right_width'    => '1px solid',
+    'ch_menu_element_border_right_color'    => '#999999',
+    'ch_menu_element_text_indent'           => '',
+    );
+    $vs_menu_defaults = array(
+    'tl_menu_background_color'              => '',
+    'tl_menu_background_color_hover'        => '',
+    'tl_menu_text_color'                    => '#0000ff',
+    'tl_menu_text_color_hover'              => '#ffffff',
+    'tl_menu_font_family'                   => '',
+    'tl_menu_font_size'                     => '',
+    'tl_menu_font_weight'                   => '',
+    'tl_menu_line_height'                   => '',
+    'tl_menu_element_width'                 => '',
+    'tl_menu_element_padding'               => '',
+    'tl_menu_element_border_top_width'      => '',
+    'tl_menu_element_border_top_color'      => '',
+    'tl_menu_element_border_bottom_width'   => '',
+    'tl_menu_element_border_bottom_color'   => '',
+    'tl_menu_element_border_left_width'     => '',
+    'tl_menu_element_border_left_color'     => '',
+    'tl_menu_element_border_right_width'    => '',
+    'tl_menu_element_border_right_color'    => '',
+    'tl_menu_element_text_indent'           => '',
+    );
+
 
 /*
  * Displays a list of all menus
  */
 
 function MB_displayMenuList( ) {
-    global $_CONF, $LANG_MB01, $LANG_MB_ADMIN, $LANG_ADMIN,$LANG_MB_MENU_TYPES, $mbMenu;
+    global $_CONF, $_USER, $_TABLES, $LANG_MB01, $LANG_MB_ADMIN, $LANG_ADMIN,$LANG_MB_MENU_TYPES;
 
     $retval = '';
+    $menuArray = array();
 
     $toolTipStyle = COM_getTooltipStyle();
+
+    $mbadmin = SEC_hasRights('menu.admin');
+    $root    = SEC_inGroup('Root');
+
+    if (COM_isAnonUser()) {
+        $uid = 1;
+    } else {
+        $uid = $_USER['uid'];
+    }
+
+    $result = DB_query("SELECT * FROM {$_TABLES['menu']}",1);
+    while ( $menu = DB_fetchArray($result) ) {
+        $menuID = $menu['id'];
+        $menuArray[$menu['id']]['menu_name']   = $menu['menu_name'];
+        $menuArray[$menu['id']]['menu_id']     = $menu['id'];
+        $menuArray[$menu['id']]['active']      = $menu['menu_active'];
+        $menuArray[$menu['id']]['menu_type']   = $menu['menu_type'];
+        $menuArray[$menu['id']]['group_id']    = $menu['group_id'];
+
+        if ($mbadmin || $root) {
+            $menuArray[$menu['id']]['menu_perm'] = 3;
+        } else {
+            if ( $menuArray['group_id'] == 998 ) {
+                if( COM_isAnonUser() ) {
+                    $menuArray[$menu['id']]['menu_perm'] = 3;
+                } else {
+                    $menuArray[$menu['id']]['menu_perm'] =  0;
+                }
+            } else {
+                if ( in_array( $menu['group_id'], $_GROUPS ) ) {
+                    $menuArray[$menu['id']]['menu_perm'] =  3;
+                }
+            }
+        }
+    }
 
     $menu_arr = array(
             array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=newmenu',
@@ -68,11 +235,11 @@ function MB_displayMenuList( ) {
                                 $_CONF['layout_url'] . '/images/icons/menubuilder.png');
 
     $T = new Template($_CONF['path_layout'] . 'admin/menu');
-    $T->set_file (array ('admin' => 'menulist.thtml'));
+    $T->set_file ('admin','menulist.thtml');
     $T->set_block('admin', 'menurow', 'mrow');
     $rowCounter = 0;
-    if ( is_array($mbMenu) ) {
-        foreach ($mbMenu AS $menu) {
+    if ( is_array($menuArray) ) {
+        foreach ($menuArray AS $menu) {
             $id = $menu['menu_id'];
             $T->set_var('menu_id',$menu['menu_id']);
             $T->set_var('menu_name',$menu['menu_name']);
@@ -80,7 +247,6 @@ function MB_displayMenuList( ) {
             if ( $menu['menu_name'] != 'header' && $menu['menu_name'] != 'footer' && $menu['menu_name'] != 'navigation' ) {
                 $T->set_var('delete_menu','<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=deletemenu&amp;id=' . $menu['menu_id'] . '" onclick="return confirm(\'' . $LANG_MB01['confirm_delete'] . '\');"><img src="' . $_CONF['layout_url'] . '/images/delete.png" alt="' . $LANG_MB01['delete'] . '"' . '/></a>');
             }
-            $T->set_var('menu_tree',isset($mbMenu[$id]['elements']) ? $mbMenu[$id]['elements'][0]->editTree(0,2) : '');
             $elementDetails = $menu['menu_name'] . '::';
             $elementDetails .= '<b>' . $LANG_MB01['type'] . ':</b><br />' . $LANG_MB_MENU_TYPES[$menu['menu_type']] . '<br/>';
             $info       = '<a class="'.$toolTipStyle.'" title="' . $elementDetails . '" href="#">'.$menu['menu_name'].'</a>';
@@ -91,9 +257,7 @@ function MB_displayMenuList( ) {
         }
     }
     $T->set_var(array(
-        'site_admin_url'    => $_CONF['site_admin_url'],
-        'site_url'          => $_CONF['site_url'],
-        'lang_admin'        => 'MenuBuilder',
+        'lang_admin'        => $LANG_MB01['menu_builder'],
     ));
     $T->parse('output', 'admin');
     $retval .= $T->finish($T->get_var('output'));
@@ -109,7 +273,7 @@ function MB_displayMenuList( ) {
 
 function MB_cloneMenu( $menu_id ) {
     global $_CONF, $_TABLES, $LANG_MB01, $LANG_MB_ADMIN,
-           $LANG_MB_MENU_TYPES, $LANG_ADMIN, $mbMenu;
+           $LANG_MB_MENU_TYPES, $LANG_ADMIN;
 
     $retval = '';
 
@@ -125,11 +289,9 @@ function MB_cloneMenu( $menu_id ) {
 
 
     $T = new Template($_CONF['path_layout'] . 'admin/menu');
-    $T->set_file (array ('admin' => 'clonemenu.thtml'));
+    $T->set_file ('admin','clonemenu.thtml');
 
     $T->set_var(array(
-        'site_admin_url'    => $_CONF['site_admin_url'],
-        'site_url'          => $_CONF['site_url'],
         'form_action'       => $_CONF['site_admin_url'] . '/menu.php',
         'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/menu.php">'.$LANG_MB01['menu_list'].'</a> :: '.$LANG_MB01['clone'],
         'lang_admin'        => $LANG_MB01['menu_builder'],
@@ -146,12 +308,14 @@ function MB_cloneMenu( $menu_id ) {
  */
 
 function MB_saveCloneMenu( ) {
-    global $_CONF, $_TABLES, $mbMenu, $_GROUPS;
+    global $_CONF, $_TABLES, $_GROUPS;
 
     $menu_name  = DB_escapeString(COM_applyFilter($_POST['menuname']));
     $menu       = COM_applyFilter($_POST['menu'],true);
 
-    $sql = "SELECT * FROM {$_TABLES['menu']} WHERE id=".$menu;
+    $pidmap = array();
+
+    $sql = "SELECT * FROM {$_TABLES['menu']} WHERE id=".(int) $menu;
     $result = DB_query($sql);
     if ( DB_numRows($result) > 0 ) {
         $M = DB_fetchArray($result);
@@ -163,7 +327,7 @@ function MB_saveCloneMenu( ) {
         $sqlDataValues = "'$menu_name',$menu_type,$menu_active,$group_id";
         DB_save($_TABLES['menu'], $sqlFieldList, $sqlDataValues);
         $menu_id = DB_insertId();
-        $sql = "SELECT * FROM {$_TABLES['menu_config']} WHERE menu_id='".$menu."'";
+        $sql = "SELECT * FROM {$_TABLES['menu_config']} WHERE menu_id='".(int)$menu."'";
         $result = DB_query($sql);
         while ($C = DB_fetchArray($result) ) {
             DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'".DB_escapeString($C['conf_name'])."','".DB_escapeString($C['conf_value'])."'");
@@ -173,14 +337,20 @@ function MB_saveCloneMenu( ) {
         $root       = SEC_inGroup('Root');
         $groups     = $_GROUPS;
 
-        $sql = "SELECT * FROM {$_TABLES['menu_elements']} WHERE menu_id=".$menu;
+        $sql = "SELECT * FROM {$_TABLES['menu_elements']} WHERE menu_id=".(int)$menu;
         $result = DB_query($sql);
         while ($M = DB_fetchArray($result)) {
-            $M['menu_id'] = $menu_id;
+            $M['menu_id']       = $menu_id;
             $element            = new menuElement();
             $element->constructor( $M, $meadmin, $root, $groups );
             $element->id        = $element->createElementID($M['menu_id']);
+            $pidmap[$M['id']] = $element->id;
             $element->saveElement();
+        }
+        if ( is_array($pidmap) ) {
+            foreach ( $pidmap AS $oldid => $newid ) {
+                DB_query("UPDATE {$_TABLES['menu_elements']} SET pid=".(int) $newid." WHERE menu_id=".(int) $menu_id." AND pid=".(int) $oldid);
+            }
         }
     }
     CACHE_remove_instance('mbmenu');
@@ -197,7 +367,7 @@ function MB_saveCloneMenu( ) {
 
 function MB_createMenu( ) {
     global $_CONF, $_TABLES, $LANG_MB01, $LANG_MB_ADMIN,
-           $LANG_MB_MENU_TYPES, $LANG_ADMIN, $mbMenu;
+           $LANG_MB_MENU_TYPES, $LANG_ADMIN;
 
     $retval = '';
 
@@ -213,7 +383,7 @@ function MB_createMenu( ) {
 
 
     $T = new Template($_CONF['path_layout'] . 'admin/menu');
-    $T->set_file (array ('admin' => 'createmenu.thtml'));
+    $T->set_file ('admin','createmenu.thtml');
 
     // build menu type select
 
@@ -240,8 +410,6 @@ function MB_createMenu( ) {
     $group_select .= '</select>' . LB;
 
     $T->set_var(array(
-        'site_admin_url'    => $_CONF['site_admin_url'],
-        'site_url'          => $_CONF['site_url'],
         'form_action'       => $_CONF['site_admin_url'] . '/menu.php',
         'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/menu.php">'.$LANG_MB01['menu_list'].'</a> :: '.$LANG_MB01['add_newmenu'],
         'lang_admin'        => $LANG_MB01['menu_builder'],
@@ -259,11 +427,34 @@ function MB_createMenu( ) {
  */
 
 function MB_saveNewMenu( ) {
-    global $_CONF, $_TABLES, $mbMenu, $_GROUPS;
+    global $_CONF, $_TABLES, $_GROUPS,$hc_menu_defaults,$hs_menu_defaults,$vc_menu_defaults,$vs_menu_defaults;
+
+    $errors = 0;
+    $errMsg = '';
+
+
+    // sanity check
+
+    if ( !isset($_POST['menuname']) || $_POST['menuname'] == '' ) {
+        $errors++;
+//@TODO - fix language
+        $errMsg .= 'Menu name cannot be blank.';
+    } else {
+        $menuname = COM_applyFilter($_POST['menuname']);
+        if ( strstr($menuname,' ' ) !== FALSE ) {
+            $errors++;
+//@TODO - fix language
+            $errMsg .= 'Menu name cannot contain spaces';
+        }
+    }
+
+    if ( $errors > 0 ) {
+        return $errMsg;
+    }
 
     $menuname   = DB_escapeString(COM_applyFilter($_POST['menuname']));
     $menutype   = COM_applyFilter($_POST['menutype'],true);
-    $menuactive = COM_applyFilter($_POST['menuactive'],true);
+    $menuactive = isset($_POST['menuactive']) ? COM_applyFilter($_POST['menuactive'],true) : 0;
     $menugroup  = COM_applyFilter($_POST['group'],true);
 
     $sqlFieldList  = 'menu_name,menu_type,menu_active,group_id';
@@ -274,56 +465,32 @@ function MB_saveNewMenu( ) {
 
     switch ( $menutype ) {
         case 1:
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_bg_color','#151515'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_bg_color','#3667c0'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_text_color','#CCCCCC'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_text_color','#FFFFFF'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_text_color','#FFFFFF'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_text_color','#679EF1'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_background_color','#151515'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_bg_color','#333333'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_highlight_color','#151515'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_shadow_color','#151515'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'use_images','1'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_bg_filename','menu_bg.gif'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_hover_filename','menu_hover_bg.gif'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_parent_filename','menu_parent.png'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_alignment','1'");
+            foreach ( $hc_menu_defaults AS $name => $value ) {
+                if ( $value != '' ) {
+                    DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'$name','$value'");
+                }
+            }
             break;
         case 2:
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_bg_color','#000000'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_bg_color','#000000'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_text_color','#3677C0'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_text_color','#679EF1'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_text_color','#FFFFFF'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_text_color','#679EF1'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_background_color','#151515'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_bg_color','#333333'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_highlight_color','#151515'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_shadow_color','#151515'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'use_images','1'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_bg_filename','menu_bg.gif'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_hover_filename','menu_hover_bg.gif'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_parent_filename','menu_parent.png'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_alignment','1'");
+            foreach ( $hs_menu_defaults AS $name => $value ) {
+                if ( $value != '' ) {
+                    DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'$name','$value'");
+                }
+            }
             break;
         case 3:
+            foreach ( $vc_menu_defaults AS $name => $value ) {
+                if ( $value != '' ) {
+                    DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'$name','$value'");
+                }
+            }
+            break;
         case 4:
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_bg_color','#DDDDDD'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_bg_color','#BBBBBB'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_text_color','#0000FF'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_text_color','#FFFFFF'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_text_color','#0000FF'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_text_color','#F7FF00'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_background_color','#DDDDDD'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_bg_color','#BBBBBB'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_highlight_color','#999999'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_shadow_color','#999999'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'use_images','1'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_bg_filename','menu_bg.gif'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_hover_filename','menu_hover_bg.gif'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_parent_filename','vmenu_parent.gif'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_alignment','1'");
+            foreach ( $vs_menu_defaults AS $name => $value ) {
+                if ( $value != '' ) {
+                    DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'$name','$value'");
+                }
+            }
             break;
     }
 
@@ -332,6 +499,7 @@ function MB_saveNewMenu( ) {
     $randID = rand();
     DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
     mb_initMenu(true);
+    return '';
 }
 
 /*
@@ -339,70 +507,93 @@ function MB_saveNewMenu( ) {
  */
 
 function MB_displayTree( $menu_id ) {
-    global $_CONF, $LANG_MB01, $LANG_MB_ADMIN, $LANG_ADMIN, $mbMenu;
+    global $_CONF, $LANG_MB01, $LANG_MB_ADMIN, $LANG_ADMIN;
 
     $retval = '';
 
+    $menu = menu::getInstance( $menu_id );
+
     $menu_arr = array(
-            array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=new&amp;menuid='.$menu_id,
+            array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=new&amp;menuid='.(int) $menu_id,
                   'text' => $LANG_MB01['create_element']),
             array('url'  => $_CONF['site_admin_url'] .'/menu.php',
                   'text' => $LANG_MB01['menu_list']),
     );
-    $retval  .= COM_startBlock($LANG_MB01['menu_builder'].' :: '.$mbMenu[$menu_id]['menu_name'],'', COM_getBlockTemplate('_admin_block', 'header'));
+    $retval  .= COM_startBlock($LANG_MB01['menu_builder'].' :: '.$menu->name,'', COM_getBlockTemplate('_admin_block', 'header'));
     $retval  .= ADMIN_createMenu($menu_arr, $LANG_MB_ADMIN[3],
                                 $_CONF['layout_url'] . '/images/icons/menubuilder.png');
 
-    $T = new Template($_CONF['path_layout'] . 'admin/menu');
-    $T->set_file (array ('admin' => 'menutree.thtml'));
+    $data_arr = array();
+    $text_arr = array();
+    $options  = array();
 
-    $menu_select = '<form name="jumpbox" id="jumpbox" action="' . $_CONF['site_admin_url'] . '/menu.php" method="get" style="margin:0;padding:0"><div>';
-    $menu_select .= '<input type="hidden" name="mode" id="mode" value="menu"/>' . LB;
-    $menu_select .= '<strong>Menu</strong>' . ':&nbsp;<select name="menu" onchange="submit()">';
-    foreach ($mbMenu AS $menu) {
-        $menu_select .= '<option value="' . $menu['menu_id'].'"' . ($menu['menu_id'] == $menu_id ? ' selected="selected"' : '') . '>' . $menu['menu_name'] .'</option>' . LB;
-    }
-    $menu_select .= '</select>';
-    $menu_select .= '&nbsp;<input type="submit" value="' . 'go' . '"/>';
-    $menu_select .= '</div></form>';
+    $header_arr = array(
+        array('text' => $LANG_MB01['menu_element'], 'field' => 'label'),
+        array('text' => $LANG_MB01['info'], 'field' => 'info', 'align' => 'center' ),
+        array('text' => $LANG_MB01['enabled'], 'field' => 'enabled', 'align' => 'center'),
+        array('text' => $LANG_MB01['edit'], 'field' => 'edit', 'align' => 'center'),
+        array('text' => $LANG_MB01['delete'], 'field' => 'delete', 'align' => 'center'),
+        array('text' => $LANG_MB01['order'], 'field' => 'order', 'align' => 'center')
+    );
 
-    $T->set_var(array(
-        'site_admin_url'    => $_CONF['site_admin_url'],
-        'site_url'          => $_CONF['site_url'],
-        'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/menu.php">'.$LANG_MB01['menu_list'].'</a> :: '.$mbMenu[$menu_id]['menu_name'].' :: '.$LANG_MB01['elements'],
-        'lang_admin'        => $LANG_MB01['menu_builder'],
-        'menu_tree'         => $mbMenu[$menu_id]['elements'][0]->editTree(0,2),
-        'menuid'            => $menu_id,
-        'menuname'          => $mbMenu[$menu_id]['menu_name'],
-        'menu_select'       => $menu_select,
-        'menuactive'        => $mbMenu[$menu_id]['active'] == 1 ? ' checked="checked"' : ' ',
-    ));
+    $text_arr = array('has_menu'    => false,
+                      'title'       => '',
+                      'help_url'    => '',
+                      'no_data'     => $LANG_MB01['no_elements'],
+                      'form_url'    => "{$_CONF['site_admin_url']}/menu.php"
+    );
 
-    $T->parse('output', 'admin');
-    $retval .= $T->finish($T->get_var('output'));
+    $form_arr['bottom'] = '<input type="hidden" id="menu" name="menu" value="'.$menu_id.'"/>' . LB
+                        . '<input type="hidden" name="mode" value="activate"/>'. LB
+                        . '<script type="text/javascript">' . LB
+                        . '    document.getElementById(\'menubuilder\').style.display=\'\''.LB
+                        . '</script>';
+
+    $data_arr = $menu->menu_elements[0]->editTree(0,2);
+
+    $retval .= ADMIN_simpleList("_mb_getListField_menu", $header_arr, $text_arr, $data_arr,$options,$form_arr);
+
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+
     return $retval;
 }
+
+
+function MB_getMenuList( $selected = '' )
+{
+    global $_TABLES;
+
+    $menu_select = '';
+
+    $result = DB_query("SELECT id, menu_name FROM {$_TABLES['menu']} ORDER BY menu_name ASC",1);
+    while ( ( $M = DB_fetchArray($result) ) ) {
+        $menu_select .= '<option value="' . $M['id'].'"' . ($M['id'] == $selected ? ' selected="selected"' : '') . '>' . $M['menu_name'] .'</option>' . LB;
+    }
+    return $menu_select;
+}
+
 
 /*
  * Moves a menu element up or down
  */
 function MB_moveElement( $menu_id, $mid, $direction ) {
-    global $_CONF, $_TABLES, $mbMenu;
+    global $_CONF, $_TABLES;
+
+    $menu = menu::getInstance($menu_id);
 
     switch ( $direction ) {
         case 'up' :
-            $neworder = $mbMenu[$menu_id]['elements'][$mid]->order - 11;
+            $neworder = $menu->menu_elements[$mid]->order - 11;
             DB_query("UPDATE {$_TABLES['menu_elements']} SET element_order=" . $neworder . " WHERE menu_id=".$menu_id." AND id=" . $mid);
             break;
         case 'down' :
-            $neworder = $mbMenu[$menu_id]['elements'][$mid]->order + 11;
+            $neworder = $menu->menu_elements[$mid]->order + 11;
             DB_query("UPDATE {$_TABLES['menu_elements']} SET element_order=" . $neworder . " WHERE menu_id=".$menu_id." AND id=" . $mid);
             break;
     }
-    $pid = $mbMenu[$menu_id]['elements'][$mid]->pid;
+    $pid = $menu->menu_elements[$mid]->pid;
 
-    $mbMenu[$menu_id]['elements'][$pid]->reorderMenu();
+    $menu->menu_elements[$pid]->reorderMenu();
     CACHE_remove_instance('mbmenu');
 
     return;
@@ -413,19 +604,21 @@ function MB_moveElement( $menu_id, $mid, $direction ) {
  */
 
 function MB_createElement ( $menu_id ) {
-    global $_CONF, $_TABLES, $mbMenu, $LANG_MB01, $LANG_MB_ADMIN, $LANG_MB_TYPES,
+    global $_CONF, $_TABLES, $LANG_MB01, $LANG_MB_ADMIN, $LANG_MB_TYPES,
            $LANG_MB_GLTYPES, $LANG_MB_GLFUNCTION;
+
+    $menu = menu::getInstance($menu_id);
 
     $retval = '';
     $group_select = '';
 
     $menu_arr = array(
             array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=menu&amp;menu='.$menu_id,
-                  'text' => 'Back to ' . $mbMenu[$menu_id]['menu_name']),
+                  'text' => $LANG_MB01['return_to'] . $menu->name),
             array('url'  => $_CONF['site_admin_url'] .'/menu.php',
                   'text' => $LANG_MB01['menu_list']),
     );
-    $retval  .= COM_startBlock($LANG_MB01['menu_builder'].' :: '.$LANG_MB01['create_element'] .' for ' . $mbMenu[$menu_id]['menu_name'],'', COM_getBlockTemplate('_admin_block', 'header'));
+    $retval  .= COM_startBlock($LANG_MB01['menu_builder'].' :: '.$LANG_MB01['create_element'] .' for ' . $menu->name,'', COM_getBlockTemplate('_admin_block', 'header'));
     $retval  .= ADMIN_createMenu($menu_arr, $LANG_MB_ADMIN[4],
                                 $_CONF['layout_url'] . '/images/icons/menubuilder.png');
 
@@ -469,7 +662,7 @@ function MB_createElement ( $menu_id ) {
         if ( $spCount == 0 && key($LANG_MB_TYPES) == 5 ) {
             // skip it
         } else {
-            if ( ($mbMenu[$menu_id]['menu_type'] == 2 || $mbMenu[$menu_id]['menu_type'] == 4 ) && (key($LANG_MB_TYPES) == 1 || key($LANG_MB_TYPES) == 3)){
+            if ( ($menu->type == 2 || $menu->type == 4 ) && (key($LANG_MB_TYPES) == 1 || key($LANG_MB_TYPES) == 3)){
                 // skip it
             } else {
                 $type_select .= '<option value="' . key($LANG_MB_TYPES) . '"';
@@ -489,7 +682,7 @@ function MB_createElement ( $menu_id ) {
     $gl_select .= '</select>' . LB;
 
     $plugin_select = '<select id="pluginname" name="pluginname">' . LB;
-    $plugin_menus = _mbPLG_getMenuItems(); // PLG_getMenuItems();
+    $plugin_menus = _mbPLG_getMenuItems();
 
     $num_plugins = count($plugin_menus);
     for( $i = 1; $i <= $num_plugins; $i++ ) {
@@ -506,12 +699,12 @@ function MB_createElement ( $menu_id ) {
     }
     $glfunction_select .= '</select>' . LB;
 
-    if ( $mbMenu[$menu_id]['menu_type'] == 2 || $mbMenu[$menu_id]['menu_type'] == 4 ) {
+    if ( $menu->type == 2 || $menu->type == 4 ) {
         $parent_select = '<input type="hidden" name="pid" id="pid" value="0"/>'.$LANG_MB01['top_level'];
     } else {
         $parent_select = '<select name="pid" id="pid">' . LB;
         $parent_select .= '<option value="0">' . $LANG_MB01['top_level'] . '</option>' . LB;
-        $result = DB_query("SELECT id,element_label FROM {$_TABLES['menu_elements']} WHERE menu_id='" . $menu_id . "' AND element_type=1");
+        $result = DB_query("SELECT id,element_label FROM {$_TABLES['menu_elements']} WHERE menu_id='" . (int) $menu_id . "' AND element_type=1");
         while ($row = DB_fetchArray($result)) {
             $parent_select .= '<option value="' . $row['id'] . '">' . $row['element_label'] . '</option>' . LB;
         }
@@ -544,14 +737,14 @@ function MB_createElement ( $menu_id ) {
     $group_select .= '</select>' . LB;
 
     $T = new Template($_CONF['path_layout'] . 'admin/menu');
-    $T->set_file( array( 'admin' => 'createelement.thtml'));
+    $T->set_file( 'admin','createelement.thtml');
 
     $T->set_var(array(
         'site_admin_url'    => $_CONF['site_admin_url'],
         'site_url'          => $_CONF['site_url'],
         'form_action'       => $_CONF['site_admin_url'] . '/menu.php',
-        'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/menu.php">'.$LANG_MB01['menu_list'].'</a> :: <a href="'.$_CONF['site_admin_url'].'/menu.php?mode=menu&amp;menu='.$menu_id.'">'.$mbMenu[$menu_id]['menu_name'].'</a> :: '.$LANG_MB01['create_element'],
-        'menuname'          => $mbMenu[$menu_id]['menu_name'],
+        'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/menu.php">'.$LANG_MB01['menu_list'].'</a> :: <a href="'.$_CONF['site_admin_url'].'/menu.php?mode=menu&amp;menu='.$menu_id.'">'.$menu->name.'</a> :: '.$LANG_MB01['create_element'],
+        'menuname'          => $menu->name,
         'menuid'            => $menu_id,
         'type_select'       => $type_select,
         'gl_select'         => $gl_select,
@@ -575,18 +768,20 @@ function MB_createElement ( $menu_id ) {
  */
 
 function MB_saveNewMenuElement ( ) {
-    global $_CONF, $_TABLES, $mbMenu,$_GROUPS;
+    global $_CONF, $_TABLES, $_GROUPS;
 
     // build post vars
     $E['menu_id']           = COM_applyFilter($_POST['menuid'],true);
     $E['pid']               = COM_applyFilter($_POST['pid'],true);
-    $E['element_label']     = htmlspecialchars(strip_tags(COM_checkWords($_POST['menulabel'])));
+    $E['element_label']     = @htmlspecialchars(strip_tags(COM_checkWords($_POST['menulabel'])));
     $E['element_type']      = COM_applyFilter($_POST['menutype'],true);
     $E['element_target']    = COM_applyFilter($_POST['urltarget']);
     $afterElementID         = COM_applyFilter($_POST['menuorder'],true);
     $E['element_active']    = COM_applyFilter($_POST['menuactive'],true);
     $E['element_url']       = trim(COM_applyFilter($_POST['menuurl']));
     $E['group_id']          = COM_applyFilter($_POST['group'],true);
+
+    $menu = menu::getInstance($E['menu_id']);
 
     switch($E['element_type']) {
         case 2 :
@@ -652,12 +847,12 @@ function MB_saveNewMenuElement ( ) {
      */
 
     $element            = new menuElement();
-    $element->constructor( $E, $meadmin, $root, $groups );
+    $element->constructor( $E, $meadmin, $root, $groups,1 );
     $element->id        = $element->createElementID($E['menu_id']);
     $element->saveElement();
     $pid                = $E['pid'];
     $menu_id            = $E['menu_id'];
-    $mbMenu[$menu_id]['elements'][$pid]->reorderMenu();
+    $menu->menu_elements[$pid]->reorderMenu();
     CACHE_remove_instance('mbmenu');
 }
 
@@ -666,35 +861,37 @@ function MB_saveNewMenuElement ( ) {
  */
 
 function MB_editElement( $menu_id, $mid ) {
-    global $_CONF, $_TABLES, $mbMenu,$mbMenu,$LANG_MB01, $LANG_MB_ADMIN,
+    global $_CONF, $_TABLES, $LANG_MB01, $LANG_MB_ADMIN,
            $LANG_MB_TYPES, $LANG_MB_GLTYPES,$LANG_MB_GLFUNCTION;
 
     $retval = '';
 
+    $menu = menu::getInstance($menu_id);
+
     $menu_arr = array(
             array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=menu&amp;menu='.$menu_id,
-                  'text' => 'Back to ' . $mbMenu[$menu_id]['menu_name']),
+                  'text' => $LANG_MB01['return_to'] . $menu->name),
             array('url'  => $_CONF['site_admin_url'] .'/menu.php',
                   'text' => $LANG_MB01['menu_list']),
     );
-    $retval  .= COM_startBlock($LANG_MB01['menu_builder'].' :: '.$LANG_MB01['edit_element'] .' for ' . $mbMenu[$menu_id]['menu_name'],'', COM_getBlockTemplate('_admin_block', 'header'));
+    $retval  .= COM_startBlock($LANG_MB01['menu_builder'].' :: '.$LANG_MB01['edit_element'] .' for ' . $menu->name,'', COM_getBlockTemplate('_admin_block', 'header'));
     $retval  .= ADMIN_createMenu($menu_arr, $LANG_MB_ADMIN[5],
                                 $_CONF['layout_url'] . '/images/icons/menubuilder.png');
 
 
     // build types select
 
-    if ( $mbMenu[$menu_id]['elements'][$mid]->type == 1 ) {
+    if ( $menu->menu_elements[$mid]->type == 1 ) {
         $type_select = '<select id="menutype" name="menutype" disabled="disabled">' . LB;
     } else {
         $type_select = '<select id="menutype" name="menutype">' . LB;
     }
     while ( $types = current($LANG_MB_TYPES) ) {
-        if ( ($mbMenu[$menu_id]['menu_type'] == 2 || $mbMenu[$menu_id]['menu_type'] == 4 ) && (key($LANG_MB_TYPES) == 1 || key($LANG_MB_TYPES) == 3)){
+        if ( ($menu->type == 2 || $menu->type == 4 ) && (key($LANG_MB_TYPES) == 1 || key($LANG_MB_TYPES) == 3)){
             // skip it
         } else {
             $type_select .= '<option value="' . key($LANG_MB_TYPES) . '"';
-            $type_select .= ($mbMenu[$menu_id]['elements'][$mid]->type==key($LANG_MB_TYPES) ? ' selected="selected"' : '') . '>' . $types . '</option>' . LB;
+            $type_select .= ($menu->menu_elements[$mid]->type==key($LANG_MB_TYPES) ? ' selected="selected"' : '') . '>' . $types . '</option>' . LB;
         }
         next($LANG_MB_TYPES);
     }
@@ -704,7 +901,7 @@ function MB_editElement( $menu_id, $mid ) {
     $glfunction_select = '<select id="glfunction" name="glfunction">' . LB;
     while ( $glfunction = current($LANG_MB_GLFUNCTION) ) {
         $glfunction_select .= '<option value="' . key($LANG_MB_GLFUNCTION) . '"';
-        $glfunction_select .= ($mbMenu[$menu_id]['elements'][$mid]->subtype==key($LANG_MB_GLFUNCTION) ? ' selected="selected"' : '') . '>' . $glfunction . '</option>' . LB;
+        $glfunction_select .= ($menu->menu_elements[$mid]->subtype==key($LANG_MB_GLFUNCTION) ? ' selected="selected"' : '') . '>' . $glfunction . '</option>' . LB;
         next($LANG_MB_GLFUNCTION);
     }
     $glfunction_select .= '</select>' . LB;
@@ -712,7 +909,7 @@ function MB_editElement( $menu_id, $mid ) {
     $gl_select = '<select id="gltype" name="gltype">' . LB;
     while ( $gltype = current($LANG_MB_GLTYPES) ) {
         $gl_select .= '<option value="' . key($LANG_MB_GLTYPES) . '"';
-        $gl_select .= ($mbMenu[$menu_id]['elements'][$mid]->subtype==key($LANG_MB_GLTYPES) ? ' selected="selected"' : '') . '>' . $gltype . '</option>' . LB;
+        $gl_select .= ($menu->menu_elements[$mid]->subtype==key($LANG_MB_GLTYPES) ? ' selected="selected"' : '') . '>' . $gltype . '</option>' . LB;
         next($LANG_MB_GLTYPES);
     }
     $gl_select .= '</select>' . LB;
@@ -726,7 +923,7 @@ function MB_editElement( $menu_id, $mid ) {
     {
         $plugin_select .= '<option value="' . key($plugin_menus) . '"';
 
-        if ( $mbMenu[$menu_id]['elements'][$mid]->subtype==key($plugin_menus) ) {
+        if ( $menu->menu_elements[$mid]->subtype==key($plugin_menus) ) {
             $plugin_select .= ' selected="selected"';
             $found++;
         }
@@ -735,7 +932,7 @@ function MB_editElement( $menu_id, $mid ) {
         next( $plugin_menus );
     }
     if ( $found == 0 ) {
-        $plugin_select .= '<option value="'.$mbMenu[$menu_id]['elements'][$mid]->subtype.'" selected="selected">'.$LANG_MB01['disabled_plugin'].'</option>'.LB;
+        $plugin_select .= '<option value="'.$menu->menu_elements[$mid]->subtype.'" selected="selected">'.$LANG_MB01['disabled_plugin'].'</option>'.LB;
     }
     $plugin_select .= '</select>' . LB;
 
@@ -748,7 +945,7 @@ function MB_editElement( $menu_id, $mid ) {
         } else {
             $label = $sp_label;
         }
-        $sp_select .= '<option value="' . $sp_id . '"' . ($mbMenu[$menu_id]['elements'][$mid]->subtype == $sp_id ? ' selected="selected"' : '') . '>' . $label . '</option>' . LB;
+        $sp_select .= '<option value="' . $sp_id . '"' . ($menu->menu_elements[$mid]->subtype == $sp_id ? ' selected="selected"' : '') . '>' . $label . '</option>' . LB;
     }
     $sp_select .= '</select>' . LB;
 
@@ -756,18 +953,18 @@ function MB_editElement( $menu_id, $mid ) {
     $sql = "SELECT tid,topic FROM {$_TABLES['topics']} ORDER BY topic";
     $result = DB_query($sql);
     while (list ($tid, $topic) = DB_fetchArray($result)) {
-        $topic_select .= '<option value="' . $tid . '"' . ($mbMenu[$menu_id]['elements'][$mid]->subtype == $tid ? ' selected="selected"' : '') . '>' . $topic . '</option>' . LB;
+        $topic_select .= '<option value="' . $tid . '"' . ($menu->menu_elements[$mid]->subtype == $tid ? ' selected="selected"' : '') . '>' . $topic . '</option>' . LB;
     }
     $topic_select .= '</select>' . LB;
 
-    if ( $mbMenu[$menu_id]['menu_type'] == 2 || $mbMenu[$menu_id]['menu_type'] == 4 ) {
+    if ( $menu->type == 2 || $menu->type == 4 ) {
         $parent_select = '<input type="hidden" name="pid" id="pid" value="0"/>'.$LANG_MB01['top_level'];
     } else {
         $parent_select = '<select id="pid" name="pid">' . LB;
         $parent_select .= '<option value="0">' . $LANG_MB01['top_level'] . '</option>' . LB;
         $result = DB_query("SELECT id,element_label FROM {$_TABLES['menu_elements']} WHERE menu_id='" . $menu_id . "' AND element_type=1");
         while ($row = DB_fetchArray($result)) {
-            $parent_select .= '<option value="' . $row['id'] . '" ' . ($mbMenu[$menu_id]['elements'][$mid]->pid==$row['id'] ? 'selected="selected"' : '') . '>' . $row['element_label'] . '</option>' . LB;
+            $parent_select .= '<option value="' . $row['id'] . '" ' . ($menu->menu_elements[$mid]->pid==$row['id'] ? 'selected="selected"' : '') . '>' . $row['element_label'] . '</option>' . LB;
         }
         $parent_select .= '</select>' . LB;
     }
@@ -783,7 +980,7 @@ function MB_editElement( $menu_id, $mid ) {
 
     for ($i = 0; $i < count($usergroups); $i++) {
         $group_select .= '<option value="' . $usergroups[key($usergroups)] . '"';
-        if ($mbMenu[$menu_id]['elements'][$mid]->group_id==$usergroups[key($usergroups)] ) {
+        if ($menu->menu_elements[$mid]->group_id==$usergroups[key($usergroups)] ) {
             $group_select .= ' selected="selected"';
         }
         $group_select .= '>' . key($usergroups) . '</option>' . LB;
@@ -792,11 +989,11 @@ function MB_editElement( $menu_id, $mid ) {
     $group_select .= '</select>' . LB;
 
     $target_select = '<select id="urltarget" name="urltarget">' . LB;
-    $target_select .= '<option value=""' . ($mbMenu[$menu_id]['elements'][$mid]->target == "" ? ' selected="selected"' : '') . '>' . $LANG_MB01['same_window'] . '</option>' . LB;
-    $target_select .= '<option value="_blank"' . ($mbMenu[$menu_id]['elements'][$mid]->target == "_blank" ? ' selected="selected"' : '') . '>' . $LANG_MB01['new_window'] . '</option>' . LB;
+    $target_select .= '<option value=""' . ($menu->menu_elements[$mid]->target == "" ? ' selected="selected"' : '') . '>' . $LANG_MB01['same_window'] . '</option>' . LB;
+    $target_select .= '<option value="_blank"' . ($menu->menu_elements[$mid]->target == "_blank" ? ' selected="selected"' : '') . '>' . $LANG_MB01['new_window'] . '</option>' . LB;
     $target_select .= '</select>' . LB;
 
-    if ( $mbMenu[$menu_id]['elements'][$mid]->active ) {
+    if ( $menu->menu_elements[$mid]->active ) {
         $active_selected = ' checked="checked"';
     } else {
         $active_selected = '';
@@ -804,31 +1001,29 @@ function MB_editElement( $menu_id, $mid ) {
 
     $order_select = '<select id="menuorder" name="menuorder">' . LB;
     $order_select .= '<option value="0">' . $LANG_MB01['first_position'] . '</option>' . LB;
-    $result = DB_query("SELECT id,element_label,element_order FROM {$_TABLES['menu_elements']} WHERE menu_id='" . $menu_id . "' AND pid=".$mbMenu[$menu_id]['elements'][$mid]->pid." ORDER BY element_order ASC");
+    $result = DB_query("SELECT id,element_label,element_order FROM {$_TABLES['menu_elements']} WHERE menu_id='" . $menu_id . "' AND pid=".(int) $menu->menu_elements[$mid]->pid." ORDER BY element_order ASC");
     $order = 10;
 
     while ($row = DB_fetchArray($result)) {
-        if ( $mbMenu[$menu_id]['elements'][$mid]->order != $order ) {
+        if ( $menu->menu_elements[$mid]->order != $order ) {
             $test_order = $order + 10;
-            $order_select .= '<option value="' . $row['id'] . '"' . ($mbMenu[$menu_id]['elements'][$mid]->order == $test_order ? ' selected="selected"' : '') . '>' . $row['element_label'] . '</option>' . LB;
+            $order_select .= '<option value="' . $row['id'] . '"' . ($menu->menu_elements[$mid]->order == $test_order ? ' selected="selected"' : '') . '>' . $row['element_label'] . '</option>' . LB;
         }
         $order += 10;
     }
     $order_select .= '</select>' . LB;
 
     $T = new Template($_CONF['path_layout'] . 'admin/menu');
-    $T->set_file( array( 'admin' => 'editelement.thtml'));
+    $T->set_file('admin','editelement.thtml');
 
     $T->set_var(array(
-        'site_admin_url'    => $_CONF['site_admin_url'],
-        'site_url'          => $_CONF['site_url'],
         'form_action'       => $_CONF['site_admin_url'] . '/menu.php',
-        'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/menu.php">Menu List</a> :: <a href="'.$_CONF['site_admin_url'].'/menu.php?mode=menu&amp;menu='.$menu_id.'">'.$mbMenu[$menu_id]['menu_name'].'</a> :: Edit Element',
-        'menulabel'         => $mbMenu[$menu_id]['elements'][$mid]->label,
-        'menuorder'         => $mbMenu[$menu_id]['elements'][$mid]->order,
+        'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/menu.php">Menu List</a> :: <a href="'.$_CONF['site_admin_url'].'/menu.php?mode=menu&amp;menu='.$menu_id.'">'.$menu->name.'</a> :: Edit Element',
+        'menulabel'         => $menu->menu_elements[$mid]->label,
+        'menuorder'         => $menu->menu_elements[$mid]->order,
         'order_select'      => $order_select,
-        'menuurl'           => $mbMenu[$menu_id]['elements'][$mid]->url,
-        'phpfunction'       => $mbMenu[$menu_id]['elements'][$mid]->subtype,
+        'menuurl'           => $menu->menu_elements[$mid]->url,
+        'phpfunction'       => $menu->menu_elements[$mid]->subtype,
         'type_select'       => $type_select,
         'gl_select'         => $gl_select,
         'plugin_select'     => $plugin_select,
@@ -854,7 +1049,7 @@ function MB_editElement( $menu_id, $mid ) {
  */
 
 function MB_saveEditMenuElement ( ) {
-    global $_TABLES, $mbMenu;
+    global $_TABLES;
 
     $id            = COM_applyFilter($_POST['id'],true);
     $menu_id       = COM_applyFilter($_POST['menu']);
@@ -862,6 +1057,8 @@ function MB_saveEditMenuElement ( ) {
     $label         = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords($_POST['menulabel']))));
     $type          = COM_applyFilter($_POST['menutype'],true);
     $target        = COM_applyFilter($_POST['urltarget']);
+
+    $menu = menu::getInstance($menu_id);
 
     if ( $type == 0 )
         $type = 1;
@@ -913,7 +1110,7 @@ function MB_saveEditMenuElement ( ) {
 
     DB_query($sql);
     mb_initMenu(true);
-    $mbMenu[$menu_id]['elements'][$pid]->reorderMenu();
+    $menu->menu_elements[$pid]->reorderMenu();
     mb_initMenu(true);
 }
 
@@ -968,12 +1165,13 @@ function MB_changeActiveStatusMenu ($menu_arr)
 }
 
 function MB_deleteMenu($menu_id) {
-    global $mbMenu, $_CONF, $_TABLES, $_USER;
+    global $_CONF, $_TABLES, $_USER;
 
     MB_deleteChildElements(0,$menu_id);
 
     DB_query("DELETE FROM {$_TABLES['menu']} WHERE id=".(int) $menu_id);
     DB_query("DELETE FROM {$_TABLES['menu_config']} WHERE menu_id=".(int) $menu_id);
+    DB_query("DELETE FROM {$_TABLES['menu_elements']} WHERE menu_id=".(int) $menu_id);
 
     CACHE_remove_instance('mbmenu');
     CACHE_remove_instance('css');
@@ -985,7 +1183,7 @@ function MB_deleteMenu($menu_id) {
 *
 */
 function MB_deleteChildElements( $id, $menu_id ){
-    global $mbMenu, $_CONF, $_TABLES, $_USER;
+    global $_CONF, $_TABLES, $_USER;
 
     $sql = "SELECT * FROM {$_TABLES['menu_elements']} WHERE pid=" . (int) $id . " AND menu_id=" . (int) $menu_id;
     $aResult = DB_query( $sql );
@@ -1005,144 +1203,42 @@ function MB_deleteChildElements( $id, $menu_id ){
  */
 
 function MB_menuConfig( $mid ) {
-    global $_CONF, $_TABLES, $mbMenu,$LANG_MB01, $LANG_MB_ADMIN,
+    global $_CONF, $_TABLES, $LANG_MB01, $LANG_MB_ADMIN,
            $LANG_MB_TYPES, $LANG_MB_GLTYPES,$LANG_MB_GLFUNCTION,
            $LANG_MB_MENU_TYPES,$LANG_VC,$LANG_HS,$LANG_HC,$LANG_VS;
 
     /* define the active attributes for each menu type */
 
-    $menuAttributes = array( 'main_menu_bg_color'       => 'none',
-                             'main_menu_hover_bg_color' => 'none',
-                             'main_menu_text_color'     => 'none',
-                             'main_menu_hover_text_color' => 'none',
-                             'submenu_text_color'       => 'none',
-                             'submenu_hover_text_color' => 'none',
-                             'submenu_background_color' => 'none',
-                             'submenu_hover_bg_color'   => 'none',
-                             'submenu_highlight_color'  => 'none',
-                             'submenu_shadow_color'     => 'none',
-                             'menu_bg_filename'         => 'none',
-                             'menu_hover_filename'      => 'none',
-                             'menu_parent_filename'     => 'none',
-                             'menu_alignment'           => 'none',
-                             'use_images'               => 'none',
-                        );
-
-    $HCattributes = array(   'main_menu_bg_color',
-                             'main_menu_hover_bg_color',
-                             'main_menu_text_color',
-                             'main_menu_hover_text_color',
-                             'submenu_hover_text_color',
-                             'submenu_background_color',
-                             'submenu_highlight_color',
-                             'submenu_shadow_color',
-                             'menu_bg_filename',
-                             'menu_hover_filename',
-                             'menu_parent_filename',
-                             'menu_alignment',
-                             'use_images',
-                        );
-    $HSattributes = array(   'main_menu_text_color',
-                             'main_menu_hover_text_color',
-                             'submenu_highlight_color',
-                        );
-
-    $VCattributes = array(   'main_menu_bg_color',
-                             'main_menu_hover_bg_color',
-                             'main_menu_text_color',
-                             'main_menu_hover_text_color',
-                             'submenu_text_color',
-                             'submenu_hover_text_color',
-                             'submenu_highlight_color',
-                             'menu_parent_filename',
-                             'menu_alignment',
-                        );
-
-    $VSattributes = array(   'main_menu_text_color',
-                             'main_menu_hover_text_color',
-                             'menu_alignment',
-                        );
-
     $retval = '';
     $menu_id = $mid;
+
+    $menu = menu::getInstance($mid);
+
     $menu_arr = array(
             array('url'  => $_CONF['site_admin_url'] .'/menu.php',
                   'text' => $LANG_MB01['menu_list']),
     );
-    $retval  .= COM_startBlock($LANG_MB01['menu_builder'].' :: '.$LANG_MB01['menu_colors'] .' for ' . $mbMenu[$menu_id]['menu_name'],'', COM_getBlockTemplate('_admin_block', 'header'));
+    $retval  .= COM_startBlock($LANG_MB01['menu_builder'].' :: '.$LANG_MB01['menu_colors'] .' for ' . $menu->name,'', COM_getBlockTemplate('_admin_block', 'header'));
     $retval  .= ADMIN_createMenu($menu_arr, $LANG_MB_ADMIN[6],
                                 $_CONF['layout_url'] . '/images/icons/menubuilder.png');
 
-
-
-    foreach ($menuAttributes AS $name => $display ) {
-        $menuConfig[$name] = '#000000';
-    }
-
-    if ( is_array($mbMenu[$mid]['config']) ) {
-        foreach ($mbMenu[$mid]['config'] AS $name => $value ) {
-            $menuConfig[$name] = $value;
-        }
-    } else {
-        foreach ($menuAttributes AS $name => $display ) {
-            $menuConfig[$name] = '#000000';
+    foreach($menu->access_control AS $name => $use ) {
+        if ( $use[$menu->type] == true ) {
+            $menuConfig[$name] = $menu->{$name};
         }
     }
 
-    $main_menu_bg_colorRGB         = '[' . MB_hexrgb($menuConfig['main_menu_bg_color'],'r') .
-                                      ',' . MB_hexrgb($menuConfig['main_menu_bg_color'],'g') .
-                                      ',' . MB_hexrgb($menuConfig['main_menu_bg_color'],'b') . ']';
-
-    $main_menu_hover_bg_colorRGB   = '[' . MB_hexrgb($menuConfig['main_menu_hover_bg_color'],'r')  .
-                                      ',' . MB_hexrgb($menuConfig['main_menu_hover_bg_color'],'g')  .
-                                      ',' . MB_hexrgb($menuConfig['main_menu_hover_bg_color'],'b')  . ']';
-
-    $main_menu_text_colorRGB       = '[' . MB_hexrgb($menuConfig['main_menu_text_color'],'r')  .
-                                      ',' . MB_hexrgb($menuConfig['main_menu_text_color'],'g')  .
-                                      ',' . MB_hexrgb($menuConfig['main_menu_text_color'],'b')  . ']';
-
-    $main_menu_hover_text_colorRGB = '[' . MB_hexrgb($menuConfig['main_menu_hover_text_color'],'r') .
-                                      ',' . MB_hexrgb($menuConfig['main_menu_hover_text_color'],'g') .
-                                      ',' . MB_hexrgb($menuConfig['main_menu_hover_text_color'],'b') . ']';
-
-    $submenu_text_colorRGB         = '[' .  MB_hexrgb($menuConfig['submenu_text_color'],'r')  .
-                                      ',' . MB_hexrgb($menuConfig['submenu_text_color'],'g')  .
-                                      ',' . MB_hexrgb($menuConfig['submenu_text_color'],'b')  . ']';
-
-    $submenu_hover_text_colorRGB   = '[' . MB_hexrgb($menuConfig['submenu_hover_text_color'],'r') .
-                                      ',' . MB_hexrgb($menuConfig['submenu_hover_text_color'],'g') .
-                                      ',' . MB_hexrgb($menuConfig['submenu_hover_text_color'],'b') . ']';
-
-    $submenu_hover_bg_colorRGB     = '[' . MB_hexrgb($menuConfig['submenu_hover_bg_color'],'r') .
-                                      ',' . MB_hexrgb($menuConfig['submenu_hover_bg_color'],'g') .
-                                      ',' . MB_hexrgb($menuConfig['submenu_hover_bg_color'],'b') . ']';
-
-    $submenu_background_colorRGB   = '[' . MB_hexrgb($menuConfig['submenu_background_color'],'r') .
-                                      ',' . MB_hexrgb($menuConfig['submenu_background_color'],'g') .
-                                      ',' . MB_hexrgb($menuConfig['submenu_background_color'],'b') . ']';
-
-    $submenu_highlight_colorRGB    = '[' . MB_hexrgb($menuConfig['submenu_highlight_color'],'r')  .
-                                      ',' . MB_hexrgb($menuConfig['submenu_highlight_color'],'g')  .
-                                      ',' . MB_hexrgb($menuConfig['submenu_highlight_color'],'b')  . ']';
-
-    $submenu_shadow_colorRGB       = '[' . MB_hexrgb($menuConfig['submenu_shadow_color'],'r')  .
-                                      ',' . MB_hexrgb($menuConfig['submenu_shadow_color'],'g')  .
-                                      ',' . MB_hexrgb($menuConfig['submenu_shadow_color'],'b')  . ']';
-
-    $menu_active_check = ($mbMenu[$mid]['active'] == 1  ? ' checked="checked"' : '');
+    $menu_active_check = ($menu->active == 1  ? ' checked="checked"' : '');
 
     $menu_align_left_checked  = ($menuConfig['menu_alignment'] == 1 ? 'checked="checked"' : '');
     $menu_align_right_checked = ($menuConfig['menu_alignment'] == 0 ? 'checked="checked"' : '');
-
-    $use_images_checked = ($menuConfig['use_images'] == 1 ? ' checked="checked"' : '');
-    $use_colors_checked = ($menuConfig['use_images'] == 0 ? ' checked="checked"' : '');
 
     // build menu type select
 
     $menuTypeSelect = '<select id="menutype" name="menutype">' . LB;
     while ( $types = current($LANG_MB_MENU_TYPES) ) {
         $menuTypeSelect .= '<option value="' . key($LANG_MB_MENU_TYPES) . '"';
-        if (key($LANG_MB_MENU_TYPES) == $mbMenu[$menu_id]['menu_type']) {
+        if (key($LANG_MB_MENU_TYPES) == $menu->type) {
             $menuTypeSelect .= ' selected="selected"';
         }
         $menuTypeSelect .= '>' . $types . '</option>' . LB;
@@ -1159,7 +1255,7 @@ function MB_menuConfig( $mid ) {
     $group_select = '<select id="group" name="group">' . LB;
     for ($i = 0; $i < count($usergroups); $i++) {
         $group_select .= '<option value="' . $usergroups[key($usergroups)] . '"';
-        if ( $usergroups[key($usergroups)] == $mbMenu[$menu_id]['group_id']) {
+        if ( $usergroups[key($usergroups)] == $menu->group_id) {
             $group_select .= ' selected="selected"';
         }
         $group_select .= '>' . key($usergroups) . '</option>' . LB;
@@ -1167,95 +1263,88 @@ function MB_menuConfig( $mid ) {
     }
     $group_select .= '</select>' . LB;
 
-    $T = new Template($_CONF['path_layout'] . 'admin/menu');
-    $T->set_file( array( 'admin' => 'menuconfig.thtml'));
 
+
+    $T = new Template($_CONF['path_layout'] . 'admin/menu');
+    $T->set_file( 'admin','menuconfig.thtml');
+
+    $T->set_block('admin', 'top_level_row', 'tlr');
+
+    foreach ($menu->access_control AS $name => $use ) {
+        if ( $use[0] === true && $use[$menu->type] === true ) {
+            $T->set_var(array(
+                'item_name'     => $name,
+                'value'         => $menuConfig[$name],
+                'prompt'        => isset($LANG_MB01[$name]) ? $LANG_MB01[$name] : $name
+            ));
+            if ( $use[5] == true ) {
+                $T->set_var(array(
+                    '_sample'     => $menuConfig[$name],
+                    '_sb'         => true
+                ));
+            } else {
+                $T->set_var(array(
+                    '_sample'     => '',
+                    '_sb'         => ''
+                ));
+            }
+            $T->parse('tlr','top_level_row',true);
+        }
+    }
+
+    $T->set_block('admin', 'child_menu_row', 'cmr');
+
+    foreach ($menu->access_control AS $name => $use ) {
+        if ( !$use[0] && $use[0] != -1 && $use[$menu->type] == true ) {
+            $T->set_var(array(
+                'item_name'     => $name,
+                'value'         => $menuConfig[$name],
+                'prompt'        => isset($LANG_MB01[$name]) ? $LANG_MB01[$name] : $name
+            ));
+            if ( $use[5] == true ) {
+                $T->set_var(array(
+                    '_sample'     => $menuConfig[$name],
+                    '_sb'         => true
+                ));
+            } else {
+                $T->set_var(array(
+                    '_sample'     => '',
+                    '_sb'         => ''
+                ));
+            }
+            $T->parse('cmr','child_menu_row',true);
+        }
+    }
+/*
+    foreach ($menu->image_control AS $name => $use ) {
+        if ( $use[$menu->type] == true ) {
+            $T->set_var($name,isset($menuConfig[$name]) ? $menuConfig[$name] : '');
+            $T->set_var('prompt',isset($LANG_MB01[$name]) ? $LANG_MB01[$name] : $name);
+        }
+    }
+*/
+//@TODO fix to use image_control
     $T->set_var(array(
+        'javascript'    => $menu->buildEditStyle(),
         'group_select'      => $group_select,
-        'menutype'          => $mbMenu[$menu_id]['menu_type'],
+        'menutype'          => $menu->type,
         'menutype_select'   => $menuTypeSelect,
-        'menuactive'        => $mbMenu[$menu_id]['active'] == 1 ? ' checked="checked"' : ' ',
-        'site_admin_url'    => $_CONF['site_admin_url'],
-        'site_url'          => $_CONF['site_url'],
+        'menuactive'        => $menu->active == 1 ? ' checked="checked"' : ' ',
         'form_action'       => $_CONF['site_admin_url'] . '/menu.php',
-        'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/menu.php">Menu List</a> :: '.$mbMenu[$mid]['menu_name'].' :: Configuration',
+        'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/menu.php">'.$LANG_MB01['menu_list'].'</a> :: '.$menu->name.' :: '.$LANG_MB01['configuration'],
         'menu_id'           => $mid,
-        'menu_name'         => $mbMenu[$mid]['menu_name'],
-        'tmbgcolor'         => $menuConfig['main_menu_bg_color'],
-        'tmbgcolorrgb'      => $main_menu_bg_colorRGB,
-        'tmhcolor'          => $menuConfig['main_menu_hover_bg_color'],
-        'tmhcolorrgb'       => $main_menu_hover_bg_colorRGB,
-        'tmtcolor'          => $menuConfig['main_menu_text_color'],
-        'tmtcolorrgb'       => $main_menu_text_colorRGB,
-        'tmthcolor'         => $menuConfig['main_menu_hover_text_color'],
-        'tmthcolorrgb'      => $main_menu_hover_text_colorRGB,
-        'smtcolor'          => $menuConfig['submenu_text_color'],
-        'smtcolorrgb'       => $submenu_text_colorRGB,
-        'smthcolor'         => $menuConfig['submenu_hover_text_color'],
-        'smthcolorrgb'      => $submenu_hover_text_colorRGB,
-        'smbgcolor'         => $menuConfig['submenu_background_color'],
-        'smbgcolorrgb'      => $submenu_background_colorRGB,
-        'smhbgcolor'         => $menuConfig['submenu_hover_bg_color'],
-        'smhbgcolorrgb'      => $submenu_hover_bg_colorRGB,
-        'smhcolor'          => $menuConfig['submenu_highlight_color'],
-        'smhcolorrgb'       => $submenu_highlight_colorRGB,
-        'smscolor'          => $menuConfig['submenu_shadow_color'],
-        'smscolorrgb'       => $submenu_shadow_colorRGB,
-        'enabled'           => $menu_active_check,
-        'graphics_selected' => $use_images_checked,
-        'colors_selected'   => $use_colors_checked,
-        'menu_bg_filename'          => $menuConfig['menu_bg_filename'],
-        'menu_hover_filename'       => $menuConfig['menu_hover_filename'],
-        'menu_parent_filename'      => $menuConfig['menu_parent_filename'],
+        'menu_name'         => $menu->name,
         'alignment_left_checked'    => $menu_align_left_checked,
         'alignment_right_checked'   => $menu_align_right_checked,
+        'tl_menu_background_image'  => $menu->tl_menu_background_image,
+        'tl_menu_text_hover_image'  => $menu->tl_menu_text_hover_image,
+        'ch_menu_background_image'  => $menu->ch_menu_background_image,
+        'ch_menu_text_hover_image'  => $menu->ch_menu_text_hover_image,
+        'ch_menu_parent_image'      => $menu->ch_menu_parent_image,
     ));
 
-    if ( $mbMenu[$menu_id]['menu_type'] == 1 ) {
+    if ( $menu->type == 1 ) {
         $T->set_var('show_warning','1');
-    }
-
-    /* check menu type and call the proper foreach call to
-       set the display for the items.
-    */
-
-    switch ($mbMenu[$mid]['menu_type']) {
-        case 1: // horizontal cascading...
-            foreach ($HCattributes AS $name) {
-                $menuAttributes[$name] = 'show';
-                if ( isset($LANG_HC[$name]) ) {
-                    $T->set_var('lang_'.$name,$LANG_HC[$name]);
-                }
-            }
-            break;
-        case 2: // horizontal simple
-            foreach ($HSattributes AS $name) {
-                $menuAttributes[$name] = 'show';
-                if ( isset($LANG_HS[$name]) ) {
-                    $T->set_var('lang_'.$name,$LANG_HS[$name]);
-                }
-            }
-            break;
-        case 3: // vertical cascading
-            foreach ($VCattributes AS $name) {
-                $menuAttributes[$name] = 'show';
-                if ( isset($LANG_VC[$name]) ) {
-                    $T->set_var('lang_'.$name,$LANG_VC[$name]);
-                }
-            }
-            break;
-        case 4: // vertical simple
-            foreach ($VSattributes AS $name) {
-                $menuAttributes[$name] = 'show';
-                if ( isset($LANG_VS[$name]) ) {
-                    $T->set_var('lang_'.$name,$LANG_VS[$name]);
-                }
-            }
-            break;
-    }
-
-    foreach ($menuAttributes AS $name => $display ) {
-        $T->set_var($name.'_show', $display);
     }
 
     $T->parse('output', 'admin');
@@ -1272,70 +1361,176 @@ function MB_menuConfig( $mid ) {
 function MB_saveMenuConfig($menu_id=0) {
     global $_CONF, $_TABLES, $mbMenu;
 
-    $menu_id                          = COM_applyFilter($_POST['menu_id'],true);
-    $mc['main_menu_bg_color']         = COM_applyFilter($_POST['tmbg_sample']);
-    $mc['main_menu_hover_bg_color']   = COM_applyFilter($_POST['tmh_sample']);
-    $mc['main_menu_text_color']       = COM_applyFilter($_POST['tmt_sample']);
-    $mc['main_menu_hover_text_color'] = COM_applyFilter($_POST['tmth_sample']);
-    $mc['submenu_text_color']         = COM_applyFilter($_POST['smt_sample']);
-    $mc['submenu_hover_text_color']   = COM_applyFilter($_POST['smth_sample']);
-    $mc['submenu_background_color']   = COM_applyFilter($_POST['smbg_sample']);
-    $mc['submenu_hover_bg_color']     = COM_applyFilter($_POST['smhbg_sample']);
-    $mc['submenu_highlight_color']    = COM_applyFilter($_POST['smh_sample']);
-    $mc['submenu_shadow_color']       = COM_applyFilter($_POST['sms_sample']);
-    $mc['menu_alignment']             = isset($_POST['malign']) ? COM_applyFilter($_POST['malign'],true) : 0;
-    $mc['use_images']                 = isset($_POST['gorc']) ? COM_applyFilter($_POST['gorc'],true) : 0;
+    $menu_id = COM_applyFilter($_POST['menu_id'],true);
 
-    $menutype   = COM_applyFilter($_POST['menutype'],true);
-    $menuactive = COM_applyFilter($_POST['menuactive'],true);
-    $menugroup  = COM_applyFilter($_POST['group'],true);
+    $menu = menu::getInstance($menu_id);
 
-    $menuname   = DB_escapeString($mbMenu[$menu_id]['menu_name']);
+    foreach ( $menu->access_control AS $name => $use ) {
+        if ( $use[$menu->type] == true ) {
+            $postname = $name;
+            if ( isset($_POST[$postname]) ) {
+                $menu->$name = COM_applyFilter($_POST[$postname]);
+            }
+        }
+    }
+    foreach ( $menu->access_control AS $name => $use ) {
+        if ( $use[$menu->type] == true && $use[5] == true ) {
+            $postname = $name.'_sample';
+            if ( isset($_POST[$postname]) ) {
+                $menu->$name = COM_applyFilter($_POST[$postname]);
+            }
+        }
+    }
+
+    // special handling rules
+    if ( isset($_POST['tl_menu_font_family']) ) {
+        $menu->tl_menu_font_family = strip_tags($_POST['tl_menu_font_family']);
+    }
+    if ( isset($_POST['ch_menu_font_family']) ) {
+        $menu->ch_menu_font_family = strip_tags($_POST['ch_menu_font_family']);
+    }
+
+    $menu->menu_alignment = isset($_POST['malign']) ? COM_applyFilter($_POST['malign'],true) : 0;
+
+    $menu->type      = COM_applyFilter($_POST['menutype'],true);
+    $menu->active    = COM_applyFilter($_POST['menuactive'],true);
+    $menu->group_id  = COM_applyFilter($_POST['group'],true);
+
+    $menuname   = DB_escapeString($menu->name);
+    $menu_id    = (int) $menu->id;
+    $menutype   = (int) $menu->type;
+    $menuactive = (int) $menu->active;
+    $menugroup  = (int) $menu->group_id;
 
     $sqlFieldList  = 'id,menu_name,menu_type,menu_active,group_id';
     $sqlDataValues = "$menu_id,'$menuname',$menutype,$menuactive,$menugroup";
     DB_save($_TABLES['menu'], $sqlFieldList, $sqlDataValues);
 
-    foreach ($mc AS $name => $value) {
-        DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'$name','$value'");
+    $menu->save();
+
+    $file = array();
+    $file = $_FILES['tl_menu_background_image'];
+    if ( isset($file['tmp_name']) && $file['tmp_name'] != '' ) {
+        switch ( $file['type'] ) {
+            case 'image/png' :
+            case 'image/x-png' :
+                $ext = '.png';
+                break;
+            case 'image/gif' :
+                $ext = '.gif';
+                break;
+            case 'image/jpg' :
+            case 'image/jpeg' :
+            case 'image/pjpeg' :
+                $ext = '.jpg';
+                break;
+            default :
+                $ext = 'unknown';
+                $retval = 2;
+                break;
+        }
+        if ( $ext != 'unknown' ) {
+            $imgInfo = @getimagesize($file['tmp_name']);
+            if ( $imgInfo != false ) {
+                $newFilename = 'tl_menu_background_image' . substr(md5(uniqid(rand())),0,8) . $ext;
+                $rc = move_uploaded_file($file['tmp_name'],$_CONF['path_html'] . 'images/menu/' . $newFilename);
+                if ( $rc ) {
+                    @unlink($_CONF['path_html'] . 'images/menu/' . $mbMenu[$menu_id]['config']['bgimage']);
+                    DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'tl_menu_background_image','$newFilename'");
+                }
+            }
+        }
+    } else {
+        $deleteoldbgimg = isset($_POST['tl_menu_background_image_delete']) ? COM_applyFilter($_POST['tl_menu_background_image_delete'],true) : 0;
+        if ( $deleteoldbgimg == 1 ) {
+            @unlink($_CONF['path_html'] . 'images/menu/' . $mbMenu[$menu_id]['config']['tl_menu_background_image']);
+            DB_query("DELETE FROM {$_TABLES['menu_config']} WHERE menu_id=".$menu_id." AND conf_name='tl_menu_background_image'");
+        }
+    }
+
+
+    $file = array();
+    $file = $_FILES['tl_menu_text_hover_image'];
+    if ( isset($file['tmp_name']) && $file['tmp_name'] != '' ) {
+        switch ( $file['type'] ) {
+            case 'image/png' :
+            case 'image/x-png' :
+                $ext = '.png';
+                break;
+            case 'image/gif' :
+                $ext = '.gif';
+                break;
+            case 'image/jpg' :
+            case 'image/jpeg' :
+            case 'image/pjpeg' :
+                $ext = '.jpg';
+                break;
+            default :
+                $ext = 'unknown';
+                $retval = 2;
+                break;
+        }
+        if ( $ext != 'unknown' ) {
+            $imgInfo = @getimagesize($file['tmp_name']);
+            if ( $imgInfo != false ) {
+                $newFilename = 'tl_menu_text_hover_image' . substr(md5(uniqid(rand())),0,8) . $ext;
+                $rc = move_uploaded_file($file['tmp_name'],$_CONF['path_html'] . 'images/menu/' . $newFilename);
+                if ( $rc ) {
+                    @unlink($_CONF['path_html'] . 'images/menu/' . $mbMenu[$menu_id]['config']['tl_menu_text_hover_image']);
+                    DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'tl_menu_text_hover_image','$newFilename'");
+                }
+            }
+        }
+    } else {
+        $deleteoldhoverimg = isset($_POST['tl_menu_text_hover_image_delete']) ? COM_applyFilter($_POST['tl_menu_text_hover_image_delete'],true) : 0;
+        if ( $deleteoldhoverimg == 1 ) {
+            @unlink($_CONF['path_html'] . 'images/menu/' . $mbMenu[$menu_id]['config']['tl_menu_text_hover_image']);
+            DB_query("DELETE FROM {$_TABLES['menu_config']} WHERE menu_id=".$menu_id." AND conf_name='tl_menu_text_hover_image'");
+        }
     }
 
     $file = array();
-    $file = $_FILES['bgimg'];
+    $file = $_FILES['ch_menu_background_image'];
     if ( isset($file['tmp_name']) && $file['tmp_name'] != '' ) {
+        switch ( $file['type'] ) {
+            case 'image/png' :
+            case 'image/x-png' :
+                $ext = '.png';
+                break;
+            case 'image/gif' :
+                $ext = '.gif';
+                break;
+            case 'image/jpg' :
+            case 'image/jpeg' :
+            case 'image/pjpeg' :
+                $ext = '.jpg';
+                break;
+            default :
+                $ext = 'unknown';
+                $retval = 2;
+                break;
+        }
+        if ( $ext != 'unknown' ) {
+            $imgInfo = @getimagesize($file['tmp_name']);
+            if ( $imgInfo != false ) {
+                $newFilename = 'ch_menu_background_image' . substr(md5(uniqid(rand())),0,8) . $ext;
+                $rc = move_uploaded_file($file['tmp_name'],$_CONF['path_html'] . 'images/menu/' . $newFilename);
+                if ( $rc ) {
+                    @unlink($_CONF['path_html'] . 'images/menu/' . $mbMenu[$menu_id]['config']['bgimage']);
+                    DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'ch_menu_background_image','$newFilename'");
+                }
+            }
+        }
+    } else {
+        $deleteoldbgimg = isset($_POST['ch_menu_background_image_delete']) ? COM_applyFilter($_POST['ch_menu_background_image_delete'],true) : 0;
+        if ( $deleteoldbgimg == 1 ) {
+            @unlink($_CONF['path_html'] . 'images/menu/' . $mbMenu[$menu_id]['config']['ch_menu_background_image']);
+            DB_query("DELETE FROM {$_TABLES['menu_config']} WHERE menu_id=".$menu_id." AND conf_name='ch_menu_background_image'");
+        }
+    }
 
-        switch ( $file['type'] ) {
-            case 'image/png' :
-            case 'image/x-png' :
-                $ext = '.png';
-                break;
-            case 'image/gif' :
-                $ext = '.gif';
-                break;
-            case 'image/jpg' :
-            case 'image/jpeg' :
-            case 'image/pjpeg' :
-                $ext = '.jpg';
-                break;
-            default :
-                $ext = 'unknown';
-                $retval = 2;
-                break;
-        }
-        if ( $ext != 'unknown' ) {
-            $imgInfo = @getimagesize($file['tmp_name']);
-            if ( $imgInfo != false ) {
-                $newFilename = 'menu_bg' . substr(md5(uniqid(rand())),0,8) . $ext;
-                $rc = move_uploaded_file($file['tmp_name'],$_CONF['path_html'] . 'images/menu/' . $newFilename);
-                if ( $rc ) {
-                    @unlink($_CONF['path_html'] . '/menu/images/' . $mbMenu[$menu_id]['config']['bgimage']);
-                    DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_bg_filename','$newFilename'");
-                }
-            }
-        }
-    }
     $file = array();
-    $file = $_FILES['hvimg'];
+    $file = $_FILES['ch_menu_text_hover_image'];
     if ( isset($file['tmp_name']) && $file['tmp_name'] != '' ) {
         switch ( $file['type'] ) {
             case 'image/png' :
@@ -1358,17 +1553,24 @@ function MB_saveMenuConfig($menu_id=0) {
         if ( $ext != 'unknown' ) {
             $imgInfo = @getimagesize($file['tmp_name']);
             if ( $imgInfo != false ) {
-                $newFilename = 'menu_hover_bg' . substr(md5(uniqid(rand())),0,8) . $ext;
+                $newFilename = 'ch_menu_text_hover_image' . substr(md5(uniqid(rand())),0,8) . $ext;
                 $rc = move_uploaded_file($file['tmp_name'],$_CONF['path_html'] . 'images/menu/' . $newFilename);
                 if ( $rc ) {
-                    @unlink($_CONF['path_html'] . '/menu/images/' . $mbMenu[$menu_id]['config']['hoverimage']);
-                    DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_hover_filename','$newFilename'");
+                    @unlink($_CONF['path_html'] . 'images/menu/' . $mbMenu[$menu_id]['config']['tl_menu_text_hover_image']);
+                    DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'ch_menu_text_hover_image','$newFilename'");
                 }
             }
         }
+    } else {
+        $deleteoldhoverimg = isset($_POST['ch_menu_text_hover_image_delete']) ? COM_applyFilter($_POST['ch_menu_text_hover_image_delete'],true) : 0;
+        if ( $deleteoldhoverimg == 1 ) {
+            @unlink($_CONF['path_html'] . 'images/menu/' . $mbMenu[$menu_id]['config']['ch_menu_text_hover_image']);
+            DB_query("DELETE FROM {$_TABLES['menu_config']} WHERE menu_id=".$menu_id." AND conf_name='ch_menu_text_hover_image'");
+        }
     }
+
     $file = array();
-    $file = $_FILES['piimg'];
+    $file = $_FILES['ch_menu_parent_image'];
     if ( isset($file['tmp_name']) && $file['tmp_name'] != '' ) {
         switch ( $file['type'] ) {
             case 'image/png' :
@@ -1391,19 +1593,27 @@ function MB_saveMenuConfig($menu_id=0) {
         if ( $ext != 'unknown' ) {
             $imgInfo = @getimagesize($file['tmp_name']);
             if ( $imgInfo != false ) {
-                $newFilename = 'menu_parent' . substr(md5(uniqid(rand())),0,8) . $ext;
+                $newFilename = 'ch_menu_parent_image' . substr(md5(uniqid(rand())),0,8) . $ext;
                 $rc = move_uploaded_file($file['tmp_name'],$_CONF['path_html'] . 'images/menu/' . $newFilename);
                 if ( $rc ) {
-                    @unlink($_CONF['path_html'] . '/menu/images/' . $mbMenu[$menu_id]['config']['parentimage']);
-                    DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_parent_filename','$newFilename'");
+                    @unlink($_CONF['path_html'] . 'images/menu/' . $mbMenu[$menu_id]['config']['ch_menu_parent_image']);
+                    DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'ch_menu_parent_image','$newFilename'");
                 }
             }
         }
+    } else {
+        $deleteoldhoverimg = isset($_POST['ch_menu_parent_image']) ? COM_applyFilter($_POST['ch_menu_parent_image'],true) : 0;
+        if ( $deleteoldhoverimg == 1 ) {
+            @unlink($_CONF['path_html'] . 'images/menu/' . $mbMenu[$menu_id]['config']['ch_menu_parent_image']);
+            DB_query("DELETE FROM {$_TABLES['menu_config']} WHERE menu_id=".$menu_id." AND conf_name='ch_menu_parent_image'");
+        }
     }
+
     CACHE_remove_instance('mbmenu');
     CACHE_remove_instance('css');
     $randID = rand();
     DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
+    echo COM_refresh($_CONF['site_admin_url'].'/menu.php');
     return;
 }
 
@@ -1428,6 +1638,41 @@ function MB_hexrgb($hexstr, $rgb) {
             break;
     }
 }
+
+function _mb_getListField_menu($fieldname, $fieldvalue, $A, $icon_arr)
+{
+    global $_CONF, $_USER, $_TABLES, $LANG_ADMIN,$LANG_MB01;
+
+    switch ($fieldname) {
+        case 'label':
+            $retval = "<span style=\"padding:0 5px;margin-left:" .$A['indent'] . "px;\">" . ($A['type'] == 1 ? '<b>' : '') . strip_tags($fieldvalue) . ($A['type'] == 1 ? '</b>' : '').'</span>';
+            break;
+        case 'enabled' :
+            $retval =  '<input type="checkbox" name="enableditem[' . $A['id'] . ']" onclick="submit()" value="1"' . ($fieldvalue == 1 ? ' checked="checked"' : '') . '/>';
+            break;
+        case 'edit' :
+            $retval = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=edit&amp;mid=' . $A['id'] . '&amp;menu=' . $A['menu_id']. '">';
+            $retval .= '<img src="' . $_CONF['layout_url'] . '/images/edit.png" alt="' . $LANG_MB01['edit'] . '"/></a>';
+            break;
+        case 'delete' :
+            $retval = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=delete&amp;mid=' . $fieldvalue . '&amp;menuid='.$A['menu_id'].'" onclick="return confirm(\'' . $LANG_MB01['confirm_delete'] . '\');">';
+            $retval .= '<img src="' . $_CONF['layout_url'] . '/images/delete.png" alt="' . $LANG_MB01['delete'] . '"/></a>';
+            break;
+        case 'order' :
+            $moveup = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=move&amp;where=up&amp;mid=' . $A['id'] . '&amp;menu=' . $A['menu_id'] . '">';
+            $movedown = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=move&amp;where=down&amp;mid=' . $A['id'] . '&amp;menu=' . $A['menu_id'] . '">';
+            $retval = $moveup . '<img src="' . $_CONF['layout_url'] . '/images/up.png" alt="' . $LANG_MB01['move_up'] . '"/></a>&nbsp;' . $movedown . '<img src="' . $_CONF['layout_url'] . '/images/down.png" alt="' . $LANG_MB01['move_down'] . '"/></a>';
+            break;
+        case 'info' :
+            $retval = '<a class="'.COM_getToolTipStyle().'" title="' . $fieldvalue . '" href="#"><img src="' . $_CONF['layout_url'] . '/images/info.png" alt=""/></a>';
+            break;
+        default :
+            $retval = $fieldvalue;
+            break;
+    }
+    return $retval;
+}
+
 
 /*
  * Main processing loop
@@ -1498,8 +1743,13 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             exit;
             break;
         case 'savenewmenu' :
-            MB_saveNewMenu();
-            $content = MB_displayMenuList( );
+            $rc = MB_saveNewMenu();
+            if ( $rc != '' ) {
+                $content = COM_showMessageText($rc, '', true);
+                $content .= MB_createMenu();
+            } else {
+                $content = MB_displayMenuList( );
+            }
             break;
         case 'saveclonemenu' :
             MB_saveCloneMenu();
@@ -1573,44 +1823,38 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
 } else if ( isset($_POST['defaults']) ) {
     $menu_id = COM_applyFilter($_POST['menu_id'],true);
     switch ( $mbMenu[$menu_id]['menu_type']) {
-        case 1: // horizontal cascading (navigation menu)
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_bg_color','#151515'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_bg_color','#3667c0'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_text_color','#CCCCCC'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_text_color','#FFFFFF'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_text_color','#FFFFFF'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_text_color','#679EF1'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_background_color','#151515'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_bg_color','#333333'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_highlight_color','#333333'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_shadow_color','#000000'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'use_images','1'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_bg_filename','menu_bg.gif'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_hover_filename','menu_hover_bg.gif'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_parent_filename','menu_parent.png'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_alignment','1'");
+        case 1:
+            foreach ( $hc_menu_defaults AS $name => $value ) {
+                if ( $value != '' ) {
+                    DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'$name','$value'");
+                }
+            }
             break;
-        case 2: // horizontal simple (footer menu)
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_text_color','#3677C0'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_text_color','#679EF1'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_highlight_color','#999999'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_alignment','1'");
+        case 2:
+            foreach ( $hs_menu_defaults AS $name => $value ) {
+                if ( $value != '' ) {
+                    DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'$name','$value'");
+                }
+            }
             break;
-        case 3: //vertical simple
-        case 4: // vertical cascading (block)
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_bg_color','#DDDDDD'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_bg_color','#BBBBBB'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_text_color','#0000FF'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_text_color','#FFFFFF'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_text_color','#0000FF'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_text_color','#FFFFFF'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_highlight_color','#999999'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_parent_filename','vmenu_parent.gif'");
-            DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_alignment','1'");
+        case 3:
+            foreach ( $vc_menu_defaults AS $name => $value ) {
+                if ( $value != '' ) {
+                    DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'$name','$value'");
+                }
+            }
+            break;
+        case 4:
+            foreach ( $vs_menu_defaults AS $name => $value ) {
+                if ( $value != '' ) {
+                    DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value","$menu_id,'$name','$value'");
+                }
+            }
             break;
     }
     CACHE_remove_instance('mbmenu');
     CACHE_remove_instance('css');
+    $content = MB_displayMenuList( );
 } else if ( isset($_POST['cancel']) && isset($_POST['menu']) ) {
     $menu_id = COM_applyFilter($_POST['menu'],true);
     $content = MB_displayTree( $menu_id );

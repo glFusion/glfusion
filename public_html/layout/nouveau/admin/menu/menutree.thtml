@@ -10,7 +10,7 @@
 
 <form method="post" id="menusel" action="{site_admin_url}/menu.php">
 <div>
-  <table style="width:100%;">
+  <table class="admin-list" style="width:100%;">
     <tr>
       <th>{$LANG_MB01[menu_element]}</th>
       <th class="aligncenter" style="text-align:center;">{$LANG_MB01[enabled]}</th>

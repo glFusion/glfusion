@@ -2132,6 +2132,8 @@ $LANG_MB01 = array (
     'clone'                 => 'Copy',
     'clone_menu_label'      => 'Name for Cloned Menu',
     'topic'                 => 'Topics',
+    'no_elements'           => 'No menu elements defined',
+    'return_to'             => 'Return to ',
 );
 
 $LANG_HC = array (

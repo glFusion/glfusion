@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.3.0
 ------
+- Forum Plugin: When user account is renamed - update topic records (Mark)
+- Integrated Smiley plugin support for comments (Mark)
+- Menu Builder enhancements - better CSS and control via online editor (Mark)
 - Added 'author' attribute to plugin_getiteminfo_...() (Mark)
 - Fixed issue where comment styles were not properly set during preview (Mark)
 - Replaced {xhtml} tags with " /" as HTML5 validates by ignoring auto-closing

@@ -661,7 +661,6 @@ function glfusion_130()
     $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='d/m/y H:i' WHERE dfid=17";
     $_SQL[] = "UPDATE {$_TABLES['dateformats']} SET format='D d M h:iA' WHERE dfid=18";
 
-
     foreach ($_SQL as $sql) {
         DB_query($sql,1);
     }
@@ -674,17 +673,37 @@ function glfusion_130()
             $_TABLES['st_menus_config'] = $_DB_table_prefix . 'st_menus_config';
             $_TABLES['st_menu_elements']= $_DB_table_prefix . 'st_menu_elements';
         }
-
+        $_SQL = array();
         $_SQL[] = "INSERT INTO {$_TABLES['logo']} SELECT * FROM {$_TABLES['st_config']}";
         $_SQL[] = "INSERT INTO {$_TABLES['menu']} SELECT * FROM {$_TABLES['st_menus']}";
         $_SQL[] = "INSERT INTO {$_TABLES['menu_config']} SELECT * FROM {$_TABLES['st_menus_config']}";
         $_SQL[] = "INSERT INTO {$_TABLES['menu_elements']} SELECT * FROM {$_TABLES['st_menu_elements']}";
 
+        foreach ($_SQL as $sql) {
+            DB_query($sql,1);
+        }
         DB_query("UPDATE {$_TABLES['plugins']} SET pi_enabled=0 WHERE pi_name='sitetailor'",1);
         DB_query("INSERT INTO {$_TABLES['vars']} (name,value) VALUES ('stcvt','1')",1);
     }
+    $_SQL = array()
 
+    $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='tl_menu_background_color' WHERE conf_name='main_menu_bg_color'";
+    $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='tl_menu_background_color_hover' WHERE conf_name='main_menu_hover_bg_color'";
+    $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='tl_menu_text_color' WHERE conf_name='main_menu_text_color'";
+    $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='tl_menu_text_color_hover' WHERE conf_name='main_menu_hover_text_color'";
+    $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='ch_menu_text_color' WHERE conf_name='submenu_text_color'";
+    $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='ch_menu_text_color_hover' WHERE conf_name='submenu_hover_text_color'";
+    $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='ch_menu_background_color' WHERE conf_name='submenu_background_color'";
+    $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='ch_menu_background_color_hover' WHERE conf_name='submenu_hover_bg_color'";
+    $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='ch_menu_element_border_top_color' WHERE conf_name='submenu_highlight_color'";
+    $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='ch_menu_element_border_bottom_color' WHERE conf_name='submenu_shadow_color'";
+    $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='tl_menu_background_image' WHERE conf_name='menu_bg_filename'";
+    $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='tl_menu_text_hover_image' WHERE conf_name='menu_hover_filename'";
+    $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='ch_menu_parent_image' WHERE conf_name='menu_parent_filename'";
 
+    foreach ($_SQL as $sql) {
+        DB_query($sql,1);
+    }
     // new config options
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();

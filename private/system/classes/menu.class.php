@@ -34,6 +34,317 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+class menu {
+    var $id;
+    var $name;
+    var $type;
+    var $active;
+    var $group_id;
+
+    var $menu_alignment;
+    var $tl_menu_background_color;
+    var $tl_menu_background_image;
+    var $tl_menu_background_color_hover;
+    var $tl_menu_text_color;
+    var $tl_menu_text_color_hover;
+    var $tl_menu_text_hover_image;
+    var $tl_menu_font_family;
+    var $tl_menu_font_size;
+    var $tl_menu_font_weight;
+    var $tl_menu_line_height;
+    var $tl_menu_element_width;
+    var $tl_menu_element_padding;
+    var $tl_menu_element_border_top_width;
+    var $tl_menu_element_border_top_color;
+    var $tl_menu_element_border_bottom_width;
+    var $tl_menu_element_border_bottom_color;
+    var $tl_menu_element_border_left_width;
+    var $tl_menu_element_border_left_color;
+    var $tl_menu_element_border_right_width;
+    var $tl_menu_element_border_right_color;
+    var $tl_menu_element_text_indent;
+
+    var $ch_menu_background_color;
+    var $ch_menu_background_image;
+    var $ch_menu_background_color_hover;
+    var $ch_menu_text_color;
+    var $ch_menu_text_color_hover;
+    var $ch_menu_text_hover_image;
+    var $ch_menu_font_family;
+    var $ch_menu_font_size;
+    var $ch_menu_offset;
+    var $ch_menu_font_weight;
+    var $ch_menu_line_height;
+    var $ch_menu_element_width;
+    var $ch_menu_submenu_offset;
+    var $ch_menu_element_border_top_width;
+    var $ch_menu_element_border_top_color;
+    var $ch_menu_element_border_bottom_width;
+    var $ch_menu_element_border_bottom_color;
+    var $ch_menu_element_border_left_width;
+    var $ch_menu_element_border_left_color;
+    var $ch_menu_element_border_right_width;
+    var $ch_menu_element_border_right_color;
+    var $ch_menu_element_text_indent;
+    var $ch_menu_parent_image;
+
+    var $menu_elements = array();               // menu elements array
+
+    var $image_control = array(
+            'tl_menu_background_image' => array(0 => true, 1 => true, 2 => false,3 => true,4 => true, 5 => false),
+            'tl_menu_text_hover_image' => array(0 => true, 1 => true, 2 => false,3 => true,4 => true, 5 => false),
+            'ch_menu_background_image' => array(0 => true, 1 => true, 2 => false,3 => true,4 => false, 5 => false),
+            'ch_menu_text_hover_image' => array(0 => true, 1 => true, 2 => false,3 => true,4 => false, 5 => false),
+            'ch_menu_parent_image' => array(0 => true, 1 => true, 2 => false,3 => true,4 => false, 5 => false),
+    );
+
+    var $access_control = array(
+            'menu_alignment' => array(0 => -1, 1 => true, 2 => true,3 => true,4 => true,5 => false),
+            'tl_menu_background_color' => array(0 => true, 1 => true, 2 => false,3 => true,4 => false, 5 => true),
+            'tl_menu_background_color_hover' => array(0 => true, 1 => true, 2 => false,3 => true,4 => true,5 => true),
+            'tl_menu_text_color' => array(0 => true, 1 => true, 2 => true,3 => true,4 => true, 5 => true),
+            'tl_menu_text_color_hover' => array(0 => true, 1 => true, 2 => true,3 => true,4 => true,5 => true),
+            'tl_menu_font_family' => array(0 => true, 1 => true, 2 => false,3 => true,4 => false, 5 => false),
+            'tl_menu_font_size' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false, 5 => false),
+            'tl_menu_font_weight' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false,5 => false),
+            'tl_menu_line_height' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false,5 => false),
+            'tl_menu_element_width' => array(0 => true, 1 => true, 2 => false,3 => true,4 => false,5 => false),
+            'tl_menu_element_padding' => array(0 => true, 1 => true, 2 => false,3 => true,4 => false,5=>false),
+            'tl_menu_element_border_top_width' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false,5=>false),
+            'tl_menu_element_border_top_color' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false,5 => true),
+            'tl_menu_element_border_bottom_width' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false,5=>false),
+            'tl_menu_element_border_bottom_color' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false,5 => true),
+            'tl_menu_element_border_left_width' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false,5=>false),
+            'tl_menu_element_border_left_color' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false,5 => true),
+            'tl_menu_element_border_right_width' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false,5=>false),
+            'tl_menu_element_border_right_color' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false,5 => true),
+            'tl_menu_element_text_indent' => array(0 => true, 1 => true, 2 => false,3 => true,4 => false,5=>false),
+            'ch_menu_background_color' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => true),
+            'ch_menu_background_color_hover' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => true),
+            'ch_menu_text_color' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => true),
+            'ch_menu_text_color_hover' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => true),
+            'ch_menu_font_family' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => false),
+            'ch_menu_font_size' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => false),
+            'ch_menu_offset' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => false),
+            'ch_menu_font_weight' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false, 5 => false),
+            'ch_menu_line_height' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => false),
+            'ch_menu_submenu_offset' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => false),
+            'ch_menu_element_width' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => false),
+            'ch_menu_element_border_top_width' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5=>false),
+            'ch_menu_element_border_top_color' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => true),
+            'ch_menu_element_border_bottom_width' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => false),
+            'ch_menu_element_border_bottom_color' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => true),
+            'ch_menu_element_border_left_width' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5=>false),
+            'ch_menu_element_border_left_color' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => true),
+            'ch_menu_element_border_right_width' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5=>false),
+            'ch_menu_element_border_right_color' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => true),
+            'ch_menu_element_text_indent' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5=>false),
+    );
+
+    public function __construct( $menu_id = 0 )
+    {
+        if ( $menu_id > 0 ) {
+            $this->getMenu($menu_id);
+        } else {
+            $this->id = 0;
+        }
+    }
+
+
+    function &getInstance( $menu_id = 0 )
+    {
+        static $instance = array();
+
+        if (!isset($instance[$menu_id]) ) {
+            $instance[$menu_id] = new menu($menu_id);
+        }
+        return $instance[$menu_id];
+    }
+
+    function save()
+    {
+        global $_TABLES;
+
+        $menuname   = DB_escapeString($this->name);
+
+        foreach ($this->access_control AS $name => $use) {
+            if ( $use[$this->type] == true ) {
+                DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value",$this->id.",'".$name."','".$this->$name."'");
+            }
+        }
+    }
+
+    function getMenu($menu_id)
+    {
+        global $_TABLES;
+
+        $result = DB_query("SELECT * FROM {$_TABLES['menu']} WHERE id = ". (int)$menu_id,1);
+        if ( $result !== FALSE && DB_numRows($result) > 0 ) {
+            $menu = DB_fetchArray($result);
+            $this->id = $menu['id'];
+            $this->name = $menu['menu_name'];
+            $this->type = $menu['menu_type'];
+            $this->active = $menu['menu_active'];
+            $this->group_id = $menu['group_id'];
+            $this->getConfig();
+            $this->getElements();
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+    function getConfig()
+    {
+        global $_TABLES;
+        $cfgResult = DB_query("SELECT * FROM {$_TABLES['menu_config']} WHERE menu_id=". (int) $this->id );
+        while ($cfgRow = DB_fetchArray($cfgResult)) {
+            $this->{$cfgRow['conf_name']} = $cfgRow['conf_value'];
+        }
+    }
+
+    function getElements()
+    {
+        global $_TABLES, $_GROUPS;
+
+        $mbadmin = SEC_hasRights('menu.admin');
+        $root    = SEC_inGroup('Root');
+
+        $sql = "SELECT * FROM {$_TABLES['menu_elements']} WHERE menu_id=".(int) $this->id." ORDER BY element_order ASC";
+        $elementResult      = DB_query( $sql, 1);
+        $element            = new menuElement();
+        $element->id        = 0;
+        $element->menu_id   = $this->id;
+        $element->label     = 'Top Level Menu';
+        $element->type      = -1;
+        $element->pid       = 0;
+        $element->order     = 0;
+        $element->url       = '';
+        $element->owner_id  = $mbadmin;
+        $element->group_id  = $root;
+        if ( $mbadmin ) {
+            $element->access = 3;
+        }
+        $this->menu_elements[0] = $element;
+
+        while ($A = DB_fetchArray($elementResult) ) {
+            $element  = new menuElement();
+            $element->constructor($A,$mbadmin,$root,$_GROUPS,1);
+            if ( $element->access > 0 ) {
+                $this->menu_elements[$element->id] = $element;
+            }
+        }
+
+        foreach( $this->menu_elements as $id => $element) {
+            if ($id != 0 && isset($this->menu_elements[$element->pid]->id) ) {
+                $this->menu_elements[$element->pid]->setChild($id);
+            }
+        }
+    }
+
+    function buildEditStyle()
+    {
+        $rbg_colors = array();
+        $counter = 1;
+        $style = '';
+
+        foreach ( $this->access_control AS $configOption => $use ) {
+            if ( $use[$this->type] == true && $use[5] == true ) {
+                $rgb_colors[$configOption] = '[' . $this->_hexrgb($this->$configOption,'r') .
+                                        ',' . $this->_hexrgb($this->$configOption,'g') .
+                                        ',' . $this->_hexrgb($this->$configOption,'b') .
+                                        ']';
+            }
+        }
+
+        foreach ( $this->access_control AS $configOption => $use ) {
+            if ( $use[$this->type] == true && $use[5] == true ) {
+                $counter++;
+                $style .= "
+                    var ".$configOption." = new MooRainbow('".$configOption."_sb', {
+                        'id' : 'mooRainbow".$counter."',
+                        'startColor': ".$rgb_colors[$configOption].",
+                        'onChange': function(color) {
+                            $('".$configOption."').value = color.hex;
+                            $('".$configOption."_sample').value = color.hex;
+                            $('".$configOption."_sample').setStyle('background-color',color.hex);
+                            $('".$configOption."_sample').fireEvent('focus');
+                        },
+                        'onComplete': function() {
+                            $('".$configOption."_sample').fireEvent('focus');
+                        }
+                    });
+                " . LB;
+
+                $style .= "
+                    var v = $('".$configOption."_sample').value;
+                    var l = $('".$configOption."_sample').value.length;
+                    if ( l > 3 ) {
+                        var c = new Color(v);
+                        var x = c.hex;
+                        var z=c.hex.hexToRgb(true);
+                        var d=hsv(z);
+                        if(d[2]<127) $('".$configOption."_sample').setStyle('color','#fff');
+                        else $('".$configOption."_sample').setStyle('color','#000');
+                    }
+
+                    $('".$configOption."_sample').addEvent('focus',function(){
+                        var l = $('".$configOption."_sample').value.length;
+                        var v = $('".$configOption."_sample').value;
+                        var c = new Color(v);
+                        var x = c.hex;
+                        if ( l > 3 ) {
+                            $('".$configOption."_sample').setStyle('background-color',x);
+                            var z=c.hex.hexToRgb(true);
+                            var d=hsv(z);
+                            if(d[2]<127) $('".$configOption."_sample').setStyle('color','#fff');
+                            else $('".$configOption."_sample').setStyle('color','#000');
+                        }
+                     });
+                    $('".$configOption."_sample').addEvent('keyup',function(){
+                        if ( $('".$configOption."_sample').value.test(/^#[0-9a-f]{3,6}$/i) ) {
+                            $('".$configOption."_sample').fireEvent('focus');
+                        }
+
+                     });
+                    $('".$configOption."_sample').addEvent('change',function(){
+                        var l = $('".$configOption."_sample').value.length;
+                        var v = $('".$configOption."_sample').value;
+                        var c = new Color(v);
+                        var x = c.hex;
+                        if ( l > 3 ) {
+                            tlmbgc.manualSet(x,'hex');
+                        }
+                     });
+                " . LB;
+            }
+        }
+        return $style;
+    }
+
+    function _hexrgb($hexstr, $rgb) {
+        $int = hexdec($hexstr);
+        switch($rgb) {
+            case "r":
+                return 0xFF & $int >> 0x10;
+                break;
+            case "g":
+                return 0xFF & ($int >> 0x8);
+                break;
+            case "b":
+                return 0xFF & $int;
+                break;
+            default:
+                return array(
+                    "r" => 0xFF & $int >> 0x10,
+                    "g" => 0xFF & ($int >> 0x8),
+                    "b" => 0xFF & $int
+                );
+                break;
+        }
+    }
+}
+
 class menuElement {
     var $id;                // item id
     var $pid;               // parent id (0 = root level)
@@ -48,7 +359,7 @@ class menuElement {
     var $group_id;          // group membership
     var $access;            // derived access level
     var $children;          // this elements child elements
-    var $hidden;            // I have no idea -- Joe
+    var $hidden;            // hidden menu
 
     function menuElement () {
         $this->children         = array();
@@ -57,7 +368,7 @@ class menuElement {
         $this->group_id         = 0;
     }
 
-    function constructor( $element, $meadmin, $root, $groups ) {
+    function constructor( $element, $meadmin, $root, $groups, $edit=0 ) {
         $this->id               = isset($element['id']) ? $element['id'] : '';
         $this->pid              = $element['pid'];
         $this->menu_id          = $element['menu_id'];
@@ -69,7 +380,11 @@ class menuElement {
         $this->url              = (!empty($element['element_url']) && $element['element_url'] != ' ') ? $element['element_url'] : '';
         $this->target           = $element['element_target'];
         $this->group_id         = $element['group_id'];
-        $this->setAccessRights($meadmin,$root,$groups);
+        if ( $edit == 1 ) {
+            $this->access = 3;
+        } else {
+            $this->setAccessRights($meadmin,$root,$groups);
+        }
     }
 
     function setChild( $id ) {
@@ -77,10 +392,10 @@ class menuElement {
     }
 
     function saveElement( ) {
-        global $_TABLES, $mbMenu;
+        global $_TABLES;
 
-        $this->label            = DB_escapeString($this->label);
-        $this->url              = DB_escapeString($this->url);
+        $this->label = DB_escapeString($this->label);
+        $this->url = DB_escapeString($this->url);
 
         $sqlFieldList  = 'id,pid,menu_id,element_label,element_type,element_subtype,element_order,element_active,element_url,element_target,group_id';
         $sqlDataValues = "$this->id,$this->pid,'".DB_escapeString($this->menu_id)."','$this->label',$this->type,'$this->subtype',$this->order,$this->active,'$this->url','$this->target',$this->group_id";
@@ -88,7 +403,7 @@ class menuElement {
     }
 
     function reorderMenu( ) {
-        global $_TABLES, $mbMenu;
+        global $_TABLES;
 
         $pid = (int) $this->id;
         $menu_id = (int) $this->menu_id;
@@ -124,27 +439,104 @@ class menuElement {
 
 
     function setAccessRights( $meadmin, $root, $groups ) {
-        global $_USER, $mbMenu;
+        global $_USER;
 
-        if ($meadmin || $root) {
-            $this->access = 3;
-        } else {
-            if ( $this->group_id == 998 ) {
-                if( COM_isAnonUser() ) {
-                    $this->access = 3;
-                } else {
-                    $this->access = 0;
-                }
+        if ( $this->group_id == 998 ) {
+            if( COM_isAnonUser() ) {
+                $this->access = 3;
             } else {
-                if ( in_array( $this->group_id, $groups ) ) {
-                    $this->access = 3;
-                }
+                $this->access = 0;
+            }
+        } else {
+            if ($meadmin || $root) {
+                $this->access = 3;
+            } else if ( in_array( $this->group_id, $groups ) ) {
+                $this->access = 3;
+            } else {
+                $this->access = 0;
             }
         }
     }
 
-    function getChildren() {
+    function getChildren()
+    {
         return (array_keys($this->children));
+    }
+
+    function editTree( $depth, $count ) {
+        global $_CONF, $level;
+        global $LANG_MB01, $LANG_MB_TYPES,$LANG_MB_GLTYPES,$LANG_MB_GLFUNCTION;
+
+        $data_arr = array();
+
+        $toolTipStyle = COM_getToolTipStyle();
+
+        $menu = menu::getInstance($this->menu_id);
+
+        $plugin_menus = _mbPLG_getMenuItems();
+
+        $px = ($level - 1 ) * 15;
+
+        if ( $this->label != 'Top Level Menu' ) {
+            $elementDetails = $this->label . '::';
+            $elementDetails .= '<b>' . $LANG_MB01['type'] . ':</b> '
+                            . $LANG_MB_TYPES[$this->type] . '<br/>';
+            switch ($this->type) {
+                case 1 :
+                    break;
+                case 2 :
+                    $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . '</b> '
+                                    . $LANG_MB_GLFUNCTION[$this->subtype] . '<br/>';
+                    break;
+                case 3 :
+                    $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . ':</b> '
+                                        . $LANG_MB_GLTYPES[$this->subtype] . '<br/>';
+                    break;
+                case 4 :
+                    $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . ':</b> '
+                                        . $this->subtype . '<br/>';
+                    break;
+                case 5 :
+                    $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . ':</b> UNDEFINED <br/>';
+                    break;
+                case 6 :
+                    $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . ':</b> '
+                                        . $this->url . '<br/>';
+                    break;
+                case 7 :
+                    $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . ':</b> '
+                                        . $this->subtype . '<br/>';
+                    break;
+                case 9 :
+                    $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . ':</b> '
+                                        . $this->subtype . '<br />'   ;
+            }
+
+            $item['indent'] = $px;
+            $item['label']  = $this->label;
+            $item['enabled'] = $this->active;
+            $item['info'] = $elementDetails;
+            $item['edit'] = $this->id;
+            $item['delete'] = $this->id;
+            $item['order'] = $this->order;
+            $item['type'] = $this->type;
+            $item['id']   = $this->id;
+            $item['menu_id'] = $this->menu_id;
+            $data_arr[] = $item;
+        }
+
+        if ( !empty($this->children)) {
+            $children = $this->getChildren();
+            foreach($children as $child) {
+                $level++;
+                if ( isset($menu->menu_elements[$child]) ) {
+                    $carray = $menu->menu_elements[$child]->editTree($depth,$count);
+                    $data_arr = array_merge($data_arr,$carray);
+                }
+                $level--;
+            }
+        }
+        return $data_arr;
     }
 
     function getChildcount() {
@@ -167,89 +559,6 @@ class menuElement {
         return $numChildren;
     }
 
-// This will build the actual edit tree line.  It will be a table, where each row
-
-    function editTree( $depth, $count ) {
-        global $_CONF, $mbMenu, $level;
-        global $LANG_MB01, $LANG_MB_TYPES,$LANG_MB_GLTYPES,$LANG_MB_GLFUNCTION;
-
-        $plugin_menus = _mbPLG_getMenuItems();
-
-        static $count;
-        $retval = '';
-        $px = ($level - 1 ) * 15;
-
-        if ( $this->label != 'Top Level Menu' ) {
-
-            $style = ($count % 2) + 1;
-
-            $retval .= '<tr class="pluginRow' . $style . '" onmouseover="className=\'pluginRollOver\';" onmouseout="className=\'pluginRow' . $style . '\';">';
-
-            $retval .= '<td>';
-
-            $elementDetails = $this->label . '::';
-            $elementDetails .= '<b>' . $LANG_MB01['type'] . ':</b> ' . $LANG_MB_TYPES[$this->type] . '<br/>';
-            switch ($this->type) {
-                case 1 :
-                    break;
-                case 2 :
-                    $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . '</b> ' . $LANG_MB_GLFUNCTION[$this->subtype] . '<br/>';
-                    break;
-                case 3 :
-                    $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . ':</b> ' . $LANG_MB_GLTYPES[$this->subtype] . '<br/>';
-                    break;
-                case 4 :
-                    $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . ':</b> ' . $this->subtype . '<br/>';
-                    break;
-                case 5 :
-                    $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . ':</b> UNDEFINED <br/>';
-                    break;
-                case 6 :
-                    $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . ':</b> ' . $this->url . '<br/>';
-                    break;
-                case 7 :
-                    $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . ':</b> ' . $this->subtype . '<br/>';
-                    break;
-                case 9 :
-                    $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . ':</b> ' . $this->subtype . '<br />'   ;
-            }
-
-            $moveup     = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=move&amp;where=up&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
-            $movedown   = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=move&amp;where=down&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
-            $edit       = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=edit&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
-            $delete     = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=delete&amp;mid=' . $this->id . '&amp;menuid='.$this->menu_id.'" onclick="return confirm(\'' . $LANG_MB01['confirm_delete'] . '\');">';
-            $info       = '<a class="gl_mootip" title="' . $elementDetails . '" href="#"><img src="' . $_CONF['layout_url'] . '/images/info.png" alt=""/></a>';
-
-            $retval .= "<div style=\"padding:0 5px;margin-left:" . $px . "px;\">" . ($this->type == 1 ? '<b>' : '') . strip_tags($this->label) . ($this->type == 1 ? '</b>' : '') . '</div>' . LB;
-
-            $retval .= '</td>';
-            $retval .= '<td class="aligncenter">';
-            $retval .=  '<input type="checkbox" name="enableditem[' . $this->id . ']" onclick="submit()" value="1"' . ($this->active == 1 ? ' checked="checked"' : '') . '/>';
-            $retval .= '</td>';
-            $retval .= '<td class="aligncenter">';
-            $retval .= $info;
-            $retval .= '</td>';
-            $retval .= '<td class="aligncenter">' . $edit . '<img src="' . $_CONF['layout_url'] . '/images/edit.png" alt="' . $LANG_MB01['edit'] . '"/></a></td>';
-            $retval .= '<td class="aligncenter">' . $delete . '<img src="' . $_CONF['layout_url'] . '/images/delete.png" alt="' . $LANG_MB01['delete'] . '"/></a></td>';
-            $retval .= '<td class="aligncenter">' . $moveup . '<img src="' . $_CONF['layout_url'] . '/images/up.png" alt="' . $LANG_MB01['move_up'] . '"/></a></td><td class="aligncenter">' . $movedown . '<img src="' . $_CONF['layout_url'] . '/images/down.png" alt="' . $LANG_MB01['move_down'] . '"/></a></td>';
-            $retval .= '</tr>';
-            $count++;
-
-        }
-
-        if ( !empty($this->children)) {
-            $children = $this->getChildren();
-            foreach($children as $child) {
-                $level++;
-                if ( isset($mbMenu[$this->menu_id]['elements'][$child]) ) {
-                    $retval .= $mbMenu[$this->menu_id]['elements'][$child]->editTree($depth,$count);
-                }
-                $level--;
-            }
-        }
-        return $retval;
-    }
-
     function isLastChild() {
         global $mbMenu;
 
@@ -270,8 +579,7 @@ class menuElement {
         return;
     }
 
-    function showTree( $depth,$ulclass='',$liclass='',$parentaclass='',$lastclass,$selected='',$noid=0 ) {
-
+    function showTree( $depth,$ulclass='',$liclass='',$parentaclass='',$lastclass='',$selected='' ) {
         global $_SP_CONF,$_USER, $_TABLES, $LANG01, $LANG_MB01, $LANG_LOGO, $LANG_AM, $LANG29, $_CONF,$meLevel,
                $_DB_dbms,$_GROUPS, $config,$mbMenu;
 
@@ -279,15 +587,6 @@ class menuElement {
         $oliclass       = $liclass;
         $oparentaclass  = $parentaclass;
         $olastclass     = $lastclass;
-
-        if ( $ulclass != '' && $noid == 0)
-            $ulclass = $ulclass . $this->menu_id;
-        if ( $liclass != '' && $noid == 0)
-            $liclass = $liclass . $this->menu_id;
-        if ( $parentaclass != '' && $noid == 0)
-            $parentaclass = $parentaclass . $this->menu_id;
-        if ( $lastclass != '' && $noid == 0)
-            $lastclass = $lastclass . $this->menu_id;
 
         $retval = '';
         $menu = '';
@@ -319,15 +618,18 @@ class menuElement {
 
         // need to build the URL
         switch ( $this->type ) {
-            case '1' : // subtype - do nothing
+            case ET_SUB_MENU :
                 $this->replace_macros();
                 break;
-            case '2' : // glfusion action
+            case ET_FUSION_ACTION :
                 switch ($this->subtype) {
                     case 0: // home
                         $this->url = $_CONF['site_url'] . '/';
                         break;
                     case 1: // contribute
+                        if( $anon && ( $_CONF['loginrequired'] || $_CONF['submitloginrequired'] )) {
+                            return $retval;
+                        }
                         if( empty( $topic )) {
                             $this->url = $_CONF['site_url'] . '/submit.php?type=story';
                         } else {
@@ -335,54 +637,56 @@ class menuElement {
                                  . '/submit.php?type=story&amp;topic=' . $topic;
                         }
                         $label = $LANG01[71];
-                        if( $anon && ( $_CONF['loginrequired'] || $_CONF['submitloginrequired'] )) {
-                            $allowed = false;
-                        }
                         break;
                     case 2: // directory
+                        if( $anon && ( $_CONF['loginrequired'] ||
+                                $_CONF['directoryloginrequired'] )) {
+                            return $retval;
+                        }
                         $this->url = $_CONF['site_url'] . '/directory.php';
                         if( !empty( $topic )) {
                             $this->url = COM_buildUrl( $this->url . '?topic='
                                                  . urlencode( $topic ));
                         }
-                        if( $anon && ( $_CONF['loginrequired'] ||
-                                $_CONF['directoryloginrequired'] )) {
-                            $allowed = false;
-                        }
                         break;
                     case 3: // prefs
-                        $this->url = $_CONF['site_url'] . '/usersettings.php?mode=edit';
                         if( $anon && ( $_CONF['loginrequired'] ||
                                 $_CONF['profileloginrequired'] )) {
-                            $allowed = false;
+                            return $retval;
                         }
+                        $this->url = $_CONF['site_url'] . '/usersettings.php?mode=edit';
                         break;
                     case 4: // search
-                        $this->url = $_CONF['site_url'] . '/search.php';
                         if( $anon && ( $_CONF['loginrequired'] ||
                                 $_CONF['searchloginrequired'] )) {
-                            $allowed = false;
+                            return $retval;
                         }
+                        $this->url = $_CONF['site_url'] . '/search.php';
                         break;
                     case 5: // stats
-                        $this->url = $_CONF['site_url'] . '/stats.php';
                         if ( !SEC_hasRights('stats.view') ) {
-                            $allowed = false;
+                            return $retval;
                         }
-
+                        $this->url = $_CONF['site_url'] . '/stats.php';
                         break;
                     default : // unknown?
                         $this->url = $_CONF['site_url'] . '/';
                         break;
                 }
                 break;
-            case '3' : // glfusion menu
+            case ET_FUSION_MENU :
                 switch ($this->subtype) {
-                    case 1 : // user menu
-                        if ( $this->id != 0 && $this->access > 0 && $parentaclass != '' ) {
-                            $menu .= "<li>" . '<a class="' . $parentaclass . '" name="'.$parentaclass.'" href="#">' . strip_tags($this->label) . '</a>' . LB;
+                    case USER_MENU :
+                        $item_array = array();
+                        if ($this->isLastChild() && $lastclass != '') {
+                            $lilastclass = ' class="'.$lastclass.'"';
                         } else {
-                            $menu .= "<li>" . '<a href="#">' . strip_tags($this->label) . '</a>' . LB;
+                            $lilastclass = '';
+                        }
+                        if ( $this->id != 0 && $this->access > 0 && $parentaclass != '' ) {
+                            $menu .= "<li".$lilastclass.">" . '<a class="' . $parentaclass . '" href="#">' . strip_tags($this->label) . '</a>' . LB;
+                        } else {
+                            $menu .= "<li".$lilastclass.">" . '<a href="#">' . strip_tags($this->label) . '</a>' . LB;
                         }
                         if ( $this->id == 0 && $ulclass != '' ) {
                             $menu .= '<ul class="' . $ulclass . '">' . LB;
@@ -398,17 +702,12 @@ class menuElement {
                             {
                                 $url = $_CONF['site_admin_url'] . '/index.php';
                                 $label =  $LANG29[34];
-                                $menu .= '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                $item_array[] = array('label' => $label, 'url' => $url);
                             }
                             // what's our current URL?
                             $thisUrl = COM_getCurrentURL();
-
-                            // This function will show the user options for all installed plugins
-                            // (if any)
-
                             $plugin_options = PLG_getUserOptions();
                             $nrows = count( $plugin_options );
-
                             for( $i = 0; $i < $nrows; $i++ ) {
                                 $plg = current( $plugin_options );
                                 $label = $plg->adminlabel;
@@ -416,42 +715,54 @@ class menuElement {
                                     $label .= ' (' . $plg->numsubmissions . ')';
                                 }
                                 $url = $plg->adminurl;
-                                $menu .= '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                $item_array[] = array('label' => $label, 'url' => $url);
                                 next( $plugin_options );
                             }
                             $url = $_CONF['site_url'] . '/usersettings.php?mode=edit';
                             $label = $LANG01[48];
-                            $menu .= '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                            $item_array[] = array('label' => $label, 'url' => $url);
                             $url = $_CONF['site_url'] . '/users.php?mode=logout';
                             $label = $LANG01[19];
-                            $menu .= '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                            $item_array[] = array('label' => $label, 'url' => $url);
                         } else {
                             $url = $_CONF['site_url'] . '/users.php?mode=login';
-                            $label = 'Login';
-                            $menu .= '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                            $label = $LANG01[58];
+                            $item_array[] = array('label' => $label, 'url' => $url);
+                        }
+                        $itemCount = count($item_array);
+                        $lastItem = $itemCount - 1;
+                        for ( $i=0; $i<$itemCount; $i++ ) {
+                            if ( $i == $lastItem && $lastclass != '' ) {
+                                $lc = ' class="'.$lastclass.'"';
+                            } else {
+                                $lc = '';
+                            }
+                            $menu .= '<li'.$lc.'><a href="' . $item_array[$i]['url'] . '">' . $item_array[$i]['label'] . '</a></li>' . LB;
                         }
                         $menu .= '</ul>' . LB . '</li>' . LB;
                         break;
-                    case 2 : // admin menu
+                    case ADMIN_MENU :
 
-                        if( !empty( $_USER['username'] )) {
-
+                        if( !COM_isAnonUser()) {
+                            $item_array = array();
                             /*
                              * Set the initial $menu opening
                              */
-
-                            if ( $this->id != 0 && $this->access > 0 && $parentaclass != '' ) {
-                                $menu .= "<li>" . '<a class="' . $parentaclass . '" name="'.$parentaclass.'" href="#">' . strip_tags($this->label) . '</a>' . LB;
+                            if ($this->isLastChild() && $lastclass != '') {
+                                $lilastclass = ' class="'.$lastclass.'"';
                             } else {
-                                $menu .= "<li>" . '<a href="#">' . strip_tags($this->label) . '</a>' .  LB;
+                                $lilastclass = '';
+                            }
+                            if ( $this->id != 0 && $this->access > 0 && $parentaclass != '' ) {
+                                $menu .= "<li".$lilastclass.">" . '<a class="' . $parentaclass . '" href="#">' . strip_tags($this->label) . '</a>' . LB;
+                            } else {
+                                $menu .= "<li".$lilastclass.">" . '<a href="#">' . strip_tags($this->label) . '</a>' .  LB;
                             }
                             if ( $this->id == 0 && $ulclass != '' ) {
                                 $menu .= '<ul class="' . $ulclass . '">' . LB;
                             } else {
                                 $menu .= '<ul>' . LB;
                             }
-
-                            $link_array = array();
 
                             /*
                              * Get all plugin menu options
@@ -488,7 +799,6 @@ class menuElement {
                                         }
                                     }
                                 }
-
                                 $modnum = 0;
                                 if( SEC_hasRights( 'story.edit,story.moderate', 'OR' ) || (( $_CONF['usersubmission'] == 1 ) && SEC_hasRights( 'user.edit,user.delete' ))) {
                                     if( SEC_hasRights( 'story.moderate' )) {
@@ -531,7 +841,7 @@ class menuElement {
                                     }
 
                                     $label .= ' (' . COM_numberFormat($numstories) . ')';
-                                    $link_array[$LANG01[11]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                    $item_array[] = array('label' => $label, 'url' => $url);
                                 }
                                 if( SEC_hasRights( 'block.edit' )) {
                                     $result = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['blocks']}" . COM_getPermSql());
@@ -539,41 +849,40 @@ class menuElement {
 
                                     $url = $_CONF['site_admin_url'] . '/block.php';
                                     $label = $LANG01[12] . ' (' . COM_numberFormat($count) . ')';
-                                    $link_array[$LANG01[12]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                    $item_array[] = array('label' => $label, 'url' => $url);
                                 }
                                 if ( SEC_hasRights('autotag.admin') ) {
                                     $url = $_CONF['site_admin_url'] . '/autotag.php';
                                     $label = $LANG_AM['title'];
-                                    $link_array[$LANG_AM['title']] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                    $item_array[] = array('label' => $label, 'url' => $url);
                                 }
                                 if( SEC_inGroup( 'Root' )) {
                                     $url = $_CONF['site_admin_url'] . '/clearctl.php';
                                     $label =  $LANG01['ctl'];
-                                    $link_array[$LANG01['ctl']] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                    $item_array[] = array('label' => $label, 'url' => $url);
                                 }
                                 if( SEC_inGroup( 'Root' )) {
                                     $url = $_CONF['site_admin_url'] . '/menu.php';
                                     $label =  $LANG_MB01['menu_builder'];
-                                    $link_array[$LANG_MB01['menu_builder']] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                    $item_array[] = array('label' => $label, 'url' => $url);
                                 }
                                 if( SEC_inGroup( 'Root' )) {
                                     $url = $_CONF['site_admin_url'] . '/logo.php';
                                     $label =  $LANG_LOGO['logo_admin'];
-                                    $link_array[$LANG_LOGO['logo_admin']] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                    $item_array[] = array('label' => $label, 'url' => $url);
                                 }
                                 if( SEC_hasRights( 'topic.edit' )) {
                                     $result = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['topics']}" . COM_getPermSql());
                                     list( $count ) = DB_fetchArray( $result );
-
                                     $url = $_CONF['site_admin_url'] . '/topic.php';
                                     $label = $LANG01[13] . ' (' . COM_numberFormat($count) . ')';
-                                    $link_array[$LANG01[13]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                    $item_array[] = array('label' => $label, 'url' => $url);
                                 }
 
                                 if( SEC_hasRights( 'user.edit' )) {
                                     $url = $_CONF['site_admin_url'] . '/user.php';
                                     $label = $LANG01[17] . ' (' . COM_numberFormat(DB_count($_TABLES['users']) -1) . ')';
-                                    $link_array[$LANG01[17]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                    $item_array[] = array('label' => $label, 'url' => $url);
                                 }
 
                                 if( SEC_hasRights( 'group.edit' )) {
@@ -588,41 +897,41 @@ class menuElement {
 
                                     $url = $_CONF['site_admin_url'] . '/group.php';
                                     $label = $LANG01[96] . ' (' . COM_numberFormat($A['count']) . ')';
-                                    $link_array[$LANG01[96]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                    $item_array[] = array('label' => $label, 'url' => $url);
                                 }
 
                                 if ( SEC_inGroup('Root') ) {
                                     $url = $_CONF['site_admin_url'].'/envcheck.php';
                                     $label = $LANG01['env_check'];
-                                    $link_array[$LANG01['env_check']] = '<li><a href="'.$url.'">'.$label.'</a></li>'.LB;
+                                    $item_array[] = array('label' => $label, 'url' => $url);
                                 }
 
                                 if( SEC_hasRights( 'user.mail' )) {
                                     $url = $_CONF['site_admin_url'] . '/mail.php';
                                     $label = $LANG01[105] . ' (N/A)';
-                                    $link_array[$LANG01[105]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                    $item_array[] = array('label' => $label, 'url' => $url);
                                 }
 
                                 if(( $_CONF['backend'] == 1 ) && SEC_hasRights( 'syndication.edit' )) {
                                     $url = $_CONF['site_admin_url'] . '/syndication.php';
                                     $label = $LANG01[38] . ' (' . COM_numberFormat(DB_count($_TABLES['syndication'])) . ')';
-                                    $link_array[$LANG01[38]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                    $item_array[] = array('label' => $label, 'url' => $url);
                                 }
 
                                 if(( $_CONF['trackback_enabled'] || $_CONF['pingback_enabled'] || $_CONF['ping_enabled'] ) && SEC_hasRights( 'story.ping' )) {
                                     $url = $_CONF['site_admin_url'] . '/trackback.php';
                                     $label = $LANG01[116] . ' (' . COM_numberFormat( DB_count( $_TABLES['pingservice'] )) . ')';
-                                    $link_array[$LANG01[116]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                    $item_array[] = array('label' => $label, 'url' => $url);
                                 }
                                 if( SEC_hasRights( 'plugin.edit' )) {
                                     $url = $_CONF['site_admin_url'] . '/plugins.php';
                                     $label = $LANG01[77] . ' (' . COM_numberFormat( DB_count( $_TABLES['plugins'] )) . ')';
-                                    $link_array[$LANG01[77]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                    $item_array[] = array('label' => $label, 'url' => $url);
                                 }
                                 if (SEC_inGroup('Root')) {
                                     $url = $_CONF['site_admin_url'] . '/configuration.php';
                                     $label = $LANG01[129] . ' (' . COM_numberFormat(count($config->_get_groups())) . ')';
-                                    $link_array[$LANG01[129]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                    $item_array[] = array('label' => $label, 'url' => $url);
                                 }
 
                                 // This will show the admin options for all installed plugins (if any)
@@ -634,24 +943,23 @@ class menuElement {
                                     $label = $plg->adminlabel;
 
                                     if( empty( $plg->numsubmissions )) {
-                                        $label .= ' (N/A)';
+                                        $label .= '';
                                     } else {
                                         $label .= ' (' . COM_numberFormat( $plg->numsubmissions ) . ')';
                                     }
-                                    $link_array[$plg->adminlabel] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
-
+                                    $item_array[] = array('label' => $label, 'url' => $url);
                                     next( $plugin_options );
                                 }
 
-                                if(( $_CONF['allow_mysqldump'] == 1 ) AND ( $_DB_dbms == 'mysql' ) AND SEC_inGroup( 'Root' )) {
+                                if(( $_CONF['allow_mysqldump'] == 1 ) AND ( $_DB_dbms == 'mysql' || $_DB_dbms == 'mysqli' ) AND SEC_inGroup( 'Root' )) {
                                     $url = $_CONF['site_admin_url'] . '/database.php';
-                                    $label = $LANG01[103] . ' (N/A)';
-                                    $link_array[$LANG01[103]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                    $label = $LANG01[103] . '';
+                                    $item_array[] = array('label' => $label, 'url' => $url);
                                 }
                                 if( SEC_inGroup( 'Root' )) {
                                     $url = $_CONF['site_admin_url'] . '/logview.php';
-                                    $label = $LANG01['logview'] . ' (N/A)';
-                                    $link_array[$LANG01['logview']] = '<li><a href="' . $url .'">' . $label . '</a></li>' . LB;
+                                    $label = $LANG01['logview'] . '';
+                                    $item_array[] = array('label' => $label, 'url' => $url);
                                 }
 
                                 if( $_CONF['link_documentation'] == 1 ) {
@@ -662,45 +970,54 @@ class menuElement {
                                         $docUrl = $_CONF['site_url'].'/docs/english/index.html';
                                     }
                                     $url = $docUrl;
-                                    $label = $LANG01[113] . ' (N/A)';
-                                    $link_array[$LANG01[113]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                    $label = $LANG01[113] . '';
+                                    $item_array[] = array('label' => $label, 'url' => $url);
                                 }
 
                                 if( SEC_inGroup( 'Root' )) {
                                     $url = $_CONF['site_admin_url'] . '/vercheck.php';
                                     $label = $LANG01[107] . ' (' . GVERSION . PATCHLEVEL . ')';
-                                    $link_array[$LANG01[107]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                    $item_array[] = array('label' => $label, 'url' => $url);
                                 }
                                 if (SEC_isModerator()) {
                                     $url = $_CONF['site_admin_url'] . '/moderation.php';
                                     $label = $LANG01[10] . ' (' . COM_numberFormat( $modnum ) . ')';
-                                    $link_array[$LANG01[10]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                    $item_array[] = array('label' => $label, 'url' => $url);
                                 }
 
-                                if( $_CONF['sort_admin'] ) {
-                                    uksort( $link_array, 'strcasecmp' );
+                                if ( $_CONF['sort_admin']) {
+                                    usort($item_array,'_mb_cmp');
                                 }
-                                // C&C entry
                                 $url = $_CONF['site_admin_url'] . '/index.php';
                                 $label = $LANG29[34];
-                                $menu_item = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
-
-                                $link_array = array( $menu_item ) + $link_array;
-
-                                foreach( $link_array as $link ) {
-                                    $menu .= $link;
+                                $cc_item = array('label' => $LANG29[34], 'url' => $url);
+                                $item_array = array($cc_item) + $item_array;
+                                $itemCount = count($item_array);
+                                $lastItem = $itemCount - 1;
+                                for ( $i=0; $i<$itemCount; $i++ ) {
+                                    if ( $i == $lastItem && $lastclass != '' ) {
+                                        $lc = ' class="'.$lastclass.'"';
+                                    } else {
+                                        $lc = '';
+                                    }
+                                    $menu .= '<li'.$lc.'><a href="' . $item_array[$i]['url'] . '">' . $item_array[$i]['label'] . '</a></li>' . LB;
                                 }
-
                                 $menu .= '</ul>' . LB . '</li>' . LB;
                             }
                         }
                         break;
 
-                    case 3 : // topics menu
-                        if ( $this->id != 0 && $this->access > 0 && $parentaclass != '' ) {
-                            $menu .= "<li>" . '<a class="' . $parentaclass . '" name="'.$parentaclass.'" href="#">' . strip_tags($this->label) . '</a>' . LB;
+                    case TOPIC_MENU :
+                        $item_array = array();
+                        if ($this->isLastChild() && $lastclass != '') {
+                            $lilastclass = ' class="'.$lastclass.'"';
                         } else {
-                            $menu .= "<li>" . '<a href="#">' . strip_tags($this->label) . '</a>' . LB;
+                            $lilastclass = '';
+                        }
+                        if ( $this->id != 0 && $this->access > 0 && $parentaclass != '' ) {
+                            $menu .= "<li".$lilastclass.">" . '<a class="' . $parentaclass . '" href="#">' . strip_tags($this->label) . '</a>' . LB;
+                        } else {
+                            $menu .= "<li".$lilastclass.">" . '<a href="#">' . strip_tags($this->label) . '</a>' . LB;
                         }
                         if ( $this->id == 0 && $ulclass != '' ) {
                             $menu .= '<ul class="' . $ulclass . '">' . LB;
@@ -783,16 +1100,34 @@ class menuElement {
                                 $countstring .= ')';
                             }
                             $label .= $countstring;
-                            $menu .= '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                            $item_array[] = array('label' => $label, 'url' => $url);
                         }
+                        $itemCount = count($item_array);
+                        $lastItem = $itemCount - 1;
+                        for ( $i=0; $i<$itemCount; $i++ ) {
+                            if ( $i == $lastItem && $lastclass != '' ) {
+                                $lc = ' class="'.$lastclass.'"';
+                            } else {
+                                $lc = '';
+                            }
+                            $menu .= '<li'.$lc.'><a href="' . $item_array[$i]['url'] . '">' . $item_array[$i]['label'] . '</a></li>' . LB;
+                        }
+
                         $menu .= '</ul>' . LB . '</li>' . LB;
                         break;
 
-                    case 4 : // static pages menu
-                        if ( $this->id != 0 && $this->access > 0 && $parentaclass != '' ) {
-                            $menu .= "<li>" . '<a class="' . $parentaclass . '" href="#">' . strip_tags($this->label) . '</a>' . LB;
+                    case STATICPAGE_MENU :
+                        $item_array = array();
+                        if ($this->isLastChild() && $lastclass != '') {
+                            $lilastclass = ' class="'.$lastclass.'"';
                         } else {
-                            $menu .= "<li>" . '<a href="#">' . strip_tags($this->label) . '</a>' . LB;
+                            $lilastclass = '';
+                        }
+
+                        if ( $this->id != 0 && $this->access > 0 && $parentaclass != '' ) {
+                            $menu .= "<li".$lilastclass.">" . '<a class="' . $parentaclass . '" href="#">' . strip_tags($this->label) . '</a>' . LB;
+                        } else {
+                            $menu .= "<li".$lilastclass.">" . '<a href="#">' . strip_tags($this->label) . '</a>' . LB;
                         }
                         if ( $this->id == 0 && $ulclass != '' ) {
                             $menu .= '<ul class="' . $ulclass . '">' . LB;
@@ -819,15 +1154,31 @@ class menuElement {
                             $A = DB_fetchArray ($result);
                             $url = COM_buildURL ($_CONF['site_url'] . '/page.php?page=' . $A['sp_id']);
                             $label = $A['sp_label'];
-                            $menu .= '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                            $item_array[] = array('label' => $label, 'url' => $url);
+                        }
+                        $itemCount = count($item_array);
+                        $lastItem = $itemCount - 1;
+                        for ( $i=0; $i<$itemCount; $i++ ) {
+                            if ( $i == $lastItem && $lastclass != '' ) {
+                                $lc = ' class="'.$lastclass.'"';
+                            } else {
+                                $lc = '';
+                            }
+                            $menu .= '<li'.$lc.'><a href="' . $item_array[$i]['url'] . '">' . $item_array[$i]['label'] . '</a></li>' . LB;
                         }
                         $menu .= '</ul>' . LB . '</li>' . LB;
                         break;
-                    case 5 : // plugin menu
-                        if ( $this->id != 0 && $this->access > 0 && $parentaclass != '' ) {
-                            $menu .= "<li>" . '<a class="' . $parentaclass . '" href="#">' . strip_tags($this->label) . '</a>' . LB;
+                    case PLUGIN_MENU :
+                        $item_array = array();
+                        if ($this->isLastChild() && $lastclass != '') {
+                            $lilastclass = ' class="'.$lastclass.'"';
                         } else {
-                            $menu .= "<li>" . '<a href="#">' . strip_tags($this->label) . '</a>' . LB;
+                            $lilastclass = '';
+                        }
+                        if ( $this->id != 0 && $this->access > 0 && $parentaclass != '' ) {
+                            $menu .= "<li".$lilastclass.">" . '<a class="' . $parentaclass . '" href="#">' . strip_tags($this->label) . '</a>' . LB;
+                        } else {
+                            $menu .= "<li".$lilastclass.">" . '<a href="#">' . strip_tags($this->label) . '</a>' . LB;
                         }
                         if ( $this->id == 0 && $ulclass != '' ) {
                             $menu .= '<ul class="' . $ulclass . '">' . LB;
@@ -841,58 +1192,66 @@ class menuElement {
                             for( $i = 1; $i <= count( $plugin_menu ); $i++ ) {
                                 $url = current($plugin_menu);
                                 $label = key($plugin_menu);
-                                $menu .= '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                $item_array[] = array('label' => $label, 'url' => $url);
                                 next( $plugin_menu );
                             }
+                        }
+                        $itemCount = count($item_array);
+                        $lastItem = $itemCount - 1;
+                        for ( $i=0; $i<$itemCount; $i++ ) {
+                            if ( $i == $lastItem && $lastclass != '' ) {
+                                $lc = ' class="'.$lastclass.'"';
+                            } else {
+                                $lc = '';
+                            }
+                            $menu .= '<li'.$lc.'><a href="' . $item_array[$i]['url'] . '">' . $item_array[$i]['label'] . '</a></li>' . LB;
                         }
                         $menu .= '</ul>' . LB . '</li>' . LB;
                         break;
 
-                    case 6 : // header menu
+                    case HEADER_MENU :
 
-                    default : // unknown
+                    default :
                 }
                 break;
-            case '4' : // plugin
+            case ET_PLUGIN :
                 $plugin_menus = _mbPLG_getMenuItems();
                 if ( isset($plugin_menus[$this->subtype]) ) {
                     $this->url = $plugin_menus[$this->subtype];
                 } else {
                     $this->access = 0;
+                    $allowed = 0;
                 }
                 break;
-            case '5' : // static page
+            case ET_STATICPAGE :
                 $this->url = COM_buildURL ($_CONF['site_url'] . '/page.php?page=' . $this->subtype);
                 break;
-            case '6' : // external URL
-                /*
-                 * Check to see if any internal macros
-                 */
+            case ET_URL :
                 $this->replace_macros();
                 break;
-            case '7' : // php function
+            case ET_PHP :
                 $functionName = $this->subtype;
                 if (function_exists($functionName)) {
                     /* Pass the type of menu to custom php function */
-                    $menu = "<li>" . '<a class="' . $parentaclass . '" name="'.$parentaclass.'" href="#">' . strip_tags($this->label) . '</a>' . LB;
+                    $menu = "<li>" . '<a class="' . $parentaclass . '" href="#">' . strip_tags($this->label) . '</a>' . LB;
                     $menu .= $functionName();
                     $menu .= '</li>';
                 }
                 break;
-            case '9' : // topic
+            case ET_TOPIC :
                 $this->url = $_CONF['site_url'] . '/index.php?topic=' . $this->subtype;
                 break;
-            default : // unknown
+            default :
                 break;
         }
-        if ( $this->id != 0 && $this->group_id == 998 && (SEC_inGroup('Root') || SEC_inGroup('sitetailor Admin')) ) {
+        if ( $this->id != 0 && $this->group_id == 998 && (SEC_inGroup('Root') ) ) {
             return $retval;
         }
         if ( $allowed == 0 ) {
             return $retval;
         }
         /* here we actually define the menu item.... */
-        if ( $this->type == 3 || $this->type == 7) {
+        if ( $this->type == ET_FUSION_MENU || $this->type == ET_PHP ) {
             $retval .= $menu;
         } else {
             if ( $this->id != 0 && $this->access > 0 ) {
@@ -902,10 +1261,10 @@ class menuElement {
                     $lilastClass = '';
                 }
 
-                if ( $this->type == 1 && $parentaclass != '' ) {
-                    $retval .= "<li".$lilastClass.">" . '<a class="' . $parentaclass . '" name="'.$parentaclass.'" href="' . ($this->url == '' ? '#' : $this->url) . '">' . strip_tags($this->label) . '</a>' . LB;
+                if ( $this->type == ET_SUB_MENU && $parentaclass != '' ) {
+                    $retval .= "<li".$lilastClass.">" . '<a class="' . $parentaclass . '" href="' . ($this->url == '' ? '#' : $this->url) . '">' . strip_tags($this->label) . '</a>' . LB;
                 } else {
-                    if ($this->type == 8 ) {
+                    if ($this->type == ET_LABEL ) {
                         $retval .= "<li".$lilastClass.'><a><strong>' . strip_tags($this->label) . '</strong></a>' . LB;
                     } else {
                         $retval .= "<li".$lilastClass.">" . '<a href="' . $this->url . '"' . ($this->target != '' ? ' target="' . $this->target . '"' : '') . '>' . strip_tags($this->label) . '</a>' . LB;
@@ -924,7 +1283,7 @@ class menuElement {
                 }
                 foreach($children as $child) {
                     $meLevel++;
-                    $retval .= $mbMenu[$this->menu_id]['elements'][$child]->showTree($depth,$oulclass,$oliclass,$oparentaclass,$olastclass,$selected,$noid);
+                    $retval .= $mbMenu[$this->menu_id]['elements'][$child]->showTree($depth,$oulclass,$oliclass,$oparentaclass,$olastclass,$selected);
                     $meLevel--;
                 }
                 if ( $this->id == 0 ) {
@@ -934,15 +1293,11 @@ class menuElement {
                 }
             }
         } else {
-//            if ($this->type == 1) {
-            if ($this->type != 3 && $this->type != 7) {
-
+            if ($this->type != ET_FUSION_MENU && $this->type != ET_PHP ) {
                 $retval .= '</li>';
             }
         }
         return $retval;
     }
-
-
 }
 ?>

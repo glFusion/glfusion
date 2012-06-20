@@ -1151,6 +1151,26 @@ function INST_doPrePluginUpgrade()
                 }
             }
 
+            $_SQL = array();
+
+            $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='tl_menu_background_color' WHERE conf_name='main_menu_bg_color'";
+            $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='tl_menu_background_color_hover' WHERE conf_name='main_menu_hover_bg_color'";
+            $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='tl_menu_text_color' WHERE conf_name='main_menu_text_color'";
+            $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='tl_menu_text_color_hover' WHERE conf_name='main_menu_hover_text_color'";
+            $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='ch_menu_text_color' WHERE conf_name='submenu_text_color'";
+            $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='ch_menu_text_color_hover' WHERE conf_name='submenu_hover_text_color'";
+            $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='ch_menu_background_color' WHERE conf_name='submenu_background_color'";
+            $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='ch_menu_background_color_hover' WHERE conf_name='submenu_hover_bg_color'";
+            $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='ch_menu_element_border_top_color' WHERE conf_name='submenu_highlight_color'";
+            $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='ch_menu_element_border_bottom_color' WHERE conf_name='submenu_shadow_color'";
+            $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='tl_menu_background_image' WHERE conf_name='menu_bg_filename'";
+            $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='tl_menu_text_hover_image' WHERE conf_name='menu_hover_filename'";
+            $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='ch_menu_parent_image' WHERE conf_name='menu_parent_filename'";
+
+            foreach ($_SQL as $sql) {
+                DB_query($sql,1);
+            }
+
             $_TABLES['am_autotags'] = $_DB_table_prefix . 'am_autotags';
 
             if ( DB_checkTableExists('am_autotags') ) {
