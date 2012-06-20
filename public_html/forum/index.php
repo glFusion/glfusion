@@ -180,14 +180,14 @@ if ($op == 'search') {
     $query = DB_escapeString($_REQUEST['query']);
     $report->set_var (array(
             'form_action'   => $_CONF['site_url'] . '/forum/index.php?op=search',
-            'LANG_TITLE'    => $LANG_GF02['msg119'].' '. htmlentities($html_query, ENT_QUOTES, COM_getEncodingt()),
+            'LANG_TITLE'    => $LANG_GF02['msg119'].' '. @htmlentities($html_query, ENT_QUOTES, COM_getEncodingt()),
             'returnlink'    => $_CONF['site_url'].'/forum/index.php' . $returnPostfix,
             'LANG_return'   => $LANG_GF02['msg175'],
             'LANG_Heading1' => $LANG_GF01['SUBJECT'],
             'LANG_Heading2' => $LANG_GF01['REPLIES'],
             'LANG_Heading3' => $LANG_GF01['VIEWS'],
             'LANG_Heading4' => $LANG_GF01['DATE'],
-            'op'            => "&amp;op=search&amp;query=".htmlentities($html_query, ENT_QUOTES, COM_getEncodingt()),
+            'op'            => "&amp;op=search&amp;query=".@htmlentities($html_query, ENT_QUOTES, COM_getEncodingt()),
             'prevorder'     => $order,
             'direction'     => $direction,
             'page'          => '1'
