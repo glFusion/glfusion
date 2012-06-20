@@ -155,10 +155,12 @@ class getid3_jpg
 			if (isset($ThisFileInfo['filenamepath'])) {
 				$image_xmp = new Image_XMP($ThisFileInfo['filenamepath']);
 				$xmp_raw = $image_xmp->getAllTags();
-				foreach ($xmp_raw as $key => $value) {
-					list($subsection, $tagname) = explode(':', $key);
-					$ThisFileInfo['xmp'][$subsection][$tagname] = $this->CastAsAppropriate($value);
-				}
+				if ( is_array($xmp_raw) ) {
+    				foreach ($xmp_raw as $key => $value) {
+	    				list($subsection, $tagname) = explode(':', $key);
+		    			$ThisFileInfo['xmp'][$subsection][$tagname] = $this->CastAsAppropriate($value);
+			    	}
+			    }
 			}
 		}
 
