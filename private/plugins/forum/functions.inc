@@ -190,12 +190,21 @@ function plugin_getadminoption_forum()
 
 function plugin_user_create_forum ($uid)
 {
-    global $_TABLES,$FF_userprefs;
+    global $_TABLES,$_FF_CONF;
 
     DB_query ("INSERT INTO {$_TABLES['ff_userinfo']} (uid,rating,signature) VALUES (".(int) $uid.",0,'')");
     DB_query ("INSERT INTO {$_TABLES['ff_userprefs']} (uid,topicsperpage,postsperpage) VALUES (".(int)$uid.",".
-               (int)$FF_userprefs['topicsperpage'].",".(int)$FF_userprefs['postsperpage'].")");
+               (int)$_FF_CONF['show_topics_perpage'].",".(int)$_FF_CONF['show_posts_perpage'].")");
 }
+
+function plugin_user_changed_forum( $uid )
+{
+    global $_TABLES, $_USER;
+
+    $curusername = DB_getItem ($_TABLES['users'], 'username',"uid = $uid");
+    DB_query("UPDATE {$_TABLES['ff_topic']} SET name='".DB_escapeString($curusername)."' WHERE uid=".(int) $uid);
+}
+
 
 /**
 * Called if admin deletes a user - Removes any moderator records for user
