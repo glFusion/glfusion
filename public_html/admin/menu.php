@@ -49,145 +49,138 @@ if (!SEC_hasRights('menu.admin')) {
 
 $menuAttributes = array();
 
-    $hc_menu_defaults = array(
-    'tl_menu_background_color'              => '#151515',
-    'tl_menu_background_color_hover'        => '#3667c0',
-    'tl_menu_text_color'                    => '#CCCCCC',
-    'tl_menu_text_color_hover'              => '#ffffff',
-    'tl_menu_font_family'                   => '',
-    'tl_menu_font_size'                     => '1.0em',
-    'tl_menu_font_weight'                   => '700',
-    'tl_menu_line_height'                   => '2.2em',
-    'tl_menu_element_width'                 => '14.74em',
-    'tl_menu_element_padding'               => '0 1.2em',
-    'tl_menu_element_border_top_width'      => '',
-    'tl_menu_element_border_top_color'      => '',
-    'tl_menu_element_border_bottom_width'   => '',
-    'tl_menu_element_border_bottom_color'   => '',
-    'tl_menu_element_border_left_width'     => '',
-    'tl_menu_element_border_left_color'     => '',
-    'tl_menu_element_border_right_width'    => '',
-    'tl_menu_element_border_right_color'    => '',
-    'tl_menu_element_text_indent'           => '1.2em',
-    'ch_menu_background_color'              => '#151515',
-    'ch_menu_background_color_hover'        => '#3667c0',
-    'ch_menu_text_color'                    => '#ffffff',
-    'ch_menu_text_color_hover'              => '#ffffff',
-    'ch_menu_font_family'                   => 'Helvetica, Arial, sans-serif',
-    'ch_menu_font_size'                     => '100%',
-    'ch_menu_offset'                        => '2.2em',
-    'ch_menu_font_weight'                   => '400',
-    'ch_menu_line_height'                   => '2.3em',
-    'ch_menu_submenu_offset'                => '14.65em',
-    'ch_menu_element_width'                 => '14.6em',
-    'ch_menu_element_border_top_width'      => '1px solid',
-    'ch_menu_element_border_top_color'      => '#333333',
-    'ch_menu_element_border_bottom_width'   => '1px solid',
-    'ch_menu_element_border_bottom_color'   => '#000000',
-    'ch_menu_element_border_left_width'     => '',
-    'ch_menu_element_border_left_color'     => '',
-    'ch_menu_element_border_right_width'    => '',
-    'ch_menu_element_border_right_color'    => '',
-    'ch_menu_element_text_indent'           => '',
-    );
+$hc_menu_defaults = array(
+'tl_menu_background_color'              => '#151515',
+'tl_menu_background_color_hover'        => '#3667c0',
+'tl_menu_text_color'                    => '#CCCCCC',
+'tl_menu_text_color_hover'              => '#ffffff',
+'tl_menu_font_family'                   => '',
+'tl_menu_font_size'                     => '1.0em',
+'tl_menu_font_weight'                   => '700',
+'tl_menu_line_height'                   => '2.2em',
+'tl_menu_element_width'                 => '14.74em',
+'tl_menu_element_padding'               => '0 1.2em',
+'tl_menu_element_border_top_width'      => '',
+'tl_menu_element_border_top_color'      => '',
+'tl_menu_element_border_bottom_width'   => '',
+'tl_menu_element_border_bottom_color'   => '',
+'tl_menu_element_border_left_width'     => '',
+'tl_menu_element_border_left_color'     => '',
+'tl_menu_element_border_right_width'    => '',
+'tl_menu_element_border_right_color'    => '',
+'tl_menu_element_text_indent'           => '1.2em',
+'ch_menu_background_color'              => '#151515',
+'ch_menu_background_color_hover'        => '#3667c0',
+'ch_menu_text_color'                    => '#ffffff',
+'ch_menu_text_color_hover'              => '#ffffff',
+'ch_menu_font_family'                   => 'Helvetica, Arial, sans-serif',
+'ch_menu_font_size'                     => '100%',
+'ch_menu_offset'                        => '2.2em',
+'ch_menu_font_weight'                   => '400',
+'ch_menu_line_height'                   => '2.3em',
+'ch_menu_submenu_offset'                => '14.65em',
+'ch_menu_element_width'                 => '14.6em',
+'ch_menu_element_border_top_width'      => '1px solid',
+'ch_menu_element_border_top_color'      => '#333333',
+'ch_menu_element_border_bottom_width'   => '1px solid',
+'ch_menu_element_border_bottom_color'   => '#000000',
+'ch_menu_element_border_left_width'     => '',
+'ch_menu_element_border_left_color'     => '',
+'ch_menu_element_border_right_width'    => '',
+'ch_menu_element_border_right_color'    => '',
+'ch_menu_element_text_indent'           => '',
+);
 
-    $hs_menu_defaults = array(
-    'tl_menu_background_color'              => '',
-    'tl_menu_background_color_hover'        => '',
-    'tl_menu_text_color'                    => '#3677c0',
-    'tl_menu_text_color_hover'              => '#679ef1',
-    'tl_menu_font_family'                   => '',
-    'tl_menu_font_size'                     => '',
-    'tl_menu_font_weight'                   => '',
-    'tl_menu_line_height'                   => '',
-    'tl_menu_element_width'                 => '',
-    'tl_menu_element_padding'               => '',
-    'tl_menu_element_border_top_width'      => '',
-    'tl_menu_element_border_top_color'      => '',
-    'tl_menu_element_border_bottom_width'   => '',
-    'tl_menu_element_border_bottom_color'   => '',
-    'tl_menu_element_border_left_width'     => '',
-    'tl_menu_element_border_left_color'     => '',
-    'tl_menu_element_border_right_width'    => '1px solid',
-    'tl_menu_element_border_right_color'    => '#999999',
-    'tl_menu_element_text_indent'           => '',
-    );
+$hs_menu_defaults = array(
+'tl_menu_background_color'              => '',
+'tl_menu_background_color_hover'        => '',
+'tl_menu_text_color'                    => '#3677c0',
+'tl_menu_text_color_hover'              => '#679ef1',
+'tl_menu_font_family'                   => '',
+'tl_menu_font_size'                     => '',
+'tl_menu_font_weight'                   => '',
+'tl_menu_line_height'                   => '',
+'tl_menu_element_width'                 => '',
+'tl_menu_element_padding'               => '',
+'tl_menu_element_border_top_width'      => '',
+'tl_menu_element_border_top_color'      => '',
+'tl_menu_element_border_bottom_width'   => '',
+'tl_menu_element_border_bottom_color'   => '',
+'tl_menu_element_border_left_width'     => '',
+'tl_menu_element_border_left_color'     => '',
+'tl_menu_element_border_right_width'    => '1px solid',
+'tl_menu_element_border_right_color'    => '#999999',
+'tl_menu_element_text_indent'           => '',
+);
 
-    $vc_menu_defaults = array(
-    'tl_menu_background_color'              => '#dddddd',
-    'tl_menu_background_color_hover'        => '#bbbbbb',
-    'tl_menu_text_color'                    => '#0000ff',
-    'tl_menu_text_color_hover'              => '#ffffff',
-    'tl_menu_font_family'                   => '',
-    'tl_menu_font_size'                     => '',
-    'tl_menu_font_weight'                   => '',
-    'tl_menu_line_height'                   => '',
-    'tl_menu_element_width'                 => '156px',
-    'tl_menu_element_padding'               => '3px 6px',
-    'tl_menu_element_border_top_width'      => '1px solid',
-    'tl_menu_element_border_top_color'      => '#999999',
-    'tl_menu_element_border_bottom_width'   => '',
-    'tl_menu_element_border_bottom_color'   => '',
-    'tl_menu_element_border_left_width'     => '1px solid',
-    'tl_menu_element_border_left_color'     => '#999999',
-    'tl_menu_element_border_right_width'    => '1px solid',
-    'tl_menu_element_border_right_color'    => '#999999',
-    'tl_menu_element_text_indent'           => '',
-    'ch_menu_background_color'              => '#dddddd',
-    'ch_menu_background_color_hover'        => '#bbbbbb',
-    'ch_menu_text_color'                    => '#0000ff',
-    'ch_menu_text_color_hover'              => '#ffffff',
-    'ch_menu_font_family'                   => '',
-    'ch_menu_font_size'                     => '',
-    'ch_menu_offset'                        => '',
-    'ch_menu_font_weight'                   => '',
-    'ch_menu_line_height'                   => '',
-    'ch_menu_submenu_offset'                => '155px',
-    'ch_menu_element_width'                 => '',
-    'ch_menu_element_border_top_width'      => '1px solid',
-    'ch_menu_element_border_top_color'      => '#999999',
-    'ch_menu_element_border_bottom_width'   => '1px solid',
-    'ch_menu_element_border_bottom_color'   => '#999999',
-    'ch_menu_element_border_left_width'     => '1px solid',
-    'ch_menu_element_border_left_color'     => '#999999',
-    'ch_menu_element_border_right_width'    => '1px solid',
-    'ch_menu_element_border_right_color'    => '#999999',
-    'ch_menu_element_text_indent'           => '',
-    );
-    $vs_menu_defaults = array(
-    'tl_menu_background_color'              => '',
-    'tl_menu_background_color_hover'        => '',
-    'tl_menu_text_color'                    => '#0000ff',
-    'tl_menu_text_color_hover'              => '#ffffff',
-    'tl_menu_font_family'                   => '',
-    'tl_menu_font_size'                     => '',
-    'tl_menu_font_weight'                   => '',
-    'tl_menu_line_height'                   => '',
-    'tl_menu_element_width'                 => '',
-    'tl_menu_element_padding'               => '',
-    'tl_menu_element_border_top_width'      => '',
-    'tl_menu_element_border_top_color'      => '',
-    'tl_menu_element_border_bottom_width'   => '',
-    'tl_menu_element_border_bottom_color'   => '',
-    'tl_menu_element_border_left_width'     => '',
-    'tl_menu_element_border_left_color'     => '',
-    'tl_menu_element_border_right_width'    => '',
-    'tl_menu_element_border_right_color'    => '',
-    'tl_menu_element_text_indent'           => '',
-    );
-
-
-/*
- * Displays a list of all menus
- */
+$vc_menu_defaults = array(
+'tl_menu_background_color'              => '#dddddd',
+'tl_menu_background_color_hover'        => '#bbbbbb',
+'tl_menu_text_color'                    => '#0000ff',
+'tl_menu_text_color_hover'              => '#ffffff',
+'tl_menu_font_family'                   => '',
+'tl_menu_font_size'                     => '',
+'tl_menu_font_weight'                   => '',
+'tl_menu_line_height'                   => '',
+'tl_menu_element_width'                 => '156px',
+'tl_menu_element_padding'               => '3px 6px',
+'tl_menu_element_border_top_width'      => '1px solid',
+'tl_menu_element_border_top_color'      => '#999999',
+'tl_menu_element_border_bottom_width'   => '',
+'tl_menu_element_border_bottom_color'   => '',
+'tl_menu_element_border_left_width'     => '1px solid',
+'tl_menu_element_border_left_color'     => '#999999',
+'tl_menu_element_border_right_width'    => '1px solid',
+'tl_menu_element_border_right_color'    => '#999999',
+'tl_menu_element_text_indent'           => '',
+'ch_menu_background_color'              => '#dddddd',
+'ch_menu_background_color_hover'        => '#bbbbbb',
+'ch_menu_text_color'                    => '#0000ff',
+'ch_menu_text_color_hover'              => '#ffffff',
+'ch_menu_font_family'                   => '',
+'ch_menu_font_size'                     => '',
+'ch_menu_offset'                        => '',
+'ch_menu_font_weight'                   => '',
+'ch_menu_line_height'                   => '',
+'ch_menu_submenu_offset'                => '155px',
+'ch_menu_element_width'                 => '',
+'ch_menu_element_border_top_width'      => '1px solid',
+'ch_menu_element_border_top_color'      => '#999999',
+'ch_menu_element_border_bottom_width'   => '1px solid',
+'ch_menu_element_border_bottom_color'   => '#999999',
+'ch_menu_element_border_left_width'     => '1px solid',
+'ch_menu_element_border_left_color'     => '#999999',
+'ch_menu_element_border_right_width'    => '1px solid',
+'ch_menu_element_border_right_color'    => '#999999',
+'ch_menu_element_text_indent'           => '',
+);
+$vs_menu_defaults = array(
+'tl_menu_background_color'              => '',
+'tl_menu_background_color_hover'        => '',
+'tl_menu_text_color'                    => '#0000ff',
+'tl_menu_text_color_hover'              => '#ffffff',
+'tl_menu_font_family'                   => '',
+'tl_menu_font_size'                     => '',
+'tl_menu_font_weight'                   => '',
+'tl_menu_line_height'                   => '',
+'tl_menu_element_width'                 => '',
+'tl_menu_element_padding'               => '',
+'tl_menu_element_border_top_width'      => '',
+'tl_menu_element_border_top_color'      => '',
+'tl_menu_element_border_bottom_width'   => '',
+'tl_menu_element_border_bottom_color'   => '',
+'tl_menu_element_border_left_width'     => '',
+'tl_menu_element_border_left_color'     => '',
+'tl_menu_element_border_right_width'    => '',
+'tl_menu_element_border_right_color'    => '',
+'tl_menu_element_text_indent'           => '',
+);
 
 function MB_displayMenuList( ) {
     global $_CONF, $_USER, $_TABLES, $LANG_MB01, $LANG_MB_ADMIN, $LANG_ADMIN,$LANG_MB_MENU_TYPES;
 
     $retval = '';
     $menuArray = array();
-
-    $toolTipStyle = COM_getTooltipStyle();
 
     $mbadmin = SEC_hasRights('menu.admin');
     $root    = SEC_inGroup('Root');
@@ -446,7 +439,6 @@ function MB_saveNewMenu( ) {
     $errors = 0;
     $errMsg = '';
 
-
     // sanity check
 
     if ( !isset($_POST['menuname']) || $_POST['menuname'] == '' ) {
@@ -458,7 +450,12 @@ function MB_saveNewMenu( ) {
         if ( strstr($menuname,' ' ) !== FALSE ) {
             $errors++;
 //@TODO - fix language
-            $errMsg .= 'Menu name cannot contain spaces';
+            $errMsg .= 'Menu name cannot contain spaces<br />';
+        }
+        $existing_id = DB_getItem($_TABLES['menu'],'id','menu_name="'.DB_escapeString($menuname).'"');
+        if ( $existing_id > 0 ) {
+            $errors++;
+            $errMsg .= 'Menu name must be unique, there is already a menu by this name';
         }
     }
 
@@ -507,7 +504,6 @@ function MB_saveNewMenu( ) {
             }
             break;
     }
-
     CACHE_remove_instance('mbmenu');
     CACHE_remove_instance('css');
     $randID = rand();
@@ -1277,8 +1273,6 @@ function MB_menuConfig( $mid ) {
     }
     $group_select .= '</select>' . LB;
 
-
-
     $T = new Template($_CONF['path_layout'] . 'admin/menu');
     $T->set_file( 'admin','menuconfig.thtml');
 
@@ -1461,7 +1455,6 @@ function MB_saveMenuConfig($menu_id=0) {
             DB_query("DELETE FROM {$_TABLES['menu_config']} WHERE menu_id=".$menu_id." AND conf_name='tl_menu_background_image'");
         }
     }
-
 
     $file = array();
     $file = $_FILES['tl_menu_text_hover_image'];
@@ -1725,8 +1718,6 @@ function _mb_getListField_menulist($fieldname, $fieldvalue, $A, $icon_arr)
     }
     return $retval;
 }
-
-
 
 /*
  * Main processing loop
