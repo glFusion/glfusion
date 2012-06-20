@@ -1,0 +1,21 @@
+{menuname} .menu-vertical-simple ul {
+    text-align:         left;
+{!if tl_menu_background_color}
+    background:         {tl_menu_background_color};
+{!endif}
+    color:              {tl_menu_text_color};
+    list-style-type:    disc;
+}
+
+{menuname} .menu-vertical-simple li a:link,
+{menuname} .menu-vertical-simple li a:visited {
+    color:              {tl_menu_text_color};
+    text-decoration:    none;
+}
+{menuname} .menu-vertical-simple li a:hover {
+    color:              {tl_menu_text_color_hover};
+{!if tl_menu_background_color_hover}
+    background:         {tl_menu_background_color_hover};
+{!endif}
+    text-decoration:    underline;
+}

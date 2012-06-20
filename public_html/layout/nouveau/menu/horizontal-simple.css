@@ -1,0 +1,56 @@
+{menuname} .menu-horizontal-simple {
+    text-align:         center;
+    margin:             1em;
+    padding:            0;
+    clear:              both;
+    text-align:         center; /* options are left - center - right */
+{!if tl_menu_text_color}
+    color:              {tl_menu_text_color};
+{!endif}
+    list-style-type:    disc;
+    list-style-image:   none;
+    list-style-position:outside;
+{!if tl_menu_element_border_top_width}
+    border-top:         {tl_menu_element_border_top_width} {tl_menu_element_border_top_color};
+{!endif}
+{!if tl_menu_element_border_bottom_width}
+    border-bottom:      {tl_menu_element_border_bottom_width} {tl_menu_element_border_bottom_color};
+{!endif}
+
+}
+
+{menuname} .menu-horizontal-simple li {
+{!if tl_menu_element_border_right_width}
+    border-right:       {tl_menu_element_border_right_width} {tl_menu_element_border_right_color};
+{!endif}
+    display:            inline;
+    padding:            0 1.1em 0 .8em;
+{!if tl_menu_line_height}
+    line-height:        {tl_menu_line_height};
+{!endif}
+{!if tl_menu_font_size}
+    font-size:          {tl_menu_font_size};
+{!endif}
+{!if tl_menu_font_weight}
+    font-weight:        {tl_menu_font_weight};
+{!endif}
+}
+
+{menuname} .menu-horizontal-simple li.last {
+    border-right:       0;
+}
+
+{menuname} .menu-horizontal-simple a:link,
+{menuname} .menu-horizontal-simple a:visited {
+{!if tl_menu_text_color}
+    color:              {tl_menu_text_color};
+{!endif}
+    text-decoration:    none;
+}
+
+{menuname} .menu-horizontal-simple a:hover {
+{!if tl_menu_text_color_hover}
+    color:              {tl_menu_text_color_hover};
+{!endif}
+    text-decoration:    underline;
+}
