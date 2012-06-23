@@ -405,11 +405,8 @@ class Media {
             $media_size           = @getimagesize($media_thumbnail_file);
         }
 
-		if ( $_MG_CONF['use_upload_time'] == 1 ) {
-        	$media_time        = MG_getUserDateTimeFormat($this->upload_time);
-        } else {
-        	$media_time        = MG_getUserDateTimeFormat($this->time);
-        }
+       	$media_time        = MG_getUserDateTimeFormat($this->time);
+      	$upload_time = MG_getUserDateTimeFormat($this->upload_time);
 
         $url_media_item = $url_display_item;
 
@@ -579,6 +576,7 @@ class Media {
             'media_description' => PLG_replaceTags(nl2br($this->description),'mediagallery','media_description'),
             'media_tag'         => strip_tags($this->title),
             'media_time'        => $media_time[0],
+            'upload_time'       => $upload_time[0],
             'media_owner'		=> $username,
             'site_url'			=> $_MG_CONF['site_url'],
             'lang_published'	=> $LANG_MG03['published'],

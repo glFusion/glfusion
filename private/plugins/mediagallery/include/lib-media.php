@@ -1622,11 +1622,8 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     $mid = $media[$mediaObject]['media_id'];
 
-	if ( $_MG_CONF['use_upload_time'] == 1 ) {
-    	$media_date = MG_getUserDateTimeFormat( $media[$mediaObject]['upload_time'] );
-    } else {
-    	$media_date = MG_getUserDateTimeFormat( $media[$mediaObject]['media_time'] );
-    }
+  	$media_date = MG_getUserDateTimeFormat( $media[$mediaObject]['media_time'] );
+    $upload_date = MG_getUserDateTimeFormat( $media[$mediaObject]['media_upload_time'] );
 
     // build the rating bar if rating is enabled.
     if ( $MG_albums[$aid]->enable_rating > 0 ) {
@@ -1799,6 +1796,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         'media_desc'    =>  (isset($media[$mediaObject]['media_desc']) && $media[$mediaObject]['media_desc'] != ' ' ) ? $media_desc : '',
         'artist'        =>  (isset($media[$mediaObject]['artist'])) ? $media[$mediaObject]['artist'] : '',
         'media_time'    =>  $media_date[0],
+        'upload_time'   =>  $upload_date[0],
         'media_views'   =>  ($MG_albums[$aid]->enable_views ? $media[$mediaObject]['media_views'] : ''),
         'media_comments' => ($MG_albums[$aid]->enable_comments ? $media[$mediaObject]['media_comments'] . '<br />' : ''),
         'pagination'    =>  ($sortID > 0 ? '' : generate_pic_pagination($_MG_CONF['site_url'] . "/media.php?f=" . ($full ? '1' : '0') . "&amp;sort=" . $sortOrder, $nRows, 1, $mediaObject, $media, TRUE)),
