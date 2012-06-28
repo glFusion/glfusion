@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.3.0
 ------
+- Media Gallery: Now redirect to last album that received an upload when
+  using the SWF upload feature (Mark)
 - Forum Plugin: When user account is renamed - update topic records (Mark)
 - Integrated Smiley plugin support for comments (Mark)
 - Menu Builder enhancements - better CSS and control via online editor (Mark)

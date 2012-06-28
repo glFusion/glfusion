@@ -1178,6 +1178,8 @@ function MG_displayEmbed($aid,$I,$full,$mediaObject) {
     global $_CONF, $_MG_CONF, $MG_albums, $_USER;
 
     $retval = '';
+    $resolution_x = 0;
+    $resolution_y = 0;
 
 	$playback_type = $MG_albums[$aid]->playback_type;
 

@@ -262,11 +262,11 @@ if (($mode == 'edit') ) {
     exit;
 } else if ( $mode == $LANG_MG01['save_exit'] ) {
     $retval = '';
-    if ( isset($_GET['album_id']) ) {
+    if ( isset($_REQUEST['album_id']) ) {
         if ( !function_exists('MG_batchCaptionEdit') ) {
             require_once $_CONF['path'] . 'plugins/mediagallery/include/caption.php';
         }
-        $album_id = COM_applyFilter($_GET['album_id'],true);
+        $album_id = COM_applyFilter($_REQUEST['album_id'],true);
         $start    = isset($_GET['start']) ? COM_applyFilter($_GET['start'],true) : 0;
         if ( $album_id == 0 ) {
             $actionURL = $_MG_CONF['site_url'] . '/index.php';

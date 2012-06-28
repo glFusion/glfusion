@@ -200,7 +200,8 @@ function MG_SWFUpload( $album_id ) {
 * @param    int     album_id    album_id save uploaded media
 * @return   string              HTML
 *
-*/function MG_saveSWFUpload( $album_id ) {
+*/
+function MG_saveSWFUpload( $album_id ) {
     global $MG_albums, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG02, $LANG_MG03, $new_media_id;
 
     $statusMsg = '';

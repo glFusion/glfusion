@@ -621,6 +621,7 @@ function onAlbumChange() {
   var file_types_desc = "{swfupload_types_desc}";
   var file_types_span = document.getElementById("swfu_file_types");
   var size_limit_span = document.getElementById("swfu_size_limit");
+  var batch_save_div  = document.getElementById("divSWFThumbnails");
   var size_limit = "{swfupload_size_limit}";
   var post_params = { "uid" : uid, "sid" : sid, "aid": aid };
   var url = "{site_url}/album_rpc.php";
@@ -637,7 +638,6 @@ function onAlbumChange() {
         xmlhttp.open('GET', url + query, true);
         xmlhttp.onreadystatechange = function() {
            if (xmlhttp.readyState == 4) {
-
                 var response = xmlhttp.responseText.split( "%" );
                 size_limit_display = (response[0] / 1024 ) / 1024 + " M";
                 size_limit = response[0];
@@ -647,6 +647,7 @@ function onAlbumChange() {
                 swfu.setFileTypes( file_types, file_types_desc );
                 size_limit_span.innerHTML = size_limit_display;
                 swfu.setFileSizeLimit( size_limit );
+                document.captions.album_id.value = aid;
               }
        };
         xmlhttp.send(null);
@@ -767,12 +768,12 @@ addLoadEvent(onAlbumChange);
     </form>
 
     <div id="divSWFThumbnails">
-      <form name="captions" method="post" action="{site_url}/admin.php?album_id=0">
+      <form name="captions" method="post" action="{site_url}/admin.php">
 
     	<div id="thumbnails" style="vertical-align:middle;"></div>
 
         <div style="clear:both;"></div>
-
+        <input type="hidden" name="album_id" id="album_id" value="0" />
         <input type="hidden" name="action" value="batchcaptionsave" />
         <input type="submit" name="mode"   value="{$LANG_MG01[save_exit]}" />
 

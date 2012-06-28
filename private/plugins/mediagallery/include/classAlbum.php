@@ -132,7 +132,7 @@ class mgAlbum {
         $this->album_disk_usage     = 0;
         $this->last_update          = 0;
         $this->views                = 0;
-        $this->podcast				= 0;// $_MG_CONF['ad_podcast'];
+        $this->podcast				= 0;
         $this->mp3ribbon            = isset($_MG_CONF['ad_mp3ribbon']) ? $_MG_CONF['ad_mp3ribbon'] : 0;
         $this->enable_album_views   = $_MG_CONF['ad_enable_album_views'];
         $this->image_skin           = $_MG_CONF['ad_image_skin'];
