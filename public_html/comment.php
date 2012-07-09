@@ -510,7 +510,7 @@ if ( isset($_POST['cancel'] ) ) {
         exit;
     }
 
-} elseif ( isset($_POST['delete'] ) ) {
+} elseif ( isset($_POST['delete'] ) || $mode == 'delete' ) {
     if (SEC_checkToken()) {
         $pageBody .= handleDelete();
     } else {
