@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2010 by the following authors:                             |
+// | Copyright (C) 2010-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -190,7 +190,7 @@ function INSTALLER_install_table($step, &$vars)
 
 function INSTALLER_extract_params($str, $delim)
 {
-    $params = Array();
+    $params = array();
     for ($i=0; $i < strlen($str);) {
         $j = strpos($str, $delim, $i);
         if ($j > 0) {
@@ -217,7 +217,7 @@ function INSTALLER_install_sql($step, &$vars)
     }
 
     if (array_key_exists('sql', $step)) {
-        $query = (is_array($step['sql'])) ? $step['sql'] : Array($step['sql']);
+        $query = (is_array($step['sql'])) ? $step['sql'] : array($step['sql']);
         foreach ($query as $sql) {
             // check for replaceable parameters
             $params = INSTALLER_extract_params($sql,'%%');
@@ -239,7 +239,7 @@ function INSTALLER_install_sql($step, &$vars)
 function INSTALLER_fail_sql($step, &$vars)
 {
     if (array_key_exists('rev', $step)) {
-        $query = (is_array($step['rev'])) ? $step['rev'] : Array($step['rev']);
+        $query = (is_array($step['rev'])) ? $step['rev'] : array($step['rev']);
         foreach ($query as $sql) {
             // check for replaceable parameters
             $params = INSTALLER_extract_params($sql,'%%');
@@ -312,20 +312,20 @@ function INSTALLER_install_createvar($step, &$vars)
 function INSTALLER_install_mkdir($step, &$vars)
 {
     if (array_key_exists('dirs', $step)) {
-        $dirs = (is_array($step['dirs'])) ? $step['dirs'] : Array($step['dirs']);
+        $dirs = (is_array($step['dirs'])) ? $step['dirs'] : array($step['dirs']);
         foreach ($dirs as $path) {
             COM_errorlog("AutoInstall: Creating directory $path");
             $ret = @mkdir($path);
             file_put_contents($path . '/index.html', '');
         }
     }
-    return Array('type' => 'rmdir', 'dirs' => $dirs);
+    return array('type' => 'rmdir', 'dirs' => $dirs);
 }
 
 function INSTALLER_fail_rmdir($step)
 {
     if (array_key_exists('dirs', $step)) {
-        $dirs = (is_array($step['dirs'])) ? $step['dirs'] : Array($step['dirs']);
+        $dirs = (is_array($step['dirs'])) ? $step['dirs'] : array($step['dirs']);
         foreach ($dirs as $path) {
             COM_errorlog("AutoInstall: FAIL: removing directory $path");
             @rmdir($path);
@@ -384,12 +384,12 @@ function INSTALLER_install($A)
 
     $pluginName = $A['plugin']['name'];
 
-    $vars = Array('__groups' => Array(), '__features' => Array(), '__blocks' => Array());
-    $reverse = Array();
+    $vars = array('__groups' => array(), '__features' => array(), '__blocks' => array());
+    $reverse = array();
     foreach ($A as $meta => $step) {
         if ($meta === 'installer') { // must use === when since 0 == 'anystring' is true
         } elseif ($meta === 'plugin') {
-            if (!isset($meta['name'])) {
+            if (!isset($step['name'])) {
                 COM_errorLog("AutoInstall: Missing plugin name!");
                 INSTALLER_fail($pluginName,$reverse);
                 COM_errorLog("AutoInstall: **** END Installation ****");
@@ -458,7 +458,7 @@ function INSTALLER_uninstall($A)
     global $_TABLES;
 
     $reverse = array_reverse($A);
-    $plugin = Array();
+    $plugin = array();
     foreach ($reverse as $step) {
         if ($step['type'] == 'feature') {
             $ft_name = DB_escapeString($step['feature']);
@@ -538,7 +538,7 @@ function INSTALLER_applyGroupDefault($grp_id, $add = true)
         for ($i = 0; $i < $num_users; $i += $_values_per_insert) {
             $u = array();
             for ($j = 0; $j < $_values_per_insert; $j++) {
-                list($uid) = DB_fetchArray($result);
+                list($uid) = DB_fetcharray($result);
                 $u[] = $uid;
                 if ($i + $j + 1 >= $num_users) {
                     break;
