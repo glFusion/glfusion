@@ -517,7 +517,7 @@ class Template
                         $this->varvals[$k] = $v;
                     }
                     if ($nocache) {
-                        $this->nocache[$varname] = true;
+                        $this->nocache[$k] = true;
                     }
                 }
             }
