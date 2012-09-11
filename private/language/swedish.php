@@ -2063,7 +2063,9 @@ $LANG_MB01 = array(
     'disabled_plugin' => 'Not found or disabled plugin',
     'clone' => 'Copy',
     'clone_menu_label' => 'Name for Cloned Menu',
-    'topic' => 'Topics'
+    'topic' => 'Topics',
+    'no_elements' => 'No menu elements defined',
+    'return_to' => 'Return to '
 );
 
 ###############################################################################
