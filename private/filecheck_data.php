@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: filecheck_data.php 5763 2010-03-31 00:16:44Z usableweb            $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -38,7 +38,7 @@ if (!defined ('GVERSION')) {
 
 // these file/dir names will be completely ignored, and not checked
 
-$glfIgnore = array('.','..','.svn','CVS','cgi-bin','.htaccess','robots.txt');
+$glfIgnore = array('.','..','.svn','CVS','cgi-bin','.htaccess','robots.txt','lightash');
 
 // these are the bundled plugins.  they are fully defined/checked as below
 
@@ -196,7 +196,6 @@ $glfDir = array(
 // plugin: sitetailor
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/plugins/sitetailor'),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/plugins/sitetailor/language'),
-    array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/plugins/sitetailor/language/custom'),
 // plugin: spamx
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/plugins/spamx' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/language' ),
@@ -496,6 +495,7 @@ $glfDir = array(
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/trackback/custom' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/users' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/users/custom' ),
+
 // plugin: links
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/links' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/links/images' ),
@@ -601,6 +601,7 @@ $glfDir = array(
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/admin/menu' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/menu' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/menu/custom' ),
+
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/mediagallery/frames/halo' ),
 );
 
@@ -1517,6 +1518,7 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/mediagallery/include/mediamanage.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/mediagallery/include/mgindex.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/mediagallery/include/newmedia.php' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/mediagallery/include/mgindex-all.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/mediagallery/include/rebuild.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/mediagallery/include/remote.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/mediagallery/include/rotate.php' ),
@@ -1628,6 +1630,8 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/mediagallery/templates/global_album_attr.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/mediagallery/templates/global_album_perm.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/mediagallery/templates/install.thtml' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/mediagallery/templates/index-all.thtml' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/mediagallery/templates/media-fi.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/mediagallery/templates/mediablock.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/mediagallery/templates/mediaedit.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/mediagallery/templates/mediaitems.thtml' ),
@@ -1744,15 +1748,8 @@ $glfFile = array(
 // plugin: sitetailor
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/sitetailor/autoinstall.php'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/sitetailor/functions.inc'),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/sitetailor/language/custom/README'),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/sitetailor/language/custom/index.html'),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/sitetailor/language/dutch_utf-8.php'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/sitetailor/language/english.php'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/sitetailor/language/english_utf-8.php'),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/sitetailor/language/german.php'),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/sitetailor/language/german_formal.php'),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/sitetailor/language/german_formal_utf-8.php'),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/sitetailor/language/german_utf-8.php'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/sitetailor/plugin.xml'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/sitetailor/sitetailor.php'),
 // plugin: spamx
@@ -1765,15 +1762,16 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/EditHeader.Admin.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/EditIP.Admin.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/EditIPofURL.Admin.class.php' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/EditSFS.Admin.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/Header.Examine.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/IP.Examine.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/IPofUrl.Examine.class.php' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/LogView.Admin.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/MailAdmin.Action.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/MassDelTrackback.Admin.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/MassDelete.Admin.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/SFS.Misc.class.php' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/SFS.Examine.class.php' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/SFSbase.class.php' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/SFSreport.Action.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/SLV.Examine.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/SLVbase.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/spamx/SLVreport.Action.class.php' ),
@@ -1843,6 +1841,7 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/classes/openid/server.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/classes/openid/trustroot.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/classes/openidhelper.class.php' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/classes/output.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/classes/plugin.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/classes/sanitize.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/classes/search.class.php' ),
@@ -2084,7 +2083,6 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/imglib/index.html' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/pear/index.html' ),
 // public core files
-
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/admin/autotag.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/admin/autotag_upload.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/admin/getorder.php' ),
@@ -2118,8 +2116,14 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/loginform_oauth.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/menu/animate.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/menu/custom/index.html' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/menu/horizontal-cascading.thtml' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/menu/horizontal-simple.thtml' ),
+//    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/menu/horizontal-cascading.thtml' ),
+//    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/menu/horizontal-simple.thtml' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/menu/horizontal-cascading.css' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/menu/horizontal-simple.css' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/menu/vertical-cascading.css' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/menu/vertical-simple.css' ),
+
+
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/menu/index.html' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/menu/vertical-cascading.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/menu/vertical-simple.thtml' ),
@@ -2128,6 +2132,8 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/preferences/resynch.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/preferences/subscriptionblock.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/users/email.thtml' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/sysmessage.thtml' ),
+
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/mediagallery/frames/halo/BC.png' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/mediagallery/frames/halo/BL.png' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/mediagallery/frames/halo/BR.png' ),
@@ -2141,7 +2147,6 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/mediagallery/frames/halo/index.html' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/mediagallery/subscription.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/page.php' ),
-
 
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/404.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/rater.php' ),
@@ -2303,6 +2308,7 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/admin/topic.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/admin/trackback.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/admin/user.php' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/admin/vercheck.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/article.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/backend/glfusion.rss' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/backend/index.html' ),
@@ -3312,10 +3318,10 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/admin/user/prefeditor.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/admin/user/privacypanel.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/admin/user/userinfopanel.thtml' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/admin/vercheck.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/adminoption.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/adminoption_off.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/advanced_editor_header.thtml' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/archivestorybodytext.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/archivestorytext.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/article/article.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/article/custom/index.html' ),
@@ -3350,7 +3356,6 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/digest_text.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/digest_story_text.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/fckstyles.xml' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/featuredstorybodytext.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/featuredstorytext.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/footer.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/functions.php' ),
@@ -3587,7 +3592,6 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/stats/singlestat.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/stats/singlesummary.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/stats/sitestatistics.thtml' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/storybodytext.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/storytext.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/style-colors.css' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/style.css' ),
@@ -4092,5 +4096,8 @@ $glfFile = array(
 // files to ignore
     array( 'test' => 'I', 'preq' => 'R', 'path' => 'public_html/jscache_nouveau.js' ),
     array( 'test' => 'I', 'preq' => 'R', 'path' => 'public_html/stylecache_nouveau.css' ),
+    array( 'test' => 'I', 'preq' => 'R', 'path' => 'public_html/jscache_lightash.js' ),
+    array( 'test' => 'I', 'preq' => 'R', 'path' => 'public_html/stylecache_lightash.css' ),
+
 );
 ?>
