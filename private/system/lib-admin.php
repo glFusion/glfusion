@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -210,7 +210,7 @@ function ADMIN_listArray($component, $fieldfunction, $header_arr, $text_arr,
         $orderby = $defsort_arr['field']; // not set - use default (this could be null)
     } else {
         $orderbyidx = COM_applyFilter($_GET['orderby'], true); // set - retrieve and clean
-        $orderidx_link = "&amp;order=$orderbyidx"; // preserve the value for paging
+        $orderidx_link = "&amp;orderby=$orderbyidx"; // preserve the value for paging
         $orderby = $header_arr[$orderbyidx]['field']; // get the field name to sort by
     }
 
