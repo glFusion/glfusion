@@ -11,7 +11,7 @@
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2011 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -155,6 +155,11 @@ function _bb_listEntries ($page = 1, $msg = '')
 		$headers = str_replace("Referer:","<strong>Referer:</strong>",$headers);
 		$headers = str_replace("Pragma:","<strong>Pragma:</strong>",$headers);
 		$headers = str_replace("Proxy-","<strong>Proxy-</strong>",$headers);
+		$headers = str_replace("Cf-Connecting-Ip","<strong>Cf-Connecting-Ip</strong>",$headers);
+		$headers = str_replace("Cf-Ipcountry","<strong>Cf-Ipcountry</strong>",$headers);
+		$headers = str_replace("X-Forwarded-Proto","<strong>X-Forwarded-Proto</strong>",$headers);
+		$headers = str_replace("Cf-Visitor","<strong>Cf-Visitor</strong>",$headers);
+
 		$entity = str_replace("\n", "<br/>\n", $A["request_entity"]);
 
         $templates->set_var (array(
