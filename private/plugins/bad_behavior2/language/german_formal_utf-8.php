@@ -118,7 +118,8 @@ $LANG_BB2_RESPONSE = array(
     'f0dcb3fd' => 'Web-Browser versucht, einen Trackback senden',
     'f1182195' => 'User-Agent behauptete Googlebot scheint falsch zu sein.',
     'f9f2b8b9' => 'Ein User-Agent ist erforderlich aber keiner war vorgesehen.',
-    'f9f3b8b0' => 'Question mark at end of query.'
+    'f9f3b8b0' => 'Question mark at end of query.',
+    '96c0bd29' => 'SQL Injection detected'
 );
 
 $PLG_bad_behavior_MESSAGE1 = 'Wenn Sie diesen Hinweis sehen, dann ist Bad Behavior <b>nicht</b> korrekt installiert. Bitte lesen Sie sich die Installationsanleitung noch einmal sorgfältig durch.';

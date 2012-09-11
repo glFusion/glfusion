@@ -37,7 +37,6 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
@@ -46,7 +45,6 @@ if (!defined ('GVERSION')) {
 
 $LANG_GF00 = array(
     'admin_only' => 'Vain Admineille. Jos olet Admin, kirjaudu ensin.',
-    'plugin' => 'Lis&auml;osa',
     'pluginlabel' => 'Foorumi',
     'searchlabel' => 'Aihe',
     'statslabel' => 'Viestej&auml; yhteens&auml;',
@@ -54,26 +52,12 @@ $LANG_GF00 = array(
     'statsheading2' => 'Top 10 Vastatut aiheet',
     'statsheading3' => 'Ei aiheita raportoitavaksi',
     'searchresults' => 'hakutulokset %s',
-    'useradminmenu' => 'Foorumi Asetukset',
-    'useradmintitle' => 'Foorumin K&auml;ytt&auml;j&auml; Asetukset',
     'access_denied' => 'P&auml;&auml;sy ev&auml;tty',
-    'access_denied_msg' => 'Vain P&auml;&auml;k&auml;ytt&auml;jill&auml; On p&auml;&auml;sy T&auml;h&auml;n.  K&auml;ytt&auml;j&auml;nimesi ja IP on taltioitu.',
-    'admin' => 'Lis&auml;osa Admin',
-    'install_header' => 'Asenna/Poista Asennus',
-    'installed' => 'Lis&auml;osa ja Lohko on asennettu',
-    'uninstalled' => 'Lis&auml;osaa Ei Asennettu',
-    'install_success' => "Asennus onnistui<p><b>Seuraavaksi</b>:\n        <ol><li>K&auml;yt&auml; Foorumin Admin aluetta asetusten m&auml;&auml;rittelyyn\n        <li>Katso Foorumin Asetukset ja Personoi\n        <li>Luo ainakin yksi foorumi ja yksi kategoria</ol>\n        <p>Katso <a href=\"%s\">Asennus Huomautukset</a>.",
-    'install_failed' => 'Asennus Ep&auml;onnistui -- Katso error logi.',
-    'uninstall_msg' => 'Lis&auml;osan Asennus Poistettu',
-    'install' => 'Asenna',
-    'uninstall' => 'Poista Asennus',
-    'enabled' => '<br' . XHTML . '>Lis&auml;osa Asennettu ja otettu k&auml;ytt&ouml;&ouml;n.<br' . XHTML . '>Poista k&auml;yt&ouml;st&auml; ensin jos halua poistaa aasennuksen.<p>',
-    'warning' => 'Foorumin asennuksen poisto varoitus',
-    'uploaderr' => 'Tiedoston latausvirhe'
+    'uploaderr' => 'Tiedoston latausvirhe',
+    'instructions' => 'Select the option above to create / modify categories and forum. You can also setup forum moderators, import glFusion stories into the forum and administer the community moderation settings.'
 );
 
 $LANG_GF01 = array(
-    'LOGIN' => 'Kirjaudu',
     'FORUM' => 'Keskustelualue',
     'ALL' => 'Kaikki',
     'YES' => 'Kyll&auml;',
@@ -86,14 +70,10 @@ $LANG_GF01 = array(
     'UPDATE' => 'P&auml;ivit&auml;',
     'SAVE' => 'Tallenna',
     'CANCEL' => 'Peruuta',
-    'CLOSE' => 'Sulje',
     'ON' => 'L&auml;hetetty: ',
     'ON2' => '&nbsp;&nbsp;<b>On: </b>',
-    'ON3' => 'on',
-    'IN' => 'In: ',
     'BY' => 'L&auml;hetti: ',
     'RE' => 'Re: ',
-    'NA' => 'N/A',
     'DATE' => 'P&auml;iv&auml;',
     'VIEWS' => 'Lukukerrat',
     'REPLIES' => 'Viestit',
@@ -102,30 +82,18 @@ $LANG_GF01 = array(
     'TOPIC' => 'Aihe',
     'TOPICS' => 'Aiheet',
     'TOPICSUBJECT' => 'Aihe',
-    'FROM' => 'L&auml;hetti',
-    'REPLY' => 'Vastaa',
-    'PM' => 'PM\'s',
-    'HOME' => 'Katso aiheet',
     'HOMEPAGE' => 'Etusivu',
     'SUBJECT' => 'Aihe',
-    'HELLO' => 'Hei ',
-    'MEMBERS' => 'J&auml;senet',
     'MOVED' => 'Siirretty',
     'REMOVE' => 'Poista',
-    'CURRENT' => 'Nykyinen',
     'STARTEDBY' => 'Aloitti:',
     'POSTS' => 'Viestit',
     'LASTPOST' => 'Uusin',
     'POSTEDON' => 'Kohteessa',
     'POSTEDBY' => 'L&auml;hetti',
-    'PAGE' => 'Sivu',
     'PAGES' => 'Sivut',
-    'ANONYMOUS' => 'Tuntematon:',
     'TODAY' => 'T&auml;n&auml;&auml;n ',
-    'WELCOME' => 'Tervetuloa ',
-    'REGISTER' => 'Rekister&ouml;idy',
     'REGISTERED' => 'Rekister&ouml;ityi',
-    'MOSTPOPULAR' => 'Suosittu',
     'ORDERBY' => 'J&auml;rjest&auml;:&nbsp;',
     'ORDER' => 'J&auml;rjestys:',
     'USER' => 'K&auml;ytt&auml;j&auml;',
@@ -133,32 +101,13 @@ $LANG_GF01 = array(
     'ANON' => 'Tuntematon: ',
     'ADMIN' => 'Admin',
     'AUTHOR' => 'L&auml;hetti',
-    'LOCATION' => 'Sijainti',
-    'WEBSITE' => 'Kotisivu',
-    'EMAIL' => 'S&auml;hk&ouml;posti',
-    'MOOD' => 'Mieliala',
     'NOMOOD' => 'Ei mielialaa',
-    'REQUIRED' => '[Vaaditaan]',
-    'OPTIONAL' => '[Valinnainen]',
     'SUBMIT' => 'L&auml;het&auml;',
     'PREVIEW' => 'Esikatselu',
-    'NOTIFY' => 'Ilmoitus:',
-    'KEYWORDS' => 'Avainsanat',
     'EDIT' => 'Muokkaa',
     'DELETE' => 'Poista',
-    'MESSAGE' => 'Viesti:',
     'OPTIONS' => 'Valinnat:',
     'MISSINGSUBJECT' => 'Aihe tyhj&auml;',
-    'MAY' => 'may',
-    'IS' => 'on',
-    'FOR' => 'for',
-    'ARE' => 'are',
-    'NOT' => 'not',
-    'YOU' => 'Sin&auml;',
-    'HTML' => 'HTML',
-    'FULLHTML' => 'T&auml;ysi HTML',
-    'WORDS' => 'Sanat',
-    'SMILIES' => 'Hymi&ouml;t',
     'MIGRATE_NOW' => 'Yjdist&auml; nyt',
     'FILTERLIST' => 'Suodatin Lista',
     'SELECTFORUM' => 'Valitse alue',
@@ -172,31 +121,15 @@ $LANG_GF01 = array(
     'CENSOR_PERM_MSG' => 'Suodatettu sis&auml;lt&ouml;',
     'ANON_PERM_MSG' => 'Tuntemattomien viestit',
     'POST_PERM_MSG1' => 'Voi l&auml;hett&auml;&auml; viestej&auml;',
-    'POST_PERM_MSG2' => 'Tuntemattomat voi l&auml;hett&auml;&auml; viestej&auml;',
-    'CENSORED' => 'suodatettu',
-    'ALLOWED' => 'sallittu',
     'GO' => 'OK',
     'STATUS' => 'Tila:',
     'ONLINE' => 'paikalla',
     'OFFLINE' => 'ei paikalla',
-    'back2parent' => 'Is&auml;nn&auml;n aihe',
     'forumname' => '',
     'category' => 'Kategoria: ',
-    'loginreqview' => '<B>Sinun t&auml;ytyy %s rekister&ouml;ity&auml;</A> tai %s kirjautua sis&auml;&auml;n </A> voidaksesi k&auml;ytt&auml;&auml; t&auml;t&auml; foorumia</B>',
-    'loginreqpost' => '<B>Sinun t&auml;ytyy rekister&ouml;ity&auml; tai kirjautua sis&auml;&auml;n jos haluat l&auml;hett&auml;&auml; viestej&auml;</B>',
-    'searchresults' => '<b>»</b> Hakusi <b>%s</b> %s kirjoittaja <b>%s</b> tulokset:</b><br' . XHTML . '><br' . XHTML . '>',
-    'feature_not_on' => 'Tominto ei k&auml;yt&ouml;ss&auml;',
     'nolastpostmsg' => 'N/A',
     'no_one' => 'Ei kukaan.',
-    'popular' => 'Suosittu',
-    'notify' => 'Ilmoitukset',
-    'NEW_PM' => 'Uusi PM',
-    'DELALL_PM' => 'Poista kaikki',
-    'DELOLDER_PM' => 'Poista vanhat',
-    'members' => 'J&auml;senet',
-    'save_sucess' => 'Tallennettu',
     'back2top' => 'Yl&ouml;s',
-    'POSTMODE' => 'L&auml;hetys muto:',
     'TEXTMODE' => 'Teksti muoto:',
     'HTMLMODE' => 'HTML Muoto:',
     'TopicPreview' => 'Aiheen esikatselu',
@@ -276,7 +209,7 @@ $LANG_GF01 = array(
     'VIOLET' => 'Violetti',
     'WHITE' => 'Valkea',
     'BLACK' => 'Musta',
-    'ID'    => 'ID',
+    'ID' => 'ID',
     'b_help' => 'Lihavoitu: [b]teksti[/b]',
     'i_help' => 'Kursivoitu: [i]teksti[/i]',
     'u_help' => 'Alleviivattu: [u]teksti[/u]',
@@ -293,26 +226,21 @@ $LANG_GF01 = array(
     't_help' => 'K&auml;yt&auml; [file]#[/file] upottaaksesi liitetyn kuvan',
     'e_help' => 'Listan kohde: [*]teksti',
     'smiley' => 'Hymi&ouml;t',
-
-    /* --- Community moderation tags --- */
-    'grade'         => '<br /><b>Ryhm&auml; Mukavuus<br />Leveli:</b>',
-    'grade_user'    => '<br /><b>Arvioi K&auml;ytt&auml;j&auml;</b>',
+    'grade' => '<br /><b>Ryhm&auml; Mukavuus<br />Leveli:</b>',
+    'grade_user' => '<br /><b>Arvioi K&auml;ytt&auml;j&auml;</b>',
     'retract_grade' => '<br /><b>Peruuta Arviointi</b>',
-    'rate_too_low'  => 'Arviosi on liian pieni t&auml;lle foorumille',
+    'rate_too_low' => 'Arviosi on liian pieni t&auml;lle foorumille',
     'rate_too_low_forum' => 'Your rating level is not high enough to view this forum',
     'rate_too_low_thread' => 'Your rating level is not high enough to view this thread',
-    /* --- bbcode signature --- */
     'signature' => 'Foorumin allekirjoitus',
     'edit_signature' => 'Muokkaa BBcode Allekirjoitusta',
     'signature_preview' => 'Allekirjoituksen esikatselu',
     'cancel_confirm' => 'Oletko varma ett&auml; haluat perua?',
-    /* --- topic features --- */
     'disable_bbcode' => 'BBCode pois:',
     'disable_smilies' => 'Hymi&ouml;t pois:',
     'disable_urlparse' => '&auml;l&auml; j&auml;senn&auml; URLi&auml;:',
     'features' => 'Toiminnot:',
-    /* --- rss feature --- */
-    'rss_link' => 'Tilaa t&auml;m&auml;n keskustelun RSS sy&ouml;te.',
+    'rss_link' => 'Tilaa t&auml;m&auml;n keskustelun RSS sy&ouml;te.'
 );
 
 $LANG_GF02 = array(
@@ -517,7 +445,7 @@ $LANG_GF02 = array(
     'EditTopic' => 'Muokkaa aihetta',
     'quietforum' => 'Keskustelussa ei uusia aiheita',
     'notify_full' => 'Sis&auml;llyt&auml; koko viesti ilmoitukseen',
-    'view_online' => 'Jos t&auml;m&auml; s&auml;hk&ouml;posti ei n&auml;y oikein, <a href="%s">katso online versio</a>.',
+    'view_online' => 'Jos t&auml;m&auml; s&auml;hk&ouml;posti ei n&auml;y oikein, <a href="%s">katso online versio</a>.'
 );
 
 $LANG_GF03 = array(
@@ -538,14 +466,14 @@ $LANG_GF03 = array(
     'splitheading' => 'Aiheen jako valinnat:',
     'splitopt1' => 'Siirr&auml; kaikki viestit t&auml;st&auml; kohdasta',
     'splitopt2' => 'Siirr&auml; vain t&auml;m&auml; yksi viesti',
-    'merge_post'  => 'Yhdist&auml; Viesti',
+    'merge_post' => 'Yhdist&auml; Viesti',
     'merge_topic' => 'Yhdist&auml; Aihe',
     'mergetopicmsg' => 'Voit yhdist&auml;&auml; valitut viestit toiseen aiheeseen. N&auml;it&auml; viestej&auml; ei j&auml;rjestet&auml; uudestaan, vaan ne n&auml;kyv&auml;t kuin k&auml;ytt&auml;j&auml; olisi ne l&auml;hett&auml;nyt. Anna kohdeaiheen id tai klikkaa "Valitse aihe".',
     'mergeparent' => 'Olet valinnut vaihtoehdon yhdist&auml;&auml; <strong>kaikki</strong> viestit t&auml;ss&auml; aiheessa toiseen aiheeseen.',
-    'select'    => 'Valitse',
+    'select' => 'Valitse',
     'select_forum' => 'Valitse keskustelun aihe',
     'destination_topic' => 'Kohde aiheen ID:',
-    'select_topic' => 'Valitse aihe',
+    'select_topic' => 'Valitse aihe'
 );
 
 $LANG_GF04 = array(
@@ -574,7 +502,6 @@ $LANG_GF05 = array(
     'yim_alttext' => 'YIM:&nbsp;'
 );
 
-// Admin Navbar
 $LANG_GF06 = array(
     1 => 'Tilastot',
     2 => 'Asetukset',
@@ -585,9 +512,9 @@ $LANG_GF06 = array(
     7 => 'IP Mgmt',
     8 => 'Yhteis&ouml; Moderointi',
     9 => 'Tuo',
+    10 => 'Forum Administration'
 );
 
-// User Functions Navbar
 $LANG_GF07 = array(
     1 => 'Katso Keskustelut',
     2 => 'Asetukset',
@@ -596,14 +523,12 @@ $LANG_GF07 = array(
     5 => 'J&auml;senet'
 );
 
-// Forum User Features
 $LANG_GF08 = array(
     1 => 'Aihe Ilmoitukset',
     2 => 'Seuraa foorumin ilmoituksia',
     3 => 'Aihe Poikkeus Ilmoitukset'
 );
 
-// Attachment support feature
 $LANG_GF10 = array(
     'attachments' => 'Liitteet',
     'maxattachments' => 'Max %s sallittu',
@@ -639,8 +564,21 @@ $LANG_GF91 = array(
     'avgvmsg' => 'Lukukertoja keskim&auml;&auml;rin per:'
 );
 
-// Settings.php
 $LANG_GF92 = array(
+    'topicspp' => 'Aiheita per sivu',
+    'showiframe' => 'N&auml;yt&auml; Aiheen Arvostelu',
+    'showiframedscp' => 'N&auml;yt&auml; Aiheen Arvostelu (Iframe) alhaalla kun aiheeseen vastataan',
+    'forum_prefs' => 'Foorumi asetukset',
+    'forumprefs_help_title' => 'Foorumi asetus ohjeita',
+    'forumprefs_help' => 'Muokkaa foorumin k&auml;ytt&auml;j&auml; asetuksia.<ul><li>Kuinka monta aihetta n&auml;ytet&auml;&auml;n foorumin alkusivulla.</li><li>Viestien m&auml;&auml;r&auml; per sivu.</li><li>Viestien m&auml;&auml;r&auml; ennenkuin  se merkit&auml;&auml;n suosituksi.</li><li>Monta rivi&auml; n&auml;ytet&auml;&auml;n hakutuloksissa.</li><li>J&auml;senlista ikkunassa</li><li>Piiloita tuntemattomien viestit.</li><li>Automaattinen Ilmoitus.</li><li>Vain yksi Ilmoitus.</li><li>N&auml;yt&auml; aiheen arvostelu ikkunassa (iframe).</li></ul>',
+    'topic_order' => 'Aihej&auml;rjestys',
+    'editor_type' => 'Editorin tyyppi',
+    'bbcode' => 'BBCode',
+    'wysiwyg' => 'WYSIWYG',
+    'ascending' => 'Nouseva',
+    'descending' => 'Laskeva',
+    'sb_latestposts' => 'Uusin Viesti',
+    'setsavemsg' => 'Asetukset tallennettu.',
     'gfsettings' => 'Keskustelufoorumin Asetukset',
     'gensettings' => 'Yleis Asetukset',
     'topicsettings' => 'Aiheen l&auml;hetys asetukset',
@@ -661,8 +599,6 @@ $LANG_GF92 = array(
     'allowsmiliesdscp' => 'Salli hymi&ouml;iden k&auml;ytt&ouml;',
     'allownotify' => 'Salli Ilmoitukset',
     'allownotifydscp' => 'Haluatko sallia ilmoitukset?',
-    'showiframe' => 'N&auml;yt&auml; Aiheen Arvostelu',
-    'showiframedscp' => 'N&auml;yt&auml; Aiheen Arvostelu (Iframe) alhaalla kun aiheeseen vastataan',
     'autorefresh' => 'Automaattinen Refresh',
     'autorefreshdscp' => 'Automaattiseti p&auml;ivit&auml; sivu viestin l&auml;hett&auml;misen j&auml;lkeen',
     'refreshdelay' => 'Pause Delay',
@@ -671,7 +607,6 @@ $LANG_GF92 = array(
     'xtrausersettingsdscp' => 'Enable optional extra user settings',
     'titleleng' => 'Otsikon Pituus',
     'titlelengdscp' => 'Max pituus (merkki&auml;) aiheen aiheessa',
-    'topicspp' => 'Aiheita per sivu',
     'topicsppdscp' => 'Kuinka monta aihetta n&auml;ytet&auml;&auml;n foorumin index sivulla',
     'postspp' => 'Viestej&auml; per sivu',
     'postsppdscp' => 'Viestej&auml; per sivu',
@@ -691,7 +626,6 @@ $LANG_GF92 = array(
     'lev5' => 'Level 5',
     'lev5dscp' => 'Rank 5 - Kuvaus ja alaraja',
     'setsave' => 'Asetukset Tallennettu',
-    'setsavemsg' => 'Asetukset tallennettu.',
     'defaultmode' => 'L&auml;hett&auml;misen Oletus Moodi',
     'defaultmodedscp' => 'HTML K&auml;yt&ouml;ss&auml; oletuksena - aseta Kyll&auml;.<br' . XHTML . '>Enable Text mode as default (safest) - set to No',
     'cbsettings' => 'Keskilohkojen Asetukset',
@@ -731,7 +665,6 @@ $LANG_GF92 = array(
     'sb_subjectsizedscp' => 'Number of characters allowed in displayed subject',
     'sb_numposts' => 'Number of posts',
     'sb_numpostsdscp' => 'Number of posts to show in latestposts block',
-    'sb_latestposts' => 'Uusin Viesti',
     'sb_latestpostsdscp' => 'Only show the latest post per topic',
     'userdatefmt' => 'Date Format',
     'userdatefmtdscp' => 'Use the user defined preference for Date/Time format where required',
@@ -744,19 +677,9 @@ $LANG_GF92 = array(
     'geshiformat' => 'Code Formatting',
     'geshiformatdscp' => 'Use the Geshi Code Formatting Feature',
     'edit_timewindow' => 'Muokkamiseen Aikaa',
-    'edit_timewindowdscp' => 'Sallittu aika (min) oman viestin muokkaamiseen',
-    'forum_prefs' => 'Foorumi asetukset',
-    'forumprefs_help_title' => 'Foorumi asetus ohjeita',
-    'forumprefs_help' => 'Muokkaa foorumin k&auml;ytt&auml;j&auml; asetuksia.<ul><li>Kuinka monta aihetta n&auml;ytet&auml;&auml;n foorumin alkusivulla.</li><li>Viestien m&auml;&auml;r&auml; per sivu.</li><li>Viestien m&auml;&auml;r&auml; ennenkuin  se merkit&auml;&auml;n suosituksi.</li><li>Monta rivi&auml; n&auml;ytet&auml;&auml;n hakutuloksissa.</li><li>J&auml;senlista ikkunassa</li><li>Piiloita tuntemattomien viestit.</li><li>Automaattinen Ilmoitus.</li><li>Vain yksi Ilmoitus.</li><li>N&auml;yt&auml; aiheen arvostelu ikkunassa (iframe).</li></ul>',
-    'topic_order' => 'Aihej&auml;rjestys',
-    'editor_type' => 'Editorin tyyppi',
-    'bbcode'    => 'BBCode',
-    'wysiwyg'   => 'WYSIWYG',
-    'ascending' => 'Nouseva',
-    'descending' => 'Laskeva',
+    'edit_timewindowdscp' => 'Sallittu aika (min) oman viestin muokkaamiseen'
 );
 
-// Board Admin
 $LANG_GF93 = array(
     'gfboard' => 'Discussion Forum Board Admin',
     'vieworder' => 'View Order',
@@ -766,6 +689,7 @@ $LANG_GF93 = array(
     'catorder' => 'Kategoria J&auml;rjestys',
     'forumorder' => 'Keskustelu J&auml;rjestys',
     'catadded' => 'Kategoria Lis&auml;tty.',
+    'catadderror' => 'Error Adding Category.',
     'catdeleted' => 'Kategoria Poistettu',
     'catedited' => 'Kategoria Muokattu.',
     'forumadded' => 'Keskustelu lis&auml;tty.',
@@ -882,12 +806,12 @@ $LANG_GF97 = array(
 );
 
 $LANG_GF98 = array(
-    'user_ratings'  => 'K&auml;ytt&auml;j&auml; Arviot',
+    'user_ratings' => 'K&auml;ytt&auml;j&auml; Arviot',
     'forum_settings' => 'Yhteis&ouml;n Moderointi Foorumi Asetukset.  M&auml;&auml;rittele min k&auml;ytt&auml;j&auml; arvio foorumin lukemiseen ja viestien l&auml;hett&auml;miseen.',
     'board_ratings' => 'Arvio Asetukset',
     'user_ratings_desc' => 'Yhteis&ouml;n Moderointi k&auml;ytt&auml;j&auml; arviot.  Voit muokata k&auml;ytt&auml;j&auml; asetuksia tai katsoa kuka k&auml;ytt&auml;j&auml; on arvioinut tai katsoa k&auml;ytt&auml;j&auml;n arvion',
-    'rating'    => 'Arvio',
-    'uid'       => 'UID',
+    'rating' => 'Arvio',
+    'uid' => 'UID',
     'user_rating_title' => 'Yhteis&ouml;n Moderointi K&auml;ytt&auml;j&auml; Arviot',
     'no_subject_defined' => 'Aihetta ei m&auml;&auml;ritelty',
     'admin_set_value' => 'Yll&auml;pito Asetti Uuden K&auml;ytt&auml;j&auml; Arvion',
@@ -898,10 +822,15 @@ $LANG_GF98 = array(
     'user_votes_desc' => 'T&auml;m&auml; ikkuna n&auml;ytt&auml;&auml; miten k&auml;ytt&auml;j&auml; on arvioinut muita k&auml;ytt&auml;ji&auml;.',
     'user_rating_details' => 'K&auml;ytt&auml;j&auml; Arvio Tiedot Kohteelle: ',
     'user_voting_details' => 'K&auml;ytt&auml;j&auml; Änestys Tiedot Kohteelle: ',
-    'save_changes'  => 'Tallenna Muutokset',
+    'save_changes' => 'Tallenna Muutokset',
+    'view_rating' => 'View Rating',
+    'post_rating' => 'Post Rating'
 );
 
-###############################################################################
+$LANG_FF_AUTOTAG = array(
+    'desc_forum' => 'Link: to a Forum post.  link_text defaults to the post topic. usage: [forum:<i>post_id</i> {link_text}]'
+);
+
 $PLG_forum_MESSAGE1 = 'Foorumi Lis&auml;osan P&auml;ivitys Valmis - Ei Virheit&auml;';
 $PLG_forum_MESSAGE2 = 'Foorumi Lis&auml;osan P&auml;ivitys: T&auml;m&auml;n version p&auml;ivitys automaattisesti ei onnistu. Katso Lis&auml;osan dokumentti.';
 $PLG_forum_MESSAGE5 = 'Foorumi Lis&auml;osan P&auml;ivitys Ep&auml;onnistui - Katso error.log';
@@ -962,8 +891,6 @@ $LANG_confignames['forum'] = array(
     'level5name' => 'Rank 5 - Nimi',
     'showblocks' => 'N&auml;yt&auml; Lohkot',
     'usermenu' => 'K&auml;ytt&auml;j&auml; Valikko Tyyppi',
-    'mysql4+' => 'MySQL 4+ Asennettu',
-    'pre2.5_mode' => 'Pre 2.5 Moodi',
     'silent_edit_default' => 'Piilomuokkaus Oletus',
     'avatar_width' => 'Avatar Leveys',
     'allow_img_bbcode' => 'Salli IMG bbcode',
@@ -995,7 +922,7 @@ $LANG_confignames['forum'] = array(
     'use_wysiwyg_editor' => 'Ota k&auml;ytt&ouml;&ouml;n WYSIWYG HTML Editori',
     'bbcode_disabled' => 'Default Setting for BBCode Disabled Box',
     'smilies_disabled' => 'Default Setting for Smilies Disabled Box',
-    'urlparse_disabled' => 'Default Setting for URL Parse Disabled Box',
+    'urlparse_disabled' => 'Default Setting for URL Parse Disabled Box'
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -1011,6 +938,7 @@ $LANG_fs['forum'] = array(
     'ff_attachments_settings' => 'Liite Asetukset'
 );
 
+// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['forum'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => true, 'False' => false),

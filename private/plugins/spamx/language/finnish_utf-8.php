@@ -1,5 +1,4 @@
 <?php
-
 /**
  * File: finnish_utf-8.php
  * This is the finnish language file for the glFusion Spam-X plugin
@@ -18,7 +17,7 @@ if (!defined ('GVERSION')) {
 
 global $LANG32;
 
-$LANG_SX00 = array (
+$LANG_SX00 = array(
     'inst1' => '<p>If you do this, then others ',
     'inst2' => 'will be able to view and import your personal blacklist and we can create a more effective ',
     'inst3' => 'distributed database.</p><p>If you have submitted your website and decide you do not wish your website to remain on the list ',
@@ -44,7 +43,7 @@ $LANG_SX00 = array (
     'rsscreated' => 'RSS Feed Created',
     'add1' => 'Lis&auml;tty ',
     'add2' => ' entries from ',
-    'add3' => "'s blacklist.",
+    'add3' => '\'s blacklist.',
     'adminc' => 'Administration Commands:',
     'mblack' => 'My Blacklist:',
     'rlinks' => 'Related Links:',
@@ -93,17 +92,17 @@ $LANG_SX00 = array (
     'foundspam' => 'Found Spam Post matching ',
     'foundspam2' => ' posted by user ',
     'foundspam3' => ' from IP ',
-	'deletespam' => 'Delete Spam',
-	'numtocheck' => 'Number of Comments to check',
-	'note1'		=> '<p>Note: Mass Delete is intended to help you when you are hit by',
-	'note2'		=> ' comment spam and Spam-X does not catch it.</p><ul><li>First find the link(s) or other ',
-	'note3'		=> 'identifiers of this spam comment and add it to your personal blacklist.</li><li>Then ',
-	'note4'		=> 'come back here and have Spam-X check the latest comments for spam.</li></ul><p>Comments ',
-	'note5'		=> 'are checked from newest comment to oldest -- checking more comments ',
-	'note6'		=> 'requires more time for the check.</p>',
-	'masshead'	=> '<hr' . XHTML . '><h1 align="center">Mass Delete Spam Comments</h1>',
-	'masstb' => '<hr' . XHTML . '><h1 align="center">Mass Delete Trackback Spam</h1>',
-	'comdel'	=> ' comments deleted.',
+    'deletespam' => 'Delete Spam',
+    'numtocheck' => 'Number of Comments to check',
+    'note1' => '<p>Note: Mass Delete is intended to help you when you are hit by',
+    'note2' => ' comment spam and Spam-X does not catch it.</p><ul><li>First find the link(s) or other ',
+    'note3' => 'identifiers of this spam comment and add it to your personal blacklist.</li><li>Then ',
+    'note4' => 'come back here and have Spam-X check the latest comments for spam.</li></ul><p>Comments ',
+    'note5' => 'are checked from newest comment to oldest -- checking more comments ',
+    'note6' => 'requires more time for the check.</p>',
+    'masshead' => '<hr' . XHTML . '><h1 align="center">Mass Delete Spam Comments</h1>',
+    'masstb' => '<hr' . XHTML . '><h1 align="center">Mass Delete Trackback Spam</h1>',
+    'comdel' => ' comments deleted.',
     'initial_Pimport' => '<p>Personal Blacklist Import"',
     'initial_import' => 'Initial MT-Blacklist Import',
     'import_success' => '<p>Successfully imported %d blacklist entries.',
@@ -116,7 +115,6 @@ $LANG_SX00 = array (
     'ipofurlblack' => 'Spam-X IP of URL Blacklist',
     'headerblack' => 'Spam-X HTTP Header Blacklist',
     'headers' => 'Request headers:',
-
     'stats_headline' => 'Spam-X Tilastot',
     'stats_page_title' => 'Musta Lista',
     'stats_entries' => 'Entries',
@@ -126,20 +124,19 @@ $LANG_SX00 = array (
     'stats_ipofurl' => 'Blokattu IP:n tai URL:n mukaan',
     'stats_header' => 'HTTP headers',
     'stats_deleted' => 'Viesti Poistettu Roskapostina',
-
     'plugin_name' => 'Spam-X',
-    'slvwhitelist' => 'SLV Whitelist'
+    'slvwhitelist' => 'SLV Whitelist',
+    'instructions' => 'Spam-X allows you to define words, URLs, and other items that can be used to block spam posts on your site.',
+    'invalid_email_or_ip' => 'Invalid e-mail address or IP address has been blocked'
 );
 
-
-/* Define Messages that are shown when Spam-X module action is taken */
+// Define Messages that are shown when Spam-X module action is taken
 $PLG_spamx_MESSAGE128 = 'Roskaposti havaittu. Viesti poistettiin.';
-$PLG_spamx_MESSAGE8   = 'Roskaposti havaittu. S&auml;hk&ouml;posti l&auml;hetetty Adminille.';
+$PLG_spamx_MESSAGE8 = 'Roskaposti havaittu. S&auml;hk&ouml;posti l&auml;hetetty Adminille.';
 
 // Messages for the plugin upgrade
 $PLG_spamx_MESSAGE3001 = 'Plugin upgrade not supported.';
 $PLG_spamx_MESSAGE3002 = $LANG32[9];
-
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['spamx'] = array(
@@ -150,7 +147,7 @@ $LANG_configsections['spamx'] = array(
 $LANG_confignames['spamx'] = array(
     'action' => 'Spam-X Toimenpiteet',
     'notification_email' => 'S&auml;hk&ouml;posti Ilmoitus',
-    'admin_override' => "Äl&auml; Suodata Adminin Viestej&auml;",
+    'admin_override' => 'Äl&auml; Suodata Adminin Viestej&auml;',
     'logging' => 'Kirjautuminen K&auml;yt&ouml;ss&auml;',
     'timeout' => 'Aikakatkaisu'
 );
@@ -163,9 +160,10 @@ $LANG_fs['spamx'] = array(
     'fs_main' => 'Spam-X P&auml;&auml; Asetukset'
 );
 
+// Note: entries 0, 1, 9, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['spamx'] = array(
     0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => TRUE, 'False' => FALSE)
+    1 => array('True' => true, 'False' => false)
 );
 
 ?>

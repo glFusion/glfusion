@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # finnish_utf-8.php
 #
@@ -92,7 +91,7 @@ $LANG_CAL_1 = array(
     49 => 'N&auml;ytt&auml;&auml; silt&auml; ett&auml; t&auml;ll&auml; sivustolla ei ole tapahtumia, tai kukaan ei ole klikannut niit&auml;.',
     50 => 'Tapahtumat',
     51 => 'Poista',
-    52 => 'L&auml;hetti',
+    52 => 'L&auml;hetti'
 );
 
 $_LANG_CAL_SEARCH = array(
@@ -176,6 +175,12 @@ $LANG_CAL_ADMIN = array(
     37 => 'Moderoi Tapahtumaa',
     38 => 'Batch tapahtuma Admin',
     39 => 'Tapahtuman Admin',
+    40 => 'Event List',
+    41 => 'This screen allows you to edit / create events. Edit the fields below and save.'
+);
+
+$LANG_CAL_AUTOTAG = array(
+    'desc_calendar' => 'Link: to a Calendar event on this site; link_text defaults to event title: [calendar:<i>event_id</i> {link_text}]'
 );
 
 $LANG_CAL_MESSAGE = array(
@@ -219,7 +224,7 @@ $LANG_confignames['calendar'] = array(
     'aftersave' => 'Tapahtuman Tallennuksen J&auml;lkeen',
     'default_permissions' => 'Tapahtuman Oletus Oikeudet',
     'only_admin_submit' => 'Salli Vain Admineitten L&auml;hett&auml;&auml;',
-    'displayblocks' => 'N&auml;yt&auml; glFusion Lohkot',
+    'displayblocks' => 'N&auml;yt&auml; glFusion Lohkot'
 );
 
 $LANG_configsubgroups['calendar'] = array(

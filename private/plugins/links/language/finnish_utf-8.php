@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # finnish_utf-8.php
 #
@@ -25,42 +24,20 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 ###############################################################################
-# $Id: english_utf-8.php 5955 2010-04-17 19:04:22Z usableweb $
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-/**
- * This is the english language page for the glFusion links Plug-in!
- *
- * @package Links
- * @subpackage Language
- * @filesource
- * @version 2.0
- * @since GL 1.4.0
- * @copyright Copyright &copy; 2005-2007
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @author Trinity Bays <trinity93 AT gmail DOT com>
- * @author Tony Bibbs <tony AT tonybibbs DOT com>
- * @author Tom Willett <twillett AT users DOT sourceforge DOT net>
- *
- */
-
 global $LANG32;
 
 ###############################################################################
 # Array Format:
-# $LANGXX[YY]:    $LANG - variable name
-#                 XX - file id number
-#                 YY - phrase id number
+# $LANGXX[YY]:  $LANG - variable name
+#               XX    - file id number
+#               YY    - phrase id number
 ###############################################################################
 
-/**
-* the link plugin's lang array
-*
-* @global array $LANG_LINKS
-*/
 $LANG_LINKS = array(
     10 => 'L&auml;hetetyt',
     14 => 'Linkit',
@@ -79,48 +56,36 @@ $LANG_LINKS = array(
     125 => 'Kategoriat',
     126 => 'Olet t&auml;&auml;ll&auml;:',
     'root' => 'Juuri',
-    'error_header'  => 'Linkin L&auml;hetys Virhe',
+    'error_header' => 'Linkin L&auml;hetys Virhe',
     'verification_failed' => 'M&auml;&auml;ritelty URL ei vaikuta olevan toimiva',
-    'category_not_found' => 'Kategoria ei vaikuta olevan toimiva',
+    'category_not_found' => 'Kategoria ei vaikuta olevan toimiva'
 );
 
 ###############################################################################
 # for stats
-/**
-* the link plugin's lang stats array
-*
-* @global array $LANG_LINKS_STATS
-*/
+
 $LANG_LINKS_STATS = array(
     'links' => 'Linkki (Klikkauksia) Systeemiss&auml;',
     'stats_headline' => 'Top 10 Linkki&auml;',
     'stats_page_title' => 'Linkit',
     'stats_hits' => 'Osumia',
-    'stats_no_hits' => 'N&auml;yt&auml;st&auml;&auml; silt&auml; ett&auml; sivustolla ei ole linkkej&auml; tai kukaan ei ole viel&auml; klikannut sellaista.',
+    'stats_no_hits' => 'N&auml;yt&auml;st&auml;&auml; silt&auml; ett&auml; sivustolla ei ole linkkej&auml; tai kukaan ei ole viel&auml; klikannut sellaista.'
 );
 
 ###############################################################################
 # for the search
-/**
-* the link plugin's lang search array
-*
-* @global array $LANG_LINKS_SEARCH
-*/
+
 $LANG_LINKS_SEARCH = array(
- 'results' => 'Tulokset',
- 'title' => 'Nimi',
- 'date' => 'Lis&auml;tty',
- 'author' => 'Lis&auml;si',
- 'hits' => 'Klikkauksia'
+    'results' => 'Tulokset',
+    'title' => 'Nimi',
+    'date' => 'Lis&auml;tty',
+    'author' => 'Lis&auml;si',
+    'hits' => 'Klikkauksia'
 );
 
 ###############################################################################
 # for the submission form
-/**
-* the link plugin's lang submit form array
-*
-* @global array $LANG_LINKS_SUBMIT
-*/
+
 $LANG_LINKS_SUBMIT = array(
     1 => 'L&auml;het&auml; Linkki',
     2 => 'Linkki',
@@ -133,7 +98,7 @@ $LANG_LINKS_SUBMIT = array(
     9 => 'URL',
     10 => 'Kategoria',
     11 => 'L&auml;hetetyt Linkit',
-    12 => 'L&auml;hetti',
+    12 => 'L&auml;hetti'
 );
 
 ###############################################################################
@@ -143,10 +108,9 @@ $PLG_links_MESSAGE1 = "Kiitos ett&auml; l&auml;hetit linkin sivustolle {$_CONF['
 $PLG_links_MESSAGE2 = 'Linkkisi on tallennettu.';
 $PLG_links_MESSAGE3 = 'Linkki on poistettu.';
 $PLG_links_MESSAGE4 = "Kiitos ett&auml; l&auml;hetit linkin sivustolle {$_CONF['site_name']}.  N&auml;et sen nyt <a href={$_CONF['site_url']}/links/index.php>links</a> alueella.";
-$PLG_links_MESSAGE5 = "Sinulla ei ole tarvittavia oikeuksia n&auml;hd&auml; t&auml;t&auml; kategoriaa.";
+$PLG_links_MESSAGE5 = 'Sinulla ei ole tarvittavia oikeuksia n&auml;hd&auml; t&auml;t&auml; kategoriaa.';
 $PLG_links_MESSAGE6 = 'Sinulla ei ole tarvittavia oikeuksia muokata t&auml;t&auml; kategoriaa.';
 $PLG_links_MESSAGE7 = 'Anna kategorian Nimi ja Kuvaus.';
-
 $PLG_links_MESSAGE10 = 'Kategoria tallennettu.';
 $PLG_links_MESSAGE11 = 'Sinulla ei ole lupaa asettaa kategorian id:t&auml; "sivusto" tai "k&auml;ytt&auml;j&auml;" - n&auml;m&auml; on varattu sis&auml;iseen k&auml;ytt&ouml;&ouml;n.';
 $PLG_links_MESSAGE12 = 'Yrit&auml;t tehd&auml; is&auml;nt&auml; kategorian alakategoriaa sen omaan alakategoriaan. T&auml;m&auml; loisi orvon kategorian, siir&auml; alakategoria tai kategoriat ylemm&auml;lle tasolle.';
@@ -161,12 +125,8 @@ $PLG_links_MESSAGE3001 = 'Lis&auml;osan p&auml;ivitys ei tuettu.';
 $PLG_links_MESSAGE3002 = $LANG32[9];
 
 ###############################################################################
-# admin/link.php
-/**
-* the link plugin's lang admin array
-*
-* @global array $LANG_LINKS_ADMIN
-*/
+# admin/plugins/links/index.php
+
 $LANG_LINKS_ADMIN = array(
     1 => 'Linkki Editori',
     2 => 'Linkki ID',
@@ -221,52 +181,58 @@ $LANG_LINKS_ADMIN = array(
     63 => 'Oletko varma ett&auml; haluat poistaa t&auml;m&auml;n linkin?',
     64 => 'Oletko varma ett&auml; haluat poistaa t&auml;m&auml;n kategorian?',
     65 => 'Moderoi Linkki&auml;',
+    66 => 'This screen allows you to create / edit links.',
+    67 => 'This screen allows you to create / edit a links category.'
 );
+
 
 $LANG_LINKS_STATUS = array(
-    100 => "Jatka",
-    101 => "Vaihda Protokollia",
-    200 => "OK",
-    201 => "Luotu",
-    202 => "Hyv&auml;ksytty",
-    203 => "Non-Authoritative Information",
-    204 => "Ei sis&auml;lt&ouml;&auml;",
-    205 => "Tyhjenn&auml; Sis&auml;lt&ouml;",
-    206 => "Osittainen Sis&auml;lt&ouml;",
-    300 => "Useita Valintoja",
-    301 => "Poistettu Pysyv&auml;sti",
-    302 => "L&ouml;ytyi",
-    303 => "Katso Toinen",
-    304 => "Ei Muokattu",
-    305 => "K&auml;yt&auml; Proxy&auml;",
-    307 => "V&auml;liaikainen Uudelleenohjaus",
-    400 => "Ep&auml;kelpo Pyynt&ouml;",
-    401 => "Ei Oikeutta",
-    402 => "Maksu Vaaditaan",
-    403 => "Kieletty",
-    404 => "Ei l&ouml;ydy",
-    405 => "Metodi Ei Sallittu",
-    406 => "Ei Hyv&auml;ksytt&auml;v&auml;",
-    407 => "Proxy Tunnistautuminen Vaaditaan",
-    408 => "Pyyn&ouml;n Aikaraja",
-    409 => "Konflikti",
-    410 => "H&auml;vinnyt",
-    411 => "Pituus Vaaditaan",
-    412 => "Ennakkoehto Ep&auml;onnistui",
-    413 => "Pyynt&ouml; Kokonaisuus Liian Iso",
-    414 => "Pyynt&ouml;-URI Liian Pitk&auml;",
-    415 => "Media Tyyppi Ei Tuettu",
-    416 => "Pyydetty Alue Ei Hyv&auml;ksytt&auml;v&auml;",
-    417 => "Ennakko-Odotus Ep&auml;onnistui",
-    500 => "Sis&auml;inen Serveri Virhe",
-    501 => "Ei Pantu Toimeen",
-    502 => "Ep&auml;kelpo Yhdysk&auml;yt&auml;v&auml;",
-    503 => "Palvelua Ei Saatavilla",
-    504 => "Yhdysk&auml;yt&auml;v&auml; Aikarajoitus",
-    505 => "HTTP Versio Ei Tuettu",
-    999 => "Yhteys Aikakatkaistu"
+    100 => 'Jatka',
+    101 => 'Vaihda Protokollia',
+    200 => 'OK',
+    201 => 'Luotu',
+    202 => 'Hyv&auml;ksytty',
+    203 => 'Non-Authoritative Information',
+    204 => 'Ei sis&auml;lt&ouml;&auml;',
+    205 => 'Tyhjenn&auml; Sis&auml;lt&ouml;',
+    206 => 'Osittainen Sis&auml;lt&ouml;',
+    300 => 'Useita Valintoja',
+    301 => 'Poistettu Pysyv&auml;sti',
+    302 => 'L&ouml;ytyi',
+    303 => 'Katso Toinen',
+    304 => 'Ei Muokattu',
+    305 => 'K&auml;yt&auml; Proxy&auml;',
+    307 => 'V&auml;liaikainen Uudelleenohjaus',
+    400 => 'Ep&auml;kelpo Pyynt&ouml;',
+    401 => 'Ei Oikeutta',
+    402 => 'Maksu Vaaditaan',
+    403 => 'Kieletty',
+    404 => 'Ei l&ouml;ydy',
+    405 => 'Metodi Ei Sallittu',
+    406 => 'Ei Hyv&auml;ksytt&auml;v&auml;',
+    407 => 'Proxy Tunnistautuminen Vaaditaan',
+    408 => 'Pyyn&ouml;n Aikaraja',
+    409 => 'Konflikti',
+    410 => 'H&auml;vinnyt',
+    411 => 'Pituus Vaaditaan',
+    412 => 'Ennakkoehto Ep&auml;onnistui',
+    413 => 'Pyynt&ouml; Kokonaisuus Liian Iso',
+    414 => 'Pyynt&ouml;-URI Liian Pitk&auml;',
+    415 => 'Media Tyyppi Ei Tuettu',
+    416 => 'Pyydetty Alue Ei Hyv&auml;ksytt&auml;v&auml;',
+    417 => 'Ennakko-Odotus Ep&auml;onnistui',
+    500 => 'Sis&auml;inen Serveri Virhe',
+    501 => 'Ei Pantu Toimeen',
+    502 => 'Ep&auml;kelpo Yhdysk&auml;yt&auml;v&auml;',
+    503 => 'Palvelua Ei Saatavilla',
+    504 => 'Yhdysk&auml;yt&auml;v&auml; Aikarajoitus',
+    505 => 'HTTP Versio Ei Tuettu',
+    999 => 'Yhteys Aikakatkaistu'
 );
 
+$LANG_LI_AUTOTAG = array(
+    'desc_link' => 'Link: to the detail page for a Link on this site; link_text defaults to the link name. usage: [link:<i>link_id</i> {link_text}]'
+);
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['links'] = array(
@@ -290,7 +256,7 @@ $LANG_confignames['links'] = array(
     'root' => 'Juuri Kategorian ID',
     'default_permissions' => 'Linkin Oletus Oikeudet',
     'target_blank' => 'Avaa Linkit Uuteen Ikkunaan',
-    'displayblocks' => 'N&auml;yt&auml; glFusion Lohkot',
+    'displayblocks' => 'N&auml;yt&auml; glFusion Lohkot'
 );
 
 $LANG_configsubgroups['links'] = array(
@@ -306,7 +272,7 @@ $LANG_fs['links'] = array(
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['links'] = array(
     0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => TRUE, 'False' => FALSE),
+    1 => array('True' => true, 'False' => false),
     9 => array('Forward to Linked Site' => 'item', 'Display Admin List' => 'list', 'Display Public List' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
     13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)

@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # finnish_utf-8.php
 #
@@ -32,31 +31,38 @@ if (!defined ('GVERSION')) {
 
 global $LANG32;
 
+###############################################################################
+# Array Format:
+# $LANGXX[YY]:  $LANG - variable name
+#               XX    - file id number
+#               YY    - phrase id number
+###############################################################################
+
 $LANG_POLLS = array(
-    'polls'             => 'Pollit',
-    'results'           => 'Tulokset',
-    'pollresults'       => 'Polli tulokset',
-    'votes'             => '&auml;&auml;nt&auml;',
-    'vote'              => '&auml;&auml;nest&auml;',
-    'pastpolls'         => 'Aikasemmat pollit',
-    'savedvotetitle'    => '&auml;&auml;ni tallennettu',
-    'savedvotemsg'      => 'Antamasi &auml;&auml;ni tallennettu',
-    'pollstitle'        => 'Polleja systeemiss&auml;',
-    'polltopics'        => 'Muut pollit',
-    'stats_top10'       => 'Top 10 kyselyt',
-    'stats_topics'      => 'Pollin aihe',
-    'stats_votes'       => '&auml;&auml;nt&auml;',
-    'stats_none'        => 'N&auml;ytt&auml;&auml; silt&auml; ett&auml; sivustolla ei ole yht&auml;&auml;n pollia tai kukaan ei ole &auml;&auml;nest&auml;nyt.',
-    'stats_summary'     => 'Polleja (Vastauksia) systeemiss&auml;',
-    'open_poll'         => 'Avoinna &auml;&auml;nestykseen',
-    'answer_all'        => 'Vastaa kaikkiin kysymyksiin',
-    'not_saved'         => 'Tuloksia ei tallennettu',
-    'upgrade1'          => 'Asensit uuden version Poll lis&auml;osasta.',
-    'upgrade2'          => 'p&auml;ivit&auml;',
-    'editinstructions'  => 'T&auml;yt&auml; Poll ID, v&auml;hint&auml;&auml;n yksi kysymys ja kaksi vastausta.',
-    'pollclosed'        => 'T&auml;m&auml; kysely on suljettu.',
-    'pollhidden'        => 'Tulokset saatavilla kyselyn suljettua.',
-    'start_poll'        => 'Aloita polli',
+    'polls' => 'Pollit',
+    'results' => 'Tulokset',
+    'pollresults' => 'Polli tulokset',
+    'votes' => '&auml;&auml;nt&auml;',
+    'vote' => '&auml;&auml;nest&auml;',
+    'pastpolls' => 'Aikasemmat pollit',
+    'savedvotetitle' => '&auml;&auml;ni tallennettu',
+    'savedvotemsg' => 'Antamasi &auml;&auml;ni tallennettu',
+    'pollstitle' => 'Polleja systeemiss&auml;',
+    'polltopics' => 'Muut pollit',
+    'stats_top10' => 'Top 10 kyselyt',
+    'stats_topics' => 'Pollin aihe',
+    'stats_votes' => '&auml;&auml;nt&auml;',
+    'stats_none' => 'N&auml;ytt&auml;&auml; silt&auml; ett&auml; sivustolla ei ole yht&auml;&auml;n pollia tai kukaan ei ole &auml;&auml;nest&auml;nyt.',
+    'stats_summary' => 'Polleja (Vastauksia) systeemiss&auml;',
+    'open_poll' => 'Avoinna &auml;&auml;nestykseen',
+    'answer_all' => 'Vastaa kaikkiin kysymyksiin',
+    'not_saved' => 'Tuloksia ei tallennettu',
+    'upgrade1' => 'Asensit uuden version Poll lis&auml;osasta.',
+    'upgrade2' => 'p&auml;ivit&auml;',
+    'editinstructions' => 'T&auml;yt&auml; Poll ID, v&auml;hint&auml;&auml;n yksi kysymys ja kaksi vastausta.',
+    'pollclosed' => 'T&auml;m&auml; kysely on suljettu.',
+    'pollhidden' => 'Tulokset saatavilla kyselyn suljettua.',
+    'start_poll' => 'Aloita polli',
     'deny_msg' => 'P&auml;&auml;sy ev&auml;tty.  Polli on joko poistettu tai sinulla ei ole tarvittavia oikeuksia siihen.'
 );
 
@@ -67,15 +73,15 @@ $LANG25 = array(
     1 => 'Moodi',
     2 => 'Anna aihe, ainakin 1 kysymys ja 1 vastaus kysymykseen.',
     3 => 'Luotu',
-    4 => "Polli %s tallennettu",
+    4 => 'Polli %s tallennettu',
     5 => 'Muokkaa Pollia',
     6 => 'Pollin ID',
     7 => '(&auml;l&auml; k&auml;yt&auml; v&auml;lily&ouml;nti&auml;)',
     8 => 'N&auml;kyy Poll lohkossa',
     9 => 'Aihe',
     10 => 'Vastauksia / Ä&auml;ni&auml; / Remark',
-    11 => "There was an error getting poll answer data about the poll %s",
-    12 => "There was an error getting poll question data about the poll %s",
+    11 => 'There was an error getting poll answer data about the poll %s',
+    12 => 'There was an error getting poll question data about the poll %s',
     13 => 'Luo Polli',
     14 => 'tallenna',
     15 => 'peruuta',
@@ -108,13 +114,21 @@ $LANG25 = array(
     42 => 'Oletko aivan varma ett&auml; haluat poistaa t&auml;m&auml;n pollin?  Kaikki kysymykset, vastaukset ja kommentit liittyen t&auml;h&auml;n polliin poistetaan tietokannasta pysyv&auml;sti.'
 );
 
+###############################################################################
+# autotag descriptions
+
+$LANG_PO_AUTOTAG = array(
+    'desc_poll' => 'Link: to a Poll on this site.  link_text defaults to the Poll topic.  usage: [poll:<i>poll_id</i> {link_text}]',
+    'desc_poll_result' => 'HTML: renders the results of a Poll on this site.  usage: [poll_result:<i>poll_id</i>]',
+    'desc_poll_vote' => 'HTML: renders a voting block for a Poll on this site.  usage: [poll_vote:<i>poll_id</i>]'
+);
+
 $PLG_polls_MESSAGE19 = 'Polli on tallennettu.';
 $PLG_polls_MESSAGE20 = 'Polli on poistettu.';
 
 // Messages for the plugin upgrade
 $PLG_polls_MESSAGE3001 = 'Plugin upgrade not supported.';
 $PLG_polls_MESSAGE3002 = $LANG32[9];
-
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['polls'] = array(
@@ -133,7 +147,7 @@ $LANG_confignames['polls'] = array(
     'delete_polls' => 'Delete Polls with Owner',
     'aftersave' => 'Pollin Tallentamisen J&auml;lkeen',
     'default_permissions' => 'Pollin Oletus Oikeudet',
-    'displayblocks' => 'N&auml;yt&auml; glFusion Lohkot',
+    'displayblocks' => 'N&auml;yt&auml; glFusion Lohkot'
 );
 
 $LANG_configsubgroups['polls'] = array(
@@ -148,7 +162,7 @@ $LANG_fs['polls'] = array(
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['polls'] = array(
     0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => TRUE, 'False' => FALSE),
+    1 => array('True' => true, 'False' => false),
     2 => array('As Submitted' => 'submitorder', 'By Votes' => 'voteorder'),
     9 => array('Forward to Poll' => 'item', 'Display Admin List' => 'list', 'Display Public List' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
