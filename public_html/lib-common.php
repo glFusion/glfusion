@@ -381,6 +381,9 @@ if ( $_CONF['allow_user_themes'] && !empty( $usetheme ) && is_dir( $_CONF['path_
         $theme = COM_sanitizeFilename($_COOKIE[$_CONF['cookie_theme']], true);
         if ( is_dir( $_CONF['path_themes'] . $theme )) {
             $_USER['theme'] = $theme;
+            $_CONF['path_layout'] = $_CONF['path_themes'] . $theme . '/';
+            $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $theme;
+
         }
     }
 
@@ -6819,6 +6822,29 @@ function COM_getTooltipStyle()
     return $retval;
 }
 
+function COM_getEffectivePermission($owner, $group_id, $perm_owner,$perm_group, $perm_member, $perm_anon)
+{
+    global $_USER, $_GROUPS;
+
+    $perm = 0;
+
+    if ( COM_isAnonUser()) {
+        $perm = $perm_anon;
+    } else {
+        $perm = $perm_member;
+        if ( in_array($item['group_id'],$_GROUPS )) {
+            if ( $perm_group > $perm)
+                $perm = $perm_group;
+        }
+        if ( $item['owner_id'] == $_USER['uid'] ) {
+            if ( $perm_owner > $perm ) {
+                $perm = $perm_owner;
+            }
+        }
+    }
+    return $perm;
+}
+
 /*
  * For backward compatibility
  */
@@ -6951,9 +6977,7 @@ function css_out()
     } else {
         $files[] = $_CONF['path_layout'] . 'style-colors.css';
     }
-    if ( file_exists($_CONF['path_layout'] .'custom.css') ) {
-        $files[] = $_CONF['path_layout'] . 'custom.css';
-    }
+
     /*
      * Check to see if there are any custom CSS files to include
      */
@@ -6966,7 +6990,6 @@ function css_out()
         }
     }
 
-// get the menu builder css
     $menuBuildCSS =  mb_getheadercss();
     if ( is_array($menuBuildCSS) ) {
         foreach($menuBuildCSS AS $item => $file) {
@@ -6987,6 +7010,10 @@ function css_out()
                 }
             }
         }
+    }
+
+    if ( file_exists($_CONF['path_layout'] .'custom.css') ) {
+        $files[] = $_CONF['path_layout'] . 'custom.css';
     }
 
     // check cache age & handle conditional request
