@@ -97,9 +97,9 @@ for ($i = 0; $i < count($files); $i++) {
     next($files);
 }
 $retval .= '</select>&nbsp;&nbsp;&nbsp;&nbsp;';
-$retval .= '<input type="submit" name="viewlog" value="'.$LANG_LOGVIEW['view'].'"'.XHTML.'>';
+$retval .= '<input type="submit" name="viewlog" value="'.$LANG_LOGVIEW['view'].'"/>';
 $retval .= '&nbsp;&nbsp;&nbsp;&nbsp;';
-$retval .= '<input type="submit" name="clearlog" value="'.$LANG_LOGVIEW['clear'].'"'.XHTML.'>';
+$retval .= '<input type="submit" name="clearlog" value="'.$LANG_LOGVIEW['clear'].'"/>';
 $retval .= '</form>';
 
 if ( isset($_POST['clearlog']) ) {
@@ -114,7 +114,7 @@ if ( isset($_POST['viewlog']) ) {
     $retval .= '<p><strong>'.$LANG_LOGVIEW['log_file'].': ' . $log . '</strong></p>';
     $retval .= '<div style="margin:10px 0 5px;border-bottom:1px solid #cccccc;"></div>';
     $retval .= '<div class="logview" style="overflow:scroll; height:500px;"><pre>';
-    $retval .= htmlentities(implode('', file($_CONF['path_log'] . $log)),ENT_NOQUOTES,COM_getEncodingt());
+    $retval .= @htmlentities(implode('', file($_CONF['path_log'] . $log)),ENT_NOQUOTES,COM_getEncodingt());
     $retval .= "</pre></div>";
 }
 
