@@ -286,7 +286,7 @@ z-index:10;
 /* webkit only browsers hack to hug right side*/
 @media screen and (-webkit-min-device-pixel-ratio:0)
 {
-  #gl_extra { margin-left:-14.96em;}
+  #gl_extra { margin-left:-14.97em;}
 }
 /*end webkit hack */
 #gl_footer {
