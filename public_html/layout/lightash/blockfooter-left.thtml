@@ -1,0 +1,6 @@
+{# begin {templatelocation} #}
+</div>
+<div class="aligncenter">
+    <div class="block-divider-left"></div>
+</div>
+{# end {templatelocation} #}

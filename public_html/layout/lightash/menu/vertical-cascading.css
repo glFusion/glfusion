@@ -1,0 +1,179 @@
+{menuname} .menu-vertical-cascading {
+	margin:             0 auto;
+}
+{menuname} .menu-vertical-cascading {
+    margin-left:        -8px;
+    padding-left:       0px;
+}
+{menuname} .menu-vertical-cascading {
+	text-align:         {alignment};
+}
+{menuname} .menu-vertical-cascading ul {
+	margin:             0;
+	padding:            0;
+	list-style:         none;
+}
+{menuname} .menu-vertical-cascading ul {
+{!if tl_menu_element_width}
+	width:              {tl_menu_element_width};
+{!endif}
+{!if tl_menu_element_border_bottom_width}
+	border-bottom:      {tl_menu_element_border_bottom_width} {tl_menu_element_border_bottom_color};
+{!endif}
+}
+{menuname} .menu-vertical-cascading ul li {
+	position:           relative;
+	z-index:            400;
+	width:              100%;
+	margin:             0;
+    padding:            0;
+}
+{menuname} .menu-vertical-cascading li ul {
+	position:           absolute;
+	top:                0;
+	display:            block;
+	margin:             0;
+    padding:            0;
+}
+{menuname} .menu-vertical-cascading li ul {
+{!if ch_menu_offset}
+	left:               {ch_menu_offset};
+{!endif}
+{!if ch_menu_element_width}
+	width:              {ch_menu_element_width};
+{!endif}
+}
+{menuname} .menu-vertical-cascading li li ul {
+{!if ch_menu_submenu_offset}
+    left:               {ch_menu_submenu_offset};
+{!endif}
+}
+{!if right_align}
+{menuname} .menu-vertical-cascading li ul {
+{!if ch_menu_submenu_offset}
+	left:               -{ch_menu_submenu_offset};
+{!endif}
+}
+{!endif}
+{menuname} .menu-vertical-cascading li:hover ul {
+	display:            block;
+}
+{menuname} .menu-vertical-cascading li:hover>ul {
+	visibility:         visible;
+}
+{menuname} .menu-vertical-cascading ul ul {
+	visibility:         hidden;
+}
+/* Fix IE. Hide from IE Mac \*/
+* html {menuname} .menu-vertical-cascading ul li {
+	float:              left;
+	height:             1%;
+}
+* html {menuname} .menu-vertical-cascading ul li a {
+	height:             1%;
+}
+/* End of IE fix */
+{menuname} .menu-vertical-cascading ul {
+	margin:             0;
+}
+{menuname} .menu-vertical-cascading ul a {
+	display:            block;
+	text-decoration:    none;
+{!if tl_menu_line_height}
+    line-height:        {tl_menu_line_height};
+{!endif}
+{!if tl_menu_font_weight}
+    font-weight:        {tl_menu_font_weight};
+{!endif}
+{!if tl_menu_line_height}
+    height:             {tl_menu_line_height};
+{!endif}
+{!if tl_menu_font_size}
+    font-size:          {tl_menu_font_size};
+{!endif}
+}
+{menuname} .menu-vertical-cascading ul a {
+{!if tl_menu_text_color}
+	color:              {tl_menu_text_color};
+{!endif}
+{!if tl_menu_background_color}
+	background:         {tl_menu_background_color};
+{!endif}
+{!if tl_menu_element_padding}
+	padding:            {tl_menu_element_padding};
+{!endif}
+{!if tl_menu_element_border_top_width}
+    border-top:         {tl_menu_element_border_top_width} {tl_menu_element_border_top_color};
+{!endif}
+{!if tl_menu_element_border_left_width}
+    border-left:        {tl_menu_element_border_left_width} {tl_menu_element_border_left_color};
+{!endif}
+{!if tl_menu_element_border_right_width}
+    border-right:       {tl_menu_element_border_right_width} {tl_menu_element_border_right_color};
+{!endif}
+	border-bottom:      0;
+}
+{menuname} .menu-vertical-cascading ul a:hover {
+	color:              {tl_menu_text_color_hover};
+	background:         {tl_menu_background_color_hover};
+}
+{menuname} .menu-vertical-cascading li ul a {
+	text-decoration:    none;
+}
+{menuname} .menu-vertical-cascading li ul a {
+	color:              {ch_menu_text_color};
+	background:         {ch_menu_background_color};
+	padding:            3px 6px;
+{!if ch_menu_element_border_top_width}
+    border-top:         {ch_menu_element_border_top_width} {ch_menu_element_border_top_color};
+{!endif}
+{!if ch_menu_element_border_left_width}
+    border-left:        {ch_menu_element_border_left_width} {ch_menu_element_border_left_color};
+{!endif}
+{!if ch_menu_element_border_right_width}
+    border-right:       {ch_menu_element_border_right_width} {ch_menu_element_border_right_color};
+{!endif}
+	border-bottom:      0;
+{!if ch_menu_font_size}
+    font-size:          {ch_menu_font_size};
+{!endif}
+{!if ch_menu_font_weight}
+    font-weight:        {ch_menu_font_weight};
+{!endif}
+{!if ch_menu_line_height}
+    height:             {ch_menu_line_height};
+    line-height:        {ch_menu_line_height};
+{!endif}
+}
+{menuname} .menu-vertical-cascading li ul a:hover {
+	color:              {ch_menu_text_color_hover};
+	background:         {ch_menu_background_color_hover};
+}
+{menuname} .menu-vertical-cascading ul a.parent {
+	background:         {tl_menu_background_color}
+{!if ch_menu_parent_image}
+    url(images/menu/{ch_menu_parent_image}) no-repeat scroll 95% 50%
+{!endif}
+	;
+}
+{menuname} .menu-vertical-cascading ul a.parent:hover {
+	background:         {tl_menu_background_color_hover}
+{!if ch_menu_parent_image}
+    url(images/menu/{ch_menu_parent_image}) no-repeat scroll 95% 50%
+{!endif}
+	;
+}
+{menuname} .menu-vertical-cascading li ul a.parent {
+	background:         {ch_menu_background_color}
+{!if ch_menu_parent_image}
+    url(images/menu/{ch_menu_parent_image}) no-repeat scroll 95% 50%
+{!endif}
+	;
+}
+{menuname} .menu-vertical-cascading li ul a.parent:hover {
+	background:         {ch_menu_background_color_hover}
+{!if ch_menu_parent_image}
+    url(images/menu/{ch_menu_parent_image}) no-repeat scroll 95% 50%
+{!endif}
+	;
+}

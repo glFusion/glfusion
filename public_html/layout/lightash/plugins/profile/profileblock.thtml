@@ -1,0 +1,13 @@
+{# begin {templatelocation} #}
+<div class="profile-header">
+  {$LANG_PROFILE['block_title']}
+</div>
+<table border="0">
+<!-- BEGIN profile_row -->
+    {# only show profile fields the user has completed #}
+    {!if value}
+    <tr><td class="alignright">{descrip} : </td><td>{value}</td></tr>
+    {!endif}
+<!-- END profile_row -->
+</table>
+{# end {templatelocation} #}

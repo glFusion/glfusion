@@ -1,0 +1,41 @@
+{# begin {templatelocation} #}
+<script type="text/javascript">
+<!--
+window.addEvent('domready',function() {
+    var myValidator = new fValidator("contact");
+});
+-->
+</script>
+{start_block_mailstory2friend}
+<div class="input-form">
+<form action="{site_url}/profiles.php" method="post" id="contact">
+<div>
+  <label for="from">{lang_fromname}:</label>
+  <input class="fValidate['required']" type="text" id="from" name="from" size="40" maxlength="96" value="{name}" />
+</div>
+<div>
+  <label for="fromemail">{lang_fromemailaddress}:</label>
+  <input class="fValidate['required','email']" type="text" id="fromemail" name="fromemail" size="40" maxlength="96" value="{email}" />
+</div>
+<div>
+  <label for="to">{lang_toname}:</label>
+  <input class="fValidate['required']" type="text" id="to" name="to" size="40" maxlength="96" value="{toname}" /><br />
+</div>
+<div>
+  <label for="toemail">{lang_toemailaddress}:</label>
+  <input class="fValidate['required','email']" type="text" id="toemail" name="toemail" size="40" maxlength="96" value="{toemail}" /><br />
+</div>
+<div>
+  <label for="shortmsg">{lang_shortmessage}:</label>
+  <textarea class="fValidate['required']" id="shortmsg" name="shortmsg" rows="10" cols="50">{shortmsg}</textarea><br />
+</div>
+<div class="warning">{lang_warning}</div>
+<div style="margin-top:10px;margin-bottom:10px;">{captcha}</div>
+
+<input type="hidden" name="sid" value="{story_id}" />
+<input type="hidden" name="what" value="sendstory" />
+<input type="submit" value="{lang_sendmessage}" />
+</form>
+</div>
+{end_block}
+{# end {templatelocation} #}

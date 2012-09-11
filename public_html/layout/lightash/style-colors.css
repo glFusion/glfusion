@@ -1,0 +1,526 @@
+/* set the default background and foreground colors */
+body {
+    background-color: #EEE;
+    color: #222;
+}
+
+/* make sure login form in header uses dark text */
+.header-flag-n-search form {
+    color: #222;
+}
+
+/****************** BEGIN background #222 ******************/
+
+#calendar1,
+#calendar2,
+#calendar3,
+#gl_container_fixed,
+#gl_container_fluid,
+#gl_content,
+#gl_content-full,
+#gl_content-wide-left,
+#gl_content-wide-right,
+#gl_content-full .poll-question ul li,
+#gl_content-full .poll-questions,
+#gl_content-full .poll-vote,
+#gl_content-full .poll-vote-results,
+#gl_content-wide-left .poll-question ul li,
+#gl_content-wide-left .poll-questions,
+#gl_content-wide-left .poll-vote,
+#gl_content-wide-left .poll-vote-results,
+#gl_content-wide-right .poll-question ul li,
+#gl_content-wide-right .poll-questions,
+#gl_content-wide-right .poll-vote,
+#gl_content-wide-right .poll-vote-results,
+#gl_footer,
+#gl_slide-tabs li.current,
+#gl_slide-tabs li.current,
+#header-textbox,
+#header-textbox:focus,
+#navcontainer a,
+.block-box-left h2,
+.block-box-right h2,
+.bottom-r-corner,
+.commentbar-line2,
+.commentbar-line3,
+.ng-selected-day,
+.ng-cal,
+.pluginBG,
+.pluginRollOut,
+.pluginRow1 .pluginRollOut,
+.pluginRow1 td,
+.pluginRow1,
+.pluginRow2 .pluginRollOut,
+.pluginSubTable,
+.profile-header,
+div.glfform form div input.inputSubmit,
+form div input.inputButton,
+input.inputButton,
+input.inputSubmit,
+#tpndummy {
+	background-color: #EEE;
+	color: #222;
+}
+
+/****************** BEGIN border #666 ******************/
+
+.commentbar-line2,
+#tpndummy {
+	border-top: 1px solid #666;
+}
+
+#navcontainer,
+.commentbar-line2,
+.commentbar-line3,
+.forumpost .pluginCellTitle,
+.forumpost .pluginCellSubTitle,
+.searchform-box,
+.welcomeanddate-text,
+form fieldset div.notes h4,
+#tpndummy {
+	border-bottom: 1px solid #666;
+}
+
+.pluginRow1 td table tr td,
+.pluginRow2 td table tr td,
+#tpndummy {
+	border: none;
+}
+
+#gl_moospring .gl_moospring1,
+#gl_moospring .gl_moospring2,
+#gl_moospring .gl_moospring3,
+#tpndummy {
+	border-right: 5px solid #666;
+}
+
+#calendar1,
+#calendar2,
+#calendar3,
+#gl_content,
+.admin-menu,
+.codeblock,
+.commenttitle,
+.forumpost,
+.gl_moosimplebox,
+.morph-start,
+.ng-cal .ng-days-name-td,
+.ng-cal td,
+.ng-cal,
+.ng-cal-header-table,
+.ng-clear-link,
+.ng-close-link,
+.plugin,
+.pluginSubTable,
+.profile-bio,
+.profile-image,
+.quotemain,
+.story-featured pre .story-body pre,
+.table_list td,
+.table_list,
+a.tooltip:hover span,
+div.glfform form div fieldset,
+div.glfform form fieldset div.notes h4,
+div.glfform form fieldset div.notes,
+div.glfform form fieldset,
+div.glfform p.error,
+form fieldset div.notes,
+#tpndummy {
+	border: 1px solid #666;
+}
+
+/****************** BEGIN color #999 ******************/
+
+#footer-copyright a:link,
+#footer-copyright a:visited,
+#footer-copyright,
+#gl_extra h3,
+#gl_extra,
+#gl_moorotator .gl_moorotatortext,
+#gl_navigation,
+#gl_slide-tabs li,
+#gl_slide-tabs li.active,
+#gl_slide-tabs li.current,
+#header-site-slogan,
+.authorname,
+.block-box-left h2,
+.block-box-left h3,
+.block-box-right h2,
+.block-box-right h3
+.block-content,
+.block-content-left,
+.block-content-right,
+.codeblock,
+.commentbar-line1,
+.commentbar-line3,
+.disabledfield,
+.fieldhelp,
+.gftool-tip,
+.gl_moorotatortext a,
+.gl_moorotatortext a:hover,
+.gl_moosimplebox,
+.gl_user-menu-left,
+.gl_user-menu-right,
+.highlight,
+.ng-cal-header-td,
+.ng-cal-next-td,
+.ng-cal-previous-td,
+.ng-clear-link,
+.ng-close-link,
+.ng-dateOff,
+.ng-dayOff,
+.ng-month-name-th,
+.ng-outOfRange,
+.ng-weekend,
+.plugin th,
+.plugin,
+.pluginAlert,
+.pluginAltBG td,
+.pluginAltText,
+.pluginBreadCrumbs a:hover,
+.pluginBreadCrumbs a:link,
+.pluginBreadCrumbs a:visited,
+.pluginBreadCrumbs,
+.pluginCellSubTitle,
+.pluginCellText,
+.pluginCellTitle,
+.pluginFooter td,
+.pluginFooter,
+.pluginInfo,
+.pluginRollOut,
+.pluginRollOver,
+.pluginRow1 .pluginRollOut,
+.pluginRow1 .pluginRollOver,
+.pluginRow1 td,
+.pluginRow1,
+.pluginRow2 .pluginRollOut,
+.pluginRow2 .pluginRollOver,
+.pluginRow2 td,
+.pluginRow2,
+.pluginSubTable,
+.pluginTitle,
+.poll-question ul li,
+.poll-questions,
+.poll-vote,
+.poll-vote-results,
+.searchauth,
+.searchdate,
+.searchhits,
+.story,
+.story-featured,
+.story-footer,
+.story-icons,
+.story-information,
+.table_list th,
+.tool-tip,
+a.tooltip,
+blockquote,
+div.glfform p.error,
+div.glfform,
+fieldset,
+form,
+h3,
+legend,
+q,
+select,
+td,
+textarea,
+th,
+#tpndummy {
+	color: #222;
+}
+
+/****************** BEGIN color #3677C0 ******************/
+
+#configuration legend,
+#gl_content h1,
+#gl_content h2,
+#gl_content h3,
+#gl_content-full h1,
+#gl_content-full h2,
+#gl_content-full h3,
+#gl_content-wide-left h1,
+#gl_content-wide-left h2,
+#gl_content-wide-left h3,
+#gl_content-wide-right h1,
+#gl_content-wide-right h2,
+#gl_content-wide-right h3,
+#gl_extra h1,
+#gl_extra h2,
+#gl_extra h3,
+#gl_navigation h1,
+#gl_navigation h2,
+#gl_navigation h3,
+#tpndummy {
+	color: #b22222;
+}
+
+#navcontainer a:hover,
+#navcontainer a:link,
+#navcontainer a:visited,
+.admin-menu a:hover,
+.admin-menu a:link,
+.admin-menu a:visited,
+.authorname a:hover,
+.authorname a:link,
+.authorname a:visited,
+.block-box a:hover,
+.block-box a:link,
+.block-box a:visited,
+.block-box-comment a:hover,
+.block-box-comment a:link,
+.block-box-comment a:visited,
+.block-box-left a:hover,
+.block-box-left a:link,
+.block-box-left a:visited,
+.block-box-right a:hover,
+.block-box-right a:link,
+.block-box-right a:visited,
+.forumpost a:hover,
+.forumpost a:link,
+.forumpost a:visited,
+.forumpost,
+.gl_user-menu-left a:hover,
+.gl_user-menu-left a:link,
+.gl_user-menu-left a:visited,
+.gl_user-menu-right a:hover,
+.gl_user-menu-right a:link,
+.gl_user-menu-right a:visited,
+.jsenabled_show a:hover,
+.jsenabled_show a:link,
+.jsenabled_show a:visited,
+.pagenav a:hover,
+.pagenav a:link,
+.pagenav a:visited,
+.pagenav,
+.plugin a:hover,
+.plugin a:link,
+.plugin a:visited,
+.pluginButton a:hover,
+.pluginButton a:link,
+.pluginButton a:visited,
+.pluginHeader a:hover,
+.pluginHeader a:link,
+.pluginHeader a:visited,
+.pluginLinks a:hover,
+.pluginLinks a:link,
+.pluginLinks a:visited,
+.pluginRow1 a:hover,
+.pluginRow1 a:link,
+.pluginRow1 a:visited,
+.pluginRow2 a:hover,
+.pluginRow2 a:link,
+.pluginRow2 a:visited,
+.profile-header a:hover,
+.profile-header a:link,
+.profile-header a:visited,
+.story-body a:hover,
+.story-body a:link,
+.story-body a:visited,
+.story-footer a:hover,
+.story-footer a:link,
+.story-footer a:visited,
+.story-information a:hover,
+.story-information a:link,
+.story-information a:visited,
+a.pluginButton:hover,
+a.pluginButton:link,
+a.pluginButton:visited,
+a:active.non-ul,
+a:hover,
+a:hover.non-ul,
+a:link,
+a:link.non-ul,
+a:visited,
+a:visited.non-ul,
+span a:hover,
+span a:link,
+span a:visited,
+#tpndummy {
+	color: #1455A0;
+}
+
+/****************** BEGIN color #222 ******************/
+
+#header-textbox,
+#header-textbox:focus,
+#msgbox,
+#navcontainer a#current span,
+div.glfform form div input.inputSubmit,
+div.glfform form div.error,
+div.glfform form fieldset div.notes h4,
+div.glfform form fieldset div.notes p,
+div.glfform form fieldset div.notes,
+div.glfform input,
+div.glfform select,
+div.glfform textarea,
+form div input.inputButton,
+form fieldset div.notes h4,
+form fieldset div.notes p,
+form fieldset div.notes,
+input,
+input.inputButton,
+input.inputSubmit,
+select,
+submit,
+textarea,
+#tpndummy {
+	color: #222;
+}
+
+#navcontainer a:hover span,
+#tpndummy {
+	color: #ccc;
+}
+
+/**************** BEGIN #CCC ******************/
+
+#gl_navigation {
+	border: none;
+	border-right: 1px solid #666;
+	border-bottom: 1px solid #666;
+}
+
+#gl_extra {
+	border: none;
+	border-left: 1px solid #666;
+	border-bottom: 1px solid #666;
+}
+
+div#frame {
+	border: 5px solid #666;
+}
+
+/**************** BEGIN background #444 ***************/
+
+#gl_slide-tabs li,
+.admin-list-headerfield,
+.ng-cal-header-table,
+.ng-month-name-th,
+.pluginAlert,
+.pluginAltBG,
+.pluginBG,
+.pluginCellTitle,
+.pluginFooter td,
+.pluginFooter,
+.pluginHeader,
+.pluginInfo,
+.pluginRow2 td,
+.pluginRow2,
+.pluginTitle,
+.searchform-box,
+.table_list tr.odd,
+#tpndummy {
+	background-color: #CCC;
+}
+
+/**************** BEGIN background #333 ***************/
+
+#gl_extra,
+#gl_navigation,
+#gl_navigation .poll-question ul li,
+#gl_navigation .poll-questions,
+#gl_navigation .poll-vote,
+#gl_navigation .poll-vote-results,
+.commenttitle,
+.ng-clear-link,
+.ng-close-link,
+.ng-outOfRange,
+.plugin,
+.pluginCellFill,
+.pluginCellSubTitle,
+.pluginRollOver,
+.profile-bio,
+.profile-image,
+.story-featured pre .story-body pre,
+#tpndummy { 
+	background-color: #CCC;
+}
+
+/**************** BEGIN background #ff0000 ***************/
+
+div.glfform p.error {
+	background-color: #ff0000;
+}
+
+/**************** BEGIN background #fff ***************/
+
+div.glfform form div.error {
+	border: 1px solid #222;
+}
+
+/**************** BEGIN color #ff0000 ***************/
+
+.warning,
+.warningsmall,
+a:active,
+div.glfform form div.error p.error,
+#tpndummy {
+	color: #ff0000;
+}
+
+/**************** BEGIN background #DAE0ED ***************/
+
+.ng-cal .ng-days-name-td,
+.ng-mouse-over,
+.pluginSubTable th,
+.quotemain,
+a.tooltip:hover span,
+th,
+#tpndummy {
+	background-color: #dae0ed;
+}
+
+/**************** BEGIN background #ece9d8 ***************/
+
+.codeblock,
+div.glfform form div.error,
+div.glfform form fieldset div.notes,
+form fieldset div.notes,
+#tpndummy {
+	background-color: #ece9d8;
+}
+
+/**************** BEGIN background #666 ***************/
+
+div.forumpost {
+        border: none;
+}
+
+.pluginSolidOutline {
+	background: #666;
+        border: 1px solid #666;
+}
+
+div.forumpost table.pluginHeader {
+        margin-top: 15px;
+        border: 1px solid #666;
+}
+
+.plugin th {
+	background: #ccc;
+}
+
+/**************** BEGIN color #679ef1 ***************/
+
+#footer-copyright a:hover,
+.tool-title,
+.gftool-title,
+#tpndummy {
+	color: #679ef1;
+}
+
+.footerlinks a:hover {
+	color: #66cdf5;
+}
+
+.highlight {
+	background-color: #ffff00;
+}
+
+a.tooltip:hover span,
+.pluginHeader,
+.pluginSolidFill,
+.quotemain {
+	color: #465584;
+}

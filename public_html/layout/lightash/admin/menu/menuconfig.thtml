@@ -1,0 +1,196 @@
+{# begin {templatelocation} #}
+<script type="text/javascript" src="{site_url}/javascript/menu/mooRainbow.js?ver=1"></script>
+{# Hide the menu builder as Javascript is required. If JS is enabled then the JS below will un-hide it #}
+<script type="text/javascript">
+    document.getElementById('menubuilder').style.display=''
+</script>
+<script type="text/javascript">
+<!--
+window.addEvent('domready', function() {
+{javascript}
+});
+function hsv(a){
+		var r=a[0],
+		g=a[1],
+		b=a[2],
+		H,S,V;
+		var c=Math.min(r,g,b);
+		var d=Math.max(r,g,b);
+		var e=d-c;
+		V=d;
+		if(!e){H=0;S=0}
+		else{
+			S=e/d;
+			deltaR=(((d-r)/6)+(e/2))/e;
+			deltaG=(((d-g)/6)+(e/2))/e;
+			deltaB=(((d-b)/6)+(e/2))/e;
+			if(r==d)H=deltaB-deltaG;
+			else if(g==d)H=(1/3)+deltaR-deltaB;
+			else if(b==d)H=(2/3)+deltaG-deltaR;
+			if(H<0)H+=1;if(H>1)H-=1
+		};
+		return[H,S,V]
+	}
+-->
+</script>
+
+<div class="input-form">
+    <form method="post" action="{form_action}" id="mbconfig" enctype="multipart/form-data" >
+        <input type="hidden" name="menu_id" id="menu_id" value="{menu_id}"/>
+        <input type="hidden" name="menutype" id="menutype" value="{menutype}"/>
+
+        <fieldset>
+            <legend>{$LANG_MB01[menu_properties]} {menu_name}</legend>
+
+            <div class="input-field">
+                <label for="menuactive">{$LANG_MB01[active]}</label>
+                <input type="checkbox" id="menuactive" name="menuactive" value="1"{menuactive}/>
+            </div>
+
+            <div class="input-field">
+                <label for="group">{$LANG_MB01[permission]}</label>
+                {group_select}
+            </div>
+
+        </fieldset>
+
+        <fieldset>
+            <legend>{$LANG_MB01[menu_alignment]}</legend>
+
+            <div class="input-field">
+                <label>{$LANG_MB01[alignment_question]}</label>
+                <input type="radio" name="malign" value="1" {alignment_left_checked}/>&nbsp;{$LANG_MB01[align_left]}
+                <input type="radio" name="malign" value="0" {alignment_right_checked}/>&nbsp;{$LANG_MB01[align_right]}
+            </div>
+
+        </fieldset>
+
+        <fieldset>
+            <legend>Top Level Menu Attributes</legend>
+
+<!-- BEGIN top_level_row -->
+            <div class="input-field" id="{item_name}">
+                <label for="{item_name}">
+                    {prompt}
+                </label>
+{!if _sb}
+                <input type="hidden" name="{item_name}" id="{item_name}" value="{value}" />
+                <input type="text" name="{item_name}_sample" id="{item_name}_sample" size="7" maxlength="7" value="{value}" style="vertical-align:middle;background-color:{value};"/>
+                <img id="{item_name}_sb" src="{layout_url}/images/rainbow.png" alt="{$LANG_MB01[select_color]}" title="{$LANG_MB01[select_color]}" width="16" height="16" style="vertical-align:middle;"/>
+{!else}
+                <input type="text" name="{item_name}" id="{item_name}" value="{value}" />
+{!endif}
+            </div>
+
+<!-- END top_level_row -->
+
+            <div class="input-field" id="tl_menu_background_image">
+                <label for "tl_menu_background_image">
+                    Top Level Background Image
+                </label>
+
+                <input type="file" name="tl_menu_background_image" id="tl_menu_background_image" value="" />
+{!if tl_menu_background_image}
+                Delete: <input type="checkbox" name="tl_menu_background_image_delete" id="tl_menu_background_image_delete" value="1"/>
+
+                &nbsp;{$LANG_MB01[currently]}:
+		        &nbsp;<img src="{site_url}/images/menu/{tl_menu_background_image}" width="27" height="27" style="vertical-align:middle;border:none;" alt="" />
+{!endif}
+            </div>
+
+            <div class="input-field" id="tl_menu_text_hover_image">
+                <label for "tl_menu_text_hover_image">
+                    Top Level Hover Image
+                </label>
+
+                <input type="file" name="tl_menu_text_hover_image" id="tl_menu_text_hover_image" value="" />
+{!if tl_menu_text_hover_image}
+                Delete: <input type="checkbox" name="tl_menu_text_hover_image_delete" id="tl_menu_text_hover_image_delete" value="1"/>
+
+                    &nbsp;{$LANG_MB01[currently]}:
+            		&nbsp;<img src="{site_url}/images/menu/{tl_menu_text_hover_image}" width="27" height="27" style="vertical-align:middle;border:none;" alt="" />
+{!endif}
+            </div>
+
+
+
+
+        </fieldset>
+
+        <fieldset>
+            <legend>Child Menu Attributes</legend>
+
+<!-- BEGIN child_menu_row -->
+            <div class="input-field" id="{item_name}">
+                <label for="{item_name}">
+                    {prompt}
+                </label>
+{!if _sb}
+                <input type="hidden" name="{item_name}" id="{item_name}" value="{value}" />
+                <input type="text" name="{item_name}_sample" id="{item_name}_sample" size="7" maxlength="7" value="{value}" style="vertical-align:middle;background-color:{value};"/>
+                <img id="{item_name}_sb" src="{layout_url}/images/rainbow.png" alt="{$LANG_MB01[select_color]}" title="{$LANG_MB01[select_color]}" width="16" height="16" style="vertical-align:middle;"/>
+{!else}
+                <input type="text" name="{item_name}" id="{item_name}" value="{value}" />
+{!endif}
+            </div>
+
+<!-- END child_menu_row -->
+
+            <div class="input-field" id="ch_menu_background_image">
+                <label for "ch_menu_background_image">
+                    Sub-menu Background Image
+                </label>
+
+                <input type="file" name="ch_menu_background_image" id="ch_menu_background_image" value="" />
+{!if ch_menu_background_image}
+                Delete: <input type="checkbox" name="ch_menu_background_image_delete" id="ch_menu_background_image_delete" value="1"/>
+
+                &nbsp;{$LANG_MB01[currently]}:
+		        &nbsp;<img src="{site_url}/images/menu/{ch_menu_background_image}" width="27" height="27" style="vertical-align:middle;border:none;" alt="" />
+{!endif}
+            </div>
+
+            <div class="input-field" id="ch_menu_text_hover_image">
+                <label for "ch_menu_text_hover_image">
+                    Sub Menu Hover Image
+                </label>
+
+                <input type="file" name="ch_menu_text_hover_image" id="ch_menu_text_hover_image" value="" />
+{!if ch_menu_text_hover_image}
+                Delete: <input type="checkbox" name="ch_menu_text_hover_image_delete" id="ch_menu_text_hover_image_delete" value="1"/>
+
+                    &nbsp;{$LANG_MB01[currently]}:
+            		&nbsp;<img src="{site_url}/images/menu/{ch_menu_text_hover_image}" width="27" height="27" style="vertical-align:middle;border:none;" alt="" />
+{!endif}
+            </div>
+
+        </fieldset>
+
+        <fieldset>
+            <legend>Parent Menu Indicator</legend>
+
+            <div class="input-field" id="ch_menu_parent_image">
+                <label for="ch_menu_parent_image">
+                    Parent Menu Indicator
+                </label>
+
+                <input type="file" name="ch_menu_parent_image" id="ch_menu_parent_image" value="" />
+{!if ch_menu_parent_image}
+                Delete: <input type="checkbox" name="ch_menu_parent_image" id="ch_menu_parent_image" value="1"/>
+
+                    &nbsp;{$LANG_MB01[currently]}:
+            		&nbsp;<img src="{site_url}/images/menu/{ch_menu_parent_image}" width="27" height="27" style="vertical-align:middle;border:none;" alt="" />
+{!endif}
+            </div>
+
+        </fieldset>
+
+        <div style="text-align:center;padding-top:20px;padding-bottom:10px;">
+            <input type="hidden" id="mode" name="mode" value="savecfg"/>
+            <input type="submit" id="execute" name="execute" value="{$LANG32[23]}"/>
+            <input type="reset"  id="reset"   name="reset"   value="{$LANG_MB01[reset]}"/>
+            <input type="submit" id="defaults" name="defaults"  value="{$LANG_MB01[defaults]}" onclick="return confirm('{$LANG_MB01[confirm_reset]}');" />
+        </div>
+    </form>
+</div>
+{# end {templatelocation} #}

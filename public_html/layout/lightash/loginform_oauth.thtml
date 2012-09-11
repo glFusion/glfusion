@@ -1,0 +1,5 @@
+{# begin {templatelocation} #}
+<form action="{site_url}/users.php?oauth_login={oauth_service}" method="post">
+  <input src="{oauth_sign_in_image}"{oauth_sign_in_image_style} type="image" />
+</form>
+{# end {templatelocation} #}

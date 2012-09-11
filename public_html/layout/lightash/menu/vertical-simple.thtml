@@ -1,0 +1,16 @@
+
+.st-vmenu{menu_id} ul{
+text-align:left; /* options are left - center - right */
+color:{main_menu_text_color};
+list-style-type:disc;
+}
+
+.st-vmenu{menu_id} a:link,
+.st-vmenu{menu_id} a:visited {
+color:{main_menu_text_color};
+text-decoration:none;
+}
+.st-vmenu{menu_id} a:hover {
+color:{main_menu_hover_text_color};
+text-decoration:underline;
+}

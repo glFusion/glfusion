@@ -1,0 +1,6 @@
+{# begin {templatelocation} #}
+<h2>{link_category}</h2>
+<ul class="top10links">
+  {link_details}
+</ul>
+{# end {templatelocation} #}
