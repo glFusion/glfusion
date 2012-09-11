@@ -325,6 +325,9 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
     if ( ! ($status & DISABLE_BBCODE ) ) {
 
         $bbcode->addParser ('list', 'bbcode_stripcontents');
+        $bbcode->addCode ('code', 'usecontent', 'do_bbcode_code', array ('usecontent_param' => 'default'),
+                          'code', array ('listitem', 'block', 'inline', 'link'), array ());
+
         $bbcode->addCode ('b', 'simple_replace', null, array ('start_tag' => '<b>', 'end_tag' => '</b>'),
                           'inline', array ('listitem', 'block', 'inline', 'link'), array ());
         $bbcode->addCode ('i', 'simple_replace', null, array ('start_tag' => '<i>', 'end_tag' => '</i>'),
@@ -353,8 +356,6 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
                           'image', array ('listitem', 'block', 'inline', 'link'), array ());
         $bbcode->addCode ('file', 'usecontent', 'do_bbcode_file', array (),
                           'image', array ('listitem', 'block', 'inline', 'link'), array ());
-        $bbcode->addCode ('code', 'usecontent', 'do_bbcode_code', array ('usecontent_param' => 'default'),
-                          'code', array ('listitem', 'block', 'inline', 'link'), array ());
         $bbcode->setCodeFlag ('quote', 'paragraph_type', BBCODE_PARAGRAPH_ALLOW_INSIDE);
         $bbcode->setCodeFlag ('*', 'closetag', BBCODE_CLOSETAG_OPTIONAL);
         $bbcode->setCodeFlag ('*', 'paragraphs', true);
@@ -412,7 +413,6 @@ function _ff_geshi_formatted($str,$type='PHP') {
     global $_CONF;
 
     include_once($_CONF['path'].'lib/geshi/geshi.php');
-
     $geshi = new Geshi($str,$type,"{$_CONF['path']}lib/geshi");
     $geshi->set_header_type(GESHI_HEADER_DIV);
     //$geshi->enable_strict_mode(true);
@@ -428,7 +428,6 @@ function _ff_geshi_formatted($str,$type='PHP') {
 
     $geshi->set_header_content("$type Formatted Code");
     $geshi->set_header_content_style('font-family: Verdana, Arial, sans-serif; color: #808080; font-size: 90%; font-weight: bold; background-color: #f0f0ff; border-bottom: 1px solid #d0d0d0; padding: 2px;');
-
     return $geshi->parse_code();
 }
 
