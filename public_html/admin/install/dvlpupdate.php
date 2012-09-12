@@ -685,7 +685,7 @@ function glfusion_130()
         DB_query("UPDATE {$_TABLES['plugins']} SET pi_enabled=0 WHERE pi_name='sitetailor'",1);
         DB_query("INSERT INTO {$_TABLES['vars']} (name,value) VALUES ('stcvt','1')",1);
     }
-    $_SQL = array()
+    $_SQL = array();
 
     $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='tl_menu_background_color' WHERE conf_name='main_menu_bg_color'";
     $_SQL[] = "UPDATE {$_TABLES['menu_config']} SET conf_name='tl_menu_background_color_hover' WHERE conf_name='main_menu_hover_bg_color'";
