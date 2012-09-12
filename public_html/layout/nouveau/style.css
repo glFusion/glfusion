@@ -283,20 +283,13 @@ width:14.80em;
 height:1%;
 z-index:10;
 }
-/* webkit only browsers hack to hug right side*/
-@media screen and (-webkit-min-device-pixel-ratio:0)
-{
-  #gl_extra { margin-left:-14.97em;}
-}
-/*end webkit hack */
 #gl_footer {
 background:#000;
 clear:left;
 height:40px;
 width:100%;
 }
-
-input-form.* {
+input-form * {
   margin: 0;
   padding: 0;
 }
@@ -348,7 +341,6 @@ div.input-form textarea {
 div.input-form form div {
   clear: left;
   display: block;
-/*  width: 354px; */
   height: expression('1%');
   margin: 5px 0 0 0;
   padding: 1px 3px;
@@ -2431,7 +2423,7 @@ padding:0 15px;
 }
 
 #gl_slide-tabs li.active {
-background:679ef1;
+background:#679ef1;
 color:#999;
 }
 
