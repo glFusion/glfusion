@@ -250,7 +250,9 @@ function submitstory($topic = '')
 */
 function sendNotification($table, $story)
 {
-    global $_CONF, $_TABLES, $LANG01, $LANG08, $LANG24, $LANG29, $LANG_ADMIN;
+    global $_CONF, $_USER, $_TABLES, $LANG01, $LANG08, $LANG24, $LANG29, $LANG_ADMIN;
+
+    $dt = new Date('now',$_USER['tzid']);
 
     $title = COM_undoSpecialChars( $story->displayElements('title') );
     $postmode = $story->displayElements('postmode');
