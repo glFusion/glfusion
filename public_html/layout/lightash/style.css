@@ -16,7 +16,6 @@ div.gl_moomenu1 {
 }
 
 body {
-    background: #FFF;
     background: #ffcc99;
     font: 14px helvetica,arial,sans-serif;
     font-family: helvetica, serif;
@@ -68,186 +67,17 @@ form select option {
     width: 73.050003em;
 }
 
-.yui-b {
-    position: relative;
-    _position: static;
-}
-
-#yui-main .yui-b {
-    position: static;
-    float: none;
-    width: auto;
-}
-
-.yui-t1 #yui-main,.yui-t2 #yui-main,.yui-t3 #yui-main {
-    float: right;
-    margin-left: -25em;
-}
-
-.yui-t4 #yui-main,.yui-t5 #yui-main,.yui-t6 #yui-main {
-    float: left;
-    margin-right: -25em;
-}
-
-.yui-t1 .yui-b {
-    float: left;
-    width: 12em;
-}
-
-.yui-t1 #yui-main .yui-b {
-    margin-left: 13.05em;
-}
-
-.yui-t2 .yui-b {
-    float: left;
-    width: 13.5em;
-}
-
-.yui-t2 #yui-main .yui-b {
-    margin-left: 14.55em;
-}
-
-.yui-t3 .yui-b {
-    float: left;
-    width: 22.5em;
-}
-
-.yui-t3 #yui-main .yui-b {
-    margin-left: 23.620001em;
-}
-
-.yui-t4 .yui-b {
-    float: right;
-    width: 13.5em;
-}
-
-.yui-t4 #yui-main .yui-b {
-    margin-right: 14.55em;
-}
-
-.yui-t5 .yui-b {
-    float: right;
-    width: 18em;
-}
-
-.yui-t5 #yui-main .yui-b {
-    margin-right: 19.125em;
-}
-
-.yui-t6 .yui-b {
-    float: right;
-    width: 22.5em;
-}
-
-.yui-t6 #yui-main .yui-b {
-    margin-right: 23.620001em;
-}
-
-.yui-t7 #yui-main .yui-b {
-    display: block;
-    margin: 0 0 1em;
-}
-
-.yui-gb .yui-u,.yui-g .yui-gb .yui-u,.yui-gb .yui-g,.yui-gb .yui-gb,.yui-gb .yui-gc,.yui-gb .yui-gd,.yui-gb .yui-ge,.yui-gb .yui-gf,.yui-gc .yui-u,.yui-gc .yui-g,.yui-gd .yui-u {
-    float: left;
-    width: 32%;
-    margin-left: 1.99%;
-}
-
-.yui-g .yui-u,.yui-g .yui-g,.yui-g .yui-gb,.yui-g .yui-gc,.yui-g .yui-gd,.yui-g .yui-ge,.yui-g .yui-gf {
-    width: 49.099998%;
-}
-
-.yui-gb .yui-u {
-    margin-left: 1.9%;
-    width: 31.9%;
-}
-
-.yui-g .yui-gb div.first,.yui-gb .yui-gb div.first {
-    margin-right: 0;
-    width: 32%;
-    _width: 31.700001%;
-}
-
-.yui-gb .yui-g div.first {
-    margin-right: 4%;
-    _margin-right: 1.3%;
-}
-
-.yui-gb .yui-gc div.first,.yui-gb .yui-gd div.first {
-    margin-right: 0;
-}
-
-.yui-gb .yui-gb .yui-u,.yui-gb .yui-gc .yui-u {
-    margin-left: 1.8%;
-    _margin-left: 4%;
-}
-
-.yui-g .yui-gb .yui-u {
-    _margin-left: 1%;
-}
-
-.yui-gb .yui-gd .yui-u {
-    width: 66%;
-    _width: 61.200001%;
-}
-
-.yui-gb .yui-gd div.first {
-    width: 31%;
-    _width: 29.5%;
-}
-
-.yui-g .yui-gc .yui-u,.yui-gb .yui-gc .yui-u {
-    width: 32%;
-    _float: right;
-    margin-right: 0;
-    _margin-left: 0;
-}
-
-.yui-gb .yui-gc div.first {
-    width: 66%;
-    float: left;
-    margin-left: 0;
-}
-
-.yui-gb .yui-gb .yui-u {
-    _margin-left: .7%;
-}
-
-.yui-g .yui-gd div.first {
-    _width: 29.9%;
-}
-
-.yui-gb .yui-ge .yui-u,.yui-gb .yui-gf div.first {
-    width: 24%;
-    _width: 20%;
-}
-
-.yui-gb .yui-ge div.first,.yui-gb .yui-gf .yui-u {
-    width: 73.5%;
-    _width: 65.5%;
-}
-
-.yui-ge div.first .yui-gd .yui-u {
-    width: 65%;
-}
-
-#bd,.yui-g,.yui-gb,.yui-gc,.yui-gd,.yui-ge,.yui-gf {
-    zoom: 1;
-}
 
 #gl_container_fixed { /* if you adjust the width and use the forum plugin, also adjust #gl_container_fixed div.php below */
-    background: #FFF;
     background: #ffcc99;
-    min-width: 955px; !important
+    min-width: 955px;
     width: 955px;
     margin: 20px auto auto;
 }
 
 #gl_container_fluid {
-    background: #FFF;
     background: #ffcc99;
-    min-width: 955px; !important
+    min-width: 955px;
     margin: 20px;
     margin: 0px;
 }
@@ -287,25 +117,20 @@ form select option {
     overflow: hidden;
 }
 #gl_content {
-    background: #FFF;
     background: #ffcc99;
     height: 1%;
     margin: 0 15.79em;
     margin-bottom: 10px;	/* keeps the content bottom and footer spaced apart */
-/* border: 1px solid #666; */
     padding: 5px;
 }
 #gl_content-full {
-    background: #FFF;
     background: #ffcc99;
     height: 1%;
     margin: 0 10px;
     margin-bottom: 10px;	/* keeps the content bottom and footer spaced apart */
-/* border: 1px solid #666; */
     padding: 5px;
 }
 #gl_content-wide-left {
-    background: #FFF;
     background: #ffcc99;
     height: 1%;
     margin: 0 0.82em 0 15.79em;
@@ -314,16 +139,13 @@ form select option {
     padding: 5px;
 }
 #gl_content-wide-right {
-    background: #FFF;
     background: #ffcc99;
     height: 1%;
     margin: 0 15.79em 0 0.82em;
     margin-bottom: 10px;	/* keeps the content bottom and footer spaced apart */
-/* border: 1px solid #666; */
     padding: 5px;
 }
 #gl_navigation {
-    background: #F7F7F7;
     background: #ffcc99;
     border: 1px solid #CCC;
     float: left;
@@ -340,22 +162,16 @@ form select option {
     height: 1%;
     z-index: 10;
 }
-/* webkit only browsers hack to hug right side*/
-    @media screen and (-webkit-min-device-pixel-ratio: 0)
-    {
-    #gl_extra { margin-left: -14.96em;}
-}
-/*end webkit hack */
+
 #gl_footer {
     background: #000;
     background: #6c6c6c;
     clear: left;
-/* height: 60px; */
     margin: 10px 0;
     width: 100%;
 }
 
-glfform.* {
+glfform * {
     margin: 0;
     padding: 0;
 }
@@ -408,8 +224,7 @@ div.glfform textarea {
 div.glfform form div {
     clear: left;
     display: block;
-/*  width: 354px; */
-    height: expression('1%');
+    height: 1%;
     margin: 5px 0 0 0;
     padding: 1px 3px;
 }
@@ -421,7 +236,7 @@ div.glfform form fieldset div.notes {
     margin: 0 0 10px 10px;
     padding: 5px;
     border: 1px solid #666666;
-    background-color: #ffffe1;
+    background: #ffffe1;
     color: #666666;
     font-size: 88%;
 }
@@ -487,7 +302,7 @@ div.glfform form div label.labelCheckbox, form div label.labelRadio {
     float: none;
     display: block;
     width: 200px;
-    height: expression('1%');
+    height: 1%;
     padding: 0;
     margin: 0 0 5px 142px;
     text-align: left;
@@ -503,7 +318,7 @@ div.glfform form div img {
 }
 
 div.glfform p.error {
-    background-color: #ff0000;
+    background: #ff0000;
     background-image: url(layout/lightash/images/alert-small.png);
     background-repeat: no-repeat;
     background-position: 3px 3px;
@@ -514,7 +329,7 @@ div.glfform p.error {
 }
 
 div.glfform form div.error {
-    background-color: #ffffe1;
+    background: #ffffe1;
     background-repeat: no-repeat;
     background-position: top left;
     color: #666666;
@@ -524,7 +339,7 @@ div.glfform form div.error {
 div.glfform form div.error p.error {
     background-image: url(layout/lightash/images/alert-small.png);
     background-position: top left;
-    background-color: transparent;
+    background: transparent;
     border-style: none;
     font-size: 88%;
     font-weight: bold;
@@ -558,7 +373,7 @@ div.glfform form div input.inputCheckbox, form div input.inputRadio, input.input
     display: inline;
     height: auto;
     width: auto;
-    background-color: transparent;
+    background: transparent;
     border-width: 0;
     padding: 0;
     margin: 0 0 0 140px;
@@ -579,7 +394,7 @@ div.glfform form div.submit div {
 }
 
 div.glfform form div input.inputSubmit, form div input.inputButton, input.inputSubmit, input.inputButton {
-    background-color: #cccccc;
+    background: #cccccc;
     color: #000000;
     width: auto;
     padding: 0 6px;
@@ -596,7 +411,7 @@ div.glfform form div small {
     margin: 0 0 5px 142px;
     padding: 1px 3px;
     font-size: 88%;
-    height: expression('1%');
+    height: 1%;
 }
 
 div.glfform form div.fValidator-msg {
@@ -605,22 +420,18 @@ div.glfform form div.fValidator-msg {
 }
 
 .top-r-corner {
-/* background: transparent url(layout/lightash/images/top-r-corner.png) 100% 0 no-repeat; */
     height: 100px;
 }
 
 .top-l-corner {
-/* background: transparent url(layout/lightash/images/top-l-corner.png) 0 0 no-repeat; */
     height: 100px;
 }
 
 .bottom-r-corner {
-/* background: #FFF url(layout/lightash/images/bottom-r-corner.png) 100% 0 no-repeat; */
     height: 5px;
 }
 
 .bottom-l-corner {
-/* background: transparent url(layout/lightash/images/bottom-l-corner.png) 0 0 no-repeat; */
     height: 5px;
 }
 
@@ -676,7 +487,7 @@ form div.notes li {
 }
 
 form fieldset div.notes {
-    background-color: #ffffe1;
+    background: #ffffe1;
     border: 1px solid #666;
     color: #666;
     float: right;
@@ -751,7 +562,7 @@ textarea {
 }
 
 th {
-    background-color: #DAE0ED;
+    background: #DAE0ED;
     color: #000;
     font-weight: 700;
     padding-left: 3px;
@@ -999,7 +810,7 @@ th {
 .header-flag-n-search {
     float: right;
     text-align: right;
-    margin: 30px 10px 0 0!important;
+    margin: 30px 10px 0 0 !important;
 }
 
 #header-site-logo {
@@ -1032,7 +843,7 @@ th {
     width: 120px;
 }
 
-#header-textbox: focus {
+#header-textbox:focus {
     background: url(layout/lightash/images/bg_search.jpg) no-repeat right -1px #FFF;
     color: #000;
     padding-left: 2px;
@@ -1207,44 +1018,10 @@ th {
     margin-bottom: 30px;
 }
 
-<!--
-.story h1 {
-    background: transparent;
-    font-size: 1.5em;
-    font-weight: 700;
-}
-
-.story h1,
-.story h2,
-.story h3 {
-    font-family: helvetica, serif;
-    text-shadow: white 0px 1px 0px;
-    margin: 10px 0px 4px 0px;
-}
--->
-
 .story-body {
     margin-bottom: 10px;
     padding: 3px;
 }
-/*
-#gl_content ol,
-#gl_content ul,
-#gl_content-full ol,
-#gl_content-full ul,
-#gl_content-wide-left ol,
-#gl_content-wide-left ul,
-#gl_content-wide-right ol,
-#gl_content-wide-right ul,
-#not-a-class {
-    margin-left: 10px;
-}
-
-#gl_content ol li,
-#gl_content-full ol li,
-#gl_content-wide-left ol li,
-#gl_content-wide-right ol li,
-*/
 
 .story-body ol li,
 .story-body ul li,
@@ -1253,12 +1030,6 @@ th {
     padding-left: 5px;
     list-style-position: outside;
 }
-
-/*#gl_content ul li,
-#gl_content-full ul li,
-#gl_content-wide-left ul li,
-#gl_content-wide-right ul li,
-*/
 
 .story-body ul li,
 #not-a-class {
@@ -2012,8 +1783,6 @@ q {
     background-image: url(layout/lightash/images/quote-l.png);
     background-repeat: no-repeat;
     background-attachment: scroll;
-    background-x-position: left;
-    background-y-position: top;
     color: #666;
     font-size: 120%;
     font-style: italic;
@@ -2122,7 +1891,7 @@ div .php, div .text {
     margin: 0;
 }
 
-#bd: after,.yui-g: after,.yui-gb: after,.yui-gc: after,.yui-gd: after,.yui-ge: after,.yui-gf: after,.clearfix: after {
+#bd:after,.yui-g:after,.yui-gb:after,.yui-gc:after,.yui-gd:after,.yui-ge:after,.yui-gf:after,.clearfix:after {
     clear: both;
     content: ".";
     display: block;
@@ -2334,11 +2103,7 @@ div .html,div .css {
 #inter_cal2 .ng-cal-header-table {
     width: 95%;
 }
-/*
-#configuration {
-    border: 1px solid silver;
-}
-*/
+
 #configuration fieldset {
     margin-bottom: 10px;
     border: 1px #ccc solid;
@@ -2483,12 +2248,12 @@ div .html,div .css {
     z-index: 2;
     margin-left: 10px;
     display: block;
-    color: #FFF;
+    color: #FFF !important;
 }
 
 .gl_moorotatortext a,
 .gl_moorotatortext a:hover {
-    color: #FFF;
+    color: #FFF !important;
     text-decoration: none;
 }
 
@@ -2517,10 +2282,10 @@ div .html,div .css {
 }
 
 #gl_moorotator .control-prev,
-div#frame div.button#left:hover,
-div#frame div.button#left.hover,
-div#frame div.button#right:hover,
-div#frame div.button#right.hover,
+div#gl_frame div.button#left:hover,
+div#gl_frame div.button#left.hover,
+div#gl_frame div.button#right:hover,
+div#gl_frame div.button#right.hover,
 #gl_mooticker .control-prev {
     background-position: 0 0;
 }
@@ -2597,7 +2362,7 @@ ul#gl_slide-tabs { /* The tabs for the content box */
 }
 
 #gl_slide-tabs li.active {
-    background: 679ef1;
+    background: #679ef1;
     color: #999;
 }
 
@@ -2606,7 +2371,7 @@ ul#gl_slide-tabs { /* The tabs for the content box */
     color: #999;
 }
 
-div#frame {
+div#gl_frame {
     clear: both;
     position: relative;
     overflow: hidden;
@@ -2614,7 +2379,7 @@ div#frame {
     margin: 0 auto 2em;
 }
 
-div#frame div.button {
+div#gl_frame div.button {
     position: absolute;
     width: 28px;
     height: 28px;
@@ -2623,28 +2388,28 @@ div#frame div.button {
     top: 40%;
 }
 
-div#frame div.button#left {
+div#gl_frame div.button#left {
     left: 10px;
     background: url(layout/lightash/images/prev.png) no-repeat;
 }
 
-div#frame div.button#right {
+div#gl_frame div.button#right {
     right: 10px;
     background: url(layout/lightash/images/next.png) no-repeat;
 }
 
-#scroller {
+#gl_scroller {
     overflow: hidden;
     margin: 0 auto;
 }
 
-.tab-pane {
+.gl_tab-pane {
     float: left;
     overflow: hidden;
     margin: 0;
 }
 
-.tab-pane img {
+.gl_tab-pane img {
     padding: 0;
 }
 
@@ -3057,7 +2822,7 @@ ul.top10links li {
     margin: 15px auto;
 }
 
-input-form.* {
+input-form * {
   margin: 0;
   padding: 0;
 }
@@ -3110,7 +2875,7 @@ div.input-form form div {
   clear: left;
   display: block;
 /*  width: 354px; */
-  height: expression('1%');
+  height: 1%;
   margin: 5px 0 0 0;
   padding: 1px 3px;
 }
@@ -3188,7 +2953,7 @@ div.input-form form div label.labelCheckbox, form div label.labelRadio {
   float: none;
   display: block;
   width: 200px;
-  height: expression('1%');
+  height: 1%;
   padding: 0;
   margin: 0 0 5px 142px;
   text-align: left;
@@ -3297,7 +3062,7 @@ div.input-form form div small {
   margin: 0 0 5px 142px;
   padding: 1px 3px;
   font-size: 88%;
-  height: expression('1%');
+  height: 1%;
 }
 
 div.input-form form div.fValidator-msg {
@@ -3627,3 +3392,170 @@ color: #DF3737;
 }
 /* end of horizontal simple menu CSS */
 
+.yui-b {
+    position: relative;
+    _position: static;
+}
+
+#yui-main .yui-b {
+    position: static;
+    float: none;
+    width: auto;
+}
+
+.yui-t1 #yui-main,.yui-t2 #yui-main,.yui-t3 #yui-main {
+    float: right;
+    margin-left: -25em;
+}
+
+.yui-t4 #yui-main,.yui-t5 #yui-main,.yui-t6 #yui-main {
+    float: left;
+    margin-right: -25em;
+}
+
+.yui-t1 .yui-b {
+    float: left;
+    width: 12em;
+}
+
+.yui-t1 #yui-main .yui-b {
+    margin-left: 13.05em;
+}
+
+.yui-t2 .yui-b {
+    float: left;
+    width: 13.5em;
+}
+
+.yui-t2 #yui-main .yui-b {
+    margin-left: 14.55em;
+}
+
+.yui-t3 .yui-b {
+    float: left;
+    width: 22.5em;
+}
+
+.yui-t3 #yui-main .yui-b {
+    margin-left: 23.620001em;
+}
+
+.yui-t4 .yui-b {
+    float: right;
+    width: 13.5em;
+}
+
+.yui-t4 #yui-main .yui-b {
+    margin-right: 14.55em;
+}
+
+.yui-t5 .yui-b {
+    float: right;
+    width: 18em;
+}
+
+.yui-t5 #yui-main .yui-b {
+    margin-right: 19.125em;
+}
+
+.yui-t6 .yui-b {
+    float: right;
+    width: 22.5em;
+}
+
+.yui-t6 #yui-main .yui-b {
+    margin-right: 23.620001em;
+}
+
+.yui-t7 #yui-main .yui-b {
+    display: block;
+    margin: 0 0 1em;
+}
+
+.yui-gb .yui-u,.yui-g .yui-gb .yui-u,.yui-gb .yui-g,.yui-gb .yui-gb,.yui-gb .yui-gc,.yui-gb .yui-gd,.yui-gb .yui-ge,.yui-gb .yui-gf,.yui-gc .yui-u,.yui-gc .yui-g,.yui-gd .yui-u {
+    float: left;
+    width: 32%;
+    margin-left: 1.99%;
+}
+
+.yui-g .yui-u,.yui-g .yui-g,.yui-g .yui-gb,.yui-g .yui-gc,.yui-g .yui-gd,.yui-g .yui-ge,.yui-g .yui-gf {
+    width: 49.099998%;
+}
+
+.yui-gb .yui-u {
+    margin-left: 1.9%;
+    width: 31.9%;
+}
+
+.yui-g .yui-gb div.first,.yui-gb .yui-gb div.first {
+    margin-right: 0;
+    width: 32%;
+    _width: 31.700001%;
+}
+
+.yui-gb .yui-g div.first {
+    margin-right: 4%;
+    _margin-right: 1.3%;
+}
+
+.yui-gb .yui-gc div.first,.yui-gb .yui-gd div.first {
+    margin-right: 0;
+}
+
+.yui-gb .yui-gb .yui-u,.yui-gb .yui-gc .yui-u {
+    margin-left: 1.8%;
+    _margin-left: 4%;
+}
+
+.yui-g .yui-gb .yui-u {
+    _margin-left: 1%;
+}
+
+.yui-gb .yui-gd .yui-u {
+    width: 66%;
+    _width: 61.200001%;
+}
+
+.yui-gb .yui-gd div.first {
+    width: 31%;
+    _width: 29.5%;
+}
+
+.yui-g .yui-gc .yui-u,.yui-gb .yui-gc .yui-u {
+    width: 32%;
+    _float: right;
+    margin-right: 0;
+    _margin-left: 0;
+}
+
+.yui-gb .yui-gc div.first {
+    width: 66%;
+    float: left;
+    margin-left: 0;
+}
+
+.yui-gb .yui-gb .yui-u {
+    _margin-left: .7%;
+}
+
+.yui-g .yui-gd div.first {
+    _width: 29.9%;
+}
+
+.yui-gb .yui-ge .yui-u,.yui-gb .yui-gf div.first {
+    width: 24%;
+    _width: 20%;
+}
+
+.yui-gb .yui-ge div.first,.yui-gb .yui-gf .yui-u {
+    width: 73.5%;
+    _width: 65.5%;
+}
+
+.yui-ge div.first .yui-gd .yui-u {
+    width: 65%;
+}
+
+#bd,.yui-g,.yui-gb,.yui-gc,.yui-gd,.yui-ge,.yui-gf {
+    zoom: 1;
+}
