@@ -153,10 +153,16 @@
           <div style="padding-top:3px;">{avatar}</div>
           {member_badge}
           <p>
-          {regdate}
-          {numposts}<br/>
+{!if regdate}
+          <strong>{$LANG_GF01[REGISTERED]}: </strong>{regdate}
+{!endif}
+{!if numposts}
+          <strong>{$LANG_GF01[POSTS]}: </strong>{numposts}<br/>
+{!endif}
     	  {grade}
-          {location}<br/>
+{!if location}
+          <strong>{$LANG_GF04[label_location]}: </strong>{location}<br/>
+{!endif}
           {ipaddress}
           </p>
         </div>
