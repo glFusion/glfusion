@@ -2,6 +2,11 @@ glFusion ChangeLog
 
 v1.3.0
 ------
+- Keep UTF-8 checkbox on same row in IE9 in the installer (Eric)
+- Fixed visited documentation link disappearing (white text on white bg) (Eric) 
+- Fixed broken link to webroot install instructions. Note that the other
+  language files do not contain this link. The translators need to update
+  the install language files. (Eric)
 - Media Gallery: Now redirect to last album that received an upload when
   using the SWF upload feature (Mark)
 - Forum Plugin: When user account is renamed - update topic records (Mark)
