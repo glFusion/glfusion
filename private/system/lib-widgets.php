@@ -292,7 +292,7 @@ function WIDGET_autotranslations($header=0) {
             $retval .= '&amp;sl=' . $_CONF['rdf_language']; // default language of your site
             $retval .= '&amp;tl=' . $key; // 2 character language code to translate site into (usually should be the same as hl above)
             $retval .= '&amp;u=' . urlencode($_CONF['site_url'] . '?r=' . $randID); // address of your site appends a random string so Google won't cache the translated page
-            $retval .= '"><img src="' . $_CONF['site_url'] . '/images/speck.gif" alt="'.$language.'" title="'.$language.'"' . XHTML . '/></a></li>';
+            $retval .= '"><img src="' . $_CONF['site_url'] . '/images/speck.gif" alt="'.$language.'" title="'.$language.'" /></a></li>';
         }
     }
     $retval .= '</ul><div style="clear:left;"></div>';
