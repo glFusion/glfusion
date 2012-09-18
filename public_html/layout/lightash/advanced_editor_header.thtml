@@ -1,9 +1,0 @@
-{# begin {templatelocation} #}
-{# Load Advanced Editor #}
-<script type="text/javascript">
-    var glfusionEditorBaseUrl = '{site_url}';
-    var glfusionLayoutUrl = '{layout_url}';
-</script>
-<script type="text/javascript" src="{site_url}/fckeditor/fckeditor.js"></script>
-{# End of Editor Load #}
-{# end {templatelocation} #}

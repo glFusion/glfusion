@@ -1,8 +1,0 @@
-{# begin {templatelocation} #}
-                            {login_message}<br /><br />
-                            [ <a href="{site_url}/users.php" rel="nofollow">{lang_login}</a>
-                            {!if lang_newuser}
-                            | <a href="{site_url}/users.php?mode=new" rel="nofollow">{lang_newuser}</a>
-                            {!endif}
-                             ]<br /><br />
-{# end {templatelocation} #}

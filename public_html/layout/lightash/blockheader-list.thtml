@@ -1,8 +1,0 @@
-{# begin {templatelocation} #}
-<div {block_id}class="block-box-left blocklist">
-    <span class="block-helpicon">
-        {block_help}
-    </span>
-    <h2>{block_title}</h2>
-    <ul>
-{# end {templatelocation} #}

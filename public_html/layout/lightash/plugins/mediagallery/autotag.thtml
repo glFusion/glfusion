@@ -1,6 +1,0 @@
-{# begin {templatelocation} #}
-<div style="{float} padding:10px; {margin-right} width:{framewidth}px; border:3px solid #666; text-align:center;">
-  {autotag}
-  <div style="clear:both; line-height:30px; width:{width}px; text-align:center;">{caption}</div>
-</div>
-{# end {templatelocation} #}
