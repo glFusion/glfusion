@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.3.0
 ------
+- Fixed hard-coded language reference in Media Gallery, Bug#579 (Eric)
 - Remove duplicate blogroll block from default content install (Eric)
 - Auto translations block image tags now validate to xhtml 1.0 (Eric)
 - Keep UTF-8 checkbox on same row in IE9 in the installer (Eric)
