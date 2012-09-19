@@ -718,7 +718,7 @@ the site </td>
 </tr>
 <tr class="row1">
 <td class="col0 leftalign"><a name="desc_menu_elements">Menu Elements</a> </td>
-<td class="col1 leftalign">Specifies which entries
+<td class="col1 leftalign">If no Menu Builder Navigation menu exists for the site header, glFusion will fall back to using the legacy Geeklog style menu. Menu Elements specifies which entries
 are displayed
 in the site's menu bar (if your theme uses the {menu_elements} variable
 to display the menu bar). Can be any combination of 'home',
@@ -726,7 +726,7 @@ to display the menu bar). Can be any combination of 'home',
 and 'custom' where 'plugins' is the same as the {plg_menu_elements}
 variable, i.e. a list of the menu entries provided by plugins, and
 'custom' displays the entries returned by a custom function
-CUSTOM_menuEntries (see lib-custom.php for details). </td>
+CUSTOM_menuEntries (see lib-custom.php for details, and public_html/layout/nouveau/header.thtml for {menu_elements} tag usage as a fallback if there is no Navigation menu specified in Menu Builder). </td>
 </tr>
 <tr class="row2">
 <td class="col0 leftalign"><a name="desc_path_themes">Themes Path</a> </td>
