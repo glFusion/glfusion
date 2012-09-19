@@ -625,7 +625,7 @@ function MG_indexAll()
     $admin_box  = '<form name="adminbox" id="adminbox" action="' . $_MG_CONF['site_url'] . '/admin.php" method="get" style="margin:0;padding:0;">' . LB;
     $admin_box .= '<div>';
     $admin_box .= '<select onchange="javascript:forms[\'adminbox\'].submit();" name="mode">' . LB;
-    $admin_box .= '<option label="Options" value="">' . $LANG_MG01['options'] . '</option>' . LB;
+    $admin_box .= '<option label="' . $LANG_MG01['options'] . '" value="">' . $LANG_MG01['options'] . '</option>' . LB;
 
     if ( ($MG_albums[0]->member_uploads || $MG_albums[0]->access == 3) && (isset($_USER['uid']) && $_USER['uid'] > 1 ) )  {
         $admin_box .= '<option value="upload">' . $LANG_MG01['add_media'] . '</option>' . LB;
@@ -750,7 +750,7 @@ function MG_indexAll()
     $admin_box = '<form name="adminbox" id="adminbox" action="' . $_MG_CONF['site_url'] . '/admin.php" method="get" style="margin:0;padding:0">';
     $admin_box .= '<div><input type="hidden" name="album_id" value="' . $album_id . '"/>';
     $admin_box .= '<select name="mode" onchange="forms[\'adminbox\'].submit()">';
-    $admin_box .= '<option label="Options" value="">' . $LANG_MG01['options'] .'</option>';
+    $admin_box .= '<option label="' . $LANG_MG01['options'] .'" value="">' . $LANG_MG01['options'] .'</option>';
     $admin_box .= '<option value="search">' . $LANG_MG01['search'] . '</option>';
 
     $uploadMenu = 0;

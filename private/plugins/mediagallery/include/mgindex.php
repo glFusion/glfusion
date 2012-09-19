@@ -109,7 +109,7 @@ function MG_index() {
     $admin_box  = '<form name="adminbox" id="adminbox" action="' . $_MG_CONF['site_url'] . '/admin.php" method="get" style="margin:0;padding:0;">' . LB;
     $admin_box .= '<div>';
     $admin_box .= '<select onchange="javascript:forms[\'adminbox\'].submit();" name="mode">' . LB;
-    $admin_box .= '<option label="Options" value="">' . $LANG_MG01['options'] . '</option>' . LB;
+    $admin_box .= '<option label="' . $LANG_MG01['options'] . '" value="">' . $LANG_MG01['options'] . '</option>' . LB;
 
     if ( ($MG_albums[0]->member_uploads || $MG_albums[0]->access == 3) && (!COM_isAnonUser() ) )  {
         $admin_box .= '<option value="upload">' . $LANG_MG01['add_media'] . '</option>' . LB;
