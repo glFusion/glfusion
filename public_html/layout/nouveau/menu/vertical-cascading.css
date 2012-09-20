@@ -1,19 +1,13 @@
 {menuname} .menu-vertical-cascading {
 	margin:             0 auto;
-}
-{menuname} .menu-vertical-cascading {
     margin-left:        -8px;
     padding-left:       0px;
-}
-{menuname} .menu-vertical-cascading {
 	text-align:         {alignment};
 }
 {menuname} .menu-vertical-cascading ul {
 	margin:             0;
 	padding:            0;
 	list-style:         none;
-}
-{menuname} .menu-vertical-cascading ul {
 {!if tl_menu_element_width}
 	width:              {tl_menu_element_width};
 {!endif}
@@ -34,8 +28,6 @@
 	display:            block;
 	margin:             0;
     padding:            0;
-}
-{menuname} .menu-vertical-cascading li ul {
 {!if ch_menu_offset}
 	left:               {ch_menu_offset};
 {!endif}
@@ -97,7 +89,11 @@
 	color:              {tl_menu_text_color};
 {!endif}
 {!if tl_menu_background_color}
-	background:         {tl_menu_background_color};
+	background:         {tl_menu_background_color}
+{!if tl_menu_background_image}
+    url({site_url}/images/menu/{tl_menu_background_image}) repeat
+{!endif}
+    ;
 {!endif}
 {!if tl_menu_element_padding}
 	padding:            {tl_menu_element_padding};
@@ -115,14 +111,22 @@
 }
 {menuname} .menu-vertical-cascading ul a:hover {
 	color:              {tl_menu_text_color_hover};
-	background:         {tl_menu_background_color_hover};
+	background:         {tl_menu_text_color_hover}
+{!if tl_menu_text_hover_image}
+    url({site_url}/images/menu/{tl_menu_text_hover_image}) repeat
+{!endif}
+    ;
 }
 {menuname} .menu-vertical-cascading li ul a {
 	text-decoration:    none;
 }
 {menuname} .menu-vertical-cascading li ul a {
 	color:              {ch_menu_text_color};
-	background:         {ch_menu_background_color};
+	background:         {ch_menu_background_color}
+{!if ch_menu_background_image}
+    url({site_url}/images/menu/{ch_menu_background_image}) repeat
+{!endif}
+    ;
 	padding:            3px 6px;
 {!if ch_menu_element_border_top_width}
     border-top:         {ch_menu_element_border_top_width} {ch_menu_element_border_top_color};
@@ -147,10 +151,42 @@
 }
 {menuname} .menu-vertical-cascading li ul a:hover {
 	color:              {ch_menu_text_color_hover};
-	background:         {ch_menu_background_color_hover};
+	background:         {ch_menu_background_color_hover}
+{!if ch_menu_text_hover_image}
+    url(images/menu/{ch_menu_text_hover_image}) repeat
+{!endif}
+    ;
 }
-{menuname} .menu-vertical-cascading ul a.parent {
+{menuname} .menu-vertical-cascading ul li {
+	background:         {ch_menu_background_color}
+{!if ch_menu_text_hover_image}
+    url(images/menu/{ch_menu_text_hover_image}) repeat
+{!endif}
+	;
+}
+{menuname} .menu-vertical-cascading ul li ul li {
+	background:         {ch_menu_background_color}
+{!if ch_menu_background_image}
+    url(images/menu/{ch_menu_background_image}) repeat
+{!endif}
+	;
+}
+{menuname} .menu-vertical-cascading ul li ul li:hover {
+	background:         {ch_menu_text_hover_color}
+{!if ch_menu_text_hover_image}
+    url(images/menu/{ch_menu_text_hover_image}) repeat
+{!endif}
+	;
+}
+{menuname} .menu-vertical-cascading ul li:hover {
 	background:         {tl_menu_background_color}
+{!if tl_menu_text_hover_image}
+    url({site_url}/images/menu/{tl_menu_text_hover_image}) repeat
+{!endif}
+	;
+}
+{menuname} .menu-vertical-cascading ul li a.parent {
+	background:
 {!if ch_menu_parent_image}
     url(images/menu/{ch_menu_parent_image}) no-repeat scroll 95% 50%
 {!endif}
@@ -159,21 +195,27 @@
 {menuname} .menu-vertical-cascading ul a.parent:hover {
 	background:         {tl_menu_background_color_hover}
 {!if ch_menu_parent_image}
-    url(images/menu/{ch_menu_parent_image}) no-repeat scroll 95% 50%
+    background:transparent url(images/menu/{ch_menu_parent_image}) no-repeat scroll 95% 50%
 {!endif}
 	;
 }
 {menuname} .menu-vertical-cascading li ul a.parent {
 	background:         {ch_menu_background_color}
 {!if ch_menu_parent_image}
-    url(images/menu/{ch_menu_parent_image}) no-repeat scroll 95% 50%
+    background:transparent url(images/menu/{ch_menu_parent_image}) no-repeat scroll 95% 50%
 {!endif}
 	;
 }
 {menuname} .menu-vertical-cascading li ul a.parent:hover {
 	background:         {ch_menu_background_color_hover}
 {!if ch_menu_parent_image}
-    url(images/menu/{ch_menu_parent_image}) no-repeat scroll 95% 50%
+    background:transparent url(images/menu/{ch_menu_parent_image}) no-repeat scroll 95% 50%
 {!endif}
 	;
+}
+{menuname} .menu-vertical-cascading li li a.parent,
+{menuname} .menu-vertical-cascading li li a.parent:hover {
+{!if ch_menu_parent_image}
+    background:transparent url({site_url}/images/menu/{ch_menu_parent_image})  no-repeat scroll 95% 50%;
+{!endif}
 }
