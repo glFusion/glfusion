@@ -750,19 +750,15 @@ class config {
                         . $LANG_CONFIG['disable'] . "'>X</a>)");
             }
             if (($a = strrchr($name, '[')) !== FALSE) {
-                $on = substr($a, 1, -1);
                 $o = str_replace(array('[', ']'), array('_', ''), $name);
             } else {
                 $o = $name;
-                $on = $name;
             }
-            if (! is_numeric($on)) {
-                $helpUrl = $this->_get_ConfigHelp($group, $o);
-                if (! empty($helpUrl)) {
-                    $t->set_var('doc_link', $helpUrl);
-                } else {
-                    $t->set_var('doc_link', '');
-                }
+            $helpUrl = $this->_get_ConfigHelp($group, $o);
+            if (! empty($helpUrl)) {
+                $t->set_var('doc_link', $helpUrl);
+            } else {
+                $t->set_var('doc_link', '');
             }
         }
         if ($type == "unset") {
