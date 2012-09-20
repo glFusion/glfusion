@@ -65,7 +65,6 @@
 {!endif}
 }
 {menuname} .menu-horizontal-cascading li li {
-    background:         none;
     margin:             0;
     position:           relative;
     float:              none;
@@ -210,6 +209,16 @@
     *width:{iefixwidth}px;
 }
 {!endif}
+{menuname} .menu-horizontal-cascading li li:hover ul,
+{menuname} .menu-horizontal-cascading li li.sfHover ul,
+{menuname} .menu-horizontal-cascading li li li:hover ul,
+{menuname} .menu-horizontal-cascading li li li.sfHover ul,
+{menuname} .menu-horizontal-cascading li li li li:hover ul,
+{menuname} .menu-horizontal-cascading li li li li.sfHover ul {
+{!if ch_menu_submenu_offset}
+    *left:               14em; /* update this if you adjust Menu Builder ch_menu_submenu_offset */ 
+{!endif}
+}
 <![endif]-->
 /*
 {menuname} .dummyclass1 {
