@@ -3191,3 +3191,7 @@ color:#0055bb !important;
     text-decoration:    underline;
 }
 /* end of horizontal simple menu CSS */
+
+.currentpage {
+  background: #3667c0 url(images/menu/menu_hover_bg.gif) repeat;
+}

@@ -73,25 +73,25 @@ $menuStyles = array(
     'horizontal_cascading'  => array('ulclass' => 'menu-horizontal-cascading',
                                      'liclass' => '',
                                      'parentclass' => 'parent',
-                                     'lastclass' => '',
+                                     'lastclass' => 'last',
                                      'selclass' => ''
                                      ),
     'horizontal_simple'     => array('ulclass' => 'menu-horizontal-simple',
                                      'liclass' => '',
-                                     'parentclass' => 'parent',
+                                     'parentclass' => '',
                                      'lastclass' => 'last',
                                      'selclass' => ''
                                      ),
     'vertical_cascading'    => array('ulclass' => 'menu-vertical-cascading',
                                      'liclass' => '',
                                      'parentclass' => 'parent',
-                                     'lastclass' => '',
+                                     'lastclass' => 'last',
                                      'selclass' => ''
                                     ),
     'vertical_simple'       => array('ulclass' => 'menu-vertical-simple',
                                      'liclass' => '',
                                      'parentclass' => '',
-                                     'lastclass' => '',
+                                     'lastclass' => 'last',
                                      'selclass' => ''
                                      )
 );
@@ -104,7 +104,7 @@ function theme_themeJS() {
 // MAKE SURE TO CLEAR BROWSER & C.T.L. CACHE when activating/deactivating
 //    $js[] = $_CONF['path_html'] .'javascript/mootools/gl_moochronometer.js';
     $js[] = $_CONF['path_layout'] .'js/gltips.js';
-
+    $js[] = $_CONF['path_layout'] .'js/currentpage.js';
     return($js);
 }
 ?>
