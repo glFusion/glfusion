@@ -253,7 +253,7 @@ function mb_getMenu($name, $selected='') {
         return $retval;
     }
     if ( $menuID != '' && $mbMenu[$menuID]['active'] == 1 && $mbMenu[$menuID]['menu_perm'] == 3) {
-        $retval .= '<div class="menu_'.$noSpaceName.'">';
+        $retval .= '<div id="menu_' .$noSpaceName.'" class="menu_'.$noSpaceName.'">';
 
         if ( $wrapper != '' ) {
             $retval .= '<div class="'.$wrapper.'">' . LB;
