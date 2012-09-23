@@ -11,7 +11,7 @@
   <img class="hidden" src="{layout_url}/images/speck.gif" alt="skip navigation" />
   </a>
 </div>
-    <div id="gl_container_fixed"> {# options: fixed | fluid #}
+    <div id="gl_container_fluid"> {# options: fixed | fluid #}
         <div id="gl_header">
             <div class="top-r-corner">
                 <div class="top-l-corner">
