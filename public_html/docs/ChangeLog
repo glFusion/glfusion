@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.3.0
 ------
+- Set nouveau layout to default to fixed width (Eric)
+- Added menu link highlighting when on a given page (Tracker#200) (Eric)
 - Updated documentation links for default permissions (Tracker#720) (Eric)
 - Added missing help-icon image to default permissions configs (Tracker#720) (Mark)
 - Fixed hard-coded language reference in Media Gallery (Tracker#579) (Eric)
