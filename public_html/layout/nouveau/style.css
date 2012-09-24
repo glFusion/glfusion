@@ -3192,6 +3192,7 @@ color:#0055bb !important;
 }
 /* end of horizontal simple menu CSS */
 
-.currentpage {
+#menu_navigation a.currentpage,
+#menu_block a.currentpage {
   background: #3667c0 url(images/menu/menu_hover_bg.gif) repeat;
 }

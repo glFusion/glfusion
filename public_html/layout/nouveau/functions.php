@@ -100,11 +100,22 @@ function theme_themeJS() {
     global $_CONF;
 
     $js = array();
+    
+    $js[] = $_CONF['path_layout'] .'js/gltips.js';
+
 // uncomment the line below to enable gl_moochronometer header rotator
 // MAKE SURE TO CLEAR BROWSER & C.T.L. CACHE when activating/deactivating
 //    $js[] = $_CONF['path_html'] .'javascript/mootools/gl_moochronometer.js';
-    $js[] = $_CONF['path_layout'] .'js/gltips.js';
-    $js[] = $_CONF['path_layout'] .'js/currentpage.js';
+
+
+
+// uncomment the line below to enable current page menu link highlighting.
+// if the current url matches a link in the top horizontal menu, it adds
+// class="currentpage" to the a href tag so it can be styled from style.css.
+// if you use a different menu than the default navigation one, change the
+// getElementById in currentpage.js.
+//    $js[] = $_CONF['path_layout'] .'js/currentpage.js';
+    
     return($js);
 }
 ?>

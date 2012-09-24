@@ -17,17 +17,21 @@ function setActiveMenu(arr, crtPage)
             if (arr[i].parentNode.tagName != "div")
             {
                 arr[i].className = "currentpage";
-                arr[i].parentNode.className = "";
+                arr[i].parentNode.className = ""; //can also assign a class to the parent of the a tag
             }
         }
     }
 }
- 
+
+// change the getElementById values below if you use a different menu name
 function setPage()
 {
     hrefString = document.location.href ? document.location.href : document.location;
     if (document.getElementById("menu_navigation") !=null )
     setActiveMenu(document.getElementById("menu_navigation").getElementsByTagName("a"), extractPageName(hrefString));
+    //uncomment below to declare multiple menus, like the block menu
+    // if (document.getElementById("menu_block") !=null )
+    // setActiveMenu(document.getElementById("menu_block").getElementsByTagName("a"), extractPageName(hrefString));
 }
 
 window.onload=function()
