@@ -111,7 +111,7 @@
 }
 {menuname} .menu-vertical-cascading ul a:hover {
 	color:              {tl_menu_text_color_hover};
-	background:         {tl_menu_text_color_hover}
+	background:         {tl_menu_background_color_hover}
 {!if tl_menu_text_hover_image}
     url({site_url}/images/menu/{tl_menu_text_hover_image}) repeat
 {!endif}
@@ -179,7 +179,7 @@
 	;
 }
 {menuname} .menu-vertical-cascading ul li:hover {
-	background:         {tl_menu_background_color}
+	background:         {tl_menu_background_color_hover}
 {!if tl_menu_text_hover_image}
     url({site_url}/images/menu/{tl_menu_text_hover_image}) repeat
 {!endif}
