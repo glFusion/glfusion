@@ -971,18 +971,21 @@ $_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (id, pid, menu_id, element_l
 (18, 0, 1, 'My Account', 3, '1', 100, 1, '', '', 13),
 (19, 0, 1, 'Admins Only', 3, '2', 110, 1, '', '', 1),
 (20, 0, 2, 'Home', 2, '0', 10, 1, '', '', 2),
-(21, 0, 2, 'Contribute', 2, '1', 30, 1, '', '', 13),
-(22, 0, 2, 'Search', 2, '4', 20, 1, '', '', 2),
+(21, 0, 2, 'Contribute', 2, '1', 20, 1, '', '', 13),
+(22, 0, 2, 'Search', 2, '4', 30, 1, '', '', 2),
 (23, 0, 2, 'Site Stats', 2, '5', 40, 1, '', '', 2),
-(24, 0, 2, 'Contact Us', 6, '%site_url%/profiles.php?uid=2', 50, 1, '%site_url%/profiles.php?uid=2', '', 2),
-(25, 0, 2, 'Top', 6, '#top', 60, 1, '#top', '', 2),
-(26, 0, 3, 'Home', 2, '0', 10, 1, '', '', 2),
-(27, 0, 3, 'Downloads', 4, 'filemgmt', 20, 1, '', '', 2),
-(28, 0, 3, 'Forums', 4, 'forum', 30, 1, '', '', 2),
-(29, 0, 3, 'Topic Menu', 3, '3', 40, 1, '', '', 2),
-(30, 0, 3, 'User Menu', 3, '1', 50, 1, '', '', 13),
-(31, 0, 3, 'Admin Options', 3, '2', 60, 1, '', '', 1),
-(32, 0, 3, 'Logout', 6, '%site_url%/users.php?mode=logout', 70, 1, '%site_url%/users.php?mode=logout', '', 13);
+(24, 0, 2, 'Terms of Use', 6, '%site_url%/page.php?page=terms-of-use', 50, 1, '%site_url%/page.php?page=terms-of-use', '', 2),
+(25, 0, 2, 'Privacy Policy', 6, '%site_url%/page.php?page=privacy-policy', 60, 1, '%site_url%/page.php?page=privacy-policy', '', 2),
+(26, 0, 2, 'RSS', 6, '%site_url%/backend/glfusion.rss', 70, 1, '%site_url%/backend/glfusion.rss', '', 2),
+(27, 0, 2, 'Contact Us', 6, '%site_url%/profiles.php?uid=2', 80, 1, '%site_url%/profiles.php?uid=2', '', 2),
+(28, 0, 2, 'Top', 6, '#top', 80, 1, '#top', '', 2),
+(29, 0, 3, 'Home', 2, '0', 10, 1, '', '', 2),
+(30, 0, 3, 'Downloads', 4, 'filemgmt', 20, 1, '', '', 2),
+(31, 0, 3, 'Forums', 4, 'forum', 30, 1, '', '', 2),
+(32, 0, 3, 'Topic Menu', 3, '3', 40, 1, '', '', 2),
+(33, 0, 3, 'User Menu', 3, '1', 50, 1, '', '', 13),
+(34, 0, 3, 'Admin Options', 3, '2', 60, 1, '', '', 1),
+(35, 0, 3, 'Logout', 6, '%site_url%/users.php?mode=logout', 70, 1, '%site_url%/users.php?mode=logout', '', 13);
 ";
 
 #
