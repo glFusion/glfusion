@@ -6990,13 +6990,6 @@ function css_out()
         }
     }
 
-    $menuBuildCSS =  mb_getheadercss();
-    if ( is_array($menuBuildCSS) ) {
-        foreach($menuBuildCSS AS $item => $file) {
-            $files[] = $file;
-        }
-    }
-
     if ( is_array($_PLUGINS) ) {
         foreach ( $_PLUGINS as $pi_name ) {
             if ( function_exists('plugin_getheadercss_'.$pi_name) ) {
