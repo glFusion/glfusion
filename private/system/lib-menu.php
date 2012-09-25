@@ -211,9 +211,9 @@ function mb_getMenu($name, $selected='') {
         $parentclass = $menuStyles['horizontal_cascading']['parentclass'];
         $lastclass   = $menuStyles['horizontal_cascading']['lastclass'];
         $selclass    = $menuStyles['horizontal_cascading']['selclass'];
-        if ( $mbMenu[$menuID]['config']['menu_alignment'] == 0 ) {
-            $ulclass = $ulclass . ' ' . $ulclass.'-right';
-        }
+//        if ( $mbMenu[$menuID]['config']['menu_alignment'] == 0 ) {
+//            $ulclass = $ulclass . ' ' . $ulclass.'-right';
+//        }
     } else if ($mbMenu[$menuID]['menu_type'] == MENU_HORIZONTAL_SIMPLE ) {
         $ulclass    = $menuStyles['horizontal_simple']['ulclass'];
         $liclass    = $menuStyles['horizontal_simple']['liclass'];
@@ -227,9 +227,9 @@ function mb_getMenu($name, $selected='') {
         $parentclass = $menuStyles['vertical_cascading']['parentclass'];
         $lastclass  = $menuStyles['vertical_cascading']['lastclass'];
         $selclass   = $menuStyles['vertical_cascading']['selclass'];
-        if ( $mbMenu[$menuID]['config']['menu_alignment'] == 0 ) {
-            $ulclass = $ulclass . ' ' . $ulclass.'-right';
-        }
+//        if ( $mbMenu[$menuID]['config']['menu_alignment'] == 0 ) {
+//            $ulclass = $ulclass . ' ' . $ulclass.'-right';
+//        }
     } else if ($mbMenu[$menuID]['menu_type'] == MENU_VERTICAL_SIMPLE ) {
         $ulclass    = $menuStyles['vertical_simple']['ulclass'];
         $liclass    = $menuStyles['vertical_simple']['liclass'];

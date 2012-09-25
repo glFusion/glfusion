@@ -1227,10 +1227,6 @@ function _mb_getListField_menulist($fieldname, $fieldvalue, $A, $icon_arr)
             $retval = '<a href="'.$_CONF['site_admin_url'].'/menu.php?mode=menu&amp;menu='.$A['menu_id'].'">'
             . '<img src="'.$_CONF['layout_url'].'/images/edit.png" alt="'.$LANG_MB01['edit'].'" />';
             break;
-        case 'options' :
-            $retval = '<a href="'.$_CONF['site_admin_url'].'/menu.php?mode=menuconfig&amp;menuid='.$A['menu_id'].'">'
-            . '<img src="'.$_CONF['layout_url'].'/images/rainbow.png" alt="'.$LANG_MB01['options'].'" />';
-            break;
         case 'delete' :
             if ( $A['menu_id'] != 1 && $A['menu_id'] != 2 && $A['menu_id'] != 3 ) {
                 $retval = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=deletemenu&amp;id=' . $A['menu_id'] . '" onclick="return confirm(\'' . $LANG_MB01['confirm_delete'] . '\');"><img src="' . $_CONF['layout_url'] . '/images/delete.png" alt="' . $LANG_MB01['delete'] . '"' . '/></a>';
