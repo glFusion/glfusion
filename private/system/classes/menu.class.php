@@ -42,104 +42,7 @@ class menu {
     var $group_id;
 
     var $menu_alignment;
-    var $tl_menu_background_color;
-    var $tl_menu_background_image;
-    var $tl_menu_background_color_hover;
-    var $tl_menu_text_color;
-    var $tl_menu_text_color_hover;
-    var $tl_menu_text_hover_image;
-    var $tl_menu_font_family;
-    var $tl_menu_font_size;
-    var $tl_menu_font_weight;
-    var $tl_menu_line_height;
-    var $tl_menu_element_width;
-    var $tl_menu_element_padding;
-    var $tl_menu_element_border_top_width;
-    var $tl_menu_element_border_top_color;
-    var $tl_menu_element_border_bottom_width;
-    var $tl_menu_element_border_bottom_color;
-    var $tl_menu_element_border_left_width;
-    var $tl_menu_element_border_left_color;
-    var $tl_menu_element_border_right_width;
-    var $tl_menu_element_border_right_color;
-    var $tl_menu_element_text_indent;
-
-    var $ch_menu_background_color;
-    var $ch_menu_background_image;
-    var $ch_menu_background_color_hover;
-    var $ch_menu_text_color;
-    var $ch_menu_text_color_hover;
-    var $ch_menu_text_hover_image;
-    var $ch_menu_font_family;
-    var $ch_menu_font_size;
-    var $ch_menu_offset;
-    var $ch_menu_font_weight;
-    var $ch_menu_line_height;
-    var $ch_menu_element_width;
-    var $ch_menu_submenu_offset;
-    var $ch_menu_element_border_top_width;
-    var $ch_menu_element_border_top_color;
-    var $ch_menu_element_border_bottom_width;
-    var $ch_menu_element_border_bottom_color;
-    var $ch_menu_element_border_left_width;
-    var $ch_menu_element_border_left_color;
-    var $ch_menu_element_border_right_width;
-    var $ch_menu_element_border_right_color;
-    var $ch_menu_element_text_indent;
-    var $ch_menu_parent_image;
-
     var $menu_elements = array();               // menu elements array
-
-    var $image_control = array(
-            'tl_menu_background_image' => array(0 => true, 1 => true, 2 => false,3 => true,4 => true, 5 => false),
-            'tl_menu_text_hover_image' => array(0 => true, 1 => true, 2 => false,3 => true,4 => true, 5 => false),
-            'ch_menu_background_image' => array(0 => true, 1 => true, 2 => false,3 => true,4 => false, 5 => false),
-            'ch_menu_text_hover_image' => array(0 => true, 1 => true, 2 => false,3 => true,4 => false, 5 => false),
-            'ch_menu_parent_image' => array(0 => true, 1 => true, 2 => false,3 => true,4 => false, 5 => false),
-    );
-
-    var $access_control = array(
-            'menu_alignment' => array(0 => -1, 1 => true, 2 => true,3 => true,4 => true,5 => false),
-            'tl_menu_background_color' => array(0 => true, 1 => true, 2 => false,3 => true,4 => false, 5 => true),
-            'tl_menu_background_color_hover' => array(0 => true, 1 => true, 2 => false,3 => true,4 => true,5 => true),
-            'tl_menu_text_color' => array(0 => true, 1 => true, 2 => true,3 => true,4 => true, 5 => true),
-            'tl_menu_text_color_hover' => array(0 => true, 1 => true, 2 => true,3 => true,4 => true,5 => true),
-            'tl_menu_font_family' => array(0 => true, 1 => true, 2 => false,3 => true,4 => false, 5 => false),
-            'tl_menu_font_size' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false, 5 => false),
-            'tl_menu_font_weight' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false,5 => false),
-            'tl_menu_line_height' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false,5 => false),
-            'tl_menu_element_width' => array(0 => true, 1 => true, 2 => false,3 => true,4 => false,5 => false),
-            'tl_menu_element_padding' => array(0 => true, 1 => true, 2 => false,3 => true,4 => false,5=>false),
-            'tl_menu_element_border_top_width' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false,5=>false),
-            'tl_menu_element_border_top_color' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false,5 => true),
-            'tl_menu_element_border_bottom_width' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false,5=>false),
-            'tl_menu_element_border_bottom_color' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false,5 => true),
-            'tl_menu_element_border_left_width' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false,5=>false),
-            'tl_menu_element_border_left_color' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false,5 => true),
-            'tl_menu_element_border_right_width' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false,5=>false),
-            'tl_menu_element_border_right_color' => array(0 => true, 1 => true, 2 => true,3 => true,4 => false,5 => true),
-            'tl_menu_element_text_indent' => array(0 => true, 1 => true, 2 => false,3 => true,4 => false,5=>false),
-            'ch_menu_background_color' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => true),
-            'ch_menu_background_color_hover' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => true),
-            'ch_menu_text_color' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => true),
-            'ch_menu_text_color_hover' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => true),
-            'ch_menu_font_family' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => false),
-            'ch_menu_font_size' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => false),
-            'ch_menu_offset' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => false),
-            'ch_menu_font_weight' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false, 5 => false),
-            'ch_menu_line_height' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => false),
-            'ch_menu_submenu_offset' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => false),
-            'ch_menu_element_width' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => false),
-            'ch_menu_element_border_top_width' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5=>false),
-            'ch_menu_element_border_top_color' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => true),
-            'ch_menu_element_border_bottom_width' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => false),
-            'ch_menu_element_border_bottom_color' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => true),
-            'ch_menu_element_border_left_width' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5=>false),
-            'ch_menu_element_border_left_color' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => true),
-            'ch_menu_element_border_right_width' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5=>false),
-            'ch_menu_element_border_right_color' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5 => true),
-            'ch_menu_element_text_indent' => array(0 => false, 1 => true, 2 => false,3 => true,4 => false,5=>false),
-    );
 
     public function __construct( $menu_id = 0 )
     {
@@ -161,19 +64,6 @@ class menu {
         return $instance[$menu_id];
     }
 
-    function save()
-    {
-        global $_TABLES;
-
-        $menuname   = DB_escapeString($this->name);
-
-        foreach ($this->access_control AS $name => $use) {
-            if ( $use[$this->type] == true ) {
-                DB_save($_TABLES['menu_config'],"menu_id,conf_name,conf_value",$this->id.",'".$name."','".$this->$name."'");
-            }
-        }
-    }
-
     function getMenu($menu_id)
     {
         global $_TABLES;
@@ -186,21 +76,11 @@ class menu {
             $this->type = $menu['menu_type'];
             $this->active = $menu['menu_active'];
             $this->group_id = $menu['group_id'];
-            $this->getConfig();
             $this->getElements();
         } else {
             return false;
         }
         return true;
-    }
-
-    function getConfig()
-    {
-        global $_TABLES;
-        $cfgResult = DB_query("SELECT * FROM {$_TABLES['menu_config']} WHERE menu_id=". (int) $this->id );
-        while ($cfgRow = DB_fetchArray($cfgResult)) {
-            $this->{$cfgRow['conf_name']} = $cfgRow['conf_value'];
-        }
     }
 
     function getElements()
@@ -239,108 +119,6 @@ class menu {
             if ($id != 0 && isset($this->menu_elements[$element->pid]->id) ) {
                 $this->menu_elements[$element->pid]->setChild($id);
             }
-        }
-    }
-
-    function buildEditStyle()
-    {
-        $rbg_colors = array();
-        $counter = 1;
-        $style = '';
-
-        foreach ( $this->access_control AS $configOption => $use ) {
-            if ( $use[$this->type] == true && $use[5] == true ) {
-                $rgb_colors[$configOption] = '[' . $this->_hexrgb($this->$configOption,'r') .
-                                        ',' . $this->_hexrgb($this->$configOption,'g') .
-                                        ',' . $this->_hexrgb($this->$configOption,'b') .
-                                        ']';
-            }
-        }
-
-        foreach ( $this->access_control AS $configOption => $use ) {
-            if ( $use[$this->type] == true && $use[5] == true ) {
-                $counter++;
-                $style .= "
-                    var ".$configOption." = new MooRainbow('".$configOption."_sb', {
-                        'id' : 'mooRainbow".$counter."',
-                        'startColor': ".$rgb_colors[$configOption].",
-                        'onChange': function(color) {
-                            $('".$configOption."').value = color.hex;
-                            $('".$configOption."_sample').value = color.hex;
-                            $('".$configOption."_sample').setStyle('background-color',color.hex);
-                            $('".$configOption."_sample').fireEvent('focus');
-                        },
-                        'onComplete': function() {
-                            $('".$configOption."_sample').fireEvent('focus');
-                        }
-                    });
-                " . LB;
-
-                $style .= "
-                    var v = $('".$configOption."_sample').value;
-                    var l = $('".$configOption."_sample').value.length;
-                    if ( l > 3 ) {
-                        var c = new Color(v);
-                        var x = c.hex;
-                        var z=c.hex.hexToRgb(true);
-                        var d=hsv(z);
-                        if(d[2]<127) $('".$configOption."_sample').setStyle('color','#fff');
-                        else $('".$configOption."_sample').setStyle('color','#000');
-                    }
-
-                    $('".$configOption."_sample').addEvent('focus',function(){
-                        var l = $('".$configOption."_sample').value.length;
-                        var v = $('".$configOption."_sample').value;
-                        var c = new Color(v);
-                        var x = c.hex;
-                        if ( l > 3 ) {
-                            $('".$configOption."_sample').setStyle('background-color',x);
-                            var z=c.hex.hexToRgb(true);
-                            var d=hsv(z);
-                            if(d[2]<127) $('".$configOption."_sample').setStyle('color','#fff');
-                            else $('".$configOption."_sample').setStyle('color','#000');
-                        }
-                     });
-                    $('".$configOption."_sample').addEvent('keyup',function(){
-                        if ( $('".$configOption."_sample').value.test(/^#[0-9a-f]{3,6}$/i) ) {
-                            $('".$configOption."_sample').fireEvent('focus');
-                        }
-
-                     });
-                    $('".$configOption."_sample').addEvent('change',function(){
-                        var l = $('".$configOption."_sample').value.length;
-                        var v = $('".$configOption."_sample').value;
-                        var c = new Color(v);
-                        var x = c.hex;
-                        if ( l > 3 ) {
-                            tlmbgc.manualSet(x,'hex');
-                        }
-                     });
-                " . LB;
-            }
-        }
-        return $style;
-    }
-
-    function _hexrgb($hexstr, $rgb) {
-        $int = hexdec($hexstr);
-        switch($rgb) {
-            case "r":
-                return 0xFF & $int >> 0x10;
-                break;
-            case "g":
-                return 0xFF & ($int >> 0x8);
-                break;
-            case "b":
-                return 0xFF & $int;
-                break;
-            default:
-                return array(
-                    "r" => 0xFF & $int >> 0x10,
-                    "g" => 0xFF & ($int >> 0x8),
-                    "b" => 0xFF & $int
-                );
-                break;
         }
     }
 }

@@ -2891,7 +2891,7 @@ color:#0055bb !important;
     width:100%;
     height:auto;
     z-index:500;
-    background:#151515; /* url(images/menu/menu_bg.gif) repeat; */
+    background:#151515 url(images/menu/menu_bg.gif) repeat;
 }
 
 /* general link styles */
@@ -2905,7 +2905,7 @@ color:#0055bb !important;
     height:             2.2em;
     font-size:          1em;
     padding:            0 1.2em;
-    color:              #ccc;  /*Top Menu Text*/
+    color:              #ccc !important;  /*Top Menu Text*/
 }
 
 /* top level UL */
@@ -2967,7 +2967,7 @@ color:#0055bb !important;
 /* hover item for li (all levels) */
 .menu-horizontal-cascading li:hover {
     z-index:        510;
-    background:     #3667c0; /* url(images/menu/menu_hover_bg.gif) repeat; */
+    background:     #3667c0 url(images/menu/menu_hover_bg.gif) repeat;
     color:          #fff;
 
 }
@@ -3026,7 +3026,7 @@ color:#0055bb !important;
 
 .menu-horizontal-cascading li li a.parent,
 .menu-horizontal-cascading li li a.parent:hover {
-/*    background:transparent url(images/menu/menu_parent.png) no-repeat scroll 95% 50%; */
+    background:transparent url(images/menu/menu_parent.png) no-repeat scroll 95% 50%;
 }
 .menu-horizontal-cascading {
     float:          left;

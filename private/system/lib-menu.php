@@ -105,12 +105,6 @@ function mb_initMenu($skipCache=false) {
             }
         }
 
-        // retrieve configuration options for this menu...
-        $cfgResult = DB_query("SELECT * FROM {$_TABLES['menu_config']} WHERE menu_id=". (int) $menu['id']);
-        while ($cfgRow = DB_fetchArray($cfgResult)) {
-            $mbMenu[$menu['id']]['config'][$cfgRow['conf_name']] = $cfgRow['conf_value'];
-        }
-
         $sql = "SELECT * FROM {$_TABLES['menu_elements']} WHERE menu_id=".(int) $menuID." AND element_active = 1 ORDER BY element_order ASC";
         $elementResult      = DB_query( $sql, 1);
         $element            = new menuElement();
@@ -300,92 +294,6 @@ function _mbPLG_getMenuItems()
 }
 
 
-function mb_getheadercss() {
-    global $_CONF, $_USER, $_MB_CONF, $mbMenu, $themeAPI, $themeStyle;
-
-    $mb_header = array();
-    $fCSS = '';
-    $mb_header[] = $_CONF['path_layout'] . 'admin/menu/mooRainbow.css';
-
-    if ( is_array($mbMenu) ) {
-        $cacheInstance = 'mbmenu_css' . '__' . $_USER['theme'];
-        $retval = CACHE_check_instance($cacheInstance, 0);
-        if ( $retval ) {
-            $mb_header[] = CACHE_instance_filename($cacheInstance,0);
-        } else {
-            foreach ($mbMenu AS $menu) {
-                if ( $menu['active'] == 1 ) {
-                    $ms = new Template( $_CONF['path_layout'] . 'menu' );
-                    $under = 0;
-                    $over = 0;
-                    switch ($menu['menu_type']) {
-                        case 1 :
-                            $stylefile = 'horizontal-cascading.css';
-                            $under = 50;
-                            $over = 51;
-                            break;
-                        case 2 :
-                            $stylefile = 'horizontal-simple.css';
-                            break;
-                        case 3 :
-                            $stylefile = 'vertical-cascading.css';
-                            $under = 40;
-                            break;
-                        case 4 :
-                            $stylefile = 'vertical-simple.css';
-                            break;
-                        default :
-                            $stylefile = 'horizontal-cascading.css';
-                            break;
-                    }
-                    $ms->set_file('style',$stylefile);
-                    $ms->set_var('menu_id',$menu['menu_id']);
-                    $ms->set_var('menuname','.menu_'.$menu['menu_name']);
-                    if ( isset($menu['config']) && is_array($menu['config']) ) {
-                        foreach ($menu['config'] AS $name => $value ) {
-                            if ( $value != '' ) {
-                                $ms->set_var($name,$value);
-                            }
-                        }
-                    }
-                    if ( isset($menu['config']['menu_alignment']) && $menu['config']['menu_alignment'] == 1 ) {
-                        $ms->set_var('alignment','left');
-                        $ms->set_var('right_align','');
-                    } else {
-                        $ms->set_var('alignment','right');
-                        $ms->set_var('right_align',true);
-                    }
-                    if ( $menu['menu_id'] < 4 ) {
-                        $under *= 10;
-                        $over *= 10;
-                    }
-                    if ( $under > 0 ) {
-                        $ms->set_var('under', $under);
-                    } else {
-                        $ms->set_var('under',50);
-                    }
-                    if ( $over > 0 ) {
-                        $ms->set_var('over', $over);
-                    } else {
-                        $ms->set_var('over',50);
-                    }
-                    if ( isset($menu['config']['ch_menu_element_width']) ) {
-                        if ( strstr($menu['config']['ch_menu_element_width'],'em') !== FALSE ) {
-                            $emwidth = intval($menu['config']['ch_menu_element_width']);
-                            $pxwidth = (int) ($emwidth * 12.16);
-                            $ms->set_var('iefixwidth',$pxwidth);
-                        }
-                    }
-                    $ms->parse ('output', 'style');
-                    $fCSS .= $ms->finish ($ms->get_var('output')) . LB;
-                }
-            }
-            CACHE_create_instance($cacheInstance, $fCSS, 0);
-            $mb_header[] = CACHE_instance_filename($cacheInstance,0);
-        }
-    }
-    return $mb_header;
-}
 
 function mb_getheaderjs() {
     global $_CONF, $_USER, $mbMenu;

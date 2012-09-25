@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2011 by the following authors:                             |
+// | Copyright (C) 2012 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -95,17 +95,6 @@ $_SQL[] = "CREATE TABLE {$_TABLES['menu']} (
   group_id mediumint(9) NOT NULL,
   PRIMARY KEY  (id),
   KEY menu_name (menu_name)
-) ENGINE=MyISAM;
-";
-
-$_SQL[] = "CREATE TABLE {$_TABLES['menu_config']} (
-  id int(11) NOT NULL auto_increment,
-  menu_id int(11) NOT NULL,
-  conf_name varchar(64) NOT NULL,
-  conf_value varchar(64) NOT NULL,
-  PRIMARY KEY  (id),
-  UNIQUE KEY Config (menu_id,conf_name),
-  KEY menu_id (menu_id)
 ) ENGINE=MyISAM;
 ";
 

@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -625,17 +625,6 @@ $_SQL[] = "CREATE TABLE {$_TABLES['menu']} (
 ) ENGINE=MyISAM;
 ";
 
-$_SQL[] = "CREATE TABLE {$_TABLES['menu_config']} (
-  id int(11) NOT NULL auto_increment,
-  menu_id int(11) NOT NULL,
-  conf_name varchar(64) NOT NULL,
-  conf_value varchar(64) NOT NULL,
-  PRIMARY KEY  (id),
-  UNIQUE KEY Config (menu_id,conf_name),
-  KEY menu_id (menu_id)
-) ENGINE=MyISAM;
-";
-
 $_SQL[] = "CREATE TABLE {$_TABLES['menu_elements']} (
   id int(11) NOT NULL auto_increment,
   pid int(11) NOT NULL,
@@ -869,95 +858,6 @@ $_DATA[] = "INSERT INTO {$_TABLES['menu']} (id, menu_name, menu_type, menu_activ
 (1, 'navigation', 1, 1, 2),
 (2, 'footer', 2, 1, 2),
 (3, 'block', 3, 1, 2);
-";
-
-$_DATA[] = "INSERT INTO {$_TABLES['menu_config']} (id, menu_id, conf_name, conf_value) VALUES
-(1, 1, 'ch_menu_element_border_bottom_color', '#000000'),
-(2, 1, 'ch_menu_element_border_bottom_width', '1px solid'),
-(3, 1, 'ch_menu_element_border_top_color', '#333333'),
-(4, 1, 'ch_menu_element_border_top_width', '1px solid'),
-(5, 1, 'ch_menu_element_width', '14.6em'),
-(6, 1, 'ch_menu_submenu_offset', '14.65em'),
-(7, 1, 'ch_menu_line_height', '2.3em'),
-(8, 1, 'ch_menu_font_weight', '400'),
-(9, 1, 'ch_menu_offset', '2.2em'),
-(10, 1, 'ch_menu_font_size', '100%'),
-(11, 1, 'ch_menu_font_family', 'Helvetica, Arial, sans-serif'),
-(12, 1, 'ch_menu_text_color_hover', '#ffffff'),
-(13, 1, 'ch_menu_text_color', '#ffffff'),
-(14, 1, 'ch_menu_background_color_hover', '#3667c0'),
-(15, 1, 'ch_menu_background_color', '#151515'),
-(16, 1, 'tl_menu_element_text_indent', '1.2em'),
-(17, 1, 'tl_menu_element_padding', '0 1.2em'),
-(18, 1, 'tl_menu_element_width', '14.74em'),
-(19, 1, 'tl_menu_line_height', '2.2em'),
-(20, 1, 'tl_menu_font_weight', '700'),
-(21, 1, 'tl_menu_font_size', '1.0em'),
-(22, 1, 'tl_menu_text_color_hover', '#ffffff'),
-(23, 1, 'tl_menu_text_color', '#CCCCCC'),
-(24, 1, 'tl_menu_background_color_hover', '#3667c0'),
-(25, 1, 'tl_menu_background_color', '#151515'),
-(26, 1, 'menu_alignment', '1'),
-(27, 1, 'tl_menu_font_family', ''),
-(28, 1, 'tl_menu_element_border_top_width', ''),
-(29, 1, 'tl_menu_element_border_top_color', ''),
-(30, 1, 'tl_menu_element_border_bottom_width', ''),
-(31, 1, 'tl_menu_element_border_bottom_color', ''),
-(32, 1, 'tl_menu_element_border_left_width', ''),
-(33, 1, 'tl_menu_element_border_left_color', ''),
-(34, 1, 'tl_menu_element_border_right_width', ''),
-(35, 1, 'tl_menu_element_border_right_color', ''),
-(36, 1, 'ch_menu_element_border_left_width', ''),
-(37, 1, 'ch_menu_element_border_left_color', ''),
-(38, 1, 'ch_menu_element_border_right_width', ''),
-(39, 1, 'ch_menu_element_border_right_color', ''),
-(40, 1, 'ch_menu_element_text_indent', ''),
-(41, 1, 'tl_menu_background_image', 'menu_bg.gif'),
-(42, 1, 'ch_menu_parent_image', 'menu_parent.png'),
-(43, 1, 'tl_menu_text_hover_image', 'menu_hover_bg.gif'),
-(44, 2, 'tl_menu_element_border_right_color', '#999999'),
-(45, 2, 'tl_menu_element_border_right_width', '1px solid'),
-(46, 2, 'tl_menu_text_color_hover', '#679ef1'),
-(47, 2, 'tl_menu_text_color', '#3677c0'),
-(48, 3, 'tl_menu_font_weight', ''),
-(49, 3, 'tl_menu_font_size', ''),
-(50, 3, 'tl_menu_font_family', ''),
-(51, 3, 'menu_alignment', '1'),
-(52, 3, 'ch_menu_element_border_right_color', '#999999'),
-(53, 3, 'ch_menu_element_border_right_width', '1px solid'),
-(54, 3, 'ch_menu_element_border_left_color', '#999999'),
-(55, 3, 'ch_menu_element_border_left_width', '1px solid'),
-(56, 3, 'ch_menu_element_border_bottom_color', '#999999'),
-(57, 3, 'ch_menu_element_border_bottom_width', '1px solid'),
-(58, 3, 'ch_menu_element_border_top_color', '#999999'),
-(59, 3, 'ch_menu_element_border_top_width', '1px solid'),
-(60, 3, 'ch_menu_text_color_hover', '#ffffff'),
-(61, 3, 'ch_menu_text_color', '#0000ff'),
-(62, 3, 'ch_menu_background_color_hover', '#bbbbbb'),
-(63, 3, 'ch_menu_background_color', '#dddddd'),
-(64, 3, 'tl_menu_element_border_right_color', '#999999'),
-(65, 3, 'tl_menu_element_border_right_width', '1px solid'),
-(66, 3, 'tl_menu_element_border_left_color', '#999999'),
-(67, 3, 'tl_menu_element_border_left_width', '1px solid'),
-(68, 3, 'tl_menu_element_border_top_color', '#999999'),
-(69, 3, 'tl_menu_element_border_top_width', '1px solid'),
-(70, 3, 'tl_menu_element_padding', '3px 6px'),
-(71, 3, 'tl_menu_text_color_hover', '#ffffff'),
-(72, 3, 'tl_menu_text_color', '#0000ff'),
-(73, 3, 'tl_menu_background_color_hover', '#bbbbbb'),
-(74, 3, 'tl_menu_background_color', '#dddddd'),
-(75, 3, 'tl_menu_line_height', ''),
-(76, 3, 'tl_menu_element_border_bottom_width', ''),
-(77, 3, 'tl_menu_element_border_bottom_color', ''),
-(78, 3, 'tl_menu_element_text_indent', ''),
-(79, 3, 'ch_menu_font_family', ''),
-(80, 3, 'ch_menu_font_size', ''),
-(81, 3, 'ch_menu_offset', ''),
-(82, 3, 'ch_menu_font_weight', ''),
-(83, 3, 'ch_menu_line_height', ''),
-(84, 3, 'ch_menu_element_width', ''),
-(85, 3, 'ch_menu_element_text_indent', ''),
-(86, 3, 'ch_menu_parent_image', 'vmenu_parent.gif');
 ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (id, pid, menu_id, element_label, element_type, element_subtype, element_order, element_active, element_url, element_target, group_id) VALUES

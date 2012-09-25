@@ -3510,6 +3510,7 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/images/video.png' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/index.html' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/js/gltips.js' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/js/currentpage.js' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/js/index.html' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/leftblocks.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/list.thtml' ),
