@@ -965,6 +965,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->del('wikitext_editor','Core');
             // add oauth user_login_method
             $c->del('user_login_method', 'Core');
+            // delete microsummary
+            $c->del('microsummary_short', 'Core');
             $standard = ($_CONF['user_login_method']['standard']) ? true : false;
             $openid = ($_CONF['user_login_method']['openid']) ? true : false;
             $thirdparty = ($_CONF['user_login_method']['3rdparty']) ? true: false;

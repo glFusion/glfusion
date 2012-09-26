@@ -720,6 +720,7 @@ function glfusion_130()
     $c->add('whosonline_photo',FALSE,'select',3,14,0,930,TRUE);
 
     $c->del('wikitext_editor','Core');
+    $c->del('microsummary_short', 'Core');
 
     // add oauth user_login_method
     $standard = ($_CONF['user_login_method']['standard']) ? true : false;
