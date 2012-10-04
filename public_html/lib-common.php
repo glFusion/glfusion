@@ -1201,7 +1201,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     }
     $rdf = substr_replace( $_CONF['rdf_file'], $_CONF['site_url'], 0,strlen( $_CONF['path_html'] ) - 1 ) . LB;
 
-    if ( $_SYSTEM['use_direct_style_js'] ) {
+    if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
         $style_cache_url = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'].'&amp;i='.$cacheID;
         $js_cache_url    = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].$_USER['theme'].'.js?t='.$_USER['theme'].'&amp;i='.$cacheID;
     } else {
@@ -6929,7 +6929,7 @@ function CTL_clearCache($plugin='')
     CTL_clearCacheDirectories($_CONF['path_data'] . 'layout_cache/', $plugin);
 
     if ( empty($plugin) ) {
-        if ( $_SYSTEM['use_direct_style_js'] ) {
+        if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
             foreach (glob($_CONF['path_html'].$_CONF['css_cache_filename']."*.*") as $filename) {
                 @unlink($filename);
             }
@@ -6954,7 +6954,7 @@ function css_out()
         $_CONF['css_cache_filename'] = 'stylecache_';
     }
 
-    if ( $_SYSTEM['use_direct_style_js'] ) {
+    if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
         $cacheFile = $_CONF['path_html'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css';
         $cacheURL  = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'];
     } else {
@@ -7121,7 +7121,7 @@ function js_out()
         $_CONF['js_cache_filename'] = 'jscache_';
     }
 
-    if ( $_SYSTEM['use_direct_style_js'] ) {
+    if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
         $cacheFile = $_CONF['path_html'].$_CONF['js_cache_filename'].$_USER['theme'].'.js';
         $cacheURL  = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].'.js?t='.$_USER['theme'];
     } else {
@@ -7234,7 +7234,7 @@ function js_out()
     print "var glfusionEditorBaseUrl = '".$_CONF['site_url']."';" . LB;
     print "var glfusionLayoutUrl     = '".$_CONF['layout_url']."';" . LB;
 
-    if ( $_SYSTEM['use_direct_style_js'] ) {
+    if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
         print "var glfusionStyleCSS      = '".$_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'] . "';" . LB;
     } else {
         print "var glfusionStyleCSS      = '".$_CONF['site_url']."/css.php?t=" . $_USER['theme'] . "';" . LB;
