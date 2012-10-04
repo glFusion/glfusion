@@ -801,6 +801,7 @@ function _pi_dir_copy($srcdir, $dstdir )
     $fail = 0;
     $sizetotal = 0;
     $fifail = '';
+    $verbose = 0;
     if (!@is_dir($dstdir)) fusion_io_mkdir_p($dstdir);
     if ($curdir = @opendir($srcdir)) {
         while ($file = readdir($curdir)) {
@@ -876,6 +877,7 @@ function _pi_test_copy($srcdir, $dstdir)
     $fifail     = '';
     $createdDst = 0;
     $ret        = '';
+    $verbose    = 0;
 
     $failedFiles = array();
 
