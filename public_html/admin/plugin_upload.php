@@ -378,7 +378,7 @@ function processPluginUpload()
 
     // check prerequisites
     $errors = '';
-    if ( is_array($pluginData['requires']) ) {
+    if ( isset($pluginData['requires']) && is_array($pluginData['requires']) ) {
         foreach ($pluginData['requires'] AS $reqPlugin ) {
             if ( ($key = array_search($reqPlugin,$_PLUGINS)) === false ) {
                 $errors .= sprintf($LANG32[51],$pluginData['id'],$reqPlugin,$reqPlugin);
