@@ -451,7 +451,7 @@ class Date extends DateTime
      * @param   array   attributes i.e.; array('name'=>'tzid','id'=>'tzid')
      * @return  string  HTML select box
      */
-    public function getTimeZoneDropDown($selectedzone = '', $attributes = array())
+    public static function getTimeZoneDropDown($selectedzone = '', $attributes = array())
     {
 
         $select = '<select';

@@ -117,7 +117,7 @@ class outputHandler {
 	 * @return	object	The outputHandler object.
 	 * @since	1.3.0
 	 */
-    function &getInstance()
+    public static function &getInstance()
     {
         static $instance;
 

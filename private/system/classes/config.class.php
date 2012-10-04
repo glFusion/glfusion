@@ -58,7 +58,7 @@ class config {
      *
      *    @return config             The newly created or referenced config object
      */
-    function &get_instance()
+    public static function &get_instance()
     {
         static $instance;
 
