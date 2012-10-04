@@ -51,7 +51,7 @@ $adminEmail = "<a href=\"$siteURL/profiles.php?uid=2\">here</a>";
 $sitePrivacy="<a href=\"$siteURL/privpol.php\">Privacy Policy</a>";
 $siteTerms  = "<a href=\"$siteURL/terms.php\">Terms of Use</a>";
 $register   = "<a href=\"$siteURL/users.php?mode=new\">Register</a>";
-
+$display  = '';
 $display .= "<div><h1>Terms of Use</h1>";
 $display .= "<br /><p><b>1. Acceptance of Terms of Use and Amendments</b><br />Each time you use or cause access to this web site, you agree to be bound by these $siteTerms, and as amended from time to time with or without notice to you. In addition, if you are using a particular service on or through this web site, you will be subject to any rules or guidelines applicable to those services and they shall be incorporated by reference into these $siteTerms. Please see our $sitePrivacy, which is incorporated into these $siteTerms by reference.</p><br />
 <p><b>2. Our Service</b><br />Our web site and services provided to you on and through our web site on an &quot;AS IS&quot; basis. You agree that the owners of this web site exclusively reserve the right and may, at any time and without notice and any liability to you, modify or discontinue this web site and its services or delete the data you provide, whether temporarily or permanently. We shall have no responsibilty or liability for the timeliness, deletion, failure to store, inaccuracy, or improper delivery of any data or information.</p><br />
