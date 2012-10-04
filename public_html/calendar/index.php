@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -187,7 +187,7 @@ function getDeleteImageLink($mode, $A, $token)
     $img = '<img style="vertical-align:top" src="' . $_CONF['site_url']
         . '/calendar/images/delete_event.' . $_IMAGE_TYPE
         . '" alt="' . $LANG_CAL_2[30] . '" title="'
-        . $LANG_CAL_2[30] . '"' . XHTML . '>';
+        . $LANG_CAL_2[30] . '"/>';
 
     if ($mode == 'personal') {
         if (SEC_hasAccess($A['owner_id'], $A['group_id'], $A['perm_owner'],
@@ -508,9 +508,6 @@ case 'day':
                                    'event'=>'singleevent.thtml',
                                    'dayview'=>'dayview.thtml',
                                    'quickadd'=>'quickaddform.thtml'));
-    $cal_templates->set_var ( 'xhtml', XHTML );
-    $cal_templates->set_var ('site_url', $_CONF['site_url']);
-    $cal_templates->set_var ('site_admin_url', $_CONF['site_admin_url']);
     $cal_templates->set_var ('layout_url', $_CONF['layout_url']);
     $cal_templates->set_var('mode', $mode);
     $cal_templates->set_var('lang_day', $LANG_CAL_2[39]);
@@ -585,7 +582,7 @@ case 'day':
             $cal_templates->set_var('eid', $A['eid']);
             $cal_templates->set_var('event_title', $A['title']);
             if ($i < $alldaycount) {
-                $cal_templates->set_var('br', '<br' . XHTML . '>');
+                $cal_templates->set_var('br', '<br/>');
             } else {
                 $cal_templates->set_var('br', '');
             }
@@ -612,7 +609,7 @@ case 'day':
                 $cal_templates->set_var('eid', $A['eid']);
                 $cal_templates->set_var('event_title', $A['title']);
                 if ($j < $numevents) {
-                    $cal_templates->set_var('br', '<br' . XHTML . '>');
+                    $cal_templates->set_var('br', '<br/>');
                 } else {
                     $cal_templates->set_var('br', '');
                 }
@@ -667,9 +664,6 @@ case 'week':
     $cal_templates->set_file(array('week'=>'weekview/weekview.thtml',
                                    'events'=>'weekview/events.thtml',
                                    'quickadd'=>'dayview/quickaddform.thtml'));
-    $cal_templates->set_var ( 'xhtml', XHTML );
-    $cal_templates->set_var ('site_url', $_CONF['site_url']);
-    $cal_templates->set_var ('site_admin_url', $_CONF['site_admin_url']);
     $cal_templates->set_var ('layout_url', $_CONF['layout_url']);
     $cal_templates->set_var('mode', $mode);
     $cal_templates->set_var('lang_week', $LANG_CAL_2[27]);
@@ -859,9 +853,6 @@ $cal_templates->set_file (array (
         'addevent'    => 'addeventoption.thtml'
         ));
 
-$cal_templates->set_var ( 'xhtml', XHTML );
-$cal_templates->set_var ('site_url', $_CONF['site_url']);
-$cal_templates->set_var ('site_admin_url', $_CONF['site_admin_url']);
 $cal_templates->set_var ('layout_url', $_CONF['layout_url']);
 $cal_templates->set_var ('mode', $mode);
 if ($mode == 'personal') {
@@ -1026,7 +1017,7 @@ for ($i = 1; $i <= 6; $i++) {
                     }
                 }
                 for ($z = $z; $z <= 4; $z++) {
-                    $entries .= '<br' . XHTML . '>';
+                    $entries .= '<br/>';
                 }
 
                 $cal_templates->set_var('event_anchortags', $entries);
@@ -1034,7 +1025,7 @@ for ($i = 1; $i <= 6; $i++) {
             } else {
                 if ($q2_numrows < 4) {
                     for ($t=0; $t < (4 - $q2_numrows); $t++) {
-                        $cal_templates->set_var('cal_day_entries','<br' . XHTML . '><br' . XHTML . '><br' . XHTML . '><br' . XHTML . '>');
+                        $cal_templates->set_var('cal_day_entries','<br/><br/><br/><br/>');
                     }
                 }
             }
