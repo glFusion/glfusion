@@ -134,6 +134,11 @@ $config->initConfig();
 
 $_CONF = $config->get_config('Core');
 
+$result = DB_query("SELECT * FROM {$_TABLES['vars']}");
+while ($row = DB_fetchArray($result) ) {
+    $_VARS[$row['name']] = $row['value'];
+}
+
 // set default UI styles
 $uiStyles = array(
     'full_content' => array('left_class' => '',
@@ -1029,7 +1034,7 @@ function COM_renderMenu( &$header, $plugin_menu )
 
 function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 {
-    global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG01, $LANG_BUTTONS, $LANG_DIRECTION,
+    global $_CONF, $_SYSTEM, $_VARS, $_TABLES, $_USER, $LANG01, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $theme_what, $theme_pagetitle,
            $theme_headercode, $theme_layout,$mbMenu,$themeAPI;
 
@@ -1063,7 +1068,12 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 
     $cacheID = SESS_getVar('cacheID');
     if ( empty($cacheID) || $cacheID == '' ) {
-        $cacheID = DB_getItem($_TABLES['vars'],'value','name="cacheid"');
+        if ( !isset($_VARS['cacheid']) ) {
+            $cacheID = 'css_' . md5( time() );
+            $_VARS['cacheid'] = $cacheID;
+        } else {
+            $cacheID = $_VARS['cacheid'];
+        }
         SESS_setVar('cacheID',$cacheID);
     }
 
@@ -3972,7 +3982,7 @@ function COM_hit()
 
 function COM_emailUserTopics()
 {
-    global $_CONF, $_USER, $_TABLES, $LANG04, $LANG08, $LANG24;
+    global $_CONF, $_USER, $_VARS, $_TABLES, $LANG04, $LANG08, $LANG24;
 
     if ($_CONF['emailstories'] == 0) {
         return;
@@ -3995,7 +4005,10 @@ function COM_emailUserTopics()
     $users = DB_query( $usersql );
     $nrows = DB_numRows( $users );
 
-    $lastrun = DB_getItem( $_TABLES['vars'], 'value', "name = 'lastemailedstories'" );
+    if ( !isset($_VARS['lastemailedstories']) ) {
+        $_VARS['lastemailedstories'] = 0;
+    }
+    $lastrun = $_VARS['lastemailedstories'];
 
     // For each user, pull the stories they want and email it to them
     for( $x = 0; $x < $nrows; $x++ ) {
@@ -6947,7 +6960,7 @@ function CTL_clearCache($plugin='')
 
 function css_out()
 {
-    global $_CONF, $_SYSTEM, $_USER, $_PLUGINS, $_TABLES;
+    global $_CONF, $_SYSTEM, $_VARS, $_USER, $_PLUGINS, $_TABLES;
     global $mbMenu, $themeAPI, $themeStyle;
 
     if ( !isset($_CONF['css_cache_filename']) ) {
@@ -7017,6 +7030,7 @@ function css_out()
     $cacheID = 'css_' . md5( time() );
 
     DB_query("REPLACE INTO {$_TABLES['vars']} (name, value) VALUES ('cacheid','".$cacheID."')");
+    $_VARS['cacheid'] = $cacheID;
 
     // start output buffering and build the stylesheet
     ob_start();
@@ -7609,8 +7623,11 @@ if ( isset($_CONF['maintenance_mode']) && $_CONF['maintenance_mode'] == 1 && !SE
 
 // Check and see if any plugins (or custom functions)
 // have scheduled tasks to perform
+if ( !isset($_VARS['last_scheduled_run'] ) ) {
+    $_VARS['last_scheduled_run'] = 0;
+}
 if ( $_CONF['cron_schedule_interval'] > 0 && COM_onFrontpage() ) {
-    if (( DB_getItem( $_TABLES['vars'], 'value', "name='last_scheduled_run'" )
+    if (( $_VARS['last_scheduled_run']
             + $_CONF['cron_schedule_interval'] ) <= time()) {
         DB_query( "UPDATE {$_TABLES['vars']} SET value=UNIX_TIMESTAMP() WHERE name='last_scheduled_run'" );
         PLG_runScheduledTask();

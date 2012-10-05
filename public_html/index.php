@@ -155,7 +155,9 @@ if ($limit < 1) {
 // glFusion now allows for articles to be published in the future.  Because of
 // this, we need to check to see if we need to rebuild the RDF file in the case
 // that any such articles have now been published
-COM_rdfUpToDateCheck();
+if ( $_VARS['totalhits'] % 100 === 0 ) {
+    COM_rdfUpToDateCheck();
+}
 
 // Scan for any stories that have expired and should be archived or deleted
 $asql = "SELECT sid,tid,title,expire,statuscode FROM {$_TABLES['stories']} ";
