@@ -66,7 +66,7 @@ function _template_set_root($root) {
 }
 
 function glfusion_UpgradeCheck() {
-    global $_CONF,$_SYSTEM,$_TABLES,$LANG01;
+    global $_CONF,$_SYSTEM,$_VARS,$_TABLES,$LANG01;
 
     if (!SEC_inGroup ('Root')) {
         return;
@@ -75,7 +75,7 @@ function glfusion_UpgradeCheck() {
     $retval = '';
     $msg = '';
 
-    $dbversion = DB_getItem($_TABLES['vars'],'value','name="glfusion"');
+    $dbversion = $_VARS['glfusion'];
     $comparison = version_compare( GVERSION, $dbversion );
     $install_url = $_CONF['site_url'] . '/admin/install/index.php';
 
