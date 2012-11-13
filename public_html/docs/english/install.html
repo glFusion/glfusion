@@ -41,13 +41,13 @@ Zeus, Lighttpd, and Microsoft <acronym title="Internet Information Services">IIS
 
 
 <p>
-glFusion still supports <acronym title="Hypertext Preprocessor">PHP</acronym> v4.x, but the <acronym title="Hypertext Preprocessor">PHP</acronym> Foundation has already announced the end of life of the v4.x branch.  Using <acronym title="Hypertext Preprocessor">PHP</acronym> v5.x series is a better long term choice.  Currently, the Web Services feature of glFusion requires <acronym title="Hypertext Preprocessor">PHP</acronym> 5.  If you are running <acronym title="Hypertext Preprocessor">PHP</acronym> v4.x, Web Services will be automatically disabled.
+glFusion only supports <acronym title="Hypertext Preprocessor">PHP</acronym> v5.2.x and above.
 
 </p>
 
 
 <p>
-glFusion supports MySQL database.
+glFusion supports MySQL database engine using both the MySQL interface and the MySQLi interface.
 </p>
 
 
@@ -72,8 +72,8 @@ glFusion supports MySQL database.
 	<tr class="row1">
 
 		<td class="col0 leftalign"><acronym title="Hypertext Preprocessor">PHP</acronym>  </td>
-      <td class="col1 leftalign">4.3.10  </td>
-      <td class="col2 leftalign">4.4.8  </td>
+      <td class="col1 leftalign">5.2.0  </td>
+      <td class="col2 leftalign">5.2.17  </td>
       <td class="col3 leftalign"><a href="http://www.php.net" class="urlextern" title="http://www.php.net" rel="nofollow">http://www.php.net</a>  </td>
 
 	</tr>
@@ -81,7 +81,7 @@ glFusion supports MySQL database.
 	<tr class="row2">
 
 		<td class="col0 leftalign">MySQL  </td>
-      <td class="col1 leftalign">3.23.x  </td>
+      <td class="col1 leftalign">4.1.3.x  </td>
       <td class="col2 leftalign">5.2.x  </td>
       <td class="col3 leftalign"><a href="http://www.mysql.org" class="urlextern" title="http://www.mysql.org" rel="nofollow">http://www.mysql.org</a>  </td>
 
@@ -115,12 +115,12 @@ Your server or hosting environment must have the following items available for y
   </li>
 
   <li class="level1">
-    <div class="li"> <acronym title="Hypertext Preprocessor">PHP</acronym> v4.3.0 or higher</div>
+    <div class="li"> <acronym title="Hypertext Preprocessor">PHP</acronym> v5.2.0 or higher</div>
 
   </li>
 
   <li class="level1">
-    <div class="li"> MySQL v3.23</div>
+    <div class="li"> MySQL v4.1.3</div>
 
 
   </li>
@@ -390,7 +390,7 @@ our example.</div>
   </li>
 
   <li class="level1">
-    <div class="li"> Open the glfusion-1.2.1.tar.gz file with WinRAR (or you choice of archive program).</div>
+    <div class="li"> Open the glfusion-1.3.0.tar.gz file with WinRAR (or you choice of archive program).</div>
 
   </li>
 
@@ -467,7 +467,7 @@ accessible via the web.</div>
   <li class="level1">
     <div class="li"> Unpack the downloaded distribution file by running:  <br />
 
- <code>tar -zxvf glfusion-1.2.1.tar.gz</code> (for Unix systems) </div>
+ <code>tar -zxvf glfusion-1.3.0.tar.gz</code> (for Unix systems) </div>
 
   </li>
 
@@ -669,7 +669,7 @@ You will need to repeat these steps for all the directories listed above.
 
 <p>If you need assistance getting the permission settings correct,
 check with your hosting provider&#8217;s technical support or post a
-support message at the gl Labs website.
+support message at the <a href="http://www.glfusion.org">glFusion.org website</a>.
 </p>
 
 
@@ -921,7 +921,7 @@ Follow the instructions above in the <span class="curid"><a href="http://www.glf
 
 <div class="level2">
 
-<p>If you are upgrading an existing glFusion v1.1.2.0 site, the upgrade
+<p>If you are upgrading an existing glFusion v1.2.x site, the upgrade
 process if very simple. You only need to update the changed files. To
 make this as easy as possible, we have packaged the changed files into
 a separate distribution: glfusion-1.1.2_to_1.2.1.tar.gz.
@@ -931,7 +931,7 @@ a separate distribution: glfusion-1.1.2_to_1.2.1.tar.gz.
 <p>
 Copy these files to your server and you are done!</p><p>If you are
 upgrading from an earlier version of glFusion, you will need to copy
-the entire glFusion v1.2.1 distribution to your web server.
+the entire glFusion v1.3.0 distribution to your web server.
 </p>
 
 
@@ -950,10 +950,10 @@ JavaScript files (specifically the FCKeditor JavaScript).
 
 <div class="level2">
 
-<p>glFusion v1.2.1 supports migrating your existing Geeklog 1.4.1+ site by performing the Migration process.&nbsp;</p><p><span style="font-weight: bold;">You must be running Geeklog v1.5.0 or higher to migrate. If you have an
+<p>glFusion v1.3.0 supports migrating your existing Geeklog 1.4.1+ site, up to Geeklog v1.7.0, by performing the Migration process.&nbsp;</p><p><span style="font-weight: bold;">You must be running Geeklog v1.4.1 or higher to migrate. If you have an
 older Geeklog site, please upgrade it to at least Geeklog v1.4.1 before
-migrating.</span>
-</p>glFusion v1.1.x has some major changes in the theme engine. glFusion uses a <acronym title="Cascading Style Sheets">CSS</acronym>, non-table based theme engine which is very different than Geeklog's implementation.  glFusion v1.1.x does offer <em>legacy theme</em> support, which means any Geeklog theme that is based off their standard <em>Professional</em>
+migrating.  If you are running a later version of Geeklog than 1.7.0, <strong>migration is not supported.</strong></span>
+</p>glFusion v1.3.x has some major changes in the theme engine. glFusion uses a <acronym title="Cascading Style Sheets">CSS</acronym>, non-table based theme engine which is very different than Geeklog's implementation.  glFusion v1.1.x does offer <em>legacy theme</em> support, which means any Geeklog theme that is based off their standard <em>Professional</em>
 theme should work, but you will not get all the new features and
 benefits available in glFusion. For full details, please see the <a href="http://www.glfusion.org/wiki/doku.php/glfusion:theme#legacy_theme_support" class="wikilink1" title="glfusion:theme">Legacy Theme</a> section in the glFusion wiki.<br /><br /><span style="font-weight: bold;">The glFusion team recommends that you use the standard Nouveau theme
 included in glFusion. If you have a heavily customized legacy theme,
@@ -1084,7 +1084,7 @@ the Plugin Editor to manually install them.
 
 <div id="gl_footer">
 
-<p><a href="http://www.glfusion.org">glFusion Project</a> - Updated 2010-03-13</p>
+<p><a href="http://www.glfusion.org">glFusion Project</a> - Updated 2012-10-03</p>
 
     </div>
  <!-- end of gl_footer-->
