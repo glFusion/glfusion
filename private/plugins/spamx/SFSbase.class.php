@@ -4,7 +4,7 @@
 * File: SFSbase.class.php
 * Stop Forum Spam (SFS) Base Class
 *
-* Copyright (C) 201 by the following authors:
+* Copyright (C) 2011 by the following authors:
 * Author        Mark R. Evans   mark AT glfusion DOT org
 *
 * Licensed under the GNU General Public License
@@ -81,7 +81,7 @@ class SFSbase {
         $result = @unserialize($response->getBody());
 
         if (!$result) return false;     // invalid data, assume ok
-        if ($result['ip']['appears'] == 1) {
+        if ($result['ip']['appears'] == 1 && $result['ip']['confidence'] > (float) 25) {
             $retval = true;
             SPAMX_log ("SFS: spam detected");
         } else if ($this->_verbose) {

@@ -1431,9 +1431,9 @@ function _ff_stopforumspam($username='',$email='',$ip='')
     }
 
     if (
-       (isset($result['email']) && $result['email']['appears'] == 1) ||
-       ($result['ip']['appears'] == 1 ) ||
-       (isset($result['username']) && $result['username']['appears'] == 1 )
+       (isset($result['email']) && $result['email']['appears'] == 1 && $result['email']['confidence'] > (float) 25 ) ||
+       ($result['ip']['appears'] == 1 && $result['ip']['confidence'] > (float) 25 ) ||
+       (isset($result['username']) && $result['username']['appears'] == 1 && $result['username']['appears'] > (float) 25 )
        ) {
         return 1;
     }
