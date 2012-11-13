@@ -1669,9 +1669,9 @@ class Template
         }
         $phpfile = $TEMPLATE_OPTIONS['path_cache'] . $extra_path . $basefile . '.php';
 
-        $template_fstat = filemtime($filename);
+        $template_fstat = @filemtime($filename);
         if (file_exists($phpfile)) {
-            $cache_fstat = filemtime($phpfile);
+            $cache_fstat = @filemtime($phpfile);
         } else {
             $cache_fstat = 0;
         }
