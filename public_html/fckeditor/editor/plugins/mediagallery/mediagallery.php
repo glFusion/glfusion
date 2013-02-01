@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2006-2011 by the following authors:                        |
+// | Copyright (C) 2006-2013 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -312,15 +312,17 @@ if ( $refresh != 1 ) {	// initial call
 	));
 }
 
+$self_url = @htmlspecialchars($_SERVER['PHP_SELF'],ENT_QUOTES,COM_getEncodingt());
+
 $T->set_var(array(
-	's_form_action'			=> $_SERVER['PHP_SELF'],
+	's_form_action'			=> $self_url,
     'site_url'              => $_MG_CONF['site_url'],
     'birdseed'              => $birdseed,
     'album_title'           => PLG_replaceTags($MG_albums[$album_id]->title),
     'table_columns'         => $columns_per_page,
     'table_column_width'    => intval(100 / $columns_per_page) . '%',
-    'top_pagination'        => COM_printPageNavigation($_SERVER['PHP_SELF'] .  '?aid=' . $album_id . '&amp;i=' . $instance . '&amp;refresh=1', $page+1,ceil($total_items_in_album  / $media_per_page)),
-    'bottom_pagination'     => COM_printPageNavigation($_SERVER['PHP_SELF'] . '?aid=' . $album_id . '&amp;i=' . $instance  . '&amp;refresh=1', $page+1,ceil($total_items_in_album  / $media_per_page)),
+    'top_pagination'        => COM_printPageNavigation($self_url .  '?aid=' . $album_id . '&amp;i=' . $instance . '&amp;refresh=1', $page+1,ceil($total_items_in_album  / $media_per_page)),
+    'bottom_pagination'     => COM_printPageNavigation($self_url . '?aid=' . $album_id . '&amp;i=' . $instance  . '&amp;refresh=1', $page+1,ceil($total_items_in_album  / $media_per_page)),
     'page_number'           => sprintf("%s %d %s %d",$LANG_MG03['page'], $current_print_page, $LANG_MG03['of'], $total_print_pages),
     'jumpbox'               => $album_jumpbox,
     'album_id'              => $album_id,

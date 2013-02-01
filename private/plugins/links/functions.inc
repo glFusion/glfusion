@@ -818,8 +818,6 @@ function plugin_submit_links($A = array())
 
     $linkform = new Template($_CONF['path'] . 'plugins/links/templates');
     $linkform->set_file('linkform', 'submitlink.thtml');
-    $linkform->set_var('site_url', $_CONF['site_url']);
-    $linkform->set_var('layout_url', $_CONF['layout_url']);
     $linkform->set_var('lang_title', $LANG12[10]);
     $linkform->set_var('lang_link', $LANG_LINKS_SUBMIT[2]);
     $linkform->set_var('lang_category', $LANG_LINKS_SUBMIT[3]);
@@ -832,16 +830,15 @@ function plugin_submit_links($A = array())
     $linkform->set_var('lang_htmlnotallowed', $LANG12[35]);
     $linkform->set_var('lang_submit', $LANG12[8]);
     $linkform->set_var('max_url_length', 255);
-    $linkform->set_var('xhtml', XHTML);
 
     if ( isset($A['title']) ) {
-        $linkform->set_var('title',strip_tags($A['title']));
+        $linkform->set_var('title',@htmlspecialchars(strip_tags($A['title']),ENT_QUOTES,COM_getEncodingt()) );
     }
     if ( isset($A['description'] ) ) {
         $linkform->set_var('description',@htmlspecialchars($A['description']));
     }
     if ( isset($A['url']) ) {
-        $linkform->set_var('url',$A['url']);
+        $linkform->set_var('url',@htmlspecialchars($A['url'],ENT_QUOTES,COM_getEncodingt()));
     } else {
         $linkform->set_var('url','http://');
     }
@@ -877,7 +874,7 @@ function plugin_save_submit_links($A)
 
     // pseudo-formatted link description for the spam check
     $spamcheck = '<p>'. COM_createLink($A['title'], $A['url']) .' ('
-               . $A['categorydd'] . ')<br' . XHTML . '>' . $A['description']
+               . $A['categorydd'] . ')<br/>' . $A['description']
                . '</p>';
     $result = PLG_checkforSpam($spamcheck, $_CONF['spamx']);
     if ($result > 0) {
@@ -1521,7 +1518,7 @@ function phpblock_topic_links()
                      . '/links/portal.php?what=link&amp;item=' . $A['lid']);
                 $retval .= COM_createLink($content, $url,
                                           array('title' => $A['url']))
-                        . '<br' . XHTML . '>';
+                        . '<br/>';
             }
         }
     }
@@ -1551,7 +1548,7 @@ function phpblock_topic_categories()
                 $content = $A['category'];
                 $url = $_CONF['site_url'] . '/links/index.php?category='
                                           . urlencode($A['cid']);
-                $retval .= COM_createLink($content, $url) . '<br' . XHTML . '>';
+                $retval .= COM_createLink($content, $url) . '<br/>';
             }
         }
     }
@@ -1596,7 +1593,7 @@ function phpblock_blogroll()
                 $link = '<a href="' . $url . '" title="' . $A['url'] . '">';
 
             }
-            $links[] = $link . COM_truncate($A['title'],25,'...') . '</a>'; // . ' (' . ($A['hits']) . ')' . '<br' . XHTML . '><em>' . ($A['description']) . '</em><br' . XHTML . '><br' . XHTML . '>';
+            $links[] = $link . COM_truncate($A['title'],25,'...') . '</a>'; // . ' (' . ($A['hits']) . ')' . '<br/><em>' . ($A['description']) . '</em><br/><br/>';
         }
 
         if (count ($links) > 0) {

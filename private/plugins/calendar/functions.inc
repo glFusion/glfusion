@@ -778,11 +778,17 @@ function plugin_submit_calendar($mode = 'master',$A = array())
 {
     global $_CONF, $_USER, $_CA_CONF, $LANG_CAL_1;
 
+    $valid_modes = array('personal','master');
+
     if (isset($_POST['calendar_type'])) {
         $mode = $_POST['calendar_type'];
     } else if (isset($_REQUEST['mode']) && ($_REQUEST['mode'] == 'personal')) {
         $mode = 'personal';
     } else {
+        $mode = 'master';
+    }
+
+    if ( !in_array($mode,$valid_modes) ) {
         $mode = 'master';
     }
 
@@ -1028,18 +1034,18 @@ function plugin_submit_calendar($mode = 'master',$A = array())
     }
 
     // set the fields
-    $eventform->set_var('title',$title);
+    $eventform->set_var('title',htmlspecialchars($title,ENT_QUOTES,COM_getEncodingt()));
     $eventform->set_var('event_type',$event_type);
-    $eventform->set_var('url',$url);
+    $eventform->set_var('url',htmlspecialchars($url,ENT_QUOTES,COM_getEncodingt()));
     $eventform->set_var('allday',$allday);
-    $eventform->set_var('location',htmlspecialchars($location));
-    $eventform->set_var('address1',$address1);
-    $eventform->set_var('address2',$address2);
-    $eventform->set_var('city',$city);
-    $eventform->set_var('state',$state);
-    $eventform->set_var('zipcode',$zipcode);
-    $eventform->set_var('description',htmlspecialchars($description));
-    $eventform->set_var('postmode',$postmode);
+    $eventform->set_var('location',htmlspecialchars($location,ENT_QUOTES,COM_getEncodingt()));
+    $eventform->set_var('address1',htmlspecialchars($address1,ENT_QUOTES,COM_getEncodingt()));
+    $eventform->set_var('address2',htmlspecialchars($address2,ENT_QUOTES,COM_getEncodingt()));
+    $eventform->set_var('city',htmlspecialchars($city,ENT_QUOTES,COM_getEncodingt()));
+    $eventform->set_var('state',htmlspecialchars($state,ENT_QUOTES,COM_getEncodingt()));
+    $eventform->set_var('zipcode',htmlspecialchars($zipcode,ENT_QUOTES,COM_getEncodingt()));
+    $eventform->set_var('description',htmlspecialchars($description,ENT_QUOTES,COM_getEncodingt()));
+    $eventform->set_var('postmode',htmlspecialchars($postmode,ENT_QUOTES,COM_getEncodingt()));
     $eventform->parse('theform', 'eventform');
     $retval .= $eventform->finish($eventform->get_var('theform'));
     $retval .= COM_endBlock();

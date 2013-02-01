@@ -3045,9 +3045,7 @@ color:#0055bb !important;
     width:          177px;
 }
 <![endif]-->
-/*
-.dummyclass1 {
-} */
+
 /* end of horizontal cascading menu */
 
 /* begin vertical cascading menu */
@@ -3191,6 +3189,8 @@ color:#0055bb !important;
     text-decoration:    underline;
 }
 /* end of horizontal simple menu CSS */
+
+/* Current page highlighting */
 
 #menu_navigation a.currentpage,
 #menu_block a.currentpage {

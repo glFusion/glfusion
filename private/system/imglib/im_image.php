@@ -136,7 +136,7 @@ function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $d
         if ( $_CONF['debug_image_upload'] ) {
             $rc = UTL_execWrapper('"' . $_CONF['path_to_mogrify'] . "/convert" . '"' . " -verbose -flatten -quality $JpegQuality -size $newdim $srcImage -geometry $newdim $destImage");
         } else {
-            $rc = UTL_execWrapper('"' . $_CONF['path_to_mogrify'] . "/convert" . '"' . " -flatten -quality $JpegQuality -size $newdim $srcImage -geometry $newdim $destImage");
+            $rc = UTL_execWrapper('"' . $_CONF['path_to_mogrify'] . "/convert" . '"' . " -flatten -quality $JpegQuality -thumbnail $newdim $srcImage -geometry $newdim $destImage");
         }
         if ( $rc != true ) {
             COM_errorLog("_img_resizeImage: Error - Unable to resize image - ImageMagick convert failed.");

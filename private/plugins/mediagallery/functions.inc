@@ -1845,6 +1845,8 @@ function MG_initAlbums() {
         $nRows  = DB_numRows($result);
         if ( $nRows > 0 ) {
             $_MG_USERPREFS = DB_fetchArray($result);
+        } else {
+            $_MG_USERPREFS = array();
         }
     }
 

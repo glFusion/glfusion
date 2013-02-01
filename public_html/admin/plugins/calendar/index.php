@@ -111,6 +111,19 @@ function CALENDAR_edit($action, $A, $msg = '')
     $event_templates->set_var('lang_allowed_html', COM_allowedHTML(SEC_getUserPermissions(),false,'calendar','description'));
     $event_templates->set_var('lang_postmode', $LANG_CAL_ADMIN[3]);
 
+    if (!isset($A['perm_owner']) ) {
+        $A['perm_owner'][0] = "0";
+    }
+    if (!isset($A['perm_group']) ) {
+        $A['perm_group'][0] = "0";
+    }
+    if (!isset($A['perm_members']) ) {
+        $A['perm_members'][0] = "0";
+    }
+    if (!isset($A['perm_anon']) ) {
+        $A['perm_anon'][0] = "0";
+    }
+
     if ($action <> 'moderate' AND !empty($A['eid'])) {
         // Get what level of access user has to this object
         $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);

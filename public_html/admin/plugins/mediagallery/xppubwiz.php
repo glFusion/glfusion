@@ -101,8 +101,8 @@ if ($step == 'reg') {
         '[HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\PublishingWizard\\PublishingWizard\\Providers\\' . $cfg[ 'registrykey' ] . ']' . "\n" .
         '"displayname"="' . $cfg[ 'wizardname' ] . '"' . "\n" .
         '"description"="' . $cfg[ 'wizarddescription' ] . '"' . "\n" .
-        '"href"="' . $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'PHP_SELF' ] . '"' . "\n" .
-        '"icon"="' . $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . dirname($_SERVER[ 'PHP_SELF' ]) . '/favicon.ico"';
+        '"href"="' . $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . htmlspecialchars($_SERVER[ 'PHP_SELF' ],ENT_QUOTES,COM_getEncodingt()) . '"' . "\n" .
+        '"icon"="' . $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . dirname(htmlspecialchars($_SERVER[ 'PHP_SELF' ],ENT_QUOTES,COM_getEncodingt())) . '/favicon.ico"';
     exit;
 }
 
@@ -115,8 +115,8 @@ if ($step == 'regvista') {
         '[HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\PublishingWizard\\InternetPhotoPrinting\\Providers\\' . $cfg[ 'registrykey' ] . ']' . "\n" .
         '"displayname"="' . $cfg[ 'wizardname' ] . '"' . "\n" .
         '"description"="' . $cfg[ 'wizarddescription' ] . '"' . "\n" .
-        '"href"="' . $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'PHP_SELF' ] . '"' . "\n" .
-        '"icon"="' . $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . dirname($_SERVER[ 'PHP_SELF' ]) . '/favicon.ico"';
+        '"href"="' . $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . htmlspecialchars($_SERVER[ 'PHP_SELF' ],ENT_QUOTES,COM_getEncodingt()) . '"' . "\n" .
+        '"icon"="' . $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . dirname(htmlspecialchars($_SERVER[ 'PHP_SELF' ],ENT_QUOTES,COM_getEncodingt())) . '/favicon.ico"';
     exit;
 }
 
@@ -191,6 +191,7 @@ if ($step == 'process_login' ) {
                                $_CONF['cookiedomain'], $_CONF['cookiesecure']);
                 }
             } else {
+//                $userid = $HTTP_COOKIE_VARS[$_CONF['cookie_name']];
                 $userid = $_COOKIE[$_CONF['cookie_name']];
 
                 if (empty ($userid) || ($userid == 'deleted')) {
@@ -228,7 +229,7 @@ if ($step == 'login') {
     $T->set_var(array(
         'lang_username'         => $LANG04[2],
         'lang_password'         => $LANG20[5],
-        's_form_action'         => $_SERVER[ 'PHP_SELF' ],
+        's_form_action'         => htmlspecialchars($_SERVER[ 'PHP_SELF' ],ENT_QUOTES,COM_getEncodingt()),
     ));
 
     $T->parse('output', 'wizard');
@@ -243,7 +244,7 @@ if ($step == 'login') {
 if ($step == 'info') {
     MG_xpPubHeader();
 ?>
-    <form method="post" id="info" action="<?php echo $_SERVER[ 'PHP_SELF' ]; ?>"
+    <form method="post" id="info" action="<?php echo htmlspecialchars($_SERVER[ 'PHP_SELF' ],ENT_QUOTES,COM_getEncodingt()); ?>"
 >
     <center>
     <h3><?php echo $LANG_MG06['welcome'] . ' '; ?> <?php echo $_CONF['site_name'
@@ -280,7 +281,15 @@ if ($step == "options") {
     if ( $album_count == 0 ) {
         $album_select = $LANG_MG06['no_albums'];
     }
-
+/* ---
+    $album_jumpbox = '';
+    $level = 0;
+    $MG_albums[0]->buildJumpBox($album_id,3);
+    $album_select = $album_jumpbox;
+    if ($album_count == 0 ) {
+        $album_select = $LANG_MG06['no_albums'];
+    }
+--- */
     MG_xpPubHeader();
     $T = new Template($_MG_CONF['template_path']);
     $T->set_file ('wizard','xplist.thtml');
@@ -291,7 +300,7 @@ if ($step == "options") {
         'album_select'          => $album_select,
         'lang_select_album'     => $LANG_MG06['select_album'],
         'lang_create_album'     => $LANG_MG01['create_album'],
-        's_form_action'         => $_SERVER[ 'PHP_SELF' ],
+        's_form_action'         => htmlspecialchars($_SERVER[ 'PHP_SELF' ],ENT_QUOTES,COM_getEncodingt()),
     ));
 
     $T->parse('output', 'wizard');
@@ -312,7 +321,7 @@ if ( $step == "docheck" ) {
     $album = $_POST['dir'];
     ?>
 
-    <form method="post" id="options" action="<?php echo $_SERVER[ 'PHP_SELF' ]; ?>">
+    <form method="post" id="options" action="<?php echo htmlspecialchars($_SERVER[ 'PHP_SELF' ],ENT_QUOTES,COM_getEncodingt()); ?>">
     <input type="hidden" name="dir" value="<?php echo $album; ?>">
     <input type="hidden" name="manifest" value="" />
     <input type="hidden" name="step" value="check" />
@@ -349,7 +358,7 @@ if ( $step == "addit" ) {
 
     ?>
 
-    <form method="post" id="options" action="<?php echo $_SERVER[ 'PHP_SELF' ]; ?>">
+    <form method="post" id="options" action="<?php echo htmlspecialchars($_SERVER[ 'PHP_SELF' ],ENT_QUOTES,COM_getEncodingt()); ?>">
     <input type="hidden" name="dir" value="<?php echo $A['album_id']; ?>">
     <input type="hidden" name="manifest" value="" />
     <input type="hidden" name="step" value="options" />
@@ -398,7 +407,7 @@ if ($step == "create") {
         'lang_title'            => $LANG_MG01['album_title'],
         'lang_description'      => $LANG_MG01['description'],
         'lang_parent_album'     => $LANG_MG01['parent_album'],
-        's_form_action'         => $_SERVER[ 'PHP_SELF' ],
+        's_form_action'         => htmlspecialchars($_SERVER[ 'PHP_SELF' ],ENT_QUOTES,COM_getEncodingt()),
     ));
 
     $T->parse('output', 'wizard');
@@ -508,7 +517,7 @@ if ($step == "check")
                 }
 
                 $manifest .=
-                    '<post href="' . $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'PHP_SELF' ] . '" name="userfile">' .
+                    '<post href="' . $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . htmlspecialchars($_SERVER[ 'PHP_SELF' ],ENT_QUOTES,COM_getEncodingt()) . '" name="userfile">' .
                     '   <formdata name="MAX_FILE_SIZE">10000000</formdata>' .
                     '   <formdata name="step">upload</formdata>' .
                     '   <formdata name="todir">' . htmlspecialchars($_REQUEST[ 'dir' ]) . '</formdata>';

@@ -112,6 +112,7 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
 
             $msg = PLG_itemPreSave ('contact', $message);
             if (!empty ($msg)) {
+                $subject = @htmlspecialchars($subject,ENT_QUOTES,COM_getEncodingt());
                 $retval .= COM_siteHeader ('menu', '')
                         . COM_errorLog ($msg, 2)
                         . contactform ($uid, $subject, $message)
