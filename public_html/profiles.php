@@ -327,25 +327,28 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
 
     $storyurl = COM_buildUrl($_CONF['site_url'] . '/article.php?story=' . $sid);
     if ($_CONF['url_rewrite']) {
-        $retval = COM_refresh($storyurl . '?msg=85');
+        $retURL = $storyurl . '?msg=85';
     } else {
-        $retval = COM_refresh($storyurl . '&amp;msg=85');
+        $retURL = $storyurl . '&amp;msg=85';
     }
     // check for correct $_CONF permission
     if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
                              ($_CONF['emailstoryloginrequired'] == 1))) {
-        return $retval;
+        echo COM_refresh($retURL);
+        exit;
     }
 
     // check if emailing of stories is disabled
     if ($_CONF['hideemailicon'] == 1) {
-        return $retval;
+        echo COM_refresh($retURL);
+        exit;
     }
 
     // check mail speedlimit
     COM_clearSpeedlimit ($_CONF['speedlimit'], 'mail');
     if (COM_checkSpeedlimit ('mail') > 0) {
-        return $retval;
+        echo COM_refresh($retURL);
+        exit;
     }
 
     $sql = "SELECT uid,title,introtext,bodytext,commentcode,UNIX_TIMESTAMP(date) AS day,postmode FROM {$_TABLES['stories']} WHERE sid = '".DB_escapeString($sid)."'" . COM_getTopicSql('AND') . COM_getPermSql('AND');
@@ -430,7 +433,8 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
             $retval = COM_refresh($storyurl . '&amp;msg=26');
         }
     }
-    return $retval;
+    echo COM_refresh($retval);
+    exit;
 }
 
 /**
