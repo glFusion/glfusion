@@ -145,7 +145,7 @@ class mgAlbum {
         $this->tn_attached          = 0;
         $this->enable_slideshow     = $_MG_CONF['ad_enable_slideshow'];
         $this->enable_random        = $_MG_CONF['ad_enable_random'];
-        $this->enable_shutterfly    = $_MG_CONF['ad_enable_shutterfly'];
+        $this->enable_shutterfly    = 0; //$_MG_CONF['ad_enable_shutterfly'];
         $this->enable_views         = $_MG_CONF['ad_enable_views'];
         $this->enable_keywords      = $_MG_CONF['ad_enable_keywords'];
         $this->display_album_desc   = $_MG_CONF['ad_display_album_desc'];
@@ -218,7 +218,7 @@ class mgAlbum {
         $this->tn_attached      = $album['tn_attached'];
         $this->enable_slideshow = $album['enable_slideshow'];
         $this->enable_random    = $album['enable_random'];
-        $this->enable_shutterfly = $album['enable_shutterfly'];
+        $this->enable_shutterfly = 0; //$album['enable_shutterfly'];
         $this->enable_views     = $album['enable_views'];
         $this->enable_keywords  = $album['enable_keywords'];
         $this->enable_sort      = $album['enable_sort'];
