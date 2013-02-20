@@ -1637,6 +1637,7 @@ default:
         }
         $_USER['theme'] = $_CONF['theme'];
         COM_resetSpeedlimit('login');
+
         // let's see if we need to merge accounts
         if ( $checkMerge ) {
             $display = mergeAccountForm();

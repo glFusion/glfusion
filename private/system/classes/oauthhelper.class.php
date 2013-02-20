@@ -139,27 +139,11 @@ class OAuthConsumer {
    		$success = $this->client->Finalize($success);
 
     	if ($this->client->exit) {
-COM_errorLog("OAuth requested immediate exit");
     		exit;
     	}
     	if ($success) {
     	    return $user;
     	}
-
-        $url_photo = $this->url_userinfo_photo . '?' . http_build_query($params, null, '&');
-        $this->request->setUrl($url_photo);
-        // COM_errorLog("FB:sreq_serinfo_response() req3: " . $url_photo);
-        $response = $this->request->send();
-        if(($response->getStatus() == '302') AND ($response->getReasonPhrase() == 'Found')) {
-            $header = $response->getHeader();
-            $userinfo->photo_url = $header['location'];
-            // COM_errorLog("photo_url=" . $userinfo->photo_url);
-        } else {
-            $userinfo->photo_url = '';
-            // COM_errorLog("photo_url=(null)");
-        }
-
-
     }
 
     public function setRedirectURL($url) {
@@ -174,9 +158,6 @@ COM_errorLog("OAuth requested immediate exit");
         return $this->consumer->getErrorMsg();
     }
 
-    public function doSynch($info) {
-        $this->consumer->doSynch($info);
-    }
 
     protected function _getUpdateUserInfo($info) {
         $userinfo = array();
@@ -198,6 +179,8 @@ COM_errorLog("OAuth requested immediate exit");
             case 'yahoo' :
                 break;
         }
+
+
         return $userinfo;
     }
 
@@ -215,7 +198,7 @@ COM_errorLog("OAuth requested immediate exit");
                     'homepage'       => $info->link,
                     'remoteusername' => DB_escapeString($info->id),
                     'remoteservice'  => 'oauth.facebook',
-//                    'remotephoto'    => $info->photo_url,
+                    'remotephoto'    => 'http://graph.facebook.com/'.$info->id.'/picture',
                 );
                 break;
             case 'google' :
@@ -245,6 +228,7 @@ COM_errorLog("OAuth requested immediate exit");
                 );
                 break;
         }
+
         return $users;
     }
 
@@ -275,29 +259,23 @@ COM_errorLog("OAuth requested immediate exit");
             $checkName = DB_getItem($_TABLES['users'], 'username', "username='".DB_escapeString($loginname)."'");
             if (!empty($checkName)) {
                 if (function_exists('CUSTOM_uniqueRemoteUsername')) {
-                    // COM_errorLog("CUSTOM_uniqueRemoteUserName function exists, calling it");
                     $loginname = CUSTOM_uniqueRemoteUsername(loginname, $remoteservice);
                 }
                 if (strcasecmp($checkName,$loginname) == 0) {
-                    // COM_errorLog("remoteusername is not unique, using USER_uniqueUsername() to create one");
                     $loginname = USER_uniqueUsername($loginname);
                 }
             }
             $users['loginname'] = $loginname;
             $uid = USER_createAccount($users['loginname'], $users['email'], '', $users['fullname'], $users['homepage'], $users['remoteusername'], $users['remoteservice']);
-            // COM_errorLog("after creation, uid={$uid}");
 
-            // COM_errorLog("updating users[]");
             if (is_array($users)) {
                 $this->_DBupdate_users($uid, $users);
             }
 
-            // COM_errorLog("updating userinfo[]");
             if (is_array($userinfo)) {
                 $this->_DBupdate_userinfo($uid, $userinfo);
             }
 
-            // COM_errorLog("adding uid={$uid} to Remote Users group");
             $remote_grp = DB_getItem($_TABLES['groups'], 'grp_id', "grp_name = 'Remote Users'");
             DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ($remote_grp, $uid)");
             $checkMerge = true;
@@ -318,262 +296,26 @@ COM_errorLog("OAuth requested immediate exit");
 
     protected function _DBupdate_userinfo($uid, $userinfo) {
         global $_TABLES;
-        // COM_errorLog("_DBupdate_userinfo()-----------------");
         if (!empty($userinfo['about']) || !empty($userinfo['location'])) {
-            // COM_errorLog("userinfo update needed");
-            // COM_errorLog("userinfo[about]={$userinfo['about']}");
-            // COM_errorLog("userinfo[location]={$userinfo['location']}");
             $sql = "UPDATE {$_TABLES['userinfo']} SET";
             $sql .= !empty($userinfo['about']) ? " about = '".DB_escapeString($userinfo['about'])."'" : "";
             $sql .= (!empty($userinfo['about']) && !empty($userinfo['location'])) ? "," : "";
             $sql .= !empty($userinfo['location']) ? " location = '".DB_escapeString($userinfo['location'])."'" : "";
             $sql .= " WHERE uid = ".(int) $uid;
-            // COM_errorLog("sql={$sql}");
             DB_query($sql);
         }
     }
 
     protected function _DBupdate_users($uid, $users) {
         global $_TABLES, $_CONF;
-        // COM_errorLog("_DBupdate_users()---------------------");
-        $sql = "UPDATE {$_TABLES['users']} SET remoteusername = '".DB_escapeString($users['remoteusername'])."', remoteservice = '".DB_escapeString($users['remoteservice'])."', status = 3";
-//        if (!empty($users['remotephoto'])) {
-//            // COM_errorLog("saving userphoto");
-//            $save_img = $_CONF['path_images'] . 'userphotos/' . $uid ;
-//            // COM_errorLog("from={$users['remotephoto']} to={$save_img}");
-//            $imgsize = $this->_saveUserPhoto($users['remotephoto'], $save_img);
-//            // COM_errorLog("imgsize={$imgsize}");
-//            if (!empty($imgsize)) {
-//                $ext = $this->_getImageExt($save_img);
-//                // COM_errorLog("image_ext={$ext}");
-//                $image = $save_img . $ext;
-//                // if a userphoto exists, delete it
-//                if (file_exists($image)) {
-//                    unlink($image);
-//                }
-//                rename($save_img, $image);
-//                $imgname = $uid . $ext;
-//                $sql .= ", photo = '".DB_escapeString($imgname)."'";
-//            }
-//        }
-        $sql .= " WHERE uid = ".(int) $uid;
-        // COM_errorLog("sql={$sql}");
-        DB_query($sql);
-    }
 
-}
-
-class OAuthConsumerBaseClass {
-    protected $request = '';
-    protected $consumer = '';
-    protected $errormsg = '';
-    protected $shortapi = 'http://api.tr.im/api/trim_url.xml';
-    public $consumer_key = '';
-    public $consumer_secret = '';
-    public $url_requestToken = '';
-    public $url_authorize = '';
-    public $url_accessToken = '';
-    public $url_userinfo = '';
-    public $method_requestToken = 'GET';
-    public $method_accessToken = 'GET';
-    public $method_userinfo = 'GET';
-    public $cookietimeout = 300;    // google Callbacks 5min
-    public $token = '';
-    public $token_secret = '';
-    public $callback_query_string = 'oauth_verifier';
-    public $cancel_query_string = '';
-
-    public function __construct () {
-        $httpRequest = new HTTP_Request2;
-        $httpRequest->setConfig('ssl_verify_peer', false);
-        $httpRequest->setHeader('Accept-Encoding', '.*');
-        $this->request = new HTTP_OAuth_Consumer_Request;
-        $this->request->accept($httpRequest);
-    }
-
-    public function find_identity_info($callback_url, $query) {
-        $url = '';
-
-        try {
-            $this->consumer = new HTTP_OAuth_Consumer($this->consumer_key, $this->consumer_secret);
-            $this->consumer->accept($this->request);
-
-            $this->consumer->getRequestToken($this->url_requestToken, $callback_url, array(), $this->method_requestToken);
-            $timeout = time() + $this->cookietimeout;
-            SEC_setCookie('request_token', $this->consumer->getToken(), $timeout);
-            SEC_setCookie('request_token_secret', $this->consumer->getTokenSecret(), $timeout);
-
-            $url = $this->consumer->getAuthorizeUrl($this->url_authorize);
-
-        } catch (HTTP_OAuth_Consumer_Exception_Invalid_Response $e) {
-            $this->errormsg = get_class($e) . ': ' . $e->getBody();
-        } catch (Exception $e) {
-            $this->errormsg = get_class($e) . ': ' . $e->getMessage();
-        }
-        return $url;
-    }
-
-    public function sreq_userinfo_response($query) {
-        $userinfo = array();
-
-        // COM_errorLog("BASE:sreq_userinfo_response()------------------");
-        try {
-            $this->token = (isset($_COOKIE['request_token']) ? $_COOKIE['request_token'] : '');
-            $this->token_secret = (isset($_COOKIE['request_token_secret']) ? $_COOKIE['request_token_secret'] : '');
-            $verifier = $query[$this->callback_query_string];
-            // clear cookies
-            SEC_setCookie('request_token', '', time() - 10000);
-            SEC_setCookie('request_token_secret', '', time() - 10000);
-            $this->consumer = new HTTP_OAuth_Consumer($this->consumer_key, $this->consumer_secret, $this->token, $this->token_secret);
-            $this->consumer->accept($this->request);
-
-            $this->consumer->getAccessToken($this->url_accessToken, $verifier, array(), $this->method_accessToken);
-
-            $this->token = $this->consumer->getToken();
-            $this->token_secret = $this->consumer->getTokenSecret();
-
-            $this->consumer->setToken($this->token);
-            $this->consumer->setTokenSecret($this->token_secret);
-
-            $response = $this->consumer->sendRequest($this->url_userinfo, array(), $this->method_userinfo);
-            if ($response->getStatus() !== 200) {
-                $this->errormsg = $response->getStatus() . ' : ' . $response->getBody();
-            } else {
-                $userinfo = simplexml_load_string($response->getBody());
-            }
-        } catch (HTTP_OAuth_Consumer_Exception_Invalid_Response $e) {
-            $this->errormsg = get_class($e) . ': ' . $e->getBody();
-        } catch (Exception $e) {
-            $this->errormsg = get_class($e) . ': ' . $e->getMessage();
-        }
-        return $userinfo;
-    }
-
-    public function doSynch($info) {
-        global $_TABLES, $_USER, $status, $uid, $_CONF;
-
-        // COM_errorLog("doSynch() method ------------------");
-
-        // remote auth precludes usersubmission and integrates user activation
-
-        $users = $this->_getCreateUserInfo($info);
-        $userinfo = $this->_getUpdateUserInfo($info);
-
-        $updatecolumns = '';
-
-        // Update users
-        if (is_array($users)) {
-            $sql = "UPDATE {$_TABLES['users']} SET ";
-            if (!empty($users['fullname'])) {
-                $updatecolumns .= "fullname='".DB_escapeString($users['fullname'])."'";
-            }
-            if (!empty($users['email'])) {
-                if (!empty($updatecolumns)) { $updatecolumns .= ", "; }
-                $updatecolumns .= "email='".DB_escapeString($users['email'])."'";
-            }
-            if (!empty($users['homepage'])) {
-                if (!empty($updatecolumns)) { $updatecolumns .= ", "; }
-                $updatecolumns .= "homepage='".DB_escapeString($users['homepage'])."'";
-            }
-            $sql = $sql . $updatecolumns . " WHERE uid=" . (int) $_USER['uid'];
-
-            DB_query($sql);
-
-            // Update rest of users info
-            $this->_DBupdate_users($_USER['uid'], $users);
-        }
-
-        // Update userinfo
-        if (is_array($userinfo)) {
-            $this->_DBupdate_userinfo($_USER['uid'], $userinfo);
-        }
-
-    }
-
-    public function doAction($info) {
-
-        global $_TABLES, $status, $uid, $_CONF, $checkMerge;
-
-        // COM_errorLog("doAction() method ------------------");
-
-        // remote auth precludes usersubmission, and integrates user activation
-        $status = USER_ACCOUNT_ACTIVE;
-
-        $users = $this->_getCreateUserInfo($info);
-        $userinfo = $this->_getUpdateUserInfo($info);
-
-        $sql = "SELECT uid,status FROM {$_TABLES['users']} WHERE remoteusername = '".DB_escapeString($users['remoteusername'])."' AND remoteservice = '".DB_escapeString($users['remoteservice'])."'";
-        // COM_errorLog("sql={$sql}");
-        $result = DB_query($sql);
-        $tmp = DB_error();
-        // COM_errorLog("DB_error={$tmp}");
-        $nrows = DB_numRows($result);
-        // COM_errorLog("DB_numRows={$nrows}");
-        if (empty($tmp) && $nrows == 1) {
-            list($uid, $status) = DB_fetchArray($result);
-            $checkMerge = false;
-            // COM_errorLog("user found!  uid={$uid} status={$status}");
-        } else {
-            // COM_errorLog("user not found - creating new account");
-            // initial login - create account
-            $status = USER_ACCOUNT_ACTIVE;
-            $loginname = $users['loginname'];
-            // COM_errorLog("checking remoteusername for uniqueness");
-            $checkName = DB_getItem($_TABLES['users'], 'username', "username='".DB_escapeString($loginname)."'");
-            if (!empty($checkName)) {
-                if (function_exists('CUSTOM_uniqueRemoteUsername')) {
-                    // COM_errorLog("CUSTOM_uniqueRemoteUserName function exists, calling it");
-                    $loginname = CUSTOM_uniqueRemoteUsername(loginname, $remoteservice);
-                }
-                if (strcasecmp($checkName,$loginname) == 0) {
-                    // COM_errorLog("remoteusername is not unique, using USER_uniqueUsername() to create one");
-                    $loginname = USER_uniqueUsername($loginname);
-                }
-            }
-            $users['loginname'] = $loginname;
-            $uid = USER_createAccount($users['loginname'], $users['email'], '', $users['fullname'], $users['homepage'], $users['remoteusername'], $users['remoteservice']);
-            // COM_errorLog("after creation, uid={$uid}");
-
-            // COM_errorLog("updating users[]");
-            if (is_array($users)) {
-                $this->_DBupdate_users($uid, $users);
-            }
-
-            // COM_errorLog("updating userinfo[]");
-            if (is_array($userinfo)) {
-                $this->_DBupdate_userinfo($uid, $userinfo);
-            }
-
-            // COM_errorLog("adding uid={$uid} to Remote Users group");
-            $remote_grp = DB_getItem($_TABLES['groups'], 'grp_id', "grp_name = 'Remote Users'");
-            DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ($remote_grp, $uid)");
-            $checkMerge = true;
-            // usercreate after trigger
-            if (method_exists($this, '_after_trigger')) {
-                $this->_after_trigger($uid, $users, $userinfo);
-            }
-        }
-    }
-
-    public function getErrorMsg() {
-        return $this->errormsg;
-    }
-
-    protected function _DBupdate_users($uid, $users) {
-        global $_TABLES, $_CONF;
-        // COM_errorLog("_DBupdate_users()---------------------");
-        $sql = "UPDATE {$_TABLES['users']} SET remoteusername = '".DB_escapeString($users['remoteusername'])."', remoteservice = '".DB_escapeString($users['remoteservice'])."', status = 3";
+        $sql = "UPDATE {$_TABLES['users']} SET remoteusername = '".DB_escapeString($users['remoteusername'])."', remoteservice = '".DB_escapeString($users['remoteservice'])."', status = 3 ";
         if (!empty($users['remotephoto'])) {
-            // COM_errorLog("saving userphoto");
             $save_img = $_CONF['path_images'] . 'userphotos/' . $uid ;
-            // COM_errorLog("from={$users['remotephoto']} to={$save_img}");
             $imgsize = $this->_saveUserPhoto($users['remotephoto'], $save_img);
-            // COM_errorLog("imgsize={$imgsize}");
             if (!empty($imgsize)) {
                 $ext = $this->_getImageExt($save_img);
-                // COM_errorLog("image_ext={$ext}");
                 $image = $save_img . $ext;
-                // if a userphoto exists, delete it
                 if (file_exists($image)) {
                     unlink($image);
                 }
@@ -583,25 +325,7 @@ class OAuthConsumerBaseClass {
             }
         }
         $sql .= " WHERE uid = ".(int) $uid;
-        // COM_errorLog("sql={$sql}");
         DB_query($sql);
-    }
-
-    protected function _DBupdate_userinfo($uid, $userinfo) {
-        global $_TABLES;
-        // COM_errorLog("_DBupdate_userinfo()-----------------");
-        if (!empty($userinfo['about']) || !empty($userinfo['location'])) {
-            // COM_errorLog("userinfo update needed");
-            // COM_errorLog("userinfo[about]={$userinfo['about']}");
-            // COM_errorLog("userinfo[location]={$userinfo['location']}");
-            $sql = "UPDATE {$_TABLES['userinfo']} SET";
-            $sql .= !empty($userinfo['about']) ? " about = '".DB_escapeString($userinfo['about'])."'" : "";
-            $sql .= (!empty($userinfo['about']) && !empty($userinfo['location'])) ? "," : "";
-            $sql .= !empty($userinfo['location']) ? " location = '".DB_escapeString($userinfo['location'])."'" : "";
-            $sql .= " WHERE uid = ".(int) $uid;
-            // COM_errorLog("sql={$sql}");
-            DB_query($sql);
-        }
     }
 
     protected function _saveUserPhoto($from, $to) {
@@ -653,7 +377,46 @@ class OAuthConsumerBaseClass {
         }
     }
 
-}
+    public function doSynch($info) {
+        global $_TABLES, $_USER, $status, $uid, $_CONF;
 
+        // COM_errorLog("doSynch() method ------------------");
+
+        // remote auth precludes usersubmission and integrates user activation
+
+        $users = $this->_getCreateUserInfo($info);
+        $userinfo = $this->_getUpdateUserInfo($info);
+
+        $updatecolumns = '';
+
+        // Update users
+        if (is_array($users)) {
+            $sql = "UPDATE {$_TABLES['users']} SET ";
+            if (!empty($users['fullname'])) {
+                $updatecolumns .= "fullname='".DB_escapeString($users['fullname'])."'";
+            }
+            if (!empty($users['email'])) {
+                if (!empty($updatecolumns)) { $updatecolumns .= ", "; }
+                $updatecolumns .= "email='".DB_escapeString($users['email'])."'";
+            }
+            if (!empty($users['homepage'])) {
+                if (!empty($updatecolumns)) { $updatecolumns .= ", "; }
+                $updatecolumns .= "homepage='".DB_escapeString($users['homepage'])."'";
+            }
+            $sql = $sql . $updatecolumns . " WHERE uid=" . (int) $_USER['uid'];
+
+            DB_query($sql);
+
+            // Update rest of users info
+            $this->_DBupdate_users($_USER['uid'], $users);
+        }
+
+        // Update userinfo
+        if (is_array($userinfo)) {
+            $this->_DBupdate_userinfo($_USER['uid'], $userinfo);
+        }
+
+    }
+}
 
 ?>

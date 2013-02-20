@@ -1131,11 +1131,7 @@ function saveuser($A)
         // at this point, the user information has been saved, but now we're going to check to see if
         // the user has requested resynchronization with their remoteservice account
         $msg = 5; // default msg = Your account information has been successfully saved
-        if (isset($A['resynch'])) {
-            // COM_errorLog("remote service resynch requested --------------");
-            // COM_errorLog("upon entry, _COOKIE[request_token]={$_COOKIE['request_token']}");
-            // COM_errorLog("upon entry, _COOKIE[request_token_secret]={$_COOKIE['request_token_secret']}");
-
+        if (isset($A['resynch']) ) {
             if ($_CONF['user_login_method']['oauth'] && (strpos($_USER['remoteservice'], 'oauth.') === 0)) {
                 $modules = SEC_collectRemoteOAuthModules();
                 $active_service = (count($modules) == 0) ? false : in_array(substr($_USER['remoteservice'], 6), $modules);
@@ -1143,27 +1139,13 @@ function saveuser($A)
                     $status = -1;
                     $msg = 115; // Remote service has been disabled.
                 } else {
-                    $query[] = '';
-                    $callback_url = $_CONF['site_url'] . '/usersettings.php?mode=synch&oauth_login=' . $service;
-
-                    if($service == 'oauth.facebook') {
-                        // Facebook does sync after refresh
-                        return COM_refresh($callback_url);
-                    } else {
-                        // other OAuth services use reauth/callback method
-                        require_once $_CONF['path_system'] . 'classes/oauthhelper.class.php';
-
-                        $consumer = new OAuthConsumer($service);
-                        $url = $consumer->find_identity_info($callback_url, $query);
-                        // COM_errorLog("authentication url={$url}");
-                        if (empty($url)) {
-                            $msg = 110; // Can not get URL for authentication.'
-                            COM_errorLog($MESSAGE[$msg]);
-                        } else {
-                            header('Location: ' . $url);
-                            exit;
-                        }
-                    }
+                    require_once $_CONF['path_system'] . 'classes/oauthhelper.class.php';
+                    $service = substr($_USER['remoteservice'], 6);
+                    $consumer = new OAuthConsumer($service);
+                    $callback_url = $_CONF['site_url'];
+                    $consumer->setRedirectURL($callback_url);
+                    $user = $consumer->authenticate_user();
+                    $consumer->doSynch($user);
                 }
             }
 
