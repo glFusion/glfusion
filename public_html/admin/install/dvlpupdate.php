@@ -741,20 +741,41 @@ function glfusion_130()
         $c->add('facebook_consumer_key','not configured yet','text',4,16,NULL,351,TRUE);
         $c->add('facebook_consumer_secret','not configured yet','text',4,16,NULL,352,TRUE);
     }
-/*
-    $c->add('linkedin_login',0,'select',4,16,1,353,TRUE);
-    $c->add('linkedin_consumer_key','not configured yet','text',4,16,NULL,354,TRUE);
-    $c->add('linkedin_consumer_secret','not configured yet','text',4,16,NULL,355,TRUE);
-    $c->add('twitter_login',0,'select',4,16,1,356,TRUE);
-    $c->add('twitter_consumer_key','not configured yet','text',4,16,NULL,357,TRUE);
-    $c->add('twitter_consumer_secret','not configured yet','text',4,16,NULL,358,TRUE);
-*/
-    $c->del('linkedin_login','Core');
-    $c->del('linkedin_consumer_key','Core');
-    $c->del('linkedin_consumer_secret','Core');
-    $c->del('twitter_login','Core');
-    $c->del('twitter_consumer_key','Core');
-    $c->del('twitter_consumer_secret','Core');
+    if ( !isset($_CONF['google_login']) ) {
+        $c->add('google_login',0,'select',4,16,1,353,TRUE);
+        $c->add('google_consumer_key','not configured yet','text',4,16,NULL,354,TRUE);
+        $c->add('google_consumer_secret','not configured yet','text',4,16,NULL,355,TRUE);
+    }
+/* ---
+    if ( !isset($_CONF['yahoo_login']) ) {
+        $c->add('yahoo_login',0,'select',4,16,1,356,TRUE);
+        $c->add('yahoo_consumer_key','not configured yet','text',4,16,NULL,357,TRUE);
+        $c->add('yahoo_consumer_secret','not configured yet','text',4,16,NULL,358,TRUE);
+    }
+    if ( !isset($_CONF['microsoft_login']) ) {
+        $c->add('microsoft_login',0,'select',4,16,1,357,TRUE);
+        $c->add('microsoft_consumer_key','not configured yet','text',4,16,NULL,358,TRUE);
+        $c->add('microsoft_consumer_secret','not configured yet','text',4,16,NULL,359,TRUE);
+    }
+-- */
+    if ( !isset($_CONF['linkedin_login']) ) {
+        $c->add('linkedin_login',0,'select',4,16,1,358,TRUE);
+        $c->add('linkedin_consumer_key','not configured yet','text',4,16,NULL,359,TRUE);
+        $c->add('linkedin_consumer_secret','not configured yet','text',4,16,NULL,360,TRUE);
+    }
+
+    if ( !isset($_CONF['twitter_login']) ) {
+        $c->add('twitter_login',0,'select',4,16,1,361,TRUE);
+        $c->add('twitter_consumer_key','not configured yet','text',4,16,NULL,362,TRUE);
+        $c->add('twitter_consumer_secret','not configured yet','text',4,16,NULL,363,TRUE);
+    }
+
+    $c->del('yahoo_login','Core');
+    $c->del('yahoo_consumer_key','Core');
+    $c->del('yahoo_consumer_secret','Core');
+    $c->del('microsoft_login','Core');
+    $c->del('microsoft_consumer_key','Core');
+    $c->del('microsoft_consumer_secret','Core');
 
     // date / time format changes
 

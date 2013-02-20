@@ -1074,7 +1074,7 @@ with an <a href="http://oauth.net/">OAuth</a>-based service (eg. Facebook, Linke
 and others) to log into your glFusion site with the credentials they have established with that
 service. Enabling this option result in the display of one or more service-specific login buttons
 in the site login dialog(s).<br /><b>Note:</b> Currently only OAuth 1.0 is supported. Current
-OAuth services that are supported include: Facebook, Twitter and LinkedIn. The OpenSSL PHP
+OAuth services that are supported include: Facebook, Google, Twitter and LinkedIn. The OpenSSL PHP
 extension (php_openssl) must also be installed and enabled on your webserver. Please refer to our
 <a href="http://www.glfusion.org/wiki/doku.php/glfusion:remoteauth#oauth_support"
 target="_blank">glFusion Remote Authentication wiki page</a> for more information.</td>
@@ -1123,6 +1123,7 @@ create a Secret Key (consumer secret) string that is specific to your site/URL. 
 <a href="http://www.glfusion.org/wiki/doku.php/glfusion:remoteauth#oauth_support"
 target="_blank">glFusion Remote Authentication wiki page</a> for more information.</td>
 </tr>
+
 <tr class="row19">
 <td class="col0 leftalign"><a name="desc_twitter_login">Enable Twitter OAuth Login Method</a></td>
 <td class="col1 leftalign">Allow (when set to true) users to login to the site using their Twitter
@@ -1132,7 +1133,7 @@ your site.</td>
 <tr class="row20">
 <td class="col0 leftalign"><a name="desc_twitter_consumer_key">Twitter OAuth Consumer Key</a></td>
 <td class="col1 leftalign">Required to use the Twitter OAuth login method. Please visit the
-<a href="https://twitter.com/apps" target="_blank">Twitter Application Page</a> to create a
+<a href="https://dev.twitter.com/apps/" target="_blank">Twitter Application Page</a> to create a
 Twitter Consumer Key string that is specific to your site/URL.
 Please refer to our <a href="http://www.glfusion.org/wiki/doku.php/glfusion:remoteauth#oauth_support"
 target="_blank">glFusion Remote Authentication wiki page</a> for more information.</td>
@@ -1140,12 +1141,34 @@ target="_blank">glFusion Remote Authentication wiki page</a> for more informatio
 <tr class="row21">
 <td class="col0 leftalign"><a name="desc_twitter_consumer_secret">Twitter OAuth Consumer Secret</a></td>
 <td class="col1 leftalign">Required to use the Twitter OAuth login method. Please visit the
-<a href="https://twitter.com/apps" target="_blank">Twitter Application Page</a> to create a
+<a href="https://dev.twitter.com/apps/" target="_blank">Twitter Application Page</a> to create a
 Twitter Consumer Secret string that is specific to your site/URL. Please refer to our
 <a href="http://www.glfusion.org/wiki/doku.php/glfusion:remoteauth#oauth_support"
 target="_blank">glFusion Remote Authentication wiki page</a> for more information.</td>
 </tr>
 <tr class="row22">
+<td class="col0 leftalign"><a name="desc_google_login">Enable Google OAuth Login Method</a></td>
+<td class="col1 leftalign">Allow (when set to true) users to login to the site using their Google
+account credentials. <b>Note:</b> You must create a Google Consumer Key and Consumer Secret for
+your site.</td>
+</tr>
+<tr class="row23">
+<td class="col0 leftalign"><a name="desc_google_consumer_key">Google OAuth Consumer Key</a></td>
+<td class="col1 leftalign">Required to use the Google OAuth login method. Please visit the
+<a href="http://code.google.com/apis/console" target="_blank">Google Application Page</a> to create a
+Google Consumer Key string that is specific to your site/URL.
+Please refer to our <a href="http://www.glfusion.org/wiki/doku.php/glfusion:remoteauth#oauth_support"
+target="_blank">glFusion Remote Authentication wiki page</a> for more information.</td>
+</tr>
+<tr class="row24">
+<td class="col0 leftalign"><a name="desc_google_consumer_secret">Google OAuth Consumer Secret</a></td>
+<td class="col1 leftalign">Required to use the Google OAuth login method. Please visit the
+<a href="http://code.google.com/apis/console" target="_blank">Google Application Page</a> to create a
+Twitter Consumer Secret string that is specific to your site/URL. Please refer to our
+<a href="http://www.glfusion.org/wiki/doku.php/glfusion:remoteauth#oauth_support"
+target="_blank">glFusion Remote Authentication wiki page</a> for more information.</td>
+</tr>
+<tr class="row25">
 <td class="col0 leftalign"><a name="desc_aftersave_user">After Saving User</a> </td>
 <td class="col1 leftalign">Which page to go to after
 a user has been saved: <br />

@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2012 by the following authors:                        |
+// | Copyright (C) 2009-2013 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -365,7 +365,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
             $values .= ',' . USER_ACCOUNT_AWAITING_APPROVAL;
         }
     } else {
-        if ($_CONF['registration_type'] == 1 ) { // && (empty($remoteusername) || empty($service))) {
+        if (($_CONF['registration_type'] == 1 ) && (empty($remoteusername) || empty($service))) {
             $fields .= ',status';
             $values .= ',' . USER_ACCOUNT_AWAITING_VERIFICATION;
         }

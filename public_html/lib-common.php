@@ -1127,8 +1127,8 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
                     $format_name = ucwords( $format[0] );
 
                     $feed_url[] = '<link rel="alternate" type="application/'
-                              . $format_type . '+xml" hreflang="' . $A['language']
-                              . '" href="' . $baseurl . $A['filename'] . '" title="'
+                              . $format_type . '+xml"'
+                              . ' href="' . $baseurl . $A['filename'] . '" title="'
                               . $format_name . ' Feed: ' . $A['title'] . '"/>';
                 }
             }

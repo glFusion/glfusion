@@ -1909,6 +1909,10 @@ function USER_batchAdmin()
         $usr_type = 'phantom';
     }
 
+    if (!in_array($usr_type,array('phantom','sort','old','recent')) ) {
+        $usr_type = 'phantom';
+    }
+
     $usr_time_arr = array();
     $usr_time = '';
     $usr_time_arr['phantom'] = 2;

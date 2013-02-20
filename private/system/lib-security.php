@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2012 by the following authors:                        |
+// | Copyright (C) 2009-2013 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -2090,7 +2090,6 @@ function SEC_loginForm($use_options = array())
                 $loginform->set_var('oauth_service', $service);
                 // for sign in image
                 $loginform->set_var('oauth_sign_in_image', $_CONF['site_url'] . '/images/login-with-' . $service . '.png');
-                $loginform->set_var('oauth_sign_in_image_style', '');
                 $loginform->parse('output', 'oauth_login');
                 $html_oauth .= $loginform->finish($loginform->get_var('output'));
             }
@@ -2139,7 +2138,32 @@ function SEC_collectRemoteOAuthModules()
 {
     global $_CONF;
 
+//    $available_modules = array('facebook','google','microsoft','yahoo','twitter');
+    $available_modules = array('facebook','google','twitter');
+
     $modules = array();
+
+    if (extension_loaded('openssl')) {
+        foreach ($available_modules as $mod) {
+            if (isset($_CONF[$mod . '_login'])) {
+                if ($_CONF[$mod . '_login']) {
+                    // Now check if a Consumer Key and Secret exist and are set
+                    if (isset($_CONF[$mod . '_consumer_key'])) {
+                        if ($_CONF[$mod . '_consumer_key'] != '') {
+                            if (isset($_CONF[$mod . '_consumer_secret'])) {
+                                if ($_CONF[$mod . '_consumer_secret'] != '') {
+                                    $modules[] = $mod;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return $modules;
+
+
 
     // Check for OpenSSL PHP extension which is required
     if (extension_loaded('openssl')) {

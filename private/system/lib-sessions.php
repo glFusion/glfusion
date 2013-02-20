@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2011 by the following authors:                        |
+// | Copyright (C) 2009-2013 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -509,7 +509,6 @@ function SESS_completeLogin($uid)
     // build the $_USER array
     $userdata = SESS_getUserDataFromId($uid);
     $_USER = $userdata;
-
     // save old session data
     $savedSessionData = $_SESSION;
 

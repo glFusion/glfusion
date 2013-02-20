@@ -1005,7 +1005,7 @@ function mergeAccountForm($msg='')
  */
 function mergeaccounts()
 {
-    global $_CONF, $_TABLES, $_USER, $LANG20;
+    global $_CONF, $_SYSTEM, $local_login, $_TABLES, $_USER, $LANG20;
 
 /*
  To merge the user accounts we need all attributes from both accounts
@@ -1593,11 +1593,6 @@ default:
         } else {
             $query = array_merge($_GET, $_POST);
             $service = $query['oauth_login'];
-            // COM_errorLog("--------------------------------------------------------------");
-            // COM_errorLog("users.php?oauth_login={$service}");
-            // COM_errorLog("--------------------------------------------------------------");
-            // COM_errorLog("upon entry, COOKIE[request_token]={$_COOKIE['request_token']}");
-            // COM_errorLog("upon entry, COOKIE[request_token_secret]={$_COOKIE['request_token_secret']}");
 
             COM_clearSpeedlimit($_CONF['login_speedlimit'], $service);
             if (COM_checkSpeedlimit($service, $_CONF['login_attempts']) > 0) {
@@ -1608,60 +1603,19 @@ default:
 
             $consumer = new OAuthConsumer($service);
 
-            // setup what we need to callback and authenticate
-            $callback_query_string = $consumer->getCallback_query_string();
-            // COM_errorLog("callback_query_string={$callback_query_string}");
-            $cancel_query_string = $consumer->getCancel_query_string();
-            // COM_errorLog("cancel_query_string={$cancel_query_string}");
             $callback_url = $_CONF['site_url'] . '/users.php?oauth_login=' . $service;
-            // COM_errorLog("callback_url={$callback_url}");
 
-            // authenticate with the remote service
-            if (!isset($query[$callback_query_string]) && (empty($cancel_query_string) || !isset($query[$cancel_query_string]))) {
-                // COM_errorLog("authenticating with {$service}");
-                $url = $consumer->find_identity_info($callback_url, $query);
-                // COM_errorLog("after find_identity_info, url={$url}");
-                if (empty($url)) {
-                    COM_updateSpeedlimit('login');
-                    COM_updateSpeedlimit($service);
-                    echo COM_refresh($_CONF['site_url'] . '/users.php?msg=110'); // Unable to retrieve OAuth authentication URL
-                    COM_errorLog($MESSAGE[110]);
-                    exit;
-                } else {
-                    // COM_errorLog("attempting remote service login");
-                    // COM_errorLog("redirecting to authentication URL={$url}");
-                    header('Location: ' . $url); // refresh to the OAuth remote service authentication dialog
-                    exit;
-                }
-
-            // elseif the callback query string is set, then we have successfully authenticated
-            } elseif (isset($query[$callback_query_string])) {
-                // COM_errorLog("authenticated with remote service, retrieve userinfo");
-                $oauth_userinfo = $consumer->sreq_userinfo_response($query);
-                if (empty($oauth_userinfo)) {
-                    COM_updateSpeedlimit('login');
-                    echo COM_refresh($_CONF['site_url'] . '/users.php?msg=111'); // OAuth authentication error
-                    COM_errorLog($MESSAGE[111]);
-                    // COM_errorLog("error: unable to retrieve essential userinfo");
-                    exit;
-                } else {
-                    // COM_errorLog("userinfo retrieved.");
-                    // foreach($oauth_userinfo as $key=>$value) {
-                    //     COM_errorLog("oauth_user_info[{$key}]=set");
-                    // }
-                    $consumer->doAction($oauth_userinfo);
-                }
-            } elseif (!empty($cancel_query_string) && isset($query[$cancel_query_string])) {
+            $consumer->setRedirectURL($callback_url);
+            $oauth_userinfo = $consumer->authenticate_user();
+            if ( $oauth_userinfo === false ) {
                 COM_updateSpeedlimit('login');
-                echo COM_refresh($_CONF['site_url'] . '/users.php?msg=112'); // OAuth certification has been cancelled
-                COM_errorLog($MESSAGE[112]);
-                exit;
-            } else {
-                COM_updateSpeedlimit('login');
-                echo COM_refresh($_CONF['site_url'] . '/users.php?msg=91'); // You specified an invalid identity URL
-                COM_errorLog($MESSAGE[91]);
+                COM_errorLog($MESSAGE[111]);
+                echo COM_refresh($_CONF['site_url'] . '/users.php?msg=111'); // OAuth authentication error
                 exit;
             }
+
+            $consumer->doAction($oauth_userinfo);
+
         }
 
     //  end OAuth authentication method(s)
@@ -1669,6 +1623,7 @@ default:
     } else {
         $status = -2;
     }
+
     if ($status == USER_ACCOUNT_ACTIVE || $status == USER_ACCOUNT_AWAITING_ACTIVATION ) { // logged in AOK.
         SESS_completeLogin($uid);
         $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
