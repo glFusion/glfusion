@@ -39,9 +39,6 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-// PEAR class to handle HTTP-Request2
-require_once 'HTTP/Request2.php';
-
 require_once $_CONF['path'] . 'lib/http/http.php';
 require_once $_CONF['path'] . 'lib/oauth/oauth_client.php';
 
@@ -155,12 +152,91 @@ class OAuthConsumer {
             $this->client->redirect_uri  = $url;
     }
 
-    public function refresh_userinfo() {
-        return $this->consumer->refresh_userinfo();
+    public function doAction($info) {
+        global $_TABLES, $status, $uid, $_CONF, $checkMerge;
+
+        // remote auth precludes usersubmission, and integrates user activation
+        $status = USER_ACCOUNT_ACTIVE;
+
+        $users      = $this->_getCreateUserInfo($info);
+        $userinfo   = $this->_getUpdateUserInfo($info);
+
+        $sql = "SELECT uid,status FROM {$_TABLES['users']} WHERE remoteusername = '".DB_escapeString($users['remoteusername'])."' AND remoteservice = '".DB_escapeString($users['remoteservice'])."'";
+
+        $result = DB_query($sql);
+        $tmp = DB_error();
+        $nrows = DB_numRows($result);
+
+        if (empty($tmp) && $nrows == 1) {
+            list($uid, $status) = DB_fetchArray($result);
+            $checkMerge = false;
+        } else {
+            // initial login - create account
+            $status = USER_ACCOUNT_ACTIVE;
+            $loginname = $users['loginname'];
+            $checkName = DB_getItem($_TABLES['users'], 'username', "username='".DB_escapeString($loginname)."'");
+            if (!empty($checkName)) {
+                if (function_exists('CUSTOM_uniqueRemoteUsername')) {
+                    $loginname = CUSTOM_uniqueRemoteUsername(loginname, $remoteservice);
+                }
+                if (strcasecmp($checkName,$loginname) == 0) {
+                    $loginname = USER_uniqueUsername($loginname);
+                }
+            }
+            $users['loginname'] = $loginname;
+            $uid = USER_createAccount($users['loginname'], $users['email'], '', $users['fullname'], $users['homepage'], $users['remoteusername'], $users['remoteservice']);
+
+            if (is_array($users)) {
+                $this->_DBupdate_users($uid, $users);
+            }
+
+            if (is_array($userinfo)) {
+                $this->_DBupdate_userinfo($uid, $userinfo);
+            }
+
+            $remote_grp = DB_getItem($_TABLES['groups'], 'grp_id', "grp_name = 'Remote Users'");
+            DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ($remote_grp, $uid)");
+            $checkMerge = true;
+        }
     }
 
-    public function getErrorMsg() {
-        return $this->consumer->getErrorMsg();
+    public function doSynch($info) {
+        global $_TABLES, $_USER, $status, $uid, $_CONF;
+
+        // remote auth precludes usersubmission and integrates user activation
+
+        $users = $this->_getCreateUserInfo($info);
+        $userinfo = $this->_getUpdateUserInfo($info);
+
+        $updatecolumns = '';
+
+        // Update users
+        if (is_array($users)) {
+            $sql = "UPDATE {$_TABLES['users']} SET ";
+            if (!empty($users['fullname'])) {
+                $updatecolumns .= "fullname='".DB_escapeString($users['fullname'])."'";
+            }
+            if (!empty($users['email'])) {
+                if (!empty($updatecolumns)) { $updatecolumns .= ", "; }
+                $updatecolumns .= "email='".DB_escapeString($users['email'])."'";
+            }
+            if (!empty($users['homepage'])) {
+                if (!empty($updatecolumns)) { $updatecolumns .= ", "; }
+                $updatecolumns .= "homepage='".DB_escapeString($users['homepage'])."'";
+            }
+            $sql = $sql . $updatecolumns . " WHERE uid=" . (int) $_USER['uid'];
+
+            DB_query($sql);
+
+            // Update rest of users info
+            $this->_DBupdate_users($_USER['uid'], $users);
+        }
+
+        // Update userinfo
+        if (is_array($userinfo)) {
+            $this->_DBupdate_userinfo($_USER['uid'], $userinfo);
+        }
+
     }
 
     protected function _getUpdateUserInfo($info) {
@@ -187,7 +263,6 @@ class OAuthConsumer {
                     $userinfo['location'] = $info->location->name;
                 }
                 break;
-
         }
 
         return $userinfo;
@@ -280,68 +355,6 @@ class OAuthConsumer {
         return $users;
     }
 
-
-    public function doAction($info) {
-        global $_TABLES, $status, $uid, $_CONF, $checkMerge;
-
-        // remote auth precludes usersubmission, and integrates user activation
-        $status = USER_ACCOUNT_ACTIVE;
-
-        $users      = $this->_getCreateUserInfo($info);
-        $userinfo   = $this->_getUpdateUserInfo($info);
-
-        $sql = "SELECT uid,status FROM {$_TABLES['users']} WHERE remoteusername = '".DB_escapeString($users['remoteusername'])."' AND remoteservice = '".DB_escapeString($users['remoteservice'])."'";
-
-        $result = DB_query($sql);
-        $tmp = DB_error();
-        $nrows = DB_numRows($result);
-
-        if (empty($tmp) && $nrows == 1) {
-            list($uid, $status) = DB_fetchArray($result);
-            $checkMerge = false;
-        } else {
-            // initial login - create account
-            $status = USER_ACCOUNT_ACTIVE;
-            $loginname = $users['loginname'];
-            // COM_errorLog("checking remoteusername for uniqueness");
-            $checkName = DB_getItem($_TABLES['users'], 'username', "username='".DB_escapeString($loginname)."'");
-            if (!empty($checkName)) {
-                if (function_exists('CUSTOM_uniqueRemoteUsername')) {
-                    $loginname = CUSTOM_uniqueRemoteUsername(loginname, $remoteservice);
-                }
-                if (strcasecmp($checkName,$loginname) == 0) {
-                    $loginname = USER_uniqueUsername($loginname);
-                }
-            }
-            $users['loginname'] = $loginname;
-            $uid = USER_createAccount($users['loginname'], $users['email'], '', $users['fullname'], $users['homepage'], $users['remoteusername'], $users['remoteservice']);
-
-            if (is_array($users)) {
-                $this->_DBupdate_users($uid, $users);
-            }
-
-            if (is_array($userinfo)) {
-                $this->_DBupdate_userinfo($uid, $userinfo);
-            }
-
-            $remote_grp = DB_getItem($_TABLES['groups'], 'grp_id', "grp_name = 'Remote Users'");
-            DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ($remote_grp, $uid)");
-            $checkMerge = true;
-            // usercreate after trigger
-            if (method_exists($this, '_after_trigger')) {
-                $this->_after_trigger($uid, $users, $userinfo);
-            }
-        }
-    }
-
-    public function getCallback_query_string() {
-        return $this->consumer->callback_query_string;
-    }
-
-    public function getCancel_query_string() {
-        return $this->consumer->cancel_query_string;
-    }
-
     protected function _DBupdate_userinfo($uid, $userinfo) {
         global $_TABLES;
         if (!empty($userinfo['about']) || !empty($userinfo['location'])) {
@@ -408,63 +421,5 @@ class OAuthConsumer {
         }
         return ($dot ? '.' : '') . $ext;
     }
-
-    protected function _shorten($url) {
-        $this->request->setUrl($this->shortapi.'?url='.$url);
-        $this->request->setMethod('GET');
-        try {
-            $response = $this->request->send();
-            if ($response->getStatus() !== 200) {
-                return $url;
-            } else {
-                $xml = @simplexml_load_string($response->getBody());
-                return $xml->url;
-            }
-        } catch (HTTP_Request2_Exception $e) {
-            COM_errorLog($e->getMessage());
-        }
-    }
-
-    public function doSynch($info) {
-        global $_TABLES, $_USER, $status, $uid, $_CONF;
-
-        // COM_errorLog("doSynch() method ------------------");
-
-        // remote auth precludes usersubmission and integrates user activation
-
-        $users = $this->_getCreateUserInfo($info);
-        $userinfo = $this->_getUpdateUserInfo($info);
-
-        $updatecolumns = '';
-
-        // Update users
-        if (is_array($users)) {
-            $sql = "UPDATE {$_TABLES['users']} SET ";
-            if (!empty($users['fullname'])) {
-                $updatecolumns .= "fullname='".DB_escapeString($users['fullname'])."'";
-            }
-            if (!empty($users['email'])) {
-                if (!empty($updatecolumns)) { $updatecolumns .= ", "; }
-                $updatecolumns .= "email='".DB_escapeString($users['email'])."'";
-            }
-            if (!empty($users['homepage'])) {
-                if (!empty($updatecolumns)) { $updatecolumns .= ", "; }
-                $updatecolumns .= "homepage='".DB_escapeString($users['homepage'])."'";
-            }
-            $sql = $sql . $updatecolumns . " WHERE uid=" . (int) $_USER['uid'];
-
-            DB_query($sql);
-
-            // Update rest of users info
-            $this->_DBupdate_users($_USER['uid'], $users);
-        }
-
-        // Update userinfo
-        if (is_array($userinfo)) {
-            $this->_DBupdate_userinfo($_USER['uid'], $userinfo);
-        }
-
-    }
 }
-
 ?>

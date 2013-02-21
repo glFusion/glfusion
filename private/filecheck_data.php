@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: filecheck_data.php 5763 2010-03-31 00:16:44Z usableweb            $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2012 by the following authors:                        |
+// | Copyright (C) 2008-2013 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -80,8 +80,10 @@ $glfDir = array(
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/lib/getid3' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/lib/htmLawed' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/lib/html2text' ),
+    array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/lib/http' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/lib/phpmailer' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/lib/phpmailer/language' ),
+    array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/lib/oauth' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/lib/simplepie'),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/lib/simplepie/idn'),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/lib/utf8'),
@@ -218,7 +220,6 @@ $glfDir = array(
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/system/classes' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/system/classes/authentication' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/system/classes/authentication/ldap' ),
-    array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/system/classes/oauth' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/system/classes/openid' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/system/classes/syndication' ),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'private/system/databases' ),
@@ -621,9 +622,6 @@ $glfFile = array(
 
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/classes/date.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/classes/menu.class.php' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/classes/oauth/facebook.auth.class.php' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/classes/oauth/linkedin.auth.class.php' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/classes/oauth/twitter.auth.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/classes/oauthhelper.class.php' ),
 
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/databases/mysqli.class.php' ),
@@ -851,6 +849,9 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/lib/html2text/html2text.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/lib/htmLawed/index.html' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/lib/htmLawed/htmLawed.php' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/lib/http/LICENSE.txt' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/lib/http/http.php' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/lib/oauth/oauth_client.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/lib/phpmailer/index.html' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/lib/phpmailer/LICENSE' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/lib/phpmailer/class.phpmailer.php' ),
@@ -2090,11 +2091,9 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/admin/menu.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/bad_behavior2/bad-behavior/yahoo.inc.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/forum/list.php' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/images/login-with-facebook.png' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/images/login-with-linkedin.png' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/images/login-with-twitter.png' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/javascript/menu/index.html' ),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/javascript/menu/mooRainbow.js' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/images/oauth-login-with-sprite.png' ),
+//    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/javascript/menu/index.html' ),
+//    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/javascript/menu/mooRainbow.js' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/javascript/sitetailor_ie6vertmenu.js' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/admin/autotag/autotag.thtml' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/nouveau/admin/autotag/autotag_upload_confirm.thtml' ),

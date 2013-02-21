@@ -214,22 +214,22 @@ function install_config($site_url)
     $c->add('custom_registration',FALSE,'select',4,17,1,310,TRUE);
 
     $c->add('user_login_method',array('standard' => true, 'openid' => false, '3rdparty' => false, 'oauth' => false),'@select',4,17,1,320,TRUE);
-    $c->add('facebook_login',0,'select',4,17,1,350,TRUE);
-    $c->add('facebook_consumer_key','not configured yet','text',4,17,NULL,351,TRUE);
-    $c->add('facebook_consumer_secret','not configured yet','text',4,17,NULL,352,TRUE);
-    $c->add('linkedin_login',0,'select',4,17,1,353,TRUE);
-    $c->add('linkedin_consumer_key','not configured yet','text',4,17,NULL,354,TRUE);
+    $c->add('facebook_login',0,'select',4,17,1,330,TRUE);
+    $c->add('facebook_consumer_key','not configured yet','text',4,17,NULL,335,TRUE);
+    $c->add('facebook_consumer_secret','not configured yet','text',4,17,NULL,340,TRUE);
+    $c->add('linkedin_login',0,'select',4,17,1,345,TRUE);
+    $c->add('linkedin_consumer_key','not configured yet','text',4,17,NULL,350,TRUE);
     $c->add('linkedin_consumer_secret','not configured yet','text',4,17,NULL,355,TRUE);
-    $c->add('twitter_login',0,'select',4,17,1,356,TRUE);
-    $c->add('twitter_consumer_key','not configured yet','text',4,17,NULL,357,TRUE);
-    $c->add('twitter_consumer_secret','not configured yet','text',4,17,NULL,358,TRUE);
-    $c->add('google_login',0,'select',4,17,1,359,TRUE);
-    $c->add('google_consumer_key','not configured yet','text',4,17,NULL,360,TRUE);
-    $c->add('google_consumer_secret','not configured yet','text',4,17,NULL,361,TRUE);
-    $c->add('microsoft_login',0,'select',4,17,1,362,TRUE);
-    $c->add('microsoft_consumer_key','not configured yet','text',4,17,NULL,363,TRUE);
-    $c->add('microsoft_consumer_secret','not configured yet','text',4,17,NULL,364,TRUE);
-    $c->add('aftersave_user','item','select',4,17,9,1340,TRUE);
+    $c->add('twitter_login',0,'select',4,17,1,360,TRUE);
+    $c->add('twitter_consumer_key','not configured yet','text',4,17,NULL,365,TRUE);
+    $c->add('twitter_consumer_secret','not configured yet','text',4,17,NULL,370,TRUE);
+    $c->add('google_login',0,'select',4,17,1,375,TRUE);
+    $c->add('google_consumer_key','not configured yet','text',4,17,NULL,380,TRUE);
+    $c->add('google_consumer_secret','not configured yet','text',4,17,NULL,385,TRUE);
+    $c->add('microsoft_login',0,'select',4,17,1,390,TRUE);
+    $c->add('microsoft_consumer_key','not configured yet','text',4,17,NULL,395,TRUE);
+    $c->add('microsoft_consumer_secret','not configured yet','text',4,17,NULL,400,TRUE);
+    $c->add('aftersave_user','item','select',4,17,9,410,TRUE);
 
     $c->add('fs_spamx', NULL, 'fieldset', 4, 18, NULL, 0, TRUE);
     $c->add('spamx',128,'text',4,18,NULL,330,TRUE);
