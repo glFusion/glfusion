@@ -1,1 +1,12 @@
-This is the language override directory.
+This is the language override directory. You can create language specific
+override files in this directory, such as english_utf-8.php. Here's an
+example:
+
+<?php
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own!');
+}
+
+$LANG28[45]='Active User';
+$LANG01[59]="Sign up as a <a href=\"{$_CONF['site_url']}/users.php?mode=new\" rel=\"nofollow\">New User</a>";
+?>
