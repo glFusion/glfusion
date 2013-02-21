@@ -226,11 +226,9 @@ function install_config($site_url)
     $c->add('google_login',0,'select',4,17,1,359,TRUE);
     $c->add('google_consumer_key','not configured yet','text',4,17,NULL,360,TRUE);
     $c->add('google_consumer_secret','not configured yet','text',4,17,NULL,361,TRUE);
-/* ---
     $c->add('microsoft_login',0,'select',4,17,1,362,TRUE);
     $c->add('microsoft_consumer_key','not configured yet','text',4,17,NULL,363,TRUE);
     $c->add('microsoft_consumer_secret','not configured yet','text',4,17,NULL,364,TRUE);
---- */
     $c->add('aftersave_user','item','select',4,17,9,1340,TRUE);
 
     $c->add('fs_spamx', NULL, 'fieldset', 4, 18, NULL, 0, TRUE);

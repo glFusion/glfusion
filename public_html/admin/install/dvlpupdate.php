@@ -746,18 +746,18 @@ function glfusion_130()
         $c->add('google_consumer_key','not configured yet','text',4,16,NULL,354,TRUE);
         $c->add('google_consumer_secret','not configured yet','text',4,16,NULL,355,TRUE);
     }
-/* ---
+/*
     if ( !isset($_CONF['yahoo_login']) ) {
         $c->add('yahoo_login',0,'select',4,16,1,356,TRUE);
         $c->add('yahoo_consumer_key','not configured yet','text',4,16,NULL,357,TRUE);
         $c->add('yahoo_consumer_secret','not configured yet','text',4,16,NULL,358,TRUE);
     }
+*/
     if ( !isset($_CONF['microsoft_login']) ) {
         $c->add('microsoft_login',0,'select',4,16,1,357,TRUE);
         $c->add('microsoft_consumer_key','not configured yet','text',4,16,NULL,358,TRUE);
         $c->add('microsoft_consumer_secret','not configured yet','text',4,16,NULL,359,TRUE);
     }
--- */
     if ( !isset($_CONF['linkedin_login']) ) {
         $c->add('linkedin_login',0,'select',4,16,1,358,TRUE);
         $c->add('linkedin_consumer_key','not configured yet','text',4,16,NULL,359,TRUE);
@@ -773,10 +773,11 @@ function glfusion_130()
     $c->del('yahoo_login','Core');
     $c->del('yahoo_consumer_key','Core');
     $c->del('yahoo_consumer_secret','Core');
+/*
     $c->del('microsoft_login','Core');
     $c->del('microsoft_consumer_key','Core');
     $c->del('microsoft_consumer_secret','Core');
-
+*/
     // date / time format changes
 
     $c->add('date','l, F d Y @ h:i A T','text',6,29,NULL,370,TRUE);

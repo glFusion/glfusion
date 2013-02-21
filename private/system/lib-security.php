@@ -2139,7 +2139,7 @@ function SEC_collectRemoteOAuthModules()
     global $_CONF;
 
 //    $available_modules = array('facebook','google','microsoft','yahoo','twitter');
-    $available_modules = array('facebook','google','twitter');
+    $available_modules = array('facebook','google','twitter','microsoft','linkedin');
 
     $modules = array();
 

@@ -101,6 +101,11 @@ class OAuthConsumer {
                 $scope   = '';
                 $q_api   = array('q'=>'select * from social.profile where guid=me','format'=>'json');
                 break;
+            case 'linkedin' :
+                $api_url = 'http://api.linkedin.com/v1/people/~:(id,first-name,last-name,location,summary,email-address,picture-url,public-profile-url)';
+                $scope   = 'r_fullprofile r_emailaddress';
+                $q_api   = array('format'=>'json');
+                break;
         }
 
         $this->client->scope = $scope;
@@ -158,7 +163,6 @@ class OAuthConsumer {
         return $this->consumer->getErrorMsg();
     }
 
-
     protected function _getUpdateUserInfo($info) {
         $userinfo = array();
         switch ( $this->client->server ) {
@@ -178,8 +182,13 @@ class OAuthConsumer {
                 break;
             case 'yahoo' :
                 break;
-        }
+            case 'linkedin' :
+                if ( isset($info->location->name) ) {
+                    $userinfo['location'] = $info->location->name;
+                }
+                break;
 
+        }
 
         return $userinfo;
     }
@@ -225,6 +234,45 @@ class OAuthConsumer {
                     'remoteusername' => DB_escapeString($info->screen_name),
                     'remoteservice'  => 'oauth.twitter',
                     'remotephoto'    => $info->profile_image_url,
+                );
+                break;
+            case 'microsoft' :
+                $users = array(
+                    'loginname'      => (isset($info->first_name) ? $info->first_name : $info->id),
+                    'email'          => $info->emails->preferred,
+                    'passwd'         => '',
+                    'passwd2'        => '',
+                    'fullname'       => $info->name,
+                    'homepage'       => '',
+                    'remoteusername' => DB_escapeString($info->id),
+                    'remoteservice'  => 'oauth.microsoft',
+                    'remotephoto'    => 'https://apis.live.net/v5.0/me/picture?access_token='.$this->client->access_token,
+                );
+                break;
+            case 'yahoo' :
+                $users = array(
+                    'loginname'      => (isset($info->first_name) ? $info->first_name : $info->id),
+                    'email'          => $info->emails->preferred,
+                    'passwd'         => '',
+                    'passwd2'        => '',
+                    'fullname'       => $info->name,
+                    'homepage'       => '',
+                    'remoteusername' => DB_escapeString($info->id),
+                    'remoteservice'  => 'oauth.yahoo',
+                    'remotephoto'    => 'https://apis.live.net/v5.0/me/picture?access_token='.$this->client->access_token,
+                );
+                break;
+            case 'linkedin' :
+                $users = array(
+                    'loginname'      => (isset($info->{'firstName'}) ? $info->{'firstName'} : $info->id),
+                    'email'          => $info->{'emailAddress'},
+                    'passwd'         => '',
+                    'passwd2'        => '',
+                    'fullname'       => $info->{'firstName'} . ' ' .  $info->{'lastName'},
+                    'homepage'       => $info->{'publicProfileUrl'},
+                    'remoteusername' => DB_escapeString($info->id),
+                    'remoteservice'  => 'oauth.linkedin',
+                    'remotephoto'    => $info->{'pictureUrl'},
                 );
                 break;
         }
