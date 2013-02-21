@@ -1305,18 +1305,18 @@ $LANG_MG10 = array(
 );
 
 $LANG_MG_AUTOTAG = array(
-    'desc_album' => 'HTML: renders a thumbname image link to a Media Album.  usage: [album:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/doku.php/glfusion:mediagallery:glfusion_integration#album" target="_blank">options</a>}]',
+    'desc_album' => 'HTML: renders a thumbname image link to a Media Album.  usage: [album:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#album" target="_blank">options</a>}]',
     'desc_alink' => 'Link: to a Media Album.  link_text defaults to the Album name. usage: [alink:<i>album_id</i> {link_text}]',
-    'desc_audio' => 'HTML: renders an audio Media player with or without a thumbnail image.  usage: [audio:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/doku.php/glfusion:mediagallery:glfusion_integration#audio" target="_blank">options</a>}]',
-    'desc_fslideshow' => 'HTML: renders a flash image Media slideshow. usage: [fslideshow:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/doku.php/glfusion:mediagallery:glfusion_integration#fslideshow" target="_blank">options</a>}]',
+    'desc_audio' => 'HTML: renders an audio Media player with or without a thumbnail image.  usage: [audio:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#audio" target="_blank">options</a>}]',
+    'desc_fslideshow' => 'HTML: renders a flash image Media slideshow. usage: [fslideshow:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#fslideshow" target="_blank">options</a>}]',
     'desc_image' => 'HTML: (Deprecated) Use the [media:] Autotag instead.',
-    'desc_img' => 'HTML: renders raw HTML image tag for an image Media thumbnail. usage: [img:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/doku.php/glfusion:mediagallery:glfusion_integration#img" target="_blank">options</a>}]',
-    'desc_media' => 'HTML: renders a Media item (general purpose). usage: [media:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/doku.php/glfusion:mediagallery:glfusion_integration#media" target="_blank">options</a>}]',
-    'desc_mlink' => 'Link: to a Media item. (text only) usage: [mlink:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/doku.php/glfusion:mediagallery:glfusion_integration#mlink" target="_blank">options</a>}]',
+    'desc_img' => 'HTML: renders raw HTML image tag for an image Media thumbnail. usage: [img:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#img" target="_blank">options</a>}]',
+    'desc_media' => 'HTML: renders a Media item (general purpose). usage: [media:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#media" target="_blank">options</a>}]',
+    'desc_mlink' => 'Link: to a Media item. (text only) usage: [mlink:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#mlink" target="_blank">options</a>}]',
     'desc_oimage' => 'HTML: (Deprecated) Use the [media:] Autotag instead.',
-    'desc_playall' => 'HTML: renders an audio Media player which plays an entire Album. usage: [playall:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/doku.php/glfusion:mediagallery:glfusion_integration#playall" target="_blank">options</a>}]',
-    'desc_slideshow' => 'HTML: renders a JS-based image Media slideshow. usage: [slideshow:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/doku.php/glfusion:mediagallery:glfusion_integration#slideshow" target="_blank">options</a>}]',
-    'desc_video' => 'HTML: renders an video player for any local or remote video Media. usage:[video:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/doku.php/glfusion:mediagallery:glfusion_integration#video" target="_blank">options</a>}',
+    'desc_playall' => 'HTML: renders an audio Media player which plays an entire Album. usage: [playall:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#playall" target="_blank">options</a>}]',
+    'desc_slideshow' => 'HTML: renders a JS-based image Media slideshow. usage: [slideshow:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#slideshow" target="_blank">options</a>}]',
+    'desc_video' => 'HTML: renders an video player for any local or remote video Media. usage:[video:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#video" target="_blank">options</a>}',
     'desc_download' => 'Link: to a Media item to allow user download.  link_text defaults to the media caption.  usage: [download:<i>media_id</i> {link_text}]'
 );
 
