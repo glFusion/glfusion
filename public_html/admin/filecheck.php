@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -239,7 +239,7 @@ function FILECHECK_scanPositive( $path = '.', $where, $level = 0, $prefix=array(
                     }
                     // fix to recurse unrecognized directories
                     $prefix[] = $file;
-                    FILECHECK_scanPositive( "$path/$file", $where, ($level+1), $prefix );
+//                    FILECHECK_scanPositive( "$path/$file", $where, ($level+1), $prefix );
                     array_pop($prefix);
                 }
             } else {
