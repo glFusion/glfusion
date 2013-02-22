@@ -45,6 +45,7 @@ require_once $_CONF['path'] . 'lib/oauth/oauth_client.php';
 class OAuthConsumer {
     protected $consumer = NULL;
     protected $client = NULL;
+    var $error = '';
 
     public function OAuthConsumer($service) {
         global $_CONF,$_SYSTEM;
@@ -117,9 +118,9 @@ class OAuthConsumer {
     	if ( ($success = $this->client->Initialize() ) ) {
     		if ( ($success = $this->client->Process() ) ) {
     			if(strlen($this->client->authorization_error)) {
-				    $this->client->error = $client->authorization_error;
+				    $this->client->error = $this->client->authorization_error;
+				    $this->error = $this->client->authorization_error;
 				    $success = false;
-
 			    } elseif(strlen($this->client->access_token)) {
                     $user = $this->get_userinfo();
                 }

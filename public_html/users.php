@@ -1609,7 +1609,7 @@ default:
             $oauth_userinfo = $consumer->authenticate_user();
             if ( $oauth_userinfo === false ) {
                 COM_updateSpeedlimit('login');
-                COM_errorLog($MESSAGE[111]);
+                COM_errorLog("OAuth Error: " . $consumer->error);
                 echo COM_refresh($_CONF['site_url'] . '/users.php?msg=111'); // OAuth authentication error
                 exit;
             }
