@@ -1,18 +1,20 @@
-                                glFusion Readme
+                              glFusion CMS Readme
 
-What is glFusion?
-================
-glFusion is a content publishing system. It has been called a blog, content
-management system, and even an application development framework. Regardless
-what you call it, glFusion provides all the tools necessary to quickly create
-and maintain a content driven web site. glFusion also provides a rich
-application development environment.
+What is glFusion CMS?
+=====================
+glFusion CMS is a content management and publishing system. It can be
+utilized as a content management system, a content publishing system,
+a colloboration system, and even an application development framework.
+Regardless how you use it, glFusion CMS provides all the tools necessary
+to quickly create and maintain a content driven web site. glFusion CMS
+also provides a rich application development environment.
 
-glFusion is well organized and provides a very powerful system that is
-extremely easy to use. glFusion powers everything from personal blogs, to high
-volume community discussion sites, and almost everything in between.
+glFusion CMS is well organized and provides a very powerful system that
+is extremely easy to use. glFusion CMS powers everything from personal
+blogs, to high volume community discussion sites, and almost everything
+in between.
 
-A summary of glFusion’s features are:
+A summary of glFusion CMS features are:
 
 Blog/CMS Features
 
@@ -28,6 +30,8 @@ Blog/CMS Features
     * Spam detection and rejection.
     * Calendar functions with support for personalized calendars.
     * Support for OpenID and other remote authentication methods.
+    * Support for OAuth authentication with Google, Microsoft, Twitter,
+      LinkedIn, and Facebook.
     * Extendible via numerous plugins.
 
 Administration Features
@@ -48,18 +52,18 @@ Developer Features
     * Well organized code base, use of PHP's Object-Oriented features.
     * Thin database abstraction layer allowing glFusion to be ported to DBMS's
       other than the default (MySQL is the only database currently supported
-      by glFusion).
+      by glFusion CMS).
 
 Support
 =======
-The best support method for glFusion is the glFusion Web Site located at
-http://www.glfusion.org.  There is an active community ready to help out
+The best support method for glFusion CMS is the glFusion Web Site located
+at http://www.glfusion.org.  There is an active community ready to help out
 where they can.
 
 Known Issues
 ============
 Known issues in the current release is tracked in the glFusion Wiki located
-at http://www.glfusion.org/wiki/doku.php?id=glfusion:issues
+at http://www.glfusion.org/wiki/glfusion:issues
 
 glFusion also maintain an active bug tracker and feature request system. If
 you identify a bug, please let us know by filing a bug report at:
@@ -71,7 +75,7 @@ System Requirements and Installation
 =====================================
 Visit the glFusion Wiki at
 
-    http://www.glfusion.org/wiki/doku.php?id=glfusion:start
+    http://www.glfusion.org/wiki/glfusion:start
 
 For the latest in requirements, installation, and upgrade documentation.
 
@@ -86,4 +90,4 @@ Further Documentation
 =====================
 glFusion has extensive online documentation available at:
 
-http://www.glfusion.org/wiki/doku.php?id=glfusion:start
+http://www.glfusion.org/wiki/glfusion:start
