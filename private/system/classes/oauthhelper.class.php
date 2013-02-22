@@ -47,14 +47,16 @@ class OAuthConsumer {
     protected $client = NULL;
 
     public function OAuthConsumer($service) {
-        global $_CONF;
+        global $_CONF,$_SYSTEM;
 
         if (strpos($service, 'oauth.') === 0) {
             $service = str_replace("oauth.", "", $service);
         }
 
     	$this->client = new oauth_client_class;
-    	$this->client->server = $service;
+    	$this->client->server     = $service;
+        $this->client->debug      = $_SYSTEM['debug_oauth'];
+        $this->client->debug_http = $_SYSTEM['debug_oauth'];
 
         // Set key and secret for OAuth service if found in config
         if ($this->client->client_id == '') {
@@ -111,17 +113,20 @@ class OAuthConsumer {
     }
 
     public function authenticate_user() {
+        global $_SYSTEM;
     	if ( ($success = $this->client->Initialize() ) ) {
     		if ( ($success = $this->client->Process() ) ) {
     			if(strlen($this->client->authorization_error)) {
 				    $this->client->error = $client->authorization_error;
 				    $success = false;
+
 			    } elseif(strlen($this->client->access_token)) {
                     $user = $this->get_userinfo();
                 }
     		}
     		$success = $this->client->Finalize($success);
     	}
+        if ($_SYSTEM['debug_oauth'] ) COM_errorLog($this->client->debug_output);
     	if ($this->client->exit) {
     		exit;
     	}
