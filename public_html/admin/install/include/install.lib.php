@@ -970,20 +970,26 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $standard = ($_CONF['user_login_method']['standard']) ? true : false;
             $openid = ($_CONF['user_login_method']['openid']) ? true : false;
             $thirdparty = ($_CONF['user_login_method']['3rdparty']) ? true: false;
+
+            // OAuth configuration settings
             $oauth = false;
             $c->add('user_login_method',array('standard' => $standard , 'openid' => $openid , '3rdparty' => $thirdparty , 'oauth' => $oauth),'@select',4,16,1,320,TRUE);
-            // OAuth configuration settings
-            $c->add('facebook_login',0,'select',4,16,1,350,TRUE);
-            $c->add('facebook_consumer_key','not configured yet','text',4,16,NULL,351,TRUE);
-            $c->add('facebook_consumer_secret','not configured yet','text',4,16,NULL,352,TRUE);
-/*
-            $c->add('linkedin_login',0,'select',4,16,1,353,TRUE);
-            $c->add('linkedin_consumer_key','not configured yet','text',4,16,NULL,354,TRUE);
-            $c->add('linkedin_consumer_secret','not configured yet','text',4,16,NULL,355,TRUE);
-            $c->add('twitter_login',0,'select',4,16,1,356,TRUE);
-            $c->add('twitter_consumer_key','not configured yet','text',4,16,NULL,357,TRUE);
-            $c->add('twitter_consumer_secret','not configured yet','text',4,16,NULL,358,TRUE);
-*/
+            $c->add('facebook_login',0,'select',4,17,1,330,TRUE);
+            $c->add('facebook_consumer_key','not configured yet','text',4,17,NULL,335,TRUE);
+            $c->add('facebook_consumer_secret','not configured yet','text',4,17,NULL,340,TRUE);
+            $c->add('linkedin_login',0,'select',4,17,1,345,TRUE);
+            $c->add('linkedin_consumer_key','not configured yet','text',4,17,NULL,350,TRUE);
+            $c->add('linkedin_consumer_secret','not configured yet','text',4,17,NULL,355,TRUE);
+            $c->add('twitter_login',0,'select',4,17,1,360,TRUE);
+            $c->add('twitter_consumer_key','not configured yet','text',4,17,NULL,365,TRUE);
+            $c->add('twitter_consumer_secret','not configured yet','text',4,17,NULL,370,TRUE);
+            $c->add('google_login',0,'select',4,17,1,375,TRUE);
+            $c->add('google_consumer_key','not configured yet','text',4,17,NULL,380,TRUE);
+            $c->add('google_consumer_secret','not configured yet','text',4,17,NULL,385,TRUE);
+            $c->add('microsoft_login',0,'select',4,17,1,390,TRUE);
+            $c->add('microsoft_consumer_key','not configured yet','text',4,17,NULL,395,TRUE);
+            $c->add('microsoft_consumer_secret','not configured yet','text',4,17,NULL,400,TRUE);
+
             // date / time format changes
             $c->add('date','l, F d Y @ h:i A T','text',6,29,NULL,370,TRUE);
             $c->add('daytime','m/d h:iA','text',6,29,NULL,380,TRUE);
