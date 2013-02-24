@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2013 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -361,6 +361,30 @@ class config {
         $this->_writeIntoCache();
         $this->_purgeCache();
     }
+
+    function sync($param_name, $default_value, $type, $subgroup, $fieldset,
+         $selection_array=null, $sort=0, $set=true, $group='Core')
+    {
+        global $_TABLES;
+
+        $Qargs = array($param_name,
+                       $set ? serialize($default_value) : 'unset',
+                       $type,
+                       $subgroup,
+                       $group,
+                       ($selection_array === null ?
+                        -1 : $selection_array),
+                       $sort,
+                       $fieldset,
+                       serialize($default_value));
+        $Qargs = array_map('DB_escapeString', $Qargs);
+
+        $sql = "UPDATE {$_TABLES['conf_values']} SET sort_order={$Qargs[6]},fieldset={$Qargs[7]}".
+               " WHERE group_name='{$Qargs[4]}' AND name='{$Qargs[0]}'";
+
+        $this->_DB_escapedQuery($sql,1);
+    }
+
 
     /**
      * Permanently deletes a parameter
@@ -1035,7 +1059,7 @@ class config {
      * Helper function: Fix escaped SQL requests for MS SQL, if necessary
      *
      */
-    function _DB_escapedQuery($sql)
+    function _DB_escapedQuery($sql,$noerror=0)
     {
         global $_DB, $_DB_dbms;
 
@@ -1044,7 +1068,7 @@ class config {
             $sql = str_replace('\\"', '"', $sql);
             $_DB->dbQuery($sql, 0, 1);
         } else {
-            DB_query($sql);
+            DB_query($sql,$noerror);
         }
     }
 
