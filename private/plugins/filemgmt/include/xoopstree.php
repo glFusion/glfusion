@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: xoopstree.php 3155 2008-09-16 02:13:18Z mevans0263                $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2013 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -171,7 +171,7 @@ class XoopsTree{
     if ( $sel_name == "" ) {
         $sel_name = $this->id;
     }
-    $myts =& MyTextSanitizer::getInstance();
+    $myts = MyTextSanitizer::getInstance();
 
     $sql = "SELECT $this->id, $title FROM $this->table WHERE $this->pid = 0 $this->filtersql ";
     if ( $order != "" ) {
@@ -210,7 +210,7 @@ class XoopsTree{
     if ( $sel_name == "" ) {
         $sel_name = $this->id;
     }
-    $myts =& MyTextSanitizer::getInstance();
+    $myts = MyTextSanitizer::getInstance();
     $retval = "<select name='".$sel_name."'";
     if ( $onchange != "" ) {
         echo " onchange='".$onchange."'";
@@ -263,7 +263,7 @@ class XoopsTree{
             return $path;
         }
         list($parentid,$name) = DB_fetchARRAY($result);
-        $myts =& MyTextSanitizer::getInstance();
+        $myts = MyTextSanitizer::getInstance();
         $name = $myts->makeTboxData4Show($name);
         if (strpos($funcURL,'?',0) === FALSE) {
             $path = "<a href=\"{$funcURL}?{$this->id}={$sel_id}\">{$name}</a>&nbsp;:&nbsp;{$path}";
