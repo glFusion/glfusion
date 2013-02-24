@@ -626,7 +626,7 @@ class XML_RPC_Server
                     } else {
                         $r = call_user_func($dmap[$methName]['function'], $m);
                     }
-                    if (!is_a($r, 'XML_RPC_Response')) {
+                    if (!is_object($r) || !is_a($r, 'XML_RPC_Response')) {
                         $r = new XML_RPC_Response(0, $XML_RPC_err['not_response_object'],
                                                   $XML_RPC_str['not_response_object']);
                     }

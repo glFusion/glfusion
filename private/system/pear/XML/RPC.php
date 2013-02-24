@@ -576,7 +576,7 @@ class XML_RPC_Base {
      */
     function isError($value)
     {
-        return is_a($value, 'PEAR_Error');
+        return is_object($value) && is_a($value, 'PEAR_Error');
     }
 }
 
@@ -852,7 +852,7 @@ class XML_RPC_Client extends XML_RPC_Base {
      */
     function send($msg, $timeout = 0)
     {
-        if (!is_a($msg, 'XML_RPC_Message')) {
+        if (!is_object($msg) || !is_a($msg, 'XML_RPC_Message')) {
             $this->errstr = 'send()\'s $msg parameter must be an'
                           . ' XML_RPC_Message object.';
             $this->raiseError($this->errstr, XML_RPC_ERROR_PROGRAMMING);
@@ -1530,7 +1530,7 @@ class XML_RPC_Message extends XML_RPC_Base
                 $r = new XML_RPC_Response($v);
             }
         }
-        $r->hdrs = preg_split("@\r?\n@", $XML_RPC_xh[$parser]['ha'][1]);
+        $r->hdrs = preg_split("@\r?\n@", $XML_RPC_xh[$parser]['ha']);
         return $r;
     }
 }

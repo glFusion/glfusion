@@ -38,7 +38,7 @@ putenv("PHP_PEAR_RUNTESTS=1");
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    Release: 1.9.0
+ * @version    Release: 1.9.4
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.3.3
  */
@@ -282,7 +282,7 @@ class PEAR_RunTest
         if (empty($this->_options['cgi'])) {
             // try to see if php-cgi is in the path
             $res = $this->system_with_timeout('php-cgi -v');
-            if (false !== $res && !(is_array($res) && $res === array(127, ''))) {
+            if (false !== $res && !(is_array($res) && in_array($res[0], array(-1, 127)))) {
                 $this->_options['cgi'] = 'php-cgi';
             }
         }
@@ -370,9 +370,8 @@ class PEAR_RunTest
         // We've satisfied the preconditions - run the test!
         if (isset($this->_options['coverage']) && $this->xdebug_loaded) {
             $xdebug_file = $temp_dir . DIRECTORY_SEPARATOR . $main_file_name . 'xdebug';
-            $text = '<?php';
-            $text .= "\n" . 'function coverage_shutdown() {' .
-                     "\n" . '    $xdebug = var_export(xdebug_get_code_coverage(), true);';
+            $text = "\n" . 'function coverage_shutdown() {' .
+                    "\n" . '    $xdebug = var_export(xdebug_get_code_coverage(), true);';
             if (!function_exists('file_put_contents')) {
                 $text .= "\n" . '    $fh = fopen(\'' . $xdebug_file . '\', "wb");' .
                         "\n" . '    if ($fh !== false) {' .
@@ -383,19 +382,37 @@ class PEAR_RunTest
                 $text .= "\n" . '    file_put_contents(\'' . $xdebug_file . '\', $xdebug);';
             }
 
-            $text .= "\n" . 'xdebug_stop_code_coverage();' .
-                "\n" . '} // end coverage_shutdown()' .
-                "\n" . 'register_shutdown_function("coverage_shutdown");';
-            $text .= "\n" . 'xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);' . "\n?>";
+            // Workaround for http://pear.php.net/bugs/bug.php?id=17292
+            $lines             = explode("\n", $section_text['FILE']);
+            $numLines          = count($lines);
+            $namespace         = '';
+            $coverage_shutdown = 'coverage_shutdown';
 
-            $len_f = 5;
-            if (substr($section_text['FILE'], 0, 5) != '<?php'
-                && substr($section_text['FILE'], 0, 2) == '<?') {
-                $len_f = 2;
+            if (
+                substr($lines[0], 0, 2) == '<?' ||
+                substr($lines[0], 0, 5) == '<?php'
+            ) {
+                unset($lines[0]);
             }
-            $text .= $section_text['FILE'];
 
-            $this->save_text($temp_file, $text);
+
+            for ($i = 0; $i < $numLines; $i++) {
+                if (isset($lines[$i]) && substr($lines[$i], 0, 9) == 'namespace') {
+                    $namespace         = substr($lines[$i], 10, -1);
+                    $coverage_shutdown = $namespace . '\\coverage_shutdown';
+                    $namespace         = "namespace " . $namespace . ";\n";
+
+                    unset($lines[$i]);
+                    break;
+                }
+            }
+
+            $text .= "\n    xdebug_stop_code_coverage();" .
+                "\n" . '} // end coverage_shutdown()' .
+                "\n\n" . 'register_shutdown_function("' . $coverage_shutdown . '");';
+            $text .= "\n" . 'xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);' . "\n";
+
+            $this->save_text($temp_file, "<?php\n" . $namespace . $text  . "\n" . implode("\n", $lines));
         } else {
             $this->save_text($temp_file, $section_text['FILE']);
         }
