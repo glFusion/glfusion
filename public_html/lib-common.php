@@ -1432,8 +1432,12 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     $year = date( 'Y' );
     $copyrightyear = $year;
-    if ( !empty( $_CONF['copyrightyear'] )) {
-        $copyrightyear = $_CONF['copyrightyear'];
+    if ( !empty( $_CONF['copyrightyear'] ) ) {
+        if ($year == $_CONF['copyrightyear']) {
+            $copyrightyear = $_CONF['copyrightyear'];
+        } else {
+            $copyrightyear = $_CONF['copyrightyear'] . " - " . $year;
+        }
     }
     $theme->set_var( 'copyright_notice', $LANG01[93] . ' &copy; '
             . $copyrightyear . ' ' . $_CONF['site_name'] . '&nbsp;&nbsp;&bull;&nbsp;&nbsp;'

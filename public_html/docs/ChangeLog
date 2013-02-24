@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.3.0
 ------
+- Several language file fixes and HTML code fixes (Andre)
+- Copyright year fix - if year is old than current show
+  $copyright_year - current_year (Andre)
 - Updated config.html documentation to point to correct Wiki URLs and to
   support new configuration items.
 - Added configuration 're-sync' to reset configuration items to the current
