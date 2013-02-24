@@ -2,9 +2,13 @@ glFusion ChangeLog
 
 v1.3.0
 ------
+- Updated config.html documentation to point to correct Wiki URLs and to
+  support new configuration items.
+- Added configuration 're-sync' to reset configuration items to the current
+  fieldset / sort orders - keeps everything in sync as sites upgrade (Mark)
 - Removed Digibug support form Media Gallery
-- Updated OAuth 1.0a and 2.0 support for Facebook, Google, Twitter
-  logins (Mark)
+- Updated OAuth 1.0a and 2.0 support for Facebook, Google, Twitter, LinkedIn,
+  and Microsoft Live logins (Mark)
 - Implemented XSS fixes from v1.2.2.pl4
 - Added Terms of Use and Privacy Policy as pages and links in the default
   install of the footer menu, also added link to RSS feed (Tracker#564) (Eric)

@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | Media Gallery Rebuild User Quotas                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2012 by the following authors:                        |
+// | Copyright (C) 2005-2013 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
