@@ -6,7 +6,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2012 by the following authors:                        |
+// | Copyright (C) 2008-2013 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -2719,8 +2719,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
         }
 
         if ( $_CONF['link_versionchecker'] == 1 AND SEC_inGroup( 'Root' )) {
-            $adminmenu->set_var( 'option_url',
-               'http://www.glfusion.org/versionchecker.php?version=' . GVERSION . PATCHLEVEL );
+            $adminmenu->set_var( 'option_url',$_CONF['site_admin_url'].'/vercheck.php');
             $adminmenu->set_var( 'option_label', $LANG01[107] );
             $adminmenu->set_var( 'option_count', GVERSION . PATCHLEVEL );
 
