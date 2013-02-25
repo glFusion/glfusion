@@ -1159,6 +1159,7 @@ function INST_doPrePluginUpgrade()
             }
 
             $_TABLES['am_autotags'] = $_DB_table_prefix . 'am_autotags';
+            $_TABLES['autotags'] = $_DB_table_prefix . 'autotags';
 
             if ( DB_checkTableExists('am_autotags') ) {
                 // we have an installed version of autotags plugin....
