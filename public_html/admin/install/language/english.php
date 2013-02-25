@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2013 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -116,7 +116,7 @@ $LANG_INSTALL = array(
     'path_prompt'               => 'Path to private/ directory',
     'path_settings'             => 'Path Settings',
     'perform_upgrade'			=> 'Perform Upgrade',
-    'php_req_version'			=> 'glFusion requires PHP version 4.3.0 or newer.',
+    'php_req_version'			=> 'glFusion requires PHP version 5.2.0 or newer.',
     'php_settings'				=> 'PHP Settings',
     'php_version'				=> 'PHP Version',
     'php_warning'				=> 'If any of the items below are marked in <span class="no">red</span>, you may encounter problems with your glFusion site.  Check with your hosting provider for information on changing any of these PHP settings.',
@@ -173,8 +173,9 @@ $LANG_INSTALL = array(
     'data_path'                 => 'Data Path',
     'language_support'          => 'Language Support',
     'language_pack'             => 'glFusion ships in English, but after installation you can download and install the <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Language Pack</a> which contains the language files for all supported languages.',
-/* --- New in glFusion v1.1.4 --- */
     'libcustom_not_found'       => 'Unable to located lib-custom.php.dist.',
+    'version_check'             => 'Check For Updates',
+    'check_for_updates'         => 'Goto the <a href="'.$_CONF['site_admin_url'].'/vercheck.php">Upgrade Checker</a> to see if there are any glFusion CMS or Plugin updates available.',
 );
 
 // +---------------------------------------------------------------------------+

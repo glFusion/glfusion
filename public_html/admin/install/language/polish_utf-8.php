@@ -177,7 +177,10 @@ $LANG_INSTALL = array(
     'data_path' => 'Ścieżka plików',
     'language_support' => 'Pliki językowe',
     'language_pack' => 'glFusion oparty jest o język Angielski, po instalacji możesz pobrać i zainstalować <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Paczkę Językową (Language Pack)</a> który zawiera obsługiwane pliki językowe.',
-    'libcustom_not_found' => 'Unable to located lib-custom.php.dist.'
+    'libcustom_not_found' => 'Unable to located lib-custom.php.dist.',
+    'no_db_driver'              => 'You must have the MySQL extension loaded in PHP to install glFusion',
+    'version_check'             => 'Check For Updates',
+    'check_for_updates'         => 'Goto the <a href="'.$_CONF['site_admin_url'].'/vercheck.php">Upgrade Checker</a> to see if there are any glFusion CMS or Plugin updates available.',
 );
 
 // +---------------------------------------------------------------------------+

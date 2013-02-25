@@ -178,7 +178,10 @@ $LANG_INSTALL = array(
     'data_path' => '資料檔案路徑',
     'language_support' => '多語言支援',
     'language_pack' => '在glFusion完成安裝後，您可以下載並安裝<a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">語言包</a>， 該語言包包含所有支援的語言檔。',
-    'libcustom_not_found' => 'Unable to located lib-custom.php.dist.'
+    'libcustom_not_found' => 'Unable to located lib-custom.php.dist.',
+    'no_db_driver'              => 'You must have the MySQL extension loaded in PHP to install glFusion',
+    'version_check'             => 'Check For Updates',
+    'check_for_updates'         => 'Goto the <a href="'.$_CONF['site_admin_url'].'/vercheck.php">Upgrade Checker</a> to see if there are any glFusion CMS or Plugin updates available.',
 );
 
 // +---------------------------------------------------------------------------+
