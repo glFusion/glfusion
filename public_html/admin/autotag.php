@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2011 by the following authors:                        |
+// | Copyright (C) 2009-2013 by the following authors:                        |
 // |                                                                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -73,7 +73,7 @@ function AT_mergeAllTags()
 
 function AT_adminForm($A, $error = false)
 {
-    global $_CONF, $LANG_AM, $_AM_CONF, $LANG_ADMIN, $_IMAGE_TYPE;
+    global $_CONF, $LANG_AM, $_AM_CONF, $LANG_ADMIN;
     global $self_url, $cc_url;
 
 $LANG_AM['instructions_edit'] = 'This screen allows you to create a custom autotag.';
@@ -113,7 +113,7 @@ $LANG_AM['instructions_edit'] = 'This screen allows you to create a custom autot
                 'lang_enabled'      => $LANG_AM['enabled'],
                 'lang_replacement'  => $LANG_AM['replacement'],
                 'lang_replace_explain'  => $LANG_AM['replace_explain'],
-                'admin_menu' => ADMIN_createMenu($menu_arr, $LANG_AM['instructions_edit'],$_CONF['site_admin_url'] . '/images/autotag.' . $_IMAGE_TYPE),
+                'admin_menu' => ADMIN_createMenu($menu_arr, $LANG_AM['instructions_edit'],$_CONF['layout_url'] . '/images/icons/autotag.png'),
         ));
 
         if (isset($A['is_enabled']) && $A['is_enabled'] == 1) {
@@ -271,7 +271,7 @@ function AT_save($tag, $old_tag, $description, $is_enabled, $is_function, $repla
 
 function AT_adminList()
 {
-    global $_CONF, $_USER, $_TABLES, $_IMAGE_TYPE, $LANG_ADMIN, $LANG_AM, $self_url, $cc_url, $public_url;
+    global $_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG_AM, $self_url, $cc_url, $public_url;
 
     USES_lib_admin();
 
@@ -286,7 +286,7 @@ function AT_adminList()
     );
 
     $retval .= ADMIN_createMenu($menu_arr, $LANG_AM['instructions'],
-                $_CONF['layout_url'] . '/images/icons/autotag.' . $_IMAGE_TYPE);
+                $_CONF['layout_url'] . '/images/icons/autotag.png');
 
 
     $retval .= AT_showUploadForm();
@@ -332,7 +332,7 @@ function AT_adminList()
 
 function AT_list()
 {
-    global $_CONF, $LANG_AM, $LANG_ADMIN, $_IMAGE_TYPE;
+    global $_CONF, $LANG_AM, $LANG_ADMIN;
 
     USES_lib_admin();
 
@@ -352,7 +352,7 @@ function AT_list()
     // display the header and instructions
 
     $retval .= ADMIN_createMenu($menu_arr, $LANG_AM['public_instructions'],
-                $_CONF['layout_url'] . '/images/icons/autotag.' . $_IMAGE_TYPE);
+                $_CONF['layout_url'] . '/images/icons/autotag.png');
     $retval .= '<br/>';
 
     // default sort array and direction
@@ -541,7 +541,7 @@ function AT_toggleStatus($enabledtags, $tagarray)
 function ATP_edit($autotag_id = '')
 {
     global $_TABLES, $_CONF, $_USER, $LANG01, $LANG_ACCESS, $LANG_ADMIN, $LANG_AM, $MESSAGE,
-           $LANG28, $VERBOSE, $_IMAGE_TYPE;
+           $LANG28, $VERBOSE;
 
     USES_lib_admin();
 
@@ -561,7 +561,7 @@ function ATP_edit($autotag_id = '')
     $retval .= ADMIN_createMenu(
         $menu_arr,
         $LANG_AM['autotagpermmsg'],
-        $_CONF['layout_url'] . '/images/icons/autotag.' . $_IMAGE_TYPE
+        $_CONF['layout_url'] . '/images/icons/autotag.png'
     );
 
     $retval .= '<form action="'.$_CONF['site_admin_url'].'/autotag.php" method="post">';
