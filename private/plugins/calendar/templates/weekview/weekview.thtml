@@ -1,15 +1,15 @@
 {# begin {templatelocation} #}
 <table width="100%" border="0" cellpadding="5" cellspacing="0" class="cal-header">
   <tr align="center">
-    <td width="33%" align="center"><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day">{lang_day}</a></td>
+    <td width="33%" align="center"><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day" rel="nofollow">{lang_day}</a></td>
     <td width="33%" align="center"><b>{lang_week}</b></td>
-    <td width="33%" align="center"><a href="{site_url}/calendar/index.php?mode={mode}">{lang_month}</a></td>
+    <td width="33%" align="center"><a href="{site_url}/calendar/index.php?mode={mode}" rel="nofollow">{lang_month}</a></td>
   </tr>
 </table>
 <br />
 <table width="100%" cellspacing="0" border="0">
     <tr>
-        <td colspan="2" class="cal-weekview-daterange"><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=week&amp;month={prevmonth}&amp;day={prevday}&amp;year={prevyear}">&lt;&lt;</a>&nbsp;&nbsp;{date_range}&nbsp;&nbsp;<a href="{site_url}/calendar/index.php?mode={mode}&amp;view=week&amp;month={nextmonth}&amp;day={nextday}&amp;year={nextyear}">&gt;&gt;</a></td>
+        <td colspan="2" class="cal-weekview-daterange"><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=week&amp;month={prevmonth}&amp;day={prevday}&amp;year={prevyear}">&lt;&lt;</a>&nbsp;&nbsp;{date_range}&nbsp;&nbsp;<a href="{site_url}/calendar/index.php?mode={mode}&amp;view=week&amp;month={nextmonth}&amp;day={nextday}&amp;year={nextyear}" rel="nofollow">&gt;&gt;</a></td>
     </tr>
     <tr>
         <td colspan="2" class="cal-weekview-caltitle">{calendar_title} {calendar_toggle}</td>

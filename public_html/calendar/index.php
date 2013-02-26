@@ -194,7 +194,7 @@ function getDeleteImageLink($mode, $A, $token)
                 $A['perm_group'], $A['perm_members'], $A['perm_anon']) > 0) {
             $retval = COM_createLink($img, $_CONF['site_url']
                     . '/calendar/event.php?action=deleteevent&amp;eid='
-                    . $A['eid'] . '&amp;' . CSRF_TOKEN . '=' . $token);
+                    . $A['eid'] . '&amp;' . CSRF_TOKEN . '=' . $token,$attr = array('rel'=>'nofollow'));
         }
     } else if (SEC_hasRights('calendar.edit')) {
         if (SEC_hasAccess($A['owner_id'], $A['group_id'], $A['perm_owner'],
@@ -202,7 +202,7 @@ function getDeleteImageLink($mode, $A, $token)
             $retval = COM_createLink($img, $_CONF['site_admin_url']
                     . '/plugins/calendar/index.php?mode='
                     . $LANG_ADMIN['delete'] . '&amp;eid=' . $A['eid'] . '&amp;'
-                    . CSRF_TOKEN . '=' . $token);
+                    . CSRF_TOKEN . '=' . $token,$attr=array('rel'=>'nofollow'));
         }
     }
 
@@ -233,7 +233,7 @@ function getSmallCalendar ($m, $y, $mode = '')
     $retval .= '<table class="smallcal">' . LB
             . '<tr class="smallcal-headline"><td align="center" colspan="7">'
             . COM_createLink($mycal->getMonthName ($m), $_CONF['site_url']
-                . '/calendar/index.php?month=' . $m . '&amp;year=' . $y . $mode)
+                . '/calendar/index.php?month=' . $m . '&amp;year=' . $y . $mode,$attr = array('rel'=>'nofollow'))
             . '</td></tr>' . makeDaysHeadline () . LB;
 
     for ($i = 1; $i <= 6; $i++) {
@@ -534,14 +534,14 @@ case 'day':
         $cal_templates->set_var('calendar_title', '[' . $LANG_CAL_2[28] . ' ' . COM_getDisplayName());
         $cal_templates->set_var('calendar_toggle', '|&nbsp;'
             . COM_createLink($LANG_CAL_2[11], $_CONF['site_url']
-                . "/calendar/index.php?view=day&amp;month=$month&amp;day=$day&amp;year=$year") . ']'
+                . "/calendar/index.php?view=day&amp;month=$month&amp;day=$day&amp;year=$year",$attr = array('rel'=>'nofollow')) . ']'
         );
     } else {
         $cal_templates->set_var('calendar_title', '[' . $_CONF['site_name'] . ' ' . $LANG_CAL_2[29]);
         if (!COM_isAnonUser() AND $_CA_CONF['personalcalendars'] == 1) {
             $cal_templates->set_var('calendar_toggle', '|&nbsp;'
                 . COM_createLink($LANG_CAL_2[12], $_CONF['site_url']
-                    . "/calendar/index.php?mode=personal&amp;view=day&amp;month=$month&amp;day=$day&amp;year=$year") . ']'
+                    . "/calendar/index.php?mode=personal&amp;view=day&amp;month=$month&amp;day=$day&amp;year=$year",$attr = array('rel'=>'nofollow')) . ']'
             );
         } else {
             $cal_templates->set_var('calendar_toggle', ']');
@@ -624,15 +624,15 @@ case 'day':
         if ( $mode != 'personal' ) {
             if ( $_CA_CONF['only_admin_submit'] == 1 ) {
                 if ( SEC_hasRights('calendar.edit') ) {
-                    $link = '<a href="' . $_CONF['site_url'] . '/calendar/index.php?op=add&amp;mode='.$mode.'&amp;month='.$month.'&amp;day='.$day.'&amp;year='.$year.'&amp;hour='.$i.'">';
+                    $link = '<a href="' . $_CONF['site_url'] . '/calendar/index.php?op=add&amp;mode='.$mode.'&amp;month='.$month.'&amp;day='.$day.'&amp;year='.$year.'&amp;hour='.$i.'" rel="nofollow">';
                 } else {
                     $link = '';
                 }
             } else {
-                $link = '<a href="' . $_CONF['site_url'] . '/calendar/index.php?op=add&amp;mode='.$mode.'&amp;month='.$month.'&amp;day='.$day.'&amp;year='.$year.'&amp;hour='.$i.'">';
+                $link = '<a href="' . $_CONF['site_url'] . '/calendar/index.php?op=add&amp;mode='.$mode.'&amp;month='.$month.'&amp;day='.$day.'&amp;year='.$year.'&amp;hour='.$i.'" rel="nofollow">';
             }
         } else {
-            $link = '<a href="' . $_CONF['site_url'] . '/calendar/index.php?op=add&amp;mode='.$mode.'&amp;month='.$month.'&amp;day='.$day.'&amp;year='.$year.'&amp;hour='.$i.'">';
+            $link = '<a href="' . $_CONF['site_url'] . '/calendar/index.php?op=add&amp;mode='.$mode.'&amp;month='.$month.'&amp;day='.$day.'&amp;year='.$year.'&amp;hour='.$i.'" rel="nofollow">';
         }
         $link .= strftime ('%I:%M%p', mktime ($i, 0));
         if ( $mode != 'personal' ) {
@@ -671,14 +671,14 @@ case 'week':
         $cal_templates->set_var('calendar_title', '[' . $LANG_CAL_2[28] . ' ' . COM_getDisplayName());
         $cal_templates->set_var('calendar_toggle', '|&nbsp;'
             . COM_createLink($LANG_CAL_2[11], $_CONF['site_url']
-                . "/calendar/index.php?view=week&amp;month=$month&amp;day=$day&amp;year=$year") . ']'
+                . "/calendar/index.php?view=week&amp;month=$month&amp;day=$day&amp;year=$year",$attr = array('rel'=>'nofollow')) . ']'
         );
     } else {
         $cal_templates->set_var('calendar_title', '[' . $_CONF['site_name'] . ' ' . $LANG_CAL_2[29]);
         if (!COM_isAnonUser() AND $_CA_CONF['personalcalendars'] == 1) {
             $cal_templates->set_var('calendar_toggle', '|&nbsp;'
                 . COM_createLink($LANG_CAL_2[12], $_CONF['site_url']
-                    . "/calendar/index.php?mode=personal&amp;view=week&amp;month=$month&amp;day=$day&amp;year=$year") . ']'
+                    . "/calendar/index.php?mode=personal&amp;view=week&amp;month=$month&amp;day=$day&amp;year=$year",$attr = array('rel'=>'nofollow')) . ']'
             );
         } else {
             $cal_templates->set_var('calendar_toggle', ']');
@@ -754,7 +754,7 @@ case 'week':
         $cal_templates->set_var ('day' . $i, $dayname . ', '
             . COM_createLink( strftime ('%x', $thedate[1]),
             $_CONF['site_url'] . '/calendar/index.php?' . addMode ($mode)
-            . "view=day&amp;day$daynum&amp;month=$monthnum&amp;year=$yearnum")
+            . "view=day&amp;day$daynum&amp;month=$monthnum&amp;year=$yearnum",$attr = array('rel' => 'nofollow'))
         );
         if ($mode == 'personal') {
             $add_str =  $LANG_CAL_2[8];
@@ -767,19 +767,19 @@ case 'week':
                 if ( SEC_hasRights('calendar.edit') ) {
                     $cal_templates->set_var ('langlink_addevent' . $i,
                         COM_createLink($add_str, $_CONF['site_url'] . '/calendar/index.php?op=add&amp;type=calendar&amp;'
-                        . addMode ($mode) . "day=$daynum&amp;month=$monthnum&amp;year=$yearnum")
+                        . addMode ($mode) . "day=$daynum&amp;month=$monthnum&amp;year=$yearnum",$attr=array('rel'=>'nofollow'))
                     );
                 }
             } else {
                 $cal_templates->set_var ('langlink_addevent' . $i,
                     COM_createLink($add_str, $_CONF['site_url'] . '/calendar/index.php?op=add&amp;type=calendar&amp;'
-                    . addMode ($mode) . "day=$daynum&amp;month=$monthnum&amp;year=$yearnum")
+                    . addMode ($mode) . "day=$daynum&amp;month=$monthnum&amp;year=$yearnum",$attr=array('rel'=>'nofollow'))
                 );
             }
         } else {
             $cal_templates->set_var ('langlink_addevent' . $i,
                 COM_createLink($add_str, $_CONF['site_url'] . '/calendar/index.php?op=add&amp;type=calendar&amp;'
-                . addMode ($mode) . "day=$daynum&amp;month=$monthnum&amp;year=$yearnum")
+                . addMode ($mode) . "day=$daynum&amp;month=$monthnum&amp;year=$yearnum",$attr=array('rel'=>'nofollow'))
             );
         }
         if ($mode == 'personal') {
@@ -973,7 +973,7 @@ for ($i = 1; $i <= 6; $i++) {
                 COM_createLink($curday->daynumber, $_CONF['site_url']
                     . '/calendar/index.php?view=day&amp;' . addMode ($mode)
                     . 'day=' . $curday->daynumber . "&amp;month=$month&amp;year=$year",
-                    array('class'=>'cal-date'))
+                    array('class'=>'cal-date','rel'=>'nofollow'))
                     . '<div style="margin:2px 0 5px;border-bottom:1px solid #666666"></div>'
             );
 
@@ -1012,7 +1012,7 @@ for ($i = 1; $i <= 6; $i++) {
                                 $results['title'],
                                 $_CONF['site_url'] . '/calendar/event.php?' . addMode ($mode)
                                 . 'eid=' . $results['eid'],
-                                array('class'=>'cal-event'))
+                                array('class'=>'cal-event','rel'=>'nofollow'))
                                 . '<div style="margin:5px 0 5px;border-bottom:1px solid #bbbbbb"></div>';
                     }
                 }
