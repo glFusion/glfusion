@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.3.0
 ------
+- Display 404 Error if invalid SID passed to article.php (Mark)
 - Added link to Upgrade Checker on upgrade success page. (Mark)
 - Several language file fixes and HTML code fixes (Andre)
 - Copyright year fix - if year is old than current show

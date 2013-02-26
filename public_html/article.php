@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2012 by the following authors:                        |
+// | Copyright (C) 2008-2013 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -93,8 +93,7 @@ if (isset ($_POST['mode'])) {
 }
 
 if (empty ($sid)) {
-    echo COM_refresh ($_CONF['site_url'] . '/index.php');
-    exit();
+    COM_404();
 }
 if ((strcasecmp ($order, 'ASC') != 0) && (strcasecmp ($order, 'DESC') != 0)) {
     $order = '';
@@ -140,8 +139,7 @@ if ($A['count'] > 0) {
         echo $display;
         exit;
     } elseif ( $output == STORY_INVALID_SID ) {
-        echo COM_refresh($_CONF['site_url'] . '/index.php');
-        exit;
+        COM_404();
     } elseif (($mode == 'print') && ($_CONF['hideprintericon'] == 0)) {
         $story_template = new Template($_CONF['path_layout'] . 'article');
         $story_template->set_file('article', 'printable.thtml');
@@ -167,8 +165,6 @@ if ($A['count'] > 0) {
         $story_template->set_var ('story_bodytext',
                                     $story->DisplayElements('bodytext'));
 
-        $story_template->set_var ('site_url', $_CONF['site_url']);
-        $story_template->set_var ('layout_url', $_CONF['layout_url']);
         $story_template->set_var ('site_name', $_CONF['site_name']);
         $story_template->set_var ('site_slogan', $_CONF['site_slogan']);
         $story_template->set_var ('story_id', $story->getSid());
@@ -396,7 +392,7 @@ if ($A['count'] > 0) {
         $pageBody .= $story_template->finish ($story_template->parse ('output', 'article'));
     }
 } else {
-    echo COM_refresh($_CONF['site_url'] . '/index.php');
+    COM_404();
 }
 
 if ($pingback == true && $_CONF['pingback_enabled']) {
