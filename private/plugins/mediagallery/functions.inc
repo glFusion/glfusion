@@ -1825,10 +1825,10 @@ function phpblock_mg_maenroll(){
 }
 
 
-function MG_initAlbums() {
+function MG_initAlbums($force=0) {
     global $_CONF, $_TABLES, $_USER, $_GROUPS, $_MG_CONF, $MG_albums, $_MG_USERPREFS, $mg_installed_version, $ratedIds;
 
-    if ( isset($MG_albums) ) {
+    if ( isset($MG_albums) && $force == 0) {
         return;
     }
 

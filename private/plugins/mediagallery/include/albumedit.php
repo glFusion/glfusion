@@ -182,7 +182,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         $A['mp3ribbon']         = 0;
         $A['rsschildren']       = 0;
         $A['usealternate']      = isset($_MG_CONF['ad_use_alternate']) ? $_MG_CONF['ad_use_alternate'] : 0;
-        $A['skin']              = $_MG_CONF['ad_skin'];
+        $A['skin']              = isset($_MG_CONF['ad_skin']) ? $_MG_CONF['ad_skin'] : 'default';
 
         $gresult = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name LIKE 'mediagallery Admin'");
         $grow = DB_fetchArray($gresult);
@@ -810,7 +810,7 @@ function MG_quickCreate( $parent, $title, $desc='' ) {
     $album->saveAlbum();
     $aid = $album->id;
 
-    MG_initAlbums();
+    MG_initAlbums(1);
 
     if ( !function_exists('MG_buildFullRSS') ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/rssfeed.php';
@@ -1225,7 +1225,7 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
         }
     }
 
-    MG_initAlbums();
+    MG_initAlbums(1);
 
     // do any album sorting here...
 

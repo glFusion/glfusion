@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.3.0
 ------
+- Fixed album re-initialize bug in Media Gallery (Mark)
+- Fixed bug where large files were copied twice when using
+  Media Gallery FTP upload (Mark)
 - Display 404 Error if invalid SID passed to article.php (Mark)
 - Added link to Upgrade Checker on upgrade success page. (Mark)
 - Several language file fixes and HTML code fixes (Andre)

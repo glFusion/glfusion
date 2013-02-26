@@ -484,7 +484,9 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
     if ($upload) {
         $rc = @move_uploaded_file($filename, $tmpPath);
     } else {
-        $rc = @copy($filename, $tmpPath);
+        $tmpPath = $filename;
+        $rc = 1;
+//        $rc = @copy($filename, $tmpPath);
         $importSource = $filename;
     }
     if ( $rc != 1 ) {
@@ -492,7 +494,11 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         COM_errorLog("Media Upload - Unable to copy file to: " . $tmpPath);
         $errors++;
         $errMsg .= sprintf($LANG_MG02['move_error'],$filename);
-        @unlink($tmpPath);
+        if ( $upload ) {
+            @unlink($tmpPath);
+        } else if ( !$purgefiles ) {
+            @unlink($tmpPath);
+        }
         COM_errorLog("MG Upload: Problem uploading a media object");
         return array( false, $errMsg );
     }
@@ -910,7 +916,6 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
 
             // process video format
             $media_orig = $_MG_CONF['path_mediaobjects'] . 'orig/' . $media_filename[0] . '/' . $media_filename . '.' . $mimeExt;
-
             $rc = @copy($filename, $media_orig);
 
             if ( $rc != 1 )
@@ -1011,7 +1016,9 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
     DB_query("UPDATE {$_TABLES['mg_albums']} SET album_disk_usage=" . $quota . " WHERE album_id=" . $albums);
 
     if ( $errors ) {
-        @unlink($tmpPath);
+        if ( $upload ) {
+            @unlink($tmpPath);
+        }
         COM_errorLog("MG Upload: Problem uploading a media object");
         return array( false, $errMsg );
     }
@@ -1218,7 +1225,9 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         CACHE_remove_instance('whatsnew');
     }
     COM_errorLog("MG Upload: Successfully uploaded a media object");
-    @unlink($tmpPath);
+
+    if ( $upload )
+        @unlink($tmpPath);
     return array (true, $errMsg );
 }
 
