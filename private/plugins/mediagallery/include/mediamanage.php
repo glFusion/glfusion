@@ -350,10 +350,10 @@ function MG_saveMedia( $album_id, $actionURL = '' ) {
         $media[$i]['seq'] = $_POST['seq'][$i];
         $media[$i]['oldseq'] = $_POST['oldseq'][$i];
         $media[$i]['title'] = $_POST['mtitle'][$i];
-        $media[$i]['description'] = $_POST['mdesc'][$i];
-        $media[$i]['include_ss'] = $_POST['ss'][$i];
-        $media[$i]['keywords'] = $_POST['mkeywords'][$i];
-        $media[$i]['cat_id'] = $_POST['cat_id'][$i];
+        $media[$i]['description'] = isset($_POST['mdesc'][$i]) ? $_POST['mdesc'][$i] : '';
+        $media[$i]['include_ss'] = isset($_POST['ss'][$i]) ? $_POST['ss'][$i] : '';
+        $media[$i]['keywords'] = isset($_POST['mkeywords'][$i]) ? $_POST['mkeywords'][$i] : '';
+        $media[$i]['cat_id'] = isset($_POST['cat_id'][$i]) ? $_POST['cat_id'][$i] : '';
     }
 
     for ( $i=0; $i < $numItems; $i++ ) {
