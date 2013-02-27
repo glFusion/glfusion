@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion installation script.                                            |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
+// | $Id::                                                             $|
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2013 by the following authors:                        |
 // |                                                                          |
@@ -1682,6 +1682,8 @@ function INST_sanitizePath($path)
 
 function INST_resyncConfig() {
     global $_CONF, $_TABLES;
+
+    require_once $_CONF['path_system'] . 'classes/config.class.php';
 
     $site_url = $_CONF['site_url'];
     $c = config::get_instance();
