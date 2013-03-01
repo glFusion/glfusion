@@ -2,7 +2,7 @@
 /*
  * http.php
  *
- * @(#) $Header: /opt2/ena/metal/http/http.php,v 1.89 2012/07/22 03:05:46 mlemos Exp $
+ * @(#) $Header: /opt2/ena/metal/http/http.php,v 1.90 2013/02/20 11:45:28 mlemos Exp $
  *
  */
 
@@ -27,7 +27,7 @@ class http_class
 
 	var $protocol="http";
 	var $request_method="GET";
-	var $user_agent='httpclient (http://www.phpclasses.org/httpclient $Revision: 1.89 $)';
+	var $user_agent='httpclient (http://www.phpclasses.org/httpclient $Revision: 1.90 $)';
 	var $accept='';
 	var $authentication_mechanism="";
 	var $user;
@@ -1277,7 +1277,8 @@ class http_class
 			$protocol_version=$this->protocol_version;
 		$this->request=$this->request_method." ".$request_uri." HTTP/".$protocol_version;
 		if($body_length
-		|| ($body_length=strlen($this->request_body)))
+		|| ($body_length=strlen($this->request_body))
+		|| !strcmp($this->request_method, 'POST'))
 			$this->request_headers["Content-Length"]=$body_length;
 		for($headers=array(),$host_set=0,Reset($this->request_headers),$header=0;$header<count($this->request_headers);Next($this->request_headers),$header++)
 		{
