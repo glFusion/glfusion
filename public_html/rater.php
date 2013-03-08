@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2006-2009 by the following authors:                        |
+// | Copyright (C) 2006-2013 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -34,7 +34,9 @@
 
 require_once 'lib-common.php';
 
-$_CONF['rating_speedlimit'] = 15;
+if ( !isset($_CONF['rating_speedlimit']) ) {
+    $_CONF['rating_speedlimit'] = 15;
+}
 
 //getting the values
 $vote_sent  = preg_replace("/[^0-9]/","",$_REQUEST['j']);

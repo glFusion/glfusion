@@ -794,6 +794,10 @@ function glfusion_130()
     $c->add('update_check_interval','86400','select',0,7,29,765,TRUE);
     $c->add('send_site_data',TRUE,'select',0,7,1,770,TRUE);
 
+    // rating information
+    $c->add('fs_rating',NULL, 'fieldset', 4,7,NULL,0,TRUE);
+    $c->add('rating_speedlimit',15,'text',4,7,NULL,10,TRUE);
+
     // add new logo.admin permission
     $result = DB_query("SELECT * FROM {$_TABLES['features']} WHERE ft_name='logo.admin'");
     if ( DB_numRows($result) > 0 ) {
@@ -1227,6 +1231,9 @@ function _updateConfig() {
     $c->sync('article_comment_close_enabled',0,'select',4,6,0,90,TRUE);
     $c->sync('article_comment_close_days',30,'text',4,6,NULL,100,TRUE);
     $c->sync('comment_close_rec_stories',0,'text',4,6,NULL,110,TRUE);
+
+    $c->sync('fs_rating',NULL, 'fieldset', 4,7,NULL,0,TRUE);
+    $c->sync('rating_speedlimit',15,'text',4,7,NULL,10,TRUE);
 
     // Subgroup: Images
     $c->sync('sg_images', NULL, 'subgroup', 5, 0, NULL, 0, TRUE);

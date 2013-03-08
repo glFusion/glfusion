@@ -277,6 +277,9 @@ function install_config($site_url)
     $c->add('article_comment_close_days',30,'text',4,6,NULL,100,TRUE);
     $c->add('comment_close_rec_stories',0,'text',4,6,NULL,110,TRUE);
 
+    $c->add('fs_rating',NULL, 'fieldset', 4,7,NULL,0,TRUE);
+    $c->add('rating_speedlimit',15,'text',4,7,NULL,10,TRUE);
+
     // Subgroup: Images
     $c->add('sg_images', NULL, 'subgroup', 5, 0, NULL, 0, TRUE);
 

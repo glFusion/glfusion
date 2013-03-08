@@ -2609,6 +2609,7 @@ $LANG_confignames['Core'] = array(
     'hideemptyblock' => 'Hide What\'s New Block when empty',
     'update_check_interval' => 'Update Check Interval',
     'send_site_data' => 'Send Site Data',
+    'rating_speedlimit' => 'Rating SpeedLimit (in seconds)',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2668,6 +2669,7 @@ $LANG_fs['Core'] = array(
     'fs_mulitlanguage' => 'Multiple Language Support - See <a href="http://www.glfusion.org/wiki/doku.php/glfusion:language#multilingual_sites" target=_blank>Multi-Language Documentation</a>',
     'fs_logo' => 'Logo Options',
     'fs_update' => 'Update Checker',
+    'fs_rating' => 'Rating Options',
 );
 
 $LANG_configselects['Core'] = array(

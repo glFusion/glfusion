@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2007-2009 by the following authors:                        |
+// | Copyright (C) 2007-2013 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans      - mark AT glfusion DOT org                            |
 // | Joe Mucchiello     - joe AT throwingdice DOT com                         |
@@ -41,8 +41,6 @@ if (!defined('GVERSION')) {
     die('This file can not be used on its own.');
 }
 
-define('TEMPLATE_VERSION','2.3.4');
-
 /**
  * The template class allows you to keep your HTML code in some external files
  * which are completely free of PHP code, but contain replacement fields.
@@ -69,7 +67,6 @@ $TEMPLATE_OPTIONS = array(
                         'site_url' => $_CONF['site_url'],
                         'site_admin_url' => $_CONF['site_admin_url'],
                         'layout_url' => $_CONF['layout_url'],
-                        'xhtml' => (defined('XHTML') ? XHTML : ' /'),
                       ),
     'hook' => array(),
 );
@@ -1780,7 +1777,6 @@ class Template
         $reg = "/\s*<!--\s+BEGIN ([-\w\d_]+)\s+-->\s*?\n?(\s*.*?\n?)\s*<!--\s+END \\1\s+-->\s*?\n?/smU";
         $matches = array();
         if (preg_match_all($reg, $str, $matches, PREG_SET_ORDER)) {
-//            $phpstub = $TEMPLATE_OPTIONS['path_cache'] . $extra_path . $basefile . '__%s' . '.php';
             foreach ($matches as $m) {
                 $str = str_replace($m[0], '<?php echo $this->block_echo(\''.$m[1].'\'); ?>', $str);
                 $this->compile_blocks($m);
