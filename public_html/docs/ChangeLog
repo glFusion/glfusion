@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.3.0
 ------
+- Moved hard coded rating speed limit to configuration (Mark)
 - Fixed album re-initialize bug in Media Gallery (Mark)
 - Fixed bug where large files were copied twice when using
   Media Gallery FTP upload (Mark)
