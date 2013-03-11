@@ -2,7 +2,11 @@
 <div style="width:100%; text-align:center;">
   <div style="font-size:1.2em;">{start_block_loginagain}</div>
   <p style="font-size:.8em;">{lang_message}</p>
-    <div style="padding:1em; width:45em; margin:auto; background:#f2f2f2; border:1px solid #ccc; font-size:.8em;">
+    {!if oauth_login}
+    <div class="loginbox" style="width:42em;">
+    {!else}
+    <div class="loginbox" style="width:29em;">
+    {!endif}
     <form id="login" name="login" action="{form_action}" method="post" style="margin-top:1em; margin-bottom:1em;">
       <div style="float:left;width:10em;">
         <img class="floatleft" style="width:128px;" src="{layout_url}/images/lock.png" alt="" />
@@ -35,7 +39,7 @@
       </div>
       </form>
       {!if oauth_login}
-      <div style="float:right;padding-right:10px;;padding-top:20px;">
+      <div class="oauth">
         {oauth_login}
       </div>
       {!endif}

@@ -3222,3 +3222,17 @@ color:#0055bb !important;
 
 #login_openid{left:0px;width:141px;}
 #login_openid{background:url('images/oauth-login-with-sprite.png') no-repeat; background-position: 0 -154px;}
+
+.loginbox {
+  padding:1em;
+  margin:auto;
+  background:#f2f2f2;
+  border:1px solid #ccc;
+  font-size:.8em;
+}
+
+.oauth {
+  float:right;
+  padding-right:10px;
+  padding-top:20px;
+}
