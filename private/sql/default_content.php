@@ -399,6 +399,21 @@ echo WIDGET_moorotator();
 		</div>
 	</div>
 
+
+	<div class=\"gl_moorotator\">
+		<div class=\"gl_moorotatorimage\">
+			<a href=\"http://www.glfusion.org/wiki/glfusion:remoteauth\" target=\"_blank\">
+				<img src=\"xxxSITEURLxxx/images/library/Image/moorotator5.jpg\" alt=\"Social Login\" title=\"Social Login\" />
+			</a>
+		</div>
+		<div class=\"gl_moorotatortext\">
+					<b>Remote Social Authentication</b>
+				<p>
+				Login to glFusion using your favorite social networking services.
+				</p>
+		</div>
+	</div>
+
 	<!-- repeat as needed -->
 </div>', 0, NOW(), 'leftblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 1, '', 'none', 1, 2, 0, 0, 'html', 0) ";
 $_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_status`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('gl_moosimplebox', 1, 2, 'gl_moosimplebox', '<center>
