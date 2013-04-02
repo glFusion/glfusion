@@ -3174,6 +3174,7 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/images/library/Image/moorotator2.jpg' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/images/library/Image/moorotator3.jpg' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/images/library/Image/moorotator4.jpg' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/images/library/Image/moorotator5.jpg' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/images/library/Image/moorotatorblock1.jpg' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/images/library/Image/moorotatorblock2.jpg' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/images/library/Image/moorotatorblock3.jpg' ),
