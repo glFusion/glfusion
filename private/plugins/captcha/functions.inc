@@ -98,9 +98,9 @@ function plugin_geticon_captcha ()
 function plugin_enablestatechange_captcha($enable) {
 
     if ( defined('DEMO_MODE') && $enable == false ) {
-        return -2;
+        return 99;
     }
-    return true;
+    return 1;
 }
 
 // this plugin uses the 'templatesetvars' hook to insert the CAPTCHA challenge in user-accessible scripts

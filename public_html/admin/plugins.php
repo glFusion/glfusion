@@ -684,7 +684,7 @@ function PLUGINS_toggleStatus($plugin_name_arr, $pluginarray)
                 PLG_enableStateChange ($plugin, true);
             } else {
                 $rc = PLG_enableStateChange ($plugin, false);
-                if ( $rc != -2 ) {
+                if ( $rc != 99 ) {
                     DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '0' WHERE pi_name = '".DB_escapeString($plugin)."'");
                 }
             }
