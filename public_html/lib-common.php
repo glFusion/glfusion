@@ -66,7 +66,7 @@ if (!defined ('GVERSION')) {
     define('GVERSION', '1.3.0');
 }
 
-define('PATCHLEVEL','.svn');
+define('PATCHLEVEL','.pl0');
 
 //define('DEMO_MODE',true);
 
