@@ -1632,10 +1632,10 @@ function USER_save($uid)
             if ( $remoteuser == 1 ) {
                 $uid = USER_createAccount($username, $email, '',
                            $fullname, '', $remoteusername,
-                           $remoteservice);
+                           $remoteservice,1);
             } else {
                 $uid = USER_createAccount ($username, $email, $passwd2, $fullname,
-                                           $homepage);
+                                           $homepage,'','',1);
             }
             if ($uid > 1) {
                 DB_query("UPDATE {$_TABLES['users']} SET status = $userstatus WHERE uid = $uid");

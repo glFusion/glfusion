@@ -319,7 +319,7 @@ function USER_sendActivationEmail ($username, $useremail)
 * @return   int                 new user's ID
 *
 */
-function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $homepage = '', $remoteusername = '', $service = '')
+function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $homepage = '', $remoteusername = '', $service = '', $ignore = 0)
 {
     global $_CONF, $_USER, $_TABLES;
 
@@ -423,6 +423,8 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
     if ( function_exists('CUSTOM_userCreateHook') ) {
         CUSTOM_userCreateHook($uid);
     }
+
+    if ( $ignore == 0 ) PLG_createUser($uid);
 
     // Notify the admin?
     if (isset ($_CONF['notification']) &&
