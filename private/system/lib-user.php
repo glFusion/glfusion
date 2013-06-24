@@ -243,7 +243,7 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
     $to   = COM_formatEmailAddress( $username,$useremail );
     $subject    = COM_undoSpecialChars(strip_tags($subject));
 
-    return COM_mail ($to, $subject, $mailtext, $from,true);
+    return COM_mail ($to, $subject, $mailtext, $from, false);
 }
 
 function USER_createActivationToken($uid,$username)
