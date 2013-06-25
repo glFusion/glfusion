@@ -655,7 +655,7 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
         }
         COM_setMessage(49);
         $url = $_CONF['site_admin_url'] . '/group.php';
-        $url .= (isset($_POST['chk_showall']) && ($_POST['chk_showall'] == 1)) ? '&amp;chk_showall=1' : '';
+        $url .= (isset($_POST['chk_showall']) && ($_POST['chk_showall'] == 1)) ? '?chk_showall=1' : '';
         echo COM_refresh($url);
     } else {
         $retval .= COM_siteHeader ('menu', $LANG_ACCESS['groupeditor']);
@@ -1135,7 +1135,7 @@ function GROUP_saveUsers($grp_id, $grp_members)
     }
     COM_setMessage(49);
     $url = $_CONF['site_admin_url'] . '/group.php';
-    $url .= (isset($_REQUEST['chk_showall']) && ($_REQUEST['chk_showall'] == 1)) ? '&chk_showall=1' : '';
+    $url .= (isset($_REQUEST['chk_showall']) && ($_REQUEST['chk_showall'] == 1)) ? '?chk_showall=1' : '';
     $retval = COM_refresh($url);
 
     return $retval;
@@ -1175,7 +1175,7 @@ function GROUP_delete($grp_id)
 
     COM_setMessage(50);
     $url = $_CONF['site_admin_url'] . '/group.php';
-    $url .= (isset($_REQUEST['chk_showall']) && ($_REQUEST['chk_showall'] == 1)) ? '&amp;chk_showall=1' : '';
+    $url .= (isset($_REQUEST['chk_showall']) && ($_REQUEST['chk_showall'] == 1)) ? '?chk_showall=1' : '';
     return COM_refresh($url);;
 }
 
