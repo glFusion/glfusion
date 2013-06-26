@@ -62,15 +62,15 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
 
     if (!SEC_hasRights('staticpages.edit')) {
         $output  = COM_siteHeader('menu', $LANG_STATIC['access_denied']);
-        $retval .= COM_showMessageText($LANG_STATIC['access_denied_msg'],$LANG_STATIC['access_denied'],true);
+        $output .= COM_showMessageText($LANG_STATIC['access_denied_msg'],$LANG_STATIC['access_denied'],true);
         $output .= COM_siteFooter();
 
         return PLG_RET_AUTH_FAILED;
     }
 
     if ( defined('DEMO_MODE') ) {
-        $output = COM_siteHeader('menu');
-        $retval .= COM_showMessageText('Option disabled in Demo Mode','Option disabled in Demo Mode',true);
+        $output  = COM_siteHeader('menu');
+        $output .= COM_showMessageText('Option disabled in Demo Mode','Option disabled in Demo Mode',true);
         $output .= COM_siteFooter();
         return PLG_REG_AUTH_FAILED;
     }
