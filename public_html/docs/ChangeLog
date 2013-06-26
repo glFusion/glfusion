@@ -1,5 +1,11 @@
 glFusion ChangeLog
 
+v1.3.0.pl1
+------
+- Fixed error when saving in Group editor when chk_showall was set
+  to 1 (Mark)
+- Demo mode security improvements (Mark)
+
 v1.3.0
 ------
 - Added social auth moorotator image to default content (Michael/Eric)

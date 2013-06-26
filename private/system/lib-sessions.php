@@ -425,6 +425,15 @@ function SESS_endUserSession($userid)
 			session_unset();
 			session_destroy();
 		}
+    } else {
+        if ( isset($_COOKIE[$_CONF['cookie_session']]) {
+            $sess = $_COOKIE[$_CONF['cookie_session']];
+            DB_delete($_TABLES['sessions'],'md5_sess_id',DB_escapeString($sess));
+        }
+		if (session_id()) {
+			session_unset();
+			session_destroy();
+		}
     }
 
     return 1;

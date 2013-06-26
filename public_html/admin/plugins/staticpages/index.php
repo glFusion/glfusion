@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2013 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -179,7 +179,7 @@ function PAGE_form($A, $error = false)
         if (SEC_hasRights ('staticpages.delete') && ($action != 'clone') &&
                 !empty ($A['sp_old_id'])) {
             $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
-                       . '" name="delete"%s' . XHTML . '>';
+                       . '" name="delete"%s/>';
             $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
             $sp_template->set_var ('delete_option',
                                    sprintf ($delbutton, $jsconfirm));
@@ -394,7 +394,6 @@ function PAGE_form($A, $error = false)
         }
         $sp_template->set_var('end_block',
                 COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer')));
-        $sp_template->set_var( 'xhtml', XHTML );
 
         $sp_template->set_var('owner_dropdown',COM_buildOwnerList('owner_id',$A['owner_id']));
         $sp_template->set_var('writtenby_dropdown',COM_buildOwnerList('sp_uid',$A['sp_uid']));
@@ -644,8 +643,8 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                     $switch = '';
                 }
                 $retval = '<input type="checkbox" name="enabledstaticpages[' . $A['sp_id'] . ']" ' . $title
-                    . 'onclick="submit()" value="1"' . $switch . XHTML . '>';
-                $retval .= '<input type="hidden" name="sp_idarray['.$A['sp_id'].']" value="1" ' . XHTML . '>';
+                    . 'onclick="submit()" value="1"' . $switch . '/>';
+                $retval .= '<input type="hidden" name="sp_idarray['.$A['sp_id'].']" value="1" />';
             } else {
                 $retval = ($enabled) ? $LANG_ACCESS['yes'] : $LANG_ACCESS['No'];
             }
@@ -715,7 +714,7 @@ function PAGE_list()
     $token = SEC_createToken();
     $form_arr = array(
         'top'    => '<input type="hidden" name="'.CSRF_TOKEN.'" value="'.$token.'"/>',
-        'bottom' => '<input type="hidden" name="staticpageenabler" value="true"' . XHTML . '>'
+        'bottom' => '<input type="hidden" name="staticpageenabler" value="true"/>'
     );
 
     $retval .= ADMIN_list('static_pages', 'PAGE_getListField',
