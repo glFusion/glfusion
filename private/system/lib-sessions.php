@@ -426,7 +426,7 @@ function SESS_endUserSession($userid)
 			session_destroy();
 		}
     } else {
-        if ( isset($_COOKIE[$_CONF['cookie_session']]) {
+        if ( isset($_COOKIE[$_CONF['cookie_session']] )) {
             $sess = $_COOKIE[$_CONF['cookie_session']];
             DB_delete($_TABLES['sessions'],'md5_sess_id',DB_escapeString($sess));
         }
