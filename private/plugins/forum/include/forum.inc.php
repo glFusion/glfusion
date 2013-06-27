@@ -656,12 +656,12 @@ function forum_showBlocks($showblocks)
 
 // Generates the HTML Select element for the listing of filemgmt plugin the user has access to
 function gf_makeFilemgmtCatSelect($uid) {
-    global $_CONF,$_FM_TABLES,$_DB_name;
+    global $_CONF,$_TABLES, $_DB_name;
 
     include_once $_CONF['path'].'plugins/filemgmt/include/xoopstree.php';
     include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
     $_GROUPS = SEC_getUserGroups( $uid );
-    $mytree = new XoopsTree($_DB_name,$_FM_TABLES['filemgmt_cat'],"cid","pid");
+    $mytree = new XoopsTree($_DB_name,$_TABLES['filemgmt_cat'],"cid","pid");
     $mytree->setGroupUploadAccessFilter($_GROUPS);
     return $mytree->makeMySelBoxNoHeading('title', 'title','','','filemgmtcat');
 }

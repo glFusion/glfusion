@@ -140,7 +140,7 @@ function plugin_chkVersion_filemgmt() {
 * Called by the plugin Editor to run the SQL Update for a plugin update
 */
 function plugin_upgrade_filemgmt() {
-    global $_CONF, $_TABLES,$_TABLES,$CONF_FM;
+    global $_CONF,$_TABLES,$CONF_FM;
 
     require_once $_CONF['path'] . 'plugins/filemgmt/upgrade.php';
 
@@ -188,7 +188,7 @@ function plugin_commentsupport_filemgmt()
  * @return  mixed   HTML string (redirect?) for success or comment form if failure.
  */
 function plugin_savecomment_filemgmt($title,$comment,$id,$pid,$postmode) {
-    global $_CONF,$_TABLES, $LANG03, $_TABLES;
+    global $_CONF,$_TABLES, $LANG03;
 
     $retval = '';
 
@@ -226,7 +226,7 @@ function plugin_editcomment_filemgmt($cid,$id) {
  * @param   string  $id     Item id to which $cid belongs
  * @return  mixed   false for failure, HTML string (redirect?) for success
  */function plugin_deletecomment_filemgmt($cid,$id) {
-    global $_CONF,$_TABLES, $_TABLES;
+    global $_CONF,$_TABLES;
 
     if (SEC_hasRights("filemgmt.edit")) {
         if (CMT_deleteComment($cid, $id, 'filemgmt') == 0) {
@@ -255,7 +255,7 @@ function plugin_editcomment_filemgmt($cid,$id) {
  * @return  mixed   results of calling the CMT_userComments function
  */
 function plugin_displaycomment_filemgmt($id,$commentid,$title,$order,$format,$page,$view) {
-    global $_USER, $_FM_CONF, $filemgmt_FileSnapURL, $FilemgmtAdmin ,$mydownloads_dlreport ,$mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_TABLES, $_CONF, $LANG01,$_DB_name;
+    global $_USER, $_FM_CONF, $filemgmt_FileSnapURL, $FilemgmtAdmin ,$mydownloads_dlreport ,$mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_CONF, $LANG01,$_DB_name;
 
 
     if ( COM_isAnonUser() && $mydownloads_publicpriv != 1 )  {
@@ -447,7 +447,7 @@ function plugin_searchtypes_filemgmt()
 */
 function plugin_dopluginsearch_filemgmt($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
 {
-    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_TABLES, $_CONF, $filemgmt_FileStoreURL;
+    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_CONF, $filemgmt_FileStoreURL;
 
     if ( COM_isAnonUser() && $mydownloads_publicpriv != 1 )  {
         return '';
@@ -490,7 +490,7 @@ function plugin_dopluginsearch_filemgmt($query, $datestart, $dateend, $topic, $t
 */
 function plugin_dopluginsearch_comment_filemgmt($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
 {
-    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_TABLES, $_CONF, $filemgmt_FileStoreURL, $LANG09;
+    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_CONF, $filemgmt_FileStoreURL, $LANG09;
 
     $query = trim(DB_escapeString(htmlspecialchars($query)));
 
@@ -541,7 +541,7 @@ function plugin_cclabel_filemgmt()
 */
 
 function plugin_getuseroption_filemgmt() {
-    global $_CONF, $_TABLES, $_TABLES, $LANG_FILEMGMT,$mydownloads_uploadselect;
+    global $_CONF, $_TABLES, $LANG_FILEMGMT,$mydownloads_uploadselect;
 
     if (SEC_hasRights('filemgmt.upload') OR $mydownloads_uploadselect == 1) {
         $groupsql = filemgmt_buildAccessSql();
@@ -655,7 +655,7 @@ function filemgmt_buildSql ($topic, $limits)
 
 function plugin_getfeedcontent_filemgmt ($feed, &$link, &$update)
 {
-    global $_CONF, $_TABLES, $_TABLES;
+    global $_CONF, $_TABLES;
 
     $content = array ();
     $lids = array ();
@@ -740,7 +740,7 @@ function plugin_whatsnewsupported_filemgmtxx() {
   * API function provides the content of our "What's New" feed
 */
 function plugin_getwhatsnew_filemgmt() {
-    global $_TABLES, $_TABLES, $_CONF, $LANG_FILEMGMT,$LANG_FM00, $LANG01;
+    global $_TABLES, $_CONF, $LANG_FILEMGMT,$LANG_FM00, $LANG01;
     global $filemgmtWhatsNewTitleLength,$filemgmtWhatsNewPeriodDays,$filemgmt_showWhatsNewComments,$mydownloads_publicpriv;
     global $mydownloads_whatsnew;
 

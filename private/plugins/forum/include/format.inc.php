@@ -609,7 +609,7 @@ function _ff_replacesmilie($str) {
 }
 
 function _ff_showattachments($topic,$mode='') {
-    global $_TABLES,$_CONF,$_FF_CONF,$_FM_TABLES;
+    global $_TABLES,$_CONF,$_FF_CONF;
 
     $retval = '';
     $sql = "SELECT id,repository_id,filename FROM {$_TABLES['ff_attachments']} WHERE topic_id=".(int) $topic." ";
@@ -631,12 +631,12 @@ function _ff_showattachments($topic,$mode='') {
         $filename = explode(':',$field_value);
         if ($filemgmtSupport AND $lid > 0) {   // Check and see if user has access to file
             $groupsql = filemgmt_buildAccessSql();
-            $sql = "SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
-            $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
+            $sql = "SELECT COUNT(*) FROM {$_TABLES['filemgmt_filedetail']} a ";
+            $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
             $sql .= "WHERE a.lid='$lid' $groupsql";
             list($testaccess_cnt) = DB_fetchArray(DB_query($sql));
         }
-        if ($lid > 0 AND (!$filemgmtSupport OR $testaccess_cnt == 0 OR DB_count($_FM_TABLES['filemgmt_filedetail'],"lid",$lid ) == 0)) {
+        if ($lid > 0 AND (!$filemgmtSupport OR $testaccess_cnt == 0 OR DB_count($_TABLES['filemgmt_filedetail'],"lid",$lid ) == 0)) {
             $retval .= "<img src=\"{$_CONF['site_url']}/forum/images/document_sm.gif\" border=\"0\" alt=\"\"/>Insufficent Access";
         } elseif (!empty($field_value)) {
             $retval .= "<img src=\"{$_CONF['site_url']}/forum/images/document_sm.gif\" border=\"0\" alt=\"\"/>";

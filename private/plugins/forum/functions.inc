@@ -1576,23 +1576,23 @@ function _ff_canPost( $forum ) {
 
 
 function forum_delAttachment($deleteid) {
-    global $_TABLES,$_FM_TABLES,$_FF_CONF,$filemgmt_FileStore;
+    global $_TABLES,$_FF_CONF,$filemgmt_FileStore;
 
     // Check and see if the file is in the repository or a saved to the local forum data area
     $lid = DB_getItem($_TABLES['ff_attachments'],'repository_id',"id=$deleteid");
-    if ($lid > 0 AND DB_count($_FM_TABLES['filemgmt_filedetail'],"lid",$lid ) == 1) {
+    if ($lid > 0 AND DB_count($_TABLES['filemgmt_filedetail'],"lid",$lid ) == 1) {
         // Verify Access rights
         $groupsql = filemgmt_buildAccessSql();
-        $sql = "SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
-        $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
+        $sql = "SELECT COUNT(*) FROM {$_TABLES['filemgmt_filedetail']} a ";
+        $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
         $sql .= "WHERE a.lid='$lid' $groupsql";
         list($testaccess_cnt) = DB_fetchArray(DB_query($sql));
         if ($testaccess_cnt == 1) {
-            $name = DB_getItem($_FM_TABLES['filemgmt_filedetail'],"url","lid=$lid");
-            DB_query("DELETE FROM {$_FM_TABLES['filemgmt_filedesc']} WHERE lid='$lid'");
-            DB_query("DELETE FROM {$_FM_TABLES['filemgmt_votedata']} WHERE lid='$lid'");
-            DB_query("DELETE FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='$lid'");
-            DB_query("DELETE FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='$lid'");
+            $name = DB_getItem($_TABLES['filemgmt_filedetail'],"url","lid=$lid");
+            DB_query("DELETE FROM {$_TABLES['filemgmt_filedesc']} WHERE lid='$lid'");
+            DB_query("DELETE FROM {$_TABLES['filemgmt_votedata']} WHERE lid='$lid'");
+            DB_query("DELETE FROM {$_TABLES['filemgmt_filedetail']} WHERE lid='$lid'");
+            DB_query("DELETE FROM {$_TABLES['filemgmt_brokenlinks']} WHERE lid='$lid'");
             $fullname  = $filemgmt_FileStore . $name;
             if ($fullname != '' && file_exists($fullname) && (!is_dir($fullname))) {
                 @unlink($fullname);
