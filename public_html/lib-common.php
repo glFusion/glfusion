@@ -3342,7 +3342,9 @@ function COM_emailNotification( $msgData = array() )
             if ( is_array($to) ) {
                 $mail->AddBCC($to['email'],$to['name']);
             } else {
-                $mail->AddBCC($to);
+                if ( COM_isEmail($to) ) {
+                    $mail->AddBCC($to);
+                }
             }
 
             $queued++;
@@ -3356,7 +3358,7 @@ function COM_emailNotification( $msgData = array() )
         }
     }
     if ( $queued > 0 ) {
-        if ( !$mail->Send() ) {
+        if ( !@$mail->Send() ) {
             COM_errorLog("Email Error: " . $mail->ErrorInfo);
         }
     }
