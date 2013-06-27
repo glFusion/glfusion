@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.3.0.pl1
 ------
+- Fixed SQL error when FileMgmt integration is enabled in Forum
+  Plugin (Mark)
+- Fixed email notification error - invalid email address (Mark)
 - Fixed error when saving in Group editor when chk_showall was set
   to 1 (Mark)
 - Demo mode security improvements (Mark)
