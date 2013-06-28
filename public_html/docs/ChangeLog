@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.3.0.pl1
 ------
+- Fixed error in Media Gallery submission queue approval (Mark)
 - Fixed SQL error when FileMgmt integration is enabled in Forum
   Plugin (Mark)
 - Fixed email notification error - invalid email address (Mark)

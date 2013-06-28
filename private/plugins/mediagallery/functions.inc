@@ -1123,16 +1123,19 @@ function plugin_moderationapprove_mediagallery($id)
         $media_type = $media['media_type'];
 
         $sql = "SELECT * FROM " . $_TABLES['mg_media_album_queue'] . " WHERE media_id='" . DB_escapeString($id) . "'";
-        $result = DB_query($sql);
-        $nRows = DB_numRows($result);
+        $res2 = DB_query($sql);
+        $nRows = DB_numRows($res2);
         if ( $nRows > 0 ) {
-            $row = DB_fetchArray($result);
+            $row = DB_fetchArray($res2);
             $sql = "INSERT INTO {$_TABLES['mg_media_albums']} (album_id,media_id,media_order) "
                    . "VALUES ('" .
                    (int) $row['album_id'] . "','" .
                    (int) $row['media_id'] . "',32000)";
 
             DB_query($sql);
+            if ( DB_error() ) {
+                COM_errorLog("Media Gallery: Error inserting queued item into album.");
+            }
             $sql = "DELETE FROM " . $_TABLES['mg_media_album_queue'] . " WHERE media_id='" . DB_escapeString($id) . "'";
             DB_query($sql);
             $statusReport .= "Media ID " . $id . $LANG_MG01['queue_processed'];
