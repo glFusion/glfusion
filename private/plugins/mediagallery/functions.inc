@@ -1104,7 +1104,7 @@ function plugin_submissioncount_mediagallery() {
 */
 function plugin_moderationapprove_mediagallery($id)
 {
-    global $_CONF, $_TABLES, $_MG_CONF, $LANG_MG01;
+    global $_CONF, $_TABLES, $_MG_CONF, $MG_albums, $LANG_MG01;
 
     $statusReport = '';
 
@@ -1121,7 +1121,6 @@ function plugin_moderationapprove_mediagallery($id)
         $media_upload_time = $media['media_upload_time'];
         $media_filename = $media['media_filename'];
         $media_type = $media['media_type'];
-
         $sql = "SELECT * FROM " . $_TABLES['mg_media_album_queue'] . " WHERE media_id='" . DB_escapeString($id) . "'";
         $res2 = DB_query($sql);
         $nRows = DB_numRows($res2);
@@ -1130,7 +1129,7 @@ function plugin_moderationapprove_mediagallery($id)
             $sql = "INSERT INTO {$_TABLES['mg_media_albums']} (album_id,media_id,media_order) "
                    . "VALUES ('" .
                    (int) $row['album_id'] . "','" .
-                   (int) $row['media_id'] . "',32000)";
+                   DB_escapeString($row['media_id']) . "',32000)";
 
             DB_query($sql);
             if ( DB_error() ) {
@@ -1138,6 +1137,9 @@ function plugin_moderationapprove_mediagallery($id)
             }
             $sql = "DELETE FROM " . $_TABLES['mg_media_album_queue'] . " WHERE media_id='" . DB_escapeString($id) . "'";
             DB_query($sql);
+            if ( DB_error() ) {
+                COM_errorLog("Media Gallery: Error deleting queued item from album queue.");
+            }
             $statusReport .= "Media ID " . $id . $LANG_MG01['queue_processed'];
             MG_SortMedia( $row['album_id'] );
 
@@ -1154,7 +1156,6 @@ function plugin_moderationapprove_mediagallery($id)
                          " WHERE album_id=" . (int) $row['album_id'] );
             }
             CACHE_remove_instance('whatsnew');
-
             // email the owner / uploader that the item has been approved.
 
             COM_clearSpeedlimit(600,'mgapprove');
