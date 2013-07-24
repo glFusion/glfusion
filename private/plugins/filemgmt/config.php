@@ -54,6 +54,8 @@ $_FMDOWNLOAD  = array(
     'cgi'   => 'txt',
     'py'    => 'txt',
     'sh'    => 'txt',
+    'html'  => 'txt',
+    'htm'   => 'txt',
     'exe'   => 'reject'
 );
 
