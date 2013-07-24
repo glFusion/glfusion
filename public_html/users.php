@@ -955,8 +955,8 @@ function displayLoginErrorAndAbort($msg, $message_title, $message_text)
         // and need to control the login process
         CUSTOM_loginErrorHandler($msg);
     } else {
-        header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden');
-        header('Status: 403 Forbidden');
+        @header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden');
+        @header('Status: 403 Forbidden');
         $retval = COM_siteHeader('menu', $message_title)
                 . COM_showMessageText($message_text,$message_title,true,'error')
                 . COM_siteFooter();
