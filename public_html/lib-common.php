@@ -197,6 +197,7 @@ if (isset($_SYSTEM['site_enabled']) && !$_SYSTEM['site_enabled']) {
 
 list($usec, $sec) = explode(' ', microtime());
 mt_srand( (10000000000 * (float)$usec) ^ (float)$sec );
+@date_default_timezone_set('America/Chicago');
 
 // +--------------------------------------------------------------------------+
 // | Library Includes                                                         |
@@ -2415,7 +2416,7 @@ function COM_userMenu( $help='', $title='', $position='' )
 function COM_adminMenu( $help = '', $title = '', $position = '' )
 {
     global $_TABLES, $_USER, $_CONF, $LANG01, $LANG_ADMIN, $LANG_AM, $_BLOCK_TEMPLATE,
-           $_DB_dbms, $config, $LANG29;
+           $_DB_dbms, $config, $LANG29, $LANG_MB01;
 
     $retval = '';
     $link_array = array();
@@ -2553,7 +2554,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $url = $_CONF['site_admin_url'] . '/autotag.php';
             $adminmenu->set_var( 'option_url', $url );
             $adminmenu->set_var( 'option_label', $LANG_AM['title'] );
-            $adminmenu->set_var( 'option_count', 'n/a');
+            $adminmenu->set_var( 'option_count', $LANG_ADMIN['na']);
 
             $menu_item = $adminmenu->parse( 'item',
                     ( $thisUrl == $url ) ? 'current' : 'option' );
@@ -2705,6 +2706,30 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $menu_item = $adminmenu->parse( 'item',
                     ( $thisUrl == $url ) ? 'current' : 'option' );
             $link_array[$LANG01['logview']] = $menu_item;
+        }
+
+        if( SEC_inGroup( 'Root' )) {
+            $url = $_CONF['site_admin_url'] . '/menu.php';
+            $adminmenu->set_var( 'option_url', $url );
+            $adminmenu->set_var( 'option_label', $LANG_MB01['menu_builder'] );
+            $adminmenu->set_var('option_count',
+                    COM_numberFormat(DB_count($_TABLES['menu'],
+                                              'menu_active', 1)));
+
+            $menu_item = $adminmenu->parse( 'item',
+                    ( $thisUrl == $url ) ? 'current' : 'option' );
+            $link_array[$LANG_MB01['menu_builder']] = $menu_item;
+        }
+
+        if( SEC_inGroup( 'Root' )) {
+            $url = $_CONF['site_admin_url'] . '/clearctl.php';
+            $adminmenu->set_var( 'option_url', $url );
+            $adminmenu->set_var( 'option_label', $LANG01['ctl'] );
+            $adminmenu->set_var( 'option_count', $LANG_ADMIN['na']);
+
+            $menu_item = $adminmenu->parse( 'item',
+                    ( $thisUrl == $url ) ? 'current' : 'option' );
+            $link_array[$LANG_01['ctl']] = $menu_item;
         }
 
         if ( $_CONF['link_documentation'] == 1 ) {
