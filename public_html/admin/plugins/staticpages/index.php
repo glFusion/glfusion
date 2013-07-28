@@ -347,6 +347,7 @@ function PAGE_form($A, $error = false)
         $sp_template->set_var('lang_blankpage', $LANG_STATIC['blankpage']);
         $sp_template->set_var('lang_noblocks', $LANG_STATIC['noblocks']);
         $sp_template->set_var('lang_leftblocks', $LANG_STATIC['leftblocks']);
+        $sp_template->set_var('lang_rightblocks', $LANG_STATIC['rightblocks']);
         $sp_template->set_var('lang_leftrightblocks', $LANG_STATIC['leftrightblocks']);
         if (!isset ($A['sp_format'])) {
             $A['sp_format'] = '';
@@ -360,6 +361,11 @@ function PAGE_form($A, $error = false)
             $sp_template->set_var('leftblocks_selected', 'selected="selected"');
         } else {
             $sp_template->set_var('leftblocks_selected', '');
+        }
+        if ($A['sp_format'] == 'rightblocks') {
+            $sp_template->set_var('rightblocks_selected', 'selected="selected"');
+        } else {
+            $sp_template->set_var('rightblocks_selected', '');
         }
         if ($A['sp_format'] == 'blankpage') {
             $sp_template->set_var('blankpage_selected', 'selected="selected"');

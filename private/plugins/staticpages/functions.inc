@@ -416,7 +416,7 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
             }
         }
 
-        if (($A['sp_format'] == 'allblocks') && ($_USER['noboxes'] != 1)) {
+        if (($A['sp_format'] == 'allblocks' || $A['sp_format'] == 'rightblocks') && ($_USER['noboxes'] != 1)) {
             $retval .= COM_siteFooter(true);
         } else if (($A['sp_format'] == 'leftblocks') || ($A['sp_format'] == 'noblocks')) {
             $retval .= COM_siteFooter(false);
@@ -829,6 +829,7 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
             if ($where == 0) {
                 switch ($S['sp_format']) {
                     case 'noblocks':
+                    case 'rightblocks':
                         $retval .= COM_siteHeader ('none');
                         break;
                     case 'allblocks':
@@ -906,7 +907,7 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
             }
 
             if ($where == 0) {
-                if ($S['sp_format'] == 'allblocks') {
+                if ($S['sp_format'] == 'allblocks' || $S['sp_format'] == 'rightblocks') {
                     $retval .= COM_siteFooter (true);
                 } else if ($S['sp_format'] != 'blankpage') {
                     $retval .= COM_siteFooter ();

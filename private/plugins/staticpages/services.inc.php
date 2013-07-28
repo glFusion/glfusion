@@ -373,7 +373,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
             DB_query($sql);
         }
 
-        $formats = array ('allblocks', 'blankpage', 'leftblocks', 'noblocks');
+        $formats = array ('allblocks', 'blankpage', 'leftblocks', 'rightblocks', 'noblocks');
         if (!in_array ($sp_format, $formats)) {
             $sp_format = 'allblocks';
         }

@@ -32,6 +32,7 @@
                     <option value="blankpage" {blankpage_selected}>{lang_blankpage}</option>
                     <option value="noblocks" {noblock_selected}>{lang_noblocks}</option>
                     <option value="leftblocks" {leftblocks_selected}>{lang_leftblocks}</option>
+                    <option value="rightblocks" {rightblocks_selected}>{lang_rightblocks}</option>
                     <option value="allblocks" {allblocks_selected}>{lang_leftrightblocks}</option>
                 </select>
             </td>
