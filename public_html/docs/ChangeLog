@@ -1,7 +1,13 @@
 glFusion ChangeLog
 
-v1.3.0.pl1
+v1.3.1
 ------
+- Added Clear Cache and Menu Builder entries to the Admins Only block
+  function (Eric)
+- StaticPages Plugin: Added rightblocks only page option (Eric)
+- Improved session id generation (Mark)
+- Improved error handling on display error and abort call. (Mark)
+- Improved upload security for FileMgmt plugin (Mark)
 - Fixed error in Media Gallery submission queue approval (Mark)
 - Fixed SQL error when FileMgmt integration is enabled in Forum
   Plugin (Mark)
@@ -187,6 +193,22 @@ v1.3.0
 - Removed PHP4 items (Mark)
 - Removed wiki text formatting (Mark)
 - Removed storybodytext.thtml / featuredbodytext.thtml templates (Mark)
+
+v1.2.3
+------
+- Security updates
+- Import (upload) fix to properly handle FTP uploads
+
+v1.2.2.pl4
+----------
+- Fixed serveral XSS issues identified by High-Tech Bridge Security Research
+  Lab
+- Fixed issue where crash when admin list was empty
+- Fixed plugin installation error on later versions of PHP
+- Fixed right block display issue with newer Chrome releases
+- Improved string handling in Forum plugin formatting
+- Several variable input sanitization updates
+- Updated Bad Behavior plugin to v2.0.49
 
 v1.2.2.pl3
 ----------
