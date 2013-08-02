@@ -94,7 +94,7 @@ function SESS_sessionCheck()
     $_USER = $userdata;
 
     $userid = 0;
-    $sessid = _createID();
+
     $mintime = time() - $_CONF['session_cookie_timeout'];
     $request_ip = (!empty($_SERVER['REMOTE_ADDR'])) ? htmlspecialchars($_SERVER['REMOTE_ADDR']) : '';
 
@@ -157,6 +157,8 @@ function SESS_sessionCheck()
             }
         }
     }
+    if ( $sessid == '' || $sessid == 0 ) $sessid = _createID();
+
     session_id($sessid);
     session_start();
 
@@ -718,11 +720,14 @@ function short_ipv6($ip, $length)
 *
 */
 function _createID() {
-	$id = 0;
-	while (strlen($id) < 32)  {
-		$id .= mt_rand(0, mt_getrandmax());
-	}
-	$id	= md5(uniqid($id, true));
-	return $id;
+    global $_SYSTEM;
+
+    $rand_seed = COM_makesid();
+
+    $val = $rand_seed . microtime();
+    $val = md5($val);
+    $rand_seed = md5($rand_seed . $val);
+    $id = substr($val, 3, 18);
+    return $id;
 }
 ?>
