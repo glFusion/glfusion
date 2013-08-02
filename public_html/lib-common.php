@@ -2416,7 +2416,7 @@ function COM_userMenu( $help='', $title='', $position='' )
 function COM_adminMenu( $help = '', $title = '', $position = '' )
 {
     global $_TABLES, $_USER, $_CONF, $LANG01, $LANG_ADMIN, $LANG_AM, $_BLOCK_TEMPLATE,
-           $_DB_dbms, $config, $LANG29, $LANG_MB01;
+           $_DB_dbms, $config, $LANG29, $LANG_MB01, $LANG_01;
 
     $retval = '';
     $link_array = array();
