@@ -946,6 +946,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '1.2.1';
         case '1.2.1' :
         case '1.2.2' :
+        case '1.2.3' :
             require_once $_CONF['path'] . 'sql/updates/mysql_1.2.2_to_1.3.0.php';
             list($rc,$errors) = INST_updateDB($_SQL);
             if ( $rc === false ) {
