@@ -72,7 +72,7 @@ class SFSreg extends BaseCommand {
 //            return 0;
 //        }
 
-        $em = urlencode($email);
+        $em = $email;
 
         $request = new HTTP_Request2('http://www.stopforumspam.com/api',
                                      HTTP_Request2::METHOD_GET, array('use_brackets' => true));
