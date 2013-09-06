@@ -840,8 +840,8 @@ $themeStyle = MG_getThemeCSS(0);
 if (($mode == $LANG_MG01['search'] && !empty ($LANG_MG01['search'])) || $mode == 'search') {
     $keywords       = isset($_REQUEST['keywords']) ? COM_applyFilter($_REQUEST['keywords']) : '';
     $stype          = isset($_REQUEST['keyType']) ? COM_applyFilter($_REQUEST['keyType']) : '';
-    $category       = isset($_REQUEST['cat_id']) ? COM_applyFilter($_REQUEST['cat_id']) : 0;
-    $skeywords      = isset($_REQUEST['swhere']) ? COM_applyFilter($_REQUEST['swhere']) : 1;
+    $category       = isset($_REQUEST['cat_id']) ? COM_applyFilter($_REQUEST['cat_id'],1) : 0;
+    $skeywords      = isset($_REQUEST['swhere']) ? COM_applyFilter($_REQUEST['swhere'],1) : 1;
     $numresults     = isset($_REQUEST['numresults']) ? COM_applyFilter($_REQUEST['numresults'],true) : 10;
     $users			= isset($_REQUEST['uid']) ? COM_applyFilter($_REQUEST['uid'],true) : 0;
     $sortyby        = 'title';
@@ -947,7 +947,7 @@ if (($mode == $LANG_MG01['search'] && !empty ($LANG_MG01['search'])) || $mode ==
     }
 
     if ( $category != 0 ) {
-        $sqltmp .= " AND m.media_category=" . $category;
+        $sqltmp .= " AND m.media_category=" . (int) $category;
     }
     if ( $users > 0 ) {
 	    $sqltmp .= " AND m.media_user_id=" . $users;
