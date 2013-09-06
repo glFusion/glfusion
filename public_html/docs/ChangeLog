@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.3.1
 ------
+- Fixed potential SQL inject in Media Gallery - Identified by Manituna
+  Security (Mark)
 - Fixed SpamX SFS email check - no longer urlencode email address (Mark)
 - Added Clear Cache and Menu Builder entries to the Admins Only block
   function (Eric)
