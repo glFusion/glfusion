@@ -42,6 +42,11 @@ if (!SEC_hasRights('mediagallery.config')) {
     echo $display;
     exit;
 }
+
+require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
+
+MG_initAlbums();
+
 function MG_exportAlbums( $aid, $path, $srcRoot, $destRoot ) {
 	global $MG_albums, $_TABLES, $fp,$mvorcopy,$unix;
 
@@ -111,7 +116,10 @@ function MG_exportAlbums( $aid, $path, $srcRoot, $destRoot ) {
 
 global $unix, $mvorcopy;
 
-$mode = COM_applyFilter($_POST['mode']);
+$mode = '';
+if ( isset($_POST['mode']) ) {
+    $mode = COM_applyFilter($_POST['mode']);
+}
 
 $srcRoot  = $_POST['srcroot'];
 $destRoot = $_POST['destroot'];
