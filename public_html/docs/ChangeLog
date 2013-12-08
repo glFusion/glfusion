@@ -1,5 +1,8 @@
 glFusion ChangeLog
 
+v1.3.2
+------
+
 v1.3.1
 ------
 - Fixed potential SQL inject in Media Gallery - Identified by Manituna
