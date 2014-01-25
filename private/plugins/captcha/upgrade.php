@@ -6,8 +6,6 @@
 // |                                                                          |
 // | Upgrade routines                                                         |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2005-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -93,11 +91,8 @@ function captcha_upgrade()
         case '3.2.4' :
         case '3.2.5' :
             $c = config::get_instance();
-            $c->add('pc_publickey', '','text',
-                    0, 0, 0, 48, true, 'captcha');
-            $c->add('pc_privatekey', '','text',
-                    0, 0, 0, 49, true, 'captcha');
-
+            $c->add('pc_publickey', '','text',0, 0, 0, 48, true, 'captcha');
+            $c->add('pc_privatekey', '','text',0, 0, 0, 49, true, 'captcha');
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_CP_CONF['pi_version']."',pi_gl_version='".$_CP_CONF['gl_version']."' WHERE pi_name='captcha' LIMIT 1");
             break;

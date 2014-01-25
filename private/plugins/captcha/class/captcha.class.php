@@ -6,8 +6,6 @@
 // |                                                                          |
 // | main CAPTCHA processing, generates CAPTCHA image / tokens                |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2002-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -281,7 +279,6 @@ class captcha {
                 # prepare our image magick command
                 $cmd    = '"' . $this->convertpath . '"';
                 $cmd .= ' -font "'.$this->getRandFont().'"';
-                #$cmd .= ' -fill "'.$color.'"';
                 $cmd .= ' -pointsize '.$size;
                 $cmd .= ' -gravity "'.$gravity.'"';
                 $cmd .= ' -annotate 0 "' . $newString . '"';
