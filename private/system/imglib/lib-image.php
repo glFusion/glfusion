@@ -198,8 +198,10 @@ function IMG_resizeImage($srcImage, $destImage, $dImageHeight, $dImageWidth, $mi
     // if smaller, do not upsize, simply copy the src to the dest.
 
     if ( ( $newheight > $imgheight) && ($newwidth > $imgwidth ) )  {
-        $rc = copy($srcImage, $destImage);
-        COM_errorLog("IMG_resizeImage: Original (" . $srcImage . ") is smaller than target, original copied to target image (" . $destImage . ".");
+        if ( $srcImage != $destImage) {
+            $rc = copy($srcImage, $destImage);
+            COM_errorLog("IMG_resizeImage: Original (" . $srcImage . ") is smaller than target, original copied to target image (" . $destImage . ".");
+        }
         return array(true,'Original is smaller than target, original copied to target image.');
     }
 
