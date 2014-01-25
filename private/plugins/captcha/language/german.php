@@ -62,6 +62,7 @@ $LANG_CP00 = array(
     'bypass_error' => 'Du hast versucht CAPTCHA auf dieser Seite zu umgehen, bitte verwende den Neuer-Benutzer-Link zur Registrierung.',
     'bypass_error_blank' => 'Du hast versucht CAPTCHA auf dieser Seite zu umgehen, bitte gib eine gültige CAPTCHA-Zeichenfolge ein.',
     'entry_error' => 'Die eingegebene CAPTCHA-Zeichenfolge stimmt nicht mit den Zeichen in der Grafik überein, bitte versuche es erneut. <b>Groß-und Kleinschreibung!</b>',
+    'entry_error_pic' => 'The selected CAPTCHA images did not match the request on the graphic, please try again.',
     'captcha_info' => 'Das CAPTCHA-Plugin bietet Deiner Seite zusätzlichen Schutz vor Spambots.  Schau in das <a href="%s">Online-Dokumentation-Wiki</a> für mehr Infos.',
     'enabled_header' => 'Aktuelle CAPTCHA-Einstellungen',
     'on' => 'An',
@@ -110,7 +111,9 @@ $LANG_confignames['captcha'] = array(
     'expire' => 'Wieviele Sekunden eine CAPTCHA-Session gültig ist',
     'publickey' => 'reCAPTCHA Public Key - <a href="https://www.google.com/recaptcha/admin/create">reCAPTCHA Signup</a>',
     'privatekey' => 'reCAPTCHA Private Key',
-    'recaptcha_theme' => 'reCAPTCHA Theme'
+    'recaptcha_theme' => 'reCAPTCHA Theme',
+    'pc_publickey' => 'PiCATCHA Public Key - <a href="http://picatcha.com/signup/" target=_blank>Picatcha Signup</a>',
+    'pc_privatekey' => 'PiCATCHA Private Key'
 );
 
 $LANG_configsubgroups['captcha'] = array(
@@ -126,7 +129,7 @@ $LANG_fs['captcha'] = array(
 $LANG_configselects['captcha'] = array(
     0 => array('Ja' => 1, 'Nein' => 0),
     1 => array('Ja' => true, 'Nein' => false),
-    2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Stat. Bilder' => 2),
+    2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Stat. Bilder' => 2, 'reCAPTCHA' => 3, 'Picatcha' => 4),
     4 => array('Standard' => 'default', 'Einfach' => 'simple'),
     5 => array('JPG' => 'jpg', 'PNG' => 'png'),
     6 => array('clean' => 'clean', 'red' => 'red', 'white' => 'white', 'blackglass' => 'blackglass')

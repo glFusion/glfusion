@@ -63,6 +63,7 @@ $LANG_CP00 = array(
     'bypass_error' => 'Yritit ohittaa CAPTCHAn, k&auml;yt&auml; Uusi K&auml;ytt&auml;j&auml; linkki&auml; ja rekister&ouml;idy.',
     'bypass_error_blank' => 'Yritit ohittaa CAPTCHAn, anna oikea CAPTCHA lauseke.',
     'entry_error' => 'Annettu CAPTCHA merkkijono ei vastaa kuvassa olevaa, yrit&auml; uudestaan. <b>Merkkikokoriippuvainen.</b>',
+    'entry_error_pic' => 'The selected CAPTCHA images did not match the request on the graphic, please try again.',
     'captcha_info' => 'CAPTCHA Lis&auml;osa tarjoaa lis&auml;suojaa Roskapostia vastaan glFusion sivustollasi.  Katso lis&auml;tietoja<a href="%s">Online Documentation Wiki</a>.',
     'enabled_header' => 'Nykyiset CAPTCHA Asetukset',
     'on' => 'On',
@@ -80,7 +81,7 @@ $LANG_CP00 = array(
 );
 
 $PLG_captcha_MESSAGE1 = 'CAPTCHA Lis&auml;osan P&auml;ivitys: P&auml;ivitys Valmis.';
-$PLG_captcha_MESSAGE2 = 'CAPTCHA Lis&auml;osa Asennettu';
+$PLG_captcha_MESSAGE2 = 'CAPTCHA Plugin Successfully Installed';
 $PLG_captcha_MESSAGE3 = 'CAPTCHA Plugin Successfully Installed';
 
 // Localization of the Admin Configuration UI
@@ -111,7 +112,9 @@ $LANG_confignames['captcha'] = array(
     'expire' => 'Kuinka monta sekuntia CAPTCHA Istunto on voimassa',
     'publickey' => 'reCAPTCHA Public Key - <a href="http://recaptcha.net/api/getkey?app=php">reCAPTCHA Signup</a>',
     'privatekey' => 'reCAPTCHA Private Key',
-    'recaptcha_theme' => 'reCAPTCHA Teema'
+    'recaptcha_theme' => 'reCAPTCHA Teema',
+    'pc_publickey' => 'PiCATCHA Public Key - <a href="http://picatcha.com/signup/" target=_blank>Picatcha Signup</a>',
+    'pc_privatekey' => 'PiCATCHA Private Key'
 );
 
 $LANG_configsubgroups['captcha'] = array(
@@ -127,7 +130,7 @@ $LANG_fs['captcha'] = array(
 $LANG_configselects['captcha'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => true, 'False' => false),
-    2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Static Images' => 2, 'reCAPTCHA' => 3),
+    2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Static Images' => 2, 'reCAPTCHA' => 3, 'Picatcha' => 4),
     4 => array('Default' => 'default', 'Simple' => 'simple'),
     5 => array('JPG' => 'jpg', 'PNG' => 'png'),
     6 => array('clean' => 'clean', 'red' => 'red', 'white' => 'white', 'blackglass' => 'blackglass')
