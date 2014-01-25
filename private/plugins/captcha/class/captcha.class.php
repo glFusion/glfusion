@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2010 by the following authors:                        |
+// | Copyright (C) 2002-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -197,6 +197,8 @@ class captcha {
             echo recaptcha_get_html($this->publickey, NULL);
             exit;
         }
+        if ( $this->driver == 4 ) {
+            echo picatcha_get_html($this->publickey);
 
         if ( $this->session_id != 0 ) {
             $sql = "UPDATE {$_TABLES['cp_sessions']} SET validation='" . $this->getCaptchaString() . "' WHERE session_id='" . DB_escapeString($this->session_id) . "'";

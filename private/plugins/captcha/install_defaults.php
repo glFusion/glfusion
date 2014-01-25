@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -115,6 +115,11 @@ function plugin_initconfig_captcha()
                 0, 0, 0, 44, true, 'captcha');
         $c->add('recaptcha_theme', $_CP_DEFAULT['recaptcha_theme'],'select',
                 0, 0, 6, 46, true, 'captcha');
+
+        $c->add('pc_publickey', $_CP_DEFAULT['publickey'],'text',
+                0, 0, 0, 48, true, 'captcha');
+        $c->add('pc_privatekey', $_CP_DEFAULT['privatekey'],'text',
+                0, 0, 0, 49, true, 'captcha');
 
 
         $c->add('debug', $_CP_DEFAULT['debug'], 'select',

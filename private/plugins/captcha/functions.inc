@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -74,11 +74,19 @@ if ( $_CP_CONF['gfxDriver'] == 3 ) {
         $_CP_CONF['gfxDriver'] = 2;
     }
 }
+if ( $_CP_CONF['gfxDriver'] == 4 ) {
+    if ( $_CP_CONF['pc_publickey'] == '' || $_CP_CONF['pc_privatekey'] == '' ) {
+        $_CP_CONF['gfxDriver'] = 2;
+    }
+}
 
 if ( $_CP_CONF['gfxDriver'] == 3 ) {
     require_once $_CONF['path'] . 'plugins/captcha/class/recaptchalib.php';
 }
 
+if ( $_CP_CONF['gfxDriver'] == 4 ) {
+    require_once $_CONF['path'] . 'plugins/captcha/class/picatchalib.php';
+}
 
 /**
 * Returns the URL of the plugin's icon
@@ -452,6 +460,10 @@ function CAPTCHA_getHTML($csid, $ctype='general' ) {
         $T->set_var('recaptcha', recaptcha_get_html($_CP_CONF['publickey'], NULL));
         $T->set_var('recaptcha_theme',$_CP_CONF['recaptcha_theme']);
     }
+    if ( $_CP_CONF['gfxDriver'] == 4 ) {
+        $T->set_var('recaptcha', picatcha_get_html($_CP_CONF['pc_publickey']));
+        $T->set_var('recpatcha_theme',$_CP_CONF['recaptcha_theme']);
+    }
 
     $T->parse('output', 'page');
     $retval .= $T->finish($T->get_var('output'));
@@ -472,8 +484,31 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
     $msg = '';
     $rc = 0;
 
+    if ( $_CP_CONF['gfxDriver'] == 4 ) {
+        if ( !isset($_POST['picatcha']['r']) ) {
+            $_POST['picatcha']['r'] = '';
+        }
+        $response = picatcha_check_answer($_CP_CONF['pc_privatekey'],
+            $_SERVER['REMOTE_ADDR'],
+            $_SERVER['HTTP_USER_AGENT'], $_POST['picatcha']['token'], $_POST['picatcha']['r']);
+
+        if ($response->isValid){
+            return array(1,'');
+        } else {
+            # set the error code so that we can display it
+            if ( $response->error == 'incorrect-answer' ) {
+                $error = $LANG_CP00['entry_error_pic'];
+            } else {
+                $error = $response->error;
+            }
+            CAPTCHA_errorLog("CAPTCHA: An invalid PICAPTCHA image set was selected in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
+
+            return array(0,$error);
+        }
+    }
+
     if ( $_CP_CONF['gfxDriver'] == 3 ) {
-        $resp = recaptcha_check_answer ($_CP_CONF['privatekey'],
+        $resp = recaptcha_check_answer ($_CP_CONF['pc_privatekey'],
                                         $_SERVER["REMOTE_ADDR"],
                                         $_POST["recaptcha_challenge_field"],
                                         $_POST["recaptcha_response_field"]);
@@ -487,6 +522,8 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
             } else {
                 $error = $resp->error;
             }
+            CAPTCHA_errorLog("CAPTCHA: An invalid CAPTCHA string was entered in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
+
             return array(0,$error);
         }
     }

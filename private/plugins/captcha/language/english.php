@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -61,6 +61,7 @@ $LANG_CP00 = array (
     'bypass_error'      => "You have attempted to bypass the CAPTCHA processing at this site, please use the New User link to register.",
     'bypass_error_blank' => "You have attempted to bypass the CAPTCHA processing at this site, please enter a valid CAPTCHA phrase.",
     'entry_error'       => 'The entered CAPTCHA string did not match the characters on the graphic, please try again. <b>This is case sensitive.</b>',
+    'entry_error_pic'   => 'The selected CAPTCHA images did not match the request on the graphic, please try again.',
     'captcha_info'      => 'The CAPTCHA Plugin provides another layer of protection against SpamBots for your glFusion site.  See the <a href="%s">Online Documentation Wiki</a> for more info.',
     'enabled_header'    => 'Current CAPTCHA Settings',
     'on'                => 'On',
@@ -102,9 +103,11 @@ $LANG_confignames['captcha'] = array(
     'enable_links'          => 'Enable Links Plugin Support',
     'enable_calendar'       => 'Enable Calendar Plugin Support',
     'expire'                => 'How Many Seconds a CAPTCHA Session is Valid',
-    'publickey'             => 'reCAPTCHA Public Key - <a href="https://www.google.com/recaptcha/admin/create">reCAPTCHA Signup</a>',
+    'publickey'             => 'reCAPTCHA Public Key - <a href="https://www.google.com/recaptcha/admin/create" target=_blank>reCAPTCHA Signup</a>',
     'privatekey'            => 'reCAPTCHA Private Key',
     'recaptcha_theme'       => 'reCAPTCHA Theme',
+    'pc_publickey'          => 'PiCATCHA Public Key - <a href="http://picatcha.com/signup/" target=_blank>Picatcha Signup</a>',
+    'pc_privatekey'         => 'PiCATCHA Private Key',
 );
 $LANG_configsubgroups['captcha'] = array(
     'sg_main'               => 'Configuration Settings'
