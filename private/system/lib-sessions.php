@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2013 by the following authors:                        |
+// | Copyright (C) 2009-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -157,9 +157,9 @@ function SESS_sessionCheck()
             }
         }
     }
-//    if ( $sessid == '' || $sessid == 0 ) $sessid = _createID();
+
     if (empty($sessid)) $sessid = _createID();
-    
+
     session_id($sessid);
     session_start();
 
