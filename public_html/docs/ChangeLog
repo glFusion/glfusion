@@ -7,6 +7,7 @@ v1.3.2
 - CAPTCHA Plugin: Added support for PICATCHA - Image based CAPTCHA (Mark)
 - Added Stop Forum Spam user check feature (Mark)
 - Updated OAuth library to latest version (Mark)
+- Fixed logic bug in Media Gallery export script (Mark)
 
 v1.3.1
 ------
