@@ -122,9 +122,9 @@ function phpblock_calendar( $help='', $title='' )
             $range = 14; // fallback: 14 days
         }
         $dateonly = $_CONF['dateonly'];
-        if( empty( $dateonly )) {
+//        if( empty( $dateonly )) {
             $dateonly = '%d-%b'; // fallback: day - abbrev. month name
-        }
+//        }
 
         if( empty( $title )) {
             $title = DB_getItem( $_TABLES['blocks'], 'title',
@@ -454,7 +454,7 @@ function CALENDAR_sendNotification($table, $A)
     $description = $A['description'];
 
     $mailbody = "$LANG09[16]: $title\n"
-              . "$LANG09[17]: " . strftime ($_CONF['date'],
+              . "$LANG09[17]: " . strftime ('%d-%b',
                 strtotime ($A['datestart'] . ' ' . $A['timestart']));
     if ($A['allday']) {
         $mailbody .= ' (' . $LANG_CAL_2[26] . ')';

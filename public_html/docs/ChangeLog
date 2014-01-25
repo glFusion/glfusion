@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.3.2
 ------
+- Fixed date display issue with Calendar Upcoming Event block (Mark)
 - Fixed session initialization error - thanks Lee! (Mark)
 - CAPTCHA Plugin: Added support for PICATCHA - Image based CAPTCHA (Mark)
 - Added Stop Forum Spam user check feature (Mark)
