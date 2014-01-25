@@ -6,8 +6,6 @@
 // |                                                                          |
 // | glFusion integration functions.                                          |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2002-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -55,8 +53,6 @@ if (file_exists($langfile)) {
 
 require_once $_CONF['path'].'plugins/captcha/captcha.php';
 
-// load the plugin configuration, but only if needed
-
 if (!isset($_CP_CONF['gfxDriver'])) {
     require_once $_CONF['path_system'].'classes/config.class.php';
 
@@ -72,28 +68,24 @@ if (!isset($_CP_CONF['gfxDriver'])) {
 if ( $_CP_CONF['gfxDriver'] == 3 ) {
     if ( $_CP_CONF['publickey'] == '' || $_CP_CONF['privatekey'] == '' ) {
         $_CP_CONF['gfxDriver'] = 2;
+    } else {
+        require_once $_CONF['path'] . 'plugins/captcha/class/recaptchalib.php';
     }
+
 }
 if ( $_CP_CONF['gfxDriver'] == 4 ) {
     if ( $_CP_CONF['pc_publickey'] == '' || $_CP_CONF['pc_privatekey'] == '' ) {
         $_CP_CONF['gfxDriver'] = 2;
+    } else {
+        require_once $_CONF['path'] . 'plugins/captcha/class/picatchalib.php';
     }
 }
 
-if ( $_CP_CONF['gfxDriver'] == 3 ) {
-    require_once $_CONF['path'] . 'plugins/captcha/class/recaptchalib.php';
-}
-
-if ( $_CP_CONF['gfxDriver'] == 4 ) {
-    require_once $_CONF['path'] . 'plugins/captcha/class/picatchalib.php';
-}
-
 /**
-* Returns the URL of the plugin's icon
-*
-* @return   string      URL of the icon
-*
-*/
+ * Returns URL for the plugin's icon
+ *
+ * @return  string  URL to icon
+ */
 function plugin_geticon_captcha ()
 {
     global $_CONF;
@@ -101,7 +93,14 @@ function plugin_geticon_captcha ()
     return $_CONF['site_url'] . '/captcha/captcha.png';
 }
 
-// glFusion plugin API functions for CAPTCHA plugin
+/**
+ * Enable / disable plugin - called from plugin admin console
+ *
+ * If running in Demo mode - never disable the plugin
+ *
+ * @param   boolean enable state
+ * @return  true
+ */
 
 function plugin_enablestatechange_captcha($enable) {
 
@@ -111,13 +110,21 @@ function plugin_enablestatechange_captcha($enable) {
     return 1;
 }
 
-// this plugin uses the 'templatesetvars' hook to insert the CAPTCHA challenge in user-accessible scripts
-// that allow users to create or edit content of type specified (ctype).  the template handle relating to the
-// input/edit form for the content type is passed to allow the corresponding 'captcha' template var to be set.
-// the plugin configuration allows the challenge to be presented only for certain content types, and/or based
-// upon whether this is an anonymous user
-
-function plugin_templatesetvars_captcha($ctype, &$template) {
+/**
+ * Set template variable with CAPTCHA image
+ *
+ * This plugin uses the 'templatesetvars' hook to insert the CAPTCHA
+ * challenge in user accessible scripts. This allows users to create
+ * or edit content of type specified ($ctype). The template handle
+ * relating to the input/edit form for the content type is passed
+ * to allow the corresponding captcha template variable to be set.
+ *
+ * @param   string  CAPTCHA type - comment, registration, etc.
+ * @param   class   Template class handle
+ * @return  string  blank
+ */
+function plugin_templatesetvars_captcha($ctype, &$template)
+{
     global $_CP_CONF, $_USER, $_TABLES;
 
     // establish whether we are offering the challenge for this content type
@@ -223,8 +230,18 @@ function plugin_templatesetvars_captcha($ctype, &$template) {
     return '';
 }
 
-// this plugin hooks the content 'presave' hooks to check the user response to the CAPTCHA challenge
-
+/**
+ * Plugin hook to content's pre-save - checks user's response
+ *
+ * @param   integer user id
+ * @param   string  content title
+ * @param   string  content text
+ * @param   string  content SID
+ * @param   string  content PID
+ * @param   string  content type
+ * @param   string  content postmode (i.e. HTML, TEXT)
+ * @return  boolean 0 / 1
+ */
 function plugin_commentPreSave_captcha($uid, $title, $comment, $sid, $pid, $type, $postmode) {
     global $_CP_CONF, $_USER;
 
@@ -259,6 +276,14 @@ function plugin_commentPreSave_captcha($uid, $title, $comment, $sid, $pid, $type
     return 0;
 }
 
+/**
+ * Plugin hook to content's pre-save - checks user's response
+ *
+ * @param   integer user id
+ * @param   string  content type
+ * @param   string  content
+ * @return  string  error message - blank signals success
+ */
 function plugin_itemPreSave_captcha( $ctype='registration', $content='' ) {
     global $_CP_CONF, $_USER;
 
@@ -331,12 +356,22 @@ function plugin_itemPreSave_captcha( $ctype='registration', $content='' ) {
     return '';
 }
 
+/**
+ * Return plugin's version information
+ *
+ * @return  string   plugin version number
+ */
 function plugin_chkVersion_captcha() {
     global $_CP_CONF;
 
     return $_CP_CONF['pi_version'];
 }
 
+/**
+ * Upgrade plugin
+ *
+ * @return  string   plugin version number
+ */
 function plugin_upgrade_captcha() {
     global $_CONF, $_TABLES;
 
@@ -345,16 +380,20 @@ function plugin_upgrade_captcha() {
     return captcha_upgrade();
 }
 
-// CAPTCHA functions...
-
-// create a unique but random CAPTCHA session identifer
-
+/**
+ * Create unique session id for CAPTCHA
+ *
+ * @return  string   session id
+ */
 function CAPTCHA_sid() {
     return dechex(time()).dechex(mt_rand(1,65535));
 }
 
-// creates a new (or refreshes existing) CAPTCHA session, the session identifier (csid) is returned
-
+/**
+ * Create a new, or refresh existing, session id.
+ *
+ * @return  string   session id
+ */
 function CAPTCHA_getSession($ctype = '') {
     global $_TABLES;
 
@@ -389,8 +428,11 @@ function CAPTCHA_getSession($ctype = '') {
     return $csid;
 }
 
-// prune the CAPTCHA session table by expiring stale sessions
-
+/**
+ * Prune CAPTCHA session table by expiring old sessions
+ *
+ * @return  none
+ */
 function CAPTCHA_expireSessions() {
     global $_CP_CONF, $_TABLES;
     $oldSessions = time() - ($_CP_CONF['expire']+900);
@@ -398,8 +440,14 @@ function CAPTCHA_expireSessions() {
     return;
 }
 
-// create the HTML to be inserted based upon the current CAPTCHA session id (csid) and content type (ctype)
-
+/**
+ * Create HTML to be inserted in content based on current
+ * session id and content type
+ *
+ * @param   string  session id
+ * @param   string  content type
+ * @return  string  HTML
+ */
 function CAPTCHA_getHTML($csid, $ctype='general' ) {
     global $_CONF, $_CP_CONF, $LANG_CP00;
 
@@ -471,18 +519,43 @@ function CAPTCHA_getHTML($csid, $ctype='general' ) {
     return $retval;
 }
 
-// check the user entry (response) to see if it matches the challenge inserted for the current CAPTCHA session
-// the current content type (ctype) is passed only as a clue to be used in the error message.  note that the order of
-// the arguments to this function was reversed in v3.2.4, however this should not have broken anything in the core or
-// bundled plugins.  this was done to improve usability, eg. to allow a simpler form of the function to be used in
-// external staticpage, block, or other user custom code
-
+/**
+ * Verify user's response to CAPTCHA challenge
+ *
+ * @param   string  user' response
+ * @param   string  content type
+ * @return  array   array containing boolean true / false and error message
+ */
 function CAPTCHA_checkInput( $response, $ctype='general' ) {
     global $_CP_CONF, $_TABLES, $LANG_CP00, $_SERVER;
 
     // if rc=0 on return, this is failure, and msg will contain detail
     $msg = '';
     $rc = 0;
+
+    // expire stale CAPTCHA sessions
+    CAPTCHA_expireSessions();
+
+    if ( $_CP_CONF['gfxDriver'] == 3 ) {
+        $resp = recaptcha_check_answer ($_CP_CONF['pc_privatekey'],
+                                        $_SERVER["REMOTE_ADDR"],
+                                        $_POST["recaptcha_challenge_field"],
+                                        $_POST["recaptcha_response_field"]);
+
+        if ($resp->is_valid) {
+            return array(1,'');
+        } else {
+            # set the error code so that we can display it
+            if ( $resp->error == 'incorrect-captcha-sol' ) {
+                $error = $LANG_CP00['entry_error'];
+            } else {
+                $error = $resp->error;
+            }
+            CAPTCHA_errorLog("CAPTCHA: An invalid reCAPTCHA string was entered in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
+
+            return array(0,$error);
+        }
+    }
 
     if ( $_CP_CONF['gfxDriver'] == 4 ) {
         if ( !isset($_POST['picatcha']['r']) ) {
@@ -501,35 +574,11 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
             } else {
                 $error = $response->error;
             }
-            CAPTCHA_errorLog("CAPTCHA: An invalid PICAPTCHA image set was selected in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
+            CAPTCHA_errorLog("CAPTCHA: An invalid PICATCHA image set was selected in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
 
             return array(0,$error);
         }
     }
-
-    if ( $_CP_CONF['gfxDriver'] == 3 ) {
-        $resp = recaptcha_check_answer ($_CP_CONF['pc_privatekey'],
-                                        $_SERVER["REMOTE_ADDR"],
-                                        $_POST["recaptcha_challenge_field"],
-                                        $_POST["recaptcha_response_field"]);
-
-        if ($resp->is_valid) {
-            return array(1,'');
-        } else {
-            # set the error code so that we can display it
-            if ( $resp->error == 'incorrect-captcha-sol' ) {
-                $error = $LANG_CP00['entry_error'];
-            } else {
-                $error = $resp->error;
-            }
-            CAPTCHA_errorLog("CAPTCHA: An invalid CAPTCHA string was entered in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
-
-            return array(0,$error);
-        }
-    }
-
-    // expire stale CAPTCHA sessions
-    CAPTCHA_expireSessions();
 
     $csid_name = 'csid';
     if ( $ctype == 'token' ) {
@@ -578,8 +627,13 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
     return ( array( $rc, $msg ) );
 }
 
-// CAPTCHA likes it's own log, however someday we're going to unify these things i hope
-
+/**
+ * Log message in CAPTCHA log
+ *
+ * @param   string  log entry
+ * @param   int     override (forces log entry regardless of log setting)
+ * @return  none
+ */
 function CAPTCHA_errorLog( $logentry, $override = 0) {
     global $_CONF, $_CP_CONF;
 
@@ -591,8 +645,11 @@ function CAPTCHA_errorLog( $logentry, $override = 0) {
         return;
     }
 
+    USES_class_date();
+    $dt = new Date('now',$_CONF['timezone']);
+
     if( !empty( $logentry )) {
-        $timestamp = strftime( '%c' );
+        $timestamp = $dt->format('d M Y H:i:s',true);
         $logfile = $_CONF['path_log'] . 'captcha.log';
 
         if( $file = fopen( $logfile, 'a' )) {
@@ -601,6 +658,4 @@ function CAPTCHA_errorLog( $logentry, $override = 0) {
         }
     }
 }
-
-
 ?>
