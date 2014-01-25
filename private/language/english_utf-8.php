@@ -2332,6 +2332,31 @@ $LANG_UPGRADE = array(
 );
 
 ###############################################################################
+# admin/sfs.php - stop forum spam checks
+$LANG_SFS = array(
+    'title'             => 'Stop Forum Spam (SFS) User Check',
+    'instructions'      => 'All users have had their username, email address, and source IP address checked in the Stop Forum Spam database.  You may select any user\'s that were found in the SFS database and ban them from further use of your site.',
+    'no_record_found'   => 'No Record Found',
+    'sfs_email_match'   => 'Email Match in SFS',
+    'sfs_ip_match'      => 'IP match in SFS',
+    'sfs_username_match' => 'Username match in SFS',
+    'uid'               => 'UID',
+    'username'          => 'Username',
+    'remote_ip'         => 'Remote IP',
+    'email'             => 'Email Address',
+    'sfs_status'        => 'SFS Status',
+    'confirm_one'       => 'Are you sure you want to Ban all selected users?',
+    'confirm_two'       => 'Are you REALLY sure you want to Ban all selected users?',
+    'action_text'       => 'Ban Users',
+    'confirmation_ban'  => 'All selected user\'s have been banned',
+    'confirmation_del'  => 'Users have been deleted.',
+    'confirm_one_del'   => 'Are you sure you want to DELETE all selected users?',
+    'confirm_two_del'   => 'Are you REALLY sure you want to DELETE all selected users?',
+    'action_text_del'   => 'Delete Users',
+    'no_data'           => 'No user\'s were found in the user database.',
+);
+
+###############################################################################
 # Localization of the Admin Configuration UI
 
 $LANG_CONFIG = array(
