@@ -2,6 +2,10 @@ glFusion ChangeLog
 
 v1.3.2
 ------
+- Fixed session initialization error - thanks Lee! (Mark)
+- CAPTCHA Plugin: Added support for PICATCHA - Image based CAPTCHA (Mark)
+- Added Stop Forum Spam user check feature (Mark)
+- Updated OAuth library to latest version (Mark)
 
 v1.3.1
 ------

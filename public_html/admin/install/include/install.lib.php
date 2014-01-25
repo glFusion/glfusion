@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                             $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric Warren            eric AT glfusion DOT org                          |
@@ -1063,6 +1063,12 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '1.3.0';
         case '1.3.0' :
             $current_fusion_version = '1.3.1';
+        case '1.3.1' :
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+//            $c->add('pc_publickey', '','text',0, 0, 0, 48, true, 'captcha');
+//            $c->add('pc_privatekey', '','text',0, 0, 0, 49, true, 'captcha');
+            $current_fusion_version = '1.3.2';
         default:
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='".$current_fusion_version."' WHERE name='glfusion'",1);

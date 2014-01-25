@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -991,6 +991,23 @@ function glfusion_130()
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.3.0' WHERE name='glfusion'",1);
 }
 
+function glfusion_132()
+{
+    global $_TABLES, $_CONF, $_PLUGINS, $LANG_AM, $_DB_table_prefix;
+
+    // new config options
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+
+    $c->add('pc_publickey', '','text',0, 0, 0, 48, true, 'captcha');
+    $c->add('pc_privatekey', '','text',0, 0, 0, 49, true, 'captcha');
+
+    // update version number
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.3.2',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.3.2' WHERE name='glfusion'",1);
+}
+
+
 function _updateConfig() {
     global $_CONF, $_TABLES;
 
@@ -1475,7 +1492,7 @@ function _forum_fix_watch() {
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_130();
+glfusion_132();
 
 $stdPlugins=array('staticpages','spamx','links','polls','calendar','sitetailor','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
 foreach ($stdPlugins AS $pi_name) {
