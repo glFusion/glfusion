@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2012 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -1396,9 +1396,11 @@ function USER_list($grp_id)
     );
 
     $text_arr = array(
-        'has_extras' => true,
-        'form_url'   => $_CONF['site_admin_url'] . '/user.php',
-        'help_url'   => ''
+        'form_url'      => $_CONF['site_admin_url'] . '/user.php',
+        'help_url'      => '',
+        'has_search'    => true,
+        'has_limit'     => true,
+        'has_paging'    => true,
     );
 
     $join_userinfo   = '';
@@ -2017,12 +2019,14 @@ function USER_batchAdmin()
     $header_arr[] = array('text' => $LANG28[87], 'field' => 'num_reminders', 'sort' => true, 'align' => 'center', 'width' => '40px');
 
     $text_arr = array('has_menu'     => true,
-                      'has_extras'   => true,
                       'title'        => '',//$LANG28[54],
                       'instructions' => "$desc",
                       'icon'         => $_CONF['layout_url'] . '/images/icons/user.' . $_IMAGE_TYPE,
                       'form_url'     => $_CONF['site_admin_url'] . "/user.php?batchadmin=x&amp;usr_type=$usr_type&amp;usr_time=$usr_time",
-                      'help_url'     => ''
+                      'help_url'     => '',
+                      'has_search'    => true,
+                      'has_limit'     => true,
+                      'has_paging'    => true,
     );
 
     $defsort_arr = array('field'     => $sort,
