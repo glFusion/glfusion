@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2010-2011 by the following authors:                        |
+// | Copyright (C) 2010-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -119,7 +119,7 @@ class url {
             for ($x=0; $x < $indexArray; $x++) {
                 array_shift($this->_arguments);
             }
-            if ( $this->_arguments[0] == substr($script_name,1) ) {
+            if ( isset($this->_arguments[0]) && $this->_arguments[0] == substr($script_name,1) ) {
                 array_shift($this->_arguments);
             }
         } else {
