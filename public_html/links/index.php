@@ -347,7 +347,7 @@ function prepare_link_item ($A, &$template)
     $template->set_var ('link_name', $A['title']);
     $template->set_var ('link_hits', COM_numberFormat ($A['hits']));
     $template->set_var ('link_description',
-                        nl2br (PLG_replaceTags($A['description'],'links','description')));
+                        PLG_replaceTags(nl2br($A['description']),'links','description'));
     $content = $A['title'];
 
     if ( $_LI_CONF['target_blank'] == 1 ) {
