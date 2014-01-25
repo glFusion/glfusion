@@ -2272,6 +2272,32 @@ $LANG_AM = array(
 );
 
 ###############################################################################
+# sfs.php
+
+$LANG_SFS = array(
+    'title' => 'Stop Forum Spam (SFS) User Check',
+    'instructions' => 'All users have had their username, email address, and source IP address checked in the Stop Forum Spam database.  You may select any user\'s that were found in the SFS database and ban them from further use of your site.',
+    'no_record_found' => 'No Record Found',
+    'sfs_email_match' => 'Email Match in SFS',
+    'sfs_ip_match' => 'IP match in SFS',
+    'sfs_username_match' => 'Username match in SFS',
+    'uid' => 'UID',
+    'username' => 'Username',
+    'remote_ip' => 'Remote IP',
+    'email' => 'Email Address',
+    'sfs_status' => 'SFS Status',
+    'confirm_one' => 'Are you sure you want to Ban all selected users?',
+    'confirm_two' => 'Are you REALLY sure you want to Ban all selected users?',
+    'action_text' => 'Ban Users',
+    'confirmation_ban' => 'All selected user\'s have been banned',
+    'confirmation_del' => 'Users have been deleted.',
+    'confirm_one_del' => 'Are you sure you want to DELETE all selected users?',
+    'confirm_two_del' => 'Are you REALLY sure you want to DELETE all selected users?',
+    'action_text_del' => 'Delete Users',
+    'no_data' => 'No user\'s were found in the user database.'
+);
+
+###############################################################################
 # Widgets - Strings
 # 
 # These are some standard strings used by the widget static pages
@@ -2619,7 +2645,8 @@ $LANG_confignames['Core'] = array(
     'whatsnew_cache_time' => 'Time between forced rebuild of the What\'s New cache (in seconds)',
     'hideemptyblock' => 'Hide What\'s New Block when empty',
     'update_check_interval' => 'Update Check Interval',
-    'send_site_data' => 'Send Site Data'
+    'send_site_data' => 'Send Site Data',
+    'rating_speedlimit' => 'Rating SpeedLimit (in seconds)'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2678,7 +2705,8 @@ $LANG_fs['Core'] = array(
     'fs_caching' => 'Caching',
     'fs_mulitlanguage' => 'Multiple Language Support - See <a href="http://www.glfusion.org/wiki/doku.php/glfusion:language#multilingual_sites" target=_blank>Multi-Language Documentation</a>',
     'fs_logo' => 'Logo Options',
-    'fs_update' => 'Update Checker'
+    'fs_update' => 'Update Checker',
+    'fs_rating' => 'Rating Options'
 );
 
 $LANG_configselects['Core'] = array(
