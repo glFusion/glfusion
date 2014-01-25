@@ -993,14 +993,16 @@ function glfusion_130()
 
 function glfusion_132()
 {
-    global $_TABLES, $_CONF, $_PLUGINS, $LANG_AM, $_DB_table_prefix;
+    global $_TABLES, $_CONF, $_PLUGINS, $LANG_AM, $_DB_table_prefix, $_CP_CONF;
 
     // new config options
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
 
-    $c->add('pc_publickey', '','text',0, 0, 0, 48, true, 'captcha');
-    $c->add('pc_privatekey', '','text',0, 0, 0, 49, true, 'captcha');
+    if ( !isset($_CP_CONF['pc_publickey'] ) ) {
+        $c->add('pc_publickey', '','text',0, 0, 0, 48, true, 'captcha');
+        $c->add('pc_privatekey', '','text',0, 0, 0, 49, true, 'captcha');
+    }
 
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.3.2',name='glfusion'",1);
