@@ -6,9 +6,7 @@
 // |                                                                          |
 // | OAuth Distributed Authentication Module.                                 |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2011-2013 by the following authors:                        |
+// | Copyright (C) 2011-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -387,6 +385,16 @@ class OAuthConsumer {
                     unlink($image);
                 }
                 rename($save_img, $image);
+
+                if (($_CONF['max_photo_width'] > 0) && ($_CONF['max_photo_height'] > 0)) {
+                    $upWidth  = $_CONF['max_photo_width'];
+                    $upHeight = $_CONF['max_photo_height'];
+                } else {
+                    $upWidth  = $_CONF['max_image_width'];
+                    $upHeight = $_CONF['max_image_height'];
+                }
+                IMG_resizeImage($image, $image, $upHeight, $upWidth);
+
                 $imgname = $uid . $ext;
                 $sql .= ", photo = '".DB_escapeString($imgname)."'";
             }
@@ -397,13 +405,22 @@ class OAuthConsumer {
 
     protected function _saveUserPhoto($from, $to) {
         $ret = '';
-        require_once 'HTTP/Request.php';
-        $req = new HTTP_Request($from);
-        $req->addHeader('User-Agent', 'glFusion/' . GVERSION);
-        $req->addHeader('Referer', COM_getCurrentUrl());
-        $res = $req->sendRequest();
-        if( !PEAR::isError($res) ){
-            $img = $req->getResponseBody();
+        require_once 'HTTP/Request2.php';
+        $request = new HTTP_Request2($from, HTTP_Request2::METHOD_GET);
+        $request->setConfig(array(
+            'adapter'           => 'HTTP_Request2_Adapter_Socket',
+            'connect_timeout'   => 15,
+            'timeout'           => 30,
+            'follow_redirects'  => TRUE,
+            'max_redirects'     => 5,
+            'ssl_verify_peer'   => false,
+            'ssl_verify_host'   => false
+        ));
+        $request->setHeader('User-Agent', 'glFusion/' . GVERSION);
+        $request->setHeader('Referer', COM_getCurrentUrl());
+        $response = $request->send();
+        if ( $response->getStatus() == 200 ) {
+            $img = $response->getBody();
             $ret = file_put_contents($to, $img);
         }
         return $ret;
