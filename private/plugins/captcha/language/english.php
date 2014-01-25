@@ -120,7 +120,7 @@ $LANG_fs['captcha'] = array(
 $LANG_configselects['captcha'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => TRUE, 'False' => FALSE),
-    2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Static Images' => 2, 'reCAPTCHA' => 3),
+    2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Static Images' => 2, 'reCAPTCHA' => 3, 'Picatcha' => 4),
     4 => array('Default' => 'default','Simple' => 'simple'),
     5 => array('JPG' => 'jpg','PNG' => 'png'),
     6 => array('clean' => 'clean','red' => 'red','white' => 'white','blackglass' => 'blackglass'),
