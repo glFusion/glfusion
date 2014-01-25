@@ -157,8 +157,9 @@ function SESS_sessionCheck()
             }
         }
     }
-    if ( $sessid == '' || $sessid == 0 ) $sessid = _createID();
-
+//    if ( $sessid == '' || $sessid == 0 ) $sessid = _createID();
+    if (empty($sessid)) $sessid = _createID();
+    
     session_id($sessid);
     session_start();
 
