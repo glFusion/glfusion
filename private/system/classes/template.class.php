@@ -238,7 +238,7 @@ class Template
     * @access    public
     * @return    void
     */
-    function Template($root = array(), $unknowns = "")
+    function Template($root = array(), $unknowns = "remove")
     {
         global $_CONF, $TEMPLATE_OPTIONS;
 
@@ -455,6 +455,7 @@ class Template
             $this->blocks[$varname] = $p['dirname'].'/'.substr($p['basename'],0,-(strlen($p['extension'])+1)).'__'.$varname.'.'.$p['extension'];
             $this->file[$varname] = $p['dirname'].'/'.substr($p['basename'],0,-(strlen($p['extension'])+1)).'.'.$p['extension'];
         }
+        return true;
     }
 
 
@@ -1246,7 +1247,7 @@ class Template
       if ($this->unknowns == 'comment') {
           return "<!-- Template variable $val undefined -->";
       } else if ($this->unknowns == 'keep') {
-          return '{'.$val.'}{'.$this->varvals[$val].'}';
+          return '{'.$val.'}';
       }
       return '';
     }
