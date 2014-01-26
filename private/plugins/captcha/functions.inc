@@ -537,7 +537,7 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
     CAPTCHA_expireSessions();
 
     if ( $_CP_CONF['gfxDriver'] == 3 ) {
-        $resp = recaptcha_check_answer ($_CP_CONF['pc_privatekey'],
+        $resp = recaptcha_check_answer ($_CP_CONF['privatekey'],
                                         $_SERVER["REMOTE_ADDR"],
                                         $_POST["recaptcha_challenge_field"],
                                         $_POST["recaptcha_response_field"]);
