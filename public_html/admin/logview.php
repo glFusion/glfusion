@@ -6,9 +6,7 @@
 // |                                                                          |
 // | glFusion log viewer.                                                     |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2012 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -35,16 +33,9 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
-require_once $_CONF['path_system'] . 'lib-admin.php';
+require_once 'auth.inc.php';
 
-if (!SEC_inGroup('Root')) {
-    $display = COM_siteHeader ('menu');
-    $display .= COM_showMessageText($LANG27[12],$LANG27[12],true);
-    $display .= COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to illegally access the log viewer utility.");
-    echo $display;
-    exit;
-}
+USES_lib_admin();
 
 if ( isset($_GET['log']) ) {
     $log = COM_applyFilter($_GET['log']);
@@ -56,23 +47,21 @@ if ( isset($_GET['log']) ) {
 
 $log = preg_replace('/[^a-z0-9\.\-_]/', '', $log);
 
-$retval = '';
-
-$display = COM_siteHeader();
+$pageBody = '';
 
 $menu_arr = array (
     array('url' => $_CONF['site_admin_url'],
           'text' => $LANG_ADMIN['admin_home'])
 );
 
-$retval  = COM_startBlock ($LANG_LOGVIEW['logview'],'', COM_getBlockTemplate ('_admin_block', 'header'));
-$retval .= ADMIN_createMenu( $menu_arr,
+$pageBody  = COM_startBlock ($LANG_LOGVIEW['logview'],'', COM_getBlockTemplate ('_admin_block', 'header'));
+$pageBody .= ADMIN_createMenu( $menu_arr,
                              $LANG_LOGVIEW['info'],
                              $_CONF['layout_url'] . '/images/icons/logview.'. $_IMAGE_TYPE
 );
 
-$retval .= '<form method="post" action="'.$_CONF['site_admin_url'].'/logview.php">';
-$retval .= $LANG_LOGVIEW['logs'].':&nbsp;&nbsp;&nbsp;';
+$pageBody .= '<form method="post" action="'.$_CONF['site_admin_url'].'/logview.php">';
+$pageBody .= $LANG_LOGVIEW['logs'].':&nbsp;&nbsp;&nbsp;';
 $files = array();
 if ($dir = @opendir($_CONF['path_log'])) {
     while(($file = readdir($dir)) !== false) {
@@ -83,24 +72,24 @@ if ($dir = @opendir($_CONF['path_log'])) {
     closedir($dir);
 }
 sort($files);
-$retval .= '<select name="log">';
+$pageBody .= '<select name="log">';
 if (empty($log)) {
     $log = $files[0];
 }
 
 for ($i = 0; $i < count($files); $i++) {
-    $retval .= '<option value="' . $files[$i] . '"';
+    $pageBody .= '<option value="' . $files[$i] . '"';
     if ($log == $files[$i]) {
-        $retval .= ' selected="selected"';
+        $pageBody .= ' selected="selected"';
     }
-    $retval .= '>' . $files[$i] . '</option>';
+    $pageBody .= '>' . $files[$i] . '</option>';
     next($files);
 }
-$retval .= '</select>&nbsp;&nbsp;&nbsp;&nbsp;';
-$retval .= '<input type="submit" name="viewlog" value="'.$LANG_LOGVIEW['view'].'"/>';
-$retval .= '&nbsp;&nbsp;&nbsp;&nbsp;';
-$retval .= '<input type="submit" name="clearlog" value="'.$LANG_LOGVIEW['clear'].'"/>';
-$retval .= '</form>';
+$pageBody .= '</select>&nbsp;&nbsp;&nbsp;&nbsp;';
+$pageBody .= '<input type="submit" name="viewlog" value="'.$LANG_LOGVIEW['view'].'"/>';
+$pageBody .= '&nbsp;&nbsp;&nbsp;&nbsp;';
+$pageBody .= '<input type="submit" name="clearlog" value="'.$LANG_LOGVIEW['clear'].'"/>';
+$pageBody .= '</form>';
 
 if ( isset($_POST['clearlog']) ) {
     @unlink($_CONF['path_log'] . $log);
@@ -111,16 +100,17 @@ if ( isset($_POST['clearlog']) ) {
     $_POST['viewlog'] = 1;
 }
 if ( isset($_POST['viewlog']) ) {
-    $retval .= '<p><strong>'.$LANG_LOGVIEW['log_file'].': ' . $log . '</strong></p>';
-    $retval .= '<div style="margin:10px 0 5px;border-bottom:1px solid #cccccc;"></div>';
-    $retval .= '<div class="logview" style="overflow:scroll; height:500px;"><pre>';
-    $retval .= @htmlentities(implode('', file($_CONF['path_log'] . $log)),ENT_NOQUOTES,COM_getEncodingt());
-    $retval .= "</pre></div>";
+    $pageBody .= '<p><strong>'.$LANG_LOGVIEW['log_file'].': ' . $log . '</strong></p>';
+    $pageBody .= '<div style="margin:10px 0 5px;border-bottom:1px solid #cccccc;"></div>';
+    $pageBody .= '<div class="logview" style="overflow:scroll; height:500px;"><pre>';
+    $pageBody .= @htmlentities(implode('', file($_CONF['path_log'] . $log)),ENT_NOQUOTES,COM_getEncodingt());
+    $pageBody .= "</pre></div>";
 }
 
-$retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
+$pageBody .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
 
-$display .= $retval;
+$display = COM_siteHeader();
+$display .= $pageBody;
 $display .= COM_siteFooter();
 echo $display;
 exit;
