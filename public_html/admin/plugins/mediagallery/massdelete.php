@@ -5,7 +5,7 @@
 // | $Id::                                                                   $|
 // | Administer Media Gallery categories.                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2013 by the following authors:                        |
+// | Copyright (C) 2005-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -159,6 +159,7 @@ function MG_massDeleteAlbums( $aid ) {
 
     $children = $MG_albums[$aid]->getChildren();
     $numItems = count($children);
+
     for ($x=0; $x < $numItems; $x++) {
         $i = $MG_albums[$children[$x]]->id;
         if ( isset($_POST['album'][$i]) && $_POST['album'][$i] == 1 ) {
@@ -167,7 +168,6 @@ function MG_massDeleteAlbums( $aid ) {
             MG_massDeleteAlbums($MG_albums[$children[$x]]->id);
         }
     }
-    echo COM_refresh($_MG_CONF['admin_url'] . 'index.php?msg=15');
 }
 
 /**
