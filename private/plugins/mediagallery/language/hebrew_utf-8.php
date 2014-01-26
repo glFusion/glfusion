@@ -1332,5 +1332,7 @@ $PLG_mediagallery_MESSAGE7 = 'לא נמצאו עוד פריטים לעיבוד.'
 $PLG_mediagallery_MESSAGE8 = 'הגלויה שלכם נשלחה.';
 $PLG_mediagallery_MESSAGE9 = 'הייתה בעיה בשליחת הגלויה, אנא צרו קשר עם המנהלים';
 $PLG_mediagallery_MESSAGE10 = 'הייתה בעיה בהחלפת קובץ המדיה שלכם, ראו את error.log בשביל פרטים';
+$PLG_mediagallery_MESSAGE520 = 'You have been subscribed to this notification feed.';
+$PLG_mediagallery_MESSAGE521 = 'You have been successfully un-subscribed from the notification feed.';
 
 ?>

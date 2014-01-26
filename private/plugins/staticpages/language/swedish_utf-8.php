@@ -56,6 +56,7 @@ $LANG_STATIC = array(
     'blankpage' => 'Tom sida',
     'noblocks' => 'Inga block',
     'leftblocks' => 'Vänsterblock',
+    'rightblocks' => 'Right Blocks',
     'addtomenu' => 'Lägg till i meny',
     'label' => 'Etikett',
     'nopages' => 'Inga statiska sidor än ännu inlagda i systemet',

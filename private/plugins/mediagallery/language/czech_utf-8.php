@@ -1334,5 +1334,7 @@ $PLG_mediagallery_MESSAGE7 = 'Nebyla nalezena položka pro zpracování.';
 $PLG_mediagallery_MESSAGE8 = 'E-pohlednice byla poslána.';
 $PLG_mediagallery_MESSAGE9 = 'Při posílání e-pohlednice se objevila chyba. Prosím, kontaktuj administrátora';
 $PLG_mediagallery_MESSAGE10 = 'Chyba při náhradě souboru, detaily jsou v souboru error.log';
+$PLG_mediagallery_MESSAGE520 = 'You have been subscribed to this notification feed.';
+$PLG_mediagallery_MESSAGE521 = 'You have been successfully un-subscribed from the notification feed.';
 
 ?>

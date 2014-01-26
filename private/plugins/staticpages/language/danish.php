@@ -55,6 +55,7 @@ $LANG_STATIC = array(
     'blankpage' => 'Blank Side',
     'noblocks' => 'Ingen Kasser',
     'leftblocks' => 'Venstre Kasser',
+    'rightblocks' => 'Right Blocks',
     'addtomenu' => 'Tilføj til Menu',
     'label' => 'Titel',
     'nopages' => 'Der er ingen faste sider i systemet endnu',

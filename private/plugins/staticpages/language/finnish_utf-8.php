@@ -54,6 +54,7 @@ $LANG_STATIC = array(
     'blankpage' => 'Tyhj&auml; Sivu',
     'noblocks' => 'Ei Lohkoja',
     'leftblocks' => 'Vasen Lohkot',
+    'rightblocks' => 'Right Blocks',
     'addtomenu' => 'Lis&auml;&auml; Valikkoon',
     'label' => 'Valikkonimi',
     'nopages' => 'Ei staattisia sivuja viel&auml;',

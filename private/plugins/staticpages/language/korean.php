@@ -55,6 +55,7 @@ $LANG_STATIC = array(
     'blankpage' => '전체 화면표시',
     'noblocks' => '블로그 없습니다',
     'leftblocks' => '왼편블로그 있습니다(오른편블로그는 없습니다)',
+    'rightblocks' => 'Right Blocks',
     'addtomenu' => '왼편블로그 메뉴에 추가',
     'label' => '메뉴이름',
     'nopages' => '정적 페이지가 없습니다',

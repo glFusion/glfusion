@@ -55,6 +55,7 @@ $LANG_STATIC = array(
     'blankpage' => 'עמוד ריק',
     'noblocks' => 'ללא קוביות מידע',
     'leftblocks' => 'קוביות מידע שמאליות [ימניות במצב שפה RTL]',
+    'rightblocks' => 'Right Blocks',
     'addtomenu' => 'הוספה לתפריט',
     'label' => 'תווית',
     'nopages' => 'אין עדיין עמודים סטטיים במערכת',

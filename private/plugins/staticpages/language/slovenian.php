@@ -56,6 +56,7 @@ $LANG_STATIC = array(
     'blankpage' => 'Prazna stran',
     'noblocks' => 'Ni blokov',
     'leftblocks' => 'Levi blok',
+    'rightblocks' => 'Right Blocks',
     'addtomenu' => 'Dodaj v meni',
     'label' => 'Nalepka',
     'nopages' => 'V sistemu še ni statiènih strani',

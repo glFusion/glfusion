@@ -80,7 +80,7 @@ $LANG_BAD_BEHAVIOR = array(
 );
 
 $LANG_BB2_RESPONSE = array(
-    '00000000' => 'Anforderung übergeben - Keine User Agent angegeben',
+    '00000000' => 'Request Passed - No User Agent Specified',
     '136673cd' => 'IP-Adresse in externer Blacklist gefunden',
     '17566707' => 'Benötigte Header \'Accept \' fehlt',
     '17f4e8c8' => 'User-Agent wurde in Blacklist gefunden',
@@ -119,10 +119,10 @@ $LANG_BB2_RESPONSE = array(
     'f1182195' => 'User-Agent gibt vor Googlebot zu sein',
     'f9f2b8b9' => 'Ein User-Agent ist erforderlich aber es wurde keiner bereitgestellt.',
     'f9f3b8b0' => 'Fragezeichen am Ende der Abfrage.',
-    '96c0bd29' => 'SQL Injection festgestellt',
+    '96c0bd29' => 'SQL Injection festgestellt'
 );
 
-$PLG_bad_behavior_MESSAGE1   = 'Wenn Sie diesen Hinweis sehen, dann ist Bad Behavior <b>nicht</b> korrekt installiert. Bitte lesen SIe die Installationsanleitung noch einmal sorgfältig durch.';
+$PLG_bad_behavior_MESSAGE1 = 'Wenn Sie diesen Hinweis sehen, dann ist Bad Behavior <b>nicht</b> korrekt installiert. Bitte lesen SIe die Installationsanleitung noch einmal sorgfältig durch.';
 $PLG_bad_behavior_MESSAGE100 = 'Die IP-Adresse wurde wieder freigegeben.';
 $PLG_bad_behavior_MESSAGE101 = 'Es gab ein Problem beim Freigeben der IP-Adresse.';
 

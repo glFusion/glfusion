@@ -1332,5 +1332,7 @@ $PLG_mediagallery_MESSAGE7 = 'No se encontraron items para procesar.';
 $PLG_mediagallery_MESSAGE8 = 'Su Postal ha sido enviada.';
 $PLG_mediagallery_MESSAGE9 = 'Hubo un error al enviar la postal, favor de contactar al administrador del sitio';
 $PLG_mediagallery_MESSAGE10 = 'Hubo un error al reemplazar su archivo de medios, ver error.log para detalles';
+$PLG_mediagallery_MESSAGE520 = 'You have been subscribed to this notification feed.';
+$PLG_mediagallery_MESSAGE521 = 'You have been successfully un-subscribed from the notification feed.';
 
 ?>

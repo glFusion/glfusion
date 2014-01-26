@@ -57,6 +57,7 @@ $LANG_STATIC = array(
     'blankpage' => '全画面表示（ヘッダ・フッタ・ブロックなし）',
     'noblocks' => 'ヘッダ・フッタあり（ブロックなし）',
     'leftblocks' => 'ヘッダ・フッタ・左ブロックあり（右ブロックなし）',
+    'rightblocks' => 'Right Blocks',
     'addtomenu' => 'ヘッダメニュー',
     'label' => 'メニュー名',
     'nopages' => '静的ページがありません',

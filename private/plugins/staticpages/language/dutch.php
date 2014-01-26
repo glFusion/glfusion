@@ -56,6 +56,7 @@ $LANG_STATIC = array(
     'blankpage' => 'Blanco Pagina',
     'noblocks' => 'Geen Blokken',
     'leftblocks' => 'Linker Blokken',
+    'rightblocks' => 'Right Blocks',
     'addtomenu' => 'Aan menu toevoegen',
     'label' => 'Label',
     'nopages' => 'Er zijn nog geen static pages.',

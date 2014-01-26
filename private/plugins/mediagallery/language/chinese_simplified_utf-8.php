@@ -1332,5 +1332,7 @@ $PLG_mediagallery_MESSAGE7 = '没有可处理的项目.';
 $PLG_mediagallery_MESSAGE8 = '你的明信片已寄出.';
 $PLG_mediagallery_MESSAGE9 = '寄出明信片时出了错误, 请跟管理员联络';
 $PLG_mediagallery_MESSAGE10 = '取代媒体时出了错误． 详情请看 error.log';
+$PLG_mediagallery_MESSAGE520 = 'You have been subscribed to this notification feed.';
+$PLG_mediagallery_MESSAGE521 = 'You have been successfully un-subscribed from the notification feed.';
 
 ?>

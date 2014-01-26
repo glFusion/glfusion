@@ -57,6 +57,7 @@ $LANG_STATIC = array(
     'blankpage' => '空页',
     'noblocks' => '无组件',
     'leftblocks' => '左组件',
+    'rightblocks' => 'Right Blocks',
     'addtomenu' => '加入菜单',
     'label' => '标签',
     'nopages' => '此系统无静态页',

@@ -54,6 +54,7 @@ $LANG_STATIC = array(
     'blankpage' => 'Порожня сторінка',
     'noblocks' => 'Без блоків',
     'leftblocks' => 'Ліві блоки',
+    'rightblocks' => 'Right Blocks',
     'addtomenu' => 'Додати до меню',
     'label' => 'Мітка',
     'nopages' => 'В системі ще немає статичних сторінок',

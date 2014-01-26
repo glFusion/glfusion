@@ -56,6 +56,7 @@ $LANG_STATIC = array(
     'blankpage' => 'tühi leht',
     'noblocks' => 'blokkideta',
     'leftblocks' => 'Vasakblokid',
+    'rightblocks' => 'Right Blocks',
     'addtomenu' => 'Lisa menüüsse',
     'label' => 'Silt',
     'nopages' => 'Süsteemis pole veel staatilisi lehti',

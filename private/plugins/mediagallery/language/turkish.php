@@ -1332,5 +1332,7 @@ $PLG_mediagallery_MESSAGE7 = 'There were no items found to process.';
 $PLG_mediagallery_MESSAGE8 = 'E-Kartýnýz Gönderildi.';
 $PLG_mediagallery_MESSAGE9 = 'There was an error in sending the postcard, please contact site administrator';
 $PLG_mediagallery_MESSAGE10 = 'There was an error in replacing your media file, see error.log for details';
+$PLG_mediagallery_MESSAGE520 = 'You have been subscribed to this notification feed.';
+$PLG_mediagallery_MESSAGE521 = 'You have been successfully un-subscribed from the notification feed.';
 
 ?>

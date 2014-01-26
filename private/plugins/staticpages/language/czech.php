@@ -56,6 +56,7 @@ $LANG_STATIC = array(
     'blankpage' => 'Prázdná stránka',
     'noblocks' => 'Bez blokù',
     'leftblocks' => 'Bloky nalevo',
+    'rightblocks' => 'Right Blocks',
     'addtomenu' => 'Pøidat do menu',
     'label' => 'Název polo¾ky',
     'nopages' => '®ádné stránky zde nejsou',

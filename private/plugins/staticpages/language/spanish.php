@@ -54,6 +54,7 @@ $LANG_STATIC = array(
     'blankpage' => 'Página en blanco',
     'noblocks' => 'Sin Cajas',
     'leftblocks' => 'Cajas a Izquierda',
+    'rightblocks' => 'Right Blocks',
     'addtomenu' => 'Añadir al menú',
     'label' => 'Etiqueta',
     'nopages' => 'Todavía no hay páginas estáticas',

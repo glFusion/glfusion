@@ -54,6 +54,7 @@ $LANG_STATIC = array(
     'blankpage' => 'صفحه خالي',
     'noblocks' => 'بدون بلاك',
     'leftblocks' => 'بلاكهاي راست',
+    'rightblocks' => 'Right Blocks',
     'addtomenu' => 'افزودن به فهرست',
     'label' => 'اتيكت',
     'nopages' => 'هنوز هيچ صفحه در سيستم براي آمار در صفحه موجود نيست',

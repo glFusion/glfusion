@@ -1332,5 +1332,7 @@ $PLG_mediagallery_MESSAGE7 = 'There were no items found to process.';
 $PLG_mediagallery_MESSAGE8 = 'ポストカードは送信されました。';
 $PLG_mediagallery_MESSAGE9 = 'ポストカードの送信時にエラーが発生しました。サイト管理者までご連絡願います。';
 $PLG_mediagallery_MESSAGE10 = 'メディアファイルの置き換えでエラーが発生しました。詳しくは error.log をご覧下さい。';
+$PLG_mediagallery_MESSAGE520 = 'You have been subscribed to this notification feed.';
+$PLG_mediagallery_MESSAGE521 = 'You have been successfully un-subscribed from the notification feed.';
 
 ?>

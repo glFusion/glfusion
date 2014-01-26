@@ -1333,5 +1333,7 @@ $PLG_mediagallery_MESSAGE7 = 'Es wurden keine Dateien zur Verabeitung gefunden.'
 $PLG_mediagallery_MESSAGE8 = 'Ihre Postkarte wurde versand.';
 $PLG_mediagallery_MESSAGE9 = 'Es ist ein Fehler beim Versenden der Postkarte aufgetreten, Bitte informiere den Seiten-Admin';
 $PLG_mediagallery_MESSAGE10 = 'Es trat ein Fehler beim Ersetzen Ihrer Mediendatei auf, Schauen Sie in die Datei error.log für weitere Infos.';
+$PLG_mediagallery_MESSAGE520 = 'You have been subscribed to this notification feed.';
+$PLG_mediagallery_MESSAGE521 = 'You have been successfully un-subscribed from the notification feed.';
 
 ?>

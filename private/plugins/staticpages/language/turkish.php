@@ -55,6 +55,7 @@ $LANG_STATIC = array(
     'blankpage' => 'Boþ Sayfa',
     'noblocks' => 'Bloklar Yok',
     'leftblocks' => 'Sol Bloklar',
+    'rightblocks' => 'Right Blocks',
     'addtomenu' => 'Menüye Ekle',
     'label' => 'Etiket',
     'nopages' => 'Henüz sistemde statik sayfalar yok',

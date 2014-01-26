@@ -80,10 +80,6 @@ $LANG_CP00 = array(
     'characters' => 'Merkit'
 );
 
-$PLG_captcha_MESSAGE1 = 'CAPTCHA Lis&auml;osan P&auml;ivitys: P&auml;ivitys Valmis.';
-$PLG_captcha_MESSAGE2 = 'CAPTCHA Plugin Successfully Installed';
-$PLG_captcha_MESSAGE3 = 'CAPTCHA Plugin Successfully Installed';
-
 // Localization of the Admin Configuration UI
 $LANG_configsections['captcha'] = array(
     'label' => 'CAPTCHA',
@@ -135,5 +131,8 @@ $LANG_configselects['captcha'] = array(
     5 => array('JPG' => 'jpg', 'PNG' => 'png'),
     6 => array('clean' => 'clean', 'red' => 'red', 'white' => 'white', 'blackglass' => 'blackglass')
 );
+$PLG_captcha_MESSAGE1 = 'CAPTCHA Lis&auml;osan P&auml;ivitys: P&auml;ivitys Valmis.';
+$PLG_captcha_MESSAGE2 = 'CAPTCHA Plugin Successfully Installed';
+$PLG_captcha_MESSAGE3 = 'CAPTCHA Plugin Successfully Installed';
 
 ?>

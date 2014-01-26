@@ -54,6 +54,7 @@ $LANG_STATIC = array(
     'blankpage' => 'Порожня стор╕нка',
     'noblocks' => 'Без блок╕в',
     'leftblocks' => 'Л╕в╕ блоки',
+    'rightblocks' => 'Right Blocks',
     'addtomenu' => 'Додати до меню',
     'label' => 'М╕тка',
     'nopages' => 'В систем╕ ще нема╓ статичних стор╕нок',

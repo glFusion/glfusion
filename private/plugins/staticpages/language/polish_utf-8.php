@@ -54,6 +54,7 @@ $LANG_STATIC = array(
     'blankpage' => 'Nowe Okno',
     'noblocks' => 'Bez Bloków',
     'leftblocks' => 'Lewe Bloki',
+    'rightblocks' => 'Right Blocks',
     'addtomenu' => 'Dodaj Do Menu',
     'label' => 'Etykieta',
     'nopages' => 'Brak stron statycznych w systemie',
