@@ -1903,7 +1903,7 @@ min-height:100px;
 }
 
 #gl_container_fixed div .php, #gl_container_fixed div .text, #gl_container_fixed div .quotemain  {
-width:596px;
+width:auto;
 }
 
 #ft,.clearboth {
