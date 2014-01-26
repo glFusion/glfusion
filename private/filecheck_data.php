@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: filecheck_data.php 5763 2010-03-31 00:16:44Z usableweb            $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -985,6 +985,7 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/captcha/class/error.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/captcha/class/filter.class.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/captcha/class/recaptchalib.php' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/captcha/class/picatchalib.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/captcha/functions.inc' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/captcha/images/backgrounds/bg0.jpg' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/plugins/captcha/images/backgrounds/bg0.png' ),
@@ -2224,6 +2225,7 @@ $glfFile = array(
     array( 'test' => 'I', 'preq' => 'R', 'path' => 'public_html/admin/install/templates/header.thtml' ),
     array( 'test' => 'I', 'preq' => 'R', 'path' => 'public_html/admin/install/toinnodb.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/admin/logview.php' ),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/admin/sfs.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/admin/mail.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/admin/moderation.php' ),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/admin/plugin_upload.php' ),
