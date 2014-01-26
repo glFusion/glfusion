@@ -178,9 +178,9 @@ $LANG_INSTALL = array(
     'language_support' => 'Pliki j�zykowe',
     'language_pack' => 'glFusion oparty jest o j�zyk Angielski, po instalacji mo�esz pobra� i zainstalowa� <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Paczk� J�zykow� (Language Pack)</a> kt�ry zawiera obs�ugiwane pliki j�zykowe.',
     'libcustom_not_found' => 'Unable to located lib-custom.php.dist.',
-    'no_db_driver'              => 'You must have the MySQL extension loaded in PHP to install glFusion',
-    'version_check'             => 'Check For Updates',
-    'check_for_updates'         => 'Goto the <a href="'.$_CONF['site_admin_url'].'/vercheck.php">Upgrade Checker</a> to see if there are any glFusion CMS or Plugin updates available.',
+    'no_db_driver' => 'You must have the MySQL extension loaded in PHP to install glFusion',
+    'version_check' => 'Check For Updates',
+    'check_for_updates' => "Goto the <a href=\"{$_CONF['site_admin_url']}/vercheck.php\">Upgrade Checker</a> to see if there are any glFusion CMS or Plugin updates available."
 );
 
 // +---------------------------------------------------------------------------+
@@ -194,9 +194,9 @@ $LANG_SUCCESS = array(
     4 => ' glFusion-a. Zapoznaj si� z informacjami zamieszczonymi poni�ej.',
     5 => 'Aby zalogowa� si� prosz� u�y� nast�puj�cego konta:',
     6 => 'U�ytkownik:',
-    7 => 'Admin', // do not translate
+    7 => 'Admin',
     8 => 'Has�o:',
-    9 => 'password', // do not translate
+    9 => 'password',
     10 => 'Powiadomienie bezpiecze�stwa',
     11 => 'Nie zapomnij zrobi�',
     12 => 'rzeczy',

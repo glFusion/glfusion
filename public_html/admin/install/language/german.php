@@ -178,9 +178,9 @@ $LANG_INSTALL = array(
     'language_support' => 'Sprachunterstützung',
     'language_pack' => 'glFusion kommt zunächst mit englischer Sprachunterstützung. Nach der Installation kann man das <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Sprachpaket</a> runterladen und installieren, dass alle unterstützten Sprachen enthält.',
     'libcustom_not_found' => 'Unable to located lib-custom.php.dist.',
-    'no_db_driver'              => 'You must have the MySQL extension loaded in PHP to install glFusion',
+    'no_db_driver' => 'You must have the MySQL extension loaded in PHP to install glFusion',
     'version_check' => 'Check For Updates',
-    'check_for_updates' => 'Goto the <a href="'.$_CONF['site_admin_url'].'/vercheck.php">Upgrade Checker</a> to see if there are any glFusion CMS or Plugin updates available.',
+    'check_for_updates' => "Goto the <a href=\"{$_CONF['site_admin_url']}/vercheck.php\">Upgrade Checker</a> to see if there are any glFusion CMS or Plugin updates available."
 );
 
 // +---------------------------------------------------------------------------+
@@ -194,9 +194,9 @@ $LANG_SUCCESS = array(
     4 => ' . Bitte eine Minute Zeit nehmen, um die Information unten zu lesen.',
     5 => 'Um in den neue glFusion-Auftritt einzuloggen, bitte diesen Account benutzen:',
     6 => 'Benutzername:',
-    7 => 'Admin', // do not translate
+    7 => 'Admin',
     8 => 'Kennwort:',
-    9 => 'password', // do not translate
+    9 => 'password',
     10 => 'Sicherheitswarnung',
     11 => 'Bitte vergiss nicht, die folgenden ',
     12 => ' Dinge zu tun',

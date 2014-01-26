@@ -180,9 +180,9 @@ $LANG_INSTALL = array(
     'language_support' => 'Taal ondersteuning',
     'language_pack' => 'glFusion heeft als standaard instelling Engels, na de installatie kun je via de link <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">een taal pakket Pack</a> downloaden en installeren die alle tot nu toe geondersteunde talen bevat.',
     'libcustom_not_found' => 'Unable to located lib-custom.php.dist.',
-    'no_db_driver'              => 'You must have the MySQL extension loaded in PHP to install glFusion',
-    'version_check'             => 'Check For Updates',
-    'check_for_updates'         => 'Goto the <a href="'.$_CONF['site_admin_url'].'/vercheck.php">Upgrade Checker</a> to see if there are any glFusion CMS or Plugin updates available.',
+    'no_db_driver' => 'You must have the MySQL extension loaded in PHP to install glFusion',
+    'version_check' => 'Check For Updates',
+    'check_for_updates' => "Goto the <a href=\"{$_CONF['site_admin_url']}/vercheck.php\">Upgrade Checker</a> to see if there are any glFusion CMS or Plugin updates available."
 );
 
 // +---------------------------------------------------------------------------+
@@ -196,9 +196,9 @@ $LANG_SUCCESS = array(
     4 => ' glFusion. Neem een paar minuten leestijd voor de weergegeven informatie.',
     5 => 'Om in te loggen op je nieuwe glFusion site, gebruik a.u.b. dit account:',
     6 => 'Gebruikersnaam:',
-    7 => 'Admin', // do not translate
+    7 => 'Admin',
     8 => 'Wachtwoord:',
-    9 => 'password', // do not translate
+    9 => 'password',
     10 => 'Veiligheidswaarschuwing',
     11 => 'Vergeet niet om te doen',
     12 => 'dingen',
