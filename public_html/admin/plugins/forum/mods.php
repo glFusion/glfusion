@@ -208,7 +208,7 @@ if(DB_count($_TABLES['ff_forums']) == 0) {
 
         $showforumssql = DB_query("SELECT forum_name,forum_id FROM {$_TABLES['ff_forums']}");
         $sel_forums = '<option value="0">'.$LANG_GF94['allforums'].'</option>';
-        $selected_forum = isset($_POST['sel_forum']) ? COM_applyFilter($_POST['sel_forum'], true) : 0;
+        $selected_forum = isset($_POST['sel_forum']) ? $_POST['sel_forum']: 0;
 
         while($showforum = DB_fetchArray($showforumssql)){
             if ($selected_forum == $showforum['forum_id']) {
