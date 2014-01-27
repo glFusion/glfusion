@@ -1,5 +1,13 @@
 glFusion ChangeLog
 
+v1.3.2.pl1
+---------
+- Updated PHPMailer to latest upstream release (Mark)
+- Forum Plugin: Fixed new post detection / display (Mark)
+- Forum Plugin: New / Reply post notification emails used wrong text (Mark)
+- Forum Plugin: Stop Forum Spam tweak to only urlencode when needed (Mark)
+- Forum Plugin: Fixed crash when adding group moderators (Mark)
+
 v1.3.2
 ------
 - Style tweak - quotes in Forum plugin pushed past margin in fixed
