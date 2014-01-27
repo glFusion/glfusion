@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Main program to create topics and posts in the forum                     |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -1067,6 +1065,7 @@ function FF_saveTopic( $forumData, $postData, $action )
             if ( DB_Count($_TABLES['ff_attachments'],'topic_id',(int) $lastid) ) {
                 DB_query("UPDATE {$_TABLES['ff_topic']} SET attachments=1 WHERE id=".(int) $lastid);
             }
+            DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE topic=".(int) $topicPID." and time > 0");
         } else if ( $action == 'savereply' ) {
 
             $fields = "name,email,date,subject,comment,postmode,ip,mood,uid,pid,forum,status";
@@ -1106,6 +1105,7 @@ function FF_saveTopic( $forumData, $postData, $action )
             if ( DB_Count($_TABLES['ff_attachments'],'topic_id',(int) $lastid) ) {
                 DB_query("UPDATE {$_TABLES['ff_topic']} SET attachments=1 WHERE id=".(int) $id);
             }
+            DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE topic=".(int) $topicPID." and time > 0");
         } elseif ( $action == 'saveedit' ) {
             $sql = "UPDATE {$_TABLES['ff_topic']} SET " .
                    "subject='$subject'," .
@@ -1308,7 +1308,7 @@ function _ff_chknotifications($forumid,$topicid,$userid,$type='topic') {
             $digestSubject = $forum_name;
             $digestSubject .= ": ";
             $digestSubject .= $A['subject'];
-            $messageBody .= sprintf($LANG_GF02['msg23b'],$A['subject'],$A['name'],$forum_name, $_CONF['site_name'],$_CONF['site_url'],$pid);
+            $messageBody .= sprintf($LANG_GF02['msg23a'],$A['subject'],$postername, $A['name'],$_CONF['site_name']);
             $last_reply_rec = DB_getItem($_TABLES['ff_forums'],'last_post_rec',"forum_id=".(int) $forumid);
         } else {
             if ( $A['last_reply_rec'] != '' && $A['last_reply_rec'] != 0 ) {
@@ -1319,7 +1319,8 @@ function _ff_chknotifications($forumid,$topicid,$userid,$type='topic') {
             $digestSubject = $forum_name;
             $digestSubject .= ": RE: ";
             $digestSubject .= $A['subject'];
-            $messageBody .= sprintf($LANG_GF02['msg23a'],$A['subject'],$postername, $A['name'],$_CONF['site_name']);
+            $messageBody .= sprintf($LANG_GF02['msg23b'],$A['subject'],$A['name'],$forum_name, $_CONF['site_name'],$_CONF['site_url'],$pid);
+//            $messageBody .= sprintf($LANG_GF02['msg23a'],$A['subject'],$postername, $A['name'],$_CONF['site_name']);
             $messageBody .= sprintf($LANG_GF02['msg23c'],$_CONF['site_url'],$pid,$last_reply_rec);
         }
         $messageBody .= $LANG_GF02['msg26'];
@@ -1399,7 +1400,7 @@ function _ff_stopforumspam($username='',$email='',$ip='')
 //            return 0;
 //        }
 
-    $em = urlencode($email);
+    $em = $email;
 
     $request = new HTTP_Request2('http://www.stopforumspam.com/api',
                                  HTTP_Request2::METHOD_GET, array('use_brackets' => true));
@@ -1410,10 +1411,10 @@ function _ff_stopforumspam($username='',$email='',$ip='')
         $checkData['ip'] = $ip;
     }
     if ( $em != '' ) {
-        $checkData['email'] = urlencode($email);
+        $checkData['email'] = $email;
     }
     if ( $username != '' ) {
-        $checkData['username'] = urlencode($username);
+        $checkData['username'] = $username;
     }
 
     $url->setQueryVariables($checkData);
