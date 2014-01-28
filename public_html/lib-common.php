@@ -6,7 +6,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -66,7 +66,7 @@ if (!defined ('GVERSION')) {
     define('GVERSION', '1.3.2');
 }
 
-define('PATCHLEVEL','.pl0');
+define('PATCHLEVEL','.pl1');
 
 //define('DEMO_MODE',true);
 
