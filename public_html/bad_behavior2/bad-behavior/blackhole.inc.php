@@ -17,7 +17,7 @@ function bb2_blackhole($package) {
 
 	// Only conservative lists
 	$bb2_blackhole_lists = array(
-//		"zen.spamhaus.org",	// All around nasties
+//		"sbl-xbl.spamhaus.org",	// All around nasties
 //		"dnsbl.sorbs.net",	// Old useless data.
 //		"list.dsbl.org",	// Old useless data.
 //		"dnsbl.ioerror.us",	// Bad Behavior Blackhole
