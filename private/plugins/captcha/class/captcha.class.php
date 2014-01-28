@@ -197,6 +197,8 @@ class captcha {
         }
         if ( $this->driver == 4 ) {
             echo picatcha_get_html($this->publickey);
+            exit;
+        }
 
         if ( $this->session_id != 0 ) {
             $sql = "UPDATE {$_TABLES['cp_sessions']} SET validation='" . $this->getCaptchaString() . "' WHERE session_id='" . DB_escapeString($this->session_id) . "'";
