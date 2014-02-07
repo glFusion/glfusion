@@ -2158,7 +2158,7 @@ $LANG_MB_TARGET = array(
 ###############################################################################
 # menu.php
 
-$LANG_MB_FUNCTION = array(
+$LANG_MB_GLFUNCTION = array(
     0 => 'Home',
     1 => 'Contribute',
     2 => 'Directory',
