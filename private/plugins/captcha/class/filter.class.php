@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Filters                                                                  |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -74,8 +72,8 @@
 
         $centerX     = mt_rand(1, $w);
         $centerY     = mt_rand(1, $h);
-        $amount      = mt_rand(1, 15);
-        $stringcolor = imagecolorallocate($image, 175, 175, 175);
+        $amount      = mt_rand(9, 11);
+        $stringcolor = imagecolorallocate($image, 100, 100, 100);
 
         for ($n = 0; $n < $amount; $n++)
         {
@@ -90,7 +88,6 @@
                        $stringcolor, $font, $sign);
 
         }
-
       }
 
     } //signs

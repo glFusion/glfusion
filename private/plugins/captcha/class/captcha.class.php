@@ -249,6 +249,7 @@ class captcha {
                             $this->getRandFont(),
                             $this->CaptchaString{$i});
                 }
+
                 switch ($this->gfxformat ) {
                     case 'png' :
                         imagepng($image);
