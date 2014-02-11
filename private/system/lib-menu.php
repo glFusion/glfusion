@@ -58,6 +58,224 @@ define('HEADER_MENU',6);
 
 require_once $_CONF['path_system'] . 'classes/menu.class.php';
 
+
+// new code here
+/*
+ * this function will build the HTML for the menu
+ * you pass it the data structure of the fully fleshed out menu
+ *
+ * TODO: need to add caching to this...
+ */
+
+function renderMenu( $structure ) {
+    global $_CONF;
+
+    $T = new Template( $_CONF['path_layout'].'/menu/');
+
+// will need to select proper template based on menu type
+    $T->set_file (array(
+        'page'      => 'menu_horizontal_cascading.thtml',
+    ));
+
+    // should probably get the name of the menu so we can pass it too...
+
+    $T->set_block('page', 'Elements', 'element');
+
+    foreach($structure['children'] AS $item ) {
+        $T->set_var(array(
+                        'label' => $item['label'],
+                        'url'   => $item['url']
+                    ));
+        if ( $item['children'] != NULL && is_array($item['children']) ) {
+            $T->set_var('haschildren',true);
+            $childrenHTML = handleChildren($item['children']);
+            $T->set_var('children',$childrenHTML);
+        }
+        $T->parse('element', 'Elements',true);
+        $T->unset_var('haschildren');
+        $T->unset_var('children');
+    }
+
+    $T->set_var('wrapper',true);
+
+    $T->parse('output','page');
+    $retval = $T->finish($T->get_var('output'));
+    return $retval;
+}
+
+/*
+ * handle the children elements when building the menu HTML
+ */
+function handleChildren( $elements ) {
+    global $_CONF;
+
+    $retval = '';
+
+    $C = new Template( $_CONF['path_layout'].'/menu/');
+
+    $C->set_file (array(
+        'page'      => 'menu_horizontal_cascading.thtml',
+    ));
+
+    $C->set_block('page', 'Elements', 'element');
+
+    foreach ($elements AS $child) {
+        $C->set_var(array(
+                        'label' => $child['label'],
+                        'url'   => $child['url']
+                    ));
+        if ( $child['children'] != NULL && is_array($child['children']) ) {
+            $C->set_var('haschildren',true);
+            $childHTML = handleChildren($child['children']);
+            $C->set_var('children',$childHTML);
+        }
+        $C->parse('element', 'Elements',true);
+        $C->unset_var('haschildren');
+        $C->unset_var('children');
+    }
+    $C->parse('output','page');
+    $retval = $C->finish($C->get_var('output'));
+
+    return $retval;
+}
+
+/*
+ * New initialization function. No changes from the original version
+ * I removed caching for my tests
+ *
+ */
+function mb_initMenu2($skipCache=false) {
+    global $mbMenu2,$_GROUPS, $_TABLES, $_USER;
+
+    $mbadmin = SEC_hasRights('menu.admin');
+    $root    = SEC_inGroup('Root');
+
+    if (COM_isAnonUser()) {
+        $uid = 1;
+    } else {
+        $uid = $_USER['uid'];
+    }
+
+    // i would rather initMenu return an array of menu objects
+    //
+
+    $result = DB_query("SELECT * FROM {$_TABLES['menu']} WHERE menu_active=1",1);
+    while ( $menuRow = DB_fetchArray($result) ) {
+
+        $menu = new menu2();
+
+        $menu->id = $menuRow['id'];
+        $menu->name = $menuRow['menu_name'];
+        $menu->type = $menuRow['menu_type'];
+        $menu->active = $menuRow['active'];
+        $menu->group_id = $menuRow['group_id'];
+
+        if ($mbadmin || $root) {
+            $menu->permission = 3;
+        } else {
+            if ( $menuRow['group_id'] == 998 ) {
+                if( COM_isAnonUser() ) {
+                    $menu->permission = 3;
+                } else {
+                    $menu->permission =  0;
+                }
+            } else {
+                if ( in_array( $menuRow['group_id'], $_GROUPS ) ) {
+                    $menu->permission =  3;
+                }
+            }
+        }
+
+        $sql = "SELECT * FROM {$_TABLES['menu_elements']} WHERE menu_id=".(int) $menu->id." AND element_active = 1 ORDER BY element_order ASC";
+        $elementResult      = DB_query( $sql, 1);
+        $element            = new menuElement2();
+        $element->id        = 0;
+        $element->menu_id   = $menuID;
+        $element->label     = 'Top Level Menu';
+        $element->type      = -1;
+        $element->pid       = 0;
+        $element->order     = 0;
+        $element->url       = '';
+        $element->owner_id  = $mbadmin;
+        $element->group_id  = $root;
+        if ( $mbadmin ) {
+            $element->access = 3;
+        }
+        $menu->menu_elements[0] = $element;
+
+        while ($A = DB_fetchArray($elementResult) ) {
+            $element  = new menuElement2();
+            $element->constructor($A,$mbadmin,$root,$_GROUPS);
+            if ( $element->access > 0 ) {
+                $menu->menu_elements[$A['id']] = $element;
+            }
+        }
+        $mbMenu2[] = $menu;
+    }
+
+
+    if ( is_array($mbMenu2) ) {
+        foreach ($mbMenu2 as $menu ) {
+            foreach($menu->menu_elements as $element) {
+                if ( $element->id != 0 && is_object($menu->menu_elements[$element->pid]) ) {
+                    $menu->menu_elements[$element->pid]->setChild($element);
+                }
+            }
+        }
+    }
+}
+
+
+/*
+ * New getMenu function - this one only builds the menu structe
+ * into an array - it does not do any styling.
+ */
+function mb_getMenu2($name, $selected='') {
+    global $mbMenu2, $menuStyles, $_CONF, $_USER;
+
+    $retval = '';
+    $menuID = '';
+
+    $lang = COM_getLanguageId();
+    if (!empty($lang)) {
+        $menuName = $name . '_'.$lang;
+    } else {
+        $menuName = $name;
+    }
+
+    if ( is_array($mbMenu2) ) {
+        foreach($mbMenu2 AS $menu) {
+            if ( strcasecmp(trim($menu->name), trim($menuName)) == 0 ) {
+                $menuID = $menu->id;
+                break;
+            }
+        }
+    }
+
+    if ( $menuID == '' ) {
+        print "didn't find name";
+        return;
+    }
+
+    $retval = $menu->_parseMenu($menu->menu_elements[0]);
+    return $retval;
+}
+
+// OLD CODE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function mb_initMenu($skipCache=false) {
     global $mbMenu,$_GROUPS, $_TABLES, $_USER;
 
