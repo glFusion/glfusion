@@ -166,13 +166,13 @@ function displayMenu( $menuName, $skipCache=false ) {
             $template_file = 'menu_horizontal_cascading.thtml';
             break;
         case MENU_HORIZONTAL_SIMPLE :
-            $template_file = 'menu_horizontal_cascading.thtml';
+            $template_file = 'menu_horizontal_simple.thtml';
             break;
         case MENU_VERTICAL_CASCADING :
-            $template_file = 'menu_horizontal_cascading.thtml';
+            $template_file = 'menu_vertical_cascading.thtml';
             break;
         case MENU_VERTICAL_SIMPLE :
-            $template_file = 'menu_horizontal_cascading.thtml';
+            $template_file = 'menu_horizontal_simple.thtml';
             break;
         default:
             return $retval;
@@ -182,6 +182,8 @@ function displayMenu( $menuName, $skipCache=false ) {
     $T->set_file (array(
         'page'      => $template_file,
     ));
+
+    $T->set_var('menuname',$menuName);
 
     // should probably get the name of the menu so we can pass it too...
 
@@ -224,10 +226,10 @@ function displayMenuChildren( $type, $elements ) {
             $template_file = 'menu_horizontal_cascading.thtml';
             break;
         case MENU_HORIZONTAL_SIMPLE :
-            $template_file = 'menu_horizontal_cascading.thtml';
+            $template_file = 'menu_horizontal_simple.thtml';
             break;
         case MENU_VERTICAL_CASCADING :
-            $template_file = 'menu_horizontal_cascading.thtml';
+            $template_file = 'menu_vertical_cascading.thtml';
             break;
         case MENU_VERTICAL_SIMPLE :
             $template_file = 'menu_horizontal_cascading.thtml';
@@ -263,7 +265,7 @@ function displayMenuChildren( $type, $elements ) {
 }
 
 
-$display = displayMenu('navigation',false);
+$display = displayMenu('footer',false);
 
 dummyheader();
 echo $display;

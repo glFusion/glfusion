@@ -658,10 +658,6 @@ class menu2 {
             return NULL;
         }
 
-        //
-        // we should have all the values built now.
-        //
-
         if ( $element->type == ET_FUSION_MENU ||
              $element->type == ET_PHP ) {
             // we know that a built in fusion menu cannot have children
@@ -730,6 +726,13 @@ class menuElement2 {
         }
     }
 
+    function replace_macros() {
+        global $_CONF;
+        $this->url = str_replace( "%version%", GVERSION, $this->url );
+        $this->url = str_replace( "%site_url%", $_CONF['site_url'], $this->url );
+        $this->url = str_replace( "%site_admin_url%", $_CONF['site_admin_url'], $this->url );
+        return;
+    }
     function setChild($el) {
         $this->children[$el->id] = $el;
     }
