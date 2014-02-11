@@ -1,0 +1,25 @@
+{# Generic menu template #}
+{!if wrapper}
+ <div id="menu_navigation" class="menu_navigation">
+{!endif}
+<ul class="menu-horizontal-cascading">
+<!-- BEGIN Elements -->
+  <li>
+  {!if haschildren}
+     <a class="parent" href="#">
+  {!else}
+   <a href="{url}">
+  {!endif}
+   {label}
+{!if url}
+   </a>
+{!endif}   
+{!if haschildren}
+  {children}
+{!endif}  
+  </li>  
+<!-- END Elements -->  
+</ul>
+{!if wrapper}
+</div>
+{!endif}
