@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Menu editor                                                              |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2012 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -354,11 +352,10 @@ function MB_saveCloneMenu( ) {
             }
         }
     }
-    CACHE_remove_instance('mbmenu');
+    CACHE_remove_instance('menu');
     CACHE_remove_instance('css');
     $randID = rand();
     DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
-    mb_initMenu(true);
 }
 
 
@@ -468,11 +465,10 @@ function MB_saveNewMenu( ) {
 
     $menu_id = DB_insertId();
 
-    CACHE_remove_instance('mbmenu');
+    CACHE_remove_instance('menu');
     CACHE_remove_instance('css');
     $randID = rand();
     DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
-    mb_initMenu(true);
     return '';
 }
 
@@ -481,8 +477,9 @@ function MB_saveNewMenu( ) {
  */
 
 function MB_displayTree( $menu_id ) {
-    global $_CONF, $LANG_MB01, $LANG_MB_ADMIN, $LANG_ADMIN;
+    global $_CONF, $LANG_MB01, $LANG_MB_ADMIN, $LANG_ADMIN, $level;
 
+$level = 1;
     $retval = '';
 
     $menu = menu::getInstance( $menu_id );
@@ -522,8 +519,9 @@ function MB_displayTree( $menu_id ) {
                         . '<script type="text/javascript">' . LB
                         . '    document.getElementById(\'menubuilder\').style.display=\'\''.LB
                         . '</script>';
+$data_arr = $menu->editTree(0,2);
 
-    $data_arr = $menu->menu_elements[0]->editTree(0,2);
+//    $data_arr = $menu->editTree($menu->menu_elements[0],0,2);
 
     $retval .= ADMIN_simpleList("_mb_getListField_menu", $header_arr, $text_arr, $data_arr,$options,$form_arr);
 
@@ -567,8 +565,8 @@ function MB_moveElement( $menu_id, $mid, $direction ) {
     }
     $pid = $menu->menu_elements[$mid]->pid;
 
-    $menu->menu_elements[$pid]->reorderMenu();
-    CACHE_remove_instance('mbmenu');
+    $menu->reorderMenu($pid);
+    CACHE_remove_instance('menu');
 
     return;
 }
@@ -824,8 +822,8 @@ function MB_saveNewMenuElement ( ) {
     $element->saveElement();
     $pid                = $E['pid'];
     $menu_id            = $E['menu_id'];
-    $menu->menu_elements[$pid]->reorderMenu();
-    CACHE_remove_instance('mbmenu');
+    $menu->reorderMenu($pid);
+    CACHE_remove_instance('menu');
 }
 
 /*
@@ -1081,9 +1079,7 @@ function MB_saveEditMenuElement ( ) {
     $sql        = "UPDATE {$_TABLES['menu_elements']} SET pid=".(int) $pid.", element_order=".(int) $neworder.", element_label='$label', element_type='$type', element_subtype='$subtype', element_active=$active, element_url='$url', element_target='".DB_escapeString($target)."', group_id=".(int) $group_id." WHERE id=".(int) $id;
 
     DB_query($sql);
-    mb_initMenu(true);
-    $menu->menu_elements[$pid]->reorderMenu();
-    mb_initMenu(true);
+    $menu->reorderMenu($pid);
 }
 
 
@@ -1107,7 +1103,7 @@ function MB_changeActiveStatusElement ($element_arr)
             DB_query($sql);
         }
     }
-    CACHE_remove_instance('mbmenu');
+    CACHE_remove_instance('menu');
     CACHE_remove_instance('css');
     CACHE_remove_instance('js');
 
@@ -1131,7 +1127,7 @@ function MB_changeActiveStatusMenu ($menu_arr)
             DB_query($sql);
         }
     }
-    CACHE_remove_instance('mbmenu');
+    CACHE_remove_instance('menu');
 
     return;
 }
@@ -1144,7 +1140,7 @@ function MB_deleteMenu($menu_id) {
     DB_query("DELETE FROM {$_TABLES['menu']} WHERE id=".(int) $menu_id);
     DB_query("DELETE FROM {$_TABLES['menu_elements']} WHERE menu_id=".(int) $menu_id);
 
-    CACHE_remove_instance('mbmenu');
+    CACHE_remove_instance('menu');
     CACHE_remove_instance('css');
 }
 
@@ -1166,7 +1162,7 @@ function MB_deleteChildElements( $id, $menu_id ){
     $sql = "DELETE FROM " . $_TABLES['menu_elements'] . " WHERE id=" . (int) $id;
     DB_query( $sql );
 
-    CACHE_remove_instance('mbmenu');
+    CACHE_remove_instance('menu');
 }
 
 
@@ -1295,7 +1291,7 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             break;
         case 'saveedit' :
             MB_saveEditMenuElement();
-            CACHE_remove_instance('mbmenu');
+            CACHE_remove_instance('menu');
             echo COM_refresh($_CONF['site_admin_url'] . '/menu.php?mode=menu&amp;menu=' . $menu_id);
             exit;
             break;
@@ -1303,7 +1299,7 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             // save the new or edited element
             $menu_id = COM_applyFilter($_POST['menuid'],true);
             MB_saveNewMenuElement();
-            CACHE_remove_instance('mbmenu');
+            CACHE_remove_instance('menu');
             echo COM_refresh($_CONF['site_admin_url'] . '/menu.php?mode=menu&amp;menu=' . $menu_id);
             exit;
             break;
@@ -1330,13 +1326,11 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             break;
         case 'activate' :
             MB_changeActiveStatusElement ($_POST['enableditem']);
-            mb_initMenu();
             $content = MB_displayTree( $menu_id );
             $currentSelect = $LANG_MB01['menu_builder'];
             break;
         case 'menuactivate' :
             MB_changeActiveStatusMenu ($_POST['enabledmenu']);
-            mb_initMenu();
             $content = MB_displayMenuList( );
             $currentSelect = $LANG_MB01['menu_builder'];
             break;
@@ -1344,8 +1338,12 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             // delete the element
             $id        = COM_applyFilter($_GET['mid'],true);
             $menu_id   = COM_applyFilter($_GET['menuid'],true);
+
+            $menu = menu::getInstance( $menu_id );
+
             MB_deleteChildElements( $id, $menu_id );
-            $mbMenu[$menu_id]['elements'][0]->reorderMenu();
+
+            $menu->reorderMenu(0);
             echo COM_refresh($_CONF['site_admin_url'] . '/menu.php?mode=menu&amp;menu=' . $menu_id);
             exit;
             break;

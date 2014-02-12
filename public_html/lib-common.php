@@ -2252,10 +2252,7 @@ function COM_userMenu( $help='', $title='', $position='' )
         $retval .= COM_startBlock( $title, $help,
                            COM_getBlockTemplate( 'user_block', 'header', $position ), 'user_block' );
 
-        $userMenu = new menu(0);
-        $userMenu->type = MENU_GENERIC;
-        $userMenu->active = 1;
-        $userMenu->name = 'user';
+        $userMenu = new menuElement;
         $menuData = $userMenu->_userMenu();
         $retval .= '<ul>';
         foreach ( $menuData as $item ) {
@@ -2396,10 +2393,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
     $retval .= COM_startBlock( $title, $help,
                        COM_getBlockTemplate( 'admin_block', 'header', $position ), 'admin_block' );
 
-    $adminMenu = new menu(0);
-    $adminMenu->type = MENU_GENERIC;
-    $adminMenu->active = 1;
-    $adminMenu->name = 'admin';
+    $adminMenu = new menuElement();
     $menuData = $adminMenu->_adminMenu();
     $retval .= '<ul>';
     foreach ( $menuData as $item ) {
