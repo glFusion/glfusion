@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2012 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -38,6 +38,7 @@ define('MENU_HORIZONTAL_CASCADING',1);
 define('MENU_HORIZONTAL_SIMPLE',2);
 define('MENU_VERTICAL_CASCADING',3);
 define('MENU_VERTICAL_SIMPLE',4);
+define('MENU_GENERIC',5);
 
 define('ET_SUB_MENU',1);
 define('ET_FUSION_ACTION',2);
@@ -58,24 +59,184 @@ define('HEADER_MENU',6);
 
 require_once $_CONF['path_system'] . 'classes/menu.class.php';
 
-
 // new code here
 /*
- * this function will build the HTML for the menu
- * you pass it the data structure of the fully fleshed out menu
+ * pull the data for a specific menu from the DB
  *
- * TODO: need to add caching to this...
+ * returns a menu object
+
+ */
+function initMenu($menuname, $skipCache=false) {
+    global $_GROUPS, $_TABLES, $_USER;
+
+    $menu = NULL;
+
+    $cacheInstance = 'menuobject_' .$menuname . '_' . CACHE_security_hash() . '__data';
+    if ( $skipCache == false ) {
+        $retval = CACHE_check_instance($cacheInstance, 0);
+        if ( $retval ) {
+            $menu = unserialize($retval);
+            return $menu ;
+        }
+    }
+    $mbadmin = SEC_hasRights('menu.admin');
+    $root    = SEC_inGroup('Root');
+
+    if (COM_isAnonUser()) {
+        $uid = 1;
+    } else {
+        $uid = $_USER['uid'];
+    }
+    $sql = "SELECT * FROM {$_TABLES['menu']} WHERE menu_active=1 AND menu_name='".DB_escapeString($menuname)."'";
+    $result = DB_query("SELECT * FROM {$_TABLES['menu']} WHERE menu_active=1 AND menu_name='".DB_escapeString($menuname)."'",1);
+    $menuRow = DB_fetchArray($result);
+    if ( $menuRow ) {
+        $menu = new menu();
+
+        $menu->id = $menuRow['id'];
+        $menu->name = $menuRow['menu_name'];
+        $menu->type = $menuRow['menu_type'];
+        $menu->active = $menuRow['menu_active'];
+        $menu->group_id = $menuRow['group_id'];
+
+        if ($mbadmin || $root) {
+            $menu->permission = 3;
+        } else {
+            if ( $menuRow['group_id'] == 998 ) {
+                if( COM_isAnonUser() ) {
+                    $menu->permission = 3;
+                } else {
+                    $menu->permission =  0;
+                    return NULL;
+                }
+            } else {
+                if ( in_array( $menuRow['group_id'], $_GROUPS ) ) {
+                    $menu->permission =  3;
+                } else {
+                    return NULL;
+                }
+            }
+        }
+        $sql = "SELECT * FROM {$_TABLES['menu_elements']} WHERE menu_id=".(int) $menu->id." AND element_active = 1 ORDER BY element_order ASC";
+        $elementResult      = DB_query( $sql, 1);
+        $element            = new menuElement();
+        $element->id        = 0;
+        $element->menu_id   = $menu->id;
+        $element->label     = 'Top Level Menu';
+        $element->type      = -1;
+        $element->pid       = 0;
+        $element->order     = 0;
+        $element->url       = '';
+        $element->owner_id  = $mbadmin;
+        $element->group_id  = $root;
+        if ( $mbadmin ) {
+            $element->access = 3;
+        }
+        $menu->menu_elements[0] = $element;
+
+        while ($A = DB_fetchArray($elementResult) ) {
+            $element  = new menuElement();
+            $element->constructor($A,$mbadmin,$root,$_GROUPS);
+            if ( $element->access > 0 ) {
+                $menu->menu_elements[$A['id']] = $element;
+            }
+        }
+        if ( isset($menu->menu_elements) && is_array( $menu->menu_elements ) ) {
+            foreach($menu->menu_elements as $element) {
+                if ( $element->id != 0 && is_object($menu->menu_elements[$element->pid]) ) {
+                    $menu->menu_elements[$element->pid]->setChild($element);
+                }
+            }
+        }
+        $cacheMenu = serialize($menu);
+        CACHE_create_instance($cacheInstance, $cacheMenu, 0);
+    }
+    return $menu;
+}
+
+/*
+ * New assembleMenu function - this one only builds the menu structe
+ * into an array - it does not do any styling.
+ *
+ * takes a menu object and turns it into a full data structure
+ *
+ * first check to see if the data structure is on disk (cache)
+ *
+ *
+ */
+function assembleMenu($name, $skipCache=false) {
+
+    $menuData = NULL;
+
+    $lang = COM_getLanguageId();
+    if (!empty($lang)) {
+        $menuName = $name . '_'.$lang;
+    } else {
+        $menuName = $name;
+    }
+
+    $cacheInstance = 'menudata_' .$menuName . '_' . CACHE_security_hash() . '__data';
+
+    if ( $skipCache == false ) {
+        $cacheCheck = CACHE_check_instance($cacheInstance, 0);
+        if ( $cacheCheck ) {
+            $menuData = unserialize($cacheCheck);
+            return $menuData;
+        }
+    }
+
+    $menuObject = initMenu($menuName, $skipCache);
+    if ( $menuObject != NULL ) {
+        $menuData = $menuObject->_parseMenu($menuObject->menu_elements[0]);
+        $menuData['type'] = $menuObject->type;
+        $cacheMenu = serialize($menuData);
+        CACHE_create_instance($cacheInstance, $cacheMenu, 0);
+    }
+    return $menuData;
+}
+
+/*
+ * Render the menu
  */
 
-function renderMenu( $structure ) {
+function displayMenu( $menuName, $skipCache=false ) {
     global $_CONF;
+
+    $retval = '';
+
+    $structure = assembleMenu($menuName, $skipCache);
+    if ( $structure == NULL ) {
+        return $retval;
+    }
 
     $T = new Template( $_CONF['path_layout'].'/menu/');
 
-// will need to select proper template based on menu type
+    switch ( $structure['type'] ) {
+        case MENU_HORIZONTAL_CASCADING :
+            $template_file = 'menu_horizontal_cascading.thtml';
+            break;
+        case MENU_HORIZONTAL_SIMPLE :
+            $template_file = 'menu_horizontal_simple.thtml';
+            break;
+        case MENU_VERTICAL_CASCADING :
+            $template_file = 'menu_vertical_cascading.thtml';
+            break;
+        case MENU_VERTICAL_SIMPLE :
+            $template_file = 'menu_horizontal_simple.thtml';
+            break;
+        case MENU_GENERIC :
+            $template_file = 'menu_generic.thtml';
+            break;
+        default:
+            return $retval;
+            break;
+    }
+
     $T->set_file (array(
-        'page'      => 'menu_horizontal_cascading.thtml',
+        'page'      => $template_file,
     ));
+
+    $T->set_var('menuname',$menuName);
 
     // should probably get the name of the menu so we can pass it too...
 
@@ -87,8 +248,8 @@ function renderMenu( $structure ) {
                         'url'   => $item['url']
                     ));
         if ( $item['children'] != NULL && is_array($item['children']) ) {
+            $childrenHTML = displayMenuChildren($structure['type'],$item['children']);
             $T->set_var('haschildren',true);
-            $childrenHTML = handleChildren($item['children']);
             $T->set_var('children',$childrenHTML);
         }
         $T->parse('element', 'Elements',true);
@@ -106,27 +267,49 @@ function renderMenu( $structure ) {
 /*
  * handle the children elements when building the menu HTML
  */
-function handleChildren( $elements ) {
+function displayMenuChildren( $type, $elements ) {
     global $_CONF;
 
     $retval = '';
 
     $C = new Template( $_CONF['path_layout'].'/menu/');
 
+    switch ( $type ) {
+        case MENU_HORIZONTAL_CASCADING :
+            $template_file = 'menu_horizontal_cascading.thtml';
+            break;
+        case MENU_HORIZONTAL_SIMPLE :
+            $template_file = 'menu_horizontal_simple.thtml';
+            break;
+        case MENU_VERTICAL_CASCADING :
+            $template_file = 'menu_vertical_cascading.thtml';
+            break;
+        case MENU_VERTICAL_SIMPLE :
+            $template_file = 'menu_horizontal_cascading.thtml';
+            break;
+        case MENU_GENERIC :
+            $template_file = 'menu_generic.thtml';
+            break;
+        default:
+            return $retval;
+            break;
+    }
     $C->set_file (array(
-        'page'      => 'menu_horizontal_cascading.thtml',
+        'page'      => $template_file,
     ));
 
     $C->set_block('page', 'Elements', 'element');
 
     foreach ($elements AS $child) {
+        $C->unset_var('haschildren');
+
         $C->set_var(array(
                         'label' => $child['label'],
                         'url'   => $child['url']
                     ));
-        if ( $child['children'] != NULL && is_array($child['children']) ) {
+        if ( isset($child['children']) && $child['children'] != NULL && is_array($child['children']) ) {
+            $childHTML = displayMenuChildren($type, $child['children']);
             $C->set_var('haschildren',true);
-            $childHTML = handleChildren($child['children']);
             $C->set_var('children',$childHTML);
         }
         $C->parse('element', 'Elements',true);
@@ -139,140 +322,7 @@ function handleChildren( $elements ) {
     return $retval;
 }
 
-/*
- * New initialization function. No changes from the original version
- * I removed caching for my tests
- *
- */
-function mb_initMenu2($skipCache=false) {
-    global $mbMenu2,$_GROUPS, $_TABLES, $_USER;
-
-    $mbadmin = SEC_hasRights('menu.admin');
-    $root    = SEC_inGroup('Root');
-
-    if (COM_isAnonUser()) {
-        $uid = 1;
-    } else {
-        $uid = $_USER['uid'];
-    }
-
-    // i would rather initMenu return an array of menu objects
-    //
-
-    $result = DB_query("SELECT * FROM {$_TABLES['menu']} WHERE menu_active=1",1);
-    while ( $menuRow = DB_fetchArray($result) ) {
-
-        $menu = new menu2();
-
-        $menu->id = $menuRow['id'];
-        $menu->name = $menuRow['menu_name'];
-        $menu->type = $menuRow['menu_type'];
-        $menu->active = $menuRow['active'];
-        $menu->group_id = $menuRow['group_id'];
-
-        if ($mbadmin || $root) {
-            $menu->permission = 3;
-        } else {
-            if ( $menuRow['group_id'] == 998 ) {
-                if( COM_isAnonUser() ) {
-                    $menu->permission = 3;
-                } else {
-                    $menu->permission =  0;
-                }
-            } else {
-                if ( in_array( $menuRow['group_id'], $_GROUPS ) ) {
-                    $menu->permission =  3;
-                }
-            }
-        }
-
-        $sql = "SELECT * FROM {$_TABLES['menu_elements']} WHERE menu_id=".(int) $menu->id." AND element_active = 1 ORDER BY element_order ASC";
-        $elementResult      = DB_query( $sql, 1);
-        $element            = new menuElement2();
-        $element->id        = 0;
-        $element->menu_id   = $menuID;
-        $element->label     = 'Top Level Menu';
-        $element->type      = -1;
-        $element->pid       = 0;
-        $element->order     = 0;
-        $element->url       = '';
-        $element->owner_id  = $mbadmin;
-        $element->group_id  = $root;
-        if ( $mbadmin ) {
-            $element->access = 3;
-        }
-        $menu->menu_elements[0] = $element;
-
-        while ($A = DB_fetchArray($elementResult) ) {
-            $element  = new menuElement2();
-            $element->constructor($A,$mbadmin,$root,$_GROUPS);
-            if ( $element->access > 0 ) {
-                $menu->menu_elements[$A['id']] = $element;
-            }
-        }
-        $mbMenu2[] = $menu;
-    }
-
-
-    if ( is_array($mbMenu2) ) {
-        foreach ($mbMenu2 as $menu ) {
-            foreach($menu->menu_elements as $element) {
-                if ( $element->id != 0 && is_object($menu->menu_elements[$element->pid]) ) {
-                    $menu->menu_elements[$element->pid]->setChild($element);
-                }
-            }
-        }
-    }
-}
-
-
-/*
- * New getMenu function - this one only builds the menu structe
- * into an array - it does not do any styling.
- */
-function mb_getMenu2($name, $selected='') {
-    global $mbMenu2, $menuStyles, $_CONF, $_USER;
-
-    $retval = '';
-    $menuID = '';
-
-    $lang = COM_getLanguageId();
-    if (!empty($lang)) {
-        $menuName = $name . '_'.$lang;
-    } else {
-        $menuName = $name;
-    }
-
-    if ( is_array($mbMenu2) ) {
-        foreach($mbMenu2 AS $menu) {
-            if ( strcasecmp(trim($menu->name), trim($menuName)) == 0 ) {
-                $menuID = $menu->id;
-                break;
-            }
-        }
-    }
-
-    if ( $menuID == '' ) {
-        print "didn't find name";
-        return;
-    }
-
-    $retval = $menu->_parseMenu($menu->menu_elements[0]);
-    return $retval;
-}
-
 // OLD CODE
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -488,7 +538,7 @@ function mb_getMenu($name, $selected='') {
 
 function phpblock_getMenu( $arg1, $arg2 )
 {
-    return( mb_getMenu($arg2));
+    return( displayMenu($arg2) );
 }
 
 function _mbPLG_getMenuItems()
@@ -511,7 +561,8 @@ function _mbPLG_getMenuItems()
     return $menu;
 }
 
-
+// broken now - since we don't load the array - need a better
+// method to get the JS loaded per menu.
 
 function mb_getheaderjs() {
     global $_CONF, $_USER, $mbMenu;

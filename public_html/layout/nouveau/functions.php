@@ -69,38 +69,11 @@ $_BLOCK_TEMPLATE['forum_menu'] = 'blockheader-left.thtml,blockfooter-left.thtml'
 // $_BLOCK_TEMPLATE['configmanager_block'] = 'blockheader-left.thtml,blockfooter-left.thtml';
 // $_BLOCK_TEMPLATE['configmanager_subblock'] = 'blockheader-left.thtml,blockfooter-left.thtml';
 
-$menuStyles = array(
-    'horizontal_cascading'  => array('ulclass' => 'menu-horizontal-cascading',
-                                     'liclass' => '',
-                                     'parentclass' => 'parent',
-                                     'lastclass' => 'last',
-                                     'selclass' => ''
-                                     ),
-    'horizontal_simple'     => array('ulclass' => 'menu-horizontal-simple',
-                                     'liclass' => '',
-                                     'parentclass' => '',
-                                     'lastclass' => 'last',
-                                     'selclass' => ''
-                                     ),
-    'vertical_cascading'    => array('ulclass' => 'menu-vertical-cascading',
-                                     'liclass' => '',
-                                     'parentclass' => 'parent',
-                                     'lastclass' => 'last',
-                                     'selclass' => ''
-                                    ),
-    'vertical_simple'       => array('ulclass' => 'menu-vertical-simple',
-                                     'liclass' => '',
-                                     'parentclass' => '',
-                                     'lastclass' => 'last',
-                                     'selclass' => ''
-                                     )
-);
-
 function theme_themeJS() {
     global $_CONF;
 
     $js = array();
-    
+
     $js[] = $_CONF['path_layout'] .'js/gltips.js';
 
 // uncomment the line below to enable gl_moochronometer header rotator
@@ -115,7 +88,7 @@ function theme_themeJS() {
 // if you use a different menu than the default navigation one, change the
 // getElementById in currentpage.js.
 //    $js[] = $_CONF['path_layout'] .'js/currentpage.js';
-    
+
     return($js);
 }
 ?>

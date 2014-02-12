@@ -1,0 +1,8 @@
+{# Generic menu template #}
+ <ul>
+<!-- BEGIN Elements -->
+  <li>
+     <a href="{url}">{label}</a>
+  </li>
+<!-- END Elements -->
+</ul>

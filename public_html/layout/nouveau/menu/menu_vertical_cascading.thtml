@@ -11,9 +11,7 @@
    <a href="{url}">
   {!endif}
    {label}
-{!if url}
    </a>
-{!endif}
 {!if haschildren}
   {children}
 {!endif}

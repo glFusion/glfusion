@@ -660,7 +660,6 @@ if ( !COM_isAnonUser() ) {
 $_RIGHTS = explode( ',', SEC_getUserPermissions() );
 
 require_once $_CONF['path_system'].'lib-menu.php';
-mb_initMenu();
 
 if ( isset( $_GET['topic'] )) {
     $topic = COM_applyFilter( $_GET['topic'] );
@@ -1387,12 +1386,11 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         'lang_newuser'      => $LANG12[3],
     ));
 
-    $st_hmenu = mb_getMenu('navigation','');
-
+    $st_hmenu = displayMenu( 'navigation');
     $theme->set_var('st_hmenu',$st_hmenu);
-    $st_footer_menu = mb_getMenu('footer');
+    $st_footer_menu = displayMenu('footer');
     $theme->set_var('st_footer_menu',$st_footer_menu);
-    $theme->set_var('st_header_menu',mb_getMenu('header'));
+    $theme->set_var('st_header_menu',displayMenu('header'));
 
     $lblocks = '';
 
@@ -2254,59 +2252,18 @@ function COM_userMenu( $help='', $title='', $position='' )
         $retval .= COM_startBlock( $title, $help,
                            COM_getBlockTemplate( 'user_block', 'header', $position ), 'user_block' );
 
-        $plugin_options = PLG_getAdminOptions();
-        $num_plugins = count($plugin_options);
-
-        if (SEC_isModerator() OR
-                SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit', 'OR') OR
-                ($num_plugins > 0)) {
-            $url = $_CONF['site_admin_url'] . '/index.php';
-            $usermenu->set_var('option_label', $LANG29[34]);
-            $usermenu->set_var('option_url', $url);
-            $usermenu->set_var('option_count', '');
-            $retval .= $usermenu->parse('item', ($thisUrl == $url) ? 'current' : 'option');
+        $userMenu = new menu(0);
+        $userMenu->type = MENU_GENERIC;
+        $userMenu->active = 1;
+        $userMenu->name = 'user';
+        $menuData = $userMenu->_userMenu();
+        $retval .= '<ul>';
+        foreach ( $menuData as $item ) {
+            $retval .= '<li><a href="'.$item['url'].'">'.$item['label'].'</a></li>';
         }
+        $retval .= '</ul>';
 
-        // This function will show the user options for all installed plugins
-        // (if any)
 
-        $plugin_options = PLG_getUserOptions();
-        $nrows = count( $plugin_options );
-
-        for( $i = 0; $i < $nrows; $i++ ) {
-            $plg = current( $plugin_options );
-            $usermenu->set_var( 'option_label', $plg->adminlabel );
-
-            if ( !empty( $plg->numsubmissions )) {
-                $usermenu->set_var( 'option_count', '(' . $plg->numsubmissions . ')' );
-            } else {
-                $usermenu->set_var( 'option_count', '' );
-            }
-
-            $usermenu->set_var( 'option_url', $plg->adminurl );
-            if ( $thisUrl == $plg->adminurl ) {
-                $retval .= $usermenu->parse( 'item', 'current' );
-            } else {
-                $retval .= $usermenu->parse( 'item', 'option' );
-            }
-            next( $plugin_options );
-        }
-
-        $url = $_CONF['site_url'] . '/usersettings.php';
-        $usermenu->set_var( 'option_label', $LANG01[48] );
-        $usermenu->set_var( 'option_count', '' );
-        $usermenu->set_var( 'option_url', $url );
-        if ( $thisUrl == $url ) {
-            $retval .= $usermenu->parse( 'item', 'current' );
-        } else {
-            $retval .= $usermenu->parse( 'item', 'option' );
-        }
-
-        $url = $_CONF['site_url'] . '/users.php?mode=logout';
-        $usermenu->set_var( 'option_label', $LANG01[19] );
-        $usermenu->set_var( 'option_count', '' );
-        $usermenu->set_var( 'option_url', $url );
-        $retval .= $usermenu->finish($usermenu->parse('item', 'option'));
         $retval .=  COM_endBlock( COM_getBlockTemplate( 'user_block', 'footer' ));
     } else {
         $retval .= COM_startBlock( $LANG01[47], $help,
@@ -2415,8 +2372,7 @@ function COM_userMenu( $help='', $title='', $position='' )
 
 function COM_adminMenu( $help = '', $title = '', $position = '' )
 {
-    global $_TABLES, $_USER, $_CONF, $LANG01, $LANG_ADMIN, $LANG_AM, $_BLOCK_TEMPLATE,
-           $_DB_dbms, $config, $LANG29, $LANG_MB01, $LANG_01,$LANG_LOGO;
+    global $_TABLES, $_USER, $_CONF;
 
     $retval = '';
     $link_array = array();
@@ -2425,374 +2381,32 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
         return $retval;
     }
 
-    $plugin_options = PLG_getAdminOptions();
-    $num_plugins = count( $plugin_options );
+    $thisUrl = COM_getCurrentURL();
 
-    if ( SEC_isModerator() OR SEC_hasRights( 'story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit', 'OR' ) OR ( $num_plugins > 0 )) {
-        // what's our current URL?
-        $thisUrl = COM_getCurrentURL();
-
-        if ($_CONF['hide_adminmenu'] && @strpos($thisUrl, $_CONF['site_admin_url']) === false) {
-            return '';
-        }
-
-        $adminmenu = new Template( $_CONF['path_layout'] );
-        if ( isset( $_BLOCK_TEMPLATE['adminoption'] )) {
-            $templates = explode( ',', $_BLOCK_TEMPLATE['adminoption'] );
-            $adminmenu->set_file( array( 'option' => $templates[0],
-                                         'current' => $templates[1] ));
-        } else {
-            $adminmenu->set_file( array( 'option' => 'adminoption.thtml',
-                                         'current' => 'adminoption_off.thtml' ));
-        }
-        $adminmenu->set_var( 'layout_url', $_CONF['layout_url'] );
-        $adminmenu->set_var( 'block_name', str_replace( '_', '-', 'admin_block' ));
-
-        if ( empty( $title )) {
-            $title = DB_getItem( $_TABLES['blocks'], 'title',
-                                 "name = 'admin_block'" );
-        }
-
-        $retval .= COM_startBlock( $title, $help,
-                           COM_getBlockTemplate( 'admin_block', 'header', $position ), 'admin_block' );
-
-        $topicsql = '';
-        if ( SEC_isModerator() || SEC_hasRights( 'story.edit' )) {
-            $tresult = DB_query( "SELECT tid FROM {$_TABLES['topics']}"
-                                 . COM_getPermSQL() );
-            $trows = DB_numRows( $tresult );
-            if ( $trows > 0 ) {
-                $tids = array();
-                for( $i = 0; $i < $trows; $i++ ) {
-                    $T = DB_fetchArray( $tresult );
-                    $tids[] = $T['tid'];
-                }
-                if ( count( $tids ) > 0 ) {
-                    $topicsql = " (tid IN ('" . implode( "','", $tids ) . "'))";
-                }
-            }
-        }
-
-        $modnum = 0;
-        if ( SEC_hasRights( 'story.edit,story.moderate', 'OR' ) || (( $_CONF['usersubmission'] == 1 ) && SEC_hasRights( 'user.edit,user.delete' ))) {
-
-            if ( SEC_hasRights( 'story.moderate' )) {
-                if ( empty( $topicsql )) {
-                    $modnum += DB_count( $_TABLES['storysubmission'] );
-                } else {
-                    $sresult = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['storysubmission']} WHERE " . $topicsql );
-                    $S = DB_fetchArray( $sresult );
-                    $modnum += $S['count'];
-                }
-            }
-
-            if (( $_CONF['listdraftstories'] == 1 ) && SEC_hasRights( 'story.edit' )) {
-                $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (draft_flag = 1)";
-                if ( !empty( $topicsql )) {
-                    $sql .= ' AND' . $topicsql;
-                }
-                $result = DB_query( $sql . COM_getPermSQL( 'AND', 0, 3 ));
-                $A = DB_fetchArray( $result );
-                $modnum += $A['count'];
-            }
-
-            if ( $_CONF['usersubmission'] == 1 ) {
-                if ( SEC_hasRights( 'user.edit' ) && SEC_hasRights( 'user.delete' )) {
-                    $modnum += DB_count( $_TABLES['users'], 'status', '2' );
-                }
-            }
-        }
-
-        if (SEC_inGroup('Root')) {
-            $url = $_CONF['site_admin_url'] . '/configuration.php';
-            $adminmenu->set_var('option_url', $url);
-            $adminmenu->set_var('option_label', $LANG01[129]);
-            $adminmenu->set_var('option_count', count($config->_get_groups()));
-            $menu_item = $adminmenu->parse('item',
-                                           ($thisUrl == $url) ? 'current' :
-                                                                'option');
-            $link_array[$LANG01[129]] = $menu_item;
-        }
-
-
-        // now handle submissions for plugins
-        $modnum += PLG_getSubmissionCount();
-
-        if ( SEC_hasRights( 'story.edit' )) {
-            $url = $_CONF['site_admin_url'] . '/story.php';
-            $adminmenu->set_var( 'option_url', $url );
-            $adminmenu->set_var( 'option_label', $LANG01[11] );
-            if ( empty( $topicsql )) {
-                $numstories = DB_count( $_TABLES['stories'] );
-            } else {
-                $nresult = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE" . $topicsql . COM_getPermSql( 'AND' ));
-                $N = DB_fetchArray( $nresult );
-                $numstories = $N['count'];
-            }
-            $adminmenu->set_var( 'option_count',
-                                 COM_numberFormat( $numstories ));
-            $menu_item = $adminmenu->parse( 'item',
-                    ( $thisUrl == $url ) ? 'current' : 'option' );
-            $link_array[$LANG01[11]] = $menu_item;
-        }
-
-        if ( SEC_hasRights( 'block.edit' )) {
-            $result = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['blocks']}" . COM_getPermSql());
-            list( $count ) = DB_fetchArray( $result );
-
-            $url = $_CONF['site_admin_url'] . '/block.php';
-            $adminmenu->set_var( 'option_url', $url );
-            $adminmenu->set_var( 'option_label', $LANG01[12] );
-            $adminmenu->set_var( 'option_count', COM_numberFormat( $count ));
-
-            $menu_item = $adminmenu->parse( 'item',
-                    ( $thisUrl == $url ) ? 'current' : 'option' );
-            $link_array[$LANG01[12]] = $menu_item;
-        }
-
-        if ( SEC_hasRights( 'autotag.admin' )) {
-            $url = $_CONF['site_admin_url'] . '/autotag.php';
-            $adminmenu->set_var( 'option_url', $url );
-            $adminmenu->set_var( 'option_label', $LANG_AM['title'] );
-            $adminmenu->set_var( 'option_count', $LANG_ADMIN['na']);
-
-            $menu_item = $adminmenu->parse( 'item',
-                    ( $thisUrl == $url ) ? 'current' : 'option' );
-            $link_array[$LANG01['autotag_perms']] = $menu_item;
-        }
-
-        if ( SEC_hasRights( 'topic.edit' )) {
-            $result = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['topics']}" . COM_getPermSql());
-            list( $count ) = DB_fetchArray( $result );
-
-            $url = $_CONF['site_admin_url'] . '/topic.php';
-            $adminmenu->set_var( 'option_url', $url );
-            $adminmenu->set_var( 'option_label', $LANG01[13] );
-            $adminmenu->set_var( 'option_count', COM_numberFormat( $count ));
-
-            $menu_item = $adminmenu->parse( 'item',
-                    ( $thisUrl == $url ) ? 'current' : 'option' );
-            $link_array[$LANG01[13]] = $menu_item;
-        }
-
-        if ( SEC_hasRights( 'user.edit' )) {
-            $url = $_CONF['site_admin_url'] . '/user.php';
-            $adminmenu->set_var( 'option_url', $url );
-            $adminmenu->set_var( 'option_label', $LANG01[17] );
-            $adminmenu->set_var( 'option_count',
-                    COM_numberFormat( DB_count( $_TABLES['users'] ) -1 ));
-
-            $menu_item = $adminmenu->parse( 'item',
-                    ( $thisUrl == $url ) ? 'current' : 'option' );
-            $link_array[$LANG01[17]] = $menu_item;
-        }
-
-        if ( SEC_hasRights( 'group.edit' )) {
-            if (SEC_inGroup('Root')) {
-                $grpFilter = '';
-            } else {
-                $thisUsersGroups = SEC_getUserGroups ();
-                $grpFilter = 'WHERE (grp_id IN (' . implode (',', $thisUsersGroups) . '))';
-            }
-            $result = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['groups']} $grpFilter;" );
-            $A = DB_fetchArray( $result );
-
-            $url = $_CONF['site_admin_url'] . '/group.php';
-            $adminmenu->set_var( 'option_url', $url );
-            $adminmenu->set_var( 'option_label', $LANG01[96] );
-            $adminmenu->set_var( 'option_count',
-                                 COM_numberFormat( $A['count'] ));
-
-            $menu_item = $adminmenu->parse( 'item',
-                    ( $thisUrl == $url ) ? 'current' : 'option' );
-            $link_array[$LANG01[96]] = $menu_item;
-        }
-
-        if ( SEC_hasRights( 'user.mail' )) {
-            $url = $_CONF['site_admin_url'] . '/mail.php';
-            $adminmenu->set_var( 'option_url', $url );
-            $adminmenu->set_var( 'option_label', $LANG01[105] );
-            $adminmenu->set_var( 'option_count', $LANG_ADMIN['na'] );
-
-            $menu_item = $adminmenu->parse( 'item',
-                    ( $thisUrl == $url ) ? 'current' : 'option' );
-            $link_array[$LANG01[105]] = $menu_item;
-        }
-
-        if (( $_CONF['backend'] == 1 ) && SEC_hasRights( 'syndication.edit' )) {
-            $url = $_CONF['site_admin_url'] . '/syndication.php';
-            $adminmenu->set_var( 'option_url', $url );
-            $adminmenu->set_var( 'option_label', $LANG01[38] );
-            $count = COM_numberFormat( DB_count( $_TABLES['syndication'] ));
-            $adminmenu->set_var( 'option_count', $count );
-
-            $menu_item = $adminmenu->parse( 'item',
-                    ( $thisUrl == $url ) ? 'current' : 'option' );
-            $link_array[$LANG01[38]] = $menu_item;
-        }
-
-        if (( $_CONF['trackback_enabled'] || $_CONF['pingback_enabled'] ||
-                $_CONF['ping_enabled'] ) && SEC_hasRights( 'story.ping' )) {
-            $url = $_CONF['site_admin_url'] . '/trackback.php';
-            $adminmenu->set_var( 'option_url', $url );
-            $adminmenu->set_var( 'option_label', $LANG01[116] );
-            if ( $_CONF['ping_enabled'] ) {
-                $count = COM_numberFormat( DB_count( $_TABLES['pingservice'] ));
-                $adminmenu->set_var( 'option_count', $count );
-            } else {
-                $adminmenu->set_var( 'option_count', $LANG_ADMIN['na'] );
-            }
-
-            $menu_item = $adminmenu->parse( 'item',
-                    ( $thisUrl == $url ) ? 'current' : 'option' );
-            $link_array[$LANG01[116]] = $menu_item;
-        }
-
-        if (SEC_hasRights('plugin.edit')) {
-            $url = $_CONF['site_admin_url'] . '/plugins.php';
-            $adminmenu->set_var('option_url', $url);
-            $adminmenu->set_var('option_label', $LANG01[77]);
-            $adminmenu->set_var('option_count',
-                    COM_numberFormat(DB_count($_TABLES['plugins'],
-                                              'pi_enabled', 1)));
-
-            $menu_item = $adminmenu->parse( 'item',
-                    ( $thisUrl == $url ) ? 'current' : 'option' );
-            $link_array[$LANG01[77]] = $menu_item;
-        }
-
-        // This will show the admin options for all installed plugins (if any)
-
-        for ($i = 0; $i < $num_plugins; $i++) {
-            $plg = current($plugin_options);
-
-            $adminmenu->set_var( 'option_url', $plg->adminurl );
-            $adminmenu->set_var( 'option_label', $plg->adminlabel );
-
-            if (isset($plg->numsubmissions) &&
-                    is_numeric($plg->numsubmissions)) {
-                $adminmenu->set_var('option_count',
-                                    COM_numberFormat($plg->numsubmissions));
-            } elseif (! empty($plg->numsubmissions)) {
-                $adminmenu->set_var('option_count', $plg->numsubmissions);
-            } else {
-                $adminmenu->set_var('option_count', $LANG_ADMIN['na']);
-            }
-
-            $menu_item = $adminmenu->parse( 'item',
-                    ( $thisUrl == $plg->adminurl ) ? 'current' : 'option', true );
-            $link_array[$plg->adminlabel] = $menu_item;
-
-            next( $plugin_options );
-        }
-
-        if (( $_CONF['allow_mysqldump'] == 1 ) AND ( $_DB_dbms == 'mysql' ) AND SEC_inGroup( 'Root' )) {
-            $url = $_CONF['site_admin_url'] . '/database.php';
-            $adminmenu->set_var( 'option_url', $url );
-            $adminmenu->set_var( 'option_label', $LANG01[103] );
-            $adminmenu->set_var( 'option_count', $LANG_ADMIN['na'] );
-
-            $menu_item = $adminmenu->parse( 'item',
-                    ( $thisUrl == $url ) ? 'current' : 'option' );
-            $link_array[$LANG01[103]] = $menu_item;
-        }
-
-        if ( SEC_inGroup( 'Root' )) {
-            $url = $_CONF['site_admin_url'] . '/logview.php';
-            $adminmenu->set_var( 'option_url', $url );
-            $adminmenu->set_var( 'option_label', $LANG01['logview'] );
-            $adminmenu->set_var( 'option_count',$LANG_ADMIN['na']);
-
-            $menu_item = $adminmenu->parse( 'item',
-                    ( $thisUrl == $url ) ? 'current' : 'option' );
-            $link_array[$LANG01['logview']] = $menu_item;
-        }
-
-        if( SEC_inGroup( 'Root' )) {
-            $url = $_CONF['site_admin_url'] . '/menu.php';
-            $adminmenu->set_var( 'option_url', $url );
-            $adminmenu->set_var( 'option_label', $LANG_MB01['menu_builder'] );
-            $adminmenu->set_var('option_count',
-                    COM_numberFormat(DB_count($_TABLES['menu'],
-                                              'menu_active', 1)));
-
-            $menu_item = $adminmenu->parse( 'item',
-                    ( $thisUrl == $url ) ? 'current' : 'option' );
-            $link_array[$LANG_MB01['menu_builder']] = $menu_item;
-        }
-        if( SEC_inGroup( 'Root' )) {
-            $url = $_CONF['site_admin_url'] . '/logo.php';
-            $adminmenu->set_var( 'option_url', $url );
-            $adminmenu->set_var( 'option_label', $LANG_LOGO['logo_admin'] );
-            $adminmenu->set_var( 'option_count', $LANG_ADMIN['na']);
-
-            $menu_item = $adminmenu->parse( 'item',
-                    ( $thisUrl == $url ) ? 'current' : 'option' );
-            $link_array[$LANG_LOGO['logo_admin']] = $menu_item;
-         }
-        if( SEC_inGroup( 'Root' )) {
-            $url = $_CONF['site_admin_url'] . '/clearctl.php';
-            $adminmenu->set_var( 'option_url', $url );
-            $adminmenu->set_var( 'option_label', $LANG01['ctl'] );
-            $adminmenu->set_var( 'option_count', $LANG_ADMIN['na']);
-
-            $menu_item = $adminmenu->parse( 'item',
-                    ( $thisUrl == $url ) ? 'current' : 'option' );
-            $link_array[$LANG_01['ctl']] = $menu_item;
-        }
-
-        if ( $_CONF['link_documentation'] == 1 ) {
-            $doclang = COM_getLanguageName();
-            if ( @file_exists($_CONF['path_html'] . 'docs/' . $doclang . '/index.html') ) {
-                $docUrl = $_CONF['site_url'].'/docs/'.$doclang.'/index.html';
-            } else {
-                $docUrl = $_CONF['site_url'].'/docs/english/index.html';
-            }
-            $adminmenu->set_var( 'option_url',
-                                 $docUrl );
-            $adminmenu->set_var( 'option_label', $LANG01[113] );
-            $adminmenu->set_var( 'option_count', $LANG_ADMIN['na'] );
-            $menu_item = $adminmenu->parse( 'item', 'option' );
-            $link_array[$LANG01[113]] = $menu_item;
-        }
-
-        if ( $_CONF['link_versionchecker'] == 1 AND SEC_inGroup( 'Root' )) {
-            $adminmenu->set_var( 'option_url',$_CONF['site_admin_url'].'/vercheck.php');
-            $adminmenu->set_var( 'option_label', $LANG01[107] );
-            $adminmenu->set_var( 'option_count', GVERSION . PATCHLEVEL );
-
-            $menu_item = $adminmenu->parse( 'item', 'option' );
-            $link_array[$LANG01[107]] = $menu_item;
-        }
-
-        // submissions entry
-        if (SEC_isModerator()) {
-            $url = $_CONF['site_admin_url'] . '/moderation.php';
-            $adminmenu->set_var( 'option_url', $url );
-            $adminmenu->set_var( 'option_label', $LANG01[10] );
-            $adminmenu->set_var( 'option_count', COM_numberFormat( $modnum ));
-            $menu_item = $adminmenu->parse( 'item',
-                        ( $thisUrl == $url ) ? 'current' : 'option' );
-            $link_array[$LANG01[10]] = $menu_item;
-        }
-
-        if ($_CONF['sort_admin']) {
-            uksort($link_array, 'strcasecmp');
-        }
-
-        // C&C entry
-        $url = $_CONF['site_admin_url'] . '/index.php';
-        $adminmenu->set_var('option_url', $url);
-        $adminmenu->set_var('option_label', $LANG29[34]);
-        $adminmenu->set_var('option_count', $LANG_ADMIN['na']);
-        $menu_item = $adminmenu->parse('item', ($thisUrl == $url) ? 'current' : 'option' );
-        $link_array = array($menu_item) + $link_array;
-
-        $retval .= implode('', $link_array);
-
-        $retval .= COM_endBlock( COM_getBlockTemplate( 'admin_block', 'footer', $position ));
+    if ($_CONF['hide_adminmenu'] && @strpos($thisUrl, $_CONF['site_admin_url']) === false) {
+        return '';
     }
 
+
+    if ( empty( $title )) {
+        $title = DB_getItem( $_TABLES['blocks'], 'title',
+                             "name = 'admin_block'" );
+    }
+
+    $retval .= COM_startBlock( $title, $help,
+                       COM_getBlockTemplate( 'admin_block', 'header', $position ), 'admin_block' );
+
+    $adminMenu = new menu(0);
+    $adminMenu->type = MENU_GENERIC;
+    $adminMenu->active = 1;
+    $adminMenu->name = 'admin';
+    $menuData = $adminMenu->_adminMenu();
+    $retval .= '<ul>';
+    foreach ( $menuData as $item ) {
+        $retval .= '<li><a href="'.$item['url'].'">'.$item['label'].'</a></li>';
+    }
+    $retval .= '</ul>';
+    $retval .= COM_endBlock( COM_getBlockTemplate( 'admin_block', 'footer', $position ));
     return $retval;
 }
 
