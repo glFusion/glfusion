@@ -572,7 +572,7 @@ class menuElement {
             case ET_PHP :
                 $functionName = $this->subtype;
                 if (function_exists($functionName)) {
-                    $this->labe .= $functionName();
+                    $item_array = $functionName();
                 }
                 break;
 
@@ -589,9 +589,7 @@ class menuElement {
             return NULL;
         }
 
-        if ( $this->type == ET_FUSION_MENU ||
-             $this->type == ET_PHP ) {
-            // we know that a built in fusion menu cannot have children
+        if ( $this->type == ET_FUSION_MENU || $this->type == ET_PHP ) {
             $childArray = $item_array;
         } else {
             if ( !empty($this->children)) {
