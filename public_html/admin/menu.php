@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | menu.php                                                                 |
 // |                                                                          |
-// | Menu editor                                                              |
+// | glFusion CMS Menu Administration                                         |
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
@@ -40,139 +40,10 @@ if (!SEC_hasRights('menu.admin')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_showMessageText($MESSAGE[37],$MESSAGE[30],true);
     $display .= COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} unauthorized user tried to access the menu editor administration screen.");
+    COM_accessLog ("User {$_USER['username']} unauthorized user tried to access the menu editor screen.");
     echo $display;
     exit;
 }
-
-$menuAttributes = array();
-
-$hc_menu_defaults = array(
-'tl_menu_background_color'              => '#151515',
-'tl_menu_background_color_hover'        => '#3667c0',
-'tl_menu_text_color'                    => '#CCCCCC',
-'tl_menu_text_color_hover'              => '#ffffff',
-'tl_menu_font_family'                   => '',
-'tl_menu_font_size'                     => '1.0em',
-'tl_menu_font_weight'                   => '700',
-'tl_menu_line_height'                   => '2.2em',
-'tl_menu_element_width'                 => '14.74em',
-'tl_menu_element_padding'               => '0 1.2em',
-'tl_menu_element_border_top_width'      => '',
-'tl_menu_element_border_top_color'      => '',
-'tl_menu_element_border_bottom_width'   => '',
-'tl_menu_element_border_bottom_color'   => '',
-'tl_menu_element_border_left_width'     => '',
-'tl_menu_element_border_left_color'     => '',
-'tl_menu_element_border_right_width'    => '',
-'tl_menu_element_border_right_color'    => '',
-'tl_menu_element_text_indent'           => '1.2em',
-'ch_menu_background_color'              => '#151515',
-'ch_menu_background_color_hover'        => '#3667c0',
-'ch_menu_text_color'                    => '#ffffff',
-'ch_menu_text_color_hover'              => '#ffffff',
-'ch_menu_font_family'                   => 'Helvetica, Arial, sans-serif',
-'ch_menu_font_size'                     => '100%',
-'ch_menu_offset'                        => '2.2em',
-'ch_menu_font_weight'                   => '400',
-'ch_menu_line_height'                   => '2.3em',
-'ch_menu_submenu_offset'                => '14.65em',
-'ch_menu_element_width'                 => '14.6em',
-'ch_menu_element_border_top_width'      => '1px solid',
-'ch_menu_element_border_top_color'      => '#333333',
-'ch_menu_element_border_bottom_width'   => '1px solid',
-'ch_menu_element_border_bottom_color'   => '#000000',
-'ch_menu_element_border_left_width'     => '',
-'ch_menu_element_border_left_color'     => '',
-'ch_menu_element_border_right_width'    => '',
-'ch_menu_element_border_right_color'    => '',
-'ch_menu_element_text_indent'           => '',
-);
-
-$hs_menu_defaults = array(
-'tl_menu_background_color'              => '',
-'tl_menu_background_color_hover'        => '',
-'tl_menu_text_color'                    => '#3677c0',
-'tl_menu_text_color_hover'              => '#679ef1',
-'tl_menu_font_family'                   => '',
-'tl_menu_font_size'                     => '',
-'tl_menu_font_weight'                   => '',
-'tl_menu_line_height'                   => '',
-'tl_menu_element_width'                 => '',
-'tl_menu_element_padding'               => '',
-'tl_menu_element_border_top_width'      => '',
-'tl_menu_element_border_top_color'      => '',
-'tl_menu_element_border_bottom_width'   => '',
-'tl_menu_element_border_bottom_color'   => '',
-'tl_menu_element_border_left_width'     => '',
-'tl_menu_element_border_left_color'     => '',
-'tl_menu_element_border_right_width'    => '1px solid',
-'tl_menu_element_border_right_color'    => '#999999',
-'tl_menu_element_text_indent'           => '',
-);
-
-$vc_menu_defaults = array(
-'tl_menu_background_color'              => '#dddddd',
-'tl_menu_background_color_hover'        => '#bbbbbb',
-'tl_menu_text_color'                    => '#0000ff',
-'tl_menu_text_color_hover'              => '#ffffff',
-'tl_menu_font_family'                   => '',
-'tl_menu_font_size'                     => '',
-'tl_menu_font_weight'                   => '',
-'tl_menu_line_height'                   => '',
-'tl_menu_element_width'                 => '156px',
-'tl_menu_element_padding'               => '3px 6px',
-'tl_menu_element_border_top_width'      => '1px solid',
-'tl_menu_element_border_top_color'      => '#999999',
-'tl_menu_element_border_bottom_width'   => '',
-'tl_menu_element_border_bottom_color'   => '',
-'tl_menu_element_border_left_width'     => '1px solid',
-'tl_menu_element_border_left_color'     => '#999999',
-'tl_menu_element_border_right_width'    => '1px solid',
-'tl_menu_element_border_right_color'    => '#999999',
-'tl_menu_element_text_indent'           => '',
-'ch_menu_background_color'              => '#dddddd',
-'ch_menu_background_color_hover'        => '#bbbbbb',
-'ch_menu_text_color'                    => '#0000ff',
-'ch_menu_text_color_hover'              => '#ffffff',
-'ch_menu_font_family'                   => '',
-'ch_menu_font_size'                     => '',
-'ch_menu_offset'                        => '',
-'ch_menu_font_weight'                   => '',
-'ch_menu_line_height'                   => '',
-'ch_menu_submenu_offset'                => '155px',
-'ch_menu_element_width'                 => '',
-'ch_menu_element_border_top_width'      => '1px solid',
-'ch_menu_element_border_top_color'      => '#999999',
-'ch_menu_element_border_bottom_width'   => '1px solid',
-'ch_menu_element_border_bottom_color'   => '#999999',
-'ch_menu_element_border_left_width'     => '1px solid',
-'ch_menu_element_border_left_color'     => '#999999',
-'ch_menu_element_border_right_width'    => '1px solid',
-'ch_menu_element_border_right_color'    => '#999999',
-'ch_menu_element_text_indent'           => '',
-);
-$vs_menu_defaults = array(
-'tl_menu_background_color'              => '',
-'tl_menu_background_color_hover'        => '',
-'tl_menu_text_color'                    => '#0000ff',
-'tl_menu_text_color_hover'              => '#ffffff',
-'tl_menu_font_family'                   => '',
-'tl_menu_font_size'                     => '',
-'tl_menu_font_weight'                   => '',
-'tl_menu_line_height'                   => '',
-'tl_menu_element_width'                 => '',
-'tl_menu_element_padding'               => '',
-'tl_menu_element_border_top_width'      => '',
-'tl_menu_element_border_top_color'      => '',
-'tl_menu_element_border_bottom_width'   => '',
-'tl_menu_element_border_bottom_color'   => '',
-'tl_menu_element_border_left_width'     => '',
-'tl_menu_element_border_left_color'     => '',
-'tl_menu_element_border_right_width'    => '',
-'tl_menu_element_border_right_color'    => '',
-'tl_menu_element_text_indent'           => '',
-);
 
 function MB_displayMenuList( ) {
     global $_CONF, $_USER, $_TABLES, $LANG_MB01, $LANG_MB_ADMIN, $LANG_ADMIN,$LANG_MB_MENU_TYPES;
@@ -233,7 +104,7 @@ function MB_displayMenuList( ) {
         array('text' => $LANG_MB01['clone'], 'field' => 'copy','align' => 'center' ),
         array('text' => $LANG_MB01['active'], 'field' => 'active','align' => 'center'),
         array('text' => $LANG_MB01['elements'], 'field' => 'elements', 'align' => 'center' ),
-//        array('text' => $LANG_MB01['options'], 'field'=> 'options', 'align' => 'center'),
+        array('text' => $LANG_MB01['options'], 'field'=> 'options', 'align' => 'center'),
         array('text' => $LANG_MB01['delete'], 'field' => 'delete', 'align' => 'center')
     );
 
@@ -472,6 +343,48 @@ function MB_saveNewMenu( ) {
     return '';
 }
 
+function MB_saveEditMenu( ) {
+    global $_CONF, $_TABLES, $_GROUPS,$hc_menu_defaults,$hs_menu_defaults,$vc_menu_defaults,$vs_menu_defaults;
+
+    $errors = 0;
+    $errMsg = '';
+
+    // sanity check
+
+    if ( !isset($_POST['menuname']) || $_POST['menuname'] == '' ) {
+        $errors++;
+//@TODO - fix language
+        $errMsg .= 'Menu name cannot be blank.';
+    } else {
+        $menuname = COM_applyFilter($_POST['menuname']);
+        if ( strstr($menuname,' ' ) !== FALSE ) {
+            $errors++;
+//@TODO - fix language
+            $errMsg .= 'Menu name cannot contain spaces<br />';
+        }
+    }
+
+    if ( $errors > 0 ) {
+        return $errMsg;
+    }
+
+    $menu_id    = COM_applyFilter($_POST['menu_id'],true);
+    $menuname   = DB_escapeString(COM_applyFilter($_POST['menuname']));
+    $menutype   = COM_applyFilter($_POST['menutype'],true);
+    $menuactive = isset($_POST['menuactive']) ? COM_applyFilter($_POST['menuactive'],true) : 0;
+    $menugroup  = COM_applyFilter($_POST['group'],true);
+
+    $sqlFieldList  = 'id,menu_name,menu_type,menu_active,group_id';
+    $sqlDataValues = "'$menu_id','$menuname',$menutype,$menuactive,$menugroup";
+    DB_save($_TABLES['menu'], $sqlFieldList, $sqlDataValues);
+
+    CACHE_remove_instance('menu');
+    CACHE_remove_instance('css');
+    $randID = rand();
+    DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
+    return '';
+}
+
 /*
  * Displays a list of all menu elements for the given menu
  */
@@ -479,7 +392,7 @@ function MB_saveNewMenu( ) {
 function MB_displayTree( $menu_id ) {
     global $_CONF, $LANG_MB01, $LANG_MB_ADMIN, $LANG_ADMIN, $level;
 
-$level = 1;
+    $level = 1;
     $retval = '';
 
     $menu = menu::getInstance( $menu_id );
@@ -519,9 +432,8 @@ $level = 1;
                         . '<script type="text/javascript">' . LB
                         . '    document.getElementById(\'menubuilder\').style.display=\'\''.LB
                         . '</script>';
-$data_arr = $menu->editTree(0,2);
 
-//    $data_arr = $menu->editTree($menu->menu_elements[0],0,2);
+    $data_arr = $menu->editTree();
 
     $retval .= ADMIN_simpleList("_mb_getListField_menu", $header_arr, $text_arr, $data_arr,$options,$form_arr);
 
@@ -848,11 +760,11 @@ function MB_editElement( $menu_id, $mid ) {
     $retval  .= ADMIN_createMenu($menu_arr, $LANG_MB_ADMIN[5],
                                 $_CONF['layout_url'] . '/images/icons/menubuilder.png');
 
-
     // build types select
 
     if ( $menu->menu_elements[$mid]->type == 1 ) {
-        $type_select = '<select id="menutype" name="menutype" disabled="disabled">' . LB;
+        $type_select = '<input type="hidden" name="menutype" id="menutype" value="1" />';
+        $type_select .= '<select id="menutyped" name="menutyped" disabled="disabled">' . LB;
     } else {
         $type_select = '<select id="menutype" name="menutype">' . LB;
     }
@@ -934,7 +846,9 @@ function MB_editElement( $menu_id, $mid ) {
         $parent_select .= '<option value="0">' . $LANG_MB01['top_level'] . '</option>' . LB;
         $result = DB_query("SELECT id,element_label FROM {$_TABLES['menu_elements']} WHERE menu_id='" . $menu_id . "' AND element_type=1");
         while ($row = DB_fetchArray($result)) {
-            $parent_select .= '<option value="' . $row['id'] . '" ' . ($menu->menu_elements[$mid]->pid==$row['id'] ? 'selected="selected"' : '') . '>' . $row['element_label'] . '</option>' . LB;
+            if ($row['id'] != $mid ) {
+                $parent_select .= '<option value="' . $row['id'] . '" ' . ($menu->menu_elements[$mid]->pid==$row['id'] ? 'selected="selected"' : '') . '>' . $row['element_label'] . '</option>' . LB;
+            }
         }
         $parent_select .= '</select>' . LB;
     }
@@ -1166,6 +1080,86 @@ function MB_deleteChildElements( $id, $menu_id ){
 }
 
 
+function MB_editMenu( $mid ) {
+    global $_CONF, $_TABLES, $_ST_CONF, $stMenu, $LANG_MB00, $LANG_MB01, $LANG_MB_ADMIN,
+           $LANG_MB_TYPES, $LANG_MB_GLTYPES,$LANG_MB_GLFUNCTION,
+           $LANG_MB_MENU_TYPES;
+
+    $retval = '';
+    $menu_id = $mid;
+
+    $menu = menu::getInstance($menu_id);
+
+    $menu_arr = array(
+            array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=menu&amp;menu='.$menu_id,
+                  'text' => $LANG_MB01['return_to'] . $menu->name),
+            array('url'  => $_CONF['site_admin_url'] .'/menu.php',
+                  'text' => $LANG_MB01['menu_list']),
+    );
+    $retval  .= COM_startBlock($LANG_MB01['menu_builder'].' :: '.$LANG_MB01['edit_element'] .' for ' . $menu->name,'', COM_getBlockTemplate('_admin_block', 'header'));
+    $retval  .= ADMIN_createMenu($menu_arr, $LANG_MB_ADMIN[5],
+                                $_CONF['layout_url'] . '/images/icons/menubuilder.png');
+
+    // build menu type select
+
+    $menuTypeSelect = '<select id="menutype" name="menutype">' . LB;
+    while ( $types = current($LANG_MB_MENU_TYPES) ) {
+        $menuTypeSelect .= '<option value="' . key($LANG_MB_MENU_TYPES) . '"';
+        if (key($LANG_MB_MENU_TYPES) == $menu->type) {
+            $menuTypeSelect .= ' selected="selected"';
+        }
+        $menuTypeSelect .= '>' . $types . '</option>' . LB;
+        next($LANG_MB_MENU_TYPES);
+    }
+    $menuTypeSelect .= '</select>' . LB;
+
+    // build group select
+
+    $rootUser = DB_getItem($_TABLES['group_assignments'],'ug_uid','ug_main_grp_id=1');
+    $usergroups = SEC_getUserGroups($rootUser);
+    $usergroups[$LANG_MB01['non-logged-in']] = 998;
+    ksort($usergroups);
+    $group_select = '<select id="group" name="group">' . LB;
+    for ($i = 0; $i < count($usergroups); $i++) {
+        $group_select .= '<option value="' . $usergroups[key($usergroups)] . '"';
+        if ( $usergroups[key($usergroups)] == $menu->group_id) {
+            $group_select .= ' selected="selected"';
+        }
+        $group_select .= '>' . key($usergroups) . '</option>' . LB;
+        next($usergroups);
+    }
+    $group_select .= '</select>' . LB;
+
+    $T = new Template($_CONF['path_layout'] . 'admin/menu');
+    $T->set_file( array( 'admin' => 'editmenu.thtml'));
+
+    if ( $mid == 1 || $mid == 2 || $mid == 3 ) {
+        $disabled = ' readonly ';
+    } else {
+        $disabled = '';
+    }
+
+    $menu_active_check = ($menu->active == 1  ? ' checked="checked"' : '');
+
+    $T->set_var(array(
+        'group_select'      => $group_select,
+        'menutype'          => $menu->type,
+        'menutype_select'   => $menuTypeSelect,
+        'menuactive'        => $menu->active == 1 ? ' checked="checked"' : ' ',
+        'form_action'       => $_CONF['site_admin_url'] . '/menu.php',
+        'menu_id'           => $mid,
+        'menuname'          => $menu->name,
+        'enabled'           => $menu_active_check,
+        'disabled'          => $disabled,
+    ));
+
+    $T->parse('output', 'admin');
+
+    $retval .= $T->finish($T->get_var('output'));
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+    return $retval;
+}
+
 function _mb_getListField_menu($fieldname, $fieldvalue, $A, $icon_arr)
 {
     global $_CONF, $_USER, $_TABLES, $LANG_ADMIN,$LANG_MB01;
@@ -1228,6 +1222,11 @@ function _mb_getListField_menulist($fieldname, $fieldvalue, $A, $icon_arr)
                 $retval = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=deletemenu&amp;id=' . $A['menu_id'] . '" onclick="return confirm(\'' . $LANG_MB01['confirm_delete'] . '\');"><img src="' . $_CONF['layout_url'] . '/images/delete.png" alt="' . $LANG_MB01['delete'] . '"' . '/></a>';
             }
             break;
+        case 'options' :
+            $retval = '<a href="'.$_CONF['site_admin_url'].'/menu.php?mode=editmenu&amp;menuid='.$A['menu_id'].'">'
+            . '<img src="'.$_CONF['layout_url'].'/images/gear.png" height="16" width="16" alt="'.$LANG_MB01['options'].'"/></a>';
+            break;
+
         default :
             $retval = $fieldvalue;
             break;
@@ -1317,11 +1316,17 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             $content = MB_displayMenuList( );
             break;
         case 'saveeditmenu' :
-            MB_saveEditMenu();
-            $content = MB_displayMenuList( );
+            $rc = MB_saveEditMenu();
+            if ( $rc != '' ) {
+                $content = COM_showMessageText($rc, '', true);
+                $menu_id = COM_applyFilter($_POST['menu_id'],true);
+                $content .= MB_editMenu( $menu_id );
+            } else {
+                $content = MB_displayMenuList( );
+            }
             break;
         case 'editmenu' :
-            $menu_id = COM_applyFilter($_GET['menu_id'],true);
+            $menu_id = COM_applyFilter($_GET['menuid'],true);
             $content = MB_editMenu( $menu_id );
             break;
         case 'activate' :
@@ -1354,29 +1359,6 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             echo COM_refresh($_CONF['site_admin_url'] . '/menu.php');
             exit;
             break;
-/* -------
-        case 'config' :
-            $content = MB_menuConfig($menu_id);
-            $currentSelect = $LANG_MB01['configuration'];
-            $currentSelect = $LANG_MB01['menu_builder'];
-            break;
-        case 'savecfg' :
-            $menu_id = COM_applyFilter($_POST['menu_id'],true);
-            MB_saveMenuConfig($menu_id);
-            mb_initMenu();
-            $content = MB_menuConfig( $menu_id );
-            $currentSelect = $LANG_MB01['menu_colors'];
-            break;
-        case 'menucolor' :
-            $content = MB_menuConfig($menu_id);
-            $currentSelect = $LANG_MB01['menu_colors'];
-            break;
-        case 'menuconfig' :
-            $menu_id = COM_applyFilter($_REQUEST['menuid'],true);
-            $content = MB_menuConfig($menu_id);
-            $currentSelect = $LANG_MB01['menu_colors'];
-            break;
--------- */
         case 'newmenu' :
             $content = MB_createMenu( );
             $currentSelect = $LANG_MB01['menu_builder'];

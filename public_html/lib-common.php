@@ -4,8 +4,6 @@
 // +--------------------------------------------------------------------------+
 // | Common functions and startup code                                        |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -6873,13 +6871,6 @@ function js_out()
                     }
                 }
             }
-        }
-    }
-
-    $mbJS = mb_getheaderjs();
-    if ( is_array($mbJS) ) {
-        foreach($mbJS AS $item => $file ) {
-            $files[] = $file;
         }
     }
 

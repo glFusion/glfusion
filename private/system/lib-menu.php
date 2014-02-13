@@ -176,7 +176,7 @@ function assembleMenu($name, $skipCache=false) {
 
 function displayMenu( $menuName, $skipCache=false ) {
     global $_CONF;
-$skipCache = true;
+
     $retval = '';
 
     $structure = assembleMenu($menuName, $skipCache);
@@ -200,10 +200,7 @@ $skipCache = true;
             $template_file = 'menu_vertical_cascading.thtml';
             break;
         case MENU_VERTICAL_SIMPLE :
-            $template_file = 'menu_horizontal_simple.thtml';
-            break;
-        case MENU_GENERIC :
-            $template_file = 'menu_generic.thtml';
+            $template_file = 'menu_vertical_simple.thtml';
             break;
         default:
             return $retval;
@@ -261,7 +258,7 @@ function displayMenuChildren( $type, $elements ) {
             $template_file = 'menu_vertical_cascading.thtml';
             break;
         case MENU_VERTICAL_SIMPLE :
-            $template_file = 'menu_horizontal_cascading.thtml';
+            $template_file = 'menu_vertical_simple.thtml';
             break;
         default:
             return $retval;
@@ -320,41 +317,8 @@ function _mbPLG_getMenuItems()
     return $menu;
 }
 
-// broken now - since we don't load the array - need a better
-// method to get the JS loaded per menu.
-
-function mb_getheaderjs() {
-    global $_CONF, $_USER, $mbMenu;
-
-    $mb_js = array();
-    $js = '';
-
-    if ( is_array($mbMenu) ) {
-        $cacheInstance = 'mbmenu_js' .'__' . $_USER['theme'];
-        $retval = CACHE_check_instance($cacheInstance, 0);
-        if ( $retval ) {
-            $mb_js[] = CACHE_instance_filename($cacheInstance,0);
-        } else {
-            foreach ($mbMenu AS $menu) {
-                if ($menu['menu_type'] == 1 /* || $menu['menu_type'] == 3 */ ) {
-                    $ms = new Template( $_CONF['path_layout'] . 'menu' );
-                    $ms->set_file('js','animate.thtml');
-                    $ms->set_var('menu_id',$menu['menu_id']);
-                    $ms->set_var('menu_name',strtolower(str_replace(" ","_",$menu['menu_name'])));
-                    $ms->parse ('output', 'js');
-                    $js .= $ms->finish ($ms->get_var('output')) . LB;
-                }
-            }
-            CACHE_create_instance($cacheInstance, $js, 0);
-            $mb_js[] = CACHE_instance_filename($cacheInstance,0);
-        }
-    }
-    return $mb_js;
-}
-
 function _mb_cmp($a,$b)
 {
     return strcasecmp($a['label'],$b['label']);
 }
-
 ?>

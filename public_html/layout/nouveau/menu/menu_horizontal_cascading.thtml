@@ -1,5 +1,21 @@
-{# Generic menu template #}
+{# horizontal cascading menu template #}
 {!if wrapper}
+<script>
+window.addEvent('load', function() {
+	new moomenu($E('div.menu_{menuname}'), {
+		bgiframe: false,
+		delay: 50,
+		animate: {
+			props: ['opacity', 'width', 'height'],
+			opts: {
+				duration:300,
+				fps: 100,
+				transition: Fx.Transitions.Quad.easeOut
+			}
+		}
+	});
+});
+</script>
  <div id="menu_{menuname}" class="menu_navigation">
  <ul class="menu-horizontal-cascading">
 {!else}

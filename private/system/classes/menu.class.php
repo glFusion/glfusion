@@ -39,7 +39,7 @@ class menu {
     var $active;
     var $group_id;
     var $menu_alignment;
-    var $menu_elements = array();               // menu elements array
+    var $menu_elements = array();
 
     public function __construct( $menu_id = 0 )
     {
@@ -88,7 +88,7 @@ class menu {
         $root    = SEC_inGroup('Root');
 
         $sql = "SELECT * FROM {$_TABLES['menu_elements']} WHERE menu_id=".(int) $this->id." ORDER BY element_order ASC";
-        $elementResult      = DB_query( $sql, 1);
+        $elementResult = DB_query( $sql, 1);
 
         while ($A = DB_fetchArray($elementResult) ) {
             $element  = new menuElement();
@@ -99,9 +99,8 @@ class menu {
         }
 
         foreach( $this->menu_elements as $id => $element) {
-            if ($id != 0 && isset($this->menu_elements[$element->pid]->id) ) {
+            if ($id != 0 && $element->pid != 0 && isset($this->menu_elements[$element->pid]->id) ) {
                 $this->menu_elements[$element->pid]->setChild($element);
-                unset($this->menu_elements[$id]);
             }
         }
     }
@@ -115,12 +114,13 @@ class menu {
         $returnArray    = array();
 
         foreach ( $this->menu_elements as $element ) {
-            $elementArray = $element->_parseElement();
-            if ( $elementArray != NULL ) {
-                $returnArray[] = $elementArray;
+            if ( $element->pid == 0 ) {
+                $elementArray = $element->_parseElement();
+                if ( $elementArray != NULL ) {
+                    $returnArray[] = $elementArray;
+                }
             }
         }
-
         return $returnArray;
     }
 
@@ -128,13 +128,16 @@ class menu {
     /*
      * editTree for menu class
      */
-    function editTree( $depth, $count ) {
+    function editTree( ) {
          $returnArray = array();
 
+        $depth = 1;
         foreach ( $this->menu_elements as $element ) {
-            $elementArray = $element->_editElement($depth,$count);
-            if ( $elementArray != NULL ) {
-                $returnArray = array_merge($returnArray,$elementArray);
+            if ( $element->pid == 0 ) {
+                $elementArray = $element->_editElement($depth);
+                if ( $elementArray != NULL ) {
+                    $returnArray = array_merge($returnArray,$elementArray);
+                }
             }
         }
         return $returnArray;
@@ -210,7 +213,7 @@ class menuElement {
         return;
     }
 
-
+//@FIXME - don't copy element - build an array of ids to parse
     function setChild($el) {
         $this->children[$el->id] = $el;
     }
@@ -225,26 +228,6 @@ class menuElement {
         $sqlDataValues = "$this->id,$this->pid,'".DB_escapeString($this->menu_id)."','$this->label',$this->type,'$this->subtype',$this->order,$this->active,'$this->url','$this->target',$this->group_id";
         DB_save($_TABLES['menu_elements'], $sqlFieldList, $sqlDataValues);
     }
-
-
-//@FIXME - Remove??
-    function reorderMenuXX( ) {
-        global $_TABLES;
-
-        $pid = (int) $this->id;
-        $menu_id = (int) $this->menu_id;
-
-        $orderCount = 10;
-
-        $sql = "SELECT id,`element_order` FROM {$_TABLES['menu_elements']} WHERE menu_id=".$menu_id." AND pid=" . $pid . " ORDER BY `element_order` ASC";
-        $result = DB_query($sql);
-        while ($M = DB_fetchArray($result)) {
-            $M['element_order'] = $orderCount;
-            $orderCount += 10;
-            DB_query("UPDATE {$_TABLES['menu_elements']} SET `element_order`=" . $M['element_order'] . " WHERE menu_id=".$menu_id." AND id=" . (int) $M['id'] );
-        }
-    }
-
 
     function createElementID( $menu_id ) {
         global $_TABLES;
@@ -268,7 +251,7 @@ class menuElement {
         global $_USER;
 
         if ( $this->group_id == 998 ) {
-            if( COM_isAnonUser() ) {
+            if ( COM_isAnonUser() ) {
                 $this->access = 3;
             } else {
                 $this->access = 0;
@@ -289,8 +272,8 @@ class menuElement {
         return $this->children;
     }
 
-    function _editElement( $depth, $count ) {
-        global $_CONF, $level;
+    function _editElement( $depth ) {
+        global $_CONF;
         global $LANG_MB01, $LANG_MB_TYPES,$LANG_MB_GLTYPES,$LANG_MB_GLFUNCTION;
 
         $data_arr = array();
@@ -299,7 +282,7 @@ class menuElement {
 
         $plugin_menus = _mbPLG_getMenuItems();
 
-        $px = ($level - 1 ) * 15;
+        $px = ($depth - 1 ) * 15;
 
         $elementDetails = $this->label . '::';
         $elementDetails .= '<b>' . $LANG_MB01['type'] . ':</b> '
@@ -351,12 +334,12 @@ class menuElement {
             $children = $this->getChildren();
             if ( is_array($children) ) {
                 foreach($children as $child) {
-                    $level++;
+                    $depth++;
                     if ( is_object($child) ) {
-                        $carray = $child->_editElement($depth,$count);
+                        $carray = $child->_editElement($depth);
                         $data_arr = array_merge($data_arr,$carray);
                     }
-                    $level--;
+                    $depth--;
                 }
             }
         }
@@ -421,7 +404,7 @@ class menuElement {
             $topic = '';
         }
 
-        if( COM_isAnonUser() ) {
+        if ( COM_isAnonUser() ) {
             $anon = 1;
         } else {
             $anon = 0;
@@ -435,8 +418,6 @@ class menuElement {
         if ( $this->group_id == 1 && !isset($_GROUPS['Root']) ) {
             return NULL;
         }
-
-        // need to build the URL
         switch ( $this->type ) {
             case ET_SUB_MENU :
                 $this->replace_macros();
@@ -447,10 +428,10 @@ class menuElement {
                         $this->url = $_CONF['site_url'] . '/';
                         break;
                     case 1: // contribute
-                        if( $anon && ( $_CONF['loginrequired'] || $_CONF['submitloginrequired'] )) {
+                        if ( $anon && ( $_CONF['loginrequired'] || $_CONF['submitloginrequired'] )) {
                             return $retval;
                         }
-                        if( empty( $topic )) {
+                        if ( empty( $topic )) {
                             $this->url = $_CONF['site_url'] . '/submit.php?type=story';
                         } else {
                             $this->url = $_CONF['site_url']
@@ -459,25 +440,25 @@ class menuElement {
                         $label = $LANG01[71];
                         break;
                     case 2: // directory
-                        if( $anon && ( $_CONF['loginrequired'] ||
+                        if ( $anon && ( $_CONF['loginrequired'] ||
                                 $_CONF['directoryloginrequired'] )) {
                             return $retval;
                         }
                         $this->url = $_CONF['site_url'] . '/directory.php';
-                        if( !empty( $topic )) {
+                        if ( !empty( $topic )) {
                             $this->url = COM_buildUrl( $this->url . '?topic='
                                                  . urlencode( $topic ));
                         }
                         break;
                     case 3: // prefs
-                        if( $anon && ( $_CONF['loginrequired'] ||
+                        if ( $anon && ( $_CONF['loginrequired'] ||
                                 $_CONF['profileloginrequired'] )) {
                             return $retval;
                         }
                         $this->url = $_CONF['site_url'] . '/usersettings.php?mode=edit';
                         break;
                     case 4: // search
-                        if( $anon && ( $_CONF['loginrequired'] ||
+                        if ( $anon && ( $_CONF['loginrequired'] ||
                                 $_CONF['searchloginrequired'] )) {
                             return $retval;
                         }
@@ -537,7 +518,7 @@ class menuElement {
                     case PLUGIN_MENU :
                         $item_array = array();
                         $plugin_menu = PLG_getMenuItems();
-                        if( count( $plugin_menu ) == 0 ) {
+                        if ( count( $plugin_menu ) == 0 ) {
                             $this->access = 0;
                         } else {
                             for( $i = 1; $i <= count( $plugin_menu ); $i++ ) {
@@ -637,7 +618,7 @@ class menuElement {
             for( $i = 0; $i < $nrows; $i++ ) {
                 $plg = current( $plugin_options );
                 $label = $plg->adminlabel;
-                if( !empty( $plg->numsubmissions )) {
+                if ( !empty( $plg->numsubmissions )) {
                     $label .= ' (' . $plg->numsubmissions . ')';
                 }
                 $url = $plg->adminurl;
@@ -667,48 +648,34 @@ class menuElement {
 
         $item_array = array();
 
-
-        if( !COM_isAnonUser()) {
-
-            /*
-             * Get all plugin menu options
-             */
-
+        if ( !COM_isAnonUser() ) {
             $plugin_options = PLG_getAdminOptions();
             $num_plugins = count( $plugin_options );
 
-            /*
-             * Build the standard glFusion admin options
-             */
-
-            /*
-             * Story moderation entry
-             */
-
-            if( SEC_isModerator() OR SEC_hasRights( 'story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit', 'OR' ) OR ( $num_plugins > 0 )) {
+            if ( SEC_isModerator() OR SEC_hasRights( 'story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit', 'OR' ) OR ( $num_plugins > 0 ) ) {
                 // what's our current URL?
                 $elementUrl = COM_getCurrentURL();
 
                 $topicsql = '';
-                if( SEC_isModerator() || SEC_hasRights( 'story.edit' )) {
+                if ( SEC_isModerator() || SEC_hasRights( 'story.edit' ) ) {
                     $tresult = DB_query( "SELECT tid FROM {$_TABLES['topics']}"
                                          . COM_getPermSQL() );
                     $trows = DB_numRows( $tresult );
-                    if( $trows > 0 ) {
+                    if ( $trows > 0 ) {
                         $tids = array();
                         for( $i = 0; $i < $trows; $i++ ) {
                             $T = DB_fetchArray( $tresult );
                             $tids[] = $T['tid'];
                         }
-                        if( sizeof( $tids ) > 0 ) {
+                        if ( sizeof( $tids ) > 0 ) {
                             $topicsql = " (tid IN ('" . implode( "','", $tids ) . "'))";
                         }
                     }
                 }
                 $modnum = 0;
-                if( SEC_hasRights( 'story.edit,story.moderate', 'OR' ) || (( $_CONF['usersubmission'] == 1 ) && SEC_hasRights( 'user.edit,user.delete' ))) {
-                    if( SEC_hasRights( 'story.moderate' )) {
-                        if( empty( $topicsql )) {
+                if ( SEC_hasRights( 'story.edit,story.moderate', 'OR' ) || (( $_CONF['usersubmission'] == 1 ) && SEC_hasRights( 'user.edit,user.delete' ))) {
+                    if ( SEC_hasRights( 'story.moderate' )) {
+                        if ( empty( $topicsql )) {
                             $modnum += DB_count( $_TABLES['storysubmission'] );
                         } else {
                             $sresult = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['storysubmission']} WHERE" . $topicsql );
@@ -716,9 +683,9 @@ class menuElement {
                             $modnum += $S['count'];
                         }
                     }
-                    if(( $_CONF['listdraftstories'] == 1 ) && SEC_hasRights( 'story.edit' )) {
+                    if (( $_CONF['listdraftstories'] == 1 ) && SEC_hasRights( 'story.edit' )) {
                         $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (draft_flag = 1)";
-                        if( !empty( $topicsql )) {
+                        if ( !empty( $topicsql )) {
                             $sql .= ' AND' . $topicsql;
                         }
                         $result = DB_query( $sql . COM_getPermSQL( 'AND', 0, 3 ));
@@ -726,8 +693,8 @@ class menuElement {
                         $modnum += $A['count'];
                     }
 
-                    if( $_CONF['usersubmission'] == 1 ) {
-                        if( SEC_hasRights( 'user.edit' ) && SEC_hasRights( 'user.delete' )) {
+                    if ( $_CONF['usersubmission'] == 1 ) {
+                        if ( SEC_hasRights( 'user.edit' ) && SEC_hasRights( 'user.delete' )) {
                             $modnum += DB_count( $_TABLES['users'], 'status', '2' );
                         }
                     }
@@ -735,10 +702,10 @@ class menuElement {
                 // now handle submissions for plugins
                 $modnum += PLG_getSubmissionCount();
 
-                if( SEC_hasRights( 'story.edit' )) {
+                if ( SEC_hasRights( 'story.edit' )) {
                     $url = $_CONF['site_admin_url'] . '/story.php';
                     $label = $LANG01[11];
-                    if( empty( $topicsql )) {
+                    if ( empty( $topicsql )) {
                         $numstories = DB_count( $_TABLES['stories'] );
                     } else {
                         $nresult = DB_query( "SELECT COUNT(*) AS count from {$_TABLES['stories']} WHERE" . $topicsql . COM_getPermSql( 'AND' ));
@@ -749,7 +716,7 @@ class menuElement {
                     $label .= ' (' . COM_numberFormat($numstories) . ')';
                     $item_array[] = array('label' => $label, 'url' => $url);
                 }
-                if( SEC_hasRights( 'block.edit' )) {
+                if ( SEC_hasRights( 'block.edit' )) {
                     $result = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['blocks']}" . COM_getPermSql());
                     list( $count ) = DB_fetchArray( $result );
 
@@ -762,22 +729,22 @@ class menuElement {
                     $label = $LANG_AM['title'];
                     $item_array[] = array('label' => $label, 'url' => $url);
                 }
-                if( SEC_inGroup( 'Root' )) {
+                if ( SEC_inGroup( 'Root' )) {
                     $url = $_CONF['site_admin_url'] . '/clearctl.php';
                     $label =  $LANG01['ctl'];
                     $item_array[] = array('label' => $label, 'url' => $url);
                 }
-                if( SEC_inGroup( 'Root' )) {
+                if ( SEC_inGroup( 'Root' )) {
                     $url = $_CONF['site_admin_url'] . '/menu.php';
                     $label =  $LANG_MB01['menu_builder'];
                     $item_array[] = array('label' => $label, 'url' => $url);
                 }
-                if( SEC_inGroup( 'Root' )) {
+                if ( SEC_inGroup( 'Root' )) {
                     $url = $_CONF['site_admin_url'] . '/logo.php';
                     $label =  $LANG_LOGO['logo_admin'];
                     $item_array[] = array('label' => $label, 'url' => $url);
                 }
-                if( SEC_hasRights( 'topic.edit' )) {
+                if ( SEC_hasRights( 'topic.edit' )) {
                     $result = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['topics']}" . COM_getPermSql());
                     list( $count ) = DB_fetchArray( $result );
                     $url = $_CONF['site_admin_url'] . '/topic.php';
@@ -785,13 +752,13 @@ class menuElement {
                     $item_array[] = array('label' => $label, 'url' => $url);
                 }
 
-                if( SEC_hasRights( 'user.edit' )) {
+                if ( SEC_hasRights( 'user.edit' )) {
                     $url = $_CONF['site_admin_url'] . '/user.php';
                     $label = $LANG01[17] . ' (' . COM_numberFormat(DB_count($_TABLES['users']) -1) . ')';
                     $item_array[] = array('label' => $label, 'url' => $url);
                 }
 
-                if( SEC_hasRights( 'group.edit' )) {
+                if ( SEC_hasRights( 'group.edit' )) {
                     if (SEC_inGroup('Root')) {
                         $grpFilter = '';
                     } else {
@@ -812,24 +779,24 @@ class menuElement {
                     $item_array[] = array('label' => $label, 'url' => $url);
                 }
 
-                if( SEC_hasRights( 'user.mail' )) {
+                if ( SEC_hasRights( 'user.mail' )) {
                     $url = $_CONF['site_admin_url'] . '/mail.php';
                     $label = $LANG01[105] . ' (N/A)';
                     $item_array[] = array('label' => $label, 'url' => $url);
                 }
 
-                if(( $_CONF['backend'] == 1 ) && SEC_hasRights( 'syndication.edit' )) {
+                if (( $_CONF['backend'] == 1 ) && SEC_hasRights( 'syndication.edit' )) {
                     $url = $_CONF['site_admin_url'] . '/syndication.php';
                     $label = $LANG01[38] . ' (' . COM_numberFormat(DB_count($_TABLES['syndication'])) . ')';
                     $item_array[] = array('label' => $label, 'url' => $url);
                 }
 
-                if(( $_CONF['trackback_enabled'] || $_CONF['pingback_enabled'] || $_CONF['ping_enabled'] ) && SEC_hasRights( 'story.ping' )) {
+                if (( $_CONF['trackback_enabled'] || $_CONF['pingback_enabled'] || $_CONF['ping_enabled'] ) && SEC_hasRights( 'story.ping' )) {
                     $url = $_CONF['site_admin_url'] . '/trackback.php';
                     $label = $LANG01[116] . ' (' . COM_numberFormat( DB_count( $_TABLES['pingservice'] )) . ')';
                     $item_array[] = array('label' => $label, 'url' => $url);
                 }
-                if( SEC_hasRights( 'plugin.edit' )) {
+                if ( SEC_hasRights( 'plugin.edit' )) {
                     $url = $_CONF['site_admin_url'] . '/plugins.php';
                     $label = $LANG01[77] . ' (' . COM_numberFormat( DB_count( $_TABLES['plugins'] )) . ')';
                     $item_array[] = array('label' => $label, 'url' => $url);
@@ -848,7 +815,7 @@ class menuElement {
                     $url = $plg->adminurl;
                     $label = $plg->adminlabel;
 
-                    if( empty( $plg->numsubmissions )) {
+                    if ( empty( $plg->numsubmissions )) {
                         $label .= '';
                     } else {
                         $label .= ' (' . COM_numberFormat( $plg->numsubmissions ) . ')';
@@ -857,18 +824,18 @@ class menuElement {
                     next( $plugin_options );
                 }
 
-                if(( $_CONF['allow_mysqldump'] == 1 ) AND ( $_DB_dbms == 'mysql' || $_DB_dbms == 'mysqli' ) AND SEC_inGroup( 'Root' )) {
+                if (( $_CONF['allow_mysqldump'] == 1 ) AND ( $_DB_dbms == 'mysql' || $_DB_dbms == 'mysqli' ) AND SEC_inGroup( 'Root' )) {
                     $url = $_CONF['site_admin_url'] . '/database.php';
                     $label = $LANG01[103] . '';
                     $item_array[] = array('label' => $label, 'url' => $url);
                 }
-                if( SEC_inGroup( 'Root' )) {
+                if ( SEC_inGroup( 'Root' )) {
                     $url = $_CONF['site_admin_url'] . '/logview.php';
                     $label = $LANG01['logview'] . '';
                     $item_array[] = array('label' => $label, 'url' => $url);
                 }
 
-                if( $_CONF['link_documentation'] == 1 ) {
+                if ( $_CONF['link_documentation'] == 1 ) {
                     $doclang = COM_getLanguageName();
                     if ( @file_exists($_CONF['path_html'] . 'docs/' . $doclang . '/index.html') ) {
                         $docUrl = $_CONF['site_url'].'/docs/'.$doclang.'/index.html';
@@ -880,7 +847,7 @@ class menuElement {
                     $item_array[] = array('label' => $label, 'url' => $url);
                 }
 
-                if( SEC_inGroup( 'Root' )) {
+                if ( SEC_inGroup( 'Root' )) {
                     $url = $_CONF['site_admin_url'] . '/vercheck.php';
                     $label = $LANG01[107] . ' (' . GVERSION . PATCHLEVEL . ')';
                     $item_array[] = array('label' => $label, 'url' => $url);
@@ -912,7 +879,7 @@ class menuElement {
 
         $item_array = array();
         $langsql = COM_getLangSQL( 'tid' );
-        if( empty( $langsql )) {
+        if ( empty( $langsql )) {
             $op = 'WHERE';
         } else {
             $op = 'AND';
@@ -922,7 +889,7 @@ class menuElement {
         if ( !COM_isAnonUser() ) {
             $tids = DB_getItem( $_TABLES['userindex'], 'tids',
                                 "uid=".(int) $_USER['uid']);
-            if( !empty( $tids )) {
+            if ( !empty( $tids )) {
                 $sql .= " $op (tid NOT IN ('" . str_replace( ' ', "','", $tids )
                      . "'))" . COM_getPermSQL( 'AND' );
             } else {
@@ -931,14 +898,14 @@ class menuElement {
         } else {
             $sql .= COM_getPermSQL( $op );
         }
-        if( $_CONF['sortmethod'] == 'alpha' ) {
+        if ( $_CONF['sortmethod'] == 'alpha' ) {
             $sql .= ' ORDER BY topic ASC';
         } else {
             $sql .= ' ORDER BY sortnum';
         }
         $result = DB_query( $sql );
 
-        if( $_CONF['showstorycount'] ) {
+        if ( $_CONF['showstorycount'] ) {
             $sql = "SELECT tid, COUNT(*) AS count FROM {$_TABLES['stories']} "
                  . 'WHERE (draft_flag = 0) AND (date <= NOW()) '
                  . COM_getPermSQL( 'AND' )
@@ -949,7 +916,7 @@ class menuElement {
             }
         }
 
-        if( $_CONF['showsubmissioncount'] ) {
+        if ( $_CONF['showsubmissioncount'] ) {
             $sql = "SELECT tid, COUNT(*) AS count FROM {$_TABLES['storysubmission']} "
                  . ' GROUP BY tid';
             $rcount = DB_query( $sql );
@@ -964,20 +931,20 @@ class menuElement {
             $label = $topicname;
 
             $countstring = '';
-            if( $_CONF['showstorycount'] || $_CONF['showsubmissioncount'] ) {
+            if ( $_CONF['showstorycount'] || $_CONF['showsubmissioncount'] ) {
                 $countstring .= ' (';
-                if( $_CONF['showstorycount'] ) {
-                    if( empty( $storycount[$A['tid']] )) {
+                if ( $_CONF['showstorycount'] ) {
+                    if ( empty( $storycount[$A['tid']] )) {
                         $countstring .= 0;
                     } else {
                         $countstring .= COM_numberFormat( $storycount[$A['tid']] );
                     }
                 }
-                if( $_CONF['showsubmissioncount'] ) {
-                    if( $_CONF['showstorycount'] ) {
+                if ( $_CONF['showsubmissioncount'] ) {
+                    if ( $_CONF['showstorycount'] ) {
                         $countstring .= '/';
                     }
-                    if( empty( $submissioncount[$A['tid']] )) {
+                    if ( empty( $submissioncount[$A['tid']] )) {
                         $countstring .= 0;
                     } else {
                         $countstring .= COM_numberFormat( $submissioncount[$A['tid']] );
