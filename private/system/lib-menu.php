@@ -170,6 +170,36 @@ function assembleMenu($name, $skipCache=false) {
     return $menuData;
 }
 
+function getMenuTemplate($menutype, $menuname) {
+    global $_CONF;
+
+    $noSpaceName = strip_tags(strtolower(str_replace(" ","_",$menuname)));
+
+    switch ( $menutype ) {
+        case MENU_HORIZONTAL_CASCADING :
+            $template_file = 'menu_horizontal_cascading';
+            break;
+        case MENU_HORIZONTAL_SIMPLE :
+            $template_file = 'menu_horizontal_simple';
+            break;
+        case MENU_VERTICAL_CASCADING :
+            $template_file = 'menu_vertical_cascading';
+            break;
+        case MENU_VERTICAL_SIMPLE :
+            $template_file = 'menu_vertical_simple';
+            break;
+        default:
+            return $retval;
+            break;
+    }
+    //see if custom template exists
+    $tFile = $template_file . '_'.$noSpaceName.'.thtml';
+    $sFile = $template_file . '.thtml';
+    $rc = file_exists($_CONF['path_layout'].'menu/custom/'.$tFile);
+    if ($rc) return $tFile;
+    return $sFile;
+}
+
 /*
  * Render the menu
  */
@@ -189,23 +219,7 @@ function displayMenu( $menuName, $skipCache=false ) {
 
     $T = new Template( $_CONF['path_layout'].'/menu/');
 
-    switch ( $menuType ) {
-        case MENU_HORIZONTAL_CASCADING :
-            $template_file = 'menu_horizontal_cascading.thtml';
-            break;
-        case MENU_HORIZONTAL_SIMPLE :
-            $template_file = 'menu_horizontal_simple.thtml';
-            break;
-        case MENU_VERTICAL_CASCADING :
-            $template_file = 'menu_vertical_cascading.thtml';
-            break;
-        case MENU_VERTICAL_SIMPLE :
-            $template_file = 'menu_vertical_simple.thtml';
-            break;
-        default:
-            return $retval;
-            break;
-    }
+    $template_file = getMenuTemplate($menuType, $menuName);
 
     $T->set_file (array(
         'page'      => $template_file,
@@ -222,7 +236,7 @@ function displayMenu( $menuName, $skipCache=false ) {
                         'url'   => $item['url']
                     ));
         if ( isset($item['children']) && $item['children'] != NULL && is_array($item['children']) ) {
-            $childrenHTML = displayMenuChildren($menuType,$item['children']);
+            $childrenHTML = displayMenuChildren($menuType,$item['children'],$template_file);
             $T->set_var('haschildren',true);
             $T->set_var('children',$childrenHTML);
         }
@@ -240,30 +254,13 @@ function displayMenu( $menuName, $skipCache=false ) {
 /*
  * handle the children elements when building the menu HTML
  */
-function displayMenuChildren( $type, $elements ) {
+function displayMenuChildren( $type, $elements, $template_file ) {
     global $_CONF;
 
     $retval = '';
 
     $C = new Template( $_CONF['path_layout'].'/menu/');
 
-    switch ( $type ) {
-        case MENU_HORIZONTAL_CASCADING :
-            $template_file = 'menu_horizontal_cascading.thtml';
-            break;
-        case MENU_HORIZONTAL_SIMPLE :
-            $template_file = 'menu_horizontal_simple.thtml';
-            break;
-        case MENU_VERTICAL_CASCADING :
-            $template_file = 'menu_vertical_cascading.thtml';
-            break;
-        case MENU_VERTICAL_SIMPLE :
-            $template_file = 'menu_vertical_simple.thtml';
-            break;
-        default:
-            return $retval;
-            break;
-    }
     $C->set_file (array(
         'page'      => $template_file,
     ));
@@ -278,7 +275,7 @@ function displayMenuChildren( $type, $elements ) {
                         'url'   => $child['url']
                     ));
         if ( isset($child['children']) && $child['children'] != NULL && is_array($child['children']) ) {
-            $childHTML = displayMenuChildren($type, $child['children']);
+            $childHTML = displayMenuChildren($type, $child['children'],$template_file);
             $C->set_var('haschildren',true);
             $C->set_var('children',$childHTML);
         }
@@ -290,6 +287,371 @@ function displayMenuChildren( $type, $elements ) {
     $retval = $C->finish($C->get_var('output'));
 
     return $retval;
+}
+
+function getUserMenu()
+{
+    global $_SP_CONF,$_USER, $_TABLES, $LANG01, $LANG_MB01, $LANG_LOGO,
+           $LANG_AM, $LANG29, $_CONF, $_DB_dbms,$_GROUPS, $config;
+
+    $item_array = array();
+    if ( !COM_isAnonUser() ) {
+        $plugin_options = PLG_getAdminOptions();
+        $num_plugins = count($plugin_options);
+        if (SEC_isModerator() OR
+                SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit', 'OR') OR
+                ($num_plugins > 0))
+        {
+            $url = $_CONF['site_admin_url'] . '/index.php';
+            $label =  $LANG29[34];
+            $item_array[] = array('label' => $label, 'url' => $url);
+        }
+        // what's our current URL?
+        $elementUrl = COM_getCurrentURL();
+        $plugin_options = PLG_getUserOptions();
+        $nrows = count( $plugin_options );
+        for( $i = 0; $i < $nrows; $i++ ) {
+            $plg = current( $plugin_options );
+            $label = $plg->adminlabel;
+            if ( !empty( $plg->numsubmissions )) {
+                $label .= ' (' . $plg->numsubmissions . ')';
+            }
+            $url = $plg->adminurl;
+            $item_array[] = array('label' => $label, 'url' => $url);
+            next( $plugin_options );
+        }
+        $url = $_CONF['site_url'] . '/usersettings.php?mode=edit';
+        $label = $LANG01[48];
+        $item_array[] = array('label' => $label, 'url' => $url);
+        $url = $_CONF['site_url'] . '/users.php?mode=logout';
+        $label = $LANG01[19];
+        $item_array[] = array('label' => $label, 'url' => $url);
+    } else {
+        $url = $_CONF['site_url'] . '/users.php?mode=login';
+        $label = $LANG01[58];
+        $item_array[] = array('label' => $label, 'url' => $url);
+    }
+    return $item_array;
+}
+
+function getAdminMenu()
+{
+    global $_SP_CONF,$_USER, $_TABLES, $LANG01, $LANG_MB01, $LANG_LOGO,
+           $LANG_AM, $LANG29, $_CONF,
+           $_DB_dbms,$_GROUPS, $config;
+
+    $item_array = array();
+
+    if ( !COM_isAnonUser() ) {
+        $plugin_options = PLG_getAdminOptions();
+        $num_plugins = count( $plugin_options );
+
+        if ( SEC_isModerator() OR SEC_hasRights( 'story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit', 'OR' ) OR ( $num_plugins > 0 ) ) {
+            // what's our current URL?
+            $elementUrl = COM_getCurrentURL();
+
+            $topicsql = '';
+            if ( SEC_isModerator() || SEC_hasRights( 'story.edit' ) ) {
+                $tresult = DB_query( "SELECT tid FROM {$_TABLES['topics']}"
+                                     . COM_getPermSQL() );
+                $trows = DB_numRows( $tresult );
+                if ( $trows > 0 ) {
+                    $tids = array();
+                    for( $i = 0; $i < $trows; $i++ ) {
+                        $T = DB_fetchArray( $tresult );
+                        $tids[] = $T['tid'];
+                    }
+                    if ( sizeof( $tids ) > 0 ) {
+                        $topicsql = " (tid IN ('" . implode( "','", $tids ) . "'))";
+                    }
+                }
+            }
+            $modnum = 0;
+            if ( SEC_hasRights( 'story.edit,story.moderate', 'OR' ) || (( $_CONF['usersubmission'] == 1 ) && SEC_hasRights( 'user.edit,user.delete' ))) {
+                if ( SEC_hasRights( 'story.moderate' )) {
+                    if ( empty( $topicsql )) {
+                        $modnum += DB_count( $_TABLES['storysubmission'] );
+                    } else {
+                        $sresult = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['storysubmission']} WHERE" . $topicsql );
+                        $S = DB_fetchArray( $sresult );
+                        $modnum += $S['count'];
+                    }
+                }
+                if (( $_CONF['listdraftstories'] == 1 ) && SEC_hasRights( 'story.edit' )) {
+                    $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (draft_flag = 1)";
+                    if ( !empty( $topicsql )) {
+                        $sql .= ' AND' . $topicsql;
+                    }
+                    $result = DB_query( $sql . COM_getPermSQL( 'AND', 0, 3 ));
+                    $A = DB_fetchArray( $result );
+                    $modnum += $A['count'];
+                }
+
+                if ( $_CONF['usersubmission'] == 1 ) {
+                    if ( SEC_hasRights( 'user.edit' ) && SEC_hasRights( 'user.delete' )) {
+                        $modnum += DB_count( $_TABLES['users'], 'status', '2' );
+                    }
+                }
+            }
+            // now handle submissions for plugins
+            $modnum += PLG_getSubmissionCount();
+
+            if ( SEC_hasRights( 'story.edit' )) {
+                $url = $_CONF['site_admin_url'] . '/story.php';
+                $label = $LANG01[11];
+                if ( empty( $topicsql )) {
+                    $numstories = DB_count( $_TABLES['stories'] );
+                } else {
+                    $nresult = DB_query( "SELECT COUNT(*) AS count from {$_TABLES['stories']} WHERE" . $topicsql . COM_getPermSql( 'AND' ));
+                    $N = DB_fetchArray( $nresult );
+                    $numstories = $N['count'];
+                }
+
+                $label .= ' (' . COM_numberFormat($numstories) . ')';
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+            if ( SEC_hasRights( 'block.edit' )) {
+                $result = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['blocks']}" . COM_getPermSql());
+                list( $count ) = DB_fetchArray( $result );
+
+                $url = $_CONF['site_admin_url'] . '/block.php';
+                $label = $LANG01[12] . ' (' . COM_numberFormat($count) . ')';
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+            if ( SEC_hasRights('autotag.admin') ) {
+                $url = $_CONF['site_admin_url'] . '/autotag.php';
+                $label = $LANG_AM['title'];
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+            if ( SEC_inGroup( 'Root' )) {
+                $url = $_CONF['site_admin_url'] . '/clearctl.php';
+                $label =  $LANG01['ctl'];
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+            if ( SEC_inGroup( 'Root' )) {
+                $url = $_CONF['site_admin_url'] . '/menu.php';
+                $label =  $LANG_MB01['menu_builder'];
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+            if ( SEC_inGroup( 'Root' )) {
+                $url = $_CONF['site_admin_url'] . '/logo.php';
+                $label =  $LANG_LOGO['logo_admin'];
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+            if ( SEC_hasRights( 'topic.edit' )) {
+                $result = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['topics']}" . COM_getPermSql());
+                list( $count ) = DB_fetchArray( $result );
+                $url = $_CONF['site_admin_url'] . '/topic.php';
+                $label = $LANG01[13] . ' (' . COM_numberFormat($count) . ')';
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+
+            if ( SEC_hasRights( 'user.edit' )) {
+                $url = $_CONF['site_admin_url'] . '/user.php';
+                $label = $LANG01[17] . ' (' . COM_numberFormat(DB_count($_TABLES['users']) -1) . ')';
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+
+            if ( SEC_hasRights( 'group.edit' )) {
+                if (SEC_inGroup('Root')) {
+                    $grpFilter = '';
+                } else {
+                    $elementUsersGroups = SEC_getUserGroups ();
+                    $grpFilter = 'WHERE (grp_id IN (' . implode (',', $elementUsersGroups) . '))';
+                }
+                $result = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['groups']} $grpFilter;" );
+                $A = DB_fetchArray( $result );
+
+                $url = $_CONF['site_admin_url'] . '/group.php';
+                $label = $LANG01[96] . ' (' . COM_numberFormat($A['count']) . ')';
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+
+            if ( SEC_inGroup('Root') ) {
+                $url = $_CONF['site_admin_url'].'/envcheck.php';
+                $label = $LANG01['env_check'];
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+
+            if ( SEC_hasRights( 'user.mail' )) {
+                $url = $_CONF['site_admin_url'] . '/mail.php';
+                $label = $LANG01[105] . ' (N/A)';
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+
+            if (( $_CONF['backend'] == 1 ) && SEC_hasRights( 'syndication.edit' )) {
+                $url = $_CONF['site_admin_url'] . '/syndication.php';
+                $label = $LANG01[38] . ' (' . COM_numberFormat(DB_count($_TABLES['syndication'])) . ')';
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+
+            if (( $_CONF['trackback_enabled'] || $_CONF['pingback_enabled'] || $_CONF['ping_enabled'] ) && SEC_hasRights( 'story.ping' )) {
+                $url = $_CONF['site_admin_url'] . '/trackback.php';
+                $label = $LANG01[116] . ' (' . COM_numberFormat( DB_count( $_TABLES['pingservice'] )) . ')';
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+            if ( SEC_hasRights( 'plugin.edit' )) {
+                $url = $_CONF['site_admin_url'] . '/plugins.php';
+                $label = $LANG01[77] . ' (' . COM_numberFormat( DB_count( $_TABLES['plugins'] )) . ')';
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+            if (SEC_inGroup('Root')) {
+                $url = $_CONF['site_admin_url'] . '/configuration.php';
+                $label = $LANG01[129] . ' (' . COM_numberFormat(count($config->_get_groups())) . ')';
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+
+            // This will show the admin options for all installed plugins (if any)
+
+            for( $i = 0; $i < $num_plugins; $i++ ) {
+                $plg = current( $plugin_options );
+
+                $url = $plg->adminurl;
+                $label = $plg->adminlabel;
+
+                if ( empty( $plg->numsubmissions )) {
+                    $label .= '';
+                } else {
+                    $label .= ' (' . COM_numberFormat( $plg->numsubmissions ) . ')';
+                }
+                $item_array[] = array('label' => $label, 'url' => $url);
+                next( $plugin_options );
+            }
+
+            if (( $_CONF['allow_mysqldump'] == 1 ) AND ( $_DB_dbms == 'mysql' || $_DB_dbms == 'mysqli' ) AND SEC_inGroup( 'Root' )) {
+                $url = $_CONF['site_admin_url'] . '/database.php';
+                $label = $LANG01[103] . '';
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+            if ( SEC_inGroup( 'Root' )) {
+                $url = $_CONF['site_admin_url'] . '/logview.php';
+                $label = $LANG01['logview'] . '';
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+
+            if ( $_CONF['link_documentation'] == 1 ) {
+                $doclang = COM_getLanguageName();
+                if ( @file_exists($_CONF['path_html'] . 'docs/' . $doclang . '/index.html') ) {
+                    $docUrl = $_CONF['site_url'].'/docs/'.$doclang.'/index.html';
+                } else {
+                    $docUrl = $_CONF['site_url'].'/docs/english/index.html';
+                }
+                $url = $docUrl;
+                $label = $LANG01[113] . '';
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+
+            if ( SEC_inGroup( 'Root' )) {
+                $url = $_CONF['site_admin_url'] . '/vercheck.php';
+                $label = $LANG01[107] . ' (' . GVERSION . PATCHLEVEL . ')';
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+            if (SEC_isModerator()) {
+                $url = $_CONF['site_admin_url'] . '/moderation.php';
+                $label = $LANG01[10] . ' (' . COM_numberFormat( $modnum ) . ')';
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+
+            if ( $_CONF['sort_admin']) {
+                usort($item_array,'_mb_cmp');
+            }
+            $url = $_CONF['site_admin_url'] . '/index.php';
+            $label = $LANG29[34];
+            $cc_item = array('label' => $LANG29[34], 'url' => $url);
+            $item_array = array_merge(array($cc_item),$item_array);
+        }
+    }
+    return $item_array;
+}
+
+
+function getTopicMenu()
+{
+    global $_SP_CONF,$_USER, $_TABLES, $LANG01, $LANG_MB01, $LANG_LOGO,
+           $LANG_AM, $LANG29, $_CONF,
+           $_DB_dbms,$_GROUPS, $config;
+
+
+    $item_array = array();
+    $langsql = COM_getLangSQL( 'tid' );
+    if ( empty( $langsql )) {
+        $op = 'WHERE';
+    } else {
+        $op = 'AND';
+    }
+
+    $sql = "SELECT tid,topic,imageurl FROM {$_TABLES['topics']}" . $langsql;
+    if ( !COM_isAnonUser() ) {
+        $tids = DB_getItem( $_TABLES['userindex'], 'tids',
+                            "uid=".(int) $_USER['uid']);
+        if ( !empty( $tids )) {
+            $sql .= " $op (tid NOT IN ('" . str_replace( ' ', "','", $tids )
+                 . "'))" . COM_getPermSQL( 'AND' );
+        } else {
+            $sql .= COM_getPermSQL( $op );
+        }
+    } else {
+        $sql .= COM_getPermSQL( $op );
+    }
+    if ( $_CONF['sortmethod'] == 'alpha' ) {
+        $sql .= ' ORDER BY topic ASC';
+    } else {
+        $sql .= ' ORDER BY sortnum';
+    }
+    $result = DB_query( $sql );
+
+    if ( $_CONF['showstorycount'] ) {
+        $sql = "SELECT tid, COUNT(*) AS count FROM {$_TABLES['stories']} "
+             . 'WHERE (draft_flag = 0) AND (date <= NOW()) '
+             . COM_getPermSQL( 'AND' )
+             . ' GROUP BY tid';
+        $rcount = DB_query( $sql );
+        while( $C = DB_fetchArray( $rcount )) {
+            $storycount[$C['tid']] = $C['count'];
+        }
+    }
+
+    if ( $_CONF['showsubmissioncount'] ) {
+        $sql = "SELECT tid, COUNT(*) AS count FROM {$_TABLES['storysubmission']} "
+             . ' GROUP BY tid';
+        $rcount = DB_query( $sql );
+        while( $C = DB_fetchArray( $rcount )) {
+            $submissioncount[$C['tid']] = $C['count'];
+        }
+    }
+
+    while( $A = DB_fetchArray( $result ) ) {
+        $topicname = $A['topic'];
+        $url =  $_CONF['site_url'] . '/index.php?topic=' . $A['tid'];
+        $label = $topicname;
+
+        $countstring = '';
+        if ( $_CONF['showstorycount'] || $_CONF['showsubmissioncount'] ) {
+            $countstring .= ' (';
+            if ( $_CONF['showstorycount'] ) {
+                if ( empty( $storycount[$A['tid']] )) {
+                    $countstring .= 0;
+                } else {
+                    $countstring .= COM_numberFormat( $storycount[$A['tid']] );
+                }
+            }
+            if ( $_CONF['showsubmissioncount'] ) {
+                if ( $_CONF['showstorycount'] ) {
+                    $countstring .= '/';
+                }
+                if ( empty( $submissioncount[$A['tid']] )) {
+                    $countstring .= 0;
+                } else {
+                    $countstring .= COM_numberFormat( $submissioncount[$A['tid']] );
+                }
+            }
+
+            $countstring .= ')';
+        }
+        $label .= $countstring;
+        $item_array[] = array('label' => $label, 'url' => $url);
+    }
+    return $item_array;
 }
 
 function phpblock_getMenu( $arg1, $arg2 )

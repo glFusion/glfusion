@@ -2250,13 +2250,12 @@ function COM_userMenu( $help='', $title='', $position='' )
         $retval .= COM_startBlock( $title, $help,
                            COM_getBlockTemplate( 'user_block', 'header', $position ), 'user_block' );
 
-        $userMenu = new menuElement;
-        $menuData = $userMenu->_userMenu();
-        $retval .= '<ul>';
+        $menuData = getUserMenu();
+        $retval .= '<div id="usermenu"><ul>';
         foreach ( $menuData as $item ) {
             $retval .= '<li><a href="'.$item['url'].'">'.$item['label'].'</a></li>';
         }
-        $retval .= '</ul>';
+        $retval .= '</ul></div>';
 
 
         $retval .=  COM_endBlock( COM_getBlockTemplate( 'user_block', 'footer' ));
@@ -2391,13 +2390,12 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
     $retval .= COM_startBlock( $title, $help,
                        COM_getBlockTemplate( 'admin_block', 'header', $position ), 'admin_block' );
 
-    $adminMenu = new menuElement();
-    $menuData = $adminMenu->_adminMenu();
-    $retval .= '<ul>';
+    $menuData = getAdminMenu();
+    $retval .= '<div id="adminmenu"><ul>';
     foreach ( $menuData as $item ) {
         $retval .= '<li><a href="'.$item['url'].'">'.$item['label'].'</a></li>';
     }
-    $retval .= '</ul>';
+    $retval .= '</ul></div>';
     $retval .= COM_endBlock( COM_getBlockTemplate( 'admin_block', 'footer', $position ));
     return $retval;
 }
