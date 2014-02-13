@@ -1,6 +1,6 @@
 {# horizontal cascading menu template #}
 {!if wrapper}
-<script>
+<script type="text/javascript">
 window.addEvent('load', function() {
 	new moomenu($E('div.menu_{menuname}'), {
 		bgiframe: false,
