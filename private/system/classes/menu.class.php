@@ -592,7 +592,7 @@ class menuElement {
         return $returnArray;
     }
 
-
+//@FIXME move these to lib-menu.php
     function _userMenu()
     {
         global $_SP_CONF,$_USER, $_TABLES, $LANG01, $LANG_MB01, $LANG_LOGO,
