@@ -228,7 +228,7 @@ function displayMenu( $menuName, $skipCache=false ) {
     $T->set_var('menuname',$menuName);
 
     $T->set_block('page', 'Elements', 'element');
-
+    $lastElement = end($structure);
     foreach($structure as $item) {
 
         $T->set_var(array(
@@ -240,9 +240,16 @@ function displayMenu( $menuName, $skipCache=false ) {
             $T->set_var('haschildren',true);
             $T->set_var('children',$childrenHTML);
         }
+        if ( $item == $lastElement ) {
+            $T->set_var('last',true);
+        } else {
+            $T->unset_var('last');
+        }
         $T->parse('element', 'Elements',true);
         $T->unset_var('haschildren');
         $T->unset_var('children');
+
+
     }
     $T->set_var('wrapper',true);
 
@@ -266,7 +273,7 @@ function displayMenuChildren( $type, $elements, $template_file ) {
     ));
 
     $C->set_block('page', 'Elements', 'element');
-
+    $lastElement = end($elements);
     foreach ($elements AS $child) {
         $C->unset_var('haschildren');
 
@@ -278,6 +285,11 @@ function displayMenuChildren( $type, $elements, $template_file ) {
             $childHTML = displayMenuChildren($type, $child['children'],$template_file);
             $C->set_var('haschildren',true);
             $C->set_var('children',$childHTML);
+        }
+        if ( $child == $lastElement ) {
+            $C->set_var('last',true);
+        } else {
+            $C->unset_var('last');
         }
         $C->parse('element', 'Elements',true);
         $C->unset_var('haschildren');

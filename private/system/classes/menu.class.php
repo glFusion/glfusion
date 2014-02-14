@@ -387,8 +387,7 @@ class menuElement {
     function _parseElement(  )
     {
         global $_SP_CONF,$_USER, $_TABLES, $LANG01, $LANG_MB01, $LANG_LOGO,
-               $LANG_AM, $LANG29, $_CONF,
-               $_DB_dbms,$_GROUPS, $config;
+               $LANG_AM, $LANG29, $_CONF,$_DB_dbms,$_GROUPS, $config;
 
         $returnArray    = array();
         $childArray     = array();

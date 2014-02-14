@@ -4,7 +4,11 @@
 {!endif}
 <ul class="menu-horizontal-simple">
 <!-- BEGIN Elements -->
+{!if last}
+  <li class="last">
+{!else}
   <li>
+{!endif}
    <a href="{url}">
    {label}
    </a>
