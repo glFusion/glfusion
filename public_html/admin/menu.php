@@ -296,7 +296,7 @@ function MB_createMenu( ) {
  */
 
 function MB_saveNewMenu( ) {
-    global $_CONF, $_TABLES, $_GROUPS,$hc_menu_defaults,$hs_menu_defaults,$vc_menu_defaults,$vs_menu_defaults;
+    global $_CONF, $_TABLES, $_GROUPS, $LANG_MB;
 
     $errors = 0;
     $errMsg = '';
@@ -305,19 +305,17 @@ function MB_saveNewMenu( ) {
 
     if ( !isset($_POST['menuname']) || $_POST['menuname'] == '' ) {
         $errors++;
-//@TODO - fix language
-        $errMsg .= 'Menu name cannot be blank.';
+        $errMsg .= $LANG_MB['menu_name_error'];
     } else {
         $menuname = COM_applyFilter($_POST['menuname']);
         if ( strstr($menuname,' ' ) !== FALSE ) {
             $errors++;
-//@TODO - fix language
-            $errMsg .= 'Menu name cannot contain spaces<br />';
+            $errMsg .= $LANG_MB['menu_name_space'].'<br/>';
         }
         $existing_id = DB_getItem($_TABLES['menu'],'id','menu_name="'.DB_escapeString($menuname).'"');
         if ( $existing_id > 0 ) {
             $errors++;
-            $errMsg .= 'Menu name must be unique, there is already a menu by this name';
+            $errMsg .= $LANG_MB['menu_name_exits'];
         }
     }
 
@@ -344,7 +342,7 @@ function MB_saveNewMenu( ) {
 }
 
 function MB_saveEditMenu( ) {
-    global $_CONF, $_TABLES, $_GROUPS,$hc_menu_defaults,$hs_menu_defaults,$vc_menu_defaults,$vs_menu_defaults;
+    global $_CONF, $_TABLES, $_GROUPS, $LANG_MB;
 
     $errors = 0;
     $errMsg = '';
@@ -353,14 +351,12 @@ function MB_saveEditMenu( ) {
 
     if ( !isset($_POST['menuname']) || $_POST['menuname'] == '' ) {
         $errors++;
-//@TODO - fix language
-        $errMsg .= 'Menu name cannot be blank.';
+        $errMsg .= $LANG_MB['menu_name_error'];
     } else {
         $menuname = COM_applyFilter($_POST['menuname']);
         if ( strstr($menuname,' ' ) !== FALSE ) {
             $errors++;
-//@TODO - fix language
-            $errMsg .= 'Menu name cannot contain spaces<br />';
+            $errMsg .= $LANG_MB['menu_name_space'];;
         }
     }
 
@@ -390,9 +386,8 @@ function MB_saveEditMenu( ) {
  */
 
 function MB_displayTree( $menu_id ) {
-    global $_CONF, $LANG_MB01, $LANG_MB_ADMIN, $LANG_ADMIN, $level;
+    global $_CONF, $LANG_MB01, $LANG_MB_ADMIN, $LANG_ADMIN;
 
-    $level = 1;
     $retval = '';
 
     $menu = menu::getInstance( $menu_id );
