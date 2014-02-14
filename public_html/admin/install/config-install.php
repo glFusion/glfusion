@@ -153,8 +153,7 @@ function install_config($site_url)
 
     $c->add('fs_theme', NULL, 'fieldset', 2, 1, NULL, 0, TRUE);
     $c->add('theme','nouveau','select',2,1,NULL,10,TRUE);
-    $c->add('menu_elements',array('home','contribute','search','stats','directory','plugins'),'%text',2,1,NULL,20,TRUE);
-    $c->add('path_themes','','text',2,1,NULL,30,TRUE);
+    $c->add('path_themes','','text',2,1,NULL,20,TRUE);
 
     $c->add('fs_theme_advanced', NULL, 'fieldset', 2, 2, NULL, 0, TRUE);
     $c->add('show_right_blocks',FALSE,'select',2,2,1,10,TRUE);

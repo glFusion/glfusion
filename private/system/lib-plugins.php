@@ -6,9 +6,7 @@
 // |                                                                          |
 // | This file implements plugin support in glFusion.                         |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -2059,9 +2057,10 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
                     if ( $autotag['tag'] == 'menu' ) {
                         $menu = '';
                         $menuID = trim($autotag['parm1']);
-                        $menuHTML = mb_getMenu($menuID,'');
+                        $menuHTML = displayMenu($menuID);
                         $content = str_replace($autotag['tagstr'],$menuHTML,$content);
                     }
+/* -----
                     if ( $autotag['tag'] == 'hmenu' ) { // depreciated
                         $menu = '';
                         $menuID = trim($autotag['parm1']);
@@ -2081,6 +2080,7 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
                         $menu = phpblock_getMenu('',trim($autotag['parm1']));
                         $content = str_replace($autotag['tagstr'],$menu,$content);
                     }
+---- */
                     if (isset($_AUTOTAGS[$autotag['tag']])) {
                         $content = autotags_autotag('parse', $content, $autotag);
                     }

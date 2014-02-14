@@ -2094,17 +2094,6 @@ $LANG_MB01 = array (
     'target'            => 'URL Window',
     'same_window'       => 'Same Window',
     'new_window'        => 'New Window',
-    'menu_color_options'    => 'Menu Color Options',
-    'top_menu_bg'           => 'Main Menu BG',
-    'top_menu_hover'        => 'Main Menu Hover',
-    'top_menu_text'         => 'Main Menu Text',
-    'top_menu_text_hover'   => 'Main Menu Text Hover / Sub Menu Text',
-    'sub_menu_text_hover'   => 'Sub Menu Text Hover',
-    'sub_menu_text'         => 'Sub Menu Text Color',
-    'sub_menu_bg'           => 'Sub Menu BG',
-    'sub_menu_hover_bg'     => 'Sub Menu Hover BG',
-    'sub_menu_highlight'    => 'Sub Menu Highlight',
-    'sub_menu_shadow'       => 'Sub Menu Shadow',
     'menu_builder'          => 'Menu Builder',
     'logo'                  => 'Logo',
     'menu_colors'           => 'Menu Options',
@@ -2134,41 +2123,9 @@ $LANG_MB01 = array (
     'topic'                 => 'Topics',
     'no_elements'           => 'No menu elements defined',
     'return_to'             => 'Return to ',
-);
-
-$LANG_HC = array (
-    'main_menu_bg_color'         => 'Main Menu BG',
-    'main_menu_hover_bg_color'   => 'Main Menu Hover',
-    'main_menu_text_color'       => 'Main Menu Text',
-    'main_menu_hover_text_color' => 'Main Menu Text Hover / Sub Menu Text',
-    'submenu_hover_text_color'   => 'Sub Menu Text Hover',
-    'submenu_background_color'   => 'Sub Menu BG',
-    'submenu_hover_bg_color'     => 'Sub Menu Hover BG',
-    'submenu_highlight_color'    => 'Sub Menu Highlight',
-    'submenu_shadow_color'       => 'Sub Menu Shadow',
-    'menu_bg_filename'           => 'Menu Background Filename',
-    'menu_hover_filename'        => 'Menu Hover Filename',
-    'menu_parent_filename'       => 'Menu Parent Filename',
-    'menu_alignment'             => 'Menu Alignment',
-    'use_images'                 => 'Use Images',
-);
-$LANG_HS = array (
-    'main_menu_text_color'          => 'Text',
-    'main_menu_hover_text_color'    => 'Hover',
-    'submenu_highlight_color'       => 'Seperator',
-);
-$LANG_VC = array(
-    'main_menu_bg_color'           => 'Menu BG',
-    'main_menu_hover_bg_color'     => 'Menu BG Hover',
-    'main_menu_text_color'         => 'Menu Text',
-    'main_menu_hover_text_color'   => 'Menu Text Hover',
-    'submenu_text_color'           => 'Sub Menu Text',
-    'submenu_hover_text_color'     => 'Sub Menu Text Hover',
-    'submenu_highlight_color'      => 'Border',
-);
-$LANG_VS = array (
-    'main_menu_text_color'          => 'Menu Text',
-    'main_menu_hover_text_color'    => 'Menu Text Hover',
+    'menu_name_error'       => 'Menu name cannot be blank',
+    'menu_name_space'       => 'Menu name cannot contain spaces',
+    'menu_name_exists'      => 'Menu name must be unique, there is already a menu by this name',
 );
 
 $LANG_MB_MENU_TYPES = array(
