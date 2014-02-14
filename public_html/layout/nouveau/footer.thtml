@@ -8,9 +8,9 @@
             <div class="bottom-r-corner">
                 <div class="bottom-l-corner"></div>
             </div>
-			{# begin Site Tailor footer menu #}
-			{st_footer_menu}
-			{# end Site Tailor footer menu #}
+			{# begin footer menu #}
+			{menu_footer}
+			{# end footer menu #}
             <div id="footer-copyright">
                 {copyright_notice}&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href="{rss_url}">RSS</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;{execution_textandtime}&nbsp;{powered_by} <a href="{glfusion_url}">glFusion</a><?php if (SEC_inGroup( 'Root' )) { echo " v" . GVERSION . PATCHLEVEL; } ?>
             </div>

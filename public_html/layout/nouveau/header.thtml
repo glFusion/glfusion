@@ -29,15 +29,9 @@
                 </div>
             </div>
         </div> {# end of gl_header #}
-		{# start of gl_menu #}
-        {!if st_hmenu}
-          {st_hmenu}
-		{!else}
-          <div id="gl_moomenu">
-			<ul class="gl_moomenu">
-				{menu_elements}
-			</ul>
-	      </div>
+		{# start of navigation menu #}
+        {!if menu_navigation}
+          {menu_navigation}
 		{!endif}
         <div id="gl_wrapper">
             <div id="{centercolumn}">
