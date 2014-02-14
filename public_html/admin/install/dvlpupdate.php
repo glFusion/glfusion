@@ -1009,6 +1009,20 @@ function glfusion_132()
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.3.2' WHERE name='glfusion'",1);
 }
 
+function glfusion_133()
+{
+    global $_TABLES, $_CONF, $_PLUGINS, $LANG_AM, $_DB_table_prefix, $_CP_CONF;
+
+    // new config options
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+
+    $c->del('menu_elements','Core');
+
+    // update version number
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.3.3',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.3.3' WHERE name='glfusion'",1);
+}
 
 function _updateConfig() {
     global $_CONF, $_TABLES;
@@ -1127,7 +1141,7 @@ function _updateConfig() {
 
     $c->sync('fs_theme', NULL, 'fieldset', 2, 1, NULL, 0, TRUE);
     $c->sync('theme','nouveau','select',2,1,NULL,10,TRUE);
-    $c->sync('menu_elements',array('home','contribute','search','stats','directory','plugins'),'%text',2,1,NULL,20,TRUE);
+//    $c->sync('menu_elements',array('home','contribute','search','stats','directory','plugins'),'%text',2,1,NULL,20,TRUE);
     $c->sync('path_themes','','text',2,1,NULL,30,TRUE);
 
     $c->sync('fs_theme_advanced', NULL, 'fieldset', 2, 2, NULL, 0, TRUE);
@@ -1494,7 +1508,7 @@ function _forum_fix_watch() {
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_132();
+glfusion_133();
 
 $stdPlugins=array('staticpages','spamx','links','polls','calendar','sitetailor','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
 foreach ($stdPlugins AS $pi_name) {
