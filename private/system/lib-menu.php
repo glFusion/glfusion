@@ -235,6 +235,13 @@ function displayMenu( $menuName, $skipCache=false ) {
                         'label' => $item['label'],
                         'url'   => $item['url']
                     ));
+        if (isset($item['target']) ) {
+            $T->set_var(array(
+                        'target' => ($item['target'] == '' ? '' : ' target="'.$item['target'].'" ')
+                    ));
+        } else {
+            $T->set_var('target','');
+        }
         if ( isset($item['children']) && $item['children'] != NULL && is_array($item['children']) ) {
             $childrenHTML = displayMenuChildren($menuType,$item['children'],$template_file);
             $T->set_var('haschildren',true);
@@ -281,6 +288,13 @@ function displayMenuChildren( $type, $elements, $template_file ) {
                         'label' => $child['label'],
                         'url'   => $child['url']
                     ));
+        if ( isset($child['target']) ) {
+            $C->set_var(array(
+                       'target' => ($child['target'] == '' ? '' : ' target="'.$child['target'].'" ')
+                       ));
+        } else {
+            $C->set_var('target','');
+        }
         if ( isset($child['children']) && $child['children'] != NULL && is_array($child['children']) ) {
             $childHTML = displayMenuChildren($type, $child['children'],$template_file);
             $C->set_var('haschildren',true);
@@ -304,7 +318,7 @@ function displayMenuChildren( $type, $elements, $template_file ) {
 function getUserMenu()
 {
     global $_SP_CONF,$_USER, $_TABLES, $LANG01, $LANG_MB01, $LANG_LOGO,
-           $LANG_AM, $LANG29, $_CONF, $_DB_dbms,$_GROUPS, $config;
+           $LANG_AM, $LANG29, $_CONF, $_DB_dbms,$_GROUPS;
 
     $item_array = array();
     if ( !COM_isAnonUser() ) {
@@ -349,8 +363,7 @@ function getUserMenu()
 function getAdminMenu()
 {
     global $_SP_CONF,$_USER, $_TABLES, $LANG01, $LANG_MB01, $LANG_LOGO,
-           $LANG_AM, $LANG29, $_CONF,
-           $_DB_dbms,$_GROUPS, $config;
+           $LANG_AM, $LANG29, $_CONF,$_DB_dbms,$_GROUPS, $config;
 
     $item_array = array();
 
@@ -580,9 +593,7 @@ function getAdminMenu()
 function getTopicMenu()
 {
     global $_SP_CONF,$_USER, $_TABLES, $LANG01, $LANG_MB01, $LANG_LOGO,
-           $LANG_AM, $LANG29, $_CONF,
-           $_DB_dbms,$_GROUPS, $config;
-
+           $LANG_AM, $LANG29, $_CONF, $_GROUPS;
 
     $item_array = array();
     $langsql = COM_getLangSQL( 'tid' );

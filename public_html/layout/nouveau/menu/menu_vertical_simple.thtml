@@ -4,7 +4,7 @@
 {!endif}
 <ul class="menu-vertical-simple">
 <!-- BEGIN Elements -->
-  <li>   <a href="{url}">{label}</a></li>
+  <li>   <a href="{url}" {target}>{label}</a></li>
 <!-- END Elements -->
 </ul>
 {!if wrapper}

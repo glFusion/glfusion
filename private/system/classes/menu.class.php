@@ -213,7 +213,6 @@ class menuElement {
         return;
     }
 
-//@FIXME - don't copy element - build an array of ids to parse
     function setChild($el) {
         $this->children[$el->id] = $el;
     }
@@ -386,12 +385,11 @@ class menuElement {
 
     function _parseElement(  )
     {
-        global $_SP_CONF,$_USER, $_TABLES, $LANG01, $LANG_MB01, $LANG_LOGO,
-               $LANG_AM, $LANG29, $_CONF,$_DB_dbms,$_GROUPS, $config;
+        global $_SP_CONF,$_USER, $_TABLES, $LANG01, $_CONF,$_GROUPS;
 
         $returnArray    = array();
         $childArray     = array();
-        $retval = NULL;
+        $item_array     = array();
 
         if ( $this->active != 1 && $this->id != 0 ) {
             return NULL;
@@ -428,7 +426,7 @@ class menuElement {
                         break;
                     case 1: // contribute
                         if ( $anon && ( $_CONF['loginrequired'] || $_CONF['submitloginrequired'] )) {
-                            return $retval;
+                            return NULL;
                         }
                         if ( empty( $topic )) {
                             $this->url = $_CONF['site_url'] . '/submit.php?type=story';
@@ -441,7 +439,7 @@ class menuElement {
                     case 2: // directory
                         if ( $anon && ( $_CONF['loginrequired'] ||
                                 $_CONF['directoryloginrequired'] )) {
-                            return $retval;
+                            return NULL;
                         }
                         $this->url = $_CONF['site_url'] . '/directory.php';
                         if ( !empty( $topic )) {
@@ -452,20 +450,20 @@ class menuElement {
                     case 3: // prefs
                         if ( $anon && ( $_CONF['loginrequired'] ||
                                 $_CONF['profileloginrequired'] )) {
-                            return $retval;
+                            return NULL;
                         }
                         $this->url = $_CONF['site_url'] . '/usersettings.php?mode=edit';
                         break;
                     case 4: // search
                         if ( $anon && ( $_CONF['loginrequired'] ||
                                 $_CONF['searchloginrequired'] )) {
-                            return $retval;
+                            return NULL;
                         }
                         $this->url = $_CONF['site_url'] . '/search.php';
                         break;
                     case 5: // stats
                         if ( !SEC_hasRights('stats.view') ) {
-                            return $retval;
+                            return NULL;
                         }
                         $this->url = $_CONF['site_url'] . '/stats.php';
                         break;
@@ -586,6 +584,7 @@ class menuElement {
         }
         $returnArray = array('label' => $this->label,
                              'url'   => $this->url,
+                             'target'=> $this->target,
                              'children' => (is_array($childArray) ? $childArray : NULL)  );
 
         return $returnArray;

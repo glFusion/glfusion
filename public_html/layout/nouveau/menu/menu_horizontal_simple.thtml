@@ -9,7 +9,7 @@
 {!else}
   <li>
 {!endif}
-   <a href="{url}">
+   <a href="{url}" {target}>
    {label}
    </a>
   </li>

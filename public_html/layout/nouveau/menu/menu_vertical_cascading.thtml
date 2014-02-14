@@ -8,7 +8,7 @@
   {!if haschildren}
      <a class="parent" href="#">
   {!else}
-   <a href="{url}">
+   <a href="{url}" {target}>
   {!endif}
    {label}
    </a>
