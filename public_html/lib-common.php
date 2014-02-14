@@ -1384,12 +1384,18 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         'lang_newuser'      => $LANG12[3],
     ));
 
-    $st_hmenu = displayMenu( 'navigation');
-    $theme->set_var('st_hmenu',$st_hmenu);
-    $st_footer_menu = displayMenu('footer');
-    $theme->set_var('st_footer_menu',$st_footer_menu);
-    $theme->set_var('st_header_menu',displayMenu('header'));
+    $menu_navigation = displayMenu('navigation');
+    $menu_footer     = displayMenu('footer');
+    $menu_header     = displayMenu('header');
 
+    $theme->set_var(array(
+                    'menu_navigation'   => $menu_navigation,
+                    'menu_footer'       => $menu_footer,
+                    'menu_header'       => $menu_header,
+                    'st_hmenu'          => $menu_navigation,    // depreciated
+                    'st_footer_menu'    => $menu_footer,        // depreciated
+                    'st_header_menu'    => $menu_header,        // depreciated
+                    ));
     $lblocks = '';
 
     /* Check if an array has been passed that includes the name of a plugin
