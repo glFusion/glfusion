@@ -575,7 +575,10 @@ class menuElement {
                 if ( $howmany > 0 ) {
                     $children = $this->getChildren();
                     foreach($children as $child) {
-                        $childArray[] = $child->_parseElement();
+                        $elementArray = $child->_parseElement();
+                        if ( $elementArray != NULL ) {
+                            $childArray[] = $elementArray;
+                        }
                     }
                 }
             } else {
