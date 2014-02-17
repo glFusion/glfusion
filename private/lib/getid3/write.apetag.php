@@ -19,17 +19,17 @@ getid3_lib::IncludeDependency(GETID3_INCLUDEPATH.'module.tag.apetag.php', __FILE
 class getid3_write_apetag
 {
 
-	var $filename;
-	var $tag_data;
-	var $always_preserve_replaygain = true;  // ReplayGain / MP3gain tags will be copied from old tag even if not passed in data
-	var $warnings = array();                 // any non-critical errors will be stored here
-	var $errors   = array();                 // any critical errors will be stored here
+	public $filename;
+	public $tag_data;
+	public $always_preserve_replaygain = true;    // ReplayGain / MP3gain tags will be copied from old tag even if not passed in data
+	public $warnings                   = array(); // any non-critical errors will be stored here
+	public $errors                     = array(); // any critical errors will be stored here
 
-	function getid3_write_apetag() {
+	public function getid3_write_apetag() {
 		return true;
 	}
 
-	function WriteAPEtag() {
+	public function WriteAPEtag() {
 		// NOTE: All data passed to this function must be UTF-8 format
 
 		$getID3 = new getID3;
@@ -56,9 +56,7 @@ class getid3_write_apetag
 		}
 
 		if ($APEtag = $this->GenerateAPEtag()) {
-			ob_start();
-			if ($fp = fopen($this->filename, 'a+b')) {
-				ob_end_clean();
+			if (is_writable($this->filename) && is_file($this->filename) && ($fp = fopen($this->filename, 'a+b'))) {
 				$oldignoreuserabort = ignore_user_abort(true);
 				flock($fp, LOCK_EX);
 
@@ -89,20 +87,15 @@ class getid3_write_apetag
 				ignore_user_abort($oldignoreuserabort);
 				return true;
 			}
-			$errormessage = ob_get_contents();
-			ob_end_clean();
-			return false;
 		}
 		return false;
 	}
 
-	function DeleteAPEtag() {
+	public function DeleteAPEtag() {
 		$getID3 = new getID3;
 		$ThisFileInfo = $getID3->analyze($this->filename);
 		if (isset($ThisFileInfo['ape']['tag_offset_start']) && isset($ThisFileInfo['ape']['tag_offset_end'])) {
-			ob_start();
-			if ($fp = fopen($this->filename, 'a+b')) {
-				ob_end_clean();
+			if (is_writable($this->filename) && is_file($this->filename) && ($fp = fopen($this->filename, 'a+b'))) {
 
 				flock($fp, LOCK_EX);
 				$oldignoreuserabort = ignore_user_abort(true);
@@ -126,15 +119,13 @@ class getid3_write_apetag
 
 				return true;
 			}
-			$errormessage = ob_get_contents();
-			ob_end_clean();
 			return false;
 		}
 		return true;
 	}
 
 
-	function GenerateAPEtag() {
+	public function GenerateAPEtag() {
 		// NOTE: All data passed to this function must be UTF-8 format
 
 		$items = array();
@@ -168,7 +159,7 @@ class getid3_write_apetag
 		return $this->GenerateAPEtagHeaderFooter($items, true).implode('', $items).$this->GenerateAPEtagHeaderFooter($items, false);
 	}
 
-	function GenerateAPEtagHeaderFooter(&$items, $isheader=false) {
+	public function GenerateAPEtagHeaderFooter(&$items, $isheader=false) {
 		$tagdatalength = 0;
 		foreach ($items as $itemdata) {
 			$tagdatalength += strlen($itemdata);
@@ -184,7 +175,7 @@ class getid3_write_apetag
 		return $APEheader;
 	}
 
-	function GenerateAPEtagFlags($header=true, $footer=true, $isheader=false, $encodingid=0, $readonly=false) {
+	public function GenerateAPEtagFlags($header=true, $footer=true, $isheader=false, $encodingid=0, $readonly=false) {
 		$APEtagFlags = array_fill(0, 4, 0);
 		if ($header) {
 			$APEtagFlags[0] |= 0x80; // Tag contains a header
@@ -197,8 +188,8 @@ class getid3_write_apetag
 		}
 
 		// 0: Item contains text information coded in UTF-8
-		// 1: Item contains binary information �)
-		// 2: Item is a locator of external stored information 같)
+		// 1: Item contains binary information 째)
+		// 2: Item is a locator of external stored information 째째)
 		// 3: reserved
 		$APEtagFlags[3] |= ($encodingid << 1);
 
@@ -209,7 +200,7 @@ class getid3_write_apetag
 		return chr($APEtagFlags[3]).chr($APEtagFlags[2]).chr($APEtagFlags[1]).chr($APEtagFlags[0]);
 	}
 
-	function CleanAPEtagItemKey($itemkey) {
+	public function CleanAPEtagItemKey($itemkey) {
 		$itemkey = preg_replace("#[^\x20-\x7E]#i", '', $itemkey);
 
 		// http://www.personal.uni-jena.de/~pfk/mpp/sv8/apekey.html
@@ -230,5 +221,3 @@ class getid3_write_apetag
 	}
 
 }
-
-?>

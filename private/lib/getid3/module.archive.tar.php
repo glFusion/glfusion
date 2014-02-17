@@ -14,26 +14,26 @@
 /////////////////////////////////////////////////////////////////
 //                                                             //
 // Module originally written by                                //
-//      Mike Mozolin <teddybearØmail*ru>                       //
+//      Mike Mozolin <teddybearÃ˜mail*ru>                       //
 //                                                             //
 /////////////////////////////////////////////////////////////////
 
 
-class getid3_tar {
+class getid3_tar extends getid3_handler
+{
 
-	function getid3_tar(&$fd, &$ThisFileInfo) {
-		$ThisFileInfo['fileformat'] = 'tar';
-		$ThisFileInfo['tar']['files'] = array();
+	public function Analyze() {
+		$info = &$this->getid3->info;
+
+		$info['fileformat'] = 'tar';
+		$info['tar']['files'] = array();
 
 		$unpack_header = 'a100fname/a8mode/a8uid/a8gid/a12size/a12mtime/a8chksum/a1typflag/a100lnkname/a6magic/a2ver/a32uname/a32gname/a8devmaj/a8devmin/a155prefix';
 		$null_512k = str_repeat("\x00", 512); // end-of-file marker
 
-		ob_start();
-		fseek($fd, 0);
-		$errormessage = ob_get_contents();
-		ob_end_clean();
-		while (!feof($fd)) {
-			$buffer = fread($fd, 512);
+		fseek($this->getid3->fp, 0);
+		while (!feof($this->getid3->fp)) {
+			$buffer = fread($this->getid3->fp, 512);
 			if (strlen($buffer) < 512) {
 				break;
 			}
@@ -82,27 +82,27 @@ class getid3_tar {
 			}
 
 			// Read to the next chunk
-			fseek($fd, $size, SEEK_CUR);
+			fseek($this->getid3->fp, $size, SEEK_CUR);
 
 			$diff = $size % 512;
 			if ($diff != 0) {
 				// Padding, throw away
-				fseek($fd, (512 - $diff), SEEK_CUR);
+				fseek($this->getid3->fp, (512 - $diff), SEEK_CUR);
 			}
 			// Protect against tar-files with garbage at the end
 			if ($name == '') {
 				break;
 			}
-			$ThisFileInfo['tar']['file_details'][$name] = array (
+			$info['tar']['file_details'][$name] = array (
 				'name'     => $name,
 				'mode_raw' => $mode,
-				'mode'     => getid3_tar::display_perms($mode),
+				'mode'     => self::display_perms($mode),
 				'uid'      => $uid,
 				'gid'      => $gid,
 				'size'     => $size,
 				'mtime'    => $mtime,
 				'chksum'   => $chksum,
-				'typeflag' => getid3_tar::get_flag_type($typflag),
+				'typeflag' => self::get_flag_type($typflag),
 				'linkname' => $lnkname,
 				'magic'    => $magic,
 				'version'  => $ver,
@@ -111,13 +111,13 @@ class getid3_tar {
 				'devmajor' => $devmaj,
 				'devminor' => $devmin
 			);
-			$ThisFileInfo['tar']['files'] = getid3_lib::array_merge_clobber($ThisFileInfo['tar']['files'], getid3_lib::CreateDeepArray($ThisFileInfo['tar']['file_details'][$name]['name'], '/', $size));
+			$info['tar']['files'] = getid3_lib::array_merge_clobber($info['tar']['files'], getid3_lib::CreateDeepArray($info['tar']['file_details'][$name]['name'], '/', $size));
 		}
 		return true;
 	}
 
 	// Parses the file mode to file permissions
-	function display_perms($mode) {
+	public function display_perms($mode) {
 		// Determine Type
 		if     ($mode & 0x1000) $type='p'; // FIFO pipe
 		elseif ($mode & 0x2000) $type='c'; // Character special
@@ -152,7 +152,7 @@ class getid3_tar {
 	}
 
 	// Converts the file type
-	function get_flag_type($typflag) {
+	public function get_flag_type($typflag) {
 		static $flag_types = array(
 			'0' => 'LF_NORMAL',
 			'1' => 'LF_LINK',
@@ -174,5 +174,3 @@ class getid3_tar {
 	}
 
 }
-
-?>

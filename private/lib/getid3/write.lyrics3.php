@@ -16,28 +16,26 @@
 
 class getid3_write_lyrics3
 {
-	var $filename;
-	var $tag_data;
-	//var $lyrics3_version = 2;       // 1 or 2
-	var $warnings        = array(); // any non-critical errors will be stored here
-	var $errors          = array(); // any critical errors will be stored here
+	public $filename;
+	public $tag_data;
+	//public $lyrics3_version = 2;       // 1 or 2
+	public $warnings        = array(); // any non-critical errors will be stored here
+	public $errors          = array(); // any critical errors will be stored here
 
-	function getid3_write_lyrics3() {
+	public function getid3_write_lyrics3() {
 		return true;
 	}
 
-	function WriteLyrics3() {
+	public function WriteLyrics3() {
 		$this->errors[] = 'WriteLyrics3() not yet functional - cannot write Lyrics3';
 		return false;
 	}
-	function DeleteLyrics3() {
+	public function DeleteLyrics3() {
 		// Initialize getID3 engine
 		$getID3 = new getID3;
 		$ThisFileInfo = $getID3->analyze($this->filename);
 		if (isset($ThisFileInfo['lyrics3']['tag_offset_start']) && isset($ThisFileInfo['lyrics3']['tag_offset_end'])) {
-			ob_start();
-			if ($fp = fopen($this->filename, 'a+b')) {
-				ob_end_clean();
+			if (is_readable($this->filename) && is_writable($this->filename) && is_file($this->filename) && ($fp = fopen($this->filename, 'a+b'))) {
 
 				flock($fp, LOCK_EX);
 				$oldignoreuserabort = ignore_user_abort(true);
@@ -62,12 +60,8 @@ class getid3_write_lyrics3
 				return true;
 
 			} else {
-
-				$errormessage = ob_get_contents();
-				ob_end_clean();
-				$this->errors[] = 'Cannot open "'.$this->filename.'" in "a+b" mode';
+				$this->errors[] = 'Cannot fopen('.$this->filename.', "a+b")';
 				return false;
-
 			}
 		}
 		// no Lyrics3 present
@@ -75,5 +69,3 @@ class getid3_write_lyrics3
 	}
 
 }
-
-?>

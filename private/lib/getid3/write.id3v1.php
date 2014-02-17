@@ -17,28 +17,25 @@ getid3_lib::IncludeDependency(GETID3_INCLUDEPATH.'module.tag.id3v1.php', __FILE_
 
 class getid3_write_id3v1
 {
-	var $filename;
-	var $filesize;
-	var $tag_data;
-	var $warnings = array(); // any non-critical errors will be stored here
-	var $errors   = array(); // any critical errors will be stored here
+	public $filename;
+	public $filesize;
+	public $tag_data;
+	public $warnings = array(); // any non-critical errors will be stored here
+	public $errors   = array(); // any critical errors will be stored here
 
-	function getid3_write_id3v1() {
+	public function getid3_write_id3v1() {
 		return true;
 	}
 
-	function WriteID3v1() {
+	public function WriteID3v1() {
 		// File MUST be writeable - CHMOD(646) at least
-		if (!empty($this->filename) && is_writeable($this->filename)) {
+		if (!empty($this->filename) && is_readable($this->filename) && is_writable($this->filename) && is_file($this->filename)) {
 			$this->setRealFileSize();
 			if (($this->filesize <= 0) || !getid3_lib::intValueSupported($this->filesize)) {
 				$this->errors[] = 'Unable to WriteID3v1('.$this->filename.') because filesize ('.$this->filesize.') is larger than '.round(PHP_INT_MAX / 1073741824).'GB';
 				return false;
 			}
-			ob_start();
 			if ($fp_source = fopen($this->filename, 'r+b')) {
-
-				ob_end_clean();
 				fseek($fp_source, -128, SEEK_END);
 				if (fread($fp_source, 3) == 'TAG') {
 					fseek($fp_source, -128, SEEK_END); // overwrite existing ID3v1 tag
@@ -60,9 +57,7 @@ class getid3_write_id3v1
 				return true;
 
 			} else {
-				$errormessage = ob_get_contents();
-				ob_end_clean();
-				$this->errors[] = 'Could not open '.$this->filename.' mode "r+b"';
+				$this->errors[] = 'Could not fopen('.$this->filename.', "r+b")';
 				return false;
 			}
 		}
@@ -70,7 +65,7 @@ class getid3_write_id3v1
 		return false;
 	}
 
-	function FixID3v1Padding() {
+	public function FixID3v1Padding() {
 		// ID3v1 data is supposed to be padded with NULL characters, but some taggers incorrectly use spaces
 		// This function rewrites the ID3v1 tag with correct padding
 
@@ -92,18 +87,16 @@ class getid3_write_id3v1
 		return false;
 	}
 
-	function RemoveID3v1() {
+	public function RemoveID3v1() {
 		// File MUST be writeable - CHMOD(646) at least
-		if (!empty($this->filename) && is_writeable($this->filename)) {
+		if (!empty($this->filename) && is_readable($this->filename) && is_writable($this->filename) && is_file($this->filename)) {
 			$this->setRealFileSize();
 			if (($this->filesize <= 0) || !getid3_lib::intValueSupported($this->filesize)) {
 				$this->errors[] = 'Unable to RemoveID3v1('.$this->filename.') because filesize ('.$this->filesize.') is larger than '.round(PHP_INT_MAX / 1073741824).'GB';
 				return false;
 			}
-			ob_start();
 			if ($fp_source = fopen($this->filename, 'r+b')) {
 
-				ob_end_clean();
 				fseek($fp_source, -128, SEEK_END);
 				if (fread($fp_source, 3) == 'TAG') {
 					ftruncate($fp_source, $this->filesize - 128);
@@ -114,9 +107,7 @@ class getid3_write_id3v1
 				return true;
 
 			} else {
-				$errormessage = ob_get_contents();
-				ob_end_clean();
-				$this->errors[] = 'Could not open '.$this->filename.' mode "r+b"';
+				$this->errors[] = 'Could not fopen('.$this->filename.', "r+b")';
 			}
 		} else {
 			$this->errors[] = $this->filename.' is not writeable';
@@ -124,7 +115,7 @@ class getid3_write_id3v1
 		return false;
 	}
 
-	function setRealFileSize() {
+	public function setRealFileSize() {
 		if (PHP_INT_MAX > 2147483647) {
 			$this->filesize = filesize($this->filename);
 			return true;
@@ -143,5 +134,3 @@ class getid3_write_id3v1
 	}
 
 }
-
-?>
