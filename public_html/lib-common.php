@@ -3205,7 +3205,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
 {
     global $_CONF, $_TABLES, $LANG21;
 
-    require_once $_CONF['path'].'/lib/simplepie/simplepie.php';
+    require_once $_CONF['path'].'/lib/simplepie/autoloader.php';
 
     $result = DB_query("SELECT rdf_last_modified, rdf_etag FROM {$_TABLES['blocks']} WHERE bid = ".(int)$bid);
     list($last_modified, $etag) = DB_fetchArray($result);
