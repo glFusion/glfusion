@@ -51,7 +51,7 @@ class menu {
     }
 
 
-    function &getInstance( $menu_id = 0 )
+    public static function getInstance( $menu_id = 0 )
     {
         static $instance = array();
 
