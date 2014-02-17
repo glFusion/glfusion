@@ -272,8 +272,7 @@ class menuElement {
     }
 
     function _editElement( $depth ) {
-        global $_CONF;
-        global $LANG_MB01, $LANG_MB_TYPES,$LANG_MB_GLTYPES,$LANG_MB_GLFUNCTION;
+        global $_CONF, $LANG_MB01, $LANG_MB_TYPES,$LANG_MB_GLTYPES,$LANG_MB_GLFUNCTION;
 
         $data_arr = array();
 
