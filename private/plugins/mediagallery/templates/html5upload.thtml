@@ -88,8 +88,9 @@
 }
 </style>
 
-<h2>File upload</h2>
-<p>Browse and upload multiple files in one go by holding down Ctrl (Windows, Linux) or Command (Mac) when clicking on them in the file dialog, or drag and drop files. Information about the uploaded files will be listed below.</p>
+<h2>{$LANG_MG01[html5upload_media]}</h2>
+{html5upload_usage}
+
 <div id="divAlbumSelect">
   <form method="post" name="form_album">
     <span style="font-weight:bold;">{lang_destination}:</span> {album_select}
@@ -101,13 +102,13 @@
 <div id="divSizeLimit">
   {html5upload_file_size_limit}<span id="html5_size_limit">{html5upload_size_limit}</span>
 </div>
-<h3>Choose file(s)</h3>
+<h3>{$LANG_MG01[html5upload_select_files]}</h3>
 <p>
 	<input id="files-upload" type="file" multiple>
 </p>
 <p id="drop-area">
-	<span class="drop-instructions">or drag and drop files here</span>
-	<span class="drop-over">Drop files here!</span>
+	<span class="drop-instructions">{$LANG_MG01['html5upload_drop_here']}</span>
+	<span class="drop-over">{$LANG_MG01[html5upload_drop_here]}</span>
 </p>
 <div id="divThumbnails">
   <form name="captions" method="post" action="{site_url}/admin.php">
@@ -170,8 +171,12 @@ var aid;
 			progressBar.innerHTML = "Uploaded!";
             var none = document.getElementById("no-items");
             none.style.display = 'none';
-            var srvResponse = xhr.responseText.split( "|" );
-            addImage("{site_url}/thumbnail.php?id=" + srvResponse[0].substring(7),srvResponse[0].substring(7), file.name,srvResponse[1] );
+            if (xhr.responseText.substring(0, 7) === "FILEID:") {
+                var srvResponse = xhr.responseText.split( "|" );
+                addImage("{site_url}/thumbnail.php?id=" + srvResponse[0].substring(7),srvResponse[0].substring(7), file.name,srvResponse[1] );
+            } else {
+                showError(xhr.responseText,file);
+    	    }
 		}, false);
 
         var query = "?aid=" + aid + "&uid=" + uid + "&sid=" + sid;
@@ -231,6 +236,16 @@ var aid;
 	}, false);
 })();
 
+
+function showError( message, file ) {
+    var newDiv   = document.createElement("div");
+    var inputDiv = document.createElement("div");
+
+    inputDiv.setAttribute('style','color:red');
+    inputDiv.innerHTML = '{$LANG_MG01[html5upload_error]} ' + file.name + '  ' + message + '<br/>';
+	newDiv.appendChild(inputDiv);
+	document.getElementById("file-list").appendChild(newDiv);
+}
 
 function addImage(src, id, filename, queue ) {
     var newImg   = document.createElement("img");

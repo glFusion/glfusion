@@ -128,7 +128,7 @@ function MG_HTML5Upload( $album_id ) {
         'lang_destination'          => $LANG_MG01['destination_album'],
         'user_id'                   => $user_id,
         'user_token'                => $user_token,
-        'html5upload_usage'         => $LANG_MG01['swfupload_usage'],
+        'html5upload_usage'         => $LANG_MG01['html5upload_usage'],
         'html5upload_allowed_types' => $LANG_MG01['swfupload_allowed_types'],
         'html5upload_file_types'      => $allowed_file_types,
         'html5upload_file_size_limit' => $LANG_MG01['swfupload_file_size_limit'],

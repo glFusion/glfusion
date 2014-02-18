@@ -727,6 +727,11 @@ $LANG_MG01 = array (
     'submissions'               => 'Media Gallery Submissions',
     'lightbox_image'            => 'Click for full image',
     'queued'                    => 'Queued for Moderator Approval',
+    'html5upload_error'         => 'Upload Error:',
+    'html5upload_media'         => 'HTML5 Upload',
+    'html5upload_usage'         => 'Select the destination Album and then browse and upload multiple files in one go by holding down Ctrl (Windows, Linux) or Command (Mac) when clicking on them in the file dialog, or drag and drop files. Information about the uploaded files will be listed below.',
+    'html5upload_select_files'  => 'Choose file(s)',
+    'html5upload_drop_here'     => 'Drop Files Here!',
 );
 
 // error messages
