@@ -502,7 +502,7 @@ if (($mode == 'edit') ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $retval .= MG_navbar($LANG_MG01['swfupload_media'],$album_id);
-        $retval .= MG_SWFUpload( $album_id );
+        $retval .= MG_HTML5Upload( $album_id );
     } else {
         $retval .= MG_invalidRequest();
     }

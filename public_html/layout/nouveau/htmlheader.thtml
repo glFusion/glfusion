@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Script-Type" content="text/javascript"/>
 <meta http-equiv="Content-Style-Type" content="text/css"/>
 <meta http-equiv="Content-Type" content="text/html; charset={charset}" />
-<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+{# <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" /> #}
 {# <meta http-equiv="Pragma" content="no-cache" /> #}
 <link rel="SHORTCUT ICON" href="{layout_url}/images/favicon.ico" />
 {# Load Stylesheets #}

@@ -1,0 +1,343 @@
+{# begin {templatelocation} #}
+	<style>
+		#drop-area {
+			height: 50px;
+			text-align: center;
+			border: 2px dashed #ddd;
+			padding: 10px;
+			margin-bottom: 2em;
+		}
+
+		#drop-area .drop-instructions {
+			display: block;
+			height: 30px;
+		}
+
+		#drop-area .drop-over {
+			display: none;
+			font-size: 25px;
+			height: 30px;
+		}
+
+		#drop-area.over {
+			background: #ffffa2;
+			border: 2px dashed #000;
+		}
+
+		#drop-area.over .drop-instructions {
+			display: none;
+		}
+
+		#drop-area.over .drop-over {
+			display: block;
+		}
+
+		#drop-area.over .drop-over {
+			display: block;
+			font-size: 25px;
+		}
+
+
+		#file-list {
+			list-style: none;
+			margin-bottom: 3em;
+		}
+
+		#file-list li {
+			border-bottom: 1px solid #000;
+			margin-bottom: 0.5em;
+			padding-bottom: 0.5em;
+		}
+
+		#file-list li.no-items {
+			border-bottom: none;
+		}
+
+		#file-list div {
+			margin-bottom: 0.5em;
+		}
+
+		#file-list li img {
+			max-width: 400px;
+		}
+
+		#file-list .progress-bar-container {
+			width: 400px;
+			height: 10px;
+			border: 1px solid #555;
+			margin-bottom: 20px;
+		}
+
+		#file-list .progress-bar-container.uploaded {
+			height: auto;
+			border: none;
+		}
+
+		#file-list .progress-bar {
+			width: 0;
+			height: 10px;
+			font-weight: bold;
+			background: #6787e3;
+		}
+
+		#file-list .progress-bar-container.uploaded .progress-bar{
+			display: inline-block;
+			width: auto;
+			color: #6db508;
+			background: transparent;
+		}
+	</style>
+
+
+
+
+
+				<h2>File upload</h2>
+				<p>Browse and upload multiple files in one go by holding down Ctrl (Windows, Linux) or Command (Mac) when clicking on them in the file dialog, or drag and drop files. Information about the uploaded files will be listed below. NOTE: Safari seems to fail to read out any information about the actual files.</p>
+
+<div id="divAlbumSelect">
+  <form method="post" name="form_album">
+    <span style="font-weight:bold;">{lang_destination}:</span> {album_select}
+  </form>
+</div>
+<div id="divAllowedTypes">
+  {html5upload_allowed_types}<span id="html5_file_types">{html5upload_file_types}</span>
+</div>
+<div id="divSizeLimit">
+  {html5upload_file_size_limit}<span id="html5_size_limit">{html5upload_size_limit}</span>
+</div>
+
+
+				<h3>Choose file(s)</h3>
+				<p>
+					<input id="files-upload" type="file" multiple>
+				</p>
+				<p id="drop-area">
+					<span class="drop-instructions">or drag and drop files here</span>
+					<span class="drop-over">Drop files here!</span>
+				</p>
+
+    <div id="divThumbnails">
+      <form name="captions" method="post" action="{site_url}/admin.php">
+
+				<div id="file-list">
+				    <span id="no-items" class="no-items">(no files uploaded yet)</span>
+				</div>
+
+        <div style="clear:both;"></div>
+        <input type="hidden" name="album_id" id="album_id" value="0" />
+        <input type="hidden" name="action" value="batchcaptionsave" />
+        <input type="submit" name="mode"   value="{$LANG_MG01[save_exit]}" />
+
+      </form>
+    </div>
+
+<script>
+var uid;
+var sid;
+var aid;
+(function () {
+	var filesUpload = document.getElementById("files-upload"),
+		dropArea = document.getElementById("drop-area"),
+		fileList = document.getElementById("file-list");
+
+	function uploadFile (file) {
+		var li = document.createElement("div"),
+			div = document.createElement("div"),
+			img,
+			progressBarContainer = document.createElement("div"),
+			progressBar = document.createElement("div"),
+			reader,
+			xhr,
+			fileInfo;
+
+		li.appendChild(div);
+
+		progressBarContainer.className = "progress-bar-container";
+		progressBar.className = "progress-bar";
+		progressBarContainer.appendChild(progressBar);
+		li.appendChild(progressBarContainer);
+
+		/*
+			If the file is an image and the web browser supports FileReader,
+			present a preview in the file list
+		*/
+
+		// Uploading - for Firefox, Google Chrome and Safari
+		xhr = new XMLHttpRequest();
+
+		// Update progress bar
+		xhr.upload.addEventListener("progress", function (evt) {
+			if (evt.lengthComputable) {
+				progressBar.style.width = (evt.loaded / evt.total) * 100 + "%";
+			}
+			else {
+				// No data to calculate on
+			}
+		}, false);
+
+		// File uploaded
+		xhr.addEventListener("load", function () {
+			progressBarContainer.className += " uploaded";
+			progressBar.innerHTML = "Uploaded!";
+            var none = document.getElementById("no-items");
+            none.style.display = 'none';
+            var srvResponse = xhr.responseText.split( "|" );
+            addImage("{site_url}/thumbnail.php?id=" + srvResponse[0].substring(7),srvResponse[0].substring(7), file.name,srvResponse[1] );
+		}, false);
+
+        var query = "?aid=" + aid + "&uid=" + uid + "&sid=" + sid;
+		xhr.open("post", "{site_url}/html5upload.php" + query, true);
+
+		// Set appropriate headers
+		xhr.setRequestHeader("Content-Type", "multipart/form-data");
+		xhr.setRequestHeader("X-File-Name", file.name);
+		xhr.setRequestHeader("X-File-Size", file.size);
+		xhr.setRequestHeader("X-File-Type", file.type);
+
+		// Send the file (doh)
+		xhr.send(file);
+	}
+
+	function traverseFiles (files) {
+		if (typeof files !== "undefined") {
+			for (var i=0, l=files.length; i<l; i++) {
+				uploadFile(files[i]);
+			}
+		}
+		else {
+			fileList.innerHTML = "No support for the File API in this web browser";
+		}
+	}
+
+	filesUpload.addEventListener("change", function () {
+		traverseFiles(this.files);
+	}, false);
+
+	dropArea.addEventListener("dragleave", function (evt) {
+		var target = evt.target;
+
+		if (target && target === dropArea) {
+			this.className = "";
+		}
+		evt.preventDefault();
+		evt.stopPropagation();
+	}, false);
+
+	dropArea.addEventListener("dragenter", function (evt) {
+		this.className = "over";
+		evt.preventDefault();
+		evt.stopPropagation();
+	}, false);
+
+	dropArea.addEventListener("dragover", function (evt) {
+		evt.preventDefault();
+		evt.stopPropagation();
+	}, false);
+
+	dropArea.addEventListener("drop", function (evt) {
+		traverseFiles(evt.dataTransfer.files);
+		this.className = "";
+		evt.preventDefault();
+		evt.stopPropagation();
+	}, false);
+})();
+
+
+function addImage(src, id, filename, queue ) {
+    var newImg   = document.createElement("img");
+    var imgDiv   = document.createElement("div");
+    var newDiv   = document.createElement("div");
+    var inputDiv = document.createElement("div");
+    var clrDiv   = document.createElement("div");
+
+
+    newImg.style.margin = "auto";
+    newImg.style.display = "block";
+
+
+    imgDiv.setAttribute('style','float:left;width:210px;height:220px;text-align:center;margin-right:5px;');
+    inputDiv.setAttribute('style','float:left');
+
+    if ( queue > 0 ) {
+        imgDiv.innerHTML = '<span style="font-weight:bold;vertical-align:top;">{$LANG_MG01[queued]}</span>';
+    } else {
+        imgDiv.innerHTML = '<span style="font-weight:bold;vertical-align:top;">' + filename + '</span>';
+    }
+
+    inputDiv.innerHTML = '<span style="font-weight:bold;vertical-align:top;">{$LANG_MG01[title]}</span><br /><textarea rows="2" cols="60" name="media_title[]" style="width:80%;"></textarea><br /><span style="font-weight:bold;vertical-align:top;">{$LANG_MG01[description]}</span><br /><textarea rows="2" cols="60" name="media_desc[]" style="width:80%;"></textarea><input type="hidden" name="media_id[]" value="' + id + '" />';
+
+    clrDiv.setAttribute('style','clear:both;border-bottom:1px solid;border-bottom-color:#D9E4FF;margin-bottom:5px;');
+
+	newDiv.appendChild(imgDiv);
+	newDiv.appendChild(inputDiv);
+	imgDiv.appendChild(newImg);
+
+	document.getElementById("file-list").appendChild(newDiv);
+	document.getElementById("file-list").appendChild(clrDiv);
+/*
+	if (newImg.filters) {
+		try {
+			newImg.filters.item("DXImageTransform.Microsoft.Alpha").opacity = 0;
+		} catch (e) {
+			// If it is not set initially, the browser will throw an error.  This will set it if it is not set yet.
+			newImg.style.filter = 'progid:DXImageTransform.Microsoft.Alpha(opacity=' + 0 + ')';
+		}
+	} else {
+		newImg.style.opacity = 0;
+	}
+*/
+//	newImg.onload = function () {
+//		fadeIn(newImg, 0);
+//	};
+
+	newImg.src = src;
+}
+
+var xhr;
+
+function onAlbumChange() {
+  var aid_index = document.form_album.album_id.selectedIndex;
+  aid = document.form_album.album_id.value;
+  uid = "{user_id}";
+  sid = "{user_token}";
+  var file_types = "{html5upload_file_types}";
+  var file_types_desc = "{html5upload_types_desc}";
+  var file_types_span = document.getElementById("html5_file_types");
+  var size_limit_span = document.getElementById("html5_size_limit");
+
+  var size_limit = "{html5upload_size_limit}";
+  var post_params = { "uid" : uid, "sid" : sid, "aid": aid };
+  var url = "{site_url}/album_rpc.php";
+  var query = "?aid=" + aid;
+
+  if ( aid_index == undefined ) {
+    aid_index = 1;
+  }
+
+  if (aid_index >= 0) {
+
+        xmlhttp = new XMLHttpRequest();
+
+        xmlhttp.open('GET', url + query, true);
+        xmlhttp.onreadystatechange = function() {
+           if (xmlhttp.readyState == 4) {
+                var response = xmlhttp.responseText.split( "%" );
+                size_limit_display = (response[0] / 1024 ) / 1024 + " M";
+                size_limit = response[0];
+                file_types = response[1];
+                file_types_span.innerHTML = file_types;
+                size_limit_span.innerHTML = size_limit_display;
+                document.captions.album_id.value = aid;
+              }
+       };
+        xmlhttp.send(null);
+    }
+  return;
+}
+onAlbumChange();
+
+
+</script>
+
+{# end {templatelocation} #}
