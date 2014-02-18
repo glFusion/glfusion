@@ -1,100 +1,95 @@
 {# begin {templatelocation} #}
-	<style>
-		#drop-area {
-			height: 50px;
-			text-align: center;
-			border: 2px dashed #ddd;
-			padding: 10px;
-			margin-bottom: 2em;
-		}
+<style>
+#drop-area {
+	height: 50px;
+	text-align: center;
+	border: 2px dashed #ddd;
+	padding: 10px;
+	margin-bottom: 2em;
+}
 
-		#drop-area .drop-instructions {
-			display: block;
-			height: 30px;
-		}
+#drop-area .drop-instructions {
+	display: block;
+	height: 30px;
+}
 
-		#drop-area .drop-over {
-			display: none;
-			font-size: 25px;
-			height: 30px;
-		}
+#drop-area .drop-over {
+	display: none;
+	font-size: 25px;
+	height: 30px;
+}
 
-		#drop-area.over {
-			background: #ffffa2;
-			border: 2px dashed #000;
-		}
+#drop-area.over {
+	background: #ffffa2;
+	border: 2px dashed #000;
+}
 
-		#drop-area.over .drop-instructions {
-			display: none;
-		}
+#drop-area.over .drop-instructions {
+	display: none;
+}
 
-		#drop-area.over .drop-over {
-			display: block;
-		}
+#drop-area.over .drop-over {
+	display: block;
+}
 
-		#drop-area.over .drop-over {
-			display: block;
-			font-size: 25px;
-		}
-
-
-		#file-list {
-			list-style: none;
-			margin-bottom: 3em;
-		}
-
-		#file-list li {
-			border-bottom: 1px solid #000;
-			margin-bottom: 0.5em;
-			padding-bottom: 0.5em;
-		}
-
-		#file-list li.no-items {
-			border-bottom: none;
-		}
-
-		#file-list div {
-			margin-bottom: 0.5em;
-		}
-
-		#file-list li img {
-			max-width: 400px;
-		}
-
-		#file-list .progress-bar-container {
-			width: 400px;
-			height: 10px;
-			border: 1px solid #555;
-			margin-bottom: 20px;
-		}
-
-		#file-list .progress-bar-container.uploaded {
-			height: auto;
-			border: none;
-		}
-
-		#file-list .progress-bar {
-			width: 0;
-			height: 10px;
-			font-weight: bold;
-			background: #6787e3;
-		}
-
-		#file-list .progress-bar-container.uploaded .progress-bar{
-			display: inline-block;
-			width: auto;
-			color: #6db508;
-			background: transparent;
-		}
-	</style>
+#drop-area.over .drop-over {
+	display: block;
+	font-size: 25px;
+}
 
 
+#file-list {
+	list-style: none;
+	margin-bottom: 3em;
+}
 
+#file-list li {
+	border-bottom: 1px solid #000;
+	margin-bottom: 0.5em;
+	padding-bottom: 0.5em;
+}
 
+#file-list li.no-items {
+	border-bottom: none;
+}
 
-				<h2>File upload</h2>
-				<p>Browse and upload multiple files in one go by holding down Ctrl (Windows, Linux) or Command (Mac) when clicking on them in the file dialog, or drag and drop files. Information about the uploaded files will be listed below. NOTE: Safari seems to fail to read out any information about the actual files.</p>
+#file-list div {
+	margin-bottom: 0.5em;
+}
 
+#file-list li img {
+	max-width: 400px;
+}
+
+#file-list .progress-bar-container {
+	width: 400px;
+	height: 10px;
+	border: 1px solid #555;
+	margin-bottom: 20px;
+}
+
+#file-list .progress-bar-container.uploaded {
+	height: auto;
+	border: none;
+}
+
+#file-list .progress-bar {
+	width: 0;
+	height: 10px;
+	font-weight: bold;
+	background: #6787e3;
+}
+
+#file-list .progress-bar-container.uploaded .progress-bar{
+	display: inline-block;
+	width: auto;
+	color: #6db508;
+	background: transparent;
+}
+</style>
+
+<h2>File upload</h2>
+<p>Browse and upload multiple files in one go by holding down Ctrl (Windows, Linux) or Command (Mac) when clicking on them in the file dialog, or drag and drop files. Information about the uploaded files will be listed below.</p>
 <div id="divAlbumSelect">
   <form method="post" name="form_album">
     <span style="font-weight:bold;">{lang_destination}:</span> {album_select}
@@ -106,32 +101,25 @@
 <div id="divSizeLimit">
   {html5upload_file_size_limit}<span id="html5_size_limit">{html5upload_size_limit}</span>
 </div>
-
-
-				<h3>Choose file(s)</h3>
-				<p>
-					<input id="files-upload" type="file" multiple>
-				</p>
-				<p id="drop-area">
-					<span class="drop-instructions">or drag and drop files here</span>
-					<span class="drop-over">Drop files here!</span>
-				</p>
-
-    <div id="divThumbnails">
-      <form name="captions" method="post" action="{site_url}/admin.php">
-
-				<div id="file-list">
-				    <span id="no-items" class="no-items">(no files uploaded yet)</span>
-				</div>
-
-        <div style="clear:both;"></div>
-        <input type="hidden" name="album_id" id="album_id" value="0" />
-        <input type="hidden" name="action" value="batchcaptionsave" />
-        <input type="submit" name="mode"   value="{$LANG_MG01[save_exit]}" />
-
-      </form>
-    </div>
-
+<h3>Choose file(s)</h3>
+<p>
+	<input id="files-upload" type="file" multiple>
+</p>
+<p id="drop-area">
+	<span class="drop-instructions">or drag and drop files here</span>
+	<span class="drop-over">Drop files here!</span>
+</p>
+<div id="divThumbnails">
+  <form name="captions" method="post" action="{site_url}/admin.php">
+    <div id="file-list">
+	  <span id="no-items" class="no-items">(no files uploaded yet)</span>
+	</div>
+    <div style="clear:both;"></div>
+    <input type="hidden" name="album_id" id="album_id" value="0" />
+    <input type="hidden" name="action" value="batchcaptionsave" />
+    <input type="submit" name="mode"   value="{$LANG_MG01[save_exit]}" />
+  </form>
+</div>
 <script>
 var uid;
 var sid;
@@ -251,10 +239,8 @@ function addImage(src, id, filename, queue ) {
     var inputDiv = document.createElement("div");
     var clrDiv   = document.createElement("div");
 
-
     newImg.style.margin = "auto";
     newImg.style.display = "block";
-
 
     imgDiv.setAttribute('style','float:left;width:210px;height:220px;text-align:center;margin-right:5px;');
     inputDiv.setAttribute('style','float:left');
@@ -275,21 +261,6 @@ function addImage(src, id, filename, queue ) {
 
 	document.getElementById("file-list").appendChild(newDiv);
 	document.getElementById("file-list").appendChild(clrDiv);
-/*
-	if (newImg.filters) {
-		try {
-			newImg.filters.item("DXImageTransform.Microsoft.Alpha").opacity = 0;
-		} catch (e) {
-			// If it is not set initially, the browser will throw an error.  This will set it if it is not set yet.
-			newImg.style.filter = 'progid:DXImageTransform.Microsoft.Alpha(opacity=' + 0 + ')';
-		}
-	} else {
-		newImg.style.opacity = 0;
-	}
-*/
-//	newImg.onload = function () {
-//		fadeIn(newImg, 0);
-//	};
 
 	newImg.src = src;
 }
@@ -336,7 +307,12 @@ function onAlbumChange() {
   return;
 }
 onAlbumChange();
-
+// Checking all the possible window objects needed for file api
+if (window.File && window.FileReader && window.FileList && window.Blob) {
+  // Browser is fully supportive.
+} else {
+  alert('Browser does not support File API');
+}
 
 </script>
 
