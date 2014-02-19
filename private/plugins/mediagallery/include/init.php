@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Startup and general purpose routines                                     |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2013 by the following authors:                        |
+// | Copyright (C) 2002-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -213,9 +211,9 @@ function MG_genericError( $errorMessage ) {
 }
 
 function MG_replace_accents($str) {
-    $str = htmlentities($str, ENT_QUOTES, COM_getEncodingt());
-    $str = preg_replace('/&([a-zA-Z])(uml|acute|grave|circ|tilde);/','$1',$str);
-    return html_entity_decode($str);
+//    $str = htmlentities($str, ENT_QUOTES, COM_getEncodingt());
+    $str = preg_replace("/[^a-z0-9-]/", "-", strtolower($str));
+    return $str;
 }
 
 function MG_getImageFile($image) {
