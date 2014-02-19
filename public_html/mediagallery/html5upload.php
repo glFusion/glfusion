@@ -2,13 +2,11 @@
 // +--------------------------------------------------------------------------+
 // | Media Gallery Plugin - glFusion CMS                                      |
 // +--------------------------------------------------------------------------+
-// | swfupload.php                                                            |
+// | html5upload.php                                                          |
 // |                                                                          |
-// | Processes media files uploaded via SWFUpload                             |
+// | Processes media files uploaded via HTML 5                                |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2011 by the following authors:                        |
+// | Copyright (C) 2009-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -32,24 +30,24 @@
 
 global $_CONF, $_USER, $_PLUGINS, $_MG_CONF;
 
-require_once '../../lib-common.php';
+require_once '../lib-common.php';
 
 // main
 
 if (!in_array('mediagallery', $_PLUGINS)) {
-    COM_errorLog( 'SWFUpload: MediaGallery not found in $_PLUGINS', 1 );
+    COM_errorLog( 'HTML5Upload: MediaGallery not found in $_PLUGINS', 1 );
     COM_404();
     exit;
 }
 
 require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
 
-$uid = (isset($_POST['uid'])) ? COM_applyFilter( $_POST['uid'], true ) : '';
-$sid = (isset($_POST['sid'])) ? COM_applyFilter( $_POST['sid'], false ) : '';
-$aid = (isset($_POST['aid'])) ? COM_applyFilter( $_POST['aid'], true ) : '';
+$uid = (isset($_GET['uid'])) ? COM_applyFilter( $_GET['uid'], true ) : '';
+$sid = (isset($_GET['sid'])) ? COM_applyFilter( $_GET['sid'], false ) : '';
+$aid = (isset($_GET['aid'])) ? COM_applyFilter( $_GET['aid'], true ) : '';
 
 if( $_MG_CONF['verbose'] ) {
-    COM_errorLog( '***Inside SWFUpload main()***', 1 );
+    COM_errorLog( '***Inside HTML5Upload main()***', 1 );
     COM_errorLog( 'received uid=' . $uid, 1 );
     COM_errorLog( 'received sid=' . $sid, 1 );
     COM_errorLog( 'received aid=' . $aid, 1 );
@@ -58,19 +56,19 @@ if( $_MG_CONF['verbose'] ) {
 // let's try to set the $_USER array
 $_USER = SESS_getUserDataFromId( $uid );
 if( isset($_USER['error']) && $_USER['error'] == '1' ) {
-    COM_errorLog( 'SWFUpload: User identified by uid=' . $uid . ' not found.', 1 );
+    COM_errorLog( 'HTML5Upload: User identified by uid=' . $uid . ' not found.', 1 );
     echo $LANG_MG01['swfupload_err_session'];
     exit (0);
 } elseif(!isset($_USER['uid']) || $_USER['uid'] < 2 ) {
-    COM_errorLog( 'SWFUpload: Anonymous upload rejection.', 1 );
+    COM_errorLog( 'HTML5Upload: Anonymous upload rejection.', 1 );
     echo 'Anonymous upload rejected';
     exit(0);
 }
 
 // ok, we have a valid uid, but now check the token.  if it is invalid, then
 // return the user to the swfupload page.
-if( !(SEC_checkTokenGeneral( $sid, 'swfupload' )) ) {
-    COM_errorLog( 'SWFUpload: Invalid token=' . $sid . ' for uid=' . $uid, 1 );
+if( !(SEC_checkTokenGeneral( $sid, 'html5upload' )) ) {
+    COM_errorLog( 'HTML5Upload: Invalid token=' . $sid . ' for uid=' . $uid, 1 );
     echo "Session has expired, please reload the page";
     exit(0);
 }
@@ -80,7 +78,7 @@ if( !(SEC_checkTokenGeneral( $sid, 'swfupload' )) ) {
 if ( $_MG_CONF['verbose'] ) {
     COM_errorLog( 'The upload is authentic', 1 );
     COM_errorLog( 'Retrieved ' . count($_USER) . ' user data values', 1 );
-    COM_errorLog( '***Leaving SWFUpload main()***', 1 );
+    COM_errorLog( '***Leaving HTML5Upload main()***', 1 );
 }
 
 $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
@@ -97,7 +95,8 @@ if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
     exit;
 }
 
-$rc = MG_saveSWFUpload( $aid );
+$rc = MG_saveHTML5Upload( $aid );
+COM_errorLog($rc);
 echo $rc;
 exit(0);
 ?>

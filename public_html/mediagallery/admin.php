@@ -79,7 +79,7 @@ function MG_navbar($selected='',$album_id) {
     $retval = $T->finish($T->get_var('output'));
 
     $navbar = new navbar;
-    $navbar->add_menuitem($LANG_MG01['swfupload_media'],$_MG_CONF['site_url'] .'/admin.php?mode=upload&amp;album_id=' . $album_id);
+    $navbar->add_menuitem($LANG_MG01['html5upload_media'],$_MG_CONF['site_url'] .'/admin.php?mode=upload&amp;album_id=' . $album_id);
     $navbar->add_menuitem($LANG_MG01['browser_upload'],$_MG_CONF['site_url'] .'/admin.php?mode=browser&amp;album_id='  . $album_id);
     $navbar->add_menuitem($LANG_MG01['gallery_remote'],$_MG_CONF['site_url'] .'/admin.php?mode=gremote&amp;album_id=' . $album_id);
     $navbar->add_menuitem($LANG_MG01['xp_pub'],$_MG_CONF['site_url'] .'/admin.php?mode=xppub&amp;album_id='   . $album_id);
@@ -501,8 +501,8 @@ if (($mode == 'edit') ) {
     } else if ( isset($_GET['album_id']) ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
-        $retval .= MG_navbar($LANG_MG01['swfupload_media'],$album_id);
-        $retval .= MG_SWFUpload( $album_id );
+        $retval .= MG_navbar($LANG_MG01['html5upload_media'],$album_id);
+        $retval .= MG_HTML5Upload( $album_id );
     } else {
         $retval .= MG_invalidRequest();
     }
