@@ -501,7 +501,7 @@ if (($mode == 'edit') ) {
     } else if ( isset($_GET['album_id']) ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
-        $retval .= MG_navbar($LANG_MG01['swfupload_media'],$album_id);
+        $retval .= MG_navbar($LANG_MG01['html5upload_media'],$album_id);
         $retval .= MG_HTML5Upload( $album_id );
     } else {
         $retval .= MG_invalidRequest();

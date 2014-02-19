@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Upload library                                                           |
 // +--------------------------------------------------------------------------+
-// | $Id:: lib-upload.php 2963 2008-08-23 17:38:32Z mevans0263               $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2013 by the following authors:                        |
+// | Copyright (C) 2002-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -462,7 +460,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
     }
 
     if ( $MG_albums[$albums]->access != 3 && !$MG_albums[0]->owner_id && $MG_albums[$albums]->member_uploads == 0) {
-        COM_errorLog("Someone has tried to illegally upload to an album in Media Gallery.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: " . $_SERVER['REMOTE_ADDR'],1);
+        COM_errorLog("Someone has tried to upload to an album in Media Gallery without the proper permissions.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: " . $_SERVER['REMOTE_ADDR'],1);
         return array(false,$LANG_MG00['access_denied_msg']);
     }
 
@@ -738,13 +736,11 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
 	    if ( $_MG_CONF['preserve_filename'] == 1 ) {
 	        $loopCounter = 0;
 	        $digitCounter = 1;
-
 	        $file_name = $file;
 	        $file_name = MG_replace_accents($file_name);
 	        $file_name = preg_replace("#[ ]#","_",$file_name);  // change spaces to underscore
 	        $file_name = preg_replace('#[^\.\-,\w]#','_',$file_name);  //only parenthesis, underscore, letters, numbers, comma, hyphen, period - others to underscore
 	        $file_name = preg_replace('#(_)+#','_',$file_name);  //eliminate duplicate underscore
-
 	        $pos = strrpos($file_name, '.');
 	        if($pos === false) {
 	            $basefilename = $file_name;
@@ -1069,7 +1065,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
           $queue = 0;
         }
 
-        $original_filename = DB_escapeString($file);
+        $original_filename = DB_escapeString(MG_replace_accents($file));
 
         if ( $MG_albums[$albums]->filename_title ) {
             if ( $media_caption == '' ) {

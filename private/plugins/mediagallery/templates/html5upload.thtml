@@ -90,17 +90,16 @@
 
 <h2>{$LANG_MG01[html5upload_media]}</h2>
 {html5upload_usage}
-
 <div id="divAlbumSelect">
   <form method="post" name="form_album">
     <span style="font-weight:bold;">{lang_destination}:</span> {album_select}
   </form>
 </div>
 <div id="divAllowedTypes">
-  {html5upload_allowed_types}<span id="html5_file_types">{html5upload_file_types}</span>
+  <b>{html5upload_allowed_types}</b>&nbsp;<span id="html5_file_types">{html5upload_file_types}</span>
 </div>
 <div id="divSizeLimit">
-  {html5upload_file_size_limit}<span id="html5_size_limit">{html5upload_size_limit}</span>
+  <b>{html5upload_file_size_limit}</b>&nbsp;<span id="html5_size_limit">{html5upload_size_limit}</span>
 </div>
 <h3>{$LANG_MG01[html5upload_select_files]}</h3>
 <p>
@@ -240,7 +239,6 @@ var aid;
 function showError( message, file ) {
     var newDiv   = document.createElement("div");
     var inputDiv = document.createElement("div");
-
     inputDiv.setAttribute('style','color:red');
     inputDiv.innerHTML = '{$LANG_MG01[html5upload_error]} ' + file.name + '  ' + message + '<br/>';
 	newDiv.appendChild(inputDiv);
@@ -302,9 +300,7 @@ function onAlbumChange() {
   }
 
   if (aid_index >= 0) {
-
         xmlhttp = new XMLHttpRequest();
-
         xmlhttp.open('GET', url + query, true);
         xmlhttp.onreadystatechange = function() {
            if (xmlhttp.readyState == 4) {
@@ -328,7 +324,5 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
 } else {
   alert('Browser does not support File API');
 }
-
 </script>
-
 {# end {templatelocation} #}
