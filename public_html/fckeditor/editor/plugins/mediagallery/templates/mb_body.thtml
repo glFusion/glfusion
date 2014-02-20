@@ -1,0 +1,14 @@
+<div align="center">
+  <div id="pix">
+    <br style="clear:both">
+
+<!-- BEGIN ImageRow -->
+<!-- BEGIN ImageColumn -->
+    <div>
+      {CELL_DISPLAY_IMAGE}
+    </div>
+<!-- END ImageColumn -->
+<!-- END ImageRow -->
+
+  </div>
+</div>

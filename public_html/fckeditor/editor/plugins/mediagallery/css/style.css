@@ -1,0 +1,78 @@
+body {
+  background: #F7F7F7;
+  color:#000000;
+  font:.8em arial,sans-serif,verdana,tahoma,helvetica;
+  margin:10px;
+  text-align:left;
+}
+
+td {
+  font-size: 1em;
+}
+
+input {
+  background: #FFFFFF;
+  border: 1px solid #cccccc;
+}
+
+td, input, select, textarea {
+  font-size: .9em;
+}
+
+input, select, textarea {
+  font-size: .9em;
+  border: 1px solid #808080;
+}
+
+input.radio {
+  border: 1px none #000000;
+  background-color: transparent;
+  vertical-align: middle;
+}
+
+fieldset {
+  border: 1px solid #919B9C;
+  font-size: 1em;
+  padding: 0px;
+  margin: 0px;
+  padding: 4px;
+  clear: left;
+}
+
+legend {
+  color: #2B6FB6;
+  font-weight: bold;
+}
+
+img {
+  margin: 2px;
+  float: left;
+}
+
+form {
+  margin: 0px;
+}
+
+p {
+  margin: 4px;
+}
+
+#pix {
+  color: black;
+}
+
+#pix div {
+  margin: 1px;
+  width: 100px;
+  color: black;
+  text-align: center;
+  height: 120px;
+  float: left;
+}
+
+#pix a img {
+  border-style: none;
+}
+#pix a {
+  text-decoration: none;
+}
