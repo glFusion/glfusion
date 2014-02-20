@@ -4,10 +4,8 @@
 // +--------------------------------------------------------------------------+
 // | profiles.php                                                             |
 // |                                                                          |
-// | This pages lets glFusion users communicate with each other without risk  |
-// | of their email address being intercepted by spammers.                    |
-// +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
+// | This pages lets glFusion users communicate with each other without       |
+// | exposing email addresses.                                                |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
@@ -207,10 +205,8 @@ function contactform ($uid, $subject = '', $message = '')
         } else {
             $isAdmin = false;
         }
-
-        if ($_CONF['advanced_editor'] == 1) {
-            $postmode = 'html';
-        } elseif (empty ($postmode)) {
+//@TODO validate postmode
+        if (empty ($postmode)) {
             $postmode = $_CONF['postmode'];
         }
 
@@ -221,18 +217,7 @@ function contactform ($uid, $subject = '', $message = '')
             $retval = COM_startBlock ($LANG08[10] . ' ' . $displayname);
             $mail_template = new Template ($_CONF['path_layout'] . 'profiles');
 
-            if (($_CONF['advanced_editor'] == 1)) {
-                $mail_template->set_file('form','contactuserform_advanced.thtml');
-                if ( isset($_USER['uid']) ) {
-                    $ae_uid = COM_applyFilter($_USER['uid'],true);
-                } else {
-                    $ae_uid = 1;
-                }
-                $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
-                DB_Query($sql,1);
-            } else {
-                $mail_template->set_file('form','contactuserform.thtml');
-            }
+            $mail_template->set_file('form','contactuserform.thtml');
             if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
                 $mail_template->set_var('glfusionStyleBasePath',$_CONF['layout_url']);
             } else {
@@ -478,41 +463,18 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
                                      "uid = {$_USER['uid']}");
         }
     }
-
-    if ($_CONF['advanced_editor'] == 1) {
-        $postmode = 'html';
-    } elseif (empty ($postmode)) {
+//@TODO validate postmode
+    if (empty ($postmode)) {
         $postmode = $_CONF['postmode'];
     }
 
     $mail_template = new Template($_CONF['path_layout'] . 'profiles');
 
-    if (($_CONF['advanced_editor'] == 1)) {
-        $mail_template->set_file('form','contactauthorform_advanced.thtml');
-        $ae_uid = COM_applyFilter($_USER['uid'],true);
-        $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
-        DB_Query($sql,1);
-    } else {
-        $mail_template->set_file('form','contactauthorform.thtml');
-    }
-    if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
-        $mail_template->set_var('glfusionStyleBasePath',$_CONF['layout_url']);
-    } else {
-        $mail_template->set_var('glfusionStyleBasePath',$_CONF['site_url'] . '/fckeditor');
-    }
-    if ($postmode == 'html') {
-        $mail_template->set_var ('show_texteditor', 'none');
-        $mail_template->set_var ('show_htmleditor', '');
-    } else {
-        $mail_template->set_var ('show_texteditor', '');
-        $mail_template->set_var ('show_htmleditor', 'none');
-    }
+    $mail_template->set_file('form','contactauthorform.thtml');
+
     $mail_template->set_var('lang_postmode', $LANG03[2]);
     $mail_template->set_var('postmode_options', COM_optionList($_TABLES['postmodes'],'code,name',$postmode));
 
-    $mail_template->set_var( 'xhtml', XHTML );
-    $mail_template->set_var('site_url', $_CONF['site_url']);
-    $mail_template->set_var('site_admin_url', $_CONF['site_admin_url']);
     $mail_template->set_var('layout_url', $_CONF['layout_url']);
     $mail_template->set_var('start_block_mailstory2friend', COM_startBlock($LANG08[17]));
     $mail_template->set_var('lang_fromname', $LANG08[20]);
@@ -524,9 +486,7 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
     $mail_template->set_var('lang_toemailaddress', $LANG08[19]);
     $mail_template->set_var('toemail', $toemail);
     $mail_template->set_var('lang_shortmessage', $LANG08[27]);
-    $mail_template->set_var('shortmsg', htmlspecialchars($shortmsg));
-    $mail_template->set_var('message_text', htmlspecialchars($shortmsg));
-    $mail_template->set_var('message_html', htmlspecialchars($shortmsg));
+    $mail_template->set_var('shortmsg', @htmlspecialchars($shortmsg,ENT_COMPAT,COM_getEncodingt()));
     $mail_template->set_var('lang_warning', $LANG08[22]);
     $mail_template->set_var('lang_sendmessage', $LANG08[16]);
     $mail_template->set_var('story_id',$sid);
@@ -554,18 +514,13 @@ switch ($what) {
     case 'contact':
         $uid = COM_applyFilter ($_POST['uid'], true);
         if ($uid > 1) {
+//@TODO need to determine correct postmode...
             $html = 0;
-            if (($_CONF['advanced_editor'] == 1)) {
-                if ( $_POST['postmode'] == 'html' ) {
-                    $message = $_POST['message_html'];
-                    $html = 1;
-                } else if ( $_POST['postmode'] == 'plaintext' ) {
-                    $message = $_POST['message_text'];
-                    $html = 0;
-                }
-            } else {
-                $message = $_POST['message'];
+            if ( $_POST['postmode'] == 'html' ) {
+                $html = 1;
             }
+            $message = $_POST['message'];
+
             $display .= contactemail ($uid, $_POST['author'],
                     $_POST['authoremail'], $_POST['subject'],
                     $message,$html);
@@ -598,17 +553,12 @@ switch ($what) {
             $display = COM_refresh ($_CONF['site_url'] . '/index.php');
         } else {
             $html = 0;
-            if (($_CONF['advanced_editor'] == 1)) {
-                if ( $_POST['postmode'] == 'html' ) {
-                    $shortmessage = $_POST['message_html'];
-                    $html = 1;
-                } else if ( $_POST['postmode'] == 'plaintext' ) {
-                    $shortmessage = $_POST['message_text'];
-                    $html = 0;
-                }
-            } else {
-                $shortmessage = $_POST['shortmsg'];
+//@TODO validate postmode
+            if ( $_POST['postmode'] == 'html' ) {
+                $html = 1;
             }
+            $shortmessage = $_POST['shortmsg'];
+
             if (empty ($_POST['toemail']) || empty ($_POST['fromemail'])
                     || !COM_isEmail ($_POST['toemail'])
                     || !COM_isEmail ($_POST['fromemail'])) {

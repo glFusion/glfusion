@@ -1024,12 +1024,6 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     }
     $header->set_var('page_title_and_site_name', $title_and_name);
 
-    if ( isset( $_CONF['advanced_editor'] ) && ( $_CONF['advanced_editor'] == 1 )) {
-        $header->set_file( 'editor'  , 'advanced_editor_header.thtml');
-        $header->parse( 'advanced_editor', 'editor' );
-    } else {
-        $header->set_var( 'advanced_editor', '' );
-    }
     $rdf = substr_replace( $_CONF['rdf_file'], $_CONF['site_url'], 0,strlen( $_CONF['path_html'] ) - 1 ) . LB;
 
     if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
