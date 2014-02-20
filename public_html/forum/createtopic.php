@@ -355,7 +355,6 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
 
     $retval         = '';
     $editmoderator  = false;
-    $wysiwyg        = 0;
     $numAttachments = 0;
 
     if ( COM_isAnonUser() ) {
@@ -666,31 +665,11 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
 
     if ($_FF_CONF['allow_html'] || SEC_inGroup( 'Root' ) || SEC_hasRights('forum.html')) {
         if ( $action == 'edittopic' ) {
-            if ( $postData['postmode'] == 'html' && $_FF_CONF['use_wysiwyg_editor'] == 1 ) {
-                $mode_prompt = '<input type="hidden" name="postmode" value="html" />';
-                $wysiwyg = 1;
-            } else {
-                $mode_prompt = $postmode_msg. '<br/><input type="checkbox" name="postmode_switch" value="1"/><input type="hidden" name="postmode" value="' . $postData['postmode'] . '"/>';
-            }
-        } elseif ( $_FF_CONF['use_wysiwyg_editor'] && $_FF_CONF['post_htmlmode']) {
-            $mode_prompt = '<input type="hidden" name="postmode" value="html" />';
-            $wysiwyg = 1;
-        } else {
             $mode_prompt = $postmode_msg. '<br/><input type="checkbox" name="postmode_switch" value="1"/><input type="hidden" name="postmode" value="' . $postData['postmode'] . '"/>';
         }
     }
 
     if ( $action == 'edittopic' ) {
-        if ( $postData['postmode'] == 'html' && $_FF_CONF['use_wysiwyg_editor'] == 1 ) {
-            $peTemplate->set_var('wysiwyg',true);
-            $wysiwyg = 1;
-        } else {
-            $peTemplate->set_var('bbcodeeditor',true);
-        }
-    } elseif (($_FF_CONF['allow_html'] || SEC_inGroup( 'Root' ) || SEC_hasRights('forum.html')) && $_FF_CONF['use_wysiwyg_editor'] && $_FF_CONF['post_htmlmode']) {
-        $peTemplate->set_var('wysiwyg',true);
-        $wysiwyg = 1;
-    } else {
         $peTemplate->set_var('bbcodeeditor',true);
     }
 
@@ -699,7 +678,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
     if(!$_FF_CONF['allow_smilies']) {
         $smilies = '';
     } else {
-        $smilies =  forumPLG_showsmilies($wysiwyg);
+        $smilies =  forumPLG_showsmilies(0);
     }
 
     $disable_bbcode_prompt   = $LANG_GF01['disable_bbcode'].'&nbsp;<input type="checkbox" name="disable_bbcode" value="1" '.$disable_bbcode_val . '/>';

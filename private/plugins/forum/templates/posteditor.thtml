@@ -1,11 +1,4 @@
 {# begin {templatelocation} #}
-{!if wysiwyg}
-<script type="text/javascript">
-glfusionEditorBasePath = "{site_url}/fckeditor/" ;
-glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
-</script>
-<script type="text/javascript" src="{site_url}/forum/javascript/forum_fckeditor.js"></script>
-{!endif}
 
 <div class="forumpost">
   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:2px;">
@@ -145,7 +138,6 @@ glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
       </tr>
 {!endif}
 
-{!if bbcodeeditor}
       <tr>
         <td class="pluginCellSubTitle">&nbsp;{LANG_code}:</td>
         <td class="pluginCellText pluginCellFill" style="line-height:100%;">&nbsp;
@@ -196,33 +188,7 @@ glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
         </div>
         </td>
       </tr>
-{!endif}
 
-{!if wysiwyg}
-      <tr>
-        <td class="pluginCellSubTitle">&nbsp;{LANG_SUBJECT}:</td>
-        <td class="pluginCellText pluginCellFill">
-          <input type="text" name="subject" value="{subject}" id="subject" tabindex="5" size="70" />
-{!if smilies}
-          <input class="button2" type="button" title="Smileys" style="text-decoration: none; width: 60px;" value="Smileys" name="toggleV" id="toggleV" />
-{!endif}
-
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2" class="pluginCellText pluginCellFill" style="padding-left: 5px;">
-{!if smilies}
-          <div style="width:95%; padding:10px; clear:both;" id="smileys">
-            {smilies}
-          </div>
-{!endif}
-          <textarea name="comment" id="input2" rows="50" cols="80" tabindex="6" class="post" style="width:99%">{comment}</textarea>
-        </td>
-      </tr>
-{!endif}
-
-
-{!if bbcodeeditor}
       <tr>
         <td class="pluginCellSubTitle">&nbsp;{LANG_SUBJECT}:</td>
         <td class="pluginCellText pluginCellFill">
@@ -240,7 +206,6 @@ glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
           <textarea name="comment" id="input2" rows="20" cols="45" tabindex="6" class="post" style="width:99%" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);">{comment}</textarea>
         </td>
       </tr>
-{!endif}
 
 {!if use_attachments}
       <tr>
