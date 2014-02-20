@@ -141,40 +141,16 @@ function submitstory($topic = '')
     $retval .= COM_startBlock($LANG12[6],'submitstory.html');
 
     $storyform = new Template($_CONF['path_layout'] . 'submit');
-    if (isset ($_CONF['advanced_editor']) && ($_CONF['advanced_editor'] == 1)) {
-        $storyform->set_file('storyform','submitstory_advanced.thtml');
-        if ( COM_isAnonUser() ) {
-            $ae_uid = 1;
-        } else {
-            $ae_uid = (int) COM_applyFilter($_USER['uid'],true);
-        }
-        $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=".(int)$ae_uid." AND urlfor='advancededitor'";
-        DB_Query($sql,1);
-        if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
-            $storyform->set_var('glfusionStyleBasePath',$_CONF['layout_url']);
-        } else {
-            $storyform->set_var('glfusionStyleBasePath',$_CONF['site_url'] . '/fckeditor');
-        }
-        $storyform->set_var ('change_editormode', 'onchange="change_editmode(this);"');
-        $storyform->set_var ('lang_expandhelp', $LANG24[67]);
-        $storyform->set_var ('lang_reducehelp', $LANG24[68]);
-        if ($story->EditElements('postmode') == 'html' || $story->EditElements('postmode') == '' ) {
-            $storyform->set_var ('show_texteditor', 'none');
-            $storyform->set_var ('show_htmleditor', '');
-        } else {
-            $storyform->set_var ('show_texteditor', '');
-            $storyform->set_var ('show_htmleditor', 'none');
-        }
+//@TODO advanced editor stuff
+    $storyform->set_file('storyform','submitstory.thtml');
+    if ($story->EditElements('postmode') == 'html') {
+        $storyform->set_var ('show_texteditor', 'none');
+        $storyform->set_var ('show_htmleditor', '');
     } else {
-        $storyform->set_file('storyform','submitstory.thtml');
-        if ($story->EditElements('postmode') == 'html') {
-            $storyform->set_var ('show_texteditor', 'none');
-            $storyform->set_var ('show_htmleditor', '');
-        } else {
-            $storyform->set_var ('show_texteditor', '');
-            $storyform->set_var ('show_htmleditor', 'none');
-        }
+        $storyform->set_var ('show_texteditor', '');
+        $storyform->set_var ('show_htmleditor', 'none');
     }
+
     $storyform->set_var ('site_admin_url', $_CONF['site_admin_url']);
     $storyform->set_var ('lang_username', $LANG12[27]);
 
@@ -235,6 +211,8 @@ function submitstory($topic = '')
     $storyform->parse('theform', 'storyform');
     $retval .= $storyform->finish($storyform->get_var('theform'));
     $retval .= COM_endBlock();
+
+//@TODO - security measure for advanced editor file manager
     $rc = @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
                time() + 1200, $_CONF['cookie_path'],
                $_CONF['cookiedomain'], $_CONF['cookiesecure']);
@@ -424,6 +402,7 @@ if (isset ($_POST['mode'])) {
 
 if (($mode == $LANG12[8]) && !empty ($LANG12[8])) { // submit
     // purge any tokens we created for the advanced editor
+//@TODO security measure for advanced editor
     if ( !isset($_USER['uid'] ) ) {
         $_USER['uid'] = 1;
     }
