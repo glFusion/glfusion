@@ -6614,7 +6614,6 @@ function js_out()
      */
 
     $files = array(
-        $_CONF['path_html'] . 'fckeditor/fckeditor.js',
         $_CONF['path_html'] . 'javascript/common.js',
 
     );
@@ -6703,10 +6702,11 @@ function js_out()
     ob_start();
 
     // add some global variables
+/* --- remove with advanced editor
     print "var glfusionSiteUrl = '".$_CONF['site_url']."';" . LB;
     print "var glfusionEditorBaseUrl = '".$_CONF['site_url']."';" . LB;
     print "var glfusionLayoutUrl     = '".$_CONF['layout_url']."';" . LB;
-
+--- */
     if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
         print "var glfusionStyleCSS      = '".$_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'] . "';" . LB;
     } else {
