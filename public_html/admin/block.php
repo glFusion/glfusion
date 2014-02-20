@@ -261,36 +261,7 @@ function BLOCK_edit($bid = '', $B = array())
 
     $block_templates = new Template($_CONF['path_layout'] . 'admin/block');
 
-   if (isset ($_CONF['advanced_editor']) && ($_CONF['advanced_editor'] == 1) ) {
-        $block_templates->set_file ('editor', 'blockeditor_advanced.thtml');
-        if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
-            $block_templates->set_var('glfusionStyleBasePath',$_CONF['layout_url']);
-        } else {
-            $block_templates->set_var('glfusionStyleBasePath',$_CONF['site_url'] . '/fckeditor');
-        }
-        $block_templates->set_var ('lang_toolbar', $LANG24[70]);
-        $block_templates->set_var ('toolbar1', $LANG24[71]);
-        $block_templates->set_var ('toolbar2', $LANG24[72]);
-        $block_templates->set_var ('toolbar3', $LANG24[73]);
-        $block_templates->set_var ('toolbar4', $LANG24[74]);
-        $block_templates->set_var ('toolbar5', $LANG24[75]);
-        $block_templates->set_var('lang_nojavascript',$LANG24[77]);
-        $block_templates->set_var('lang_postmode', $LANG24[4]);
-        $block_templates->set_var('show_htmleditor','none');
-        $block_templates->set_var('show_texteditor','');
-
-        $post_options = '<option value="html" selected="selected">'.$LANG_postmodes['html'].'</option>';
-        if (isset($A['postmode']) && $A['postmode'] == 'adveditor') {
-            $post_options .= '<option value="adveditor" selected="selected">'.$LANG24[86].'</option>';
-        } else {
-            $post_options .= '<option value="adveditor">'.$LANG24[86].'</option>';
-        }
-
-        $block_templates->set_var('post_options',$post_options );
-        $block_templates->set_var ('change_editormode', 'onchange="change_editmode(this);"');
-    } else {
-        $block_templates->set_file('editor','blockeditor.thtml');
-    }
+    $block_templates->set_file('editor','blockeditor.thtml');
 
     $block_templates->set_var('start_block_editor', COM_startBlock ($LANG21[3],
             '', COM_getBlockTemplate ('_admin_block', 'header')));
@@ -1046,17 +1017,8 @@ switch ($action) {
             }
 
             $content = '';
-            if (($_CONF['advanced_editor'] == 1)) {
-                if ( $_POST['postmode'] == 'adveditor' ) {
-                    $content = $_POST['block_html'];
-                    $html = true;
-                } else if ( $_POST['postmode'] == 'html' ) {
-                    $content = $_POST['block_text'];
-                    $html = false;
-                }
-            } else {
-                $content = isset($_POST['content']) ? $_POST['content'] : '';
-            }
+            $content = isset($_POST['content']) ? $_POST['content'] : '';
+//@TODO look to see if $html is needed elsewhere...
 
             $rdfurl         = isset ($_POST['rdfurl'])         ? COM_applyFilter($_POST['rdfurl']) : '';
             $rdfupdated     = isset ($_POST['rdfupdated'])     ? $_POST['rdfupdated'] : '';
