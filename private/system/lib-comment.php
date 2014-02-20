@@ -6,9 +6,7 @@
 // |                                                                          |
 // | glFusion comment library.                                                |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2012 by the following authors:                        |
+// | Copyright (C) 2009-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -969,25 +967,6 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 $comment_template->set_var('mode',$mode);
                 $comment_template->set_var('show_anchor',1);
             }
-
-            if ( $_CONF['comment_editor'] == 1 ) {
-                $comment_template->set_var('advanced_editor',true);
-                if ( COM_isAnonUser() ) {
-                    $ae_uid = 1;
-                } else {
-                    $ae_uid = (int) COM_applyFilter($_USER['uid'],true);
-                }
-                $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=".(int)$ae_uid." AND urlfor='advancededitor'";
-                DB_query($sql,1);
-            } else {
-                $comment_template->set_var('advanced_editor','');
-
-            }
-            if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
-                $comment_template->set_var('glfusionStyleBasePath',$_CONF['layout_url']);
-            } else {
-                $comment_template->set_var('glfusionStyleBasePath',$_CONF['site_url'] . '/fckeditor');
-            }
             $comment_template->set_var('start_block_postacomment', COM_startBlock($LANG03[1]));
             if ($_CONF['show_fullname'] == 1) {
                 $comment_template->set_var('lang_username', $LANG_ACCESS['name']);
@@ -1045,13 +1024,6 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 $comment_template->set_var('username_disabled','');
             }
 
-            if ($postmode == 'html' && $_CONF['comment_editor'] == 1) {
-                $comment_template->set_var ('show_texteditor', 'none');
-                $comment_template->set_var ('show_htmleditor', '');
-            } else {
-                $comment_template->set_var ('show_texteditor', '');
-                $comment_template->set_var ('show_htmleditor', 'none');
-            }
 
             $comment_template->set_var('lang_title', $LANG03[16]);
             $comment_template->set_var('title', @htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
