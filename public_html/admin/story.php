@@ -457,20 +457,49 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
               'text' => $LANG_ADMIN['admin_home']),
     );
 
-require_once $_CONF['path_system'] . 'classes/navbar.class.php';
-
     // Load HTML templates
     $story_templates = new Template($_CONF['path_layout'] . 'admin/story');
+    if ( isset ($_CONF['advanced_editor']) && ($_CONF['advanced_editor'] == 1 )) {
+        $advanced_editormode = true;
+        $story_templates->set_file(array('editor'=>'storyeditor_advanced.thtml'));
+        if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
+            $story_templates->set_var('glfusionStyleBasePath',$_CONF['layout_url']);
+        } else {
+            $story_templates->set_var('glfusionStyleBasePath',$_CONF['site_url'] . '/fckeditor');
+        }
+        $story_templates->set_var ('change_editormode', 'onchange="change_editmode(this);"');
 
-    $story_templates->set_file(array('editor' => 'storyeditor.thtml'));
+        require_once $_CONF['path_system'] . 'classes/navbar.class.php';
+
+        $story_templates->set_var ('show_preview', 'none');
+        $story_templates->set_var ('lang_expandhelp', $LANG24[67]);
+        $story_templates->set_var ('lang_reducehelp', $LANG24[68]);
+        $story_templates->set_var ('lang_publishdate', $LANG24[69]);
+        $story_templates->set_var ('lang_toolbar', $LANG24[70]);
+        $story_templates->set_var ('toolbar1', $LANG24[71]);
+        $story_templates->set_var ('toolbar2', $LANG24[72]);
+        $story_templates->set_var ('toolbar3', $LANG24[73]);
+        $story_templates->set_var ('toolbar4', $LANG24[74]);
+        $story_templates->set_var ('toolbar5', $LANG24[75]);
+
+        if ($story->EditElements('advanced_editor_mode') == 1 OR $story->EditElements('postmode') == 'adveditor') {
+            $story_templates->set_var ('show_texteditor', 'none');
+            $story_templates->set_var ('show_htmleditor', '');
+        } else {
+            $story_templates->set_var ('show_texteditor', '');
+            $story_templates->set_var ('show_htmleditor', 'none');
+        }
+    } else {
+        $story_templates->set_file(array('editor' => 'storyeditor.thtml'));
+        $advanced_editormode = false;
+    }
 
     $story_templates->set_var ('hour_mode',      $_CONF['hour_mode']);
 
     if ($story->hasContent()) {
         $previewContent = STORY_renderArticle($story, 'p');
-        if ($previewContent != '' ) {
+        if ($advanced_editormode AND $previewContent != '' ) {
             $story_templates->set_var('preview_content', $previewContent);
-//@TODO Fix this
         } elseif ($previewContent != '') {
             $display = COM_startBlock ($LANG24[26], '',
                             COM_getBlockTemplate ('_admin_block', 'header'));
@@ -479,35 +508,36 @@ require_once $_CONF['path_system'] . 'classes/navbar.class.php';
         }
     }
 
-    $navbar = new navbar;
-    if (!empty ($previewContent)) {
-        $navbar->add_menuitem($LANG24[79],'showhideEditorDiv("preview",0);return false;',true);
-        $navbar->add_menuitem($LANG24[80],'showhideEditorDiv("editor",1);return false;',true);
-        $navbar->add_menuitem($LANG24[81],'showhideEditorDiv("publish",2);return false;',true);
-        $navbar->add_menuitem($LANG24[82],'showhideEditorDiv("images",3);return false;',true);
-        $navbar->add_menuitem($LANG24[83],'showhideEditorDiv("archive",4);return false;',true);
-        $navbar->add_menuitem($LANG24[84],'showhideEditorDiv("perms",5);return false;',true);
-        $navbar->add_menuitem($LANG24[85],'showhideEditorDiv("all",6);return false;',true);
-    }  else {
-        $navbar->add_menuitem($LANG24[80],'showhideEditorDiv("editor",0);return false;',true);
-        $navbar->add_menuitem($LANG24[81],'showhideEditorDiv("publish",1);return false;',true);
-        $navbar->add_menuitem($LANG24[82],'showhideEditorDiv("images",2);return false;',true);
-        $navbar->add_menuitem($LANG24[83],'showhideEditorDiv("archive",3);return false;',true);
-        $navbar->add_menuitem($LANG24[84],'showhideEditorDiv("perms",4);return false;',true);
-        $navbar->add_menuitem($LANG24[85],'showhideEditorDiv("all",5);return false;',true);
-    }
+    if ($advanced_editormode) {
+        $navbar = new navbar;
+        if (!empty ($previewContent)) {
+            $navbar->add_menuitem($LANG24[79],'showhideEditorDiv("preview",0);return false;',true);
+            $navbar->add_menuitem($LANG24[80],'showhideEditorDiv("editor",1);return false;',true);
+            $navbar->add_menuitem($LANG24[81],'showhideEditorDiv("publish",2);return false;',true);
+            $navbar->add_menuitem($LANG24[82],'showhideEditorDiv("images",3);return false;',true);
+            $navbar->add_menuitem($LANG24[83],'showhideEditorDiv("archive",4);return false;',true);
+            $navbar->add_menuitem($LANG24[84],'showhideEditorDiv("perms",5);return false;',true);
+            $navbar->add_menuitem($LANG24[85],'showhideEditorDiv("all",6);return false;',true);
+        }  else {
+            $navbar->add_menuitem($LANG24[80],'showhideEditorDiv("editor",0);return false;',true);
+            $navbar->add_menuitem($LANG24[81],'showhideEditorDiv("publish",1);return false;',true);
+            $navbar->add_menuitem($LANG24[82],'showhideEditorDiv("images",2);return false;',true);
+            $navbar->add_menuitem($LANG24[83],'showhideEditorDiv("archive",3);return false;',true);
+            $navbar->add_menuitem($LANG24[84],'showhideEditorDiv("perms",4);return false;',true);
+            $navbar->add_menuitem($LANG24[85],'showhideEditorDiv("all",5);return false;',true);
+        }
 
-    if ($action == 'preview') {
-        $story_templates->set_var ('show_preview', '');
-//        $story_templates->set_var ('show_htmleditor', 'none');
-        $story_templates->set_var ('show_texteditor', 'none');
-        $story_templates->set_var ('show_submitoptions', 'none');
-        $navbar->set_selected($LANG24[79]);
-    } else {
-        $navbar->set_selected($LANG24[80]);
-        $story_templates->set_var ('show_preview', 'none');
+        if ($action == 'preview') {
+            $story_templates->set_var ('show_preview', '');
+            $story_templates->set_var ('show_htmleditor', 'none');
+            $story_templates->set_var ('show_texteditor', 'none');
+            $story_templates->set_var ('show_submitoptions', 'none');
+            $navbar->set_selected($LANG24[79]);
+        } else {
+            $navbar->set_selected($LANG24[80]);
+        }
+        $story_templates->set_var ('navbar', $navbar->generate() );
     }
-    $story_templates->set_var ('navbar', $navbar->generate() );
 
     // start generating the story editor block
     $display .= COM_startBlock ($title, '',COM_getBlockTemplate ('_admin_block', 'header'));
@@ -760,16 +790,26 @@ require_once $_CONF['path_system'] . 'classes/navbar.class.php';
     $story_templates->set_var('lang_bodytext', $LANG24[17]);
     $story_templates->set_var('lang_postmode', $LANG24[4]);
     $story_templates->set_var('lang_publishoptions',$LANG24[76]);
-    $story_templates->set_var('lang_publishdate', $LANG24[69]);
     $story_templates->set_var('lang_nojavascript',$LANG24[77]);
     $story_templates->set_var('no_javascript_return_link',sprintf($LANG24[78],$_CONF['site_admin_url'], $sid));
     $post_options = COM_optionList($_TABLES['postmodes'],'code,name',$story->EditElements('postmode'));
 
-    $post_options .= '<option value="adveditor">'.$LANG24[86].'</option>';
+    // If Advanced Mode - add post option and set default if editing story created with Advanced Editor
+    if ($_CONF['advanced_editor'] == 1) {
+        if ($story->EditElements('advanced_editor_mode') == 1 OR $story->EditElements('postmode') == 'adveditor') {
+            $post_options .= '<option value="adveditor" selected="selected">'.$LANG24[86].'</option>';
+        } else {
+            $post_options .= '<option value="adveditor">'.$LANG24[86].'</option>';
+        }
+    }
 
     $story_templates->set_var('post_options',$post_options );
     $story_templates->set_var('lang_allowed_html', COM_allowedHTML(SEC_getUserPermissions(),false,'glfusion','story'));
-    $story_templates->set_var ('show_allowedhtml', 'none');
+    if ($story->EditElements('advanced_editor_mode') == 1 OR $story->EditElements('postmode') == 'adveditor' OR $story->EditElements('postmode') == 'plaintext') {
+        $story_templates->set_var ('show_allowedhtml', 'none');
+    } else {
+        $story_templates->set_var ('show_allowedhtml', '');
+    }
 
     $fileinputs = '';
     $saved_images = '';
@@ -914,6 +954,9 @@ if (isset($_POST['editopt'])) {
     $editopt = COM_applyFilter($_POST['editopt']);
 } elseif (isset($_GET['editopt'])) {
     $editopt = COM_applyFilter($_GET['editopt']);
+}
+if ($editopt == 'default') {
+    $_CONF['advanced_editor'] = false;
 }
 $msg = COM_getMessage();
 
