@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Administration page.                                                     |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -89,9 +87,6 @@ function PAGE_form($A, $error = false)
         }
         SEC_setDefaultPermissions ($A, $_SP_CONF['default_permissions']);
         $access = 3;
-        if (isset ($_CONF['advanced_editor']) && ($_CONF['advanced_editor'] == 1)) {
-             $A['advanced_editor_mode'] = 1;
-        }
     }
     $retval = '';
 
@@ -106,41 +101,7 @@ function PAGE_form($A, $error = false)
         $retval .= $error . '<br/><br/>';
     } else {
         $sp_template = new Template ($template_path);
-        if (isset ($_CONF['advanced_editor']) && ($_CONF['advanced_editor'] == 1) ) {
-            $sp_template->set_file ('form', 'editor_advanced.thtml');
-            if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
-                $sp_template->set_var('glfusionStyleBasePath',$_CONF['layout_url']);
-            } else {
-                $sp_template->set_var('glfusionStyleBasePath',$_CONF['site_url'] . '/fckeditor');
-            }
-            $sp_template->set_var ('lang_expandhelp', $LANG24[67]);
-            $sp_template->set_var ('lang_reducehelp', $LANG24[68]);
-            $sp_template->set_var ('lang_toolbar', $LANG24[70]);
-            $sp_template->set_var ('toolbar1', $LANG24[71]);
-            $sp_template->set_var ('toolbar2', $LANG24[72]);
-            $sp_template->set_var ('toolbar3', $LANG24[73]);
-            $sp_template->set_var ('toolbar4', $LANG24[74]);
-            $sp_template->set_var ('toolbar5', $LANG24[75]);
-            $sp_template->set_var('lang_nojavascript',$LANG24[77]);
-            $sp_template->set_var('lang_postmode', $LANG24[4]);
-            if (isset($A['postmode']) && $A['postmode'] == 'adveditor') {
-                $sp_template->set_var('show_adveditor','');
-                $sp_template->set_var('show_htmleditor','none');
-            } else {
-                $sp_template->set_var('show_adveditor','none');
-                $sp_template->set_var('show_htmleditor','');
-            }
-            $post_options = '<option value="html" selected="selected">'.$LANG_postmodes['html'].'</option>';
-            if (isset($A['postmode']) && $A['postmode'] == 'adveditor') {
-                $post_options .= '<option value="adveditor" selected="selected">'.$LANG24[86].'</option>';
-            } else {
-                $post_options .= '<option value="adveditor">'.$LANG24[86].'</option>';
-            }
-            $sp_template->set_var('post_options',$post_options );
-            $sp_template->set_var ('change_editormode', 'onchange="change_editmode(this);"');
-        } else {
-            $sp_template->set_file ('form', 'editor.thtml');
-        }
+        $sp_template->set_file ('form', 'editor.thtml');
         $sp_template->set_var('layout_url', $_CONF['layout_url']);
         $sp_template->set_var('lang_mode', $LANG24[3]);
         $sp_template->set_var(
