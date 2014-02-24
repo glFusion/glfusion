@@ -830,6 +830,9 @@ require_once $_CONF['path_system'] . 'classes/navbar.class.php';
     $story_templates->set_var('lang_delete', $LANG_ADMIN['delete']);
     $story_templates->set_var('gltoken_name', CSRF_TOKEN);
     $story_templates->set_var('gltoken', SEC_createToken());
+
+    PLG_templateSetVars('storyeditor',$story_templates);
+
     $story_templates->parse('output','editor');
     $display .= $story_templates->finish($story_templates->get_var('output'));
     $display .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
