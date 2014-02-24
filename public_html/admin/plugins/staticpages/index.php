@@ -368,6 +368,7 @@ function PAGE_form($A, $error = false)
         $sp_template->set_var( 'gltoken_name', CSRF_TOKEN );
         $sp_template->set_var( 'gltoken', SEC_createToken() );
         $sp_template->set_var( 'admin_menu',ADMIN_createMenu($menu_arr, $LANG_STATIC['instructions_edit'], plugin_geticon_staticpages()));
+        PLG_templateSetVars('sp_editor',$sp_template);
         $retval .= $sp_template->parse('output','form');
     }
 
