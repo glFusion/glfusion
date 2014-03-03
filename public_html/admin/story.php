@@ -928,7 +928,7 @@ switch ($action) {
     case 'edit':
     case 'moderate':
     case 'draft':
-        SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+        SEC_setCookie ($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral('advancededitor'),
                        time() + 1200, $_CONF['cookie_path'],
                        $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
         switch ($action) {
@@ -965,7 +965,7 @@ switch ($action) {
         if (SEC_checkToken()) {
             $display = STORY_submit();
         } else {
-            SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+            SEC_setCookie ($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral('advancededitor'),
                            time() + 1200, $_CONF['cookie_path'],
                            $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
             $display  = COM_siteHeader('menu', $LANG24[5]);
@@ -976,7 +976,7 @@ switch ($action) {
         break;
 
     case 'previewstory':
-        SEC_setCookie($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+        SEC_setCookie($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral('advancededitor'),
                        time() + 1200, $_CONF['cookie_path'],
                        $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
         $display .= COM_siteHeader('menu', $LANG24[5]);
