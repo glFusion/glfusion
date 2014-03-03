@@ -162,8 +162,8 @@
       {lang_introtext}:
         {!if wysiwyg}
         <div>
-        <input type="button" value="{$LANG_CK00[visual]}" onclick="won('introtext')"/>
-        <input type="button" value="{$LANG_CK00[html]}"  onclick="woff('introtext')"/>
+        <input type="button" value="{visual_editor}" onclick="won('introtext')"/>
+        <input type="button" value="{html_editor}"  onclick="woff('introtext')"/>
         </div>
         {!endif}
       <div style="width:99%; padding-bottom:10px;">
