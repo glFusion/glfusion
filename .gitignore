@@ -5,6 +5,7 @@ public_html/siteconfig.php
 public_html/mediagallery/mediaobjects/
 public_html/web.config
 public_html/backend/
-public_html/admin/plugins/tinymce/
-public_html/images/
 public_html/tinymce/
+public_html/admin/plugins/tinymce/
+public_html/ckeditor/
+public_html/admin/plugins/ckeditor/
