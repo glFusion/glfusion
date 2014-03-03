@@ -7,3 +7,5 @@ public_html/web.config
 public_html/backend/
 public_html/tinymce/
 public_html/admin/plugins/tinymce/
+public_html/ckeditor/
+public_html/admin/plugins/ckeditor/
