@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-
+{wysiwyg}
 <div class="forumpost">
   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:2px;">
     <tr>
@@ -137,7 +137,8 @@
         <td class="pluginCellText pluginCellFill"><select name="mood" style="width:150px; text-indent: 0px;" tabindex="2">{moodoptions}</select></td>
       </tr>
 {!endif}
-
+{!if wysiwyg}
+{!else}
       <tr>
         <td class="pluginCellSubTitle">&nbsp;{LANG_code}:</td>
         <td class="pluginCellText pluginCellFill" style="line-height:100%;">&nbsp;
@@ -188,7 +189,7 @@
         </div>
         </td>
       </tr>
-
+{!endif}
       <tr>
         <td class="pluginCellSubTitle">&nbsp;{LANG_SUBJECT}:</td>
         <td class="pluginCellText pluginCellFill">
@@ -203,10 +204,15 @@
               {smilies}
             </div>
           {!endif}
+{!if wysiwyg}
+    <div>
+    <input type="button" value="{visual_editor}" onclick="won('comment')"/>
+    <input type="button" value="{html_editor}"  onclick="woff('comment')"/>
+    </div>
+{!endif}
           <textarea name="comment" id="input2" rows="20" cols="45" tabindex="6" class="post" style="width:99%" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);">{comment}</textarea>
         </td>
       </tr>
-
 {!if use_attachments}
       <tr>
         <td class="pluginCellSubTitle" style="vertical-align:top;padding-top:10px;">
