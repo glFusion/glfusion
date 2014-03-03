@@ -1,4 +1,7 @@
 {# begin {templatelocation} #}
+{!if htmlmode}
+{wysiwyg}
+{!endif}
 {start_block_postacomment}
 {!if show_anchor}
 <a name="comment_entry"></a>
@@ -26,21 +29,23 @@
             <td class="alignright" style="vertical-align:top;"><b>{lang_comment}:</b></td>
             <td>
                 <div id="text_editor">
+                    {!if wysiwyg}
+                    {!if htmlmode}
+                    <div>
+                    <input type="button" value="{$LANG_CK00[visual]}" onclick="won('comment_text')"/>
+                    <input type="button" value="{$LANG_CK00[html]}"  onclick="woff('comment_text')"/>
+                    </div>
+                    {!endif}
+                    {!endif}
                     <textarea id="comment_text" name="comment_text" cols="60" rows="10" style="width:90%;">{comment}</textarea>
+                    <input type="hidden" name="postmode" value="{postmode}" />
                 </div>
             </td>
         </tr>
 
         <tr>
-            <td class="alignright" style="vertical-align:top;"><b>{lang_postmode}:</b></td>
+            <td class="alignright" style="vertical-align:top;">&nbsp;</td>
             <td style="vertical-align:top;">
-                <select name="postmode"
-{!if advanced_editor}
-        onchange="change_editmode(this);
-{!endif}
-                ">
-                    {postmode_options}
-                </select><br/>
                 <span class="warningsmall">{allowed_html}</span>
             </td>
         </tr>
