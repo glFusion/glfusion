@@ -755,7 +755,7 @@ if (isset ($_POST['staticpageenabler']) && SEC_checkToken()) {
 switch ($action) {
 
     case 'edit':
-        SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+        SEC_setCookie ($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral('advancededitor'),
                         time() + 1200, $_CONF['cookie_path'],
                         $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
         $display .= COM_siteHeader ('menu', $LANG_STATIC['staticpageeditor']);
@@ -769,7 +769,7 @@ switch ($action) {
 
     case 'clone':
         if (!empty($sp_id)) {
-            SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+            SEC_setCookie ($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral('advancededitor'),
                             time() + 1200, $_CONF['cookie_path'],
                             $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
             $display .= COM_siteHeader('menu', $LANG_STATIC['staticpageeditor']);
@@ -847,7 +847,7 @@ switch ($action) {
             }
         } else {
             //token expired?
-            SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+            SEC_setCookie ($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral('advancededitor'),
                         time() + 1200, $_CONF['cookie_path'],
                         $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
             $display .= COM_siteHeader ('menu', $LANG_STATIC['staticpageeditor']);
