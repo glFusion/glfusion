@@ -903,7 +903,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             $_POST['title'] = $title;
             $newcomment = $comment;
 
-            $_POST['comment'] = $newcomment;
+            $_POST['comment_text'] = $newcomment;
 
             // Preview mode:
             if (($mode == $LANG03[14] || $mode == 'preview' || $mode == 'preview_new' || $mode == 'preview_edit') && !empty($title) && !empty($comment) ) {
@@ -916,7 +916,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 foreach ($_POST as $key => $value) {
                     if (($key == 'pid') || ($key == 'cid')) {
                         $A[$key] = (int) COM_applyFilter ($_POST[$key], true);
-                    } else if (($key == 'title') || ($key == 'comment')) {
+                    } else if (($key == 'title') || ($key == 'comment_text')) {
                         // these have already been filtered above
                         $A[$key] = $_POST[$key];
                     } else if ($key == 'username') {
@@ -1024,12 +1024,15 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 $comment_template->set_var('username_disabled','');
             }
 
-
+            if ( $postmode == 'html' ) {
+                $comment_template->set_var('htmlmode',true);
+            }
             $comment_template->set_var('lang_title', $LANG03[16]);
             $comment_template->set_var('title', @htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
             $comment_template->set_var('lang_comment', $LANG03[9]);
             $comment_template->set_var('comment', $commenttext);
             $comment_template->set_var('lang_postmode', $LANG03[2]);
+            $comment_template->set_var('postmode',$postmode);
             $comment_template->set_var('postmode_options', COM_optionList($_TABLES['postmodes'],'code,name',$postmode));
             $comment_template->set_var('allowed_html', COM_allowedHTML(SEC_getUserPermissions(),false,'glfusion','comment'));
             $comment_template->set_var('lang_importantstuff', $LANG03[18]);

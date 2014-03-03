@@ -112,11 +112,7 @@ function handleSubmit()
     $postmode = COM_applyFilter($_POST['postmode']);
     $comment = '';
 
-    if ( $postmode == 'html' ) {
-        $comment = $_POST['comment_html'];
-    } else {
-        $comment = $_POST['comment_text'];
-    }
+    $comment = $_POST['comment_text'];
 
     if ( !($display = PLG_commentSave($type, $title,$comment, $sid, $pid,$postmode)) ) {
         $display = COM_refresh ($_CONF['site_url'] . '/index.php');
@@ -305,11 +301,7 @@ function handleEditSubmit()
         $uid = $_USER['uid'];
     }
 
-    if ( $postmode == 'html' ) {
-        $comment = $_POST['comment_html'];
-    } else {
-        $comment = $_POST['comment_text'];
-    }
+    $comment = $_POST['comment_text'];
 
     //check for bad input
     if (empty ($sid) || empty ($_POST['title']) || empty ($comment) || !is_numeric ($cid)
