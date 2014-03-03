@@ -3423,4 +3423,31 @@ function PLG_remove($pi_name)
 
     return true;
 }
+
+function PLG_getEditorType()
+{
+    global $_PLUGINS;
+
+    foreach ($_PLUGINS as $pi_name) {
+        $function = 'plugin_getEditorType_' . $pi_name;
+        if (function_exists($function)) {
+            return $function ();
+        }
+    }
+    return '';
+}
+
+function PLG_requestEditor($plugin, $feature, $template)
+{
+    global $_PLUGINS;
+
+    foreach ($_PLUGINS as $pi_name) {
+        $function = 'plugin_requestEditor_' . $pi_name;
+        if (function_exists($function)) {
+            return $function ($plugin, $feature, $template);
+        }
+    }
+    return false;
+}
+
 ?>
