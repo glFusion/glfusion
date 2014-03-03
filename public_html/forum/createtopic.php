@@ -793,6 +793,19 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
     $peTemplate->set_var('token', SEC_createToken());
 
     $peTemplate->set_var ('postmode', $postData['postmode']);
+
+    if ($_FF_CONF['use_wysiwyg_editor'] && $postData['postmode'] == 'html') {
+        // hook into wysiwyg here
+        switch( PLG_getEditorType() ) {
+            case 'ckeditor' :
+                PLG_requestEditor('forum','forum_entry','ckeditor_forum.thtml');
+                PLG_templateSetVars('forum_entry',$peTemplate);
+                break;
+            default :
+                // don't support others right now
+                break;
+        }
+    }
     $peTemplate->parse ('output', 'posteditor');
     $retval .= $peTemplate->finish($peTemplate->get_var('output'));
 
