@@ -3424,6 +3424,14 @@ function PLG_remove($pi_name)
     return true;
 }
 
+
+/**
+* Returns the WYSIWYG editor type
+*
+* @return   string            name of wysiwyg editor or blank if none configured
+* @since    glFusion v1.4.0
+*
+*/
 function PLG_getEditorType()
 {
     global $_PLUGINS;
@@ -3437,6 +3445,16 @@ function PLG_getEditorType()
     return '';
 }
 
+/**
+* Register a plugin's template for the wysiwyg editor
+*
+* @param    string  $plugin   plugin name
+* @param    string  $feature  function / feature (i.e.; story_edit)
+* @param    string  $template handle to template
+* @return   boolean          true if processed / false if no editor available.
+* @since    glFusion v1.4.0
+*
+*/
 function PLG_requestEditor($plugin, $feature, $template)
 {
     global $_PLUGINS;
