@@ -903,7 +903,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             $_POST['title'] = $title;
             $newcomment = $comment;
 
-            $_POST['comment_text'] = $newcomment;
+            $_POST['comment'] = $newcomment;
 
             // Preview mode:
             if (($mode == $LANG03[14] || $mode == 'preview' || $mode == 'preview_new' || $mode == 'preview_edit') && !empty($title) && !empty($comment) ) {
@@ -916,7 +916,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 foreach ($_POST as $key => $value) {
                     if (($key == 'pid') || ($key == 'cid')) {
                         $A[$key] = (int) COM_applyFilter ($_POST[$key], true);
-                    } else if (($key == 'title') || ($key == 'comment_text')) {
+                    } else if (($key == 'title') || ($key == 'comment')) {
                         // these have already been filtered above
                         $A[$key] = $_POST[$key];
                     } else if ($key == 'username') {
