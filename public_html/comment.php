@@ -453,11 +453,7 @@ if ( isset($_POST['cancel'] ) ) {
     $pageTitle = $LANG03[14];
     $comment = '';
 
-    if ( isset($_POST['postmode']) && $_POST['postmode'] == 'html' && isset($_POST['comment_html']) ) {
-        $comment = $_POST['comment_html'];
-    } else {
-        $comment = $_POST['comment_text'];
-    }
+    $comment = $_POST['comment_text'];
 
     $type    = COM_applyFilter ($_POST['type']);
     $sid     = COM_applyFilter ($_POST['sid']);
