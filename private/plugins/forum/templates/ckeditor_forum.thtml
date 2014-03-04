@@ -1,51 +1,28 @@
 <script type="text/javascript" src="{site_url}/ckeditor/ckeditor.js" ></script >
 <script type="text/javascript" >
-    var site_url = "{site_url}";
-    var comment;
-
-    var tools = {
-    	items: {
-    		'source': ['Source'],
-    		'clipboard': ['Cut', 'Copy', 'Paste', 'PasteText'],
-    		'undo': ['Undo', 'Redo'],
-    		'editing': ['Find', 'Replace', '-', 'SelectAll', '-', 'Scayt'],
-    		'links': ['Link', 'Unlink'],
-    		'basicstyles': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'],
-    		'insert': ['Image', 'Table', 'HorizontalRule', 'SpecialChar'],
-    		'paragraph': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', '-', 'BidiLtr', 'BidiRtl'],
-    		'styles': ['Styles', 'Format', 'Font', 'FontSize'],
-    		'colors': ['TextColor', 'BGColor'],
-    		'tools': ['Maximize', 'ShowBlocks'],
-    		'about': ['About'],
-    		'basicstyles_basic': ['Bold', 'Italic'],
-    		'paragraph_basic': ['NumberedList', 'BulletedList'],
-    		'insert_advanced': ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar']
-    	}
-    };
-
-    CKEDITOR.config.toolbar_Basic = [
-    		tools.items['source'],
-    		tools.items['undo'],
-    		tools.items['basicstyles_basic'],
-    		tools.items['links'],
-    		tools.items['paragraph_basic'],
-    		tools.items['tools']
-    	];
-
-    CKEDITOR.config.toolbar = 'Basic';
-    CKEDITOR.config.removePlugins = 'elementspath';
-    CKEDITOR.config.resize_enabled = false;
-
-    CKEDITOR.config.contentsCss = '{site_url}/css.php?t={theme}';
-    CKEDITOR.config.bodyClass = 'forumpost';
-
-    window.onload = function() {
-        comment = CKEDITOR.replace( 'comment',CKEDITOR.config );
-    };
-    function won (id) {
-        comment = CKEDITOR.replace(id);
-    }
-    function woff (id) {
-        comment.destroy();
-    }
+var site_url = "{site_url}";
+var comment;
+function loadEditor(id) {
+    var instance = CKEDITOR.replace( id, {
+    	toolbar: [
+    		{ name: 'document', items: [ 'Source' ] },
+    		[ 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo' ],
+    		{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline' ] },
+    	],
+        contentsCss: '{site_url}/css.php?t={theme}',
+        bodyClass: 'forumpost',
+        removePlugins: 'elementspath',
+        resize_enabled: false,
+     } );
+     return instance;
+}
+window.onload = function() {
+    comment = loadEditor('comment');
+};
+function won (id) {
+    comment = loadEditor('comment');
+}
+function woff (id) {
+    comment.destroy();
+}
 </script>
