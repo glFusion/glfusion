@@ -762,6 +762,7 @@ require_once $_CONF['path_system'] . 'classes/navbar.class.php';
     $story_templates->set_var('lang_publishoptions',$LANG24[76]);
     $story_templates->set_var('lang_publishdate', $LANG24[69]);
     $story_templates->set_var('lang_nojavascript',$LANG24[77]);
+    $story_templates->set_var('postmode',$story->EditElements('postmode'));
     $story_templates->set_var('no_javascript_return_link',sprintf($LANG24[78],$_CONF['site_admin_url'], $sid));
     $post_options = COM_optionList($_TABLES['postmodes'],'code,name',$story->EditElements('postmode'));
 
