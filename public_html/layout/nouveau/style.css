@@ -3070,7 +3070,7 @@ color:#0055bb !important;
 }
 .menu-vertical-cascading ul li {
 	position:           relative;
-	z-index:            400;
+	z-index:            5;
 	width:              100%;
 	margin:             0;
     padding:            0;
