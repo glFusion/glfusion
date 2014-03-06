@@ -188,7 +188,6 @@ function WIDGET_mootickerRSS($block = 'gl_mootickerRSS', $id = 'gl_mooticker') {
 
     // Update feeds from blocks where 'is_enabled' -tag is set to 0
     $blocksql['mysql'] = $query;
-    $blocksql['mssql'] .= $query;
     $result = DB_query( $blocksql );
     $nrows = DB_numRows( $result );
 
