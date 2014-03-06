@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Let users submit stories and plugin stuff.                               |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -54,7 +52,7 @@ USES_lib_story();
 * types is story.  If no type is provided, Story is assumed.
 *
 * @param    string  $type   type of submission ('story')
-* @param    string  $mode   calendar mode ('personal' or empty string)
+* @param    string  $mode   story mode ('personal' or empty string)
 * @param    string  $topic  topic (for stories)
 * @return   string          HTML for submission form
 *
@@ -64,6 +62,8 @@ function submissionform($type='story', $mode = '', $topic = '')
     global $_CONF, $_TABLES, $_USER, $LANG12, $LANG_LOGIN;
 
     $retval = '';
+
+    $postmode = $_CONF['postmode'];
 
     COM_clearSpeedlimit($_CONF['speedlimit'], 'submit');
 
@@ -141,14 +141,12 @@ function submitstory($topic = '')
     $retval .= COM_startBlock($LANG12[6],'submitstory.html');
 
     $storyform = new Template($_CONF['path_layout'] . 'submit');
-//@TODO advanced editor stuff
+
     $storyform->set_file('storyform','submitstory.thtml');
     if ($story->EditElements('postmode') == 'html') {
-        $storyform->set_var ('show_texteditor', 'none');
-        $storyform->set_var ('show_htmleditor', '');
+        $storyform->set_var ('show_htmleditor', true);
     } else {
-        $storyform->set_var ('show_texteditor', '');
-        $storyform->set_var ('show_htmleditor', 'none');
+        $storyform->unset_var ('show_htmleditor');
     }
 
     $storyform->set_var ('site_admin_url', $_CONF['site_admin_url']);
@@ -196,24 +194,22 @@ function submitstory($topic = '')
     $storyform->set_var('story_bodytext', $story->EditElements('bodytext'));
     $storyform->set_var('lang_postmode', $LANG12[36]);
     $storyform->set_var('story_postmode_options', COM_optionList($_TABLES['postmodes'],'code,name',$story->EditElements('postmode')));
+    $storyform->set_var('postmode',$story->EditElements('postmode'));
     $storyform->set_var('allowed_html', COM_allowedHTML(SEC_getUserPermissions(),false,'glfusion','story'));
     $storyform->set_var('story_uid', $story->EditElements('uid'));
     $storyform->set_var('story_sid', $story->EditElements('sid'));
     $storyform->set_var('story_date', $story->EditElements('unixdate'));
-
+    PLG_templateSetVars ('story', $storyform);
     if (($_CONF['skip_preview'] == 1) ||
             (isset($_POST['mode']) && ($_POST['mode'] == $LANG12[32]))) {
-        PLG_templateSetVars ('story', $storyform);
         $storyform->set_var('save_button', '<input name="mode" type="submit" value="' . $LANG12[8] . '"' . XHTML . '>');
     }
-
     $storyform->set_var('lang_preview', $LANG12[32]);
     $storyform->parse('theform', 'storyform');
     $retval .= $storyform->finish($storyform->get_var('theform'));
     $retval .= COM_endBlock();
 
-//@TODO - security measure for advanced editor file manager
-    $rc = @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+    $rc = @setcookie ($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral('advancededitor'),
                time() + 1200, $_CONF['cookie_path'],
                $_CONF['cookiedomain'], $_CONF['cookiesecure']);
     return $retval;
@@ -402,7 +398,6 @@ if (isset ($_POST['mode'])) {
 
 if (($mode == $LANG12[8]) && !empty ($LANG12[8])) { // submit
     // purge any tokens we created for the advanced editor
-//@TODO security measure for advanced editor
     if ( !isset($_USER['uid'] ) ) {
         $_USER['uid'] = 1;
     }
