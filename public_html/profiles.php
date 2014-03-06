@@ -7,6 +7,9 @@
 // | This pages lets glFusion users communicate with each other without       |
 // | exposing email addresses.                                                |
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2011-2014 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans      - mark AT glfusion DOT org                            |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -33,7 +36,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once ('lib-common.php');
+require_once 'lib-common.php';
 
 /**
 * Mails the contents of the contact form to that user
@@ -155,7 +158,7 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
         } else {
             $subject = strip_tags ($subject);
             $subject = substr ($subject, 0, strcspn ($subject, "\r\n"));
-            $subject = htmlspecialchars (trim ($subject), ENT_QUOTES,COM_getEncodingt());
+            $subject = @htmlspecialchars (trim ($subject), ENT_QUOTES,COM_getEncodingt());
             $retval .= COM_siteHeader ('menu', $LANG04[81])
                     . COM_errorLog ($LANG08[3], 2)
                     . contactform ($uid, $subject, $message)
@@ -164,7 +167,7 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
     } else {
         $subject = strip_tags ($subject);
         $subject = substr ($subject, 0, strcspn ($subject, "\r\n"));
-        $subject = htmlspecialchars (trim ($subject), ENT_QUOTES,COM_getEncodingt());
+        $subject = @htmlspecialchars (trim ($subject), ENT_QUOTES,COM_getEncodingt());
         $retval .= COM_siteHeader ('menu', $LANG04[81])
                 . COM_errorLog ($LANG08[4], 2)
                 . contactform ($uid, $subject, $message)
@@ -455,7 +458,7 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
                                      "uid = {$_USER['uid']}");
         }
     }
-//@TODO validate postmode
+
     if (empty ($postmode) || (!in_array($postmode,array('html','plaintext')))) {
         $postmode = $_CONF['postmode'];
     }
@@ -471,9 +474,6 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
     }
     $mail_template->set_var('lang_postmode', $LANG03[2]);
     $mail_template->set_var('postmode', $postmode);
-//    $mail_template->set_var('postmode_options', COM_optionList($_TABLES['postmodes'],'code,name',$postmode));
-
-    $mail_template->set_var('layout_url', $_CONF['layout_url']);
     $mail_template->set_var('start_block_mailstory2friend', COM_startBlock($LANG08[17]));
     $mail_template->set_var('lang_fromname', $LANG08[20]);
     $mail_template->set_var('name', $from);
@@ -508,13 +508,21 @@ if (isset ($_POST['what'])) {
     $what = '';
 }
 
+$postmode = $postmode = $_CONF['postmode'];
+if ( isset($_POST['postmode'] ) )  {
+    if ( !in_array($_POST['postmode'],array('html','plaintext') ) ) {
+        $postmode = 'plaintext';
+    } else {
+        $postmode = COM_applyFilter($_POST['postmode']);
+    }
+}
+
 switch ($what) {
     case 'contact':
         $uid = COM_applyFilter ($_POST['uid'], true);
         if ($uid > 1) {
-//@TODO need to determine correct postmode...
             $html = 0;
-            if ( $_POST['postmode'] == 'html' ) {
+            if ( $postmode == 'html' ) {
                 $html = 1;
             }
             $message = $_POST['message'];
@@ -551,8 +559,8 @@ switch ($what) {
             $display = COM_refresh ($_CONF['site_url'] . '/index.php');
         } else {
             $html = 0;
-//@TODO validate postmode
-            if ( $_POST['postmode'] == 'html' ) {
+
+            if ( $postmode == 'html' ) {
                 $html = 1;
             }
             $shortmessage = $_POST['shortmsg'];
@@ -592,7 +600,7 @@ switch ($what) {
 
     default:
         if (isset ($_GET['uid'])) {
-            $uid = COM_applyFilter ($_GET['uid'], true);
+            $uid = (int) COM_applyFilter ($_GET['uid'], true);
         } else {
             $uid = 0;
         }
