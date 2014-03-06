@@ -8,6 +8,7 @@ window.addEvent('domready',function() {
 
 -->
 </script>
+{wysiwyg}
 {start_block_editor}
 {admin_menu}
 <form id="block" action="{site_admin_url}/block.php" method="post">

@@ -1,4 +1,7 @@
 {# begin {templatelocation} #}
+{!if show_htmleditor}
+{wysiwyg}
+{!endif}
 <form action="{php_self}" method="post">
     {startblock_email}
     {admin_menu}
@@ -55,15 +58,12 @@
 {!endif}
         <tr>
             <td class="alignright" style="vertical-align:top;">{lang_body}:</td>
-            <td><textarea rows="12" name="message" cols="40" style="width:85%;">{message_text}</textarea></td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td><input type="checkbox" name="html" /> {lang_HTML}</td>
+            <td><textarea id="message" name="message" rows="10" cols="80">{message_text}</textarea></td>
         </tr>
         <tr>
             <td></td>
             <td>
+                <input type="hidden" value="postmode" value="{postmode}" />
                 <input type="submit" value="{lang_send}" />
                 <input type="hidden" name="mail" value="mail" />
                 <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
