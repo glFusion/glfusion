@@ -6,9 +6,7 @@
 // |                                                                          |
 // | glFusion mail administration page.                                       |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2010-2011      by the following authors:                   |
+// | Copyright (C) 2010-2014      by the following authors:                   |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -46,7 +44,7 @@ if (!SEC_hasrights ('user.mail')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_showMessageText($MESSAGE[39],$MESSAGE[30],true);
     $display .= COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to illegally access the mail administration screen.");
+    COM_accessLog ("User {$_USER['username']} tried to access the mail administration screen.");
     echo $display;
     exit;
 }
@@ -74,23 +72,14 @@ function MAIL_displayForm( $uid=0, $grp_id=0, $from='', $replyto='', $subject=''
     }
 
     $mail_templates = new Template ($_CONF['path_layout'] . 'admin/mail');
-    if (($_CONF['advanced_editor'] == 1)) {
-        $mail_templates->set_file('form','mailform_advanced.thtml');
-    } else {
-        $mail_templates->set_file('form','mailform.thtml');
-    }
-    if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
-        $mail_templates->set_var('glfusionStyleBasePath',$_CONF['layout_url']);
-    } else {
-        $mail_templates->set_var('glfusionStyleBasePath',$_CONF['site_url'] . '/fckeditor');
-    }
+    $mail_templates->set_file('form','mailform.thtml');
+
     if ($postmode == 'html') {
-        $mail_templates->set_var ('show_texteditor', 'none');
-        $mail_templates->set_var ('show_htmleditor', '');
+        $mail_templates->set_var ('show_htmleditor', true);
     } else {
-        $mail_templates->set_var ('show_texteditor', '');
-        $mail_templates->set_var ('show_htmleditor', 'none');
+        $mail_templates->unset_var ('show_htmleditor');
     }
+    $mail_templates->set_var('postmode',$postmode);
     $mail_templates->set_var('lang_postmode', $LANG03[2]);
     $mail_templates->set_var('postmode_options', COM_optionList($_TABLES['postmodes'],'code,name',$postmode));
 
@@ -186,14 +175,13 @@ function MAIL_displayForm( $uid=0, $grp_id=0, $from='', $replyto='', $subject=''
     $mail_templates->set_var ('lang_ignoreusersettings', $LANG31[14]);
     $mail_templates->set_var ('lang_send', $LANG31[12]);
     $mail_templates->set_var ('end_block', COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer')));
-    $mail_templates->set_var ('xhtml', XHTML);
     $mail_templates->set_var('gltoken_name', CSRF_TOKEN);
     $mail_templates->set_var('gltoken', SEC_createToken());
-
+    PLG_templateSetVars('contact',$mail_templates);
     $mail_templates->parse ('output', 'form');
     $retval = $mail_templates->finish ($mail_templates->get_var ('output'));
 
-    SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+    SEC_setCookie ($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral('advancededitor'),
                    time() + 1200, $_CONF['cookie_path'],
                    $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
 

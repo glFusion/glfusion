@@ -6,9 +6,7 @@
 // |                                                                          |
 // | glFusion block administration.                                           |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2010-2011 by the following authors:                        |
+// | Copyright (C) 2010-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -268,7 +266,7 @@ function BLOCK_edit($bid = '', $B = array())
 
     if (!empty($bid) && SEC_hasrights('block.delete')) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
-                   . '" name="delete"%s' . XHTML . '>';
+                   . '" name="delete"%s />';
         $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
         $block_templates->set_var ('delete_option',
                                    sprintf ($delbutton, $jsconfirm));
@@ -431,11 +429,11 @@ function BLOCK_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                         $moveTitleMsg = $LANG21[60];
                         $switchside = '0';
                     }
-                    $retval.="<img src=\"{$_CONF['layout_url']}/images/admin/$blockcontrol_image\" width=\"45\" height=\"20\" usemap=\"#arrow{$A['bid']}\" alt=\"\"" . XHTML . ">"
+                    $retval.="<img src=\"{$_CONF['layout_url']}/images/admin/$blockcontrol_image\" width=\"45\" height=\"20\" usemap=\"#arrow{$A['bid']}\" alt=\"\" />"
                             ."<map id=\"arrow{$A['bid']}\" name=\"arrow{$A['bid']}\">"
-                            ."<area coords=\"0,0,12,20\"  title=\"{$LANG21[58]}\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=up&amp;".CSRF_TOKEN."={$token}\" alt=\"{$LANG21[58]}\"" . XHTML . ">"
-                            ."<area coords=\"13,0,29,20\" title=\"$moveTitleMsg\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=$switchside&amp;".CSRF_TOKEN."={$token}\" alt=\"$moveTitleMsg\"" . XHTML . ">"
-                            ."<area coords=\"30,0,43,20\" title=\"{$LANG21[57]}\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=dn&amp;".CSRF_TOKEN."={$token}\" alt=\"{$LANG21[57]}\"" . XHTML . ">"
+                            ."<area coords=\"0,0,12,20\"  title=\"{$LANG21[58]}\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=up&amp;".CSRF_TOKEN."={$token}\" alt=\"{$LANG21[58]}\" />"
+                            ."<area coords=\"13,0,29,20\" title=\"$moveTitleMsg\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=$switchside&amp;".CSRF_TOKEN."={$token}\" alt=\"$moveTitleMsg\" />"
+                            ."<area coords=\"30,0,43,20\" title=\"{$LANG21[57]}\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=dn&amp;".CSRF_TOKEN."={$token}\" alt=\"{$LANG21[57]}\" />"
                             ."</map>";
                 }
                 break;
@@ -476,8 +474,8 @@ function BLOCK_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                         $switch = '';
                     }
                     $retval = '<input type="checkbox" name="enabledblocks[' . $A['bid'] . ']" ' . $title
-                        . 'onclick="submit()" value="' . $A['onleft'] . '"' . $switch . XHTML . '>';
-                    $retval .= '<input type="hidden" name="bidarray[' . $A['bid'] . ']" value="' . $A['onleft'] . '"' . XHTML . '>';
+                        . 'onclick="submit()" value="' . $A['onleft'] . '"' . $switch .'/>';
+                    $retval .= '<input type="hidden" name="bidarray[' . $A['bid'] . ']" value="' . $A['onleft'] . '" />';
                 }
                 break;
 
@@ -658,7 +656,7 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
         } else {
             $msg = $LANG21[70];
         }
-        SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+        SEC_setCookie ($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral('advancededitor'),
                         time() + 1200, $_CONF['cookie_path'],
                         $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
         $retval .= COM_siteHeader ('menu', $LANG21[63])
@@ -779,7 +777,7 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
         COM_setMessage(11);
         return COM_refresh ($_CONF['site_admin_url'] . '/block.php');
     } else {
-        SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+        SEC_setCookie ($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral('advancededitor'),
                         time() + 1200, $_CONF['cookie_path'],
                         $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
 
@@ -1001,7 +999,7 @@ if (isset($_POST['blockenabler']) && SEC_checkToken()) {
 switch ($action) {
 
     case 'edit':
-        SEC_setCookie($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+        SEC_setCookie($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral('advancededitor'),
                        time() + 1200, $_CONF['cookie_path'],
                        $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
         $display .= COM_siteHeader('menu', $LANG21[3])
