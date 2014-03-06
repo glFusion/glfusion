@@ -218,22 +218,16 @@ function contactform ($uid, $subject = '', $message = '')
             $mail_template = new Template ($_CONF['path_layout'] . 'profiles');
 
             $mail_template->set_file('form','contactuserform.thtml');
-            if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
-                $mail_template->set_var('glfusionStyleBasePath',$_CONF['layout_url']);
-            } else {
-                $mail_template->set_var('glfusionStyleBasePath',$_CONF['site_url'] . '/fckeditor');
-            }
+
             if ($postmode == 'html') {
-                $mail_template->set_var ('show_texteditor', 'none');
-                $mail_template->set_var ('show_htmleditor', '');
+                $mail_template->set_var ('show_htmleditor', true);
             } else {
-                $mail_template->set_var ('show_texteditor', '');
-                $mail_template->set_var ('show_htmleditor', 'none');
+                $mail_template->unset_var ('show_htmleditor');
             }
+
             $mail_template->set_var('lang_postmode', $LANG03[2]);
             $mail_template->set_var('postmode_options', COM_optionList($_TABLES['postmodes'],'code,name',$postmode));
 
-            $mail_template->set_var ( 'xhtml', XHTML );
             $mail_template->set_var ('site_url', $_CONF['site_url']);
             $mail_template->set_var ('lang_description', $LANG08[26]);
             $mail_template->set_var ('lang_username', $LANG08[11]);
@@ -242,7 +236,7 @@ function contactform ($uid, $subject = '', $message = '')
                 if (isset ($_POST['author'])) {
                     $sender = strip_tags ($_POST['author']);
                     $sender = substr ($sender, 0, strcspn ($sender, "\r\n"));
-                    $sender = htmlspecialchars (trim ($sender), ENT_QUOTES,COM_getEncodingt());
+                    $sender = @htmlspecialchars (trim ($sender), ENT_QUOTES,COM_getEncodingt());
                 }
                 $mail_template->set_var ('username', $sender);
             } else {
@@ -256,7 +250,7 @@ function contactform ($uid, $subject = '', $message = '')
                 if (isset ($_POST['authoremail'])) {
                     $email = strip_tags ($_POST['authoremail']);
                     $email = substr ($email, 0, strcspn ($email, "\r\n"));
-                    $email = htmlspecialchars (trim ($email), ENT_QUOTES,COM_getEncodingt());
+                    $email = @htmlspecialchars (trim ($email), ENT_QUOTES,COM_getEncodingt());
                 }
                 $mail_template->set_var ('useremail', $email);
             } else {
@@ -265,9 +259,7 @@ function contactform ($uid, $subject = '', $message = '')
             $mail_template->set_var ('lang_subject', $LANG08[13]);
             $mail_template->set_var ('subject', $subject);
             $mail_template->set_var ('lang_message', $LANG08[14]);
-            $mail_template->set_var ('message', htmlspecialchars($message));
-            $mail_template->set_var ('message_text',htmlspecialchars($message));
-            $mail_template->set_var ('message_html',htmlspecialchars($message));
+            $mail_template->set_var ('message', @htmlspecialchars($message),ENT_QUOTES,COM_getEncodingt());
             $mail_template->set_var ('lang_nohtml', $LANG08[15]);
             $mail_template->set_var ('lang_submit', $LANG08[16]);
             $mail_template->set_var ('uid', $uid);
@@ -464,7 +456,7 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
         }
     }
 //@TODO validate postmode
-    if (empty ($postmode)) {
+    if (empty ($postmode) || (!in_array($postmode,array('html','plaintext')))) {
         $postmode = $_CONF['postmode'];
     }
 
@@ -472,8 +464,14 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
 
     $mail_template->set_file('form','contactauthorform.thtml');
 
+    if ($postmode == 'html') {
+        $mail_template->set_var ('show_htmleditor', true);
+    } else {
+        $mail_template->unset_var ('show_htmleditor');
+    }
     $mail_template->set_var('lang_postmode', $LANG03[2]);
-    $mail_template->set_var('postmode_options', COM_optionList($_TABLES['postmodes'],'code,name',$postmode));
+    $mail_template->set_var('postmode', $postmode);
+//    $mail_template->set_var('postmode_options', COM_optionList($_TABLES['postmodes'],'code,name',$postmode));
 
     $mail_template->set_var('layout_url', $_CONF['layout_url']);
     $mail_template->set_var('start_block_mailstory2friend', COM_startBlock($LANG08[17]));
