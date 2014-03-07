@@ -6,9 +6,7 @@
 // |                                                                          |
 // | glFusion Story Abstraction.                                              |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -134,7 +132,6 @@ class Story
     var $_trackbackcode;
     var $_statuscode;
     var $_expire;
-    var $_advanced_editor_mode;
     var $_frontpage;
     var $_owner_id;
     var $_group_id;
@@ -203,7 +200,6 @@ class Story
            'statuscode' => 1,
            'expire' => 1,
            'postmode' => 1,
-           'advanced_editor_mode' => 1,
            'frontpage' => 1,
            'owner_id' => 1,
            'group_id' => 1,
@@ -510,11 +506,9 @@ class Story
             $this->_numemails = 0;
 
             if (isset($_CONF['advanced_editor']) && $_CONF['advanced_editor'] && ($_CONF['postmode'] != 'plaintext')) {
-                $this->_advanced_editor_mode = 1;
-                $this->_postmode = 'adveditor';
+                $this->_postmode = 'html';
             } else {
                 $this->_postmode = $_CONF['postmode'];
-                $this->_advanced_editor_mode = 0;
             }
 
             $this->_statuscode = 0;
@@ -878,13 +872,9 @@ class Story
             $this->_htmlLoadStory($array['title'], $array['introtext'], $array['bodytext']);
 
             if ($this->_postmode == 'adveditor') {
-                $this->_advanced_editor_mode = 1;
                 $this->_postmode = 'html';
-            } else {
-                $this->_advanced_editor_mode = 0;
             }
         } else {
-            $this->_advanced_editor_mode = 0;
             $this->_plainTextLoadStory($array['title'], $array['introtext'], $array['bodytext']);
         }
 
@@ -991,13 +981,9 @@ class Story
             $this->_htmlLoadStory($array['title'], $array['introtext'], $array['bodytext']);
 
             if ($this->_postmode == 'adveditor') {
-                $this->_advanced_editor_mode = 1;
                 $this->_postmode = 'html';
-            } else {
-                $this->_advanced_editor_mode = 0;
             }
         } else {
-            $this->_advanced_editor_mode = 0;
             $this->_plainTextLoadStory($array['title'], $array['introtext'], $array['bodytext']);
         }
 

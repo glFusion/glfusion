@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Story-related functions needed in more than one place.                   |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -1430,7 +1428,6 @@ function service_get_story($args, &$output, &$svc_msg)
                                     'statuscode',
                                     'expire_date',
                                     'postmode',
-                                    'advanced_editor_mode',
                                     'frontpage',
                                     'owner_id',
                                     'group_id',
