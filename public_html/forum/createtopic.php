@@ -659,8 +659,10 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
     if ($postData['postmode'] == 'html' || $postData['postmode'] == 'HTML') {
         $postmode_msg = $LANG_GF01['TEXTMODE'];
         $postData['postmode'] = 'html';
+        $peTemplate->set_var('show_htmleditor',true);
     } else {
-         $postmode_msg = $LANG_GF01['HTMLMODE'];
+        $peTemplate->unset_var('show_htmleditor');
+        $postmode_msg = $LANG_GF01['HTMLMODE'];
     }
 
     if ($_FF_CONF['allow_html'] || SEC_inGroup( 'Root' ) || SEC_hasRights('forum.html')) {
@@ -706,7 +708,8 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         'subject'           => $postData['subject'],
         'smilies'           => $smilies,
         'LANG_attachments'  => $LANG_GF10['attachments'],
-        'LANG_maxattachments'=>sprintf($LANG_GF10['maxattachments'],$_FF_CONF['maxattachments'])
+        'LANG_maxattachments'=>sprintf($LANG_GF10['maxattachments'],$_FF_CONF['maxattachments']),
+        'postmode'          => $postData['postmode'],
     ));
 
     // Check and see if the filemgmt plugin is installed and enabled
@@ -894,6 +897,7 @@ function FF_saveTopic( $forumData, $postData, $action )
         }
     } else {
         if ( COM_isAnonUser() && $_FF_CONF['use_sfs']) {
+/* ------------------------
             if ( isset($postData['email']) && $postData['email'] != '' && COM_isEmail($postData['email']) ) {
                 $email = _ff_preparefordb(strip_tags(trim($postData['email'])),'text');
                 $email = urldecode($email);
@@ -901,6 +905,7 @@ function FF_saveTopic( $forumData, $postData, $action )
                 $okToSave = false;
                 $errorMessages .= $LANG_GF02['invalid_email'] . '<br />';
             }
+--------------------------- */
         } else {
             $email = isset($_USER['email']) ? $_USER['email'] : '';
         }
