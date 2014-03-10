@@ -7,9 +7,7 @@
 // | This file implements the necessary glFusion Plugin API functions and     |
 // | includes some common Forum functions                                     |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -90,12 +88,11 @@ if ( !COM_isAnonUser() ) {
     $result = DB_query("SELECT * FROM {$_TABLES['ff_userprefs']} where uid = ".(int) $_USER['uid'],1);
     if ( DB_numRows($result) > 0 ) {
         $FF_userprefs = DB_fetchArray($result);
-        if ( $_FF_CONF['allow_wysiwyg_editor'] == 1 && isset($userprefs['use_wysiwyg_editor'])) {
-            $_FF_CONF['use_wysiwyg_editor'] = $userprefs['use_wysiwyg_editor'];
+        if ( $_FF_CONF['allow_wysiwyg_editor'] == 1 && isset($FF_userprefs['use_wysiwyg_editor'])) {
+            $_FF_CONF['use_wysiwyg_editor'] = $FF_userprefs['use_wysiwyg_editor'];
         }
     }
 }
-
 $_FF_CONF['use_glfilter'] = 1; // always use the filter...
 
 if ( !isset($_FF_CONF['showtopic_review_order']) ) {
