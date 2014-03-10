@@ -804,6 +804,12 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
                 PLG_requestEditor('forum','forum_entry','ckeditor_forum.thtml');
                 PLG_templateSetVars('forum_entry',$peTemplate);
                 break;
+            case 'tinymce' :
+                $peTemplate->set_var('show_htmleditor',true);
+                PLG_requestEditor('forum','forum_entry','tinymce_forum.thtml');
+                PLG_templateSetVars('forum_entry',$peTemplate);
+                break;
+
             default :
                 // don't support others right now
                 break;
