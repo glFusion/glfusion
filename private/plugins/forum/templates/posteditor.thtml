@@ -61,7 +61,6 @@
   <script type="text/javascript" src="{site_url}/forum/javascript/createtopic.js"></script>
   <script type="text/javascript">
       var site_url = '{site_url}';
-
   window.addEvent('domready', function() {
   	var mySlideV = new Fx.Slide('smileys').hide();
   		$('toggleV').addEvent('click', function(e){
@@ -205,7 +204,7 @@
     <input type="button" value="{html_editor}"  onclick="woff('comment')"/>
     </div>
 {!endif}
-          <textarea name="comment" id="input2" rows="20" cols="45" tabindex="6" class="post" style="width:99%" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);">{comment}</textarea>
+          <textarea name="comment" id="comment" rows="20" cols="45" tabindex="6" class="post" style="width:99%" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);">{comment}</textarea>
         </td>
       </tr>
 {!if use_attachments}
