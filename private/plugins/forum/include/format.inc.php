@@ -272,6 +272,9 @@ function do_bbcode_code($action, $attributes, $content, $params, $node_object) {
         $codeblock = str_replace('&lt;','<',$codeblock);
         $codeblock = str_replace('&gt;','>',$codeblock);
         $codeblock = str_replace('&amp;','&',$codeblock);
+        $codeblock = str_replace("<br /><br />","<br />",$codeblock);
+        $codeblock = str_replace("<p>","",$codeblock);
+        $codeblock = str_replace("</p>","",$codeblock);
     }
 
     return $codeblock;
