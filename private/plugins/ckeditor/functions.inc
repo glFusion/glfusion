@@ -1,0 +1,212 @@
+<?php
+// +--------------------------------------------------------------------------+
+// | CKEditor Plugin - glFusion CMS                                           |
+// +--------------------------------------------------------------------------+
+// | functions.inc                                                            |
+// |                                                                          |
+// | glFusion integration functions.                                          |
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2014 by the following authors:                             |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
+
+// this file can't be used on its own
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
+// load the language file(s), including custom strings if any
+
+$langfile = $_CONF['path'].'plugins/ckeditor/language/' . $_CONF['language'] . '.php';
+$custfile = $_CONF['path'].'plugins/ckeditor/language/custom/' . $_CONF['language'] . '.php';
+
+if (file_exists($langfile)) {
+    include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
+} else {
+    $langfile = $_CONF['path'].'plugins/ckeditor/language/english.php';
+    $custfile = $_CONF['path'].'plugins/ckeditor/language/custom/english.php';
+    include_once $langfile;
+    if (file_exists($custfile)) {
+        include_once $custfile;
+    }
+}
+if (!isset($_CK_CONF['enable_story'])) {
+    require_once $_CONF['path_system'] . 'classes/config.class.php';
+
+    $tm_config = config::get_instance();
+    $_CK_CONF = $tm_config->get_config('ckeditor');
+}
+require_once $_CONF['path'].'plugins/ckeditor/ckeditor.php';
+
+$_editorRegistration = array();
+
+/**
+ * Returns URL for the plugin's icon
+ *
+ * @return  string  URL to icon
+ */
+function plugin_geticon_ckeditor ()
+{
+    global $_CONF;
+
+    return $_CONF['site_url'] . '/ckeditor/ckeditor.png';
+}
+
+
+/**
+ * Set template variable with ckeditor editor
+ *
+ * This plugin uses the 'templatesetvars' hook to insert the WYSIWYG
+ * editor code into the template. This allows users to create
+ * or edit content of type specified ($ctype). The template handle
+ * relating to the input/edit form for the content type is passed
+ * to allow the corresponding ckeditor template variable to be set.
+ *
+ * @param   string  Template type - comment, registration, etc.
+ * @param   class   Template class handle
+ * @return  string  blank
+ */
+function plugin_templatesetvars_ckeditor($ctype, &$template)
+{
+    global $_CONF, $_CK_CONF, $_USER, $_TABLES, $LANG_CK00, $_editorRegistration;
+
+    $setupEditor = 0;
+    $templateFile = 'ckeditor.thtml';
+    $templatePath = $_CONF['path'] . 'plugins/ckeditor/templates';
+
+    switch( $ctype ) {
+        case 'comment' :
+            if ( $_CK_CONF['enable_comment'] != 1 ) {
+                $template->unset_var('wysiwyg');
+                return;
+            }
+            $templateFile = 'ckeditor_comment.thtml';
+            break;
+        case 'storyeditor' :
+            if ( $_CK_CONF['enable_story'] != 1 ) {
+                $template->unset_var('wysiwyg');
+                return;
+            }
+            $templateFile = 'ckeditor_story.thtml';
+            break;
+        case 'story' :
+            if ( $_CK_CONF['enable_submitstory'] != 1 ) {
+                $template->unset_var('wysiwyg');
+                return;
+            }
+            $templateFile = 'ckeditor_submitstory.thtml';
+            break;
+        case 'contact' :
+            if ( $_CK_CONF['enable_contact'] != 1 ) {
+                $template->unset_var('wysiwyg');
+                return;
+            }
+            $templateFile = 'ckeditor_contact.thtml';
+            break;
+        case 'emailstory' :
+            if ( $_CK_CONF['enable_emailstory'] != 1 ) {
+                $template->unset_var('wysiwyg');
+                return;
+            }
+            $templateFile = 'ckeditor_email.thtml';
+            break;
+        case 'sp_editor' :
+            if ( $_CK_CONF['enable_sp'] != 1 ) {
+                $template->unset_var('wysiwyg');
+                return;
+            }
+            $templateFile = 'ckeditor_sp.thtml';
+            break;
+        case 'general' :
+            $templateFile = 'ckeditor.thtml';
+            break;
+        default :
+            foreach ( $_editorRegistration AS $_pi => $data ) {
+
+                if ( $data['function'] == $ctype ) {
+                    $template->unset_var('wysiwyg');
+                    $templateFile = $data['template'];
+                    $templatePath = $_CONF['path'].'plugins/'.$_pi.'/templates';
+                    $setupEditor = 1;
+                    break;
+                }
+            }
+            if ( $setupEditor == 0 ) return '';
+            break;
+    }
+    $T = new Template($templatePath);
+    $T->set_file('page', $templateFile);
+    if ( file_exists($_CONF['path_layout'].'ck_styles.js') ) {
+        $T->set_var('styleset',"stylesSet: '".$_CONF['theme'].":".$_CONF['layout_url']."/ck_styles.js',");
+    }
+    $T->set_var(array(
+                'theme' => $_CONF['theme'],
+                'path_html' => $_CONF['path_html'],
+                ));
+    $T->parse('output','page');
+    $wysiwyg = $T->finish($T->get_var('output'));
+    $template->set_var(array(
+        'wysiwyg'   => $wysiwyg,
+        'html_editor' => $LANG_CK00['html'],
+        'visual_editor' => $LANG_CK00['visual'],
+    ));
+    return '';
+}
+
+/**
+ * Return plugin's version information
+ *
+ * @return  string   plugin version number
+ */
+function plugin_chkVersion_ckeditor() {
+    global $_CK_CONF;
+
+    return $_CK_CONF['pi_version'];
+}
+
+/**
+ * Upgrade plugin
+ *
+ * @return  string   plugin version number
+ */
+function plugin_upgrade_ckeditor() {
+    global $_CONF, $_TABLES;
+
+    require_once $_CONF['path'].'plugins/ckeditor/upgrade.php';
+
+    return ckeditor_upgrade();
+}
+
+function plugin_requestEditor_ckeditor($plugin, $ctype, $template)
+{
+    global $_editorRegistration;
+
+    $_editorRegistration[$plugin] = array('function' => $ctype,'template' => $template);
+    return true;
+}
+
+function plugin_getEditorType_ckeditor()
+{
+    return 'ckeditor';
+}
+?>
