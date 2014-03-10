@@ -1,0 +1,17 @@
+<script type="text/javascript" src="{site_url}/tinymce/tinymce.js" ></script >
+<script type="text/javascript" >
+function won (id) {
+    tinymce.execCommand('mceAddEditor', false, id);
+}
+function woff (id) {
+    tinymce.execCommand('mceRemoveEditor', false, id);
+}
+tinymce.init({
+    selector: "textarea",
+    body_class: 'forumpost',
+    menubar:false,
+    statusbar : false,
+    content_css : "{site_url}/css.php?t={theme}",
+    toolbar: "bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link fullscreen code emoticons"
+});
+</script>
