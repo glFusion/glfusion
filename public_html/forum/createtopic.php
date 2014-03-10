@@ -659,7 +659,6 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
     if ($postData['postmode'] == 'html' || $postData['postmode'] == 'HTML') {
         $postmode_msg = $LANG_GF01['TEXTMODE'];
         $postData['postmode'] = 'html';
-        $peTemplate->set_var('show_htmleditor',true);
     } else {
         $peTemplate->unset_var('show_htmleditor');
         $postmode_msg = $LANG_GF01['HTMLMODE'];
@@ -796,11 +795,12 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
     $peTemplate->set_var('token', SEC_createToken());
 
     $peTemplate->set_var ('postmode', $postData['postmode']);
-
+    $peTemplate->unset_var('show_htmleditor');
     if ($_FF_CONF['use_wysiwyg_editor'] && $postData['postmode'] == 'html') {
         // hook into wysiwyg here
         switch( PLG_getEditorType() ) {
             case 'ckeditor' :
+                $peTemplate->set_var('show_htmleditor',true);
                 PLG_requestEditor('forum','forum_entry','ckeditor_forum.thtml');
                 PLG_templateSetVars('forum_entry',$peTemplate);
                 break;
