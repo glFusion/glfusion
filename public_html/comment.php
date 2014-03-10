@@ -576,7 +576,7 @@ if ( isset($_POST['cancel'] ) ) {
                 $sid   = isset($_REQUEST['sid']) ? COM_applyFilter ($_REQUEST['sid']) : '';
                 $type  = isset($_REQUEST['type']) ? COM_applyFilter ($_REQUEST['type']) : '';
                 $title = isset($_REQUEST['title']) ? strip_tags($_REQUEST['title']) : '';
-                $postmode = isset($_REQUEST['postmode']) ? COM_applyFilter($_REQUEST['postmode']) : $_CONF['comment_postmode'];
+                $postmode = $_CONF['comment_postmode'];
                 $pid = isset($_REQUEST['pid']) ? COM_applyFilter($_REQUEST['pid'],true) : 0;
 
                 if (!empty ($sid) && !empty ($type)) {

@@ -6,8 +6,6 @@
 // |                                                                          |
 // | Initial configuration setup.                                             |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2007-2008 by the following authors:                        |
@@ -259,9 +257,9 @@ function install_config($site_url)
     $c->add('story_submit_by_perm_only',0,'select',4,5,0,20,TRUE);
     $c->add('listdraftstories',0,'select',4,5,0,30,TRUE);
     $c->add('postmode','html','select',4,5,5,40,TRUE);
-    $c->add('speedlimit',45,'text',4,5,NULL,50,TRUE);
-    $c->add('skip_preview',0,'select',4,5,0,60,TRUE);
-    $c->add('advanced_editor',TRUE,'select',4,5,1,70,TRUE);
+    $c->add('mailuser_postmode','html','select',4,5,5,50,TRUE);
+    $c->add('speedlimit',45,'text',4,5,NULL,60,TRUE);
+    $c->add('skip_preview',0,'select',4,5,0,70,TRUE);
 
     $c->add('fs_comments', NULL, 'fieldset', 4, 6, NULL, 0, TRUE);
     $c->add('commentspeedlimit',45,'text',4,6,NULL,10,TRUE);
@@ -271,7 +269,6 @@ function install_config($site_url)
     $c->add('comment_edit',0,'select',4,6,0,50,TRUE);
     $c->add('comment_edittime',1800,'text',4,6,NULL,60,TRUE);
     $c->add('comment_postmode','plaintext','select',4,6,5,70,TRUE);
-    $c->add('comment_editor',0,'select',4,6,28,80,TRUE);
     $c->add('article_comment_close_enabled',0,'select',4,6,0,90,TRUE);
     $c->add('article_comment_close_days',30,'text',4,6,NULL,100,TRUE);
     $c->add('comment_close_rec_stories',0,'text',4,6,NULL,110,TRUE);

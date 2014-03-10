@@ -208,10 +208,7 @@ function contactform ($uid, $subject = '', $message = '')
         } else {
             $isAdmin = false;
         }
-//@TODO validate postmode
-        if (empty ($postmode)) {
-            $postmode = $_CONF['postmode'];
-        }
+        $postmode = $_CONF['mailuser_postmode'];
 
         $displayname = COM_getDisplayName ($uid);
         if ((($P['emailfromadmin'] == 1) && $isAdmin) ||
@@ -231,7 +228,6 @@ function contactform ($uid, $subject = '', $message = '')
             $mail_template->set_var('lang_postmode', $LANG03[2]);
             $mail_template->set_var('postmode_options', COM_optionList($_TABLES['postmodes'],'code,name',$postmode));
 
-            $mail_template->set_var ('site_url', $_CONF['site_url']);
             $mail_template->set_var ('lang_description', $LANG08[26]);
             $mail_template->set_var ('lang_username', $LANG08[11]);
             if (COM_isAnonUser()) {
@@ -459,9 +455,7 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
         }
     }
 
-    if (empty ($postmode) || (!in_array($postmode,array('html','plaintext')))) {
-        $postmode = $_CONF['postmode'];
-    }
+    $postmode = $_CONF['mailuser_postmode'];
 
     $mail_template = new Template($_CONF['path_layout'] . 'profiles');
 
@@ -482,12 +476,12 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
     $mail_template->set_var('lang_toname', $LANG08[18]);
     $mail_template->set_var('toname', $to);
     $mail_template->set_var('lang_toemailaddress', $LANG08[19]);
-    $mail_template->set_var('toemail', $toemail);
+    $mail_template->set_var('toemail', $toemail);$_
     $mail_template->set_var('lang_shortmessage', $LANG08[27]);
     $mail_template->set_var('shortmsg', @htmlspecialchars($shortmsg,ENT_COMPAT,COM_getEncodingt()));
     $mail_template->set_var('lang_warning', $LANG08[22]);
     $mail_template->set_var('lang_sendmessage', $LANG08[16]);
-    $mail_template->set_var('story_id',$sid);
+$_    $mail_template->set_var('story_id',$sid);
     PLG_templateSetVars ('emailstory', $mail_template);
     $mail_template->set_var('end_block', COM_endBlock());
     $mail_template->parse('output', 'form');
@@ -508,14 +502,7 @@ if (isset ($_POST['what'])) {
     $what = '';
 }
 
-$postmode = $postmode = $_CONF['postmode'];
-if ( isset($_POST['postmode'] ) )  {
-    if ( !in_array($_POST['postmode'],array('html','plaintext') ) ) {
-        $postmode = 'plaintext';
-    } else {
-        $postmode = COM_applyFilter($_POST['postmode']);
-    }
-}
+$postmode = $_CONF['mailuser_postmode'];
 
 switch ($what) {
     case 'contact':

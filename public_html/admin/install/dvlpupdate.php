@@ -6,8 +6,6 @@
 // |                                                                          |
 // | glFusion Development SQL Updates                                         |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -1017,11 +1015,23 @@ function glfusion_133()
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
 
+    // remove menu_elements - no longer used
     $c->del('menu_elements','Core');
+    $c->del('mailstory_postmode','Core');
+    $c->del('comment_editor','Core');
+    $c->del('advanced_editor','Core');
+
+    // add mailuser_postmode
+    // add mailstory_postmode
+
+    if ( !isset($_CONF['mailuser_postmode'] ) ) {
+        $c->add('mailuser_postmode','html','select',4,5,5,43,TRUE);
+    }
+
 
     // update version number
-    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.3.3',name='glfusion'",1);
-    DB_query("UPDATE {$_TABLES['vars']} SET value='1.3.3' WHERE name='glfusion'",1);
+//    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.3.3',name='glfusion'",1);
+//    DB_query("UPDATE {$_TABLES['vars']} SET value='1.3.3' WHERE name='glfusion'",1);
 }
 
 function _updateConfig() {

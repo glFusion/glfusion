@@ -505,7 +505,7 @@ class Story
             $this->_trackbacks = 0;
             $this->_numemails = 0;
 
-            if (isset($_CONF['advanced_editor']) && $_CONF['advanced_editor'] && ($_CONF['postmode'] != 'plaintext')) {
+            if ( $_CONF['postmode'] != 'plaintext' ) {
                 $this->_postmode = 'html';
             } else {
                 $this->_postmode = $_CONF['postmode'];
@@ -2028,11 +2028,6 @@ class Story
     function _htmlLoadStory($title, $intro, $body)
     {
         global $_CONF;
-
-        // fix for bug in advanced editor
-        if ($_CONF['advanced_editor'] && ($body == '<br />')) {
-            $body = '';
-        }
 
         $this->_title = htmlspecialchars(strip_tags(COM_checkWords($title)));
         $this->_introtext = COM_checkHTML(COM_checkWords($intro), 'story.edit');
