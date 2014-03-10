@@ -65,11 +65,15 @@ function MAIL_displayForm( $uid=0, $grp_id=0, $from='', $replyto='', $subject=''
 
     $retval = '';
 
-    if ($_CONF['advanced_editor'] == 1) {
-        $postmode = 'html';
-    } elseif (empty ($postmode)) {
+    if ( isset($_POST['postmode'] ) ) {
+        $postmode = COM_applyFilter($_POST['postmode']);
+        if ( $postmode != 'html' || $postmode != 'plaintext' ) {
+            $postmode = $_CONF['postmode'];
+        }
+    } else {
         $postmode = $_CONF['postmode'];
     }
+
 
     $mail_templates = new Template ($_CONF['path_layout'] . 'admin/mail');
     $mail_templates->set_file('form','mailform.thtml');
@@ -204,16 +208,9 @@ function MAIL_sendMessages($vars)
     $retval = '';
 
     $html = 0;
-    if (($_CONF['advanced_editor'] == 1)) {
-        if ( $vars['postmode'] == 'html' ) {
-            $message = $vars['message_html'];
-            $html = true;
-        } else if ( $vars['postmode'] == 'text' ) {
-            $message = $vars['message_text'];
-            $html = false;
-        }
-    } else {
-        $message = $vars['message'];
+    $message = $vars['message'];
+    if ( $vars['postmode'] == 'html' ) {
+        $html = true;
     }
 
     $usermode = ((int) $vars['to_uid'] > 0 && (int) $vars['to_group'] == 0) ? true : false;
@@ -224,11 +221,7 @@ function MAIL_sendMessages($vars)
 
         $retval .= COM_showMessageText($LANG31[26],$LANG31[1],true);
 
-        if ( $vars['postmode'] == 'html' ) {
-            $msg = htmlspecialchars($vars['message_html'],ENT_COMPAT,COM_getEncodingt());
-        } else {
-            $msg = htmlspecialchars($vars['message_text'],ENT_COMPAT,COM_getEncodingt());
-        }
+        $msg = htmlspecialchars($vars['message'],ENT_COMPAT,COM_getEncodingt());
         $subject = htmlspecialchars($vars['subject'],ENT_COMPAT,COM_getEncodingt());
         $fra     = htmlspecialchars($vars['fra'],ENT_COMPAT,COM_getEncodingt());
         $fraepost = htmlspecialchars($vars['fraepost'],ENT_COMPAT,COM_getEncodingt());
@@ -306,7 +299,7 @@ function MAIL_sendMessages($vars)
 
     $retval .= '<h2>' . $LANG31[21] . '</h2>';
     for ($i = 0; $i < count ($failures); $i++) {
-        $retval .= current ($failures) . '<br' . XHTML . '>';
+        $retval .= current ($failures) . '<br/>';
         next ($failures);
     }
     if (count ($failures) == 0) {
@@ -315,7 +308,7 @@ function MAIL_sendMessages($vars)
 
     $retval .= '<h2>' . $LANG31[22] . '</h2>';
     for ($i = 0; $i < count ($successes); $i++) {
-        $retval .= current ($successes) . '<br' . XHTML . '>';
+        $retval .= current ($successes) . '<br/>';
         next ($successes);
     }
     if (count ($successes) == 0) {
