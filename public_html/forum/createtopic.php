@@ -529,7 +529,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         $peTemplate->set_var ('anonymous_user',true);
         $peTemplate->set_var ('post_message', $postmessage);
         $peTemplate->set_var ('LANG_NAME', $LANG_GF02['msg33']);
-        $peTemplate->set_var ('name', _ff_checkHTML(strip_tags(COM_checkWords(trim(USER_sanitizeName(isset($postData['name']) ? $postData['name'] : ''))))));
+        $peTemplate->set_var ('name', htmlentities(strip_tags(COM_checkWords(trim(USER_sanitizeName(isset($postData['name']) ? $postData['name'] : ''))))));
         $peTemplate->set_var ('email',strip_tags($postData['email']));
     } else {
         $peTemplate->set_var ('member_user',true);
@@ -744,7 +744,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
             'cat_name'          => $postData['cat_name'],
             'cat_id'            => $forumData['forum_cat'],
             'forum_name'        => $postData['forum_name'],
-            'subject'           => _ff_checkHTML($postData['subject']),
+            'subject'           => @htmlspecialchars($postData['subject'],ENT_QUOTES, COM_getEncodingt()),
             'LANG_HOME'         => $LANG_GF01['HOMEPAGE'],
             'forum_home'        => $LANG_GF01['INDEXPAGE'],
             'hidden_id'         => $postData['id'],
@@ -917,7 +917,8 @@ function FF_saveTopic( $forumData, $postData, $action )
         }
     }
     if (isset($postData['name']) && $postData['name'] != '') {
-        $name = _ff_preparefordb(_ff_checkHTML(strip_tags(trim(COM_checkWords(USER_sanitizeName($postData['name']))))),'text');
+//        $name = _ff_preparefordb(_ff_checkHTML(strip_tags(trim(COM_checkWords(USER_sanitizeName($postData['name']))))),'text');
+        $name = _ff_preparefordb(@htmlspecialchars(strip_tags(trim(COM_checkWords(USER_sanitizeName($postData['name'])))),ENT_QUOTES,COM_getEncodingt()),'text');
         $name = urldecode($name);
     } else {
         $okToSave = false;
@@ -1197,7 +1198,7 @@ function FF_previewPost( $postData, $mode )
 
     $retval = '';
 
-    $postData['name'] = _ff_checkHTML(strip_tags(COM_checkWords(trim(USER_sanitizeName(urldecode($_POST['name']))))));
+    $postData['name'] = @htmlspecialchars(strip_tags(COM_checkWords(trim(USER_sanitizeName(urldecode($_POST['name']))))),ENT_QUOTES,COM_getEncodingt());
     if ( !isset($postData['uid']) ) {
         if ( COM_isAnonUser() ) {
             $postData['uid'] = 1;
@@ -1270,6 +1271,7 @@ function FF_previewPost( $postData, $mode )
     if ( !isset($postData['date']) ) {
         $postData['date'] = time();
     }
+    $postData['comment'] = COM_filterHTML($postData['comment']);
     FF_showtopic($postData,'preview',1,0,$previewTemplate);
     $previewTemplate->parse ('output', 'preview');
 

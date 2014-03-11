@@ -288,7 +288,8 @@ function do_bbcode_code($action, $attributes, $content, $params, $node_object) {
 */
 function bbcode_cleanHTML($str) {
     global $_CONF;
-
+    COM_filterHTML( $str );
+/*
     require_once $_CONF['path'] . 'lib/htmLawed/htmLawed.php';
     $configArray = array('safe' => 1,
                          'balance'  => 1,
@@ -296,6 +297,7 @@ function bbcode_cleanHTML($str) {
                         );
 
     return htmLawed($str,$configArray);
+*/
 }
 
 
@@ -315,7 +317,7 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
         $bbcode->addParser (array ('block', 'inline', 'link', 'listitem'), 'bbcode_htmlspecialchars');
     }
     if ( $_FF_CONF['use_glfilter'] == 1 && ($postmode == 'html' || $postmode == 'HTML')) {
-        $bbcode->addParser(array('block','inline','link','listitem'), '_ff_checkHTML');      // calls glFusion's checkHTML on all text blocks
+//        $bbcode->addParser(array('block','inline','link','listitem'), '_ff_checkHTML');      // calls glFusion's checkHTML on all text blocks
         $str = str_replace('<pre>','[code]',$str);
         $str = str_replace('</pre>','[/code]',$str);
     }
