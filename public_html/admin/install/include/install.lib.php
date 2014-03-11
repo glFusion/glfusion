@@ -1066,9 +1066,18 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
         case '1.3.1' :
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
-//            $c->add('pc_publickey', '','text',0, 0, 0, 48, true, 'captcha');
-//            $c->add('pc_privatekey', '','text',0, 0, 0, 49, true, 'captcha');
             $current_fusion_version = '1.3.2';
+        case '1.3.2' :
+            $c = config::get_instance();
+            // remove menu_elements - no longer used
+            $c->del('menu_elements','Core');
+            $c->del('mailstory_postmode','Core');
+            $c->del('comment_editor','Core');
+            $c->del('advanced_editor','Core');
+            if ( !isset($_CONF['mailuser_postmode'] ) ) {
+                $c->add('mailuser_postmode','html','select',4,5,5,43,TRUE);
+            }
+            $current_fusion_version = '1.4.0';
         default:
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='".$current_fusion_version."' WHERE name='glfusion'",1);
