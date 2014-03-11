@@ -2433,36 +2433,54 @@ function COM_filterHTML( $str, $permissions = 'story.edit' )
             SEC_inGroup( 'Root' )) {
         return $str;
     }
+COM_errorLog("calling filterHTML:".htmlspecialchars($str));
+    $commentWhiteList   = $_CONF['htmlfilter_comment'];
+    $storyWhiteList     = $_CONF['htmlfilter_story'];
+    $rootWhiteList      = $_CONF['htmlfilter_root'];
+    $wysiwygWhiteList   = 'img';
 
-    if ( $_CONF['allow_embed_object'] == 1 ) {
-        $configArray = array('safe' => 1,
-                             'elements' => '*+embed+object',
-                             'balance'  => 1,
-                             'valid_xhtml' => 0
-                            );
-    } else {
-        $configArray = array('safe' => 1,
-                             'balance'  => 1,
-                             'valid_xhtml' => 1
-                            );
+    $comment = explode(',',$commentWhiteList);
+    $story   = explode(',',$storyWhiteList);
+    $root    = explode(',',$rootWhiteList);
+    $wysiwyg = explode(',',$wysiwygWhiteList);
+
+    $configArray = array();
+
+    switch ( $permissions ) {
+        case 'story.edit' :
+            $configArray = array_merge($configArray,$story);
+            break;
+        default :
+            $configArray = array_merge($configArray,$comment);
+            break;
+    }
+    if ( SEC_inGroup('Root') ) {
+        $configArray = array_merge($configArray,$root);
     }
 
-    if ( isset($_SYSTEM['filterOverride']) && is_array($_SYSTEM['filterOverride'] ) ) {
-        $configArray = array_merge($configArray,$_SYSTEM['filterOverride']);
+    $configArray = array_merge($configArray,$wysiwyg);
+    $filterArray = array_unique($configArray);
+    foreach($filterArray as $element) {
+        $final[$element] = true;
     }
 
-    if ( SEC_inGroup('Root') && isset($_SYSTEM['RootFilterOverride']) && is_array($_SYSTEM['RootFilterOverride'] ) ) {
-        $configArray = array_merge($configArray,$_SYSTEM['RootFilterOverride']);
-    }
+    $configFilter = implode(",",$filterArray);
+/*
+echo '<pre>';
+echo print_r($final);
+echo '</pre>';
+exit;
+*/
+    require_once $_CONF['path'] . 'lib/htmlpurifier/HTMLPurifier.auto.php';
+    require_once $_CONF['path'] . 'lib/htmlpurifier/CustomFilters.php';
 
-    require_once $_CONF['path'] . 'lib/htmLawed/htmLawed.php';
+    $config = HTMLPurifier_Config::createDefault();
+//    $config->set('HTML.AllowedElements', $final);
 
-    if ( $_CONF['allow_embed_object'] == 1 ) {
-        $str = htmLawed($str,$configArray);
-    } else {
-        $str = htmLawed($str,$configArray);
-    }
-    return $str;
+    $purifier = new HTMLPurifier($config);
+
+    $clean_html = $purifier->purify($str);
+    return $clean_html;
 }
 
 
