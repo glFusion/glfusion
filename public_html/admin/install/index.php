@@ -38,7 +38,7 @@
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
 if (!defined('GVERSION')) {
-    define('GVERSION', '1.3.2.pl0');
+    define('GVERSION', '1.4.0.pl0');
 }
 
 define('SESSION_EXPIRED',           1);

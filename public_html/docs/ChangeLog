@@ -1,5 +1,39 @@
 glFusion ChangeLog
 
+v1.4.0
+------
+- Removed FCKEditor from code base
+- Implemented CKEditor as plugin (integrated into glFusion CMS Distirbution)
+- Developed TinyMCE Editor plugin - available as separate download
+- Implemented plugin API to integrate with WYSIWYG plugins
+- Forum: Several bug fixes for HTML entry
+- Media Gallery: Removed SWFUpload
+- Media Gallery: Added HTML5 Upload option
+- Updated SimplePie library to latest release
+- Updated getID3() library to latest release
+- PHP v5.4 updates (proper class definitions)
+- New SFS, Versioncheck, and configuration icons for Nouveau theme
+- Rewrote the internal menu building code. The code is now much more efficient.
+  The following changes / features were added:
+  * Removed depreciated vhmenu and hmenu autotags. Should use menu.
+  * Menu layouts are now template driven. There are 4 base templates located in
+    the layout/themename/menu/ directory:
+      - menu_horizontal_cascading.thtml -
+      - menu_horizontal_simple.thtml
+      - menu_vertical_cascading.thtml
+      - menu_vertical_simple.thtml
+  * You can use a custom template for each menu by creating a copy of the base
+    template (see above) in the layout/themename/menu/custom directory
+    and appending '_menuname' to the end. For example, to have a custom template
+    for the 'navigation' menu, the template would be named:
+      - menu_horizontal_cascading_navigation.thtml
+  * Javascript to animate menus or modify look / feel should be embedded in the template.
+  * Removed on st_ template variable names - now use the following
+      - menu_header
+      - menu_navigation
+      - menu_footer
+- Removed all legacy menu code (i.e.; menu_elements from config, etc.)
+
 v1.3.2.pl1
 ---------
 - Updated PHPMailer to latest upstream release (Mark)

@@ -61,10 +61,10 @@ if (version_compare(PHP_VERSION,'5.2.0','<')) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.3.2');
+    define('GVERSION', '1.4.0');
 }
 
-define('PATCHLEVEL','.pl1');
+define('PATCHLEVEL','.pl0');
 
 //define('DEMO_MODE',true);
 
