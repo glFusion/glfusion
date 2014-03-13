@@ -30,23 +30,24 @@
 if (!defined ('GVERSION')) {
     define('GVERSION', '1.4.0');
 }
-
 require_once 'siteconfig.php';
-
 if ( !isset($_GET['t']) ) {
 	exit;
 }
-
 if ( !isset($_CONF['css_cache_filename']) ) {
     $_CONF['css_cache_filename'] = 'stylecache_';
 }
-
 $theme = preg_replace( '/[^a-zA-Z0-9\-_\.]/', '',$_GET['t'] );
 $theme = str_replace( '..', '', $theme );
+if ( $_SYSTEM['use_direct_style_js'] ) {
+    $filename = './'.$_CONF['css_cache_filename'].$theme.'.css';
+} else {
+    $filename = $_CONF['path'] . '/data/layout_cache/'.$_CONF['css_cache_filename'].$theme.'.css';
+}
 $buf = '';
-if ( @file_exists ($_CONF['path'] . '/data/layout_cache/'.$_CONF['css_cache_filename'].$theme.'.css') ) {
+if ( @file_exists ($filename) ) {
     header('Content-type: text/css');
-    $buf = file_get_contents($_CONF['path'] . '/data/layout_cache/'.$_CONF['css_cache_filename'].$theme.'.css');
+    $buf = file_get_contents($filename);
     echo $buf;
 }
 ?>
