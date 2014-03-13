@@ -1361,7 +1361,6 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     echo $tmp;  // send the header.thtml
 
     $retval = $theme->finish( $theme->get_var( 'index_footer' ));
-
     return $retval;
 }
 
@@ -1843,6 +1842,29 @@ function COM_errorLog( $logentry, $actionid = '' )
     }
 
     return $retval;
+}
+//@TODO REMOVE - just for debugging
+function COM_filterLog( $logentry)
+{
+    global $_CONF, $LANG01, $REMOTE_ADDR;
+
+    $retval = '';
+    USES_class_date();
+    $dt = new Date('now',$_CONF['timezone']);
+
+    if ( !empty( $logentry )) {
+        $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),$logentry );
+
+        $timestamp = $dt->format('d M Y H:i:s',true);
+        $ipaddress = $REMOTE_ADDR;
+
+        $logfile = $_CONF['path_html'] . 'filter.html';
+
+        if ( !$file = fopen( $logfile, 'a' )) {
+        } else {
+            fputs( $file, "$timestamp - $ipaddress<br/> $logentry <br/>" );
+        }
+    }
 }
 
 /**
@@ -2439,7 +2461,6 @@ function COM_filterHTML( $str, $permissions = 'story.edit' )
             SEC_inGroup( 'Root' )) {
         return $str;
     }
-COM_errorLog("calling filterHTML:".htmlspecialchars($str));
     $commentWhiteList   = $_CONF['htmlfilter_comment'];
     $storyWhiteList     = $_CONF['htmlfilter_story'];
     $rootWhiteList      = $_CONF['htmlfilter_root'];
@@ -2469,23 +2490,24 @@ COM_errorLog("calling filterHTML:".htmlspecialchars($str));
     foreach($filterArray as $element) {
         $final[$element] = true;
     }
-
     $configFilter = implode(",",$filterArray);
-/*
-echo '<pre>';
-echo print_r($final);
-echo '</pre>';
-exit;
-*/
     require_once $_CONF['path'] . 'lib/htmlpurifier/HTMLPurifier.auto.php';
     require_once $_CONF['path'] . 'lib/htmlpurifier/CustomFilters.php';
 
+    $charset = COM_getCharset();
     $config = HTMLPurifier_Config::createDefault();
-//    $config->set('HTML.AllowedElements', $final);
-
+    $config->set('HTML.AllowedElements', $final);
+    $config->set('Core.Encoding',$charset);
+    $config->set('Core.CollectErrors',true);
     $purifier = new HTMLPurifier($config);
-
     $clean_html = $purifier->purify($str);
+//@TODO debug code
+    if (@$config->get('Core', 'CollectErrors')) {
+        $e = $purifier->context->get('ErrorCollector');
+        $class = $e->getRaw() ? 'fail' : 'pass';
+        COM_filterLog( $e->getHTMLFormatted($config) );
+
+    }
     return $clean_html;
 }
 
