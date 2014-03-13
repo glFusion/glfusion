@@ -1029,7 +1029,7 @@ function glfusion_140()
 
     if ( !isset($_CONF['htmlfilter_comment']) ) {
         $c->add('htmlfilter_comment','p,b,a,i,strong,em,br,tt,hr,li,ol,ul,code,pre','text',7,5,NULL,30,TRUE);
-        $c->add('htmlfilter_story','a, abbr, acronym, address, b, basefont, bdo, big, blockquote, br, center, cite, code, del, dfn, dir, div, dl, em, font, h1, h2, h3, h4, h5, h6, hr, i, img, ins, kbd, menu, ol, p, pre, q, s, samp, small, span, strike, strong, sub, sup, table, tt, u, ul, var','text',7,5,NULL,40,TRUE);
+        $c->add('htmlfilter_story','p,b,a,i,strong,em,br,tt,hr,li,ol,ul,code,pre,blockquote','text',7,5,NULL,40,TRUE);
         $c->add('htmlfilter_root','div,span,table,tr.td,th','text',7,5,NULL,50,TRUE);
     }
 
