@@ -6,9 +6,7 @@
 // |                                                                          |
 // | General formatting routines                                              |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric M. Kingsley       kingsley AT trains-n-town DOTcom                  |
@@ -82,15 +80,16 @@ function do_bbcode_url ($action, $attributes, $content, $params, $node_object) {
 
     if (!isset ($attributes['default'])) {
         if ( stristr($content,'http') ) {
-            return '<a href="'.bbcode_cleanHTML($content).'" rel="nofollow">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
+            return '<a href="'.strip_tags($content).'" rel="nofollow">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
         } else {
-            return '<a href="http://'.bbcode_cleanHTML($content).'" rel="nofollow">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
+            return '<a href="http://'.strip_tags($content).'" rel="nofollow">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
+
         }
     }
     if ( stristr($attributes['default'],'http') ) {
-        return '<a href="'.bbcode_cleanHTML($attributes['default']).'" rel="nofollow">'.$content.'</a>';
+        return '<a href="'.strip_tags($attributes['default']).'" rel="nofollow">'.$content.'</a>';
     } else {
-        return '<a href="http://'.bbcode_cleanHTML($attributes['default']).'" rel="nofollow">'.$content.'</a>';
+        return '<a href="http://'.strip_tags($attributes['default']).'" rel="nofollow">'.$content.'</a>';
     }
 }
 
@@ -289,15 +288,6 @@ function do_bbcode_code($action, $attributes, $content, $params, $node_object) {
 function bbcode_cleanHTML($str) {
     global $_CONF;
     COM_filterHTML( $str );
-/*
-    require_once $_CONF['path'] . 'lib/htmLawed/htmLawed.php';
-    $configArray = array('safe' => 1,
-                         'balance'  => 1,
-                         'valid_xhtml' => 1
-                        );
-
-    return htmLawed($str,$configArray);
-*/
 }
 
 
@@ -525,7 +515,7 @@ function _ff_checkHTMLforSQL($str,$postmode='html') {
     $bbcode = new StringParser_BBCode ();
     $bbcode->setGlobalCaseSensitive (false);
 
-    if ( $_FF_CONF['use_glfilter'] == 1 && ($postmode == 'html' || $postmode == 'HTML')) {
+    if ( $postmode == 'html' || $postmode == 'HTML') {
         $bbcode->addParser(array('block','inline'), '_ff_cleanHTML');
     }
     $bbcode->addCode ('code', 'simple_replace', null, array ('start_tag' => '[code]', 'end_tag' => '[/code]'),
@@ -569,7 +559,7 @@ function _ff_replaceTags($text) {
 function _ff_preparefordb($message,$postmode) {
     global $_FF_CONF, $_CONF;
 
-    if ( $_FF_CONF['use_glfilter'] == 1 && ($postmode == 'html' || $postmode == 'HTML') ) {
+    if ( $postmode == 'html' || $postmode == 'HTML' ) {
         $message = _ff_checkHTMLforSQL($message,$postmode);
     }
 
