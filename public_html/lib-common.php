@@ -245,6 +245,7 @@ $_URL = new url( $_CONF['url_rewrite'] );
 */
 
 require_once $_CONF['path_system'].'classes/template.class.php';
+require_once $_CONF['path_system'].'classes/filter.class.php';
 
 /**
 * This is the database library.
@@ -2453,6 +2454,7 @@ function COM_filterHTML( $str, $permissions = 'story.edit' )
     if ( isset( $_CONF['skip_html_filter_for_root'] ) &&
              ( $_CONF['skip_html_filter_for_root'] == 1 ) &&
             SEC_inGroup( 'Root' )) {
+
         return $str;
     }
     $commentWhiteList   = $_CONF['htmlfilter_comment'];
@@ -2494,6 +2496,7 @@ function COM_filterHTML( $str, $permissions = 'story.edit' )
     $config->set('Core.Encoding',$charset);
     $config->set('Core.CollectErrors',true);
     $purifier = new HTMLPurifier($config);
+
     $clean_html = $purifier->purify($str);
 //@TODO debug code
     if (@$config->get('Core', 'CollectErrors')) {
@@ -3346,13 +3349,37 @@ function COM_allowedHTML( $permissions = 'story.edit', $list_only = false, $name
 
         $allow_page_break = true;
     }
-    $retval = '<span class="warningsmall">' . $LANG01[31] . ' ';
+//    $retval = '<span class="warningsmall">' . $LANG01[31] . ' ';
+
+    $comment = explode(',',$_CONF['htmlfilter_comment']);
+    $story   = explode(',',$_CONF['htmlfilter_story']);
+    $root    = explode(',',$_CONF['htmlfilter_root']);
+    $wysiwyg = explode(',','img');
+
+    $configArray = array();
+
+    switch ( $permissions ) {
+        case 'story.edit' :
+            $configArray = array_merge($configArray,$story);
+            break;
+        default :
+            $configArray = array_merge($configArray,$comment);
+            break;
+    }
+    if ( SEC_inGroup('Root') ) {
+        $configArray = array_merge($configArray,$root);
+    }
+    $configArray = array_merge($configArray,$wysiwyg);
+    $filterArray = array_unique($configArray);
+
+    foreach ( $filterArray as $tag ) {
+        $retval .= '&lt;' . $tag . '&gt;&nbsp;, ';
+    }
+    if ( $allow_page_break ) {
+        $retval .= '[page_break],&nbsp;';
+    }
 
     $retval .= '[code], [raw]';
-
-    if ( $allow_page_break ) {
-        $retval .= ', [page_break]';
-    }
 
     // list autolink tags
     $autotags = PLG_collectTags($namespace,$operation);
@@ -3361,7 +3388,7 @@ function COM_allowedHTML( $permissions = 'story.edit', $list_only = false, $name
     }
 
     if ( !$list_only ) {
-        $retval .= '</span>';
+//        $retval .= '</span>';
     }
 
     return $retval;
