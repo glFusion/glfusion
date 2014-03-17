@@ -2030,8 +2030,32 @@ class Story
         global $_CONF;
 
         $this->_title = htmlspecialchars(strip_tags(COM_checkWords($title)));
-        $this->_introtext = COM_checkHTML(COM_checkWords($intro), 'story.edit');
-        $this->_bodytext = COM_checkHTML(COM_checkWords($body), 'story.edit');
+
+        $filter = new sanitizer();
+        $filter->setPostmode($this->_postmode);
+
+// setup the filter for this mode
+        $story   = explode(',',$_CONF['htmlfilter_story']);
+        $root    = explode(',',$_CONF['htmlfilter_root']);
+        $wysiwyg = explode(',','img');
+        $configArray = array();
+        $configArray = array_merge($configArray,$story);
+        if ( SEC_inGroup('Root') ) {
+            $configArray = array_merge($configArray,$root);
+        }
+        $configArray = array_merge($configArray,$wysiwyg);
+        $filterArray = array_unique($configArray);
+        $allowedElements = implode(',',$filterArray);
+// need to make this a funciton.
+
+        $filter->setAllowedElements($allowedElements);
+        $filter->setCensorData(true);
+        $filter->setNamespace('glfusion','story');
+        $this->_introtext = $filter->filterHTML($intro);
+        $this->_bodytext = $filter->filterHTML($body);
+
+//        $this->_introtext = COM_checkHTML(COM_checkWords($intro), 'story.edit');
+//        $this->_bodytext = COM_checkHTML(COM_checkWords($body), 'story.edit');
     }
 
 
