@@ -59,6 +59,7 @@ class HTMLPurifier_AttrValidator
 
         // do local transformations only applicable to this element (pre)
         // ex. <p align="right"> to <p style="text-align:right;">
+        if ( is_array($definition->info[$token->name]) ) {
         foreach ($definition->info[$token->name]->attr_transform_pre as $transform) {
             $attr = $transform->transform($o = $attr, $config, $context);
             if ($e) {
@@ -67,7 +68,7 @@ class HTMLPurifier_AttrValidator
                 }
             }
         }
-
+        }
         // create alias to this element's attribute definition array, see
         // also $d_defs (global attribute definition array)
         // DEFINITION CALL
@@ -154,6 +155,7 @@ class HTMLPurifier_AttrValidator
         }
 
         // local (error reporting untested)
+        if ( is_array($definition->info[$token->name]) ) {
         foreach ($definition->info[$token->name]->attr_transform_post as $transform) {
             $attr = $transform->transform($o = $attr, $config, $context);
             if ($e) {
@@ -162,7 +164,7 @@ class HTMLPurifier_AttrValidator
                 }
             }
         }
-
+        }
         $token->attr = $attr;
 
         // destroy CurrentToken if we made it ourselves
