@@ -476,12 +476,12 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
     $mail_template->set_var('lang_toname', $LANG08[18]);
     $mail_template->set_var('toname', $to);
     $mail_template->set_var('lang_toemailaddress', $LANG08[19]);
-    $mail_template->set_var('toemail', $toemail);$_
+    $mail_template->set_var('toemail', $toemail);
     $mail_template->set_var('lang_shortmessage', $LANG08[27]);
     $mail_template->set_var('shortmsg', @htmlspecialchars($shortmsg,ENT_COMPAT,COM_getEncodingt()));
     $mail_template->set_var('lang_warning', $LANG08[22]);
     $mail_template->set_var('lang_sendmessage', $LANG08[16]);
-$_    $mail_template->set_var('story_id',$sid);
+    $mail_template->set_var('story_id',$sid);
     PLG_templateSetVars ('emailstory', $mail_template);
     $mail_template->set_var('end_block', COM_endBlock());
     $mail_template->parse('output', 'form');
