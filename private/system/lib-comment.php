@@ -1511,6 +1511,12 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
 
     global $_USER, $_TABLES, $LANG03, $_CONF;
 
+    $filter = new sanitizer();
+    $filter->setPostmode($postmode);
+    $filter->setCensorData(true);
+    $filter->setNamespace('glfusion','comment');
+    $comment = $filter->filterHTML($comment);
+/*
     if ($postmode == 'html') {
         $comment = COM_checkWords (COM_checkHTML ($comment));
     } else {
@@ -1521,7 +1527,7 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
             $comment = nl2br ($newcomment);
         }
     }
-
+*/
     if (COM_isAnonUser()) {
         $uid = 1;
     } elseif ($edit && is_numeric($cid) ){
