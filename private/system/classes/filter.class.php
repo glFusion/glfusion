@@ -35,14 +35,33 @@ if (!class_exists('StringParser') ) {
     require_once $_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php';
 }
 
+/*
+ * the following are the configuration vars
+ *
+ * htmlfilter_default - default set of elements to use if no other is defined
+ * htmlfilter_comment - HTML elements for comments
+ * htmlfilter_story   - HTML elements for stories
+ * htmlfilter_root    - HTML elements that applys to anything a Root user enters
+ *
+ * $_SYSTEM['html_filter'] defines which html filter to use. Defaults to
+ *                         HTMLPurifier is the default - other option is
+ *                         HtmLawed.
+ *
+ *
+ * This class contains serveral filtering and sanitization routines.
+ * Plugins should provide the valid set of allowed HTML elements and
+ * not rely on the very restrictive default set of elements.
+ *
+ */
+
 class sanitizer
 {
     var $_postmode       = 'text';  // Post mode
-    var $allowedElements = 'p,b,a,i,strong,em';      // default allowed HTML elements - very restrictive
+    var $allowedElements = 'p,b,a,i,strong,em';   // default allowed HTML elements - very restrictive
     var $schemas         = 'http:,https:,ftp:';   // default schemas
     var $encoding        = 'utf-8'; // character encoding
     var $namespace       = '';      // who is calling.. used for replacetags...
-    var $action          = '';      // action being performed...
+    var $operation       = '';      // operations being performed - i.e.; story, media_description
     var $replaceTags     = true;    // do we or don't we replace auto tags
     var $_censorData     = true;    // do we or don't we censor data
     var $filterMethod    = 'htmlpurifier'; // or htmlawed
@@ -52,6 +71,12 @@ class sanitizer
         global $_SYSTEM;
 
         $this->encoding = COM_getEncodingt();
+        if ( isset($_SYSTEM['html_filter']) && $_SYSTEM['html_filter'] == 'htmlawed' ) {
+            $this->setFilterMethod('htmlawed');
+        }
+        if ( isset($_CONF['htmlfilter_default']) ) {
+            $this->setAllowedElements($_CONF['htmlfilter_default']);
+        }
     }
 
 
@@ -65,6 +90,18 @@ class sanitizer
         return $instance;
     }
 
+    /**
+     * Set the post mode - determines type of filtering to perform
+     *
+     * Set the postmode type - this is used to determine how the HTML
+     * filter and other text rendering functions act based on text type
+     * Either html or text
+     *
+     * @param   string  $mode   post mode - either html or text
+     * @return  none
+     * @access  public
+     *
+     */
     public function setPostmode ( $mode )
     {
         $mode = strtolower($mode);
@@ -74,6 +111,37 @@ class sanitizer
             $this->_postmode = 'text';
         }
     }
+
+    /**
+     * Build allowed HTML elements list
+     *
+     * Combines the current HTML allowed elements with the root
+     * allowed elemnets (if set).  This function builds the comma
+     * delimited list which can be consumed by ->setAllowedElements()
+     *
+     * @param   string  $elements   Comma delimited string of allowed HTML elements
+     * @return  string              Comma delimited string of all allowed HTML
+     *                              elements for this operations
+     * @access  public
+     *
+     */
+    public function makeAllowedElements( $elements )
+    {
+        global $_CONF;
+
+        $elementArray = array();
+        $root         = array();
+        $itemElements = explode(',',$elements);
+        $elementArray = array_merge($elementArray,$itemElements);
+        if ( SEC_inGroup('Root') ) {
+            $root    = explode(',',$_CONF['htmlfilter_root']);
+            $elementArray = array_merge($elementArray,$root);
+        }
+        $filterArray = array_unique($elementArray);
+        $fullelementlist = implode(',',$filterArray);
+        return $fullelementlist;
+    }
+
 
 
     /**
@@ -91,24 +159,42 @@ class sanitizer
 
 
     /**
-     * Set namespace - this defines what area / action is being
-     * perfomred - for example, glFusion is the area, comment is the action
+     * Set namespace - this defines what area / operation is being
+     * perfomred - for example, glFusion is the area, comment is the operation
      * Used to determine autotag replacements.
+     *
+     * Core operations:
+     *   - glfusion - mail_story
+     *   - glfusion - block
+     *   - glfusion - story
+     *   - glfusion - contact_user
+     *   - bbcode - post
+     * Bundled Plugin operations
+     *   - calendar - description
+     *   - filemgmt - description
+     *   - forum - post
+     *   - forum - signature
+     *   - mediagallery - media_description
+     *   - mediagallery - media_title
+     *   - mediagallery - album_description
+     *   - mediagallery - category_description
+     *   - links - description
+     *   - staticpages - page
      *
      * @param   string  $namespace  namespace i.e.; glfusion, mediagallery, forum
      * @return  none
      * @access  public
      *
      */
-    public function setNamespace( $namespace, $action )
+    public function setNamespace( $namespace, $operation )
     {
         $this->namespace = $namespace;
-        $this->action    = $action;
+        $this->operation = $operation;
     }
 
-    public function setAction( $action )
+    public function setOperation( $operation )
     {
-        $this->action = $action;
+        $this->operation = $operation;
     }
 
     public function setReplaceTags( $option )
@@ -138,6 +224,31 @@ class sanitizer
         }
     }
 
+
+    /**
+     * Filter data - will filter HTML or text data based on the
+     * current _postmode setting.  This will return filtered HTML
+     * data where only whitelisted elements are included and
+     * malicious HTML removed.  Or, if postmost == text, it will
+     * return htmlspecialchar() text data.
+     *
+     * NOTE: Code blocks, i.e.; [code][/code] are not procssed
+     * by this function - they are not filtered or modified.
+     *
+     * @param   string  $str    Data to be filtered
+     * @return  string          Filtered data.
+     * @access  public
+     *
+     */
+    public function filterData( $str )
+    {
+        if ($this->_postmode == 'html' ) {
+            return $this->filterHTML($str);
+        } else {
+            return $this->filterText($str);
+        }
+    }
+
     public function filterHTML( $str )
     {
         global $_CONF;
@@ -155,27 +266,51 @@ class sanitizer
         $sp->addCode ('code', 'usecontent', array($this,'_codeblockFilter'), array ('usecontent_param' => 'default'),
                       'code', array ('block'), array ());
 
-        if ( $this->_censorData ) {
-            $str = $this->_censor($str);
+        $str = $sp->parse ($str);
+
+        return $str;
+    }
+
+    public function filterText( $str )
+    {
+        global $_CONF;
+
+        $sp = new StringParser_BBCode ();
+        $sp->setGlobalCaseSensitive (false);
+
+        if ( $this->_postmode != 'html' ) {
+            $sp->addParser(array('block'), array($this,'htmlspecialchars'));
         }
+        $sp->addCode ('code', 'usecontent', array($this,'_codeblockFilter'), array ('usecontent_param' => 'default'),
+                      'code', array ('block'), array ());
 
         $str = $sp->parse ($str);
 
         return $str;
     }
 
-    /*
-     * The HTML Filters escape some < > &, etc.  we can undo them
+    /**
+     * Return text ready to be used in an input field.
+     *
+     * For HTML data - it is assumed that filterHTML has already
+     * been run on the data.
+     *
+     * NOTE: Code blocks, i.e.; [code][/code] do not receive any
+     *       special treatment here - all data is run through
+     *       htmlspecialchars();
+     *
+     * @param   string  $str    Data to be filtered
+     * @return  string          Filtered data.
+     * @access  public
      *
      */
-
     public function editableText($str)
     {
         if ( $this->_postmode == 'html' ) {
             // html filter escapes several items...
             $str = htmlspecialchars_decode($str,ENT_NOQUOTES);
         }
-        return $this->_htmlspecialchars($str,ENT_NOQUOTES,$this->encoding);
+        return $this->htmlspecialchars($str,ENT_NOQUOTES,$this->encoding);
     }
 
     /*
@@ -188,10 +323,11 @@ class sanitizer
         $sp->setGlobalCaseSensitive (false);
 
         if ( $this->_postmode != 'html') {
-            $sp->addParser (array ('block', 'inline'), array($this,'_htmlspecialchars'));
+            $sp->addParser (array ('block', 'inline'), array($this,'htmlspecialchars'));
             $sp->addParser(array('block','inline'), 'nl2br');
         }
-        $sp->addParser(array('block','inline'), array($this,'linkify'));
+
+//        $sp->addParser(array('block','inline'), array($this,'linkify'));
 
         $sp->addCode ('code', 'usecontent', array($this,'_codeblock'), array ('usecontent_param' => 'default'),
                       'code', array ('block'), array ());
@@ -201,7 +337,7 @@ class sanitizer
         }
 
         if ( $this->_censorData ) {
-            $str = $this->_censor($str);
+            $str = $this->censor($str);
         }
         $str = $sp->parse ($str);
 
@@ -211,15 +347,14 @@ class sanitizer
     /*
      * replace glFusion autotags with final form data
      */
-    function _replaceTags($text) {
-        return PLG_replaceTags($text,$this->namespace,$this->action);
+    public function _replaceTags($text) {
+        return PLG_replaceTags($text,$this->namespace,$this->operation);
     }
 
-    function _htmlspecialchars($text)
+    public function htmlspecialchars($text)
     {
         return (@htmlspecialchars ($text,ENT_NOQUOTES, $this->encoding));
     }
-
 
     /*
      * Filter HTML input to remove malicious or un-wanted HTML tags
@@ -231,9 +366,7 @@ class sanitizer
         if ( isset( $_CONF['skip_html_filter_for_root'] ) && ( $_CONF['skip_html_filter_for_root'] == 1 ) && SEC_inGroup( 'Root' )) {
             return $str;
         }
-
         $configArray = explode(',',$this->allowedElements);
-
         $filterArray = array_unique($configArray);
         foreach($filterArray as $element) {
             $final[$element] = true;
@@ -246,23 +379,21 @@ class sanitizer
         $config = HTMLPurifier_Config::createDefault();
         $config->set('HTML.AllowedElements', $final);
         $config->set('Core.Encoding',$this->encoding);
-        $config->set('Core.CollectErrors',true);
         $config->set('AutoFormat.Linkify',false);
-
-        $config->set('HTML.SafeObject',true);       // allow youtube
-        $config->set('Output.FlashCompat',true);    // allow youtube
-
+        $config->set('HTML.SafeObject',true);
+        $config->set('Output.FlashCompat',true);
+        $config->set('Core.CollectErrors',true); //debug
         $purifier = new HTMLPurifier($config);
         $clean_html = $purifier->purify($str);
 
-    //@TODO debug code
+//@TODO debug code
 
         if (@$config->get('Core', 'CollectErrors')) {
             $e = $purifier->context->get('ErrorCollector');
             $class = $e->getRaw() ? 'fail' : 'pass';
             COM_filterLog( $e->getHTMLFormatted($config) );
-
         }
+// end of debug code
         return $clean_html;
     }
 
@@ -277,8 +408,8 @@ class sanitizer
         }
 
         $allowed = '';
-        $allowedStuff = explode(',',$this->allowedElements);
-        $filterArray = array_unique($allowedStuff);
+        $allowedElements = explode(',',$this->allowedElements);
+        $filterArray = array_unique($allowedElements);
         $allowed = implode(',',$filterArray);
 
         $configArray = array(
@@ -290,7 +421,7 @@ class sanitizer
             'unique_ids' => 0,
             'elements' => $allowed,
             'keep_bad' => 0,
-            'schemes' => 'classid:clsid; href: aim, feed, file, ftp, gopher, http, https, irc, mailto, news, nntp, sftp, ssh, telnet; style: nil; *:file, http, https', // clsid allowed in class
+            'schemes' => 'classid:clsid; href:, aim, feed, file, ftp, gopher, http, https, irc, mailto, news, nntp, sftp, ssh, telnet; style: nil; *:file, http, https', // clsid allowed in class
             'valid_xhtml' => 0,
             'direct_list_nest' => 1,
             'balance' => 1,
@@ -305,33 +436,20 @@ class sanitizer
         return $str;
     }
 
-    /*
-     * Does not filter or modify code block data - simply returns
-     * this serves as a stub to prevent code blocks from being
-     * parsed by other filters
-     */
-    function _codeblockFilter($action, $attributes, $content, $params, $node_object)
-    {
-        if ( $action == 'validate') {
-            return true;
-        }
-        $codeblock = '[code]'.$content.'[/code]';
-        return $codeblock;
-    }
-
-    /*
-     * prepares a code block for display.
-     */
-    function _codeblock($action, $attributes, $content, $params, $node_object)
-    {
-        if ( $action == 'validate') {
-            return true;
-        }
-        $codeblock = '<pre>'  . @htmlspecialchars($content,ENT_NOQUOTES, $this->encoding) . '</pre>';
-        return $codeblock;
-    }
-
-    function _censor( $text )
+    /**
+    * This censors inappropriate content
+    *
+    * This will replace 'bad words' with something more appropriate
+    *
+    * @param        string      $Message        String to check
+    * @see function COM_checkHTML
+    * @return   string  Edited $Message
+    *
+    * @copyright (c) 2005 phpBB Group
+    * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+    *
+    */
+    public function censor( $text )
     {
         global $_CONF;
 
@@ -360,7 +478,7 @@ class sanitizer
     	return $text;
     }
 
-    function _makeClickableLinks( $text )
+    function linkify( $text )
     {
         $text = preg_replace( '/([^"]?)((((ht|f)tps?):(\/\/)|www\.)[a-z0-9%&_\-\+,;=:@~#\/.\?\[\]]+(\/|[+0-9a-z]))/is', '\\1<a href="\\2">\\2</a>', $text );
         $text = str_replace( '<a href="www', '<a href="http://www', $text );
@@ -420,7 +538,7 @@ class sanitizer
     *           for files to be included where part of the filename is dynamic.
     *
     */
-    function sanitizeFilename($filename, $allow_dots = false)
+    function sanitizeFilename($filename, $allow_dots = true)
     {
         if ($allow_dots) {
             $filename = preg_replace('/[^a-zA-Z0-9\-_\.]/', '', $filename);
@@ -429,7 +547,7 @@ class sanitizer
             $filename = preg_replace('/[^a-zA-Z0-9\-_]/', '', $filename);
         }
 
-        return $filename;
+        return trim($filename);
     }
 
     /**
@@ -447,8 +565,7 @@ class sanitizer
         if ( empty( $id ) && $new_id ) {
             $id = COM_makesid();
         }
-
-        return $id;
+        return trim($id);
     }
 
     public function prepareForDB($data) {
@@ -464,43 +581,93 @@ class sanitizer
         }
     }
 
+
     /**
-     * Turn all URLs in clickable links.
-     *
-     * @param string $value
-     * @param array  $protocols  http/https, ftp, mail, twitter
-     * @param array  $attributes
-     * @param string $mode       normal or all
-     * @return string
-     *
-     * from: http://www.jasny.net/articles/linkify-turning-urls-into-clickable-links-in-php/
-     *
-     */
-    public function linkify($value, $protocols = array('http', 'mail','twitter'), array $attributes = array())
+    * Returns what HTML is allowed in content
+    *
+    * Returns what HTML tags the system allows to be used inside content.
+    *
+    * @param    boolean $list_only      true = return only the list of HTML tags
+    * @return   string  HTML <span> enclosed string
+    */
+    function getAllowedHTML( $list_only = false)
     {
-        // Link attributes
-        $attr = '';
-        foreach ($attributes as $key => $val) {
-            $attr = ' ' . $key . '="' . htmlentities($val) . '"';
-        }
+        global $_CONF, $LANG01;
 
-        $links = array();
+        $retval = '';
 
-        // Extract existing links and tags
-        $value = preg_replace_callback('~(<a .*?>.*?</a>|<.*?>)~i', function ($match) use (&$links) { return '<' . array_push($links, $match[1]) . '>'; }, $value);
-
-        // Extract text links for each protocol
-        foreach ((array)$protocols as $protocol) {
-            switch ($protocol) {
-                case 'http':
-                case 'https':   $value = preg_replace_callback('~(?:(https?)://([^\s<]+)|(www\.[^\s<]+?\.[^\s<]+))(?<![\.,:])~i', function ($match) use ($protocol, &$links, $attr) { if ($match[1]) $protocol = $match[1]; $link = $match[2] ?: $match[3]; return '<' . array_push($links, "<a $attr href=\"$protocol://$link\">$link</a>") . '>'; }, $value); break;
-                case 'mail':    $value = preg_replace_callback('~([^\s<]+?@[^\s<]+?\.[^\s<]+)(?<![\.,:])~', function ($match) use (&$links, $attr) { return '<' . array_push($links, "<a $attr href=\"mailto:{$match[1]}\">{$match[1]}</a>") . '>'; }, $value); break;
-                case 'twitter': $value = preg_replace_callback('~(?<!\w)[@#](\w++)~', function ($match) use (&$links, $attr) { return '<' . array_push($links, "<a $attr href=\"https://twitter.com/" . ($match[0][0] == '@' ? '' : 'search/%23') . $match[1]  . "\">{$match[0]}</a>") . '>'; }, $value); break;
-                default:        $value = preg_replace_callback('~' . preg_quote($protocol, '~') . '://([^\s<]+?)(?<![\.,:])~i', function ($match) use ($protocol, &$links, $attr) { return '<' . array_push($links, "<a $attr href=\"$protocol://{$match[1]}\">{$match[1]}</a>") . '>'; }, $value); break;
+        $allow_page_break = false;
+        if ( isset( $_CONF['skip_html_filter_for_root'] ) &&
+                 ( $_CONF['skip_html_filter_for_root'] == 1 ) &&
+                SEC_inGroup( 'Root' )) {
+            if ( !$list_only ) {
+                $retval .= '<span class="warningsmall">' . $LANG01[123] . '</span>, ';
             }
+
+        } else {
+            if ( !$list_only ) {
+                $retval .= '<span class="warningsmall">' . $LANG01[31] . ' ';
+            }
+            if ( $_CONF['allow_page_breaks'] && $this->operation == 'story')
+                $allow_page_break = true;
         }
-        // Insert all link
-        return preg_replace_callback('/<(\d+)>/', function ($match) use (&$links) { return $links[$match[1] - 1]; }, $value);
+
+        $elementArray = array();
+        $itemElements = explode(',',$this->allowedElements);
+        $elementArray = array_merge($elementArray,$itemElements);
+        if ( SEC_inGroup('Root') ) {
+            $root    = explode(',',$_CONF['htmlfilter_root']);
+            $elementArray = array_merge($elementArray,$root);
+        }
+        $filterArray = array_unique($elementArray);
+
+        foreach ( $filterArray as $tag ) {
+            $retval .= '&lt;' . $tag . '&gt;&nbsp;, ';
+        }
+        if ( $allow_page_break ) {
+            $retval .= '[page_break],&nbsp;';
+        }
+        $retval .= '[code]';
+        // list autolink tags
+        $autotags = PLG_collectTags($this->namespace,$this->operation);
+        foreach( $autotags as $tag => $module ) {
+            $retval .= ', [' . $tag . ':]';
+        }
+        return $retval;
     }
+
+    public function sanitizeUsername($username)
+    {
+        $result = (string) preg_replace( '/[\x00-\x1F\x7F<>"%&*\/\\\\]/', '', $username );
+
+        return trim($result);
+    }
+
+    /*
+     * Does not filter or modify code block data - simply returns
+     * this serves as a stub to prevent code blocks from being
+     * parsed by other filters
+     */
+    function _codeblockFilter($action, $attributes, $content, $params, $node_object)
+    {
+        if ( $action == 'validate') {
+            return true;
+        }
+        $codeblock = '[code]'.$content.'[/code]';
+        return $codeblock;
+    }
+
+    /*
+     * prepares a code block for display.
+     */
+    function _codeblock($action, $attributes, $content, $params, $node_object)
+    {
+        if ( $action == 'validate') {
+            return true;
+        }
+        $codeblock = '<pre>' . @htmlspecialchars($content,ENT_NOQUOTES, $this->encoding) . '</pre>';
+        return $codeblock;
+    }
+
 }
 ?>
