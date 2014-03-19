@@ -2284,39 +2284,11 @@ function COM_userComments( $sid, $title, $type='article', $order='', $mode='', $
 * @param        string      $Message        String to check
 * @see function COM_checkHTML
 * @return   string  Edited $Message
-*
-* @copyright (c) 2005 phpBB Group
-* @license http://opensource.org/licenses/gpl-license.php GNU Public License
-*
 */
-
 function COM_checkWords( $Message )
 {
-    global $_CONF;
-
-    if ( $_CONF['censormode'] != 0 && is_array( $_CONF['censorlist'] ) ) {
-        $Replacement = $_CONF['censorreplace'];
-        $unicode = (@preg_match('/\p{L}/u', 'a') !== false) ? true : false;
-        foreach ($_CONF['censorlist'] AS $word ) {
-			if ($unicode) {
-				// Unescape the asterisk to simplify further conversions
-				$word = str_replace('\*', '*', preg_quote($word, '#'));
-				// Replace the asterisk inside the pattern, at the start and at the end of it with regexes
-				$word = preg_replace(array('#(?<=[\p{Nd}\p{L}_])\*(?=[\p{Nd}\p{L}_])#iu', '#^\*#', '#\*$#'), array('([\x20]*?|[\p{Nd}\p{L}_-]*?)', '[\p{Nd}\p{L}_-]*?', '[\p{Nd}\p{L}_-]*?'), $word);
-
-				// Generate the final substitution
-				$censors['match'][] = '#(?<![\p{Nd}\p{L}_-])(' . $word . ')(?![\p{Nd}\p{L}_-])#iu';
-			} else {
-				$censors['match'][] = '#(?<!\S)(' . str_replace('\*', '\S*?', preg_quote($word, '#')) . ')(?!\S)#iu';
-			}
-
-			$censors['replace'][] = $Replacement;
-		}
-	    if (sizeof($censors)) {
-		    return preg_replace($censors['match'], $censors['replace'], $Message);
-	    }
-    }
-	return $Message;
+    $filter = new sanitizer();
+    return $filter->censor($Message);
 }
 
 
@@ -2375,75 +2347,7 @@ function COM_checkHTML( $str, $permissions = 'story.edit' )
 {
     global $_CONF;
 
-    // Get rid of any newline characters
-    $str = preg_replace( "/\n/", '', $str );
-
-    // handle [code] ... [/code]
-    do {
-        $start_pos = utf8_strpos( utf8_strtolower( $str ), '[code]' );
-        if ( $start_pos !== false ) {
-            $end_pos = utf8_strpos( utf8_strtolower( $str ), '[/code]' );
-            if ( $end_pos !== false ) {
-                $encoded = COM_handleCode( utf8_substr( $str, $start_pos + 6,
-                        $end_pos - ( $start_pos + 6 )));
-                $encoded = '<pre><code>' . $encoded . '</code></pre>';
-                $str = utf8_substr( $str, 0, $start_pos ) . $encoded
-                     . utf8_substr( $str, $end_pos + 7 );
-            } else { // missing [/code]
-                // Treat the rest of the text as code (so as not to lose any
-                // special characters). However, the calling entity should
-                // better be checking for missing [/code] before calling this
-                // function ...
-                $encoded = COM_handleCode( utf8_substr( $str, $start_pos + 6 ));
-                $encoded = '<pre><code>' . $encoded . '</code></pre>';
-                $str = utf8_substr( $str, 0, $start_pos ) . $encoded;
-            }
-        }
-    }
-    while ( $start_pos !== false );
-
-    // handle [raw] ... [/raw]
-    do {
-        $start_pos = utf8_strpos( utf8_strtolower( $str ), '[raw]' );
-        if ( $start_pos !== false ) {
-            $end_pos = utf8_strpos( utf8_strtolower( $str ), '[/raw]' );
-            if ( $end_pos !== false ) {
-                $encoded = COM_handleCode( utf8_substr( $str, $start_pos + 5,
-                        $end_pos - ( $start_pos + 5 )));
-                // [raw2] to avoid infinite loop. Not HTML comment as we strip
-                // them later.
-                $encoded = '[raw2]' . $encoded . '[/raw2]';
-                $str = utf8_substr( $str, 0, $start_pos ) . $encoded
-                     . utf8_substr( $str, $end_pos + 6 );
-            } else { // missing [/raw]
-                // Treat the rest of the text as raw (so as not to lose any
-                // special characters). However, the calling entity should
-                // better be checking for missing [/raw] before calling this
-                // function ...
-                $encoded = COM_handleCode( utf8_substr( $str, $start_pos + 5 ));
-                // [raw2] to avoid infinite loop. Not HTML comment as we strip
-                // them later.
-                $encoded = '[raw2]' . $encoded . '[/raw2]';
-                $str = utf8_substr( $str, 0, $start_pos ) . $encoded;
-            }
-        }
-    }
-    while ( $start_pos !== false );
-
-    if ( isset( $_CONF['skip_html_filter_for_root'] ) &&
-             ( $_CONF['skip_html_filter_for_root'] == 1 ) &&
-            SEC_inGroup( 'Root' )) {
-        return $str;
-    }
-
-    // strip_tags() gets confused by HTML comments ...
-    $str = preg_replace( '/<!--.+?-->/', '', $str );
-
-    $str = COM_filterHTML( $str );
-
-    $str = str_replace('[raw2]','<!--raw--><span class="raw">', $str);
-    $str = str_replace('[/raw2]','</span><!--/raw-->', $str);
-    return $str;
+    return COM_filterHTML($str, $permissions);
 }
 
 /**
@@ -2463,15 +2367,10 @@ function COM_filterHTML( $str, $permissions = 'story.edit' )
 
         return $str;
     }
-    $commentWhiteList   = $_CONF['htmlfilter_comment'];
-    $storyWhiteList     = $_CONF['htmlfilter_story'];
-    $rootWhiteList      = $_CONF['htmlfilter_root'];
-    $wysiwygWhiteList   = 'img';
-
-    $comment = explode(',',$commentWhiteList);
-    $story   = explode(',',$storyWhiteList);
-    $root    = explode(',',$rootWhiteList);
-    $wysiwyg = explode(',',$wysiwygWhiteList);
+    $default = explode(',',$_CONF['htmlfilter_default']);
+    $comment = explode(',',$_CONF['htmlfilter_comment']);
+    $story   = explode(',',$_CONF['htmlfilter_story']);
+    $root    = explode(',',$_CONF['htmlfilter_root']);
 
     $configArray = array();
 
@@ -2480,38 +2379,20 @@ function COM_filterHTML( $str, $permissions = 'story.edit' )
             $configArray = array_merge($configArray,$story);
             break;
         default :
-            $configArray = array_merge($configArray,$comment);
+            $configArray = array_merge($configArray,$default);
             break;
     }
     if ( SEC_inGroup('Root') ) {
         $configArray = array_merge($configArray,$root);
     }
 
-    $configArray = array_merge($configArray,$wysiwyg);
     $filterArray = array_unique($configArray);
-    foreach($filterArray as $element) {
-        $final[$element] = true;
-    }
-    $configFilter = implode(",",$filterArray);
-    require_once $_CONF['path'] . 'lib/htmlpurifier/HTMLPurifier.auto.php';
-    require_once $_CONF['path'] . 'lib/htmlpurifier/CustomFilters.php';
+    $allowedElements = implode(',',$filterArray);
 
-    $charset = COM_getCharset();
-    $config = HTMLPurifier_Config::createDefault();
-    $config->set('HTML.AllowedElements', $final);
-    $config->set('Core.Encoding',$charset);
-    $config->set('Core.CollectErrors',true);
-    $purifier = new HTMLPurifier($config);
-
-    $clean_html = $purifier->purify($str);
-//@TODO debug code
-    if (@$config->get('Core', 'CollectErrors')) {
-        $e = $purifier->context->get('ErrorCollector');
-        $class = $e->getRaw() ? 'fail' : 'pass';
-        COM_filterLog( $e->getHTMLFormatted($config) );
-
-    }
-    return $clean_html;
+    $filter = new sanitizer();
+    $filter->setAllowedelements($allowedElements);
+    $filter->setPostmode('html');
+    return $filter->filterHTML($str);
 }
 
 
@@ -4976,44 +4857,8 @@ function COM_applyBasicFilter( $parameter, $isnumeric = false )
 */
 function COM_sanitizeUrl( $url, $allowed_protocols = array('http','https','ftp'), $default_protocol = 'http' )
 {
-    global $_CONF;
-
-    if ( empty( $allowed_protocols )) {
-        $allowed_protocols = $_CONF['allowed_protocols'];
-    } else if ( !is_array( $allowed_protocols )) {
-        $allowed_protocols = array( $allowed_protocols );
-    }
-
-    if ( empty( $default_protocol )) {
-        $default_protocol = 'http:';
-    } else if ( substr( $default_protocol, -1 ) != ':' ) {
-        $default_protocol .= ':';
-    }
-
-    $url = strip_tags( $url );
-    if ( !empty( $url )) {
-        $pos = utf8_strpos( $url, ':' );
-        if ( $pos === false ) {
-            $url = $default_protocol . '//' . $url;
-        } else {
-            $protocol = utf8_substr( $url, 0, $pos + 1 );
-            $found_it = false;
-            foreach( $allowed_protocols as $allowed ) {
-                if ( substr( $allowed, -1 ) != ':' ) {
-                    $allowed .= ':';
-                }
-                if ( $protocol == $allowed ) {
-                    $found_it = true;
-                    break;
-                }
-            }
-            if ( !$found_it ) {
-                $url = $default_protocol . utf8_substr( $url, $pos + 1 );
-            }
-        }
-    }
-
-    return $url;
+    $filter = new sanitizer();
+    return $filter->sanitizeUrl($url, $allowed_protocols = array('http','https','ftp'), $default_protocol = 'http');
 }
 
 /**
@@ -5025,14 +4870,8 @@ function COM_sanitizeUrl( $url, $allowed_protocols = array('http','https','ftp')
 */
 function COM_sanitizeID( $id, $new_id = true )
 {
-    $id = str_replace( ' ', '', $id );
-    $id = str_replace( array( '/', '\\', ':', '+' ), '-', $id );
-    $id = preg_replace( '/[^a-zA-Z0-9\-_\.]/', '', $id );
-    if ( empty( $id ) && $new_id ) {
-        $id = COM_makesid();
-    }
-
-    return $id;
+    $filter = new sanitizer();
+    return $filter->sanitizeID($id,$new_id);
 }
 
 /**
@@ -5047,14 +4886,8 @@ function COM_sanitizeID( $id, $new_id = true )
 */
 function COM_sanitizeFilename($filename, $allow_dots = false)
 {
-    if ($allow_dots) {
-        $filename = preg_replace('/[^a-zA-Z0-9\-_\.]/', '', $filename);
-        $filename = str_replace('..', '', $filename);
-    } else {
-        $filename = preg_replace('/[^a-zA-Z0-9\-_]/', '', $filename);
-    }
-
-    return $filename;
+    $filter = new sanitizer();
+    return $filter->sanitizeFilename($filename, $allow_dots);
 }
 
 /**
