@@ -1776,15 +1776,10 @@ function COM_errorLog( $logentry, $actionid = '' )
     global $_CONF, $LANG01, $REMOTE_ADDR;
 
     $retval = '';
-    USES_class_date();
-    $dt = new Date('now',$_CONF['timezone']);
-
+    $timestamp = date('d M Y H:i:s');
     if ( !empty( $logentry )) {
         $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),$logentry );
-
-        $timestamp = $dt->format('d M Y H:i:s',true);
         $ipaddress = $REMOTE_ADDR;
-
         if (!isset($_CONF['path_layout']) &&
                 (($actionid == 2) || empty($actionid))) {
             $actionid = 1;
@@ -1792,7 +1787,6 @@ function COM_errorLog( $logentry, $actionid = '' )
         if (!isset($_CONF['path_log']) && ($actionid != 2)) {
             $actionid = 3;
         }
-
         switch( $actionid ) {
             case 1:
                 $logfile = $_CONF['path_log'] . 'error.log';
