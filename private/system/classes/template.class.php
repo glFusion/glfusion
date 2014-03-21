@@ -6,9 +6,7 @@
 // |                                                                          |
 // | glFusion template library.                                               |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2007-2013 by the following authors:                        |
+// | Copyright (C) 2007-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans      - mark AT glfusion DOT org                            |
 // | Joe Mucchiello     - joe AT throwingdice DOT com                         |
@@ -642,18 +640,14 @@ class Template
                 return true;
             }
 
-            if (!is_readable($filename)) {
-                // file missing
-                if ($this->debug & 4) {
-                    echo "<p><b>subst:</b> file $filename Does Not Exist or is not readable</p>\n";
-                }
-                return true;
-            }
-
             $p = pathinfo($filename);
             if ($p['extension'] == 'php') {
                 ob_start();
-                include $filename;
+                $rc = @include $filename;
+                if ( $rc != true) {
+                    ob_end_clean();
+                    return true;
+                }
                 $str = ob_get_contents();
                 ob_end_clean();
             } else {
