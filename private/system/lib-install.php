@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Install/Uninstall library.                                               |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2010-2012 by the following authors:                        |
+// | Copyright (C) 2010-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -614,10 +612,10 @@ function _pi_deleteDir($path) {
     if (@is_dir($path)) {
       if (!$dh = @opendir($path)) return false;
 
-      while ($f = readdir($dh)) {
+    while (false !== ($f = readdir($dh))) {
         if ($f == '..' || $f == '.') continue;
         _pi_deleteDir("$path/$f");
-      }
+    }
 
       closedir($dh);
       return @rmdir($path);
@@ -636,7 +634,7 @@ function _pi_parseXML($tmpDirectory)
     if (!$dh = @opendir($tmpDirectory)) {
         return false;
     }
-   while ( ( $file = readdir($dh) ) != false ) {
+     while (false !== ($file = readdir($dh)) {
         if ( $file == '..' || $file == '.' ) {
             continue;
         }
@@ -804,7 +802,7 @@ function _pi_dir_copy($srcdir, $dstdir )
     $verbose = 0;
     if (!@is_dir($dstdir)) fusion_io_mkdir_p($dstdir);
     if ($curdir = @opendir($srcdir)) {
-        while ($file = readdir($curdir)) {
+        while (false !== ($file = readdir($curdir))) {
             if ($file != '.' && $file != '..') {
                 $srcfile = $srcdir . '/' . $file;
                 $dstfile = $dstdir . '/' . $file;
@@ -892,7 +890,7 @@ function _pi_test_copy($srcdir, $dstdir)
     }
 
     if($curdir = @opendir($srcdir)) {
-        while($file = readdir($curdir)) {
+        while(false !== ($file = readdir($curdir))) {
             if($file != '.' && $file != '..') {
                 $srcfile = $srcdir . '/' . $file;
                 $dstfile = $dstdir . '/' . $file;
