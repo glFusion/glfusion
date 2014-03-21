@@ -1035,7 +1035,7 @@ function saveuser($A)
                         $cooktime = $A['cooktime'];
                         $token_ttl = $A['cooktime'];
                     } else {
-                        $cooktime = -1000;
+                        $cooktime = 0;
                         $token_ttl = 14400;
                     }
                     $ltToken = SEC_createTokenGeneral('ltc',$token_ttl);
@@ -1052,7 +1052,7 @@ function saveuser($A)
             if ($A['cooktime'] > 0) {
                 $cooktime = $A['cooktime'];
             } else {
-                $cooktime = -1000;
+                $cooktime = 0;
             }
             $ltToken = SEC_createTokenGeneral('ltc',$cooktime);
             SEC_setCookie($_CONF['cookie_password'], $ltToken, time() + $cooktime);
