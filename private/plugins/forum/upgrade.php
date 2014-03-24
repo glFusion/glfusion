@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Plugin upgrade                                                           |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -156,6 +154,10 @@ function forum_upgrade() {
                 }
             }
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.3.0',pi_gl_version='1.3.0' WHERE pi_name = 'forum'");
+        case '3.3.0' :
+            $c = config::get_instance();
+            $c->add('allowed_html','p,b,i,strong,em,br,pre,img,ol,ul,li,u', 'text',0, 2, 0, 82, true, 'forum');
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.3.1',pi_gl_version='1.4.0' WHERE pi_name = 'forum'");
         default :
             DB_query("ALTER TABLE {$_TABLES['ff_forums']} DROP INDEX forum_id",1);
             DB_query("ALTER TABLE {$_TABLES['ff_rating_assoc']} DROP PRIMARY KEY",1);
