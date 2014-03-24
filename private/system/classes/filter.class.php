@@ -82,7 +82,7 @@ class sanitizer
 
     public static function getInstance(  )
     {
-        static $instance = array();
+        static $instance;
 
         if (!isset($instance) ) {
             $instance = new sanitizer();
@@ -308,7 +308,7 @@ class sanitizer
     {
         if ( $this->_postmode == 'html' ) {
             // html filter escapes several items...
-            $str = htmlspecialchars_decode($str,ENT_NOQUOTES);
+//            $str = htmlspecialchars_decode($str,ENT_NOQUOTES);
         }
         return $this->htmlspecialchars($str,ENT_NOQUOTES,$this->encoding);
     }
