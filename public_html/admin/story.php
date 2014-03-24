@@ -455,7 +455,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
               'text' => $LANG_ADMIN['admin_home']),
     );
 
-require_once $_CONF['path_system'] . 'classes/navbar.class.php';
+    require_once $_CONF['path_system'] . 'classes/navbar.class.php';
 
     // Load HTML templates
     $story_templates = new Template($_CONF['path_layout'] . 'admin/story');
@@ -767,6 +767,7 @@ require_once $_CONF['path_system'] . 'classes/navbar.class.php';
     $post_options .= '<option value="adveditor">'.$LANG24[86].'</option>';
 
     $story_templates->set_var('post_options',$post_options );
+
     $story_templates->set_var('lang_allowed_html', COM_allowedHTML(SEC_getUserPermissions(),false,'glfusion','story'));
     $story_templates->set_var ('show_allowedhtml', 'none');
 
