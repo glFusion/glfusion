@@ -57,7 +57,7 @@ function plugin_subscription_email_format_comment($category,$track_id,$post_id,$
     $dt = new Date('now',$_USER['tzid']);
     $permalink = 'Not defined';
 
-    $filter = new sanitizer();
+    $filter = sanitizer::getInstance();
     $AllowedElements = $filter->makeAllowedElements($_CONF['htmlfilter_comment']);
     $filter->setAllowedelements($AllowedElements);
     $filter->setNamespace('glfusion','comment');
@@ -324,7 +324,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
     $retval = ''; // initialize return value
 
 
-    $filter = new sanitizer();
+    $filter = sanitizer::getInstance();
     $AllowedElements = $filter->makeAllowedElements($_CONF['htmlfilter_comment']);
     $filter->setAllowedelements($AllowedElements);
     $filter->setNamespace('glfusion','comment');
@@ -859,7 +859,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
     $cid = 0;
     $edit_comment = '';
 
-    $filter = new sanitizer();
+    $filter = sanitizer::getInstance();
     $AllowedElements = $filter->makeAllowedElements($_CONF['htmlfilter_comment']);
     $filter->setAllowedelements($AllowedElements);
     $filter->setNamespace('glfusion','comment');
@@ -1519,7 +1519,7 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
 
     global $_USER, $_TABLES, $LANG03, $_CONF;
 
-    $filter = new sanitizer();
+    $filter = sanitizer::getInstance();
     $filter->setPostmode($postmode);
     $filter->setCensorData(true);
     $filter->setNamespace('glfusion','comment');
