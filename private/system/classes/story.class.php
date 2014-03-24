@@ -1405,6 +1405,13 @@ class Story
     {
         global $_CONF, $_USER;
 
+        $filter = sanitizer::getInstance();
+        $filter->setPostmode($this->_postmode);
+        $allowedElements = $filter->makeAllowedElements($_CONF['htmlfilter_story']);
+        $filter->setAllowedElements($allowedElements);
+        $filter->setCensorData(true);
+        $filter->setNamespace('glfusion','story');
+
         $dtPublish  = new Date($this->_date,$_USER['tzid']);
         $dtExpire   = new Date($this->_expire,$_USER['tzid']);
 
@@ -1519,11 +1526,11 @@ class Story
                 break;
 
             case 'introtext':
-                $return = $this->_editText($this->_introtext);
+                $return = $filter->editableText($this->_introtext);
                 break;
 
             case 'bodytext':
-                $return = $this->_editText($this->_bodytext);
+                $return = $filter->editableText($this->_bodytext);
                 break;
 
             default:
@@ -1558,6 +1565,14 @@ class Story
     {
         global $_CONF, $_USER, $_TABLES;
 
+        $filter = sanitizer::getInstance();;
+        $filter->setPostmode($this->_postmode);
+        $allowedElements = $filter->makeAllowedElements($_CONF['htmlfilter_story']);
+        $filter->setAllowedElements($allowedElements);
+        $filter->setCensorData(true);
+        $filter->setReplaceTags(true);
+        $filter->setNamespace('glfusion','story');
+
         $dtObject = new Date($this->_date,$_USER['tzid']);
 
         if (isset($this->_expire) && $this->_expire != 0) {
@@ -1570,23 +1585,11 @@ class Story
 
         switch (strtolower($item)) {
             case 'introtext':
-                if ($this->_postmode == 'plaintext') {
-                    $return = nl2br($this->_introtext);
-                } else {
-                    $return = $this->_introtext;
-                }
-
-                $return = PLG_replaceTags($this->_displayEscape($return),'glfusion','story');
+                $return = $filter->displayText($this->_introtext);
                 break;
 
             case 'bodytext':
-                if (($this->_postmode == 'plaintext') && !(empty($this->_bodytext))) {
-                    $return = nl2br($this->_bodytext);
-                } elseif (!empty($this->_bodytext)) {
-                    $return = $this->_displayEscape($this->_bodytext);
-                }
-
-                $return = PLG_replaceTags($return,'glfusion','story');
+                $return = $filter->displayText($this->_bodytext);
                 break;
 
             case 'title':
@@ -1623,7 +1626,7 @@ class Story
                 $return = COM_NumberFormat($this->_votes);
                 break;
             case 'topic':
-                $return = htmlspecialchars($this->_topic);
+                $return = $filter->htmlspecialchars($this->_topic);
                 break;
 
             case 'expire':
@@ -2030,8 +2033,15 @@ class Story
         global $_CONF;
 
         $this->_title = htmlspecialchars(strip_tags(COM_checkWords($title)));
-        $this->_introtext = COM_checkHTML(COM_checkWords($intro), 'story.edit');
-        $this->_bodytext = COM_checkHTML(COM_checkWords($body), 'story.edit');
+
+        $filter = sanitizer::getInstance();
+        $filter->setPostmode($this->_postmode);
+        $allowedElements = $filter->makeAllowedElements($_CONF['htmlfilter_story']);
+        $filter->setAllowedElements($allowedElements);
+        $filter->setCensorData(true);
+        $filter->setNamespace('glfusion','story');
+        $this->_introtext = $filter->filterHTML($intro);
+        $this->_bodytext = $filter->filterHTML($body);
     }
 
 

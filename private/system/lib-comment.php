@@ -57,6 +57,11 @@ function plugin_subscription_email_format_comment($category,$track_id,$post_id,$
     $dt = new Date('now',$_USER['tzid']);
     $permalink = 'Not defined';
 
+    $filter = sanitizer::getInstance();
+    $AllowedElements = $filter->makeAllowedElements($_CONF['htmlfilter_comment']);
+    $filter->setAllowedelements($AllowedElements);
+    $filter->setNamespace('glfusion','comment');
+
     $post_id = COM_applyFilter($post_id,true);
     $result = DB_query("SELECT * FROM {$_TABLES['comments']} WHERE cid={$post_id}");
     if ( DB_numRows($result) > 0 ) {
@@ -69,7 +74,8 @@ function plugin_subscription_email_format_comment($category,$track_id,$post_id,$
         if ( $A['uid'] > 1 ) {
             $name = COM_getDisplayName($A['uid']);
         } else {
-            $name = COM_checkWords(USER_sanitizeName($A['name']));
+            $name = $filter->sanitizeUsername($A['name']);
+            $name = $filter->censor($name);
         }
 
         $name = @htmlspecialchars($name,ENT_QUOTES, COM_getEncodingt());
@@ -86,8 +92,7 @@ function plugin_subscription_email_format_comment($category,$track_id,$post_id,$
         if( preg_match( '/<.*>/', $text ) == 0 ) {
             $A['comment'] = nl2br( $A['comment'] );
         }
-        // Replace any plugin autolink tags
-        $A['comment'] = PLG_replaceTags( $A['comment'],'glfusion','comment' );
+        $A['comment'] = $filter->_replaceTags($A['comment']);
 
         $notifymsg = sprintf($LANG03[46],'<a href="'.$_CONF['site_url'].'/comment.php?mode=unsubscribe&sid='.htmlentities($track_id).'&type='.$A['type'].'" rel="nofollow">'.$LANG01['unsubscribe'].'</a>');
 
@@ -318,6 +323,12 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
     $indent = 0;  // begin with 0 indent
     $retval = ''; // initialize return value
 
+
+    $filter = sanitizer::getInstance();
+    $AllowedElements = $filter->makeAllowedElements($_CONF['htmlfilter_comment']);
+    $filter->setAllowedelements($AllowedElements);
+    $filter->setNamespace('glfusion','comment');
+
     if ( $mode == 'threaded' ) $mode = 'nested';
 
     $template = new Template( $_CONF['path_layout'] . 'comment' );
@@ -413,7 +424,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         }
 
         $template->set_var( 'indent', $indent );
-        $template->set_var( 'author_name', strip_tags(USER_sanitizeName($A['username'] )));
+        $template->set_var( 'author_name', $filter->sanitizeUsername($A['username'] ));
         $template->set_var( 'author_id', $A['uid'] );
         $template->set_var( 'cid', $A['cid'] );
         $template->set_var( 'cssid', $row % 2 );
@@ -467,7 +478,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             );
 
         } else {
-            $username = strip_tags(USER_sanitizeName(trim($A['name'])));
+            $username = $filter->sanitizeUsername($A['name']);
             if ( $username == '' ) {
                 $username = $LANG01[24];
             }
@@ -579,9 +590,15 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         $text = str_replace('</div><!-- /COMMENTSIG -->', '', $text);
         $text = str_replace('<div class="comment-edit">', '', $text);
         $text = str_replace('</div><!-- /COMMENTEDIT -->', '', $text);
+
+        $filter->setReplaceTags(true);
+        $filter->setCensorData(true);
+
         if( preg_match( '/<.*>/', $text ) == 0 ) {
             $A['comment'] = nl2br( $A['comment'] );
         }
+        $filter->setPostmode('html');
+        $A['comment'] = $filter->displayText($A['comment']);
 
         // highlight search terms if specified
         if( !empty( $_REQUEST['query'] )) {
@@ -589,8 +606,6 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                                                 strip_tags($_REQUEST['query']) );
         }
 
-        // Replace any plugin autolink tags
-        $A['comment'] = PLG_replaceTags( $A['comment'],'glfusion','comment' );
         if (function_exists('msg_replaceEmoticons'))  {
             $A['comment'] = msg_replaceEmoticons($A['comment']);
         }
@@ -702,9 +717,6 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
 
     $template = new Template( $_CONF['path_layout'] . 'comment' );
     $template->set_file( array( 'commentarea' => 'startcomment.thtml' ));
-    $template->set_var( 'site_url', $_CONF['site_url'] );
-    $template->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
-    $template->set_var( 'layout_url', $_CONF['layout_url'] );
     if ( $mode != 'nobar' ) {
         $template->set_var( 'commentbar',
                 CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode ));
@@ -845,6 +857,12 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
 
     $retval = '';
     $cid = 0;
+    $edit_comment = '';
+
+    $filter = sanitizer::getInstance();
+    $AllowedElements = $filter->makeAllowedElements($_CONF['htmlfilter_comment']);
+    $filter->setAllowedelements($AllowedElements);
+    $filter->setNamespace('glfusion','comment');
 
     // never trust $uid ...
     if (COM_isAnonUser()) {
@@ -879,31 +897,21 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 $postmode = $_CONF['comment_postmode'];
             }
 
-            // Note:
-            // $comment / $newcomment is what goes into the preview / is
-            // actually stored in the database -> strip HTML
-            // $commenttext is what the user entered and goes back into the
-            // <textarea> -> don't strip HTML
+            $AllowedElements = $filter->makeAllowedElements($_CONF['htmlfilter_comment']);
+            $filter->setPostmode($postmode);
+            $filter->setCensorData(true);
+            $filter->setAllowedElements($AllowedElements);
+            $comment         = $filter->filterHTML($comment);
+            $display_comment = $filter->displayText($comment);
+            $edit_comment    = $filter->editableText($comment);
 
-            $commenttext = @htmlspecialchars ($comment,ENT_COMPAT,COM_getEncodingt());
+            $filter->setPostmode('text');
+            $title = $filter->displayText($title);
+            $title = $filter->editableText($title);
+            $filter->setPostmode($postmode);
 
-            $fakepostmode = $postmode;
-            if ($postmode == 'html') {
-                $comment = COM_checkWords (COM_checkHTML  ($comment));
-            } else {
-                $comment = @htmlspecialchars (COM_checkWords ($comment),ENT_COMPAT,COM_getEncodingt());
-                $newcomment = COM_makeClickableLinks ($comment);
-                if (strcmp ($comment, $newcomment) != 0) {
-                    $comment = nl2br ($newcomment);
-                    $fakepostmode = 'html';
-                }
-            }
-            $title = COM_checkWords (strip_tags ($title));
-
-            $_POST['title'] = $title;
-            $newcomment = $comment;
-
-            $_POST['comment'] = $newcomment;
+            $_POST['title']     = $title;
+            $_POST['comment']   = $display_comment;
 
             // Preview mode:
             if (($mode == $LANG03[14] || $mode == 'preview' || $mode == 'preview_new' || $mode == 'preview_edit') && !empty($title) && !empty($comment) ) {
@@ -1011,7 +1019,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 //Anonymous user
                 $comment_template->set_var('uid', 1);
                 if ( isset($_POST['username']) ) {
-                    $name = strip_tags(USER_sanitizeName($_POST['username'])); //for preview
+                    $name = $filter->sanitizeUsername(COM_applyFilter9($_POST['username'])); //for preview
                 } else {
                     $name = $LANG03[24]; //anonymous user
                 }
@@ -1030,11 +1038,11 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             $comment_template->set_var('lang_title', $LANG03[16]);
             $comment_template->set_var('title', @htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
             $comment_template->set_var('lang_comment', $LANG03[9]);
-            $comment_template->set_var('comment', $commenttext);
+            $comment_template->set_var('comment', $edit_comment);
             $comment_template->set_var('lang_postmode', $LANG03[2]);
             $comment_template->set_var('postmode',$postmode);
             $comment_template->set_var('postmode_options', COM_optionList($_TABLES['postmodes'],'code,name',$postmode));
-            $comment_template->set_var('allowed_html', COM_allowedHTML(SEC_getUserPermissions(),false,'glfusion','comment'));
+            $comment_template->set_var('allowed_html', $filter-> getAllowedHTML());
             $comment_template->set_var('lang_importantstuff', $LANG03[18]);
             $comment_template->set_var('lang_instr_line1', $LANG03[19]);
             $comment_template->set_var('lang_instr_line2', $LANG03[20]);
@@ -1511,16 +1519,15 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
 
     global $_USER, $_TABLES, $LANG03, $_CONF;
 
-    if ($postmode == 'html') {
-        $comment = COM_checkWords (COM_checkHTML ($comment));
-    } else {
-    	//plaintext
-        $comment = @htmlspecialchars (COM_checkWords ($comment),ENT_COMPAT,COM_getEncodingt());
-        $newcomment = COM_makeClickableLinks ($comment);
-        if (strcmp ($comment, $newcomment) != 0) {
-            $comment = nl2br ($newcomment);
-        }
-    }
+    $filter = sanitizer::getInstance();
+    $filter->setPostmode($postmode);
+    $filter->setCensorData(true);
+    $filter->setNamespace('glfusion','comment');
+
+    $AllowedElements = $filter->makeAllowedElements($_CONF['htmlfilter_comment']);
+    $filter->setAllowedElements($AllowedElements);
+    $comment = $filter->filterData($comment);  // does not censor...
+    $comment = $filter->censor($comment);
 
     if (COM_isAnonUser()) {
         $uid = 1;

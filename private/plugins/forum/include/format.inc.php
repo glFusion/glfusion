@@ -6,9 +6,7 @@
 // |                                                                          |
 // | General formatting routines                                              |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric M. Kingsley       kingsley AT trains-n-town DOTcom                  |
@@ -82,15 +80,16 @@ function do_bbcode_url ($action, $attributes, $content, $params, $node_object) {
 
     if (!isset ($attributes['default'])) {
         if ( stristr($content,'http') ) {
-            return '<a href="'.bbcode_cleanHTML($content).'" rel="nofollow">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
+            return '<a href="'.strip_tags($content).'" rel="nofollow">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
         } else {
-            return '<a href="http://'.bbcode_cleanHTML($content).'" rel="nofollow">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
+            return '<a href="http://'.strip_tags($content).'" rel="nofollow">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
+
         }
     }
     if ( stristr($attributes['default'],'http') ) {
-        return '<a href="'.bbcode_cleanHTML($attributes['default']).'" rel="nofollow">'.$content.'</a>';
+        return '<a href="'.strip_tags($attributes['default']).'" rel="nofollow">'.$content.'</a>';
     } else {
-        return '<a href="http://'.bbcode_cleanHTML($attributes['default']).'" rel="nofollow">'.$content.'</a>';
+        return '<a href="http://'.strip_tags($attributes['default']).'" rel="nofollow">'.$content.'</a>';
     }
 }
 
@@ -287,18 +286,18 @@ function do_bbcode_code($action, $attributes, $content, $params, $node_object) {
 * @return       string      filtered HTML code
 */
 function bbcode_cleanHTML($str) {
-    global $_CONF;
+    global $_FF_CONF, $_CONF;
 
-    require_once $_CONF['path'] . 'lib/htmLawed/htmLawed.php';
-    $configArray = array('safe' => 1,
-                         'balance'  => 1,
-                         'valid_xhtml' => 1
-                        );
+    $filter = sanitizer::getInstance();
+    $AllowedElements = $filter->makeAllowedElements($_FF_CONF['allowed_html']);
+    $filter->setAllowedelements($AllowedElements);
+    $filter->setNamespace('forum','post');
+    $filter->setPostmode('html');
 
-    return htmLawed($str,$configArray);
+    return $filter->filterHTML($str);
 }
 
-
+/* for display */
 function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
     global $_CONF, $_FF_CONF, $_ff_pm;
 
@@ -315,7 +314,6 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
         $bbcode->addParser (array ('block', 'inline', 'link', 'listitem'), 'bbcode_htmlspecialchars');
     }
     if ( $_FF_CONF['use_glfilter'] == 1 && ($postmode == 'html' || $postmode == 'HTML')) {
-        $bbcode->addParser(array('block','inline','link','listitem'), '_ff_checkHTML');      // calls glFusion's checkHTML on all text blocks
         $str = str_replace('<pre>','[code]',$str);
         $str = str_replace('</pre>','[/code]',$str);
     }
@@ -323,7 +321,7 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
         $bbcode->addParser(array('block','inline','link','listitem'), 'nl2br');
     }
 
-    $bbcode->addParser(array('block','inline','link','listitem'), '_ff_fixtemplate');
+//    $bbcode->addParser(array('block','inline','link','listitem'), '_ff_fixtemplate');
 
     if ( ! ($status & DISABLE_BBCODE ) ) {
 
@@ -523,7 +521,7 @@ function _ff_checkHTMLforSQL($str,$postmode='html') {
     $bbcode = new StringParser_BBCode ();
     $bbcode->setGlobalCaseSensitive (false);
 
-    if ( $_FF_CONF['use_glfilter'] == 1 && ($postmode == 'html' || $postmode == 'HTML')) {
+    if ( $postmode == 'html' || $postmode == 'HTML') {
         $bbcode->addParser(array('block','inline'), '_ff_cleanHTML');
     }
     $bbcode->addCode ('code', 'simple_replace', null, array ('start_tag' => '[code]', 'end_tag' => '[/code]'),
@@ -534,23 +532,21 @@ function _ff_checkHTMLforSQL($str,$postmode='html') {
 
 /**
 * Cleans (filters) HTML - only allows HTML tags specified in the
-* $_CONF['user_html'] string.  This function is designed to be called
+* $_FF_CONF['allowed_html'] string.  This function is designed to be called
 * by the stringparser class to filter everything except [code] blocks.
 *
 * @param        string      $message        The topic post to filter
 * @return       string      filtered HTML code
 */
 function _ff_cleanHTML($message) {
-    global $_CONF;
+    global $_CONF, $_FF_CONF;
 
-    if( isset( $_CONF['skip_html_filter_for_root'] ) &&
-             ( $_CONF['skip_html_filter_for_root'] == 1 ) &&
-            SEC_inGroup( 'Root' ))
-    {
-        return $message;
-    }
-
-    return COM_filterHTML( $message);
+    $filter = sanitizer::getInstance();
+    $AllowedElements = $filter->makeAllowedElements($_FF_CONF['allowed_html']);
+    $filter->setAllowedelements($AllowedElements);
+    $filter->setNamespace('forum','post');
+    $filter->setPostmode('html');
+    return $filter->filterHTML($message);
 }
 
 function _ff_fixtemplate($text) {
@@ -567,7 +563,7 @@ function _ff_replaceTags($text) {
 function _ff_preparefordb($message,$postmode) {
     global $_FF_CONF, $_CONF;
 
-    if ( $_FF_CONF['use_glfilter'] == 1 && ($postmode == 'html' || $postmode == 'HTML') ) {
+    if ( $postmode == 'html' || $postmode == 'HTML' ) {
         $message = _ff_checkHTMLforSQL($message,$postmode);
     }
 
@@ -578,24 +574,6 @@ function _ff_preparefordb($message,$postmode) {
     $message = DB_escapeString($message);
     return $message;
 }
-
-function _ff_checkHTML($str) {
-    global $_FF_CONF, $_CONF;
-
-    // just return if admin doesn't want to filter html
-    if ( $_FF_CONF['use_glfilter'] != 1 ) {
-        return $str;
-    }
-    // if glFusion is configured to allow root to use all html, no need to call
-    if( isset( $_CONF['skip_html_filter_for_root'] ) &&
-             ( $_CONF['skip_html_filter_for_root'] == 1 ) &&
-            SEC_inGroup( 'Root' ))
-    {
-        return $str;
-    }
-    return COM_filterHTML($str);
-}
-
 
 function _ff_replacesmilie($str) {
     global $_CONF,$_TABLES,$_FF_CONF;

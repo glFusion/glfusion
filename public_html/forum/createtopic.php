@@ -436,6 +436,12 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
     $peTemplate = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $peTemplate->set_file('posteditor','posteditor.thtml');
 
+    if ( $postData['postmode'] == 'html' ) {
+        $peTemplate->set_var('html_mode',true);
+    } else {
+        $peTemplate->unset_var('html_mode');
+    }
+
     if ( $viewMode == PREVIEW_VIEW ) {
         $peTemplate->set_var('preview_post',FF_previewPost( $postData, $action ));
     }
@@ -529,7 +535,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         $peTemplate->set_var ('anonymous_user',true);
         $peTemplate->set_var ('post_message', $postmessage);
         $peTemplate->set_var ('LANG_NAME', $LANG_GF02['msg33']);
-        $peTemplate->set_var ('name', _ff_checkHTML(strip_tags(COM_checkWords(trim(USER_sanitizeName(isset($postData['name']) ? $postData['name'] : ''))))));
+        $peTemplate->set_var ('name', htmlentities(strip_tags(COM_checkWords(trim(USER_sanitizeName(isset($postData['name']) ? $postData['name'] : ''))))));
         $peTemplate->set_var ('email',strip_tags($postData['email']));
     } else {
         $peTemplate->set_var ('member_user',true);
@@ -744,7 +750,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
             'cat_name'          => $postData['cat_name'],
             'cat_id'            => $forumData['forum_cat'],
             'forum_name'        => $postData['forum_name'],
-            'subject'           => _ff_checkHTML($postData['subject']),
+            'subject'           => @htmlspecialchars($postData['subject'],ENT_QUOTES, COM_getEncodingt()),
             'LANG_HOME'         => $LANG_GF01['HOMEPAGE'],
             'forum_home'        => $LANG_GF01['INDEXPAGE'],
             'hidden_id'         => $postData['id'],
@@ -902,22 +908,12 @@ function FF_saveTopic( $forumData, $postData, $action )
             $okToSave = false;
         }
     } else {
-        if ( COM_isAnonUser() && $_FF_CONF['use_sfs']) {
-/* ------------------------
-            if ( isset($postData['email']) && $postData['email'] != '' && COM_isEmail($postData['email']) ) {
-                $email = _ff_preparefordb(strip_tags(trim($postData['email'])),'text');
-                $email = urldecode($email);
-            } else {
-                $okToSave = false;
-                $errorMessages .= $LANG_GF02['invalid_email'] . '<br />';
-            }
---------------------------- */
-        } else {
+        if ( !COM_isAnonUser() && $_FF_CONF['use_sfs']) {
             $email = isset($_USER['email']) ? $_USER['email'] : '';
         }
     }
     if (isset($postData['name']) && $postData['name'] != '') {
-        $name = _ff_preparefordb(_ff_checkHTML(strip_tags(trim(COM_checkWords(USER_sanitizeName($postData['name']))))),'text');
+        $name = _ff_preparefordb(@htmlspecialchars(strip_tags(trim(COM_checkWords(USER_sanitizeName($postData['name'])))),ENT_QUOTES,COM_getEncodingt()),'text');
         $name = urldecode($name);
     } else {
         $okToSave = false;
@@ -967,8 +963,6 @@ function FF_saveTopic( $forumData, $postData, $action )
         }
     }
 
-    // hook directly into SFS
-    // check the email address too...
     if ( $_FF_CONF['use_sfs'] == 1 && COM_isAnonUser() ) {
         $result = _ff_stopforumspam($postData['name'],$email,$REMOTE_ADDR);
         if ($result > 0) {
@@ -988,13 +982,6 @@ function FF_saveTopic( $forumData, $postData, $action )
             $postData['postmode_switch'] = 0;
         }
         $postmode   = _ff_chkpostmode($postData['postmode'],$postData['postmode_switch']);
-        $subject    = _ff_preparefordb(strip_tags($postData['subject']),'text');
-        $comment    = _ff_preparefordb($postData['comment'],$postmode);
-        $mood       = isset($postData['mood']) ? COM_applyFilter($postData['mood']) : '';
-        $id         = COM_applyFilter($postData['id'],true);
-        $forum      = COM_applyFilter($postData['forum'],true);
-        $notify     = isset($postData['notify']) ? COM_applyFilter($postData['notify']) : '';
-
         // validate postmode
 
         if ( $postmode == 'html' || $postmode == 'HTML' ) {
@@ -1004,6 +991,12 @@ function FF_saveTopic( $forumData, $postData, $action )
                 $postmode = 'text';
             }
         }
+        $subject    = _ff_preparefordb(strip_tags($postData['subject']),'text');
+        $comment    = _ff_preparefordb($postData['comment'],$postmode);
+        $mood       = isset($postData['mood']) ? COM_applyFilter($postData['mood']) : '';
+        $id         = COM_applyFilter($postData['id'],true);
+        $forum      = COM_applyFilter($postData['forum'],true);
+        $notify     = isset($postData['notify']) ? COM_applyFilter($postData['notify']) : '';
 
         $status = 0;
         if ( isset($postData['disable_bbcode']) && $postData['disable_bbcode'] == 1 ) {
@@ -1197,7 +1190,7 @@ function FF_previewPost( $postData, $mode )
 
     $retval = '';
 
-    $postData['name'] = _ff_checkHTML(strip_tags(COM_checkWords(trim(USER_sanitizeName(urldecode($_POST['name']))))));
+    $postData['name'] = @htmlspecialchars(strip_tags(COM_checkWords(trim(USER_sanitizeName(urldecode($_POST['name']))))),ENT_QUOTES,COM_getEncodingt());
     if ( !isset($postData['uid']) ) {
         if ( COM_isAnonUser() ) {
             $postData['uid'] = 1;
@@ -1270,6 +1263,14 @@ function FF_previewPost( $postData, $mode )
     if ( !isset($postData['date']) ) {
         $postData['date'] = time();
     }
+
+    $filter = sanitizer::getInstance();
+    $AllowedElements = $filter->makeAllowedElements($_FF_CONF['allowed_html']);
+    $filter->setAllowedelements($AllowedElements);
+    $filter->setNamespace('forum','post');
+    $filter->setPostmode($postData['postmode']);
+
+    $postData['comment'] = $filter->filterHTML($postData['comment']);
     FF_showtopic($postData,'preview',1,0,$previewTemplate);
     $previewTemplate->parse ('output', 'preview');
 

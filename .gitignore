@@ -8,3 +8,4 @@ public_html/backend/
 public_html/tinymce/
 public_html/admin/plugins/tinymce/
 public_html/images/
+private/lib/htmlpurifier/HTMLPurifier/DefinitionCache/

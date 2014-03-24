@@ -15,10 +15,23 @@ global $_CONF, $_SYSTEM;
 $_CONF = array();
 $_SYSTEM = array();
 
+//** Performance options **
+
 // +--------------------------------------------------------------------------+
-// | Enables 'per user' libraries for images for the Advanced Editor          |
+// | Use direct style / js - Directly call the style / jss cache files        |
+// |                                                                          |
+// | If loading the PHP processor on your site adds additional load to your   |
+// | site you can skip that process and load the cache files directly from    |
+// | htmlheader.thtml                                                         |
 // +--------------------------------------------------------------------------+
-$_CONF_FCK['editor_images_by_user'] = false;
+
+$_SYSTEM['use_direct_style_js'] = false;
+
+
+// +--------------------------------------------------------------------------+
+// | Select filtering method                                                  |
+// +--------------------------------------------------------------------------+
+$_SYSTEM['html_filter'] = 'htmlpurifier';  // or htmlawed
 
 
 // ** System Maintenance and debugging options **
@@ -128,35 +141,6 @@ $_SYSTEM['verification_token_ttl'] = 86400;
 
 $_SYSTEM['token_ip'] = false;
 
-// +--------------------------------------------------------------------------+
-// | HTML Filtering Overrides                                                 |
-// |                                                                          |
-// | By default, glFusion allows most safe HTML, but will filter out items    |
-// | such as the iframe tag for security reasons.                             |
-// |                                                                          |
-// | You can override what elements are filtered by allowing new items using  |
-// | the following two configuration options:                                 |
-// |                                                                          |
-// | $_SYSTEM['filterOverride'] = array() - Applies to all users              |
-// | $_SYSTEM['RootFilterOverride'] = array() - Applies to only Root users    |
-// |                                                                          |
-// | Overrides must include the full set of elements to allow / disallow      |
-// | See the detailed HTML filtering documentation at:                        |
-// |  http://www.glfusion.org/wiki/doku.php?id=glfusion:htmlfilter            |
-// +--------------------------------------------------------------------------+
-
-//$_SYSTEM['filterOverride'] = array( 'elements' => '*+embed+object' );
-//$_SYSTEM['RootFilterOverride'] = array( 'elements' => '*+embed+object+iframe' );
-
-// +--------------------------------------------------------------------------+
-// | Use direct style / js - Directly call the style / jss cache files        |
-// |                                                                          |
-// | If loading the PHP processor on your site adds additional load to your   |
-// | site you can skip that process and load the cache files directly from    |
-// | htmlheader.thtml                                                         |
-// +--------------------------------------------------------------------------+
-
-$_SYSTEM['use_direct_style_js'] = false;
 
 // +--------------------------------------------------------------------------+
 // | glFusion cache filenames - You generally do not need to adjust these.    |
@@ -178,8 +162,6 @@ $_CONF['path'] = '/path/to/glfusion/';
 $_CONF['path_system'] = $_CONF['path'] . 'system/';
 
 $_CONF['default_charset'] = 'iso-8859-1';
-
-$_CONF_FCK['imagelibrary'] = '/images/library';
 
 if (!defined('LB')) {
   define('LB',"\n");

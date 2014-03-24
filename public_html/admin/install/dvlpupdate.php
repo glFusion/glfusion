@@ -1009,7 +1009,7 @@ function glfusion_132()
 
 function glfusion_140()
 {
-    global $_TABLES, $_CONF, $_PLUGINS, $LANG_AM, $_DB_table_prefix, $_CP_CONF;
+    global $_TABLES, $_CONF, $_FF_CONF, $_PLUGINS, $LANG_AM, $_DB_table_prefix, $_CP_CONF;
 
     // new config options
     require_once $_CONF['path_system'].'classes/config.class.php';
@@ -1022,12 +1022,22 @@ function glfusion_140()
     $c->del('advanced_editor','Core');
 
     // add mailuser_postmode
-    // add mailstory_postmode
 
     if ( !isset($_CONF['mailuser_postmode'] ) ) {
         $c->add('mailuser_postmode','html','select',4,5,5,43,TRUE);
     }
 
+    // set the initial set of html elements
+    if ( !isset($_CONF['htmlfilter_comment']) ) {
+        $c->add('htmlfilter_default','p,b,a,i,strong,em,br','text',7,5,NULL,30,true);
+        $c->add('htmlfilter_comment','p,b,a,i,strong,em,br,tt,hr,li,ol,ul,code,pre','text',7,5,NULL,35,TRUE);
+        $c->add('htmlfilter_story','p,b,a,i,strong,em,br,tt,hr,li,ol,ul,code,pre,blockquote,img','text',7,5,NULL,40,TRUE);
+        $c->add('htmlfilter_root','div,span,table,tr,td,th','text',7,5,NULL,50,TRUE);
+    }
+
+    if ( !isset($_FF_CONF['allowed_html']) ) {
+        $c->add('allowed_html','p,b,i,strong,em,br,pre,img,ol,ul,li,u', 'text',0, 2, 0, 82, true, 'forum');
+    }
 
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.4.0',name='glfusion'",1);

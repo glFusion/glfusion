@@ -37,6 +37,8 @@
 
   {preview_post}
 
+{!if html_mode}
+{!else}
   <script type="text/javascript">
   // Helpline messages
   b_help = "{LANG_bhelp}";
@@ -71,6 +73,7 @@
   });
   </script>
   <script type="text/javascript" src="{site_url}/forum/javascript/ajax_deletefile.js"></script>
+{!endif}
 
 {!if error_msg}
   <div class="pluginAlert"">{error_msg}</div>
@@ -131,7 +134,7 @@
         <td class="pluginCellText pluginCellFill"><select name="mood" style="width:150px; text-indent: 0px;" tabindex="2">{moodoptions}</select></td>
       </tr>
 {!endif}
-{!if wysiwyg}
+{!if html_mode}
 {!else}
       <tr>
         <td class="pluginCellSubTitle">&nbsp;{LANG_code}:</td>
@@ -194,15 +197,18 @@
       <tr>
         <td colspan="2" class="pluginCellText pluginCellFill" style="padding-left: 5px;">
           {!if smilies}
+          {!if html_mode}
+          {!else}
             <div style="width:95%; padding:10px; clear:both;" id="smileys">
               {smilies}
             </div>
+            {!endif}
           {!endif}
 {!if wysiwyg}
-    <div>
-    <input type="button" value="{visual_editor}" onclick="won('comment')"/>
-    <input type="button" value="{html_editor}"  onclick="woff('comment')"/>
-    </div>
+            <div>
+            <input type="button" value="{visual_editor}" onclick="won('comment')"/>
+            <input type="button" value="{html_editor}"  onclick="woff('comment')"/>
+            </div>
 {!endif}
           <textarea name="comment" id="comment" rows="20" cols="45" tabindex="6" class="post" style="width:99%" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);">{comment}</textarea>
         </td>

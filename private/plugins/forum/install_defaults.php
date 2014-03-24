@@ -8,9 +8,7 @@
 // | records. These settings are only used during the initial installation    |
 // | and not referenced any more once the plugin is installed.                |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -188,6 +186,7 @@ $_FF_DEFAULT['inlineimageypes']    = array(
 );
 $_FF_DEFAULT['enable_fm_integration'] = false;
 $_FF_DEFAULT['allow_memberlist']      = false;
+$_FF_DEFAULT['allowed_html'] = 'p,b,i,strong,em,br,pre,code,img,ol,ul,li,u';
 
 /**
 * the Forum plugin's config array
@@ -209,6 +208,8 @@ if ( isset($_TABLES['ff_settings']) ) {
             $_FF_CONF['registered_to_post']     = $A['registerpost'];
         if ( isset($A['allowhtml']) )
             $_FF_CONF['allow_html']             = $A['allowhtml'];
+        if ( isset($A['allowed_html']) )
+            $_FF_CONF['allowed_html']             = $A['allowed_html'];
         if ( isset($A['post_htmlmode']) )
             $_FF_CONF['post_htmlmode']          = $A['post_htmlmode'];
         if ( isset($A['glfilter']) )
@@ -429,6 +430,11 @@ function plugin_initconfig_forum()
                 0, 2, 0, 70, true, 'forum');
         $c->add('allow_html', $_FF_DEFAULT['allow_html'], 'select',
                 0, 2, 0, 80, true, 'forum');
+
+        $c->add('allowed_html', $_FF_DEFAULT['allowed_html'], 'text',
+                0, 2, 0, 82, true, 'forum');
+
+
         $c->add('use_wysiwyg_editor', false, 'select',
                 0, 2, 0, 85, true, 'forum');
         $c->add('post_htmlmode', $_FF_DEFAULT['post_htmlmode'], 'select',
