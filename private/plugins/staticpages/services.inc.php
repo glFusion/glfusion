@@ -6,9 +6,7 @@
 // |                                                                          |
 // | This file implements the services provided by the 'Static Pages' plugin. |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2013 by the following authors:                             |
+// | Copyright (C) 2013-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
