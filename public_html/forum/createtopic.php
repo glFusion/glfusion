@@ -436,6 +436,12 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
     $peTemplate = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $peTemplate->set_file('posteditor','posteditor.thtml');
 
+    if ( $postData['postmode'] == 'html' ) {
+        $peTemplate->set_var('html_mode',true);
+    } else {
+        $peTemplate->unset_var('html_mode');
+    }
+
     if ( $viewMode == PREVIEW_VIEW ) {
         $peTemplate->set_var('preview_post',FF_previewPost( $postData, $action ));
     }
@@ -1257,7 +1263,14 @@ function FF_previewPost( $postData, $mode )
     if ( !isset($postData['date']) ) {
         $postData['date'] = time();
     }
-    $postData['comment'] = COM_filterHTML($postData['comment']);
+
+    $filter = sanitizer::getInstance();
+    $AllowedElements = $filter->makeAllowedElements($_FF_CONF['allowed_html']);
+    $filter->setAllowedelements($AllowedElements);
+    $filter->setNamespace('forum','post');
+    $filter->setPostmode($postData['postmode']);
+
+    $postData['comment'] = $filter->filterHTML($postData['comment']);
     FF_showtopic($postData,'preview',1,0,$previewTemplate);
     $previewTemplate->parse ('output', 'preview');
 
