@@ -1724,7 +1724,7 @@ function PLG_collectTags($namespace='',$operation='')
     //                        'tag'   => 'module'
     $autolinkModules = array();
 
-    $coreTags = array ('story' => 'glfusion','story_introtext' => 'glfusion', 'showblock' => 'glfusion','hmenu' => 'glfusion', 'vmenu' => 'glfusion', 'menu' => 'glfusion');
+    $coreTags = array ('story' => 'glfusion','story_introtext' => 'glfusion', 'showblock' => 'glfusion', 'menu' => 'glfusion');
     foreach ($coreTags as $tag => $pi_name) {
         $permCheck = $tag.$postFix;
         if ( empty($postFix) || !isset($autoTagPerms[$permCheck]) || $autoTagPerms[$permCheck] == 1 ) {
@@ -2060,27 +2060,6 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
                         $menuHTML = displayMenu($menuID);
                         $content = str_replace($autotag['tagstr'],$menuHTML,$content);
                     }
-/* -----
-                    if ( $autotag['tag'] == 'hmenu' ) { // depreciated
-                        $menu = '';
-                        $menuID = trim($autotag['parm1']);
-                        $id = DB_getItem($_TABLES['menu'],'id','menu_name="'.DB_escapeString($menuID).'"');
-                        if ( $id > 0 ) {
-                            if ( $mbMenu[$id]['menu_type'] == 1 ) {
-                                $menu = mb_getMenu($menuID,'');
-                            } else {
-                                $menu = mb_getMenu($menuID,'');
-                            }
-                            $content = str_replace($autotag['tagstr'],$menu,$content);
-                        } else {
-                            $content = str_replace($autotag['tagstr'],$menu,$content);
-                        }
-                    }
-                    if ( $autotag['tag'] == 'vmenu' ) { // depreciated
-                        $menu = phpblock_getMenu('',trim($autotag['parm1']));
-                        $content = str_replace($autotag['tagstr'],$menu,$content);
-                    }
----- */
                     if (isset($_AUTOTAGS[$autotag['tag']])) {
                         $content = autotags_autotag('parse', $content, $autotag);
                     }
