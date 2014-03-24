@@ -327,6 +327,18 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
         exit;
     }
 
+    $filter = sanitizer::getInstance();
+    if ( $html ) {
+        $filter->setPostmode('html');
+    } else {
+        $filter->setPostmode('text');
+    }
+    $allowedElements = $filter->makeAllowedElements($_CONF['htmlfilter_default']);
+    $filter->setAllowedElements($allowedElements);
+    $filter->setCensorData(true);
+    $filter->setReplaceTags(true);
+    $filter->setNamespace('glfusion','mail_story');
+
     $sql = "SELECT uid,title,introtext,bodytext,commentcode,UNIX_TIMESTAMP(date) AS day,postmode FROM {$_TABLES['stories']} WHERE sid = '".DB_escapeString($sid)."'" . COM_getTopicSql('AND') . COM_getPermSql('AND');
     $result = DB_query($sql);
     if (DB_numRows($result) == 0) {
@@ -337,7 +349,8 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
     $mailtext = sprintf ($LANG08[23], $from, $fromemail) . LB;
     if (strlen ($shortmsg) > 0) {
         if ( $html ) {
-            $shortmsg = COM_filterHTML($shortmsg);
+
+            $shortmsg = $filter->filterHTML($shortmsg);
         }
         $mailtext .= LB . sprintf ($LANG08[28], $from) . $shortmsg . LB;
     }
@@ -365,13 +378,13 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
         $mailtext .= $LANG01[1] . ' ' . $author . LB;
     }
     if ( $html ) {
-        $mailtext .= PLG_replaceTags($A['introtext'],'glfusion','mail_story') . '<br />'.PLG_replaceTags($A['bodytext'],'glfusion','mail_story').'<br /><br />'
-        . '------------------------------------------------------------<br />';
+        $mailtext .= $filter->displayText($A['introtext']) . '<br />' .
+                     $filter->displayText($A['bodytext']) . '<br /><br />' .
+                    '------------------------------------------------------------<br />';
     } else {
-        $mailtext .= LB
-            . COM_undoSpecialChars(strip_tags(PLG_replaceTags($A['introtext'],'glfusion','mail_story'))).LB.LB
-            . COM_undoSpecialChars(strip_tags(PLG_replaceTags($A['bodytext'],'glfusion','mail_story'))).LB.LB
-            . '------------------------------------------------------------'.LB;
+        $mailtext .= $filter->displayText($A['introtext']) . LB .
+                     $filter->displayText($A['bodytext']) . LB.LB.
+                    '------------------------------------------------------------' . LB;
     }
     if ($A['commentcode'] == 0) { // comments allowed
         $mailtext .= $LANG08[24] . LB
