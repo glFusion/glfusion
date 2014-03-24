@@ -6,8 +6,6 @@
 // |                                                                          |
 // | glFusion installation script.                                            |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                             $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -1076,6 +1074,13 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->del('advanced_editor','Core');
             if ( !isset($_CONF['mailuser_postmode'] ) ) {
                 $c->add('mailuser_postmode','html','select',4,5,5,43,TRUE);
+            }
+            // set the initial set of html elements
+            if ( !isset($_CONF['htmlfilter_comment']) ) {
+                $c->add('htmlfilter_default','p,b,a,i,strong,em,br','text',7,5,NULL,30,true);
+                $c->add('htmlfilter_comment','p,b,a,i,strong,em,br,tt,hr,li,ol,ul,code,pre','text',7,5,NULL,35,TRUE);
+                $c->add('htmlfilter_story','p,b,a,i,strong,em,br,tt,hr,li,ol,ul,code,pre,blockquote,img','text',7,5,NULL,40,TRUE);
+                $c->add('htmlfilter_root','div,span,table,tr,td,th','text',7,5,NULL,50,TRUE);
             }
             $current_fusion_version = '1.4.0';
         default:

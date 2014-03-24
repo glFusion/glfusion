@@ -637,7 +637,7 @@ class Template
                 if ($this->debug & 4) {
                     echo "<p><b>subst:</b> varname $varname does not reference a file</p>\n";
                 }
-                return true;
+                return "";
             }
 
             $p = pathinfo($filename);
@@ -646,7 +646,7 @@ class Template
                 $rc = @include $filename;
                 if ( $rc != true) {
                     ob_end_clean();
-                    return true;
+                    return "";
                 }
                 $str = ob_get_contents();
                 ob_end_clean();
@@ -666,7 +666,7 @@ class Template
                 if ($this->debug & 4) {
                     echo "<p><b>subst:</b> varname $varname does not reference a file</p>\n";
                 }
-                return true;
+                return "";
             }
 
             ob_start();
