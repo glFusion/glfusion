@@ -2591,6 +2591,10 @@ $LANG_confignames['Core'] = array(
     'update_check_interval' => 'Update Check Interval',
     'send_site_data' => 'Send Site Data',
     'rating_speedlimit' => 'Rating SpeedLimit (in seconds)',
+    'html_filter_default' => 'Default set of allowed HTML',
+    'htmlfilter_comment' => 'HTML allowed in comments',
+    'htmlfilter_story' => 'HTML allowed in stories',
+    'htmlfilter_root' => 'Additional HTML allowed for Root users',
 );
 
 $LANG_configsubgroups['Core'] = array(
