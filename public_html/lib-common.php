@@ -3213,11 +3213,9 @@ function COM_allowedHTML( $permissions = 'story.edit', $list_only = false, $name
 {
     global $_CONF;
 
-    $filter = new filter();
-    if ($permissions == 'story.edit') {
-        $filter->setAllowedElements($_CONF['htmlfilter_story']);
-    }
-    return $filter->getAllowedElements();
+    $filter = sanitizer::getInstance();
+    $allowedHTML = $filter->getAllowedHTML();
+    return $allowedHTML;
 }
 
 /**
