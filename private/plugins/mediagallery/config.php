@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Configuration options for Media Gallery                                  |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2013 by the following authors:                        |
+// | Copyright (C) 2002-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -110,7 +108,7 @@ $_MG_CONF['disable_version_check']   = 1;
  * Set the maximum number of media items to display in the Media Manage Screen
  */
 
-$_MG_CONF['mediamanage_items']       = 200;
+$_MG_CONF['mediamanage_items']       = 100;
 
 /*
  * Media Gallery will convert all uploaded image media to JPG format,
