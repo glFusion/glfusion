@@ -1724,8 +1724,13 @@ function INST_doPluginUpgrade()
         $error .= sprintf($LANG_INSTALL['plugin_upgrade_error'],'Comment Feeds');
         $upgradeError = 1;
     }
+    $rc = INST_pluginAutoUpgrade('ckeditor',1);
+    if ( $rc == false ) {
+        $error .= sprintf($LANG_INSTALL['plugin_upgrade_error'],'CKEditor');
+        $upgradeError = 1;
+    }
 
-    $stdPlugins=array('staticpages','spamx','links','polls','calendar','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
+    $stdPlugins=array('ckeditor','staticpages','spamx','links','polls','calendar','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
     foreach ($stdPlugins AS $pi_name) {
         DB_query("UPDATE {$_TABLES['plugins']} SET pi_gl_version='".GVERSION."', pi_homepage='http://www.glfusion.org' WHERE pi_name='".$pi_name."'",1);
     }
