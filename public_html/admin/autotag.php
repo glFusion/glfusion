@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Autotag management console                                               |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2013 by the following authors:                        |
+// | Copyright (C) 2009-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -48,7 +46,7 @@ require_once $_CONF['path_system'].'lib-autotag.php';
 // ensure the current user has rights to administer autotags
 
 if (!SEC_hasRights('autotag.admin')) {
-    COM_accessLog ("User {$_USER['username']} tried to illegally access the Autotag Manager administration screen.");
+    COM_accessLog ("User {$_USER['username']} tried to access the Autotag Manager administration screen without the proper permissions.");
     $display = COM_siteHeader('menu')
         . COM_showMessageText($LANG_AM['access_denied_msg'],$LANG_AM['access_denied'],true)
         . COM_siteFooter();
@@ -75,8 +73,6 @@ function AT_adminForm($A, $error = false)
 {
     global $_CONF, $LANG_AM, $_AM_CONF, $LANG_ADMIN;
     global $self_url, $cc_url;
-
-$LANG_AM['instructions_edit'] = 'This screen allows you to create a custom autotag.';
 
     USES_lib_admin();
 
@@ -806,7 +802,7 @@ switch ($action) {
             @unlink($_CONF['path_system'].'autotags/' . $filename);
             exit;
         } else {
-            COM_accessLog('User ' . $_USER['username'] . ' tried to illegally delete autotag ' . $tag . ' and failed CSRF checks.');
+            COM_accessLog('User ' . $_USER['username'] . ' did not have permissions to delete autotag ' . $tag . ' - operation failed CSRF checks.');
             $display = COM_refresh($cc_url);
         }
         break;
