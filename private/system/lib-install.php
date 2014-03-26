@@ -634,7 +634,7 @@ function _pi_parseXML($tmpDirectory)
     if (!$dh = @opendir($tmpDirectory)) {
         return false;
     }
-     while (false !== ($file = readdir($dh)) {
+    while (false !== ($file = readdir($dh))) {
         if ( $file == '..' || $file == '.' ) {
             continue;
         }
