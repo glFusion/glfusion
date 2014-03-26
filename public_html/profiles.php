@@ -363,9 +363,9 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
     }
     $dt->setTimestamp($A['day']);
     if ( $html ) {
-        $mailtext .= '------------------------------------------------------------<br /><br />'
-                  . COM_undoSpecialChars ($A['title']) . '<br />'
-                  . $dt->format($_CONF['date'], true) . '<br />';
+        $mailtext .= '<p>------------------------------------------------------------</p>'
+                  . '<p>' . COM_undoSpecialChars ($A['title']) . '</p>'
+                  . '<p>' . $dt->format($_CONF['date'], true) . '</p>';
     } else {
         $mailtext .= '------------------------------------------------------------'
                   . LB . LB
@@ -378,9 +378,9 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
         $mailtext .= $LANG01[1] . ' ' . $author . LB;
     }
     if ( $html ) {
-        $mailtext .= $filter->displayText($A['introtext']) . '<br />' .
-                     $filter->displayText($A['bodytext']) . '<br /><br />' .
-                    '------------------------------------------------------------<br />';
+        $mailtext .= '<p>'.$filter->displayText($A['introtext']) . '<br />' .
+                     $filter->displayText($A['bodytext']) . '</p>' .
+                    '<p>------------------------------------------------------------</p>';
     } else {
         $mailtext .= $filter->displayText($A['introtext']) . LB .
                      $filter->displayText($A['bodytext']) . LB.LB.
