@@ -3,7 +3,7 @@
     <name>Polls</name>
     <description>Online Poll System</description>
     <version>2.1.1</version>
-    <glfusionversion>1.3.0</glfusionversion>
+    <glfusionversion>1.4.0</glfusionversion>
     <phpversion>5.2.0</phpversion>
     <url>http://www.glfusion.org</url>
     <maintainer>Mark R. Evans</maintainer>

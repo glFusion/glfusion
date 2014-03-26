@@ -6,8 +6,6 @@
 // |                                                                          |
 // | Plugin system integration options                                        |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2009-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -52,6 +50,6 @@ $_TABLES['staticpage']          = $_DB_table_prefix . 'staticpage';
 $_SP_CONF['pi_name']            = 'staticpages';
 $_SP_CONF['pi_display_name']    = 'Pages';
 $_SP_CONF['pi_version']         = '1.6.0';
-$_SP_CONF['gl_version']         = '1.3.0';
+$_SP_CONF['gl_version']         = '1.4.0';
 $_SP_CONF['pi_url']             = 'http://www.glfusion.org/';
 ?>

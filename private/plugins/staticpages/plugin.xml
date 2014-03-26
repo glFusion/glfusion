@@ -3,7 +3,7 @@
     <name>Static Pages</name>
     <description>Static Content Management</description>
     <version>1.6.0</version>
-    <glfusionversion>1.3.0</glfusionversion>
+    <glfusionversion>1.4.0</glfusionversion>
     <phpversion>5.2.0</phpversion>
     <url>http://www.glfusion.org</url>
     <maintainer>Mark R. Evans</maintainer>
