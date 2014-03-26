@@ -1498,6 +1498,7 @@ function INST_installAndContentPlugins()
 
     INST_pluginAutoInstall('bad_behavior2');
     INST_pluginAutoInstall('captcha');
+    INST_pluginAutoInstall('ckeditor');
     INST_pluginAutoInstall('commentfeeds');
     INST_pluginAutoInstall('spamx');
     INST_pluginAutoInstall('staticpages');
