@@ -38,7 +38,7 @@ if (!defined ('GVERSION')) {
 
 // these file/dir names will be completely ignored, and not checked
 
-$glfIgnore = array('.','..','.svn','CVS','cgi-bin','.htaccess','robots.txt','lightash');
+$glfIgnore = array('.','..','.svn','.git','CVS','cgi-bin','.htaccess','robots.txt','lightash');
 
 // these are the bundled plugins.  they are fully defined/checked as below
 
@@ -46,13 +46,13 @@ $glfPlugins = array(
     'bad_behavior2',
     'calendar',
     'captcha',
+    'ckeditor',
     'commentfeeds',
     'filemgmt',
     'forum',
     'links',
     'mediagallery',
     'polls',
-    'sitetailor',
     'spamx',
     'staticpages'
 );
