@@ -365,7 +365,6 @@ function install_config($site_url)
     $c->add('cron_schedule_interval',86400,'text',7,2,NULL,20,TRUE);
     $c->add('disable_autolinks',0,'select',7,2,0,30,TRUE);
 
-
     $c->add('fs_debug', NULL, 'fieldset', 7, 3, NULL, 0, TRUE);
     $c->add('rootdebug',FALSE,'select',7,3,1,10,TRUE);
 
@@ -377,6 +376,10 @@ function install_config($site_url)
     $c->add('fs_htmlfilter', NULL, 'fieldset', 7, 5, NULL, 0, TRUE);
     $c->add('allow_embed_object',TRUE,'select',7,5,1,10,TRUE);
     $c->add('skip_html_filter_for_root',0,'select',7,5,0,20,TRUE);
+    $c->add('htmlfilter_default','p,b,a,i,strong,em,br','text',7,5,NULL,30,true);
+    $c->add('htmlfilter_comment','p,b,a,i,strong,em,br,tt,hr,li,ol,ul,code,pre','text',7,5,NULL,35,TRUE);
+    $c->add('htmlfilter_story','p,b,a,i,strong,em,br,tt,hr,li,ol,ul,code,pre,blockquote,img','text',7,5,NULL,40,TRUE);
+    $c->add('htmlfilter_root','div,span,table,tr,td,th','text',7,5,NULL,50,TRUE);
 
     $c->add('fs_censoring', NULL, 'fieldset', 7, 6, NULL, 0, TRUE);
     $c->add('censormode',1,'select',7,6,23,10,TRUE);
