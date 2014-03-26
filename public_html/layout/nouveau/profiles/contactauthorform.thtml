@@ -30,7 +30,7 @@ window.addEvent('domready',function() {
 </tr>
 <tr>
 <td class="alignright" style="vertical-align:top;"><b>{lang_shortmessage}:</b></td>
-  <td><textarea class="fValidate['required']" id="shortmsg" name="shortmsg" cols="60" rows="10" style="width:90%;">{shortmsg}</textarea></td>
+  <td><textarea id="shortmsg" name="shortmsg" cols="60" rows="10" style="width:90%;">{shortmsg}</textarea></td>
 </tr>
 </table>
 <div class="warning">{lang_warning}</div>
