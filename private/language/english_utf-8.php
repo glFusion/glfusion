@@ -2244,7 +2244,6 @@ $LANG_AM = array (
                                 .'<p>You may also use %0% to represent the entire string after the first colon, this is handy when you want to use only a single parameter, and the value will contain whitespace which would otherwise be interpreted as a delimiter between multiple parameters.  The %site_url% and $site_admin_url% macros can also be used, and will be replaced by the base url and admin url respectively.</p>',
     'autotagpermmsg'            => 'Select which features (operations) you want to allow the autotag to be used.',
     'autotag'                   => 'Autotag',
-
     'desc_showblock'            => 'HTML: renders a block. usage: [show_block:<i>block_id</i>]',
     'desc_story'                => 'Link: to a story on this site; link_text defaults to story title.  usage: [story:<i>story_id</i> {link_text}]',
     'desc_story_introtext'      => 'HTML: renders story content, up to and including only introduction text.  usage: [story_introtext:<i>story_id</i>]',
@@ -2259,6 +2258,7 @@ $LANG_AM = array (
     'desc_user'                 => 'Text: expands \$_USER global var, eg. [user:p1] -> value of \$_USER[p1]',
     'desc_wikipedia'            => 'Link: to the wikipedia search result for the text specified. usage: [wikipedia:<i>text</i>]',
     'desc_youtube'              => 'HTML: embeds a youtube.com video object. usage: [youtube:<i>video_id</i>]',
+    'instructions_edit'         => 'This screen allows you to create a custom autotag.',
 );
 
 ###############################################################################
