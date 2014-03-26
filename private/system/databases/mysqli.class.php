@@ -197,7 +197,9 @@ class database
     */
     public function setErrorFunction($functionname)
     {
-        $this->_errorlog_fn = $functionname;
+        if (is_callable($functionname)) {
+            $this->_errorlog_fn = $functionname;
+        }
     }
 
     /**
@@ -698,7 +700,7 @@ class database
 
     public function dbEscapeString($value, $is_numeric = FALSE)
     {
-        $value = $this->_db->escape_string($value);
+        $value = $this->_db->real_escape_string($value);
         return $value;
     }
 
