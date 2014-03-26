@@ -28,7 +28,6 @@ function reload(form){
         <select name="type">
           <option value="install">{lang_new_install}</option>
           <option value="upgrade">{lang_site_upgrade}</option>
-          <option value="migrate">{lang_geeklog_migrate}</option>
         </select>
       </span>
       <p>

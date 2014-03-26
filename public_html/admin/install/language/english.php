@@ -6,9 +6,7 @@
 // |                                                                          |
 // | English language file for the glFusion installation script               |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -81,12 +79,10 @@ $LANG_INSTALL = array(
     'filesystem_check'          => 'File System Check',
     'forum'                     => 'Load Forum Plugin?',
     'forum_desc'                => 'An online community forum system. Provides community collaboration and interactivity.',
-    'geeklog_migrate'           => 'Migrate a Geeklog v1.4.1+ Site',
     'hosting_env'               => 'Hosting Environment Check',
     'install'                   => 'Install',
     'install_heading'           => 'glFusion Installation',
     'install_steps'             => 'INSTALL STEPS',
-    'invalid_geeklog_version'   => 'The installer is unable to locate the siteconfig.php file. Are you sure you are migrating from Geeklog v1.5.0 or higher?  If you have an older Geeklog installation, please upgrade it to at least Geeklog v1.4.1+ and then try the migration again.',
     'language'                  => 'Language',
     'language_task'             => 'Language & Task',
     'libcustom_not_writable'    => 'lib-custom.php is not writable.',
@@ -163,7 +159,7 @@ $LANG_INSTALL = array(
     'upgrade_steps'             => 'UPGRADE STEPS',
     'upload_max_filesize'		=> 'glFusion allows you to upload plugins, images, and files. You should allow at least 8M for the upload size.',
     'use_utf8'                  => 'Use UTF-8',
-    'welcome_help'              => 'Welcome to the glFusion CMS Installation Wizard. You can install a new glFusion site, upgrade an existing glFusion site, or migrate from an existing Geeklog v1.4.1+ site.<br /><br />Please select the language for the wizard, and the task to perform, then press <strong>Next</strong>.',
+    'welcome_help'              => 'Welcome to the glFusion CMS Installation Wizard. You can install a new glFusion site, upgrade an existing glFusion site.<br /><br />Please select the language for the wizard, and the task to perform, then press <strong>Next</strong>.',
     'wizard_version'            => 'v' . GVERSION . ' Installation Wizard',
     'system_path_prompt'        => 'Enter the full, absolute path on your server to glFusion\'s <strong>private/</strong> directory.<br /><br />For a new install, this is the directory that contains the <strong>db-config.php.dist</strong> file, or for an upgrade, and existing <strong>db-config.php</strong> file.<br /><br />Directory Examples:<br />/home/www/glfusion/private/<br />c:/www/glfusion/private/<br /><br /><strong>Hint:</strong> From a security perspective, the most desirable location for the private/ directory is outside of the webroot.  The webroot is the directory that is served by your web host that relates to the root url of your site (http://www.yoursite.com/).<br /><br />It appears that the absolute path to your <strong>public_html/</strong> <i>(not <strong>private/</strong>)</i> directory is:<br /><br />%s<br /><br />We suggest that you place your private/ directory somewhere outside of the webroot, if your web host allows this.<br /><br />If your web host does not allow for placement of files outside of the webroot, please follow the instructions in the <a href="http://www.glfusion.org/wiki/glfusion:installation:webroot" target="_blank">documentation</a> on installing the private folder <strong>inside</strong> the webroot.<br /><br /><strong>Advanced Settings</strong> allow you to override some of the default paths.  Generally you do not need to modify or specify these paths, the system will determine them automatically.',
     'advanced_settings'         => 'Advanced Settings',

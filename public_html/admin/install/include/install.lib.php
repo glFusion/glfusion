@@ -679,10 +679,11 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $_SQLi[] = "ALTER TABLE {$_TABLES['sessions']} DROP INDEX sess_id";
             $_SQLi[] = "ALTER TABLE {$_TABLES['stories']} DROP INDEX stories_sid";
             $_SQLi[] = "ALTER TABLE {$_TABLES['userindex']} DROP INDEX userindex_uid";
-            $_SQLi[] = "ALTER TABLE {$_TABLES['polltopics']} DROP INDEX pollquestions_pid";
-
+            if ( isset($_TABLES['polltopics']) ) {
+                $_SQLi[] = "ALTER TABLE {$_TABLES['polltopics']} DROP INDEX pollquestions_pid";
+            }
             foreach ($_SQLi as $sqli) {
-                DB_query($sqli,1);
+                $rc = DB_query($sqli,1);
             }
             $_SQLi = array();
             if ( !@file_exists($_CONF['path_system'].'classes/config.class.php') ) {
@@ -1188,7 +1189,7 @@ function INST_doPrePluginUpgrade()
             $_TABLES['am_autotags'] = $_DB_table_prefix . 'am_autotags';
             $_TABLES['autotags'] = $_DB_table_prefix . 'autotags';
 
-            if ( DB_checkTableExists('am_autotags') ) {
+            if ( DB_checkTableExists('am_autotags') && isset($_TABLES['am_autotags']) ) {
                 // we have an installed version of autotags plugin....
                 DB_query("INSERT INTO {$_TABLES['autotags']} SELECT * FROM " . $_TABLES['am_autotags'],1);
 
@@ -1545,91 +1546,6 @@ function INST_identifyglFusionVersion ()
     return $version;
 }
 
-function INST_identifyGeeklogVersion()
-{
-    global $_TABLES, $_DB, $_DB_dbms;
-
-    $_DB->setDisplayError(true);
-
-    $version = '';
-
-    /**
-    * First check for 'database_version' in gl_vars. If that exists, assume
-    * it's the correct version. Else, try some heuristics (below).
-    * Note: Need to handle 'sr1' etc. appendices.
-    */
-    $db_v = DB_getItem($_TABLES['vars'], 'value', "name = 'database_version'");
-    if (! empty($db_v)) {
-        $v = explode('.', $db_v);
-        if (count($v) == 3) {
-            $v[2] = (int) $v[2];
-            $version = implode('.', $v);
-
-            return $version;
-        }
-    }
-
-    // simple tests for the version of the database:
-    // "DESCRIBE sometable somefield", ''
-    //  => just test that the field exists
-    // "DESCRIBE sometable somefield", 'somefield,sometype'
-    //  => test that the field exists and is of the given type
-    //
-    // Should always include a test for the current version so that we can
-    // warn the user if they try to run the update again.
-
-    $test = array(
-        // as of 1.5.1, we should have the 'database_version' entry
-        '1.5.0'  => array("DESCRIBE {$_TABLES['storysubmission']} bodytext",''),
-        '1.4.1'  => array("SELECT ft_name FROM {$_TABLES['features']} WHERE ft_name = 'syndication.edit'", 'syndication.edit'),
-        '1.4.0'  => array("DESCRIBE {$_TABLES['users']} remoteusername",''),
-        '1.3.11' => array("DESCRIBE {$_TABLES['comments']} sid", 'sid,varchar(40)'),
-        '1.3.10' => array("DESCRIBE {$_TABLES['comments']} lft",''),
-        '1.3.9'  => array("DESCRIBE {$_TABLES['syndication']} fid",''),
-        '1.3.8'  => array("DESCRIBE {$_TABLES['userprefs']} showonline",'')
-        // It's hard to (reliably) test for 1.3.7 - let's just hope
-        // nobody uses such an old version any more ...
-        );
-    $firstCheck = "DESCRIBE {$_TABLES['access']} acc_ft_id";
-    $result = DB_query($firstCheck, 1);
-    if ($result === false) {
-        // A check for the first field in the first table failed?
-        // Sounds suspiciously like an empty table ...
-        return 'empty';
-    }
-
-    foreach ($test as $v => $qarray) {
-        $result = DB_query($qarray[0], 1);
-        if ($result === false) {
-            // error - continue with next test
-
-        } else if (DB_numRows($result) > 0) {
-            $A = DB_fetchArray($result);
-            if (empty($qarray[1])) {
-                // test only for existence of field - succeeded
-                $version = $v;
-                break;
-            } else {
-                if (substr($qarray[0], 0, 6) == 'SELECT') {
-                    // text for a certain value
-                    if ($A[0] == $qarray[1]) {
-                        $version = $v;
-                        break;
-                    }
-                } else {
-                    // test for certain type of field
-                    $tst = explode(',', $qarray[1]);
-                    if (($A['Field'] == $tst[0]) && ($A['Type'] == $tst[1])) {
-                        $version = $v;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    return $version;
-}
 
 function INST_checkCacheDir($path,$template,$classCounter)
 {
