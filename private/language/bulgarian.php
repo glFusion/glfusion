@@ -954,7 +954,7 @@ $LANG24 = array(
     83 => 'Archive Options',
     84 => 'Permissions',
     85 => 'Show All',
-    86 => 'Advanced Editor',
+    86 => '',
     87 => 'Story Stats',
     88 => 'Wiki-style format',
     89 => 'Are you sure you want to delete this Story?',
@@ -2022,17 +2022,6 @@ $LANG_MB01 = array(
     'target' => 'URL Window',
     'same_window' => 'Same Window',
     'new_window' => 'New Window',
-    'menu_color_options' => 'Menu Color Options',
-    'top_menu_bg' => 'Main Menu BG',
-    'top_menu_hover' => 'Main Menu Hover',
-    'top_menu_text' => 'Main Menu Text',
-    'top_menu_text_hover' => 'Main Menu Text Hover / Sub Menu Text',
-    'sub_menu_text_hover' => 'Sub Menu Text Hover',
-    'sub_menu_text' => 'Sub Menu Text Color',
-    'sub_menu_bg' => 'Sub Menu BG',
-    'sub_menu_hover_bg' => 'Sub Menu Hover BG',
-    'sub_menu_highlight' => 'Sub Menu Highlight',
-    'sub_menu_shadow' => 'Sub Menu Shadow',
     'menu_builder' => 'Menu Builder',
     'logo' => 'Logo',
     'menu_colors' => 'Menu Options',
@@ -2061,62 +2050,10 @@ $LANG_MB01 = array(
     'clone_menu_label' => 'Name for Cloned Menu',
     'topic' => 'Topics',
     'no_elements' => 'No menu elements defined',
-    'return_to' => 'Return to '
-);
-
-###############################################################################
-# menu.php
-
-$LANG_HC = array(
-    'main_menu_bg_color' => 'Main Menu BG',
-    'main_menu_hover_bg_color' => 'Main Menu Hover',
-    'main_menu_text_color' => 'Main Menu Text',
-    'main_menu_hover_text_color' => 'Main Menu Text Hover / Sub Menu Text',
-    'submenu_hover_text_color' => 'Sub Menu Text Hover',
-    'submenu_background_color' => 'Sub Menu BG',
-    'submenu_hover_bg_color' => 'Sub Menu Hover BG',
-    'submenu_highlight_color' => 'Sub Menu Highlight',
-    'submenu_shadow_color' => 'Sub Menu Shadow',
-    'menu_bg_filename' => 'Menu Background Filename',
-    'menu_hover_filename' => 'Menu Hover Filename',
-    'menu_parent_filename' => 'Menu Parent Filename',
-    'menu_alignment' => 'Menu Alignment',
-    'use_images' => 'Use Images'
-);
-
-###############################################################################
-# menu.php
-
-$LANG_HS = array(
-    'main_menu_text_color' => 'Text',
-    'main_menu_hover_text_color' => 'Hover',
-    'submenu_highlight_color' => 'Seperator'
-);
-
-###############################################################################
-# menu.php
-
-$LANG_VC = array(
-    'main_menu_bg_color' => 'Menu BG',
-    'main_menu_hover_bg_color' => 'Menu BG Hover',
-    'main_menu_text_color' => 'Menu Text',
-    'main_menu_hover_text_color' => 'Menu Text Hover',
-    'submenu_text_color' => 'Sub Menu Text',
-    'submenu_hover_text_color' => 'Sub Menu Text Hover',
-    'submenu_highlight_color' => 'Border'
-);
-
-###############################################################################
-# menu.php
-
-$LANG_VS = array(
-    'main_menu_bg_color' => 'Menu BG',
-    'main_menu_hover_bg_color' => 'Menu BG Hover',
-    'main_menu_text_color' => 'Menu Text',
-    'main_menu_hover_text_color' => 'Menu Text Hover',
-    'submenu_text_color' => 'Sub Menu Text',
-    'submenu_hover_text_color' => 'Sub Menu Text Hover',
-    'submenu_highlight_color' => 'Border'
+    'return_to' => 'Return to ',
+    'menu_name_error' => 'Menu name cannot be blank',
+    'menu_name_space' => 'Menu name cannot contain spaces',
+    'menu_name_exists' => 'Menu name must be unique, there is already a menu by this name'
 );
 
 ###############################################################################
@@ -2264,7 +2201,8 @@ $LANG_AM = array(
     'desc_conf' => 'Text: expands \$_CONF global var, eg. [conf:p1] -> value of \$_CONF[p1]',
     'desc_user' => 'Text: expands \$_USER global var, eg. [user:p1] -> value of \$_USER[p1]',
     'desc_wikipedia' => 'Link: to the wikipedia search result for the text specified. usage: [wikipedia:<i>text</i>]',
-    'desc_youtube' => 'HTML: embeds a youtube.com video object. usage: [youtube:<i>video_id</i>]'
+    'desc_youtube' => 'HTML: embeds a youtube.com video object. usage: [youtube:<i>video_id</i>]',
+    'instructions_edit' => 'This screen allows you to create a custom autotag.'
 );
 
 ###############################################################################
@@ -2321,7 +2259,8 @@ $LANG_UPGRADE = array(
     'desc_conf' => 'Text: expands \$_CONF global var, eg. [conf:p1] -> value of \$_CONF[p1]',
     'desc_user' => 'Text: expands \$_USER global var, eg. [user:p1] -> value of \$_USER[p1]',
     'desc_wikipedia' => 'Link: to the wikipedia search result for the text specified. usage: [wikipedia:<i>text</i>]',
-    'desc_youtube' => 'HTML: embeds a youtube.com video object. usage: [youtube:<i>video_id</i>]'
+    'desc_youtube' => 'HTML: embeds a youtube.com video object. usage: [youtube:<i>video_id</i>]',
+    'instructions_edit' => 'This screen allows you to create a custom autotag.'
 );
 
 ###############################################################################
@@ -2538,10 +2477,9 @@ $LANG_confignames['Core'] = array(
     'listdraftstories' => 'List Draft Stories?',
     'notification' => 'Notifications',
     'postmode' => 'Default Post Mode',
+    'mailuser_postmode' => 'HTML or Text mode when mailing users / stories',
     'speedlimit' => 'Post Speed Limit',
     'skip_preview' => 'Skip Preview in Posts',
-    'advanced_editor' => 'Advanced Editor?',
-    'wikitext_editor' => 'Wikitext Editor?',
     'cron_schedule_interval' => 'Cron Schedule Interval',
     'sortmethod' => 'Sort Topics',
     'showstorycount' => 'Show Story Count?',
@@ -2692,14 +2630,17 @@ $LANG_confignames['Core'] = array(
     'article_comment_close_enabled' => 'Automatically close comments (default)',
     'registration_type' => 'Registration Type',
     'comment_postmode' => 'Comment Postmode',
-    'comment_editor' => 'Comment Editor',
     'max_logo_width' => 'Max logo width',
     'max_logo_height' => 'Max logo height',
     'whatsnew_cache_time' => 'Time between forced rebuild of the What\'s New cache (in seconds)',
     'hideemptyblock' => 'Hide What\'s New Block when empty',
     'update_check_interval' => 'Update Check Interval',
     'send_site_data' => 'Send Site Data',
-    'rating_speedlimit' => 'Rating SpeedLimit (in seconds)'
+    'rating_speedlimit' => 'Rating SpeedLimit (in seconds)',
+    'htmlfilter_default' => 'Default set of allowed HTML',
+    'htmlfilter_comment' => 'HTML allowed in comments',
+    'htmlfilter_story' => 'HTML allowed in stories',
+    'htmlfilter_root' => 'Additional HTML allowed for Root users'
 );
 
 $LANG_configsubgroups['Core'] = array(
