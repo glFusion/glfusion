@@ -6,9 +6,7 @@
 // |                                                                          |
 // | glFusion File Validation Utility                                         |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2012 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -100,8 +98,10 @@ function FILECHECK_scanNegative()
         } elseif (strtolower(substr($rdir,0,11)) == 'public_html') {
             $where = 'public_html';
             $rdir = (strtolower($rdir) <> $where) ? $_CONF['path_html'] . substr($rdir,12) : substr($_CONF['path_html'],0,-1);
+        } elseif ( $rdir == 'README' || $rdir == '.gitignore' ) {
+            continue;
         } else {
-            COM_errorlog( 'filecheck: unexpected root dirspec(not private/ or public_html/): ' . $dir );
+            COM_errorlog( 'filecheck: unexpected root dirspec(not private/ or public_html/): ' . $rdir );
         }
         // how we check depends upon whether we were allowed to recurse there
         $test = $value[0];
@@ -144,8 +144,10 @@ function FILECHECK_scanNegative()
         } elseif (strtolower(substr($rdir,0,11)) == 'public_html') {
             $where = 'public_html';
             $rdir = (strtolower($rdir) <> $where) ? $_CONF['path_html'] . substr($rdir,12) : substr($_CONF['path_html'],0,-1);
+        } elseif ($rdir == 'README' || $rdir == '.gitignore' ) {
+            continue;
         } else {
-            COM_errorlog( 'filecheck: unexpected root dirspec(not private/ or public_html/): ' . $dir );
+            COM_errorlog( 'filecheck: unexpected root dirspec(not private/ or public_html/): ' . $rdir );
         }
 
         // ok now check for unpinged files that are not set to be ignored
