@@ -39,7 +39,7 @@ if ( !isset($_CONF['css_cache_filename']) ) {
 }
 $theme = preg_replace( '/[^a-zA-Z0-9\-_\.]/', '',$_GET['t'] );
 $theme = str_replace( '..', '', $theme );
-if ( $_SYSTEM['use_direct_style_js'] ) {
+if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
     $filename = './'.$_CONF['css_cache_filename'].$theme.'.css';
 } else {
     $filename = $_CONF['path'] . '/data/layout_cache/'.$_CONF['css_cache_filename'].$theme.'.css';
