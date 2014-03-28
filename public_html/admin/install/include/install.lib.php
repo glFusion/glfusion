@@ -1067,6 +1067,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c = config::get_instance();
             $current_fusion_version = '1.3.2';
         case '1.3.2' :
+            require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
             // remove menu_elements - no longer used
             $c->del('menu_elements','Core');
