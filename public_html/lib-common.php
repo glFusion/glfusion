@@ -245,12 +245,15 @@ $_URL = new url( $_CONF['url_rewrite'] );
 */
 
 require_once $_CONF['path_system'].'classes/template.class.php';
+
+/**
+* This is our HTML filter / sanitization class.
+*
+*/
 require_once $_CONF['path_system'].'classes/filter.class.php';
 
 /**
 * This is the database library.
-*
-* Including this gives you a working connection to the database
 *
 */
 
@@ -1837,29 +1840,6 @@ function COM_errorLog( $logentry, $actionid = '' )
     }
 
     return $retval;
-}
-//@TODO REMOVE - just for debugging
-function COM_filterLog( $logentry)
-{
-    global $_CONF, $LANG01, $REMOTE_ADDR;
-
-    $retval = '';
-    USES_class_date();
-    $dt = new Date('now',$_CONF['timezone']);
-
-    if ( !empty( $logentry )) {
-        $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),$logentry );
-
-        $timestamp = $dt->format('d M Y H:i:s',true);
-        $ipaddress = $REMOTE_ADDR;
-
-        $logfile = $_CONF['path_html'] . 'filter.html';
-
-        if ( !$file = fopen( $logfile, 'a' )) {
-        } else {
-            fputs( $file, "$timestamp - $ipaddress<br/> $logentry <br/>" );
-        }
-    }
 }
 
 /**

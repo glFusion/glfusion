@@ -163,24 +163,6 @@ class sanitizer
      * perfomred - for example, glFusion is the area, comment is the operation
      * Used to determine autotag replacements.
      *
-     * Core operations:
-     *   - glfusion - mail_story
-     *   - glfusion - block
-     *   - glfusion - story
-     *   - glfusion - contact_user
-     *   - bbcode - post
-     * Bundled Plugin operations
-     *   - calendar - description
-     *   - filemgmt - description
-     *   - forum - post
-     *   - forum - signature
-     *   - mediagallery - media_description
-     *   - mediagallery - media_title
-     *   - mediagallery - album_description
-     *   - mediagallery - category_description
-     *   - links - description
-     *   - staticpages - page
-     *
      * @param   string  $namespace  namespace i.e.; glfusion, mediagallery, forum
      * @return  none
      * @access  public
@@ -382,18 +364,8 @@ class sanitizer
         $config->set('AutoFormat.Linkify',false);
         $config->set('HTML.SafeObject',true);
         $config->set('Output.FlashCompat',true);
-        $config->set('Core.CollectErrors',true); //debug
         $purifier = new HTMLPurifier($config);
         $clean_html = $purifier->purify($str);
-
-//@TODO debug code
-
-        if (@$config->get('Core', 'CollectErrors')) {
-            $e = $purifier->context->get('ErrorCollector');
-            $class = $e->getRaw() ? 'fail' : 'pass';
-            COM_filterLog( $e->getHTMLFormatted($config) );
-        }
-// end of debug code
         return $clean_html;
     }
 
