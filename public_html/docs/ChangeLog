@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.4.0
 ------
+- Improved HTML filtering and variable sanitizing capabilities.
+- Fixed security flaw in HTML filter.
 - Removed FCKEditor from code base
 - Implemented CKEditor as plugin (integrated into glFusion CMS Distirbution)
 - Developed TinyMCE Editor plugin - available as separate download
