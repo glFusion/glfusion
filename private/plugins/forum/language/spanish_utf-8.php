@@ -924,7 +924,9 @@ $LANG_confignames['forum'] = array(
     'use_wysiwyg_editor' => 'Activar Editor WYSIWYG HTML',
     'bbcode_disabled' => 'Default Setting for BBCode Disabled Box',
     'smilies_disabled' => 'Default Setting for Smilies Disabled Box',
-    'urlparse_disabled' => 'Default Setting for URL Parse Disabled Box'
+    'urlparse_disabled' => 'Default Setting for URL Parse Disabled Box',
+    'use_sfs' => 'Enable Stop Forum Spam Checks for new posts',
+    'allowed_html' => 'Allowed HTML'
 );
 
 $LANG_configsubgroups['forum'] = array(
