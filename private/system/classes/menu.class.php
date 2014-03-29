@@ -393,6 +393,7 @@ class menuElement {
         if ( $this->active != 1 && $this->id != 0 ) {
             return NULL;
         }
+        if ( $this->group_id == 998 && !COM_isAnonUser()) return NULL;
 
         if (isset($_REQUEST['topic']) ){
             $topic = COM_applyFilter($_REQUEST['topic']);
@@ -562,7 +563,7 @@ class menuElement {
         if ( $this->id != 0 && $this->group_id == 998 && (SEC_inGroup('Root') ) ) {
             return NULL;
         }
-        if ( $allowed == 0 ) {
+        if ( $allowed == 0 || $this->access == 0 ) {
             return NULL;
         }
 
