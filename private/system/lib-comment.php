@@ -1061,17 +1061,13 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             if (function_exists('msg_replaceEmoticons'))  {
                 $comment_template->set_var('smilies',msg_showsmilies());
             }
-
-
-
+            PLG_templateSetVars ('comment', $comment_template);
             if ($mode == 'preview_edit' || ($mode == 'edit' && $_CONF['skip_preview'] == 1) ) {
                 //for editing
-                PLG_templateSetVars ('comment', $comment_template);
                 $comment_template->set_var('save_option', '<input type="submit" name="saveedit" value="'
                     . $LANG03[29] . '"/>');
             } elseif (($_CONF['skip_preview'] == 1) || ($mode == 'preview_new')) {
                 //new comment
-                PLG_templateSetVars ('comment', $comment_template);
                 $comment_template->set_var('save_option', '<input type="submit" name="savecomment" value="'
                     . $LANG03[11] . '"/>');
             }
