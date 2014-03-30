@@ -3944,6 +3944,8 @@ function COM_printPageNavigation( $base_url, $curpage, $num_pages,
 
     $retval = '';
 
+    $output = outputHandler::getInstance();
+
     if ( $num_pages < 2 ) {
         return;
     }
@@ -3964,6 +3966,7 @@ function COM_printPageNavigation( $base_url, $curpage, $num_pages,
         $retval .= COM_createLink($LANG05[7], $base_url . $sep . $page_str . '1' . $suffix) . ' | ';
         $pg = $sep . $page_str . ( $curpage - 1 );
         $retval .= COM_createLink($LANG05[6], $base_url . $pg . $suffix) . ' | ';
+        $output->addLink('prev', $base_url . $pg . $suffix);
     } else {
         $retval .= $LANG05[7] . ' | ' ;
         $retval .= $LANG05[6] . ' | ' ;
@@ -3992,6 +3995,7 @@ function COM_printPageNavigation( $base_url, $curpage, $num_pages,
                                          . $page_str . ($curpage + 1) . $suffix);
         $retval .= ' | ' . COM_createLink($LANG05[8], $base_url . $sep
                                           . $page_str . $num_pages . $suffix);
+        $output->addLink('next', $base_url . $sep. $page_str . ($curpage + 1) . $suffix);
     }
 
     if ( !empty( $retval )) {

@@ -16,7 +16,7 @@
         "fileSorting": "default",
         "chars_only_latin": true,
         "dateFormat": "d M Y H:i",
-        "serverRoot": true,
+        "serverRoot": false,
         "fileRoot": "../../images/library/",
         "relPath": false,
         "logger": false,
