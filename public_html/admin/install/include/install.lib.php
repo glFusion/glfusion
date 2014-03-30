@@ -1084,6 +1084,9 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                 $c->add('htmlfilter_story','p,b,a,i,strong,em,br,tt,hr,li,ol,ul,code,pre,blockquote,img','text',7,5,NULL,40,TRUE);
                 $c->add('htmlfilter_root','div,span,table,tr,td,th','text',7,5,NULL,50,TRUE);
             }
+            $sql = "REPLACE INTO {$_TABLES['autotags']} (tag, description, is_enabled, is_function, replacement) VALUES ('youtube', 'Embed Youtube videos into content. Usage:[youtube:ID height:px width:px align:left/right/center pad:px]', 1, 1, NULL)";
+            DB_query($sql,1);
+
             $current_fusion_version = '1.4.0';
         default:
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);

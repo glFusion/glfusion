@@ -1,0 +1,18 @@
+CKEDITOR.plugins.setLang('youtube2', 'en', {
+	button : 'Embed Youtube Video',
+	title : 'Embed Youtube Video',
+	txtEmbed : 'Paste Embed Code Here',
+	txtWidth : 'Width',
+	txtHeight : 'Height',
+	txtAlign : 'Alignment',
+	left : 'Left',
+	right : 'Right',
+	center : 'Center',
+	txtPad : 'Padding',
+	noCode : 'You must input an embed code or URL',
+	invalidEmbed : 'The embed code you\'ve entered doesn\'t appear to be valid',
+	noWidth : 'You must inform the width',
+	invalidWidth : 'Inform a valid width',
+	noHeight : 'You must inform the height',
+	invalidHeight : 'Inform a valid height',
+});

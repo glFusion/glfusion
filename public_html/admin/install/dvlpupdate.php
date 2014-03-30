@@ -1039,6 +1039,9 @@ function glfusion_140()
         $c->add('allowed_html','p,b,i,strong,em,br,pre,img,ol,ul,li,u', 'text',0, 2, 0, 82, true, 'forum');
     }
 
+    $sql = "REPLACE INTO ".$_TABLES['autotags']." (tag, description, is_enabled, is_function, replacement) VALUES ('youtube', 'Embed Youtube videos into content. Usage:[youtube:ID height:PX width:PX align:LEFT/RIGHT pad:PX]', 1, 1, NULL)";
+    DB_query($sql);
+
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.4.0',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.4.0' WHERE name='glfusion'",1);
