@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Main interface to Media Gallery                                          |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2012 by the following authors:                        |
+// | Copyright (C) 2002-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -590,11 +588,13 @@ function MG_indexAll()
            $displayRows, $tnSize, $level, $album_jumpbox;
 
     $album_id = 0;
+    if (isset($_GET['aid']) ) {
+        $album_id  = (int) COM_applyFilter($_GET['aid'],true);
+    }
+    $page = 0;
 
     if (isset($_GET['page']) ) {
         $page      = (int) COM_applyFilter($_GET['page'],true);
-    } else {
-        $page = 0;
     }
 
     if ( $page != 0 ) {
@@ -683,7 +683,7 @@ function MG_indexAll()
     // loop thru all the albums and build a list of valid albums that the user can see
 
     $first = 0;
-    $albumList = getAlbumList(0,$first);
+    $albumList = getAlbumList($album_id,$first);
 
 
     $orderBy = ' ORDER BY m.media_upload_time '.$sortOrder;
@@ -846,8 +846,8 @@ function MG_indexAll()
         'album_title'           => "All Photos - Sorted by Post Date", // PLG_replaceTags($MG_albums[$album_id]->title),
         'table_columns'         => $columns_per_page,
         'table_column_width'    => intval(100 / $columns_per_page) . '%',
-        'top_pagination'        => COM_printPageNavigation($_MG_CONF['site_url'] . '/index.php',$page+1,ceil($total_items_in_album  / $media_per_page)),
-        'bottom_pagination'     => COM_printPageNavigation($_MG_CONF['site_url'] . '/index.php', $page+1,ceil($total_items_in_album  / $media_per_page)),
+        'top_pagination'        => COM_printPageNavigation($_MG_CONF['site_url'] . '/index.php?aid='.$album_id,$page+1,ceil($total_items_in_album  / $media_per_page)),
+        'bottom_pagination'     => COM_printPageNavigation($_MG_CONF['site_url'] . '/index.php?aid='.$album_id, $page+1,ceil($total_items_in_album  / $media_per_page)),
         'page_number'           => sprintf("%s %d %s %d",$LANG_MG03['page'], $current_print_page, $LANG_MG03['of'], $total_print_pages),
         'jumpbox'               => $album_jumpbox,
         'album_id'              => $album_id,
