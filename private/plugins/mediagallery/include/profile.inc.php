@@ -116,7 +116,7 @@ function _mg_profileicondisplay( $uid ) {
             $album_id = $A['album_id'];
             $retval['url'] = $_MG_CONF['site_url'].'/album.php?aid='.$album_id;
             $retval['text'] = $LANG_MG01['album'];
-            $retval['icon'] = $_CONF['site_url'].'/fckeditor/editor/plugins/mediagallery/images/mediagallery.gif';
+            $retval['icon'] = $_CONF['site_url'].'/mediagallery/mediaobjects/mediagallery.gif';
         }
     }
 
