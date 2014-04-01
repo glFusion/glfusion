@@ -83,6 +83,7 @@ if ( $page != 0 ) {
     $nRows  = DB_numRows( $result );
     $total_media = $nRows;
     $media = array();
+    $ids = array();
     while ( $row = DB_fetchArray($result) ) {
         $media[] = $row;
         $ids[] = $row['media_id'];
