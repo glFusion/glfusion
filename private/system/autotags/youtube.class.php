@@ -77,7 +77,7 @@ class autotag_youtube extends BaseAutotag {
         $align = '';
         $pad = 0;
 
-        $px = explode (' ', trim ($p2));
+        $px = explode (' ', $p2);
         if (is_array ($px)) {
             foreach ($px as $part) {
                 if (substr ($part, 0, 6) == 'width:') {
