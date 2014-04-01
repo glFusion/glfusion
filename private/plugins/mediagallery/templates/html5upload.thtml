@@ -1,7 +1,8 @@
 {# begin {templatelocation} #}
 <style>
 #drop-area {
-	height: 50px;
+	height: 100px;
+	width: 90%;
 	text-align: center;
 	border: 2px dashed #ddd;
 	padding: 10px;
@@ -102,13 +103,12 @@
 <div id="divSizeLimit">
   <b>{html5upload_file_size_limit}</b>&nbsp;<span id="html5_size_limit">{html5upload_size_limit}</span>
 </div>
-<h3>{$LANG_MG01[html5upload_select_files]}</h3>
-<p>
-	<input id="files-upload" type="file" multiple>
-</p>
+
 <p id="drop-area">
 	<span class="drop-instructions">{$LANG_MG01['html5upload_drop_here']}</span>
 	<span class="drop-over">{$LANG_MG01[html5upload_drop_here]}</span>
+    <span style="text-align:center;">or</span><br />
+    <span style="text-align:center;"><input id="files-upload" type="file" multiple></span>
 </p>
 <div id="divThumbnails">
   <form name="captions" method="post" action="{site_url}/admin.php">
