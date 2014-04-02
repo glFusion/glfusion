@@ -6523,8 +6523,9 @@ function js_out()
     ob_start();
 
     // add some global variables
-/* --- remove with advanced editor
+
     print "var glfusionSiteUrl = '".$_CONF['site_url']."';" . LB;
+/* --- remove with advanced editor
     print "var glfusionEditorBaseUrl = '".$_CONF['site_url']."';" . LB;
     print "var glfusionLayoutUrl     = '".$_CONF['layout_url']."';" . LB;
 --- */
