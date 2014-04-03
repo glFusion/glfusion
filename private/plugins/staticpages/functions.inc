@@ -383,11 +383,13 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
     $content = SP_render_content ($A['sp_content'], $A['sp_php']);
     $spage->set_var('content', $content );
 
+    $dt = new Date($A['sp_date'],$_USER['tzid']);
+    $curtime = $dt->format($dt->getUserFormat(),true);
+
     $spage->set_var('info_separator', 'hidden');
     if ($A['sp_format'] <> 'blankpage') {
-        $curtime = COM_getUserDateTimeFormat ($A['sp_date']);
         if ($_SP_CONF['show_date'] == 1) {
-            $lastupdate = $LANG_STATIC['lastupdated']. ' ' . $curtime[0];
+            $lastupdate = $LANG_STATIC['lastupdated']. ' ' . $curtime;
             $spage->set_var('lastupdate', $lastupdate);
         }
 
