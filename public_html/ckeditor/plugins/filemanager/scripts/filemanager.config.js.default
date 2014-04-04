@@ -43,6 +43,7 @@
             "xlsx",
             "ppt",
             "pptx",
+            "csv",
             "ogv",
             "mp4",
             "webm",
@@ -59,7 +60,8 @@
     },
     "exclude": {
         "unallowed_files": [
-            ".htaccess"
+            ".htaccess",
+            "web.config"
         ],
         "unallowed_dirs": [
             "_thumbs",
@@ -100,6 +102,17 @@
             "ogg",
             "mp3",
             "wav"
+        ]
+    },
+    "edit": {
+        "enabled": true,
+        "lineNumbers": true,
+        "lineWrapping": true,
+        "codeHighlight": false,
+        "theme": "elegant",
+        "editExt": [
+            "txt",
+            "csv"
         ]
     },
     "extras": {

@@ -31,17 +31,17 @@ class Filemanager {
 	protected $separator = 'userfiles'; // @todo fix keep it or not?
 
 	public function __construct($extraConfig = '') {
-			
+
+		// getting user config file
 		$content = file_get_contents("../../scripts/filemanager.config.js");
 		$config = json_decode($content, true);
-			
+
 		$this->config = $config;
 
 		// override config options if needed
 		if(!empty($extraConfig)) {
 			$this->setup($extraConfig);
 		}
-
 		$this->root = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR;
 		$this->properties = array(
 				'Date Created'=>null,
@@ -85,8 +85,11 @@ class Filemanager {
 	// $extraconfig should be formatted as json config array.
 	public function setup($extraconfig) {
 
-		$this->config = array_merge_recursive($this->config, $extraconfig);
-			
+		$this->config = array_replace_recursive($this->config, $extraconfig);
+		if ( isset($extraconfig['options']['capabilities'] )) {
+		    $this->config['options']['capabilities'] = $extraconfig['options']['capabilities'];
+		}
+
 	}
 
 	// allow Filemanager to be used with dynamic folders
@@ -97,11 +100,11 @@ class Filemanager {
 		} else {
 			$this->doc_root =  $path;
 		}
-		
+
 		// necessary for retrieving path when set dynamically with $fm->setFileRoot() method
 		$this->dynamic_fileroot = str_replace($_SERVER['DOCUMENT_ROOT'], '', $this->doc_root);
 		$this->separator = basename($this->doc_root);
-		
+
 		$this->__log(__METHOD__ . ' $this->doc_root value overwritten : ' . $this->doc_root);
 		$this->__log(__METHOD__ . ' $this->dynamic_fileroot value ' . $this->dynamic_fileroot);
 		$this->__log(__METHOD__ . ' $this->separator value ' . $this->separator);
@@ -140,11 +143,15 @@ class Filemanager {
 			return true;
 		}
 	}
-	public function postvar($var) {
+	public function postvar($var, $sanitize = true) {
 		if(!isset($_POST[$var]) || $_POST[$var]=='') {
 			$this->error(sprintf($this->lang('INVALID_VAR'),$var));
 		} else {
-			$this->post[$var] = $this->sanitize($_POST[$var]);
+			if($sanitize) {
+				$this->post[$var] = $this->sanitize($_POST[$var]);
+			} else {
+				$this->post[$var] = $_POST[$var];
+			}
 			return true;
 		}
 	}
@@ -153,7 +160,7 @@ class Filemanager {
 		$this->item = array();
 		$this->item['properties'] = $this->properties;
 		$this->get_file_info('', false);
-		
+
 		// handle path when set dynamically with $fm->setFileRoot() method
 		if($this->dynamic_fileroot != '') {
 			$path = $this->dynamic_fileroot. $this->get['path'];
@@ -161,7 +168,7 @@ class Filemanager {
 		} else {
 			$path = $this->get['path'];
 		}
-		
+
 
 		$array = array(
 				'Path'=> $path,
@@ -198,7 +205,7 @@ class Filemanager {
 				}
 			}
 			closedir($handle);
-			
+
 			// By default
 			// Sorting files by name ('default' or 'NAME_DESC' cases from $this->config['options']['fileSorting']
 			natcasesort($filesDir);
@@ -245,8 +252,66 @@ class Filemanager {
 				}
 			}
 		}
-		
+
 		$array = $this->sortFiles($array);
+
+		return $array;
+	}
+
+
+	public function editfile() {
+
+		$current_path = $this->getFullPath();
+
+		if(!$this->isValidPath($current_path) || !$this->isEditable($current_path)) {
+			$this->error("No way.");
+		}
+
+		$this->__log(__METHOD__ . ' - editing file '. $current_path);
+
+		$content = file_get_contents($current_path);
+		$content = htmlspecialchars($content);
+
+		if(!$content) {
+			$this->error(sprintf($this->lang('ERROR_OPENING_FILE')));
+		}
+
+		$array = array(
+				'Error'=>"",
+				'Code'=>0,
+				'Path'=>$this->get['path'],
+				'Content'=>$this->formatPath($content)
+		);
+
+		return $array;
+	}
+
+	public function savefile() {
+
+		$current_path = $this->getFullPath($this->post['path']);
+
+		if(!$this->isValidPath($current_path) || !$this->isEditable($current_path)) {
+			$this->error("No way.");
+		}
+
+		if(!is_writable($current_path)) {
+			$this->error(sprintf($this->lang('ERROR_WRITING_PERM')));
+		}
+
+		$this->__log(__METHOD__ . ' - saving file '. $current_path);
+
+		$content =  htmlspecialchars_decode($this->post['content']);
+		$r = file_put_contents($current_path, $content, LOCK_EX);
+
+		if(!is_numeric($r)) {
+			$this->error(sprintf($this->lang('ERROR_SAVING_FILE')));
+		}
+
+		$array = array(
+					'Error'=>"",
+					'Code'=>0,
+					'Path'=>$this->formatPath($this->post['path'])
+			);
 
 		return $array;
 	}
@@ -254,7 +319,6 @@ class Filemanager {
 	public function rename() {
 
 		$suffix='';
-
 
 		if(substr($this->get['old'],-1,1)=='/') {
 			$this->get['old'] = substr($this->get['old'],0,(strlen($this->get['old'])-1));
@@ -301,10 +365,10 @@ class Filemanager {
 	}
 
 	public function move() {
-		
+
 		// dynamic fileroot dir must be used when enabled
 		$rootDir = $this->dynamic_fileroot;
-		
+
 		if (empty($rootDir)) {
 			$rootDir = $this->get['root'];
 		}
@@ -380,13 +444,20 @@ class Filemanager {
 	public function delete() {
 
 		$current_path = $this->getFullPath();
-			
+		$thumbnail_path = $this->get_thumbnail_path($current_path);
+
 		if(!$this->isValidPath($current_path)) {
 			$this->error("No way.");
 		}
-			
+
 		if(is_dir($current_path)) {
+
 			$this->unlinkRecursive($current_path);
+
+			// we remove thumbnails if needed
+			$this->__log(__METHOD__ . ' - deleting thumbnails folder '. $thumbnail_path);
+			$this->unlinkRecursive($thumbnail_path);
+
 			$array = array(
 					'Error'=>"",
 					'Code'=>0,
@@ -397,7 +468,13 @@ class Filemanager {
 			return $array;
 
 		} else if(file_exists($current_path)) {
+
 			unlink($current_path);
+
+			// delete thumbail if exists
+			$this->__log(__METHOD__ . ' - deleting thumbnail file '. $thumbnail_path);
+			if(file_exists($thumbnail_path)) unlink($thumbnail_path);
+
 			$array = array(
 					'Error'=>"",
 					'Code'=>0,
@@ -411,15 +488,13 @@ class Filemanager {
 			$this->error(sprintf($this->lang('INVALID_DIRECTORY_OR_FILE')));
 		}
 	}
-	
+
 	public function replace() {
-		
-		$this->__log(__METHOD__ . ' - APPEL APPEL APPEL APPEL ');
-		
+
 		$this->setParams();
 
 		if(!isset($_FILES['fileR']) || !is_uploaded_file($_FILES['fileR']['tmp_name'])) {
-			
+
 			// if fileSize limit set by the user is greater than size allowed in php.ini file, we apply server restrictions
 			// and log a warning into file
 			if($this->config['upload']['fileSizeLimit'] > $this->getMaxUploadFileSize()) {
@@ -427,7 +502,7 @@ class Filemanager {
 				$this->config['upload']['fileSizeLimit'] = $this->getMaxUploadFileSize();
 				$this->error(sprintf($this->lang('UPLOAD_FILES_SMALLER_THAN'),$this->config['upload']['fileSizeLimit'] . $this->lang('mb')),true);
 			}
-			
+
 			$this->error(sprintf($this->lang('INVALID_FILE_UPLOAD') . ' '. sprintf($this->lang('UPLOAD_FILES_SMALLER_THAN'),$this->config['upload']['fileSizeLimit'] . $this->lang('mb'))),true);
 		}
 		// we determine max upload size if not set
@@ -438,21 +513,21 @@ class Filemanager {
 		if($_FILES['fileR']['size'] > ($this->config['upload']['fileSizeLimit'] * 1024 * 1024)) {
 			$this->error(sprintf($this->lang('UPLOAD_FILES_SMALLER_THAN'),$this->config['upload']['fileSizeLimit'] . $this->lang('mb')),true);
 		}
-		
+
 		// we check the given file has the same extension as the old one
 		if(strtolower(pathinfo($_FILES['fileR']['name'], PATHINFO_EXTENSION)) != strtolower(pathinfo($this->post['newfilepath'], PATHINFO_EXTENSION))) {
 			$this->error(sprintf($this->lang('ERROR_REPLACING_FILE') . ' '. pathinfo($this->post['newfilepath'], PATHINFO_EXTENSION)),true);
 		}
-		
+
 		if(!$this->isAllowedFileType($_FILES['fileR']['name'])) {
 			$this->error(sprintf($this->lang('INVALID_FILE_TYPE')),true);
 		}
-		
+
 		// we check if extension is allowed regarding the security Policy settings
 		if(!$this->isAllowedFileType($_FILES['fileR']['name'])) {
 			$this->error(sprintf($this->lang('INVALID_FILE_TYPE')),true);
 		}
-		
+
 		// we check if only images are allowed
 		if($this->config['upload']['imagesOnly'] || (isset($this->params['type']) && strtolower($this->params['type'])=='images')) {
 			if(!($size = @getimagesize($_FILES['fileR']['tmp_name']))){
@@ -470,7 +545,7 @@ class Filemanager {
 		}
 
 		move_uploaded_file($_FILES['fileR']['tmp_name'], $current_path);
-		
+
 		// we delete thumbnail if file is image and thumbnail already
 		if($this->is_image($current_path) && file_exists($this->get_thumbnail($current_path))) {
 			unlink($this->get_thumbnail($current_path));
@@ -482,11 +557,11 @@ class Filemanager {
 			if ($size = @getimagesize($imagePath)){
 				if ($size[0] > $this->config['images']['resize']['maxWidth'] || $size[1] > $this->config['images']['resize']['maxHeight']) {
 					require_once('./inc/vendor/wideimage/lib/WideImage.php');
-					
+
 					$image = WideImage::load($imagePath);
 					$resized = $image->resize($this->config['images']['resize']['maxWidth'], $this->config['images']['resize']['maxHeight'], 'inside');
 					$resized->saveToFile($imagePath);
-					
+
 					$this->__log(__METHOD__ . ' - resizing image : '. $current_path);
 				}
 			}
@@ -508,11 +583,11 @@ class Filemanager {
 	}
 
 	public function add() {
-			
+
 		$this->setParams();
 
 		if(!isset($_FILES['newfile']) || !is_uploaded_file($_FILES['newfile']['tmp_name'])) {
-			
+
 			// if fileSize limit set by the user is greater than size allowed in php.ini file, we apply server restrictions
 			// and log a warning into file
 			if($this->config['upload']['fileSizeLimit'] > $this->getMaxUploadFileSize()) {
@@ -520,7 +595,7 @@ class Filemanager {
 				$this->config['upload']['fileSizeLimit'] = $this->getMaxUploadFileSize();
 				$this->error(sprintf($this->lang('UPLOAD_FILES_SMALLER_THAN'),$this->config['upload']['fileSizeLimit'] . $this->lang('mb')),true);
 			}
-			
+
 			$this->error(sprintf($this->lang('INVALID_FILE_UPLOAD') . ' '. sprintf($this->lang('UPLOAD_FILES_SMALLER_THAN'),$this->config['upload']['fileSizeLimit'] . $this->lang('mb'))),true);
 		}
 		// we determine max upload size if not set
@@ -531,12 +606,12 @@ class Filemanager {
 		if($_FILES['newfile']['size'] > ($this->config['upload']['fileSizeLimit'] * 1024 * 1024)) {
 			$this->error(sprintf($this->lang('UPLOAD_FILES_SMALLER_THAN'),$this->config['upload']['fileSizeLimit'] . $this->lang('mb')),true);
 		}
-		
+
 		// we check if extension is allowed regarding the security Policy settings
 		if(!$this->isAllowedFileType($_FILES['newfile']['name'])) {
 			$this->error(sprintf($this->lang('INVALID_FILE_TYPE')),true);
 		}
-		
+
 		// we check if only images are allowed
 		if($this->config['upload']['imagesOnly'] || (isset($this->params['type']) && strtolower($this->params['type'])=='images')) {
 			if(!($size = @getimagesize($_FILES['newfile']['tmp_name']))){
@@ -565,11 +640,11 @@ class Filemanager {
 			if ($size = @getimagesize($imagePath)){
 				if ($size[0] > $this->config['images']['resize']['maxWidth'] || $size[1] > $this->config['images']['resize']['maxHeight']) {
 					require_once('./inc/vendor/wideimage/lib/WideImage.php');
-					
+
 					$image = WideImage::load($imagePath);
 					$resized = $image->resize($this->config['images']['resize']['maxWidth'], $this->config['images']['resize']['maxHeight'], 'inside');
 					$resized->saveToFile($imagePath);
-					
+
 					$this->__log(__METHOD__ . ' - resizing image : '. $_FILES['newfile']['name']. ' into '. $current_path);
 				}
 			}
@@ -591,9 +666,9 @@ class Filemanager {
 	}
 
 	public function addfolder() {
-			
+
 		$current_path = $this->getFullPath();
-			
+
 		if(!$this->isValidPath($current_path)) {
 			$this->error("No way.");
 		}
@@ -617,13 +692,13 @@ class Filemanager {
 	}
 
 	public function download() {
-			
+
 		$current_path = $this->getFullPath();
-			
+
 		if(!$this->isValidPath($current_path)) {
 			$this->error("No way.");
 		}
-		
+
 		// we check if extension is allowed regarding the security Policy settings
 		if(!$this->isAllowedFileType(basename($current_path))) {
 			$this->error(sprintf($this->lang('INVALID_FILE_TYPE')),true);
@@ -647,11 +722,11 @@ class Filemanager {
 	}
 
 	public function preview($thumbnail) {
-			
+
 		$current_path = $this->getFullPath();
-			
+
 		if(isset($this->get['path']) && file_exists($current_path)) {
-			
+
 			// if $thumbnail is set to true we return the thumbnail
 			if($this->config['options']['generateThumbnails'] == true && $thumbnail == true) {
 				// get thumbnail (and create it if needed)
@@ -659,22 +734,22 @@ class Filemanager {
 			} else {
 				$returned_path = $current_path;
 			}
-			
+
 			header("Content-type: image/" . strtolower(pathinfo($returned_path, PATHINFO_EXTENSION)));
 			header("Content-Transfer-Encoding: Binary");
 			header("Content-length: ".filesize($returned_path));
 			header('Content-Disposition: inline; filename="' . basename($returned_path) . '"');
 			readfile($returned_path);
-			
+
 			exit();
-			
+
 		} else {
 			$this->error(sprintf($this->lang('FILE_DOES_NOT_EXIST'),$current_path));
 		}
 	}
 
 	public function getMaxUploadFileSize() {
-			
+
 		$max_upload = (int) ini_get('upload_max_filesize');
 		$max_post = (int) ini_get('post_max_size');
 		$memory_limit = (int) ini_get('memory_limit');
@@ -706,7 +781,7 @@ class Filemanager {
 
 
 	private function get_file_info($path='', $thumbnail = false) {
-			
+
 		// DO NOT  rawurlencode() since $current_path it
 		// is used for displaying name file
 		if($path=='') {
@@ -729,7 +804,7 @@ class Filemanager {
 			$this->item['preview'] = $this->config['icons']['path'] . $this->config['icons']['directory'];
 
 		} else if(in_array(strtolower($this->item['filetype']),array_map('strtolower', $this->config['images']['imagesExt']))) {
-			
+
 			// svg should not be previewed as raster formats images
 			if($this->item['filetype'] == 'svg') {
 				$this->item['preview'] = $current_path;
@@ -764,11 +839,11 @@ class Filemanager {
 }
 
 private function getFullPath($path = '') {
-		
+
 	if($path == '') {
 		if(isset($this->get['path'])) $path = $this->get['path'];
 	}
-	
+
 	if($this->config['options']['fileRoot'] !== false) {
 		$full_path = $this->doc_root . rawurldecode(str_replace ( $this->doc_root , '' , $path));
 		if($this->dynamic_fileroot != '') {
@@ -777,13 +852,13 @@ private function getFullPath($path = '') {
 	} else {
 		$full_path = $this->doc_root . rawurldecode($path);
 	}
-		
+
 	$full_path = str_replace("//", "/", $full_path);
-		
+
 	// $this->__log(__METHOD_. " returned path : " . $full_path);
-		
+
 	return $full_path;
-		
+
 }
 
 /**
@@ -791,16 +866,16 @@ private function getFullPath($path = '') {
  * @param string $path
  */
 private function formatPath($path) {
-	
+
 	if($this->dynamic_fileroot != '') {
-		
+
 		$a = explode($this->separator, $path);
 		return end($a);
-		
+
 	} else {
-		
+
 		return $path;
-		
+
 	}
 
 }
@@ -814,10 +889,10 @@ private function sortFiles($array) {
 
 	// handle 'TYPE_ASC' and 'TYPE_DESC'
 	if(strpos($this->config['options']['fileSorting'], 'TYPE_') !== false || $this->config['options']['fileSorting'] == 'default') {
-		
+
 		$a = array();
 		$b = array();
-		
+
 		foreach ($array as $key=>$item){
 			if(strcmp($item["File Type"], "dir") == 0) {
 				$a[$key]=$item;
@@ -853,18 +928,18 @@ private function sortFiles($array) {
 		return $array;
 
 	}
-	
+
 	return $array;
 
 
 }
 
 private function isValidPath($path) {
-		
+
 	// @todo remove debug message
 	// $this->__log('compare : ' .$this->getFullPath(). '($this->getFullPath())  and ' . $path . '(path)');
 	// $this->__log('strncmp() retruned value : ' .strncmp($path, $this->getFullPath(), strlen($this->getFullPath())));
-		
+
 	return !strncmp($path, $this->getFullPath(), strlen($this->getFullPath()));
 
 }
@@ -898,24 +973,24 @@ private function unlinkRecursive($dir,$deleteRootToo=true) {
  * @param string $file
  */
 private function isAllowedFileType($file) {
-	
+
 	$path_parts = pathinfo($file);
-	
+
 	$exts = array_map('strtolower', $this->config['security']['uploadRestrictions']);
-	
+
 	if($this->config['security']['uploadPolicy'] == 'DISALLOW_ALL') {
-			
+
 		if(!in_array(strtolower($path_parts['extension']), $exts))
 			$this->error(sprintf($this->lang('INVALID_FILE_TYPE')),true);
 	}
 	if($this->config['security']['uploadPolicy'] == 'ALLOW_ALL') {
-	
+
 		if(in_array(strtolower($path_parts['extension']), $exts))
 			$this->error(sprintf($this->lang('INVALID_FILE_TYPE')),true);
 	}
-	
+
 	return true;
-	
+
 }
 
 private function cleanString($string, $allowed = array()) {
@@ -935,7 +1010,7 @@ private function cleanString($string, $allowed = array()) {
 			'Þ'=>'B', 'ß'=>'Ss','à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
 			'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n',
 			'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o', 'ö'=>'o', 'ő'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'ű'=>'u',
-			'û'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y', 'Ŕ'=>'R', 'ŕ'=>'r', ' '=>'_', "'"=>'_', '/'=>''
+			'û'=>'u', 'ü'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y', 'Ŕ'=>'R', 'ŕ'=>'r', ' '=>'_', "'"=>'_', '/'=>''
 	);
 
 	if (is_array($string)) {
@@ -958,9 +1033,33 @@ private function cleanString($string, $allowed = array()) {
 			// $clean = preg_replace("/[^{$allow}_a-zA-Z0-9\x{0430}-\x{044F}\x{0410}-\x{042F}]/u", '', $string); // allow only latin alphabet with cyrillic
 		}
 		$cleaned = preg_replace('/[_]+/', '_', $string); // remove double underscore
-		
+
 	}
 	return $cleaned;
+}
+
+/**
+ * Return Thumbnail path from given path
+ * works for both file and dir path
+ * @param string $path
+ */
+private function get_thumbnail_path($path) {
+
+	$a = explode($this->separator, $path);
+
+	$path_parts = pathinfo($path);
+
+	$thumbnail_path = $a[0].$this->separator.'/'.$this->cachefolder.dirname(end($a)).'/';
+	$thumbnail_name = $path_parts['filename'] . '_' . $this->thumbnail_width . 'x' . $this->thumbnail_height . 'px.' . $path_parts['extension'];
+
+	if(is_dir($path)) {
+		$thumbnail_fullpath = $thumbnail_path;
+	} else {
+		$thumbnail_fullpath = $thumbnail_path.$thumbnail_name;
+	}
+
+	return $thumbnail_fullpath;
+
 }
 
 /**
@@ -970,37 +1069,28 @@ private function cleanString($string, $allowed = array()) {
  * @param string $path
  */
 private function get_thumbnail($path) {
-	
-	require_once('./inc/vendor/wideimage/lib/WideImage.php');
-	
 
-	// echo $path.'<br>';
-	$a = explode($this->separator, $path);
-	
-	$path_parts = pathinfo($path);
-	
-	// $thumbnail_path = $path_parts['dirname'].'/'.$this->cachefolder;
-	$thumbnail_path = $a[0].$this->separator.'/'.$this->cachefolder.dirname(end($a)).'/';
-	$thumbnail_name = $path_parts['filename'] . '_' . $this->thumbnail_width . 'x' . $this->thumbnail_height . 'px.' . $path_parts['extension'];
-	$thumbnail_fullpath = $thumbnail_path.$thumbnail_name;
-	
+	require_once('./inc/vendor/wideimage/lib/WideImage.php');
+
+	$thumbnail_fullpath = $this->get_thumbnail_path($path);
+
 	// echo $thumbnail_fullpath.'<br>';
-	
+
 	// if thumbnail does not exist we generate it
 	if(!file_exists($thumbnail_fullpath)) {
-		
+
 		// create folder if it does not exist
-		if(!file_exists($thumbnail_path)) {
-			mkdir($thumbnail_path, 0755, true);
+		if(!file_exists(dirname($thumbnail_fullpath))) {
+			mkdir(dirname($thumbnail_fullpath), 0755, true);
 		}
 		$image = WideImage::load($path);
 		$resized = $image->resize($this->thumbnail_width, $this->thumbnail_height, 'outside')->crop('center', 'center', $this->thumbnail_width, $this->thumbnail_height);
 		$resized->saveToFile($thumbnail_fullpath);
 
 		$this->__log(__METHOD__ . ' - generating thumbnail :  '. $thumbnail_fullpath);
-		
+
 	}
-	
+
 	return $thumbnail_fullpath;
 }
 
@@ -1059,7 +1149,7 @@ private function availableLanguages() {
 }
 
 private function is_image($path) {
-	
+
 	$a = getimagesize($path);
 	$image_type = $a[2];
 
@@ -1069,9 +1159,28 @@ private function is_image($path) {
 	return false;
 }
 
+private function isEditable($file) {
+
+	$path_parts = pathinfo($file);
+
+	$exts = array_map('strtolower', $this->config['edit']['editExt']);
+
+	if(in_array($path_parts['extension'], $exts)) {
+
+		return true;
+
+	} else {
+
+		return false;
+
+	}
+
+
+}
+
 
 private function __log($msg) {
-		
+
 	if($this->logger == true) {
 
 		$fp = fopen($this->logfile, "a");
@@ -1079,19 +1188,19 @@ private function __log($msg) {
 		fwrite($fp, $str . PHP_EOL);
 		fclose($fp);
 	}
-		
+
 }
 
 public function enableLog($logfile = '') {
-		
+
 	$this->logger = true;
-		
+
 	if($logfile != '') {
 		$this->logfile = $logfile;
 	}
-		
+
 	$this->__log(__METHOD__ . ' - Log enabled (in '. $this->logfile. ' file)');
-		
+
 }
 
 public function disableLog() {

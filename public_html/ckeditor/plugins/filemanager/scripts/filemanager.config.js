@@ -43,6 +43,7 @@
             "xlsx",
             "ppt",
             "pptx",
+            "csv",
             "ogv",
             "mp4",
             "webm",
@@ -59,7 +60,8 @@
     },
     "exclude": {
         "unallowed_files": [
-            ".htaccess"
+            ".htaccess",
+            "web.config"
         ],
         "unallowed_dirs": [
             "_thumbs",
@@ -102,9 +104,20 @@
             "wav"
         ]
     },
+    "edit": {
+        "enabled": true,
+        "lineNumbers": true,
+        "lineWrapping": true,
+        "codeHighlight": false,
+        "theme": "elegant",
+        "editExt": [
+            "txt",
+            "csv"
+        ]
+    },
     "extras": {
-        "extra_js": ["extra.config.js"],
-        "extra_js_async": false
+        "extra_js": [],
+        "extra_js_async": true
     },
     "icons": {
         "path": "images/fileicons/",
