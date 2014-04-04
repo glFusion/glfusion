@@ -61,7 +61,7 @@ $response = '';
 if(!auth()) {
   $fm->error($fm->lang('AUTHORIZATION_REQUIRED'));
 }
-$fm->setFileRoot($_CONF['path_html']);
+
 if(!isset($_GET)) {
   $fm->error($fm->lang('INVALID_ACTION'));
 } else {
