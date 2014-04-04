@@ -108,7 +108,7 @@ function submissionform($type='story', $mode = '', $topic = '')
 */
 function submitstory($topic = '')
 {
-    global $_CONF, $_TABLES, $_USER, $LANG12, $LANG24;
+    global $_CONF, $_TABLES, $_USER, $LANG12, $LANG24,$REMOTE_ADDR;
 
     $retval = '';
 
@@ -208,8 +208,11 @@ function submitstory($topic = '')
     $storyform->parse('theform', 'storyform');
     $retval .= $storyform->finish($storyform->get_var('theform'));
     $retval .= COM_endBlock();
-
-    $rc = @setcookie ($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral('advancededitor'),
+    $urlfor = 'advancededitor';
+    if ( COM_isAnonUser() ) {
+        $urlfor = 'advancededitor'.md5($REMOTE_ADDR);
+    }
+    $rc = @setcookie ($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral($urlfor),
                time() + 1200, $_CONF['cookie_path'],
                $_CONF['cookiedomain'], $_CONF['cookiesecure']);
     return $retval;
@@ -401,7 +404,11 @@ if (($mode == $LANG12[8]) && !empty ($LANG12[8])) { // submit
     if ( !isset($_USER['uid'] ) ) {
         $_USER['uid'] = 1;
     }
-    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=".(int)$_USER['uid']." AND urlfor='advancededitor'";
+    $urlfor = 'advancededitor';
+    if ( COM_isAnonUser() ) {
+        $urlfor = 'advancededitor'.md5($REMOTE_ADDR);
+    }
+    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=".(int)$_USER['uid']." AND urlfor='".$urlfor."'";
     DB_Query($sql,1);
     if (COM_isAnonUser() &&
         (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {

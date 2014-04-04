@@ -162,6 +162,12 @@ if ( COM_isAnonUser() ) {
 } else {
     $uid = $_USER['uid'];
 }
+// purge any tokens we created for the advanced editor
+$urlfor = 'advancededitor';
+if ( $uid == 1 ) {
+    $urlfor = 'advancededitor'.md5($REMOTE_ADDR);
+}
+DB_query("DELETE FROM {$_TABLES['tokens']} WHERE owner_id=".(int) $uid." AND urlfor='".$urlfor."'",1);
 
 switch ( $mode ) {
     case 'newtopic' :
@@ -351,7 +357,7 @@ function _ff_accessError()
 function FF_postEditor( $postData, $forumData, $action, $viewMode )
 {
     global $_CONF, $_TABLES, $_FF_CONF, $FF_userprefs, $_USER,
-           $LANG_GF01, $LANG_GF02, $LANG_GF10;
+           $LANG_GF01, $LANG_GF02, $LANG_GF10,$REMOTE_ADDR;
 
     $retval         = '';
     $editmoderator  = false;
@@ -823,6 +829,13 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
     }
     $peTemplate->parse ('output', 'posteditor');
     $retval .= $peTemplate->finish($peTemplate->get_var('output'));
+    $urlfor = 'advancededitor';
+    if ( $uid == 1 ) {
+        $urlfor = 'advancededitor'.md5($REMOTE_ADDR);
+    }
+    SEC_setCookie ($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral($urlfor),
+                   time() + 1200, $_CONF['cookie_path'],
+                   $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
 
     if ( !isset($_POST['editpost']) ) {
         $_POST['editpost'] = '';
