@@ -382,6 +382,7 @@ function BLOCK_edit($bid = '', $B = array())
     $block_templates->set_var('admin_menu', ADMIN_createMenu($menu_arr,$LANG21[71],$_CONF['layout_url'] . '/images/icons/block.'. $_IMAGE_TYPE));
     $block_templates->set_var ('end_block',
             COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer')));
+    PLG_templateSetVars('blockeditor',$block_templates);
     $block_templates->parse('output', 'editor');
     $retval .= $block_templates->finish($block_templates->get_var('output'));
     return $retval;

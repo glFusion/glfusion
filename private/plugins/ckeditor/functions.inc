@@ -137,6 +137,15 @@ function plugin_templatesetvars_ckeditor($ctype, &$template)
             }
             $templateFile = 'ckeditor_sp.thtml';
             break;
+
+        case 'blockeditor' :
+            if ( $_CK_CONF['enable_block'] != 1 ) {
+                $template->unset_var('wysiwyg');
+                return;
+            }
+            $templateFile = 'ckeditor_block.thtml';
+            break;
+
         case 'general' :
             $templateFile = 'ckeditor.thtml';
             break;
