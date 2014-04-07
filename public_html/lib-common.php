@@ -6524,7 +6524,15 @@ function js_out()
 
     // add some global variables
 
+    $urlparts = parse_url($_CONF['site_url']);
+    if ( isset($urlparts['path']) ) {
+        $fileroot = $urlparts['path'];
+    } else {
+        $fileroot = '';
+    }
+
     print "var glfusionSiteUrl = '".$_CONF['site_url']."';" . LB;
+    print "var glfusionFileRoot = '". $fileroot ."';". LB;
 /* --- remove with advanced editor
     print "var glfusionEditorBaseUrl = '".$_CONF['site_url']."';" . LB;
     print "var glfusionLayoutUrl     = '".$_CONF['layout_url']."';" . LB;

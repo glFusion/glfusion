@@ -5,6 +5,12 @@ if ( SEC_inGroup('Root') ) {
 } else {
     $capabilities = array("select");
 }
+$urlparts = parse_url($_CONF['site_url']);
+if ( isset($urlparts['path']) ) {
+    $fileroot = $urlparts['path'];
+} else {
+    $fileroot = '';
+}
 $fmconfiguration = array(
 	"_comment" =>  "IMPORTANT  =>  go to the wiki page to know about options configuration https => //github.com/simogeo/Filemanager/wiki/Filemanager-configuration-file",
     "options" =>  array(
@@ -24,7 +30,7 @@ $fmconfiguration = array(
         "chars_only_latin" =>  true,
         "dateFormat" =>  "d M Y H => i",
         "serverRoot" =>  true,
-        "fileRoot" =>  "images/library/",
+        "fileRoot" =>  $fileroot . "/images/library/",
         "relPath" =>  false,
         "logger" =>  false,
         "capabilities" =>  $capabilities,
