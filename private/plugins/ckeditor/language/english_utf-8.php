@@ -70,7 +70,8 @@ $LANG_confignames['ckeditor'] = array(
     'enable_submitstory'    => 'Enable User Story Contribute',
     'enable_contact'        => 'Enable Contact',
     'enable_emailstory'     => 'Enable Email Story',
-    'enable_sp'             => 'Enabled StaticPages Support',
+    'enable_sp'             => 'Enable StaticPages Support',
+    'enable_block'          => 'Enalbe Block Editor',
 );
 $LANG_configsubgroups['ckeditor'] = array(
     'sg_main'               => 'Configuration Settings'

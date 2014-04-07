@@ -41,7 +41,9 @@ function ckeditor_upgrade()
 
     switch( $currentVersion ) {
         case "1.0.0" :
-
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+            $c->add('enable_block', 1,'select',0, 1, 0, 130, true, 'ckeditor');
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_CK_CONF['pi_version']."',pi_gl_version='".$_CK_CONF['gl_version']."' WHERE pi_name='ckeditor' LIMIT 1");
             break;

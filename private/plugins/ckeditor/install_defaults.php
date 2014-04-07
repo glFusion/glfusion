@@ -52,6 +52,7 @@ $_CK_DEFAULT['enable_registration'] = 1;
 $_CK_DEFAULT['enable_story'] = 1;
 $_CK_DEFAULT['enable_submitstory'] = 1;
 $_CK_DEFAULT['enable_sp'] = 1;
+$_CK_DEFAULT['enable_block'] = 1;
 
 /**
 * the ckeditor plugin's config array
@@ -89,6 +90,7 @@ function plugin_initconfig_ckeditor()
         $c->add('enable_contact', $_CK_DEFAULT['enable_contact'],'select',0, 1, 0, 60, true, 'ckeditor');
         $c->add('enable_emailstory', $_CK_DEFAULT['enable_emailstory'],'select',0, 1, 0, 70, true, 'ckeditor');
         $c->add('enable_sp', $_CK_DEFAULT['enable_sp'],'select',0, 1, 0, 120, true, 'ckeditor');
+        $c->add('enable_block', $_CK_DEFAULT['enable_block'],'select',0, 1, 0, 130, true, 'ckeditor');
     }
 
     return true;
