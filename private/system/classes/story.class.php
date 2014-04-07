@@ -481,7 +481,7 @@ class Story
             $this->_date = $dtPublish->toUnix();
             $this->_expire = $dtExpire->toUnix();
             if ($_CONF['article_comment_close_enabled']) {
-                $this->_comment_expire = $dtCmtClose->toUnix() +
+                $this->_comment_expire = $dtCmtclose->toUnix() +
                     ($_CONF['article_comment_close_days'] * 86400);
             } else {
                 $this->_comment_expire = 0;
