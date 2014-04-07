@@ -7,7 +7,7 @@
         var instance = CKEDITOR.replace( id, {
                 allowedContent: true,
                 contentsCss: '{site_url}/css.php?t={theme}',
-                extraPlugins: 'mediagallery',
+                extraPlugins: 'mediagallery,youtube2',
                 {styleset}
                 height: 500,
          } );
