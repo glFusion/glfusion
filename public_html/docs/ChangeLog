@@ -1,5 +1,17 @@
 glFusion ChangeLog
 
+v1.4.1
+------
+- Fixed row styling on admin lists
+- Ratings did not register when 'clicked'
+- CKEditor FileManager could not locate images/library/ directory
+- StaticPages: Last update date was incorrect
+- Added WYSIWYG editor support for blocks
+- Fixed error when submitting a new article when auto close comments
+  was enabled.
+- CKEditor now support direct integration with Smiley plugin
+- Installation / upgrade enhancements to better support PHP v5.5+
+
 v1.4.0
 ------
 - Improved HTML filtering and variable sanitizing capabilities.
