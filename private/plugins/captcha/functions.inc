@@ -54,6 +54,7 @@ if (file_exists($langfile)) {
 require_once $_CONF['path'].'plugins/captcha/captcha.php';
 
 if (!isset($_CP_CONF['gfxDriver'])) {
+    $_CP_CONF = array();
     require_once $_CONF['path_system'].'classes/config.class.php';
 
     $cp_config = config::get_instance();
