@@ -172,6 +172,7 @@ function plugin_templatesetvars_ckeditor($ctype, &$template)
                 'theme' => $_CONF['theme'],
                 'path_html' => $_CONF['path_html'],
                 ));
+    PLG_templateSetVars('ckeditor',$T);
     $T->parse('output','page');
     $wysiwyg = $T->finish($T->get_var('output'));
     $template->set_var(array(
