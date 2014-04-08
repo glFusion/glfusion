@@ -562,6 +562,14 @@ function INST_createDatabaseStructures ($use_innodb = false)
 
     $rc = true;
 
+    switch ( $_DB_dbms ) {
+        case 'mysql' :
+        case 'mysqli' :
+        default :
+            $dbDriver = 'mysql';
+            break;
+    }
+
     $_DB->setDisplayError (true);
 
     // Because the create table syntax can vary from dbms-to-dbms we are
@@ -569,11 +577,11 @@ function INST_createDatabaseStructures ($use_innodb = false)
     // postgresql.class.php, etc)
 
     // Get DBMS-specific create table array and data array
-    if ( !@file_exists($_CONF['path'] . 'sql/' . $_DB_dbms . '_tableanddata.php') ) {
+    if ( !@file_exists($_CONF['path'] . 'sql/' . $dbDriver . '_tableanddata.php') ) {
         echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
         exit;
     }
-    require_once $_CONF['path'] . 'sql/' . $_DB_dbms . '_tableanddata.php';
+    require_once $_CONF['path'] . 'sql/' . $dbDriver . '_tableanddata.php';
 
     $progress = '';
     $errors = '';

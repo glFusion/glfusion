@@ -1427,7 +1427,7 @@ function INST_installAndContentPlugins()
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
     require $_CONF['path_system'].'lib-database.php';
-
+    if ( $_DB_dbms == 'mysqli' ) $_DB_dbms = 'mysql';
     list($rc,$errors) = INST_createDatabaseStructures($use_innodb);
     if ( $rc != true ) {
         return _displayError(DB_NO_CONNECT,'getsiteinformation',$errors);
@@ -1523,7 +1523,7 @@ function INST_installAndContentPlugins()
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
     require $_CONF['path_html'].'lib-common.php';
-
+    if ( $_DB_dbms == 'mysqli') $_DB_dbms = 'mysql';
     INST_pluginAutoInstall('bad_behavior2');
     INST_pluginAutoInstall('captcha');
     INST_pluginAutoInstall('ckeditor');
