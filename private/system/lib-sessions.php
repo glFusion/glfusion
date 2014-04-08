@@ -63,6 +63,7 @@ if (session_id()) {
 
 // disable transparent sid support
 ini_set('session.use_trans_sid', '0');
+if ( !isset($_CONF['cookie_session']) || $_CONF['cookie_session'] == '' ) $_CONF['cookie_session'] = 'glfsc';
 session_name($_CONF['cookie_session']); // cookie name
 
 $_USER = SESS_sessionCheck();
