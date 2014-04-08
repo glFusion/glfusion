@@ -1886,8 +1886,7 @@ switch($mode) {
         $pageBody = INST_installAndContentPlugins();
         break;
     case 'installplugins' :
-        $dbcfg_path = preg_replace('/[^a-z0-9\-_]/', '', $_GLFUSION['dbconfig_path']);
-        require $dbcfg_path.'db-config.php';
+       require $_GLFUSION['dbconfig_path'].'db-config.php';
         require '../../lib-common.php';
         $pageBody = INST_doPluginInstall();
         break;
