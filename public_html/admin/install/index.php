@@ -1078,7 +1078,6 @@ function INST_gotSiteInformation()
     if ( ($rc = _checkSession() ) !== 0 ) {
         return $rc;
     }
-var_dump($_GLFUSION);exit;
     $_GLFUSION['currentstep'] = 'getsiteinformation';
 
     $dbconfig_path = $_GLFUSION['dbconfig_path'];
