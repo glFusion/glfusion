@@ -890,13 +890,13 @@ $_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (id, pid, menu_id, element_l
 # Default autotags
 #
 
-$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('cipher', '{$LANG_AM['desc_cipher']}', 1, 1, NULL)";
-$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('topic', '{$LANG_AM['desc_topic']}', 1, 1, NULL)";
-$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('glfwiki', '{$LANG_AM['desc_glfwiki']}', 1, 1, NULL)";
-$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('lang', '{$LANG_AM['desc_lang']}', 0, 1, NULL)";
-$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('conf', '{$LANG_AM['desc_conf']}', 0, 1, NULL)";
-$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('user', '{$LANG_AM['desc_user']}', 0, 1, NULL)";
-$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('wikipedia', '{$LANG_AM['desc_wikipedia']}', 1, 1, NULL)";
+$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('cipher', 'Text: substitution cipher. Usage example is [wikipedia:ROT13]: [cipher:<i>nopqrstuvwxyzabcdefghijklm</i> <i>text_to_encode</i>]', 1, 1, NULL)";
+$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('topic', 'Link: to home page to display specified topic: link_text defaults to description. usage: [topic:<i>topic_id</i> {link_text}]', 1, 1, NULL)";
+$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('glfwiki', 'Link: to the glfusion.or wiki search result for the text specified. usage: [glfwiki:<i>text</i>], 1, 1, NULL)";
+$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('lang', 'Text: expands \$LANG global var, eg. [lang:p1 p2] -> value of \$LANGp1[p2] or \$LANG_p1[p2]', 0, 1, NULL)";
+$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('conf', 'Text: expands \$_CONF global var, eg. [conf:p1] -> value of \$_CONF[p1]', 0, 1, NULL)";
+$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('user', 'Text: expands \$_USER global var, eg. [user:p1] -> value of \$_USER[p1]', 0, 1, NULL)";
+$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('wikipedia', 'Link: to the wikipedia search result for the text specified. usage: [wikipedia:<i>text</i>]', 1, 1, NULL)";
 $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('youtube', 'Embed Youtube videos into content. Usage:[youtube:ID height:PX width:PX align:LEFT/RIGHT pad:PX]', 1, 1, NULL)";
 
 ?>

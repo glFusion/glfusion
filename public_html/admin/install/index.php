@@ -90,6 +90,7 @@ if ( is_array($_POST) ) {
     }
 }
 
+$php55 = (INST_phpIsGreater('5.5.0') ? true : false);
 
 /**
  * Error Handler - attempt to trap certain errors
@@ -298,7 +299,7 @@ function _displayError($error,$step,$errorText='')
             $T->set_var('text',$LANG_INSTALL['no_migrate_glfusion']);
             break;
         case FILE_INCLUDE_ERROR :
-            $T->set_var('text','Internal Error - please contact support@glfusion.org');
+            $T->set_var('text','Internal Error - please contact support@glfusion.org' . ' ' . $errorText);
             break;
         case NO_DB_DRIVER :
             $T->set_var('text',$LANG_INSTALL['no_db_driver']);
@@ -736,15 +737,15 @@ function INST_checkEnvironment($dbconfig_path='')
         require '../../siteconfig.php';
         $_GLFUSION['dbconfig_path'] = $_CONF['path'];
         if ( !file_exists($_CONF['path'].'db-config.php') ) {
-            return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+            return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error code: ' . __LINE__);
         }
         require $_CONF['path'].'db-config.php';
         if ( !file_exists($_CONF['path_system'].'lib-database.php') ) {
-            return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+            return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error code: ' .  __LINE__);
         }
         require_once $_CONF['path_system'].'lib-database.php';
         if ( !file_exists($_CONF['path_system'].'classes/config.class.php') ) {
-            return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+            return _displayError(FILE_INCLUDE_ERROR,'pathsetting', 'Error code: ' . __LINE__);
         }
         require_once $_CONF['path_system'].'classes/config.class.php';
         $config = config::get_instance();
@@ -952,7 +953,7 @@ function INST_checkEnvironment($dbconfig_path='')
  */
 function INST_getSiteInformation()
 {
-    global $_GLFUSION, $LANG_INSTALL;
+    global $_GLFUSION, $LANG_INSTALL, $php55;
 
     if ( ($rc = _checkSession() ) !== 0 ) {
         return $rc;
@@ -978,7 +979,7 @@ function INST_getSiteInformation()
     $dbconfig_path  = $_GLFUSION['dbconfig_path'];
 
     if ( !file_exists($dbconfig_path.'db-config.php') ) {
-        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
     require $dbconfig_path.'db-config.php';
 
@@ -1007,14 +1008,14 @@ function INST_getSiteInformation()
         $T->set_var('innodb_selected',' selected="selected"');
         $T->set_var('noinnodb_selected','');
         $T->set_var('mysqli_selected','');
-    } elseif ($_GLFUSION['db_type'] == 'mysqli' ) {
+    } elseif (isset($_GLFUSION['db_type']) && $_GLFUSION['db_type'] == 'mysqli' ) {
         $T->set_var('mysqli_selected',' selected="selected"');
         $T->set_var('innodb_selected','');
         $T->set_var('noinnodb_selected','');
     } else {
-        $T->set_var('noinnodb_selected',' selected="selected"');
+        $T->set_var('noinnodb_selected', ($php55 ? '' : ' selected="selected"'));
         $T->set_var('innodb_selected','');
-        $T->set_var('mysqli_selected','');
+        $T->set_var('mysqli_selected',($php55 ? 'selected="selected"' : ''));
     }
 
     $T->set_var(array(
@@ -1072,18 +1073,18 @@ function INST_getSiteInformation()
  */
 function INST_gotSiteInformation()
 {
-    global $_GLFUSION, $LANG_INSTALL;
+    global $php55, $_GLFUSION, $LANG_INSTALL;
 
     if ( ($rc = _checkSession() ) !== 0 ) {
         return $rc;
     }
-
+var_dump($_GLFUSION);exit;
     $_GLFUSION['currentstep'] = 'getsiteinformation';
 
     $dbconfig_path = $_GLFUSION['dbconfig_path'];
 
     if ( !file_exists($dbconfig_path.'lib/email-address-validation/EmailAddressValidator.php') ) {
-        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
     include $dbconfig_path.'lib/email-address-validation/EmailAddressValidator.php';
     $validator = new EmailAddressValidator;
@@ -1142,7 +1143,7 @@ function INST_gotSiteInformation()
             if ( class_exists('MySQLi') ) {
                 $db_type = 'mysqli';
             } else {
-                $db_type = 'mysql';
+             $db_type = 'mysql';
             }
             break;
     }
@@ -1219,32 +1220,55 @@ function INST_gotSiteInformation()
         return _displayError(SITE_DATA_ERROR,'getsiteinformation',$errText);
     }
 
-    if ( !function_exists('mysql_connect') ) {
+    if ( !function_exists('mysql_connect') && !function_exists('mysqli_connect') ) {
         return _displayError(NO_DB_DRIVER,'getsiteinformation');
     }
 
-    $db_handle = @mysql_connect($db_host, $db_user, $db_pass);
-    if (!$db_handle) {
-        return _displayError(DB_NO_CONNECT,'getsiteinformation');
-    }
-    if ($db_handle) {
-        $connected = @mysql_select_db($db_name, $db_handle);
-    }
-    if ( !$connected) {
-        return _displayError(DB_NO_DATABASE,'getsiteinformation');
-    }
-    if ( $innodb ) {
-        $res = @mysql_query("SHOW VARIABLES LIKE 'have_innodb'");
-        $A = @mysql_fetch_array($res);
-        if (strcasecmp ($A[1], 'yes') != 0) {
-            return _displayError(DB_NO_INNODB,'getsiteinformation');
+    if ( $php55 || $db_type == 'mysqli' ) {
+        $db_handle = @mysqli_connect($db_host, $db_user, $db_pass);
+        if (!$db_handle) {
+            return _displayError(DB_NO_CONNECT,'getsiteinformation');
+        }
+        if ($db_handle) {
+            $connected = @mysqli_select_db($db_handle, $db_name);
+        }
+        if ( !$connected) {
+            return _displayError(DB_NO_DATABASE,'getsiteinformation');
+        }
+        if ( $innodb ) {
+            $res = @mysqli_query($db_handle, "SHOW VARIABLES LIKE 'have_innodb'");
+            $A = @mysqli_fetch_array($res);
+            if (strcasecmp ($A[1], 'yes') != 0) {
+                return _displayError(DB_NO_INNODB,'getsiteinformation');
+            }
+        }
+        $result = @mysqli_query($db_handle, "SHOW TABLES LIKE '".$db_prefix."vars'");
+        if (@mysqli_num_rows ($rmysqli_num_rowsmysqli_num_rowsmysqli_num_rowsmysqli_num__rowsesult) > 0) {
+            return _displayError(DB_EXISTS,'');
+        }
+    } else {
+        $db_handle = @mysql_connect($db_host, $db_user, $db_pass);
+        if (!$db_handle) {
+            return _displayError(DB_NO_CONNECT,'getsiteinformation');
+        }
+        if ($db_handle) {
+            $connected = @mysql_select_db($db_name, $db_handle);
+        }
+        if ( !$connected) {
+            return _displayError(DB_NO_DATABASE,'getsiteinformation');
+        }
+        if ( $innodb ) {
+            $res = @mysql_query("SHOW VARIABLES LIKE 'have_innodb'");
+            $A = @mysql_fetch_array($res);
+            if (strcasecmp ($A[1], 'yes') != 0) {
+                return _displayError(DB_NO_INNODB,'getsiteinformation');
+            }
+        }
+        $result = @mysql_query("SHOW TABLES LIKE '".$db_prefix."vars'");
+        if (@mysql_numrows ($result) > 0) {
+            return _displayError(DB_EXISTS,'');
         }
     }
-    $result = @mysql_query("SHOW TABLES LIKE '".$db_prefix."vars'");
-    if (@mysql_numrows ($result) > 0) {
-        return _displayError(DB_EXISTS,'');
-    }
-
     if ( $numErrors > 0 ) {
         return _displayError(SITE_DATA_MISSING,'getsiteinformation',$errText);
     }
@@ -1340,7 +1364,7 @@ function INST_installAndContentPlugins()
     fclose($siteconfig_file);
 
     if ( !file_exists($siteconfig_path) ) {
-        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
     require $siteconfig_path;
     $siteconfig_data = str_replace("\$_CONF['path'] = '{$_CONF['path']}';",
@@ -1359,12 +1383,18 @@ function INST_installAndContentPlugins()
         return _displayError(SITECONFIG_NOT_WRITABLE,'getsiteinformation');
     }
     fclose ($siteconfig_file);
-    require $siteconfig_path;
+
+    global $_CONF, $_SYSTEM;
+    require $siteconfig_path;  // this should reset the path data - doesn't seem to work on qa.
+
+    $_CONF['path'] = str_replace('db-config.php', '', $_PATH['dbconfig_path']);
+    $_CONF['path_system'] = $_CONF['path'] . 'system/';
+    $_CONF['default_charset'] = $charset;
 
     $config_file = $_GLFUSION['dbconfig_path'].'db-config.php';
 
     if ( !file_exists($config_file) ) {
-        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
     require $config_file;
 
@@ -1394,11 +1424,11 @@ function INST_installAndContentPlugins()
     fclose($dbconfig_file);
     require $config_file;
 
-    if ( !file_exists($_CONF['path_system'].'lib-database.php') ) {
-        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+    if ( !file_exists($_CONF['path'].'system/lib-database.php') ) {
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
     require $_CONF['path_system'].'lib-database.php';
-    if ( $_DB_dbms == 'mysqli' ) $_DB_dbms = 'mysql';
+
     list($rc,$errors) = INST_createDatabaseStructures($use_innodb);
     if ( $rc != true ) {
         return _displayError(DB_NO_CONNECT,'getsiteinformation',$errors);
@@ -1418,7 +1448,7 @@ function INST_installAndContentPlugins()
     INST_personalizeAdminAccount($site_mail, $site_url);
 
     if ( !file_exists($_CONF['path_system'].'classes/config.class.php') ) {
-        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__ );
     }
     require_once $_CONF['path_system'].'classes/config.class.php';
     require_once 'config-install.php';
@@ -1473,7 +1503,7 @@ function INST_installAndContentPlugins()
     $config->_purgeCache();
     // rebuild the config array
     if ( !file_exists($siteconfig_path) ) {
-        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
     include $siteconfig_path;
     $config->set_configfile($_CONF['path'] . 'db-config.php');
@@ -1491,10 +1521,9 @@ function INST_installAndContentPlugins()
     global $_CONF, $_SYSTEM, $_DB, $_DB_dbms, $_GROUPS, $_RIGHTS, $TEMPLATE_OPTIONS;
 
     if ( !file_exists($_CONF['path_html'].'lib-common.php') ) {
-        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
     require $_CONF['path_html'].'lib-common.php';
-    if ( $_DB_dbms == 'mysqli') $_DB_dbms = 'mysql';
 
     INST_pluginAutoInstall('bad_behavior2');
     INST_pluginAutoInstall('captcha');
@@ -1555,7 +1584,7 @@ function INST_doPluginInstall()
     }
     if ( isset($_POST['installdefaultdata']) ) {
         if ( !file_exists($_CONF['path'].'sql/default_content.php') ) {
-            return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+            return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__ );
         }
         require_once $_CONF['path'].'sql/default_content.php';
         // pull a list of all plugins that are installed....
@@ -1632,7 +1661,7 @@ function INST_doSiteUpgrade()
 
     if ( $rc ) {
         if ( !file_exists($_CONF['path_system'] . 'classes/config.class.php') ) {
-            return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+            return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
         }
         require_once $_CONF['path_system'] . 'classes/config.class.php';
         $config = config::get_instance();
@@ -1793,7 +1822,7 @@ if (!empty($lng) && is_file('language/' . $lng . '.php')) {
 
 $_GLFUSION['language'] = $language;
 if ( !file_exists('language/'.$language.'.php') ) {
-    return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+    return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__ );
 }
 require_once 'language/'.$language.'.php';
 
@@ -1858,12 +1887,12 @@ switch($mode) {
         } else {
             require '../../siteconfig.php';
             if ( !file_exists($_CONF['path'].'db-config.php') ) {
-                return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
             }
             require $_CONF['path'].'db-config.php';
             $_GLFUSION['dbconfig_path'] = $_CONF['path'];
             if ( !file_exists($_CONF['path_system'].'lib-database.php') ) {
-                return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__ );
             }
             require_once $_CONF['path_system'].'lib-database.php';
             $version = INST_identifyglFusionVersion();
@@ -1880,12 +1909,12 @@ switch($mode) {
         } else {
             require '../../siteconfig.php';
             if ( !file_exists($_CONF['path'].'db-config.php') ) {
-                return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
             }
             require $_CONF['path'].'db-config.php';
             $_GLFUSION['dbconfig_path'] = $_CONF['path'];
             if ( !file_exists($_CONF['path_system'] . 'lib-database.php') ) {
-                return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                return _displayError(FILE_INCLUDE_ERROR,'pathsetting', 'Error Code: ' . __LINE__);
             }
             require $_CONF['path_system'] . 'lib-database.php';
             $pageBody = INST_doSiteUpgrade();

@@ -61,6 +61,8 @@ if (!isset($_CP_CONF['gfxDriver'])) {
 
     if ( is_array($_CP_CONF)  && is_array($_CP_CFG) ) {
         $_CP_CONF = array_merge($_CP_CONF, $_CP_CFG);
+    } else {
+        $_CP_CONF = $_CP_CFG;
     }
     unset($_CP_CFG);
 }

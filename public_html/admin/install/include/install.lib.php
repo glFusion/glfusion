@@ -144,6 +144,17 @@ function INST_phpOutOfDate()
     return false;
 }
 
+function INST_phpIsGreater($version)
+{
+    $phpv = php_v();
+    $check = explode('.', $version);
+
+    if ( $phpv[0] > $check[0] ) return true;
+    if ( $phpv[0] >= $check[0] && $phpv[1] > $check[1] ) return true;
+    if ( $phpv[0] >= $check[0] && $phpv[1] >= $check[1] && $phpv[2] >= $check[2]) return true;
+    return false;
+}
+
 /**
  * Returns the MySQL version
  *
@@ -152,12 +163,19 @@ function INST_phpOutOfDate()
  */
 function mysql_v($_DB_host, $_DB_user, $_DB_pass)
 {
-    if (($res = @mysql_connect($_DB_host, $_DB_user, $_DB_pass)) === false) {
-        return false;
+    global $php55;
+
+    if ( $php55 ) {
+        if (($res = @mysqli_connect($_DB_host, $_DB_user, $_DB_pass)) === false) {
+            return false;
+        }
+        $mysqlv = @mysqli_get_server_info($res);
+    } else {
+        if (($res = @mysql_connect($_DB_host, $_DB_user, $_DB_pass)) === false) {
+            return false;
+        }
+        $mysqlv = @mysql_get_server_info();
     }
-
-    $mysqlv = @mysql_get_server_info();
-
     if (!empty($mysqlv)) {
         preg_match('/^([0-9]+).([0-9]+).([0-9]+)/', $mysqlv, $match);
         $mysqlmajorv = $match[1];
@@ -262,6 +280,8 @@ function INST_checkTableExists($table)
  */
 function INST_dbConnect($db)
 {
+    global $php55;
+
     if (empty($db['pass'])) {
         return false;
     }
@@ -272,6 +292,11 @@ function INST_dbConnect($db)
         // deliberate fallthrough - no "break"
     case 'mysql':
         if ($db_handle = @mysql_connect($db['host'], $db['user'], $db['pass'])) {
+            return $db_handle;
+        }
+        break;
+    case 'mysqli' :
+        if ($db_handle = @mysqli_connect($db['host'], $db['user'], $db['pass'])) {
             return $db_handle;
         }
         break;
@@ -293,6 +318,11 @@ function INST_dbExists($db)
     switch ($db['type']) {
     case 'mysql':
         if (@mysql_select_db($db['name'], $db_handle)) {
+            return true;
+        }
+        break;
+    case 'mysqli':
+        if (@mysqli_select_db($db_handle, $db['name'], $db_handle)) {
             return true;
         }
         break;
@@ -555,6 +585,7 @@ function INST_createDatabaseStructures ($use_innodb = false)
 
     switch($_DB_dbms){
         case 'mysql':
+        case 'mysqli' :
             list($rc,$errors) = INST_updateDB($_SQL,$use_innodb);
             if ( $rc != true ) {
                 return array($rc,$errors);
@@ -589,7 +620,7 @@ function INST_personalizeAdminAccount($site_mail, $site_url)
 {
     global $_TABLES, $_DB_dbms;
 
-    if (($_DB_dbms == 'mysql') || ($_DB_dbms == 'mssql')) {
+    if (($_DB_dbms == 'mysql') || ($_DB_dbms == 'mysqli')) {
 
         // let's try and personalize the Admin account a bit ...
 
@@ -1473,6 +1504,7 @@ function INST_identifyglFusionVersion ()
     switch ($_DB_dbms) {
 
     case 'mysql':
+    case 'mysqli':
         $test = array(
             '1.1.0'  => array("SELECT name FROM {$_TABLES['conf_values']} WHERE name='allow_embed_object'",'allow_embed_object'),
             '1.0.0'  => array("SELECT name FROM {$_TABLES['conf_values']} WHERE name='use_safe_html'",'use_safe_html'),
