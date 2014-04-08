@@ -1421,7 +1421,16 @@ function INST_installAndContentPlugins()
         return _displayError(DBCONFIG_NOT_WRITABLE,'getsiteinformation');
     }
     fclose($dbconfig_file);
+    global $_DB_host, $_DB_name, $_DB_user, $_DB_pass, $_DB_dbms, $_DB_table_prefix;
     require $config_file;
+    $_DB_host = $_GLFUSION['db_host'];
+    $_DB_name = $_GLFUSION['db_name'];
+    $_DB_user = $_GLFUSION['db_user'];
+    $_DB_pass = $_GLFUSION['db_pass'];
+    $_DB_table_prefix = $_GLFUSION['db_prefix'];
+    $_DB_dbms = $_GLFUSION['db_type'];
+
+
 
     if ( !file_exists($_CONF['path'].'system/lib-database.php') ) {
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
@@ -1877,6 +1886,8 @@ switch($mode) {
         $pageBody = INST_installAndContentPlugins();
         break;
     case 'installplugins' :
+        $dbcfg_path = preg_replace('/[^a-z0-9\-_]/', '', $_GLFUSION['dbconfig_path']);
+        require $dbcfg_path.'db-config.php';
         require '../../lib-common.php';
         $pageBody = INST_doPluginInstall();
         break;

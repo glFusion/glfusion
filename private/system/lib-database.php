@@ -117,7 +117,11 @@ $_TABLES['userevent']           = $_DB_table_prefix . 'userevent';
 * Include appropriate DBMS object
 *
 */
-require_once $_CONF['path_system'] . 'databases/'. $_DB_dbms . '.class.php';
+if (($_DB_dbms === 'mysql') AND class_exists('MySQLi')) {
+    require_once $_CONF['path_system'] . 'databases/mysqli.class.php';
+} else {
+    require_once $_CONF['path_system'] . 'databases/'. $_DB_dbms . '.class.php';
+}
 if ( $_DB_dbms == 'mysqli' ) {
     $_DB_dbms = 'mysql';
 }
