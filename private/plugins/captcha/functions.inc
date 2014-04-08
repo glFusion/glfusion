@@ -65,7 +65,7 @@ if (!isset($_CP_CONF['gfxDriver'])) {
     unset($_CP_CFG);
 }
 
-if ( $_CP_CONF['gfxDriver'] == 3 ) {
+if ( isset($_CP_CONF['gfxDriver']) && $_CP_CONF['gfxDriver'] == 3 ) {
     if ( $_CP_CONF['publickey'] == '' || $_CP_CONF['privatekey'] == '' ) {
         $_CP_CONF['gfxDriver'] = 2;
     } else {
@@ -73,7 +73,7 @@ if ( $_CP_CONF['gfxDriver'] == 3 ) {
     }
 
 }
-if ( $_CP_CONF['gfxDriver'] == 4 ) {
+if ( isset($_CP_CONF['gfxDriver']) && $_CP_CONF['gfxDriver'] == 4 ) {
     if ( $_CP_CONF['pc_publickey'] == '' || $_CP_CONF['pc_privatekey'] == '' ) {
         $_CP_CONF['gfxDriver'] = 2;
     } else {
