@@ -1242,7 +1242,7 @@ function INST_gotSiteInformation()
             }
         }
         $result = @mysqli_query($db_handle, "SHOW TABLES LIKE '".$db_prefix."vars'");
-        if (@mysqli_num_rows ($rmysqli_num_rowsmysqli_num_rowsmysqli_num_rowsmysqli_num__rowsesult) > 0) {
+        if (@mysqli_num_rows ($result) > 0) {
             return _displayError(DB_EXISTS,'');
         }
     } else {
