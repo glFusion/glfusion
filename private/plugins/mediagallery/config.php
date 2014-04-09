@@ -35,7 +35,7 @@ if (!defined ('GVERSION')) {
  * Media Gallery Global Configuration Options
  * ----------------------------------------------------------------------- */
 
-$_MG_CONF['menulabel']           = $LANG_MG00['menulabel'];
+$_MG_CONF['menulabel'] = isset($LANG_MG00['menulabel']) ? $LANG_MG00['menulabel'] : 'Media Gallery';
 
 $_MG_CONF['watermark_types'] = array('image/jpeg','image/jpg','image/png','image/bmp');
 

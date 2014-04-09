@@ -72,8 +72,8 @@ $_DATA['polls'][] = "INSERT INTO `{$_TABLES['pollquestions']}` (`pid`, `qid`, `q
 $_DATA['polls'][] = "INSERT INTO `{$_TABLES['polltopics']}` (`pid`, `topic`, `voters`, `questions`, `date`, `display`, `is_open`, `hideresults`, `commentcode`, `statuscode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES ('glfusionfeaturepoll', 'Tell us your opinion about glFusion', 0, 2, NOW(), 1, 1, 1, 0, 0, 2, 8, 3, 2, 2, 2);";
 $_DATA['polls'][] = "INSERT INTO {$_TABLES['blocks']} (is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (1,'polls_block','phpblock','Poll','all',3,'','','NOW()',0,'phpblock_polls',4,2,3,3,2,2) ";
 
-// Site Tailor Default Data
-$_ST_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES
+// Menu default data
+$_MB_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES
 (7, 0, 1, 'Widgets', 1, '', 70, 1, '', '', 2),
 (8, 7, 1, 'moodrawers', 5, 'gl_moodrawers', 10, 1, '', '', 2),
 (9, 7, 1, 'moomorph', 5, 'gl_moomorph', 20, 1, '', '', 2),

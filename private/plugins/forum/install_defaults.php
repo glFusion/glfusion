@@ -191,7 +191,7 @@ $_FF_DEFAULT['allowed_html'] = 'p,b,i,strong,em,br,pre,code,img,ol,ul,li,u';
 /**
 * the Forum plugin's config array
 */
-global $_FF_CONF;
+global $_FF_CONF, $_DB_table_prefix;
 $_FF_CONF = array();
 
 $_TABLES['ff_settings']     = $_DB_table_prefix . 'forum_settings';

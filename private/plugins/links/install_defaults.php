@@ -8,8 +8,6 @@
 // | records. These settings are only used during the initial installation    |
 // | and not referenced any more once the plugin is installed.                |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -160,6 +158,7 @@ $_LI_DEFAULT['displayblocks'] = 0;
  */
 $_LI_DEFAULT['default_permissions'] = array (3, 2, 2, 2);
 
+$_LI_DEFAULT['target_blank'] = 1;
 
 /**
 * Initialize Links plugin configuration

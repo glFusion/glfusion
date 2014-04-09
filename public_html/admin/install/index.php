@@ -1628,15 +1628,15 @@ function INST_doPluginInstall()
             }
         }
         // update the site tailor menu to reflect the static pages content
-        if ( is_array($_ST_DEFAULT_DATA) ) {
-            foreach ($_ST_DEFAULT_DATA AS $sql) {
+        if ( is_array($_MB_DEFAULT_DATA) ) {
+            foreach ($_MB_DEFAULT_DATA AS $sql) {
                 DB_query($sql,1);
             }
         }
         // cycle through the rest of the installed plugins and add their data
         if ( is_array($installedPlugins) ) {
             foreach ($installedPlugins AS $plugin) {
-                if ( is_array($_DATA[$plugin]) ) {
+                if ( isset($_DATA[$plugin]) && is_array($_DATA[$plugin]) ) {
                     foreach ($_DATA[$plugin] AS $sql) {
                         DB_query($sql,1);
                     }

@@ -59,9 +59,12 @@ if (file_exists($langfile)) {
     }
 }
 
-$pi_version = $_PLUGIN_INFO['forum'];
-
 require_once $_CONF['path'].'plugins/forum/forum.php';
+if ( isset($_PLUGIN_INFO['forum']) ) {
+    $pi_version = $_PLUGIN_INFO['forum'];
+} else {
+    $pi_version = $_FF_CONF['pi_version'];
+}
 require_once $_CONF['path_system'] . 'classes/config.class.php';
 $ff_config = config::get_instance();
 $_FF_FORUM = $ff_config->get_config('forum');
@@ -72,17 +75,21 @@ if ( is_array($_FF_FORUM) && is_array($_FF_CONF) ) {
 // View Anonymous Posts - registed users can set this false
 $_FF_CONF['show_anonymous_posts'] = 1;
 $_FF_CONF['topic_order'] = 'ASC';
-$_FF_CONF['allow_wysiwyg_editor'] = $_FF_CONF['use_wysiwyg_editor'];
+if ( isset($_FF_CONF['use_wysiwyg_editor']) ) {
+    $_FF_CONF['allow_wysiwyg_editor'] = $_FF_CONF['use_wysiwyg_editor'];
+} else {
+    $_FF_CONF['allow_wysiwyg_editor'] = false;
+}
 
 if ( $_CONF['loginrequired'] == 1 ) {
     $_FF_CONF['registration_required'] = 1;
 }
 
-$FF_userprefs['topicsperpage']  = $_FF_CONF['show_topics_perpage'];
-$FF_userprefs['postsperpage']   = $_FF_CONF['show_posts_perpage'];
-$FF_userprefs['showiframe']     = $_FF_CONF['show_topicreview'];
-$FF_userprefs['viewanonposts']  = $_FF_CONF['show_anonymous_posts'];
-$FF_userprefs['topic_order']    = $_FF_CONF['topic_order'];
+$FF_userprefs['topicsperpage']  = isset($_FF_CONF['show_topics_perpage']) ? $_FF_CONF['show_topics_perpage'] : 10;
+$FF_userprefs['postsperpage']   = isset($_FF_CONF['show_posts_perpage']) ? $_FF_CONF['show_posts_perpage'] : 10;
+$FF_userprefs['showiframe']     = isset($_FF_CONF['show_topicreview']) ? $_FF_CONF['show_topicreview'] : true;
+$FF_userprefs['viewanonposts']  = isset($_FF_CONF['show_anonymous_posts']) ? $_FF_CONF['show_anonymous_posts'] : true;
+$FF_userprefs['topic_order']    = isset($_FF_CONF['topic_order']) ? $_FF_CONF['topic_order'] : 'DESC';
 
 if ( !COM_isAnonUser() ) {
     $result = DB_query("SELECT * FROM {$_TABLES['ff_userprefs']} where uid = ".(int) $_USER['uid'],1);

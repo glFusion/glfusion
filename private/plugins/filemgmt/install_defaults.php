@@ -170,7 +170,7 @@ function plugin_initconfig_filemgmt()
                 0, 2, 0, 10, true, 'filemgmt');
         $c->add('shotwidth', $_FM_DEFAULT['shotwidth'],'text',
                 0, 2, 0, 20, true, 'filemgmt');
-        $c->add('Emailoption', $_FM_DEFAULT['Emailoption'],'select',
+        $c->add('Emailoption', $_FM_DEFAULT['emailoption'],'select',
                 0, 2, 0, 30, true, 'filemgmt');
         $c->add('enable_rating', 1,'select',
                 0, 2, 0, 35, true, 'filemgmt');
