@@ -97,16 +97,15 @@ window.addEvent('domready',function() {
             <td colspan="2"><b>{lang_normalblockoptions}</b></td>
         </tr>
         <tr>
-            <td class="alignright" style="vertical-align:top">{lang_blockcontent}:</td>
-
-            <td>
-        {!if wysiwyg}
-        <div>
-        <input type="button" value="{visual_editor}" onclick="won('content')"/>
-        <input type="button" value="{html_editor}"  onclick="woff('content')"/>
-        </div>
-        {!endif}
-            <textarea name="content" cols="45" rows="12" style="width:100%;font-family:courier new;font-size:1.2em;">{block_content}</textarea><br />
+            <td class="alignleft" style="vertical-align:top">{lang_blockcontent}:</td><td>&nbsp;</td>
+            <tr><td colspan="2">
+            {!if wysiwyg}
+            <div>
+            <input type="button" value="{visual_editor}" onclick="won('content')"/>
+            <input type="button" value="{html_editor}"  onclick="woff('content')"/>
+            </div>
+            {!endif}
+            <textarea name="content" id="content" cols="45" rows="12" style="width:100%;font-family:courier new;font-size:1.2em;">{block_content}</textarea><br />
                 <span class="warningsmall">{lang_allowed_html}</span></td>
         </tr>
         <tr>
