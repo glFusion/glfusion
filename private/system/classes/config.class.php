@@ -6,8 +6,6 @@
 // |                                                                          |
 // | Controls the UI and database for configuration settings                  |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2013 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -139,7 +137,7 @@ class config {
             if ($row[1] !== 'unset') {
                 if (!array_key_exists($row[2], $this->config_array) ||
                     !array_key_exists($row[0], $this->config_array[$row[2]])) {
-//                    $row[1] = preg_replace('!s:(\d+):"(.*?)";!se', "'s:'.strlen('$2').':\"$2\";'", $row[1] );
+                    $row[1] = preg_replace('!s:(\d+):"(.*?)";!se', "'s:'.strlen('$2').':\"$2\";'", $row[1] );
                     $value = @unserialize($row[1]);
                     if (($value === false) && ($row[1] != $false_str)) {
                         if (function_exists('COM_errorLog')) {
@@ -1151,7 +1149,7 @@ class config {
         if (file_exists($cache_file)) {
             $s = file_get_contents($cache_file);
             if ($s !== false) {
-//                $s = preg_replace('!s:(\d+):"(.*?)";!se', "'s:'.strlen('$2').':\"$2\";'", $s );
+                $s = preg_replace('!s:(\d+):"(.*?)";!se', "'s:'.strlen('$2').':\"$2\";'", $s );
                 $this->config_array = @unserialize($s);
                 return true;
             }
