@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.4.1
 ------
+- Several stability improvements
 - Fixed row styling on admin lists
 - Ratings did not register when 'clicked'
 - CKEditor FileManager could not locate images/library/ directory
@@ -11,6 +12,7 @@ v1.4.1
   was enabled.
 - CKEditor now support direct integration with Smiley plugin
 - Installation / upgrade enhancements to better support PHP v5.5+
+- Update OAuth library to latest release
 
 v1.4.0
 ------
