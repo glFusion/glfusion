@@ -219,4 +219,13 @@ function plugin_getEditorType_ckeditor()
 {
     return 'ckeditor';
 }
+
+function plugin_configmanager_filemanager_fileroot_ckeditor_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] != '/' ) {
+        return $value . '/';
+    }
+    return $value;
+}
 ?>

@@ -72,18 +72,57 @@ $LANG_confignames['ckeditor'] = array(
     'enable_emailstory'     => 'Enable Email Story',
     'enable_sp'             => 'Enable Pages Editor Support',
     'enable_block'          => 'Enalbe Block Editor',
+    'filemanager_fileroot'  => 'Relative Path (from public_html) to Files',
+    'filemanager_per_user_dir' => 'Use Per User Directories',
+    'filemanager_browse_only'       => 'Browse only mode',
+    'filemanager_default_view_mode' => 'Default view mode',
+    'filemanager_show_confirmation' => 'Show confirmation',
+    'filemanager_search_box'        => 'Show search box',
+    'filemanager_file_sorting'      => 'File sorting',
+    'filemanager_chars_only_latin'  => 'Allow only latin chars',
+    'filemanager_date_format'       => 'Date time format',
+    'filemanager_show_thumbs'       => 'Show thumbnails',
+    'filemanager_generate_thumbnails' => 'Generate thumbnails',
+    'filemanager_upload_restrictions' => 'Allowed file extensions',
+    'filemanager_upload_overwrite'  => 'Overwrite existing file',
+    'filemanager_upload_images_only' => 'Upload images only',
+    'filemanager_upload_file_size_limit' => 'Upload file size limit (MB)',
+    'filemanager_unallowed_files'   => 'Unallowed files',
+    'filemanager_unallowed_dirs'    => 'Unallowed directories',
+    'filemanager_unallowed_files_regexp' => 'Regular expression for unallowed files',
+    'filemanager_unallowed_dirs_regexp' => 'Regular expression for unallowed directories',
+    'filemanager_images_ext'        => 'Image file extensions',
+    'filemanager_show_video_player' => 'Show video player',
+    'filemanager_videos_ext'        => 'Video file extensions',
+    'filemanager_videos_player_width' => 'Video player width (px)',
+    'filemanager_videos_player_height' => 'Video player height (px)',
+    'filemanager_show_audio_player' => 'Show audio player',
+    'filemanager_audios_ext'        => 'Audio file extensions',
+    'filemanager_edit_enabled'      => 'Editor Enabled',
+    'filemanager_edit_linenumbers'  => 'Line Numbers',
+    'filemanager_edit_linewrapping' => 'Line Wrapping',
+    'filemanager_edit_codehighlight' => 'Code Highlighting',
+    'filemanager_edit_editext' => 'Allowed Edit Extensions',
 );
 $LANG_configsubgroups['ckeditor'] = array(
     'sg_main'               => 'Configuration Settings'
 );
 $LANG_fs['ckeditor'] = array(
-    'ck_public'                 => 'General Settings',
+    'ck_public'                 => 'CKEditor Configuration',
     'ck_integration'            => 'CKEditor Integration',
+	'fs_filemanager_general'    => 'Filemanager General Settings',
+	'fs_filemanager_upload'     => 'Filemanager Upload Settings',
+	'fs_filemanager_images'     => 'Filemanager Image Settings',
+	'fs_filemanager_videos'     => 'Filemanager Video Settings',
+	'fs_filemanager_audios'     => 'Filemanager Audio Settings',
+	'fs_filemanager_editor'     => 'Filemanager Embedded Editor',
 );
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['ckeditor'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => TRUE, 'False' => FALSE),
+	2 => array('grid' => 'grid', 'list' => 'list'),
+	3 => array('default' => 'default', 'Name (asc)' => 'NAME_ASC', 'Name (desc)' => 'NAME_DESC', 'Type (asc)' => 'TYPE_ASC', 'Type (desc)' => 'TYPE_DESC', 'Modified (asc)' => 'MODIFIED_ASC', 'Modified (desc)' => 'MODIFIED_DESC'),
 );
 
 $PLG_ckeditor_MESSAGE1 = 'CKEditor plugin upgrade: Update completed successfully.';
