@@ -3551,24 +3551,20 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 
         if ( $nrows > 0 ) {
             // Any late breaking news stories?
-            $retval .= '<h3>' . $LANG01[99] . '</h3>';
-            $newmsg = COM_formatTimeString( $LANG_WHATSNEW['new_string'],
-                        $_CONF['newstoriesinterval'], $LANG01[11], $nrows);
-
-            if ( $newstories && ( $page < 2 )) {
-                $retval .= $newmsg . '<br/>';
-            } else {
-                $newstory = array();
-                while ($A=DB_fetchArray($result)) {
-                    $title = COM_undoSpecialChars( $A['title'] );
-                    $title = str_replace('&nbsp;',' ',$title);
-                    $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],'...' );
-                    $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
-                    $url = COM_buildUrl($_CONF['site_url'] . '/article.php?story=' . $A['sid']);
-                    $newstory[] = COM_createLink($titletouse,$url,$attr);
-                }
-                $retval .= COM_makeList( $newstory, 'list-new-articles' ) .'<br/>';
+            $retval .= '<h3>' . $LANG01[99] . ' <small>'
+                    . COM_formatTimeString( $LANG_WHATSNEW['new_last'],
+                                            $_CONF['newcommentsinterval'] )
+                    . '</small></h3>';
+            $newstory = array();
+            while ($A=DB_fetchArray($result)) {
+                $title = COM_undoSpecialChars( $A['title'] );
+                $title = str_replace('&nbsp;',' ',$title);
+                $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],'...' );
+                $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
+                $url = COM_buildUrl($_CONF['site_url'] . '/article.php?story=' . $A['sid']);
+                $newstory[] = COM_createLink($titletouse,$url,$attr);
             }
+            $retval .= COM_makeList( $newstory, 'list-new-articles' ) .'<br/>';
         }
     }
 

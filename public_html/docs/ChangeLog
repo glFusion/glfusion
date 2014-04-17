@@ -3,6 +3,9 @@ glFusion ChangeLog
 v1.4.1
 ------
 - Several stability improvements
+- Stories under what's new block now display the time interval
+- Fixed error where Comment header did not always display in what's new block
+- Notification emails did not send properly for newly uploaded files
 - CKEditor's filemanager plugin now supports per-user directories
   for images.
 - Fixed row styling on admin lists
