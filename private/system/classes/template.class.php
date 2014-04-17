@@ -339,7 +339,7 @@ class Template
 
         if (isset($TEMPLATE_OPTIONS['force_unknowns'])) {
             $unknowns = $TEMPLATE_OPTIONS['force_unknowns'];
-        } else if (empty($unknowns)) {
+        } else if (empty($unknowns) && !is_numeric($unknowns)) {
             if (isset($TEMPLATE_OPTIONS['unknowns'])) {
                 $unknowns = $TEMPLATE_OPTIONS['unknowns'];
             } else {
@@ -445,7 +445,7 @@ class Template
     {
         global $_CONF;
 
-        $this->block_replace[$varname] = !empty($name)?$name:$parent;
+        $this->block_replace[$varname] = (!empty($name) || is_numeric($name)) ? $name : $parent;
 
         if ( isset($_CONF['cache_templates']) && $_CONF['cache_templates'] == true ) {
             $filename = $this->file[$parent];
@@ -487,7 +487,7 @@ class Template
     function set_var($varname, $value = "", $append = false, $nocache = false)
     {
         if (!is_array($varname)) {
-            if (!empty($varname)) {
+            if (!empty($varname) || is_numeric($varname) ) {
                 if ($this->debug & 1) {
                     printf("<b>set_var:</b> (with scalar) <b>%s</b> = '%s'<br>\n", $varname, htmlentities($value));
                 }
@@ -503,7 +503,7 @@ class Template
         } else {
             reset($varname);
             while(list($k, $v) = each($varname)) {
-                if (!empty($k)) {
+                if (!empty($k) || is_numeric($k) ) {
                     if ($this->debug & 1) {
                         printf("<b>set_var:</b> (with array) <b>%s</b> = '%s'<br>\n", $k, htmlentities($v));
                     }
@@ -543,7 +543,7 @@ class Template
     function clear_var($varname)
     {
         if (!is_array($varname)) {
-            if (!empty($varname)) {
+            if (!empty($varname) || is_numeric($varname) ) {
                 if ($this->debug & 1) {
                     printf("<b>clear_var:</b> (with scalar) <b>%s</b><br>\n", $varname);
                 }
@@ -552,7 +552,7 @@ class Template
         } else {
             reset($varname);
             while(list($k, $v) = each($varname)) {
-                if (!empty($v)) {
+                if (!empty($v) || is_numeric($v) ) {
                     if ($this->debug & 1) {
                         printf("<b>clear_var:</b> (with array) <b>%s</b><br>\n", $v);
                     }
@@ -585,7 +585,7 @@ class Template
     function unset_var($varname)
     {
         if (!is_array($varname)) {
-            if (!empty($varname)) {
+            if (!empty($varname) || is_numeric($varname) ) {
                 if ($this->debug & 1) {
                     printf("<b>unset_var:</b> (with scalar) <b>%s</b><br>\n", $varname);
                 }
@@ -595,7 +595,7 @@ class Template
         } else {
             reset($varname);
             while(list($k, $v) = each($varname)) {
-                if (!empty($v)) {
+                if (!empty($v) || is_numeric($v) ) {
                     if ($this->debug & 1) {
                         printf("<b>unset_var:</b> (with array) <b>%s</b><br>\n", $v);
                     }
@@ -630,7 +630,7 @@ class Template
                 $filename = $this->blocks[$varname];
             } else if (isset($this->file[$varname])) {
                 $filename = $this->file[$varname];
-            } else if (isset($this->varvals[$varname]) OR empty($varname)) {
+            } else if (isset($this->varvals[$varname]) OR (empty($varname) && !is_numeric($varname))  ) {
                 return $this->slow_subst($varname);
             } else {
                 // $varname does not reference a file so return
@@ -659,7 +659,7 @@ class Template
                 $templateCode = $this->blocks[$varname];
             } else if (isset($this->templateCode[$varname])) {
                 $templateCode = $this->templateCode[$varname];
-            } else if (isset($this->varvals[$varname]) OR empty($varname)) {
+            } else if (isset($this->varvals[$varname]) OR (empty($varname) && !is_numeric($varname) ) ) {
                 return $this->slow_subst($varname);
             } else {
                 // $varname does not reference a file so return
@@ -1153,7 +1153,7 @@ class Template
 
         /* use @file here to avoid leaking filesystem information if there is an error */
         $str = @file_get_contents($filename);
-        if (empty($str)) {
+        if (empty($str) && !is_numeric($str) ) {
             $this->halt("loadfile: While loading $varname, $filename does not exist or is empty.");
             return false;
         }
@@ -1252,7 +1252,7 @@ class Template
     function var_notempty($val)
     {
         if (array_key_exists($val, $this->varvals)) {
-            return !empty($this->varvals[$val]);
+            return !(empty($this->varvals[$val]) && !is_numeric($this->varvals[$val]) ) ;
         }
         return false;
     }
@@ -1260,7 +1260,7 @@ class Template
     function mod_echo($val, $modifier = '')
     {
         if (array_key_exists($val, $this->nocache) && $this->unknowns == 'PHP') {
-            if (empty($modifier)) {
+            if (empty($modifier) && !is_numeric($modifer) ) {
                 return '<?php echo $this->val_echo(\''.$val.'\'); ?>';
             } else {
                 return '<?php echo $this->mod_echo(\''.$val.'\',\''.$modifier.'\'); ?>';
@@ -1812,7 +1812,7 @@ class Template
     */
     function uncached_var($vars)
     {
-        if (empty($vars)) {
+        if (empty($vars) && !is_numeric($vars) ) {
             return;
         } elseif (!is_array($vars)) {
             $vars = array($vars);
