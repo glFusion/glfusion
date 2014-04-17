@@ -50,9 +50,12 @@ include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
 function FM_notifyAdmins( $filename,$file_user_id,$description ) {
     global $LANG_DIRECTION, $LANG_CHARSET, $LANG_FM00, $_USER, $_FM_CONF, $_CONF, $_TABLES;
 
-    require_once $_CONF['path'].'lib/phpmailer/class.phpmailer.php';
-
+    $html = false;
+    $altBody = '';
+    $to = array();
     $body = '';
+
+    $description = stripslashes($description); // already escaped for db
 
     if( empty( $LANG_DIRECTION )) {
         // default to left-to-right
@@ -72,23 +75,8 @@ function FM_notifyAdmins( $filename,$file_user_id,$description ) {
     COM_clearSpeedlimit(300,'fmnotify');
     $last = COM_checkSpeedlimit ('fmnotify');
     if ( $last == 0 ) {
-        $mail = new PHPMailer();
-        $mail->CharSet = $charset;
-        if ($_CONF['mail_backend'] == 'smtp' ) {
-            $mail->Host     = $_CONF['mail_smtp_host'] . ':' . $_CONF['mail_smtp_port'];
-            $mail->SMTPAuth = $_CONF['mail_smtp_auth'];
-            $mail->Username = $_CONF['mail_smtp_username'];
-            $mail->Password = $_CONF['mail_smtp_password'];
-            $mail->Mailer = "smtp";
-        } elseif ($_CONF['mail_backend'] == 'sendmail') {
-            $mail->Mailer = "sendmail";
-            $mail->Sendmail = $_CONF['mail_sendmail_path'];
-        } else {
-            $mail->Mailer = "mail";
-        }
-        $mail->WordWrap = 76;
-        $mail->IsHTML(true);
-        $mail->Subject = $LANG_FM00['new_upload'] . $_CONF['site_name'];
+        $html = true;
+        $subject = $LANG_FM00['new_upload'] . $_CONF['site_name'];
 
         if (!isset($file_user_id) || $file_user_id < 2  ) {
             $uname = 'Anonymous';
@@ -115,7 +103,6 @@ function FM_notifyAdmins( $filename,$file_user_id,$description ) {
         ));
         $T->parse('output','email');
         $body .= $T->finish($T->get_var('output'));
-        $mail->Body    = $body;
 
         $altbody  = $LANG_FM00['new_upload_body'] . $_CONF['site_name'];
         $altbody .= "\n\r\n\r";
@@ -129,11 +116,6 @@ function FM_notifyAdmins( $filename,$file_user_id,$description ) {
         $altbody .= "\n\r\n\r";
         $altbody .= $_CONF['site_name'] . "\n\r";
         $altbody .= $_CONF['site_url'] . "\n\r";
-
-        $mail->AltBody = $altbody;
-
-        $mail->From = $_CONF['site_mail'];
-        $mail->FromName = $_CONF['site_name'];
 
         $group_id = DB_getItem($_TABLES['groups'],'grp_id','grp_name="filemgmt Admin"');
 
@@ -157,13 +139,17 @@ function FM_notifyAdmins( $filename,$file_user_id,$description ) {
             if ( $row['email'] != '' ) {
     			COM_errorLog("FileMgmt Upload: Sending notification email to: " . $row['email'] . " - " . $row['username']);
                 $toCount++;
-                $mail->AddAddress($row['email'], $row['username']);
+                $to[] = array('email' => $row['email'],'name' => $row['username']);
             }
         }
         if ( $toCount > 0 ) {
-        	if(!$mail->Send()) {
-            	COM_errorLog("FileMgmt Upload: Unable to send moderation email - error:" . $mail->ErrorInfo);
-        	}
+            $msgData['htmlmessage'] = $body;
+            $msgData['textmessage'] = $altBody;
+            $msgData['subject'] = $subject;
+            $msgData['from']['email'] = $_CONF['site_mail'];
+            $msgData['from']['name'] = $_CONF['site_name'];
+            $msgData['to'] = $to;
+            COM_emailNotification( $msgData );
     	} else {
         	COM_errorLog("FileMgmt Upload: Error - Did not find any administrators to email");
     	}

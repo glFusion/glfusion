@@ -1290,14 +1290,13 @@ function MG_attachThumbnail( $aid, $thumbnail, $mediaFilename ) {
 function MG_notifyModerators( $aid ) {
     global $LANG_DIRECTION, $LANG_CHARSET, $_USER, $MG_albums, $_MG_CONF, $_CONF, $_TABLES, $LANG_MG01;
 
-    if ($MG_albums[$aid]->moderate != 1 || $MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/) {
+    $to = array();
+
+    if ($MG_albums[$aid]->moderate != 1 || $MG_albums[0]->owner_id) {
         return true;
     }
 
     $body = '';
-
-    require_once $_CONF['path'] . 'lib/phpmailer/class.phpmailer.php';
-
     $media_user_id = $_USER['uid'];
 
     if( empty( $LANG_DIRECTION )) {
@@ -1318,23 +1317,7 @@ function MG_notifyModerators( $aid ) {
     COM_clearSpeedlimit(600,'mgnotify');
     $last = COM_checkSpeedlimit ('mgnotify');
     if ( $last == 0 ) {
-        $mail = new PHPMailer();
-        $mail->CharSet = $charset;
-        if ($_CONF['mail_backend'] == 'smtp' ) {
-            $mail->Host     = $_CONF['mail_smtp_host'] . ':' . $_CONF['mail_smtp_port'];
-            $mail->SMTPAuth = $_CONF['mail_smtp_auth'];
-            $mail->Username = $_CONF['mail_smtp_username'];
-            $mail->Password = $_CONF['mail_smtp_password'];
-            $mail->Mailer = "smtp";
-        } elseif ($_CONF['mail_backend'] == 'sendmail') {
-            $mail->Mailer = "sendmail";
-            $mail->Sendmail = $_CONF['mail_sendmail_path'];
-        } else {
-            $mail->Mailer = "mail";
-        }
-        $mail->WordWrap = 76;
-        $mail->IsHTML(true);
-        $mail->Subject = $LANG_MG01['new_upload_subject'] . $_CONF['site_name'];
+        $subject = $LANG_MG01['new_upload_subject'] . $_CONF['site_name'];
 
         if ( COM_isAnonUser() ) {
             $uname = 'Anonymous';
@@ -1344,7 +1327,6 @@ function MG_notifyModerators( $aid ) {
         // build the template...
         $T = new Template( MG_getTemplatePath($aid) );
         $T->set_file ('email', 'modemail.thtml');
-
         $T->set_var(array(
             'direction'         =>  $direction,
             'charset'           =>  $charset,
@@ -1360,7 +1342,6 @@ function MG_notifyModerators( $aid ) {
         ));
         $T->parse('output','email');
         $body .= $T->finish($T->get_var('output'));
-        $mail->Body    = $body;
 
         $altbody  = $LANG_MG01['new_upload_body'] . $MG_albums[$aid]->title;
         $altbody .= "\n\r\n\r";
@@ -1371,10 +1352,6 @@ function MG_notifyModerators( $aid ) {
         $altbody .= $_CONF['site_name'] . "\n\r";
         $altbody .= $_CONF['site_url'] . "\n\r";
 
-        $mail->AltBody = $altbody;
-
-        $mail->From = $_CONF['site_mail'];
-        $mail->FromName = $_CONF['site_name'];
 
         $groups = MG_getGroupList($MG_albums[$aid]->mod_group_id);
         $groupList = implode(',',$groups);
@@ -1395,13 +1372,17 @@ function MG_notifyModerators( $aid ) {
 					COM_errorLog("MG Upload: Sending notification email to: " . $row['email'] . " - " . $row['username']);
 				}
                 $toCount++;
-                $mail->AddAddress($row['email'], $row['username']);
+                $to[] = array('email' => $row['email'], 'name' => $row['username']);
             }
         }
         if ( $toCount > 0 ) {
-        	if(!$mail->Send()) {
-            	COM_errorLog("MG Upload: Unable to send moderation email - error:" . $mail->ErrorInfo);
-        	}
+            $msgData['htmlmessage'] = $body;
+            $msgData['textmessage'] = $altBody;
+            $msgData['subject'] = $subject;
+            $msgData['from']['email'] = $_CONF['site_mail'];
+            $msgData['from']['name'] = $_CONF['site_name'];
+            $msgData['to'] = $to;
+            COM_emailNotification( $msgData );
     	} else {
         	COM_errorLog("MG Upload: Error - Did not find any moderators to email");
     	}
