@@ -3574,7 +3574,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 
     if ( $_CONF['hidenewcomments'] == 0 ) {
         // Go get the newest comments
-
+        $commentHeader = 0;
         $newcomments = array();
         $commentrow  = array();
 
@@ -3598,7 +3598,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                     . COM_formatTimeString( $LANG_WHATSNEW['new_last'],
                                             $_CONF['newcommentsinterval'] )
                     . '</small></h3>';
-
+            $commentHeader = 1;
             for ($x = 0; $x < $nrows; $x++ ) {
                 $A = DB_fetchArray($result);
                 $A['url'] = COM_buildUrl( $_CONF['site_url']
@@ -3615,6 +3615,14 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         $nrows = count($commentrow);
 
         if ( $nrows > 0 ) {
+            if ( $commentHeader == 0 ) {
+                $retval .= '<h3>' . $LANG01[83] . ' <small>'
+                        . COM_formatTimeString( $LANG_WHATSNEW['new_last'],
+                                                $_CONF['newcommentsinterval'] )
+                        . '</small></h3>';
+                $commentHeader = 1;
+            }
+
             $newcomments = array();
             for( $x = 0; $x < $nrows; $x++ ) {
                 $titletouse = '';
