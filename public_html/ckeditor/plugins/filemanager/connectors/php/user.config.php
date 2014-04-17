@@ -46,11 +46,6 @@ function auth() {
 }
 $inRoot = SEC_inGroup('Root');
 
-if ( $inRoot ) {
-    $capabilities = array("select", "download", "rename", "move", "delete", "replace");
-} else {
-    $capabilities = array("select");
-}
 $fileroot = '';
 if ( COM_isAnonUser() ) {
     $uid = 1;
@@ -70,6 +65,13 @@ if ( $inRoot ) {
             }
         }
     }
+}
+if ( $inRoot ) {
+    $capabilities = array("select", "download", "rename", "move", "delete", "replace");
+} else if ($_CK_CONF['filemanager_per_user_dir'] ) {
+    $capabilities = array("select", "rename", "move", "delete", "replace");
+} else {
+    $capabilities = array("select");
 }
 $fmconfiguration = array(
 	"_comment" =>  "IMPORTANT  =>  go to the wiki page to know about options configuration https => //github.com/simogeo/Filemanager/wiki/Filemanager-configuration-file",

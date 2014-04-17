@@ -2,11 +2,6 @@
 require_once '../../../../lib-common.php';
 $inRoot = SEC_inGroup('Root');
 
-if ( $inRoot ) {
-    $capabilities = array("select", "download", "rename", "move", "delete", "replace");
-} else {
-    $capabilities = array("select");
-}
 $urlparts = parse_url($_CONF['site_url']);
 if ( isset($urlparts['path']) ) {
     $fileroot = $urlparts['path'];
@@ -31,6 +26,13 @@ if ( $inRoot ) {
             }
         }
     }
+}
+if ( $inRoot ) {
+    $capabilities = array("select", "download", "rename", "move", "delete", "replace");
+} else if ($_CK_CONF['filemanager_per_user_dir'] ) {
+    $capabilities = array("select", "rename", "move", "delete", "replace");
+} else {
+    $capabilities = array("select");
 }
 $fmconfiguration = array(
 	"_comment" =>  "IMPORTANT  =>  go to the wiki page to know about options configuration https => //github.com/simogeo/Filemanager/wiki/Filemanager-configuration-file",
