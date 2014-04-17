@@ -2742,24 +2742,23 @@ function COM_olderStuff()
     if ( $nrows > 0 ) {
         $dateonly = $_CONF['dateonly'];
         if ( empty( $dateonly )) {
-            $dateonly = '%d-%b'; // fallback: day - abbrev. month name
+            $dateonly = 'd-M'; // fallback: day - abbrev. month name
         }
 
         $day = 'noday';
         $string = '';
-
+        $dt = new Date();
         for( $i = 0; $i < $nrows; $i++ ) {
             $A = DB_fetchArray( $result );
-
-            $daycheck = strftime( '%A', $A['day'] );
+            $dt->setTimestamp($A['day']);
+            $daycheck = $dt->format("l",true);
             if ( $day != $daycheck ) {
                 if ( $day != 'noday' ) {
                    $daylist = COM_makeList($oldnews, 'list-older-stories');
                     $daylist = str_replace(array("\015", "\012"), '', $daylist);
                     $string .= $daylist . '<br/>';
                 }
-
-                $day2 = strftime( $dateonly, $A['day'] );
+                $day2 = $dt->format($_CONF['dateonly'], true);
                 $string .= '<h3>' . $daycheck . ' <small>' . $day2
                         . '</small></h3>' . LB;
                 $oldnews = array();
