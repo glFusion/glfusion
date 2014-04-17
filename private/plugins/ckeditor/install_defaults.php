@@ -92,7 +92,7 @@ function plugin_initconfig_ckeditor()
         $c->add('enable_sp', $_CK_DEFAULT['enable_sp'],'select',0, 1, 0, 120, true, 'ckeditor');
         $c->add('enable_block', $_CK_DEFAULT['enable_block'],'select',0, 1, 0, 130, true, 'ckeditor');
         $c->add('fs_filemanager_general', NULL, 'fieldset', 0, 2, NULL, 0, true, 'ckeditor');
-        $c->add('filemanager_fileroot', '/images/library/', 'text', 0, 2, NULL, 20, true, 'ckeditor');
+        $c->add('filemanager_fileroot', '/images/library/userfiles/', 'text', 0, 2, NULL, 20, true, 'ckeditor');
         $c->add('filemanager_per_user_dir', true, 'select', 0, 2, 1, 30, true, 'ckeditor');
         $c->add('filemanager_browse_only', false, 'select', 0, 2, 1, 40, true, 'ckeditor');
         $c->add('filemanager_default_view_mode', 'grid', 'select', 0, 2, 2, 50, true, 'ckeditor');

@@ -3,6 +3,8 @@ glFusion ChangeLog
 v1.4.1
 ------
 - Several stability improvements
+- CKEditor's filemanager plugin now supports per-user directories
+  for images.
 - Fixed row styling on admin lists
 - Ratings did not register when 'clicked'
 - CKEditor FileManager could not locate images/library/ directory

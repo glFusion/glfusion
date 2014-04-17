@@ -1056,7 +1056,7 @@ function glfusion_141()
     $c = config::get_instance();
 
     $c->add('fs_filemanager_general', NULL, 'fieldset', 0, 2, NULL, 0, true, 'ckeditor');
-    $c->add('filemanager_fileroot', '/images/library/', 'text', 0, 2, NULL, 20, true, 'ckeditor');
+    $c->add('filemanager_fileroot', '/images/library/usersfiles/', 'text', 0, 2, NULL, 20, true, 'ckeditor');
     $c->add('filemanager_per_user_dir', true, 'select', 0, 2, 1, 30, true, 'ckeditor');
     $c->add('filemanager_browse_only', false, 'select', 0, 2, 1, 40, true, 'ckeditor');
     $c->add('filemanager_default_view_mode', 'grid', 'select', 0, 2, 2, 50, true, 'ckeditor');
