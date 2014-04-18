@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<form action="{PHP_SELF}" method="post" style="margin:0px;">
+<form action="{phpself}" method="post" style="margin:0px;">
   <table cellspacing="1" cellpadding="0" style="width:100%;border:none;margin-top:10px;" class="plugin">
     <tr>
       <td class="pluginTitle" style="padding-left:10px;">{title}</td>

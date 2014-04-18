@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<form action="{PHP_SELF}" method="post">
+<form action="{phpself}" method="post">
             <table width="100%" border="0" cellspacing="0" cellpadding="3" class="plugin" style="margin-top:10px;">
                 <tr>
                     <td class="pluginAlert pluginMediumText" style="padding:10px;">{deletenote1}</td>
