@@ -3,6 +3,7 @@ glFusion ChangeLog
 v1.4.1
 ------
 - Several stability improvements
+- Improved URL filtering
 - Stories under what's new block now display the time interval
 - Older Stories block did not display the proper date
 - Fixed error where Comment header did not always display in what's new block
