@@ -43,7 +43,7 @@ div.mg-block-exif {
  </tr>
  </table>
  <br>
- <form action="PHP_SELF">
+ <form>
  <div style="text-align:center;">
  <input type="button" value="{lang_close}" onclick="javascript:window.close();">
  </div>
