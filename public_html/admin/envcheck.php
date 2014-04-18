@@ -6,9 +6,7 @@
 // |                                                                          |
 // | glFusion Environment Check                                               |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric Warren            eric AT glfusion DOT org                          |
@@ -320,7 +318,6 @@ function _checkEnvironment()
     $feedpath = $_CONF['rdf_file'];
     $pos = strrpos( $feedpath, '/' );
     $feedPath = substr( $feedpath, 0, $pos + 1 );
-//    $feedPath .= $feedfile;
 
     $file_list = array( $_CONF['path_data'],
                         $_CONF['path_log'].'error.log',
@@ -329,11 +326,9 @@ function _checkEnvironment()
                         $_CONF['path_log'].'spamx.log',
                         $_CONF['path_data'].'layout_cache/',
                         $_CONF['path_data'].'temp/',
-
                         $_CONF['path_html'],
                         $feedPath,
                         $_CONF['rdf_file'],
-
                         $_CONF['path_html'].'images/articles/',
                         $_CONF['path_html'].'images/topics/',
                         $_CONF['path_html'].'images/userphotos/',
@@ -341,6 +336,7 @@ function _checkEnvironment()
                         $_CONF['path_html'].'images/library/Flash/',
                         $_CONF['path_html'].'images/library/Image/',
                         $_CONF['path_html'].'images/library/Media/',
+                        $_CONF['path_html'].'images/library/userfiles/',
                     );
 
     $mg_file_list = array($_CONF['path'].'plugins/mediagallery/tmp/',
