@@ -1252,7 +1252,7 @@ class Template
     function var_notempty($val)
     {
         if (array_key_exists($val, $this->varvals)) {
-            return !(empty($this->varvals[$val]) && !is_numeric($this->varvals[$val]) ) ;
+            return !(empty($this->varvals[$val]) ) ;
         }
         return false;
     }
@@ -1345,7 +1345,12 @@ class Template
         if (!$ret) $this->unset_var($loopvar);
         return $ret;
     }
-
+    function inc($var)
+    {
+        $val = $this->get_var($var);
+        if ($val == 0) $val = 0;
+        $this->set_var($var, ++$val);
+    }
     function inc_echo($var)
     {
         $val = $this->get_var($var);
@@ -1353,7 +1358,12 @@ class Template
         $this->set_var($var, ++$val);
         return $val;
     }
-
+    function dec($var)
+    {
+        $val = $this->get_var($var);
+        if ($val == 0) $val = 0;
+        $this->set_var($var, --$val);
+    }
     function dec_echo($var)
     {
         $val = $this->get_var($var);
@@ -1467,6 +1477,7 @@ class Template
                       '/\{!end(if|while|for)(|!| !)\}/',                    // for is not yet supported but here for future use
                       '/\{!loop ([-\w\d_\[\]]+)(|!| !)\}/',
                       '/\{!endloop(|!| !)\}/',
+                      '/\{!(inc|dec) ([-\w\d_\[\]]+)(|!| !)\}/',
                       '/\{!(inc|dec)(\+(echo))? ([-\w\d_\[\]]+)(|!| !)\}/',
                       '/\{!(break|continue)( \d+)?(|!| !)\}/',
                       '/\{!unset ([-\w\d_\[\]]+)(|!| !)\}/',                // unsets a variable
@@ -1477,6 +1488,7 @@ class Template
                       '<?php end\1; ?>',
                       '<?php while ($this->loop(\'\1\')): ?>',              // !loop
                       '<?php endwhile; ?>',                                 // !endloop
+                      '<?php $this->\1(\'\2\'); ?>',                // !inc and !dec and +echo
                       '<?php \3 $this->\1_echo(\'\4\'); ?>',                // !inc and !dec and +echo
                       '<?php \1\2; ?>',                                     // !break and !continue
                       '<?php $this->unset_var(\'\1\'); ?>',
