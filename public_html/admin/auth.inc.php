@@ -6,9 +6,7 @@
 // |                                                                          |
 // | glFusion admin authentication module                                     |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2011-2012 by the following authors:                        |
+// | Copyright (C) 2011-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |

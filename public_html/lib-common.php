@@ -5034,7 +5034,8 @@ function COM_getCurrentURL()
             $thisUrl = substr( $_CONF['site_url'], 0, $pos ) . $requestUri;
         }
     }
-
+    $filter = sanitizer::getInstance();
+    $destination = urlencode($filter->sanitizeURL($thisUrl));
     return $thisUrl;
 }
 
