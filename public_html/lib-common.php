@@ -4999,7 +4999,19 @@ function COM_getCurrentURL()
 
     if ( empty( $_SERVER['SCRIPT_URI'] )) {
         if ( !empty( $_SERVER['DOCUMENT_URI'] )) {
-            $thisUrl = $_SERVER['DOCUMENT_URI'];
+            $document_uri = $_SERVER['DOCUMENT_URI'];
+            $first_slash = strpos( $_CONF['site_url'], '/' );
+            if ( $first_slash === false ) {
+                // special case - assume it's okay
+                $thisUrl = $_CONF['site_url'] . $document_uri;
+            } else if ( $first_slash + 1 == strrpos( $_CONF['site_url'], '/' )) {
+                // site is in the document root
+                $thisUrl = $_CONF['site_url'] . $document_uri;
+            } else {
+                // extract server name first
+                $pos = strpos( $_CONF['site_url'], '/', $first_slash + 2 );
+                $thisUrl = substr( $_CONF['site_url'], 0, $pos ) . $document_uri;
+            }
         }
     } else {
         $thisUrl = $_SERVER['SCRIPT_URI'];
