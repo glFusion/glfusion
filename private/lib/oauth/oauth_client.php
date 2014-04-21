@@ -2,7 +2,7 @@
 /*
  * oauth_client.php
  *
- * @(#) $Id: oauth_client.php,v 1.90 2014/03/17 09:45:08 mlemos Exp $
+ * @(#) $Id: oauth_client.php,v 1.96 2014/04/12 09:45:03 mlemos Exp $
  *
  */
 
@@ -12,7 +12,7 @@
 
 	<package>net.manuellemos.oauth</package>
 
-	<version>@(#) $Id: oauth_client.php,v 1.90 2014/03/17 09:45:08 mlemos Exp $</version>
+	<version>@(#) $Id: oauth_client.php,v 1.96 2014/04/12 09:45:03 mlemos Exp $</version>
 	<copyright>Copyright © (C) Manuel Lemos 2012</copyright>
 	<title>OAuth client</title>
 	<author>Manuel Lemos</author>
@@ -230,6 +230,7 @@ class oauth_client_class
 				<stringvalue>Bitbucket</stringvalue>,
 				<stringvalue>Box</stringvalue>,
 				<stringvalue>Buffer</stringvalue>,
+				<stringvalue>Dailymotion</stringvalue>,
 				<stringvalue>Discogs</stringvalue>,
 				<stringvalue>Disqus</stringvalue>,
 				<stringvalue>Dropbox</stringvalue> (Dropbox with OAuth 1.0),
@@ -254,8 +255,10 @@ class oauth_client_class
 				<stringvalue>SurveyMonkey</stringvalue>,
 				<stringvalue>Tumblr</stringvalue>,
 				<stringvalue>Twitter</stringvalue>,
+				<stringvalue>Vimeo</stringvalue>,
 				<stringvalue>VK</stringvalue>,
 				<stringvalue>Withings</stringvalue>,
+				<stringvalue>Wordpress</stringvalue>,
 				<stringvalue>Xero</stringvalue>,
 				<stringvalue>XING</stringvalue> and
 				<stringvalue>Yahoo</stringvalue>. Please contact the author if you
@@ -849,8 +852,7 @@ class oauth_client_class
 */
 	var $response_status = 0;
 
-	var $oauth_user_agent = 'PHP-OAuth-API (http://www.phpclasses.org/oauth-api $Revision: 1.90 $)';
-	var $session_started = false;
+	var $oauth_user_agent = 'PHP-OAuth-API (http://www.phpclasses.org/oauth-api $Revision: 1.96 $)';
 
 	Function SetError($error)
 	{
@@ -908,11 +910,11 @@ class oauth_client_class
 
 	Function GetStoredState(&$state)
 	{
-		if(!$this->session_started)
-		{
-			if(!function_exists('session_start'))
-				return $this->SetError('Session variables are not accessible in this PHP environment');
-		}
+		if(!function_exists('session_start'))
+			return $this->SetError('Session variables are not accessible in this PHP environment');
+		if(session_id() === ''
+		&& !session_start())
+			return($this->SetPHPError('it was not possible to start the PHP session', $php_errormsg));
 		if(IsSet($_SESSION['OAUTH_STATE']))
 			$state = $_SESSION['OAUTH_STATE'];
 		else
@@ -1042,11 +1044,11 @@ class oauth_client_class
 */
 	Function StoreAccessToken($access_token)
 	{
-		if(!$this->session_started)
-		{
-			if(!function_exists('session_start'))
-				return $this->SetError('Session variables are not accessible in this PHP environment');
-		}
+		if(!function_exists('session_start'))
+			return $this->SetError('Session variables are not accessible in this PHP environment');
+		if(session_id() === ''
+		&& !session_start())
+			return($this->SetPHPError('it was not possible to start the PHP session', $php_errormsg));
 		if(!$this->GetAccessTokenURL($access_token_url))
 			return false;
 		$_SESSION['OAUTH_ACCESS_TOKEN'][$access_token_url] = $access_token;
@@ -1096,14 +1098,11 @@ class oauth_client_class
 */
 	Function GetAccessToken(&$access_token)
 	{
-		if(!$this->session_started)
-		{
-			if(!function_exists('session_start'))
-				return $this->SetError('Session variables are not accessible in this PHP environment');
-//			if(!session_start())
-//				return($this->SetPHPError('it was not possible to start the PHP session', $php_errormsg));
-			$this->session_started = true;
-		}
+		if(!function_exists('session_start'))
+			return $this->SetError('Session variables are not accessible in this PHP environment');
+		if(session_id() === ''
+		&& !session_start())
+			return($this->SetPHPError('it was not possible to start the PHP session', $php_errormsg));
 		if(!$this->GetAccessTokenURL($access_token_url))
 			return false;
 		if(IsSet($_SESSION['OAUTH_ACCESS_TOKEN'][$access_token_url]))
@@ -1153,14 +1152,11 @@ class oauth_client_class
 			return false;
 		if($this->debug)
 			$this->OutputDebug('Resetting the access token status for OAuth server located at '.$access_token_url);
-		if(!$this->session_started)
-		{
-			if(!function_exists('session_start'))
-				return $this->SetError('Session variables are not accessible in this PHP environment');
-			if(!session_start())
-				return($this->SetPHPError('it was not possible to start the PHP session', $php_errormsg));
-		}
-		$this->session_started = true;
+		if(!function_exists('session_start'))
+			return $this->SetError('Session variables are not accessible in this PHP environment');
+		if(session_id() === ''
+		&& !session_start())
+			return($this->SetPHPError('it was not possible to start the PHP session', $php_errormsg));
 		if(IsSet($_SESSION['OAUTH_ACCESS_TOKEN'][$access_token_url]))
 			Unset($_SESSION['OAUTH_ACCESS_TOKEN'][$access_token_url]);
 		return true;
@@ -1247,7 +1243,7 @@ class oauth_client_class
 						default:
 							return($this->SetError($value['Type'].' is not a valid type for file '.$name));
 					}
-					$file['ContentType'] = (IsSet($value['Content-Type']) ? $value['Content-Type'] : 'automatic/name');
+					$file['Content-Type'] = (IsSet($value['ContentType']) ? $value['ContentType'] : 'automatic/name');
 					$post_files[$name] = $file;
 				}
 				UnSet($parameters[$name]);
@@ -1278,8 +1274,9 @@ class oauth_client_class
 					}
 					$parameters = array();
 				}
-				$value_parameters = ($type !== 'application/x-www-form-urlencoded' ? array() : $parameters);
+				$value_parameters = (($type !== 'application/x-www-form-urlencoded') ? array() : $parameters);
 			}
+			$header_values = ($method === 'GET' ? array_merge($values, $oauth, $value_parameters) : array_merge($values, $oauth));
 			$values = array_merge($values, $oauth, $value_parameters);
 			$key = $this->Encode($this->client_secret).'&'.$this->Encode($this->access_token_secret);
 			switch($this->signature_method)
@@ -1305,7 +1302,7 @@ class oauth_client_class
 						$sign .= $this->Encode(($first ? '' : '&').$parameter.'='.$this->Encode($value));
 						$first = false;
 					}
-					$values['oauth_signature'] = base64_encode($this->HMAC('sha1', $sign, $key));
+					$header_values['oauth_signature'] = $values['oauth_signature'] = base64_encode($this->HMAC('sha1', $sign, $key));
 					break;
 				default:
 					return $this->SetError($this->signature_method.' signature method is not yet supported');
@@ -1314,7 +1311,7 @@ class oauth_client_class
 			{
 				$authorization = 'OAuth';
 				$first = true;
-				foreach($values as $parameter => $value)
+				foreach($header_values as $parameter => $value)
 				{
 					$authorization .= ($first ? ' ' : ',').$parameter.'="'.$this->Encode($value).'"';
 					$first = false;
@@ -1429,6 +1426,7 @@ class oauth_client_class
 		}
 		$this->response_status = intval($http->response_status);
 		$content_type = (IsSet($options['ResponseContentType']) ? $options['ResponseContentType'] : (IsSet($headers['content-type']) ? strtolower(trim(strtok($headers['content-type'], ';'))) : 'unspecified'));
+		$content_type = preg_replace('/^(.+\\/).+\\+(.+)$/', '\\1\\2', $content_type);
 		switch($content_type)
 		{
 			case 'text/javascript':
