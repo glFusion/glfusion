@@ -2751,15 +2751,15 @@ function COM_olderStuff()
         for( $i = 0; $i < $nrows; $i++ ) {
             $A = DB_fetchArray( $result );
             $dt->setTimestamp($A['day']);
-            $daycheck = $dt->format("l",true);
+            $daycheck = $dt->format("z",true);
             if ( $day != $daycheck ) {
                 if ( $day != 'noday' ) {
-                   $daylist = COM_makeList($oldnews, 'list-older-stories');
+                    $daylist = COM_makeList($oldnews, 'list-older-stories');
                     $daylist = str_replace(array("\015", "\012"), '', $daylist);
                     $string .= $daylist . '<br/>';
                 }
                 $day2 = $dt->format($_CONF['dateonly'], true);
-                $string .= '<h3>' . $daycheck . ' <small>' . $day2
+                $string .= '<h3>' . $dt->format('l',true) . ' <small>' . $day2
                         . '</small></h3>' . LB;
                 $oldnews = array();
                 $day = $daycheck;
