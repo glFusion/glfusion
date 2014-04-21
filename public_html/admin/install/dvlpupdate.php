@@ -1093,6 +1093,13 @@ function glfusion_141()
     $c->add('filemanager_edit_codehighlight', false, 'select', 0, 7, 1, 40, true, 'ckeditor');
     $c->add('filemanager_edit_editext', 'txt,csv', 'text', 0, 7, NULL, 50, true, 'ckeditor');
 
+    if ( !isset($_CONF['github_login']) ) {
+        $c->add('github_login',0,'select',4,1,1,271,TRUE);
+        $c->add('github_consumer_key','not configured yet','text',4,1,NULL,272,TRUE);
+        $c->add('github_consumer_secret','not configured yet','text',4,1,NULL,273,TRUE);
+    }
+
+
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.4.1',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.4.1' WHERE name='glfusion'",1);

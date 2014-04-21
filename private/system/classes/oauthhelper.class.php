@@ -104,6 +104,12 @@ class OAuthConsumer {
                 $scope   = 'r_fullprofile r_emailaddress';
                 $q_api   = array('format'=>'json');
                 break;
+            case 'github' :
+                $api_url = 'https://api.github.com/user';
+                $scope   = 'user:email';
+                $q_api   = array();
+                break;
+
         }
 
         $this->client->scope = $scope;
@@ -267,6 +273,8 @@ class OAuthConsumer {
                     $userinfo['location'] = $info->location->name;
                 }
                 break;
+            case 'github' :
+                break;
         }
 
         return $userinfo;
@@ -352,6 +360,19 @@ class OAuthConsumer {
                     'remoteusername' => DB_escapeString($info->id),
                     'remoteservice'  => 'oauth.linkedin',
                     'remotephoto'    => $info->{'pictureUrl'},
+                );
+                break;
+            case 'github' :
+                $users = array(
+                    'loginname'      => (isset($info->{'login'}) ? $info->{'login'} : $info->id),
+                    'email'          => $info->{'email'},
+                    'passwd'         => '',
+                    'passwd2'        => '',
+                    'fullname'       => $info->{'name'},
+                    'homepage'       => $info->{'html_url'},
+                    'remoteusername' => DB_escapeString($info->id),
+                    'remoteservice'  => 'oauth.github',
+                    'remotephoto'    => $info->{'avatar_url'},
                 );
                 break;
         }

@@ -225,7 +225,10 @@ function install_config($site_url)
     $c->add('microsoft_login',0,'select',4,1,1,250,TRUE);
     $c->add('microsoft_consumer_key','not configured yet','text',4,1,NULL,260,TRUE);
     $c->add('microsoft_consumer_secret','not configured yet','text',4,1,NULL,270,TRUE);
-    $c->add('aftersave_user','item','select',4,1,9,280,TRUE);
+    $c->add('github_login',0,'select',4,1,1,280,TRUE);
+    $c->add('github_consumer_key','not configured yet','text',4,1,NULL,290,TRUE);
+    $c->add('github_consumer_secret','not configured yet','text',4,1,NULL,300,TRUE);
+    $c->add('aftersave_user','item','select',4,1,9,310,TRUE);
 
     $c->add('fs_spamx', NULL, 'fieldset', 4, 2, NULL, 0, TRUE);
     $c->add('spamx',128,'text',4,2,NULL,10,TRUE);
