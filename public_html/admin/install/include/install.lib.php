@@ -1130,6 +1130,9 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
         case '1.4.0' :
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
+            $c->add('github_login',0,'select',4,1,1,271,TRUE);
+            $c->add('github_consumer_key','not configured yet','text',4,1,NULL,272,TRUE);
+            $c->add('github_consumer_secret','not configured yet','text',4,1,NULL,273,TRUE);
 
             $current_fusion_version = '1.4.1';
         default:
@@ -1866,7 +1869,10 @@ function INST_resyncConfig() {
     $c->sync('microsoft_login',0,'select',4,1,1,250,TRUE);
     $c->sync('microsoft_consumer_key','not configured yet','text',4,1,NULL,260,TRUE);
     $c->sync('microsoft_consumer_secret','not configured yet','text',4,1,NULL,270,TRUE);
-    $c->sync('aftersave_user','item','select',4,1,9,280,TRUE);
+    $c->sync('github_login',0,'select',4,1,1,280,TRUE);
+    $c->sync('github_consumer_key','not configured yet','text',4,1,NULL,290,TRUE);
+    $c->sync('github_consumer_secret','not configured yet','text',4,1,NULL,300,TRUE);
+    $c->sync('aftersave_user','item','select',4,1,9,310,TRUE);
 
     $c->sync('fs_spamx', NULL, 'fieldset', 4, 2, NULL, 0, TRUE);
     $c->sync('spamx',128,'text',4,2,NULL,10,TRUE);
@@ -2018,6 +2024,10 @@ function INST_resyncConfig() {
     $c->sync('fs_htmlfilter', NULL, 'fieldset', 7, 5, NULL, 0, TRUE);
     $c->sync('allow_embed_object',TRUE,'select',7,5,1,10,TRUE);
     $c->sync('skip_html_filter_for_root',0,'select',7,5,0,20,TRUE);
+    $c->sync('htmlfilter_default','p,b,a,i,strong,em,br','text',7,5,NULL,30,true);
+    $c->sync('htmlfilter_comment','p,b,a,i,strong,em,br,tt,hr,li,ol,ul,code,pre','text',7,5,NULL,35,TRUE);
+    $c->sync('htmlfilter_story','p,b,a,i,strong,em,br,tt,hr,li,ol,ul,code,pre,blockquote,img','text',7,5,NULL,40,TRUE);
+    $c->sync('htmlfilter_root','div,span,table,tr,td,th','text',7,5,NULL,50,TRUE);
 
     $c->sync('fs_censoring', NULL, 'fieldset', 7, 6, NULL, 0, TRUE);
     $c->sync('censormode',1,'select',7,6,23,10,TRUE);
