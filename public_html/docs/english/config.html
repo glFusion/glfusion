@@ -497,12 +497,7 @@ ability to send a story by email. It will also hide the email icon from
 stories and the &#8220;Email Article To a Friend&#8221; from the Story
 Options block. </td>
 </tr>
-<tr>
-<td><a name="desc_digg_enabled"></a>Show
-Digg.com Links</td>
-<td>If set to true, this will add a small Submit Story to
-Digg icon next to the Email and Print icons at the top of the story.</td>
-</tr>
+
 <tr class="row6">
 <td class="col0 leftalign"><a name="desc_hideprintericon">Hide Print Icon</a> </td>
 <td class="col1 leftalign">When set to 1, this will
@@ -716,23 +711,7 @@ others. </td>
 <td class="col1 leftalign">Default theme to use on
 the site </td>
 </tr>
-<tr class="row1">
-<td class="col0 leftalign"><a name="desc_menu_elements">Menu Elements</a> </td>
-<td class="col1 leftalign">If no Menu Builder Navigation menu exists
-for the site header, glFusion will fall back to using the legacy
-Geeklog style menu. Menu Elements specifies which entries
-are displayed
-in the site's menu bar (if your theme uses the {menu_elements} variable
-to display the menu bar). Can be any combination of 'home',
-'contribute', 'calendar', 'search', 'directory', 'prefs', 'plugins',
-and 'custom' where 'plugins' is the same as the {plg_menu_elements}
-variable, i.e. a list of the menu entries provided by plugins, and
-'custom' displays the entries returned by a custom function
-CUSTOM_menuEntries (see lib-custom.php for details, and
-public_html/layout/nouveau/header.thtml for {menu_elements} tag usage
-as a fallback if there is no Navigation menu specified in Menu
-Builder). </td>
-</tr>
+
 <tr class="row2">
 <td class="col0 leftalign"><a name="desc_path_themes">Themes Path</a> </td>
 <td class="col1 leftalign">Directory where all
@@ -960,7 +939,10 @@ entries by plugins from the What's New block. </td>
 <td class="col0 leftalign"><a name="desc_title_trim_length">Title Trim Length</a> </td>
 <td class="col1 leftalign">Max. length of the title
 of items listed in the What's New block. </td>
-</tr>
+</tr><tr><td><a name="desc_whatsnew_cache_time"></a>Time between forced rebuild of the What's New cache in seconds</td><td>The
+number of seconds that the cache file for What's New will live.
+&nbsp;For example, if you set this to 3600, this is 60 minutes - which
+means the What's New block will be rebuilt every hour.</td></tr>
 </tbody>
 </table>
 </div>
@@ -1158,11 +1140,14 @@ Please refer to our <a href="http://www.glfusion.org/wiki/glfusion:remoteauth:go
 <tr class="row24">
 <td class="col0 leftalign"><a name="desc_google_consumer_secret">Google OAuth Consumer Secret</a></td>
 <td class="col1 leftalign">Required to use the Google OAuth login method. Please visit the
-<a href="http://code.google.com/apis/console" target="_blank">Google Application Page</a> to create a
-Twitter Consumer Secret string that is specific to your site/URL. Please refer to our
+<a href="http://code.google.com/apis/console" target="_blank">Google Application Page</a> to create a Google Consumer Secret string that is specific to your site/URL. Please refer to our
 <a href="http://www.glfusion.org/wiki/glfusion:remoteauth:google" target="_blank">glFusion OAuth Authentication for Google wiki page</a> for more information.</td>
 </tr>
-<tr class="row25">
+<tr><td><a name="desc_microsoft_login"></a>Enable Microsoft OAuth Login Method</td><td>Allow (when set to true) users to login to the site using their Microsoft Live
+account credentials. <b>Note:</b> You must create a Microsoft Consumer Key and Consumer Secret for
+your site.</td></tr><tr><td><a name="desc_microsoft_consumer_key"></a>Microsoft OAuth Consumer Key</td><td>Required to use the Microsoft OAuth login method. Please visit the <a href="https://manage.dev.live.com/AddApplication.aspx" target="_blank">Microsoft Application Page</a> to create a Microsoft Consumer Key string that is specific to your site/URL.
+Please refer to our<a href="http://www.glfusion.org/wiki/glfusion:remoteauth:microsoft" target="_blank"> glFusion OAuth Authentication for Microsoft wiki page</a> for more information.</td></tr><tr><td><a name="desc_microsoft_consumer_secret"></a>Microsoft Oauth Consumer Secret</td><td>Required to use the Microsoft OAuth login method. Please visit the <a href="https://manage.dev.live.com/AddApplication.aspx" target="_blank">Microsoft Application Page</a> to create a Microsoft Consumer Secret string that is specific to your site/URL. Please refer to our
+<a href="http://www.glfusion.org/wiki/glfusion:remoteauth:microsoft" target="_blank">glFusion OAuth Authentication for Microsoft wiki page</a> for more information.</td></tr><tr><td><a name="desc_github_login"></a>Enable Github OAuth Login</td><td>Allow (when set to true) users to login to the site using their Github account. &nbsp;<span style="font-weight: bold;">Note:</span> You must create a Github Client ID and Client Secret for your site. </td></tr><tr><td><a name="desc_github_consumer_key"></a>Github Client ID</td><td>Required to use the Github login method. Please visit the <a href="https://github.com/settings/applications/new" target="_blank">Github Application Page</a>&nbsp;to create the Client ID.</td></tr><tr><td><a name="desc_github_consumer_secret"></a>Github Client Secret</td><td>Required to use the Github login method. &nbsp;Please visit the <a href="https://github.com/settings/applications/new" target="_blank">Github Application Page </a>to create the Client Secret.</td></tr><tr class="row25">
 <td class="col0 leftalign"><a name="desc_aftersave_user">After Saving User</a> </td>
 <td class="col1 leftalign">Which page to go to after
 a user has been saved: <br />
@@ -1438,13 +1423,7 @@ future.</td>
 <td>Select the default postmode for comments.</td>
 </tr>
 
-<tr>
-<td><a name="desc_comment_editor"></a>Comment Editor</td>
-<td>Select the type of editor to use for comments.  Options are Text Box which
-    uses a standard HTML text box for both HTML and text comments. WYSIWYG will display
-    the advanced What You See is What You Get editor.
-    </td>
-</tr>
+
 
 <tr>
 <td><a name="desc_article_comment_close_days"></a>Days
@@ -2029,7 +2008,7 @@ Filtering</a></h2>
 <td class="col1 leftalign">Allow the EMBED object in
 HTML stories
 and posts. &nbsp;This allows you to embed YouTube videos and other
-streaming videos in stories. </td>
+streaming videos in stories. (Obsolete). </td>
 </tr>
 <tr class="row3">
 <td class="col0 leftalign"><a name="desc_skip_html_filter_for_root">Skip HTML Filter for
@@ -2037,8 +2016,8 @@ Root</a> </td>
 <td class="col1 leftalign">When set to TRUE, this
 will allow members of the Root group to use all <acronym title="HyperText Markup Language">HTML</acronym> in
 their posts. Use at your own risk! </td>
-</tr>
-</tbody>
+</tr><tr><td><a name="desc_htmlfilter_default"></a>Default set of allowed HTML</td><td>The default HTML tags that are allowed.</td></tr>
+<tr><td><a name="desc_htmlfilter_comment"></a>HTML allowed in comments</td><td>The set of HTML tags allowed when entering comments - a comma separted list</td></tr><tr><td><a name="desc_htmlfilter_story"></a>HTML allowed in stories</td><td>The set of HTML tags allowed when entering stories - a comma separated list.</td></tr><tr><td><a name="desc_htmlfilter_root"></a>Additional HTML allowed for Root users</td><td>Additional HTML tags that are only allowed for Root users - a comma separated list.</td></tr></tbody>
 </table>
 </div>
 <h2><a name="misc_censoring" id="censoring">Censoring</a></h2>
@@ -2370,8 +2349,20 @@ example, if they are behind a proxy server farm.</td></tr><tr><td>use_direct_sty
 call the style / JS cache files. &nbsp;If loading the PHP processor on
 your site adds additional load to your web server, you can skip that
 process and load the cache files directly from the htmlheader.thtml
-template.</td></tr>
-</tbody>
+template.</td></tr><tr><td>html_filter</td><td>htmlpurifier</td><td>Select
+which HTML filtering engine to use - HTMLPurifier provides stricter
+filtering and HTML compliance, but it also requires a site be running
+with pure UTF-8 content. If there is an issue,<span style="font-weight: bold;"> htmlawed</span> is another excellent filter, but it does not enforce strict HTML compliance as well.</td></tr><tr><td>debug_oauth</td><td>false</td><td>OAuth
+debug - Display detailed message from Oauth authentication.&nbsp;If
+this is set to true - verbose log messages of the Oauth login process
+will be logged to the glFusion error.log file. This option is useful
+if&nbsp;you are experiencing issues with any of the Oauth protocols.</td></tr><tr><td>admin_session</td><td>1200</td><td>The number of seconds the administrative session will be valid. &nbsp;Set this to 0 to disable admin access re-authentication.</td></tr>
+<tr><td>verification_token_ttl</td><td>86400</td><td>The number of seconds that the registration verification token is valid. The default is 24 hours (86400 seconds).&nbsp;&nbsp; </td></tr><tr><td>token_ip</td><td>false</td><td>Use
+IP address to validate tokens instead of referring URL. By default,
+glFusion will use the referrer URL to validate security tokens. In some
+cases, the browser may not send this data, so you can use the remote IP
+as the check. If this value is set to true, the IP address will be
+checked instead of the referring URL.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td></tr></tbody>
 </table>
 </div>
 <h1><a name="calendar_plugin_configuration_options" id="calendar_plugin_configuration_options">Calendar Plugin
@@ -2762,7 +2753,7 @@ in web services feed.</td>
 <!-- end of gl_wrapper -->
 <div id="gl_footer">
 <p><a href="http://www.glfusion.org">glFusion Project</a>
-- Updated 2014-04-17</p>
+- Updated 2014-04-21</p>
 </div>
 <!-- end of gl_footer--> </div>
 <!-- end of gl_container -->
