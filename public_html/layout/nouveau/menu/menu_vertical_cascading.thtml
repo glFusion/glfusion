@@ -6,7 +6,11 @@
 <!-- BEGIN Elements -->
   <li>
   {!if haschildren}
+    {!if url}
+     <a class="parent" href="{url}">
+    {!else}
      <a class="parent" href="#">
+    {!endif}
   {!else}
    <a href="{url}" {target}>
   {!endif}

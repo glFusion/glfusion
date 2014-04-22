@@ -24,7 +24,11 @@ window.addEvent('load', function() {
 <!-- BEGIN Elements -->
   <li>
 {!if haschildren}
-     <a class="parent" href="#">
+    {!if url}
+        <a class="parent" href="{url}">
+    {!else}
+        <a class="parent" href="#">
+    {!endif}
 {!else}
      <a href="{url}" {target}>
 {!endif}
