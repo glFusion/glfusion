@@ -4,6 +4,7 @@ v1.4.1
 ------
 - Several stability improvements
 - Improved URL filtering
+- Fixed issue where sub menus with URLs did not use the defined URL
 - Added Github oauth authentication
 - Stories under what's new block now display the time interval
 - Older Stories block did not display the proper date
