@@ -37,6 +37,12 @@ function install_config($site_url)
 {
     global $_CONF, $_TABLES;
 
+    if (preg_match("@^https?://@",$site_url)) {
+        $cookiesecure = 1;
+    } else {
+        $cookiesecure = 0;
+    }
+
     $c = config::get_instance();
 
     // Subgroup: Site
@@ -361,7 +367,7 @@ function install_config($site_url)
     $c->add('session_cookie_timeout',7200,'text',7,1,NULL,90,TRUE);
     $c->add('cookie_path','/','text',7,1,NULL,100,TRUE);
     $c->add('cookiedomain','','text',7,1,NULL,110,TRUE);
-    $c->add('cookiesecure',FALSE,'select',7,1,1,120,TRUE);
+    $c->add('cookiesecure',$cookiesecure,'select',7,1,1,120,TRUE);
 
     $c->add('fs_misc', NULL, 'fieldset', 7, 2, NULL, 0, TRUE);
     $c->add('notification',array(),'%text',7,2,NULL,10,TRUE);
