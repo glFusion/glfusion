@@ -131,7 +131,7 @@ $config->load_baseconfig();
 $config->initConfig();
 
 $_CONF = $config->get_config('Core');
-
+if ( $_CONF['cookiesecure']) @ini_set('session.cookie_secure','1');
 $result = DB_query("SELECT * FROM {$_TABLES['vars']}");
 while ($row = DB_fetchArray($result) ) {
     $_VARS[$row['name']] = $row['value'];
