@@ -531,7 +531,7 @@ function SESS_completeLogin($uid)
 	if (isset($_COOKIE[$_CONF['cookie_session']])) {
 		$cookie_domain = $_CONF['cookiedomain'];
 		$cookie_path   = $_CONF['cookie_path'];
-		setcookie($_COOKIE[$_CONF['cookie_session']],'', time()-42000, $cookie_path, $cookie_domain);
+		setcookie($_COOKIE[$_CONF['cookie_session']],'', time()-42000, $cookie_path, $cookie_domain,$_CONF['cookiesecure'],true);
 	}
 
     session_id($sessid);
