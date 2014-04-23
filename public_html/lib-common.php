@@ -5047,7 +5047,7 @@ function COM_getCurrentURL()
         }
     }
     $filter = sanitizer::getInstance();
-    $thisUrl = urlencode($filter->sanitizeURL($thisUrl));
+    $thisUrl = $filter->sanitizeURL($thisUrl);
     return $thisUrl;
 }
 
