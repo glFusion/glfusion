@@ -1,40 +1,12 @@
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | common.js                                                                |
-// |                                                                          |
-// | Commmon javascript functions                                             |
-// +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2005-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors:   Blaine Lang - blaine@portalparts.com                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-
-// -------------------------------------------------------------------
-// caItems(form object)
-// Check All Items - generic function that can be used to check and un-check all items in a list
-// Used in the Admin Lists - like on the moderation page
-// -------------------------------------------------------------------
+/*
+ * glFusion CMS
+ *
+ * @license Copyright (c) 2005-2008, Blaine Lang. All rights reserved.
+ * @license Copyright (c) 2008-2014, Mark R. Evans. All rights reserved.
+ * Licensed under the terms of the GNU General Public License
+ * 		http://www.opensource.org/licenses/gpl-license.php
+ *
+ */
    function caItems(f, name) {
        var n=f.elements.length;
        for (i=0;i<n; i++) {
@@ -113,7 +85,7 @@
     function doubleconfirm( msg1, msg2 ) {
         return confirm(msg1) && confirm(msg2);
     }
-    
+
     //widget wrapper iframe buster (load links to parent site in parent window)
     if (top.location != location) {
         top.location.href = document.location.href;
