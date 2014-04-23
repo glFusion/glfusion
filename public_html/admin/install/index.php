@@ -34,7 +34,7 @@
 // +--------------------------------------------------------------------------+
 
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
-
+@ini_set('opcache.enable','0');
 if (!defined('GVERSION')) {
     define('GVERSION', '1.4.1');
 }
@@ -401,16 +401,6 @@ function INST_getPathSetting()
     }
 
     $_GLFUSION['currentstep'] = 'pathsetting';
-
-/* --- Allow user to create an existing siteconfig.php with the necessary permissions
-
-    if ( isset($_GLFUSION['method']) && $_GLFUSION['method'] == 'install' ) {
-        // if it isn't there, ask again...
-        if ( @file_exists('../../siteconfig.php') ) {
-            return _displayError(SITECONFIG_EXISTS,'');
-        }
-    }
------------- */
 
     $fusion_path    = strtr(__FILE__, '\\', '/'); // replace all '\' with '/'
     for ($i = 0; $i < 4; $i++) {
@@ -1382,13 +1372,7 @@ function INST_installAndContentPlugins()
         return _displayError(SITECONFIG_NOT_WRITABLE,'getsiteinformation');
     }
     fclose ($siteconfig_file);
-
-    global $_CONF, $_SYSTEM;
-    require $siteconfig_path;  // this should reset the path data - doesn't seem to work on qa.
-
-    $_CONF['path'] = str_replace('db-config.php', '', $_PATH['dbconfig_path']);
-    $_CONF['path_system'] = $_CONF['path'] . 'system/';
-    $_CONF['default_charset'] = $charset;
+    require $siteconfig_path;
 
     $config_file = $_GLFUSION['dbconfig_path'].'db-config.php';
 
@@ -1420,74 +1404,13 @@ function INST_installAndContentPlugins()
     if (!fwrite($dbconfig_file, $dbconfig_data)) {
         return _displayError(DBCONFIG_NOT_WRITABLE,'getsiteinformation');
     }
+    fflush($dbconfig_file);
     fclose($dbconfig_file);
 
-    $T = new TemplateLite('templates/');
-    $T->set_file('page','contentplugins.thtml');
+    require $config_file;
 
-    $T->set_var(array(
-        'lang_content_plugins'      =>  $LANG_INSTALL['content_plugins'],
-        'lang_load_sample_content'  =>  $LANG_INSTALL['load_sample_content'],
-        'lang_samplecontent_desc'   =>  $LANG_INSTALL['samplecontent_desc'],
-        'lang_calendar'             =>  $LANG_INSTALL['calendar'],
-        'lang_filemgmt'             =>  $LANG_INSTALL['filemgmt'],
-        'lang_mediagallery'         =>  $LANG_INSTALL['mediagallery'],
-        'lang_forum'                =>  $LANG_INSTALL['forum'],
-        'lang_polls'                =>  $LANG_INSTALL['polls'],
-        'lang_links'                =>  $LANG_INSTALL['links'],
-        'lang_calendar_desc'        =>  $LANG_INSTALL['calendar_desc'],
-        'lang_filemgmt_desc'        =>  $LANG_INSTALL['filemgmt_desc'],
-        'lang_mediagallery_desc'    =>  $LANG_INSTALL['mediagallery_desc'],
-        'lang_forum_desc'           =>  $LANG_INSTALL['forum_desc'],
-        'lang_polls_desc'           =>  $LANG_INSTALL['polls_desc'],
-        'lang_links_desc'           =>  $LANG_INSTALL['links_desc'],
-        'lang_next'                 =>  $LANG_INSTALL['next'],
-        'hiddenfields'              => _buildHiddenFields(),
-    ));
-
-    $T->parse('output','page');
-    return $T->finish($T->get_var('output'));
-}
-
-
-/**
- * Installs optional plugins and content
- *
- * @note redirects to success page.
- *
- */
-function INST_doPluginInstall()
-{
-    global $_GLFUSION, $_SYSTEM, $_CONF, $_TABLES, $_DB, $_DB_dbms,
-           $_DB_host, $_DB_user,$_DB_pass, $site_url,$_DB_table_prefix,
-           $LANG_INSTALL;
-
-    $site_url = $_CONF['site_url'];
-    $language = $_GLFUSION['language'];
-
-    $_PATH['dbconfig_path'] = $_GLFUSION['dbconfig_path'];
-    $_PATH['public_html']   = INST_getHtmlPath();
-    if (!preg_match('/^.*\/$/', $_PATH['public_html'])) {
-        $_PATH['public_html'] .= '/';
-    }
-    $dbconfig_path = str_replace('db-config.php', '', $_PATH['dbconfig_path']);
-    $siteconfig_path = $_PATH['public_html'] . 'siteconfig.php';
-
-    include '../../siteconfig.php';
-    include $_CONF['path'].'db-config.php';
-
-/*---
-    global $_DB_host, $_DB_name, $_DB_user, $_DB_pass, $_DB_dbms, $_DB_table_prefix;
-
-    $_DB_host = $_GLFUSION['db_host'];
-    $_DB_name = $_GLFUSION['db_name'];
-    $_DB_user = $_GLFUSION['db_user'];
-    $_DB_pass = $_GLFUSION['db_pass'];
-    $_DB_table_prefix = $_GLFUSION['db_prefix'];
-    $_DB_dbms = $_GLFUSION['db_type'];
---- */
-    if ( !file_exists($_CONF['path'].'system/lib-database.php') ) {
-        return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
+    if ( !file_exists($_CONF['path_system'].'lib-database.php') ) {
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error code: ' . __LINE__);
     }
     require $_CONF['path_system'].'lib-database.php';
     if ( $_DB_dbms == 'mysqli' ) $_DB_dbms = 'mysql';
@@ -1587,6 +1510,7 @@ function INST_doPluginInstall()
     }
     require $_CONF['path_html'].'lib-common.php';
     if ( $_DB_dbms == 'mysqli') $_DB_dbms = 'mysql';
+
     INST_pluginAutoInstall('bad_behavior2');
     INST_pluginAutoInstall('captcha');
     INST_pluginAutoInstall('ckeditor');
@@ -1597,10 +1521,54 @@ function INST_doPluginInstall()
     $config->_purgeCache();
     INST_clearCache();
 
+    $T = new TemplateLite('templates/');
+    $T->set_file('page','contentplugins.thtml');
+
+    $T->set_var(array(
+        'lang_content_plugins'      =>  $LANG_INSTALL['content_plugins'],
+        'lang_load_sample_content'  =>  $LANG_INSTALL['load_sample_content'],
+        'lang_samplecontent_desc'   =>  $LANG_INSTALL['samplecontent_desc'],
+        'lang_calendar'             =>  $LANG_INSTALL['calendar'],
+        'lang_filemgmt'             =>  $LANG_INSTALL['filemgmt'],
+        'lang_mediagallery'         =>  $LANG_INSTALL['mediagallery'],
+        'lang_forum'                =>  $LANG_INSTALL['forum'],
+        'lang_polls'                =>  $LANG_INSTALL['polls'],
+        'lang_links'                =>  $LANG_INSTALL['links'],
+        'lang_calendar_desc'        =>  $LANG_INSTALL['calendar_desc'],
+        'lang_filemgmt_desc'        =>  $LANG_INSTALL['filemgmt_desc'],
+        'lang_mediagallery_desc'    =>  $LANG_INSTALL['mediagallery_desc'],
+        'lang_forum_desc'           =>  $LANG_INSTALL['forum_desc'],
+        'lang_polls_desc'           =>  $LANG_INSTALL['polls_desc'],
+        'lang_links_desc'           =>  $LANG_INSTALL['links_desc'],
+        'lang_next'                 =>  $LANG_INSTALL['next'],
+        'hiddenfields'              => _buildHiddenFields(),
+    ));
+
+    $T->parse('output','page');
+    return $T->finish($T->get_var('output'));
+}
+
+
+/**
+ * Installs optional plugins and content
+ *
+ * @note redirects to success page.
+ *
+ */
+function INST_doPluginInstall()
+{
+    global $_GLFUSION, $_CONF, $_TABLES, $_DB_table_prefix;
+
+    $site_url = $_CONF['site_url'];
+    $language = $_GLFUSION['language'];
+
     $pluginsToInstall = $_POST['plugin'];
     if ( is_array($pluginsToInstall) ) {
         foreach ($pluginsToInstall AS $plugin => $settings ) {
             $rc = INST_pluginAutoInstall($plugin);
+            if ( $rc === false ) {
+                return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__ );
+            }
         }
     }
     if ( isset($_POST['installdefaultdata']) ) {
@@ -1899,6 +1867,7 @@ switch($mode) {
         $pageBody = INST_installAndContentPlugins();
         break;
     case 'installplugins' :
+        require '../../lib-common.php';
         $pageBody = INST_doPluginInstall();
         break;
     case 'startupgrade' :
@@ -1947,7 +1916,7 @@ switch($mode) {
     case 'dopluginupgrade' :
         require '../../lib-common.php';
         $pageBody = INST_doPrePluginUpgrade();
-        $pageBody = INST_doPluginUpgrade();
+        $pageBody .= INST_doPluginUpgrade();
         break;
     case 'done' :
         $method = $_GLFUSION['method'];

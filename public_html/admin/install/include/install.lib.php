@@ -1348,8 +1348,7 @@ function INST_pluginAutoInstall( $plugin )
     $ret = false;
 
     if ( !@file_exists($_CONF['path'] . '/system/lib-install.php') ) {
-        echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
-        exit;
+        return false;
     }
     require_once $_CONF['path'] . '/system/lib-install.php';
 
