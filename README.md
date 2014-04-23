@@ -1,8 +1,15 @@
 ## glFusion CMS
 
-glFusion CMS is a content management and publishing system. It can be utilized as a content management system, a content publishing system, a collaboration system, and even an application development framework. Regardless how you use it, glFusion CMS provides all the tools necessary to quickly create and maintain a content driven web site. glFusion CMS also provides a rich application development environment.
+glFusion CMS is a content management and publishing system. It can be utilized
+as a content management system, a content publishing system, a collaboration
+system, and even an application development framework. Regardless how you use
+it, glFusion CMS provides all the tools necessary to quickly create and
+maintain a content driven web site. glFusion CMS also provides a rich
+application development environment.
 
-glFusion CMS is well organized and provides a very powerful system that is extremely easy to use. glFusion CMS powers everything from personal blogs, to high volume community discussion sites, and almost everything
+glFusion CMS is well organized and provides a very powerful system that is
+extremely easy to use. glFusion CMS powers everything from personal blogs, to
+high volume community discussion sites, and almost everything
 in between.
 
 ## Features
@@ -23,25 +30,35 @@ in between.
 
 ## Documentation
 
-Please head over to our documentation wiki at http://www.glfusion.org/wiki/glfusion:start for all the details on how to install, extend and use the glFusion CMS.
+Please head over to our documentation wiki at
+http://www.glfusion.org/wiki/glfusion:start for all the details on how to
+install, extend and use the glFusion CMS.
 
 ## Support
 
-The best support method for glFusion CMS is the glFusion Web Site located at http://www.glfusion.org.  There is an active community ready to help out.
+The best support method for glFusion CMS is the glFusion Web Site located at
+http://www.glfusion.org.  There is an active community ready to help out.
 
-The glFusion CMS documentation is at http://www.glfusion.org/wiki/glfusion:start.
+The glFusion CMS documentation is located at
+http://www.glfusion.org/wiki/glfusion:start.
 
-The mailing list for announcements is glfusion-announce@freelists.org. You can subscribe at http://www.freelists.org/list/glfusion-announce. This list is an extremely low traffic mailing list.
+The mailing list for announcements is glfusion-announce@freelists.org. You can
+subscribe at http://www.freelists.org/list/glfusion-announce. This list is an
+extremely low traffic mailing list.
 
-The mailing list for development discussion is glfusion-development@freelists.org. You can subscribe at http://www.freelists.org/list/glfusion-development.
+The mailing list for development discussions is
+glfusion-development@freelists.org. You can subscribe at
+http://www.freelists.org/list/glfusion-development.
 
 ## System Requirements and Installation
 
-Visit the glFusion Wiki at http://www.glfusion.org/wiki/glfusion:start for the latest in requirements, installation, and upgrade documentation.
+Visit the glFusion Wiki at http://www.glfusion.org/wiki/glfusion:start for the
+latest in requirements, installation, and upgrade documentation.
 
 ## Demo
 
-You can visit our demo site to become familiar with the basic features of glFusion.
+You can visit our demo site to become familiar with the basic features of
+glFusion.
 
 http://demo.glfusion.org
 
