@@ -473,12 +473,14 @@ class menuElement {
                 }
                 break;
             case ET_FUSION_MENU :
+                $this->url = '';
                 switch ($this->subtype) {
                     case USER_MENU :
                         $item_array = getUserMenu();
                         break;
 
                     case ADMIN_MENU :
+                        $this->url = $_CONF['site_admin_url'];
                         $item_array = getAdminMenu();
                         break;
 
