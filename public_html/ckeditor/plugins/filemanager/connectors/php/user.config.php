@@ -133,9 +133,9 @@ $fmconfiguration = array(
     ),
     "edit" =>  array(
         "enabled" =>  $_CK_CONF['filemanager_edit_enabled'],
-        "lineNumbers" =>  $_CK_CONF['filemanager_editor_linenumbers'],
-        "lineWrapping" =>  $_CK_CONF['filemanager_editor_linewrapping'],
-        "codeHighlight" =>  $_CK_CONF['filemanager_editor_codehighlight'],
+        "lineNumbers" =>  $_CK_CONF['filemanager_edit_linenumbers'],
+        "lineWrapping" =>  $_CK_CONF['filemanager_edit_linewrapping'],
+        "codeHighlight" =>  $_CK_CONF['filemanager_edit_codehighlight'],
         "theme" =>  "elegant",
         "editExt" =>  explode(',',$_CK_CONF['filemanager_edit_editext'])
     ),
