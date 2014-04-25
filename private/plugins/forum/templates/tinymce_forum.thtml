@@ -1,4 +1,4 @@
-<script type="text/javascript" src="{site_url}/tinymce/tinymce.js" ></script >
+<script type="text/javascript" src="{site_url}/tinymce/tinymce.min.js" ></script >
 <script type="text/javascript" >
 function won (id) {
     tinymce.execCommand('mceAddEditor', false, id);
