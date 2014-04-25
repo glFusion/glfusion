@@ -54,7 +54,7 @@ if ( !isset($_SYSTEM['admin_session']) ) {
 }
 
 // determine the destination of this request
-$destination = urlencode(COM_getCurrentURL());
+$destination = COM_getCurrentURL();
 
 // validate the destination is not blank and is part of our site...
 if ( $destination == '' ) {

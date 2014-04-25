@@ -1905,6 +1905,10 @@ function SEC_reauthform($desturl, $message = '',$method = '', $postdata = '', $g
     $hidden .= '<input type="hidden" name="token_filedata" value="'.urlencode($filedata).'"/>' . LB;
     $hidden .= '<input type="hidden" name="token_requestmethod" value="'.$method.'"/>' . LB;
 
+    $quotes = array('/"/',"/'/");
+    $replacements = array('%22','%27');
+    $desturl = preg_replace($quotes,$replacements,$desturl);
+
     $options = array(
         'forgotpw_link'   => false,
         'newreg_link'     => false,

@@ -462,6 +462,8 @@ class sanitizer
     {
         global $_CONF;
 
+        $url = filter_var($url, FILTER_VALIDATE_URL);
+
         if ( empty( $allowed_protocols )) {
             $allowed_protocols = $_CONF['allowed_protocols'];
         } else if ( !is_array( $allowed_protocols )) {
