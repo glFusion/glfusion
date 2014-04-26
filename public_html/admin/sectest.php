@@ -358,7 +358,7 @@ if (empty ($LANG_DIRECTION)) {
 
 $display .= '<p>To stay informed about new glFusion releases and possible '
     . 'security issues, we suggest that you subscribe to the (low-traffic) '
-    . COM_createLink('glfusion-announce', 'https://lists.sourceforge.net/lists/listinfo/glfusion-announce')
+    . COM_createLink('glfusion-announce', 'http://www.freelists.org/list/glfusion-announce')
     . ' mailing list and/or use the ' . $versioncheck
     . ' option in your Admin menu from time to time to check for available updates.</p>';
 
