@@ -735,25 +735,6 @@ function plugin_savesubmission_calendar($A)
     return $retval;
 }
 
-function plugin_getheadercode_calendar()
-{
-    global $_CONF, $themeAPI;
-
-    if ( $themeAPI > 1 ) {
-        return;
-    }
-
-    $str = null;
-
-    // use the CSS only if we are on the plugin's pages
-    if (substr_count ($_SERVER['PHP_SELF'], '/calendar/') > 0) {
-        $str = '<link rel="stylesheet" type="text/css" href="'
-             . $_CONF['site_url'] . '/calendar/style.css"/>';
-    }
-
-    return $str;
-}
-
 function plugin_getheadercss_calendar()
 {
     global $_CONF;
