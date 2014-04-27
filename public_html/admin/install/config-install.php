@@ -37,7 +37,7 @@ function install_config($site_url)
 {
     global $_CONF, $_TABLES;
 
-    if (preg_match("@^https?://@",$site_url)) {
+    if (preg_match("@^https://@",$site_url)) {
         $cookiesecure = 1;
     } else {
         $cookiesecure = 0;
