@@ -197,7 +197,6 @@ function plugin_templatesetvars_captcha($ctype, &$template)
         // option controlling it, and we should just clear the 'captcha' template var
 
         default :
-            $template->set_var('captcha', '');
             return;
             break;
     }
