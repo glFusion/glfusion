@@ -434,10 +434,6 @@ if (file_exists($_CONF['path_layout'] . 'custom/functions.php') ) {
     require_once $_CONF['path_layout'] . 'functions.php';
 }
 
-if (!isset($themeAPI) ) {
-    $themeAPI = 1;
-}
-
 // ensure XHTML constant is defined to avoid problems elsewhere
 
 if (!defined('XHTML')) {
@@ -861,7 +857,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 {
     global $_CONF, $_SYSTEM, $_VARS, $_TABLES, $_USER, $LANG01, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $theme_what, $theme_pagetitle,
-           $theme_headercode, $theme_layout,$mbMenu,$themeAPI;
+           $theme_headercode, $theme_layout;
 
     if ( !isset($_USER['theme']) || $_USER['theme'] == '' ) {
         $_USER['theme'] = $_CONF['theme'];
@@ -1084,8 +1080,8 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG12, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $_PAGE_TIMER, $theme_what,
-           $theme_pagetitle, $theme_headercode, $theme_layout,$mbMenuConfig,
-           $_LOGO,$mbMenu, $themeAPI,$uiStyles;
+           $theme_pagetitle, $theme_headercode, $theme_layout,
+           $_LOGO,$uiStyles;
 
     COM_hit();
 
@@ -1350,7 +1346,6 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_var(array(
                 'meta-header'  => $outputHandle->renderHeader('meta'),
                 'css-header'   => $outputHandle->renderHeader('style'),
-                'js-header'    => $outputHandle->renderHeader('script'),
                 'raw-header'   => $outputHandle->renderHeader('raw'),
     ));
 
@@ -6264,7 +6259,6 @@ function CTL_clearCache($plugin='')
 function css_out()
 {
     global $_CONF, $_SYSTEM, $_VARS, $_USER, $_PLUGINS, $_TABLES;
-    global $mbMenu, $themeAPI, $themeStyle;
 
     if ( !isset($_CONF['css_cache_filename']) ) {
         $_CONF['css_cache_filename'] = 'stylecache_';
@@ -6432,7 +6426,7 @@ function css_comment_cb( $matches )
 
 function js_out()
 {
-    global $_CONF, $_SYSTEM, $_USER, $_PLUGINS, $themeAPI;
+    global $_CONF, $_SYSTEM, $_USER, $_PLUGINS;
 
     if ( !isset($_CONF['js_cache_filename']) ) {
         $_CONF['js_cache_filename'] = 'jscache_';
@@ -6455,20 +6449,16 @@ function js_out()
 
     );
 
-    if ( !isset($_SYSTEM['disable_mootools']) || $_SYSTEM['disable_mootools'] == false ) {
-        $files[] = $_CONF['path_html'] . 'javascript/mootools/mootools-release-1.11.packed.js';
-        $files[] = $_CONF['path_html'] . 'javascript/fValidator.js';
-        $files[] = $_CONF['path_html'] . 'javascript/mootools/gl_mooreflection.js';
-        $files[] = $_CONF['path_html'] . 'javascript/mootools/gl_moomenu.js';
-        $files[] = $_CONF['path_html'] . 'javascript/mootools/moorating.js';
-    }
+    // need to parse the outputhandler to see if there are any js scripts to load
 
-    if ( $themeAPI < 2 ) {
-        $files[] = $_CONF['path_html'] . 'javascript/sitetailor_ie6vertmenu.js';
+    $outputHandle = outputHandler::getInstance();
+    $headerscripts = $outputHandle->getScripts();
+    foreach ($headerscripts as $s ) {
+        $files[] = $s;
     }
 
     /*
-     * Check to see if the theme has any JavaScript to include...
+     * Check to see if the theme has any JavaScript to include... (depreciate)
      */
 
     $function = 'theme_themeJS';
@@ -6483,8 +6473,9 @@ function js_out()
     }
 
     /*
-     * Check to see if there are any custom javascript files to include
+     * Check to see if there are any custom javascript files to include (depreciate)
      */
+
     if ( function_exists( 'CUSTOM_js' )) {
         $jTheme = CUSTOM_js( );
         if ( is_array($jTheme) ) {
@@ -6497,7 +6488,7 @@ function js_out()
     /*
      * Let the plugins add their JavaScript needs here...
      */
-
+// here only to support backward compatibility - use the output handler class from now on.
     if ( is_array($_PLUGINS) ) {
         foreach ( $_PLUGINS as $pi_name ) {
             if ( function_exists('plugin_getheaderjs_'.$pi_name) ) {
@@ -6516,6 +6507,7 @@ function js_out()
     /*
      * Let the plugins add any global JS variables
      */
+// here only to support backward compatibility - use the output handler class from now on.
     if (is_array($_PLUGINS) ) {
         foreach ( $_PLUGINS as $pi_name ) {
             if ( function_exists('plugin_getglobaljs_'.$pi_name) ) {
@@ -6548,15 +6540,13 @@ function js_out()
     }
 
     print "var glfusionSiteUrl = '".$_CONF['site_url']."';" . LB;
-    print "var glfusionFileRoot = '". $fileroot ."';". LB;
-/* --- remove with advanced editor
-    print "var glfusionEditorBaseUrl = '".$_CONF['site_url']."';" . LB;
-    print "var glfusionLayoutUrl     = '".$_CONF['layout_url']."';" . LB;
---- */
+    print "var glfusionFileRoot = '".$fileroot ."';". LB;
+    print "var glfusionLayoutUrl = '".$_CONF['layout_url']."';" . LB;
+    print "var site_admin_url = '".$_CONF['site_admin_url']."';" . LB;
     if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
-        print "var glfusionStyleCSS      = '".$_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'] . "';" . LB;
+        print "var glfusionStyleCSS = '".$_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'] . "';" . LB;
     } else {
-        print "var glfusionStyleCSS      = '".$_CONF['site_url']."/css.php?t=" . $_USER['theme'] . "';" . LB;
+        print "var glfusionStyleCSS = '".$_CONF['site_url']."/css.php?t=" . $_USER['theme'] . "';" . LB;
     }
 
     // send any global plugin JS vars
