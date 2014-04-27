@@ -6,9 +6,7 @@
 // |                                                                          |
 // | glFusion Browser Output Handler                                          |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2012 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -343,6 +341,21 @@ class outputHandler {
             return '';
         }
         return $this->_array_concat_recursive($this->_header[$type]);
+    }
+
+    /* return path to js files */
+    public function getScripts()
+    {
+        $js = array();
+
+        foreach ($this->_header['script'] as $priority ) {
+            if ( is_array($priority) ) {
+                foreach ($priority as $path ) {
+                    $js[] = $path;
+                }
+            }
+        }
+        return $js;
     }
 
     // PRIVATE METHODS
