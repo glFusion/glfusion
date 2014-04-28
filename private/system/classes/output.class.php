@@ -228,23 +228,18 @@ class outputHandler {
 	/**
 	 * Add a JavaScript source to a page
 	 *
-	 * This adds a javascript source file to a page - The URL should not have
+	 * This adds a javascript source file to a page - Physical path to the JS file
 	 * the <link> attribute.
 	 *
 	 * @param  string   $href       The URL to the javascript file
 	 * @param  int      $priority   Load priority
-	 * @param  string   $mime       The mime type of the stylesheet, 'text/css'
-	 *                              used if no other type passed.
      *
 	 * @access public
 	 * @return nothing
 	 */
-    public function addLinkScript($href, $priority = HEADER_PRIO_NORMAL, $mime = 'text/javascript')
+    public function addLinkScript($href, $priority = HEADER_PRIO_NORMAL)
     {
-        $link = '<script type="' . $mime . '" src="' . @htmlspecialchars($href,ENT_QUOTES, COM_getEncodingt()) . '"';
-        $link .= "></script>" . LB;
-
-        $this->_header['script'][$priority][] = $link;
+        $this->_header['script'][$priority][] = $href;
     }
 
 	/**
