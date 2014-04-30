@@ -67,6 +67,7 @@ class outputHandler {
     private $_copyrightyear;
     private $_directHeader = array();
     private $_rewriteEnabled = false;
+    private $priorities = array(HEADER_PRIO_VERYHIGH, HEADER_PRIO_HIGH, HEADER_PRIO_NORMAL, HEADER_PRIO_LOW, HEADER_PRIO_VERYLOW);
     private $_header = array(
                     'meta' => array('http-equiv' => array(), 'name' => array()),
                     'style' => array(HEADER_PRIO_VERYHIGH => array(),
@@ -75,6 +76,11 @@ class outputHandler {
                                      HEADER_PRIO_LOW => array(),
                                      HEADER_PRIO_VERYLOW => array()),
                     'script' => array(HEADER_PRIO_VERYHIGH => array(),
+                                     HEADER_PRIO_HIGH => array(),
+                                     HEADER_PRIO_NORMAL => array(),
+                                     HEADER_PRIO_LOW => array(),
+                                     HEADER_PRIO_VERYLOW => array()),
+                    'script_file' => array(HEADER_PRIO_VERYHIGH => array(),
                                      HEADER_PRIO_HIGH => array(),
                                      HEADER_PRIO_NORMAL => array(),
                                      HEADER_PRIO_LOW => array(),
@@ -228,6 +234,28 @@ class outputHandler {
 	/**
 	 * Add a JavaScript source to a page
 	 *
+	 * This adds a javascript source file to a page - The URL should not have
+	 * the <link> attribute.
+	 *
+	 * @param  string   $href       The URL to the javascript file
+	 * @param  int      $priority   Load priority
+	 * @param  string   $mime       The mime type of the stylesheet, 'text/css'
+	 *                              used if no other type passed.
+     *
+	 * @access public
+	 * @return nothing
+	 */
+    public function addLinkScript($href, $priority = HEADER_PRIO_NORMAL, $mime = 'text/javascript')
+    {
+        $link = '<script type="' . $mime . '" src="' . @htmlspecialchars($href,ENT_QUOTES, COM_getEncodingt()) . '"';
+        $link .= "></script>" . LB;
+
+        $this->_header['script'][$priority][] = $link;
+    }
+
+	/**
+	 * Add a JavaScript source to a page
+	 *
 	 * This adds a javascript source file to a page - Physical path to the JS file
 	 * the <link> attribute.
 	 *
@@ -237,9 +265,9 @@ class outputHandler {
 	 * @access public
 	 * @return nothing
 	 */
-    public function addLinkScript($href, $priority = HEADER_PRIO_NORMAL)
+    public function addScriptFile($href, $priority = HEADER_PRIO_NORMAL)
     {
-        $this->_header['script'][$priority][] = $href;
+        $this->_header['script_file'][$priority][] = $href;
     }
 
 	/**
@@ -338,12 +366,20 @@ class outputHandler {
         return $this->_array_concat_recursive($this->_header[$type]);
     }
 
-    /* return path to js files */
-    public function getScripts()
+	/**
+	 * Returns array of JS files
+	 *
+	 * Returns an array of JavaScript file names (with paths) to
+	 * all queued JS files
+	 *
+	 * @access public
+	 * @return array
+	 */
+    public function getScriptFiles()
     {
         $js = array();
 
-        foreach ($this->_header['script'] as $priority ) {
+        foreach ($this->_header['script_file'] as $priority ) {
             if ( is_array($priority) ) {
                 foreach ($priority as $path ) {
                     $js[] = $path;

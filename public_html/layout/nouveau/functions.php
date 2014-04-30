@@ -66,12 +66,12 @@ $_BLOCK_TEMPLATE['forum_menu'] = 'blockheader-left.thtml,blockfooter-left.thtml'
 
 // define the JS we need for this theme..
 $outputHandle = outputHandler::getInstance();
-$outputHandle->addLinkScript($_CONF['path_layout'].'js/mootools-release-1.11.packed.js');
-$outputHandle->addLinkScript($_CONF['path_layout'].'js/fValidator.js');
-$outputHandle->addLinkScript($_CONF['path_layout'].'js/gl_mooreflection.js');
-$outputHandle->addLinkScript($_CONF['path_layout'].'js/gl_moomenu.js');
-$outputHandle->addLinkScript($_CONF['path_layout'].'js/moorating.js');
-$outputHandle->addLinkScript($_CONF['path_layout'].'js/gltips.js');
+$outputHandle->addScriptFile($_CONF['path_layout'].'js/mootools-release-1.11.packed.js');
+$outputHandle->addScriptFile($_CONF['path_layout'].'js/fValidator.js');
+$outputHandle->addScriptFile($_CONF['path_layout'].'js/gl_mooreflection.js');
+$outputHandle->addScriptFile($_CONF['path_layout'].'js/gl_moomenu.js');
+$outputHandle->addScriptFile($_CONF['path_layout'].'js/moorating.js');
+$outputHandle->addScriptFile($_CONF['path_layout'].'js/gltips.js');
 
 function theme_getToolTipStyle()
 {

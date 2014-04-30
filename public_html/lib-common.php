@@ -6248,8 +6248,6 @@ function CTL_clearCache($plugin='')
                 @unlink($filename);
             }
         }
-        $_SYSTEM['jquery_loaded']   = false;
-        $_SYSTEM['mootools_loaded'] = false;
         css_out();
         js_out();
     }
@@ -6452,7 +6450,7 @@ function js_out()
     // need to parse the outputhandler to see if there are any js scripts to load
 
     $outputHandle = outputHandler::getInstance();
-    $headerscripts = $outputHandle->getScripts();
+    $headerscripts = $outputHandle->getScriptFiles();
     foreach ($headerscripts as $s ) {
         $files[] = $s;
     }
