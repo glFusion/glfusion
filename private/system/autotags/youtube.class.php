@@ -40,37 +40,11 @@ class autotag_youtube extends BaseAutotag {
         $this->description = $_AUTOTAGS['youtube']['description'];
     }
 
-    function parse($p1, $p2, $fulltag)
+    function parse($p1, $p2='', $fulltag)
     {
         global $_CONF;
 
         $retval = '';
-
-        /*
-         * Process the auto tag to remove any embedded &nbsp;
-         */
-        $tag = str_replace('&nbsp;',' ',$fulltag);
-        $parms = explode (' ', $tag);
-        if (substr ($parms[0], -1) == ':') {
-            $startpos = strlen ($parms[0]) + strlen ($parms[1]) + 2;
-            $label = str_replace (']', '', substr ($tag, $startpos));
-            $tagid = $parms[1];
-        } else {
-            $label = str_replace (']', '',
-                     substr ($tag, strlen ($parms[0]) + 1));
-            $parms = explode (':', $parms[0]);
-            if (count ($parms) > 2) {
-                array_shift ($parms);
-                $tagid = implode (':', $parms);
-            } else {
-                $tagid = $parms[1];
-            }
-        }
-        $p1['parm1'] = str_replace(']','',$tagid);
-        $p2['parm2'] = $label;
-        /*
-         * end of tag replacement
-         */
 
         $width = 560;
         $height = 315;
@@ -106,13 +80,8 @@ class autotag_youtube extends BaseAutotag {
                     for ($i = 0; $i < $skip; $i++) {
                         array_shift ($px);
                     }
-                    $caption = trim (implode (' ', $px));
-                } else {
-                    $caption = '';
                 }
             }
-        } else {
-            $caption = trim ($p2);
         }
         $extra = '';
         if ( $align != '' ) {
