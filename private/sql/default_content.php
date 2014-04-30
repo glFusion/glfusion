@@ -6,9 +6,7 @@
 // |                                                                          |
 // | glFusion Default Content                                                 |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2010 by the following authors:                        |
+// | Copyright (C) 2009-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -436,7 +434,7 @@ You can also <span id=\"gl_moosimplebox_trigger2\" style=\"cursor:pointer;\">cli
      You can change the box styling in your theme\'s style.css file.
 </div>
 
-<script type=\"text/javascript\" src=\"xxxSITEURLxxx/javascript/mootools/gl_moosimplebox.js\"></script>
+<script type=\"text/javascript\" src=\"xxxSITEURLxxx/layout/nouveau/gl_moosimplebox.js\"></script>
 <script language=\"javascript\" type=\"text/javascript\">
 window.addEvent(\'domready\',function(){
 	var p = new mooSimpleBox({
@@ -460,7 +458,7 @@ window.addEvent(\'domready\',function(){
 })
 </script>
 
-<script type=\"text/javascript\" src=\"xxxSITEURLxxx/javascript/mootools/gl_moosimplebox.js\"></script>
+<script type=\"text/javascript\" src=\"xxxSITEURLxxx/layout/nouveau/js/gl_moosimplebox.js\"></script>
 <script language=\"javascript\" type=\"text/javascript\">
 window.addEvent(\'domready\',function(){
 	var p = new mooSimpleBox({
@@ -543,7 +541,7 @@ $_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_status
 //<a href=\"javascript:loadintoIframe(''myframe'', ''external.htm'')\">Link</a>\r\n\r\n//notice to Opera users that this script will NOT automatically re-size\r\n//the iframe height in that browser\r\n\r\n?>\r\n\r\n<div id=\"noOpera\" style=\"width:100%; text-align:center; margin:10px auto;\"></div>\r\n\r\n<iframe\r\n	src=\"http://my-other-site-here\"\r\n	id=\"myframe\"\r\n	scrolling=\"no\"\r\n	marginwidth=\"0\"\r\n	marginheight=\"0\"\r\n	frameborder=\"0\"\r\n	style=\"\r\n	        overflow:visible;\r\n		width:100%;\r\n\">Unfortunately, your browser does not support iframes.</iframe>', 0, 'NOW()', 'noblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 1, 2, 0, 0, 'html', 0)";
 
 // Blocks Default Data
-$_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['blocks']} (is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (1,'moorotator','normal','Visit glFusion','all',0,'<script type=\"text/javascript\" src=\"xxxSITEURLxxx/javascript/mootools/gl_moorotator-block.js\"></script>
+$_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['blocks']} (is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (1,'moorotator','normal','Visit glFusion','all',0,'<script type=\"text/javascript\" src=\"xxxSITEURLxxx/layout/nouveau/js/gl_moorotator-block.js\"></script>
 <script type=\"text/javascript\">
 	window.addEvent(\'domready\', function() {
 		var rotator = new gl_mooRotator_block(\'gl_moorotator_block\', {

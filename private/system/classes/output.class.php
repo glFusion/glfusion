@@ -6,9 +6,7 @@
 // |                                                                          |
 // | glFusion Browser Output Handler                                          |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2012 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -69,6 +67,7 @@ class outputHandler {
     private $_copyrightyear;
     private $_directHeader = array();
     private $_rewriteEnabled = false;
+    private $priorities = array(HEADER_PRIO_VERYHIGH, HEADER_PRIO_HIGH, HEADER_PRIO_NORMAL, HEADER_PRIO_LOW, HEADER_PRIO_VERYLOW);
     private $_header = array(
                     'meta' => array('http-equiv' => array(), 'name' => array()),
                     'style' => array(HEADER_PRIO_VERYHIGH => array(),
@@ -77,6 +76,11 @@ class outputHandler {
                                      HEADER_PRIO_LOW => array(),
                                      HEADER_PRIO_VERYLOW => array()),
                     'script' => array(HEADER_PRIO_VERYHIGH => array(),
+                                     HEADER_PRIO_HIGH => array(),
+                                     HEADER_PRIO_NORMAL => array(),
+                                     HEADER_PRIO_LOW => array(),
+                                     HEADER_PRIO_VERYLOW => array()),
+                    'script_file' => array(HEADER_PRIO_VERYHIGH => array(),
                                      HEADER_PRIO_HIGH => array(),
                                      HEADER_PRIO_NORMAL => array(),
                                      HEADER_PRIO_LOW => array(),
@@ -250,6 +254,23 @@ class outputHandler {
     }
 
 	/**
+	 * Add a JavaScript source to a page
+	 *
+	 * This adds a javascript source file to a page - Physical path to the JS file
+	 * the <link> attribute.
+	 *
+	 * @param  string   $href       The URL to the javascript file
+	 * @param  int      $priority   Load priority
+     *
+	 * @access public
+	 * @return nothing
+	 */
+    public function addScriptFile($href, $priority = HEADER_PRIO_NORMAL)
+    {
+        $this->_header['script_file'][$priority][] = $href;
+    }
+
+	/**
 	 * Add Meta data to header
 	 *
 	 * This adds a meta record to the header
@@ -343,6 +364,29 @@ class outputHandler {
             return '';
         }
         return $this->_array_concat_recursive($this->_header[$type]);
+    }
+
+	/**
+	 * Returns array of JS files
+	 *
+	 * Returns an array of JavaScript file names (with paths) to
+	 * all queued JS files
+	 *
+	 * @access public
+	 * @return array
+	 */
+    public function getScriptFiles()
+    {
+        $js = array();
+
+        foreach ($this->_header['script_file'] as $priority ) {
+            if ( is_array($priority) ) {
+                foreach ($priority as $path ) {
+                    $js[] = $path;
+                }
+            }
+        }
+        return $js;
     }
 
     // PRIVATE METHODS

@@ -6,9 +6,7 @@
 // |                                                                          |
 // | A place for widget functions, mootools based or otherwise                |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Joe Mucchiello         jmucchiello AT yahoo DOT com                      |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -108,7 +106,7 @@ echo $display;
 	if ($id == 'gl_slide') {$id = 'gl_';}
 
     $display = <<<EOJ
-<script type="text/javascript" src="{$_CONF['site_url']}/javascript/mootools/gl_mooslide.js"></script>
+<script type="text/javascript" src="{$_CONF['layout_url']}/js/gl_mooslide.js"></script>
 <script type="text/javascript">
     window.addEvent('load', function() {
         var myFilm = new gl_Slide(\$('$id'), {
@@ -302,7 +300,7 @@ function WIDGET_autotranslations($header=0) {
 function WIDGET_moospring() {
     global $_CONF;
 
-    $retval = '<script type="text/javascript" src="' . $_CONF['site_url'] . '/javascript/mootools/gl_moospring.js"></script>';
+    $retval = '<script type="text/javascript" src="' . $_CONF['layout_url'] . '/js/gl_moospring.js"></script>';
     return $retval;
 }
 

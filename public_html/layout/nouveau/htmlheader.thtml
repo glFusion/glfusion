@@ -16,12 +16,6 @@
 <script type="text/javascript" src="{js_cache_url}"></script>
 {# Load plugin Header Code #}
 {plg_headercode}
-<!--[if lte IE 6]>
-<link rel="stylesheet" type="text/css" href="{layout_url}/ie6.css" title="{theme}" />
-<script defer type="text/javascript" src="{site_url}/javascript/mootools/gl_mooie6warning.js"></script>
-<script defer type="text/javascript" src="{site_url}/javascript/mootools/gl_moopngfix.js"></script>
-<script defer type="text/javascript" src="{site_url}/javascript/sitetailor_ie6vertmenu.js"></script>
-<![endif]-->
 <!--[if IE 7]>
 <link rel="stylesheet" type="text/css" href="{layout_url}/ie7.css" title="{theme}" />
 <![endif]-->

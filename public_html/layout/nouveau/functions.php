@@ -4,11 +4,9 @@
 // +--------------------------------------------------------------------------+
 // | functions.php                                                            |
 // |                                                                          |
-// | Theme specific functions                                                 |
+// | Support functions for Nouveau theme                                      |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2012 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -64,31 +62,19 @@ $_BLOCK_TEMPLATE['story_options_block'] = 'blockheader-related.thtml,blockfooter
 $_BLOCK_TEMPLATE['admin_block'] = 'blockheader-list.thtml,blockfooter-list.thtml';
 $_BLOCK_TEMPLATE['section_block'] = 'blockheader-list.thtml,blockfooter-list.thtml';
 $_BLOCK_TEMPLATE['user_block'] = 'blockheader-list.thtml,blockfooter-list.thtml';
-// $_BLOCK_TEMPLATE['login_block'] = 'blockheader-left.thtml,blockfooter-left.thtml';
 $_BLOCK_TEMPLATE['forum_menu'] = 'blockheader-left.thtml,blockfooter-left.thtml';
-// $_BLOCK_TEMPLATE['configmanager_block'] = 'blockheader-left.thtml,blockfooter-left.thtml';
-// $_BLOCK_TEMPLATE['configmanager_subblock'] = 'blockheader-left.thtml,blockfooter-left.thtml';
 
-function theme_themeJS() {
-    global $_CONF;
+// define the JS we need for this theme..
+$outputHandle = outputHandler::getInstance();
+$outputHandle->addScriptFile($_CONF['path_layout'].'js/mootools-release-1.11.packed.js');
+$outputHandle->addScriptFile($_CONF['path_layout'].'js/fValidator.js');
+$outputHandle->addScriptFile($_CONF['path_layout'].'js/gl_mooreflection.js');
+$outputHandle->addScriptFile($_CONF['path_layout'].'js/gl_moomenu.js');
+$outputHandle->addScriptFile($_CONF['path_layout'].'js/moorating.js');
+$outputHandle->addScriptFile($_CONF['path_layout'].'js/gltips.js');
 
-    $js = array();
-
-    $js[] = $_CONF['path_layout'] .'js/gltips.js';
-
-// uncomment the line below to enable gl_moochronometer header rotator
-// MAKE SURE TO CLEAR BROWSER & C.T.L. CACHE when activating/deactivating
-//    $js[] = $_CONF['path_html'] .'javascript/mootools/gl_moochronometer.js';
-
-
-
-// uncomment the line below to enable current page menu link highlighting.
-// if the current url matches a link in the top horizontal menu, it adds
-// class="currentpage" to the a href tag so it can be styled from style.css.
-// if you use a different menu than the default navigation one, change the
-// getElementById in currentpage.js.
-//    $js[] = $_CONF['path_layout'] .'js/currentpage.js';
-
-    return($js);
+function theme_getToolTipStyle()
+{
+    return('gl_mootip');
 }
 ?>

@@ -368,21 +368,6 @@ function plugin_getheaderjs_forum() {
     return($js);
 }
 
-function plugin_getheadercode_forum() {
-    global $_CONF, $_SYSTEM, $_FF_CONF, $themeAPI;
-
-    $gf_header = '';
-
-    if ( $themeAPI > 1 ) {
-        return '';
-    }
-
-    $gf_header .= '<style>'. file_get_contents($_CONF['path'] . 'plugins/forum/css/style.css') . '</style>';
-
-    return $gf_header;
-}
-
-
 /**
 * glFusion is asking us to provide any new items that show up in the type drop-down
 * on search.php.  Let's let users search the Filelistings in the Filemgmt Plugin
