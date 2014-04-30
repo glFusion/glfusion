@@ -41,7 +41,7 @@ if (!defined('LB')) {
     define('LB', "\n");
 }
 if (!defined('SUPPORTED_PHP_VER')) {
-    define('SUPPORTED_PHP_VER', '5.2.0');
+    define('SUPPORTED_PHP_VER', '5.3.0');
 }
 if (!defined('SUPPORTED_MYSQL_VER')) {
     define('SUPPORTED_MYSQL_VER', '4.1.3');
@@ -1135,6 +1135,12 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('github_consumer_secret','not configured yet','text',4,1,NULL,273,TRUE);
 
             $current_fusion_version = '1.4.1';
+        case '1.4.1' :
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+
+
+            $current_fusion_version = '1.5.0';
         default:
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='".$current_fusion_version."' WHERE name='glfusion'",1);

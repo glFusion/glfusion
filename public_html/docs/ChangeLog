@@ -1,5 +1,10 @@
 glFusion ChangeLog
 
+v1.5.0
+------
+- Fixed error in youtube autotag where it would trhow random
+- Migrate all Mootools functionality into the Nouveau theme.
+
 v1.4.1
 ------
 - Several stability improvements

@@ -36,7 +36,7 @@
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 @ini_set('opcache.enable','0');
 if (!defined('GVERSION')) {
-    define('GVERSION', '1.4.1');
+    define('GVERSION', '1.5.0');
 }
 
 define('SESSION_EXPIRED',           1);
@@ -658,7 +658,7 @@ function INST_checkEnvironment($dbconfig_path='')
     } else {
         $T->set_var('status','<span class="yes">'.phpversion().'</span>');
     }
-    $T->set_var('recommended','5.2.0+');
+    $T->set_var('recommended','5.3.0+');
     $T->set_var('notes',$LANG_INSTALL['php_req_version']);
     $T->parse('env','envs',true);
 

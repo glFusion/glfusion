@@ -43,8 +43,8 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 }
 
 // we must have PHP v5.0 or greater
-if (version_compare(PHP_VERSION,'5.2.0','<')) {
-    die('Sorry, glFusion requires PHP version 5.2.0 or greater.');
+if (version_compare(PHP_VERSION,'5.3.0','<')) {
+    die('Sorry, glFusion requires PHP version 5.3.0 or greater.');
 }
 
 /**
@@ -61,7 +61,7 @@ if (version_compare(PHP_VERSION,'5.2.0','<')) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.4.1');
+    define('GVERSION', '1.5.0');
 }
 
 define('PATCHLEVEL','.pl0');
