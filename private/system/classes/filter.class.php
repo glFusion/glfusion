@@ -309,7 +309,7 @@ class sanitizer
             $sp->addParser(array('block','inline'), 'nl2br');
         }
 
-//        $sp->addParser(array('block','inline'), array($this,'linkify'));
+        $sp->addParser(array('block','inline'), array($this,'linkify'));
 
         $sp->addCode ('code', 'usecontent', array($this,'_codeblock'), array ('usecontent_param' => 'default'),
                       'code', array ('block'), array ());
