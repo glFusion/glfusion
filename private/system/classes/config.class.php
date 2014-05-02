@@ -137,7 +137,11 @@ class config {
             if ($row[1] !== 'unset') {
                 if (!array_key_exists($row[2], $this->config_array) ||
                     !array_key_exists($row[0], $this->config_array[$row[2]])) {
-                    $row[1] = preg_replace('!s:(\d+):"(.*?)";!se', "'s:'.strlen('$2').':\"$2\";'", $row[1] );
+//                    $row[1] = preg_replace('!s:(\d+):"(.*?)";!se', "'s:'.strlen('$2').':\"$2\";'", $row[1] );
+                    $row[1] = preg_replace_callback ( '!s:(\d+):"(.*?)";!',
+                        function($match) {
+                            return ($match[1] == strlen($match[2])) ? $match[0] : 's:' . strlen($match[2]) . ':"' . $match[2] . '";';
+                        },$row[1] );
                     $value = @unserialize($row[1]);
                     if (($value === false) && ($row[1] != $false_str)) {
                         if (function_exists('COM_errorLog')) {
@@ -1149,7 +1153,11 @@ class config {
         if (file_exists($cache_file)) {
             $s = file_get_contents($cache_file);
             if ($s !== false) {
-                $s = preg_replace('!s:(\d+):"(.*?)";!se', "'s:'.strlen('$2').':\"$2\";'", $s );
+//                $s = preg_replace('!s:(\d+):"(.*?)";!se', "'s:'.strlen('$2').':\"$2\";'", $s );
+                $s = preg_replace_callback ( '!s:(\d+):"(.*?)";!',
+                    function($match) {
+                    return ($match[1] == strlen($match[2])) ? $match[0] : 's:' . strlen($match[2]) . ':"' . $match[2] . '";';
+                },$s );
                 $this->config_array = @unserialize($s);
                 return true;
             }
