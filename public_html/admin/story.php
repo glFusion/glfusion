@@ -832,6 +832,9 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     $story_templates->set_var('gltoken', SEC_createToken());
 
     PLG_templateSetVars('storyeditor',$story_templates);
+    if ( $story->EditElements('postmode') != 'html' ) {
+        $story_templates->unset_var('wysiwyg');
+    }
 
     $story_templates->parse('output','editor');
     $display .= $story_templates->finish($story_templates->get_var('output'));
