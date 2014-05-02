@@ -303,13 +303,15 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
 
     $bbcode = new StringParser_BBCode ();
     $bbcode->setGlobalCaseSensitive (false);
+    $filter = sanitizer::getInstance();
+
 
     if ($postmode == 'text' ) {
         $_ff_pm = 'text';
     } else {
         $_ff_pm = 'html';
     }
-
+    $filter->setPostmode($postmode);
     if ( $postmode == 'text') {
         $bbcode->addParser (array ('block', 'inline', 'link', 'listitem'), 'bbcode_htmlspecialchars');
     }
@@ -377,7 +379,7 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
     $str = $bbcode->parse ($str);
 
     if ( ! ($status & DISABLE_URLPARSE ) ) {
-        $str = make_clickable($str);
+        $str = $filter->linkify($str);
     }
 
     return $str;
@@ -753,7 +755,7 @@ function make_clickable_callback($type, $whitespace, $url, $relative_url, $class
 
     return $html;
 }
-
+//@TODO remove
 /**
 * make_clickable function
 *
@@ -761,7 +763,7 @@ function make_clickable_callback($type, $whitespace, $url, $relative_url, $class
 * Cuts down displayed size of link if over 50 chars, turns absolute links
 * into relative versions when the server/script path matches the link
 */
-function make_clickable($text, $server_url = false, $class = 'postlink')
+function make_clickableXXX($text, $server_url = false, $class = 'postlink')
 {
     global $_CONF;
 
