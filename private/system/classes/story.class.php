@@ -2064,8 +2064,8 @@ class Story
     function _plainTextLoadStory($title, $intro, $body)
     {
         $this->_title = htmlspecialchars(strip_tags(COM_checkWords($title)));
-        $this->_introtext = COM_makeClickableLinks(htmlspecialchars(COM_checkWords($intro)));
-        $this->_bodytext = COM_makeClickableLinks(htmlspecialchars(COM_checkWords($body)));
+        $this->_introtext = COM_checkWords($intro);
+        $this->_bodytext = COM_checkWords($body);
     }
 
     /**
