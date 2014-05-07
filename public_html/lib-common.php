@@ -1270,7 +1270,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_var( 'powered_by', $LANG01[95]);
     $theme->set_var( 'glfusion_url', 'http://www.glfusion.org/' );
     $theme->set_var( 'glfusion_version', GVERSION );
-    $theme->set_var('direction',(empty($LANG_DIRECTION) ? 'ltr' : $LANG_DIRECTION));
+    $theme->set_var( 'direction',(empty($LANG_DIRECTION) ? 'ltr' : $LANG_DIRECTION));
 
     /* Check if an array has been passed that includes the name of a plugin
      * function or custom function.
@@ -1290,21 +1290,21 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
             $theme->set_var( 'glfusion_rblocks', '');
             $theme->set_var( 'right_blocks','');
             if ( empty($lblocks) ) {
+                // using full_content
                 $theme->set_var( 'centercolumn',$uiStyles['full_content']['content_class'] );
-                $theme->set_var( 'footercolumn-l',$uiStyles['full_content']['left_class']);
-                $theme->set_var( 'footercolumn-r',$uiStyles['full_content']['right_class']);
             } else {
+                // using left_content
                 $theme->set_var( 'centercolumn',$uiStyles['left_content']['content_class'] );
                 $theme->set_var( 'footercolumn-l',$uiStyles['left_content']['left_class']);
-                $theme->set_var( 'footercolumn-r',$uiStyles['left_content']['right_class']);
             }
         } else {
             $theme->set_var( 'glfusion_rblocks', $rblocks);
             if ( empty($lblocks) ) {
+                // using content_right
                 $theme->set_var( 'centercolumn',$uiStyles['content_right']['content_class'] );
-                $theme->set_var( 'footercolumn-l',$uiStyles['content_right']['left_class']);
                 $theme->set_var( 'footercolumn-r',$uiStyles['content_right']['right_class']);
             } else {
+                // using left_content_right
                 $theme->set_var( 'centercolumn',$uiStyles['left_content_right']['content_class'] );
                 $theme->set_var( 'footercolumn-l',$uiStyles['left_content_right']['left_class']);
                 $theme->set_var( 'footercolumn-r',$uiStyles['left_content_right']['right_class']);
@@ -1314,13 +1314,12 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         $theme->set_var( 'glfusion_rblocks', '');
         $theme->set_var( 'right_blocks', '' );
         if ( empty( $lblocks )) {
+            // using full content
             $theme->set_var( 'centercolumn',$uiStyles['full_content']['content_class'] );
-            $theme->set_var( 'footercolumn-l',$uiStyles['full_content']['left_class']);
-            $theme->set_var( 'footercolumn-r',$uiStyles['full_content']['right_class']);
         } else {
+            // using left_content
             $theme->set_var( 'centercolumn',$uiStyles['left_content']['content_class'] );
             $theme->set_var( 'footercolumn-l',$uiStyles['left_content']['left_class']);
-            $theme->set_var( 'footercolumn-r',$uiStyles['left_content']['right_class']);
         }
     }
 
@@ -1346,6 +1345,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_var(array(
                 'meta-header'  => $outputHandle->renderHeader('meta'),
                 'css-header'   => $outputHandle->renderHeader('style'),
+                'js-header'    => $outputHandle->renderHeader('script'),
                 'raw-header'   => $outputHandle->renderHeader('raw'),
     ));
 
@@ -3196,6 +3196,31 @@ function COM_allowedHTML( $permissions = 'story.edit', $list_only = false, $name
     return $allowedHTML;
 }
 
+function COM_allowedAutotags( $permissions = 'story.edit', $list_only = false, $namespace='glfusion',$operation='' )
+{
+    global $_CONF,$LANG01;
+
+    $retval = '';
+    $allow_page_break = false;
+    if ( $_CONF['allow_page_breaks'] && $operation == 'story')
+        $allow_page_break = true;
+
+    if ( !$list_only ) {
+        $retval .= '<span class="warningsmall"><strong>' . $LANG01[31] . '</strong> ';
+    }
+    if ( $allow_page_break ) {
+        $retval .= '[page_break],&nbsp;';
+    }
+    $retval .= '[code]';
+    // list autolink tags
+    $autotags = PLG_collectTags($namespace,$operation);
+    foreach( $autotags as $tag => $module ) {
+        $retval .= ', [' . $tag . ':]';
+    }
+    $retval .= '</span>';
+    return $retval;
+}
+
 /**
 * Return the password for the given username
 *
@@ -3968,7 +3993,7 @@ function COM_printPageNavigation( $base_url, $curpage, $num_pages,
         $retval .= COM_createLink($LANG05[7], $base_url . $sep . $page_str . '1' . $suffix) . ' | ';
         $pg = $sep . $page_str . ( $curpage - 1 );
         $retval .= COM_createLink($LANG05[6], $base_url . $pg . $suffix) . ' | ';
-        $output->addLink('prev', $base_url . $pg . $suffix);
+        $output->addLink('prev', urldecode($base_url . $pg . $suffix));
     } else {
         $retval .= $LANG05[7] . ' | ' ;
         $retval .= $LANG05[6] . ' | ' ;
@@ -3997,7 +4022,7 @@ function COM_printPageNavigation( $base_url, $curpage, $num_pages,
                                          . $page_str . ($curpage + 1) . $suffix);
         $retval .= ' | ' . COM_createLink($LANG05[8], $base_url . $sep
                                           . $page_str . $num_pages . $suffix);
-        $output->addLink('next', $base_url . $sep. $page_str . ($curpage + 1) . $suffix);
+        $output->addLink('next', urldecode($base_url . $sep. $page_str . ($curpage + 1) . $suffix));
     }
 
     if ( !empty( $retval )) {
@@ -6252,8 +6277,10 @@ function CTL_clearCache($plugin='')
                 @unlink($filename);
             }
         }
-        css_out();
-        js_out();
+        if ( defined('DVLP_DEBUG') ) {
+            COM_errorLog("DEBUG: Cache has been cleared");
+        }
+
     }
 }
 
@@ -6458,7 +6485,6 @@ function js_out()
     foreach ($headerscripts as $s ) {
         $files[] = $s;
     }
-
     /*
      * Check to see if the theme has any JavaScript to include... (depreciate)
      */
@@ -6579,6 +6605,10 @@ function js_out()
         fwrite($fp,$js);
         fclose($fp);
     }
+    if ( defined('DVLP_DEBUG') ) {
+        COM_errorLog("DEBUG: JS cache file written");
+    }
+
     return $cacheURL;
 }
 
@@ -6930,9 +6960,6 @@ if ( $_CONF['cron_schedule_interval'] > 0 && COM_onFrontpage() ) {
         PLG_runScheduledTask();
     }
 }
-
-css_out();
-js_out();
 
 if ( function_exists('CUSTOM_splashpage') ) {
     CUSTOM_splashpage();
