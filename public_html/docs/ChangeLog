@@ -2,8 +2,15 @@ glFusion ChangeLog
 
 v1.5.0
 ------
-- Fixed error in youtube autotag where it would trhow random
-- Migrate all Mootools functionality into the Nouveau theme.
+- New 'default' theme - based on Nouveau but uses jQuery as JS engine
+- Revamped how scripts are loaded...
+- Implemented new jQuery widgets
+- Fixed error in youtube autotag where it would log parse errors
+- Migrate all Mootools functionality into the Nouveau theme
+- Reworked how embedded story images are handled
+- Cleaned up allowed html / allowed auto tag display on story and
+  comment entry
+- Comment edit now takes you directly to the comment entry area
 
 v1.4.1
 ------
