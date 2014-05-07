@@ -166,10 +166,10 @@ function plugin_templatesetvars_ckeditor($ctype, &$template)
     $T = new Template($templatePath);
     $T->set_file('page', $templateFile);
     if ( file_exists($_CONF['path_layout'].'ck_styles.js') ) {
-        $T->set_var('styleset',"stylesSet: '".$_CONF['theme'].":".$_CONF['layout_url']."/ck_styles.js',");
+        $T->set_var('styleset',"stylesSet: '".$_USER['theme'].":".$_CONF['layout_url']."/ck_styles.js',");
     }
     $T->set_var(array(
-                'theme' => $_CONF['theme'],
+                'theme' => $_USER['theme'],
                 'path_html' => $_CONF['path_html'],
                 ));
     PLG_templateSetVars('ckeditor',$T);
