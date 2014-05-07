@@ -63,14 +63,12 @@
   <script type="text/javascript" src="{site_url}/forum/javascript/createtopic.js"></script>
   <script type="text/javascript">
       var site_url = '{site_url}';
-  window.addEvent('domready', function() {
-  	var mySlideV = new Fx.Slide('smileys').hide();
-  		$('toggleV').addEvent('click', function(e){
-  			e = new Event(e);
-  			mySlideV.toggle();
-  			e.stop();
-          });
-  });
+      $(window).load(function() {
+        $( "#toggleV" ).click(function() {
+        $( "#smileys" ).slideToggle( "fast" );
+      });
+      $("#smileys").hide();
+      });
   </script>
   <script type="text/javascript" src="{site_url}/forum/javascript/ajax_deletefile.js"></script>
 {!endif}
@@ -199,7 +197,7 @@
           {!if smilies}
           {!if html_mode}
           {!else}
-            <div style="width:95%; padding:10px; clear:both;" id="smileys">
+            <div style="width:95%; padding:10px; clear:both;display:none;" id="smileys">
               {smilies}
             </div>
             {!endif}
