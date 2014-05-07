@@ -114,6 +114,7 @@ function userprofile($user, $msg = 0, $plugin = '')
             COM_startBlock ($LANG04[1] . ' ' . $display_name));
     $user_templates->set_var ('end_block', COM_endBlock ());
     $user_templates->set_var ('lang_username', $LANG04[2]);
+    $user_templates->set_var ('tooltip', COM_getTooltipStyle());
 
     if ($_CONF['show_fullname'] == 1) {
         if (empty ($A['fullname'])) {
