@@ -605,18 +605,19 @@ class sanitizer
         global $_CONF, $LANG01;
 
         $retval = '';
+        $first  = 0;
 
         $allow_page_break = false;
         if ( isset( $_CONF['skip_html_filter_for_root'] ) &&
                  ( $_CONF['skip_html_filter_for_root'] == 1 ) &&
                 SEC_inGroup( 'Root' )) {
             if ( !$list_only ) {
-                $retval .= '<span class="warningsmall">' . $LANG01[123] . '</span>, ';
+                $retval .= '<span class="warningsmall"><strong>' . $LANG01[123] . '</strong></span>, ';
             }
 
         } else {
             if ( !$list_only ) {
-                $retval .= '<span class="warningsmall">' . $LANG01[31] . ' ';
+                $retval .= '<span class="warningsmall"><strong>' . $LANG01['allowed_html'] . '</strong> ';
             }
             if ( $_CONF['allow_page_breaks'] && $this->operation == 'story')
                 $allow_page_break = true;
@@ -632,17 +633,11 @@ class sanitizer
         $filterArray = array_unique($elementArray);
 
         foreach ( $filterArray as $tag ) {
-            $retval .= '&lt;' . $tag . '&gt;&nbsp;, ';
+            if ( $first != 0 ) $retval .= ', ';
+            $retval .= '&lt;' . $tag . '&gt;&nbsp;';
+            $first++;
         }
-        if ( $allow_page_break ) {
-            $retval .= '[page_break],&nbsp;';
-        }
-        $retval .= '[code]';
-        // list autolink tags
-        $autotags = PLG_collectTags($this->namespace,$this->operation);
-        foreach( $autotags as $tag => $module ) {
-            $retval .= ', [' . $tag . ':]';
-        }
+        $retval .= '</span>';
         return $retval;
     }
 

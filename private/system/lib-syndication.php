@@ -6,8 +6,6 @@
 // |                                                                          |
 // | glFusion syndication library.                                            |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2003-2010 by the following authors:                        |
@@ -42,6 +40,7 @@ $_SYND_DEBUG = false;
 if ($_CONF['trackback_enabled']) {
     USES_lib_trackback();
 }
+USES_lib_story();
 
 /**
 * Check if a feed for all stories needs to be updated.
@@ -258,8 +257,10 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
 
             $storytitle = $row['title'];
             $fulltext   = $row['introtext']."\n".$row['bodytext'];
+            $fulltext   = STORY_renderImages($row['sid'],$fulltext);
             $fulltext   = PLG_replaceTags( $fulltext,'glfusion','story' );
-            $storytext  = PLG_replaceTags($row['introtext'],'glfusion','story');
+            $storytext  = STORY_renderImages($row['sid'],$row['introtext']);
+            $storytext  = PLG_replaceTags($storytext,'glfusion','story');
 
             if ( $contentLength > 1 ) {
                 $fulltext  = COM_truncateHTML( $fulltext, $contentLength, ' ...');
@@ -372,8 +373,10 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
 
         $storytitle = $row['title'];
         $fulltext   = $row['introtext']."\n".$row['bodytext'];
+        $fulltext   = STORY_renderImages($row['sid'],$fulltext);
         $fulltext   = PLG_replaceTags( $fulltext,'glfusion','story' );
-        $storytext  = PLG_replaceTags($row['introtext'],'glfusion','story');
+        $storytext  = STORY_renderImages($row['sid'],$row['introtext']);
+        $storytext  = PLG_replaceTags($storytext,'glfusion','story');
 
         if ( $contentLength > 1 ) {
             $fulltext  = COM_truncateHTML($fulltext,$contentLength,' ...');

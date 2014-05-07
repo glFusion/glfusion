@@ -1360,6 +1360,10 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     echo $tmp;  // send the header.thtml
 
     $retval = $theme->finish( $theme->get_var( 'index_footer' ));
+
+    css_out();
+    js_out();
+
     return $retval;
 }
 

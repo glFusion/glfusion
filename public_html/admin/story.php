@@ -761,15 +761,20 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     $story_templates->set_var('lang_publishdate', $LANG24[69]);
     $story_templates->set_var('lang_nojavascript',$LANG24[77]);
     $story_templates->set_var('postmode',$story->EditElements('postmode'));
-    $story_templates->set_var('no_javascript_return_link',sprintf($LANG24[78],$_CONF['site_admin_url'], $sid));
-    $post_options = COM_optionList($_TABLES['postmodes'],'code,name',$story->EditElements('postmode'));
 
-    $post_options .= '<option value="adveditor">'.$LANG24[86].'</option>';
+//    $story_templates->set_var('no_javascript_return_link',sprintf($LANG24[78],$_CONF['site_admin_url'], $sid));
+//    $post_options = COM_optionList($_TABLES['postmodes'],'code,name',$story->EditElements('postmode'));
+//    $post_options .= '<option value="adveditor">'.$LANG24[86].'</option>';
+//    $story_templates->set_var('post_options',$post_options );
 
-    $story_templates->set_var('post_options',$post_options );
-
-    $story_templates->set_var('lang_allowed_html', COM_allowedHTML(SEC_getUserPermissions(),false,'glfusion','story'));
-    $story_templates->set_var ('show_allowedhtml', 'none');
+    if ( $story->EditElements('postmode') == 'plaintext' || $story->EditElements('postmode') == 'text' ) {
+        $allowedHTML = '';
+    } else {
+        $allowedHTML = COM_allowedHTML(SEC_getUserPermissions(),false,'glfusion','story') . '<br/>';
+    }
+    $allowedHTML .= COM_allowedAutotags(SEC_getUserPermissions(),false,'glfusion','story');
+    $story_templates->set_var('lang_allowed_html', $allowedHTML);
+//    $story_templates->set_var ('show_allowedhtml', 'none');
 
     $fileinputs = '';
     $saved_images = '';
