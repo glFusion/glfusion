@@ -4,9 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | functions.inc                                                            |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2012 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -313,15 +311,20 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
            $LANG01, $LANG11, $LANG_STATIC, $_IMAGE_TYPE, $_SP_CONF;
 
     $retval = '';
+    $headerOption = '';
+    $footerOption = '';
+
+    $outputHandle = outputHandler::getInstance();
 
     $sp_url = COM_buildUrl($_CONF['site_url'] . '/page.php?page='.$page);
-    $headercode = '<link rel="canonical" href="' . $sp_url . '"/>'.LB;
+    $outputHandle->addLink('canonical', $sp_url);
+
 
     if ($A['sp_format'] == 'allblocks' OR $A['sp_format'] == 'leftblocks') {
-        $retval .= COM_siteHeader('menu', $A['sp_title'], $headercode);
+        $headerOption = 'menu';
     } else {
         if ($A['sp_format'] <> 'blankpage') {
-            $retval .= COM_siteHeader('none', $A['sp_title'], $headercode);
+            $headerOption = 'none';
         }
     }
     if (($A['sp_inblock'] == 1) && ($A['sp_format'] != 'blankpage')) {
@@ -419,15 +422,18 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
         }
 
         if (($A['sp_format'] == 'allblocks' || $A['sp_format'] == 'rightblocks') && ($_USER['noboxes'] != 1)) {
-            $retval .= COM_siteFooter(true);
+            $footerOption = true;
         } else if (($A['sp_format'] == 'leftblocks') || ($A['sp_format'] == 'noblocks')) {
-            $retval .= COM_siteFooter(false);
+            $footerOption = false;
         } else {
-            $retval .= COM_siteFooter();
+            $footerOption = '';
         }
     }
 
-    return $retval;
+    $page = COM_siteHeader($headerOption, $A['sp_title']);
+    $page .= $retval;
+    $page .= COM_siteFooter($footerOption);
+    return $page;
 }
 
 /**
