@@ -145,7 +145,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
                     $min_height = $min_height + 5;
                 }
                 $udt = new Date(strtotime($userarray['regdate']),$_USER['tzid']);
-                $regdate = $udt->format('m/d/y',true) . '<br/>';
+                $regdate = $udt->format($_CONF['shortdate'],true) . '<br/>';
                 $numposts = $posts;
                 if ( DB_count( $_TABLES['sessions'], 'uid', (int) $showtopic['uid']) > 0 AND DB_getItem($_TABLES['userprefs'],'showonline',"uid=".(int) $showtopic['uid']."") == 1) {
                     $onlinestatus = $LANG_GF01['ONLINE'];
