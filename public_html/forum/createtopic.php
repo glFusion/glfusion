@@ -398,7 +398,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
             }
         }
     } else {
-        if ( $_FF_CONF['post_htmlmode'] ) {
+        if ( $_FF_CONF['post_htmlmode'] && $_FF_CONF['allow_html'] ) {
             $postData['postmode'] = 'html';
         } else {
             $postData['postmode'] = 'text';
