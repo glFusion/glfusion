@@ -7,18 +7,16 @@
     <input type="text" name="query" id="query" size="80" value="{query}" />&nbsp;<input type="submit" name="submit" value="{$LANG09[10]}" />&nbsp;&nbsp;<a href="#" id="toggleV">{$LANG09[2]}</a>
 
 <script type="text/javascript">
-window.addEvent('load', function() {
-//-vertical slide
-	var mySlideV = new Fx.Slide('gl_moodrawerV').hide();
-		$('toggleV').addEvent('click', function(e){
-			e = new Event(e);
-			mySlideV.toggle();
-			e.stop();
-        }); //end vertical slide
-});
+    $(window).load(function() {
+      $( "#toggleV" ).click(function() {
+        $( "#advanced-options" ).slideToggle( "slow" );
+    });
+    $("#advanced-options").hide();
+    });
+
 </script>
 
-    <div id="gl_moodrawerV">
+    <div id="advanced-options">
         <table style="padding-top:5px; width:550px;">
             <tr>
                 <td align="center">{$LANG09[70]}</td>

@@ -18,16 +18,7 @@
     });
     $("#smileys").hide();
     });
-/*
-    window.addEvent('domready', function() {
-    	var mySlideV = new Fx.Slide('smileys').hide();
-    		$('toggleV').addEvent('click', function(e){
-    			e = new Event(e);
-    			mySlideV.toggle();
-    			e.stop();
-            });
-    });
-*/
+
 // ]]>
 </script>
 <script type="text/javascript" src="{site_url}/javascript/bbcode.js"></script>
