@@ -497,7 +497,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
 
     if ($action == 'preview') {
         $story_templates->set_var ('show_preview', '');
-//        $story_templates->set_var ('show_htmleditor', 'none');
+        $story_templates->set_var ('show_htmleditor', 'none');
         $story_templates->set_var ('show_texteditor', 'none');
         $story_templates->set_var ('show_submitoptions', 'none');
         $navbar->set_selected($LANG24[79]);

@@ -76,6 +76,7 @@
 
         } else if (option == 'preview') {
             document.getElementById('preview').style.display = '';
+            document.getElementById('text_editor').style.display = 'none';
             document.getElementById('editor_mode').style.display = 'none';
         } else {
             document.getElementById('se_options').style.display = '';
@@ -173,7 +174,7 @@
       </div>
     </div>
 
-    <div id="editor_mode" style="margin-top:10px; padding:10px; border:1px solid #ECE9D8; display:'';">
+    <div id="editor_mode" style="margin-top:10px; padding:10px; border:1px solid #ECE9D8; display:{show_htmleditor};">
       {lang_allowed_html}
     </div>
     <div  id="se_options" style="width:100%; margin-top:10px; border:1px solid #ECE9D8; display:none;">
