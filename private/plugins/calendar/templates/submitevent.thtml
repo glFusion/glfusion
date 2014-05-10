@@ -1,8 +1,5 @@
 {# begin {templatelocation} #}
 {explanation}
-{# nogray calendar - must be replaced in 1.2.0 #}
-<script src="{site_url}/javascript/nogray_date_calendar_vs1_min.js" type="text/javascript"></script>
-{# nogray calendar - must be replaced in 1.2.0 #}
 <script language="javascript" type="text/javascript">
 <!--
 function update_month() document.getElementById('end_month').value = document.getElementById('start_month').value;
@@ -11,37 +8,28 @@ function update_year() document.getElementById('end_year').value = document.getE
 function update_hour() document.getElementById('end_hour').value = document.getElementById('start_hour').value;
 function update_minute() document.getElementById('end_minute').value = document.getElementById('start_minute').value;
 function update_ampm() document.getElementById('end_ampm').value = document.getElementById('start_ampm').value;
-
-window.addEvent('domready',function() {
-  var myValidator = new fValidator("submitevent");
+$(window).load(function() {
+    $("#allday").change(toggleTOD);
 });
-
-window.addEvent('load', function() {
-  $('allday').addEvent('change',toggleTOD);
-  toggleTOD();
-});
-
 function toggleTOD() {
-  var selected = $('allday').getValue();
+  var selected = $('#allday').val();
   switch (selected) {
     case false:
-      $('todstart').style.display='';
-      $('todend').style.display='';
+      $('#todstart').css('display','');
+      $('#todend').css('display','');
       break;
     case 'on':
-      $('todstart').style.display='none';
-      $('todend').style.display='none';
+      $('#todstart').css('display','none');
+      $('#todend').css('display','none');
       break;
   }
-
 }
-
 -->
 </script>
 <form class="form-theme" action="{site_url}{submit_url}" id="submitevent" method="post">
   <div style="margin:15px 0 15px 0;border-bottom:1px solid #cccccc"></div>
     <div class="form-description">*{lang_title}:</div>
-    <div class="form-field"><input class="fValidate['required']" type="text" size="48" maxlength="128" name="title" value="{title}"  /></div>
+    <div class="form-field"><input class="required" type="text" size="48" maxlength="128" name="title" value="{title}"  /></div>
     <div class="clear-left"></div>
     <div class="form-description">{lang_eventtype}:</div>
     <div class="form-field">
@@ -74,14 +62,6 @@ function toggleTOD() {
         <select name="start_year" id="start_year" onchange="update_year()">
             {start_year_options}
         </select>
-        {# nogray calendar - must be replaced in 1.2.0 #}
-        <span id="cal1">
-        <a href="#" id="toggler1">
-        <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:text-top;border:none;" />
-        </a>
-        </span>
-        <span id="calendar1"></span>
-        {# nogray calendar - must be replaced in 1.2.0 #}
         <span id="todstart">
           &nbsp;&nbsp;
           <b>{lang_starttime}: </b>
@@ -111,14 +91,6 @@ function toggleTOD() {
         <select name="end_year" id="end_year">
             {end_year_options}
         </select>
-        {# nogray calendar - must be replaced in 1.2.0 #}
-        <span id="cal2">
-        <a href="#" id="toggler2">
-        <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:text-top;border:none;" />
-        </a>
-        </span>
-        <span id="calendar2"></span>
-        {# nogray calendar - must be replaced in 1.2.0 #}
         <span id="todend">
           &nbsp;&nbsp;
           <b>{lang_endtime}: </b>
@@ -159,7 +131,7 @@ function toggleTOD() {
   <div style="margin:10px 0 10px 0;border-bottom:1px solid #cccccc"></div>
 
     <div class="form-description">{lang_description}:</div>
-    <div class="form-field"><textarea class="fValidate['required']" name="description" style="width:100%" cols="45" rows="8">{description}</textarea></div>
+    <div class="form-field"><textarea class="required" name="description" style="width:100%" cols="45" rows="8">{description}</textarea></div>
     <div class="clear-left"></div>
     <div class="form-field">{lang_htmnotallowed}</div>
 
@@ -180,69 +152,7 @@ function toggleTOD() {
   </div>
   <div class="clear-left"></div>
 </form>
-<script language="javascript" type="text/javascript">
-<!--
-var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
-if ( is_chrome == 0 ) {
-    window.addEvent("domready", function() {
-
-        var sYear  = document.getElementById('start_year').value;
-        var sMonth = document.getElementById('start_month').value;
-        var sDay   = document.getElementById('start_day').value;
-
-        var calender1 = new Calendar("calendar1", "toggler1",
-        {inputField:{date:'start_day',
-             month:'start_month',
-             year:'start_year'},
-             inputType:'select',
-             idPrefix:'cal1',
-             startDate:new Date(sYear-1,0,1),
-             selectedDate: new Date(sYear,sMonth-1,sDay),
-             allowDaysOffSelection:true,
-             allowWeekendSelection:true,
-             allowDatesOffSelection:true,
-             numMonths:1,
-             onSelect: function() {
-              document.getElementById('end_year').value = document.getElementById('start_year').value;
-              document.getElementById('end_month').value = document.getElementById('start_month').value;
-              document.getElementById('end_day').value = document.getElementById('start_day').value;
-              }
-        });
-
-    });
-
-    window.addEvent("domready", function(){
-
-        var eYear  = document.getElementById('end_year').value;
-        var eMonth = document.getElementById('end_month').value;
-        var eDay   = document.getElementById('end_day').value;
-
-        var calender2 = new Calendar("calendar2", "toggler2",
-           {inputField:{date:'end_day',
-                month:'end_month',
-                year:'end_year'},
-                inputType:'select',
-                idPrefix:'cal2',
-                startDate:new Date(eYear-1,0,1),
-                selectedDate:  new Date(eYear,eMonth-1,eDay),
-                allowDaysOffSelection:true,
-                allowWeekendSelection:true,
-                allowDatesOffSelection:true,
-                numMonths:1
-        });
-    });
-} else {
-    document.getElementById('cal1').innerHTML = '';
-    document.getElementById('calendar1').style.borderTop = '0px';
-    document.getElementById('calendar1').style.borderLeft = '0px';
-    document.getElementById('calendar1').style.borderRight = '0px';
-    document.getElementById('calendar1').style.borderBottom = '0px';
-    document.getElementById('cal2').innerHTML = '';
-    document.getElementById('calendar2').style.borderTop = '0px';
-    document.getElementById('calendar2').style.borderLeft = '0px';
-    document.getElementById('calendar2').style.borderRight = '0px';
-    document.getElementById('calendar2').style.borderBottom = '0px';
-}
--->
+<script>
+$("#submitevent").validate();
 </script>
 {# end {templatelocation} #}

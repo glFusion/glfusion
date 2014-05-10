@@ -20,7 +20,7 @@
           <tr>
             <td><label for="new_username">{lang_username}:</label></td>
             <td>
-              <input class="fValidate['required']" type="text" size="16" maxlength="32" name="new_username" value="{user_name}"/>
+              <input class="required" type="text" size="16" maxlength="32" name="new_username" value="{user_name}"/>
             </td>
           </tr>
           <tr>
@@ -87,11 +87,11 @@
           </tr>
           <tr>
             <td><label for="email">{lang_email}:</label></td>
-            <td><input class="fValidate['required']" type="text" id="email" name="email" size="50" maxlength="96" value="{email_value}"/></td>
+            <td><input class="required email" type="text" id="email" name="email" size="50" maxlength="96" value="{email_value}"/></td>
           </tr>
           <tr>
             <td><label for="email_conf">{lang_email_conf}:</label></td>
-            <td><input class="fValidate['required','confirm']" type="text" id="email_conf" name="email_conf" size="50" maxlength="96" value="{email_value}"/></td>
+            <td><input class="required email" type="text" id="email_conf" name="email_conf" size="50" maxlength="96" value="{email_value}"/></td>
           </tr>
           {plugin_namepass_pwdemail}
         </table>

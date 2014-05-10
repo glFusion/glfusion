@@ -1,11 +1,4 @@
 {# begin {templatelocation} #}
-<script type="text/javascript">
-<!--
-window.addEvent('domready',function() {
-    var myValidator = new fValidator("contact");
-});
--->
-</script>
 {!if show_htmleditor}
 {wysiwyg}
 {!endif}
@@ -15,18 +8,18 @@ window.addEvent('domready',function() {
 <table cellspacing="0" cellpadding="3" width="95%">
   <tr>
     <td class="alignright"><b>{lang_fromname}:</b></td>
-    <td><input class="fValidate['required']" type="text" id="from" name="from" size="40" maxlength="96" value="{name}" /></td>
+    <td><input class="required" type="text" id="from" name="from" size="40" maxlength="96" value="{name}" /></td>
   </tr>
   <tr>
   <td class="alignright"><b>{lang_fromemailaddress}:</b></td>
-  <td><input class="fValidate['required','email']" type="text" id="fromemail" name="fromemail" size="40" maxlength="96" value="{email}" /></td>
+  <td><input class="required email" type="text" id="fromemail" name="fromemail" size="40" maxlength="96" value="{email}" /></td>
   </tr>
   <tr><td class="alignright"><b>{lang_toname}:</b></td>
-  <td><input class="fValidate['required']" type="text" id="to" name="to" size="40" maxlength="96" value="{toname}" /></td>
+  <td><input class="required" type="text" id="to" name="to" size="40" maxlength="96" value="{toname}" /></td>
 </tr>
 <tr>
 <td class="alignright"><b>{lang_toemailaddress}:</b></td>
-  <td><input class="fValidate['required','email']" type="text" id="toemail" name="toemail" size="40" maxlength="96" value="{toemail}" /></td>
+  <td><input class="required email" type="text" id="toemail" name="toemail" size="40" maxlength="96" value="{toemail}" /></td>
 </tr>
 <tr>
 <td class="alignright" style="vertical-align:top;"><b>{lang_shortmessage}:</b></td>
@@ -43,4 +36,7 @@ window.addEvent('domready',function() {
 </form>
 
 {end_block}
+<script>
+$("#contact").validate();
+</script>
 {# end {templatelocation} #}

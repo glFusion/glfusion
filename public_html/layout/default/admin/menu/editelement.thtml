@@ -1,127 +1,126 @@
 {# begin {templatelocation} #}
 {# Hide the menu builder as Javascript is required. If JS is enabled then the JS below will un-hide it #}
 <script type="text/javascript">
-    document.getElementById('menubuilder').style.display=''
+    document.getElementById('menubuilder').style.display='';
 </script>
 <script type="text/javascript">
-<!--
-window.addEvent('load',function() {
-    $('menutype').addEvent('change',toggleFields);
-    $('pid').addEvent('change',function(){
-         var option_id = this.getValue();
+$(window).load(function() {
+    $("#menutype").change(toggleFields);
+    $("#pid").change(function() {
+         var option_id = $("#pid").val();
          var menu_id = {menu};
-         var url = 'getorder.php?optionid='+option_id+'&menuid='+menu_id+'&edit=1';
-         new Ajax(url, {
-              method: 'get',
-              update: $('displayafter')
-         }).request();
+         var url = 'getorder.php?optionid='+option_id+'&menuid='+menu_id;
+         $.get(url,function(data) {
+            $('#displayafter').html(data);
+         });
     });
-    toggleFields();
+    $('#urldiv').css('display','');
+    $('#targetdiv').css('display','none');
+    $('#glcorediv').css('display','none');
+    $('#plugin').css('display','none');
+    $('#staticpage').css('display','none');
+    $('#glfunc').css('display','none');
+    $('#phpdiv').css('display','none');
+    $('#topic').css('display','none');
 });
-
 function toggleFields() {
-    selected = $('menutype').getValue();
-
+    selected = $('#menutype').val();
     switch( selected ) {
         case '1' : // sub
-            $('urldiv').style.display='';
-            $('targetdiv').style.display='none';
-            $('glcorediv').style.display='none';
-            $('plugin').style.display='none';
-            $('staticpage').style.display='none';
-            $('glfunc').style.display='none';
-            $('phpdiv').style.display='none';
-            $('topic').style.display='none';
+            $('#urldiv').css('display','');
+            $('#targetdiv').css('display','none');
+            $('#glcorediv').css('display','none');
+            $('#plugin').css('display','none');
+            $('#staticpage').css('display','none');
+            $('#glfunc').css('display','none');
+            $('#phpdiv').css('display','none');
+            $('#topic').css('display','none');
             break;
         case '2' : // gl actioin
-            $('urldiv').style.display='none';
-            $('targetdiv').style.display='none';
-            $('glcorediv').style.display='none';
-            $('plugin').style.display='none';
-            $('staticpage').style.display='none';
-            $('glfunc').style.display='';
-            $('phpdiv').style.display='none';
-            $('topic').style.display='none';
+            $('#urldiv').css('display','none');
+            $('#targetdiv').css('display','none');
+            $('#glcorediv').css('display','none');
+            $('#plugin').css('display','none');
+            $('#staticpage').css('display','none');
+            $('#glfunc').css('display','');
+            $('#phpdiv').css('display','none');
+            $('#topic').css('display','none');
             break;
         case '3' : // gl menus
-            $('urldiv').style.display='none';
-            $('targetdiv').style.display='none';
-            $('glcorediv').style.display='';
-            $('plugin').style.display='none';
-            $('staticpage').style.display='none';
-            $('glfunc').style.display='none';
-            $('phpdiv').style.display='none';
-            $('topic').style.display='none';
+            $('#urldiv').css('display','none');
+            $('#targetdiv').css('display','none');
+            $('#glcorediv').css('display','');
+            $('#plugin').css('display','none');
+            $('#staticpage').css('display','none');
+            $('#glfunc').css('display','none');
+            $('#phpdiv').css('display','none');
+            $('#topic').css('display','none');
             break;
         case '4' : // plugins
-            $('urldiv').style.display='none';
-            $('targetdiv').style.display='none';
-            $('glcorediv').style.display='none';
-            $('plugin').style.display='';
-            $('staticpage').style.display='none';
-            $('glfunc').style.display='none';
-            $('phpdiv').style.display='none';
-            $('topic').style.display='none';
+            $('#urldiv').css('display','none');
+            $('#targetdiv').css('display','none');
+            $('#glcorediv').css('display','none');
+            $('#plugin').css('display','');
+            $('#staticpage').css('display','none');
+            $('#glfunc').css('display','none');
+            $('#phpdiv').css('display','none');
+            $('#topic').css('display','none');
             break;
         case '5' :  // static pages
-            $('urldiv').style.display='none';
-            $('targetdiv').style.display='none';
-            $('glcorediv').style.display='none';
-            $('plugin').style.display='none';
-            $('staticpage').style.display='';
-            $('glfunc').style.display='none';
-            $('phpdiv').style.display='none';
-            $('topic').style.display='none';
+            $('#urldiv').css('display','none');
+            $('#targetdiv').css('display','none');
+            $('#glcorediv').css('display','none');
+            $('#plugin').css('display','none');
+            $('#staticpage').css('display','');
+            $('#glfunc').css('display','none');
+            $('#phpdiv').css('display','none');
+            $('#topic').css('display','none');
             break;
         case '6' : // url
-            $('urldiv').style.display='';
-            $('targetdiv').style.display='';
-            $('glcorediv').style.display='none';
-            $('plugin').style.display='none';
-            $('staticpage').style.display='none';
-            $('glfunc').style.display='none';
-            $('phpdiv').style.display='none';
-            $('topic').style.display='none';
+            $('#urldiv').css('display','');
+            $('#targetdiv').css('display','none');
+            $('#glcorediv').css('display','none');
+            $('#plugin').css('display','none');
+            $('#staticpage').css('display','none');
+            $('#glfunc').css('display','none');
+            $('#phpdiv').css('display','none');
+            $('#topic').css('display','none');
             break;
         case '7' :  // php function
-            $('urldiv').style.display='none';
-            $('targetdiv').style.display='none';
-            $('glcorediv').style.display='none';
-            $('plugin').style.display='none';
-            $('staticpage').style.display='none';
-            $('glfunc').style.display='none';
-            $('phpdiv').style.display='';
-            $('topic').style.display='none';
+            $('#urldiv').css('display','none');
+            $('#targetdiv').css('display','none');
+            $('#glcorediv').css('display','none');
+            $('#plugin').css('display','none');
+            $('#staticpage').css('display','none');
+            $('#glfunc').css('display','none');
+            $('#phpdiv').css('display','');
+            $('#topic').css('display','none');
             break;
         case '8' :
-            $('urldiv').style.display='none';
-            $('targetdiv').style.display='none';
-            $('glcorediv').style.display='none';
-            $('plugin').style.display='none';
-            $('staticpage').style.display='none';
-            $('glfunc').style.display='none';
-            $('phpdiv').style.display='none';
-            $('topic').style.display='none';
+            $('#urldiv').css('display','none');
+            $('#targetdiv').css('display','none');
+            $('#glcorediv').css('display','none');
+            $('#plugin').css('display','none');
+            $('#staticpage').css('display','none');
+            $('#glfunc').css('display','none');
+            $('#phpdiv').css('display','none');
+            $('#topic').css('display','none');
             break;
-        case '9' :
-            $('urldiv').style.display='none';
-            $('targetdiv').style.display='none';
-            $('glcorediv').style.display='none';
-            $('plugin').style.display='none';
-            $('staticpage').style.display='none';
-            $('glfunc').style.display='none';
-            $('phpdiv').style.display='none';
-            $('topic').style.display='';
+        case '9' : // topic
+            $('#urldiv').css('display','none');
+            $('#targetdiv').css('display','none');
+            $('#glcorediv').css('display','none');
+            $('#plugin').css('display','none');
+            $('#staticpage').css('display','none');
+            $('#glfunc').css('display','none');
+            $('#phpdiv').css('display','none');
+            $('#topic').css('display','');
             break;
-
     }
 }
--->
 </script>
-
-
 <div class="input-form">
-  <form method="post" action="{form_action}">
+  <form id="editmenuelement" method="post" action="{form_action}">
     <input type="hidden" id="menu" name="menu" value="{menu}" />
     <input type="hidden" id="id" name="id" value="{mid}" />
 
@@ -132,7 +131,7 @@ function toggleFields() {
 
       <div class="required">
         <label for="menulabel">{$LANG_MB01[elementlabel]}:</label>
-        <input type="text" id="menulabel" name="menulabel" size="48" value="{menulabel}" />
+        <input type="text" class="required" id="menulabel" name="menulabel" size="48" value="{menulabel}" />
       </div>
       <div id="displayafter" class="required">
         <label for="menuorder">{$LANG_MB01[display_after]}:</label>
@@ -193,8 +192,11 @@ function toggleFields() {
     <div style="text-align:center;padding-top:20px;padding-bottom:10px;">
       <input type="hidden" id="mode" name="mode" value="saveedit" />
       <input type="submit" id="execute" name="execute" value="{$LANG32[23]}" />&nbsp;&nbsp;
-      <input type="submit" id="cancel" name="cancel" value="{$LANG_MB01[cancel]}" />
+      <input type="submit" class="cancel" id="cancel" name="cancel" value="{$LANG_MB01[cancel]}" />
     </div>
   </form>
 </div>
+<script>
+$("#editmenuelement").validate();
+</script>
 {# end {templatelocation} #}

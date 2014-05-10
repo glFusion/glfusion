@@ -1,20 +1,9 @@
 {# begin {templatelocation} #}
-
-<script type="text/javascript">
-<!--
-window.addEvent('domready',function() {
-    var myValidator = new fValidator("topiceditor");
-{!if lang_donotusespaces}
-    myValidator.register($("tid"), {type: "space", re: /^[a-z0-9._-]+$/i, msg: "Topic ID can only contain 0-9, a-z, A-Z, _ - or . "});
-{!endif}
-});
--->
-</script>
 <form id="topiceditor" action="{site_admin_url}/topic.php" method="post" enctype="multipart/form-data">
     <table cellspacing="0" cellpadding="2" width="100%">
         <tr>
             <td width="20%" class="alignright">{lang_topicname}:</td>
-            <td width="80%"><input class="fValidate['required']" type="text" size="48" name="topic" id="topic" value="{topic_name}" /></td>
+            <td width="80%"><input class="required" type="text" size="48" name="topic" id="topic" value="{topic_name}" /></td>
         </tr>
         <tr>
             <td class="alignright">{lang_topicid}:</td>
@@ -160,11 +149,14 @@ window.addEvent('domready',function() {
         <tr>
             <td colspan="2">
                 <input type="submit" value="{lang_save}" name="save" />
-                <input type="submit" value="{lang_cancel}" name="cancel" />
+                <input type="submit" class="cancel" value="{lang_cancel}" name="cancel" />
                 {!if delete_option}{delete_option}{!endif}
                 <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
             </td>
         </tr>
     </table>
 </form>
+<script type="text/javascript">
+$("#topiceditor").validate();
+</script>
 {# end {templatelocation} #}

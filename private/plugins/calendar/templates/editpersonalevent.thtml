@@ -1,7 +1,4 @@
 {# begin {templatelocation} #}
-{# nogray calendar - must be replaced in 1.2.0 #}
-<script src="{site_url}/javascript/nogray_date_calendar_vs1_min.js" type="text/javascript"></script>
-{# nogray calendar - must be replaced in 1.2.0 #}
 <script language="javascript" type="text/javascript">
 <!--
 function update_month() document.getElementById('end_month').value = document.getElementById('start_month').value;
@@ -11,224 +8,156 @@ function update_hour() document.getElementById('end_hour').value = document.getE
 function update_minute() document.getElementById('end_minute').value = document.getElementById('start_minute').value;
 function update_ampm() document.getElementById('end_ampm').value = document.getElementById('start_ampm').value;
 
-window.addEvent('domready',function() {
-    var myValidator = new fValidator("editpersonalevent");
+$(window).load(function() {
+    $("#allday").change(toggleTOD);
 });
-
-window.addEvent('load', function() {
-  $('allday').addEvent('change',toggleTOD);
-  toggleTOD();
-});
-
 function toggleTOD() {
-  var selected = $('allday').getValue();
+  var selected = $('#allday').val();
   switch (selected) {
     case false:
-      $('todstart').style.display='';
-      $('todend').style.display='';
+      $('#todstart').css('display','');
+      $('#todend').css('display','');
       break;
     case 'on':
-      $('todstart').style.display='none';
-      $('todend').style.display='none';
+      $('#todstart').css('display','none');
+      $('#todend').css('display','none');
       break;
   }
 
 }
-
 -->
 </script>
-                            <form action="{site_url}/calendar/event.php" id="editpersonalevent" method="post">
-                                <input type="hidden" name="calendar_type" value="personal" />
-                                <input type="hidden" name="hour_mode" value="{hour_mode}" />
-                                <input type="hidden" name="eid" value="{eid}" />
-                                <input type="hidden" name="uid" value="{uid}" />
-                                <table border="0" cellspacing="0" cellpadding="3">
-                                    <tr>
-                                        <td align="right"><b>{lang_title}:</b></td>
-                                        <td><input class="fValidate['required']" type="text" size="36" maxlength="96" name="title" value="{event_title}" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right"><b>{lang_eventtype}:</b></td>
-                                        <td>
-                                            <select name="event_type">
-                                                <option value="">--</option>
-                                                {type_options}
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right"><b>{lang_alldayevent}:</b></td>
-                                        <td><input type="checkbox" name="allday" {allday_checked} /></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right"><b>{lang_startdate}:</b></td>
-                                        <td>
-                                          <span dir="ltr">
-                                            <select name="start_month" id="start_month" onchange="update_month()">
-                                                {startmonth_options}
-                                            </select>
-                                            /
-                                            <select name="start_day" id="start_day" onchange="update_day()">
-                                                {startday_options}
-                                            </select>
-                                            /
-                                            <select name="start_year" id="start_year" onchange="update_year()">
-                                                {startyear_options}
-                                            </select>
-                                            {# nogray calendar - must be replaced in 1.2.0 #}
-                                                    <a href="#" id="toggler1">
-                                                    <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:text-top;border:none;" />
-                                                    </a>
-                                                    <span id="calendar1"></span>
-                                            {# nogray calendar - must be replaced in 1.2.0 #}
-                                            <span id="todstart">
-                                                &nbsp;&nbsp;
-                                                <b>{lang_starttime}: </b>
-                                                <select name="start_hour" id="start_hour" onchange="update_hour()">
-                                                    {starthour_options}
-                                                </select>
-                                                :
-                                                <select name="start_minute" id="start_minute" onchange="update_minute()">
-                                                    {startminute_options}
-                                                </select>
-                                                {startampm_selection}
-                                            </span>
-                                          </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right"><b>{lang_enddate}:</b></td>
-                                        <td>
-                                          <span dir="ltr">
-                                            <select name="end_month">
-                                                {endmonth_options}
-                                            </select>
-                                            /
-                                            <select name="end_day">
-                                                {endday_options}
-                                            </select>
-                                            /
-                                            <select name="end_year">
-                                                {endyear_options}
-                                            </select>
-                                            {# nogray calendar - must be replaced in 1.2.0 #}
-                                                    <a href="#" id="toggler2">
-                                                    <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:text-top;border:none;" />
-                                                    </a>
-                                                    <span id="calendar2"></span>
-                                            {# nogray calendar - must be replaced in 1.2.0 #}
-                                            <span id="todend">
-                                                &nbsp;&nbsp;
-                                                <b>{lang_endtime}: </b>
-                                                <select name="end_hour">
-                                                    {endhour_options}
-                                                </select>
-                                                :
-                                                <select name="end_minute">
-                                                    {endminute_options}
-                                                </select>
-                                                {endampm_selection}
-                                            </span>
-                                          </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right" valign="top"><b>{lang_location}:</b></td>
-                                        <td>
-                                            <textarea name="location" cols="45" rows="2">{event_location}</textarea>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right"><b>{lang_addressline1}:</b></td>
-                                        <td><input type="text" name="address1" size="36" value="{event_address1}" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right"><b>{lang_addressline2}:</b></td>
-                                        <td><input type="text" name="address2" size="36" value="{event_address2}" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right"><b>{lang_city}:</b></td>
-                                        <td><input type="text" name="city" size="36" value="{event_city}" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right"><b>{lang_state}:</b></td>
-                                        <td><input type="text" name="state" size="36" value="{event_state}" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right"><b>{lang_zipcode}:</b></td>
-                                        <td><input type="text" name="zipcode" size="5" maxlength="5" value="{event_zipcode}" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right"><b>{lang_link}:</b></td>
-                                        <td><input type="text" size="36" maxlength="128" name="url" value="{event_url}" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right" valign="top"><b>{lang_description}:</b></td>
-                                        <td><textarea class="fValidate['required']" name="description" style="width:100%" cols="50" rows="20">{event_description}</textarea></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center" colspan="2">{lang_htmlnotallowed}</td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center" colspan="2">
-                                            <input type="hidden" name="type" value="event" />
-                                            <input type="submit" name="action" value="{lang_submit}" />
-                                            <input type="submit" name="action" value="{lang_delete}" />
-                                            <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
-                                        </td>
-                                    </tr>
-                                </table>
-                            </form>
-<script language="javascript" type="text/javascript">
-<!--
-
-window.addEvent("domready", function() {
-
-    var sYear  = document.getElementById('start_year').value;
-    var sMonth = document.getElementById('start_month').value;
-    var sDay   = document.getElementById('start_day').value;
-
-    var calender1 = new Calendar("calendar1", "toggler1",
-    {inputField:{date:'start_day',
-         month:'start_month',
-         year:'start_year'},
-         inputType:'select',
-         idPrefix:'cal1',
-         startDate:new Date(sYear-1,0,1),
-         selectedDate: new Date(sYear,sMonth-1,sDay),
-         allowDaysOffSelection:true,
-         allowWeekendSelection:true,
-         allowDatesOffSelection:true,
-         numMonths:1,
-         onSelect: function() {
-          document.getElementById('end_year').value = document.getElementById('start_year').value;
-          document.getElementById('end_month').value = document.getElementById('start_month').value;
-          document.getElementById('end_day').value = document.getElementById('start_day').value;
-          }
-    });
-
-});
-
-window.addEvent("domready", function(){
-
-    var eYear  = document.getElementById('end_year').value;
-    var eMonth = document.getElementById('end_month').value;
-    var eDay   = document.getElementById('end_day').value;
-
-    var calender2 = new Calendar("calendar2", "toggler2",
-       {inputField:{date:'end_day',
-            month:'end_month',
-            year:'end_year'},
-            inputType:'select',
-            idPrefix:'cal2',
-            startDate:new Date(eYear-1,0,1),
-            selectedDate:  new Date(eYear,eMonth-1,eDay),
-            allowDaysOffSelection:true,
-            allowWeekendSelection:true,
-            allowDatesOffSelection:true,
-            numMonths:1
-    });
-});
--->
+<form action="{site_url}/calendar/event.php" id="editpersonalevent" method="post">
+    <input type="hidden" name="calendar_type" value="personal" />
+    <input type="hidden" name="hour_mode" value="{hour_mode}" />
+    <input type="hidden" name="eid" value="{eid}" />
+    <input type="hidden" name="uid" value="{uid}" />
+    <table border="0" cellspacing="0" cellpadding="3">
+        <tr>
+            <td align="right"><b>{lang_title}:</b></td>
+            <td><input class="required" type="text" size="36" maxlength="96" name="title" value="{event_title}" /></td>
+        </tr>
+        <tr>
+            <td align="right"><b>{lang_eventtype}:</b></td>
+            <td>
+                <select name="event_type">
+                    <option value="">--</option>
+                    {type_options}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td align="right"><b>{lang_alldayevent}:</b></td>
+            <td><input type="checkbox" name="allday" {allday_checked} /></td>
+        </tr>
+        <tr>
+            <td align="right"><b>{lang_startdate}:</b></td>
+            <td>
+              <span dir="ltr">
+                <select name="start_month" id="start_month" onchange="update_month()">
+                    {startmonth_options}
+                </select>
+                /
+                <select name="start_day" id="start_day" onchange="update_day()">
+                    {startday_options}
+                </select>
+                /
+                <select name="start_year" id="start_year" onchange="update_year()">
+                    {startyear_options}
+                </select>
+                <span id="todstart">
+                    &nbsp;&nbsp;
+                    <b>{lang_starttime}: </b>
+                    <select name="start_hour" id="start_hour" onchange="update_hour()">
+                        {starthour_options}
+                    </select>
+                    :
+                    <select name="start_minute" id="start_minute" onchange="update_minute()">
+                        {startminute_options}
+                    </select>
+                    {startampm_selection}
+                </span>
+              </span>
+            </td>
+        </tr>
+        <tr>
+            <td align="right"><b>{lang_enddate}:</b></td>
+            <td>
+              <span dir="ltr">
+                <select name="end_month">
+                    {endmonth_options}
+                </select>
+                /
+                <select name="end_day">
+                    {endday_options}
+                </select>
+                /
+                <select name="end_year">
+                    {endyear_options}
+                </select>
+                <span id="todend">
+                    &nbsp;&nbsp;
+                    <b>{lang_endtime}: </b>
+                    <select name="end_hour">
+                        {endhour_options}
+                    </select>
+                    :
+                    <select name="end_minute">
+                        {endminute_options}
+                    </select>
+                    {endampm_selection}
+                </span>
+              </span>
+            </td>
+        </tr>
+        <tr>
+            <td align="right" valign="top"><b>{lang_location}:</b></td>
+            <td>
+                <textarea name="location" cols="45" rows="2">{event_location}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <td align="right"><b>{lang_addressline1}:</b></td>
+            <td><input type="text" name="address1" size="36" value="{event_address1}" /></td>
+        </tr>
+        <tr>
+            <td align="right"><b>{lang_addressline2}:</b></td>
+            <td><input type="text" name="address2" size="36" value="{event_address2}" /></td>
+        </tr>
+        <tr>
+            <td align="right"><b>{lang_city}:</b></td>
+            <td><input type="text" name="city" size="36" value="{event_city}" /></td>
+        </tr>
+        <tr>
+            <td align="right"><b>{lang_state}:</b></td>
+            <td><input type="text" name="state" size="36" value="{event_state}" /></td>
+        </tr>
+        <tr>
+            <td align="right"><b>{lang_zipcode}:</b></td>
+            <td><input type="text" name="zipcode" size="5" maxlength="5" value="{event_zipcode}" /></td>
+        </tr>
+        <tr>
+            <td align="right"><b>{lang_link}:</b></td>
+            <td><input type="text" size="36" maxlength="128" name="url" value="{event_url}" /></td>
+        </tr>
+        <tr>
+            <td align="right" valign="top"><b>{lang_description}:</b></td>
+            <td><textarea class="required" name="description" style="width:100%" cols="50" rows="20">{event_description}</textarea></td>
+        </tr>
+        <tr>
+            <td align="center" colspan="2">{lang_htmlnotallowed}</td>
+        </tr>
+        <tr>
+            <td align="center" colspan="2">
+                <input type="hidden" name="type" value="event" />
+                <input type="submit" name="action" value="{lang_submit}" />
+                <input type="submit" name="action" value="{lang_delete}" />
+                <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
+            </td>
+        </tr>
+    </table>
+</form>
+<script>
+$("#editpersonalevent").validate();
 </script>
 {# end {templatelocation} #}

@@ -1,11 +1,4 @@
 {# begin {templatelocation} #}
-<script type="text/javascript">
-<!--
-window.addEvent('domready',function() {
-    var myValidator = new fValidator("contact");
-});
--->
-</script>
 {!if show_htmleditor}
 {wysiwyg}
 {!endif}
@@ -13,15 +6,15 @@ window.addEvent('domready',function() {
 <table cellspacing="0" cellpadding="3" width="95%">
 <tr>
 <td class="alignright"><b>{lang_username}:</b></td>
-<td><input class="fValidate['required']" type="text" id="author" name="author" size="40" maxlength="96" value="{username}" /></td>
+<td><input class="required" type="text" id="author" name="author" size="40" maxlength="96" value="{username}" /></td>
 </tr>
 <tr>
 <td class="alignright"><b>{lang_useremail}</b></td>
-<td><input class="fValidate['required','email']" type="text" id="authoremail" name="authoremail" size="32" value="{useremail}" maxlength="96" /></td>
+<td><input class="required email" type="text" id="authoremail" name="authoremail" size="32" value="{useremail}" maxlength="96" /></td>
 </tr>
 <tr>
 <td class="alignright"><b>{lang_subject}</b></td>
-<td><input class="fValidate['required']" type="text" id="subject" name="subject" size="32" maxlength="96" value="{subject}" /></td>
+<td><input class="required" type="text" id="subject" name="subject" size="32" maxlength="96" value="{subject}" /></td>
 </tr>
 <tr>
 <td class="alignright"><b>{lang_message}</b></td>
@@ -37,4 +30,7 @@ window.addEvent('domready',function() {
 <input type="submit" value="{lang_submit}" />
 </div>
 </form>
+<script>
+$("#contact").validate();
+</script>
 {# end {templatelocation} #}

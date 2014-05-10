@@ -5,7 +5,6 @@
     </span>
     </p>
 {!else}
-
 <div id="msgbox" style="font-weight:bold;width:95%;margin:10px;border:1px solid black;">
     <div style="padding:5px;color:#FFFFFF;background:url({layout_url}/images/header-bg.png) #1A3955;">
         {showhide}
@@ -21,12 +20,13 @@
         </p>
      </div>
 </div>
-
 {!if fade}
 <script type="text/javascript">
-	var fx = new Fx.Styles('msgbox', { duration: 3000 });
-	fx.addEvent('onComplete',function () { $('msgbox').setStyle('display', 'none'); });
-	fx.start.delay(5000, fx, { 'opacity' : 0 });
+$(window).load(function() {
+$( '#msgbox' ).delay(3000).fadeOut( 1000, function() {
+$( '#msgbox' ).remove();
+});
+});
 </script>
 {!endif}
 {!endif}
