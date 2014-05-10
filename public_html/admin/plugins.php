@@ -545,7 +545,7 @@ function PLUGINS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 . '<p>' . $A['maintainer'] . '</p>'
                 . '<p><b>' . $LANG32[82] . ':</b></p>'
                 . '<p>glFusion: v' . $A['glfusionversion'] . '<br />' . 'PHP: v' . $A['phpversion'] . '</p>';
-            $attr['class'] = 'gl_mootip';
+            $attr['class'] = COM_getTooltipStyle();
             $attr['title'] = $tip;
              if ($enabled) {
                 $retval = COM_createLink($icon_arr['info'], '#', $attr);

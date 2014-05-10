@@ -184,7 +184,7 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
                                   sprintf($delbutton, ''));
         $topic_templates->clear_var('lang_donotusespaces');
     } else {
-        $tid_input = '<input class="fValidate[\'required\',\'space\']" type="text" size="20" maxlength="20" name="tid" id="tid" value="'.$tid.'"' . XHTML . '>';
+        $tid_input = '<input class="required alphanumeric" type="text" size="20" maxlength="20" name="tid" id="tid" value="'.$tid.'"' . XHTML . '>';
         $topic_templates->set_var('lang_donotusespaces', $LANG27[5]);
     }
     $topic_templates->set_var('tid_input',$tid_input);

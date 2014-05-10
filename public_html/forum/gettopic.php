@@ -73,7 +73,7 @@ function _ff_getListField_gettopic($fieldname, $fieldvalue, $A, $icon_arr)
             $html2txt        = new html2text($testText,false);
             $testText        = trim($html2txt->get_text());
             $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$_FF_CONF['contentinfo_numchars']). '...')),ENT_QUOTES,COM_getEncodingt());
-            $retval = '<span class="gf_mootip" style="text-decoration:none;" title="' . $A['subject'] . '::' . $lastpostinfogll . '">' . $fieldvalue . '</span>';
+            $retval = '<span class="'.COM_getTooltipStyle().'" style="text-decoration:none;" title="' . $A['subject'] . '::' . $lastpostinfogll . '">' . $fieldvalue . '</span>';
             break;
         case 'select' :
             $retval = '[&nbsp;<a href="#" onclick="insert_topic(\''.$A['id'].'\'); return false;">'.$LANG_GF03['select'].'</a>&nbsp;]';

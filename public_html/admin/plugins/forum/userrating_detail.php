@@ -89,7 +89,7 @@ function ADMIN_getListField_ratings($fieldname, $fieldvalue, $A, $icon_arr)
                 if ( $subject == '' ) {
                     $subject = '<em>'.$LANG_GF98['no_subject_defined'].'</em>';
                 }
-                $retval = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . ($pid == 0 ? $id : $pid) . '&amp;topic='.$id.'#'.$id.'" title="' . $subject . '::' . $lastpostinfogll . '" rel="nofollow">' . $subject . '</a>';
+                $retval = '<a class="'.COM_getTooltipStyle().'" style="text-decoration:none;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . ($pid == 0 ? $id : $pid) . '&amp;topic='.$id.'#'.$id.'" title="' . $subject . '::' . $lastpostinfogll . '" rel="nofollow">' . $subject . '</a>';
             } elseif ($A['topic_id'] == -1 ) {
                 $retval = $LANG_GF98['admin_set_value'];
             } else {
