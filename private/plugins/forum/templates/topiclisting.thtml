@@ -68,7 +68,7 @@
             <td style="width:65%;" onmouseover="this.style.cursor='pointer';" onclick="window.location.href='viewtopic.php?showtopic={topic_id}'">
               <span style="float:left;">
                 {moved}
-                <a class="gl_mootip" style="text-decoration:none;" href="viewtopic.php?showtopic={topic_id}" title="{topicinfo}">
+                <a class="{tooltip_style}" style="text-decoration:none;" href="viewtopic.php?showtopic={topic_id}" title="{topicinfo}">
                 {subject}
                 </a>
               </span>
