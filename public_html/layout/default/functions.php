@@ -34,7 +34,7 @@ if (!defined ('GVERSION')) {
 }
 
 $themeAPI = 2;
-
+$_SYSTEM['disable_mootools'] = true;
 $_IMAGE_TYPE = 'png';
 
 $lang = COM_getLanguageId();
@@ -80,6 +80,8 @@ $outputHandle->addScriptFile($_CONF['path_layout'].'js/slimbox2.js');
 // validation
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.validate.min.js');
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/additional-methods.min.js');
+
+$outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.cycle.lite.min.js');
 // tooltips
 $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/tooltipster.css');
 //slimbox
