@@ -1,29 +1,28 @@
 {# begin {templatelocation} #}
-  <script language="javascript" type="text/javascript">
-  <!--
-  window.addEvent('load', function() {
-    $('is_function').addEvent('change',toggleReplacementText);
-    toggleReplacementText();
-  });
-
-  function toggleReplacementText() {
-    var selected = $('is_function').getValue();
-    switch (selected) {
-      case false:
-        $('replacement').disabled = false;
-        $('replacement-help').style.display = '';
-        $('php-msg').style.display = '';
-        break;
-      case 'on':
-        $('replacement').disabled = true;
-        $('replacement-help').style.display = 'none';
-        $('php-msg').style.display = 'none';
-        $('replacement').value = '{phpfn_replace} {phpfn_must_exist}';
-        break;
-    }
+<script language="javascript" type="text/javascript">
+<!--
+$(window).load(function() {
+  $("#is_function").change(toggleReplacementText);
+  toggleReplacementText();
+});
+function toggleReplacementText() {
+  var selected = $('#is_function').prop('checked');
+   switch (selected) {
+    case false:
+      $('#replacement').prop('disabled',false);
+      $('#replacement-help').css('display','');
+      $('#php-msg').css('dispaly','');
+      break;
+    case true:
+      $('#replacement').prop('disabled', true);
+      $('#replacement-help').css('display','none');
+      $('#php-msg').css('display','none');
+      $('#replacement').html('{phpfn_replace} {phpfn_must_exist}');
+      break;
   }
-  -->
-  </script>
+}
+-->
+</script>
   {start_block_editor}
   {admin_menu}
   <form action="{site_admin_url}/autotag.php" method="post">
