@@ -85,7 +85,6 @@ $mg_installed_version = $_PLUGIN_INFO['mediagallery'];
 $_MG_CONF['validExtensions'] = array('.jpg','.png','.gif','.bmp');
 
 $swfjsinclude = 0;
-$mgLightBox = 0;
 $themeStyle = '';
 
 $_MG_CONF['random_skin'] = 'default';
@@ -522,7 +521,7 @@ function plugin_getadminoption_mediagallery()
 
 function plugin_getheadercss_mediagallery()
 {
-    global $_CONF, $_MG_CONF, $_USER, $mgLightBox, $swfjsinclude,$themeStyle;
+    global $_CONF, $_MG_CONF, $_USER, $swfjsinclude,$themeStyle;
 
     $styles = array();
 
@@ -554,28 +553,15 @@ function plugin_getheadercss_mediagallery()
 
 function plugin_getheaderjs_mediagallery()
 {
-    global $_CONF, $_MG_CONF, $_SYSTEM, $mgLightBox, $swfjsinclude,$themeStyle;
+    global $_CONF, $_MG_CONF, $_SYSTEM, $swfjsinclude,$themeStyle;
 
     $js = array();
 
-    // the order is important here.  swfobject must be 'sandwiched' between
-    // swfupload.js and swupload.swfobject.js.
-
-    $js[] = $_MG_CONF['path_html'] . 'swfupload/swfupload.js';
     $js[] = $_MG_CONF['path_html'] . 'js/swfobject.js';
-    $js[] = $_MG_CONF['path_html'] . 'swfupload/swfupload.swfobject.js';
-
     $js[] = $_MG_CONF['path_html'] . 'js/mediagallery.js';
-
     if ( !isset($_SYSTEM['disable_mootools']) || $_SYSTEM['disable_mootools'] == false ) {
-
-        if ( $_MG_CONF['disable_lightbox'] != true ) {
-            $js[] = $_MG_CONF['path_html'] . 'js/slimbox.js';
-        }
         $js[] = $_MG_CONF['path_html'] . 'js/slideshow.js';
-
     }
-
 	return ($js);
 }
 
@@ -591,7 +577,7 @@ function plugin_getglobaljs_mediagallery()
 
 function plugin_getheadercode_mediagallery()
 {
-    global $_CONF, $_MG_CONF, $mgLightBox, $swfjsinclude,$themeStyle;
+    global $_CONF, $_MG_CONF, $swfjsinclude,$themeStyle;
 
     $mg_header = '';
 

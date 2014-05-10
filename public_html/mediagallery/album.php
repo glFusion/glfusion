@@ -248,7 +248,6 @@ if ( $MG_albums[$album_id]->enable_slideshow == 2 && $_MG_CONF['disable_lightbox
 }
 
 if ( $MG_albums[$album_id]->enable_slideshow == 2 ) {
-    $mgLightBox = 1;
     $lbSlideShow = '<noscript><div class="pluginAlert">' . $LANG04[150] . '</div></noscript>' . LB;
     $lbSlideShow .= '<script type="text/javascript">' . LB;
     $lbSlideShow .= 'function openGallery1() {' . LB;

@@ -1350,7 +1350,7 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
 
 function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sortID=0,$spage=0) {
     global $MG_albums, $_TABLES, $_CONF, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG03, $LANG_MG04, $LANG_ACCESS, $LANG01, $album_jumpbox, $glversion, $_USER, $_MG_USERPREFS;
-    global $_DB_dbms, $mgLightBox, $LANG04,$ratedIds;
+    global $_DB_dbms, $LANG04,$ratedIds;
 
     $retval = '';
     $srcID  = $mediaObject;
@@ -1740,7 +1740,6 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
     // start of the lightbox slideshow code
 
     if ( $MG_albums[$aid]->enable_slideshow == 2 ) {
-        $mgLightBox = 1;
         $lbSlideShow  = '<noscript><div class="pluginAlert">' . $LANG04[150] . '</div></noscript>' . LB;
         $lbSlideShow .= '<script type="text/javascript">' . LB;
         $lbSlideShow .= 'function openGallery1() {' . LB;
@@ -1772,7 +1771,6 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
             	$url_slideshow = '<span id="mgslideshow" class="jsenabled_show" style="display:none"><a href="#" onclick="return openGallery1()"><b>' . $LANG_MG03['slide_show'] . '</b></a></span>';
             } else {
             	$MG_albums[$aid]->enable_slideshow = 0;
-            	$mgLightBox = 0;
             }
             break;
         case 3:

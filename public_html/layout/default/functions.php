@@ -75,9 +75,15 @@ $outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.tooltipster.min.js
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/tooltip.js');
 // menu animation
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/superfish.js');
-
-
+// lightbox
+$outputHandle->addScriptFile($_CONF['path_layout'].'js/slimbox2.js');
+// validation
+$outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.validate.min.js');
+$outputHandle->addScriptFile($_CONF['path_layout'].'js/additional-methods.min.js');
+// tooltips
 $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/tooltipster.css');
+//slimbox
+$outputHandle->addLinkStyle($_CONF['layout_url'].'/css/slimbox2.css');
 
 function theme_getToolTipStyle()
 {

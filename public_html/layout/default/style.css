@@ -531,11 +531,6 @@ div.input-form form div small {
   height: expression('1%');
 }
 
-div.input-form form div.fValidator-msg {
-margin-left: 235px;
-color: #DF3737;
-}
-
 .top-r-corner {
 background:transparent url(layout/default/images/top-r-corner.png) 100% 0 no-repeat;
 height:100px;
@@ -3234,3 +3229,12 @@ color:#0055bb !important;
   padding-right:10px;
   padding-top:20px;
 }
+
+
+label.error, label.error {
+	/* remove the next line when you have trouble in IE6 with labels in list */
+	color: red;
+	font-style: italic
+}
+div.error { display: none; }
+input.error { border: 2px dotted red; }
