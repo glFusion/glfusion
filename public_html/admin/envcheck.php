@@ -164,9 +164,14 @@ function _checkEnvironment()
     $classCounter++;
 
     $post_limit = _return_bytes(ini_get('post_max_size'));
-    $post_limit_print = ($post_limit / 1024) / 1024;
+    if ( $post_limit == 0 ) {
+        $post_limit_print = 'unlimited';
+        $T->set_var('status','<span class="yes">'.$post_limit_print.'</span>');
+    } else {
+        $post_limit_print = ($post_limit / 1024) / 1024;
+        $T->set_var('status',$post_limit < 8388608 ? '<span class="notok">'.$post_limit_print.'M</span>' : '<span class="yes">'.$post_limit_print.'M</span>');
+    }
     $T->set_var('item','post_max_size');
-    $T->set_var('status',$post_limit < 8388608 ? '<span class="notok">'.$post_limit_print.'M</span>' : '<span class="yes">'.$post_limit_print.'M</span>');
     $T->set_var('recommended','8M');
     $T->set_var('notes',$LANG01['post_max_size']);
     $T->set_var('rowclass',($classCounter % 2)+1);
