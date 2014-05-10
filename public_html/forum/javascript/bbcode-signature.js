@@ -253,9 +253,8 @@ function ajax_previewsig() {
 
 }
 function receiveSigPreview(signature) {
-    var preview = $('sigpreview');
 
     if (signature != '') {
-        preview.setHTML(signature);
+        document.getElementById("sigpreview").innerHTML = signature;
     }
 }
