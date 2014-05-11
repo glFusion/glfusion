@@ -1,6 +1,28 @@
 /* Links Plugin */
 
 .linkswidth100 {
-width:100%;
+ width:100%;
 }
 
+.linkswidth_90 {
+ width:90%;
+}
+
+.width_and_padding {
+ border-collapse: colaspe;
+ border-spacing: 0px;
+ padding:2px;
+ width:100%;
+}
+
+.alignright_10 {
+ text-align:right;
+ width:10%;
+}
+
+.alignright_top {
+ text-align:right;
+ vertical-align:top;
+}
+
+.
