@@ -80,8 +80,8 @@ $outputHandle->addScriptFile($_CONF['path_layout'].'js/slimbox2.js');
 // validation
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.validate.min.js');
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/additional-methods.min.js');
-
-$outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.cycle.lite.min.js');
+// slideshow
+$outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.tcycle.js');
 // tooltips
 $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/tooltipster.css');
 //slimbox
