@@ -161,7 +161,7 @@ $_CONF['js_cache_filename'] = 'jscache_';
 $_CONF['path'] = '/path/to/glfusion/';
 $_CONF['path_system'] = $_CONF['path'] . 'system/';
 
-$_CONF['default_charset'] = 'iso-8859-1';
+$_CONF['default_charset'] = 'utf-8';
 
 if (!defined('LB')) {
   define('LB',"\n");
