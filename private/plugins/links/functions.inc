@@ -159,6 +159,22 @@ function plugin_getwhatsnew_links()
     return '';
 }
 
+function plugin_getheadercss_links()
+{
+    global $_CONF;
+
+    $styles = array();
+
+    if ( @file_exists($_CONF['path_layout'].'plugins/links/style.css') ) {
+        $styleFile = $_CONF['path_layout'].'plugins/links/style.css';
+    } else {
+        $styleFile = $_CONF['path_html'].'/links/style.css';
+    }
+	$styles[] = $styleFile;
+
+    return $styles;
+}
+
 /**
 * Implements the [link:] autotag.
 *
