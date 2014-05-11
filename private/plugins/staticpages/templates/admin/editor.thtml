@@ -8,13 +8,7 @@
               <td align="right">{lang_title}:</td>
               <td><input type="text" size="48" maxlength="255" name="sp_title" value="{sp_title}" /></td>
           </tr>
-          <tr>
-              <td align="right">{lang_addtomenu}:</td>
-              <td>
-                  <input type="checkbox" name="sp_onmenu" {onmenu_checked} />&nbsp;&nbsp;{lang_label}:
-                  <input type="text" name="sp_label" size="48" maxlength="64" value="{sp_label}" />
-              </td>
-          </tr>
+
           <tr>
               <td align="right">{lang_pageformat}:</td>
               <td>
