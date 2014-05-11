@@ -358,7 +358,8 @@ class sanitizer
         require_once $_CONF['path'] . 'lib/htmlpurifier/CustomFilters.php';
 
         $config = HTMLPurifier_Config::createDefault();
-        $config->set('HTML.AllowedElements', $final);
+        $config->set('Attr.AllowedFrameTargets', array('_blank'));
+        $config->set('HTML.Allowed', $configFilter);
         $config->set('Core.Encoding',$this->encoding);
         $config->set('AutoFormat.Linkify',false);
         $config->set('HTML.SafeObject',true);
