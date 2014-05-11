@@ -159,7 +159,6 @@ function WIDGET_slider( $dataArray )
     $outputHandle = outputHandler::getInstance();
     // core js
     $outputHandle->addLinkScript($_CONF['layout_url'].'/js/jquery.nivo.slider.pack.js');
-
     $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/nivo-slider.css');
     $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/themes/default/default.css');
 
@@ -254,7 +253,7 @@ function WIDGET_tabslide( $dataArray )
         return '';
     }
     ksort($pages);
-    $retval .= '<div id="slidertabs_'.$id.'" style="margin:0 auto;">';
+    $retval .= '<div id="slidertabs_'.$id.'" class="tab-slider">';
     $retval .= '<ul>';
     foreach ( $pages as $page ) {
         extract($page);

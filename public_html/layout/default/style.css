@@ -3238,3 +3238,8 @@ label.error, label.error {
 }
 div.error { display: none; }
 input.error { border: 2px dotted red; }
+
+.tab-slider {
+    margin:0 auto;
+    padding-bottom:10px;
+}
