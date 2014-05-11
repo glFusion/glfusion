@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.5.0
 ------
+- Bumped PHP requirement to v5.3 as a minimum
 - New 'default' theme - based on Nouveau but uses jQuery as JS engine
 - Revamped how scripts are loaded...
 - Implemented new jQuery widgets
@@ -11,6 +12,9 @@ v1.5.0
 - Cleaned up allowed html / allowed auto tag display on story and
   comment entry
 - Comment edit now takes you directly to the comment entry area
+- HTML filter now allows you to specific both element and attributes
+- Privacy policy and Terms of use now implemented as static pages
+- Support for PHP v5.3+ unlimited post size
 
 v1.4.1
 ------
