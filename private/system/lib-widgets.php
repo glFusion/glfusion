@@ -161,8 +161,12 @@ function WIDGET_slider( $dataArray )
     $outputHandle->addLinkScript($_CONF['layout_url'].'/js/jquery.nivo.slider.pack.js');
     $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/nivo-slider.css');
     $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/themes/default/default.css');
-
-    $retval .= '<div class="slide-wrapper theme-default">';
+    if ( isset($dataArray['options']['width']) ) {
+        $max_width = 'style="max-width:'.$dataArray['options']['width'] . 'px;"';
+    } else {
+        $max_width = '';
+    }
+    $retval .= '<div class="slide-wrapper theme-default" '.$max_width.'>';
     $retval .= '<div id="slide_'.$rand.'" class="nivoSlider">';
 
     foreach ($dataArray['images'] as $images ) {

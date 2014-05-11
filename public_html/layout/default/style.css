@@ -3243,3 +3243,7 @@ input.error { border: 2px dotted red; }
     margin:0 auto;
     padding-bottom:10px;
 }
+.slide-wrapper {
+    margin:0 auto;
+    padding-bottom:10px;
+}
