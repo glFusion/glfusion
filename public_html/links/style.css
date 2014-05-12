@@ -40,3 +40,13 @@
  margin:5px 0 5px;
 }
 
+.categoryeditor {
+ padding:2px;
+ width:100%;
+}
+
+.cat-parent {
+ text-align:right;
+ width:150px;
+}
+
