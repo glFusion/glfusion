@@ -1,7 +1,7 @@
 {# begin {templatelocation} #}
 <div class="block-divider"> </div>
 
-<a id="comments" name="comments"></a>
+<a id="comments"></a>
 
 <div class="commentbar-line1"></div>
 
