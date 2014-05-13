@@ -1,73 +1,72 @@
 {# begin {templatelocation} #}
-<table id="cal-header">
-  <tr class="aligncenter">
-    <td style="width:33%;text-align:center;"><b>{lang_day}</b></td>
-    <td style="width:33%;text-align:center;"><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=week" rel="nofollow">{lang_week}</a></td>
-    <td style="width:33%;text-align:center;"><a href="{site_url}/calendar/index.php?mode={mode}" rel="nofollow">{lang_month}</a></td>
-  </tr>
-</table>
+<div id="cal-header">
+<div id="cal-day"><b>{lang_day}</b></div>
+<div id="cal-week"><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=week" rel="nofollow">{lang_week}</a></div>
+<div id="cal-month"><a href="{site_url}/calendar/index.php?mode={mode}" rel="nofollow">{lang_month}</a></div>
+</div>
 <br />
-<div id="cal-daysx"><a
- href="%7Bsite_url%7D/calendar/index.php?mode=%7Bmode%7D&amp;view=day&amp;month=%7Bprevmonth%7D&amp;day=%7Bprevday%7D&amp;year=%7Bprevyear%7D">&lt;&lt;</a>&nbsp;&nbsp;{currentday}&nbsp;&nbsp;<a
- href="%7Bsite_url%7D/calendar/index.php?mode=%7Bmode%7D&amp;view=day&amp;month=%7Bnextmonth%7D&amp;day=%7Bnextday%7D&amp;year=%7Bnextyear%7D"
- rel="nofollow">&gt;&gt;</a><br>
-{calendar_title} {calendar_toggle}
+<div id="cal-header1">
+<div id="cal-dayx-cur">
+<p><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day&amp;month={prevmonth}&amp;day={prevday}&amp;year={prevyear}">&lt;&lt;</a>&nbsp;&nbsp;{currentday}&nbsp;&nbsp;<a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day&amp;month={nextmonth}&amp;day={nextday}&amp;year={nextyear}" rel="nofollow">&gt;&gt;</a></p>
 </div>
-<p>&nbsp;
-</p>
-<div id="cal-hour">
-<div>{lang_week} {week_num}</div>
-{allday_events}
-<div>{0_hour}</div>
+<div id="cal-dayx-subcur">{calendar_title}
+{calendar_toggle}</div>
+<div id="cal-dayx-weekevent">
+<p>{lang_week} {week_num}</p>
+</div>
+<div id="alldayevt">
+<p>{allday_events}</p>
+</div>
+</div>
+
+<div class="alignleft">{0_hour}</div>
 {0_cols}
-<div>{1_hour}</div>
+<div class="alignleft">{1_hour}</div>
 {1_cols}
-<div>{2_hour}</div>
+<div class="alignleft">{2_hour}</div>
 {2_cols}
-<div>{3_hour}</div>
+<div class="alignleft">{3_hour}</div>
 {3_cols}
-<div>{4_hour}</div>
+<div class="alignleft">{4_hour}</div>
 {4_cols}
-<div>{5_hour}</div>
+<div class="alignleft">{5_hour}</div>
 {5_cols}
-<div>{6_hour}</div>
+<div class="alignleft">{6_hour}</div>
 {6_cols}
-<div>{7_hour}</div>
+<div class="alignleft">{7_hour}</div>
 {7_cols}
-<div>{8_hour}</div>
+<div class="alignleft">{8_hour}</div>
 {8_cols}
-<div>{9_hour}</div>
+<div class="alignleft">{9_hour}</div>
 {9_cols}
-<div>{10_hour}</div>
+<div class="alignleft">{10_hour}</div>
 {10_cols}
-<div>{11_hour}</div>
+<div class="alignleft">{11_hour}</div>
 {11_cols}
-<div>{12_hour}</div>
+<div class="alignleft">{12_hour}</div>
 {12_cols}
-<div>{13_hour}</div>
+<div class="alignleft">{13_hour}</div>
 {13_cols}
-<div>{14_hour}</div>
+<div class="alignleft">{14_hour}</div>
 {14_cols}
-<div>{15_hour}</div>
+<div class="alignleft">{15_hour}</div>
 {15_cols}
-<div>{16_hour}</div>
+<div class="alignleft">{16_hour}</div>
 {16_cols}
-<div>{17_hour}</div>
+<div class="alignleft">{17_hour}</div>
 {17_cols}
-<div>{18_hour}</div>
+<div class="alignleft">{18_hour}</div>
 {18_cols}
-<div>{19_hour}</div>
+<div class="alignleft">{19_hour}</div>
 {19_cols}
-<div>{20_hour}</div>
+<div class="alignleft">{20_hour}</div>
 {20_cols}
-<div>{21_hour}</div>
+<div class="alignleft">{21_hour}</div>
 {21_cols}
-<div>{22_hour}</div>
+<div class="alignleft">{22_hour}</div>
 {22_cols}
-<div>{23_hour}</div>
+<div class="alignleft">{23_hour}</div>
 {23_cols}
-</div>
-<div style="text-align: center;"> </div>
 
 <br />
 {quickadd_form}
