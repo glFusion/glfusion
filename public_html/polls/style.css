@@ -13,6 +13,7 @@
 
 .poll-topic {
   font-weight:bold;
+  margin-bottom:10px;
 }
 
 .poll-autotag-message {
@@ -33,6 +34,10 @@
   padding: 5px;
   margin-right: auto;
   width: 350px;
+}
+
+.poll-questions {
+  margin-bottom:5px;
 }
 
 .poll-questions ul {

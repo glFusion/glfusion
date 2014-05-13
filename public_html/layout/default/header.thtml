@@ -6,7 +6,7 @@
 </head>
 <body dir="{direction}" style="background:#000000;">
 <div>
-  <a name="top"></a>
+  <a id="top"></a>
   <a href="#content-start"> {# for screenreaders #}
   <img class="hidden" src="{layout_url}/images/speck.gif" alt="skip navigation" />
   </a>
@@ -54,6 +54,6 @@
                     </span>
                 </div>
 {# START OF CONTENT AREA #}
-                <a name="content-start" id="content-start"></a> {# for screenreaders #}
+                <a id="content-start"></a> {# for screenreaders #}
                 {content}
 {# end {templatelocation} #}

@@ -1,0 +1,52 @@
+/* Links Plugin */
+
+.linkswidth100 {
+ width:100%;
+}
+
+.linkswidth_90 {
+ width:90%;
+}
+
+.width_and_padding {
+ border-collapse: colaspe;
+ border-spacing: 0px;
+ padding:2px;
+ width:100%;
+}
+
+.alignright_10 {
+ text-align:right;
+ width:10%;
+}
+
+.alignright_top {
+ text-align:right;
+ vertical-align:top;
+}
+
+.linkeditor {
+ width:100%;
+ padding:2px;
+}
+
+.linkdescription {
+ text-align:right;
+ verical-align:top;
+}
+
+.horizontal-line {
+ border-bottom:1px solid #cccccc;
+ margin:5px 0 5px;
+}
+
+.categoryeditor {
+ padding:2px;
+ width:100%;
+}
+
+.cat-parent {
+ text-align:right;
+ width:150px;
+}
+

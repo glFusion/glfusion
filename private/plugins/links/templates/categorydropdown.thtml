@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 <form action="{site_url}/links/index.php" method="post">
-<table width="100%">
+<table class="linkswidth100">
   <tr>
     <td class="alignleft">{breadcrumbs}</td>
     <td class="alignright">
