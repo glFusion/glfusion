@@ -231,7 +231,7 @@ function getSmallCalendar ($m, $y, $mode = '')
     }
 
     $retval .= '<table class="smallcal">' . LB
-            . '<tr class="smallcal-headline"><td align="center" colspan="7">'
+            . '<tr class="smallcal-headline"><td class="aligncenter" colspan="7">'
             . COM_createLink($mycal->getMonthName ($m), $_CONF['site_url']
                 . '/calendar/index.php?month=' . $m . '&amp;year=' . $y . $mode,$attr = array('rel'=>'nofollow'))
             . '</td></tr>' . makeDaysHeadline () . LB;
@@ -253,7 +253,7 @@ function getSmallCalendar ($m, $y, $mode = '')
                 }
                 $tr_sent = true;
             }
-            $retval .= '<td align="right"';
+            $retval .= '<td style="alignright"';
             if (!empty ($curday)) {
                 if ($j % 2 == 0) {
                     $retval .= ' class="smallcal-day-even">' . LB;

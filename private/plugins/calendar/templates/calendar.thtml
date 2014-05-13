@@ -1,24 +1,24 @@
 {# begin {templatelocation} #}
                                 {# Begin Calendar #}
-                                <table width="100%" cellpadding="5" cellspacing="0" border="0" class="cal-header">
-                                    <tr align="center" class="dayview_times">
-                                        <td width="33%" align="center"><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day" rel="nofollow">{lang_day}</a></td>
-                                        <td width="33%" align="center"><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=week" rel="nofollow">{lang_week}</a></td>
-                                        <td width="33%" align="center"><b>{lang_month}</b></td>
+                                <table id="cal-header">
+                                    <tr class="dayview_times">
+                                        <td style="width:33%;text-align:center;"><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day" rel="nofollow">{lang_day}</a></td>
+                                        <td style="width:33%;text-align:center;"><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=week" rel="nofollow">{lang_week}</a></td>
+                                        <td style="width:33%;text-align:center;"><b>{lang_month}</b></td>
                                     </tr>
                                 </table><br />
-                                <table width="100%" cellpadding="5" cellspacing="1" border="0" class="cal-body">
-                                    <tr align="center">
+                                <table id="cal-body">
+                                    <tr class="text-align:center;">
                                         <td colspan="8" class="cal-month">
-                                            <table border="0" width="100%">
+                                            <table style="width:100%;">
                                                 <tr>
-                                                    <td class="cal-month" valign="top">
+                                                    <td class="cal-month">
                                                         {previous_months_calendar}
                                                     </td>
-                                                    <td width="100%" class="cal-month" align="center">
-                                                        <table border="0" cellpadding="5" cellspacing="0">
+                                                    <td style="width:100%;text-align:center;" class="cal-month">
+                                                        <table class="cal-jump">
                                                             <tr>
-                                                                <td colspan="2" align="center">
+                                                                <td colspan="2">
                                                                     <form method="post" action="index.php">
                                                                         <div>
                                                                             <input type="hidden" name="mode" value="{mode}" />
@@ -44,17 +44,17 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td align="right">
+                                                                <td class="personal-master-opt">
                                                                     {add_event_option}
                                                                 </td>
-                                                                <td>
+                                                                <td class="personal-master-opt">
                                                                     {personal_calendar_option}
                                                                     {master_calendar_option}
                                                                 </td>
                                                             </tr>
                                                         </table>
                                                     </td>
-                                                    <td class="cal-month" valign="top">
+                                                    <td class="cal-month">
                                                         {next_months_calendar}
                                                     </td>
                                                 </tr>
@@ -63,17 +63,17 @@
                                     </tr>
                                     <tr>
                                         <td>&nbsp;</td>
-                                        <td width="15%" class="cal-day">{lang_sunday}</td>
-                                        <td width="14%" class="cal-day">{lang_monday}</td>
-                                        <td width="14%" class="cal-day">{lang_tuesday}</td>
-                                        <td width="14%" class="cal-day">{lang_wednesday}</td>
-                                        <td width="14%" class="cal-day">{lang_thursday}</td>
-                                        <td width="14%" class="cal-day">{lang_friday}</td>
-                                        <td width="15%" class="cal-day">{lang_saturday}</td>
+                                        <td style="width:15%;" class="cal-day">{lang_sunday}</td>
+                                        <td style="width:14%;" class="cal-day">{lang_monday}</td>
+                                        <td style="width:14%;" class="cal-day">{lang_tuesday}</td>
+                                        <td style="width:14%;" class="cal-day">{lang_wednesday}</td>
+                                        <td style="width:14%;" class="cal-day">{lang_thursday}</td>
+                                        <td style="width:14%;" class="cal-day">{lang_friday}</td>
+                                        <td style="width:15%;" class="cal-day">{lang_saturday}</td>
                                     </tr>
                                     {cal_week}
                                 </table>
-                                <table align="center">
+                                <table class="aligncenter">
                                     <tr>
                                         <td>
                                             <form method="post" action="index.php">
