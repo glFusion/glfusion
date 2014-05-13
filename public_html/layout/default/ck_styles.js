@@ -29,6 +29,6 @@ CKEDITOR.stylesSet.add( 'default', [
     {name: 'Microphone Bulleted List',element: 'ul',attributes: {'class' : 'mic'}},
     {name: 'Speaker Bulleted List',element: 'ul',attributes: {'class' : 'speaker'}},
     {name: 'Video Bulleted List',element: 'ul',attributes: {'class' : 'video'}},
-	{name: 'Borderless Table',element: 'table',	styles: { 'border-style': 'hidden', 'background-color': '#E6E6FA' } },
+	{name: 'Borderless Table',element: 'table',	styles: { 'border-style': 'hidden', 'background-color': '#E6E6FA' } }
 ] );
 
