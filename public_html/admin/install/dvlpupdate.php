@@ -1110,6 +1110,12 @@ function glfusion_150()
 {
     global $_TABLES, $_CONF, $_FF_CONF, $_PLUGINS, $LANG_AM, $_DB_table_prefix, $_CP_CONF;
 
+    $_SQL[] = "ALTER TABLE {$_TABLES['tokens']} CHANGE `urlfor` `urlfor` VARCHAR( 1024 ) NOT NULL";
+
+    foreach ($_SQL as $sql) {
+        DB_query($sql,1);
+    }
+
     // new config options
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
