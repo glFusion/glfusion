@@ -125,6 +125,7 @@
 
 .cal-quickadd,
 .quickadd {
+  width:100%;
   background:#F7F7F7;
   border-bottom:#E7E7E7 1px solid;
   border-left:#E7E7E7 1px solid;
