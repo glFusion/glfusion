@@ -203,10 +203,44 @@ function WIDGET_slider( $dataArray )
     return $retval;
 }
 
-function WIDGET_springMenu()
+function WIDGET_springMenu($dataArray)
 {
-   // nothing here yet.  We may make this data driven like the other...
+    global $_CONF;
 
+    $rand = rand(1,1000);
+    $slideCounter = 1;
+    $retval = '';
+
+    // define the JS we need for this theme..
+    $outputHandle = outputHandler::getInstance();
+    // core js
+    $outputHandle->addLinkScript($_CONF['layout_url'].'/js/jquery.accordionImageMenu.min.js');
+    $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/accordionImageMenu.css');
+
+    $retval .= '<div class="spring-menu">';
+    $retval .= '<div id="springmenu_'.$rand.'" class="aim">';
+
+    foreach ($dataArray['images'] as $images ) {
+        if ( isset($images['link']) && $images['link'] != '' ) {
+            $retval .= '<a href="'.$images['link'].'">';
+        }
+        $retval .= '<img src="'.$images['image'].'" alt="" />' ;
+        if ( isset($images['link']) && $images['link'] != '' ) {
+            $retval .= '</a>';
+        }
+        $slideCounter++;
+    }
+    $retval .= '</div>';
+    $retval .= '</div>';
+
+    $retval .= '<script type="text/javascript">$(window).load(function() {';
+    $retval .= '   $(\'#springmenu_'.$rand.'\').AccordionImageMenu({';
+    foreach ($dataArray['options'] as $option => $value ) {
+        $retval .= "'".$option."'" . ": " . "'".$value . "',";
+    }
+    $retval .= '}); });</script>';
+
+    return $retval;
 }
 
 /*
