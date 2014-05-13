@@ -2,7 +2,8 @@ glFusion ChangeLog
 
 v1.5.0
 ------
-- Bumped PHP requirement to v5.3 as a minimum
+- Bumped MySQL requirement to 5.0.1 as the minimum
+- Bumped PHP requirement to v5.3 as the minimum
 - New 'default' theme - based on Nouveau but uses jQuery as JS engine
 - Revamped how scripts are loaded...
 - Implemented new jQuery widgets

@@ -44,7 +44,7 @@ if (!defined('SUPPORTED_PHP_VER')) {
     define('SUPPORTED_PHP_VER', '5.3.0');
 }
 if (!defined('SUPPORTED_MYSQL_VER')) {
-    define('SUPPORTED_MYSQL_VER', '4.1.3');
+    define('SUPPORTED_MYSQL_VER', '5.0.3');
 }
 
 if (empty($LANG_DIRECTION)) {
@@ -1136,6 +1136,12 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             $current_fusion_version = '1.4.1';
         case '1.4.1' :
+            $_SQL[] = "ALTER TABLE {$_TABLES['tokens']} CHANGE `urlfor` `urlfor` VARCHAR( 1024 ) NOT NULL";
+
+            foreach ($_SQL as $sql) {
+                DB_query($sql,1);
+            }
+
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
 
