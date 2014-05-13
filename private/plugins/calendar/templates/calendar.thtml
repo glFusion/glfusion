@@ -1,12 +1,11 @@
 {# begin {templatelocation} #}
                                 {# Begin Calendar #}
-                                <table id="cal-header">
-                                    <tr class="dayview_times">
-                                        <td style="width:33%;text-align:center;"><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day" rel="nofollow">{lang_day}</a></td>
-                                        <td style="width:33%;text-align:center;"><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=week" rel="nofollow">{lang_week}</a></td>
-                                        <td style="width:33%;text-align:center;"><b>{lang_month}</b></td>
-                                    </tr>
-                                </table><br />
+<div id="cal-header">
+<div id="cal-day"><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day" rel="nofollow">{lang_day}</a></div>
+<div id="cal-week"><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=week" rel="nofollow">{lang_week}</a></div>
+<div id="cal-month"><b>{lang_month}</b></div>
+</div>
+<br />
                                 <table id="cal-body">
                                     <tr class="text-align:center;">
                                         <td colspan="8" class="cal-month">
