@@ -3,7 +3,7 @@
 {wysiwyg}
 {!endif}
 <form action="{site_url}/submit.php" method="post" onsubmit='set_postcontent();'>
-    <table cellspacing="0" cellpadding="3">
+    <table style="padding:3px;">
         <tr>
             <td style="width:10%;" class="alignright"><b>{lang_username}:</b></td>
             <td>{story_username} [ <a href="{status_url}" rel="nofollow">{lang_loginout}</a>{separator}{create_account} ]</td>
