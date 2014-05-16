@@ -335,7 +335,7 @@ function BBC_editor($editorText,$formName,$textName,$additionalCodes = array(),$
 
     $buttonText = $buttonText . $buttonSelectText;
 
-    $T = new Template($_CONF['path_layout'] . 'bbcode/');
+    $T = new Template($_CONF['path_layout'] . 'bbcode/','keep');
     $T->set_file (array (
         'editor'    =>  'editor.thtml',
     ));
