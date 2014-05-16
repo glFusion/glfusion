@@ -191,9 +191,8 @@
         </div>
         </td>
       </tr>
+      {bbcode_buttons}
 {!endif}
-    {bbcode_buttons}
-
       <tr>
         <td colspan="2" class="pluginCellText pluginCellFill" style="padding-left: 5px;">
           {!if smilies}
