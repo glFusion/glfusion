@@ -2521,6 +2521,11 @@ border-right:5px solid #FFF;
 background:url(layout/default/images/joinus.jpg) no-repeat;
 }
 
+#gl_moospring_center {
+width:50%;
+margin: 0 auto;
+}
+
 /* start gl_mootickerRSS css */
 #gl_mooticker {
 padding:15px 0;
