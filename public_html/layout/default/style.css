@@ -2357,6 +2357,10 @@ background-position:0 -17px;
 #gl_moosimplebox_trigger1 {
 cursor:pointer;
 }
+#gl_moosimplebox {
+width:20%;
+margin:0 auto;
+}
 .gl_moosimplebox {
 color:#fff;
 font-family:Arial, Helvetica, sans-serif;
@@ -3238,3 +3242,12 @@ label.error, label.error {
 }
 div.error { display: none; }
 input.error { border: 2px dotted red; }
+
+.tab-slider {
+    margin:0 auto;
+    padding-bottom:10px;
+}
+.slide-wrapper {
+    margin:0 auto;
+    padding-bottom:10px;
+}
