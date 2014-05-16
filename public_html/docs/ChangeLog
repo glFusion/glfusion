@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.5.0
 ------
+- Updated CKEditor v4.4.0
 - Bumped MySQL requirement to 5.0.1 as the minimum
 - Bumped PHP requirement to v5.3 as the minimum
 - New 'default' theme - based on Nouveau but uses jQuery as JS engine
