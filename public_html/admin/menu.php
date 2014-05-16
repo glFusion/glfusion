@@ -483,7 +483,7 @@ function MB_moveElement( $menu_id, $mid, $direction ) {
  */
 
 function MB_createElement ( $menu_id ) {
-    global $_CONF, $_TABLES, $LANG_MB01, $LANG_MB_ADMIN, $LANG_MB_TYPES,
+    global $_CONF, $_TABLES, $_PLUGINS, $LANG_MB01, $LANG_MB_ADMIN, $LANG_MB_TYPES,
            $LANG_MB_GLTYPES, $LANG_MB_GLFUNCTION;
 
     $menu = menu::getInstance($menu_id);
@@ -504,23 +504,26 @@ function MB_createElement ( $menu_id ) {
     // build types select
 
     $spCount = 0;
+
     $sp_select = '<select id="spname" name="spname">' . LB;
-    $sql = "SELECT sp_id,sp_title,sp_label FROM {$_TABLES['staticpage']} WHERE sp_status = 1 ORDER BY sp_title ";
-    $result = DB_query($sql);
-    while (list ($sp_id, $sp_title,$sp_label) = DB_fetchArray($result)) {
-        if ( $sp_title == '' ) {
-            $label = $sp_label;
-        } else {
-            $label = $sp_title;
+    if (in_array('staticpages', $_PLUGINS)) {
+        $sql = "SELECT sp_id,sp_title,sp_label FROM {$_TABLES['staticpage']} WHERE sp_status = 1 ORDER BY sp_title ";
+        $result = DB_query($sql);
+        while (list ($sp_id, $sp_title,$sp_label) = DB_fetchArray($result)) {
+            if ( $sp_title == '' ) {
+                $label = $sp_label;
+            } else {
+                $label = $sp_title;
+            }
+            $sp_select .= '<option value="' . $sp_id . '">' . $label . '</option>' . LB;
+            $spCount++;
         }
-        $sp_select .= '<option value="' . $sp_id . '">' . $label . '</option>' . LB;
-        $spCount++;
     }
     $sp_select .= '</select>' . LB;
 
-    if ( $spCount == 0 ) {
-        $sp_select = '';
-    }
+//    if ( $spCount == 0 ) {
+//        $sp_select = '';
+//    }
 
     $topicCount = 0;
     $topic_select = '<select id="topicname" name="topicname">' . LB;
@@ -738,7 +741,7 @@ function MB_saveNewMenuElement ( ) {
  */
 
 function MB_editElement( $menu_id, $mid ) {
-    global $_CONF, $_TABLES, $LANG_MB01, $LANG_MB_ADMIN,
+    global $_CONF, $_TABLES, $_PLUGINS, $LANG_MB01, $LANG_MB_ADMIN,
            $LANG_MB_TYPES, $LANG_MB_GLTYPES,$LANG_MB_GLFUNCTION;
 
     $retval = '';
@@ -814,15 +817,17 @@ function MB_editElement( $menu_id, $mid ) {
     $plugin_select .= '</select>' . LB;
 
     $sp_select = '<select id="spname" name="spname">' . LB;
-    $sql = "SELECT sp_id,sp_title,sp_label FROM {$_TABLES['staticpage']} WHERE sp_status = 1 ORDER BY sp_title";
-    $result = DB_query($sql);
-    while (list ($sp_id, $sp_title,$sp_label) = DB_fetchArray($result)) {
-        if (trim($sp_label) == '') {
-            $label = $sp_title;
-        } else {
-            $label = $sp_label;
+    if (in_array('staticpages', $_PLUGINS)) {
+        $sql = "SELECT sp_id,sp_title,sp_label FROM {$_TABLES['staticpage']} WHERE sp_status = 1 ORDER BY sp_title";
+        $result = DB_query($sql);
+        while (list ($sp_id, $sp_title,$sp_label) = DB_fetchArray($result)) {
+            if (trim($sp_label) == '') {
+                $label = $sp_title;
+            } else {
+                $label = $sp_label;
+            }
+            $sp_select .= '<option value="' . $sp_id . '"' . ($menu->menu_elements[$mid]->subtype == $sp_id ? ' selected="selected"' : '') . '>' . $label . '</option>' . LB;
         }
-        $sp_select .= '<option value="' . $sp_id . '"' . ($menu->menu_elements[$mid]->subtype == $sp_id ? ' selected="selected"' : '') . '>' . $label . '</option>' . LB;
     }
     $sp_select .= '</select>' . LB;
 
