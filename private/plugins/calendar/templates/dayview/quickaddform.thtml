@@ -3,13 +3,13 @@
                                 <input type="hidden" name="view" value="addentry" />
                                 <input type="hidden" name="calendar_type" value="quickadd" />
                                 <input type="hidden" name="hour_mode" value="{hour_mode}" />
-                                <table cellpadding="0" cellspacing="1" border="0" width="100%">
+                                <table style=width:100%">
                                     <tr>
                                         <td>{lang_quickadd}</td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <table cellpadding="0" cellspacing="0" border="0" width="100%" class="cal-quickadd">
+                                            <table class="cal-quickadd">
                                                 <tr>
                                                     <td><b>{lang_event}</b></td>
                                                     <td><b>{lang_date}</b></td>

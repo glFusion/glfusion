@@ -2357,6 +2357,10 @@ background-position:0 -17px;
 #gl_moosimplebox_trigger1 {
 cursor:pointer;
 }
+#gl_moosimplebox {
+width:20%;
+margin:0 auto;
+}
 .gl_moosimplebox {
 color:#fff;
 font-family:Arial, Helvetica, sans-serif;
@@ -2515,6 +2519,11 @@ border-right:5px solid #FFF;
 
 #gl_moospring .gl_moospring4 {
 background:url(layout/default/images/joinus.jpg) no-repeat;
+}
+
+#gl_moospring_center {
+width:50%;
+margin: 0 auto;
 }
 
 /* start gl_mootickerRSS css */

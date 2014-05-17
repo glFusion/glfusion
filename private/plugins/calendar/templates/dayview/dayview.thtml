@@ -1,127 +1,73 @@
 {# begin {templatelocation} #}
-<table width="100%" border="0" cellpadding="5" cellspacing="0" class="cal-header">
-  <tr align="center">
-    <td width="33%" align="center"><b>{lang_day}</b></td>
-    <td width="33%" align="center"><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=week" rel="nofollow">{lang_week}</a></td>
-    <td width="33%" align="center"><a href="{site_url}/calendar/index.php?mode={mode}" rel="nofollow">{lang_month}</a></td>
-  </tr>
-</table>
+<div id="cal-header">
+<div id="cal-day"><b>{lang_day}</b></div>
+<div id="cal-week"><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=week" rel="nofollow">{lang_week}</a></div>
+<div id="cal-month"><a href="{site_url}/calendar/index.php?mode={mode}" rel="nofollow">{lang_month}</a></div>
+</div>
 <br />
-<table cellpadding="2" cellspacing="1" border="0" width="100%" class="cal-dayx-body">
-    <tr>
-        <td colspan="2" class="cal-dayx-cur"><table width="100%" border="0">
-          <tr>
-            <td colspan="2" class="cal-dayx-cur"><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day&amp;month={prevmonth}&amp;day={prevday}&amp;year={prevyear}">&lt;&lt;</a>&nbsp;&nbsp;{currentday}&nbsp;&nbsp;<a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day&amp;month={nextmonth}&amp;day={nextday}&amp;year={nextyear}" rel="nofollow">&gt;&gt;</a></td>
-            <td>&nbsp;</td>
-          </tr>
-          <tr>
-            <td colspan="2" class="cal-dayx-subcur">{calendar_title} {calendar_toggle}</td>
-            <td>&nbsp;</td>
-          </tr>
-        </table></td>
-    </tr>
-    <tr>
-        <td width="1%" class="cal-dayx-weekevent" nowrap="nowrap"><div align="right">{lang_week} {week_num}</div></td>
-        <td>{allday_events}</td>
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{0_hour}</div></td>
-        {0_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{1_hour}</div></td>
-        {1_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{2_hour}</div></td>
-        {2_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{3_hour}</div></td>
-        {3_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{4_hour}</div></td>
-        {4_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{5_hour}</div></td>
-        {5_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{6_hour}</div></td>
-        {6_cols}
-    </tr>
+<div id="cal-header1">
+<div id="cal-dayx-cur">
+<p><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day&amp;month={prevmonth}&amp;day={prevday}&amp;year={prevyear}">&lt;&lt;</a>&nbsp;&nbsp;{currentday}&nbsp;&nbsp;<a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day&amp;month={nextmonth}&amp;day={nextday}&amp;year={nextyear}" rel="nofollow">&gt;&gt;</a></p>
+</div>
+<div id="cal-dayx-subcur">{calendar_title}
+{calendar_toggle}</div>
+<div id="cal-dayx-weekevent">
+<p>{lang_week} {week_num}</p>
+</div>
+<div id="alldayevt">
+<p>{allday_events}</p>
+</div>
+</div>
 
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{7_hour}</div></td>
-        {7_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{8_hour}</div></td>
-        {8_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{9_hour}</div></td>
-        {9_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{10_hour}</div></td>
-        {10_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{11_hour}</div></td>
-        {11_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{12_hour}</div></td>
-        {12_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{13_hour}</div></td>
-        {13_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{14_hour}</div></td>
-        {14_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{15_hour}</div></td>
-        {15_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{16_hour}</div></td>
-        {16_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{17_hour}</div></td>
-        {17_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{18_hour}</div></td>
-        {18_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{19_hour}</div></td>
-        {19_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{20_hour}</div></td>
-        {20_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{21_hour}</div></td>
-        {21_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{22_hour}</div></td>
-        {22_cols}
-    </tr>
-    <tr>
-        <td width="1%" valign="top" class="cal-dayx-times"><div align="right">{23_hour}</div></td>
-        {23_cols}
-    </tr>
-</table>
+<div class="alignleft">{0_hour}</div>
+{0_cols}
+<div class="alignleft">{1_hour}</div>
+{1_cols}
+<div class="alignleft">{2_hour}</div>
+{2_cols}
+<div class="alignleft">{3_hour}</div>
+{3_cols}
+<div class="alignleft">{4_hour}</div>
+{4_cols}
+<div class="alignleft">{5_hour}</div>
+{5_cols}
+<div class="alignleft">{6_hour}</div>
+{6_cols}
+<div class="alignleft">{7_hour}</div>
+{7_cols}
+<div class="alignleft">{8_hour}</div>
+{8_cols}
+<div class="alignleft">{9_hour}</div>
+{9_cols}
+<div class="alignleft">{10_hour}</div>
+{10_cols}
+<div class="alignleft">{11_hour}</div>
+{11_cols}
+<div class="alignleft">{12_hour}</div>
+{12_cols}
+<div class="alignleft">{13_hour}</div>
+{13_cols}
+<div class="alignleft">{14_hour}</div>
+{14_cols}
+<div class="alignleft">{15_hour}</div>
+{15_cols}
+<div class="alignleft">{16_hour}</div>
+{16_cols}
+<div class="alignleft">{17_hour}</div>
+{17_cols}
+<div class="alignleft">{18_hour}</div>
+{18_cols}
+<div class="alignleft">{19_hour}</div>
+{19_cols}
+<div class="alignleft">{20_hour}</div>
+{20_cols}
+<div class="alignleft">{21_hour}</div>
+{21_cols}
+<div class="alignleft">{22_hour}</div>
+{22_cols}
+<div class="alignleft">{23_hour}</div>
+{23_cols}
+
 <br />
 {quickadd_form}
 {# end {templatelocation} #}

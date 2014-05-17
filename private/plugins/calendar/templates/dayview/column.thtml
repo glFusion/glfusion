@@ -1,3 +1,3 @@
 {# begin {templatelocation} #}
-<td class="cal-dayx-times2">{event_entry}</td>
+<div class="cal-dayx-times2">{event_entry}</div>
 {# end {templatelocation} #}
