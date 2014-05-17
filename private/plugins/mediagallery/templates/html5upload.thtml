@@ -186,7 +186,6 @@ var aid;
 		xhr.open("post", "{site_url}/html5upload.php" + query, true);
 
 		// Set appropriate headers
-		xhr.setRequestHeader("Content-Type", "multipart/form-data");
 		xhr.setRequestHeader("X-File-Name", file.name);
 		xhr.setRequestHeader("X-File-Size", file.size);
 		xhr.setRequestHeader("X-File-Type", file.type);
