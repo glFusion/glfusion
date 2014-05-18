@@ -1,7 +1,7 @@
 {# begin {templatelocation} #}
 {forum_time}
 <div style="background:transparent; border: 1px solid #C8DAF7;">
-<table width="100%" border="0" cellspacing="1" cellpadding="2" class="pluginFooter">
+<table style="border-collapse: separate; border-spacing: 1px;" class="forum-pluginFooter">
     <tr>
         <td style="width:50%;">
             {forum_legend}

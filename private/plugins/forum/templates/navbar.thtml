@@ -3,13 +3,13 @@
   <div>
     {menu}
   </div>
-  <table width="100%" cellspacing="1" cellpadding="0" style="border:none;">
+  <table class="forum-navbar">
     <tr>
-      <td colspan="5" style="padding-right:5px;">{navmenu}</td>
+      <td style="padding-right:5px;">{navmenu}</td>
 	</tr>
     <tr>
-      <td colspan="5" style="padding-right:5px;">
-        <table width="100%" border="0" cellspacing="0" cellpadding="2">
+      <td style="padding-right:5px;">
+        <table style="width:100%;padding:2px;">
           <tr>
             <td style="white-space:nowrap;">
               {search_forum}

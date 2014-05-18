@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 <div id="forumcenterblock">
-  <table width="100%" border="0" cellspacing="0" cellpadding="1" class="pluginBG" style="border: 1px solid #CCC; margin-bottom:10px;">
+  <table class="forum-pluginBG">
     <tr style="vertical-align:middle;">
       <td class="pluginTitle alignleft" style="width:30%;padding:4px;"><strong>{LANG_FORUM}</strong></td>
       <td class="pluginTitle alignleft" style="width:40%;padding:4px;"><strong>{LANG_TOPIC}</strong></td>
