@@ -99,7 +99,7 @@ function popitup(url)
                 </span>
                 {headline_last10stories}
             </div>
-            <table class="profile-data" cellspacing="0" cellpadding="3">
+            <table class="profile-data" style="padding:3px;">
                 {story_row}
             </table>
             <div class="profile-header">
@@ -110,7 +110,7 @@ function popitup(url)
                 </span>
                 {headline_last10comments}
             </div>
-            <table class="profile-data" cellspacing="0" cellpadding="3">
+            <table class="profile-data" style="padding:3px;">
                 {comment_row}
             </table>
             <div class="profile-header">
