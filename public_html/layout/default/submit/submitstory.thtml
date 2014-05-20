@@ -21,12 +21,6 @@
             </td>
         </tr>
         <tr>
-            <td class="alignright" style="vertical-align:top;">&nbsp;</td>
-            <td style="vertical-align:top;">
-                <span class="warningsmall">{allowed_html}</span>
-            </td>
-        </tr>
-        <tr>
             <td class="alignright" style="vertical-align:top;"><b>{lang_story}:</b></td>
             <td style="vertical-align:top;width:100%;">
             <div id="text_editor" style="width:90%;margin-right:20px;">
@@ -37,6 +31,13 @@
             </div>
             </td>
         </tr>
+        <tr>
+            <td class="alignright" style="vertical-align:top;">&nbsp;</td>
+            <td style="vertical-align:top;">
+                <span class="warningsmall">{allowed_html}</span>
+            </td>
+        </tr>
+
         {captcha}
         <tr>
             <td class="aligncenter" colspan="2">

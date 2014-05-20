@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.5.0
 ------
+- Fixed user submitted story form to show allowed items at the bottom
+  of the form
 - Updated CKEditor v4.4.0
 - Bumped MySQL requirement to 5.0.1 as the minimum
 - Bumped PHP requirement to v5.3 as the minimum
