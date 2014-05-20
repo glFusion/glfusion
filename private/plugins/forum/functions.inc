@@ -1376,7 +1376,7 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
     $sql  = "SELECT " . implode(',', $fields) . ",a.pid,a.postmode, a.status ";
     $sql .= "FROM {$_TABLES['ff_topic']} a ";
     $sql .= "LEFT JOIN {$_TABLES['ff_forums']} b ON a.forum=b.forum_id ";
-    $sql .= $where . $permOp . " AND b.grp_id IN ($grouplist)";
+    $sql .= $where . $permOp . " b.grp_id IN ($grouplist)";
 
     if ($id != '*') {
         $sql .= ' LIMIT 1';
