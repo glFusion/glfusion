@@ -65,9 +65,9 @@ $menu_arr = array (
 $retval .= ADMIN_createMenu($menu_arr, $LANG_SX00['instructions'],$_CONF['site_admin_url'] . '/plugins/spamx/images/spamx.png');
 
 $files = array ();
-if ($dir = @opendir ($_CONF['path'] . 'plugins/spamx/')) {
+if ($dir = @opendir ($_CONF['path'] . 'plugins/spamx/modules/')) {
     while (($file = readdir ($dir)) !== false) {
-        if (is_file ($_CONF['path'] . 'plugins/spamx/' . $file)) {
+        if (is_file ($_CONF['path'] . 'plugins/spamx/modules/' . $file)) {
             if (substr ($file, -16) == '.Admin.class.php') {
                 $tmp = str_replace ('.Admin.class.php', '', $file);
                 array_push ($files, $tmp);
@@ -79,7 +79,7 @@ if ($dir = @opendir ($_CONF['path'] . 'plugins/spamx/')) {
 $retval .= '<p><b>' . $LANG_SX00['adminc'] . '</b></p><ul>';
 
 foreach ($files as $file) {
-    require_once ($_CONF['path'] . 'plugins/spamx/' . $file . '.Admin.class.php');
+    require_once ($_CONF['path'] . 'plugins/spamx/modules/' . $file . '.Admin.class.php');
     $CM = new $file;
     $retval .= '<li>' . COM_createLink($CM->link (), $_CONF['site_admin_url']
              . '/plugins/spamx/index.php?command=' . $file) . '</li>';

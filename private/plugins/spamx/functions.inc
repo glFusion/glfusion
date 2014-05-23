@@ -106,8 +106,6 @@ function plugin_showstats_spamx($showsitestats)
                 'stats' => COM_numberFormat (DB_count ($_TABLES['spamx'], 'name', 'IPofUrl'))),
             array('label' => $LANG_SX00['stats_header'],
                 'stats' => COM_numberFormat (DB_count ($_TABLES['spamx'], 'name', 'HTTPHeader'))),
-            array('label' => $LANG_SX00['slvwhitelist'],
-                'stats' => COM_numberFormat (DB_count ($_TABLES['spamx'], 'name', 'SLVwhitelist')))
         );
         $retval .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
     }
@@ -225,7 +223,7 @@ function plugin_checkforSpam_spamx ($comment, $action = -1)
         }
     }
 
-    $spamx_path = $_CONF['path'] . 'plugins/spamx/';
+    $spamx_path = $_CONF['path'] . 'plugins/spamx/modules/';
 
     // Set up Spamx_Examine array
     $Spamx_Examine = array ();
@@ -269,7 +267,7 @@ function plugin_spamaction_spamx ($comment, $action)
 
     $res = 0;
 
-    $spamx_path = $_CONF['path'] . 'plugins/spamx/';
+    $spamx_path = $_CONF['path'] . 'plugins/spamx/modules/';
 
     if (($action == -1) || ($action == '')) {
         $action = $_SPX_CONF['action'];
@@ -352,8 +350,8 @@ function plugin_itemPreSave_spamx($type, $username)
         if ( isset($_POST['email']) ) {
             $email = $_POST['email'];
         }
-        if ( @file_exists($_CONF['path'].'/plugins/spamx/SFS.Misc.class.php') ) {
-            require_once $_CONF['path'].'/plugins/spamx/SFS.Misc.class.php';
+        if ( @file_exists($_CONF['path'].'/plugins/spamx/modules/SFS.Misc.class.php') ) {
+            require_once $_CONF['path'].'/plugins/spamx/modules/SFS.Misc.class.php';
             $EX = new SFSreg;
             $res = $EX->execute($email, $REMOTE_ADDR);
             if ($res > 0) {
