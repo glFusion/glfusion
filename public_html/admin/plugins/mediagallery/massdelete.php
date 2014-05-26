@@ -2,7 +2,6 @@
 // +--------------------------------------------------------------------------+
 // | Media Gallery Plugin for glFusion CMS                                    |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
 // | Administer Media Gallery categories.                                     |
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2005-2014 by the following authors:                        |
@@ -92,7 +91,6 @@ function MG_MassdeleteAlbum( $album_id ) {
     MG_initAlbums();
     require_once $_CONF['path'] . 'plugins/mediagallery/include/rssfeed.php';
     MG_buildFullRSS( );
-    echo COM_refresh($_MG_CONF['admin_url'] . '/index.php?msg=15');
 
 }
 
@@ -159,7 +157,6 @@ function MG_massDeleteAlbums( $aid ) {
 
     $children = $MG_albums[$aid]->getChildren();
     $numItems = count($children);
-
     for ($x=0; $x < $numItems; $x++) {
         $i = $MG_albums[$children[$x]]->id;
         if ( isset($_POST['album'][$i]) && $_POST['album'][$i] == 1 ) {
@@ -198,6 +195,7 @@ if ($mode == $LANG_MG01['delete'] && !empty ($LANG_MG01['delete'])) {
     $T->set_var(array(
         'admin_body'    => MG_massDeleteAlbums(0),
     ));
+    echo COM_refresh($_MG_CONF['admin_url'] . '/index.php?msg=15');
 } elseif ($mode == $LANG_MG01['cancel']) {
     echo COM_refresh ($_MG_CONF['admin_url'] . 'index.php');
     exit;
