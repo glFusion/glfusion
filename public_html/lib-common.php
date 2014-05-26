@@ -400,7 +400,7 @@ if ( $_CONF['allow_user_themes'] && !empty( $usetheme ) && is_dir( $_CONF['path_
             if ( $_CONF['theme'] != 'chameleon' ) {
                 $_USER['theme'] = $_CONF['theme'];
             } else {
-                $_USER['theme'] = 'nouveau';
+                $_USER['theme'] = 'default';
             }
         }
     }
@@ -415,8 +415,8 @@ if ( $_CONF['allow_user_themes'] && !empty( $usetheme ) && is_dir( $_CONF['path_
     }
 } else if ($_CONF['theme'] == 'chameleon' ) {
     if (DB_count($_TABLES['plugins'], array("pi_name","pi_enabled"),array("chameleon","1")) < 1) {
-        $_USER['theme'] = 'nouveau';
-        $_CONF['theme'] = 'nouveau';
+        $_USER['theme'] = 'default';
+        $_CONF['theme'] = 'default';
         $_CONF['path_layout'] = $_CONF['path_themes'] . $_USER['theme'] . '/';
         $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_USER['theme'];
     }
