@@ -2345,14 +2345,11 @@ function COM_filterHTML( $str, $permissions = 'story.edit' )
     $story   = explode(',',$_CONF['htmlfilter_story']);
     $root    = explode(',',$_CONF['htmlfilter_root']);
 
-    $configArray = array();
+    $configArray = is_array($default) ? $default : array();
 
     switch ( $permissions ) {
         case 'story.edit' :
             $configArray = array_merge($configArray,$story);
-            break;
-        default :
-            $configArray = array_merge($configArray,$default);
             break;
     }
     if ( SEC_inGroup('Root') ) {
