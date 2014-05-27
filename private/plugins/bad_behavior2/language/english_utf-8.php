@@ -6,12 +6,10 @@
 // |                                                                          |
 // | English language file                                                    |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2009 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2012 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -121,6 +119,8 @@ $LANG_BB2_RESPONSE = array (
     'f9f2b8b9' => 'A User-Agent is required but none was provided.',
     'f9f3b8b0' => 'Question mark at end of query.',
     '96c0bd29' => 'SQL Injection detected',
+    'f9f3b8b1' => 'Call to do=register',
+    'f9f3b8b2' => '/RK=0/RS= Attack',
 );
 
 

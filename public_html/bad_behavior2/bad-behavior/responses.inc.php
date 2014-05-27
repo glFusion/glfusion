@@ -42,7 +42,10 @@ function bb2_get_response($key) {
 		'f0dcb3fd' => array('response' => 403, 'explanation' => 'You do not have permission to access this server. Before trying again, run anti-virus and anti-spyware software and remove any viruses and spyware from your computer.', 'log' => 'Web browser attempted to send a trackback'),
 		'f1182195' => array('response' => 403, 'explanation' => 'An invalid request was received. You claimed to be a major search engine, but you do not appear to actually be a major search engine.', 'log' => 'User-Agent claimed to be Googlebot, claim appears to be false.'),
 		'f9f2b8b9' => array('response' => 403, 'explanation' => 'You do not have permission to access this server. This may be caused by a malfunctioning proxy server or browser privacy software.', 'log' => 'A User-Agent is required but none was provided.'),
-        'f9f3b8b0' => array('response' => 403, 'explanation' => 'An invalid request was received.', 'log' => 'Question mark at end of query.')
+        'f9f3b8b0' => array('response' => 403, 'explanation' => 'An invalid request was received.', 'log' => 'Question mark at end of query.'),
+        'f9f3b8b1' => array('response' => 403, 'explanation' => 'An invalid request was received.', 'log' => 'do=register attack'),
+        'f9f3b8b2' => array('response' => 403, 'explanation' => 'An invalid request was received.', 'log' => '/rk=0/rs= attack'),
+        '96c0bd29' => array('response' => 403, 'explanation' => 'An invalid request was received.', 'log' => 'SQL Injection')
 	);
 
 	if (array_key_exists($key, $bb2_responses)) return $bb2_responses[$key];

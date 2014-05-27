@@ -58,6 +58,13 @@ function bb2_misc_headers($settings, $package)
 	        return "f9f3b8b0";
 	    }
 	}
+	if ( strpos($package['request_uri'], "users.php?do=register") !== false ) {
+	    return "f9f3b8b1";
+	}
+	if ( strpos($package['request_uri'], "/RK=0/RS=") !== false ) {
+	    return "f9f3b8b2";
+	}
+
 
 	// Range: field exists and begins with 0
 	// Real user-agents do not start ranges at 0

@@ -17,31 +17,8 @@ function bb2_screener_javascript($settings, $package, $cookie_name, $cookie_valu
 	// FIXME: do something
 	$bb2_javascript = "<script type=\"text/javascript\">
 <!--
-function bb2_addLoadEvent(func) {
-	var oldonload = window.onload;
-	if (typeof window.onload != 'function') {
-		window.onload = func;
-	} else {
-		window.onload = function() {
-			oldonload();
-			func();
-		}
-	}
-}
-
-bb2_addLoadEvent(function() {
-	for ( i=0; i < document.forms.length; i++ ) {
-		if (document.forms[i].method == 'post') {
-			var myElement = document.createElement('input');
-			myElement.setAttribute('type', 'hidden');
-			myElement.name = '$cookie_name';
-			myElement.value = '$cookie_value';
-			document.forms[i].appendChild(myElement);
-		}
-	}
-});
-// --></script>
-		";
+function bb2_addLoadEvent(e){var t=window.onload;if(typeof window.onload!=\"function\"){window.onload=e}else{window.onload=function(){t();e()}}}bb2_addLoadEvent(function(){for(i=0;i<document.forms.length;i++){if(document.forms[i].method==\"post\"){var e=document.createElement(\"input\");e.setAttribute(\"type\",\"hidden\");e.name=\"$cookie_name\";e.value=\"$cookie_value\";document.forms[i].appendChild(e)}}})
+// --></script>";
 }
 
 function bb2_screener($settings, $package)
