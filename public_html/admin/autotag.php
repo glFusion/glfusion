@@ -284,6 +284,7 @@ function AT_adminList()
     $retval .= ADMIN_createMenu($menu_arr, $LANG_AM['instructions'],
                 $_CONF['layout_url'] . '/images/icons/autotag.png');
 
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
     $retval .= AT_showUploadForm();
     $retval .= '<br />';
@@ -318,8 +319,6 @@ function AT_adminList()
 
     $retval .= ADMIN_list("autotag", "AT_getListField", $header_arr, $text_arr, $query_arr, $defsort_arr, '', $token, '', $form_arr);
 
-    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
-
     return $retval;
 
 }
@@ -333,6 +332,8 @@ function AT_list()
     USES_lib_admin();
 
     $retval = '';
+
+    $retval .= COM_startBlock($LANG_AM['public_title'], '', COM_getBlockTemplate('_admin_block', 'header'));
 
     // if an autotag admin is using this page, offer navigation to the admin page(s)
 
@@ -349,7 +350,9 @@ function AT_list()
 
     $retval .= ADMIN_createMenu($menu_arr, $LANG_AM['public_instructions'],
                 $_CONF['layout_url'] . '/images/icons/autotag.png');
-    $retval .= '<br/>';
+
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+//    $retval .= '<br/>';
 
     // default sort array and direction
 
@@ -813,9 +816,9 @@ switch ($action) {
         break;
     default:
         $display = COM_siteHeader('menu', $LANG_AM['title'])
-            . COM_startBlock($LANG_AM['public_title'], '', COM_getBlockTemplate('_admin_block', 'header'))
+//            . COM_startBlock($LANG_AM['public_title'], '', COM_getBlockTemplate('_admin_block', 'header'))
             . AT_list()
-            . COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'))
+//            . COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'))
             . COM_siteFooter();
         break;
 }
