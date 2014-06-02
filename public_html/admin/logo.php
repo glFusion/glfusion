@@ -4,9 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | logo.php                                                                 |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -57,6 +55,7 @@ function _logoEdit() {
     $retval  .= ADMIN_createMenu($menu_arr, $LANG_LOGO['instructions'],
                                 $_CONF['layout_url'] . '/images/icons/logo.' . $_IMAGE_TYPE);
 
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
     if ( file_exists($_CONF['path_html'] . '/images/' . $_LOGO['logo_name'] ) ) {
         $current_logo = '<img src="' . $_CONF['site_url'] . '/images/' . $_LOGO['logo_name'] . '" alt="" border="0"/>';
@@ -77,7 +76,7 @@ function _logoEdit() {
     $T->parse('output', 'admin');
 
     $retval .= $T->finish($T->get_var('output'));
-    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+
     return $retval;
 }
 
