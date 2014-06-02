@@ -2092,6 +2092,7 @@ function SEC_loginForm($use_options = array())
             foreach ($modules as $service) {
                 $loginform->set_file('oauth_login', '../loginform_oauth.thtml');
                 $loginform->set_var('oauth_service', $service);
+                $loginform->set_var('oauth_service_display',ucwords($service));
                 // for sign in image
                 $loginform->set_var('oauth_sign_in_image', $_CONF['site_url'] . '/images/login-with-' . $service . '.png');
                 $loginform->parse('output', 'oauth_login');
