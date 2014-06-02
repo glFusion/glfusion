@@ -180,8 +180,8 @@ class navbar  {
                 $navtemplate->set_var( 'cssactive', ' id="active"');
                 $navtemplate->set_var( 'csscurrent',' id="current"');
             } else {
-                $navtemplate->set_var( 'cssactive', '');
-                $navtemplate->set_var( 'csscurrent','');
+                $navtemplate->unset_var( 'cssactive');
+                $navtemplate->unset_var( 'csscurrent');
             }
             $navtemplate->set_var( 'label',  $label);
             $navtemplate->parse( 'menuitems', 'menuitem', true );
