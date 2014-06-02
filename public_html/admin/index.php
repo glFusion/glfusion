@@ -6,8 +6,6 @@
 // |                                                                          |
 // | This is the admin index page that does nothing more that login you in.   |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -109,8 +107,8 @@ function commandcontrol()
                                        'ccitem' => 'ccitem.thtml'));
     $admin_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
 
-    $retval .= COM_startBlock ('glFusion ' . GVERSION . PATCHLEVEL . ' -- ' . $LANG29[34], '',
-                               COM_getBlockTemplate ('_admin_block', 'header'));
+    $admin_templates->set_var('title','glFusion ' . GVERSION . PATCHLEVEL . ' -- ' . $LANG29[34]);
+    $retval .= '<h2>glFusion ' . GVERSION . PATCHLEVEL . ' -- ' . $LANG29[34].'</h2>';
 
     $showTrackbackIcon = (($_CONF['trackback_enabled'] ||
                           $_CONF['pingback_enabled'] || $_CONF['ping_enabled'])
@@ -205,8 +203,7 @@ function commandcontrol()
             'lang' => $LANG01[113], 'image' => '/images/icons/docs.'),
         array('condition' => (SEC_inGroup ('Root') &&
                               ($_CONF['link_versionchecker'] == 1)),
-'url' => $_CONF['site_admin_url'].'/vercheck.php',
-//            'url' => 'http://www.glfusion.org/versionchecker.php?version=' . GVERSION . PATCHLEVEL,
+            'url' => $_CONF['site_admin_url'].'/vercheck.php',
             'lang' => $LANG01[107], 'image' => '/images/icons/versioncheck.'),
         array('condition' => (SEC_inGroup ('Root')),
             'url'=>$_CONF['site_admin_url'] . '/configuration.php',
@@ -257,8 +254,6 @@ function commandcontrol()
     }
 
     $retval .= $admin_templates->finish($admin_templates->parse('output','cc'));
-
-    $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
 
     return $retval;
 }
