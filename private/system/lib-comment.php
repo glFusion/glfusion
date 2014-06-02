@@ -447,8 +447,10 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                     $A['photo'] = '';
                 }
                 $photo = USER_getPhoto( $A['uid'], $A['photo'], $A['email'] );
+                $photo_raw = USER_getPhoto( $A['uid'], $A['photo'],$A['email'],64,0);
                 if( !empty( $photo ) ) {
                     $template->set_var( 'author_photo', $photo );
+                    $template->set_var( 'author_photo_raw',$photo_raw);
                     $camera_icon = '<img src="' . $_CONF['layout_url']
                         . '/images/smallcamera.' . $_IMAGE_TYPE . '" alt=""/>';
                     $template->set_var( 'camera_icon',
@@ -459,6 +461,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                     );
                 } else {
                     $template->set_var( 'author_photo', '<img src="'.$_CONF['default_photo'].'" alt="" class="userphoto"/>' );
+                    $template->set_var( 'author_photo_raw', $_CONF['default_photo']);
                     $template->set_var( 'camera_icon', '' );
                 }
             } else {
@@ -1062,12 +1065,17 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 $comment_template->set_var('smilies',msg_showsmilies());
             }
             PLG_templateSetVars ('comment', $comment_template);
+            $comment_template->unset_var('save_type');
             if ($mode == 'preview_edit' || ($mode == 'edit' && $_CONF['skip_preview'] == 1) ) {
                 //for editing
+                $comment_template->set_var('save_type','saveedit');
+                $comment_template->set_var('lang_save',$LANG03[29]);
                 $comment_template->set_var('save_option', '<input type="submit" name="saveedit" value="'
                     . $LANG03[29] . '"/>');
             } elseif (($_CONF['skip_preview'] == 1) || ($mode == 'preview_new')) {
                 //new comment
+                $comment_template->set_var('save_type','savecomment');
+                $comment_template->set_var('lang_save',$LANG03[11]);
                 $comment_template->set_var('save_option', '<input type="submit" name="savecomment" value="'
                     . $LANG03[11] . '"/>');
             }
