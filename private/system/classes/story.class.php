@@ -1251,12 +1251,19 @@ class Story
             $norm = $lLinkPrefix . '<img ' . $sizeattributes . 'src="' . $imgSrc . '" alt=""' . XHTML . '>' . $lLinkSuffix;
             $left = $lLinkPrefix . '<img ' . $sizeattributes . 'class="floatleft" src="' . $imgSrc . '" alt=""' . XHTML . '>'
                     . $lLinkSuffix;
+            $left_old = $lLinkPrefix . '<img ' . $sizeattributes . 'align="left" src="' . $imgSrc . '" alt=""' . XHTML . '>'
+                    . $lLinkSuffix;
             $right = $lLinkPrefix . '<img ' . $sizeattributes . 'class="floatright" src="' . $imgSrc . '" alt=""' . XHTML . '>'
                     . $lLinkSuffix;
+            $right_old = $lLinkPrefix . '<img ' . $sizeattributes . 'align="right" src="' . $imgSrc . '" alt=""' . XHTML . '>'
+                    . $lLinkSuffix;
+
 
             $text = str_replace($norm, $imageX, $text);
             $text = str_replace($left, $imageX_left, $text);
+            $text = str_replace($left_old, $imageX_left, $text);
             $text = str_replace($right, $imageX_right, $text);
+            $text = str_replace($right_old, $imageX_right, $text);
 
             if (($_CONF['allow_user_scaling'] == 1) and ($_CONF['keep_unscaled_image'] == 1)) {
                 $unscaledX = '[unscaled' . ($i + 1) . ']';
