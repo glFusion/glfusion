@@ -20,6 +20,18 @@ v1.5.0
 - Privacy policy and Terms of use now implemented as static pages
 - Support for PHP v5.3+ unlimited post size
 
+v1.4.2
+------
+- Fixed error in youtube autotag where it would log parse errors
+- Reworked how embedded story images are handled
+- Comment edit now takes you directly to the comment entry area
+- Support for PHP v5.3+ unlimited post size
+- Media Gallery - fixed bug in batch album delete
+- Forum - fixed bug in HTML postmode detection
+- Utilize dynamic tooltip style throughout the code
+- Forum reorganized forum entry page - moved subject above editing toolbar
+- Media Gallery - fixed HTML5 upload issue
+
 v1.4.1
 ------
 - Several stability improvements

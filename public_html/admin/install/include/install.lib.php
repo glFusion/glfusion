@@ -1137,15 +1137,13 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '1.4.1';
         case '1.4.1' :
             $_SQL[] = "ALTER TABLE {$_TABLES['tokens']} CHANGE `urlfor` `urlfor` VARCHAR( 1024 ) NOT NULL";
-
             foreach ($_SQL as $sql) {
                 DB_query($sql,1);
             }
-
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
-
-
+            $current_fusion_version = '1.4.2';
+        case '1.4.2' :
             $current_fusion_version = '1.5.0';
         default:
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);
