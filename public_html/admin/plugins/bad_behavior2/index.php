@@ -88,22 +88,37 @@ function _bb_listEntries ($page = 1, $msg = '')
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
-
-    $retval .= COM_startBlock ($LANG_BAD_BEHAVIOR['plugin_display_name'] . ' - ' . $LANG_BAD_BEHAVIOR['block_title_list'], '',
+    $start_block = COM_startBlock ($LANG_BAD_BEHAVIOR['plugin_display_name'] . ' - ' . $LANG_BAD_BEHAVIOR['block_title_list'], '',
                                COM_getBlockTemplate ('_admin_block', 'header'));
 
-    $retval .= ADMIN_createMenu(
+//    $retval .= COM_startBlock ($LANG_BAD_BEHAVIOR['plugin_display_name'] . ' - ' . $LANG_BAD_BEHAVIOR['block_title_list'], '',
+//                               COM_getBlockTemplate ('_admin_block', 'header'));
+
+    $admin_menu = ADMIN_createMenu(
         $menu_arr,
         $donate,
         $_CONF['site_url'] . '/bad_behavior2/images/bad_behavior2.png'
     );
-    $retval .= '<br />';
+
+    $admin_menu_header = ADMIN_createMenuHeader(
+        $menu_arr,
+        $donate,
+        $LANG_BAD_BEHAVIOR['plugin_display_name'],
+        $_CONF['site_url'] . '/bad_behavior2/images/bad_behavior2.png'
+    );
+
+//    $retval .= ADMIN_createMenu(
+//        $menu_arr,
+//        $donate,
+//        $_CONF['site_url'] . '/bad_behavior2/images/bad_behavior2.png'
+//    );
+//    $retval .= '<br />';
 
 
     if (!empty ($msg)) {
-        $retval .= COM_showMessage ($msg, 'bad_behavior2');
+//        $retval .= COM_showMessage ($msg, 'bad_behavior2');
+        $msgText = COM_showMessage($msg,'bad_behavior2');
     }
-
     $templates = new Template ($_CONF['path'] . 'plugins/'
                                . BAD_BEHAVIOR_PLUGIN . '/templates');
     $templates->set_file ('list','log.thtml');
@@ -209,9 +224,17 @@ function _bb_listEntries ($page = 1, $msg = '')
     } else {
         $templates->set_var ('google_paging', '');
     }
+    $end_block = COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
+    $templates->set_var (array(
+            'start_block'           => $start_block,
+            'end_block'             => $end_block,
+            'admin_menu'            => $admin_menu,
+            'admin_menu_header'     => $admin_menu_header,
+            'msg'                   => $msgText,
+    ));
     $templates->parse('output', 'list');
     $retval .= $templates->finish($templates->get_var('output'));
-    $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
+
 
     return $retval;
 }
@@ -314,7 +337,7 @@ function _bb_viewEntry ($id, $page = 1)
 
 // MAIN
 $rightblocks = false;
-$display .= COM_siteHeader ('menu', $LANG_BAD_BEHAVIOR['page_title']);
+$pageBody = '';
 
 if ( isset($_GET['mode']) ) {
     $mode = COM_applyFilter ($_GET['mode']);
@@ -324,16 +347,18 @@ if ( isset($_GET['mode']) ) {
 
 if ($mode == 'list') {
     $page = isset($_GET['page']) ? COM_applyFilter ($_GET['page'], true) : 0;
-    $display .= _bb_listEntries ($page);
+    $pageBody .= _bb_listEntries ($page);
 } else if ($mode == 'view') {
     $id = isset($_GET['id']) ? COM_applyFilter ($_GET['id'], true) : 0;
     $page = isset($_GET['page']) ? COM_applyFilter ($_GET['page'], true) : 0;
-    $display .= _bb_viewEntry ($id, $page);
+    $pageBody .= _bb_viewEntry ($id, $page);
 } else {
     $page = isset($_GET['page']) ? COM_applyFilter ($_GET['page'], true) : 0;
-    $display .= _bb_listEntries ($page);
+    $pageBody .= _bb_listEntries ($page);
 }
 
+$display = COM_siteHeader ('menu', $LANG_BAD_BEHAVIOR['page_title']);
+$display .= $pageBody;
 $display .= COM_siteFooter ($rightblocks);
 
 echo $display;

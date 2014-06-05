@@ -1,4 +1,7 @@
 {# begin {templatelocation} #}
+{start_block}
+{admin_menu}
+{end_block}
 <div style="float:right;">{google_paging}</div>
 <table border="0" cellspacing="1" cellpadding="5" width="100%">
     <tr>
