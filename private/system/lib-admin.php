@@ -850,4 +850,35 @@ function ADMIN_createMenu($menu_arr, $text, $icon = '')
     return $retval;
 }
 
+
+function ADMIN_createMenuHeader($menu_arr, $text, $title = '', $icon = '')
+{
+    global $_CONF;
+
+    $admin_templates = new Template($_CONF['path_layout'] . 'admin/lists');
+    $admin_templates->set_file (
+        array ('top_menu' => 'topmenu_nav.thtml')
+    );
+
+    $menu_fields = '';
+    $attr = array('class' => 'admin-menu-item');
+
+    $admin_templates->set_block('top_menu', 'menu_items', 'menuvar');
+    for ($i = 0; $i < count($menu_arr); $i++) { # iterate through menu
+        $admin_templates->set_var('menu_item_url',COM_buildURL($menu_arr[$i]['url']));
+        $admin_templates->set_var('menu_item_text',$menu_arr[$i]['text']);
+        $admin_templates->parse('menuvar', 'menu_items',true);
+    }
+    if (!empty ($icon)) {
+        $attr = array('class' => 'admin-menu-icon');
+        $icon = COM_createImage($icon, '', $attr);
+        $admin_templates->set_var('icon', $icon);
+    }
+    $admin_templates->set_var('lang_title',$title);
+    $admin_templates->set_var('lang_instructions', $text);
+
+    $admin_templates->parse('top_menu', 'top_menu');
+    $retval = $admin_templates->finish($admin_templates->get_var('top_menu'));
+    return $retval;
+}
 ?>
