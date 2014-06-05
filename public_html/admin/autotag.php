@@ -72,7 +72,7 @@ function AT_mergeAllTags()
 function AT_adminForm($A, $error = false)
 {
     global $_CONF, $LANG_AM, $_AM_CONF, $LANG_ADMIN;
-    global $self_url, $cc_url;
+    global $cc_url;
 
     USES_lib_admin();
 
@@ -84,7 +84,7 @@ function AT_adminForm($A, $error = false)
 
         $menu_arr = array (
             array('url' => $_CONF['site_admin_url'] . '/autotag.php?list=x','text' => $LANG_ADMIN['custom_autotag']),
-            array('url' => $self_url, 'text' => $LANG_AM['public_title']),
+            array('url' => $_CONF['site_admin_url'] . '/autotag.php', 'text' => $LANG_AM['public_title']),
             array('url' => $cc_url, 'text' => $LANG_ADMIN['admin_home']),
         );
 
@@ -110,6 +110,7 @@ function AT_adminForm($A, $error = false)
                 'lang_replacement'  => $LANG_AM['replacement'],
                 'lang_replace_explain'  => $LANG_AM['replace_explain'],
                 'admin_menu' => ADMIN_createMenu($menu_arr, $LANG_AM['instructions_edit'],$_CONF['layout_url'] . '/images/icons/autotag.png'),
+                'admin_menu_header' => ADMIN_createMenuHeader($menu_arr,$LANG_AM['instructions_edit'],$LANG_AM['title'].'::'.$LANG_AM['autotag_editor'],$_CONF['layout_url'] . '/images/icons/autotag.png'),
         ));
 
         if (isset($A['is_enabled']) && $A['is_enabled'] == 1) {
@@ -174,7 +175,9 @@ function AT_edit($tag, $action = '')
 
 function AT_save($tag, $old_tag, $description, $is_enabled, $is_function, $replacement)
 {
-    global $_CONF, $LANG_AM, $_AM_CONF, $_TABLES, $self_url;
+    global $_CONF, $LANG_AM, $_AM_CONF, $_TABLES;
+
+    $retval = '';
 
     $old_tag = COM_applyFilter($old_tag);
 
@@ -211,21 +214,28 @@ function AT_save($tag, $old_tag, $description, $is_enabled, $is_function, $repla
         // this a duplicate autotag, output error msg (screen+log) and reenter editor
         // retain the current tag field values to allow name change
 
-        $display = COM_errorLog($LANG_AM['duplicate_tag'], 2) . AT_edit($tag);
+        $error = $LANG_AM['duplicate_tag'];
+        COM_errorLog($error);
+
+        $retval = COM_showMessageText($error,'',true,'error') . AT_edit($tag);
 
     } elseif (!empty($tag) && in_array($tag, AT_mergeAllTags())) {
 
         // this is a reserved autotag, output error msg (screen+log) and reenter editor
         // zap the current tag field values, and start over
-
-        $display = COM_errorLog($LANG_AM['disallowed_tag'], 2) . AT_edit('');
+        $error = $LANG_AM['disallowed_tag'];
+        COM_errorLog($LANG_AM['disallowed_tag']);
+        $retval = COM_showMessageText($error,'',true,'error') . AT_edit('');
 
     } elseif (!empty($tag) && ($is_function == 1) && !@file_exists($_CONF['path_system'].'autotags/'.$tag.'.class.php' ) ) {
         // an attempt was made to define a PHP autotag for which a function was
         // not yet available to support.  this is likely to cause an error, and
         // therefore we should warn the user to create the function first.
 
-        $display = COM_errorLog(sprintf($LANG_AM['phpfn_missing'],$tag) . ' ' . $LANG_AM['phpfn_must_exist'], 2) . AT_adminList();
+        $error = sprintf($LANG_AM['phpfn_missing'],$tag).' '.$LANG_AM['phpfn_must_exist'];
+        COM_errorLog($error);
+        $retval = COM_showMessageText($error,'',true,'error');
+        $retval .= AT_edit('');
 
     } elseif (!empty($tag) && (!empty($replacement) || $is_function == 1)) {
 
@@ -250,15 +260,13 @@ function AT_save($tag, $old_tag, $description, $is_enabled, $is_function, $repla
             DB_delete($_TABLES['autotags'], 'tag', DB_escapeString($old_tag));
         }
         // refresh to ourself
-        $display = COM_refresh($self_url.'?list=x');
-
+        echo COM_refresh($_CONF['site_admin_url'] . '/autotag.php'.'?list=x');
     } else {
-
         // failed validation - required field missing
-        $display = COM_errorLog($LANG_AM['no_tag_or_replacement'], 2) . AT_edit($tag);
+        $error = $LANG_AM['no_tag_or_replacement'];
+        COM_errorLog($error);
+        $retval = COM_showMessageText($error,'',true,'error') . AT_edit($tag);
     }
-
-    $retval = COM_siteheader() . $display . COM_siteFooter();
 
     return $retval;
 }
@@ -267,28 +275,31 @@ function AT_save($tag, $old_tag, $description, $is_enabled, $is_function, $repla
 
 function AT_adminList()
 {
-    global $_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG_AM, $self_url, $cc_url, $public_url;
+    global $_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG_AM, $cc_url, $public_url;
 
     USES_lib_admin();
 
-    $retval = COM_startBlock($LANG_AM['title'], '', COM_getBlockTemplate('_admin_block', 'header'));
+    $admin_list = new Template($_CONF['path_layout'] .'admin/autotag/');
+    $admin_list->set_file('admin', 'autotag_list.thtml');
+
+    $admin_list->set_var('start_block',COM_startBlock($LANG_AM['title'], '', COM_getBlockTemplate('_admin_block', 'header')));
 
     // render the menu
 
     $menu_arr = array (
-        array('url' => $self_url . '?edit=x', 'text' => $LANG_ADMIN['create_new']),
-        array('url' => $self_url, 'text' => $LANG_AM['public_title']),
+        array('url' => $_CONF['site_admin_url'] . '/autotag.php' . '?edit=x', 'text' => $LANG_ADMIN['create_new']),
+        array('url' => $_CONF['site_admin_url'] . '/autotag.php', 'text' => $LANG_AM['public_title']),
         array('url' => $cc_url, 'text' => $LANG_ADMIN['admin_home']),
     );
 
-    $retval .= ADMIN_createMenu($menu_arr, $LANG_AM['instructions'],
-                $_CONF['layout_url'] . '/images/icons/autotag.png');
+    $admin_list->set_var('admin_menu',ADMIN_createMenu($menu_arr, $LANG_AM['instructions'],
+                $_CONF['layout_url'] . '/images/icons/autotag.png'));
 
-    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+    $admin_list->set_var('admin_menu_header',ADMIN_createMenuHeader($menu_arr, $LANG_AM['instructions'],$LANG_AM['title'].'::'.$LANG_ADMIN['custom_autotag'],
+                $_CONF['layout_url'] . '/images/icons/autotag.png'));
 
-    $retval .= AT_showUploadForm();
-    $retval .= '<br />';
-
+    $admin_list->set_var('end_block',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
+    $admin_list->set_var('upload_form',AT_showUploadForm());
 
     // render the autotag manager list
 
@@ -303,7 +314,7 @@ function AT_adminList()
 
     $defsort_arr = array('field' => 'is_function', 'direction' => 'desc');
 
-    $text_arr = array('has_extras'   => true, 'form_url' => $self_url);
+    $text_arr = array('has_extras'   => true, 'form_url' => $_CONF['site_admin_url'].'/autotag.php?list=x');
 
     $query_arr = array('table' => 'autotags',
                        'sql' => "SELECT * FROM {$_TABLES['autotags']} WHERE 1 ",
@@ -314,11 +325,12 @@ function AT_adminList()
 
     $form_arr = array(
         'top'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="' . $token . '"/>',
-        'bottom' => '<input type="hidden" name="tagenabler" value="true"/>'
+        'bottom' => '<input type="hidden" name="tagenabler" value="true">'
     );
 
-    $retval .= ADMIN_list("autotag", "AT_getListField", $header_arr, $text_arr, $query_arr, $defsort_arr, '', $token, '', $form_arr);
+    $admin_list->set_var('admin_list',ADMIN_list("autotag", "AT_getListField", $header_arr, $text_arr, $query_arr, $defsort_arr, '', $token, '', $form_arr));
 
+    $retval = $admin_list->finish ($admin_list->parse('output','admin'));
     return $retval;
 
 }
@@ -333,7 +345,10 @@ function AT_list()
 
     $retval = '';
 
-    $retval .= COM_startBlock($LANG_AM['public_title'], '', COM_getBlockTemplate('_admin_block', 'header'));
+    $admin_list = new Template($_CONF['path_layout'] .'admin/autotag/');
+    $admin_list->set_file('admin-list', 'autotag_list.thtml');
+
+    $admin_list->set_var('start_block',COM_startBlock($LANG_AM['public_title'], '', COM_getBlockTemplate('_admin_block', 'header')));
 
     // if an autotag admin is using this page, offer navigation to the admin page(s)
 
@@ -348,11 +363,13 @@ function AT_list()
 
     // display the header and instructions
 
-    $retval .= ADMIN_createMenu($menu_arr, $LANG_AM['public_instructions'],
-                $_CONF['layout_url'] . '/images/icons/autotag.png');
+    $admin_list->set_var('admin_menu',ADMIN_createMenu($menu_arr,$LANG_AM['public_instructions'],
+        $_CONF['layout_url'].'/images/icons/autotag.png'));
 
-    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
-//    $retval .= '<br/>';
+    $admin_list->set_var('admin_menu_header',ADMIN_createMenuHeader($menu_arr,$LANG_AM['public_instructions'],$LANG_AM['title'].' :: '.$LANG_AM['public_title'],
+        $_CONF['layout_url'].'/images/icons/autotag.png'));
+
+    $admin_list->set_var('end_block',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
 
     // default sort array and direction
 
@@ -370,9 +387,9 @@ function AT_list()
 
     $data_arr = AT_collectTags();
 
-    $retval .= ADMIN_listArray('autotag-list', 'AT_getListField', $header_arr, $text_arr = '',
-                                $data_arr, $defsort_arr, '', $extra = 'dummy', $options_arr = '', $form_arr = '');
-
+    $admin_list->set_var('admin_list',ADMIN_listArray('autotag-list', 'AT_getListField', $header_arr, $text_arr = '',
+                                $data_arr, $defsort_arr, '', $extra = 'dummy', $options_arr = '', $form_arr = ''));
+    $retval = $admin_list->parse('output','admin-list');
     return $retval;
 }
 
@@ -403,7 +420,7 @@ function AT_showUploadForm()
 
 function AT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
-    global $_CONF, $_AM_CONF, $LANG_AM, $LANG_ACCESS, $LANG_ADMIN, $self_url;
+    global $_CONF, $_AM_CONF, $LANG_AM, $LANG_ACCESS, $LANG_ADMIN;
 
     $allow_php = $_AM_CONF['allow_php'];
     $isfunction = ($A['is_function'] == 1) ? true : false;
@@ -417,7 +434,7 @@ function AT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 $retval = '';
             } else {
                 $attr['title'] = $LANG_ADMIN['edit'];
-                $retval = COM_createLink($icon_arr['edit'], $self_url . '?edit=x&amp;tag=' . $A['tag'], $attr );
+                $retval = COM_createLink($icon_arr['edit'], $_CONF['site_admin_url'].'/autotag.php'. '?edit=x&amp;tag=' . $A['tag'], $attr );
             }
             break;
 
@@ -468,8 +485,8 @@ function AT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                     $title = 'title="' . $LANG_ADMIN['enable'] . '" ';
                 }
                 $retval = '<input type="checkbox" name="enabledtags[' . $A['tag'] . ']" ' . $title
-                    . 'onclick="submit()" value="' . $A['tag'] . '"' . $switch . XHTML . '>';
-                $retval .= '<input type="hidden" name="tagarray[' . $A['tag'] . ']" value="1" ' . XHTML . '>';
+                    . 'onclick="submit()" value="' . $A['tag'] . '"' . $switch .'>';
+                $retval .= '<input type="hidden" name="tagarray[' . $A['tag'] . ']" value="1" ' .'>';
             }
             break;
 
@@ -478,7 +495,7 @@ function AT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 $attr['title'] = $LANG_ADMIN['delete'];
                 $attr['onclick'] = 'return confirm(\'' . $LANG_AM['confirm'] . '\');';
                 $retval = COM_createLink($icon_arr['delete'],
-                    $self_url . '?delete=x&amp;tag=' . $A['tag']
+                    $_CONF['site_admin_url'].'/autotag.php' . '?delete=x&amp;tag=' . $A['tag']
                     . '&amp;' . CSRF_TOKEN . '=' . $token, $attr );
             } else {
                 $retval = '';
@@ -708,8 +725,10 @@ function ATP_save($autotag_id, $perms)
 // setup the various URL's we will use
 
 $cc_url = $_CONF['site_admin_url'] . '/index.php';
-$self_url = $_CONF['site_admin_url'] . '/autotag.php';
 $public_url = $_CONF['site_url'] . '/autotag/index.php';
+
+$pageContent = '';
+$pageTitle   = $LANG_AM['title'];
 
 // process the command line
 
@@ -756,21 +775,19 @@ if (isset($_POST['autotag_id'])) {
 switch ($action) {
 
     case 'edit':
-        $display = COM_siteHeader('menu', $LANG_AM['autotag_editor'])
-            . AT_edit($tag, $action)
-            . COM_siteFooter();
+        $pageContent .= AT_edit($tag,$action);
+        $pageTitle   = $LANG_AM['autotag_editor'];
         break;
 
     case 'pedit':
-        $display .= COM_siteHeader('menu', $LANG01['autotag_perms']);
-        $display .= ATP_edit($autotag_id);
-        $display .= COM_siteFooter();
+        $pageContent .= ATP_edit($autotag_id);
+        $pageTitle    = $LANG01['autotag_perms'];
         break;
 
     case 'save':
         if (SEC_checkToken()) {
             if (!empty($tag)) {
-                $display = AT_save($tag,
+                $pageContent .= AT_save($tag,
                              COM_applyFilter($_POST['old_tag']),
                              isset($_POST['description']) ? $_POST['description'] : '',
                              isset($_POST['is_enabled']) ? COM_applyFilter($_POST['is_enabled']) : '',
@@ -778,11 +795,11 @@ switch ($action) {
                              isset($_POST['replacement']) ? $_POST['replacement'] : '');
             } else {
                 // we shouldn't be saving an empty tag - refresh to ourselves
-                $display = COM_refresh($self_url);
+                echo COM_refresh($_CONF['site_admin_url'] . '/autotag.php');
             }
         } else {
             COM_accessLog('User ' . $_USER['username'] . ' tried to illegally edit autotag ' . $tag . ' and failed CSRF checks.');
-            $display = COM_refresh($cc_url);
+            echo COM_refresh($cc_url);
         }
         break;
 
@@ -790,7 +807,7 @@ switch ($action) {
         if (SEC_checkToken()) {
             $perms = array();
             $perms = (isset($_POST['perms']) ? $_POST['perms'] : array());
-            $display .= ATP_save($autotag_id,$perms);
+            $pageContent .= ATP_save($autotag_id,$perms,$_CONF['site_admin_url'] . '/autotag.php');
         } else {
             COM_accessLog("User {$_USER['username']} tried to illegally edit autotag permissions for $autotag_id and failed CSRF checks.");
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
@@ -800,28 +817,28 @@ switch ($action) {
     case 'delete':
         if (SEC_checkToken()) {
             $filename = $tag . '.class.php';
-            DB_delete($_TABLES['autotags'], 'tag', DB_escapeString($tag), $self_url);
+            DB_delete($_TABLES['autotags'], 'tag', DB_escapeString($tag), $_CONF['site_admin_url'] . '/autotag.php');
             // need to check and see if it is a PHP function
             @unlink($_CONF['path_system'].'autotags/' . $filename);
             exit;
         } else {
             COM_accessLog('User ' . $_USER['username'] . ' did not have permissions to delete autotag ' . $tag . ' - operation failed CSRF checks.');
-            $display = COM_refresh($cc_url);
+            echo COM_refresh($cc_url);
         }
         break;
     case 'list' :
-        $display  = COM_siteHeader('menu', $LANG_AM['public_title'])
-            . AT_Adminlist()
-            . COM_siteFooter();
+        $pageContent = AT_Adminlist();
+        $pageTitle   = $LANG_AM['public_title'];
         break;
     default:
-        $display = COM_siteHeader('menu', $LANG_AM['title'])
-//            . COM_startBlock($LANG_AM['public_title'], '', COM_getBlockTemplate('_admin_block', 'header'))
-            . AT_list()
-//            . COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'))
-            . COM_siteFooter();
+        $pageContent .= AT_list();
+
         break;
 }
+
+$display = COM_siteHeader('menu',$pageTitle);
+$display .= $pageContent;
+$display .= COM_siteFooter();
 
 echo $display;
 
