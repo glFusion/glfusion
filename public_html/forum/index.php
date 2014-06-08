@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Main program to view forum                                               |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -828,7 +826,9 @@ if ($forum > 0) {
         $topiclisting->parse('trow', 'topicrows',true);
         $displayCount++;
     }
-    $topiclisting->set_var ('pagenavigation', COM_printPageNavigation($base_url,$page, $numpages));
+    $topiclisting->set_var ('pagenavigation', forum_pagination($base_url,$page, $numpages));
+    $topiclisting->set_var ('page',$page);
+    $topiclisting->set_var ('num_pages',$numpages);
 
     if ( $displayCount > 0 ) {
         $topiclisting->set_var('records_displayed',true);
