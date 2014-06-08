@@ -449,7 +449,7 @@ if (empty($_IMAGE_TYPE)) {
 
 // Similarly set language
 
-if ( isset( $_COOKIE[$_CONF['cookie_language']] ) && empty( $_USER['language'] )) {
+if ( isset( $_COOKIE[$_CONF['cookie_language']] ) ) {
     $language = COM_sanitizeFilename($_COOKIE[$_CONF['cookie_language']]);
     if ( is_file( $_CONF['path_language'] . $language . '.php' ) &&
             ( $_CONF['allow_user_language'] == 1 ))
