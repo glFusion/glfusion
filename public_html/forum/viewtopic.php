@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Display a topic list                                                     |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -273,7 +271,10 @@ if ( !$iframe ) {
         'LANG_next'     => $LANG_GF01['NEXT'],
         'LANG_TOP'      => $LANG_GF01['TOP'],
         'subject'       => $viewtopic['subject'],
-        'LANG_HOME'     => $LANG_GF01['HOMEPAGE']
+        'LANG_HOME'     => $LANG_GF01['HOMEPAGE'],
+        'num_posts'     => $replies+1,
+        'page'          => $page,
+        'num_pages'     => $numpages
     ));
 }
 $sql = "SELECT * FROM {$_TABLES['ff_topic']} WHERE id=".(int) $showtopic." OR pid=".(int) $showtopic." ORDER BY date $order LIMIT $offset, $show";
@@ -320,8 +321,11 @@ if (!$iframe) {
 } else {
     $base_url .= '&amp;onlytopic=1';
 }
+
+$page_navigation = forum_pagination($base_url,$page,$numpages);
+
 $topicTemplate->set_var(array(
-        'pagenavigation'  => COM_printPageNavigation($base_url,$page,$numpages),
+        'pagenavigation'  => $page_navigation, // COM_printPageNavigation($base_url,$page,$numpages),
         'page_generated_time',sprintf($LANG_GF02['msg179'],$mytimer->stopTimer())));
 
 $topicTemplate->parse ('output', 'topictemplate');
