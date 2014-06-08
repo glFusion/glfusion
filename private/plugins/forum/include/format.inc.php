@@ -352,6 +352,8 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
         if ($mode != 'noquote' ) {
             $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '</p><div class="quotemain"><img src="' . $_CONF['site_url'] . '/forum/images/img_quote.gif" alt="" class="forum-quote-img"/>', 'end_tag' => '</div><p>'),
                               'inline', array('listitem','block','inline','link'), array());
+//            $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '<blockquote>', 'end_tag' => '</blockquote>'),
+//                              'inline', array('listitem','block','inline','link'), array());
         }
         $bbcode->addCode ('url', 'usecontent?', 'do_bbcode_url', array ('usecontent_param' => 'default'),
                           'link', array ('listitem', 'block', 'inline'), array ('link'));
@@ -860,5 +862,146 @@ function get_preg_expression($mode)
 	}
 
 	return '';
+}
+
+function forum_pagination( $base_url, $curpage, $num_pages,
+                                  $page_str='page=', $do_rewrite=false, $msg='',
+                                  $open_ended = '',$suffix='')
+{
+    global $_CONF, $LANG05;
+
+    $retval = '';
+
+    $output = outputHandler::getInstance();
+
+    if ( $num_pages < 2 ) {
+        return $retval;
+    }
+
+    $T = new Template($_CONF['path'] . 'plugins/forum/templates');
+    $T->set_file('pagination','pagination.thtml');
+
+    if ( !$do_rewrite ) {
+        $hasargs = strstr( $base_url, '?' );
+        if ( $hasargs ) {
+            $sep = '&amp;';
+        } else {
+            $sep = '?';
+        }
+    } else {
+        $sep = '/';
+        $page_str = '';
+    }
+
+    if ( $curpage > 1 ) {
+        $T->set_var('first',true);
+        $T->set_var('first_link',COM_buildURL($base_url . $sep . $page_str . '1' . $suffix));
+        $pg = $sep . $page_str . ( $curpage - 1 );
+        $T->set_var('prev',true);
+        $T->set_var('prev_link',COM_buildURL($base_url . $pg . $suffix));
+        $output->addLink('prev', urldecode($base_url . $pg . $suffix));
+    } else {
+        $T->unset_var('first');
+        $T->unset_var('first_link');
+        $T->unset_var('prev');
+        $T->unset_var('prev_link');
+    }
+
+    $T->set_block('pagination', 'datarow', 'datavar');
+
+    if ( $curpage == 1 ) {
+        $T->set_var('page_str','1');
+        $T->set_var('page_link','#');
+        $T->set_var('disabled',true);
+        $T->set_var('active',true);
+        $T->parse('datavar', 'datarow',true);
+        $T->unset_var('active');
+        $T->unset_var('disabled');
+    } else {
+        $T->set_var('page_str','1');
+        $pg = $sep . $page_str . 1;
+        $T->set_var('page_link',COM_buildURL($base_url . $pg . $suffix));
+        $T->parse('datavar', 'datarow',true);
+    }
+
+    if ( $num_pages > 5 ) {
+        $start_cnt = min(max(1, $curpage - 4), $num_pages - 5);
+        $end_cnt = max(min($num_pages,$curpage + 2), 6);
+        if ( $start_cnt > 1 ) {
+            $T->set_var('page_str','...');
+            $T->set_var('page_link','#');
+            $T->set_var('disabled',true);
+            $T->parse('datavar', 'datarow',true);
+        }
+
+        for ( $i = ($start_cnt + 1); $i < $end_cnt; $i++ ) {
+            if ( $i == $curpage ) {
+                $T->set_var('page_str',$i);
+                $T->set_var('page_link','#');
+                $T->set_var('disabled',true);
+                $T->set_var('active',true);
+            } else {
+                $T->set_var('page_str',$i);
+                $pg = $sep . $page_str . $i;
+                $T->set_var('page_link',COM_buildURL($base_url . $pg . $suffix));
+            }
+            $T->parse('datavar', 'datarow',true);
+            $T->unset_var('active');
+            $T->unset_var('disabled');
+        }
+        if ( $end_cnt < $num_pages ) {
+            $T->set_var('page_str','...');
+            $T->set_var('page_link','#');
+            $T->set_var('disabled',true);
+            $T->parse('datavar', 'datarow',true);
+        }
+        if ( $curpage == $num_pages ) {
+            $T->set_var('page_str',$num_pages);
+            $T->set_var('page_link','#');
+            $T->set_var('active',true);
+        } else {
+            $T->set_var('page_str',$num_pages);
+            $pg = $sep . $page_str . $num_pages;
+            $T->set_var('page_link',COM_buildURL($base_url . $pg . $suffix));
+        }
+        $T->parse('datavar', 'datarow',true);
+    } else {
+        for( $pgcount = ( $curpage - 10 ); ( $pgcount <= ( $curpage + 9 )) AND ( $pgcount <= $num_pages ); $pgcount++ ) {
+            if ( $pgcount <= 0 ) {
+                $pgcount = 2;
+            }
+            if ( $pgcount == $curpage ) {
+                $T->set_var('active',true);
+                $T->set_var('page_str',$curpage);
+            } else {
+                $T->unset_var('active');
+                $T->set_var('page_str',$pgcount);
+                $pg = $sep . $page_str . $pgcount;
+                $T->set_var('page_link',COM_buildURL($base_url . $pg . $suffix));
+            }
+            $T->parse('datavar', 'datarow',true);
+        }
+    }
+    if ( !empty( $open_ended )) {
+        $T->set_var('open_ended',true);
+    } else if ( $curpage == $num_pages ) {
+        $T->unset_var('open_ended');
+        $T->unset_var('next');
+        $T->unset_var('last');
+        $T->unset_var('next_link');
+        $T->unset_var('last_link');
+    } else {
+        $T->set_var('next',true);
+        $T->set_var('next_link',COM_buildURL($base_url . $sep.$page_str . ($curpage + 1) . $suffix));
+        $T->set_var('last',true);
+        $T->set_var('last_link',COM_buildURL($base_url . $sep.$page_str . $num_pages . $suffix));
+        $output->addLink('next', urldecode($base_url . $sep. $page_str . ($curpage + 1) . $suffix));
+    }
+    if (!empty($msg) ) {
+        $T->set_var('msg',$msg);
+    }
+
+    $retval = $T->finish ($T->parse('output','pagination'));
+    return $retval;
 }
 ?>
