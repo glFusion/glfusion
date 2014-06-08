@@ -144,6 +144,13 @@ if ( !$iframe )  {
         $csslink = $_CONF['site_url'].'/css.php?t='.$_USER['theme'];
     }
     $topicTemplate->set_var('csslink',$csslink);
+    $outputHandle = outputHandler::getInstance();
+    $topicTemplate->set_var(array(
+                'meta-header'  => $outputHandle->renderHeader('meta'),
+                'css-header'   => $outputHandle->renderHeader('style'),
+                'js-header'    => $outputHandle->renderHeader('script'),
+                'raw-header'   => $outputHandle->renderHeader('raw'),
+    ));
 }
 
 if (isset($_GET['lastpost']) && $_GET['lastpost']) {
