@@ -174,6 +174,8 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
             $commentbar->set_var( 'subscribe_url', $_CONF['site_url'].'/comment.php?mode=subscribe&amp;type='.htmlentities($type).'&amp;sid='.htmlentities($sid));
             $commentbar->set_var( 'subscribe_text', $LANG01['subscribe']);
         }
+    } else {
+        $commentbar->unset_var('subscribe');
     }
 
     if( $ccode == 0 &&
