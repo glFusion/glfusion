@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Main functions to show - format topics in the forum                      |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -162,6 +160,9 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
                 $foundUser = 1;
             }
         }
+    } else {
+        $avatar = '<img src="' . USER_getPhoto($showtopic['uid'],'','','','0') . '" alt="" title="" class="forum-userphoto" style="width:' . $_FF_CONF['avatar_width'] . 'px;"/>';
+        $min_height = $min_height + 150;
     }
 
     if ( $foundUser ) {
@@ -418,6 +419,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
             'LANG_ON2'      => $LANG_GF01['ON2'],
             'mod_functions' => isset($mod_functions) ? $mod_functions : '',
             'topic_comment' => $showtopic['comment'],
+            'subject'       => $showtopic['subject'],
             'comment_minheight' => "min-height:{$min_height}px",
             'forumid'       => $showtopic['forum'],
             'topic_id'      => $showtopic['id'],
@@ -425,6 +427,11 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
             'back_link'     => isset($backlink) ? $backlink : '',
             'member_badge'  => forumPLG_getMemberBadge($showtopic['uid'])
     ));
+    if ( $parent_id != 0 ) {
+        $topictemplate->set_var('prefix',$LANG_GF01['RE']);
+    } else {
+        $topictemplate->set_var('prefix','');
+    }
     if (isset($sig) && trim($sig) != '') {
         $topictemplate->set_var ('sig', PLG_replaceTags($sig,'forum','signature'));
     } else {
