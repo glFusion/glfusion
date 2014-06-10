@@ -266,7 +266,7 @@ function BLOCK_edit($bid = '', $B = array())
 
     if (!empty($bid) && SEC_hasrights('block.delete')) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
-                   . '" name="delete"%s />';
+                   . '" name="delete"%s >';
         $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
         $block_templates->set_var ('delete_option',
                                    sprintf ($delbutton, $jsconfirm));
@@ -380,6 +380,7 @@ function BLOCK_edit($bid = '', $B = array())
     $block_templates->set_var('gltoken_name', CSRF_TOKEN);
     $block_templates->set_var('gltoken', SEC_createToken());
     $block_templates->set_var('admin_menu', ADMIN_createMenu($menu_arr,$LANG21[71],$_CONF['layout_url'] . '/images/icons/block.'. $_IMAGE_TYPE));
+    $block_templates->set_var('admin_menu_header', ADMIN_createMenuHeader($menu_arr,$LANG21[71],$LANG21[3],$_CONF['layout_url'] . '/images/icons/block.'. $_IMAGE_TYPE));
     $block_templates->set_var ('end_block',
             COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer')));
     PLG_templateSetVars('blockeditor',$block_templates);
@@ -430,11 +431,11 @@ function BLOCK_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                         $moveTitleMsg = $LANG21[60];
                         $switchside = '0';
                     }
-                    $retval.="<img src=\"{$_CONF['layout_url']}/images/admin/$blockcontrol_image\" width=\"45\" height=\"20\" usemap=\"#arrow{$A['bid']}\" alt=\"\" />"
+                    $retval.="<img src=\"{$_CONF['layout_url']}/images/admin/$blockcontrol_image\" width=\"45\" height=\"20\" usemap=\"#arrow{$A['bid']}\" alt=\"\">"
                             ."<map id=\"arrow{$A['bid']}\" name=\"arrow{$A['bid']}\">"
-                            ."<area coords=\"0,0,12,20\"  title=\"{$LANG21[58]}\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=up&amp;".CSRF_TOKEN."={$token}\" alt=\"{$LANG21[58]}\" />"
-                            ."<area coords=\"13,0,29,20\" title=\"$moveTitleMsg\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=$switchside&amp;".CSRF_TOKEN."={$token}\" alt=\"$moveTitleMsg\" />"
-                            ."<area coords=\"30,0,43,20\" title=\"{$LANG21[57]}\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=dn&amp;".CSRF_TOKEN."={$token}\" alt=\"{$LANG21[57]}\" />"
+                            ."<area coords=\"0,0,12,20\"  title=\"{$LANG21[58]}\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=up&amp;".CSRF_TOKEN."={$token}\" alt=\"{$LANG21[58]}\">"
+                            ."<area coords=\"13,0,29,20\" title=\"$moveTitleMsg\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=$switchside&amp;".CSRF_TOKEN."={$token}\" alt=\"$moveTitleMsg\">"
+                            ."<area coords=\"30,0,43,20\" title=\"{$LANG21[57]}\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=dn&amp;".CSRF_TOKEN."={$token}\" alt=\"{$LANG21[57]}\">"
                             ."</map>";
                 }
                 break;
@@ -474,9 +475,11 @@ function BLOCK_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                         $title = 'title="' . $LANG_ADMIN['enable'] . '" ';
                         $switch = '';
                     }
-                    $retval = '<input type="checkbox" name="enabledblocks[' . $A['bid'] . ']" ' . $title
-                        . 'onclick="submit()" value="' . $A['onleft'] . '"' . $switch .'/>';
-                    $retval .= '<input type="hidden" name="bidarray[' . $A['bid'] . ']" value="' . $A['onleft'] . '" />';
+                    $retval = '<input class="clicker" type="checkbox" id="enabledblocks['.$A['bid'].']" name="enabledblocks[' . $A['bid'] . ']" ' . $title
+//                        . 'onclick="submit()" value="' . $A['onleft'] . '"' . $switch .'>';
+                        . 'onclick="submit()" value="' . $A['bid'] . '"' . $switch .'>';
+
+                    $retval .= '<input type="hidden" name="bidarray[' . $A['bid'] . ']" value="' . $A['onleft'] . '" >';
                 }
                 break;
 
@@ -501,6 +504,9 @@ function BLOCK_list()
 
     $retval = '';
 
+    $admin_list = new Template($_CONF['path_layout'] .'admin/block/');
+    $admin_list->set_file('admin-list', 'block_list.thtml');
+
     // writing the menu on top
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/block.php?edit=x',
@@ -509,13 +515,16 @@ function BLOCK_list()
               'text' => $LANG_ADMIN['admin_home'])
     );
 
-    $retval .= COM_startBlock($LANG21[19], '',
-                              COM_getBlockTemplate('_admin_block', 'header'));
-    $retval .= ADMIN_createMenu(
+    $admin_list->set_var('block_start',COM_startBlock($LANG21[19], '',
+                              COM_getBlockTemplate('_admin_block', 'header')));
+
+    $admin_list->set_var('admin_menu',ADMIN_createMenu(
         $menu_arr,
         $LANG21[25],
         $_CONF['layout_url'] . '/images/icons/block.'. $_IMAGE_TYPE
-    );
+    ));
+    $admin_list->set_var('admin_menu_header',ADMIN_createMenuHeader($menu_arr,$LANG21[25],$LANG21[19],
+        $_CONF['layout_url'] . '/images/icons/block.'. $_IMAGE_TYPE));
 
     BLOCK_reorder();
 
@@ -555,16 +564,16 @@ function BLOCK_list()
     // blocks has been enabled or disabled - the value is the onleft var
 
     $form_arr = array(
-        'top'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="'. $token .'"/>',
-        'bottom' => '<input type="hidden" name="blockenabler" value="1"/>'
+        'top'    => '<input type="hidden" id="'.CSRF_TOKEN.'" name="' . CSRF_TOKEN . '" value="'. $token .'">',
+        'bottom' => '<input type="hidden" name="blockenabler" value="1">'
     );
 
-    $retval .= ADMIN_list(
+    $admin_list->set_var('admin_list', ADMIN_list(
         'blocks', 'BLOCK_getListField', $header_arr, $text_arr,
         $query_arr, $defsort_arr, '', $token, '', $form_arr
-    );
+    ));
 
-    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+    $admin_list->set_var('block_end',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
 
     $query_arr = array(
         'table' => 'blocks',
@@ -582,15 +591,15 @@ function BLOCK_list()
     // blocks has been enabled or disabled - the value is the onleft var
 
     $form_arr = array(
-        'top'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="'. $token .'"/>',
-        'bottom' => '<input type="hidden" name="blockenabler" value="0"/>'
+        'top'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="'. $token .'">',
+        'bottom' => '<input type="hidden" name="blockenabler" value="0">'
     );
 
-    $retval .= ADMIN_list (
+    $admin_list->set_var('admin_list_right', ADMIN_list (
         'blocks', 'BLOCK_getListField', $header_arr, $text_arr,
         $query_arr, $defsort_arr, '', $token, '', $form_arr
-    );
-
+    ));
+    $retval = $admin_list->parse('output','admin-list');
     return $retval;
 }
 
@@ -876,7 +885,6 @@ function BLOCK_move($bid, $where)
         COM_errorLOG("block admin error: Attempt to move an non existing block id: $bid");
     }
     echo COM_refresh($_CONF['site_admin_url'] . "/block.php");
-//    exit;
     return $retval;
 }
 
