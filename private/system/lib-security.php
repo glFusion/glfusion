@@ -1347,7 +1347,7 @@ function SEC_checkToken()
   *
   * @return boolean     true if the token is valid and for this user.
   */
-function _sec_checkToken()
+function _sec_checkToken($ajax=0)
 {
     global $_CONF, $_SYSTEM, $_USER, $_TABLES, $_DB_dbms;
 
@@ -1398,9 +1398,11 @@ function _sec_checkToken()
             } else {
                 $return = true; // Everything is AOK in only one condition...
             }
-            // It's a one time token. So eat it.
-            $sql = "DELETE FROM {$_TABLES['tokens']} WHERE token='".DB_escapeString($token)."'";
-            DB_query($sql);
+            if ( $ajax == 0 ) {
+                // It's a one time token. So eat it.
+                $sql = "DELETE FROM {$_TABLES['tokens']} WHERE token='".DB_escapeString($token)."'";
+                DB_query($sql);
+            }
         }
     } else {
         $return = false; // no token.
