@@ -14,7 +14,6 @@
 // | Based upon the fine work of:                                             |
 // |                                                                          |
 // | Joe Mucchiello         joe AT throwingdice DOT com                       |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -418,7 +417,7 @@ function AT_showUploadForm()
 
 // generate field data for the ADMIN_list and ADMIN_simpleList presentations
 
-function AT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
+function AT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token='')
 {
     global $_CONF, $_AM_CONF, $LANG_AM, $LANG_ACCESS, $LANG_ADMIN;
 
@@ -501,6 +500,19 @@ function AT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 $retval = '';
             }
             break;
+        case 'usage_allowed' :
+            $retval = '<input type="checkbox" name="perms[]" value="'. $A['usage_id'] . '"';
+            if ($A['usage_allowed'] == 1 ) {
+                $retval .= 'checked="checked"';
+            }
+            $retval .= '>';
+            break;
+        case 'usage_namespace' :
+            $retval = $A['usage_namespace'];
+            break;
+        case 'usage_operation' :
+            $retval = $A['usage_operation'];
+            break;
 
         default:
             $retval = ($isenabled) ? $fieldvalue: '<span class="disabledfield">' . $fieldvalue . '</span>';
@@ -563,6 +575,10 @@ function ATP_edit($autotag_id = '')
 
     $retval   = '';
     $form_url = '';
+    $token    = SEC_createToken();
+
+    $admin_list = new Template($_CONF['path_layout'] .'admin/autotag/');
+    $admin_list->set_file('admin', 'autotag_perm.thtml');
 
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/autotag.php',
@@ -571,25 +587,43 @@ function ATP_edit($autotag_id = '')
               'text' => $LANG_ADMIN['admin_home'])
     );
 
-    $retval .= COM_startBlock ($LANG01['autotag_perms'], '',
-                               COM_getBlockTemplate ('_admin_block', 'header'));
+    $admin_list->set_var('block_start',COM_startBlock ($LANG01['autotag_perms'], '',
+                               COM_getBlockTemplate ('_admin_block', 'header')));
 
-    $retval .= ADMIN_createMenu(
+    $admin_list->set_var('admin_menu',ADMIN_createMenu(
         $menu_arr,
         $LANG_AM['autotagpermmsg'],
         $_CONF['layout_url'] . '/images/icons/autotag.png'
+    ));
+
+    $admin_list->set_var('admin_menu_header',
+                ADMIN_createMenuHeader($menu_arr,$LANG_AM['autotagpermmsg'],$LANG_AM['title'].' :: '.$LANG01['autotag_perms'],
+                    $_CONF['layout_url'].'/images/icons/autotag.png'));
+
+    $header_arr = array(      # dislay 'text' and use table field 'field'
+        array('text' => $LANG_AM['allowed'],     'field' => 'usage_allowed',   'sort' => false, 'align' => 'left'),
+        array('text' => $LANG_AM['namespace'],   'field' => 'usage_namespace', 'sort' => true, 'align' => 'left'),
+        array('text' => $LANG_AM['operation'],   'field' => 'usage_operation', 'sort' => true, 'align' => 'left'),
     );
 
-    $retval .= '<form action="'.$_CONF['site_admin_url'].'/autotag.php" method="post">';
-    $retval .= '<table cellspacing="0" cellpadding="2" width="100%" border="0">' .LB;
-    $retval .= '<tr><td class="alignleft"><h1>'.$LANG_AM['autotag'].':&nbsp;'.$autotag_id.'</h1></td><td>&nbsp;</td></tr>';
-    $retval .= '<tr><td colspan="2" width="100%"><table border="0" width="100%" cellpadding="0" cellspacing="0">';
+    $text_arr = array('has_menu'  => false,
+                      'title'     => $LANG_AM['autotag'].':&nbsp;'.$autotag_id,
+                      'help_url'  => '',
+                      'no_data'   => 'No data to display',
+                      'form_url'  => ''
+    );
+
+    $defsort_arr = array('field' => 'usage_namespace', 'direction' => 'asc');
+
+    $form_arr = array();
+    $options = array();
+    $extra   = array();
 
     $tagUsage = PLG_collectAutotagUsage();
 
     $sql  = "SELECT * FROM {$_TABLES['autotag_perm']} JOIN {$_TABLES['autotag_usage']} ON ";
     $sql .= "{$_TABLES['autotag_perm']}.autotag_id = {$_TABLES['autotag_usage']}.autotag_id ";
-    $sql .= "WHERE {$_TABLES['autotag_perm']}.autotag_id = '".DB_escapeString($autotag_id)."' ORDER BY usage_namespace DESC";
+    $sql .= "WHERE {$_TABLES['autotag_perm']}.autotag_id = '".DB_escapeString($autotag_id)."' ORDER BY usage_namespace ASC";
 
     $result = DB_query($sql);
 
@@ -623,40 +657,15 @@ function ATP_edit($autotag_id = '')
         }
     }
 
-    $ftcount = 0;
-    $retval .= '<tr>';
-    foreach($final AS $item) {
-        if ( $ftcount > 0 && $ftcount % 3 == 0 ) {
-            $retval .= '</tr>'.LB.'<tr>';
-        }
-        $pluginRow = sprintf('pluginRow%d', ($ftcount % 2) + 1);
-        $ftcount++;
-        $retval .= '<td class="' . $pluginRow . '">'
-                . '<input type="checkbox" name="perms[]" value="'
-                . $item['usage_id'] . '"';
-        if ($item['usage_allowed'] == 1 ) {
-            $retval .= 'checked="checked"';
-        }
-        $retval .= '/><span title="' . $item['autotag_name']. '">'
-                . $item['usage_namespace'].'.'.$item['usage_operation'] . '</span></td>';
+    $FinalList = ADMIN_listArray('autotag-list', 'AT_getListField', $header_arr, $text_arr,
+                                $final, $defsort_arr, '', $extra, $options, $form_arr );
 
-    }
-    if ($ftcount == 0) {
-        // There are no usage items defined
-        $retval .= '<td colspan="3" class="pluginRow1">'
-                . 'nothing to show' . '</td>';
-    }
-    $retval .= '</tr></table></td></tr>';
-    $retval .= '<tr><td colspan="2">';
-    $retval .= '<input type="submit" value="'.$LANG_ADMIN['save'].'" name="psave"/>';
-    $retval .= '<input type="submit" value="'.$LANG_ADMIN['cancel'].'" name="cancel" />';
-    $retval .= '<input type="hidden" name="autotag_id" value="'.$autotag_id.'"/>';
-    $retval .= '<input type="hidden" name="'.CSRF_TOKEN.'" value="'.SEC_createToken().'" />';
-    $retval .= '</td></tr></table>';
-    $retval .= '</form>';
-
-    $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
-
+    $admin_list->set_var('admin_list',$FinalList);
+    $admin_list->set_var('input_csrf_token',CSRF_TOKEN);
+    $admin_list->set_var('var_token',$token);
+    $admin_list->set_var('var_autotag_id',$autotag_id);
+    $admin_list->set_var('block_end',COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer')));
+    $retval = $admin_list->parse('output','admin');
     return $retval;
 }
 
@@ -729,6 +738,17 @@ $public_url = $_CONF['site_url'] . '/autotag/index.php';
 
 $pageContent = '';
 $pageTitle   = $LANG_AM['title'];
+
+if (isset($_GET['msg'])) {
+    $msg = (int) COM_applyFilter($_GET['msg'], true);
+    if ($msg > 0) {
+        $plugin = '';
+        if (isset($_GET['plugin'])) {
+            $plugin = COM_applyFilter($_GET['plugin']);
+        }
+        $pageContent .= COM_showMessage($msg, $plugin,'',0,'error');
+    }
+}
 
 // process the command line
 
@@ -835,6 +855,7 @@ switch ($action) {
 
         break;
 }
+
 
 $display = COM_siteHeader('menu',$pageTitle);
 $display .= $pageContent;
