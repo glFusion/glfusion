@@ -132,7 +132,13 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
                     $avatar = '<img src="' . USER_getPhoto($showtopic['uid'],'','','','0') . '" alt="" title="" class="forum-userphoto" style="width:' . $_FF_CONF['avatar_width'] . 'px;"/>';
                     $min_height = $min_height + 150;
                 } else {
-                    $avatar = '';
+                    if ( !isset($_CONF['default_photo']) || $_CONF['default_photo'] == '' ) {
+                        $img = $_CONF['site_url'] . '/images/userphotos/default.jpg';
+                    } else {
+                        $img = $_CONF['default_photo'];
+                    }
+                    $avatar = '<img src="' . $img . '" alt="" title="" class="forum-userphoto" style="width:' . $_FF_CONF['avatar_width'] . 'px;"/>';
+                    $min_height = $min_height + 150;
                 }
                 if ( $_FF_CONF['enable_user_rating_system']) {
                     if ( $showtopic['uid'] > 1 ) {
@@ -161,7 +167,12 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
             }
         }
     } else {
-        $avatar = '<img src="' . USER_getPhoto($showtopic['uid'],'','','','0') . '" alt="" title="" class="forum-userphoto" style="width:' . $_FF_CONF['avatar_width'] . 'px;"/>';
+        if ( !isset($_CONF['default_photo']) || $_CONF['default_photo'] == '' ) {
+            $img = $_CONF['site_url'] . '/images/userphotos/default.jpg';
+        } else {
+            $img = $_CONF['default_photo'];
+        }
+        $avatar = '<img src="' . $img . '" alt="" title="" class="forum-userphoto" style="width:' . $_FF_CONF['avatar_width'] . 'px;"/>';
         $min_height = $min_height + 150;
     }
 
