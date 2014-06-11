@@ -346,7 +346,11 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         if ( $row['uid'] == 1 ) {
             continue;
         }
-        $owner_select .= '<option value="' . $row['uid'] . '"' . ($A['owner_id'] == $row['uid'] ? 'selected="selected"' : '') . '>' . COM_getDisplayName($row['uid']) . '</option>';
+        $owner_select .= '<option value="'
+            . $row['uid'] . '"'
+            . ($A['owner_id'] == $row['uid'] ? 'selected="selected"' : '') . '>'
+            . COM_getDisplayName($row['uid'],$row['username'],$row['fullname'],$row['remoteusername'],$row['remoteservice'])
+            . '</option>';
     }
     $owner_select .= '</select>';
 
