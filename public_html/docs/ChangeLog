@@ -22,6 +22,7 @@ v1.5.0
 
 v1.4.2
 ------
+- Fixed issue where Media Gallery would timeout on album admin screens
 - Fixed error in youtube autotag where it would log parse errors
 - Reworked how embedded story images are handled
 - Comment edit now takes you directly to the comment entry area
