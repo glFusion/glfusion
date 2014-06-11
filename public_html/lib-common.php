@@ -385,7 +385,7 @@ if ( $_CONF['allow_user_themes'] && !empty( $usetheme ) && is_dir( $_CONF['path_
     $_CONF['path_layout'] = $_CONF['path_themes'] . $_USER['theme'] . '/';
     $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_USER['theme'];
 } else if ( $_CONF['allow_user_themes'] == 1 ) {
-    if ( isset( $_COOKIE[$_CONF['cookie_theme']] ) && empty( $_USER['theme'] )) {
+    if ( isset( $_COOKIE[$_CONF['cookie_theme']] ) ) {
         $theme = COM_sanitizeFilename($_COOKIE[$_CONF['cookie_theme']], true);
         if ( is_dir( $_CONF['path_themes'] . $theme )) {
             $_USER['theme'] = $theme;
@@ -3278,7 +3278,7 @@ function COM_getDisplayName( $uid = '', $username='', $fullname='', $remoteusern
         $uid = (int) $uid;
     }
 
-    if (array_key_exists($uid, $cache)) {
+    if (isset($cache[$uid]) )  {
         return $cache[$uid];
     }
 
