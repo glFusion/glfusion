@@ -1376,14 +1376,7 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
 }
 
 $display = COM_siteHeader();
-$display .= '<noscript>' . LB;
-$display .= '    <div class="pluginAlert aligncenter" style="border:1px dashed #ccc;margin-top:10px;padding:15px;">' . LB;
-$display .= '    <p>' . $LANG_MB01['javascript_required'] . '</p>' . LB;
-$display .= '    </div>' . LB;
-$display .= '</noscript>' . LB;
-$display .= '<div id="menubuilder" style="display:none;">' . LB;
 $display .= $content;
-$display .= '</div>';
 $display .= COM_siteFooter();
 echo $display;
 exit;
