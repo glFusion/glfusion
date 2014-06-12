@@ -2230,7 +2230,7 @@ $LANG_AM = array (
     'access_denied'             => 'Access Denied',
     'access_denied_msg'         => 'You are illegally trying access one of the Autotag Manager administration pages.  Please note that all attempts to illegally access this page are logged',
     'php_msg_enabled'           => 'If checked, the PHP class <b>{tag}.class.php</b> will be called to expand the tag. The <b>Replacement</b> text will be ignored.',
-    'php_msg_norights'          => '<br />NOTE: PHP Autotags are enabled, however the current user has not been assigned the \'autotag.PHP\' feature, and therefore cannot create new PHP Autotags and/or enable or disable existing PHP Autotags.',
+    'php_msg_norights'          => '<br>NOTE: PHP Autotags are enabled, however the current user has not been assigned the \'autotag.PHP\' feature, and therefore cannot create new PHP Autotags and/or enable or disable existing PHP Autotags.',
     'php_msg_disabled'          => 'PHP Autotags have been disabled.<br />To enable, you must set the \'Allow PHP in Autotags\' setting to \'True\' in the Autotag Manager plugin configuration panel.',
     'disallowed_tag'            => 'The tag you have chosen is restricted and not available for use. Choose another tag.',
     'duplicate_tag'             => 'The tag you have chosen is already in use. Please choose another tag name or edit the existing tag.',
@@ -2261,6 +2261,9 @@ $LANG_AM = array (
     'desc_wikipedia'            => 'Link: to the wikipedia search result for the text specified. usage: [wikipedia:<i>text</i>]',
     'desc_youtube'              => 'HTML: embeds a youtube.com video object. usage: [youtube:<i>video_id</i>]',
     'instructions_edit'         => 'This screen allows you to create a custom autotag.',
+    'allowed'                   => 'Allowed',
+    'namespace'                 => 'Namespace',
+    'operation'                 => 'Operation',
 );
 
 ###############################################################################
