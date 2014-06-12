@@ -422,8 +422,8 @@ function AT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token='')
     global $_CONF, $_AM_CONF, $LANG_AM, $LANG_ACCESS, $LANG_ADMIN;
 
     $allow_php = $_AM_CONF['allow_php'];
-    $isfunction = ($A['is_function'] == 1) ? true : false;
-    $isenabled = ((!$isfunction AND $A['is_enabled'] == 1) OR ($isfunction AND $allow_php AND $A['is_enabled'])) ? true : false;
+    $isfunction = (isset($A['is_function']) && $A['is_function'] == 1) ? true : false;
+    $isenabled = ((!$isfunction && isset($A['is_enabled']) && $A['is_enabled'] == 1) OR ($isfunction AND $allow_php AND $A['is_enabled'])) ? true : false;
     $phprights = SEC_hasRights('autotag.PHP');
 
     switch($fieldname) {
