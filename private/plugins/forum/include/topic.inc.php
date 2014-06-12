@@ -438,7 +438,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
             'back_link'     => isset($backlink) ? $backlink : '',
             'member_badge'  => forumPLG_getMemberBadge($showtopic['uid'])
     ));
-    if ( $parent_id != 0 ) {
+    if ( $replytopicid != 0 ) {
         $topictemplate->set_var('prefix',$LANG_GF01['RE']);
     } else {
         $topictemplate->set_var('prefix','');
