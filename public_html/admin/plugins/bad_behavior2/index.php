@@ -66,6 +66,7 @@ function _bb_listEntries ($page = 1, $msg = '')
     global $_CONF, $_USER, $_TABLES, $LANG_BAD_BEHAVIOR, $LANG_BB2_RESPONSE, $LANG_ADMIN;
 
     $retval = '';
+    $msgText = '';
 
     if ($page < 1) {
         $page = 1;
