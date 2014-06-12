@@ -158,7 +158,7 @@ if ($status == USER_ACCOUNT_ACTIVE) {
         $filedata = urldecode($_POST['token_filedata']);
         $file_array = unserialize($filedata);
     }
-    if (empty($_FILES) && is_array($file_array) ) {
+    if (empty($_FILES) && (isset($file_array) && is_array($file_array) ) ) {
         foreach ($file_array as $fkey => $file) {
             if ( isset($file['name']) && is_array($file['name']) ) {
                 foreach($file AS $key => $data) {
