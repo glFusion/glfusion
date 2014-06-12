@@ -2149,11 +2149,12 @@ function COM_userMenu( $help='', $title='', $position='' )
             } else {
                 $html_oauth = '';
                 foreach ($modules as $service) {
-                    $login->set_file('oauth_login', 'loginform_oauth.thtml');
+                    $login->set_file('oauth_login', 'loginform_oauth_block.thtml');
                     $login->set_var('oauth_service', $service);
                     // for sign in image
                     $login->set_var('oauth_sign_in_image', $_CONF['site_url'] . '/images/login-with-' . $service . '.png');
                     $login->set_var('oauth_sign_in_image_style', '');
+                    $login->set_var('oauth_service_display',ucwords($service));
                     $login->parse('output', 'oauth_login');
                     $html_oauth .= $login->finish($login->get_var('output'));
                 }
@@ -3541,9 +3542,17 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
             return $retval;
         }
     }
-    $retval = '';
+
+    $T = new Template($_CONF['path_layout'].'blocks');
+    $T->set_file('block', 'whatsnew.thtml');
+
+    $items_found = 0;
+
     $header = COM_startBlock( $title, $help,
                        COM_getBlockTemplate( 'whats_new_block', 'header', $position ), 'whats_new_block' );
+
+    $T->set_var('block_start',$header);
+
 
     $topicsql = '';
     if (( $_CONF['hidenewstories'] == 0 ) || ( $_CONF['hidenewcomments'] == 0 )
@@ -3569,24 +3578,34 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
             $title = DB_getItem( $_TABLES['blocks'], 'title', "name='whats_new_block'" );
         }
 
+        $T->set_block('block', 'section', 'sectionblock');
+
         if ( $nrows > 0 ) {
             // Any late breaking news stories?
-            $retval .= '<h3>' . $LANG01[99] . ' <small>'
-                    . COM_formatTimeString( $LANG_WHATSNEW['new_last'],
-                                            $_CONF['newcommentsinterval'] )
-                    . '</small></h3>';
+            $T->set_var('section_title',$LANG01[99]);
+            $T->set_var('interval',COM_formatTimeString( $LANG_WHATSNEW['new_last'],$_CONF['newcommentsinterval'] ));
+
             $newstory = array();
+
+            $T->set_block('block','datarow','datablock');
+
             while ($A=DB_fetchArray($result)) {
                 $title = COM_undoSpecialChars( $A['title'] );
                 $title = str_replace('&nbsp;',' ',$title);
                 $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],'...' );
                 $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
                 $url = COM_buildUrl($_CONF['site_url'] . '/article.php?story=' . $A['sid']);
-                $newstory[] = COM_createLink($titletouse,$url,$attr);
+                $storyitem = COM_createLink($titletouse,$url,$attr);
+                $newstory[] = $storyitem;
+
+                $T->set_var('data_item',$storyitem);
+                $T->parse('datablock', 'datarow',true);
+                $items_found++;
             }
-            $retval .= COM_makeList( $newstory, 'list-new-articles' ) .'<br/>';
+            $T->parse('sectionblock','section',true);
         }
     }
+    $T->unset_var('datablock');
 
     if ( $_CONF['hidenewcomments'] == 0 ) {
         // Go get the newest comments
@@ -3610,15 +3629,15 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         $nrows = DB_numRows( $result );
 
         if ( $nrows > 0 ) {
-            $retval .= '<h3>' . $LANG01[83] . ' <small>'
-                    . COM_formatTimeString( $LANG_WHATSNEW['new_last'],
-                                            $_CONF['newcommentsinterval'] )
-                    . '</small></h3>';
+            $T->set_var('section_title',$LANG01[83]);
+            $T->set_var('interval',COM_formatTimeString( $LANG_WHATSNEW['new_last'],$_CONF['newcommentsinterval'] ));
+
             $commentHeader = 1;
             for ($x = 0; $x < $nrows; $x++ ) {
                 $A = DB_fetchArray($result);
                 $A['url'] = COM_buildUrl( $_CONF['site_url']
                         . '/article.php?story=' . $A['sid'] ) . '#comments';
+
                 $commentrow[] = $A;
             }
         }
@@ -3632,11 +3651,9 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 
         if ( $nrows > 0 ) {
             if ( $commentHeader == 0 ) {
-                $retval .= '<h3>' . $LANG01[83] . ' <small>'
-                        . COM_formatTimeString( $LANG_WHATSNEW['new_last'],
-                                                $_CONF['newcommentsinterval'] )
-                        . '</small></h3>';
                 $commentHeader = 1;
+                $T->set_var('section_title',$LANG01[83]);
+                $T->set_var('interval',COM_formatTimeString( $LANG_WHATSNEW['new_last'],$_CONF['newcommentsinterval'] ));
             }
 
             $newcomments = array();
@@ -3655,11 +3672,16 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 
                 $newcomments[] = COM_createLink($titletouse, $url, $attr);
             }
-
-            $retval .= COM_makeList( $newcomments, 'list-new-comments' );
-            $retval .= '<br />';
+            $T->set_block('block','datarow','datablock');
+            foreach ($newcomments as $comment) {
+                $T->set_var('data_item',$comment);
+                $T->parse('datablock', 'datarow',true);
+                $items_found++;
+            }
+            $T->parse('sectionblock','section',true);
         }
     }
+    $T->unset_var('datablock');
 
     if ( $_CONF['trackback_enabled'] && ( $_CONF['hidenewtrackbacks'] == 0 )) {
 
@@ -3668,13 +3690,11 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 
         $nrows = DB_numRows( $result );
         if ( $nrows > 0 ) {
-            $retval .= '<h3>' . $LANG01[114] . ' <small>'
-                    . COM_formatTimeString( $LANG_WHATSNEW['new_last'],
-                                            $_CONF['newtrackbackinterval'] )
-                    . '</small></h3>';
+            $T->set_var('section_title',$LANG01[114]);
+            $T->set_var('interval',COM_formatTimeString( $LANG_WHATSNEW['new_last'],$_CONF['newtrackbackinterval'] ));
 
             $newcomments = array();
-
+            $T->set_block('block','datarow','datablock');
             for( $i = 0; $i < $nrows; $i++ ) {
                 $titletouse = '';
                 $A = DB_fetchArray( $result );
@@ -3690,46 +3710,52 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                 if ( $A['count'] > 1 ) {
                     $titletouse .= ' [+' . $A['count'] . ']';
                 }
-
-                $newcomments[] = COM_createLink($titletouse, $url, $attr);
+                $trackback = COM_createLink($titletouse, $url, $attr);
+                $newcomments[] = $trackback;
+                $T->set_var('data_item',$trackback);
+                $T->parse('datablock', 'datarow',true);
+                $items_found++;
             }
-
-            $retval .= COM_makeList( $newcomments, 'list-new-trackbacks' );
+            $T->parse('sectionblock','section',true);
         }
     }
+    $T->unset_var('datablock');
 
     if ( $_CONF['hidenewplugins'] == 0 ) {
         list( $headlines, $smallheadlines, $content ) = PLG_getWhatsNew();
         $plugins = count( $headlines );
         if ( $plugins > 0 ) {
             for( $i = 0; $i < $plugins; $i++ ) {
-                $retval .= '<h3>' . $headlines[$i] . ' <small>'
-                        . $smallheadlines[$i] . '</small></h3>';
+                $T->set_var('section_title',$headlines[$i]);
+                $T->set_var('interval',$smallheadlines[$i]);
+                $T->set_block('block','datarow','datablock');
                 if ( is_array( $content[$i] )) {
-                    $retval .= COM_makeList( $content[$i], 'list-new-plugins' );
+                    foreach($content[$i] as $item ){
+                        $T->set_var('data_item',$item);
+                        $T->parse('datablock', 'datarow',true);
+                    }
                 } else {
-                    $retval .= $content[$i];
+                    $T->set_var('data_item',$content[$i]);
+                    $T->parse('datablock', 'datarow',true);
+                    $items_found++;
                 }
-
-                if ( $i + 1 < $plugins ) {
-                    $retval .= '<br/>';
-                }
+                $T->parse('sectionblock','section',true);
             }
         }
     }
 
-    if ( $retval != '' ) {
-        $retval = $header . $retval;
-        $retval .= COM_endBlock( COM_getBlockTemplate( 'whats_new_block', 'footer', $position ));
+    if ( $items_found == 0 ) {
+        $T->set_var('no_items_found',$LANG01['no_new_items']);
     } else {
-        if ( $_CONF['hideemptyblock'] != TRUE ) {
-            $retval = $header . $LANG01['no_new_items'];
-            $retval .= COM_endBlock( COM_getBlockTemplate( 'whats_new_block', 'footer', $position ));
-        }
+        $T->set_var('no_items_found','');
     }
-    CACHE_create_instance($cacheInstance, $retval, 0);
+    $T->set_var('block_end',COM_endBlock( COM_getBlockTemplate( 'whats_new_block', 'footer', $position )));
 
-    return $retval;
+    $T->parse ('output', 'block');
+    $final = $T->finish($T->get_var('output'));
+    CACHE_create_instance($cacheInstance, $final, 0);
+
+    return $final;
 }
 
 
