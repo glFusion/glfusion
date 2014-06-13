@@ -158,9 +158,9 @@ function WIDGET_slider( $dataArray )
     // define the JS we need for this theme..
     $outputHandle = outputHandler::getInstance();
     // core js
-    $outputHandle->addLinkScript($_CONF['layout_url'].'/js/jquery.nivo.slider.pack.js');
-    $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/nivo-slider.css');
-    $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/themes/default/default.css');
+    $outputHandle->addLinkScript($_CONF['site_url'].'/javascript/addons/nivo-slider/jquery.nivo.slider.pack.js');
+    $outputHandle->addLinkStyle($_CONF['site_url'].'/javascript/addons/nivo-slider/css/nivo-slider.css');
+    $outputHandle->addLinkStyle($_CONF['site_url'].'/javascript/addons/nivo-slider/themes/default/default.css');
     if ( isset($dataArray['options']['width']) ) {
         $max_width = 'style="max-width:'.$dataArray['options']['width'] . 'px;"';
     } else {
@@ -214,8 +214,8 @@ function WIDGET_springMenu($dataArray)
     // define the JS we need for this theme..
     $outputHandle = outputHandler::getInstance();
     // core js
-    $outputHandle->addLinkScript($_CONF['layout_url'].'/js/jquery.accordionImageMenu.min.js');
-    $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/accordionImageMenu.css');
+    $outputHandle->addLinkScript($_CONF['site_url'].'/javascript/addons/accordion-image-menu/jquery.accordionImageMenu.min.js');
+    $outputHandle->addLinkStyle( $_CONF['site_url'].'/javascript/addons/accordion-image-menu/accordionImageMenu.css');
 
     $retval .= '<div class="spring-menu">';
     $retval .= '<div id="springmenu_'.$rand.'" class="aim">';
@@ -258,8 +258,8 @@ function WIDGET_tabslide( $dataArray )
     // define the JS we need for this theme..
     $outputHandle = outputHandler::getInstance();
     // core js
-    $outputHandle->addLinkScript($_CONF['layout_url'].'/js/jquery.sliderTabs.min.js');
-    $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/jquery.sliderTabs.css');
+    $outputHandle->addLinkScript($_CONF['site_url'].'/javascript/addons/slider-tabs/jquery.sliderTabs.min.js');
+    $outputHandle->addLinkStyle($_CONF['site_url'].'/javascript/addons/slider-tabs/styles/jquery.sliderTabs.min.css');
 
     $page_ids = $dataArray['panels'];
 

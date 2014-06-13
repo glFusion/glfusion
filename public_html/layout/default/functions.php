@@ -47,11 +47,10 @@ $_BLOCK_TEMPLATE['forum_menu'] = 'blockheader-left.thtml,blockfooter-left.thtml'
 // define the JS we need for this theme..
 $outputHandle = outputHandler::getInstance();
 
-// slideshow
-$outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.tcycle.js');
 // cookie law
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.cookiebar.js');
 $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/jquery.cookiebar.css');
+
 
 // must load the jquery ui library we want to use.
 $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/ui-lightness/jquery-ui-1.10.4.min.css');

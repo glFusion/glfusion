@@ -6558,19 +6558,22 @@ function js_out()
         $files[] = $_CONF['path_html'].'javascript/jquery/addons/jqrating.js';
 
         if ( !isset($_SYSTEM['disable_jquery_tooltip']) || $_SYSTEM['disable_jquery_tooltip'] == false ) {
-            $files[] = $_CONF['path_html'].'javascript/addons/jquery.tooltipster.min.js';
-            $files[] = $_CONF['path_html'].'javascript/addons/tooltip.js';
+            $files[] = $_CONF['path_html'].'javascript/addons/tooltipster/jquery.tooltipster.min.js';
+            $files[] = $_CONF['path_html'].'javascript/addons/tooltipster/tooltip.js';
         }
         if ( !isset($_SYSTEM['disable_jquery_menu']) || $_SYSTEM['disable_jquery_menu'] == false ) {
-            $files[] = $_CONF['path_html'].'javascript/addons/superfish.js';
-            $files[] = $_CONF['path_html'].'javascript/addons/hoverIntent.js';
+            $files[] = $_CONF['path_html'].'javascript/addons/superfish/superfish.js';
+            $files[] = $_CONF['path_html'].'javascript/addons/superfish/hoverIntent.js';
         }
         if ( !isset($_SYSTEM['disable_jquery_slimbox']) || $_SYSTEM['disable_jquery_slimbox'] == false ) {
-            $files[] = $_CONF['path_html'].'javascript/addons/slimbox2.js';
+            $files[] = $_CONF['path_html'].'javascript/addons/slimbox/slimbox2.js';
         }
         if ( !isset($_SYSTEM['disable_jquery_validate']) || $_SYSTEM['disable_jquery_validate'] == false ) {
-            $files[] = $_CONF['path_html'].'javascript/addons/jquery.validate.min.js';
-            $files[] = $_CONF['path_html'].'javascript/addons/additional-methods.min.js';
+            $files[] = $_CONF['path_html'].'javascript/addons/jquery-validate/jquery.validate.min.js';
+            $files[] = $_CONF['path_html'].'javascript/addons/jquery-validate/additional-methods.min.js';
+        }
+        if ( !isset($_SYSTEM['disable_jquery_slideshow']) || $_SYSTEM['disable_jquery_slideshow'] == false ) {
+            $files[] = $_CONF['path_html'].'javascript/addons/tcycle/jquery.tcycle.js';
         }
     }
     $files[] = $_CONF['path_html'].'javascript/common.js';
@@ -6581,6 +6584,7 @@ function js_out()
     foreach ($headerscripts as $s ) {
         $files[] = $s;
     }
+
     /*
      * Check to see if the theme has any JavaScript to include... (depreciate)
      */
