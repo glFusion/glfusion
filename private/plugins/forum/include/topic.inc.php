@@ -191,7 +191,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
     }
 
     if ($_FF_CONF['show_moods'] &&  $showtopic['mood'] != "") {
-        $moodimage = '<img align="middle" src="'._ff_getImage($showtopic['mood'],'moods') .'" title="'.$showtopic['mood'].'" alt=""/><br/>';
+        $moodimage = '<img style="vertical-align:middle;" src="'._ff_getImage($showtopic['mood'],'moods') .'" title="'.$showtopic['mood'].'" alt=""/><br/>';
         $min_height = $min_height + 30;
     }
 
@@ -213,7 +213,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
         }
         if ($editAllowed) {
             $editlink = $_CONF['site_url'].'/forum/createtopic.php?mode=edittopic&amp;forum='.$showtopic['forum'].'&amp;id='.$showtopic['id'].'&amp;editid='.$showtopic['id'].'&amp;page='.$page;
-            $editlinkimg = '<img src="'._ff_getImage('edit_button').'" border="0" align="middle" alt="'.$LANG_GF01['EDITICON'].'" title="'.$LANG_GF01['EDITICON'].'"/>';
+            $editlinkimg = '<img src="'._ff_getImage('edit_button').'" style="vertical-align:middle;" alt="'.$LANG_GF01['EDITICON'].'" title="'.$LANG_GF01['EDITICON'].'"/>';
             $topictemplate->set_var (array(
                     'editlink'  => $editlink,
                     'editlinkimg'   => $editlinkimg,
@@ -266,7 +266,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
             if ($is_readonly == 0 || forum_modPermission($showtopic['forum'],(COM_isAnonUser() ? 1 : $_USER['uid']),'mod_edit')) {
                 if ( $canPost != 0 ) {
                     $quotelink = $_CONF['site_url'].'/forum/createtopic.php?mode=newreply&amp;forum='.$showtopic['forum'].'&amp;id='.$replytopicid.'&amp;quoteid='.$showtopic['id'];
-                    $quotelinkimg = '<img src="'._ff_getImage('quote_button').'" border="0" align="middle" alt="'.$LANG_GF01['QUOTEICON'].'" title="'.$LANG_GF01['QUOTEICON'].'"/>';
+                    $quotelinkimg = '<img src="'._ff_getImage('quote_button').'" style="vertical-align:middle;" alt="'.$LANG_GF01['QUOTEICON'].'" title="'.$LANG_GF01['QUOTEICON'].'"/>';
                     $topictemplate->set_var (array(
                                 'quotelink' => $quotelink,
                                 'quotelinkimg'  => $quotelinkimg,
@@ -293,7 +293,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
                 $pmplugin_link = forumPLG_getPMlink($showtopic['uid']);
                 if ($pmplugin_link != '') {
                     $pm_link = $pmplugin_link;
-                    $pm_linkimg = '<img src="'._ff_getImage('pm_button').'" border="0" align="middle" alt="'.$LANG_GF01['PMLink'].'" title="'.$LANG_GF01['PMLink'].'"/>';
+                    $pm_linkimg = '<img src="'._ff_getImage('pm_button').'" style="vertical-align:middle;" alt="'.$LANG_GF01['PMLink'].'" title="'.$LANG_GF01['PMLink'].'"/>';
                     $topictemplate->set_var(array(
                             'pmlink'    => $pm_link,
                             'pmlinkimg' => $pm_linkimg,
@@ -304,7 +304,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
         $topictemplate->clear_var(array('emaillink','emaillinkimg','LANG_email'));
         if (isset($userarray['email']) && $userarray['email'] != '' && $showtopic["uid"] > 1 && $userarray['emailfromuser'] == 1) {
             $email_link = $_CONF['site_url'].'/profiles.php?uid='.$showtopic['uid'];
-            $email_linkimg = '<img src="'._ff_getImage('email_button').'" border="0" align="middle" alt="'.$LANG_GF01['EmailLink'].'" title="'.$LANG_GF01['EmailLink'].'"/>';
+            $email_linkimg = '<img src="'._ff_getImage('email_button').'" style="vertical-align:middle;" alt="'.$LANG_GF01['EmailLink'].'" title="'.$LANG_GF01['EmailLink'].'"/>';
             $topictemplate->set_var(array(
                     'emaillink'     => $email_link,
                     'emaillinkimg'  => $email_linkimg,
@@ -316,7 +316,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
             if (!preg_match("/http/i",$homepage) ) {
                 $homepage = 'http://' .$homepage;
             }
-            $homepageimg = '<img src="'._ff_getImage('website_button').'" border="0" align="middle" alt="'.$LANG_GF01['WebsiteLink'].'" title="'.$LANG_GF01['WebsiteLink'].'"/>';
+            $homepageimg = '<img src="'._ff_getImage('website_button').'" style="vertical-align:middle;" alt="'.$LANG_GF01['WebsiteLink'].'" title="'.$LANG_GF01['WebsiteLink'].'"/>';
             $topictemplate->set_var(array(
                     'websitelink'   => $homepage,
                     'websitelinkimg'=> $homepageimg,

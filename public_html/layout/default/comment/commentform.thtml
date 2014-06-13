@@ -7,7 +7,7 @@
 <a id="comment_entry"></a>
 {!endif}
 <form action="{site_url}/comment.php#comment_entry" method="post">
-    <table cellspacing="0" cellpadding="3" width="95%">
+    <table style="padding:3px;width:95%;">
         <tr>
             <td class="alignright"><b>{lang_username}:</b></td>
             <td>

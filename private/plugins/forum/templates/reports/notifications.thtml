@@ -1,7 +1,7 @@
 {# begin {templatelocation} #}
 <div class="forumpost">
 {navmenu}
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<table style="width:100%;">
   <tr>
     <td class="alignright" style="width:95%;padding:5px 10px 5px 0px;">
       <form action="{phpself}" method="post" style="margin:0px;">
@@ -43,15 +43,15 @@
           &nbsp;
           {!endif}
         </td>
-        <td width="2%" style="padding:2px 0px 2px 5px;">{views}</td>
-        <td width="2%" style="padding:2px 0px 2px 5px;">{replies}</td>
-        <td width="2%" style="padding:2px 0px 2px 5px;"><a href="notify.php?submit=delete&amp;id={notify_id}&amp;filter={notifytype}">{LANG_REMOVE}</a></td>
+        <td style="width:2%;padding:2px 0px 2px 5px;">{views}</td>
+        <td style="width:2%;padding:2px 0px 2px 5px;">{replies}</td>
+        <td style="width:2%;padding:2px 0px 2px 5px;"><a href="notify.php?submit=delete&amp;id={notify_id}&amp;filter={notifytype}">{LANG_REMOVE}</a></td>
       </tr>
 <!-- END notification -->
     </table>
   </div>
 </form>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<table style="width:100%;">
   <tr>
     <td class="aligncenter">{pagenavigation}</td>
     <td class="aligncenter">{bottomlink}</td>

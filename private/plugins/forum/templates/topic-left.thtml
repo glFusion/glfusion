@@ -5,7 +5,7 @@
 <tr class="pluginRow{csscode}" style="display:{show_topicrow1};">
 <td style="height:30px;padding-left:6px; padding-right:6px;">{userlink}{topic_post_link_begin}{topic_post_link_end}</td>
   <td style="padding-left:6px; padding-right:6px;">
-    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <table style="width:100%;">
       <tr>
         <td style="width:8px;" class="aligncenter"><a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}&amp;lastpost=true#{topic_id}"><img src="{site_url}/forum/images/icon_minipost.gif" alt="{$LANG_GF01[PERMLINK]}" title="{$LANG_GF01[PERMLINK]}" /></a></td>
         {# <td nowrap>&nbsp;{posted_date}{preview_topic_subject}&nbsp;{read_msg}&nbsp;{locked_icon} #}
@@ -65,10 +65,10 @@
 <tr class="pluginRow{csscode}" style="display:{preview_mode};">
   <td style="height:30px;">&nbsp;</td>
   <td style="padding-left:6px; padding-right:6px;">
-    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <table style="width:100%;">
       <tr>
         <td style="white-space:nowrap;">
-          <table border="0" cellspacing="0" cellpadding="0">
+          <table>
             <tr>
               {!if profile_link}
                 {profile_link}
@@ -94,7 +94,7 @@
           </table>
         </td>
         <td class="alignright" style="float:right;white-space:nowrap;">
-          <table border="0" cellspacing="0" cellpadding="0">
+          <table>
             <tr>
               {!if edittopic_link}
                 {edittopic_link}

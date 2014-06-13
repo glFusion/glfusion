@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<table cellspacing="0" cellpadding="0" width="100%" style="border:none;">
+<table style="width:100%;">
   <tr>
     <td style="vertical-align:middle;">
       <form action="{action}" method="post" name="jumpbox" onsubmit="if(document.jumpbox.forum.value == -1){return false;}" style="margin:0px;padding:2px">
