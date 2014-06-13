@@ -1027,8 +1027,8 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     $rdf = substr_replace( $_CONF['rdf_file'], $_CONF['site_url'], 0,strlen( $_CONF['path_html'] ) - 1 ) . LB;
 
     if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
-        $style_cache_url = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'].'&amp;i='.$cacheID;
-        $js_cache_url    = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].$_USER['theme'].'.js?t='.$_USER['theme'].'&amp;i='.$cacheID;
+        $style_cache_url = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?i='.$cacheID;
+        $js_cache_url    = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].$_USER['theme'].'.js?i='.$cacheID;
     } else {
         $style_cache_url = $_CONF['site_url'].'/css.php?t='.$_USER['theme'].'&amp;i='.$cacheID;
         $js_cache_url    = $_CONF['site_url'].'/js.php?t='.$_USER['theme'].'&amp;i='.$cacheID;
@@ -1055,8 +1055,6 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     $header->parse( 'index_header', 'header' );
     $retval = $header->finish( $header->get_var( 'index_header' ));
 
-    // send out the charset header
-//    header( 'Content-Type: text/html; charset=' . COM_getCharset());
     echo $retval;
 
     // Start caching / capturing output from glFusion / plugins
@@ -1361,8 +1359,8 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     $retval = $theme->finish( $theme->get_var( 'index_footer' ));
 
-    css_out();
     js_out();
+    css_out();
 
     return $retval;
 }
@@ -6319,7 +6317,6 @@ function CTL_clearCache($plugin='')
     }
 }
 
-
 function css_out()
 {
     global $_CONF, $_SYSTEM, $_VARS, $_USER, $_PLUGINS, $_TABLES;
@@ -6330,13 +6327,11 @@ function css_out()
 
     if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
         $cacheFile = $_CONF['path_html'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css';
-        $cacheURL  = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'];
+        $cacheURL  = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css';
     } else {
         $cacheFile = $_CONF['path'].'/data/layout_cache/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css';
         $cacheURL  = $_CONF['site_url'].'/css.php?t='.$_USER['theme'];
     }
-
-    $cacheURL  = $_CONF['site_url'].'/css.php?t='.$_USER['theme'];
 
     $files   = array();
 
@@ -6346,9 +6341,10 @@ function css_out()
     } else {
         $files[] = $_CONF['path_layout'] . 'style.css';
     }
+
     if ( file_exists($_CONF['path_layout'] .'custom/style-colors.css') ) {
         $files[] = $_CONF['path_layout'] . 'custom/style-colors.css';
-    } else {
+    } else if (file_exists($_CONF['path_layout'].'style-color.css')) {
         $files[] = $_CONF['path_layout'] . 'style-colors.css';
     }
 
@@ -6456,21 +6452,33 @@ function css_loadfile($file)
 /**
  * Very simple CSS optimizer
  *
+ * @author Andreas Gohr <andi@splitbrain.org>
  */
-function css_compress($css)
-{
+function css_compress($css){
     //strip comments through a callback
     $css = preg_replace_callback('#(/\*)(.*?)(\*/)#s','css_comment_cb',$css);
 
     //strip (incorrect but common) one line comments
-    $css = preg_replace('/(?<!:)\/\/.*$/m','',$css);
+    $css = preg_replace_callback('/^.*\/\/.*$/m','css_onelinecomment_cb',$css);
 
     // strip whitespaces
     $css = preg_replace('![\r\n\t ]+!',' ',$css);
-    $css = preg_replace('/ ?([:;,{}\/]) ?/','\\1',$css);
+    $css = preg_replace('/ ?([;,{}\/]) ?/','\\1',$css);
+    $css = preg_replace('/ ?: /',':',$css);
+
+    // number compression
+    $css = preg_replace('/([: ])0+(\.\d+?)0*((?:pt|pc|in|mm|cm|em|ex|px)\b|%)(?=[^\{]*[;\}])/', '$1$2$3', $css); // "0.1em" to ".1em", "1.10em" to "1.1em"
+    $css = preg_replace('/([: ])\.(0)+((?:pt|pc|in|mm|cm|em|ex|px)\b|%)(?=[^\{]*[;\}])/', '$1$2', $css); // ".0em" to "0"
+    $css = preg_replace('/([: ]0)0*(\.0*)?((?:pt|pc|in|mm|cm|em|ex|px)(?=[^\{]*[;\}])\b|%)/', '$1', $css); // "0.0em" to "0"
+    $css = preg_replace('/([: ]\d+)(\.0*)((?:pt|pc|in|mm|cm|em|ex|px)(?=[^\{]*[;\}])\b|%)/', '$1$3', $css); // "1.0em" to "1em"
+    $css = preg_replace('/([: ])0+(\d+|\d*\.\d+)((?:pt|pc|in|mm|cm|em|ex|px)(?=[^\{]*[;\}])\b|%)/', '$1$2$3', $css); // "001em" to "1em"
+
+    // shorten attributes (1em 1em 1em 1em -> 1em)
+    $css = preg_replace('/(?<![\w\-])((?:margin|padding|border|border-(?:width|radius)):)([\w\.]+)( \2)+(?=[;\}]| !)/', '$1$2', $css); // "1em 1em 1em 1em" to "1em"
+    $css = preg_replace('/(?<![\w\-])((?:margin|padding|border|border-(?:width)):)([\w\.]+) ([\w\.]+) \2 \3(?=[;\}]| !)/', '$1$2 $3', $css); // "1em 2em 1em 2em" to "1em 2em"
 
     // shorten colors
-    $css = preg_replace("/#([0-9a-fA-F]{1})\\1([0-9a-fA-F]{1})\\2([0-9a-fA-F]{1})\\3/", "#\\1\\2\\3",$css);
+    $css = preg_replace("/#([0-9a-fA-F]{1})\\1([0-9a-fA-F]{1})\\2([0-9a-fA-F]{1})\\3(?=[^\{]*[;\}])/", "#\\1\\2\\3", $css);
 
     return $css;
 }
@@ -6480,17 +6488,56 @@ function css_compress($css)
  *
  * Keeps short comments (< 5 chars) to maintain typical browser hacks
  *
+ * @author Andreas Gohr <andi@splitbrain.org>
  */
-function css_comment_cb( $matches )
-{
-    if (strlen($matches[2]) > 4)
-        return '';
+function css_comment_cb($matches){
+    if(strlen($matches[2]) > 4) return '';
     return $matches[0];
 }
+
+/**
+ * Callback for css_compress()
+ *
+ * Strips one line comments but makes sure it will not destroy url() constructs with slashes
+ *
+ * @param $matches
+ * @return string
+ */
+function css_onelinecomment_cb($matches) {
+    $line = $matches[0];
+
+    $out = '';
+    $i = 0;
+    $len = strlen($line);
+    while ($i< $len){
+        $nextcom = strpos($line, '//', $i);
+        $nexturl = stripos($line, 'url(', $i);
+
+        if($nextcom === false) {
+            // no more comments, we're done
+            $out .= substr($line, $i, $len-$i);
+            break;
+        }
+        if($nexturl === false || $nextcom < $nexturl) {
+            // no url anymore, strip comment and be done
+            $out .= substr($line, $i, $nextcom-$i);
+            break;
+        }
+        // we have an upcoming url
+        $urlclose = strpos($line, ')', $nexturl);
+        $out .= substr($line, $i, $urlclose-$i);
+        $i = $urlclose;
+    }
+
+    return $out;
+}
+
 
 function js_out()
 {
     global $_CONF, $_SYSTEM, $_USER, $_PLUGINS;
+
+    $outputHandle = outputHandler::getInstance();
 
     if ( !isset($_CONF['js_cache_filename']) ) {
         $_CONF['js_cache_filename'] = 'jscache_';
@@ -6498,24 +6545,38 @@ function js_out()
 
     if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
         $cacheFile = $_CONF['path_html'].$_CONF['js_cache_filename'].$_USER['theme'].'.js';
-        $cacheURL  = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].'.js?t='.$_USER['theme'];
+        $cacheURL  = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].'.js';
     } else {
         $cacheFile = $_CONF['path'].'data/layout_cache/'.$_CONF['js_cache_filename'].$_USER['theme'].'.js';
         $cacheURL  = $_CONF['site_url'].'/js.php?t='.$_USER['theme'];
     }
 
-    /*
-     * Static list of standard JavaScript used by glFusion...
-     */
+    // standard JS used by glFusion
+    if ( !isset($_SYSTEM['disable_jquery']) || $_SYSTEM['disable_jquery'] == false ) {
+        $files[] = $_CONF['path_html'].'javascript/jquery/jquery-1.11.0.min.js';
+        $files[] = $_CONF['path_html'].'javascript/jquery/jquery-ui-1.10.4.min.js';
+        $files[] = $_CONF['path_html'].'javascript/jquery/addons/jqrating.js';
 
-    $files = array(
-        $_CONF['path_html'] . 'javascript/common.js',
-
-    );
+        if ( !isset($_SYSTEM['disable_jquery_tooltip']) || $_SYSTEM['disable_jquery_tooltip'] == false ) {
+            $files[] = $_CONF['path_html'].'javascript/addons/jquery.tooltipster.min.js';
+            $files[] = $_CONF['path_html'].'javascript/addons/tooltip.js';
+        }
+        if ( !isset($_SYSTEM['disable_jquery_menu']) || $_SYSTEM['disable_jquery_menu'] == false ) {
+            $files[] = $_CONF['path_html'].'javascript/addons/superfish.js';
+            $files[] = $_CONF['path_html'].'javascript/addons/hoverIntent.js';
+        }
+        if ( !isset($_SYSTEM['disable_jquery_slimbox']) || $_SYSTEM['disable_jquery_slimbox'] == false ) {
+            $files[] = $_CONF['path_html'].'javascript/addons/slimbox2.js';
+        }
+        if ( !isset($_SYSTEM['disable_jquery_validate']) || $_SYSTEM['disable_jquery_validate'] == false ) {
+            $files[] = $_CONF['path_html'].'javascript/addons/jquery.validate.min.js';
+            $files[] = $_CONF['path_html'].'javascript/addons/additional-methods.min.js';
+        }
+    }
+    $files[] = $_CONF['path_html'].'javascript/common.js';
 
     // need to parse the outputhandler to see if there are any js scripts to load
 
-    $outputHandle = outputHandler::getInstance();
     $headerscripts = $outputHandle->getScriptFiles();
     foreach ($headerscripts as $s ) {
         $files[] = $s;
@@ -6536,7 +6597,7 @@ function js_out()
     }
 
     /*
-     * Check to see if there are any custom javascript files to include (depreciate)
+     * Check to see if there are any custom javascript files to include (depreciated)
      */
 
     if ( function_exists( 'CUSTOM_js' )) {
@@ -6680,6 +6741,7 @@ function js_cacheok($cache,$files)
     }
     return true;
 }
+
 
 /**
  * This block will display a list of flags that link to the Google automatic
