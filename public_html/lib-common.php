@@ -857,7 +857,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 {
     global $_CONF, $_SYSTEM, $_VARS, $_TABLES, $_USER, $LANG01, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $theme_what, $theme_pagetitle,
-           $theme_headercode, $theme_layout;
+           $theme_headercode, $theme_layout, $blockInterface;
 
     if ( !isset($_USER['theme']) || $_USER['theme'] == '' ) {
         $_USER['theme'] = $_CONF['theme'];
@@ -880,9 +880,24 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     if ( is_array($what) ) {
         $theme_what = array();
     }
-    $theme_what         = $what;
+//    $theme_what         = $what;
     $theme_pagetitle    = $pagetitle;
     $theme_headercode   = $headercode;
+
+    if ( isset($blockInterface['left'] )) {
+        $currentURL = COM_getCurrentURL();
+        if ( strpos($currentURL, $_CONF['site_admin_url']) === 0 ) {
+            if ( $blockInterface['left']['location'] == 'right' || $blockInterface['left']['location'] == 'left' ) {
+                $theme_what = 'none';
+            } else {
+                $theme_what = $what;
+            }
+        } else {
+            $theme_what = $what;
+        }
+    } else {
+        $theme_what = $what;
+    }
 
     $header = new Template( $_CONF['path_layout'] );
     $header->set_file('header','htmlheader.thtml');
@@ -1082,6 +1097,15 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
            $_LOGO,$uiStyles;
 
     COM_hit();
+
+    if ( isset($blockInterface['right']) ) {
+        $currentURL = COM_getCurrentURL();
+        if ( strpos($currentURL, $_CONF['site_admin_url']) === 0 ) {
+            if ( $blockInterface['right']['location'] == 'right' || $blockInterface['right']['location'] == 'left' ) {
+                $rightblocks = -1;
+            }
+        }
+    }
 
     $function = $_USER['theme'] . '_siteFooter';
     if ( function_exists( $function )) {
