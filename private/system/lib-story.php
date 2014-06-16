@@ -1093,9 +1093,7 @@ function service_submit_story($args, &$output, &$svc_msg)
     global $_CONF, $_TABLES, $_USER, $LANG24, $MESSAGE, $_GROUPS;
 
     if (!SEC_hasRights('story.edit')) {
-        $output .= COM_siteHeader('menu', $MESSAGE[30])
-                . COM_showMessageText($MESSAGE[31], $MESSAGE[30],true)
-                . COM_siteFooter();
+        $output .= COM_showMessageText($MESSAGE[31], $MESSAGE[30],true);
 
         return PLG_RET_AUTH_FAILED;
     }
@@ -1270,40 +1268,31 @@ function service_submit_story($args, &$output, &$svc_msg)
     $sid = $story->getSid();
 
     switch ($result) {
-    case STORY_DUPLICATE_SID:
-        $output .= COM_siteHeader ('menu', $LANG24[5]);
-        $output .= COM_errorLog ($LANG24[24], 2);
-        if (!$args['gl_svc']) {
-            if ( isset($args['type']) && $args['type'] == 'submission' ) {
-                $output .= STORY_edit($sid,'moderate');
-            } else {
+        case STORY_DUPLICATE_SID:
+            if (!$args['gl_svc']) {
+                if ( isset($args['type']) && $args['type'] == 'submission' ) {
+                    $output .= STORY_edit($sid,'moderate');
+                } else {
+                    $output .= STORY_edit($sid,'error');
+                }
+            }
+            return PLG_RET_ERROR;
+
+        case STORY_EXISTING_NO_EDIT_PERMISSION:
+            $output .= COM_showMessageText($MESSAGE[31], $MESSAGE[30]);
+            COM_accessLog("User {$_USER['username']} tried to illegally submit or edit story $sid.");
+            return PLG_RET_PERMISSION_DENIED;
+        case STORY_NO_ACCESS_PARAMS:
+            $output .= COM_showMessageText($MESSAGE[31], $MESSAGE[30]);
+            COM_accessLog("User {$_USER['username']} tried to illegally submit or edit story $sid.");
+            return PLG_RET_PERMISSION_DENIED;
+        case STORY_EMPTY_REQUIRED_FIELDS:
+            if (!$args['gl_svc']) {
                 $output .= STORY_edit($sid,'error');
             }
-        }
-        $output .= COM_siteFooter ();
-        return PLG_RET_ERROR;
-    case STORY_EXISTING_NO_EDIT_PERMISSION:
-        $output .= COM_siteHeader('menu', $MESSAGE[30])
-                . COM_showMessageText($MESSAGE[31], $MESSAGE[30])
-                . COM_siteFooter ();
-        COM_accessLog("User {$_USER['username']} tried to illegally submit or edit story $sid.");
-        return PLG_RET_PERMISSION_DENIED;
-    case STORY_NO_ACCESS_PARAMS:
-        $output .= COM_siteHeader('menu', $MESSAGE[30])
-                . COM_showMessageText($MESSAGE[31], $MESSAGE[30])
-                . COM_siteFooter ();
-        COM_accessLog("User {$_USER['username']} tried to illegally submit or edit story $sid.");
-        return PLG_RET_PERMISSION_DENIED;
-    case STORY_EMPTY_REQUIRED_FIELDS:
-        $output .= COM_siteHeader('menu');
-        $output .= COM_errorLog($LANG24[31],2);
-        if (!$args['gl_svc']) {
-            $output .= STORY_edit($sid,'error');
-        }
-        $output .= COM_siteFooter();
-        return PLG_RET_ERROR;
-    default:
-        break;
+            return PLG_RET_ERROR;
+        default:
+            break;
     }
 
     /* Image upload is not supported by the web-service at present */
@@ -1314,7 +1303,6 @@ function service_submit_story($args, &$output, &$svc_msg)
             for ($i = 1; $i <= $delete; $i++) {
                 $ai_filename = DB_getItem ($_TABLES['article_images'],'ai_filename', "ai_sid = '".DB_escapeString($sid)."' AND ai_img_num = " . intval(key($args['delete'])));
                 STORY_deleteImage ($ai_filename);
-
                 DB_query ("DELETE FROM {$_TABLES['article_images']} WHERE ai_sid = '".DB_escapeString($sid)."' AND ai_img_num = '" . intval(key($args['delete'])) ."'");
                 next($args['delete']);
             }
@@ -1350,6 +1338,9 @@ function service_submit_story($args, &$output, &$svc_msg)
                     'image/png'   => '.png'
                     ));
             $upload->setFieldName('file');
+
+//@TODO - better error handling...
+
             if (!$upload->setPath($_CONF['path_images'] . 'articles')) {
                 $output = COM_siteHeader ('menu', $LANG24[30]);
                 $output .= COM_showMessageText($upload->printErrors(false),$LANG24[30],true);
@@ -1394,7 +1385,7 @@ function service_submit_story($args, &$output, &$svc_msg)
             }
             $upload->setFileNames($filenames);
             $upload->uploadFiles();
-
+//@TODO - better error handling
             if ($upload->areErrors()) {
                 $retval = COM_siteHeader('menu', $LANG24[30]);
                 $retval .= COM_showMessageText($upload->printErrors(false),$LANG24[30],true);
@@ -1418,7 +1409,6 @@ function service_submit_story($args, &$output, &$svc_msg)
         }
 
         if ($_CONF['maximagesperarticle'] > 0) {
-//            $errors = $story->insertImages();
             $errors = $story->checkImages();
             if (count($errors) > 0) {
                 $output = COM_siteHeader ('menu', $LANG24[54]);
@@ -1427,6 +1417,7 @@ function service_submit_story($args, &$output, &$svc_msg)
                     $eMsg .= current($errors) . '<br />';
                     next($errors);
                 }
+//@TODO - use return here...
                 $output .= COM_showMessageText($eMsg,$LANG24[54],true);
                 $output .= STORY_edit($sid,'error');
                 $output .= COM_siteFooter();
@@ -1452,7 +1443,8 @@ function service_submit_story($args, &$output, &$svc_msg)
 
         if ($story->type == 'submission') {
             COM_setMessage(9);
-            $output = COM_refresh ($_CONF['site_admin_url'] . '/moderation.php');
+            echo COM_refresh ($_CONF['site_admin_url'] . '/moderation.php');
+            exit;
         } else {
             $output = PLG_afterSaveSwitch($_CONF['aftersave_story'],
                     COM_buildURL("{$_CONF['site_url']}/article.php?story=$sid"),

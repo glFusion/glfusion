@@ -209,9 +209,13 @@ function STORY_list()
     global $_CONF, $_TABLES, $_IMAGE_TYPE,
            $LANG09, $LANG_ADMIN, $LANG_ACCESS, $LANG24;
 
-    require_once $_CONF['path_system'] . 'lib-admin.php';
+    USES_lib_admin();
 
     $retval = '';
+
+    $form = new Template($_CONF['path_layout'] .'admin/story/');
+    $form->set_file('form', 'story_admin.thtml');
+
 
     if (!empty ($_GET['tid'])) {
         $current_topic = COM_applyFilter($_GET['tid']);
@@ -288,13 +292,21 @@ function STORY_list()
               'text' => $LANG_ADMIN['admin_home']),
     );
 
-    $retval .= COM_startBlock($LANG24[22], '',
-                              COM_getBlockTemplate('_admin_block', 'header'));
-    $retval .= ADMIN_createMenu(
+    $form->set_var('block_start',COM_startBlock($LANG24[22], '',
+                              COM_getBlockTemplate('_admin_block', 'header')));
+
+    $form->set_var('admin_menu',ADMIN_createMenu(
         $menu_arr,
         $LANG24[23],
         $_CONF['layout_url'] . '/images/icons/story.' . $_IMAGE_TYPE
-    );
+    ));
+    $form->set_var('admin_menu_header',ADMIN_createMenuHeader(
+        $menu_arr,
+        $LANG24[23],
+        $LANG24[22],
+        $_CONF['layout_url'] . '/images/icons/story.' . $_IMAGE_TYPE
+    ));
+
     $text_arr = array(
         'has_extras' => true,
         'form_url'   => $_CONF['site_admin_url'] . '/story.php?ptid='.urlencode($current_topic)
@@ -320,9 +332,12 @@ function STORY_list()
         'bottom'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="'. $token .'"/>',
     );
 
-    $retval .= ADMIN_list('story', 'STORY_getListField', $header_arr,
-                          $text_arr, $query_arr, $defsort_arr, $filter, $token, '', $form_arr);
-    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+    $form->set_var('admin_list',ADMIN_list('story', 'STORY_getListField', $header_arr,
+                          $text_arr, $query_arr, $defsort_arr, $filter, $token, '', $form_arr));
+    $form->set_var('block_end',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
+
+    $retval = $form->parse('output','form');
+
     return $retval;
 }
 
@@ -375,6 +390,10 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
             break;
     }
 
+    // Load HTML templates
+    $story_templates = new Template($_CONF['path_layout'] . 'admin/story');
+    $story_templates->set_file(array('editor' => 'storyeditor.thtml'));
+
     if (!isset ($_CONF['hour_mode'])) {
         $_CONF['hour_mode'] = 12;
     }
@@ -411,7 +430,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
 
     if( ($result == STORY_PERMISSION_DENIED) || ($result == STORY_NO_ACCESS_PARAMS) ) {
         $display .= COM_showMessageText($LANG24[42],$LANG_ACCESS['accessdenied'],true);
-        COM_accessLog("User {$_USER['username']} tried to illegally access story $sid. - STORY_PERMISSION_DENIED or STORY_NO_ACCESS_PARAMS - ".$result);
+        COM_accessLog("User {$_USER['username']} tried to access story $sid. - STORY_PERMISSION_DENIED or STORY_NO_ACCESS_PARAMS - ".$result);
         return $display;
     } elseif( ($result == STORY_EDIT_DENIED) || ($result == STORY_EXISTING_NO_EDIT_PERMISSION) ) {
         $display .= COM_showMessageText($LANG24[41],$LANG_ACCESS['accessdenied'],true);
@@ -422,12 +441,14 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         if ( $action == 'moderate' ) {
             // that submission doesn't seem to be there any more (may have been
             // handled by another Admin) - take us back to the moderation page
-            return COM_refresh( $_CONF['site_admin_url'] . '/moderation.php' );
+            echo COM_refresh( $_CONF['site_admin_url'] . '/moderation.php' );
         } else {
-            return COM_refresh( $_CONF['site_admin_url'] . '/story.php' );
+            echo COM_refresh( $_CONF['site_admin_url'] . '/story.php' );
         }
     } elseif( $result == STORY_DUPLICATE_SID) {
-        $display .= COM_errorLog ($LANG24[24], 2);
+        $story_templates->set_var('error_message',$LANG24[24]);
+    } elseif ( $result == STORY_EMPTY_REQUIRED_FIELDS ) {
+        $story_templates->set_var('error_message',$LANG24[31]);
     }
 
     if(empty($currenttopic) && ($story->EditElements('tid') == '')) {
@@ -457,10 +478,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
 
     require_once $_CONF['path_system'] . 'classes/navbar.class.php';
 
-    // Load HTML templates
-    $story_templates = new Template($_CONF['path_layout'] . 'admin/story');
 
-    $story_templates->set_file(array('editor' => 'storyeditor.thtml'));
 
     $story_templates->set_var ('hour_mode',      $_CONF['hour_mode']);
 
@@ -468,12 +486,6 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         $previewContent = STORY_renderArticle($story, 'p');
         if ($previewContent != '' ) {
             $story_templates->set_var('preview_content', $previewContent);
-//@TODO Fix this
-        } elseif ($previewContent != '') {
-            $display = COM_startBlock ($LANG24[26], '',
-                            COM_getBlockTemplate ('_admin_block', 'header'));
-            $display .= $previewContent;
-            $display .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
         }
     }
 
@@ -507,23 +519,31 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     }
     $story_templates->set_var ('navbar', $navbar->generate() );
 
+    $story_templates->set_var('start_block',COM_startBlock ($title, '',COM_getBlockTemplate ('_admin_block', 'header')));
+
     // start generating the story editor block
-    $display .= COM_startBlock ($title, '',COM_getBlockTemplate ('_admin_block', 'header'));
+    $story_templates->set_var('block_start',COM_startBlock ($title, '',COM_getBlockTemplate ('_admin_block', 'header')));
+
     $oldsid = $story->EditElements('originalSid');
     if (!empty ($oldsid)) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
                    . '" name="deletestory"%s/>';
         $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
+
         $story_templates->set_var ('delete_option',
                                    sprintf ($delbutton, $jsconfirm));
         $story_templates->set_var ('delete_option_no_confirmation',
                                    sprintf ($delbutton, ''));
+        $story_templates->set_var('lang_delete_confirm',$MESSAGE[76]);
+
     }
     if ($submission || ($story->type == 'submission')) {
         $story_templates->set_var ('submission_option',
                 '<input type="hidden" name="type" value="submission"/>');
     }
     $story_templates->set_var ('admin_menu',    ADMIN_createMenu($menu_arr, $LANG24[92],$_CONF['layout_url'] . '/images/icons/story.' . $_IMAGE_TYPE));
+    $story_templates->set_var ('admin_menu_header',    ADMIN_createMenuHeader($menu_arr, $LANG24[92],$title,$_CONF['layout_url'] . '/images/icons/story.' . $_IMAGE_TYPE));
+
     $story_templates->set_var ('lang_author', $LANG24[7]);
     $storyauthor = COM_getDisplayName ($story->EditElements('uid'));
     $storyauthor_select= COM_optionList($_TABLES['users'], 'uid,username',
@@ -825,7 +845,8 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         $story_templates->set_var('rating',$rating);
         $story_templates->set_var('votes',$votes);
     }
-
+    $sec_token_name = CSRF_TOKEN;
+    $sec_token = SEC_createToken();
     $story_templates->set_var('story_id', $story->getSid());
     $story_templates->set_var('old_story_id', $story->EditElements('originalSid'));
     $story_templates->set_var('lang_sid', $LANG24[12]);
@@ -834,7 +855,10 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     $story_templates->set_var('lang_cancel', $LANG_ADMIN['cancel']);
     $story_templates->set_var('lang_delete', $LANG_ADMIN['delete']);
     $story_templates->set_var('gltoken_name', CSRF_TOKEN);
-    $story_templates->set_var('gltoken', SEC_createToken());
+    $story_templates->set_var('gltoken', $sec_token);
+    $story_templates->set_var('security_token',$sec_token);
+    $story_templates->set_var('security_token_name',$sec_token_name);
+    $story_templates->set_var('end_block',COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer')));
 
     PLG_templateSetVars('storyeditor',$story_templates);
     if ( $story->EditElements('postmode') != 'html' ) {
@@ -843,7 +867,6 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
 
     $story_templates->parse('output','editor');
     $display .= $story_templates->finish($story_templates->get_var('output'));
-    $display .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
 
     return $display;
 }
@@ -896,13 +919,27 @@ function STORY_submit($type='')
     /* ANY FURTHER PROCESSING on POST variables - COM_stripslashes etc.
      * Do it HERE on $args */
 
-    PLG_invokeService('story', 'submit', $args, $output, $svc_msg);
+    $rc = PLG_invokeService('story', 'submit', $args, $output, $svc_msg);
+
+    switch ( $rc ) {
+        case PLG_RET_ERROR :
+            break;
+        case PLG_RET_PERMISSION_DENIED :
+            break;
+        case PLG_RET_PERMISSION_DENIED :
+            break;
+        case PLG_RET_PRECONDITION_FAILED :
+            break;
+        case PLG_RET_AUTH_FAILED :
+            break;
+    }
 
     return $output;
 }
 
 // MAIN ========================================================================
 
+$pageBody = '';
 $action = '';
 $expected = array('edit','moderate','draft','clone','save','previewstory','deletestory','cancel');
 foreach($expected as $provided) {
@@ -950,19 +987,17 @@ switch ($action) {
                 $blocktitle = $LANG24[91];
                 break;
         }
-        $display .= COM_siteHeader('menu', $blocktitle);
-        $display .= STORY_edit($sid, $action, '', $topic);
-        $display .= COM_siteFooter();
+        $pageTitle = $blocktitle;
+        $pageBody .= STORY_edit($sid, $action, '', $topic);
         break;
 
     case 'clone':
         if (!empty($sid)) {
-            $display .= COM_siteHeader('menu', $LANG24[5]);
-            $display .= STORY_edit($sid, $action);
-            $display .= COM_siteFooter();
+            $pageTitle = $LANG24[5];
+            $pageBody .= STORY_edit($sid, $action);
         } else {
             COM_errorLog('User ' . $_USER['username'] . ' attempted to clone a story, sid empty or null, sid=' . $sid);
-            $display = COM_refresh($_CONF['site_admin_url'] . '/index.php');
+            echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;
 
@@ -971,15 +1006,14 @@ switch ($action) {
         DB_query("DELETE FROM {$_TABLES['tokens']} WHERE owner_id=".(int) $_USER['uid']." AND urlfor='advancededitor'",1);
 
         if (SEC_checkToken()) {
-            $display = STORY_submit();
+            $pageBody = STORY_submit();
         } else {
             SEC_setCookie ($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral('advancededitor'),
                            time() + 1200, $_CONF['cookie_path'],
                            $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
-            $display  = COM_siteHeader('menu', $LANG24[5]);
-            $display .= COM_showMessage(501);
-            $display .= STORY_edit(COM_applyFilter ($_POST['sid']), 'preview');
-            $display .= COM_siteFooter();
+            $pageTitle = $LANG24[5];
+            $pageBody .= COM_showMessage(501);
+            $pageBody .= STORY_edit(COM_applyFilter ($_POST['sid']), 'preview');
         }
         break;
 
@@ -987,26 +1021,25 @@ switch ($action) {
         SEC_setCookie($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral('advancededitor'),
                        time() + 1200, $_CONF['cookie_path'],
                        $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
-        $display .= COM_siteHeader('menu', $LANG24[5]);
-        $display .= STORY_edit($sid, 'preview');
-        $display .= COM_siteFooter();
+        $pageTitle = $LANG24[5];
+        $pageBody .= STORY_edit($sid, 'preview');
         break;
 
     case 'deletestory':
         if (!isset($sid) || empty($sid)) {
             COM_errorLog('User ' . $_USER['username'] . ' attempted to delete a story, sid empty or null, sid=' . $sid);
-            $display = COM_refresh($_CONF['site_admin_url'] . '/story.php');
+            echo COM_refresh($_CONF['site_admin_url'] . '/story.php');
         } elseif ($type == 'submission') {
             $tid = DB_getItem($_TABLES['storysubmission'], 'tid', "sid = '".DB_escapeString($sid)."'");
             if (SEC_hasTopicAccess($tid) < 3) {
                 COM_accessLog ('User ' . $_USER['username'] . ' had insufficient rights to delete a story submission, sid=' . $sid);
-                $display = COM_refresh($_CONF['site_admin_url'] . '/index.php');
+                echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
             } elseif (SEC_checkToken()) {
                 DB_delete ($_TABLES['storysubmission'], 'sid', DB_escapeString($sid),
                            $_CONF['site_admin_url'] . '/moderation.php');
             } else {
                 COM_accessLog ("User {$_USER['username']} tried to illegally delete a story submission, sid=$sid and failed CSRF checks.");
-                $display = COM_refresh($_CONF['site_admin_url'] . '/index.php');
+                echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
             }
         } else if (SEC_checkToken()) {
             $display .= STORY_deleteStory($sid);
@@ -1020,18 +1053,22 @@ switch ($action) {
         // purge any tokens we created for the advanced editor
         DB_query("DELETE FROM {$_TABLES['tokens']} WHERE owner_id=".(int) $_USER['uid']." AND urlfor='advancededitor'",1);
         if (($action == 'cancel') && ($type == 'submission')) {
-            $display = COM_refresh($_CONF['site_admin_url'] . '/moderation.php');
+            echo COM_refresh($_CONF['site_admin_url'] . '/moderation.php');
         } else {
-            $display .= COM_siteHeader('menu', $LANG24[22]);
-            if(isset($msg)) {
-                $display .= (is_numeric($msg)) ? COM_showMessage($msg) : COM_showMessageText( $msg );
-            }
-            $display .= STORY_list();
-            $display .= COM_siteFooter();
+            $pageTitle = $LANG24[22];
+            $pageBody .= STORY_list();
         }
         break;
 
 }
+
+
+$display = COM_siteHeader('menu',$pageTitle);
+if(isset($msg)) {
+    $display .= (is_numeric($msg)) ? COM_showMessage($msg) : COM_showMessageText( $msg );
+}
+$display .= $pageBody;
+$display .= COM_siteFooter();
 
 echo $display;
 
