@@ -75,6 +75,11 @@ class outputHandler {
                                      HEADER_PRIO_NORMAL => array(),
                                      HEADER_PRIO_LOW => array(),
                                      HEADER_PRIO_VERYLOW => array()),
+                    'css_file' => array(HEADER_PRIO_VERYHIGH => array(),
+                                     HEADER_PRIO_HIGH => array(),
+                                     HEADER_PRIO_NORMAL => array(),
+                                     HEADER_PRIO_LOW => array(),
+                                     HEADER_PRIO_VERYLOW => array()),
                     'script' => array(HEADER_PRIO_VERYHIGH => array(),
                                      HEADER_PRIO_HIGH => array(),
                                      HEADER_PRIO_NORMAL => array(),
@@ -271,6 +276,23 @@ class outputHandler {
     }
 
 	/**
+	 * Add a JavaScript source to a page
+	 *
+	 * This adds a javascript source file to a page - Physical path to the JS file
+	 * the <link> attribute.
+	 *
+	 * @param  string   $href       The URL to the javascript file
+	 * @param  int      $priority   Load priority
+     *
+	 * @access public
+	 * @return nothing
+	 */
+    public function addCSSFile($href, $priority = HEADER_PRIO_NORMAL)
+    {
+        $this->_header['css_file'][$priority][] = $href;
+    }
+
+	/**
 	 * Add Meta data to header
 	 *
 	 * This adds a meta record to the header
@@ -364,6 +386,29 @@ class outputHandler {
             return '';
         }
         return $this->_array_concat_recursive($this->_header[$type]);
+    }
+
+	/**
+	 * Returns array of JS files
+	 *
+	 * Returns an array of JavaScript file names (with paths) to
+	 * all queued JS files
+	 *
+	 * @access public
+	 * @return array
+	 */
+    public function getCSSFiles()
+    {
+        $css = array();
+
+        foreach ($this->_header['css_file'] as $priority ) {
+            if ( is_array($priority) ) {
+                foreach ($priority as $path ) {
+                    $css[] = $path;
+                }
+            }
+        }
+        return $css;
     }
 
 	/**
