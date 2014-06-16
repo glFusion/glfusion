@@ -6321,6 +6321,8 @@ function css_out()
 {
     global $_CONF, $_SYSTEM, $_VARS, $_USER, $_PLUGINS, $_TABLES;
 
+    $outputHandle = outputHandler::getInstance();
+
     if ( !isset($_CONF['css_cache_filename']) ) {
         $_CONF['css_cache_filename'] = 'stylecache_';
     }
@@ -6346,6 +6348,13 @@ function css_out()
         $files[] = $_CONF['path_layout'] . 'custom/style-colors.css';
     } else if (file_exists($_CONF['path_layout'].'style-color.css')) {
         $files[] = $_CONF['path_layout'] . 'style-colors.css';
+    }
+
+    // need to parse the outputhandler to see if there are any js scripts to load
+
+    $headercss = $outputHandle->getCSSFiles();
+    foreach ($headercss as $s ) {
+        $files[] = $s;
     }
 
     /*
