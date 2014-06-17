@@ -966,6 +966,8 @@ $LANG24 = array(
     90 => 'Moderate Story',
     91 => 'Moderate Draft Story',
     92 => 'Enter the story information below and save.',
+    93 => 'Display',
+    94 => 'Published',
 );
 
 ###############################################################################

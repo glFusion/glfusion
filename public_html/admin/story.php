@@ -699,6 +699,9 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     $story_templates->set_var('lang_draft', $LANG24[34]);
     if ($story->EditElements('draft_flag')) {
         $story_templates->set_var('is_checked', 'checked="checked"');
+        $story_templates->set_var('unpublished_selected','selected="selected"');
+    } else {
+        $story_templates->set_var('published_selected','selected="selected"');
     }
     $story_templates->set_var ('lang_mode', $LANG24[3]);
     $story_templates->set_var ('status_options',
@@ -763,8 +766,11 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         $featured_options = "<select name=\"featured\">" . LB
                           . COM_optionList ($_TABLES['featurecodes'], 'code,name', $story->EditElements('featured'))
                           . "</select>" . LB;
+        $featured_options_data =  COM_optionList ($_TABLES['featurecodes'], 'code,name', $story->EditElements('featured'));
+        $story_templates->set_var('featured_options_data',$featured_options_data);
     } else {
         $featured_options = "<input type=\"hidden\" name=\"featured\" value=\"0\"/>";
+        $story_templates->unset_var('featured_options_data');
     }
     $story_templates->set_var ('featured_options',$featured_options);
     $story_templates->set_var ('frontpage_options',
@@ -939,6 +945,7 @@ function STORY_submit($type='')
 
 // MAIN ========================================================================
 
+$pageTitle = '';
 $pageBody = '';
 $action = '';
 $expected = array('edit','moderate','draft','clone','save','previewstory','deletestory','cancel');
