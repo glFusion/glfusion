@@ -137,7 +137,8 @@ if ($op == 'search') {
     $sort       = isset($_REQUEST['sort']) ? COM_applyFilter($_REQUEST['sort'],true) : 0;
     $dCat = isset($_GET['cat']) ? COM_applyFilter($_GET['cat'],true) : 0;
 
-    $display .= FF_siteHeader($LANG_GF02['msg45']);
+    $pageBody = '';
+
 
     $report = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $report->set_file('report', 'search_results.thtml');
@@ -259,7 +260,10 @@ if ($op == 'search') {
         $report->set_var ('bottomlink',$link);
     }
     $report->parse ('output', 'report');
-    $display .= $report->finish($report->get_var('output'));
+    $pageBody = $report->finish($report->get_var('output'));
+
+    $display .= FF_siteHeader($LANG_GF02['msg45']);
+    $display .= $pageBody;
     $display .= FF_siteFooter();
     echo $display;
     exit();

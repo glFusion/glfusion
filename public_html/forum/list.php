@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Message Lists                                                            |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -68,6 +66,9 @@ function FF_newPosts($forum = 0)
         return array($pageTitle,$retval);
     }
 
+    $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
+    $T->set_file('list', 'lists.thtml');
+
     if ( $_FF_CONF['enable_user_rating_system'] && !COM_isAnonUser() ) {
         $rating = (int) _ff_getUserRating((int) $_USER['uid']);
     }
@@ -85,10 +86,10 @@ function FF_newPosts($forum = 0)
     $data_arr = array();
     $text_arr = array();
     if ($_FF_CONF['usermenu'] == 'navbar') {
-        $retval .= FF_NavbarMenu($LANG_GF02['new_posts']);
+        $T->set_var('navbar',FF_NavbarMenu($LANG_GF02['new_posts']));
     }
-    $retval .= COM_startBlock($LANG_GF02['msg111'], '',
-                              COM_getBlockTemplate('_admin_block', 'header'));
+    $T->set_var('block_start',COM_startBlock($LANG_GF02['msg111'], '',
+                              COM_getBlockTemplate('_admin_block', 'header')));
     $groups = array ();
     $usergroups = SEC_getUserGroups();
     foreach ($usergroups as $group) {
@@ -183,8 +184,11 @@ function FF_newPosts($forum = 0)
         }
     }
 
-    $retval .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
-    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+    $T->set_var('list_data',ADMIN_simpleList("", $header_arr, $text_arr, $data_arr));
+    $T->set_var('block_end',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
+
+    $T->parse ('output', 'list');
+    $retval = $T->finish($T->get_var('output'));
 
     return array($pageTitle,$retval);
 }
@@ -196,6 +200,9 @@ function FF_popular()
     $pageTitle = $LANG_GF02['msg152'];
     $retval = '';
 
+    $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
+    $T->set_file('list', 'lists.thtml');
+
     USES_lib_admin();
 
     $header_arr = array(      # display 'text' and use table field 'field'
@@ -206,11 +213,11 @@ function FF_popular()
                   array('text' => $LANG_GF01['DATE'],      'field' => 'date', 'sort' => false, 'nowrap' => true)
     );
     if ($_FF_CONF['usermenu'] == 'navbar') {
-        $retval .= FF_NavbarMenu($LANG_GF02['msg201']);
+        $T->set_var('navbar',FF_NavbarMenu($LANG_GF02['msg201']));
     }
 
-    $retval .= COM_startBlock($LANG_GF02['msg201'], '',
-                              COM_getBlockTemplate('_admin_block', 'header'));
+    $T->set_var('block_start',COM_startBlock($LANG_GF02['msg201'], '',
+                              COM_getBlockTemplate('_admin_block', 'header')));
 
     $text_arr = array(
         'has_extras' => true,
@@ -247,9 +254,12 @@ function FF_popular()
                        'query_fields'   => array('date','subject','comment','replies','views','id','forum','forum_name'),
                        'default_filter' => '');
 
-    $retval .= ADMIN_list('popular', '_ff_getListField_forum', $header_arr,
-                          $text_arr, $query_arr, $defsort_arr);
-    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+    $T->set_var('list_data',ADMIN_list('popular', '_ff_getListField_forum', $header_arr,
+                          $text_arr, $query_arr, $defsort_arr));
+    $T->set_var('block_end',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
+
+    $T->parse ('output', 'list');
+    $retval = $T->finish($T->get_var('output'));
 
     return array($pageTitle,$retval);
 }
@@ -266,6 +276,9 @@ function FF_bookmarks()
         return array($pageTitle,$retval);
     }
 
+    $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
+    $T->set_file('list', 'lists.thtml');
+
     USES_lib_admin();
 
     $header_arr = array(      # display 'text' and use table field 'field'
@@ -278,15 +291,10 @@ function FF_bookmarks()
                   array('text' => $LANG_GF01['DATE'],      'field' => 'date', 'sort' => true, 'nowrap' => true)
     );
     if ($_FF_CONF['usermenu'] == 'navbar') {
-        $retval .= FF_NavbarMenu($LANG_GF01['BOOKMARKS']);
+        $T->set_var('navbar',FF_NavbarMenu($LANG_GF01['BOOKMARKS']));
     }
 
-    $retval .= '<script type="text/javascript">' . LB;
-    $retval .= 'var site_url = \''.$_CONF['site_url'].'\';' . LB;
-    $retval .= '</script>' . LB;
-    $retval .= '<script type="text/javascript" src="'.$_CONF['site_url'].'/forum/javascript/ajax_bookmark.js"></script>' . LB;
-
-    $retval .= COM_startBlock($LANG_GF01['BOOKMARKS'], '',COM_getBlockTemplate('_admin_block', 'header'));
+    $T->set_var('block_start',COM_startBlock($LANG_GF01['BOOKMARKS'], '',COM_getBlockTemplate('_admin_block', 'header')));
 
     $text_arr = array(
         'has_extras' => true,
@@ -303,12 +311,13 @@ function FF_bookmarks()
                        'query_fields'   => array('topics.date','topics.subject','topics.comment','topics.name','topics.replies','topics.views','id','forum','forum_name'),
                        'default_filter' => '');
 
-    $retval .= ADMIN_list('bookmarks', '_ff_getListField_forum', $header_arr,
-                          $text_arr, $query_arr, $defsort_arr);
-    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+    $T->set_var('list_data',ADMIN_list('bookmarks', '_ff_getListField_forum', $header_arr,
+                          $text_arr, $query_arr, $defsort_arr));
+    $T->set_var('block_end',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
 
+    $T->parse ('output', 'list');
+    $retval = $T->finish($T->get_var('output'));
     return array($pageTitle,$retval);
-
 }
 
 function FF_lastx()
@@ -321,6 +330,9 @@ function FF_lastx()
     USES_lib_admin();
     USES_lib_html2text();
 
+    $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
+    $T->set_file('list', 'lists.thtml');
+
     $dt = new Date('now',$_USER['tzid']);
 
     $header_arr = array(
@@ -331,10 +343,10 @@ function FF_lastx()
     $data_arr = array();
     $text_arr = array();
     if ($_FF_CONF['usermenu'] == 'navbar') {
-        $retval .=  FF_NavbarMenu($LANG_GF01['LASTX']);
+        $T->set_var('navbar',FF_NavbarMenu($LANG_GF01['LASTX']));
     }
-    $retval .= COM_startBlock($LANG_GF01['LASTX'], '',
-                              COM_getBlockTemplate('_admin_block', 'header'));
+    $T->set_var('block_start',COM_startBlock($LANG_GF01['LASTX'], '',
+                              COM_getBlockTemplate('_admin_block', 'header')));
     $groups = array ();
     $usergroups = SEC_getUserGroups();
     foreach ($usergroups as $group) {
@@ -421,8 +433,11 @@ function FF_lastx()
         }
     }
 
-    $retval .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
-    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+    $T->set_var('list_data',ADMIN_simpleList("", $header_arr, $text_arr, $data_arr));
+    $T->set_var('block_end',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
+
+    $T->parse ('output', 'list');
+    $retval = $T->finish($T->get_var('output'));
 
     return array($pageTitle,$retval);
 }
