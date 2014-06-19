@@ -150,8 +150,8 @@ $_SYSTEM['token_ip'] = false;
 // +--------------------------------------------------------------------------+
 
 define('CONFIG_CACHE_FILE_NAME','$$$config$$$.cache');
-$_CONF['css_cache_filename'] = 'stylecache_';
-$_CONF['js_cache_filename'] = 'jscache_';
+$_CONF['css_cache_filename'] = 'style.cache';
+$_CONF['js_cache_filename'] = 'js.cache';
 
 // +--------------------------------------------------------------------------+
 // | You should not need to change any settings below this line,              |

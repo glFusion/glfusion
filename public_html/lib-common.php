@@ -1041,13 +1041,8 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 
     $rdf = substr_replace( $_CONF['rdf_file'], $_CONF['site_url'], 0,strlen( $_CONF['path_html'] ) - 1 ) . LB;
 
-    if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
-        $style_cache_url = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?i='.$cacheID;
-        $js_cache_url    = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].$_USER['theme'].'.js?i='.$cacheID;
-    } else {
-        $style_cache_url = $_CONF['site_url'].'/css.php?t='.$_USER['theme'].'&amp;i='.$cacheID;
-        $js_cache_url    = $_CONF['site_url'].'/js.php?t='.$_USER['theme'].'&amp;i='.$cacheID;
-    }
+    list($cacheFile,$style_cache_url) = COM_getStyleCacheLocation();
+    list($cacheFile,$js_cache_url) = COM_getJSCacheLocation();
 
     $header->set_var(array(
         'site_name'     => $_CONF['site_name'],
@@ -6242,6 +6237,47 @@ function COM_getEffectivePermission($owner, $group_id, $perm_owner,$perm_group, 
     return $perm;
 }
 
+function COM_getStyleCacheLocation()
+{
+    global $_CONF, $_SYSTEM;
+
+    if ( !isset($_CONF['css_cache_filename']) ) {
+        $_CONF['css_cache_filename'] = 'style.cache';
+    }
+
+    if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
+        $cacheFile = $_CONF['path_layout'].'/'.$_CONF['css_cache_filename'].'.css';
+        $cacheURL  = $_CONF['layout_url'].'/'.$_CONF['css_cache_filename'].'.css';
+    } else {
+        $cacheFile = $_CONF['path'].'/data/layout_cache/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css';
+        $cacheURL  = $_CONF['layout_url'].'/css.php?t='.$_USER['theme'];
+    }
+
+    return array($cacheFile, $cacheURL);
+
+}
+
+function COM_getJSCacheLocation()
+{
+    global $_CONF, $_SYSTEM;
+
+    if ( !isset($_CONF['js_cache_filename']) ) {
+        $_CONF['js_cache_filename'] = 'js.cache';
+    }
+
+    if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
+        $cacheFile = $_CONF['path_layout'].'/'.$_CONF['js_cache_filename'].'.js';
+        $cacheURL  = $_CONF['layout_url'].'/'.$_CONF['js_cache_filename'].'.js';
+    } else {
+        $cacheFile = $_CONF['path'].'/data/layout_cache/'.$_CONF['js_cache_filename'].'_'.$_USER['theme'].'.js';
+        $cacheURL  = $_CONF['layout_url'].'/js.php?t='.$_USER['theme'];
+    }
+
+    return array($cacheFile, $cacheURL);
+}
+
+
+
 /*
  * For backward compatibility
  */
@@ -6327,10 +6363,10 @@ function CTL_clearCache($plugin='')
 
     if ( empty($plugin) ) {
         if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
-            foreach (glob($_CONF['path_html'].$_CONF['css_cache_filename']."*.*") as $filename) {
+            foreach (glob($_CONF['path_layout'].$_CONF['css_cache_filename']."*.*") as $filename) {
                 @unlink($filename);
             }
-            foreach (glob($_CONF['path_html'].$_CONF['js_cache_filename']."*.*") as $filename) {
+            foreach (glob($_CONF['path_layout'].$_CONF['js_cache_filename']."*.*") as $filename) {
                 @unlink($filename);
             }
         }
@@ -6351,13 +6387,7 @@ function css_out()
         $_CONF['css_cache_filename'] = 'stylecache_';
     }
 
-    if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
-        $cacheFile = $_CONF['path_html'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css';
-        $cacheURL  = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css';
-    } else {
-        $cacheFile = $_CONF['path'].'/data/layout_cache/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css';
-        $cacheURL  = $_CONF['site_url'].'/css.php?t='.$_USER['theme'];
-    }
+    list($cacheFile,$cacheURL) = COM_getStyleCacheLocation();
 
     $files   = array();
 
@@ -6573,16 +6603,9 @@ function js_out()
     $outputHandle = outputHandler::getInstance();
 
     if ( !isset($_CONF['js_cache_filename']) ) {
-        $_CONF['js_cache_filename'] = 'jscache_';
+        $_CONF['js_cache_filename'] = 'js.cache';
     }
-
-    if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
-        $cacheFile = $_CONF['path_html'].$_CONF['js_cache_filename'].$_USER['theme'].'.js';
-        $cacheURL  = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].'.js';
-    } else {
-        $cacheFile = $_CONF['path'].'data/layout_cache/'.$_CONF['js_cache_filename'].$_USER['theme'].'.js';
-        $cacheURL  = $_CONF['site_url'].'/js.php?t='.$_USER['theme'];
-    }
+    list($cacheFile,$cacheURL) = COM_getJSCacheLocation();
 
     // standard JS used by glFusion
     if ( !isset($_SYSTEM['disable_jquery']) || $_SYSTEM['disable_jquery'] == false ) {
@@ -6705,9 +6728,9 @@ function js_out()
     print "var glfusionLayoutUrl = '".$_CONF['layout_url']."';" . LB;
     print "var site_admin_url = '".$_CONF['site_admin_url']."';" . LB;
     if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
-        print "var glfusionStyleCSS = '".$_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'] . "';" . LB;
+        print "var glfusionStyleCSS = '".$_CONF['layout_url'].'/'.$_CONF['css_cache_filename'].'.css?t='.$_USER['theme'] . "';" . LB;
     } else {
-        print "var glfusionStyleCSS = '".$_CONF['site_url']."/css.php?t=" . $_USER['theme'] . "';" . LB;
+        print "var glfusionStyleCSS = '".$_CONF['layout_url']."/css.php?t=" . $_USER['theme'] . "';" . LB;
     }
 
     // send any global plugin JS vars

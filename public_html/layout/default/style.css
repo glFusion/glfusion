@@ -213,25 +213,25 @@ margin:20px;
 }
 
 #gl_header {
-background:url(layout/default/images/header-bg.png) 0 0 repeat-x;
+background:url(images/header-bg.png) 0 0 repeat-x;
 height:100px;
 }
 
 /*gl_moochronometer header images*/
 #dawn #gl_header {
-  background:url(layout/default/images/header-bg-dawn.jpg) 0 0 repeat-x;
+  background:url(images/header-bg-dawn.jpg) 0 0 repeat-x;
 }
 #day #gl_header {
-  background:url(layout/default/images/header-bg-day.jpg) 0 0 repeat-x;
+  background:url(images/header-bg-day.jpg) 0 0 repeat-x;
 }
 #afternoon #gl_header {
-  background:url(layout/default/images/header-bg-afternoon.jpg) 0 0 repeat-x;
+  background:url(images/header-bg-afternoon.jpg) 0 0 repeat-x;
 }
 #dusk #gl_header {
-  background:url(layout/default/images/header-bg-dusk.jpg) 0 0 repeat-x;
+  background:url(images/header-bg-dusk.jpg) 0 0 repeat-x;
 }
 #night #gl_header {
-  background:url(layout/default/images/header-bg-night.jpg) 0 0 repeat-x;
+  background:url(images/header-bg-night.jpg) 0 0 repeat-x;
 }
 /*end gl_moochronometer header images*/
 
@@ -359,7 +359,7 @@ div.input-form form fieldset div.notes {
 }
 
 div.input-form form fieldset div.notes h4 {
-  background-image: url(layout/default/images/info.png);
+  background-image: url(images/info.png);
   background-repeat: no-repeat;
   background-position: top left;
   padding: 3px 0 3px 27px;
@@ -436,7 +436,7 @@ div.input-form form div img {
 
 div.input-form p.error {
   background-color: #ff0000;
-  background-image: url(layout/default/images/alert-small.png);
+  background-image: url(images/alert-small.png);
   background-repeat: no-repeat;
   background-position: 3px 3px;
   color: #ffffff;
@@ -454,7 +454,7 @@ div.input-form form div.error {
 }
 
 div.input-form form div.error p.error {
-  background-image: url(layout/default/images/alert-small.png);
+  background-image: url(images/alert-small.png);
   background-position: top left;
   background-color: transparent;
   border-style: none;
@@ -532,22 +532,22 @@ div.input-form form div small {
 }
 
 .top-r-corner {
-background:transparent url(layout/default/images/top-r-corner.png) 100% 0 no-repeat;
+background:transparent url(images/top-r-corner.png) 100% 0 no-repeat;
 height:100px;
 }
 
 .top-l-corner {
-background:transparent url(layout/default/images/top-l-corner.png) 0 0 no-repeat;
+background:transparent url(images/top-l-corner.png) 0 0 no-repeat;
 height:100px;
 }
 
 .bottom-r-corner {
-background:#FFF url(layout/default/images/bottom-r-corner.png) 100% 0 no-repeat;
+background:#FFF url(images/bottom-r-corner.png) 100% 0 no-repeat;
 height:5px;
 }
 
 .bottom-l-corner {
-background:transparent url(layout/default/images/bottom-l-corner.png) 0 0 no-repeat;
+background:transparent url(images/bottom-l-corner.png) 0 0 no-repeat;
 height:5px;
 }
 
@@ -617,7 +617,7 @@ padding:5px;
 }
 
 form fieldset div.notes h4 {
-background:url(layout/default/images/info.png) no-repeat top left;
+background:url(images/info.png) no-repeat top left;
 border-bottom:1px solid #666;
 color:#666;
 font-size:1.3em;
@@ -933,7 +933,7 @@ z-index:1000;
 }
 
 #header-textbox {
-background:url(layout/default/images/bg_search.jpg) no-repeat right -22px #FFF;
+background:url(images/bg_search.jpg) no-repeat right -22px #FFF;
 color:#000;
 margin-right:15px;
 padding-left:2px;
@@ -941,7 +941,7 @@ width:120px;
 }
 
 #header-textbox:focus {
-background:url(layout/default/images/bg_search.jpg) no-repeat right -1px #FFF;
+background:url(images/bg_search.jpg) no-repeat right -1px #FFF;
 color:#000;
 padding-left:2px;
 width:120px;
@@ -965,7 +965,7 @@ white-space:nowrap;
 }
 
 .list-blogroll li {
-background:transparent url(layout/default/images/bullet-star.png) no-repeat scroll 0 30%;
+background:transparent url(images/bullet-star.png) no-repeat scroll 0 30%;
 padding-bottom:5px;
 padding-left:12px;
 margin-left:-10px;
@@ -1349,7 +1349,7 @@ text-decoration:underline;
 }
 
 a.pluginButton:link,a.pluginButton:visited {
-background:transparent url(layout/default/navbar/images/button_over.gif) center repeat-x;
+background:transparent url(navbar/images/button_over.gif) center repeat-x;
 color:#000;
 display:block;
 height:19px;
@@ -1359,7 +1359,7 @@ text-decoration:none;
 }
 
 a.pluginButton:hover {
-background:transparent url(layout/default/navbar/images/button_over.gif) center repeat-x;
+background:transparent url(navbar/images/button_over.gif) center repeat-x;
 color:blue;
 display:block;
 height:19px;
@@ -1414,7 +1414,7 @@ width:100%;
 }
 
 #navcontainer a {
-background:url(layout/default/navbar/images/tableftJ.gif) no-repeat left top;
+background:url(navbar/images/tableftJ.gif) no-repeat left top;
 float:left;
 text-decoration:none;
 margin:0;
@@ -1423,7 +1423,7 @@ color:#4D77CC;
 }
 
 #navcontainer a span {
-background:url(layout/default/navbar/images/tabrightJ.gif) no-repeat right top;
+background:url(navbar/images/tabrightJ.gif) no-repeat right top;
 display:block;
 float:none;
 padding:5px 15px 4px 6px;
@@ -1439,13 +1439,13 @@ background-position:0 -42px;
 }
 
 #navcontainer a#current span {
-background:url(layout/default/navbar/images/tabrightI.gif) no-repeat left top;
+background:url(navbar/images/tabrightI.gif) no-repeat left top;
 background-position:100% -42px;
 color:#FFF;
 }
 
 #navcontainer a:link#current,#navcontainer a:visited#current,#navcontainer a:hover#current {
-background:url(layout/default/navbar/images/tableftI.gif) no-repeat left top;
+background:url(navbar/images/tableftI.gif) no-repeat left top;
 background-position:0 -42px;
 }
 
@@ -1466,7 +1466,7 @@ overflow:auto;
 }
 
 blockquote {
-background:transparent url(layout/default/images/quote-l.png) no-repeat scroll left top;
+background:transparent url(images/quote-l.png) no-repeat scroll left top;
 color:#666;
 font-size:1.2em;
 font-style:italic;
@@ -1478,7 +1478,7 @@ min-height:3.0em;
 }
 
 blockquote p {
-background:transparent url(layout/default/images/quote-r.png) no-repeat scroll right bottom;
+background:transparent url(images/quote-r.png) no-repeat scroll right bottom;
 padding-right:60px;
 margin:10px;
 min-height:3.0em;
@@ -1492,135 +1492,135 @@ list-style:disc;
 }
 
 ul.arrow li {
-background:transparent url(layout/default/images/arrow.png) no-repeat scroll 0 50%;
+background:transparent url(images/arrow.png) no-repeat scroll 0 50%;
 }
 
 ul.bug li {
-background:transparent url(layout/default/images/bug.png) no-repeat scroll 0 50%;
+background:transparent url(images/bug.png) no-repeat scroll 0 50%;
 }
 
 ul.cart li {
-background:transparent url(layout/default/images/cart.png) no-repeat scroll 0 50%;
+background:transparent url(images/cart.png) no-repeat scroll 0 50%;
 }
 
 ul.check li {
-background:transparent url(layout/default/images/check.png) no-repeat scroll 0 50%;
+background:transparent url(images/check.png) no-repeat scroll 0 50%;
 }
 
 ul.script li {
-background:transparent url(layout/default/images/script.png) no-repeat scroll 0 50%;
+background:transparent url(images/script.png) no-repeat scroll 0 50%;
 }
 
 ul.bullet-blue li {
-background:transparent url(layout/default/images/bullet-blue.png) no-repeat scroll 0 50%;
+background:transparent url(images/bullet-blue.png) no-repeat scroll 0 50%;
 }
 
 ul.bullet-grey li {
-background:transparent url(layout/default/images/bullet-grey.png) no-repeat scroll 0 50%;
+background:transparent url(images/bullet-grey.png) no-repeat scroll 0 50%;
 }
 
 ul.bullet-plus li {
-background:transparent url(layout/default/images/bullet-plus.png) no-repeat scroll 0 50%;
+background:transparent url(images/bullet-plus.png) no-repeat scroll 0 50%;
 }
 
 ul.bullet-rss li {
-background:transparent url(layout/default/images/bullet-rss.png) no-repeat scroll 0 50%;
+background:transparent url(images/bullet-rss.png) no-repeat scroll 0 50%;
 }
 
 ul.bullet-star li {
-background:transparent url(layout/default/images/bullet-star.png) no-repeat scroll 0 50%;
+background:transparent url(images/bullet-star.png) no-repeat scroll 0 50%;
 }
 
 ul.disc li {
-background:transparent url(layout/default/images/disc.png) no-repeat scroll 0 50%;
+background:transparent url(images/disc.png) no-repeat scroll 0 50%;
 }
 
 ul.headphones li {
-background:transparent url(layout/default/images/headphones.png) no-repeat scroll 0 50%;
+background:transparent url(images/headphones.png) no-repeat scroll 0 50%;
 }
 
 ul.mic li {
-background:transparent url(layout/default/images/mic.png) no-repeat scroll 0 50%;
+background:transparent url(images/mic.png) no-repeat scroll 0 50%;
 }
 
 ul.speaker li {
-background:transparent url(layout/default/images/speaker.png) no-repeat scroll 0 50%;
+background:transparent url(images/speaker.png) no-repeat scroll 0 50%;
 }
 
 ul.video li {
-background:transparent url(layout/default/images/video.png) no-repeat scroll 0 50%;
+background:transparent url(images/video.png) no-repeat scroll 0 50%;
 }
 
 li.num-1 {
-background:transparent url(layout/default/images/number-1.png) no-repeat scroll 0 50%;
+background:transparent url(images/number-1.png) no-repeat scroll 0 50%;
 }
 
 li.num-2 {
-background:transparent url(layout/default/images/number-2.png) no-repeat scroll 0 50%;
+background:transparent url(images/number-2.png) no-repeat scroll 0 50%;
 }
 
 li.num-3 {
-background:transparent url(layout/default/images/number-3.png) no-repeat scroll 0 50%;
+background:transparent url(images/number-3.png) no-repeat scroll 0 50%;
 }
 
 li.num-4 {
-background:transparent url(layout/default/images/number-4.png) no-repeat scroll 0 50%;
+background:transparent url(images/number-4.png) no-repeat scroll 0 50%;
 }
 
 li.num-5 {
-background:transparent url(layout/default/images/number-5.png) no-repeat scroll 0 50%;
+background:transparent url(images/number-5.png) no-repeat scroll 0 50%;
 }
 
 li.num-6 {
-background:transparent url(layout/default/images/number-6.png) no-repeat scroll 0 50%;
+background:transparent url(images/number-6.png) no-repeat scroll 0 50%;
 }
 
 li.num-7 {
-background:transparent url(layout/default/images/number-7.png) no-repeat scroll 0 50%;
+background:transparent url(images/number-7.png) no-repeat scroll 0 50%;
 }
 
 li.num-8 {
-background:transparent url(layout/default/images/number-8.png) no-repeat scroll 0 50%;
+background:transparent url(images/number-8.png) no-repeat scroll 0 50%;
 }
 
 li.num-9 {
-background:transparent url(layout/default/images/number-9.png) no-repeat scroll 0 50%;
+background:transparent url(images/number-9.png) no-repeat scroll 0 50%;
 }
 
 li.num-1g {
-background:transparent url(layout/default/images/number-1g.png) no-repeat scroll 0 50%;
+background:transparent url(images/number-1g.png) no-repeat scroll 0 50%;
 }
 
 li.num-2g {
-background:transparent url(layout/default/images/number-2g.png) no-repeat scroll 0 50%;
+background:transparent url(images/number-2g.png) no-repeat scroll 0 50%;
 }
 
 li.num-3g {
-background:transparent url(layout/default/images/number-3g.png) no-repeat scroll 0 50%;
+background:transparent url(images/number-3g.png) no-repeat scroll 0 50%;
 }
 
 li.num-4g {
-background:transparent url(layout/default/images/number-4g.png) no-repeat scroll 0 50%;
+background:transparent url(images/number-4g.png) no-repeat scroll 0 50%;
 }
 
 li.num-5g {
-background:transparent url(layout/default/images/number-5g.png) no-repeat scroll 0 50%;
+background:transparent url(images/number-5g.png) no-repeat scroll 0 50%;
 }
 
 li.num-6g {
-background:transparent url(layout/default/images/number-6g.png) no-repeat scroll 0 50%;
+background:transparent url(images/number-6g.png) no-repeat scroll 0 50%;
 }
 
 li.num-7g {
-background:transparent url(layout/default/images/number-7g.png) no-repeat scroll 0 50%;
+background:transparent url(images/number-7g.png) no-repeat scroll 0 50%;
 }
 
 li.num-8g {
-background:transparent url(layout/default/images/number-8g.png) no-repeat scroll 0 50%;
+background:transparent url(images/number-8g.png) no-repeat scroll 0 50%;
 }
 
 li.num-9g {
-background:transparent url(layout/default/images/number-9g.png) no-repeat scroll 0 50%;
+background:transparent url(images/number-9g.png) no-repeat scroll 0 50%;
 }
 
 ul.arrow,ul.bug,ul.cart,ul.check,ul.script,ul.bullet-blue,ul.bullet-grey,ul.bullet-plus,ul.bullet-rss,ul.bullet-star,ul.disc,ul.headphones,ul.mic,ul.speaker,ul.video,ul.number {
@@ -1636,7 +1636,7 @@ padding-left:30px;
 }
 
 ul.blank,li.blankul.arrow li.blank ,ul.bug li.blank ,ul.cart li.blank ,ul.check li.blank ,ul.script li.blank ,ul.bullet-blue li.blank ,ul.bullet-grey li.blank ,ul.bullet-plus li.blank ,ul.bullet-rss li.blank ,ul.bullet-star li.blank ,ul.disc li.blank,ul.headphones li.blank ,ul.mic li.blank ,ul.speaker li.blank ,ul.video li.blank  {
-background:transparent url(layout/default/images/blank.png) no-repeat scroll 0 50%;
+background:transparent url(images/blank.png) no-repeat scroll 0 50%;
 }
 
 ul.arrow li ul,ul.bug li ul,ul.cart li ul,ul.check li ul,ul.script li ul,ul.bullet-blue li ul,ul.bullet-grey li ul,ul.bullet-plus li ul,ul.bullet-rss li ul,ul.bullet-star li ul,ul.disc li ul,ul.headphones li ul,ul.mic li ul,ul.speaker li ul,ul.video li ul,ul.number li ul{
@@ -1648,7 +1648,7 @@ padding:2px 0 2px 30px;
 }
 
 .story-featured pre, .story-body pre {
-background:#F7F7F7 url(layout/default/images/code.png) no-repeat scroll 5px 50%;
+background:#F7F7F7 url(images/code.png) no-repeat scroll 5px 50%;
 border:3px solid #CCC;
 font-size:90%;
 line-height:135%;
@@ -1657,37 +1657,37 @@ padding:1em 1em 1em 5em;
 }
 
 span.alert {
-background:#FFD6D6 url(layout/default/images/alert.png) no-repeat scroll 5px 50%;
+background:#FFD6D6 url(images/alert.png) no-repeat scroll 5px 50%;
 border:3px solid #FE7B7A;
 color:#C00;
 }
 
 span.down {
-background:#EEF7DD url(layout/default/images/download.png) no-repeat scroll 5px 50%;
+background:#EEF7DD url(images/download.png) no-repeat scroll 5px 50%;
 border:3px solid #9ACC2E;
 color:green;
 }
 
 span.help {
-background:#f9ecd3 url(layout/default/images/help.png) no-repeat scroll 5px 50%;
+background:#f9ecd3 url(images/help.png) no-repeat scroll 5px 50%;
 border:3px solid #ffba42;
 color:orange;
 }
 
 span.idea {
-background:#FABFFF url(layout/default/images/idea.png) no-repeat scroll 5px 50%;
+background:#FABFFF url(images/idea.png) no-repeat scroll 5px 50%;
 border:3px solid #F56FFF;
 color:purple;
 }
 
 span.info {
-background:#D8E5F8 url(layout/default/images/sysmessage.png) no-repeat scroll 5px 50%;
+background:#D8E5F8 url(images/sysmessage.png) no-repeat scroll 5px 50%;
 border:3px solid #629DE3;
 color:#05B;
 }
 
 span.note {
-background:#FEF6D8 url(layout/default/images/note.png) no-repeat scroll 5px 50%;
+background:#FEF6D8 url(images/note.png) no-repeat scroll 5px 50%;
 border:3px solid #FDE179;
 color:#B79000;
 }
@@ -1701,7 +1701,7 @@ padding:10px 10px 10px 45px;
 
 q {
 background-color:transparent;
-background-image:url(layout/default/images/quote-l.png);
+background-image:url(images/quote-l.png);
 background-repeat:no-repeat;
 background-attachment:scroll;
 background-x-position:left;
@@ -2091,7 +2091,7 @@ margin:0;
 
 .tool-text {
 font-size:11px;
-background:url(layout/default/images/gl_mootip_bg200.png) bottom right;
+background:url(images/gl_mootip_bg200.png) bottom right;
 padding:4px 8px 8px;
 overflow:hidden;
 }
@@ -2171,12 +2171,12 @@ pre {
   border: 1px dashed blue;
 }
 .moofx-toggler {
-  background: url(layout/default/images/arrow_open.png) no-repeat 0 100%;
+  background: url(images/arrow_open.png) no-repeat 0 100%;
   padding:0 5px 0 10px;
 }
 
 .moofx-toggler-down {
-  background: url(layout/default/images/arrow_down.png) no-repeat 0 100%;
+  background: url(images/arrow_down.png) no-repeat 0 100%;
   padding:0 5px 0 10px;
 }
 
@@ -3067,7 +3067,7 @@ input.error { border: 2px dotted red; }
 }
 
 .lbLoading {
-	background: #fff url(layout/default/images/loading.gif) no-repeat center;
+	background: #fff url(images/loading.gif) no-repeat center;
 }
 
 #lbImage {
@@ -3091,7 +3091,7 @@ input.error { border: 2px dotted red; }
 }
 
 #lbPrevLink:hover {
-	background: transparent url(layout/default/images/prevlabel.gif) no-repeat 0 15%;
+	background: transparent url(images/prevlabel.gif) no-repeat 0 15%;
 }
 
 #lbNextLink {
@@ -3099,7 +3099,7 @@ input.error { border: 2px dotted red; }
 }
 
 #lbNextLink:hover {
-	background: transparent url(layout/default/images/nextlabel.gif) no-repeat 100% 15%;
+	background: transparent url(images/nextlabel.gif) no-repeat 100% 15%;
 }
 
 #lbBottom {
@@ -3117,7 +3117,7 @@ input.error { border: 2px dotted red; }
 	float: right;
 	width: 66px;
 	height: 22px;
-	background: transparent url(layout/default/images/closelabel.gif) no-repeat center;
+	background: transparent url(images/closelabel.gif) no-repeat center;
 	margin: 5px 0;
 	outline: none;
 }
