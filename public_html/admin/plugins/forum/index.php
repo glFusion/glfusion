@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Main Forum administration screen                                         |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -53,89 +51,138 @@ if (!SEC_hasRights('forum.edit')) {
 USES_forum_functions();
 USES_forum_admin();
 
-$display = FF_siteHeader();
+function forum_admin_list()
+{
+    global $_TABLES, $LANG_ADMIN, $LANG_GF00,$LANG_GF91, $LANG_GF06, $_CONF, $_FF_CONF;
 
-$display .= FF_navbar($navbarMenu,$LANG_GF06['1']);
+    USES_lib_admin();
 
-$display .= COM_startBlock($LANG_GF91['gfstats']);
+    $retval = '';
+    $selected = '';
 
-// CATEGORIES
-$numcats=DB_query("SELECT id FROM {$_TABLES['ff_categories']}");
-$totalcats=DB_numRows($numcats);
-// FORUMS
-$numforums=DB_query("SELECT forum_id FROM {$_TABLES['ff_forums']}");
-$totalforums=DB_numRows($numforums);
-// TOPICS
-$numtopics=DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE pid = 0");
-$totaltopics=DB_numRows($numtopics);
-// POSTS
-$numposts=DB_query("SELECT id FROM {$_TABLES['ff_topic']}");
-$totalposts=DB_numRows($numposts);
-// VIEWS
-$numviews=DB_query("SELECT SUM(views) AS TOTAL FROM {$_TABLES['ff_topic']}");
-$totalviews=DB_fetchArray($numviews);
+    $menu_arr = array();
 
-// AVERAGE POSTS
-if ($totalposts != 0) {
-    $avgcposts = $totalposts / $totalcats;
-    $avgcposts = round($avgcposts);
-    $avgfposts = $totalposts / $totalforums;
-    $avgfposts = round($avgfposts);
-    $avgtposts = $totalposts / $totaltopics;
-    $avgtposts = round($avgtposts);
-} else {
-    $avgcposts = 0;
-    $avgfposts = 0;
-    $avgtposts = 0;
+    $admin_list = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
+    $admin_list->set_file('admin-list', 'index.thtml');
+
+    $admin_list->set_var('block_start',COM_startBlock($LANG_GF91['gfstats']));
+
+    $navbarMenu = array(
+        $LANG_GF06['1']   => $_CONF['site_admin_url'] .'/plugins/forum/index.php',
+        $LANG_GF06['3']   => $_CONF['site_admin_url'] .'/plugins/forum/boards.php',
+        $LANG_GF06['4']   => $_CONF['site_admin_url'] .'/plugins/forum/mods.php',
+        $LANG_GF06['5']   => $_CONF['site_admin_url'] .'/plugins/forum/migrate.php',
+        $LANG_GF06['6']   => $_CONF['site_admin_url'] .'/plugins/forum/messages.php',
+        $LANG_GF06['7']   => $_CONF['site_admin_url'] .'/plugins/forum/ips.php',
+    );
+    if ( $_FF_CONF['enable_user_rating_system'] ) {
+        $navbarMenu[$LANG_GF06['8']] = $_CONF['site_admin_url'] .'/plugins/forum/rating.php';
+    }
+    $navbarMenu[$LANG_GF06['9']] = $_CONF['site_admin_url'] .'/plugins/forum/import.php';
+
+    for ( $i=1; $i <= count($navbarMenu); $i++ )  {
+        $parms = explode( "=",current($navbarMenu) );
+        if ( key($navbarMenu) != $selected ) {
+            $url = current($navbarMenu);
+            $label = key($navbarMenu);
+            $menu_arr = array_merge($menu_arr,array (
+                array('url' => $url,
+                      'text'=> $label)
+            ));
+        }
+        next($navbarMenu);
+    }
+
+    $menu_arr = array_merge($menu_arr,array (
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    ));
+
+    $admin_list->set_var('admin_menu',ADMIN_createMenu($menu_arr,$LANG_GF00['instructions'],
+          $_CONF['site_url'] . '/forum/images/forum.png')
+    );
+    $admin_list->set_var('admin_menu_header',ADMIN_createMenuHeader($menu_arr,$LANG_GF00['instructions'],$LANG_GF91['gfstats'],
+          $_CONF['site_url'] . '/forum/images/forum.png')
+    );
+
+    // CATEGORIES
+    $numcats=DB_query("SELECT id FROM {$_TABLES['ff_categories']}");
+    $totalcats=DB_numRows($numcats);
+    // FORUMS
+    $numforums=DB_query("SELECT forum_id FROM {$_TABLES['ff_forums']}");
+    $totalforums=DB_numRows($numforums);
+    // TOPICS
+    $numtopics=DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE pid = 0");
+    $totaltopics=DB_numRows($numtopics);
+    // POSTS
+    $numposts=DB_query("SELECT id FROM {$_TABLES['ff_topic']}");
+    $totalposts=DB_numRows($numposts);
+    // VIEWS
+    $numviews=DB_query("SELECT SUM(views) AS TOTAL FROM {$_TABLES['ff_topic']}");
+    $totalviews=DB_fetchArray($numviews);
+
+    // AVERAGE POSTS
+    if ($totalposts != 0) {
+        $avgcposts = $totalposts / $totalcats;
+        $avgcposts = round($avgcposts);
+        $avgfposts = $totalposts / $totalforums;
+        $avgfposts = round($avgfposts);
+        $avgtposts = $totalposts / $totaltopics;
+        $avgtposts = round($avgtposts);
+    } else {
+        $avgcposts = 0;
+        $avgfposts = 0;
+        $avgtposts = 0;
+    }
+
+
+    // AVERAGE VIEWS
+    if ($totalviews['TOTAL'] != 0) {
+        $avgcviews = $totalviews['TOTAL'] / $totalcats;
+        $avgcviews = round($avgcviews);
+        $avgfviews = $totalviews['TOTAL'] / $totalforums;
+        $avgfviews = round($avgfviews);
+        $avgtviews = $totalviews['TOTAL'] / $totaltopics;
+        $avgtviews = round($avgtviews);
+    } else {
+        $avgcviews = 0;
+        $avgfviews = 0;
+        $avgtviews = 0;
+    }
+
+    $admin_list->set_var (array(
+        'statsmsg'      => $LANG_GF91['statsmsg'],
+        'totalcatsmsg'  => $LANG_GF91['totalcats'],
+        'totalcats'     => $totalcats,
+        'totalforumsmsg'=> $LANG_GF91['totalforums'],
+        'totalforums'   => $totalforums,
+        'totaltopicsmsg'=> $LANG_GF91['totaltopics'],
+        'totaltopics'   => $totaltopics,
+        'totalpostsmsg' => $LANG_GF91['totalposts'],
+        'totalposts'    => $totalposts,
+        'totalviewsmsg' => $LANG_GF91['totalviews'],
+        'totalviews'    => $totalviews['TOTAL'],
+        'category'      => $LANG_GF91['category'],
+        'forum'         => $LANG_GF91['forum'],
+        'topic'         => $LANG_GF91['topic'],
+        'avgpmsg'       => $LANG_GF91['avgpmsg'],
+        'avgcposts'     => $avgcposts,
+        'avgfposts'     => $avgfposts,
+        'avgtposts'     => $avgtposts,
+        'avgvmsg'       => $LANG_GF91['avgvmsg'],
+        'avgcviews'     => $avgcviews,
+        'avgfviews'     => $avgfviews,
+        'avgtviews'     => $avgtviews));
+
+    $admin_list->set_var('block_end',COM_endBlock());
+
+    $admin_list->parse ('output', 'admin-list');
+    $retval .= $admin_list->finish ($admin_list->get_var('output'));
+    return $retval;
 }
 
-
-// AVERAGE VIEWS
-if ($totalviews['TOTAL'] != 0) {
-    $avgcviews = $totalviews['TOTAL'] / $totalcats;
-    $avgcviews = round($avgcviews);
-    $avgfviews = $totalviews['TOTAL'] / $totalforums;
-    $avgfviews = round($avgfviews);
-    $avgtviews = $totalviews['TOTAL'] / $totaltopics;
-    $avgtviews = round($avgtviews);
-} else {
-    $avgcviews = 0;
-    $avgfviews = 0;
-    $avgtviews = 0;
-}
-
-$indextemplate = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
-$indextemplate->set_file ('indextemplate', 'index.thtml');
-
-$indextemplate->set_var (array(
-    'statsmsg'      => $LANG_GF91['statsmsg'],
-    'totalcatsmsg'  => $LANG_GF91['totalcats'],
-    'totalcats'     => $totalcats,
-    'totalforumsmsg'=> $LANG_GF91['totalforums'],
-    'totalforums'   => $totalforums,
-    'totaltopicsmsg'=> $LANG_GF91['totaltopics'],
-    'totaltopics'   => $totaltopics,
-    'totalpostsmsg' => $LANG_GF91['totalposts'],
-    'totalposts'    => $totalposts,
-    'totalviewsmsg' => $LANG_GF91['totalviews'],
-    'totalviews'    => $totalviews['TOTAL'],
-    'category'      => $LANG_GF91['category'],
-    'forum'         => $LANG_GF91['forum'],
-    'topic'         => $LANG_GF91['topic'],
-    'avgpmsg'       => $LANG_GF91['avgpmsg'],
-    'avgcposts'     => $avgcposts,
-    'avgfposts'     => $avgfposts,
-    'avgtposts'     => $avgtposts,
-    'avgvmsg'       => $LANG_GF91['avgvmsg'],
-    'avgcviews'     => $avgcviews,
-    'avgfviews'     => $avgfviews,
-    'avgtviews'     => $avgtviews));
-
-$indextemplate->parse ('output', 'indextemplate');
-$display .= $indextemplate->finish ($indextemplate->get_var('output'));
-
-$display .= COM_endBlock();
-$display .= FF_adminfooter();
-$display .= FF_siteFooter();
+$display  = COM_siteHeader();
+$display .= forum_admin_list();
+$display .= COM_siteFooter();
 echo $display;
 ?>
