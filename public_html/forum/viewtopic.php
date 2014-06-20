@@ -138,11 +138,8 @@ if ( !$iframe )  {
     $display .= FF_siteHeader($pageTitle,$headercode);
     $display .= FF_ForumHeader($forum,$showtopic);
 } else {
-    if ( $_SYSTEM['use_direct_style_js'] ) {
-        $csslink = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'];
-    } else {
-        $csslink = $_CONF['site_url'].'/css.php?t='.$_USER['theme'];
-    }
+    list($cacheFile,$cacheURL) = COM_getStyleCacheLocation();
+    $csslink = $cacheURL;
     $topicTemplate->set_var('csslink',$csslink);
     $outputHandle = outputHandler::getInstance();
     $topicTemplate->set_var(array(
