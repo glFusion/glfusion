@@ -1,4 +1,6 @@
 {# begin {templatelocation} #}
+{block_start}
+{admin_menu}
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:5px;">
   <tr>
     <td class="pluginCellTitle alignleft">{statsmsg}</td>
@@ -64,4 +66,5 @@
     <td style="padding-left:20px;">{avgtviews}</td>
   </tr>
 </table>
+{block_end}
 {# end {templatelocation} #}
