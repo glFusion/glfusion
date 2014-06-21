@@ -39,9 +39,9 @@ global $LANG32;
 ###############################################################################
 
 $LANG_POLLS = array(
-    'polls' => 'sondages',
+    'polls' => 'Sondages',
     'results' => 'Résultats',
-    'pollresults' => 'Résultat des sondages',
+    'pollresults' => 'Résultat des Sondages',
     'votes' => 'votes',
     'vote' => 'Vote',
     'pastpolls' => 'Sondages anciens',
@@ -49,8 +49,8 @@ $LANG_POLLS = array(
     'savedvotemsg' => 'Votre vote à été enregistré',
     'pollstitle' => 'Sondages dans le système',
     'polltopics' => 'Other polls',
-    'stats_top10' => 'Top-10 des sondages',
-    'stats_topics' => 'Poll Topic',
+    'stats_top10' => 'Top-10 des Sondages',
+    'stats_topics' => 'Sondage Sujet',
     'stats_votes' => 'Votes',
     'stats_none' => 'Il appert qu\'il n\'y a aucun sondage actif en ce moment, ou que personne n\'ait voté à ce jour.',
     'stats_summary' => 'Sondages (réponses) dans le système',
