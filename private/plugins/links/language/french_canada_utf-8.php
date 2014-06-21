@@ -40,10 +40,10 @@ global $LANG32;
 
 $LANG_LINKS = array(
     10 => 'Soumissions',
-    14 => 'liens',
+    14 => 'Liens',
     84 => 'LIENS',
-    88 => 'Pas de liens récents',
-    114 => 'liens',
+    88 => 'Pas de liens rÃ©cents',
+    114 => 'Liens',
     116 => 'Ajoutez un lien',
     117 => 'Report Broken Link',
     118 => 'Broken Link Report',
@@ -65,18 +65,18 @@ $LANG_LINKS = array(
 # for stats
 
 $LANG_LINKS_STATS = array(
-    'links' => 'Liens en mémoire',
-    'stats_headline' => 'Top-10 des liens',
+    'links' => 'Liens en mÃ©moire',
+    'stats_headline' => 'Haut dix des liens',
     'stats_page_title' => 'Liens',
     'stats_hits' => 'Clics',
-    'stats_no_hits' => 'Il appert qu\'il n\'existe aucun lien, ou que personne n\'a cliqué sur le lien.'
+    'stats_no_hits' => 'Il appert qu\'il n\'existe aucun lien, ou que personne n\'a cliquÃ© sur le lien.'
 );
 
 ###############################################################################
 # for the search
 
 $LANG_LINKS_SEARCH = array(
-    'results' => 'Résultat des liens',
+    'results' => 'RÃ©sultat des liens',
     'title' => 'Titre',
     'date' => 'Date d\'ajout',
     'author' => 'Soumis par',
@@ -89,14 +89,14 @@ $LANG_LINKS_SEARCH = array(
 $LANG_LINKS_SUBMIT = array(
     1 => 'Soumettez un lien',
     2 => 'Lien',
-    3 => 'Catégorie',
+    3 => 'CatÃ©gorie',
     4 => 'Autre',
-    5 => 'Spécifiez autre',
-    6 => 'Erreur : catégorie manquante',
-    7 => 'Lorsque vous sélectionnez "Autre", merci d\'aussi inscrire une catégorie correspondante',
+    5 => 'SpÃ©cifiez autre',
+    6 => 'Erreur : catÃ©gorie manquante',
+    7 => 'Lorsque vous sÃ©lectionnez "Autre", merci d\'aussi inscrire une catÃ©gorie correspondante',
     8 => 'Titre',
     9 => 'URL',
-    10 => 'Catégorie',
+    10 => 'CatÃ©gorie',
     11 => 'Liens soumis',
     12 => 'Submitted By'
 );
@@ -104,10 +104,10 @@ $LANG_LINKS_SUBMIT = array(
 ###############################################################################
 # Messages for COM_showMessage the submission form
 
-$PLG_links_MESSAGE1 = "Merci de soumettre un lien vers {$_CONF['site_name']}.  Votre demande est en cours d\'approbation. Lorsque qu\'approuvé, votre soumission sera affichée dans la <a href={$_CONF['site_url']}/links/index.php>section des liens</a>.";
-$PLG_links_MESSAGE2 = 'Lien sauvegardé avec succès.';
-$PLG_links_MESSAGE3 = 'Lien effacé avec succès.';
-$PLG_links_MESSAGE4 = "Merci de soumettre un lien vers {$_CONF['site_name']}. Il apparaît désormais à la <a href={$_CONF['site_url']}/links/index.php>section des liens</a>.";
+$PLG_links_MESSAGE1 = "Merci de soumettre un lien vers {$_CONF['site_name']}.  Votre demande est en cours d\'approbation. Lorsque qu\'approuvÃ©, votre soumission sera affichÃ©e dans la <a href={$_CONF['site_url']}/links/index.php>section des liens</a>.";
+$PLG_links_MESSAGE2 = 'Lien sauvegardÃ© avec succÃ¨s.';
+$PLG_links_MESSAGE3 = 'Lien effacÃ© avec succÃ¨s.';
+$PLG_links_MESSAGE4 = "Merci de soumettre un lien vers {$_CONF['site_name']}. Il apparaÃ®t dÃ©sormais Ã  la <a href={$_CONF['site_url']}/links/index.php>section des liens</a>.";
 $PLG_links_MESSAGE5 = 'You do not have sufficient access rights to view this category.';
 $PLG_links_MESSAGE6 = 'You do not have sufficient rights to edit this category.';
 $PLG_links_MESSAGE7 = 'Please enter a Category Name and Description.';
@@ -136,10 +136,10 @@ $LANG_LINKS_ADMIN = array(
     6 => '(include http://)',
     7 => 'Other',
     8 => 'Link Hits',
-    9 => 'Link Description',
+    9 => 'Description du Lien',
     10 => 'You need to provide a link Title, URL and Description.',
     11 => 'Link Manager',
-    12 => 'To modify or delete a link, click on that link\'s edit icon below.  To create a new link, click on "Create New" above.',
+    12 => 'Pour modifier ou supprimer un lien, cliquez sur Modifier l`icône de ce lien ci-dessous. Pour créer un nouveau lien, cliquez sur "Créer un nouveau" ci-dessus.',
     14 => 'Link Category',
     16 => 'Access Denied',
     17 => "You are trying to access a link that you don't have rights to.  This attempt has been logged. Please <a href=\"{$_CONF['site_admin_url']}/plugins/links/index.php\">go back to the link administration screen</a>.",
@@ -149,10 +149,10 @@ $LANG_LINKS_ADMIN = array(
     23 => 'delete',
     24 => 'Link not found',
     25 => 'The link you selected for editing could not be found.',
-    26 => 'Validate Links',
+    26 => 'Valider Liens',
     27 => 'HTML Status',
     28 => 'Edit category',
-    29 => 'Enter or edit the details below.',
+    29 => 'Saisir ou modifier les détails ci-dessous.',
     30 => 'Category',
     31 => 'Description',
     32 => 'Category ID',
@@ -165,23 +165,23 @@ $LANG_LINKS_ADMIN = array(
     43 => 'Site categories',
     44 => 'Add&nbsp;child',
     46 => 'User %s tried to delete a category to which they do not have access rights',
-    50 => 'List categories',
-    51 => 'New link',
+    50 => 'Catégories de la Liste',
+    51 => 'Nouveau Lien',
     52 => 'New category',
-    53 => 'List links',
+    53 => 'Liste des liens',
     54 => 'Category Manager',
     55 => 'Edit categories below. Note that you cannot delete a category that contains other categories or links - you should delete these first, or move them to another category.',
     56 => 'Category Editor',
-    57 => 'Not validated yet',
-    58 => 'Validate now',
-    59 => '<p>To validate all links displayed, please click on the "Validate now" link below. Please note that this might take some time depending on the amount of links displayed.</p>',
+    57 => 'Pas encore validé',
+    58 => 'Validez Maintenant',
+    59 => '<p>Pour valider tous les liens, s`il vous plaît cliquer sur le lien "Valider maintenant" ci-dessous. S`il vous plaît noter que cela peut prendre du temps en fonction de la quantité de liens affichés.</p>',
     60 => 'User %s tried illegally to edit category %s.',
     61 => 'Owner',
     62 => 'Last Updated',
     63 => 'Are you sure you want to delete this link?',
     64 => 'Are you sure you want to delete this category?',
     65 => 'Moderate Link',
-    66 => 'This screen allows you to create / edit links.',
+    66 => 'Cet écran vous permet de créer / modifier des liens.',
     67 => 'This screen allows you to create / edit a links category.'
 );
 
