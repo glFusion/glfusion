@@ -2109,7 +2109,7 @@ display:block;
 .autotranslations li {
 float:left;
 margin:0 5px 5px 0;
-background:url(images/translations/sprite-flags.png) no-repeat top left;
+background:url(../../images/translations/sprite-flags.png) no-repeat top left;
 width:16px;
 height:11px;
 }
@@ -2191,14 +2191,14 @@ pre {
 }
 .rater_loading {
 	height: 30px;
-	background: url('images/working.gif') 50% 50% no-repeat;
+	background: url('images/rating/working.gif') 50% 50% no-repeat;
 }
 .rater_loadingsm {
 	height: 10px;
 	line-height:10px;
 	padding:0;
 	margin:0;
-	background: url('images/working.gif') 50% 50% no-repeat;
+	background: url('images/rating/working.gif') 50% 50% no-repeat;
 }
 .rating-unit { /* the UL */
 	list-style:none;
@@ -2206,7 +2206,7 @@ pre {
 	padding:0px;
 	height: 30px;
 	position: relative;
-	background: url('images/starrating.png') top left repeat-x;
+	background: url('images/rating/starrating.png') top left repeat-x;
 	margin:0px auto;
 }
 .rating-unit li{
@@ -2229,7 +2229,7 @@ pre {
 	padding: 0px;
 }
 .rating-unit li a:hover{
-	background: url('images/starrating.png') left center;
+	background: url('images/rating/starrating.png') left center;
 	z-index: 2;
 	left: 0px;
 }
@@ -2254,7 +2254,7 @@ pre {
 .rating-unit a.r10-unit{left: 270px;}
 .rating-unit a.r10-unit:hover{width: 300px;}
 .rating-unit li.current-rating {
-	background: url('images/starrating.png') left bottom;
+	background: url('images/rating/starrating.png') left bottom;
 	position: absolute;
 	height: 30px;
 	display: block;
@@ -2269,7 +2269,7 @@ pre {
 	padding:0px;
 	height: 15px;
 	position: relative;
-	background: url('images/star_small.png') top left repeat-x;
+	background: url('images/rating/star_small.png') top left repeat-x;
 	margin:0px auto;
 }
 .small-rating-unit li{
@@ -2292,7 +2292,7 @@ pre {
 	padding: 0px;
 }
 .small-rating-unit li a:hover{
-	background: url('images/star_small.png') left center;
+	background: url('images/rating/star_small.png') left center;
 	z-index: 2;
 	left: 0px;
 	line-height:15px
@@ -2318,7 +2318,7 @@ pre {
 .small-rating-unit a.r10-unit{left: 135px;}
 .small-rating-unit a.r10-unit:hover{width: 150px;}
 .small-rating-unit li.current-rating {
-	background: url('images/star_small.png') left bottom;
+	background: url('images/rating/star_small.png') left bottom;
 	position: absolute;
 	height: 15px;
 	display: block;
