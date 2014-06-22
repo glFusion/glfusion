@@ -48,15 +48,12 @@ $_BLOCK_TEMPLATE['forum_menu'] = 'blockheader-left.thtml,blockfooter-left.thtml'
 $outputHandle = outputHandler::getInstance();
 
 // cookie law
-$outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.cookiebar.js');
-$outputHandle->addLinkStyle($_CONF['layout_url'].'/css/jquery.cookiebar.css');
+//$outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.cookiebar.js');
+//$outputHandle->addLinkStyle($_CONF['layout_url'].'/css/jquery.cookiebar.css');
 
 
 // must load the jquery ui library we want to use.
-$outputHandle->addLinkStyle($_CONF['layout_url'].'/css/ui-lightness/jquery-ui-1.10.4.min.css');
-
-
-
+$outputHandle->addCSSFile($_CONF['layout_url'].'/css/ui-lightness/jquery-ui-1.10.4.min.css');
 
 function theme_getToolTipStyle()
 {
