@@ -6,9 +6,7 @@
 // |                                                                          |
 // | GD Lib v2 Graphic Library interface                                      |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2002-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -33,13 +31,14 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $dImageHeight, $dImageWidth, $mimeType) {
+function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $dImageHeight, $dImageWidth, $mimeType)
+{
     global $_CONF;
 
     $JpegQuality = 85;
 
     if ( $_CONF['debug_image_upload'] ) {
-        COM_errorLog("IMG_resizeImage: Resizing using GD libs src = " . $srcImage . " mimetype = " . $mimeType);
+        COM_errorLog("IMG_resizeImage: Resizing using GD2: Src = " . $srcImage . " mimetype = " . $mimeType);
     }
     switch ( $mimeType ) {
         case 'image/jpeg' :
@@ -57,11 +56,11 @@ function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $d
             break;
         case 'image/x-targa' :
         case 'image/tga' :
-            COM_errorLog("IMG_resizeImage: TGA files not supported by GD Libs");
-            return array(false,'TGA format not supported by GD Libs');;
+            COM_errorLog("IMG_resizeImage: TGA files not supported by GD2 Libs");
+            return array(false,'TGA format not supported by GD2 Libs');;
         default :
-            COM_errorLog("IMG_resizeImage: GD Libs only support JPG, PNG, and GIF image types.");
-            return array(false,'GD Libs only support JPG, PNG and GIF image types');
+            COM_errorLog("IMG_resizeImage: GD2 only supports JPG, PNG, and GIF image types.");
+            return array(false,'GD2 only supports JPG, PNG and GIF image types');
     }
     if ( !$image ) {
         COM_errorLog("IMG_resizeImage: GD Libs failed to create working image.");
@@ -71,9 +70,16 @@ function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $d
         $dImageWidth = $sImageWidth;
         $dImageHeight = $sImageHeight;
     }
-    $newimage = imagecreatetruecolor($dImageWidth, $dImageHeight);
-    imagecopyresampled($newimage, $image, 0,0,0,0,  $dImageWidth, $dImageHeight, $sImageWidth, $sImageHeight);
-    imagedestroy($image);
+
+    $newimage = imagecreatetruecolor( $dImageWidth, $dImageHeight);
+    imagealphablending( $newimage, false );
+    imagesavealpha( $newimage, true );
+
+    imagecopyresampled( $newimage, $image,
+                        0, 0,
+                        0, 0,
+                        $dImageWidth, $dImageHeight,
+                        $sImageWidth, $sImageHeight );
 
     switch ( $mimeType ) {
         case 'image/jpeg' :
