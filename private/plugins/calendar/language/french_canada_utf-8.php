@@ -80,8 +80,8 @@ $LANG_CAL_1 = array(
     38 => 'Éditez les types',
     39 => 'Endroit',
     40 => 'Ajoutez à',
-    41 => 'calendrier général',
-    42 => 'calendrier personnel',
+    41 => 'Calendrier Général',
+    42 => 'Calendrier Personnel',
     43 => 'Lien',
     44 => 'HTML non-permis',
     45 => 'Envoyez',
@@ -109,14 +109,14 @@ $LANG_CAL_2 = array(
     8 => 'Choisissez',
     9 => '%s Event',
     10 => 'Évènement pour',
-    11 => 'le calendrier général',
-    12 => 'mon calendrier',
+    11 => 'Le Calendrier Général',
+    12 => 'Mon Calendrier',
     25 => 'Retour à ',
     26 => 'Toute la journée',
     27 => 'Semaine',
     28 => 'Calendrier perso de',
     29 => 'Calendrier général',
-    30 => 'effacez',
+    30 => 'Effacez',
     31 => 'Ajoutez',
     32 => 'Évènement',
     33 => 'Date',
@@ -147,51 +147,51 @@ $LANG_CAL_ADMIN = array(
     9 => '(inclure http://)',
     10 => 'Vous devez compléter tous les champs',
     11 => 'Calendar Manager',
-    12 => 'To modify or delete an event, click on that event\'s edit icon below.  To create a new event, click on "Create New" above. Click on the copy icon to create a copy of an existing event.',
+    12 => 'Pour modifier ou supprimer un événement, cliquez sur Modifier l`icône de cet événement ci-dessous. Pour créer un nouvel événement, cliquez sur "Créer un nouveau" ci-dessus. Cliquez sur l`icône de copie pour créer une copie d`un événement existant.',
     13 => 'Auteur',
     14 => 'Date de départ',
     15 => 'Date de fin',
     16 => '',
-    17 => "You are trying to access an event that you don't have rights to.  This attempt has been logged. Please <a href=\"{$_CONF['site_admin_url']}/plugins/calendar/index.php\">go back to the event administration screen</a>.",
+    17 => "Vous essayez d'accéder à un événement que vous ne disposez pas des droits à. Cette tentative a été enregistré. s`il vous plaît <a href=\"{$_CONF['site_admin_url']}/plugins/calendar/index.php\">revenir à l`écran d`administration de l`événement</a>.",
     18 => '',
     19 => '',
-    20 => 'sauvegarder',
-    21 => 'annuler',
-    22 => 'effacer',
+    20 => 'Sauvegarder',
+    21 => 'Annuler',
+    22 => 'Effacer',
     23 => 'Mauvaise date de départ.',
     24 => 'Mauvaise date de fin.',
     25 => 'La fin précède le départ.',
-    26 => 'Delete old entries',
-    27 => 'These are the events that are older than ',
-    28 => ' months. Please click on the trashcan Icon on the bottom to delete them, or select a different timespan:<br' . XHTML . '>Find all entries that are older than ',
+    26 => 'Supprimer les anciennes entrées',
+    27 => 'Ce sont les événements qui sont âgés de plus de ',
+    28 => ' mois. S`il vous plaît cliquer sur l`icône de la corbeille sur le fond pour les supprimer, ou sélectionnez un laps de temps différent: <br /> Trouver toutes les entrées qui sont âgés de plus de ',
     29 => '',
     30 => 'Update List',
-    31 => 'Are You sure you want to permanently delete ALL selected users?',
-    32 => 'List all',
-    33 => 'No events selected for deletion',
+    31 => 'Etes-vous sûr de vouloir supprimer définitivement TOUS les utilisateurs sélectionnés?',
+    32 => 'La Liste de TOUS',
+    33 => 'Pas événements sélectionnés pour la suppression',
     34 => 'Event ID',
-    35 => 'could not be deleted',
-    36 => 'Sucessfully deleted',
-    37 => 'Moderate Event',
+    35 => 'Ne pouvaient pas être supprimées',
+    36 => 'Supprimé Avec Succès',
+    37 => 'Événement Modérée',
     38 => 'Batch Event Admin',
     39 => 'Event Admin',
-    40 => 'Event List',
-    41 => 'This screen allows you to edit / create events. Edit the fields below and save.'
+    40 => 'Event Liste',
+    41 => 'Cet écran vous permet de modifier / créer des événements. Modifiez les champs ci-dessous et enregistrez.'
 );
 
 $LANG_CAL_AUTOTAG = array(
-    'desc_calendar' => 'Link: to a Calendar event on this site; link_text defaults to event title: [calendar:<i>event_id</i> {link_text}]'
+    'desc_calendar' => 'Lien: à un événement de calendrier sur ce site; LINK_TEXT par défaut titre de l`événement: [calendar:<i>event_id</i> {link_text}]'
 );
 
 $LANG_CAL_MESSAGE = array(
     'save' => 'Évènement ajouté avec succès.',
     'delete' => 'Évènement effacé avec succès.',
     'private' => 'Évènement sauvegardé à votre calendrier',
-    'login' => 'Cannot open your personal calendar until you login',
-    'removed' => 'Event was successfully removed from your personal calendar',
+    'login' => 'Vous ne pouvez pas ouvrir votre calendrier personnel jusqu`à ce que vous vous connectez',
+    'removed' => 'L`événement a été supprimé de votre calendrier personnel',
     'noprivate' => 'Désolé, les calendriers persos ne sont pas admis sur ce site',
-    'unauth' => 'Sorry, you do not have access to the event administration page.  Please note that all attempts to access unauthorized features are logged',
-    'delete_confirm' => 'Are you sure you want to delete this event?'
+    'unauth' => 'Désolé, vous n`avez pas accès à la page d`administration de l`événement. S`il vous plaît noter que toutes les tentatives d`accès non autorisées caractéristiques sont enregistrés',
+    'delete_confirm' => 'Etes-vous sûr de vouloir supprimer cet événement?'
 );
 
 $PLG_calendar_MESSAGE4 = "Merci de soumettre un évènement à {$_CONF['site_name']}.  Vous pourrez le visualisé sur le <a href=\"{$_CONF['site_url']}/calendar/index.php\">calendrier</a> une fois approuvé.";
@@ -201,39 +201,39 @@ $PLG_calendar_MESSAGE24 = 'Évènement sauvegardé sur votre calendrier.';
 $PLG_calendar_MESSAGE26 = 'Évènement effacé avec succès.';
 
 // Messages for the plugin upgrade
-$PLG_calendar_MESSAGE3001 = 'Plugin upgrade not supported.';
+$PLG_calendar_MESSAGE3001 = 'Plugin Mise à niveau non pris en charge.';
 $PLG_calendar_MESSAGE3002 = $LANG32[9];
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['calendar'] = array(
-    'label' => 'Calendar',
-    'title' => 'Calendar Configuration'
+    'label' => 'Calendrier',
+    'title' => 'Configuration du Calendrier'
 );
 
 $LANG_confignames['calendar'] = array(
-    'calendarloginrequired' => 'Calendar Login Required?',
-    'hidecalendarmenu' => 'Hide Calendar Menu Entry?',
-    'personalcalendars' => 'Enable Personal Calendars?',
-    'eventsubmission' => 'Enable Submission Queue?',
-    'showupcomingevents' => 'Show upcoming Events?',
-    'upcomingeventsrange' => 'Upcoming Events Range',
-    'event_types' => 'Event Types',
-    'hour_mode' => 'Hour Mode',
-    'notification' => 'Notification Email?',
-    'delete_event' => 'Delete Events with Owner?',
-    'aftersave' => 'After Saving Event',
-    'default_permissions' => 'Event Default Permissions',
-    'only_admin_submit' => 'Only Allow Admins to Submit',
-    'displayblocks' => 'Display glFusion Blocks'
+    'calendarloginrequired' => 'Identifiez-vous nécessaire?',
+    'hidecalendarmenu' => 'Cachez Calendrier Menu entrée?',
+    'personalcalendars' => 'Activer Calendriers personnels?',
+    'eventsubmission' => 'Permettre la présentation de file d`attente?',
+    'showupcomingevents' => 'Afficher les événements à venir?',
+    'upcomingeventsrange' => 'Événements à venir Gamme',
+    'event_types' => 'Types d`événements',
+    'hour_mode' => 'Mode Heure',
+    'notification' => 'Courriel de notification?',
+    'delete_event' => 'Supprimer événements avec le propriétaire?',
+    'aftersave' => 'Après l`enregistrement de l`événement',
+    'default_permissions' => 'Permission cas de défaut',
+    'only_admin_submit' => 'Seulement Autoriser les administrateurs à Soumettre',
+    'displayblocks' => 'Afficher glFusion Blocs'
 );
 
 $LANG_configsubgroups['calendar'] = array(
-    'sg_main' => 'Main Settings'
+    'sg_main' => 'Paramètres Principaux'
 );
 
 $LANG_fs['calendar'] = array(
-    'fs_main' => 'General Calendar Settings',
-    'fs_permissions' => 'Default Permissions'
+    'fs_main' => 'Calendrier des Paramètres Généraux',
+    'fs_permissions' => 'Autorisations par Défaut'
 );
 
 // Note: entries 0, 1, 6, 9, 12 are the same as in $LANG_configselects['Core']

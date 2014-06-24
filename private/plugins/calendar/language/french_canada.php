@@ -41,61 +41,61 @@ global $LANG32;
 # index.php
 $LANG_CAL_1 = array(
     1 => 'Calendrier',
-    2 => 'DÈsolÈ, il n\'y a rien ‡ l\'horaire.',
+    2 => 'D√©sol√©, il n\'y a rien √† l\'horaire.',
     3 => 'Quand',
-    4 => 'O˘',
+    4 => 'O√π',
     5 => 'Description',
     6 => 'Ajout',
-    7 => '¿ venir',
-    8 => 'Ajoutez cet ÈvËnement ‡ votre calendrier personnel et accÈdez ‡ vos ÈvËnements privÈs via la fonction calendrier de votre zone membre.',
-    9 => 'Ajoutez ‡ mon calendrier',
+    7 => '√Ä venir',
+    8 => 'Ajoutez cet √©v√®nement √† votre calendrier personnel et acc√©dez √† vos √©v√®nements priv√©s via la fonction calendrier de votre zone membre.',
+    9 => 'Ajoutez √† mon calendrier',
     10 => 'Retirez de mon calendrier',
     11 => 'Ajoutez au calendrier de %s',
-    12 => '…vËnement',
-    13 => 'DÈbut',
+    12 => '√âv√®nement',
+    13 => 'D√©but',
     14 => 'Fin',
     15 => 'De retour au calendrier',
     16 => 'Calendrier',
-    17 => 'Date de dÈbut',
+    17 => 'Date de d√©but',
     18 => 'Date de fin',
     19 => 'Soumissions',
     20 => 'Titre',
-    21 => 'Date de dÈpart',
+    21 => 'Date de d√©part',
     22 => 'URL',
-    23 => 'Vos ÈvËnements',
-    24 => 'Les ÈvËnements du site',
-    25 => 'Il n\'y a aucun ÈvËnement ‡ venir',
-    26 => 'Soumettre un ÈvËnement',
-    27 => "En soumettant un ÈvËnement ‡ {$_CONF['site_name']}, vous acceptez que celui-ci soit vu par tous les usagers du site. Cette fonction est interdite aux envois de type personnels.<br" . XHTML . "><br" . XHTML . ">La soumission apparaÓtra au calendrier gÈnÈral une fois approuvÈ par l\'administrateur du site.",
+    23 => 'Vos √©v√®nements',
+    24 => 'Les √©v√®nements du site',
+    25 => 'Il n\'y a aucun √©v√®nement √† venir',
+    26 => 'Soumettre un √©v√®nement',
+    27 => "En soumettant un √©v√®nement √† {$_CONF['site_name']}, vous acceptez que celui-ci soit vu par tous les usagers du site. Cette fonction est interdite aux envois de type personnels.<br" . XHTML . "><br" . XHTML . ">La soumission appara√Ætra au calendrier g√©n√©ral une fois approuv√© par l\'administrateur du site.",
     28 => 'Titre',
-    29 => 'Heure du dÈbut',
+    29 => 'Heure du d√©but',
     30 => 'Heure de la fin',
-    31 => 'Toute la journÈe',
+    31 => 'Toute la journ√©e',
     32 => 'Adresse 1',
     33 => 'Adresse 2',
     34 => 'Ville',
-    35 => 'RÈgion',
+    35 => 'R√©gion',
     36 => 'Code postal',
     37 => 'Type',
-    38 => '…ditez les types',
+    38 => '√âditez les types',
     39 => 'Endroit',
-    40 => 'Ajoutez ‡',
-    41 => 'calendrier gÈnÈral',
-    42 => 'calendrier personnel',
+    40 => 'Ajoutez √†',
+    41 => 'Calendrier G√©n√©ral',
+    42 => 'Calendrier Personnel',
     43 => 'Lien',
     44 => 'HTML non-permis',
     45 => 'Envoyez',
-    46 => '…vËnements dans le systËme',
+    46 => '√âv√®nements dans le syst√®me',
     47 => 'Le top10',
     48 => 'Hits',
-    49 => 'Pas d\'ÈvËnements en perspective, ou vous n\'avez pas cliquÈ sur un ÈvËnement.',
-    50 => '…vËnements',
+    49 => 'Pas d\'√©v√®nements en perspective, ou vous n\'avez pas cliqu√© sur un √©v√®nement.',
+    50 => '√âv√®nements',
     51 => 'Effacer',
     52 => 'Submitted By'
 );
 
 $_LANG_CAL_SEARCH = array(
-    'results' => 'RÈsultats',
+    'results' => 'R√©sultats',
     'title' => 'Titre',
     'date_time' => 'Date et heure',
     'location' => 'Endroit',
@@ -108,132 +108,132 @@ $_LANG_CAL_SEARCH = array(
 $LANG_CAL_2 = array(
     8 => 'Choisissez',
     9 => '%s Event',
-    10 => '…vËnement pour',
-    11 => 'le calendrier gÈnÈral',
-    12 => 'mon calendrier',
-    25 => 'Retour ‡ ',
-    26 => 'Toute la journÈe',
+    10 => '√âv√®nement pour',
+    11 => 'Le Calendrier G√©n√©ral',
+    12 => 'Mon Calendrier',
+    25 => 'Retour √† ',
+    26 => 'Toute la journ√©e',
     27 => 'Semaine',
     28 => 'Calendrier perso de',
-    29 => 'Calendrier gÈnÈral',
-    30 => 'effacez',
+    29 => 'Calendrier g√©n√©ral',
+    30 => 'Effacez',
     31 => 'Ajoutez',
-    32 => '…vËnement',
+    32 => '√âv√®nement',
     33 => 'Date',
     34 => 'Heure',
     35 => 'Ajout rapide',
     36 => 'Soumettre',
-    37 => 'DÈsolÈ, cette fonction n\'est pas activÈe sur ce site',
-    38 => '…diteur personnel',
+    37 => 'D√©sol√©, cette fonction n\'est pas activ√©e sur ce site',
+    38 => '√âditeur personnel',
     39 => 'Jour',
     40 => 'Semaine',
     41 => 'Mois',
-    42 => 'Ajoutez un ÈvËnement gÈnÈral',
-    43 => 'Soumission des ÈvËnements'
+    42 => 'Ajoutez un √©v√®nement g√©n√©ral',
+    43 => 'Soumission des √©v√®nements'
 );
 
 ###############################################################################
 # admin/plugins/calendar/index.php, formerly admin/event.php ($LANG22)
 
 $LANG_CAL_ADMIN = array(
-    1 => '…diteur',
+    1 => '√âditeur',
     2 => 'Erreur',
     3 => 'Mode Post',
     4 => 'URL',
-    5 => 'Date de dÈpart',
+    5 => 'Date de d√©part',
     6 => 'Date de fin',
     7 => 'Endroit',
     8 => 'Description',
     9 => '(inclure http://)',
-    10 => 'Vous devez complÈter tous les champs',
+    10 => 'Vous devez compl√©ter tous les champs',
     11 => 'Calendar Manager',
-    12 => 'To modify or delete an event, click on that event\'s edit icon below.  To create a new event, click on "Create New" above. Click on the copy icon to create a copy of an existing event.',
+    12 => 'Pour modifier ou supprimer un √©v√©nement, cliquez sur Modifier l`ic√¥ne de cet √©v√©nement ci-dessous. Pour cr√©er un nouvel √©v√©nement, cliquez sur "Cr√©er un nouveau" ci-dessus. Cliquez sur l`ic√¥ne de copie pour cr√©er une copie d`un √©v√©nement existant.',
     13 => 'Auteur',
-    14 => 'Date de dÈpart',
+    14 => 'Date de d√©part',
     15 => 'Date de fin',
     16 => '',
-    17 => "You are trying to access an event that you don't have rights to.  This attempt has been logged. Please <a href=\"{$_CONF['site_admin_url']}/plugins/calendar/index.php\">go back to the event administration screen</a>.",
+    17 => "Vous essayez d'acc√©der √† un √©v√©nement que vous ne disposez pas des droits √†. Cette tentative a √©t√© enregistr√©. s`il vous pla√Æt <a href=\"{$_CONF['site_admin_url']}/plugins/calendar/index.php\">revenir √† l`√©cran d`administration de l`√©v√©nement</a>.",
     18 => '',
     19 => '',
-    20 => 'sauvegarder',
-    21 => 'annuler',
-    22 => 'effacer',
-    23 => 'Mauvaise date de dÈpart.',
+    20 => 'Sauvegarder',
+    21 => 'Annuler',
+    22 => 'Effacer',
+    23 => 'Mauvaise date de d√©part.',
     24 => 'Mauvaise date de fin.',
-    25 => 'La fin prÈcËde le dÈpart.',
-    26 => 'Delete old entries',
-    27 => 'These are the events that are older than ',
-    28 => ' months. Please click on the trashcan Icon on the bottom to delete them, or select a different timespan:<br' . XHTML . '>Find all entries that are older than ',
+    25 => 'La fin pr√©c√®de le d√©part.',
+    26 => 'Supprimer les anciennes entr√©es',
+    27 => 'Ce sont les √©v√©nements qui sont √¢g√©s de plus de ',
+    28 => ' mois. S`il vous pla√Æt cliquer sur l`ic√¥ne de la corbeille sur le fond pour les supprimer, ou s√©lectionnez un laps de temps diff√©rent: <br /> Trouver toutes les entr√©es qui sont √¢g√©s de plus de ',
     29 => '',
     30 => 'Update List',
-    31 => 'Are You sure you want to permanently delete ALL selected users?',
-    32 => 'List all',
-    33 => 'No events selected for deletion',
+    31 => 'Etes-vous s√ªr de vouloir supprimer d√©finitivement TOUS les utilisateurs s√©lectionn√©s?',
+    32 => 'La Liste de TOUS',
+    33 => 'Pas √©v√©nements s√©lectionn√©s pour la suppression',
     34 => 'Event ID',
-    35 => 'could not be deleted',
-    36 => 'Sucessfully deleted',
-    37 => 'Moderate Event',
+    35 => 'Ne pouvaient pas √™tre supprim√©es',
+    36 => 'Supprim√© Avec Succ√®s',
+    37 => '√âv√©nement Mod√©r√©e',
     38 => 'Batch Event Admin',
     39 => 'Event Admin',
-    40 => 'Event List',
-    41 => 'This screen allows you to edit / create events. Edit the fields below and save.'
+    40 => 'Event Liste',
+    41 => 'Cet √©cran vous permet de modifier / cr√©er des √©v√©nements. Modifiez les champs ci-dessous et enregistrez.'
 );
 
 $LANG_CAL_AUTOTAG = array(
-    'desc_calendar' => 'Link: to a Calendar event on this site; link_text defaults to event title: [calendar:<i>event_id</i> {link_text}]'
+    'desc_calendar' => 'Lien: √† un √©v√©nement de calendrier sur ce site; LINK_TEXT par d√©faut titre de l`√©v√©nement: [calendar:<i>event_id</i> {link_text}]'
 );
 
 $LANG_CAL_MESSAGE = array(
-    'save' => '…vËnement ajoutÈ avec succËs.',
-    'delete' => '…vËnement effacÈ avec succËs.',
-    'private' => '…vËnement sauvegardÈ ‡ votre calendrier',
-    'login' => 'Cannot open your personal calendar until you login',
-    'removed' => 'Event was successfully removed from your personal calendar',
-    'noprivate' => 'DÈsolÈ, les calendriers persos ne sont pas admis sur ce site',
-    'unauth' => 'Sorry, you do not have access to the event administration page.  Please note that all attempts to access unauthorized features are logged',
-    'delete_confirm' => 'Are you sure you want to delete this event?'
+    'save' => '√âv√®nement ajout√© avec succ√®s.',
+    'delete' => '√âv√®nement effac√© avec succ√®s.',
+    'private' => '√âv√®nement sauvegard√© √† votre calendrier',
+    'login' => 'Vous ne pouvez pas ouvrir votre calendrier personnel jusqu`√† ce que vous vous connectez',
+    'removed' => 'L`√©v√©nement a √©t√© supprim√© de votre calendrier personnel',
+    'noprivate' => 'D√©sol√©, les calendriers persos ne sont pas admis sur ce site',
+    'unauth' => 'D√©sol√©, vous n`avez pas acc√®s √† la page d`administration de l`√©v√©nement. S`il vous pla√Æt noter que toutes les tentatives d`acc√®s non autoris√©es caract√©ristiques sont enregistr√©s',
+    'delete_confirm' => 'Etes-vous s√ªr de vouloir supprimer cet √©v√©nement?'
 );
 
-$PLG_calendar_MESSAGE4 = "Merci de soumettre un ÈvËnement ‡ {$_CONF['site_name']}.  Vous pourrez le visualisÈ sur le <a href=\"{$_CONF['site_url']}/calendar/index.php\">calendrier</a> une fois approuvÈ.";
-$PLG_calendar_MESSAGE17 = '…vËnement sauvegardÈ avec succËs.';
-$PLG_calendar_MESSAGE18 = '…vËnement effacÈ avec succËs.';
-$PLG_calendar_MESSAGE24 = '…vËnement sauvegardÈ sur votre calendrier.';
-$PLG_calendar_MESSAGE26 = '…vËnement effacÈ avec succËs.';
+$PLG_calendar_MESSAGE4 = "Merci de soumettre un √©v√®nement √† {$_CONF['site_name']}.  Vous pourrez le visualis√© sur le <a href=\"{$_CONF['site_url']}/calendar/index.php\">calendrier</a> une fois approuv√©.";
+$PLG_calendar_MESSAGE17 = '√âv√®nement sauvegard√© avec succ√®s.';
+$PLG_calendar_MESSAGE18 = '√âv√®nement effac√© avec succ√®s.';
+$PLG_calendar_MESSAGE24 = '√âv√®nement sauvegard√© sur votre calendrier.';
+$PLG_calendar_MESSAGE26 = '√âv√®nement effac√© avec succ√®s.';
 
 // Messages for the plugin upgrade
-$PLG_calendar_MESSAGE3001 = 'Plugin upgrade not supported.';
+$PLG_calendar_MESSAGE3001 = 'Plugin Mise √† niveau non pris en charge.';
 $PLG_calendar_MESSAGE3002 = $LANG32[9];
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['calendar'] = array(
-    'label' => 'Calendar',
-    'title' => 'Calendar Configuration'
+    'label' => 'Calendrier',
+    'title' => 'Configuration du Calendrier'
 );
 
 $LANG_confignames['calendar'] = array(
-    'calendarloginrequired' => 'Calendar Login Required?',
-    'hidecalendarmenu' => 'Hide Calendar Menu Entry?',
-    'personalcalendars' => 'Enable Personal Calendars?',
-    'eventsubmission' => 'Enable Submission Queue?',
-    'showupcomingevents' => 'Show upcoming Events?',
-    'upcomingeventsrange' => 'Upcoming Events Range',
-    'event_types' => 'Event Types',
-    'hour_mode' => 'Hour Mode',
-    'notification' => 'Notification Email?',
-    'delete_event' => 'Delete Events with Owner?',
-    'aftersave' => 'After Saving Event',
-    'default_permissions' => 'Event Default Permissions',
-    'only_admin_submit' => 'Only Allow Admins to Submit',
-    'displayblocks' => 'Display glFusion Blocks'
+    'calendarloginrequired' => 'Identifiez-vous n√©cessaire?',
+    'hidecalendarmenu' => 'Cachez Calendrier Menu entr√©e?',
+    'personalcalendars' => 'Activer Calendriers personnels?',
+    'eventsubmission' => 'Permettre la pr√©sentation de file d`attente?',
+    'showupcomingevents' => 'Afficher les √©v√©nements √† venir?',
+    'upcomingeventsrange' => '√âv√©nements √† venir Gamme',
+    'event_types' => 'Types d`√©v√©nements',
+    'hour_mode' => 'Mode Heure',
+    'notification' => 'Courriel de notification?',
+    'delete_event' => 'Supprimer √©v√©nements avec le propri√©taire?',
+    'aftersave' => 'Apr√®s l`enregistrement de l`√©v√©nement',
+    'default_permissions' => 'Permission cas de d√©faut',
+    'only_admin_submit' => 'Seulement Autoriser les administrateurs √† Soumettre',
+    'displayblocks' => 'Afficher glFusion Blocs'
 );
 
 $LANG_configsubgroups['calendar'] = array(
-    'sg_main' => 'Main Settings'
+    'sg_main' => 'Param√®tres Principaux'
 );
 
 $LANG_fs['calendar'] = array(
-    'fs_main' => 'General Calendar Settings',
-    'fs_permissions' => 'Default Permissions'
+    'fs_main' => 'Calendrier des Param√®tres G√©n√©raux',
+    'fs_permissions' => 'Autorisations par D√©faut'
 );
 
 // Note: entries 0, 1, 6, 9, 12 are the same as in $LANG_configselects['Core']
