@@ -346,6 +346,7 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
                 . '/page.php?page=' . $page . '&amp;disp_mode=print');
             $icon = COM_createLink($printicon, $print_url,array('rel' => 'nofollow'));
             $spage->set_var('print_icon', $icon);
+            $spage->set_var('link_print',$print_url);
         }
         if ((SEC_hasAccess ($A['owner_id'], $A['group_id'], $A['perm_owner'],
                 $A['perm_group'], $A['perm_members'], $A['perm_anon']) == 3) &&
@@ -363,6 +364,7 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
                 $attr //other attributes
             );
             $spage->set_var('edit_icon', $icon);
+            $spage->set_var('link_edit',$url);
         }
     }
 
