@@ -204,7 +204,7 @@ function WIDGET_slider( $dataArray )
     $retval .= ' }); });</script>';
 
     $retval .= '<div class="slide-wrapper" style="margin:0 auto;">';
-    $retval .= '<ul class="slide_'.$rand.'">';
+    $retval .= '<ul class="slide_'.$rand.'" style="margin:0;">';
 
     foreach ($dataArray['images'] as $images ) {
         $retval .= '<li>';
