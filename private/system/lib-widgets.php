@@ -150,6 +150,25 @@ function WIDGET_slider( $dataArray )
 {
     global $_CONF;
 
+    $optionTypeArray = array(
+      'mode' => 's',
+      'slideWidth' => 'n',
+      'speed' => 'n',
+      'slideMargin' => 'n',
+      'startSlide' => 'n',
+      'randomStart' => 'b',
+      'infiniteLoop' => 'b',
+      'hideControlOnEnd' => 'b',
+      'captions' => 'b',
+      'responsive' => 'b',
+      'touchEnabled' => 'b',
+      'pager' => 'b',
+      'pagerType' => 's',
+      'auto' => 'b'
+    );
+
+    $last = 0;
+    $first = 0;
     $rand = rand(1,1000);
     $slideCounter = 1;
     $captionDiv = '';
@@ -158,47 +177,59 @@ function WIDGET_slider( $dataArray )
     // define the JS we need for this theme..
     $outputHandle = outputHandler::getInstance();
     // core js
-    $outputHandle->addLinkScript($_CONF['site_url'].'/javascript/addons/nivo-slider/jquery.nivo.slider.pack.js');
-    $outputHandle->addLinkStyle($_CONF['site_url'].'/javascript/addons/nivo-slider/css/nivo-slider.css');
-    $outputHandle->addLinkStyle($_CONF['site_url'].'/javascript/addons/nivo-slider/themes/default/default.css');
-    if ( isset($dataArray['options']['width']) ) {
-        $max_width = 'style="max-width:'.$dataArray['options']['width'] . 'px;"';
-    } else {
-        $max_width = '';
+    $outputHandle->addLinkScript($_CONF['site_url'].'/javascript/addons/bxslider/jquery.bxslider.min.js');
+    $outputHandle->addLinkStyle($_CONF['site_url'].'/javascript/addons/bxslider/jquery.bxslider.css');
+
+    $retval .= '<script type="text/javascript">$(window).load(function() {';
+    $retval .= '   $(\'.slide_'.$rand.'\').bxSlider({';
+
+    foreach ($dataArray['options'] as $option => $value ) {
+        if ( isset($optionTypeArray[$option]) ) {
+            if ( $last > 0 ) $retval .= ',';
+            $retval .= $option . ": ";
+            switch ($optionTypeArray[$option]) {
+                case 's' :
+                    $retval .= "'" . $value . "'";
+                    break;
+                case 'b' :
+                    $retval .= $value == 0 ? 'false' : 'true';
+                    break;
+                case 'n' :
+                    $retval .= $value;
+                    break;
+            }
+            $last++;
+        }
     }
-    $retval .= '<div class="slide-wrapper theme-default" '.$max_width.'>';
-    $retval .= '<div id="slide_'.$rand.'" class="nivoSlider">';
+    $retval .= ' }); });</script>';
+
+    $retval .= '<div class="slide-wrapper" style="margin:0 auto;">';
+    $retval .= '<ul class="slide_'.$rand.'">';
 
     foreach ($dataArray['images'] as $images ) {
+        $retval .= '<li>';
+
         if ( isset($images['link']) && $images['link'] != '' ) {
             $retval .= '<a href="'.$images['link'].'">';
         }
+        $retval .= '<img src="'.$images['image'].'" ' ;
+
         if (isset($images['caption']) && $images['caption'] != '' ) {
-            $caption = ' title="#htmlCaption'.$slideCounter.'" ';
-        } else {
-            $caption = '';
+            $retval .= ' title="'.$images['caption'].'" ';
         }
-        $retval .= '<img src="'.$images['image'].'" data-thumb="'.$images['image'] .'" '.$caption.'alt="" />' ;
+
+        $first++;
+
+        $retval .= '>';
+
         if ( isset($images['link']) && $images['link'] != '' ) {
             $retval .= '</a>';
         }
-        if ( isset($images['caption']) && $images['caption'] != '' ) {
-            $captionDiv .= '<div id="htmlCaption'.$slideCounter.'" class="nivo-html-caption">';
-            $captionDiv .= $images['caption'];
-            $captionDiv .= '</div>';
-        }
+        $retval .= '</li>';
         $slideCounter++;
     }
+    $retval .= '</ul>';
     $retval .= '</div>';
-    $retval .= $captionDiv;
-    $retval .= '</div>';
-
-    $retval .= '<script type="text/javascript">$(window).load(function() {';
-    $retval .= '   $(\'#slide_'.$rand.'\').nivoSlider({';
-    foreach ($dataArray['options'] as $option => $value ) {
-        $retval .= $option . ": " . "'".$value . "',";
-    }
-    $retval .= 'prevText: \'Prev\', nextText: \'Next\' }); });</script>';
 
     return $retval;
 }
