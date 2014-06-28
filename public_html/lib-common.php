@@ -6611,28 +6611,28 @@ function js_out()
     if ( !isset($_SYSTEM['disable_jquery']) || $_SYSTEM['disable_jquery'] == false ) {
         $files[] = $_CONF['path_html'].'javascript/jquery/jquery-1.11.0.min.js';
         $files[] = $_CONF['path_html'].'javascript/jquery/jquery-ui-1.10.4.min.js';
-        $files[] = $_CONF['path_html'].'javascript/jquery/addons/jqrating.js';
+        $files[] = $_CONF['path_html'].'javascript/jquery/addons/jqrating.min.js';
 
         if ( !isset($_SYSTEM['disable_jquery_tooltip']) || $_SYSTEM['disable_jquery_tooltip'] == false ) {
             $files[] = $_CONF['path_html'].'javascript/addons/tooltipster/jquery.tooltipster.min.js';
-            $files[] = $_CONF['path_html'].'javascript/addons/tooltipster/tooltip.js';
+            $files[] = $_CONF['path_html'].'javascript/addons/tooltipster/tooltip.min.js';
         }
         if ( !isset($_SYSTEM['disable_jquery_menu']) || $_SYSTEM['disable_jquery_menu'] == false ) {
-            $files[] = $_CONF['path_html'].'javascript/addons/superfish/superfish.js';
-            $files[] = $_CONF['path_html'].'javascript/addons/superfish/hoverIntent.js';
+            $files[] = $_CONF['path_html'].'javascript/addons/superfish/superfish.min.js';
+            $files[] = $_CONF['path_html'].'javascript/addons/superfish/hoverIntent.min.js';
         }
         if ( !isset($_SYSTEM['disable_jquery_slimbox']) || $_SYSTEM['disable_jquery_slimbox'] == false ) {
-            $files[] = $_CONF['path_html'].'javascript/addons/slimbox/slimbox2.js';
+            $files[] = $_CONF['path_html'].'javascript/addons/slimbox/slimbox2.min.js';
         }
         if ( !isset($_SYSTEM['disable_jquery_validate']) || $_SYSTEM['disable_jquery_validate'] == false ) {
             $files[] = $_CONF['path_html'].'javascript/addons/jquery-validate/jquery.validate.min.js';
             $files[] = $_CONF['path_html'].'javascript/addons/jquery-validate/additional-methods.min.js';
         }
         if ( !isset($_SYSTEM['disable_jquery_slideshow']) || $_SYSTEM['disable_jquery_slideshow'] == false ) {
-            $files[] = $_CONF['path_html'].'javascript/addons/tcycle/jquery.tcycle.js';
+            $files[] = $_CONF['path_html'].'javascript/addons/tcycle/jquery.tcycle.min.js';
         }
     }
-    $files[] = $_CONF['path_html'].'javascript/common.js';
+    $files[] = $_CONF['path_html'].'javascript/common.min.js';
 
     // need to parse the outputhandler to see if there are any js scripts to load
 
