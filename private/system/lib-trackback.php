@@ -6,8 +6,6 @@
 // |                                                                          |
 // | Functions needed to handle trackback comments.                           |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2005-2008 by the following authors:                        |
@@ -688,9 +686,6 @@ function TRB_renderTrackbackComments ($sid, $type, $title, $permalink, $trackbac
     $template = new Template ($_CONF['path_layout'] . 'trackback');
     $template->set_file (array ('trackback' => 'trackback.thtml',
                                 'comment'   => 'trackbackcomment.thtml'));
-    $template->set_var ( 'xhtml', XHTML );
-    $template->set_var ('site_url', $_CONF['site_url']);
-    $template->set_var ('layout_url', $_CONF['layout_url']);
 
     $template->set_var ('lang_trackback', $LANG_TRB['trackback']);
     $template->set_var ('lang_trackback_url', $LANG_TRB['this_trackback_url']);

@@ -1111,6 +1111,11 @@ function glfusion_150()
     global $_TABLES, $_CONF, $_FF_CONF, $_PLUGINS, $LANG_AM, $_DB_table_prefix, $_CP_CONF;
 
     $_SQL[] = "ALTER TABLE {$_TABLES['tokens']} CHANGE `urlfor` `urlfor` VARCHAR( 1024 ) NOT NULL";
+    $_SQL[] = "ALTER TABLE  {$_TABLES['comments']} CHANGE  `ipaddress`  `ipaddress` VARCHAR( 45 ) NOT NULL DEFAULT  ''";
+    $_SQL[] = "ALTER TABLE  {$_TABLES['rating_votes']} CHANGE  `ip_address`  `ip_address` VARCHAR( 45 ) NOT NULL";
+    $_SQL[] = "ALTER TABLE  {$_TABLES['sessions']} CHANGE  `remote_ip`  `remote_ip` VARCHAR( 45 ) NOT NULL DEFAULT  ''";
+    $_SQL[] = "ALTER TABLE  {$_TABLES['trackback']}  `ipaddress`  `ipaddress` VARCHAR( 45 ) NOT NULL DEFAULT  ''";
+    $_SQL[] = "ALTER TABLE  {$_TABLES['users']} CHANGE  `remote_ip`  `remote_ip` VARCHAR( 45 ) NOT NULL DEFAULT  ''";
 
     foreach ($_SQL as $sql) {
         DB_query($sql,1);

@@ -6,9 +6,7 @@
 // |                                                                          |
 // | glFusion database library.                                               |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2104 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -56,6 +54,7 @@ $_TABLES['access']              = $_DB_table_prefix . 'access';
 $_TABLES['article_images']      = $_DB_table_prefix . 'article_images';
 $_TABLES['autotag_perm']        = $_DB_table_prefix . 'autotag_perm';
 $_TABLES['autotag_usage']       = $_DB_table_prefix . 'autotag_usage';
+$_TABLES['autotags']            = $_DB_table_prefix . 'autotags';
 $_TABLES['blocks']              = $_DB_table_prefix . 'blocks';
 $_TABLES['commentcodes']        = $_DB_table_prefix . 'commentcodes';
 $_TABLES['commentedits']        = $_DB_table_prefix . 'commentedits';
@@ -69,7 +68,11 @@ $_TABLES['features']            = $_DB_table_prefix . 'features';
 $_TABLES['frontpagecodes']      = $_DB_table_prefix . 'frontpagecodes';
 $_TABLES['group_assignments']   = $_DB_table_prefix . 'group_assignments';
 $_TABLES['groups']              = $_DB_table_prefix . 'groups';
+$_TABLES['logo']                = $_DB_table_prefix . 'logo';
 $_TABLES['maillist']            = $_DB_table_prefix . 'maillist';
+$_TABLES['menu']                = $_DB_table_prefix . 'menu';
+$_TABLES['menu_config']         = $_DB_table_prefix . 'menu_config';
+$_TABLES['menu_elements']       = $_DB_table_prefix . 'menu_elements';
 $_TABLES['pingservice']         = $_DB_table_prefix . 'pingservice';
 $_TABLES['plugins']             = $_DB_table_prefix . 'plugins';
 $_TABLES['postmodes']           = $_DB_table_prefix . 'postmodes';
@@ -93,13 +96,6 @@ $_TABLES['userinfo']            = $_DB_table_prefix . 'userinfo';
 $_TABLES['userprefs']           = $_DB_table_prefix . 'userprefs';
 $_TABLES['users']               = $_DB_table_prefix . 'users';
 $_TABLES['vars']                = $_DB_table_prefix . 'vars';
-
-$_TABLES['menu']                = $_DB_table_prefix . 'menu';
-$_TABLES['menu_config']         = $_DB_table_prefix . 'menu_config';
-$_TABLES['menu_elements']       = $_DB_table_prefix . 'menu_elements';
-$_TABLES['logo']                = $_DB_table_prefix . 'logo';
-
-$_TABLES['autotags']            = $_DB_table_prefix . 'autotags';
 
 // These tables aren't used by glFusion any more, but the table names are still
 // needed when upgrading from old versions

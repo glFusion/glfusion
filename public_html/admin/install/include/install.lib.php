@@ -1120,8 +1120,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             if ( !isset($_CONF['htmlfilter_comment']) ) {
                 $c->add('htmlfilter_default','p,b,a,i,strong,em,br','text',7,5,NULL,30,true);
                 $c->add('htmlfilter_comment','p,b,a,i,strong,em,br,tt,hr,li,ol,ul,code,pre','text',7,5,NULL,35,TRUE);
-                $c->add('htmlfilter_story','p,b,a,i,strong,em,br,tt,hr,li,ol,ul,code,pre,blockquote,img','text',7,5,NULL,40,TRUE);
-                $c->add('htmlfilter_root','div,span,table,tr,td,th','text',7,5,NULL,50,TRUE);
+                $c->add('htmlfilter_story','div[class],h1,h2,h3,pre,br,p[style],b[style],s,strong[style],i[style],em[style],u[style],strike,a[style|href|title|target],ol[style|class],ul[style|class],li[style|class],hr[style],blockquote[style],img[style|alt|title|width|height|src|align],table[style|width|bgcolor|align|cellspacing|cellpadding|border],tr[style],td[style],th[style],tbody,thead,caption,col,colgroup,span[style|class],sup,sub','text',7,5,NULL,40,TRUE);
+                $c->add('htmlfilter_root','div[style|class],span[style|class],table,tr,td,th','text',7,5,NULL,50,TRUE);
             }
             $sql = "REPLACE INTO {$_TABLES['autotags']} (tag, description, is_enabled, is_function, replacement) VALUES ('youtube', 'Embed Youtube videos into content. Usage:[youtube:ID height:px width:px align:left/right/center pad:px]', 1, 1, NULL)";
             DB_query($sql,1);
@@ -1136,14 +1136,23 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             $current_fusion_version = '1.4.1';
         case '1.4.1' :
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+            $current_fusion_version = '1.4.2';
+        case '1.4.2' :
             $_SQL[] = "ALTER TABLE {$_TABLES['tokens']} CHANGE `urlfor` `urlfor` VARCHAR( 1024 ) NOT NULL";
+            $_SQL[] = "ALTER TABLE  {$_TABLES['comments']} CHANGE  `ipaddress`  `ipaddress` VARCHAR( 45 ) NOT NULL DEFAULT  ''";
+            $_SQL[] = "ALTER TABLE  {$_TABLES['rating_votes']} CHANGE  `ip_address`  `ip_address` VARCHAR( 45 ) NOT NULL";
+            $_SQL[] = "ALTER TABLE  {$_TABLES['sessions']} CHANGE  `remote_ip`  `remote_ip` VARCHAR( 45 ) NOT NULL DEFAULT  ''";
+            $_SQL[] = "ALTER TABLE  {$_TABLES['trackback']}  `ipaddress`  `ipaddress` VARCHAR( 45 ) NOT NULL DEFAULT  ''";
+            $_SQL[] = "ALTER TABLE  {$_TABLES['users']} CHANGE  `remote_ip`  `remote_ip` VARCHAR( 45 ) NOT NULL DEFAULT  ''";
+
             foreach ($_SQL as $sql) {
                 DB_query($sql,1);
             }
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
-            $current_fusion_version = '1.4.2';
-        case '1.4.2' :
+
             $current_fusion_version = '1.5.0';
         default:
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);
