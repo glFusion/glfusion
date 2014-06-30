@@ -212,7 +212,7 @@ function WIDGET_slider( $dataArray )
         if ( isset($images['link']) && $images['link'] != '' ) {
             $retval .= '<a href="'.$images['link'].'">';
         }
-        $retval .= '<img src="'.$images['image'].'" ' ;
+        $retval .= '<img src="'.$images['image'].'" alt="" ' ;
 
         if (isset($images['caption']) && $images['caption'] != '' ) {
             $retval .= ' title="'.$images['caption'].'" ';
