@@ -6359,6 +6359,13 @@ function CTL_clearCache($plugin='')
         $plugin = '__' . $plugin . '__';
     }
 
+    if ( !isset($_CONF['css_cache_filename']) ) {
+        $_CONF['css_cache_filename'] = 'style.cache';
+    }
+    if ( !isset($_CONF['js_cache_filename']) ) {
+        $_CONF['js_cache_filename'] = 'js.cache';
+    }
+
     CTL_clearCacheDirectories($_CONF['path_data'] . 'layout_cache/', $plugin);
 
     if ( empty($plugin) ) {
@@ -6384,7 +6391,7 @@ function css_out()
     $outputHandle = outputHandler::getInstance();
 
     if ( !isset($_CONF['css_cache_filename']) ) {
-        $_CONF['css_cache_filename'] = 'stylecache_';
+        $_CONF['css_cache_filename'] = 'style.cache';
     }
 
     list($cacheFile,$cacheURL) = COM_getStyleCacheLocation();
@@ -6472,12 +6479,47 @@ function css_out()
         $css = css_compress($css);
     }
     // save cache file
+
+    $rc = cms_writeFile($cacheFile,'',$css);
+    if ( $rc === false ) cms_writeFile($cacheFile,'',$css);
+
+/*
     $fp = @fopen($cacheFile,'w');
     if ( $fp !== false ) {
         fwrite($fp,$css);
         fclose($fp);
     }
+*/
     return $cacheURL;
+}
+
+function cms_writeFile($filename, $tempfile, $data, $mutex='cms_writeFile')
+{
+    global $_CONF;
+
+    $retval=false; //assume failure of function
+    if(! $tempfile) {
+        $tempfile = tempnam(dirname($filename),basename($filename));
+    }
+    $fullmutex = $_CONF['path_data'] . $mutex;
+
+    $fm=fopen($fullmutex, 'w');// existing file that is always present to be locked as a mutex
+    if (flock($fm, LOCK_EX)) { //Use the mutex to ensure only one write is happening
+        $ft = fopen($tempfile, 'w');
+        if(flock($ft, LOCK_EX)) { //Now not essential, but still good practice
+            fwrite($ft, $data);
+            flock($ft, LOCK_UN);
+            fclose($ft);
+            if(rename($tempfile, $filename)) { // check for size became unnecessary
+                $retval=true; // The only path to success
+            } else { // The whole process failed.
+                unlink($tempfile);
+            }
+        }
+        flock($fm,LOCK_UN); // Only unlock mutex when whole atomic action has completed.
+        fclose($fm);
+    }
+    return $retval;
 }
 
 /**
