@@ -3,6 +3,7 @@
     <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
     <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset={charset}" />
     <link rel="stylesheet" type="text/css" href="{csslink}" />
     <script type="text/javascript">
     var site_url = '{site_url}';
