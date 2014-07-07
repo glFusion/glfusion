@@ -70,8 +70,8 @@
       $("#smileys").hide();
       });
   </script>
-  <script type="text/javascript" src="{site_url}/forum/javascript/ajax_deletefile.js"></script>
 {!endif}
+<script type="text/javascript" src="{site_url}/forum/javascript/ajax_deletefile.js"></script>
 
 {!if error_msg}
   <div class="pluginAlert"">{error_msg}</div>
