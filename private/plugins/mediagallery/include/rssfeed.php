@@ -6,9 +6,7 @@
 // |                                                                          |
 // | RSS Feed maintenance                                                     |
 // +--------------------------------------------------------------------------+
-// | $Id:: rssfeed.php 3070 2008-09-07 02:40:49Z mevans0263                  $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2013 by the following authors:                        |
+// | Copyright (C) 2002-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -174,11 +172,11 @@ function MG_processAlbumFeedItems( &$rss, $aid ) {
             $dt = new Date($row['media_upload_time'],$_CONF['timezone']);
             $item->date = $dt->toRFC822(true);
             $item->source = $_CONF['site_url'];
-            if ( $row['artist'] != '' ) {
+            if ( $MG_albums[$aid]->podcast && $row['artist'] != '' ) {
                 $item->author = $row['artist'];
                 $item->podcast->author = $row['artist'];
             }
-            if ( $row['media_keywords'] != '' ) {
+            if ( $MG_albums[$aid]->podcast && $row['media_keywords'] != '' ) {
                 $item->podcast->keywords = $row['media_keywords'];
             }
             switch( $row['media_type'] ) {

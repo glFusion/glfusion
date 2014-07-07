@@ -147,6 +147,7 @@ if ( !$iframe )  {
                 'css-header'   => $outputHandle->renderHeader('style'),
                 'js-header'    => $outputHandle->renderHeader('script'),
                 'raw-header'   => $outputHandle->renderHeader('raw'),
+                'charset'      => COM_getCharset(),
     ));
 }
 
