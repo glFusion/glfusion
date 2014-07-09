@@ -6464,7 +6464,7 @@ function css_out()
     // load files
     if ( is_array($files) ) {
         foreach($files as $file) {
-            $file_content = file_get_contents($file);
+            $file_content = @file_get_contents($file);
             if ( $file_content === false ) {
                 COM_errorLog("ERROR: Unable to retrieve CSS file: " . $file);
             } else {
