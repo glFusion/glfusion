@@ -6239,17 +6239,17 @@ function COM_getEffectivePermission($owner, $group_id, $perm_owner,$perm_group, 
 
 function COM_getStyleCacheLocation()
 {
-    global $_CONF, $_SYSTEM;
+    global $_CONF, $_USER, $_SYSTEM;
 
     if ( !isset($_CONF['css_cache_filename']) ) {
         $_CONF['css_cache_filename'] = 'style.cache';
     }
 
     if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
-        $cacheFile = $_CONF['path_layout'].'/'.$_CONF['css_cache_filename'].'.css';
+        $cacheFile = $_CONF['path_layout'].$_CONF['css_cache_filename'].'.css';
         $cacheURL  = $_CONF['layout_url'].'/'.$_CONF['css_cache_filename'].'.css';
     } else {
-        $cacheFile = $_CONF['path'].'/data/layout_cache/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css';
+        $cacheFile = $_CONF['path'].'data/layout_cache/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css';
         $cacheURL  = $_CONF['layout_url'].'/css.php?t='.$_USER['theme'];
     }
 
@@ -6259,7 +6259,7 @@ function COM_getStyleCacheLocation()
 
 function COM_getJSCacheLocation()
 {
-    global $_CONF, $_SYSTEM;
+    global $_CONF, $_USER, $_SYSTEM;
 
     if ( !isset($_CONF['js_cache_filename']) ) {
         $_CONF['js_cache_filename'] = 'js.cache';
@@ -6388,6 +6388,10 @@ function css_out()
 {
     global $_CONF, $_SYSTEM, $_VARS, $_USER, $_PLUGINS, $_TABLES;
 
+    $css            = '';
+    $file_content   = '';
+    $files          = array();
+
     $outputHandle = outputHandler::getInstance();
 
     if ( !isset($_CONF['css_cache_filename']) ) {
@@ -6395,8 +6399,6 @@ function css_out()
     }
 
     list($cacheFile,$cacheURL) = COM_getStyleCacheLocation();
-
-    $files   = array();
 
     // Let's look in the custom directory first...
     if ( file_exists($_CONF['path_layout'] .'custom/style.css') ) {
@@ -6459,41 +6461,46 @@ function css_out()
     DB_query("REPLACE INTO {$_TABLES['vars']} (name, value) VALUES ('cacheid','".$cacheID."')");
     $_VARS['cacheid'] = $cacheID;
 
-    // start output buffering and build the stylesheet
-    ob_start();
-
     // load files
     if ( is_array($files) ) {
         foreach($files as $file) {
-            css_loadfile($file);
-            print "\n";
+            $file_content = file_get_contents($file);
+            if ( $file_content === false ) {
+                COM_errorLog("ERROR: Unable to retrieve CSS file: " . $file);
+            } else {
+                $css .= $file_content;
+            }
+            $css .= LB;
         }
     }
-
-    // end output buffering and get contents
-    $css = ob_get_contents();
-    ob_end_clean();
 
     // compress whitespace and comments
     if ($_CONF['compress_css']){
         $css = css_compress($css);
     }
+
     // save cache file
-
-    $rc = cms_writeFile($cacheFile,'',$css);
-    if ( $rc === false ) cms_writeFile($cacheFile,'',$css);
-
-/*
+/* --- remove for testing
     $fp = @fopen($cacheFile,'w');
     if ( $fp !== false ) {
-        fwrite($fp,$css);
+        $rc = fwrite($fp,$css);
+        if ( $rc === false ) {
+            COM_errorLog("ERROR: Error writing CSS cache file");
+            fwrite($fp,$css);
+        }
         fclose($fp);
     }
-*/
+--- */
+
+    $rc = cms_writeFile($cacheFile,'',$css);
+    if ( $rc === false ) cms_writeFile($cacheFile,'',$css,'glfusion_css.lck');
+
     return $cacheURL;
 }
 
-function cms_writeFile($filename, $tempfile, $data, $mutex='cms_writeFile')
+
+// currently depreciated...
+function cms_writeFile($filename, $tempfile, $data, $mutex='glfusion.lck')
 {
     global $_CONF;
 
@@ -6503,21 +6510,25 @@ function cms_writeFile($filename, $tempfile, $data, $mutex='cms_writeFile')
     }
     $fullmutex = $_CONF['path_data'] . $mutex;
 
-    $fm=fopen($fullmutex, 'w');// existing file that is always present to be locked as a mutex
-    if (flock($fm, LOCK_EX)) { //Use the mutex to ensure only one write is happening
+    $fm=fopen($fullmutex, 'w');
+    if (flock($fm, LOCK_EX)) {
         $ft = fopen($tempfile, 'w');
-        if(flock($ft, LOCK_EX)) { //Now not essential, but still good practice
+        if (flock($ft, LOCK_EX)) {
             fwrite($ft, $data);
             flock($ft, LOCK_UN);
             fclose($ft);
-            if(rename($tempfile, $filename)) { // check for size became unnecessary
+            if (rename($tempfile, $filename)) {
                 $retval=true; // The only path to success
             } else { // The whole process failed.
                 unlink($tempfile);
             }
+        } else {
+            COM_errorLog("ERROR: Unable to obtain exclusive lock on temp file: " . $tempfile);
         }
         flock($fm,LOCK_UN); // Only unlock mutex when whole atomic action has completed.
         fclose($fm);
+    } else {
+        COM_errorLog("ERROR: Unable to obtain exclusive lock on ".$mutex);
     }
     return $retval;
 }
@@ -6529,23 +6540,26 @@ function cms_writeFile($filename, $tempfile, $data, $mutex='cms_writeFile')
 function css_cacheok($cache,$files)
 {
     $ctime = @filemtime($cache);
-    if (!$ctime) {
-        return false;
-    } //There is no cache
-
-    // now walk the files
+    if ( $ctime === false ) {
+        return false; // no cache file found
+    }
 
     if ( is_array($files) ) {
         foreach($files as $file){
-            if (@filemtime($file) > $ctime){
-                return false;
+            $mod_time = @filemtime($file);
+            if ( $mod_time === false ) {
+                COM_errorLog("ERROR: Unable to retrieve mod time for CSS file: " . $file);
+            } else {
+                if ( $mod_time > $ctime ) {
+                    return false;
+                }
             }
         }
     }
     return true;
 }
 /**
- * Loads a given file
+ * Loads a given file - DEPRECIATED
  */
 function css_loadfile($file)
 {
