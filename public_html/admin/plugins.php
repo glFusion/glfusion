@@ -6,9 +6,7 @@
 // |                                                                          |
 // | glFusion plugin administration page.                                     |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -610,20 +608,30 @@ function PLUGINS_list($token)
 
     USES_lib_admin();
 
-    $retval = COM_startBlock($LANG32[5], '',
-                              COM_getBlockTemplate('_admin_block', 'header'));
+    $T = new Template($_CONF['path_layout'] .'admin/plugins/');
+    $T->set_file('admin-list', 'plugin_list.thtml');
+
+    $T->set_var('block_start', COM_startBlock($LANG32[5], '',
+                              COM_getBlockTemplate('_admin_block', 'header')));
 
     $menu_arr = array (
                     array('url' => $_CONF['site_admin_url'],
                           'text' => $LANG_ADMIN['admin_home']));
 
-    $retval .= ADMIN_createMenu(
+    $T->set_var('admin_menu',ADMIN_createMenu(
         $menu_arr,
         $LANG32[11],
         $_CONF['layout_url'] . '/images/icons/plugins.' . $_IMAGE_TYPE
-    );
+    ));
 
-    $retval .= PLUGINS_showUploadForm($token);  // show the plugin upload form
+    $T->set_var('admin_menu_header',ADMIN_createMenuHeader(
+        $menu_arr,
+        $LANG32[11],
+        $LANG32[5],
+        $_CONF['layout_url'] . '/images/icons/plugins.' . $_IMAGE_TYPE
+    ));
+
+    $T->set_var('upload_form',PLUGINS_showUploadForm($token));  // show the plugin upload form
 
     $data_arr = array();
     PLUGINS_loadPlugins($data_arr);             // installed plugins
@@ -655,12 +663,13 @@ function PLUGINS_list($token)
         'bottom' => '<input type="hidden" name="pluginenabler" value="true"/>'
     );
 
-    $retval .= ADMIN_listArray('plugins', 'PLUGINS_getListField', $header_arr,
+    $T->set_var('plugin_list',ADMIN_listArray('plugins', 'PLUGINS_getListField', $header_arr,
                             $text_arr, $data_arr, $defsort_arr, '', $token,
-                            $options_arr, $form_arr);
+                            $options_arr, $form_arr));
 
-    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+    $T->set_var('block_end',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
 
+    $retval = $T->parse('output','admin-list');
     return $retval;
 }
 
