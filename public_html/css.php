@@ -26,6 +26,7 @@
 // | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
+error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
 if (!defined ('GVERSION')) {
     define('GVERSION', '1.5.0');
@@ -35,19 +36,20 @@ if ( !isset($_GET['t']) ) {
 	exit;
 }
 if ( !isset($_CONF['css_cache_filename']) ) {
-    $_CONF['css_cache_filename'] = 'stylecache_';
+    $_CONF['css_cache_filename'] = 'style.cache';
 }
 $theme = preg_replace( '/[^a-zA-Z0-9\-_\.]/', '',$_GET['t'] );
 $theme = str_replace( '..', '', $theme );
 if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
     $filename = './'.$_CONF['css_cache_filename'].$theme.'.css';
 } else {
-    $filename = $_CONF['path'] . '/data/layout_cache/'.$_CONF['css_cache_filename'].$theme.'.css';
+    $filename = $_CONF['path'] . 'data/layout_cache/'.$_CONF['css_cache_filename'].$theme.'.css';
 }
-$buf = '';
 if ( @file_exists ($filename) ) {
     header('Content-type: text/css');
-    $buf = file_get_contents($filename);
-    echo $buf;
+    ob_clean();
+    flush();
+    readfile($filename);
 }
+exit;
 ?>
