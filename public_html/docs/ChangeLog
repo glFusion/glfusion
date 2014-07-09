@@ -20,8 +20,19 @@ v1.5.0
 - Privacy policy and Terms of use now implemented as static pages
 - Support for PHP v5.3+ unlimited post size
 
+v1.4.3
+------
+- Media Gallery - implemented a fix where data was being written to an
+  un-initialized object causing an error on PHP v5.4+ systems.
+- Implemented file locking when creating the style cache file to ensure
+  multiple instances do not cause a file write error
+
+
 v1.4.2
 ------
+- Ensure CKEditor's Media Gallery browser window has scrollbars and is
+  resizable
+- Improved GD2 image resizing to preserve transparency
 - Fixed issue where Media Gallery would timeout on album admin screens
 - Fixed error in youtube autotag where it would log parse errors
 - Reworked how embedded story images are handled
