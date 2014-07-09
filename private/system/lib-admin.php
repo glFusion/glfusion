@@ -862,10 +862,12 @@ function ADMIN_createMenuHeader($menu_arr, $text, $title = '', $icon = '')
     $attr = array('class' => 'admin-menu-item');
 
     $admin_templates->set_block('top_menu', 'menu_items', 'menuvar');
+    $admin_templates->set_block('top_menu', 'alt_menu_items', 'alt_menuvar');
     for ($i = 0; $i < count($menu_arr); $i++) { # iterate through menu
         $admin_templates->set_var('menu_item_url',COM_buildURL($menu_arr[$i]['url']));
         $admin_templates->set_var('menu_item_text',$menu_arr[$i]['text']);
         $admin_templates->parse('menuvar', 'menu_items',true);
+        $admin_templates->parse('alt_menuvar', 'alt_menu_items',true);
     }
     if (!empty ($icon)) {
         $attr = array('class' => 'admin-menu-icon');
