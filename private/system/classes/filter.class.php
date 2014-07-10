@@ -344,7 +344,10 @@ class sanitizer
     {
         global $_CONF,$_SYSTEM;
 
+        if ( !isset($_SYSTEM['debug_html_filter']) ) $_SYSTEM['debug_html_filter'] = false;
+
         if ( isset( $_CONF['skip_html_filter_for_root'] ) && ( $_CONF['skip_html_filter_for_root'] == 1 ) && SEC_inGroup( 'Root' )) {
+            if ( $_SYSTEM['debug_html_filter'] == true ) COM_errorLog("HTMLFILTER: Skipped for root user");
             return $str;
         }
         $configArray = explode(',',$this->allowedElements);
@@ -364,8 +367,21 @@ class sanitizer
         $config->set('AutoFormat.Linkify',false);
         $config->set('HTML.SafeObject',true);
         $config->set('Output.FlashCompat',true);
+        if ( $_SYSTEM['debug_html_filter'] == true ) $config->set('Core.CollectErrors',true);
         $purifier = new HTMLPurifier($config);
         $clean_html = $purifier->purify($str);
+
+        if (  $_SYSTEM['debug_html_filter'] == true  ) {
+            $e = $purifier->context->get('ErrorCollector');
+            $errArray = $e->getRaw();
+            if (is_array($errArray)) {
+                foreach ($errArray as $error) {
+                    if ( $error[0] == 1 ) {
+                        COM_errorLog("HTMLFILTER: " .  $error[2]);
+                    }
+                }
+            }
+        }
         return $clean_html;
     }
 
