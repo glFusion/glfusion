@@ -6,8 +6,6 @@
 // |                                                                          |
 // | glFusion Calendar Plugin administration page.                            |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -1125,7 +1123,7 @@ switch ($action) {
 
     default:
         if (($action == 'cancel') && ($type == 'submission')) {
-            $display = COM_refresh($_CONF['site_admin_url'] . '/moderation.php');
+            echo COM_refresh($_CONF['site_admin_url'] . '/moderation.php');
         } else {
             $display .= COM_siteHeader ('menu', $LANG_CAL_ADMIN[11]);
             if(isset($msg)) {
