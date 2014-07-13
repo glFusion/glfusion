@@ -1140,6 +1140,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c = config::get_instance();
             $current_fusion_version = '1.4.2';
         case '1.4.2' :
+        case '1.4.3' :
             $_SQL[] = "ALTER TABLE {$_TABLES['tokens']} CHANGE `urlfor` `urlfor` VARCHAR( 1024 ) NOT NULL";
             $_SQL[] = "ALTER TABLE  {$_TABLES['comments']} CHANGE  `ipaddress`  `ipaddress` VARCHAR( 45 ) NOT NULL DEFAULT  ''";
             $_SQL[] = "ALTER TABLE  {$_TABLES['rating_votes']} CHANGE  `ip_address`  `ip_address` VARCHAR( 45 ) NOT NULL";
