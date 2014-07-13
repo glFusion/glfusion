@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.5.0
 ------
+- Implemented HTML filter debug option
 - Fixed user submitted story form to show allowed items at the bottom
   of the form
 - Updated CKEditor v4.4.0
