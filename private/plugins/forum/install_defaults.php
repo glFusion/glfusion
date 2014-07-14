@@ -186,7 +186,7 @@ $_FF_DEFAULT['inlineimageypes']    = array(
 );
 $_FF_DEFAULT['enable_fm_integration'] = false;
 $_FF_DEFAULT['allow_memberlist']      = false;
-$_FF_DEFAULT['allowed_html'] = 'p,b,i,strong,em,br,pre,code,img,ol,ul,li,u';
+$_FF_DEFAULT['allowed_html'] = 'p,b,i,strong,em,br,pre,code,img[src|alt|style|title],ol,ul,li,u';
 
 /**
 * the Forum plugin's config array

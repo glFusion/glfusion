@@ -1,0 +1,5 @@
+{block_start}
+{admin_menu}
+{upload_form}
+{plugin_list}
+{block_end}

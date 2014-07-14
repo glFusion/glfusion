@@ -1,9 +1,15 @@
 {# begin {templatelocation} #}
+{block_start}
+{admin_menu}
+{status_text}
 <table style="width:100%;border:none;" cellspacing="1" cellpadding="0">
-    <tr>
-        <td class="pluginHeader aligncenter" style="padding:5px;">[&nbsp;<a href="{phpself}?mode=add&amp;type=category">{addcat}</a>&nbsp;]</td>
-    </tr>
+  <tr>
+    <td class="pluginHeader aligncenter" style="padding:5px;">
+      [&nbsp;<a href="{phpself}?mode=addcat&amp;type=category">{addcat}</a>&nbsp;]
+    </td>
+  </tr>
 </table>
+
 {# start board_categories.thtml #}
 <!-- BEGIN catrows -->
 <table width="100%" border="0" cellspacing="0" cellpadding="3" style="margin-top:10px; margin-bottom:20px;">
@@ -25,7 +31,6 @@
           <td class="pluginCellTitle" style="width:15%;padding-left:5px">{LANG_action}</td>
           <td class="pluginCellTitle" style="wdith:70%;">{LANG_forumdesc}</td>
           <td class="pluginCellTitle" style="width:5%;white-space:nowrap;">{LANG_posts}</td>
-          <td class="pluginCellTitle" style="width:10%;">{LANG_order}</td>
         </tr>
 {# board_forums.thtml here #}
         {forum_records}
@@ -38,21 +43,16 @@
                 </td>
                 <td style="white-space:nowrap;">
                   <form action="{phpself}" method="post">
-                    <input type="hidden" name="type" value="forum" />
-                    <input type="hidden" name="forumname" value="{forumname}" />
-                    <input type="hidden" name="id" value="{forumid}" />
-                    <input type="submit" name="mode" value="{delete}" />
-                    <input type="submit" name="mode" value="{edit}" />
-                  </form>
-                </td>
-              </tr>
-              <tr>
-                <td colspan="2" style="padding: 2px 0px 2px 2px;">
-                  <form action="{phpself}" method="post">
-                    <input type="hidden" name="type" value="forum" />
-                    <input type="hidden" name="forumname" value="{forumname}" />
-                    <input type="hidden" name="id" value="{forumid}" />
-                    <input type="submit" name="mode" value="{resync}" />
+                    <input type="hidden" name="type" value="forum">
+                    <input type="hidden" name="forumname" value="{forumname}">
+                    <input type="hidden" name="id" value="{forumid}">
+                    <select class="uk-form-width-medium" id="mode" name="mode" onchange="javascript:submit();">
+                      <option value="#">{$LANG_GF93[forum_options]}</option>
+                      <option value="editforum">{edit}</option>
+                      <option value="resyncforum">{resync}</option>
+                      <option value="delforum">{delete}</option>
+                    </select>
+                    <input type="submit" value="Go">
                   </form>
                 </td>
               </tr>
@@ -63,16 +63,7 @@
             <br />{forumdscp}
           </td>
           <td class="pluginCellText pluginCellFill aligncenter" style="white-space:nowrap;">{messagecount}</td>
-          <td class="pluginCellText pluginCellFill" style="white-space:nowrap;">
-            <form action="{phpself}" method="post">
-              <input type="hidden" name="type" value="forum" />
-              <input type="hidden" name="mode" value="{edit}" />
-              <input type="hidden" name="what" value="order" />
-              <input type="hidden" name="id" value="{forumid}" />
-              <input type="text" size="2" name="order" value="{forumorder}" />&nbsp;
-              <input type="submit" name="submit" value="{submit}" />
-            </form>
-          </td>
+
         </tr>
 <!-- END forumrows -->
 {# end board_forums.thtml #}
@@ -84,24 +75,28 @@
       <table style="width:100%;border:none;" cellspacing="1" cellpadding="4">
         <tr>
           <td style="white-space:nowrap;">
-            <form action="{phpself}" method="post">
-              <input type="hidden" name="type" value="category" />
-              <input type="hidden" name="forumname" value="{forumname}" />
-              <input type="hidden" name="id" value="{catid}" />
-              <fieldset>
-                <legend style="padding-bottom:5px;">Category</legend>
-                <input type="submit" name="mode" value="{delete}" />&nbsp;
-                <input type="submit" name="mode" value="{edit}" />&nbsp;
-                <input type="submit" name="mode" value="{resync_cat}" style="display:{hide_options};" />
-              </fieldset>
-            </form>
+      <form class="uk-form" action="{s_form_action}" method="post">
+        <input type="hidden" name="type" value="category">
+        <input type="hidden" name="forumname" value="{forumname}">
+        <input type="hidden" name="id" value="{catid}">
+        <select class="uk-form-width-medium" id="mode" name="mode" onchange="javascript:submit();">
+          <option value="#">Category Options...</option>
+          <option value="editcat">{edit}</option>
+          <option value="resynccat">{resync_cat}</option>
+          <option value="delcat">{delete}</option>
+        </select>
+      </form>
+
+
           </td>
-          <td style="width:60%;white-space:nowrap;" class="alignright">[&nbsp;<a href="{phpself}?mode=add&amp;type=forum&amp;category={catid}&amp;catname={catname}">{addforum}</a>&nbsp;]&nbsp;&nbsp;<br /></td>
+          <td style="width:60%;white-space:nowrap;" class="alignright">
+          [&nbsp;<a href="{phpself}?mode=addforum&amp;category={catid}">{addforum}</a>&nbsp;]&nbsp;&nbsp;<br />
+          </td>
         </tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- END catrows -->
-{# end board_categories.thtml #}
+{block_end}
 {# end {templatelocation} #}

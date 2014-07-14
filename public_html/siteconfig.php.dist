@@ -84,6 +84,15 @@ $_SYSTEM['rootdebug']        = false;
 $_SYSTEM['debug_oauth']      = false;
 
 // +--------------------------------------------------------------------------+
+// | HTML Filter debug - Log details on filtered elements.                    |
+// |                                                                          |                                                                     |
+// | If this is set to true - the HTML filter will log details on which       |
+// | HTML elements and attributes are filtered.                               |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['debug_html_filter']      = false;
+
+// +--------------------------------------------------------------------------+
 // | No Fail SQL - Do not fail (crash) if SQL errors are encountered          |
 // |                                                                          |
 // | Use this option if your site becomes unavailable because of the          |

@@ -1,5 +1,11 @@
 {# begin {templatelocation} #}
-<form action="{phpself}" method="post" style="margin:0px;">
+{block_start}
+{admin_menu}
+<form action="{s_form_action}" method="post" style="margin:0px;">
+  <input type="hidden" name="id" value="{id}">
+  <input type="hidden" name="mode" value="{mode}">
+  <input type="hidden" name="category" value="{category_id}">
+
   <table cellspacing="1" cellpadding="0" style="width:100%;border:none;margin-top:10px;" class="plugin">
     <tr>
       <td class="pluginTitle" style="padding-left:10px;">{title}</td>
@@ -25,6 +31,16 @@
               <input type="text" name="dscp" value="{forum_dscp}" size="80" />
             </td>
           </tr>
+
+          <tr>
+            <td class="pluginCellSubTitle">Display After</td>
+            <td class="pluginCellText pluginCellFill">
+                <select name="order" id="order">
+                {order_list}
+                </select>
+            </td>
+          </tr>
+
           <tr>
             <td class="pluginCellSubTitle">{LANG_GROUPACCESS}</td>
             <td class="pluginCellText pluginCellFill">
@@ -66,12 +82,8 @@
         <table style="width:100%;border:none;" cellspacing="1" cellpadding="3">
           <tr>
             <td class="aligncenter">
-              <input type="hidden" name="type" value="forum" />
-              <input type="hidden" name="confirm" value="{confirm}" />
-              <input type="hidden" name="id" value="{id}" />
-              <input type="hidden" name="mode" value="{mode}" />
-              <input type="submit" name="submit" value="{LANG_SAVE}" />&nbsp;
-              <input type="button" value="{LANG_CANCEL}" onclick="javascript:history.go(-1)" />
+              <input type="submit" name="submit" value="{LANG_SAVE}">&nbsp;
+              <input type="submit" name="cancel" value="{LANG_CANCEL}">
             </td>
           </tr>
         </table>
@@ -79,4 +91,5 @@
     </tr>
   </table>
 </form>
+{block_end}
 {# end {templatelocation} #}

@@ -67,36 +67,7 @@ function forum_admin_list()
 
     $admin_list->set_var('block_start',COM_startBlock($LANG_GF91['gfstats']));
 
-    $navbarMenu = array(
-        $LANG_GF06['1']   => $_CONF['site_admin_url'] .'/plugins/forum/index.php',
-        $LANG_GF06['3']   => $_CONF['site_admin_url'] .'/plugins/forum/boards.php',
-        $LANG_GF06['4']   => $_CONF['site_admin_url'] .'/plugins/forum/mods.php',
-        $LANG_GF06['5']   => $_CONF['site_admin_url'] .'/plugins/forum/migrate.php',
-        $LANG_GF06['6']   => $_CONF['site_admin_url'] .'/plugins/forum/messages.php',
-        $LANG_GF06['7']   => $_CONF['site_admin_url'] .'/plugins/forum/ips.php',
-    );
-    if ( $_FF_CONF['enable_user_rating_system'] ) {
-        $navbarMenu[$LANG_GF06['8']] = $_CONF['site_admin_url'] .'/plugins/forum/rating.php';
-    }
-    $navbarMenu[$LANG_GF06['9']] = $_CONF['site_admin_url'] .'/plugins/forum/import.php';
-
-    for ( $i=1; $i <= count($navbarMenu); $i++ )  {
-        $parms = explode( "=",current($navbarMenu) );
-        if ( key($navbarMenu) != $selected ) {
-            $url = current($navbarMenu);
-            $label = key($navbarMenu);
-            $menu_arr = array_merge($menu_arr,array (
-                array('url' => $url,
-                      'text'=> $label)
-            ));
-        }
-        next($navbarMenu);
-    }
-
-    $menu_arr = array_merge($menu_arr,array (
-        array('url' => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home'])
-    ));
+    $menu_arr = FF_adminNav($LANG_GF06['1']);
 
     $admin_list->set_var('admin_menu',ADMIN_createMenu($menu_arr,$LANG_GF00['instructions'],
           $_CONF['site_url'] . '/forum/images/forum.png')

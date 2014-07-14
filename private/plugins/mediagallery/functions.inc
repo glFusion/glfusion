@@ -82,7 +82,7 @@ require_once $_CONF['path'].'plugins/mediagallery/include/classAlbum.php';
 $mg_installed_version = $_PLUGIN_INFO['mediagallery'];
 
 // This is a list of valid extensions for image media thumbnails / display images
-$_MG_CONF['validExtensions'] = array('.jpg','.png','.gif','.bmp');
+$_MG_CONF['validExtensions'] = array('.jpg','.jpeg','.png','.gif','.bmp');
 
 $swfjsinclude = 0;
 $themeStyle = '';

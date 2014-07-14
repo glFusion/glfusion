@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Forum Admin functions                                                    |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -56,6 +54,48 @@ if ( $_FF_CONF['enable_user_rating_system'] ) {
     $navbarMenu[$LANG_GF06['8']] = $_CONF['site_admin_url'] .'/plugins/forum/rating.php';
 }
 $navbarMenu[$LANG_GF06['9']] = $_CONF['site_admin_url'] .'/plugins/forum/import.php';
+
+
+function FF_adminNav( $selected = '' )
+{
+    global $_CONF, $_FF_CONF, $LANG_GF06, $LANG_ADMIN;
+
+    $menu_arr = array();
+
+    $navbarMenu = array(
+        $LANG_GF06['1']   => $_CONF['site_admin_url'] .'/plugins/forum/index.php',
+        $LANG_GF06['3']   => $_CONF['site_admin_url'] .'/plugins/forum/boards.php',
+        $LANG_GF06['4']   => $_CONF['site_admin_url'] .'/plugins/forum/mods.php',
+        $LANG_GF06['5']   => $_CONF['site_admin_url'] .'/plugins/forum/migrate.php',
+        $LANG_GF06['6']   => $_CONF['site_admin_url'] .'/plugins/forum/messages.php',
+        $LANG_GF06['7']   => $_CONF['site_admin_url'] .'/plugins/forum/ips.php',
+    );
+    if ( $_FF_CONF['enable_user_rating_system'] ) {
+        $navbarMenu[$LANG_GF06['8']] = $_CONF['site_admin_url'] .'/plugins/forum/rating.php';
+    }
+    $navbarMenu[$LANG_GF06['9']] = $_CONF['site_admin_url'] .'/plugins/forum/import.php';
+
+    for ( $i=1; $i <= count($navbarMenu); $i++ )  {
+        $parms = explode( "=",current($navbarMenu) );
+        if ( key($navbarMenu) != $selected ) {
+            $url = current($navbarMenu);
+            $label = key($navbarMenu);
+            $menu_arr = array_merge($menu_arr,array (
+                array('url' => $url,
+                      'text'=> $label)
+            ));
+        }
+        next($navbarMenu);
+    }
+
+    $menu_arr = array_merge($menu_arr,array (
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    ));
+
+    return $menu_arr;
+}
+
 
 // Site admin can add common footer code here
 function FF_adminfooter() {
@@ -127,6 +167,9 @@ function gf_resyncforum($id) {
 * @param        string     $order       Optional Don't show in newposts and centerblock
 * @return       string                  Returns the Forum ID for the new forum if successful
 */
+
+//DEPRECIATED - can remove from code.
+
 function ff_addForum($name,$category,$dscp="",$order="",$grp_id=2,$is_readonly=0,$is_hidden=0,$no_newposts=0,$attachmentgroup=1) {
     global $_TABLES, $_USER;
 

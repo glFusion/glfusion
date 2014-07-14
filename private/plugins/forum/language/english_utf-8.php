@@ -704,7 +704,7 @@ $LANG_GF92 = array(
 
 // Board Admin
 $LANG_GF93 = array(
-    'gfboard' => 'Discussion Forum Board Admin',
+    'gfboard' => 'Forum Admin',
     'vieworder' => 'View Order',
     'addcat' => 'Add Forum Category',
     'addforum' => 'Add A Forum',
@@ -718,8 +718,8 @@ $LANG_GF93 = array(
     'forumadded' => 'Forum Added.',
     'forumaddError' => 'Error Adding Forum.',
     'forumdeleted' => 'Forum Deleted',
-    'forumedited' => 'Forum Edited',
-    'forumordered' => 'Forum Order Edited',
+    'forumedited' => 'Forum Details Successfully Saved',
+    'forumordered' => 'Forum Order Saved',
     'transfer' => 'Transfering to board index..',
     'back' => 'Back',
     'addnote' => 'Note: You can edit these values.',
@@ -758,7 +758,13 @@ $LANG_GF93 = array(
     'hiddendscp' => 'Forum does not show in the forum index',
     'hideposts' => 'Hide New posts',
     'hidepostsdscp' => 'Updates will not show in the New Posts Blocks or RSS Feeds',
-    'attachaccess' => 'Able to add attachments'
+    'attachaccess' => 'Able to add attachments',
+    'name_blank' => 'Name cannot be blank',
+    'desc_blank' => 'Description cannot be blank',
+    'category_resynced' => 'All forums in the category have been resynced',
+    'forum_resynced' => 'The Forum has been resynced',
+    'forum_options'  => 'Forum Options...',
+    'category_options' => 'Category Options...',
 );
 
 $LANG_GF94 = array(
