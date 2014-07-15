@@ -6518,6 +6518,7 @@ function cms_writeFile($filename, $tempfile, $data, $mutex='glfusion.lck')
             flock($ft, LOCK_UN);
             fclose($ft);
             if (rename($tempfile, $filename)) {
+                @chmod($filename, 0644);
                 $retval=true; // The only path to success
             } else { // The whole process failed.
                 unlink($tempfile);
