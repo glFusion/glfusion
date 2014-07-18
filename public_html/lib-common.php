@@ -6478,8 +6478,8 @@ function css_out()
     if ($_CONF['compress_css']){
         $css = css_compress($css);
     }
-
     // save cache file
+
 /* --- remove for testing
     $fp = @fopen($cacheFile,'w');
     if ( $fp !== false ) {
@@ -6491,34 +6491,32 @@ function css_out()
         fclose($fp);
     }
 --- */
-
-    $rc = cms_writeFile($cacheFile,'',$css);
-    if ( $rc === false ) cms_writeFile($cacheFile,'',$css,'glfusion_css.lck');
+    $rc = writeFile_lck($cacheFile,'',$css,'glfusion_css.lck');
+    if ( $rc === false ) writeFile_lck($cacheFile,'',$css,'glfusion_css.lck');
 
     return $cacheURL;
 }
 
 
-// currently depreciated...
-function cms_writeFile($filename, $tempfile, $data, $mutex='glfusion.lck')
+function writeFile_lck($filename, $tempfile, $data, $mutex='glfusion.lck')
 {
     global $_CONF;
 
     $retval=false; //assume failure of function
-    if(! $tempfile) {
+    if (! $tempfile) {
         $tempfile = tempnam(dirname($filename),basename($filename));
     }
     $fullmutex = $_CONF['path_data'] . $mutex;
 
-    $fm=fopen($fullmutex, 'w');
+    $fm = fopen($fullmutex, 'w');
     if (flock($fm, LOCK_EX)) {
         $ft = fopen($tempfile, 'w');
         if (flock($ft, LOCK_EX)) {
             fwrite($ft, $data);
             flock($ft, LOCK_UN);
             fclose($ft);
+            @chmod($tempfile, 0644);
             if (rename($tempfile, $filename)) {
-                @chmod($filename, 0644);
                 $retval=true; // The only path to success
             } else { // The whole process failed.
                 unlink($tempfile);
