@@ -6,13 +6,11 @@
 // |                                                                          |
 // | Controls the UI and database for configuration settings                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2007-2008 by the following authors:                        |
-// |                                                                          |
 // | Authors: Aaron Blankstein  - kantai AT gmail DOT com                     |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
@@ -579,17 +577,17 @@ class config {
         $t->set_file(array('main' => 'configuration.thtml',
                            'menugroup' => 'menu_element.thtml'));
 
-        $t->set_var('site_url', $_CONF['site_url']);
-        $t->set_var('site_admin_url', $_CONF['site_admin_url']);
-        $t->set_var('layout_url', $_CONF['layout_url']);
-        $t->set_var('xhtml', XHTML);
-        $t->set_var('gltoken_name', CSRF_TOKEN);
-        $t->set_var('gltoken', SEC_createToken());
-
+        $token = SEC_createToken();
+        $t->set_var('sec_token_name', CSRF_TOKEN);
+        $t->set_var('sec_token',$token);
         $t->set_var('lang_save_changes', $LANG_CONFIG['save_changes']);
         $t->set_var('lang_reset_form', $LANG_CONFIG['reset_form']);
         $t->set_var('lang_changes_made', $LANG_CONFIG['changes_made']);
 
+// depreciated
+        $t->set_var('gltoken_name', CSRF_TOKEN);
+        $t->set_var('gltoken', $token);
+// end decpreciated
         $t->set_var('open_group', $grp);
 
         $groups = $this->_get_groups();
@@ -643,10 +641,20 @@ class config {
         }
 
         $t->set_var('open_sg', $sg);
+
         $t->set_block('main','fieldset','sg_contents');
         $t->set_block('fieldset', 'notes', 'fs_notes');
-
+        $t->set_block('main','tabs','sg_tabs');
         $ext_info = $this->_get_extended($sg, $grp);
+
+        $docUrl = $this->_getConfigHelpDocument($grp,'');
+
+        if ( $docUrl != '' ) {
+            $t->set_var('confighelpurl',$docUrl);
+        } else {
+            $t->unset_var('confighelpurl');
+        }
+
         if ( is_array($ext_info) ) {
             foreach ($ext_info as $fset => $params) {
                 $fs_contents = '';
@@ -707,13 +715,18 @@ class config {
                         "type = 'fieldset' AND fieldset = $fs_id AND group_name = '$group' AND subgroup=".$sg);
         if (empty($fs_index) && isset($LANG_fs[$group][$fs_id])) {
             $t->set_var('fs_display', $LANG_fs[$group][$fs_id]);
+            $t->set_var('tab',$LANG_fs[$group][$fs_id]);
         } else if (isset($LANG_fs[$group][$fs_index])) {
             $t->set_var('fs_display', $LANG_fs[$group][$fs_index]);
+            $t->set_var('tab', $LANG_fs[$group][$fs_index]);
         } else {
             $t->set_var('fs_display', $fs_index);
+            $t->set_var('tab',$fs_index);
         }
+        $t->set_var('index',$fs_index);
         $t->set_var('fs_notes', '');
         $t->parse('sg_contents', 'fieldset', true);
+        $t->parse('sg_tabs', 'tabs',true);
     }
 
     function _UI_perm_denied()
@@ -749,11 +762,6 @@ class config {
                 $t->set_block('element', $block);
             }
         }
-
-        $t->set_var('site_url', $_CONF['site_url']);
-        $t->set_var('site_admin_url', $_CONF['site_admin_url']);
-        $t->set_var('layout_url', $_CONF['layout_url']);
-        $t->set_var('xhtml', XHTML);
 
         $t->set_var('lang_restore', $LANG_CONFIG['restore']);
         $t->set_var('lang_enable', $LANG_CONFIG['enable']);
@@ -791,6 +799,13 @@ class config {
                 $t->set_var('doc_link', $helpUrl);
             } else {
                 $t->set_var('doc_link', '');
+            }
+
+            $docUrl = $this->_getConfigHelpDocument($group, $o);
+            if ( $docUrl != '' ) {
+                $t->set_var('cfg_item',$o);
+            } else {
+                $t->unset_var('cfg_item');
             }
         }
         if ($type == "unset") {
@@ -1078,6 +1093,42 @@ class config {
         } else {
             DB_query($sql,$noerror);
         }
+    }
+
+    function _getConfigHelpDocument($group, $option)
+    {
+        global $_CONF;
+
+        static $coreUrl;
+
+        $retval = '';
+
+        $descUrl = '';
+
+        $doclang = COM_getLanguageName();
+
+        if ($group == 'Core') {
+            if (isset($coreUrl)) {
+                $descUrl = $coreUrl;
+            } elseif (!empty($GLOBALS['_CONF']['site_url']) &&
+                    !empty($GLOBALS['_CONF']['path_html'])) {
+                $baseUrl = $GLOBALS['_CONF']['site_url'];
+                $cfg = 'docs/' . $doclang . '/config.html';
+                if (@file_exists($GLOBALS['_CONF']['path_html'] . $cfg)) {
+                    $descUrl = $baseUrl . '/' . $cfg;
+                } else {
+                    $descUrl = $baseUrl . '/docs/english/config.html';
+                }
+                $coreUrl = $descUrl;
+            } else {
+                $descUrl = 'http://www.glfusion.org/docs/english/config.html';
+            }
+            $retval = $descUrl;
+        } else {
+            list ($doc_url, $popuptype) = PLG_getConfigElementHelp($group, $option, $doclang );
+            $retval = $doc_url;
+        }
+        return $retval;
     }
 
     /**

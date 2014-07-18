@@ -143,7 +143,7 @@ class OAuthConsumer {
 
     public function get_userinfo() {
 
-         if (strlen($this->client->access_token)) {
+        if (strlen($this->client->access_token)) {
     	    $success = $this->client->CallAPI(
     		    $this->api_url,
     			'GET', $this->q_api, array('FailOnAccessError'=>true), $user);
