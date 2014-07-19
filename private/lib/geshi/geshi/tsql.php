@@ -4,7 +4,7 @@
  * --------
  * Author: Duncan Lock (dunc@dflock.co.uk)
  * Copyright: (c) 2006 Duncan Lock (http://dflock.co.uk/), Nigel McNie (http://qbnz.com/highlighter)
- * Release Version: 1.0.8.4
+ * Release Version: 1.0.8.11
  * Date Started: 2005/11/22
  *
  * T-SQL language file for GeSHi.
@@ -41,21 +41,21 @@ $language_data = array (
     'LANG_NAME' => 'T-SQL',
     'COMMENT_SINGLE' => array(1 => '--'),
     'COMMENT_MULTI' => array('/*' => '*/'),
-    'CASE_KEYWORDS' => GESHI_CAPS_UPPER,
+    'CASE_KEYWORDS' => GESHI_CAPS_NO_CHANGE,
     'QUOTEMARKS' => array("'", '"'),
-    'ESCAPE_CHAR' => '\\',
+    'ESCAPE_CHAR' => '',
     'KEYWORDS' => array(
         1 => array(
             // Datatypes
-            'bigint', 'int', 'smallint', 'tinyint', 'bit', 'decimal', 'numeric', 'money',
-            'smallmoney', 'float', 'real', 'datetime', 'smalldatetime', 'char', 'varchar',
-            'text', 'nchar', 'nvarchar', 'ntext', 'binary', 'varbinary', 'image', 'cursor',
-            'sql_variant', 'table', 'timestamp', 'uniqueidentifier',
+            'bigint', 'tinyint', 'money',
+            'smallmoney', 'datetime', 'smalldatetime',
+            'text', 'nvarchar', 'ntext', 'varbinary', 'image',
+            'sql_variant', 'uniqueidentifier',
 
             // Keywords
             'ABSOLUTE', 'ACTION', 'ADD', 'ADMIN', 'AFTER', 'AGGREGATE', 'ALIAS', 'ALLOCATE', 'ALTER', 'ARE', 'ARRAY', 'AS',
             'ASC', 'ASSERTION', 'AT', 'AUTHORIZATION', 'BACKUP', 'BEFORE', 'BEGIN', 'BINARY', 'BIT', 'BLOB', 'BOOLEAN', 'BOTH', 'BREADTH',
-            'BREAK', 'BROWSE', 'BULK', 'BY', 'CALL', 'CASCADE', 'CASCADED', 'CASE', 'CAST', 'CATALOG', 'CHAR', 'CHARACTER', 'CHECK', 'CHECKPOINT',
+            'BREAK', 'BROWSE', 'BULK', 'BY', 'CALL', 'CASCADE', 'CASCADED', 'CASE', 'CAST', 'CATALOG', 'CATCH', 'CHAR', 'CHARACTER', 'CHECK', 'CHECKPOINT',
             'CLASS', 'CLOB', 'CLOSE', 'CLUSTERED', 'COALESCE', 'COLLATE', 'COLLATION', 'COLUMN', 'COMMIT', 'COMPLETION', 'COMPUTE', 'CONNECT',
             'CONNECTION', 'CONSTRAINT', 'CONSTRAINTS', 'CONSTRUCTOR', 'CONTAINS', 'CONTAINSTABLE', 'CONTINUE', 'CONVERT', 'CORRESPONDING', 'CREATE',
             'CUBE', 'CURRENT', 'CURRENT_DATE', 'CURRENT_PATH', 'CURRENT_ROLE', 'CURRENT_TIME', 'CURRENT_TIMESTAMP', 'CURRENT_USER',
@@ -79,7 +79,7 @@ $language_data = array (
             'SEQUENCE', 'SESSION', 'SESSION_USER', 'SET', 'SETS', 'SETUSER', 'SHUTDOWN', 'SIZE', 'SMALLINT', 'SPACE', 'SPECIFIC',
             'SPECIFICTYPE', 'SQL', 'SQLEXCEPTION', 'SQLSTATE', 'SQLWARNING', 'START', 'STATE', 'STATEMENT', 'STATIC', 'STATISTICS', 'STRUCTURE',
             'SYSTEM_USER', 'TABLE', 'TEMPORARY', 'TERMINATE', 'TEXTSIZE', 'THAN', 'THEN', 'TIME', 'TIMESTAMP', 'TIMEZONE_HOUR', 'TIMEZONE_MINUTE',
-            'TO', 'TOP', 'TRAILING', 'TRAN', 'TRANSACTION', 'TRANSLATION', 'TREAT', 'TRIGGER', 'TRUE', 'TRUNCATE', 'TSEQUAL', 'UNDER', 'UNION',
+            'TO', 'TOP', 'TRAILING', 'TRAN', 'TRANSACTION', 'TRANSLATION', 'TREAT', 'TRIGGER', 'TRUE', 'TRUNCATE', 'TRY', 'TSEQUAL', 'UNDER', 'UNION',
             'UNIQUE', 'UNKNOWN', 'UNNEST', 'UPDATE', 'UPDATETEXT', 'USAGE', 'USE', 'USER', 'USING', 'VALUE', 'VALUES', 'VARCHAR', 'VARIABLE',
             'VARYING', 'VIEW', 'WAITFOR', 'WHEN', 'WHENEVER', 'WHERE', 'WHILE', 'WITH', 'WITHOUT', 'WORK', 'WRITE', 'WRITETEXT', 'YEAR', 'ZONE',
             'UNCOMMITTED', 'NOCOUNT',
