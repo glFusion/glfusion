@@ -2,7 +2,7 @@
 /*
  * http.php
  *
- * @(#) $Header: /opt2/ena/metal/http/http.php,v 1.90 2013/02/20 11:45:28 mlemos Exp $
+ * @(#) $Header: /opt2/ena/metal/http/http.php,v 1.91 2013/07/14 13:21:38 mlemos Exp $
  *
  */
 
@@ -27,7 +27,7 @@ class http_class
 
 	var $protocol="http";
 	var $request_method="GET";
-	var $user_agent='httpclient (http://www.phpclasses.org/httpclient $Revision: 1.90 $)';
+	var $user_agent='httpclient (http://www.phpclasses.org/httpclient $Revision: 1.91 $)';
 	var $accept='';
 	var $authentication_mechanism="";
 	var $user;
@@ -1990,6 +1990,36 @@ class http_class
 			if(strlen($block) == 0)
 				return('');
 			$body .= $block;
+		}
+	}
+
+	Function ReadWholeReplyIntoTemporaryFile(&$file)
+	{
+		if(!($file = tmpfile()))
+			return $this->SetPHPError('could not create the temporary file to save the response', $php_errormsg, HTTP_CLIENT_ERROR_CANNOT_ACCESS_LOCAL_FILE);
+		for(;;)
+		{
+			if(strlen($error = $this->ReadReplyBody($block, $this->file_buffer_length)))
+			{
+				fclose($file);
+				return($error);
+			}
+			if(strlen($block) == 0)
+			{
+				if(@fseek($file, 0) != 0)
+				{
+					$error = $this->SetPHPError('could not seek to the beginning of temporary file with the response', $php_errormsg, HTTP_CLIENT_ERROR_CANNOT_ACCESS_LOCAL_FILE);
+					fclose($file);
+					return $error;
+				}
+				return('');
+			}
+			if(!@fwrite($file, $block))
+			{
+				$error = $this->SetPHPError('could not write to the temporary file to save the response', $php_errormsg, HTTP_CLIENT_ERROR_CANNOT_ACCESS_LOCAL_FILE);
+				fclose($file);
+				return $error;
+			}
 		}
 	}
 
