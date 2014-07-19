@@ -2,10 +2,17 @@ glFusion ChangeLog
 
 v1.5.0
 ------
+- Update 3rd party libraries to latest releases:
+   - geshi Library
+   - getID3
+   - htmLawed
+   - http class
+   - oauth class
+- Static Pages - fixed autotags so they do not override the page title
 - Implemented HTML filter debug option
 - Fixed user submitted story form to show allowed items at the bottom
   of the form
-- Updated CKEditor v4.4.0
+- Updated CKEditor v4.4.3
 - Bumped MySQL requirement to 5.0.1 as the minimum
 - Bumped PHP requirement to v5.3 as the minimum
 - New 'default' theme - based on Nouveau but uses jQuery as JS engine
@@ -23,6 +30,8 @@ v1.5.0
 
 v1.4.3
 ------
+- Static Pages - Do not override the page title when static page content
+  is provided via auto tag
 - Media Gallery - implemented a fix where data was being written to an
   un-initialized object causing an error on PHP v5.4+ systems.
 - Implemented file locking when creating the style cache file to ensure
