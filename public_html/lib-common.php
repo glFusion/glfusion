@@ -2534,6 +2534,7 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
     $mail = new PHPMailer();
     $mail->SetLanguage('en',$_CONF['path'].'lib/phpmailer/language/');
     $mail->CharSet = COM_getCharset();
+    $mail->XMailer = 'glFusion CMS v' . GVERSION . ' (http://www.glfusion.org)';
     if ($_CONF['mail_backend'] == 'smtp' ) {
         $mail->IsSMTP();
         $mail->Host     = $_CONF['mail_smtp_host'];
