@@ -6,10 +6,6 @@
 // |                                                                          |
 // | Does a quick security check of the glFusion install                      |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2002-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Dirk Haun            - dirk AT haun-online DOT de               |

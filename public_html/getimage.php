@@ -6,10 +6,6 @@
 // |                                                                          |
 // | Shows images outside of the webtree                                      |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2004-2009 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |

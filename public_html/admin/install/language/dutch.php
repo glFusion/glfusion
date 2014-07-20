@@ -6,14 +6,11 @@
 // |                                                                          |
 // | Dutch language file voor het glFusion installatiescript                  |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Theo Claassen          tc AT i2work DOT com                              |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |

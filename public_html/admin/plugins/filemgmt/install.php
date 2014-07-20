@@ -6,13 +6,11 @@
 // |                                                                          |
 // | This file installs and removes the data structures                       |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the FileMgmt Plugin for Geeklog                                 |
+// | Based on the FileMgmt Plugin                                             |
 // | Copyright (C) 2004 by Consult4Hire Inc.                                  |
 // | Author:                                                                  |
 // | Blaine Lang            blaine@portalparts.com                            |
