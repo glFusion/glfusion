@@ -2,10 +2,9 @@
 // +--------------------------------------------------------------------------+
 // | Media Gallery Plugin for glFusion CMS                                    |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
 // | Restores all Media Gallery configuration options install defaults        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2013 by the following authors:                        |
+// | Copyright (C) 2005-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+

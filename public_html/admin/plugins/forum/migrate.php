@@ -7,13 +7,10 @@
 // | Story Migration Utility for glFusion to the Forum                        |
 // | Forum admin program to migrate stories to the forum                      |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the Forum Plugin for Geeklog CMS                                |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Blaine Lang       - blaine AT portalparts DOT com               |

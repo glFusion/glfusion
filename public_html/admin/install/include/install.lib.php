@@ -11,7 +11,6 @@
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric Warren            eric AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2007-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Aaron Blankstein  - kantai AT gmail DOT com                     |

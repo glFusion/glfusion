@@ -6,14 +6,11 @@
 // |                                                                          |
 // | Archivo de lenguaje español para el script de instalación de glFusion    |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // | Derecho de autor (C) 2008-2009 por los siguientes autores:               |
 // |                                                                          |
 // | Marvin Ortega          maty1206 EN maryanlinux PUNTO com                 |
 // | Mark R. Evans          mark EN glfusion PUNTO org                        |
 // |                                                                          |
-// | Basado en el CMS Geeklog                                                 |
 // | Derecho de autor (C) 2000-2008 por los siguientes autores:               |
 // |                                                                          |
 // | Autores: AnTony Bibbs      - tony EN tonybibbs PUNTO com                 |

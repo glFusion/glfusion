@@ -6,8 +6,6 @@
 // |                                                                          |
 // | Initial configuration setup.                                             |
 // +--------------------------------------------------------------------------+
-// |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2007-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Aaron Blankstein  - kantai AT gmail DOT com                     |
