@@ -521,10 +521,10 @@ function BLOCK_list()
     $admin_list->set_var('admin_menu',ADMIN_createMenu(
         $menu_arr,
         $LANG21[25],
-        $_CONF['layout_url'] . '/images/icons/block.'. $_IMAGE_TYPE
+        $_CONF['layout_url'] . '/images/icons/block.png'
     ));
     $admin_list->set_var('admin_menu_header',ADMIN_createMenuHeader($menu_arr,$LANG21[25],$LANG21[19],
-        $_CONF['layout_url'] . '/images/icons/block.'. $_IMAGE_TYPE));
+        $_CONF['layout_url'] . '/images/icons/block.png'));
 
     BLOCK_reorder();
 
@@ -543,8 +543,17 @@ function BLOCK_list()
 
     $defsort_arr = array('field' => 'blockorder', 'direction' => 'asc');
 
+global $blockInterface;
+
+if ( isset($blockInterface['left']['title']) ) {
+    $label = $blockInterface['left']['title'];
+} else {
+    $label = $LANG21[40];
+}
+
+
     $text_arr = array(
-        'title'      => "$LANG21[19] ($LANG21[40])",
+        'title'      => "$LANG21[19] (".$label.")",
         'form_url'   => $_CONF['site_admin_url'] . '/block.php'
     );
 
@@ -582,8 +591,13 @@ function BLOCK_list()
         'default_filter' => COM_getPermSql ('AND')
     );
 
+if ( isset($blockInterface['right']['title']) ) {
+    $label = $blockInterface['right']['title'];
+} else {
+    $label = $LANG21[41];
+}
     $text_arr = array(
-        'title'      => "$LANG21[19] ($LANG21[41])",
+        'title'      => "$LANG21[19] (".$label.")",
         'form_url'   => $_CONF['site_admin_url'] . '/block.php'
     );
 
