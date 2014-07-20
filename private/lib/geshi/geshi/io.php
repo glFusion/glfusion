@@ -4,7 +4,7 @@
  * -------
  * Author: Nigel McNie (nigel@geshi.org)
  * Copyright: (c) 2006 Nigel McNie (http://qbnz.com/highlighter/)
- * Release Version: 1.0.8.4
+ * Release Version: 1.0.8.11
  * Date Started: 2006/09/23
  *
  * Io language file for GeSHi. Thanks to Johnathan Wright for the suggestion and help
@@ -67,7 +67,7 @@ $language_data = array (
             'Fnmatch', 'Font', 'Future', 'GL', 'GLE', 'GLScissor', 'GLU', 'GLUCylinder',
             'GLUQuadric', 'GLUSphere', 'GLUT', 'Host', 'Image', 'Importer', 'LinkList', 'List',
             'Lobby', 'Locals', 'MD5', 'MP3Decoder', 'MP3Encoder', 'Map', 'Message', 'Movie',
-            'NULL', 'Nil', 'Nop', 'Notification', 'Number', 'Object', 'OpenGL', 'Point', 'Protos',
+            'NULL', 'Nil', 'Nop', 'Notifiction', 'Number', 'Object', 'OpenGL', 'Point', 'Protos',
             'Regex', 'SGMLTag', 'SQLite', 'Server', 'ShowMessage', 'SleepyCat', 'SleepyCatCursor',
             'Socket', 'SocketManager', 'Sound', 'Soup', 'Store', 'String', 'Tree', 'UDPSender',
             'UDPReceiver', 'URL', 'User', 'Warning', 'WeakLink'
