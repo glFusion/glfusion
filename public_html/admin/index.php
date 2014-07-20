@@ -11,7 +11,6 @@
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Joe Mucchiello         joe AT throwingdice DOT com                       |
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Jason Whittenburg - jwhitten AT securitygeeks DOT com           |

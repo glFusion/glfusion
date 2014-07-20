@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Forum Plugin Community Moderation Setting administration                 |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2013 by the following authors:                        |
+// | Copyright (C) 2009-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Josh Pendergrass       cendent AT syndicate-gaming DOT com               |

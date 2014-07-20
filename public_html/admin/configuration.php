@@ -6,10 +6,10 @@
 // |                                                                          |
 // | Loads the administration UI and sends input to config.class              |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
+// | Copyright (C) 2009-2014 by the following authors:                        |
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
 // | Copyright (C) 2007-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Aaron Blankstein  - kantai AT gmail DOT com                     |

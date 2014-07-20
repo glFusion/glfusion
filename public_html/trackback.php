@@ -6,10 +6,6 @@
 // |                                                                          |
 // | Handle trackback pings for stories and plugins.                          |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2005-2008 by the following authors:                        |
 // |                                                                          |
 // | Author: Dirk Haun - dirk AT haun-online DOT de                           |

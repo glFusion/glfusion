@@ -6,10 +6,6 @@
 // |                                                                          |
 // | Change glFusion tables from MyISAM to InnoDB.                            |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Dirk Haun - dirk@haun-online.de                                 |

@@ -6,10 +6,6 @@
 // |                                                                          |
 // | Display current configuration settings                                   |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Jeffrey Schoolcraft  - dream AT dr3amscap3 DOT com              |
