@@ -1311,7 +1311,7 @@ class Template
                 }
             }
             if (is_scalar($var)) {
-                return htmlspecialchars($var);
+                return $var;
             }
         }
         if ($this->unknowns == 'comment') {

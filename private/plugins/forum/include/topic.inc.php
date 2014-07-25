@@ -413,6 +413,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
     }
 
     $topictemplate->set_var (array(
+            'user_name'     => isset($username) ? $username : 'Anonymous',
             'vote_html'     => $voteHTML,
             'csscode'       => $onetwo,
             'postmode'      => $showtopic['postmode'],
