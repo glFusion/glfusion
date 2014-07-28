@@ -1908,7 +1908,7 @@ function USER_batchAdmin()
         $usr_type = 'phantom';
     }
 
-    if (!in_array($usr_type,array('phantom','sort','old','recent')) ) {
+    if (!in_array($usr_type,array('phantom','old','recent','short')) ) {
         $usr_type = 'phantom';
     }
 
