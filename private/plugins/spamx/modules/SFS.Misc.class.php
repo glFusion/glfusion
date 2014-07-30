@@ -104,7 +104,7 @@ class SFSreg extends BaseCommand {
             if (!$result) return 0;     // invalid data, assume ok
 
             if ( isset($result['ip']) && $result['ip']['appears'] == 1 ) {
-                if ( $result['ip']['confidence'] > $_SPX_CONF['sfs_ip_confidence']) {
+                if ( $result['ip']['confidence'] > (float) $_SPX_CONF['sfs_ip_confidence']) {
                     SPAMX_log ($type . ' - Found ' . $type . ' matching ' . 'Stop Forum Spam (SFS)'.
                         'for IP '  . $ip . ' with confidence level of ' . $result['ip']['confidence'] .
                         $LANG_SX00['foundspam3'] . $_SERVER['REMOTE_ADDR']);
@@ -114,7 +114,7 @@ class SFSreg extends BaseCommand {
                 }
             }
             if ( isset($result['email']) && $result['email']['appears'] == 1 ) {
-                if ( $result['email']['confidence'] > $_SPX_CONF['sfs_email_confidence']) {
+                if ( $result['email']['confidence'] > (float) $_SPX_CONF['sfs_email_confidence']) {
                     SPAMX_log ($type . ' - Found ' . $type . ' matching ' . 'Stop Forum Spam (SFS)'.
                         'for email '  . $email . ' with confidence level of ' . $result['email']['confidence'] .
                         $LANG_SX00['foundspam3'] . $_SERVER['REMOTE_ADDR']);
@@ -122,7 +122,7 @@ class SFSreg extends BaseCommand {
                 }
             }
             if ( isset($result['username']) && $result['username']['appears'] == 1 ) {
-                if ( $result['username']['confidence'] > $_SPX_CONF['sfs_username_confidence']) {
+                if ( $result['username']['confidence'] > (float) $_SPX_CONF['sfs_username_confidence']) {
                     SPAMX_log ($type . ' - Found ' . $type . ' matching ' . 'Stop Forum Spam (SFS)'.
                         'for username '  . $username . ' with confidence level of ' . $result['username']['confidence'] .
                         $LANG_SX00['foundspam3'] . $_SERVER['REMOTE_ADDR']);

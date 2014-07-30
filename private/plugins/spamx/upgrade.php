@@ -44,6 +44,25 @@ function spamx_upgrade()
     $currentVersion = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='spamx'");
 
     switch( $currentVersion ) {
+        case '1.1.0' :
+        case '1.1.1' :
+        case '1.1.2' :
+        case '1.1.3' :
+        case '1.1.4' :
+        case '1.1.5' :
+        case '1.1.6' :
+        case '1.1.7' :
+        case '1.1.8' :
+        case '1.1.9' :
+        case '1.2.0' :
+            $c = config::get_instance();
+            $c->add('fs_sfs', NULL, 'fieldset', 0, 1, NULL, 0, true, 'spamx');
+            $c->add('sfs_username_check', false, 'select',0, 1, 1, 10, true, 'spamx');
+            $c->add('sfs_email_check', true, 'select',0, 1, 1, 20, true, 'spamx');
+            $c->add('sfs_ip_check', true, 'select',0, 1, 1, 30, true, 'spamx');
+            $c->add('sfs_username_confidence', '99.00', 'text',0, 1, 1, 40, true, 'spamx');
+            $c->add('sfs_email_confidence', '50.00', 'text',0, 1, 1, 50, true, 'spamx');
+            $c->add('sfs_ip_confidence', '25.00', 'text',0, 1, 1, 60, true, 'spamx');
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_SPX_CONF['pi_version']."',pi_gl_version='".$_SPX_CONF['gl_version']."' WHERE pi_name='spamx' LIMIT 1");
             break;

@@ -8,10 +8,6 @@
 // | records. These settings are only used during the initial installation    |
 // | and not referenced any more once the plugin is installed.                |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors      Tom Willett     tomw AT pigstye DOT net                     |
@@ -63,8 +59,16 @@ $_SPX_DEFAULT['admin_override'] = false;
 // enable / disable logging to spamx.log
 $_SPX_DEFAULT['logging'] = true;
 
-// timeout for contacting external services, e.g. SLV
+// timeout for contacting external services, e.g. SFS
 $_SPX_DEFAULT['timeout'] = 5; // in seconds
+
+$_SPX_DEFAULT['sfs_username_check'] = false;
+$_SPX_DEFAULT['sfs_email_check'] = true;
+$_SPX_DEFAULT['sfs_ip_check'] = true;
+
+$_SPX_DEFAULT['sfs_username_confidence'] = (float) 99.00;
+$_SPX_DEFAULT['sfs_email_confidence'] = (float) 50.00;
+$_SPX_DEFAULT['sfs_ip_confidence'] = (float) 25.00;
 
 
 /**
@@ -105,6 +109,21 @@ function plugin_initconfig_spamx()
                 'text', 0, 0, null, 40, $enable_email, 'spamx');
         $c->add('action', $_SPX_DEFAULT['action'], 'text',
                 0, 0, null, 50, false, 'spamx');
+
+        $c->add('fs_sfs', NULL, 'fieldset', 0, 1, NULL, 0, true, 'spamx');
+        $c->add('sfs_username_check', $_SPX_DEFAULT['sfs_username_check'], 'select',0, 1, 1, 10, true, 'spamx');
+        $c->add('sfs_email_check', $_SPX_DEFAULT['sfs_email_check'], 'select',0, 1, 1, 20, true, 'spamx');
+        $c->add('sfs_ip_check', $_SPX_DEFAULT['sfs_ip_check'], 'select',0, 1, 1, 30, true, 'spamx');
+        $c->add('sfs_username_confidence', $_SPX_DEFAULT['sfs_username_confidence'], 'text',0, 1, 1, 40, true, 'spamx');
+        $c->add('sfs_email_confidence', $_SPX_DEFAULT['sfs_email_confidence'], 'text',0, 1, 1, 50, true, 'spamx');
+        $c->add('sfs_ip_confidence', $_SPX_DEFAULT['sfs_ip_confidence'], 'text',0, 1, 1, 60, true, 'spamx');
+
+
+
+
+
+
+
 
     }
 
