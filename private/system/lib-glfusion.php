@@ -6,9 +6,7 @@
 // |                                                                          |
 // | glFusion Enhancement Library                                             |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2012 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -194,8 +192,6 @@ function phpblock_storypicker() {
     return $list;
 }
 
-require_once 'HTTP/Request2.php';
-
 function xml2array($contents, $get_attributes = 1, $priority = 'tag')
 {
     if (!function_exists('xml_parser_create')) {
@@ -337,22 +333,37 @@ function _checkVersion()
 
     // build XML request
 
-    $request = new HTTP_Request2('http://www.glfusion.org/versions/index.php');
-    $request->setMethod(HTTP_Request2::METHOD_POST);
-    $request->addPostParameter('v', GVERSION.PATCHLEVEL);
+    require_once $_CONF['path'].'lib/http/http.php';
+
+    $result = '';
+
+    $http=new http_class;
+    $http->timeout=5;
+    $http->data_timeout=5;
+    $http->debug=0;
+    $http->html_debug=0;
+    $http->user_agent = 'glFusion/' . GVERSION;
+    $url="http://www.glfusion.org/versions/index.php";
+    $error=$http->GetRequestArguments($url,$arguments);
+    $arguments["RequestMethod"]="POST";
+    $arguments["PostValues"]=array(
+        "v"=>"v".GVERSION.PATCHLEVEL
+    );
     if ( $_CONF['send_site_data'] ) {
-        $request->addPostParameter('s', $_CONF['site_url']);
+        $arguments["PostValues"]['s'] = $_CONF['site_url'];
     }
-    $url = $request->getUrl();
-    try {
-        $response = $request->send();
-    } catch (Exception $e) {
-        return array(-1,-1,array());
+    $error=$http->Open($arguments);
+    if ( $error == "" ) {
+        $error=$http->SendRequest($arguments);
+        if ( $error == "" ) {
+            for(;;) {
+                $error = $http->ReadReplyBody($body,1000);
+                if ( $error != "" || strlen($body) == 0 )
+                    break;
+                $result = $result . $body;
+            }
+        }
     }
-    if ( $response->getStatus() != 200 ) {
-        return array(-1,-1,array());
-    }
-    $result = $response->getBody();
 
     if (!$result) {
         return array(-1,-1,array());
