@@ -34,6 +34,7 @@ require_once 'auth.inc.php';
 //define('DVLP_VERSION', 'Y');
 
 USES_lib_admin();
+require_once $_CONF['path'] . 'lib/http/http.php';
 
 // MAIN
 if (isset($_GET['mode']) && ($_GET['mode'] == 'logout')) {
@@ -51,55 +52,51 @@ $page = '';
 
 function _checkSFS($username, $email, $ip = '')
 {
-    global $_TABLES, $LANG_SX00;
+    global $_TABLES, $_SPX_CONF, $LANG_SX00;
 
     $rc = 0;
+    $arguments = array();
+    $response = '';
 
-    require_once 'HTTP/Request2.php';
-
-// for local development you need to uncomment this - stopforumspam.com
-//  thinks that 127.0.0.1 is a spammer address
-//        if ( $_SERVER['REMOTE_ADDR'] == '127.0.0.1' ) {
-//            return 0;
-//        }
-
-    $request = new HTTP_Request2('http://www.stopforumspam.com/api',
-                                 HTTP_Request2::METHOD_GET, array('use_brackets' => true));
-    $url = $request->getUrl();
-
-    $checkData['f'] = 'serial';
+    $http=new http_class;
+    $http->timeout=0;
+    $http->data_timeout=0;
+    $http->debug=0;
+    $http->html_debug=0;
+    $http->user_agent = 'glFusion/' . GVERSION;
+    $url="http://www.stopforumspam.com/api";
+    $requestArgs = '?f=serial&';
     if ( $ip != '' ) {
-        $checkData['ip'] = $ip;
+        $requestArgs .= 'ip='.$ip.'&';
     }
     if ( $email != '' ) {
-        $checkData['email'] = $email;
+        $requestArgs .= 'email='.urlencode($email).'&';
     }
     if ( $username != '' ) {
-       $checkData['username'] = $username;
+        $requestArgs .= 'username='.urlencode($username).'&';
     }
+    $requestArgs .= 'cmd=display';
+    $url = $url . $requestArgs;
+    $error = $http->GetRequestArguments($url,$arguments);
+    $error=$http->Open($arguments);
+    $error=$http->SendRequest($arguments);
+    if ( $error == "" ) {
+        $error=$http->ReadReplyBody($body,1024);
+        if ( $error != "" || strlen($body) == 0 )
+            break;
+        $response = $response . $body;
+        $result = @unserialize($response);
+        if (!$result) return 0;     // invalid data, assume ok
 
-    $url->setQueryVariables($checkData);
-    $url->setQueryVariable('cmd', 'display');
-    try {
-        $response = $request->send();
-    } catch (Exception $e) {
-        COM_errorLog("SFS Query returned an exception");
-        return 0;
-    }
-    $result = @unserialize($response->getBody());
-    if (!$result) {
-        COM_errorLog("SFS: Invalid data returned - returning 0");
-        return 0;     // invalid data, assume ok
-    }
-
-    if ( (isset($result['email']) && $result['email']['appears'] == 1) ) {
-        $rc = $rc + 1;
-    }
-    if ( isset($result['ip']) && $result['ip']['appears'] == 1 )  {
-        $rc = $rc + 2;
-    }
-    if ( isset($result['username']) && $result['username']['appears'] == 1 )  {
-        $rc = $rc + 4;
+        if ( (isset($result['email']) && $result['email']['appears'] == 1) ) {
+            $rc = $rc + 1;
+        }
+        if ( isset($result['ip']) && $result['ip']['appears'] == 1 )  {
+            $rc = $rc + 2;
+        }
+        if ( isset($result['username']) && $result['username']['appears'] == 1 )  {
+            $rc = $rc + 4;
+        }
     }
     return $rc;
 }
