@@ -1121,9 +1121,9 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_file( array(
         'header'        => 'header.thtml',
         'footer'        => 'footer.thtml',
-        'menuitem'      => 'menuitem.thtml',
-        'menuitem_last' => 'menuitem_last.thtml',
-        'menuitem_none' => 'menuitem_none.thtml',
+//        'menuitem'      => 'menuitem.thtml',
+//        'menuitem_last' => 'menuitem_last.thtml',
+//        'menuitem_none' => 'menuitem_none.thtml',
         'leftblocks'    => 'leftblocks.thtml',
         'rightblocks'   => 'rightblocks.thtml',
     ));
@@ -2061,19 +2061,6 @@ function COM_userMenu( $help='', $title='', $position='' )
     $retval = '';
 
     if ( !COM_isAnonUser() ) {
-        $usermenu = new Template( $_CONF['path_layout'] );
-        if ( isset( $_BLOCK_TEMPLATE['useroption'] ))
-        {
-            $templates = explode( ',', $_BLOCK_TEMPLATE['useroption'] );
-            $usermenu->set_file( array( 'option' => $templates[0],
-                                        'current' => $templates[1] ));
-        } else {
-           $usermenu->set_file( array( 'option' => 'useroption.thtml',
-                                       'current' => 'useroption_off.thtml' ));
-        }
-        $usermenu->set_var( 'layout_url', $_CONF['layout_url'] );
-        $usermenu->set_var( 'block_name', str_replace( '_', '-', 'user_block' ));
-
         if ( empty( $title )) {
             $title = DB_getItem( $_TABLES['blocks'], 'title',
                                  "name='user_block'" );
@@ -6079,38 +6066,35 @@ function COM_decompress($file, $target)
 {
     global $_CONF;
 
-$ok = 0;
+    $ok = false;
 
     // decompression library doesn't like target folders ending in "/"
     if (substr($target, -1) == "/") $target = substr($target, 0, -1);
     $ext = substr($file, strrpos($file,'.')+1);
-
     // .tar, .tar.bz, .tar.gz, .tgz
-    if (in_array($ext, array('tar','bz','bz2','gz','tgz'))) {
-
-        require_once 'Archive/Tar.php';
-
-        $tar = new Archive_Tar($file);
-
-        $ok = $tar->extract($target);
-        if ( $ok ) {
-            $ok = 1;
+    if (in_array($ext, array('bz','bz2','gz','tgz'))) {
+        $base = substr($file, strrpos($file,'/')+1);
+        $tfile = substr($base,0,strpos($base,'.')+1);
+        $tar_temp_file= $_CONF['path_data'].'temp/'.$tfile.'tar';
+        @unlink($tar_temp_file);
+        $p = new PharData($file);
+        try {
+            $p2 = $p->decompress();
+        } catch (Exception $e) {
+            $ok = false;
+            return $ok;
         }
-        return ($ok<1?false:true);
-
-    } else if ($ext == 'zip') {
-
-      require_once $_CONF['path'].'/lib/ZipLib.class.php';
-
-      $zip = new ZipLib();
-      $ok = $zip->Extract($file, $target);
-
-      return ($ok==-1?false:true);
-
+    } else {
+        $p2 = new PharData($file);
     }
-
-    // unsupported file type
-    return false;
+    try {
+        $p2->extractTo($target,NULL,true); // extract all files
+        $ok = true;
+    } catch (Exception $e) {
+        $ok = false;
+    }
+    @unlink($tar_temp_file);
+    return $ok;
 }
 
 function COM_isWritable($path)
