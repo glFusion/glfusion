@@ -18,6 +18,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
+require_once $_CONF['path'] . 'lib/http/http.php';
+
 /**
 * Include Abstract Examine Class
 */
@@ -64,8 +66,6 @@ class SFSreg extends BaseCommand {
     {
         global $_TABLES, $LANG_SX00;
 
-        require_once 'HTTP/Request2.php';
-
 // for local development you need to uncomment this - stopforumspam.com
 //  thinks that 127.0.0.1 is a spammer address
 //        if ( $_SERVER['REMOTE_ADDR'] == '127.0.0.1' ) {
@@ -73,34 +73,42 @@ class SFSreg extends BaseCommand {
 //        }
 
         $em = $email;
+        $arguments = array();
+        $response = '';
 
-        $request = new HTTP_Request2('http://www.stopforumspam.com/api',
-                                     HTTP_Request2::METHOD_GET, array('use_brackets' => true));
-        $url = $request->getUrl();
-
-        $checkData['f'] = 'serial';
+        $http=new http_class;
+        $http->timeout=0;
+        $http->data_timeout=0;
+        $http->debug=0;
+        $http->html_debug=0;
+        $http->user_agent = 'glFusion/' . GVERSION;
+        $url="http://www.stopforumspam.com/api";
+        $requestArgs = '?f=serial&';
         if ( $ip != '' ) {
-            $checkData['ip'] = $ip;
+            $requestArgs .= 'ip='.$ip.'&';
         }
         if ( $em != '' ) {
-            $checkData['email'] = $em;
+            $requestArgs .= 'email='.urlencode($em).'&';
         }
-        $url->setQueryVariables($checkData);
-        $url->setQueryVariable('cmd', 'display');
-        try {
-            $response = $request->send();
-        } catch (Exception $e) {
+        $requestArgs .= 'cmd=display';
+        $url = $url . $requestArgs;
+        $error = $http->GetRequestArguments($url,$arguments);
+        $error=$http->Open($arguments);
+        $error=$http->SendRequest($arguments);
+        if ( $error == "" ) {
+            $error=$http->ReadReplyBody($body,1000);
+            if($error!="" || strlen($body)==0)
+                    break;
+            $response = $response . $body;
+            $result = @unserialize($response);
+            if (!$result) return 0;     // invalid data, assume ok
+            if ( (isset($result['email']) && $result['email']['appears'] == 1) ||
+               ($result['ip']['appears'] == 1 ) ) {
+                return 1;
+            }
+            // Passed the checks
             return 0;
         }
-        $result = @unserialize($response->getBody());
-
-        if (!$result) return 0;     // invalid data, assume ok
-
-        if ( (isset($result['email']) && $result['email']['appears'] == 1) ||
-           ($result['ip']['appears'] == 1 ) ) {
-            return 1;
-        }
-        // Passed the checks
         return 0;
     }
 }

@@ -399,7 +399,7 @@ class OAuthConsumer {
         if (!empty($users['remotephoto'])) {
             $save_img = $_CONF['path_images'] . 'userphotos/' . $uid ;
             $imgsize = $this->_saveUserPhoto($users['remotephoto'], $save_img);
-            if (!empty($imgsize)) {
+            if ( $imgsize > 0 ) {
                 $ext = $this->_getImageExt($save_img);
                 $image = $save_img . $ext;
                 if (file_exists($image)) {
@@ -424,26 +424,28 @@ class OAuthConsumer {
         DB_query($sql);
     }
 
-    protected function _saveUserPhoto($from, $to) {
-        $ret = '';
-        require_once 'HTTP/Request2.php';
-        $request = new HTTP_Request2($from, HTTP_Request2::METHOD_GET);
-        $request->setConfig(array(
-            'adapter'           => 'HTTP_Request2_Adapter_Socket',
-            'connect_timeout'   => 15,
-            'timeout'           => 30,
-            'follow_redirects'  => TRUE,
-            'max_redirects'     => 5,
-            'ssl_verify_peer'   => false,
-            'ssl_verify_host'   => false
-        ));
-        $request->setHeader('User-Agent', 'glFusion/' . GVERSION);
-        $request->setHeader('Referer', COM_getCurrentUrl());
-        $response = $request->send();
-        if ( $response->getStatus() == 200 ) {
-            $img = $response->getBody();
-            $ret = file_put_contents($to, $img);
+    protected function _saveUserPhoto($from, $to)
+    {
+        $ret = 0;
+        $img = '';
+        $arguments = array();
+        $http = new http_class;
+        $http->user_agent = 'glFusion/' . GVERSION;
+        $error = $http->GetRequestArguments($from,$arguments);
+        $error = $http->Open($arguments);
+        if ($error=="") {
+            $error = $http->SendRequest($arguments);
+            if ( $error == "" ) {
+                for (;;) {
+                    $error = $http->ReadReplyBody($body,10240);
+                    if ( $error != "" || strlen($body) == 0 )
+                        break;
+                    $img = $img . $body;
+                }
+                $ret = file_put_contents($to, $img);
+            }
         }
+        $http->Close();
         return $ret;
     }
 
