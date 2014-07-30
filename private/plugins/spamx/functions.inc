@@ -6,10 +6,10 @@
 // |                                                                          |
 // | This is the functions.inc for the glFusion Spam-X plugin                 |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
+// | Copyright (C) 2013-2014 by the following authors:                        |
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
+// |              Mark R. Evans   mark AT glfusion DOT org                    |
+// |                                                                          |
 // | Copyright (C) 2004-2010 by the following authors:                        |
 // |                                                                          |
 // | Authors      Tom Willett     tomw AT pigstye DOT net                     |
@@ -341,7 +341,42 @@ function plugin_geticon_spamx ()
     return $_CONF['site_admin_url'] . '/plugins/spamx/images/spamx.png';
 }
 
-function plugin_itemPreSave_spamx($type, $username)
+function plugin_itemPreSave_spamx($type, $data)
+{
+    global $_CONF, $REMOTE_ADDR, $_SPX_CONF, $LANG_SX00;
+
+    if ( !isset($_SPX_CONF['sfs_username_check']) ) $_SPX_CONF['sfs_username_check'] = false;
+    if ( !isset($_SPX_CONF['sfs_email_check']) ) $_SPX_CONF['sfs_email_check'] = true;
+    if ( !isset($_SPX_CONF['sfs_ip_check']) ) $_SPX_CONF['sfs_ip_check'] = true;
+
+    $username = '';
+    $email    = '';
+    $ip       = '';
+
+    if (isset($data['username']) && $_SPX_CONF['sfs_username_check'] == true ) {
+        $username = $data['username'];
+    }
+    if ( isset($data['email']) && $_SPX_CONF['sfs_email_check'] == true ) {
+        $email = $data['email'];
+    }
+    if ( isset($data['ip']) && $_SPX_CONF['sfs_ip_check'] == true) {
+        $ip = $data['ip'];
+    }
+
+    if ( $username == '' && $email =='' && $ip == '' ) return '';
+
+    if ( @file_exists($_CONF['path'].'/plugins/spamx/modules/SFS.Misc.class.php') ) {
+        require_once $_CONF['path'].'/plugins/spamx/modules/SFS.Misc.class.php';
+        $EX = new SFSreg;
+        $res = $EX->execute($type, $email, $REMOTE_ADDR, $username);
+        if ($res > 0) {
+            return $LANG_SX00['invalid_email_or_ip'];
+        }
+    }
+}
+
+
+function plugin_itemPreSave_spamxORIG($type, $username)
 {
     global $_CONF, $LANG_SX00, $REMOTE_ADDR;
 

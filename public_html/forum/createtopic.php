@@ -977,10 +977,14 @@ function FF_saveTopic( $forumData, $postData, $action )
     }
 
     if ( $_FF_CONF['use_sfs'] == 1 && COM_isAnonUser() ) {
-        $result = _ff_stopforumspam($postData['name'],$email,$REMOTE_ADDR);
-        if ($result > 0) {
-            // then tell them to get lost ...
-            $errorMessages .= $LANG_GF02['spam_detected'];
+       $spamCheckData = array(
+            'username'  => $postData['name'],
+            'email'     => $email,
+            'ip'        => $REMOTE_ADDR);
+
+        $msg = PLG_itemPreSave ('forum', $spamCheckData);
+        if (!empty ($msg)) {
+            $errorMessages .= $msg;
             $okToSave = false;
         }
     }
@@ -1403,59 +1407,5 @@ function _ff_chknotifications($forumid,$topicid,$userid,$type='topic') {
     $msgDataNotify['to'] = $toNotify;
     COM_emailNotification($msgDataDigest);
     COM_emailNotification($msgDataNotify);
-}
-
-function _ff_stopforumspam($username='',$email='',$ip='')
-{
-    global $_CONF;
-
-    require_once 'HTTP/Request2.php';
-
-// for local development you need to uncomment this - stopforumspam.com
-//  thinks that 127.0.0.1 is a spammer address
-//        if ( $_SERVER['REMOTE_ADDR'] == '127.0.0.1' ) {
-//            return 0;
-//        }
-
-    $em = $email;
-
-    $request = new HTTP_Request2('http://www.stopforumspam.com/api',
-                                 HTTP_Request2::METHOD_GET, array('use_brackets' => true));
-    $url = $request->getUrl();
-
-    $checkData['f'] = 'serial';
-    if ( $ip != '' ) {
-        $checkData['ip'] = $ip;
-    }
-    if ( $em != '' ) {
-        $checkData['email'] = $email;
-    }
-    if ( $username != '' ) {
-        $checkData['username'] = $username;
-    }
-
-    $url->setQueryVariables($checkData);
-    $url->setQueryVariable('cmd', 'display');
-
-    try {
-        $response = $request->send();
-    } catch (Exception $e) {
-        return 0;
-    }
-    $result = @unserialize($response->getBody());
-
-    if (!$result) {
-        return 0;     // invalid data, assume ok
-    }
-
-    if (
-       (isset($result['email']) && $result['email']['appears'] == 1 && $result['email']['confidence'] > (float) 25 ) ||
-       ($result['ip']['appears'] == 1 && $result['ip']['confidence'] > (float) 25 ) ||
-       (isset($result['username']) && $result['username']['appears'] == 1 && $result['username']['appears'] > (float) 25 )
-       ) {
-        return 1;
-    }
-    // Passed the checks
-    return 0;
 }
 ?>

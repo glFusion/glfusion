@@ -618,7 +618,7 @@ function newtokenform ($uid)
 */
 function createuser ($username, $email, $email_conf, $passwd='', $passwd_conf='')
 {
-    global $_CONF, $_TABLES, $LANG01, $LANG04, $MESSAGE;
+    global $_CONF, $_TABLES, $LANG01, $LANG04, $MESSAGE, $REMOTE_ADDR;
 
     $retval = '';
 
@@ -686,7 +686,13 @@ function createuser ($username, $email, $email_conf, $passwd='', $passwd_conf=''
             }
 
             // Let plugins have a chance to decide what to do before creating the user, return errors.
-            $msg = PLG_itemPreSave ('registration', $username);
+
+            $spamCheckData = array(
+                'username'  => $username,
+                'email'     => $email,
+                'ip'        => $REMOTE_ADDR);
+
+            $msg = PLG_itemPreSave ('registration', $spamCheckData);
             if (!empty ($msg)) {
                 $retval .= COM_siteHeader ('menu', $LANG04[22]);
                 if ($_CONF['custom_registration'] && function_exists ('CUSTOM_userForm')) {

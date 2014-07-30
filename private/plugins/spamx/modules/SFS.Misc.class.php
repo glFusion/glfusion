@@ -45,11 +45,11 @@ class SFSreg extends BaseCommand {
      * @param   string  $comment    Comment text to examine
      * @return  int                 0: no spam, else: spam detected
      */
-    function execute($email)
+    function execute($type, $email = '', $ip = '', $username = '')
     {
         global $result;
 
-        $result = $this->_process($email, $_SERVER['REMOTE_ADDR']);
+        $result = $this->_process($type, $email, $ip, $username);
         return $result;
     }
 
@@ -62,17 +62,14 @@ class SFSreg extends BaseCommand {
      * @return  int             0: no spam, else: spam detected
      * @access  private
      */
-    function _process($email, $ip)
+    function _process($type, $email = '', $ip = '', $username = '')
     {
-        global $_TABLES, $LANG_SX00;
+        global $_TABLES, $_SPX_CONF, $LANG_SX00;
 
-// for local development you need to uncomment this - stopforumspam.com
-//  thinks that 127.0.0.1 is a spammer address
-//        if ( $_SERVER['REMOTE_ADDR'] == '127.0.0.1' ) {
-//            return 0;
-//        }
+        if ( !isset($_SPX_CONF['sfs_username_confidence']) ) $_SPX_CONF['sfs_username_confidence'] = (float) 99.00;
+        if ( !isset($_SPX_CONF['sfs_email_confidence']) ) $_SPX_CONF['sfs_email_confidence'] = (float) 50.00;
+        if ( !isset($_SPX_CONF['sfs_ip_confidence']) ) $_SPX_CONF['sfs_ip_confidence'] = (float) 25.00;
 
-        $em = $email;
         $arguments = array();
         $response = '';
 
@@ -87,8 +84,11 @@ class SFSreg extends BaseCommand {
         if ( $ip != '' ) {
             $requestArgs .= 'ip='.$ip.'&';
         }
-        if ( $em != '' ) {
-            $requestArgs .= 'email='.urlencode($em).'&';
+        if ( $email != '' ) {
+            $requestArgs .= 'email='.urlencode($email).'&';
+        }
+        if ( $username != '' ) {
+            $requestArgs .= 'username='.urlencode($username).'&';
         }
         $requestArgs .= 'cmd=display';
         $url = $url . $requestArgs;
@@ -96,15 +96,38 @@ class SFSreg extends BaseCommand {
         $error=$http->Open($arguments);
         $error=$http->SendRequest($arguments);
         if ( $error == "" ) {
-            $error=$http->ReadReplyBody($body,1000);
-            if($error!="" || strlen($body)==0)
-                    break;
+            $error=$http->ReadReplyBody($body,1024);
+            if ( $error != "" || strlen($body) == 0 )
+                break;
             $response = $response . $body;
             $result = @unserialize($response);
             if (!$result) return 0;     // invalid data, assume ok
-            if ( (isset($result['email']) && $result['email']['appears'] == 1) ||
-               ($result['ip']['appears'] == 1 ) ) {
-                return 1;
+
+            if ( isset($result['ip']) && $result['ip']['appears'] == 1 ) {
+                if ( $result['ip']['confidence'] > $_SPX_CONF['sfs_ip_confidence']) {
+                    SPAMX_log ($type . ' - Found ' . $type . ' matching ' . 'Stop Forum Spam (SFS)'.
+                        'for IP '  . $ip . ' with confidence level of ' . $result['ip']['confidence'] .
+                        $LANG_SX00['foundspam3'] . $_SERVER['REMOTE_ADDR']);
+                    return 1;
+                } else {
+                    COM_errorLog("Spamx: SFS found match on IP, but confidence level was only " . $result['ip']['confidence']);
+                }
+            }
+            if ( isset($result['email']) && $result['email']['appears'] == 1 ) {
+                if ( $result['email']['confidence'] > $_SPX_CONF['sfs_email_confidence']) {
+                    SPAMX_log ($type . ' - Found ' . $type . ' matching ' . 'Stop Forum Spam (SFS)'.
+                        'for email '  . $email . ' with confidence level of ' . $result['email']['confidence'] .
+                        $LANG_SX00['foundspam3'] . $_SERVER['REMOTE_ADDR']);
+                    return 1;
+                }
+            }
+            if ( isset($result['username']) && $result['username']['appears'] == 1 ) {
+                if ( $result['username']['confidence'] > $_SPX_CONF['sfs_username_confidence']) {
+                    SPAMX_log ($type . ' - Found ' . $type . ' matching ' . 'Stop Forum Spam (SFS)'.
+                        'for username '  . $username . ' with confidence level of ' . $result['username']['confidence'] .
+                        $LANG_SX00['foundspam3'] . $_SERVER['REMOTE_ADDR']);
+                    return 1;
+                }
             }
             // Passed the checks
             return 0;
