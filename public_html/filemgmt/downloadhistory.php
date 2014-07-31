@@ -6,13 +6,10 @@
 // |                                                                          |
 // | Displays a report of downloaded files                                    |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the FileMgmt Plugin for Geeklog                                 |
 // | Copyright (C) 2004 by Consult4Hire Inc.                                  |
 // | Author:                                                                  |
 // | Blaine Lang            blaine@portalparts.com                            |

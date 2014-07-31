@@ -6,13 +6,10 @@
 // |                                                                          |
 // | Main public script to view filemgmt categories and files                 |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the FileMgmt Plugin for Geeklog                                 |
 // | Copyright (C) 2004 by Consult4Hire Inc.                                  |
 // | Author:                                                                  |
 // | Blaine Lang            blaine@portalparts.com                            |

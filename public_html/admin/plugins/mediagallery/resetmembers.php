@@ -53,7 +53,7 @@ if ( $mode == $LANG_MG01['cancel'] ) {
 
 switch ($step) {
     case 'two' :
-        // pull all users from the Geeklog user table
+        // pull all users from the glFusion user table
         $result = DB_query("SELECT * FROM {$_TABLES['users']}");
         while ( $U = DB_fetchArray($result) ) {
             $result2 = DB_query("SELECT album_id FROM {$_TABLES['mg_albums']} WHERE owner_id=" . $U['uid'] . " AND album_parent=" . $_MG_CONF['member_album_root']);
