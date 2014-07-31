@@ -5,10 +5,7 @@
 // |                                                                          |
 // | Javascript functions for FCKEditor Integration into Polls plugin         |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2003-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors:   Blaine Lang - blaine@portalparts.com                          |
