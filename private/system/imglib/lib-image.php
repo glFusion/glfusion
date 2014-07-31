@@ -116,6 +116,10 @@ function IMG_getMediaMetaData( $filename ) {
     $ThisFileInfo = $getID3->analyze($filename);
     getid3_lib::CopyTagsToComments($ThisFileInfo);
 
+    if ( !isset($ThisFileInfo['mime_type']) || empty($ThisFileInfo['mime_type']) || $ThisFileInfo['mime_type'] == '' ) {
+        $ThisFileInfo['mime_type'] = 'application/octet-stream';
+    }
+
     if ( $_CONF['debug_image_upload'] ) {
         COM_errorLog("IMG_getMediaMetaData: getID3 analyzing file: " . $filename);
         COM_errorLog("IMG_getMediaMetaData: getID3 found mime_type: " . $ThisFileInfo['mime_type']);
