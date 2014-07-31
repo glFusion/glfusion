@@ -6,13 +6,10 @@
 // |                                                                          |
 // | class to allow for spider friendly URL's                                 |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2010-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2002-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs       - tony@tonybibbs.com                           |

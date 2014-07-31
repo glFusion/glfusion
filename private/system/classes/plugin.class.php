@@ -6,10 +6,7 @@
 // |                                                                          |
 // | glFusion plugin class.                                                   |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs, tony AT tonybibbs DOT com                           |
@@ -57,7 +54,7 @@ class Plugin {
     var $num_searchresults = 0;
     var $searchheading = array();
     var $searchresults = array();
-    var $num_itemssearched = 0; 
+    var $num_itemssearched = 0;
     var $num_searchheadings = 0;
     /**
     * @access private
@@ -71,7 +68,7 @@ class Plugin {
     var $submissionhelpfile = '';
     var $getsubmissionssql = '';
     var $submissionheading = array();
-    
+
 
     // PUBLIC METHODS
 
