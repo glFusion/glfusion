@@ -10,7 +10,6 @@
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
@@ -53,6 +52,6 @@ $_TABLES['pollvoters']          = $_DB_table_prefix . 'pollvoters';
 $_PO_CONF['pi_name']            = 'polls';
 $_PO_CONF['pi_display_name']    = 'Polls';
 $_PO_CONF['pi_version']         = '2.1.1';
-$_PO_CONF['gl_version']         = '1.4.0';
+$_PO_CONF['gl_version']         = '1.5.0';
 $_PO_CONF['pi_url']             = 'http://www.glfusion.org/';
 ?>

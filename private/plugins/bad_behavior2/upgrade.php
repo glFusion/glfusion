@@ -6,10 +6,8 @@
 // |                                                                          |
 // | This file has the functions necessary to upgrade Bad Behavior2           |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
-// | Copyright (C) 2005-2009 Michael Hampton                                  |
+// | Copyright (C) 2005-2014 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2012 by the following authors:                        |
 // |                                                                          |

@@ -6,13 +6,10 @@
 // |                                                                          |
 // | German formal language file, addressing the user as "Sie"                |
 // +--------------------------------------------------------------------------+
-// | $Id:: german_formal.php 2846 2008-07-29 00:52:10Z mevans0263            $|
-// +--------------------------------------------------------------------------+
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
-// | Copyright (C) 2005-2008 Michael Hampton                                  |
+// | Copyright (C) 2005-2014 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Dirk Haun         - dirk AT haun-online DOT de                  |

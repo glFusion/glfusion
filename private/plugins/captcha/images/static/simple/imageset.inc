@@ -1,12 +1,12 @@
 <?php
 // +---------------------------------------------------------------------------+
-// | CAPTCHA for Geeklog                                                       |
+// | CAPTCHA for glFusion CMS                                                  |
 // +---------------------------------------------------------------------------+
 // | CAPTCHA Static Image Set                                                  |
 // +---------------------------------------------------------------------------+
 // | Copyright (C) 2006 by the following authors:                              |
 // |                                                                           |
-// | Adapted for Geeklog by: Mark R. Evans <mevans@ecsnet.com>                 |
+// | Adapted for glFusion by: Mark R. Evans <mark AT glfusion DOT org>         |
 // +---------------------------------------------------------------------------+
 // |                                                                           |
 // | This program is free software; you can redistribute it and/or             |

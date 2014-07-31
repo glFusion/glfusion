@@ -6,16 +6,13 @@
 // |                                                                          |
 // | finnish language file                                                    |
 // +--------------------------------------------------------------------------+
-// | $Id:: english_utf-8.php 4753 2009-08-05 14:39:39Z mevans0263            $|
-// +--------------------------------------------------------------------------+
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
-// | Copyright (C) 2005-2009 Michael Hampton                                  |
+// | Copyright (C) 2005-2014 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Dirk Haun         - dirk AT haun-online DOT de                  |
