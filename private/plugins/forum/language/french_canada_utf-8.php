@@ -4,13 +4,12 @@
 // +--------------------------------------------------------------------------+
 // | french_canada_utf-8.php                                                  |
 // |                                                                          |
-// | Fichier de langue canadienne-française                                                    |
+// | Fichier de langue canadienne-française                                   |
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2014 par les auteurs suivants:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Basé sur le plugin Forum pour Geeklog CMS                                |
 // | Copyright (C) 2000-2008 par les auteurs suivants:                        |
 // |                                                                          |
 // | Authors: Blaine Lang       - blaine AT portalparts DOT com               |
@@ -115,7 +114,7 @@ $LANG_GF01 = array(
     'COMMENTS' => 'Commentaires',
     'SUBMISSIONS' => 'Soumissions',
     'HTML_FILTER_MSG' => 'Filtré HTML Autorisés',
-    'HTML_FULL_MSG' => 'Plein HTML autoris�s',
+    'HTML_FULL_MSG' => 'Plein HTML autoris豧,
     'HTML_MSG' => 'HTML Autorisés',
     'CENSOR_PERM_MSG' => 'Contenu Censurée',
     'ANON_PERM_MSG' => 'Voir les messages anonymes',
@@ -325,7 +324,7 @@ $LANG_GF02 = array(
     'msg74' => 'Dernier %s Messages du forum',
     'msg75' => 'Haut %s Sujets par Vues',
     'msg76' => 'Haut %s Sujets par messages',
-    'msg77' => '<br/><p style="padding-left:10px;">Vous ne devriez pas �tre ici! <br /> Acc�s restreint � ce forum.<br />',
+    'msg77' => '<br/><p style="padding-left:10px;">Vous ne devriez pas 鳲e ici! <br /> Acc籠restreint �e forum.<br />',
     'msg78' => '<br/>Vous ne devriez pas être ici! <br/> Forum valide.',
     'msg81' => '- Sujet Modifier notification',
     'msg82' => '<p>Votre message "%s" a été édité par le modérateur %s.<p>',

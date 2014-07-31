@@ -6,13 +6,10 @@
 // |                                                                          |
 // | Danish language file - Uffe Kjølby                                       |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the Forum Plugin for Geeklog CMS                                |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Blaine Lang       - blaine AT portalparts DOT com               |
@@ -590,10 +587,10 @@ $LANG_GF92 = array(
     'savesettings' => '    Opdaterings Instillinger    ',
     'allowhtml' => 'Tillad HTML',
     'allowhtmldscp' => 'Tillad HTML at blive brugt i svar',
-    'glfilter' => 'Geeklog Filter',
-    'glfilterdscp' => 'Tillad Geeklog filtrering af HTML',
+    'glfilter' => 'glFusion Filter',
+    'glfilterdscp' => 'Tillad glFusion filtrering af HTML',
     'censor' => 'Censor',
-    'censordscp' => 'Tillad Geeklog filtrering af bandeord',
+    'censordscp' => 'Tillad glFusion filtrering af bandeord',
     'showmoods' => 'Tillad Moods',
     'showmoodsdscp' => 'Tillad moods at blive brugt i svart',
     'allowsmilies' => 'Tillad Smilies',

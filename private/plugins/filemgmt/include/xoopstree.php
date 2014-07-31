@@ -6,13 +6,10 @@
 // |                                                                          |
 // | Displays elements in tree format                                         |
 // +--------------------------------------------------------------------------+
-// | $Id:: xoopstree.php 3155 2008-09-16 02:13:18Z mevans0263                $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2002-2013 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the FileMgmt Plugin for Geeklog                                 |
 // | Copyright (C) 2004 by Consult4Hire Inc.                                  |
 // | Author:                                                                  |
 // | Blaine Lang            blaine@portalparts.com                            |

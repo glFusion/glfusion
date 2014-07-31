@@ -6,13 +6,10 @@
 // |                                                                          |
 // | Spanish Language file                                                    |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the FileMgmt Plugin for Geeklog                                 |
 // | Copyright (C) 2004 by Consult4Hire Inc.                                  |
 // | Author:                                                                  |
 // | Blaine Lang            blaine@portalparts.com                            |
@@ -129,7 +126,7 @@ $LANG_FILEMGMT = array(
     'system_locked' => 'Sistema bloqueado',
     'system_locked_msg' => 'El Componente de Gestor de Fichero est&aacute; instalado y bloqueado. Si se quiere desinstalar este componente, por favor lea el fichero README que acompa&ntilde;a a &eacute;ste.',
     'uninstall_complete' => 'Desinstalaci&oacute;n completada',
-    'uninstall_complete_msg' => 'Las estructuras de datos para el Componente de Gestor de Ficheros han sido eliminadas exitosamente de la base de datos de Geeklog<br' . XHTML . '><br' . XHTML . '>Se requiere eliminar manualmente todos los ficheros en el dep&oacute;sito en el disco duro.',
+    'uninstall_complete_msg' => 'Las estructuras de datos para el Componente de Gestor de Ficheros han sido eliminadas exitosamente de la base de datos de glFusion<br' . XHTML . '><br' . XHTML . '>Se requiere eliminar manualmente todos los ficheros en el dep&oacute;sito en el disco duro.',
     'uninstall_failed' => 'Fall&oacute; desinstalaci&oacute;n.',
     'uninstall_failed_msg' => 'La instalaci&oacute;n de el Componente de Gestor de Ficheros fall&oacute;. Revise el fichero error.log para averiguar por qu&eacute;',
     'install_noop' => 'Instalaci&oacute;n del componente',
@@ -146,7 +143,7 @@ $LANG_FILEMGMT_AUTOTAG = array(
 );
 
 $PLG_filemgmt_MESSAGE1 = 'El proceso de instalaci&oacute;n de Componente de Gestor de Ficheros (Filemgmt) fue interrumpido<br' . XHTML . '>Fichero: plugins/filemgmt/filemgmt.php sin atributos de escritura.';
-$PLG_filemgmt_MESSAGE3 = 'Este componente requiere Geeklog Versi&oacute;n 1.4 o m&aacute;s reciente, proceso de actualizaci&oacute;n interrumpido.';
+$PLG_filemgmt_MESSAGE3 = 'Este componente requiere glFusion Versi&oacute;n 1.0 o m&aacute;s reciente, proceso de actualizaci&oacute;n interrumpido.';
 $PLG_filemgmt_MESSAGE4 = 'Versi&oacute;n de c&oacute;digo del Componente es anterior a 1.5 - proceso de actualizaci&oacute;n interrumpido.';
 $PLG_filemgmt_MESSAGE5 = 'El proceso de actualizaci&oacute;n de Componente de Gestor de Ficheros fue interrumpido.<br' . XHTML . '>La versi&oacute;n del componente es distinta a 1.3';
 

@@ -6,13 +6,10 @@
 // |                                                                          |
 // | FileMgmt configuration options                                           |
 // +--------------------------------------------------------------------------+
-// | $Id:: config.php 3274 2008-09-30 03:30:57Z mevans0263                   $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the FileMgmt Plugin for Geeklog                                 |
 // | Copyright (C) 2004 by Consult4Hire Inc.                                  |
 // | Author:                                                                  |
 // | Blaine Lang            blaine@portalparts.com                            |

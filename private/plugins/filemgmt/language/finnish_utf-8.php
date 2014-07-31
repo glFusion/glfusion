@@ -6,13 +6,10 @@
 // |                                                                          |
 // | finnish language file                                                    |
 // +--------------------------------------------------------------------------+
-// | $Id:: english_utf-8.php 5848 2010-04-09 13:34:16Z mevans0263            $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the FileMgmt Plugin for Geeklog                                 |
 // | Copyright (C) 2004 by Consult4Hire Inc.                                  |
 // | Author:                                                                  |
 // | Blaine Lang            blaine@portalparts.com                            |

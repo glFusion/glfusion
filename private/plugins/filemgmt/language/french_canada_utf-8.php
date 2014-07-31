@@ -1,37 +1,35 @@
-<?php
-// | FileMgmt Plugin - glFusion CMS                                              |
-// + ----------------------------------------------- --------------------------- +
-// | French_canada_utf-8.php                                                     |
-// |                                                                             |
-// | File de langue anglaise                                                     |
-// + ----------------------------------------------- --------------------------- +
-// | $ Id $ ::                                                                   |
-// + ----------------------------------------------- --------------------------- +
-// | Copyright (C) 2008-2011 par les auteurs suivants:                           |
-// |                                                                             |
-// | Mark R. Evans marque AT glFusion DOT org                                    |
-// |                                                                             |
-// | Basé sur le plugin FileMgmt pour Geeklog                                    |
-// | Copyright (C) 2004 par Consult4Hire Inc.                                    |
-// | Auteur:                                                                     |
-// | Blaine Lang blaine@portalparts.com                                          |
-// + ----------------------------------------------- --------------------------- +
-// |                                                                             |
-// | Ce programme est un logiciel libre; vous pouvez le redistribuer et / ou     |
-// | Modifier selon les termes de la Licence Publique Générale GNU               |
-// | Publié par la Free Software Foundation; soit la version 2                   |
-// | De la Licence, ou (à votre choix) toute version ultérieure.                 |
-// |                                                                             |
-// | Ce programme est distribué dans l`espoir qu`il sera utile,                  |
-// | Mais SANS AUCUNE GARANTIE; sans même la garantie implicite de               |
-// | COMMERCIALISATION ou D`ADAPTATION À UN USAGE PARTICULIER. Voir l`           |
-// | Licence Publique Générale GNU pour plus de détails.                         |
-// |                                                                             |
-// | Vous devriez avoir reçu une copie de la Licence Publique Générale GNU       |
-// | Avec ce programme; si pas, écrivez à la Free Software Foundation,           |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.              |
-// |                                                                             |
-// + ----------------------------------------------- --------------------------- +
+<?PHP
+// +--------------------------------------------------------------------------+
+// | FileMgmt Plugin - glFusion CMS                                           |
+// + ----------------------------------------------- -------------------------+
+// | French_canada_utf-8.php                                                  |
+// |                                                                          |
+// | File de langue anglaise                                                  |
+// + ----------------------------------------------- -------------------------+
+// | Copyright (C) 2008-2011 par les auteurs suivants:                        |
+// |                                                                          |
+// | Mark R. Evans marque AT glFusion DOT org                                 |
+// |                                                                          |
+// | Copyright (C) 2004 par Consult4Hire Inc.                                 |
+// | Auteur:                                                                  |
+// | Blaine Lang blaine@portalparts.com                                       |
+// + ----------------------------------------------- -------------------------+
+// |                                                                          |
+// | Ce programme est un logiciel libre; vous pouvez le redistribuer et / ou  |
+// | Modifier selon les termes de la Licence Publique Générale GNU            |
+// | Publié par la Free Software Foundation; soit la version 2                |
+// | De la Licence, ou (à votre choix) toute version ultérieure.              |
+// |                                                                          |
+// | Ce programme est distribué dans l`espoir qu`il sera utile,               |
+// | Mais SANS AUCUNE GARANTIE; sans même la garantie implicite de            |
+// | COMMERCIALISATION ou D`ADAPTATION À UN USAGE PARTICULIER. Voir l`        |
+// | Licence Publique Générale GNU pour plus de détails.                      |
+// |                                                                          |
+// | Vous devriez avoir reçu une copie de la Licence Publique Générale GNU    |
+// | Avec ce programme; si pas, écrivez à la Free Software Foundation,        |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.           |
+// |                                                                          |
+// + ----------------------------------------------- -------------------------+
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');

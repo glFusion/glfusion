@@ -10,7 +10,6 @@
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the Forum Plugin for Geeklog CMS                                |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Blaine Lang       - blaine AT portalparts DOT com               |
@@ -19,7 +18,7 @@
 // | Prototype & Concept :        Mr.GxBlock, www.gxblock.com                 |
 // |                                                                          |
 // | Translation by Dirk Haun <dirk AT haun-online DOT de>                    |
-// | Modifiziert: August 09 Tony Kluever									                    |
+// | Modifiziert: August 09 Tony Kluever		                              |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |

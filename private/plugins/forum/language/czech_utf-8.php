@@ -6,14 +6,11 @@
 // |                                                                          |
 // | Czech language file                                                      |
 // +--------------------------------------------------------------------------+
-// | $Id:: czech_utf-8.php                                                   $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Ivan Simunek (2010)    ivsi AT post DOT cz                               |
 // |                                                                          |
-// | Based on the Forum Plugin for Geeklog CMS                                |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Blaine Lang       - blaine AT portalparts DOT com               |

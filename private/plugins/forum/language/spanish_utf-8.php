@@ -8,13 +8,10 @@
 // | Translated by - Alberto Borja                                            |
 // | Finished at 2010-feb-06 20:30                                            |
 // +--------------------------------------------------------------------------+
-// | $Id:: english_utf-8.php 5180 2009-11-29 02:50:18Z mevans0263            $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the Forum Plugin for Geeklog CMS                                |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Blaine Lang       - blaine AT portalparts DOT com               |
