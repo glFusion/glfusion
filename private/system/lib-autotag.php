@@ -6,20 +6,11 @@
 // |                                                                          |
 // | glFusion autotag library.                                                |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
 // |                                                                          |
-// | Based on the Geeklog CMS StaticPages Plugin                              |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
-// |          Tom Willett      - twillett AT users DOT sourceforge DOT net    |
-// |          Blaine Lang      - blaine AT portalparts DOT com                |
-// |          Dirk Haun        - dirk AT haun-online DOT de                   |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |

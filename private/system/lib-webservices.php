@@ -6,10 +6,7 @@
 // |                                                                          |
 // | WS-related functions needed in more than one place.                      |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2007-2009 by the following authors:                        |
 // |                                                                          |
 // | Authors: Ramnath R Iyer        - rri AT silentyak DOT com                |
