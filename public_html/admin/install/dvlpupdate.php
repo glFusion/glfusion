@@ -60,7 +60,6 @@ function glfusion_110() {
     $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD comment_expire datetime NOT NULL default '0000-00-00 00:00:00' AFTER comments";
     $_SQL[] = "REPLACE INTO {$_TABLES['vars']} (name, value) VALUES ('database_version', '1')";
     $_SQL[] = "ALTER TABLE {$_TABLES['syndication']} CHANGE type type varchar(30) NOT NULL default 'article'";
-    $_SQL[] = "UPDATE {$_TABLES['syndication']} SET type = 'article' WHERE type = 'geeklog'";
     $_SQL[] = "UPDATE {$_TABLES['syndication']} SET type = 'article' WHERE type = 'glfusion'";
     $_SQL[] = "UPDATE {$_TABLES['configuration']} SET type='select',default_value='s:10:\"US/Central\";' WHERE name='timezone'";
     $_SQL[] = "UPDATE {$_TABLES['configuration']} SET value='s:10:\"US/Central\";' WHERE name='timezone' AND value=''";
@@ -1124,6 +1123,14 @@ function glfusion_150()
     // new config options
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
+
+    $c->add('fs_sfs', NULL, 'fieldset', 0, 1, NULL, 0, true, 'spamx');
+    $c->add('sfs_username_check', false, 'select',0, 1, 1, 10, true, 'spamx');
+    $c->add('sfs_email_check', true, 'select',0, 1, 1, 20, true, 'spamx');
+    $c->add('sfs_ip_check', true, 'select',0, 1, 1, 30, true, 'spamx');
+    $c->add('sfs_username_confidence', '99.00', 'text',0, 1, 1, 40, true, 'spamx');
+    $c->add('sfs_email_confidence', '50.00', 'text',0, 1, 1, 50, true, 'spamx');
+    $c->add('sfs_ip_confidence', '25.00', 'text',0, 1, 1, 60, true, 'spamx');
 
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.5.0',name='glfusion'",1);

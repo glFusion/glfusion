@@ -505,7 +505,7 @@ ensure a secure installation of glFusion.
 
   <li class="level1">
     <div class="li"> Create an inconspicuous directory (i.e. don't name
-it &#8220;geeklog&#8221;, &#8220;glfusion&#8221; or
+it &#8220;glfusion&#8221; or
 &#8220;private&#8221;) in your root web directory. </div>
 
 
@@ -791,17 +791,12 @@ If you have made any customizations to glFusion's core files or the theme files,
 </div>
 
 
-<p>glFusion brings some major architectural changes that break away
-from how upgrades were handled in previous versions of Geeklog. The
-main change is that the config.php file is no longer used by glFusion.
-Instead, most of the configuration options are now maintained with an
+<p>Most of the configuration options are now maintained with an
 online configuration editor and the configuration files are
 automatically updated during the upgrade process. There are a few
 configuration options that are still maintained in the db-config.php
 (database settings) and siteconfig.php (site specific options such as
 Character Set), but you should not have to edit these files directly.
-Also, you no longer need to edit lib-common.php to specify the path to
-config.php as you did with previous versions of Geeklog.
 </p>
 
 
@@ -829,7 +824,7 @@ Be sure to check the Requirements list below to validate your site can be upgrad
 
 To ensure a smooth upgrade process and to prevent any problems after the upgrade, you will need to validate the following items:
 
-  
+
     </p><ul><li class="level1"><div class="li">Determine
 the current version of your glFusion installation. You can find the
 current version of glFusion installed on your site by visiting the
