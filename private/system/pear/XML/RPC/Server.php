@@ -18,7 +18,7 @@
  * @author     Daniel Convissor <danielc@php.net>
  * @copyright  1999-2001 Edd Dumbill, 2001-2010 The PHP Group
  * @license    http://www.php.net/license/3_01.txt  PHP License
- * @version    SVN: $Id$
+ * @version    SVN: $Id: Server.php 315558 2011-08-26 14:42:51Z danielc $
  * @link       http://pear.php.net/package/XML_RPC
  */
 
