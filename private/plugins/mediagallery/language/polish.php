@@ -2,8 +2,6 @@
 // +--------------------------------------------------------------------------+
 // | Media Gallery Plugin - glFusion CMS                                      |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------|
 // | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -76,7 +74,6 @@ $LANG_MG00 = array(
     'no_access' => 'Wybra³es album do którego nie masz dostêpu. Wybierz inny album.',
     'overview' => 'Media Gallery jest pluginem systemu glFusion, który pozwala na na pe³ne zarz±dzanie multimedialn± galeri± w twojej stronie internetowej, opartej na systemie CMS glFusion.  Media Gallery obs³uguje zdjêcia, video oraz pliki audio, zaweira zaawansowane opcje do prezentacji twoich multimediów w sposób jak najbardiej prosty i ³atwy w u¿yciu.',
     'preinstall_check' => 'Media Gallery ma nastêpujace wymagania:',
-    'geeklog_check' => 'CMS glFusion v1.0.0 albo w wersji wy¿szej, raportowana wersja to <b>%s</b>.',
     'php_check' => 'PHP v4.3.0 albo w wersji wy¿szej, raportowana wersja to <b>%s</b>.',
     'preinstall_confirm' => "Po pe³ne wymagania instalacji Media Gallery, proszê przej¶æ do strony <a href=\"{$_CONF['site_admin_url']}/plugins/mediagallery/install_doc.html\">Installation Manual</a>.",
     'filecheck' => 'Narzêdzia do sprawdzania plików (FileCheck)',

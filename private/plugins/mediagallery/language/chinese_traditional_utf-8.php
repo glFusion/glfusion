@@ -2,8 +2,6 @@
 // +--------------------------------------------------------------------------+
 // | Media Gallery Plugin - glFusion CMS                                      |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------|
 // | Copyright (C) 2002-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -76,7 +74,6 @@ $LANG_MG00 = array(
     'no_access' => '你選了一個有限制的影集.  請選另外一個影集',
     'overview' => '媒體畫廊是個志樂(glFusion)的插件，供給你的志樂網站能有多媒體的功能在一個非常容易管理的環境.',
     'preinstall_check' => '媒體畫廊有以下的要求:',
-    'geeklog_check' => '志樂 v1.4.0 或以上, 你現在的版本是 <b>%s</b>.',
     'php_check' => 'PHP v4.3.0 或以上, 你現在的版本是 <b>%s</b>.',
     'preinstall_confirm' => "關於怎麼安裝或詳細資料, 請看 <a href=\"{$_CONF['site_admin_url']}/plugins/mediagallery/install_doc.html\">安裝手冊</a>.",
     'filecheck' => 'Fileheck 檔檢查工具',

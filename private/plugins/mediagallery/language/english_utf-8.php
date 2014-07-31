@@ -76,7 +76,6 @@ $LANG_MG00 = array (
     'no_access'         => 'You have selected an album that has restricted access.  Please choose a different album',
     'overview'          => 'Media Gallery is a native glFusion plugin that provides a full featured multi-media gallery for your glFusion powered website.  Media Gallery supports multiple image, video and audio formats and has many advanced features to make presenting your multi-media items in a robust environment simple and easy to maintain.',
     'preinstall_check'  => 'Media Gallery has the following requirements:',
-    'geeklog_check'     => 'glFusion v1.0.0 or greater, version reported is <b>%s</b>.',
     'php_check'         => 'PHP v5.2.0 or greater, version reported is <b>%s</b>.',
     'preinstall_confirm' => "For full details on installing Media Gallery, please refer to the <a href=\"{$_CONF['site_admin_url']}/plugins/mediagallery/install_doc.html\">Installation Manual</a>.",
     'filecheck'         => 'FileCheck Utility',
