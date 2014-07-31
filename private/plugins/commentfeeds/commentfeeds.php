@@ -10,7 +10,6 @@
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the Comment Feed Plugin for the Geeklog CMS                     |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Michael Jervis   - mike AT fuckingbrit DOT com                  |
@@ -41,6 +40,6 @@ if (!defined ('GVERSION')) {
 $_CF_CONF['pi_name']            = 'commentfeeds';
 $_CF_CONF['pi_display_name']    = 'Comment Feeds';
 $_CF_CONF['pi_version']         = '1.1.0';
-$_CF_CONF['gl_version']         = '1.4.0';
+$_CF_CONF['gl_version']         = '1.5.0';
 $_CF_CONF['pi_url']             = 'http://www.glfusion.org/';
 ?>

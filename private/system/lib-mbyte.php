@@ -6,10 +6,7 @@
 // |                                                                          |
 // | function collection to handle mutli-byte related issues                  |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Oliver Spiesshofer - oliver AT spiesshofer DOT com              |

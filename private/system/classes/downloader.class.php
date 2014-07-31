@@ -6,10 +6,7 @@
 // |                                                                          |
 // | glFusion file download class library.                                    |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |

@@ -8,13 +8,10 @@
 // | from arrays or SQL statements. It will also supports the sorting and     |
 // | paging of results.                                                       |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Authors: Sami Barakat, s.m.barakat AT gmail DOT com                      |
@@ -115,7 +112,7 @@ if (!defined ('GVERSION')) {
         else
         {
             // Create a link from the title and id
-            $row['title'] = '<a href="http://www.geeklog.net/list_test.php?id='.$row['id'].'">'.$row['title'].'</a>';
+            $row['title'] = '<a href="http://www.glfusion.org/list_test.php?id='.$row['id'].'">'.$row['title'].'</a>';
 
             // Shorten the text and strip any HTML tags
             $row['text'] = substr(strip_tags($row['text']), 0, 20);

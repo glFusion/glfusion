@@ -10,7 +10,6 @@
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs         - tony AT tonybibbs DOT com                  |
@@ -56,6 +55,6 @@ $_TABLES['linksubmission']      = $_DB_table_prefix . 'linksubmission';
 $_LI_CONF['pi_name']            = 'links';
 $_LI_CONF['pi_display_name']    = 'Links';
 $_LI_CONF['pi_version']         = '2.1.4';
-$_LI_CONF['gl_version']         = '1.4.0';
+$_LI_CONF['gl_version']         = '1.5.0';
 $_LI_CONF['pi_url']             = 'http://www.glfusion.org/';
 ?>

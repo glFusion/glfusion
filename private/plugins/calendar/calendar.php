@@ -10,7 +10,6 @@
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
@@ -46,7 +45,7 @@ global $_DB_table_prefix, $_TABLES;
 $_CA_CONF['pi_name']            = 'calendar';
 $_CA_CONF['pi_display_name']    = 'Calendar';
 $_CA_CONF['pi_version']         = '1.0.7';
-$_CA_CONF['gl_version']         = '1.4.0';
+$_CA_CONF['gl_version']         = '1.5.0';
 $_CA_CONF['pi_url']             = 'http://www.glfusion.org/';
 
 // Define database tables

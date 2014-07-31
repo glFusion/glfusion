@@ -10,7 +10,6 @@
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
@@ -50,6 +49,6 @@ $_TABLES['staticpage']          = $_DB_table_prefix . 'staticpage';
 $_SP_CONF['pi_name']            = 'staticpages';
 $_SP_CONF['pi_display_name']    = 'Pages';
 $_SP_CONF['pi_version']         = '1.6.0';
-$_SP_CONF['gl_version']         = '1.4.0';
+$_SP_CONF['gl_version']         = '1.5.0';
 $_SP_CONF['pi_url']             = 'http://www.glfusion.org/';
 ?>

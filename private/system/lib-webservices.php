@@ -6,10 +6,7 @@
 // |                                                                          |
 // | WS-related functions needed in more than one place.                      |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2007-2009 by the following authors:                        |
 // |                                                                          |
 // | Authors: Ramnath R Iyer        - rri AT silentyak DOT com                |
@@ -641,7 +638,7 @@ function WS_xmlToArgs(&$args)
  * Converts an array into an XML entry node
  *
  * @param   array       $arr        the array which is to be converted into XML
- * @param   array       $extn_elements Geeklog-specific extension elements
+ * @param   array       $extn_elements glFusion-specific extension elements
  * @param   object      &$entry_elem   entry to append to
  * @param   DOMDocument &$atom_doc  the Atom document to which the entry should be appended
  */

@@ -11,7 +11,6 @@
 // | Mark Howard            mark AT usable-web DOT com                        |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2010 by the following authors:                             |
 // |                                                                          |
 // | Authors: Hiroron          - hiroron AT hiroron DOT com                   |

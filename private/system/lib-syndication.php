@@ -7,7 +7,6 @@
 // | glFusion syndication library.                                            |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2003-2010 by the following authors:                        |
 // |                                                                          |
 // | Authors: Dirk Haun        - dirk AT haun-online DOT de                   |

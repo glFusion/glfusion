@@ -7,10 +7,7 @@
 // | This class acts like a container which allows data to be passed between  |
 // | the search engine and plugins.                                           |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Authors: Sami Barakat, s.m.barakat AT gmail DOT com                      |

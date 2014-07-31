@@ -6,10 +6,6 @@
 // |                                                                          |
 // | class to create and display a CSS based Navbar for site navigation       |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // |                                                                          |
 // | Copyright (C) 2004 by Consult4Hire Inc.                                  |
 // |                                                                          |

@@ -6,13 +6,10 @@
 // |                                                                          |
 // | glFusion search class.                                                   |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs       - tony AT geeklog DOT net                      |
@@ -48,7 +45,6 @@ require_once $_CONF['path_system'] . 'classes/listfactory.class.php';
 * glFusion Search Class
 *
 * @author Tony Bibbs <tony AT geeklog DOT net>
-* @package net.geeklog.search
 *
 */
 class Search {
@@ -175,7 +171,7 @@ class Search {
      * Shows an error message to anonymous users
      *
      * This is called when anonymous users attempt to access search
-     * functionality that has been locked down by the Geeklog admin.
+     * functionality that has been locked down by the glFusion admin.
      *
      * @author Tony Bibbs <tony AT geeklog DOT net>
      * @access private
@@ -493,9 +489,7 @@ class Search {
      *
      * Initiates the search engine and returns HTML formatted
      * results. It also provides support to plugins using a
-     * search API. Backwards compatibility has been incorporated
-     * in this function to allow legacy support to plugins using
-     * the old API calls defined versions prior to Geeklog 1.5.1
+     * search API.
      *
      * @author Sami Barakat <s.m.barakat AT gmail DOT com>
      * @access public

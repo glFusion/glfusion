@@ -6,10 +6,7 @@
 // |                                                                          |
 // | glFusion plugin class.                                                   |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Authors: Sami Barakat, s.m.barakat AT gmail DOT com                      |
