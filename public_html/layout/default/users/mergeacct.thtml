@@ -1,6 +1,7 @@
 <form name="acctmerge" method="post" action="{site_url}/users.php">
   <input type="hidden" name="mode" value="mergeacct"/>
   <input type="hidden" name="localuid" value="{localuid}"/>
+  <input type="hidden" name="remoteuid" value="{remoteuid}" />
   <table width="100%">
     <tr>
       <td colspan="2">

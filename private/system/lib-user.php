@@ -354,18 +354,22 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
                 $queueUser = false;
             }
         }
-        if ( !empty($remoteusername) && !emtpy(!$service) ) {
-            $queueUser = false;
-        }
+//@TODO - Remove this check to allow remote users to be queued
+//        if ( !empty($remoteusername) && !emtpy(!$service) ) {
+//            $queueUser = false;
+//        }
+
         if ($queueUser) {
             $fields .= ',status';
             $values .= ',' . USER_ACCOUNT_AWAITING_APPROVAL;
+COM_errorLog("Queing user");
         }
     } else {
         if (($_CONF['registration_type'] == 1 ) && (empty($remoteusername) || empty($service))) {
             $fields .= ',status';
             $values .= ',' . USER_ACCOUNT_AWAITING_VERIFICATION;
         }
+/*
         if (!empty($remoteusername)) {
             $fields .= ',remoteusername';
             $values .= ",'".DB_escapeString($remoteusername)."'";
@@ -375,6 +379,17 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
             $fields .= ',remoteservice';
             $values .= ",'".DB_escapeString($service)."'";
         }
+*/
+    }
+
+    if (!empty($remoteusername)) {
+        $fields .= ',remoteusername';
+        $values .= ",'".DB_escapeString($remoteusername)."'";
+        $account_type = REMOTE_USER;
+    }
+    if (!empty($service)) {
+        $fields .= ',remoteservice';
+        $values .= ",'".DB_escapeString($service)."'";
     }
 
     $fields .= ',account_type';
@@ -896,5 +911,38 @@ function USER_buildTopicList ()
     }
 
     return $topics;
+}
+
+function USER_mergeAccountScreen( $remoteUID, $localUID, $msg='' )
+{
+    global $_USER, $_CONF, $_TABLES;
+
+    $retval = '';
+
+    $sql = "SELECT * FROM {$_TABLES['users']} WHERE uid = " . (int) $localUID;
+    $result = DB_query($sql);
+    $numRows = DB_numRows($result);
+    if ( $numRows > 0 ) {
+        // we have the potential to merge
+        $row = DB_fetchArray($result);
+        $T = new Template($_CONF['path_layout'].'/users/');
+        $T->set_file('merge','mergeacct.thtml');
+        $T->set_var(array(
+            'localuid'       => $row['uid'],
+            'local_username' => $row['username'],
+            'remoteuid'      => $remoteUID,
+        ));
+        $T->parse( 'page', 'merge' );
+        if ( $msg != '' ) {
+            $retval .= COM_showMessageText($msg,'',false,'info');
+        }
+        $retval .= $T->finish( $T->get_var( 'page' ));
+    } else {
+        echo COM_refresh($_CONF['site_url'].'/index.php');
+    }
+    echo COM_siteHeader();
+    echo $retval;
+    echo COM_siteFooter();
+    exit;
 }
 ?>

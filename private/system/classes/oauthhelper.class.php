@@ -162,10 +162,7 @@ class OAuthConsumer {
     }
 
     public function doAction($info) {
-        global $_TABLES, $status, $uid, $_CONF, $checkMerge;
-
-        // remote auth precludes usersubmission, and integrates user activation
-        $status = USER_ACCOUNT_ACTIVE;
+        global $_TABLES, $LANG04, $status, $uid, $_CONF, $checkMerge;
 
         $users      = $this->_getCreateUserInfo($info);
         $userinfo   = $this->_getUpdateUserInfo($info);
@@ -176,12 +173,17 @@ class OAuthConsumer {
         $tmp = DB_error();
         $nrows = DB_numRows($result);
 
-        if (empty($tmp) && $nrows == 1) {
+        if (empty($tmp) && $nrows == 1) { // existing user...
             list($uid, $status) = DB_fetchArray($result);
             $checkMerge = false;
         } else {
+            if ( $_CONF['disable_new_user_registration'] ) {
+                echo COM_siteHeader();
+                echo $LANG04[122];
+                echo COM_siteFooter();
+                exit;
+            }
             // initial login - create account
-            $status = USER_ACCOUNT_ACTIVE;
             $loginname = $users['loginname'];
             $checkName = DB_getItem($_TABLES['users'], 'username', "username='".DB_escapeString($loginname)."'");
             if (!empty($checkName)) {
@@ -194,18 +196,35 @@ class OAuthConsumer {
             }
             $users['loginname'] = $loginname;
             $uid = USER_createAccount($users['loginname'], $users['email'], '', $users['fullname'], $users['homepage'], $users['remoteusername'], $users['remoteservice']);
-
             if (is_array($users)) {
                 $this->_DBupdate_users($uid, $users);
             }
-
             if (is_array($userinfo)) {
                 $this->_DBupdate_userinfo($uid, $userinfo);
             }
 
+            $status = DB_getItem($_TABLES['users'],'status','uid='.(int)$uid);
             $remote_grp = DB_getItem($_TABLES['groups'], 'grp_id', "grp_name = 'Remote Users'");
             DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ($remote_grp, $uid)");
-            $checkMerge = true;
+
+// we've done all we need to do to create the remote user - now check to see
+// if we need to merge the account.
+
+            if ( isset($users['email']) && $users['email'] != '' ) {
+                $sql = "SELECT * FROM {$_TABLES['users']} WHERE (remoteservice='' OR remoteservice IS NULL) AND email='".DB_escapeString($users['email'])."' AND uid > 1";
+                $result = DB_query($sql);
+                $numRows = DB_numRows($result);
+                if ( $numRows == 1 ) {
+                    $row = DB_fetchArray($result);
+                    $remoteUID = $uid;
+                    $localUID  = $row['uid'];
+                    USER_mergeAccountScreen($remoteUID, $localUID);
+                } else {
+                    COM_errorLog("DEBUG: no matching email found");
+                }
+            } else {
+                COM_errorLog("DEBUG: email not set");
+            }
         }
     }
 
@@ -245,7 +264,6 @@ class OAuthConsumer {
         if (is_array($userinfo)) {
             $this->_DBupdate_userinfo($_USER['uid'], $userinfo);
         }
-
     }
 
     protected function _getUpdateUserInfo($info) {
@@ -394,7 +412,7 @@ class OAuthConsumer {
     protected function _DBupdate_users($uid, $users) {
         global $_TABLES, $_CONF;
 
-        $sql = "UPDATE {$_TABLES['users']} SET remoteusername = '".DB_escapeString($users['remoteusername'])."', remoteservice = '".DB_escapeString($users['remoteservice'])."', status = 3 ";
+        $sql = "UPDATE {$_TABLES['users']} SET remoteusername = '".DB_escapeString($users['remoteusername'])."', remoteservice = '".DB_escapeString($users['remoteservice'])."' ";
         if (!empty($users['remotephoto'])) {
             $save_img = $_CONF['path_images'] . 'userphotos/' . $uid ;
             $imgsize = $this->_saveUserPhoto($users['remotephoto'], $save_img);
