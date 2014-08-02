@@ -1364,7 +1364,12 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
                 'js-header'    => $outputHandle->renderHeader('script'),
                 'raw-header'   => $outputHandle->renderHeader('raw'),
     ));
-
+    if ( SESS_isSet('glfusion.infoblock') ) {
+        $msgArray = @unserialize(SESS_getVar('glfusion.infoblock'));
+        $msgTxt = COM_showMessageText($msgArray['msg'], '', $persist = false, $msgArray['type']);
+        $theme->set_var('info_block',$msgTxt);
+        SESS_unSet('glfusion.infoblock');
+    }
     // Call to plugins to set template variables in the footer
     PLG_templateSetVars( 'header', $theme );
     PLG_templateSetVars( 'footer', $theme );
@@ -3822,6 +3827,11 @@ function COM_setMessage( $msg = 0 )
     SESS_setVar('glfusion.infomessage',$msg);
 }
 
+function COM_setMsg( $msg, $type='info' )
+{
+    $msgArray = array('msg' => $msg, 'type' => $type);
+    SESS_setVar('glfusion.infoblock', serialize($msgArray));
+}
 
 /**
 * Returns message number if set

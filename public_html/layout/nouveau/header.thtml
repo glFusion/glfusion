@@ -55,5 +55,6 @@
                 </div>
 {# START OF CONTENT AREA #}
                 <a name="content-start" id="content-start"></a> {# for screenreaders #}
+                {info_block}
                 {content}
 {# end {templatelocation} #}

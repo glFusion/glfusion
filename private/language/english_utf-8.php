@@ -484,7 +484,8 @@ $LANG04 = array(
     186 => 'If you do not wish to merge the accounts, please select the Cancel button below.',
     187 => 'Enter the password above for the local account and hit the Merge button.',
     188 => 'Merge',
-    189 => 'Forgot Password'
+    189 => 'Forgot Password',
+    190 => 'You have exceeded the allowed number of attempts to enter the password for merging accounts',
 );
 
 ###############################################################################
