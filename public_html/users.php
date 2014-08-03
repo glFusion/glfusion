@@ -59,7 +59,6 @@ function userprofile()
 // @param    int     $msg    Message to display (if != 0)
 // @param    string  $plugin optional plugin name for message
 
-
     $retval = '';
     if (COM_isAnonUser() &&
         (($_CONF['loginrequired'] == 1) || ($_CONF['profileloginrequired'] == 1))) {
@@ -107,7 +106,7 @@ function userprofile()
         COM_displayMessageAndAbort (30, '', 403, 'Forbidden');
     }
 
-    $display_name = htmlspecialchars(COM_getDisplayName($user, $A['username'],$A['fullname']),ENT_COMPAT,COM_getEncodingt());
+    $display_name = @htmlspecialchars(COM_getDisplayName($user, $A['username'],$A['fullname']),ENT_COMPAT,COM_getEncodingt());
 
     if ($msg > 0) {
         $retval .= COM_showMessage($msg, $plugin,'',0,'info');
@@ -395,7 +394,6 @@ function emailpassword ($username, $passwd = '', $msg = 0)
 
     $username = DB_escapeString ($username);
     // don't retrieve any remote users!
-//    $result = DB_query ("SELECT uid,email,status FROM {$_TABLES['users']} WHERE username = '".$username."' AND ((remoteservice is null) OR (remoteservice = ''))");
     $result = DB_query ("SELECT uid,email,status FROM {$_TABLES['users']} WHERE username = '".$username."' AND (account_type & ".LOCAL_USER.")");
     $nrows = DB_numRows ($result);
     if ($nrows == 1) {
@@ -440,7 +438,6 @@ function requestpassword ($username, $msg = 0)
 
     // no remote users!
     $username = DB_escapeString($username);
-//    $result = DB_query ("SELECT uid,email,passwd,status FROM {$_TABLES['users']} WHERE username = '".$username."' AND ((remoteservice IS NULL) OR (remoteservice=''))");
     $result = DB_query ("SELECT uid,email,passwd,status FROM {$_TABLES['users']} WHERE username = '".$username."' AND (account_type & ".LOCAL_USER.")");
     $nrows = DB_numRows ($result);
     if ($nrows == 1) {
@@ -479,8 +476,7 @@ function requestpassword ($username, $msg = 0)
         COM_updateSpeedlimit ('password');
     } else {
         COM_updateSpeedlimit ('password');
-        echo COM_refresh ($_CONF['site_url']
-                                . '/users.php?mode=getpassword');
+        echo COM_refresh ($_CONF['site_url'].'/users.php?mode=getpassword');
         exit;
     }
 
@@ -535,9 +531,7 @@ function requesttoken ($uid, $msg = 0)
     }
 
     $retval = '';
-    // no remote users!
     $uid = (int) $uid;
-//    $result = DB_query ("SELECT uid,username,email,passwd,status FROM {$_TABLES['users']} WHERE uid = ".(int)$uid." AND ((remoteservice IS NULL) OR (remoteservice=''))");
     $result = DB_query ("SELECT uid,username,email,passwd,status FROM {$_TABLES['users']} WHERE uid = ".(int)$uid." AND (account_type & ".LOCAL_USER.")");
     $nrows = DB_numRows ($result);
     if ($nrows == 1) {
@@ -639,7 +633,8 @@ function createuser ( )
     $passwd_conf = '';
 
     if ($_CONF['disable_new_user_registration']) {
-        return COM_showMessageText($LANG04[122],$LANG04[22],true,'error');
+        COM_setMsg($LANG04[122],'error');
+        echo COM_refresh($_CONF['site_url']);
     }
 
     $email       = isset($_POST['email']) ? COM_applyFilter ($_POST['email']) : '';
@@ -811,6 +806,11 @@ function newuserform ($msg = '')
 
     $retval = '';
 
+    if ($_CONF['disable_new_user_registration']) {
+        COM_setMsg($LANG04[122],'error');
+        echo COM_refresh($_CONF['site_url']);
+    }
+
     if ($_CONF['custom_registration'] AND (function_exists('CUSTOM_userForm'))) {
         return CUSTOM_userForm($msg);
     }
@@ -826,8 +826,6 @@ function newuserform ($msg = '')
     $user_templates->set_var('lang_fullname', $LANG04[3]);
     $user_templates->set_var('lang_email', $LANG04[5]);
     $user_templates->set_var('lang_email_conf', $LANG04[124]);
-//FIX ME
-// we may want to check for submission queue and add some more info about once the admin approves...
     if ( $_CONF['registration_type'] == 1 ) { // verification link
         $user_templates->set_var('lang_passwd',$LANG01[57]);
         $user_templates->set_var('lang_passwd_conf',$LANG04[176]);
@@ -966,214 +964,6 @@ function displayLoginErrorAndAbort($msg, $message_title, $message_text)
     exit();
 }
 
-
-/**
-* Shows a merge account input form
-*
-* This displays the merge account input form.
-*
-* @return   string          HTML for form
-*
-*/
-function mergeAccountForm($uid, $msg='')
-{
-    global $_USER, $_CONF, $_TABLES;
-
-    $retval = '';
-    $remoteEmail = '';
-
-    $sql = "SELECT * FROM {$_TABLES['users']} WHERE uid = " . (int) $uid;
-    $result = DB_query($sql);
-    $numRows = DB_numRows($result);
-    if ( $numRows == 1 ) {
-        $row = DB_fetchArray($result);
-        $remoteEmail = $row['email'];
-    } else {
-        echo COM_refresh($_CONF['site_url'].'/index.php');
-    }
-    if ($remoteEmail == '' ) echo COM_refresh($_CONF['site_url'].'/index.php');
-
-    $sql = "SELECT * FROM {$_TABLES['users']} WHERE (remoteservice='' OR remoteservice IS NULL) AND email='".DB_escapeString($remoteEmail)."' AND uid > 1";
-    $result = DB_query($sql);
-    $numRows = DB_numRows($result);
-    if ( $numRows > 0 ) {
-        // we have the potential to merge
-        $row = DB_fetchArray($result);
-        $T = new Template($_CONF['path_layout'].'/users/');
-        $T->set_file('merge','mergeacct.thtml');
-        $T->set_var(array(
-            'localuid'       => $row['uid'],
-            'local_username' => $row['username'],
-        ));
-        $T->parse( 'page', 'merge' );
-        if ( $msg != '' ) {
-            $retval .= COM_showMessageText($msg,'',false,'info');
-        }
-        $retval .= $T->finish( $T->get_var( 'page' ));
-    } else {
-        echo COM_refresh($_CONF['site_url'].'/index.php');
-    }
-    return $retval;
-}
-
-/**
-* Merge User Accounts
-*
-* This validates the entered password and then merges a remote
-* account with a local account.
-*
-* @return   string          HTML merge form if error, redirect on success
-*
-*/
-function mergeaccounts()
-{
-    global $_CONF, $_SYSTEM, $local_login, $_TABLES, $_USER, $LANG04, $LANG12, $LANG20;
-
-/*
- To merge the user accounts we need all attributes from both accounts
- There are several tables:
-
-    - users
-    - userprefs
-    - userindex
-    - usercomment
-    - userinfo
-
-  We will also need for plugins to have either move user or merge
-  user support. Basically, we would want to move everything from
-  one user to another. We would need to change ownership, move
-  preferences, etc.
-
-  If we do it at the time the account is created, there is no
-  reason to worry about plugins - we can focus on just
-  populating the remoteusername and remoteservice
-
-  We may want to look at a new field that denotes the user type
-    - local = 1
-    - remote = 2
-    - merged = 3
-
-  this might help with the group stuff.
-
-*/
-    // need to add error checks to ensure everything passed
-
-    $retval = '';
-
-    $remoteUID = COM_applyFilter($_POST['remoteuid'],true);
-    $localUID  = COM_applyFilter($_POST['localuid'],true);
-    $localpwd  = $_POST['localpasswd'];
-    $localResult  = DB_query("SELECT * FROM {$_TABLES['users']} WHERE uid=".(int) $localUID);
-    $localRow     = DB_fetchArray($localResult);
-
-    if ( SEC_check_hash($localpwd, $localRow['passwd']) ) {
-        // password is valid
-        $sql = "SELECT * FROM {$_TABLES['users']} WHERE remoteusername <> '' and email='".DB_escapeString($localRow['email'])."'";
-        $result = DB_query($sql);
-        $numRows = DB_numRows($result);
-        if ( $numRows == 1 ) {
-            $remoteRow = DB_fetchArray($result);
-            if ( $remoteUID == $remoteRow['uid'] ) {
-                $remoteUID = (int) $remoteRow['uid'];
-            } else {
-                echo COM_refresh($_CONF['site_url'].'/index.php');
-            }
-        } else {
-            echo COM_refresh($_CONF['site_url'].'/index.php');
-        }
-        $sql = "UPDATE {$_TABLES['users']} SET remoteusername='".
-               DB_escapeString($remoteRow['remoteusername']) . "'," .
-               "remoteservice='".DB_escapeString($remoteRow['remoteservice'])."', ".
-               "account_type=3 ".
-               " WHERE uid=".(int)$localUID;
-        DB_query($sql);
-
-        $_USER['uid'] = $localRow['uid'];
-
-        SESS_completeLogin($localUID);
-        $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
-        $_RIGHTS = explode( ',', SEC_getUserPermissions() );
-        if ($_SYSTEM['admin_session'] > 0 && $local_login ) {
-            if (SEC_isModerator() || SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR')
-                     || (count(PLG_getAdminOptions()) > 0)) {
-                $admin_token = SEC_createTokenGeneral('administration',$_SYSTEM['admin_session']);
-                SEC_setCookie('token',$admin_token,0,$_CONF['cookie_path'],$_CONF['cookiedomain'],$_CONF['cookiesecure'],true);
-            }
-        }
-        COM_resetSpeedlimit('login');
-
-        // log the user out
-        SESS_endUserSession ($remoteUID);
-
-        // Ok, now delete everything related to this user
-
-        // let plugins update their data for this user
-        PLG_deleteUser ($remoteUID);
-
-        if ( function_exists('CUSTOM_userDeleteHook')) {
-            CUSTOM_userDeleteHook($remoteUID);
-        }
-
-        // Call custom account profile delete function if enabled and exists
-        if ($_CONF['custom_registration'] && function_exists ('CUSTOM_userDelete')) {
-            CUSTOM_userDelete ($remoteUID);
-        }
-
-        // remove from all security groups
-        DB_delete ($_TABLES['group_assignments'], 'ug_uid', $remoteUID);
-
-        // remove user information and preferences
-        DB_delete ($_TABLES['userprefs'], 'uid', $remoteUID);
-        DB_delete ($_TABLES['userindex'], 'uid', $remoteUID);
-        DB_delete ($_TABLES['usercomment'], 'uid', $remoteUID);
-        DB_delete ($_TABLES['userinfo'], 'uid', $remoteUID);
-
-        // avoid having orphand stories/comments by making them anonymous posts
-        DB_query ("UPDATE {$_TABLES['comments']} SET uid = 1 WHERE uid = $remoteUID");
-        DB_query ("UPDATE {$_TABLES['stories']} SET uid = 1 WHERE uid = $remoteUID");
-        DB_query ("UPDATE {$_TABLES['stories']} SET owner_id = 1 WHERE owner_id = $remoteUID");
-
-        // delete story submissions
-        DB_delete ($_TABLES['storysubmission'], 'uid', $remoteUID);
-
-        // delete user photo, if enabled & exists
-        if ($_CONF['allow_user_photo'] == 1) {
-            $photo = DB_getItem ($_TABLES['users'], 'photo', "uid = $remoteUID");
-            USER_deletePhoto ($photo, false);
-        }
-
-        // delete subscriptions
-        DB_delete($_TABLES['subscriptions'],'uid',$remoteUID);
-
-        // in case the user owned any objects that require Admin access, assign
-        // them to the Root user with the lowest uid
-        $rootgroup = DB_getItem ($_TABLES['groups'], 'grp_id', "grp_name = 'Root'");
-        $result = DB_query ("SELECT DISTINCT ug_uid FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = '$rootgroup' ORDER BY ug_uid LIMIT 1");
-        $A = DB_fetchArray ($result);
-        $rootuser = $A['ug_uid'];
-        if ( $rootuser == '' || $rootuser < 2 ) {
-            $rootuser = 2;
-        }
-        DB_query ("UPDATE {$_TABLES['blocks']} SET owner_id = $rootuser WHERE owner_id = $remoteUID");
-        DB_query ("UPDATE {$_TABLES['topics']} SET owner_id = $rootuser WHERE owner_id = $remoteUID");
-        // now delete the user itself
-        DB_delete ($_TABLES['users'], 'uid', $remoteUID);
-    } else {
-        // invalid password - let's try one more time
-        // need to set speed limit and give them 3 tries
-        COM_clearSpeedlimit($_CONF['login_speedlimit'], 'merge');
-        $last = COM_checkSpeedlimit ('merge',4);
-        if ($last > 0) {
-            COM_setMsg($LANG04[190],'error');
-            echo COM_refresh($_CONF['site_url'].'/users.php');
-        } else {
-            COM_updateSpeedlimit ('merge');
-            USER_mergeAccountScreen($localUID,$remoteUID,$LANG20[3]);
-        }
-        return $retval;
-    }
-    echo COM_refresh($_CONF['site_url'].'/index.php');
-}
 
 /**
 * Log user out
@@ -1335,21 +1125,6 @@ function _userEmailpassword()
     return $retval;
 }
 
-function _userNew()
-{
-    global $_CONF, $_TABLES, $_USER, $LANG04;
-
-    $retval = '';
-
-    if ($_CONF['disable_new_user_registration']) {
-        $retval .= COM_showMessageText($LANG04[122],$LANG04[22],true,'error');
-    } else {
-        $retval .= newuserform();
-    }
-
-    return $retval;
-}
-
 function _userVerify()
 {
     global $_CONF, $_TABLES, $_USER, $LANG04;
@@ -1457,6 +1232,10 @@ if ( isset($_POST['mode']) ) {
 $display = '';
 $pageBody = '';
 
+if ( isset($_POST['cancel']) ) {
+    echo COM_refresh($_CONF['site_url'].'/index.php');
+}
+
 switch ($mode) {
     case 'logout':
         $pageBody = userLogout();
@@ -1481,7 +1260,7 @@ switch ($mode) {
         $pageBody .= _userEmailpasswd();
         break;
     case 'new':
-        $pageBody .= _userNew();
+        $pageBody .= newuserform();
         break;
     case 'verify':
         $pageBody .= _userVerify();
@@ -1489,10 +1268,12 @@ switch ($mode) {
     case 'getnewtoken':
         $pageBody .= _userGetnewtoken();
         break;
+    case 'mergeacct' :
+        $pageBody .= USER_mergeAccounts();
+        break;
     default:
         $status = -2;
         $local_login = false;
-        $checkMerge  = false;
         $newTwitter  = false;
 
         // prevent dictionary attacks on passwords
@@ -1700,10 +1481,6 @@ switch ($mode) {
             } else {
                 echo COM_refresh ($_CONF['site_url'] . '/index.php');
             }
-        } else if ( isset($_POST['mode']) && $_POST['mode'] == 'mergeacct' && !isset($_POST['cancel']) ) {
-            $pageBody .= mergeaccounts();
-        } elseif (isset($_POST['cancel']) ) {
-            echo COM_refresh ($_CONF['site_url'] . '/index.php');
         } else {
             if ( isset($_POST['msg']) ) {
                 $msg = COM_applyFilter($_POST['msg'],true);

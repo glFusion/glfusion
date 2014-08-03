@@ -207,11 +207,8 @@ class OAuthConsumer {
             $remote_grp = DB_getItem($_TABLES['groups'], 'grp_id', "grp_name = 'Remote Users'");
             DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ($remote_grp, $uid)");
 
-// we've done all we need to do to create the remote user - now check to see
-// if we need to merge the account.
-
             if ( isset($users['email']) && $users['email'] != '' ) {
-                $sql = "SELECT * FROM {$_TABLES['users']} WHERE (remoteservice='' OR remoteservice IS NULL) AND email='".DB_escapeString($users['email'])."' AND uid > 1";
+                $sql = "SELECT * FROM {$_TABLES['users']} WHERE account_type = ".LOCAL_USER." AND email='".DB_escapeString($users['email'])."' AND uid > 1";
                 $result = DB_query($sql);
                 $numRows = DB_numRows($result);
                 if ( $numRows == 1 ) {
@@ -219,19 +216,13 @@ class OAuthConsumer {
                     $remoteUID = $uid;
                     $localUID  = $row['uid'];
                     USER_mergeAccountScreen($remoteUID, $localUID);
-                } else {
-                    COM_errorLog("DEBUG: no matching email found");
                 }
-            } else {
-                COM_errorLog("DEBUG: email not set");
             }
         }
     }
 
     public function doSynch($info) {
         global $_TABLES, $_USER, $status, $uid, $_CONF;
-
-        // remote auth precludes usersubmission and integrates user activation
 
         $users = $this->_getCreateUserInfo($info);
         $userinfo = $this->_getUpdateUserInfo($info);
