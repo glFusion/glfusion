@@ -174,7 +174,17 @@ function edituser()
      if ( $A['account_type'] & REMOTE_USER ) {
         if ($_CONF['user_login_method']['oauth'] && (strpos($_USER['remoteservice'], 'oauth.') === 0)) { // OAuth only supports re-synch at the moment
             $preferences->set_var ('resynch_checked', '');
+            $sql = "SELECT * FROM {$_TABLES['users']} WHERE email='".DB_escapeString($A['email'])."' AND account_type = " . LOCAL_USER;
+            $mergeResult = DB_query($sql);
+            if ( DB_numRows($mergeResult) == 1 ) {
+                $localAccountData = DB_fetchArray($mergeResult);
+                $preferences->set_var('merge_account',true);
+                $preferences->set_var('localuid',$localAccountData['uid']);
+                $preferences->set_var('local_username',$localAccountData['username']);
+                $preferences->set_var('remoteuid',$_USER['uid']);
+            }
             $preferences->parse ('resynch_option', 'resynch', true);
+
         } else {
             $preferences->set_var ('resynch_option', '');
         }
@@ -899,6 +909,13 @@ function saveuser($A)
         COM_accessLog ("An attempt was made to illegally change the account information of user {$_USER['uid']}.");
 
         return COM_refresh ($_CONF['site_url'] . '/index.php');
+    }
+
+    if ( isset($_POST['merge']) ) {
+        if ( COM_applyFilter($_POST['remoteuid'],true) != $_USER['uid'] ) {
+            echo COM_refresh($_CONF['site_url'].'/usersettings.php?mode=edit');
+        }
+        USER_mergeAccounts();
     }
 
     // If not set or possibly removed from template - initialize variable

@@ -486,6 +486,9 @@ $LANG04 = array(
     188 => 'Merge',
     189 => 'Forgot Password',
     190 => 'You have exceeded the allowed number of attempts to enter the password for merging accounts',
+    191 => 'Local Account Password',
+    192 => 'Merge Remote Account with Existing Local Account',
+    193 => 'Note: If you merge a remote account to an existing local account, the preferences for the local user will take priority.',
 );
 
 ###############################################################################
@@ -1523,6 +1526,7 @@ $MESSAGE = array(
     519 => 'You are already subscribed to this notification feed.',
     520 => 'You have been subscribed to this notification feed.',
     521 => 'You have been successfully un-subscribed from the notification feed.',
+    522 => 'Remote account has been successfully merged with existing local account',
 
 );
 

@@ -22,8 +22,8 @@
     </tr>
 
     <tr>
-      <td><strong>{$LANG20[5]} </strong></td>
-      <td><input type="password" name="localpasswd" length="20" /></td>
+      <td><strong>{$LANG04[191]} </strong></td>
+      <td><input type="password" name="localp" length="20" /></td>
     </tr>
 
     <tr>

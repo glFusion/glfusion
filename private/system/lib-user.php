@@ -961,13 +961,6 @@ function USER_mergeAccounts()
 
 /*
  To merge the user accounts we need all attributes from both accounts
- There are several tables:
-
-    - users
-    - userprefs
-    - userindex
-    - usercomment
-    - userinfo
 
   We will also need for plugins to have either move user or merge
   user support. Basically, we would want to move everything from
@@ -975,16 +968,7 @@ function USER_mergeAccounts()
   preferences, etc.
 
   If we do it at the time the account is created, there is no
-  reason to worry about plugins - we can focus on just
-  populating the remoteusername and remoteservice
-
-  We may want to look at a new field that denotes the user type
-    - local = 1
-    - remote = 2
-    - merged = 3
-
-  this might help with the group stuff.
-
+  reason to worry about plugins or moving ownership.
 */
     // need to add error checks to ensure everything passed
 
@@ -992,7 +976,7 @@ function USER_mergeAccounts()
 
     $remoteUID = COM_applyFilter($_POST['remoteuid'],true);
     $localUID  = COM_applyFilter($_POST['localuid'],true);
-    $localpwd  = $_POST['localpasswd'];
+    $localpwd  = $_POST['localp'];
     $localResult  = DB_query("SELECT * FROM {$_TABLES['users']} WHERE uid=".(int) $localUID);
     $localRow     = DB_fetchArray($localResult);
 
@@ -1100,12 +1084,11 @@ function USER_mergeAccounts()
             echo COM_refresh($_CONF['site_url'].'/users.php');
         } else {
             COM_updateSpeedlimit ('merge');
-            USER_mergeAccountScreen($localUID,$remoteUID,$LANG20[3]);
+            USER_mergeAccountScreen($remoteUID,$localUID,$LANG20[3]);
         }
         return $retval;
     }
-    echo COM_refresh($_CONF['site_url'].'/index.php');
+    // can't use COM_setMsg here since the session is being destroyed.
+    echo COM_refresh($_CONF['site_url'].'/index.php?msg=522');
 }
-
-
 ?>
