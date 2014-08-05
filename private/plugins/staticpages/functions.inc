@@ -930,6 +930,14 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
     return $retval;
 }
 
+function plugin_user_move_staticpages($origUID,$destUID)
+{
+    global $_TABLES;
+
+    DB_query ("UPDATE {$_TABLES['staticpage']} SET sp_uid = ".(int)$destUID." WHERE sp_uid = ".(int)$origUID,1);
+    DB_query ("UPDATE {$_TABLES['staticpage']} SET owner_id = ".(int)$destUID." WHERE owner_id = ".(int)$origUID,1);
+}
+
 /**
 * A user is about to be deleted. Update ownership of any static pages owned
 * by that user or delete them.

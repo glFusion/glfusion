@@ -428,6 +428,13 @@ function plugin_getadminoption_links()
     }
 }
 
+function plugin_user_move_links($origUID, $destUID)
+{
+    global $_TABLES, $_LI_CONF;
+
+    DB_query ("UPDATE {$_TABLES['links']} SET owner_id = ".(int)$destUID." WHERE owner_id = ".(int) $origUID,1);
+}
+
 /**
 * A user is about to be deleted. Update ownership of any links owned
 * by that user or delete them.

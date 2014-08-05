@@ -387,6 +387,12 @@ function plugin_getadminoption_polls()
     }
 }
 
+function plugin_user_move_polls($origUID, $destUID)
+{
+    global $_TABLES;
+    DB_query ("UPDATE {$_TABLES['polltopics']} SET owner_id = ".(int)$destUID." WHERE owner_id = ".(int)$origUID,1);
+}
+
 
 /**
 * A user is about to be deleted. Update ownership of any polls owned

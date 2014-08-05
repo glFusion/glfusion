@@ -959,19 +959,6 @@ function USER_mergeAccounts()
 {
     global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG04, $LANG12, $LANG20;
 
-/*
- To merge the user accounts we need all attributes from both accounts
-
-  We will also need for plugins to have either move user or merge
-  user support. Basically, we would want to move everything from
-  one user to another. We would need to change ownership, move
-  preferences, etc.
-
-  If we do it at the time the account is created, there is no
-  reason to worry about plugins or moving ownership.
-*/
-    // need to add error checks to ensure everything passed
-
     $retval = '';
 
     $remoteUID = COM_applyFilter($_POST['remoteuid'],true);
@@ -1021,6 +1008,9 @@ function USER_mergeAccounts()
         // log the user out
         SESS_endUserSession ($remoteUID);
 
+        // Let plugins know a user is being merged
+        PLG_moveUser($remoteUID, $_USER['uid']);
+
         // Ok, now delete everything related to this user
 
         // let plugins update their data for this user
@@ -1043,14 +1033,6 @@ function USER_mergeAccounts()
         DB_delete ($_TABLES['userindex'], 'uid', $remoteUID);
         DB_delete ($_TABLES['usercomment'], 'uid', $remoteUID);
         DB_delete ($_TABLES['userinfo'], 'uid', $remoteUID);
-
-        // avoid having orphand stories/comments by making them anonymous posts
-        DB_query ("UPDATE {$_TABLES['comments']} SET uid = 1 WHERE uid = $remoteUID");
-        DB_query ("UPDATE {$_TABLES['stories']} SET uid = 1 WHERE uid = $remoteUID");
-        DB_query ("UPDATE {$_TABLES['stories']} SET owner_id = 1 WHERE owner_id = $remoteUID");
-
-        // delete story submissions
-        DB_delete ($_TABLES['storysubmission'], 'uid', $remoteUID);
 
         // delete user photo, if enabled & exists
         if ($_CONF['allow_user_photo'] == 1) {

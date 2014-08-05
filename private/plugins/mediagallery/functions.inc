@@ -1232,6 +1232,16 @@ function plugin_user_delete_mediagallery( $uid )
     return _mg_user_delete( $uid );
 }
 
+function plugin_user_move_mediagallery($origUID, $destUID)
+{
+    global $_TABLES;
+
+    $sql = "UPDATE {$_TABLES['mg_albums']} SET owner_id=".(int) $destUID . " WHERE owner_id=".(int) $origUID;
+    DB_query($sql);
+    $sql = "UPDATE {$_TABLES['mg_media']} SET media_user_id=".(int)$destUID. " WHERE media_user_id=".(int)$origUID;
+    DB_query($sql);
+}
+
 function plugin_profileicondisplay_mediagallery( $uid )
 {
     global $MG_albums,$_TABLES, $_MG_CONF, $_CONF, $_USER,$LANG_MG01;

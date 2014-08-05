@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin interface to glFusion                                             |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -222,7 +222,8 @@ function plugin_editcomment_filemgmt($cid,$id) {
  * @param   int     $cid    Comment to be deleted
  * @param   string  $id     Item id to which $cid belongs
  * @return  mixed   false for failure, HTML string (redirect?) for success
- */function plugin_deletecomment_filemgmt($cid,$id) {
+ */
+function plugin_deletecomment_filemgmt($cid,$id) {
     global $_CONF,$_TABLES;
 
     if (SEC_hasRights("filemgmt.edit")) {
@@ -1101,5 +1102,13 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
     }
 
     return $retval;
+}
+
+function plugin_user_move_filemgmt($origUID,$destUID)
+{
+    global $_TABLES;
+
+    $sql = "UPDATE {$_TABLES['filemgmt_filedetail']} SET submitter=".(int)$destUID." WHERE submitter=".(int)$origUID;
+    DB_query($sql,1);
 }
 ?>

@@ -3,12 +3,8 @@
 // | Calendar Plugin - glFusion CMS                                           |
 // +--------------------------------------------------------------------------+
 // | functions.inc                                                            |
-// |                                                                          |
-// | This file does two things: 1) it implements the necessary glFusion Plugin|
-// | API method and 2) implements all the common code needed by the Calendar  |
-// | plugin' PHP files.                                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2010-2012 by the following authors:                        |
+// | Copyright (C) 2010-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -1416,6 +1412,23 @@ function plugin_getuseroption_calendar()
     }
 }
 
+/**
+* A user is about to be merged. Update ownership of any events owned
+* by that user
+*
+* @param   origUID   int   User id of original user
+* @param   destUID   int   User id of the user receiving the items
+*
+*/
+function plugin_user_move_calendar($origUID,$destUID)
+{
+    global $_TABLES, $_CA_CONF;
+
+    $sql = "UPDATE {$_TABLES['personal_events']} SET owner_id=".(int)$destUID." WHERE owner_id=".(int)$origUID;
+    DB_query($sql,1);
+    $sql = "UPDATE {$_TABLES['events']} SET owner_id = ".(int) $destUID." WHERE owner_id = ".(int) $origUID;
+    DB_query($sql,1);
+}
 
 /**
 * A user is about to be deleted. Update ownership of any events owned

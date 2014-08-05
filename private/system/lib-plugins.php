@@ -1287,6 +1287,39 @@ function PLG_createUser ($uid)
 }
 
 /**
+* Inform plugins a user is being merged
+*
+* @param    int     $originaluid    Original uid ID (to be deleted)
+* @param    int     $destinationUID Destination user id
+* @since    glFusion v1.5.0
+*
+*/
+function PLG_moveUser($originalUID, $destinationUID)
+{
+    global $_PLUGINS, $_TABLES;
+
+    // comments...
+    $sql = "UPDATE {$_TABLES['comments']} SET uid=".(int)$destinationUID." WHERE uid=".(int)$originalUID;
+    DB_query($sql,1);
+    // ratings
+    $sql = "UPDATE {$_TABLES['rating_votes']} SET uid=".(int)$destinationUID." WHERE uid=".(int)$originalUID;
+    DB_query($sql,1);
+
+    foreach ($_PLUGINS as $pi_name) {
+        $function = 'plugin_user_move_' . $pi_name;
+        if (function_exists ($function)) {
+            $function($originalUID, $destinationUID);
+        }
+    }
+
+    $function = 'CUSTOM_user_move';
+    if (function_exists($function)) {
+        $function($uid);
+    }
+}
+
+
+/**
 * This function will inform all plugins when a user account is deleted.
 *
 * @param    int     $uid    user id of the deleted user account
@@ -3194,6 +3227,17 @@ function plugin_submissioncount_story()
     return (plugin_ismoderator_story) ? DB_count ($_TABLES['storysubmission']) : 0;
 }
 
+function plugin_user_move_story($origUID, $destUID)
+{
+    global $_TABLES;
+
+    $sql = "UPDATE {$_TABLS['stories']} SET uid=".(int)$destUID." WHERE uid=".(int)$origUID;
+    DB_query($sql,1);
+    $sql = "UPDATE {$_TABLES['stories']} SET owner_id=".(int) $destUID." WHERE owner_id=".(int) $origUID;
+    DB_query($sql,1);
+    $sql = "UPDATE {$_TABLES['storysubmission']} SET uid=".(int) $destUID." WHERE uid=".(int)$origUID;
+    DB_query($sql,1);
+}
 
 /**
 * Subscribe user to notification feed for an item

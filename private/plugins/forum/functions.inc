@@ -208,6 +208,14 @@ function plugin_user_changed_forum( $uid )
     DB_query("UPDATE {$_TABLES['ff_topic']} SET name='".DB_escapeString($curusername)."' WHERE uid=".(int) $uid);
 }
 
+function plugin_user_move_forum($origUID, $destUID)
+{
+    global $_TABLES;
+
+    $username = DB_getItem($_TABLES['users'], "username", "uid=".(int) $destUID);
+    $sql = "UPDATE {$_TABLES['ff_topic']} SET uid=".(int)$destUID.",name='".DB_escapeString($username)."' WHERE uid=".(int) $origUID;
+    DB_query($sql,1);
+}
 
 /**
 * Called if admin deletes a user - Removes any moderator records for user
