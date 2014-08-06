@@ -8,9 +8,10 @@
                 toolbar: 'standard',
                 allowedContent: true,
                 contentsCss: '{site_url}/css.php?t={theme}',
-                extraPlugins: 'mediagallery,,youtube2',
+                extraPlugins: 'mediagallery,youtube2',
                 {styleset}
                 height: 300,
+                language: '{iso_lang}'
          } );
 
          return instance;

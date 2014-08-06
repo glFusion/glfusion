@@ -13,6 +13,7 @@
             {styleset}
             bodyClass: 'story-body',
             height: 500,
+            language: '{iso_lang}'
          } );
 
          return instance;

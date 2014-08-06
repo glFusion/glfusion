@@ -612,7 +612,7 @@ switch ($_CONF['language']) {
         $_CONF['iso_lang'] = 'en';
         break;
 }
-
+$TEMPLATE_OPTIONS['default_vars']['iso_lang'] = $_CONF['iso_lang'];
 /**
 *
 * Language include
@@ -6496,7 +6496,7 @@ function writeFile_lck($filename, $tempfile, $data, $mutex='glfusion.lck')
 {
     global $_CONF;
 
-    $retval=false; //assume failure of function
+    $retval = false; //assume failure of function
     if (! $tempfile) {
         $tempfile = tempnam(dirname($filename),basename($filename));
     }
