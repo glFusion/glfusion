@@ -89,8 +89,6 @@ function USER_edit($uid = '', $msg = '')
     USES_class_navbar();
     USES_lib_admin();
 
-    $retval .= COM_startBlock($LANG28[1], '',
-                              COM_getBlockTemplate('_admin_block', 'header'));
 
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/user.php',
@@ -137,9 +135,6 @@ function USER_edit($uid = '', $msg = '')
     $userform->set_var('navbar', $navbar->generate());
     $userform->set_var('no_javascript_warning',$LANG04[150]);
 
-    if (!empty ($msg)) {
-        $retval .= COM_showMessageText($MESSAGE[$msg],$LANG28[22],false);
-    }
 
     if (!empty ($msg) && !empty ($uid) && ($uid > 1)) {
         // an error occured while editing a user - if it was a new account,
@@ -273,9 +268,17 @@ function USER_edit($uid = '', $msg = '')
     if ( isset($_POST['topic_order']) )
         $U['topic_order']    = $_POST['topic_order'] == 'ASC' ? 'ASC' : 'DESC';
 
+
+    $retval .= COM_startBlock($LANG28[1] . ' :: ' . $menuText, '',
+                              COM_getBlockTemplate('_admin_block', 'header'));
+
+    if (!empty ($msg)) {
+        $retval .= COM_showMessageText($MESSAGE[$msg],$LANG28[22],false);
+    }
+
     $retval .= ADMIN_createMenu(
         $menu_arr,
-        '&nbsp;<br/><strong>'.$menuText.'</strong>',
+        '',
         $_CONF['layout_url'] . '/images/icons/user.' . $_IMAGE_TYPE
     );
 
@@ -391,7 +394,7 @@ function USER_accountPanel($U,$newuser = 0)
       $_CONF['user_login_method']['oauth'] ) ) { // && $U['account_type'] & REMOTE_USER /*$allow_remote_user */) {
         $modules = array();
 
-        if ($U['account_type'] & REMOTE_USER) { //  ($U['remoteusername'] != '' && $U['remoteservice'] != '') || $U['remoteuser'] == 1) {
+        if ($U['account_type'] & REMOTE_USER) {
             $remote_user_checked = ' checked="checked"';
             $pwd_disabled = ' disabled="disabled"';
             $remote_user_display = '';
@@ -1337,7 +1340,7 @@ function USER_list($grp_id)
 
     $filter = $LANG28[101]
         . ': <select name="grp_id" onchange="this.form.submit()">'
-        . $group_all . USER_groupSelectList($grp_id) . '</select>&nbsp;&nbsp;&nbsp;&nbsp;';
+        . $group_all . USER_groupSelectList($grp_id) . '</select>';
 
     if ($_CONF['lastlogin']) {
         $login_text = $LANG28[41];
