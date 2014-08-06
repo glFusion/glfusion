@@ -230,6 +230,7 @@ if ( !$iframe ) {
             $notifylinkimg = '<img src="'._ff_getImage('notify_on').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg62'].'" title="'.$LANG_GF02['msg62'].'"/>';
             $notifylink = $_CONF['site_url'].'/forum/notify.php?forum='.$forumid.'&amp;submit=save&amp;topic='.$showtopic;
             $topicTemplate->set_var ('LANG_notify', $LANG_GF01['SubscribeLink']);
+            $topicTemplate->unset_var ('topic_subscribed');
 
         /* Check if user has subscribed to complete forum */
         } elseif (DB_count($_TABLES['subscriptions'], array('type','category', 'id', 'uid'), array('forum',(int) $forumid, '0',(int) $_USER['uid'])) > 0) {
@@ -237,20 +238,20 @@ if ( !$iframe ) {
             $notifylinkimg = '<img src="'._ff_getImage('notify_off').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg137'].'" title="'.$LANG_GF02['msg137'].'"/>';
             $notifylink = $_CONF['site_url'].'/forum/notify.php?submit=delete2&amp;id='.$notifyID.'&amp;forum='.$forumid.'&amp;topic='.$showtopic;
             $topicTemplate->set_var ('LANG_notify', $LANG_GF01['unSubscribeLink']);
-
+            $topicTemplate->set_var ('topic_subscribed',true);
         /* Check if user is subscribed to this specific topic */
         } elseif (DB_count($_TABLES['subscriptions'], array('type','category', 'id', 'uid'), array('forum',(int) $forumid, (int) $showtopic,(int) $_USER['uid'])) > 0) {
             $notifyID = DB_getItem($_TABLES['subscriptions'],'sub_id', "type='forum' AND category=".(int)$forumid." AND id=".(int)$showtopic." AND uid=".(int)$_USER['uid']);
             $notifylinkimg = '<img src="'._ff_getImage('notify_off').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg137'].'" title="'.$LANG_GF02['msg137'].'"/>';
             $notifylink = $_CONF['site_url'].'/forum/notify.php?submit=delete2&amp;id='.$notifyID.'&amp;forum='.$forumid.'&amp;topic='.$showtopic;
             $topicTemplate->set_var ('LANG_notify', $LANG_GF01['unSubscribeLink']);
-
+            $topicTemplate->set_var ('topic_subscribed',true);
         } else {
             $notifylinkimg = '<img src="'._ff_getImage('notify_on').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg62'].'" title="'.$LANG_GF02['msg62'].'"/>';
             $notifylink = $_CONF['site_url'].'/forum/notify.php?forum='.$forumid.'&amp;submit=save&amp;topic='.$showtopic;
             $topicTemplate->set_var ('LANG_notify', $LANG_GF01['SubscribeLink']);
+            $topicTemplate->unset_var ('topic_subscribed');
         }
-
         $topicTemplate->set_var (array(
             'notifylinkimg' => $notifylinkimg,
             'notifylink'    => $notifylink

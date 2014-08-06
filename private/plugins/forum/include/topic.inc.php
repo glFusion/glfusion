@@ -494,7 +494,7 @@ function _ff_getmodFunctions($showtopic)
         $retval .= '<input type="hidden" name="topic_parent_id" value="' .$msgpid. '"/>';
         $retval .= '<input type="hidden" name="top" value="' .$top. '"/>';
         $retval .= '<input type="hidden" name="page" value="' .$page. '"/>';
-        $retval .= '&nbsp;&nbsp;<input type="submit" name="submit" value="' .$LANG_GF01['GO'].'!"/>';
+        $retval .= '&nbsp;&nbsp;<input type="submit" name="submit" value="' .$LANG_GF01['GO'].'"/>';
         $retval .= '</div></form>';
     }
     return $retval;
