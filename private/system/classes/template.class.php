@@ -2018,7 +2018,7 @@ function CACHE_create_instance($iid, $data, $bypass_lang = false)
     }
 
     $filename = CACHE_instance_filename($iid, $bypass_lang);
-    file_put_contents($filename, $data);
+    file_put_contents($filename, $data,LOCK_EX);
 
 }
 
