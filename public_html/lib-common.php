@@ -6474,17 +6474,6 @@ function css_out()
     }
     // save cache file
 
-/* --- remove for testing
-    $fp = @fopen($cacheFile,'w');
-    if ( $fp !== false ) {
-        $rc = fwrite($fp,$css);
-        if ( $rc === false ) {
-            COM_errorLog("ERROR: Error writing CSS cache file");
-            fwrite($fp,$css);
-        }
-        fclose($fp);
-    }
---- */
     $rc = writeFile_lck($cacheFile,'',$css,'glfusion_css.lck');
     if ( $rc === false ) writeFile_lck($cacheFile,'',$css,'glfusion_css.lck');
 
@@ -6541,7 +6530,7 @@ function css_cacheok($cache,$files)
         foreach($files as $file){
             $mod_time = @filemtime($file);
             if ( $mod_time === false ) {
-                COM_errorLog("ERROR: Unable to retrieve mod time for CSS file: " . $file);
+//                COM_errorLog("ERROR: Unable to retrieve mod time for CSS file: " . $file);
             } else {
                 if ( $mod_time > $ctime ) {
                     return false;
@@ -6551,16 +6540,7 @@ function css_cacheok($cache,$files)
     }
     return true;
 }
-/**
- * Loads a given file - DEPRECIATED
- */
-function css_loadfile($file)
-{
-    if (!@file_exists($file))
-        return '';
-    $css = readfile($file);
-    return;
-}
+
 /**
  * Very simple CSS optimizer
  *
@@ -6647,6 +6627,12 @@ function css_onelinecomment_cb($matches) {
 
 function js_out()
 {
+    global $_CONF, $_SYSTEM, $_USER, $_PLUGINS, $themeAPI;
+
+    $js = '';
+    $file_content = '';
+    $files   = array();
+
     global $_CONF, $_SYSTEM, $_USER, $_PLUGINS;
 
     $outputHandle = outputHandler::getInstance();
@@ -6691,7 +6677,7 @@ function js_out()
     }
 
     /*
-     * Check to see if the theme has any JavaScript to include... (depreciate)
+     * Check to see if the theme has any JavaScript to include...
      */
 
     $function = 'theme_themeJS';
@@ -6706,9 +6692,8 @@ function js_out()
     }
 
     /*
-     * Check to see if there are any custom javascript files to include (depreciated)
+     * Check to see if there are any custom javascript files to include
      */
-
     if ( function_exists( 'CUSTOM_js' )) {
         $jTheme = CUSTOM_js( );
         if ( is_array($jTheme) ) {
@@ -6721,7 +6706,7 @@ function js_out()
     /*
      * Let the plugins add their JavaScript needs here...
      */
-// here only to support backward compatibility - use the output handler class from now on.
+
     if ( is_array($_PLUGINS) ) {
         foreach ( $_PLUGINS as $pi_name ) {
             if ( function_exists('plugin_getheaderjs_'.$pi_name) ) {
@@ -6740,7 +6725,6 @@ function js_out()
     /*
      * Let the plugins add any global JS variables
      */
-// here only to support backward compatibility - use the output handler class from now on.
     if (is_array($_PLUGINS) ) {
         foreach ( $_PLUGINS as $pi_name ) {
             if ( function_exists('plugin_getglobaljs_'.$pi_name) ) {
@@ -6760,9 +6744,6 @@ function js_out()
         return $cacheURL;
     }
 
-    // start output buffering and build the script
-    ob_start();
-
     // add some global variables
 
     $urlparts = parse_url($_CONF['site_url']);
@@ -6772,63 +6753,44 @@ function js_out()
         $fileroot = '';
     }
 
-    print "var glfusionSiteUrl = '".$_CONF['site_url']."';" . LB;
-    print "var glfusionFileRoot = '".$fileroot ."';". LB;
-    print "var glfusionLayoutUrl = '".$_CONF['layout_url']."';" . LB;
-    print "var site_admin_url = '".$_CONF['site_admin_url']."';" . LB;
+    $js .= "var glfusionSiteUrl = '".$_CONF['site_url']."';" . LB;
+    $js .= "var glfusionFileRoot = '".$fileroot ."';". LB;
+    $js .= "var glfusionLayoutUrl = '".$_CONF['layout_url']."';" . LB;
+    $js .= "var site_admin_url = '".$_CONF['site_admin_url']."';" . LB;
     if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
-        print "var glfusionStyleCSS = '".$_CONF['layout_url'].'/'.$_CONF['css_cache_filename'].'.css?t='.$_USER['theme'] . "';" . LB;
+        $js .= "var glfusionStyleCSS      = '".$_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'] . "';" . LB;
     } else {
-        print "var glfusionStyleCSS = '".$_CONF['layout_url']."/css.php?t=" . $_USER['theme'] . "';" . LB;
+        $js .= "var glfusionStyleCSS      = '".$_CONF['site_url']."/css.php?t=" . $_USER['theme'] . "';" . LB;
     }
 
     // send any global plugin JS vars
 
     if ( isset($pluginJSvars) && is_array($pluginJSvars) ) {
         foreach ($pluginJSvars AS $name => $value) {
-            print "var " . $name . " = '".$value."';";
+            $js .= "var " . $name . " = '".$value."';";
         }
     }
 
-    // load files
     if ( is_array($files) ) {
-        foreach($files as $file){
-            js_load($file);
-            print "\n";
+        foreach($files as $file) {
+            $file_content = @file_get_contents($file);
+            if ( $file_content === false ) {
+                COM_errorLog("ERROR: Unable to retrieve JS file: " . $file);
+            } else {
+                $js .= $file_content;
+            }
+            $js .= LB;
         }
     }
 
-    // end output buffering and get contents
-    $js = ob_get_contents();
-    ob_end_clean();
+    $js .= LB; // https://bugzilla.mozilla.org/show_bug.cgi?id=316033
 
-    $js .= "\n"; // https://bugzilla.mozilla.org/show_bug.cgi?id=316033
-
-    // save cache file
-    $fp = @fopen($cacheFile,"w");
-    if ( $fp !== false ) {
-        fwrite($fp,$js);
-        fclose($fp);
-    }
-    if ( defined('DVLP_DEBUG') ) {
-        COM_errorLog("DEBUG: JS cache file written");
-    }
+    $rc = writeFile_lck($cacheFile,'',$js,'glfusion_js.lck');
+    if ( $rc === false ) writeFile_lck($cacheFile,'',$js,'glfusion_js.lck');
 
     return $cacheURL;
 }
 
-/**
- * Load the given file, handle include calls and print it
- */
-function js_load($file)
-{
-    if (!@file_exists($file))
-        return;
-
-    $js = readfile($file);
-
-    return;
-}
 
 /**
  * Checks if a JavaScript Cache file still is valid
