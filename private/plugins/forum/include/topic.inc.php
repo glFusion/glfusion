@@ -255,8 +255,10 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
             $bmArray = _ff_cacheBookMarks( $_USER['uid'] );
             if (isset($bmArray[$showtopic['id']]) ) {
                 $topictemplate->set_var('bookmark_icon','<img src="'._ff_getImage('star_on_sm').'" title="'.$LANG_GF02['msg204'].'" alt=""/>');
+                $topictemplate->set_var('bookmarked',true);
             } else {
                 $topictemplate->set_var('bookmark_icon','<img src="'._ff_getImage('star_off_sm').'" title="'.$LANG_GF02['msg203'].'" alt=""/>');
+                $topictemplate->unset_var('bookmarked');
             }
         }
         $topictemplate->clear_var (array('quotelink','quotelinkimg','LANG_quote'));

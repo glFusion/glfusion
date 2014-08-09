@@ -2,6 +2,13 @@ glFusion ChangeLog
 
 v1.5.0
 ------
+- Implement og:image tag for stories
+- Implemented the ability to merge remote to local users from the
+  user preference screen.
+- Implemented PLG_moveUser() to support account merging
+- Allow remote authenticated users to be moderated (queued)
+- Rewrote all processes using PEAR HTTP Request2 to use the new
+  http class
 - Update 3rd party libraries to latest releases:
    - geshi Library
    - getID3

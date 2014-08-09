@@ -78,7 +78,7 @@ if ((isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'save') && ($topic != 
             $query = DB_query("SELECT sub_id FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid=".(int)$_USER['uid']." AND category=".(int) $forum." AND id < 0 " );
             if (DB_numRows($query) > 0 ) {
                 list($watchrec) = DB_fetchArray($query);
-                DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE id=".(int)$watchrec);
+                DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE sub_id=".(int)$watchrec);
             }  else {
                 $forum_name = DB_getItem($_TABLES['ff_forums'],'forum_name','forum_id='.(int)$forum);
                 $topic_name = DB_getItem($_TABLES['ff_topic'],'subject','id='.(int)$pid);

@@ -138,7 +138,6 @@ if ($op == 'search') {
 
     $pageBody = '';
 
-
     $report = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $report->set_file('report', 'search_results.thtml');
 
@@ -623,15 +622,23 @@ if ($forum > 0) {
             $subscribelinkimg = '<img src="'._ff_getImage('forumnotify_on').'" style="vertical-align:middle;" alt="'.$LANG_GF01['FORUMSUBSCRIBE'].'" title="'.$LANG_GF01['FORUMSUBSCRIBE'].'"/>';
             $subscribelink = $_CONF['site_url'].'/forum/index.php?op=subscribe&amp;forum='.$forum;
             $subcribelanguage = $LANG_GF01['FORUMSUBSCRIBE'];
+            $sub_option = 'subscribe_forum';
         } else {
             $subscribelinkimg = '<img src="'._ff_getImage('forumnotify_off').'" alt="'.$LANG_GF01['FORUMUNSUBSCRIBE'].'" title="'.$LANG_GF01['FORUMUNSUBSCRIBE'].'" style="vertical-align:middle;"/>';
             $subscribelink = $_CONF['site_url'].'/forum/notify.php?filter=2';
             $subcribelanguage = $LANG_GF01['FORUMUNSUBSCRIBE'];
+            $sub_option = 'unsubscribe_forum';
         }
+        $token = SEC_createToken();
         $topiclisting->set_var (array(
                                 'subscribelink'     => $subscribelink,
                                 'subscribelinkimg'  => $subscribelinkimg,
-                                'LANG_subscribe'    => $subcribelanguage));
+                                'LANG_subscribe'    => $subcribelanguage,
+                                'forum'             => $forum,
+                                'suboption'         => $sub_option,
+                                'token'             => $token,
+                                'token_name'        => CSRF_TOKEN,
+        ));
     }
     if (!COM_isAnonUser()) {
         $link = '<a href="'.$_CONF['site_url'].'/forum/index.php?op=markallread&amp;cat_id='.$category['id'].'&amp;forum_id='.(int)$forum.'">';
@@ -780,8 +787,10 @@ if ($forum > 0) {
             }
             if (isset($bmArray[$record['id']]) ) {
                 $topiclisting->set_var('bookmark_icon','<img src="'._ff_getImage('star_on_sm').'" title="'.$LANG_GF02['msg204'].'" alt=""/>');
+                $topiclisting->set_var('bookmarked',true);
             } else {
                 $topiclisting->set_var('bookmark_icon','<img src="'._ff_getImage('star_off_sm').'" title="'.$LANG_GF02['msg203'].'" alt=""/>');
+                $topiclisting->unset_var('bookmarked');
             }
         } elseif ($record['sticky'] == 1) {
             $folderimg = '<img src="'._ff_getImage('sticky').'" style="vertical-align:middle;" alt="'.$LANG_GF02['msg61'].'" title="'.$LANG_GF02['msg61'].'"/>';
