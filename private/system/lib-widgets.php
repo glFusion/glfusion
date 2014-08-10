@@ -180,7 +180,7 @@ function WIDGET_slider( $dataArray )
     $outputHandle->addLinkScript($_CONF['site_url'].'/javascript/addons/bxslider/jquery.bxslider.min.js');
     $outputHandle->addLinkStyle($_CONF['site_url'].'/javascript/addons/bxslider/jquery.bxslider.css');
 
-    $retval .= '<script type="text/javascript">$(window).load(function() {';
+    $retval .= '<script type="text/javascript">$(document).ready(function(){';
     $retval .= '   $(\'.slide_'.$rand.'\').bxSlider({';
 
     foreach ($dataArray['options'] as $option => $value ) {
@@ -264,7 +264,7 @@ function WIDGET_springMenu($dataArray)
     $retval .= '</div>';
     $retval .= '</div>';
 
-    $retval .= '<script type="text/javascript">$(window).load(function() {';
+    $retval .= '<script type="text/javascript">$(document).ready(function(){';
     $retval .= '   $(\'#springmenu_'.$rand.'\').AccordionImageMenu({';
     foreach ($dataArray['options'] as $option => $value ) {
         $retval .= "'".$option."'" . ": " . "'".$value . "',";
@@ -337,7 +337,7 @@ function WIDGET_tabslide( $dataArray )
     }
     $retval .= '</div><div style="clear:both;"></div>';
 
-    $retval .= '<script type="text/javascript">$(window).load(function() {';
+    $retval .= '<script type="text/javascript">$(document).ready(function(){';
     $retval .= '$("div#slidertabs_'.$id.'").sliderTabs({';
 
     foreach ($dataArray['options'] as $option => $value ) {
