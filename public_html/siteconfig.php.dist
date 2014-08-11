@@ -112,6 +112,15 @@ $_SYSTEM['no_fail_sql']      = false;
 $_SYSTEM['no_cache_config']  = false;
 
 // +--------------------------------------------------------------------------+
+// | Disable Instance Caching - disable all instance caching                  |
+// |                                                                          |
+// | If you experience issues with the instance cache files                   |
+// | you can disable the caching feature by setting this to true.             |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['disable_instance_caching'] = false;
+
+// +--------------------------------------------------------------------------+
 // | Administrative session timeout - set to 0 to disable re-auth             |
 // +--------------------------------------------------------------------------+
 

@@ -622,7 +622,8 @@ class Template
     * @access    public
     * @return    string
     */
-    function subst($varname) {
+    function subst($varname)
+    {
         global $_CONF;
 
         if ( isset($_CONF['cache_templates']) && $_CONF['cache_templates'] == true ) {
@@ -1854,25 +1855,30 @@ class Template
     * @see    check_instance
     *
     */
-    function create_instance($iid, $filevar) {
-      global $TEMPLATE_OPTIONS, $_CONF;
+    function create_instance($iid, $filevar)
+    {
+        global $TEMPLATE_OPTIONS, $_CONF, $_SYSTEM;
 
-      $old_unknowns = $this->unknowns;
-      $this->unknowns = 'PHP';
-      $tmplt = $this->parse($iid, $filevar);
-      $path_cache = $TEMPLATE_OPTIONS['path_cache'];
-      if ($TEMPLATE_OPTIONS['cache_by_language']) {
-          $path_cache .= $_CONF['language'] . '/';
-      }
-      $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
-      $iid = str_replace('-','_',$iid);
-      $filename = $path_cache.'instance__'.$iid.'.php';
-      $tmplt = '<!-- begin cached as '.htmlspecialchars($iid)." -->\n"
-             . $tmplt
-             . '<!-- end cached as '.htmlspecialchars($iid)." -->\n";
-      $this->cache_write($filename, $tmplt);
-      $this->unknowns = $old_unknowns;
-      return $filename;
+        if ( isset($_SYSTEM['disable_instance_caching']) && $_SYSTEM['disable_instance_caching'] == true ) {
+            return;
+        }
+
+        $old_unknowns = $this->unknowns;
+        $this->unknowns = 'PHP';
+        $tmplt = $this->parse($iid, $filevar);
+        $path_cache = $TEMPLATE_OPTIONS['path_cache'];
+        if ($TEMPLATE_OPTIONS['cache_by_language']) {
+            $path_cache .= $_CONF['language'] . '/';
+        }
+        $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
+        $iid = str_replace('-','_',$iid);
+        $filename = $path_cache.'instance__'.$iid.'.php';
+        $tmplt = '<!-- begin cached as '.htmlspecialchars($iid)." -->\n"
+               . $tmplt
+               . '<!-- end cached as '.htmlspecialchars($iid)." -->\n";
+        $this->cache_write($filename, $tmplt);
+        $this->unknowns = $old_unknowns;
+        return $filename;
     }
 
    /******************************************************************************
@@ -1901,23 +1907,27 @@ class Template
     * @see    create_instance
     *
     */
-    function check_instance($iid, $filevar) {
-      global $TEMPLATE_OPTIONS, $_CONF;
+    function check_instance($iid, $filevar)
+    {
+        global $TEMPLATE_OPTIONS, $_CONF, $_SYSTEM;
 
-      $path_cache = $TEMPLATE_OPTIONS['path_cache'];
-      if ($TEMPLATE_OPTIONS['cache_by_language']) {
-          $path_cache .= $_CONF['language'] . '/';
-      }
-      $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
-      $iid = str_replace('-','_',$iid);
-      $filename = $path_cache.'instance__'.$iid.'.php';
-      if (file_exists($filename) && array_key_exists($filevar, $this->file)) {
-          $this->file[$filevar] = $filename;
-          return true;
-      }
-      return false;
+        if ( isset($_SYSTEM['disable_instance_caching']) && $_SYSTEM['disable_instance_caching'] == true ) {
+            return;
+        }
+
+        $path_cache = $TEMPLATE_OPTIONS['path_cache'];
+        if ($TEMPLATE_OPTIONS['cache_by_language']) {
+            $path_cache .= $_CONF['language'] . '/';
+        }
+        $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
+        $iid = str_replace('-','_',$iid);
+        $filename = $path_cache.'instance__'.$iid.'.php';
+        if (file_exists($filename) && array_key_exists($filevar, $this->file)) {
+            $this->file[$filevar] = $filename;
+            return true;
+        }
+        return false;
     }
-
 } // end class
 
 /******************************************************************************
@@ -2008,7 +2018,11 @@ function CACHE_remove_instance($iid)
  */
 function CACHE_create_instance($iid, $data, $bypass_lang = false)
 {
-    global $TEMPLATE_OPTIONS, $_CONF;
+    global $TEMPLATE_OPTIONS, $_CONF, $_SYSTEM;
+
+    if ( isset($_SYSTEM['disable_instance_caching']) && $_SYSTEM['disable_instance_caching'] == true ) {
+        return;
+    }
 
     if ($TEMPLATE_OPTIONS['cache_by_language']) {
         if (!is_dir($TEMPLATE_OPTIONS['path_cache'] . $_CONF['language'])) {
@@ -2054,7 +2068,11 @@ function CACHE_create_instance($iid, $data, $bypass_lang = false)
  */
 function CACHE_check_instance($iid, $bypass_lang = false)
 {
-    global $_CONF;
+    global $_CONF, $_SYSTEM;
+
+    if ( isset($_SYSTEM['disable_instance_caching']) && $_SYSTEM['disable_instance_caching'] == true ) {
+        return false;
+    }
 
     $filename = CACHE_instance_filename($iid, $bypass_lang);
     if (file_exists($filename)) {
@@ -2078,7 +2096,11 @@ function CACHE_check_instance($iid, $bypass_lang = false)
  */
 function CACHE_get_instance_update($iid, $bypass_lang = false)
 {
-    global $_CONF;
+    global $_CONF, $_SYSTEM;
+
+    if ( isset($_SYSTEM['disable_instance_caching']) && $_SYSTEM['disable_instance_caching'] == true ) {
+        return;
+    }
 
     $filename = CACHE_instance_filename($iid, $bypass_lang);
     return @filemtime($filename);
@@ -2141,7 +2163,5 @@ function CACHE_security_hash()
         }
     }
     return $hash;
-
 }
-
 ?>
