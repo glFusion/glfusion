@@ -31,24 +31,24 @@ in between.
 ## Documentation
 
 Please head over to our documentation wiki at
-http://www.glfusion.org/wiki/glfusion:start for all the details on how to
+<a href="http://www.glfusion.org/wiki/glfusion:start">http://www.glfusion.org/wiki/glfusion:start</a> for all the details on how to
 install, extend and use the glFusion CMS.
 
 ## Support
 
 The best support method for glFusion CMS is the glFusion Web Site located at
-http://www.glfusion.org.  There is an active community ready to help out.
+<a href="http://www.glfusion.org" target="_blank">http://www.glfusion.org</a>.  There is an active community ready to help out.
 
-The glFusion CMS documentation is located at
-http://www.glfusion.org/wiki/glfusion:start.
+The glFusion CMS documentation is located at <a href="http://www.glfusion.org/wiki/glfusion:start" target="_blank">
+http://www.glfusion.org/wiki/glfusion:start</a>.
 
 The mailing list for announcements is glfusion-announce@freelists.org. You can
-subscribe at http://www.freelists.org/list/glfusion-announce. This list is an
+subscribe at <a href="http://www.freelists.org/list/glfusion-announce" target="_blank">http://www.freelists.org/list/glfusion-announce</a>. This list is an
 extremely low traffic mailing list.
 
 The mailing list for development discussions is
 glfusion-development@freelists.org. You can subscribe at
-http://www.freelists.org/list/glfusion-development.
+<a href="http://www.freelists.org/list/glfusion-development" target="_blank">http://www.freelists.org/list/glfusion-development</a>.
 
 ## System Requirements and Installation
 
@@ -60,7 +60,7 @@ latest in requirements, installation, and upgrade documentation.
 You can visit our demo site to become familiar with the basic features of
 glFusion.
 
-http://demo.glfusion.org
+<a href="http://demo.glfusion.org" target="_blank">http://demo.glfusion.org</a>
 
 ## License
 glFusion is licensed under the terms of the GNU General Public License
