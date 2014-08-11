@@ -18,8 +18,6 @@ if (is_ajax()) {
     if (isset($_POST["action"]) && !empty($_POST["action"])) {
         $action = $_POST["action"];
 
- COM_errorLog($action);
-
         switch ( $action ) {
             case 'subscribe_forum' :
                 subscribe();
