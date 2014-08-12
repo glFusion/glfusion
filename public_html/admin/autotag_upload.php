@@ -118,6 +118,7 @@ function processAutotagUpload()
     if ( $rc == -1 ) {
         // no xml file found
         _pi_deleteDir($_CONF['path_data'].$tmp);
+//        return _at_errorBox('Unable to locate the autotag XML file');
         return _at_errorBox(sprintf($LANG32[49],$autotagData['glfusionversion']));
     }
 
@@ -143,16 +144,14 @@ function processAutotagUpload()
         return _at_errorBox($errors);
     }
 
-    // check if plugin already exists
-    // if it does, check that this is an upgrade
-    // if not, error
-    // else validate we really want to upgrade
+    // check to see if an auto tag already exists...
+/*
     $result = DB_query("SELECT * FROM {$_TABLES['autotags']} WHERE tag='".DB_escapeString($autotagData['id'])."'");
     if ( DB_numRows($result) > 0 ) {
         _pi_deleteDir($_CONF['path_data'].$tmp);
         return _at_errorBox(sprintf($LANG32[52],$autotagData['id']));
     }
-
+*/
     $permError = 0;
     $permErrorList = '';
     if ( function_exists('set_time_limit') ) {
@@ -259,7 +258,7 @@ function post_uploadProcess() {
         $is_enabled = 1;
         $is_function = 1;
         $replacement = '';
-        DB_query("INSERT INTO {$_TABLES['autotags']} (tag,description,is_enabled,is_function,replacement) VALUES ('".$tag."','".$desc."',".$is_enabled.",".$is_function.",'')");
+        DB_query("REPLACE INTO {$_TABLES['autotags']} (tag,description,is_enabled,is_function,replacement) VALUES ('".$tag."','".$desc."',".$is_enabled.",".$is_function.",'')");
     }
     _pi_deleteDir($tmp);
 
