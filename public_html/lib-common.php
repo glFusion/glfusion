@@ -6076,35 +6076,38 @@ function COM_decompress($file, $target)
 {
     global $_CONF;
 
-    $ok = false;
+    $ok = 0;
 
     // decompression library doesn't like target folders ending in "/"
     if (substr($target, -1) == "/") $target = substr($target, 0, -1);
     $ext = substr($file, strrpos($file,'.')+1);
+
     // .tar, .tar.bz, .tar.gz, .tgz
-    if (in_array($ext, array('bz','bz2','gz','tgz'))) {
-        $base = substr($file, strrpos($file,'/')+1);
-        $tfile = substr($base,0,strpos($base,'.')+1);
-        $tar_temp_file= $_CONF['path_data'].'temp/'.$tfile.'tar';
-        @unlink($tar_temp_file);
-        $p = new PharData($file);
-        try {
-            $p2 = $p->decompress();
-        } catch (Exception $e) {
-            $ok = false;
-            return $ok;
+    if (in_array($ext, array('tar','bz','bz2','gz','tgz'))) {
+
+        require_once 'Archive/Tar.php';
+
+        $tar = new Archive_Tar($file);
+
+        $ok = $tar->extract($target);
+        if ( $ok ) {
+            $ok = 1;
         }
-    } else {
-        $p2 = new PharData($file);
+        return ($ok<1?false:true);
+
+    } else if ($ext == 'zip') {
+
+      require_once $_CONF['path'].'/lib/ZipLib.class.php';
+
+      $zip = new ZipLib();
+      $ok = $zip->Extract($file, $target);
+
+      return ($ok==-1?false:true);
+
     }
-    try {
-        $p2->extractTo($target,NULL,true); // extract all files
-        $ok = true;
-    } catch (Exception $e) {
-        $ok = false;
-    }
-    @unlink($tar_temp_file);
-    return $ok;
+
+    // unsupported file type
+    return false;
 }
 
 function COM_isWritable($path)
