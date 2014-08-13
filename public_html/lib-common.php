@@ -4031,10 +4031,10 @@ function COM_printPageNavigation( $base_url, $curpage, $num_pages,
 
     if ( $curpage > 1 ) {
         $T->set_var('first',true);
-        $T->set_var('first_link',COM_buildURL($base_url . $sep . $page_str . '1' . $suffix));
+        $T->set_var('first_link',$base_url . $sep . $page_str . '1' . $suffix);
         $pg = $sep . $page_str . ( $curpage - 1 );
         $T->set_var('prev',true);
-        $T->set_var('prev_link',COM_buildURL($base_url . $pg . $suffix));
+        $T->set_var('prev_link',$base_url . $pg . $suffix);
         $output->addLink('prev', urldecode($base_url . $pg . $suffix));
     } else {
         $T->unset_var('first');
@@ -4056,7 +4056,7 @@ function COM_printPageNavigation( $base_url, $curpage, $num_pages,
             $T->unset_var('active');
             $T->set_var('page_str',$pgcount);
             $pg = $sep . $page_str . $pgcount;
-            $T->set_var('page_link',COM_buildURL($base_url . $pg . $suffix));
+            $T->set_var('page_link',$base_url . $pg . $suffix);
         }
         $T->parse('datavar', 'datarow',true);
     }
@@ -4070,9 +4070,9 @@ function COM_printPageNavigation( $base_url, $curpage, $num_pages,
         $T->unset_var('last_link');
     } else {
         $T->set_var('next',true);
-        $T->set_var('next_link',COM_buildURL($base_url . $sep.$page_str . ($curpage + 1) . $suffix));
+        $T->set_var('next_link',$base_url . $sep.$page_str . ($curpage + 1) . $suffix);
         $T->set_var('last',true);
-        $T->set_var('last_link',COM_buildURL($base_url . $sep.$page_str . $num_pages . $suffix));
+        $T->set_var('last_link',$base_url . $sep.$page_str . $num_pages . $suffix);
         $output->addLink('next', urldecode($base_url . $sep. $page_str . ($curpage + 1) . $suffix));
     }
     if (!empty($msg) ) {
