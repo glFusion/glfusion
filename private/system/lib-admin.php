@@ -835,7 +835,7 @@ function ADMIN_createMenu($menu_arr, $text, $icon = '')
     $attr = array('class' => 'admin-menu-item');
     for ($i = 0; $i < count($menu_arr); $i++) { # iterate through menu
         $menu_fields .= COM_createLink($menu_arr[$i]['text'], $menu_arr[$i]['url'], $attr);
-        $admin_templates->set_var('menu_item_url',COM_buildURL($menu_arr[$i]['url']));
+        $admin_templates->set_var('menu_item_url',$menu_arr[$i]['url']);
         $admin_templates->set_var('menu_item_text',$menu_arr[$i]['text']);
         $admin_templates->parse('menuvar', 'menu_items',true);
         $admin_templates->parse('alt_menuvar', 'alt_menu_items',true);
@@ -872,7 +872,7 @@ function ADMIN_createMenuHeader($menu_arr, $text, $title = '', $icon = '')
     $admin_templates->set_block('top_menu', 'menu_items', 'menuvar');
     $admin_templates->set_block('top_menu', 'alt_menu_items', 'alt_menuvar');
     for ($i = 0; $i < count($menu_arr); $i++) { # iterate through menu
-        $admin_templates->set_var('menu_item_url',COM_buildURL($menu_arr[$i]['url']));
+        $admin_templates->set_var('menu_item_url',$menu_arr[$i]['url']);
         $admin_templates->set_var('menu_item_text',$menu_arr[$i]['text']);
         $admin_templates->parse('menuvar', 'menu_items',true);
         $admin_templates->parse('alt_menuvar', 'alt_menu_items',true);
