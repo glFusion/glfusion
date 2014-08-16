@@ -639,7 +639,7 @@ function createuser ( )
 
     $email       = isset($_POST['email']) ? COM_applyFilter ($_POST['email']) : '';
     $email_conf  = isset($_POST['email_conf']) ? COM_applyFilter ($_POST['email_conf']) : '';
-    $newusername = isset($_POST['username']) ? $_POST['username'] : '';
+    $username = isset($_POST['username']) ? $_POST['username'] : '';
 
     if ( isset($_POST['passwd']) ) {
         $passwd = trim($_POST['passwd']);
