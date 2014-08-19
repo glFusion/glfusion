@@ -6649,7 +6649,7 @@ function js_out()
     if ( !isset($_SYSTEM['disable_jquery']) || $_SYSTEM['disable_jquery'] == false ) {
         $files[] = $_CONF['path_html'].'javascript/jquery/jquery-1.11.0.min.js';
         $files[] = $_CONF['path_html'].'javascript/jquery/jquery-ui-1.10.4.min.js';
-        $files[] = $_CONF['path_html'].'javascript/jquery/addons/jqrating.min.js';
+        $files[] = $_CONF['path_html'].'javascript/addons/jqrating.min.js';
 
         if ( !isset($_SYSTEM['disable_jquery_tooltip']) || $_SYSTEM['disable_jquery_tooltip'] == false ) {
             $files[] = $_CONF['path_html'].'javascript/addons/tooltipster/jquery.tooltipster.min.js';
