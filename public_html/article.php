@@ -213,16 +213,6 @@ if ($A['count'] > 0) {
             }
             $pingback = true;
         }
-        $outputHandle->addMeta('property','og:title',$pagetitle);
-        $outputHandle->addMeta('property','og:type','article');
-        $outputHandle->addMeta('property','og:url',$permalink);
-
-        if (preg_match('/<img[^>]+src=([\'"])?((?(1).+?|[^\s>]+))(?(1)\1)/si', $story->DisplayElements('introtext'), $arrResult)) {
-            $outputHandle->addMeta('property','og:image',$arrResult[2]);
-        } else if (preg_match('/<img[^>]+src=([\'"])?((?(1).+?|[^\s>]+))(?(1)\1)/si', $story->DisplayElements('bodytext'), $arrResult)) {
-            $outputHandle->addMeta('property','og:image',$arrResult[2]);
-        }
-
         USES_lib_html2text();
         $metaDesc = $story->DisplayElements('introtext');
         $metaDesc = strip_tags($metaDesc);
@@ -242,6 +232,19 @@ if ($A['count'] > 0) {
             }
         }
         $metaDesc = trim($shortComment).$tailString;
+
+        $outputHandle->addMeta('property','og:site_name',urlencode($_CONF['site_name']));
+        $outputHandle->addMeta('property','og:locale',isset($LANG_LOCALE) ? $LANG_LOCALE : 'en_US');
+        $outputHandle->addMeta('property','og:title',$pagetitle);
+        $outputHandle->addMeta('property','og:type','article');
+        $outputHandle->addMeta('property','og:url',$permalink);
+        if (preg_match('/<img[^>]+src=([\'"])?((?(1).+?|[^\s>]+))(?(1)\1)/si', $story->DisplayElements('introtext'), $arrResult)) {
+            $outputHandle->addMeta('property','og:image',$arrResult[2]);
+        } else if (preg_match('/<img[^>]+src=([\'"])?((?(1).+?|[^\s>]+))(?(1)\1)/si', $story->DisplayElements('bodytext'), $arrResult)) {
+            $outputHandle->addMeta('property','og:image',$arrResult[2]);
+        }
+        $outputHandle->addMeta('property','og:description',@htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()));
+
         $outputHandle->addMeta('name','description',@htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()));
 
         if (isset($_GET['msg'])) {
