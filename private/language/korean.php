@@ -30,6 +30,8 @@ if (!defined ('GVERSION')) {
 
 $LANG_CHARSET = 'euc-kr';
 
+$LANG_LOCALE  = 'ko_KR';
+
 ###############################################################################
 # Array Format:
 # $LANGXX[YY]:  $LANG - variable name

@@ -29,6 +29,8 @@ if (!defined ('GVERSION')) {
 
 $LANG_CHARSET = 'iso-8859-1';
 
+$LANG_LOCALE = 'af_ZA';
+
 ###############################################################################
 # Array Format:
 # $LANGXX[YY]:  $LANG - variable name
@@ -83,7 +85,7 @@ $LANG01 = array(
     37 => 'Geen gebruiker artikels',
     38 => 'Inhoud Sindikasie',
     39 => 'Herlaai',
-    40 => 'Jou <tt>register_globals = Off</tt> in jou <tt>php.ini</tt>. Geekolog vereis egter dat <tt>register_globals</tt> <strong>aan</strong> is. Voordat jy verder gaan, stel dit na <strong>on</strong> en herlaai jou webblaaier.',
+    40 => 'Jou <tt>register_globals = Off</tt> in jou <tt>php.ini</tt>. glFusion vereis egter dat <tt>register_globals</tt> <strong>aan</strong> is. Voordat jy verder gaan, stel dit na <strong>on</strong> en herlaai jou webblaaier.',
     41 => 'Besoekers',
     42 => 'Geskryf deur:',
     43 => 'Antwoord hierop',
@@ -237,7 +239,8 @@ $LANG01 = array(
     'unsubscribe' => 'Unsubscribe',
     'view_online' => 'Click here %s to view online',
     'no_new_items' => 'No New Items',
-    'max_execution_time' => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.'
+    'max_execution_time' => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.',
+    'allowed_html' => 'Allowed HTML:'
 );
 
 ###############################################################################

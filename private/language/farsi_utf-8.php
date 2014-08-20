@@ -17,6 +17,8 @@ if (!defined ('GVERSION')) {
 $LANG_CHARSET = 'utf-8';
 $LANG_DIRECTION = 'rtl';
 
+$LANG_LOCALE  = 'fa_IR';
+
 ###############################################################################
 # Array Format:
 # $LANGXX[YY]:  $LANG - variable name

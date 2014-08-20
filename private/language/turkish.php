@@ -29,6 +29,8 @@ if (!defined ('GVERSION')) {
 
 $LANG_CHARSET = 'iso-8859-9';
 
+$LANG_LOCALE  = 'tr_TR';
+
 ###############################################################################
 # Array Format:
 # $LANGXX[YY]:  $LANG - variable name

@@ -33,6 +33,8 @@ if (!defined ('GVERSION')) {
 
 $LANG_CHARSET = 'iso-8859-2';
 
+$LANG_LOCALE  = 'bs_BA';
+
 ###############################################################################
 # Array Format:
 # $LANGXX[YY]:  $LANG - variable name

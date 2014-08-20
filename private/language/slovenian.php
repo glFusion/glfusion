@@ -32,6 +32,8 @@ if (!defined ('GVERSION')) {
 
 $LANG_CHARSET = 'windows-1250';
 
+$LANG_LOCALE  = 'sl_SI';
+
 ###############################################################################
 # Array Format:
 # $LANGXX[YY]:  $LANG - variable name

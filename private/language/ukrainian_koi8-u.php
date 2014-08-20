@@ -33,6 +33,8 @@ if (!defined ('GVERSION')) {
 
 $LANG_CHARSET = 'KOI8-U';
 
+$LANG_LOCALE  = 'uk_UA';
+
 ###############################################################################
 # Array Format:
 # $LANGXX[YY]:  $LANG - variable name
