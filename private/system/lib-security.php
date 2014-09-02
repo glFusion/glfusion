@@ -2054,6 +2054,7 @@ function SEC_loginForm($use_options = array())
     if (! empty($options['hidden_fields'])) {
         // allow caller to (ab)use {services} for hidden fields
         $services .= $options['hidden_fields'];
+        $loginform->set_var('hidden_fields',$options['hidden_fields']);
     }
     $loginform->set_var('services', $services);
 

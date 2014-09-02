@@ -120,8 +120,24 @@ if ($status == USER_ACCOUNT_ACTIVE) {
             echo $display;
             exit;
         }
+        $method = '';
+        if (isset($_POST['token_requestmethod'])) {
+            $method = COM_applyFilter($_POST['token_requestmethod']);
+        }
+        $postdata = '';
+        if (isset($_POST['token_postdata'])) {
+            $postdata = urldecode($_POST['token_postdata']);
+        }
+        $getdata = '';
+        if (isset($_POST['token_getdata'])) {
+            $getdata = urldecode($_POST['token_getdata']);
+        }
+        $filedata = '';
+        if ( isset($_POST['token_filedata']) ) {
+            $filedata = urldecode($_POST['token_filedata']);
+        }
         $display  = COM_siteHeader('menu');
-        $display .= SEC_reauthform($destination,$LANG20[9]);
+        $display .= SEC_reauthform($destination,$LANG20[9],$method,$postdata,$getdata,$filedata);
         $display .= COM_siteFooter();
         echo $display;
         exit;
@@ -136,10 +152,10 @@ if ($status == USER_ACCOUNT_ACTIVE) {
         if ( $currentUID > 1 ) {
             DB_delete($_TABLES['tokens'],'owner_id',(int)$currentUID);
         }
-
         echo COM_refresh($destination);
         exit;
     }
+
     $method = '';
     if (isset($_POST['token_requestmethod'])) {
         $method = COM_applyFilter($_POST['token_requestmethod']);
@@ -234,8 +250,25 @@ if ($status == USER_ACCOUNT_ACTIVE) {
         exit;
     }
 
+    $method = '';
+    if (isset($_POST['token_requestmethod'])) {
+        $method = COM_applyFilter($_POST['token_requestmethod']);
+    }
+    $postdata = '';
+    if (isset($_POST['token_postdata'])) {
+        $postdata = urldecode($_POST['token_postdata']);
+    }
+    $getdata = '';
+    if (isset($_POST['token_getdata'])) {
+        $getdata = urldecode($_POST['token_getdata']);
+    }
+    $filedata = '';
+    if ( isset($_POST['token_filedata']) ) {
+        $filedata = urldecode($_POST['token_filedata']);
+    }
+
     $display .= COM_siteHeader('menu');
-    $display .= SEC_reauthform($destination,$LANG20[9]);
+    $display .= SEC_reauthform($destination,$LANG20[9],$method,$postdata,$getdata,$filedata);
     $display .= COM_siteFooter();
     echo $display;
     exit;
@@ -250,14 +283,33 @@ if ($status == USER_ACCOUNT_ACTIVE) {
         $token = '';
     }
 }
-
 if ( $_SYSTEM['admin_session'] != 0 ) {
     // validate admin token
     if ( !SEC_checkTokenGeneral($token,'administration') ) {
-        $method   = strtoupper($_SERVER['REQUEST_METHOD']) == 'GET' ? 'GET' : 'POST';
-        $postdata = serialize($_POST);
-        $getdata  = serialize($_GET);
+
+        $method = '';
+        if (isset($_POST['token_requestmethod'])) {
+            $method = COM_applyFilter($_POST['token_requestmethod']);
+        } else {
+            $method   = strtoupper($_SERVER['REQUEST_METHOD']) == 'GET' ? 'GET' : 'POST';
+        }
+        $postdata = '';
+        if (isset($_POST['token_postdata'])) {
+            $postdata = urldecode($_POST['token_postdata']);
+        } else {
+            $postdata = serialize($_POST);
+        }
+        $getdata = '';
+        if (isset($_POST['token_getdata'])) {
+            $getdata = urldecode($_POST['token_getdata']);
+        } else {
+            $getdata  = serialize($_GET);
+        }
         $filedata = '';
+        if ( isset($_POST['token_filedata']) ) {
+            $filedata = urldecode($_POST['token_filedata']);
+        }
+
         if (! empty($_FILES)) {
             foreach ($_FILES as $key => $file) {
                 if ( is_array($file['name']) ) {
@@ -292,6 +344,7 @@ if ( $_SYSTEM['admin_session'] != 0 ) {
             exit;
         }
         $username = isset($_USER['username']) ? $_USER['username'] : '';
+
         $display .= COM_siteHeader();
         $display .= SEC_reauthform($destination,$message,$method,$postdata,$getdata,$filedata);
         $display .= COM_siteFooter();

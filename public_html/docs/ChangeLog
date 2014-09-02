@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.5.0
 ------
+- Disable exist check on auto tag upload
 - Implement og:image tag for stories
 - Implemented the ability to merge remote to local users from the
   user preference screen.
@@ -37,13 +38,21 @@ v1.5.0
 
 v1.4.3
 ------
+- Implemented option to disable instance caching
+- Added og:image meta data to articles
+- Fixed error that prevented batch user uploads.
+- Fixed error in Batch User Admin where short term user option did not work
+- Updated CKEditor to v4.4.3
+- Forum - Fixed issue where a required JS files was not loaded when
+  wysiwyg editor was selected
 - Static Pages - Do not override the page title when static page content
   is provided via auto tag
 - Media Gallery - implemented a fix where data was being written to an
   un-initialized object causing an error on PHP v5.4+ systems.
+- Cleaned up the style sheet caching logic and implemented improvements
+  to prevent corrupt cache files.
 - Implemented file locking when creating the style cache file to ensure
   multiple instances do not cause a file write error
-
 
 v1.4.2
 ------
