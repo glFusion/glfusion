@@ -1788,6 +1788,7 @@ function phpblock_mg_randommedia($parm1=array(),$parm2=''){
             'url_media'         =>  $url_media,
             'url_album'         =>  $url_album,
             'media_thumbnail'   =>  $media_item_thumbnail,
+            'media_thumbnail_img' => $media_thumbnail,
             'media_height'      =>  $height,
             'media_width'       =>  $width,
             'border_width'      =>  $width + 14,

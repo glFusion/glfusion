@@ -262,7 +262,10 @@ function _mg_profileblocksdisplay( $uid ) {
             $width = round($imgwidth / $ratio);
         }
 
-        $template->set_var('mediaitem_image', '<img src="' . $url_thumb . '" alt="" style="width:' . $width . 'px;height:' . $height . 'px;border:none;" />');
+        $template->set_var('mediaitem_image_thumb',$url_thumb);
+        $template->set_var('mediaitem_image_height',$height);
+        $template->set_var('mediaitem_image_width',$width);
+        $template->set_var('mediaitem_image', '<img src="' . $url_thumb . '" alt="" style="width:' . $width . 'px;height:' . $height . 'px" />');
         $template->set_var('mediaitem_begin_href', '<a href="' . $url_media . '">');
         $template->set_var('mediaitem_title', strip_tags($row['media_title']));
         $template->set_var('mediaitem_end_href', '</a>');
@@ -358,6 +361,9 @@ function _mg_profileblocksdisplay( $uid ) {
             $height = 120;
             $width = round($imgwidth / $ratio);
         }
+        $template->set_var('album_cover_thumb',$url_thumb);
+        $template->set_var('album_cover_height',$height);
+        $template->set_var('album_cover_width',$width);
         $template->set_var('album_cover', '<img src="' . $url_thumb . '" alt="" style="width:' . $width . 'px;height:' . $height . 'px;border:none;" />');
         $template->set_var('album_begin_href', '<a href="' . $url_album . '">');
         $template->set_var('album_title', strip_tags($row['album_title']));

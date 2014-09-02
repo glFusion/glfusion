@@ -6,8 +6,6 @@
 // |                                                                          |
 // | Main index page for Media Gallery                                        |
 // +--------------------------------------------------------------------------+
-// | $Id:: mgindex.php 2869 2008-07-31 14:38:32Z mevans0263                  $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2002-2013 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -92,6 +90,7 @@ function MG_index() {
         $rsslink = '<a href="' . $feedUrl . '"' . ' type="application/rss+xml">';
         $rsslink .= '<img src="' . MG_getImageFile('feed.png') . '" alt="" style="border:none;"/></a>';
         $T->set_var('rsslink', $rsslink);
+        $T->set_var('rsslink_url',$feedUrl);
     } else {
         $T->set_var('rsslink','');
     }
@@ -105,33 +104,34 @@ function MG_index() {
     // Let's build our admin menu options
 
     $showAdminBox = 0;
+    $admin_box_item = '';
 
     $admin_box  = '<form name="adminbox" id="adminbox" action="' . $_MG_CONF['site_url'] . '/admin.php" method="get" style="margin:0;padding:0;">' . LB;
     $admin_box .= '<div>';
     $admin_box .= '<select onchange="javascript:forms[\'adminbox\'].submit();" name="mode">' . LB;
-    $admin_box .= '<option label="' . $LANG_MG01['options'] . '" value="">' . $LANG_MG01['options'] . '</option>' . LB;
+    $admin_box_item .= '<option label="' . $LANG_MG01['options'] . '" value="">' . $LANG_MG01['options'] . '</option>' . LB;
 
     if ( ($MG_albums[0]->member_uploads || $MG_albums[0]->access == 3) && (!COM_isAnonUser() ) )  {
-        $admin_box .= '<option value="upload">' . $LANG_MG01['add_media'] . '</option>' . LB;
+        $admin_box_item .= '<option value="upload">' . $LANG_MG01['add_media'] . '</option>' . LB;
         $showAdminBox = 1;
     }
     if ( $MG_albums[0]->owner_id ) {
-        $admin_box .= '<option value="albumsort">'  . $LANG_MG01['sort_albums'] . '</option>' . LB;
-        $admin_box .= '<option value="globalattr">' . $LANG_MG01['globalattr'] . '</option>' . LB;
-        $admin_box .= '<option value="globalperm">' . $LANG_MG01['globalperm'] . '</option>' . LB;
+        $admin_box_item .= '<option value="albumsort">'  . $LANG_MG01['sort_albums'] . '</option>' . LB;
+        $admin_box_item .= '<option value="globalattr">' . $LANG_MG01['globalattr'] . '</option>' . LB;
+        $admin_box_item .= '<option value="globalperm">' . $LANG_MG01['globalperm'] . '</option>' . LB;
         $queue_count = DB_count($_TABLES['mg_media_album_queue']);
-        $admin_box .= '<option value="moderate">' . $LANG_MG01['media_queue'] . ' (' . $queue_count . ')</option>' . LB;
-        $admin_box .= '<option value="wmmanage">' . $LANG_MG01['wm_management'] . '</option>' . LB;
-        $admin_box .= '<option value="create">' . $LANG_MG01['create_album'] . '</option>' . LB;
+        $admin_box_item .= '<option value="moderate">' . $LANG_MG01['media_queue'] . ' (' . $queue_count . ')</option>' . LB;
+        $admin_box_item .= '<option value="wmmanage">' . $LANG_MG01['wm_management'] . '</option>' . LB;
+        $admin_box_item .= '<option value="create">' . $LANG_MG01['create_album'] . '</option>' . LB;
         $showAdminBox = 1;
     } elseif ( $MG_albums[0]->access == 3 ) {
-        $admin_box .= '<option value="create">' . $LANG_MG01['create_album'] . '</option>' . LB;
+        $admin_box_item .= '<option value="create">' . $LANG_MG01['create_album'] . '</option>' . LB;
         $showAdminBox = 1;
     } elseif ( $_MG_CONF['member_albums'] == 1 && ( !COM_isAnonUser() ) && $_MG_CONF['member_album_root'] == 0 && $_MG_CONF['member_create_new']) {
-        $admin_box .= '<option value="create">' . $LANG_MG01['create_album'] . '</option>' . LB;
+        $admin_box_item .= '<option value="create">' . $LANG_MG01['create_album'] . '</option>' . LB;
         $showAdminBox = 1;
     }
-
+    $admin_box .= $admin_box_item;
     $admin_box .= '</select>' . LB;
     $admin_box .= '<input type="hidden" name="album_id" value="0"/>' . LB;
     $admin_box .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '"/>' . LB;
@@ -140,9 +140,11 @@ function MG_index() {
 
     if ( $showAdminBox == 0 ) {
         $admin_box = '';
+        $admin_box_item = '';
     }
 
     $T->set_var('select_adminbox',$admin_box);
+    $T->set_var('select_box_items',$admin_box_item);
 
     $album_count = 0;
 
@@ -470,6 +472,27 @@ function MG_index() {
                     'column_width'      => $albumColumnWidth,
                     'column_width2'     => $tn_height + 35 . 'px',
                     'lang_album'        => $LANG_MG00['album'],
+
+
+                    'border_width'          => $newwidth + 20,
+                    'border_height'         => $newheight + 20,
+                    'media_link_start'      => '<a href="' . $_MG_CONF['site_url'] . '/album.php?aid=' . $MG_albums[$achild[$indexCounter]]->id . '&amp;page=1' . '">',
+                    'media_link_end'        => '</a>',
+                    'url_media_item'        => $_MG_CONF['site_url'] . '/album.php?aid=' . $MG_albums[$achild[$indexCounter]]->id . '&amp;page=1',
+                    'media_thumbnail'       => $album_last_image,
+                    'media_size'            => 'width="' . $newwidth . '" height="' . $newheight . '"',
+                    'media_height'          => $newheight,
+                    'media_width'           => $newwidth,
+                    'media_tag'             => strip_tags($MG_albums[$achild[$indexCounter]]->title),
+                    'frWidth'               =>  $newwidth  - $MG_albums[0]->afrWidth,
+                    'frHeight'              =>  $newheight - $MG_albums[0]->afrHeight,
+
+
+
+
+
+
+
                 ));
                 $T->parse('AColumn', 'AlbumColumn',true);
                 $indexCounter++;
