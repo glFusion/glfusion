@@ -1691,22 +1691,25 @@ function forumPLG_getMemberBadge($uid) {
 function phpblock_forum_menu() {
     global $_TABLES,$_CONF,$_USER,$_FF_CONF,$LANG_GF01,$LANG_GF02,$LANG_GF07;
 
+// let's move this to a template - shall we....
+
+    $menuArray = array();
+
     $retval = '<ul>';
-    $retval .= '<li><a href="'.$_CONF['site_url'].'/forum/index.php" title="'.$LANG_GF02['msg196'].'">'.$LANG_GF01['INDEXPAGE'].'</a></li>';
+    $menuArray[] = '<a href="'.$_CONF['site_url'].'/forum/index.php" title="'.$LANG_GF02['msg196'].'">'.$LANG_GF01['INDEXPAGE'].'</a>';
     if ( !COM_isAnonUser() ) {
-        $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/notify.php' . '" title="' . $LANG_GF01['SUBSCRIPTIONS'] . '">' . $LANG_GF01['SUBSCRIPTIONS'] . '</a></li>';
-        $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/list.php?op=bookmarks' . '" title="' . $LANG_GF01['BOOKMARKS'] . '">' . $LANG_GF01['BOOKMARKS'] . '</a></li>';
+        $menuArray[] = '<a href="' . $_CONF['site_url'] . '/forum/notify.php' . '" title="' . $LANG_GF01['SUBSCRIPTIONS'] . '">' . $LANG_GF01['SUBSCRIPTIONS'] . '</a>';
+        $menuArray[] = '<a href="' . $_CONF['site_url'] . '/forum/list.php?op=bookmarks' . '" title="' . $LANG_GF01['BOOKMARKS'] . '">' . $LANG_GF01['BOOKMARKS'] . '</a>';
     }
     if ( $_FF_CONF['allow_memberlist'] && !COM_isAnonUser() ) {
-        $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/memberlist.php" title="' . $LANG_GF02['msg88'] . '">' . $LANG_GF02['msg88'] . '</a></li>';
+        $menuArray[] = '<a href="' . $_CONF['site_url'] . '/forum/memberlist.php" title="' . $LANG_GF02['msg88'] . '">' . $LANG_GF02['msg88'] . '</a>';
     }
-    $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/list.php?op=lastx" title="' . $LANG_GF01['LASTX'] . '">' . $LANG_GF01['LASTX'] . '</a></li>';
-    $retval .= '<li><a href="'.$_CONF['site_url'].'/forum/list.php?op=popular" title="' . $LANG_GF02['msg201'] . '">'.$LANG_GF07['3'].'</a></li>';
-    $retval .= '</ul>';
+    $menuArray[] = '<a href="' . $_CONF['site_url'] . '/forum/list.php?op=lastx" title="' . $LANG_GF01['LASTX'] . '">' . $LANG_GF01['LASTX'] . '</a>';
+    $menuArray[] = '<a href="'.$_CONF['site_url'].'/forum/list.php?op=popular" title="' . $LANG_GF02['msg201'] . '">'.$LANG_GF07['3'].'</a>';
+
+    $retval = COM_makeList($menuArray);
     return $retval;
 }
-
-
 
 function _ff_canUserViewRating( $forum_id ) {
     global $_USER, $_TABLES, $_FF_CONF;
