@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Displays the contents of a MG album                                      |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2013 by the following authors:                        |
+// | Copyright (C) 2002-2014 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -354,6 +352,10 @@ $birdseed = '<a href="' . $_CONF['site_url'] . '/index.php">' . $LANG_MG03['home
             ($_MG_CONF['gallery_only'] == 1 ? '' : $_MG_CONF['seperator'] . ' <a href="' . $_MG_CONF['site_url'] . '/index.php?page=' . $aPage . '">' . $_MG_CONF['menulabel'] . '</a> ') .
             $MG_albums[$album_id]->getPath(0,$sortOrder);
 
+$birdseedUL = '<li><a href="' . $_CONF['site_url'] . '/index.php">' . $LANG_MG03['home'] . '</a></li>';
+$birdseedUL .= ($_MG_CONF['gallery_only'] == 1 ? '' : '<li><a href="' . $_MG_CONF['site_url'] . '/index.php?page=' . $aPage . '">' . $_MG_CONF['menulabel'] . '</a></li>');
+$birdseedUL .= $MG_albums[$album_id]->getPathUL(0,$sortOrder);
+
 switch ( $MG_albums[$album_id]->enable_slideshow ) {
     case 0 :
         $url_slideshow = '';
@@ -395,11 +397,13 @@ switch ( $MG_albums[$album_id]->enable_slideshow ) {
 // now build the admin select...
 
 $admin_box = '';
+$admin_box_items = '';
+
 $admin_box  = '<form name="adminbox" id="adminbox" action="' . $_MG_CONF['site_url'] . '/admin.php" method="get" style="margin:0;padding:0">';
 $admin_box .= '<div><input type="hidden" name="album_id" value="' . $album_id . '"/>';
 $admin_box .= '<select name="mode" onchange="forms[\'adminbox\'].submit()">';
-$admin_box .= '<option label="' . $LANG_MG01['options'] . '" value="">' . $LANG_MG01['options'] .'</option>';
-$admin_box .= '<option value="search">' . $LANG_MG01['search'] . '</option>';
+$admin_box_items .= '<option label="' . $LANG_MG01['options'] . '" value="">' . $LANG_MG01['options'] .'</option>';
+$admin_box_items .= '<option value="search">' . $LANG_MG01['search'] . '</option>';
 
 $uploadMenu = 0;
 $adminMenu  = 0;
@@ -423,27 +427,28 @@ if ( $MG_albums[0]->owner_id ) {
     $adminMenu  = 0;
 }
 if ( $uploadMenu == 1 ) {
-    $admin_box .= '<option value="upload">' . $LANG_MG01['add_media'] . '</option>';
+    $admin_box_items .= '<option value="upload">' . $LANG_MG01['add_media'] . '</option>';
 }
 if ( $adminMenu == 1 ) {
-    $admin_box .= '<option value="edit">'   . $LANG_MG01['edit_album'] . '</option>';
-    $admin_box .= '<option value="create">' . $LANG_MG01['create_album'] . '</option>';
-    $admin_box .= '<option value="batchcaption">' . $LANG_MG01['batch_caption'] . '</option>';
-    $admin_box .= '<option value="staticsort">' . $LANG_MG01['static_sort_media'] . '</option>';
-    $admin_box .= '<option value="media">' . $LANG_MG01['manage_media'] .'</option>';
-    $admin_box .= '<option value="resize">' . $LANG_MG01['resize_display'] . '</option>';
-    $admin_box .= '<option value="rebuild">' . $LANG_MG01['rebuild_thumb'] . '</option>';
+    $admin_box_items .= '<option value="edit">'   . $LANG_MG01['edit_album'] . '</option>';
+    $admin_box_items .= '<option value="create">' . $LANG_MG01['create_album'] . '</option>';
+    $admin_box_items .= '<option value="batchcaption">' . $LANG_MG01['batch_caption'] . '</option>';
+    $admin_box_items .= '<option value="staticsort">' . $LANG_MG01['static_sort_media'] . '</option>';
+    $admin_box_items .= '<option value="media">' . $LANG_MG01['manage_media'] .'</option>';
+    $admin_box_items .= '<option value="resize">' . $LANG_MG01['resize_display'] . '</option>';
+    $admin_box_items .= '<option value="rebuild">' . $LANG_MG01['rebuild_thumb'] . '</option>';
 } elseif ($_MG_CONF['member_albums'] == 1 && !empty ($_USER['username']) && $_MG_CONF['member_create_new'] == 1 && $_MG_USERPREFS['active'] == 1 && ($album_id == $_MG_CONF['member_album_root'])) {
-    $admin_box .= '<option value="create">' . $LANG_MG01['create_album'] . '</option>';
+    $admin_box_items .= '<option value="create">' . $LANG_MG01['create_album'] . '</option>';
     $adminMenu = 1;
 }
-
+$admin_box .= $admin_box_items;
 $admin_box .= '</select>';
 $admin_box .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '" style="padding:0px;margin:0px;"/>';
 $admin_box .= '</div></form>';
 
 if ( $uploadMenu == 0 && $adminMenu == 0 ) {
     $admin_box = '';
+    $admin_box_items = '';
 }
 
 if ( $MG_albums[$album_id]->enable_sort == 1 ) {
@@ -489,6 +494,7 @@ SESS_setVar('mediagallery.album.page',$page+1);
 $T->set_var(array(
     'site_url'              => $_MG_CONF['site_url'],
     'birdseed'              => $birdseed,
+    'birdseed_ul'           => $birdseedUL,
     'album_title'           => PLG_replaceTags($MG_albums[$album_id]->title,'mediagallery','album_title'),
     'url_slideshow'         => $url_slideshow,
     'table_columns'         => $columns_per_page,
@@ -503,6 +509,7 @@ $T->set_var(array(
 	'album_id_display'  	=> ($MG_albums[0]->owner_id || $_MG_CONF['enable_media_id'] == 1 ? $LANG_MG03['album_id_display'] . $album_id : ''),
 	'lang_slideshow'        => $lang_slideshow,
 	'select_adminbox'		=> $admin_box,
+	'admin_box_items'       => $admin_box_items,
 	'select_sortbox'		=> $sort_box,
 	'album_last_update'		=> $album_last_update[0],
 	'album_owner'			=> $ownername,
