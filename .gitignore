@@ -9,5 +9,8 @@ public_html/tinymce/
 public_html/admin/plugins/tinymce/
 public_html/images/
 private/lib/htmlpurifier/HTMLPurifier/DefinitionCache/
+public_html/forum/media/
 public_html/jscache_*.js
 public_html/stylecache_*.css
+style.cache.css
+js.cache.js
