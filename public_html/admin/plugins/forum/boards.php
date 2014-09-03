@@ -759,12 +759,12 @@ function board_edit_forum($id, $statusText='')
         if ($grp == $privgroup) {
             $grouplist .= '<option value="' .$grp. '" selected="selected">' . $name. '</option>';
         } else {
-            $grouplist .= '<option value="' .$grp. '">' . $name. '</option>';
+            $grouplist .= '<option value="' .$grp. '">' . ucfirst($name). '</option>';
         }
         if ($grp == $attachgroup) {
-            $attachgrouplist .= '<option value="' .$grp. '" selected="selected">' . $name. '</option>';
+            $attachgrouplist .= '<option value="' .$grp. '" selected="selected">' . ucfirst($name). '</option>';
         } else {
-            $attachgrouplist .= '<option value="' .$grp. '">' . $name. '</option>';
+            $attachgrouplist .= '<option value="' .$grp. '">' . ucfirst($name). '</option>';
         }
     }
     $catSelect = '<select name="category">';
