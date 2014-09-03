@@ -101,7 +101,7 @@ function PAGE_form($A, $error = false)
     } else {
         $sp_template = new Template ($template_path);
         $sp_template->set_file ('form', 'editor.thtml');
-        $sp_template->set_var('layout_url', $_CONF['layout_url']);
+
         $sp_template->set_var('lang_mode', $LANG24[3]);
         $sp_template->set_var(
             'comment_options',
@@ -109,33 +109,30 @@ function PAGE_form($A, $error = false)
             'code,name',
             $A['commentcode'])
         );
-
-        $sp_template->set_var('sp_search_checked',$A['sp_search'] == 1 ? ' checked="checked"' : '');
-        $sp_template->set_var('sp_status_checked',$A['sp_status'] == 1 ? ' checked="checked"' : '');
-
-        $sp_template->set_var('lang_accessrights', $LANG_ACCESS['accessrights']);
-        $sp_template->set_var('lang_owner', $LANG_ACCESS['owner']);
         $ownername = COM_getDisplayName ($A['owner_id']);
-        $sp_template->set_var('owner_username', DB_getItem($_TABLES['users'],
-                              'username',"uid = {$A['owner_id']}"));
-        $sp_template->set_var('owner_name', $ownername);
-        $sp_template->set_var('owner', $ownername);
-        $sp_template->set_var('owner_id', $A['owner_id']);
-        $sp_template->set_var('lang_group', $LANG_ACCESS['group']);
-        $sp_template->set_var('group_dropdown',
-                              SEC_getGroupDropdown ($A['group_id'], $access));
-        $sp_template->set_var('permissions_editor', SEC_getPermissionsHTML($A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']));
-        $sp_template->set_var('lang_permissions', $LANG_ACCESS['permissions']);
-        $sp_template->set_var('lang_perm_key', $LANG_ACCESS['permissionskey']);
-        $sp_template->set_var('permissions_msg', $LANG_ACCESS['permmsg']);
-        $sp_template->set_var('site_url', $_CONF['site_url']);
-        $sp_template->set_var('site_admin_url', $_CONF['site_admin_url']);
-        $sp_template->set_var('start_block_editor',
-                COM_startBlock($LANG_STATIC['staticpageeditor']), '',
-                        COM_getBlockTemplate ('_admin_block', 'header'));
-        $sp_template->set_var('lang_save', $LANG_ADMIN['save']);
-        $sp_template->set_var('lang_cancel', $LANG_ADMIN['cancel']);
-        $sp_template->set_var('lang_preview', $LANG_ADMIN['preview']);
+
+        $sp_template->set_var(array(
+            'sp_search_checked' => $A['sp_search'] == 1 ? ' checked="checked"' : '',
+            'sp_status_checked' => $A['sp_status'] == 1 ? ' checked="checked"' : '',
+            'lang_accessrights' => $LANG_ACCESS['accessrights'],
+            'lang_owner'        => $LANG_ACCESS['owner'],
+            'owner_username'    => DB_getItem($_TABLES['users'],'username',"uid = {$A['owner_id']}"),
+            'owner_name'        => $ownername,
+            'owner'             => $ownername,
+            'owner_id'          => $A['owner_id'],
+            'lang_group'        => $LANG_ACCESS['group'],
+            'group_dropdown'    => SEC_getGroupDropdown ($A['group_id'], $access),
+            'permissions_editor'=> SEC_getPermissionsHTML($A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']),
+            'lang_permissions'  => $LANG_ACCESS['permissions'],
+            'lang_perm_key'     => $LANG_ACCESS['permissionskey'],
+            'permissions_msg'   => $LANG_ACCESS['permmsg'],
+            'start_block_editor' => COM_startBlock($LANG_STATIC['staticpages'].' :: '.$LANG_STATIC['staticpageeditor'], '',
+                        COM_getBlockTemplate ('_admin_block', 'header')),
+            'lang_save'         => $LANG_ADMIN['save'],
+            'lang_cancel'       => $LANG_ADMIN['cancel'],
+            'lang_preview'      => $LANG_ADMIN['preview']
+        ));
+
         if (SEC_hasRights ('staticpages.delete') && ($action != 'clone') &&
                 !empty ($A['sp_old_id'])) {
             $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
@@ -143,11 +140,17 @@ function PAGE_form($A, $error = false)
             $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
             $sp_template->set_var ('delete_option',
                                    sprintf ($delbutton, $jsconfirm));
+
+            $sp_template->set_var('delete_button',true);
+            $sp_template->set_var('lang_delete_confirm',$MESSAGE[76]);
+            $sp_template->set_var('lang_delete',$LANG_ADMIN['delete']);
+
             $sp_template->set_var ('delete_option_no_confirmation',
                                    sprintf ($delbutton, ''));
         } else {
             $sp_template->set_var('delete_option','');
         }
+
         $sp_template->set_var('lang_writtenby', $LANG_STATIC['writtenby']);
         $sp_template->set_var('username', DB_getItem($_TABLES['users'],
                               'username', "uid = {$A['sp_uid']}"));
