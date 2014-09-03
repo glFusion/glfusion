@@ -1172,13 +1172,15 @@ function SEC_getGroupDropdown ($group_id, $access, $var_name='group_id')
     if ($access == 3) {
         $usergroups = SEC_getUserGroups ();
 
+        uksort($usergroups, "strnatcasecmp");
+
         $groupdd .= '<select name="' . $var_name . '">' . LB;
         foreach ($usergroups as $ug_name => $ug_id) {
             $groupdd .= '<option value="' . $ug_id . '"';
             if ($group_id == $ug_id) {
                 $groupdd .= ' selected="selected"';
             }
-            $groupdd .= '>' . $ug_name . '</option>' . LB;
+            $groupdd .= '>' . ucfirst($ug_name) . '</option>' . LB;
         }
         $groupdd .= '</select>' . LB;
     } else {
