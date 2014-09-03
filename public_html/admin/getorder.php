@@ -57,7 +57,7 @@ $id_sent    = preg_replace("/[^0-9a-zA-Z]/","",$_REQUEST['optionid']);
 $menu       = preg_replace("/[^0-9a-zA-Z]/","",$_REQUEST['menuid']);
 
 $order_select = '<label for="menuorder">' . $LANG_MB01['display_after'] . ':</label>';
-$order_select .= '<select id="menuorder" name="menuorder">' . LB;
+$order_select = '<select id="menuorder" name="menuorder">' . LB;
 $order_select .= '<option value="0">' . $LANG_MB01['first_position'] . '</option>' . LB;
 $result = DB_query("SELECT id,element_label,element_order FROM {$_TABLES['menu_elements']} WHERE menu_id='" . (int) $menu . "' AND pid=" . (int) $id_sent . ' ORDER BY element_order ASC');
 while ($row = DB_fetchArray($result)) {

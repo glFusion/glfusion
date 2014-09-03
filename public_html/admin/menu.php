@@ -269,11 +269,11 @@ function MB_createMenu( ) {
     $rootUser = DB_getItem($_TABLES['group_assignments'],'ug_uid','ug_main_grp_id=1');
     $usergroups = SEC_getUserGroups($rootUser);
     $usergroups[$LANG_MB01['non-logged-in']] = 998;
-    ksort($usergroups);
+    uksort($usergroups, "strnatcasecmp");
     $group_select = '<select id="group" name="group">' . LB;
     for ($i = 0; $i < count($usergroups); $i++) {
         $group_select .= '<option value="' . $usergroups[key($usergroups)] . '"';
-        $group_select .= '>' . key($usergroups) . '</option>' . LB;
+        $group_select .= '>' . ucfirst(key($usergroups)) . '</option>' . LB;
         next($usergroups);
     }
     $group_select .= '</select>' . LB;
@@ -521,10 +521,6 @@ function MB_createElement ( $menu_id ) {
     }
     $sp_select .= '</select>' . LB;
 
-//    if ( $spCount == 0 ) {
-//        $sp_select = '';
-//    }
-
     $topicCount = 0;
     $topic_select = '<select id="topicname" name="topicname">' . LB;
     $sql = "SELECT tid,topic FROM {$_TABLES['topics']} ORDER BY topic";
@@ -608,24 +604,28 @@ function MB_createElement ( $menu_id ) {
 
     $usergroups = SEC_getUserGroups($rootUser);
     $usergroups[$LANG_MB01['non-logged-in']] = 998;
-    ksort($usergroups);
+    uksort($usergroups, "strnatcasecmp");
     $group_select .= '<select id="group" name="group">' . LB;
 
     for ($i = 0; $i < count($usergroups); $i++) {
         $group_select .= '<option value="' . $usergroups[key($usergroups)] . '"';
-        $group_select .= '>' . key($usergroups) . '</option>' . LB;
+        $group_select .= '>' . ucfirst(key($usergroups)) . '</option>' . LB;
         next($usergroups);
     }
     $group_select .= '</select>' . LB;
 
     $T = new Template($_CONF['path_layout'] . 'admin/menu');
-    $T->set_file( 'admin','createelement.thtml');
+//    $T->set_file( 'admin','createelement.thtml');
+    $T->set_file( 'admin','editelement.thtml');
 
     $T->set_var(array(
         'form_action'       => $_CONF['site_admin_url'] . '/menu.php',
         'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/menu.php">'.$LANG_MB01['menu_list'].'</a> :: <a href="'.$_CONF['site_admin_url'].'/menu.php?mode=menu&amp;menu='.$menu_id.'">'.$menu->name.'</a> :: '.$LANG_MB01['create_element'],
         'menuname'          => $menu->name,
+//depreciated
         'menuid'            => $menu_id,
+//
+        'menu'              => $menu_id,
         'type_select'       => $type_select,
         'gl_select'         => $gl_select,
         'parent_select'     => $parent_select,
@@ -635,6 +635,8 @@ function MB_createElement ( $menu_id ) {
         'topic_select'      => $topic_select,
         'glfunction_select' => $glfunction_select,
         'group_select'      => $group_select,
+// new
+        'mode'              => 'save',
     ));
 
     $T->parse('output', 'admin');
@@ -859,15 +861,16 @@ function MB_editElement( $menu_id, $mid ) {
 
     $usergroups = SEC_getUserGroups($rootUser);
     $usergroups[$LANG_MB01['non-logged-in']] = 998;
-    ksort($usergroups);
+
+    uksort($usergroups, "strnatcasecmp");
     $group_select = '<select id="group" name="group">' . LB;
 
     for ($i = 0; $i < count($usergroups); $i++) {
         $group_select .= '<option value="' . $usergroups[key($usergroups)] . '"';
-        if ($menu->menu_elements[$mid]->group_id==$usergroups[key($usergroups)] ) {
+        if ($menu->menu_elements[$mid]->group_id == $usergroups[key($usergroups)] ) {
             $group_select .= ' selected="selected"';
         }
-        $group_select .= '>' . key($usergroups) . '</option>' . LB;
+        $group_select .= '>' . ucfirst(key($usergroups)) . '</option>' . LB;
         next($usergroups);
     }
     $group_select .= '</select>' . LB;
@@ -920,6 +923,7 @@ function MB_editElement( $menu_id, $mid ) {
         'active_selected'   => $active_selected,
         'menu'              => $menu_id,
         'mid'               => $mid,
+        'mode'              => 'saveedit',
     ));
     $T->parse('output', 'admin');
 
@@ -1118,14 +1122,15 @@ function MB_editMenu( $mid ) {
     $rootUser = DB_getItem($_TABLES['group_assignments'],'ug_uid','ug_main_grp_id=1');
     $usergroups = SEC_getUserGroups($rootUser);
     $usergroups[$LANG_MB01['non-logged-in']] = 998;
-    ksort($usergroups);
+    uksort($usergroups, "strnatcasecmp");
+
     $group_select = '<select id="group" name="group">' . LB;
     for ($i = 0; $i < count($usergroups); $i++) {
         $group_select .= '<option value="' . $usergroups[key($usergroups)] . '"';
         if ( $usergroups[key($usergroups)] == $menu->group_id) {
             $group_select .= ' selected="selected"';
         }
-        $group_select .= '>' . key($usergroups) . '</option>' . LB;
+        $group_select .= '>' . ucfirst(key($usergroups)) . '</option>' . LB;
         next($usergroups);
     }
     $group_select .= '</select>' . LB;
@@ -1203,8 +1208,8 @@ function _mb_getListField_menulist($fieldname, $fieldvalue, $A, $icon_arr)
     switch ($fieldname) {
         case 'menu_name':
             $elementDetails = $A['menu_name'] . '::';
-            $elementDetails .= '<b>' . $LANG_MB01['type'] . ':</b><br />' . $LANG_MB_MENU_TYPES[$A['menu_type']] . '<br/>';
-            $retval = '<a class="'.COM_getToolTipStyle().'" title="' . $elementDetails . '" href="#">'.$A['menu_name'].'</a>';
+            $elementDetails .= '<b>' . $LANG_MB01['type'] . ':</b><br/>' . $LANG_MB_MENU_TYPES[$A['menu_type']] . '<br/>';
+            $retval = '<span style="cursor:pointer;" class="'.COM_getToolTipStyle().'" title="' . $elementDetails . '">'.$A['menu_name'].'</span>';
             break;
         case 'copy' :
             $retval = '<a href="'.$_CONF['site_admin_url'].'/menu.php?mode=clone&amp;id='.$fieldvalue.'">'
@@ -1215,7 +1220,7 @@ function _mb_getListField_menulist($fieldname, $fieldvalue, $A, $icon_arr)
             break;
         case 'elements' :
             $retval = '<a href="'.$_CONF['site_admin_url'].'/menu.php?mode=menu&amp;menu='.$A['menu_id'].'">'
-            . '<img src="'.$_CONF['layout_url'].'/images/edit.png" alt="'.$LANG_MB01['edit'].'" />';
+            . '<img src="'.$_CONF['layout_url'].'/images/edit.png" alt="'.$LANG_MB01['edit'].'">';
             break;
         case 'delete' :
             if ( $A['menu_id'] != 1 && $A['menu_id'] != 2 && $A['menu_id'] != 3 ) {
@@ -1226,7 +1231,6 @@ function _mb_getListField_menulist($fieldname, $fieldvalue, $A, $icon_arr)
             $retval = '<a href="'.$_CONF['site_admin_url'].'/menu.php?mode=editmenu&amp;menuid='.$A['menu_id'].'">'
             . '<img src="'.$_CONF['layout_url'].'/images/gear.png" height="16" width="16" alt="'.$LANG_MB01['options'].'"/></a>';
             break;
-
         default :
             $retval = $fieldvalue;
             break;

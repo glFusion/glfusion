@@ -191,7 +191,7 @@ function toggleFields() {
         {group_select}
       </div>
     <div style="text-align:center;padding-top:20px;padding-bottom:10px;">
-      <input type="hidden" id="mode" name="mode" value="saveedit" />
+      <input type="hidden" id="mode" name="mode" value="{mode}" />
       <input type="submit" id="execute" name="execute" value="{$LANG32[23]}" />&nbsp;&nbsp;
       <input type="submit" id="cancel" name="cancel" value="{$LANG_MB01[cancel]}" />
     </div>
