@@ -395,6 +395,10 @@ function FEED_edit($fid = 0, $type = '')
                                  sprintf ($delbutton, $jsconfirm));
         $feed_template->set_var ('delete_option_no_confirmation',
                                  sprintf ($delbutton, ''));
+        $feed_template->set_var('delete_button',true);
+        $feed_template->set_var('lang_delete_confirm', $LANG33[56]);
+        $feed_template->set_var('lang_delete',$LANG_ADMIN['delete']);
+
     }
     $feed_template->set_var ('feed_id', $A['fid']);
     $feed_template->set_var ('feed_title', $A['title']);
