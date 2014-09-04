@@ -46,7 +46,11 @@ function showhidePollsEditorDiv(option,selindex,questions) {
     // Set the <a tag to have an id called 'current'
     var menuitem = menuitems[selindex];
     for (var j=0; j<menuitem.childNodes.length; j++ ) {
-        if (menuitem.childNodes[j].nodeName.toLowerCase() == 'a')  menuitem.childNodes[j].id = 'current';
+        if (menuitem.childNodes[j].nodeName.toLowerCase() == 'a') {
+            menuitem.childNodes[j].id = 'current';
+            $('#current').parent().siblings('li').removeClass('uk-active');
+            $('#current').parent().addClass('uk-active');
+        }
     }
 
     // Reset or show all the main divs - editor tab sections
