@@ -3,14 +3,12 @@
 // | Links Plugin - glFusion CMS                                              |
 // +--------------------------------------------------------------------------+
 // | functions.inc                                                            |
-// |                                                                          |
-// | This file does two things: 1) it implements the necessary glFusion Plugin|
-// | API method and 2) implements all the common code needed by the Links     |
-// | Plugins' PHP files.                                                      |
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2012-2014 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
 // | Authors: Tony Bibbs         - tony AT tonybibbs DOT com                  |
 // |          Mark Limburg       - mlimburg AT users.sourceforge DOT net      |
 // |          Jason Whittenburg  - jwhitten AT securitygeeks DOT com          |
@@ -154,22 +152,6 @@ function plugin_getwhatsnew_links()
     }
 
     return '';
-}
-
-function plugin_getheadercss_links()
-{
-    global $_CONF;
-
-    $styles = array();
-
-    if ( @file_exists($_CONF['path_layout'].'plugins/links/style.css') ) {
-        $styleFile = $_CONF['path_layout'].'plugins/links/style.css';
-    } else {
-        $styleFile = $_CONF['path_html'].'/links/style.css';
-    }
-	$styles[] = $styleFile;
-
-    return $styles;
 }
 
 /**
@@ -426,13 +408,6 @@ function plugin_getadminoption_links()
                       $_CONF['site_admin_url'] . '/plugins/links/index.php',
                       $total_links);
     }
-}
-
-function plugin_user_move_links($origUID, $destUID)
-{
-    global $_TABLES, $_LI_CONF;
-
-    DB_query ("UPDATE {$_TABLES['links']} SET owner_id = ".(int)$destUID." WHERE owner_id = ".(int) $origUID,1);
 }
 
 /**
@@ -1508,7 +1483,32 @@ function links_breadcrumbs($root, $cid)
     return $breadcrumb;
 }
 
+/*
+* Configuration validation
+*
+* Update DB if root category name is changed.
+*/
+function plugin_configmanager_root_links_validate($cid)
+{
+    global $_LI_CONF, $_TABLES;
 
+    // need to pull old value
+
+    $old_cid = $_LI_CONF['root'];
+
+    if ( $old_cid != $cid ) {
+        $sql = "UPDATE {$_TABLES['linkcategories']} SET pid='".DB_escapeString($cid)."' WHERE pid = '".DB_escapeString($old_cid)."'";
+
+        DB_query($sql);
+
+        $sql = "UPDATE {$_TABLES['linkcategories']}
+                SET cid='".DB_escapeString($cid)."'
+                WHERE cid = '".DB_escapeString($old_cid)."'";
+
+        DB_query($sql);
+    }
+    return $cid;
+}
 
 // +--------------------------------------------------------------------------+
 // | PHP Block functions                                                      |
