@@ -264,7 +264,7 @@ function MG_batchMoveMedia( $album_id, $actionURL = '' ) {
 
     // make sure they are not the same...
 
-    if ( $album_id == $destination ) {
+    if ( $album_id == $destination || $destination == 0 ) {
         echo COM_refresh($actionURL);
         exit;
     }
