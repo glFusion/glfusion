@@ -459,7 +459,7 @@ $LANG04 = array(
     159 => 'This eMail was generated automatically. Please do not reply to this eMail.',
     160 => 'Online',
     161 => 'Password Strength',
-    162 => 'The username contains invalid characters ( < > " % & * / \ ) are not allowed',
+    162 => 'The username must by at least ' . $_CONF['min_username_length'] . ' characters and cannot contain invalid characters ( < > " % & * / \ )',
     163 => 'Remote User',
     164 => 'Remote Username',
     165 => 'Remote Service',
@@ -2607,6 +2607,7 @@ $LANG_confignames['Core'] = array(
     'htmlfilter_comment' => 'HTML allowed in comments',
     'htmlfilter_story' => 'HTML allowed in stories',
     'htmlfilter_root' => 'Additional HTML allowed for Root users',
+    'min_username_length' => 'Minimum Username Length',
 );
 
 $LANG_configsubgroups['Core'] = array(

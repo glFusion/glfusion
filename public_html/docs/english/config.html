@@ -2,11 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
 <meta content="text/html;charset=iso-8859-1" http-equiv="Content-Type" />
 <link href="../docstyle.css" type="text/css" rel="stylesheet" />
-<meta content="noindex,nofollow" name="robots" /><title>glFusion - Content Management with Style</title></head>
+<meta content="noindex,nofollow" name="robots" /><title>glFusion - Content Management with Style</title>
+
+</head>
 <body style="direction: ltr;">
 <div id="gl_container_fluid">
 <div id="gl_header"> <span style="color: rgb(255, 255, 255); float: left; padding-left: 10px; padding-top: 5px; vertical-align: middle;">glFusion
-Documentation Project </span> <a style="float: right; padding-right: 10px; padding-top: 5px; vertical-align: middle;" href="http://www.glfusion.org/wiki/glfusion:start">glFusion Wiki</a>
+Documentation Project </span> <a style="float: right; padding-right: 10px; padding-top: 5px; vertical-align: middle;" href="http://www.glfusion.org/wiki/glfusion:start">glFusion
+Wiki</a>
 </div>
 <div id="gl_wrapper">
 <div class="body-container">
@@ -65,12 +68,22 @@ to display
 when a glFusion site is disabled. If the text begins with
 &#8220;http:&#8221; then visitors are redirected to that <acronym title="Uniform Resource Locator">URL</acronym>. </td>
 </tr>
-<tr class="row5"><td><a name="desc_maintenance_mode"></a>Enable Maintenance Mode</td><td>Setting
+<tr class="row5">
+<td><a name="desc_maintenance_mode"></a>Enable
+Maintenance Mode</td>
+<td>Setting
 this to TRUE will block all non-admin users from using the site.
-&nbsp;All non-admin users will see the Site Disabled Message or URL.
+&nbsp;All non-admin users will see the Site Disabled Message or
+URL.
 &nbsp;Admin users will still be able to access all features of the
-site. &nbsp;This is useful when you need to perform maintenance on the
-site and do not want any users to access during the maintenance.<br /><br /><span style="font-weight: bold;">You must login as an admin user before setting this to true!</span></td></tr><tr class="row6">
+site. &nbsp;This is useful when you need to perform maintenance on
+the
+site and do not want any users to access during the maintenance.<br />
+<br />
+<span style="font-weight: bold;">You must login as
+an admin user before setting this to true!</span></td>
+</tr>
+<tr class="row6">
 <td class="col0 leftalign"><a name="desc_copyrightyear">Copyright Year</a> </td>
 <td class="col1 leftalign">Set this to the year you
 want to
@@ -383,10 +396,12 @@ of Search Results</td>
 <tr>
 <td><a name="desc_search_show_limit"></a>Show
 Result Number</td>
-<td>Whether or not to display the number of each search result.</td>
+<td>Whether or not to display the number of each search
+result.</td>
 </tr>
 <tr>
-<td><a name="desc_search_show_sort"></a>Show Result Type</td>
+<td><a name="desc_search_show_sort"></a>Show
+Result Type</td>
 <td>Show the result type (i.e. Forum, Wiki, Story, etc.)</td>
 </tr>
 <tr>
@@ -422,30 +437,32 @@ Search Method</td>
 </tbody>
 </table>
 </div>
-
-<h2><a name="site_update" id="update">Update Checker</a></h2>
+<h2><a name="site_update" id="update">Update
+Checker</a></h2>
 <div class="level2">
 <table class="inline">
 <tbody>
 <tr class="row0">
 <td class="col0 leftalign"><a name="desc_update_check_interval">Update Check Interval</a>
 </td>
-<td class="col1 leftalign">Specifies how often glFusion should automatically check for updates. </td>
+<td class="col1 leftalign">Specifies how often
+glFusion should automatically check for updates. </td>
 </tr>
 <tr class="row1">
 <td class="col0 leftalign"><a name="desc_send_site_data">Send Site Data</a> </td>
-<td class="col1 leftalign">When glFusion checks for updates,
+<td class="col1 leftalign">When glFusion checks for
+updates,
 if this is enabled, it will also pass the site URL to the glFusion.org
 site. This data is only used by the glFusion team to gain a better
-understanding of how many sites are running glFusion. This data is never sold
-or shared with any other source. If disabled, no information is passed during
+understanding of how many sites are running glFusion. This data is
+never sold
+or shared with any other source. If disabled, no information is passed
+during
 the upgrade check.</td>
 </tr>
 </tbody>
 </table>
 </div>
-
-
 <h1><a name="stories" id="stories_and_trackback">Stories
 and Trackback</a></h1>
 <div class="level1">
@@ -497,7 +514,6 @@ ability to send a story by email. It will also hide the email icon from
 stories and the &#8220;Email Article To a Friend&#8221; from the Story
 Options block. </td>
 </tr>
-
 <tr class="row6">
 <td class="col0 leftalign"><a name="desc_hideprintericon">Hide Print Icon</a> </td>
 <td class="col1 leftalign">When set to 1, this will
@@ -511,9 +527,10 @@ Version&#8221; from the Story Options block. </td>
 <td class="col1 leftalign">
 Allow users to rate stories on the site. Valid options are
 <ul>
-    <li>Diabled - no rating</li>
-    <li>Logged-In User - allow all Logged-in Users to rate stories</li>
-    <li>Everyone - Allow any site visitor to rate stories</li>
+<li>Diabled - no rating</li>
+<li>Logged-In User - allow all Logged-in Users to rate
+stories</li>
+<li>Everyone - Allow any site visitor to rate stories</li>
 </ul>
 </td>
 </tr>
@@ -711,7 +728,6 @@ others. </td>
 <td class="col1 leftalign">Default theme to use on
 the site </td>
 </tr>
-
 <tr class="row2">
 <td class="col0 leftalign"><a name="desc_path_themes">Themes Path</a> </td>
 <td class="col1 leftalign">Directory where all
@@ -744,7 +760,8 @@ story on page 2 of a topic page, for example. </td>
 <tr class="row0">
 <td class="col0 leftalign"><a name="desc_compress_css"></a>Compress
 CSS</td>
-<td class="col1 leftalign">glFusion collects all the site CSS and sends it as a
+<td class="col1 leftalign">glFusion collects all the
+site CSS and sends it as a
 single
 item. &nbsp;glFusion can perform some simple compression (remove
 comments, whitespace, etc.) when it sends the CSS. &nbsp;This can
@@ -884,8 +901,10 @@ see the names of other users that are currently online. </td>
 </tr>
 <tr class="row2">
 <td class="col0 leftalign"><a name="desc_whosonline_photo">Display User Photo Thumbnail</a></td>
-<td clase="col1 leftalign">If enabled (i.e. set to 1), and a photo exists for
-the user, a thumbnail of that photo will be displayed, otherwise a photo icon
+<td clase="col1 leftalign">If enabled (i.e. set to
+1), and a photo exists for
+the user, a thumbnail of that photo will be displayed, otherwise a
+photo icon
 will be displayed.</td>
 </tr>
 </tbody>
@@ -939,10 +958,16 @@ entries by plugins from the What's New block. </td>
 <td class="col0 leftalign"><a name="desc_title_trim_length">Title Trim Length</a> </td>
 <td class="col1 leftalign">Max. length of the title
 of items listed in the What's New block. </td>
-</tr><tr><td><a name="desc_whatsnew_cache_time"></a>Time between forced rebuild of the What's New cache in seconds</td><td>The
+</tr>
+<tr>
+<td><a name="desc_whatsnew_cache_time"></a>Time
+between forced rebuild of the What's New cache in seconds</td>
+<td>The
 number of seconds that the cache file for What's New will live.
-&nbsp;For example, if you set this to 3600, this is 60 minutes - which
-means the What's New block will be rebuilt every hour.</td></tr>
+&nbsp;For example, if you set this to 3600, this is 60 minutes -
+which
+means the What's New block will be rebuilt every hour.</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -1014,10 +1039,16 @@ accounts on remote services (like LDAP or LiveJournal), this option
 will at the service's name to the username to avoid confusion with
 local users of the same name. Set to false to disable. </td>
 </tr>
-<tr><td><a name="desc_hide_exclude_content"></a>Hide Exclude Content Tab</td><td>When set to true, glFusion will hide the <span style="font-weight: bold;">Content</span>
-tab in the user profile screen. &nbsp;This tab allows users to block
+<tr>
+<td><a name="desc_hide_exclude_content"></a>Hide
+Exclude Content Tab</td>
+<td>When set to true, glFusion will hide the <span style="font-weight: bold;">Content</span>
+tab in the user profile screen. &nbsp;This tab allows users to
+block
 certain content and content authors, but it can also cause some
-confusion with site users.</td></tr><tr class="row9">
+confusion with site users.</td>
+</tr>
+<tr class="row9">
 <td class="col0 leftalign"><a name="desc_custom_registration">Enable Custom Registration</a>
 </td>
 <td class="col1 leftalign">When set to true,
@@ -1033,7 +1064,8 @@ logins into the site, i.e. with a user account that only exists in your
 site's database. </td>
 </tr>
 <tr class="row11">
-<td class="col0 leftalign"><a name="desc_user_login_method_openid">User Login Method [openid]</a>
+<td class="col0 leftalign"><a name="desc_user_login_method_openid">User Login Method
+[openid]</a>
 </td>
 <td class="col1 leftalign">Whether to allow logins
 using OpenID. This will display a special OpenID login below the normal
@@ -1042,7 +1074,8 @@ login field. <br />
 Note: Currently only OpenID 1.1 is supported. </td>
 </tr>
 <tr class="row11">
-<td class="col0 leftalign"><a name="desc_user_login_method_3rdparty">User Login Method [3rdparty]</a></td>
+<td class="col0 leftalign"><a name="desc_user_login_method_3rdparty">User Login Method
+[3rdparty]</a></td>
 <td class="col1 leftalign">Allow (when set to true)
 users who
 already have an account with some other service to log into your
@@ -1056,98 +1089,187 @@ information. </td>
 </tr>
 <tr class="row12">
 <td class="col0 leftalign"><a name="desc_user_login_method_oauth">User Login Method [OAuth]</a></td>
-<td class="col1 leftalign">Allow (when set to true) users who already have an account
-with an <a href="http://oauth.net/">OAuth</a>-based service (eg. Facebook, LinkedIn, Twitter
-and others) to log into your glFusion site with the credentials they have established with that
-service. Enabling this option result in the display of one or more service-specific login buttons
+<td class="col1 leftalign">Allow (when set to true)
+users who already have an account
+with an <a href="http://oauth.net/">OAuth</a>-based
+service (eg. Facebook, LinkedIn, Twitter
+and others) to log into your glFusion site with the credentials they
+have established with that
+service. Enabling this option result in the display of one or more
+service-specific login buttons
 in the site login dialog(s). Please refer to our
-<a href="http://www.glfusion.org/wiki/glfusion:remoteauth#oauth_support" target="_blank">glFusion Remote Authentication wiki page</a> for more information.</td>
+<a href="http://www.glfusion.org/wiki/glfusion:remoteauth#oauth_support" target="_blank">glFusion Remote Authentication wiki page</a>
+for more information.</td>
 </tr>
 <tr class="row13">
 <td class="col0 leftalign"><a name="desc_facebook_login">Enable Facebook OAuth Login Method</a></td>
-<td class="col1 leftalign">Allow (when set to true) users to login to the site using their Facebook
-account. <b>Note:</b> You must create a Facebook Application ID (consumer key) and Application
+<td class="col1 leftalign">Allow (when set to true)
+users to login to the site using their Facebook
+account. <b>Note:</b> You must create a Facebook
+Application ID (consumer key) and Application
 Secret (consumer secret) for your site.</td>
 </tr>
 <tr class="row14">
-<td class="col0 leftalign"><a name="desc_facebook_consumer_key">Facebook OAuth Application ID</a></td>
-<td class="col1 leftalign">Required to use the Facebook OAuth login method. Please visit the
+<td class="col0 leftalign"><a name="desc_facebook_consumer_key">Facebook OAuth Application
+ID</a></td>
+<td class="col1 leftalign">Required to use the
+Facebook OAuth login method. Please visit the
 <a href="http://developers.facebook.com/setup/" target="_blank">Facebook Developers Page</a> to
-create an Application ID (consumer key) string that is specific to your site/URL. Please refer to
-our <a href="http://www.glfusion.org/wiki/glfusion:remoteauth:facebook" target="_blank">glFusion OAuth Authentication for Facebook wiki page</a> for more information.</td>
+create an Application ID (consumer key) string that is specific to your
+site/URL. Please refer to
+our <a href="http://www.glfusion.org/wiki/glfusion:remoteauth:facebook" target="_blank">glFusion OAuth Authentication for Facebook
+wiki page</a> for more information.</td>
 </tr>
 <tr class="row15">
-<td class="col0 leftalign"><a name="desc_facebook_consumer_secret">Facebook OAuth Application Secret</a></td>
-<td class="col1 leftalign">Required to use the Facebook OAuth login method. Please visit the
+<td class="col0 leftalign"><a name="desc_facebook_consumer_secret">Facebook OAuth
+Application Secret</a></td>
+<td class="col1 leftalign">Required to use the
+Facebook OAuth login method. Please visit the
 <a href="http://developers.facebook.com/setup/" target="_blank">Facebook Developers Page</a> to
-create an Application Secret (consumer secret) string that is specific to your site/URL. Please
-refer to our <a href="http://www.glfusion.org/wiki/glfusion:remoteauth:facebook" target="_blank">glFusion OAuth Authentication for Facebook wiki page</a> for more information.</td>
+create an Application Secret (consumer secret) string that is specific
+to your site/URL. Please
+refer to our <a href="http://www.glfusion.org/wiki/glfusion:remoteauth:facebook" target="_blank">glFusion OAuth Authentication for Facebook
+wiki page</a> for more information.</td>
 </tr>
 <tr class="row16">
 <td class="col0 leftalign"><a name="desc_linkedin_login">Enable LinkedIn OAuth Login Method</a></td>
-<td class="col1 leftalign">Allow (when set to true) users to login to the site using their LinkedIn
-account. <b>Note:</b> You must create a LinkedIn API Key (consumer key) and Secret Key (consumer
+<td class="col1 leftalign">Allow (when set to true)
+users to login to the site using their LinkedIn
+account. <b>Note:</b> You must create a LinkedIn API Key
+(consumer key) and Secret Key (consumer
 secret) for your site.</td>
 </tr>
 <tr class="row17">
 <td class="col0 leftalign"><a name="desc_linkedin_consumer_key">LinkedIn OAuth API Key</a></td>
-<td class="col1 leftalign">Required to use the LinkedIn OAuth login method. Please visit the
+<td class="col1 leftalign">Required to use the
+LinkedIn OAuth login method. Please visit the
 <a href="https://www.linkedin.com/secure/developer" target="_blank">LinkedIn Developers Page</a> to
-create a LinkedIn API Key (consumer key) string that is specific to your site/URL. Please refer to
-our <a href="http://www.glfusion.org/wiki/glfusion:remoteauth:linkedin" target="_blank">glFusion Remote OAuth for LinkedIn wiki page</a> for more information.</td>
+create a LinkedIn API Key (consumer key) string that is specific to
+your site/URL. Please refer to
+our <a href="http://www.glfusion.org/wiki/glfusion:remoteauth:linkedin" target="_blank">glFusion Remote OAuth for LinkedIn wiki page</a>
+for more information.</td>
 </tr>
 <tr class="row18">
-<td class="col0 leftalign"><a name="desc_linkedin_consumer_secret">LinkedIn OAuth Secret Key</a></td>
-<td class="col1 leftalign">Required to use the LinkedIn OAuth login method. Please visit the
+<td class="col0 leftalign"><a name="desc_linkedin_consumer_secret">LinkedIn OAuth Secret
+Key</a></td>
+<td class="col1 leftalign">Required to use the
+LinkedIn OAuth login method. Please visit the
 <a href="https://www.linkedin.com/secure/developer" target="_blank">LinkedIn Developers</a> page to
-create a Secret Key (consumer secret) string that is specific to your site/URL. Please refer to our
-<a href="http://www.glfusion.org/wiki/glfusion:remoteauth:linkedin" target="_blank">glFusion OAuth Authentication for LinkedIn wiki page</a> for more information.</td>
+create a Secret Key (consumer secret) string that is specific to your
+site/URL. Please refer to our
+<a href="http://www.glfusion.org/wiki/glfusion:remoteauth:linkedin" target="_blank">glFusion OAuth Authentication for LinkedIn
+wiki page</a> for more information.</td>
 </tr>
-
 <tr class="row19">
 <td class="col0 leftalign"><a name="desc_twitter_login">Enable Twitter OAuth Login Method</a></td>
-<td class="col1 leftalign">Allow (when set to true) users to login to the site using their Twitter
-account credentials. <b>Note:</b> You must create a Twitter Consumer Key and Consumer Secret for
+<td class="col1 leftalign">Allow (when set to true)
+users to login to the site using their Twitter
+account credentials. <b>Note:</b> You must create a
+Twitter Consumer Key and Consumer Secret for
 your site.</td>
 </tr>
 <tr class="row20">
 <td class="col0 leftalign"><a name="desc_twitter_consumer_key">Twitter OAuth Consumer Key</a></td>
-<td class="col1 leftalign">Required to use the Twitter OAuth login method. Please visit the
-<a href="https://dev.twitter.com/apps/" target="_blank">Twitter Application Page</a> to create a
+<td class="col1 leftalign">Required to use the
+Twitter OAuth login method. Please visit the
+<a href="https://dev.twitter.com/apps/" target="_blank">Twitter
+Application Page</a> to create a
 Twitter Consumer Key string that is specific to your site/URL.
-Please refer to our <a href="http://www.glfusion.org/wiki/glfusion:remoteauth:twitter" target="_blank">glFusion OAuth Authentication For Twitter wiki page</a> for more information.</td>
+Please refer to our <a href="http://www.glfusion.org/wiki/glfusion:remoteauth:twitter" target="_blank">glFusion OAuth Authentication For Twitter
+wiki page</a> for more information.</td>
 </tr>
 <tr class="row21">
-<td class="col0 leftalign"><a name="desc_twitter_consumer_secret">Twitter OAuth Consumer Secret</a></td>
-<td class="col1 leftalign">Required to use the Twitter OAuth login method. Please visit the
-<a href="https://dev.twitter.com/apps/" target="_blank">Twitter Application Page</a> to create a
-Twitter Consumer Secret string that is specific to your site/URL. Please refer to our
-<a href="http://www.glfusion.org/wiki/glfusion:remoteauth:twitter" target="_blank">glFusion OAuth Authentication for Twitter wiki page</a> for more information.</td>
+<td class="col0 leftalign"><a name="desc_twitter_consumer_secret">Twitter OAuth Consumer
+Secret</a></td>
+<td class="col1 leftalign">Required to use the
+Twitter OAuth login method. Please visit the
+<a href="https://dev.twitter.com/apps/" target="_blank">Twitter
+Application Page</a> to create a
+Twitter Consumer Secret string that is specific to your site/URL.
+Please refer to our
+<a href="http://www.glfusion.org/wiki/glfusion:remoteauth:twitter" target="_blank">glFusion OAuth Authentication for Twitter
+wiki page</a> for more information.</td>
 </tr>
 <tr class="row22">
 <td class="col0 leftalign"><a name="desc_google_login">Enable Google OAuth Login Method</a></td>
-<td class="col1 leftalign">Allow (when set to true) users to login to the site using their Google
-account credentials. <b>Note:</b> You must create a Google Consumer Key and Consumer Secret for
+<td class="col1 leftalign">Allow (when set to true)
+users to login to the site using their Google
+account credentials. <b>Note:</b> You must create a Google
+Consumer Key and Consumer Secret for
 your site.</td>
 </tr>
 <tr class="row23">
 <td class="col0 leftalign"><a name="desc_google_consumer_key">Google OAuth Consumer Key</a></td>
-<td class="col1 leftalign">Required to use the Google OAuth login method. Please visit the
-<a href="http://code.google.com/apis/console" target="_blank">Google Application Page</a> to create a
+<td class="col1 leftalign">Required to use the
+Google OAuth login method. Please visit the
+<a href="http://code.google.com/apis/console" target="_blank">Google Application Page</a> to create
+a
 Google Consumer Key string that is specific to your site/URL.
-Please refer to our <a href="http://www.glfusion.org/wiki/glfusion:remoteauth:google" target="_blank">glFusion OAuth Authentication for Google wiki page</a> for more information.</td>
+Please refer to our <a href="http://www.glfusion.org/wiki/glfusion:remoteauth:google" target="_blank">glFusion OAuth Authentication for Google
+wiki page</a> for more information.</td>
 </tr>
 <tr class="row24">
-<td class="col0 leftalign"><a name="desc_google_consumer_secret">Google OAuth Consumer Secret</a></td>
-<td class="col1 leftalign">Required to use the Google OAuth login method. Please visit the
-<a href="http://code.google.com/apis/console" target="_blank">Google Application Page</a> to create a Google Consumer Secret string that is specific to your site/URL. Please refer to our
-<a href="http://www.glfusion.org/wiki/glfusion:remoteauth:google" target="_blank">glFusion OAuth Authentication for Google wiki page</a> for more information.</td>
+<td class="col0 leftalign"><a name="desc_google_consumer_secret">Google OAuth Consumer
+Secret</a></td>
+<td class="col1 leftalign">Required to use the
+Google OAuth login method. Please visit the
+<a href="http://code.google.com/apis/console" target="_blank">Google Application Page</a> to create
+a Google Consumer Secret string that is specific to your site/URL.
+Please refer to our
+<a href="http://www.glfusion.org/wiki/glfusion:remoteauth:google" target="_blank">glFusion OAuth Authentication for Google
+wiki page</a> for more information.</td>
 </tr>
-<tr><td><a name="desc_microsoft_login"></a>Enable Microsoft OAuth Login Method</td><td>Allow (when set to true) users to login to the site using their Microsoft Live
-account credentials. <b>Note:</b> You must create a Microsoft Consumer Key and Consumer Secret for
-your site.</td></tr><tr><td><a name="desc_microsoft_consumer_key"></a>Microsoft OAuth Consumer Key</td><td>Required to use the Microsoft OAuth login method. Please visit the <a href="https://manage.dev.live.com/AddApplication.aspx" target="_blank">Microsoft Application Page</a> to create a Microsoft Consumer Key string that is specific to your site/URL.
-Please refer to our<a href="http://www.glfusion.org/wiki/glfusion:remoteauth:microsoft" target="_blank"> glFusion OAuth Authentication for Microsoft wiki page</a> for more information.</td></tr><tr><td><a name="desc_microsoft_consumer_secret"></a>Microsoft Oauth Consumer Secret</td><td>Required to use the Microsoft OAuth login method. Please visit the <a href="https://manage.dev.live.com/AddApplication.aspx" target="_blank">Microsoft Application Page</a> to create a Microsoft Consumer Secret string that is specific to your site/URL. Please refer to our
-<a href="http://www.glfusion.org/wiki/glfusion:remoteauth:microsoft" target="_blank">glFusion OAuth Authentication for Microsoft wiki page</a> for more information.</td></tr><tr><td><a name="desc_github_login"></a>Enable Github OAuth Login</td><td>Allow (when set to true) users to login to the site using their Github account. &nbsp;<span style="font-weight: bold;">Note:</span> You must create a Github Client ID and Client Secret for your site. </td></tr><tr><td><a name="desc_github_consumer_key"></a>Github Client ID</td><td>Required to use the Github login method. Please visit the <a href="https://github.com/settings/applications/new" target="_blank">Github Application Page</a>&nbsp;to create the Client ID.</td></tr><tr><td><a name="desc_github_consumer_secret"></a>Github Client Secret</td><td>Required to use the Github login method. &nbsp;Please visit the <a href="https://github.com/settings/applications/new" target="_blank">Github Application Page </a>to create the Client Secret.</td></tr><tr class="row25">
+<tr>
+<td><a name="desc_microsoft_login"></a>Enable
+Microsoft OAuth Login Method</td>
+<td>Allow (when set to true) users to login to the site
+using their Microsoft Live
+account credentials. <b>Note:</b> You must create a
+Microsoft Consumer Key and Consumer Secret for
+your site.</td>
+</tr>
+<tr>
+<td><a name="desc_microsoft_consumer_key"></a>Microsoft
+OAuth Consumer Key</td>
+<td>Required to use the Microsoft OAuth login method.
+Please visit the <a href="https://manage.dev.live.com/AddApplication.aspx" target="_blank">Microsoft Application Page</a> to
+create a Microsoft Consumer Key string that is specific to your
+site/URL.
+Please refer to our<a href="http://www.glfusion.org/wiki/glfusion:remoteauth:microsoft" target="_blank"> glFusion OAuth Authentication for Microsoft
+wiki page</a> for more information.</td>
+</tr>
+<tr>
+<td><a name="desc_microsoft_consumer_secret"></a>Microsoft
+Oauth Consumer Secret</td>
+<td>Required to use the Microsoft OAuth login method.
+Please visit the <a href="https://manage.dev.live.com/AddApplication.aspx" target="_blank">Microsoft Application Page</a> to
+create a Microsoft Consumer Secret string that is specific to your
+site/URL. Please refer to our
+<a href="http://www.glfusion.org/wiki/glfusion:remoteauth:microsoft" target="_blank">glFusion OAuth Authentication for Microsoft
+wiki page</a> for more information.</td>
+</tr>
+<tr>
+<td><a name="desc_github_login"></a>Enable
+Github OAuth Login</td>
+<td>Allow (when set to true) users to login to the site
+using their Github account. &nbsp;<span style="font-weight: bold;">Note:</span> You must
+create a Github Client ID and Client Secret for your site. </td>
+</tr>
+<tr>
+<td><a name="desc_github_consumer_key"></a>Github
+Client ID</td>
+<td>Required to use the Github login method. Please visit
+the <a href="https://github.com/settings/applications/new" target="_blank">Github Application Page</a>&nbsp;to
+create the Client ID.</td>
+</tr>
+<tr>
+<td><a name="desc_github_consumer_secret"></a>Github
+Client Secret</td>
+<td>Required to use the Github login method.
+&nbsp;Please visit the <a href="https://github.com/settings/applications/new" target="_blank">Github Application Page </a>to create
+the Client Secret.</td>
+</tr>
+<tr class="row25">
 <td class="col0 leftalign"><a name="desc_aftersave_user">After Saving User</a> </td>
 <td class="col1 leftalign">Which page to go to after
 a user has been saved: <br />
@@ -1284,7 +1406,8 @@ receive their password) </td>
 </tr>
 <tr class="row1">
 <td class="col0 leftalign"><a name="desc_registration_type">Registration Type</a> </td>
-<td class="col1 leftalign">Generate Password will automatically
+<td class="col1 leftalign">Generate Password will
+automatically
 generate a random password for the user
 upon registration, and send it to them in the welcome email. User
 Enters Password will prompt the user to create their own password
@@ -1314,14 +1437,26 @@ Example disallow email addresses with a certain domain name and from
 any &#8221;.edu&#8221; domain: 'somebaddomain.com,\.edu$' </td>
 </tr>
 <tr class="row4">
-<td class="col0 leftalign"><a name="desc_user_reg_fullname">Full Name option on registration form?</a>
+<td class="col0 leftalign"><a name="desc_user_reg_fullname">Full Name option on
+registration form?</a>
 </td>
-<td class="col1 leftalign">This controls whether there will be a "Full Name" field shown on the user registration form.  The options are:<br />
+<td class="col1 leftalign">This controls whether
+there will be a "Full Name" field shown on the user registration form.
+The options are:<br />
 <ul>
-<li>No: The new user will not be able to enter a full name during registration.  This matches the method used by glFusion.</li>
-<li>Optional: The user will be able to enter a full name during registration, but is not required to do so.</li>
-<li>Required: The user will be required to enter a full name before submitting the registration form.</li></ul>
+<li>No: The new user will not be able to enter a full
+name during registration. This matches the method used by glFusion.</li>
+<li>Optional: The user will be able to enter a full name
+during registration, but is not required to do so.</li>
+<li>Required: The user will be required to enter a full
+name before submitting the registration form.</li>
+</ul>
 </td>
+</tr>
+<tr class="row5">
+<td class="col0 leftalign"><a name="desc_min_username_length"></a>Minimum
+Username Length</td>
+<td class="col1 leftalign">The minimum allowed length of a username.</td>
 </tr>
 </tbody>
 </table>
@@ -1375,8 +1510,6 @@ of stories and
 comments without previewing (i.e. the submission form will always have
 a Preview and a Submit button). </td>
 </tr>
-
-
 </tbody>
 </table>
 </div>
@@ -1417,14 +1550,11 @@ Edit Time</td>
 seconds). If set ot 0, the user can edit the comment anytime in the
 future.</td>
 </tr>
-
 <tr>
-<td><a name="desc_comment_postmode"></a>Comment Post mode</td>
+<td><a name="desc_comment_postmode"></a>Comment
+Post mode</td>
 <td>Select the default postmode for comments.</td>
 </tr>
-
-
-
 <tr>
 <td><a name="desc_article_comment_close_days"></a>Days
 to close comments</td>
@@ -1444,20 +1574,19 @@ closed setting applied.</td>
 </tbody>
 </table>
 </div>
-
-<h2><a name="users_rating" id="rating">Rating Options</a></h2>
+<h2><a name="users_rating" id="rating">Rating
+Options</a></h2>
 <div class="level2">
 <table class="inline">
 <tbody>
 <tr class="row0">
 <td class="col0 leftalign"><a name="desc_rating_speedlimit">Rating Speed Limit</a> </td>
-<td class="col1 leftalign">Number of seconds a user must wait between each rating</td>
+<td class="col1 leftalign">Number of seconds a user
+must wait between each rating</td>
 </tr>
 </tbody>
 </table>
 </div>
-
-
 <h1><a name="images" id="images">Images</a></h1>
 <div class="level1">
 </div>
@@ -1724,7 +1853,8 @@ glFusion language files to use. </td>
 <td class="col1">For multi-lingual setups only: A
 list mapping
 language shortcuts ('en', 'de', etc.) to the language's native name
-(&#8220;English&#8221;, &#8220;Deutsch&#8221;, etc.). See <a href="http://www.glfusion.org/wiki/glfusion:language" class="wikilink1" title="glfusion:language">language</a> for more
+(&#8220;English&#8221;, &#8220;Deutsch&#8221;, etc.). See <a href="http://www.glfusion.org/wiki/glfusion:language" class="wikilink1" title="glfusion:language">language</a>
+for more
 information.</td>
 </tr>
 </tbody>
@@ -1839,8 +1969,10 @@ stores the session ID. </td>
 cookie. </td>
 </tr>
 <tr class="row1">
-<td class="col0 leftalign"><a name="desc_session_ip_check">Session IP Validation</a> </td>
-<td class="col1 leftalign">Determines how much of the users IP is used
+<td class="col0 leftalign"><a name="desc_session_ip_check">Session IP Validation</a>
+</td>
+<td class="col1 leftalign">Determines how much of
+the users IP is used
 to validate a session; All compares the complete address, A.B.C the
 first x.x.x, A.B the first x.x, None disables checking.
 </td>
@@ -1911,7 +2043,6 @@ manual for details). </td>
 <div class="level2">
 <table class="inline">
 <tbody>
-
 <tr class="row1">
 <td class="col0 leftalign"><a name="desc_notification">Notifications</a> </td>
 <td class="col1 leftalign">Send an email
@@ -2016,8 +2147,31 @@ Root</a> </td>
 <td class="col1 leftalign">When set to TRUE, this
 will allow members of the Root group to use all <acronym title="HyperText Markup Language">HTML</acronym> in
 their posts. Use at your own risk! </td>
-</tr><tr><td><a name="desc_htmlfilter_default"></a>Default set of allowed HTML</td><td>The default HTML tags that are allowed.</td></tr>
-<tr><td><a name="desc_htmlfilter_comment"></a>HTML allowed in comments</td><td>The set of HTML tags allowed when entering comments - a comma separted list</td></tr><tr><td><a name="desc_htmlfilter_story"></a>HTML allowed in stories</td><td>The set of HTML tags allowed when entering stories - a comma separated list.</td></tr><tr><td><a name="desc_htmlfilter_root"></a>Additional HTML allowed for Root users</td><td>Additional HTML tags that are only allowed for Root users - a comma separated list.</td></tr></tbody>
+</tr>
+<tr>
+<td><a name="desc_htmlfilter_default"></a>Default
+set of allowed HTML</td>
+<td>The default HTML tags that are allowed.</td>
+</tr>
+<tr>
+<td><a name="desc_htmlfilter_comment"></a>HTML
+allowed in comments</td>
+<td>The set of HTML tags allowed when entering comments - a
+comma separted list</td>
+</tr>
+<tr>
+<td><a name="desc_htmlfilter_story"></a>HTML
+allowed in stories</td>
+<td>The set of HTML tags allowed when entering stories - a
+comma separated list.</td>
+</tr>
+<tr>
+<td><a name="desc_htmlfilter_root"></a>Additional
+HTML allowed for Root users</td>
+<td>Additional HTML tags that are only allowed for Root
+users - a comma separated list.</td>
+</tr>
+</tbody>
 </table>
 </div>
 <h2><a name="misc_censoring" id="censoring">Censoring</a></h2>
@@ -2070,27 +2224,33 @@ $_CONF['site_url'] . '/nettools/whois.php?domain=*'; </td>
 <table class="inline">
 <tbody>
 <tr class="row0">
-<td class="col0 leftalign"><a name="desc_default_permissions_story_0">Story Default Permissions[0]</a>
+<td class="col0 leftalign"><a name="desc_default_permissions_story_0">Story Default
+Permissions[0]</a>
 </td>
-<td class="col1 leftalign">The default Owner permissions for the Story
+<td class="col1 leftalign">The default Owner
+permissions for the Story
 editor. The settings here will determine what permissions are checked
 (Read only, or Read/Write), or unchecked (No access) by default in the
 Owner box of the Permissions panel in the Story editor. Options are No
 access, Read only, or Read/Write.</td>
 </tr>
 <tr class="row1">
-<td class="col0 leftalign"><a name="desc_default_permissions_story_1">Story Default Permissions[1]</a>
+<td class="col0 leftalign"><a name="desc_default_permissions_story_1">Story Default
+Permissions[1]</a>
 </td>
-<td class="col1 leftalign">The default Group permissions for the Story
+<td class="col1 leftalign">The default Group
+permissions for the Story
 editor. The settings here will determine what permissions are checked
 (Read only, or Read/Write), or unchecked (No access) by default in the
 Group box of the Permissions panel in the Story editor. Options are No
 access, Read only, or Read/Write.</td>
 </tr>
 <tr class="row2">
-<td class="col0 leftalign"><a name="desc_default_permissions_story_2">Story Default Permissions[2]</a>
+<td class="col0 leftalign"><a name="desc_default_permissions_story_2">Story Default
+Permissions[2]</a>
 </td>
-<td class="col1 leftalign">The default Member permissions for the Story
+<td class="col1 leftalign">The default Member
+permissions for the Story
 editor. The settings here will determine what permissions are checked
 (Read only, or Read/Write), or unchecked (No access) by default in the
 Members box of the Permissions panel in the Story editor. Options are
@@ -2098,9 +2258,11 @@ No access, Read only, or Read/Write.
 </td>
 </tr>
 <tr class="row3">
-<td class="col0 leftalign"><a name="desc_default_permissions_story_3">Story Default Permissions[3]</a>
+<td class="col0 leftalign"><a name="desc_default_permissions_story_3">Story Default
+Permissions[3]</a>
 </td>
-<td class="col1 leftalign">The default Anonymous permissions for the
+<td class="col1 leftalign">The default Anonymous
+permissions for the
 Story editor. The settings here will determine what permissions are
 checked (Read only, or Read/Write), or unchecked (No access) by default
 in the Anonymous box of the Permissions panel in the Story editor.
@@ -2115,27 +2277,33 @@ Options are No access, Read only, or Read/Write.
 <table class="inline">
 <tbody>
 <tr class="row0">
-<td class="col0 leftalign"><a name="desc_default_permissions_topic_0">Topic Default Permissions[0]</a>
+<td class="col0 leftalign"><a name="desc_default_permissions_topic_0">Topic Default
+Permissions[0]</a>
 </td>
-<td class="col1 leftalign">The default Owner permissions for the Topic
+<td class="col1 leftalign">The default Owner
+permissions for the Topic
 editor. The settings here will determine what permissions are checked
 (Read only, or Read/Write), or unchecked (No access) by default in the
 Owner box of the Permissions panel in the Topic editor. Options are No
 access, Read only, or Read/Write.</td>
 </tr>
 <tr class="row1">
-<td class="col0 leftalign"><a name="desc_default_permissions_topic_1">Topic Default Permissions[1]</a>
+<td class="col0 leftalign"><a name="desc_default_permissions_topic_1">Topic Default
+Permissions[1]</a>
 </td>
-<td class="col1 leftalign">The default Group permissions for the Topic
+<td class="col1 leftalign">The default Group
+permissions for the Topic
 editor. The settings here will determine what permissions are checked
 (Read only, or Read/Write), or unchecked (No access) by default in the
 Group box of the Permissions panel in the Topic editor. Options are No
 access, Read only, or Read/Write.</td>
 </tr>
 <tr class="row2">
-<td class="col0 leftalign"><a name="desc_default_permissions_topic_2">Topic Default Permissions[2]</a>
+<td class="col0 leftalign"><a name="desc_default_permissions_topic_2">Topic Default
+Permissions[2]</a>
 </td>
-<td class="col1 leftalign">The default Member permissions for the Topic
+<td class="col1 leftalign">The default Member
+permissions for the Topic
 editor. The settings here will determine what permissions are checked
 (Read only, or Read/Write), or unchecked (No access) by default in the
 Members box of the Permissions panel in the Topic editor. Options are
@@ -2143,9 +2311,11 @@ No access, Read only, or Read/Write.
 </td>
 </tr>
 <tr class="row3">
-<td class="col0 leftalign"><a name="desc_default_permissions_topic_3">Topic Default Permissions[3]</a>
+<td class="col0 leftalign"><a name="desc_default_permissions_topic_3">Topic Default
+Permissions[3]</a>
 </td>
-<td class="col1 leftalign">The default Anonymous permissions for the
+<td class="col1 leftalign">The default Anonymous
+permissions for the
 Topic editor. The settings here will determine what permissions are
 checked (Read only, or Read/Write), or unchecked (No access) by default
 in the Anonymous box of the Permissions panel in the Topic editor.
@@ -2160,27 +2330,33 @@ Options are No access, Read only, or Read/Write.
 <table class="inline">
 <tbody>
 <tr class="row0">
-<td class="col0 leftalign"><a name="desc_default_permissions_block_0">Block Default Permissions[0]</a>
+<td class="col0 leftalign"><a name="desc_default_permissions_block_0">Block Default
+Permissions[0]</a>
 </td>
-<td class="col1 leftalign">The default Owner permissions for the Block
+<td class="col1 leftalign">The default Owner
+permissions for the Block
 editor. The settings here will determine what permissions are checked
 (Read only, or Read/Write), or unchecked (No access) by default in the
 Owner box of the Permissions panel in the Block editor. Options are No
 access, Read only, or Read/Write.</td>
 </tr>
 <tr class="row1">
-<td class="col0 leftalign"><a name="desc_default_permissions_block_1">Block Default Permissions[1]</a>
+<td class="col0 leftalign"><a name="desc_default_permissions_block_1">Block Default
+Permissions[1]</a>
 </td>
-<td class="col1 leftalign">The default Group permissions for the Block
+<td class="col1 leftalign">The default Group
+permissions for the Block
 editor. The settings here will determine what permissions are checked
 (Read only, or Read/Write), or unchecked (No access) by default in the
 Group box of the Permissions panel in the Block editor. Options are No
 access, Read only, or Read/Write.</td>
 </tr>
 <tr class="row2">
-<td class="col0 leftalign"><a name="desc_default_permissions_block_2">Block Default Permissions[2]</a>
+<td class="col0 leftalign"><a name="desc_default_permissions_block_2">Block Default
+Permissions[2]</a>
 </td>
-<td class="col1 leftalign">The default Member permissions for the Block
+<td class="col1 leftalign">The default Member
+permissions for the Block
 editor. The settings here will determine what permissions are checked
 (Read only, or Read/Write), or unchecked (No access) by default in the
 Members box of the Permissions panel in the Block editor. Options are
@@ -2188,9 +2364,11 @@ No access, Read only, or Read/Write.
 </td>
 </tr>
 <tr class="row3">
-<td class="col0 leftalign"><a name="desc_default_permissions_block_3">Block Default Permissions[3]</a>
+<td class="col0 leftalign"><a name="desc_default_permissions_block_3">Block Default
+Permissions[3]</a>
 </td>
-<td class="col1 leftalign">The default Anonymous permissions for the
+<td class="col1 leftalign">The default Anonymous
+permissions for the
 Block editor. The settings here will determine what permissions are
 checked (Read only, or Read/Write), or unchecked (No access) by default
 in the Anonymous box of the Permissions panel in the Block editor.
@@ -2287,7 +2465,10 @@ file.
 </p>
 <table style="width: 803px; height: 1239px;" class="inline">
 <tbody>
-<tr><td colspan="3" rowspan="1">$_CONF variables</td></tr><tr class="row0">
+<tr>
+<td colspan="3" rowspan="1">$_CONF variables</td>
+</tr>
+<tr class="row0">
 <td class="col0 leftalign">path </td>
 <td class="col1 leftalign">/path/to/glfusion/ </td>
 <td class="col2 leftalign">Base file system path for
@@ -2302,16 +2483,36 @@ directory for your
 site (trailing slash necessary). This directory holds the code
 libraries used throughout glFusion </td>
 </tr>
-<tr><td>default_charset</td><td>iso-8859-1</td><td>Character encoding used
+<tr>
+<td>default_charset</td>
+<td>iso-8859-1</td>
+<td>Character encoding used
 by glFusion when serving <acronym title="HyperText Markup Language">HTML</acronym>
 pages or sending email. Only used if the language file did not already
 set another character encoding. For multi-language setups, using
-'utf-8' as the default character set is recommended.</td></tr><tr><td>css_cache_filename</td><td>stylecache_</td><td>When
+'utf-8' as the default character set is recommended.</td>
+</tr>
+<tr>
+<td>css_cache_filename</td>
+<td>stylecache_</td>
+<td>When
 running multiple sites off the same code base, having the ability to
 define unique cache files per site can be beneficial. &nbsp;You
-normally do not need to adjust this setting.</td></tr><tr><td>js_cache_filename</td><td>jscache_</td><td>When running multiple sites off the same code base, having the ability
-to define unique cache files per site can be beneficial. &nbsp;You normally
-do not need to adjust this setting.</td></tr><tr><td colspan="3" rowspan="1">$_SYSTEM variables</td></tr><tr class="row2">
+normally do not need to adjust this setting.</td>
+</tr>
+<tr>
+<td>js_cache_filename</td>
+<td>jscache_</td>
+<td>When running multiple sites off the same code base,
+having the ability
+to define unique cache files per site can be beneficial. &nbsp;You
+normally
+do not need to adjust this setting.</td>
+</tr>
+<tr>
+<td colspan="3" rowspan="1">$_SYSTEM variables</td>
+</tr>
+<tr class="row2">
 <td class="col0 leftalign">site_enabled </td>
 <td class="col1 leftalign">true </td>
 <td class="col2 leftalign">A glFusion site can be
@@ -2319,10 +2520,32 @@ disabled quickly (e.g. for maintenance) by setting this to 'false'. <br />
 <br />
 Also see the site_disabled_msg configuration option. </td>
 </tr>
-<tr><td>maintenance_mode</td><td>false</td><td><span style="font-weight: bold;">Depreciated - Please use the online configuration utility - setting Enable Maintenance Mode</span><br /><br />Allows the site admin to disable the site for non-admin (and anonymous) users.<br /><br />This mode is useful if you have maintenance work to do like installing a new plugin or reorganizing content. &nbsp;You <span style="font-weight: bold;">must</span> login to your site as an admin user <span style="font-weight: bold;">before</span> enabling this option since it will disable all non-admin users.</td></tr><tr><td>rootdebug</td><td>false</td><td>Display detailed error messages. &nbsp;This option can be useful in diagnosing errors on yoru site.<br /><br />This
+<tr>
+<td>maintenance_mode</td>
+<td>false</td>
+<td><span style="font-weight: bold;">Depreciated
+- Please use the online configuration utility - setting Enable
+Maintenance Mode</span><br />
+<br />
+Allows the site admin to disable the site for non-admin (and anonymous)
+users.<br />
+<br />
+This mode is useful if you have maintenance work to do like installing
+a new plugin or reorganizing content. &nbsp;You <span style="font-weight: bold;">must</span> login to your
+site as an admin user <span style="font-weight: bold;">before</span>
+enabling this option since it will disable all non-admin users.</td>
+</tr>
+<tr>
+<td>rootdebug</td>
+<td>false</td>
+<td>Display detailed error messages. &nbsp;This option
+can be useful in diagnosing errors on yoru site.<br />
+<br />
+This
 option should not be enabled on production sites since it will display
 configuration data and other details that could expose confidential
-data such as database logins, etc.</td></tr>
+data such as database logins, etc.</td>
+</tr>
 <tr>
 <td>no_fail_sql</td>
 <td>0</td>
@@ -2336,33 +2559,81 @@ can
 be very helpful in diagnosing the database errors.<br />
 </td>
 </tr>
-<tr><td>no_cache_config</td><td>false</td><td>Disable configuration
+<tr>
+<td>no_cache_config</td>
+<td>false</td>
+<td>Disable configuration
 caching. &nbsp;If you experience issues with the caching of the
 configuration options you can disable the caching feature by setting
-this value to true.</td></tr><tr><td>skip_ip_check</td><td>false</td><td>Disable
+this value to true.</td>
+</tr>
+<tr>
+<td>skip_ip_check</td>
+<td>false</td>
+<td>Disable
 glFusion's checking of the long term cookie against the user's IP
-address. &nbsp;As a security precaution, glFusion validates that the IP
+address. &nbsp;As a security precaution, glFusion validates that
+the IP
 address used to create the long term cookie (used to automatically log
 you in) matches the IP address of the user each time it is checked.
 &nbsp;This can cause issues for users who change IPs often, for
-example, if they are behind a proxy server farm.</td></tr><tr><td>use_direct_style_js</td><td>false</td><td>Directly
-call the style / JS cache files. &nbsp;If loading the PHP processor on
+example, if they are behind a proxy server farm.</td>
+</tr>
+<tr>
+<td>use_direct_style_js</td>
+<td>false</td>
+<td>Directly
+call the style / JS cache files. &nbsp;If loading the PHP processor
+on
 your site adds additional load to your web server, you can skip that
 process and load the cache files directly from the htmlheader.thtml
-template.</td></tr><tr><td>html_filter</td><td>htmlpurifier</td><td>Select
+template.</td>
+</tr>
+<tr>
+<td>html_filter</td>
+<td>htmlpurifier</td>
+<td>Select
 which HTML filtering engine to use - HTMLPurifier provides stricter
 filtering and HTML compliance, but it also requires a site be running
-with pure UTF-8 content. If there is an issue,<span style="font-weight: bold;"> htmlawed</span> is another excellent filter, but it does not enforce strict HTML compliance as well.</td></tr><tr><td>debug_oauth</td><td>false</td><td>OAuth
+with pure UTF-8 content. If there is an issue,<span style="font-weight: bold;"> htmlawed</span> is another
+excellent filter, but it does not enforce strict HTML compliance as
+well.</td>
+</tr>
+<tr>
+<td>debug_oauth</td>
+<td>false</td>
+<td>OAuth
 debug - Display detailed message from Oauth authentication.&nbsp;If
 this is set to true - verbose log messages of the Oauth login process
 will be logged to the glFusion error.log file. This option is useful
-if&nbsp;you are experiencing issues with any of the Oauth protocols.</td></tr><tr><td>admin_session</td><td>1200</td><td>The number of seconds the administrative session will be valid. &nbsp;Set this to 0 to disable admin access re-authentication.</td></tr>
-<tr><td>verification_token_ttl</td><td>86400</td><td>The number of seconds that the registration verification token is valid. The default is 24 hours (86400 seconds).&nbsp;&nbsp; </td></tr><tr><td>token_ip</td><td>false</td><td>Use
+if&nbsp;you are experiencing issues with any of the Oauth protocols.</td>
+</tr>
+<tr>
+<td>admin_session</td>
+<td>1200</td>
+<td>The number of seconds the administrative session will
+be valid. &nbsp;Set this to 0 to disable admin access
+re-authentication.</td>
+</tr>
+<tr>
+<td>verification_token_ttl</td>
+<td>86400</td>
+<td>The number of seconds that the registration
+verification token is valid. The default is 24 hours (86400
+seconds).&nbsp;&nbsp; </td>
+</tr>
+<tr>
+<td>token_ip</td>
+<td>false</td>
+<td>Use
 IP address to validate tokens instead of referring URL. By default,
 glFusion will use the referrer URL to validate security tokens. In some
 cases, the browser may not send this data, so you can use the remote IP
 as the check. If this value is set to true, the IP address will be
-checked instead of the referring URL.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td></tr></tbody>
+checked instead of the referring
+URL.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
+</tr>
+</tbody>
 </table>
 </div>
 <h1><a name="calendar_plugin_configuration_options" id="calendar_plugin_configuration_options">Calendar Plugin

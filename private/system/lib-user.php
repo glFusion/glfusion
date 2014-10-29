@@ -354,32 +354,16 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
                 $queueUser = false;
             }
         }
-//@TODO - Remove this check to allow remote users to be queued
-//        if ( !empty($remoteusername) && !emtpy(!$service) ) {
-//            $queueUser = false;
-//        }
 
         if ($queueUser) {
             $fields .= ',status';
             $values .= ',' . USER_ACCOUNT_AWAITING_APPROVAL;
-COM_errorLog("Queing user");
         }
     } else {
         if (($_CONF['registration_type'] == 1 ) && (empty($remoteusername) || empty($service))) {
             $fields .= ',status';
             $values .= ',' . USER_ACCOUNT_AWAITING_VERIFICATION;
         }
-/*
-        if (!empty($remoteusername)) {
-            $fields .= ',remoteusername';
-            $values .= ",'".DB_escapeString($remoteusername)."'";
-            $account_type = REMOTE_USER;
-        }
-        if (!empty($service)) {
-            $fields .= ',remoteservice';
-            $values .= ",'".DB_escapeString($service)."'";
-        }
-*/
     }
 
     if (!empty($remoteusername)) {
@@ -792,6 +776,10 @@ function USER_uniqueUsername($username)
 function USER_validateUsername($username)
 {
 	global $_CONF, $_TABLES, $_USER;
+
+	if ( strlen($username) < $_CONF['min_username_length'] ) {
+	    return false;
+	}
 
     $regex = '[\x00-\x1F\x7F<>"%&*\/\\\\]';
 	// ... fast checks first.
