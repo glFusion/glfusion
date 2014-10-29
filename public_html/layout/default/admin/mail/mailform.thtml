@@ -63,7 +63,7 @@
         <tr>
             <td></td>
             <td>
-                <input type="hidden" value="postmode" value="{postmode}" />
+                <input type="hidden" name="postmode" value="{postmode}" />
                 <input type="submit" value="{lang_send}" />
                 <input type="hidden" name="mail" value="mail" />
                 <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
