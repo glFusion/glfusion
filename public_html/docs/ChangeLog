@@ -20,7 +20,6 @@ v1.5.0
 - Implemented HTML filter debug option
 - Fixed user submitted story form to show allowed items at the bottom
   of the form
-- Updated CKEditor v4.4.3
 - Bumped MySQL requirement to 5.0.1 as the minimum
 - Bumped PHP requirement to v5.3 as the minimum
 - New 'default' theme - based on Nouveau but uses jQuery as JS engine
@@ -38,11 +37,14 @@ v1.5.0
 
 v1.4.3
 ------
+- Added new configuration parameter to set minimum username length
+- Links Plugin - update root category in database when changed
+  via online configuration
 - Implemented option to disable instance caching
 - Added og:image meta data to articles
 - Fixed error that prevented batch user uploads.
 - Fixed error in Batch User Admin where short term user option did not work
-- Updated CKEditor to v4.4.3
+- Updated CKEditor to v4.4.4
 - Forum - Fixed issue where a required JS files was not loaded when
   wysiwyg editor was selected
 - Static Pages - Do not override the page title when static page content
