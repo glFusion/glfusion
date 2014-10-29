@@ -4,15 +4,35 @@
 <!-- END delete-button -->
 
 <!-- BEGIN text-element -->
-<tr><td class="key">{display_name} {doc_link} {unset_link}</td>
-<td>
-<input type="text" class="opt" name="{name}" style="width:300px" value="{value}" />
-{delete}
-</td></tr>
+<tr>
+  <td class="key">
+{!if cfg_item}
+    <span id="{cfg_item}" class="tooltip_cfg" title="">
+{!endif}
+      {display_name}
+{!if cfg_item}
+    </span>
+{!endif}
+    {unset_link}
+  </td>
+
+  <td>
+    <input type="text" class="opt" name="{name}" style="width:300px" value="{value}" />
+      {delete}
+  </td>
+</tr>
 <!-- END text-element -->
 
 <!-- BEGIN passwd-element -->
-<tr><td class="key">{display_name} {doc_link} {unset_link}</td>
+<tr><td class="key">
+{!if cfg_item}
+    <span id="{cfg_item}" class="tooltip_cfg" title="">
+{!endif}
+{display_name}
+{!if cfg_item}
+    </span>
+{!endif}
+{unset_link}</td>
 <td>
 <input type="password" class="opt" name="{name}" style="width:300px" value="{value}" />
 {delete}
@@ -20,14 +40,32 @@
 <!-- END passwd-element -->
 
 <!-- BEGIN placeholder-element -->
-<tr><td class="key">{display_name}</td><td>
+<tr><td class="key">
+{!if cfg_item}
+    <span id="{cfg_item}" class="tooltip_cfg" title="">
+{!endif}
+{display_name}
+{!if cfg_item}
+    </span>
+{!endif}
+
+</td><td>
 <input type="hidden" name="{name}" value="{value}" />
 {delete}
 </td></tr>
 <!-- END placeholder-element -->
 
 <!-- BEGIN select-element -->
-<tr><td class="key">{display_name} {doc_link} {unset_link}</td>
+<tr><td class="key">
+{!if cfg_item}
+    <span id="{cfg_item}" class="tooltip_cfg" title="">
+{!endif}
+
+{display_name}
+{!if cfg_item}
+    </span>
+{!endif}
+{unset_link}</td>
 <td>
 <select name="{name}" class="opt">
   <!-- BEGIN select-options -->
@@ -37,7 +75,15 @@
 <!-- END select-element -->
 
 <!-- BEGIN unset-param -->
-<tr><td class="key">{display_name} {doc_link}</td>
+<tr><td class="key">
+{!if cfg_item}
+    <span id="{cfg_item}" class="tooltip_cfg" title="">
+{!endif}
+{display_name}
+{!if cfg_item}
+    </span>
+{!endif}
+</td>
 <td><a href="#" onclick="restore('{name}');">{lang_enable}</a></td>
 </tr>
 <!-- END unset-param -->

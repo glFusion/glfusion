@@ -53,7 +53,9 @@ $outputHandle = outputHandler::getInstance();
 
 
 // must load the jquery ui library we want to use.
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/ui-lightness/jquery-ui-1.10.4.min.css');
+$outputHandle->addLinkStyle($_CONF['layout_url'].'/css/ui-lightness/jquery-ui-1.10.4.min.css');
+//$outputHandle->addLinkStyle($_CONF['layout_url'].'/css/ui-uikit/jquery-ui-1.10.4.custom.min.css');
+
 
 function theme_getToolTipStyle()
 {
