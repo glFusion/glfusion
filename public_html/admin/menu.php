@@ -561,10 +561,10 @@ function MB_createElement ( $menu_id ) {
 
     $plugin_select = '<select id="pluginname" name="pluginname">' . LB;
     $plugin_menus = _mbPLG_getMenuItems();
-
+    ksort($plugin_menus);
     $num_plugins = count($plugin_menus);
     for( $i = 1; $i <= $num_plugins; $i++ ) {
-        $plugin_select .= '<option value="' . key($plugin_menus) . '">' . key($plugin_menus) . '</option>' . LB;
+        $plugin_select .= '<option value="' . key($plugin_menus) . '">' . ucfirst(key($plugin_menus)) . '</option>' . LB;
         next( $plugin_menus );
     }
     $plugin_select .= '</select>' . LB;
@@ -653,7 +653,7 @@ function MB_saveNewMenuElement ( ) {
     global $_CONF, $_TABLES, $_GROUPS;
 
     // build post vars
-    $E['menu_id']           = COM_applyFilter($_POST['menuid'],true);
+    $E['menu_id']           = COM_applyFilter($_POST['menu'],true);
     $E['pid']               = COM_applyFilter($_POST['pid'],true);
     $E['element_label']     = @htmlspecialchars(strip_tags(COM_checkWords($_POST['menulabel'])));
     $E['element_type']      = COM_applyFilter($_POST['menutype'],true);
@@ -720,7 +720,7 @@ function MB_saveNewMenuElement ( ) {
     if ( $afterElementID == 0 ) {
         $aorder = 0;
     } else {
-        $aorder             = DB_getItem($_TABLES['menu_elements'],'element_order','id=' . $afterElementID);
+        $aorder = DB_getItem($_TABLES['menu_elements'],'element_order','id=' . $afterElementID);
     }
     $E['element_order'] = $aorder + 1;
 
@@ -762,6 +762,8 @@ function MB_editElement( $menu_id, $mid ) {
 
     // build types select
 
+//asort($LANG_MB_TYPES, SORT_STRING | SORT_NATURAL | SORT_FLAG_CASE );
+
     if ( $menu->menu_elements[$mid]->type == 1 ) {
         $type_select = '<input type="hidden" name="menutype" id="menutype" value="1" />';
         $type_select .= '<select id="menutyped" name="menutyped" disabled="disabled">' . LB;
@@ -798,18 +800,17 @@ function MB_editElement( $menu_id, $mid ) {
 
     $plugin_select = '<select id="pluginname" name="pluginname">' . LB;
     $plugin_menus = _mbPLG_getMenuItems();
-
+    ksort($plugin_menus);
     $found = 0;
     $num_plugins = count($plugin_menus);
-    for( $i = 1; $i <= $num_plugins; $i++ )
-    {
+    for( $i = 1; $i <= $num_plugins; $i++ ) {
         $plugin_select .= '<option value="' . key($plugin_menus) . '"';
 
         if ( $menu->menu_elements[$mid]->subtype==key($plugin_menus) ) {
             $plugin_select .= ' selected="selected"';
             $found++;
         }
-        $plugin_select .= '>' . key($plugin_menus) . '</option>' . LB;
+        $plugin_select .= '>' . ucfirst(key($plugin_menus)) . '</option>' . LB;
 
         next( $plugin_menus );
     }
@@ -1300,7 +1301,7 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             break;
         case 'save' :
             // save the new or edited element
-            $menu_id = COM_applyFilter($_POST['menuid'],true);
+            $menu_id = COM_applyFilter($_POST['menu'],true);
             MB_saveNewMenuElement();
             CACHE_remove_instance('menu');
             echo COM_refresh($_CONF['site_admin_url'] . '/menu.php?mode=menu&amp;menu=' . $menu_id);
