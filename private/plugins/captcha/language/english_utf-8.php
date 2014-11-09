@@ -52,8 +52,8 @@ $LANG_CP00 = array (
     'overview'          => 'CAPTCHA is a native glFusion plugin that provides an additional layer of security for spambots. <br /><br />A CAPTCHA (an acronym for "Completely Automated Public Turing test to tell Computers and Humans Apart", trademarked by Carnegie Mellon University) is a type of challenge-response test used in computing to determine whether or not the user is human.  By presenting a difficult to read graphic of letters and numbers, it is assumed that only a human could read and enter the characters properly.  By implementing the CAPTCHA test, it should help reduce the number of Spambot entries on your site.',
     'details'           => 'The CAPTCHA plugin will use static (already generated) CAPTCHA images unless you configure CAPTCHA to build dynamic images using either the GD Graphic Library or ImageMagick.  In order to use either GD libraries or ImageMagick, they must support True Type fonts.  Check with your hosting provider to determine if they support TTF.',
     'preinstall_check'  => 'CAPTCHA has the following requirements:',
-    'glfusion_check'    => 'glFusion v1.0.1 or greater, version reported is <b>%s</b>.',
-    'php_check'         => 'PHP v4.3.0 or greater, version reported is <b>%s</b>.',
+    'glfusion_check'    => 'glFusion v1.4.3 or greater, version reported is <b>%s</b>.',
+    'php_check'         => 'PHP v5.2.0 or greater, version reported is <b>%s</b>.',
     'preinstall_confirm' => "For full details on installing CAPTCHA, please refer to the <a href=\"{$_CONF['site_admin_url']}/plugins/captcha/install_doc.html\">Installation Manual</a>.",
     'captcha_help'      => 'Enter the characters',
     'bypass_error'      => "You have attempted to bypass the CAPTCHA processing at this site, please use the New User link to register.",
@@ -74,6 +74,10 @@ $LANG_CP00 = array (
     'session_expired'   => 'Your CAPTCHA Session has expired, please try again',
     'picture'           => 'Picture',
     'characters'        => 'Characters',
+    'ayah_error'        => 'Sorry, but we were not able to verify you as human. Please try again.',
+    'captcha_math'      => 'Enter the answer',
+    'captcha_prompt'    => 'Are You Human?',
+    'captcha_help'      => 'Solve the Problem',
 );
 
 // Localization of the Admin Configuration UI
@@ -104,8 +108,9 @@ $LANG_confignames['captcha'] = array(
     'publickey'             => 'reCAPTCHA Public Key - <a href="https://www.google.com/recaptcha/admin/create" target=_blank>reCAPTCHA Signup</a>',
     'privatekey'            => 'reCAPTCHA Private Key',
     'recaptcha_theme'       => 'reCAPTCHA Theme',
-    'pc_publickey'          => 'PiCATCHA Public Key - <a href="http://picatcha.com/signup/" target=_blank>Picatcha Signup</a>',
-    'pc_privatekey'         => 'PiCATCHA Private Key',
+    'ay_publickey'          => 'Are You a Human Publisher Key - <a href="http://areyouahuman.com/" target=_blank>Are You a Human Signup</a>',
+    'ay_privatekey'         => 'Are You a Human Scoring Key',
+
 );
 $LANG_configsubgroups['captcha'] = array(
     'sg_main'               => 'Configuration Settings'
@@ -118,7 +123,7 @@ $LANG_fs['captcha'] = array(
 $LANG_configselects['captcha'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => TRUE, 'False' => FALSE),
-    2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Static Images' => 2, 'reCAPTCHA' => 3, 'Picatcha' => 4),
+    2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Static Images' => 2, 'reCAPTCHA' => 3, 'Are You Human Game' => 5, 'Math Equation' => 6),
     4 => array('Default' => 'default','Simple' => 'simple'),
     5 => array('JPG' => 'jpg','PNG' => 'png'),
     6 => array('clean' => 'clean','red' => 'red','white' => 'white','blackglass' => 'blackglass'),

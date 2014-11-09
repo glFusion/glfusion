@@ -49,6 +49,9 @@ if (file_exists ($imgSet)) {
 class captcha {
     var $Length;
     var $CaptchaString = NULL;
+    var $first;
+    var $second;
+    var $operator;
     var $fontpath;
     var $bgpath;
     var $fonts;
@@ -82,10 +85,6 @@ class captcha {
         $this->wavemax      = "5";
         $this->session_id   = $csid;
         $this->publickey    = $_CP_CONF['publickey'];
-
-        if ( $this->driver == 3 ) {
-            $this->makeCaptcha ();
-        }
 
         if ($this->driver == 2 ) { // static images
             $this->stringGen();
@@ -178,27 +177,33 @@ class captcha {
         if ( $this->driver == 2 ) { // static
             $i = mt_rand(0,$cCount);
             $this->CaptchaString = $i;
-        } else {
+        } else if ($this->driver == 0 || $this->driver == 1 ) {
             $CharPool = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";
             $PoolLength = strlen($CharPool) - 1;
 
             for ($i = 0; $i < $this->Length; $i++) {
                 $this->CaptchaString .= $CharPool[mt_rand(0, $PoolLength)];
             }
+        } else if ( $this->driver == 6 ) {
+            $operator_pool = array('+','-');
+            $first_number_pool = array(30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15);
+            $second_number_pool = array(1,2,3,4,5,6,8,9,10,11,12,13,14,15);
+            $this->operator = $operator_pool[mt_rand(0,count($operator_pool) - 1)];
+            $this->first = $first_number_pool[mt_rand(0, count($first_number_pool) - 1)];
+            $this->second = $second_number_pool[mt_rand(0, count($second_number_pool) - 1)];
+            switch ($this->operator) {
+                case '+' :
+                    $this->CaptchaString = ((int)$this->first + (int)$this->second);
+                    break;
+                case '-' :
+                    $this->CaptchaString = ((int)$this->first - (int)$this->second);
+                    break;
+            }
         }
     } //StringGen
 
     function makeCaptcha () {
-        global $cString, $_CONF, $_TABLES;
-
-        if ( $this->driver == 3 ) {
-            echo recaptcha_get_html($this->publickey, NULL);
-            exit;
-        }
-        if ( $this->driver == 4 ) {
-            echo picatcha_get_html($this->publickey);
-            exit;
-        }
+        global $cString, $_CONF, $_TABLES, $LANG_CP00;
 
         if ( $this->session_id != 0 ) {
             $sql = "UPDATE {$_TABLES['cp_sessions']} SET validation='" . $this->getCaptchaString() . "' WHERE session_id='" . DB_escapeString($this->session_id) . "'";
@@ -208,48 +213,137 @@ class captcha {
            exit;
         }
 
-        if ( $this->driver == 2 ) { // static images
-            header('Content-type: image/jpeg');
-            $filename = $cString[$this->CaptchaString] . '.jpg';
-            $fp = fopen($_CONF['path'] . 'plugins/captcha/images/static/' . $this->imageset . '/' . $filename, 'rb');
-            if ( $fp != NULL ) {
-                while (!feof($fp)) {
-                    $buf = fgets($fp, 8192);
-                    echo $buf;
+        switch ($this->driver) {
+            case 0 :
+            case 1 :
+                if ( $this->gfxformat != 'png' && $this->gfxformat != 'jpg') {
+                    header('Content-type: image/gif');
+                    COM_errorLog("CAPTCHA: No valid gfxFormat specified");
+                    $errormgr = new error;
+                    $errormgr->addError('');
+                    $errormgr->displayError();
+                    die();
                 }
-                fclose($fp);
-            } else {
-                COM_errorLog("CAPTCHA: Unable to open static image file");
-            }
-        } else {
-            if ( $this->gfxformat != 'png' && $this->gfxformat != 'jpg') {
-                header('Content-type: image/gif');
-                COM_errorLog("CAPTCHA: No valid gfxFormat specified");
-                $errormgr = new error;
-                $errormgr->addError('');
-                $errormgr->displayError();
-                die();
-            }
 
-            $header = 'Content-type: image/' . $this->gfxformat;
-            header($header);
+                $header = 'Content-type: image/' . $this->gfxformat;
+                header($header);
 
-            if ( $this->driver == 0 ) {
+                if ( $this->driver == 0 ) {
+                    $imagelength = $this->Length * 25 + 16;
+                    $imageheight = 75;
+                    $image       = imagecreate($imagelength, $imageheight);
+                    $bgcolor     = imagecolorallocate($image, 255, 255, 255);
+                    $stringcolor = imagecolorallocate($image, 0, 0, 0);
+                    $filter      = new filters;
+                    $filter->signs($image, $this->getRandFont());
+                    for ($i = 0; $i < strlen($this->CaptchaString); $i++) {
+                        imagettftext($image, 25, mt_rand(-15, 15), $i * 25 + 10,
+                                mt_rand(30, 70),
+                                $stringcolor,
+                                $this->getRandFont(),
+                                $this->CaptchaString{$i});
+                    }
+
+                    switch ($this->gfxformat ) {
+                        case 'png' :
+                            imagepng($image);
+                            break;
+                        case 'jpg' :
+                            imagejpeg($image);
+                            break;
+                    }
+                    imagedestroy($image);
+                } else {
+                    // ImageMagick code originally written by
+                    // Thom Skrtich  (email : bisohpthom@supertwist.net)
+                    // used in SecureImage a CAPTCHA plugin for WordPress.
+                    $gravity = 'Center';
+                    # modify the image according to the generated settings
+                    $size =  rand($this->sizemin,  $this->sizemax);
+                    $blur =  rand($this->blurmin,  $this->blurmax);
+                    $angle = rand($this->anglemin, $this->anglemax);
+                    $swirl = rand($this->swirlmin, $this->swirlmax);
+                    $wave =  rand($this->wavemin,  $this->wavemax);
+
+                    $cString = $this->CaptchaString;
+                    $i = strlen($cString);
+                    $newString = '';
+                    for ($x=0; $x<$i;$x++) {
+                        $newString .= $cString[$x];
+                        $newString .= ' ';
+                    }
+
+                    # prepare our image magick command
+                    $cmd    = '"' . $this->convertpath . '"';
+                    $cmd .= ' -font "'.$this->getRandFont().'"';
+                    $cmd .= ' -pointsize '.$size;
+                    $cmd .= ' -gravity "'.$gravity.'"';
+                    $cmd .= ' -annotate 0 "' . $newString . '"';
+                    $cmd .= ' -blur '.$blur;
+                    $cmd .= ' -rotate '.$angle;
+                    $cmd .= ' -swirl '.$swirl;
+                    $cmd .= ' -wave '.$wave.'x80';
+                    $cmd .= ' ' . $this->getRandBackground() . ' - ';
+
+                    if (PHP_OS == "WINNT") {
+                        $pcmd = 'cmd /c " ' . $cmd . '"';
+                    } else {
+                        $pcmd = $cmd;
+                    }
+                    if ($this->debug) {
+                        COM_errorLog("CAPTCHA cmd: " . $pcmd);
+                    }
+                    passthru($pcmd);
+                }
+                break;
+            case 2 :
+                header('Content-type: image/jpeg');
+                $filename = $cString[$this->CaptchaString] . '.jpg';
+                $fp = fopen($_CONF['path'] . 'plugins/captcha/images/static/' . $this->imageset . '/' . $filename, 'rb');
+                if ( $fp != NULL ) {
+                    while (!feof($fp)) {
+                        $buf = fgets($fp, 8192);
+                        echo $buf;
+                    }
+                    fclose($fp);
+                } else {
+                    COM_errorLog("CAPTCHA: Unable to open static image file");
+                }
+                break;
+            case 3 :
+            case 4 :
+            case 5 :
+                break;
+            case 6 :
+                $output =  $this->first . ' '.$this->operator . ' ' . $this->second . ' = ';
+                $imagelength = $this->Length * 25 + 16;
+                $imageheight = 75;
+                $im = imagecreate($imagelength, $imageheight);
+                // White background and blue text
+                $bg = imagecolorallocate($im, 255, 255, 255);
+                $textcolor = imagecolorallocate($im, 0, 0, 255);
+                // Write the string at the top left
+                imagestring($im, 5, 35, 15, $output, $textcolor);
+                imagestring($im, 25, 5, 45, $LANG_CP00['captcha_help'], $textcolor);
+                // Output the image
+                header('Content-type: image/png');
+                imagepng($im);
+                imagedestroy($im);
+/* Alternative approach
+                $output =  $this->first . ''.$this->operator . '' . $this->second . '=';
+                $font = $this->fontpath . 'bluehigl.ttf';
                 $imagelength = $this->Length * 25 + 16;
                 $imageheight = 75;
                 $image       = imagecreate($imagelength, $imageheight);
                 $bgcolor     = imagecolorallocate($image, 255, 255, 255);
                 $stringcolor = imagecolorallocate($image, 0, 0, 0);
-                $filter      = new filters;
-                $filter->signs($image, $this->getRandFont());
-                for ($i = 0; $i < strlen($this->CaptchaString); $i++) {
+                for ($i = 0; $i < strlen($output); $i++) {
                     imagettftext($image, 25, mt_rand(-15, 15), $i * 25 + 10,
-                            mt_rand(30, 70),
+                            45,
                             $stringcolor,
-                            $this->getRandFont(),
-                            $this->CaptchaString{$i});
+                            $font,
+                            $output{$i});
                 }
-
                 switch ($this->gfxformat ) {
                     case 'png' :
                         imagepng($image);
@@ -259,49 +353,12 @@ class captcha {
                         break;
                 }
                 imagedestroy($image);
-            } else {
-                // ImageMagick code originally written by
-                // Thom Skrtich  (email : bisohpthom@supertwist.net)
-                // used in SecureImage a CAPTCHA plugin for WordPress.
-                $gravity = 'Center';
-                # modify the image according to the generated settings
-                $size =  rand($this->sizemin,  $this->sizemax);
-                $blur =  rand($this->blurmin,  $this->blurmax);
-                $angle = rand($this->anglemin, $this->anglemax);
-                $swirl = rand($this->swirlmin, $this->swirlmax);
-                $wave =  rand($this->wavemin,  $this->wavemax);
-
-                $cString = $this->CaptchaString;
-                $i = strlen($cString);
-                $newString = '';
-                for ($x=0; $x<$i;$x++) {
-                    $newString .= $cString[$x];
-                    $newString .= ' ';
-                }
-
-                # prepare our image magick command
-                $cmd    = '"' . $this->convertpath . '"';
-                $cmd .= ' -font "'.$this->getRandFont().'"';
-                $cmd .= ' -pointsize '.$size;
-                $cmd .= ' -gravity "'.$gravity.'"';
-                $cmd .= ' -annotate 0 "' . $newString . '"';
-                $cmd .= ' -blur '.$blur;
-                $cmd .= ' -rotate '.$angle;
-                $cmd .= ' -swirl '.$swirl;
-                $cmd .= ' -wave '.$wave.'x80';
-                $cmd .= ' ' . $this->getRandBackground() . ' - ';
-
-                if (PHP_OS == "WINNT") {
-                    $pcmd = 'cmd /c " ' . $cmd . '"';
-                } else {
-                    $pcmd = $cmd;
-                }
-                if ($this->debug) {
-                    COM_errorLog("CAPTCHA cmd: " . $pcmd);
-                }
-                passthru($pcmd);
-            }
+*/
+                break;
+            default :
+                break;
         }
+
     } //MakeCaptcha
 
     function getCaptchaString () {

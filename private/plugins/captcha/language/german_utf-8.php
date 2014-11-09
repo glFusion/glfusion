@@ -76,7 +76,11 @@ $LANG_CP00 = array(
     'reload_too_many' => 'Du kannst max. 5 neue Bilder generieren lassen',
     'session_expired' => 'Deine CAPTCHA-Session ist abgelaufen, bitte versuche es erneut',
     'picture' => 'Bild',
-    'characters' => 'Zeichen'
+    'characters' => 'Zeichen',
+    'ayah_error' => 'Sorry, but we were not able to verify you as human. Please try again.',
+    'captcha_math' => 'Enter the answer',
+    'captcha_prompt'    => 'Are You Human?',
+    'captcha_help'      => 'Solve the Problem',
 );
 
 // Localization of the Admin Configuration UI
@@ -108,8 +112,8 @@ $LANG_confignames['captcha'] = array(
     'publickey' => 'reCAPTCHA Public Key - <a href="https://www.google.com/recaptcha/admin/create">reCAPTCHA Signup</a>',
     'privatekey' => 'reCAPTCHA Private Key',
     'recaptcha_theme' => 'reCAPTCHA Theme',
-    'pc_publickey' => 'PiCATCHA Public Key - <a href="http://picatcha.com/signup/" target=_blank>Picatcha Signup</a>',
-    'pc_privatekey' => 'PiCATCHA Private Key'
+    'ay_publickey' => 'Are You a Human Publisher Key - <a href="http://areyouahuman.com/" target=_blank>Are You a Human Signup</a>',
+    'ay_privatekey' => 'Are You a Human Scoring Key'
 );
 
 $LANG_configsubgroups['captcha'] = array(
@@ -125,7 +129,7 @@ $LANG_fs['captcha'] = array(
 $LANG_configselects['captcha'] = array(
     0 => array('Ja' => 1, 'Nein' => 0),
     1 => array('Ja' => true, 'Nein' => false),
-    2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Stat. Bilder' => 2, 'reCAPTCHA' => 3, 'Picatcha' => 4),
+    2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Stat. Bilder' => 2, 'reCAPTCHA' => 3, 'Are You Human Game' => 5, 'Math Equation' => 6),
     4 => array('Standard' => 'default', 'Einfach' => 'simple'),
     5 => array('JPG' => 'jpg', 'PNG' => 'png'),
     6 => array('clean' => 'clean', 'red' => 'red', 'white' => 'white', 'blackglass' => 'blackglass')

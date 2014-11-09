@@ -65,6 +65,12 @@ if (!isset($_CP_CONF['gfxDriver'])) {
     unset($_CP_CFG);
 }
 
+if ( isset($_CP_CONF['gfxDriver']) && $_CP_CONF['gfxDriver'] == 6 ) {
+    if (!extension_loaded('gd') || !function_exists('gd_info')) {
+        $_CP_CONF['gfxDriver'] = 2;
+    }
+}
+
 if ( isset($_CP_CONF['gfxDriver']) && $_CP_CONF['gfxDriver'] == 3 ) {
     if ( $_CP_CONF['publickey'] == '' || $_CP_CONF['privatekey'] == '' ) {
         $_CP_CONF['gfxDriver'] = 2;
@@ -73,11 +79,23 @@ if ( isset($_CP_CONF['gfxDriver']) && $_CP_CONF['gfxDriver'] == 3 ) {
     }
 
 }
-if ( isset($_CP_CONF['gfxDriver']) && $_CP_CONF['gfxDriver'] == 4 ) {
-    if ( $_CP_CONF['pc_publickey'] == '' || $_CP_CONF['pc_privatekey'] == '' ) {
+if ( isset($_CP_CONF['gfxDriver']) && $_CP_CONF['gfxDriver'] == 5 ) {
+     if ( $_CP_CONF['ay_publickey'] == '' || $_CP_CONF['ay_privatekey'] == '' ) {
         $_CP_CONF['gfxDriver'] = 2;
     } else {
-        require_once $_CONF['path'] . 'plugins/captcha/class/picatchalib.php';
+        define( 'AYAH_PUBLISHER_KEY', $_CP_CONF['ay_publickey']);
+        define( 'AYAH_SCORING_KEY', $_CP_CONF['ay_privatekey']);
+        define( 'AYAH_WEB_SERVICE_HOST', 'ws.areyouahuman.com');
+        define( 'AYAH_TIMEOUT', 0);
+        define( 'AYAH_DEBUG_MODE', FALSE);
+        if ( !function_exists('curl_init') ) {
+            define( 'AYAH_USE_CURL', FALSE);
+        } else {
+            define( 'AYAH_USE_CURL', TRUE);
+        }
+        require_once $_CONF['path'] . 'plugins/captcha/class/ayah.php';
+        $ayah = new AYAH();
+
     }
 }
 
@@ -270,7 +288,6 @@ function plugin_commentPreSave_captcha($uid, $title, $comment, $sid, $pid, $type
             SESS_setVar('glfusion.commentpresave.error',$msg);
             return 1;
         }
-
     }
     return 0;
 }
@@ -448,7 +465,7 @@ function CAPTCHA_expireSessions() {
  * @return  string  HTML
  */
 function CAPTCHA_getHTML($csid, $ctype='general' ) {
-    global $_CONF, $_CP_CONF, $LANG_CP00;
+    global $_CONF, $_CP_CONF, $LANG_CP00, $ayah;
 
     $retval = '';
 
@@ -493,7 +510,6 @@ function CAPTCHA_getHTML($csid, $ctype='general' ) {
     }
 
     $T->set_var(array(
-        'lang_captcha_help'     => $LANG_CP00['captcha_help'],
         'lang_refresh'          => $LANG_CP00['reload'],
         'lang_alt'              => $LANG_CP00['captcha_alt'],
         'captcha_image'         => $_CONF['site_url'] . '/captcha/captcha.php?csid=' . $csid . '&amp;.' . ($_CP_CONF['gfxFormat'] != '' ? $_CP_CONF['gfxFormat'] : 'jpg'),
@@ -502,14 +518,18 @@ function CAPTCHA_getHTML($csid, $ctype='general' ) {
         'lang_too_many'         => $LANG_CP00['reload_too_many'],
         'csid'                  => $csid,
     ));
-
+    if ( $_CP_CONF['gfxDriver'] == 6 ) {
+        $T->set_var('lang_captcha_help', $LANG_CP00['captcha_math']);
+    } else {
+        $T->set_var('lang_captcha_help', $LANG_CP00['captcha_help']);
+    }
     if ( $_CP_CONF['gfxDriver'] == 3 ) {
         $T->set_var('recaptcha', recaptcha_get_html($_CP_CONF['publickey'], NULL));
         $T->set_var('recaptcha_theme',$_CP_CONF['recaptcha_theme']);
     }
-    if ( $_CP_CONF['gfxDriver'] == 4 ) {
-        $T->set_var('recaptcha', picatcha_get_html($_CP_CONF['pc_publickey']));
-        $T->set_var('recpatcha_theme',$_CP_CONF['recaptcha_theme']);
+    if ( $_CP_CONF['gfxDriver'] == 5 ) {
+        $T->set_var('recaptcha', $ayah->getPublisherHTML() );
+        $T->set_var('recaptcha_theme','none');
     }
 
     $T->parse('output', 'page');
@@ -526,7 +546,7 @@ function CAPTCHA_getHTML($csid, $ctype='general' ) {
  * @return  array   array containing boolean true / false and error message
  */
 function CAPTCHA_checkInput( $response, $ctype='general' ) {
-    global $_CP_CONF, $_TABLES, $LANG_CP00, $_SERVER;
+    global $_CP_CONF, $_TABLES, $LANG_CP00, $_SERVER,$ayah;
 
     // if rc=0 on return, this is failure, and msg will contain detail
     $msg = '';
@@ -534,6 +554,11 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
 
     // expire stale CAPTCHA sessions
     CAPTCHA_expireSessions();
+
+    if ( isset($_POST['validation_field']) && !empty($_POST['validation_field']) ) {
+        CAPTCHA_errorLog("CAPTCHA: Honey Pot Field was populated in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
+        return array(0,$LANG_CP00['entry_error']);
+    }
 
     if ( $_CP_CONF['gfxDriver'] == 3 ) {
         $resp = recaptcha_check_answer ($_CP_CONF['privatekey'],
@@ -556,25 +581,14 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
         }
     }
 
-    if ( $_CP_CONF['gfxDriver'] == 4 ) {
-        if ( !isset($_POST['picatcha']['r']) ) {
-            $_POST['picatcha']['r'] = '';
-        }
-        $response = picatcha_check_answer($_CP_CONF['pc_privatekey'],
-            $_SERVER['REMOTE_ADDR'],
-            $_SERVER['HTTP_USER_AGENT'], $_POST['picatcha']['token'], $_POST['picatcha']['r']);
-
-        if ($response->isValid){
+    if ( $_CP_CONF['gfxDriver'] == 5 ) {
+        $score = $ayah->scoreResult();
+        if ($score) {
             return array(1,'');
         } else {
             # set the error code so that we can display it
-            if ( $response->error == 'incorrect-answer' ) {
-                $error = $LANG_CP00['entry_error_pic'];
-            } else {
-                $error = $response->error;
-            }
-            CAPTCHA_errorLog("CAPTCHA: An invalid PICATCHA image set was selected in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
-
+            $error = $LANG_CP00['ayah_error'];
+            CAPTCHA_errorLog("CAPTCHA: An invalid AYAH score was provided in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
             return array(0,$error);
         }
     }

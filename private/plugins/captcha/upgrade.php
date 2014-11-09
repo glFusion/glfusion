@@ -93,6 +93,17 @@ function captcha_upgrade()
             $c = config::get_instance();
             $c->add('pc_publickey', '','text',0, 0, 0, 48, true, 'captcha');
             $c->add('pc_privatekey', '','text',0, 0, 0, 49, true, 'captcha');
+
+        case '3.3.0' :
+            $c = config::get_instance();
+            $c->add('ay_publickey', '','text',0, 0, 0, 50, true, 'captcha');
+            $c->add('ay_privatekey', '','text',0, 0, 0, 51, true, 'captcha');
+
+            $c->del('pc_publickey','captcha');
+            $c->del('pc_privatekey','captcha');
+            if ( $_CP_CONF['gfxDriver'] == 4 ) {
+                $c->set('gfxDriver',6,'captcha');
+            }
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_CP_CONF['pi_version']."',pi_gl_version='".$_CP_CONF['gl_version']."' WHERE pi_name='captcha' LIMIT 1");
             break;

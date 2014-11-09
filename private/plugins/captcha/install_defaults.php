@@ -59,7 +59,7 @@ $_CP_DEFAULT['enable_rating'] = 1;
 $_CP_DEFAULT['enable_story'] = 1;
 $_CP_DEFAULT['enable_calendar'] = 1;
 $_CP_DEFAULT['enable_links'] = 1;
-$_CP_DEFAULT['gfxDriver'] = 2;
+$_CP_DEFAULT['gfxDriver'] = 6;
 $_CP_DEFAULT['gfxFormat'] = 'jpg';
 $_CP_DEFAULT['imageset'] = 'default';
 $_CP_DEFAULT['logging'] = 0;
@@ -114,10 +114,15 @@ function plugin_initconfig_captcha()
         $c->add('recaptcha_theme', $_CP_DEFAULT['recaptcha_theme'],'select',
                 0, 0, 6, 46, true, 'captcha');
 
-        $c->add('pc_publickey', $_CP_DEFAULT['publickey'],'text',
-                0, 0, 0, 48, true, 'captcha');
-        $c->add('pc_privatekey', $_CP_DEFAULT['privatekey'],'text',
-                0, 0, 0, 49, true, 'captcha');
+//        $c->add('pc_publickey', $_CP_DEFAULT['publickey'],'text',
+//                0, 0, 0, 48, true, 'captcha');
+//        $c->add('pc_privatekey', $_CP_DEFAULT['privatekey'],'text',
+//                0, 0, 0, 49, true, 'captcha');
+
+        $c->add('ay_publickey', $_CP_DEFAULT['publickey'],'text',
+                0, 0, 0, 50, true, 'captcha');
+        $c->add('ay_privatekey', $_CP_DEFAULT['privatekey'],'text',
+                0, 0, 0, 51, true, 'captcha');
 
 
         $c->add('debug', $_CP_DEFAULT['debug'], 'select',

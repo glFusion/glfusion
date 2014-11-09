@@ -6,8 +6,6 @@
 // |                                                                          |
 // | finnish language file                                                    |
 // +--------------------------------------------------------------------------+
-// | $Id:: english_utf-8.php 5873 2010-04-11 03:26:08Z ewarren               $|
-// +--------------------------------------------------------------------------+
 // | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -77,7 +75,11 @@ $LANG_CP00 = array(
     'reload_too_many' => 'Max 5 p&auml;ivitys',
     'session_expired' => 'CAPTCHA Aika on p&auml;&auml;ttynyt, yrit&auml; uudestaan',
     'picture' => 'Kuva',
-    'characters' => 'Merkit'
+    'characters' => 'Merkit',
+    'ayah_error' => 'Sorry, but we were not able to verify you as human. Please try again.',
+    'captcha_math' => 'Enter the answer',
+    'captcha_prompt'    => 'Are You Human?',
+    'captcha_help'      => 'Solve the Problem',
 );
 
 // Localization of the Admin Configuration UI
@@ -109,8 +111,8 @@ $LANG_confignames['captcha'] = array(
     'publickey' => 'reCAPTCHA Public Key - <a href="http://recaptcha.net/api/getkey?app=php">reCAPTCHA Signup</a>',
     'privatekey' => 'reCAPTCHA Private Key',
     'recaptcha_theme' => 'reCAPTCHA Teema',
-    'pc_publickey' => 'PiCATCHA Public Key - <a href="http://picatcha.com/signup/" target=_blank>Picatcha Signup</a>',
-    'pc_privatekey' => 'PiCATCHA Private Key'
+    'ay_publickey' => 'Are You a Human Publisher Key - <a href="http://areyouahuman.com/" target=_blank>Are You a Human Signup</a>',
+    'ay_privatekey' => 'Are You a Human Scoring Key'
 );
 
 $LANG_configsubgroups['captcha'] = array(
@@ -126,7 +128,7 @@ $LANG_fs['captcha'] = array(
 $LANG_configselects['captcha'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => true, 'False' => false),
-    2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Static Images' => 2, 'reCAPTCHA' => 3, 'Picatcha' => 4),
+    2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Static Images' => 2, 'reCAPTCHA' => 3, 'Are You Human Game' => 5, 'Math Equation' => 6),
     4 => array('Default' => 'default', 'Simple' => 'simple'),
     5 => array('JPG' => 'jpg', 'PNG' => 'png'),
     6 => array('clean' => 'clean', 'red' => 'red', 'white' => 'white', 'blackglass' => 'blackglass')
