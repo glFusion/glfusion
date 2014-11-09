@@ -541,7 +541,9 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         $peTemplate->set_var ('post_message', $postmessage);
         $peTemplate->set_var ('LANG_NAME', $LANG_GF02['msg33']);
         $peTemplate->set_var ('name', htmlentities(strip_tags(COM_checkWords(trim(USER_sanitizeName(isset($postData['name']) ? $postData['name'] : ''))))));
-        $peTemplate->set_var ('email',strip_tags($postData['email']));
+        if ( isset($postData['email']) ) {
+            $peTemplate->set_var ('email',strip_tags($postData['email']));
+        }
     } else {
         $peTemplate->set_var ('member_user',true);
         $peTemplate->set_var ('post_message', $postmessage);
