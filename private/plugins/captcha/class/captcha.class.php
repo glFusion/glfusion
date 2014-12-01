@@ -315,6 +315,7 @@ class captcha {
             case 5 :
                 break;
             case 6 :
+/*
                 $output =  $this->first . ' '.$this->operator . ' ' . $this->second . ' = ';
                 $imagelength = $this->Length * 25 + 16;
                 $imageheight = 75;
@@ -329,7 +330,7 @@ class captcha {
                 header('Content-type: image/png');
                 imagepng($im);
                 imagedestroy($im);
-/* Alternative approach
+*/
                 $output =  $this->first . ''.$this->operator . '' . $this->second . '=';
                 $font = $this->fontpath . 'bluehigl.ttf';
                 $imagelength = $this->Length * 25 + 16;
@@ -353,7 +354,7 @@ class captcha {
                         break;
                 }
                 imagedestroy($image);
-*/
+
                 break;
             default :
                 break;
