@@ -3749,6 +3749,9 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                     $items_found++;
                 }
                 $T->parse('sectionblock','section',true);
+                $T->unset_var('datablock');
+                $T->unset_var('interval');
+                $T->unset_var('section_title');
             }
         }
     }
