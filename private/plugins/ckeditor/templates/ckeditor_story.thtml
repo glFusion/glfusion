@@ -21,12 +21,17 @@
     window.onload = function() {
         introtext = loadEditor('introtext');
         bodytext  = loadEditor('bodytext' );
-
     };
     function won (id) {
-        if (id == 'introtext') introtext = loadEditor(id);
-        if (id == 'bodytext')  bodytext = loadEditor(id);
-        id = CKEDITOR.replace(id);
+        if (id == 'introtext') {
+            if ( !introtext ) introtext = loadEditor(id);
+            introtext = CKEDITOR.replace('introtext');
+        }
+
+        if (id == 'bodytext')  {
+            if ( !bodytext ) bodytext = loadEditor(id);
+            bodytext = CKEDITOR.replace('bodytext');
+        }
     }
     function woff (id) {
         if ( id == 'introtext' ) introtext.destroy();
