@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.5.0
 ------
+- Fixed issue with What's new block duplicating data
 - Disable exist check on auto tag upload
 - Implement og:image tag for stories
 - Implemented the ability to merge remote to local users from the
