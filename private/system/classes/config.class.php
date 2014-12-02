@@ -692,11 +692,12 @@ class config {
 
     function _UI_get_change_block($changes)
     {
+        global $LANG_confignames;
         if ($changes != null AND $changes !== array()) {
             $display = '<ul style="margin-top:5px;">';
             if ( is_array($changes) ) {
                 foreach ($changes as $param_name => $success)
-                    $display .= '<li>' . $param_name . '</li>';
+                    $display .= '<li>' . $LANG_confignames['Core'][$param_name] . '</li>';
                 $display .= '</ul>';
             }
             return $display;
