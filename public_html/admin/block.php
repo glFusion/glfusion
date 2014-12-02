@@ -271,6 +271,8 @@ function BLOCK_edit($bid = '', $B = array())
                                    sprintf ($delbutton, $jsconfirm));
         $block_templates->set_var ('delete_option_no_confirmation',
                                    sprintf ($delbutton, ''));
+        $block_templates->set_var('lang_delete',$LANG_ADMIN['delete']);
+        $block_templates->set_var('lang_delete_confirm',$MESSAGE[76]);
     }
 
     $block_templates->set_var('block_bid', $A['bid']);
@@ -280,6 +282,7 @@ function BLOCK_edit($bid = '', $B = array())
     $block_templates->set_var('lang_blockhelpurl', $LANG_ADMIN['help_url']);
     $block_templates->set_var('lang_topic', $LANG_ADMIN['topic']);
     $block_templates->set_var('lang_save', $LANG_ADMIN['save']);
+
     $block_templates->set_var('lang_cancel', $LANG_ADMIN['cancel']);
     $block_templates->set_var('lang_blocktype', $LANG_ADMIN['type']);
     $block_templates->set_var('lang_allowed_html', $LANG01[123]);
