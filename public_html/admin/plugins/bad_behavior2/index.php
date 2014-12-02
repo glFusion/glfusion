@@ -151,30 +151,48 @@ function _bb_listEntries ($page = 1, $msg = '')
         $dt = new Date($A['date'],$_USER['tzid']);
 
         $headers = str_replace("\n", "<br/>\n", $A['http_headers']);
-		$headers = str_replace("User-Agent:","<strong>User-Agent:</strong>",$headers);
-		$headers = str_replace("Host:","<strong>Host:</strong>",$headers);
-		$headers = str_replace("POST ","<strong>POST</strong> ",$headers);
-		$headers = str_replace("GET ","<strong>GET</strong> ",$headers);
-		$headers = str_replace("Accept-Language:","<strong>Accept-Language:</strong> ",$headers);
-		$headers = str_replace("Accept-Encoding:","<strong>Accept-Encoding:</strong> ",$headers);
-		$headers = str_replace("Accept-Charset:","<strong>Accept-Charset:</strong> ",$headers);
-		$headers = str_replace("X-Forwarded-For:","<strong>X-Forwarded-For:</strong> ",$headers);
-		$headers = str_replace("Cookie:","<strong>Cookie:</strong> ",$headers);
-		$headers = str_replace("Via:","<strong>Via:</strong> ",$headers);
-		$headers = str_replace("Connection:","<strong>Connection:</strong>",$headers);
-		$headers = str_replace("Language:","<strong>Language:</strong>",$headers);
-		$headers = str_replace("Accept:","<strong>Accept:</strong>",$headers);
-		$headers = str_replace("Cache-Control:","<strong>Cache-Control:</strong>",$headers);
-		$headers = str_replace("Referer:","<strong>Referer:</strong>",$headers);
-		$headers = str_replace("Pragma:","<strong>Pragma:</strong>",$headers);
-		$headers = str_replace("Proxy-","<strong>Proxy-</strong>",$headers);
-		$headers = str_replace("Cf-Connecting-Ip","<strong>Cf-Connecting-Ip</strong>",$headers);
-		$headers = str_replace("Cf-Ipcountry","<strong>Cf-Ipcountry</strong>",$headers);
-		$headers = str_replace("X-Forwarded-Proto","<strong>X-Forwarded-Proto</strong>",$headers);
-		$headers = str_replace("Cf-Visitor","<strong>Cf-Visitor</strong>",$headers);
+
+        $keywords = array(
+        "User-Agent:",
+        "Host:",
+        "POST ",
+        "GET ",
+        "Accept-Language:",
+        "Accept-Encoding:",
+        "Accept-Charset:",
+        "X-Forwarded-For:",
+        "Cookie:",
+        "Via:",
+        "Connection:",
+        "Language:",
+        "Accept:",
+        "Cache-Control:",
+        "Referer:",
+        "Pragma:",
+        "Proxy-",
+        "Cf-Connecting-Ip",
+        "Cf-Ipcountry",
+        "X-Forwarded-Proto",
+        "Cf-Visitor",
+        "Cf-Ray",
+        "True-Client-Ip",
+        "X-Http-Proto",
+        "X-Real-Ip",
+        "Content-Length:",
+        "Content-Type:",
+        "title:",
+        "url:",
+        "excerpt:",
+        "blog_name:"
+        );
+        foreach ($keywords AS $key ) {
+            $headers = str_replace($key,"<strong>".$key."</strong>",$headers);
+        }
 
 		$entity = str_replace("\n", "<br/>\n", $A["request_entity"]);
-
+        foreach ($keywords AS $key ) {
+            $entity = str_replace($key,"<strong>".$key."</strong>",$entity);
+        }
         $templates->set_var (array(
                 'row_num'           => $lcount,
                 'cssid'             => ($i % 2) + 1,
@@ -187,7 +205,7 @@ function _bb_listEntries ($page = 1, $msg = '')
                 'reason'            => $LANG_BB2_RESPONSE[$A['key']],
                 'http_user_agent'   => $A['user_agent'],
                 'http_response'     => $entity,
-                'date_and_time'     => $dt->toRFC822(true) // $A['date']
+                'date_and_time'     => $dt->toRFC822(true)
         ));
 
         $url = $_CONF['site_admin_url'] . '/plugins/' . BAD_BEHAVIOR_PLUGIN
@@ -218,7 +236,8 @@ function _bb_listEntries ($page = 1, $msg = '')
                  . '/index.php?mode=list';
         $numpages = ceil ($entries / 50);
         $templates->set_var ('google_paging',
-                COM_printPageNavigation ($baseurl, $page, $numpages));
+//                COM_printPageNavigation ($baseurl, $page, $numpages));
+                _pagination ($baseurl, $page, $numpages));
     } else {
         $templates->set_var ('google_paging', '');
     }
