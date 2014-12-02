@@ -486,9 +486,13 @@ function FEED_edit($fid = 0, $type = '')
     } else {
         $feed_template->set_var ('is_enabled', '');
     }
+    $security_token = SEC_createToken();
+    $feed_template->set_var('sec_token_name', CSRF_TOKEN);
+    $feed_template->set_var('sec_token', $security_token);
+//depreciated
     $feed_template->set_var('gltoken_name', CSRF_TOKEN);
-    $feed_template->set_var('gltoken', SEC_createToken());
-
+    $feed_template->set_var('gltoken', $security_token);
+//end of depreciated
     $retval .= $feed_template->finish ($feed_template->parse ('output','editor'));
     return $retval;
 }
