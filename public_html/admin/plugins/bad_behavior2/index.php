@@ -236,8 +236,7 @@ function _bb_listEntries ($page = 1, $msg = '')
                  . '/index.php?mode=list';
         $numpages = ceil ($entries / 50);
         $templates->set_var ('google_paging',
-//                COM_printPageNavigation ($baseurl, $page, $numpages));
-                _pagination ($baseurl, $page, $numpages));
+                COM_printPageNavigation ($baseurl, $page, $numpages));
     } else {
         $templates->set_var ('google_paging', '');
     }

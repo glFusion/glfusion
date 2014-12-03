@@ -418,7 +418,7 @@ function GROUP_displayRights($grp_id = '', $core = 0)
                     $retval .= ' checked="checked"';
                 }
             }
-            $retval .= XHTML . '><span title="' . $A['ft_descr'] . '">'
+            $retval .= '>&nbsp;<span title="' . $A['ft_descr'] . '">'
                     . $A['ft_name'] . '</span></td>';
         } else {
             // either this is an indirect right OR this is a core feature
@@ -430,7 +430,7 @@ function GROUP_displayRights($grp_id = '', $core = 0)
 
             $retval .= '<td class="' . $pluginRow . '">'
                     . '<input type="checkbox" checked="checked" '
-                    . 'disabled="disabled"' . XHTML . '>'
+                    . 'disabled="disabled">'
                     . '(<i title="' . $A['ft_descr'] . '">' . $A['ft_name']
                     . '</i>)</td>';
         }
@@ -822,12 +822,12 @@ function GROUP_getListField2($fieldname, $fieldvalue, $A, $icon_arr, $selected =
             if (is_array($selected) && in_array($A['grp_id'], $selected)) {
                 $retval .= ' checked="checked"';
             }
-            $retval .= XHTML . '>';
+            $retval .= '>';
             break;
 
         case 'disabled-checkbox':
             $retval = '<input type="checkbox" checked="checked" '
-                    . 'disabled="disabled"' . XHTML . '>';
+                    . 'disabled="disabled">';
             break;
 
         case 'grp_name':
@@ -916,14 +916,14 @@ function GROUP_list($show_all_groups = false)
     }
 
     if ($show_all_groups) {
-        $filter .= '<label for="chk_showall"><input id="chk_showall" type="checkbox" name="chk_showall" value="1" onclick="this.form.submit();" checked="checked"' . XHTML . '>';
+        $filter .= '<label for="chk_showall"><input id="chk_showall" type="checkbox" name="chk_showall" value="1" onclick="this.form.submit();" checked="checked">';
         $query_arr = array(
             'table' => 'groups',
             'sql' => "SELECT * FROM {$_TABLES['groups']} WHERE 1=1",
             'query_fields' => array('grp_name', 'grp_descr'),
             'default_filter' => $grpFilter);
     } else {
-        $filter .= '<label for="chk_showall"><input id="chk_showall" type="checkbox" name="chk_showall" value="1" onclick="this.form.submit();"' . $checked . XHTML . '>';
+        $filter .= '<label for="chk_showall"><input id="chk_showall" type="checkbox" name="chk_showall" value="1" onclick="this.form.submit();"' . $checked . '>';
         $query_arr = array(
             'table' => 'groups',
             'sql' => "SELECT * FROM {$_TABLES['groups']} WHERE (grp_gl_core = 0 OR grp_name IN ('All Users','Logged-in Users'))",
@@ -1067,7 +1067,6 @@ function GROUP_editUsers($grp_id)
     $groupmembers->set_var('lang_grouplist', $LANG28[38]);
     $groupmembers->set_var('show_all', $showall);
     $groupmembers->set_var('group_id',$grp_id);
-    $groupmembers->set_var('xhtml', XHTML);
     $groupmembers->set_var('gltoken_name', CSRF_TOKEN);
     $groupmembers->set_var('gltoken', SEC_createToken());
     $groupmembers->parse('output', 'groupmembers');
