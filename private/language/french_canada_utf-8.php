@@ -1317,6 +1317,7 @@ $LANG32 = array(
     87 => 'Balise automatique d`installation',
     88 => 'Etes-vous sûr de vouloir supprimer ce plugin?',
     89 => 'Êtes-vous absolument sûr de vouloir supprimer ce plugin? Cela se traduira par la suppression de tous les fichiers et répertoires liés à ce plugin, et de ré-installer ce plugin, vous devrez télécharger une autre copie.',
+    90 => 'Version <b>%s</b> of the <b>%s</b> plugin is required, but version <b>%s</b> is installed. Please update the %s plugin.',
 );
 
 ###############################################################################
