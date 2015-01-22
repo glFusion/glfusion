@@ -177,6 +177,12 @@ $MG_albums[$album_id]->afrHeight = $aFrame->frame['hVT'] + $aFrame->frame['hVB']
 
 // construct the album jumpbox...
 $level = 0;
+
+
+$MG_albums[0]->buildJumpBox($album_id);
+$album_jumpbox_raw = $album_jumpbox;
+$level = 0;
+
 $album_jumpbox = '<form name="jumpbox" id="jumpbox" action="' . $_MG_CONF['site_url'] . '/album.php' . '" method="get" style="margin:0;padding:0"><div>';
 $album_jumpbox .= $LANG_MG03['jump_to'] . ':&nbsp;<select name="aid" onchange="forms[\'jumpbox\'].submit()">';
 $MG_albums[0]->buildJumpBox($album_id);
@@ -184,6 +190,7 @@ $album_jumpbox .= '</select>';
 $album_jumpbox .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '"/>';
 $album_jumpbox .= '<input type="hidden" name="page" value="1"/>';
 $album_jumpbox .= '</div></form>';
+
 
 // initialize our variables
 
@@ -450,7 +457,7 @@ if ( $uploadMenu == 0 && $adminMenu == 0 ) {
     $admin_box = '';
     $admin_box_items = '';
 }
-
+$sort_box_raw = '';
 if ( $MG_albums[$album_id]->enable_sort == 1 ) {
     $sort_box = '<form name="sortbox" id="sortbox" action="' . $_MG_CONF['site_url'] . '/album.php" method="get" style="margin:0;padding:0"><div>';
     $sort_box .= '<input type="hidden" name="aid" value="' . $album_id . '"/>';
@@ -472,6 +479,19 @@ if ( $MG_albums[$album_id]->enable_sort == 1 ) {
     $sort_box .= '</select>';
     $sort_box .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '"/>';
     $sort_box .= '</div></form>';
+
+    $sort_box_raw .= '<option value="0" ' . ($sortOrder==0 ? ' selected="selected" ' : '') . '>' . $LANG_MG03['sort_default'] . '</option>';
+    $sort_box_raw .= '<option value="1" ' . ($sortOrder==1 ? ' selected="selected" ' : '') . '>' . $LANG_MG03['sort_default_asc'] . '</option>';
+    $sort_box_raw .= '<option value="2" ' . ($sortOrder==2 ? ' selected="selected" ' : '') . '>' . $LANG_MG03['sort_upload'] . '</option>';
+    $sort_box_raw .= '<option value="3" ' . ($sortOrder==3 ? ' selected="selected" ' : '') . '>' . $LANG_MG03['sort_upload_asc'] . '</option>';
+    $sort_box_raw .= '<option value="4" ' . ($sortOrder==4 ? ' selected="selected" ' : '') . '>' . $LANG_MG03['sort_capture'] . '</option>';
+    $sort_box_raw .= '<option value="5" ' . ($sortOrder==5 ? ' selected="selected" ' : '') . '>' . $LANG_MG03['sort_capture_asc'] . '</option>';
+    $sort_box_raw .= '<option value="6" ' . ($sortOrder==6 ? ' selected="selected" ' : '') . '>' . $LANG_MG03['sort_rating'] . '</option>';
+    $sort_box_raw .= '<option value="7" ' . ($sortOrder==7 ? ' selected="selected" ' : '') . '>' . $LANG_MG03['sort_rating_asc'] . '</option>';
+    $sort_box_raw .= '<option value="8" ' . ($sortOrder==8 ? ' selected="selected" ' : '') . '>' . $LANG_MG03['sort_views'] . '</option>';
+    $sort_box_raw .= '<option value="9" ' . ($sortOrder==9 ? ' selected="selected" ' : '') . '>' . $LANG_MG03['sort_views_asc'] . '</option>';
+    $sort_box_raw .= '<option value="10" ' . ($sortOrder==10 ? ' selected="selected" ' : '') . '>' . $LANG_MG03['sort_alpha'] . '</option>';
+    $sort_box_raw .= '<option value="11" ' . ($sortOrder==11 ? ' selected="selected" ' : '') . '>' . $LANG_MG03['sort_alpha_asc'] . '</option>';
 } else {
     $sort_box = '';
 }
@@ -503,6 +523,7 @@ $T->set_var(array(
     'bottom_pagination'     => COM_printPageNavigation($_MG_CONF['site_url'] . '/album.php?aid=' . $album_id . '&amp;sort=' . $sortOrder, $page+1,ceil($total_items_in_album  / $media_per_page)),
     'page_number'           => sprintf("%s %d %s %d",$LANG_MG03['page'], $current_print_page, $LANG_MG03['of'], $total_print_pages),
     'jumpbox'               => $album_jumpbox,
+    'album_jumpbox_raw'     => $album_jumpbox_raw,
     'album_id'              => $album_id,
 	'lbslideshow'           => $lbSlideShow,
 	'album_description' 	=> ($MG_albums[$album_id]->display_album_desc ? PLG_replaceTags($MG_albums[$album_id]->description,'mediagallery','album_description') : ''),
@@ -511,6 +532,7 @@ $T->set_var(array(
 	'select_adminbox'		=> $admin_box,
 	'admin_box_items'       => $admin_box_items,
 	'select_sortbox'		=> $sort_box,
+	'select_sortbox_raw'    => $sort_box_raw,
 	'album_last_update'		=> $album_last_update[0],
 	'album_owner'			=> $ownername,
 	'media_count'			=> $MG_albums[$album_id]->getMediaCount(),

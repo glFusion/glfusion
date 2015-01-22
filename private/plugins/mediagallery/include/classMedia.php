@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Media objects class and handling routines                                |
 // +--------------------------------------------------------------------------+
-// | $Id:: classMedia.php 2869 2008-07-31 14:38:32Z mevans0263               $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2013 by the following authors:                        |
+// | Copyright (C) 2002-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -590,6 +588,8 @@ class Media {
             'alt_edit_link'     => $edit_item,
             'filesize'          => $fileSize,
             'media_id'          => $this->id,
+            'raw_media_thumbnail'   =>  $media_thumbnail,
+            'display_url'       => $url_media_item,
 
         ));
 

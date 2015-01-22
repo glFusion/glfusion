@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Album class                                                              |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2014 by the following authors:                        |
+// | Copyright (C) 2002-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -507,6 +507,20 @@ class mgAlbum {
         }
         return $path;
     }
+
+    function getPath_ul($hot=0, $sortOrder=0, $page=0) {
+        global $MG_albums, $_MG_CONF;
+
+        $path = '<li>' . ($hot ? '<a href="' . $_MG_CONF['site_url'] . '/album.php?aid=' . $this->id . '&amp;sort=' . $sortOrder . '&amp;page=' . $page . '">' : '') . ($_MG_CONF['truncate_breadcrumb'] > 0 ? COM_truncate(strip_tags($this->title),$_MG_CONF['truncate_breadcrumb'],'...') : strip_tags($this->title)).'</li>';
+
+        $tree = $MG_albums[$this->parent];
+        while ($tree->id != 0 ) {
+            $path = '<li><a href="' . $_MG_CONF['site_url'] . '/album.php?aid=' . $tree->id . '&amp;sort=' . $sortOrder .'">' . ($_MG_CONF['truncate_breadcrumb'] > 0 ? COM_truncate(strip_tags($tree->title),$_MG_CONF['truncate_breadcrumb'],'...') : strip_tags($tree->title)) . '</a></li>' . $path;
+            $tree = $MG_albums[$tree->parent];
+        }
+        return $path;
+    }
+
 
     function getPathUL($hot=0, $sortOrder=0, $page=0) {
         global $MG_albums, $_MG_CONF;

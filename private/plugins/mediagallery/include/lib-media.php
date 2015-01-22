@@ -6,9 +6,7 @@
 // |                                                                          |
 // | General purpose media display / manipulation interface                   |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2013 by the following authors:                        |
+// | Copyright (C) 2002-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -1515,11 +1513,23 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         $birdseed = '<a href="' . $_CONF['site_url'] . '/index.php">' . $LANG_MG03['home'] . '</a> ' .
                 	($_MG_CONF['gallery_only'] == 1 ? '' : $_MG_CONF['seperator'] . ' <a href="' . $_MG_CONF['site_url'] . '/index.php?page=' . $aPage . '">' . $_MG_CONF['menulabel'] . '</a> ') .
     			    $_MG_CONF['seperator'] . '<a href="' . $_MG_CONF['site_url'] . '/search.php?id=' . $sortID . '&amp;page=' . $spage . '">' . $LANG_MG03['search_results'] . '</a>';  $MG_albums[$aid]->getPath(1,$sortOrder,$page) . '</a>';
+
+        $birdseed_ul = '<li><a href="' . $_CONF['site_url'] . '/index.php">' . $LANG_MG03['home'] . '</a></li>' .
+        	'<li><a href="' . $_MG_CONF['site_url'] . '/index.php?page=' . $aPage . '">' . $_MG_CONF['menulabel'] . '</a></li>' .
+		    '<li><a href="' . $_MG_CONF['site_url'] . '/search.php?id=' . $sortID . '&amp;page=' . $spage . '">' . $LANG_MG03['search_results'] . '</a></li>' .
+		    $MG_albums[$aid]->getPath_ul(1,$sortOrder,$page) . '</a>';
+
+
         $album_link = '<a href="' . $_MG_CONF['site_url'] . '/search.php?id=' . $sortID . '&amp;page=' . $spage . '">';
     } else {
         $birdseed = '<a href="' . $_CONF['site_url'] . '/index.php">' . $LANG_MG03['home'] . '</a> ' .
         			($_MG_CONF['gallery_only'] == 1 ? '' : $_MG_CONF['seperator'] . ' <a href="' . $_MG_CONF['site_url'] . '/index.php?page=' . $aPage . '">' . $_MG_CONF['menulabel'] . '</a> ') .
     	    		$MG_albums[$aid]->getPath(1,$sortOrder,$page) . '</a>';
+
+        $birdseed_ul = '<li><a href="' . $_CONF['site_url'] . '/index.php">' . $LANG_MG03['home'] . '</a></li>' .
+			'<li><a href="' . $_MG_CONF['site_url'] . '/index.php?page=' . $aPage . '">' . $_MG_CONF['menulabel'] . '</a></li>'.
+    		$MG_albums[$aid]->getPath_ul(1,$sortOrder,$page) . '</a>';
+
     	$album_link = '<a href="' . $_MG_CONF['site_url'] . '/album.php?aid=' . $aid . '&amp;page=' . $page . '&amp;sort=' . $sortOrder . '">';
     }
 
@@ -1787,6 +1797,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     $T->set_var(array(
         'birdseed'      =>  $birdseed,
+        'birdseed_ul'   =>  $birdseed_ul,
         'slide_show'    =>  isset($url_slideshow) ? $url_slideshow : '',
         'image_detail'  =>  $u_image,
         'border_height' =>  $raw_image_height + 30,
