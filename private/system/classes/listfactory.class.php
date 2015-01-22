@@ -308,11 +308,11 @@ class ListFactory {
     {
         if (is_array($sql))
         {
-            $sql['mysql'] = preg_replace('/SELECT.*FROM/is', 'SELECT COUNT(*) FROM', $sql['mysql']);
-            $sql['mssql'] = preg_replace('/SELECT.*FROM/is', 'SELECT COUNT(*) FROM', $sql['mssql']);
+            $sql['mysql'] = preg_replace('/SELECT.*?FROM/is', 'SELECT COUNT(*) FROM', $sql['mysql']);
+        } else {
+            $sql = preg_replace('/SELECT.*?FROM/is', 'SELECT COUNT(*) FROM', $sql);
         }
-        else
-            $sql = preg_replace('/SELECT.*FROM/is', 'SELECT COUNT(*) FROM', $sql);
+
         $result = DB_query($sql);
         $num_rows = DB_numRows($result);
         if ($num_rows <= 1)
