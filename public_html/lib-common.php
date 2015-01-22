@@ -2150,7 +2150,7 @@ function COM_userMenu( $help='', $title='', $position='' )
         }
 
         // OAuth remote authentication.
-        if ($_CONF['user_login_method']['oauth'] && ($_CONF['usersubmission'] == 0) && !$_CONF['disable_new_user_registration']) {
+        if ($_CONF['user_login_method']['oauth'] ) {
             $modules = SEC_collectRemoteOAuthModules();
             if (count($modules) == 0) {
                 $login->set_var('oauth_login', '');
@@ -2733,7 +2733,7 @@ function COM_emailNotification( $msgData = array() )
 * Creates older stuff block
 *
 * Creates the olderstuff block for display.
-* Actually updates the olderstuff record in the gl_blocks database.
+* Actually updates the olderstuff record in the blocks table.
 * @return   void
 */
 

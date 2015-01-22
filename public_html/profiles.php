@@ -54,14 +54,17 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
     $retval = '';
 
     // check for correct $_CONF permission
-    if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
-                             ($_CONF['emailuserloginrequired'] == 1))
-                         && ($uid != 2)) {
-        $display  = COM_siteHeader('menu', $LANG_LOGIN[1]);
-        $display .= SEC_loginRequiredForm();
-        $display .= COM_siteFooter();
-        echo $display;
-        exit;
+
+    if ( COM_isAnonUser() ) {
+        if ( !SEC_inGroup('Contact',(int)$uid) ) {
+            if ( ( ( $_CONF['loginrequired'] == 1 ) || ($_CONF['emailuserloginrequired'] == 1 ) ) && $uid != 2 ) {
+                $display  = COM_siteHeader('menu', $LANG_LOGIN[1]);
+                $display .= SEC_loginRequiredForm();
+                $display .= COM_siteFooter();
+                echo $display;
+                exit;
+            }
+        }
     }
 
     // check for correct 'to' user preferences
@@ -191,83 +194,85 @@ function contactform ($uid, $subject = '', $message = '')
 
     $retval = '';
 
-    if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
-                             ($_CONF['emailuserloginrequired'] == 1))
-                         && ($uid != 2)) {
-        $display  = COM_siteHeader('menu', $LANG_LOGIN[1]);
-        $display .= SEC_loginRequiredForm();
-        $display .= COM_siteFooter();
-        echo $display;
-        exit;
+    if ( COM_isAnonUser() ) {
+        if ( !SEC_inGroup('Contact',(int)$uid) ) {
+            if ( ( (  $_CONF['loginrequired'] == 1 ) || ($_CONF['emailuserloginrequired'] == 1 ) ) && $uid != 2 ) {
+                $display  = COM_siteHeader('menu', $LANG_LOGIN[1]);
+                $display .= SEC_loginRequiredForm();
+                $display .= COM_siteFooter();
+                echo $display;
+                exit;
+            }
+        }
+    }
+
+    $result = DB_query ("SELECT emailfromadmin,emailfromuser FROM {$_TABLES['userprefs']} WHERE uid = ".(int) $uid);
+    $P = DB_fetchArray ($result);
+    if (SEC_inGroup ('Root') || SEC_hasRights ('user.mail')) {
+        $isAdmin = true;
     } else {
-        $result = DB_query ("SELECT emailfromadmin,emailfromuser FROM {$_TABLES['userprefs']} WHERE uid = ".(int) $uid);
-        $P = DB_fetchArray ($result);
-        if (SEC_inGroup ('Root') || SEC_hasRights ('user.mail')) {
-            $isAdmin = true;
+        $isAdmin = false;
+    }
+    $postmode = $_CONF['mailuser_postmode'];
+
+    $displayname = COM_getDisplayName ($uid);
+    if ((($P['emailfromadmin'] == 1) && $isAdmin) ||
+        (($P['emailfromuser'] == 1) && !$isAdmin)) {
+
+        $retval = COM_startBlock ($LANG08[10] . ' ' . $displayname);
+        $mail_template = new Template ($_CONF['path_layout'] . 'profiles');
+
+        $mail_template->set_file('form','contactuserform.thtml');
+
+        if ($postmode == 'html') {
+            $mail_template->set_var ('show_htmleditor', true);
         } else {
-            $isAdmin = false;
+            $mail_template->unset_var ('show_htmleditor');
         }
-        $postmode = $_CONF['mailuser_postmode'];
 
-        $displayname = COM_getDisplayName ($uid);
-        if ((($P['emailfromadmin'] == 1) && $isAdmin) ||
-            (($P['emailfromuser'] == 1) && !$isAdmin)) {
+        $mail_template->set_var('lang_postmode', $LANG03[2]);
+        $mail_template->set_var('postmode_options', COM_optionList($_TABLES['postmodes'],'code,name',$postmode));
 
-            $retval = COM_startBlock ($LANG08[10] . ' ' . $displayname);
-            $mail_template = new Template ($_CONF['path_layout'] . 'profiles');
-
-            $mail_template->set_file('form','contactuserform.thtml');
-
-            if ($postmode == 'html') {
-                $mail_template->set_var ('show_htmleditor', true);
-            } else {
-                $mail_template->unset_var ('show_htmleditor');
+        $mail_template->set_var ('lang_description', $LANG08[26]);
+        $mail_template->set_var ('lang_username', $LANG08[11]);
+        if (COM_isAnonUser()) {
+            $sender = '';
+            if (isset ($_POST['author'])) {
+                $sender = strip_tags ($_POST['author']);
+                $sender = substr ($sender, 0, strcspn ($sender, "\r\n"));
+                $sender = @htmlspecialchars (trim ($sender), ENT_QUOTES,COM_getEncodingt());
             }
-
-            $mail_template->set_var('lang_postmode', $LANG03[2]);
-            $mail_template->set_var('postmode_options', COM_optionList($_TABLES['postmodes'],'code,name',$postmode));
-
-            $mail_template->set_var ('lang_description', $LANG08[26]);
-            $mail_template->set_var ('lang_username', $LANG08[11]);
-            if (COM_isAnonUser()) {
-                $sender = '';
-                if (isset ($_POST['author'])) {
-                    $sender = strip_tags ($_POST['author']);
-                    $sender = substr ($sender, 0, strcspn ($sender, "\r\n"));
-                    $sender = @htmlspecialchars (trim ($sender), ENT_QUOTES,COM_getEncodingt());
-                }
-                $mail_template->set_var ('username', $sender);
-            } else {
-                $mail_template->set_var ('username',
-                        COM_getDisplayName ($_USER['uid'], $_USER['username'],
-                                            $_USER['fullname']));
-            }
-            $mail_template->set_var ('lang_useremail', $LANG08[12]);
-            if (empty ($_USER['email'])) {
-                $email = '';
-                if (isset ($_POST['authoremail'])) {
-                    $email = strip_tags ($_POST['authoremail']);
-                    $email = substr ($email, 0, strcspn ($email, "\r\n"));
-                    $email = @htmlspecialchars (trim ($email), ENT_QUOTES,COM_getEncodingt());
-                }
-                $mail_template->set_var ('useremail', $email);
-            } else {
-                $mail_template->set_var ('useremail', $_USER['email']);
-            }
-            $mail_template->set_var ('lang_subject', $LANG08[13]);
-            $mail_template->set_var ('subject', $subject);
-            $mail_template->set_var ('lang_message', $LANG08[14]);
-            $mail_template->set_var ('message', @htmlspecialchars($message),ENT_QUOTES,COM_getEncodingt());
-            $mail_template->set_var ('lang_nohtml', $LANG08[15]);
-            $mail_template->set_var ('lang_submit', $LANG08[16]);
-            $mail_template->set_var ('uid', $uid);
-            PLG_templateSetVars ('contact', $mail_template);
-            $mail_template->parse ('output', 'form');
-            $retval .= $mail_template->finish ($mail_template->get_var ('output'));
-            $retval .= COM_endBlock ();
+            $mail_template->set_var ('username', $sender);
         } else {
-            $retval = COM_showMessageText($LANG08[35],$LANG08[10],false,'error');
+            $mail_template->set_var ('username',
+                    COM_getDisplayName ($_USER['uid'], $_USER['username'],
+                                        $_USER['fullname']));
         }
+        $mail_template->set_var ('lang_useremail', $LANG08[12]);
+        if (empty ($_USER['email'])) {
+            $email = '';
+            if (isset ($_POST['authoremail'])) {
+                $email = strip_tags ($_POST['authoremail']);
+                $email = substr ($email, 0, strcspn ($email, "\r\n"));
+                $email = @htmlspecialchars (trim ($email), ENT_QUOTES,COM_getEncodingt());
+            }
+            $mail_template->set_var ('useremail', $email);
+        } else {
+            $mail_template->set_var ('useremail', $_USER['email']);
+        }
+        $mail_template->set_var ('lang_subject', $LANG08[13]);
+        $mail_template->set_var ('subject', $subject);
+        $mail_template->set_var ('lang_message', $LANG08[14]);
+        $mail_template->set_var ('message', @htmlspecialchars($message),ENT_QUOTES,COM_getEncodingt());
+        $mail_template->set_var ('lang_nohtml', $LANG08[15]);
+        $mail_template->set_var ('lang_submit', $LANG08[16]);
+        $mail_template->set_var ('uid', $uid);
+        PLG_templateSetVars ('contact', $mail_template);
+        $mail_template->parse ('output', 'form');
+        $retval .= $mail_template->finish ($mail_template->get_var ('output'));
+        $retval .= COM_endBlock ();
+    } else {
+        $retval = COM_showMessageText($LANG08[35],$LANG08[10],false,'error');
     }
 
     return $retval;
