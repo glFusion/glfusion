@@ -876,6 +876,13 @@ class Template
         return $result;
     }
 
+    function dump_vars()
+    {
+        $tvars = $this->get_vars();
+        foreach ($tvars AS $name => $value) {
+            print $name . '<br/>';
+        }
+    }
 
    /******************************************************************************
     * This function returns the value of the variable named by $varname.
