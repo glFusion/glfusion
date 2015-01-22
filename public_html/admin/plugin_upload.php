@@ -293,7 +293,7 @@ function processOldPluginInstall(  )
 */
 function processPluginUpload()
 {
-    global $_CONF, $_PLUGINS, $_TABLES, $pluginData, $LANG32, $_DB_dbms, $_DB_table_prefix ;
+    global $_CONF, $_PLUGINS, $_PLUGIN_INFO, $_TABLES, $pluginData, $LANG32, $_DB_dbms, $_DB_table_prefix ;
 
     $retval = '';
     $upgrade = false;
@@ -378,11 +378,20 @@ function processPluginUpload()
     $errors = '';
     if ( isset($pluginData['requires']) && is_array($pluginData['requires']) ) {
         foreach ($pluginData['requires'] AS $reqPlugin ) {
-            if ( ($key = array_search($reqPlugin,$_PLUGINS)) === false ) {
+            list($reqPlugin, $required_ver) = explode(',', $reqPlugin);
+            if (!isset($_PLUGIN_INFO[$reqPlugin])) {
+                // required plugin not installed
                 $errors .= sprintf($LANG32[51],$pluginData['id'],$reqPlugin,$reqPlugin);
+            } elseif (!empty($required_ver)) {
+                $installed_ver = $_PLUGIN_INFO[$reqPlugin];
+                if (!COM_checkVersion($installed_ver, $required_ver)) {
+                    // required plugin installed, but wrong version
+                    $errors .= sprintf($LANG32[90],$required_ver,$reqPlugin,$installed_ver,$reqPlugin);
+                }
             }
         }
     }
+
     if ( $errors != '' ) {
         _pi_deleteDir($_CONF['path_data'].$tmp);
         return _pi_errorBox($errors);
