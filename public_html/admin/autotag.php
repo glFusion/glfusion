@@ -88,8 +88,8 @@ function AT_adminForm($A, $error = false)
         );
 
         $form->set_var(array(
-                'start_block_editor'=> COM_startBlock($LANG_AM['autotag_editor']), '', COM_getBlockTemplate('_admin_block', 'header'),
-                'end_block'         => COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer')),
+                'start_block_editor'=> COM_startBlock($LANG_AM['autotag_editor'], '', COM_getBlockTemplate('_admin_block', 'header')),
+                'end_block'         => COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')),
                 'delete_option'     => '<input type="submit" value="' . $LANG_AM['delete'] . '" name="delete" />',
                 'tag'               => $A['tag'],
                 'old_tag'           => $A['old_tag'],
@@ -109,7 +109,6 @@ function AT_adminForm($A, $error = false)
                 'lang_replacement'  => $LANG_AM['replacement'],
                 'lang_replace_explain'  => $LANG_AM['replace_explain'],
                 'admin_menu' => ADMIN_createMenu($menu_arr, $LANG_AM['instructions_edit'],$_CONF['layout_url'] . '/images/icons/autotag.png'),
-                'admin_menu_header' => ADMIN_createMenuHeader($menu_arr,$LANG_AM['instructions_edit'],$LANG_AM['title'].'::'.$LANG_AM['autotag_editor'],$_CONF['layout_url'] . '/images/icons/autotag.png'),
         ));
 
         if (isset($A['is_enabled']) && $A['is_enabled'] == 1) {
@@ -278,10 +277,7 @@ function AT_adminList()
 
     USES_lib_admin();
 
-    $admin_list = new Template($_CONF['path_layout'] .'admin/autotag/');
-    $admin_list->set_file('admin', 'autotag_list.thtml');
-
-    $admin_list->set_var('start_block',COM_startBlock($LANG_AM['title'], '', COM_getBlockTemplate('_admin_block', 'header')));
+    $retval = COM_startBlock($LANG_AM['title'], '', COM_getBlockTemplate('_admin_block', 'header'));
 
     // render the menu
 
@@ -291,14 +287,10 @@ function AT_adminList()
         array('url' => $cc_url, 'text' => $LANG_ADMIN['admin_home']),
     );
 
-    $admin_list->set_var('admin_menu',ADMIN_createMenu($menu_arr, $LANG_AM['instructions'],
-                $_CONF['layout_url'] . '/images/icons/autotag.png'));
+    $retval .= ADMIN_createMenu($menu_arr, $LANG_AM['instructions'],
+                $_CONF['layout_url'] . '/images/icons/autotag.png');
 
-    $admin_list->set_var('admin_menu_header',ADMIN_createMenuHeader($menu_arr, $LANG_AM['instructions'],$LANG_AM['title'].'::'.$LANG_ADMIN['custom_autotag'],
-                $_CONF['layout_url'] . '/images/icons/autotag.png'));
-
-    $admin_list->set_var('end_block',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
-    $admin_list->set_var('upload_form',AT_showUploadForm());
+    $retval .= AT_showUploadForm();
 
     // render the autotag manager list
 
@@ -327,9 +319,10 @@ function AT_adminList()
         'bottom' => '<input type="hidden" name="tagenabler" value="true">'
     );
 
-    $admin_list->set_var('admin_list',ADMIN_list("autotag", "AT_getListField", $header_arr, $text_arr, $query_arr, $defsort_arr, '', $token, '', $form_arr));
+    $retval .= ADMIN_list("autotag", "AT_getListField", $header_arr, $text_arr, $query_arr, $defsort_arr, '', $token, '', $form_arr);
 
-    $retval = $admin_list->finish ($admin_list->parse('output','admin'));
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+
     return $retval;
 
 }
@@ -344,11 +337,6 @@ function AT_list()
 
     $retval = '';
 
-    $admin_list = new Template($_CONF['path_layout'] .'admin/autotag/');
-    $admin_list->set_file('admin-list', 'autotag_list.thtml');
-
-    $admin_list->set_var('start_block',COM_startBlock($LANG_AM['public_title'], '', COM_getBlockTemplate('_admin_block', 'header')));
-
     // if an autotag admin is using this page, offer navigation to the admin page(s)
 
     if (SEC_hasRights('autotag.admin')) {
@@ -362,13 +350,12 @@ function AT_list()
 
     // display the header and instructions
 
-    $admin_list->set_var('admin_menu',ADMIN_createMenu($menu_arr,$LANG_AM['public_instructions'],
-        $_CONF['layout_url'].'/images/icons/autotag.png'));
+    $retval .= COM_startBlock($LANG_AM['public_title'], '', COM_getBlockTemplate('_admin_block', 'header'));
 
-    $admin_list->set_var('admin_menu_header',ADMIN_createMenuHeader($menu_arr,$LANG_AM['public_instructions'],$LANG_AM['title'].' :: '.$LANG_AM['public_title'],
-        $_CONF['layout_url'].'/images/icons/autotag.png'));
+    $retval .= ADMIN_createMenu($menu_arr, $LANG_AM['public_instructions'],
+                $_CONF['layout_url'] . '/images/icons/autotag.png');
 
-    $admin_list->set_var('end_block',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
     // default sort array and direction
 
@@ -386,9 +373,9 @@ function AT_list()
 
     $data_arr = AT_collectTags();
 
-    $admin_list->set_var('admin_list',ADMIN_listArray('autotag-list', 'AT_getListField', $header_arr, $text_arr = '',
-                                $data_arr, $defsort_arr, '', $extra = 'dummy', $options_arr = '', $form_arr = ''));
-    $retval = $admin_list->parse('output','admin-list');
+    $retval .= ADMIN_listArray('autotag-list', 'AT_getListField', $header_arr, $text_arr = '',
+                                $data_arr, $defsort_arr, '', $extra = 'dummy', $options_arr = '', $form_arr = '');
+
     return $retval;
 }
 
@@ -587,18 +574,16 @@ function ATP_edit($autotag_id = '')
               'text' => $LANG_ADMIN['admin_home'])
     );
 
-    $admin_list->set_var('block_start',COM_startBlock ($LANG01['autotag_perms'], '',
-                               COM_getBlockTemplate ('_admin_block', 'header')));
+    $retval .= COM_startBlock ($LANG01['autotag_perms'], '',
+                               COM_getBlockTemplate ('_admin_block', 'header'));
 
-    $admin_list->set_var('admin_menu',ADMIN_createMenu(
+    $retval .= ADMIN_createMenu(
         $menu_arr,
         $LANG_AM['autotagpermmsg'],
         $_CONF['layout_url'] . '/images/icons/autotag.png'
-    ));
+    );
 
-    $admin_list->set_var('admin_menu_header',
-                ADMIN_createMenuHeader($menu_arr,$LANG_AM['autotagpermmsg'],$LANG_AM['title'].' :: '.$LANG01['autotag_perms'],
-                    $_CONF['layout_url'].'/images/icons/autotag.png'));
+    $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
 
     $header_arr = array(      # dislay 'text' and use table field 'field'
         array('text' => $LANG_AM['allowed'],     'field' => 'usage_allowed',   'sort' => false, 'align' => 'left'),
@@ -664,8 +649,8 @@ function ATP_edit($autotag_id = '')
     $admin_list->set_var('input_csrf_token',CSRF_TOKEN);
     $admin_list->set_var('var_token',$token);
     $admin_list->set_var('var_autotag_id',$autotag_id);
-    $admin_list->set_var('block_end',COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer')));
-    $retval = $admin_list->parse('output','admin');
+    $retval .= $admin_list->parse('output','admin');
+
     return $retval;
 }
 
