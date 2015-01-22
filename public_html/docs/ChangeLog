@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.5.0
 ------
+- Implemented plugin version dependency check - Lee
 - Updated UIKIT to v2.13.1
 - Fixed issue with What's new block duplicating data
 - Disable exist check on auto tag upload
