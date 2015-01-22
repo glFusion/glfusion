@@ -38,8 +38,22 @@ v1.5.0
 - Privacy policy and Terms of use now implemented as static pages
 - Support for PHP v5.3+ unlimited post size
 
+v1.4.4
+------
+- Fixed error where Static Pages comments did not show up in search.
+- Fixed issue where editing a comment on a plugin would cause a
+  404 error on save.
+- Fixed a search error that would trigger on certain search words.
+
 v1.4.3
 ------
+- CAPTCHA Plugin - Added mathmatical captcha
+- Forum - Fixed error where forum ranking did not always display properly.
+- SpamX - Add Allow TOR IP configuration option
+- CAPTCHA Plugin - Removed PICATCHA since the service is no longer
+  supporting new signups.
+- CAPTCHA Plugin - Added Are You Human game support
+- Media Gallery - Prevent moving images to root album
 - Added new configuration parameter to set minimum username length
 - Links Plugin - update root category in database when changed
   via online configuration
