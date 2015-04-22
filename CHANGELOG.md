@@ -33,12 +33,12 @@ v 1.5.0 (unreleased)
   - Privacy policy and Terms of use now implemented as static pages
   - Support for PHP v5.3+ unlimited post size
 
-v 1.4.4 (unreleased) 
+v 1.4.4 (unreleased)
   - Fixed error where Static Pages comments did not show up in search.
   - Fixed issue where editing a comment on a plugin would cause a 404 error on save.
   - Fixed a search error that would trigger on certain search words.
 
-v 1.4.3
+v 1.4.3 (Nov 9, 2014)
   - CAPTCHA Plugin - Added mathmatical captcha
   - Forum - Fixed error where forum ranking did not always display properly.
   - SpamX - Add Allow TOR IP configuration option
@@ -57,3 +57,228 @@ v 1.4.3
   - Media Gallery - implemented a fix where data was being written to an un-initialized object causing an error on PHP v5.4+ systems.
   - Cleaned up the style sheet caching logic and implemented improvements to prevent corrupt cache files.
   - Implemented file locking when creating the style cache file to ensure multiple instances do not cause a file write error
+
+v 1.4.2 (Jun 29, 2014)
+  - Ensure CKEditor's Media Gallery browser window has scrollbars and is resizable
+  - Improved GD2 image resizing to preserve transparency
+  - Fixed issue where Media Gallery would timeout on album admin screens
+  - Fixed error in youtube autotag where it would log parse errors
+  - Reworked how embedded story images are handled
+  - Comment edit now takes you directly to the comment entry area
+  - Support for PHP v5.3+ unlimited post size
+  - Media Gallery - fixed bug in batch album delete
+  - Forum - fixed bug in HTML postmode detection
+  - Utilize dynamic tooltip style throughout the code
+  - Forum reorganized forum entry page - moved subject above editing toolbar
+  - Media Gallery - fixed HTML5 upload issue
+
+v 1.4.1 (Apr 26, 2014)
+  - Several stability improvements
+  - Several code improvements for running a site under SSL
+  - Improved URL filtering
+  - Fixed issue where sub menus with URLs did not use the defined URL
+  - Added Github oauth authentication
+  - Stories under what's new block now display the time interval
+  - Older Stories block did not display the proper date
+  - Fixed error where Comment header did not always display in what's new block
+  - Notification emails did not send properly for newly uploaded files
+  - CKEditor's filemanager plugin now supports per-user directories for images.
+  - Fixed row styling on admin lists
+  - Ratings did not register when 'clicked'
+  - CKEditor FileManager could not locate images/library/ directory
+  - StaticPages: Last update date was incorrect
+  - Added WYSIWYG editor support for blocks
+  - Fixed error when submitting a new article when auto close comments was enabled.
+  - CKEditor now support direct integration with Smiley plugin
+  - Installation / upgrade enhancements to better support PHP v5.5+
+  - Update OAuth library to latest release
+
+v 1.4.0 (Apr 1, 2014)
+  - Improved HTML filtering and variable sanitizing capabilities.
+  - Fixed security flaw in HTML filter.
+  - Removed FCKEditor from code base
+  - Implemented CKEditor as plugin (integrated into glFusion CMS Distirbution)
+  - Developed TinyMCE Editor plugin - available as separate download
+  - Implemented plugin API to integrate with WYSIWYG plugins
+  - Forum: Several bug fixes for HTML entry
+  - Media Gallery: Removed SWFUpload
+  - Media Gallery: Added HTML5 Upload option
+  - Updated SimplePie library to latest release
+  - Updated getID3() library to latest release
+  - PHP v5.4 updates (proper class definitions)
+  - New SFS, Versioncheck, and configuration icons for Nouveau theme
+  - Rewrote the internal menu building code. The code is now much more efficient.
+     The following changes / features were added:
+       - Removed depreciated vhmenu and hmenu autotags. Should use menu.
+       - Menu layouts are now template driven. There are 4 base templates located in the layout/themename/menu/ directory:
+       - menu_horizontal_cascading.thtml -
+       - menu_horizontal_simple.thtml
+       - menu_vertical_cascading.thtml
+       - menu_vertical_simple.thtml
+     - You can use a custom template for each menu by creating a copy of the base template (see above) in the layout/themename/menu/custom directory and appending '_menuname' to the end. For example, to have a custom template for the 'navigation' menu, the template would be named:
+       - menu_horizontal_cascading_navigation.thtml
+     - Javascript to animate menus or modify look / feel should be embedded in the template.
+     - Removed on st_ template variable names - now use the following
+       - menu_header
+       - menu_navigation
+       - menu_footer
+  - Removed all legacy menu code (i.e.; menu_elements from config, etc.)
+
+v 1.3.2.pl1
+  - Updated PHPMailer to latest upstream release (Mark)
+  - Forum Plugin: Fixed new post detection / display (Mark)
+  - Forum Plugin: New / Reply post notification emails used wrong text (Mark)
+  - Forum Plugin: Stop Forum Spam tweak to only urlencode when needed (Mark)
+  - Forum Plugin: Fixed crash when adding group moderators (Mark)
+
+v 1.3.2 (Jan 26, 2014)
+  - Style tweak - quotes in Forum plugin pushed past margin in fixed width layout (Mark)
+  - Media Gallery - Batch Album delete did not properly remove albums (Mark)
+  - Fixed date display issue with Calendar Upcoming Event block (Mark)
+  - Fixed session initialization error - thanks Lee! (Mark)
+  - CAPTCHA Plugin: Added support for PICATCHA - Image based CAPTCHA (Mark)
+  - Added Stop Forum Spam user check feature (Mark)
+  - Updated OAuth library to latest version (Mark)
+  - Fixed logic bug in Media Gallery export script (Mark)
+
+v 1.3.1 (Sep 5, 2013)
+  - Fixed potential SQL inject in Media Gallery - Identified by Manituna Security (Mark)
+  - Fixed SpamX SFS email check - no longer urlencode email address (Mark)
+  - Added Clear Cache and Menu Builder entries to the Admins Only block function (Eric)
+  - StaticPages Plugin: Added rightblocks only page option (Eric)
+  - Improved session id generation (Mark)
+  - Improved error handling on display error and abort call. (Mark)
+  - Improved upload security for FileMgmt plugin (Mark)
+  - Fixed error in Media Gallery submission queue approval (Mark)
+  - Fixed SQL error when FileMgmt integration is enabled in Forum Plugin (Mark)
+  - Fixed email notification error - invalid email address (Mark)
+  - Fixed error when saving in Group editor when chk_showall was set to 1 (Mark)
+  - Demo mode security improvements (Mark)
+
+v 1.3.0 (Jun 19, 2013)
+  - Added social auth moorotator image to default content (Michael/Eric)
+  - Moved hard-coded styles in public_html/layout/nouveau/users/loginform.thtml to style.css, dynamically set loginbox width if oauth enabled (Michael/Eric)
+  - Moved hard coded rating speed limit to configuration (Mark)
+  - Fixed album re-initialize bug in Media Gallery (Mark)
+  - Fixed bug where large files were copied twice when using Media Gallery FTP upload (Mark)
+  - Display 404 Error if invalid SID passed to article.php (Mark)
+  - Added link to Upgrade Checker on upgrade success page. (Mark)
+  - Several language file fixes and HTML code fixes (Andre)
+  - Copyright year fix - if year is old than current show $copyright_year - current_year (Andre)
+  - Updated config.html documentation to point to correct Wiki URLs and to support new configuration items.
+  - Added configuration 're-sync' to reset configuration items to the current fieldset / sort orders - keeps everything in sync as sites upgrade (Mark)
+  - Removed Digibug support form Media Gallery
+  - Updated OAuth 1.0a and 2.0 support for Facebook, Google, Twitter, LinkedIn, and Microsoft Live logins (Mark)
+  - Implemented XSS fixes from v1.2.2.pl4
+  - Added Terms of Use and Privacy Policy as pages and links in the default install of the footer menu, also added link to RSS feed (Tracker#564) (Eric)
+  - Added optional menu link highlighting when on a given page, see public_html/layout/nouveau/functions.php to activate (Tracker#200) (Eric)
+  - Updated documentation links for default permissions (Tracker#720) (Eric)
+  - Added missing help-icon image to default permissions configs (Tracker#720) (Mark)
+  - Fixed hard-coded language reference in Media Gallery (Tracker#579) (Eric)
+  - Remove duplicate blogroll block from default content install (Eric)
+  - Auto translations block image tags now validate to xhtml 1.0 (Eric)
+  - Keep UTF-8 checkbox on same row in IE9 in the installer (Eric)
+  - Fixed visited documentation link disappearing (white text on white bg) (Eric)
+  - Fixed broken link to webroot install instructions. Note that the other language files do not contain this link. The translators need to update the install language files. (Eric)
+  - Media Gallery: Now redirect to last album that received an upload when using the SWF upload feature (Mark)
+  - Forum Plugin: When user account is renamed - update topic records (Mark)
+  - Integrated Smiley plugin support for comments (Mark)
+  - Menu Builder enhancements - better CSS and control via online editor (Mark)
+  - Added 'author' attribute to plugin_getiteminfo_...() (Mark)
+  - Fixed issue where comment styles were not properly set during preview (Mark)
+  - Replaced {xhtml} tags with " /" as HTML5 validates by ignoring auto-closing tags (ex: <br />) (Eric)
+  - Removed unused templates in private/plugins/filemgmt/templates/ (Eric)
+  - Removed public_html/layout/nouveau/comment/commentform_advanced.thtml (no longer needed per Mark) (Eric)
+  - General BB2 code cleanup, upgrade to core 2.0.48 (Mark)
+  - Fixed hard-coded admin url reference (Eric)
+  - Improved comment entry / viewing (Mark)
+  - Removed 'View Members' option from group editor (Mark)
+  - User admin / profile editor - reworked the password form fields to be more user friendly for password managers (Mark)
+  - PLG_createUser() was called too early in the creation process (Mark)
+  - Forum: Implemented Stop Forum Spam for anonymous posts (Mark)
+  - New update checker (Mark)
+  - Implemented full support for StopForumSpam in Spam-X (Mark)
+  - Error check to ensure Media Gallery plugin is enabled before calling init routines (Mark)
+  - Open Graph Support (Mark)
+  - meta description support for articles (Mark)
+  - Added example phpblock functions to lib-custom (Eric)
+  - Fixed pwd strength meter on My Account/Username & Password panel (Mark H.)
+  - Implemented Facebook account merge (Mark)
+  - Fixed issue with auto tags not expanded in the BB code library (Mark)
+  - Updated Bad Behavior to v2.0.45 (Mark)
+  - Fixed Static Page label field was not being saved (Mark)
+  - Fixed bug in new date class - Unix timestamp coversion did not use proper timezone (Mark)
+  - Media Gallery: When viewing an image by following the What's New comment link, CSS was displayed at the top of the image (Mark)
+  - Fixed quotes handling in Group and Block admin description fields (Mark H.)
+  - Media Gallery: Fixed paging error when paging through albums (Mark)
+  - Forum Plugin: Default topics / posts per page were not properly set for new users (Mark)
+  - Fixed grp_id not passed in pagination links User Admin when group selection filter is applied.  (Mark H.)
+  - Links: Fixed autoinstall code - example data will now be correctly restored when uninstalling and then reinstalling the plugin.  Also fix example data group ownership during site installation.  Tweaked lib-install to allow passage of arrays to raw sql auto-installation options. (Mark H.)
+  - Feature: Uninstalled plugins can now be completely removed from the site by clicking the 'Delete' icon again after uninstalling.  (Mark H.)
+  - Improved error trapping / messages on logo upload (Mark)
+  - Add check to validate timezone in date/time class (Mark)
+  - Add check for MySQL extension in the installation routine (Mark)
+  - Move config helper/validation functions to config class to ensure they are loaded and available to all scripts instantiating the class (Mark H.)
+  - Add global var to test for development mode (Mark H.)
+  - Add max_execution_time to environment check (Mark H.)
+  - Remove deprecated microsummary feature (Mark H.)
+  - StaticPages: Display 404 page if user does not have permission to view static page (Mark)
+  - Allow [img] code in [url][/url] set (Mark)
+  - Improved permission check on story edit - only show when appropriate (Mark)
+  - Forum: Current forum was not available as a select option when spliting a topic (Mark)
+  - FileMgmt: If no category is selected, display error and abort upload (Mark)
+  - Improved UTF-8 handling - works whether mbtye extension is installed in PHP or not (Mark)
+  - Improved user menu caching - ensure no user specific data is cached (Mark)
+  - Media Gallery: include thumbnail image in album RSS feeds (Mark)
+  - Replaced RSS code with SimplePie and feedcreator.class.php (Mark)
+  - Saving a story with invalid data returned to story list instead of the story editor with the appropriate error message (Mark)
+  - No news message did not always display when it should (Mark)
+  - If user changes remember me settings, ensure they are implemented immediately (Mark)
+  - Implemented re-validation when security token has expired (Mark)
+  - New SESS API - SESS_unSet() removes a session variable is set (Mark)
+  - CAPTCHA now displays appropriate feedback when invalid CAPTCHA entered on comment entry form (Mark)
+  - Cache $_GROUP data in session variable to reduce SQL calls (Mark)
+  - E_ALL fix when saving comments (Mark)
+  - Improved COM_refresh() to use header() call when appropriate (Mark)
+  - Support for MySQLi interface (Mark)
+  - Implement new What's New options - no longer display an item if not new items are available.  New config option to hide What's New block if no entries to display (Mark/Lee)
+  - Initialize $_USER for all users (including anonymous) (Mark)
+  - Modified to now check $_USER for user preferences (Mark)
+  - Fixed race condition when creating menu cache files (menu/css/js) (Mark)
+  - Updated phpmailer to latest release (Mark)
+  - Highlight comments in Media Gallery when posted by media owner (Mark)
+  - Added halo skin to Media Gallery (compliments of Walter Rowe) (Mark)
+  - Implemented consistent admin interface for
+     - Bad Behavior2 Plugin
+     - FileMgmt Plugin
+     - Forum Plugin
+     - Media Gallery Plugin
+  - Updated PEAR modules to latest releases (Mark)
+  - Updated getID3() library to latest production release. (Mark)
+  - Integrated Site Tailor plugin (menu editor / logo admin) into the glFusion core code. The Site Tailor plugin has been retired. (Mark)
+  - Forum Plugin: General code clean up / optimizations / template consolidation (Mark)
+  - Removed bundled plugin table definitions from lib-database - now part of each plugin (Mark)
+  - Cleaned up search queries so all now retrieve the same set of vars and no longer retrieve unused variables (Mark)
+  - Implemented new $_PLUGIN_INFO[] array - this contains ['pi_name'] = pi_version. This allows the plugin to check the installed version without having to hit the database. (Mark)
+  - upload.class.php - log error if unable to determine mime type (Mark)
+  - Fixed issue where 'All but Homepage' block setting did not display properly when topic was not empty (Mark)
+  - Calendar Plugin: Fixed admin edit to display appropriate errors and the input form properly (with previously entered data) when submission fails (Mark)
+  - New SESS API - SESS_isSet() checks to see if session variable is set (Mark)
+  - General code cleanup in lib-common.php - removed unused code and unreferenced items in COM_siteHeader / COM_siteFooter (Mark)
+  - Made SEC_inGroup comparison case insensitive (Mark H.)
+  - Implemented subscription / notification system (Mark)
+  - Do not allow remote users to be members of admin groups (Mark)
+  - Fix layout bug when forum signature is present in a fixed width site with rightblocks. (Eric)
+  - Implemented new date / time class / handling (Mark)
+  - Implemented improved session handling (Mark)
+  - Fixed bug in requesting a new verification email (Mark)
+  - MySQL version 4.0.18 or newer required. (Mark)
+  - Detect refering URL on clear cache call and return to calling page (Mark)
+  - Implemented global magic_quotes_gpc() handling that is now automatic. Plugins and other items no longer need to worry about calling any routines to deal with magic quotes. (Mark)
+  - Feature: AutoTag Permission Editor (Mark)
+  - Load userprefs data into $_USER array (Mark)
+  - Feature: OAuth login support for FB, LinkedIn and Twitter (Mark H.); This will allow users to login to your site with their existing FaceBook, LinkedIn or Twitter accounts.  User Submission Queue must be disabled, and the php_openssl PHP extension must be installed on your webserver.
+  - Feature: Allow users displayed in Who's Online block to be displayed as user photo icons (FB-style) rather than their username/fullname.
+  - Removed PHP4 items (Mark)
+  - Removed wiki text formatting (Mark)
+  - Removed storybodytext.thtml / featuredbodytext.thtml templates (Mark)
