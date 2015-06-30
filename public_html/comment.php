@@ -339,7 +339,14 @@ function handleEditSubmit()
         return COM_refresh($_CONF['site_url'] . '/index.php');
     }
     PLG_commentEditSave($type,$cid,$sid);
-    return COM_refresh (COM_buildUrl ($_CONF['site_url'] . "/article.php?story=$sid"));
+
+    $urlArray = PLG_getCommentUrlId($type);
+    if ( is_array($urlArray) ) {
+        $url = $urlArray[0] . '?' . $urlArray[1].'='.$sid;
+        echo COM_refresh($url);
+        exit;
+    }
+    return COM_refresh($_CONF['site_url'] . '/index.php');
 }
 
 function handleSubscribe($sid,$type)
