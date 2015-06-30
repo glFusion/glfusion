@@ -114,8 +114,10 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
                     }
                 }
             } else {
+
                 $fullurl = $filemgmt_FileStoreURL .$url;
                 $fullurl = $fullurl;
+                header("Cache-Control: private");
                 header("Location: $fullurl");
                 echo "<html><head><meta http-equiv=\"Refresh\" content=\"0; URL=".$fullurl."\"></meta></head><body></body></html>";
                 exit();
