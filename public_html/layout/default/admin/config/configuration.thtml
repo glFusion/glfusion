@@ -22,7 +22,7 @@
           <input type="hidden" name="sub_group" value="{open_sg}" />
           <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
           <div id="ce_{subgroup_name}">
-            <div id="tabs">
+            <div id="tabs" style="background: none !important;">
               <ul>
 <!-- BEGIN tabs -->
                 <li><a href="#{index}">{tab}</a></li>
