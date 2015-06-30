@@ -1,8 +1,9 @@
 Please view this file on the master branch, on stable branches it's out of date.
 
 v 1.5.0 (unreleased)
+  - Only show allowed HTML tags when postmode is HTML
   - Implemented plugin version dependency check - Lee
-  - Updated UIKIT to v2.13.1
+  - Updated UIKIT to v2.20
   - Fixed issue with What's new block duplicating data
   - Disable exist check on auto tag upload
   - Implement og:image tag for stories
