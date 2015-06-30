@@ -486,7 +486,11 @@ $LANG04 = array(
     186 => 'If you do not wish to merge the accounts, please select the Cancel button below.',
     187 => 'Enter the password above for the local account and hit the Merge button.',
     188 => 'Merge',
-    189 => 'Forgot Password'
+    189 => 'Forgot Password',
+    190 => 'You have exceeded the allowed number of attempts to enter the password for merging accounts',
+    191 => 'Local Account Password',
+    192 => 'Merge Remote Account with Existing Local Account',
+    193 => 'Note: If you merge a remote account to an existing local account, the preferences for the local user will take priority.',
 );
 
 ###############################################################################
@@ -1525,6 +1529,7 @@ $MESSAGE = array(
     519 => 'You are already subscribed to this notification feed.',
     520 => 'You have been subscribed to this notification feed.',
     521 => 'You have been successfully un-subscribed from the notification feed.',
+    522 => 'Remote account has been successfully merged with existing local account',
 
 );
 
@@ -2235,7 +2240,7 @@ $LANG_AM = array (
     'access_denied'             => 'Access Denied',
     'access_denied_msg'         => 'You are illegally trying access one of the Autotag Manager administration pages.  Please note that all attempts to illegally access this page are logged',
     'php_msg_enabled'           => 'If checked, the PHP class <b>{tag}.class.php</b> will be called to expand the tag. The <b>Replacement</b> text will be ignored.',
-    'php_msg_norights'          => '<br>NOTE: PHP Autotags are enabled, however the current user has not been assigned the \'autotag.PHP\' feature, and therefore cannot create new PHP Autotags and/or enable or disable existing PHP Autotags.',
+    'php_msg_norights'          => '<br />NOTE: PHP Autotags are enabled, however the current user has not been assigned the \'autotag.PHP\' feature, and therefore cannot create new PHP Autotags and/or enable or disable existing PHP Autotags.',
     'php_msg_disabled'          => 'PHP Autotags have been disabled.<br />To enable, you must set the \'Allow PHP in Autotags\' setting to \'True\' in the Autotag Manager plugin configuration panel.',
     'disallowed_tag'            => 'The tag you have chosen is restricted and not available for use. Choose another tag.',
     'duplicate_tag'             => 'The tag you have chosen is already in use. Please choose another tag name or edit the existing tag.',
@@ -2609,6 +2614,16 @@ $LANG_confignames['Core'] = array(
     'htmlfilter_story' => 'HTML allowed in stories',
     'htmlfilter_root' => 'Additional HTML allowed for Root users',
     'min_username_length' => 'Minimum Username Length',
+    'bb2_enabled' => 'Bad Behavior2 Enabled',
+    'bb2_display_stats' => 'Display Stats',
+    'bb2_strict' => 'Strict Checking',
+    'bb2_verbose' => 'Verbose Logging',
+    'bb2_logging' => 'Logging Enabled',
+    'bb2_httpbl_key' => 'HTTP BlackList Key',
+    'bb2_httpbl_threat' => 'HTTPbl Threat Threshold',
+    'bb2_httpbl_maxage' => 'HTTPbl Max Age',
+    'bb2_offsite_forms' => 'Allow offsite forms',
+    'bb2_eu_cookie' => 'EU Cookie',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2619,7 +2634,8 @@ $LANG_configsubgroups['Core'] = array(
     'sg_users' => 'Users and Submissions',
     'sg_images' => 'Images',
     'sg_locale' => 'Languages and Locale',
-    'sg_misc' => 'Miscellaneous'
+    'sg_misc' => 'Miscellaneous',
+    'sg_spam' => 'Spam / Bot Protection'
 );
 
 $LANG_fs['Core'] = array(
@@ -2669,6 +2685,7 @@ $LANG_fs['Core'] = array(
     'fs_logo' => 'Logo Options',
     'fs_update' => 'Update Checker',
     'fs_rating' => 'Rating Options',
+    'fs_spam_config' => 'Configuration'
 );
 
 $LANG_configselects['Core'] = array(

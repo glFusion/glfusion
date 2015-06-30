@@ -9,7 +9,7 @@
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2014 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2012 by the following authors:                        |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -40,7 +40,19 @@ function bad_behavior2_upgrade ()
 
     // Bad Behavior handles its database changes automatically,
     // so only update the version number
-    DB_query ("UPDATE {$_TABLES['plugins']} SET pi_version = '".$_BB2_CONF['pi_version']."', pi_gl_version = '".$_BB2_CONF['gl_version']."', pi_homepage = 'http://www.glfusion.org/' WHERE pi_name = 'bad_behavior2'");
+
+    $sql .= "CREATE TABLE IF NOT EXISTS `gl_bad_behavior2_ban` (
+        `id` smallint(5) unsigned NOT NULL auto_increment,
+        `ip` varbinary(16) NOT NULL,
+        `type` tinyint(3) unsigned NOT NULL,
+        `timestamp` int(8) NOT NULL DEFAULT '0',
+        PRIMARY KEY  (id),
+        UNIQUE ip (ip),
+        INDEX type (type),
+        INDEX timestamp (timestamp) ) ENGINE=MyISAM;";
+    DB_query($sql);
+
+    DB_query ("UPDATE {$_TABLES['plugins']} SET pi_version = '".$_BB2_CONF['pi_version']."', pi_gl_version = '".$_BB2_CONF['gl_version']."', pi_homepage = 'https://www.glfusion.org' WHERE pi_name = 'bad_behavior2'");
 
     return true;
 }

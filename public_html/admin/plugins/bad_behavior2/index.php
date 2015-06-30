@@ -7,9 +7,9 @@
 // | Main administration page.                                                |
 // +--------------------------------------------------------------------------+
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
-// | Copyright (C) 2005-2014 Michael Hampton                                  |
+// | Copyright (C) 2005-2015 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2012 by the following authors:                        |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -63,14 +63,29 @@ function _bb_listEntries ($page = 1, $msg = '')
     global $_CONF, $_USER, $_TABLES, $LANG_BAD_BEHAVIOR, $LANG_BB2_RESPONSE, $LANG_ADMIN;
 
     $retval = '';
-    $msgText = '';
 
     if ($page < 1) {
         $page = 1;
     }
 
+    $filter = 'all';
+    if ( isset($_REQUEST['filter']) ) {
+        $filter = COM_applyFilter($_REQUEST['filter']);
+    }
+    $where = '';
+
+    if ( $filter != 'all' ) {
+        $where = ' WHERE '.WP_BB_LOG.'.key="'. DB_escapeString($filter) . '"';
+    }
+
     $start = (($page - 1) * 50);
-    $entries = DB_count (WP_BB_LOG);
+
+    if ( $filter != 'all' ) {
+        $entries = DB_count (WP_BB_LOG,WP_BB_LOG.'.key',DB_escapeString($filter));
+    } else {
+        $entries = DB_count (WP_BB_LOG);
+    }
+
     if ($start > $entries) {
         $start = 1;
         $page = 1;
@@ -83,46 +98,105 @@ function _bb_listEntries ($page = 1, $msg = '')
 
     // writing the menu on top
     $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'].'/plugins/bad_behavior2/ban.php',
+              'text' => 'List Banned IPs'),
+        array('url' => $_CONF['site_admin_url'].'/plugins/bad_behavior2/ban.php?mode=add',
+              'text' => 'Ban IPs'),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
-    $start_block = COM_startBlock ($LANG_BAD_BEHAVIOR['plugin_display_name'] . ' - ' . $LANG_BAD_BEHAVIOR['block_title_list'], '',
+
+    $retval .= COM_startBlock ($LANG_BAD_BEHAVIOR['plugin_display_name'] . ' - ' . $LANG_BAD_BEHAVIOR['block_title_list'], '',
                                COM_getBlockTemplate ('_admin_block', 'header'));
 
-//    $retval .= COM_startBlock ($LANG_BAD_BEHAVIOR['plugin_display_name'] . ' - ' . $LANG_BAD_BEHAVIOR['block_title_list'], '',
-//                               COM_getBlockTemplate ('_admin_block', 'header'));
-
-    $admin_menu = ADMIN_createMenu(
+    $retval .= ADMIN_createMenu(
         $menu_arr,
         $donate,
         $_CONF['site_url'] . '/bad_behavior2/images/bad_behavior2.png'
     );
 
-    $admin_menu_header = ADMIN_createMenuHeader(
-        $menu_arr,
-        $donate,
-        $LANG_BAD_BEHAVIOR['plugin_display_name'],
-        $_CONF['site_url'] . '/bad_behavior2/images/bad_behavior2.png'
-    );
+// NEW
+//$retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
 
-//    $retval .= ADMIN_createMenu(
-//        $menu_arr,
-//        $donate,
-//        $_CONF['site_url'] . '/bad_behavior2/images/bad_behavior2.png'
-//    );
-//    $retval .= '<br />';
+    $retval .= '<br />';
 
 
     if (!empty ($msg)) {
-//        $retval .= COM_showMessage ($msg, 'bad_behavior2');
-        $msgText = COM_showMessage($msg,'bad_behavior2');
+        $retval .= COM_showMessage ($msg, 'bad_behavior2');
     }
+
+/* -----------------------------------------------------
+// Attempt to use a admin lists instead...
+
+    $header_arr = array(      # display 'text' and use table field 'field'
+//        array('text' => 'Date', 'field' => 'date','sort' => true,'align' => 'center'),
+        array('text' => 'IP / Date / Status', 'field' => 'ip', 'sort' => false, 'align' => 'left'),
+        array('text' => 'Headers', 'field' => 'http_headers', 'sort' => true, 'align' => 'left'),
+    );
+    $defsort_arr = array('field' => 'ip', 'direction' => 'asc');
+
+    $text_arr = array(
+        'no_data'    => '',
+        'title'      => "",
+        'form_url'   => $_CONF['site_admin_url'] . '/plugins/bad_behavior2/index.php',
+        'has_search'    => true,
+        'has_limit'     => true,
+        'has_paging'    => true,
+    );
+
+    $actions = '';
+
+    $option_arr = array(
+        'chkselect'     => false,
+        'chkall'        => false,
+        'chkfield'      => '',
+        'chkname'       => 'actionitem',
+        'chkactions'    => $actions,
+    );
+
+    $query_arr = array(
+        'table' => 'bad_behavior2',
+        'sql' => "SELECT id,ip,date,request_method,request_uri,server_protocol,http_headers,user_agent,request_entity,`key` FROM {$_TABLES['bad_behavior2']} WHERE 1=1",
+        'query_fields' => array('ip'),
+        'default_filter' => ''
+    );
+
+
+    $filter_select = '<select name="filter"><option value="all"';
+    if ( $filter == '' ) {
+        $filter_select .= ' selected="selected" ';
+    }
+    $filter_select .= '>'.$LANG_BAD_BEHAVIOR['no_filter'].'</option>';
+    foreach ($LANG_BB2_RESPONSE AS $code => $text ) {
+        $filter_select .= '<option value="'.$code.'"';
+        if ( $filter == $code ) {
+            $filter_select .= ' selected="selected" ';
+        }
+        $filter_select .= '>'.$text.'</option>';
+    }
+    $filter_select .= '</select>';
+
+    $token = SEC_createToken();
+    $form_arr = array(
+        'top'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="'. $token .'"/>'.$filter_select,
+        'bottom' => '<input type="hidden" name="mode" value="delete"/>'
+    );
+
+    $retval .= ADMIN_list(
+        'bad_behavior2', 'BB2_getListField_list', $header_arr, $text_arr,
+        $query_arr, $defsort_arr, '', $token, $option_arr, $form_arr
+    );
+
+    return $retval;
+
+----------- */
+
     $templates = new Template ($_CONF['path'] . 'plugins/'
                                . BAD_BEHAVIOR_PLUGIN . '/templates');
     $templates->set_file ('list','log.thtml');
 
     $templates->set_var (array(
-            'lang_ip'   => $LANG_BAD_BEHAVIOR['row_ip'],
+            'lang_ip'           => $LANG_BAD_BEHAVIOR['row_ip'],
             'lang_user_agent'   => $LANG_BAD_BEHAVIOR['row_user_agent'],
             'lang_referer'      => $LANG_BAD_BEHAVIOR['row_referer'],
             'lang_reason'       => $LANG_BAD_BEHAVIOR['row_reason'],
@@ -133,9 +207,25 @@ function _bb_listEntries ($page = 1, $msg = '')
             'lang_search'       => $LANG_BAD_BEHAVIOR['search'],
             'lang_ip_date'      => $LANG_BAD_BEHAVIOR['ip_date'],
             'lang_headers'      => $LANG_BAD_BEHAVIOR['headers'],
+            'lang_filter_select'=> $LANG_BAD_BEHAVIOR['filter'],
+            'lang_go'           => $LANG_BAD_BEHAVIOR['go'],
             ));
 
-    $result = DB_query ("SELECT id,ip,date,request_method,request_uri,server_protocol,http_headers,user_agent,request_entity,`key` FROM " . WP_BB_LOG . " ORDER BY date DESC LIMIT $start,50");
+    $filter_select = '<option value="all"';
+    if ( $filter == '' ) {
+        $filter_select .= ' selected="selected" ';
+    }
+    $filter_select .= '>'.$LANG_BAD_BEHAVIOR['no_filter'].'</option>';
+    foreach ($LANG_BB2_RESPONSE AS $code => $text ) {
+        $filter_select .= '<option value="'.$code.'"';
+        if ( $filter == $code ) {
+            $filter_select .= ' selected="selected" ';
+        }
+        $filter_select .= '>'.$text.'</option>';
+    }
+    $templates->set_var('filter_select', $filter_select);
+
+    $result = DB_query ("SELECT id,ip,date,request_method,request_uri,server_protocol,http_headers,user_agent,request_entity,`key` FROM " . WP_BB_LOG . " " . $where . " ORDER BY date DESC LIMIT $start,50");
     $num = DB_numRows ($result);
 
     $templates->set_block('list','logrow','lrow');
@@ -151,48 +241,36 @@ function _bb_listEntries ($page = 1, $msg = '')
         $dt = new Date($A['date'],$_USER['tzid']);
 
         $headers = str_replace("\n", "<br/>\n", $A['http_headers']);
-
-        $keywords = array(
-        "User-Agent:",
-        "Host:",
-        "POST ",
-        "GET ",
-        "Accept-Language:",
-        "Accept-Encoding:",
-        "Accept-Charset:",
-        "X-Forwarded-For:",
-        "Cookie:",
-        "Via:",
-        "Connection:",
-        "Language:",
-        "Accept:",
-        "Cache-Control:",
-        "Referer:",
-        "Pragma:",
-        "Proxy-",
-        "Cf-Connecting-Ip",
-        "Cf-Ipcountry",
-        "X-Forwarded-Proto",
-        "Cf-Visitor",
-        "Cf-Ray",
-        "True-Client-Ip",
-        "X-Http-Proto",
-        "X-Real-Ip",
-        "Content-Length:",
-        "Content-Type:",
-        "title:",
-        "url:",
-        "excerpt:",
-        "blog_name:"
-        );
-        foreach ($keywords AS $key ) {
-            $headers = str_replace($key,"<strong>".$key."</strong>",$headers);
-        }
+		$headers = str_replace("User-Agent:","<strong>User-Agent:</strong>",$headers);
+		$headers = str_replace("Host:","<strong>Host:</strong>",$headers);
+		$headers = str_replace("POST ","<strong>POST</strong> ",$headers);
+		$headers = str_replace("GET ","<strong>GET</strong> ",$headers);
+		$headers = str_replace("Accept-Language:","<strong>Accept-Language:</strong> ",$headers);
+		$headers = str_replace("Accept-Encoding:","<strong>Accept-Encoding:</strong> ",$headers);
+		$headers = str_replace("Accept-Charset:","<strong>Accept-Charset:</strong> ",$headers);
+		$headers = str_replace("X-Forwarded-For:","<strong>X-Forwarded-For:</strong> ",$headers);
+		$headers = str_replace("Cookie:","<strong>Cookie:</strong> ",$headers);
+		$headers = str_replace("Via:","<strong>Via:</strong> ",$headers);
+		$headers = str_replace("Connection:","<strong>Connection:</strong>",$headers);
+		$headers = str_replace("Accept:","<strong>Accept:</strong>",$headers);
+		$headers = str_replace("Cache-Control:","<strong>Cache-Control:</strong>",$headers);
+		$headers = str_replace("Referer:","<strong>Referer:</strong>",$headers);
+		$headers = str_replace("Pragma:","<strong>Pragma:</strong>",$headers);
+		$headers = str_replace("Proxy-","<strong>Proxy-</strong>",$headers);
+		$headers = str_replace("Cf-Connecting-Ip","<strong>Cf-Connecting-Ip</strong>",$headers);
+		$headers = str_replace("Cf-Ipcountry","<strong>Cf-Ipcountry</strong>",$headers);
+		$headers = str_replace("X-Forwarded-Proto","<strong>X-Forwarded-Proto</strong>",$headers);
+		$headers = str_replace("Cf-Visitor","<strong>Cf-Visitor</strong>",$headers);
+		$headers = str_replace("X-Http-Proto","<strong>X-Http-Proto</strong>",$headers);
+		$headers = str_replace("X-Real-Ip","<strong>X-Real-Ip</strong>",$headers);
+		$headers = str_replace("Content-Length","<strong>Content-Length</strong>",$headers);
+        $headers = str_replace("Content-Type","<strong>Content-Type</strong>",$headers);
+        $headers = str_replace("Te:","<strong>Te:</strong>",$headers);
+        $headers = str_replace("Expect:","<strong>Expect:</strong>",$headers);
+        $headers = str_replace("Dnt:","<strong>Dnt:</strong>",$headers);
 
 		$entity = str_replace("\n", "<br/>\n", $A["request_entity"]);
-        foreach ($keywords AS $key ) {
-            $entity = str_replace($key,"<strong>".$key."</strong>",$entity);
-        }
+
         $templates->set_var (array(
                 'row_num'           => $lcount,
                 'cssid'             => ($i % 2) + 1,
@@ -233,24 +311,128 @@ function _bb_listEntries ($page = 1, $msg = '')
 
     if ($entries > 50) {
         $baseurl = $_CONF['site_admin_url'] . '/plugins/' . BAD_BEHAVIOR_PLUGIN
-                 . '/index.php?mode=list';
+                 . '/index.php?mode=list&filter='.$filter;
         $numpages = ceil ($entries / 50);
         $templates->set_var ('google_paging',
                 COM_printPageNavigation ($baseurl, $page, $numpages));
     } else {
         $templates->set_var ('google_paging', '');
     }
-    $end_block = COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
-    $templates->set_var (array(
-            'start_block'           => $start_block,
-            'end_block'             => $end_block,
-            'admin_menu'            => $admin_menu,
-            'admin_menu_header'     => $admin_menu_header,
-            'msg'                   => $msgText,
-    ));
     $templates->parse('output', 'list');
     $retval .= $templates->finish($templates->get_var('output'));
+    $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
 
+    return $retval;
+}
+
+// NOT NEEDED IF WE DON'T USE ADMIN LISTS
+function BB2_getListField_list($fieldname, $fieldvalue, $A, $icon_arr, $token)
+{
+    global $_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG_BAD_BEHAVIOR,$LANG_BB2_RESPONSE;
+
+    $retval = '';
+
+    $dt = new Date('now',$_USER['tzid']);
+
+    switch ($fieldname) {
+        case 'http_headers' :
+            $headers = str_replace("\n", "<br/>\n", $A['http_headers']);
+    		$headers = str_replace("User-Agent:","<strong>User-Agent:</strong>",$headers);
+    		$headers = str_replace("Host:","<strong>Host:</strong>",$headers);
+    		$headers = str_replace("POST ","<strong>POST</strong> ",$headers);
+    		$headers = str_replace("GET ","<strong>GET</strong> ",$headers);
+    		$headers = str_replace("Accept-Language:","<strong>Accept-Language:</strong> ",$headers);
+    		$headers = str_replace("Accept-Encoding:","<strong>Accept-Encoding:</strong> ",$headers);
+    		$headers = str_replace("Accept-Charset:","<strong>Accept-Charset:</strong> ",$headers);
+    		$headers = str_replace("X-Forwarded-For:","<strong>X-Forwarded-For:</strong> ",$headers);
+    		$headers = str_replace("Cookie:","<strong>Cookie:</strong> ",$headers);
+    		$headers = str_replace("Via:","<strong>Via:</strong> ",$headers);
+    		$headers = str_replace("Connection:","<strong>Connection:</strong>",$headers);
+    		$headers = str_replace("Accept:","<strong>Accept:</strong>",$headers);
+    		$headers = str_replace("Cache-Control:","<strong>Cache-Control:</strong>",$headers);
+    		$headers = str_replace("Referer:","<strong>Referer:</strong>",$headers);
+    		$headers = str_replace("Pragma:","<strong>Pragma:</strong>",$headers);
+    		$headers = str_replace("Proxy-","<strong>Proxy-</strong>",$headers);
+    		$headers = str_replace("Cf-Connecting-Ip","<strong>Cf-Connecting-Ip</strong>",$headers);
+    		$headers = str_replace("Cf-Ipcountry","<strong>Cf-Ipcountry</strong>",$headers);
+    		$headers = str_replace("X-Forwarded-Proto","<strong>X-Forwarded-Proto</strong>",$headers);
+    		$headers = str_replace("Cf-Visitor","<strong>Cf-Visitor</strong>",$headers);
+    		$headers = str_replace("X-Http-Proto","<strong>X-Http-Proto</strong>",$headers);
+    		$headers = str_replace("X-Real-Ip","<strong>X-Real-Ip</strong>",$headers);
+    		$headers = str_replace("Content-Length","<strong>Content-Length</strong>",$headers);
+            $headers = str_replace("Content-Type","<strong>Content-Type</strong>",$headers);
+            $headers = str_replace("Te:","<strong>Te:</strong>",$headers);
+            $headers = str_replace("Expect:","<strong>Expect:</strong>",$headers);
+
+            $retval .= $headers;
+
+            $entity;
+            if ( $A['request_entity'] ) {
+                $entity = str_replace("\n", "<br/>\n", $A["request_entity"]);
+
+                $retval .= '<strong>Response:</strong><br/>'.$entity;
+            }
+
+            break;
+
+        case 'date' :
+            $dt = new Date($A['date'],$_USER['tzid']);
+            $retval .= $dt->toRFC822(true);
+            break;
+
+        case 'ip' :
+            $retval .= $A['ip'];
+            $retval .= '&nbsp;&nbsp;[<a href="'.$_CONF['site_url'].'/search.php?mode=search&amp;type=bad_behavior2&amp;query='.$A['ip'].'">'.'Search'.'</a>]';
+            $retval .= '<br/><br/>';
+            $dt = new Date($A['date'],$_USER['tzid']);
+            $retval .= $dt->toRFC822(true);
+            $retval .= '<br/><br/>';
+
+//            {date_and_time}<br/><br/>
+            $retval .= '<span class="warning">'.$LANG_BB2_RESPONSE[$A['key']].'</span>';
+            break;
+
+
+        case 'delete' :
+        case 'delete':
+            $retval = '';
+            $attr['title'] = $LANG_ADMIN['delete'];
+            $attr['onclick'] = 'return doubleconfirm(\'' . $LANG28[104] . '\',\'' . $LANG28[109] . '\');';
+            $retval .= COM_createLink($icon_arr['delete'],
+                $_CONF['site_admin_url'] . '/plugins/bad_behavior2/ban.php'
+                . '?delete=x&amp;ip=' . $A['ip'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            break;
+
+        case 'type' :
+            switch ( $A['type'] ) {
+                case 0 :
+                    $retval = $LANG_BAD_BEHAVIOR['manually_added'];
+                    break;
+                case 2 :
+                    $retval = $LANG_BAD_BEHAVIOR['automatic_captcha'];
+                    break;
+                case 3:
+                    $retval = $LANG_BAD_BEHAVIOR['automatic_token'];
+                    break;
+               default :
+                    $retval = $A['type'];
+                    break;
+            }
+            break;
+
+        case 'timestamp' :
+            if ( $A['type'] == 0 ) {
+                $retval = ' - ';
+            } else {
+                $dt = new Date($A['timestamp'], $_CONF['timezone']);
+                $retval = $dt->format($_CONF['date'],true);
+            }
+            break;
+
+        default:
+            $retval = $fieldvalue;
+            break;
+    }
 
     return $retval;
 }
@@ -353,7 +535,7 @@ function _bb_viewEntry ($id, $page = 1)
 
 // MAIN
 $rightblocks = false;
-$pageBody = '';
+$display .= COM_siteHeader ('menu', $LANG_BAD_BEHAVIOR['page_title']);
 
 if ( isset($_GET['mode']) ) {
     $mode = COM_applyFilter ($_GET['mode']);
@@ -363,18 +545,16 @@ if ( isset($_GET['mode']) ) {
 
 if ($mode == 'list') {
     $page = isset($_GET['page']) ? COM_applyFilter ($_GET['page'], true) : 0;
-    $pageBody .= _bb_listEntries ($page);
+    $display .= _bb_listEntries ($page);
 } else if ($mode == 'view') {
     $id = isset($_GET['id']) ? COM_applyFilter ($_GET['id'], true) : 0;
     $page = isset($_GET['page']) ? COM_applyFilter ($_GET['page'], true) : 0;
-    $pageBody .= _bb_viewEntry ($id, $page);
+    $display .= _bb_viewEntry ($id, $page);
 } else {
     $page = isset($_GET['page']) ? COM_applyFilter ($_GET['page'], true) : 0;
-    $pageBody .= _bb_listEntries ($page);
+    $display .= _bb_listEntries ($page);
 }
 
-$display = COM_siteHeader ('menu', $LANG_BAD_BEHAVIOR['page_title']);
-$display .= $pageBody;
 $display .= COM_siteFooter ($rightblocks);
 
 echo $display;

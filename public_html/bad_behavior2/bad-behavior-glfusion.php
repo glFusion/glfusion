@@ -1,7 +1,7 @@
 <?php
 /*
 Bad Behavior - detects and blocks unwanted Web accesses
-Copyright (C) 2005-2011 Michael Hampton
+Copyright (C) 2005-2014 Michael Hampton
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ if (!defined ('GVERSION')) {
     die('This file can not be used on its own.');
 }
 
-global $_DB_table_prefix;
+global $_DB_table_prefix, $_CONF;
 
 define('BB2_CWD', dirname(__FILE__));
 
@@ -40,15 +40,16 @@ define('BB2_CWD', dirname(__FILE__));
 // Most of these are unused in non-database mode.
 $bb2_settings_defaults = array(
 	'log_table'     => $_DB_table_prefix . 'bad_behavior2',
-	'display_stats' => true,
-	'strict'        => false,
-	'verbose'       => false,
-	'logging'       => true,
-	'httpbl_key'    => '',
-	'httpbl_threat' => '25',
-	'httpbl_maxage' => '30',
-	'offsite_forms' => false,
-	'eu_cookie'     => false,
+	'ban_table'     => $_DB_table_prefix . 'bad_behavior2_ban',
+	'display_stats' => $_CONF['bb2_display_stats'],
+	'strict'        => $_CONF['bb2_strict'],
+	'verbose'       => $_CONF['bb2_verbose'],
+	'logging'       => $_CONF['bb2_logging'],
+	'httpbl_key'    => $_CONF['bb2_httpbl_key'],
+	'httpbl_threat' => $_CONF['bb2_httpbl_threat'],
+	'httpbl_maxage' => $_CONF['bb2_httpbl_maxage'],
+	'offsite_forms' => $_CONF['bb2_offsite_forms'],
+	'eu_cookie'     => $_CONF['bb2_eu_cookie'],
 	'secure_cookie' => $_CONF['cookiesecure'],
 );
 
@@ -56,9 +57,12 @@ $bb2_settings_defaults = array(
 
 // Return current time in the format preferred by your database.
 function bb2_db_date() {
-    global $_CONF;
-    $dt = new Date('now',$_CONF['timezone']);
-    return $dt->toMySQL(true);
+
+    return date("Y-m-d H:i:s");
+
+//    global $_CONF;
+//    $dt = new Date('now',$_CONF['timezone']);
+//    return $dt->toMySQL(true);
 }
 
 // Return affected rows from most recent query.
@@ -88,7 +92,7 @@ function bb2_db_num_rows($result) {
 // Bad Behavior will use the return value here in other callbacks.
 function bb2_db_query($query) {
 
-    $result = DB_query($query);
+    $result = DB_query($query,1);
     if ( $result === false ) {
 	    return FALSE;
     }
@@ -121,6 +125,7 @@ function bb2_read_settings() {
     }
 
     return array('log_table'      => $bb2_settings_defaults['log_table'],
+                 'ban_table'      => $bb2_settings_defaults['ban_table'],
 			     'display_stats'  => $bb2_settings_defaults['display_stats'],
 			     'verbose'        => $bb2_settings_defaults['verbose'],
 			     'logging'        => $bb2_settings_defaults['logging'],
@@ -195,6 +200,23 @@ function bb2_relative_path() {
     global $_CONF;
 
     return $_CONF['cookie_path'];
+}
+
+function bb2_ban($ip,$type = 1) {
+    global $_CONF;
+    $settings = bb2_read_settings();
+    $timestamp = time();
+    $sql = "INSERT INTO {$settings['ban_table']}
+           (ip,type,timestamp) VALUE (INET_ATON('".DB_escapeString($ip)."'),".$type.",".$timestamp.")";
+    DB_query($sql);
+    COM_refresh($_CONF['site_url']);
+}
+
+function bb2_expireBans() {
+    $settings = bb2_read_settings();
+    $oldBans = time() - (86400); // 24 hours
+    DB_query("DELETE FROM {$settings['ban_table']} WHERE type != 0 AND timestamp < " . $oldBans,1);
+    return;
 }
 
 $bb2_mtime = explode(" ", microtime());

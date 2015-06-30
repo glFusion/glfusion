@@ -14,7 +14,9 @@ function bb2_table_structure($name)
 {
 	// It's not paranoia if they really are out to get you.
 	$name_escaped = bb2_db_escape($name);
-	return "CREATE TABLE IF NOT EXISTS `$name_escaped` (
+    $ban_escaped = bb2_db_escape($name.'_ban');
+
+    $sql = "CREATE TABLE IF NOT EXISTS `$name_escaped` (
 		`id` INT(11) NOT NULL auto_increment,
 		`ip` TEXT NOT NULL,
 		`date` DATETIME NOT NULL default '0000-00-00 00:00:00',
@@ -28,6 +30,18 @@ function bb2_table_structure($name)
 		INDEX (`ip`(15)),
 		INDEX (`user_agent`(10)),
 		PRIMARY KEY (`id`) ) ENGINE=MyISAM;";	// TODO: INDEX might need tuning
+
+    $sql .= "CREATE TABLE IF NOT EXISTS `gl_bad_behavior2_ban` (
+        `id` smallint(5) unsigned NOT NULL auto_increment,
+        `ip` varbinary(16) NOT NULL,
+        `type` tinyint(3) unsigned NOT NULL,
+        `timestamp` int(8) NOT NULL DEFAULT '0',
+        PRIMARY KEY  (id),
+        UNIQUE ip (ip),
+        INDEX type (type),
+        INDEX timestamp (timestamp) ) ENGINE=MyISAM;";
+
+    return $sql;
 }
 
 // Insert a new record
@@ -145,7 +159,7 @@ function bb2_start($settings)
 	if (!bb2_whitelist($package)) {
 		// Now check the blacklist
 		require_once(BB2_CORE . "/blacklist.inc.php");
-		bb2_test($settings, $package, bb2_blacklist($package));
+		bb2_test($settings, $package, bb2_blacklist($settings,$package));
 
 		// Check the http:BL
 		require_once(BB2_CORE . "/blackhole.inc.php");

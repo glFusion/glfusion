@@ -58,7 +58,7 @@ function bb2_misc_headers($settings, $package)
 	        return "f9f3b8b0";
 	    }
 	}
-	if ( strpos($package['request_uri'], "users.php?do=register") !== false ) {
+	if ( strpos($package['request_uri'], "do=register") !== false ) {
 	    return "f9f3b8b1";
 	}
 	if ( strpos($package['request_uri'], "/RK=0/RS=") !== false ) {

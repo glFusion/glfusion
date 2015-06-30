@@ -127,6 +127,11 @@ function plugin_geticon_bad_behavior2 ()
     return $_CONF['site_url'] . '/bad_behavior2/images/bad_behavior2.png';
 }
 
+function plugin_runScheduledTask_bad_behavior2()
+{
+    bb2_expireBans();
+}
+
 /**
 * Return total number of blocked IPs currently in the BB logs
 *

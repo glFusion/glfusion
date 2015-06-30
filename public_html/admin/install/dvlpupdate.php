@@ -1163,6 +1163,21 @@ function glfusion_150()
     $c->add('sfs_email_confidence', '50.00', 'text',0, 1, 1, 50, true, 'spamx');
     $c->add('sfs_ip_confidence', '25.00', 'text',0, 1, 1, 60, true, 'spamx');
 
+    $c->add('sg_spam', NULL, 'subgroup', 8, 0, NULL, 0, TRUE);
+    $c->add('fs_spam_config', NULL, 'fieldset', 8, 1, NULL, 0, TRUE);
+    $c->add('bb2_enabled',1,'select',8,1,0,10,TRUE);
+    $c->add('bb2_display_stats',1,'select',8,1,0,20,TRUE);
+    $c->add('bb2_strict',0,'select',8,1,0,30,TRUE);
+    $c->add('bb2_verbose',0,'select',8,1,0,40,TRUE);
+    $c->add('bb2_logging',0,'select',8,1,0,50,TRUE);
+    $c->add('bb2_httpbl_key','','text',8,1,NULL,60,TRUE);
+    $c->add('bb2_httpbl_threat',25,'text',8,1,NULL,70,TRUE);
+    $c->add('bb2_httpbl_maxage',30,'text',8,1,NULL,80,TRUE);
+    $c->add('bb2_offsite_forms',0,'select',8,1,0,90,TRUE);
+    $c->add('bb2_eu_cookie',0,'select',8,1,0,100,TRUE);
+
+
+
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.5.0',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.5.0' WHERE name='glfusion'",1);

@@ -2406,6 +2406,134 @@ returned when an Atom feed is requested through the webservices <acronym title="
 </tbody>
 </table>
 </div>
+
+
+<!-- BEGIN HERE -->
+
+<h2><a name="spam_bot_protection" id="spam_bot_protection">Spam / Bot Protection</a></h2>
+<div class="level2">
+<table class="inline">
+<tbody>
+<tr class="row0">
+<td class="col0 leftalign"><a name="desc_bb2_enabled">BB2 Enabled</a>
+</td>
+<td class="col1 leftalign">Set this to true to enable Bad Behavior 2 plugin protection. </td>
+</tr>
+<tr class="row1">
+<td class="col0 leftalign"><a name="desc_bb2_display_stats">Display Stats</a>
+</td>
+<td class="col1 leftalign">
+Enabling this option will add a blurb to your web site
+footer advertising Bad Behavior's presence and the number of recently
+blocked requests. Sites receiving more than 1,000 visitors per day should
+leave this option disabled as it is database intensive.
+This option is not available or has no effect when logging is not in use.
+</td>
+</tr>
+<tr class="row2">
+<td class="col0 leftalign"><a name="desc_bb2_strict">Strict Checking</a>
+</td>
+<td class="col1 leftalign">
+Bad Behavior operates in two blocking modes: normal and strict.
+When strict mode is enabled, some additional checks for buggy software
+which have been spam sources are enabled, but occasional legitimate
+users using the same software (usually corporate or government users
+using very old software) may be blocked as well. It is up to you
+whether you want to have the government reading your blog, or keep
+away more spammers.
+</td>
+</tr>
+<tr class="row3">
+<td class="col0 leftalign"><a name="desc_bb2_verbose">Verbose Logging</a>
+</td>
+<td class="col1 leftalign">
+Turning on verbose mode causes all HTTP requests to be logged.
+When verbose mode is off, only blocked requests and a few suspicious
+(but permitted) requests are logged. Verbose mode is off by default.
+Using verbose mode is not recommended as it can significantly slow
+down your site; it exists to capture data from live spammers which
+are not being blocked.
+</td>
+</tr>
+<tr class="row4">
+<td class="col0 leftalign"><a name="desc_bb2_logging">Logging Enabled</a>
+</td>
+<td class="col1 leftalign">
+You can disable logging entirely, but this is not recommended since
+it may cause additional spam to get through.
+</td>
+</tr>
+<tr class="row5">
+<td class="col0 leftalign"><a name="desc_bb2_httpbl_key">HTTP BlackList Key</a>
+</td>
+<td class="col1 leftalign">
+Bad Behavior is capable of using data from the http:BL service provided by
+<a href="http://www.projecthoneypot.org/" target="_blank">Project Honey Pot</a> to screen requests.
+This is purely optional; however if you wish to use it, you must
+<a href="http://www.projecthoneypot.org/account_login.php" target="_blank">sign up for the service</a>
+and obtain an API key.
+To disable http:BL use, remove the API key from your settings.
+</td>
+</tr>
+<tr class="row6">
+<td class="col0 leftalign"><a name="desc_bb2_httpbl_threat">http:BL Threat Level</a>
+</td>
+<td class="col1 leftalign">
+This number provides a measure of how suspicious an IP address is,
+based on activity observed at Project Honey Pot. Bad Behavior will
+block requests with a threat level equal or higher to this setting.
+Project Honey Pot has
+<a href="http://www.projecthoneypot.org/threat_info.php" target="_blank">more information on this parameter.</a>
+</td>
+</tr>
+<tr class="row7">
+<td class="col0 leftalign"><a name="desc_bb2_httpbl_maxage">http:BL Maximum Age</a>
+</td>
+<td class="col1 leftalign">
+This is the number of days since suspicious activity was last observed
+from an IP address by Project Honey Pot. Bad Behavior will block requests
+with a maximum age equal to or less than this setting. Project Honey Pot
+(http://www.projecthoneypot.org/threat_info.php) has
+more information on this parameter.
+</td>
+</tr>
+<tr class="row8">
+<td class="col0 leftalign"><a name="desc_bb2_offsite_forms">Allow Offsite Forms</a>
+</td>
+<td class="col1 leftalign">
+Bad Behavior normally prevents your site from receiving data posted
+from forms on other web sites. This prevents spammers from, e.g.,
+using a Google cached version of your web site to send you spam.
+However, some web applications such as OpenID require that your site
+be able to receive form data in this way. If you are running OpenID,
+enable this option.
+</td>
+</tr>
+<tr class="row9">
+<td class="col0 leftalign"><a name="desc_bb2_eu_cookie">EU Cookie</a>
+</td>
+<td class="col1 leftalign">
+Enable this option to alter Bad Behavior’s cookie handling to
+conform to 2012 EU cookie regulations.
+</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+
+<!-- end of bb2 -->
+
+
+
+
+
+
+
+
+
+
+
 <h1><a name="db-config.php" id="db-config.php">db-config.php</a></h1>
 <div class="level1">
 <p>As the name implies, the file db-config.php contains the
