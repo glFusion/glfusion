@@ -628,33 +628,36 @@ class sanitizer
         if ( isset( $_CONF['skip_html_filter_for_root'] ) &&
                  ( $_CONF['skip_html_filter_for_root'] == 1 ) &&
                 SEC_inGroup( 'Root' )) {
-            if ( !$list_only ) {
+            if ( !$list_only && $this->_postmode == 'html' ) {
                 $retval .= '<span class="warningsmall"><strong>' . $LANG01[123] . '</strong></span>, ';
             }
 
         } else {
-            if ( !$list_only ) {
+            if ( !$list_only && $this->_postmode == 'html' ) {
                 $retval .= '<span class="warningsmall"><strong>' . $LANG01['allowed_html'] . '</strong> ';
             }
             if ( $_CONF['allow_page_breaks'] && $this->operation == 'story')
                 $allow_page_break = true;
         }
 
-        $elementArray = array();
-        $itemElements = explode(',',$this->allowedElements);
-        $elementArray = array_merge($elementArray,$itemElements);
-        if ( SEC_inGroup('Root') ) {
-            $root    = explode(',',$_CONF['htmlfilter_root']);
-            $elementArray = array_merge($elementArray,$root);
-        }
-        $filterArray = array_unique($elementArray);
+        if ( $this->_postmode == 'html' ) {
 
-        foreach ( $filterArray as $tag ) {
-            if ( $first != 0 ) $retval .= ', ';
-            $retval .= '&lt;' . $tag . '&gt;&nbsp;';
-            $first++;
+            $elementArray = array();
+            $itemElements = explode(',',$this->allowedElements);
+            $elementArray = array_merge($elementArray,$itemElements);
+            if ( SEC_inGroup('Root') ) {
+                $root    = explode(',',$_CONF['htmlfilter_root']);
+                $elementArray = array_merge($elementArray,$root);
+            }
+            $filterArray = array_unique($elementArray);
+
+            foreach ( $filterArray as $tag ) {
+                if ( $first != 0 ) $retval .= ', ';
+                $retval .= '&lt;' . $tag . '&gt;&nbsp;';
+                $first++;
+            }
+            $retval .= '</span>';
         }
-        $retval .= '</span>';
         return $retval;
     }
 
