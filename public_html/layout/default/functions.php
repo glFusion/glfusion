@@ -5,7 +5,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2010-2014 by the following authors:
+*  Copyright (C) 2010-2015 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -47,15 +47,8 @@ $_BLOCK_TEMPLATE['forum_menu'] = 'blockheader-left.thtml,blockfooter-left.thtml'
 // define the JS we need for this theme..
 $outputHandle = outputHandler::getInstance();
 
-// cookie law
-//$outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.cookiebar.js');
-//$outputHandle->addLinkStyle($_CONF['layout_url'].'/css/jquery.cookiebar.css');
-
-
 // must load the jquery ui library we want to use.
 $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/ui-lightness/jquery-ui-1.10.4.min.css');
-//$outputHandle->addLinkStyle($_CONF['layout_url'].'/css/ui-uikit/jquery-ui-1.10.4.custom.min.css');
-
 
 function theme_getToolTipStyle()
 {
