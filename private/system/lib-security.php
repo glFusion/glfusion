@@ -156,7 +156,7 @@ function SEC_getUserGroups($uid='')
             }
             if (!in_array($A['ug_main_grp_id'], $groups)) {
                 array_push($cgroups, $A['ug_main_grp_id']);
-                $groups[$A['grp_name']] = $A['ug_main_grp_id'];
+                $groups[ucfirst($A['grp_name'])] = $A['ug_main_grp_id'];
             }
         }
 
