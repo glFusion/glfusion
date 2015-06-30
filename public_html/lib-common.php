@@ -484,14 +484,14 @@ switch ($_CONF['language']) {
     case 'catalan_utf-8' :
         $_CONF['iso_lang'] = 'ca';
         break;
-   	case 'chinese_traditional' :
-   	case 'chinese_traditional_utf-8' :
-   		$_CONF['iso_lang'] = 'zh-tw';
-   		break;
-   	case 'chinese_simplified' :
-   	case 'chinese_simplified_utf-8' :
-   		$_CONF['iso_lang'] = 'zh';
-   		break;
+       case 'chinese_traditional' :
+       case 'chinese_traditional_utf-8' :
+           $_CONF['iso_lang'] = 'zh-tw';
+           break;
+       case 'chinese_simplified' :
+       case 'chinese_simplified_utf-8' :
+           $_CONF['iso_lang'] = 'zh';
+           break;
     case 'croatian' :
     case 'croatian_utf-8' :
         $_CONF['iso_lang'] = 'hr';
@@ -544,70 +544,70 @@ switch ($_CONF['language']) {
     case 'hellenic_utf-8' :
         $_CONF['iso_lang'] = 'el';
         break;
-   	case 'indonesian' :
-   	case 'indonesian_utf-8' :
-   		$_CONF['iso_lang'] = 'id';
-   		break;
-   	case 'italian' :
-   	case 'italian_utf-8' :
-   		$_CONF['iso_lang'] = 'it';
-   		break;
-   	case 'japanese' :
-   	case 'japanese_utf-8' :
-   		$_CONF['iso_lang'] = 'ja';
-   		break;
+       case 'indonesian' :
+       case 'indonesian_utf-8' :
+           $_CONF['iso_lang'] = 'id';
+           break;
+       case 'italian' :
+       case 'italian_utf-8' :
+           $_CONF['iso_lang'] = 'it';
+           break;
+       case 'japanese' :
+       case 'japanese_utf-8' :
+           $_CONF['iso_lang'] = 'ja';
+           break;
     case 'korean' :
     case 'korean_utf-8' :
         $_CONF['iso_lang'] = 'ko';
         break;
-   	case 'norwegian' :
-   	case 'norwegian_utf-8' :
-   		$_CONF['iso_lang'] = 'no';
-   		break;
-   	case 'polish' :
-   	case 'polish_utf-8' :
-   		$_CONF['iso_lang'] = 'pl';
-   		break;
-   	case 'portuguese_brazil' :
-   	case 'portuguese_brazil_utf-8' :
-   		$_CONF['iso_lang'] = 'pt-btr';
-   		break;
-   	case 'portuguese' :
-   	case 'portuguese_utf-8' :
-   		$_CONF['iso_lang'] = 'pt';
-   		break;
-   	case 'romanian' :
-   	case 'romanian_utf-8' :
-   		$_CONF['iso_lang'] = 'ro';
-   		break;
-   	case 'russian' :
-   	case 'russian_utf-8' :
-   		$_CONF['iso_lang'] = 'ru';
-   		break;
-   	case 'slovak' :
-   	case 'slovak_utf-8' :
-   		$_CONF['iso_lang'] = 'sk';
-   		break;
-   	case 'slovenian' :
-   	case 'slovenian_utf-8' :
-   		$_CONF['iso_lang'] = 'sl';
-   		break;
+       case 'norwegian' :
+       case 'norwegian_utf-8' :
+           $_CONF['iso_lang'] = 'no';
+           break;
+       case 'polish' :
+       case 'polish_utf-8' :
+           $_CONF['iso_lang'] = 'pl';
+           break;
+       case 'portuguese_brazil' :
+       case 'portuguese_brazil_utf-8' :
+           $_CONF['iso_lang'] = 'pt-btr';
+           break;
+       case 'portuguese' :
+       case 'portuguese_utf-8' :
+           $_CONF['iso_lang'] = 'pt';
+           break;
+       case 'romanian' :
+       case 'romanian_utf-8' :
+           $_CONF['iso_lang'] = 'ro';
+           break;
+       case 'russian' :
+       case 'russian_utf-8' :
+           $_CONF['iso_lang'] = 'ru';
+           break;
+       case 'slovak' :
+       case 'slovak_utf-8' :
+           $_CONF['iso_lang'] = 'sk';
+           break;
+       case 'slovenian' :
+       case 'slovenian_utf-8' :
+           $_CONF['iso_lang'] = 'sl';
+           break;
     case 'spanish' :
     case 'spanish_utf-8' :
         $_CONF['iso_lang'] = 'es';
         break;
-   	case 'swedish' :
-   	case 'swedish_utf-8' :
-   		$_CONF['iso_lang'] = 'sv';
-   		break;
-   	case 'turkish' :
-   	case 'turkish_utf-8' :
-   		$_CONF['iso_lang'] = 'tr';
-   		break;
-   	case 'ukrainian' :
-   	case 'ukrainian_utf-8' :
-   		$_CONF['iso_lang'] = 'uk';
-   		break;
+       case 'swedish' :
+       case 'swedish_utf-8' :
+           $_CONF['iso_lang'] = 'sv';
+           break;
+       case 'turkish' :
+       case 'turkish_utf-8' :
+           $_CONF['iso_lang'] = 'tr';
+           break;
+       case 'ukrainian' :
+       case 'ukrainian_utf-8' :
+           $_CONF['iso_lang'] = 'uk';
+           break;
     default :
         $_CONF['iso_lang'] = 'en';
         break;
@@ -844,7 +844,8 @@ function COM_getThemes( $all = false )
 * <tr><td colspan="3">Footer</td></table>
 * </code>
 *
-* @param    string  $what       If 'none' then no left blocks are returned, if 'menu' (default) then right blocks are returned
+* @param    string  $what       If 'none' then no left blocks are returned, if
+*                               'menu' (default) then right blocks are returned
 * @param    string  $pagetitle  optional content for the page's <title>
 * @param    string  $headercode optional code to go into the page's <head>
 * @return   string              Formatted HTML containing the site header
@@ -886,7 +887,8 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     if ( isset($blockInterface['left'] )) {
         $currentURL = COM_getCurrentURL();
         if ( strpos($currentURL, $_CONF['site_admin_url']) === 0 ) {
-            if ( $blockInterface['left']['location'] == 'right' || $blockInterface['left']['location'] == 'left' ) {
+            if ( $blockInterface['left']['location'] == 'right' ||
+                 $blockInterface['left']['location'] == 'left' ) {
                 $theme_what = 'none';
             } else {
                 $theme_what = $what;
@@ -3861,7 +3863,7 @@ function COM_getMessage()
 *
 * @param    string  $message    Message text; may contain HTML
 * @param    string  $title      (optional) alternative block title
-* @param	string	$boolean	(optional) whether message should be persistent
+* @param    string    $boolean    (optional) whether message should be persistent
 * @param    string  $type       (optional) type of message to display
 * @return   string              HTML block with message
 *
@@ -3933,7 +3935,7 @@ function COM_showMessageText($message, $title = '', $persist = false, $type='')
 * @param    int     $msg        ID of message to show
 * @param    string  $plugin     Optional Name of plugin to lookup plugin defined message
 * @param    string  $title      (optional) alternative block title
-* @param	string	$boolean	(optional) whether message should be persistent
+* @param    string    $boolean    (optional) whether message should be persistent
 * @return   string              HTML block with message
 */
 function COM_showMessage($msg, $plugin = '', $title = '', $persist = false,$type='')
@@ -3980,9 +3982,9 @@ function COM_showMessageFromParameter()
     if (isset($_GET['msg'])) {
         $msg = COM_applyFilter($_GET['msg'], true);
         if ($msg > 0) {
-			$plugin = (isset($_GET['plugin'])) ? COM_applyFilter($_GET['plugin']) : '';
-			$title = (isset($_GET['title'])) ? COM_applyFilter($_GET['title']) : '';
-			$persist = (isset($_GET['persist'])) ? true : false;
+            $plugin = (isset($_GET['plugin'])) ? COM_applyFilter($_GET['plugin']) : '';
+            $title = (isset($_GET['title'])) ? COM_applyFilter($_GET['title']) : '';
+            $persist = (isset($_GET['persist'])) ? true : false;
             $retval .= COM_showMessage($msg, $plugin, $title, $persist,'info');
         }
     }
@@ -5340,7 +5342,7 @@ function COM_numberFormat( $number, $decimals=-1 )
     $ts = $_CONF['thousand_separator'];
     $ds = $_CONF['decimal_separator'];
 
-    return number_format( $number, $dc, $ds, $ts );
+    return @number_format( $number, $dc, $ds, $ts );
 }
 
 /**
@@ -5828,31 +5830,31 @@ function COM_getCharset()
 *
 */
 function COM_getEncodingt() {
-	global $_CONF, $LANG_CHARSET;
+    global $_CONF, $LANG_CHARSET;
 
-	static $encoding = null;
+    static $encoding = null;
 
     $valid_charsets = array('iso-8859-1','iso-8859-15','utf-8','cp866','cp1251','cp1252','koi8-r','big5','gb2312','big5-hkscs','shift_jis sjis','euc-jp');
 
-	if ($encoding === null) {
-		if (isset($LANG_CHARSET)) {
-			$encoding = $LANG_CHARSET;
-		} else if (isset($_CONF['default_charset'])) {
-			$encoding = $_CONF['default_charset'];
-		} else {
-			$encoding = 'iso-8859-1';
-		}
-	}
+    if ($encoding === null) {
+        if (isset($LANG_CHARSET)) {
+            $encoding = $LANG_CHARSET;
+        } else if (isset($_CONF['default_charset'])) {
+            $encoding = $_CONF['default_charset'];
+        } else {
+            $encoding = 'iso-8859-1';
+        }
+    }
 
-	$encoding = strtolower($encoding);
+    $encoding = strtolower($encoding);
 
-	if ( in_array($encoding,$valid_charsets) ) {
-	    return $encoding;
-	} else {
-	    return 'iso-8859-1';
-	}
+    if ( in_array($encoding,$valid_charsets) ) {
+        return $encoding;
+    } else {
+        return 'iso-8859-1';
+    }
 
-	return $encoding;
+    return $encoding;
 }
 
 /**
