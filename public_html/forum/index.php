@@ -402,6 +402,8 @@ if ($forum == 0) {
     	            $forumlisting->set_var ('moderator', '');
         	    }
            		$numForumsDisplayed ++;
+           		$busyforum = 0;
+           		$quietforum = 1;
             	if ($postCount > 0) {
             	    $B['subject'] = COM_truncate($B['subject'],40);
         	        if ($_FF_CONF['use_censor']) {
@@ -411,8 +413,12 @@ if ($forum == 0) {
     	                // Determine if there are new topics since last visit for this user.
                         $tcount = (int) DB_result(DB_query("SELECT COUNT(uid) FROM {$_TABLES['ff_log']} WHERE uid = ".(int) $uid." AND forum = ".(int) $B['forum_id']." AND time > 0"),0,0);
                         if ($topicCount > $tcount ) {
+                            $busyforum = 1;
+                            $quietforum = 0;
                 	        $folderimg = '<img src="'._ff_getImage('busyforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg111'].'" title="'.$LANG_GF02['msg111'].'"/>';
                 	    } else {
+                	        $busyforum = 0;
+                	        $quietforum = 1;
                     	    $folderimg = '<img src="'._ff_getImage('quietforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['quietforum'].'" title="'.$LANG_GF02['quietforum'].'"/>';
                     	}
 	                } else {
@@ -467,7 +473,9 @@ if ($forum == 0) {
         	                    'posts'         =>  $postCount,
 	                            'topic_id'      => $topicparent,
     	                        'lastpostid'    => $B['id'],
-        	                    'LANGGF01_LASTPOST' => $LANG_GF01['LASTPOST']
+        	                    'LANGGF01_LASTPOST' => $LANG_GF01['LASTPOST'],
+        	                    'quietforum'    => $quietforum,
+        	                    'busyforum'     => $busyforum,
         	    ));
                 $forumlisting->parse('frow', 'forumrows',true);
 			}
