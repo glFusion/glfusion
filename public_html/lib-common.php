@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | Common functions and startup code                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2014 by the following authors:                        |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -131,6 +131,13 @@ $config->initConfig();
 
 $_CONF = $config->get_config('Core');
 if ( $_CONF['cookiesecure']) @ini_set('session.cookie_secure','1');
+
+@date_default_timezone_set('America/Chicago');
+
+if (isset($_CONF['bb2_enabled']) && $_CONF['bb2_enabled']) {
+    require_once $_CONF['path_html'].'bad_behavior2/bad-behavior-glfusion.php';
+}
+
 $result = DB_query("SELECT * FROM {$_TABLES['vars']}");
 while ($row = DB_fetchArray($result) ) {
     $_VARS[$row['name']] = $row['value'];
@@ -282,16 +289,6 @@ $_PLUGIN_INFO = array();
 while ($A = DB_fetchArray($result)) {
     $_PLUGINS[] = $A['pi_name'];
     $_PLUGIN_INFO[$A['pi_name']] = $A['pi_version'];
-}
-
-/**
-* Check to see if the Bad Behavior2 Security Plugin is enabled, if yes
-* then include the necessary files.
-*
-*/
-
-if (in_array('bad_behavior2', $_PLUGINS)) {
-    require_once $_CONF['path_html'].'bad_behavior2/bad-behavior-glfusion.php';
 }
 
 /**
