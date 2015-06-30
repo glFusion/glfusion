@@ -1390,6 +1390,12 @@ function _sec_checkToken($ajax=0)
             } else if($tokendata['urlfor'] != $referCheck) {
                 COM_errorLog("CheckToken: Token failed - token URL/IP does not match referer URL/IP.");
                 COM_errorLog("Token URL: " . $tokendata['urlfor'] . " - REFERER URL: " . $_SERVER['HTTP_REFERER']);
+
+                if ( function_exists('bb2_ban') ) {
+                    COM_ErrorLog("Banning " . $REMOTE_ADDR . " due to token URL/IP does not match");
+                    bb2_ban($_SERVER['REMOTE_ADDR'],3);
+                }
+
                 $return = false;
             } else if($tokendata['expired'] != 0) {
                 COM_errorLog("CheckToken: Token failed - token has expired.");
@@ -1491,6 +1497,10 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
             } else if($tokendata['urlfor'] != $action) {
                 COM_errorLog("CheckTokenGeneral: Token failed - token action does not match referer action.");
                 COM_errorLog("Token Action: " . $tokendata['urlfor'] . " - ACTION: " . $action);
+
+                if ( function_exists('bb2_ban') ) {
+                    bb2_ban($_SERVER['REMOTE_ADDR'],3);
+                }
                 $return = false;
             } else {
                 $return = true; // Everything is OK
