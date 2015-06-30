@@ -1,9 +1,19 @@
 Please view this file on the master branch, on stable branches it's out of date.
 
 v 1.5.0 (unreleased)
+  - Fixed error where Static Pages comments did not show up in search.
+  - Fixed issue where editing a comment on a plugin would cause a 404 error on save.
+  - Fixed a search error that would trigger on certain search words.
+  - Forum Plugin: Fixed issue where forum name was passed via URL (not needed)
+  - Updated reCAPTCHA to support Google's latest API (v2)
+  - Modified Bad Behavior Plugin to be more efficient - uses less system resources.
+  - Modified Bad Behavior Plugin to support banning IPs both permanently and temporary
+  - Modified CAPTCHA to support automatic banning (for 24 hours) when 4 failed attempts.
+  - Fixed error where Static Pages comments did not show up in search.
+  - Fixed issue where editing a comment on a plugin would cause a 404 error on save.
+  - Fixed a search error that would trigger on certain search words.
   - Only show allowed HTML tags when postmode is HTML
   - Implemented plugin version dependency check - Lee
-  - Updated UIKIT to v2.20
   - Fixed issue with What's new block duplicating data
   - Disable exist check on auto tag upload
   - Implement og:image tag for stories
@@ -33,11 +43,6 @@ v 1.5.0 (unreleased)
   - HTML filter now allows you to specific both element and attributes
   - Privacy policy and Terms of use now implemented as static pages
   - Support for PHP v5.3+ unlimited post size
-
-v 1.4.4 (unreleased)
-  - Fixed error where Static Pages comments did not show up in search.
-  - Fixed issue where editing a comment on a plugin would cause a 404 error on save.
-  - Fixed a search error that would trigger on certain search words.
 
 v 1.4.3 (Nov 9, 2014)
   - CAPTCHA Plugin - Added mathmatical captcha
