@@ -5,7 +5,7 @@
   <form method="post" action="configuration.php" name="group">
     <input type="hidden" value="{open_group}" name="conf_group" />
     <input type="hidden" value="" name="subgroup" />
-    <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
+    <input type="hidden" name="{sec_token_name}" value="{sec_token}" />
   </form>
   <table>
     <tr>
