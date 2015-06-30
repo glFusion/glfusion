@@ -673,9 +673,9 @@ function plugin_dopluginsearch_comment_staticpages($query, $datestart, $dateend,
     $sql =  "SELECT c.sid AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
     $sql .= "CONCAT('/page.php?page=', c.sid,'#comments') AS url ";
     $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
-    $sql .= "LEFT JOIN {$_TABLES['staticpage']} s ON c.cid=s.sp_id ";
+    $sql .= "LEFT JOIN {$_TABLES['staticpage']} s ON c.sid=s.sp_id ";
     $sql .= "WHERE (c.type='staticpages') AND (u.uid = c.uid) ";
-    $sql .= COM_getPermSQL('AND') . COM_getLangSQL('sp_id', 'AND', 's') . ' ';
+    $sql .= COM_getPermSQL('AND',0,2,'s') . COM_getLangSQL('sp_id', 'AND', 's') . ' ';
 
     if (!empty($author)) {
         $sql .= "AND (c.uid = ".(int) $author.") ";
