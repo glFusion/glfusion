@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Upgrade routines                                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2014 by the following authors:                        |
+// | Copyright (C) 2005-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -104,6 +104,14 @@ function captcha_upgrade()
             if ( $_CP_CONF['gfxDriver'] == 4 ) {
                 $c->set('gfxDriver',6,'captcha');
             }
+        case '3.4.0' :
+            // no changes needed
+        case '3.4.1' :
+            // need to add column to table
+            // ALTER TABLE `gl_cp_sessions` ADD `ip` VARCHAR(16) NOT NULL ;
+            $sql = "ALTER TABLE {$_TABLES['cp_sessions']} ADD `ip` VARCHAR(16) NOT NULL";
+            DB_query($sql,1);
+
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_CP_CONF['pi_version']."',pi_gl_version='".$_CP_CONF['gl_version']."' WHERE pi_name='captcha' LIMIT 1");
             break;

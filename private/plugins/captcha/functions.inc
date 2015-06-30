@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion integration functions.                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2014 by the following authors:                        |
+// | Copyright (C) 2002-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -162,6 +162,7 @@ function plugin_templatesetvars_captcha($ctype, &$template)
             }
             break;
         case 'registration' :
+        case 'loginform' :
             if ( $_CP_CONF['enable_registration'] != 1 ) {
                 $template->set_var('captcha', '');
                 return;
@@ -317,6 +318,7 @@ function plugin_itemPreSave_captcha( $ctype='registration', $content='' ) {
             }
             break;
         case 'registration' :
+        case 'loginform' :
             if ( $_CP_CONF['enable_registration'] != 1 ) {
                 return '';
             }
@@ -411,11 +413,14 @@ function CAPTCHA_sid() {
  * @return  string   session id
  */
 function CAPTCHA_getSession($ctype = '') {
-    global $_TABLES;
+    global $_TABLES, $REMOTE_ADDR;
+
+    $counter = 0;
 
     if ( $ctype == 'token' ) {
         if ( isset($_POST['csidt']) ) {
             $csid = COM_applyFilter($_POST['csidt']);
+            $counter = (int) DB_getItem($_TABLES['cp_sessions'],'counter','session_id="'.DB_escapeString($csid).'"');
         } else {
             $csid    = CAPTCHA_sid();
         }
@@ -423,22 +428,27 @@ function CAPTCHA_getSession($ctype = '') {
         // if (csid) is in POST array, this is a reuse of an old session, else create a new one
         if ( isset($_POST['csid']) ) {
             $csid = COM_applyFilter($_POST['csid']);
+            $counter = (int) DB_getItem($_TABLES['cp_sessions'],'counter','session_id="'.DB_escapeString($csid).'"');
         } else {
-            $csid    = CAPTCHA_sid();
+            // check to see if there is one for this IP?
+            $csid = DB_getItem($_TABLES['cp_sessions'],'session_id',"{$_TABLES['cp_sessions']}.ip='".DB_escapeString($REMOTE_ADDR)."'");
+            if ( $csid == '' || $csid == NULL ) {
+                $csid    = CAPTCHA_sid();
+            } else {
+                $counter = (int) DB_getItem($_TABLES['cp_sessions'],'counter','session_id="'.DB_escapeString($csid).'"');
+            }
         }
     }
 
     // set the current time
     $time    = time();
 
-    // reset the number of tries
-    $counter = 0;
-
     // this will be filled in by the CAPTCHA
     $validation = '';
-
+    $counter++;
+    $ip = $REMOTE_ADDR;
     // update the session table
-    DB_save($_TABLES['cp_sessions'],"session_id,cptime,validation,counter","'".DB_escapeString($csid)."','$time','','0'");
+    DB_save($_TABLES['cp_sessions'],"session_id,cptime,validation,counter,ip","'".DB_escapeString($csid)."','$time','',$counter,'$ip'");
 
     // return the CAPTCHA session identifier
     return $csid;
@@ -451,7 +461,7 @@ function CAPTCHA_getSession($ctype = '') {
  */
 function CAPTCHA_expireSessions() {
     global $_CP_CONF, $_TABLES;
-    $oldSessions = time() - ($_CP_CONF['expire']+900);
+    $oldSessions = time() - ($_CP_CONF['expire']+3600);
     DB_query("DELETE FROM {$_TABLES['cp_sessions']} WHERE cptime < " . $oldSessions,1);
     return;
 }
@@ -478,6 +488,7 @@ function CAPTCHA_getHTML($csid, $ctype='general' ) {
             $T->set_file('page', 'captcha_story.thtml');
             break;
         case 'registration' :
+        case 'loginform' :
             $T->set_file('page', 'captcha_registration.thtml');
             break;
         case 'contact' :
@@ -538,6 +549,36 @@ function CAPTCHA_getHTML($csid, $ctype='general' ) {
     return $retval;
 }
 
+function recaptcha_get_html($pkey,$other)
+{
+    global $_CONF;
+    $retval = '';
+    $retval .= ' <form action="?" method="post">'
+             . '<div class="g-recaptcha" data-sitekey="'
+             . $pkey . '"></div>'
+             . '<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl='.$_CONF['iso_lang'].'">'
+             . '</script>'
+             . '<br/>'
+             . ' </form>';
+
+    return $retval;
+
+}
+
+function CAPTCHA_checkRetries( $csid )
+{
+    global $_CONF, $_TABLES;
+
+    $counter = DB_getItem($_TABLES['cp_sessions'],'counter',"session_id='" . DB_escapeString($csid) . "'");
+
+    if ( $counter > 4 ) { // this allowed me to try 5 times.
+        if ( function_exists('bb2_ban') ) {
+COM_errorLog("CAPTCHA Debug: In checkRetries - banning for too many failed attempts: ". $_SERVER['REMOTE_ADDR']);
+            bb2_ban($_SERVER['REMOTE_ADDR'],2);
+        }
+    }
+}
+
 /**
  * Verify user's response to CAPTCHA challenge
  *
@@ -557,26 +598,46 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
 
     if ( isset($_POST['validation_field']) && !empty($_POST['validation_field']) ) {
         CAPTCHA_errorLog("CAPTCHA: Honey Pot Field was populated in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
+        // immediate ban!
+        if ( function_exists('bb2_ban') ) {
+            bb2_ban($_SERVER['REMOTE_ADDR'],2);
+        }
         return array(0,$LANG_CP00['entry_error']);
     }
 
-    if ( $_CP_CONF['gfxDriver'] == 3 ) {
-        $resp = recaptcha_check_answer ($_CP_CONF['privatekey'],
-                                        $_SERVER["REMOTE_ADDR"],
-                                        $_POST["recaptcha_challenge_field"],
-                                        $_POST["recaptcha_response_field"]);
+    // check the session data prior to checking the external items
 
-        if ($resp->is_valid) {
+    $csid_name = 'csid';
+    if ( $ctype == 'token' ) {
+        $csid_name = 'csidt';
+    }
+
+    // if the csid is not set - an attempt to bypass
+    if ( !isset($_POST[$csid_name]) ) {
+        // immediate ban!
+        if ( function_exists('bb2_ban') ) {
+//COM_errorLog("CAPTCHA DEBUG: Immediate ban - detected attempt to bypass captcha entry: " . $_SERVER['REMOTE_ADDR']);
+            bb2_ban($_SERVER['REMOTE_ADDR'],2);
+        }
+        CAPTCHA_errorLog("CAPTCHA: Detected an attempt to bypass CAPTCHA (no session id) in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
+        $msg = $LANG_CP00['bypass_error_blank'];
+        $rc = 0;
+        return ( array( $rc, $msg ) );
+    } else {
+        $csid = COM_applyFilter($_POST[$csid_name]);
+    }
+
+    if ( $_CP_CONF['gfxDriver'] == 3 ) {
+        $resp = recaptcha_check_answer ();
+
+        if ($resp != NULL && $resp->success) {
             return array(1,'');
         } else {
             # set the error code so that we can display it
-            if ( $resp->error == 'incorrect-captcha-sol' ) {
-                $error = $LANG_CP00['entry_error'];
-            } else {
-                $error = $resp->error;
-            }
+            $error = $LANG_CP00['entry_error'];
             CAPTCHA_errorLog("CAPTCHA: An invalid reCAPTCHA string was entered in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
 
+            CAPTCHA_checkRetries( $csid );
             return array(0,$error);
         }
     }
@@ -589,29 +650,20 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
             # set the error code so that we can display it
             $error = $LANG_CP00['ayah_error'];
             CAPTCHA_errorLog("CAPTCHA: An invalid AYAH score was provided in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
+            CAPTCHA_checkRetries( $csid );
             return array(0,$error);
         }
     }
 
-    $csid_name = 'csid';
-    if ( $ctype == 'token' ) {
-        $csid_name = 'csidt';
-    }
-
-    if ( !isset($_POST[$csid_name]) || $response == '' ) {
-        if ( !isset($_POST[$csid_name]) ) {
-            CAPTCHA_errorLog("CAPTCHA: Detected an attempt to bypass CAPTCHA (no session id) in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
-        } else {
-            CAPTCHA_errorLog("CAPTCHA: Detected an attempt to bypass CAPTCHA (blank input string) in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
-        }
+    if ( $response == '' ) {
+        CAPTCHA_errorLog("CAPTCHA: Detected an attempt to bypass CAPTCHA (blank input string) in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
         $msg = $LANG_CP00['bypass_error_blank'];
         $rc = 0;
     } else {
-        $csid = COM_applyFilter($_POST[$csid_name]);
         // check the time
         $cTime = DB_getItem($_TABLES['cp_sessions'],'cptime',"session_id='" . DB_escapeString($csid) . "'");
         $now = time();
-        if ( $cTime == '' || $cTime+$_CP_CONF['expire'] < $now ) {
+        if ( $cTime == '' || $cTime+$_CP_CONF['expire']+3600 < $now ) {
             CAPTCHA_errorLog("CAPTCHA: Detected an attempt to use an expired CAPTCHA in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
             $msg = $LANG_CP00['session_expired'];
             $rc = 0;
@@ -620,6 +672,7 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
         $validationString = DB_getItem($_TABLES['cp_sessions'],'validation',"session_id='" . DB_escapeString($csid) . "'");
         if ( $validationString == '' ) {
            // no active session was found
+            CAPTCHA_checkRetries( $csid );
             CAPTCHA_errorLog("CAPTCHA: Detected an attempt to use old CAPTCHA Session in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
             $msg = $LANG_CP00['bypass_error_blank'];
             $rc = 0;
@@ -629,6 +682,7 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
             $msg = $LANG_CP00['entry_error'];
             CAPTCHA_errorLog("CAPTCHA: An invalid CAPTCHA string was entered in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
             $rc = 0;
+            CAPTCHA_checkRetries( $csid );
             return ( array( $rc, $msg ) );
         }
         if ( $validationString == $response && $response != '' ) {
@@ -638,6 +692,24 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
         }
     }
     return ( array( $rc, $msg ) );
+}
+
+function recaptcha_check_answer()
+{
+    global $_CP_CONF;
+
+    $rc = 0;
+
+    // The response from reCAPTCHA
+    $resp = null;
+    // The error code from reCAPTCHA, if any
+    $error = null;
+    $reCaptcha = new ReCaptcha($_CP_CONF['privatekey']);
+    // Was there a reCAPTCHA response?
+    if ($_POST["g-recaptcha-response"]) {
+        $resp = $reCaptcha->verifyResponse($_SERVER["REMOTE_ADDR"],$_POST["g-recaptcha-response"]);
+    }
+    return $resp;
 }
 
 /**

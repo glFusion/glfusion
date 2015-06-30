@@ -38,6 +38,7 @@ CREATE TABLE {$_TABLES['cp_sessions']} (
   `cptime`  INT(11) NOT NULL default 0,
   `validation` varchar(40) NOT NULL default '',
   `counter`    TINYINT(4) NOT NULL default 0,
+  `ip` VARCHAR(16) NOT NULL default '',
   PRIMARY KEY (`session_id`)
 ) ENGINE=MyISAM
 ";
