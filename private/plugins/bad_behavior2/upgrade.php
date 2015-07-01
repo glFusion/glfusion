@@ -72,7 +72,26 @@ function bad_behavior2_upgrade ()
                 UNIQUE ip (ip),
                 INDEX type (type),
                 INDEX timestamp (timestamp) ) ENGINE=MyISAM;";
-            DB_query($sql);
+            DB_query($sql,1);
+
+            require_once $_CONF['path_system'] . 'classes/config.class.php';
+            $c = config::get_instance();
+
+            // Subgroup: Spam / Bot Protection
+            $c->add('sg_spam', NULL, 'subgroup', 8, 0, NULL, 0, TRUE);
+            $c->add('fs_spam_config', NULL, 'fieldset', 8, 1, NULL, 0, TRUE);
+            $c->add('bb2_enabled',1,'select',8,1,0,10,TRUE);
+            $c->add('bb2_ban_enabled',0,'select',8,1,0,15,TRUE);
+            $c->add('bb2_display_stats',1,'select',8,1,0,20,TRUE);
+            $c->add('bb2_strict',0,'select',8,1,0,30,TRUE);
+            $c->add('bb2_verbose',0,'select',8,1,0,40,TRUE);
+            $c->add('bb2_logging',0,'select',8,1,0,50,TRUE);
+            $c->add('bb2_httpbl_key','','text',8,1,NULL,60,TRUE);
+            $c->add('bb2_httpbl_threat',25,'text',8,1,NULL,70,TRUE);
+            $c->add('bb2_httpbl_maxage',30,'text',8,1,NULL,80,TRUE);
+            $c->add('bb2_offsite_forms',0,'select',8,1,0,90,TRUE);
+            $c->add('bb2_eu_cookie',0,'select',8,1,0,100,TRUE);
+
             break;
         default:
             break;
