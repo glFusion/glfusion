@@ -1392,7 +1392,6 @@ function _sec_checkToken($ajax=0)
                 COM_errorLog("Token URL: " . $tokendata['urlfor'] . " - REFERER URL: " . $_SERVER['HTTP_REFERER']);
 
                 if ( function_exists('bb2_ban') ) {
-                    COM_ErrorLog("Banning " . $REMOTE_ADDR . " due to token URL/IP does not match");
                     bb2_ban($_SERVER['REMOTE_ADDR'],3);
                 }
 

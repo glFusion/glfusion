@@ -1166,6 +1166,7 @@ function glfusion_150()
     $c->add('sg_spam', NULL, 'subgroup', 8, 0, NULL, 0, TRUE);
     $c->add('fs_spam_config', NULL, 'fieldset', 8, 1, NULL, 0, TRUE);
     $c->add('bb2_enabled',1,'select',8,1,0,10,TRUE);
+    $c->add('bb2_ban_enabled',0,'select',8,1,0,15,TRUE);
     $c->add('bb2_display_stats',1,'select',8,1,0,20,TRUE);
     $c->add('bb2_strict',0,'select',8,1,0,30,TRUE);
     $c->add('bb2_verbose',0,'select',8,1,0,40,TRUE);

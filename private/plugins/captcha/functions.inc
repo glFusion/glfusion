@@ -573,7 +573,6 @@ function CAPTCHA_checkRetries( $csid )
 
     if ( $counter > 4 ) { // this allowed me to try 5 times.
         if ( function_exists('bb2_ban') ) {
-COM_errorLog("CAPTCHA Debug: In checkRetries - banning for too many failed attempts: ". $_SERVER['REMOTE_ADDR']);
             bb2_ban($_SERVER['REMOTE_ADDR'],2);
         }
     }
@@ -616,7 +615,6 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
     if ( !isset($_POST[$csid_name]) ) {
         // immediate ban!
         if ( function_exists('bb2_ban') ) {
-//COM_errorLog("CAPTCHA DEBUG: Immediate ban - detected attempt to bypass captcha entry: " . $_SERVER['REMOTE_ADDR']);
             bb2_ban($_SERVER['REMOTE_ADDR'],2);
         }
         CAPTCHA_errorLog("CAPTCHA: Detected an attempt to bypass CAPTCHA (no session id) in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
