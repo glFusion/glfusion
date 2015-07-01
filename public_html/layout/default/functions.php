@@ -48,7 +48,7 @@ $_BLOCK_TEMPLATE['forum_menu'] = 'blockheader-left.thtml,blockfooter-left.thtml'
 $outputHandle = outputHandler::getInstance();
 
 // must load the jquery ui library we want to use.
-$outputHandle->addLinkStyle($_CONF['layout_url'].'/css/ui-lightness/jquery-ui-1.10.4.min.css');
+$outputHandle->addLinkStyle($_CONF['layout_url'].'/css/ui-lightness/jquery-ui-1.10.4.css');
 
 function theme_getToolTipStyle()
 {
