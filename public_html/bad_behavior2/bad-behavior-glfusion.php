@@ -39,18 +39,18 @@ define('BB2_CWD', dirname(__FILE__));
 // Settings you can adjust for Bad Behavior.
 // Most of these are unused in non-database mode.
 $bb2_settings_defaults = array(
-	'log_table'     => $_DB_table_prefix . 'bad_behavior2',
-	'ban_table'     => $_DB_table_prefix . 'bad_behavior2_ban',
-	'display_stats' => $_CONF['bb2_display_stats'],
-	'strict'        => $_CONF['bb2_strict'],
-	'verbose'       => $_CONF['bb2_verbose'],
-	'logging'       => $_CONF['bb2_logging'],
-	'httpbl_key'    => $_CONF['bb2_httpbl_key'],
-	'httpbl_threat' => $_CONF['bb2_httpbl_threat'],
-	'httpbl_maxage' => $_CONF['bb2_httpbl_maxage'],
-	'offsite_forms' => $_CONF['bb2_offsite_forms'],
-	'eu_cookie'     => $_CONF['bb2_eu_cookie'],
-	'secure_cookie' => $_CONF['cookiesecure'],
+    'log_table'     => $_DB_table_prefix . 'bad_behavior2',
+    'ban_table'     => $_DB_table_prefix . 'bad_behavior2_ban',
+    'display_stats' => $_CONF['bb2_display_stats'],
+    'strict'        => $_CONF['bb2_strict'],
+    'verbose'       => $_CONF['bb2_verbose'],
+    'logging'       => $_CONF['bb2_logging'],
+    'httpbl_key'    => $_CONF['bb2_httpbl_key'],
+    'httpbl_threat' => $_CONF['bb2_httpbl_threat'],
+    'httpbl_maxage' => $_CONF['bb2_httpbl_maxage'],
+    'offsite_forms' => $_CONF['bb2_offsite_forms'],
+    'eu_cookie'     => $_CONF['bb2_eu_cookie'],
+    'secure_cookie' => $_CONF['cookiesecure'],
 );
 
 // Bad Behavior callback functions.
@@ -94,7 +94,7 @@ function bb2_db_query($query) {
 
     $result = DB_query($query,1);
     if ( $result === false ) {
-	    return FALSE;
+        return FALSE;
     }
     return $result;
 }
@@ -116,45 +116,39 @@ function bb2_email() {
 // retrieve settings from database
 // Settings are hard-coded for non-database use
 function bb2_read_settings() {
-    global $_TABLES, $bb2_settings_defaults;
-
-    static $isInstalled   = null;
-
-    if ($isInstalled === null) {
-        $isInstalled = DB_getItem($_TABLES['vars'],'value','name="bb2_installed"');
-    }
+    global $_TABLES, $_CONF, $bb2_settings_defaults;
 
     return array('log_table'      => $bb2_settings_defaults['log_table'],
                  'ban_table'      => $bb2_settings_defaults['ban_table'],
-			     'display_stats'  => $bb2_settings_defaults['display_stats'],
-			     'verbose'        => $bb2_settings_defaults['verbose'],
-			     'logging'        => $bb2_settings_defaults['logging'],
-			     'httpbl_key'     => $bb2_settings_defaults['httpbl_key'],
-			     'httpbl_threat'  => $bb2_settings_defaults['httpbl_threat'],
-			     'httpbl_maxage'  => $bb2_settings_defaults['httpbl_maxage'],
-			     'strict'         => $bb2_settings_defaults['strict'],
-			     'offsite_forms'  => $bb2_settings_defaults['offsite_forms'],
-			     'eu_cookie'      => $bb2_settings_defaults['eu_cookie'],
-			     'secure_cookie'  => $bb2_settings_defaults['secure_cookie'],
-			     'is_installed'   => $isInstalled );
+                 'display_stats' => $_CONF['bb2_display_stats'],
+                 'strict'        => $_CONF['bb2_strict'],
+                 'verbose'       => $_CONF['bb2_verbose'],
+                 'logging'       => $_CONF['bb2_logging'],
+                 'httpbl_key'    => $_CONF['bb2_httpbl_key'],
+                 'httpbl_threat' => $_CONF['bb2_httpbl_threat'],
+                 'httpbl_maxage' => $_CONF['bb2_httpbl_maxage'],
+                 'offsite_forms' => $_CONF['bb2_offsite_forms'],
+                 'eu_cookie'     => $_CONF['bb2_eu_cookie'],
+                 'secure_cookie' => $_CONF['cookiesecure'],
+                 'is_installed'  => true);
 }
 
 // write settings to database
 function bb2_write_settings($settings) {
    global $_TABLES;
 
-   DB_save($_TABLES['vars'],"name,value","'bb2_installed','{$settings['is_installed']}'");
-
    return true;
 }
 
 // installation
 function bb2_install() {
+    return;
+
     $settings = bb2_read_settings();
     if( $settings['is_installed'] == false ) {
-	    bb2_db_query(bb2_table_structure($settings['log_table']));
-	    $settings['is_installed'] = true;
-	    bb2_write_settings( $settings );
+        bb2_db_query(bb2_table_structure($settings['log_table']));
+        $settings['is_installed'] = true;
+        bb2_write_settings( $settings );
     }
 }
 

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Auto Installer module                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2014 by the following authors:                        |
+// | Copyright (C) 2009-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -33,7 +33,9 @@ if (!defined ('GVERSION')) {
 
 global $_DB_dbms;
 
+require_once $_CONF['path'].'plugins/bad_behavior2/functions.inc';
 require_once $_CONF['path'].'plugins/bad_behavior2/bad_behavior2.php';
+require_once $_CONF['path'].'plugins/bad_behavior2/sql/'.$_DB_dbms.'_install.php';
 
 // +--------------------------------------------------------------------------+
 // | Plugin installation options                                              |
@@ -46,8 +48,11 @@ $INSTALL_plugin['bad_behavior2'] = array(
         'ver' => $_BB2_CONF['pi_version'], 'gl_ver' => $_BB2_CONF['gl_version'],
         'url' => $_BB2_CONF['pi_url'], 'display' => $_BB2_CONF['pi_display_name']),
 
-  array('type' => 'group', 'group' => 'Bad Behavior2 Admin', 'desc' => 'Users in this group can administer the Bad Behavior2 plugin',
+    array('type' => 'group', 'group' => 'Bad Behavior2 Admin', 'desc' => 'Users in this group can administer the Bad Behavior2 plugin',
         'variable' => 'admin_group_id', 'addroot' => true, 'admin' => true),
+
+    array('type' => 'table', 'table' => $_TABLES['bad_behavior2'], 'sql' => $_SQL['bad_behavior2']),
+    array('type' => 'table', 'table' => $_TABLES['bad_behavior2_ban'], 'sql' => $_SQL['bad_behavior2_ban']),
 );
 
 
@@ -77,6 +82,21 @@ function plugin_install_bad_behavior2()
     return true;
 }
 
+/**
+* Loads the configuration records for the Online Config Manager
+*
+* @return   boolean     true = proceed with install, false = an error occured
+*
+*/
+function plugin_load_configuration_bad_behavior2()
+{
+    global $_CONF;
+
+    require_once $_CONF['path'].'plugins/bad_behavior2/install_defaults.php';
+
+    return plugin_initconfig_bad_behavior2();
+}
+
 
 /**
 * Automatic uninstall function for plugins
@@ -92,9 +112,24 @@ function plugin_install_bad_behavior2()
 */
 function plugin_autouninstall_bad_behavior2 ()
 {
+    $c = config::get_instance();
+    $c->del('sg_spam', 'Core');
+    $c->del('fs_spam_config', 'Core');
+    $c->del('bb2_enabled','Core');
+    $c->del('bb2_ban_enabled','Core');
+    $c->del('bb2_display_stats','Core');
+    $c->del('bb2_strict','Core');
+    $c->del('bb2_verbose','Core');
+    $c->del('bb2_logging','Core');
+    $c->del('bb2_httpbl_key','Core');
+    $c->del('bb2_httpbl_threat','Core');
+    $c->del('bb2_httpbl_maxage','Core');
+    $c->del('bb2_offsite_forms','Core');
+    $c->del('bb2_eu_cookie','Core');
+
     $out = array (
         /* give the name of the tables, without $_TABLES[] */
-        'tables' => array(),
+        'tables' => array('bad_behavior2','bad_behavior2_ban'),
         /* give the full name of the group, as in the db */
         'groups' => array('Bad Behavior2 Admin'),
         /* give the full name of the feature, as in the db */
