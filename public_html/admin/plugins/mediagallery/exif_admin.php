@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | select which exif/iptc tags admin cares about                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2014 by the following authors:                        |
+// | Copyright (C) 2005-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+

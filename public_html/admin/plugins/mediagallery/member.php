@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | Edit Media Gallery Member Albums defaults.                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2014 by the following authors:                        |
+// | Copyright (C) 2005-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+

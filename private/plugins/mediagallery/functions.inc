@@ -4,9 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | functions.inc                                                            |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2013 by the following authors:                        |
+// | Copyright (C) 2002-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -561,6 +559,7 @@ function plugin_getheaderjs_mediagallery()
     $js[] = $_MG_CONF['path_html'] . 'js/mediagallery.js';
     if ( !isset($_SYSTEM['disable_mootools']) || $_SYSTEM['disable_mootools'] == false ) {
         $js[] = $_MG_CONF['path_html'] . 'js/slideshow.js';
+        $js[] = $_MG_CONF['path_html'] . 'js/slimbox.js';
     }
 	return ($js);
 }

@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Displays the PHP configuration screen to user                            |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2013 by the following authors:                        |
+// | Copyright (C) 2002-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+

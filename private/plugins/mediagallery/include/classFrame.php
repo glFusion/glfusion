@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Image frames (borders) routines                                          |
 // +--------------------------------------------------------------------------+
-// | $Id:: classFrame.php 3082 2008-09-09 01:31:30Z mevans0263               $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2006-2013 by the following authors:                        |
+// | Copyright (C) 2006-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |

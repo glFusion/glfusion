@@ -6,9 +6,7 @@
 // |                                                                          |
 // | Global album edit/perm administration routines                           |
 // +--------------------------------------------------------------------------+
-// | $Id:: global.php 3070 2008-09-07 02:40:49Z mevans0263                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2013 by the following authors:                        |
+// | Copyright (C) 2002-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
