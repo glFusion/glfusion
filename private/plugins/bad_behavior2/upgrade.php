@@ -38,6 +38,8 @@ function bad_behavior2_upgrade ()
 {
     global $_TABLES, $_CONF, $_BB2_CONF;
 
+    $sql = '';
+
     $currentVersion = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='bad_behavior2'");
 
     switch( $currentVersion ) {
