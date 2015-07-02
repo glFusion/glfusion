@@ -6,7 +6,7 @@ var message;
 function loadEditor(id) {
     var instance = CKEDITOR.replace( id, {
         toolbar: 'basic',
-        contentsCss: '{site_url}/css.php?t={theme}',
+        contentsCss: '{layout_url}/style.cache.css',
         bodyClass: 'comment',
         removePlugins: 'elementspath',
         resize_enabled: false,

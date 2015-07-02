@@ -1,12 +1,12 @@
 <script type="text/javascript" src="{site_url}/ckeditor/ckeditor.js" ></script >
 <script type="text/javascript" >
 var site_url = "{site_url}";
-var comment_text;
+var shortmsg;
 
 function loadEditor(id) {
     var instance = CKEDITOR.replace( id, {
         toolbar: 'basic',
-        contentsCss: '{layout_url}/style.cache.css',
+        contentsCss: '{site_url}/css.php?t={theme}',
         bodyClass: 'comment',
         removePlugins: 'elementspath',
         resize_enabled: false,
@@ -16,10 +16,10 @@ function loadEditor(id) {
 }
 
 window.onload = function() {
-    comment_text = loadEditor('comment_text');
+    shortmsg = loadEditor('shortmsg');
 };
 function won (id) {
-    comment_text = loadEditor('comment_text');
+    shortmsg = loadEditor('shortmsg');
 }
 function woff (id) {
     comment_text.destroy();

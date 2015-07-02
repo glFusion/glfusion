@@ -6,7 +6,7 @@
     function loadEditor(id) {
         var instance = CKEDITOR.replace( id, {
                 allowedContent: true,
-                contentsCss: '{site_url}/css.php?t={theme}',
+                contentsCss: '{layout_url}/style.cache.css',
                 extraPlugins: 'mediagallery,youtube2',
                 {styleset}
                 height: 500,
