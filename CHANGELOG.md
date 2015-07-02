@@ -1,9 +1,6 @@
-Please view this file on the master branch, on stable branches it's out of date.
+Please view this file on the master branch, on other branches it's out of date.
 
 v 1.5.0 (unreleased)
-  - Fixed error where Static Pages comments did not show up in search.
-  - Fixed issue where editing a comment on a plugin would cause a 404 error on save.
-  - Fixed a search error that would trigger on certain search words.
   - Forum Plugin: Fixed issue where forum name was passed via URL (not needed)
   - Updated reCAPTCHA to support Google's latest API (v2)
   - Modified Bad Behavior Plugin to be more efficient - uses less system resources.
