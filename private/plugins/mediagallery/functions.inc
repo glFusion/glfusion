@@ -519,18 +519,32 @@ function plugin_getadminoption_mediagallery()
 
 function plugin_getheadercss_mediagallery()
 {
-    global $_CONF, $_MG_CONF, $_USER, $swfjsinclude,$themeStyle;
+    global $_CONF, $_MG_CONF, $_USER, $_SYSTEM, $swfjsinclude,$themeStyle;
 
     $styles = array();
 
     if ( @file_exists($_CONF['path_layout'].'plugins/mediagallery/style.css') ) {
         $styleFile = $_CONF['path_layout'].'plugins/mediagallery/style.css';
+        if ( !isset($_SYSTEM['disable_mootools']) || $_SYSTEM['disable_mootools'] == false ) {
+            $lightboxFile = $_CONF['path_layout'] . 'mediagallery/lightbox.css';
+        	$styles[] = $lightboxFile;
+        }
     } else if ( $_MG_CONF['template_path'] == $_CONF['path'] . 'plugins/mediagallery/templates' ) {
 	    $styleFile = $_MG_CONF['path_html'] . 'style.css';
+        if ( !isset($_SYSTEM['disable_mootools']) || $_SYSTEM['disable_mootools'] == false ) {
+            $lightboxFile = $_MG_CONF['path_html'] . 'lightbox.css';
+        	$styles[] = $lightboxFile;
+        }
+
 	} else {
-		$styleFile = $_CONF['path_layout'] . '/mediagallery/style.css';
+		$styleFile = $_CONF['path_layout'] . 'mediagallery/style.css';
+        if ( !isset($_SYSTEM['disable_mootools']) || $_SYSTEM['disable_mootools'] == false ) {
+            $lightboxFile = $_CONF['path_layout'] . 'mediagallery/lightbox.css';
+        	$styles[] = $lightboxFile;
+        }
 	}
 	$styles[] = $styleFile;
+
 
     // check for random skin css
     $cacheInstance = 'mgrs' . $_MG_CONF['random_skin'] . '__' . $_USER['theme'];
