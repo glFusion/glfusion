@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Controls the UI and database for configuration settings                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2014 by the following authors:                        |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -696,8 +696,17 @@ class config {
         if ($changes != null AND $changes !== array()) {
             $display = '<ul style="margin-top:5px;">';
             if ( is_array($changes) ) {
-                foreach ($changes as $param_name => $success)
-                    $display .= '<li>' . $LANG_confignames['Core'][$param_name] . '</li>';
+                foreach ($changes as $group => $item ) {
+                    if ( is_array($item) ) {
+                        foreach ($item as $param_name => $value ) {
+                            if ( isset($LANG_confignames[$group][$param_name]) ) {
+                                $display .= '<li>' . $LANG_confignames[$group][$param_name] . '</li>';
+                            } else {
+                                $display .= '<li>' . $param_name . '</li>';
+                            }
+                        }
+                    }
+                }
                 $display .= '</ul>';
             }
             return $display;
@@ -947,7 +956,7 @@ class config {
                     }
                     if ($change_array[$param_name] != $param_value) {
                         $this->set($param_name, $change_array[$param_name], $group);
-                        $success_array[$param_name] = true;
+                        $success_array[$group][$param_name] = true;
                     }
                 }
             }
