@@ -32,7 +32,7 @@ if (!defined ('GVERSION')) {
 
 $LANG_CHARSET = 'utf-8';
 
-$LANG_LOCALE  = 'fi_FI';
+$LANG_LOCALE = 'fi_FI';
 
 ###############################################################################
 # Array Format:
@@ -242,7 +242,8 @@ $LANG01 = array(
     'unsubscribe' => 'Unsubscribe',
     'view_online' => 'Click here %s to view online',
     'no_new_items' => 'No New Items',
-    'max_execution_time' => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.'
+    'max_execution_time' => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.',
+    'allowed_html' => 'Allowed HTML:'
 );
 
 ###############################################################################
@@ -485,7 +486,12 @@ $LANG04 = array(
     185 => 'There is a local account with the same email address as your Facebook eMail. Would you like to merge these accounts?',
     186 => 'If you do not wish to merge the accounts, please select the Cancel button below.',
     187 => 'Enter the password above for the local account and hit the Merge button.',
-    188 => 'Merge'
+    188 => 'Merge',
+    189 => 'Forgot Password',
+    190 => 'You have exceeded the allowed number of attempts to enter the password for merging accounts',
+    191 => 'Local Account Password',
+    192 => 'Merge Remote Account with Existing Local Account',
+    193 => 'Note: If you merge a remote account to an existing local account, the preferences for the local user will take priority.'
 );
 
 ###############################################################################
@@ -965,7 +971,9 @@ $LANG24 = array(
     89 => 'Oletko varma ett&auml; haluat poistaa t&auml;m&auml;n jutun?',
     90 => 'Moderoi Juttua',
     91 => 'Moderoi Jutun Vedosta',
-    92 => 'Enter the story information below and save.'
+    92 => 'Enter the story information below and save.',
+    93 => 'Display',
+    94 => 'Published'
 );
 
 ###############################################################################
@@ -1313,7 +1321,7 @@ $LANG32 = array(
     87 => 'Autotag Installer',
     88 => 'Are you sure you want to remove this plugin?',
     89 => 'Are you absolutely sure you want to remove this plugin?  This will result in the deletion of all of the files and directories relating to this plugin, and to re-install this plugin, you will have to upload another copy.',
-    90 => 'Version <b>%s</b> of the <b>%s</b> plugin is required, but version <b>%s</b> is installed. Please update the %s plugin.',
+    90 => 'Version <b>%s</b> of the <b>%s</b> plugin is required, but version <b>%s</b> is installed. Please update the %s plugin.'
 );
 
 ###############################################################################
@@ -1508,7 +1516,8 @@ $MESSAGE = array(
     518 => 'You must login to subscribe to a notification feed.',
     519 => 'You are already subscribed to this notification feed.',
     520 => 'You have been subscribed to this notification feed.',
-    521 => 'You have been successfully un-subscribed from the notification feed.'
+    521 => 'You have been successfully un-subscribed from the notification feed.',
+    522 => 'Remote account has been successfully merged with existing local account'
 );
 
 ###############################################################################
@@ -2208,7 +2217,10 @@ $LANG_AM = array(
     'desc_user' => 'Text: expands \$_USER global var, eg. [user:p1] -> value of \$_USER[p1]',
     'desc_wikipedia' => 'Link: to the wikipedia search result for the text specified. usage: [wikipedia:<i>text</i>]',
     'desc_youtube' => 'HTML: embeds a youtube.com video object. usage: [youtube:<i>video_id</i>]',
-    'instructions_edit' => 'This screen allows you to create a custom autotag.'
+    'instructions_edit' => 'This screen allows you to create a custom autotag.',
+    'allowed' => 'Allowed',
+    'namespace' => 'Namespace',
+    'operation' => 'Operation'
 );
 
 ###############################################################################
@@ -2618,7 +2630,19 @@ $LANG_confignames['Core'] = array(
     'htmlfilter_default' => 'Default set of allowed HTML',
     'htmlfilter_comment' => 'HTML allowed in comments',
     'htmlfilter_story' => 'HTML allowed in stories',
-    'htmlfilter_root' => 'Additional HTML allowed for Root users'
+    'htmlfilter_root' => 'Additional HTML allowed for Root users',
+    'min_username_length' => 'Minimum Username Length',
+    'bb2_enabled' => 'Bad Behavior2 Enabled',
+    'bb2_ban_enabled' => 'Enable Automatic Banning',
+    'bb2_display_stats' => 'Display Stats',
+    'bb2_strict' => 'Strict Checking',
+    'bb2_verbose' => 'Verbose Logging',
+    'bb2_logging' => 'Logging Enabled',
+    'bb2_httpbl_key' => 'http:BL Key',
+    'bb2_httpbl_threat' => 'http:BL Threat Threshold',
+    'bb2_httpbl_maxage' => 'http:BL Max Age',
+    'bb2_offsite_forms' => 'Allow offsite forms',
+    'bb2_eu_cookie' => 'EU Cookie'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2629,7 +2653,8 @@ $LANG_configsubgroups['Core'] = array(
     'sg_users' => 'K&auml;ytt&auml;j&auml;t ja L&auml;hetetyt',
     'sg_images' => 'Kuvat',
     'sg_locale' => 'Kielet ja Paikallisuus',
-    'sg_misc' => 'Sekalaista'
+    'sg_misc' => 'Sekalaista',
+    'sg_spam' => 'Spam / Bot Protection'
 );
 
 $LANG_fs['Core'] = array(
@@ -2678,7 +2703,8 @@ $LANG_fs['Core'] = array(
     'fs_mulitlanguage' => 'Moni Kieli tuki - katso <a href="http://www.glfusion.org/wiki/doku.php/glfusion:language#multilingual_sites" target=_blank>Multi-Language Documentation</a>',
     'fs_logo' => 'Logo Options',
     'fs_update' => 'Update Checker',
-    'fs_rating' => 'Rating Options'
+    'fs_rating' => 'Rating Options',
+    'fs_spam_config' => 'Configuration'
 );
 
 $LANG_configselects['Core'] = array(

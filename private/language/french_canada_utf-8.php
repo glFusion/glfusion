@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # french_canada_utf-8.php
 #
@@ -34,7 +33,7 @@ if (!defined ('GVERSION')) {
 
 $LANG_CHARSET = 'utf-8';
 
-$LANG_LOCALE  = 'fr_CA';
+$LANG_LOCALE = 'fr_CA';
 
 ###############################################################################
 # Array Format:
@@ -186,66 +185,66 @@ $LANG01 = array(
     503 => 'Mode d`entretien - les connexions non-admin désactivé',
     504 => 'La version de base de données est: %s<br />La version de script glFusion est: %s<br />S`il vous plaît exécuter le <a href="%s">script d`installation</a> mettre à jour la base de données!',
     505 => 'Votre version de base de données est: %s<br />La version de script glFusion est: %s<br />S`il vous plaît vérifier l`intégrité de votre site!',
-    'ctl'                       => 'Vider le Cache',
-    'logview'                   => 'Afficher le Journal',
-    'correct_perms'             => 'S`il vous plaît corriger les problèmes identifiés ci-dessous. Une fois qu`ils ont été corrigées, <b>utilisez le Recheck </b>pour valider l`environnement.',
-    'current'                   => 'Courant',
-    'current_php_settings'      => 'Paramètres PHP Actuelles',
-    'directory_permissions'     => 'Annuaire Autorisations',
-    'enabled'                   => 'Activé',
-    'env_check'                 => 'Vérification de l`Environnement',
-    'file_permissions'          => 'Autorisations de Fichier',
-    'file_uploads'              => 'Plusieurs caractéristiques de glFusion exigent la possibilité de télécharger des fichiers, il doit être activé.',
-    'filesystem_check'          => 'Permissions des Répertoires / Fichiers',
-    'gd_lib'                    => 'Bibliothèques GD',
-    'gd_not_found'              => 'Impossible de localiser les fonctions de la bibliothèque GD. S`il vous plaît s`assurer que les librairies GD ont été compilées avec PHP, ou sélectionner une bibliothèque graphique suppléant.',
-    'gd_ok'                     => 'GD Bibliothèques v2 sont installés.',
-    'gd_v1'                     => 'GD Bibliothèques v1 est installé - Cette version ne prend pas totalement en JPG traitement de l`image de sorte qu`il peut y avoir des problèmes de qualité.',
-    'graphics'                  => 'Bibliothèque Graphique',
-    'hosting_env'               => 'Environnement d`hébergement Vérifier',
-    'imagemagick'               => 'Programmes ImageMagick',
-    'im_not_found'              => 'Impossible de localiser la <strong>convertir</strong> exécutable pour ImageMagick.',
-    'im_ok'                     => 'Le <strong>convertir </strong>exécutable semble être valide.',
-    'memory_limit'              => 'Il est recommandé que vous avez au moins 48M de mémoire activée sur votre site.',
-    'not_writable'              => 'PAS ACCESSIBLE EN ÉCRITURE',
-    'notes'                     => 'Remarques',
-    'not_found'                 => 'Introuvable',
-    'netpbm'                    => 'NetPBM Bibliothèque',
-    'np_ok'                     => 'La bibliothèque est installée NetPBM',
-    'np_not_found'              => 'Les exécutables NetPBM sont introuvables.',
-    'off'                       => 'en Congé',
-    'ok'                        => 'OK',
-    'on'                        => 'Sur',
-    'open_basedir'              => 'Si <strong> open_basedir </strong> restrictions sont activées sur votre site, il peut causer des problèmes de permissions lors de l`installation. Le système de fichiers Vérifiez ci-dessous doit signaler tous les problèmes.',
-    'php_req_version'           => 'glFusion nécessite la version de PHP 5.2.0 ou plus récent.',
-    'php_settings'              => 'Paramètres PHP',
-    'php_version'               => 'Version de PHP',
-    'php_warning'               => 'Si l`un des éléments ci-dessous sont marqués en <span class="no">red</span>, vous pouvez rencontrer des problèmes avec votre site glFusion. Vérifiez auprès de votre fournisseur d`hébergement pour les informations sur l`un de ces paramètres de PHP.',
-    'post_max_size'             => 'glFusion vous permet de télécharger des plugins, des images et des fichiers. Vous devez prévoir au moins 8M pour la taille de poste maximum.',
-    'recheck'                   => 'Vérifiez à nouveau l`Environnement',
-    'recommended'               => 'Recommandé',
-    'register_globals'          => 'Si la <strong>de PHP register_globals</strong> est activé, il peut créer des problèmes de sécurité.',
-    'safe_mode'                 => 'Si <strong>de PHP safe_mode</strong> est activé, certaines fonctions de glFusion peuvent ne pas fonctionner correctement. Plus précisément, le plug-in Media Gallery.',
-    'setting'                   => 'Le Réglage',
-    'unable_mkdir'              => 'Impossible de créer le répertoire',
-    'upload_max_filesize'       => 'glFusion vous permet de télécharger des plugins, des images et des fichiers. Vous devez prévoir au moins 8M pour la taille de téléchargement.',
-    'not_checked'               => 's`est arrêté',
-    'bypass_note'               => 'Depuis soit en mode sans échec ou restrictions open_basedir ont été détectés, le chèque de bibliothèques graphiques ont été ignorés.',
-    'jhead'                     => 'Programme jhead',
-    'jhead_not_found'           => 'Impossible de localiser l`exécutable jhead.',
-    'jhead_ok'                  => 'L`exécutable jhead est installé.',
-    'jpegtran'                  => 'Programme jpegtran',
-    'jpegtran_not_found'        => 'Impossible de localiser l`exécutable jpegtran.',
-    'jpegtran_ok'               => 'L`exécutable jpegtran est installé.',
-    'show_phpinfo'              => 'Afficher Complet PHP Infos',
-    'hide_phpinfo'              => 'Masquer Tout le PHP Infos',
-    'autotag_perms'             => 'AutoTag Autorisations',
-    'subscribe'                 => 'Souscrire',
-    'unsubscribe'               => 'Se Désabonner',
-    'view_online'               => 'Cliquez ici %s pour voir en ligne',
-    'no_new_items'              => 'Aucun Élément Nouveau',
-    'max_execution_time'        => 'glFusion recommande la valeur par défaut de PHP de 30 secondes au minimum, mais ajouts plugins et autres opérations peuvent prendre plus de temps que ce en fonction de votre environnement d`hébergement. Si safe_mode (ci-dessus) est Off, vous pourriez être en mesure d`augmenter en modifiant la valeur de <b>max_execution_time</b> dans votre fichier php.ini.',
-    'allowed_html'              => 'HTML Autorisé:',
+    'ctl' => 'Vider le Cache',
+    'logview' => 'Afficher le Journal',
+    'correct_perms' => 'S`il vous plaît corriger les problèmes identifiés ci-dessous. Une fois qu`ils ont été corrigées, <b>utilisez le Recheck </b>pour valider l`environnement.',
+    'current' => 'Courant',
+    'current_php_settings' => 'Paramètres PHP Actuelles',
+    'directory_permissions' => 'Annuaire Autorisations',
+    'enabled' => 'Activé',
+    'env_check' => 'Vérification de l`Environnement',
+    'file_permissions' => 'Autorisations de Fichier',
+    'file_uploads' => 'Plusieurs caractéristiques de glFusion exigent la possibilité de télécharger des fichiers, il doit être activé.',
+    'filesystem_check' => 'Permissions des Répertoires / Fichiers',
+    'gd_lib' => 'Bibliothèques GD',
+    'gd_not_found' => 'Impossible de localiser les fonctions de la bibliothèque GD. S`il vous plaît s`assurer que les librairies GD ont été compilées avec PHP, ou sélectionner une bibliothèque graphique suppléant.',
+    'gd_ok' => 'GD Bibliothèques v2 sont installés.',
+    'gd_v1' => 'GD Bibliothèques v1 est installé - Cette version ne prend pas totalement en JPG traitement de l`image de sorte qu`il peut y avoir des problèmes de qualité.',
+    'graphics' => 'Bibliothèque Graphique',
+    'hosting_env' => 'Environnement d`hébergement Vérifier',
+    'imagemagick' => 'Programmes ImageMagick',
+    'im_not_found' => 'Impossible de localiser la <strong>convertir</strong> exécutable pour ImageMagick.',
+    'im_ok' => 'Le <strong>convertir </strong>exécutable semble être valide.',
+    'memory_limit' => 'Il est recommandé que vous avez au moins 48M de mémoire activée sur votre site.',
+    'not_writable' => 'PAS ACCESSIBLE EN ÉCRITURE',
+    'notes' => 'Remarques',
+    'not_found' => 'Introuvable',
+    'netpbm' => 'NetPBM Bibliothèque',
+    'np_ok' => 'La bibliothèque est installée NetPBM',
+    'np_not_found' => 'Les exécutables NetPBM sont introuvables.',
+    'off' => 'en Congé',
+    'ok' => 'OK',
+    'on' => 'Sur',
+    'open_basedir' => 'Si <strong> open_basedir </strong> restrictions sont activées sur votre site, il peut causer des problèmes de permissions lors de l`installation. Le système de fichiers Vérifiez ci-dessous doit signaler tous les problèmes.',
+    'php_req_version' => 'glFusion nécessite la version de PHP 5.2.0 ou plus récent.',
+    'php_settings' => 'Paramètres PHP',
+    'php_version' => 'Version de PHP',
+    'php_warning' => 'Si l`un des éléments ci-dessous sont marqués en <span class="no">red</span>, vous pouvez rencontrer des problèmes avec votre site glFusion. Vérifiez auprès de votre fournisseur d`hébergement pour les informations sur l`un de ces paramètres de PHP.',
+    'post_max_size' => 'glFusion vous permet de télécharger des plugins, des images et des fichiers. Vous devez prévoir au moins 8M pour la taille de poste maximum.',
+    'recheck' => 'Vérifiez à nouveau l`Environnement',
+    'recommended' => 'Recommandé',
+    'register_globals' => 'Si la <strong>de PHP register_globals</strong> est activé, il peut créer des problèmes de sécurité.',
+    'safe_mode' => 'Si <strong>de PHP safe_mode</strong> est activé, certaines fonctions de glFusion peuvent ne pas fonctionner correctement. Plus précisément, le plug-in Media Gallery.',
+    'setting' => 'Le Réglage',
+    'unable_mkdir' => 'Impossible de créer le répertoire',
+    'upload_max_filesize' => 'glFusion vous permet de télécharger des plugins, des images et des fichiers. Vous devez prévoir au moins 8M pour la taille de téléchargement.',
+    'not_checked' => 's`est arrêté',
+    'bypass_note' => 'Depuis soit en mode sans échec ou restrictions open_basedir ont été détectés, le chèque de bibliothèques graphiques ont été ignorés.',
+    'jhead' => 'Programme jhead',
+    'jhead_not_found' => 'Impossible de localiser l`exécutable jhead.',
+    'jhead_ok' => 'L`exécutable jhead est installé.',
+    'jpegtran' => 'Programme jpegtran',
+    'jpegtran_not_found' => 'Impossible de localiser l`exécutable jpegtran.',
+    'jpegtran_ok' => 'L`exécutable jpegtran est installé.',
+    'show_phpinfo' => 'Afficher Complet PHP Infos',
+    'hide_phpinfo' => 'Masquer Tout le PHP Infos',
+    'autotag_perms' => 'AutoTag Autorisations',
+    'subscribe' => 'Souscrire',
+    'unsubscribe' => 'Se Désabonner',
+    'view_online' => 'Cliquez ici %s pour voir en ligne',
+    'no_new_items' => 'Aucun Élément Nouveau',
+    'max_execution_time' => 'glFusion recommande la valeur par défaut de PHP de 30 secondes au minimum, mais ajouts plugins et autres opérations peuvent prendre plus de temps que ce en fonction de votre environnement d`hébergement. Si safe_mode (ci-dessus) est Off, vous pourriez être en mesure d`augmenter en modifiant la valeur de <b>max_execution_time</b> dans votre fichier php.ini.',
+    'allowed_html' => 'HTML Autorisé:'
 );
 
 ###############################################################################
@@ -299,7 +298,7 @@ $LANG03 = array(
     45 => 'Vous recevez cet email car vous avez choisi d`être prévenu lorsqu`un nouveau commentaire a été posté.',
     46 => 'Pour vous désabonner de ce flux de commentaires, s`il vous plaît cliquer sur ce lien: %s',
     47 => 'Avertissez-moi par email lorsque de nouveaux commentaires ou réponses sont publiées pour cet article.',
-    48 => 'Cliquez <a href="javascript:history.back()">ici</a> pour revenir',
+    48 => 'Cliquez <a href="javascript:history.back()">ici</a> pour revenir'
 );
 
 ###############################################################################
@@ -489,6 +488,11 @@ $LANG04 = array(
     186 => 'Si vous ne souhaitez pas fusionner les comptes, s`il vous plaît sélectionner le bouton Annuler ci-dessous.',
     187 => 'Entrez le mot de passe pour le compte local et cliquez sur le bouton Fusionner.',
     188 => 'Fusionner',
+    189 => 'Forgot Password',
+    190 => 'You have exceeded the allowed number of attempts to enter the password for merging accounts',
+    191 => 'Local Account Password',
+    192 => 'Merge Remote Account with Existing Local Account',
+    193 => 'Note: If you merge a remote account to an existing local account, the preferences for the local user will take priority.'
 );
 
 ###############################################################################
@@ -502,7 +506,7 @@ $LANG_MYACCOUNT = array(
     'pe_layout' => 'Disposition &amp; Langue',
     'pe_content' => 'Teneur',
     'pe_privacy' => 'Intimité',
-    'pe_subscriptions' => 'Abonnements',
+    'pe_subscriptions' => 'Abonnements'
 );
 
 ###############################################################################
@@ -559,8 +563,7 @@ $LANG08 = array(
     34 => 'Fin de Message',
     35 => 'Désolé, cet utilisateur préfère ne pas recevoir de courriers électroniques.',
     36 => 'Vous recevez ce message parce que vous avez souscrit à l` %s digérer par jour. Pour supprimer ou modifier vos préférences, s`il vous plaît changer votre <strong> Daily Digest </strong> Préférences dans le <a href="%s/usersettings.php?mode=edit">Mon Compte</a> - Section Contenu.',
-    37 => 'Vous recevez ce message parce que vous avez souscrit à l` %s digérer par jour. Pour supprimer ou modifier vos préférences, s`il vous plaît modifier vos préférences Daily Digest dans le %s/usersettings.php?mode=edit Mon Compte - Section Contenu.',
-
+    37 => 'Vous recevez ce message parce que vous avez souscrit à l` %s digérer par jour. Pour supprimer ou modifier vos préférences, s`il vous plaît modifier vos préférences Daily Digest dans le %s/usersettings.php?mode=edit Mon Compte - Section Contenu.'
 );
 
 ###############################################################################
@@ -647,7 +650,7 @@ $LANG09 = array(
     78 => '1 mois',
     79 => '3 mois',
     80 => '6 mois',
-    81 => '1 année',
+    81 => '1 année'
 );
 
 ###############################################################################
@@ -761,20 +764,20 @@ $LANG12 = array(
 );
 
 ###############################################################################
-# rater.php
+# lib-rating.php
 
 $LANG13 = array(
-    'vote'              => 'vote',
-    'votes'             => 'votes',
-    'currently'         => 'Actuellement',
-    'rating'            => 'Évaluation',
-    'cast'              => 'Jeter',
-    'rate_speedlimit'   => "Vous Dernier évalué un élément %s Il ya secondes. Ce site nécessite au moins %s secondes entre les notations",
-    'ip_rated'          => 'Votre adresse IP a déjà noté cet article.',
-    'uid_rated'         => 'Votre nom d`utilisateur a déjà noté cet article.',
-    'own_rated'         => 'Soit vous posséder le produit ou n`avez pas la permission à noter.',
-    'thanks_for_vote'   => 'Merci d`avoir voté!',
-    'reset_rating'      => 'Réinitialiser Note',
+    'vote' => 'vote',
+    'votes' => 'votes',
+    'currently' => 'Actuellement',
+    'rating' => 'Évaluation',
+    'cast' => 'Jeter',
+    'rate_speedlimit' => 'Vous Dernier évalué un élément %s Il ya secondes. Ce site nécessite au moins %s secondes entre les notations',
+    'ip_rated' => 'Votre adresse IP a déjà noté cet article.',
+    'uid_rated' => 'Votre nom d`utilisateur a déjà noté cet article.',
+    'own_rated' => 'Soit vous posséder le produit ou n`avez pas la permission à noter.',
+    'thanks_for_vote' => 'Merci d`avoir voté!',
+    'reset_rating' => 'Réinitialiser Note'
 );
 
 ###############################################################################
@@ -793,7 +796,7 @@ $LANG20 = array(
     6 => 'L`accès administrateur pour ce site est réservé au personnel autorisé <br /> Tous les accès est enregistré et examiné..',
     7 => 'connexion',
     8 => 'Expiration de la session - S`il vous plaît ré-authentifier',
-    9 => 'L`accès à des Fonctionnalités d`Administration requiert une authentification',
+    9 => 'L`accès à des Fonctionnalités d`Administration requiert une authentification'
 );
 
 ###############################################################################
@@ -871,7 +874,7 @@ $LANG21 = array(
     69 => 'Etes-vous sûr de vouloir supprimer ce bloc?',
     70 => 'Nom du bloc ne peut pas être vide et ne peut pas contenir d`espaces ou les caractères suivants: <> \ "% & * / ou barre oblique inverse',
     71 => 'Cet écran vous permet de créer un nouveau bloc ou de modifier un bloc existant qui sera affiché sur la barre de navigation de droite à gauche ou.',
-    72 => 'Cet écran vous permet d`éditer un bloc de base glFusion.',
+    72 => 'Cet écran vous permet d`éditer un bloc de base glFusion.'
 );
 
 ###############################################################################
@@ -970,6 +973,8 @@ $LANG24 = array(
     90 => 'Histoire Modéré',
     91 => 'Modéré Projet Histoire',
     92 => 'Entrez les informations de l`histoire ci-dessous et enregistrez.',
+    93 => 'Display',
+    94 => 'Published'
 );
 
 ###############################################################################
@@ -1032,7 +1037,7 @@ $LANG27 = array(
     54 => 'Bloquer Admin',
     55 => 'Syndication Admin',
     56 => 'Appuyez sur Annuler puis Modifier ce sujet pour voir les détails, y compris le nombre total d`objets dans la base de données qui sont associées à ce sujet.',
-    57 => 'Cet écran vous permet de créer ou modifier un sujet. ID Sujet ne peuvent pas contenir d`espaces.',
+    57 => 'Cet écran vous permet de créer ou modifier un sujet. ID Sujet ne peuvent pas contenir d`espaces.'
 );
 
 ###############################################################################
@@ -1192,7 +1197,7 @@ $LANG29 = array(
 # admin/mail.php
 
 $LANG31 = array(
-    1 => "Utilisateurs de Messagerie",
+    1 => 'Utilisateurs de Messagerie',
     2 => 'À Partir de',
     3 => 'Répondre à',
     4 => 'Le Sujet',
@@ -1317,7 +1322,7 @@ $LANG32 = array(
     87 => 'Balise automatique d`installation',
     88 => 'Etes-vous sûr de vouloir supprimer ce plugin?',
     89 => 'Êtes-vous absolument sûr de vouloir supprimer ce plugin? Cela se traduira par la suppression de tous les fichiers et répertoires liés à ce plugin, et de ré-installer ce plugin, vous devrez télécharger une autre copie.',
-    90 => 'Version <b>%s</b> of the <b>%s</b> plugin is required, but version <b>%s</b> is installed. Please update the %s plugin.',
+    90 => 'Version <b>%s</b> of the <b>%s</b> plugin is required, but version <b>%s</b> is installed. Please update the %s plugin.'
 );
 
 ###############################################################################
@@ -1376,19 +1381,7 @@ $LANG33 = array(
     55 => 'Articles',
     56 => 'Etes-vous sûr de vouloir supprimer ce flux?',
     57 => 'Liste de Syndication',
-    58 => 'Pour créer / modifier un flux, modifier les champs ci-dessous et enregistrez',
-);
-
-###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Afficher le Journal',
-    'info' => 'Gestion de Fichiers glFusion Connexion',
-    'logs' => 'Journaux',
-    'view' => 'Voir Fichier Journal',
-    'clear' => 'Fichier Effacer Journal',
-    'log_file' => 'Fichier Journal'
+    58 => 'Pour créer / modifier un flux, modifier les champs ci-dessous et enregistrez'
 );
 
 ###############################################################################
@@ -1501,7 +1494,7 @@ $MESSAGE = array(
     113 => 'Votre compte a été créé avec succès. {site_url}',
     114 => 'Attention: resynchronisation avec votre compte OAuth à distance a échoué, mais vos autres informations de compte a bien été enregistré.',
     115 => 'Attention: Le service d`authentification OAuth à distance a été désactivé.',
-    116 => "Les fichiers du plugin et répertoires liés ont été supprimés.",
+    116 => 'Les fichiers du plugin et répertoires liés ont été supprimés.',
     200 => 'Désolé, vous n`avez pas accès à cette page. S`il vous plaît noter que toutes les tentatives d`accès non autorisées caractéristiques sont enregistrés.',
     500 => 'Le cache de modèle a été effacé avec succès',
     501 => 'Jeton de sécurité est valide - Possible expiration de la session.',
@@ -1525,7 +1518,100 @@ $MESSAGE = array(
     519 => 'Vous êtes déjà abonné à cette notification alimentation.',
     520 => 'Vous avez été abonné à cette notification alimentation.',
     521 => 'Vous avez été avec succès non souscrites à partir du flux de notification.',
+    522 => 'Remote account has been successfully merged with existing local account'
+);
 
+###############################################################################
+# admin/logview.php
+
+$LANG_LOGVIEW = array(
+    'logview' => 'Afficher le Journal',
+    'info' => 'Gestion de Fichiers glFusion Connexion',
+    'logs' => 'Journaux',
+    'view' => 'Voir Fichier Journal',
+    'clear' => 'Fichier Effacer Journal',
+    'log_file' => 'Fichier Journal'
+);
+
+###############################################################################
+# lib-bbcode.php
+
+$LANG_BBCODE = array(
+    'bold_label' => 'B',
+    'italic_label' => 'i',
+    'underline_label' => 'u',
+    'quote_label' => 'Quote',
+    'code_label' => 'Code',
+    'list_label' => 'List',
+    'olist_label' => 'List=',
+    'listitem_label' => '[*]',
+    'img_label' => 'Img',
+    'url_label' => 'URL',
+    'smiley_label' => 'Smileys',
+    'size_label' => 'Font Size',
+    'color_label' => 'Font Color',
+    'bold_help' => 'Bold text: [b]text[/b]',
+    'italic_help' => 'Italic text: [i]text[/i]',
+    'underline_help' => 'Underline text: [u]text[/u]',
+    'quote_help' => 'Quote text: [quote]text[/quote]',
+    'code_help' => 'Code display: [code]code[/code]',
+    'list_help' => 'List: [list]text[/list]',
+    'olist_help' => 'List: [list=]text[/list]',
+    'listitem_help' => 'List item: [*]text[/*]',
+    'img_help' => 'Insert image: [img]http://image_url[/img]',
+    'url_help' => 'Insert URL: [url]http://url[/url] or [url=http://url]URL text[/url]',
+    'smiley_help' => 'Open Smiley Window',
+    'size_help' => 'Font size: [size=9]small text[/size]',
+    'color_help' => 'Text Color: [color=red]red text[/color]',
+    'size_tiny' => 'Tiny',
+    'size_small' => 'Small',
+    'size_normal' => 'Normal',
+    'size_large' => 'Large',
+    'size_huge' => 'Huge',
+    'color_default' => 'Default',
+    'color_darkred' => 'Dark Red',
+    'color_red' => 'Red',
+    'color_orange' => 'Orange',
+    'color_brown' => 'Brown',
+    'color_yellow' => 'Yellow',
+    'color_green' => 'Green',
+    'color_olive' => 'Olive',
+    'color_cyan' => 'Cyan',
+    'color_blue' => 'Blue',
+    'color_darkblue' => 'Dark Blue',
+    'color_indigo' => 'Indigo',
+    'color_violet' => 'Violet',
+    'color_white' => 'White',
+    'color_black' => 'Black',
+    'formatted_code' => 'Formatted Code'
+);
+
+###############################################################################
+# filecheck.php
+
+$LANG_FILECHECK = array(
+    'filecheck' => 'File Integrity Check',
+    'recheck' => 'Recheck File Integrity',
+    'confirm' => 'Are you sure you want to deleted the selected file(s)?',
+    'scan' => 'Your site\'s file integrity is being analyzed.  Please be patient, this process may take awhile to complete, and execution speed depends upon the hosting environment.  If this script approaches the maximum PHP script execution time of %s seconds, scanning will be interrupted and an error message will be displayed.',
+    'results' => 'Your site\'s files and directories have been compared to the glFusion v%s distribution, and the results are shown below.  Added or missing files and directories have been identified, and files that have been added may be selected for deletion.  Directories that have been added will be detected, but presently these must be removed manually.<br /><br />Additional files and/or directories that are detected may be associated with plugins or other scripts that you have added, or are otherwise critical to your site\'s operation, and therefore <b>this DOES NOT mean you should simply delete these files!&nbsp;&nbsp;<span style="color:red">Please use this tool with caution!</span></b>',
+    'expiration1' => 'NOTE: The scan was aborted because the elapsed time it was approaching your site\'s PHP maximum execution time limit.  This analysis script is CPU and I/O-intensive, and can be affected by a number of factors in your web hosting environment.  Please consider one or more of the following recommendations resolve this problem:<br />',
+    'expiration2' => '<ol><li>Try increasing the value of \'max_execution_time\' in your php.ini file.  It is currently set to %s seconds.</li><li>Manually inspect your site and remove any unneeded files and directories.</li></ol>',
+    'abort' => 'Abort Scan',
+    'aborted' => 'The scan was aborted.',
+    'where' => 'Where',
+    'type' => 'Type',
+    'delta' => 'Change',
+    'location' => 'Location',
+    'path' => 'Path',
+    'file' => 'file',
+    'dir' => 'directory',
+    'plugin' => 'plugin',
+    'added' => 'added',
+    'missing' => 'missing',
+    'removed' => '%s %s deleted.  Your site\'s File Integrity will now be rechecked ....',
+    'working' => 'Scanning, please wait ...<br />',
+    'elapsed' => 'The scan completed in %s sec.<br /><br />'
 );
 
 ###############################################################################
@@ -1598,20 +1684,20 @@ $LANG_ACCESS = array(
     'copy' => 'Copie',
     'pe_namepass' => 'Compte',
     'pe_userinfo' => 'Information',
-    'pe_layout'   => 'Disposition &amp; Langue',
-    'pe_content'  => 'Teneur',
-    'pe_privacy'  => 'Intimité',
+    'pe_layout' => 'Disposition &amp; Langue',
+    'pe_content' => 'Teneur',
+    'pe_privacy' => 'Intimité',
     'editusers' => 'Gérer',
     'sendemail' => 'eMail',
     'admingroup' => 'Admin',
     'defaultgroup' => 'Par défaut',
-    'editinguser'   => 'Montage Utilisateur: ',
+    'editinguser' => 'Montage Utilisateur: ',
     'createnewuser' => 'Créer un Nouveau Compte',
     'confirm1' => 'Etes-vous sûr de vouloir supprimer ce groupe?',
     'confirm2' => 'Êtes-vous certain de vouloir supprimer ce groupe? Cela va affecter tous les utilisateurs ou groupes qui sont associés à ce groupe! Appuyez sur Annuler puis Modifier ce groupe si vous souhaitez afficher les détails.',
     'token_expired' => 'Le jeton de sécurité a expiré. S`il vous plaît valider votre session ci-dessous.',
     'token_expired_footer' => 'Le jeton de sécurité pour cette opération a expiré, s`il vous plaît re-valider',
-    'validation_failed' => 'Validation a échoué - S`il vous plaît essayez de nouveau.',
+    'validation_failed' => 'Validation a échoué - S`il vous plaît essayez de nouveau.'
 );
 
 ###############################################################################
@@ -1622,7 +1708,7 @@ $LANG_DB_BACKUP = array(
     'do_backup' => 'Faire de Sauvegarde',
     'backup_successful' => 'Base de données de sauvegarde a réussi.',
     'db_explanation' => 'Pour créer une nouvelle sauvegarde de la base de données de votre site, cliquez sur "Créer un nouveau" ci-dessus. Cliquez sur le nom d`un fichier à télécharger cette sauvegarde.',
-    'not_found' => "Chemin d`accès incorrect, restriction de sécurité en vigueur ou mysqldump utilitaire pas exécutable. <br/> Vérifiez <strong> mysqldump_path </strong> définition de la configuration. <br/> Vérifiez <a href=\"http://www.php.net/manual/en/features.safe-mode.php#ini.open-basedir\">open_basedir</a> open_basedir </a> paramètres en PHP.",
+    'not_found' => 'Chemin d`accès incorrect, restriction de sécurité en vigueur ou mysqldump utilitaire pas exécutable. <br/> Vérifiez <strong> mysqldump_path </strong> définition de la configuration. <br/> Vérifiez <a href="http://www.php.net/manual/en/features.safe-mode.php#ini.open-basedir">open_basedir</a> open_basedir </a> paramètres en PHP.',
     'zero_size' => 'Échec de la sauvegarde: Taille du fichier était 0 bytes',
     'path_not_found' => "{$_CONF['backup_path']} n`existe pas ou n`est pas un répertoire",
     'no_access' => "ERREUR: la {$_CONF['backup_path']} n'est pas accessible.",
@@ -1655,7 +1741,7 @@ $LANG_BUTTONS = array(
 $LANG_404 = array(
     1 => '404 - URL introuvable',
     2 => '<div class="story-body">Vous ne pouvez pas être en mesure d`accéder à cette page en raison de l`une des conditions suivantes: <ul> <li> un de bookmark ou favori </li> <li> un moteur de recherche possède un listing périmé sur ce site </li> <li> une adresse erronée</li></ul></div>',
-    3 => "<p>S`il vous plaît essayer une des méthodes suivantes:<ul style=\"margin-left:15px;padding-top:10px;\"><li><a href=\"{$_CONF['site_url']}\">Accueil</a></li><li><a href=\"{$_CONF['site_url']}/search.php\">Recherche</a></li></ul></p>",
+    3 => "<p>S`il vous plaît essayer une des méthodes suivantes:<ul style=\"margin-left:15px;padding-top:10px;\"><li><a href=\"{$_CONF['site_url']}\">Accueil</a></li><li><a href=\"{$_CONF['site_url']}/search.php\">Recherche</a></li></ul></p>"
 );
 
 ###############################################################################
@@ -1755,7 +1841,7 @@ $LANG_TRB = array(
     'delete_trackback' => 'To delete this Trackback click: ',
     'edit_explain' => 'This screen allows you to create or edit a new trackback or ping service.',
     'ping_explain' => 'This screen allows you to send pingback requests for your stories.',
-    'trb_explain' => 'This screen allows you to send trackback requests.',
+    'trb_explain' => 'This screen allows you to send trackback requests.'
 );
 
 ###############################################################################
@@ -1771,7 +1857,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-#
+# 
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1841,12 +1927,12 @@ $LANG_WEEK = array(
     11 => 'Wed',
     12 => 'Thu',
     13 => 'Fri',
-    14 => 'Sat',
+    14 => 'Sat'
 );
 
 ###############################################################################
 # Admin - Strings
-#
+# 
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1877,12 +1963,11 @@ $LANG_ADMIN = array(
     'list' => 'Liste',
     'list_all' => 'la liste de Tous',
     'na' => '-',
-    'action' => 'Action',
+    'action' => 'Action pour tous sélectionnés:',
     'enable' => 'Permettre',
     'disable' => 'Désactiver',
     'admin_users' => 'Administration des Utilisateurs',
     'admin_groups' => 'Admin Groupe',
-    'action' => 'Action pour tous sélectionnés:',
     'authenticate' => 'Authentifier',
     'select' => 'Sélectionner',
     'name' => 'Nom',
@@ -1892,12 +1977,309 @@ $LANG_ADMIN = array(
     'block_list' => 'Bloc Liste',
     'topic_list' => 'Liste des Sujets',
     'tb_list' => 'Liste Trackback',
-    'custom_autotag' => 'Personnalisé Autotags',
+    'custom_autotag' => 'Personnalisé Autotags'
+);
+
+###############################################################################
+# Menu Builder
+
+$LANG_MB01 = array(
+    'javascript_required' => 'Menu Builder nécessite que vous ayez Javascript activé.',
+    'create_element' => 'Créer un Menu Element',
+    'add_new' => 'Ajouter un Nouvel Élément de Menu',
+    'add_newmenu' => 'Créer un Nouveau Menu',
+    'edit_menu' => 'Menu Modifier',
+    'menu_list' => 'Menu Annonce',
+    'configuration' => 'Configuration',
+    'edit_element' => 'Edit Menu Item',
+    'menu_element' => 'Menu Élément',
+    'menu_type' => 'Type de Menu',
+    'elements' => 'Éléments',
+    'enabled' => 'Activé',
+    'edit' => 'Modifier',
+    'delete' => 'Effacer',
+    'move_up' => 'Monter',
+    'move_down' => 'Descendre',
+    'order' => 'Ordre',
+    'id' => 'ID',
+    'parent' => 'Mère',
+    'label' => 'Nom du Menu',
+    'elementlabel' => 'Nom de l`élément',
+    'display_after' => 'Après Affichage',
+    'type' => 'Type',
+    'url' => 'URL',
+    'php' => 'Fonction PHP',
+    'coretype' => 'glFusion Menu',
+    'group' => 'Groupe',
+    'permission' => 'Visible à',
+    'active' => 'Actif',
+    'top_level' => 'Top Level Menu',
+    'confirm_delete' => 'Etes-vous sûr de vouloir supprimer cet élément de menu?',
+    'type_submenu' => 'Sous-Menu',
+    'type_url_same' => 'Parent Fenêtre',
+    'type_url_new' => 'Nouvelle Fenêtre à la Navigation',
+    'type_url_new_nn' => 'Nouvelle Fenêtre sans Navigation',
+    'type_core' => 'glFusion Menu',
+    'type_php' => 'Fonction PHP',
+    'gl_user_menu' => 'Menu de l`Utilisateur',
+    'gl_admin_menu' => 'Admin Menu',
+    'gl_topics_menu' => 'Sujets Menu',
+    'gl_sp_menu' => 'Pages Statiques Menu',
+    'gl_plugin_menu' => 'Plugin Menu',
+    'gl_header_menu' => 'Header Menu',
+    'plugins' => 'Plugin',
+    'static_pages' => 'Pages Statiques',
+    'glfusion_function' => 'glFusion Fonction',
+    'cancel' => 'Annuler',
+    'action' => 'Action',
+    'first_position' => 'Première Position',
+    'info' => 'Infos',
+    'non-logged-in' => 'Les Utilisateurs Non Connectés Uniquement',
+    'target' => 'Fenêtre URL',
+    'same_window' => 'la Même Fenêtre',
+    'new_window' => 'Nouvelle Fenêtre',
+    'menu_builder' => 'Menu Builder',
+    'logo' => 'Logo',
+    'menu_colors' => 'Menu Options',
+    'options' => 'Options',
+    'menu_graphics' => 'Graphiques du Menu',
+    'graphics_or_colors' => 'Utiliser des Graphiques ou des Couleurs?',
+    'graphics' => 'Graphique',
+    'colors' => 'Couleurs',
+    'menu_bg_image' => 'Menu Principal BG Image',
+    'currently' => 'Actuellement',
+    'menu_hover_image' => 'Main Menu Hover Image',
+    'parent_item_image' => 'Sub Menu Parent Indicator',
+    'not_used' => 'Non utilisé si utilisation graphique est sélectionné ci-dessous.',
+    'select_color' => 'Select Color',
+    'menu_alignment' => 'Menu Alignment',
+    'alignment_question' => 'Align the Menu to the',
+    'align_left' => 'Gauche',
+    'align_right' => 'Droit',
+    'blocks' => 'Bloc Styles',
+    'reset' => 'Réinitialiser',
+    'defaults' => 'Pour réinitialiser les valeurs par défaut',
+    'confirm_reset' => 'Ceci permet de réinitialiser les couleurs du menu et des graphiques pour les valeurs d`installation et efface automatiquement le cache de modèle. Etes-vous sûr de vouloir continuer? Lorsque vous avez terminé, assurez-vous de vider votre cache de navigateur local.',
+    'menu_properties' => 'Propriétés du Menu pour',
+    'disabled_plugin' => 'Pas trouvé ou un plugin handicapés',
+    'clone' => 'Copie',
+    'clone_menu_label' => 'Nom de Menu Clonée',
+    'topic' => 'Sujets',
+    'no_elements' => 'Aucun élément de menu définies',
+    'return_to' => 'Réintégrer ',
+    'menu_name_error' => 'Le nom du menu ne peut pas être vide',
+    'menu_name_space' => 'Le nom du menu ne peut pas contenir d`espaces',
+    'menu_name_exists' => 'Le nom du menu doit être unique, il existe déjà un menu de ce nom'
+);
+
+###############################################################################
+# menu.php
+
+$LANG_MB_MENU_TYPES = array(
+    1 => 'Horizontal - Cascading',
+    2 => 'Horizontal - Simple',
+    3 => 'Vertical - Cascading',
+    4 => 'Vertical - Simple'
+);
+
+###############################################################################
+# menu.php
+
+$LANG_MB_TYPES = array(
+    1 => 'Sub Menu',
+    2 => 'glFusion Action',
+    3 => 'glFusion Menu',
+    4 => 'Plugin',
+    5 => 'Static Page',
+    6 => 'External URL',
+    7 => 'PHP Function',
+    8 => 'Label',
+    9 => 'Topic'
+);
+
+###############################################################################
+# menu.php
+
+$LANG_MB_TARGET = array(
+    1 => 'Parent Fenêtre',
+    2 => 'Nouvelle Fenêtre à la navigation',
+    3 => 'Nouvelle Fenêtre sans navigation'
+);
+
+###############################################################################
+# menu.php
+
+$LANG_MB_GLFUNCTION = array(
+    0 => 'Maison',
+    1 => 'Contribuer',
+    2 => 'Annuaire',
+    3 => 'Préférences',
+    4 => 'Recherche',
+    5 => 'Statistiques du Site'
+);
+
+###############################################################################
+# menu.php
+
+$LANG_MB_GLTYPES = array(
+    1 => 'Menu de l`Utilisateur',
+    2 => 'Admin Menu',
+    3 => 'Sujets Menu',
+    4 => 'Pages Statiques Menu',
+    5 => 'Plugin Menu',
+    6 => 'Header Menu'
+);
+
+###############################################################################
+# menu.php
+
+$LANG_MB_ADMIN = array(
+    1 => 'Menu Builder vous permet de créer et modifier des menus pour votre site. Pour ajouter un nouveau menu, cliquez sur le lien Nouveau Menu Créer ci-dessus. Pour modifier les articles de s \ un menu, cliquez sur l`icône dans la colonne Eléments. Pour modifier les couleurs du menu, cliquez sur l`icône dans la colonne Options.',
+    2 => 'Pour créer un nouveau menu, spécifier un nom de menu et le type de menu ci-dessous. Vous pouvez également définir l`état actif, et ce groupe d`utilisateurs serez en mesure de voir le menu, avec l`active et visible pour les champs.',
+    3 => 'Cliquez sur l`icône dans la colonne Modifier pour modifier les propriétés d`un élément de menu. Disposez les articles en les déplaçant vers le haut ou vers le bas avec les flèches sous la colonne Ordre.',
+    4 => 'Pour créer un nouvel élément de menu, spécifiez les détails et les autorisations ci-dessous.',
+    5 => 'Une fois qu`un élément est créé, vous pouvez toujours revenir en arrière et modifier les détails et les autorisations ci-dessous.',
+    6 => 'Menu Builder vous permet de personnaliser facilement l`aspect et la convivialité de vos menus. Ajustez les valeurs ci-dessous pour créer un style de menu unique.'
+);
+
+###############################################################################
+# logo.php
+
+$LANG_LOGO = array(
+    'logo_admin' => 'Logo',
+    'instructions' => 'Logo Administration vous permet de personnaliser facilement votre site logo et de contrôler l`affichage du slogan du site.',
+    'javascript_required' => 'Logo Administration exige que vous avez activer Javascript.',
+    'logo_options' => 'glFusion Options Logo',
+    'use_graphic_logo' => 'Utilisez Graphique Logo',
+    'use_text_logo' => 'Utilisez Logo du texte',
+    'use_no_logo' => 'Ne Pas Afficher un Logo',
+    'display_site_slogan' => 'Slogan Affichage du Site',
+    'upload_logo' => 'Téléchargez le Nouveau Logo',
+    'current_logo' => 'Logo Actuel',
+    'no_logo_graphic' => 'No Logo Graphique Disponible',
+    'logo_help' => 'Logo images graphiques envoyés ne sont pas redimensionnées, la taille standard pour glFusion logo est de 100 pixels de haut et doit être inférieure à 500 pixels de largeur. Vous pouvez télécharger des images plus grandes, mais vous aurez besoin de modifier le site CSS dans styles.css pour s`assurer qu`il affiche correctement.',
+    'logo_saved' => 'Options de Logo sauvegardés avec succès.',
+    'invalid_type' => 'Invalid type d`image, que JPG, PNG et GIF sont autorisés',
+    'invalid_size' => 'Logo Téléchargé supérieure au maximum la taille de '
+);
+
+###############################################################################
+# autotag.php
+
+$LANG_AM = array(
+    'plugin' => 'autotag',
+    'title' => 'Autotag Manager',
+    'menulabel' => 'Autotags',
+    'public_title' => 'Autotag List',
+    'tag' => 'Tag',
+    'type' => 'Type',
+    'module' => 'Module',
+    'description' => 'Description',
+    'replacement' => 'Replacement',
+    'enabled' => 'Enabled?',
+    'click_to_enable' => 'Click to enable.',
+    'click_to_disable' => 'Click to disable.',
+    'function' => 'PHPfn?',
+    'autotag_editor' => 'Autotag Editor',
+    'autotag_list' => 'Autotag List',
+    'edit' => 'Edit',
+    'save' => 'Save',
+    'delete' => 'Delete',
+    'cancel' => 'Cancel',
+    'confirm' => 'Are you sure you want to delete this Autotag?',
+    'access_denied' => 'Access Denied',
+    'access_denied_msg' => 'You are illegally trying access one of the Autotag Manager administration pages.  Please note that all attempts to illegally access this page are logged',
+    'php_msg_enabled' => 'If checked, the PHP class <b>{tag}.class.php</b> will be called to expand the tag. The <b>Replacement</b> text will be ignored.',
+    'php_msg_norights' => '<br />NOTE: PHP Autotags are enabled, however the current user has not been assigned the \'autotag.PHP\' feature, and therefore cannot create new PHP Autotags and/or enable or disable existing PHP Autotags.',
+    'php_msg_disabled' => 'PHP Autotags have been disabled.<br />To enable, you must set the \'Allow PHP in Autotags\' setting to \'True\' in the Autotag Manager plugin configuration panel.',
+    'disallowed_tag' => 'The tag you have chosen is restricted and not available for use. Choose another tag.',
+    'duplicate_tag' => 'The tag you have chosen is already in use. Please choose another tag name or edit the existing tag.',
+    'no_tag_or_replacement' => 'You must at least fill in the <b>Tag</b> and <b>Replacement</b> fields.',
+    'phpfn_missing' => 'The class: \'%s.class.php\' does not exist in the autotag/ directory.',
+    'phpfn_must_exist' => 'You must create this class and place it in system/autotag/ directory before defining the associated PHP-based Autotag.',
+    'phpfn_replace' => 'This tag will be expanded by a call to the PHP class {tag}.class.php.',
+    'html_allowed' => '(HTML:OK)',
+    'instructions' => 'To modify or delete an Autotag, click on that tag\'s edit icon below. To create a new Autotag, click on "Create New" above. <p>If there are PHP function-based Autotags below that you cannot edit or enable, it is because 1) you do not have access to the autotag.PHP feature and/or 2) PHP Autotags are disabled in the Autotag Manager plugin configuration panel.</p>',
+    'public_instructions' => 'The complete list of Autotags that are currently available and enabled on this site are displayed below.  For each Autotag, the contributing glFusion Module is displayed, as well as the Type and Description.  Usage examples are provided with the <i>required</i> and {optional} parameters.  Where multiple options are available, a link to the glFusion.org wiki documentation is provided.',
+    'replace_explain' => 'Autotags take the form <b>[tag:{p1} {p2}]</b>. In the <b>Replacement</b> field you can use any valid HTML. You can include {p1} and/or {p2} parameters in your replacement string by using the replacement macros %1% and %2% respectively.<p>Autotags are commonly used to create links. A <b>Replacement</b> field of <b>&lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</b> when combined with this tag: <b>[tag:foo This is a link]</b> will result in the string <b>&lt;a href="http://path.to.somewhere/foo"&gt;This is a link&lt;/a&gt;</b></p><p>You may also use %0% to represent the entire string after the first colon, this is handy when you want to use only a single parameter, and the value will contain whitespace which would otherwise be interpreted as a delimiter between multiple parameters.  The %site_url% and $site_admin_url% macros can also be used, and will be replaced by the base url and admin url respectively.</p>',
+    'autotagpermmsg' => 'Select which features (operations) you want to allow the autotag to be used.',
+    'autotag' => 'Autotag',
+    'desc_showblock' => 'HTML: renders a block. usage: [show_block:<i>block_id</i>]',
+    'desc_story' => 'Link: to a story on this site; link_text defaults to story title.  usage: [story:<i>story_id</i> {link_text}]',
+    'desc_story_introtext' => 'HTML: renders story content, up to and including only introduction text.  usage: [story_introtext:<i>story_id</i>]',
+    'desc_vmenu' => '<b>Depreciated</b> - Use <b>menu</b> tag. HTML: renders a JS-enhanced vertical menu. usage: [vmenu:<i>menu_id</id>]',
+    'desc_hmenu' => '<b>Depreciated</b> - Use <b>menu</b> tag. HTML: renders a JS-enhanced horizontal menu.  usage: [hmenu:<i>menu_id</i>]',
+    'desc_menu' => 'HTML: reneders a JS-enhanced menu. usage : [menu:<i>menu_id</i>]',
+    'desc_cipher' => 'Text: substitution cipher. Usage example is [wikipedia:ROT13]: [cipher:<i>nopqrstuvwxyzabcdefghijklm</i> <i>text_to_encode</i>]',
+    'desc_topic' => 'Link: to home page to display specified topic: link_text defaults to description. usage: [topic:<i>topic_id</i> {link_text}]',
+    'desc_glfwiki' => 'Link: to the glfusion.or wiki search result for the text specified. usage: [glfwiki:<i>text</i>]',
+    'desc_lang' => 'Text: expands \$LANG global var, eg. [lang:p1 p2] -> value of \$LANGp1[p2] or \$LANG_p1[p2]',
+    'desc_conf' => 'Text: expands \$_CONF global var, eg. [conf:p1] -> value of \$_CONF[p1]',
+    'desc_user' => 'Text: expands \$_USER global var, eg. [user:p1] -> value of \$_USER[p1]',
+    'desc_wikipedia' => 'Link: to the wikipedia search result for the text specified. usage: [wikipedia:<i>text</i>]',
+    'desc_youtube' => 'HTML: embeds a youtube.com video object. usage: [youtube:<i>video_id</i>]',
+    'instructions_edit' => 'This screen allows you to create a custom autotag.',
+    'allowed' => 'Allowed',
+    'namespace' => 'Namespace',
+    'operation' => 'Operation'
+);
+
+###############################################################################
+# versioncheck.php
+
+$LANG_UPGRADE = array(
+    'recheck' => 'Recheck Version',
+    'desc' => 'Ensure your glFusion software and plugins are up-to-date. The upgrade / version checker will query the glFusion.org web site to retrieve the latest version of all software and compare to your installed version.',
+    'title' => 'glFusion CMS Upgrade Checker',
+    'upgrade_title' => 'Upgrade Recommended',
+    'upgrade' => 'The glFusion CMS version you are running, %s is out of date. <span class="b">We recommend upgrading to the current version, %s, as soon as possible.</span> The latest version of glFusion is available at the <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">glFusion CMS Support Site</a>.',
+    'uptodate_title' => 'Congratulations, your glFusion installation is up-to-date.',
+    'uptodate' => 'Your current glFusion CMS installation is running the latest production release. We do recommend that you subscribe to the <a href="http://www.freelists.org/list/glfusion-announce" target="_blank">glFusion Announcements Mailing List</a> to receive immediate information about updates and security issues.',
+    'unknown_title' => 'Unable to determine glFusion version status',
+    'unknown' => 'We were unable to match your current glFusion version of %s to any released versions. If you are running a development snapshot, we recommend subscribing to the <a href="http://www.freelists.org/list/glfusion-development" target="_blank">glFusion Development Mailing List</a>. You are are not running a development snapshot, please use the <a href="http://www.glfusion.org/forum/index.php?forum=28" target="blank">glFusion Support Forums</a> for assistance.',
+    'error_title' => 'An error has occured while processing your request.',
+    'error' => 'We were unable to retrieve the version data from glFusion.org. If this problem persists, please visit <a href="http://www.glfusion.org/forum/index.php?forum=28" target="blank">the glFusion CMS Support Forum</a> to discover how you can get support.',
+    'was_released' => 'Version %s was released on %s.',
+    'plugin_uptodate' => 'Up To Date',
+    'plugin_newer' => 'You are running a newer version of the plugin.',
+    'no_data' => 'No data available.',
+    'updates_available' => "There are updates available - Please use the <a href=\"{$_CONF['site_admin_url']}/vercheck.php\">Version Checker</a> to see available updates.",
+    'plugin_title' => 'Plugin Version Check',
+    'plugin' => 'Plugin',
+    'installed_version' => 'Installed Version',
+    'latest_version' => 'Latest Version',
+    'notes' => 'Notes'
+);
+
+###############################################################################
+# sfs.php
+
+$LANG_SFS = array(
+    'title' => 'Stop Forum Spam (SFS) User Check',
+    'instructions' => 'All users have had their username, email address, and source IP address checked in the Stop Forum Spam database.  You may select any user\'s that were found in the SFS database and ban them from further use of your site.',
+    'no_record_found' => 'No Record Found',
+    'sfs_email_match' => 'Email Match in SFS',
+    'sfs_ip_match' => 'IP match in SFS',
+    'sfs_username_match' => 'Username match in SFS',
+    'uid' => 'UID',
+    'username' => 'Username',
+    'remote_ip' => 'Remote IP',
+    'email' => 'Email Address',
+    'sfs_status' => 'SFS Status',
+    'confirm_one' => 'Are you sure you want to Ban all selected users?',
+    'confirm_two' => 'Are you REALLY sure you want to Ban all selected users?',
+    'action_text' => 'Ban Users',
+    'confirmation_ban' => 'All selected user\'s have been banned',
+    'confirmation_del' => 'Users have been deleted.',
+    'confirm_one_del' => 'Are you sure you want to DELETE all selected users?',
+    'confirm_two_del' => 'Are you REALLY sure you want to DELETE all selected users?',
+    'action_text_del' => 'Delete Users',
+    'no_data' => 'No user\'s were found in the user database.'
 );
 
 ###############################################################################
 # Widgets - Strings
-#
+# 
 # These are some standard strings used by the widget static pages
 
 $LANG_WIDGETS = array(
@@ -1965,361 +2347,6 @@ $LANG_trackbackcodes = array(
     -1 => 'Trackback Disabled'
 );
 
-$LANG_BBCODE = array(
-    'bold_label'        => 'B',
-    'italic_label'      => 'i',
-    'underline_label'   => 'u',
-    'quote_label'       => 'Quote',
-    'code_label'        => 'Code',
-    'list_label'        => 'List',
-    'olist_label'       => 'List=',
-    'listitem_label'    => '[*]',
-    'img_label'         => 'Img',
-    'url_label'         => 'URL',
-    'smiley_label'      => 'Smileys',
-    'size_label'        => 'Font Size',
-    'color_label'       => 'Font Color',
-    'bold_help'         =>'Bold text: [b]text[/b]',
-    'italic_help'       =>'Italic text: [i]text[/i]',
-    'underline_help'    =>'Underline text: [u]text[/u]',
-    'quote_help'        =>'Quote text: [quote]text[/quote]',
-    'code_help'         =>'Code display: [code]code[/code]',
-    'list_help'         =>'List: [list]text[/list]',
-    'olist_help'        =>'List: [list=]text[/list]',
-    'listitem_help'     =>'List item: [*]text[/*]',
-    'img_help'          =>'Insert image: [img]http://image_url[/img]',
-    'url_help'          =>'Insert URL: [url]http://url[/url] or [url=http://url]URL text[/url]',
-    'smiley_help'       =>'Open Smiley Window',
-    'size_help'         =>'Font size: [size=9]small text[/size]',
-    'color_help'        =>'Text Color: [color=red]red text[/color]',
-    'size_tiny'         => 'Tiny',
-    'size_small'        => 'Small',
-    'size_normal'       => 'Normal',
-    'size_large'        => 'Large',
-    'size_huge'         => 'Huge',
-    'color_default'     => 'Default',
-    'color_darkred'     => 'Dark Red',
-    'color_red'         => 'Red',
-    'color_orange'      => 'Orange',
-    'color_brown'       => 'Brown',
-    'color_yellow'      => 'Yellow',
-    'color_green'       => 'Green',
-    'color_olive'       => 'Olive',
-    'color_cyan'        => 'Cyan',
-    'color_blue'        => 'Blue',
-    'color_darkblue'    => 'Dark Blue',
-    'color_indigo'      => 'Indigo',
-    'color_violet'      => 'Violet',
-    'color_white'       => 'White',
-    'color_black'       => 'Black',
-    'formatted_code'    => 'Formatted Code',
-);
-
-###############################################################################
-# admin/filecheck.php - distribution integrity checker
-
-$LANG_FILECHECK = array(
-    'filecheck'         => 'File Integrity Check',
-    'recheck'           => 'Recheck File Integrity',
-    'confirm'           => 'Are you sure you want to deleted the selected file(s)?',
-    'scan'              => 'Your site\'s file integrity is being analyzed.  Please be patient, this process may take awhile to complete, and execution speed depends upon the hosting environment.  If this script approaches the maximum PHP script execution time of %s seconds, scanning will be interrupted and an error message will be displayed.',
-    'results'           => 'Your site\'s files and directories have been compared to the glFusion v%s distribution, and the results are shown below.  Added or missing files and directories have been identified, and files that have been added may be selected for deletion.  Directories that have been added will be detected, but presently these must be removed manually.<br /><br />Additional files and/or directories that are detected may be associated with plugins or other scripts that you have added, or are otherwise critical to your site\'s operation, and therefore <b>this DOES NOT mean you should simply delete these files!&nbsp;&nbsp;<span style="color:red">Please use this tool with caution!</span></b>',
-    'expiration1'       => 'NOTE: The scan was aborted because the elapsed time it was approaching your site\'s PHP maximum execution time limit.  This analysis script is CPU and I/O-intensive, and can be affected by a number of factors in your web hosting environment.  Please consider one or more of the following recommendations resolve this problem:<br />',
-    'expiration2'       => '<ol><li>Try increasing the value of \'max_execution_time\' in your php.ini file.  It is currently set to %s seconds.</li><li>Manually inspect your site and remove any unneeded files and directories.</li></ol>',
-    'abort'             => 'Abort Scan',
-    'aborted'           => 'The scan was aborted.',
-    'where'             => 'Where',
-    'type'              => 'Type',
-    'delta'             => 'Change',
-    'location'          => 'Location',
-    'path'              => 'Path',
-    'file'              => 'file',
-    'dir'               => 'directory',
-    'plugin'            => 'plugin',
-    'added'             => 'added',
-    'missing'           => 'missing',
-    'removed'           => '%s %s deleted.  Your site\'s File Integrity will now be rechecked ....',
-    'working'           => 'Scanning, please wait ...<br />',
-    'elapsed'           => 'The scan completed in %s sec.<br /><br />'
-);
-
-###############################################################################
-# admin/menu.php - menu builder
-
-$LANG_MB01 = array (
-    'javascript_required' => 'Menu Builder nécessite que vous ayez Javascript activé.',
-    'create_element'    => 'Créer un Menu Element',
-    'add_new'           => 'Ajouter un Nouvel Élément de Menu',
-    'add_newmenu'       => 'Créer un Nouveau Menu',
-    'edit_menu'         => 'Menu Modifier',
-    'menu_list'         => 'Menu Annonce',
-    'configuration'     => 'Configuration',
-    'edit_element'      => 'Edit Menu Item',
-    'menu_element'      => 'Menu Élément',
-    'menu_type'         => 'Type de Menu',
-    'elements'          => 'Éléments',
-    'enabled'           => 'Activé',
-    'edit'              => 'Modifier',
-    'delete'            => 'Effacer',
-    'move_up'           => 'Monter',
-    'move_down'         => 'Descendre',
-    'order'             => 'Ordre',
-    'id'                => 'ID',
-    'parent'            => 'Mère',
-    'label'             => 'Nom du Menu',
-    'elementlabel'      => 'Nom de l`élément',
-    'display_after'     => 'Après Affichage',
-    'type'              => 'Type',
-    'url'               => 'URL',
-    'php'               => 'Fonction PHP',
-    'coretype'          => 'glFusion Menu',
-    'group'             => 'Groupe',
-    'permission'        => 'Visible à',
-    'active'            => 'Actif',
-    'top_level'         => 'Top Level Menu',
-    'confirm_delete'    => 'Etes-vous sûr de vouloir supprimer cet élément de menu?',
-    'type_submenu'      => 'Sous-Menu',
-    'type_url_same'     => 'Parent Fenêtre',
-    'type_url_new'      => 'Nouvelle Fenêtre à la Navigation',
-    'type_url_new_nn'   => 'Nouvelle Fenêtre sans Navigation',
-    'type_core'         => 'glFusion Menu',
-    'type_php'          => 'Fonction PHP',
-    'gl_user_menu'      => 'Menu de l`Utilisateur',
-    'gl_admin_menu'     => 'Admin Menu',
-    'gl_topics_menu'    => 'Sujets Menu',
-    'gl_sp_menu'        => 'Pages Statiques Menu',
-    'gl_plugin_menu'    => 'Plugin Menu',
-    'gl_header_menu'    => 'Header Menu',
-    'plugins'           => 'Plugin',
-    'static_pages'      => 'Pages Statiques',
-    'glfusion_function' => 'glFusion Fonction',
-    'cancel'            => 'Annuler',
-    'action'            => 'Action',
-    'first_position'    => 'Première Position',
-    'info'              => 'Infos',
-    'non-logged-in'     => 'Les Utilisateurs Non Connectés Uniquement',
-    'target'            => 'Fenêtre URL',
-    'same_window'       => 'la Même Fenêtre',
-    'new_window'        => 'Nouvelle Fenêtre',
-    'menu_builder'          => 'Menu Builder',
-    'logo'                  => 'Logo',
-    'menu_colors'           => 'Menu Options',
-    'options'               => 'Options',
-    'menu_graphics'         => 'Graphiques du Menu',
-    'graphics_or_colors'    => 'Utiliser des Graphiques ou des Couleurs?',
-    'graphics'              => 'Graphique',
-    'colors'                => 'Couleurs',
-    'menu_bg_image'         => 'Menu Principal BG Image',
-    'currently'             => 'Actuellement',
-    'menu_hover_image'      => 'Main Menu Hover Image',
-    'parent_item_image'     => 'Sub Menu Parent Indicator',
-    'not_used'              => 'Non utilisé si utilisation graphique est sélectionné ci-dessous.',
-    'select_color'          => 'Select Color',
-    'menu_alignment'        => 'Menu Alignment',
-    'alignment_question'    => 'Align the Menu to the',
-    'align_left'            => 'Gauche',
-    'align_right'           => 'Droit',
-    'blocks'                => 'Bloc Styles',
-    'reset'                 => 'Réinitialiser',
-    'defaults'              => 'Pour réinitialiser les valeurs par défaut',
-    'confirm_reset'         => 'Ceci permet de réinitialiser les couleurs du menu et des graphiques pour les valeurs d`installation et efface automatiquement le cache de modèle. Etes-vous sûr de vouloir continuer? Lorsque vous avez terminé, assurez-vous de vider votre cache de navigateur local.',
-    'menu_properties'       => 'Propriétés du Menu pour',
-    'disabled_plugin'       => 'Pas trouvé ou un plugin handicapés',
-    'clone'                 => 'Copie',
-    'clone_menu_label'      => 'Nom de Menu Clonée',
-    'topic'                 => 'Sujets',
-    'no_elements'           => 'Aucun élément de menu définies',
-    'return_to'             => 'Réintégrer ',
-    'menu_name_error'       => 'Le nom du menu ne peut pas être vide',
-    'menu_name_space'       => 'Le nom du menu ne peut pas contenir d`espaces',
-    'menu_name_exists'      => 'Le nom du menu doit être unique, il existe déjà un menu de ce nom',
-);
-
-$LANG_MB_MENU_TYPES = array(
-    1                   => 'Horizontal - Cascading',
-    2                   => 'Horizontal - Simple',
-    3                   => 'Vertical - Cascading',
-    4                   => 'Vertical - Simple',
-);
-
-$LANG_MB_TYPES = array(
-    1                   => 'Sub Menu',
-    2                   => 'glFusion Action',
-    3                   => 'glFusion Menu',
-    4                   => 'Plugin',
-    5                   => 'Static Page',
-    6                   => 'External URL',
-    7                   => 'PHP Function',
-    8                   => 'Label',
-    9                   => 'Topic',
-);
-
-
-$LANG_MB_TARGET = array(
-    1                   => 'Parent Fenêtre',
-    2                   => 'Nouvelle Fenêtre à la navigation',
-    3                   => 'Nouvelle Fenêtre sans navigation',
-);
-
-$LANG_MB_GLFUNCTION = array(
-    0                   => 'Maison',
-    1                   => 'Contribuer',
-    2                   => 'Annuaire',
-    3                   => 'Préférences',
-    4                   => 'Recherche',
-    5                   => 'Statistiques du Site',
-);
-
-$LANG_MB_GLTYPES = array(
-    1                   => 'Menu de l`Utilisateur',
-    2                   => 'Admin Menu',
-    3                   => 'Sujets Menu',
-    4                   => 'Pages Statiques Menu',
-    5                   => 'Plugin Menu',
-    6                   => 'Header Menu',
-);
-
-$LANG_MB_ADMIN = array(
-    1                   => 'Menu Builder vous permet de créer et modifier des menus pour votre site. Pour ajouter un nouveau menu, cliquez sur le lien Nouveau Menu Créer ci-dessus. Pour modifier les articles de s \ un menu, cliquez sur l`icône dans la colonne Eléments. Pour modifier les couleurs du menu, cliquez sur l`icône dans la colonne Options.',
-    2                   => 'Pour créer un nouveau menu, spécifier un nom de menu et le type de menu ci-dessous. Vous pouvez également définir l`état actif, et ce groupe d`utilisateurs serez en mesure de voir le menu, avec l`active et visible pour les champs.',
-    3                   => 'Cliquez sur l`icône dans la colonne Modifier pour modifier les propriétés d`un élément de menu. Disposez les articles en les déplaçant vers le haut ou vers le bas avec les flèches sous la colonne Ordre.',
-    4                   => 'Pour créer un nouvel élément de menu, spécifiez les détails et les autorisations ci-dessous.',
-    5                   => 'Une fois qu`un élément est créé, vous pouvez toujours revenir en arrière et modifier les détails et les autorisations ci-dessous.',
-    6                   => 'Menu Builder vous permet de personnaliser facilement l`aspect et la convivialité de vos menus. Ajustez les valeurs ci-dessous pour créer un style de menu unique.',
-);
-
-###############################################################################
-# admin/logo.php - logo administration
-
-$LANG_LOGO = array(
-    'logo_admin'        => 'Logo',
-    'instructions'      => 'Logo Administration vous permet de personnaliser facilement votre site logo et de contrôler l`affichage du slogan du site.',
-    'javascript_required' => 'Logo Administration exige que vous avez activer Javascript.',
-    'logo_options'      => 'glFusion Options Logo',
-    'use_graphic_logo'  => 'Utilisez Graphique Logo',
-    'use_text_logo'     => 'Utilisez Logo du texte',
-    'use_no_logo'       => 'Ne Pas Afficher un Logo',
-    'display_site_slogan'   => 'Slogan Affichage du Site',
-    'upload_logo'       => 'Téléchargez le Nouveau Logo',
-    'current_logo'      => 'Logo Actuel',
-    'no_logo_graphic'   => 'No Logo Graphique Disponible',
-    'logo_help'         => 'Logo images graphiques envoyés ne sont pas redimensionnées, la taille standard pour glFusion logo est de 100 pixels de haut et doit être inférieure à 500 pixels de largeur. Vous pouvez télécharger des images plus grandes, mais vous aurez besoin de modifier le site CSS dans styles.css pour s`assurer qu`il affiche correctement.',
-    'logo_saved'        => 'Options de Logo sauvegardés avec succès.',
-    'invalid_type'      => 'Invalid type d`image, que JPG, PNG et GIF sont autorisés',
-    'invalid_size'      => 'Logo Téléchargé supérieure au maximum la taille de ',
-);
-
-###############################################################################
-# admin/autotag.php - autotag administration
-$LANG_AM = array (
-    'plugin'                    => 'autotag',
-    'title'                     => 'Autotag Manager',
-    'menulabel'                 => 'Autotags',
-    'public_title'              => 'Autotag List',
-    'tag'                       => 'Tag',
-    'type'                      => 'Type',
-    'module'                    => 'Module',
-    'description'               => 'Description',
-    'replacement'               => 'Replacement',
-    'enabled'                   => 'Enabled?',
-    'click_to_enable'           => 'Click to enable.',
-    'click_to_disable'          => 'Click to disable.',
-    'function'                  => 'PHPfn?',
-    'autotag_editor'            => 'Autotag Editor',
-    'autotag_list'              => 'Autotag List',
-    'edit'                      => 'Edit',
-    'save'                      => 'Save',
-    'delete'                    => 'Delete',
-    'cancel'                    => 'Cancel',
-    'confirm'                   => 'Are you sure you want to delete this Autotag?',
-    'access_denied'             => 'Access Denied',
-    'access_denied_msg'         => 'You are illegally trying access one of the Autotag Manager administration pages.  Please note that all attempts to illegally access this page are logged',
-    'php_msg_enabled'           => 'If checked, the PHP class <b>{tag}.class.php</b> will be called to expand the tag. The <b>Replacement</b> text will be ignored.',
-    'php_msg_norights'          => '<br />NOTE: PHP Autotags are enabled, however the current user has not been assigned the \'autotag.PHP\' feature, and therefore cannot create new PHP Autotags and/or enable or disable existing PHP Autotags.',
-    'php_msg_disabled'          => 'PHP Autotags have been disabled.<br />To enable, you must set the \'Allow PHP in Autotags\' setting to \'True\' in the Autotag Manager plugin configuration panel.',
-    'disallowed_tag'            => 'The tag you have chosen is restricted and not available for use. Choose another tag.',
-    'duplicate_tag'             => 'The tag you have chosen is already in use. Please choose another tag name or edit the existing tag.',
-    'no_tag_or_replacement'     => 'You must at least fill in the <b>Tag</b> and <b>Replacement</b> fields.',
-    'phpfn_missing'             => 'The class: \'%s.class.php\' does not exist in the '.$_CONF['path_system'].'autotag/ directory.',
-    'phpfn_must_exist'          => 'You must create this class and place it in system/autotag/ directory before defining the associated PHP-based Autotag.',
-    'phpfn_replace'             => 'This tag will be expanded by a call to the PHP class {tag}.class.php.',
-    'html_allowed'              => '(HTML:OK)',
-    'instructions'              => 'To modify or delete an Autotag, click on that tag\'s edit icon below. To create a new Autotag, click on "Create New" above. <p>If there are PHP function-based Autotags below that you cannot edit or enable, it is because 1) you do not have access to the autotag.PHP feature and/or 2) PHP Autotags are disabled in the Autotag Manager plugin configuration panel.</p>',
-    'public_instructions'       => 'The complete list of Autotags that are currently available and enabled on this site are displayed below.  For each Autotag, the contributing glFusion Module is displayed, as well as the Type and Description.  Usage examples are provided with the <i>required</i> and {optional} parameters.  Where multiple options are available, a link to the glFusion.org wiki documentation is provided.',
-    'replace_explain'           => 'Autotags take the form <b>[tag:{p1} {p2}]</b>. In the <b>Replacement</b> field you can use any valid HTML. You can include {p1} and/or {p2} parameters in your replacement string by using the replacement macros %1% and %2% respectively.'
-                                .'<p>Autotags are commonly used to create links. A <b>Replacement</b> field of <b>&lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</b> when combined with this tag: <b>[tag:foo This is a link]</b> will result in the string <b>&lt;a href="http://path.to.somewhere/foo"&gt;This is a link&lt;/a&gt;</b></p>'
-                                .'<p>You may also use %0% to represent the entire string after the first colon, this is handy when you want to use only a single parameter, and the value will contain whitespace which would otherwise be interpreted as a delimiter between multiple parameters.  The %site_url% and $site_admin_url% macros can also be used, and will be replaced by the base url and admin url respectively.</p>',
-    'autotagpermmsg'            => 'Select which features (operations) you want to allow the autotag to be used.',
-    'autotag'                   => 'Autotag',
-    'desc_showblock'            => 'HTML: renders a block. usage: [show_block:<i>block_id</i>]',
-    'desc_story'                => 'Link: to a story on this site; link_text defaults to story title.  usage: [story:<i>story_id</i> {link_text}]',
-    'desc_story_introtext'      => 'HTML: renders story content, up to and including only introduction text.  usage: [story_introtext:<i>story_id</i>]',
-    'desc_vmenu'                => '<b>Depreciated</b> - Use <b>menu</b> tag. HTML: renders a JS-enhanced vertical menu. usage: [vmenu:<i>menu_id</id>]',
-    'desc_hmenu'                => '<b>Depreciated</b> - Use <b>menu</b> tag. HTML: renders a JS-enhanced horizontal menu.  usage: [hmenu:<i>menu_id</i>]',
-    'desc_menu'                 => 'HTML: reneders a JS-enhanced menu. usage : [menu:<i>menu_id</i>]',
-    'desc_cipher'               => 'Text: substitution cipher. Usage example is [wikipedia:ROT13]: [cipher:<i>nopqrstuvwxyzabcdefghijklm</i> <i>text_to_encode</i>]',
-    'desc_topic'                => 'Link: to home page to display specified topic: link_text defaults to description. usage: [topic:<i>topic_id</i> {link_text}]',
-    'desc_glfwiki'              => 'Link: to the glfusion.or wiki search result for the text specified. usage: [glfwiki:<i>text</i>]',
-    'desc_lang'                 => 'Text: expands \$LANG global var, eg. [lang:p1 p2] -> value of \$LANGp1[p2] or \$LANG_p1[p2]',
-    'desc_conf'                 => 'Text: expands \$_CONF global var, eg. [conf:p1] -> value of \$_CONF[p1]',
-    'desc_user'                 => 'Text: expands \$_USER global var, eg. [user:p1] -> value of \$_USER[p1]',
-    'desc_wikipedia'            => 'Link: to the wikipedia search result for the text specified. usage: [wikipedia:<i>text</i>]',
-    'desc_youtube'              => 'HTML: embeds a youtube.com video object. usage: [youtube:<i>video_id</i>]',
-    'instructions_edit'         => 'This screen allows you to create a custom autotag.',
-);
-
-###############################################################################
-# admin/vercheck.php - version checker
-$LANG_UPGRADE = array(
-    'recheck'       => 'Recheck Version',
-    'desc'          => 'Ensure your glFusion software and plugins are up-to-date. The upgrade / version checker will query the glFusion.org web site to retrieve the latest version of all software and compare to your installed version.',
-    'title'         => 'glFusion CMS Upgrade Checker',
-    'upgrade_title' => 'Upgrade Recommended',
-    'upgrade'       => 'The glFusion CMS version you are running, %s is out of date. <span class="b">We recommend upgrading to the current version, %s, as soon as possible.</span> The latest version of glFusion is available at the <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">glFusion CMS Support Site</a>.',
-    'uptodate_title'=> 'Congratulations, your glFusion installation is up-to-date.',
-    'uptodate'      => 'Your current glFusion CMS installation is running the latest production release. We do recommend that you subscribe to the <a href="http://www.freelists.org/list/glfusion-announce" target="_blank">glFusion Announcements Mailing List</a> to receive immediate information about updates and security issues.',
-    'unknown_title' => 'Unable to determine glFusion version status',
-    'unknown'       => 'We were unable to match your current glFusion version of %s to any released versions. If you are running a development snapshot, we recommend subscribing to the <a href="http://www.freelists.org/list/glfusion-development" target="_blank">glFusion Development Mailing List</a>. You are are not running a development snapshot, please use the <a href="http://www.glfusion.org/forum/index.php?forum=28" target="blank">glFusion Support Forums</a> for assistance.',
-    'error_title'   => 'An error has occured while processing your request.',
-    'error_title'   => 'An error has occured while processing your request.',
-    'error'         => 'We were unable to retrieve the version data from glFusion.org. If this problem persists, please visit <a href="http://www.glfusion.org/forum/index.php?forum=28" target="blank">the glFusion CMS Support Forum</a> to discover how you can get support.',
-    'was_released'  => 'Version %s was released on %s.',
-    'plugin_uptodate' => 'Up To Date',
-    'plugin_newer'  => 'You are running a newer version of the plugin.',
-    'no_data'       => 'No data available.',
-    'updates_available' => 'There are updates available - Please use the <a href="'.$_CONF['site_admin_url'].'/vercheck.php">Version Checker</a> to see available updates.',
-    'plugin_title'  => 'Plugin Version Check',
-    'plugin'        => 'Plugin',
-    'installed_version' => 'Installed Version',
-    'latest_version' => 'Latest Version',
-    'notes'         => 'Notes',
-);
-
-###############################################################################
-# admin/sfs.php - stop forum spam checks
-$LANG_SFS = array(
-    'title'             => 'Stop Forum Spam (SFS) User Check',
-    'instructions'      => 'All users have had their username, email address, and source IP address checked in the Stop Forum Spam database.  You may select any user\'s that were found in the SFS database and ban them from further use of your site.',
-    'no_record_found'   => 'No Record Found',
-    'sfs_email_match'   => 'Email Match in SFS',
-    'sfs_ip_match'      => 'IP match in SFS',
-    'sfs_username_match' => 'Username match in SFS',
-    'uid'               => 'UID',
-    'username'          => 'Username',
-    'remote_ip'         => 'Remote IP',
-    'email'             => 'Email Address',
-    'sfs_status'        => 'SFS Status',
-    'confirm_one'       => 'Are you sure you want to Ban all selected users?',
-    'confirm_two'       => 'Are you REALLY sure you want to Ban all selected users?',
-    'action_text'       => 'Ban Users',
-    'confirmation_ban'  => 'All selected user\'s have been banned',
-    'confirmation_del'  => 'Users have been deleted.',
-    'confirm_one_del'   => 'Are you sure you want to DELETE all selected users?',
-    'confirm_two_del'   => 'Are you REALLY sure you want to DELETE all selected users?',
-    'action_text_del'   => 'Delete Users',
-    'no_data'           => 'No user\'s were found in the user database.',
-);
-
 ###############################################################################
 # Localization of the Admin Configuration UI
 
@@ -2376,24 +2403,24 @@ $LANG_confignames['Core'] = array(
     'show_servicename' => 'Nom Spectacle de Services',
     'custom_registration' => 'Activer l`Inscription Personnalisée',
     'user_login_method' => 'Connexion utilisateur Méthode',
-    'facebook_login' => "Enable Facebook OAuth Login Method",
-    'facebook_consumer_key' => "Facebook OAuth Application ID",
-    'facebook_consumer_secret' => "Facebook OAuth Application Secret",
-    'linkedin_login' => "Enable LinkedIn OAuth Login Method",
-    'linkedin_consumer_key' => "LinkedIn OAuth API Key",
-    'linkedin_consumer_secret' => "LinkedIn OAuth Secret Key",
-    'twitter_login' => "Enable Twitter OAuth Login Method",
-    'twitter_consumer_key' => "Twitter OAuth Consumer Key",
-    'twitter_consumer_secret' => "Twitter OAuth Consumer Secret",
-    'google_login' => "Enable Google OAuth Login Method",
-    'google_consumer_key' => "Google OAuth Consumer Key",
-    'google_consumer_secret' => "Google OAuth Consumer Secret",
-    'microsoft_login' => "Enable Microsoft OAuth Login Method",
-    'microsoft_consumer_key' => "Microsoft OAuth Consumer Key",
-    'microsoft_consumer_secret' => "Microsoft OAuth Consumer Secret",
-    'github_login' => "Enable Github OAuth Login Method",
-    'github_consumer_key' => "Github OAuth Client ID",
-    'github_consumer_secret' => "Github OAuth Client Secret",
+    'facebook_login' => 'Enable Facebook OAuth Login Method',
+    'facebook_consumer_key' => 'Facebook OAuth Application ID',
+    'facebook_consumer_secret' => 'Facebook OAuth Application Secret',
+    'linkedin_login' => 'Enable LinkedIn OAuth Login Method',
+    'linkedin_consumer_key' => 'LinkedIn OAuth API Key',
+    'linkedin_consumer_secret' => 'LinkedIn OAuth Secret Key',
+    'twitter_login' => 'Enable Twitter OAuth Login Method',
+    'twitter_consumer_key' => 'Twitter OAuth Consumer Key',
+    'twitter_consumer_secret' => 'Twitter OAuth Consumer Secret',
+    'google_login' => 'Enable Google OAuth Login Method',
+    'google_consumer_key' => 'Google OAuth Consumer Key',
+    'google_consumer_secret' => 'Google OAuth Consumer Secret',
+    'microsoft_login' => 'Enable Microsoft OAuth Login Method',
+    'microsoft_consumer_key' => 'Microsoft OAuth Consumer Key',
+    'microsoft_consumer_secret' => 'Microsoft OAuth Consumer Secret',
+    'github_login' => 'Enable Github OAuth Login Method',
+    'github_consumer_key' => 'Github OAuth Client ID',
+    'github_consumer_secret' => 'Github OAuth Client Secret',
     'spamx' => 'Spam-X Actions',
     'sort_admin' => 'Trier les Liens',
     'language' => 'Langue',
@@ -2451,7 +2478,7 @@ $LANG_confignames['Core'] = array(
     'hide_home_link' => 'Hide Home Link',
     'whosonline_threshold' => 'Session Threshold',
     'whosonline_anonymous' => 'Hide Names from Guests',
-    'whosonline_photo' => "Display User Photo Thumbnail?",
+    'whosonline_photo' => 'Display User Photo Thumbnail?',
     'emailstories' => 'Daily Digest Enabled',
     'emailstorieslength' => 'Length of Stories',
     'emailstoriesperdefault' => 'Enable for New Users',
@@ -2594,7 +2621,7 @@ $LANG_confignames['Core'] = array(
     'article_comment_close_enabled' => 'Automatically close comments (default)',
     'registration_type' => 'Registration Type',
     'comment_postmode' => 'Comment Postmode',
-    'max_logo_width' =>  'Max logo width',
+    'max_logo_width' => 'Max logo width',
     'max_logo_height' => 'Max logo height',
     'whatsnew_cache_time' => 'Time between forced rebuild of the What\'s New cache (in seconds)',
     'hideemptyblock' => 'Hide What\'s New Block when empty',
@@ -2605,6 +2632,18 @@ $LANG_confignames['Core'] = array(
     'htmlfilter_comment' => 'HTML allowed in comments',
     'htmlfilter_story' => 'HTML allowed in stories',
     'htmlfilter_root' => 'Additional HTML allowed for Root users',
+    'min_username_length' => 'Minimum Username Length',
+    'bb2_enabled' => 'Bad Behavior2 Enabled',
+    'bb2_ban_enabled' => 'Enable Automatic Banning',
+    'bb2_display_stats' => 'Display Stats',
+    'bb2_strict' => 'Strict Checking',
+    'bb2_verbose' => 'Verbose Logging',
+    'bb2_logging' => 'Logging Enabled',
+    'bb2_httpbl_key' => 'http:BL Key',
+    'bb2_httpbl_threat' => 'http:BL Threat Threshold',
+    'bb2_httpbl_maxage' => 'http:BL Max Age',
+    'bb2_offsite_forms' => 'Allow offsite forms',
+    'bb2_eu_cookie' => 'EU Cookie'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2615,7 +2654,8 @@ $LANG_configsubgroups['Core'] = array(
     'sg_users' => 'Users and Submissions',
     'sg_images' => 'Images',
     'sg_locale' => 'Languages and Locale',
-    'sg_misc' => 'Miscellaneous'
+    'sg_misc' => 'Miscellaneous',
+    'sg_spam' => 'Spam / Bot Protection'
 );
 
 $LANG_fs['Core'] = array(
@@ -2665,6 +2705,7 @@ $LANG_fs['Core'] = array(
     'fs_logo' => 'Logo Options',
     'fs_update' => 'Update Checker',
     'fs_rating' => 'Rating Options',
+    'fs_spam_config' => 'Configuration'
 );
 
 $LANG_configselects['Core'] = array(
@@ -2697,7 +2738,7 @@ $LANG_configselects['Core'] = array(
     26 => array('None' => 0, 'A.B' => 1, 'A.B.C' => 2, 'All' => 3),
     27 => array('Generate Password' => 0, 'User Enters Password' => 1),
     28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
-    29 => array('Daily' => 86400, 'Weekly' => 604800, 'Hourly' => 3600, 'Always' => 0),
+    29 => array('Daily' => 86400, 'Weekly' => 604800, 'Hourly' => 3600, 'Always' => 0)
 );
 
 ?>
