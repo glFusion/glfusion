@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion CMS Menu Administration                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2014 by the following authors:                        |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -906,7 +906,7 @@ function MB_editElement( $menu_id, $mid ) {
 
     $T->set_var(array(
         'form_action'       => $_CONF['site_admin_url'] . '/menu.php',
-        'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/menu.php">Menu List</a> :: <a href="'.$_CONF['site_admin_url'].'/menu.php?mode=menu&amp;menu='.$menu_id.'">'.$menu->name.'</a> :: Edit Element',
+        'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/menu.php">'.$LANG_MB01['menu_list'].'</a> :: <a href="'.$_CONF['site_admin_url'].'/menu.php?mode=menu&amp;menu='.$menu_id.'">'.$menu->name.'</a> :: '.$LANG_MB01['edit_element'],
         'menulabel'         => $menu->menu_elements[$mid]->label,
         'menuorder'         => $menu->menu_elements[$mid]->order,
         'order_select'      => $order_select,
