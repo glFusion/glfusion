@@ -57,7 +57,7 @@ $LANG_CP00 = array(
     'glfusion_check' => 'glFusion v1.0.1 tai uudempi, nykyinen versio on <b>%s</b>.',
     'php_check' => 'PHP v4.3.0 tai uudempi, nykyinen versio on <b>%s</b>.',
     'preinstall_confirm' => "Tiedot CAPTCHAn asentamiseen, lue <a href=\"{$_CONF['site_admin_url']}/plugins/captcha/install_doc.html\">Installation Manual</a>.",
-    'captcha_help' => 'Kuvateksti t&auml;h&auml;n',
+    'captcha_help' => 'Solve the Problem',
     'bypass_error' => 'Yritit ohittaa CAPTCHAn, k&auml;yt&auml; Uusi K&auml;ytt&auml;j&auml; linkki&auml; ja rekister&ouml;idy.',
     'bypass_error_blank' => 'Yritit ohittaa CAPTCHAn, anna oikea CAPTCHA lauseke.',
     'entry_error' => 'Annettu CAPTCHA merkkijono ei vastaa kuvassa olevaa, yrit&auml; uudestaan. <b>Merkkikokoriippuvainen.</b>',
@@ -78,8 +78,7 @@ $LANG_CP00 = array(
     'characters' => 'Merkit',
     'ayah_error' => 'Sorry, but we were not able to verify you as human. Please try again.',
     'captcha_math' => 'Enter the answer',
-    'captcha_prompt'    => 'Are You Human?',
-    'captcha_help'      => 'Solve the Problem',
+    'captcha_prompt' => 'Are You Human?'
 );
 
 // Localization of the Admin Configuration UI

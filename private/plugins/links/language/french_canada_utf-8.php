@@ -277,4 +277,5 @@ $LANG_configselects['links'] = array(
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
     13 => array('Gauche Blocs' => 0, 'Blocs Droite' => 1, 'Gauche et Blocs Droite' => 2, 'None' => 3)
 );
+
 ?>

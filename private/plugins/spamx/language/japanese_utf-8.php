@@ -152,7 +152,13 @@ $LANG_confignames['spamx'] = array(
     'notification_email' => 'メールで通知する',
     'admin_override' => '管理者の入力はフィルターしない',
     'logging' => 'ログを有効にする',
-    'timeout' => 'タイムアウト'
+    'timeout' => 'タイムアウト',
+    'sfs_username_check' => 'Enable User name validation',
+    'sfs_email_check' => 'Enable email validation',
+    'sfs_ip_check' => 'Enable IP address validation',
+    'sfs_username_confidence' => 'Minimum confidence level on Username match to trigger spam block',
+    'sfs_email_confidence' => 'Minimum confidence level on Email match to trigger spam block',
+    'sfs_ip_confidence' => 'Minimum confidence level on IP address match to trigger spam block'
 );
 
 $LANG_configsubgroups['spamx'] = array(
@@ -160,7 +166,8 @@ $LANG_configsubgroups['spamx'] = array(
 );
 
 $LANG_fs['spamx'] = array(
-    'fs_main' => 'Spam-Xの設定'
+    'fs_main' => 'Spam-Xの設定',
+    'fs_sfs' => 'Stop Forum Spam Settings'
 );
 
 // Note: entries 0, 1, 9, and 12 are the same as in $LANG_configselects['Core']

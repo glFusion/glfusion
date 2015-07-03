@@ -150,7 +150,13 @@ $LANG_confignames['spamx'] = array(
     'notification_email' => 'Teavituskiri',
     'admin_override' => 'Ära filtreeri administraatori postitusi',
     'logging' => 'Luba logimine',
-    'timeout' => 'Ajapiir'
+    'timeout' => 'Ajapiir',
+    'sfs_username_check' => 'Enable User name validation',
+    'sfs_email_check' => 'Enable email validation',
+    'sfs_ip_check' => 'Enable IP address validation',
+    'sfs_username_confidence' => 'Minimum confidence level on Username match to trigger spam block',
+    'sfs_email_confidence' => 'Minimum confidence level on Email match to trigger spam block',
+    'sfs_ip_confidence' => 'Minimum confidence level on IP address match to trigger spam block'
 );
 
 $LANG_configsubgroups['spamx'] = array(
@@ -158,7 +164,8 @@ $LANG_configsubgroups['spamx'] = array(
 );
 
 $LANG_fs['spamx'] = array(
-    'fs_main' => 'Spam-X peahäälestused'
+    'fs_main' => 'Spam-X peahäälestused',
+    'fs_sfs' => 'Stop Forum Spam Settings'
 );
 
 // Note: entries 0, 1, 9, and 12 are the same as in $LANG_configselects['Core']

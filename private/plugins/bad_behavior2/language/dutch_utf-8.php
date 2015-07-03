@@ -76,7 +76,29 @@ $LANG_BAD_BEHAVIOR = array(
     'blocked_ips' => 'Unique IP adressen geblokkeerd',
     'unblock' => 'Deblokkeer IP adres',
     'ip_date' => 'IP / Date / Status',
-    'headers' => 'Headers'
+    'headers' => 'Headers',
+    'log_entries' => 'Log Entries',
+    'list_ips' => 'List Banned IPs',
+    'ban_ip' => 'Ban IPs',
+    'ban_list_info' => 'The IPs listed below are banned from the system. Manual bans are permanent. Automatic bans expire after 24 hours.',
+    'ip_address' => 'IP Address',
+    'type' => 'Type',
+    'date' => 'Date',
+    'delete' => 'Delete',
+    'delete_confirm_1' => 'Are you sure you want to un-ban these IPs?',
+    'delete_confirm_2' => 'Are you REALLY sure?',
+    'delete_info' => 'Remove Banned IP',
+    'manually_added' => 'Manually Added',
+    'automatic_captcha' => 'Automatically Added (CAPTCHA)',
+    'enter_ip_info' => 'Enter IPs to ban from the site below. Each IP should be on a separate line.',
+    'ban_results' => 'IPs listed below had errors that prevented them from being added to the ban list.',
+    'duplicate_error' => 'IP %s already exists in the Ban list.',
+    'invalid_ip' => 'IP %s is not a valid IPv4 address.',
+    'submit' => 'Submit',
+    'cancel' => 'Cancel',
+    'filter' => 'Filter Selection',
+    'go' => 'Go',
+    'no_filter' => 'No Filter'
 );
 
 $LANG_BB2_RESPONSE = array(
@@ -119,7 +141,10 @@ $LANG_BB2_RESPONSE = array(
     'f1182195' => 'User-Agent claimed to be Googlebot, claim appears to be false.',
     'f9f2b8b9' => 'A User-Agent is required but none was provided.',
     'f9f3b8b0' => 'Question mark at end of query.',
-    '96c0bd29' => 'SQL Injection detected'
+    '96c0bd29' => 'SQL Injection detected',
+    'f9f3b8b1' => 'do=register BOT Attack',
+    'f9f3b8b2' => '/RK=0/RS= BOT',
+    '96c0bd30' => 'Banned IP'
 );
 
 $PLG_bad_behavior_MESSAGE1 = 'If you see this message, then Bad Behavior2 is <b>not</b> installed correctly! Please read the installation instructions again carefully.';

@@ -34,7 +34,6 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
@@ -52,7 +51,7 @@ $LANG_GF00 = array(
     'searchresults' => 'Résultats de la recherche Forum %s',
     'access_denied' => 'Accès refusé',
     'uploaderr' => 'File Upload erreur',
-    'instructions' => 'Sélectionnez l option ci-dessus pour créer / modifier des catégories et forum. Vous pouvez également modérateurs du forum de configuration, importation glFusion histoires dans le forum et administrer les paramètres communauté de modération.',
+    'instructions' => 'Sélectionnez l option ci-dessus pour créer / modifier des catégories et forum. Vous pouvez également modérateurs du forum de configuration, importation glFusion histoires dans le forum et administrer les paramètres communauté de modération.'
 );
 
 $LANG_GF01 = array(
@@ -114,7 +113,7 @@ $LANG_GF01 = array(
     'COMMENTS' => 'Commentaires',
     'SUBMISSIONS' => 'Soumissions',
     'HTML_FILTER_MSG' => 'Filtré HTML Autorisés',
-    'HTML_FULL_MSG' => 'Plein HTML autoris豧,
+    'HTML_FULL_MSG' => 'Plein HTML autoris',
     'HTML_MSG' => 'HTML Autorisés',
     'CENSOR_PERM_MSG' => 'Contenu Censurée',
     'ANON_PERM_MSG' => 'Voir les messages anonymes',
@@ -132,7 +131,7 @@ $LANG_GF01 = array(
     'HTMLMODE' => 'Mode HTML:',
     'TopicPreview' => 'Sujet après l',
     'moderator' => 'Modérateur',
-    'admin' => 'Admin',                 /* stopped here */
+    'admin' => 'Admin',
     'DATEADDED' => 'Date Ajouté',
     'PREVTOPIC' => 'Précédent Subjet',
     'NEXTTOPIC' => 'Suivant Subjet',
@@ -207,7 +206,7 @@ $LANG_GF01 = array(
     'VIOLET' => 'Violet',
     'WHITE' => 'Blanc',
     'BLACK' => 'Noir',
-    'ID'    => 'ID',
+    'ID' => 'ID',
     'b_help' => 'Le texte en gras: [b]text[/b]',
     'i_help' => 'Le texte en italique: [i]text[/i]',
     'u_help' => 'Souligner le texte: [u]text[/u]',
@@ -224,26 +223,21 @@ $LANG_GF01 = array(
     't_help' => 'Utilisez [file]#[/file] à incorporer une image attachée à la poste',
     'e_help' => 'Liste article: [*]texte',
     'smiley' => 'Smileys',
-
-    /* --- Balises de modération de la Communauté --- */
-    'grade'         => '<br /><b>Confort Groupe<br />Liveau:</b>',
-    'grade_user'    => '<br /><b>Évaluer l`utilisateur</b>',
+    'grade' => '<br /><b>Confort Groupe<br />Liveau:</b>',
+    'grade_user' => '<br /><b>Évaluer l`utilisateur</b>',
     'retract_grade' => '<br /><b>Rétracter Évaluation</b>',
-    'rate_too_low'  => 'Votre niveau d`évaluation est trop faible pour la publication dans ce forum',
+    'rate_too_low' => 'Votre niveau d`évaluation est trop faible pour la publication dans ce forum',
     'rate_too_low_forum' => 'Votre niveau d`évaluation n`est pas suffisamment élevé pour voir ce forum',
     'rate_too_low_thread' => 'Votre niveau d`évaluation n`est pas suffisamment élevé pour voir ce fil',
-    /* --- bbcode signature --- */
     'signature' => 'Forum Signature',
     'edit_signature' => 'Modifier BBcode Signature',
     'signature_preview' => 'Signature Extrait',
     'cancel_confirm' => 'Etes-vous sûr de vouloir annuler ce message?',
-    /* --- sujet caractéristiques --- */
     'disable_bbcode' => 'Désactiver le BBCode:',
     'disable_smilies' => 'Désactiver les Smileys:',
     'disable_urlparse' => 'Ne pas analyser les URL:',
     'features' => 'Caractéristiques:',
-    /* --- rss Caractéristiques: --- */
-    'rss_link' => 'Subscribe to this forum\'s RSS feed.',
+    'rss_link' => 'Subscribe to this forum\'s RSS feed.'
 );
 
 $LANG_GF02 = array(
@@ -429,7 +423,7 @@ $LANG_GF02 = array(
     'msg190' => 'Silencieux Modifier',
     'msg191' => 'Modifier interdite. Admissible modifier délai a expiré ou vous avez besoin des droits de modérateur',
     'msg192' => 'Terminé ... Migrés %s sujets et %s commentaires.',
-   'msg193' => 'HISTOIRE&nbsp;&nbsp;À&nbsp;&nbsp;FORUM&nbsp;&nbsp;MIGRATION&nbsp;&nbsp;UTILITAIRE',
+    'msg193' => 'HISTOIRE&nbsp;&nbsp;À&nbsp;&nbsp;FORUM&nbsp;&nbsp;MIGRATION&nbsp;&nbsp;UTILITAIRE',
     'msg194' => 'Forum Tranquille',
     'msg195' => 'Cliquez sur pour sauter au forum',
     'msg196' => 'Afficher le principal indice de forum',
@@ -448,13 +442,7 @@ $LANG_GF02 = array(
     'EditTopic' => 'Modifier le Sujet',
     'quietforum' => 'Forum n`a pas de nouveaux sujets',
     'notify_full' => 'Inclure le post complet dans la notification',
-    'view_online' => 'Si ce message ne ​​s`affiche pas correctement, <a href="%s">Voir la version en ligne</a>.',
-    'invalid_token' => 'Invalid Token de sécurité',
-    'edit_time_passed' => 'Le délai d`éditer votre message a expiré',
-    'not_your_post' => 'Vous ne semblez pas être l`auteur de ce post.',
-    'spam_detected' => 'Votre message a été identifié comme un spam',
-    'invalid_email' => 'Email vide ou non une adresse email valide',
-    'invalid_name'  => 'Pas de nom ou blanc',
+    'view_online' => 'Si ce message ne ​​s`affiche pas correctement, <a href="%s">Voir la version en ligne</a>.'
 );
 
 $LANG_GF03 = array(
@@ -475,14 +463,14 @@ $LANG_GF03 = array(
     'splitheading' => 'Option de fil de Split:',
     'splitopt1' => 'Déplacez tous les messages de ce point',
     'splitopt2' => 'Déplacez ce seul poste',
-    'merge_post'  => 'Fusionner Poster',
+    'merge_post' => 'Fusionner Poster',
     'merge_topic' => 'Fusionner le sujet',
     'mergetopicmsg' => 'Vous pouvez fusionner poste (s) sélectionné dans un autre sujet. Ces postes ne seront pas réorganisées et apparaissent comme si les utilisateurs eux affichés sur le nouveau sujet. S`il vous plaît entrer dans le sujet de destination Identifiant ou cliquez sur "Choisir le sujet" pour rechercher un.',
     'mergeparent' => 'Vous avez choisi l`option de fusionner <strong> tous </ strong> messages de ce sujet dans un autre sujet.',
-    'select'    => 'Sélectionner',
+    'select' => 'Sélectionner',
     'select_forum' => 'Sélectionner le Forum Discussion',
     'destination_topic' => 'Destinations Rubrique ID:',
-    'select_topic' => 'Choisir un Sujet',
+    'select_topic' => 'Choisir un Sujet'
 );
 
 $LANG_GF04 = array(
@@ -511,7 +499,6 @@ $LANG_GF05 = array(
     'yim_alttext' => 'YIM:&nbsp;'
 );
 
-// Admin Navbar
 $LANG_GF06 = array(
     1 => 'Statistiques',
     2 => 'Paramètres',
@@ -522,10 +509,9 @@ $LANG_GF06 = array(
     7 => 'Gestion IP',
     8 => 'La modération de la Communauté',
     9 => 'Importer',
-    10 => 'Administration Forum',
+    10 => 'Administration Forum'
 );
 
-// Fonctions utilisateur la barre de navigation
 $LANG_GF07 = array(
     1 => 'Voir les forums',
     2 => 'Préférences',
@@ -534,14 +520,12 @@ $LANG_GF07 = array(
     5 => 'Membres'
 );
 
-// Caractéristiques Forum des utilisateurs
 $LANG_GF08 = array(
     1 => 'Sujet Notifications',
     2 => 'Forum Piste Notifications',
     3 => 'Notifications sujet d`exception'
 );
 
-// Fonction de support de fixation
 $LANG_GF10 = array(
     'attachments' => 'Annexes',
     'maxattachments' => 'Max %s Permis',
@@ -577,7 +561,6 @@ $LANG_GF91 = array(
     'avgvmsg' => 'Vues en moyenne par:'
 );
 
-// Settings.php
 $LANG_GF92 = array(
     'topicspp' => 'Sujets Par Page',
     'showiframe' => 'Afficher Sujet avis',
@@ -585,21 +568,14 @@ $LANG_GF92 = array(
     'forum_prefs' => 'Forum Préférences',
     'forumprefs_help_title' => 'Forum Préf Aide',
     'forumprefs_help' => 'Modifier les préférences de l`utilisateur Forum Plugin. <li> Nombre de sujets à afficher lors de la visualisation de l`indice de forum. </Li> <li> Nombre de messages à afficher par page. </Li> <li> Masquer les messages depuis anonyme utilisateurs. </li> <li> Activer les notifications d`automobiles. </li> <li> Seulement envoyer une notification. </li> <li> Afficher examen de sujet (iframe) en bas lorsque vous répondez. </li></ul >',
-    'topicspp_help' => 'Nombre de sujets à afficher lors de la visualisation de l`indice de forum.',
-    'postspp_help' => 'Nombre de messages à afficher par page.',
-    'anonymous_help' => 'Masquer les messages d`utilisateurs anonymes.',
-    'notify_help' => 'Activer les notifications automatiques.',
-    'notify_once_help' => 'Seulement en envoyer une notification.',
-    'iframe_help' => 'Afficher examen de sujet (iframe) en bas lorsque vous répondez.',
     'topic_order' => 'Sujet Trier',
     'editor_type' => 'Type d`éditeur',
-    'bbcode'    => 'BBCode',
-    'wysiwyg'   => 'WYSIWYG',
+    'bbcode' => 'BBCode',
+    'wysiwyg' => 'WYSIWYG',
     'ascending' => 'Ascending',
     'descending' => 'Descending',
     'sb_latestposts' => 'Dernier Message',
     'setsavemsg' => 'Paramètres enregistrés.',
-    /* not used */
     'gfsettings' => 'Réglages Forum de Discussion',
     'gensettings' => 'Paramètres Généraux',
     'topicsettings' => 'Rubrique Paramètres de messages',
@@ -698,10 +674,9 @@ $LANG_GF92 = array(
     'geshiformat' => 'Le Code de mise en Forme',
     'geshiformatdscp' => 'Utilisez la fonction Geshi forme du code',
     'edit_timewindow' => 'Modifier Calendrier',
-    'edit_timewindowdscp' => 'Délai imparti (min) pour permettre aux membres d`éditer leurs messages',
+    'edit_timewindowdscp' => 'Délai imparti (min) pour permettre aux membres d`éditer leurs messages'
 );
 
-// Board Admin
 $LANG_GF93 = array(
     'gfboard' => 'Forum de discussion du Conseil d`administration',
     'vieworder' => 'Afficher ma Commande',
@@ -828,12 +803,12 @@ $LANG_GF97 = array(
 );
 
 $LANG_GF98 = array(
-    'user_ratings'  => 'Avis des Utilisateurs',
+    'user_ratings' => 'Avis des Utilisateurs',
     'forum_settings' => 'Paramètres de modération du forum communautaire. Définir la note minimale de l`utilisateur de visualiser et de poster dans les forums.',
     'board_ratings' => 'Paramètres Conseil de notation',
     'user_ratings_desc' => 'Modération communautaire notes des utilisateurs. Vous pouvez modifier les paramètres de l`utilisateur ou voir un utilisateur qui a classé ou voir la note d`un utilisateur',
-    'rating'    => 'Évaluation',
-    'uid'       => 'UID',
+    'rating' => 'Évaluation',
+    'uid' => 'UID',
     'user_rating_title' => 'Avis modération de la Communauté de l`Utilisateur',
     'no_subject_defined' => 'Aucun sujet défini',
     'admin_set_value' => 'Administrateur de définir une nouvelle note de l`utilisateur',
@@ -844,16 +819,15 @@ $LANG_GF98 = array(
     'user_votes_desc' => 'Cet écran montre comment l`utilisateur a voté (classées) d`autres utilisateurs.',
     'user_rating_details' => 'Votre note Détails pour: ',
     'user_voting_details' => 'Utilisateurs Détails de vote pour: ',
-    'save_changes'  => 'Enregistrer les Modifications',
+    'save_changes' => 'Enregistrer les Modifications',
     'view_rating' => 'Voir Note',
-    'post_rating' => 'Poster Vendeur',
+    'post_rating' => 'Poster Vendeur'
 );
 
 $LANG_FF_AUTOTAG = array(
-    'desc_forum' => 'Lien: à un poste Forum. link_text par défaut le thème de poste. utilisation: [forum:<i>post_id</i> {link_text}]',
+    'desc_forum' => 'Lien: à un poste Forum. link_text par défaut le thème de poste. utilisation: [forum:<i>post_id</i> {link_text}]'
 );
 
-###############################################################################
 $PLG_forum_MESSAGE1 = 'Forum Plugin Upgrade complété - aucune erreur';
 $PLG_forum_MESSAGE2 = 'Forum Plugin de mise à niveau: Nous ne pouvons pas mettre à jour cette version automatiquement. Reportez-vous à la documentation du plugin.';
 $PLG_forum_MESSAGE5 = 'Forum Plugin Upgrade a échoué - chèque error.log';
@@ -947,7 +921,7 @@ $LANG_confignames['forum'] = array(
     'smilies_disabled' => 'Réglage par Défaut pour Smileys Box Handicapés',
     'urlparse_disabled' => 'Réglage par Défaut pour l`URL Parse Box Handicapés',
     'use_sfs' => 'Activer Contrôles Arrêter Forum Spam pour de Nouveaux Messages',
-    'allowed_html' => 'Permis HTML',
+    'allowed_html' => 'Permis HTML'
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -963,6 +937,7 @@ $LANG_fs['forum'] = array(
     'ff_attachments_settings' => 'Spécifications d`Attachement'
 );
 
+// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['forum'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => true, 'False' => false),
