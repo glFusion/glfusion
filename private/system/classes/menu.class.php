@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Menu elements class / functions                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C)  2008-2014 by the following authors:                       |
+// | Copyright (C)  2008-2015 by the following authors:                       |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -301,7 +301,7 @@ class menuElement {
                                     . $this->subtype . '<br/>';
                 break;
             case 5 :
-                $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . ':</b> UNDEFINED <br/>';
+                $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . ':</b> '.$this->subtype.'<br/>';
                 break;
             case 6 :
                 $elementDetails .= '<b>' . $LANG_MB_TYPES[$this->type] . ':</b> '
