@@ -1,6 +1,7 @@
 Filemanager
 ========================
 
+FM is an open-source file manager released under MIT license. It is an alternative to elfinder or CKFinder.
 
 Support
 -------
@@ -9,8 +10,66 @@ Filemanager is under free license. If you want to support the filemanager develo
 [![Donate](https://www.paypal.com/en_US/i/btn/x-click-but21.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=2M5GWH9NLNEZL) 
 
 
+
+Main features
+-------------
+
+* A Filemanager relying on jquery.
+* Available in more than 20 languages.
+* [Highly customizable](https://github.com/simogeo/Filemanager/wiki/Filemanager-configuration-file)
+* Can work as standalone application
+* Easy integration with RTE like CKEditor, TinyMCE and so on.
+* Easy integration with [colorbox jquery plugin](https://github.com/simogeo/Filemanager/wiki/How-to-use-the-filemanager-with-colorbox-%3F) or [HTML simple textfield](https://github.com/simogeo/Filemanager/wiki/How-to-use-the-filemanager-from-a-simple-textfield-%3F)
+* Several computer language connectors available. **PHP is up-to-date**
+* Ability to upload, delete, modify, download and move files
+* Ability to create folders
+* Support user permissions - based on session
+* Handle system permissions
+* Multiple uploads support - based on [dropzonejs](http://www.dropzonejs.com)
+* Online text / code edition - based on [codeMirror](http://codemirror.net/)
+* [Opening a given folder](https://github.com/simogeo/Filemanager/wiki/How-to-open-a-given-folder-different-from-root-folder-when-opening-the-filemanager%3F)
+* [Opening exclusively a given folder](https://github.com/simogeo/Filemanager/wiki/How-to-open-%28exclusively%29-a-given-subfolder-%3F)
+* [Passing parameters to the FM](https://github.com/simogeo/Filemanager/wiki/Passing-parameters-to-the-FM)
+* [File types restriction](https://github.com/simogeo/Filemanager/wiki/Set-up-upload-restriction-on-file-type)
+* Video and audio player relying on web browser capabilities
+* Textbox Search filter
+* Thumbnails generation
+* Image auto-resize
+* File size limit
+* File exclusion based on name and patterns
+* Images files only
+* Prevent files overwriting (or not)
+* Switch from list to grid view and vice-versa
+* Copy direct file URL
+* [CSS Themes](https://github.com/simogeo/Filemanager/wiki/Create-your-own-theme) - **Please, share your themes with others !**
+* and more ...
+
+
+Screenshot
+-------------
+
+![Filemanager Screenshot](http://i57.tinypic.com/35cqw74.png)
+
+
+Documentation
+-------------
+
+Filemanager is highly documented on the [wiki pages](https://github.com/simogeo/Filemanager/wiki). API, see below.
+
+
 Installation and Setup
 ----------------------
+
+**Preamble**
+
+Since many changes have been done recently, only PHP and MVC connectors are now available. You can try the latest version for others connectors, but with no warranty they implement all features and work correctly.
+
+To use other connectors, please download v0.8 version from https://github.com/simogeo/Filemanager/archive/v0.8.zip
+(PHP, ASHX, ASP, CFM, lasso, PL and JSP connectors are available)
+
+A JSP/Java connector implementation is available at : https://github.com/th-schwarz/C5Connector.Java 
+
+---
 
 **(1)** Check out a copy of the FileManager from the repository using Git :
 
@@ -23,16 +82,7 @@ You can place the FileManager anywhere within your web serving root directory.
 **(2)** Make a copy of the default configuration file ("filemanager.config.js.default" located in the scripts directory), removing the '.default' from the end of the filename, and edit the options according to the following wiki page : https://github.com/simogeo/Filemanager/wiki/Filemanager-configuration-file
    Having a look on configuration cases study may also be helpful to you : https://github.com/simogeo/Filemanager/wiki/Specify-user-folder%2C-configuration-cases
 
-**(3)** Find the default configuration file for the connector you chose in Step 2 above, and follow the same procedure to configure the connector. For instance, the default configuration file for the PHP connector is located here:
-		[Path to FileManager]/connectors/php/filemanager.config.php
-		
-**Since many changes have been done recently, only PHP and MVC connectors are now available**. You can try the latest version for others connectors, but with no warranty they implement all features and work correctly.
-		
-To use other connectors, please download v0.8 version from https://github.com/simogeo/Filemanager/archive/v0.8.zip
-(PHP, ASHX, ASP, CFM, lasso, PL and JSP connectors are available)
-    
-
-**(4a)** If you are integrating the FileManager with FCKEditor, open your fckconfig.js file and find the lines which specify what file browser to use for images, links, etc. Look toward the bottom of the file. You will need to change lines such as this:
+**(3a)** If you are integrating the FileManager with FCKEditor, open your fckconfig.js file and find the lines which specify what file browser to use for images, links, etc. Look toward the bottom of the file. You will need to change lines such as this:
 
 ```javascript
 FCKConfig.ImageBrowser = false ;
@@ -46,7 +96,7 @@ FCKConfig.ImageBrowser = true ;
 FCKConfig.ImageBrowserURL = '[Path to Filemanager]/index.html' ;
 ```
 
-**(4b)** If you are integrating the FileManager with CKEditor 3.x or higher, simply set the URL when you configure your instance, like so:
+**(3b)** If you are integrating the FileManager with CKEditor 3.x or higher, simply set the URL when you configure your instance, like so:
 
 ```javascript
 CKEDITOR.replace('instancename', {
@@ -55,7 +105,9 @@ CKEDITOR.replace('instancename', {
 });
 ```
 
-**(4c)** If you are integrating the FileManager with TinyMCE (>= 3.0), you should:
+If you want to use the **modal dialog mode** (instead of pop-up), please refer to [the dedicated wiki page](https://github.com/simogeo/Filemanager/wiki/How-to-open-the-Filemanager-from-CKEditor-in-a-modal-window-%3F).
+
+**(3c)** If you are integrating the FileManager with TinyMCE (>= 3.0), you should:
 
 Create a Javascript callback function that will open the FileManager index.html base page (see URL below for examples)
 Add a line like: "file_browser_callback : 'name_of_callback_function'" in the tinyMCE.init command
@@ -64,7 +116,7 @@ See http://www.tinymce.com/wiki.php/TinyMCE3x:How-to_implement_a_custom_file_bro
 See also the dedicated wiki page, with TinyMCE 4 sample : https://github.com/simogeo/Filemanager/wiki/How-to-use-the-Filemanager-with-tinyMCE--3-or-4-%3F
 
 
-**(5)** Last but not least, **worry about security**!
+**(4)** Last but not least, **worry about security**!
 
 For **PHP connector** : copy/paste the `/connectors/php/default.config.php` to `/connectors/php/user.config.php` to define your own authentication function.
 To do so, you will find an example on the [dedicated wiki page](https://github.com/simogeo/Filemanager/wiki/Security-concern).
@@ -136,6 +188,7 @@ Example Response:
 		"Filename": "logo.png",
 		"File Type": "png",
 		"Preview": "/UserFiles/Image/logo.png",
+		"Protected": 0,
 		"Properties": {
 			"Date Created": null, 
 			"Date Modified": "02/09/2007 14:01:06",
@@ -161,6 +214,8 @@ The keys are as follows:
 		Directories: images/fileicons/_Open.png		
 		Files: images/fileicons/[extension].png		
 		Unknown: images/fileicons/default.png
+		
+	Protected: Indicates if the file has some reading / writing restrictions. If not, set to 0. Else set to 1. 
 	
 	Properties: A nested JSON object containing specific properties of the file.
 	
@@ -194,6 +249,7 @@ Example Response:
 			"Filename": "logo.png",
 			"File Type": "png",
 			"Preview": "/UserFiles/Image/logo.png",
+			"Protected": 0,
 			"Properties": {
 				"Date Created": null, 
 				"Date Modified": "02/09/2007 14:01:06",

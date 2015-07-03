@@ -14,14 +14,13 @@
  *	@copyright	Authors
  */
 
-require_once('./inc/filemanager.inc.php');
 require_once('filemanager.class.php');
 
 // if user file is defined we include it, else we include the default file
 (file_exists('user.config.php')) ? include_once('user.config.php') : include_once('default.config.php');
 
 // auth() function is already defined
-// and Filemanager is instantiated ad $fm
+// and Filemanager is instantiated as $fm
 
 $response = '';
 
@@ -65,7 +64,7 @@ if(!isset($_GET)) {
 
       case 'move':
         // allow "../"
-        if($fm->getvar('old') && $fm->getvar('new', 'parent_dir') && $fm->getvar('root')) {
+        if($fm->getvar('old') && $fm->getvar('new') && $fm->getvar('root')) {
           $response = $fm->move();
         }
         break;
@@ -106,10 +105,6 @@ if(!isset($_GET)) {
         	}
           $fm->preview($thumbnail);
         }
-        break;
-			
-      case 'maxuploadfilesize':
-        $fm->getMaxUploadFileSize();
         break;
     }
 

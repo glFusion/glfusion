@@ -39,6 +39,7 @@ $fmconfiguration = array(
     "options" =>  array(
         "culture" =>  $_CONF['iso_lang'],
         "lang" =>  "php",
+        "theme" => "flat-dark",
         "defaultViewMode" =>  $_CK_CONF['filemanager_default_view_mode'],
         "autoload" =>  true,
         "showFullPath" =>  false,
@@ -54,7 +55,7 @@ $fmconfiguration = array(
         "dateFormat" =>  $_CK_CONF['filemanager_date_format'],
         "serverRoot" =>  true,
         "fileRoot" =>  $filePath,
-        "relPath" =>  false,
+        "baseUrl" =>  false,
         "logger" =>  false,
         "capabilities" =>  $capabilities,
         "plugins" =>  array()
@@ -100,6 +101,11 @@ $fmconfiguration = array(
         "theme" =>  "elegant",
         "editExt" =>  explode(',',$_CK_CONF['filemanager_edit_editext'])
     ),
+    "customScrollbar" => array(
+        "enabled" => true,
+        "theme" => "insert-2-dark",
+        "button" => true
+    ),
     "extras" =>  array(
         "extra_js" =>  array(),
         "extra_js_async" =>  true
@@ -108,7 +114,9 @@ $fmconfiguration = array(
         "path" =>  "images/fileicons/",
         "directory" =>  "_Open.png",
         "default" =>  "default.png"
-    )
+    ),
+    "url" => "https://github.com/simogeo/Filemanager",
+    "version" => "2.0.0-dev"
 );
 
 echo json_encode($fmconfiguration);
