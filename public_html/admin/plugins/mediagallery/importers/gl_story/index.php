@@ -2,10 +2,9 @@
 // +--------------------------------------------------------------------------+
 // | Media Gallery Plugin for glFusion CMS                                    |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// | glFUsion Story Image Import                                              |
+// | glFusion Story Image Import                                              |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2011 by the following authors:                        |
+// | Copyright (C) 2005-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+

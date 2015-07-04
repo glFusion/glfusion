@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Autotag management console                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2014 by the following authors:                        |
+// | Copyright (C) 2009-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
 // | Mark R. Evans          mark AT glfusion DOT org                          |

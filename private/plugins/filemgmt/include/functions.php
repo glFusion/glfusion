@@ -6,7 +6,7 @@
 // |                                                                          |
 // | General functions for FileMgmt                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2011 by the following authors:                        |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |

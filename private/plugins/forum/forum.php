@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin intergration                                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2014 by the following authors:                        |
+// | Copyright (C) 2009-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -47,7 +47,7 @@ $_FF_CONF = array();
 $_FF_CONF['pi_name']            = 'forum';
 $_FF_CONF['pi_display_name']    = 'Forum';
 $_FF_CONF['pi_version']         = '3.3.1';
-$_FF_CONF['gl_version']         = '1.4.0';
+$_FF_CONF['gl_version']         = '1.5.0';
 $_FF_CONF['pi_url']             = 'http://www.glfusion.org/';
 
 $_TABLES['ff_userprefs']    = $_DB_table_prefix . 'forum_userprefs';

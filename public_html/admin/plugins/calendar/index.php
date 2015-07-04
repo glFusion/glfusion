@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Calendar Plugin administration page.                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2012 by the following authors:                        |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |

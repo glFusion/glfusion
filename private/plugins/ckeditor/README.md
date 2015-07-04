@@ -6,7 +6,7 @@ Copyright (c) 2003-2014, CKSource - Frederico Knabben. All rights reserved.
 http://ckeditor.com - See LICENSE.md for license information.
 
 glFusion CMS Integration
-Copyright (c) 2014, Mark R. Evans. All rights reserved.
+Copyright (c) 2014-2015, Mark R. Evans. All rights reserved.
 http://www.glfusion.org
 
 CKEditor is a WYSIWYG text editor to be used inside web pages.

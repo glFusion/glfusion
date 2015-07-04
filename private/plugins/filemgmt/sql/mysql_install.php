@@ -6,6 +6,9 @@
 // |                                                                          |
 // | SQL commands                                                             |
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2015 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Copyright (C) 2004 by Consult4Hire Inc.                                  |
 // | Author:                                                                  |

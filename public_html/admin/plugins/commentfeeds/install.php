@@ -3,8 +3,6 @@
 // | CommentFeeds Plugin - glFusion CMS                                       |
 // +--------------------------------------------------------------------------+
 // | install.php                                                              |
-// |                                                                          |
-// | Installation                                                             |
 // +--------------------------------------------------------------------------+
 // | Author:                                                                  |
 // | Michael Jervis <mike AT fuckingbrit DOT com>                             |

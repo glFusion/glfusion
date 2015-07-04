@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Upgrade routines                                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2014 by the following authors:                             |
+// | Copyright (C) 2014-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+

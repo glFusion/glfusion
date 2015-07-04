@@ -6,7 +6,7 @@
 // |                                                                          |
 // | GD Lib v2 Graphic Library interface                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2014 by the following authors:                        |
+// | Copyright (C) 2002-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -98,6 +98,103 @@ function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $d
             break;
     }
     imagedestroy($newimage);
+    return array(true,'');
+}
+
+function _img_squareThumbnail($srcImage, $destImage, $sImageHeight, $sImageWidth, $dSize, $mimeType)
+{
+    global $_CONF;
+
+    $JpegQuality = 85;
+
+    if ( $_CONF['debug_image_upload'] ) {
+        COM_errorLog("IMG_squareThumbnail: Resizing using GD2: Src = " . $srcImage . " mimetype = " . $mimeType);
+    }
+    switch ( $mimeType ) {
+        case 'image/jpeg' :
+        case 'image/jpg' :
+            $image = @imagecreatefromjpeg($srcImage);
+            break;
+        case 'image/png' :
+            $image = @imagecreatefrompng($srcImage);
+            break;
+        case 'image/bmp' :
+            $image = @imagecreatefromwbmp($srcImage);
+            break;
+        case 'image/gif' :
+            $image = @imagecreatefromgif($srcImage);
+            break;
+        case 'image/x-targa' :
+        case 'image/tga' :
+            COM_errorLog("IMG_squareThumbnail: TGA files not supported by GD2 Libs");
+            return array(false,'TGA format not supported by GD2 Libs');;
+        default :
+            COM_errorLog("IMG_squareThumbnail: GD2 only supports JPG, PNG, and GIF image types.");
+            return array(false,'GD2 only supports JPG, PNG and GIF image types');
+    }
+    if ( !$image ) {
+        COM_errorLog("IMG_squareThumbnail: GD Libs failed to create working image.");
+        return array(false,'GD Libs failed to create working image.');
+    }
+	$original_width = $sImageWidth;
+	$original_height = $sImageHeight;
+
+	if($original_width > $original_height){
+		$new_height = $dSize;
+		$new_width = $new_height*($original_width/$original_height);
+	}
+
+	if($original_height > $original_width){
+		$new_width = $dSize;
+		$new_height = $new_width*($original_height/$original_width);
+	}
+
+	if($original_height == $original_width){
+		$new_width = $dSize;
+		$new_height = $dSize;
+	}
+
+	$new_width = round($new_width);
+	$new_height = round($new_height);
+
+	$smaller_image = imagecreatetruecolor($new_width, $new_height);
+	$square_image = imagecreatetruecolor($dSize, $dSize);
+
+	imagecopyresampled($smaller_image, $image, 0, 0, 0, 0, $new_width, $new_height, $original_width, $original_height);
+
+	if($new_width>$new_height){
+		$difference = $new_width-$new_height;
+		$half_difference =  round($difference/2);
+		imagecopyresampled($square_image, $smaller_image, 0-$half_difference+1, 0, 0, 0, $dSize+$difference, $dSize, $new_width, $new_height);
+	}
+
+	if($new_height>$new_width){
+		$difference = $new_height-$new_width;
+		$half_difference =  round($difference/2);
+		imagecopyresampled($square_image, $smaller_image, 0, 0-$half_difference+1, 0, 0, $dSize, $dSize+$difference, $new_width, $new_height);
+	}
+
+	if($new_height == $new_width){
+		imagecopyresampled($square_image, $smaller_image, 0, 0, 0, 0, $dSize, $dSize, $new_width, $new_height);
+	}
+
+    switch ( $mimeType ) {
+        case 'image/jpeg' :
+        case 'image/jpg' :
+            imagejpeg($square_image,$destImage,$JpegQuality);
+            break;
+        case 'image/png' :
+            $pngQuality = ceil(intval(($JpegQuality / 100) + 8));
+            imagepng($square_image,$destImage,$pngQuality);
+            break;
+        case 'image/bmp' :
+            imagewbmp($square_image,$destImage);
+            break;
+        case 'image/gif' :
+            imagegif($square_image,$destImage);
+            break;
+    }
+    imagedestroy($square_image);
     return array(true,'');
 }
 

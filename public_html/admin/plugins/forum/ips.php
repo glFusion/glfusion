@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Program to administrate IP access/restriction to forum                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |

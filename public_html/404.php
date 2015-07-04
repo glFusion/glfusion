@@ -6,6 +6,10 @@
 // |                                                                          |
 // | glFusion 404 Page Note Found                                             |
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2015 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
@@ -50,7 +54,5 @@ $display .= $LANG_404[3];
 $display .= COM_endBlock ();
 $display .= COM_siteFooter ();
 
-//header("HTTP/1.0 404 Not Found");
 echo $display
-
 ?>

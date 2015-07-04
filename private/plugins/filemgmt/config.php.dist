@@ -6,7 +6,7 @@
 // |                                                                          |
 // | FileMgmt configuration options                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |

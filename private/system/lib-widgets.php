@@ -6,7 +6,7 @@
 // |                                                                          |
 // | A place for widget functions, mootools based or otherwise                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2014 by the following authors:                        |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
 // | Joe Mucchiello         jmucchiello AT yahoo DOT com                      |
 // | Mark R. Evans          mark AT glfusion DOT org                          |

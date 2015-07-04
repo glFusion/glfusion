@@ -8,6 +8,9 @@
 // | records. These settings are only used during the initial installation    |
 // | and not referenced any more once the plugin is installed.                |
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2015 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |

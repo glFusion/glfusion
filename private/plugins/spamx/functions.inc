@@ -6,9 +6,9 @@
 // |                                                                          |
 // | This is the functions.inc for the glFusion Spam-X plugin                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2013-2014 by the following authors:                        |
+// | Copyright (C) 2009-2015 by the following authors:                        |
 // |                                                                          |
-// |              Mark R. Evans   mark AT glfusion DOT org                    |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Copyright (C) 2004-2010 by the following authors:                        |
 // |                                                                          |

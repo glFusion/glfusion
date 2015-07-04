@@ -6,6 +6,9 @@
 // |                                                                          |
 // | Installation SQL                                                         |
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2009-2015 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |

@@ -3,14 +3,8 @@
 // | Site Tailor Plugin - glFusion CMS                                        |
 // +--------------------------------------------------------------------------+
 // | functions.inc                                                            |
-// |                                                                          |
-// | This file does two things: 1) it implements the necessary glFusion Plugin|
-// | API method and 2) implements all the common code needed by the Site      |
-// | Tailor plugin' PHP files.                                                |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C)  2008-2011 by the following authors:                       |
+// | Copyright (C)  2008-2015 by the following authors:                       |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+

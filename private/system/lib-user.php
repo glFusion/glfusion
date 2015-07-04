@@ -6,7 +6,7 @@
 // |                                                                          |
 // | User-related functions needed in more than one place.                    |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2013 by the following authors:                        |
+// | Copyright (C) 2009-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Header / Footer                                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | lang PHP autotag functions                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2011 by the following authors:                        |
+// | Copyright (C) 2009-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
 // +--------------------------------------------------------------------------+

@@ -4,11 +4,8 @@
 // +--------------------------------------------------------------------------+
 // | functions.inc                                                            |
 // |                                                                          |
-// | This file does two things: 1) it implements the necessary glFusion Plugin|
-// | API method and 2) implements all the common code needed by the Polls     |
-// | plugin' PHP files.                                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2012 by the following authors:                        |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |

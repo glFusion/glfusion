@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Loads the administration UI and sends input to config.class              |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2014 by the following authors:                        |
+// | Copyright (C) 2009-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |

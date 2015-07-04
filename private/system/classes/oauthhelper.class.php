@@ -6,7 +6,7 @@
 // |                                                                          |
 // | OAuth Distributed Authentication Module.                                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2011-2014 by the following authors:                        |
+// | Copyright (C) 2011-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
 // | Mark R. Evans          mark AT glfusion DOT org                          |

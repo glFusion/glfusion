@@ -1,12 +1,12 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | CKEditor Plugin - glFusion CMS                                            |
+// | CKEditor Plugin - glFusion CMS                                           |
 // +--------------------------------------------------------------------------+
 // | autoinstall.php                                                          |
 // |                                                                          |
 // | glFusion Auto Installer module                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2014 by the following authors:                             |
+// | Copyright (C) 2014-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+

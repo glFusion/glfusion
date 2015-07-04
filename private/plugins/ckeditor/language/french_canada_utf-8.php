@@ -2,11 +2,11 @@
 // +--------------------------------------------------------------------------+
 // | CKEditor Plugin - glFusion CMS                                           |
 // +--------------------------------------------------------------------------+
-// | french_canada_utf-8.php                                                        |
+// | french_canada_utf-8.php                                                  |
 // |                                                                          |
-// | French Canadian language file                                                    |
+// | French Canadian language file                                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2014 by the following authors:                             |
+// | Copyright (C) 2014-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org						  |
 // | Michael Brusletten     mbrusl AT spacequad DOT net		                  |

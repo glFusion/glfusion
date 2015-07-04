@@ -5,7 +5,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2014 by Mark R. Evans - mark AT glfusion DOT org
+*  Copyright (C) 2014-2015 by Mark R. Evans - mark AT glfusion DOT org
 */
 
 require_once '../lib-common.php';

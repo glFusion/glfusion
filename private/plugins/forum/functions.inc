@@ -7,7 +7,7 @@
 // | This file implements the necessary glFusion Plugin API functions and     |
 // | includes some common Forum functions                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2014 by the following authors:                        |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |

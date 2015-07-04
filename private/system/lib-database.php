@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion database library.                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2104 by the following authors:                        |
+// | Copyright (C) 2008-2105 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |

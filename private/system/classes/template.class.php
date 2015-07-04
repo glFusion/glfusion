@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion template library.                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2007-2014 by the following authors:                        |
+// | Copyright (C) 2007-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans      - mark AT glfusion DOT org                            |
 // | Joe Mucchiello     - joe AT throwingdice DOT com                         |

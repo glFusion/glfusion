@@ -6,7 +6,7 @@
 // |                                                                          |
 // | General formatting routines                                              |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2014 by the following authors:                        |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric M. Kingsley       kingsley AT trains-n-town DOTcom                  |
