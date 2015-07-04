@@ -269,6 +269,7 @@ function MG_editConfig( $msgString = '' ) {
     $gallery_tn_size_select .= '<option value="1"' . ($_MG_CONF['gallery_tn_size']==1 ? 'selected="selected"' : '') . '>' . $LANG_MG01['medium'] . '</option>';
     $gallery_tn_size_select .= '<option value="2"' . ($_MG_CONF['gallery_tn_size']==2 ? 'selected="selected"' : '') . '>' . $LANG_MG01['large'] . '</option>';
     $gallery_tn_size_select .= '<option value="3"' . ($_MG_CONF['gallery_tn_size']==3 ? 'selected="selected"' : '') . '>' . $LANG_MG01['custom'] . '</option>';
+    $gallery_tn_size_select .= '<option value="4"' . ($_MG_CONF['gallery_tn_size']==4 ? 'selected="selected"' : '') . '>' . $LANG_MG01['square'] . '</option>';
     $gallery_tn_size_select .= '</select>';
 
     $gallery_tnheight_input = '<input type="text" size="3" name="tnheight" value="' . $_MG_CONF['gallery_tn_height'] . '" />';

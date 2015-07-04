@@ -237,7 +237,7 @@ function _img_squareThumbnail($srcImage, $destImage, $sImageHeight, $sImageWidth
         }
     }
 
-    $opt = '-quality ' . 85;
+    $opt = '-quality ' . 91;
 
     if ($_MG_CONF['verbose']) {
         $opt .= ' -verbose';
