@@ -674,7 +674,8 @@ $LANG_MG01 = array(
     'html5upload_drop_here' => 'Drop Files Here!',
     'html5upload_allowed_types' => 'File Types Allowed:',
     'html5upload_file_size_limit' => 'File Size Limit:',
-    'html5upload_err_album_id' => 'Unable to determine destination album'
+    'html5upload_err_album_id' => 'Unable to determine destination album',
+    'square' => 'Square'
 );
 
 ###############################################################################
