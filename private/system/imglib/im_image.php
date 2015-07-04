@@ -221,4 +221,62 @@ function _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $
     COM_errorLog("_img_watermarkImage: Watermark successfully applied (ImageMagick)");
     return array($rc,'');
 }
+
+function _img_squareThumbnail($srcImage, $destImage, $sImageHeight, $sImageWidth, $dSize, $mimeType)
+{
+    global $_CONF, $_MG_CONF;
+
+    $version = _img_getIMversion();
+
+    if ( is_array($version) ) {
+        $rc = version_compare($version[1],"6.3.4");
+        if ( $rc == -1 ) {
+            $noLayers = 1;
+        } else {
+            $noLayers = 0;
+        }
+    }
+
+    $opt = '-quality ' . 85;
+
+    if ($_MG_CONF['verbose']) {
+        $opt .= ' -verbose';
+        COM_errorLog("_img_squareThumbnail: Resizing using ImageMagick src = " . $srcImage . " mimetype = " . $mimeType);
+    }
+
+    if ($mimeType == 'image/gif') {
+        $opt .= ' -coalesce';
+        $opt .= ($noLayers == 0) ? ' -layers Optimize' : '';
+    } else {
+        $opt .= ' -flatten';
+    }
+
+    $dImageWidth = $dSize;
+    $dImageHeight = $dSize;
+    $dSizeX2 = (int) $dSize * 2;
+
+    $binary = 'convert' . ((PHP_OS == 'WINNT') ? '.exe' : '');
+
+    $opt .= " -thumbnail x".$dSizeX2;
+    $opt .= " -resize " . ((PHP_OS == 'WINNT') ? $dSizeX2."x^<" : "'".$dSizeX2."x<'");
+
+    $rc = UTL_execWrapper('"' . $_CONF['path_to_mogrify'] . $binary . '"'
+                          . " $opt -resize 50% -gravity center -crop ".$dSize."x".$dSize."+0+0 +repage -quality 91 $srcImage $destImage");
+
+    if ($rc != true) {
+        COM_errorLog("_img_resizeImage_crop: Error - Unable to resize image - ImageMagick convert failed.");
+        return array(false, 'Error - Unable to resize image (square thumbnail) - ImageMagick convert failed.');
+    }
+
+    clearstatcache();
+
+    if (!file_exists($destImage) || !filesize($destImage)) {
+        COM_errorLog("_img_resizeImage_crop: Error - Unable to resize image - ImageMagick convert failed.");
+        return array(false, 'Error - Unable to resize image (square thumbnail) - ImageMagick convert failed.');
+    }
+    if (($mimeType != 'image/gif') && ($_MG_CONF['jhead_enabled'] == 1)) {
+        UTL_execWrapper('"' . $_MG_CONF['jhead_path'] . "/jhead" . '"' . " -v -te " . $srcImage . " " . $destImage);
+    }
+    return array(true, '');
+}
 ?>

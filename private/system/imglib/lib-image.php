@@ -350,22 +350,6 @@ function IMG_squareThumbnail($srcImage, $destImage, $dSize, $mimeType='', $delet
         $mimeType = $metaData['mime_type'];
     }
 
-	if($original_width > $original_height){
-		$new_height = $dSize;
-		$new_width = $new_height*($original_width/$original_height);
-	}
-
-	if($original_height > $original_width){
-		$new_width = $dSize;
-		$new_height = $new_width*($original_height/$original_width);
-	}
-	if($original_height == $original_width){
-		$new_width = $dSize;
-		$new_height = $dSize;
-	}
-
-	$new_width = round($new_width);
-	$new_height = round($new_height);
 	list($rc,$msg) = _img_squareThumbnail($srcImage, $destImage, $original_height, $original_width, $dSize, $mimeType);
     if ( $rc == false ) {
         return array($rc,$msg);

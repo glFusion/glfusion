@@ -1691,7 +1691,7 @@ function MG_galleryOnly() {
 
 
 function phpblock_mg_randommedia($parm1=array(),$parm2=''){
-    global $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG03, $_DB_dbms, $mg_installed_version;
+    global $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG03, $MG_albums, $_DB_dbms, $mg_installed_version;
 
     $retval = '';
     $gotit = 0;
@@ -1702,10 +1702,6 @@ function phpblock_mg_randommedia($parm1=array(),$parm2=''){
     require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
     MG_initAlbums();
     $randomSelect = "RAND(NOW()) ";
-
-    $sql = "SELECT ma.album_id,m.media_user_id,m.media_id,m.media_filename,m.media_title FROM {$_TABLES['mg_albums']} as a LEFT JOIN {$_TABLES['mg_media_albums']} as ma
-            on a.album_id=ma.album_id LEFT JOIN {$_TABLES['mg_media']} as m on ma.media_id=m.media_id WHERE
-            m.media_type=0 AND a.enable_random=1 AND a.hidden=0 " . COM_getPermSQL('and') . " ORDER BY " . $randomSelect . " LIMIT 1";
 
     $sql = "SELECT ma.album_id,m.media_user_id,m.media_id,m.media_filename,m.media_title,
             u.fullname FROM {$_TABLES['mg_albums']} as a
@@ -1764,14 +1760,20 @@ function phpblock_mg_randommedia($parm1=array(),$parm2=''){
         if ( !isset($_MG_CONF['random_width']) || $_MG_CONF['random_width'] == 0 ) {
             $_MG_CONF['random_width'] = 120;
         }
-        if ( $imgwidth > $imgheight ) {
-            $ratio = $imgwidth / $_MG_CONF['random_width'];
+        if ( $MG_albums[$row['album_id']]->tn_size == 4 ) {
             $width = $_MG_CONF['random_width'];
-            $height = round($imgheight / $ratio);
+            $height = $width;
         } else {
-            $ratio = $imgheight / $_MG_CONF['random_width'];
-            $height = $_MG_CONF['random_width'];
-            $width = round($imgwidth / $ratio);
+
+            if ( $imgwidth > $imgheight ) {
+                $ratio = $imgwidth / $_MG_CONF['random_width'];
+                $width = $_MG_CONF['random_width'];
+                $height = round($imgheight / $ratio);
+            } else {
+                $ratio = $imgheight / $_MG_CONF['random_width'];
+                $height = $_MG_CONF['random_width'];
+                $width = round($imgwidth / $ratio);
+            }
         }
 
         if ( $parm2 == 'album' ) {

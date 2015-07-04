@@ -148,14 +148,16 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 MG_watermarkBatchProcess( $row['aid'],$row['mid'] );
                 break;
             case 'rebuildthumb' :
+                $makeSquare = 0;
                 $aid = $row['aid'];
                 $srcImage = $row['data'];
                 $imageThumb = $row['data2'];
                 $mimeExt = $row['data3'];
                 $mimeType = $row['mid'];
-                if ( $MG_albums[$aid]->tn_size == 3 ) {
+                if ( $MG_albums[$aid]->tn_size == 3 || $MG_albums[$aid]->tn_size == 4) {
                 	$tnHeight = $MG_albums[$aid]->tnHeight;
                 	$tnWidth  = $MG_albums[$aid]->tnWidth;
+                	if ( $MG_albums[$aid]->tn_size == 4 ) $makeSquare = 1;
                 } else {
                     if ( $_MG_CONF['thumbnail_actual_size'] == 1 ) {
                         switch ($MG_albums[$aid]->tn_size) {
@@ -187,16 +189,24 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                      $mimeType == 'image/psd' ||
                      $mimeType == 'application/photoshop' ||
                      $mimeType == 'application/psd' ) {
-                    $tmpImage = $_MG_CONF['tmp_path'] . '/wip' . rand() . '.jpg';
+                     $tmpImage = $_MG_CONF['tmp_path'] . '/wip' . rand() . '.jpg';
                     $rc = IMG_convertImageFormat($srcImage, $tmpImage, 'image/jpeg',0);
                     if ( $rc == false ) {
                         COM_errorLog("MG_convertImage: Error converting uploaded image to jpeg format.");
                         @unlink($srcImage);
                         return false;
                     }
-                    $rc = IMG_resizeImage($tmpImage,$imageThumb,$tnHeight,$tnWidth,$mimeType,0);
+                    if ($makeSquare == 1 ) {
+                        $rc = IMG_squareThumbnail($tmpImage, $imageThumb, $tnWidth, $mimeType,0);
+                    } else {
+                        $rc = IMG_resizeImage($tmpImage,$imageThumb,$tnHeight,$tnWidth,$mimeType,0);
+                    }
                 } else {
-                    $rc = IMG_resizeImage($srcImage, $imageThumb, $tnHeight, $tnWidth, $mimeType, 0 );
+                    if ( $makeSquare == 1 ) {
+                        $rc = IMG_squareThumbnail($srcImage, $imageThumb, $tnWidth, $mimeType,0);
+                    } else {
+                        $rc = IMG_resizeImage($srcImage, $imageThumb, $tnHeight, $tnWidth, $mimeType, 0 );
+                    }
                 }
                 if ( $rc == false ) {
                     COM_errorLog("MG_convertImage: Error resizing uploaded image to thumbnail size.");

@@ -430,6 +430,7 @@ class Media {
                 $tn_width  = 200;
                 break;
             case '3' :
+            case '4' :
             	$tn_height = $MG_albums[$this->album_id]->tnHeight;
             	$tn_width  = $MG_albums[$this->album_id]->tnWidth;
             	if ( $tn_height == 0 ) {

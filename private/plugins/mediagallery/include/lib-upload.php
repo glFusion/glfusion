@@ -96,6 +96,8 @@ function MG_processOriginal( $srcImage, $mimeExt, $mimeType, $aid, $baseFilename
 function MG_convertImage( $srcImage, $imageThumb, $imageDisplay, $mimeExt, $mimeType, $aid, $baseFilename, $dnc ) {
     global $_CONF, $_MG_CONF, $MG_albums;
 
+    $makeSquare = 0;
+
     if ($_MG_CONF['verbose'] ) {
         COM_errorLog("MG Upload: Entering MG_convertImage()");
     }
@@ -121,7 +123,7 @@ function MG_convertImage( $srcImage, $imageThumb, $imageDisplay, $mimeExt, $mime
     // Create the thumbnail image
     // --
 
-    if ( $MG_albums[$aid]->tn_size == 3 ) {
+    if ( $MG_albums[$aid]->tn_size == 3 || $MG_albums[$aid]->tn_size == 4) {
     	$tnHeight = $MG_albums[$aid]->tnHeight;
     	$tnWidth  = $MG_albums[$aid]->tnWidth;
     	if ($tnHeight == 0 ) {
@@ -129,6 +131,9 @@ function MG_convertImage( $srcImage, $imageThumb, $imageDisplay, $mimeExt, $mime
     	}
     	if ( $tnWidth == 0 ) {
     	    $tnWidth = 200;
+    	}
+    	if ( $MG_albums[$aid]->tn_size == 4 ) {
+    	    $makeSquare = 1;
     	}
     } else {
         if ( $_MG_CONF['thumbnail_actual_size'] == 1 ) {
@@ -167,9 +172,17 @@ function MG_convertImage( $srcImage, $imageThumb, $imageDisplay, $mimeExt, $mime
             @unlink($srcImage);
             return array(false,$msg);
         }
-        list($rc,$msg) = IMG_resizeImage($tmpImage,$imageThumb,$tnHeight,$tnWidth,'',0);
+        if ($makeSquare == 1 ) {
+            list($rc,$msg) = IMG_squareThumbnail($tmpImage, $imageThumb, $tnWidth, '',0);
+        } else {
+            list($rc,$msg) = IMG_resizeImage($tmpImage,$imageThumb,$tnHeight,$tnWidth,'',0);
+        }
     } else {
-        list($rc,$msg) = IMG_resizeImage($srcImage, $imageThumb, $tnHeight, $tnWidth, $mimeType, 0 );
+        if ( $makeSquare == 1 ) {
+            list($rc,$msg) = IMG_squareThumbnail($srcImage, $imageThumb, $tnWidth, $mimeType,0);
+        } else {
+            list($rc,$msg) = IMG_resizeImage($srcImage, $imageThumb, $tnHeight, $tnWidth, $mimeType, 0 );
+        }
     }
     if ( $rc == false ) {
         COM_errorLog("MG_convertImage: Error resizing uploaded image to thumbnail size.");
@@ -1230,13 +1243,15 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
 function MG_attachThumbnail( $aid, $thumbnail, $mediaFilename ) {
     global $_CONF, $_MG_CONF, $MG_albums;
 
+    $makeSquare = 0;
     if ($_MG_CONF['verbose']) {
         COM_errorLog("MG Upload: Processing attached thumbnail: " . $thumbnail );
     }
 
-    if ( $MG_albums[$aid]->tn_size == 3 ) {
+    if ( $MG_albums[$aid]->tn_size == 3 || $MG_albums[$aid]->tn_size == 4 ) {
     	$tnHeight = $MG_albums[$aid]->tnHeight;
     	$tnWidth  = $MG_albums[$aid]->tnWidth;
+    	if ( $MG_albums[$aid]->tn_size == 4 ) $makeSquare = 1;
     } else {
         if ( $_MG_CONF['thumbnail_actual_size'] == 1 ) {
             switch ($MG_albums[$aid]->tn_size) {
@@ -1282,7 +1297,11 @@ function MG_attachThumbnail( $aid, $thumbnail, $mediaFilename ) {
             return false;
     }
     $attach_tn   = $mediaFilename . $tnExt;
-    list($rc,$msg) = IMG_resizeImage($thumbnail, $attach_tn, $tnHeight, $tnWidth, $tn_mime_type['mime_type'], 1 );
+    if ( $makeSquare ) {
+        list($rc,$msg) = IMG_squareThumbnail($thumbnail, $attach_tn, $tnWidth, $tn_mime_type['mime_type'], 1 );
+    } else {
+        list($rc,$msg) = IMG_resizeImage($thumbnail, $attach_tn, $tnHeight, $tnWidth, $tn_mime_type['mime_type'], 1 );
+    }
 
     return true;
 }

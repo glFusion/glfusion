@@ -141,6 +141,7 @@ if ( $mode == 'thumbs' ) {
                 for ($x=0; $x<$nRows; $x++ ) {
 
                     $row = DB_fetchArray($result);
+                    $aid = $row['album_id'];
                     $srcImage = '';
                     $imageDisplay = '';
                     if ( $_MG_CONF['discard_original'] == 1 ) {
@@ -177,7 +178,7 @@ if ( $mode == 'thumbs' ) {
                     }
                     $mimeExt = $row['media_mime_ext'];
                     $mimeType = $row['mime_type'];
-                    DB_query("INSERT INTO {$_TABLES['mg_session_items']} (session_id,mid,aid,data,data2,data3,status) VALUES('$session_id','$mimeType',0,'" . $srcImage . "','" . $imageDisplay . "','" . $mimeExt . "',0)");
+                    DB_query("INSERT INTO {$_TABLES['mg_session_items']} (session_id,mid,aid,data,data2,data3,status) VALUES('$session_id','$mimeType',".(int) $aid.",'" . $srcImage . "','" . $imageDisplay . "','" . $mimeExt . "',0)");
                 }
 
                 $display  = MG_siteHeader();

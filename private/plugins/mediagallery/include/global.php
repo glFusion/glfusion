@@ -308,6 +308,7 @@ function MG_globalAlbumAttributeEditor($adminMenu=0) {
     $tn_size_select .= '<option value="1">' . $LANG_MG01['medium'] . '</option>';
     $tn_size_select .= '<option value="2">' . $LANG_MG01['large'] . '</option>';
     $tn_size_select .= '<option value="3">' . $LANG_MG01['custom'] . '</option>';
+    $tn_size_select .= '<option value="4">' . $LANG_MG01['square'] . '</option>';
     $tn_size_select .= '</select>';
 
     $tnheight_input = '<input type="text" size="3" name="tnheight" value="" />';

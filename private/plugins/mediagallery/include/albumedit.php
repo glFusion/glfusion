@@ -288,6 +288,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     $tn_size_select .= '<option value="1"' . ($A['tn_size']==1 ? 'selected="selected"' : '') . '>' . $LANG_MG01['medium'] . '</option>';
     $tn_size_select .= '<option value="2"' . ($A['tn_size']==2 ? 'selected="selected"' : '') . '>' . $LANG_MG01['large'] . '</option>';
     $tn_size_select .= '<option value="3"' . ($A['tn_size']==3 ? 'selected="selected"' : '') . '>' . $LANG_MG01['custom'] . '</option>';
+    $tn_size_select .= '<option value="4"' . ($A['tn_size']==4 ? 'selected="selected"' : '') . '>' . $LANG_MG01['square'] . '</option>';
     $tn_size_select .= '</select>';
 
     $display_image_size_select  = '<select name="display_image_size">';
