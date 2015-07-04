@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v 1.5.0 (unreleased)
+  - Media Gallery: Added support for square thumbnails
   - CKEditor - Updated to v4.5.1
   - FileManager (CKEditor) - Updated to v2.2.0
   - Forum Plugin: Fixed issue where forum name was passed via URL (not needed)
