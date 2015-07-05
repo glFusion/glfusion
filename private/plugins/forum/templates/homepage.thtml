@@ -1,10 +1,10 @@
 {# begin {templatelocation} #}
 <div class="forumpost">
  <!-- BEGIN catrows -->
-  <table class="forum-pluginHeader">
-    <tr class="forum-pluginLinks" style="vertical-align: middle; height:25px;">
+  <table width="100%" cellspacing="0" cellpadding="0" style="border:none;margin:2px;padding-right:15px;" class="pluginHeader">
+    <tr class="pluginLinks" style="vertical-align: middle; height:25px;">
       <td style="height:18px;width:10px;">{forumindeximg}</td>
-      <td class="forum-pluginHeader alignleft" style="width:95%;white-space:nowrap;font-size:larger;">&nbsp;{birdseed}</td>
+      <td class="pluginHeader alignleft" style="width:95%;white-space:nowrap;font-size:larger;">&nbsp;{birdseed}</td>
 {!if newpostslink}
       <td class="pluginButton" style="white-space:nowrap;">[&nbsp;<a {newpostslink}{LANG_newposts}</a>&nbsp;]</td>
 {!endif}
@@ -14,7 +14,7 @@
 {!endif}
     </tr>
   </table>
-  <table class="pluginSolidOutline forum-navbar" style="border-collapse: collapse; border-spacing: 1px;padding:3px;margin-bottom:10px;">
+  <table width="100%" cellspacing="1" cellpadding="3" class="pluginSolidOutline" style="border:none;margin-bottom:10px;">
     <tr>
       <td class="pluginCellTitle alignleft" colspan="2">{cat_desc}</td>
       <td class="pluginCellTitle aligntop" style="width:5%;">{LANGGF01_TOPICS}</td>

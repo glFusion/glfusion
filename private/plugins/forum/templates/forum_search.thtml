@@ -2,10 +2,10 @@
 <form action="index.php" method="get" id="searchbox" onsubmit="return (this.query.value != '');" style="margin:0px;padding:2px;">
   <input type="hidden" name="op" value="search"/>
   <input type="hidden" name="forum" value="{forum}"/>
-  <table style="width:100%;">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
-      <td class="alignleft" style="width:50%;">
-        <table style="border-collapse: separate; border-spacing: 2px;">
+      <td class="alignleft" width="50%">
+        <table border="0" cellspacing="2" cellpadding="0">
           <tr>
             <td>
               <label for="query"></label>

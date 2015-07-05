@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 {autoredirect_javascript}
-<table class="plugin" style="width:100%;margin-top:10px;">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="plugin" style="margin-top:10px;">
     <tr>
         <td class="pluginAlert" style="padding:5px;text-align:center;">{heading}</td>
     </tr>

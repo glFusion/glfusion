@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 <div class="forumpost">
-  <table style="width:99%;margin:5px;border:1px solid #CCC;">
+  <table width="99%" border="0" cellspacing="0" cellpadding="0" style="margin:5px;border:1px solid #CCC;">
     <tr>
       <td class="pluginTitle" style="padding:10px;"><img src="{site_url}/forum/images/alert_warning.gif" alt="" style="vertical-align:middle" />&nbsp;{alert_title}</td>
     </tr>

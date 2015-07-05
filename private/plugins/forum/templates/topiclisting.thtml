@@ -6,7 +6,7 @@
 
 <div class="forumpost">
 
-  <table style="width:100%;margin:2px;">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:2px;">
     <tr>
       <td>{navbreadcrumbsimg}</td>
       <td class="alignleft" style="width:95%;white-space:nowrap;">&nbsp;<a href="{site_url}/forum/index.php">{forum_home}</a>&nbsp;&#62;&nbsp;<a href="{site_url}/forum/index.php?cat={cat_id}">{cat_name}</a>&nbsp;&#62;&nbsp;<a href="{site_url}/forum/index.php?forum={forum_id}">{forum_name}</a></td>
@@ -20,7 +20,7 @@
     </tr>
   </table>
 
-  <table style="width:100%;" class="pluginCellTitle alignleft">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pluginCellTitle alignleft">
     <tr>
       <td class="pluginBreadCrumbs alignleft" style="padding-left:5px;white-space:nowrap;">
         {pagenavigation}
@@ -37,10 +37,10 @@
     </tr>
   </table>
 {!if records_displayed}
-  <table style="width:100%;" class="alignleft">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="alignleft">
     <tr>
       <td>
-        <table style="width:100%;border-collapse: seperate; border-spacing: 1px;padding:2px" class="pluginSolidOutline">
+        <table width="100%" border="0" cellspacing="1" cellpadding="2" class="pluginSolidOutline">
           <tr>
             <td colspan="2" class="aligncenter">
                 {LANG_TOPIC}<br/>
@@ -88,7 +88,7 @@
             </td>
             <td style="width:25%;" onmouseover="this.style.cursor='pointer';" onclick="window.location.href='viewtopic.php?showtopic={topic_id}&amp;lastpost=true#{lastpostid}'" title="{LANG_lastpost}">
 
-              <table style="width:100%;">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                   <td style="white-space:nowrap;padding-left:2px;" class="pluginLinks">{LANG_BY}{lastposter}</td>
                 </tr>
@@ -105,7 +105,7 @@
       </td>
     </tr>
   </table>
-  <table style="padding:2px;width:100%;">
+  <table cellspacing="0" cellpadding="2" width="100%">
     <tr>
       <td style="height:24px;white-space:nowrap;">{pagenavigation}</td>
     </tr>

@@ -43,7 +43,7 @@
       <div style="clear:both;"></div>
       {attachments}
       {!if sig}
-      <div style="min-height:45px;padding-top:10px;">
+      <div class="forum-signature" style="min-height:45px;padding-top:10px;">
         {sig}<br/>
         {remote_ip}
       </div>
