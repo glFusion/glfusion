@@ -6587,10 +6587,10 @@ function css_out()
             }
         }
     }
-
-    if ( file_exists($_CONF['path_layout'] .'custom.css') ) {
-        $files[] = $_CONF['path_layout'] . 'custom.css';
-    }
+//  Custom CSS added by theme if it supports it...
+//    if ( file_exists($_CONF['path_layout'] .'custom.css') ) {
+//        $files[] = $_CONF['path_layout'] . 'custom.css';
+//    }
 
     // check cache age & handle conditional request
     if (css_cacheok($cacheFile,$files)){
@@ -6791,8 +6791,8 @@ function js_out()
 
     // standard JS used by glFusion
     if ( !isset($_SYSTEM['disable_jquery']) || $_SYSTEM['disable_jquery'] == false ) {
-        $files[] = $_CONF['path_html'].'javascript/jquery/jquery-1.11.0.min.js';
-        $files[] = $_CONF['path_html'].'javascript/jquery/jquery-ui-1.10.4.min.js';
+        $files[] = $_CONF['path_html'].'javascript/jquery/jquery.min.js';
+        $files[] = $_CONF['path_html'].'javascript/jquery/jquery-ui.min.js';
         $files[] = $_CONF['path_html'].'javascript/addons/jqrating.min.js';
 
         if ( !isset($_SYSTEM['disable_jquery_tooltip']) || $_SYSTEM['disable_jquery_tooltip'] == false ) {
