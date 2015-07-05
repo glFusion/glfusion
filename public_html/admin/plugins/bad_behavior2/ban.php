@@ -287,9 +287,13 @@ function BB2_process_ban()
             $sql = "INSERT INTO {$_TABLES['bad_behavior2_ban']}
                    (ip,type) VALUE (INET_ATON('".DB_escapeString($ip)."'),0)";
 
-            $result = DB_query($sql,1);
-            if ($result === false ) {
-                $retval .= sprintf($LANG_BAD_BEHAVIOR['duplicate_error'].'<br>', $ip);
+            if ( defined('DEMO_MODE') ) {
+                $retval .= 'Banning IPs is disabled in Demo Mode';
+            } else {
+                $result = DB_query($sql,1);
+                if ($result === false ) {
+                    $retval .= sprintf($LANG_BAD_BEHAVIOR['duplicate_error'].'<br>', $ip);
+                }
             }
         } else {
             $retval .= sprintf($LANG_BAD_BEHAVIOR['invalid_ip'].'<br>',$ip);
