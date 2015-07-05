@@ -81,7 +81,7 @@ function _img_RotateImage($srcImage, $direction,$mimeType)
 
 function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $dImageHeight, $dImageWidth, $mimeType)
 {
-    global $_CONF;
+    global $_CONF, $_MG_CONF;
 
     $noLayers = 1;
 
@@ -96,7 +96,7 @@ function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $d
         }
     }
 
-    $JpegQuality = 85;
+    $JpegQuality = $_MG_CONF['jpg_quality'];
 
     if ( $_CONF['debug_image_upload'] ) {
         COM_errorLog("_img_resizeImage: Resizing using ImageMagick src = " . $srcImage . " mimetype = " . $mimeType);
