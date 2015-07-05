@@ -129,7 +129,9 @@ function plugin_geticon_bad_behavior2 ()
 
 function plugin_runScheduledTask_bad_behavior2()
 {
-    bb2_expireBans();
+    global $_CONF;
+
+    if (isset($_CONF['bb2_enabled']) && $_CONF['bb2_enabled']) bb2_expireBans();
 }
 
 /**
