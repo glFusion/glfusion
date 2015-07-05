@@ -1,6 +1,8 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v 1.5.0 (unreleased)
+  - Fixed issue where 3rd party authentication fails if username is too short.
+  - Truncate Forum signature at 600px to ensure a signature cannot push out the layout.
   - Media Gallery: Added support for square thumbnails
   - CKEditor - Updated to v4.5.1
   - FileManager (CKEditor) - Updated to v2.2.0
