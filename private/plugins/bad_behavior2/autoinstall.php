@@ -112,6 +112,10 @@ function plugin_load_configuration_bad_behavior2()
 */
 function plugin_autouninstall_bad_behavior2 ()
 {
+    if ( defined('DEMO_MODE') ) {
+        return '';
+    }
+
     $c = config::get_instance();
     $c->del('sg_spam', 'Core');
     $c->del('fs_spam_config', 'Core');

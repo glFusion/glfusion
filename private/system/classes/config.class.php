@@ -660,7 +660,7 @@ class config {
                 $fs_contents = '';
                 foreach ($params as $name => $e) {
                     if ( defined('DEMO_MODE') ) {
-                        if ( in_array($name,array('facebook_login','facebook_consumer_key','facebook_consumer_secret','linkedin_login','linkedin_consumer_key','linkedin_consumer_secret','twitter_login','twitter_consumer_key','twitter_consumer_secret','google_login','google_consumer_key','google_consumer_secret','microsoft_login','microsoft_consumer_key','microsoft_consumer_secret','path_html','path_log','path_language','backup_path','path_data','path_pear','mysqldump_path','path_themes','path_images','uploadpath','rdf_file','site_url','site_admin_url','FileStore','SnapStore','SnapCat','FileStoreURL','SnapCatURL','FileSnapURL'))) {
+                        if ( in_array($name,array('facebook_login','facebook_consumer_key','facebook_consumer_secret','linkedin_login','linkedin_consumer_key','linkedin_consumer_secret','twitter_login','twitter_consumer_key','twitter_consumer_secret','google_login','google_consumer_key','google_consumer_secret','microsoft_login','microsoft_consumer_key','microsoft_consumer_secret','path_html','path_log','path_language','backup_path','path_data','path_pear','mysqldump_path','path_themes','path_images','uploadpath','rdf_file','site_url','site_admin_url','FileStore','SnapStore','SnapCat','FileStoreURL','SnapCatURL','FileSnapURL','bb2_enabled','bb2_httpbl_key'))) {
                             continue;
                         }
                     }

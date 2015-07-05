@@ -127,6 +127,23 @@ function plugin_geticon_bad_behavior2 ()
     return $_CONF['site_url'] . '/bad_behavior2/images/bad_behavior2.png';
 }
 
+/**
+ * Enable / disable plugin - called from plugin admin console
+ *
+ * If running in Demo mode - never disable the plugin
+ *
+ * @param   boolean enable state
+ * @return  true
+ */
+
+function plugin_enablestatechange_bad_behavior2($enable) {
+
+    if ( defined('DEMO_MODE') && $enable == false ) {
+        return 99;
+    }
+    return 1;
+}
+
 function plugin_runScheduledTask_bad_behavior2()
 {
     global $_CONF;
