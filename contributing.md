@@ -1,6 +1,6 @@
 # Contribute to glFusion
 
-This guide details how contribute to glFusion.  The glFusion development team welcomes all input, whether it be bug reporting, testing, documentation updates, helping others in the forums, or patches to resolve issues or improve functionality.  glFusion utilizes the **Fork & Pull Model** for patches and code modifications.  See the details below on how to submit code modifications to glFusion.
+This guide details how to contribute to glFusion.  The glFusion development team welcomes all input, be bug reporting, testing, documentation updates, helping others in the forums, or patches to resolve issues or improve functionality.  glFusion utilizes the **Fork & Pull Model** for patches and code modifications.  See the details below on how to submit code modifications to glFusion.
 
 ## Fork & Pull Model
 
