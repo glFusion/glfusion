@@ -54,20 +54,30 @@ function auth() {
 }
 $inRoot = SEC_inGroup('Root');
 
-$fileroot = '';
+$urlparts = parse_url($_CONF['site_url']);
+if ( isset($urlparts['path']) ) {
+    $fileroot = $urlparts['path'];
+    $fileroot = trim($fileroot);
+    if ( $fileroot[strlen($fileroot)-1] != '/' ) {
+        $fileroot = $fileroot.'/';
+    }
+} else {
+    $fileroot = '';
+}
+
 if ( COM_isAnonUser() ) {
     $uid = 1;
 } else {
     $uid = $_USER['uid'];
 }
 if ( $inRoot ) {
-    $filePath = 'images/library/';
+    $filePath = $fileroot . 'images/library/';
 } else {
     $filePath = $fileroot . $_CK_CONF['filemanager_fileroot'];
     if ( $_CK_CONF['filemanager_per_user_dir'] ) {
         $filePath = $fileroot . $_CK_CONF['filemanager_fileroot'] . $uid . '/';
         if ( !is_dir($_CONF['path_html'].$filePath) ) {
-            $rc = @mkdir($_CONF['path_html'].$filePath, 0777, true);
+            $rc = @mkdir($_CONF['path_html'].$filePath, 0755, true);
             if ( $rc === false ) {
                 $filePath = $fileroot . $_CK_CONF['filemanager_fileroot'];
             }
