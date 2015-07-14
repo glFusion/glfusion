@@ -73,10 +73,6 @@ $p->set_file (array (
     'category'         =>     'filelisting_subcategory.thtml',
     'sortmenu'         =>     'sortmenu.thtml'));
 
-$p->set_var ('layout_url', $_CONF['layout_url']);
-$p->set_var ('site_url',$_CONF['site_url']);
-$p->set_var ('site_admin_url',$_CONF['site_admin_url']);
-$p->set_var ('imgset',$_CONF['layout_url'] . '/nexflow/images');
 $p->set_var ('tablewidth', $mydownloads_shotwidth+10);
 $p->set_var('block_header', COM_startBlock(_MD_CATEGORYTITLE));
 $p->set_var('block_footer', COM_endBlock());

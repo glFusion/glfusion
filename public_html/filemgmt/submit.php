@@ -199,6 +199,12 @@ if ( defined('DEMO_MODE') ) {
     exit;
 }
 
+if ( isset($_USER['uid']) ) {
+    $uid = $_USER['uid'];
+} else {
+    $uid = 1;
+}
+
 if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
 
     $logourl = '';
@@ -410,24 +416,10 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
 
     } else {
 
-        $display .= FM_siteHeader();
-        $display .= COM_startBlock("<b>". _MD_UPLOADTITLE ."</b>");
-        $display .= "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"8\" class=\"plugin\"><tr><td style=\"padding-top:10px;padding-left:50px;\">\n";
-        $display .= "<ul><li>"._MD_SUBMITONCE."<b>&nbsp;&nbsp;".'(max:'."&nbsp;" . ini_get('upload_max_filesize') . ')' . "</b> </li>\n";
-        $display .= "<li>"._MD_ALLPENDING."</li>\n";
-        $display .= "<li>"._MD_DONTABUSE."</li>\n";
-        $display .= "<li>"._MD_TAKEDAYS."</li>\n";
-        $display .= "<li>"._MD_REQUIRED."</li></ul>\n";
+        $T = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
+        $T->set_file('page', 'upload.thtml');
 
-        $display .= "<form action=\"submit.php\" method=\"post\" enctype='multipart/form-data'> \n";
-        $display .= "<table width=\"80%\"><tr>";
-        $display .= "<td align=\"right\" style=\"white-space:nowrap;\"><b>"._MD_FILETITLE."</b></td><td>";
-        $display .= "<input type=\"text\" name=\"title\" size=\"50\" maxlength=\"100\" />";
-        $display .= "</td></tr><tr><td align=\"right\" style=\"white-space:nowrap;\"><b>"._MD_DLFILENAME."</b></td><td>";
-        $display .= "<input type=\"file\" name=\"newfile\" size=\"50\" maxlength=\"100\" />";
-        $display .= "</td></tr>";
-        $display .= "<tr><td align=\"right\" style=\"white-space:nowrap;\"><b>"._MD_CATEGORY."</b></td><td>";
-
+        $categorySelectHTML = '';
         $sql = "SELECT cid,title,grp_writeaccess FROM {$_TABLES['filemgmt_cat']} WHERE pid=0 ";
         if (count($_GROUPS) == 1) {
             $sql .= " AND grp_access = '" . current($_GROUPS) ."' ";
@@ -436,7 +428,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         }
         $sql .= "ORDER BY cid";
         $query = DB_query($sql);
-        $categorySelectHTML = '<select name="cid">';
+
         while (list($cid,$title,$directUploadGroup) = DB_fetchArray($query)) {
             $categorySelectHTML .= '<option value="'.$cid.'">';
             if (!SEC_inGroup($directUploadGroup)) {
@@ -458,33 +450,38 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
                 $categorySelectHTML .= "</option>\n";
             }
         }
-        $categorySelectHTML .= '</select>';
 
-        $display .= $categorySelectHTML;
-        $display .= '<span class="pluginTinyText" style="padding-left:5px;">' ._MD_APPROVEREQ ."</span></td></tr>\n";
+        $T->set_var(array(
+                    'lang_submitnotice' => _MD_SUBMITONCE,
+                    'lang_allpending'   => _MD_ALLPENDING,
+                    'lang_dontabuse'    => _MD_DONTABUSE,
+                    'lang_takedays'     => _MD_TAKEDAYS,
+                    'lang_required'     => _MD_REQUIRED,
+                    'lang_filetitle'    => _MD_FILETITLE,
+                    'lang_filename'     => _MD_DLFILENAME,
+                    'lang_category'     => _MD_CATEGORY,
+                    'lang_approve'      => _MD_APPROVEREQ,
+                    'lang_homepage'     => _MD_HOMEPAGEC,
+                    'lang_version'      => _MD_VERSIONC,
+                    'lang_desc'         => _MD_DESCRIPTIONC,
+                    'lang_screenshot'   => _MD_SHOTIMAGE,
+                    'lang_commentoption'=> _MD_COMMENTOPTION,
+                    'lang_no'           => _MD_NO,
+                    'lang_yes'          => _MD_YES,
+                    'lang_submit'       => _MD_SUBMIT,
+                    'lang_cancel'       => _MD_CANCEL,
+                    'token_name'        => CSRF_TOKEN,
+                    'security_token'    => SEC_createToken(),
+                    'cat_select_options'=> $categorySelectHTML,
+                    'uid'               => $uid,
+        ));
 
-        $display .= "<tr><td align=\"right\" style=\"white-space:nowrap;\"><b>"._MD_HOMEPAGEC."</b></td><td>\n";
-        $display .= "<input type=\"text\" name=\"homepage\" size=\"50\" maxlength=\"100\" /></td></tr>\n";
-        $display .= "<tr><td align=\"right\" style=\"white-space:nowrap;\"><b>"._MD_VERSIONC."</b></td><td>\n";
-        $display .= "<input type=\"text\" name=\"version\" size=\"10\" maxlength=\"10\" /></td></tr>\n";
-        $display .= "<tr><td align=\"right\" valign=\"top\" style=\"white-space:nowrap;\"><b>"._MD_DESCRIPTIONC."</b></td><td>\n";
-        $display .= "<textarea name=\"description\" cols=\"50\" rows=\"6\"></textarea>\n";
-        $display .= "</td></tr>\n";
-        $display .= "<tr><td align=\"right\" style=\"white-space:nowrap;\"><b>"._MD_SHOTIMAGE."</b></td><td>\n";
-        $display .= "<input type=\"file\" name=\"newfileshot\" size=\"50\" maxlength=\"60\" /></td></tr>\n";
-        $display .= "<tr><td align=\"right\"></td><td>";
-        $display .= "</td></tr><tr><td style=\"text-align:right;\"><b>"._MD_COMMENTOPTION."</b></td><td>";
-        $display .= "<input type=\"radio\" name=\"commentoption\" value=\"1\" checked=\"checked\" />&nbsp;" ._MD_YES."&nbsp;";
-        $display .= "<input type=\"radio\" name=\"commentoption\" value=\"0\" />&nbsp;" ._MD_NO."&nbsp;";
-        $display .= "</td></tr>\n";
-        $display .= "</table>\n";
-        $display .= "<br />";
-        $display .= "<input type=\"hidden\" name=\"submitter\" value=\"".$uid."\" />";
-        $display .= "<center><input type=\"submit\" name=\"submit\" class=\"button\" value=\""._MD_SUBMIT."\"" . XHTML. ">\n";
-        $display .= "&nbsp;<input type=\"button\" value=\""._MD_CANCEL."\" onclick=\"javascript:history.go(-1)\" /></center>\n";
-        $display .= "<input type=\"hidden\" name=\"".CSRF_TOKEN."\" value=\"".SEC_createToken()."\"/>";
-        $display .= "</form>\n";
-        $display .= "</td></tr></table>";
+        $display .= FM_siteHeader();
+        $display .= COM_startBlock("<b>". _MD_UPLOADTITLE ."</b>");
+
+        $T->parse('output', 'page');
+        $display .= $T->finish($T->get_var('output'));
+
         $display .= COM_endBlock();
         $display .= FM_siteFooter();
         echo $display;
