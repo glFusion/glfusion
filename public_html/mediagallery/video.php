@@ -97,6 +97,7 @@ if ( $nRows > 0 ) {
 
     switch ( $row['mime_type'] ) {
 	    case 'embed' :
+            $T->set_file ('video','embed.thtml');
 		    $T->set_var(array(
 		        'video'             =>  'embed.thtml',
 		    	'embed_string'		=>  $row['remote_url'],
