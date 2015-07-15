@@ -124,6 +124,14 @@
         </td>
       </tr>
       <tr>
+        <td class="alignright">{lang_alt_topic}</td>
+        <td>
+          <select name="alternate_tid">
+            {alt_topic_options}
+          </select>
+        </td>
+      </tr>
+      <tr>
         <td class="alignright">{lang_story_stats}:</td>
         <td>
           <table cellspacing="0" cellpadding="3">

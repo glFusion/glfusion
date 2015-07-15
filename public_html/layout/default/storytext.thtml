@@ -1,18 +1,6 @@
 {# begin {templatelocation} #}
 <div class="story">
     <span class="story-icons">
-{# displays the Submit to Digg.com icon. For more info visit http://digg.com/tools/integrate #}
-		{!if digg_enabled}
-		<span style="padding-right:3px;">
-<script type="text/javascript">
-digg_url = '{article_url}'; {# permalink to article #}
-digg_skin = 'icon'; {# icon, compact, normal(if left blank) #}
-digg_window = 'new'; {# open Digg.com window in a new window, if left blank will use same window #}
-</script>
-<script src="http://digg.com/tools/diggthis.js" type="text/javascript"></script>
-		</span>
-		{!endif}
-{# end Digg.com icon code #}
         {plugin_icon_vars}
         {email_icon}
         {print_icon}
