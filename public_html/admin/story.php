@@ -354,7 +354,7 @@ function STORY_list()
 */
 function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
 {
-    global $_CONF, $_GROUPS, $_TABLES, $_USER, $LANG24, $LANG_ACCESS,
+    global $_CONF, $_GROUPS, $_TABLES, $_USER, $LANG24, $LANG33, $LANG_ACCESS,
            $LANG_ADMIN, $MESSAGE,$_IMAGE_TYPE;
 
     USES_lib_admin();
@@ -457,8 +457,10 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     }
     if ( SEC_hasRights('story.edit') ) {
         $allowedTopicList = COM_topicList ('tid,topic', $story->EditElements('tid'), 1, true,0);
+        $allowedAltTopicList = '<option value="">'.$LANG33[44].'</option>'.COM_topicList ('tid,topic', $story->EditElements('alternate_tid'), 1, true,0);
     } else {
         $allowedTopicList = COM_topicList ('tid,topic', $story->EditElements('tid'), 1, true,3);
+        $allowedAltTopicList = '<option value="">'.$LANG33[44].'</option>'.COM_topicList ('tid,topic', $story->EditElements('alternate_tid'), 1, true,3);
     }
     if ( $allowedTopicList == '' ) {
         $display .= COM_showMessageText($LANG24[42],$LANG_ACCESS['accessdenied'],true);
@@ -689,6 +691,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     $story_templates->set_var('lang_topic', $LANG_ADMIN['topic']);
 
     $story_templates->set_var ('topic_options',$allowedTopicList);
+    $story_templates->set_var ('alt_topic_options',$allowedAltTopicList);
     $story_templates->set_var('lang_show_topic_icon', $LANG24[56]);
     if ($story->EditElements('show_topic_icon') == 1) {
         $story_templates->set_var('show_topic_icon_checked', 'checked="checked"');

@@ -182,10 +182,18 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         }
 
         $topicname = $story->DisplayElements('topic');
+        if ( $story->DisplayElements('alternate_tid')  != NULL ) {
+            $alttopic = DB_getItem( $_TABLES['topics'], 'topic', "tid = '".DB_escapeString($story->DisplayElements('alternate_tid'))."'" );
+        } else {
+            $alttopic = '';
+        }
         $article->set_var('story_topic_id', $story->DisplayElements('tid'));
+        $article->set_var('alt_story_topic_id', $story->DisplayElements('alternate_tid'));
         $article->set_var('story_topic_name', $topicname);
+        $article->set_var('story_alternate_topic_name',$alttopic);
 
         $topicurl = $_CONF['site_url'] . '/index.php?topic=' . $story->DisplayElements('tid');
+        $alttopicurl = $_CONF['site_url'] . '/index.php?topic=' . $story->DisplayElements('alternate_tid');
         if(( !isset( $_USER['noicons'] ) OR ( $_USER['noicons'] != 1 )) AND
                 $story->DisplayElements('show_topic_icon') == 1 ) {
             $imageurl = $story->DisplayElements('imageurl');
@@ -217,6 +225,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             }
         }
         $article->set_var( 'story_topic_url', $topicurl );
+        $article->set_var( 'alt_story_topic_url',$alttopicurl);
 
         $recent_post_anchortag = '';
         $articleUrl = COM_buildUrl($_CONF['site_url'] . '/article.php?story='
@@ -467,6 +476,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
 
             if ($_CONF['backend'] == 1) {
                 $tid = $story->displayElements('tid');
+                $alt_tid = $story->displayElements('alternate_tid');
                 $result = DB_query("SELECT filename, title FROM {$_TABLES['syndication']} WHERE type = 'article' AND topic = '".DB_escapeString($tid)."' AND is_enabled = 1");
                 $feeds = DB_numRows($result);
                 for ($i = 0; $i < $feeds; $i++) {
@@ -1179,6 +1189,10 @@ function service_submit_story($args, &$output, &$svc_msg)
 
     if (empty($args['group_id'])) {
         $args['group_id'] = SEC_getFeatureGroup('story.edit', $_USER['uid']);
+    }
+
+    if ( $args['tid'] == $args['alternate_id']) {
+        $args['alternate_id'] = NULL;
     }
 
     if (empty($args['postmode'])) {

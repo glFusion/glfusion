@@ -351,6 +351,7 @@ CREATE TABLE {$_TABLES['stories']} (
   uid mediumint(8) NOT NULL default '1',
   draft_flag tinyint(3) unsigned default '0',
   tid varchar(20) NOT NULL default 'General',
+  alternate_tid varchar(20) NULL DEFAULT NULL,
   date datetime default NULL,
   title varchar(128) default NULL,
   introtext text,

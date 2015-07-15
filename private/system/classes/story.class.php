@@ -116,6 +116,7 @@ class Story
     var $_uid;
     var $_draft_flag;
     var $_tid;
+    var $_alternate_tid;
     var $_date;
     var $_hits;
     var $_rating;
@@ -145,6 +146,7 @@ class Story
     var $_photo;
     var $_email;
     var $_topic;
+    var $_alternate_topic;
     var $_imageurl;
 
     /**
@@ -180,6 +182,7 @@ class Story
            'uid' => 1,
            'draft_flag' => 1,
            'tid' => 1,
+           'alternate_tid' => 1,
            'date' => 1,
            'title' => 1,
            'introtext' => 1,
@@ -208,6 +211,7 @@ class Story
            'perm_anon' => 1,
            'imageurl' => 0,
            'topic' => 0,
+           'alternate_topic' => 0,
            'access' => 0,
            'photo' => 0,
            'email' => 0
@@ -228,6 +232,11 @@ class Story
               (
                 STORY_AL_ALPHANUM,
                 '_tid'
+              ),
+           'alternate_tid' => array
+              (
+                STORY_AL_ALPHANUM,
+                '_alternate_tid'
               ),
            'show_topic_icon' => array
               (
@@ -865,8 +874,13 @@ class Story
         $topic = DB_fetchArray($topic);
         $this->_topic = $topic['topic'];
         $this->_imageurl = $topic['imageurl'];
+        $alternate_topic = '';
+        if ( $this->_alternate_tid != NULL ) {
+            $alternate_topic = DB_getItem($_TABLES['topics'],'topic','tid="'.DB_escapeString($this->_alternate_tid)."'");
+        }
+        $this->_alternate_topic = $alternate_topic;
 
-        /* Then load the title, intro and body */
+         /* Then load the title, intro and body */
         if (($array['postmode'] == 'html') || ($array['postmode'] == 'adveditor') ) {
             $this->_htmlLoadStory($array['title'], $array['introtext'], $array['bodytext']);
 
@@ -880,7 +894,9 @@ class Story
         if (empty($this->_title) || empty($this->_introtext)) {
             return STORY_EMPTY_REQUIRED_FIELDS;
         }
-
+        if ( $this->_tid == $this->_alternate_tid ) {
+            $this->_alternate_tid = NULL;
+        }
         $this->_sanitizeData();
         return $retval;
     }
@@ -987,6 +1003,7 @@ class Story
         }
 
         $this->_tid = COM_applyFilter($array['tid']);
+        $this->_alternate_tid = COM_applyFilter($array['altnerate_tid']);
 
         if (empty($this->_title) || empty($this->_introtext)) {
             return STORY_EMPTY_REQUIRED_FIELDS;
@@ -1553,7 +1570,9 @@ class Story
             case 'topic':
                 $return = $filter->htmlspecialchars($this->_topic);
                 break;
-
+            case 'alternate_topic':
+                $return = $filter->htmlspecialchars($this->_alternate_topic);
+                break;
             case 'expire':
                 $return = $dtExpire->toUnix();
                 break;

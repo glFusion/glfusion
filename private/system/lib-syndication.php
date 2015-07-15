@@ -88,7 +88,7 @@ function SYND_feedUpdateCheckAll( $frontpage_only, $update_info, $limit, $update
     if( count( $topiclist ) > 0 )
     {
         $tlist = "'" . implode( "','", $topiclist ) . "'";
-        $where .= " AND (tid IN ($tlist))";
+        $where .= " AND (tid IN ($tlist) OR alternate_tid IN ($tlist))";
     }
     if ($frontpage_only) {
         $where .= ' AND frontpage = 1';
@@ -154,7 +154,7 @@ function SYND_feedUpdateCheckTopic( $tid, $update_info, $limit, $updated_topic =
         $limitsql = ' LIMIT 10';
     }
 
-    $result = DB_query( "SELECT sid FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() AND tid = '$tid' AND perm_anon > 0 ORDER BY date DESC $limitsql" );
+    $result = DB_query( "SELECT sid FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() AND (tid = '$tid' OR alternate_tid = '$tid') AND perm_anon > 0 ORDER BY date DESC $limitsql" );
     $nrows = DB_numRows( $result );
 
     $sids = array ();
@@ -246,7 +246,7 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
 
         $topic = DB_getItem( $_TABLES['topics'], 'topic',"tid = '".DB_escapeString($tid)."'" );
 
-        $result = DB_query( "SELECT sid,uid,title,introtext,bodytext,postmode,UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() AND tid = '".DB_escapeString($tid)."' AND perm_anon > 0 ORDER BY date DESC $limitsql" );
+        $result = DB_query( "SELECT sid,uid,title,introtext,bodytext,postmode,UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() AND (tid = '".DB_escapeString($tid)."' OR alternate_tid = '".DB_escapeString($tid)."') AND perm_anon > 0 ORDER BY date DESC $limitsql" );
 
         $nrows = DB_numRows( $result );
 

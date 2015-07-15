@@ -193,7 +193,7 @@ if (empty ($topic)) {
 
 // if a topic was provided only select those stories.
 if (!empty($topic)) {
-    $sql .= " AND s.tid = '".DB_escapeString($topic)."' ";
+    $sql .= " AND (s.tid = '".DB_escapeString($topic)."' OR s.alternate_tid = '".DB_escapeString($topic)."') ";
 } elseif (!$newstories) {
     $sql .= " AND frontpage = 1 ";
 }

@@ -719,6 +719,8 @@ function TOPIC_delete($tid)
 
     // same with feeds
     DB_query ("UPDATE {$_TABLES['syndication']} SET topic = '::all', is_enabled = 0 WHERE topic = '$tid'");
+    // remove any alternate topics
+    DB_query ("UPDATE {$_TABLES['stories']} SET alternate_tid = NULL WHERE alternate_tid = '$tid'");
 
     // delete comments, trackbacks, images associated with stories in this topic
     $result = DB_query ("SELECT sid FROM {$_TABLES['stories']} WHERE tid = '$tid'");

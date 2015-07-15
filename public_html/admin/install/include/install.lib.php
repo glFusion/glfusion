@@ -1144,12 +1144,13 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('min_username_length','4','text',4,4,NULL,60,TRUE);
             $current_fusion_version = '1.4.3';
         case '1.4.3' :
+            $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `alternate_tid` VARCHAR(20) NULL DEFAULT NULL AFTER `tid`, ADD INDEX `alternate_topic` (`alternate_tid`) ;";
             $_SQL[] = "ALTER TABLE {$_TABLES['tokens']} CHANGE `urlfor` `urlfor` VARCHAR( 1024 ) NOT NULL";
-            $_SQL[] = "ALTER TABLE  {$_TABLES['comments']} CHANGE  `ipaddress`  `ipaddress` VARCHAR( 45 ) NOT NULL DEFAULT  ''";
-            $_SQL[] = "ALTER TABLE  {$_TABLES['rating_votes']} CHANGE  `ip_address`  `ip_address` VARCHAR( 45 ) NOT NULL";
-            $_SQL[] = "ALTER TABLE  {$_TABLES['sessions']} CHANGE  `remote_ip`  `remote_ip` VARCHAR( 45 ) NOT NULL DEFAULT  ''";
-            $_SQL[] = "ALTER TABLE  {$_TABLES['trackback']}  `ipaddress`  `ipaddress` VARCHAR( 45 ) NOT NULL DEFAULT  ''";
-            $_SQL[] = "ALTER TABLE  {$_TABLES['users']} CHANGE  `remote_ip`  `remote_ip` VARCHAR( 45 ) NOT NULL DEFAULT  ''";
+            $_SQL[] = "ALTER TABLE {$_TABLES['comments']} CHANGE  `ipaddress`  `ipaddress` VARCHAR( 45 ) NOT NULL DEFAULT  ''";
+            $_SQL[] = "ALTER TABLE {$_TABLES['rating_votes']} CHANGE  `ip_address`  `ip_address` VARCHAR( 45 ) NOT NULL";
+            $_SQL[] = "ALTER TABLE {$_TABLES['sessions']} CHANGE  `remote_ip`  `remote_ip` VARCHAR( 45 ) NOT NULL DEFAULT  ''";
+            $_SQL[] = "ALTER TABLE {$_TABLES['trackback']}  `ipaddress`  `ipaddress` VARCHAR( 45 ) NOT NULL DEFAULT  ''";
+            $_SQL[] = "ALTER TABLE {$_TABLES['users']} CHANGE  `remote_ip`  `remote_ip` VARCHAR( 45 ) NOT NULL DEFAULT  ''";
 
             foreach ($_SQL as $sql) {
                 DB_query($sql,1);
