@@ -876,7 +876,7 @@ class Story
         $this->_imageurl = $topic['imageurl'];
         $alternate_topic = '';
         if ( $this->_alternate_tid != NULL ) {
-            $alternate_topic = DB_getItem($_TABLES['topics'],'topic','tid="'.DB_escapeString($this->_alternate_tid)."'");
+            $alternate_topic = DB_getItem($_TABLES['topics'],'topic','tid="'.DB_escapeString($this->_alternate_tid).'"');
         }
         $this->_alternate_topic = $alternate_topic;
 
