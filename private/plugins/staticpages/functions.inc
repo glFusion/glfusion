@@ -1026,10 +1026,10 @@ function plugin_autotags_staticpages($op, $content = '', $autotag = '')
         }
         switch ($mode) {
             case 'home' :
-                if (!COM_isFrontpage()) return;
+                if (COM_isFrontpage()) return;
                 break;
             case 'nohome' :
-                if ( COM_isFrontpage()) return;
+                if ( !COM_isFrontpage()) return;
                 break;
         }
 
