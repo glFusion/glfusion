@@ -1010,6 +1010,29 @@ function plugin_autotags_staticpages($op, $content = '', $autotag = '')
                 break;
         }
     } else if ($op == 'parse') {
+
+        $mode = '';
+
+        $px = explode (' ', trim ($autotag['parm2']));
+        if (is_array ($px)) {
+            foreach ($px as $part) {
+                if (substr ($part, 0, 6) == 'where:') {
+                    $a = explode (':', $part);
+                    $mode = $a[1];
+                } else {
+                    break;
+                }
+            }
+        }
+        switch ($mode) {
+            case 'home' :
+                if (!COM_isFrontpage()) return;
+                break;
+            case 'nohome' :
+                if ( COM_isFrontpage()) return;
+                break;
+        }
+
         if (($autotag['tag'] == 'staticpage') || ($autotag['tag'] == 'staticpage_content' )) {
             $sp_id = COM_applyFilter($autotag['parm1']);
             if ( empty($sp_id) ) {
