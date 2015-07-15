@@ -243,6 +243,8 @@ $LANG01 = array(
     'no_new_items'              => 'No New Items',
     'max_execution_time'        => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.',
     'allowed_html'              => 'Allowed HTML:',
+    'posted_in'                 => 'Posted in',
+    'continue_reading'          => 'Continue Reading',
 );
 
 ###############################################################################
@@ -1898,6 +1900,7 @@ $LANG_ADMIN = array(
     'topic_list' => 'Topic List',
     'tb_list' => 'Trackback List',
     'custom_autotag' => 'Custom Autotags',
+    'alt_topic' => 'Alternate Topic',
 );
 
 ###############################################################################

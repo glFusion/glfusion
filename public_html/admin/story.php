@@ -689,6 +689,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
 
     $story_templates->set_var('story_title', $story->EditElements('title'));
     $story_templates->set_var('lang_topic', $LANG_ADMIN['topic']);
+    $story_templates->set_var('lang_alt_topic', $LANG_ADMIN['alt_topic']);
 
     $story_templates->set_var ('topic_options',$allowedTopicList);
     $story_templates->set_var ('alt_topic_options',$allowedAltTopicList);

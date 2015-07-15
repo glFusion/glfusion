@@ -133,9 +133,11 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         }
 
         $article->set_var( 'story_id', $story->getSid() );
+        $article->set_var( 'lang_posted_in', $LANG01['posted_in']);
 
         if ($_CONF['contributedbyline'] == 1) {
             $article->set_var('lang_contributed_by', $LANG01[1]);
+            $article->set_var('lang_by',$LANG01[95]);
             $article->set_var('contributedby_uid', $story->DisplayElements('uid'));
             $fullname = $story->DisplayElements('fullname');
             $username = $story->DisplayElements('username');
@@ -525,6 +527,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             );
             $article->set_var( 'edit_image', $editiconhtml);
         }
+        $article->set_var('lang_continue_reading',$LANG01['continue_reading']);
         PLG_templateSetVars($article_filevar,$article);
 
         if ( $_CONF['rating_enabled'] != 0 && $index != 'p') {
