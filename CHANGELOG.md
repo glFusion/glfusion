@@ -1,6 +1,9 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v 1.5.0 (unreleased)
+  - Static Pages: add where:home or nohome to autotag
+  - Add alternate topic support
+  - Media Gallery: Fixed error where pop-up video would not play
   - Fixed issue where 3rd party authentication fails if username is too short.
   - Truncate Forum signature at 600px to ensure a signature cannot push out the layout.
   - Media Gallery: Added support for square thumbnails
