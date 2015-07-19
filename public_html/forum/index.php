@@ -416,13 +416,19 @@ if ($forum == 0) {
                             $busyforum = 1;
                             $quietforum = 0;
                 	        $folderimg = '<img src="'._ff_getImage('busyforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg111'].'" title="'.$LANG_GF02['msg111'].'"/>';
+                	        $folder_icon = _ff_getImage('busyforum');
+                	        $folder_msg = $LANG_GF02['msg111'];
                 	    } else {
                 	        $busyforum = 0;
                 	        $quietforum = 1;
                     	    $folderimg = '<img src="'._ff_getImage('quietforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['quietforum'].'" title="'.$LANG_GF02['quietforum'].'"/>';
+                    	    $folder_icon = _ff_getImage('quietforum');
+                    	    $folder_msg = $LANG_GF02['quietforum'];
                     	}
 	                } else {
     	                $folderimg = '<img src="'._ff_getImage('quietforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['quietforum'].'" title="'.$LANG_GF02['quietforum'].'"/>';
+    	                $folder_icon = _ff_getImage('quietforum');
+    	                $folder_msg = $LANG_GF02['quietforum'];
 	                }
 	                $dt->setTimestamp($B['date']);
                     $lastdate1 = $dt->format('Y-m-d',true);
@@ -446,6 +452,7 @@ if ($forum == 0) {
             	    $lastpostmsgBy = $LANG_GF01['BY']. $by;
                 	$forumlisting->set_var (array(
                 	                'lastpostmsgDate'   => $lastpostmsgDate,
+                	                'lastPostDate'      => $lastdate,
 	                                'lastpostmsgTopic'  => $B['subject'],
     	                            'lastpostmsgBy'     => $lastpostmsgBy
     	            ));
@@ -456,6 +463,8 @@ if ($forum == 0) {
                 	                'lastpostmsgBy'     => '',
                 	));
 	                $folderimg = '<img src="'._ff_getImage('quietforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['quietforum'].'" title="'.$LANG_GF02['quietforum'].'"/>';
+	                $folder_icon = _ff_getImage('quietforum');
+	                $folder_msg = $LANG_GF02['quietforum'];
     	        }
 
     	        if ($B['pid'] == 0) {
@@ -466,6 +475,8 @@ if ($forum == 0) {
 
 	            $forumlisting->set_var (array(
 	                            'folderimg'     => $folderimg,
+	                            'folder_icon'   => $folder_icon,
+	                            'folder_msg'    => $folder_msg,
     	                        'forum_id'      => $B['forum_id'],
         	                    'forum_name'    => $B['forum_name'],
 	                            'forum_desc'    => $B['forum_dscp'],
@@ -768,7 +779,6 @@ if ($forum > 0) {
             $firstdate = $LANG_GF01['TODAY'] . $firsttime;
         } elseif ($_FF_CONF['allow_user_dateformat']) {
             $firstdate = $dt->format($dt->getUserFormat(),true);
-            $firstdate = $firstdate[0];
         } else {
             $firstdate = $dt->format('M/d/y H:i a',true);
         }
@@ -781,17 +791,29 @@ if ($forum > 0) {
             if (DB_numRows($lsql) == 0) {
                 if ($record['sticky'] == 1) {
                     $folderimg = '<img src="'._ff_getImage('sticky_new').'" style="vertical-align:middle;" alt="'.$LANG_GF02['msg115'].'" title="'.$LANG_GF02['msg115'].'"/>';
+                    $folder_icon = _ff_getImage('sticky_new');
+                    $folder_msg  = $LANG_GF02['msg115'];
                 } elseif ($record['locked'] == 1) {
                     $folderimg = '<img src="'._ff_getImage('locked_new').'" style="vertical-align:middle;" alt="'.$LANG_GF02['msg116'].'" title="'.$LANG_GF02['msg116'].'"/>';
+                    $folder_icon = _ff_getImage('locked_new');
+                    $folder_msg = $LANG_GF02['msg116'];
                 } else {
                     $folderimg = '<img src="'._ff_getImage('newposts').'" style="vertical-align:middle;" alt="'.$LANG_GF02['msg60'].'" title="'.$LANG_GF02['msg60'].'"/>';
+                    $folder_icon = _ff_getImage('newposts');
+                    $folder_msg = $LANG_GF02['msg60'];
                 }
             } elseif ($record['sticky'] == 1) {
                 $folderimg = '<img src="'._ff_getImage('sticky').'" style="vertical-align:middle;"alt="'.$LANG_GF02['msg61'].'" title="'.$LANG_GF02['msg61'].'"/>';
+                $folder_icon = _ff_getImage('sticky');
+                $folder_msg = $LANG_GF02['msg61'];
             } elseif ($record['locked'] == 1) {
+                $folder_icon = _ff_getImage('locked');
+                $folder_msg = $LANG_GF02['msg114'];
                 $folderimg = '<img src="'._ff_getImage('locked').'" style="vertical-align:middle;"alt="'.$LANG_GF02['msg114'].'" title="'.$LANG_GF02['msg114'].'"/>';
             } else {
                 $folderimg = '<img src="'._ff_getImage('noposts').'" style="vertical-align:middle;"alt="'.$LANG_GF02['msg59'].'" title="'.$LANG_GF02['msg59'].'"/>';
+                $folder_icon = _ff_getImage('noposts');
+                $folder_msg = $LANG_GF02['msg59'];
             }
             if (isset($bmArray[$record['id']]) ) {
                 $topiclisting->set_var('bookmark_icon','<img src="'._ff_getImage('star_on_sm').'" title="'.$LANG_GF02['msg204'].'" alt=""/>');
@@ -802,10 +824,16 @@ if ($forum > 0) {
             }
         } elseif ($record['sticky'] == 1) {
             $folderimg = '<img src="'._ff_getImage('sticky').'" style="vertical-align:middle;" alt="'.$LANG_GF02['msg61'].'" title="'.$LANG_GF02['msg61'].'"/>';
+            $folder_icon = _ff_getImage('sticky');
+            $folder_msg = $LANG_GF02['msg61'];
         } elseif ($record['locked'] == 1) {
             $folderimg = '<img src="'._ff_getImage('locked').'" style="vertical-align:middle;" alt="'.$LANG_GF02['msg114'].'" title="'.$LANG_GF02['msg114'].'"/>';
+            $folder_icon = _ff_getImage('locked');
+            $folder_msg = $LANG_GF02['msg114'];
         } else {
            $folderimg = '<img src="'._ff_getImage('noposts').'" style="vertical-align:middle;" alt="'.$LANG_GF02['msg59'].'" title="'.$LANG_GF02['msg59'].'"/>';
+           $folder_icon = _ff_getImage('noposts');
+           $folder_msg = $LANG_GF02['msg59'];
         }
 
         $lastposter = $lastreply['name'];
@@ -826,6 +854,8 @@ if ($forum > 0) {
         $topicinfo  = htmlspecialchars($record['subject']).'::'.htmlspecialchars(preg_replace('#\r?\n#','<br/>',substr(strip_tags($record['comment']),0,$_FF_CONF['contentinfo_numchars']) . '...'));
         $topiclisting->set_var (array(
                 'folderimg'     => $folderimg,
+                'folder_icon'   => $folder_icon,
+                'folder_msg'    => $folder_msg,
                 'topicinfo'     => $topicinfo,
                 'topic_id'      => $record['id'],
                 'subject'       => $subject,
@@ -841,7 +871,8 @@ if ($forum > 0) {
                 'replies'       => $record['replies'],
                 'lastdate'      => $lastdate,
                 'lastpostid'    => $record['lpid'], // $lastreply['id'],
-                'LANG_BY'       => $LANG_GF01['BY']
+                'LANG_BY'       => $LANG_GF01['BY'],
+                'startdate'     => $firstdate,
         ));
         $topiclisting->parse('trow', 'topicrows',true);
         $displayCount++;
