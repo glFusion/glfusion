@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Display Forum post in a printable format                                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -54,7 +54,7 @@ function ff_FormatForPrint( $str, $postmode='html', $status=0 ) {
     $str = str_replace('}','&#125;',$str);
 
     // we don't have a stylesheet for printing, so replace our div with the style...
-    $str = str_replace('<div class="quotemain">','<div style="border: 1px dotted #000;border-left: 4px solid #8394B2;color:#465584;  padding: 4px;  margin: 5px auto 8px auto;">',$str);
+//    $str = str_replace('<div class="quotemain">','<div style="border: 1px dotted #000;border-left: 4px solid #8394B2;color:#465584;  padding: 4px;  margin: 5px auto 8px auto;">',$str);
     return $str;
 }
 
@@ -109,12 +109,13 @@ $A["subject"] = COM_checkWords($A["subject"]);
 $A["subject"] = stripslashes(@htmlspecialchars($A["subject"],ENT_QUOTES,COM_getEncodingt()));
 
 $A['comment'] = ff_FormatForPrint( $A['comment'], $A['postmode'],'',$A['status'] );
-
+list($cacheFile,$style_cache_url) = COM_getStyleCacheLocation();
 $date = strftime('%B %d %Y @ %I:%M %p', $A['date']);
 echo"
     <html>
     <head>
         <title>$_CONF[site_name] - ".$LANG_GF02['msg147']." $A[id]]</title>
+        <link rel=\"stylesheet\" type=\"text/css\" href=\"$style_cache_url\">
     </head>
     <body>
         <font face=\"verdana\" size=\"2\">
