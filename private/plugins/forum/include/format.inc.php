@@ -349,7 +349,7 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
         $bbcode->addCode ('*', 'simple_replace', null, array ('start_tag' => '<li>', 'end_tag' => '</li>'),
                           'listitem', array ('list'), array ());
         if ($mode != 'noquote' ) {
-            $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '</p><div class="quotemain"><img src="' . $_CONF['site_url'] . '/forum/images/img_quote.gif" alt="" class="forum-quote-img"/>', 'end_tag' => '</div><p>'),
+            $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '</p><blockquote>', 'end_tag' => '</blockquote><p>'),
                               'inline', array('listitem','block','inline','link'), array());
 //            $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '<blockquote>', 'end_tag' => '</blockquote>'),
 //                              'inline', array('listitem','block','inline','link'), array());
