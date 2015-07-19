@@ -491,6 +491,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                              . $_IMAGE_TYPE . '" alt="'. $feedTitle
                              .'" title="'. $feedTitle .'" />';
                     $article->set_var( 'feed_icon',COM_createLink($feedicon, $feedUrl,array("type" =>"application/rss+xml")));
+                    $article->set_var( 'feed_url', $feedUrl);
                 } else {
                     $article->set_var( 'feed_icon', '' );
                 }
