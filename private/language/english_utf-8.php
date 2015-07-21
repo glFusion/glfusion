@@ -245,6 +245,7 @@ $LANG01 = array(
     'allowed_html'              => 'Allowed HTML:',
     'posted_in'                 => 'Posted in',
     'continue_reading'          => 'Continue Reading',
+    'menu'                      => 'Nav Menu',
 );
 
 ###############################################################################
@@ -493,6 +494,7 @@ $LANG04 = array(
     191 => 'Local Account Password',
     192 => 'Merge Remote Account with Existing Local Account',
     193 => 'Note: If you merge a remote account to an existing local account, the preferences for the local user will take priority.',
+    194 => 'Sign in with ',
 );
 
 ###############################################################################
