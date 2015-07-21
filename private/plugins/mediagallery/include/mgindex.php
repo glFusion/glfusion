@@ -138,9 +138,39 @@ function MG_index() {
     $admin_box .= '</div>';
     $admin_box .= '</form>';
 
+// build ul
+    $admin_menu = '';
+    $showAdminMenu = 0;
+    $admin_url = $_MG_CONF['site_url'] . '/admin.php?album_id=0';
+    if ( ($MG_albums[0]->member_uploads || $MG_albums[0]->access == 3) && (!COM_isAnonUser() ) )  {
+        $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=upload">'.$LANG_MG01['add_media'].'</a></li>';
+        $showAdminMenu = 1;
+    }
+    if ( $MG_albums[0]->owner_id ) {
+        $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=albumsort">'.$LANG_MG01['sort_albums'].'</a></li>';
+        $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=globalattr">'.$LANG_MG01['globalattr'] . '</a></li>' . LB;
+        $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=globalperm">'.$LANG_MG01['globalperm'] . '</a></li>' . LB;
+        $queue_count = DB_count($_TABLES['mg_media_album_queue']);
+        $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=moderate">'.$LANG_MG01['media_queue'] . ' (' . $queue_count . ')</a></li>' . LB;
+        $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=wmmanage">'.$LANG_MG01['wm_management'] . '</a></li>' . LB;
+        $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=create">' . $LANG_MG01['create_album'] . '</a></li>' . LB;
+        $showAdminMenu = 1;
+    } elseif ( $MG_albums[0]->access == 3 ) {
+        $admin_Menu .= '<li><a href="'.$abmin_url.'&amp;mode=create">' . $LANG_MG01['create_album'] . '</a></li>' . LB;
+        $showAdminMenu = 1;
+    } elseif ( $_MG_CONF['member_albums'] == 1 && ( !COM_isAnonUser() ) && $_MG_CONF['member_album_root'] == 0 && $_MG_CONF['member_create_new']) {
+        $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=create">' . $LANG_MG01['create_album'] . '</a></li>' . LB;
+        $showAdminMenu = 1;
+    }
+// end of ul
+
     if ( $showAdminBox == 0 ) {
         $admin_box = '';
         $admin_box_item = '';
+    }
+
+    if ( $showAdminMenu == 1 ) {
+        $T->set_var('admin_menu',$admin_menu);
     }
 
     $T->set_var('select_adminbox',$admin_box);
