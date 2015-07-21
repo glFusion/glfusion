@@ -405,13 +405,15 @@ switch ( $MG_albums[$album_id]->enable_slideshow ) {
 
 $admin_box = '';
 $admin_box_items = '';
+$admin_menu = '';
+$admin_url = $_MG_CONF['site_url'] . '/admin.php?album_id='.$album_id;
 
 $admin_box  = '<form name="adminbox" id="adminbox" action="' . $_MG_CONF['site_url'] . '/admin.php" method="get" style="margin:0;padding:0">';
 $admin_box .= '<div><input type="hidden" name="album_id" value="' . $album_id . '"/>';
 $admin_box .= '<select name="mode" onchange="forms[\'adminbox\'].submit()">';
 $admin_box_items .= '<option label="' . $LANG_MG01['options'] . '" value="">' . $LANG_MG01['options'] .'</option>';
 $admin_box_items .= '<option value="search">' . $LANG_MG01['search'] . '</option>';
-
+$admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=search">'.$LANG_MG01['search'].'</a></li>';
 $uploadMenu = 0;
 $adminMenu  = 0;
 if ( $MG_albums[0]->owner_id ) {
@@ -435,17 +437,26 @@ if ( $MG_albums[0]->owner_id ) {
 }
 if ( $uploadMenu == 1 ) {
     $admin_box_items .= '<option value="upload">' . $LANG_MG01['add_media'] . '</option>';
+    $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=upload">'.$LANG_MG01['add_media'].'</a></li>';
 }
 if ( $adminMenu == 1 ) {
     $admin_box_items .= '<option value="edit">'   . $LANG_MG01['edit_album'] . '</option>';
+    $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=edit">'.$LANG_MG01['edit_album'].'</a></li>';
     $admin_box_items .= '<option value="create">' . $LANG_MG01['create_album'] . '</option>';
+    $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=create">'.$LANG_MG01['create_album'].'</a></li>';
     $admin_box_items .= '<option value="batchcaption">' . $LANG_MG01['batch_caption'] . '</option>';
+    $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=batchcaption">'.$LANG_MG01['batch_caption'].'</a></li>';
     $admin_box_items .= '<option value="staticsort">' . $LANG_MG01['static_sort_media'] . '</option>';
+    $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=staticsort">'.$LANG_MG01['static_sort_media'].'</a></li>';
     $admin_box_items .= '<option value="media">' . $LANG_MG01['manage_media'] .'</option>';
+    $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=media">'.$LANG_MG01['manage_media'].'</a></li>';
     $admin_box_items .= '<option value="resize">' . $LANG_MG01['resize_display'] . '</option>';
+    $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=resize">'.$LANG_MG01['resize_display'].'</a></li>';
     $admin_box_items .= '<option value="rebuild">' . $LANG_MG01['rebuild_thumb'] . '</option>';
+    $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=rebuild">'.$LANG_MG01['rebuild_thumb'].'</a></li>';
 } elseif ($_MG_CONF['member_albums'] == 1 && !empty ($_USER['username']) && $_MG_CONF['member_create_new'] == 1 && $_MG_USERPREFS['active'] == 1 && ($album_id == $_MG_CONF['member_album_root'])) {
     $admin_box_items .= '<option value="create">' . $LANG_MG01['create_album'] . '</option>';
+    $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=create">'.$LANG_MG01['create_album'].'</a></li>';
     $adminMenu = 1;
 }
 $admin_box .= $admin_box_items;
@@ -531,6 +542,7 @@ $T->set_var(array(
 	'lang_slideshow'        => $lang_slideshow,
 	'select_adminbox'		=> $admin_box,
 	'admin_box_items'       => $admin_box_items,
+	'admin_menu'            => $admin_menu,
 	'select_sortbox'		=> $sort_box,
 	'select_sortbox_raw'    => $sort_box_raw,
 	'album_last_update'		=> $album_last_update[0],
