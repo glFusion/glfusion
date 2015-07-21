@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Main program to view forum                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2014 by the following authors:                        |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -634,6 +634,7 @@ if ($forum > 0) {
     }
     $canPost = _ff_canPost($category);
     $subscribe = '';
+    $forumsubscribed = '';
     if (!COM_isAnonUser() && $skipForum == false ) {
         // Check for user subscription status
         $sub_check = PLG_isSubscribed( 'forum', $forum, 0, $uid );
@@ -647,11 +648,13 @@ if ($forum > 0) {
             $subscribelink = $_CONF['site_url'].'/forum/notify.php?filter=2';
             $subcribelanguage = $LANG_GF01['FORUMUNSUBSCRIBE'];
             $sub_option = 'unsubscribe_forum';
+            $formsubscribed = TRUE;
         }
         $token = SEC_createToken();
         $topiclisting->set_var (array(
                                 'subscribelink'     => $subscribelink,
                                 'subscribelinkimg'  => $subscribelinkimg,
+                                'forumsubscribed'   => $forumsubscribed,
                                 'LANG_subscribe'    => $subcribelanguage,
                                 'forum'             => $forum,
                                 'suboption'         => $sub_option,
@@ -672,6 +675,7 @@ if ($forum > 0) {
         $baseurl = SYND_getFeedUrl();
         $imgurl  = '<img src="'._ff_getImage('rss_feed').'" alt="'.$LANG_GF01['rss_link'].'" title="'.$LANG_GF01['rss_link'].'" style="vertical-align:middle;"/>';
         $topiclisting->set_var('rssfeed','<a href="'.$baseurl.$rssFeed.'">'.$imgurl.'</a>');
+        $topiclisting->set_var('rssfeed_url',$baseurl.$rssFeed);
     } else {
         $topiclisting->set_var('rssfeed','');
     }
