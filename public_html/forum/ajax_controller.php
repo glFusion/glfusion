@@ -5,7 +5,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2014 by Mark R. Evans - mark AT glfusion DOT org
+*  Copyright (C) 2014-2015 by Mark R. Evans - mark AT glfusion DOT org
 */
 
 require_once '../lib-common.php';
@@ -52,7 +52,7 @@ function is_ajax() {
 
 function subscribe_topic() {
 
-    global $_CONF, $_FF_CONF, $_TABLES, $_USER, $LANG_GF02;
+    global $_CONF, $_FF_CONF, $_TABLES, $_USER, $LANG_GF01, $LANG_GF02;
 
     $retval = '';
 
@@ -111,6 +111,7 @@ function subscribe_topic() {
     $retval['errorCode'] = 0;
     $retval['icon'] = 'uk-icon-bookmark';
     $retval['subOption'] = 'unsubscribe_topic';
+    $retval['label'] = $LANG_GF01['unSubscribeLink'];
     $return["json"] = json_encode($retval);
     echo json_encode($return);
     exit();
@@ -118,7 +119,7 @@ function subscribe_topic() {
 
 function unsubscribe_topic() {
 
-    global $_CONF, $_FF_CONF, $_TABLES, $_USER, $LANG_GF02;
+    global $_CONF, $_FF_CONF, $_TABLES, $_USER, $LANG_GF01, $LANG_GF02;
 
     $retval = '';
 
@@ -149,6 +150,7 @@ function unsubscribe_topic() {
     $retval['errorCode'] = 0;
     $retval['icon'] = 'uk-icon-bookmark-o';
     $retval['subOption'] = 'subscribe_topic';
+    $retval['label'] = $LANG_GF01['SubscribeLink'];
     $return["json"] = json_encode($retval);
     echo json_encode($return);
     exit();
@@ -179,6 +181,8 @@ function subscribe() {
     }
     $retval['statusMessage'] = $LANG_GF02['msg135'];
     $retval['buttonText'] = $LANG_GF01['FORUMUNSUBSCRIBE'];
+    $retval['label'] = $LANG_GF01['FORUMUNSUBSCRIBE'];
+    $retval['icon'] = 'uk-icon-bookmark';
     $retval['subOption'] = 'unsubscribe_forum';
     $retval['errorCode'] = 0;
     $return["json"] = json_encode($retval);
@@ -209,6 +213,8 @@ function unsubscribe() {
     $retval['statusMessage'] = $LANG_GF02['msg146'];
     $retval['buttonText'] = $LANG_GF01['FORUMSUBSCRIBE'];
     $retval['subOption'] = 'subscribe_forum';
+    $retval['label'] = $LANG_GF01['FORUMSUBSCRIBE'];
+    $retval['icon'] = 'uk-icon-bookmark-o';
     $retval['errorCode'] = 0;
     $return["json"] = json_encode($retval);
     echo json_encode($return);
