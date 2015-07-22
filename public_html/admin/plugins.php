@@ -623,13 +623,6 @@ function PLUGINS_list($token)
         $_CONF['layout_url'] . '/images/icons/plugins.' . $_IMAGE_TYPE
     ));
 
-    $T->set_var('admin_menu_header',ADMIN_createMenuHeader(
-        $menu_arr,
-        $LANG32[11],
-        $LANG32[5],
-        $_CONF['layout_url'] . '/images/icons/plugins.' . $_IMAGE_TYPE
-    ));
-
     $T->set_var('upload_form',PLUGINS_showUploadForm($token));  // show the plugin upload form
 
     $data_arr = array();
