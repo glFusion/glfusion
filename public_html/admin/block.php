@@ -382,7 +382,6 @@ function BLOCK_edit($bid = '', $B = array())
     $block_templates->set_var('gltoken_name', CSRF_TOKEN);
     $block_templates->set_var('gltoken', SEC_createToken());
     $block_templates->set_var('admin_menu', ADMIN_createMenu($menu_arr,$LANG21[71],$_CONF['layout_url'] . '/images/icons/block.'. $_IMAGE_TYPE));
-    $block_templates->set_var('admin_menu_header', ADMIN_createMenuHeader($menu_arr,$LANG21[71],$LANG21[3],$_CONF['layout_url'] . '/images/icons/block.'. $_IMAGE_TYPE));
     $block_templates->set_var ('end_block',
             COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer')));
     PLG_templateSetVars('blockeditor',$block_templates);
@@ -506,9 +505,6 @@ function BLOCK_list()
 
     $retval = '';
 
-    $admin_list = new Template($_CONF['path_layout'] .'admin/block/');
-    $admin_list->set_file('admin-list', 'block_list.thtml');
-
     // writing the menu on top
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/block.php?edit=x',
@@ -517,16 +513,13 @@ function BLOCK_list()
               'text' => $LANG_ADMIN['admin_home'])
     );
 
-    $admin_list->set_var('block_start',COM_startBlock($LANG21[19], '',
-                              COM_getBlockTemplate('_admin_block', 'header')));
-
-    $admin_list->set_var('admin_menu',ADMIN_createMenu(
+    $retval .= COM_startBlock($LANG21[19], '',
+                              COM_getBlockTemplate('_admin_block', 'header'));
+    $retval .= ADMIN_createMenu(
         $menu_arr,
         $LANG21[25],
-        $_CONF['layout_url'] . '/images/icons/block.png'
-    ));
-    $admin_list->set_var('admin_menu_header',ADMIN_createMenuHeader($menu_arr,$LANG21[25],$LANG21[19],
-        $_CONF['layout_url'] . '/images/icons/block.png'));
+        $_CONF['layout_url'] . '/images/icons/block.'. $_IMAGE_TYPE
+    );
 
     BLOCK_reorder();
 
@@ -545,17 +538,16 @@ function BLOCK_list()
 
     $defsort_arr = array('field' => 'blockorder', 'direction' => 'asc');
 
-global $blockInterface;
+    global $blockInterface;
 
-if ( isset($blockInterface['left']['title']) ) {
-    $label = $blockInterface['left']['title'];
-} else {
-    $label = $LANG21[40];
-}
-
+    if ( isset($blockInterface['left']['title']) ) {
+        $label = $blockInterface['left']['title'];
+    } else {
+        $label = $LANG21[40];
+    }
 
     $text_arr = array(
-        'title'      => "$LANG21[19] (".$label.")",
+        'title'      => $label,
         'form_url'   => $_CONF['site_admin_url'] . '/block.php'
     );
 
@@ -575,16 +567,16 @@ if ( isset($blockInterface['left']['title']) ) {
     // blocks has been enabled or disabled - the value is the onleft var
 
     $form_arr = array(
-        'top'    => '<input type="hidden" id="'.CSRF_TOKEN.'" name="' . CSRF_TOKEN . '" value="'. $token .'">',
-        'bottom' => '<input type="hidden" name="blockenabler" value="1">'
+        'top'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="'. $token .'"/>',
+        'bottom' => '<input type="hidden" name="blockenabler" value="1"/>'
     );
 
-    $admin_list->set_var('admin_list', ADMIN_list(
+    $retval .= ADMIN_list(
         'blocks', 'BLOCK_getListField', $header_arr, $text_arr,
         $query_arr, $defsort_arr, '', $token, '', $form_arr
-    ));
+    );
 
-    $admin_list->set_var('block_end',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
     $query_arr = array(
         'table' => 'blocks',
@@ -593,13 +585,14 @@ if ( isset($blockInterface['left']['title']) ) {
         'default_filter' => COM_getPermSql ('AND')
     );
 
-if ( isset($blockInterface['right']['title']) ) {
-    $label = $blockInterface['right']['title'];
-} else {
-    $label = $LANG21[41];
-}
+    if ( isset($blockInterface['right']['title']) ) {
+        $label = $blockInterface['right']['title'];
+    } else {
+        $label = $LANG21[41];
+    }
+
     $text_arr = array(
-        'title'      => "$LANG21[19] (".$label.")",
+        'title'      => $label,
         'form_url'   => $_CONF['site_admin_url'] . '/block.php'
     );
 
@@ -607,15 +600,15 @@ if ( isset($blockInterface['right']['title']) ) {
     // blocks has been enabled or disabled - the value is the onleft var
 
     $form_arr = array(
-        'top'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="'. $token .'">',
-        'bottom' => '<input type="hidden" name="blockenabler" value="0">'
+        'top'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="'. $token .'"/>',
+        'bottom' => '<input type="hidden" name="blockenabler" value="0"/>'
     );
 
-    $admin_list->set_var('admin_list_right', ADMIN_list (
+    $retval .= ADMIN_list (
         'blocks', 'BLOCK_getListField', $header_arr, $text_arr,
         $query_arr, $defsort_arr, '', $token, '', $form_arr
-    ));
-    $retval = $admin_list->parse('output','admin-list');
+    );
+
     return $retval;
 }
 

@@ -71,9 +71,6 @@ function forum_admin_list()
     $admin_list->set_var('admin_menu',ADMIN_createMenu($menu_arr,$LANG_GF00['instructions'],
           $_CONF['site_url'] . '/forum/images/forum.png')
     );
-    $admin_list->set_var('admin_menu_header',ADMIN_createMenuHeader($menu_arr,$LANG_GF00['instructions'],$LANG_GF91['gfstats'],
-          $_CONF['site_url'] . '/forum/images/forum.png')
-    );
 
     // CATEGORIES
     $numcats=DB_query("SELECT id FROM {$_TABLES['ff_categories']}");

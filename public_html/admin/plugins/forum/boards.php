@@ -75,9 +75,6 @@ function board_admin_list($statusText='')
     $boards->set_var('admin_menu',ADMIN_createMenu($menu_arr,$LANG_GF00['instructions'],
           $_CONF['site_url'] . '/forum/images/forum.png')
     );
-    $boards->set_var('admin_menu_header',ADMIN_createMenuHeader($menu_arr,$LANG_GF00['instructions'],$LANG_GF06[10],
-          $_CONF['site_url'] . '/forum/images/forum.png')
-    );
 
     $boards->set_var (array(
             's_form_action' => $_CONF['site_admin_url'] .'/plugins/forum/boards.php',
@@ -205,9 +202,6 @@ function board_edit_category($id, $statusText='')
     $E['cat_dscp'] = $filter->editableText($E['cat_dscp']);
 
     $title = sprintf($LANG_GF93['editcatnote'].'<br>',$catname);
-    $T->set_var('admin_menu_header',ADMIN_createMenuHeader($menu_arr,'',$title,
-          $_CONF['site_url'] . '/forum/images/forum.png')
-    );
 
     $T->set_var(array(
         's_form_action' => $_CONF['site_admin_url'] .'/plugins/forum/boards.php',
@@ -250,9 +244,6 @@ function board_add_category($statusText='')
     $menu_arr = FF_adminNav();
 
     $T->set_var('admin_menu',ADMIN_createMenu($menu_arr,$LANG_GF00['instructions'],
-          $_CONF['site_url'] . '/forum/images/forum.png')
-    );
-    $T->set_var('admin_menu_header',ADMIN_createMenuHeader($menu_arr,'',$LANG_GF06[10].' :: '.$LANG_GF93['addcat'],
           $_CONF['site_url'] . '/forum/images/forum.png')
     );
 
@@ -508,9 +499,6 @@ function board_add_forum( $statusText = '' )
     $T->set_var('admin_menu',ADMIN_createMenu($menu_arr,$LANG_GF00['instructions'],
           $_CONF['site_url'] . '/forum/images/forum.png')
     );
-    $T->set_var('admin_menu_header',ADMIN_createMenuHeader($menu_arr,'',$LANG_GF06[10].' :: '.$LANG_GF93['addforum'],
-          $_CONF['site_url'] . '/forum/images/forum.png')
-    );
 
     $result = DB_query("SELECT DISTINCT grp_id, grp_name FROM {$_TABLES['groups']} ORDER BY grp_name");
     $nrows = DB_numRows($result);
@@ -744,10 +732,6 @@ function board_edit_forum($id, $statusText='')
     }
 
     $title = sprintf($LANG_GF93['editforumnote'], $forum_name);
-
-    $T->set_var('admin_menu_header',ADMIN_createMenuHeader($menu_arr,'',$LANG_GF93['gfboard'],
-          $_CONF['site_url'] . '/forum/images/forum.png')
-    );
 
     // build select lists
 

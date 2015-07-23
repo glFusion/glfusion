@@ -299,13 +299,6 @@ function STORY_list()
         $LANG24[23],
         $_CONF['layout_url'] . '/images/icons/story.' . $_IMAGE_TYPE
     ));
-    $form->set_var('admin_menu_header',ADMIN_createMenuHeader(
-        $menu_arr,
-        $LANG24[23],
-        $LANG24[22],
-        $_CONF['layout_url'] . '/images/icons/story.' . $_IMAGE_TYPE
-    ));
-
     $text_arr = array(
         'has_extras' => true,
         'form_url'   => $_CONF['site_admin_url'] . '/story.php?ptid='.urlencode($current_topic)
@@ -543,7 +536,6 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
                 '<input type="hidden" name="type" value="submission"/>');
     }
     $story_templates->set_var ('admin_menu',    ADMIN_createMenu($menu_arr, $LANG24[92],$_CONF['layout_url'] . '/images/icons/story.' . $_IMAGE_TYPE));
-    $story_templates->set_var ('admin_menu_header',    ADMIN_createMenuHeader($menu_arr, $LANG24[92],$title,$_CONF['layout_url'] . '/images/icons/story.' . $_IMAGE_TYPE));
 
     $story_templates->set_var ('lang_author', $LANG24[7]);
     $storyauthor = COM_getDisplayName ($story->EditElements('uid'));
