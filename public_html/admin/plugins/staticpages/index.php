@@ -130,7 +130,9 @@ function PAGE_form($A, $error = false)
                         COM_getBlockTemplate ('_admin_block', 'header')),
             'lang_save'         => $LANG_ADMIN['save'],
             'lang_cancel'       => $LANG_ADMIN['cancel'],
-            'lang_preview'      => $LANG_ADMIN['preview']
+            'lang_preview'      => $LANG_ADMIN['preview'],
+            'lang_editor'       => $LANG_STATIC['staticpageeditor'],
+            'lang_attributes'   => $LANG_STATIC['attributes'],
         ));
 
         if (SEC_hasRights ('staticpages.delete') && ($action != 'clone') &&
@@ -815,10 +817,16 @@ switch ($action) {
                 if (!isset ($_POST['postmode'])) {
                     $_POST['postmode'] = '';
                 }
-
+                $sp_status = 0;
+                if ( isset($_POST['sp_status_yes'] ) || isset($_POST['sp_status_no']) ) {
+                    if ( isset($_POST['sp_status_yes'])) $sp_status = 1;
+                    if ( isset($_POST['sp_status_no']))  $sp_status = 0;
+                } else {
+                    $sp_status = isset($_POST['sp_status']) ? 1 : 0;
+                }
                 $display .= PAGE_submit(
                     $sp_id,
-                    isset($_POST['sp_status']) ? 1 : 0,
+                    $sp_status,
                     $sp_uid,
                     isset($_POST['sp_title']) ? $_POST['sp_title'] : '',
                     isset($_POST['sp_content']) ? $_POST['sp_content'] : '',
