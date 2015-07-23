@@ -609,13 +609,13 @@ function MB_createElement ( $menu_id ) {
 
     for ($i = 0; $i < count($usergroups); $i++) {
         $group_select .= '<option value="' . $usergroups[key($usergroups)] . '"';
+        if ( $usergroups[key($usergroups)] == 2 ) $group_select .= ' selected="selected"';
         $group_select .= '>' . ucfirst(key($usergroups)) . '</option>' . LB;
         next($usergroups);
     }
     $group_select .= '</select>' . LB;
 
     $T = new Template($_CONF['path_layout'] . 'admin/menu');
-//    $T->set_file( 'admin','createelement.thtml');
     $T->set_file( 'admin','editelement.thtml');
 
     $T->set_var(array(
