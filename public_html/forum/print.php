@@ -117,7 +117,8 @@ echo"
         <title>$_CONF[site_name] - ".$LANG_GF02['msg147']." $A[id]]</title>
         <link rel=\"stylesheet\" type=\"text/css\" href=\"$style_cache_url\">
     </head>
-    <body>
+    <body onload=\"window.print();\">
+      <div style=\"box-sizing: border-box;max-width:980px;padding:0px 25px;\">
         <font face=\"verdana\" size=\"2\">
                 <h3>{$LANG_GF01['SUBJECT']}: $A[subject]</h3>
                 <b>{$LANG_GF01['POSTEDON']}:</b> $date
@@ -162,7 +163,7 @@ echo"
             </p>
 
         </font>
-
+      </div>
     </body>
     </html>
 ";
