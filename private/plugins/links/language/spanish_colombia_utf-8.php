@@ -1,14 +1,14 @@
 <?php
 
 ###############################################################################
-# english_utf-8.php
+# spanish_colombia_utf-8.php
 #
-# This is the english language file for the glFusion Links Plugin
+# This is the spanish (Colombia) language file for the glFusion Links Plugin
 #
-# Copyright (C) 2001 Tony Bibbs
-# tony AT tonybibbs DOT com
-# Copyright (C) 2005 Trinity Bays
-# trinity93 AT gmail DOT com
+# Copyright (C) 2001 Tony Bibbs - tony AT tonybibbs DOT com
+# Copyright (C) 2005 Trinity Bays - trinity93 AT gmail DOT com
+# Copyright (C) 2014 John Toro
+# john DOT toro AT newroute DOT net
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -61,24 +61,24 @@ global $LANG32;
 *
 * @global array $LANG_LINKS
 */
-$LANG_LINKS = array(
-    10 => 'Submissions',
-    14 => 'Links',
-    84 => 'Links',
-    88 => 'No new links',
-    114 => 'Links',
-    116 => 'Add A Link',
+$LANG_LINKS= array(
+    10 => 'Envios',
+    14 => 'Enlaces',
+    84 => 'Enlaces',
+    88 => 'No hay Enlaces nuevos',
+    114 => 'Enlaces',
+    116 => 'Agregar un Enlace',
     117 => 'Report Broken Link',
     118 => 'Broken Link Report',
     119 => 'The following link has been reported to be broken: ',
     120 => 'To edit the link, click here: ',
     121 => 'The broken Link was reported by: ',
     122 => 'Thank you for reporting this broken link. The administrator will correct the problem as soon as possible',
-    123 => 'Thank you',
-    124 => 'Go',
-    125 => 'Categories',
-    126 => 'You are here:',
-    'root' => 'Root',
+    123 => 'Gracias',
+    124 => 'Ir',
+    125 => 'Categorías',
+    126 => 'Ud. esta aquí:',
+    'root' => 'Enlaces/Vínculos',
     'error_header'  => 'Link Submission Error',
     'verification_failed' => 'The URL specified does not appear to be a valid URL',
     'category_not_found' => 'The Category does not appear to be valid',
@@ -93,9 +93,9 @@ $LANG_LINKS = array(
 */
 $LANG_LINKS_STATS = array(
     'links' => 'Links (Clicks) in the System',
-    'stats_headline' => 'Top Ten Links',
-    'stats_page_title' => 'Links',
-    'stats_hits' => 'Hits',
+    'stats_headline' => 'Enlaces más visitados',
+    'stats_page_title' => 'Enlaces',
+    'stats_hits' => 'Accesos',
     'stats_no_hits' => 'It appears that there are no links on this site or no one has ever clicked on one.',
 );
 
@@ -108,9 +108,9 @@ $LANG_LINKS_STATS = array(
 */
 $LANG_LINKS_SEARCH = array(
  'results' => 'Link Results',
- 'title' => 'Title',
+ 'title' => 'Título',
  'date' => 'Date Added',
- 'author' => 'Submited by',
+ 'author' => 'Enviado por',
  'hits' => 'Clicks'
 );
 
@@ -122,18 +122,18 @@ $LANG_LINKS_SEARCH = array(
 * @global array $LANG_LINKS_SUBMIT
 */
 $LANG_LINKS_SUBMIT = array(
-    1 => 'Submit a Link',
-    2 => 'Link',
-    3 => 'Category',
-    4 => 'Other',
-    5 => 'If other, please specify',
-    6 => 'Error: Missing Category',
-    7 => 'When selecting "Other" please also provide a category name',
-    8 => 'Title',
+    1 => 'Enviar un Enlace',
+    2 => 'Enlace',
+    3 => 'Categoría',
+    4 => 'Otro',
+    5 => 'Si otra, por favor especique',
+    6 => 'Error: No existe Categoría',
+    7 => 'When selecting "Other" please also provide a categoría name',
+    8 => 'Título',
     9 => 'URL',
-    10 => 'Category',
-    11 => 'Link Submissions',
-    12 => 'Submitted By',
+    10 => 'Categoría',
+    11 => 'Enlaces Enviados',
+    12 => 'Enviado por',
 );
 
 ###############################################################################
@@ -147,21 +147,21 @@ $LANG_LI_AUTOTAG = array(
 # Messages for COM_showMessage the submission form
 
 $PLG_links_MESSAGE1 = "Thank-you for submitting a link to {$_CONF['site_name']}.  It has been submitted to our staff for approval.  If approved, your link will be seen in the <a href={$_CONF['site_url']}/links/index.php>links</a> section.";
-$PLG_links_MESSAGE2 = 'Your link has been successfully saved.';
+$PLG_links_MESSAGE2 = 'Su enlace ha sido guardado exitosamente.';
 $PLG_links_MESSAGE3 = 'The link has been successfully deleted.';
 $PLG_links_MESSAGE4 = "Thank-you for submitting a link to {$_CONF['site_name']}.  You can see it now in the <a href={$_CONF['site_url']}/links/index.php>links</a> section.";
-$PLG_links_MESSAGE5 = "You do not have sufficient access rights to view this category.";
-$PLG_links_MESSAGE6 = 'You do not have sufficient rights to edit this category.';
-$PLG_links_MESSAGE7 = 'Please enter a Category Name and Description.';
+$PLG_links_MESSAGE5 = "You do not have sufficient access rights to view this categoría.";
+$PLG_links_MESSAGE6 = 'You do not have sufficient rights to edit this categoría.';
+$PLG_links_MESSAGE7 = 'Please enter a Categoría Name and Description.';
 
-$PLG_links_MESSAGE10 = 'Your category has been successfully saved.';
-$PLG_links_MESSAGE11 = 'You are not allowed to set the id of a category to "site" or "user" - these are reserved for internal use.';
-$PLG_links_MESSAGE12 = 'You are trying to make a parent category the child of it\'s own subcategory. This would create an orphan category, so please first move the child category or categories up to a higher level.';
-$PLG_links_MESSAGE13 = 'The category has been successfully deleted.';
-$PLG_links_MESSAGE14 = 'Category contains links and/or categories. Please remove these first.';
-$PLG_links_MESSAGE15 = 'You do not have sufficient rights to delete this category.';
-$PLG_links_MESSAGE16 = 'No such category exists.';
-$PLG_links_MESSAGE17 = 'This category id is already in use.';
+$PLG_links_MESSAGE10 = 'Su Categoría ha sido guardado exitosamente.';
+$PLG_links_MESSAGE11 = 'You are not allowed to set the id of a categoría to "site" or "user" - these are reserved for internal use.';
+$PLG_links_MESSAGE12 = 'You are trying to make a parent categoría the child of it\'s own subcategory. This would create an orphan categoría, so please first move the child categoría or categories up to a higher level.';
+$PLG_links_MESSAGE13 = 'The categoría has been successfully deleted.';
+$PLG_links_MESSAGE14 = 'Categoría contains links and/or categories. Please remove these first.';
+$PLG_links_MESSAGE15 = 'You do not have sufficient rights to delete this categoría.';
+$PLG_links_MESSAGE16 = 'No such categoría exists.';
+$PLG_links_MESSAGE17 = 'This categoría id is already in use.';
 
 // Messages for the plugin upgrade
 $PLG_links_MESSAGE3001 = 'Plugin upgrade not supported.';
@@ -175,56 +175,56 @@ $PLG_links_MESSAGE3002 = $LANG32[9];
 * @global array $LANG_LINKS_ADMIN
 */
 $LANG_LINKS_ADMIN = array(
-    1 => 'Link Editor',
-    2 => 'Link ID',
-    3 => 'Link Title',
-    4 => 'Link URL',
-    5 => 'Category',
-    6 => '(include http://)',
-    7 => 'Other',
-    8 => 'Link Hits',
-    9 => 'Link Description',
+    1 => 'Editor de Enlaces',
+    2 => 'ID',
+    3 => 'Título',
+    4 => 'Sitio Web',
+    5 => 'Categoría',
+    6 => '(incluya: <b>http://</b>)',
+    7 => 'Otra',
+    8 => 'Accesos',
+    9 => 'Descripción',
     10 => 'You need to provide a link Title, URL and Description.',
-    11 => 'Link Administration',
-    12 => 'To modify or delete a link, click on that link\'s edit icon below.  To create a new link or a new category, click on "New link" or "New category" above. To edit multiple categories, click on "Edit categories" above.',
-    14 => 'Link Category',
-    16 => 'Access Denied',
+    11 => 'Listado de Enlaces',
+    12 => 'Para modificar ó borrar, haga click sobre el icono: <img src="/layout/'.$_CONF['theme'].'/images/edit.png" /> correspondiente. Para crear, seleccione: "<b><i>Nuevo</i></b>" arriba.',
+    14 => 'Categoría',
+    16 => 'Acceso Denegado',
     17 => "You are trying to access a link that you don't have rights to.  This attempt has been logged. Please <a href=\"{$_CONF['site_admin_url']}/plugins/links/index.php\">go back to the link administration screen</a>.",
-    20 => 'If other, specify',
-    21 => 'save',
-    22 => 'cancel',
-    23 => 'delete',
+    20 => 'Si otra, especifique',
+    21 => 'guardae',
+    22 => 'cancelar',
+    23 => 'borrar',
     24 => 'Link not found',
     25 => 'The link you selected for editing could not be found.',
-    26 => 'Validate Links',
-    27 => 'HTML Status',
-    28 => 'Edit category',
-    29 => 'Enter or edit the details below.',
-    30 => 'Category',
-    31 => 'Description',
-    32 => 'Category ID',
-    33 => 'Topic',
-    34 => 'Parent',
-    35 => 'All',
-    40 => 'Edit this category',
-    41 => 'Add',
-    42 => 'Delete this category',
+    26 => 'Validar',
+    27 => 'Estado HTML',
+    28 => 'Modificar categoría',
+    29 => 'Escriba ó modifique los detalles a continuación.',
+    30 => 'Sub-Categoría',
+    31 => 'Descripción',
+    32 => 'ID',
+    33 => 'Tema',
+    34 => 'Categoría',
+    35 => 'Todo',
+    40 => 'Modificar esta categoría',
+    41 => 'Crear Sub-Categoría',
+    42 => 'Borrar esta Categoría',
     43 => 'Site categories',
-    44 => 'Add Subcategory',
-    46 => 'User %s tried to delete a category to which they do not have access rights',
-    50 => 'Category Admin',
-    51 => 'New Link',
-    52 => 'New Root Category',
-    53 => 'Links Admin',
-    54 => 'Link Category Administration',
-    55 => 'Edit categories below. Note that you cannot delete a category that contains other categories or links - you should delete these first, or move them to another category.',
-    56 => 'Category Editor',
+    44 => 'Agregar Sub',
+    46 => 'User %s tried to delete a categoría to which they do not have access rights',
+    50 => 'Categorías',
+    51 => 'Crear',
+    52 => 'Crear',
+    53 => 'Enlaces',
+    54 => 'Listado de Categorías',
+    55 => 'Edit categories below. Note that you cannot delete a categoría that contains other categories or links - you should delete these first, or move them to another categoría.',
+    56 => 'Editor de Categorías',
     57 => 'Not validated yet',
-    58 => 'Validate now',
-    59 => '<br /><br />To validate all links displayed, please click on the "Validate now" link below. The validation process may take some time depending on the amount of links displayed.',
-    60 => 'User %s tried illegally to edit category %s.',
-    61 => 'Owner',
-    62 => 'Last Updated',
+    58 => 'Validar ahora',
+    59 => '<p>Para validar todos los enlaces mostrados, haga click en el enlace: "Validar ahora". Esto podrá tomar un tiempo considerable dependiendo de la cantdad de enalces mostrados.</p>',
+    60 => 'User %s tried illegally to edit categoría %s.',
+    61 => 'Propietario',
+    62 => 'Actualizado',
     63 => 'Are you sure you want to delete this link?',
     64 => 'Are you sure you want to delete this category?',
     65 => 'Moderate Link',
@@ -279,24 +279,24 @@ $LANG_LINKS_STATUS = array(
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['links'] = array(
-    'label' => 'Links',
+    'label' => 'Enlaces',
     'title' => 'Links Configuration'
 );
 
 $LANG_confignames['links'] = array(
-    'linksloginrequired' => 'Links Login Required',
-    'linksubmission' => 'Enable Link Submission Queue',
+    'linksloginrequired' => 'Links Login Required?',
+    'linksubmission' => 'Enable Submission Queue?',
     'newlinksinterval' => 'New Links Interval',
-    'hidenewlinks' => 'Hide New Links',
-    'hidelinksmenu' => 'Hide Links Menu Entry',
+    'hidenewlinks' => 'Hide New Links?',
+    'hidelinksmenu' => 'Hide Links Menu Entry?',
     'linkcols' => 'Categories per Column',
     'linksperpage' => 'Links per Page',
-    'show_top10' => 'Show Top 10 Links',
-    'notification' => 'Notification Email',
-    'delete_links' => 'Delete Links with Owner',
+    'show_top10' => 'Show Top 10 Links?',
+    'notification' => 'Notification Email?',
+    'delete_links' => 'Delete Links with Owner?',
     'aftersave' => 'After Saving Link',
-    'show_category_descriptions' => 'Show Category Description',
-    'root' => 'ID of Root Category',
+    'show_category_descriptions' => 'Mostra la Descripción de la Categoría ?',
+    'root' => 'ID of Root Categoría',
     'default_permissions' => 'Link Default Permissions',
     'target_blank' => 'Open Links in New Window',
     'displayblocks' => 'Display glFusion Blocks',

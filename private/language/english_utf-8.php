@@ -2294,7 +2294,6 @@ $LANG_UPGRADE = array(
     'unknown_title' => 'Unable to determine glFusion version status',
     'unknown'       => 'We were unable to match your current glFusion version of %s to any released versions. If you are running a development snapshot, we recommend subscribing to the <a href="http://www.freelists.org/list/glfusion-development" target="_blank">glFusion Development Mailing List</a>. You are are not running a development snapshot, please use the <a href="http://www.glfusion.org/forum/index.php?forum=28" target="blank">glFusion Support Forums</a> for assistance.',
     'error_title'   => 'An error has occured while processing your request.',
-    'error_title'   => 'An error has occured while processing your request.',
     'error'         => 'We were unable to retrieve the version data from glFusion.org. If this problem persists, please visit <a href="http://www.glfusion.org/forum/index.php?forum=28" target="blank">the glFusion CMS Support Forum</a> to discover how you can get support.',
     'was_released'  => 'Version %s was released on %s.',
     'plugin_uptodate' => 'Up To Date',
@@ -2691,7 +2690,7 @@ $LANG_fs['Core'] = array(
     'fs_logo' => 'Logo Options',
     'fs_update' => 'Update Checker',
     'fs_rating' => 'Rating Options',
-    'fs_spam_config' => 'Configuration'
+    'fs_spam_config' => 'Configuration',
 );
 
 $LANG_configselects['Core'] = array(
