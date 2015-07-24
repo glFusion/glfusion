@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Display available topics for merge.                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2010-2013 by the following authors:                        |
+// | Copyright (C) 2010-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -94,29 +94,11 @@ USES_lib_admin();
 
 $retval = '';
 
-$cacheID = DB_getItem($_TABLES['vars'],'value','name="cacheid"');
 
-if ( !isset($_CONF['css_cache_filename']) ) {
-    $_CONF['css_cache_filename'] = 'stylecache_';
-}
-
-if ( $_SYSTEM['use_direct_style_js'] ) {
-    $cacheURL = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'].'&amp;i='.$cacheID;
-} else {
-    $cacheURL = $_CONF['site_url'].'/css.php?t='.$_USER['theme'].'&amp;i='.$cacheID;
-}
-
+list ($cachefile,$cacheURL) = COM_getStyleCacheLocation();
 $T->set_var('style_cache_url',$cacheURL);
-if ( !isset($_CONF['js_cache_filename']) ) {
-    $_CONF['js_cache_filename'] = 'jscache_';
-}
 
-if ( $_SYSTEM['use_direct_style_js'] ) {
-    $js_cache_url    = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].$_USER['theme'].'.js?t='.$_USER['theme'].'&amp;i='.$cacheID;
-} else {
-    $js_cache_url    = $_CONF['site_url'].'/js.php?t='.$_USER['theme'].'&amp;i='.$cacheID;
-}
-
+list ($js_cache_file,$js_cache_url) = COM_getJSCacheLocation();
 $T->set_var('js_cache_url',$js_cache_url);
 $T->set_var('theme',$_USER['theme']);
 
