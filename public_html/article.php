@@ -140,7 +140,9 @@ if ($A['count'] > 0) {
     } elseif (($mode == 'print') && ($_CONF['hideprintericon'] == 0)) {
         $story_template = new Template($_CONF['path_layout'] . 'article');
         $story_template->set_file('article', 'printable.thtml');
+        list($cacheFile,$style_cache_url) = COM_getStyleCacheLocation();
         $story_template->set_var('direction', $LANG_DIRECTION);
+        $story_template->set_var('css_url',$style_cache_url);
         $story_template->set_var('page_title',
                 $_CONF['site_name'] . ': ' . $story->displayElements('title'));
         $story_template->set_var ( 'story_title', $story->DisplayElements( 'title' ) );
