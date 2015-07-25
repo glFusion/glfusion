@@ -52,7 +52,7 @@ function captcha_upgrade()
                             "  `session_id` varchar(40) NOT NULL default '', " .
                             "  `cptime`  INT(11) NOT NULL default 0, " .
                             "  `validation` varchar(40) NOT NULL default '', " .
-                            "  `counter`    TINYINT(4) NOT NULL default 0, " .
+                            "  `counter`    INT(11) NOT NULL default 0, " .
                             "  PRIMARY KEY (`session_id`) " .
                             " );";
 
@@ -110,6 +110,8 @@ function captcha_upgrade()
             // need to add column to table
             // ALTER TABLE `gl_cp_sessions` ADD `ip` VARCHAR(16) NOT NULL ;
             $sql = "ALTER TABLE {$_TABLES['cp_sessions']} ADD `ip` VARCHAR(16) NOT NULL";
+            DB_query($sql,1);
+            $sql = "ALTER TABLE {$_TABLES['cp_sessions']} CHANGE `counter` `counter` INT(11) NOT NULL DEFAULT '0';";
             DB_query($sql,1);
 
         default :

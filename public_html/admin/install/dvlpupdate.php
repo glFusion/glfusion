@@ -1152,6 +1152,7 @@ function glfusion_150()
     $_SQL[] = "ALTER TABLE  {$_TABLES['trackback']}  `ipaddress`  `ipaddress` VARCHAR( 45 ) NOT NULL DEFAULT  ''";
     $_SQL[] = "ALTER TABLE  {$_TABLES['users']} CHANGE  `remote_ip`  `remote_ip` VARCHAR( 45 ) NOT NULL DEFAULT  ''";
     $_SQL[] = "ALTER TABLE  {$_TABLES['cp_sessions']} ADD `ip` VARCHAR(16) NOT NULL";
+    $_SQL[] = "ALTER TABLE  {$_TABLES['cp_sessions']} CHANGE `counter` `counter` INT(11) NOT NULL DEFAULT '0';";
 
     foreach ($_SQL as $sql) {
         DB_query($sql,1);
