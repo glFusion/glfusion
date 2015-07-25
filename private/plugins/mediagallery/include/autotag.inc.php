@@ -1451,7 +1451,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                             if ( $_MG_CONF['disable_lightbox'] == true ) {
                                 $link = $tagtext;
                             } else {
-                                $link = '<a href="' . $direct_link . '" rel="lightbox" title="' . strip_tags(str_replace('$','&#36;',$caption)) . '">' . $tagtext . '</a>';
+                                $link = '<a href="' . $direct_link . '" rel="lightbox" data-uk-lightbox title="' . strip_tags(str_replace('$','&#36;',$caption)) . '">' . $tagtext . '</a>';
                             }
                         } else {
                             $link = '<a href="' . $url . '"' . ($target=='' ? '' : ' target="' . $target . '"') . '>' . $tagtext . '</a>';
