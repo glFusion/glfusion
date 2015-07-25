@@ -528,6 +528,7 @@ function CAPTCHA_getHTML($csid, $ctype='general' ) {
         'lang_reload_failed'    => $LANG_CP00['reload_failed'],
         'lang_too_many'         => $LANG_CP00['reload_too_many'],
         'csid'                  => $csid,
+        'lang_are_you_human'    => $LANG_CP00['captcha_prompt'],
     ));
     if ( $_CP_CONF['gfxDriver'] == 6 ) {
         $T->set_var('lang_captcha_help', $LANG_CP00['captcha_math']);
@@ -553,13 +554,12 @@ function recaptcha_get_html($pkey,$other)
 {
     global $_CONF;
     $retval = '';
-    $retval .= ' <form action="?" method="post">'
-             . '<div class="g-recaptcha" data-sitekey="'
+    $retval .= '<div class="g-recaptcha" data-sitekey="'
              . $pkey . '"></div>'
              . '<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl='.$_CONF['iso_lang'].'">'
              . '</script>'
-             . '<br/>'
-             . ' </form>';
+             . '<br/>';
+
 
     return $retval;
 
