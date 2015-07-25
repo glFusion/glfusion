@@ -962,7 +962,7 @@ function _mg_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 }
             }
             if ( $dImage != '' ) {
-                $retval .= '<a href="'.$dImage.'" rel="lightbox" target="_new">';
+                $retval .= '<a href="'.$dImage.'" rel="lightbox" data-uk-lightbox target="_new">';
             }
             $retval .= '<img title="'.$LANG_MG01['lightbox_image'].'" style="float:left;padding:5px;" src="'.$thumbnail.'" height="'.$height.'" width="'.$width.'" alt="" />';
             if ( $dImage != '' ) {
