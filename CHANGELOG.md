@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v 1.5.0 (unreleased)
+  - Spanish Colombia translations provided by John Toro
   - Static Pages: add where:home or nohome to autotag
   - Add alternate topic support
   - Media Gallery: Fixed error where pop-up video would not play
