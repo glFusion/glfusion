@@ -146,7 +146,7 @@ function do_bbcode_file ($action, $attributes, $content, $params, $node_object) 
     }
 
     if ( isset($attributes['lightbox'] ) ) {
-        $lb = ' rel="lightbox" ';
+        $lb = ' rel="lightbox" data-uk-lightbox ';
     } else {
         $lb = '';
     }
