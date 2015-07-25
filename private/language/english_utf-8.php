@@ -246,6 +246,7 @@ $LANG01 = array(
     'posted_in'                 => 'Posted in',
     'continue_reading'          => 'Continue Reading',
     'menu'                      => 'Nav Menu',
+    'show_allowed_content'      => 'Show Allowed Content',
 );
 
 ###############################################################################

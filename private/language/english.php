@@ -243,6 +243,10 @@ $LANG01 = array(
     'no_new_items'              => 'No New Items',
     'max_execution_time'        => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.',
     'allowed_html'              => 'Allowed HTML:',
+    'posted_in'                 => 'Posted in',
+    'continue_reading'          => 'Continue Reading',
+    'menu'                      => 'Nav Menu',
+    'show_allowed_content'      => 'Show Allowed Content',
 );
 
 ###############################################################################
@@ -491,6 +495,7 @@ $LANG04 = array(
     191 => 'Local Account Password',
     192 => 'Merge Remote Account with Existing Local Account',
     193 => 'Note: If you merge a remote account to an existing local account, the preferences for the local user will take priority.',
+    194 => 'Sign in with ',
 );
 
 ###############################################################################
@@ -1898,6 +1903,7 @@ $LANG_ADMIN = array(
     'topic_list' => 'Topic List',
     'tb_list' => 'Trackback List',
     'custom_autotag' => 'Custom Autotags',
+    'alt_topic' => 'Alternate Topic',
 );
 
 ###############################################################################
@@ -2288,7 +2294,6 @@ $LANG_UPGRADE = array(
     'uptodate'      => 'Your current glFusion CMS installation is running the latest production release. We do recommend that you subscribe to the <a href="http://www.freelists.org/list/glfusion-announce" target="_blank">glFusion Announcements Mailing List</a> to receive immediate information about updates and security issues.',
     'unknown_title' => 'Unable to determine glFusion version status',
     'unknown'       => 'We were unable to match your current glFusion version of %s to any released versions. If you are running a development snapshot, we recommend subscribing to the <a href="http://www.freelists.org/list/glfusion-development" target="_blank">glFusion Development Mailing List</a>. You are are not running a development snapshot, please use the <a href="http://www.glfusion.org/forum/index.php?forum=28" target="blank">glFusion Support Forums</a> for assistance.',
-    'error_title'   => 'An error has occured while processing your request.',
     'error_title'   => 'An error has occured while processing your request.',
     'error'         => 'We were unable to retrieve the version data from glFusion.org. If this problem persists, please visit <a href="http://www.glfusion.org/forum/index.php?forum=28" target="blank">the glFusion CMS Support Forum</a> to discover how you can get support.',
     'was_released'  => 'Version %s was released on %s.',
@@ -2686,7 +2691,7 @@ $LANG_fs['Core'] = array(
     'fs_logo' => 'Logo Options',
     'fs_update' => 'Update Checker',
     'fs_rating' => 'Rating Options',
-    'fs_spam_config' => 'Configuration'
+    'fs_spam_config' => 'Configuration',
 );
 
 $LANG_configselects['Core'] = array(
