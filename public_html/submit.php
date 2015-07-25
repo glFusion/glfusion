@@ -79,9 +79,9 @@ function submissionform($type='story', $mode = '', $topic = '')
             echo $display;
             exit;
         } else {
-            $retval .= COM_startBlock($LANG12[19])
+            $retval .= COM_startBlock($LANG12[19],'',COM_getBlockTemplate( '_submit_story', 'header' ))
                     . $LANG12[9]
-                    . COM_endBlock();
+                    . COM_endBlock(COM_getBlockTemplate( '_submit_story', 'footer' ));
             $retval .= '<div style="border-bottom:1px solid #cccccc"></div>';
 
             if ((strlen($type) > 0) && ($type <> 'story')) {
@@ -137,7 +137,7 @@ function submitstory($topic = '')
         return $retval;
     }
 
-    $retval .= COM_startBlock($LANG12[6],'submitstory.html');
+    $retval .= COM_startBlock($LANG12[6]);
 
     $storyform = new Template($_CONF['path_layout'] . 'submit');
 
