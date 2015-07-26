@@ -1,330 +1,261 @@
 {# begin {templatelocation} #}
 <table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:0px auto;">
-<tr>
-<td class="pluginCellTitle" style="width:75%;vertical-align:middle;">
-<span style="font-weight:bold;">{album_title}</span>
-</td>
-<td class="pluginCellTitle pluginBreadCrumbs" style="text-align:right;vertical-align:middle;">
-{pagination}
-</td>
-</tr>
+    <tr>
+        <td class="pluginCellTitle" style="width:75%;vertical-align:middle;">
+            <span style="font-weight:bold;">{album_title}</span>
+        </td>
+        <td class="pluginCellTitle pluginBreadCrumbs" style="text-align:right;vertical-align:middle;">
+            {pagination}
+        </td>
+    </tr>
 </table>
 
+
+<!-- BEGIN noItems -->
+<div style="text-align:center">
+    {no_images}
+</div>
+<!-- END noItems -->
+<!-- BEGIN slideItems -->
+
 <script type="text/javascript">
-//<![CDATA[
-function msieversion()
-{
-  var ua = window.navigator.userAgent
-  var msie = ua.indexOf ( "MSIE " )
+    //<![CDATA[
+    var timer;
+    var current_location = 1;
+    var next_location = 1;
+    var pics_loaded = 0;
+    var onoff = 0;
+    var direction = 1;
+    var timeout_value;
+    var images = new Array;
+    var photo_urls = new Array;
+    var photo_captions = new Array;
+    var loop = 0;
 
-  if ( msie > 0 )      // If Internet Explorer, return version number
-     return parseInt (ua.substring (msie+5, ua.indexOf (".", msie )))
-  else                 // If another browser, return 0
-     return 0
+    {photo_info}
 
-}
-//]]>
+    var photo_count = {photo_count};
+
+    function stopOrStart() {
+        if (onoff) {
+            stop();
+        } else {
+            play();
+        }
+    }
+
+    function toggleLoop() {
+        if (loop) {
+            loop = 0;
+        } else {
+            loop = 1;
+        }
+    }
+
+    function changeElementText(id, newText) {
+        element = document.getElementById(id);
+        element.innerHTML = newText;
+    }
+    function stop() {
+        changeElementText("stopOrStartText", "{play}");
+
+        onoff = 0;
+        status = "{ss_stopped}";
+        clearTimeout(timer);
+    }
+
+    function play() {
+        changeElementText("stopOrStartText", "{stop}");
+
+        onoff = 1;
+        status = "{ss_running}";
+        go_to_next_photo();
+    }
+
+    function changeDirection() {
+        if (direction == 1) {
+            direction = -1;
+            changeElementText("changeDirText", "{forward}");
+        } else {
+            direction = 1;
+            changeElementText("changeDirText", "{reverse}");
+        }
+        preload_next_photo();
+    }
+    function preload_complete() {
+    }
+    function reset_timer() {
+        clearTimeout(timer);
+        if (onoff) {
+            timeout_value = document.slideshow.time.options[document.slideshow.time.selectedIndex].value * 1000;
+            timer = setTimeout('go_to_next_photo()', timeout_value);
+        }
+    }
+
+    function wait_for_current_photo() {
+
+        /* Show the current photo */
+        if (!show_current_photo()) {
+
+            /*
+            * The current photo is not loaded yet.  Set a short timer just to wait
+            * until the current photo is loaded.
+            */
+            status = "{picture_loading}(" + current_location + " {lang_of} " + photo_count +
+            ").  {please_wait}" ;
+            clearTimeout(timer);
+            timer = setTimeout('wait_for_current_photo()', 500);
+            return 0;
+        } else {
+            status = "{ss_running}";
+            preload_next_photo();
+            reset_timer();
+        }
+    }
+
+    function go_to_next_photo() {
+        /* Go to the next location */
+        current_location = next_location;
+
+        /* Show the current photo */
+        if (!show_current_photo()) {
+            wait_for_current_photo();
+            return 0;
+        }
+        preload_next_photo();
+        reset_timer();
+    }
+    function preload_next_photo() {
+
+        /* Calculate the new next location */
+        next_location = (parseInt(current_location) + parseInt(direction));
+        if (next_location > photo_count) {
+            next_location = 1;
+            if (!loop) {
+                stop();
+            }
+        }
+        if (next_location == 0) {
+            next_location = photo_count;
+            if (!loop) {
+                stop();
+            }
+        }
+        /* Preload the next photo */
+        preload_photo(next_location);
+    }
+    function show_current_photo() {
+        /*
+        * If the current photo is not completely loaded do not display it.
+        */
+        if (!images[current_location] || !images[current_location].complete) {
+            preload_photo(current_location);
+            return 0;
+        }
+        document.slide.src = images[current_location].src;
+        setCaption(photo_captions[current_location]);
+
+
+        return 1;
+    }
+    function preload_photo(index) {
+        /* Load the next picture */
+        if (pics_loaded < photo_count) {
+            /* not all the pics are loaded.  Is the next one loaded? */
+            if (!images[index]) {
+                images[index] = new Image;
+                images[index].onLoad = preload_complete();
+                images[index].src = photo_urls[index];
+                pics_loaded++;
+            }
+        }
+    }
+
+    function setCaption(text) {
+        changeElementText("caption", "[" + current_location + " {lang_of} " + photo_count + "] " + text);
+    }
+    //]]>
 </script>
 
+<form name="slideshow" id="slideshow" action="">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0px auto;">
+        <tr>
+            <td>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:0px auto;">
+                    <tr class="pluginSubCellTitle">
+                        <td style="height:35px;width:1px;"></td>
+                        <td align="center" rowspan="2" style="vertical-align:middle;">
+                            &nbsp;<a href='#' onclick='stopOrStart(); return false;'>[<span id='stopOrStartText'>{stop}</span>]</a>&nbsp;&nbsp;|
+                            {full_toggle}
+                            &nbsp;{delay}:
+                            <select name="time" size="1"  onchange="reset_timer()">
+                                <option value="1" > 1 {seconds}</option>
+                                <option value="2" > 2 {seconds}</option>
+                                <option value="3" selected="selected"> 3 {seconds}</option>
+                                <option value="4" > 4 {seconds}</option>
+                                <option value="5" > 5 {seconds}</option>
+                                <option value="10" > 10 {seconds}</option>
+                                <option value="15" > 15 {seconds}</option>
+                                <option value="30" > 30 {seconds}</option>
+                                <option value="45" > 45 {seconds}</option>
+                                <option value="60" > 60 {seconds}</option>
+                            </select>
+                            &nbsp;{loop}:<input type="checkbox" name="loopCheck"  onclick='toggleLoop();'  />
+                        </td>
+                    </tr>
+                </table>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:0px auto;">
+                    <tr>
+                        <td align="center">
+                            <h1>{no_images}</h1>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <script type="text/javascript">
+                            //<![CDATA[
+                            document.write('<td align="center"><img src="'+photo_urls[1]+'" name="slide"></td>');
+                            //]]>
+                        </script>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <script type="text/javascript">
+                            //<![CDATA[
+                            document.write('<td class="pluginRow2" align="center" style="height:25px;font-family:Tahoma, Verdana, sans-serif;font-size:-1;"><div id="caption">'+photo_captions[1]+'</div></td>');
+                            //]]>
+                        </script>
+                    </tr>
+                </table>
 
-<script type="text/javascript">
-//<![CDATA[
-var timer;
-var current_location = 1;
-var next_location = 1;
-var pics_loaded = 0;
-var onoff = 0;
-var direction = 1;
-var timeout_value;
-var images = new Array;
-var photo_urls = new Array;
-var photo_captions = new Array;
-var transitionNames = new Array;
-var transitions = new Array;
-var current_transition = 0;
-var loop = 0;
+                <script type="text/javascript">
+                    //<![CDATA[
+                    /* Load the first picture */
+                    setCaption(photo_captions[1]);
+                    preload_photo(1);
 
+                    /* Start the show. */
+                    window.addEvent('load', function () {
+                        changeElementText("stopOrStartText", "{stop}");
+                        onoff = 1;
+                        status = "{ss_running}";
+                        go_to_next_photo();
+                    });
+
+
+                    //]]>
+                </script>
+            </td>
+        </tr>
+    </table>
+</form>
+<!-- END slideItems -->
 <!-- BEGIN photo_url -->
 {URL}
 {CAPTION}
 <!-- END photo_url -->
-
-transitions[0]  = "progid:DXImageTransform.Microsoft.Fade(duration=1)";
-transitions[1]  = "progid:DXImageTransform.Microsoft.Blinds(Duration=1,bands=20)";
-transitions[2]  = "progid:DXImageTransform.Microsoft.Checkerboard(Duration=1,squaresX=20,squaresY=20)";
-transitions[3]  = "progid:DXImageTransform.Microsoft.Strips(Duration=1,motion=rightdown)";
-transitions[4]  = "progid:DXImageTransform.Microsoft.Barn(Duration=1,orientation=vertical)";
-transitions[5]  = "progid:DXImageTransform.Microsoft.GradientWipe(duration=1)";
-transitions[6]  = "progid:DXImageTransform.Microsoft.Iris(Duration=1,motion=out)";
-transitions[7]  = "progid:DXImageTransform.Microsoft.Wheel(Duration=1,spokes=12)";
-transitions[8]  = "progid:DXImageTransform.Microsoft.Pixelate(maxSquare=10,duration=1)";
-transitions[9]  = "progid:DXImageTransform.Microsoft.RadialWipe(Duration=1,wipeStyle=clock)";
-transitions[10] = "progid:DXImageTransform.Microsoft.RandomBars(Duration=1,orientation=vertical)";
-transitions[11] = "progid:DXImageTransform.Microsoft.Slide(Duration=1,slideStyle=push)";
-transitions[12] = "progid:DXImageTransform.Microsoft.RandomDissolve(Duration=1,orientation=vertical)";
-transitions[13] = "progid:DXImageTransform.Microsoft.Spiral(Duration=1,gridSizeX=40,gridSizeY=40)";
-transitions[14] = "progid:DXImageTransform.Microsoft.Stretch(Duration=1,stretchStyle=push)";
-transitions[15] = "special case";
-var transition_count = 15;
-
-var photo_count = {photo_count};
-
-var slideShowLow = "/slideshow_low.php?index=";
-
-// - IE5.5 and up can do the blending transition.
-var browserCanBlend = ( msieversion() >= 5 );
-// (is_ie5_5up);
-
-function stopOrStart() {
-    if (onoff) {
-        stop();
-    } else {
-        play();
-    }
-}
-
-function toggleLoop() {
-    if (loop) {
-        loop = 0;
-    } else {
-        loop = 1;
-    }
-}
-
-function changeElementText(id, newText) {
-    element = document.getElementById(id);
-    element.innerHTML = newText;
-}
-function stop() {
-    changeElementText("stopOrStartText", "{play}");
-
-    onoff = 0;
-    status = "{ss_stopped}";
-    clearTimeout(timer);
-}
-
-function play() {
-    changeElementText("stopOrStartText", "{stop}");
-
-    onoff = 1;
-    status = "{ss_running}";
-    go_to_next_photo();
-}
-
-function changeDirection() {
-    if (direction == 1) {
-        direction = -1;
-        changeElementText("changeDirText", "{forward}");
-    } else {
-        direction = 1;
-        changeElementText("changeDirText", "{reverse}");
-    }
-    preload_next_photo();
-}
-
-function change_transition() {
-    current_transition = document.TopForm.transitionType.selectedIndex;
-}
-
-function preload_complete() {
-}
-
-function reset_timer() {
-    clearTimeout(timer);
-    if (onoff) {
-        timeout_value = document.TopForm.time.options[document.TopForm.time.selectedIndex].value * 1000;
-        timer = setTimeout('go_to_next_photo()', timeout_value);
-    }
-}
-
-function wait_for_current_photo() {
-
-    /* Show the current photo */
-    if (!show_current_photo()) {
-
-        /*
-         * The current photo isn't loaded yet.  Set a short timer just to wait
-         * until the current photo is loaded.
-         */
-        status = "{picture_loading}(" + current_location + " {lang_of} " + photo_count +
-                ").  {please_wait}" ;
-        clearTimeout(timer);
-        timer = setTimeout('wait_for_current_photo()', 500);
-        return 0;
-    } else {
-        status = "{ss_running}";
-        preload_next_photo();
-        reset_timer();
-    }
-}
-
-function go_to_next_photo() {
-    /* Go to the next location */
-    current_location = next_location;
-
-    /* Show the current photo */
-    if (!show_current_photo()) {
-        wait_for_current_photo();
-        return 0;
-    }
-    preload_next_photo();
-    reset_timer();
-}
-function preload_next_photo() {
-
-    /* Calculate the new next location */
-    next_location = (parseInt(current_location) + parseInt(direction));
-    if (next_location > photo_count) {
-        next_location = 1;
-        if (!loop) {
-            stop();
-        }
-    }
-    if (next_location == 0) {
-        next_location = photo_count;
-        if (!loop) {
-            stop();
-        }
-    }
-    /* Preload the next photo */
-    preload_photo(next_location);
-}
-function show_current_photo() {
-    /*
-     * If the current photo is not completely loaded don't display it.
-     */
-    if (!images[current_location] || !images[current_location].complete) {
-        preload_photo(current_location);
-        return 0;
-    }
-    /* transistion effects */
-    if (browserCanBlend){
-        var do_transition;
-        if (current_transition == (transition_count)) {
-            do_transition = Math.floor(Math.random() * transition_count);
-        } else {
-            do_transition = current_transition;
-        }
-        document.images.slide.style.filter=transitions[do_transition];
-        document.images.slide.filters[0].Apply();
-    }
-    document.slide.src = images[current_location].src;
-    setCaption(photo_captions[current_location]);
-
-    if (browserCanBlend) {
-        document.images.slide.filters[0].Play();
-    }
-
-    return 1;
-}
-function preload_photo(index) {
-    /* Load the next picture */
-    if (pics_loaded < photo_count) {
-        /* not all the pics are loaded.  Is the next one loaded? */
-        if (!images[index]) {
-            images[index] = new Image;
-            images[index].onLoad = preload_complete();
-            images[index].src = photo_urls[index];
-            pics_loaded++;
-        }
-    }
-}
-
-function setCaption(text) {
-    changeElementText("caption", "[" + current_location + " {lang_of} " + photo_count + "] " + text);
-}
-//]]>
-</script>
-<form name="TopForm" id="TopForm" action="">
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0px auto;">
-    <tr>
-      <td>
-        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:0px auto;">
-          <tr class="pluginSubCellTitle">
-            <td style="height:35px;width:1px;"></td>
-            <td align="center" rowspan="2" style="vertical-align:middle;">
-                &nbsp;<a href='#' onclick='stopOrStart(); return false;'>[<span id='stopOrStartText'>{stop}</span>]</a>&nbsp;&nbsp;|
-{full_toggle}
-                &nbsp;{delay}:
-				<select name="time" size="1"  onchange="reset_timer()">
-				<option value="1" > 1 {seconds}</option>
-				<option value="2" > 2 {seconds}</option>
-				<option value="3" selected="selected"> 3 {seconds}</option>
-				<option value="4" > 4 {seconds}</option>
-				<option value="5" > 5 {seconds}</option>
-				<option value="10" > 10 {seconds}</option>
-				<option value="15" > 15 {seconds}</option>
-				<option value="30" > 30 {seconds}</option>
-				<option value="45" > 45 {seconds}</option>
-				<option value="60" > 60 {seconds}</option>
-				</select>
-			    <script type="text/javascript">
-			    //<![CDATA[
-			    /* show the blend select if appropriate */
-			    if (browserCanBlend) {
-			        document.write('&nbsp;{transition}: <select name="transitionType" size="1"  onchange="change_transition()"> <option value="0" selected="selected">{lang_blend}</option><option value="1"> {lang_blinds}</option> <option value="2" > {lang_checkerboard}</option> <option value="3" > {lang_diagonal}</option> <option value="4" > {lang_doors}</option> <option value="5" > {lang_gradient}</option> <option value="6" > {lang_iris}</option> <option value="7" > {lang_pinwheel}</option> <option value="8" > {lang_pixelate}</option> <option value="9" > {lang_radial}</option> <option value="10" > {lang_rain}</option> <option value="11" > {lang_slide}</option> <option value="12" > {lang_snow}</option> <option value="13" > {lang_spiral}</option> <option value="14" > {lang_stretch}</option> <option value="15" > {lang_random}</option> </select> ');
-			    }
-			    //]]>
-			    </script>
-			    &nbsp;{loop}:<input type="checkbox" name="loopCheck"  onclick='toggleLoop();'  />
-            </td>
-          </tr>
-        </table>
-
-        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:0px auto;">
-          <tr>
-            <td align="center">
-              <h1>{no_images}</h1>
-            </td>
-          </tr>
-          <tr>
-            <td>&nbsp;</td>
-          </tr>
-          <tr>
-            <script type="text/javascript">
-            //<![CDATA[
-            document.write('<td align="center"><img src="'+photo_urls[1]+'" name="slide"></td>');
-            //]]>
-            </script>
-          </tr>
-          <tr>
-            <td>&nbsp;</td>
-          </tr>
-          <tr>
-            <script type="text/javascript">
-            //<![CDATA[
-            document.write('<td class="pluginRow2" align="center" style="height:25px;font-family:Tahoma, Verdana, sans-serif;font-size:-1;"><div id="caption">'+photo_captions[1]+'</div></td>');
-            //]]>
-            </script>
-          </tr>
-        </table>
-        <script type="text/javascript">
-        //<![CDATA[
-        /* Load the first picture */
-        setCaption(photo_captions[1]);
-        preload_photo(1);
-        /* Start the show. */
-
-        function initSS () {
-            changeElementText("stopOrStartText", "{stop}");
-            onoff = 1;
-            status = "{ss_running}";
-            go_to_next_photo();
-        };
-        window.onload = initSS;
-
-/*
-        window.addEvent('load', function () {
-                                    changeElementText("stopOrStartText", "{stop}");
-                                    onoff = 1;
-                                    status = "{ss_running}";
-                                    go_to_next_photo();
-                                    });
-*/
-        //]]>
-        </script>
-      </td>
-    </tr>
-  </table>
-</form>
 {# end {templatelocation} #}
