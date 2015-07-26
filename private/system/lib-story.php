@@ -654,8 +654,11 @@ function STORY_whatsRelated( $related, $uid, $tid )
         // add a link to "search by topic"
         $topic = DB_getItem( $_TABLES['topics'], 'topic', "tid = '".DB_escapeString($tid)."'" );
         $rel[] = '<a href="' . $_CONF['site_url']
-               . '/search.php?mode=search&amp;type=stories&amp;topic=' . $tid
+               . '/index.php?topic=' . $tid
                . '">' . $LANG24[38] . ' ' . $topic . '</a>';
+//        $rel[] = '<a href="' . $_CONF['site_url']
+//               . '/search.php?mode=search&amp;type=stories&amp;topic=' . $tid
+//               . '">' . $LANG24[38] . ' ' . $topic . '</a>';
     }
 
     $related = '';
