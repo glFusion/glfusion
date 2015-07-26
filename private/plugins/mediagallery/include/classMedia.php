@@ -677,6 +677,7 @@ class Media {
             ));
             $T->parse('media_views','media_views');
         }
+        $T->set_var(array('max-width' => $tn_width));
 
 		PLG_templateSetVars( 'mediagallery', $T);
         $T->parse('media_cell','media_cell_image');
