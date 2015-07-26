@@ -1129,15 +1129,15 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                             }
                         }
                     } else {
-                        $tnImage = $_MG_CONF['mediaobjects_url'] . '/empty.png';
-                        $tnFileName = $_MG_CONF['path_mediaobjects'] . 'empty.png';
+                        $tnImage = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                        $tnFileName = $_MG_CONF['path_mediaobjects'] . 'placeholder.svg';
                     }
                 }
                 $media_size = @getimagesize($tnFileName);
                 if ( $media_size == false ) {
-                    $tnImage = $_MG_CONF['mediaobjects_url'] . '/missing.png';
-                    $tnFileName = $_MG_CONF['path_mediaobjects'] . 'missing.png';
-                    $media_size = @getimagesize($tnFileName);
+                    $tnImage = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                    $tnFileName = $_MG_CONF['path_mediaobjects'] . 'placeholder.svg';
+                    $media_size = array(200,200); //@getimagesize($tnFileName);
                 }
                 if ( $width > 0 && $height == 0 ) {
                     $ratio = $media_size[0] / $width;

@@ -943,14 +943,14 @@ class mgAlbum {
                 }
                 $album_last_update  = MG_getUserDateTimeFormat($this->last_update);
                 if ($mediasize == false ) {
-                    $album_last_image = $_MG_CONF['mediaobjects_url'] . '/empty.png';
-                    $mediasize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'empty.png');
+                    $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                    $mediasize = array(200,200);
                 }
             } else {
                 $filename = $this->findCover();
                 if ( $filename == '' || $filename == NULL || $filename == " ") {
-                    $album_last_image = $_MG_CONF['mediaobjects_url'] . '/empty.png';
-                    $mediasize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'empty.png');
+                    $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                    $mediasize = array(200,200);
                 } else {
                     $mediasize = false;
                     foreach ($_MG_CONF['validExtensions'] as $ext ) {
@@ -961,8 +961,8 @@ class mgAlbum {
                         }
                     }
                     if ($mediasize == false ) {
-                        $album_last_image = $_MG_CONF['mediaobjects_url'] . '/missing.png';
-                        $mediasize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
+                        $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                        $mediasize = array(200,200); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
                     }
                 }
             }
@@ -985,8 +985,8 @@ class mgAlbum {
         } else {  // nothing in the album yet...
             $filename = $this->findCover();
             if ( $filename == '' ) {
-                $album_last_image = $_MG_CONF['mediaobjects_url'] . '/empty.png';
-                $mediasize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'empty.png');
+                $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                $mediasize = array(200,200);
             } else {
                 $mediasize = false;
                 foreach ($_MG_CONF['validExtensions'] as $ext ) {
@@ -997,8 +997,8 @@ class mgAlbum {
                     }
                 }
                 if ($mediasize == false ) {
-                    $album_last_image = $_MG_CONF['mediaobjects_url'] . '/missing.png';
-                    $mediasize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
+                    $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                    $mediasize = array(200,200); // @getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
                 }
             }
             $album_last_update[0] = '';
@@ -1015,8 +1015,8 @@ class mgAlbum {
                 }
             }
             if ($mediasize == false ) {
-                $album_last_image = $_MG_CONF['mediaobjects_url'] . '/missing.png';
-                $mediasize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
+                $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                $mediasize = array(200,200); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
             }
         }
 

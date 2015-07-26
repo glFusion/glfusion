@@ -282,8 +282,9 @@ function MG_index() {
 
                         $filename = $MG_albums[$achild[$indexCounter]]->findCover();
                         if ( $filename == '' ) {
-                            $album_last_image = $_MG_CONF['mediaobjects_url'] . '/empty.png';
-                            $media_size = @getimagesize($_MG_CONF['path_mediaobjects'] . 'empty.png');
+                            $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                            $media_size = array(200,200);
+
                         } else {
                             if ( substr($filename,0,3) == 'tn_' ) {
                                 $offset = 3;
@@ -310,8 +311,8 @@ function MG_index() {
                     $album_last_update[0] = "";
                     $filename = $MG_albums[$achild[$indexCounter]]->findCover();
                     if ( $filename == '' ) {
-                        $album_last_image = $_MG_CONF['mediaobjects_url'] . '/empty.png';
-                        $media_size = @getimagesize($_MG_CONF['path_mediaobjects'] . 'empty.png');
+                        $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                        $media_size = array(200,200);
                     } else {
                         foreach ($_MG_CONF['validExtensions'] as $ext ) {
                             if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $filename[0] .'/' . $filename . $ext) ) {
@@ -345,8 +346,8 @@ function MG_index() {
                 // a little fail safe here to make sure we don't show empty boxes...
 
                 if ( $media_size === false || $media_size[0] == 0 || $media_size[1] == 0 ) {
-                    $album_last_image = $_MG_CONF['mediaobjects_url'] . '/empty.png';
-                    $media_size = @getimagesize($_MG_CONF['path_mediaobjects'] . 'empty.png');
+                    $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                    $media_size = array(200,200);
                 }
 
                 // set the image size here...

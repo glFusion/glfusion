@@ -99,8 +99,8 @@ function _mg_centerblock( $where=1, $page=1, $topic ='' ) {
                         }
                     }
                 } else {
-                    $album_last_image = $_MG_CONF['mediaobjects_url'] . '/empty.png';
-                    $media_size = @getimagesize($_MG_CONF['path_mediaobjects'] . 'empty.png');
+                    $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                    $media_size = array(200,200); //$media_size = @getimagesize($_MG_CONF['path_mediaobjects'] . 'empty.png');
                 }
                 $album_media_count = $MG_albums[$album_id]->getMediaCount();
                 $updated_prompt = ($_MG_CONF['dfid']=='99' ? '' : $LANG_MG03['updated_prompt']);
@@ -118,8 +118,8 @@ function _mg_centerblock( $where=1, $page=1, $topic ='' ) {
                     }
                 }
                 if ( $media_size == false ) {
-                    $album_last_image = $_MG_CONF['mediaobjects_url'] . '/missing.png';
-                    $media_size = @getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
+                    $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                    $media_size = array(200,200); // @getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
                 }
 
                 if ( !empty($MG_albums[$album_id]->children ) ) {
@@ -288,8 +288,8 @@ function _mg_centerblock( $where=1, $page=1, $topic ='' ) {
                     }
                 }
             } else {
-                $album_last_image = $_MG_CONF['mediaobjects_url'] . '/empty.png';
-                $media_size = @getimagesize($_MG_CONF['path_mediaobjects'] . 'empty.png');
+                $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                $media_size = array(200,200); // $media_size = @getimagesize($_MG_CONF['path_mediaobjects'] . 'empty.png');
             }
             $album_media_count = $MG_albums[$album_id]->getMediaCount();
             $updated_prompt = ($_MG_CONF['dfid']=='99' ? '' : $LANG_MG03['updated_prompt']);
@@ -307,8 +307,8 @@ function _mg_centerblock( $where=1, $page=1, $topic ='' ) {
                 }
             }
             if ( $media_size == false ) {
-                $album_last_image = $_MG_CONF['mediaobjects_url'] . '/missing.png';
-                $media_size = @getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
+                $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                $media_size = array(200,200); // @getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
             }
 
             if ( !empty($MG_albums[$album_id]->children ) ) {

@@ -234,9 +234,9 @@ function MG_imageAdmin( $album_id, $page, $actionURL = '' ) {
                     }
                 } else {
                     $width = 100;
-                    $height = 75;
-                    $thumbnail = $_MG_CONF['mediaobjects_url'] . '/missing.png';
-                    $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'missing.png';
+                    $height = 100;
+                    $thumbnail = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                    $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'placeholder.svg';
                 }
 
                 $cat_select = '<select name="cat_id[]">';

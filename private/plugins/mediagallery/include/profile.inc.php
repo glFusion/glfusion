@@ -244,8 +244,8 @@ function _mg_profileblocksdisplay( $uid ) {
         }
 
         if ($msize == false ) {
-            $url_thumb = $_MG_CONF['mediaobjects_url'] . '/missing.png';
-            $msize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
+            $url_thumb = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+            $msize = array(200,200); // @getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
         }
         $imgwidth = $msize[0];
         $imgheight = $msize[1];
@@ -334,15 +334,15 @@ function _mg_profileblocksdisplay( $uid ) {
         }
 
         if ($msize == false || $url_thumb == '' ) {
-            $url_thumb = $_MG_CONF['mediaobjects_url'] . '/empty.png';
-            $msize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'empty.png');
+            $url_thumb = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+            $msize = array(200,200); // @getimagesize($_MG_CONF['path_mediaobjects'] . 'empty.png');
         }
         $imgwidth = $msize[0];
         $imgheight = $msize[1];
 
         if ( $imgwidth == 0 || $imgheight == 0 ) {
-            $url_thumb = $_MG_CONF['mediaobjects_url'] . '/empty.png';
-            $msize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'empty.png');
+            $url_thumb = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+            $msize = array(200,200); // @getimagesize($_MG_CONF['path_mediaobjects'] . 'empty.png');
             $imgwidth = $msize[0];
             $imgheight = $msize[1];
             if ( $imgwidth == 0 || $imgheight == 0 ) {

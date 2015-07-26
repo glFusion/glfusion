@@ -326,10 +326,10 @@ class mediaItem extends Media {
         $media_size        = @getimagesize($media_thumbnail_file);
 
         if ( $media_size == false ) {
-            $default_thumbnail    = 'missing.png';
+            $default_thumbnail    = 'placeholder.svg';
             $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
             $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
-            $media_size           = @getimagesize($media_thumbnail_file);
+            $media_size           = array(200,200); //@getimagesize($media_thumbnail_file);
         }
 
 	if ( $_MG_CONF['use_upload_time'] == 1 ) {

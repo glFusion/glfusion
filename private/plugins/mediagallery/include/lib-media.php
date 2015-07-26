@@ -1294,9 +1294,9 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
         $u_image    = $_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'];
     } else {
         if ( $media_size_disp == false && !$I['remote_media']) {
-            $u_image = $_MG_CONF['mediaobjects_url'] . '/missing.png';
+            $u_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
             $media_size_disp[0] = 200;
-            $media_size_disp[1] = 150;
+            $media_size_disp[1] = 200;
         } else {
             if ($I['remote_media'] == 1 ) {
 		        $u_image = $I['remote_url'];
