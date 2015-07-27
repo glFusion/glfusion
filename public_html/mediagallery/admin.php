@@ -79,8 +79,8 @@ function MG_navbar($selected='',$album_id) {
     $navbar = new navbar;
     $navbar->add_menuitem($LANG_MG01['html5upload_media'],$_MG_CONF['site_url'] .'/admin.php?mode=upload&amp;album_id=' . $album_id);
     $navbar->add_menuitem($LANG_MG01['browser_upload'],$_MG_CONF['site_url'] .'/admin.php?mode=browser&amp;album_id='  . $album_id);
-    $navbar->add_menuitem($LANG_MG01['gallery_remote'],$_MG_CONF['site_url'] .'/admin.php?mode=gremote&amp;album_id=' . $album_id);
-    $navbar->add_menuitem($LANG_MG01['xp_pub'],$_MG_CONF['site_url'] .'/admin.php?mode=xppub&amp;album_id='   . $album_id);
+//    $navbar->add_menuitem($LANG_MG01['gallery_remote'],$_MG_CONF['site_url'] .'/admin.php?mode=gremote&amp;album_id=' . $album_id);
+//    $navbar->add_menuitem($LANG_MG01['xp_pub'],$_MG_CONF['site_url'] .'/admin.php?mode=xppub&amp;album_id='   . $album_id);
     if (SEC_hasRights('mediagallery.admin') ) {
         $navbar->add_menuitem($LANG_MG01['ftp_media'],$_MG_CONF['site_url'] .'/admin.php?mode=import&amp;album_id='  . $album_id);
     }
