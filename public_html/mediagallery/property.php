@@ -68,8 +68,11 @@ if ( $media_filename == '' ) {
 }
 $media_mime_ext = DB_getItem($_TABLES['mg_media'],'media_mime_ext',"media_id='" . DB_escapeString($mid) . "'");
 
+list($cacheFile,$style_cache_url) = COM_getStyleCacheLocation();
+
 $T = new Template( MG_getTemplatePath($aid) );
 $T->set_file (array ('property' => 'property.thtml'));
+$T->set_var('style_sheet',$style_cache_url);
 
 $exifInfo = MG_readEXIF( $mid, 1 );
 
