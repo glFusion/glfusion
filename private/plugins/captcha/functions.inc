@@ -631,10 +631,17 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
 
     if ( $_CP_CONF['gfxDriver'] == 3 ) {
         $resp = recaptcha_check_answer ();
-
+        $errors = array();
         if ($resp != NULL && $resp->isSuccess()) {
             return array(1,'');
         } else {
+            if ( $resp) $errors = $resp->getErrorCodes();
+            if ( is_array($errors) ) {
+                foreach ($errors as $code) {
+                    COM_errorLog($code);
+                }
+            }
+
             # set the error code so that we can display it
             $error = $LANG_CP00['entry_error'];
             CAPTCHA_errorLog("CAPTCHA: An invalid reCAPTCHA string was entered in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
