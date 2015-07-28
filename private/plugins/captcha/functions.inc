@@ -707,7 +707,7 @@ function recaptcha_check_answer()
     $resp = null;
     // The error code from reCAPTCHA, if any
     $error = null;
-    $reCaptcha = new \ReCaptcha\ReCaptcha($_CP_CONF['privatekey']);
+    $reCaptcha = new \ReCaptcha\ReCaptcha($_CP_CONF['privatekey'],new \ReCaptcha\RequestMethod\SocketPost());
     // Was there a reCAPTCHA response?
     if ($_POST["g-recaptcha-response"]) {
         $resp = $reCaptcha->verify($_POST["g-recaptcha-response"],$_SERVER["REMOTE_ADDR"]);
