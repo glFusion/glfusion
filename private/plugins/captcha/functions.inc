@@ -75,7 +75,8 @@ if ( isset($_CP_CONF['gfxDriver']) && $_CP_CONF['gfxDriver'] == 3 ) {
     if ( $_CP_CONF['publickey'] == '' || $_CP_CONF['privatekey'] == '' ) {
         $_CP_CONF['gfxDriver'] = 2;
     } else {
-        require_once $_CONF['path'] . 'plugins/captcha/class/recaptchalib.php';
+//        require_once $_CONF['path'] . 'plugins/captcha/class/recaptchalib.php';
+        require_once $_CONF['path'] . 'plugins/captcha/class/autoload.php';
     }
 
 }
@@ -241,6 +242,9 @@ function plugin_templatesetvars_captcha($ctype, &$template)
         }
 
         $template->set_var('captcha', $captcha);
+
+        if ( $_CP_CONF['gfxDriver'] == 3 ) $template->set_var('recaptcha',true);
+
     } else {
         $template->set_var('captcha', '');
     }
@@ -555,7 +559,7 @@ function recaptcha_get_html($pkey,$other)
     global $_CONF;
     $retval = '';
     $retval .= '<div class="g-recaptcha" data-sitekey="'
-             . $pkey . '"></div>'
+             . $pkey . '" data-callback="cp_enable"></div>'
              . '<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl='.$_CONF['iso_lang'].'">'
              . '</script>'
              . '<br/>';
@@ -628,7 +632,7 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
     if ( $_CP_CONF['gfxDriver'] == 3 ) {
         $resp = recaptcha_check_answer ();
 
-        if ($resp != NULL && $resp->success) {
+        if ($resp != NULL && $resp->isSuccess()) {
             return array(1,'');
         } else {
             # set the error code so that we can display it
@@ -694,18 +698,19 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
 
 function recaptcha_check_answer()
 {
-    global $_CP_CONF;
+    global $_CONF, $_CP_CONF;
 
     $rc = 0;
+    require_once $_CONF['path'] . 'plugins/captcha/class/autoload.php';
 
     // The response from reCAPTCHA
     $resp = null;
     // The error code from reCAPTCHA, if any
     $error = null;
-    $reCaptcha = new ReCaptcha($_CP_CONF['privatekey']);
+    $reCaptcha = new \ReCaptcha\ReCaptcha($_CP_CONF['privatekey']);
     // Was there a reCAPTCHA response?
     if ($_POST["g-recaptcha-response"]) {
-        $resp = $reCaptcha->verifyResponse($_SERVER["REMOTE_ADDR"],$_POST["g-recaptcha-response"]);
+        $resp = $reCaptcha->verify($_POST["g-recaptcha-response"],$_SERVER["REMOTE_ADDR"]);
     }
     return $resp;
 }
