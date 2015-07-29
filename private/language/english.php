@@ -245,7 +245,7 @@ $LANG01 = array(
     'allowed_html'              => 'Allowed HTML:',
     'posted_in'                 => 'Posted in',
     'continue_reading'          => 'Continue Reading',
-    'menu'                      => 'Nav Menu',
+    'menu'                      => 'Menu',
     'show_allowed_content'      => 'Show Allowed Content',
 );
 
