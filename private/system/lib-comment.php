@@ -466,6 +466,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                     $template->set_var( 'camera_icon', '' );
                 }
             } else {
+                $template->set_var( 'author_photo_raw', '' );
                 $template->set_var( 'author_photo', '' );
                 $template->set_var( 'camera_icon', '' );
             }
@@ -491,9 +492,11 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             $template->set_var( 'author_link', @htmlspecialchars($username,ENT_COMPAT,COM_getEncodingt() ));
 
             if( $_CONF['allow_user_photo'] ) {
+                $template->set_var( 'author_photo_raw', $_CONF['default_photo'] );
                 $template->set_var( 'author_photo', '<img src="'.$_CONF['default_photo'].'" alt="" class="userphoto"/>' );
                 $template->set_var( 'camera_icon', '' );
             } else {
+                $template->set_var( 'author_photo_raw', '' );
                 $template->set_var( 'author_photo', '' );
                 $template->set_var( 'camera_icon', '' );
             }
