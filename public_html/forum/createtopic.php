@@ -492,6 +492,9 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         $edit_prompt = $LANG_GF02['msg190'] . '<br/><input type="checkbox" name="silentedit" ';
         if ((isset($postData['silentedit']) && $postData['silentedit'] == 1) OR ( !isset($postData['modedit']) AND $_FF_CONF['silent_edit_default'])) {
              $edit_prompt .= 'checked="checked" ';
+             $edit_val = ' checked="checked" ';
+        } else {
+            $edit_val = '';
         }
         $edit_prompt .= 'value="1"/>';
 
@@ -705,6 +708,13 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
 
     $peTemplate->set_var ('comment', @htmlspecialchars($postData['comment'],ENT_QUOTES, COM_getEncodingt()));
     $peTemplate->set_var(array(
+        'edit_val'          => $edit_val,
+        'sticky_val'        => $sticky_val,
+        'postmode_msg'      => $postmode_msg,
+        'notify_val'        => $notify_val,
+        'disable_bbcode_val' => $disable_bbcode_val,
+        'disable_smilies_val' => $disable_smilies_val,
+        'disable_urlparse_val' => $disable_urlparse_val,
         'bbcode_prompt'     => $disable_bbcode_prompt,
         'smilies_prompt'    => $disable_smilies_prompt,
         'urlparse_prompt'   => $disable_urlparse_prompt,
