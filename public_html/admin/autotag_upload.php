@@ -36,7 +36,7 @@ if (!SEC_hasrights ('autotag.admin')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_showMessageText($MESSAGE[38], $MESSAGE[30],true);
     $display .= COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to illegally access the autotag administration screen.");
+    COM_accessLog ("User {$_USER['username']} attempted to access the autotag administration screen.");
     echo $display;
     exit;
 }
@@ -467,7 +467,7 @@ if ( isset($_POST['submit']) ) {
 
         @unlink($_CONF['path_data'] . 'temp/' . $pi_name . '*');
     }
-    echo COM_refresh($_CONF['site_admin_url'] .'/autoag.php?list=x');
+    echo COM_refresh($_CONF['site_admin_url'] .'/autotag.php?list=x');
     exit;
 
 } else {
