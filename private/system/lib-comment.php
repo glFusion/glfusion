@@ -1026,7 +1026,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 //Anonymous user
                 $comment_template->set_var('uid', 1);
                 if ( isset($_POST['username']) ) {
-                    $name = $filter->sanitizeUsername(COM_applyFilter9($_POST['username'])); //for preview
+                    $name = $filter->sanitizeUsername(COM_applyFilter($_POST['username'])); //for preview
                 } else {
                     $name = $LANG03[24]; //anonymous user
                 }
@@ -1068,8 +1068,9 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             if (function_exists('msg_replaceEmoticons'))  {
                 $comment_template->set_var('smilies',msg_showsmilies());
             }
-            PLG_templateSetVars ('comment', $comment_template);
+
             $comment_template->unset_var('save_type');
+            PLG_templateSetVars ('comment', $comment_template);
             if ($mode == 'preview_edit' || ($mode == 'edit' && $_CONF['skip_preview'] == 1) ) {
                 //for editing
                 $comment_template->set_var('save_type','saveedit');
