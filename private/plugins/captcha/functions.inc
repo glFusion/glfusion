@@ -163,7 +163,6 @@ function plugin_templatesetvars_captcha($ctype, &$template)
             }
             break;
         case 'registration' :
-        case 'loginform' :
             if ( $_CP_CONF['enable_registration'] != 1 ) {
                 $template->set_var('captcha', '');
                 return;
@@ -215,11 +214,12 @@ function plugin_templatesetvars_captcha($ctype, &$template)
 
         // the content type was null, or unrecognizable, so therefore there can be no plugin config
         // option controlling it, and we should just clear the 'captcha' template var
-
+        case 'loginform' :
         default :
             return;
             break;
     }
+
     if ( COM_isAnonUser() ) {
         $_USER['uid'] = 1;
     }
@@ -449,7 +449,6 @@ function CAPTCHA_getSession($ctype = '') {
 
     // this will be filled in by the CAPTCHA
     $validation = '';
-    $counter++;
     $ip = $REMOTE_ADDR;
     // update the session table
     DB_save($_TABLES['cp_sessions'],"session_id,cptime,validation,counter,ip","'".DB_escapeString($csid)."','$time','',$counter,'$ip'");
@@ -562,11 +561,8 @@ function recaptcha_get_html($pkey,$other)
              . $pkey . '" data-callback="cp_enable"></div>'
              . '<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl='.$_CONF['iso_lang'].'">'
              . '</script>'
-             . '<br/>';
-
-
+             . '<br>';
     return $retval;
-
 }
 
 function CAPTCHA_checkRetries( $csid )
@@ -579,6 +575,10 @@ function CAPTCHA_checkRetries( $csid )
         if ( function_exists('bb2_ban') ) {
             bb2_ban($_SERVER['REMOTE_ADDR'],2);
         }
+    } else {
+        $counter++;
+        $sql = "UPDATE {$_TABLES['cp_sessions']} SET counter=".(int) $counter ." WHERE session_id='".DB_escapeString($csid)."'";
+        DB_query($sql,1);
     }
 }
 
@@ -633,6 +633,7 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
         $resp = recaptcha_check_answer ();
         $errors = array();
         if ($resp != NULL && $resp->isSuccess()) {
+            DB_query("DELETE FROM {$_TABLES['cp_sessions']} WHERE session_id='" . DB_escapeString($csid) . "'",1);
             return array(1,'');
         } else {
             if ( $resp) $errors = $resp->getErrorCodes();
@@ -654,6 +655,7 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
     if ( $_CP_CONF['gfxDriver'] == 5 ) {
         $score = $ayah->scoreResult();
         if ($score) {
+            DB_query("DELETE FROM {$_TABLES['cp_sessions']} WHERE session_id='" . DB_escapeString($csid) . "'",1);
             return array(1,'');
         } else {
             # set the error code so that we can display it
@@ -668,6 +670,7 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
         CAPTCHA_errorLog("CAPTCHA: Detected an attempt to bypass CAPTCHA (blank input string) in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
         $msg = $LANG_CP00['bypass_error_blank'];
         $rc = 0;
+        CAPTCHA_checkRetries( $csid );
     } else {
         // check the time
         $cTime = DB_getItem($_TABLES['cp_sessions'],'cptime',"session_id='" . DB_escapeString($csid) . "'");
@@ -676,6 +679,7 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
             CAPTCHA_errorLog("CAPTCHA: Detected an attempt to use an expired CAPTCHA in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
             $msg = $LANG_CP00['session_expired'];
             $rc = 0;
+            CAPTCHA_checkRetries( $csid );
             return ( array( $rc, $msg ) );
         }
         $validationString = DB_getItem($_TABLES['cp_sessions'],'validation',"session_id='" . DB_escapeString($csid) . "'");
