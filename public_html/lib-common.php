@@ -2077,7 +2077,7 @@ function COM_userMenu( $help='', $title='', $position='' )
                            COM_getBlockTemplate( 'user_block', 'header', $position ), 'user_block' );
 
         $menuData = getUserMenu();
-        $retval .= '<div id="usermenu"><ul>';
+        $retval .= '<div id="usermenu"><ul class="uk-list uk-list-space">';
         foreach ( $menuData as $item ) {
             $retval .= '<li><a href="'.$item['url'].'">'.$item['label'].'</a></li>';
         }
@@ -2761,7 +2761,7 @@ function COM_olderStuff()
                 if ( $day != 'noday' ) {
                     $daylist = COM_makeList($oldnews, 'list-older-stories');
                     $daylist = str_replace(array("\015", "\012"), '', $daylist);
-                    $string .= $daylist . '<br/>';
+                    $string .= $daylist; // . '<br/>';
                 }
                 $day2 = $dt->format($_CONF['dateonly'], true);
                 $string .= '<h3>' . $dt->format('l',true) . ' <small>' . $day2
