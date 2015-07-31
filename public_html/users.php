@@ -1257,7 +1257,7 @@ switch ($mode) {
         $pageBody .= _userSetnewpwd();
         break;
     case 'emailpasswd':
-        $pageBody .= _userEmailpasswd();
+        $pageBody .= _userEmailpassword();
         break;
     case 'new':
         $pageBody .= newuserform();
