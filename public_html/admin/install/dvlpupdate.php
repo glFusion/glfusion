@@ -1140,9 +1140,10 @@ function glfusion_150()
     $c = config::get_instance();
     $c->add('min_username_length','4','text',4,4,NULL,60,TRUE);
 
+// BB2 changes
+    $_SQL[] = "ALTER TABLE {$_TABLES['bad_behavior2_ban']} ADD `reason` VARCHAR(255) NULL DEFAULT NULL;";
 
 // story table change....
-
 
     $_SQL[] = "ALTER TABLE  {$_TABLES['stories']} ADD `alternate_tid` VARCHAR(20) NULL DEFAULT NULL AFTER `tid`, ADD INDEX `alternate_topic` (`alternate_tid`) ;";
     $_SQL[] = "ALTER TABLE  {$_TABLES['tokens']} CHANGE `urlfor` `urlfor` VARCHAR( 1024 ) NOT NULL";
@@ -1174,6 +1175,7 @@ function glfusion_150()
     $c->add('fs_spam_config', NULL, 'fieldset', 8, 1, NULL, 0, TRUE);
     $c->add('bb2_enabled',1,'select',8,1,0,10,TRUE);
     $c->add('bb2_ban_enabled',0,'select',8,1,0,15,TRUE);
+    $c->add('bb2_ban_timeout',24,'text',8,1,0,16,TRUE);
     $c->add('bb2_display_stats',1,'select',8,1,0,20,TRUE);
     $c->add('bb2_strict',0,'select',8,1,0,30,TRUE);
     $c->add('bb2_verbose',0,'select',8,1,0,40,TRUE);
