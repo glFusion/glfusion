@@ -1127,7 +1127,7 @@ function _userEmailpassword()
 
 function _userVerify()
 {
-    global $_CONF, $_TABLES, $_USER, $LANG04;
+    global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG04;
 
     $retval = '';
 
