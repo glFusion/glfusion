@@ -51,9 +51,9 @@ $_SQL['bad_behavior2_ban'] = "CREATE TABLE {$_TABLES['bad_behavior2_ban']} (
     `ip` varbinary(16) NOT NULL,
     `type` tinyint(3) unsigned NOT NULL,
     `timestamp` int(8) NOT NULL DEFAULT '0',
+    `reason` VARCHAR(255) NULL DEFAULT NULL,
     PRIMARY KEY  (id),
     UNIQUE ip (ip),
     INDEX type (type),
     INDEX timestamp (timestamp) ) ENGINE=MyISAM;";
-
 ?>

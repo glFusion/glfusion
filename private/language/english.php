@@ -2630,6 +2630,7 @@ $LANG_confignames['Core'] = array(
     'bb2_httpbl_maxage' => 'http:BL Max Age',
     'bb2_offsite_forms' => 'Allow offsite forms',
     'bb2_eu_cookie' => 'EU Cookie',
+    'bb2_ban_timeout' => 'Number of hours to ban IP',
 );
 
 $LANG_configsubgroups['Core'] = array(

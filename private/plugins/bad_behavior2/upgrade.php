@@ -65,11 +65,12 @@ function bad_behavior2_upgrade ()
         case '2.0.47' :
         case '2.0.48' :
         case '2.0.49' :
-            $sql .= "CREATE TABLE IF NOT EXISTS `gl_bad_behavior2_ban` (
+            $sql .= "CREATE TABLE IF NOT EXISTS {$_TABLES['bad_behavior2_ban']} (
                 `id` smallint(5) unsigned NOT NULL auto_increment,
                 `ip` varbinary(16) NOT NULL,
                 `type` tinyint(3) unsigned NOT NULL,
                 `timestamp` int(8) NOT NULL DEFAULT '0',
+                `reason` VARCHAR(255) NULL DEFAULT NULL,
                 PRIMARY KEY  (id),
                 UNIQUE ip (ip),
                 INDEX type (type),
@@ -83,16 +84,17 @@ function bad_behavior2_upgrade ()
             $c->add('sg_spam', NULL, 'subgroup', 8, 0, NULL, 0, TRUE);
             $c->add('fs_spam_config', NULL, 'fieldset', 8, 1, NULL, 0, TRUE);
             $c->add('bb2_enabled',1,'select',8,1,0,10,TRUE);
-            $c->add('bb2_ban_enabled',0,'select',8,1,0,15,TRUE);
-            $c->add('bb2_display_stats',1,'select',8,1,0,20,TRUE);
-            $c->add('bb2_strict',0,'select',8,1,0,30,TRUE);
-            $c->add('bb2_verbose',0,'select',8,1,0,40,TRUE);
-            $c->add('bb2_logging',0,'select',8,1,0,50,TRUE);
-            $c->add('bb2_httpbl_key','','text',8,1,NULL,60,TRUE);
-            $c->add('bb2_httpbl_threat',25,'text',8,1,NULL,70,TRUE);
-            $c->add('bb2_httpbl_maxage',30,'text',8,1,NULL,80,TRUE);
-            $c->add('bb2_offsite_forms',0,'select',8,1,0,90,TRUE);
-            $c->add('bb2_eu_cookie',0,'select',8,1,0,100,TRUE);
+            $c->add('bb2_ban_enabled',0,'select',8,1,0,20,TRUE);
+            $c->add('bb2_ban_timeout',24,'text',8,1,0,30,TRUE);
+            $c->add('bb2_display_stats',0,'select',8,1,0,40,TRUE);
+            $c->add('bb2_strict',0,'select',8,1,0,50,TRUE);
+            $c->add('bb2_verbose',0,'select',8,1,0,60,TRUE);
+            $c->add('bb2_logging',1,'select',8,1,0,70,TRUE);
+            $c->add('bb2_httpbl_key','','text',8,1,NULL,80,TRUE);
+            $c->add('bb2_httpbl_threat',25,'text',8,1,NULL,90,TRUE);
+            $c->add('bb2_httpbl_maxage',30,'text',8,1,NULL,100,TRUE);
+            $c->add('bb2_offsite_forms',0,'select',8,1,0,110,TRUE);
+            $c->add('bb2_eu_cookie',0,'select',8,1,0,120,TRUE);
 
             break;
         default:

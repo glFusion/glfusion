@@ -59,10 +59,6 @@ $bb2_settings_defaults = array(
 function bb2_db_date() {
 
     return date("Y-m-d H:i:s");
-
-//    global $_CONF;
-//    $dt = new Date('now',$_CONF['timezone']);
-//    return $dt->toMySQL(true);
 }
 
 // Return affected rows from most recent query.
@@ -196,9 +192,29 @@ function bb2_relative_path() {
     return $_CONF['cookie_path'];
 }
 
-function bb2_ban($ip,$type = 1) {
+function bb2_ban_check($ip)
+{
+    global $_TABLES;
+
+    $sql = "SELECT id FROM {$_TABLES['bad_behavior2_ban']} WHERE ip = INET_ATON('".DB_escapeString($ip)."')";
+    $result = DB_query($sql);
+    if ( DB_numRows($result) > 0 ) return true;
+    return false;
+}
+
+function bb2_ban_remove($ip)
+{
+    global $_TABLES;
+
+    $sql = "DELETE FROM {$_TABLES['bad_behavior2_ban']} WHERE ip = INET_ATON('".DB_escapeString($ip)."')";
+    $result = DB_query($sql,1);
+    return true;
+}
+
+
+function bb2_ban($ip,$type = 1,$reason = '') {
     global $_CONF,$LANG_BAD_BEHAVIOR;
-    if ( !isset($_CONF['bb2_ban_enabled']) || $_CONF['bb2_ban_enabled'] != 1 ) {
+    if ( $type != 0 && (!isset($_CONF['bb2_ban_enabled']) || $_CONF['bb2_ban_enabled'] != 1 )) {
         return;
     }
     switch ( $type ) {
@@ -218,14 +234,18 @@ function bb2_ban($ip,$type = 1) {
     $settings = bb2_read_settings();
     $timestamp = time();
     $sql = "INSERT INTO {$settings['ban_table']}
-           (ip,type,timestamp) VALUE (INET_ATON('".DB_escapeString($ip)."'),".$type.",".$timestamp.")";
-    DB_query($sql);
-    COM_refresh($_CONF['site_url']);
+           (ip,type,reason,timestamp) VALUE (INET_ATON('".DB_escapeString($ip)."'),".$type.",'".DB_escapeString($reason)."', ".$timestamp.")";
+    DB_query($sql,1);
+    if ( $type != 0 ) COM_refresh($_CONF['site_url']);
+    return true;
 }
 
 function bb2_expireBans() {
+    global $_CONF;
+    if ( !isset($_CONF['bb2_ban_timeout']) ) $_CONF['bb2_ban_timeout'] = 24;
+    if ($_CONF['bb2_ban_timeout'] == 0 ) return;
     $settings = bb2_read_settings();
-    $oldBans = time() - (86400); // 24 hours
+    $oldBans = time() - ($_CONF['bb2_ban_timeout']*60*60);
     DB_query("DELETE FROM {$settings['ban_table']} WHERE type != 0 AND timestamp < " . $oldBans,1);
     return;
 }
