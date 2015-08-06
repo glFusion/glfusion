@@ -860,6 +860,7 @@ function MG_indexAll()
     	'album_owner'			=> $ownername,
     	'media_count'			=> $MG_albums[$album_id]->getMediaCount(),
     	'lang_search'           => $LANG_MG01['search'],
+    	'table_columns'         => $displayColumns,
     ));
 
     $T->set_var('select_adminbox',$admin_box);
