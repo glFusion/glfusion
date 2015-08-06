@@ -539,6 +539,7 @@ function MG_index() {
     }
     $T->set_var(array(
         'bottom_pagination'     => COM_printPageNavigation($_MG_CONF['site_url'] . '/index.php', $page+1,ceil($aCount  / $items_per_page)),
+        'table_columns'         => $_MG_CONF['album_display_columns'],
     ));
 
     if ($albumCount == 0 ) {

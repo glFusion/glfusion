@@ -150,8 +150,8 @@ function MG_displayASF( $aid, $I, $full ) {
                 $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
                 $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/wmp.png';
-                $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'wmp.png');
+                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             break;
         case 1: // download
@@ -161,8 +161,8 @@ function MG_displayASF( $aid, $I, $full ) {
                 $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
                 $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/wmp.png';
-                $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'wmp.png');
+                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             break;
         case 2 :    // inline
@@ -211,8 +211,8 @@ function MG_displayASF( $aid, $I, $full ) {
                 $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
                 $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/video.png';
-                $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'video.png');
+                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             break;
     }
@@ -313,8 +313,8 @@ function MG_displayMOV( $aid, $I, $full ) {
                 $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
                 $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/quicktime.png';
-                $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'quicktime.png');
+                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_quicktime.svg';
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             break;
         case 1: // download
@@ -324,11 +324,20 @@ function MG_displayMOV( $aid, $I, $full ) {
                 $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
                 $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/quicktime.png';
-                $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'quicktime.png');
+                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_quicktime.svg';
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             break;
         case 2 :    // inline
+            if ( $I['media_tn_attached'] == 1 ) {
+                $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
+                $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
+            } else {
+                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_quicktime.svg';
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
+            }
+
+
             $V = new Template( MG_getTemplatePath($aid) );
             $V->set_file (array ('video' => 'view_quicktime.thtml'));
             $V->set_var(array(
@@ -345,6 +354,8 @@ function MG_displayMOV( $aid, $I, $full ) {
                 'movie'         => $_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'],
                 'filename'      => $I['media_original_filename'],
                 'lang_noquicktime' => $LANG_MG03['no_quicktime'],
+                'thumbnail'     => $u_image,
+                'mime_type'     => $I['mime_type'],
             ));
             $V->parse('output','video');
             $u_image = $V->finish($V->get_var('output'));
@@ -406,7 +417,7 @@ function MG_displaySWF( $aid, $I, $full ) {
     } else {
         $playback_type = $MG_albums[$aid]->playback_type;
     }
-    if ( $I['resolution_x'] > 0 ) {
+    if ( isset($I['resolution_x']) && $I['resolution_x'] > 0 ) {
         $resolution_x = $I['resolution_x'];
         $resolution_y = $I['resolution_y'];
     } else {
@@ -449,8 +460,8 @@ function MG_displaySWF( $aid, $I, $full ) {
                 $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
                 $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/flash.png';
-                $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'flash.png');
+                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_flash.svg';
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             break;
         case 1: // download
@@ -461,8 +472,8 @@ function MG_displaySWF( $aid, $I, $full ) {
                 $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
                 $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/flash.png';
-                $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'flash.png');
+                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_flash.svg';
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             break;
         case 2 :    // inline
@@ -496,7 +507,8 @@ function MG_displaySWF( $aid, $I, $full ) {
 			$V->set_block('video','flashvars','flashvar');
 
             foreach( $flasharray as $var ) {
-                $temp = split("=",$var);
+//                $temp = split("=",$var);
+                $temp = explode('=',$var);
                 $variable = $temp[0];
                 $value = implode("=",array_slice($temp,1));
                 if ( !isset($variable) && $variable != '' ) {
@@ -636,8 +648,8 @@ function MG_displayFLV ( $aid, $I, $full ) {
                 $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
                 $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/flv.png';
-                $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'flv.png');
+                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_flv.svg';
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             break;
         case 1: // download
@@ -647,8 +659,8 @@ function MG_displayFLV ( $aid, $I, $full ) {
                 $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
                 $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/flv.png';
-                $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'flv.png');
+                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_flv.svg';
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             break;
         case 3: // mms - not supported for flash
@@ -848,8 +860,8 @@ function MG_displayMP3( $aid, $I, $full ) {
                 $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
                 $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/audio.png';
-                $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'audio.png');
+                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_audio.svg';
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             break;
         case 1: // download
@@ -858,8 +870,8 @@ function MG_displayMP3( $aid, $I, $full ) {
                 $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
                 $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/audio.png';
-                $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'audio.png');
+                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_audio.svg';
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             break;
         case 2 :    // inline
@@ -955,8 +967,8 @@ function MG_displayMP3( $aid, $I, $full ) {
                 $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
                 $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/audio.png';
-                $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'audio.png');
+                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_audio.svg';
+                $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             break;
     }
@@ -997,8 +1009,8 @@ function MG_displayOGG( $aid, $I, $full ) {
         $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
         $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
     } else {
-        $u_image     = $_MG_CONF['mediaobjects_url'] . '/audio.png';
-        $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'audio.png');
+        $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_audio.svg';
+        $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
     }
 
     $imageWidth  = $media_size_disp[0];
@@ -1039,8 +1051,8 @@ function MG_displayGeneric( $aid, $I, $full ) {
     } else {
         switch ( $I['mime_type'] ) {
             case 'application/pdf' :
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/pdf.png';
-                $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'pdf.png');
+                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_pdf.svg';
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
                 break;
             case 'application/zip' :
             case 'application/x-compressed' :
@@ -1575,6 +1587,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
             } else {
                 list($u_image,$raw_image,$raw_image_width,$raw_image_height,$raw_link_url) = MG_displayMOV($aid,$media[$mediaObject],$full);
             }
+
             break;
         case 'embed' :
 	        list($u_image,$raw_image,$raw_image_width,$raw_image_height,$raw_link_url) = MG_displayEmbed($aid,$media[$mediaObject],$full,$mediaObject);

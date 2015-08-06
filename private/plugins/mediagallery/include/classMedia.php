@@ -146,16 +146,16 @@ class Media {
                 switch ( $this->mime_type ) {
 
                     case 'video/x-flv' :
-                        $default_thumbnail = 'flv.png';
+                        $default_thumbnail = 'placeholder_flv.svg';
                         break;
                     case 'application/x-shockwave-flash' :
-                        $default_thumbnail = 'flash.png';
+                        $default_thumbnail = 'placeholder_flash.svg';
                         break;
                     case 'video/mpeg' :
                     case 'video/x-mpeg' :
                     case 'video/x-mpeq2a' :
         				if ( $_MG_CONF['use_wmp_mpeg'] == 1 ) {
-            				$default_thumbnail = 'wmp.png';
+            				$default_thumbnail = 'placeholder_video.svg';
             				break;
             			}
                     case 'video/x-motion-jpeg' :
@@ -163,7 +163,7 @@ class Media {
                     case 'video/x-qtc' :
                     case 'audio/mpeg' :
                     case 'video/x-m4v' :
-                        $default_thumbnail = 'quicktime.png';
+                        $default_thumbnail = 'placeholder_quicktime.svg';
                         break;
                     case 'asf' :
                     case 'video/x-ms-asf' :
@@ -178,15 +178,15 @@ class Media {
                     case 'application/x-troff-msvideo' :
                     case 'application/x-ms-wmz' :
                     case 'application/x-ms-wmd' :
-                        $default_thumbnail = 'wmp.png';
+                        $default_thumbnail = 'placeholder_video.svg';
                         break;
                     default :
-                        $default_thumbnail = 'video.png';
+                        $default_thumbnail = 'placeholder_video.svg';
                         break;
                 }
                 break;
             case 2 :    // music file
-                $default_thumbnail = 'audio.png';
+                $default_thumbnail = 'placeholder_audio.svg';
                 break;
             case 4 :    // other files
                 switch ($this->mime_type) {
@@ -199,7 +199,7 @@ class Media {
                         break;
                     case 'pdf' :
                     case 'application/pdf' :
-                        $default_thumbnail = 'pdf.png';
+                        $default_thumbnail = 'placeholder_pdf.svg';
                         break;
                     default :
                         if ( isset($_MG_CONF['dt'][$this->mime_ext]) ) {
@@ -207,7 +207,7 @@ class Media {
                         } else {
                             switch ( $this->mime_ext ) {
                                 case 'pdf' :
-                                    $default_thumbnail = 'pdf.png';
+                                    $default_thumbnail = 'placeholder_pdf.svg';
                                     break;
                                 case 'arj' :
                                     $default_thumbnail = 'zip.png';
@@ -394,13 +394,21 @@ class Media {
             $url_display_item  = $_MG_CONF['site_url'] . '/download.php?mid=' . $this->id ;
         }
 
-        $media_size        = @getimagesize($media_thumbnail_file);
+        if ( strstr($media_thumbnail_file,'.svg') ) {
+            $media_size = array($MG_albums[$this->album_id]->tnWidth,$MG_albums[$this->album_id]->tnHeight);
+        } else {
+            $media_size        = @getimagesize($media_thumbnail_file);
+        }
 
         if ( $media_size == false ) {
-            $default_thumbnail    = 'placeholder.svg';
+            if ($this->type == 2 ) {
+                $default_thumbnail = 'placeholder_audio.svg';
+            } else {
+                $default_thumbnail    = 'placeholder.svg';
+            }
             $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
             $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
-            $media_size           = array(200,200); //@getimagesize($media_thumbnail_file);
+            $media_size           = array($tn_width,$tn_height); //@getimagesize($media_thumbnail_file);
         }
 
        	$media_time        = MG_getUserDateTimeFormat($this->time);
@@ -451,8 +459,13 @@ class Media {
             $newheight = round($media_size[1] / $ratio);
         } else {
             $ratio = $media_size[1] / $tn_height;
-            $newheight = $tn_height;
-            $newwidth = round($media_size[0] / $ratio);
+            if ( $ratio == 0 ) {
+                $newheight = $tn_height;
+                $newwidth  = $tn_width;
+            } else {
+                $newheight = $tn_height;
+                $newwidth = round($media_size[0] / $ratio);
+            }
         }
 
         if ( $media_size[0] > $media_size[1] ) {
@@ -461,8 +474,13 @@ class Media {
             $smallheight = round($media_size[1] / $ratio);
         } else {
             $ratio = $media_size[1] / 50;
-            $smallheight = 50;
-            $smallwidth = round($media_size[0] / $ratio);
+            if ( $ratio == 0 ) {
+                $smallheight = 50;
+                $smallwidth = 50;
+            } else {
+                $smallheight = 50;
+                $smallwidth = round($media_size[0] / $ratio);
+            }
         }
 
         if ( $this->owner_id != "" && $this->owner_id > 1 ) {
@@ -619,6 +637,10 @@ class Media {
 
         $T->set_var(array(
             'media_item_thumbnail' => $media_item_thumbnail,
+            'url_media_item'    =>  $url_media_item,
+            'url_display_item'  =>  $url_display_item,
+            'media_thumbnail'   =>  $media_thumbnail,
+            'media_size'        =>  'width="' . $newwidth . '" height="' . $newheight . '"',
         ));
 
         if ( $MG_albums[$this->album_id]->enable_keywords) {
@@ -701,10 +723,10 @@ class Media {
             case 1 :    // video file
                 switch ( $this->mime_type ) {
                     case 'video/x-flv' :
-                        $default_thumbnail = 'flv.png';
+                        $default_thumbnail = 'placeholder_flv.svg';
                         break;
                     case 'application/x-shockwave-flash' :
-                        $default_thumbnail = 'flash.png';
+                        $default_thumbnail = 'placeholder_flash.svg';
                         break;
                         break;
                     case 'video/mpeg' :
@@ -715,7 +737,7 @@ class Media {
                     case 'video/x-mpeq2a' :
                     case 'video/x-qtc' :
                     case 'video/x-m4v' :
-                        $default_thumbnail = 'quicktime.png';
+                        $default_thumbnail = 'placeholder_quicktime.svg';
                         break;
                     case 'video/x-ms-asf' :
                     case 'video/x-ms-asf-plugin' :
@@ -729,15 +751,15 @@ class Media {
                     case 'application/x-troff-msvideo' :
                     case 'application/x-ms-wmz' :
                     case 'application/x-ms-wmd' :
-                        $default_thumbnail = 'wmp.png';
+                        $default_thumbnail = 'placeholder_video.svg';
                         break;
                     default :
-                        $default_thumbnail = 'video.png';
+                        $default_thumbnail = 'placeholder_video.svg';
                         break;
                 }
                 break;
             case 2 :    // music file
-                $default_thumbnail = 'audio.png';
+                $default_thumbnail = 'placeholder_audio.svg';
                 break;
             case 4 :    // other files
                 switch ($this->mime_type ) {
@@ -790,13 +812,21 @@ class Media {
             $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
         }
 
-        $media_size        = @getimagesize($media_thumbnail_file);
+        if ( strstr($media_thumbnail_file,'.svg') ) {
+            $media_size = array($tn_width,$tn_height);
+        } else {
+            $media_size        = @getimagesize($media_thumbnail_file);
+        }
 
         if ( $media_thumbnail == '' || $media_size == false ) {
-            $default_thumbnail    = 'generic.png';
+            if ($this->type == 2 ) {
+                $default_thumbnail = 'placeholder_audio.svg';
+            } else {
+                $default_thumbnail    = 'placeholder.svg';
+            }
             $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
             $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
-            $media_size           = @getimagesize($media_thumbnail_file);
+            $media_size           = array($tn_width,$tn_height);
         }
 
         if ( $namesOnly == 1 ) {
@@ -810,8 +840,13 @@ class Media {
             $newheight = round($media_size[1] / $ratio);
         } else {
             $ratio = $media_size[1] / $tn_height;
-            $newheight = $tn_height;
-            $newwidth = round($media_size[0] / $ratio);
+            if ( $ratio == 0 ) {
+                $newheight = $tn_height;
+                $newwidth  = $tn_width;
+            } else {
+                $newheight = $tn_height;
+                $newwidth = round($media_size[0] / $ratio);
+            }
         }
         $media_dim = 'width="' . $newwidth . '" height="' . $newheight . '"';
         return '<img src="' .$media_thumbnail . '" ' . $media_dim . ' style="border:none;" alt="' . strip_tags($this->title) . '" title="' . strip_tags($this->title) . '"/>';
@@ -827,10 +862,10 @@ class Media {
             case 1 :    // video file
                 switch ( $this->mime_type ) {
                     case 'video/x-flv' :
-                        $default_thumbnail = 'flv.png';
+                        $default_thumbnail = 'placeholder_flv.svg';
                         break;
                     case 'application/x-shockwave-flash' :
-                        $default_thumbnail = 'flash.png';
+                        $default_thumbnail = 'placeholder_flash.svg';
                         break;
                         break;
                     case 'video/mpeg' :
@@ -841,7 +876,7 @@ class Media {
                     case 'video/x-mpeq2a' :
                     case 'video/x-qtc' :
                     case 'video/x-m4v' :
-                        $default_thumbnail = 'quicktime.png';
+                        $default_thumbnail = 'placeholder_quicktime.svg';
                         break;
                     case 'video/x-ms-asf' :
                     case 'video/x-ms-asf-plugin' :
@@ -855,15 +890,15 @@ class Media {
                     case 'application/x-troff-msvideo' :
                     case 'application/x-ms-wmz' :
                     case 'application/x-ms-wmd' :
-                        $default_thumbnail = 'wmp.png';
+                        $default_thumbnail = 'placeholder_video.svg';
                         break;
                     default :
-                        $default_thumbnail = 'video.png';
+                        $default_thumbnail = 'placeholder_video.svg';
                         break;
                 }
                 break;
             case 2 :    // music file
-                $default_thumbnail = 'audio.png';
+                $default_thumbnail = 'placeholder_audio.svg';
                 break;
             case 4 :    // other files
                 switch ($this->mime_type ) {
@@ -877,11 +912,11 @@ class Media {
                         break;
                     case 'application/pdf' :
                     case 'pdf' :
-                        $default_thumbnail = 'pdf.png';
+                        $default_thumbnail = 'placeholder_pdf.svg';
                         break;
                     case 'application/octet-stream' :
                         if ( $this->mime_ext == 'pdf' ) {
-                            $default_thumbnail = 'pdf.png';
+                            $default_thumbnail = 'placeholder_pdf.svg';
                         } else if ( $this->mime_ext == 'arj' ) {
                             $default_thumbnail = 'zip.png';
                         } else if ( $this->mime_ext == 'rar' ) {
@@ -916,13 +951,21 @@ class Media {
             $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
         }
 
-        $media_size        = @getimagesize($media_thumbnail_file);
+        if ( strstr($media_thumbnail_file,'.svg') ) {
+            $media_size = array($tn_width,$tn_height);
+        } else {
+            $media_size        = @getimagesize($media_thumbnail_file);
+        }
 
         if ( $media_thumbnail == '' || $media_size == false ) {
-            $default_thumbnail    = 'generic.png';
+            if ($this->type == 2 ) {
+                $default_thumbnail = 'placeholder_audio.svg';
+            } else {
+                $default_thumbnail    = 'placeholder.svg';
+            }
             $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
             $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
-            $media_size           = @getimagesize($media_thumbnail_file);
+            $media_size           = array($tn_width,$tn_height);
         }
 
         if ( $namesOnly == 1 ) {

@@ -170,8 +170,8 @@ function MG_saveHTML5Upload( $album_id ) {
         file_put_contents($filename,file_get_contents('php://input'));
         $file = array(
                     array('name' => $fn,
-                          'type' => $_SERVER['HTTP_X_FILE_TYPE'],
-                          'size' => $_SERVER['HTTP_X_FILE_SIZE'],
+                          'type' => isset($_SERVER['HTTP_X_FILE_TYPE']) ? $_SERVER['HTTP_X_FILE_TYPE'] : '',
+                          'size' => isset($_SERVER['HTTP_X_FILE_TYPE']) ? $_SERVER['HTTP_X_FILE_SIZE'] : '',
                           'tmp_name' => $filename,
                           'error'    => ''
                           )

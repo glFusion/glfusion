@@ -944,13 +944,13 @@ class mgAlbum {
                 $album_last_update  = MG_getUserDateTimeFormat($this->last_update);
                 if ($mediasize == false ) {
                     $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
-                    $mediasize = array(200,200);
+                    $mediasize = array($this->tnWidth,$this->tnHeight);
                 }
             } else {
                 $filename = $this->findCover();
                 if ( $filename == '' || $filename == NULL || $filename == " ") {
                     $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
-                    $mediasize = array(200,200);
+                    $mediasize = array($this->tnWidth,$this->tnHeight);
                 } else {
                     $mediasize = false;
                     foreach ($_MG_CONF['validExtensions'] as $ext ) {
@@ -962,7 +962,7 @@ class mgAlbum {
                     }
                     if ($mediasize == false ) {
                         $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
-                        $mediasize = array(200,200); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
+                        $mediasize = array($this->tnWidth,$this->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
                     }
                 }
             }
@@ -986,7 +986,7 @@ class mgAlbum {
             $filename = $this->findCover();
             if ( $filename == '' ) {
                 $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
-                $mediasize = array(200,200);
+                $mediasize = array($this->tnWidth,$this->tnHeight);
             } else {
                 $mediasize = false;
                 foreach ($_MG_CONF['validExtensions'] as $ext ) {
@@ -998,7 +998,7 @@ class mgAlbum {
                 }
                 if ($mediasize == false ) {
                     $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
-                    $mediasize = array(200,200); // @getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
+                    $mediasize = array($this->tnWidth,$this->tnHeight); // @getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
                 }
             }
             $album_last_update[0] = '';
@@ -1016,7 +1016,7 @@ class mgAlbum {
             }
             if ($mediasize == false ) {
                 $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
-                $mediasize = array(200,200); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
+                $mediasize = array($this->tnWidth,$this->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
             }
         }
 
@@ -1043,6 +1043,7 @@ class mgAlbum {
                 $tn_width  = 200;
                 break;
             case '3' :
+            case '4' :
             	$tn_height = $MG_albums[$this->parent]->tnHeight;
             	$tn_width  = $MG_albums[$this->parent]->tnWidth;
             	if ( $tn_height == 0 ) {
@@ -1097,6 +1098,7 @@ class mgAlbum {
 
         $C->set_var(array(
             'media_item_thumbnail' => $media_item_thumbnail,
+            'media_item_thumbnail_raw' => $album_last_image,
             'u_viewalbum'       => $_MG_CONF['site_url'] . '/album.php?aid=' . $this->id .'&amp;page=1',
             'album_last_image'  => $album_last_image,
             'album_title'       => $this->title,

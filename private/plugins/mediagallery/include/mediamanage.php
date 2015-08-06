@@ -805,6 +805,7 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         $uimode_select .= '</select>';
 
         $T->set_var(array(
+            'audio_tab'                 => true,
             'autostart_enabled'         => $playback_options['autostart'] ? ' checked="checked"' : '',
             'autostart_disabled'        => $playback_options['autostart'] ? '' : ' checked="checked"',
             'enablecontextmenu_enabled' => $playback_options['enablecontextmenu'] ? ' checked="checked"' : '',
@@ -1239,9 +1240,9 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
 	}
 
 	if ( $remote_media ) {
-		$remote_url = DB_escapeString($_POST['remoteurl']);
+		$remote_url = isset($_POST['remoteurl']) ? DB_escapeString($_POST['remoteurl']) : '';
 	} else {
-		$remote_url = DB_escapeString($_POST['remoteurl']);
+		$remote_url = '';
 	}
 
     if ( $_MG_CONF['htmlallowed'] ) {
@@ -1265,9 +1266,9 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
     $media_keywords_safe = substr($media_keywords,0,254);
     $media_keywords = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords($media_keywords_safe))));
 
-    $artist = DB_escapeString(COM_applyFilter($_POST['artist'] ) );
-    $musicalbum = DB_escapeString(COM_applyFilter($_POST['musicalbum'] ) );
-    $genre = DB_escapeString(COM_applyFilter($_POST['genre'] ) );
+    $artist = isset($_POST['artist']) ? DB_escapeString(COM_applyFilter($_POST['artist'] ) ) : '';
+    $musicalbum = isset($_POST['musicalbum']) ? DB_escapeString(COM_applyFilter($_POST['musicalbum'] ) ) : '';
+    $genre = isset($_POST['genre']) ? DB_escapeString(COM_applyFilter($_POST['genre'] ) ) : '';
 
     $dtObject = new Date('now',$_USER['tzid']);
 	$dtObject->setDateTimestamp ( $media_time_year,$media_time_month,$media_time_day,$media_time_hour,$media_time_minute,0 );

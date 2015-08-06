@@ -72,6 +72,9 @@ function MG_globalAlbumPermEditor($adminMenu=0) {
         'admin' =>  'global_album_perm.thtml'
     ));
 
+    $A['group_id'] = '';
+    $A['mod_group_id']  = '';
+
     $usergroups = SEC_getUserGroups();
     for ($i = 0; $i < count($usergroups); $i++) {
         if ('mediagallery Admin' == key($usergroups)) {
