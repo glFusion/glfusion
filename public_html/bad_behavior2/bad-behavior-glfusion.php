@@ -236,7 +236,7 @@ function bb2_ban($ip,$type = 1,$reason = '') {
     $sql = "INSERT INTO {$settings['ban_table']}
            (ip,type,reason,timestamp) VALUE (INET_ATON('".DB_escapeString($ip)."'),".$type.",'".DB_escapeString($reason)."', ".$timestamp.")";
     DB_query($sql,1);
-    if ( $type != 0 ) COM_refresh($_CONF['site_url']);
+    if ( $type != 0 ) echo COM_refresh($_CONF['site_url']);
     return true;
 }
 
