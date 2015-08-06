@@ -1198,7 +1198,7 @@ function service_submit_story($args, &$output, &$svc_msg)
         $args['group_id'] = SEC_getFeatureGroup('story.edit', $_USER['uid']);
     }
 
-    if ( $args['tid'] == $args['alternate_id']) {
+    if ( isset($args['alternate_id']) && $args['tid'] == $args['alternate_id']) {
         $args['alternate_id'] = NULL;
     }
 
