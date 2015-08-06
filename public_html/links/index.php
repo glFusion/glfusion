@@ -200,6 +200,7 @@ function links_list($message)
                     '/links/index.php?category=' . urlencode ($C['cid']));
                 $linklist->set_var ('category_count', $display_count);
                 $linklist->set_var ('width', floor (100 / $_LI_CONF['linkcols']));
+                $linklist->set_var ('link_cols',$_LI_CONF['linkcols']);
                 if (!empty($cid) && ($cid == $C['cid'])) {
                     $linklist->parse ('category_col', 'actcol', true);
                 } else {
@@ -376,6 +377,7 @@ function prepare_link_item ($A, &$template)
             SEC_hasRights ('links.edit')) {
         $editurl = $_CONF['site_admin_url']
                  . '/plugins/links/index.php?edit=x&amp;lid=' . $A['lid'];
+        $template->set_var ('edit_url',$editurl);
         $template->set_var ('link_edit', COM_createLink($LANG_ADMIN['edit'],$editurl));
         $edit_icon = "<img src=\"{$_CONF['layout_url']}/images/edit.$_IMAGE_TYPE\" "
             . "alt=\"{$LANG_ADMIN['edit']}\" title=\"{$LANG_ADMIN['edit']}\"/>";

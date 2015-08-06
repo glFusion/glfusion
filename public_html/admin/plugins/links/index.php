@@ -174,16 +174,16 @@ function LINK_edit($action, $lid = '')
     $link_templates->set_var('link_id', $A['lid']);
     if (!empty($lid) && SEC_hasRights('links.edit')) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
-                   . '" name="delete"%s' . XHTML . '>';
+                   . '" name="delete"%s>';
         $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
         $link_templates->set_var ('delete_option',
                                   sprintf ($delbutton, $jsconfirm));
         $link_templates->set_var ('delete_option_no_confirmation',
                                   sprintf ($delbutton, ''));
+        $link_templates->set_var ('delete_confirm_msg',$MESSAGE[76]);
         if ($action == 'moderate') {
             $link_templates->set_var('submission_option',
-                '<input type="hidden" name="type" value="submission"'
-                . XHTML . '>');
+                '<input type="hidden" name="type" value="submission">');
         }
     }
     $link_templates->set_var('lang_linktitle', $LANG_LINKS_ADMIN[3]);

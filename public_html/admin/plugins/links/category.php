@@ -206,7 +206,6 @@ function LINK_CAT_edit($cid, $pid)
     $T = new Template($_CONF['path'] . 'plugins/links/templates/admin');
     $T->set_file(array('page' => 'categoryeditor.thtml'));
 
-    $T->set_var('xhtml', XHTML);
     $T->set_var('site_url', $_CONF['site_url']);
     $T->set_var('site_admin_url', $_CONF['site_admin_url']);
     $T->set_var('layout_url', $_CONF['layout_url']);
@@ -227,10 +226,11 @@ function LINK_CAT_edit($cid, $pid)
 
     if (!empty($cid)) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
-                   . '" name="delete"%s' . XHTML . '>';
+                   . '" name="delete"%s>';
         $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
         $T->set_var('delete_option', sprintf($delbutton, $jsconfirm));
         $T->set_var('delete_option_no_confirmation', sprintf($delbutton, ''));
+        $T->set_var('delete_confirm_msg',$MESSAGE[76]);
     } else {
         $T->set_var('delete_option', '');
     }
