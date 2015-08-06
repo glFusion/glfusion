@@ -75,16 +75,16 @@ class mediaItem extends Media {
             case 1 :    // video file
                 switch ( $this->mime_type ) {
                     case 'video/x-flv' :
-                        $default_thumbnail = 'flv.png';
+                        $default_thumbnail = 'placeholder_flv.svg';
                         break;
                     case 'application/x-shockwave-flash' :
-                        $default_thumbnail = 'flash.png';
+                        $default_thumbnail = 'placeholder_flash.svg';
                         break;
                     case 'video/mpeg' :
                     case 'video/x-mpeg' :
                     case 'video/x-mpeq2a' :
         				if ( $_MG_CONF['use_wmp_mpeg'] == 1 ) {
-            				$default_thumbnail = 'wmp.png';
+            				$default_thumbnail = 'placeholder_video.svg';
             				break;
             			}
                     case 'video/x-motion-jpeg' :
@@ -92,7 +92,7 @@ class mediaItem extends Media {
                     case 'video/x-qtc' :
                     case 'audio/mpeg' :
                     case 'video/x-m4v' :
-                        $default_thumbnail = 'quicktime.png';
+                        $default_thumbnail = 'placeholder_quicktime.svg';
                         break;
                     case 'asf' :
                     case 'video/x-ms-asf' :
@@ -107,15 +107,15 @@ class mediaItem extends Media {
                     case 'application/x-troff-msvideo' :
                     case 'application/x-ms-wmz' :
                     case 'application/x-ms-wmd' :
-                        $default_thumbnail = 'wmp.png';
+                        $default_thumbnail = 'placeholder_video.svg';
                         break;
                     default :
-                        $default_thumbnail = 'video.png';
+                        $default_thumbnail = 'placeholder_video.svg';
                         break;
                 }
                 break;
             case 2 :    // music file
-                $default_thumbnail = 'audio.png';
+                $default_thumbnail = 'placeholder_audio.svg';
                 break;
             case 4 :    // other files
                 switch ($this->mime_type) {
@@ -128,7 +128,7 @@ class mediaItem extends Media {
                         break;
                     case 'pdf' :
                     case 'application/pdf' :
-                        $default_thumbnail = 'pdf.png';
+                        $default_thumbnail = 'placeholder_pdf.svg';
                         break;
                     default :
                         if ( isset($_MG_CONF['dt'][$this->mime_ext]) ) {
@@ -136,7 +136,7 @@ class mediaItem extends Media {
                         } else {
                             switch ( $this->mime_ext ) {
                                 case 'pdf' :
-                                    $default_thumbnail = 'pdf.png';
+                                    $default_thumbnail = 'placeholder_pdf.svg';
                                     break;
                                 case 'arj' :
                                     $default_thumbnail = 'zip.png';
@@ -323,7 +323,11 @@ class mediaItem extends Media {
             $url_display_item  = $_MG_CONF['site_url'] . '/download.php?mid=' . $this->id ;
         }
 
-        $media_size        = @getimagesize($media_thumbnail_file);
+        if ( strstr($media_thumbnail_file,'.svg') ) {
+            $media_size = array($MG_albums[$this->album_id]->tnWidth,$MG_albums[$this->album_id]->tnHeight);
+        } else {
+            $media_size        = @getimagesize($media_thumbnail_file);
+        }
 
         if ( $media_size == false ) {
             $default_thumbnail    = 'placeholder.svg';
