@@ -361,6 +361,9 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
     $retval         = '';
     $editmoderator  = false;
     $numAttachments = 0;
+    $edit_val       = '';
+    $sticky_val     = '';
+    $locked_val     = '';
 
     if ( COM_isAnonUser() ) {
         $uid = 1;
