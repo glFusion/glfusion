@@ -98,8 +98,8 @@ while ($row = DB_fetchArray($result)) {
     $total_media++;
 }
 $noFullOption = 0;
-if ($album_data['full_display'] == 2 || $_MG_CONF['discard_original'] == 1 ||
-    ($album_data['full_display'] == 1 && (!isset($_USER['uid']) || $_USER['uid'] < 2 ))) {
+if ($MG_albums[$album_id]->full == 2 || $_MG_CONF['discard_original'] == 1 ||
+    ($MG_albums[$album_id]->full == 1 && (!isset($_USER['uid']) || $_USER['uid'] < 2 ))) {
     $full = 0;
     $noFullOption = 1;
 }
@@ -112,6 +112,7 @@ if ($total_media > 0) {
     $defaultFull        = 0;
     $y                  = 1;
     $maxheight          = 0;
+    $maxwidth           = 0;
     $T->set_block('page', 'photo_url', 'purl');
     for ( $i=0; $i<$total_media; $i++ ) {
 
@@ -142,6 +143,7 @@ if ($total_media > 0) {
         }
 
         if ( $imgsize[1] > $maxheight ) $maxheight = $imgsize[1];
+        if ( $imgsize[0] > $maxwidth  ) $maxwidth  = $imgsize[0];
 
         $PhotoCaption = $mediaObject[$i]['media_title'];
         $PhotoCaption = str_replace(";", " ",  $PhotoCaption);
@@ -173,8 +175,8 @@ $T->set_var(array(
     'slideshow_size'        => ($full ? $LANG_MG03['normal_size'] : $LANG_MG03['full_size']),
     'full_toggle'           => $full_toggle,
     'album_title'           => $album_title,
-    'max_image_height'      => $dImageHeight,
-    'max_image_width'       => $dImageWidth,
+    'max_image_height'      => $maxheight,
+    'max_image_width'       => $maxwidth,
     'home'                  => $LANG_MG03['home'],
     'return_to_album'       => $LANG_MG03['return_to_album'],
     'normal_size'           => $LANG_MG03['normal_size'],

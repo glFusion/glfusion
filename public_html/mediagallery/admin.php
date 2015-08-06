@@ -360,12 +360,14 @@ if (($mode == 'edit') ) {
     $display .= MG_siteFooter();
     echo $display;
     exit;
-} else if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {    // save the album...
+} else if (isset($_POST['ms_submit']) || ($mode == $LANG_MG01['save'] && !empty($LANG_MG01['save']))) {
+//else if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {    // save the album...
     $retval = '';
     // OK, we have a save, now we need to see what we are saving...
     if ( isset($_POST['action']) && isset($_POST['album_id']) ) {
         $action   = COM_applyFilter($_POST['action']);
         $album_id = COM_applyFilter($_POST['album_id']);
+
         switch ($action) {
             case 'album' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/albumedit.php';
