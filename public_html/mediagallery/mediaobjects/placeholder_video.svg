@@ -16,7 +16,7 @@
    id="svg3346"
    version="1.1"
    inkscape:version="0.91pre4 r13712"
-   sodipodi:docname="image.svg">
+   sodipodi:docname="video.svg">
   <defs
      id="defs3348">
     <linearGradient
@@ -111,6 +111,15 @@
          style="stop-color:#990000;stop-opacity:1.0000000;" />
     </linearGradient>
     <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3634"
+       id="linearGradient3648"
+       gradientUnits="userSpaceOnUse"
+       x1="393.03571"
+       y1="796.31158"
+       x2="393.03571"
+       y2="808.75488" />
+    <linearGradient
        id="linearGradient3634">
       <stop
          style="stop-color:#004c91;stop-opacity:1;"
@@ -121,6 +130,16 @@
          offset="1"
          id="stop3638" />
     </linearGradient>
+    <linearGradient
+       gradientTransform="matrix(16.203315,0,0,16.203315,-6645.8649,-11896.439)"
+       inkscape:collect="always"
+       xlink:href="#linearGradient3624"
+       id="linearGradient3622"
+       x1="418.56085"
+       y1="792.28839"
+       x2="418.56082"
+       y2="793.81287"
+       gradientUnits="userSpaceOnUse" />
     <linearGradient
        id="linearGradient3624">
       <stop
@@ -161,7 +180,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -250,6 +269,45 @@
        id="rect900"
        sodipodi:nodetypes="cccccccccccccccc"
        style="fill:url(#linearGradient1495);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.25214916;stroke-opacity:0.3647799" />
+    <path
+       inkscape:connector-curvature="0"
+       d="m 150.33979,944.64106 c -7.59574,-1.41775 -17.4381,-1.21671 -24.87337,-0.40864 1.2838,-5.1936 1.44427,-11.70247 -0.32094,-16.99726 l 25.19431,17.4059 z"
+       id="path906"
+       sodipodi:nodetypes="cccc"
+       style="fill:url(#linearGradient1497);fill-opacity:1;fill-rule:evenodd;stroke-width:0.95407495pt" />
+    <g
+       id="g3644"
+       transform="matrix(1.0120639,0,0,0.99241148,-402.40595,168.7569)">
+      <circle
+         r="16.25"
+         cy="792.00507"
+         cx="393.03571"
+         transform="matrix(1.3144989,0,0,1.3144989,-22.53788,-243.28117)"
+         id="path3632"
+         style="fill:url(#linearGradient3648);fill-opacity:1;stroke:#000091;stroke-width:0.99962044;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="csszs"
+         id="path3642"
+         d="m 473.43751,797.36218 c -0.0322,4.0715 13.67614,-3.28341 19.82142,-3.21428 6.04766,0.068 21.51787,7.95517 21.51787,2.5 0,-7.53602 -6.85138,-19.38485 -20.44644,-19.46429 -13.59529,-0.0794 -20.82215,11.23206 -20.89285,20.17857 z"
+         style="fill:#ffffff;fill-opacity:0.51785715;stroke:none" />
+    </g>
+    <path
+       sodipodi:type="star"
+       style="fill:url(#linearGradient3622);fill-opacity:1;fill-rule:evenodd;stroke:none"
+       id="path2842"
+       sodipodi:sides="3"
+       sodipodi:cx="-121.13743"
+       sodipodi:cy="954.02881"
+       sodipodi:r1="247.2164"
+       sodipodi:r2="123.6082"
+       sodipodi:arg1="2.0943951"
+       sodipodi:arg2="3.1415927"
+       inkscape:flatsided="true"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m -244.74563,1168.1245 0,-428.19137 370.8246,214.09568 z"
+       transform="matrix(0.04626968,0,0,0.06038896,101.21184,901.85884)" />
     <image
        y="1022.0762"
        x="86.000008"
@@ -441,31 +499,5 @@ RU5ErkJggg==
        preserveAspectRatio="none"
        height="29.999981"
        width="33.166668" />
-    <g
-       id="g3344"
-       transform="matrix(1.4449469,0,0,1.1710155,-43.614119,904.24451)"
-       style="fill:#0054dc">
-      <path
-         d="m 72.627,28.465 0,43.07 54.746,0 0,-43.07 -54.746,0 z m 50.335,38.399 -45.665,0 0,-33.729 45.665,0 0,33.729 0,0 z"
-         id="path3346"
-         inkscape:connector-curvature="0"
-         style="fill:#0054dc" />
-      <polygon
-         points="92.691,54.865 103.816,43.02 108.195,48.259 110.174,47.066 120.866,63.23 79.753,63.23 89.165,53.34 "
-         id="polygon3348"
-         style="fill:#0054dc" />
-      <circle
-         cx="90.625"
-         cy="41.712002"
-         r="4.1110001"
-         id="circle3350"
-         style="fill:#0054dc" />
-    </g>
-    <path
-       inkscape:connector-curvature="0"
-       d="m 150.33979,944.64106 c -7.59574,-1.41775 -17.4381,-1.21671 -24.87337,-0.40864 1.2838,-5.1936 1.44427,-11.70247 -0.32094,-16.99726 l 25.19431,17.4059 z"
-       id="path906"
-       sodipodi:nodetypes="cccc"
-       style="fill:url(#linearGradient1497);fill-opacity:1;fill-rule:evenodd;stroke-width:0.95407495pt" />
   </g>
 </svg>

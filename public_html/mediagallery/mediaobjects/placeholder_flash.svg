@@ -16,7 +16,7 @@
    id="svg3346"
    version="1.1"
    inkscape:version="0.91pre4 r13712"
-   sodipodi:docname="image.svg">
+   sodipodi:docname="flash.svg">
   <defs
      id="defs3348">
     <linearGradient
@@ -250,6 +250,12 @@
        id="rect900"
        sodipodi:nodetypes="cccccccccccccccc"
        style="fill:url(#linearGradient1495);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.25214916;stroke-opacity:0.3647799" />
+    <path
+       inkscape:connector-curvature="0"
+       d="m 150.33979,944.64106 c -7.59574,-1.41775 -17.4381,-1.21671 -24.87337,-0.40864 1.2838,-5.1936 1.44427,-11.70247 -0.32094,-16.99726 l 25.19431,17.4059 z"
+       id="path906"
+       sodipodi:nodetypes="cccc"
+       style="fill:url(#linearGradient1497);fill-opacity:1;fill-rule:evenodd;stroke-width:0.95407495pt" />
     <image
        y="1022.0762"
        x="86.000008"
@@ -442,30 +448,37 @@ RU5ErkJggg==
        height="29.999981"
        width="33.166668" />
     <g
-       id="g3344"
-       transform="matrix(1.4449469,0,0,1.1710155,-43.614119,904.24451)"
-       style="fill:#0054dc">
-      <path
-         d="m 72.627,28.465 0,43.07 54.746,0 0,-43.07 -54.746,0 z m 50.335,38.399 -45.665,0 0,-33.729 45.665,0 0,33.729 0,0 z"
-         id="path3346"
-         inkscape:connector-curvature="0"
-         style="fill:#0054dc" />
-      <polygon
-         points="92.691,54.865 103.816,43.02 108.195,48.259 110.174,47.066 120.866,63.23 79.753,63.23 89.165,53.34 "
-         id="polygon3348"
-         style="fill:#0054dc" />
-      <circle
-         cx="90.625"
-         cy="41.712002"
-         r="4.1110001"
-         id="circle3350"
-         style="fill:#0054dc" />
+       transform="matrix(0.1186785,0,0,0.11048017,69.084656,933.98571)"
+       id="形状_1_3_"
+       style="enable-background:new">
+      <g
+         id="形状_1">
+        <g
+           id="g6">
+          <circle
+             cx="256"
+             cy="256.5"
+             r="230"
+             style="clip-rule:evenodd;fill:#d12a27;fill-rule:evenodd"
+             id="circle8" />
+        </g>
+      </g>
     </g>
-    <path
-       inkscape:connector-curvature="0"
-       d="m 150.33979,944.64106 c -7.59574,-1.41775 -17.4381,-1.21671 -24.87337,-0.40864 1.2838,-5.1936 1.44427,-11.70247 -0.32094,-16.99726 l 25.19431,17.4059 z"
-       id="path906"
-       sodipodi:nodetypes="cccc"
-       style="fill:url(#linearGradient1497);fill-opacity:1;fill-rule:evenodd;stroke-width:0.95407495pt" />
+    <g
+       transform="matrix(0.1186785,0,0,0.11048017,69.084656,933.98571)"
+       id="形状_1_2_"
+       style="enable-background:new">
+      <g
+         id="形状_1_1_">
+        <g
+           id="g12">
+          <path
+             inkscape:connector-curvature="0"
+             d="m 360.478,162.082 0,-46.686 C 208.547,119.891 254.603,335.028 144.275,340.232 l 0,46.685 c 72.696,-2.188 101.252,-54.152 124.335,-112.438 l 63.695,0 0,-46.642 -46.02,0 c 16.378,-33.651 30.595,-63.699 74.193,-65.755 z"
+             style="clip-rule:evenodd;fill:#ffffff;fill-rule:evenodd"
+             id="path14-7" />
+        </g>
+      </g>
+    </g>
   </g>
 </svg>
