@@ -79,7 +79,7 @@ $T->set_file (array ('admin' => 'administration.thtml'));
 
 $T->set_var(array(
     'site_url'          => $_MG_CONF['site_url'],
-    'site_admin_url'    => $_MG_CONF['admin_url'],
+    'site_admin_url'    => $_CONF['site_admin_url'],
     'mg_navigation'     => MG_navigation(),
     'lang_admin'        => $LANG_MG00['admin'],
     'version'           => $_MG_CONF['pi_version'],
