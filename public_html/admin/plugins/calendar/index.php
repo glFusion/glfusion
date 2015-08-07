@@ -161,6 +161,7 @@ function CALENDAR_edit($action, $A, $msg = '')
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
                    . '" name="delete"%s/>';
         $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
+        $event_templates->set_var( 'lang_delete_confirm',$MESSAGE[76]);
         $event_templates->set_var ('delete_option',
                                    sprintf ($delbutton, $jsconfirm));
         $event_templates->set_var ('delete_option_no_confirmation',

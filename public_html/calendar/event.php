@@ -534,7 +534,7 @@ default:
 //    }
     $cal_templates->set_var ('lang_backtocalendar', $LANG_CAL_1[15]);
     if ($mode == 'personal') {
-        $cal_templates->set_var ('calendar_mode', '?mode=personal');
+        $cal_templates->set_var ('calendar_mode', 'mode=personal');
     } else {
         $cal_templates->set_var ('calendar_mode', '');
     }

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion calendar plugin                                                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2012 by the following authors:                        |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -456,20 +456,16 @@ $cal = new Calendar();
 if ($view == 'week' AND (empty($month) AND empty($day) AND empty($year))) {
     list($month, $day, $year) = getPriorSunday(date('m', time()), date('j', time()), date('Y', time()));
 } else {
-    // Get current month
-    $currentmonth = date('m', time());
+    $dt = new Date('now',$_USER['tzid']);
+    $currentmonth = (int) $dt->month;
     if (empty($month)) {
         $month = $currentmonth;
     }
-
-    // Get current year
-    $currentyear = date('Y', time());
+    $currentyear  = (int) $dt->year;
     if (empty($year)) {
         $year = $currentyear;
     }
-
-    // Get current day
-    $currentday =  date('j', time());
+    $currentday   = (int) $dt->day;
     if (empty($day)) {
         $day = $currentday;
     }
