@@ -1008,6 +1008,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
         'ITEM_LIMIT'                => $item_limit,
         'TIME_LIMIT'                => $time_limit,
         'REFRESH_RATE'              => $refresh_rate,
+        'PERCENT_COMPLETE'          => $session_percent,
         'S_BATCH_ACTION'            => $form_action
     ));
     $T->parse('output', 'batch');

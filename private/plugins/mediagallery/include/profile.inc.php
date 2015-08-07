@@ -49,9 +49,9 @@ function _mg_user_create( $uid, $force = 0 ) {
         }
 
         $album = new mgAlbum();
-
+//$_MG_CONF['member_use_fullname'] does not seem to be set..
         $title = $username . $LANG_MG01['member_album_postfix'];
-        if ( !empty($fullname) && $_MG_CONF['member_use_fullname'] == 1 ) {
+        if ( !empty($fullname) && (isset($_MG_CONF['member_use_fullname']) && $_MG_CONF['member_use_fullname'] == 1 )) {
             $title = $fullname . $LANG_MG01['member_album_postfix'];
         }
         $album->title           = htmlspecialchars(strip_tags(COM_checkWords($title)));

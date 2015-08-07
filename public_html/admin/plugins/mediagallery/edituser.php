@@ -111,9 +111,8 @@ function MG_saveUser() {
 * Main
 */
 
-$mode = COM_applyFilter ($_REQUEST['mode']);
-$display = '';
 $mode = '';
+$display = '';
 
 if (isset ($_POST['mode'])) {
     $mode = $_POST['mode'];

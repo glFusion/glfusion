@@ -551,6 +551,8 @@ class mgAlbum {
     function getMediaCount() {
         global $MG_albums;
 
+        $mediaCount = 0;
+
         if ($this->access != 0 ) {
             if ( ($this->hidden && $MG_albums[0]->owner_id == 1 ) || $this->hidden != 1) {
                 $mediaCount = $this->media_count;
