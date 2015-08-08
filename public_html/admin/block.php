@@ -476,7 +476,7 @@ function BLOCK_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                         $title = 'title="' . $LANG_ADMIN['enable'] . '" ';
                         $switch = '';
                     }
-                    $retval = '<input class="clicker" type="checkbox" id="enabledblocks['.$A['bid'].']" name="enabledblocks[' . $A['bid'] . ']" ' . $title
+                    $retval = '<input class="blk-clicker" type="checkbox" id="enabledblocks['.$A['bid'].']" name="enabledblocks[' . $A['bid'] . ']" ' . $title
 //                        . 'onclick="submit()" value="' . $A['onleft'] . '"' . $switch .'>';
                         . 'onclick="submit()" value="' . $A['bid'] . '"' . $switch .'>';
 
@@ -568,7 +568,7 @@ function BLOCK_list()
 
     $form_arr = array(
         'top'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="'. $token .'"/>',
-        'bottom' => '<input type="hidden" name="blockenabler" value="1"/>'
+        'bottom' => '<input type="hidden" name="blockenabler" value="1">'
     );
 
     $retval .= ADMIN_list(
@@ -608,6 +608,9 @@ function BLOCK_list()
         'blocks', 'BLOCK_getListField', $header_arr, $text_arr,
         $query_arr, $defsort_arr, '', $token, '', $form_arr
     );
+
+    $outputHandle = outputHandler::getInstance();
+    $outputHandle->addLinkScript($_CONF['site_url'].'/javascript/admin.js',HEADER_PRIO_NORMAL,'text/javascript');
 
     return $retval;
 }
