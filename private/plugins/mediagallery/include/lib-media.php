@@ -1354,7 +1354,7 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
     }
     $F->parse('media','media_frame');
     $retval = $F->finish($F->get_var('media'));
-    return array($retval,$u_image,$imageWidth,$imageHeight,$raw_link_url);
+    return array($retval,$u_image,$imageWidth,$imageHeight,$raw_link_url,$media_link_start,$media_link_end);
 }
 
 
@@ -1363,6 +1363,8 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
     global $_DB_dbms, $LANG04,$ratedIds;
 
     $retval = '';
+    $media_link_start = '';
+    $media_link_end = '';
     $srcID  = $mediaObject;
 
     $outputHandle = outputHandler::getInstance();
@@ -1626,7 +1628,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         case 'image/jpg' :
         case 'image/png' :
         case 'image/bmp' :
-            list($u_image,$raw_image,$raw_image_width,$raw_image_height,$raw_link_url) = MG_displayJPG($aid,$media[$mediaObject],$full, $media[$mediaObject]['media_id'], $sortOrder,$sortID,$spage);
+            list($u_image,$raw_image,$raw_image_width,$raw_image_height,$raw_link_url,$media_link_start,$media_link_end) = MG_displayJPG($aid,$media[$mediaObject],$full, $media[$mediaObject]['media_id'], $sortOrder,$sortID,$spage);
             break;
         default :
             switch( $media[$mediaObject]['media_mime_ext']) {
@@ -1634,7 +1636,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
                 case 'gif' :
                 case 'png' :
                 case 'bmp' :
-                    list($u_image,$raw_image,$raw_image_width,$raw_image_height,$raw_link_url) = MG_displayJPG($aid,$media[$mediaObject],$full, $media[$mediaObject]['media_id'], $sortOrder,$sortID,$spage);
+                    list($u_image,$raw_image,$raw_image_width,$raw_image_height,$raw_link_url,$media_link_start,$media_link_end) = MG_displayJPG($aid,$media[$mediaObject],$full, $media[$mediaObject]['media_id'], $sortOrder,$sortID,$spage);
                     break;
                 case 'asf' :
                     list($u_image,$raw_image,$raw_image_width,$raw_image_height,$raw_link_url) = MG_displayASF($aid,$media[$mediaObject],$full);
@@ -1837,6 +1839,9 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         'left_side'     =>  intval( $raw_image_width / 2 ) - 1,
         'right_side'    =>  intval( $raw_image_width / 2 ),
         'raw_image'     =>  $raw_image,
+        'media_link_start' => $media_link_start,
+        'media_link_end'  => $media_link_end,
+
         'raw_link_url'  =>  $raw_link_url,
         'album_link'    =>  $MG_albums[$aid]->getPath(1,$sortOrder,$page),
         'item_number'   =>  $mediaObject + 1,
