@@ -436,11 +436,12 @@ function USER_accountPanel($U,$newuser = 0)
         $userform->set_var('lang_remoteusername',$LANG04[164]);
         $userform->set_var('lang_remoteservice',$LANG04[165]);
         $userform->set_var('lang_remoteuserdata',$LANG04[166]);
-//        if ( $remote_user_edit == 1 ) {
-            $userform->set_var('remote_user_disabled',' disabled="disabled"');
-//        }
+        $userform->set_var('remote_user_disabled',' disabled="disabled"');
         if ( !($U['account_type'] & LOCAL_USER) ) {
             $userform->set_var('pwd_disabled',$pwd_disabled);
+        }
+        if (!($U['account_type'] & REMOTE_USER)) {
+            $userform->set_var('remoteuserenable','');
         }
     } else {
         $userform->set_var('remoteuserenable','');

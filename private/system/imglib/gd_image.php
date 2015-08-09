@@ -253,44 +253,12 @@ function _img_gdRotate( $src, $dest, $angle, $mimeType ) {
             return array(false,'GD Libs only supports JPG, PNG, BMP and GIF image formats.');
     }
 
-    if ($angle == 180){
+    if ($angle == 180) {
         $dst_img = imagerotate($curImg, $angle, 0);
     } else {
-        $width  = imagesx($curImg);
-        $height = imagesy($curImg);
-        if ($width > $height){
-            $size = $width;
-        } else {
-            $size = $height;
-        }
-
-        if (function_exists("imagecreatetruecolor")) {
-            $dst_img = imagecreatetruecolor($size,$size);
-        } else {
-            $dst_img = imagecreate($size,$size);
-        }
-
-        imagecopy($dst_img, $curImg, 0, 0, 0, 0, $width, $height);
-        imagedestroy($curImg);
-
-        $rotate_img = imagerotate($dst_img, $angle, 0);
-        imagedestroy($dst_img);
-        if (function_exists("imagecreatetruecolor")) {
-            $final_img = imagecreatetruecolor($height, $width);
-        } else {
-            $final_img = imagecreate($width,$height);
-        }
-
-        if ((($angle == 90) && ($width > $height)) || (($angle == 270) && ($width < $height))){
-            imagecopy($final_img, $rotate_img, 0, 0, 0, 0, $size, $size);
-        }
-
-        if ((($angle == 270) && ($width > $height)) || (($angle == 90) && ($width < $height))){
-            imagecopy($final_img, $rotate_img, 0, 0, $size - $height, $size - $width, $size, $size);
-        }
-        imagedestroy($rotate_img);
-
+        $final_img = imagerotate($curImg,$angle,0);
     }
+
     switch ( $mimeType ) {
         case 'image/jpeg' :
         case 'image/jpg' :

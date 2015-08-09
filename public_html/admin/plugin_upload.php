@@ -293,7 +293,7 @@ function processOldPluginInstall(  )
 */
 function processPluginUpload()
 {
-    global $_CONF, $_PLUGINS, $_PLUGIN_INFO, $_TABLES, $pluginData, $LANG32, $_DB_dbms, $_DB_table_prefix ;
+    global $_CONF, $_PLUGINS, $_PLUGIN_INFO, $_TABLES, $pluginData, $LANG_ADMIN, $LANG32, $_DB_dbms, $_DB_table_prefix,$_IMAGE_TYPE;
 
     $retval = '';
     $upgrade = false;
@@ -455,8 +455,20 @@ function processPluginUpload()
         return _pi_errorBox($errorMessage);
     }
 
+    USES_lib_admin();
+
+    $menu_arr = array (
+                    array('url' => $_CONF['site_admin_url'],
+                          'text' => $LANG_ADMIN['admin_home']));
+
     $T = new Template($_CONF['path_layout'] . 'admin/plugins');
     $T->set_file('form','plugin_upload_confirm.thtml');
+
+    $T->set_var('admin_menu',ADMIN_createMenu(
+        $menu_arr,
+        $pluginData['id'] . ' ' . $LANG32[62],
+        $_CONF['layout_url'] . '/images/icons/plugins.' . $_IMAGE_TYPE
+    ));
 
     $T->set_var(array(
         'form_action_url'   => $_CONF['site_admin_url'] .'/plugin_upload.php',
