@@ -144,11 +144,9 @@ function plugin_getwhatsnew_links()
                     );
             }
 
-            $newlinks[] = COM_createLink($title, $lcount, $attr) . LB;
+            $newlinks[] = COM_createLink($title, $lcount, $attr);
         }
-
-        $itemList = COM_makeList($newlinks, 'list-new-plugins');
-        return array($wntitle,$wnlabel,$itemList);
+        return array($wntitle,$wnlabel,$newlinks);
     }
 
     return '';

@@ -199,7 +199,7 @@ function phpblock_calendar( $help='', $title='' )
                             }
                         } else {
                             if( $totalrows > 0 ) {
-                                $retval .= '<b>' . $LANG_CAL_1[24] . '</b><br/>';
+                                $retval .= '<b>' . $LANG_CAL_1[24] . '</b>';
                             }
                         }
                         $headline = true;
@@ -255,7 +255,7 @@ function phpblock_calendar( $help='', $title='' )
                             if( $skipFirstBreak ) {
                                 $skipFirstBreak = false;
                             } else {
-                                $retval .= '<br/>';
+                                $retval .= '<br>';
                             }
                             if( $todaysEvent ) {
                                 $retval .= '<span class="' . $todaysClassName . '">';
@@ -265,7 +265,7 @@ function phpblock_calendar( $help='', $title='' )
 
                             // If different start and end dates, then display end date:
                             if( $abbrDate1 != $abbrDate2 ) {
-                                $retval .= ' - <br/><b>' . $dayName2 . '</b>&nbsp;<small>' . $abbrDate2 . '</small>';
+                                $retval .= ' - <b>' . $dayName2 . '</b>&nbsp;<small>' . $abbrDate2 . '</small>';
                             }
                             if( $todaysEvent ) {
                                 $retval .= '</span>';

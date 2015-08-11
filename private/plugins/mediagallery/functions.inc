@@ -646,7 +646,7 @@ function plugin_getwhatsnew_mediagallery()
 
     }
     if ( $newMediaCount == 0 ) {
-        $retval .= $LANG_MG03['no_new_items'] . '<br />' . LB;
+        $retval .= $LANG_MG03['no_new_items'] . '<br>' . LB;
     }
 
     if ( $_MG_CONF['disable_whatsnew_comments'] == 0 ) {
