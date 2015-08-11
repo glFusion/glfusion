@@ -3741,6 +3741,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                     foreach($content[$i] as $item ){
                         $T->set_var('data_item',$item);
                         $T->parse('datablock', 'datarow',true);
+                        $items_found++;
                     }
                 } else {
                     $T->set_var('data_item',$content[$i]);
