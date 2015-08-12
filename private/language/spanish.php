@@ -238,7 +238,11 @@ $LANG01 = array(
     'view_online' => 'Click here %s to view online',
     'no_new_items' => 'No New Items',
     'max_execution_time' => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.',
-    'allowed_html' => 'Allowed HTML:'
+    'allowed_html' => 'Allowed HTML:',
+    'posted_in' => 'Posted in',
+    'continue_reading' => 'Continue Reading',
+    'menu' => 'Menu',
+    'show_allowed_content' => 'Show Allowed Content'
 );
 
 ###############################################################################
@@ -486,7 +490,8 @@ $LANG04 = array(
     190 => 'You have exceeded the allowed number of attempts to enter the password for merging accounts',
     191 => 'Local Account Password',
     192 => 'Merge Remote Account with Existing Local Account',
-    193 => 'Note: If you merge a remote account to an existing local account, the preferences for the local user will take priority.'
+    193 => 'Note: If you merge a remote account to an existing local account, the preferences for the local user will take priority.',
+    194 => 'Sign in with '
 );
 
 ###############################################################################
@@ -1971,7 +1976,8 @@ $LANG_ADMIN = array(
     'block_list' => 'Block List',
     'topic_list' => 'Topic List',
     'tb_list' => 'Trackback List',
-    'custom_autotag' => 'Custom Autotags'
+    'custom_autotag' => 'Custom Autotags',
+    'alt_topic' => 'Alternate Topic'
 );
 
 ###############################################################################
@@ -2637,7 +2643,8 @@ $LANG_confignames['Core'] = array(
     'bb2_httpbl_threat' => 'http:BL Threat Threshold',
     'bb2_httpbl_maxage' => 'http:BL Max Age',
     'bb2_offsite_forms' => 'Allow offsite forms',
-    'bb2_eu_cookie' => 'EU Cookie'
+    'bb2_eu_cookie' => 'EU Cookie',
+    'bb2_ban_timeout' => 'Number of hours to ban IP'
 );
 
 $LANG_configsubgroups['Core'] = array(

@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # spanish_colombia_utf-8.php
 #
@@ -25,43 +24,21 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 ###############################################################################
-# $Id$
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-/**
- * This is the english language page for the glFusion links Plug-in!
- *
- * @package Links
- * @subpackage Language
- * @filesource
- * @version 2.0
- * @since GL 1.4.0
- * @copyright Copyright &copy; 2005-2007
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @author Trinity Bays <trinity93 AT gmail DOT com>
- * @author Tony Bibbs <tony AT tonybibbs DOT com>
- * @author Tom Willett <twillett AT users DOT sourceforge DOT net>
- *
- */
-
 global $LANG32;
 
 ###############################################################################
 # Array Format:
-# $LANGXX[YY]:    $LANG - variable name
-#                 XX - file id number
-#                 YY - phrase id number
+# $LANGXX[YY]:  $LANG - variable name
+#               XX    - file id number
+#               YY    - phrase id number
 ###############################################################################
 
-/**
-* the link plugin's lang array
-*
-* @global array $LANG_LINKS
-*/
-$LANG_LINKS= array(
+$LANG_LINKS = array(
     10 => 'Envios',
     14 => 'Enlaces',
     84 => 'Enlaces',
@@ -79,48 +56,36 @@ $LANG_LINKS= array(
     125 => 'Categorías',
     126 => 'Ud. esta aquí:',
     'root' => 'Enlaces/Vínculos',
-    'error_header'  => 'Link Submission Error',
+    'error_header' => 'Link Submission Error',
     'verification_failed' => 'The URL specified does not appear to be a valid URL',
-    'category_not_found' => 'The Category does not appear to be valid',
+    'category_not_found' => 'The Category does not appear to be valid'
 );
 
 ###############################################################################
 # for stats
-/**
-* the link plugin's lang stats array
-*
-* @global array $LANG_LINKS_STATS
-*/
+
 $LANG_LINKS_STATS = array(
     'links' => 'Links (Clicks) in the System',
     'stats_headline' => 'Enlaces más visitados',
     'stats_page_title' => 'Enlaces',
     'stats_hits' => 'Accesos',
-    'stats_no_hits' => 'It appears that there are no links on this site or no one has ever clicked on one.',
+    'stats_no_hits' => 'It appears that there are no links on this site or no one has ever clicked on one.'
 );
 
 ###############################################################################
 # for the search
-/**
-* the link plugin's lang search array
-*
-* @global array $LANG_LINKS_SEARCH
-*/
+
 $LANG_LINKS_SEARCH = array(
- 'results' => 'Link Results',
- 'title' => 'Título',
- 'date' => 'Date Added',
- 'author' => 'Enviado por',
- 'hits' => 'Clicks'
+    'results' => 'Link Results',
+    'title' => 'Título',
+    'date' => 'Date Added',
+    'author' => 'Enviado por',
+    'hits' => 'Clicks'
 );
 
 ###############################################################################
 # for the submission form
-/**
-* the link plugin's lang submit form array
-*
-* @global array $LANG_LINKS_SUBMIT
-*/
+
 $LANG_LINKS_SUBMIT = array(
     1 => 'Enviar un Enlace',
     2 => 'Enlace',
@@ -133,14 +98,7 @@ $LANG_LINKS_SUBMIT = array(
     9 => 'URL',
     10 => 'Categoría',
     11 => 'Enlaces Enviados',
-    12 => 'Enviado por',
-);
-
-###############################################################################
-# autotag description
-
-$LANG_LI_AUTOTAG = array(
-    'desc_link'                 => 'Link: to the detail page for a Link on this site; link_text defaults to the link name. usage: [link:<i>link_id</i> {link_text}]',
+    12 => 'Enviado por'
 );
 
 ###############################################################################
@@ -150,10 +108,9 @@ $PLG_links_MESSAGE1 = "Thank-you for submitting a link to {$_CONF['site_name']}.
 $PLG_links_MESSAGE2 = 'Su enlace ha sido guardado exitosamente.';
 $PLG_links_MESSAGE3 = 'The link has been successfully deleted.';
 $PLG_links_MESSAGE4 = "Thank-you for submitting a link to {$_CONF['site_name']}.  You can see it now in the <a href={$_CONF['site_url']}/links/index.php>links</a> section.";
-$PLG_links_MESSAGE5 = "You do not have sufficient access rights to view this categoría.";
+$PLG_links_MESSAGE5 = 'You do not have sufficient access rights to view this categoría.';
 $PLG_links_MESSAGE6 = 'You do not have sufficient rights to edit this categoría.';
 $PLG_links_MESSAGE7 = 'Please enter a Categoría Name and Description.';
-
 $PLG_links_MESSAGE10 = 'Su Categoría ha sido guardado exitosamente.';
 $PLG_links_MESSAGE11 = 'You are not allowed to set the id of a categoría to "site" or "user" - these are reserved for internal use.';
 $PLG_links_MESSAGE12 = 'You are trying to make a parent categoría the child of it\'s own subcategory. This would create an orphan categoría, so please first move the child categoría or categories up to a higher level.';
@@ -168,12 +125,8 @@ $PLG_links_MESSAGE3001 = 'Plugin upgrade not supported.';
 $PLG_links_MESSAGE3002 = $LANG32[9];
 
 ###############################################################################
-# admin/link.php
-/**
-* the link plugin's lang admin array
-*
-* @global array $LANG_LINKS_ADMIN
-*/
+# admin/plugins/links/index.php
+
 $LANG_LINKS_ADMIN = array(
     1 => 'Editor de Enlaces',
     2 => 'ID',
@@ -186,7 +139,7 @@ $LANG_LINKS_ADMIN = array(
     9 => 'Descripción',
     10 => 'You need to provide a link Title, URL and Description.',
     11 => 'Listado de Enlaces',
-    12 => 'Para modificar ó borrar, haga click sobre el icono: <img src="/layout/'.$_CONF['theme'].'/images/edit.png" /> correspondiente. Para crear, seleccione: "<b><i>Nuevo</i></b>" arriba.',
+    12 => 'Para modificar ó borrar, haga click sobre el icono: <img src="/layout//images/edit.png" /> correspondiente. Para crear, seleccione: "<b><i>Nuevo</i></b>" arriba.',
     14 => 'Categoría',
     16 => 'Acceso Denegado',
     17 => "You are trying to access a link that you don't have rights to.  This attempt has been logged. Please <a href=\"{$_CONF['site_admin_url']}/plugins/links/index.php\">go back to the link administration screen</a>.",
@@ -229,53 +182,57 @@ $LANG_LINKS_ADMIN = array(
     64 => 'Are you sure you want to delete this category?',
     65 => 'Moderate Link',
     66 => 'This screen allows you to create / edit links.',
-    67 => 'This screen allows you to create / edit a links category.',
+    67 => 'This screen allows you to create / edit a links category.'
 );
+
 
 $LANG_LINKS_STATUS = array(
-    100 => "Continue",
-    101 => "Switching Protocols",
-    200 => "OK",
-    201 => "Created",
-    202 => "Accepted",
-    203 => "Non-Authoritative Information",
-    204 => "No Content",
-    205 => "Reset Content",
-    206 => "Partial Content",
-    300 => "Multiple Choices",
-    301 => "Moved Permanently",
-    302 => "Found",
-    303 => "See Other",
-    304 => "Not Modified",
-    305 => "Use Proxy",
-    307 => "Temporary Redirect",
-    400 => "Bad Request",
-    401 => "Unauthorized",
-    402 => "Payment Required",
-    403 => "Forbidden",
-    404 => "Not Found",
-    405 => "Method Not Allowed",
-    406 => "Not Acceptable",
-    407 => "Proxy Authentication Required",
-    408 => "Request Timeout",
-    409 => "Conflict",
-    410 => "Gone",
-    411 => "Length Required",
-    412 => "Precondition Failed",
-    413 => "Request Entity Too Large",
-    414 => "Request-URI Too Long",
-    415 => "Unsupported Media Type",
-    416 => "Requested Range Not Satisfiable",
-    417 => "Expectation Failed",
-    500 => "Internal Server Error",
-    501 => "Not Implemented",
-    502 => "Bad Gateway",
-    503 => "Service Unavailable",
-    504 => "Gateway Timeout",
-    505 => "HTTP Version Not Supported",
-    999 => "Connection Timed out"
+    100 => 'Continue',
+    101 => 'Switching Protocols',
+    200 => 'OK',
+    201 => 'Created',
+    202 => 'Accepted',
+    203 => 'Non-Authoritative Information',
+    204 => 'No Content',
+    205 => 'Reset Content',
+    206 => 'Partial Content',
+    300 => 'Multiple Choices',
+    301 => 'Moved Permanently',
+    302 => 'Found',
+    303 => 'See Other',
+    304 => 'Not Modified',
+    305 => 'Use Proxy',
+    307 => 'Temporary Redirect',
+    400 => 'Bad Request',
+    401 => 'Unauthorized',
+    402 => 'Payment Required',
+    403 => 'Forbidden',
+    404 => 'Not Found',
+    405 => 'Method Not Allowed',
+    406 => 'Not Acceptable',
+    407 => 'Proxy Authentication Required',
+    408 => 'Request Timeout',
+    409 => 'Conflict',
+    410 => 'Gone',
+    411 => 'Length Required',
+    412 => 'Precondition Failed',
+    413 => 'Request Entity Too Large',
+    414 => 'Request-URI Too Long',
+    415 => 'Unsupported Media Type',
+    416 => 'Requested Range Not Satisfiable',
+    417 => 'Expectation Failed',
+    500 => 'Internal Server Error',
+    501 => 'Not Implemented',
+    502 => 'Bad Gateway',
+    503 => 'Service Unavailable',
+    504 => 'Gateway Timeout',
+    505 => 'HTTP Version Not Supported',
+    999 => 'Connection Timed out'
 );
 
+$LANG_LI_AUTOTAG = array(
+    'desc_link' => 'Link: to the detail page for a Link on this site; link_text defaults to the link name. usage: [link:<i>link_id</i> {link_text}]'
+);
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['links'] = array(
@@ -299,7 +256,7 @@ $LANG_confignames['links'] = array(
     'root' => 'ID of Root Categoría',
     'default_permissions' => 'Link Default Permissions',
     'target_blank' => 'Open Links in New Window',
-    'displayblocks' => 'Display glFusion Blocks',
+    'displayblocks' => 'Display glFusion Blocks'
 );
 
 $LANG_configsubgroups['links'] = array(
@@ -315,7 +272,7 @@ $LANG_fs['links'] = array(
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['links'] = array(
     0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => TRUE, 'False' => FALSE),
+    1 => array('True' => true, 'False' => false),
     9 => array('Forward to Linked Site' => 'item', 'Display Admin List' => 'list', 'Display Public List' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
     13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)

@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # spanish_colombia_utf-8.php
 #
@@ -51,7 +50,7 @@ $LANG_CAL_1 = array(
     8 => 'By adding this event to your calendar you can quickly view only the events you are interested in by clicking "My Calendar" from the User Functions area.',
     9 => 'Agregar a Mi Calendario',
     10 => 'Borrar de Mi Calendario',
-    11 => "Agregando Evento al Calendario de %s",
+    11 => 'Agregando Evento al Calendario de %s',
     12 => 'Evento',
     13 => 'Inicia',
     14 => 'Termina',
@@ -67,7 +66,7 @@ $LANG_CAL_1 = array(
     24 => 'Site Events',
     25 => 'No hay eventos cercanos',
     26 => 'Enviar un Evento',
-    27 => "Al enviar un evento a <b>{$_CONF['site_name']}</b> este sera publicado en el Calendario Público, donde los usuarios pueden, opcionalmente, agregarlo a sus calendarios personales. Esta caracteristica <b>NO</b> es para almacenar sus eventos personales tales como cupleaños y aniversarios.<br><br>Una vez enviado será evaluado por los administradores y si es aprovado, será publicado en el calendario público.<br><br>",
+    27 => "Al enviar un evento a <b>{$_CONF['site_name']}</b> este sera publicado en el Calendario Público, donde los usuarios pueden, opcionalmente, agregarlo a sus calendarios personales. Esta caracteristica <b>NO</b> es para almacenar sus eventos personales tales como cupleaños y aniversarios.<br" . XHTML . "><br" . XHTML . ">Una vez enviado será evaluado por los administradores y si es aprovado, será publicado en el calendario público.<br" . XHTML . "><br" . XHTML . ">",
     28 => 'Título',
     29 => 'Hora',
     30 => 'Hora',
@@ -92,7 +91,7 @@ $LANG_CAL_1 = array(
     49 => 'It appears that there are no events on this site or no one has ever clicked on one.',
     50 => 'Eventos',
     51 => 'Borrar',
-    52 => 'Enviado por',
+    52 => 'Enviado por'
 );
 
 $_LANG_CAL_SEARCH = array(
@@ -148,7 +147,7 @@ $LANG_CAL_ADMIN = array(
     9 => '(incluya: <b>http://</b>)',
     10 => 'You must provide the dates/times, event title, and description',
     11 => 'Calendario - Listado de Eventos',
-    12 => 'Para modificar ó borrar, haga click sobre el icono: <img src="/layout/'.$_CONF['theme'].'/images/edit.png" /> correspondiente. Para crear, seleccione: "<b><i>Nuevo</i></b>" arriba. Para crear una copia de un evento existente haga clic en el icono: <img src="/layout/cory/images/copy.png" /> correspondiente.',
+    12 => 'Para modificar ó borrar, haga click sobre el icono: <img src="/layout//images/edit.png" /> correspondiente. Para crear, seleccione: "<b><i>Nuevo</i></b>" arriba. Para crear una copia de un evento existente haga clic en el icono: <img src="/layout/cory/images/copy.png" /> correspondiente.',
     13 => 'Autor',
     14 => 'Inicia',
     15 => 'Termina',
@@ -165,7 +164,7 @@ $LANG_CAL_ADMIN = array(
     26 => 'Borrar Eventos Antiguos',
     27 => 'Eso son los eventos que tinenen mas de ',
     28 => ' meses. Haga clic en el icono: <img src="/layout/cory/images/deleteitem.png" /> al final para borrarlos, ó seleccione un periodo de tiempo diferente:<br' . XHTML . '>Encontrar todos los eventos con mas de: ',
-    29 => ' meses.',
+    29 => '',
     30 => 'Actualizar',
     31 => 'Are You sure you want to permanently delete ALL selected users?',
     32 => 'Listar todos',
@@ -177,25 +176,25 @@ $LANG_CAL_ADMIN = array(
     38 => 'Gestión Multiple',
     39 => 'Eventos',
     40 => 'Event List',
-    41 => 'This screen allows you to edit / create events. Edit the fields below and save.',
+    41 => 'This screen allows you to edit / create events. Edit the fields below and save.'
 );
 
 $LANG_CAL_AUTOTAG = array(
-    'desc_calendar' => 'Link: to a Calendar event on this site; link_text defaults to event title: [calendar:<i>event_id</i> {link_text}]',
+    'desc_calendar' => 'Link: to a Calendar event on this site; link_text defaults to event title: [calendar:<i>event_id</i> {link_text}]'
 );
 
 $LANG_CAL_MESSAGE = array(
-    'save'      => 'El evento se ha guardado correctamente.',
-    'delete'    => 'El evento se ha borrado correctamente.',
-    'private'   => 'The event has been saved to your calendar',
-    'login'     => 'Cannot open your personal calendar until you login',
-    'removed'   => 'Event was successfully removed from your personal calendar',
+    'save' => 'El evento se ha guardado correctamente.',
+    'delete' => 'El evento se ha borrado correctamente.',
+    'private' => 'The event has been saved to your calendar',
+    'login' => 'Cannot open your personal calendar until you login',
+    'removed' => 'Event was successfully removed from your personal calendar',
     'noprivate' => 'Sorry, personal calendars are not enabled on this site',
-    'unauth'    => 'Sorry, you do not have access to the event administration page.  Please note that all attempts to access unauthorized features are logged',
+    'unauth' => 'Sorry, you do not have access to the event administration page.  Please note that all attempts to access unauthorized features are logged',
     'delete_confirm' => 'Are you sure you want to delete this event?'
 );
 
-$PLG_calendar_MESSAGE4  = "Thank-you for submitting an event to {$_CONF['site_name']}.  It has been submitted to our staff for approval.  If approved, your event will be seen here, in our <a href=\"{$_CONF['site_url']}/calendar/index.php\">calendar</a> section.";
+$PLG_calendar_MESSAGE4 = "Thank-you for submitting an event to {$_CONF['site_name']}.  It has been submitted to our staff for approval.  If approved, your event will be seen here, in our <a href=\"{$_CONF['site_url']}/calendar/index.php\">calendar</a> section.";
 $PLG_calendar_MESSAGE17 = 'El evento se ha guardado correctamente.';
 $PLG_calendar_MESSAGE18 = 'El evento se ha borrado correctamente.';
 $PLG_calendar_MESSAGE24 = 'The event has been saved to your calendar.';
@@ -225,7 +224,7 @@ $LANG_confignames['calendar'] = array(
     'aftersave' => 'After Saving Event',
     'default_permissions' => 'Event Default Permissions',
     'only_admin_submit' => 'Only Allow Admins to Submit',
-    'displayblocks' => 'Display glFusion Blocks',
+    'displayblocks' => 'Display glFusion Blocks'
 );
 
 $LANG_configsubgroups['calendar'] = array(
@@ -240,8 +239,8 @@ $LANG_fs['calendar'] = array(
 // Note: entries 0, 1, 6, 9, 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['calendar'] = array(
     0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => TRUE, 'False' => FALSE),
-    6 => array('12' => '12', '24' => '24'),
+    1 => array('True' => true, 'False' => false),
+    6 => array('12' => 12, '24' => 24),
     9 => array('Forward to Event' => 'item', 'Display Admin List' => 'list', 'Display Calendar' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
     13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)

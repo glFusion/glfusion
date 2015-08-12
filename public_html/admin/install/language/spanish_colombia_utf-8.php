@@ -36,12 +36,16 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
 // +---------------------------------------------------------------------------+
 
 $LANG_CHARSET = 'utf-8';
 
 // +---------------------------------------------------------------------------+
-// index.php
+// install.php
 
 $LANG_INSTALL = array(
     'back_to_top' => 'Ir arriba',
@@ -171,7 +175,7 @@ $LANG_INSTALL = array(
     'libcustom_not_found' => 'Unable to located lib-custom.php.dist.',
     'no_db_driver' => 'You must have the MySQL extension loaded in PHP to install glFusion',
     'version_check' => 'Verificar Actualizaciones',
-    'check_for_updates' => "Goto the Command & Control -Upgrade Check to see if there are any glFusion CMS or Plugin updates available.",
+    'check_for_updates' => 'Goto the Command & Control -Upgrade Check to see if there are any glFusion CMS or Plugin updates available.'
 );
 
 // +---------------------------------------------------------------------------+
@@ -185,9 +189,9 @@ $LANG_SUCCESS = array(
     4 => ' glFusion. Por favor, toma un minuto para leer la información mostrada a continuación.',
     5 => 'Para ingresar en su nuevo sitio glFusion, por favor utilice esta cuenta:',
     6 => 'Nombre de usuario:',
-    7 => 'Admin', // do not translate
+    7 => 'Admin',
     8 => 'Contraseña:',
-    9 => 'password', // do not translate
+    9 => 'password',
     10 => 'Advertencia de seguridad',
     11 => 'No olvide',
     12 => 'cosas',
@@ -201,4 +205,5 @@ $LANG_SUCCESS = array(
     20 => 'instalado',
     21 => 'actualizado'
 );
+
 ?>

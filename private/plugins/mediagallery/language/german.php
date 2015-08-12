@@ -667,6 +667,7 @@ $LANG_MG01 = array(
     'submissions' => 'Media Gallery Submissions',
     'lightbox_image' => 'Click for full image',
     'queued' => 'Queued for Moderator Approval',
+    'index_all' => 'Use Summary Index instead of standard album index',
     'html5upload_error' => 'Upload Error:',
     'html5upload_media' => 'HTML5 Upload',
     'html5upload_usage' => 'Select the destination Album and then browse and upload multiple files in one go by holding down Ctrl (Windows, Linux) or Command (Mac) when clicking on them in the file dialog, or drag and drop files. Information about the uploaded files will be listed below.',
@@ -882,7 +883,8 @@ $LANG_MG03 = array(
     'cast' => 'cast',
     'your_member_album' => 'Dein Mitgliederalbum',
     'ip_rated' => 'Deine IP-Address hat dieses Objekt schon bewertet.',
-    'uid_rated' => 'Deine Benutzer-ID hat dieses Objekt schon bewertet.'
+    'uid_rated' => 'Deine Benutzer-ID hat dieses Objekt schon bewertet.',
+    'media_id' => 'Media ID'
 );
 
 $LANG_MG04 = array(

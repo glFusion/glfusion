@@ -85,7 +85,9 @@ $LANG_BAD_BEHAVIOR = array(
     'ip_address' => 'IP Address',
     'type' => 'Type',
     'date' => 'Date',
+    'reason' => 'Reason',
     'delete' => 'Delete',
+    'enter_ip' => 'Enter IP',
     'delete_confirm_1' => 'Are you sure you want to un-ban these IPs?',
     'delete_confirm_2' => 'Are you REALLY sure?',
     'delete_info' => 'Remove Banned IP',
@@ -99,7 +101,10 @@ $LANG_BAD_BEHAVIOR = array(
     'cancel' => 'Cancel',
     'filter' => 'Filter Selection',
     'go' => 'Go',
-    'no_filter' => 'No Filter'
+    'no_filter' => 'No Filter',
+    'manual' => 'Manual',
+    'token' => 'Token',
+    'captcha' => 'CAPTCHA'
 );
 
 $LANG_BB2_RESPONSE = array(

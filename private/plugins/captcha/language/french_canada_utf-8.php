@@ -133,7 +133,7 @@ $LANG_configselects['captcha'] = array(
     6 => array('clean' => 'clean', 'red' => 'red', 'white' => 'white', 'blackglass' => 'blackglass')
 );
 $PLG_captcha_MESSAGE1 = 'Plugin Captcha mise à niveau: Mise à jour effectuée avec succès.';
-$PLG_captcha_MESSAGE2 = 'CAPTCHA Plugin installé avec succès';
+$PLG_captcha_MESSAGE2 = 'CAPTCHA Plugin Successfully Installed';
 $PLG_captcha_MESSAGE3 = 'CAPTCHA Plugin Successfully Installed';
 
 ?>

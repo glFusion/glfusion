@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # spanish_colombia_utf-8.php
 #
@@ -31,7 +30,7 @@ if (!defined ('GVERSION')) {
 
 $LANG_CHARSET = 'utf-8';
 
-$LANG_LOCALE  = 'es_CO';
+$LANG_LOCALE = 'es_CO';
 
 ###############################################################################
 # Array Format:
@@ -243,9 +242,10 @@ $LANG01 = array(
     'no_new_items' => 'No hay novedades',
     'max_execution_time' => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.',
     'allowed_html' => 'Allowed HTML:',
-    'posted_in'                 => 'Posted in',
-    'continue_reading'          => 'Continuar Leyendo',
-    'menu'                      => 'Menu Nav',
+    'posted_in' => 'Posted in',
+    'continue_reading' => 'Continuar Leyendo',
+    'menu' => 'Menu Nav',
+    'show_allowed_content' => 'Show Allowed Content'
 );
 
 ###############################################################################
@@ -299,7 +299,7 @@ $LANG03 = array(
     45 => 'You are receiving this email because you have chosen to be notified when a new comment has been posted.',
     46 => 'To unsubscribe to this comment feed, please click this link: %s',
     47 => 'Notify me via eMail when new comments or replies are posted for this item.',
-    48 => 'Click <a href="javascript:history.back()">here</a> to return',
+    48 => 'Click <a href="javascript:history.back()">here</a> to return'
 );
 
 ###############################################################################
@@ -494,7 +494,7 @@ $LANG04 = array(
     191 => 'Local Account Password',
     192 => 'Merge Remote Account with Existing Local Account',
     193 => 'Note: If you merge a remote account to an existing local account, the preferences for the local user will take priority.',
-    194 => 'Iniciar sesión con ',
+    194 => 'Iniciar sesión con '
 );
 
 ###############################################################################
@@ -508,7 +508,7 @@ $LANG_MYACCOUNT = array(
     'pe_layout' => 'Plantilla &amp; Idioma',
     'pe_content' => 'Contenido',
     'pe_privacy' => 'Privacidad',
-    'pe_subscriptions' => 'Subscripciones',
+    'pe_subscriptions' => 'Subscripciones'
 );
 
 ###############################################################################
@@ -565,8 +565,7 @@ $LANG08 = array(
     34 => 'Fin del mensaje',
     35 => 'Lo siento, este usuario prefiere no recibir mensajes.',
     36 => 'You are receiving this message because you have subscribed to the %s Resumen Diario. To remove or change your preferences, please change your <strong>Resumen Diario</strong> preferences in the <a href="%s/usersettings.php?mode=edit">My Account</a> - Content section.',
-    37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Resumen Diario preferences in the %s/usersettings.php?mode=edit My Account - Content section.',
-
+    37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Resumen Diario preferences in the %s/usersettings.php?mode=edit My Account - Content section.'
 );
 
 ###############################################################################
@@ -653,7 +652,7 @@ $LANG09 = array(
     78 => '1 mes',
     79 => '3 meses',
     80 => '6 meses',
-    81 => '1 año',
+    81 => '1 año'
 );
 
 ###############################################################################
@@ -767,7 +766,7 @@ $LANG12 = array(
 );
 
 ###############################################################################
-# rater.php
+# lib-rating.php
 
 $LANG13 = array(
     'vote' => 'vote',
@@ -780,7 +779,7 @@ $LANG13 = array(
     'uid_rated' => 'Your User ID has already rated this item.',
     'own_rated' => 'Either you own the item or do not have permission to rate it.',
     'thanks_for_vote' => 'Thanks for voting!',
-    'reset_rating' => 'Reiniciar Calificación',
+    'reset_rating' => 'Reiniciar Calificación'
 );
 
 ###############################################################################
@@ -799,7 +798,7 @@ $LANG20 = array(
     6 => 'Todo acceso a las partes administrativas queda registrado y revisado.<br' . XHTML . '>Esta página es para uso exclusivo del personal autorizado.',
     7 => 'Identificación',
     8 => 'Session Timeout - Please re-authenticate',
-    9 => 'Access to Administration Features requires re-authentication',
+    9 => 'Access to Administration Features requires re-authentication'
 );
 
 ###############################################################################
@@ -877,7 +876,7 @@ $LANG21 = array(
     69 => 'Are you sure you want to delete this block?',
     70 => 'Block name cannot be blank and cannot contain spaces or the following characters: < > \' " % & * / or backslash',
     71 => 'This screen allows you to create a new block or edit an existing block that will be displayed on either the left or right navigation bars.',
-    72 => 'This screen allows you to edit a glFusion core block.',
+    72 => 'This screen allows you to edit a glFusion core block.'
 );
 
 ###############################################################################
@@ -977,7 +976,7 @@ $LANG24 = array(
     91 => 'Moderate Draft Story',
     92 => 'Enter the story information below and save.',
     93 => 'Mostrar en',
-    94 => 'Publicada',
+    94 => 'Publicada'
 );
 
 ###############################################################################
@@ -992,7 +991,7 @@ $LANG27 = array(
     6 => 'Al borrar un Tema se borrarán todas tus Noticias y Bloques asociados',
     7 => 'Por favor completa los campos ID y Nombre',
     8 => 'Administrador de Temas',
-    9 => 'Para modificar o borrar un tema, pulsa sobre ese tema. Para crear un tema nuevo, pulsa el botón de Nuevo Tema en la izquierda. Encontrarás tu nivel de acceso para tema en paréntesis. <img src="/layout/'.$_USER['theme'].'/images/admin/check.png" /> denota el tema  por defecto.',
+    9 => 'Para modificar o borrar un tema, pulsa sobre ese tema. Para crear un tema nuevo, pulsa el botón de Nuevo Tema en la izquierda. Encontrarás tu nivel de acceso para tema en paréntesis. <img src="/layout//images/admin/check.png" /> denota el tema  por defecto.',
     10 => 'Secuencia',
     11 => 'Noticias/Página',
     12 => 'Acceso Denegado',
@@ -1040,7 +1039,7 @@ $LANG27 = array(
     54 => 'Block Admin',
     55 => 'Syndication Admin',
     56 => 'Press Cancel and then Edit this topic to view details including the total number of objects in the database that are associated with this topic.',
-    57 => '<b>NOTA</b>: El ID no pueden contener espacios.',
+    57 => '<b>NOTA</b>: El ID no pueden contener espacios.'
 );
 
 ###############################################################################
@@ -1200,7 +1199,7 @@ $LANG29 = array(
 # admin/mail.php
 
 $LANG31 = array(
-    1 => "Mail User(s)",
+    1 => 'Mail User(s)',
     2 => 'De',
     3 => 'Responder a',
     4 => 'Título',
@@ -1325,7 +1324,7 @@ $LANG32 = array(
     87 => 'Autotag Installer',
     88 => 'Are you sure you want to remove this plugin?',
     89 => 'Are you absolutely sure you want to remove this plugin?  This will result in the deletion of all of the files and directories relating to this plugin, and to re-install this plugin, you will have to upload another copy.',
-    90 => 'Versión <b>%s</b> of the <b>%s</b> plugin is required, but version <b>%s</b> is installed. Please update the %s plugin.',
+    90 => 'Versión <b>%s</b> of the <b>%s</b> plugin is required, but version <b>%s</b> is installed. Please update the %s plugin.'
 );
 
 ###############################################################################
@@ -1384,19 +1383,7 @@ $LANG33 = array(
     55 => 'Articles',
     56 => 'Do you really want to delete this feed?',
     57 => 'Syndication List',
-    58 => 'To create / edit a feed, modify the fields below and save',
-);
-
-###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Visor de Sucesos',
-    'info' => 'glFusion Log file administration',
-    'logs' => 'Sucesos',
-    'view' => 'Ver archivo de Sucesos',
-    'clear' => 'Borrar archivo de Sucesos',
-    'log_file' => 'Archivo de Sucesos'
+    58 => 'To create / edit a feed, modify the fields below and save'
 );
 
 ###############################################################################
@@ -1533,8 +1520,100 @@ $MESSAGE = array(
     519 => 'You are already subscribed to this notification feed.',
     520 => 'You have been subscribed to this notification feed.',
     521 => 'You have been successfully un-subscribed from the notification feed.',
-    522 => 'Remote account has been successfully merged with existing local account',
+    522 => 'Remote account has been successfully merged with existing local account'
+);
 
+###############################################################################
+# admin/logview.php
+
+$LANG_LOGVIEW = array(
+    'logview' => 'Visor de Sucesos',
+    'info' => 'glFusion Log file administration',
+    'logs' => 'Sucesos',
+    'view' => 'Ver archivo de Sucesos',
+    'clear' => 'Borrar archivo de Sucesos',
+    'log_file' => 'Archivo de Sucesos'
+);
+
+###############################################################################
+# lib-bbcode.php
+
+$LANG_BBCODE = array(
+    'bold_label' => 'B',
+    'italic_label' => 'i',
+    'underline_label' => 'u',
+    'quote_label' => 'Quote',
+    'code_label' => 'Code',
+    'list_label' => 'List',
+    'olist_label' => 'List=',
+    'listitem_label' => '[*]',
+    'img_label' => 'Img',
+    'url_label' => 'URL',
+    'smiley_label' => 'Smileys',
+    'size_label' => 'Font Size',
+    'color_label' => 'Font Color',
+    'bold_help' => 'Bold text: [b]text[/b]',
+    'italic_help' => 'Italic text: [i]text[/i]',
+    'underline_help' => 'Underline text: [u]text[/u]',
+    'quote_help' => 'Quote text: [quote]text[/quote]',
+    'code_help' => 'Code display: [code]code[/code]',
+    'list_help' => 'List: [list]text[/list]',
+    'olist_help' => 'List: [list=]text[/list]',
+    'listitem_help' => 'List item: [*]text[/*]',
+    'img_help' => 'Insert image: [img]http://image_url[/img]',
+    'url_help' => 'Insert URL: [url]http://url[/url] or [url=http://url]URL text[/url]',
+    'smiley_help' => 'Open Smiley Window',
+    'size_help' => 'Font size: [size=9]small text[/size]',
+    'color_help' => 'Text Color: [color=red]red text[/color]',
+    'size_tiny' => 'Tiny',
+    'size_small' => 'Small',
+    'size_normal' => 'Normal',
+    'size_large' => 'Large',
+    'size_huge' => 'Huge',
+    'color_default' => 'Default',
+    'color_darkred' => 'Dark Red',
+    'color_red' => 'Red',
+    'color_orange' => 'Orange',
+    'color_brown' => 'Brown',
+    'color_yellow' => 'Yellow',
+    'color_green' => 'Green',
+    'color_olive' => 'Olive',
+    'color_cyan' => 'Cyan',
+    'color_blue' => 'Blue',
+    'color_darkblue' => 'Dark Blue',
+    'color_indigo' => 'Indigo',
+    'color_violet' => 'Violet',
+    'color_white' => 'White',
+    'color_black' => 'Black',
+    'formatted_code' => 'Formatted Code'
+);
+
+###############################################################################
+# filecheck.php
+
+$LANG_FILECHECK = array(
+    'filecheck' => 'File Integrity Check',
+    'recheck' => 'Recheck File Integrity',
+    'confirm' => 'Are you sure you want to deleted the selected file(s)?',
+    'scan' => 'Your site\'s file integrity is being analyzed.  Please be patient, this process may take awhile to complete, and execution speed depends upon the hosting environment.  If this script approaches the maximum PHP script execution time of %s seconds, scanning will be interrupted and an error message will be displayed.',
+    'results' => 'Your site\'s files and directories have been compared to the glFusion v%s distribution, and the results are shown below.  Added or missing files and directories have been identified, and files that have been added may be selected for deletion.  Directories that have been added will be detected, but presently these must be removed manually.<br /><br />Additional files and/or directories that are detected may be associated with plugins or other scripts that you have added, or are otherwise critical to your site\'s operation, and therefore <b>this DOES NOT mean you should simply delete these files!&nbsp;&nbsp;<span style="color:red">Please use this tool with caution!</span></b>',
+    'expiration1' => 'NOTE: The scan was aborted because the elapsed time it was approaching your site\'s PHP maximum execution time limit.  This analysis script is CPU and I/O-intensive, and can be affected by a number of factors in your web hosting environment.  Please consider one or more of the following recommendations resolve this problem:<br />',
+    'expiration2' => '<ol><li>Try increasing the value of \'max_execution_time\' in your php.ini file.  It is currently set to %s seconds.</li><li>Manually inspect your site and remove any unneeded files and directories.</li></ol>',
+    'abort' => 'Abort Scan',
+    'aborted' => 'The scan was aborted.',
+    'where' => 'Where',
+    'type' => 'Type',
+    'delta' => 'Change',
+    'location' => 'Location',
+    'path' => 'Path',
+    'file' => 'file',
+    'dir' => 'directory',
+    'plugin' => 'plugin',
+    'added' => 'added',
+    'missing' => 'missing',
+    'removed' => '%s %s deleted.  Your site\'s File Integrity will now be rechecked ....',
+    'working' => 'Scanning, please wait ...<br />',
+    'elapsed' => 'The scan completed in %s sec.<br /><br />'
 );
 
 ###############################################################################
@@ -1620,7 +1699,7 @@ $LANG_ACCESS = array(
     'confirm2' => 'Are you absolutely sure you want to delete this group?  This will affect any users or groups that are associated with this group!  Press Cancel and then Edit this group if you wish to view the details.',
     'token_expired' => 'The security token has expired. Please validate your session below.',
     'token_expired_footer' => 'The security token for this operation has expired, please re-validate',
-    'validation_failed' => 'Validation Failed - Please retry.',
+    'validation_failed' => 'Validation Failed - Please retry.'
 );
 
 ###############################################################################
@@ -1664,7 +1743,7 @@ $LANG_BUTTONS = array(
 $LANG_404 = array(
     1 => 'Error 404',
     2 => 'Vaya, he buscado por todos los sitios, pero no puedo encontrar <b>%s</b>.',
-    3 => "<p>Lo sentimos, pero el archivo que pides no existe. Por favor, consulta la <a href=\"{$_CONF['site_url']}\">página principal</a> o la <a href=\"{$_CONF['site_url']}/search.php\">página de búsqueda</a> para ver si puedes encontrar lo que has perdido.",
+    3 => "<p>Lo sentimos, pero el archivo que pides no existe. Por favor, consulta la <a href=\"{$_CONF['site_url']}\">página principal</a> o la <a href=\"{$_CONF['site_url']}/search.php\">página de búsqueda</a> para ver si puedes encontrar lo que has perdido."
 );
 
 ###############################################################################
@@ -1764,7 +1843,7 @@ $LANG_TRB = array(
     'delete_trackback' => 'To delete this Trackback click: ',
     'edit_explain' => 'This screen allows you to create or edit a new trackback or ping service.',
     'ping_explain' => 'This screen allows you to send pingback requests for your stories.',
-    'trb_explain' => 'This screen allows you to send trackback requests.',
+    'trb_explain' => 'This screen allows you to send trackback requests.'
 );
 
 ###############################################################################
@@ -1780,7 +1859,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-#
+# 
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1850,12 +1929,12 @@ $LANG_WEEK = array(
     11 => 'Wed',
     12 => 'Thu',
     13 => 'Fri',
-    14 => 'Sat',
+    14 => 'Sat'
 );
 
 ###############################################################################
 # Admin - Strings
-#
+# 
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1866,7 +1945,7 @@ $LANG_ADMIN = array(
     'edit' => 'Modificar',
     'edit_adv' => 'Adv. Modificar',
     'admin_home' => 'Panel de Control',
-    'create_new' => '<img src="/layout/'.$_USER['theme'].'/images/admin/add.png" /> Crear',
+    'create_new' => '<img src="/layout//images/admin/add.png" /> Crear',
     'create_new_adv' => 'Crear (Adv.)',
     'enabled' => 'Habilitado',
     'title' => 'Título',
@@ -1886,12 +1965,11 @@ $LANG_ADMIN = array(
     'list' => 'list',
     'list_all' => 'Listar todo',
     'na' => '-',
-    'action' => 'Acción',
+    'action' => 'Acción para todo lo seleccionado:',
     'enable' => 'Habilitado',
     'disable' => 'Disable',
     'admin_users' => 'Usuarios',
     'admin_groups' => 'Grupos',
-    'action' => 'Acción para todo lo seleccionado:',
     'authenticate' => 'Authenticate',
     'select' => 'Select',
     'name' => 'Nombre',
@@ -1902,159 +1980,11 @@ $LANG_ADMIN = array(
     'topic_list' => 'Temas',
     'tb_list' => 'Trackback List',
     'custom_autotag' => 'Custom Autotags',
-    'alt_topic' => 'Tema Alterno',
+    'alt_topic' => 'Tema Alterno'
 );
 
 ###############################################################################
-# Widgets - Strings
-#
-# These are some standard strings used by the widget static pages
-
-$LANG_WIDGETS = array(
-    'latest_news' => 'Latest News',
-    'translate' => 'Clic en la bandera para traducir automáticamente este sitio en el idioma del país',
-    'prev' => 'Previous',
-    'next' => 'Next',
-    'playpause' => 'Play/Pause',
-    'noOpera' => 'This script does not automatically resize the iframe in the Opera browser.'
-);
-
-# Localisation of the texts for the various drop-down menus that are actually
-# stored in the database. If these exist, they override the texts from the
-# database.
-
-$LANG_commentcodes = array(
-    0 => 'Comentarios Habilitados',
-    -1 => 'Comentarios Deshabilitados',
-    1 => 'Comentarios Cerrados'
-);
-
-$LANG_commentmodes = array(
-    'flat' => 'Plano',
-    'nested' => 'Anidado',
-    'nocomment' => 'Sin Comentarios'
-);
-
-$LANG_cookiecodes = array(
-    0 => '(don\'t)',
-    3600 => '1 Hora',
-    7200 => '2 Horas',
-    10800 => '3 Horas',
-    28800 => '8 Horas',
-    86400 => '1 Día',
-    604800 => '1 Semana',
-    2678400 => '1 Mes'
-);
-
-$LANG_dateformats = array(
-    0 => 'System Default'
-);
-
-$LANG_featurecodes = array(
-    0 => 'No',
-    1 => 'Sí'
-);
-
-$LANG_frontpagecodes = array(
-    0 => 'Solo en el Tema',
-    1 => 'Pagina Inicial'
-);
-
-$LANG_postmodes = array(
-    'plaintext' => 'Texto',
-    'html' => 'HTML'
-);
-
-$LANG_sortcodes = array(
-    'ASC' => 'Mas viejos Primero',
-    'DESC' => 'Mas nuevos Primero'
-);
-
-$LANG_trackbackcodes = array(
-    0 => 'Sí',
-    -1 => 'No'
-);
-
-$LANG_BBCODE = array(
-    'bold_label'        => 'B',
-    'italic_label'      => 'i',
-    'underline_label'   => 'u',
-    'quote_label'       => 'Quote',
-    'code_label'        => 'Code',
-    'list_label'        => 'List',
-    'olist_label'       => 'List=',
-    'listitem_label'    => '[*]',
-    'img_label'         => 'Img',
-    'url_label'         => 'URL',
-    'smiley_label'      => 'Smileys',
-    'size_label'        => 'Font Size',
-    'color_label'       => 'Font Color',
-    'bold_help'         =>'Bold text: [b]text[/b]',
-    'italic_help'       =>'Italic text: [i]text[/i]',
-    'underline_help'    =>'Underline text: [u]text[/u]',
-    'quote_help'        =>'Quote text: [quote]text[/quote]',
-    'code_help'         =>'Code display: [code]code[/code]',
-    'list_help'         =>'List: [list]text[/list]',
-    'olist_help'        =>'List: [list=]text[/list]',
-    'listitem_help'     =>'List item: [*]text[/*]',
-    'img_help'          =>'Insert image: [img]http://image_url[/img]',
-    'url_help'          =>'Insert URL: [url]http://url[/url] or [url=http://url]URL text[/url]',
-    'smiley_help'       =>'Open Smiley Window',
-    'size_help'         =>'Font size: [size=9]small text[/size]',
-    'color_help'        =>'Text Color: [color=red]red text[/color]',
-    'size_tiny'         => 'Tiny',
-    'size_small'        => 'Small',
-    'size_normal'       => 'Normal',
-    'size_large'        => 'Large',
-    'size_huge'         => 'Huge',
-    'color_default'     => 'Default',
-    'color_darkred'     => 'Dark Red',
-    'color_red'         => 'Red',
-    'color_orange'      => 'Orange',
-    'color_brown'       => 'Brown',
-    'color_yellow'      => 'Yellow',
-    'color_green'       => 'Green',
-    'color_olive'       => 'Olive',
-    'color_cyan'        => 'Cyan',
-    'color_blue'        => 'Blue',
-    'color_darkblue'    => 'Dark Blue',
-    'color_indigo'      => 'Indigo',
-    'color_violet'      => 'Violet',
-    'color_white'       => 'White',
-    'color_black'       => 'Black',
-    'formatted_code'    => 'Formatted Code',
-);
-
-###############################################################################
-# admin/filecheck.php - distribution integrity checker
-
-$LANG_FILECHECK = array(
-    'filecheck'         => 'File Integrity Check',
-    'recheck'           => 'Recheck File Integrity',
-    'confirm'           => 'Are you sure you want to deleted the selected file(s)?',
-    'scan'              => 'Your site\'s file integrity is being analyzed.  Please be patient, this process may take awhile to complete, and execution speed depends upon the hosting environment.  If this script approaches the maximum PHP script execution time of %s seconds, scanning will be interrupted and an error message will be displayed.',
-    'results'           => 'Your site\'s files and directories have been compared to the glFusion v%s distribution, and the results are shown below.  Added or missing files and directories have been identified, and files that have been added may be selected for deletion.  Directories that have been added will be detected, but presently these must be removed manually.<br /><br />Additional files and/or directories that are detected may be associated with plugins or other scripts that you have added, or are otherwise critical to your site\'s operation, and therefore <b>this DOES NOT mean you should simply delete these files!&nbsp;&nbsp;<span style="color:red">Please use this tool with caution!</span></b>',
-    'expiration1'       => 'NOTE: The scan was aborted because the elapsed time it was approaching your site\'s PHP maximum execution time limit.  This analysis script is CPU and I/O-intensive, and can be affected by a number of factors in your web hosting environment.  Please consider one or more of the following recommendations resolve this problem:<br />',
-    'expiration2'       => '<ol><li>Try increasing the value of \'max_execution_time\' in your php.ini file.  It is currently set to %s seconds.</li><li>Manually inspect your site and remove any unneeded files and directories.</li></ol>',
-    'abort'             => 'Abort Scan',
-    'aborted'           => 'The scan was aborted.',
-    'where'             => 'Where',
-    'type'              => 'Type',
-    'delta'             => 'Change',
-    'location'          => 'Location',
-    'path'              => 'Path',
-    'file'              => 'file',
-    'dir'               => 'directory',
-    'plugin'            => 'plugin',
-    'added'             => 'added',
-    'missing'           => 'missing',
-    'removed'           => '%s %s deleted.  Your site\'s File Integrity will now be rechecked ....',
-    'working'           => 'Scanning, please wait ...<br />',
-    'elapsed'           => 'The scan completed in %s sec.<br /><br />'
-);
-
-###############################################################################
-# admin/menu.php - menu builder
+# Menu Builder
 
 $LANG_MB01 = array(
     'javascript_required' => 'Menu Builder requires that you have JavaScript enabled.',
@@ -2142,15 +2072,21 @@ $LANG_MB01 = array(
     'return_to' => 'Regresar a ',
     'menu_name_error' => 'Menu name cannot be blank',
     'menu_name_space' => 'Menu name cannot contain spaces',
-    'menu_name_exists' => 'Menu name must be unique, there is already a menu by this name',
+    'menu_name_exists' => 'Menu name must be unique, there is already a menu by this name'
 );
+
+###############################################################################
+# menu.php
 
 $LANG_MB_MENU_TYPES = array(
     1 => 'Horizontal - Cascading',
     2 => 'Horizontal - Simple',
     3 => 'Vertical - Cascading',
-    4 => 'Vertical - Simple',
+    4 => 'Vertical - Simple'
 );
+
+###############################################################################
+# menu.php
 
 $LANG_MB_TYPES = array(
     1 => 'Sub Menu',
@@ -2161,15 +2097,20 @@ $LANG_MB_TYPES = array(
     6 => 'External URL',
     7 => 'PHP Function',
     8 => 'Etiqueta',
-    9 => 'Tema',
+    9 => 'Tema'
 );
 
+###############################################################################
+# menu.php
 
 $LANG_MB_TARGET = array(
     1 => 'Parent Window',
     2 => 'New Window with navigation',
-    3 => 'New Window without navigation',
+    3 => 'New Window without navigation'
 );
+
+###############################################################################
+# menu.php
 
 $LANG_MB_GLFUNCTION = array(
     0 => 'Inicio',
@@ -2177,8 +2118,11 @@ $LANG_MB_GLFUNCTION = array(
     2 => 'Directorio',
     3 => 'Preferencias',
     4 => 'Buscar',
-    5 => 'Estadisticas',
+    5 => 'Estadisticas'
 );
+
+###############################################################################
+# menu.php
 
 $LANG_MB_GLTYPES = array(
     1 => 'User Menu',
@@ -2186,8 +2130,11 @@ $LANG_MB_GLTYPES = array(
     3 => 'Menu de Temas',
     4 => 'Static Pages Menu',
     5 => 'Plugin Menu',
-    6 => 'Header Menu',
+    6 => 'Header Menu'
 );
+
+###############################################################################
+# menu.php
 
 $LANG_MB_ADMIN = array(
     1 => 'Menu Builder te permite crear y modificar menús para tu sitio. Para agregar un menú, haz clic en el enlace: <b>Crear</b>. Para modificar una opción, haz clic en el icono bajo la columna: <b>Opciones</b>. Para cambiar las preferencias del menú, haz clic en el icono bajo la columna: <b>Preferencias</b>.',
@@ -2195,11 +2142,11 @@ $LANG_MB_ADMIN = array(
     3 => 'Para modificar la propiedades de la opción, haz clic en el icono bajo la columna: <b>Modificar</b>. Ordene los elementos moviéndolos hacia arriba o abajo empleando las flechas bajo la columna: <b>Orden</b>.',
     4 => 'Para crear una nueva opción, especifique its details and permissions below.',
     5 => 'Una vez un elemento es creado, usted puede regresar y modificar los detalles y permisos.',
-    6 => 'Menu Builder allows you to easily customize the look and feel of your menus. Adjust the values below to create a unique menu style.',
+    6 => 'Menu Builder allows you to easily customize the look and feel of your menus. Adjust the values below to create a unique menu style.'
 );
 
 ###############################################################################
-# admin/logo.php - logo administration
+# logo.php
 
 $LANG_LOGO = array(
     'logo_admin' => 'Logo',
@@ -2216,11 +2163,12 @@ $LANG_LOGO = array(
     'logo_help' => 'Uploaded graphic logo images are not resized, the standard size for glFusion logo is 100 pixels tall and should be less than 500 pixels wide.  You can upload larger images, but you will need to modify the site CSS in styles.css to ensure it displays properly.',
     'logo_saved' => 'Logo options successfully saved.',
     'invalid_type' => 'Invalid image type, only JPG, PNG, and GIF are allowed',
-    'invalid_size' => 'Uploaded logo larger than allowed size of ',
+    'invalid_size' => 'Uploaded logo larger than allowed size of '
 );
 
 ###############################################################################
-# admin/autotag.php - autotag administration
+# autotag.php
+
 $LANG_AM = array(
     'plugin' => 'autotag',
     'title' => 'Autotag',
@@ -2256,9 +2204,7 @@ $LANG_AM = array(
     'html_allowed' => '(HTML:OK)',
     'instructions' => 'To modify or delete an Autotag, click on that tag\'s edit icon below. To create a new Autotag, click on "Create New" above. <p>If there are PHP function-based Autotags below that you cannot edit or enable, it is because 1) you do not have access to the autotag.PHP feature and/or 2) PHP Autotags are disabled in the Autotag Manager plugin configuration panel.</p>',
     'public_instructions' => 'The complete list of Autotags that are currently available and enabled on this site are displayed below.  For each Autotag, the contributing glFusion Module is displayed, as well as the Type and Description.  Usage examples are provided with the <i>required</i> and {optional} parameters.  Where multiple options are available, a link to the glFusion.org wiki documentation is provided.',
-    'replace_explain' => 'Autotags take the form <b>[tag:{p1} {p2}]</b>. In the <b>Replacement</b> field you can use any valid HTML. You can include {p1} and/or {p2} parameters in your replacement string by using the replacement macros %1% and %2% respectively.'
-                      .'<p>Autotags are commonly used to create links. A <b>Replacement</b> field of <b>&lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</b> when combined with this tag: <b>[tag:foo This is a link]</b> will result in the string <b>&lt;a href="http://path.to.somewhere/foo"&gt;This is a link&lt;/a&gt;</b></p>'
-                      .'<p>You may also use %0% to represent the entire string after the first colon, this is handy when you want to use only a single parameter, and the value will contain whitespace which would otherwise be interpreted as a delimiter between multiple parameters.  The %site_url% and $site_admin_url% macros can also be used, and will be replaced by the base url and admin url respectively.</p>',
+    'replace_explain' => 'Autotags take the form <b>[tag:{p1} {p2}]</b>. In the <b>Replacement</b> field you can use any valid HTML. You can include {p1} and/or {p2} parameters in your replacement string by using the replacement macros %1% and %2% respectively.<p>Autotags are commonly used to create links. A <b>Replacement</b> field of <b>&lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</b> when combined with this tag: <b>[tag:foo This is a link]</b> will result in the string <b>&lt;a href="http://path.to.somewhere/foo"&gt;This is a link&lt;/a&gt;</b></p><p>You may also use %0% to represent the entire string after the first colon, this is handy when you want to use only a single parameter, and the value will contain whitespace which would otherwise be interpreted as a delimiter between multiple parameters.  The %site_url% and $site_admin_url% macros can also be used, and will be replaced by the base url and admin url respectively.</p>',
     'autotagpermmsg' => 'Select which features (operations) you want to allow the autotag to be used.',
     'autotag' => 'Autotag',
     'desc_showblock' => 'HTML: renders a block. usage: [show_block:<i>block_id</i>]',
@@ -2276,13 +2222,14 @@ $LANG_AM = array(
     'desc_wikipedia' => 'Link: to the wikipedia search result for the text specified. usage: [wikipedia:<i>text</i>]',
     'desc_youtube' => 'HTML: embeds a youtube.com video object. usage: [youtube:<i>video_id</i>]',
     'instructions_edit' => 'This screen allows you to create a custom autotag.',
-    'allowed'                   => 'Allowed',
-    'namespace'                 => 'Namespace',
-    'operation'                 => 'Operation',
+    'allowed' => 'Allowed',
+    'namespace' => 'Namespace',
+    'operation' => 'Operation'
 );
 
 ###############################################################################
-# admin/vercheck.php - version checker
+# versioncheck.php
+
 $LANG_UPGRADE = array(
     'recheck' => 'Comprobar',
     'desc' => 'Asegúrese que tanto el software glFusion como los Módulos están al día. La comprobación solicita al sitio web glFusion.org  las ultimas versiones de todo el software y compara con las versiones instaladas.',
@@ -2304,11 +2251,12 @@ $LANG_UPGRADE = array(
     'plugin' => 'Módulo',
     'installed_version' => 'Versión Instalada',
     'latest_version' => 'Ultima Versión',
-    'notes' => 'Notas',
+    'notes' => 'Notas'
 );
 
 ###############################################################################
-# admin/sfs.php - stop forum spam checks
+# sfs.php
+
 $LANG_SFS = array(
     'title' => 'Stop Forum Spam (SFS) User Check',
     'instructions' => 'All users have had their username, email address, and source IP address checked in the Stop Forum Spam database.  You may select any user\'s that were found in the SFS database and ban them from further use of your site.',
@@ -2329,7 +2277,77 @@ $LANG_SFS = array(
     'confirm_one_del' => 'Are you sure you want to DELETE all selected users?',
     'confirm_two_del' => 'Are you REALLY sure you want to DELETE all selected users?',
     'action_text_del' => 'Borrar Usuarios',
-    'no_data' => 'No user\'s were found in the user database.',
+    'no_data' => 'No user\'s were found in the user database.'
+);
+
+###############################################################################
+# Widgets - Strings
+# 
+# These are some standard strings used by the widget static pages
+
+$LANG_WIDGETS = array(
+    'latest_news' => 'Latest News',
+    'translate' => 'Clic en la bandera para traducir automáticamente este sitio en el idioma del país',
+    'prev' => 'Previous',
+    'next' => 'Next',
+    'playpause' => 'Play/Pause',
+    'noOpera' => 'This script does not automatically resize the iframe in the Opera browser.'
+);
+
+# Localisation of the texts for the various drop-down menus that are actually
+# stored in the database. If these exist, they override the texts from the
+# database.
+
+$LANG_commentcodes = array(
+    0 => 'Comentarios Habilitados',
+    -1 => 'Comentarios Deshabilitados',
+    1 => 'Comentarios Cerrados'
+);
+
+$LANG_commentmodes = array(
+    'flat' => 'Plano',
+    'nested' => 'Anidado',
+    'nocomment' => 'Sin Comentarios'
+);
+
+$LANG_cookiecodes = array(
+    0 => '(don\'t)',
+    3600 => '1 Hora',
+    7200 => '2 Horas',
+    10800 => '3 Horas',
+    28800 => '8 Horas',
+    86400 => '1 Día',
+    604800 => '1 Semana',
+    2678400 => '1 Mes'
+);
+
+$LANG_dateformats = array(
+    0 => 'System Default'
+);
+
+$LANG_featurecodes = array(
+    0 => 'No',
+    1 => 'Sí'
+);
+
+$LANG_frontpagecodes = array(
+    0 => 'Solo en el Tema',
+    1 => 'Pagina Inicial'
+);
+
+$LANG_postmodes = array(
+    'plaintext' => 'Texto',
+    'html' => 'HTML'
+);
+
+$LANG_sortcodes = array(
+    'ASC' => 'Mas viejos Primero',
+    'DESC' => 'Mas nuevos Primero'
+);
+
+$LANG_trackbackcodes = array(
+    0 => 'Sí',
+    -1 => 'No'
 );
 
 ###############################################################################
@@ -2629,6 +2647,7 @@ $LANG_confignames['Core'] = array(
     'bb2_httpbl_maxage' => 'http:BL Max Age',
     'bb2_offsite_forms' => 'Allow offsite forms',
     'bb2_eu_cookie' => 'EU Cookie',
+    'bb2_ban_timeout' => 'Number of hours to ban IP'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2690,7 +2709,7 @@ $LANG_fs['Core'] = array(
     'fs_logo' => 'Logo',
     'fs_update' => 'Actualizaciones',
     'fs_rating' => 'Calificaciones',
-    'fs_spam_config' => 'Configuración',
+    'fs_spam_config' => 'Configuración'
 );
 
 $LANG_configselects['Core'] = array(
@@ -2723,7 +2742,7 @@ $LANG_configselects['Core'] = array(
     26 => array('Ninguno' => 0, 'A.B' => 1, 'A.B.C' => 2, 'All' => 3),
     27 => array('Generar Contraseña' => 0, 'Contraseña dada por el Usuario' => 1),
     28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
-    29 => array('Diariamente' => 86400, 'Semanalmente' => 604800, 'Cada hora' => 3600, 'Siempre' => 0),
+    29 => array('Diariamente' => 86400, 'Semanalmente' => 604800, 'Cada hora' => 3600, 'Siempre' => 0)
 );
 
 ?>
