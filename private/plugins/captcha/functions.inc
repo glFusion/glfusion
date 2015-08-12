@@ -427,6 +427,7 @@ function CAPTCHA_getSession($ctype = '') {
             $counter = (int) DB_getItem($_TABLES['cp_sessions'],'counter','session_id="'.DB_escapeString($csid).'"');
         } else {
             $csid    = CAPTCHA_sid();
+            $counter = 0;
         }
     } else {
         // if (csid) is in POST array, this is a reuse of an old session, else create a new one
@@ -438,6 +439,7 @@ function CAPTCHA_getSession($ctype = '') {
             $csid = DB_getItem($_TABLES['cp_sessions'],'session_id',"{$_TABLES['cp_sessions']}.ip='".DB_escapeString($REMOTE_ADDR)."'");
             if ( $csid == '' || $csid == NULL ) {
                 $csid    = CAPTCHA_sid();
+                $counter = 0;
             } else {
                 $counter = (int) DB_getItem($_TABLES['cp_sessions'],'counter','session_id="'.DB_escapeString($csid).'"');
             }
@@ -569,10 +571,11 @@ function CAPTCHA_checkRetries( $csid )
 {
     global $_CONF, $_TABLES;
 
-    $counter = DB_getItem($_TABLES['cp_sessions'],'counter',"session_id='" . DB_escapeString($csid) . "'");
+    $counter = (int) DB_getItem($_TABLES['cp_sessions'],'counter',"session_id='" . DB_escapeString($csid) . "'");
 
     if ( $counter > 4 ) { // this allowed me to try 5 times.
         if ( function_exists('bb2_ban') ) {
+            CAPTCHA_errorLog("CAPTCHA: Banning for too many retries - IP Address: " . $_SERVER['REMOTE_ADDR'] );
             bb2_ban($_SERVER['REMOTE_ADDR'],2);
         }
     } else {
