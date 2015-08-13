@@ -499,7 +499,7 @@ function BLOCK_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
  */
 function BLOCK_list()
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG21, $_IMAGE_TYPE;
+    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG21, $_IMAGE_TYPE, $blockInterface;
 
     USES_lib_admin();
 
@@ -537,8 +537,6 @@ function BLOCK_list()
     );
 
     $defsort_arr = array('field' => 'blockorder', 'direction' => 'asc');
-
-    global $blockInterface;
 
     if ( isset($blockInterface['left']['title']) ) {
         $label = $blockInterface['left']['title'];

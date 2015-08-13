@@ -368,9 +368,6 @@ require_once $_CONF['path_system'].'lib-autotag.php';
 require_once $_CONF['path_system'].'lib-custom.php';
 
 // Set theme
-// Need to modify this code to check if theme was cached in user cookie.  That
-// way if user logged in and set theme and then logged out we would still know
-// which theme to show them.
 
 $usetheme = '';
 if ( isset( $_POST['usetheme'] )) {
@@ -419,31 +416,7 @@ if ( $_CONF['allow_user_themes'] && !empty( $usetheme ) && is_dir( $_CONF['path_
 }
 $TEMPLATE_OPTIONS['default_vars']['layout_url'] = $_CONF['layout_url'];
 
-/**
-* Include theme functions file
-*/
-
-// Include theme functions file which may/may not do anything
-if (file_exists($_CONF['path_layout'] . 'custom/functions.php') ) {
-    require_once $_CONF['path_layout'] . 'custom/functions.php';
-} elseif (file_exists($_CONF['path_layout'] . 'functions.php')) {
-    require_once $_CONF['path_layout'] . 'functions.php';
-}
-
-// ensure XHTML constant is defined to avoid problems elsewhere
-
-if (!defined('XHTML')) {
-    define('XHTML', '');
-}
-
-// themes can now specify the default image type
-// fall back to 'gif' if they don't
-
-if (empty($_IMAGE_TYPE)) {
-    $_IMAGE_TYPE = 'gif';
-}
-
-// Similarly set language
+// Set language
 
 if ( isset( $_COOKIE[$_CONF['cookie_language']] ) ) {
     $language = COM_sanitizeFilename($_COOKIE[$_CONF['cookie_language']]);
@@ -463,153 +436,6 @@ if ( isset( $_COOKIE[$_CONF['cookie_language']] ) ) {
     $_CONF['language'] = COM_getLanguage();
 }
 
-// Set the ISO 2 digit code for language
-switch ($_CONF['language']) {
-    case 'afrikaans' :
-    case 'afrikaans_utf-8' :
-        $_CONF['iso_lang'] = 'af';
-        break;
-    case 'bosnian' :
-    case 'bosnian_utf-8' :
-        $_CONF['iso_lang'] = 'bs';
-        break;
-    case 'bulgarian' :
-    case 'bulgarian_utf-8' :
-        $_CONF['iso_lang'] = 'bg';
-        break;
-    case 'catalan' :
-    case 'catalan_utf-8' :
-        $_CONF['iso_lang'] = 'ca';
-        break;
-       case 'chinese_traditional' :
-       case 'chinese_traditional_utf-8' :
-           $_CONF['iso_lang'] = 'zh-tw';
-           break;
-       case 'chinese_simplified' :
-       case 'chinese_simplified_utf-8' :
-           $_CONF['iso_lang'] = 'zh';
-           break;
-    case 'croatian' :
-    case 'croatian_utf-8' :
-        $_CONF['iso_lang'] = 'hr';
-        break;
-    case 'czech' :
-    case 'czech_utf-8' :
-        $_CONF['iso_lang'] = 'cs';
-        break;
-    case 'danish' :
-    case 'danish_utf-8' :
-        $_CONF['iso_lang'] = 'da';
-        break;
-    case 'dutch' :
-    case 'dutch_utf-8' :
-        $_CONF['iso_lang'] = 'nl';
-        break;
-    case 'english' :
-    case 'english_utf-8' :
-        $_CONF['iso_lang'] = 'en';
-        break;
-    case 'estonian' :
-    case 'estonian_utf-8' :
-        $_CONF['iso_lang'] = 'et';
-        break;
-    case 'farsi' :
-    case 'farsi_utf-8' :
-        $_CONF['iso_lang'] = 'fa';
-        break;
-    case 'finnish' :
-    case 'finnish_utf-8' :
-        $_CONF['iso_lang'] = 'fi';
-        break;
-    case 'french_canada' :
-    case 'french_canada_utf-8' :
-    case 'french_france' :
-    case 'french_france_utf-8' :
-        $_CONF['iso_lang'] = 'fr';
-        break;
-    case 'german' :
-    case 'german_utf-8' :
-    case 'german_formal' :
-    case 'german_formal_utf-8' :
-        $_CONF['iso_lang'] = 'de';
-        break;
-    case 'hebrew' :
-    case 'hebrew_utf-8' :
-        $_CONF['iso_lang'] = 'he';
-        break;
-    case 'hellenic' :
-    case 'hellenic_utf-8' :
-        $_CONF['iso_lang'] = 'el';
-        break;
-       case 'indonesian' :
-       case 'indonesian_utf-8' :
-           $_CONF['iso_lang'] = 'id';
-           break;
-       case 'italian' :
-       case 'italian_utf-8' :
-           $_CONF['iso_lang'] = 'it';
-           break;
-       case 'japanese' :
-       case 'japanese_utf-8' :
-           $_CONF['iso_lang'] = 'ja';
-           break;
-    case 'korean' :
-    case 'korean_utf-8' :
-        $_CONF['iso_lang'] = 'ko';
-        break;
-       case 'norwegian' :
-       case 'norwegian_utf-8' :
-           $_CONF['iso_lang'] = 'no';
-           break;
-       case 'polish' :
-       case 'polish_utf-8' :
-           $_CONF['iso_lang'] = 'pl';
-           break;
-       case 'portuguese_brazil' :
-       case 'portuguese_brazil_utf-8' :
-           $_CONF['iso_lang'] = 'pt-btr';
-           break;
-       case 'portuguese' :
-       case 'portuguese_utf-8' :
-           $_CONF['iso_lang'] = 'pt';
-           break;
-       case 'romanian' :
-       case 'romanian_utf-8' :
-           $_CONF['iso_lang'] = 'ro';
-           break;
-       case 'russian' :
-       case 'russian_utf-8' :
-           $_CONF['iso_lang'] = 'ru';
-           break;
-       case 'slovak' :
-       case 'slovak_utf-8' :
-           $_CONF['iso_lang'] = 'sk';
-           break;
-       case 'slovenian' :
-       case 'slovenian_utf-8' :
-           $_CONF['iso_lang'] = 'sl';
-           break;
-    case 'spanish' :
-    case 'spanish_utf-8' :
-        $_CONF['iso_lang'] = 'es';
-        break;
-       case 'swedish' :
-       case 'swedish_utf-8' :
-           $_CONF['iso_lang'] = 'sv';
-           break;
-       case 'turkish' :
-       case 'turkish_utf-8' :
-           $_CONF['iso_lang'] = 'tr';
-           break;
-       case 'ukrainian' :
-       case 'ukrainian_utf-8' :
-           $_CONF['iso_lang'] = 'uk';
-           break;
-    default :
-        $_CONF['iso_lang'] = 'en';
-        break;
-}
-$TEMPLATE_OPTIONS['default_vars']['iso_lang'] = $_CONF['iso_lang'];
 /**
 *
 * Language include
@@ -621,6 +447,183 @@ require_once $_CONF['path_language'] . $_CONF['language'] . '.php';
 if (empty($LANG_DIRECTION)) {
     // default to left-to-right
     $LANG_DIRECTION = 'ltr';
+}
+
+if ( isset($LANG_LOCALE)) {
+    $_CONF['iso_lang'] = $LANG_LOCALE;
+} else {
+    // Set the ISO 2 digit code for language
+    switch ($_CONF['language']) {
+        case 'afrikaans' :
+        case 'afrikaans_utf-8' :
+            $_CONF['iso_lang'] = 'af';
+            break;
+        case 'bosnian' :
+        case 'bosnian_utf-8' :
+            $_CONF['iso_lang'] = 'bs';
+            break;
+        case 'bulgarian' :
+        case 'bulgarian_utf-8' :
+            $_CONF['iso_lang'] = 'bg';
+            break;
+        case 'catalan' :
+        case 'catalan_utf-8' :
+            $_CONF['iso_lang'] = 'ca';
+            break;
+           case 'chinese_traditional' :
+           case 'chinese_traditional_utf-8' :
+               $_CONF['iso_lang'] = 'zh-tw';
+               break;
+           case 'chinese_simplified' :
+           case 'chinese_simplified_utf-8' :
+               $_CONF['iso_lang'] = 'zh';
+               break;
+        case 'croatian' :
+        case 'croatian_utf-8' :
+            $_CONF['iso_lang'] = 'hr';
+            break;
+        case 'czech' :
+        case 'czech_utf-8' :
+            $_CONF['iso_lang'] = 'cs';
+            break;
+        case 'danish' :
+        case 'danish_utf-8' :
+            $_CONF['iso_lang'] = 'da';
+            break;
+        case 'dutch' :
+        case 'dutch_utf-8' :
+            $_CONF['iso_lang'] = 'nl';
+            break;
+        case 'english' :
+        case 'english_utf-8' :
+            $_CONF['iso_lang'] = 'en';
+            break;
+        case 'estonian' :
+        case 'estonian_utf-8' :
+            $_CONF['iso_lang'] = 'et';
+            break;
+        case 'farsi' :
+        case 'farsi_utf-8' :
+            $_CONF['iso_lang'] = 'fa';
+            break;
+        case 'finnish' :
+        case 'finnish_utf-8' :
+            $_CONF['iso_lang'] = 'fi';
+            break;
+        case 'french_canada' :
+        case 'french_canada_utf-8' :
+        case 'french_france' :
+        case 'french_france_utf-8' :
+            $_CONF['iso_lang'] = 'fr';
+            break;
+        case 'german' :
+        case 'german_utf-8' :
+        case 'german_formal' :
+        case 'german_formal_utf-8' :
+            $_CONF['iso_lang'] = 'de';
+            break;
+        case 'hebrew' :
+        case 'hebrew_utf-8' :
+            $_CONF['iso_lang'] = 'he';
+            break;
+        case 'hellenic' :
+        case 'hellenic_utf-8' :
+            $_CONF['iso_lang'] = 'el';
+            break;
+           case 'indonesian' :
+           case 'indonesian_utf-8' :
+               $_CONF['iso_lang'] = 'id';
+               break;
+           case 'italian' :
+           case 'italian_utf-8' :
+               $_CONF['iso_lang'] = 'it';
+               break;
+           case 'japanese' :
+           case 'japanese_utf-8' :
+               $_CONF['iso_lang'] = 'ja';
+               break;
+        case 'korean' :
+        case 'korean_utf-8' :
+            $_CONF['iso_lang'] = 'ko';
+            break;
+           case 'norwegian' :
+           case 'norwegian_utf-8' :
+               $_CONF['iso_lang'] = 'no';
+               break;
+           case 'polish' :
+           case 'polish_utf-8' :
+               $_CONF['iso_lang'] = 'pl';
+               break;
+           case 'portuguese_brazil' :
+           case 'portuguese_brazil_utf-8' :
+               $_CONF['iso_lang'] = 'pt-btr';
+               break;
+           case 'portuguese' :
+           case 'portuguese_utf-8' :
+               $_CONF['iso_lang'] = 'pt';
+               break;
+           case 'romanian' :
+           case 'romanian_utf-8' :
+               $_CONF['iso_lang'] = 'ro';
+               break;
+           case 'russian' :
+           case 'russian_utf-8' :
+               $_CONF['iso_lang'] = 'ru';
+               break;
+           case 'slovak' :
+           case 'slovak_utf-8' :
+               $_CONF['iso_lang'] = 'sk';
+               break;
+           case 'slovenian' :
+           case 'slovenian_utf-8' :
+               $_CONF['iso_lang'] = 'sl';
+               break;
+        case 'spanish' :
+        case 'spanish_utf-8' :
+            $_CONF['iso_lang'] = 'es';
+            break;
+           case 'swedish' :
+           case 'swedish_utf-8' :
+               $_CONF['iso_lang'] = 'sv';
+               break;
+           case 'turkish' :
+           case 'turkish_utf-8' :
+               $_CONF['iso_lang'] = 'tr';
+               break;
+           case 'ukrainian' :
+           case 'ukrainian_utf-8' :
+               $_CONF['iso_lang'] = 'uk';
+               break;
+        default :
+            $_CONF['iso_lang'] = 'en';
+            break;
+    }
+}
+
+$TEMPLATE_OPTIONS['default_vars']['iso_lang'] = $_CONF['iso_lang'];
+
+/**
+* Include theme functions file
+*/
+
+// Include theme functions file
+if (file_exists($_CONF['path_layout'] . 'custom/functions.php') ) {
+    require_once $_CONF['path_layout'] . 'custom/functions.php';
+} elseif (file_exists($_CONF['path_layout'] . 'functions.php')) {
+    require_once $_CONF['path_layout'] . 'functions.php';
+}
+
+// ensure XHTML constant is defined to avoid problems elsewhere
+
+if (!defined('XHTML')) {
+    define('XHTML', '');
+}
+
+// themes can now specify the default image type
+// fall back to 'gif' if they don't
+
+if (empty($_IMAGE_TYPE)) {
+    $_IMAGE_TYPE = 'gif';
 }
 
 COM_switchLocaleSettings();
@@ -877,7 +880,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     if ( is_array($what) ) {
         $theme_what = array();
     }
-//    $theme_what         = $what;
+
     $theme_pagetitle    = $pagetitle;
     $theme_headercode   = $headercode;
 

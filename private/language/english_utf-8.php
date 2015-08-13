@@ -247,6 +247,9 @@ $LANG01 = array(
     'continue_reading'          => 'Continue Reading',
     'menu'                      => 'Menu',
     'show_allowed_content'      => 'Show Allowed Content',
+    'blocks_left_title'         => 'Left Side',
+    'blocks_right_title'        => 'Right Side',
+    'blocks_footer_title'       => 'Footer',
 );
 
 ###############################################################################
