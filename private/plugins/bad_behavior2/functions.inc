@@ -208,9 +208,9 @@ function plugin_showstats_bad_behavior2 ($showsitestats)
             }
             $retval .= ADMIN_simpleList ('', $header_arr, $text_arr, $data_arr);
         } else {
-            $retval .= COM_startBlock ($LANG_BAD_BEHAVIOR['stats_headline']);
+            $retval .= COM_startBlock ($LANG_BAD_BEHAVIOR['stats_headline'],'',COM_getBlockTemplate('_admin_block', 'header'));
             $retval .= $LANG_BAD_BEHAVIOR['stats_no_hits'];
-            $retval .= COM_endBlock ();
+            $retval .= COM_endBlock (COM_getBlockTemplate('_admin_block', 'footer'));
         }
     }
 

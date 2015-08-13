@@ -319,9 +319,9 @@ function plugin_showstats_polls($showsitestats)
         }
         $retval .= ADMIN_simpleList ('', $header_arr, $text_arr, $data_arr);
     } else {
-        $retval .= COM_startBlock ($LANG_POLLS['stats_top10']);
+        $retval .= COM_startBlock ($LANG_POLLS['stats_top10'],'',COM_getBlockTemplate('_admin_block', 'header'));
         $retval .= $LANG_POLLS['stats_none'];
-        $retval .= COM_endBlock ();
+        $retval .= COM_endBlock (COM_getBlockTemplate('_admin_block', 'footer'));
     }
 
     return $retval;

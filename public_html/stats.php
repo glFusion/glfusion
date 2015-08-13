@@ -156,9 +156,9 @@ if ($nrows > 0) {
     $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
 
 } else {
-    $display .= COM_startBlock($LANG10[11]);
+    $display .= COM_startBlock($LANG10[11],'',COM_getBlockTemplate('_admin_block', 'header'));
     $display .= $LANG10[13];
-    $display .= COM_endBlock();
+    $display .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 }
 
 // Top Ten Trackback Comments
@@ -186,9 +186,9 @@ if ($_CONF['trackback_enabled'] || $_CONF['pingback_enabled']) {
         $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
 
     } else {
-        $display .= COM_startBlock ($LANG10[25]);
+        $display .= COM_startBlock ($LANG10[25],'',COM_getBlockTemplate('_admin_block', 'header'));
         $display .= $LANG10[26];
-        $display .= COM_endBlock ();
+        $display .= COM_endBlock (COM_getBlockTemplate('_admin_block', 'footer'));
     }
 }
 
@@ -217,9 +217,9 @@ if ($nrows > 0) {
     }
     $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
 } else {
-    $display .= COM_startBlock($LANG10[22]);
+    $display .= COM_startBlock($LANG10[22],'',COM_getBlockTemplate('_admin_block', 'header'));
     $display .= $LANG10[24];
-    $display .= COM_endBlock();
+    $display .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 }
 
 // Last 10 Logins
@@ -256,9 +256,9 @@ if ($nrows > 0) {
     }
     $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
 } else {
-    $display .= COM_startBlock($LANG10[6]);
+    $display .= COM_startBlock($LANG10[6],'',COM_getBlockTemplate('_admin_block', 'header'));
     $display .= $LANG10[28];
-    $display .= COM_endBlock();
+    $display .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 }
 
 // Now show stats for any plugins that want to be included
