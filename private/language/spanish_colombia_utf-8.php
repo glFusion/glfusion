@@ -245,7 +245,10 @@ $LANG01 = array(
     'posted_in' => 'Posted in',
     'continue_reading' => 'Continuar Leyendo',
     'menu' => 'Menu Nav',
-    'show_allowed_content' => 'Show Allowed Content'
+    'show_allowed_content' => 'Show Allowed Content',
+    'blocks_left_title' => 'Left Side',
+    'blocks_right_title' => 'Right Side',
+    'blocks_footer_title' => 'Footer'
 );
 
 ###############################################################################
