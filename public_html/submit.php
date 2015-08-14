@@ -390,6 +390,11 @@ if (isset ($_POST['type'])) {
 } elseif (isset($_GET['type']) ) {
     $type = COM_applyFilter ($_GET['type']);
 }
+if ( $type != '' && $type != 'story') {
+    if ( !in_array($type,$_PLUGINS)) {
+        $type = '';
+    }
+}
 
 $mode = '';
 if (isset ($_POST['mode'])) {
@@ -442,7 +447,7 @@ if (($mode == $LANG12[8]) && !empty ($LANG12[8])) { // submit
     } elseif (SEC_hasRights ('story.edit')) {
         $topic = '';
         if (isset ($_REQUEST['topic'])) {
-            $topic = '&topic=' . urlencode(COM_applyFilter($_REQUEST['topic']));
+            $topic = '&topic=' . urlencode(COM_sanitizeID(COM_applyFilter($_REQUEST['topic'])));
         }
         echo COM_refresh ($_CONF['site_admin_url']
                 . '/story.php?edit=x' . $topic);
@@ -450,7 +455,7 @@ if (($mode == $LANG12[8]) && !empty ($LANG12[8])) { // submit
     }
     $topic = '';
     if (isset ($_REQUEST['topic'])) {
-        $topic = COM_applyFilter ($_REQUEST['topic']);
+        $topic = COM_sanitizeID(COM_applyFilter ($_REQUEST['topic']));
     }
 
     switch ($type) {
