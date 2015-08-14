@@ -75,13 +75,6 @@ function MG_navigation() {
         'lang_php_info'             => $LANG_MG01['phpinfo'],
         'lang_documentation'        => $LANG_MG01['documentation'],
         'lang_import_wizards'       => $LANG_MG01['import_wizards'],
-        'lang_inmemoriam'           => $LANG_MG01['inm_import'],
-        'lang_4images'              => $LANG_MG01['fourimages_import'],
-        'lang_gallery1'             => $LANG_MG01['gallery_import'],
-        'lang_gallery2'             => $LANG_MG01['gallery_v2_import'],
-        'lang_coppermine'           => $LANG_MG01['coppermine_import'],
-        'lang_geekary'              => $LANG_MG01['geekary_import'],
-        'lang_xp_publishing'        => $LANG_MG01['xppubwizard_install'],
         'session_count'             => DB_count($_TABLES['mg_sessions'],'session_status','1'),
         'lang_member_album_options' => $LANG_MG01['member_album_options'],
         'lang_rebuild_quota'        => $LANG_MG01['rebuild_quota'],
@@ -101,7 +94,6 @@ function MG_navigation() {
         'lang_member_purge_album'   => $LANG_MG01['purge_member_albums'],
         'lang_reset_defaults'       => $LANG_MG01['reset_defaults'],
         'lang_filecheck'            => $LANG_MG01['filecheck'],
-        'lang_4images'              => $LANG_MG01['fourimages_import'],
         'lang_glstory'              => $LANG_MG01['gl_story'],
     ));
 

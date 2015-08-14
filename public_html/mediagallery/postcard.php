@@ -486,15 +486,15 @@ $display = '';
 if ($mode == $LANG_MG03['send'] && !empty ($LANG_MG03['send'])) {
     $display .= MG_sendPostCard();
 } elseif ( $mode == 'edit' ) {
-    $mid = COM_applyFilter($_GET['mid']);
+    $mid = COM_sanitizeID(COM_applyFilter($_GET['mid']));
     $display .= MG_editPostCard('create',$mid);
 } elseif ($mode == $LANG_MG03['preview']) {
-    $mid = COM_applyFilter($_POST['mid']);
+    $mid = COM_sanitizeID(COM_applyFilter($_POST['mid']));
     $display .= MG_previewPostCard();
     $display .= '<br/><br/><br/>';
     $display .= MG_editPostCard('edit',$mid);
 } elseif ($mode == $LANG_MG03['cancel']) {
-    $mid = COM_applyFilter($_POST['mid']);
+    $mid = COM_sanitizeID(COM_applyFilter($_POST['mid']));
     if (!empty($mid)) {
         echo COM_refresh ($_MG_CONF['site_url'] . '/media.php?s=' . $mid);
     } else {

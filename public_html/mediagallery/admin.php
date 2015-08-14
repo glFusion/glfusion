@@ -79,8 +79,6 @@ function MG_navbar($selected='',$album_id) {
     $navbar = new navbar;
     $navbar->add_menuitem($LANG_MG01['html5upload_media'],$_MG_CONF['site_url'] .'/admin.php?mode=upload&amp;album_id=' . $album_id);
     $navbar->add_menuitem($LANG_MG01['browser_upload'],$_MG_CONF['site_url'] .'/admin.php?mode=browser&amp;album_id='  . $album_id);
-//    $navbar->add_menuitem($LANG_MG01['gallery_remote'],$_MG_CONF['site_url'] .'/admin.php?mode=gremote&amp;album_id=' . $album_id);
-//    $navbar->add_menuitem($LANG_MG01['xp_pub'],$_MG_CONF['site_url'] .'/admin.php?mode=xppub&amp;album_id='   . $album_id);
     if (SEC_hasRights('mediagallery.admin') ) {
         $navbar->add_menuitem($LANG_MG01['ftp_media'],$_MG_CONF['site_url'] .'/admin.php?mode=import&amp;album_id='  . $album_id);
     }
@@ -143,35 +141,6 @@ if (($mode == 'edit') ) {
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $retval .= MG_navbar($LANG_MG01['browser_upload'],$album_id);
         $retval .= MG_userUpload( $album_id );
-    } else {
-        $retval .= MG_invalidRequest();
-    }
-    $display = MG_siteHeader();
-    $display .= $retval;
-    $display .= MG_siteFooter();
-    echo $display;
-    exit;
-} else if ( $mode == 'gremote' ) {
-    $retval = '';
-    if ( isset($_GET['album_id']) ) {
-        require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
-        $album_id = COM_applyFilter($_GET['album_id'],true);
-        $retval .= MG_navbar($LANG_MG01['gallery_remote'],$album_id);
-        $retval .= MG_galleryRemote( $album_id );
-    } else {
-        $retval .= MG_invalidRequest();
-    }
-    $display = MG_siteHeader();
-    $display .= $retval;
-    $display .= MG_siteFooter();
-    echo $display;
-} else if ( $mode == 'xppub' ) {
-    $retval = '';
-    if ( isset($_GET['album_id']) ) {
-        require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
-        $album_id = COM_applyFilter($_GET['album_id'],true);
-        $retval .= MG_navbar($LANG_MG01['xp_pub'],$album_id);
-        $retval .= MG_xppub( $album_id );
     } else {
         $retval .= MG_invalidRequest();
     }

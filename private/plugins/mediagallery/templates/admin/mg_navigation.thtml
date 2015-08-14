@@ -88,12 +88,6 @@
   <tr>
    <td>
      <ul>
-       <li><a href="{admin_url}importers/Inmemoriam/index.php">{lang_inmemoriam}</a></li>
-       <li><a href="{admin_url}importers/geekary/index.php">{lang_geekary}</a></li>
-       <li><a href="{admin_url}importers/Gallery1/index.php">{lang_gallery1}</a></li>
-       <li><a href="{admin_url}importers/gallery2/index.php">{lang_gallery2}</a></li>
-       <li><a href="{admin_url}importers/4images/index.php">{lang_4images}</a></li>
-       <li><a href="{admin_url}importers/Coppermine/index.php">{lang_coppermine}</a></li>
        <li><a href="{admin_url}importers/gl_story/index.php">{lang_glstory}</a></li>
      </ul>
    </td>
