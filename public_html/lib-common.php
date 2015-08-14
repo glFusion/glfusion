@@ -421,10 +421,11 @@ $TEMPLATE_OPTIONS['default_vars']['layout_url'] = $_CONF['layout_url'];
 if ( isset( $_COOKIE[$_CONF['cookie_language']] ) ) {
     $language = COM_sanitizeFilename($_COOKIE[$_CONF['cookie_language']]);
     if ( is_file( $_CONF['path_language'] . $language . '.php' ) &&
-            ( $_CONF['allow_user_language'] == 1 ))
-    {
+            ( $_CONF['allow_user_language'] == 1 )) {
         $_USER['language'] = $language;
         $_CONF['language'] = $language;
+    } else {
+        $_USER['language'] = $_CONF['language'];
     }
 } else if ( !empty( $_USER['language'] )) {
     if ( is_file( $_CONF['path_language'] . $_USER['language'] . '.php' ) &&
