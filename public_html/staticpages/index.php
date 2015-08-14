@@ -50,7 +50,7 @@ $page = COM_applyFilter(COM_getArgument('page'));
 $display_mode = COM_applyFilter(COM_getArgument('disp_mode'));
 
 if ($page == '' && isset($_POST['page']) ) {
-    $page = COM_applyFilter($_POST['page']);
+    $page = COM_sanitizeID(COM_applyFilter($_POST['page']));
 }
 
 // from comments display refresh:
@@ -74,10 +74,15 @@ if (isset($_POST['order'])) {
         $comment_mode = '';
     }
     if ( isset($_GET['cmtpage']) ) {
-        $cmt_page = COM_applyFilter($_GET['cmtpage']);
+        $cmt_page = COM_applyFilter($_GET['cmtpage'],true);
     }
 
 }
+$valid_modes = array('threaded','nested','flat','nocomment');
+if ( in_array($mode,$valid_modes) === false ) {
+    $mode = '';
+}
+
 if ($display_mode != 'print') {
     $display_mode = '';
 }
@@ -86,7 +91,7 @@ $dmArgument   = empty($display_mode) ? '' : '&disp_mode='.$display_mode;
 
 $cmtOrderArgument = empty($comment_order) ? '' : 'order='.$comment_order;
 $cmtModeArgument  = empty($comment_mode)  ? '' : 'mode='.$comment_mode;
-$cmtPageArgument  = empty($cmt_page)      ? '' : 'cmtpage='.$cmt_page;
+$cmtPageArgument  = empty($cmt_page)      ? '' : 'cmtpage='.(int) $cmt_page;
 
 $baseURL = COM_buildURL($_CONF['site_url'].'/page.php' . $pageArgument . $dmArgument);
 if (strpos($baseURL, '?') === false) {

@@ -49,7 +49,7 @@ COM_setArgNames(array('page', 'disp_mode'));
 $page = COM_applyFilter(COM_getArgument('page'));
 $display_mode = COM_applyFilter(COM_getArgument('disp_mode'));
 if ($page == '' && isset($_POST['page']) ) {
-    $page = COM_applyFilter($_POST['page']);
+    $page = COM_sanitizeID(COM_applyFilter($_POST['page']));
 }
 // from comments display refresh:
 if (isset($_POST['order'])) {
@@ -68,9 +68,14 @@ if (isset($_POST['order'])) {
         $comment_mode = COM_applyFilter($_GET['mode']);
     }
     if ( isset($_GET['cmtpage']) ) {
-        $cmt_page = COM_applyFilter($_GET['cmtpage']);
+        $cmt_page = COM_applyFilter($_GET['cmtpage'],true);
     }
 }
+$valid_modes = array('threaded','nested','flat','nocomment');
+if ( in_array($mode,$valid_modes) === false ) {
+    $mode = '';
+}
+
 if ($display_mode != 'print') {
     $display_mode = '';
 }
