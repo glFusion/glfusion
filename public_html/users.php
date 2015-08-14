@@ -1038,7 +1038,7 @@ function _userNewpwd()
     $retval = '';
 
     $uid    = COM_applyFilter ($_GET['uid'], true);
-    $reqid  = COM_applyFilter ($_GET['rid']);
+    $reqid  = COM_sanitizeID(COM_applyFilter ($_GET['rid']));
 
     if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) && !empty ($reqid) && (strlen ($reqid) == 16)) {
         $uid = (int) $uid;
@@ -1070,7 +1070,7 @@ function _userSetnewpwd()
                  . '&amp;rid=' . COM_applyFilter($_POST['rid']));
     } else {
         $uid = COM_applyFilter ($_POST['uid'], true);
-        $reqid = COM_applyFilter ($_POST['rid']);
+        $reqid = COM_sanitizeID(COM_applyFilter ($_POST['rid']));
         if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) &&
                 !empty ($reqid) && (strlen ($reqid) == 16)) {
             $uid = (int) $uid;
@@ -1473,7 +1473,11 @@ switch ($mode) {
                 } else {
                     // If user is trying to login - force redirect to index.php
                     if (strstr ($_SERVER['HTTP_REFERER'], 'mode=login') === false) {
-                        echo COM_refresh ($_SERVER['HTTP_REFERER']);
+                        if ( substr($_SERVER['HTTP_REFERER'], 0,strlen($_CONF['site_url'])) == $_CONF['site_url']) {
+                            echo COM_refresh ($_SERVER['HTTP_REFERER']);
+                        } else {
+                            echo COM_refresh($_CONF['site_url'].'/index.php');
+                        }
                     } else {
                         echo COM_refresh ($_CONF['site_url'] . '/index.php');
                     }
