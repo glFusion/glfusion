@@ -562,7 +562,7 @@ switch ($action) {
     case 'save':
         if (SEC_checkToken()) {
             $display .= LINK_save($lid,
-                    COM_applyFilter($_POST['old_lid']),
+                    COM_sanitizeID(COM_applyFilter($_POST['old_lid'])),
                     $cid,
                     $_POST['categorydd'],
                     $_POST['url'],

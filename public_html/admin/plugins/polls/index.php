@@ -556,9 +556,9 @@ foreach($expected as $provided) {
 
 $pid = '';
 if (isset($_POST['pid'])) {
-    $pid = COM_applyFilter($_POST['pid']);
+    $pid = COM_sanitizeID(COM_applyFilter($_POST['pid']));
 } elseif (isset($_GET['pid'])) {
-    $pid = COM_applyFilter($_GET['pid']);
+    $pid = COM_sanitizeID(COM_applyFilter($_GET['pid']));
 }
 
 $msg = 0;
@@ -578,7 +578,7 @@ switch ($action) {
 
     case 'save':
         if (SEC_checktoken()) {
-          $old_pid = (isset($_POST['old_pid'])) ? COM_applyFilter($_POST['old_pid']): '';
+          $old_pid = (isset($_POST['old_pid'])) ? COM_sanitizeID(COM_applyFilter($_POST['old_pid'])): '';
           if (empty($pid) && !empty($old_pid)) {
               $pid = $old_pid;
           }

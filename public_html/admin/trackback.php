@@ -1003,7 +1003,13 @@ if (($mode == 'delete') && SEC_checkToken()) {
     if (empty ($type)) {
         $type = 'article';
     }
-    $id = COM_applyFilter($_REQUEST['id']);
+    if ( $type != 'article' ) {
+        if (!in_array($type,$_PLUGINS) ) {
+            $type = 'article';
+        }
+    }
+
+    $id = COM_sanitizeID(COM_applyFilter($_REQUEST['id']));
     if (!empty ($id)) {
         list ($url, $title, $excerpt) = TRACKBACK_getItemInfo($type, $id,
                                                      'url,title,excerpt');
@@ -1032,7 +1038,7 @@ if (($mode == 'delete') && SEC_checkToken()) {
         $display = COM_refresh($_CONF['site_admin_url'] . '/index.php');
     }
 } else if ($mode == 'sendall') {
-    $id = COM_applyFilter($_REQUEST['id']);
+    $id = COM_sanitizeID(COM_applyFilter($_REQUEST['id']));
     if (empty ($id)) {
         echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         exit;
@@ -1142,7 +1148,7 @@ if (($mode == 'delete') && SEC_checkToken()) {
     $display .= COM_endBlock();
     $display .= COM_siteFooter();
 } else if ($mode == 'pretrackback') {
-    $id = COM_applyFilter($_REQUEST['id']);
+    $id = COM_sanitizeID(COM_applyFilter($_REQUEST['id']));
     if (empty ($id)) {
         echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         exit;

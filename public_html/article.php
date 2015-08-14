@@ -63,7 +63,7 @@ $order = '';
 $query = '';
 $reply = '';
 if (isset ($_POST['mode'])) {
-    $sid = COM_applyFilter ($_POST['story']);
+    $sid = COM_sanitizeID(COM_applyFilter ($_POST['story']));
     $mode = COM_applyFilter ($_POST['mode']);
     if (isset ($_POST['order'])) {
         $order = COM_applyFilter ($_POST['order']);
@@ -76,7 +76,7 @@ if (isset ($_POST['mode'])) {
     }
 } else {
     COM_setArgNames (array ('story', 'mode'));
-    $sid = COM_applyFilter (COM_getArgument ('story'));
+    $sid = COM_sanitizeID(COM_applyFilter (COM_getArgument ('story')));
     $mode = COM_applyFilter (COM_getArgument ('mode'));
     if (isset ($_GET['order'])) {
         $order = COM_applyFilter ($_GET['order']);
@@ -333,7 +333,7 @@ if ($A['count'] > 0) {
         // display comments or not?
         if ( (is_numeric($mode)) and ($_CONF['allow_page_breaks'] == 1) )
         {
-            $story_page = $mode;
+            $story_page = (int) $mode;
             $mode = '';
             if( $story_page <= 0 ) {
                 $story_page = 1;

@@ -121,7 +121,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
     }
 
     $hash = CACHE_security_hash();
-    $instance_id = 'story_'.$story->getSid().'_'.$index.$mode.'_'.$article_filevar.'_'.$hash.'_'.$_USER['theme'];
+    $instance_id = 'story_'.$story->getSid().'_'.$index.'_'.$article_filevar.'_'.$hash.'_'.$_USER['theme'];
 
     if ( $index == 'p' || !empty($query) || !$article->check_instance($instance_id,$article_filevar)) {
     // end of instance cache
