@@ -607,6 +607,7 @@ if ($forum > 0) {
         default:
             $sortOrder = "lastupdated DESC";
             $topiclisting->set_var ('img_desc5', '<img src="'._ff_getImage('desc_on').'" alt=""/>');
+            $sort = 0;
             break;
     }
 
