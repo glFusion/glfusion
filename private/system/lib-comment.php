@@ -681,6 +681,11 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
 
     $retval = '';
 
+    $valid_modes = array('threaded','nested','flat','nocomment');
+    if ( in_array($mode,$valid_modes) === false ) {
+        $mode = 'nested';
+    }
+
     if ($mode == 'threaded') $mode = 'nested';
 
     if (! COM_isAnonUser()) {

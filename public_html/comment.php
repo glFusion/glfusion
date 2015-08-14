@@ -67,10 +67,6 @@ function _getReferer()
 
     if ( isset($_POST['referer']) ) {
         $referer = $_POST['referer'];
-        $sLength = strlen($_CONF['site_url']);
-        if ( substr($referer,0,$sLength) != $_CONF['site_url'] ) {
-            $referer = $_CONF['site_url'].'/forum/index.php';
-        }
     } else {
         if ( isset($_SERVER['HTTP_REFERER'] ) ) {
             $referer = $_SERVER['HTTP_REFERER'];
@@ -100,14 +96,22 @@ function _getReferer()
  */
 function handleSubmit()
 {
+    global $_PLUGINS;
+
     $display = '';
 
     $type     = COM_applyFilter ($_POST['type']);
-    $sid      = COM_applyFilter ($_POST['sid']);
+    $sid      = COM_sanitizeID(COM_applyFilter ($_POST['sid']));
     $title    = strip_tags($_POST['title']);
     $pid      = COM_applyFilter($_POST['pid'],true);
     $postmode = COM_applyFilter($_POST['postmode']);
     $comment = '';
+
+    if ( $type != 'article' ) {
+        if (!in_array($type,$_PLUGINS) ) {
+            $type = '';
+        }
+    }
 
     $comment = $_POST['comment_text'];
 
@@ -127,15 +131,20 @@ function handleSubmit()
  */
 function handleDelete()
 {
-    global $_CONF, $_TABLES, $_USER;
+    global $_CONF, $_TABLES, $_USER, $_PLUGINS;
 
     $retval = '';
     $cid     = 0;
 
     $type = COM_applyFilter($_REQUEST['type']);
-    $sid = COM_applyFilter($_REQUEST['sid']);
+    $sid = COM_sanitizeID(COM_applyFilter($_REQUEST['sid']));
     if (isset($_REQUEST['cid'])) {
     	$cid = COM_applyFilter($_REQUEST['cid'],true);
+    }
+    if ( $type != 'article' ) {
+        if (!in_array($type,$_PLUGINS) ) {
+            $type = '';
+        }
     }
 
     if (!($retval = PLG_commentDelete($type,$cid,$sid))) {
@@ -214,7 +223,7 @@ function handleView($view = true)
  * @return string HTML (possibly a refresh)
  */
 function handleEdit() {
-    global $_TABLES, $LANG03,$_USER,$_CONF;
+    global $_TABLES, $LANG03,$_USER,$_CONF, $_PLUGINS;
 
     if ( isset($_POST['cid']) ) {
         $cid = COM_applyFilter ($_POST['cid'],true);
@@ -224,9 +233,9 @@ function handleEdit() {
         $cid = -1;
     }
     if ( isset($_POST['sid']) ) {
-        $sid = COM_applyFilter ($_POST['sid']);
+        $sid = COM_sanitizeID(COM_applyFilter ($_POST['sid']));
     } else if (isset($_GET['sid']) ) {
-        $sid = COM_applyFilter ($_GET['sid']);
+        $sid = COM_sanitizeID(COM_applyFilter ($_GET['sid']));
     } else {
         $sid = '';
     }
@@ -237,6 +246,12 @@ function handleEdit() {
     } else {
         $type = '';
     }
+    if ( $type != 'article' ) {
+        if (!in_array($type,$_PLUGINS) ) {
+            $type = '';
+        }
+    }
+
 
     if (!is_numeric ($cid) || ($cid < 0) || empty ($sid) || empty ($type)) {
         COM_errorLog("handleEdit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
@@ -284,12 +299,18 @@ function handleEdit() {
  */
 function handleEditSubmit()
 {
-    global $_CONF, $_TABLES, $_USER, $LANG03;
+    global $_CONF, $_TABLES, $_USER, $LANG03, $_PLUGINS;
 
     $type       = COM_applyFilter ($_POST['type']);
-    $sid        = COM_applyFilter ($_POST['sid']);
+    $sid        = COM_sanitizeID(COM_applyFilter ($_POST['sid']));
     $cid        = COM_applyFilter ($_POST['cid'],true);
     $postmode   = COM_applyFilter ($_POST['postmode']);
+
+    if ( $type != 'article' ) {
+        if (!in_array($type,$_PLUGINS) ) {
+            $type = '';
+        }
+    }
 
     $commentuid = DB_getItem ($_TABLES['comments'], 'uid', "cid = ".(int) $cid);
     if ( COM_isAnonUser() ) {
@@ -444,7 +465,13 @@ if (!empty ($_REQUEST['mode'])) {
 
 if ( isset($_POST['cancel'] ) ) {
     $type = COM_applyFilter($_POST['type']);
-    $sid  = COM_applyFilter($_POST['sid']);
+    $sid  = COM_sanitizeID(COM_applyFilter($_POST['sid']));
+
+    if ( $type != 'article' ) {
+        if (!in_array($type,$_PLUGINS) ) {
+            $type = '';
+        }
+    }
 
     $urlArray = PLG_getCommentUrlId($type);
     if ( is_array($urlArray) ) {
@@ -460,11 +487,17 @@ if ( isset($_POST['cancel'] ) ) {
     $comment = $_POST['comment_text'];
 
     $type    = COM_applyFilter ($_POST['type']);
-    $sid     = COM_applyFilter ($_POST['sid']);
+    $sid     = COM_sanitizeID(COM_applyFilter ($_POST['sid']));
     $pid     = COM_applyFilter ($_POST['pid'],true);
     $postmode = COM_applyFilter($_POST['postmode']);
     $title   = strip_tags ($_POST['title']);
     $mode    = COM_applyFilter($_POST['mode']);
+
+    if ( $type != 'article' ) {
+        if (!in_array($type,$_PLUGINS) ) {
+            $type = '';
+        }
+    }
 
     if ( $mode == 'edit' ) {
         $previewType = 'preview_edit';
@@ -490,11 +523,17 @@ if ( isset($_POST['cancel'] ) ) {
         $subReturn = handleSubmit();
         if ( $subReturn != '' ) {
             $type    = COM_applyFilter ($_POST['type']);
-            $sid     = COM_applyFilter ($_POST['sid']);
+            $sid     = COM_sanitizeID(COM_applyFilter ($_POST['sid']));
             $pid     = COM_applyFilter ($_POST['pid'],true);
             $postmode = COM_applyFilter($_POST['postmode']);
             $title   = strip_tags ($_POST['title']);
             $mode    = COM_applyFilter($_POST['mode']);
+
+            if ( $type != 'article' ) {
+                if (!in_array($type,$_PLUGINS) ) {
+                    $type = 'article';
+                }
+            }
             $pageBody .= PLG_displayComment($type, $sid, 0, $title, '', 'nobar', 0, 0) . $subReturn;
         }
     } else {
@@ -512,8 +551,18 @@ if ( isset($_POST['cancel'] ) ) {
 
 } elseif ( isset($_POST['sendreport'] ) ) {
     if (SEC_checkToken()) {
-        $pageBody .= CMT_sendReport(COM_applyFilter($_POST['cid'], true),
-                                   COM_applyFilter($_POST['type']));
+        if (isset($_POST['type']) ) {
+            $type = $_POST['type'];
+            if ( $type != 'article' ) {
+                if (!in_array($type,$_PLUGINS) ) {
+                    $type = 'article';
+                }
+            }
+        } else {
+            $type = '';
+        }
+        $pageBody .= CMT_sendReport(COM_sanitizeID(COM_applyFilter($_POST['cid'], true)),
+                                   $type);
     } else {
         echo COM_refresh($_CONF['site_url'] . '/index.php');
         exit;
@@ -530,9 +579,19 @@ if ( isset($_POST['cancel'] ) ) {
             break;
 
         case 'report':
+            if (isset($_POST['type']) ) {
+                $type = $_POST['type'];
+                if ( $type != 'article' ) {
+                    if (!in_array($type,$_PLUGINS) ) {
+                        $type = 'article';
+                    }
+                }
+            } else {
+                $type = '';
+            }
             $pageTitle = $LANG03[27];
             $pageBody .= CMT_reportAbusiveComment (COM_applyFilter ($_GET['cid'], true),
-                                 COM_applyFilter ($_GET['type']));
+                                 $type);
             break;
 
         case 'edit':
@@ -546,8 +605,13 @@ if ( isset($_POST['cancel'] ) ) {
 
         case 'subscribe' :
             if ( isset($_GET['sid']) ) {
-                $sid = COM_applyFilter($_GET['sid']);
+                $sid = COM_sanitizeID(COM_applyFilter($_GET['sid']));
                 $type = COM_applyFilter($_GET['type']);
+                if ( $type != 'article' ) {
+                    if (!in_array($type,$_PLUGINS) ) {
+                        $type = 'article';
+                    }
+                }
                 $pageBody .= handleSubscribe($sid,$type);
             } else {
                 echo COM_refresh($_CONF['site_url'] . '/index.php');
@@ -557,8 +621,13 @@ if ( isset($_POST['cancel'] ) ) {
 
         case 'unsubscribe' :
             if ( isset($_GET['sid']) ) {
-                $sid = COM_applyFilter($_GET['sid']);
+                $sid = COM_sanitizeID(COM_applyFilter($_GET['sid']));
                 $type = COM_applyFilter($_GET['type']);
+                if ( $type != 'article' ) {
+                    if (!in_array($type,$_PLUGINS) ) {
+                        $type = 'article';
+                    }
+                }
                 $pageBody .= handleunSubscribe($sid,$type);
             } else {
                 echo COM_refresh($_CONF['site_url'] . '/index.php');
@@ -577,11 +646,17 @@ if ( isset($_POST['cancel'] ) ) {
                 $goBack = '<br/><br/>'.$LANG03[48];
                 $pageBody .= COM_showMessageText($LANG03[7].$last.$LANG03[8].$goBack,$LANG12[26],true,'error');
             } else {
-                $sid   = isset($_REQUEST['sid']) ? COM_applyFilter ($_REQUEST['sid']) : '';
+                $sid   = isset($_REQUEST['sid']) ? COM_sanitizeID(COM_applyFilter ($_REQUEST['sid'])) : '';
                 $type  = isset($_REQUEST['type']) ? COM_applyFilter ($_REQUEST['type']) : '';
                 $title = isset($_REQUEST['title']) ? strip_tags($_REQUEST['title']) : '';
                 $postmode = $_CONF['comment_postmode'];
                 $pid = isset($_REQUEST['pid']) ? COM_applyFilter($_REQUEST['pid'],true) : 0;
+
+                if ( $type != 'article' ) {
+                    if (!in_array($type,$_PLUGINS) ) {
+                        $type = '';
+                    }
+                }
 
                 if (!empty ($sid) && !empty ($type)) {
                     if (empty ($title)) {
