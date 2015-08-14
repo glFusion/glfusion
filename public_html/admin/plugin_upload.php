@@ -840,7 +840,12 @@ if ( isset($_POST['submit']) ) {
             $display .= post_uploadProcess();
             break;
         case 'upgrade' :
-            echo pi_update($_GET['pi']);
+            if ( isset($_GET['pi']) ) {
+                $pi = COM_sanitizeID(COM_applyFilter($_GET['pi']));
+            } else {
+                $pi = '';
+            }
+            echo pi_update($pi);
             exit;
             break;
         default :

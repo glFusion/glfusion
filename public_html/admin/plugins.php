@@ -709,9 +709,9 @@ foreach($expected as $provided) {
 
 $pi_name = '';
 if (isset($_POST['pi_name'])) {
-    $pi_name = COM_applyFilter($_POST['pi_name']);
+    $pi_name = COM_sanitizeID(COM_applyFilter($_POST['pi_name']));
 } elseif (isset($_GET['pi_name'])) {
-    $pi_name = COM_applyFilter($_GET['pi_name']);
+    $pi_name = COM_sanitizeID(COM_applyFilter($_GET['pi_name']));
 }
 
 if (isset ($_POST['pluginenabler']) && SEC_checkToken()) {
@@ -728,8 +728,6 @@ if (isset ($_POST['pluginenabler']) && SEC_checkToken()) {
     // force a refresh so that the information of the plugin that was just
     // enabled / disabled (menu entries, etc.) is displayed properly
 
-//    echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php');
-//    exit;
     header ('Location: ' . $_CONF['site_admin_url'] . '/plugins.php');
     exit;
 }
