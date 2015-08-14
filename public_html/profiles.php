@@ -558,7 +558,7 @@ switch ($what) {
         break;
 
     case 'sendstory':
-        $sid = COM_applyFilter ($_POST['sid']);
+        $sid = COM_sanitizeID(COM_applyFilter ($_POST['sid']));
         if (empty ($sid)) {
             $display = COM_refresh ($_CONF['site_url'] . '/index.php');
         } else {
