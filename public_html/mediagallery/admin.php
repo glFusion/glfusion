@@ -335,7 +335,7 @@ if (($mode == 'edit') ) {
     // OK, we have a save, now we need to see what we are saving...
     if ( isset($_POST['action']) && isset($_POST['album_id']) ) {
         $action   = COM_applyFilter($_POST['action']);
-        $album_id = COM_applyFilter($_POST['album_id']);
+        $album_id = COM_applyFilter($_POST['album_id'],true);
 
         switch ($action) {
             case 'album' :
@@ -421,7 +421,7 @@ if (($mode == 'edit') ) {
     if ( isset($_POST['action']) && isset($_POST['album_id']) ) {
         $retval = '';
         $action   = COM_applyFilter($_POST['action']);
-        $album_id = COM_applyFilter($_POST['album_id']);
+        $album_id = COM_applyFilter($_POST['album_id'],true);
         switch ($action) {
             case 'media' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/batch.php';
@@ -691,7 +691,7 @@ if (($mode == 'edit') ) {
     if ( isset($_GET['album_id']) && isset($_GET['media_id']) && isset($_GET['action']) ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/rotate.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
-        $media_id = COM_applyFilter($_GET['media_id']);
+        $media_id = COM_sanitizeID(COM_applyFilter($_GET['media_id']));
         $direction = COM_applyFilter($_GET['action']);
         $queue     = COM_applyFilter($_GET['queue'],true);
         $srcFrom   = isset($_GET['s']) ? COM_applyFilter($_GET['s'],true) : 0;

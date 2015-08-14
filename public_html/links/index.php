@@ -454,7 +454,7 @@ if ( $mode == $LANG12[8] && !empty($LANG12[8]) ) {
 
 if (($mode == 'report') && (isset($_USER['uid']) && ($_USER['uid'] > 1))) {
     if (isset ($_GET['lid'])) {
-        $lid = COM_applyFilter($_GET['lid']);
+        $lid = COM_sanitizeID(COM_applyFilter($_GET['lid']));
     }
     if (!empty($lid)) {
         $lidsl = DB_escapeString($lid);

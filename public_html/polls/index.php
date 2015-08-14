@@ -100,10 +100,19 @@ function POLLS_pollList()
 
 $display = '';
 
+$pid = isset($_POST['pid']) ? COM_applyFilter($_POST['pid'],true) : 0;
+$type = isset($_POST['type']) ? COM_applyFilter($_POST['type']) : '';
+
+if ( $type != '' && $type != 'article' ) {
+    if (!in_array($type,$_PLUGINS)) {
+        $type = '';
+    }
+}
+
 if (isset ($_POST['reply']) && ($_POST['reply'] == $LANG01[25])) {
     $display .= COM_refresh ($_CONF['site_url'] . '/comment.php?sid='
-             . $_POST['pid'] . '&pid=' . $_POST['pid']
-             . '&type=' . $_POST['type']);
+             . $pid . '&pid=' . $pid
+             . '&type=' . $type);
     echo $display;
     exit;
 }
@@ -111,16 +120,16 @@ if (isset ($_POST['reply']) && ($_POST['reply'] == $LANG01[25])) {
 $pid = '';
 $aid = 0;
 if (isset ($_REQUEST['pid'])) {
-    $pid = COM_applyFilter ($_REQUEST['pid']);
+    $pid = COM_sanitizeID(COM_applyFilter ($_REQUEST['pid']));
     if (isset ($_GET['aid'])) {
         $aid = -1; // only for showing results instead of questions
     } else if (isset ($_POST['aid'])) {
-        $aid = $_POST['aid'];
+        $aid = COM_applyFilter($_POST['aid'],true);
     }
 } elseif (isset($_POST['id'])) {       // Refresh from comment tool bar
-    $pid = COM_applyFilter ($_POST['id']);
+    $pid = COM_sanitizeID(COM_applyFilter ($_POST['id']));
 } elseif ( isset($_GET['id']) ) {
-    $pid = COM_applyFilter($_GET['id']);
+    $pid = COM_sanitizeID(COM_applyFilter($_GET['id']));
 }
 $order = '';
 if (isset ($_REQUEST['order'])) {
