@@ -41,6 +41,7 @@ if (!defined ('CONFIG_CACHE_FILE_NAME')) {
 class config {
     var $dbconfig_file;
     var $config_array;
+    var $consumer_keys = array('facebook_consumer_key','facebook_consumer_secret','linkedin_consumer_key','linkedin_consumer_secret','twitter_consumer_key','twitter_consumer_secret','google_consumer_key','google_consumer_secret','microsoft_consumer_key','microsoft_consumer_secret','github_consumer_key','github_consumer_secret');
 
     /**
      * This function will return an instance of the config class. If an
@@ -202,7 +203,7 @@ class config {
             $value = $fn($value);
         }
 
-        if ( $name == 'facebook_consumer_key') {
+        if ( in_array($name,$this->consumer_keys) ) {
             $svalue = strval($value);
             $escaped_val = DB_escapeString(serialize($svalue));
         } else {
@@ -950,7 +951,7 @@ class config {
         if ( is_array($this->config_array[$group]) ) {
             foreach ($this->config_array[$group] as $param_name => $param_value) {
                 if (array_key_exists($param_name, $change_array)) {
-                    if ($param_name != 'facebook_consumer_key') {
+                    if ( !in_array($param_name,$this->consumer_keys) ) {
                         $change_array[$param_name] =
                             $this->_validate_input($change_array[$param_name]);
                     }
