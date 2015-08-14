@@ -2,7 +2,7 @@
 /*
  * http.php
  *
- * @(#) $Header: /opt2/ena/metal/http/http.php,v 1.91 2013/07/14 13:21:38 mlemos Exp $
+ * @(#) $Header: /opt2/ena/metal/http/http.php,v 1.92 2014/08/14 23:17:34 mlemos Exp $
  *
  */
 
@@ -27,7 +27,7 @@ class http_class
 
 	var $protocol="http";
 	var $request_method="GET";
-	var $user_agent='httpclient (http://www.phpclasses.org/httpclient $Revision: 1.91 $)';
+	var $user_agent='httpclient (http://www.phpclasses.org/httpclient $Revision: 1.92 $)';
 	var $accept='';
 	var $authentication_mechanism="";
 	var $user;
@@ -1546,6 +1546,11 @@ class http_class
 					return($this->SetError("it was received an unexpected HTTP response status", HTTP_CLIENT_ERROR_PROTOCOL_FAILURE));
 				$this->response_status=$matches[1];
 				$this->response_message=$matches[2];
+				if($this->response_status == 204)
+				{
+					$this->content_length = 0;
+					$this->content_length_set = 1;
+				}
 			}
 			if($line=="")
 			{
