@@ -980,7 +980,7 @@ class Story
         } else {
             $this->_postmode = 'html';
         }
-        $this->_sid = (isset($array['sid']) ? COM_applyFilter($array['sid']) : '');
+        $this->_sid = (isset($array['sid']) ? COM_sanitizeID(COM_applyFilter($array['sid'])) : '');
         $this->_uid = (isset($array['uid']) ? COM_applyFilter($array['uid'], true) : 1);
         if ($this->_uid < 1) {
             $this->_uid = 1;
