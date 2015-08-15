@@ -116,13 +116,13 @@ function MG_purgeMemberAlbums() {
     $numItems = count($_POST['album']);
     for ($i=0; $i < $numItems; $i++) {
         // grab owner ID
-        $result = DB_query("SELECT owner_id FROM {$_TABLES['mg_albums']} WHERE album_id=" . $_POST['album'][$i]);
+        $result = DB_query("SELECT owner_id FROM {$_TABLES['mg_albums']} WHERE album_id=" . (int) COM_applyFilter($_POST['album'][$i],true));
         $numRows = DB_numRows($result);
         if ( $numRows > 0 ) {
             list($owner_id) = DB_fetchArray($result);
             DB_query("UPDATE {$_TABLES['mg_userprefs']} SET member_gallery=0 WHERE uid=" . $owner_id,1);
         }
-        MG_deleteChildAlbums( $_POST['album'][$i] );
+        MG_deleteChildAlbums( (int) COM_applyFilter($_POST['album'][$i],true) );
     }
     MG_initAlbums();
     require_once $_CONF['path'] . 'plugins/mediagallery/include/rssfeed.php';
