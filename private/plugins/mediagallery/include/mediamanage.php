@@ -1186,6 +1186,10 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
 
     $back = COM_applyFilter($_POST['rpath']);
     if ( $back != '' ) {
+        $sLength = strlen($_CONF['site_url']);
+        if ( substr($back,0,$sLength) != $_CONF['site_url'] ) {
+            $back = $_CONF['site_url'];
+        }
         $actionURL = $back;
     }
 
