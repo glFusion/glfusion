@@ -61,7 +61,7 @@ if (isset($_GET['mode'])) {
 }
 $image = '';
 if (isset($_GET['image'])) {
-    $image = COM_applyFilter ($_GET['image']);
+    $image = COM_sanitizeFilename(COM_applyFilter ($_GET['image']));
 }
 if (strstr($image, '..')) {
     // Can you believe this, some jackass tried to relative pathing to access
