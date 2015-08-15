@@ -533,16 +533,16 @@ foreach($expected as $provided) {
 
 $lid = '';
 if (isset($_POST['lid'])) {
-    $lid = COM_applyFilter($_POST['lid']);
+    $lid = COM_sanitizeID(COM_applyFilter($_POST['lid']));
 } elseif (isset($_GET['lid'])) {
-    $lid = COM_applyFilter($_GET['lid']);
+    $lid = COM_sanitizeID(COM_applyFilter($_GET['lid']));
 }
 
 $cid = '';
 if (isset($_POST['cid'])) {
-    $cid = COM_applyFilter($_POST['cid']);
+    $cid = COM_sanitizeID(COM_applyFilter($_POST['cid']));
 } elseif (isset($_GET['cid'])) {
-    $cid = COM_applyFilter($_GET['cid']);
+    $cid = COM_sanitizeID(COM_applyFilter($_GET['cid']));
 }
 
 $msg = (isset($_GET['msg'])) ? COM_applyFilter($_GET['msg']) : '';
