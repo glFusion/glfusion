@@ -755,7 +755,7 @@ if (isset($_POST['tag'])) {
 } elseif (isset($_GET['tag'])) {
     $tag = COM_applyFilter($_GET['tag']);
 }
-
+$tag = COM_sanitizeFilename($tag);
 
 if (isset($_POST['tagenabler']) && SEC_checkToken()) {
     $enabledtags = array();
