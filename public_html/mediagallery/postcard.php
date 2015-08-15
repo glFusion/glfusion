@@ -47,7 +47,7 @@ MG_initAlbums();
 function MG_previewPostCard() {
     global $MG_albums, $_MG_CONF, $_CONF, $_TABLES, $_USER, $LANG_MG03, $LANG_ACCESS, $LANG_MG00;
 
-    $mid        = COM_applyFilter($_POST['mid']);
+    $mid        = COM_sanitizeID(COM_applyFilter($_POST['mid'],true));
     $toname     = COM_applyFilter($_POST['toname']);
     $toemail    = COM_applyFilter($_POST['toemail']);
     $fromname   = COM_applyFilter($_POST['fromname']);
@@ -255,7 +255,7 @@ function MG_sendPostCard() {
     global $MG_albums, $_MG_CONF, $_CONF, $_TABLES, $_USER, $LANG_MG00, $LANG_MG02, $LANG_MG03, $LANG_ACCESS, $_POST;
     global $LANG_DIRECTION, $LANG_CHARSET;
 
-    $mid        = COM_applyFilter($_POST['mid']);
+    $mid        = COM_sanitizeID(COM_applyFilter($_POST['mid'],true));
     $toname     = COM_applyFilter($_POST['toname']);
     $toemail    = COM_applyFilter($_POST['toemail']);
     $fromname   = COM_applyFilter($_POST['fromname']);
