@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v 1.5.0 (unreleased)
+  - Several security enhancements throughout the code
   - Spanish Colombia translations provided by John Toro
   - Static Pages: add where:home or nohome to autotag
   - Add alternate topic support
@@ -31,6 +32,7 @@ v 1.5.0 (unreleased)
      - geshi Library
      - getID3
      - htmLawed
+     - HTMLPurifier
      - http class
      - oauth class
   - Static Pages - fixed autotags so they do not override the page title
