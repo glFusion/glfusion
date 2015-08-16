@@ -52,7 +52,6 @@ $navbarMenu = array(
 if ( $_FF_CONF['enable_user_rating_system'] ) {
     $navbarMenu[$LANG_GF06['8']] = $_CONF['site_admin_url'] .'/plugins/forum/rating.php';
 }
-$navbarMenu[$LANG_GF06['9']] = $_CONF['site_admin_url'] .'/plugins/forum/import.php';
 
 
 function FF_adminNav( $selected = '' )
@@ -72,7 +71,6 @@ function FF_adminNav( $selected = '' )
     if ( $_FF_CONF['enable_user_rating_system'] ) {
         $navbarMenu[$LANG_GF06['8']] = $_CONF['site_admin_url'] .'/plugins/forum/rating.php';
     }
-    $navbarMenu[$LANG_GF06['9']] = $_CONF['site_admin_url'] .'/plugins/forum/import.php';
 
     for ( $i=1; $i <= count($navbarMenu); $i++ )  {
         $parms = explode( "=",current($navbarMenu) );
