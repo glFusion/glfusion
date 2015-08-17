@@ -81,7 +81,7 @@ function processAutotagUpload()
             exit;
         }
 
-        $filename = COM_sanitizeFilename($_FILES['autotagfile']['name']);
+        $filename = COM_sanitizeFilename($_FILES['autotagfile']['name'],true);
 
         $upload->setFileNames($filename);
         $upload->uploadFiles();
@@ -463,7 +463,7 @@ if ( isset($_POST['submit']) ) {
         }
     }
     if ( isset($_POST['pi_name']) ) {
-        $pi_name = COM_sanitizeFilename(COM_applyFilter($_POST['pi_name']));
+        $pi_name = COM_sanitizeFilename(COM_applyFilter($_POST['pi_name']),true);
 
         @unlink($_CONF['path_data'] . 'temp/' . $pi_name . '*');
     }
