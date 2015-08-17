@@ -706,4 +706,49 @@ function _mb_cmp($a,$b)
 {
     return strcasecmp($a['label'],$b['label']);
 }
+
+/**
+* Enable and Disable menu
+*/
+function MB_changeActiveStatusElement ($element_arr)
+{
+    global $_CONF, $_TABLES;
+
+    $menu_id = COM_applyFilter($_POST['menu'],true);
+
+    // disable all elements
+    $sql = "UPDATE {$_TABLES['menu_elements']} SET element_active = '0' WHERE menu_id=".(int) $menu_id;
+    DB_query($sql);
+    if (isset($element_arr)) {
+        foreach ($element_arr as $element => $side) {
+            $element = COM_applyFilter($element, true);
+            // the enable those in the array
+            $sql = "UPDATE {$_TABLES['menu_elements']} SET element_active = '1' WHERE id=".(int) $element;
+            DB_query($sql);
+        }
+    }
+    CACHE_remove_instance('menu');
+    CACHE_remove_instance('css');
+    CACHE_remove_instance('js');
+
+    return;
+}
+function MB_changeActiveStatusMenu ($menu_arr)
+{
+    global $_CONF, $_TABLES;
+    // disable all menus
+    $sql = "UPDATE {$_TABLES['menu']} SET menu_active = '0'";
+    DB_query($sql);
+    if (isset($menu_arr)) {
+        foreach ($menu_arr AS $menu => $side) {
+            $menu = COM_applyFilter($menu, true);
+            // the enable those in the array
+            $sql = "UPDATE {$_TABLES['menu']} SET menu_active = '1' WHERE id=".(int) $menu;
+            DB_query($sql);
+        }
+    }
+    CACHE_remove_instance('menu');
+
+    return;
+}
 ?>

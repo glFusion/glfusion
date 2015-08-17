@@ -20,6 +20,23 @@ if (is_ajax()) {
             case 'blocktoggle' :
                 block_toggle();
                 break;
+            case 'menu-element-toggle' :
+                menu_element_toggle();
+                break;
+            case 'menu-toggle' :
+                menu_toggle();
+                break;
+            case 'sp-toggle' :
+                $enabledstaticpages = array();
+                if (isset($_POST['enabledstaticpages'])) {
+                    $enabledstaticpages = $_POST['enabledstaticpages'];
+                }
+                $sp_idarray = array();
+                if ( isset($_POST['sp_idarray']) ) {
+                    $sp_idarray = $_POST['sp_idarray'];
+                }
+                SP_toggleStatus($enabledstaticpages,$sp_idarray);
+                break;
         }
     } else {
         die();
@@ -75,6 +92,68 @@ function block_toggle() {
     $return["json"] = json_encode($retval);
     echo json_encode($return);
 }
+
+function menu_element_toggle()
+{
+    global $_CONF, $_TABLES;
+
+    if (!SEC_hasRights('menu.admin')) die();
+
+    $retval = array();
+
+    MB_changeActiveStatusElement ($_POST['enableditem']);
+    $retval['statusMessage'] = 'Menu Element state has been toggled.';
+    $retval['errorCode'] = 0;
+
+    $return["json"] = json_encode($retval);
+    echo json_encode($return);
+}
+
+function menu_toggle()
+{
+    global $_CONF, $_TABLES;
+
+    if (!SEC_hasRights('menu.admin')) die();
+
+    $retval = array();
+
+    MB_changeActiveStatusMenu ($_POST['enabledmenu']);
+    $retval['statusMessage'] = 'Menu state has been toggled.';
+    $retval['errorCode'] = 0;
+
+    $return["json"] = json_encode($retval);
+    echo json_encode($return);
+}
+
+
+function SP_toggleStatus($enabledstaticpages, $sp_idarray)
+{
+    global $_TABLES, $_DB_table_prefix;
+
+    if ( !_sec_checkToken(1) ) {
+        $retval['statusMessage'] = 'Invalid security token. Please refresh the page.';
+        $retval['errorCode'] = 1;
+    } else {
+        if (isset($sp_idarray) && is_array($sp_idarray) ) {
+            foreach ($sp_idarray AS $sp_id => $junk ) {
+                $sp_id = COM_applyFilter($sp_id);
+                if (isset($enabledstaticpages[$sp_id])) {
+                    DB_query ("UPDATE {$_TABLES['staticpage']} SET sp_status = '1' WHERE sp_id = '".DB_escapeString($sp_id)."'");
+                } else {
+                    DB_query ("UPDATE {$_TABLES['staticpage']} SET sp_status = '0' WHERE sp_id = '".DB_escapeString($sp_id)."'");
+                }
+            }
+        }
+        PLG_itemSaved($sp_id,'staticpages');
+        CTL_clearCache();
+        $retval['statusMessage'] = 'StaticPage state has been toggled.';
+        $retval['errorCode'] = 0;
+
+        $return["json"] = json_encode($retval);
+        echo json_encode($return);
+    }
+}
+
 
 /*
  * Test function - used for debugging

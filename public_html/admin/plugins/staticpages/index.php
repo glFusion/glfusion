@@ -614,7 +614,7 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                     $title = 'title="' . $LANG_ADMIN['enable'] . '" ';
                     $switch = '';
                 }
-                $retval = '<input type="checkbox" name="enabledstaticpages[' . $A['sp_id'] . ']" ' . $title
+                $retval = '<input class="sp-enabler" type="checkbox" name="enabledstaticpages[' . $A['sp_id'] . ']" ' . $title
                     . 'onclick="submit()" value="1"' . $switch . '/>';
                 $retval .= '<input type="hidden" name="sp_idarray['.$A['sp_id'].']" value="1" />';
             } else {
@@ -692,6 +692,9 @@ function PAGE_list()
     $retval .= ADMIN_list('static_pages', 'PAGE_getListField',
                           $header_arr, $text_arr, $query_arr, $defsort_arr, '', $token, '', $form_arr);
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+
+    $outputHandle = outputHandler::getInstance();
+    $outputHandle->addLinkScript($_CONF['site_url'].'/javascript/admin.js',HEADER_PRIO_NORMAL,'text/javascript');
 
     return $retval;
 

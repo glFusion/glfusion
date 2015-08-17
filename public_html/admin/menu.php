@@ -30,6 +30,7 @@
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 require_once $_CONF['path_system'] . 'classes/menu.class.php';
+require_once $_CONF['path_system'] . 'lib-menu.php';
 
 USES_lib_admin();
 $display = '';
@@ -139,6 +140,9 @@ function MB_displayMenuList( ) {
     }
     $retval .= ADMIN_simpleList("_mb_getListField_menulist", $header_arr, $text_arr, $data_arr,$options,$form_arr);
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+
+    $outputHandle = outputHandler::getInstance();
+    $outputHandle->addLinkScript($_CONF['site_url'].'/javascript/admin.js',HEADER_PRIO_NORMAL,'text/javascript');
 
     return $retval;
 }
@@ -433,6 +437,9 @@ function MB_displayTree( $menu_id ) {
     $retval .= ADMIN_simpleList("_mb_getListField_menu", $header_arr, $text_arr, $data_arr,$options,$form_arr);
 
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+
+    $outputHandle = outputHandler::getInstance();
+    $outputHandle->addLinkScript($_CONF['site_url'].'/javascript/admin.js',HEADER_PRIO_NORMAL,'text/javascript');
 
     return $retval;
 }
@@ -1001,38 +1008,10 @@ function MB_saveEditMenuElement ( ) {
     $menu->reorderMenu($pid);
 }
 
-
 /**
-* Enable and Disable block
+* Enable and Disable Menu
 */
-function MB_changeActiveStatusElement ($element_arr)
-{
-    global $_CONF, $_TABLES;
-
-    $menu_id = COM_applyFilter($_POST['menu'],true);
-
-    // disable all elements
-    $sql = "UPDATE {$_TABLES['menu_elements']} SET element_active = '0' WHERE menu_id=".(int) $menu_id;
-    DB_query($sql);
-    if (isset($element_arr)) {
-        foreach ($element_arr as $element => $side) {
-            $element = COM_applyFilter($element, true);
-            // the enable those in the array
-            $sql = "UPDATE {$_TABLES['menu_elements']} SET element_active = '1' WHERE id=".(int) $element;
-            DB_query($sql);
-        }
-    }
-    CACHE_remove_instance('menu');
-    CACHE_remove_instance('css');
-    CACHE_remove_instance('js');
-
-    return;
-}
-
-/**
-* Enable and Disable block
-*/
-function MB_changeActiveStatusMenu ($menu_arr)
+function MB_changeActiveStatusMenuXX ($menu_arr)
 {
     global $_CONF, $_TABLES;
     // disable all menus
@@ -1175,7 +1154,7 @@ function _mb_getListField_menu($fieldname, $fieldvalue, $A, $icon_arr)
             $retval = "<span style=\"padding:0 5px;margin-left:" .$A['indent'] . "px;\">" . ($A['type'] == 1 ? '<b>' : '') . strip_tags($fieldvalue) . ($A['type'] == 1 ? '</b>' : '').'</span>';
             break;
         case 'enabled' :
-            $retval =  '<input type="checkbox" name="enableditem[' . $A['id'] . ']" onclick="submit()" value="1"' . ($fieldvalue == 1 ? ' checked="checked"' : '') . '/>';
+            $retval =  '<input class="menu-element-enabler" type="checkbox" name="enableditem[' . $A['id'] . ']" onclick="submit()" value="1"' . ($fieldvalue == 1 ? ' checked="checked"' : '') . '/>';
             break;
         case 'edit' :
             $retval = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=edit&amp;mid=' . $A['id'] . '&amp;menu=' . $A['menu_id']. '">';
@@ -1217,7 +1196,7 @@ function _mb_getListField_menulist($fieldname, $fieldvalue, $A, $icon_arr)
                     . '<img src="'.$_CONF['layout_url'].'/images/copy.png" alt="'.$LANG_MB01['clone'].'" />';
             break;
         case 'active' :
-            $retval = '<input type="checkbox" name="enabledmenu[' . $A['menu_id'] . ']" onclick="submit()" value="1"' . ($A['active'] == 1 ? ' checked="checked"' : '') . '/>';
+            $retval = '<input class="menu-enabler" type="checkbox" name="enabledmenu[' . $A['menu_id'] . ']" onclick="submit()" value="1"' . ($A['active'] == 1 ? ' checked="checked"' : '') . '/>';
             break;
         case 'elements' :
             $retval = '<a href="'.$_CONF['site_admin_url'].'/menu.php?mode=menu&amp;menu='.$A['menu_id'].'">'
