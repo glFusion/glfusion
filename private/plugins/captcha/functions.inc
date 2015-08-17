@@ -75,7 +75,6 @@ if ( isset($_CP_CONF['gfxDriver']) && $_CP_CONF['gfxDriver'] == 3 ) {
     if ( $_CP_CONF['publickey'] == '' || $_CP_CONF['privatekey'] == '' ) {
         $_CP_CONF['gfxDriver'] = 2;
     } else {
-//        require_once $_CONF['path'] . 'plugins/captcha/class/recaptchalib.php';
         require_once $_CONF['path'] . 'plugins/captcha/class/autoload.php';
     }
 
@@ -569,11 +568,15 @@ function recaptcha_get_html($pkey,$other)
 
 function CAPTCHA_checkRetries( $csid )
 {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES, $_SYSTEM;
+
+    if ( !isset($_SYSTEM['max_captcha_attempts']) ) {
+        $_SYSTEM['max_captcha_atttempts'] = 3;  // this + 1 is max tries
+    }
 
     $counter = (int) DB_getItem($_TABLES['cp_sessions'],'counter',"session_id='" . DB_escapeString($csid) . "'");
 
-    if ( $counter > 4 ) { // this allowed me to try 5 times.
+    if ( $counter > $_SYSTEM['max_captcha_atttempts'] ) {
         if ( function_exists('bb2_ban') ) {
             CAPTCHA_errorLog("CAPTCHA: Banning for too many retries - IP Address: " . $_SERVER['REMOTE_ADDR'] );
             bb2_ban($_SERVER['REMOTE_ADDR'],2);

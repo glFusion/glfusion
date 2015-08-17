@@ -151,7 +151,7 @@ $_SYSTEM['verification_token_ttl'] = 86400;
 // |                                                                          |
 // | by default, glFusion will use the referrer URL to validate security      |
 // | tokens. In some cases, the browser may not send this data, so you can    |
-// |use the remote IP as the check                                            |
+// | use the remote IP as the check                                           |
 // |                                                                          |
 // | If this value is set to true, the IP address will be checked instead.    |
 // | of the referring URL.                                                    |
@@ -159,6 +159,17 @@ $_SYSTEM['verification_token_ttl'] = 86400;
 
 $_SYSTEM['token_ip'] = false;
 
+// +--------------------------------------------------------------------------+
+// | Max CAPTCHA Attempts - The maximum number of attempts before banning     |
+// |                                                                          |
+// | If automatic banning is enabled in the Bad Behavior2 configuration,      |
+// | this is the maximum number of attempts to pass the CAPTCHA before        |
+// | the user receives a temporary ban.                                       |
+// |                                                                          |
+// | Attempt counts begin with 0.                                             |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['max_captcha_atttempts'] = 4;
 
 // +--------------------------------------------------------------------------+
 // | glFusion cache filenames - You generally do not need to adjust these.    |
