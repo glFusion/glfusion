@@ -116,7 +116,7 @@ class mgFrame {
 			}
 
             $retval = '<div>' . LB;
-            $retval .= '<table class="mgFrame_' . $this->name . '" border="0" cellspacing="0" cellpadding="0">' . LB;
+            $retval .= '<table class="mgFrame_' . $this->name . '" border="0" cellspacing="0" cellpadding="0" style="margin:0 auto;">' . LB;
 
             if ( !empty($this->frame['imageTT']) || !empty($this->frame['imageTL'])  || !empty($this->frame['imageTR']) ||
                  !empty($this->frame['imageTTL']) || !empty($this->frame['imageTr']) ) {
