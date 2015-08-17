@@ -440,6 +440,23 @@ function DB_fetchArray($recordset, $both = true)
 }
 
 /**
+* Retrieves all records from a recordset
+*
+* Gets all records in a recordset and returns in array
+*
+* @param        object      $recordset      The recordset to operate on
+* @param        boolean     $both           get both assoc and numeric indices
+* @return       Array      Returns data for a record in an array
+*
+*/
+function DB_fetchAll($recordset, $both = true)
+{
+    global $_DB;
+
+    return $_DB->dbFetchAll($recordset, $both);
+}
+
+/**
 * Returns the last ID inserted
 *
 * Returns the last auto_increment ID generated

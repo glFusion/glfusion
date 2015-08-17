@@ -606,6 +606,29 @@ class database
     }
 
     /**
+    * Retrieves full record set
+    *
+    * Gets the full recordset and returns in array
+    *
+    * @param    object      $recordset  The recordset to operate on
+    * @param    boolean     $both       get both assoc and numeric indices
+    * @return   array       Returns data array of current row from recordset
+    */
+    public function dbFetchAll($recordset, $both = FALSE)
+    {
+        if ($both) {
+            $result_type = MYSQLI_BOTH;
+        } else {
+            $result_type = MYSQLI_ASSOC;
+        }
+
+        $return = $recordset->fetch_all($result_type);
+        if ( $return === NULL )
+            return array();
+        return $return;
+    }
+
+    /**
     * Returns the last ID inserted
     *
     * Returns the last auto_increment ID generated

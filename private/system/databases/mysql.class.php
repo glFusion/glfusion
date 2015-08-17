@@ -666,6 +666,23 @@ class database {
     }
 
     /**
+    * Retrieves all records in recordset
+    *
+    * Gets all records in a recordset and returns in array
+    *
+    * @param    object      $recordset  The recordset to operate on
+    * @param    boolean     $both       get both assoc and numeric indices
+    * @return   array       Returns data array of all rows from recordset
+    *
+    */
+    function dbFetchAll($recordset, $both = false)
+    {
+        for ($res = array(); $tmp = @mysql_fetch_array($recordset, $result_type);) $res[] = $tmp;
+        return $res;
+    }
+
+
+    /**
     * Returns the last ID inserted
     *
     * Returns the last auto_increment ID generated
