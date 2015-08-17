@@ -738,7 +738,7 @@ class ListFactory {
         $list_templates->parse('output', 'list');
 
         // Do the actual output
-        $retval = '<div style="border-bottom:1px solid #ccc;"></div>';
+        $retval = '<div style="margin-top:5px;margin-bottom:5px;border-bottom:1px solid #ccc;"></div>';
 
         $retval .= $list_templates->finish($list_templates->get_var('output'));
 
