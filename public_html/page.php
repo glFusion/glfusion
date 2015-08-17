@@ -44,6 +44,7 @@ $comment_order = '';
 $comment_mode  = '';
 $cmt_page = '';
 $display_mode = '';
+$mode = '';
 
 COM_setArgNames(array('page', 'disp_mode'));
 $page = COM_applyFilter(COM_getArgument('page'));
