@@ -179,11 +179,19 @@ function MG_saveHTML5Upload( $album_id ) {
     }
 
     foreach ($file as $tagname=>$object) {
-        $filename   = $object['name'];
-        $filetype   = $object['type'];
-        $filesize   = $object['size'];
-        $filetmp    = $object['tmp_name'];
-        $error      = $object['error'];
+        if ( is_array($object['name'])) {
+            $filename = $object['name'][0];
+            $filetype   = $object['type'][0];
+            $filesize   = $object['size'][0];
+            $filetmp    = $object['tmp_name'][0];
+            $error      = $object['error'][0];
+        } else {
+            $filename   = $object['name'];
+            $filetype   = $object['type'];
+            $filesize   = $object['size'];
+            $filetmp    = $object['tmp_name'];
+            $error      = $object['error'];
+        }
         $caption     = '';
         $description = '';
         $attachtn    = '';
