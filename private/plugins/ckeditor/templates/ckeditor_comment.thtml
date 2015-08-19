@@ -6,7 +6,7 @@ var comment_text;
 function loadEditor(id) {
     var instance = CKEDITOR.replace( id, {
         toolbar: 'basic',
-        contentsCss: '{layout_url}/style.cache.css',
+        contentsCss: '{css_url}',
         bodyClass: 'comment',
         removePlugins: 'elementspath',
         resize_enabled: false,

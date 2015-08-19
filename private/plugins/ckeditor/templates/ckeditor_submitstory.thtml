@@ -8,7 +8,7 @@
         var instance = CKEDITOR.replace( id, {
             toolbar: 'standard',
             allowedContent: true,
-            contentsCss: '{layout_url}/style.cache.css',
+            contentsCss: '{css_url}',
             extraPlugins: 'mediagallery',
             {styleset}
             bodyClass: 'story-body',
