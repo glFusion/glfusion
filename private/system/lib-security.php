@@ -2076,13 +2076,13 @@ function SEC_loginForm($use_options = array())
         $loginform->set_file('openid_login', '../loginform_openid.thtml');
         $loginform->set_var('lang_openid_login', $LANG01[128]);
         $loginform->set_var('input_field_size', 40);
-
+/*---
         // for backward compatibility - not used any more
         $app_url = isset($_SERVER['SCRIPT_URI'])
                  ? $_SERVER['SCRIPT_URI']
                  : 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
         $loginform->set_var('app_url', $app_url);
-
+--- */
         $loginform->parse('output', 'openid_login');
         $loginform->set_var('openid_login',$loginform->finish($loginform->get_var('output')));
     } else {

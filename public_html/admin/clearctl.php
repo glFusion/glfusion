@@ -44,11 +44,11 @@ if (!SEC_inGroup ('Root')) {
  */
 
 // validate the referer here - just to be safe....
-$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_CONF['site_url'];
-if ( $referer == '' ) {
-    $referer = $_CONF['site_url'];
+$dirty_referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_CONF['site_url'];
+if ( $dirty_referer == '' ) {
+    $dirty_referer = $_CONF['site_url'];
 }
-
+$referer = COM_sanitizeUrl($dirty_referer);
 $sLength = strlen($_CONF['site_url']);
 if ( substr($referer,0,$sLength) != $_CONF['site_url'] ) {
     $referer = $_CONF['site_url'];

@@ -54,7 +54,7 @@ MG_initAlbums();
 $allowblank = 1;
 $alloweddomains = array($_CONF['site_url']);
 if (isset($_SERVER['HTTP_REFERER'])) {
-    $referrer = $_SERVER['HTTP_REFERER'];
+    $referrer = COM_sanitizeUrl($_SERVER['HTTP_REFERER']);
 } else {
     $referrer = "";
 }

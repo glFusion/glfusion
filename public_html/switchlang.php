@@ -125,7 +125,7 @@ function switch_language($url, $newlang, $oldlang)
 $ret_url = '';
 if (isset($_SERVER['HTTP_REFERER'])) {
     if (strpos($_SERVER['HTTP_REFERER'], $_CONF['site_url']) !== false) {
-        $ret_url = $_SERVER['HTTP_REFERER'];
+        $ret_url = COM_sanitizeUrl($_SERVER['HTTP_REFERER']);
     }
 }
 

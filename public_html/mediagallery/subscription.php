@@ -49,7 +49,7 @@ function handleSubscribe($album_id)
 {
     global $_CONF, $_TABLES, $_USER, $MG_albums,$LANG_MG02;
 
-    $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_CONF['site_url'];
+    $referer = isset($_SERVER['HTTP_REFERER']) ? COM_sanitizeUrl($_SERVER['HTTP_REFERER']) : $_CONF['site_url'];
     if ( $referer == '' ) {
         $referer = $_CONF['site_url'];
     }
@@ -95,7 +95,7 @@ function handleunSubscribe($album_id)
 {
     global $_CONF, $_TABLES, $_USER;
 
-    $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_CONF['site_url'];
+    $referer = isset($_SERVER['HTTP_REFERER']) ? COM_sanitizeUrl($_SERVER['HTTP_REFERER']) : $_CONF['site_url'];
     if ( $referer == '' ) {
         $referer = $_CONF['site_url'];
     }

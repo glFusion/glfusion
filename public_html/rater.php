@@ -49,7 +49,7 @@ $uid        = isset($_USER['uid']) ? $_USER['uid'] : 1;
 $uid        = (int) $uid;
 
 // validate the referer here - just to be safe....
-$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_CONF['site_url'];
+$referer = isset($_SERVER['HTTP_REFERER']) ? COM_sanitizeUrl($_SERVER['HTTP_REFERER']) : $_CONF['site_url'];
 if ( $referer == '' ) {
     $referer = $_CONF['site_url'];
 }

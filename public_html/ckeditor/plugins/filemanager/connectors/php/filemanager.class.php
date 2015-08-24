@@ -937,7 +937,7 @@ class Filemanager {
     }
 
     private function setParams() {
-        $tmp = (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/');
+        $tmp = (isset($_SERVER['HTTP_REFERER']) ? COM_sanitizeUrl($_SERVER['HTTP_REFERER']) : '/');
         $tmp = explode('?',$tmp);
         $params = array();
         if(isset($tmp[1]) && $tmp[1]!='') {

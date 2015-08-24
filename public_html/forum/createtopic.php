@@ -90,7 +90,7 @@ if ( isset($_POST['referer']) ) {
     }
 } else {
     if ( isset($_SERVER['HTTP_REFERER'] ) ) {
-        $referer = $_SERVER['HTTP_REFERER'];
+        $referer = COM_sanitizeUrl($_SERVER['HTTP_REFERER']);
     } else {
         $referer = '';
     }

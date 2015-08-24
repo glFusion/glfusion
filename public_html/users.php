@@ -1474,7 +1474,7 @@ switch ($mode) {
                     // If user is trying to login - force redirect to index.php
                     if (strstr ($_SERVER['HTTP_REFERER'], 'mode=login') === false) {
                         if ( substr($_SERVER['HTTP_REFERER'], 0,strlen($_CONF['site_url'])) == $_CONF['site_url']) {
-                            echo COM_refresh ($_SERVER['HTTP_REFERER']);
+                            echo COM_refresh (COM_sanitizeUrl($_SERVER['HTTP_REFERER']));
                         } else {
                             echo COM_refresh($_CONF['site_url'].'/index.php');
                         }

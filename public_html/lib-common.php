@@ -1385,8 +1385,8 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     $retval = $theme->finish( $theme->get_var( 'index_footer' ));
 
-    js_out();
-    css_out();
+    _js_out();
+    _css_out();
 
     return $retval;
 }
@@ -6530,7 +6530,7 @@ function CTL_clearCache($plugin='')
     }
 }
 
-function css_out()
+function _css_out()
 {
     global $_CONF, $_SYSTEM, $_VARS, $_USER, $_PLUGINS, $_TABLES;
 
@@ -6622,7 +6622,7 @@ function css_out()
 
     // compress whitespace and comments
     if ($_CONF['compress_css']){
-        $css = css_compress($css);
+        $css = _css_compress($css);
     }
     // save cache file
 
@@ -6698,12 +6698,12 @@ function css_cacheok($cache,$files)
  *
  * @author Andreas Gohr <andi@splitbrain.org>
  */
-function css_compress($css){
+function _css_compress($css){
     //strip comments through a callback
-    $css = preg_replace_callback('#(/\*)(.*?)(\*/)#s','css_comment_cb',$css);
+    $css = preg_replace_callback('#(/\*)(.*?)(\*/)#s','_css_comment_cb',$css);
 
     //strip (incorrect but common) one line comments
-    $css = preg_replace_callback('/^.*\/\/.*$/m','css_onelinecomment_cb',$css);
+    $css = preg_replace_callback('/^.*\/\/.*$/m','_css_onelinecomment_cb',$css);
 
     // strip whitespaces
     $css = preg_replace('![\r\n\t ]+!',' ',$css);
@@ -6734,7 +6734,7 @@ function css_compress($css){
  *
  * @author Andreas Gohr <andi@splitbrain.org>
  */
-function css_comment_cb($matches){
+function _css_comment_cb($matches){
     if(strlen($matches[2]) > 4) return '';
     return $matches[0];
 }
@@ -6747,7 +6747,7 @@ function css_comment_cb($matches){
  * @param $matches
  * @return string
  */
-function css_onelinecomment_cb($matches) {
+function _css_onelinecomment_cb($matches) {
     $line = $matches[0];
 
     $out = '';
@@ -6777,7 +6777,7 @@ function css_onelinecomment_cb($matches) {
 }
 
 
-function js_out()
+function _js_out()
 {
     global $_CONF, $_SYSTEM, $_USER, $_PLUGINS, $themeAPI;
 

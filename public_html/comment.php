@@ -66,19 +66,20 @@ function _getReferer()
     global $_CONF;
 
     if ( isset($_POST['referer']) ) {
-        $referer = $_POST['referer'];
+        $referer = COM_sanitizeUrl($_POST['referer']);
     } else {
         if ( isset($_SERVER['HTTP_REFERER'] ) ) {
-            $referer = $_SERVER['HTTP_REFERER'];
+            $referer = COM_sanitizeUrl($_SERVER['HTTP_REFERER']);
         } else {
             $referer = '';
         }
     }
+
     $sLength = strlen($_CONF['site_url']);
     if ( substr($referer,0,$sLength) != $_CONF['site_url'] ) {
         $referer = $_CONF['site_url'].'/forum/index.php';
     }
-    $referer = @htmlentities($referer,ENT_COMPAT, COM_getEncodingt());
+    $referer = @htmlspecialchars($referer,ENT_COMPAT, COM_getEncodingt());
     if ( strstr($referer,'comment.php') !== false ) {
         if ( isset($_REQUEST['sid']) && isset($_REQUEST['type']) ) {
             $referer = PLG_getCommentUrlId($type);
@@ -374,10 +375,13 @@ function handleSubscribe($sid,$type)
 {
     global $_CONF, $_TABLES, $_USER;
 
-    $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_CONF['site_url'];
-    if ( $referer == '' ) {
-        $referer = $_CONF['site_url'];
+    $dirty_referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_CONF['site_url'];
+    if ( $dirty_referer == '' ) {
+        $dirty_referer = $_CONF['site_url'];
     }
+
+    $referer = COM_sanitizeUrl($dirty_referer);
+
     $sLength = strlen($_CONF['site_url']);
     if ( substr($referer,0,$sLength) != $_CONF['site_url'] ) {
         $referer = $_CONF['site_url'];
@@ -415,10 +419,11 @@ function handleunSubscribe($sid,$type)
 {
     global $_CONF, $_TABLES, $_USER;
 
-    $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_CONF['site_url'];
-    if ( $referer == '' ) {
-        $referer = $_CONF['site_url'];
+    $dirty_referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_CONF['site_url'];
+    if ( $dirty_referer == '' ) {
+        $dirty_referer = $_CONF['site_url'];
     }
+    $referer = COM_sanitizeUrl($dirty_referer);
 
     $sLength = strlen($_CONF['site_url']);
     if ( substr($referer,0,$sLength) != $_CONF['site_url'] ) {
