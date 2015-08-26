@@ -431,9 +431,13 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
         }
     }
 
-    $page = COM_siteHeader($headerOption, $A['sp_title']);
+    if ($A['sp_format'] <> 'blankpage') {
+        $page = COM_siteHeader($headerOption, $A['sp_title']);
+    }
     $page .= $retval;
-    $page .= COM_siteFooter($footerOption);
+    if ($A['sp_format'] <> 'blankpage') {
+        $page .= COM_siteFooter($footerOption);
+    }
     return $page;
 }
 
