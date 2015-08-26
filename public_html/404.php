@@ -49,6 +49,7 @@ if (isset ($_SERVER['SCRIPT_URI'])) {
     }
     $url = 'http://' . $_SERVER['HTTP_HOST'] . strip_tags ($request);
 }
+$url = COM_sanitizeUrl($url);
 $display .= sprintf ($LANG_404[2], $url);
 $display .= $LANG_404[3];
 $display .= COM_endBlock ();
