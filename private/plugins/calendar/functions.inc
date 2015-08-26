@@ -540,7 +540,7 @@ function plugin_savesubmission_calendar($A)
     }
 
     $A['title']       = (isset($A['title']) ? $A['title'] : '');
-    $A['url']         = (isset($A['url']) ? $A['url'] : '');
+    $A['url']         = (isset($A['url']) ? COM_sanitizeUrl($A['url']) : '');
     $A['location']    = (isset($A['location']) ? $A['location'] : '');
     $A['address1']    = (isset($A['address1']) ? $A['address1'] : '');
     $A['address2']    = (isset($A['address2']) ? $A['address2'] : '');
