@@ -141,7 +141,7 @@ $LANG01 = array(
     91 => 'Page created in',
     92 => 'seconds',
     93 => '',
-    94 => "<a href=\"{$_CONF['site_url']}/terms.php\">Terms of Use</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href=\"{$_CONF['site_url']}/privpol.php\">Privacy Policy</a>",
+    94 => "<a href=\"{$_CONF['site_url']}/page.php?page=terms-of-use\">Terms of Use</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href=\"{$_CONF['site_url']}/page.php?page=privacy-policy\">Privacy Policy</a>",
     95 => 'by',
     96 => 'Groups',
     97 => 'Word List',
