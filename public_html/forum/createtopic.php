@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Main program to create topics and posts in the forum                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2014 by the following authors:                        |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -546,7 +546,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         $peTemplate->set_var ('anonymous_user',true);
         $peTemplate->set_var ('post_message', $postmessage);
         $peTemplate->set_var ('LANG_NAME', $LANG_GF02['msg33']);
-        $peTemplate->set_var ('name', htmlentities(strip_tags(COM_checkWords(trim(USER_sanitizeName(isset($postData['name']) ? $postData['name'] : ''))))));
+        $peTemplate->set_var ('name', htmlentities(strip_tags(COM_checkWords(trim(USER_sanitizeName(isset($postData['name']) ? $postData['name'] : ''))))),ENT_COMPAT, COM_getEncodingt());
         if ( isset($postData['email']) ) {
             $peTemplate->set_var ('email',strip_tags($postData['email']));
         }
@@ -990,14 +990,14 @@ function FF_saveTopic( $forumData, $postData, $action )
         }
     }
 
-    if ( $_FF_CONF['use_sfs'] == 1 && COM_isAnonUser() ) {
+    if ( $_FF_CONF['use_sfs'] == 1 && COM_isAnonUser() && function_exists('plugin_itemPreSave_spamx')) {
        $spamCheckData = array(
             'username'  => $postData['name'],
             'email'     => $email,
             'ip'        => $REMOTE_ADDR);
 
-        $msg = PLG_itemPreSave ('forum', $spamCheckData);
-        if (!empty ($msg)) {
+        $msg = plugin_itemPreSave_spamx('forum',$spamCheckData);
+        if ( $msg ) {
             $errorMessages .= $msg;
             $okToSave = false;
         }

@@ -373,31 +373,6 @@ function plugin_itemPreSave_spamx($type, $data)
             return $LANG_SX00['invalid_email_or_ip'];
         }
     }
-}
-
-
-function plugin_itemPreSave_spamxORIG($type, $username)
-{
-    global $_CONF, $LANG_SX00, $REMOTE_ADDR;
-
-    if ($type == 'registration') {
-        $email = '';
-        if ( isset($_POST['email']) ) {
-            $email = $_POST['email'];
-        }
-        if ( @file_exists($_CONF['path'].'/plugins/spamx/modules/SFS.Misc.class.php') ) {
-            require_once $_CONF['path'].'/plugins/spamx/modules/SFS.Misc.class.php';
-            $EX = new SFSreg;
-            $res = $EX->execute($email, $REMOTE_ADDR);
-            if ($res > 0) {
-                SPAMX_log ($type . ' - Found ' . $type . ' matching ' . 'Stop Forum Spam (SFS)'.
-                       'for email '  . $email .
-                       $LANG_SX00['foundspam3'] . $_SERVER['REMOTE_ADDR']);
-                return $LANG_SX00['invalid_email_or_ip'];
-            }
-        }
-    }
-
     return '';
 }
 ?>
