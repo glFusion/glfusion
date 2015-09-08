@@ -2,6 +2,7 @@ Please view this file on the master branch, on other branches it's out of date.
 
 v 1.5.0 (unreleased)
   - Several security enhancements throughout the code
+  - Static Pages:  Fixed blank page format to no longer include header / footer.
   - Spanish Colombia translations provided by John Toro
   - Static Pages: add where:home or nohome to autotag
   - Add alternate topic support
