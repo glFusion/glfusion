@@ -359,7 +359,7 @@ function getNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix, $group = 
 <input type="hidden" name="dbname" value="' . $dbname . '" />
 <input type="hidden" name="dbprefix" value="' . $dbprefix . '" />
 
-<center><b>To Repair the Sessions Table - Select the repair button</b></center>
+<div class="important">To Repair the Sessions Table - Select the repair button</div>
 
 <table style="width:100%;border:none;padding:5px;" cellspacing="5" cellpadding="5">
 <tr><th style="text-align:right;width:20%;">Option</th><th style="text-align:middle; width:60%;">Value</th><th style="text-align:middle;width:20%;">Reset Default</th></tr>
@@ -382,7 +382,7 @@ foreach ($config as $option => $value) {
     } elseif ($configDetail[$option]['type'] != '@text' &&  $configDetail[$option]['type'] != '%text' && $configDetail[$option]['type'] != '@select' && $configDetail[$option]['type'] != '*text' && $configDetail[$option]['type'] != '**placeholder')  {
         echo '<tr onmouseover="this.className=\'hover\';" onmouseout="this.className=\'\';"><td style="text-align:right;width:20%;">' . $option . '</td><td><input type="text" name="cfgvalue[' . $option . ']" size="90" value="' . @unserialize($value) . '" /></td><td style="text-align:center;width:20%;"><input type="checkbox" name="default[' . $option . ']" value="1" /></td></tr>';
     }  else {
-        echo '<tr onmouseover="this.className=\'hover\';" onmouseout="this.className=\'\';"><td style="text-align:right;width:20%;">' . $option . '</td><td><input type="text" name="cfgvalue[' . $option . ']" size="90" value="' . @unserialize($value) . '" /></td><td style="text-align:center;width:20%;"><input type="checkbox" name="default[' . $option . ']" value="1" /></td></tr>';
+        echo '<tr onmouseover="this.className=\'hover\';" onmouseout="this.className=\'\';"><td style="text-align:right;width:20%;">' . $option . '</td><td><input disabled="disabled" type="text" name="cfgvalue[' . $option . ']" size="90" value="' . @unserialize($value) . '" /></td><td style="text-align:center;width:20%;"><input type="checkbox" name="default[' . $option . ']" value="1" /></td></tr>';
     }
 }
 
@@ -499,17 +499,43 @@ echo '
 <meta name="robots" content="noindex,nofollow" />
 <title>glFusion Rescue Configuration Editor</title>
 <style type="text/css">
+html {
+font: 14px/20px "Helvetica Neue",Helvetica,Arial,sans-serif;
+color: #444;
+}
+.main {
+width: 960px;
+border: 1px solid #ccc;
+padding: 10px;
+text-align: left;
+margin:0 auto;
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+}
+div.important {
+background: #5ba3e3;
+color:#000;
+font-weight:700l
+line-height:2em;
+text-align: center;
+padding:10px;
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+}
 .hover {background:#ccc;}
 </style>
 </head>
 <body>
+<div class="main">
 <center>
   <h1>glFusion Rescue Configuration Editor</h1></center>
 ';
 }
 
+
 function printFooter() {
 echo '
+</div>
 </body>
 </html>';
 }
