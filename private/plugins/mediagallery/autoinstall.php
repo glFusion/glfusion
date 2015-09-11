@@ -87,11 +87,11 @@ $INSTALL_plugin['mediagallery'] = array(
 
   array('type' => 'block', 'name' => 'mgrandom', 'title' => 'Random Image',
           'phpblockfn' => 'phpblock_mg_randommedia', 'block_type' => 'phpblock',
-          'group_id' => 'admin_group_id'),
+          'onleft' => 1, 'group_id' => 'admin_group_id'),
 
   array('type' => 'block', 'name' => 'mgenroll', 'title' => 'Member Album Enroll',
           'phpblockfn' => 'phpblock_mg_maenroll', 'block_type' => 'phpblock',
-          'group_id' => 'admin_group_id'),
+          'onleft' => 1, 'group_id' => 'admin_group_id'),
 
 );
 
