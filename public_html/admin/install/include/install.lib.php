@@ -413,7 +413,7 @@ function INST_fixPathsAndUrls($path, $path_html, $site_url, $site_admin_url)
 
         if (! file_exists($path_html . 'layout/' . $_CONF['theme']
                                                  . '/header.thtml')) {
-            $config->set('theme', 'nouveau');
+            $config->set('theme', 'cms');
         }
     }
     if (! file_exists($_CONF['path_images'] . 'articles')) {
@@ -1816,7 +1816,7 @@ function INST_resyncConfig() {
     $c->sync('sg_theme', NULL, 'subgroup', 2, 0, NULL, 0, TRUE);
 
     $c->sync('fs_theme', NULL, 'fieldset', 2, 1, NULL, 0, TRUE);
-    $c->sync('theme','nouveau','select',2,1,NULL,10,TRUE);
+    $c->sync('theme','cms','select',2,1,NULL,10,TRUE);
     $c->sync('menu_elements',array('home','contribute','search','stats','directory','plugins'),'%text',2,1,NULL,20,TRUE);
     $c->sync('path_themes','','text',2,1,NULL,30,TRUE);
 

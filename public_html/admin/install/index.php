@@ -1474,8 +1474,8 @@ function INST_installAndContentPlugins()
     $_CONF['site_admin_url']    = $site_admin_url;
 
     // Setup default theme
-    $config->set('theme', 'default');
-    DB_query("UPDATE {$_TABLES['users']} SET theme='default' WHERE uid=2",1);
+    $config->set('theme', 'cms');
+    DB_query("UPDATE {$_TABLES['users']} SET theme='cms' WHERE uid=2",1);
 
     $var = time() - rand();
     $session_cookie = 'pw'.substr(md5($var),0,3);

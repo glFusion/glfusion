@@ -673,6 +673,7 @@ $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (19,
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (20,16) ";
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (21,15) ";
 
+
 $_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (1,1,'user_block','gldefault','My Account','all',4,'','','0000-00-00 00:00:00',1,'',4,2,3,3,2,2) ";
 $_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (2,1,'admin_block','gldefault','Admins Only','all',3,'','','0000-00-00 00:00:00',1,'',4,2,3,3,2,2) ";
 $_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (3,1,'section_block','gldefault','Topics','all',2,'','','0000-00-00 00:00:00',1,'',4,2,3,3,2,2) ";
@@ -852,39 +853,45 @@ $_DATA[] = "INSERT INTO {$_TABLES['logo']} (id, config_name, config_value) VALUE
 (3, 'logo_name', 'logo1234.png');
 ";
 
-$_DATA[] = "INSERT INTO {$_TABLES['menu']} (id, menu_name, menu_type, menu_active, group_id) VALUES
-(1, 'navigation', 1, 1, 2),
-(2, 'footer', 2, 1, 2),
-(3, 'block', 3, 1, 2);
-";
+$_DATA[] = "INSERT INTO {$_TABLES['menu']} (`id`, `menu_name`, `menu_type`, `menu_active`, `group_id`) VALUES(1, 'navigation', 1, 1, 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu']} (`id`, `menu_name`, `menu_type`, `menu_active`, `group_id`) VALUES(2, 'footer', 2, 1, 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu']} (`id`, `menu_name`, `menu_type`, `menu_active`, `group_id`) VALUES(3, 'block', 3, 1, 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu']} (`id`, `menu_name`, `menu_type`, `menu_active`, `group_id`) VALUES(4, 'navigation_mobile', 1, 1, 2);";
 
-$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (id, pid, menu_id, element_label, element_type, element_subtype, element_order, element_active, element_url, element_target, group_id) VALUES
-(1, 0, 1, 'Home', 2, '0', 10, 1, '', '', 2),
-(2, 0, 1, 'Contribute', 2, '1', 20, 1, '', '', 13),
-(3, 0, 1, 'Search', 2, '4', 30, 1, '', '', 2),
-(4, 0, 1, 'Directory', 2, '2', 40, 1, '', '', 2),
-(5, 0, 1, 'Topics', 3, '3', 50, 1, '', '', 2),
-(6, 0, 1, 'Extras', 3, '5', 60, 1, '', '', 2),
-(17, 0, 1, 'Site Stats', 2, '5', 90, 1, '', '', 2),
-(18, 0, 1, 'My Account', 3, '1', 100, 1, '', '', 13),
-(19, 0, 1, 'Admins Only', 3, '2', 110, 1, '', '', 1),
-(20, 0, 2, 'Home', 2, '0', 10, 1, '', '', 2),
-(21, 0, 2, 'Contribute', 2, '1', 20, 1, '', '', 13),
-(22, 0, 2, 'Search', 2, '4', 30, 1, '', '', 2),
-(23, 0, 2, 'Site Stats', 2, '5', 40, 1, '', '', 2),
-(24, 0, 2, 'Terms of Use', 6, '%site_url%/page.php?page=terms-of-use', 50, 1, '%site_url%/page.php?page=terms-of-use', '', 2),
-(25, 0, 2, 'Privacy Policy', 6, '%site_url%/page.php?page=privacy-policy', 60, 1, '%site_url%/page.php?page=privacy-policy', '', 2),
-(26, 0, 2, 'RSS', 6, '%site_url%/backend/glfusion.rss', 70, 1, '%site_url%/backend/glfusion.rss', '', 2),
-(27, 0, 2, 'Contact Us', 6, '%site_url%/profiles.php?uid=2', 80, 1, '%site_url%/profiles.php?uid=2', '', 2),
-(28, 0, 2, 'Top', 6, '#top', 80, 1, '#top', '', 2),
-(29, 0, 3, 'Home', 2, '0', 10, 1, '', '', 2),
-(30, 0, 3, 'Downloads', 4, 'filemgmt', 20, 1, '', '', 2),
-(31, 0, 3, 'Forums', 4, 'forum', 30, 1, '', '', 2),
-(32, 0, 3, 'Topic Menu', 3, '3', 40, 1, '', '', 2),
-(33, 0, 3, 'User Menu', 3, '1', 50, 1, '', '', 13),
-(34, 0, 3, 'Admin Options', 3, '2', 60, 1, '', '', 1),
-(35, 0, 3, 'Logout', 6, '%site_url%/users.php?mode=logout', 70, 1, '%site_url%/users.php?mode=logout', '', 13);
-";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(1, 0, 1, 'Home', 2, '0', 10, 1, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(37, 0, 4, 'Directory', 2, '2', 20, 0, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(4, 0, 1, 'Directory', 2, '2', 20, 0, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(39, 0, 4, 'My Account', 3, '1', 60, 1, '', '', 13);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(6, 0, 1, 'Extras', 3, '5', 30, 1, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(38, 0, 4, 'Extras', 3, '5', 30, 1, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(45, 0, 4, 'Login', 6, '%site_url%/users.php', 70, 1, '%site_url%/users.php', '', 998);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(36, 0, 4, 'Home', 2, '0', 10, 1, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(20, 0, 2, 'Home', 2, '0', 10, 1, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(21, 0, 2, 'Contribute', 2, '1', 20, 1, '', '', 13);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(22, 0, 2, 'Search', 2, '4', 30, 1, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(23, 0, 2, 'Site Stats', 2, '5', 40, 1, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(24, 0, 2, 'Terms of Use', 6, '%site_url%/page.php?page=terms-of-use', 50, 1, '%site_url%/page.php?page=terms-of-use', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(25, 0, 2, 'Privacy Policy', 6, '%site_url%/page.php?page=privacy-policy', 60, 1, '%site_url%/page.php?page=privacy-policy', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(26, 0, 2, 'RSS', 6, '%site_url%/backend/glfusion.rss', 70, 1, '%site_url%/backend/glfusion.rss', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(27, 0, 2, 'Contact Us', 6, '%site_url%/profiles.php?uid=2', 80, 1, '%site_url%/profiles.php?uid=2', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(28, 0, 2, 'Top', 6, '#top', 80, 1, '#top', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(29, 0, 3, 'Home', 2, '0', 10, 1, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(30, 0, 3, 'Downloads', 4, 'filemgmt', 20, 1, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(31, 0, 3, 'Forums', 4, 'forum', 30, 1, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(32, 0, 3, 'Topic Menu', 3, '3', 40, 1, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(33, 0, 3, 'User Menu', 3, '1', 50, 1, '', '', 13);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(34, 0, 3, 'Admin Options', 3, '2', 60, 1, '', '', 1);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(35, 0, 3, 'Logout', 6, '%site_url%/users.php?mode=logout', 70, 1, '%site_url%/users.php?mode=logout', '', 13);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(7, 0, 1, 'Widgets', 1, '', 40, 1, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(10, 7, 1, 'Rotator', 5, 'rotator', 30, 1, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(12, 7, 1, 'Tab Slider', 5, 'tab-slider-example', 50, 1, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(13, 7, 1, 'Spring Menu', 5, 'spring-menu', 60, 0, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(16, 0, 1, 'Typography', 5, 'typography', 50, 1, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(40, 0, 4, 'Widgets', 1, '', 40, 1, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(41, 40, 4, 'Rotator', 5, 'rotator', 30, 1, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(42, 40, 4, 'Tab Slider', 5, 'tab-slider-example', 50, 1, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(43, 40, 4, 'Spring Menu', 5, 'spring-menu', 60, 0, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(44, 0, 4, 'Typography', 5, 'typography', 50, 1, '', '', 2);";
 
 #
 # Default autotags
@@ -898,5 +905,6 @@ $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabl
 $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('user', 'Text: expands \$_USER global var, eg. [user:p1] -> value of \$_USER[p1]', 0, 1, NULL)";
 $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('wikipedia', 'Link: to the wikipedia search result for the text specified. usage: [wikipedia:<i>text</i>]', 1, 1, NULL)";
 $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('youtube', 'Embed Youtube videos into content. Usage:[youtube:ID height:PX width:PX align:LEFT/RIGHT pad:PX]', 1, 1, NULL)";
+$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('uikitlogin', 'Login Widget', 1, 1, NULL);";
 
 ?>
