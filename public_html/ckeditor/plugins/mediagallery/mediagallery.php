@@ -6,7 +6,7 @@
 // |                                                                          |
 // | CKeditor plugin to allow easy insertion of Media Gallery auto tags.      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2006-2014 by the following authors:                        |
+// | Copyright (C) 2006-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -67,7 +67,8 @@ function MG_popupHeader($pagetitle = '') {
     // If we reach here then either we have the default theme OR
     // the current theme only needs the default variable substitutions
 
-	$header = new Template($_CONF['path_html'] . $mb_base_path . '/templates');
+//	$header = new Template($_CONF['path_html'] . $mb_base_path . '/templates');
+	$header = new Template($_CONF['path'].'plugins/ckeditor/templates/mediagallery');
     $header->set_file('header','mb_header.thtml');
 
     if( empty( $pagetitle ) && isset( $_CONF['pagetitle'] )) {
@@ -77,6 +78,8 @@ function MG_popupHeader($pagetitle = '') {
 
     $header->set_var( 'site_name', $_CONF['site_name'] );
     $header->set_var( 'css_url', $_CONF['site_url'] . $mb_base_path . '/css/style.css' );
+    list($style_cache_file,$style_cache_url) = COM_getStyleCacheLocation();
+    $header->set_var( 'style_cache_url',$style_cache_url);
     $header->set_var( 'js_lang_url', $_CONF['site_url'] . $mb_base_path . '/langs/' . $jslangfile);
     $header->set_var( 'js_url', $_CONF['site_url'] . $mb_base_path . '/jscripts/functions.js');
 
@@ -112,13 +115,7 @@ function MG_popupFooter()
 }
 
 if (!in_array('mediagallery', $_PLUGINS)) {
-    // The plugin is disabled
-    $display = MG_popupHeader();
-    $display .= COM_startBlock('Plugin disabled');
-    $display .= '<br />The Media Gallery plugin is currently disabled.';
-    $display .= COM_endBlock();
-    $display .= MG_popupFooter();
-    echo $display;
+    COM_404();
     exit;
 }
 
@@ -150,7 +147,7 @@ $MG_albums[0]->access = 1;
 if ( $MG_albums[$album_id]->access == 0 || ($MG_albums[$album_id]->hidden == 1 && $MG_albums[$album_id]->access !=3 )) {
     $display  = MG_popupHeader();
     $display .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
-             . '<br />' . $LANG_MG00['no_access']
+             . '<br>' . $LANG_MG00['no_access']
              . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     $display .= MG_popupFooter();
     echo $display;
@@ -164,11 +161,16 @@ $media_per_page     = $columns_per_page * $rows_per_page;
 
 // construct the album jumpbox...
 $level = 0;
-$album_jumpbox = $LANG_mgMB['select_album'] . ':&nbsp;<select name="aid" onChange="forms[\'mediabrowser\'].submit()">';
 $MG_albums[0]->buildJumpBox($album_id);
-$album_jumpbox .= '</select>';
-$album_jumpbox .= '&nbsp;<input type="submit" value="' . $LANG_mgMB['go'] . '" />';
-$album_jumpbox .= '<input type="hidden" name="page" value="1">';
+
+$album_jumpbox_raw = $album_jumpbox;
+
+
+$album_jumpbox_full = $LANG_mgMB['select_album'] . ':&nbsp;<select name="aid" onChange="forms[\'mediabrowser\'].submit()">';
+$album_jumpbox_full .= $album_jumpbox; //$MG_albums[0]->buildJumpBox($album_id);
+$album_jumpbox_full .= '</select>';
+$album_jumpbox_full .= '&nbsp;<input type="submit" value="' . $LANG_mgMB['go'] . '">';
+$album_jumpbox_full .= '<input type="hidden" name="page" value="1">';
 
 if ($album_id == 0 ) {
 	if ( !empty($MG_albums[0]->children)) {
@@ -186,7 +188,8 @@ if ( !isset($MG_albums[$album_id]->id) ) {
     $display = MG_popupHeader();
     COM_errorLog("Media Gallery Error - User attempted to view an album that does not exist.");
     $display .= COM_startBlock ($LANG_mgMB['error_header'], '',COM_getBlockTemplate ('_admin_block', 'header'));
-    $T = new Template($_CONF['path'] . 'plugins/mediagallery/templates');
+//    $T = new Template($_CONF['path'] . 'plugins/mediagallery/templates');
+	$T = new Template($_CONF['path'].'plugins/ckeditor/templates/mediagallery');
     $T->set_file('error','error.thtml');
     $T->set_var('site_url', $_CONF['site_url']);
     $T->set_var('errormessage',$LANG_MG02['albumaccessdeny']);
@@ -245,7 +248,8 @@ if ( $total_print_pages == 0 ) {
     $total_print_pages = 1;
 }
 
-$T = new Template($_CONF['path_html'] . $mb_base_path . '/templates');
+//$T = new Template($_CONF['path_html'] . $mb_base_path . '/templates');
+$T = new Template($_CONF['path'].'plugins/ckeditor/templates/mediagallery');
 
 $T->set_file (array(
     'page'      => 'mb.thtml',
@@ -322,7 +326,8 @@ $T->set_var(array(
     'top_pagination'        => COM_printPageNavigation($self_url .  '?aid=' . $album_id . '&amp;i=' . $instance . '&amp;refresh=1', $page+1,ceil($total_items_in_album  / $media_per_page)),
     'bottom_pagination'     => COM_printPageNavigation($self_url . '?aid=' . $album_id . '&amp;i=' . $instance  . '&amp;refresh=1', $page+1,ceil($total_items_in_album  / $media_per_page)),
     'page_number'           => sprintf("%s %d %s %d",$LANG_MG03['page'], $current_print_page, $LANG_MG03['of'], $total_print_pages),
-    'jumpbox'               => $album_jumpbox,
+    'jumpbox'               => $album_jumpbox_full,
+    'jumpbox_raw'           => $album_jumpbox_raw,
     'album_id'              => $album_id,
     'instance'				=> $instance,
     'lang_menulabel'        => $LANG_mgMB['menulabel'],
@@ -369,6 +374,7 @@ $T->set_var(array(
     'lang_top'              => $LANG_mgMB['top'],
     'lang_bottom'           => $LANG_mgMB['bottom'],
     'destination'           => ($_mgMB_CONF['enable_dest'] == 1 ? '<p>' . $LANG_mgMB['destination'] . '&nbsp;&nbsp;<select name="dest"><option value="story">' . $LANG_mgMB['story'] . '</option><option value="block">' . $LANG_mgMB['block'] . '</option></select>' : ''),
+    'lang_select_album'     => $LANG_mgMB['select_album'],
 ));
 
 if ( $total_media == 0 ) {
@@ -401,12 +407,19 @@ if ( $total_media > 0 ) {
                 $next_image = -1;
             }
             $z = ($j+$start);
+
 	        $celldisplay = $MG_media[$j]->displayRawThumb();
+
+	        list($media_thumbnail,$media_thumbnail_file) = $MG_media[$j]->displayRawThumb(1);
+
+
 	        $T->set_var('thumbnail', $celldisplay);
 	        $T->set_var('checkbox' , '<input type="radio" name="thumbnail" value="' . $MG_media[$j]->id . '">');
 	        $celldisplay .= '<div style="clear:both;text-align:center;"><input type="radio" name="thumbnail" value="' . $MG_media[$j]->id . '"></div>';
             $T->set_var(array(
                 'CELL_DISPLAY_IMAGE'  =>  $celldisplay,
+                'raw_thumb' => $media_thumbnail,
+                'media_id'  => $MG_media[$j]->id,
             ));
             $T->parse('IDetail', 'ImageDetail',true);
             $T->parse('IColumn', 'ImageColumn',true);

@@ -1,7 +1,7 @@
 Media Gallery Browser Plugin for CKEditor 4
 ===========================================
 
-Copyright © 2014 Mark R. Evans <mark AT glfusion DOT org>.
+Copyright © 2014-2015 Mark R. Evans <mark AT glfusion DOT org>.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License

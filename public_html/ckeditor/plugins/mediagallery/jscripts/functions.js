@@ -1,7 +1,7 @@
 /*
  * Media Gallery Autotag Plugin
  *
- * @license Copyright (c) 2003-2014, Mark R. Evans. All rights reserved.
+ * @license Copyright (c) 2003-2015, Mark R. Evans. All rights reserved.
  * Licensed under the terms of the GNU General Public License
  * 		http://www.opensource.org/licenses/gpl-license.php
  *
