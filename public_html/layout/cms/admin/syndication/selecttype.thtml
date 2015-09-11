@@ -1,0 +1,9 @@
+{# begin {templatelocation} #}
+<form class="uk-form uk-form-horizontal tm-form" action="{site_admin_url}/syndication.php" method="post">
+	<div class="uk-form-row">
+		<div class="uk-form-controls">
+			{type_selection}<button class="uk-button" type="submit" value="{lang_go}" name="create">{lang_go}</button>
+		</div>
+	</div>
+</form>
+{# end {templatelocation} #}

@@ -1,0 +1,39 @@
+{# begin {templatelocation} #}
+                            <table style="padding:2px;">
+                                <tr>
+                                    <td colspan="2">{intro_msg}</td>
+                                </tr>
+                                <tr>
+                                    <td class="alignright"><b>{lang_event}:</b></td>
+                                    <td>{event_title}</td>
+                                </tr>
+                                <tr>
+                                    <td class="alignright"><b>{lang_starts}:</b></td>
+                                    <td>{event_start}</td>
+                                </tr>
+                                <tr>
+                                    <td class="alignright"><b>{lang_ends}:</b></td>
+                                    <td>{event_end}</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:right;vertical-align:top;"><b>{lang_where}:</b></td>
+                                    <td>{event_location}</td>
+                                </tr>
+                                <tr>
+                                    <td class="alignright"><b>{lang_description}:</b></td>
+                                    <td>{event_description}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <form name="userevent" method="post" action="{site_url}/calendar/event.php">
+                                            <div>
+                                                <input type="hidden" name="action" value="saveuserevent" />
+                                                <input type="hidden" name="eid" value="{event_id}" />
+                                                <input type="submit" value="{lang_addtomycalendar}" />
+                                                <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </table>
+{# end {templatelocation} #}

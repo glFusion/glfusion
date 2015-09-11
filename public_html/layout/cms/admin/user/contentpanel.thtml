@@ -1,0 +1,64 @@
+{# begin content panel #}
+<div id="pe_content" class="jsenabled_hide">
+
+{!if exclude_topic_checklist}
+  <fieldset class="uk-margin">
+    <legend>{lang_exclude_title}</legend>
+    <div class="uk-alert" data-uk-alert>
+      <a href="" class="uk-alert-close uk-close"></a>
+      <p>{lang_excluded_items}</p>
+    </div>
+
+    <div class="uk-grid">
+      <div class="uk-grid-1-2">
+        <h3>{lang_topics}</h3>
+        {exclude_topic_checklist}
+      </div>
+      <div class="uk-grid-1-2">
+{!if exclude_author_checklist}
+        <h3>{lang_authors}</h3>
+        {exclude_author_checklist}
+      </div>
+{!endif}
+
+      {plugin_content_exclude}
+
+    </div>
+  </fieldset>
+{!endif}
+
+{!if email_topic_checklist}
+  <fieldset class="uk-margin">
+    <legend>{lang_digest_top_header}</legend>
+    <div class="uk-alert" data-uk-alert>
+      <a href="" class="uk-alert-close uk-close"></a>
+      <p>{lang_emailedtopics}</p>
+    </div>
+
+    <div>{email_topic_checklist}</div>
+    {plugin_content_digest}
+  </fieldset>
+{!endif}
+
+{!if boxes_checklist}
+  <fieldset class="uk-margin">
+    <legend>{lang_boxes_title}</legend>
+    <div class="uk-alert" data-uk-alert>
+      <a href="" class="uk-alert-close uk-close"></a>
+      <p>{lang_boxes}</p>
+    </div>
+
+    <div class="uk-grid">
+      <div class="uk-grid-1-1">
+        {boxes_checklist}
+      </div>
+
+      {plugin_content_boxes}
+    </div>
+  </fieldset>
+{!endif}
+
+{plugin_content}
+</div>
+
+{# end content panel #}

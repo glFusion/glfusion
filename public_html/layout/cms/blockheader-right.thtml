@@ -1,0 +1,6 @@
+{# begin {templatelocation} #}
+    <div class="">
+      <div class="uk-panel tm-bottom-block">
+        <h3 class="uk-panel-title">{block_title}</h3>
+
+{# end {templatelocation} #}

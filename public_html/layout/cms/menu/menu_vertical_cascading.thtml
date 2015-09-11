@@ -1,0 +1,26 @@
+{# vertical cascading template #}
+{!if wrapper}
+<ul class="uk-nav uk-nav-side uk-nav-parent-icon uk-width-medium-3-3" data-uk-nav>
+{!else}
+<ul class="uk-nav-sub">
+{!endif}
+<!-- BEGIN Elements -->
+  {!if haschildren}
+    <li class="uk-parent">
+    {!if url}
+     <a class="parent" href="#">
+    {!else}
+     <a class="parent" href="#">
+    {!endif}
+  {!else}
+   <li>
+   <a href="{url}" {target}>
+  {!endif}
+   {label}
+   </a>
+{!if haschildren}
+  {children}
+{!endif}
+  </li>
+<!-- END Elements -->
+</ul>

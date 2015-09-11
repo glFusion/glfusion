@@ -1,0 +1,62 @@
+{# begin user info panel #}
+<div id="pe_userinfo" class="jsenabled_hide">
+  <fieldset class="uk-margin">
+    <legend>{lang_personal_info_legend}</legend>
+
+    <div class="uk-alert" data-uk-alert>
+      <a href="" class="uk-alert-close uk-close"></a>
+      <p>{lang_userinfo_help}</p>
+    </div>
+
+    <div class="uk-form-row">
+      <label class="uk-form-label" for="homepage">{lang_homepage}</label>
+      <div class="uk-form-controls">
+        <input type="text" id="homepage" name="homepage" maxlength="128" value="{homepage_value}">
+      </div>
+    </div>
+
+    {customfields}
+
+    <div class="uk-form-row">
+      <label class="uk-form-label" for="location">{lang_location}</label>
+      <div class="uk-form-controls">
+        <input type="text" id="location" name="location" maxlength="96" value="{location_value}">
+      </div>
+    </div>
+
+{!if lang_userphoto}
+    <div class="uk-form-row">
+      <label class="uk-form-label" for="photo">{lang_userphoto}</label>
+      <div class="uk-form-controls">
+        <input type="file" dir="ltr" id="photo" name="photo">
+        <br>
+        {display_photo}
+      </div>
+    </div>
+{!endif}
+    <div class="uk-form-row">
+      <label class="uk-form-label" for="sig">{lang_signature}</label>
+      <div class="uk-form-controls">
+        <textarea class="uk-form-large" id="sig" name="sig">{signature_value}</textarea>
+      </div>
+    </div>
+    <div class="uk-form-row">
+      <label class="uk-form-label" for="about">{lang_about}</label>
+      <div class="uk-form-controls">
+        <textarea class="uk-form-large" id="about" name="about">{about_value}</textarea>
+      </div>
+    </div>
+    <div class="uk-form-row">
+      <label class="uk-form-label" for="pgpkey">{lang_pgpkey}</label>
+      <div class="uk-form-controls">
+        <textarea class="uk-form-large" id="pgpkey" name="pgpkey">{pgpkey_value}</textarea>
+      </div>
+    </div>
+
+    {plugin_userinfo_personalinfo}
+   </fieldset>
+
+   {plugin_userinfo}
+
+</div>
+{# end user info panel #}

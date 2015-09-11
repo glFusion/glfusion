@@ -1,0 +1,3 @@
+{# begin {templatelocation} #}
+<td class="uk-text-middle" {colspan} {column_style}>{itemtext}</td>
+{# end {templatelocation} #}

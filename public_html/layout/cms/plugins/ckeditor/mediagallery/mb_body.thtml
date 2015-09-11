@@ -1,0 +1,17 @@
+<div class="uk-panel uk-panel-box uk-text-center">
+	<div id="pix">
+		<br style="clear:both">
+		<ul class="uk-grid uk-grid-width-small-1-4 uk-grid-width-medium-1-4 uk-grid-width-large-1-4 uk-text-center" data-uk-grid-margin>
+			<!-- BEGIN ImageRow -->
+			<!-- BEGIN ImageColumn -->
+			<li class="uk-text-center">
+				<img src="{raw_thumb}" class="uk-thumbnail">
+				<div class="uk-margin">
+					<input type="radio" name="thumbnail" value="{media_id}">
+				</div>
+			</li>
+			<!-- END ImageColumn -->
+			<!-- END ImageRow -->
+		</ul>
+	</div>
+</div>

@@ -1,0 +1,17 @@
+{# begin {templatelocation} #}
+<div id="navcontainer" class="uk-hidden-small">
+    <ul id="navlist" class="uk-tab">
+        {menuitems}
+    </ul>
+</div>
+<ul class="uk-tab uk-visible-small">
+    <li data-uk-dropdown="{mode:'click'}">
+        <a>{$LANG01[menu]}&nbsp;<i class="uk-icon-caret-down"></i></a>
+        <div class="uk-dropdown uk-dropdown-small">
+            <ul class="uk-nav uk-nav-dropdown">
+			{menuitems}
+            </ul>
+        </div>
+    </li>
+</ul>
+{# end {templatelocation} #}

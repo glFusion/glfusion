@@ -1,0 +1,90 @@
+<form class="uk-form uk-form-horizontal" id="prefs" name="prefs" action="{site_admin_url}/prefeditor.php" method="post">
+  <table class="uk-table uk-table-hover">
+    <tr>
+      <th>{lang_attribute}</th>
+      <th>{lang_value}</th>
+      <th class="uk-text-center">{lang_selected}</th>
+    </tr>
+    <tr>
+      <td><label for="language">{lang_language}:</label></td>
+      <td>{language_selector}</td>
+      <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="language"></td>
+    </tr>
+    <tr>
+      <td><label for="theme">{lang_theme}:</label></td>
+      <td>{theme_selector}</td>
+      <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="theme"></td>
+    </tr>
+    <tr>
+      <td><label for="cooktime">{lang_cooktime}:</label></td>
+      <td>{cooktime_selector}</td>
+      <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="cooktime"></td>
+    </tr>
+    <tr>
+      <td><label for="noicons">{lang_noicons}:</label></td>
+      <td><input type="checkbox" id="noicons" name="noicons"></td>
+      <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="noicons"></td>
+    </tr>
+    <tr>
+      <td><label for="noboxes">{lang_noboxes}:</label></td>
+      <td><input type="checkbox" id="noboxes" name="noboxes"></td>
+      <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="noboxes"></td>
+    </tr>
+    <tr>
+      <td><label for="maxstories">{lang_maxstories}:</label></td>
+      <td><input type="text" class="uk-form-width-small" maxlength="3" id="maxstories" name="maxstories" value="0"></td>
+      <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="maxstories"></td>
+    </tr>
+    <tr>
+      <td><label for="tzid">{lang_timezone}:</label></td>
+      <td>{timezone_selector}</td>
+      <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="tzid"></td>
+    </tr>
+    <tr>
+      <td><label for="dfid">{lang_dateformat}:</label></td>
+      <td>{dateformat_selector}</td>
+      <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="dfid"></td>
+    </tr>
+    <tr>
+      <td><label for="search_result_format">{lang_search_format}:</label></td>
+      <td>{search_result_select}</td>
+      <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="search_result_format"></td>
+    </tr>
+    <tr>
+      <td><label for="commentmode">{lang_displaymode}:</label></td>
+      <td>{displaymode_selector}</td>
+      <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="commentmode"></td>
+    </tr>
+    <tr>
+      <td><label for="commentorder">{lang_sortorder}:</label></td>
+      <td>{sortorder_selector}</td>
+      <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="commentorder"></td>
+    </tr>
+    <tr>
+      <td><label for="commentlimit">{lang_commentlimit}:</label></td>
+      <td><input class="uk-form-width-small" type="text" id="commentlimit" name="commentlimit" maxlength="5" value="100"></td>
+      <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="commentlimit"></td>
+    </tr>
+    <tr>
+      <td><label for="emailfromuser">{lang_emailfromuser}:</label></td>
+      <td><input type="checkbox" id="emailfromuser" name="emailfromuser"></td>
+      <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="emailfromuser"></td>
+    </tr>
+    <tr>
+      <td><label for="emailfromadmin">{lang_emailfromadmin}:</label></td>
+      <td><input type="checkbox" id="emailfromadmin" name="emailfromadmin"></td>
+      <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="emailfromadmin"></td>
+    </tr>
+    <tr>
+      <td><label for="showonline">{lang_showonline}:</label></td>
+      <td><input type="checkbox" id="showonline" name="showonline"></td>
+      <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="showonline"></td>
+    </tr>
+
+  </table>
+  <p class="uk-text-center" id="save_button">
+    <input type="hidden" name="{gltoken_name}" value="{gltoken}">
+    <button class="uk-button uk-button-primary" type="submit" value="{lang_save}" name="submit" onclick="return confirm('{lang_confirm}');">{lang_save}</button>
+    <button class="uk-button uk-button-danger" type="submit" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
+  </p>
+</form>

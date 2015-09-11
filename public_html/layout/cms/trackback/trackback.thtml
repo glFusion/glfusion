@@ -1,0 +1,10 @@
+{# begin {templatelocation} #}
+<a id="trackback"></a>
+<h3>{lang_trackback}</h3>
+<div class="uk-panel uk-panel-box uk-margin-bottom">
+	<h3 class="uk-panel-title">{lang_trackback_comments_no_link}</h3>
+	<div class="uk-margin">
+		{trackback_comments}
+	</div>
+</div>
+{# end {templatelocation} #}

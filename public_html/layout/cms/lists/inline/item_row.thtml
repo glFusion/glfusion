@@ -1,0 +1,5 @@
+{# begin {templatelocation} #}
+<div class="uk-panel uk-panel-box uk-panel-box-secondary uk-margin-small">
+    <div class="uk-text-left">{item_field}</div>
+</div>
+{# end {templatelocation} #}

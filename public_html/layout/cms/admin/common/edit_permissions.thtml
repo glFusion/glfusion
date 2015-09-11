@@ -1,0 +1,80 @@
+{# begin {templatelocation} #}
+
+{# permissions block #}
+  <div class="uk-form-row">
+    <table class="uk-table uk-table-hover uk-table-striped uk-table-condensed">
+      <tr>
+        <th class="uk-text-left">Group</th>
+        <th class="uk-text-center">Read & Write</th>
+        <th class="uk-text-center">Read Only</th>
+        <th class="uk-text-center">No Access</th>
+      </tr>
+      <tr>
+        <td>{owner}</td>
+        <td class="uk-text-center">
+          <input name="perm_owner[]" type="radio" value="3" checked="checked">
+        </td>
+        <td class="uk-text-center">
+          <input disabled="disabled" name="perm_owner" type="radio" value="2">
+        </td>
+        <td class="uk-text-center">
+          <input disabled="disabled" name="perm_owner" type="radio" value="0">
+        </td>
+      </tr>
+      <tr>
+        <td>{group}</td>
+        <td class="uk-text-center">
+          <input name="perm_group[]" type="radio" value="3"
+{!if group_e_checked}
+ checked="checked"
+{!endif}
+        </td>
+        <td class="uk-text-center">
+          <input name="perm_group[]" type="radio" value="2"
+{!if group_r_checked}
+  {!if group_e_checked}
+  {!else}
+   checked="checked"
+  {!endif}
+{!endif}
+        </td>
+        <td class="uk-text-center">
+          <input name="perm_group[]" type="radio" value="0"
+{!if group_r_checked}
+{!else}
+ checked="checked"
+{!endif}
+        </td>
+      </tr>
+      <tr>
+        <td>{members}</td>
+        <td class="uk-text-center">
+          <input name="perm_members[]" type="radio" value="3" disabled="disabled">
+        </td>
+        <td class="uk-text-center">
+          <input name="perm_members[]" type="radio" value="2"
+          {!if members_checked}  checked="checked" {!endif} >
+        </td>
+        <td class="uk-text-center">
+          <input name="perm_members[]" type="radio" value="0"
+          {!if members_checked} {!else}  checked="checked" {!endif} >
+        </td>
+      </tr>
+      <tr>
+        <td>{anonymous}</td>
+        <td class="uk-text-center">
+          <input name="perm_anon[]" type="radio" value="3" disabled="disabled">
+        </td>
+        <td class="uk-text-center">
+          <input name="perm_anon[]" type="radio" value="2"
+          {!if anon_checked}  checked="checked" {!endif} >
+        </td>
+        <td class="uk-text-center">
+          <input name="perm_anon[]" type="radio" value="0"
+          {!if anon_checked} {!else} checked="checked" {!endif} >
+        </td>
+      </tr>
+    </table>
+
+  </div> {# end of row #}
+{# end {templatelocation} #}

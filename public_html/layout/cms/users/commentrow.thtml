@@ -1,0 +1,6 @@
+{# begin {templatelocation} #}
+<tr>
+	<td>{row_number} {comment_title}</td>
+	<td class="uk-text-right">{comment_date}</td>
+</tr>
+{# end {templatelocation} #}

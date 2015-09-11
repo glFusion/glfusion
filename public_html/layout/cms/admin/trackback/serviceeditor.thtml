@@ -1,0 +1,47 @@
+{# begin {templatelocation} #}
+<div class="uk-panel uk-panel-box">
+	<form class="uk-form uk-form-horizontal tm-form" action="{site_admin_url}/trackback.php" method="post">
+		<input type="hidden" value="{service_id}" name="service_id" />
+		<input type="hidden" name="{gltoken_name}" value="{gltoken}" />
+
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_name}</label>
+			<div class="uk-form-controls">
+				<input type="text" size="48" maxlength="80" name="service_name" value="{service_name}">
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_enabled}</label>
+			<div class="uk-form-controls">
+				<input type="checkbox" name="is_enabled" {is_enabled}>
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_site_url}</label>
+			<div class="uk-form-controls">
+				<input type="text" dir="ltr" size="50" maxlength="{max_url_length}" name="service_site_url" value="{service_site_url}">
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_ping_url}</label>
+			<div class="uk-form-controls">
+				<input type="text" dir="ltr" size="50" maxlength="{max_url_length}" name="service_ping_url" value="{service_ping_url}">
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_method}</label>
+			<div class="uk-form-controls">
+				<p><input type="radio" name="method" value="standard" {standard_is_checked}> <label>{lang_method_standard} (<code>weblogUpdates.ping</code>)</label></p>
+				<p><input type="radio" name="method" value="extended" {extended_is_checked}> <label>{lang_method_extended} (<code>weblogUpdates.extendedPing</code>)</label></p>
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<div class="uk-form-controls">
+				<button class="uk-button uk-button-primary" type="submit" value="{lang_save}" name="servicemode[0]">{lang_save}</button>
+				<button class="uk-button" type="submit" value="{lang_cancel}" name="servicemode[1]">{lang_cancel}</button>
+				{delete_option}
+			</div>
+		</div>
+	</form>
+</div>
+{# end {templatelocation} #}

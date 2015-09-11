@@ -1,0 +1,11 @@
+{# begin {templatelocation} #}
+{list_top}
+<table class="uk-table uk-table-striped" style="{show_sorts}">
+    {page_sort}
+    {item_row}
+</table>
+<div class="uk-text-center uk-text-bold">{message}</div>
+
+<div class="uk-text-center">{google_paging}</div>
+{list_bottom}
+{# end {templatelocation} #}

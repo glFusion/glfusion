@@ -1,0 +1,8 @@
+{# begin {templatelocation} #}
+
+<li {!if cssactive}class="uk-active"{!endif}>
+  <a href="{link}{parms}"{onclick}>
+    {label}
+  </a>
+</li>
+{# end {templatelocation} #}

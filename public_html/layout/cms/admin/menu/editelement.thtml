@@ -1,0 +1,218 @@
+{# begin {templatelocation} #}
+<script type="text/javascript">
+$(window).load(function() {
+    $("#menutype").change(toggleFields);
+    $("#pid").change(function() {
+         var option_id = $("#pid").val();
+         var menu_id = {menu};
+         var url = '{site_admin_url}/getorder.php?optionid='+option_id+'&menuid='+menu_id;
+         $.get(url,function(data) {
+            $('#menuorder').html(data);
+         });
+    });
+    $('#urldiv').css('display','');
+    $('#targetdiv').css('display','none');
+    $('#glcorediv').css('display','none');
+    $('#plugin').css('display','none');
+    $('#staticpage').css('display','none');
+    $('#glfunc').css('display','none');
+    $('#phpdiv').css('display','none');
+    $('#topic').css('display','none');
+    toggleFields();
+});
+function toggleFields() {
+    selected = $('#menutype').val();
+    switch( selected ) {
+        case '1' : /* sub */
+            $('#urldiv').css('display','');
+            $('#targetdiv').css('display','none');
+            $('#glcorediv').css('display','none');
+            $('#plugin').css('display','none');
+            $('#staticpage').css('display','none');
+            $('#glfunc').css('display','none');
+            $('#phpdiv').css('display','none');
+            $('#topic').css('display','none');
+            break;
+        case '2' : /* gl actioin */
+            $('#urldiv').css('display','none');
+            $('#targetdiv').css('display','none');
+            $('#glcorediv').css('display','none');
+            $('#plugin').css('display','none');
+            $('#staticpage').css('display','none');
+            $('#glfunc').css('display','');
+            $('#phpdiv').css('display','none');
+            $('#topic').css('display','none');
+            break;
+        case '3' : /* gl menus */
+            $('#urldiv').css('display','none');
+            $('#targetdiv').css('display','none');
+            $('#glcorediv').css('display','');
+            $('#plugin').css('display','none');
+            $('#staticpage').css('display','none');
+            $('#glfunc').css('display','none');
+            $('#phpdiv').css('display','none');
+            $('#topic').css('display','none');
+            break;
+        case '4' : /* plugins */
+            $('#urldiv').css('display','none');
+            $('#targetdiv').css('display','none');
+            $('#glcorediv').css('display','none');
+            $('#plugin').css('display','');
+            $('#staticpage').css('display','none');
+            $('#glfunc').css('display','none');
+            $('#phpdiv').css('display','none');
+            $('#topic').css('display','none');
+            break;
+        case '5' :  /* static pages */
+            $('#urldiv').css('display','none');
+            $('#targetdiv').css('display','none');
+            $('#glcorediv').css('display','none');
+            $('#plugin').css('display','none');
+            $('#staticpage').css('display','');
+            $('#glfunc').css('display','none');
+            $('#phpdiv').css('display','none');
+            $('#topic').css('display','none');
+            break;
+        case '6' : /* url */
+            $('#urldiv').css('display','');
+            $('#targetdiv').css('display','none');
+            $('#glcorediv').css('display','none');
+            $('#plugin').css('display','none');
+            $('#staticpage').css('display','none');
+            $('#glfunc').css('display','none');
+            $('#phpdiv').css('display','none');
+            $('#topic').css('display','none');
+            break;
+        case '7' :  /* php function */
+            $('#urldiv').css('display','none');
+            $('#targetdiv').css('display','none');
+            $('#glcorediv').css('display','none');
+            $('#plugin').css('display','none');
+            $('#staticpage').css('display','none');
+            $('#glfunc').css('display','none');
+            $('#phpdiv').css('display','');
+            $('#topic').css('display','none');
+            break;
+        case '8' :
+            $('#urldiv').css('display','none');
+            $('#targetdiv').css('display','none');
+            $('#glcorediv').css('display','none');
+            $('#plugin').css('display','none');
+            $('#staticpage').css('display','none');
+            $('#glfunc').css('display','none');
+            $('#phpdiv').css('display','none');
+            $('#topic').css('display','none');
+            break;
+        case '9' : /* topic */
+            $('#urldiv').css('display','none');
+            $('#targetdiv').css('display','none');
+            $('#glcorediv').css('display','none');
+            $('#plugin').css('display','none');
+            $('#staticpage').css('display','none');
+            $('#glfunc').css('display','none');
+            $('#phpdiv').css('display','none');
+            $('#topic').css('display','');
+            break;
+    }
+}
+</script>
+<div class="uk-panel uk-panel-box uk-margin">
+<form id="menuelement" class="uk-form uk-form-horizontal" action="{form_action}" method="post">
+  <input type="hidden" id="menu" name="menu" value="{menu}">
+  <input type="hidden" id="mode" name="mode" value="{mode}">
+  <input type="hidden" id="menuid" name="menuid" value="{menu}">
+{!if mid}
+  <input type="hidden" id="id" name="id" value="{mid}">
+{!endif}
+  <div class="uk-form-row">
+    <label class="uk-form-label" for="pid">{$LANG_MB01[parent]}</label>
+    <div class="uk-form-controls">
+      {parent_select}
+    </div>
+  </div>
+  <div class="uk-form-row">
+    <label class="uk-form-label" for="menulabel">{$LANG_MB01[elementlabel]}</label>
+    <div class="uk-form-controls">
+      <input type="text" class="required" id="menulabel" name="menulabel" value="{menulabel}">
+    </div>
+  </div>
+  <div class="uk-form-row" id="displayafter">
+    <label class="uk-form-label" for="menuorder">{$LANG_MB01[display_after]}</label>
+    <div class="uk-form-controls">
+      {order_select}
+    </div>
+  </div>
+  <div class="uk-form-row">
+    <label class="uk-form-label" for="menutype">{$LANG_MB01[type]}</label>
+    <div class="uk-form-controls">
+      {type_select}
+    </div>
+  </div>
+  <div class="uk-form-row" id="urldiv">
+    <label class="uk-form-label" for="menuurl">{$LANG_MB01[url]}</label>
+    <div class="uk-form-controls">
+      <input class="uk-form-width-large" type="text" id="menuurl" name="menuurl" value="{menuurl}">
+    </div>
+  </div>
+  <div class="uk-form-row" id="targetdiv">
+    <label class="uk-form-label" for="urltarget">{$LANG_MB01[target]}</label>
+    <div class="uk-form-controls">
+      {target_select}
+    </div>
+  </div>
+  <div class="uk-form-row" id="phpdiv">
+    <label class="uk-form-label" for="phpfunction">{$LANG_MB01[php]}</label>
+    <div class="uk-form-controls">
+      <input type="text" id="phpfunction" name="phpfunction" value="{phpfunction}">
+    </div>
+  </div>
+  <div class="uk-form-row" id="glcorediv">
+    <label class="uk-form-label" for="gltype">{$LANG_MB01[coretype]}</label>
+    <div class="uk-form-controls">
+      {gl_select}
+    </div>
+  </div>
+  <div class="uk-form-row" id="plugin">
+    <label class="uk-form-label" for="plugin">{$LANG_MB01[plugins]}</label>
+    <div class="uk-form-controls">
+      {plugin_select}
+    </div>
+  </div>
+  <div class="uk-form-row" id="staticpage">
+    <label class="uk-form-label" for="spname">{$LANG_MB01[static_pages]}</label>
+    <div class="uk-form-controls">
+      {sp_select}
+    </div>
+  </div>
+  <div class="uk-form-row" id="topic">
+    <label class="uk-form-label" for="topicname">{$LANG_MB01[topic]}</label>
+    <div class="uk-form-controls">
+      {topic_select}
+    </div>
+  </div>
+  <div class="uk-form-row" id="glfunc">
+    <label class="uk-form-label" for="glfunc">{$LANG_MB01[glfusion_function]}</label>
+    <div class="uk-form-controls">
+      {glfunction_select}
+    </div>
+  </div>
+  <div class="uk-form-row">
+    <label class="uk-form-label" for="menuactive">{$LANG_MB01[active]}</label>
+    <div class="uk-form-controls">
+      <input type="checkbox" id="menuactive" name="menuactive" value="1" {active_selected}>
+    </div>
+  </div>
+  <div class="uk-form-row">
+    <label class="uk-form-label" for="group">{$LANG_MB01[permission]}</label>
+    <div class="uk-form-controls">
+      {group_select}
+    </div>
+  </div>
+  <button class="uk-button uk-button-primary uk-margin" type="submit" id="execute" name="execute" value="{$LANG32[23]}">{$LANG32[23]}</button>
+  <button class="uk-button uk-button-danger cancel uk-margin" type="submit" class="cancel" id="cancel" name="cancel" value="{$LANG_MB01[cancel]}">{$LANG_MB01[cancel]}</button>
+</form>
+</div>
+<script>
+$("#menuelement").validate();
+</script>
+{# end {templatelocation} #}

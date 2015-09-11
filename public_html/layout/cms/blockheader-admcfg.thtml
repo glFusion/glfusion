@@ -1,0 +1,4 @@
+{# begin {templatelocation} #}
+<div {block_id}class="block-box">
+    <h3>{block_title}</h3>
+{# end {templatelocation} #}

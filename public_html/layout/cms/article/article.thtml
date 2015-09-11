@@ -1,0 +1,15 @@
+{# begin {templatelocation} #}
+{formatted_article}
+<div class="uk-container uk-clearfix">
+	<div class="uk-grid uk-margin-large-bottom" data-uk-grid-margin>
+		<div class="uk-width-medium-1-2">
+			{whats_related}
+		</div>
+		<div class="uk-width-medium-1-2">
+			{story_options}
+		</div>
+	</div>
+</div>
+<div class="uk-clearfix">{trackback}</div>
+{commentbar}
+{# end {templatelocation} #}

@@ -1,0 +1,182 @@
+{# begin {templatelocation} #}
+{start_block_editor}
+{wysiwyg}
+{admin_menu}
+{end_block}
+<form id="block" class="uk-form uk-form-horizontal uk-margin-bottom" action="{site_admin_url}/block.php" method="post">
+	<input type="hidden" name="bid" value="{block_bid}" />
+	<input type="hidden" name="{gltoken_name}" value="{gltoken}" />
+
+	<fieldset>
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="title">{lang_blocktitle}</label>
+			<div class="uk-form-controls">
+				<input class="required uk-form-width-large" type="text" maxlength="48" id="title" name="title" value="{block_title}">
+			</div>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="name">{lang_blockname}</label>
+			<div class="uk-form-controls">
+				<input class="required alphanumeric uk-form-width-medium" type="text" maxlength="20" id="name" name="name" value="{block_name}">
+				<br>
+				{lang_nospaces}
+			</div>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="is_enabled">{lang_enabled}</label>
+			<div class="uk-form-controls">
+				<input type="checkbox" name="is_enabled" {is_enabled}>
+			</div>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="help">{lang_blockhelpurl}</label>
+			<div class="uk-form-controls">
+				<input class="uk-form-width-large" type="text" id="help" name="help" value="{block_help}" maxlength="{max_url_length}">
+				<div class="uk-text-small">{lang_includehttp}&nbsp;{lang_explanation}</div>
+			</div>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="tid">{lang_topic}</label>
+			<div class="uk-form-controls">
+				<select id="tid" name="tid" class="uk-form-width-medium">
+					<option value="all" {all_selected}>{lang_all}</option>
+					<option value="homeonly" {homeonly_selected}>{lang_homeonly}</option>
+					<option value="allnhp" {nohomepage_selected}>{lang_nohomepage}</option>
+					{topic_options}
+				</select>
+			</div>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="onleft">{lang_side}</label>
+			<div class="uk-form-controls">
+				<select id="onleft" name="onleft" class="uk-form-width-medium">
+					<option value="1" {left_selected}>{lang_left}</option>
+					<option value="0" {right_selected}>{lang_right}</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="blockorder">{lang_blockorder}</label>
+			<div class="uk-form-controls">
+				<input type="text" id="blockorder" name="blockorder" value="{block_order}"> 0 - 9999
+			</div>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="type">{lang_blocktype}</label>
+			<div class="uk-form-controls">
+				<select name="type" id="type" class="uk-form-width-medium">
+					<option value="normal" {normal_selected}>{lang_normalblock}</option>
+					<option value="phpblock" {php_selected}>{lang_phpblock}</option>
+					<option value="portal" {portal_selected}>{lang_portalblock}</option>
+				</select>
+			</div>
+		</div>
+	</fieldset>
+	<fieldset>
+		<legend>{lang_phpblockoptions}</legend>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="phpblockfn">{lang_blockfunction}</label>
+			<div class="uk-form-controls">
+				<input type="text" maxlength="64" name="phpblockfn" value="{block_phpblockfn}">
+			</div>
+		</div>
+
+		<div class="uk-alert uk-alert-danger">{lang_phpblockwarning}</div>
+	</fieldset>
+
+	<fieldset><legend>{lang_portalblockoptions}</legend>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="rdfurl">{lang_rdfurl}</label>
+			<div class="uk-form-controls">
+				<input type="text maxlength="{max_url_length}" id="rdfurl" name="rdfurl" value="{block_rdfurl}">
+			</div>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="rdflimit">{lang_rdflimit}</label>
+			<div class="uk-form-controls">
+				<input type="text" maxlength="3" id="rdflimit" name="rdflimit" value="{block_rdflimit}">
+			</div>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="rdfupdated">{lang_lastrdfupdate}</label>
+			<div class="uk-form-controls">
+				<input type="text" id="rdfupdated" name="rdfupdated" value="{block_rdfupdated}">
+			</div>
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>{lang_normalblockoptions}</legend>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="content">{lang_blockcontent}</label>
+		</div>
+		<div id="texteditor">
+{!if wysiwyg}
+			<div class="uk-margin-small">
+				<button id="visual" type="button" class="uk-button" value="{visual_editor}" onclick="won('content');$('#std').attr('class','uk-button');$('#visual').attr('class','uk-button uk-button-success')">{visual_editor}</button>
+				<button id="std" type="button" class="uk-button uk-button-success" value="{html_editor}"  onclick="woff('content');$('#visual').attr('class','uk-button');$('#std').attr('class','uk-button uk-button-success')">{html_editor}</button>
+			</div>
+{!endif}
+			<textarea class="texteditor" name="content" id="content" cols="45" rows="12">{block_content}</textarea>
+			<br>
+			<span class="warningsmall">{lang_allowed_html}</span>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="allow_autotags">{lang_autotags}</label>
+			<div class="uk-form-controls">
+				<input type="checkbox" id="allow_autotags" name="allow_autotags" {allow_autotags}> ({lang_use_autotags})
+			</div>
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>{lang_accessrights}</legend>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="owner_id">{lang_owner}</label>
+			<div class="uk-form-controls">
+				{owner_name} <input type="hidden" name="owner_id" value="{owner_id}">
+			</div>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="group_id">{lang_group}</label>
+			<div class="uk-form-controls">
+				{group_dropdown}
+			</div>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_permissions}</label>
+			<div class="uk-form-controls">
+				{lang_perm_key}
+				{permissions_editor}
+				{lang_permissions_msg}
+			</div>
+		</div>
+	</fieldset>
+
+	<button class="uk-button uk-button-primary" type="submit" value="{lang_save}" name="save">{lang_save}</button>
+	<button class="uk-button" type="submit" class="cancel" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
+{!if delete_option}
+	<button class="uk-button uk-button-danger" type="submit" value="{lang_delete}" name="delete" onclick="return confirm('{lang_delete_confirm}');">{lang_delete}</button>
+{!endif}
+</form>
+
+<script>
+	$("#block").validate();
+</script>
+{# end {templatelocation} #}

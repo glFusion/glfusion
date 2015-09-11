@@ -1,0 +1,69 @@
+{# begin {templatelocation} #}
+<h2>{$LANG09[1]}</h2>
+<form class="uk-form uk-form-stacked uk-margin-large uk-search" method="get" action="{site_url}/search.php">
+	<input type="hidden" name="mode" value="search">
+	<input class="uk-form-width-large uk-form-medium uk-search" type="search" id="query" name="query" value="{query}" placeholder="{$LANG09[10]}">
+	<button class="uk-button uk-button-success" type="submit" name="submit" value="{$LANG09[10]}">{$LANG09[10]}</button>
+	<button type="button" class="uk-button uk-button-primary" data-uk-toggle="{target:'#advanced'}">
+		{$LANG09[2]}
+	</button>
+	<div id="advanced" class="uk-hidden uk-margin-top">
+		<div class="uk-grid">
+			<div class="uk-width-medium-1-5">
+				<label class="uk-form-label">
+					{$LANG09[70]}
+				</label>
+				<div class="uk-form-controls">
+					<select name="type">
+						{plugin_types}
+					</select>
+				</div>
+			</div>
+			<div class="uk-width-medium-1-5">
+				<label class="uk-form-label">
+					{$LANG09[71]}
+				</label>
+				<div class="uk-form-controls">
+					<select name="st">
+						{search_time}
+					</select>
+				</div>
+			</div>
+			<div class="uk-width-medium-1-5">
+				<label class="uk-form-label">
+					{$LANG09[72]}
+				</label>
+				<div class="uk-form-controls">
+					<select name="keyType">
+						<option value="any" {key_any_selected}>{$LANG09[45]}</option>
+						<option value="all" {key_all_selected}>{$LANG09[44]}</option>
+						<option value="phrase" {key_phrase_selected}>{$LANG09[43]}</option>
+					</select>
+				</div>
+			</div>
+			{!if author_option_list}
+			<div class="uk-width-medium-1-5">
+				<label class="uk-form-label">
+					{$LANG09[69]}
+				</label>
+				<div class="uk-form-controls">
+					<select name="author">
+						{author_option_list}
+					</select>
+				</div>
+			</div>
+			{!endif}
+			<div class="uk-width-medium-1-5">
+				<label class="uk-form-label">
+					{$LANG09[73]}
+				</label>
+				<div class="uk-form-controls">
+					<select name="results">
+						{search_limits}
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+{# end {templatelocation} #}

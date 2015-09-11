@@ -1,0 +1,5 @@
+{# begin {templatelocation} #}
+<ul class="uk-list">
+{list_items}
+</ul>
+{# end {templatelocation} #}

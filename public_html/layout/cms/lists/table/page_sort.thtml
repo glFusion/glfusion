@@ -1,0 +1,3 @@
+{# begin {templatelocation} #}
+<th {sort_subtags}>{sort_text}{sort_selected}</th>
+{# end {templatelocation} #}

@@ -1,0 +1,11 @@
+{# begin group edit panel #}
+<div id="pe_usergroup" class="jsenabled_hide">
+  <fieldset>
+    <legend>{lang_securitygroups}</legend>
+    {lang_groupinstructions}
+    <div class="uk-form-row">
+        {group_options}
+    </div>
+  </fieldset>
+</div>
+{# end group edit panel #}

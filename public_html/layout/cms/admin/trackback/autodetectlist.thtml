@@ -1,0 +1,8 @@
+{# begin {templatelocation} #}
+<div class="uk-alert uk-alert-primary uk-margin">
+    {lang_trackback_explain}
+</div>
+<table class="uk-table uk-table-striped uk-table-hover">
+    {autodetect_items}
+</table>
+{# end {templatelocation} #}

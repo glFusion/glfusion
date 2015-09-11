@@ -1,0 +1,5 @@
+{# begin {templatelocation} #}
+<div class="uk-text-muted uk-margin-small">
+{message}
+</div>
+{# end {templatelocation} #}

@@ -1,0 +1,32 @@
+{# begin {templatelocation} #}
+<div class="uk-alert uk-alert-primary">
+	{lang_ping_explain}
+</div>
+<h2 class="uk-h2">{ping_results}</h2>
+<form class="uk-form uk-form-horizontal" action="{php_self}" method="post">
+	<input type="hidden" name="{gltoken_name}" value="{gltoken}">
+	{hidden_input_fields}
+	<div class="uk-form-row">
+		<label class="uk-form-label">{pingback_button}</label>
+		<div class="uk-form-controls">
+			{lang_pingback_short}
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label">{ping_button}</label>
+		<div class="uk-form-controls">
+			{lang_ping_short}
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label">{traclback_button}</label>
+		<div class="uk-form-controls">
+			{lang_traclback_short}
+		</div>
+	</div>
+
+	<div class="uk-form-row">
+		<div class="uk-alert uk-alert-danger">{lang_may_take_a_while}</div>
+	</div>
+</form>
+{# end {templatelocation} #}

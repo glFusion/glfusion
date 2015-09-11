@@ -1,0 +1,7 @@
+{# begin {templatelocation} #}
+<div class="{footercolumn-l} tm-navigation">
+    <div class="uk-panel tm-panel-navigation uk-margin-remove uk-height-1-1">
+    {glfusion_blocks}
+</div>
+</div>
+{# end {templatelocation} #}

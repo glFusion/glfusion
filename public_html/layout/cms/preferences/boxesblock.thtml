@@ -1,0 +1,12 @@
+{# begin {templatelocation} #}
+<fieldset data-uk-margin>
+    <legend>{lang_boxes_title}</legend>
+      <div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin">
+        {lang_boxes}
+       </div>
+    <div>
+        {boxes_checklist}
+    </div>
+    {plugin_content_boxes}
+</fieldset>
+{# end {templatelocation} #}

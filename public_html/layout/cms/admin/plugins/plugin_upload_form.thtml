@@ -1,0 +1,10 @@
+{# begin {templatelocation} #}
+<div class="uk-align-center uk-text-center uk-margin">
+  <form class="uk-form" name="pluginupload" action="{form_action_url}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="action" value="processupload">
+    {lang_upload_plugin}
+    <input class="uk-button" type="file" dir="ltr" name="pluginfile" id="pluginfile">
+    <button class="uk-button uk-button-primary" type="submit" name="submit" value="{$LANG32[58]}">{$LANG32[58]}</button>
+  </form>
+</div>
+{# end {templatelocation} #}

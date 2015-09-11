@@ -1,0 +1,6 @@
+{# begin {templatelocation} #}
+<h2 class="uk-h2">{lang_results}</h2>
+<table class="uk-table uk-table-striped uk-table-hover">
+    {pingback_results}
+</table>
+{# end {templatelocation} #}

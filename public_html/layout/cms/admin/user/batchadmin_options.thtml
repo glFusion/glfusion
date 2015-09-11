@@ -1,0 +1,9 @@
+{# begin {templatelocation} #}
+<div class="uk-form-row">
+    <input type="radio" name="usr_type" value="{sel_id}"{selector}>
+    <span class="uk-text-bold">{lang_description}:</span>&nbsp;{lang_text_start}
+    <input class="uk-text-center" type="text" name="usr_time[{sel_id}]" value="{id_value}" size="1"{selector}>
+    {lang_text_end}
+</div>
+
+{# end {templatelocation} #}

@@ -1,0 +1,8 @@
+<div class="uk-panel uk-panel-box">
+	<h3 class="uk-h3">{statusmsg}</h3>
+	<img class="uk-thumbnail uk-align-left" src="{alerticon}">
+	<div class="uk-text-primary">
+		{statustext}
+	</div>
+</div>
+<div class="uk-clearfix"></div>

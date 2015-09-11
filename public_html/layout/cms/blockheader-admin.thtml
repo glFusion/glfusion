@@ -1,0 +1,3 @@
+{# begin {templatelocation} #}
+<h3>{block_title}</h3>
+{# end {templatelocation} #}

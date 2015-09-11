@@ -1,0 +1,7 @@
+{# begin {templatelocation} #}
+<div class="uk-container tm-container-extra uk-container-center">
+	<div class="uk-grid uk-grid-match uk-grid-small uk-grid-width-medium-1-4 uk-flex-bottom" data-uk-grid-match="{target:'.uk-panel',row:false}" data-uk-grid-margin="">
+		{glfusion_rblocks}
+	</div>
+</div>
+{# end {templatelocation} #}

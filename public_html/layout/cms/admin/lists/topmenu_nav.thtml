@@ -1,0 +1,21 @@
+<div class="uk-panel uk-panel-box uk-margin">
+  <span class="uk-panel-title">{lang_title}</span>
+  <nav id="admin-nav-menu">
+    <ul class="uk-subnav uk-subnav-pill uk-margin-remove uk-hidden-small">
+<!-- BEGIN menu_items -->
+      <li><a href="{menu_item_url}">{menu_item_text}</a></li>
+<!-- END menu_items -->
+    </ul>
+  </nav>
+</div>
+{!if lang_instructions}
+<div class="uk-alert" data-uk-alert>
+  <a href="" class="uk-alert-close uk-close"></a>
+  <p>{lang_instructions}</p>
+</div>
+{!endif}
+<script>
+  $(function(){
+    $("nav#admin-nav-menu").menutron();
+  });
+</script>

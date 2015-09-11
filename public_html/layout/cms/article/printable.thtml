@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>{page_title}</title>
+		<link rel="stylesheet" type="text/css" href="{css_url}">
+	</head>
+	<body onload="window.print();">
+		<div class="uk-container">
+
+			<article class="uk-article uk-margin-large-bottom">
+				<header>
+					<h1 class="uk-article-title">{story_title}</h1>
+					<ul class="uk-article-meta article-meta uk-align-left uk-margin-remove">
+						<li>{lang_contributedby} {story_author}</li>
+						<li><time datetime="{story_date}">{story_date}</time></li>
+					</ul>
+				</header>
+				<div style="clear:both;"></div>
+
+				<p>{story_introtext}</p>
+
+				<p>{story_bodytext}</p>
+			</article>
+			<p>{comments_with_count}</p>
+
+			<hr />
+
+			<p>{site_name}<br />
+				<a href="{article_url}">{article_url}</a>
+			</p>
+
+		</div>
+	</body>
+</html>
+{# end {templatelocation} #}

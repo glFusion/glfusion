@@ -1,0 +1,20 @@
+{# begin {templatelocation} #}
+{block_start}
+<!-- BEGIN section -->
+<span class="uk-text-large">
+	{section_title}
+</span>&nbsp;
+<span class="uk-text-medium">
+	{interval}
+</span>
+<ul class="uk-list uk-margin-small">
+	<!-- BEGIN datarow -->
+	<li class="uk-text-truncate">{data_item}</li>
+	<!-- END datarow -->
+</ul>
+<!-- END section -->
+{!if no_items_found}
+{no_items_found}
+{!endif}
+{block_end}
+{# end {templatelocation} #}

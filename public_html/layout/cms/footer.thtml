@@ -1,0 +1,44 @@
+{# begin {templatelocation} #}
+{# END OF CONTENT AREA #}
+      </div>                              {# end of centercolumn #}
+      {left_blocks}
+    </div>                                {# end of uk-grid #}
+  </div>                                  {# end of uk-container #}
+</div>                                    {#end of tm-content #}
+
+<a href="#top">
+  <p id="scroll-to-top">
+    <i class="uk-icon-chevron-up"></i>
+  </p>
+</a>
+
+<div id="tm-footer">
+  <div id="tm-block-bottom" class="uk-clearfix">
+    {right_blocks}
+  </div>
+
+  <div id="tm-block-footer" class="uk-clearfix uk-text-center uk-align-center uk-margin-bottom-remove">
+    <div class="uk-margin-top uk-margin-bottom">
+      {copyright_msg}
+    </div>
+  </div>
+</div>
+
+<script>
+$(window).load(function(){var a=$(window).height();var c=$("#tm-footer").height();var b=$("#tm-footer").position().top+c;if(b<a){$("#tm-footer").css("margin-top",50+(a-b)+"px")}});
+$(window).load(function(){
+  $("#scroll-to-top").hide();
+  $(function () {
+    $(window).scroll(function(){
+      if ($(window).scrollTop()>100){
+        $("#scroll-to-top").fadeIn(1500);
+      } else {
+        $("#scroll-to-top").fadeOut(750);
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
+{# end {templatelocation} #}

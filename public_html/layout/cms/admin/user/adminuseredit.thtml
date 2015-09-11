@@ -1,0 +1,65 @@
+{# begin {templatelocation} #}
+<noscript><div class="pluginAlert" style="padding:10px;">{no_javascript_warning}</div></noscript>
+<script type="text/javascript" src="{site_url}/javascript/profile_editor.js"></script>
+<script type="text/javascript" src="{site_url}/javascript/pwd_strength.js"></script>
+
+<div id="pe_navbar" class="uk-margin" style="display:none">
+	{navbar}
+</div>
+
+<div class="clearboth">
+	<form class="uk-form uk-form-horizontal" id="profileform" name="profileform" action="{site_admin_url}/user.php" method="post" {enctype}>
+		{account_panel}
+		{group_panel}
+		{userinfo_panel}
+		{layout_panel}
+		{content_panel}
+		{privacy_panel}
+		{subscription_panel}
+		{plugin_panel}
+		<div class="uk-margin">
+			<button class="uk-button uk-button-primary" type="submit" id="save" name="save" value="{lang_save}">{lang_save}</button>
+			<button class="uk-button cancel" type="submit" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
+{!if delete_option}
+			<button class="uk-button uk-button-danger cancel" type="submit" value="{$LANG_ADMIN[delete]}" name="delete" onclick="return doubleconfirm('{$LANG28[104]}','{$LANG28[109]}');">{$LANG_ADMIN[delete]}</button>
+{!endif}
+			<input type="hidden" name="newuser" value="{newuser}">
+			<input type="hidden" name="{gltoken_name}" value="{gltoken}">
+		</div>
+	</form>
+</div>
+
+{# JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor #}
+<script type="text/JavaScript">
+	//<![CDATA[
+	/* Initially the navbar is hidden - in case JS is disabled. Enable it now */
+	document.getElementById('pe_navbar').style.display='';
+	var profilepanels = new Object;
+	var el;
+	el=document.getElementsByTagName('div');
+	for(i=0;i<el.length;i++) {
+		var divname = el[i].id
+		if(el[i].className == 'jsenabled_show'){
+			el[i].style.display = '';
+			profilepanels[divname] = 'show';
+		} else if(el[i].className == 'jsenabled_hide'){
+			el[i].style.display = 'none';
+			profilepanels[divname] = 'hidden';
+		}
+	}
+	//]]>
+</script>
+<script>
+	$( "#profileform" ).validate({
+		rules: {
+			email: "required",
+			email_conf: {
+				equalTo: "#email"
+			},
+			newp_conf: {
+				equalTo: "#newp"
+			}
+		}
+	});
+</script>
+{# end {templatelocation} #}

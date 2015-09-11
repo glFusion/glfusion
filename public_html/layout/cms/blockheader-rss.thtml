@@ -1,0 +1,5 @@
+{# begin {templatelocation} #}
+    <div class="">
+      <div class="uk-panel bottom-block">
+        <h3 class="uk-panel-title">{block_title}&nbsp;<i class="uk-icon-rss"></i></h3>
+{# end {templatelocation} #}

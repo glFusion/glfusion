@@ -1,0 +1,16 @@
+{# begin {templatelocation} #}
+<div class="uk-container uk-container-center uk-margin-top uk-margin-large-bottom">
+  {start_block_loginagain}
+    <form id="login" action="{form_action}" method="post" class="uk-panel uk-panel-box uk-form">
+      {hidden}
+      {captcha}
+      <button class="uk-button uk-button-primary" type="submit" value="{lang_login}">{lang_login}</button>
+    </form>
+{!if footer_message}
+    <div class="uk-alert uk-alert-danger uk-margin">
+    {footer_message}
+    </div>
+{!endif}
+  {end_block}
+</div>
+{# end {templatelocation} #}

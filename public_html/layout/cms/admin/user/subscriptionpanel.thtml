@@ -1,0 +1,23 @@
+{# begin {templatelocation} #}
+<div id="pe_subscriptions" class="jsenabled_hide">
+  <fieldset class="uk-margin">
+    <legend>{$LANG04[183]}</legend>
+      <table class="uk-table uk-table-hover uk-table-striped uk-table-condensed">
+      <tr>
+        <th>{$LANG04[179]}</th>
+        <th>{$LANG04[180]}</th>
+        <th>{$LANG04[181]}</th>
+        <th>{$LANG04[182]}</th>
+      </tr>
+      <!-- BEGIN subrows -->
+      <tr>
+        <td><input type="checkbox" name="subdelete[]" value="{subid}"></td>
+        <td>{sub_type}</td>
+        <td>{sub_category}</td>
+        <td>{sub_description}</td>
+      </tr>
+      <!-- END subrows -->
+    </table>
+  </fieldset>
+</div>
+{# end {templatelocation} #}

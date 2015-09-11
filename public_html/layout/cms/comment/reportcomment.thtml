@@ -1,0 +1,20 @@
+{# begin {templatelocation} #}
+<form action="{site_url}/comment.php" method="post">
+    <div>
+        <div id="commentarea">
+            {comment}
+        </div>
+        <div style="border-bottom:1px solid #cccccc"></div>
+        <p>
+            {lang_report_this}
+        </p>
+        <p>
+            <input type="hidden" name="cid" value="{cid}" />
+            <input type="hidden" name="type" value="{type}" />
+            <input type="hidden" name="mode" value="sendreport" />
+            <button class="uk-button" type="submit" name="sendit" value="{lang_send_report}">{lang_send_report}</button>
+            <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
+        </p>
+    </div>
+</form>
+{# end {templatelocation} #}

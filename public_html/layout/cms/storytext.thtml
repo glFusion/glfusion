@@ -1,0 +1,74 @@
+{# begin {templatelocation} #}
+<article class="uk-article tm-article uk-margin-large-bottom">
+	<header>
+		<h2 class="uk-article-title tm-article-title">{story_title_link}</h2>
+
+		<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-remove">
+			<li>{lang_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</li>
+			<li><time datetime="{story_date}">{story_date}</time></li>
+			<li>
+				{lang_posted_in} <a href="{story_topic_url}">{story_topic_name}</a>
+{!if story_alternate_topic_name}
+					, <a href="{alt_story_topic_url}">{story_alternate_topic_name}</a>
+{!endif}
+			</li>
+{!if comments_url}
+			<li><a class="uk-text" href="{comments_url}">{comments_count} {lang_comments}</a></li>
+{!endif}
+		</ul>
+		<ul class="uk-article-meta uk-align-right uk-margin-remove tm-article-meta">
+{!if email_story_url}
+			<li><a href="{email_story_url}" class="uk-icon-small uk-icon-envelope"></a></li>
+{!endif}
+{!if print_story_url}
+			<li><a href="{print_story_url}" target="_blank" class="uk-icon-small uk-icon-print"></a></li>
+{!endif}
+{!if edit_url}
+			<li><a href="{edit_url}" class="uk-icon-small uk-icon-edit"></a></li>
+{!endif}
+{!if plugin_meta_vars}
+			{plugin_meta_vars}
+{!endif}
+
+			{plugin_icon_vars}
+
+{!if feed_icon}
+			<li><a href="{feed_url}" class="uk-icon-small uk-icon-rss"></a></li>
+{!endif}
+		</ul>
+
+	</header>
+
+	<div class="uk-clearfix"></div>
+	{story_text_no_br}
+
+{!if plugin_body_vars}
+	{plugin_body_vars}
+{!endif}
+
+{!if readmore_url}
+	<p class="tm-article-links">
+		<a class="uk-text" href="{readmore_url}">{lang_continue_reading} <i class="uk-icon-angle-double-right"></i></a>
+	</p>
+{!endif}
+
+	<div class="uk-clearfix"></div>
+
+{# social buttons would go here #}
+
+	<div class="tm-article-footer">
+{!if page_selector}
+        <p>{page_selector}</p>
+{!endif}
+{!if trackbacks_count}
+		{trackbacks_with_count}
+{!endif}
+{!if plugin_footer_vars}
+		<div>{plugin_footer_vars}</div>
+{!endif}
+{!if rating_bar}
+		{rating_bar}
+{!endif}
+	</div>
+</article>
+{# end {templatelocation} #}

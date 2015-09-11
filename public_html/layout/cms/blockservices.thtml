@@ -1,0 +1,6 @@
+{# begin {templatelocation} #}
+<label class="uk-text-bold" for="service">{lang_service}</label>:
+<br>
+{select_service}
+<br>
+{# end {templatelocation} #}

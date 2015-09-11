@@ -1,0 +1,50 @@
+{# begin {templatelocation} #}
+<form class="uk-form uk-form-stacked" action="{site_url}/users.php" method="post">
+	<div class="uk-form-row">
+		<div class="uk-form-controls uk-text-center">
+			<div class="uk-form-icon">
+				<i class="uk-icon-user"></i>
+				<input class="uk-width-1-1" type="text" id="loginname" name="loginname" placeholder="{lang_username}" value="">
+			</div>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<div class="uk-form-controls uk-text-center">
+			<div class="uk-form-icon">
+				<i class="uk-icon-lock"></i>
+				<input class="uk-width-1-1" type="password" placeholder="{lang_password}" name="passwd" id="passwd">
+			</div>
+		</div>
+	</div>
+
+{!if services}
+	<div class="uk-form-row uk-text-left">
+		{services}
+	</div>
+{!endif}
+
+	<div class="uk-form-row uk-text-center">
+		<button class="uk-button uk-button-primary uk-form-width-small" type="submit" value="{lang_login}" rel="nofollow">{lang_login}</button>
+	</div>
+
+	<div class="uk-form-row">
+{!if lang_signup}
+		<a class="uk-link uk-link-muted" href="{site_url}/users.php?mode=new" rel="nofollow"><i class="uk-icon-user">&nbsp;</i>{$LANG12[3]}</a>
+{!endif}
+	</div>
+	<div class="uk-form-row">
+		<i class="uk-icon-question">&nbsp;</i><a class="uk-link uk-link-muted" href="{site_url}/users.php?mode=getpassword" rel="nofollow">{$LANG04[189]}</a>
+	</div>
+{!if oauth_login}
+	<div class="uk-form-row uk-text-center">
+		{oauth_login}
+	</div>
+{!endif}
+</form>
+{!if openid_login}
+<div class="uk-form-row uk-text-center">
+	{openid_login}
+</div>
+{!endif}
+
+{# end {templatelocation} #}
