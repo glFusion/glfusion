@@ -4,7 +4,7 @@
  */
 
 // Theme specific styles to load into the styles combo.
-CKEDITOR.stylesSet.add( 'default', [
+CKEDITOR.stylesSet.add( 'vintage', [
 	{name: 'Paragraph',element: 'p' },
 	{name: 'div clear:both',element: 'div',styles: {clear: 'both'}},
 	{name: 'Alert',element: 'span',attributes: {'class':'alert'}},
