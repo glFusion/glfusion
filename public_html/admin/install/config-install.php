@@ -195,7 +195,7 @@ function install_config($site_url)
     $c->add('hidenewtrackbacks',0,'select',3,4,0,60,TRUE);
     $c->add('hidenewplugins',0,'select',3,4,0,70,TRUE);
     $c->add('hideemptyblock',0,'select',3,4,0,80,TRUE);
-    $c->add('title_trim_length',20,'text',3,4,NULL,90,TRUE);
+    $c->add('title_trim_length',200,'text',3,4,NULL,90,TRUE);
     $c->add('whatsnew_cache_time',3600,'text',3,4,NULL,100,TRUE);
 
     // Subgroup: Users and Submissions
