@@ -1155,6 +1155,12 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             foreach ($_SQL as $sql) {
                 DB_query($sql,1);
             }
+
+            $result = DB_query("SELECT * FROM {$_TABLES['autotags']} WHERE tag='uikitlogin'");
+            if ( DB_numRows($result) < 1 ) {
+                $sql = "INSERT INTO {$_TABLES['autotags']} (`tag`, `description`, `is_enabled`, `is_function`, `replacement`) VALUES ('uikitlogin', 'UIKit Login Widget', '1', '1', NULL);";
+                DB_query($sql,1);
+            }
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
 

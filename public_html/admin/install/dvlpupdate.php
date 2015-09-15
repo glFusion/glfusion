@@ -1159,6 +1159,12 @@ function glfusion_150()
         DB_query($sql,1);
     }
 
+    $result = DB_query("SELECT * FROM {$_TABLES['autotags']} WHERE tag='uikitlogin'");
+    if ( DB_numRows($result) < 1 ) {
+        $sql = "INSERT INTO {$_TABLES['autotags']} (`tag`, `description`, `is_enabled`, `is_function`, `replacement`) VALUES ('uikitlogin', 'UIKit Login Widget', '1', '1', NULL);";
+        DB_query($sql,1);
+    }
+
     // new config options
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
@@ -1185,8 +1191,6 @@ function glfusion_150()
     $c->add('bb2_httpbl_maxage',30,'text',8,1,NULL,80,TRUE);
     $c->add('bb2_offsite_forms',0,'select',8,1,0,90,TRUE);
     $c->add('bb2_eu_cookie',0,'select',8,1,0,100,TRUE);
-
-
 
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.5.0',name='glfusion'",1);
