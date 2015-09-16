@@ -1,0 +1,40 @@
+{# begin {templatelocation} #}
+<h1>Import to Gallery v2 to Media Gallery Wizard</h1>
+Enter the following information about your Gallery v2 Installation.
+<br><br>
+This information can be found in the <b>config.php</b> file located in the Gallery v2 base directory.
+<br><br>
+
+<form method="post" action="{s_form_action}" name="mg_galler2_form" ENCTYPE="multipart/form-data">
+<fieldset style="border: none; border-top: 1px solid #000000">
+    <legend>{lang_gallery_database}</legend>
+    <br>
+    <label for="hostname">{lang_hostname}&nbsp;&nbsp;</label>
+        <input type="text" name="hostname" value="localhost" size="50">
+          <br><br>
+    <label for="database">{lang_database}&nbsp;&nbsp;</label>
+        <input type="text" name="database" value="" size="50">
+          <br><br>
+    <label for="username">{lang_username}&nbsp;&nbsp;</label>
+        <input type="text" name="username" value="" size="50">
+          <br><br>
+    <label for="password">{lang_password}&nbsp;&nbsp;</label>
+        <input type="text" name="password" value="" size="50">
+          <br><br>
+    <label for="table_prefix">{lang_table_prefix}&nbsp;&nbsp;</label>
+        <input type="text" name="table_prefix" value="g2_" size="50">
+          <br><br>
+    <label for="column_prefix">{lang_column_prefix}&nbsp;&nbsp;</label>
+        <input type="text" name="column_prefix" value="g_" size="50">
+          <br><br>
+    <label for="gallery_directory">{lang_gallery_directory}&nbsp;&nbsp;</label>
+        <input type="text" name="gallery_directory" value="" size="50">
+          <br><br>
+</fieldset>
+
+<p align="center">
+<input type="submit" name="mode" value="next" />
+<input type="submit" name="mode" value="cancel">
+</p>
+</form>
+{# end {templatelocation} #}

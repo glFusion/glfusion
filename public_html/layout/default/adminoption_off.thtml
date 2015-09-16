@@ -1,0 +1,3 @@
+{# begin {templatelocation} #}
+<li>{option_label} ({option_count})</li>
+{# end {templatelocation} #}

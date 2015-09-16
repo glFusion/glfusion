@@ -38,8 +38,6 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-###############################################################################
-
 $LANG_BAD_BEHAVIOR = array(
     'plugin_display_name' => 'Bad Behavior2',
     'page_title' => 'Bad Behavior2',
@@ -75,8 +73,8 @@ $LANG_BAD_BEHAVIOR = array(
     'stats_no_hits' => 'No entries.',
     'blocked_ips' => 'Blocked unique IP addresses',
     'unblock' => 'Desbloquar dirección IP',
-    'ip_date' => 'IP / Date / Status',
-    'headers' => 'Headers',
+    'ip_date' => 'IP / Fecha / Estado',
+    'headers' => 'Encabezados',
     'log_entries' => 'Log Entries',
     'list_ips' => 'List Banned IPs',
     'ban_ip' => 'Ban IPs',
@@ -84,26 +82,26 @@ $LANG_BAD_BEHAVIOR = array(
     'ip_address' => 'Dirección IP',
     'type' => 'Type',
     'date' => 'Fecha',
-    'reason' => 'Reason',
+    'reason' => 'Razón',
     'delete' => 'Borrar',
-    'enter_ip' => 'Enter IP',
+    'enter_ip' => 'IP',
     'delete_confirm_1' => 'Are you sure you want to un-ban these IPs?',
     'delete_confirm_2' => 'Are you REALLY sure?',
     'delete_info' => 'Remove Banned IP',
     'manually_added' => 'Manually Added',
     'automatic_captcha' => 'Automatically Added (CAPTCHA)',
-    'enter_ip_info' => 'Enter IPs to ban from the site below. Each IP should be on a separate line.',
+    'enter_ip_info' => 'Entra las IPs a bloquear en el sitio. Cada IP deberia estar en una linea separada.',
     'ban_results' => 'IPs listed below had errors that prevented them from being added to the ban list.',
     'duplicate_error' => 'IP %s already exists in the Ban list.',
     'invalid_ip' => 'IP %s is not a valid IPv4 address.',
     'submit' => 'Enviar',
     'cancel' => 'Cancelar',
-    'filter' => 'Filter Selection',
+    'filter' => 'Filtro',
     'go' => 'Ir',
-    'no_filter' => 'No Filter',
+    'no_filter' => 'Sin Filtro',
     'manual' => 'Manual',
     'token' => 'Token',
-    'captcha' => 'CAPTCHA'
+    'captcha' => 'CAPTCHA',
 );
 
 $LANG_BB2_RESPONSE = array(
@@ -149,11 +147,11 @@ $LANG_BB2_RESPONSE = array(
     '96c0bd29' => 'SQL Injection detected',
     'f9f3b8b1' => 'do=register BOT Attack',
     'f9f3b8b2' => '/RK=0/RS= BOT',
-    '96c0bd30' => 'Banned IP'
+    '96c0bd30' => 'Banned IP',
 );
+
 
 $PLG_bad_behavior_MESSAGE1 = '¡Si ves este mensaje, Bad Behavior2 <b>NO</b> esta instalado correctamente! Por favor lee cuidadosamente las instrucciones de instalación nuevamente.';
 $PLG_bad_behavior_MESSAGE100 = 'La dirección IP ha sido desbloqueada.';
 $PLG_bad_behavior_MESSAGE101 = 'There was a problem unblocking the IP address.';
-
 ?>
