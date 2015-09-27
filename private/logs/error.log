@@ -1,1 +1,1 @@
-*** dummy entry ***03 Jul 2015 19:07:00 - 127.0.0.1: 1146: Table 'dvlp_git_15.gl_bad_behavior2_ban' doesn't exist. SQL in question: SELECT id,INET_NTOA(ip) AS ip, type, timestamp FROM gl_bad_behavior2_ban WHERE 1=1 
+*** dummy entry ***
