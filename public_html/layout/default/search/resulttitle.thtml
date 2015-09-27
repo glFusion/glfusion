@@ -1,3 +1,0 @@
-{# begin {templatelocation} #}
-<tr><td class="alignleft" class=basic colspan = 3>{data}</td></tr>
-{# end {templatelocation} #}

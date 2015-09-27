@@ -6,8 +6,8 @@
 // |                                                                          |
 // | Spanish (Colombia) language file                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2014-2015 by the following authors:                        |
-// | John J. Toro A.        john DOT toro AT newroute DOT net                 |
+// | Copyright (C) 2002-2009 by the following authors:                        |
+// |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
 // |                                                                          |

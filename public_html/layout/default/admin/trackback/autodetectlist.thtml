@@ -1,7 +1,0 @@
-{# begin {templatelocation} #}
-<p>{lang_trackback_explain}</p>
-
-<table class="admin-list-table">
-    {autodetect_items}
-</table>
-{# end {templatelocation} #}

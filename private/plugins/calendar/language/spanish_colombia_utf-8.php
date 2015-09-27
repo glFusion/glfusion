@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # spanish_colombia_utf-8.php
 #
@@ -92,7 +91,7 @@ $LANG_CAL_1 = array(
     49 => 'It appears that there are no events on this site or no one has ever clicked on one.',
     50 => 'Eventos',
     51 => 'Borrar',
-    52 => 'Enviado por',
+    52 => 'Enviado por'
 );
 
 $_LANG_CAL_SEARCH = array(
@@ -148,7 +147,7 @@ $LANG_CAL_ADMIN = array(
     9 => '(incluya: <b>http://</b>)',
     10 => 'You must provide the dates/times, event title, and description',
     11 => 'Calendario - Listado de Eventos',
-    12 => 'Para modificar ó borrar, haz clic sobre el icono: <img src="'.$_CONF['layout_url'].'/images/edit.png" /> correspondiente. Para crear, selecciona: "<b><i>Crear</i></b>" arriba. Para crear una copia de un evento existente haz clic en el icono: <img src="'.$_CONF['layout_url'].'/images/copy.png" /> correspondiente.',
+    12 => 'Para modificar ó borrar, haga click sobre el icono: <img src="/layout//images/edit.png" /> correspondiente. Para crear, seleccione: "<b><i>Nuevo</i></b>" arriba. Para crear una copia de un evento existente haga clic en el icono: <img src="/layout/cory/images/copy.png" /> correspondiente.',
     13 => 'Autor',
     14 => 'Inicia',
     15 => 'Termina',
@@ -164,7 +163,7 @@ $LANG_CAL_ADMIN = array(
     25 => 'End date is before start date.',
     26 => 'Borrar Eventos Antiguos',
     27 => 'Eso son los eventos que tinenen mas de ',
-    28 => ' meses. Haz clic en el icono: <img src="'.$_CONF['layout_url'].'/images/deleteitem.png" /> al final para borrarlos, ó seleccione un periodo de tiempo diferente:<br' . XHTML . '>Encontrar todos los eventos con mas de: ',
+    28 => ' meses. Haga clic en el icono: <img src="/layout/cory/images/deleteitem.png" /> al final para borrarlos, ó seleccione un periodo de tiempo diferente:<br' . XHTML . '>Encontrar todos los eventos con mas de: ',
     29 => '',
     30 => 'Actualizar',
     31 => 'Are You sure you want to permanently delete ALL selected users?',
@@ -176,12 +175,12 @@ $LANG_CAL_ADMIN = array(
     37 => 'Moderate Event',
     38 => 'Gestión Multiple',
     39 => 'Eventos',
-    40 => 'Eventos',
-    41 => 'Esta pantalla te permite modificar/crear eventos. Modifica los campos y guarda.',
+    40 => 'Event List',
+    41 => 'This screen allows you to edit / create events. Edit the fields below and save.'
 );
 
 $LANG_CAL_AUTOTAG = array(
-    'desc_calendar' => 'Link: to a Calendar event on this site; link_text defaults to event title: [calendar:<i>event_id</i> {link_text}]',
+    'desc_calendar' => 'Link: to a Calendar event on this site; link_text defaults to event title: [calendar:<i>event_id</i> {link_text}]'
 );
 
 $LANG_CAL_MESSAGE = array(
@@ -207,29 +206,29 @@ $PLG_calendar_MESSAGE3002 = $LANG32[9];
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['calendar'] = array(
-    'label' => 'Calendario',
-    'title' => 'Configuración Calendario'
+    'label' => 'Calendar',
+    'title' => 'Calendar Configuration'
 );
 
 $LANG_confignames['calendar'] = array(
-    'calendarloginrequired' => 'Requiere Registro',
-    'hidecalendarmenu' => 'Hide Calendar Menu Entry',
-    'personalcalendars' => 'Enable Personal Calendars',
-    'eventsubmission' => 'Enable Submission Queue',
-    'showupcomingevents' => 'Show upcoming Events',
+    'calendarloginrequired' => 'Calendar Login Required?',
+    'hidecalendarmenu' => 'Hide Calendar Menu Entry?',
+    'personalcalendars' => 'Enable Personal Calendars?',
+    'eventsubmission' => 'Enable Submission Queue?',
+    'showupcomingevents' => 'Show upcoming Events?',
     'upcomingeventsrange' => 'Upcoming Events Range',
     'event_types' => 'Event Types',
     'hour_mode' => 'Hour Mode',
-    'notification' => 'Notification Email',
-    'delete_event' => 'Delete Events with Owner',
+    'notification' => 'Notification Email?',
+    'delete_event' => 'Delete Events with Owner?',
     'aftersave' => 'After Saving Event',
     'default_permissions' => 'Event Default Permissions',
     'only_admin_submit' => 'Only Allow Admins to Submit',
-    'displayblocks' => 'Display glFusion Blocks',
+    'displayblocks' => 'Display glFusion Blocks'
 );
 
 $LANG_configsubgroups['calendar'] = array(
-    'sg_main' => 'Principal'
+    'sg_main' => 'Main Settings'
 );
 
 $LANG_fs['calendar'] = array(

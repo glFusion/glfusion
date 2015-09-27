@@ -58,12 +58,12 @@ $LANG_FM00 = array (
     'new_upload_body'   => 'A new file has been submitted to the upload queue at ',
     'details'           => 'Detalles',
     'filename'          => 'Documento',
-    'uploaded_by'       => 'Cargado Pos',
+    'uploaded_by'       => 'Uploaded By',
 );
 
 // Admin Navbar
 $LANG_FM02 = array(
-    'instructions' => 'Para modificar o borrar, haz clic en el icono <img src="'.$_CONF['layout_url'].'/images/admin/edit.png" /> correspondiente. Para ver o modificar categorias, haz clic en el enlace: "<b>Categorías</b>" arriba.',
+    'instructions' => 'To modify or delete a file, click on the files\'s edit icon below. To view or modify categories, select the Categories option above.',
     'nav1'  => 'Opciones',
     'nav2'  => 'Categorías',
     'nav3'  => 'Cargar Archivo',
@@ -94,7 +94,7 @@ $LANG_FILEMGMT = array(
     'title' => "Título",
     'content' => "Contenido",
     'hits' => "Accesos",
-    'Filelisting' => "Archivos",
+    'Filelisting' => "Lista de archivos",
     'DownloadReport' => "Historial de descargas para archivos simples",
     'StatsMsg1' => "Top 10 de archivos accesados",
     'StatsMsg2' => "Parece que no hay archivos definidos en el plugin filemgmt o nadie ha accesado nunca a el.",
@@ -345,8 +345,8 @@ define("_MD_CATEGORYTITLE","Lista de Archivos - Ver categoría");
 define("_MD_DLCONF","Configuración de las descargas");
 define("_MD_GENERALSET","Opciones de Configuración");
 define("_MD_ADDMODFILENAME","Agregar nuevo archivo");
-define("_MD_ADDCATEGORYSNAP", "Imagen opcional: <small>(<i>Sólo Categorías de alto nivel</i>)</small>");
-define("_MD_ADDIMAGENOTE", "(<i>El alto de la imagen será modificada a 50px)</i>");
+define ("_MD_ADDCATEGORYSNAP", "Imagen opcional: <small>(<i>Sólo Categorías de alto nivel</i>)</small>");
+define ("_MD_ADDIMAGENOTE", "(<i>Alto de la imagen será modificada a 50 px)</i>");
 define("_MD_ADDMODCATEGORY","<b>Categorías:</b> agregar, Modificar, y borrar Categorías");
 define("_MD_DLSWAITING","Descargas esperando por validación");
 define("_MD_BROKENREPORTS","Reporte de  archivos dañados");
@@ -360,7 +360,7 @@ define("_MD_SUBMITTEDBY","Enviado por: ");
 define("_MD_APPROVE","Aprobar");
 define("_MD_DELETE","Borrar");
 define("_MD_NOSUBMITTED","No hay nuevas descargas enviadas.");
-define("_MD_ADDMAIN","Agregar Categoría Principal");
+define("_MD_ADDMAIN","Agregar categoría principal");
 define("_MD_TITLEC","Título: ");
 define("_MD_CATSEC", "Pueden ver la categoría: ");
 define("_MD_UPLOADSEC", "Pueden subir archivos: ");
@@ -368,15 +368,15 @@ define("_MD_IMGURL","<br>Tamaño de la imagen <font size='-2'> (Localizado en el
 define("_MD_ADD","Agregar");
 define("_MD_ADDSUB","Agregar SUB-Categoría");
 define("_MD_IN","Divisón de");
-define("_MD_ADDNEWFILE","Agregar Archivo");
+define("_MD_ADDNEWFILE","Agregar nuevo archivo");
 define("_MD_MODCAT","Modificar Categoría");
 define("_MD_MODDL","Modificar información de la descarga");
 define("_MD_USER","Usuario");
 define("_MD_IP","Dirección IP");
 define("_MD_USERAVG","Promedio de calificación del usuario");
 define("_MD_TOTALRATE","Calificacies totales");
-define("_MD_NOREGVOTES","Votos de usuario registrados");
-define("_MD_NOUNREGVOTES","Votos de usuario no registrados");
+define("_MD_NOREGVOTES","Votos de usuario no registrados");
+define("_MD_NOUNREGVOTES","Votos de usuario registrados");
 define("_MD_VOTEDELETED","Data de votos eliminada.");
 define("_MD_NOBROKEN","Sin archivos dañados reportados.");
 define("_MD_IGNOREDESC","Ignorar (Ignora el reporte y solo elimina este reporte enviado</b>)");
@@ -394,7 +394,7 @@ define("_MD_OWNER","Propietario: ");
 define("_MD_NOMODREQ","Sin petición de modificación de la descarga.");
 define("_MD_DBUPDATED","Actualización de la base de datos completada!");
 define("_MD_MODREQDELETED","Petición de modificación eliminada.");
-define("_MD_IMGURLMAIN","Imagen (El alto de la imagen será modificada a 50 px): ");
+define("_MD_IMGURLMAIN","Imagen (Alto de la imagen será modificada a 50 px): ");
 define("_MD_PARENT","Categoría relacionada:");
 define("_MD_SAVE","Guardar cambios");
 define("_MD_CATDELETED","Categoría eliminada.");

@@ -1,5 +1,0 @@
-{# begin {templatelocation} #}
-<div>
-  {formatted_comment}
-</div>
-{# end {templatelocation} #}

@@ -1,3 +1,0 @@
-{# begin {templatelocation} #}
-                                <td>{no_rows_msg}</td>
-{# end {templatelocation} #}

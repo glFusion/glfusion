@@ -1,5 +1,0 @@
-{# begin {templatelocation} #}
-<tr class="pluginRollOut pluginRow{cssid}" onmouseover="className='pluginRollOver';" onmouseout="className='pluginRollOut pluginRow{cssid}';">
-    {item_field}
-</tr>
-{# end {templatelocation} #}
