@@ -1,8 +1,0 @@
-{# begin {templatelocation} #}
-                    <div id="header-site-name">
-                        <a href="{site_url}" rel="bookmark" title="{site_slogan}">
-                            {site_name}
-                        </a>
-                        <div id="header-site-slogan">{site_slogan}</div>
-                    </div>
-{# end {templatelocation} #}

@@ -1,3 +1,0 @@
-{# begin {templatelocation} #}
-  <td class=""{colspan}>{field_text}</td>
-{# end {templatelocation} #}

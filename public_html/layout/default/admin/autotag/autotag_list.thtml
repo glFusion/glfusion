@@ -1,7 +1,0 @@
-{# begin {templatelocation} #}
-{start_block}
-{admin_menu}
-{end_block}
-{upload_form}
-{admin_list}
-{# end {templatelocation} #}

@@ -1,3 +1,0 @@
-{# begin {templatelocation} #}
-  <li>{list_item}</li>
-{# end {templatelocation} #}

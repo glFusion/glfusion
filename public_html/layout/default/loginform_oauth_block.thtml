@@ -1,7 +1,0 @@
-{# begin {templatelocation} #}
-
-<form action="{site_url}/users.php?oauth_login={oauth_service}" method="post">
-  <input style="border:0;height:22px;width:141px;padding:0;margin:0;" type="submit" value="" id="login_{oauth_service}" />
-</form>
-
-{# end {templatelocation} #}

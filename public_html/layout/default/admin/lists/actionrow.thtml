@@ -1,5 +1,0 @@
-{# begin {templatelocation} #}
-                                <tr>
-                                    {actions}
-                                </tr>
-{# end {templatelocation} #}

@@ -1,3 +1,0 @@
-{# begin {templatelocation} #}
-<li><a href="{menuitem_url}">{menuitem_text}</a></li>
-{# end {templatelocation} #}

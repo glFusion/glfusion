@@ -1,5 +1,0 @@
-{block_start}
-{admin_menu}
-{admin_list}
-{admin_list_right}
-{block_end}

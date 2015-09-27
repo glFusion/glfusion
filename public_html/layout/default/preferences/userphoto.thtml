@@ -1,6 +1,0 @@
-{# begin {templatelocation} #}
-           <tr>
-                <td style="width:100px;"><label for="photo">{lang_userphoto}:</label></td>
-                <td><input type="file" dir="ltr" id="photo" name="photo" size="30" /><br />{display_photo}</td>
-           </tr>
-{# end {templatelocation} #}

@@ -1,7 +1,0 @@
-{# begin {templatelocation} #}
-<div {block_id}class="block-box-comment">
-    <span class="block-helpicon">
-        {block_help}
-    </span>
-    <h2>{block_title}</h2>
-{# end {templatelocation} #}
