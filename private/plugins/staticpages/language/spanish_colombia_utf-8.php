@@ -1,10 +1,11 @@
 <?php
+
 ###############################################################################
 # spanish_colombia_utf-8.php
 # This is the spanish (Colombia) language file for the glFusion Static Page plugin
 #
 # Copyright (C) 2001 Tony Bibbs - tony@tonybibbs.com
-# Copyright (C) 2014 John Toro  - john.toro@tonybibbs.com
+# Copyright (C) 2014 John Toro  - john.toro@newroute.net
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -39,7 +40,7 @@ $LANG_STATIC = array(
     'newpage' => 'Nueva Página',
     'adminhome' => 'Administración',
     'staticpages' => 'Páginas',
-    'staticpageeditor' => 'Editor de páginas estáticas',
+    'staticpageeditor' => 'Editor',
     'writtenby' => 'Autor',
     'date' => 'Modificada',
     'title' => 'Título',
@@ -71,7 +72,7 @@ $LANG_STATIC = array(
     'no_such_page_anon' => 'Por favor, regístrate..',
     'no_page_access_msg' => "Esto puede ser porque no te has registrado o no eres un miembro de {$_CONF['site_name']}. Por favor, <a href=\"{$_CONF['site_url']}/users.php?mode=new\">regístrate</a> en {$_CONF['site_name']} para obtener acceso completo",
     'php_msg' => 'PHP: ',
-    'php_warn' => '<b>Aviso</b>: Si activa esta opción se interpretará el código PHP en su página. ¡¡Usar con cuidado!!',
+    'php_warn' => '<b>Aviso</b>: Si activas esta opción se interpretará el código PHP en tu página. ¡¡Usar con cuidado!!',
     'exit_msg' => 'Tipo de salida: ',
     'exit_info' => 'Activar para Mensaje de Acceso Preciso. No marcar para verificaciones de seguridad  y mensaje normales.',
     'deny_msg' => 'Acceso denegado a esta página. O bien ha sido movida/renombrada o no tienes permiso suficiente.',
@@ -81,8 +82,8 @@ $LANG_STATIC = array(
     'stats_no_hits' => 'Parece que no hay páginas estáticas o que nadie las ha visto nunca.',
     'id' => 'ID',
     'duplicate_id' => 'La ID elegida ya está en uso. Por favor, elige otra.',
-    'instructions' => 'Para ver una página haga click en su <b>Título</b>.<br /><img src="/layout//images/admin/add.png" />: Crea una Página. <img src="/layout//images/admin/edit.png" />: Modifica la Página. <img src="/layout//images/admin/copy.png" />: Copia/Duplica la Página. <img src="/layout//images/admin/delete.png" />: Borra la Página',
-    'centerblock' => 'Bloque central: ',
+    'instructions' => 'Para modificar o borrar, haz clic en el icono: <img src="'.$_CONF['layout_url'].'/images/edit.png" /> correspondiente. Para ver la pagina haz clic sobre el <b>Título</b>. Para crear, haz clic sobre el enlace: "<b>Crear</b>" arriba. Para crear una copia de una pagina existente, haz clic en el icono: <img src="'.$_CONF['layout_url'].'/images/copy.png" /> correspondiente.',
+    'centerblock' => 'Bloque central',
     'centerblock_msg' => 'Cuando se selecciona esta opción la página estática aparecerá como un bloque central en la página de inicio.',
     'topic' => 'Sección: ',
     'position' => 'Posición: ',
@@ -118,16 +119,13 @@ $LANG_STATIC = array(
     'allnhp_topics' => 'Todas las Secciones (Menos en la página de inicio)',
     'page_list' => 'Paginas',
     'instructions_edit' => 'Esta pantalla le permite crear/modificar/borrar una pagina. Las paginas puden contener tanto código PHP como HTML.',
-    'attributes' => 'Attributes'
+    'attributes' => 'Atributos',
 );
-###############################################################################
-# autotag descriptions
 
 $LANG_SP_AUTOTAG = array(
     'desc_staticpage' => 'Link: to a staticpage on this site; link_text defaults to staticpage title. usage: [staticpage:<i>page_id</i> {link_text}]',
-    'desc_staticpage_content' => 'HTML: renders the content of a staticpage.  usage: [staticpage_content:<i>page_id</i>]'
+    'desc_staticpage_content' => 'HTML: renders the content of a staticpage.  usage: [staticpage_content:<i>page_id</i>]',
 );
-
 
 $PLG_staticpages_MESSAGE19 = '';
 $PLG_staticpages_MESSAGE20 = '';
@@ -157,7 +155,7 @@ $LANG_confignames['staticpages'] = array(
     'atom_max_items' => 'Max. Pages in Webservices Feed',
     'comment_code' => 'Comentarios',
     'include_search' => 'Incluir en Busquedas',
-    'status_flag' => 'Modo predeterminado'
+    'status_flag' => 'Modo predeterminado',
 );
 
 $LANG_configsubgroups['staticpages'] = array(
@@ -178,7 +176,7 @@ $LANG_configselects['staticpages'] = array(
     9 => array('Ir a la página' => 'item', 'Lista de Páginas' => 'list', 'Página de Inicio' => 'home', 'Panel de Control' => 'admin'),
     12 => array('Sin acceso' => 0, 'Solo-Lectura' => 2, 'Lectura-Escritura' => 3),
     13 => array('Habilitada' => 1, 'Deshabilitada' => 0),
-    17 => array('Comentarios Habilitados' => 0, 'Comentarios Desabilitados' => -1)
+    17 => array('Comentarios Habilitados' => 0, 'Comentarios Desabilitados' => -1),
 );
 
 ?>

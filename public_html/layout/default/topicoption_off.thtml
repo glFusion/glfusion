@@ -1,0 +1,3 @@
+{# begin {templatelocation} #}
+<ul><li class="topicoption-off">{option_label} {option_count}</li></ul>
+{# end {templatelocation} #}

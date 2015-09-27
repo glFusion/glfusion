@@ -1,0 +1,3 @@
+{# begin {templatelocation} #}
+                                    <td class="{class}"{colspan} {column_style}>{itemtext}</td>
+{# end {templatelocation} #}
