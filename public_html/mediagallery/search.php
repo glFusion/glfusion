@@ -695,7 +695,7 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
         if ( $MG_albums[$M['album_id']]->enable_rating == 1 && (COM_isAnonUser() ) ) {
             $static = 'static';
         }
-        $rating_box = RATING_ratingBar('mediagallery',$M['media_id'], $M['media_votes'], ($M['media_rating']*$M['media_votes'])/2, $static, 5,'','sm');
+        $rating_box = RATING_ratingBar('mediagallery',$M['media_id'], $M['media_votes'], $M['media_rating'], $static, 5,'','sm');
     } else {
         $rating_box = '';
     }
