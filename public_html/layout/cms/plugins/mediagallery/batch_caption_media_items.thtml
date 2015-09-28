@@ -11,6 +11,7 @@
 				<label class="uk-form-label">{lang_title}</label>
 				<div class="uk-form-controls">
 					<input class="uk-form-width-large" type="text" name="media_title[]" value="{media_title}">
+          <input type="hidden" name="media_id[]" value="{media_id}">
 				</div>
 			</div>
 			<div class="uk-form-row">
