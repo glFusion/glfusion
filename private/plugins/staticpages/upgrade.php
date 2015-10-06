@@ -60,6 +60,9 @@ function staticpages_upgrade()
             $c->add('include_search', 1, 'select',0, 0, 0, 95, true, 'staticpages');
             $c->add('comment_code', -1, 'select',0, 0,17, 97, true, 'staticpages');
             $c->add('status_flag', 1, 'select',0, 0, 13, 99, true, 'staticpages');
+        case '1.6.0' :
+            DB_query("ALTER TABLE {$_TABLES['staticpage']} CHANGE `sp_tid` `sp_tid` VARCHAR(128) NOT NULL DEFAULT 'none';",1);
+
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_SP_CONF['pi_version']."',pi_gl_version='".$_SP_CONF['gl_version']."' WHERE pi_name='staticpages' LIMIT 1");
             break;

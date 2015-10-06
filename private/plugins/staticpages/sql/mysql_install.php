@@ -59,7 +59,7 @@ CREATE TABLE {$_TABLES['staticpage']} (
   perm_anon tinyint(1) unsigned NOT NULL default '2',
   sp_centerblock tinyint(1) unsigned NOT NULL default '0',
   sp_help varchar(255) default '',
-  sp_tid varchar(20) NOT NULL default 'none',
+  sp_tid varchar(128) NOT NULL default 'none',
   sp_where tinyint(1) unsigned NOT NULL default '1',
   sp_php tinyint(1) unsigned NOT NULL default '0',
   sp_nf tinyint(1) unsigned default '0',
