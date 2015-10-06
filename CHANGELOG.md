@@ -1,6 +1,11 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v 1.5.0 (unreleased)
+  - Media Gallery: Improved support for MP4 video playback
+  - Fixed incorrect password confirmation field name in CMS theme
+  - Media Gallery: Fixed incorrect rating value on search page
+  - Media Gallery: Clear user cache after enrollment in media album
+  - Increased topic id and topic name to 128 characters
   - Several security enhancements throughout the code
   - Static Pages:  Fixed blank page format to no longer include header / footer.
   - Spanish Colombia translations provided by John Toro
