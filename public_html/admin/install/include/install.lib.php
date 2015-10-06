@@ -1152,6 +1152,13 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $_SQL[] = "ALTER TABLE {$_TABLES['trackback']}  `ipaddress`  `ipaddress` VARCHAR( 45 ) NOT NULL DEFAULT  ''";
             $_SQL[] = "ALTER TABLE {$_TABLES['users']} CHANGE  `remote_ip`  `remote_ip` VARCHAR( 45 ) NOT NULL DEFAULT  ''";
 
+            $_SQL[] = "ALTER TABLE {$_TABLES['topics']} CHANGE `tid` `tid` VARCHAR(128) NOT NULL DEFAULT '';";
+            $_SQL[] = "ALTER TABLE {$_TABLES['topics']} CHANGE `topic` `topic` VARCHAR(128) NULL DEFAULT NULL;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['stories']} CHANGE `tid` `tid` VARCHAR(128) NOT NULL DEFAULT 'General';";
+            $_SQL[] = "ALTER TABLE {$_TABLES['stories']} CHANGE `alternate_tid` `alternate_tid` VARCHAR(128) NULL DEFAULT NULL;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['blocks']} CHANGE `tid` `tid` VARCHAR(128) NOT NULL DEFAULT 'All';";
+            $_SQL[] = "ALTER TABLE {$_TABLES['storysubmission']} CHANGE `tid` `tid` VARCHAR(128) NOT NULL DEFAULT 'General';";
+
             foreach ($_SQL as $sql) {
                 DB_query($sql,1);
             }

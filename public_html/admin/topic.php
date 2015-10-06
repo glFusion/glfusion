@@ -171,7 +171,7 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
 
     // generate input for topic id
     if (!empty($topicEdit) && SEC_hasRights('topic.edit')) {
-        $tid_input = $tid . '<input type="hidden" size="20" maxlength="20" name="tid" value="'.$tid.'"' . XHTML . '>';
+        $tid_input = $tid . '<input type="hidden" size="20" maxlength="128" name="tid" value="'.$tid.'"' . XHTML . '>';
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
                    . '" name="delete"%s' . XHTML . '>';
         $jsconfirm = ' onclick="return doubleconfirm(\'' . $LANG27[40] . '\',\'' . $LANG27[6] . '\');"';
@@ -181,7 +181,7 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
                                   sprintf($delbutton, ''));
         $topic_templates->clear_var('lang_donotusespaces');
     } else {
-        $tid_input = '<input class="required alphanumeric" type="text" size="20" maxlength="20" name="tid" id="tid" value="'.$tid.'"' . XHTML . '>';
+        $tid_input = '<input class="required alphanumeric" type="text" size="20" maxlength="128" name="tid" id="tid" value="'.$tid.'"' . XHTML . '>';
         $topic_templates->set_var('lang_donotusespaces', $LANG27[5]);
     }
     $topic_templates->set_var('tid_input',$tid_input);

@@ -79,7 +79,7 @@ CREATE TABLE {$_TABLES['blocks']} (
   name varchar(48) NOT NULL default '',
   type varchar(20) NOT NULL default 'normal',
   title varchar(48) default NULL,
-  tid varchar(20) NOT NULL default 'All',
+  tid varchar(128) NOT NULL default 'All',
   blockorder smallint(5) unsigned NOT NULL default '1',
   content text,
   allow_autotags tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -350,8 +350,8 @@ CREATE TABLE {$_TABLES['stories']} (
   sid varchar(40) NOT NULL default '',
   uid mediumint(8) NOT NULL default '1',
   draft_flag tinyint(3) unsigned default '0',
-  tid varchar(20) NOT NULL default 'General',
-  alternate_tid varchar(20) NULL DEFAULT NULL,
+  tid varchar(128) NOT NULL default 'General',
+  alternate_tid varchar(128) NULL DEFAULT NULL,
   date datetime default NULL,
   title varchar(128) default NULL,
   introtext text,
@@ -395,7 +395,7 @@ $_SQL[] = "
 CREATE TABLE {$_TABLES['storysubmission']} (
   sid varchar(20) NOT NULL default '',
   uid mediumint(8) NOT NULL default '1',
-  tid varchar(20) NOT NULL default 'General',
+  tid varchar(128) NOT NULL default 'General',
   title varchar(128) default NULL,
   introtext text,
   bodytext text,
@@ -460,8 +460,8 @@ CREATE TABLE {$_TABLES['tokens']} (
 
 $_SQL[] = "
 CREATE TABLE {$_TABLES['topics']} (
-  tid varchar(20) NOT NULL default '',
-  topic varchar(48) default NULL,
+  tid varchar(128) NOT NULL default '',
+  topic varchar(128) default NULL,
   imageurl varchar(255) default NULL,
   sortnum mediumint(8) default NULL,
   limitnews tinyint(3) default NULL,

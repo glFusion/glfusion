@@ -1155,6 +1155,16 @@ function glfusion_150()
     $_SQL[] = "ALTER TABLE  {$_TABLES['cp_sessions']} ADD `ip` VARCHAR(16) NOT NULL";
     $_SQL[] = "ALTER TABLE  {$_TABLES['cp_sessions']} CHANGE `counter` `counter` INT(11) NOT NULL DEFAULT '0';";
 
+// update topic length
+    $_SQL[] = "ALTER TABLE {$_TABLES['topics']} CHANGE `tid` `tid` VARCHAR(128) NOT NULL DEFAULT '';";
+    $_SQL[] = "ALTER TABLE {$_TABLES['topics']} CHANGE `topic` `topic` VARCHAR(128) NULL DEFAULT NULL;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['stories']} CHANGE `tid` `tid` VARCHAR(128) NOT NULL DEFAULT 'General';";
+    $_SQL[] = "ALTER TABLE {$_TABLES['stories']} CHANGE `alternate_tid` `alternate_tid` VARCHAR(128) NULL DEFAULT NULL;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['blocks']} CHANGE `tid` `tid` VARCHAR(128) NOT NULL DEFAULT 'All';";
+    $_SQL[] = "ALTER TABLE {$_TABLES['storysubmission']} CHANGE `tid` `tid` VARCHAR(128) NOT NULL DEFAULT 'General';";
+
+    $_SQL[] = "ALTER TABLE {$_TABLES['staticpage']} CHANGE `sp_tid` `sp_tid` VARCHAR(128) NOT NULL DEFAULT 'none';";
+
     foreach ($_SQL as $sql) {
         DB_query($sql,1);
     }
