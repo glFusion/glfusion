@@ -390,6 +390,77 @@ if ( $nRows > 0 ) {
                 'charset'		=> $LANG_CHARSET,
 			));
         	break;
+        case 'video/mp4' :
+            $T->set_file (array ('video'=>'mp4.thtml'));
+            $T->set_var('movie',$_MG_CONF['mediaobjects_url'] . '/orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
+            $T->set_var('title',$row['media_title']);
+
+            $playback_options['autoref']        = $_MG_CONF['mov_autoref'];
+            $playback_options['autoplay']       = $_MG_CONF['mov_autoplay'];
+            $playback_options['controller']     = $_MG_CONF['mov_controller'];
+            $playback_options['kioskmode']      = $_MG_CONF['mov_kioskmode'];
+            $playback_options['scale']          = $_MG_CONF['mov_scale'];
+            $playback_options['height']         = $_MG_CONF['mov_height'];
+            $playback_options['width']          = $_MG_CONF['mov_width'];
+            $playback_options['bgcolor']        = $_MG_CONF['mov_bgcolor'];
+
+            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . DB_escapeString($row['media_id']) . "'");
+            $poNumRows = DB_numRows($poResult);
+            for ($i=0; $i < $poNumRows; $i++ ) {
+                $poRow = DB_fetchArray($poResult);
+                $playback_options[$poRow['option_name']] = $poRow['option_value'];
+            }
+
+            if ( isset($row['resolution_x']) && $row['resolution_x'] > 0 ) {
+                $resolution_x = $row['resolution_x'];
+                $resolution_y = $row['resolution_y'];
+            } else {
+                if ( $row['media_resolution_x'] == 0 ) {
+                    require_once $_CONF['path'] . '/lib/getid3/getid3.php';
+                    // Needed for windows only
+                    define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
+                    $getID3 = new getID3;
+                    // Analyze file and store returned data in $ThisFileInfo
+                    $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
+                    getid3_lib::CopyTagsToComments($ThisFileInfo);
+                    if ( $ThisFileInfo['video']['resolution_x'] < 1 || $ThisFileInfo['video']['resolution_y'] < 1 ) {
+                        if (isset($ThisFileInfo['meta']['onMetaData']['width']) && isset($ThisFileInfo['meta']['onMetaData']['height']) ) {
+                            $resolution_x = $ThisFileInfo['meta']['onMetaData']['width'];
+                            $resolution_y = $ThisFileInfo['meta']['onMetaData']['height'];
+                        } else {
+                            $resolution_x = -1;
+                            $resolution_y = -1;
+                        }
+                    } else {
+                        $resolution_x = $ThisFileInfo['video']['resolution_x'];
+                        $resolution_y = $ThisFileInfo['video']['resolution_y'];
+                    }
+                    if ( $resolution_x != 0 ) {
+                        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . $resolution_x . ",media_resolution_y=" . $resolution_y . " WHERE media_id='" . DB_escapeString($row['media_id']) . "'";
+                        DB_query( $sql );
+                    }
+                } else {
+                    $resolution_x = $row['media_resolution_x'];
+                    $resolution_y = $row['media_resolution_y'];
+                }
+            }
+
+            $T->set_var(array(
+                'autoref'       => ($playback_options['autoref'] ? 'true' : 'false'),
+                'autoplay'      => ($playback_options['autoplay'] ? 'true' : 'false'),
+                'controller'    => ($playback_options['controller'] ? 'true' : 'false'),
+                'kioskmode'     => ($playback_options['kioskmode'] ? 'true' : 'false'),
+                'bgcolor'       => $playback_options['bgcolor'],
+                'scale'         => $playback_options['scale'],
+                'height'        => $playback_options['height'],
+                'width'         => $playback_options['width'],
+                'resolution_x'  => $resolution_x,
+                'resolution_y'  => $resolution_y,
+                'charset'           => $LANG_CHARSET,
+            ));
+
+            break;
+
         case 'video/mpeg' :
         case 'video/x-mpeg' :
         case 'video/x-mpeq2a' :
