@@ -311,6 +311,8 @@ function processPluginUpload()
         $upload->setAllowedMimeTypes (array (
                 'application/x-gzip'=> '.gz,.gzip,tgz',
                 'application/zip'   => '.zip',
+                'application/x-tar' => '.tar,.tar.gz,.gz',
+                'application/x-gzip-compressed' => '.tar.gz,.tgz,.gz',
                 ));
         $upload->setFieldName('pluginfile');
 
