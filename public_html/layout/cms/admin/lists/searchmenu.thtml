@@ -7,14 +7,14 @@
 	}
 </script>
 {!endif}
-<div class="uk-text-center uk-align-center">
+<div class="uk-text-center uk-align-center uk-hidden-small">
 {!if form_url}
 	<form class="uk-form uk-form-horizontal" action="{form_url}" method="post">
 {!endif}
 		<div class="admin-list-search">
 			{filter}
 {!if lang_search}
-			{lang_search}: <input type="text" id="admin-list-search" size="20" name="q" value="{last_query}" />
+			{lang_search}: <input class="uk-form-small" type="text" id="admin-list-search" name="q" value="{last_query}">
 			<button class="uk-button uk-button-success" type="submit" value="{lang_submit}">{lang_submit}</button>
 			<button class="uk-button uk-button-danger" type="submit" value="X" title="Clear" onclick="clearsearch();">Clear</button>
 {!endif}

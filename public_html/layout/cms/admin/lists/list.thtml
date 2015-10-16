@@ -1,7 +1,7 @@
 {# begin {templatelocation} #}
 {search_menu}
 {!if form_url}
-<form action="{form_url}" method="post">
+<form class="uk-form" action="{form_url}" method="post">
     {formfields_top}
 {!endif}
 <div class="uk-overflow-container">
