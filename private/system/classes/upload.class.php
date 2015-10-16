@@ -311,7 +311,7 @@ class upload
             array(
                 'application/x-gzip-compressed'     => '.tar.gz,.tgz,.gz',
                 'application/x-zip-compressed'      => '.zip',
-                'application/x-tar'                 => '.tar',
+                'application/x-tar'                 => '.tar,.tar.gz,.gz',
                 'application/x-gtar'                => '.tar',
                 'text/plain'                        => '.phps,.txt,.inc',
                 'text/html'                         => '.html,.htm',
