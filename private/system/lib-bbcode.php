@@ -254,6 +254,12 @@ function BBC_editor($editorText,$formName,$textName,$additionalCodes = array(),$
                      array('name'=>'color','label'=> $LANG_BBCODE['color_label'],'help' => $LANG_BBCODE['color_help'],'start_tag'=>'[color=]','end_tag'=>'[/color]','select'=>array('#'=>'*'.$LANG_BBCODE['color_default'],'darkred'=>$LANG_BBCODE['color_darkred'],'red'=>$LANG_BBCODE['color_red'],'orange'=>$LANG_BBCODE['color_orange'],'brown'=>$LANG_BBCODE['color_brown'],'yellow'=>$LANG_BBCODE['color_yellow'],'green'=>$LANG_BBCODE['color_green'],'olive'=>$LANG_BBCODE['color_olive'],'cyan'=>$LANG_BBCODE['color_cyan'],'blue'=>$LANG_BBCODE['color_blue'],'darkblue'=>$LANG_BBCODE['color_darkblue'],'indigo'=>$LANG_BBCODE['color_indigo'],'violet'=>$LANG_BBCODE['color_violet'],'white'=>$LANG_BBCODE['color_white'],'black'=>$LANG_BBCODE['color_black']) ),
                     );
 
+    $T = new Template($_CONF['path_layout'] . 'bbcode/','keep');
+    $T->set_file (array (
+        'editor'    =>  'editor.thtml',
+    ));
+
+
     $offset = 0;
     $bbtags = 'var bbtags = new Array(';
     $buttons = array();
@@ -333,10 +339,6 @@ function BBC_editor($editorText,$formName,$textName,$additionalCodes = array(),$
 
     $buttonText = $buttonText . $buttonSelectText;
 
-    $T = new Template($_CONF['path_layout'] . 'bbcode/','keep');
-    $T->set_file (array (
-        'editor'    =>  'editor.thtml',
-    ));
 
     $T->set_var('tags', $bbtags);
     $T->set_var('buttons',$buttonText);
