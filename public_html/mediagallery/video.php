@@ -95,6 +95,14 @@ if ( $nRows > 0 ) {
     $T->set_var('themeCSS',MG_getThemeCSS($aid));
     $T->set_var('charset',$charset);
 
+    $meta_file_name = 	$_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'];
+    $meta = IMG_getMediaMetaData($meta_file_name);
+    if ( $meta['mime_type'] == 'video/quicktime' ) {
+        if ( $meta['fileformat'] == 'mp4' ) {
+            $row['mime_type'] = 'video/mp4';
+        }
+    }
+
     switch ( $row['mime_type'] ) {
 	    case 'embed' :
             $T->set_file ('video','embed.thtml');
