@@ -2,9 +2,25 @@
 /*
  * oauth_client.php
  *
- * @(#) $Id: oauth_client.php,v 1.139 2015/07/23 20:41:37 mlemos Exp $
+ * @(#) $Id: oauth_client.php,v 1.142 2015/10/16 20:05:49 mlemos Exp $
  *
  */
+
+class oauth_session_value_class
+{
+	var $id;
+	var $session;
+	var $state;
+	var $access_token;
+	var $access_token_secret;
+	var $authorized;
+	var $expiry;
+	var $type;
+	var $server;
+	var $creation;
+	var $refresh_token;
+	var $access_token_response;
+};
 
 /*
 {metadocument}<?xml version="1.0" encoding="ISO-8859-1" ?>
@@ -12,7 +28,7 @@
 
 	<package>net.manuellemos.oauth</package>
 
-	<version>@(#) $Id: oauth_client.php,v 1.139 2015/07/23 20:41:37 mlemos Exp $</version>
+	<version>@(#) $Id: oauth_client.php,v 1.142 2015/10/16 20:05:49 mlemos Exp $</version>
 	<copyright>Copyright © (C) Manuel Lemos 2012</copyright>
 	<title>OAuth client</title>
 	<author>Manuel Lemos</author>
@@ -849,12 +865,35 @@ class oauth_client_class
 			<usage>Set this variable to <stringvalue>basic</stringvalue> if the
 				OAuth server requires that the the client ID and secret be passed
 				using HTTP basic authentication headers when retrieving a new
-				token.</usage>
+				token. Set this variable to <stringvalue>none</stringvalue> to
+				avoid that the Authorization header be set in the request to get
+				the access token.</usage>
 		</documentation>
 	</variable>
 {/metadocument}
 */
 	var $access_token_authentication = '';
+
+/*
+{metadocument}
+	<variable>
+		<name>refresh_token_authentication</name>
+		<type>STRING</type>
+		<value></value>
+		<documentation>
+			<purpose>Option to determine if the requests to refresh an expired
+				access token should use authentication to pass the application
+				client ID and secret.</purpose>
+			<usage>Leave this value with an empty string to make it use the same
+				as the <variablelink>access_token_authentication</variablelink>
+				variable. Set this variable to <stringvalue>none</stringvalue> to
+				avoid that the Authorization header be set in the request to get
+				the refresh token.</usage>
+		</documentation>
+	</variable>
+{/metadocument}
+*/
+	var $refresh_token_authentication = '';
 
 /*
 {metadocument}
@@ -1011,9 +1050,10 @@ class oauth_client_class
 {/metadocument}
 */
 	var $http_arguments = array();
-	var $oauth_user_agent = 'PHP-OAuth-API (http://www.phpclasses.org/oauth-api $Revision: 1.139 $)';
+	var $oauth_user_agent = 'PHP-OAuth-API (http://www.phpclasses.org/oauth-api $Revision: 1.142 $)';
 
 	var $response_time = 0;
+	var $session = '';
 
 	Function SetError($error)
 	{
@@ -1040,6 +1080,50 @@ class oauth_client_class
 			error_log($message);
 		}
 		return(true);
+	}
+
+	Function SetupSession(&$session)
+	{
+		if(strlen($this->session)
+		|| IsSet($_COOKIE[$this->session_cookie]))
+		{
+			if($this->debug)
+				$this->OutputDebug(strlen($this->session) ? 'Checking OAuth session '.$this->session : 'Checking OAuth session from cookie '.$_COOKIE[$this->session_cookie]);
+			if(!$this->GetOAuthSession(strlen($this->session) ? $this->session : $_COOKIE[$this->session_cookie], $this->server, $session))
+				return($this->SetError('OAuth session error: '.$this->error));
+		}
+		else
+		{
+			if($this->debug)
+				$this->OutputDebug('No OAuth session is set');
+			$session = null;
+		}
+		if(!IsSet($session))
+		{
+			if($this->debug)
+				$this->OutputDebug('Creating a new OAuth session');
+			if(!$this->CreateOAuthSession($this->server, $session))
+				return($this->SetError('OAuth session error: '.$this->error));
+			SetCookie($this->session_cookie, $session->session, 0, $this->session_path);
+		}
+		$this->session = $session->session;
+		return true;
+	}
+
+	Function InitializeOAuthSession(&$session)
+	{
+		$session = new oauth_session_value_class;
+		$session->state = md5(time().rand());
+		$session->session = md5($session->state.time().rand());
+		$session->access_token = '';
+		$session->access_token_secret = '';
+		$session->authorized = null;
+		$session->expiry = null;
+		$session->type = '';
+		$session->server = $this->server;
+		$session->creation = gmstrftime("%Y-%m-%d %H:%M:%S");
+		$session->refresh_token = '';
+		$session->access_token_response = null;
 	}
 
 	Function GetRequestTokenURL(&$request_token_url)
@@ -1590,6 +1674,8 @@ class oauth_client_class
 				if(strlen($authorization))
 					$arguments['Headers']['Authorization'] = $authorization;
 				break;
+			case 'none':
+				break;
 			default:
 				return($this->SetError($authentication.' is not a supported authentication mechanism to retrieve an access token'));
 		}
@@ -1785,6 +1871,8 @@ class oauth_client_class
 				'grant_type'=>'refresh_token',
 				'scope'=>$this->scope,
 			);
+			if(strlen($this->refresh_token_authentication))
+				$authentication = $this->refresh_token_authentication;
 		}
 		else
 		{
@@ -1798,7 +1886,6 @@ class oauth_client_class
 						'redirect_uri'=>$redirect_uri,
 						'grant_type'=>'authorization_code'
 					);
-					$authentication = $this->access_token_authentication;
 					break;
 				case 'client_credentials':
 					$values = array(
@@ -1817,6 +1904,7 @@ class oauth_client_class
 		switch(strtolower($authentication))
 		{
 			case 'basic':
+			case 'none':
 				$options['AccessTokenAuthentication'] = $authentication;
 				break;
 			case '':
@@ -1911,17 +1999,22 @@ class oauth_client_class
 			return false;
 		if(IsSet($access_token['value']))
 		{
+			$this->access_token = $access_token['value'];
 			$this->access_token_expiry = '';
 			$expired = (IsSet($access_token['expiry']) && strcmp($this->access_token_expiry = $access_token['expiry'], gmstrftime('%Y-%m-%d %H:%M:%S')) < 0);
-			if($expired)
+			if($this->debug)
 			{
-				if($this->debug)
+				if($expired)
+				{
 					$this->OutputDebug('The OAuth access token expired on '.$this->access_token_expiry.' UTC');
+				}
+				else
+				{
+					$this->OutputDebug('The OAuth access token '.$this->access_token.' is valid');
+					if(strlen($this->access_token_expiry))
+						$this->OutputDebug('The OAuth access token expires on '.$this->access_token_expiry);
+				}
 			}
-			$this->access_token = $access_token['value'];
-			if(!$expired
-			&& $this->debug)
-				$this->OutputDebug('The OAuth access token '.$this->access_token.' is valid');
 			if(IsSet($access_token['type']))
 			{
 				$this->access_token_type = $access_token['type'];
@@ -2233,6 +2326,7 @@ class oauth_client_class
 		$this->access_token_parameter = '';
 		$this->default_access_token_type = '';
 		$this->store_access_token_response = false;
+		$this->refresh_token_authentication = '';
 		switch($this->server)
 		{
 			case 'facebook':
@@ -2319,7 +2413,8 @@ class oauth_client_class
 					'access_token_authentication'=>'string',
 					'access_token_parameter'=>'string',
 					'default_access_token_type'=>'string',
-					'store_access_token_response'=>'boolean'
+					'store_access_token_response'=>'boolean',
+					'refresh_token_authentication'=>'string'
 				);
 				$required = array(
 					'oauth_version'=>array(),
