@@ -30,93 +30,99 @@ set of styles.
 }
 
 .tm-header {
-  background: #fff url("images/header-bg.png") repeat-x scroll 0% 0 !important;
-  width: 100%;
-  height: 55px;
+	background: #fff url("images/header-bg.png") repeat-x scroll 0% 0 !important;
+	width: 100%;
+	height: 55px;
+}
+
+.tm-icon {
+	width:60px;
+	margin:0 auto;
+	text-align:center;
 }
 
 /* Navbar semantics
 ========================================================================== */
 .tm-navbar {
-    border-radius: 0 !important;
+		border-radius: 0 !important;
 }
 .tm-navbar-brand {
-  color: #eee !important;
+	color: #eee !important;
 }
 .tm-navbar-brand a {
-  text-shadow:none;
-  color: #fff;
+	text-shadow:none;
+	color: #fff;
 }
 .tm-navbar-brand a:hover {
-  color:#ababab;
-  text-decoration:none;
+	color:#ababab;
+	text-decoration:none;
 }
 
 .tm-navbar-brand-oc a { /* off canvas */
-  text-shadow:none;
-  color: #fff;
+	text-shadow:none;
+	color: #fff;
 }
 .tm-navbar-brand-oc a:hover {
-  color:#ababab;
-  text-decoration:none;
+	color:#ababab;
+	text-decoration:none;
 }
 
 .tm-navbar {
-  border-radius:0;
-  padding: 1px 0px 6px !important;
-  border: medium none !important;
-  background: #325482 none repeat scroll 0% 0% !important;
+	border-radius:0;
+	padding: 1px 0px 6px !important;
+	border: medium none !important;
+	background: #325482 none repeat scroll 0% 0% !important;
 }
 
 /* .tm-navbar */
 .tm-navbar-nav > li > a {
-  border: medium none;
-  border-radius: 3px !important;
-  font-size: 15px !important;
-  height: 40px !important;
-  margin: 0 !important;
-  text-shadow: none;
+	border: medium none;
+	border-radius: 3px !important;
+	font-size: 15px !important;
+	height: 40px !important;
+	margin: 0 !important;
+	text-shadow: none;
 }
 
 .tm-dropdown {
-  background: #325482  none repeat scroll 0 0 !important;
-  color:#000;
-  border-radius: 0 !important;
-  border: 0 !important;
+	background: #325482  none repeat scroll 0 0 !important;
+	color:#000;
+	border-radius: 0 !important;
+	border: 0 !important;
 }
 
 .tm-nav-navbar > li > a {
-  color: #fff !important;
+	color: #fff !important;
 }
 
 .tm-navbar::before,
 .tm-navbar::after {
-  margin-top: 7px !important;
+	margin-top: 7px !important;
 }
 
 /* nav overload */
 .tm-navbar-nav > li:hover > a,
 .tm-navbar-nav > li > a:focus,
 .tm-navbar-nav > li.uk-open > a {
-  background-color: transparent !important;
-  color: #fff;
-  /* 3 */
-  outline: none;
-  background: #35B3EE  none repeat scroll 0 0 !important;
+	background-color: transparent !important;
+	color: #fff;
+	/* 3 */
+	outline: none;
+	background: #35B3EE  none repeat scroll 0 0 !important;
 }
 .tm-navbar-nav > li > a {
-  color: #fff !important;
-  text-shadow: none !important;
+	color: #fff !important;
+	text-shadow: none !important;
 }
 
 /* -- off canvas nav --- */
 .tm-navbar-toggle {
-  color: #ccc !important;
-  text-shadow: none !important;
+	color: #ccc !important;
+	text-shadow: none !important;
 }
 .tm-navbar-toggle:hover,
 .tm-navbar-toggle:focus {
-  color: #fff !important;
+	color: #fff !important;
 }
 
 /* Right Block semantics
@@ -141,14 +147,14 @@ set of styles.
 }
 
 .tm-container-extra h3 {
-    text-align:left;
+		text-align:left;
 }
 
 /* Headlines - used by headlines autotag
 ========================================================================== */
 .headlines p {
-  margin:0;
-  padding-bottom:5px;
+	margin:0;
+	padding-bottom:5px;
 }
 
 /* Article semantics
