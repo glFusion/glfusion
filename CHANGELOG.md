@@ -15,7 +15,7 @@ v 1.5.0 (unreleased)
   - Fixed issue where 3rd party authentication fails if username is too short.
   - Truncate Forum signature at 600px to ensure a signature cannot push out the layout.
   - Media Gallery: Added support for square thumbnails
-  - CKEditor - Updated to v4.5.1
+  - CKEditor - Updated to v4.5.4
   - FileManager (CKEditor) - Updated to v2.2.0
   - Forum Plugin: Fixed issue where forum name was passed via URL (not needed)
   - Updated reCAPTCHA to support Google's latest API (v2)
