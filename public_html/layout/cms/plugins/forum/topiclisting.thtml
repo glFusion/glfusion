@@ -92,7 +92,7 @@
 		{pagenavigation}
 	</div>
 
-	<div style="clear:both;"></div>
+	<div class="uk-clearfix"></div>
 
 {!if records_displayed}
 
@@ -100,14 +100,56 @@
 		<li class="header">
 			<dl class="icon">
 				<dt>
-					{LANG_TOPIC}
+					<a href="{site_url}/forum/index.php?forum={forum_id}&amp;order={new_sort_order}&amp;sort=1" rel="nofollow">
+						{LANG_TOPIC}
+{!if sort_subject}
+{!if sort_asc}
+  <i class="uk-icon-caret-up"></i>
+{!else}
+  <i class="uk-icon-caret-down"></i>
+{!endif}
+{!endif}
+					</a>
 {!if rssfeed}
 					<a class="uk-icon-rss-square uk-icon-small uk-text-warning" href="{rssfeed_url}" rel="nofollow"></a>
 {!endif}
 				</dt>
-				<dd class="topics uk-hidden-small">Views</dd>
-				<dd class="posts uk-hidden-small">Replies</dd>
-				<dd class="lastpost">{LANG_LASTPOST}</dd>
+				<dd class="topics uk-hidden-small">
+					<a href="{site_url}/forum/index.php?forum={forum_id}&amp;order={new_sort_order}&amp;sort=2" rel="nofollow">
+						{LANG_VIEWS}
+{!if sort_views}
+{!if sort_asc}
+  <i class="uk-icon-caret-up"></i>
+{!else}
+  <i class="uk-icon-caret-down"></i>
+{!endif}
+{!endif}
+					</a>
+				</dd>
+				<dd class="posts uk-hidden-small">
+					<a href="{site_url}/forum/index.php?forum={forum_id}&amp;order={new_sort_order}&amp;sort=3 rel="nofollow"">
+						{LANG_REPLIES}
+{!if sort_replies}
+{!if sort_asc}
+  <i class="uk-icon-caret-up"></i>
+{!else}
+  <i class="uk-icon-caret-down"></i>
+{!endif}
+{!endif}
+					</a>
+				</dd>
+				<dd class="lastpost">
+					<a href="{site_url}/forum/index.php?forum={forum_id}&amp;order={new_sort_order}&amp;sort=5 rel="nofollow"">
+						{LANG_LASTPOST}
+{!if sort_lastupdated}
+{!if sort_asc}
+  <i class="uk-icon-caret-up"></i>
+{!else}
+  <i class="uk-icon-caret-down"></i>
+{!endif}
+{!endif}
+
+				</dd>
 			</dl>
 		</li>
 	</ul>

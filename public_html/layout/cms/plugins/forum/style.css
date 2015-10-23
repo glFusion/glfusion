@@ -62,6 +62,16 @@ ul.topiclist li {
 ul.topiclist dl {
 	position: relative;
 }
+
+ul.topiclist li.header dt a, ul.topiclist li.header dt a:hover {
+	text-decoration:none;
+	color:#fff;
+}
+ul.topiclist li.header dd a, ul.topiclist li.header dd a:hover {
+	text-decoration:none;
+	color:#fff;
+}
+
 ul.topiclist li.row dl {
 	padding:0;
 }

@@ -563,51 +563,84 @@ if ($forum > 0) {
             if($order == 0) {
                 $sortOrder = "subject ASC";
                 $topiclisting->set_var ('img_asc1', '<img src="'._ff_getImage('asc_on').'" alt=""/>');
+                $topiclisting->set_var ('sort_subject',true);
+                $topiclisting->set_var ('sort_asc',true);
+                $topiclisting->set_var ('new_sort_order','1');
             } else {
                 $sortOrder = "subject DESC";
                 $topiclisting->set_var ('img_desc1', '<img src="'._ff_getImage('desc_on').'" alt=""/>');
+                $topiclisting->set_var ('sort_subject',true);
+                $topiclisting->unset_var ('sort_asc');
+                $topiclisting->set_var ('new_sort_order','0');
             }
             break;
         case 2:
             if($order == 0) {
                 $sortOrder = "views ASC";
                 $topiclisting->set_var ('img_asc2', '<img src="'._ff_getImage('asc_on').'" alt=""/>');
+                $topiclisting->set_var ('sort_views',true);
+                $topiclisting->set_var ('sort_asc',true);
+                $topiclisting->set_var ('new_sort_order','1');
             } else {
                 $sortOrder = "views DESC";
                 $topiclisting->set_var ('img_desc2', '<img src="'._ff_getImage('desc_on').'" alt=""/>');
+                $topiclisting->set_var ('sort_views',true);
+                $topiclisting->unset_var ('sort_asc');
+                $topiclisting->set_var ('new_sort_order','0');
             }
             break;
         case 3:
             if($order == 0) {
                 $sortOrder = "replies ASC";
                 $topiclisting->set_var ('img_asc3', '<img src="'._ff_getImage('asc_on').'" alt=""/>');
+                $topiclisting->set_var ('sort_replies',true);
+                $topiclisting->set_var ('sort_asc',true);
+                $topiclisting->set_var ('new_sort_order','1');
             } else {
                 $sortOrder = "replies DESC";
                 $topiclisting->set_var ('img_desc3', '<img src="'._ff_getImage('desc_on').'" alt=""/>');
+                $topiclisting->set_var ('sort_replies',true);
+                $topiclisting->unset_var ('sort_asc');
+                $topiclisting->set_var ('new_sort_order','0');
             }
             break;
         case 4:
             if($order == 0) {
                 $sortOrder = "name ASC";
                 $topiclisting->set_var ('img_asc4', '<img src="'._ff_getImage('asc_on').'" alt=""/>');
+                $topiclisting->set_var ('sort_author',true);
+                $topiclisting->set_var ('sort_asc',true);
+                $topiclisting->set_var ('new_sort_order','1');
             } else {
                 $sortOrder = "name DESC";
                 $topiclisting->set_var ('img_desc4', '<img src="'._ff_getImage('desc_on').'" alt=""/>');
+                $topiclisting->set_var ('sort_author',true);
+                $topiclisting->unset_var ('sort_asc');
+                $topiclisting->set_var ('new_sort_order','0');
             }
             break;
         case 5:
             if($order == 0) {
                 $sortOrder = "lastupdated ASC";
                 $topiclisting->set_var ('img_asc5', '<img src="' .$_CONF['site_url'] .'/forum/images/asc_on.gif" alt=""/>');
+                $topiclisting->set_var ('sort_lastupdated',true);
+                $topiclisting->set_var ('sort_asc',true);
+                $topiclisting->set_var ('new_sort_order','1');
             } else {
                 $sortOrder = "lastupdated DESC";
                 $topiclisting->set_var ('img_desc5', '<img src="' .$_CONF['site_url']. '/forum/images/desc_on.gif" alt=""/>');
+                $topiclisting->set_var ('sort_lastupdated',true);
+                $topiclisting->unset_var ('sort_asc');
+                $topiclisting->set_var ('new_sort_order','0');
             }
             break;
         default:
             $sortOrder = "lastupdated DESC";
             $topiclisting->set_var ('img_desc5', '<img src="'._ff_getImage('desc_on').'" alt=""/>');
             $sort = 0;
+            $topiclisting->set_var ('sort_lastupdated',true);
+            $topiclisting->unset_var ('sort_asc');
+            $topiclisting->set_var ('new_sort_order','0');
             break;
     }
 
