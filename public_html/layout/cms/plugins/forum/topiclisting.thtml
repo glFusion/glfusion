@@ -127,7 +127,7 @@
 					</a>
 				</dd>
 				<dd class="posts uk-hidden-small">
-					<a href="{site_url}/forum/index.php?forum={forum_id}&amp;order={new_sort_order}&amp;sort=3 rel="nofollow"">
+					<a href="{site_url}/forum/index.php?forum={forum_id}&amp;order={new_sort_order}&amp;sort=3" rel="nofollow">
 						{LANG_REPLIES}
 {!if sort_replies}
 {!if sort_asc}
@@ -139,7 +139,7 @@
 					</a>
 				</dd>
 				<dd class="lastpost">
-					<a href="{site_url}/forum/index.php?forum={forum_id}&amp;order={new_sort_order}&amp;sort=5 rel="nofollow"">
+					<a href="{site_url}/forum/index.php?forum={forum_id}&amp;order={new_sort_order}&amp;sort=5" rel="nofollow">
 						{LANG_LASTPOST}
 {!if sort_lastupdated}
 {!if sort_asc}
