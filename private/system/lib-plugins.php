@@ -3490,4 +3490,22 @@ function PLG_requestEditor($plugin, $feature, $template)
     return false;
 }
 
+function PLG_displayAdBlock($plugin, $counter)
+{
+    global $_PLUGINS;
+
+    $retval = '';
+
+    if (function_exists ('CUSTOM_displayAdBlock')) {
+        $retval = CUSTOM_displayAdBlock($plugin, $counter);
+    } elseif ( is_array($_PLUGINS) ) {
+        foreach ($_PLUGINS as $pi_name) {
+            $function = 'plugin_displayAdblock_' . $pi_name;
+            if (function_exists ($function)) {
+                $retval .= $function ($plugin,$counter);
+            }
+        }
+    }
+    return $retval;
+}
 ?>

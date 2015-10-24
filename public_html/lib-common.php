@@ -5049,11 +5049,60 @@ function COM_sanitizeFilename($filename, $allow_dots = false)
 */
 function COM_makeClickableLinks( $text )
 {
-    $text = preg_replace( '/([^"]?)((((ht|f)tps?):(\/\/)|www\.)[a-z0-9%&_\-\+,;=:@~#\/.\?\[\]]+(\/|[+0-9a-z]))/is', '\\1<a href="\\2">\\2</a>', $text );
-    $text = str_replace( '<a href="www', '<a href="http://www', $text );
+    // Matches http:// or https:// or ftp:// or ftps://
+    $regex = '/(?<=^|[\n\r\t\s\(\)\[\]<>";])((?:(?:ht|f)tps?:\/{2})(?:[^\n\r\t\s\(\)\[\]<>"&]+(?:&amp;)?)+)(?=[\n\r\t\s\(\)\[\]<>"&]|$)/i';
+    $replace = create_function(
+        '$match',
+        'return COM_makeClickableLinksCallback(\'\', $match[1]);'
+    );
+
+    $text = preg_replace_callback($regex, $replace, $text);
+
+    $regex = '/(?<=^|[\n\r\t\s\(\)\[\]<>";])((?:[a-z0-9]+\.)*[a-z0-9-]+\.(?:[a-z]{2,}|xn--[0-9a-z]+)(?:[\/?#](?:[^\n\r\t\s\(\)\[\]<>"&]+(?:&amp;)?)*)?)(?=[\n\r\t\s\(\)\[\]<>"&]|$)/i';
+    $replace = create_function(
+        '$match',
+        'return COM_makeClickableLinksCallback(\'http://\', $match[1]);'
+    );
+
+    $text = preg_replace_callback($regex, $replace, $text);
 
     return $text;
 }
+
+/**
+* Callback function to help format links in COM_makeClickableLinks
+*
+* @param    string  $http   set to 'http://' when not already in the url
+* @param    string  $link   the url
+* @return   string          link enclosed in <a>...</a> tags
+*
+*/
+function COM_makeClickableLinksCallback($http, $link) {
+    global $_CONF;
+    static $encoding = null;
+
+    if ($encoding === null) {
+        $encoding = COM_getEncodingt();
+    }
+
+    if (substr($link, -1) === '.') {
+        $link = substr($link, 0, -1);
+        $end = '.';
+    } else {
+        $end = '';
+    }
+
+    if ($_CONF['linktext_maxlen'] > 0) {
+        $text = COM_truncate($link, $_CONF['linktext_maxlen'], '...', 10);
+    } else {
+        $text = $link;
+    }
+
+    $text = htmlspecialchars($text, ENT_QUOTES, $encoding);
+
+    return '<a href="' . $http . $link . '">' . $text . '</a>' . $end;
+}
+
 
 /**
 * Undo the conversion of URLs to clickable links (in plain text posts),

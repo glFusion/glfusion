@@ -265,7 +265,7 @@ $nrows = DB_numRows ($result);
 $data = DB_query ("SELECT COUNT(*) AS count FROM {$_TABLES['stories']} AS s WHERE" . $sql);
 $D = DB_fetchArray ($data);
 $num_pages = ceil ($D['count'] / $limit);
-
+$articleCounter = 0;
 if ( $A = DB_fetchArray( $result ) ) {
 
     $story = new Story();
@@ -282,12 +282,15 @@ if ( $A = DB_fetchArray( $result ) ) {
         $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
         $pageBody .= STORY_renderArticle ($story, 'y');
     }
+    $articleCounter++;
 
     // get remaining stories
     while ($A = DB_fetchArray ($result)) {
+        $pageBody .= PLG_displayAdBlock('story',$articleCounter);
         $story = new Story();
         $story->loadFromArray($A);
         $pageBody .= STORY_renderArticle ($story, 'y');
+        $articleCounter++;
     }
 
     // get plugin center blocks that follow articles
