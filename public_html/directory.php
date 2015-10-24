@@ -38,10 +38,8 @@ require_once 'lib-common.php';
 // (if set = true)
 $conf_list_current_month = false;
 
-// name of this script
-define ('THIS_SCRIPT', 'directory.php');
-
 $display = '';
+$pageBody = '';
 
 if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
                                    ($_CONF['directoryloginrequired'] == 1))) {
@@ -64,7 +62,7 @@ if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
 * of the next month", http://www.php.net/manual/en/function.mktime.php
 *
 */
-function DIR_lastDayOfMonth ($month, $year)
+function DIR_lastDayOfMonth($month, $year)
 {
     $month++;
     if ($month > 12) {
@@ -72,68 +70,33 @@ function DIR_lastDayOfMonth ($month, $year)
         $year++;
     }
 
-    $lastday = mktime (0, 0, 0, $month, 0, $year);
+    $lastday = mktime(0, 0, 0, $month, 0, $year);
 
     return intval(strftime('%d', $lastday));
 }
 
-/**
-* Display a topic selection drop-down menu
-*
-* @param    string  $topic          current topic
-* @param    int     $year           current year
-* @param    int     $month          current month
-* @param    boolean $standalone     true: don't display form inline
-*
-*/
-function DIR_topicList ($topic = 'all', $year = 0, $month = 0, $standalone = false)
-{
-    global $_CONF, $LANG21, $LANG09;
-
-    $retval = '';
-
-    $url = $_CONF['site_url'] . '/' . THIS_SCRIPT;
-    $retval .= '<form action="' . $url . '" method="post"';
-    if (!$standalone) {
-        $retval .= ' class="floatright"' . LB;
-    }
-    $retval .= '><div style="margin-top:-7px">' . LB;
-    $retval .= $LANG09[3] .': <select name="topic" onchange="this.form.submit()">' . LB;
-    $retval .= '<option value="all"';
-    if ($topic == 'all') {
-        $retval .= ' selected="selected"';
-    }
-    $retval .= '>' . $LANG21[7] . '</option>' . LB;
-    $retval .= COM_topicList ('tid,topic', $topic);
-    $retval .= '</select>' . LB;
-    $retval .= '<input type="hidden" name="year" value="' . $year . '"' . XHTML . '>';
-    $retval .= '<input type="hidden" name="month" value="' . $month . '"' . XHTML . '>';
-    $retval .= '</div></form>' . LB;
-
-    return $retval;
-}
 
 /**
 * Build link to a month's page
 *
-* @param    string  $topic  current topic
+* @param    string  $dir_topic  current topic
 * @param    int     $year   year to link to
 * @param    int     $month  month to link to
 * @param    int     $count  number of stories for that month (may be 0)
 * @return   string          month name + count, as link or plain text
 *
 */
-function DIR_monthLink ($topic, $year, $month, $count)
+function DIR_monthLink($dir_topic, $year, $month, $count)
 {
     global $_CONF, $LANG_MONTH;
 
     $retval = $LANG_MONTH[$month] . ' (' . COM_numberFormat ($count) . ')' . LB;
 
     if ($count > 0) {
-        $month_url = COM_buildUrl ($_CONF['site_url'] . '/'
-            . THIS_SCRIPT . '?topic=' . urlencode ($topic) . '&amp;year='
+        $month_url = COM_buildUrl($_CONF['site_url'] . '/directory.php'
+            . '?topic=' . urlencode ($dir_topic) . '&amp;year='
             . $year . '&amp;month=' . $month);
-        $retval =  COM_createLink ($retval, $month_url);
+        $retval =  COM_createLink($retval, $month_url);
     }
 
     $retval .= LB;
@@ -144,19 +107,17 @@ function DIR_monthLink ($topic, $year, $month, $count)
 /**
 * Display navigation bar
 *
-* @param    string  $topic  current topic
+* @param    string  $dir_topic  current topic
 * @param    int     $year   current year
 * @param    int     $month  current month (or 0 for year view pages)
 * @return   string          navigation bar with prev, next, and "up" links
 *
 */
-function DIR_navBar ($topic, $year, $month = 0)
+function DIR_navBar($dir_topic, $year, $month = 0)
 {
     global $_CONF, $_TABLES, $LANG05, $LANG_DIR;
 
     $retval = '';
-
-    $retval .= '<div class="pagenav">';
 
     if ($month == 0) {
         $prevyear = $year - 1;
@@ -176,33 +137,40 @@ function DIR_navBar ($topic, $year, $month = 0)
         }
     }
 
-    $result = DB_query ("SELECT MIN(YEAR(date)) AS year FROM {$_TABLES['stories']}");
-    $A = DB_fetchArray ($result);
+    $result = DB_query("SELECT MIN(EXTRACT(Year from date)) AS year FROM {$_TABLES['stories']}");
+    $A = DB_fetchArray($result);
     if ($prevyear < $A['year']) {
         $prevyear = 0;
     }
 
-    $currentyear = date ('Y', time ());
+    $currenttime = time();
+    $currentyear = date('Y', $currenttime);
     if ($nextyear > $currentyear) {
         $nextyear = 0;
     }
+    if (($month > 0) && ($nextyear > 0) && ($nextyear >= $currentyear)) {
+        $currentmonth = date('n', $currenttime);
+        if ($nextmonth > $currentmonth) {
+            $nextyear = 0;
+        }
+    }
 
     if ($prevyear > 0) {
-        $url = $_CONF['site_url'] . '/' . THIS_SCRIPT . '?topic='
-             . urlencode ($topic) . '&amp;year=' . $prevyear;
+        $url = $_CONF['site_url'] . '/directory.php' . '?topic='
+             . urlencode($dir_topic) . '&amp;year=' . $prevyear;
         if ($month > 0) {
             $url .= '&amp;month=' . $prevmonth;
         }
-        $retval .= COM_createLink($LANG05[6], COM_buildUrl ($url));
+        $retval .= COM_createLink($LANG05[6], COM_buildUrl($url));
     } else {
         $retval .= $LANG05[6];
     }
 
     $retval .= ' | ';
 
-    $url = $_CONF['site_url'] . '/' . THIS_SCRIPT;
-    if ($topic != 'all') {
-        $url = COM_buildUrl ($url . '?topic=' . urlencode ($topic));
+    $url = $_CONF['site_url'] . '/directory.php';
+    if ($dir_topic != 'all') {
+        $url = COM_buildUrl($url . '?topic=' . urlencode($dir_topic));
     }
 
     $retval .= COM_createLink($LANG_DIR['nav_top'] , $url);
@@ -210,17 +178,15 @@ function DIR_navBar ($topic, $year, $month = 0)
     $retval .= ' | ';
 
     if ($nextyear > 0) {
-        $url = $_CONF['site_url'] . '/' . THIS_SCRIPT . '?topic='
-             . urlencode ($topic) . '&amp;year=' . $nextyear;
+        $url = $_CONF['site_url'] . '/directory.php' . '?topic='
+             . urlencode($dir_topic) . '&amp;year=' . $nextyear;
         if ($month > 0) {
             $url .= '&amp;month=' . $nextmonth;
         }
-        $retval .= COM_createLink($LANG05[5], COM_buildUrl ($url));
+        $retval .= COM_createLink($LANG05[5], COM_buildUrl($url));
     } else {
         $retval .= $LANG05[5];
     }
-
-    $retval .= '</div>' . LB;
 
     return $retval;
 }
@@ -228,14 +194,14 @@ function DIR_navBar ($topic, $year, $month = 0)
 /**
 * Display month view
 *
-* @param    string  $topic  current topic
+* @param    ref    &$template   reference of the template
+* @param    string  $dir_topic  current topic
 * @param    int     $year   year to display
 * @param    int     $month  month to display
-* @param    boolean $main   true: display view on its own page
 * @return   string          list of articles for the given month
 *
 */
-function DIR_displayMonth ($topic, $year, $month, $main = false)
+function DIR_displayMonth(&$template, $dir_topic, $year, $month)
 {
     global $_CONF, $_USER, $_TABLES, $LANG_MONTH, $LANG_DIR;
 
@@ -243,59 +209,52 @@ function DIR_displayMonth ($topic, $year, $month, $main = false)
 
     $dt = new Date('now',$_USER['tzid']);
 
-    if ($main) {
-        $retval .= '<div><h2>' . $LANG_MONTH[$month]
-                . ' ' . $year . '</h2> ' . DIR_topicList ($topic, $year, $month)
-                . '</div>' . LB;
-    } else {
-        $retval .= '<h2>' . $LANG_MONTH[$month] . ' ' . $year . '</h2>' . LB;
-    }
-
     $start = sprintf ('%04d-%02d-01 00:00:00', $year, $month);
     $lastday = DIR_lastDayOfMonth ($month, $year);
     $end   = sprintf ('%04d-%02d-%02d 23:59:59', $year, $month, $lastday);
 
     $sql = "SELECT sid,title,UNIX_TIMESTAMP(date) AS day,DATE_FORMAT(date, '%e') AS mday FROM {$_TABLES['stories']} WHERE (date >= '$start') AND (date <= '$end') AND (draft_flag = 0) AND (date <= NOW())";
-    if ($topic != 'all') {
-        $sql .= " AND (tid = '".DB_escapeString($topic)."')";
+    if ($dir_topic != 'all') {
+        $sql .= " AND (tid = '".DB_escapeString($dir_topic)."')";
     }
     $sql .= COM_getTopicSql ('AND') . COM_getPermSql ('AND')
          . COM_getLangSQL ('sid', 'AND') . " ORDER BY date ASC";
 
-    $result = DB_query ($sql);
-    $numrows = DB_numRows ($result);
+    $result = DB_query($sql);
+    $numrows = DB_numRows($result);
 
     if ($numrows > 0) {
-        $entries = array ();
+        $entries = array();
         $mday = 0;
 
         for ($i = 0; $i < $numrows; $i++) {
-            $A = DB_fetchArray ($result);
+            $A = DB_fetchArray($result);
 
             if ($mday != $A['mday']) {
                 if (count($entries) > 0) {
-                    $retval .= COM_makeList ($entries);
-                    $entries = array ();
+                    $retval .= COM_makeList($entries);
+                    $entries = array();
                 }
                 $dt->setTimestamp($A['day']);
                 $day = $dt->format($_CONF['shortdate'],true);
 
-                $retval .= '<h2>' . $day . '</h2>' . LB;
+                $template->set_var('section_title', $day);
+                $retval .= $template->parse('title', 'section-title') . LB;
 
                 $mday = $A['mday'];
             }
 
-            $url = COM_buildUrl ($_CONF['site_url'] . '/article.php?story='
-                                 . $A['sid']);
+            $url = COM_buildUrl($_CONF['site_url'] . '/article.php?story='
+                                . $A['sid']);
             $entries[] = COM_createLink($A['title'], $url);
         }
 
         if (count($entries) > 0) {
-            $retval .= COM_makeList ($entries);
+            $retval .= COM_makeList($entries);
         }
 
     } else {
-        $retval .= '<p>' . $LANG_DIR['no_articles'] . '</p>';
+        $retval .= $template->parse('message', 'no-articles') . LB;
     }
 
     $retval .= LB;
@@ -306,24 +265,17 @@ function DIR_displayMonth ($topic, $year, $month, $main = false)
 /**
 * Display year view
 *
-* @param    string  $topic  current topic
+* @param    ref    &$template   reference of the template
+* @param    string  $dir_topic  current topic
 * @param    int     $year   year to display
-* @param    boolean $main   true: display view on its own page
 * @return   string          list of months (+ number of stories) for given year
 *
 */
-function DIR_displayYear ($topic, $year, $main = false)
+function DIR_displayYear(&$template,$topic, $year, $main = false)
 {
     global $_CONF, $_TABLES, $LANG_MONTH, $LANG_DIR;
 
     $retval = '';
-
-    if ($main) {
-        $retval .= '<div><h2>' . $year . '</h2> '
-                . DIR_topicList ($topic, $year) . '</div>' . LB;
-    } else {
-        $retval .= '<h2>' . $year . '</h2>' . LB;
-    }
 
     $currentyear = date ('Y', time ());
     $currentmonth = date ('m', time ());
@@ -333,37 +285,31 @@ function DIR_displayYear ($topic, $year, $main = false)
 
     $monthsql = array();
     $monthsql['mysql'] = "SELECT DISTINCT MONTH(date) AS month,COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (date >= '$start') AND (date <= '$end') AND (draft_flag = 0) AND (date <= NOW())";
-    $monthsql['mssql'] = "SELECT MONTH(date) AS month,COUNT(sid) AS count FROM {$_TABLES['stories']} WHERE (date >= '$start') AND (date <= '$end') AND (draft_flag = 0) AND (date <= NOW())";
+
     if ($topic != 'all') {
         $monthsql['mysql'] .= " AND (tid = '".DB_escapeString($topic)."')";
-        $monthsql['mssql'] .= " AND (tid = '$topic')";
     }
     $monthsql['mysql'] .= COM_getTopicSql ('AND') . COM_getPermSql ('AND')
-              . COM_getLangSQL ('sid', 'AND');
-    $monthsql['mssql'] .= COM_getTopicSql ('AND') . COM_getPermSql ('AND')
               . COM_getLangSQL ('sid', 'AND');
 
     $msql = array();
     $msql['mysql'] = $monthsql['mysql'] . " GROUP BY MONTH(date) ORDER BY date ASC";
-    $msql['mssql'] = $monthsql['mssql'] . " GROUP BY MONTH(date) ORDER BY month(date) ASC";
 
-    $mresult = DB_query ($msql);
-    $nummonths = DB_numRows ($mresult);
+    $mresult = DB_query($msql);
+    $nummonths = DB_numRows($mresult);
 
     if ($nummonths > 0) {
-        $retval .= '<ul>' . LB;
+        $items = array();
         $lastm = 1;
         for ($j = 0; $j < $nummonths; $j++) {
-            $M = DB_fetchArray ($mresult);
+            $M = DB_fetchArray($mresult);
 
             for (; $lastm < $M['month']; $lastm++) {
-                $retval .= '<li>' . DIR_monthLink ($topic, $year, $lastm, 0)
-                        . '</li>';
+                $items[] = DIR_monthLink($topic, $year, $lastm, 0);
             }
             $lastm = $M['month'] + 1;
 
-            $retval .= '<li>' . DIR_monthLink ($topic, $year, $M['month'],
-                                               $M['count']) . '</li>';
+            $items[] = DIR_monthLink($topic, $year, $M['month'], $M['count']);
         }
 
         if ($year == $currentyear) {
@@ -374,14 +320,12 @@ function DIR_displayYear ($topic, $year, $main = false)
 
         if ($lastm <= $fillm) {
             for (; $lastm <= $fillm; $lastm++) {
-                $retval .= '<li>' . DIR_monthLink ($topic, $year, $lastm, 0)
-                        . '</li>';
+                $items[] = DIR_monthLink($topic, $year, $lastm, 0);
             }
         }
-
-        $retval .= '</ul>' . LB;
+        $retval .= COM_makeList($items);
     } else {
-        $retval .= '<p>' . $LANG_DIR['no_articles'] . '</p>';
+        $retval .= $template->parse('message', 'no-articles') . LB;
     }
 
     $retval .= LB;
@@ -396,43 +340,35 @@ function DIR_displayYear ($topic, $year, $main = false)
 * year for which a story has been posted. Can optionally display a list of
 * the stories for the current month at the top of the page.
 *
-* @param    string  $topic                  current topic
-* @param    boolean $list_current_month     true = list stories f. current month
-* @return   string                          list of all the years in the db
+* @param    ref    &$template  reference of the template
+* @param    string  $dir_topic current topic
+* @return   string             list of all the years in the db
 *
 */
-function DIR_displayAll ($topic, $list_current_month = false)
+function DIR_displayAll(&$template, $dir_topic)
 {
     global $_TABLES, $LANG_DIR;
 
     $retval = '';
 
-    if ($list_current_month) {
-        $currentyear = date ('Y', time ());
-        $currentmonth = date ('n', time ());
-
-        $retval .= DIR_displayMonth ($topic, $currentyear, $currentmonth);
-
-        $retval .= '<div style="margin-top:10px;border-bottom:1px solid #cccccc;"></div>' . LB;
-    }
-
-    $retval .= '<div><h2>' . $LANG_DIR['title']
-            . '</h2> ' . DIR_topicList ($topic) . '</div>' . LB;
-
     $yearsql = array();
     $yearsql['mysql'] = "SELECT DISTINCT YEAR(date) AS year,date FROM {$_TABLES['stories']} WHERE (draft_flag = 0) AND (date <= NOW())" . COM_getTopicSql ('AND') . COM_getPermSql ('AND')  . COM_getLangSQL ('sid', 'AND');
-    $yearsql['mssql'] = "SELECT YEAR(date) AS year FROM {$_TABLES['stories']} WHERE (draft_flag = 0) AND (date <= NOW())" . COM_getTopicSql ('AND') . COM_getPermSql ('AND')  . COM_getLangSQL ('sid', 'AND');
     $ysql = array();
     $ysql['mysql'] = $yearsql['mysql'] . " GROUP BY YEAR(date) ORDER BY date DESC";
-    $ysql['mssql'] = $yearsql['mssql'] . " GROUP BY YEAR(date) ORDER BY YEAR(date) DESC";
 
-    $yresult = DB_query ($ysql);
-    $numyears = DB_numRows ($yresult);
+    $yresult = DB_query($ysql);
+    $numyears = DB_numRows($yresult);
+    if ($numyears > 0) {
+        for ($i = 0; $i < $numyears; $i++) {
+            $Y = DB_fetchArray($yresult);
 
-    for ($i = 0; $i < $numyears; $i++) {
-        $Y = DB_fetchArray ($yresult);
+            $template->set_var('section_title', $Y['year']);
+            $retval .= $template->parse('title', 'section-title') . LB;
 
-        $retval .= DIR_displayYear ($topic, $Y['year']);
+            $retval .= DIR_displayYear($template, $dir_topic, $Y['year']);
+        }
+    } else {
+        $retval .= $template->parse('message', 'no-articles') . LB;
     }
 
     return $retval;
@@ -441,92 +377,166 @@ function DIR_displayAll ($topic, $list_current_month = false)
 /**
 * Return a canonical link
 *
-* @param    string  $topic  current topic or 'all'
+* @param    string  $dir_topic  current topic or 'all'
 * @param    int     $year   current year
 * @param    int     $month  current month
-* @return   string          <link rel="canonical" ...> tag
+* @return   string          <link rel="canonical"> tag
 *
 */
-function DIR_canonicalLink($topic, $year = 0, $month = 0)
+function DIR_canonicalLink($dir_topic, $year = 0, $month = 0)
 {
     global $_CONF;
 
-    $script = $_CONF['site_url'].'/'.THIS_SCRIPT;
+    $script = $_CONF['site_url'] . '/directory.php';
 
-    $tp = '?topic=' . urlencode($topic);
+    $tp = '?topic=' . urlencode($dir_topic);
     $parts = '';
     if (($year != 0) && ($month != 0)) {
         $parts .= "&amp;year=$year&amp;month=$month";
     } elseif ($year != 0) {
         $parts .= "&amp;year=$year";
-    } elseif ($topic == 'all') {
+    } elseif ($dir_topic == 'all') {
         $tp = '';
     }
     $url = COM_buildUrl($script . $tp . $parts);
 
-    return '<link rel="canonical" href="'.$url.'"'.XHTML.'>' . LB;
+    return '<link rel="canonical" href="' . $url . '"' . XHTML . '>' . LB;
 }
 
-// MAIN
-$display = '';
 
-if (isset ($_POST['topic']) && isset ($_POST['year']) && isset ($_POST['month'])) {
-    $topic = $_POST['topic'];
+if (isset($_POST['topic']) && isset($_POST['year']) && isset($_POST['month'])) {
+    $dir_topic = $_POST['topic'];
     $year = $_POST['year'];
     $month = $_POST['month'];
 } else {
-    COM_setArgNames (array ('topic', 'year', 'month'));
-    $topic = COM_getArgument ('topic');
-    $year = COM_getArgument ('year');
-    $month = COM_getArgument ('month');
+    COM_setArgNames(array('topic', 'year', 'month'));
+    $dir_topic = COM_getArgument('topic');
+    $year = COM_getArgument('year');
+    $month = COM_getArgument('month');
 }
 
-$topic = COM_applyFilter ($topic);
-if (empty ($topic)) {
-    $topic = 'all';
+$dir_topic = COM_applyFilter($dir_topic);
+if (empty($dir_topic)) {
+    $dir_topic = 'all';
 }
-$year = COM_applyFilter ($year, true);
+
+//Set topic for rest of site
+if ($dir_topic == 'all') {
+    $topic = '';
+} else {
+    $topic = $dir_topic;
+}
+// See if user has access to view topic.
+if ($topic != '') {
+    $test_topic = DB_getItem($_TABLES['topics'], 'tid', "tid = '$topic' " . COM_getPermSQL('AND'));
+    if (strtolower($topic) != strtolower($test_topic)) {
+        $topic = '';
+        $dir_topic = 'all';
+    } else {
+        $topic = $test_topic;
+        $dir_topic = $test_topic;
+    }
+}
+
+$year = COM_applyFilter($year, true);
 if ($year < 0) {
     $year = 0;
 }
-$month = COM_applyFilter ($month, true);
+$month = COM_applyFilter($month, true);
 if (($month < 1) || ($month > 12)) {
     $month = 0;
 }
 
-$topicName = '';
-if ($topic != 'all') {
-    $topicName = DB_getItem($_TABLES['topics'], 'topic',
-                            "tid = '" . DB_escapeString($topic) . "'");
+$dir_topicName = '';
+if ($dir_topic != 'all') {
+    $dir_topicName = DB_getItem($_TABLES['topics'], 'topic',
+                            "tid = '" . DB_escapeString($dir_topic) . "'");
 }
+
+$template = new Template($_CONF['path_layout']);
+$template->set_file('t_directory', 'directory.thtml');
+$template->set_block('t_directory', 'section-title');
+$template->set_block('t_directory', 'no-articles');
+$template->set_var('lang_no_articles', $LANG_DIR['no_articles']);
+
 if (($year != 0) && ($month != 0)) {
     $title = sprintf ($LANG_DIR['title_month_year'],
                       $LANG_MONTH[$month], $year);
-    if ($topic != 'all') {
-        $title .= ': ' . $topicName;
+    if ($dir_topic != 'all') {
+        $title .= ': ' . $dir_topicName;
     }
-    $display .= COM_siteHeader('menu', $title,DIR_canonicalLink($topic,$year,$month));
-    $display .= DIR_displayMonth ($topic, $year, $month, true);
-    $display .= DIR_navBar ($topic, $year, $month);
+    $headercode = DIR_canonicalLink($dir_topic, $year, $month);
+    $directory = DIR_displayMonth($template, $dir_topic, $year, $month);
+    $page_navigation = DIR_navBar($dir_topic, $year, $month);
+    $block_title = $LANG_MONTH[$month] . ' ' . $year;
+    $val_year = $year;
+    $val_month = $month;
 } else if ($year != 0) {
-    $title = sprintf ($LANG_DIR['title_year'], $year);
-    if ($topic != 'all') {
-        $title .= ': ' . $topicName;
+    $title = sprintf($LANG_DIR['title_year'], $year);
+    if ($dir_topic != 'all') {
+        $title .= ': ' . $dir_topicName;
     }
-    $display .= COM_siteHeader('menu', $title, DIR_canonicalLink($topic,$year));
-    $display .= DIR_displayYear($topic, $year, true);
-    $display .= DIR_navBar($topic, $year);
+    $headercode = DIR_canonicalLink($dir_topic, $year);
+    $directory = DIR_displayYear($template, $dir_topic, $year);
+    $page_navigation = DIR_navBar($dir_topic, $year);
+    $block_title = $year;
+    $val_year = $year;
+    $val_month = 0;
+
 } else {
     $title = $LANG_DIR['title'];
-    if ($topic != 'all') {
-        $title .= ': ' . $topicName;
+    if ($dir_topic != 'all') {
+        $title .= ': ' . $dir_topicName;
     }
-    $display .= COM_siteHeader('menu', $title, DIR_canonicalLink($topic));
-    $display .= DIR_displayAll($topic, $conf_list_current_month);
+    $headercode = DIR_canonicalLink($dir_topic);
+    $directory = DIR_displayAll($template, $dir_topic);
+    $page_navigation = '';
+    $block_title = $LANG_DIR['title'];
+    $val_year = 0;
+    $val_month = 0;
+
+    if ($conf_list_current_month) {
+        $currenttime = time();
+        $currentyear  = date('Y', $currenttime);
+        $currentmonth = date('n', $currenttime);
+        $thismonth = COM_startBlock($LANG_MONTH[$currentmonth])
+                   . DIR_displayMonth($template, $dir_topic,
+                         $currentyear, $currentmonth)
+                   . COM_endBlock();
+        $template->set_var('current_month', $thismonth);
+    }
 }
 
+$topic_list = '<option value="all">'.$LANG21[7].'</option>';
+$topics = COM_topicArray('tid,topic', 1, false, 2);
+if ( is_array($topics) ) {
+    foreach ($topics as $tid => $topic) {
+        $topic_list .= '<option value="' . $tid . '"';
+        if ($tid == $dir_topic) {
+            $topic_list .= ' selected="selected"';
+        }
+        $topic_list .= '>' . $topic;
+        if ( isset($tid) ) {
+            $topic_list .= ' (' . $tid . ')';
+        }
+        $topic_list .=  '</option>' . LB;
+    }
+}
+
+$template->set_var(array(
+    'url'             => $_CONF['site_url'] . '/directory.php',
+    'topic_list'      => $topic_list,
+    'blockheader'     => COM_startBlock($block_title),
+    'val_year'        => $val_year,
+    'val_month'       => $val_month,
+    'directory'       => $directory,
+    'page_navigation' => $page_navigation,
+    'blockfooter'     => COM_endBlock(),
+));
+$template->parse('output', 't_directory');
+$pageBody = $template->finish($template->get_var('output'));
+$display .= COM_siteHeader('menu', $title,$headercode);
+$display .= $pageBody;
 $display .= COM_siteFooter (true);
-
 echo $display;
-
 ?>
