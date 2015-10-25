@@ -158,7 +158,7 @@
 <!-- BEGIN topicrows -->
 		<li class="row">
 			<dl class="icon" style="background-image: url({folder_icon}); background-repeat: no-repeat;">
-				<dt title="{folder_msg}" onmouseover="this.style.cursor='pointer';" onclick="window.location.href='{site_url}/forum/viewtopic.php?showtopic={topic_id}&amp;lastpost=true#{lastpostid}'; this.style.cursor='pointer';">
+				<dt onmouseover="this.style.cursor='pointer';" onclick="window.location.href='{site_url}/forum/viewtopic.php?showtopic={topic_id}&amp;lastpost=true#{lastpostid}'; this.style.cursor='pointer';">
 					{moved}
 					<a class="tooltip topictitle" href="{site_url}/forum/viewtopic.php?showtopic={topic_id}" title="{topicinfo}">{subject}</a>
 					<span class="uk-align-right">{gotomsg}&nbsp;{displaypageslink}</span>
