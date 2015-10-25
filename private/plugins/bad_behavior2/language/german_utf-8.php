@@ -104,7 +104,9 @@ $LANG_BAD_BEHAVIOR = array(
     'no_filter' => 'No Filter',
     'manual' => 'Manual',
     'token' => 'Token',
-    'captcha' => 'CAPTCHA'
+    'captcha' => 'CAPTCHA',
+    'auto_refresh_on' => 'Auto Refresh On',
+    'auto_refresh_off' => 'Auto Refresh Off'
 );
 
 $LANG_BB2_RESPONSE = array(
