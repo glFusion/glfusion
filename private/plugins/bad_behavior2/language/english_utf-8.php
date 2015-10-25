@@ -9,7 +9,7 @@
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2014 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2014 by the following authors:                        |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -102,6 +102,8 @@ $LANG_BAD_BEHAVIOR = array (
     'manual'                => 'Manual',
     'token'                 => 'Token',
     'captcha'               => 'CAPTCHA',
+    'auto_refresh_on'       => 'Auto Refresh On',
+    'auto_refresh_off'      => 'Auto Refresh Off',
 );
 
 $LANG_BB2_RESPONSE = array (
