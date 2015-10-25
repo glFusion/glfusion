@@ -10,6 +10,13 @@ set of styles.
 /* Primary Styles
 ========================================================================== */
 /*
+* tm-content wraps the entire content area
+*/
+.tm-content {
+	background: #fff url(images/bg_content.jpg) repeat-x 0 0;
+}
+
+/*
 * tm-container is the primary wrapper for the content area. This excludes
 * the header / footer (see tm-nav* and tm-footer* styles)
 */
