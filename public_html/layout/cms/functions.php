@@ -18,8 +18,10 @@ if (!defined ('GVERSION')) {
 $themeAPI = 2;
 $_SYSTEM['disable_mootools'] = true;
 $_IMAGE_TYPE = 'png';
-$_SYSTEM['disable_jquery_menu'] = true; // not needed for this theme
-$_SYSTEM['disable_jquery_slimbox'] = true; // use uikit
+$_SYSTEM['disable_jquery_menu'] = true;     // not needed for this theme
+$_SYSTEM['disable_jquery_slimbox'] = true;  // use uikit
+
+// multiple language support
 
 /*
 $lang = COM_getLanguageId();
@@ -39,6 +41,8 @@ for ($i = 0; $i < $nrows; $i++) {
 }
 */
 
+// custom block templates
+
 $_BLOCK_TEMPLATE['_admin_block'] = 'blockheader-admin.thtml,blockfooter-admin.thtml';
 $_BLOCK_TEMPLATE['whats_related_block'] = 'blockheader-related.thtml,blockfooter-related.thtml';
 $_BLOCK_TEMPLATE['story_options_block'] = 'blockheader-related.thtml,blockfooter-related.thtml';
@@ -48,7 +52,6 @@ $_BLOCK_TEMPLATE['section_block'] = 'blockheader-list.thtml,blockfooter-list.tht
 $_BLOCK_TEMPLATE['topicoption'] = 'topicoption.thtml,topicoption.thtml';
 $_BLOCK_TEMPLATE['_submit_story'] = 'blockheader-submitstory.thtml,blockfooter-submitstory.thtml';
 $_BLOCK_TEMPLATE['rss_feeds'] = 'blockheader-rss.thtml,blockfooter-right.thtml';
-
 
 /*
  * Full_content - no left / right
@@ -74,8 +77,8 @@ $uiStyles = array(
 );
 
 $LANG_BLOCKS = array(
-    'left_title'    => 'Left Side',
-    'right_title'   => 'Right Side',
+    'left_title'    => $LANG01['blocks_right_title'], // 'Left Side',
+    'right_title'   => $LANG01['blocks_footer_title'], // 'Right Side',
     'location_left' => '',
     'location_right' => '',
     'location_footer' => '',
@@ -91,12 +94,12 @@ $blockInterface = array(
     'left'  => array(                        // BLOCK_LOCATION_NAV
                 'enabled'   => true,
                 'location'  => 'right',      // left, right, footer, other
-                'title'     => 'Right Side'  // could use lang string instead
+                'title'     => $LANG01['blocks_right_title']
                 ),
     'right' => array(                       // BLOCK_LOCATION_EXTRA
                 'enabled'   => true,
                 'location'  => 'footer',     // left, right, footer, other
-                'title'     => 'Footer'
+                'title'     => $LANG01['blocks_footer_title']
                 )
 );
 
@@ -107,7 +110,7 @@ $outputHandle = outputHandler::getInstance();
 
 $styleType = '.gradient.'; // almost-flat - gradient - blank
 
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/uikit'.$styleType.'css');
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/uikit'.$styleType.'min.css');
 $outputHandle->addCSSFile($_CONF['path_layout'].'css/components/accordion'.$styleType.'min.css');
 $outputHandle->addCSSFile($_CONF['path_layout'].'css/components/autocomplete'.$styleType.'min.css');
 $outputHandle->addCSSFile($_CONF['path_layout'].'css/components/datepicker'.$styleType.'min.css');
@@ -129,7 +132,6 @@ $outputHandle->addCSSFile($_CONF['path_layout'].'css/components/sortable'.$style
 $outputHandle->addCSSFile($_CONF['path_layout'].'css/components/sticky'.$styleType.'min.css');
 $outputHandle->addCSSFile($_CONF['path_layout'].'css/components/tooltip'.$styleType.'min.css');
 $outputHandle->addCSSFile($_CONF['path_layout'].'css/components/upload'.$styleType.'min.css');
-
 
 // Load our JS specific to this theme
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/uikit.min.js');
@@ -178,15 +180,14 @@ $outputHandle->addScriptFile($_CONF['path_layout'].'js/components/upload.min.js'
 // Load any additional JS/CSS for widgets / functionality
 //$outputHandle->addScriptFile($_CONF['path_layout'].'js/jQuery.menutron.min.js');
 
-
 // must load the jquery ui library we want to use.
 $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/ui-uikit/jquery-ui-1.10.4.custom.min.css');
 
 
 //  Custom CSS added by theme if it supports it...
-    if ( file_exists($_CONF['path_layout'] .'custom.css') ) {
-        $outputHandle->addCSSFile($_CONF['path_layout'].'custom.css');
-    }
+if ( file_exists($_CONF['path_layout'] .'custom.css') ) {
+    $outputHandle->addCSSFile($_CONF['path_layout'].'custom.css');
+}
 
 
 /*
@@ -196,6 +197,4 @@ function theme_getToolTipStyle()
 {
     return('tooltip');
 }
-
-
 ?>

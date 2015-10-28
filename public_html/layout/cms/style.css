@@ -7,6 +7,15 @@ You can override the uk-* styles or utilize the tm-* styles (theme specific)
 set of styles.
 ========================================================================== */
 
+/* UIKIT override for font location
+*/
+@font-face {
+  font-family: 'FontAwesome';
+  src: url("fonts/fontawesome-webfont.woff2") format('woff2'), url("fonts/fontawesome-webfont.woff") format("woff"), url("fonts/fontawesome-webfont.ttf") format("truetype") !important;
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* Primary Styles
 ========================================================================== */
 /*

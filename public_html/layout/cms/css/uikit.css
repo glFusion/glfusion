@@ -323,7 +323,7 @@ pre {
   /* 1 */
   overflow: auto;
 }
-/* Selection pseudo-element
+/* Selection pseudo-element 
  ========================================================================== */
 ::-moz-selection {
   background: #3399ff;
@@ -3528,7 +3528,7 @@ select.uk-form-width-mini {
  ========================================================================== */
 @font-face {
   font-family: 'FontAwesome';
-  src: url("fonts/fontawesome-webfont.woff2") format('woff2'), url("fonts/fontawesome-webfont.woff") format("woff"), url("fonts/fontawesome-webfont.ttf") format("truetype");
+  src: url("../fonts/fontawesome-webfont.woff2") format('woff2'), url("../fonts/fontawesome-webfont.woff") format("woff"), url("../fonts/fontawesome-webfont.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
