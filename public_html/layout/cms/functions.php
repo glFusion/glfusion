@@ -136,23 +136,6 @@ $outputHandle->addCSSFile($_CONF['path_layout'].'css/components/upload'.$styleTy
 // Load our JS specific to this theme
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/uikit.min.js');
 
-$outputHandle->addScriptFile($_CONF['path_layout'].'js/core/alert.min.js');
-$outputHandle->addScriptFile($_CONF['path_layout'].'js/core/button.min.js');
-$outputHandle->addScriptFile($_CONF['path_layout'].'js/core/core.min.js');
-$outputHandle->addScriptFile($_CONF['path_layout'].'js/core/cover.min.js');
-$outputHandle->addScriptFile($_CONF['path_layout'].'js/core/dropdown.min.js');
-$outputHandle->addScriptFile($_CONF['path_layout'].'js/core/grid.min.js');
-$outputHandle->addScriptFile($_CONF['path_layout'].'js/core/modal.min.js');
-$outputHandle->addScriptFile($_CONF['path_layout'].'js/core/nav.min.js');
-$outputHandle->addScriptFile($_CONF['path_layout'].'js/core/offcanvas.min.js');
-$outputHandle->addScriptFile($_CONF['path_layout'].'js/core/scrollspy.min.js');
-$outputHandle->addScriptFile($_CONF['path_layout'].'js/core/smooth-scroll.min.js');
-$outputHandle->addScriptFile($_CONF['path_layout'].'js/core/switcher.min.js');
-$outputHandle->addScriptFile($_CONF['path_layout'].'js/core/tab.min.js');
-$outputHandle->addScriptFile($_CONF['path_layout'].'js/core/toggle.min.js');
-$outputHandle->addScriptFile($_CONF['path_layout'].'js/core/touch.min.js');
-$outputHandle->addScriptFile($_CONF['path_layout'].'js/core/utility.min.js');
-
 // optional UIKIT components
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/components/accordion.min.js');
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/components/autocomplete.min.js');

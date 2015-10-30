@@ -2132,7 +2132,7 @@
                 justify(dropdown.css({left:0}), this.justified, boundarywidth);
             } else {
 
-                switch(this.checkBoundary(pos.left + css.left, pos.top + css.top, width, height, boundarywidth)) {
+                switch(this.checkBoundary(pos.left + css.left, pos.top + css.top, width, height, boundarywidth, offset)) {
 
                     case "x":
                         dpos = flips['x'][dpos] || 'right-top';
@@ -2157,15 +2157,14 @@
             dropdown.css(css).css("display", "").addClass('uk-dropdown-'+pp[0]);
         },
 
-        checkBoundary: function(left, top, width, height, boundarywidth) {
+        checkBoundary: function(left, top, width, height, boundarywidth, offset) {
 
             var axis = "";
 
             if (left < 0 || ((left - UI.$win.scrollLeft())+width) > boundarywidth) {
                axis += "x";
             }
-
-            if (top < 0 || ((top - UI.$win.scrollTop())+height) > window.innerHeight) {
+            if (top < 0 || ((((top - UI.$win.scrollTop())+height) > window.innerHeight) && offset.top > height) ) {
                axis += "y";
             }
 
