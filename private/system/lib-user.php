@@ -773,14 +773,15 @@ function USER_uniqueUsername($username)
 *
 * @return	boolean     true if OK, false if not
 */
-function USER_validateUsername($username)
+function USER_validateUsername($username, $existing_user = 0)
 {
 	global $_CONF, $_TABLES, $_USER;
 
-	if ( strlen($username) < $_CONF['min_username_length'] ) {
-	    return false;
-	}
-
+    if ( $existing_user == 0 ) {
+    	if ( strlen($username) < $_CONF['min_username_length'] ) {
+    	    return false;
+    	}
+    }
     $regex = '[\x00-\x1F\x7F<>"%&*\/\\\\]';
 	// ... fast checks first.
 	if (strpos($username, '&quot;') !== false || strpos($username, '"') !== false ) {

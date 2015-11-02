@@ -73,7 +73,7 @@ function userprofile()
         }
     } else if ( isset($_GET['username']) ) {
         $username = $_GET['username'];
-        if ( !USER_validateUsername($username) ) {
+        if ( !USER_validateUsername($username,1) ) {
             echo COM_refresh ($_CONF['site_url'] . '/index.php');
         }
         if ( empty($username) || $username == '' ) {
@@ -1198,7 +1198,7 @@ function _userGetnewtoken()
     } else {
         $username = (isset($_POST['username']) ? $_POST['username'] : '');
         $passwd   = (isset($_POST['passwd']) ? $_POST['passwd'] : '');
-        if (!empty ($username) && !empty ($passwd) && USER_validateUsername($username)) {
+        if (!empty ($username) && !empty ($passwd) && USER_validateUsername($username,1)) {
             $encryptedPassword = '';
             $uid = 0;
             $result = DB_query("SELECT uid,passwd FROM {$_TABLES['users']} WHERE username='".DB_escapeString($username)."'");
@@ -1285,7 +1285,7 @@ switch ($mode) {
         $loginname = '';
         if (isset ($_POST['loginname'])) {
             $loginname = $_POST['loginname'];
-            if ( !USER_validateUsername($loginname) ) {
+            if ( !USER_validateUsername($loginname,1) ) {
                 $loginname = '';
             }
         }
