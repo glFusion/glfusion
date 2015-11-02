@@ -1790,3 +1790,12 @@ input.error {
 	height: 11px;
 	width: 16px;
 }
+.floatleft {
+	float:left;
+	padding:0 10px 0 0;
+}
+
+.floatright {
+	float:right;
+	padding:0 0 0 10px;
+}
