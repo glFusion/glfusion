@@ -1,6 +1,10 @@
 Please view this file on the master branch, on other branches it's out of date.
 
-v 1.5.0 (unreleased)
+v1.5.1 (unreleased)
+  - Minimum username setting was being applied to existing users, preventing users with short username from logging in
+  - Added floatleft / floatright styles to CMS theme to support proper wrapping on [imageX] tags in stories
+
+v 1.5.0 (October 1, 2015)
   - Media Gallery: Improved support for MP4 video playback
   - Fixed incorrect password confirmation field name in CMS theme
   - Media Gallery: Fixed incorrect rating value on search page
