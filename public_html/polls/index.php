@@ -124,7 +124,7 @@ if (isset ($_REQUEST['pid'])) {
     if (isset ($_GET['aid'])) {
         $aid = -1; // only for showing results instead of questions
     } else if (isset ($_POST['aid'])) {
-        $aid = COM_applyFilter($_POST['aid'],true);
+        $aid = $_POST['aid'];
     }
 } elseif (isset($_POST['id'])) {       // Refresh from comment tool bar
     $pid = COM_sanitizeID(COM_applyFilter ($_POST['id']));
