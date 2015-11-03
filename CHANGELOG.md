@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.5.1 (unreleased)
+  - Fixed spelling error in CKEditor plugin
   - Fixed polls plugin would error when submitting vote
   - Fixed bug where stories could not be saved in draft mode
   - Minimum username setting was being applied to existing users, preventing users with short username from logging in

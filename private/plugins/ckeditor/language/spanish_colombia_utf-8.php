@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Spanish (Colombia) language file                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2014-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -71,7 +71,7 @@ $LANG_confignames['ckeditor'] = array(
     'enable_contact'        => 'Enable Contact',
     'enable_emailstory'     => 'Enable Email Story',
     'enable_sp'             => 'Enable StaticPages Support',
-    'enable_block'          => 'Enalbe Block Editor',
+    'enable_block'          => 'Enable Block Editor',
     'filemanager_fileroot'  => 'Relative Path (from public_html) to Files',
     'filemanager_per_user_dir' => 'Use Per User Directories',
     'filemanager_browse_only'       => 'Browse only mode',
