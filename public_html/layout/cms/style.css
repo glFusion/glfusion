@@ -6,6 +6,12 @@ This should contain site wide styles that augment the UIKIT styles
 You can override the uk-* styles or utilize the tm-* styles (theme specific)
 set of styles.
 ========================================================================== */
+/*
+* UIKIT overrride when using a gradient style - remove the text shadow on tabs
+*/
+.uk-tab > li > a {
+  text-shadow: none !important;
+}
 
 /* Primary Styles
 ========================================================================== */
