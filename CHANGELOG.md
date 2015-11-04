@@ -1,6 +1,8 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.5.1 (unreleased)
+  - Fixed template issue with story meta data showing leading | in when author line is not displayed
+  - Removed text shadow on tab labels
   - Fixed spelling error in CKEditor plugin
   - Fixed polls plugin would error when submitting vote
   - Fixed bug where stories could not be saved in draft mode
