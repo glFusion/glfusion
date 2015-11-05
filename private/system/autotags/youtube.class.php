@@ -50,6 +50,7 @@ class autotag_youtube extends BaseAutotag {
         $height = 315;
         $align = '';
         $pad = 0;
+        $skip = 0;
 
         $px = explode (' ', $p2);
         if (is_array ($px)) {
