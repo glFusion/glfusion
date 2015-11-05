@@ -73,7 +73,7 @@ if ( !COM_isAnonUser() ) {
 if ( isset($_POST['loginname']) && !empty($_POST['loginname']) && isset($_POST['passwd']) && !empty($_POST['passwd']) ) {
     COM_updateSpeedlimit('login');
     $loginname = $_POST['loginname'];
-    if ( !USER_validateUsername($loginname) ) {
+    if ( !USER_validateUsername($loginname,1) ) {
         $status = '';
         $message = $LANG20[2];
     } else {
