@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.5.1 (unreleased)
+  - Fixed error in CMS theme that prevented Link titles from being entered
   - Update youtube autotag to allow responsive videos when using UIKIT themes
   - Fixed uninitialized variable error in youtube auto tag
   - Fixed template issue with story meta data showing leading | in when author line is not displayed
