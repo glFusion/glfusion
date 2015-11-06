@@ -364,6 +364,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
     $edit_val       = '';
     $sticky_val     = '';
     $locked_val     = '';
+    $notify_val     = '';
 
     if ( COM_isAnonUser() ) {
         $uid = 1;
