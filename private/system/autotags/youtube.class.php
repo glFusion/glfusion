@@ -99,7 +99,7 @@ class autotag_youtube extends BaseAutotag {
             $retval .= '<div style="'.$extra.'">';
         }
 
-        $retval .= '<iframe width="'.$width.'" height="'.$height.'" src="//www.youtube.com/embed/'.$p1.'" frameborder="0" allowfullscreen></iframe>';
+        $retval .= '<iframe class="uk-responsive-width" width="'.$width.'" height="'.$height.'" src="//www.youtube.com/embed/'.$p1.'" frameborder="0" allowfullscreen></iframe>';
         if ( $extra != '' ) {
             $retval .= '</div>';
         }
