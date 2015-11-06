@@ -56,6 +56,10 @@ if ( file_exists($_CONF['path_layout'] .'custom.css') ) {
     $outputHandle->addLinkStyle($_CONF['layout_url'] . '/custom.css');
 }
 
+// uncomment the line below to enable chronometer header rotator
+// MAKE SURE TO CLEAR BROWSER & C.T.L. CACHE when activating/deactivating
+// $outputHandle->addScriptFile($_CONF['path_layout'].'js/chronometer.js');
+
 
 function theme_getToolTipStyle()
 {
