@@ -35,7 +35,7 @@
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 @ini_set('opcache.enable','0');
 if (!defined('GVERSION')) {
-    define('GVERSION', '1.5.0');
+    define('GVERSION', '1.5.1');
 }
 
 define('SESSION_EXPIRED',           1);
