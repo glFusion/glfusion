@@ -1,14 +1,14 @@
 {# begin {templatelocation} #}
 <h2>{$LANG09[1]}</h2>
-<form class="uk-form uk-form-stacked uk-margin-large uk-search" method="get" action="{site_url}/search.php">
+<form class="uk-form uk-form-stacked uk-margin-large uk-search uk-width-1-1" method="get" action="{site_url}/search.php">
 	<input type="hidden" name="mode" value="search">
-	<input class="uk-form-width-large uk-form-medium uk-search" type="search" id="query" name="query" value="{query}" placeholder="{$LANG09[10]}">
+	<input class="uk-search" type="search" id="query" name="query" value="{query}" placeholder="{$LANG09[10]}">
 	<button class="uk-button uk-button-success" type="submit" name="submit" value="{$LANG09[10]}">{$LANG09[10]}</button>
-	<button type="button" class="uk-button uk-button-primary" data-uk-toggle="{target:'#advanced'}">
+	<button type="button" class="uk-button uk-button-primary uk-margin-small" data-uk-toggle="{target:'#advanced'}">
 		{$LANG09[2]}
 	</button>
 	<div id="advanced" class="uk-hidden uk-margin-top">
-		<div class="uk-grid">
+		<div class="uk-grid uk-margin-bottom">
 			<div class="uk-width-medium-1-5">
 				<label class="uk-form-label">
 					{$LANG09[70]}
@@ -41,7 +41,7 @@
 					</select>
 				</div>
 			</div>
-			{!if author_option_list}
+{!if author_option_list}
 			<div class="uk-width-medium-1-5">
 				<label class="uk-form-label">
 					{$LANG09[69]}
@@ -52,7 +52,7 @@
 					</select>
 				</div>
 			</div>
-			{!endif}
+{!endif}
 			<div class="uk-width-medium-1-5">
 				<label class="uk-form-label">
 					{$LANG09[73]}
