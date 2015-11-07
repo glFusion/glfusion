@@ -12,6 +12,10 @@ set of styles.
 .uk-tab > li > a {
   text-shadow: none !important;
 }
+.uk-nav-offcanvas>li>a:focus, .uk-nav-offcanvas>li>a:hover {
+    text-shadow:none !important;
+    color:#fff !important;
+}
 
 /* Primary Styles
 ========================================================================== */

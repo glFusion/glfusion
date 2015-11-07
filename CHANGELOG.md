@@ -1,6 +1,9 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.5.1 (unreleased)
+  - Removed text shadow from off-canvas menu items
+  - Updated story id input to limit sid to 40 characters
+  - Fixed layout issue on search screen that breaks layout on small devices
   - Added chronometer.js (gl_moochronometer.js replacement) to vintage theme
   - Fixed error in CMS theme that prevented Link titles from being entered
   - Update youtube autotag to allow responsive videos when using UIKIT themes
