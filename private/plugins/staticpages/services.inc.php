@@ -40,7 +40,7 @@ if (!defined ('GVERSION')) {
 }
 
 // this must be kept in synch with the actual size of 'sp_id' in the db ...
-define('STATICPAGE_MAX_ID_LENGTH', 40);
+define('STATICPAGE_MAX_ID_LENGTH', 128);
 
 /**
  * Submit static page. The page is updated if it exists, or a new one is created

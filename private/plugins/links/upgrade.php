@@ -67,6 +67,9 @@ function links_upgrade()
             $c->add('displayblocks',0,'select',0, 0, 13, 60, true, 'links');
         case '2.1.3' :
         case '2.1.4' :
+            DB_query("ALTER TABLE {$_TABLES['links']} CHANGE `lid` `lid` VARCHAR(128) NOT NULL DEFAULT '';",1);
+            DB_query("ALTER TABLE {$_TABLES['linksubmission']} CHANGE `lid` `lid` VARCHAR(128) NOT NULL DEFAULT '';",1);
+
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_LI_CONF['pi_version']."',pi_gl_version='".$_LI_CONF['gl_version']."' WHERE pi_name='links' LIMIT 1");
             break;

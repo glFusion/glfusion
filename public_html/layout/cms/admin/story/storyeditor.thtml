@@ -70,7 +70,7 @@
 				<strong>{lang_title}</strong>&nbsp;<input class="uk-width-1-1" id="title" type="text" name="title" value="{story_title}">
 			</div>
 			<div class="uk-width-medium-1-3">
-				<strong>{lang_sid}</strong>&nbsp;<input class="uk-width-1-1" id="sid" class="required alphanumeric" maxlength="40" type="text" name="sid" value="{story_id}">
+				<strong>{lang_sid}</strong>&nbsp;<input class="uk-width-1-1" id="sid" class="required alphanumeric" maxlength="128" type="text" name="sid" value="{story_id}">
 			</div>
 		</div>
 	</div>

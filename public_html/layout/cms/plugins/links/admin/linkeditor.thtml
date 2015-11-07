@@ -13,7 +13,7 @@
 	<div class="uk-form-row">
 		<label class="uk-form-label">{lang_linkid}</label>
 		<div class="uk-form-controls">
-			<input class="uk-form-width-medium" type="text" maxlength="40" name="lid" value="{link_id}">
+			<input class="uk-form-width-medium" type="text" maxlength="128" name="lid" value="{link_id}">
 		</div>
 	</div>
 	<div class="uk-form-row">

@@ -58,6 +58,13 @@ function polls_upgrade()
         case '2.1.0' :
             $c = config::get_instance();
             $c->add('displayblocks',0, 'select', 0, 0, 13, 85, true, 'polls');
+
+        case '2.1.1' :
+            DB_query("ALTER TABLE {$_TABLES['pollanswers']} CHANGE `pid` `pid` VARCHAR(128) NOT NULL DEFAULT '';",1);
+            DB_query("ALTER TABLE {$_TABLES['pollquestions']} CHANGE `pid` `pid` VARCHAR(128) NOT NULL;",1);
+            DB_query("ALTER TABLE {$_TABLES['polltopics']} CHANGE `pid` `pid` VARCHAR(128) NOT NULL;",1);
+            DB_query("ALTER TABLE {$_TABLES['pollvoters']} CHANGE `pid` `pid` VARCHAR(128) NOT NULL DEFAULT '';",1);
+
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_PO_CONF['pi_version']."',pi_gl_version='".$_PO_CONF['gl_version']."' WHERE pi_name='polls' LIMIT 1");
             break;

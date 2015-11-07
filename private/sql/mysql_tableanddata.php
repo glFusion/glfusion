@@ -48,7 +48,7 @@ CREATE TABLE {$_TABLES['access']} (
 
 $_SQL[] = "
 CREATE TABLE {$_TABLES['article_images']} (
-  ai_sid varchar(40) NOT NULL,
+  ai_sid varchar(128) NOT NULL,
   ai_img_num tinyint(2) unsigned NOT NULL,
   ai_filename varchar(128) NOT NULL,
   PRIMARY KEY (ai_sid,ai_img_num)
@@ -135,7 +135,7 @@ $_SQL[] = "
 CREATE TABLE {$_TABLES['comments']} (
   cid int(10) unsigned NOT NULL auto_increment,
   type varchar(30) NOT NULL DEFAULT 'article',
-  sid varchar(40) NOT NULL default '',
+  sid varchar(128) NOT NULL default '',
   date datetime default NULL,
   title varchar(128) default NULL,
   comment text,
@@ -347,7 +347,7 @@ CREATE TABLE {$_TABLES['statuscodes']} (
 
 $_SQL[] = "
 CREATE TABLE {$_TABLES['stories']} (
-  sid varchar(40) NOT NULL default '',
+  sid varchar(128) NOT NULL default '',
   uid mediumint(8) NOT NULL default '1',
   draft_flag tinyint(3) unsigned default '0',
   tid varchar(128) NOT NULL default 'General',
@@ -393,7 +393,7 @@ CREATE TABLE {$_TABLES['stories']} (
 
 $_SQL[] = "
 CREATE TABLE {$_TABLES['storysubmission']} (
-  sid varchar(20) NOT NULL default '',
+  sid varchar(128) NOT NULL default '',
   uid mediumint(8) NOT NULL default '1',
   tid varchar(128) NOT NULL default 'General',
   title varchar(128) default NULL,
@@ -425,7 +425,7 @@ $_SQL[] = "
 CREATE TABLE {$_TABLES['syndication']} (
   fid int(10) unsigned NOT NULL auto_increment,
   type varchar(30) NOT NULL default 'article',
-  topic varchar(48) NOT NULL default '::all',
+  topic varchar(128) NOT NULL default '::all',
   header_tid varchar(48) NOT NULL default 'none',
   format varchar(20) NOT NULL default 'RSS-2.0',
   limits varchar(5) NOT NULL default '10',
@@ -482,7 +482,7 @@ CREATE TABLE {$_TABLES['topics']} (
 $_SQL[] = "
 CREATE TABLE {$_TABLES['trackback']} (
   cid int(10) unsigned NOT NULL auto_increment,
-  sid varchar(40) NOT NULL,
+  sid varchar(128) NOT NULL,
   url varchar(255) default NULL,
   title varchar(128) default NULL,
   blog varchar(80) default NULL,

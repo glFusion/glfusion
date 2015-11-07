@@ -1174,6 +1174,17 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '1.5.0';
 
         case '1.5.0' :
+            $_SQL[] = "ALTER TABLE {$_TABLES['article_images']} CHANGE `ai_sid` `ai_sid` VARCHAR(128);";
+            $_SQL[] = "ALTER TABLE {$_TABLES['comments']} CHANGE `sid` `sid` VARCHAR(128);";
+            $_SQL[] = "ALTER TABLE {$_TABLES['stories']} CHANGE `sid` `sid` VARCHAR(128);";
+            $_SQL[] = "ALTER TABLE {$_TABLES['storysubmission']} CHANGE `sid` `sid` VARCHAR(128);";
+            $_SQL[] = "ALTER TABLE {$_TABLES['syndication']} CHANGE `topic` `topic` VARCHAR(128);";
+            $_SQL[] = "ALTER TABLE {$_TABLES['trackback']} CHANGE `sid` `sid` VARCHAR(128);";
+
+            foreach ($_SQL as $sql) {
+                DB_query($sql,1);
+            }
+
             $current_fusion_version = '1.5.1';
 
         default:

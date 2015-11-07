@@ -74,7 +74,7 @@ CREATE TABLE {$_TABLES['linkcategories']} (
 
 $_SQL['links'] = "
 CREATE TABLE {$_TABLES['links']} (
-  lid varchar(40) NOT NULL default '',
+  lid varchar(128) NOT NULL default '',
   cid varchar(32) default NULL,
   url varchar(255) default NULL,
   description text,
@@ -95,7 +95,7 @@ CREATE TABLE {$_TABLES['links']} (
 
 $_SQL['linksubmission'] = "
 CREATE TABLE {$_TABLES['linksubmission']} (
-  lid varchar(40) NOT NULL default '',
+  lid varchar(128) NOT NULL default '',
   cid varchar(32) default NULL,
   url varchar(255) default NULL,
   description text,

@@ -38,7 +38,7 @@ if (!defined ('GVERSION')) {
 
 $_SQL['pollanswers'] = "
 CREATE TABLE {$_TABLES['pollanswers']} (
-  pid varchar(20) NOT NULL default '',
+  pid varchar(128) NOT NULL default '',
   qid mediumint(9) NOT NULL default 0,
   aid tinyint(3) unsigned NOT NULL default '0',
   answer varchar(255) default NULL,
@@ -51,7 +51,7 @@ CREATE TABLE {$_TABLES['pollanswers']} (
 $_SQL['pollquestions'] = "
 CREATE TABLE {$_TABLES['pollquestions']} (
     qid mediumint(9) NOT NULL DEFAULT '0',
-    pid varchar(20) NOT NULL,
+    pid varchar(128) NOT NULL,
     question varchar(255) NOT NULL,
     PRIMARY KEY (qid, pid)
 ) ENGINE=MyISAM
@@ -59,7 +59,7 @@ CREATE TABLE {$_TABLES['pollquestions']} (
 
 $_SQL['polltopics'] = "
 CREATE TABLE {$_TABLES['polltopics']} (
-  pid varchar(20) NOT NULL,
+  pid varchar(128) NOT NULL,
   topic varchar(255) default NULL,
   voters mediumint(8) unsigned default NULL,
   questions int(11) NOT NULL default '0',
