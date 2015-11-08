@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.5.1 (unreleased)
+  - Fixed typo in menu editor template (CMS) that prevented saving menu settings
   - Expand story id, link id, staticpage id, and poll id to 128 characters
   - Removed text shadow from off-canvas menu items
   - Updated story id input to limit sid to 40 characters
