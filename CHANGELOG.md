@@ -1,6 +1,6 @@
 Please view this file on the master branch, on other branches it's out of date.
 
-v1.5.1 (unreleased)
+v1.5.1 (November 8, 2015)
   - Removed custom.css included in Vintage theme
   - Fixed typo in menu editor template (CMS) that prevented saving menu settings
   - Expand story id, link id, staticpage id, and poll id to 128 characters
@@ -20,7 +20,7 @@ v1.5.1 (unreleased)
   - Added floatleft / floatright styles to CMS theme to support proper wrapping on [imageX] tags in stories
   - Fixed error where both username and email were required on the forgot password screen. Now only requires one or the other
 
-v 1.5.0 (October 1, 2015)
+v 1.5.0 (October 31, 2015)
   - Media Gallery: Improved support for MP4 video playback
   - Fixed incorrect password confirmation field name in CMS theme
   - Media Gallery: Fixed incorrect rating value on search page
