@@ -4,18 +4,18 @@
 }
 
 .tm-forum-table th {
-	background: #325482 !important;
-	color: #fff !important;
+	background: #325482;
+	color: #fff;
 }
 .tm-forum-table th a {
-	color: #fff !important;
+	color: #fff;
 }
 
 .tm-forum-footer { /* page footer for forum plugin */
 }
 
 .tm-forum-header { /* the primary header in the category listings */
-  background: #325482 none repeat-x 0 0 !important;
+	background: #325482 none repeat-x 0 0;
 }
 
 /* used by forum to change pointer when hovering bookmark icon */
@@ -24,9 +24,6 @@
 }
 /* end of forum styles */
 
-.tm-forum-header {
-	background: #325482 none repeat-x 0 0;
-}
 .forabg {
 	background: #325482 none repeat-x 0 0;
 	margin-bottom: 12px;
@@ -81,7 +78,7 @@ ul.topiclist dt {
 	width: 50%;
 	padding-left: 5px;
 	padding-right: 5px;
-	font-weight:normal !important;
+	font-weight:normal;
 }
 ul.topiclist dt > span {
 	padding-left: 12px;
@@ -101,7 +98,7 @@ ul.topiclist dfn {
 	padding-top: 14px;
 }
 .topiclist .header dt a {
-	color: #ffffff !important;
+	color: #ffffff;
 	padding-left: 12px;
 }
 .topiclist .header dd {
@@ -222,7 +219,7 @@ dd.extra {
 }
 
 dd.mark {
-	float: right !important;
+	float: right;
 	width: 9%;
 	text-align: center;
 	line-height: 200%;
@@ -249,7 +246,7 @@ dd.option {
 }
 dl.icon {
 	min-height: 35px;
-	height: auto !important;
+	height: auto;
 	height: 35px;
 	margin:0;
 }
@@ -319,7 +316,7 @@ li.header dt, li.header dd {
 	dd.topics, dd.posts,
 	ul.topiclist li.header dd.views,
 	ul.topiclist li.row dd.views {
-		display: none !important;
+		display: none;
 	}
 	ul.topiclist dt {
 		width: 60%;
@@ -334,7 +331,7 @@ li.header dt, li.header dd {
 @media only screen and (max-width: 479px) {
 
 	.topiclist .header dt {
-		padding: 14px 6px !important;
+		padding: 14px 6px;
 		width: 100%;
 		-webkit-box-sizing: border-box;
 		-moz-box-sizing: border-box;
@@ -371,9 +368,11 @@ li.header dt, li.header dd {
 }
 
 .forumtitle {
-	color:#000 !important;font-weight:500;
+	color:#000;
+	font-weight:500;
 }
 
 .forumtitle a:hover {
-	color:#000; text-decoration:underline;
+	color:#000;
+	text-decoration:underline;
 }
