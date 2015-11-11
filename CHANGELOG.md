@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.5.2 (Unreleased)
+  - Added alignleft,alignright,aligncenter styles to CMS theme
   - Removed !important attribute from forum stylesheet in CMS theme
 
 v1.5.1 (November 8, 2015)
