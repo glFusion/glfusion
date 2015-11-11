@@ -1,5 +1,8 @@
 Please view this file on the master branch, on other branches it's out of date.
 
+v1.5.2 (Unreleased)
+  - Removed !important attribute from forum stylesheet in CMS theme
+
 v1.5.1 (November 8, 2015)
   - Removed custom.css included in Vintage theme
   - Fixed typo in menu editor template (CMS) that prevented saving menu settings
