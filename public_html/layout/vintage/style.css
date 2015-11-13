@@ -3205,7 +3205,7 @@ input.error { border: 2px dotted red; }
 
 /* jQuery Overrides */
 .ui-widget {
-    font-family: arial,verdana,tahoma,helvetica,sans-serif;
+	font-family: arial,verdana,tahoma,helvetica,sans-serif;
 	font-size: 1.1em;
 }
 .ui-widget .ui-widget {
@@ -3215,7 +3215,7 @@ input.error { border: 2px dotted red; }
 .ui-widget select,
 .ui-widget textarea,
 .ui-widget button {
-  font-family: arial,verdana,tahoma,helvetica,sans-serif !important;
+	font-family: arial,verdana,tahoma,helvetica,sans-serif !important;
 	font-size: 1em !important;;
 }
 .ui-widget-content {
@@ -3233,5 +3233,5 @@ input.error { border: 2px dotted red; }
 	font-weight: bold !important;
 }
 .ui-widget-header a {
-	color: #ffffff !important;
+	color: #000 !important;
 }

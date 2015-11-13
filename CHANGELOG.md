@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.5.2 (Unreleased)
+  - Fixed colors on configuration tab labels to be more legible
   - Added alignleft,alignright,aligncenter styles to CMS theme
   - Removed !important attribute from forum stylesheet in CMS theme
 
@@ -83,10 +84,10 @@ v 1.5.0 (October 31, 2015)
   - Support for PHP v5.3+ unlimited post size
 
 v 1.4.3 (Nov 9, 2014)
-  - CAPTCHA Plugin - Added mathmatical captcha
+  - CAPTCHA Plugin - Added mathematical captcha
   - Forum - Fixed error where forum ranking did not always display properly.
   - SpamX - Add Allow TOR IP configuration option
-  - CAPTCHA Plugin - Removed PICATCHA since the service is no longer supporting new signups.
+  - CAPTCHA Plugin - Removed PICATCHA since the service is no longer supporting new sign-ups.
   - CAPTCHA Plugin - Added Are You Human game support
   - Media Gallery - Prevent moving images to root album
   - Added new configuration parameter to set minimum username length
@@ -104,7 +105,7 @@ v 1.4.3 (Nov 9, 2014)
 
 v 1.4.2 (Jun 29, 2014)
   - Ensure CKEditor's Media Gallery browser window has scrollbars and is resizable
-  - Improved GD2 image resizing to preserve transparency
+  - Improved GD2 image re-sizing to preserve transparency
   - Fixed issue where Media Gallery would timeout on album admin screens
   - Fixed error in youtube autotag where it would log parse errors
   - Reworked how embedded story images are handled
@@ -141,7 +142,7 @@ v 1.4.0 (Apr 1, 2014)
   - Improved HTML filtering and variable sanitizing capabilities.
   - Fixed security flaw in HTML filter.
   - Removed FCKEditor from code base
-  - Implemented CKEditor as plugin (integrated into glFusion CMS Distirbution)
+  - Implemented CKEditor as plugin (integrated into glFusion CMS Distribution)
   - Developed TinyMCE Editor plugin - available as separate download
   - Implemented plugin API to integrate with WYSIWYG plugins
   - Forum: Several bug fixes for HTML entry
