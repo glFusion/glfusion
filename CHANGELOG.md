@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.5.2 (Unreleased)
+  - Fixed issue that prevented albums from being deleted in CMS theme
   - Fixed colors on configuration tab labels to be more legible
   - Added alignleft,alignright,aligncenter styles to CMS theme
   - Removed !important attribute from forum stylesheet in CMS theme
