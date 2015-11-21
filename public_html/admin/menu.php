@@ -664,10 +664,10 @@ function MB_saveNewMenuElement ( ) {
     $E['pid']               = COM_applyFilter($_POST['pid'],true);
     $E['element_label']     = @htmlspecialchars(strip_tags(COM_checkWords($_POST['menulabel'])));
     $E['element_type']      = COM_applyFilter($_POST['menutype'],true);
-    $E['element_target']    = COM_applyFilter($_POST['urltarget']);
+    $E['element_target']    = isset($_POST['urltarget']) ? COM_applyFilter($_POST['urltarget']) : '';
     $afterElementID         = COM_applyFilter($_POST['menuorder'],true);
     $E['element_active']    = COM_applyFilter($_POST['menuactive'],true);
-    $E['element_url']       = trim(COM_applyFilter($_POST['menuurl']));
+    $E['element_url']       = isset($_POST['menuurl']) ? trim(COM_applyFilter($_POST['menuurl'])) : '';
     $E['group_id']          = COM_applyFilter($_POST['group'],true);
 
     $menu = menu::getInstance($E['menu_id']);
