@@ -367,8 +367,10 @@ class sanitizer
         $config->set('AutoFormat.Linkify',false);
         $config->set('HTML.SafeObject',true);
         $config->set('Output.FlashCompat',true);
+
         if ( $_SYSTEM['debug_html_filter'] == true ) $config->set('Core.CollectErrors',true);
         $purifier = new HTMLPurifier($config);
+
         $clean_html = $purifier->purify($str);
 
         if (  $_SYSTEM['debug_html_filter'] == true  ) {
@@ -376,7 +378,7 @@ class sanitizer
             $errArray = $e->getRaw();
             if (is_array($errArray)) {
                 foreach ($errArray as $error) {
-                    if ( $error[0] == 1 ) {
+                    if ( $error[1] == 1 ) {
                         COM_errorLog("HTMLFILTER: " .  $error[2]);
                     }
                 }
