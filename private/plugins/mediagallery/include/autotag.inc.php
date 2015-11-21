@@ -38,6 +38,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
     if ( $mg_installed_version != $_MG_CONF['pi_version'] ) {
         return $content;
     }
+    $default_thumbnail = 'placeholder.svg';
     if ($op == 'parse') {
         if (!isset($mgAutoTagArray['count']) || empty($mgAutoTagArray['count'])) {
             $mgAutoTagArray['count'] = 0;
