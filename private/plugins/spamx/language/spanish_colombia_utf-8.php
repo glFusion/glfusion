@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File: spanish_colombia_utf-8.php
  * This is the Spanish (Colombia) language file for the glFusion Spam-X plugin
@@ -115,6 +116,7 @@ $LANG_SX00 = array(
     'ipofurlblack' => 'Spam-X IP of URL Blacklist',
     'headerblack' => 'Spam-X HTTP Header Blacklist',
     'headers' => 'Request headers:',
+
     'stats_headline' => 'Spam-X Statistics',
     'stats_page_title' => 'Blacklist',
     'stats_entries' => 'Entries',
@@ -124,13 +126,15 @@ $LANG_SX00 = array(
     'stats_ipofurl' => 'Blocked by IP of URL',
     'stats_header' => 'HTTP headers',
     'stats_deleted' => 'Posts deleted as spam',
+
     'plugin_name' => 'Spam-X',
     'slvwhitelist' => 'SLV Whitelist',
     'instructions' => 'Spam-X allows you to define words, URLs, and other items that can be used to block spam posts on your site.',
-    'invalid_email_or_ip' => 'Invalid e-mail address or IP address has been blocked'
+    'invalid_email_or_ip' => 'Invalid e-mail address or IP address has been blocked',
 );
 
-// Define Messages that are shown when Spam-X module action is taken
+
+/* Define Messages that are shown when Spam-X module action is taken */
 $PLG_spamx_MESSAGE128 = 'Se ha detectado spam y se ha borrado el Comentario o el Mensaje.';
 $PLG_spamx_MESSAGE8 = 'Se ha detectado spam. Se ha enviado un correo al administrador.';
 
@@ -138,10 +142,11 @@ $PLG_spamx_MESSAGE8 = 'Se ha detectado spam. Se ha enviado un correo al administ
 $PLG_spamx_MESSAGE3001 = 'Plugin upgrade not supported.';
 $PLG_spamx_MESSAGE3002 = $LANG32[9];
 
+
 // Localization of the Admin Configuration UI
 $LANG_configsections['spamx'] = array(
     'label' => 'Spam-X',
-    'title' => 'Spam-X Configuration'
+    'title' => 'Configuración Spam-X'
 );
 
 $LANG_confignames['spamx'] = array(
@@ -155,22 +160,21 @@ $LANG_confignames['spamx'] = array(
     'sfs_ip_check' => 'Enable IP address validation',
     'sfs_username_confidence' => 'Minimum confidence level on Username match to trigger spam block',
     'sfs_email_confidence' => 'Minimum confidence level on Email match to trigger spam block',
-    'sfs_ip_confidence' => 'Minimum confidence level on IP address match to trigger spam block'
+    'sfs_ip_confidence' => 'Minimum confidence level on IP address match to trigger spam block',
 );
 
 $LANG_configsubgroups['spamx'] = array(
-    'sg_main' => 'Main Settings'
+    'sg_main' => 'Principal'
 );
 
 $LANG_fs['spamx'] = array(
-    'fs_main' => 'Spam-X Main Settings',
-    'fs_sfs' => 'Stop Forum Spam Settings'
+    'fs_main' => 'General',
+    'fs_sfs' => 'Foro',
 );
 
-// Note: entries 0, 1, 9, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['spamx'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => true, 'False' => false)
+    0 => array('Sí' => 1, 'No' => 0),
+    1 => array('Sí' => true, 'No' => false)
 );
 
 ?>
