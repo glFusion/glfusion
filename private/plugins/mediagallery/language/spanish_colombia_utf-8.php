@@ -33,18 +33,16 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-###############################################################################
-# installation....
 $LANG_MG00 = array(
-    'menulabel' => 'Imagenes',
-    'plugin' => 'Media Gallery',
+    'menulabel' => 'Imágenes',
+    'plugin' => 'Galería de Medios',
     'access_denied' => 'Acceso Denegado',
     'access_denied_msg' => 'You do not have the proper security privilege to access to this page.  Your user name and IP have been recorded.',
-    'admin' => 'Media Gallery Administration',
-    'install_header' => 'Media Gallery Install/Uninstall',
-    'installed' => 'Media Gallery is Installed',
-    'uninstalled' => 'Media Gallery is Not Installed',
-    'install_success' => 'Media Gallery Installation Successful.  <br /><br />Please review the system documentation and also visit the  <a href="%s">administration section</a> to insure your settings correctly match the hosting environment.',
+    'admin' => 'Administración Galería de Medios',
+    'install_header' => 'Instalación/Desinstalación Galería de Medios',
+    'installed' => 'Galería de Medios esta Instalado',
+    'uninstalled' => 'Galería de Medios no esta Instalado',
+    'install_success' => 'Instalación Exitosa de la Galería de Medios.<br /><br />Revisa la documentación del sistema y también visita la <a href="%s">sección de administración</a> para asegurarte que los ajustes del host cumplen correctamente con el ambiente.',
     'install_failed' => 'Installation Failed -- See your error log to find out why.',
     'uninstall_msg' => 'Plugin Successfully Uninstalled',
     'install' => 'Instalar',
@@ -83,7 +81,7 @@ $LANG_MG00 = array(
     'filecheck' => 'FileCheck Utility',
     'filecheck_disclaimer' => 'FileCheck will scan the Media Gallery directories and provide a list of files that exist in the directories that are not included in the Media Gallery distribution.  These files may be old, obsolete files that are no longer needed.  <b>Use Caution</b> and insure these files are not needed by your web server.  <br /><b>YOU SHOULD HAVE A CURRENT BACKUP BEFORE RUNNING THIS UTILITY!</b>',
     'mg_enroll_header' => 'Álbum Enrollment',
-    'whatsnew_title' => 'Media Gallery',
+    'whatsnew_title' => 'Galería de Medios',
     'template_cache' => 'Template Cache Library Installed',
     'env_check' => 'Environment Check',
     'gl_version_error' => 'glFusion version is not v1.4.0 or higher',
@@ -99,11 +97,11 @@ $LANG_MG00 = array(
     'thank_you' => 'Thank you for upgrading to the latest release of Media Gallery. Please double check your System Configuration Options, there are many new features in this release that you may need to configure.',
     'support' => 'For support, questions or enhancement requests, please visit <a href="http://www.gllabs.org">gl Labs</a>.  For the latest documentation, please visist the <a href="http://www.gllabs.org/wiki/doku.php?id=mediagallery16:start">gl Labs Wiki</a>.',
     'success_upgrade' => 'Media Gallery Successfully Upgraded',
-    'instructions' => 'This screen allows you to configure and administer the Media Gallery plugin.'
+    'instructions' => 'Esta pantalla te permite configurar y administrar el módulo de Galería de Medios.',
 );
 
-###############################################################################
-# administration items....
+// administration items....
+
 $LANG_MG01 = array(
     'save' => 'guardar',
     'yes' => 'Sí',
@@ -118,7 +116,7 @@ $LANG_MG01 = array(
     'bottom' => 'Abajo',
     'after_featured_articles' => 'After featured articles',
     'new_album' => 'Nuevo Álbum',
-    'upload_media' => 'Carga de Imagenes',
+    'upload_media' => 'Carga de Imágenes',
     'ftp_media' => 'Transferencia FTP',
     'usage_reports' => 'Reporte de Uso',
     'configuration' => 'Configuración',
@@ -139,7 +137,7 @@ $LANG_MG01 = array(
     'rotate_right' => 'Rotar a la Derecha',
     'edit' => 'Modificar',
     'caption' => 'Comentario',
-    'images' => 'Imagenes',
+    'images' => 'Imágenes',
     'file' => 'Archivo',
     'directory' => 'Directorio:',
     'description' => 'Descripción',
@@ -170,11 +168,11 @@ $LANG_MG01 = array(
     'all_dates' => 'All Dates',
     'select_user' => 'Select User',
     'display_rows_prompt' => 'Filas a Mostrar',
-    'display_rows_help' => 'This parameter sets the number of rows that will be displayed on each page within an album.',
+    'display_rows_help' => 'Numero de filas que serán mostradas en cada pagina dentro un álbum.',
     'album_display_columns_prompt' => 'Álbum Display Colums',
     'album_display_columns_help' => 'This paramaeter sets the number of colums that will be displayed when displaying the album list.',
     'display_columns_prompt' => 'Columnas a Mostrar',
-    'display_columns_help' => 'This parameter sets the number of columns that will be displayed when displaying the media items within an album.',
+    'display_columns_help' => 'Numero de columnas que serán mostradas cuando se muestran medios dentro de un álbum.',
     'loginrequired_prompt' => 'Login Required',
     'loginrequired_help' => 'Set this parameter to Yes to limit the availability of the Media Gallery to only logged in users.',
     'comments_prompt' => 'Permitir Comentarios',
@@ -194,20 +192,23 @@ $LANG_MG01 = array(
     'graphics_options' => 'Graphics Package',
     'usage_tracking' => 'Usage Tracking',
     'title' => 'Título',
+    'order'                     => 'Secuencia',
     'item' => 'Item',
     'select' => 'Seleccionar',
+    'order'                     => 'Secuencia',
     'cover' => 'Portada',
     'time' => 'Hora',
     'user_id' => 'User ID',
-    'application' => 'Application',
+    'application' => 'Aplicación',
     'album_title' => 'Álbum Title',
     'new_report' => 'Nuevo Reporte',
     'media_capture_time' => 'Media Capture Time',
     'media_upload_time' => 'Media Upload Time',
     'parent_album' => 'Álbum Relacionado',
+    'description' => 'Descripción',
     'featured_album' => 'Álbum Destacado',
     'set_featured' => 'Destacar',
-    'featured_help' => 'Cuando se Selecciona, un resumen del album aparecera en le area central de la pagina inicial.',
+    'featured_help' => 'Cuando se Selecciona, un resumen del álbum aparecerá en el área central de la pagina inicial.',
     'position' => 'Posición',
     'topic' => 'Tópico',
     'mod_mediatitle' => 'Media Title',
@@ -222,8 +223,12 @@ $LANG_MG01 = array(
     'options' => 'Opciones',
     'admin' => 'Admin',
     'add_media' => 'Agregar Medios',
+    'ftp_media' => 'FTP Media',
+    'edit_album' => 'Modificar Álbum',
+    'create_album' => 'Crear Álbum',
     'static_sort_media' => 'Ordenar Medios',
     'manage_media' => 'Administrar Medios',
+    'media_queue' => 'Cola de Medios',
     'sort_albums' => 'Ordenar Álbumes',
     'no_caption' => 'Sin comentario',
     'continue' => 'continuar',
@@ -231,12 +236,14 @@ $LANG_MG01 = array(
     'mg_directories' => 'Media Gallery Directories',
     'mg_dir_structure' => 'Media Gallery Directory Structure',
     'ok' => 'OK',
-    'not_found' => 'Not Found',
+    'not_found' => 'No Encontrado',
+    'not_writable' => 'NOT Writable',
     'ascending' => 'Ascendentemente',
     'descending' => 'Descendentemente',
     'static_media_sort' => 'Media Gallery Static Sort Media',
     'sort_options' => 'Sort Options',
     'order_options' => 'Order Options',
+    'all_dates' => 'Todas las Fechas',
     'subalbums' => 'Sub Álbumes',
     'destination_album' => 'Álbum de Destino',
     'move' => 'mover',
@@ -295,8 +302,8 @@ $LANG_MG01 = array(
     'user_prefs' => 'MG User Options',
     'mp3_player' => 'Default MP3 Player',
     'mp3_player_help' => 'Select which MP3 player to use for mp3 playback',
-    'av_play_options_help' => 'Method to play audio / video files',
-    'tn_size_help' => 'Select size of thumbnails in album display',
+    'av_play_options_help' => 'Método para reproducir archivos de audio / vídeo',
+    'tn_size_help' => 'Tamaño de las miniaturas a mostrar en los álbumes',
     'globalattr' => 'Cambiar Opciones Globales',
     'global_attr_editor' => 'Global Álbum Attribute Editor',
     'global_attr_help' => 'This will change the attributes for <b>ALL</b> of your álbumes, use with caution!<br /><br />Select which fields you wish to update by choosing their value and selecting the <b>Update</b> checkbox.',
@@ -313,16 +320,17 @@ $LANG_MG01 = array(
     'batch_caption' => 'Comentar en Bloque',
     'batch_caption_help' => 'Batch Edit the title and descriptions for media in your álbumes',
     'exiftag' => 'EXIF/IPTC Tag',
-    'exif_admin_header' => 'EXIF/IPTC Administration',
+    'exif_admin_header' => 'Administración EXIF/IPTC',
     'exif_admin_help' => 'Select which EXIF/IPTC tags you want to have displayed in photo properties.',
     'enable_sort' => 'Permitir Ordenamiento Local',
     'reset_rating' => 'reset rating',
     'reset_views' => 'reset views',
-    'albums_first' => 'Listar sub-álbumes antes de las imagenes',
+    'albums_first' => 'Listar sub-álbumes antes de las imágenes',
     'days' => 'Días',
     'whatsnew_time' => 'What\'s New Time',
     'gallery_tn_size' => 'Gallery View Thumbnail Size',
     'seperator' => 'Birdseed Seperator',
+    'windows_media_player' => 'Windows Media Player',
     'quicktime' => 'QuickTime Player',
     'inm_import' => 'Inmemoriam',
     'always' => 'Siempre',
@@ -423,6 +431,7 @@ $LANG_MG01 = array(
     'percent_completed' => '%s %% completed',
     'processing_details' => 'Processing Details',
     'processed_items' => 'Items Processed',
+    'status' => 'Estado',
     'total_items' => 'Total Items to Process',
     'items_remaining' => 'Items Remaining',
     'items_last_cycle' => 'Items Last Cycle',
@@ -446,11 +455,12 @@ $LANG_MG01 = array(
     'wn_title_length' => 'What\'s New Title Length',
     'batch_options' => 'Batch Processing Options',
     'refresh_rate' => 'Refresh Rate',
+    'time_limit' => 'Maximum execution time allowed',
     'item_limit' => 'Maximum items per cycle',
     'custom' => 'Custom',
     'system_default_editor' => 'System Defaults Editor',
     'av_default_editor' => 'Audio / Video Defaults',
-    'system_options' => 'System Options',
+    'system_options' => 'Opciones del Sistema',
     'album_default_editor' => 'Álbum Defaults',
     'reports' => 'Reportes',
     'quota_reports' => 'Member Álbum Userlist',
@@ -486,7 +496,7 @@ $LANG_MG01 = array(
     'zero_unlimited' => '0 = Unlimited',
     'user_quota' => 'Your quota is %d Kb and you have used %d Kb with %d Kb remaining<br /><br />',
     'member_album_options' => 'Member Álbum Options',
-    'member_albums' => 'Member Álbumes',
+    'member_albums' => 'Álbumes de Miembros',
     'enable_member_albums' => 'Enable Member Álbumes',
     'default_member_quota' => 'Default Member Quota',
     'auto_create' => 'Auto Create Álbumes',
@@ -496,6 +506,7 @@ $LANG_MG01 = array(
     'rebuild_quota_help' => 'This will scan all the álbumes on the system and rebuild the quota usage for each user.',
     'member_archive' => 'Archive Deleted Member Álbumes',
     'do_not_archive' => 'Delete - Do Not Archive',
+    'root_album' => 'Album Inicial',
     'batch_create_members' => 'Batch Create Member Álbumes',
     'quota_report' => 'Quota Report',
     'username' => 'User Name',
@@ -512,6 +523,7 @@ $LANG_MG01 = array(
     'media_original_filename' => 'Nombre Original',
     'delete_item_confirm' => 'Are you sure you want to delete the selected items?',
     'static_sort_albums' => 'Ordenar Álbumes',
+    'static_sort_media' => 'Static Sort Media',
     'process_subs' => 'Procesar Sub-Álbumes',
     'media_count' => 'Media Count',
     'last_update' => 'Last Update',
@@ -530,6 +542,7 @@ $LANG_MG01 = array(
     'postcard_retention' => 'Days to retain sent PostCards',
     'member_album_postfix' => '\'s Álbum',
     'mass_delete_help' => 'Batch Álbum Delete - USE WITH CAUTION',
+    'rss_options' => 'RSS Feed Options',
     'batch_delete_albums' => 'Batch Delete Álbumes',
     'reset_members' => 'Reset Member Álbum Create Flag',
     'reset_members_details' => 'This will check to see if a Member Álbum exists for all users, if none exists the database will be updated showing no album exists for that user.',
@@ -546,6 +559,8 @@ $LANG_MG01 = array(
     'no_sessions' => 'No active sessions found',
     'media_title' => 'Media Title',
     'seconds_per_item' => '%s segundos por item',
+    'subalbums' => 'Sub Albums',
+    'rss_options' => 'RSS Options',
     'filecheck' => 'FileCheck',
     'reset_defaults' => 'Reset Defaults',
     'reset_defaults_details' => 'Reset ALL System Options, Álbum Defaults and AV Defaults to installation defaults. This will only affect the default settings, it will not affect any existing álbumes.  Use with caution!',
@@ -619,6 +634,7 @@ $LANG_MG01 = array(
     'random_size' => 'Random Image Block Width',
     'flash_slideshow_full' => 'Flash (Orig)',
     'flash_slideshow_disp' => 'Flash (Disp)',
+    'media_attributes' => 'Media Handling Options',
     'orig_jpg_quality' => 'Original JPG Quality',
     'truncate_breadcrumb' => 'Truncate Breadcrumbs',
     'member_use_fullname' => 'Use Fullname for Member Álbum title',
@@ -633,6 +649,7 @@ $LANG_MG01 = array(
     'genre' => 'Genero',
     'tn_height' => 'Custom Thumbnail Height',
     'tn_width' => 'Custom Thumbnail Width',
+    'custom' => 'Personalizado',
     'use_alternate_url' => 'Use Alternate URL',
     'hide_email' => 'Hide Email in RSS Feed',
     'album_theme' => 'Álbum Theme',
@@ -667,6 +684,7 @@ $LANG_MG01 = array(
     'search_rating' => 'Show Rating in Search Results',
     'gallery_only' => 'Media Gallery Replaces glFusion Index Page',
     'all_nhp' => 'All topics (No Homepage)',
+    'lightbox' => 'Lightbox',
     'submissions' => 'Media Gallery Submissions',
     'lightbox_image' => 'Click for full image',
     'queued' => 'Queued for Moderator Approval',
@@ -679,11 +697,11 @@ $LANG_MG01 = array(
     'html5upload_allowed_types' => 'File Types Allowed:',
     'html5upload_file_size_limit' => 'File Size Limit:',
     'html5upload_err_album_id' => 'Unable to determine destination album',
-    'square' => 'Square'
+    'square' => 'Square',
 );
 
-###############################################################################
-# error messages
+// error messages
+
 $LANG_MG02 = array(
     'error_header' => 'Media Gallery Error',
     'generic_error' => 'Media Gallery encountered an error in processing your request. Please try again',
@@ -723,11 +741,11 @@ $LANG_MG02 = array(
     'go_back' => 'Regresar',
     'error' => 'ERROR:',
     'no_format' => 'No format selected',
-    'format_not_allowed' => 'Format not allowed'
+    'format_not_allowed' => 'Format not allowed',
 );
 
-###############################################################################
-# userland items
+// userland items...
+
 $LANG_MG03 = array(
     'featured_album' => 'Álbum Destacado',
     'updated_prompt' => 'Actualizado ',
@@ -799,6 +817,7 @@ $LANG_MG03 = array(
     'keywords' => 'Palabras claves',
     'all_fields' => 'Title, Desc, Keywords',
     'return_results' => 'Return Results',
+    'sort_by' => 'Ordenar Por',
     'search' => 'Buscar',
     'search_for' => 'Search For',
     'search_in' => 'Search In',
@@ -875,6 +894,7 @@ $LANG_MG03 = array(
     'tagline' => 'Gallery powered by <a href="http://www.gllabs.org" target="_new">Media Gallery</a>',
     'xp_pub_url' => 'Descargar: <a href="%s">xppubwiz.reg (Windows XP)</a>',
     'vista_pub_url' => 'Descargar: <a href="%s">xppubwiz.reg (Windows Vista)</a>',
+    'title_desc_keywords'   => 'All media meta data',
     'votes' => 'votos',
     'play_full_album' => 'Play Full Álbum',
     'by' => 'By',
@@ -887,8 +907,10 @@ $LANG_MG03 = array(
     'your_member_album' => 'Your Member Álbum',
     'ip_rated' => 'Your IP address has already rated this item.',
     'uid_rated' => 'Your User ID has already rated this item.',
-    'media_id' => 'Media ID'
+    'media_id' => 'Media ID',
 );
+
+// EXIF labels
 
 $LANG_MG04 = array(
     'exif_header' => 'Photo Properties',
@@ -1058,10 +1080,12 @@ $LANG_MG04 = array(
     'iptc_date_created' => 'IPTC: Date Created',
     'iptc_copyright_flag' => 'IPTC: Copyright Flag',
     'iptc_time_created' => 'IPTC: Time Created',
-    'dots_per_resolution_unit' => ' dots per ResolutionUnit',
-    'sec' => ' sec',
-    'ev' => ' EV',
+    //
+    'dots_per_resolution_unit' => ' dots per ResolutionUnit',  // Xresolution YResolution
+    'sec' => ' sec',                      // Exposure Time
+    'ev' => ' EV',                       // Exposure Bias Value
     'bulb' => 'Bulb',
+    // orientation
     'normal' => 'Normal (0 deg)',
     'mirrored' => 'Mirrored',
     'upsidedown' => 'Upsidedown',
@@ -1070,11 +1094,14 @@ $LANG_MG04 = array(
     'ccw' => '90 deg CCW',
     'ccw_mirrored' => '90 deg CCW Mirrored',
     'cw' => '90 deg CW',
+    // Resolution Unit FocalPlaneResolutionUnit ThumbnailResolutionUnit
     'no_unit' => 'Sin Unidad',
     'inch' => 'Pulgadas',
     'centimeter' => 'Centimetros',
+    //YCbCrPositioning
     'center_of_pixel_array' => 'Center of Pixel Array',
     'datum_point' => 'Datum Point',
+    //Exposure Program
     'manual' => 'Manual',
     'Program' => 'Program',
     'aperature_priority' => 'Aperature Priority',
@@ -1083,6 +1110,7 @@ $LANG_MG04 = array(
     'program_action' => 'Program Action',
     'portrait' => 'Portrait',
     'landscape' => 'Landscape',
+    // Metering Mode
     'unknown' => 'Desconocido',
     'average' => 'Promedio',
     'center_weighted_average' => 'Center Weighted Average',
@@ -1091,10 +1119,12 @@ $LANG_MG04 = array(
     'multi_segment' => 'Multi-Segment',
     'partial' => 'Parcial',
     'other' => 'Otro',
+    // lightsource
     'unknown_or_auto' => 'Desconocido o Automatico',
     'daylight' => 'Daylight',
     'flourescent' => 'Flourescent',
     'tungsten' => 'Tungsten',
+    'flash' => 'Flash',
     'standard_a' => 'Standard Light A',
     'standard_b' => 'Standard Light B',
     'standard_c' => 'Standard Light C',
@@ -1116,8 +1146,11 @@ $LANG_MG04 = array(
     'monochrome' => 'Monochrome',
     'rgb' => 'RGB',
     'ycbcr' => 'YCbCr',
+    // file source
     'digital_still_camera' => 'Digital Still Camera',
+    // scene type
     'directly_photographed' => 'Directly Photographed',
+    // flash
     'flash_00' => 'Flash did not fire',
     'flash_01' => 'Flash Fired',
     'flash_05' => 'Strobe return light not detected',
@@ -1142,6 +1175,8 @@ $LANG_MG04 = array(
     'flash_95' => 'Flash fired, auto mode, return light detected, red-eye reduction mode'
 );
 
+// Slideshow transitions
+
 $LANG_MG05 = array(
     'blend' => 'Blend',
     'blinds' => 'Blinds',
@@ -1160,6 +1195,8 @@ $LANG_MG05 = array(
     'stretch' => 'Stretch',
     'random' => 'Random'
 );
+
+// XP Publishing Wizard
 
 $LANG_MG06 = array(
     'title' => 'Media Gallery Publishing Wizard',
@@ -1232,6 +1269,8 @@ $LANG_MG07 = array(
     'codebase' => 'Codebase',
     'playcount' => 'Playcount',
     'playcount_help' => 'How many times the file should be repeated',
+    'loop' => 'Repetir',
+    'loop_help'  => 'Reproducción continua',
     'wmp_options' => 'Windows Media Player Options',
     'qt_options' => 'QuickTime Player Options',
     'mp3_options' => 'MP3 Playback Options',
@@ -1241,13 +1280,15 @@ $LANG_MG07 = array(
     'resolution_x_help' => 'Video X (Width) Resolution',
     'resolution_y_help' => 'Video Y (Height) Resolution',
     'resolution_x' => 'Video Width',
-    'resolution_y' => 'Video Height'
+    'resolution_y' => 'Video Height',
 );
+
+// installation / upgrade items...
 
 $LANG_MG08 = array(
     'success' => 'Media Gallery Plugin has been successfully installed.',
     'review' => 'Please review the <b>System Options</b> and the <b>System Defaults</b> to complete the installation and configuration.',
-    'support' => 'For Media Gallery Support, please visit the Media Gallery Website at <a href="http://www.mediagallery.org">www.mediagallery.org</a>.<br /><br />Also available at the Media Gallery Support Site is:<ul><li>Documentation Wiki</li><li>Support Forums</li><li>Announcement Mailing List for <b>security</b> and update announcements</li><li>... and much more</li></ul>'
+    'support' => 'For Media Gallery Support, please visit the Media Gallery Website at <a href="http://www.mediagallery.org">www.mediagallery.org</a>.<br /><br />Also available at the Media Gallery Support Site is:<ul><li>Documentation Wiki</li><li>Support Forums</li><li>Announcement Mailing List for <b>security</b> and update announcements</li><li>... and much more</li></ul>',
 );
 
 $LANG_MG09 = array(
@@ -1267,7 +1308,7 @@ $LANG_MG09 = array(
     14 => 'Member Álbum Gallery Flag Has Been Successfully Reset',
     15 => 'Selected Álbums Have Been Successfully Deleted',
     16 => 'User Quotas Have Been Successfully Rebuilt',
-    17 => 'Selected Files Have Been Removed'
+    17 => 'Selected Files Have Been Removed',
 );
 
 $LANG_MG10 = array(
@@ -1293,7 +1334,7 @@ $LANG_MG_AUTOTAG = array(
     'desc_playall' => 'HTML: renders an audio Media player which plays an entire Album. usage: [playall:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#playall" target="_blank">options</a>}]',
     'desc_slideshow' => 'HTML: renders a JS-based image Media slideshow. usage: [slideshow:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#slideshow" target="_blank">options</a>}]',
     'desc_video' => 'HTML: renders an video player for any local or remote video Media. usage:[video:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#video" target="_blank">options</a>}',
-    'desc_download' => 'Link: to a Media item to allow user download.  link_text defaults to the media caption.  usage: [download:<i>media_id</i> {link_text}]'
+    'desc_download' => 'Link: to a Media item to allow user download.  link_text defaults to the media caption.  usage: [download:<i>media_id</i> {link_text}]',
 );
 
 $PLG_mediagallery_MESSAGE1 = 'Media Gallery plugin upgrade: Update completed successfully.';
@@ -1308,5 +1349,4 @@ $PLG_mediagallery_MESSAGE9 = 'There was an error in sending the postcard, please
 $PLG_mediagallery_MESSAGE10 = 'There was an error in replacing your media file, see error.log for details';
 $PLG_mediagallery_MESSAGE520 = 'You have been subscribed to this notification feed.';
 $PLG_mediagallery_MESSAGE521 = 'You have been successfully un-subscribed from the notification feed.';
-
 ?>
