@@ -36,10 +36,6 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
-}
-
 // +---------------------------------------------------------------------------+
 
 $LANG_CHARSET = 'utf-8';
@@ -73,7 +69,7 @@ $LANG_INSTALL = array(
     'dbconfig_not_writable' => 'El archivo db-config.php no tiene definido el permiso de escritura. Por favor asegúrese de que el servidor web tiene permiso de escribir este archivo.',
     'directory_permissions' => 'Permisos de directorio',
     'enabled' => 'Habilitado',
-    'env_check' => 'Verificar ambiente',
+    'env_check' => 'Verificar servidor',
     'error' => 'Error',
     'file_permissions' => 'Permisos de archivos',
     'file_uploads' => 'Varias características de glFusion requieren la habilidad de cargar archivos, esto debe estar encendido.',
@@ -82,7 +78,7 @@ $LANG_INSTALL = array(
     'filesystem_check' => 'Verificar sistema de archivos',
     'forum' => '¿Cargar Extensión Foro?',
     'forum_desc' => 'Un sistema de foro y comunidad en línea. Proporciona colaboración e interactividad de la comunidad.',
-    'hosting_env' => 'Verificar ambiente anfitrión',
+    'hosting_env' => 'Verificar Configuración del Servidor',
     'install' => 'Instalar',
     'install_heading' => 'Instalación de glFusion',
     'install_steps' => 'PASOS DE INSTALACIÓN',
@@ -115,7 +111,7 @@ $LANG_INSTALL = array(
     'path_prompt' => 'Ruta del directorio <i>private/</i> ',
     'path_settings' => 'Configurar rutas',
     'perform_upgrade' => 'Realizar actualización',
-    'php_req_version' => 'glFusion requiere PHP en su versión 5.3.0 o superior.',
+    'php_req_version' => 'glFusion requiere PHP en su versión 5.2.0 o superior.',
     'php_settings' => 'Configuraciones de PHP',
     'php_version' => 'Versión de PHP',
     'php_warning' => 'Si alguno de los objetos listados a continuación, aparece marcado en color <span class="no">rojo</span>, significa que encontrarás problemas con tu sitio glFusion. Verifica con tu proveedor de Alojamiento acerca de cómo cambiar alguna de las configuraciones de PHP.',
@@ -129,9 +125,9 @@ $LANG_INSTALL = array(
     'proceed' => 'Proceder',
     'recommended' => 'Recomendado',
     'register_globals' => 'Si PHP <strong>register_globals</strong> está encendido, puede crear inconvenientes de seguridad.',
-    'safe_mode' => 'Si PHP <strong>safe_mode</strong> está encendido, algunas funcionalidades de glFusion pueden no funcionar correctamente. Especialmente la extensión Galería multimedia .',
+    'safe_mode' => 'Si PHP <strong>safe_mode</strong> está encendido, algunas funcionalidades de glFusion pueden no funcionar correctamente. Especialmente la extensión: Galería Multimedia .',
     'samplecontent_desc' => 'Si está marcado, instalará contenidos de ejemplo como bloques, historias y páginas estáticas. <strong>Esto es recomendado para nuevos usuarios de glFusion.</strong>',
-    'select_task' => 'Seleccione la tarea',
+    'select_task' => 'Selecciona la tarea',
     'session_error' => 'Su sesión ha expirado. Por favor reinicie el proceso de instalación.',
     'setting' => 'Configuración',
     'site_admin_url' => 'URL de Administración del sitio',
@@ -162,8 +158,8 @@ $LANG_INSTALL = array(
     'upgrade_steps' => 'PASOS DE ACTUALIZACIÓN',
     'upload_max_filesize' => 'glFusion le permite cargar extensiones, imágenes y archivos. Deberías permitir al menos 8M para la carga.',
     'use_utf8' => 'Utilizar UTF-8',
-    'welcome_help' => 'Bienvenido al Asistente de instalación del CMS glFusion. Puedes instalar un nuevo sitio glFusion o actualizar un sitio glFusion existente.<br /><br />Por favor selecciona el idioma para el asistente y la tarea a realizar, luego presiona <strong>Siguiente</strong>.',
-    'wizard_version' => 'v1.1.3.svn Asistente de instalación',
+    'welcome_help' => 'Bienvenido al Asistente de instalación del CMS glFusion. Puedes instalar un nuevo sitio glFusion o actualizar un sitio glFusion existente.<br /><br />Por favor selecciona el idioma para el asistente y la tarea a realizar, luego, haz clic sobre el botón: <strong>Siguiente</strong>.',
+    'wizard_version' => 'v'.GVERSION.' Asistente de instalación',
     'system_path_prompt' => 'Ingresa la ruta completa, ruta absoluta de tu servidor al directorio: <strong>private/</strong> de glFusion.<br /><br />Este directorio contiene el archivo: <strong>db-config.php.dist</strong> o <strong>db-config.php</strong>.<br /><br />Ejemplos: /home/www/glfusion/private o c:/www/glfusion/private.<br /><br /><strong>Sugerencia:</strong> La ruta absoluta de tu directorio: <strong>public_html/</strong> <i>(no <strong>private/</strong>)</i> parece ser:<br />%s<br /><br /><strong>Configuraciones avanzadas</strong> Te permite sobre escribir varias de las rutas por defecto. Generalmente no necesitas modificar o definir esas rutas. El sistema las determinará automáticamente.',
     'advanced_settings' => 'Configuraciones Avanzadas',
     'log_path' => 'Ruta de Registros',
@@ -172,10 +168,10 @@ $LANG_INSTALL = array(
     'data_path' => 'Ruta de la información',
     'language_support' => 'Soporte de Idioma',
     'language_pack' => 'glFusion viene en idioma inglés, pero una vez instalado puedes descargar e instalar un <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Paquete de idioma</a> de los múltiples idiomas soportados.',
-    'libcustom_not_found' => 'Unable to located lib-custom.php.dist.',
-    'no_db_driver' => 'You must have the MySQL extension loaded in PHP to install glFusion',
+    'libcustom_not_found' => 'No se pudo localizar lib-custom.php.dist.',
+    'no_db_driver' => 'Debes tener cargada la extensión MySQL en PHP apra instalar glFusion',
     'version_check' => 'Verificar Actualizaciones',
-    'check_for_updates' => 'Goto the Command & Control -Upgrade Check to see if there are any glFusion CMS or Plugin updates available.'
+    'check_for_updates' => 'Goto the Command & Control -Upgrade Check to see if there are any glFusion CMS or Plugin updates available.',
 );
 
 // +---------------------------------------------------------------------------+
@@ -189,9 +185,9 @@ $LANG_SUCCESS = array(
     4 => ' glFusion. Por favor, toma un minuto para leer la información mostrada a continuación.',
     5 => 'Para ingresar en su nuevo sitio glFusion, por favor utilice esta cuenta:',
     6 => 'Nombre de usuario:',
-    7 => 'Admin',
+    7 => 'Admin', // do not translate
     8 => 'Contraseña:',
-    9 => 'password',
+    9 => 'password', // do not translate
     10 => 'Advertencia de seguridad',
     11 => 'No olvide',
     12 => 'cosas',
@@ -205,5 +201,4 @@ $LANG_SUCCESS = array(
     20 => 'instalado',
     21 => 'actualizado'
 );
-
 ?>
