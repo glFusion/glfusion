@@ -31,7 +31,7 @@ if (!defined ('GVERSION')) {
 
 $LANG_CHARSET = 'iso-8859-1';
 
-$LANG_LOCALE  = 'en_US';
+$LANG_LOCALE  = 'en';
 
 ###############################################################################
 # Array Format:

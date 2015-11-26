@@ -88,7 +88,7 @@ function plugin_geticon_ckeditor ()
  */
 function plugin_templatesetvars_ckeditor($ctype, &$template)
 {
-    global $_CONF, $_CK_CONF, $_USER, $_TABLES, $LANG_CK00, $_editorRegistration;
+    global $_CONF, $_CK_CONF, $_USER, $_TABLES, $LANG_CK00, $_editorRegistration, $_SESSION;
 
     $setupEditor = 0;
     $templateFile = 'ckeditor.thtml';
@@ -163,6 +163,41 @@ function plugin_templatesetvars_ckeditor($ctype, &$template)
             if ( $setupEditor == 0 ) return '';
             break;
     }
+
+    $inRoot = SEC_inGroup('Root');
+
+    $urlparts = parse_url($_CONF['site_url']);
+    if ( isset($urlparts['path']) ) {
+        $fileroot = $urlparts['path'];
+        $fileroot = trim($fileroot);
+        if ( $fileroot[strlen($fileroot)-1] != '/' ) {
+            $fileroot = $fileroot.'/';
+        }
+    } else {
+        $fileroot = '';
+    }
+
+    if ( COM_isAnonUser() ) {
+        $uid = 1;
+    } else {
+        $uid = $_USER['uid'];
+    }
+    if ( $inRoot ) {
+        $filePath = $fileroot . 'images/library';
+    } else {
+        $filePath = $fileroot . $_CK_CONF['filemanager_fileroot'];
+        if ( $_CK_CONF['filemanager_per_user_dir'] ) {
+            $filePath = $fileroot . $_CK_CONF['filemanager_fileroot'] . $uid;
+            if ( !is_dir($_CONF['path_html'].$filePath) ) {
+                $rc = @mkdir($_CONF['path_html'].$filePath, 0755, true);
+                if ( $rc === false ) {
+                    $filePath = $fileroot . $_CK_CONF['filemanager_fileroot'];
+                }
+            }
+        }
+    }
+    $_SESSION['fileroot'] = $filePath;
+
     $T = new Template($templatePath);
     $T->set_file('page', $templateFile);
     if ( file_exists($_CONF['path_layout'].'ck_styles.js') ) {

@@ -10,11 +10,10 @@
             toolbar: 'standard',
             allowedContent: true,
             extraPlugins: 'mediagallery,youtube2',
-            {styleset}
-
             contentsCss : [ '{css_url}' ],
-            bodyClass: 'uk-article',
+            bodyClass: 'tm-container',
             height: height,
+            {styleset}
             language: '{iso_lang}'
          } );
 

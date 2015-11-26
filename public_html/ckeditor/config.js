@@ -48,6 +48,6 @@ CKEDITOR.editorConfig = function( config ) {
 	config.extraPlugins = 'youtube2';
 	config.autoParagraph = false;
     // Filemanager integration
-	config.filebrowserBrowseUrl =  site_url + '/ckeditor/plugins/filemanager/index.html?Type=File';
-	config.filebrowserImageBrowseUrl = site_url + '/ckeditor/plugins/filemanager/index.html?Type=Image';
+	config.filebrowserBrowseUrl =  site_url + '/ckeditor/plugins/filemanager/index.php?Type=File';
+	config.filebrowserImageBrowseUrl = site_url + '/ckeditor/plugins/filemanager/index.php?Type=Image';
 };
