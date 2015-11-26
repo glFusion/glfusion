@@ -2,7 +2,7 @@
 // +--------------------------------------------------------------------------+
 // | Site Tailor Plugin - glFusion CMS                                        |
 // +--------------------------------------------------------------------------+
-// | english_colombia_utf-8.php                                               |
+// | spanish_colombia_utf-8.php                                               |
 // |                                                                          |
 // | Spanish (Colombia) language file                                         |
 // +--------------------------------------------------------------------------+
@@ -44,7 +44,7 @@ $LANG_ST00 = array (
     'install_failed'    => 'Installation Failed -- See your error log to find out why.',
     'uninstall_msg'     => 'Plugin Successfully Uninstalled',
     'install'           => 'Instalar',
-    'uninstall'         => 'DesInstalar',
+    'uninstall'         => 'Desinstalar',
     'warning'           => 'Warning! Plugin is still Enabled',
     'enabled'           => 'Disable plugin before uninstalling.',
     'readme'            => 'Site Tailor Plugin Installation',
@@ -107,7 +107,7 @@ $LANG_ST01 = array (
     'parent'            => 'Parent',
     'label'             => 'Menú',
     'elementlabel'      => 'Opción',
-    'display_after'     => 'Mostrar Despues de',
+    'display_after'     => 'Mostrar Después de',
     'type'              => 'Tipo',
     'url'               => 'URL',
     'php'               => 'PHP Function',
@@ -130,7 +130,7 @@ $LANG_ST01 = array (
     'gl_plugin_menu'    => 'Plugin Menu',
     'gl_header_menu'    => 'Header Menu',
     'plugins'           => 'Complemento',
-    'static_pages'      => 'Static Pages',
+    'static_pages'      => 'Paginas',
     'glfusion_function' => 'Acción',
     'cancel'            => 'Cancelar',
     'action'            => 'Acción',

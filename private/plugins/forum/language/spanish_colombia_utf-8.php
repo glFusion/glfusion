@@ -34,6 +34,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
@@ -48,10 +49,10 @@ $LANG_GF00 = array(
     'statsheading1' => 'Los 10 temas más vistos en el Foro',
     'statsheading2' => 'Los 10 temas más respondidos en el Foro',
     'statsheading3' => 'No hay temas para mostrar',
-    'searchresults' => 'Resultados de la bésqueda en el Foro %s',
+    'searchresults' => 'Resultados de la búsqueda en el Foro %s',
     'access_denied' => 'Acceso denegado',
-    'uploaderr' => 'File Upload Error',
-    'instructions' => 'Select the option above to create / modify categories and forum. You can also setup forum moderators, import glFusion stories into the forum and administer the community moderation settings.'
+    'uploaderr' => 'Error al Cargar el Archivo',
+    'instructions' => 'Seleccione las opciones arriba para crear / modificar categorías y foros. Tambien puedes definir los moderadores, importar Noticias dentro de foros y administrar los ajustes de moderación de la comunidad.',
 );
 
 $LANG_GF01 = array(
@@ -131,7 +132,7 @@ $LANG_GF01 = array(
     'HTMLMODE' => 'Modo de HTML:',
     'TopicPreview' => 'Previsualizar Mensaje',
     'moderator' => 'Moderador',
-    'admin' => 'Admin',
+    'admin' => 'Admin',                 /* stopped here */
     'DATEADDED' => 'Fecha de envío',
     'PREVTOPIC' => 'Tema anterior',
     'NEXTTOPIC' => 'Tema siguiente',
@@ -152,7 +153,7 @@ $LANG_GF01 = array(
     'FORUMSUBSCRIBE' => 'Suscribirse a este foro ',
     'FORUMUNSUBSCRIBE' => 'Cancelar la Suscripción a este foro ',
     'NEWTOPIC' => 'Nuevo Tema',
-    'POSTREPLY' => 'Envía Respuesta',
+    'POSTREPLY' => 'Responder',
     'SubscribeLink' => 'Suscribirse',
     'unSubscribeLink' => 'Cancelar Suscripción',
     'SUBSCRIPTIONS' => 'Suscripciones',
@@ -160,7 +161,7 @@ $LANG_GF01 = array(
     'PRINTABLE' => 'Versión para imprimir',
     'ForumProfile' => 'Opciones de Foro',
     'USERPREFS' => 'Preferencias del Usuario',
-    'SPEEDLIMIT' => '"Tu último comentario fue hace %s segundos.<br' . XHTML . '>Este sitio requiere que transcurra al menos %s segundos entre cada envío de comentarios."',
+    'SPEEDLIMIT' => '"Tu última respuesta fue hace %s segundos.<br' . XHTML . '>Este sitio requiere que transcurra al menos %s segundos entre cada envío de respuestas."',
     'ACCESSERROR' => 'ERROR DE ACCESO',
     'LEGEND' => 'Leyenda',
     'ACTIONS' => 'Acciones',
@@ -172,12 +173,12 @@ $LANG_GF01 = array(
     'NOTIFYNOT' => 'NO!',
     'LASTREPLYBY' => 'Última respuesta por:&nbsp;%s',
     'UID' => 'UID',
-    'ANON_POST_BEGIN' => 'Mensaje Anonimo',
+    'ANON_POST_BEGIN' => 'Mensaje Anónimo',
     'ANON_POST_END' => 'visible',
     'INDEXPAGE' => 'Inicio',
     'FEATURE' => 'Característica',
     'SETTING' => 'Opciones',
-    'MARKALLREAD' => 'Marcar Todo como Leido',
+    'MARKALLREAD' => 'Marcar Todo como Leído',
     'PREVIEW_HEADER' => 'Post Preview',
     'BOOKMARKS' => 'Marcadores',
     'LASTX' => 'Último Mensaje',
@@ -195,49 +196,54 @@ $LANG_GF01 = array(
     'DKRED' => 'Rojo Oscuro',
     'RED' => 'Rojo',
     'ORANGE' => 'Naranja',
-    'BROWN' => 'Cafe',
+    'BROWN' => 'Café',
     'YELLOW' => 'Amarillo',
     'GREEN' => 'Verde',
     'OLIVE' => 'Oliva',
     'CYAN' => 'Cyan',
     'BLUE' => 'Azul',
     'DKBLUE' => 'Azul Oscuro',
-    'INDIGO' => 'Indigo',
+    'INDIGO' => 'Índigo',
     'VIOLET' => 'Violeta',
     'WHITE' => 'Blanco',
     'BLACK' => 'Negro',
     'ID' => 'ID',
-    'b_help' => 'Texto en Negrilla: [b]text[/b]',
-    'i_help' => 'Texto Italico: [i]text[/i]',
-    'u_help' => 'Texto Subrayado: [u]text[/u]',
-    'q_help' => 'Comentario: [quote]text[/quote]',
-    'c_help' => 'Código: [code]code[/code]',
-    'l_help' => 'Lista: [list]text[/list]',
-    'o_help' => 'Lista ordenada: [olist]text[/olist]',
-    'p_help' => '[img]http://image_url[/img]  or [img w=100 h=200][/img]',
+    'b_help' => 'Texto en Negrilla: [b]texto[/b]',
+    'i_help' => 'Texto Italico: [i]texto[/i]',
+    'u_help' => 'Texto Subrayado: [u]texto[/u]',
+    'q_help' => 'Cita: [quote]texto[/quote]',
+    'c_help' => 'Código: [code]código[/code]',
+    'l_help' => 'Lista: [list]texto[/list]',
+    'o_help' => 'Lista ordenada: [olist]texto[/olist]',
+    'p_help' => '[img]http://image_url[/img]  o [img w=100 h=200][/img]',
     'w_help' => 'Enlace URL: [url]http://url[/url] or [url=http://url]URL text[/url]',
     'a_help' => 'Cerrar todos los tags bbCode abiertos',
-    's_help' => 'Color de la fuente: [color=red]text[/color]  Tip: you can also use color=#FF0000',
-    'f_help' => 'Tamaño de la fuente: [size=x-small]small text[/size]',
-    'h_help' => 'Click para ver la ayuda mas detallada',
-    't_help' => 'Use [file]#[/file] to embed an attached image in the post',
-    'e_help' => 'List item: [*]text',
+    's_help' => 'Color de la fuente: [color=red]texto[/color]  Tip: you can also use color=#FF0000',
+    'f_help' => 'Tamaño de la fuente: [size=x-small]texto pequeño[/size]',
+    'h_help' => 'Haz clic para ver una ayuda detallada',
+    't_help' => 'Usa [file]#[/file] para incluir una imagen adjunta en la publicación',
+    'e_help' => 'List item: [*]texto',
     'smiley' => 'Smileys',
+
+   /* --- Community moderation tags --- */
     'grade' => '<br /><b>Group Comfort<br />Level:</b>',
     'grade_user' => '<br /><b>Evaluate User</b>',
     'retract_grade' => '<br /><b>Retract Evaluation</b>',
     'rate_too_low' => 'Your rating level is too low for posting to this forum',
     'rate_too_low_forum' => 'Your rating level is not high enough to view this forum',
     'rate_too_low_thread' => 'Your rating level is not high enough to view this thread',
+    /* --- bbcode signature --- */
     'signature' => 'Firma en el Foro',
     'edit_signature' => 'Edit BBcode Signature',
     'signature_preview' => 'Previsualicación',
     'cancel_confirm' => 'Are you sure you want to cancel this post?',
+    /* --- topic features --- */
     'disable_bbcode' => 'Deshabilitar BBCode:',
     'disable_smilies' => 'Deshabilitar Smilies:',
     'disable_urlparse' => 'No analizar URLs:',
     'features' => 'O. Envío:',
-    'rss_link' => 'Subscribe to this forum\'s RSS feed.'
+    /* --- rss feature --- */
+    'rss_link' => 'Subscribe to this forum\'s RSS feed.',
 );
 
 $LANG_GF02 = array(
@@ -302,14 +308,14 @@ $LANG_GF02 = array(
     'msg57' => 'Tema convertido en permanente (Sticky).',
     'msg58' => 'Tema relegado a normal(Un-stuck).',
     'msg59' => 'Tema normal',
-    'msg60' => 'Comentario nuevo',
+    'msg60' => 'Nueva publicación',
     'msg61' => 'Tema permanente',
     'msg62' => 'Notificarme de respuestas',
     'msg63' => 'Ver Perfil',
     'msg64' => 'Estás seguro que deseas borrar el tema %s titulado: %s ?',
     'msg65' => '<br' . XHTML . '>Este tema tiene comentarios adjuntos,por lo que todos ellos también serán borrados.',
-    'msg66' => 'Confirmar borrar el Comentario',
-    'msg67' => 'Modificar Comentario del Foro',
+    'msg66' => 'Confirmar borrar la Publicación',
+    'msg67' => 'Modificar Publicación del Foro',
     'msg68' => 'Nota: Ten cuidado cuando vetas a alguien,sólo los administradores pueden reincorporar a alguien.',
     'msg69' => 'Seguro que quieres vetar la dirección de IP: %s?',
     'msg70' => 'Confirmar vetar',
@@ -345,8 +351,8 @@ $LANG_GF02 = array(
     'msg112' => 'Ver todos los comentarios nuevos',
     'msg113' => 'Ver nuevos comentarios en este foro',
     'msg114' => 'Tema bloqueado',
-    'msg115' => 'Tema Permanente con Comentario Nuevo',
-    'msg116' => 'Tema Cerrado con Nuevo Comentario',
+    'msg115' => 'Tema Permanente con nueva Publicación',
+    'msg116' => 'Tema Cerrado con nueva Publicación',
     'msg117' => 'Buscar todos',
     'msg118' => 'Buscar en este Foro',
     'msg119' => 'Buscar resultados para esta pregunta:',
@@ -415,7 +421,7 @@ $LANG_GF02 = array(
     'msg182' => 'Confirmación de Moderación',
     'msg183' => 'New topic was created from this post in forum: %s',
     'msg184' => 'Notificar solo una vez',
-    'msg185' => 'Las notificaciones solo seran enviadas una vez por foro,así el tema tenga multiples mensajes nuevos desde la ultima visita.',
+    'msg185' => 'Las notificaciones solo serán enviadas una vez por foro,así el tema tenga múltiples mensajes nuevos desde la ultima visita.',
     'msg186' => 'Título del nuevo Tema',
     'msg187' => 'Return to topic - click <a href="%s">here</a>',
     'msg188' => 'Click to go directly to last post',
@@ -423,33 +429,39 @@ $LANG_GF02 = array(
     'msg190' => 'Silent Edit',
     'msg191' => 'Edit not permitted. Allowable edit timeframe expired or you need moderator rights',
     'msg192' => 'Completed ... Migrated %s topics and %s comments.',
-    'msg193' => 'Utiliad de conversión de Noticia a Tema del Foro',
+    'msg193' => 'Utilidad de conversión de Noticia a Tema del Foro',
     'msg194' => 'Foro Reservado',
-    'msg195' => 'Click para Saltar al Foro',
+    'msg195' => 'Clic para Saltar al Foro',
     'msg196' => 'View the main forum index',
-    'msg197' => 'Marcar TODOS los temas como Leidos',
+    'msg197' => 'Marcar TODOS los temas como leídos',
     'msg198' => 'Update your forum settings',
     'msg199' => 'View or remove forum notifications',
     'msg200' => 'Miembros más participativos',
     'msg201' => 'Temas más populares',
-    'msg202' => 'No hay nuevos posts',
-    'msg203' => 'Click para agregar marcador',
-    'msg204' => 'Click para borrar marcador',
+    'msg202' => 'No hay nuevas publicaciones',
+    'msg203' => 'Clic para agregar marcador',
+    'msg204' => 'Clic para borrar marcador',
     'new_posts' => 'Nuevos Mensajes',
     'StatusHeading' => 'Sólo Información',
     'PostReply' => 'Enviar una Respuesta Nueva',
     'PostTopic' => 'Enviar Nuevo Tema',
     'EditTopic' => 'Modificar Tema',
     'quietforum' => 'Forum has no new topics',
-    'notify_full' => 'Include full post in notification',
-    'view_online' => 'If this email doesn\'t display correctly,<a href="%s">view the online version</a>.'
+    'notify_full' => 'Incluir publicación completa en la notificación',
+    'view_online' => 'If this email doesn\'t display correctly,<a href="%s">view the online version</a>.',
+    'invalid_token' => 'Invalid Security Token',
+    'edit_time_passed' => 'The allowed time to edit your post has expired',
+    'not_your_post' => 'You donot appear to be the author of this post.',
+    'spam_detected' => 'Your post has been identified as a spam message',
+    'invalid_email' => 'E-mail vacio o no es una dirección de e-mail',
+    'invalid_name'  => 'Sin nombre o nombre en blanco',
 );
 
 $LANG_GF03 = array(
     'welcomemsg' => 'Bienvenido moderador',
     'title' => 'Funciones de moderador:&nbsp;',
-    'delete' => 'Borrar Comentario',
-    'edit' => 'Modificar Comentario',
+    'delete' => 'Borrar',
+    'edit' => 'Modificar',
     'move' => 'Mover Tema',
     'split' => 'Split Topic',
     'ban' => 'Vetar IP',
@@ -470,7 +482,7 @@ $LANG_GF03 = array(
     'select' => 'Seleccionar',
     'select_forum' => 'Seleccione el Tema del Foro',
     'destination_topic' => 'ID del Mensaje de Destino:',
-    'select_topic' => 'Seleccionar Tema'
+    'select_topic' => 'Seleccionar Tema',
 );
 
 $LANG_GF04 = array(
@@ -499,6 +511,7 @@ $LANG_GF05 = array(
     'yim_alttext' => 'YIM:&nbsp;'
 );
 
+// Admin Navbar
 $LANG_GF06 = array(
     1 => 'Estadísticas',
     2 => 'Configuración',
@@ -509,9 +522,10 @@ $LANG_GF06 = array(
     7 => 'Gestión de IP',
     8 => 'Community Moderation',
     9 => 'Importar',
-    10 => 'Forum Administration'
+    10 => 'Forum Administration',
 );
 
+// User Functions Navbar
 $LANG_GF07 = array(
     1 => 'Ver Foros',
     2 => 'Preferencias',
@@ -520,12 +534,14 @@ $LANG_GF07 = array(
     5 => 'Miembros'
 );
 
+// Forum User Features
 $LANG_GF08 = array(
     1 => 'Notificaciones por Tema',
     2 => 'Notifications por Seguimiento',
     3 => 'Excepciones por Tema'
 );
 
+// Attachment support feature
 $LANG_GF10 = array(
     'attachments' => 'Adjuntos',
     'maxattachments' => 'Max %s pertimitido',
@@ -552,30 +568,38 @@ $LANG_GF91 = array(
     'totalcats' => 'Total de categorías:',
     'totalforums' => 'Total de Foros:',
     'totaltopics' => 'Total de temas:',
-    'totalposts' => 'Total de comentarios:',
+    'totalposts' => 'Total de publicaciones:',
     'totalviews' => 'Total de Visitas:',
-    'avgpmsg' => 'Promedio de comentarios por:',
+    'avgpmsg' => 'Promedio de publicaciones por:',
     'category' => 'Categoría:',
     'forum' => 'Foro:',
     'topic' => 'Tema:',
     'avgvmsg' => 'Promedio de visitas por:'
 );
 
+// Settings.php
 $LANG_GF92 = array(
-    'topicspp' => 'Topics Per Page',
-    'showiframe' => 'Show Topic Review',
+    'topicspp' => 'Temas por Pagina',
+    'showiframe' => 'Mostrar Revisión de Temas',
     'showiframedscp' => 'Show Topic Review (Iframe) at bottom when replying to a topic',
-    'forum_prefs' => 'Forum Preferences',
+    'forum_prefs' => 'Preferencias del Foro',
     'forumprefs_help_title' => 'Forum Prefs Help',
-    'forumprefs_help' => 'Modify the Forum Plugin user preferences.<ul><li>Number of topics to display when viewing the forum index.</li><li>Number of posts to show per page.</li><li>Hide posts from anonymous users.</li><li>Enable auto notifications.</li><li>Only send one notification.</li><li>Show topic review (iframe) at bottom when replying.</li></ul>',
-    'topic_order' => 'Topic Order',
-    'editor_type' => 'Editor Type',
+    'forumprefs_help' => 'Modifica las preferencias de usuario del Módulo de Foro.<ul><li>Numero de temas a mostrar en el índice de foros.</li><li>Numero de publicaciones a mostrar por pagina.</li><li>Ocultar publicaciones de usuarios anónimos.</li><li>Habilitar autonotificaciones.</li><li>Solo enviar una notificación.</li><li>Mostrar revisión del tema (iframe) al final cuando se este respondiendo.</li></ul>',
+    'topicspp_help' => 'Number of topics to display when viewing the forum index.',
+    'postspp_help' => 'Numero de publicaciones a mostrar por pagina.',
+    'anonymous_help' => 'Hide posts from anonymous users.',
+    'notify_help' => 'Enable auto notifications.',
+    'notify_once_help' => 'Only send one notification.',
+    'iframe_help' => 'Show topic review (iframe) at bottom when replying.',
+    'topic_order' => 'Orden de los Temas',
+    'editor_type' => 'Tipo de Editor',
     'bbcode' => 'BBCode',
     'wysiwyg' => 'WYSIWYG',
-    'ascending' => 'Ascending',
-    'descending' => 'Descending',
-    'sb_latestposts' => 'Last Post',
-    'setsavemsg' => 'Settings saved.',
+    'ascending' => 'Ascendente',
+    'descending' => 'Descendente',
+    'sb_latestposts' => 'Último Post',
+    'setsavemsg' => 'Ajustes guardados.',
+    /* not used */
     'gfsettings' => 'Opciones de GeekForum',
     'gensettings' => 'Opciones generales',
     'topicsettings' => 'Opciones de Temas',
@@ -638,7 +662,7 @@ $LANG_GF92 = array(
     'position_top' => 'Arriba de todo',
     'position_feat' => 'Después de presentada la historia',
     'position_bottom' => 'Final de página',
-    'messagespp' => 'Messages per Page',
+    'messagespp' => 'Mensajes por pagina',
     'messagesppdscp' => 'Messages Admin screen - number of messages lines per page',
     'searchespp' => 'Search Results',
     'searchesppdscp' => 'Number of records to show per page when viewing search results',
@@ -674,9 +698,10 @@ $LANG_GF92 = array(
     'geshiformat' => 'Code Formatting',
     'geshiformatdscp' => 'Use the Geshi Code Formatting Feature',
     'edit_timewindow' => 'Edit Timeframe',
-    'edit_timewindowdscp' => 'Allowed time (min) to allow members to edit their posts'
+    'edit_timewindowdscp' => 'Allowed time (min) to allow members to edit their posts',
 );
 
+// Board Admin
 $LANG_GF93 = array(
     'gfboard' => 'Listado de foros',
     'vieworder' => 'Ver orden',
@@ -732,7 +757,13 @@ $LANG_GF93 = array(
     'hiddendscp' => 'El Foro no se mostrará en el indice de foros',
     'hideposts' => 'Ocultar Nuevos mensajes',
     'hidepostsdscp' => 'Los mensajes recientes no se mostraran en el Bloque de Mensajes Recientes o en el RSS',
-    'attachaccess' => 'Permitir adjuntos de:'
+    'attachaccess' => 'Permitir adjuntos de:',
+    'name_blank' => 'El Nombre no puede estar en blanco',
+    'desc_blank' => 'La Descripción no puede estar en blanco',
+    'category_resynced' => 'All forums in the category have been resynced',
+    'forum_resynced' => 'The Forum has been resynced',
+    'forum_options'  => 'Forum Options...',
+    'category_options' => 'Category Options...',
 );
 
 $LANG_GF94 = array(
@@ -821,13 +852,14 @@ $LANG_GF98 = array(
     'user_voting_details' => 'User Voting Details for: ',
     'save_changes' => 'Save Changes',
     'view_rating' => 'View Rating',
-    'post_rating' => 'Post Rating'
+    'post_rating' => 'Post Rating',
 );
 
 $LANG_FF_AUTOTAG = array(
-    'desc_forum' => 'Link: to a Forum post.  link_text defaults to the post topic. usage: [forum:<i>post_id</i> {link_text}]'
+    'desc_forum' => 'Link: to a Forum post.  link_text defaults to the post topic. usage: [forum:<i>post_id</i> {link_text}]',
 );
 
+###############################################################################
 $PLG_forum_MESSAGE1 = 'Forum Plugin Upgrade completed - no errors';
 $PLG_forum_MESSAGE2 = 'Forum Plugin upgrade: We are unable to update this version automatically. Refer to the plugin documentation.';
 $PLG_forum_MESSAGE5 = 'Forum Plugin Upgrade failed - check error.log';
@@ -835,7 +867,7 @@ $PLG_forum_MESSAGE5 = 'Forum Plugin Upgrade failed - check error.log';
 // Localization of the Admin Configuration UI
 $LANG_configsections['forum'] = array(
     'label' => 'Foros',
-    'title' => 'Forum Configuration'
+    'title' => 'Configuración Foros'
 );
 
 $LANG_confignames['forum'] = array(
@@ -851,7 +883,7 @@ $LANG_confignames['forum'] = array(
     'allow_notification' => 'Allow Email Notification?',
     'allow_user_dateformat' => 'Allow user defined Date/Time formats?',
     'show_topicreview' => 'Show Topic Review when replying?',
-    'use_autorefresh' => 'Refresh page after submission?',
+    'use_autorefresh' => '¿Refrescar pagina despues del envío?',
     'autorefresh_delay' => 'Pause delay in seconds',
     'show_subject_length' => 'Max length for the topic subject',
     'show_topics_perpage' => 'Topics to display in Forum index',
@@ -921,26 +953,25 @@ $LANG_confignames['forum'] = array(
     'smilies_disabled' => 'Default Setting for Smilies Disabled Box',
     'urlparse_disabled' => 'Default Setting for URL Parse Disabled Box',
     'use_sfs' => 'Enable Stop Forum Spam Checks for new posts',
-    'allowed_html' => 'Allowed HTML'
+    'allowed_html' => 'Allowed HTML',
 );
 
 $LANG_configsubgroups['forum'] = array(
-    'sg_main' => 'Configuration Settings'
+    'sg_main' => 'Configuración Settings'
 );
 
 $LANG_fs['forum'] = array(
-    'ff_public' => 'General Settings',
-    'ff_topic_post_settings' => 'Topic Posting Settings',
+    'ff_public' => 'General',
+    'ff_topic_post_settings' => 'Temas',
     'ff_centerblock' => 'Centerblock Settings',
     'ff_latest_post_block' => 'Latest Posts Block Settings',
     'ff_rank_settings' => 'Rank Settings',
-    'ff_attachments_settings' => 'Attachment Settings'
+    'ff_attachments_settings' => 'Adjuntos'
 );
 
-// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['forum'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => true, 'False' => false),
+    0 => array('Sí' => 1, 'No' => 0),
+    1 => array('Sí' => true, 'No' => false),
     2 => array('Top of Page' => 1, 'After Featured Story' => 2, 'Bottom of Page' => 3),
     3 => array('No Blocks' => 'noblocks', 'Left Blocks' => 'leftblocks', 'Right Blocks' => 'rightblocks', 'Right / Left Blocks' => 'allblocks'),
     4 => array('Block Menu' => 'blockmenu', 'Nav Bar' => 'navbar', 'None' => 'none'),
