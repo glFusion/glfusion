@@ -80,7 +80,7 @@ if ( $inRoot ) {
     }
 }
 
-$fileRoot = $reRoot . $relPaths[$type];
+$fileRoot = $relRoot . $relPaths[$type];
 $fileRoot = str_replace('\\', '/', $fileRoot);
 
 if ( $inRoot ) {
