@@ -97,7 +97,7 @@ function PAGE_form($A, $error = false)
     }
 
     if ($error) {
-        $retval .= $error . '<br/><br/>';
+        $retval .= $error . '<br><br>';
     } else {
         $sp_template = new Template ($template_path);
         $sp_template->set_file ('form', 'editor.thtml');
@@ -110,6 +110,9 @@ function PAGE_form($A, $error = false)
             $A['commentcode'])
         );
         $ownername = COM_getDisplayName ($A['owner_id']);
+
+        if ( !isset($A['sp_search']) ) $A['sp_search'] = 0;
+        if ( !isset($A['sp_status']) ) $A['sp_status'] = 0;
 
         $sp_template->set_var(array(
             'sp_search_checked' => $A['sp_search'] == 1 ? ' checked="checked"' : '',
