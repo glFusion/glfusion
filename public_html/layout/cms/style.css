@@ -75,6 +75,10 @@ set of styles.
 	text-decoration:none;
 }
 
+.tm-navbar-brand-oc  {
+	max-width:90% !important;
+}
+
 .tm-navbar-brand-oc a { /* off canvas */
 	text-shadow:none;
 	color: #fff;
