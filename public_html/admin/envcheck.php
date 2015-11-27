@@ -92,7 +92,7 @@ function _checkEnvironment()
     } else {
         $T->set_var('status','<span class="yes">'.phpversion().'</span>');
     }
-    $T->set_var('recommended','5.2.0+');
+    $T->set_var('recommended','5.3.0+');
     $T->set_var('notes',$LANG01['php_req_version']);
     $T->set_var('rowclass',($classCounter % 2)+1);
     $T->parse('env','envs',true);
