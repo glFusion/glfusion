@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.5.2 (Unreleased)
+  - Update UIKIT to v2.24.0
   - Update CKEditor plugin FileManager to v2.3.0
   - Updated CKEditor to v4.5.5
   - Fixed E_ALL error on default thumbnail for Media Gallery auto tags
