@@ -1,0 +1,116 @@
+{# begin {templatelocation} #}
+<script type="text/javascript">
+	function formControl(){
+		var myForm = document.forms.remoteupload;
+		var myType = myForm.elements['type[0]'];
+		var myHeight = myForm.elements['height[0]'];
+		var myWidth  = myForm.elements['width[0]'];
+
+		if ( myType.value == "-1" || myType.value == "5" ) {
+			myHeight.disabled = true;
+			myWidth.disabled = true;
+		} else {
+			myHeight.disabled = false;
+			myWidth.disabled = false;
+		}
+	}
+</script>
+<div class="uk-panel uk-panel-box uk-margin-bottom">
+	{lang_remote_help}
+</div>
+<form class="uk-form" method="post" enctype="multipart/form-data" name="remoteupload" action="{s_form_action}">
+	<input type="hidden" name="action" value="{action}">
+	<div class="uk-form-row uk-form-horizontal uk-margin-bottom">
+		<label class="uk-form-label">{lang_destination_album}</label>
+		<div class="uk-form-controls">
+			{album_select}
+		</div>
+	</div>
+
+	<fieldset data-uk-margin>
+
+		<div class="uk-form-row uk-form-horizontal uk-margin">
+			<label class="uk-form-label">{lang_remote_media_type}</label>
+			<div class="uk-form-controls">
+				<select name="type[0]" onchange="formControl()">
+					<option value="5">{lang_embed}</option>
+					<option value="0">{lang_flv_stream}</option>
+{!if enable_remote_images}
+					<option value="4">{lang_jpg}</option>
+					<option value="6">{lang_gif}</option>
+					<option value="7">{lang_png}</option>
+					<option value="8">{lang_bmp}</option>
+{!endif}
+				</select>
+			</div>
+		</div>
+
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label" for="thumbnail">{lang_thumbnail}</label>
+			<div class="uk-form-controls">
+				<input type="file" dir="ltr" name="thumbnail[0]" size="60">
+			</div>
+		</div>
+
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label" for="remoteurl">{lang_remote_url}</label>
+			<div class="uk-form-controls">
+				<textarea style="width:80%;" rows=5 name="remoteurl[0]"></textarea>
+			</div>
+		</div>
+
+		<div class="uk-form-row uk-margin uk-form-horizontal">
+			<label class="uk-form-label" for="width">{lang_width}</label>
+			<div class="uk-form-controls">
+				<input type="text" dir="ltr" name="width[0]" size="3">
+			</div>
+		</div>
+
+		<div class="uk-form-row uk-margin uk-form-horizontal">
+			<label class="uk-form-label" for="width">{lang_height}</label>
+			<div class="uk-form-controls">
+				<input type="text" dir="ltr" name="height[0]" size="3">
+			</div>
+		</div>
+
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label" for="caption">{lang_caption}</label>
+			<div class="uk-form-controls">
+				<input name="caption[0]" style="width:80%;" value="">
+			</div>
+		</div>
+
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label" for="description">{lang_description}</label>
+			<div class="uk-form-controls">
+				<textarea name="description[0]"  style="width:80%;" rows="5"></textarea>
+			</div>
+		</div>
+
+		<div class="uk-form-row uk-margin-bottom">
+			<label class="uk-form-label" for="keywords">{lang_keywords}</label>
+			<div class="uk-form-controls">
+				<input name="keywords[0]" style="width:80%;" value="">
+			</div>
+		</div>
+
+		<div class="uk-form-row uk-form-horizontal">
+			<label class="uk-form-label">{lang_category}</label>
+			<div class="uk-form-controls">
+				{cat_select}
+			</div>
+		</div>
+
+	</fieldset>
+
+	<div class="uk-form-row uk-margin">
+		<button class="uk-button uk-button-success" type=submit name="mode" value="{lang_save}">{lang_save}</button>
+		<button class="uk-button uk-button-danger" type="cancel" name="mode" value="{lang_cancel}">{lang_cancel}</button>
+	</div>
+
+</form>
+
+<script type="text/javascript">
+	formControl();
+</script>
+{# end {templatelocation} #}
