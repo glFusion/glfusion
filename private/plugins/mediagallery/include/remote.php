@@ -213,7 +213,7 @@ function MG_saveRemoteUpload( $albumId ) {
             case 5 :
                 $mimeType = 'embed';
                 $videoFile = 'Embedded Video';
-                if (!preg_match("/embed/i", $URL) && !preg_match("/movie/i",$URL)) {
+                if (!preg_match("/embed/i", $URL) && !preg_match("/movie/i",$URL)  && !preg_match("/video/i",$URL)) {
                     $statusMsg .= sprintf($LANG_MG02['invalid_embed_url'] . '<br>',$i);
                     $errorFound++;
                     $retval = MG_errorHandler( $statusMsg  );
