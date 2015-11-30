@@ -228,6 +228,7 @@ function MG_index() {
 
         for ( $i = $begin; $i < ($begin+$items_per_page ); $i += $_MG_CONF['album_display_columns']) {
             for ($j = $i; $j < ($i + $_MG_CONF['album_display_columns']); $j++) {
+                $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
                 if ($j >= $nrows) {
                     $k = ($i+$_MG_CONF['album_display_columns']) - $j;
                     $m = $k % $_MG_CONF['album_display_columns'];
@@ -281,10 +282,10 @@ function MG_index() {
                         $album_last_update  = MG_getUserDateTimeFormat($MG_albums[$achild[$indexCounter]]->last_update);
 
                         $filename = $MG_albums[$achild[$indexCounter]]->findCover();
+
                         if ( $filename == '' ) {
                             $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
                             $media_size = array(200,200);
-
                         } else {
                             if ( substr($filename,0,3) == 'tn_' ) {
                                 $offset = 3;
@@ -491,7 +492,7 @@ function MG_index() {
 
                 $T->set_var(array(
                     'media_item_thumbnail' => $media_item_thumbnail,
-                    'class'             => $rowcounter % 2,
+                    'class'                => $rowcounter % 2,
                     'table_column_width' => 'width="' . $width . '%"',
                     'album_id'          => $MG_albums[$achild[$indexCounter]]->id,
                     'album_title'       => PLG_replaceTags($MG_albums[$achild[$indexCounter]]->title,'mediagallery','album_title'),
@@ -503,8 +504,6 @@ function MG_index() {
                     'column_width'      => $albumColumnWidth,
                     'column_width2'     => $tn_height + 35 . 'px',
                     'lang_album'        => $LANG_MG00['album'],
-
-
                     'border_width'          => $newwidth + 20,
                     'border_height'         => $newheight + 20,
                     'media_link_start'      => '<a href="' . $_MG_CONF['site_url'] . '/album.php?aid=' . $MG_albums[$achild[$indexCounter]]->id . '&amp;page=1' . '">',
@@ -517,12 +516,6 @@ function MG_index() {
                     'media_tag'             => strip_tags($MG_albums[$achild[$indexCounter]]->title),
                     'frWidth'               =>  $newwidth  - $MG_albums[0]->afrWidth,
                     'frHeight'              =>  $newheight - $MG_albums[0]->afrHeight,
-
-
-
-
-
-
 
                 ));
                 $T->parse('AColumn', 'AlbumColumn',true);
