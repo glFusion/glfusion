@@ -9,7 +9,7 @@ var tbitems = {
 		'editing'       : ['Find', 'Replace', '-',  'Scayt'],
 		'links'         : ['Link', 'Unlink'],
 		'basicstyles'   : ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'],
-		'insert'        : ['Image', 'Mediagallery', 'Youtube2', 'Table', 'HorizontalRule', 'SpecialChar'],
+		'insert'        : ['Image', 'Mediagallery', 'Youtube2', 'Vimeo','Table', 'HorizontalRule', 'SpecialChar'],
 		'paragraph'     : ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight'],
 		'styles'        : ['Styles', 'Format', 'Font', 'FontSize'],
 		'colors'        : ['TextColor', 'BGColor'],
@@ -45,7 +45,7 @@ CKEDITOR.editorConfig = function( config ) {
 	];
 	// Set the most common block elements.
 	config.format_tags = 'p;h1;h2;h3;pre';
-	config.extraPlugins = 'youtube2';
+	config.extraPlugins = 'youtube2,vimeo';
 	config.autoParagraph = false;
     // Filemanager integration
 	config.filebrowserBrowseUrl =  site_url + '/ckeditor/plugins/filemanager/index.php?Type=File';

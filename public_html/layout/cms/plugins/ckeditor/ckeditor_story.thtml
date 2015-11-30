@@ -9,7 +9,7 @@
         var instance = CKEDITOR.replace( id, {
             toolbar: 'standard',
             allowedContent: true,
-            extraPlugins: 'mediagallery,youtube2',
+            extraPlugins: 'mediagallery,youtube2,vimeo',
             contentsCss : [ '{css_url}' ],
             bodyClass: 'tm-container',
             height: height,
