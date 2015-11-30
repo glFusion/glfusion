@@ -1188,6 +1188,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '1.5.1';
 
         case '1.5.1' :
+            $_SQL[] = "REPLACE INTO {$_TABLES['autotags']} (tag, description, is_enabled, is_function, replacement) VALUES ('vimeo', 'Embed Vimeo videos into content. Usage:[vimeo:ID height:PX width:PX align:LEFT/RIGHT pad:PX responsive:0/1]', 1, 1, NULL)";
+            foreach ($_SQL as $sql) {
+                DB_query($sql,1);
+            }
 
             $current_fusion_version = '1.5.2';
 

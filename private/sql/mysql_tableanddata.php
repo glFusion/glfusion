@@ -904,6 +904,7 @@ $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabl
 $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('user', 'Text: expands \$_USER global var, eg. [user:p1] -> value of \$_USER[p1]', 0, 1, NULL)";
 $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('wikipedia', 'Link: to the wikipedia search result for the text specified. usage: [wikipedia:<i>text</i>]', 1, 1, NULL)";
 $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('youtube', 'Embed Youtube videos into content. Usage:[youtube:ID height:PX width:PX align:LEFT/RIGHT pad:PX]', 1, 1, NULL)";
+$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('vimeo', 'Embed Vimeo videos into content. Usage:[vimeo:ID height:PX width:PX align:LEFT/RIGHT pad:PX responsive:0/1]', 1, 1, NULL)";
 $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('uikitlogin', 'UIKIT Login Widget', 1, 1, NULL);";
 
 ?>
