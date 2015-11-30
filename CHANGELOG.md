@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.5.2 (Unreleased)
+  - Media Gallery remote video improvements - responsive support for embedded video and remote url fixes
   - Tweaked style for small device logo text to prevent wrapping
   - Update UIKIT to v2.24.0
   - Update CKEditor plugin FileManager to v2.3.0
