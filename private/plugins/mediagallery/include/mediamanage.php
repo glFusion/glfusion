@@ -182,7 +182,7 @@ function MG_imageAdmin( $album_id, $page, $actionURL = '' ) {
                     }
                     $radio_box ='<input type="radio" name="cover" value="' . $row['media_id'] . '" ' . $album_cover_check . '/>';
                 } else {
-                    $radio_box = '&nbsp;';
+                    $radio_box = '';
                 }
 
                 if ( $row['media_type'] == 0 ) {
@@ -192,7 +192,7 @@ function MG_imageAdmin( $album_id, $page, $actionURL = '' ) {
                         $include_ss = '<input type="checkbox" name="ss[' . $counter . ']" value="1"/>';
                     }
                 } else {
-                    $include_ss = '&nbsp;';
+                    $include_ss = '';
                 }
 
 
@@ -277,10 +277,12 @@ function MG_imageAdmin( $album_id, $page, $actionURL = '' ) {
                     $dHeight = $disp_size[1] + 15;
                     $T->set_var(array(
                         'media_zoom'    =>      "<a href=\"#\" onclick=\"javascript:jkpopimage('" . $display . "'," . $dWidth . ',' . $dHeight . ",''); return false\">",
+                        'media_lightbox' => $display,
                     ));
                 } else {
                     $T->set_var(array(
-                        'media_zoom'    =>      ""
+                        'media_zoom'    =>  '',
+                        'media_lightbox' => '',
                     ));
                 }
 

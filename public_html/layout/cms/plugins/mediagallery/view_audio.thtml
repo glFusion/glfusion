@@ -26,14 +26,14 @@
 </nav>
 
 <div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin-remove">
-    <div class="uk-grid">
+    <div class="uk-grid uk-margin-remove">
         <div class="uk-width-1-1">
             <ul class="uk-breadcrumb">
                 {birdseed_ul}
             </ul>
         </div>
     </div>
-    <div class="uk-grid">
+    <div class="uk-grid uk-margin-remove">
         <div class="uk-width-1-2 uk-vertical-align">
 {!if slide_show}
             <div class="uk-vertical-align-middle">{slide_show}&nbsp;&nbsp;</div>
