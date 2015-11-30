@@ -29,6 +29,33 @@
  * +--------------------------------------------------------------------------+
  */
 
+.js-video {
+  height: 0;
+  padding-top: 25px;
+  padding-bottom: 67.5%;
+  margin-bottom: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.js-video.widescreen {
+  padding-bottom: 56.34%;
+}
+
+.js-video.vimeo {
+  padding-top: 0;
+}
+
+.js-video embed, .js-video iframe, .js-video object, .js-video video {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+
+
 /*
  * mgAdminAlignLeft and mgAdminAlignRight control the alignment
  * of all the admin screens, if you use a RTL language, you may

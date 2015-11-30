@@ -425,12 +425,18 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                     }
                     switch( $row['mime_type'] ) {
                         case 'embed' :
-                            if ( $align != '' && $align != "center") {
-                                $link = '<span style="float:' . $align . ';padding:5px;">' . $row['remote_url'] . '</span>';
-                            } else if ( $align == 'center' ) {
-                                $link = 'span style="text-align:center;padding:5px;">' . $row['remote_url'] . '</span>';
+                            if ( preg_match("/vimeo/i", $row['remote_url']) ) {
+                                $vimeo = 'vimeo, ';
                             } else {
-                                $link = '<span style="padding:5px;">' . $row['remote_url'] . '</span>';
+                                $vimeo = '';
+                            }
+
+                            if ( $align != '' && $align != "center") {
+                                $link = '<div class="js-video ['.$vimeo.'widescreen]"><span style="float:' . $align . ';padding:5px;">' . $row['remote_url'] . '</span></div>';
+                            } else if ( $align == 'center' ) {
+                                $link = '<div class="js-video ['.$vimeo.'widescreen]"><span style="text-align:center;padding:5px;">' . $row['remote_url'] . '</span></div>';
+                            } else {
+                                $link = '<div class="js-video ['.$vimeo.'widescreen]"><span style="padding:5px;">' . $row['remote_url'] . '</span></div>';
                             }
                             if ( $destination != 'block' ) {
                                 $content = str_replace ($autotag['tagstr'], $link, $content);
