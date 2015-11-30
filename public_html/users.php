@@ -1097,7 +1097,7 @@ function _userSetnewpwd()
 
 function _userEmailpassword()
 {
-    global $_CONF, $_TABLES, $_USER, $LANG04;
+    global $_CONF, $_TABLES, $_USER, $LANG04, $LANG12;
 
     $retval = '';
 
