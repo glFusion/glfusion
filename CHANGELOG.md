@@ -1,6 +1,9 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.5.2 (Unreleased)
+  - New Vimeo auto tag
+  - CKEditor - added vimeo embed plugin
+  - Media Gallery - improved header display when viewing media item
   - Media Gallery remote video improvements - responsive support for embedded video and remote url fixes
   - Tweaked style for small device logo text to prevent wrapping
   - Update UIKIT to v2.24.0
