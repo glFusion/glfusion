@@ -152,7 +152,7 @@ function MG_batchDeleteMedia( $album_id, $actionURL = '' ) {
         // -- need to check and see if one of these was an album cover, if so, delete it.
         //
 
-        if ( $_POST['sel'][$i] == $A['album_cover'] ) {
+        if ( $_POST['sel'][$i] == $A['album_cover'] || 'tn_'.$media_filename == $A['album_cover_filename'] ) {
             $sql = "SELECT m.media_filename FROM {$_TABLES['mg_media']} AS m LEFT JOIN {$_TABLES['mg_media_albums']} AS ma ON m.media_id=ma.media_id WHERE ma.album_id=" . $A['album_id'] . " AND m.media_type=0 ORDER BY m.media_upload_time DESC LIMIT 1";
             $result = DB_query($sql);
             $nRows =  DB_numRows($result);
