@@ -1,167 +1,130 @@
-/*
- * +--------------------------------------------------------------------------+
- * | Media Gallery Plugin - glFusion CMS                                      |
- * +--------------------------------------------------------------------------+
- * | style.css                                                                |
- * |                                                                          |
- * | Media Gallery Style Sheet                                                |
- * +--------------------------------------------------------------------------+
- * | Copyright (C) 2002-2015 by the following authors:                        |
- * |                                                                          |
- * | Mark R. Evans          mark AT glfusion DOT org                          |
- * |                                                                          |
- * +--------------------------------------------------------------------------+
- * |                                                                          |
- * | This program is free software; you can redistribute it and/or            |
- * | modify it under the terms of the GNU General Public License              |
- * | as published by the Free Software Foundation; either version 2           |
- * | of the License, or (at your option) any later version.                   |
- * |                                                                          |
- * | This program is distributed in the hope that it will be useful,          |
- * | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
- * | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
- * | GNU General Public License for more details.                             |
- * |                                                                          |
- * | You should have received a copy of the GNU General Public License        |
- * | along with this program; if not, write to the Free Software Foundation,  |
- * | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
- * |                                                                          |
- * +--------------------------------------------------------------------------+
- */
+/*@ glFusion CMS Media Gallery Plugin | https://www.glfusion.org
+(c) 2015 glFusion | GNU GPLv2 License */
 
-.js-video {
-  height: 0;
-  padding-top: 25px;
-  padding-bottom: 67.5%;
-  margin-bottom: 10px;
-  position: relative;
-  overflow: hidden;
+.video-js-responsive-container.vjs-hd {
+	padding-top: 56.25%;
 }
-
-.js-video.widescreen {
-  padding-bottom: 56.34%;
+.video-js-responsive-container.vjs-sd {
+	padding-top: 75%;
 }
-
-.js-video.vimeo {
-  padding-top: 0;
+.video-js-responsive-container {
+	width: 100%;
+	position: relative;
 }
-
-.js-video embed, .js-video iframe, .js-video object, .js-video video {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  position: absolute;
+.video-js-responsive-container .video-js {
+	height: 100% !important;
+	width: 100% !important;
+	position: absolute;
+	top: 0;
+	left: 0;
 }
-
-
 
 /*
- * mgAdminAlignLeft and mgAdminAlignRight control the alignment
- * of all the admin screens, if you use a RTL language, you may
- * want to adjust the mgAdminAlignLeft to actually be right aligned.
- */
+* mgAdminAlignLeft and mgAdminAlignRight control the alignment
+* of all the admin screens, if you use a RTL language, you may
+* want to adjust the mgAdminAlignLeft to actually be right aligned.
+*/
 
 .mgAdminAlignLeft {
-  text-align: left;
-  vertical-align:middle;
+	text-align: left;
+	vertical-align:middle;
 }
 
 .mgAdminAlignRight {
-  text-align: right;
-  vertical-align:middle;
+	text-align: right;
+	vertical-align:middle;
 }
 
 /* Do not change the MI classes, they are used to help
- * control the frames on images
- */
+* control the frames on images
+*/
 
 .mgPluginMI {
-  padding:0 !important;
+	padding:0 !important;
 }
 
 .mgPluginMI tr {
-  vertical-align:top;
+	vertical-align:top;
 }
 .mgPluginMI td {
-  padding:0px !important;
+	padding:0px !important;
 }
 
 .mgPluginMI img {
-  border:none;
+	border:none;
 }
 
 
 /*
- * the following styles add to the existing .plugin styles
- * found in the default themes style.css
- */
+* the following styles add to the existing .plugin styles
+* found in the default themes style.css
+*/
 
 .plugin textarea {
-  font-size: 1em;
+	font-size: 1em;
 }
 .plugin fieldset legend {
-  font-weight:bold;
-  font-size: 1.2em;
-  padding:5px;
+	font-weight:bold;
+	font-size: 1.2em;
+	padding:5px;
 }
 
 /* Media Gallery specific styles */
 
 .mgPluginAdmin ul {
-  list-style-position: outside;
-  margin-left: 0px;
-  padding-left: 15px;
-  list-style: square;
-  vertical-align: middle;
+	list-style-position: outside;
+	margin-left: 0px;
+	padding-left: 15px;
+	list-style: square;
+	vertical-align: middle;
 }
 
 .mgPluginAdmin li {
-  margin: 0px;
-  padding: 0px;
+	margin: 0px;
+	padding: 0px;
 }
 
 /*
- * Standard styles for controlling image drop shadows
- * and default Media Gallery borders.
- */
+* Standard styles for controlling image drop shadows
+* and default Media Gallery borders.
+*/
 
 .out {
-  display:block;
-  background:#bbb;
-  border:1px solid #ddd;
-  position:relative;
-  margin:1em 0;
+	display:block;
+	background:#bbb;
+	border:1px solid #ddd;
+	position:relative;
+	margin:1em 0;
 }
 
 .in2 {
-  display:block;
-  background:#777;
-  border:1px solid #999;
-  position:relative;
-  padding:1px;
-  margin:1px;
+	display:block;
+	background:#777;
+	border:1px solid #999;
+	position:relative;
+	padding:1px;
+	margin:1px;
 }
 
 .in {
-  text-align:center;
-  background:#fff;
-  border:1px solid #555;
-  position:relative;
-  padding:5px;
-  font-weight:normal;
+	text-align:center;
+	background:#fff;
+	border:1px solid #555;
+	position:relative;
+	padding:5px;
+	font-weight:normal;
 }
 
 .ltin {
-  left:-5px;
+	left:-5px;
 }
 
 .tpin {
-  top:-5px;
+	top:-5px;
 }
 
 .rtin {
-  left:5px;
+	left:5px;
 }
 
 
@@ -194,7 +157,7 @@
 	background: url('images/starrating.png') top left repeat-x;
 }
 .mediagallery-rating-unit li{
-    text-indent: -90000px;
+	text-indent: -90000px;
 	padding:0px;
 	margin:0px;
 	/*\*/
@@ -208,7 +171,7 @@
 	height: 30px;
 	text-decoration: none;
 	text-indent: -9000px;
- 	z-index: 20;
+	z-index: 20;
 	position: absolute;
 	padding: 0px;
 }
@@ -257,7 +220,7 @@
 	margin:0px auto;
 }
 .mediagallery-small-rating-unit li{
-    text-indent: -30000px;
+	text-indent: -30000px;
 	padding:0px;
 	margin:0px;
 	/*\*/
@@ -323,69 +286,69 @@
 .gainlayout { min-height: 0; }
 
 .center {
-    margin:auto 0;
-    text-align:center;
+	margin:auto 0;
+	text-align:center;
 }
 
 .image {
-    padding-top:20px;
-    padding-bottom:20px;
+	padding-top:20px;
+	padding-bottom:20px;
 }
 
 .album {
-    padding:10px;
+	padding:10px;
 }
 
 .album input {
-    margin:0;
-    padding:0;
+	margin:0;
+	padding:0;
 }
 
 .album-body {
-    text-align:center;
-    overflow:auto;
-    display:block;
-    margin:auto;
+	text-align:center;
+	overflow:auto;
+	display:block;
+	margin:auto;
 }
 
 .item {
-    text-align:center;
-    margin:auto 0;
-    height:25em;
-    width:20em;
-    float:left;
-    border:none;
-    padding:5px;
+	text-align:center;
+	margin:auto 0;
+	height:25em;
+	width:20em;
+	float:left;
+	border:none;
+	padding:5px;
 }
 
 .item table {
-    margin:auto;
+	margin:auto;
 }
 
 .mg-matrix table {
-    width:100%;
-    border:1px solid black;
-    text-align:center;
+	width:100%;
+	border:1px solid black;
+	text-align:center;
 }
 
 .mediacell {
-    height:15em;
+	height:15em;
 }
 
 .mediacell table {
-    margin:auto;
+	margin:auto;
 }
 
 .item table {
-    margin:auto;
+	margin:auto;
 }
 
 .out {
-    margin:auto;
+	margin:auto;
 }
 
 .clear {
-    clear:both;
+	clear:both;
 }
 
 .album-header {
@@ -393,64 +356,64 @@
 }
 
 .title-line {
-    display:table;
-    width:100%;
-    background:#4D77CC;
-    color:white;
-    padding:5px;
-    overflow:auto;
+	display:table;
+	width:100%;
+	background:#4D77CC;
+	color:white;
+	padding:5px;
+	overflow:auto;
 }
 
 .title-line input {
-    padding:0;
-    margin:0;
+	padding:0;
+	margin:0;
 }
 
 .album-items {
-    display:table;
-    width:100%;
-    margin:auto 0;
-    text-align:center;
+	display:table;
+	width:100%;
+	margin:auto 0;
+	text-align:center;
 }
 
 
 .album-title {
-    font-weight: 700;
-    font-size:1.1em;
+	font-weight: 700;
+	font-size:1.1em;
 }
 
 .album-header .breadcrumb {
-    padding:5px;
-    font-size:1.01em;
+	padding:5px;
+	font-size:1.01em;
 }
 
 .album-header .controls,
 .album-footer .controls {
-    display:table;
-    width:100%;
-    background:#eee;
-    padding:5px;
-    height: 100%;
+	display:table;
+	width:100%;
+	background:#eee;
+	padding:5px;
+	height: 100%;
 }
 
 .controls form {
-display: inline;
+	display: inline;
 }
 
 .album-footer .pages {
-    display:table;
-    width:100%;
-    background:#4D77CC;
-    color:white;
-    padding:5px;
-    text-align:center;
-    font-weight:700;
-    height: 100%;
+	display:table;
+	width:100%;
+	background:#4D77CC;
+	color:white;
+	padding:5px;
+	text-align:center;
+	font-weight:700;
+	height: 100%;
 }
 
 .album-items {
-    margin:0;
-    padding:0;
+	margin:0;
+	padding:0;
 }
 
 /* end of new styles */

@@ -1,15 +1,19 @@
 {# begin {templatelocation} #}
- <link href="http://vjs.zencdn.net/5.0.0/video-js.css" rel="stylesheet">
-  <script src="http://vjs.zencdn.net/ie8/1.1.0/videojs-ie8.min.js"></script>
-  <div style="width:{width}px;margin:0px auto;">
-  <video id="my-video" class="video-js" controls preload="auto" width="{width}" height="{height}"
-  poster="{thumbnail}" data-setup='{"controls" : {controller}, "autoplay": {autoplay},"preload": "auto"}'>
-    <source src="{movie}" type='{mime_type}'>
-    <p class="vjs-no-js">
-      To view this video please enable JavaScript, and consider upgrading to a web browser that
-      <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-    </p>
-  </video>
-  </div>
-  <script src="http://vjs.zencdn.net/5.0.0/video.js"></script>
+<link href="http://vjs.zencdn.net/5.0.0/video-js.css" rel="stylesheet">
+<script src="http://vjs.zencdn.net/ie8/1.1.0/videojs-ie8.min.js"></script>
+<div class="uk-responsive-width uk-responsive-height" style="width:{width}px;margin:0 auto;">
+	<div class="video-js-responsive-container vjs-hd">
+		<video id="my-video" class="video-js vjs-default-skin vjs-playing" controls preload="auto" width="{width}" height="{height}"
+			poster="{thumbnail}" data-setup='{"controls" : {controller}, "autoplay": {autoplay},"preload": "auto"}'>
+			<source src="{movie}" type='{mime_type}'>
+				<p class="vjs-no-js">
+					To view this video please enable JavaScript, and consider upgrading to a web browser that
+					<a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+				</p>
+			</video>
+		</video>
+	</div>
+</div>
+<div class="uk-clearfix"></div>
+<script src="http://vjs.zencdn.net/5.0.0/video.js"></script>
 {# end {templatelocation} #}
