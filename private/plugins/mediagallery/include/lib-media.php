@@ -912,7 +912,7 @@ function MG_displayFLV ( $aid, $I, $full ) {
                 'title'			=> $title,
 	           	'streamingServerURL'	=> $streamingServerURL,
 	           	'videoFile'				=> $videoFile,
-'movie' => $_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'],
+                'movie' => $_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'],
 	           	'playButton'			=> $playButton,
 	           	'streamingServerURLmg'  => $streamingServerURLmg,
 	           	'playButtonMG'			=> $playButtonMG,
