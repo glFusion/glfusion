@@ -82,20 +82,20 @@ function _checkSFS($username, $email, $ip = '')
     $error=$http->SendRequest($arguments);
     if ( $error == "" ) {
         $error=$http->ReadReplyBody($body,1024);
-        if ( $error != "" || strlen($body) == 0 )
-            break;
-        $response = $response . $body;
-        $result = @unserialize($response);
-        if (!$result) return 0;     // invalid data, assume ok
+        if ( $error == "" || strlen($body) > 0 ) {
+            $response = $response . $body;
+            $result = @unserialize($response);
+            if (!$result) return 0;     // invalid data, assume ok
 
-        if ( (isset($result['email']) && $result['email']['appears'] == 1) ) {
-            $rc = $rc + 1;
-        }
-        if ( isset($result['ip']) && $result['ip']['appears'] == 1 )  {
-            $rc = $rc + 2;
-        }
-        if ( isset($result['username']) && $result['username']['appears'] == 1 )  {
-            $rc = $rc + 4;
+            if ( (isset($result['email']) && $result['email']['appears'] == 1) ) {
+                $rc = $rc + 1;
+            }
+            if ( isset($result['ip']) && $result['ip']['appears'] == 1 )  {
+                $rc = $rc + 2;
+            }
+            if ( isset($result['username']) && $result['username']['appears'] == 1 )  {
+                $rc = $rc + 4;
+            }
         }
     }
     return $rc;
