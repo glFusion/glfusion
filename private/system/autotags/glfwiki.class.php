@@ -38,7 +38,7 @@ if (!defined ('GVERSION')) {
 
 class autotag_glfwiki extends BaseAutotag {
 
-    function autotag_glfwiki()
+    function __construct()
     {
         global $_AUTOTAGS;
 

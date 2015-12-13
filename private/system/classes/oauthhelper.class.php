@@ -44,7 +44,7 @@ class OAuthConsumer {
     protected $client = NULL;
     var $error = '';
 
-    public function OAuthConsumer($service) {
+    public function __construct($service) {
         global $_CONF,$_SYSTEM;
 
         if (strpos($service, 'oauth.') === 0) {

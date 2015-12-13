@@ -68,7 +68,7 @@ class EditBlackList extends BaseAdmin {
         }
 
         $token = SEC_createToken();
-        $display = '<hr' . XHTML . '>' . LB . '<p><b>';
+        $display = '<hr>' . LB . '<p><b>';
         $display .= $LANG_SX00['pblack'];
         $display .= '</b></p>' . LB . '<ul>' . LB;
         $result = DB_query("SELECT value FROM {$_TABLES['spamx']} WHERE name = 'Personal'");
@@ -84,15 +84,15 @@ class EditBlackList extends BaseAdmin {
         $display .= '<p>' . $LANG_SX00['e2'] . '</p>' . LB;
         $display .= '<form method="post" action="' . $_CONF['site_admin_url']
                  . '/plugins/spamx/index.php?command=EditBlackList">' . LB;
-        $display .= '<div><input type="text" size="30" name="pentry"' . XHTML
+        $display .= '<div><input type="text" size="30" name="pentry"'
                  . '>&nbsp;&nbsp;&nbsp;';
         $display .= '<input type="submit" name="paction" value="'
-                 . $LANG_SX00['addentry'] . '"' . XHTML . '>' . LB;
+                 . $LANG_SX00['addentry'] . '">' . LB;
         $display .= '<p>' . $LANG_SX00['e3'] . '</p>&nbsp;&nbsp;&nbsp;';
         $display .= '<input type="submit" name="paction" value="'
-                 . $LANG_SX00['addcen'] . '"' . XHTML . '>' . LB;
+                 . $LANG_SX00['addcen'] . '">' . LB;
         $display .= '<input type="hidden" name="' . CSRF_TOKEN
-                 . "\" value=\"{$token}\"" . XHTML . '>' . LB;
+                 . "\" value=\"{$token}\">" . LB;
         $display .= '</div></form>' . LB;
 
         return $display;

@@ -33,14 +33,14 @@ if (!defined ('GVERSION')) {
 
 class autotag_vimeo extends BaseAutotag {
 
-    function autotag_vimeo()
+    public function __construct()
     {
         global $_AUTOTAGS;
 
         $this->description = $_AUTOTAGS['vimeo']['description'];
     }
 
-    function parse($p1, $p2='', $fulltag)
+    public function parse($p1, $p2='', $fulltag)
     {
         global $_CONF;
 

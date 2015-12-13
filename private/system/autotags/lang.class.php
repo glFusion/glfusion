@@ -38,7 +38,7 @@ if (!defined ('GVERSION')) {
 
 class autotag_lang extends BaseAutotag {
 
-    function autotag_lang()
+    function __construct()
     {
         global $_AUTOTAGS;
 

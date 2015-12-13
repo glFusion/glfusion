@@ -38,14 +38,14 @@ if (!defined ('GVERSION')) {
 
 class autotag_wikipedia extends BaseAutotag {
 
-    function autotag_wikipedia()
+    public function __construct()
     {
         global $_AUTOTAGS;
 
         $this->description = $_AUTOTAGS['wikipedia']['description'];
     }
 
-    function parse($p1, $p2, $fulltag)
+    public function parse($p1, $p2, $fulltag)
     {
         global $_CONF;
 

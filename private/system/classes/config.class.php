@@ -66,7 +66,7 @@ class config {
         return $instance;
     }
 
-    function config()
+    public function __construct()
     {
         $this->config_array = array();
     }

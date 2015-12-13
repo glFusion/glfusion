@@ -114,7 +114,7 @@ class mgAlbum {
     var $skin;
     var $rssChildren;
 
-    function mgAlbum () {
+    function __construct () {
         global $_MG_CONF;
 
         $this->children             = array();

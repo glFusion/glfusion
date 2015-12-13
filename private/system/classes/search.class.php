@@ -74,7 +74,7 @@ class Search {
      * @access public
      *
      */
-    function Search()
+    function __construct()
     {
         global $_CONF, $_TABLES;
 

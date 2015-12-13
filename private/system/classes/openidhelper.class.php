@@ -57,7 +57,7 @@ class SimpleConsumer extends OpenIDConsumer {
 
 class SimpleActionHandler extends ActionHandler {
 
-    function SimpleActionHandler($query, $consumer)
+    function __construct($query, $consumer)
     {
         $this->query = $query;
         $this->consumer = $consumer;

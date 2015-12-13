@@ -236,7 +236,7 @@ class Template
     * @access    public
     * @return    void
     */
-    function Template($root = array(), $unknowns = "remove")
+    function __construct($root = array(), $unknowns = "remove")
     {
         global $_CONF, $TEMPLATE_OPTIONS;
 

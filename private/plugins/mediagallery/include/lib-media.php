@@ -490,6 +490,7 @@ function MG_displayMP4( $aid, $I, $full ) {
                 'site_url'      => $_MG_CONF['site_url'],
                 'autoref'       => ($playback_options['autoref'] ? 'true' : 'false'),
                 'autoplay'      => ($playback_options['autoplay'] ? 'true' : 'false'),
+                'autoplay_text' => ($playback_options['autoplay'] ? ' autoplay ' : ''),
                 'controller'    => ($playback_options['controller'] ? 'true' : 'false'),
                 'kioskmode'     => ($playback_options['kioskmode'] ? 'true' : 'false'),
                 'loop'          => ($playback_options['loop'] ? 'true' : 'false'),
@@ -502,6 +503,7 @@ function MG_displayMP4( $aid, $I, $full ) {
                 'lang_noquicktime' => $LANG_MG03['no_quicktime'],
                 'thumbnail'     => $u_image,
                 'mime_type'     => $I['mime_type'],
+                'player_url'    => $_CONF['site_url'].'/javascript/addons/mediaplayer/',
             ));
             $V->parse('output','video');
             $u_image = $V->finish($V->get_var('output'));
@@ -910,6 +912,7 @@ function MG_displayFLV ( $aid, $I, $full ) {
                 'title'			=> $title,
 	           	'streamingServerURL'	=> $streamingServerURL,
 	           	'videoFile'				=> $videoFile,
+'movie' => $_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'],
 	           	'playButton'			=> $playButton,
 	           	'streamingServerURLmg'  => $streamingServerURLmg,
 	           	'playButtonMG'			=> $playButtonMG,
@@ -1595,10 +1598,9 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
     	case '1' :		// video
     	case '5' : 		// embedded video
             $meta_file_name = 	$_MG_CONF['path_mediaobjects'] . 'orig/' . $media[$mediaObject]['media_filename'][0] . '/' . $media[$mediaObject]['media_filename'] . '.' . $media[$mediaObject]['media_mime_ext'];
-            COM_errorLog("DEBUG: Video File: " . $meta_file_name);
             $meta = IMG_getMediaMetaData($_MG_CONF['path_mediaobjects'] . 'orig/' . $media[$mediaObject]['media_filename'][0] . '/' . $media[$mediaObject]['media_filename'] . '.' . $media[$mediaObject]['media_mime_ext']);
-            COM_errorLog("DEBUG: Video Meta Type: " . $meta['mime_type']);
-            if ( $meta['mime_type'] == 'video/quicktime' ) {
+
+            if ( $meta['mime_type'] == 'video/quicktime' || $meta['mime_type'] == 'video/mp4') {
                 if ( $meta['fileformat'] == 'mp4' ) {
                     $media[$mediaObject]['mime_type'] = 'video/mp4';
                 }

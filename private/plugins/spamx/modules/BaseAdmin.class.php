@@ -2,8 +2,8 @@
 
 /**
  * Abstract class for Admin Duties for Spam comments
- * 
- * @author Tom Willett	tomw AT pigstye DOT net 
+ *
+ * @author Tom Willett	tomw AT pigstye DOT net
  *
  * @package Spam-X
  * @subpackage Modules
@@ -13,28 +13,28 @@
 
 class BaseAdmin {
     /**
-     * 
-     * @access private 
+     *
+     * @access private
      */
 
     /**
      * Constructor
-     * 
-     * @access public 
+     *
+     * @access public
      */
-    function BaseAdmin()
+    function __construct()
     {
-    } 
+    }
 
     function display()
     {
         return '';
-    } 
+    }
 
     function link()
     {
         return '';
-    } 
-} 
+    }
+}
 
 ?>

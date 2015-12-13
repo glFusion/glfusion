@@ -14,14 +14,14 @@ if (!defined ('GVERSION')) {
 
 class autotag_uikitlogin extends BaseAutotag {
 
-    function autotag_uikitlogin()
+    public function __construct()
     {
         global $_AUTOTAGS;
 
         $this->description = $_AUTOTAGS['uikitlogin']['description'];
     }
 
-    function parse($p1, $p2='', $fulltag)
+    public function parse($p1, $p2='', $fulltag)
     {
         global $_CONF, $LANG01, $LANG04;
 

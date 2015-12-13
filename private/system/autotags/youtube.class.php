@@ -33,14 +33,14 @@ if (!defined ('GVERSION')) {
 
 class autotag_youtube extends BaseAutotag {
 
-    function autotag_youtube()
+    public function __construct()
     {
         global $_AUTOTAGS;
 
         $this->description = $_AUTOTAGS['youtube']['description'];
     }
 
-    function parse($p1, $p2='', $fulltag)
+    public function parse($p1, $p2='', $fulltag)
     {
         global $_CONF;
 

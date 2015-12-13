@@ -34,7 +34,7 @@ class DeleteComment extends BaseCommand {
      * Constructor
      * Numbers are always binary digits and added together to make call
      */
-    function DeleteComment()
+    function __construct()
     {
         global $num;
 

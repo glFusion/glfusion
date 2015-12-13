@@ -78,7 +78,7 @@ class Plugin {
     * This initializes the plugin
     *
     */
-    function Plugin()
+    function __construct()
     {
         $this->reset();
     }

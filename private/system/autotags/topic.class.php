@@ -38,7 +38,7 @@ if (!defined ('GVERSION')) {
 
 class autotag_topic extends BaseAutotag {
 
-    function autotag_topic()
+    function __construct()
     {
         global $_AUTOTAGS;
 

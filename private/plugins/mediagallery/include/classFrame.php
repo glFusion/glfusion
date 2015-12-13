@@ -42,7 +42,7 @@ class mgFrame {
     var $frame;
     var $_valid;
 
-    function mgFrame( ) {
+    function __construct( ) {
         $this->frame = array();
     }
 

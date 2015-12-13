@@ -366,7 +366,7 @@ class Story
      * Constructor, creates a story, taking a (glFusion) database object.
      * @param $mode   string    Story class mode, either 'admin' or 'submission'
      */
-    function Story($mode = 'admin')
+    function __construct($mode = 'admin')
     {
         $this->mode = $mode;
     }

@@ -34,7 +34,7 @@ class SFSbase {
     /**
     * Constructor
     */
-    function SFSbase()
+    function __construct()
     {
         $this->_debug = false;
         $this->_verbose = false;

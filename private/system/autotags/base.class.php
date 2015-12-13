@@ -49,12 +49,12 @@ class BaseAutotag {
      *
      * @access public
      */
-    function BaseAutotag()
+    public function __construct()
     {
         return;
     }
 
-    function parse($p1, $p2, $fulltag)
+    public function parse($p1, $p2, $fulltag)
     {
         return '';
     }

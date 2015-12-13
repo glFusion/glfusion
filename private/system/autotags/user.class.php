@@ -38,7 +38,7 @@ if (!defined ('GVERSION')) {
 
 class autotag_user extends BaseAutotag {
 
-    function autotag_user()
+    function __construct()
     {
         global $_AUTOTAGS;
 

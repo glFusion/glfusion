@@ -52,7 +52,7 @@ class XoopsTree{
 
     //constructor of class XoopsTree
     //sets the names of table, unique id, and parend id
-    function XoopsTree($db_name,$table_name, $id_name, $pid_name){
+    function __construct($db_name,$table_name, $id_name, $pid_name){
         $this->db = $db_name;
         $this->table = $table_name;
         $this->id = $id_name;

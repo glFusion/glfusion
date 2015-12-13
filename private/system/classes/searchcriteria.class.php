@@ -45,7 +45,7 @@ class SearchCriteria {
     var $_type;
     var $_num_results = 0;
 
-    function SearchCriteria($pluginName, $pluginLabel,$type='sql')
+    function __construct($pluginName, $pluginLabel,$type='sql')
     {
         $this->_pluginName = $pluginName;
         $this->_pluginLabel = $pluginLabel;

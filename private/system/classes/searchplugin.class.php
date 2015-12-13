@@ -48,7 +48,7 @@ class SearchPlugin {
     var $_rank;
     var $_url_rewite;
 
-    function SearchPlugin($pluginLabel, $pluginName, $rank = 3, $url_rewite = false)
+    function __construct($pluginLabel, $pluginName, $rank = 3, $url_rewite = false)
     {
         $this->_pluginName = $pluginName;
         $this->_pluginLabel = $pluginLabel;

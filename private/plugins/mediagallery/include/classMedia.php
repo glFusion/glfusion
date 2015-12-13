@@ -62,7 +62,7 @@ class Media {
     var $remote_url;
     var $access;
 
-    function Media () {
+    function __construct () {
     }
 
     function constructor( $M, $aid ) {
@@ -410,6 +410,9 @@ class Media {
             }
             $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
             $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
+        	$tn_height = $MG_albums[$this->album_id]->tnHeight;
+        	$tn_width  = $MG_albums[$this->album_id]->tnWidth;
+
             $media_size           = array($tn_width,$tn_height); //@getimagesize($media_thumbnail_file);
         }
 

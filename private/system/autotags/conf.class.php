@@ -38,7 +38,7 @@ if (!defined ('GVERSION')) {
 
 class autotag_conf extends BaseAutotag {
 
-    function autotag_conf()
+    function __construct()
     {
         global $_AUTOTAGS;
 

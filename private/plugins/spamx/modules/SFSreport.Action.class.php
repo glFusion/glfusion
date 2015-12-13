@@ -35,7 +35,7 @@ class SFSreport extends BaseCommand {
     /**
      * Constructor
      */
-    function SFSreport()
+    function __construct()
     {
         global $num;
 

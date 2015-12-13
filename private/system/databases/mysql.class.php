@@ -169,7 +169,7 @@ class database {
     * @param        string      $charset    character set to use
     *
     */
-    function database($dbhost,$dbname,$dbuser,$dbpass,$errorlogfn='',$charset='')
+    function __construct($dbhost,$dbname,$dbuser,$dbpass,$errorlogfn='',$charset='')
     {
         $this->_host = $dbhost;
         $this->_name = $dbname;

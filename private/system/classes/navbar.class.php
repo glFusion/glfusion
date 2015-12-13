@@ -111,7 +111,7 @@ class navbar  {
     * Constructor
     *
     */
-    function navbar()
+    function __construct()
     {
     }
 

@@ -1028,7 +1028,6 @@ function _userGetpassword()
         $retval .= getpasswordform ();
     }
     return $retval;
-    break;
 }
 
 function _userNewpwd()
@@ -1092,7 +1091,6 @@ function _userSetnewpwd()
             echo COM_refresh ($_CONF['site_url']);
         }
     }
-    break;
 }
 
 function _userEmailpassword()

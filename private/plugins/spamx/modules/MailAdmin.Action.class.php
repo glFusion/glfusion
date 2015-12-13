@@ -34,7 +34,7 @@ class MailAdmin extends BaseCommand {
     /**
      * Constructor
      */
-    function MailAdmin()
+    function __construct()
     {
         global $num;
 

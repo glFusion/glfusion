@@ -179,7 +179,7 @@ class menuElement {
     var $children;          // this elements child elements
     var $hidden;            // hidden menu
 
-    function menuElement () {
+    function __construct () {
         $this->children         = array();
         $this->id               = 0;
         $this->menu_id          = 0;

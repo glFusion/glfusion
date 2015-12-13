@@ -63,7 +63,7 @@ class url {
     * @param        boolean     $enabled    whether rewriting is enabled
     *
     */
-    function url($enabled=true)
+    function __construct($enabled=true)
     {
         $this->setEnabled($enabled);
         $this->_arguments = array();

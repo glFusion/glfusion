@@ -49,7 +49,7 @@ class MyTextSanitizer {
     * <br> should not be allowed since nl2br will be used
     * when storing data
     */
-    function MyTextSanitizer(){
+    function __construct(){
     }
 
     public static function getInstance(){

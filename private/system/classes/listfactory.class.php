@@ -160,7 +160,7 @@ class ListFactory {
      * @param integer $per_page The default number or rows per page
      *
      */
-    function ListFactory($url, $limits = '10,15,20,25,30,35', $per_page = 20)
+    function __construct($url, $limits = '10,15,20,25,30,35', $per_page = 20)
     {
         $url .= (strpos($url,'?') === false ? '?' : '&amp;');
         $this->_page_url = $url;

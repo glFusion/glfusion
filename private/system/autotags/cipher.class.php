@@ -38,7 +38,7 @@ if (!defined ('GVERSION')) {
 
 class autotag_cipher extends BaseAutotag {
 
-    function autotag_cipher()
+    function __construct()
     {
         global $_AUTOTAGS;
 
