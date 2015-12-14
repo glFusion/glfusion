@@ -540,12 +540,14 @@ function MG_displayMP4( $aid, $I, $full ) {
                     }
                 }
             } else {
-if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
-    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
-} else {
-    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
-}
-
+/* ---
+                if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
+                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                } else {
+                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                }
+ --- */
+                $u_image = '';
 //                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_quicktime.svg';
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
@@ -1323,17 +1325,23 @@ function MG_displayTGA($aid,$I,$full,$mediaObject) {
 
     $media_size_disp = @getimagesize($_MG_CONF['path_mediaobjects'] . 'disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.jpg');
 
-    if ( $MG_albums[$aid]->full == 2 || $_MG_CONF['discard_original'] == 1 || ( $MG_albums[$aid]->full == 1 && !COM_isAnonUser() )) {
-        $u_pic = '#';
+    if ( $media_size_disp == false ) {
+        $u_image = $_MG_CONF['mediaobjects_url'] . '/placeholder_missing.svg';
+        $media_size_disp[0] = 200;
+        $media_size_disp[1] = 200;
         $media_link_start = '';
+        $u_pic = '#';
     } else {
-        $media_link_start =
-        $media_link_start = '<a href="' . $_MG_CONF['site_url'] . '/download.php?mid=' . $I['media_id'] . '">';
-        $media_link_end = '</a>';
-        $u_pic      = $_MG_CONF['site_url'] . '/download.php?mid=' . $I['media_id'] . '"';
+        if ( $MG_albums[$aid]->full == 2 || $_MG_CONF['discard_original'] == 1 || ( $MG_albums[$aid]->full == 1 && !COM_isAnonUser() )) {
+            $u_pic = '#';
+            $media_link_start = '';
+        } else {
+            $media_link_start = '<a href="' . $_MG_CONF['site_url'] . '/download.php?mid=' . $I['media_id'] . '">';
+            $media_link_end = '</a>';
+            $u_pic      = $_MG_CONF['site_url'] . '/download.php?mid=' . $I['media_id'] . '"';
+        }
+        $u_image    = $_MG_CONF['mediaobjects_url'] . '/disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.jpg';
     }
-    $u_image    = $_MG_CONF['mediaobjects_url'] . '/disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.jpg';
-
     $imageWidth  = $media_size_disp[0];
     $imageHeight = $media_size_disp[1];
 
