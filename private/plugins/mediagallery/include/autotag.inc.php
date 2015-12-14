@@ -374,8 +374,16 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                         $content = str_replace ($autotag['tagstr'], $link, $content);
                         return $content;
                     }
+                    $meta_file_name = 	$_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'];
+                    $meta = IMG_getMediaMetaData($meta_file_name);
+
+                    if ( $meta['mime_type'] == 'video/quicktime' || $meta['mime_type'] == 'video/mp4') {
+                        if ( $meta['fileformat'] == 'mp4' ) {
+                            $row['mime_type'] = 'video/mp4';
+                        }
+                    }
                     // determine height / width and aspect
-                    if ( $width === 'auto' && $row['media_resolution_x'] > 0 && $row['media_resolution_y'] > 0 ) {
+                    if ( ($width == 'auto' || $width == 0 ) && $row['media_resolution_x'] > 0 && $row['media_resolution_y'] > 0 ) {
                         $videoheight = $row['media_resolution_y'];
                         $videowidth  = $row['media_resolution_x'];
                     } else {
@@ -493,6 +501,63 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                                 $u_image = '<span style="padding:5px;">' . $V->finish($V->get_var('output')) . '</span>';
                             }
                             break;
+
+                        case 'video/mp4' :
+                            if ( $row['media_tn_attached'] == 1 ) {
+                                $foundTN = 0;
+                                foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                                    if ( file_exists($_MG_CONF['path_mediaobjects'] . '/orig/' . $row['media_filename'][0] . '/tn_' . $row['media_filename'] . $ext) ) {
+                                        $thumb = $_MG_CONF['mediaobjects_url'] . '/orig/' . $row['media_filename'][0] . '/tn_' . $row['media_filename'] . $ext;
+                                        $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . '/orig/' . $row['media_filename'][0] . '/tn_' . $row['media_filename'] . $ext);
+                                        $foundTN = 1;
+                                        break;
+                                    }
+                                }
+                                if ( $foundTN == 0 ) {
+                                    foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                                        if ( file_exists($_MG_CONF['path_mediaobjects'] . '/tn/' . $row['media_filename'][0] . '/tn_' . $row['media_filename'] . $ext) ) {
+                                            $thumb = $_MG_CONF['mediaobjects_url'] . '/tn/' . $row['media_filename'][0] . '/tn_' . $row['media_filename'] . $ext;
+                                            $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . '/tn/' . $row['media_filename'][0] . '/tn_' . $row['media_filename'] . $ext);
+                                            break;
+                                        }
+                                    }
+                                }
+                            } else {
+                                $thumb = '';//$_MG_CONF['mediaobjects_url'] . '/video-placeholder.png';
+//                                $thumb = $_MG_CONF['mediaobjects_url'].'/placeholder_video_w.svg';
+                            }
+
+                            $V = new Template( MG_getTemplatePath(0) );
+                            $V->set_file (array ('video' => 'view_mp4.thtml'));
+                            $V->set_var(array(
+                                'mime_type'     => 'video/mp4',
+                                'autoref'       => 'true',
+                                'autoplay'      => $autoplay ? 'true' : 'false',
+                                'autoplay_text' => $autoplay ? ' autoplay ' : '',
+                                'controller'    => 'true',
+                                'kioskmode'     => 'true',
+                                'scale'         => 'aspect',
+                                'height'        => $videoheight,
+                                'width'         => $videowidth,
+                                'bgcolor'       => '#F0F0F0',
+                                'loop'          => 'true',
+                                'movie'         => $_MG_CONF['mediaobjects_url'] . '/orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'],
+                                'thumbnail'     => $thumb,
+                                'site_url'      => $_MG_CONF['site_url'],
+                                'player_url'    => $_CONF['site_url'].'/javascript/addons/mediaplayer/',
+                            ));
+
+                            if ( $align != '' && $align != "center" ) {
+                                $V->set_var('alignment','float:'.$align.';');
+                            } else if ( $align == 'center' ) {
+                                $V->set_var('alignment','text-align:center;');
+                            } else {
+                                $V->set_var('alignment','text-align:center;');
+                            }
+                            $V->parse('output','video');
+                            $u_image = $V->finish($V->get_var('output'));
+                            break;
+
                         case 'video/mpeg' :
                         case 'video/x-motion-jpeg' :
                         case 'video/quicktime' :
