@@ -102,7 +102,7 @@ function IMG_getMediaMetaData( $filename ) {
     global $_CONF;
 
     // include getID3() library
-    require_once($_CONF['path'] . '/lib/getid3/getid3.php');
+    require_once $_CONF['path'] . '/lib/getid3/getid3.php';
     // Needed for windows only
     if ( !defined('GETID3_HELPERAPPSDIR') ) {
         define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
@@ -116,6 +116,12 @@ function IMG_getMediaMetaData( $filename ) {
 
     if ( !isset($ThisFileInfo['mime_type']) || empty($ThisFileInfo['mime_type']) || $ThisFileInfo['mime_type'] == '' ) {
         $ThisFileInfo['mime_type'] = 'application/octet-stream';
+    }
+
+    if ( $ThisFileInfo['mime_type'] == 'video/quicktime' ) {
+        if ( $ThisFileInfo['fileformat'] == 'mp4' ) {
+            $ThisFileInfo['mime_type'] = 'video/mp4';
+        }
     }
 
     if ( $_CONF['debug_image_upload'] ) {
