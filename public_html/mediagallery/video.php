@@ -42,6 +42,8 @@ if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
     exit;
 }
 
+define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
+
 require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
 MG_initAlbums();
 
@@ -91,13 +93,17 @@ if ( $nRows > 0 ) {
     }
 
 	$T = new Template( MG_getTemplatePath($aid) );
-    $T->set_var('site_url',$_CONF['site_url']);
-    $T->set_var('themeCSS',MG_getThemeCSS($aid));
-    $T->set_var('charset',$charset);
+	$P = new Template( MG_getTemplatePath($aid) );
+
+    $P->set_file('page','video_popup.thtml');
+
+    $P->set_var('site_url',$_CONF['site_url']);
+    $P->set_var('themeCSS',MG_getThemeCSS($aid));
+    $P->set_var('charset',$charset);
 
     $meta_file_name = 	$_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'];
     $meta = IMG_getMediaMetaData($meta_file_name);
-    if ( $meta['mime_type'] == 'video/quicktime' ) {
+    if ( $meta['mime_type'] == 'video/quicktime' || $meta['mime_type'] == 'video/mp4') {
         if ( $meta['fileformat'] == 'mp4' ) {
             $row['mime_type'] = 'video/mp4';
         }
@@ -145,7 +151,7 @@ if ( $nRows > 0 ) {
                 if ( $row['media_resolution_x'] == 0 ) {
                     require_once $_CONF['path'] . '/lib/getid3/getid3.php';
                     // Needed for windows only
-                    define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
+
                     $getID3 = new getID3;
                     // Analyze file and store returned data in $ThisFileInfo
                     $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
@@ -240,9 +246,6 @@ if ( $nRows > 0 ) {
             } else {
                 if ( $row['media_resolution_x'] == 0 ) {
                     require_once $_CONF['path'] . '/lib/getid3/getid3.php';
-                    // Needed for windows only
-                    define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
-
                     $getID3 = new getID3;
                     // Analyze file and store returned data in $ThisFileInfo
                     $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
@@ -425,8 +428,6 @@ if ( $nRows > 0 ) {
             } else {
                 if ( $row['media_resolution_x'] == 0 ) {
                     require_once $_CONF['path'] . '/lib/getid3/getid3.php';
-                    // Needed for windows only
-                    define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
                     $getID3 = new getID3;
                     // Analyze file and store returned data in $ThisFileInfo
                     $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
@@ -464,9 +465,10 @@ if ( $nRows > 0 ) {
                 'width'         => $playback_options['width'],
                 'resolution_x'  => $resolution_x,
                 'resolution_y'  => $resolution_y,
-                'charset'           => $LANG_CHARSET,
+                'charset'       => $LANG_CHARSET,
+                'player_url'    => $_CONF['site_url'].'/javascript/addons/mediaplayer/',
+                'mime_type'     => 'video/mp4',
             ));
-
             break;
 
         case 'video/mpeg' :
@@ -522,6 +524,7 @@ if ( $nRows > 0 ) {
             $playback_options['height']         = $_MG_CONF['mov_height'];
             $playback_options['width']          = $_MG_CONF['mov_width'];
             $playback_options['bgcolor']        = $_MG_CONF['mov_bgcolor'];
+            $playback_options['loop']           = $_MG_CONF['mov_loop'];
 
             $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . DB_escapeString($row['media_id']) . "'");
             $poNumRows = DB_numRows($poResult);
@@ -536,8 +539,6 @@ if ( $nRows > 0 ) {
             } else {
                 if ( $row['media_resolution_x'] == 0 ) {
                     require_once $_CONF['path'] . '/lib/getid3/getid3.php';
-                    // Needed for windows only
-                    define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
                     $getID3 = new getID3;
                     // Analyze file and store returned data in $ThisFileInfo
                     $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
@@ -575,7 +576,9 @@ if ( $nRows > 0 ) {
                 'width'         => $playback_options['width'],
                 'resolution_x'  => $resolution_x,
                 'resolution_y'  => $resolution_y,
-                'charset'           => $LANG_CHARSET,
+                'charset'       => $LANG_CHARSET,
+                'filename'      => $row['media_original_filename'],
+                'loop'          => ($playback_options['loop'] ? 'true' : 'false'),
             ));
 
             break;
@@ -736,7 +739,19 @@ if ( $nRows > 0 ) {
     }
 
     $T->parse('output','video');
-    $display = $T->finish($T->get_var('output'));
+    $video_player = $T->finish($T->get_var('output'));
+
+    list ( $jsfile, $jsurl) = COM_getJSCacheLocation();
+    list ( $cssfile, $cssurl) = COM_getStyleCacheLocation();
+    $P->set_var(array(
+        'css_url'       => $cssurl,
+        'js_url'        => $jsurl,
+    ));
+
+    $P->set_var('video_player',$video_player);
+
+    $P->parse('output','page');
+    $display = $P->finish($P->get_var('output'));
     echo $display;
 }
 ?>

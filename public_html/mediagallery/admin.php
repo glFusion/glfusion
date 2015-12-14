@@ -330,7 +330,6 @@ if (($mode == 'edit') ) {
     echo $display;
     exit;
 } else if (isset($_POST['ms_submit']) || ($mode == $LANG_MG01['save'] && !empty($LANG_MG01['save']))) {
-//else if ($mode == $LANG_MG01['save'] && !empty ($LANG_MG01['save'])) {    // save the album...
     $retval = '';
     // OK, we have a save, now we need to see what we are saving...
     if ( isset($_POST['action']) && isset($_POST['album_id']) ) {

@@ -248,7 +248,7 @@ if ($MG_albums[$album_id]->albums_first == 1 ) {
     }
 }
 
-if ( $MG_albums[$album_id]->enable_slideshow == 2 && $_MG_CONF['disable_lightbox'] == true) {
+if ( $MG_albums[$album_id]->enable_slideshow == 2 && ($_MG_CONF['disable_lightbox'] == true || $_SYSTEM['disable_jquery_slimbox'] == true)) {
     $MG_albums[$album_id]->enable_slideshow = 1;
 }
 

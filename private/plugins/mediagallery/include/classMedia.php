@@ -147,23 +147,46 @@ class Media {
 
                     case 'video/x-flv' :
                         $default_thumbnail = 'placeholder_flv.svg';
+                        if ( $MG_albums[$this->album_id]->tnWidth > $MG_albums[$this->album_id]->tnHeight ) {
+                            $default_thumbnail = 'placeholder_flv_w.svg';
+                        } else {
+                            $default_thumbnail = 'placeholder_flv.svg';
+                        }
+
                         break;
                     case 'application/x-shockwave-flash' :
-                        $default_thumbnail = 'placeholder_flash.svg';
+                        if ( $MG_albums[$this->album_id]->tnWidth > $MG_albums[$this->album_id]->tnHeight ) {
+                            $default_thumbnail = 'placeholder_flash_w.svg';
+                        } else {
+                            $default_thumbnail = 'placeholder_flash.svg';
+                        }
+//                        $default_thumbnail = 'placeholder_flash.svg';
                         break;
                     case 'video/mpeg' :
                     case 'video/x-mpeg' :
                     case 'video/x-mpeq2a' :
-        				if ( $_MG_CONF['use_wmp_mpeg'] == 1 ) {
-            				$default_thumbnail = 'placeholder_video.svg';
-            				break;
-            			}
+                        if ( $MG_albums[$this->album_id]->tnWidth > $MG_albums[$this->album_id]->tnHeight ) {
+                            $default_thumbnail = 'placeholder_video_w.svg';
+                        } else {
+                            $default_thumbnail = 'placeholder_video.svg';
+                        }
+
+//        				if ( $_MG_CONF['use_wmp_mpeg'] == 1 ) {
+//            				$default_thumbnail = 'placeholder_video.svg';
+//            				break;
+//            			}
                     case 'video/x-motion-jpeg' :
                     case 'video/quicktime' :
                     case 'video/x-qtc' :
                     case 'audio/mpeg' :
                     case 'video/x-m4v' :
-                        $default_thumbnail = 'placeholder_quicktime.svg';
+                        if ( $MG_albums[$this->album_id]->tnWidth > $MG_albums[$this->album_id]->tnHeight ) {
+                            $default_thumbnail = 'placeholder_video_w.svg';
+                        } else {
+                            $default_thumbnail = 'placeholder_video.svg';
+                        }
+
+//                        $default_thumbnail = 'placeholder_quicktime.svg';
                         break;
                     case 'asf' :
                     case 'video/x-ms-asf' :
@@ -178,15 +201,31 @@ class Media {
                     case 'application/x-troff-msvideo' :
                     case 'application/x-ms-wmz' :
                     case 'application/x-ms-wmd' :
-                        $default_thumbnail = 'placeholder_video.svg';
+                        if ( $MG_albums[$this->album_id]->tnWidth > $MG_albums[$this->album_id]->tnHeight ) {
+                            $default_thumbnail = 'placeholder_video_w.svg';
+                        } else {
+                            $default_thumbnail = 'placeholder_video.svg';
+                        }
+
+//                        $default_thumbnail = 'placeholder_video.svg';
                         break;
                     default :
-                        $default_thumbnail = 'placeholder_video.svg';
+                        if ( $MG_albums[$this->album_id]->tnWidth > $MG_albums[$this->album_id]->tnHeight ) {
+                            $default_thumbnail = 'placeholder_video_w.svg';
+                        } else {
+                            $default_thumbnail = 'placeholder_video.svg';
+                        }
+//                        $default_thumbnail = 'placeholder_video.svg';
                         break;
                 }
                 break;
             case 2 :    // music file
                 $default_thumbnail = 'placeholder_audio.svg';
+                if ( $MG_albums[$this->album_id]->tnWidth > $MG_albums[$this->album_id]->tnHeight ) {
+                    $default_thumbnail = 'placeholder_audio_w.svg';
+                } else {
+                    $default_thumbnail = 'placeholder_audio.svg';
+                }
                 break;
             case 4 :    // other files
                 switch ($this->mime_type) {
@@ -195,7 +234,8 @@ class Media {
                     case 'arj' :
                     case 'rar' :
                     case 'gz'  :
-                        $default_thumbnail = 'zip.png';
+//                        $default_thumbnail = 'zip.png';
+                        $default_thumbnail = 'placeholder_zip.svg';
                         break;
                     case 'pdf' :
                     case 'application/pdf' :
@@ -211,12 +251,15 @@ class Media {
                                     break;
                                 case 'arj' :
                                     $default_thumbnail = 'zip.png';
+                                    $default_thumbnail = 'placeholder_zip.svg';
                                     break;
                                 case 'gz' :
                                     $default_thumbnail = 'zip.png';
+                                    $default_thumbnail = 'placeholder_zip.svg';
                                     break;
                                 default :
                                     $default_thumbnail = 'generic.png';
+                                    $default_thumbnail = 'placeholder.svg';
                                     break;
                             }
                         }
@@ -230,10 +273,15 @@ class Media {
 					} else if (preg_match("/google/i", $this->remote_url)) {
 						$default_thumbnail = 'googlevideo.png';
 					} else if (preg_match("/vimeo/i", $this->remote_url)) {
-					    $default_thumbnail = 'placeholder_vimeo.svg';
+					    $default_thumbnail = 'placeholder_viemo.svg';
 					} else {
 						$default_thumbnail = 'remote.png';
 					}
+                    if ( $MG_albums[$this->album_id]->tnWidth > $MG_albums[$this->album_id]->tnHeight ) {
+                        $default_thumbnail = 'placeholder_video_w.svg';
+                    } else {
+                        $default_thumbnail = 'placeholder_video.svg';
+                    }
 					break;
 
         }
@@ -406,7 +454,7 @@ class Media {
             if ($this->type == 2 ) {
                 $default_thumbnail = 'placeholder_audio.svg';
             } else {
-                $default_thumbnail    = 'placeholder.svg';
+                $default_thumbnail    = 'placeholder_missing.svg';
             }
             $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
             $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
@@ -715,6 +763,9 @@ class Media {
     function displayRawThumb( $namesOnly=0 ) {
         global $_CONF, $_MG_CONF, $MG_albums, $_MG_USERPREFS, $LANG_MG03;
 
+    	$tn_height = $MG_albums[$this->album_id]->tnHeight;
+    	$tn_width  = $MG_albums[$this->album_id]->tnWidth;
+
         switch( $this->type ) {
             case 0 :    // standard image
                 $default_thumbnail = 'tn/' . $this->filename[0] . '/' . $this->filename . '.jpg';
@@ -774,30 +825,35 @@ class Media {
                     case 'arj' :
                     case 'rar' :
                     case 'gz'  :
-                        $default_thumbnail = 'zip.png';
+                        $default_thumbnail = 'placeholder_zip.svg';
                         break;
                     case 'application/pdf' :
                     case 'pdf' :
-                        $default_thumbnail = 'pdf.png';
+                        $default_thumbnail = 'placeholder_pdf.svg';
                         break;
                     case 'application/octet-stream' :
                         if ( $this->mime_ext == 'pdf' ) {
-                            $default_thumbnail = 'pdf.png';
+                            $default_thumbnail = 'placeholder_pdf.svg';
                         } else if ( $this->mime_ext == 'arj' ) {
-                            $default_thumbnail = 'zip.png';
+                            $default_thumbnail = 'placeholder_zip.svg';
                         } else if ( $this->mime_ext == 'rar' ) {
-                            $default_thumbnail = 'zip.png';
+                            $default_thumbnail = 'placeholder_zip.svg';
                         } else {
-                            $default_thumbnail = 'generic.png';
+                            $default_thumbnail = 'placeholder.svg';
                         }
                         break;
                     default :
-                        $default_thumbnail = 'generic.png';
+                        $default_thumbnail = 'placeholder.svg';
                         break;
                 }
                 break;
 			case 5 :
-	            $default_thumbnail = 'remote.png';
+                if ( $MG_albums[$this->album_id]->tnWidth > $MG_albums[$this->album_id]->tnHeight ) {
+                    $default_thumbnail = 'placeholder_video_w.svg';
+                } else {
+                    $default_thumbnail = 'placeholder_video.svg';
+                }
+//	            $default_thumbnail = 'remote.png';
 	            break;
 
         }
@@ -827,7 +883,7 @@ class Media {
             if ($this->type == 2 ) {
                 $default_thumbnail = 'placeholder_audio.svg';
             } else {
-                $default_thumbnail    = 'placeholder.svg';
+                $default_thumbnail    = 'placeholder_missing.svg';
             }
             $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
             $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
@@ -913,7 +969,8 @@ class Media {
                     case 'arj' :
                     case 'rar' :
                     case 'gz'  :
-                        $default_thumbnail = 'zip.png';
+//                        $default_thumbnail = 'zip.png';
+                        $default_thumbnail = 'placeholder_zip.svg';
                         break;
                     case 'application/pdf' :
                     case 'pdf' :
@@ -923,20 +980,25 @@ class Media {
                         if ( $this->mime_ext == 'pdf' ) {
                             $default_thumbnail = 'placeholder_pdf.svg';
                         } else if ( $this->mime_ext == 'arj' ) {
-                            $default_thumbnail = 'zip.png';
+                            $default_thumbnail = 'placeholder_zip.svg';
                         } else if ( $this->mime_ext == 'rar' ) {
-                            $default_thumbnail = 'zip.png';
+                            $default_thumbnail = 'placeholder_zip.svg';
                         } else {
-                            $default_thumbnail = 'generic.png';
+                            $default_thumbnail = 'placeholder.svg';
                         }
                         break;
                     default :
-                        $default_thumbnail = 'generic.png';
+                        $default_thumbnail = 'placeholder.svg';
                         break;
                 }
                 break;
 			case 5 :
-	            $default_thumbnail = 'remote.png';
+                if ( $MG_albums[$this->album_id]->tnWidth > $MG_albums[$this->album_id]->tnHeight ) {
+                    $default_thumbnail = 'placeholder_video_w.svg';
+                } else {
+                    $default_thumbnail = 'placeholder_video.svg';
+                }
+//	            $default_thumbnail = 'remote.png';
 	            break;
 
         }
@@ -966,7 +1028,7 @@ class Media {
             if ($this->type == 2 ) {
                 $default_thumbnail = 'placeholder_audio.svg';
             } else {
-                $default_thumbnail    = 'placeholder.svg';
+                $default_thumbnail    = 'placeholder_missing.svg';
             }
             $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
             $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;

@@ -32,6 +32,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
+
 /*
  * Generate the prev and next links for media browsing.
  */
@@ -112,7 +114,6 @@ function MG_displayASF( $aid, $I, $full ) {
         if ( $I['media_resolution_x'] == 0 ) {
             require_once $_CONF['path'] . '/lib/getid3/getid3.php';
             // Needed for windows only
-            define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
 
             $getID3 = new getID3;
             // Analyze file and store returned data in $ThisFileInfo
@@ -150,8 +151,12 @@ function MG_displayASF( $aid, $I, $full ) {
                 $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
                 $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
-                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
+                if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
+                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                } else {
+                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                }
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
             break;
         case 1: // download
@@ -161,8 +166,12 @@ function MG_displayASF( $aid, $I, $full ) {
                 $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
                 $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
-                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
+                if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
+                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                } else {
+                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                }
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
             break;
         case 2 :    // inline
@@ -211,8 +220,12 @@ function MG_displayASF( $aid, $I, $full ) {
                 $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
                 $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
-                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
+                if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
+                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                } else {
+                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                }
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
             break;
     }
@@ -276,7 +289,6 @@ function MG_displayMOV( $aid, $I, $full ) {
         if ( $I['media_resolution_x'] == 0 ) {
             require_once $_CONF['path'] . '/lib/getid3/getid3.php';
             // Needed for windows only
-            define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
 
             $getID3 = new getID3;
             // Analyze file and store returned data in $ThisFileInfo
@@ -313,8 +325,13 @@ function MG_displayMOV( $aid, $I, $full ) {
                 $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
                 $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_quicktime.svg';
-                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
+                if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
+                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                } else {
+                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                }
+//                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_quicktime.svg';
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
             break;
         case 1: // download
@@ -324,8 +341,13 @@ function MG_displayMOV( $aid, $I, $full ) {
                 $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
                 $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_quicktime.svg';
-                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
+                if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
+                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                } else {
+                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                }
+//                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_quicktime.svg';
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
             break;
         case 2 :    // inline
@@ -333,8 +355,13 @@ function MG_displayMOV( $aid, $I, $full ) {
                 $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
                 $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_quicktime.svg';
-                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
+                if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
+                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                } else {
+                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                }
+//                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_quicktime.svg';
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
 
 
@@ -421,9 +448,6 @@ function MG_displayMP4( $aid, $I, $full ) {
     } else {
         if ( $I['media_resolution_x'] == 0 ) {
             require_once $_CONF['path'] . '/lib/getid3/getid3.php';
-            // Needed for windows only
-            define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
-
             $getID3 = new getID3;
             // Analyze file and store returned data in $ThisFileInfo
             $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
@@ -456,33 +480,75 @@ function MG_displayMP4( $aid, $I, $full ) {
             $win_height = $playback_options['height'] + 40;
             $u_pic = "javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $I['media_id'] . "'," . $win_height . "," . $win_width . ")";
             if ( $I['media_tn_attached'] == 1 ) {
-                $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
-                $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
+                foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                    if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext) ) {
+                        $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext;
+                        $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext);
+                        break;
+                    }
+                }
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_quicktime.svg';
-                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
+                if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
+                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                } else {
+                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                }
+//                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_quicktime.svg';
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
             break;
         case 1: // download
         case 3: // use mms links
             $u_pic = $_MG_CONF['site_url'] . '/download.php?mid=' . $I['media_id'];
             if ( $I['media_tn_attached'] == 1 ) {
-                $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
-                $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
+                foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                    if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext) ) {
+                        $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext;
+                        $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext);
+                        break;
+                    }
+                }
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_quicktime.svg';
+                if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
+                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                } else {
+                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                }
+//                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_quicktime.svg';
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             break;
         case 2 :    // inline
             if ( $I['media_tn_attached'] == 1 ) {
-                $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
-                $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
+                $foundTN = 0;
+                foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                    if ( file_exists($_MG_CONF['path_mediaobjects'] . 'orig/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext) ) {
+                        $u_image = $_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext;
+                        $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'orig/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext);
+                        $foundTN = 1;
+                        break;
+                    }
+                }
+                if ( $foundTN == 0 ) {
+                    foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                        if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext) ) {
+                            $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext;
+                            $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext);
+                            $foundTN = 1;
+                            break;
+                        }
+                    }
+                }
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_quicktime.svg';
+if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
+    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+} else {
+    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+}
+
+//                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_quicktime.svg';
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
-
 
             $V = new Template( MG_getTemplatePath($aid) );
             $V->set_file (array ('video' => 'view_mp4.thtml'));
@@ -572,7 +638,6 @@ function MG_displaySWF( $aid, $I, $full ) {
         if ( $I['media_resolution_x'] == 0 ) {
             require_once $_CONF['path'] . '/lib/getid3/getid3.php';
             // Needed for windows only
-            define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
 
             $getID3 = new getID3;
             // Analyze file and store returned data in $ThisFileInfo
@@ -737,7 +802,6 @@ function MG_displayFLV ( $aid, $I, $full ) {
         if ( $I['media_resolution_x'] == 0 && $I['remote_media'] == 0 ) {
             require_once $_CONF['path'] . '/lib/getid3/getid3.php';
             // Needed for windows only
-            define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
 
             $getID3 = new getID3;
             // Analyze file and store returned data in $ThisFileInfo
@@ -935,6 +999,7 @@ function MG_displayFLV ( $aid, $I, $full ) {
                 'resolution_x'  => $resolution_x,
                 'resolution_y'  => $resolution_y,
                 'flv_player'	=> $flv_player,
+                'player_url'    => $_CONF['site_url'].'/javascript/addons/mediaplayer/',
 			));
             $V->parse('output','video');
             $u_image .= $V->finish($V->get_var('output'));
@@ -1209,12 +1274,16 @@ function MG_displayGeneric( $aid, $I, $full ) {
             case 'application/x-gzip' :
             case 'multipart/x-gzip' :
             case 'application/arj' :
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/zip.png';
-                $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'zip.png');
+                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_zip.svg';
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
+//                $u_image     = $_MG_CONF['mediaobjects_url'] . '/zip.png';
+//                $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'zip.png');
                 break;
             default :
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/generic.png';
-                $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'generic.png');
+                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
+//                $u_image     = $_MG_CONF['mediaobjects_url'] . '/generic.png';
+//                $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'generic.png');
                 break;
         }
     }
@@ -1360,8 +1429,15 @@ function MG_displayEmbed($aid,$I,$full,$mediaObject) {
                 $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
                 $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail; // remote.png';
-                $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . '' . $default_thumbnail); // remote.png');
+                if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
+                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                } else {
+                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                }
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
+
+//                $u_image     = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail; // remote.png';
+//                $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . '' . $default_thumbnail); // remote.png');
             }
             break;
         case 1: 	// download - not supported for embedded video
@@ -1455,7 +1531,7 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
         $u_image    = $_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'];
     } else {
         if ( $media_size_disp == false && !$I['remote_media']) {
-            $u_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+            $u_image = $_MG_CONF['mediaobjects_url'] . '/placeholder_missing.svg';
             $media_size_disp[0] = 200;
             $media_size_disp[1] = 200;
         } else {

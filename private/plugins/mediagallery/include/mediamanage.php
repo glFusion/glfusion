@@ -1212,7 +1212,6 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
         COM_errorLog($msg);
     }
 
-
     // see if we had an attached thumbnail before...
     $thumb      = $_FILES['attthumb'];
     $thumbnail  = $thumb['tmp_name'];
@@ -1395,7 +1394,9 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
         $media_filename = DB_getItem($_TABLES['mg_media'],'media_filename','media_id="' . $media_id . '"');
         $thumbFilename = $_MG_CONF['path_mediaobjects'] . 'tn/' . $media_filename[0] . '/tn_' . $media_filename;
-        MG_attachThumbnail( $album_id, $thumbnail, $thumbFilename );
+        $origThumbFilename = $_MG_CONF['path_mediaobjects'] . 'orig/' . $media_filename[0] . '/tn_' . $media_filename;
+
+        MG_attachThumbnail( $album_id, $thumbnail, $thumbFilename, $origThumbFilename );
     }
 
     if ($remove_old_tn == 1 ) {
@@ -1403,6 +1404,12 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
         foreach ($_MG_CONF['validExtensions'] as $ext ) {
             if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $media_filename[0] . '/tn_' . $media_filename . $ext) ) {
                 @unlink($_MG_CONF['path_mediaobjects'] . 'tn/' . $media_filename[0] . '/tn_' . $media_filename . $ext);
+                break;
+            }
+        }
+        foreach ($_MG_CONF['validExtensions'] as $ext ) {
+            if ( file_exists($_MG_CONF['path_mediaobjects'] . 'orig/' . $media_filename[0] . '/tn_' . $media_filename . $ext) ) {
+                @unlink($_MG_CONF['path_mediaobjects'] . 'orig/' . $media_filename[0] . '/tn_' . $media_filename . $ext);
                 break;
             }
         }

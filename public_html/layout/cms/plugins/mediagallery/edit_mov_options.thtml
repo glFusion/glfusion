@@ -1,0 +1,140 @@
+{# begin {templatelocation} #}
+<fieldset>
+	<legend>{lang_playback_options}</legend>
+	<div class="uk-form-row">
+		<div class="uk-grid">
+			<div class="uk-width-medium-1-5">
+				{lang_option}
+			</div>
+			<div class="uk-width-medium-1-5">
+				{lang_off}&nbsp;&nbsp;{lang_on}
+			</div>
+			<div class="uk-width-medium-3-5">
+				{lang_description}
+			</div>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<div class="uk-grid">
+			<div class="uk-width-medium-1-5">
+				{lang_auto_ref}
+			</div>
+			<div class="uk-width-medium-1-5">
+				<input type="radio" name="autoref" value="0" {autoref_disabled}>
+				<input type="radio" name="autoref" value="1" {autoref_enabled}>
+			</div>
+			<div class="uk-width-medium-3-5">
+				{lang_auto_ref_help}
+			</div>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<div class="uk-grid">
+			<div class="uk-width-medium-1-5">
+				{lang_auto_start}
+			</div>
+			<div class="uk-width-medium-1-5">
+				<input type="radio" name="autoplay" value="0" {autoplay_disabled}>
+				<input type="radio" name="autoplay" value="1" {autoplay_enabled}>
+			</div>
+			<div class="uk-width-medium-3-5">
+				{lang_auto_play_help}
+			</div>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<div class="uk-grid">
+			<div class="uk-width-medium-1-5">
+				{lang_controller}
+			</div>
+			<div class="uk-width-medium-1-5">
+				<input type="radio" name="controller" value="0" {controller_disabled}>
+				<input type="radio" name="controller" value="1" {controller_enabled}>
+			</div>
+			<div class="uk-width-medium-3-5">
+				{lang_controller_help}
+			</div>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<div class="uk-grid">
+			<div class="uk-width-medium-1-5">
+				{lang_kioskmode}
+			</div>
+			<div class="uk-width-medium-1-5">
+				<input type="radio" name="kioskmode" value="0" {kioskmode_disabled}>
+				<input type="radio" name="kioskmode" value="1" {kioskmode_enabled}>
+			</div>
+			<div class="uk-width-medium-3-5">
+				{lang_kiosk_mode_help}
+			</div>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<div class="uk-grid">
+			<div class="uk-width-medium-1-5">
+				{lang_scale}
+			</div>
+			<div class="uk-width-medium-1-5">
+				{scale_select}
+			</div>
+			<div class="uk-width-medium-3-5">
+				{lang_scale_help}
+			</div>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<div class="uk-grid">
+			<div class="uk-width-medium-1-5">
+				{lang_loop_help}
+			</div>
+			<div class="uk-width-medium-1-5">
+				<input type="radio" name="loop" value="0" {loop_disabled}>
+				<input type="radio" name="loop" value="1" {loop_enabled}>
+			</div>
+			<div class="uk-width-medium-3-5">
+				{lang_loop_help}
+			</div>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<div class="uk-grid">
+			<div class="uk-width-medium-1-5">
+				{lang_bgcolor}
+			</div>
+			<div class="uk-width-medium-1-5">
+				<input type="text" name="bgcolor" value="{bgcolor}" size="8">
+			</div>
+			<div class="uk-width-medium-3-5">
+				{lang_bgcolor_help}
+			</div>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<div class="uk-grid">
+			<div class="uk-width-medium-1-5">
+				{lang_width}
+			</div>
+			<div class="uk-width-medium-1-5">
+				<input type="text" name="width" value="{width}" size="3">
+			</div>
+			<div class="uk-width-medium-3-5">
+				{lang_width_help}
+			</div>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<div class="uk-grid">
+			<div class="uk-width-medium-1-5">
+				{lang_height}
+			</div>
+			<div class="uk-width-medium-1-5">
+				<input type="text" name="height" value="{height}" size="3">
+			</div>
+			<div class="uk-width-medium-3-5">
+				{lang_height_help}
+			</div>
+		</div>
+	</div>
+</fieldset>
+{# end {templatelocation} #}

@@ -1,25 +1,21 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset={charset}">
-{themeCSS}
- <link href="http://vjs.zencdn.net/5.0.0/video-js.css" rel="stylesheet">
-  <script src="http://vjs.zencdn.net/ie8/1.1.0/videojs-ie8.min.js"></script>
-<title>{title}</title>
-</head>
-<body>
-<div style="width:{width}px;margin:0px auto;">
-  <video id="my-video" class="video-js" controls preload="auto" width="{width}" height="{height}"
-  poster="{thumbnail}" data-setup='{"controls" : {controller}, "autoplay": {autoplay},"preload": "auto"}'>
-    <source src="{movie}" type='{mime_type}'>
-    <p class="vjs-no-js">
-      To view this video please enable JavaScript, and consider upgrading to a web browser that
-      <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-    </p>
+<div style="width:{width}px;margin:0 auto;">
+  <video width="{width}" height="{height}"
+{!if thumbnail}
+  poster="{thumbnail}"
+{!endif}
+{!if autoplay_text}
+    autoplay="{autoplay}"
+{!endif}
+    controls="controls" preload="auto">
+    <!-- MP4 for Safari, IE9, iPhone, iPad, Android, and Windows Phone 7 -->
+    <source type="{mime_type}" src="{movie}" />
+      <!-- Flash fallback for non-HTML5 browsers without JavaScript -->
+      <object width="320" height="240" type="application/x-shockwave-flash" data="{player_url}flashmediaelement.swf">
+        <param name="movie" value="{player_url}flashmediaelement.swf" />
+        <param name="flashvars" value="controls=true&file={movie}" />
+        <!-- Image as a last resort -->
+        <img src="{thumbnail}" width="{width}" height="{height}" title="No video playback capabilities" />
+      </object>
   </video>
-
-  <script src="http://vjs.zencdn.net/5.0.0/video.js"></script>
 </div>
-</body>
-</html>
 {# end {templatelocation} #}

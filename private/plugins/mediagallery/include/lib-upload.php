@@ -1047,7 +1047,8 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
 	        $atttn = 1;
         } else if ( $atttn == 1 ) {
             $saveThumbnailName = $_MG_CONF['path_mediaobjects'] . 'tn/'   . $media_filename[0] . '/tn_' . $media_filename;
-            MG_attachThumbnail( $albums,$thumbnail, $saveThumbnailName );
+            $origThumbnailName = $_MG_CONF['path_mediaobjects'] . 'orig/'   . $media_filename[0] . '/tn_' . $media_filename;
+            MG_attachThumbnail( $albums,$thumbnail, $saveThumbnailName, $origThumbnailName );
         }
         if ( $video_attached_thumbnail ) {
             $atttn = 1;
@@ -1240,7 +1241,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
     return array (true, $errMsg );
 }
 
-function MG_attachThumbnail( $aid, $thumbnail, $mediaFilename ) {
+function MG_attachThumbnail( $aid, $thumbnail, $mediaFilename, $origMediaFilename = '' ) {
     global $_CONF, $_MG_CONF, $MG_albums;
 
     $makeSquare = 0;
@@ -1297,6 +1298,12 @@ function MG_attachThumbnail( $aid, $thumbnail, $mediaFilename ) {
             return false;
     }
     $attach_tn   = $mediaFilename . $tnExt;
+
+    if ( $origMediaFilename != '' ) {
+        $orig_attach_tn = $origMediaFilename . $tnExt;
+        @copy ($thumbnail,$orig_attach_tn);
+    }
+
     if ( $makeSquare ) {
         list($rc,$msg) = IMG_squareThumbnail($thumbnail, $attach_tn, $tnWidth, $tn_mime_type['mime_type'], 1 );
     } else {
