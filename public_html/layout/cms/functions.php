@@ -162,6 +162,11 @@ $outputHandle->addScriptFile($_CONF['path_layout'].'js/components/upload.min.js'
 
 // Load any additional JS/CSS for widgets / functionality
 //$outputHandle->addScriptFile($_CONF['path_layout'].'js/jQuery.menutron.min.js');
+//$outputHandle->addScriptFile($_CONF['path_html'].'javascript/addons/jssor/jssor.slider.mini.js');
+
+// Media Player
+$outputHandle->addScriptFile($_CONF['path_html'].'javascript/addons/mediaplayer/mediaelement-and-player.min.js');
+$outputHandle->addCSSFile($_CONF['path_html'] .'javascript/addons/mediaplayer/mediaelementplayer.css');
 
 // must load the jquery ui library we want to use.
 $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/ui-uikit/jquery-ui-1.10.4.custom.min.css');
