@@ -9,9 +9,9 @@
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2014 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2014 by the following authors:                        |
-// |                                                                          |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
+// | John Toro              john DOT toro AT newroute DOT net                 |
 // |                                                                          |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
@@ -37,8 +37,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
-###############################################################################
 
 $LANG_BAD_BEHAVIOR = array(
     'plugin_display_name' => 'Bad Behavior2',
@@ -105,7 +103,7 @@ $LANG_BAD_BEHAVIOR = array(
     'token' => 'Token',
     'captcha' => 'CAPTCHA',
     'auto_refresh_on' => 'Auto Refresh On',
-    'auto_refresh_off' => 'Auto Refresh Off'
+    'auto_refresh_off' => 'Auto Refresh Off',
 );
 
 $LANG_BB2_RESPONSE = array(
@@ -151,11 +149,11 @@ $LANG_BB2_RESPONSE = array(
     '96c0bd29' => 'SQL Injection detected',
     'f9f3b8b1' => 'do=register BOT Attack',
     'f9f3b8b2' => '/RK=0/RS= BOT',
-    '96c0bd30' => 'Banned IP'
+    '96c0bd30' => 'Banned IP',
 );
+
 
 $PLG_bad_behavior_MESSAGE1 = '¡Si ves este mensaje, Bad Behavior2 <b>NO</b> esta instalado correctamente! Por favor lee cuidadosamente las instrucciones de instalación nuevamente.';
 $PLG_bad_behavior_MESSAGE100 = 'La dirección IP ha sido desbloqueada.';
 $PLG_bad_behavior_MESSAGE101 = 'There was a problem unblocking the IP address.';
-
 ?>
