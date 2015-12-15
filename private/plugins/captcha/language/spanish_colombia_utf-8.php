@@ -31,8 +31,6 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-###############################################################################
-
 $LANG_CP00 = array(
     'menulabel' => 'CAPTCHA',
     'plugin' => 'CAPTCHA',
@@ -77,8 +75,9 @@ $LANG_CP00 = array(
     'picture' => 'Imágenes',
     'characters' => 'Caracteres',
     'ayah_error' => 'Sorry, but we were not able to verify you as human. Please try again.',
-    'captcha_math' => 'Enter the answer',
-    'captcha_prompt' => 'Are You Human?'
+    'captcha_math' => 'Escribe la respuesta',
+    'captcha_prompt' => '¿Eres Humano?',
+    'captcha_help'      => 'Resuelve el Problema',
 );
 
 // Localization of the Admin Configuration UI
@@ -86,7 +85,6 @@ $LANG_configsections['captcha'] = array(
     'label' => 'CAPTCHA',
     'title' => 'CAPTCHA Configuration'
 );
-
 $LANG_confignames['captcha'] = array(
     'gfxDriver' => 'Graphics Driver',
     'gfxFormat' => 'Graphics Format',
@@ -111,18 +109,16 @@ $LANG_confignames['captcha'] = array(
     'privatekey' => 'reCAPTCHA Private Key',
     'recaptcha_theme' => 'reCAPTCHA Theme',
     'ay_publickey' => 'Are You a Human Publisher Key - <a href="http://areyouahuman.com/" target=_blank>Are You a Human Signup</a>',
-    'ay_privatekey' => 'Are You a Human Scoring Key'
-);
+    'ay_privatekey' => 'Are You a Human Scoring Key',
 
+);
 $LANG_configsubgroups['captcha'] = array(
     'sg_main' => 'Configuration Settings'
 );
-
 $LANG_fs['captcha'] = array(
     'cp_public' => 'General Settings',
-    'cp_integration' => 'CAPTCHA Integration'
+    'cp_integration' => 'CAPTCHA Integration',
 );
-
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['captcha'] = array(
     0 => array('True' => 1, 'False' => 0),
@@ -130,10 +126,10 @@ $LANG_configselects['captcha'] = array(
     2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Static Images' => 2, 'reCAPTCHA' => 3, 'Are You Human Game' => 5, 'Math Equation' => 6),
     4 => array('Default' => 'default', 'Simple' => 'simple'),
     5 => array('JPG' => 'jpg', 'PNG' => 'png'),
-    6 => array('clean' => 'clean', 'red' => 'red', 'white' => 'white', 'blackglass' => 'blackglass')
+    6 => array('clean' => 'clean', 'red' => 'red', 'white' => 'white', 'blackglass' => 'blackglass'),
 );
+
 $PLG_captcha_MESSAGE1 = 'CAPTCHA plugin upgrade: Update completed successfully.';
 $PLG_captcha_MESSAGE2 = 'CAPTCHA Plugin Successfully Installed';
 $PLG_captcha_MESSAGE3 = 'CAPTCHA Plugin Successfully Installed';
-
 ?>
