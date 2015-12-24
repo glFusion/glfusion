@@ -1,4 +1,4 @@
-
+/*! glFusion CMS v1.5.2 | https://www.glfusion.org | (c) 2015 glFusion | GNU GPL v2 License */
 var glfusion;
 
 glfusion = glfusion || {};
