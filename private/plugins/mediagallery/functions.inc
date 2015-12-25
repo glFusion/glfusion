@@ -446,7 +446,7 @@ function plugin_dopluginsearch_mediagallery($query, $datestart, $dateend, $topic
 
     $query = trim(DB_escapeString(htmlspecialchars($query)));
 
-    $sql = "SELECT DISTINCT m.media_id AS id,m.media_title AS title,m.media_desc AS description,m.media_time AS date,m.media_user_id AS uid,m.media_views AS hits, CONCAT('/mediagallery/media.php?s=',m.media_id) AS url  FROM " .
+    $sql = "SELECT DISTINCT m.media_id AS id,m.media_title AS title,m.media_desc AS description,m.media_time AS date,m.media_user_id AS uid,m.media_views AS hits, CONCAT('".$_MG_CONF['site_url']."/media.php?s=',m.media_id) AS url  FROM " .
             $_TABLES['mg_media'] . " as m " .
             " INNER JOIN " . $_TABLES['mg_media_albums'] . " as ma " .
             " ON m.media_id=ma.media_id " .
@@ -462,7 +462,7 @@ function plugin_dopluginsearch_mediagallery($query, $datestart, $dateend, $topic
         $sql .= "AND (m.media_user_id = '$author') ";
 
     $search = new SearchCriteria('mediagallery', 'Media Gallery');
-    $columns = array('m.media_desc','m.media_title');
+    $columns = array('m.media_desc','m.media_title', 'm.media_keywords');
     $sql .= $search->getDateRangeSQL('AND', 'm.media_time', $datestart, $dateend);
     list($sql,$ftsql) = $search->buildSearchSQL($keyType, $query, $columns, $sql);
     $search->setSQL($sql);

@@ -1,7 +1,12 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.5.2 (Unreleased)
-  - Several code modernizations to better support PHP v7.
+  - Media Gallery - add keyword field to fields the site wide search will query
+  - Media Gallery - fixed issue where search results were pointing to wrong URL if media gallery installed in a different directory that default
+  - Media Gallery - fixed display error in search results for CMS theme
+  - Added footer.js to the jQuery based themes
+  - Updated UIKIT to v2.24.3
+  - Several code modernization updates to better support PHP v7.
   - Significant work on MP4 playback and media handling, including improved player and attached thumbnail features
   - New Vimeo auto tag
   - CKEditor - added vimeo embed plugin
@@ -9,7 +14,6 @@ v1.5.2 (Unreleased)
   - Media Gallery remote video improvements - responsive support for embedded video and remote url fixes
   - Fixed vintage theme chronometer error that caused it to fail when WYSIWYG editor was displayed
   - Tweaked style for small device logo text to prevent wrapping
-  - Update UIKIT to v2.24.0
   - Update CKEditor plugin FileManager to v2.3.0
   - Updated CKEditor to v4.5.5
   - Fixed E_ALL error on default thumbnail for Media Gallery auto tags
@@ -17,7 +21,7 @@ v1.5.2 (Unreleased)
   - Fixed issue that prevented albums from being deleted in CMS theme
   - Fixed colors on configuration tab labels to be more legible
   - Added alignleft,alignright,aligncenter styles to CMS theme
-  - Removed !important attribute from forum stylesheet in CMS theme
+  - Removed !important attribute from forum style sheet in CMS theme
 
 v1.5.1 (November 8, 2015)
   - Removed custom.css included in Vintage theme
@@ -28,8 +32,8 @@ v1.5.1 (November 8, 2015)
   - Fixed layout issue on search screen that breaks layout on small devices
   - Added chronometer.js (gl_moochronometer.js replacement) to vintage theme
   - Fixed error in CMS theme that prevented Link titles from being entered
-  - Update youtube autotag to allow responsive videos when using UIKIT themes
-  - Fixed uninitialized variable error in youtube auto tag
+  - Update YouTube autotag to allow responsive videos when using UIKIT themes
+  - Fixed uninitialized variable error in YouTube auto tag
   - Fixed template issue with story meta data showing leading | in when author line is not displayed
   - Removed text shadow on tab labels
   - Fixed spelling error in CKEditor plugin
@@ -118,10 +122,10 @@ v 1.4.3 (Nov 9, 2014)
   - Implemented file locking when creating the style cache file to ensure multiple instances do not cause a file write error
 
 v 1.4.2 (Jun 29, 2014)
-  - Ensure CKEditor's Media Gallery browser window has scrollbars and is resizable
+  - Ensure CKEditor's Media Gallery browser window has scroll bars and is re-sizable
   - Improved GD2 image re-sizing to preserve transparency
   - Fixed issue where Media Gallery would timeout on album admin screens
-  - Fixed error in youtube autotag where it would log parse errors
+  - Fixed error in YouTube autotag where it would log parse errors
   - Reworked how embedded story images are handled
   - Comment edit now takes you directly to the comment entry area
   - Support for PHP v5.3+ unlimited post size
