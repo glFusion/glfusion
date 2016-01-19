@@ -6,6 +6,9 @@
 // |                                                                          |
 // | glFusion file download class library.                                    |
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2015-2016 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
@@ -333,9 +336,9 @@ class downloader
             $nerrors = count($this->_errors);
             for ($i = 1; $i <= $nerrors; $i++) {
                 if ($verbose) {
-                    print current($this->_errors) . "<br" . XHTML . ">\n";
+                    print current($this->_errors) . "<br>\n";
                 } else {
-                    $retval .= current($this->_errors) . "<br" . XHTML . ">\n";
+                    $retval .= current($this->_errors) . "<br>\n";
                 }
                 next($this->_errors);
             }
@@ -353,7 +356,7 @@ class downloader
             reset($this->_warnings);
             $nwarnings = count($this->_warnings);
             for ($i = 1; $i <= $nwarnings; $i++) {
-                print current($this->_warnings) . "<br" . XHTML . ">\n";
+                print current($this->_warnings) . "<br>\n";
                 next($this->_warnings);
             }
         }
@@ -369,7 +372,7 @@ class downloader
             reset($this->_debugMessages);
             $nmsgs = count($this->_debugMessages);
             for ($i = 1; $i <= $nmsgs; $i++) {
-                print current($this->_debugMessages) . "<br" . XHTML . ">\n";
+                print current($this->_debugMessages) . "<br>\n";
                 next($this->_debugMessages);
             }
         }
@@ -490,7 +493,7 @@ class downloader
         }
 
         if(!is_file($this->_sourceDirectory . $fileName)) {
-            echo "<br" . XHTML . ">{$this->sourceDirectory}{$filename} does not exist";
+            echo "<br>{$this->sourceDirectory}{$filename} does not exist";
         }
 
 
@@ -536,7 +539,7 @@ class downloader
             $fp = fopen($this->_sourceDirectory . $fileName, 'rb');
             while (!feof($fp)) {
                 echo fread($fp, 1024);
-                flush();
+                ob_flush();
             }
             fclose($fp);
         }
