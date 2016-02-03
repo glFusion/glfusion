@@ -1311,7 +1311,7 @@ switch ($mode) {
 
         // begin distributed (3rd party) remote authentication method
 
-        } elseif (!empty($loginame) && $_CONF['user_login_method']['3rdparty'] &&
+        } elseif (!empty($loginname) && $_CONF['user_login_method']['3rdparty'] &&
             ($_CONF['usersubmission'] == 0) &&
             ($service != '')) {
 
