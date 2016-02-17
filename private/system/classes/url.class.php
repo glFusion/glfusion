@@ -174,7 +174,6 @@ class url {
     {
         if (count($names) < count($this->_arguments)) {
             print "URL Class: number of names passed to setArgNames must be equal or greater than number of arguments found in URL (" . count($this->_arguments) . ")";
-            print_r($this->_arguments);
             exit;
         }
         if (is_array($names)) {
