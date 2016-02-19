@@ -15,8 +15,8 @@ v1.5.2 (Unreleased)
   - Media Gallery remote video improvements - responsive support for embedded video and remote url fixes
   - Fixed vintage theme chronometer error that caused it to fail when WYSIWYG editor was displayed
   - Tweaked style for small device logo text to prevent wrapping
-  - Update CKEditor plugin FileManager to v2.3.0
-  - Updated CKEditor to v4.5.5
+  - Update CKEditor plugin FileManager to v2.4.0
+  - Updated CKEditor to v4.5.7
   - Fixed E_ALL error on default thumbnail for Media Gallery auto tags
   - Bad Behavior Plugin: Updated IP addresses for MSNbot
   - Fixed issue that prevented albums from being deleted in CMS theme
