@@ -1,11 +1,12 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.5.2 (Unreleased)
+  - Fixed XSS issue.
   - Media Gallery - add keyword field to fields the site wide search will query
   - Media Gallery - fixed issue where search results were pointing to wrong URL if media gallery installed in a different directory that default
   - Media Gallery - fixed display error in search results for CMS theme
   - Added footer.js to the jQuery based themes
-  - Updated UIKIT to v2.24.3
+  - Updated UIKIT to v2.25.0
   - Several code modernization updates to better support PHP v7.
   - Significant work on MP4 playback and media handling, including improved player and attached thumbnail features
   - New Vimeo auto tag
