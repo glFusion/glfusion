@@ -8,7 +8,7 @@
 // | records. These settings are only used during the initial installation    |
 // | and not referenced any more once the plugin is installed.                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -113,17 +113,12 @@ function plugin_initconfig_captcha()
                 0, 0, 0, 44, true, 'captcha');
         $c->add('recaptcha_theme', $_CP_DEFAULT['recaptcha_theme'],'select',
                 0, 0, 6, 46, true, 'captcha');
-
-//        $c->add('pc_publickey', $_CP_DEFAULT['publickey'],'text',
-//                0, 0, 0, 48, true, 'captcha');
-//        $c->add('pc_privatekey', $_CP_DEFAULT['privatekey'],'text',
-//                0, 0, 0, 49, true, 'captcha');
-
+/*
         $c->add('ay_publickey', $_CP_DEFAULT['publickey'],'text',
                 0, 0, 0, 50, true, 'captcha');
         $c->add('ay_privatekey', $_CP_DEFAULT['privatekey'],'text',
                 0, 0, 0, 51, true, 'captcha');
-
+*/
 
         $c->add('debug', $_CP_DEFAULT['debug'], 'select',
                 0, 0, 0, 50, true, 'captcha');

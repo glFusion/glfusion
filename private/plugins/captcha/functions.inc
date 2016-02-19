@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion integration functions.                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -80,23 +80,7 @@ if ( isset($_CP_CONF['gfxDriver']) && $_CP_CONF['gfxDriver'] == 3 ) {
 
 }
 if ( isset($_CP_CONF['gfxDriver']) && $_CP_CONF['gfxDriver'] == 5 ) {
-     if ( $_CP_CONF['ay_publickey'] == '' || $_CP_CONF['ay_privatekey'] == '' ) {
-        $_CP_CONF['gfxDriver'] = 2;
-    } else {
-        define( 'AYAH_PUBLISHER_KEY', $_CP_CONF['ay_publickey']);
-        define( 'AYAH_SCORING_KEY', $_CP_CONF['ay_privatekey']);
-        define( 'AYAH_WEB_SERVICE_HOST', 'ws.areyouahuman.com');
-        define( 'AYAH_TIMEOUT', 0);
-        define( 'AYAH_DEBUG_MODE', FALSE);
-        if ( !function_exists('curl_init') ) {
-            define( 'AYAH_USE_CURL', FALSE);
-        } else {
-            define( 'AYAH_USE_CURL', TRUE);
-        }
-        require_once $_CONF['path'] . 'plugins/captcha/class/ayah.php';
-        $ayah = new AYAH();
-
-    }
+    $_CP_CONF['gfxDriver'] = 2;
 }
 
 /**
@@ -479,7 +463,7 @@ function CAPTCHA_expireSessions() {
  * @return  string  HTML
  */
 function CAPTCHA_getHTML($csid, $ctype='general' ) {
-    global $_CONF, $_CP_CONF, $LANG_CP00, $ayah;
+    global $_CONF, $_CP_CONF, $LANG_CP00;
 
     $retval = '';
 
@@ -543,10 +527,6 @@ function CAPTCHA_getHTML($csid, $ctype='general' ) {
         $T->set_var('recaptcha', recaptcha_get_html($_CP_CONF['publickey'], NULL));
         $T->set_var('recaptcha_theme',$_CP_CONF['recaptcha_theme']);
     }
-    if ( $_CP_CONF['gfxDriver'] == 5 ) {
-        $T->set_var('recaptcha', $ayah->getPublisherHTML() );
-        $T->set_var('recaptcha_theme','none');
-    }
 
     $T->parse('output', 'page');
     $retval .= $T->finish($T->get_var('output'));
@@ -596,7 +576,7 @@ function CAPTCHA_checkRetries( $csid )
  * @return  array   array containing boolean true / false and error message
  */
 function CAPTCHA_checkInput( $response, $ctype='general' ) {
-    global $_CP_CONF, $_TABLES, $LANG_CP00, $_SERVER,$ayah;
+    global $_CP_CONF, $_TABLES, $LANG_CP00, $_SERVER;
 
     // if rc=0 on return, this is failure, and msg will contain detail
     $msg = '';
@@ -653,20 +633,6 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
             $error = $LANG_CP00['entry_error'];
             CAPTCHA_errorLog("CAPTCHA: An invalid reCAPTCHA string was entered in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
 
-            CAPTCHA_checkRetries( $csid );
-            return array(0,$error);
-        }
-    }
-
-    if ( $_CP_CONF['gfxDriver'] == 5 ) {
-        $score = $ayah->scoreResult();
-        if ($score) {
-            DB_query("DELETE FROM {$_TABLES['cp_sessions']} WHERE session_id='" . DB_escapeString($csid) . "'",1);
-            return array(1,'');
-        } else {
-            # set the error code so that we can display it
-            $error = $LANG_CP00['ayah_error'];
-            CAPTCHA_errorLog("CAPTCHA: An invalid AYAH score was provided in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
             CAPTCHA_checkRetries( $csid );
             return array(0,$error);
         }

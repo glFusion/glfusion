@@ -6,7 +6,7 @@
 // |                                                                          |
 // | CAPTCHA error processing                                                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -30,12 +30,12 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-  class error
+  class cperror
   {
 
     var $errors;
 
-    function error ()
+    public function __construct()
     {
 
       $this->errors = array();

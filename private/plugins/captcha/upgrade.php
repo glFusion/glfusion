@@ -7,7 +7,7 @@
 // | Upgrade routines                                                         |
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2005-2015 by the following authors:                        |
-// |                                                                          |
+// |                                           6                               |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
@@ -113,6 +113,14 @@ function captcha_upgrade()
             DB_query($sql,1);
             $sql = "ALTER TABLE {$_TABLES['cp_sessions']} CHANGE `counter` `counter` INT(11) NOT NULL DEFAULT '0';";
             DB_query($sql,1);
+
+        case '3.5.1' :
+            $c = config::get_instance();
+            $c->del('ay_publickey','captcha');
+            $c->del('ay_privatekey','captcha');
+            if ( $_CP_CONF['gfxDriver'] == 5 ) {
+                $c->set('gfxDriver',6,'captcha');
+            }
 
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_CP_CONF['pi_version']."',pi_gl_version='".$_CP_CONF['gl_version']."' WHERE pi_name='captcha' LIMIT 1");

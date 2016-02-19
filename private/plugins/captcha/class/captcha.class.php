@@ -6,7 +6,7 @@
 // |                                                                          |
 // | main CAPTCHA processing, generates CAPTCHA image / tokens                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -65,7 +65,8 @@ class captcha {
     var $session_id;
     var $publickey;
 
-    function captcha ($csid,$length = 6) {
+    public function __construct($csid, $length = 6)
+    {
         global $_CONF, $_CP_CONF;
 
         $this->driver       = $_CP_CONF['gfxDriver'];
@@ -98,7 +99,7 @@ class captcha {
             $this->fonts       = $this->getFonts();
             $this->backgrounds = $this->getBackGrounds();
 
-            $errormgr       = new error;
+            $errormgr       = new cperror;
 
             if ($this->fonts == FALSE) {
                 $errormgr->addError('No fonts available!');
@@ -219,7 +220,7 @@ class captcha {
                 if ( $this->gfxformat != 'png' && $this->gfxformat != 'jpg') {
                     header('Content-type: image/gif');
                     COM_errorLog("CAPTCHA: No valid gfxFormat specified");
-                    $errormgr = new error;
+                    $errormgr = new cperror;
                     $errormgr->addError('');
                     $errormgr->displayError();
                     die();
