@@ -5,7 +5,10 @@
 			<!-- BEGIN ImageRow -->
 			<!-- BEGIN ImageColumn -->
 			<li class="uk-text-center">
-				<img src="{raw_thumb}" class="uk-thumbnail">
+				<figure class="uk-thumbnail">
+					<img src="{raw_thumb}" alt="">
+					<figcaption class="uk-thumbnail-caption">{title}</figcaption>
+				</figure>
 				<div class="uk-margin">
 					<input type="radio" name="thumbnail" value="{media_id}">
 				</div>
