@@ -57,7 +57,7 @@ $LANG_CP00 = array (
     'preinstall_confirm' => "For full details on installing CAPTCHA, please refer to the <a href=\"{$_CONF['site_admin_url']}/plugins/captcha/install_doc.html\">Installation Manual</a>.",
     'captcha_help'      => 'Enter the characters',
     'bypass_error'      => "You have attempted to bypass the CAPTCHA processing at this site, please use the New User link to register.",
-    'bypass_error_blank' => "You have attempted to bypass the CAPTCHA processing at this site, please enter a valid CAPTCHA phrase.",
+    'bypass_error_blank' => "You have attempted to bypass the CAPTCHA processing at this site, please complete the CAPTCHA.",
     'entry_error'       => 'The entered CAPTCHA string did not match the characters on the graphic, please try again. <b>This is case sensitive.</b>',
     'entry_error_pic'   => 'The selected CAPTCHA images did not match the request on the graphic, please try again.',
     'captcha_info'      => 'The CAPTCHA Plugin provides another layer of protection against SpamBots for your glFusion site.  See the <a href="%s">Online Documentation Wiki</a> for more info.',
