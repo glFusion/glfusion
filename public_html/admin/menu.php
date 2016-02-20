@@ -769,10 +769,8 @@ function MB_editElement( $menu_id, $mid ) {
 
     // build types select
 
-//asort($LANG_MB_TYPES, SORT_STRING | SORT_NATURAL | SORT_FLAG_CASE );
-
-    if ( $menu->menu_elements[$mid]->type == 1 ) {
-        $type_select = '<input type="hidden" name="menutype" id="menutype" value="1" />';
+    if ( $menu->menu_elements[$mid]->type == 1 && count($menu->menu_elements[$mid]->children) > 0) {
+        $type_select = '<input type="hidden" name="menutype" id="menutype" value="1">';
         $type_select .= '<select id="menutyped" name="menutyped" disabled="disabled">' . LB;
     } else {
         $type_select = '<select id="menutype" name="menutype">' . LB;
@@ -787,7 +785,6 @@ function MB_editElement( $menu_id, $mid ) {
         next($LANG_MB_TYPES);
     }
     $type_select .= '</select>' . LB;
-
 
     $glfunction_select = '<select id="glfunction" name="glfunction">' . LB;
     while ( $glfunction = current($LANG_MB_GLFUNCTION) ) {
