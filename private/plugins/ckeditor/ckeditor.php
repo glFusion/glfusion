@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin system integration options                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2014-2015 by the following authors:                        |
+// | Copyright (C) 2014-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -37,7 +37,7 @@ global $_DB_table_prefix, $_TABLES;
 
 $_CK_CONF['pi_name']            = 'ckeditor';
 $_CK_CONF['pi_display_name']    = 'CKEditor';
-$_CK_CONF['pi_version']         = '1.0.3';
+$_CK_CONF['pi_version']         = '1.0.4';
 $_CK_CONF['gl_version']         = '1.5.2';
 $_CK_CONF['pi_url']             = 'http://www.glfusion.org/';
 ?>
