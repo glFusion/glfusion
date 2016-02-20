@@ -1471,8 +1471,13 @@ switch ($mode) {
                 } else {
                     // If user is trying to login - force redirect to index.php
                     if (strstr ($_SERVER['HTTP_REFERER'], 'mode=login') === false) {
+                    // if article - we need to ensure we have the story
                         if ( substr($_SERVER['HTTP_REFERER'], 0,strlen($_CONF['site_url'])) == $_CONF['site_url']) {
-                            echo COM_refresh (COM_sanitizeUrl($_SERVER['HTTP_REFERER']));
+                            if ( strstr($_SERVER['HTTP_REFERER'],'article.php') && !isset($_POST['story'])) {
+                                echo COM_refresh($_CONF['site_url'].'/index.php');
+                            } else {
+                                echo COM_refresh (COM_sanitizeUrl($_SERVER['HTTP_REFERER']));
+                            }
                         } else {
                             echo COM_refresh($_CONF['site_url'].'/index.php');
                         }
