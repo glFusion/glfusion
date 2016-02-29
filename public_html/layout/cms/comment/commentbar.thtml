@@ -1,41 +1,73 @@
 {# begin {templatelocation} #}
 <a id="comments"></a>
-<form class="uk-form uk-margin-remove uk-display-inline-block" action="{parent_url}" method="get">
-  {hidden_field}
-  <input type="hidden" name="type" value="{comment_type}">
-  <ul class="uk-subnav uk-subnav-pill">
-    <li><span>{num_comments} {lang_comments}</span></li>
+
+<div class="uk-text-center uk-margin-bottom">
+	<ul class="tm-article-meta uk-text-center">
+		<li>{start_storylink_anchortag}<strong>{story_title}</strong>{end_storylink_anchortag}</li>
+		<li>{num_comments} {lang_comments}</li>
+
 {!if subscribe}
-    <li><a class="uk-form-small" href="{subscribe_url}">{subscribe_text}</a><li>
+		<li><a class="uk-form-small" href="{subscribe_url}">{subscribe_text}</a></li>
 {!endif}
-{!if order_selector}
-    <li>
-      <select id="order" name="order" class="uk-form-small">
-        {order_select_data}
-      </select>
-    </li>
-{!endif}
-{!if mode_selector}
-     <li>
-       <select id="{mode_select_field_name}" name="{mode_select_field_name}" class="uk-form-small">
-         {mode_select_data}
-       </select>
-     </li>
-{!endif}
-     <li>
-       <button class="uk-button uk-button-primary uk-button-small" type="submit" value="{lang_refresh}">{lang_refresh}</button>
-     </li>
-  </ul>
-</form>
-<div class="commentbar-line3 uk-text-center uk-text-warning uk-text-small uk-margin">
-  {lang_disclaimer}
+	</ul>
 </div>
 
-<form id="commentbar" class="uk-form uk-margin-remove uk-display-inline-block" action="{site_url}/comment.php#comment_entry" method="post">
-  <input type="hidden" name="sid" value="{sid}">
-  <input type="hidden" name="pid" value="0">
+{!!if {reply_hidden_or_submit} == 'hidden' !!}
+<div class="uk-alert uk-alert-danger uk-text-center">Login Required to Comment</div>
+{!endif}
+
+<nav class="uk-clearfix uk-navbar uk-hidden-small uk-margin">
+	<div class="uk-navbar-flip">
+		<div class="uk-navbar-content">
+			<form class="uk-form uk-margin-remove uk-display-inline-block" action="{parent_url}" method="post">
+  {hidden_field}
   <input type="hidden" name="type" value="{comment_type}">
-  <input type="hidden" name="title" value="{comment_title}">
-  <button class="uk-align-right uk-button uk-button-success uk-button-small" type="{reply_hidden_or_submit}" name="reply" value="{lang_reply}">{lang_reply}</button>
-</form>
+
+{!if order_selector}
+				{order_selector}
+{!endif}
+{!if mode_selector}
+				{mode_selector}
+{!endif}
+				<button class="uk-button uk-button-primary" type="submit" value="{lang_refresh}">{lang_refresh}</button>
+			</form>
+		</div>
+	</div>
+
+	<div class="uk-navbar-content">
+		<form action="{site_url}/comment.php#comment_entry" method="post" class="uk-form uk-margin-remove uk-display-inline-block">
+			<input type="hidden" name="sid" value="{sid}">
+			<input type="hidden" name="pid" value="0">
+			<input type="hidden" name="type" value="{comment_type}">
+			<input type="hidden" name="title" value="{comment_title}">
+{!!if {reply_hidden_or_submit} != 'hidden' !!}
+			<button class="uk-button uk-button-success" type="{reply_hidden_or_submit}" name="reply" value="{lang_reply}">{lang_reply}</button>
+{!else}
+			<strong>{$LANG01[83]}</strong>
+{!endif}
+		</form>
+	</div>
+</nav>
+
+<div class="uk-visible-small">
+	<form class="uk-form uk-margin-remove uk-display-inline-block" action="{parent_url}" method="post">
+		{hidden_field}
+		<input type="hidden" name="type" value="{comment_type}">
+		{order_selector}
+		{mode_selector}
+		<button class="uk-button uk-button-primary uk-button-small" type="submit" value="{lang_refresh}" class="submit">{lang_refresh}</button>
+	</form>
+
+	<div class="uk-margin uk-text-center">
+		<form action="{site_url}/comment.php#comment_entry" method="post" class="uk-form uk-margin-remove uk-display-inline-block">
+{!!if {reply_hidden_or_submit} != 'hidden' !!}
+			<button class="uk-button uk-button-success uk-button-small" type="{reply_hidden_or_submit}" name="reply" value="{lang_reply}">{lang_reply}</button>
+{!endif}
+			<input type="hidden" name="sid" value="{sid}">
+			<input type="hidden" name="pid" value="0">
+			<input type="hidden" name="type" value="{comment_type}">
+			<input type="hidden" name="title" value="{comment_title}">
+		</form>
+	</div>
+</div>
 {# end {templatelocation} #}
