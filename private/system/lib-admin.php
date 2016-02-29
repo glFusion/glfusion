@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Admin-related functions needed in more than one place.                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -207,8 +207,12 @@ function ADMIN_listArray($component, $fieldfunction, $header_arr, $text_arr,
         $orderby = $defsort_arr['field']; // not set - use default (this could be null)
     } else {
         $orderbyidx = COM_applyFilter($_GET['orderby'], true); // set - retrieve and clean
-        $orderidx_link = "&amp;orderby=$orderbyidx"; // preserve the value for paging
-        $orderby = $header_arr[$orderbyidx]['field']; // get the field name to sort by
+        if ( isset($header_arr[$orderbyidx]['field']) && $header_arr[$orderbyidx]['sort'] != false ) {
+            $orderidx_link = "&amp;orderby=$orderbyidx"; // preserve the value for paging
+            $orderby = $header_arr[$orderbyidx]['field']; // get the field name to sort by
+        } else {
+            $orderby = $defsort_arr['field']; // not set - use default (this could be null)
+        }
     }
 
     // set sort direction.  defaults to ASC
@@ -535,8 +539,14 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $orderbyidx = '';
     } else {
         $orderbyidx = COM_applyFilter($_GET['orderby'], true); // set - retrieve and clean
-        $orderidx_link = "&amp;orderby=$orderbyidx"; // preserve the value for paging
-        $orderby = $header_arr[$orderbyidx]['field']; // get the field name to sort by
+        if ( isset($header_arr[$orderbyidx]['field']) && $header_arr[$orderbyidx]['sort'] != false ) {
+            $orderidx_link = "&amp;orderby=$orderbyidx"; // preserve the value for paging
+            $orderby = $header_arr[$orderbyidx]['field']; // get the field name to sort by
+        } else {
+            $orderby = $defsort_arr['field']; // not set - use default (this could be null)
+            $orderidx_link = '';
+            $orderbyidx = '';
+        }
     }
 
     // set sort direction.  defaults to ASC

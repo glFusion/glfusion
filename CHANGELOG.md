@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.5.2 (Unreleased)
+  - Improved error checking on URL parameters in admin lists
   - Removed Are You a Human CAPTCHA option (service has shutdown)
   - Security fixes to address potential XSS issue
   - Media Gallery - add keyword field to fields the site wide search will query
