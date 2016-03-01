@@ -103,7 +103,7 @@ function handleSubmit()
 
     $type     = COM_applyFilter ($_POST['type']);
     $sid      = COM_sanitizeID(COM_applyFilter ($_POST['sid']));
-    $title    = strip_tags($_POST['title']);
+    $title    = @htmlspecialchars(strip_tags($_POST['title']),ENT_NOQUOTES,COM_getEncodingt());
     $pid      = COM_applyFilter($_POST['pid'],true);
     $postmode = COM_applyFilter($_POST['postmode']);
     $comment = '';
