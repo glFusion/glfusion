@@ -12,7 +12,7 @@
       <span class="uk-text-small">{album_desc}</span>
       <br><br>
       {!if updated}
-      <span class="uk-text-bold">{</span>updated}</span> {album_last_update}
+      <span class="uk-text-bold">{updated}</span> {album_last_update}
       {!endif}
       {!if lang_views}
       <br><span class="uk-text-bold">{lang_views}</span> {views}
