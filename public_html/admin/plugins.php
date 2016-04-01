@@ -358,7 +358,7 @@ function PLUGINS_update($pi_name)
             $retval .= COM_refresh ($_CONF['site_admin_url'].'/plugins.php');
         } else {  // Plugin returned a message number
             COM_setMessage($result);
-            $retval = COM_refresh ($_CONF['site_admin_url'].'/plugins.php?plugin='.url_encode($pi_name));
+            $retval = COM_refresh ($_CONF['site_admin_url'].'/plugins.php?plugin='.urlencode($pi_name));
         }
     } else {  // Plugin function returned a false
         $retval .= COM_showMessage(95);
