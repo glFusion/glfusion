@@ -1105,9 +1105,9 @@ function SEC_buildAccessSql ($clause = 'AND', $field = 'grp_access')
     $_GROUPS = SEC_getUserGroups($uid);
     $groupsql = '';
     if (count($_GROUPS) == 1) {
-        $groupsql .= " $clause `$field` = '" . current($_GROUPS) ."'";
+        $groupsql .= " $clause $field = '" . current($_GROUPS) ."'";
     } else {
-        $groupsql .= " $clause `$field` IN (" . implode(',',array_values($_GROUPS)) .")";
+        $groupsql .= " $clause $field IN (" . implode(',',array_values($_GROUPS)) .")";
     }
 
     return $groupsql;
