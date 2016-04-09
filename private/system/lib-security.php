@@ -1086,11 +1086,13 @@ function SEC_setDefaultPermissions (&$A, $use_permissions = array ())
 
 /**
 * Common function used to build group access SQL
+* Field ID can include a table identifier, e.g. 'tbl.fldname'
 *
 * @param   string  $clause    Optional parm 'WHERE' - default is 'AND'
+* @param   string  $field     Optional field name, default is 'grp_access'
 * @return  string  $groupsql  Formatted SQL string to be appended in calling script SQL statement
 */
-function SEC_buildAccessSql ($clause = 'AND')
+function SEC_buildAccessSql ($clause = 'AND', $field = 'grp_access')
 {
     global $_TABLES, $_USER;
 
@@ -1103,9 +1105,9 @@ function SEC_buildAccessSql ($clause = 'AND')
     $_GROUPS = SEC_getUserGroups($uid);
     $groupsql = '';
     if (count($_GROUPS) == 1) {
-        $groupsql .= " $clause grp_access = '" . current($_GROUPS) ."'";
+        $groupsql .= " $clause $field = '" . current($_GROUPS) ."'";
     } else {
-        $groupsql .= " $clause grp_access IN (" . implode(',',array_values($_GROUPS)) .")";
+        $groupsql .= " $clause $field IN (" . implode(',',array_values($_GROUPS)) .")";
     }
 
     return $groupsql;
