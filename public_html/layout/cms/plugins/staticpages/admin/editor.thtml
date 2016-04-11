@@ -171,11 +171,13 @@
 				</div>
 			</li>
 		</ul>
-		<button type="submit" class="uk-button uk-button-primary uk-margin" id="save" name="save" value="{lang_save}">{lang_save}</button>
-		<button type="submit" class="uk-button uk-margin cancel" id="cancel" name="cancel" value="{lang_cancel}">{lang_cancel}</button>
+		<ul class="uk-grid uk-grid-small">
+		<li><button type="submit" class="uk-button uk-button-primary uk-margin" id="save" name="save" value="{lang_save}">{lang_save}</button></li>
+		<li><button type="submit" class="uk-button uk-margin cancel" id="cancel" name="cancel" value="{lang_cancel}">{lang_cancel}</button></li>
 {!if delete_button}
-		<button type="submit" class="uk-button uk-button-danger uk-margin" id="delete" name="delete" value="{lang_delete}" onclick="return confirm('{lang_delete_confirm}');">{lang_delete}</button>
+		<li><button type="submit" class="uk-button uk-button-danger uk-margin" id="delete" name="delete" value="{lang_delete}" onclick="return confirm('{lang_delete_confirm}');">{lang_delete}</button></li>
 {!endif}
+                </ul>
 	</form>
 </div>
 <script>
