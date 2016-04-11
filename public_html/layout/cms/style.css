@@ -1851,3 +1851,18 @@ input.error {
 .aligncenter {
 	text-align:center;
 }
+
+/* adds styling for story edit sticky side bar*/
+
+.gf-admin-save {
+position:fixed;
+z-index:999;
+top: 30%;
+right:0;
+}
+
+.gf-admin-save-button-width {
+margin-left:0;
+margin-right:0;
+width:100px;
+}
