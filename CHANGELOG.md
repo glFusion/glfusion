@@ -1,6 +1,8 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.5.2 (Unreleased)
+  - Added editor save options as sticky button on right side of screen
+  - Added class parameter to media gallery auto tags
   - Improved error checking on URL parameters in admin lists
   - Removed Are You a Human CAPTCHA option (service has shutdown)
   - Security fixes to address potential XSS issue
@@ -8,7 +10,7 @@ v1.5.2 (Unreleased)
   - Media Gallery - fixed issue where search results were pointing to wrong URL if media gallery installed in a different directory that default
   - Media Gallery - fixed display error in search results for CMS theme
   - Added footer.js to the jQuery based themes
-  - Updated UIKIT to v2.25.0
+  - Updated UIKIT to v2.26.2
   - Several code modernization updates to better support PHP v7.
   - Significant work on MP4 playback and media handling, including improved player and attached thumbnail features
   - New Vimeo auto tag
@@ -18,7 +20,7 @@ v1.5.2 (Unreleased)
   - Fixed vintage theme chronometer error that caused it to fail when WYSIWYG editor was displayed
   - Tweaked style for small device logo text to prevent wrapping
   - Update CKEditor plugin FileManager to v2.4.0
-  - Updated CKEditor to v4.5.7
+  - Updated CKEditor to v4.5.8
   - Fixed E_ALL error on default thumbnail for Media Gallery auto tags
   - Bad Behavior Plugin: Updated IP addresses for MSNbot
   - Fixed issue that prevented albums from being deleted in CMS theme
