@@ -1,29 +1,39 @@
 {# horizontal cascading menu template #}
 {!if wrapper}
-  <ul class="uk-navbar-nav tm-navbar-nav uk-hidden-small">
+<ul class="uk-navbar-nav tm-navbar-nav uk-hidden-small">
 {!endif}
 <!-- BEGIN Elements -->
 {!if haschildren}
-    <li class="uk-parent" data-uk-dropdown="{remaintime:'300',delay:'300'}">
-    <a>
-{!else}
-     <li>
-     <a href="{url}" {target}>
+{!if hasparent}
+	<li class="uk-parent">
+	{!else}
+		<li class="uk-parent" data-uk-dropdown="{remaintime:'300',delay:'300'}">
 {!endif}
-{label}
+			<a>
+{!else}
+				<li>
+					<a href="{url}" {target}>
+{!endif}
+						{label}
 {!if haschildren}
-    <i class="uk-icon-caret-down"></i>
-    </a>
-    <div class="uk-dropdown tm-dropdown uk-dropdown-navbar">
-      <ul class="uk-nav uk-nav-navbar tm-nav-navbar">
-        {children}
-      </ul>
-  </div>
+						<i class="uk-icon-caret-down"></i>
+					</a>
+{!if hasparent}
 {!else}
-</a>
+					<div class="uk-dropdown tm-dropdown uk-dropdown-navbar">
+						<ul class="uk-nav uk-nav-navbar tm-nav-navbar">
 {!endif}
-  </li>
+							{children}
+{!if hasparent}
+{!else}
+					</ul>
+{!endif}
+				</div>
+{!else}
+			</a>
+{!endif}
+		</li>
 <!-- END Elements -->
 {!if wrapper}
-</ul>
+	</ul>
 {!endif}

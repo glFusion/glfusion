@@ -296,6 +296,7 @@ function displayMenuChildren( $type, $elements, $template_file ) {
             $C->set_var('target','');
         }
         if ( isset($child['children']) && $child['children'] != NULL && is_array($child['children']) ) {
+            $C->set_var('hasparent',true);
             $childHTML = displayMenuChildren($type, $child['children'],$template_file);
             $C->set_var('haschildren',true);
             $C->set_var('children',$childHTML);
@@ -308,6 +309,7 @@ function displayMenuChildren( $type, $elements, $template_file ) {
         $C->parse('element', 'Elements',true);
         $C->unset_var('haschildren');
         $C->unset_var('children');
+        $C->unset_var('hasparent');
     }
     $C->parse('output','page');
     $retval = $C->finish($C->get_var('output'));
