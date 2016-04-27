@@ -1,39 +1,28 @@
 {# horizontal cascading menu template #}
 {!if wrapper}
-<ul class="uk-navbar-nav tm-navbar-nav uk-hidden-small">
+<ul id="sm-{menuname}" class="sm sm-uikit uk-navbar-nav tm-navbar-nav uk-hidden-small">
 {!endif}
 <!-- BEGIN Elements -->
+	<li>
+		<a href="{url}" {target}>
+			{label}
+		</a>
 {!if haschildren}
-{!if hasparent}
-	<li class="uk-parent">
-	{!else}
-		<li class="uk-parent" data-uk-dropdown="{remaintime:'300',delay:'300'}">
+		<ul>
+			{children}
+		</ul>
 {!endif}
-			<a>
-{!else}
-				<li>
-					<a href="{url}" {target}>
-{!endif}
-						{label}
-{!if haschildren}
-						<i class="uk-icon-caret-down"></i>
-					</a>
-{!if hasparent}
-{!else}
-					<div class="uk-dropdown tm-dropdown uk-dropdown-navbar">
-						<ul class="uk-nav uk-nav-navbar tm-nav-navbar">
-{!endif}
-							{children}
-{!if hasparent}
-{!else}
-					</ul>
-{!endif}
-				</div>
-{!else}
-			</a>
-{!endif}
-		</li>
+	</li>
 <!-- END Elements -->
 {!if wrapper}
-	</ul>
+</ul>
+	<script type="text/javascript">
+		$(function() {
+			$('#sm-{menuname}').smartmenus({
+				subMenusSubOffsetX: 1,
+				subMenusSubOffsetY: -8
+			});
+			$('#{menuname}').smartmenus();
+		});
+	</script>
 {!endif}

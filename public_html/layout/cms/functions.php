@@ -106,6 +106,8 @@ $blockInterface = array(
 // define the JS we need for this theme..
 $outputHandle = outputHandler::getInstance();
 
+$outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.smartmenus.min.js');
+
 // Load our CSS specific to this theme
 
 $styleType = '.gradient.'; // almost-flat - gradient - blank
@@ -161,7 +163,9 @@ $outputHandle->addScriptFile($_CONF['path_layout'].'js/components/upload.min.js'
 
 
 // Load any additional JS/CSS for widgets / functionality
-//$outputHandle->addScriptFile($_CONF['path_layout'].'js/jQuery.menutron.min.js');
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/sm-core-css.css');
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/sm-cms.css');
+
 //$outputHandle->addScriptFile($_CONF['path_html'].'javascript/addons/jssor/jssor.slider.mini.js');
 
 // Media Player
