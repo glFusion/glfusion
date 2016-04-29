@@ -461,6 +461,7 @@ if ($forum == 0) {
         	                        'lastpostmsgDate'   => $LANG_GF01['nolastpostmsg'],
             	                    'lastpostmsgTopic'  => '',
                 	                'lastpostmsgBy'     => '',
+                	                'lastPostDate'      => $LANG_GF01['nolastpostmsg'],
                 	));
 	                $folderimg = '<img src="'._ff_getImage('quietforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['quietforum'].'" title="'.$LANG_GF02['quietforum'].'"/>';
 	                $folder_icon = _ff_getImage('quietforum');
