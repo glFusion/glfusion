@@ -4,7 +4,11 @@
 {!endif}
 <!-- BEGIN Elements -->
 	<li>
+{!if haschildren}
+		<a>
+{!else}
 		<a href="{url}" {target}>
+{!endif}
 			{label}
 		</a>
 {!if haschildren}
@@ -19,8 +23,10 @@
 	<script type="text/javascript">
 		$(function() {
 			$('#sm-{menuname}').smartmenus({
+/*
 				subMenusSubOffsetX: 1,
 				subMenusSubOffsetY: -8
+*/
 			});
 			$('#{menuname}').smartmenus();
 		});

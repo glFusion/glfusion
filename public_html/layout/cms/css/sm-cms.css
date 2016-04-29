@@ -7,15 +7,10 @@
   /* make room for the toggle button (sub indicator) */
   padding-right: 58px;
   color: #555555;
-/*  font-family: "Lucida Sans Unicode", "Lucida Sans", "Lucida Grande", Arial, sans-serif;
-  font-size: 18px;
-  font-weight: normal;
-  line-height: 17px; */
   text-decoration: none;
 
 }
 .sm-uikit a.current {
-/*  color: #d23600; */
   color: #444;
 }
 .sm-uikit a.disabled {
@@ -197,6 +192,7 @@
   .sm-uikit li {
     border-top: 0;
   }
+  /*
   .sm-uikit > li > ul:before,
   .sm-uikit > li > ul:after {
     content: '';
@@ -210,16 +206,19 @@
     border-style: dashed dashed solid dashed;
     border-color: transparent transparent #bbbbbb transparent;
   }
+*/
   .sm-uikit > li > ul:after {
     top: -16px;
     left: 31px;
     border-width: 8px;
-    border-color: transparent transparent white transparent;
+    border-color: transparent transparent #bbb transparent;
   }
+
   .sm-uikit ul {
-    border: 1px solid #bbbbbb;
+/* uncomment if you want border around dropdown */
+/*    border: 1px solid #bbbbbb; */
     padding: 5px 0;
-    background: white;
+    background: transparent; /* white; */
     -webkit-border-radius: 5px !important;
     -moz-border-radius: 5px !important;
     -ms-border-radius: 5px !important;
@@ -244,7 +243,7 @@
     color: #444;
   }
   .sm-uikit ul a.disabled {
-    background: white;
+    background: transparent; /*white;*/
     color: #cccccc;
   }
   .sm-uikit ul a.has-submenu {
@@ -342,7 +341,7 @@
     padding: 10px 20px;
   }
   .sm-uikit.sm-vertical a:hover, .sm-uikit.sm-vertical a:focus, .sm-uikit.sm-vertical a:active, .sm-uikit.sm-vertical a.highlighted {
-    background: white;
+    background: transparent; /* white; */
   }
   .sm-uikit.sm-vertical a.disabled {
     background: #eeeeee;
@@ -366,7 +365,7 @@
     background: #eeeeee;
   }
   .sm-uikit.sm-vertical ul a.disabled {
-    background: white;
+    background: transparent; /* white; */
   }
 }
 
@@ -456,8 +455,10 @@ uk-navbar-nav > li > a {
 	/* 3 */
 	outline: none;
 	background: #35B3EE  none repeat scroll 0 0 !important;
+	border-radius: 3px !important;
 }
 .tm-navbar-nav > li > a {
+
 	color: #fff !important;
 	text-shadow: none !important;
 }
