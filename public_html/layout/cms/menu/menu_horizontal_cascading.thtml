@@ -23,10 +23,8 @@
 	<script type="text/javascript">
 		$(function() {
 			$('#sm-{menuname}').smartmenus({
-/*
-				subMenusSubOffsetX: 1,
-				subMenusSubOffsetY: -8
-*/
+				showTimeout: 300,
+				showFunction: function($ul, complete) { $ul.fadeIn(425, complete); }
 			});
 			$('#{menuname}').smartmenus();
 		});
