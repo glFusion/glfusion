@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | glFusion Story Image Import                                              |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2015 by the following authors:                        |
+// | Copyright (C) 2005-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -301,7 +301,7 @@ class mgAlbumg {
         $z = 1;
         $retval = '';
         $px = ($level - 1 ) * 15;
-
+        $block = '';
         if ( $this->id != 0 && $this->access > 0 ) {
             if ( $level == 1 && $depth != 1) {
                 // our first one...
@@ -446,6 +446,7 @@ function MG_importSelectAlbums() {
     global $MG_albums, $album_jumpbox;
 
     $valid_albums = '';
+    $display = '';
 
     $T = new Template($_MG_CONF['template_path']);
     $T->set_file(array('page' => 'gl_story_import.thtml'));
@@ -480,7 +481,8 @@ function MG_buildImportAlbums( ) {
 
     $counter = 1;
 
-    $sql = "SELECT * FROM {$_TABLES['stories']}";
+//    $sql = "SELECT * FROM {$_TABLES['stories']}";
+    $sql = "SELECT *, UNIX_TIMESTAMP(date) AS unixdate, UNIX_TIMESTAMP(expire) as expireunix, UNIX_TIMESTAMP(comment_expire) as cmt_expire_unix FROM {$_TABLES['stories']}";
     $result     = DB_query( $sql );
     $numRows    = DB_numRows( $result );
     for ($i=0; $i < $numRows; $i++ ) {
