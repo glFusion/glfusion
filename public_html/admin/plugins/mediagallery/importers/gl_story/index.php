@@ -114,7 +114,7 @@ class mgAlbumg {
     var $dfrWidth;
     var $dfrHeight;
 
-    function mgAlbumg () {
+    function __construct () {
         global $_MG_CONF;
 
         $this->children             = array();
@@ -445,13 +445,15 @@ function MG_importSelectAlbums() {
     global $mgAlbums, $_TABLES, $_CONF, $_MG_CONF, $LANG_MG02, $_USER, $_POST;
     global $MG_albums, $album_jumpbox;
 
+    $valid_albums = '';
+
     $T = new Template($_MG_CONF['template_path']);
     $T->set_file(array('page' => 'gl_story_import.thtml'));
 
     $level = 0;
     $album_jumpbox  = '<select name="destination">';
     $album_jumpbox .= '<option value="0">Create Album Using Story Title</option>';
-    $valid_albums += $MG_albums[0]->buildJumpBox($select,3);
+    $valid_albums += $MG_albums[0]->buildJumpBox('',3);
     $album_jumpbox .= '</select>';
 
     MG_buildImportAlbums();
