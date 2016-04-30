@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Forum Plugin admin - Main program to setup Forums                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -592,10 +592,11 @@ function board_add_forum_save()
 
     if ( $forum_order_id == 0 ) {
         $forum_order = 0;
+        $order = 0;
     } else {
         $forum_order = DB_getItem($_TABLES['ff_forums'],'forum_order','forum_id=' . (int) $forum_order_id);
+        $order = $forum_order++;
     }
-    $order = $forum_order++;
 
     // data validation
     if ( empty($name) ) {
