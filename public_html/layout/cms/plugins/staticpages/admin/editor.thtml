@@ -15,6 +15,7 @@
 			<li><a href="#">{lang_attributes}</a></li>
 			<li><a href="#">{lang_centerblock}</a></li>
 			<li><a href="#">{lang_accessrights}</a></li>
+			<li {!if show_preview} class="uk-active" {!endif}><a href="#">Preview</a></li>
 		</ul>
 
 		{# this shows on all screens #}
@@ -170,6 +171,18 @@
 					<p>{permissions_msg}</p>
 				</div>
 			</li>
+
+			<li>
+				<div class="uk-alert uk-alert-warning" data-uk-alert>
+					<a href="#" class="uk-alert-close uk-close"></a>
+					{$LANG_STATIC[preview_help]}
+				</div>
+
+				<div class="uk-panel uk-panel-box">
+					{#					<div class="uk-panel-title">{sp_preview_title}</div> #}
+					{sp_preview_content}
+				</div>
+			</li>
 		</ul>
 
 		{# begin save side bar hidden on small devices #}
@@ -178,11 +191,11 @@
 				<li>
 					<button class="uk-button uk-button-success tm-admin-save-button-width" type="submit" value="{lang_save}" id="save" name="save" data-uk-tooltip="{pos:'left'}" title="{lang_save}"><i class="uk-icon-save"></i></button>
 				</li>
-				{#
+
 				<li>
-					<button class="uk-button tm-admin-save-button-width" type="submit" value="{lang_preview}" name="previewstory" data-uk-tooltip="{pos:'left'}" title="{lang_preview}"><i class="uk-icon-eye"></i></button>
+					<button class="uk-button tm-admin-save-button-width" type="submit" value="{lang_preview}" name="preview" data-uk-tooltip="{pos:'left'}" title="{lang_preview}"><i class="uk-icon-eye"></i></button>
 				</li>
-				#}
+
 				<li>
 					<button class="uk-button uk-button-primary cancel tm-admin-save-button-width" type="submit" value="{lang_cancel}" id="cancel" name="cancel" data-uk-tooltip="{pos:'left'}" title="{lang_cancel}"><i class="uk-icon-undo"></i></button>
 				</li>
@@ -197,33 +210,34 @@
 
 		<ul class="uk-grid uk-grid-small">
 			<li><button type="submit" class="uk-button uk-button-primary uk-margin" id="save" name="save" value="{lang_save}">{lang_save}</button></li>
-			<li><button type="submit" class="uk-button uk-margin cancel" id="cancel" name="cancel" value="{lang_cancel}">{lang_cancel}</button></li>
+			<li><button class="uk-button" type="submit" value="{lang_preview}" name="preview" title="{lang_preview}">{lang_preview}</button>
+				<li><button type="submit" class="uk-button uk-margin cancel" id="cancel" name="cancel" value="{lang_cancel}">{lang_cancel}</button></li>
 {!if delete_button}
-			<li><button type="submit" class="uk-button uk-button-danger uk-margin" id="delete" name="delete" value="{lang_delete}" onclick="return confirm('{lang_delete_confirm}');">{lang_delete}</button></li>
+				<li><button type="submit" class="uk-button uk-button-danger uk-margin" id="delete" name="delete" value="{lang_delete}" onclick="return confirm('{lang_delete_confirm}');">{lang_delete}</button></li>
 {!endif}
-		</ul>
-	</form>
-</div>
-<script>
-	$(document).ready(function() {
-		$('.toggle_yes_no').click(function(e) {
-			var buttonClicked = $(this).attr('id');
-			var myparentid = $(this).parent().attr("id");
-			var yes_or_no = $('#'+buttonClicked).hasClass("toggle_yes");
-			$('#'+myparentid+'.toggle_button label').removeClass("uk-button-success");
-			$('#'+myparentid+'.toggle_button label').removeClass("uk-button-danger");
-			if ( yes_or_no == true ) {
-				$('#'+buttonClicked).addClass("uk-button-success");
-				$("#status_yes_radio").prop('checked', true);
-				$("#status_no_radio").prop('checked', false);
-			} else {
-				$('#'+buttonClicked).addClass("uk-button-danger");
-				$("#status_yes_radio").prop('checked', false);
-				$("#status_no_radio").prop('checked', true);
+			</ul>
+		</form>
+	</div>
+	<script>
+		$(document).ready(function() {
+			$('.toggle_yes_no').click(function(e) {
+				var buttonClicked = $(this).attr('id');
+				var myparentid = $(this).parent().attr("id");
+				var yes_or_no = $('#'+buttonClicked).hasClass("toggle_yes");
+				$('#'+myparentid+'.toggle_button label').removeClass("uk-button-success");
+				$('#'+myparentid+'.toggle_button label').removeClass("uk-button-danger");
+				if ( yes_or_no == true ) {
+					$('#'+buttonClicked).addClass("uk-button-success");
+					$("#status_yes_radio").prop('checked', true);
+					$("#status_no_radio").prop('checked', false);
+				} else {
+					$('#'+buttonClicked).addClass("uk-button-danger");
+					$("#status_yes_radio").prop('checked', false);
+					$("#status_no_radio").prop('checked', true);
 
-			}
-			e.stopPropagation();
+				}
+				e.stopPropagation();
+			});
 		});
-	});
-</script>
-{# end {templatelocation} #}
+	</script>
+	{# end {templatelocation} #}

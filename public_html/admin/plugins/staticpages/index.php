@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Administration page.                                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -75,7 +75,7 @@ function PAGE_form($A, $error = false)
     );
 
     $template_path = staticpages_templatePath ('admin');
-    if (!empty($sp_id) && ($action=='edit' || $action =='clone' )) {
+    if (!empty($sp_id) && ($action=='edit' || $action =='clone' || $action == 'preview' )) {
         $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
     } else {
         $A['owner_id'] = $_USER['uid'];
@@ -176,7 +176,7 @@ function PAGE_form($A, $error = false)
         $sp_template->set_var ('lang_centerblock_desc', $LANG21[52]);
         $sp_template->set_var ('centerblock_help', $A['sp_help']);
         $sp_template->set_var ('lang_centerblock_msg', $LANG_STATIC['centerblock_msg']);
-        if (isset ($A['sp_centerblock']) && ($A['sp_centerblock'] == 1)) {
+        if (isset ($A['sp_centerblock']) && (($A['sp_centerblock'] == 1) || $A['sp_centerblock'] == 'on')) {
             $sp_template->set_var('centerblock_checked', 'checked="checked"');
         } else {
             $sp_template->set_var('centerblock_checked', '');
@@ -272,7 +272,7 @@ function PAGE_form($A, $error = false)
         $sp_template->set_var ('php_checked', '');
         $sp_template->set_var ('php_type', 'hidden');
 
-        if (isset ($A['sp_nf']) && ($A['sp_nf'] == 1)) {
+        if (isset ($A['sp_nf']) && (($A['sp_nf'] == 1) || $A['sp_nf'] == 'on')) {
             $sp_template->set_var('exit_checked','checked="checked"');
         } else {
             $sp_template->set_var('exit_checked','');
@@ -280,7 +280,7 @@ function PAGE_form($A, $error = false)
         $sp_template->set_var('exit_msg',$LANG_STATIC['exit_msg']);
         $sp_template->set_var('exit_info',$LANG_STATIC['exit_info']);
 
-        if (isset($A['sp_inblock']) && $A['sp_inblock'] == 1) {
+        if (isset($A['sp_inblock']) && ( $A['sp_inblock'] == 1 || $A['sp_inblock'] == 'on' )) {
             $sp_template->set_var ('inblock_checked', 'checked="checked"');
         } else {
             $sp_template->set_var ('inblock_checked', '');
@@ -366,6 +366,14 @@ function PAGE_form($A, $error = false)
             $sp_template->set_var ('sp_hits_formatted',
                                    COM_numberFormat ($A['sp_hits']));
         }
+
+        $sp_template->set_var('sp_preview_content',$A['preview_content']);
+        $sp_template->set_var('sp_preview_title',isset($A['preview_title']) ? $A['preview_title'] : '');
+
+        if (isset($A['preview'])) {
+            $sp_template->set_var('show_preview',true);
+        }
+
         $sp_template->set_var('end_block',
                 COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer')));
 
@@ -390,7 +398,7 @@ function PAGE_form($A, $error = false)
 * @editor       string      editor to use
 *
 */
-function PAGE_edit($sp_id, $action = '', $editor = '')
+function PAGE_edit($sp_id, $action = '', $editor = '',$preview_content = '')
 {
     global $_CONF, $_SP_CONF, $_TABLES, $_USER, $LANG_STATIC;
 
@@ -398,6 +406,17 @@ function PAGE_edit($sp_id, $action = '', $editor = '')
         $result = DB_query ("SELECT *,UNIX_TIMESTAMP(sp_date) AS unixdate FROM {$_TABLES['staticpage']} WHERE sp_id = '$sp_id'" . COM_getPermSQL ('AND', 0, 3));
         $A = DB_fetchArray ($result);
         $A['sp_old_id'] = $A['sp_id'];  // // sp_old_id is not null, this is an existing page
+
+
+        if (($_SP_CONF['allow_php'] == 1) && SEC_hasRights ('staticpages.PHP')) {
+            if (!isset ($A['sp_php'])) {
+                $A['sp_php'] = 0;
+            }
+        }
+        $preview_content = SP_render_content ($A['sp_content'], $A['sp_php']);
+        $preview_title = isset($A['sp_title']) ? $A['sp_title'] : '';
+
+
     } elseif ($action == 'edit') {
         // we're creating a new staticpage, set default values
         $A['sp_id'] = COM_makesid ();   // make a default new/unique staticpage ID based upon the datetime
@@ -427,12 +446,22 @@ function PAGE_edit($sp_id, $action = '', $editor = '')
         if (empty ($A['unixdate'])) {
             $A['unixdate'] = time ();   // update date and time
         }
+        if ( isset($_POST['sp_status_yes'] ) || isset($_POST['sp_status_no']) ) {
+            if ( isset($_POST['sp_status_yes'])) $A['sp_status'] = 1;
+            if ( isset($_POST['sp_status_no']))  $A['sp_status'] = 0;
+        } else {
+            $A['sp_status'] = isset($_POST['sp_status']) ? 1 : 0;
+        }
         $A['sp_content'] = COM_checkHTML (COM_checkWords ($A['sp_content']));
     }
     if (isset ($A['sp_title'])) {
         $A['sp_title'] = strip_tags ($A['sp_title']);
+        $A['preview_title'] = $A['sp_title'];
     }
     $A['editor'] = $editor;
+    $A['preview_content'] = $preview_content;
+
+    if ( $action == 'preview') { $A['show_preview'] = 1; $A['preview'] = 1; }
 
     return PAGE_form($A);
 }
@@ -731,12 +760,12 @@ function PAGE_toggleStatus($enabledstaticpages, $sp_idarray)
 // MAIN ========================================================================
 
 $action = '';
-$expected = array('edit','clone','save','delete','cancel');
+$expected = array('edit','clone','save','delete','cancel','preview');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
     } elseif (isset($_GET[$provided])) {
-	$action = $provided;
+	    $action = $provided;
     }
 }
 
@@ -762,7 +791,27 @@ if (isset ($_POST['staticpageenabler']) && SEC_checkToken()) {
     exit;
 }
 
+$preview_content = '';
+$sp_php = '';
 switch ($action) {
+
+    case 'preview':
+        $sp_php = isset($_POST['sp_php']) ? $_POST['sp_php'] : '';
+        $editor_content = isset($_POST['sp_content']) ? $_POST['sp_content'] : '';
+        $preview_content = SP_render_content ($editor_content, $sp_php);
+        $preview_title = isset($_POST['sp_title']) ? $_POST['sp_title'] : '';
+
+        $owner_id = $_POST['owner_id'];
+        $group_id = $_POST['group_id'];
+        $perm_owner = $_POST['perm_owner'];
+        $perm_group = $_POST['perm_group'];
+        $perm_members = $_POST['perm_members'];
+        $perm_anon = $_POST['perm_anon'];
+        list($perm_owner,$perm_group,$perm_members,$perm_anon) = SEC_getPermissionValues($perm_owner,$perm_group,$perm_members,$perm_anon);
+        $_POST['perm_owner'] = $perm_owner;
+        $_POST['perm_group'] = $perm_group;
+        $_POST['perm_members'] = $perm_members;
+        $_POST['perm_anon'] = $perm_anon;
 
     case 'edit':
         SEC_setCookie ($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral('advancededitor'),
@@ -773,7 +822,7 @@ switch ($action) {
         if (isset ($_GET['editor'])) {
             $editor = COM_applyFilter ($_GET['editor']);
         }
-        $display .= PAGE_edit($sp_id, $action, $editor);
+        $display .= PAGE_edit($sp_id, $action, $editor, $preview_content);
         $display .= COM_siteFooter ();
         break;
 

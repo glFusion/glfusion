@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.5.2 (Unreleased)
+  - Added preview option to pages editor
   - Updated menu system - implemented SmartMenus which is much more flexible and supports multi level menus
   - Added editor save options as sticky button on right side of screen
   - Added class parameter to media gallery auto tags

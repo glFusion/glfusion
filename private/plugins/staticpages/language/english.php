@@ -120,6 +120,7 @@ $LANG_STATIC = array(
     'page_list' => 'Page List',
     'instructions_edit' => 'This screen allows you to create / edit a new static page. Pages can contain PHP code and HTML code.',
     'attributes' => 'Attributes',
+    'preview_help' => 'Select the <b>Preview</b> button to refresh the preview display',
 );
 
 $LANG_SP_AUTOTAG = array(
