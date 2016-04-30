@@ -67,7 +67,6 @@ function MG_popupHeader($pagetitle = '') {
     // If we reach here then either we have the default theme OR
     // the current theme only needs the default variable substitutions
 
-//	$header = new Template($_CONF['path_html'] . $mb_base_path . '/templates');
 	$header = new Template($_CONF['path'].'plugins/ckeditor/templates/mediagallery');
     $header->set_file('header','mb_header.thtml');
 
@@ -167,7 +166,7 @@ $album_jumpbox_raw = $album_jumpbox;
 
 
 $album_jumpbox_full = $LANG_mgMB['select_album'] . ':&nbsp;<select name="aid" onChange="forms[\'mediabrowser\'].submit()">';
-$album_jumpbox_full .= $album_jumpbox; //$MG_albums[0]->buildJumpBox($album_id);
+$album_jumpbox_full .= $album_jumpbox;
 $album_jumpbox_full .= '</select>';
 $album_jumpbox_full .= '&nbsp;<input type="submit" value="' . $LANG_mgMB['go'] . '">';
 $album_jumpbox_full .= '<input type="hidden" name="page" value="1">';
@@ -248,7 +247,6 @@ if ( $total_print_pages == 0 ) {
     $total_print_pages = 1;
 }
 
-//$T = new Template($_CONF['path_html'] . $mb_base_path . '/templates');
 $T = new Template($_CONF['path'].'plugins/ckeditor/templates/mediagallery');
 
 $T->set_file (array(
@@ -420,6 +418,7 @@ if ( $total_media > 0 ) {
                 'CELL_DISPLAY_IMAGE'  =>  $celldisplay,
                 'raw_thumb' => $media_thumbnail,
                 'media_id'  => $MG_media[$j]->id,
+                'title'     => $MG_media[$j]->title,
             ));
             $T->parse('IDetail', 'ImageDetail',true);
             $T->parse('IColumn', 'ImageColumn',true);
