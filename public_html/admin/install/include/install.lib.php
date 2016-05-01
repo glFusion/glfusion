@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion installation script.                                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric Warren            eric AT glfusion DOT org                          |
@@ -580,7 +580,8 @@ function INST_createDatabaseStructures ($use_innodb = false)
         echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
         exit;
     }
-    require_once $_CONF['path'] . 'sql/' . $dbDriver . '_tableanddata.php';
+    if ( $dbDriver == 'mysql' || $dbDriver == 'mysqli' ) $sqldatafile = 'mysql';
+    require_once $_CONF['path'] . 'sql/' . $sqldatafile . '_tableanddata.php';
 
     $progress = '';
     $errors = '';
@@ -608,7 +609,7 @@ function INST_createDatabaseStructures ($use_innodb = false)
         $progress .= "executing " . $data . "<br />\n";
         DB_query ($data,1);
         if ( DB_error() ) {
-            $errors .= DB_error() . "<br />\n";
+            $errors .= $data . '<br>'. DB_error() . "<br />\n";
             $rc = false;
         }
     }
@@ -662,7 +663,7 @@ function INST_updateDB($_SQL,$use_innodb)
     foreach ($_SQL as $sql) {
         DB_query($sql,1);
         if ( DB_error() ) {
-            $errors .= DB_error() . '<br />' . LB;
+            $errors .= $sql . '<br>' . DB_error() . '<br />' . LB;
             $rc = false;
         }
     }

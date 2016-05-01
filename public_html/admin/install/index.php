@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Installation                                                    |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric Warren            eric AT glfusion DOT org                          |
@@ -307,6 +307,7 @@ function _displayError($error,$step,$errorText='')
             $T->set_var('text',$errorText);
             break;
     }
+    $T->set_var('detailed_error',$errorText);
     $T->set_var('step',$step);
     $T->set_var('hiddenfields',_buildHiddenFields());
     $T->set_var('lang_online_install_help',$LANG_INSTALL['online_install_help']);
@@ -1136,7 +1137,7 @@ function INST_gotSiteInformation()
             if ( class_exists('MySQLi') ) {
                 $db_type = 'mysqli';
             } else {
-             $db_type = 'mysql';
+                $db_type = 'mysql';
             }
             break;
     }

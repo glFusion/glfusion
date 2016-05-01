@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion installation SQL                                                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -310,7 +310,7 @@ CREATE TABLE {$_TABLES['sessions']} (
   start_time int(10) unsigned NOT NULL default '0',
   remote_ip varchar(45) NOT NULL default '',
   uid mediumint(8) NOT NULL default '1',
-  md5_sess_id varchar(128) default '',
+  md5_sess_id varchar(128) NOT NULL default '',
   PRIMARY KEY  (md5_sess_id),
   KEY start_time (start_time),
   KEY remote_ip (remote_ip)
