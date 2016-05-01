@@ -4,9 +4,9 @@
 // +--------------------------------------------------------------------------+
 // |lib-widgets.php                                                           |
 // |                                                                          |
-// | A place for widget functions, mootools based or otherwise                |
+// | A place for widget functions, jquery based or otherwise                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Joe Mucchiello         jmucchiello AT yahoo DOT com                      |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -231,61 +231,38 @@ function WIDGET_slider( $dataArray )
 {
     global $_CONF;
 
-    /* default slider options
-      'mode' => 's',
-      'slideWidth' => 'n',
-      'speed' => 'n',
-      'slideMargin' => 'n',
-      'startSlide' => 'n',
-      'randomStart' => 'b',
-      'infiniteLoop' => 'b',
-      'hideControlOnEnd' => 'b',
-      'captions' => 'b',
-      'responsive' => 'b',
-      'touchEnabled' => 'b',
-      'pager' => 'b',
-      'pagerType' => 's',
-      'auto' => 'b'
-    */
-
-    /* -- nivo slider options
-        effect: \'fade\',                 // Specify sets like: \'fold,fade,sliceDown\'
-        slices: 15,                       // For slice animations
-        boxCols: 8,                       // For box animations
-        boxRows: 4,                       // For box animations
-        animSpeed: 500,                   // Slide transition speed
-        pauseTime: 3000,                  // How long each slide will show
-        startSlide: 0,                    // Set starting Slide (0 index)
-        directionNav: true,               // Next & Prev navigation
-        controlNav: true,                 // 1,2,3... navigation
-        controlNavThumbs: false,          // Use thumbnails for Control Nav
-        pauseOnHover: true,               // Stop animation while hovering
-        manualAdvance: false,             // Force manual transitions
-        prevText: \'Prev\',                 // Prev directionNav text
-        nextText: \'Next\',                 // Next directionNav text
-        randomStart: false,               // Start on a random slide
-        beforeChange: function(){},       // Triggers before a slide transition
-        afterChange: function(){},        // Triggers after a slide transition
-        slideshowEnd: function(){},       // Triggers after all slides have been shown
-        lastSlide: function(){},          // Triggers when last slide is shown
-        afterLoad: function(){}           // Triggers when slider has loaded
-    */
-
     $optionTypeArray = array(
-      'mode' => array('map' => 'effect', 'type' => 's', 'valid' => array('fold','fade','sliceDown'), 'default' => 'fade'),
-      'slideWidth' => array('map' => '', 'type' => 'n'),
-      'speed' => array('map' => 'pauseTime', 'type' => 'n'),
-      'slideMargin' => array('map' => '', 'type' => 'n'),
-      'startSlide' => array('map' => 'startSlide', 'type' => 'n'),
-      'randomStart' => array('map' => 'randomStart', 'type' => 'b'),
-      'infiniteLoop' => array('map' => '', 'type' => 'b'),
-      'hideControlOnEnd' => array('map' => '', 'type' => 'b'),
-      'captions' => array('map' => '', 'type' => 'b'),
-      'responsive' => array('map' => '', 'type' => 'b'),
-      'touchEnabled' => array('map' => '', 'type' => 'b'),
-      'pager' => array('map' => 'controlNav', 'type' => 'b'),
-      'pagerType' => array('map' => '', 'type' => 's'),
-      'auto' => array('map' => '', 'type' => 'b'),
+        'effect' => array('map' => 'effect', 'type' => 's', 'valid' => array('fold','fade','sliceDown'), 'default' => 'fade'),
+        'slices' => array('map' => 'slices', 'type' => 'n'),
+        'boxCols' => array('map' => 'boxCols', 'type' => 'n'),
+        'boxRows' => array('map' => 'boxRows', 'type' => 'n'),
+        'animSpeed' => array('map' => 'animSpeed', 'type' => 'n'),
+        'pauseTime' => array('map' => 'pauseTime', 'type' => 'n'),
+        'startSlide' => array('map' => 'startSlide', 'type' => 'n'),
+        'directionNav' => array('map' => 'directionNav', 'type' => 'b'),
+        'controlNav' => array('map' => 'controlNav', 'type' => 'b'),
+        'controlNavThumbs' => array('map' => 'controlNavThumbs', 'type' => 'b'),
+        'pauseOnHover' => array('map' => 'pauseOnHover', 'type' => 'b'),
+        'manualAdvance' => array('map' => 'manualAdvance', 'type' => 'b'),
+        'prevText' => array('map' => 'prevText', 'type' => 's'),
+        'nextText' => array('map' => 'nextText', 'type' => 's'),
+        'randomStart' => array('map' => 'randomStart', 'type' => 'b'),
+        'link'        => array('map' => 'link', 'type' => 's', 'valid' => array('image','caption'),'default' => 'image'),
+
+        'mode' => array('map' => 'effect', 'type' => 's', 'valid' => array('fold','fade','sliceDown'), 'default' => 'fade'),
+        'slideWidth' => array('map' => '', 'type' => 'n'),
+        'speed' => array('map' => 'pauseTime', 'type' => 'n'),
+        'slideMargin' => array('map' => '', 'type' => 'n'),
+//        'startSlide' => array('map' => 'startSlide', 'type' => 'n'),
+//        'randomStart' => array('map' => 'randomStart', 'type' => 'b'),
+        'infiniteLoop' => array('map' => '', 'type' => 'b'),
+        'hideControlOnEnd' => array('map' => '', 'type' => 'b'),
+        'captions' => array('map' => '', 'type' => 'b'),
+        'responsive' => array('map' => '', 'type' => 'b'),
+        'touchEnabled' => array('map' => '', 'type' => 'b'),
+        'pager' => array('map' => 'controlNav', 'type' => 'b'),
+        'pagerType' => array('map' => '', 'type' => 's'),
+        'auto' => array('map' => '', 'type' => 'b'),
     );
 
     $retval = '';
@@ -310,8 +287,8 @@ function WIDGET_slider( $dataArray )
         $retval .= '<img src="'.$imageURL.'" alt="" ';
         if ( $images['caption'] != '' ) {
             $retval .= 'title="#slider-'.$rand.'-slide'.$slideCounter.'-caption"';
-
             $captionHTML .= '<div id="slider-'.$rand.'-slide'.$slideCounter.'-caption"  class="nivo-html-caption">' . LB;
+            $captionHTML .= '<a href="'.$images['link'].'">' . LB;
             $captionHTML .= $images['caption'] . LB;
             $captionHTML .= '</div>' . LB;
         }
