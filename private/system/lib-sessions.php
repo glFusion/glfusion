@@ -65,6 +65,8 @@ session_name($_CONF['cookie_session']); // cookie name
 
 $_USER = SESS_sessionCheck();
 
+$_CONTEXT = array();
+
 /**
 * Check if user has valid session
 *
@@ -587,7 +589,6 @@ function SESS_setVar($name, $value)
     $_SESSION[$name] = $value;
 }
 
-
 /**
 * Get session variable
 *
@@ -605,7 +606,6 @@ function SESS_getVar($name)
         return 0;
     }
 }
-
 
 /**
 * Check if session variable is set
@@ -633,6 +633,41 @@ function SESS_isSet($name)
 function SESS_unSet($name)
 {
     unset ($_SESSION[$name]);
+}
+
+/**
+* Set current context
+*
+* set current context variables
+*
+* @param    array   $data     array of variable / value pairs of current context
+* @return   none
+*
+*/
+function SESS_setContext($data)
+{
+    global $_CONTEXT;
+
+    if (is_array($data) ) {
+        foreach ($data as $item => $value ) {
+            $_CONTEXT[$item] = $value;
+        }
+    }
+}
+
+/**
+* Clear context
+*
+* clears the current context variables (reset)
+*
+* @return   none
+*
+*/
+function SESS_clearContext()
+{
+    global $_CONTEXT;
+
+    $_CONTEXT = array();
 }
 
 
