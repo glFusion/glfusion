@@ -78,6 +78,8 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
 
     static $storycounter = 0;
 
+    SESS_setContext(array('type' => 'article','sid' => $story->_sid));
+
     if( empty( $storytpl )) {
         $storytpl = 'storytext.thtml';
     }
@@ -279,6 +281,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                         }
                     }
                     $article_array = explode( '[page_break]', $bodytext );
+
                     $pagelinks = COM_printPageNavigation(
                         $articleUrl, $story_page, count( $article_array ),
                         'mode=', $_CONF['url_rewrite'], $LANG01[118]);
@@ -579,7 +582,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
     }
 
     $article->parse('finalstory',$article_filevar);
-
+    SESS_clearContext();
     return $article->finish( $article->get_var( 'finalstory' ));
 }
 
