@@ -1,10 +1,13 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.5.2 (Unreleased)
+  - Replaced jQuery rotator widget with Nivo-Slider jQuery plugin
   - Added preview option to pages editor
+  - Improved installation error reporting
   - Updated menu system - implemented SmartMenus which is much more flexible and supports multi level menus
   - Added editor save options as sticky button on right side of screen
-  - Added class parameter to media gallery auto tags
+  - Media Gallery - Added class parameter to auto tags
+  - Fixed issue where newly created forums, that have no posts, would display an invalid last update date
   - Improved error checking on URL parameters in admin lists
   - Removed Are You a Human CAPTCHA option (service has shutdown)
   - Security fixes to address potential XSS issue
