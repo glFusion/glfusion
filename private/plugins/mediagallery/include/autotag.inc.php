@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | autotag.inc.php                                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -94,6 +94,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
         $linkID         = 0;
         $alt            = 0;
         $link_src       = 'disp';
+        $classes        = '';
 
         if ( $align != '' ) {
             $aSet = 1;
@@ -169,6 +170,11 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                     $a = explode (':',$part);
                     $mp3_type = $a[1];
                     $skip++;
+                } elseif ( substr($part,0,6) == 'class:' ) {
+                    $a = explode (':', $part );
+                    $classes = preg_split("/[\s:]+/", $part);
+                    $classes = $a[1];
+                    $skip++;
                 } elseif ( substr($part,0,8) == 'linksrc:' ) {
                     $a = explode (':',$part);
                     $link_src = $a[1];
@@ -176,7 +182,6 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                         $link_src = 'disp';
                     }
                     $skip++;
-
                 } else {
                     break;
                 }
@@ -440,11 +445,11 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                             }
 
                             if ( $align != '' && $align != "center") {
-                                $link = '<div class="js-video ['.$vimeo.'widescreen]"><span style="float:' . $align . ';padding:5px;">' . $row['remote_url'] . '</span></div>';
+                                $link = '<div class="js-video ['.$vimeo.'widescreen] '.$classes. '"><span style="float:' . $align . ';padding:5px;">' . $row['remote_url'] . '</span></div>';
                             } else if ( $align == 'center' ) {
-                                $link = '<div class="js-video ['.$vimeo.'widescreen]"><span style="text-align:center;padding:5px;">' . $row['remote_url'] . '</span></div>';
+                                $link = '<div class="js-video ['.$vimeo.'widescreen] ' . $classes. '"><span style="text-align:center;padding:5px;">' . $row['remote_url'] . '</span></div>';
                             } else {
-                                $link = '<div class="js-video ['.$vimeo.'widescreen]"><span style="padding:5px;">' . $row['remote_url'] . '</span></div>';
+                                $link = '<div class="js-video ['.$vimeo.'widescreen] '.$classes.'"><span style="padding:5px;">' . $row['remote_url'] . '</span></div>';
                             }
                             if ( $destination != 'block' ) {
                                 $content = str_replace ($autotag['tagstr'], $link, $content);
@@ -774,11 +779,11 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
 
                             $V->parse('output','video');
                             if ( $align != '' && $align != "center") {
-                                $u_image .= '<span style="float:' . $align . ';padding:5px;">' . $V->finish($V->get_var('output'))  . '</span>';
+                                $u_image .= '<span class="'.$classes.'" style="float:' . $align . ';padding:5px;">' . $V->finish($V->get_var('output'))  . '</span>';
                             } else if ($align == "center") {
-                                $u_image .= '<span style="text-align:center;padding:5px;">' . $V->finish($V->get_var('output'))  . '</span>';
+                                $u_image .= '<span class="'.$classes.'" style="text-align:center;padding:5px;">' . $V->finish($V->get_var('output'))  . '</span>';
                             } else {
-                                $u_image .= '<span style="padding:5px;">' . $V->finish($V->get_var('output'))  . '</span>';
+                                $u_image .= '<span class="'.$classes.'" style="padding:5px;">' . $V->finish($V->get_var('output'))  . '</span>';
                             }
                             break;
                     }
@@ -909,11 +914,11 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                             ));
                             $V->parse('output','audio');
                             if ( $align != '' && $align != "center") {
-                                $u_image = '<div style="float:' . $align . ';padding:5px;">' . $V->finish($V->get_var('output')) . '</div>';
+                                $u_image = '<div class="'.$classes.'" style="float:' . $align . ';padding:5px;">' . $V->finish($V->get_var('output')) . '</div>';
                             } else if ($align == "center") {
-                                $u_image = '<div style="text-align:center;padding:5px;">' . $V->finish($V->get_var('output')) . '</div>';
+                                $u_image = '<div class="'.$classes.'" style="text-align:center;padding:5px;">' . $V->finish($V->get_var('output')) . '</div>';
                             } else {
-                                $u_image = '<div style="padding:5px;">' . $V->finish($V->get_var('output')) . '</div>';
+                                $u_image = '<div class="'.$classes.'" style="padding:5px;">' . $V->finish($V->get_var('output')) . '</div>';
                             }
                             break;
                     }
@@ -982,11 +987,11 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                 $link = $swfobject . $captionHTML;
 
                 if ( $align != '' && $align != "center") {
-                    $link = '<span style="float:' . $align . ';padding:5px;text-align:center;">' . $link . '</span>';
+                    $link = '<span class="'.$classes.'" style="float:' . $align . ';padding:5px;text-align:center;">' . $link . '</span>';
                 } else if ($align == "center") {
-                    $link = '<center><span style="padding:5px;text-align:center;">' . $link . '</span></center>';
+                    $link = '<center><span class="'.$classes.'" style="padding:5px;text-align:center;">' . $link . '</span></center>';
                 } else {
-                    $link = '<span style="padding:5px;text-align:center;">' . $link . '</span>';
+                    $link = '<span class="'.$classes.'" style="padding:5px;text-align:center;">' . $link . '</span>';
                 }
                 if ( $destination != 'block' ) {
                     $content = str_replace ($autotag['tagstr'], $link, $content);
@@ -1099,9 +1104,9 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                     }
 
                     if ( $MG_albums[$parm1]->hidden == 1 || $enable_link == 0 ) {
-                        $pics .= '<img class="slideshowThumbnail' . $ss_count . $active . '" src="' . $_MG_CONF['mediaobjects_url'] . '/' . $src . '/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $ext . '" alt="" style="width:' . $newwidth . 'px;height:' . $newheight . 'px;border:none;position:absolute;left:0px;top:0px;" />' . LB;
+                        $pics .= '<img class="slideshowThumbnail' . $ss_count . $active . ' '.$classes.'" src="' . $_MG_CONF['mediaobjects_url'] . '/' . $src . '/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $ext . '" alt="" style="width:' . $newwidth . 'px;height:' . $newheight . 'px;border:none;position:absolute;left:0px;top:0px;" />' . LB;
                     } else {
-                        $pics .= '<img class="slideshowThumbnail' . $ss_count . $active .  '" src="' . $_MG_CONF['mediaobjects_url'] . '/' . $src . '/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $ext . '" alt="" style="width:' . $newwidth . 'px;height:' . $newheight . 'px;border:none;position:absolute;left:0px;top:0px;" />' . LB;
+                        $pics .= '<img class="slideshowThumbnail' . $ss_count . $active .  ' '.$classes.'". src="' . $_MG_CONF['mediaobjects_url'] . '/' . $src . '/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $ext . '" alt="" style="width:' . $newwidth . 'px;height:' . $newheight . 'px;border:none;position:absolute;left:0px;top:0px;" />' . LB;
                     }
                 }
                 if ( $delay <= 0 ) {
@@ -1209,7 +1214,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                 if ( $media_size == false ) {
                     $tnImage = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
                     $tnFileName = $_MG_CONF['path_mediaobjects'] . 'placeholder.svg';
-                    $media_size = array(200,200); //@getimagesize($tnFileName);
+                    $media_size = array(200,200);
                 }
                 if ( $width > 0 && $height == 0 ) {
                     $ratio = $media_size[0] / $width;
@@ -1426,12 +1431,12 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                     }
                     if ( $autotag['tag'] == 'img' ) {
                         if ( $align != '' && $align != 'center' ) {
-                            $album_image = '<span style="float:' . $align . ';padding:5px;"><img src="' . $media_thumbnail . '" ' . $alttag . 'style="border:none;" /></span>';
+                            $album_image = '<span class="'.$classes.'" style="float:' . $align . ';padding:5px;"><img src="' . $media_thumbnail . '" ' . $alttag . 'style="border:none;" /></span>';
                         } else {
-                            $album_image = '<img src="' . $media_thumbnail . '" ' . $alttag . 'style="border:none;" />';
+                            $album_image = '<img class="'.$classes.'" src="' . $media_thumbnail . '" ' . $alttag . 'style="border:none;" />';
                         }
                     } else {
-                        $album_image = '<img src="' . $media_thumbnail . '" ' . $alttag . 'style="border:none;" />';
+                        $album_image = '<img class="'.$classes.'" src="' . $media_thumbnail . '" ' . $alttag . 'style="border:none;" />';
                     }
                 } else {
                     return $content; // no image found
@@ -1476,7 +1481,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                         $newwidth = round($mediaSize[0] / $ratio);
                     }
                 }
-                $album_image = '<img src="' . $media_thumbnail . '" ' . $alttag . ' style="width:' . $newwidth . 'px;height:' . $newheight . 'px;border:none;" />';
+                $album_image = '<img class="'.$classes.'" src="' . $media_thumbnail . '" ' . $alttag . ' style="width:' . $newwidth . 'px;height:' . $newheight . 'px;border:none;" />';
 
                 $tagtext = $album_image;
                 $link = '';
@@ -1534,7 +1539,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                 }
                 if ( $autotag['tag'] == 'img' ) {
                     if ( $align != '' && $align != 'center' ) {
-                        $link = '<span style="float:' . $align . ';padding:5px;">'.$link.'</span>';
+                        $link = '<span class="'.$classes.'" style="float:' . $align . ';padding:5px;">'.$link.'</span>';
                     }
                     if ( $destination != 'block' ) {
                         $content = str_replace ($autotag['tagstr'], $link, $content);
