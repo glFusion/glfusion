@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | Common functions and startup code                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -41,7 +41,7 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
     die('This file can not be used on its own!');
 }
 
-// we must have PHP v5.0 or greater
+// we must have PHP v5.3 or greater
 if (version_compare(PHP_VERSION,'5.3.0','<')) {
     die('Sorry, glFusion requires PHP version 5.3.0 or greater.');
 }
@@ -6641,6 +6641,11 @@ function _css_out()
             }
         }
     }
+
+    // default css to support JS libraries
+    $files[] = $_CONF['path_html'].'javascript/addons/nivo-slider/nivo-slider.css';
+    $files[] = $_CONF['path_html'].'javascript/addons/nivo-slider/themes/default/default.css';
+
 //  Custom CSS added by theme if it supports it...
 //    if ( file_exists($_CONF['path_layout'] .'custom.css') ) {
 //        $files[] = $_CONF['path_layout'] . 'custom.css';
@@ -6884,6 +6889,7 @@ function _js_out()
         if ( !isset($_SYSTEM['disable_jquery_slideshow']) || $_SYSTEM['disable_jquery_slideshow'] == false ) {
             $files[] = $_CONF['path_html'].'javascript/addons/tcycle/jquery.tcycle.min.js';
         }
+        $files[] = $_CONF['path_html'].'javascript/addons/nivo-slider/jquery.nivo.slider.pack.js';
     }
     $files[] = $_CONF['path_html'].'javascript/common.min.js';
 
