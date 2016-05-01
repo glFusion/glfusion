@@ -145,8 +145,225 @@ function WIDGET_autotranslations($header=0) {
     return $retval;
 }
 
+function WIDGET_UIKITslider( $dataArray )
+{
+    global $_CONF;
+
+    $optionTypeArray = array(
+        'animation' => 's',         // Defines the preferred transition between items.
+        'duration'  => 'n',         // Defines the transition duration.
+        'height'    => 's',         // Defines the slideshow height.
+        'start'     => 'n',         // Defines the first slideshow item to be displayed.
+        'autoplay'  => 'b',         // Defines whether or not the slideshow items should switch automatically.
+        'pauseOnHover' => 'b',      // Pause autoplay when hovering a slideshow.
+        'autoplayInterval' => 'n',  // Defines the timespan between switching slideshow items.
+        'videoautoplay' => 'b',     // Defines whether or not a video starts automatically.
+        'videomute' => 'b',         // Defines whether or not a video is muted.
+        'kenburns' => 'b',          // Defines whether or not the Ken Burns effect is active. If kenburns is a numeric value, it will be used as the animation duration.
+    );
+
+    $last = 0;
+    $first = 0;
+    $rand = rand(1,1000);
+    $slideCounter = 0;
+    $captionDiv = '';
+    $retval = '';
+    $dotnav = '';
+
+    $retval .= '<div class="uk-slidenav-position uk-margin-bottom" data-uk-slideshow="{';
+    foreach ($dataArray['options'] as $option => $value ) {
+        if ( isset($optionTypeArray[$option]) ) {
+            if ( $last > 0 ) $retval .= ',';
+            $retval .= $option . ": ";
+            switch ($optionTypeArray[$option]) {
+                case 's' :
+                    $retval .= "'" . $value . "'";
+                    break;
+                case 'b' :
+                    $retval .= $value == 0 ? 'false' : 'true';
+                    break;
+                case 'n' :
+                    $retval .= $value;
+                    break;
+                default :
+                    $retval .= "'" . $value ."'";
+                    break;
+            }
+            $last++;
+        }
+    }
+    $retval .= '}">';
+    $retval .= '<ul class="uk-slideshow">';
+    foreach ($dataArray['images'] as $images ) {
+        $retval .= '<li>';
+        $retval .= '<img src="'.$images['image'].'" alt="" ' ;
+        $first++;
+        $retval .= '>';
+        if (isset($images['caption']) && $images['caption'] != '' ) {
+            if ( isset($images['link']) && $images['link'] != '' ) {
+                $retval .= '<a href="'.$images['link'].'">';
+            }
+//            $retval .= '<div class="uk-overlay-panel uk-overlay-background uk-overlay-top uk-hidden-small">'. $images['caption'] .'</div>';
+            $retval .= '<div class="uk-overlay-panel uk-overlay-background uk-overlay-bottom uk-hidden-small">'. $images['caption'] .'</div>';
+
+            if ( isset($images['link']) && $images['link'] != '' ) {
+                $retval .= '</a>';
+            }
+        }
+        $retval .= '</li>';
+        $dotnav .= '<li data-uk-slideshow-item="'.$slideCounter.'"><a href="#"></a></li>';
+        $slideCounter++;
+    }
+    $retval .= '</ul>';
+    $retval .= '<a href="" class="uk-slidenav uk-slidenav-contrast uk-slidenav-previous" data-uk-slideshow-item="previous"></a>';
+    $retval .= '<a href="" class="uk-slidenav uk-slidenav-contrast uk-slidenav-next" data-uk-slideshow-item="next"></a>';
+
+    $retval .= '<ul class="uk-dotnav uk-dotnav-contrast uk-position-bottom uk-flex-center">';
+    $retval .= $dotnav;
+    $retval .= '</ul>';
+
+    $retval .= '</div>';
+
+    return $retval;
+}
 
 function WIDGET_slider( $dataArray )
+{
+    global $_CONF;
+
+    /* default slider options
+      'mode' => 's',
+      'slideWidth' => 'n',
+      'speed' => 'n',
+      'slideMargin' => 'n',
+      'startSlide' => 'n',
+      'randomStart' => 'b',
+      'infiniteLoop' => 'b',
+      'hideControlOnEnd' => 'b',
+      'captions' => 'b',
+      'responsive' => 'b',
+      'touchEnabled' => 'b',
+      'pager' => 'b',
+      'pagerType' => 's',
+      'auto' => 'b'
+    */
+
+    /* -- nivo slider options
+        effect: \'fade\',                 // Specify sets like: \'fold,fade,sliceDown\'
+        slices: 15,                       // For slice animations
+        boxCols: 8,                       // For box animations
+        boxRows: 4,                       // For box animations
+        animSpeed: 500,                   // Slide transition speed
+        pauseTime: 3000,                  // How long each slide will show
+        startSlide: 0,                    // Set starting Slide (0 index)
+        directionNav: true,               // Next & Prev navigation
+        controlNav: true,                 // 1,2,3... navigation
+        controlNavThumbs: false,          // Use thumbnails for Control Nav
+        pauseOnHover: true,               // Stop animation while hovering
+        manualAdvance: false,             // Force manual transitions
+        prevText: \'Prev\',                 // Prev directionNav text
+        nextText: \'Next\',                 // Next directionNav text
+        randomStart: false,               // Start on a random slide
+        beforeChange: function(){},       // Triggers before a slide transition
+        afterChange: function(){},        // Triggers after a slide transition
+        slideshowEnd: function(){},       // Triggers after all slides have been shown
+        lastSlide: function(){},          // Triggers when last slide is shown
+        afterLoad: function(){}           // Triggers when slider has loaded
+    */
+
+    $optionTypeArray = array(
+      'mode' => array('map' => 'effect', 'type' => 's', 'valid' => array('fold','fade','sliceDown'), 'default' => 'fade'),
+      'slideWidth' => array('map' => '', 'type' => 'n'),
+      'speed' => array('map' => 'pauseTime', 'type' => 'n'),
+      'slideMargin' => array('map' => '', 'type' => 'n'),
+      'startSlide' => array('map' => 'startSlide', 'type' => 'n'),
+      'randomStart' => array('map' => 'randomStart', 'type' => 'b'),
+      'infiniteLoop' => array('map' => '', 'type' => 'b'),
+      'hideControlOnEnd' => array('map' => '', 'type' => 'b'),
+      'captions' => array('map' => '', 'type' => 'b'),
+      'responsive' => array('map' => '', 'type' => 'b'),
+      'touchEnabled' => array('map' => '', 'type' => 'b'),
+      'pager' => array('map' => 'controlNav', 'type' => 'b'),
+      'pagerType' => array('map' => '', 'type' => 's'),
+      'auto' => array('map' => '', 'type' => 'b'),
+    );
+
+    $retval = '';
+    $last = 0;
+    $first = 0;
+    $rand = rand(1,1000);
+    $slideCounter = 0;
+    $captionDiv = '';
+    $captionHTML = '';
+
+    $dotnav = '';
+
+    $retval .= '<div class="slider-wrapper theme-default">' . LB;
+    $retval .= '<div id="slider-'.$rand.'" class="nivoSlider">' . LB;
+
+    foreach ($dataArray['images'] as $images ) {
+        if ( isset($images['link']) && $images['link'] != '' ) {
+            $retval .= '<a href="'.$images['link'].'">' . LB;
+        }
+        $imageURL = str_replace( "%site_url%", $_CONF['site_url'], $images['image'] );
+
+        $retval .= '<img src="'.$imageURL.'" alt="" ';
+        if ( $images['caption'] != '' ) {
+            $retval .= 'title="#slider-'.$rand.'-slide'.$slideCounter.'-caption"';
+
+            $captionHTML .= '<div id="slider-'.$rand.'-slide'.$slideCounter.'-caption"  class="nivo-html-caption">' . LB;
+            $captionHTML .= $images['caption'] . LB;
+            $captionHTML .= '</div>' . LB;
+        }
+        $retval .= '>' . LB;
+        if (isset($images['link']) && $images['link'] != '' ) $retval .= '</a>' . LB;
+        $slideCounter++;
+    }
+    $retval .= '</div>' . LB;
+    $retval .= $captionHTML;
+    $retval .= '</div>' . LB;
+
+    $retval .= '
+<script type="text/javascript">
+$(window).load(function() {
+$(\'#slider-'.$rand.'\').nivoSlider({
+';
+    foreach ($dataArray['options'] as $option => $value ) {
+        if ( isset($optionTypeArray[$option]) ) {
+            if ( $optionTypeArray[$option]['map'] == '' ) continue;
+            if ( isset($optionTypeArray[$option]['valid']) ) {
+                if (!in_array($value,$optionTypeArray[$option]['valid']) ) {
+                    $value = $optionTypeArray[$option]['default'];
+                }
+            }
+            if ( $last > 0 ) $retval .= ',' . LB;
+            $retval .= $optionTypeArray[$option]['map'] . ": ";
+            switch ($optionTypeArray[$option]['type']) {
+                case 's' :
+                    $retval .= "'" . $value . "'";
+                    break;
+                case 'b' :
+                    $retval .= $value == 0 ? 'false' : 'true';
+                    break;
+                case 'n' :
+                    $retval .= $value;
+                    break;
+                default :
+                    $retval .= "'" . $value ."'";
+                    break;
+            }
+            $last++;
+        }
+    }
+    $retval .= LB;
+    $retval .= '});' . LB;
+    $retval .= '});' . LB;
+    $retval .= '</script>' . LB;
+
+    return $retval;
+}
+
+function WIDGET_sliderBX( $dataArray )
 {
     global $_CONF;
 
@@ -273,6 +490,7 @@ function WIDGET_springMenu($dataArray)
 
     return $retval;
 }
+
 
 /*
  * replaces mooslide()
