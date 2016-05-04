@@ -3,7 +3,7 @@
     <name>CKEditor</name>
     <description>CKEditor Provided WYSIWYG Editor Features</description>
     <version>1.0.4</version>
-    <glfusionversion>1.5.2</glfusionversion>
+    <glfusionversion>1.6.0</glfusionversion>
     <phpversion>5.3.0</phpversion>
     <url>http://www.glfusion.org</url>
     <maintainer>Mark R. Evans</maintainer>

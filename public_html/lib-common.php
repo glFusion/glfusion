@@ -60,7 +60,7 @@ if (version_compare(PHP_VERSION,'5.3.0','<')) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.5.2');
+    define('GVERSION', '1.6.0');
 }
 
 define('PATCHLEVEL','.pl0');

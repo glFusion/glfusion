@@ -55,6 +55,6 @@ $_TABLES['linksubmission']      = $_DB_table_prefix . 'linksubmission';
 $_LI_CONF['pi_name']            = 'links';
 $_LI_CONF['pi_display_name']    = 'Links';
 $_LI_CONF['pi_version']         = '2.1.5';
-$_LI_CONF['gl_version']         = '1.5.0';
+$_LI_CONF['gl_version']         = '1.6.0';
 $_LI_CONF['pi_url']             = 'http://www.glfusion.org/';
 ?>
