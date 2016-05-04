@@ -172,6 +172,8 @@ $LANG_INSTALL = array(
     'no_db_driver'              => 'You must have the MySQL extension loaded in PHP to install glFusion',
     'version_check'             => 'Check For Updates',
     'check_for_updates'         => 'Goto the Command & Control -Upgrade Check to see if there are any glFusion CMS or Plugin updates available.',
+    'quick_start'               => 'glFusion Quick Start Guide',
+    'quick_start_help'          => 'Please review  the <a href="https://www.glfusion.org/wiki/glfusion:quickstart">glFusion CMS Quick Start Guide</a> and the full <a href="https://www.glfusion.org/wiki/">glFusion CMS Documentation</a> site for details on configurating your new glFusion site.',
 );
 
 // +---------------------------------------------------------------------------+

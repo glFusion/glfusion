@@ -77,8 +77,9 @@ if ($type == 'install') {
 $display .= '<li style="padding-bottom:3px">' . $LANG_SUCCESS[16] . ' <strong>' . $_CONF['path'] . 'db-config.php</strong> ' . $LANG_SUCCESS[17] . ' <strong>' . $_CONF['path_html'] . 'siteconfig.php</strong> ' . $LANG_SUCCESS[18] . ' 755.</li>
 </ol>';
 
-$display .= '<p><strong>'.$LANG_INSTALL['language_support'].'</strong></p>';
-$display .= '<p>'.$LANG_INSTALL['language_pack'].'</p>';
+$display .= '<p><strong>'.$LANG_INSTALL['quick_start'].'</strong></p>';
+$display .= '<p>'.$LANG_INSTALL['quick_start_help'].'</p>';
+
 
 if ( $type == 'upgrade' ) {
     $display .= '<br/><p><strong>'.$LANG_INSTALL['version_check'].'</strong></p>';
