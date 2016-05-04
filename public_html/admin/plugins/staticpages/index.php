@@ -452,7 +452,7 @@ function PAGE_edit($sp_id, $action = '', $editor = '',$preview_content = '')
         } else {
             $A['sp_status'] = isset($_POST['sp_status']) ? 1 : 0;
         }
-        $A['sp_content'] = COM_checkHTML (COM_checkWords ($A['sp_content']));
+//        $A['sp_content'] = COM_checkHTML (COM_checkWords ($A['sp_content']));
     }
     if (isset ($A['sp_title'])) {
         $A['sp_title'] = strip_tags ($A['sp_title']);
