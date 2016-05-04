@@ -118,7 +118,8 @@ $LANG_STATIC = array(
     'allnhp_topics' => 'Kaikki aiheet (Ei etusivu)',
     'page_list' => 'Page List',
     'instructions_edit' => 'This screen allows you to create / edit a new static page. Pages can contain PHP code and HTML code.',
-    'attributes' => 'Attributes'
+    'attributes' => 'Attributes',
+    'preview_help' => 'Select the <b>Preview</b> button to refresh the preview display'
 );
 ###############################################################################
 # autotag descriptions

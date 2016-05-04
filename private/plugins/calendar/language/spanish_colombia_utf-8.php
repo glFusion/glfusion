@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # spanish_colombia_utf-8.php
 #
@@ -92,7 +91,7 @@ $LANG_CAL_1 = array(
     49 => 'It appears that there are no events on this site or no one has ever clicked on one.',
     50 => 'Eventos',
     51 => 'Borrar',
-    52 => 'Enviado por',
+    52 => 'Enviado por'
 );
 
 $_LANG_CAL_SEARCH = array(
@@ -177,11 +176,11 @@ $LANG_CAL_ADMIN = array(
     38 => 'Gestión Multiple',
     39 => 'Eventos',
     40 => 'Event List',
-    41 => 'This screen allows you to edit / create events. Edit the fields below and save.',
+    41 => 'This screen allows you to edit / create events. Edit the fields below and save.'
 );
 
 $LANG_CAL_AUTOTAG = array(
-    'desc_calendar' => 'Link: to a Calendar event on this site; link_text defaults to event title: [calendar:<i>event_id</i> {link_text}]',
+    'desc_calendar' => 'Link: to a Calendar event on this site; link_text defaults to event title: [calendar:<i>event_id</i> {link_text}]'
 );
 
 $LANG_CAL_MESSAGE = array(
@@ -225,7 +224,7 @@ $LANG_confignames['calendar'] = array(
     'aftersave' => 'After Saving Event',
     'default_permissions' => 'Event Default Permissions',
     'only_admin_submit' => 'Only Allow Admins to Submit',
-    'displayblocks' => 'Display glFusion Blocks',
+    'displayblocks' => 'Display glFusion Blocks'
 );
 
 $LANG_configsubgroups['calendar'] = array(

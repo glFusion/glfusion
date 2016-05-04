@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # spanish_colombia_utf-8.php
 # This is the spanish (Colombia) language file for the glFusion Static Page plugin
@@ -82,7 +81,7 @@ $LANG_STATIC = array(
     'stats_no_hits' => 'Parece que no hay páginas estáticas o que nadie las ha visto nunca.',
     'id' => 'ID',
     'duplicate_id' => 'La ID elegida ya está en uso. Por favor, elige otra.',
-    'instructions' => 'Para modificar o borrar, haz clic en el icono: <img src="'.$_CONF['layout_url'].'/images/edit.png" /> correspondiente. Para ver la pagina haz clic sobre el <b>Título</b>. Para crear, haz clic sobre el enlace: "<b>Crear</b>" arriba. Para crear una copia de una pagina existente, haz clic en el icono: <img src="'.$_CONF['layout_url'].'/images/copy.png" /> correspondiente.',
+    'instructions' => 'Para modificar o borrar, haz clic en el icono: <img src="/images/edit.png" /> correspondiente. Para ver la pagina haz clic sobre el <b>Título</b>. Para crear, haz clic sobre el enlace: "<b>Crear</b>" arriba. Para crear una copia de una pagina existente, haz clic en el icono: <img src="/images/copy.png" /> correspondiente.',
     'centerblock' => 'Bloque central',
     'centerblock_msg' => 'Cuando se selecciona esta opción la página estática aparecerá como un bloque central en la página de inicio.',
     'topic' => 'Sección: ',
@@ -120,12 +119,16 @@ $LANG_STATIC = array(
     'page_list' => 'Paginas',
     'instructions_edit' => 'Esta pantalla le permite crear/modificar/borrar una pagina. Las paginas puden contener tanto código PHP como HTML.',
     'attributes' => 'Atributos',
+    'preview_help' => 'Select the <b>Preview</b> button to refresh the preview display'
 );
+###############################################################################
+# autotag descriptions
 
 $LANG_SP_AUTOTAG = array(
     'desc_staticpage' => 'Link: to a staticpage on this site; link_text defaults to staticpage title. usage: [staticpage:<i>page_id</i> {link_text}]',
-    'desc_staticpage_content' => 'HTML: renders the content of a staticpage.  usage: [staticpage_content:<i>page_id</i>]',
+    'desc_staticpage_content' => 'HTML: renders the content of a staticpage.  usage: [staticpage_content:<i>page_id</i>]'
 );
+
 
 $PLG_staticpages_MESSAGE19 = '';
 $PLG_staticpages_MESSAGE20 = '';
@@ -155,7 +158,7 @@ $LANG_confignames['staticpages'] = array(
     'atom_max_items' => 'Max. Pages in Webservices Feed',
     'comment_code' => 'Comentarios',
     'include_search' => 'Incluir en Búsquedas',
-    'status_flag' => 'Modo predeterminado',
+    'status_flag' => 'Modo predeterminado'
 );
 
 $LANG_configsubgroups['staticpages'] = array(
@@ -176,7 +179,7 @@ $LANG_configselects['staticpages'] = array(
     9 => array('Ir a la Página' => 'item', 'Lista de Páginas' => 'list', 'Página de Inicio' => 'home', 'Panel de Control' => 'admin'),
     12 => array('Sin acceso' => 0, 'Solo-Lectura' => 2, 'Lectura-Escritura' => 3),
     13 => array('Habilitada' => 1, 'Deshabilitada' => 0),
-    17 => array('Comentarios Habilitados' => 0, 'Comentarios Deshabilitados' => -1),
+    17 => array('Comentarios Habilitados' => 0, 'Comentarios Deshabilitados' => -1)
 );
 
 ?>

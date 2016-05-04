@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # spanish_colombia_utf-8.php
 #
@@ -31,6 +30,13 @@ if (!defined ('GVERSION')) {
 }
 
 global $LANG32;
+
+###############################################################################
+# Array Format:
+# $LANGXX[YY]:  $LANG - variable name
+#               XX    - file id number
+#               YY    - phrase id number
+###############################################################################
 
 $LANG_POLLS = array(
     'polls' => 'Encuestas',
@@ -82,7 +88,7 @@ $LANG25 = array(
     16 => 'borrar',
     17 => 'Please enter a Poll ID',
     18 => 'Listado de Encuestas',
-    19 => 'Para modificar ó borrar, haz clic sobre el icono: <img src="'.$_CONF['layout_url'].'/images/edit.png" /> correspondiente. Para crear, haz clic sobre el enlace: "<b><i>Crear</i></b>" arriba.',
+    19 => 'Para modificar ó borrar, haz clic sobre el icono: <img src="/images/edit.png" /> correspondiente. Para crear, haz clic sobre el enlace: "<b><i>Crear</i></b>" arriba.',
     20 => 'Votos',
     21 => 'Acceso Negado',
     22 => "You are trying to access a poll that you don't have rights to.  This attempt has been logged. Please <a href=\"{$_CONF['site_admin_url']}/poll.php\">go back to the poll administration screen</a>.",
@@ -108,10 +114,13 @@ $LANG25 = array(
     42 => 'Are you absolutely sure you want to delete this Poll?  All questions, answers and comments that are associated with this Poll will also be permanently deleted from the database.'
 );
 
+###############################################################################
+# autotag descriptions
+
 $LANG_PO_AUTOTAG = array(
     'desc_poll' => 'Link: to a Poll on this site.  link_text defaults to the Poll topic.  usage: [poll:<i>poll_id</i> {link_text}]',
     'desc_poll_result' => 'HTML: renders the results of a Poll on this site.  usage: [poll_result:<i>poll_id</i>]',
-    'desc_poll_vote' => 'HTML: renders a voting block for a Poll on this site.  usage: [poll_vote:<i>poll_id</i>]',
+    'desc_poll_vote' => 'HTML: renders a voting block for a Poll on this site.  usage: [poll_vote:<i>poll_id</i>]'
 );
 
 $PLG_polls_MESSAGE19 = 'Tu encuesta se guardó satisfactoriamente.';
@@ -120,7 +129,6 @@ $PLG_polls_MESSAGE20 = 'Tu encuesta se ha borrado satisfactoriamente.';
 // Messages for the plugin upgrade
 $PLG_polls_MESSAGE3001 = 'Plugin upgrade not supported.';
 $PLG_polls_MESSAGE3002 = $LANG32[9];
-
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['polls'] = array(
@@ -139,7 +147,7 @@ $LANG_confignames['polls'] = array(
     'delete_polls' => 'Delete Polls with Owner?',
     'aftersave' => 'After Saving Poll',
     'default_permissions' => 'Poll Default Permissions',
-    'displayblocks' => 'Display glFusion Blocks',
+    'displayblocks' => 'Display glFusion Blocks'
 );
 
 $LANG_configsubgroups['polls'] = array(

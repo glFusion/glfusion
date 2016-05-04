@@ -29,9 +29,9 @@ if (!defined ('GVERSION')) {
 }
 
 $LANG_CHARSET = 'utf-8';
+$LANG_DIRECTION = 'rtl';
 
 $LANG_LOCALE = 'he_IL';
-$LANG_DIRECTION = 'rtl';
 
 ###############################################################################
 # Array Format:
