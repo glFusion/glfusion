@@ -974,7 +974,6 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/db-config.php'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/system/lib-custom.php'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/siteconfig.php'),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/stylecache_nouveau.css'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/backups/index.html'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/backups/README'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/data/glfusion.lck'),
