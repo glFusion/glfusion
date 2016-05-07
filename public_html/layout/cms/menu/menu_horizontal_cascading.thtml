@@ -26,7 +26,6 @@
 				showTimeout: 300,
 				showFunction: function($ul, complete) { $ul.fadeIn(425, complete); }
 			});
-			$('#{menuname}').smartmenus();
 		});
 	</script>
 {!endif}
