@@ -2,6 +2,7 @@ Please view this file on the master branch, on other branches it's out of date.
 
 v1.5.2 (Unreleased)
   - Replaced jQuery rotator widget with Nivo-Slider jQuery plugin
+  - Pass PHP version in version check (if send stats enabled)
   - Added preview option to pages editor
   - Improved installation error reporting
   - Updated menu system - implemented SmartMenus which is much more flexible and supports multi level menus

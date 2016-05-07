@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Enhancement Library                                             |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -347,7 +347,8 @@ function _checkVersion()
     $error=$http->GetRequestArguments($url,$arguments);
     $arguments["RequestMethod"]="POST";
     $arguments["PostValues"]=array(
-        "v"=>"v".GVERSION.PATCHLEVEL
+        "v"=>"v".GVERSION.PATCHLEVEL,
+        "p"=>"v".PHP_VERSION
     );
     if ( $_CONF['send_site_data'] ) {
         $arguments["PostValues"]['s'] = $_CONF['site_url'];
