@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin upgrade routines                                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -194,7 +194,8 @@ function mediagallery_upgrade()
             }
         case "1.6.8" :
         case "1.6.9" :
-        case '1.6.10' :
+        case '1.6.10':
+        case '2.0.0' :
             // no db / config changes.
         default :
             if ( $_DB_dbms != 'mssql' ) {
