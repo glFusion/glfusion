@@ -115,7 +115,7 @@ function _displayVersionData()
             array('text' => $LANG_UPGRADE['latest_version'], 'field' => 'latest_version'),
             array('text' => $LANG_UPGRADE['notes'], 'field' => 'notes'),
         );
-
+        asort($pluginData);
         foreach ($pluginData AS $plugin) {
             if ( $plugin['plugin'] == 'glfusioncms' ) {
                 continue;
