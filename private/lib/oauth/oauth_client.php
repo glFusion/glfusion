@@ -2,7 +2,7 @@
 /*
  * oauth_client.php
  *
- * @(#) $Id: oauth_client.php,v 1.142 2015/10/16 20:05:49 mlemos Exp $
+ * @(#) $Id: oauth_client.php,v 1.149 2016/05/03 02:06:12 mlemos Exp $
  *
  */
 
@@ -28,7 +28,7 @@ class oauth_session_value_class
 
 	<package>net.manuellemos.oauth</package>
 
-	<version>@(#) $Id: oauth_client.php,v 1.142 2015/10/16 20:05:49 mlemos Exp $</version>
+	<version>@(#) $Id: oauth_client.php,v 1.149 2016/05/03 02:06:12 mlemos Exp $</version>
 	<copyright>Copyright © (C) Manuel Lemos 2012</copyright>
 	<title>OAuth client</title>
 	<author>Manuel Lemos</author>
@@ -64,6 +64,7 @@ class oauth_session_value_class
 			<variablelink>authorization_header</variablelink>,
 			<variablelink>request_token_url</variablelink>,
 			<variablelink>dialog_url</variablelink>,
+			<variablelink>reauthenticate_dialog_url</variablelink>,
 			<variablelink>pin_dialog_url</variablelink>,
 			<variablelink>offline_dialog_url</variablelink>,
 			<variablelink>append_state_to_redirect_uri</variablelink> and
@@ -181,6 +182,24 @@ class oauth_client_class
 /*
 {metadocument}
 	<variable>
+		<name>log_file_name</name>
+		<type>STRING</type>
+		<value></value>
+		<documentation>
+			<purpose>Name of the file to store log messages</purpose>
+			<usage>Set this variable to the path of a file to which log messages
+				will be appended instead of sending to PHP error log when the
+				<variablelink>debug</variablelink> variable is set to
+				<booleanvalue>1</booleanvalue>.</usage>
+		</documentation>
+	</variable>
+{/metadocument}
+*/
+	var $log_file_name = '';
+
+/*
+{metadocument}
+	<variable>
 		<name>exit</name>
 		<type>BOOLEAN</type>
 		<value>0</value>
@@ -265,8 +284,9 @@ class oauth_client_class
 				<stringvalue>Google</stringvalue>,
 				<stringvalue>Google1</stringvalue> (Google with OAuth 1.0),
 				<stringvalue>imgur</stringvalue>,
-				<stringvalue>Intuit</stringvalue>,
+				<stringvalue>Infusionsoft</stringvalue>,
 				<stringvalue>Instagram</stringvalue>,
+				<stringvalue>Intuit</stringvalue>,
 				<stringvalue>Jawbone</stringvalue>,
 				<stringvalue>LinkedIn</stringvalue>,
 				<stringvalue>LinkedIn2</stringvalue> (LinkedIn with OAuth 2.0),
@@ -365,6 +385,8 @@ class oauth_client_class
 				For OAuth 1.0a servers that return the login dialog URL
 				automatically, set this variable to
 				<stringvalue>automatic</stringvalue><paragraphbreak />
+				For OAuth 1.0a servers that support 2 legged authentication set
+				this variable to <stringvalue>2legged</stringvalue><paragraphbreak />
 				For certain servers, the dialog URL can have certain marks that
 				will act as template placeholders which will be replaced with
 				values defined before redirecting the users browser. Currently it
@@ -383,6 +405,25 @@ class oauth_client_class
 {/metadocument}
 */
 	var $dialog_url = '';
+
+/*
+{metadocument}
+	<variable>
+		<name>reauthenticate_dialog_url</name>
+		<type>STRING</type>
+		<value></value>
+		<documentation>
+			<purpose>URL of the OAuth server to redirect the browser so the user
+				can grant access to your application.</purpose>
+			<usage>Set this variable when forcing the user to authenticate again
+				and the format of the of the authorization dialog page URL is
+				different than the one set to the
+				<variablelink>dialog_url</variablelink> variable.</usage>
+		</documentation>
+	</variable>
+{/metadocument}
+*/
+	var $reauthenticate_dialog_url = '';
 
 /*
 {metadocument}
@@ -714,6 +755,24 @@ class oauth_client_class
 /*
 {metadocument}
 	<variable>
+		<name>reauthenticate</name>
+		<type>BOOLEAN</type>
+		<value>0</value>
+		<documentation>
+			<purpose>Specify whether it will be necessary to force the user to
+				authenticate again even after the user has already authorized the
+				application before.</purpose>
+			<usage>Set this variable to <booleanvalue>1</booleanvalue> if you
+				want to force the user to authenticate again.</usage>
+		</documentation>
+	</variable>
+{/metadocument}
+*/
+	var $reauthenticate = false;
+
+/*
+{metadocument}
+	<variable>
 		<name>access_token</name>
 		<type>STRING</type>
 		<value></value>
@@ -969,6 +1028,24 @@ class oauth_client_class
 /*
 {metadocument}
 	<variable>
+		<name>response_headers</name>
+		<type>INTEGER</type>
+		<value>0</value>
+		<documentation>
+			<purpose>HTTP response headers returned by the server when calling an
+				API</purpose>
+			<usage>Check this variable after calling the
+				<functionlink>CallAPI</functionlink> function if the API calls and you
+				need to process the error depending the response headers.</usage>
+		</documentation>
+	</variable>
+{/metadocument}
+*/
+	var $response_headers = array();
+
+/*
+{metadocument}
+	<variable>
 		<name>oauth_username</name>
 		<type>STRING</type>
 		<value></value>
@@ -1050,7 +1127,7 @@ class oauth_client_class
 {/metadocument}
 */
 	var $http_arguments = array();
-	var $oauth_user_agent = 'PHP-OAuth-API (http://www.phpclasses.org/oauth-api $Revision: 1.142 $)';
+	var $oauth_user_agent = 'PHP-OAuth-API (http://www.phpclasses.org/oauth-api $Revision: 1.149 $)';
 
 	var $response_time = 0;
 	var $session = '';
@@ -1076,8 +1153,11 @@ class oauth_client_class
 		if($this->debug)
 		{
 			$message = $this->debug_prefix.$message;
-			$this->debug_output .= $message."\n";;
-			error_log($message);
+			$this->debug_output .= $message."\n";
+			if(strlen($this->log_file_name))
+				error_log($message."\n", 3, $this->log_file_name);
+			else
+				error_log($message);
 		}
 		return(true);
 	}
@@ -1134,9 +1214,9 @@ class oauth_client_class
 
 	Function GetDialogURL(&$url, $redirect_uri = '', $state = '')
 	{
-		$url = (($this->offline && strlen($this->offline_dialog_url)) ? $this->offline_dialog_url : (($redirect_uri === 'oob' && strlen($this->pin_dialog_url)) ? $this->pin_dialog_url : $this->dialog_url));
+		$url = (($this->offline && strlen($this->offline_dialog_url)) ? $this->offline_dialog_url : (($redirect_uri === 'oob' && strlen($this->pin_dialog_url)) ? $this->pin_dialog_url : ($this->reauthenticate ? $this->reauthenticate_dialog_url : $this->dialog_url)));
 		if(strlen($url) === 0)
-			return $this->SetError('the dialog URL '.($this->offline ? 'for offline access ' : '').'is not defined for this server');
+			return $this->SetError('the dialog URL '.($this->offline ? 'for offline access ' : ($this->reauthenticate ?  'for reautentication' : '')).'is not defined for this server');
 		$url = str_replace(
 			'{REDIRECT_URI}', UrlEncode($redirect_uri), str_replace(
 			'{STATE}', UrlEncode($state), str_replace(
@@ -1540,6 +1620,7 @@ class oauth_client_class
 		$http = new http_class;
 		$http->debug = ($this->debug && $this->debug_http);
 		$http->log_debug = true;
+		$http->log_file_name = $this->log_file_name;
 		$http->sasl_authenticate = 0;
 		$http->user_agent = $this->oauth_user_agent;
 		$http->redirection_limit = (IsSet($options['FollowRedirection']) ? intval($options['FollowRedirection']) : 0);
@@ -1694,6 +1775,7 @@ class oauth_client_class
 			return($this->SetError('it was not possible to access the '.$options['Resource'].': '.$error));
 		}
 		$this->response_status = intval($http->response_status);
+		$this->response_headers = $headers;
 		$content_type = (IsSet($options['ResponseContentType']) ? $options['ResponseContentType'] : (IsSet($headers['content-type']) ? strtolower(trim(strtok($headers['content-type'], ';'))) : 'unspecified'));
 		$content_type = preg_replace('/^(.+\\/).+\\+(.+)$/', '\\1\\2', $content_type);
 		$this->response_time = (IsSet($headers['date']) ? strtotime(GetType($headers['date']) === 'array' ? $headers['date'][0] : $headers['date']) : time());
@@ -2062,7 +2144,11 @@ class oauth_client_class
 				directly setting the variables
 				<variablelink>access_token</variablelink>, as well as
 				<variablelink>access_token_secret</variablelink> in case of using
-				OAuth 1.0 or 1.0a services.</usage>
+				OAuth 1.0 or 1.0a services.<paragraphbreak />
+				The <variablelink>response_status</variablelink> variable returns
+				the HTTP response status of the request.<paragraphbreak />
+				The <variablelink>response_headers</variablelink> variable returns
+				the HTTP the request response headers.</usage>
 			<returnvalue>This function returns <booleanvalue>1</booleanvalue> if
 				the call was done successfully.</returnvalue>
 		</documentation>
@@ -2314,6 +2400,7 @@ class oauth_client_class
 			return true;
 		$this->oauth_version =
 		$this->dialog_url =
+		$this->reauthenticate_dialog_url =
 		$this->pin_dialog_url =
 		$this->access_token_url =
 		$this->request_token_url =
@@ -2327,11 +2414,13 @@ class oauth_client_class
 		$this->default_access_token_type = '';
 		$this->store_access_token_response = false;
 		$this->refresh_token_authentication = '';
+		$this->grant_type = 'authorization_code';
 		switch($this->server)
 		{
 			case 'facebook':
 				$this->oauth_version = '2.0';
 				$this->dialog_url = 'https://www.facebook.com/v2.3/dialog/oauth?client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}&scope={SCOPE}&state={STATE}';
+				$this->reauthenticate_dialog_url = 'https://www.facebook.com/v2.3/dialog/oauth?client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}&scope={SCOPE}&state={STATE}&auth_type=reauthenticate';
 				$this->access_token_url = 'https://graph.facebook.com/oauth/access_token';
 				break;
 
@@ -2402,6 +2491,7 @@ class oauth_client_class
 					'oauth_version'=>'string',
 					'request_token_url'=>'string',
 					'dialog_url'=>'string',
+					'reauthenticate_dialog_url'=>'string',
 					'pin_dialog_url'=>'string',
 					'offline_dialog_url'=>'string',
 					'access_token_url'=>'string',
@@ -2414,7 +2504,8 @@ class oauth_client_class
 					'access_token_parameter'=>'string',
 					'default_access_token_type'=>'string',
 					'store_access_token_response'=>'boolean',
-					'refresh_token_authentication'=>'string'
+					'refresh_token_authentication'=>'string',
+					'grant_type'=>'string'
 				);
 				$required = array(
 					'oauth_version'=>array(),
@@ -2648,16 +2739,30 @@ class oauth_client_class
 				}
 				if(!$this->GetDialogURL($url))
 					return false;
-				if($url === 'automatic')
+				switch($url)
 				{
-					if(!IsSet($access_token['login_url']))
-						return($this->SetError('The request token response did not automatically the login dialog URL as expected'));
-					if($this->debug)
-						$this->OutputDebug('Dialog URL obtained automatically from the request token response: '.$url);
-					$url = $access_token['login_url'];
+					case 'automatic':
+						if(!IsSet($access_token['login_url']))
+							return($this->SetError('The request token response did not automatically the login dialog URL as expected'));
+						if($this->debug)
+							$this->OutputDebug('Dialog URL obtained automatically from the request token response: '.$url);
+						$url = $access_token['login_url'];
+						break;
+					case '2legged':
+						if($this->debug)
+							$this->OutputDebug('Obtaining 2 legged access token');
+						$this->access_token_secret = $access_token['secret'];
+						$oauth = array(
+							'oauth_token'=>$access_token['value'],
+						);
+						if(!$this->ProcessToken1($oauth, $access_token))
+							return false;
+						if($this->debug)
+							$this->OutputDebug('The OAuth token was authorized');
+						return true;
+					default:
+						$url .= (strpos($url, '?') === false ? '?' : '&').'oauth_token='.$access_token['value'];
 				}
-				else
-					$url .= (strpos($url, '?') === false ? '?' : '&').'oauth_token='.$access_token['value'];
 				if(!$one_a)
 				{
 					if(!$this->GetRedirectURI($redirect_uri))
