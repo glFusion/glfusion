@@ -42,7 +42,7 @@ class autotag_uikitlogin extends BaseAutotag {
             $retval .= SEC_loginForm($options);
             $retval .= '</div></div>';
         } else {
-            $retval .= '<ul class="uk-navbar-nav tm-navbar-nav uk-navbar-flip">';
+            $retval .= '<ul class="uk-navbar-nav tm-navbar-nav uk-navbar-flip uk-margin-right">';
             $retval .= '<li class="uk-parent uk-hidden-small" data-uk-dropdown>';
             $retval .= '<a href="#">My Account&nbsp;<i class="uk-icon-caret-down"></i></a>';
             $retval .= '<div class="uk-dropdown tm-dropdown uk-dropdown-navbar">';
