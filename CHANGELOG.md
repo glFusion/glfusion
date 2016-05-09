@@ -1,6 +1,10 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.0 (Unreleased)
+  - Updated widgets (slider/rotator, tab-slider, spring-menu, and UIKIT slider) to use templates.
+  - Added feature to pass custom template file to widgets.
+  - Updated Media Element to v2.21.2
+  - Implemented About Author feature in full story display (required Contribution Line set to TRUE in config and user must have 'about' section of their user profile populated).
   - Replaced jQuery rotator widget with Nivo-Slider jQuery plugin
   - Pass PHP version in version check (if send stats enabled)
   - Added preview option to pages editor
