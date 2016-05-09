@@ -50,16 +50,16 @@
 
 {!!if {story_display} == 'article' !!}
 {!if author_about}
-<hr>
-<article class="uk-comment">
-	<header class="uk-comment-header tm-comment-header uk-margin-top">
-		<img class="uk-comment-avatar tm-comment-avatar uk-hidden-small" src="{author_photo_raw}" width="50" height="50" alt="">
-		<h4 class="uk-comment-title tm-comment-title">{lang_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</h4>
-		<div class="">
-			{author_about}
-		</div>
-	</header>
-</article>
+	<hr>
+	<article class="uk-comment tm-about-author">
+		<header class="uk-comment-header tm-about-author-header uk-margin-top">
+			<img class="uk-comment-avatar tm-about-author-avatar uk-hidden-small" src="{author_photo_raw}" width="50" height="50" alt="">
+			<h4 class="uk-comment-title tm-about-author-title">{lang_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</h4>
+			<div class="tm-about-author-bio">
+				{author_about}
+			</div>
+		</header>
+	</article>
 {!endif}
 {!endif}
 
