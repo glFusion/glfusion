@@ -56,7 +56,7 @@
 	</p>
 {!endif}
 
-{!if article_full}
+{!!if {story_display} == 'article' !!}
 {!if author_about}
 	<hr>
 	<article class="uk-comment">

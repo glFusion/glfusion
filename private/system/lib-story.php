@@ -267,7 +267,6 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         }
 
         if(( $index == 'n' ) || ( $index == 'p' )) {
-$article->set_var('article_full',true);
             if( empty( $bodytext )) {
                 $article->set_var( 'story_introtext', $introtext );
                 $article->set_var( 'story_text_no_br', $introtext );

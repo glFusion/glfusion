@@ -48,7 +48,7 @@
 		<a class="uk-button uk-button-primary" href="{readmore_url}">Continue Reading</a>
 {!endif}
 
-{!if article_full}
+{!!if {story_display} == 'article' !!}
 {!if author_about}
 <hr>
 <article class="uk-comment">
