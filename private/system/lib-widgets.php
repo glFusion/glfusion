@@ -162,6 +162,7 @@ function WIDGET_UIKITslider( $dataArray )
         'kenburns' => 'b',          // Defines whether or not the Ken Burns effect is active. If kenburns is a numeric value, it will be used as the animation duration.
     );
 
+    $templateFile = 'uikit-slider.thtml';
     $last = 0;
     $first = 0;
     $rand = rand(1,1000);
@@ -170,59 +171,73 @@ function WIDGET_UIKITslider( $dataArray )
     $retval = '';
     $dotnav = '';
 
-    $retval .= '<div class="uk-slidenav-position uk-margin-bottom" data-uk-slideshow="{';
+    $T = new Template($_CONF['path_layout'].'/widgets');
+    if ( isset($dataArray['template'] ) ) {
+        $templateFile = $dataArray['template'];
+    }
+    $T->set_file('widget', $templateFile);
+
+    $T->set_var('rand',$rand);
+
+    $optionValue = '';
+    $T->set_block('widget', 'options', 'o');
+
     foreach ($dataArray['options'] as $option => $value ) {
+        $T->unset_var('optionvalue');
+        $optionValue = '';
         if ( isset($optionTypeArray[$option]) ) {
-            if ( $last > 0 ) $retval .= ',';
-            $retval .= $option . ": ";
+            if ( $last > 0 ) $optionValue .= ',';
+            $optionValue .= $option . ": ";
             switch ($optionTypeArray[$option]) {
                 case 's' :
-                    $retval .= "'" . $value . "'";
+                    $optionValue .= "'" . $value . "'";
                     break;
                 case 'b' :
-                    $retval .= $value == 0 ? 'false' : 'true';
+                    $optionValue .= $value == 0 ? 'false' : 'true';
                     break;
                 case 'n' :
-                    $retval .= $value;
+                    $optionValue .= $value;
                     break;
                 default :
-                    $retval .= "'" . $value ."'";
+                    $optionValue .= "'" . $value ."'";
                     break;
             }
             $last++;
+            $T->set_var('optionvalue',$optionValue);
+            $T->parse('o', 'options',true);
         }
     }
-    $retval .= '}">';
-    $retval .= '<ul class="uk-slideshow">';
+
+    $T->set_block('widget', 'images', 'i');
+    $T->set_block('widget', 'dotnav', 'd');
+
     foreach ($dataArray['images'] as $images ) {
-        $retval .= '<li>';
-        $retval .= '<img src="'.$images['image'].'" alt="" ' ;
+        $T->unset_var('imageurl');
+        $T->unset_var('slidecounter');
+        $T->unset_var('link');
+        $T->unset_var('caption');
+
+        $imageURL = str_replace( "%site_url%", $_CONF['site_url'], $images['image'] );
+
+        $T->set_var('imageurl',$imageURL);
+        $T->set_var('slidecounter',$slideCounter);
+
         $first++;
         $retval .= '>';
         if (isset($images['caption']) && $images['caption'] != '' ) {
             if ( isset($images['link']) && $images['link'] != '' ) {
-                $retval .= '<a href="'.$images['link'].'">';
+                $T->set_var('link',$images['link']);
             }
-//            $retval .= '<div class="uk-overlay-panel uk-overlay-background uk-overlay-top uk-hidden-small">'. $images['caption'] .'</div>';
-            $retval .= '<div class="uk-overlay-panel uk-overlay-background uk-overlay-bottom uk-hidden-small">'. $images['caption'] .'</div>';
-
-            if ( isset($images['link']) && $images['link'] != '' ) {
-                $retval .= '</a>';
+            if ( isset($images['caption']) && $images['caption'] != '' ) {
+                $T->set_var('caption',$images['caption']);
             }
         }
-        $retval .= '</li>';
-        $dotnav .= '<li data-uk-slideshow-item="'.$slideCounter.'"><a href="#"></a></li>';
+        $T->parse('i', 'images',true);
+        $T->parse('d', 'dotnav',true);
         $slideCounter++;
     }
-    $retval .= '</ul>';
-    $retval .= '<a href="" class="uk-slidenav uk-slidenav-contrast uk-slidenav-previous" data-uk-slideshow-item="previous"></a>';
-    $retval .= '<a href="" class="uk-slidenav uk-slidenav-contrast uk-slidenav-next" data-uk-slideshow-item="next"></a>';
-
-    $retval .= '<ul class="uk-dotnav uk-dotnav-contrast uk-position-bottom uk-flex-center">';
-    $retval .= $dotnav;
-    $retval .= '</ul>';
-
-    $retval .= '</div>';
+    $T->parse('output','widget');
+    $retval = $T->finish($T->get_var('output'));
 
     return $retval;
 }
@@ -272,41 +287,48 @@ function WIDGET_slider( $dataArray )
     $slideCounter = 0;
     $captionDiv = '';
     $captionHTML = '';
+    $templateFile = 'slider.thtml';
 
     $dotnav = '';
 
-    $retval .= '<div class="slider-wrapper theme-default">' . LB;
-    $retval .= '<div id="slider-'.$rand.'" class="nivoSlider">' . LB;
+    $T = new Template($_CONF['path_layout'].'/widgets');
+    if ( isset($dataArray['template'] ) ) {
+        $templateFile = $dataArray['template'];
+    }
+    $T->set_file('widget', $templateFile);
+
+    $T->set_var('rand',$rand);
+
+    $T->set_block('widget', 'images', 'i');
+    $T->set_block('widget', 'captions', 'c');
 
     foreach ($dataArray['images'] as $images ) {
+        $T->unset_var('imageurl');
+        $T->unset_var('slidecounter');
+        $T->unset_var('caption');
+        $T->unset_var('link');
+
         $imageURL = str_replace( "%site_url%", $_CONF['site_url'], $images['image'] );
 
-        $retval .= '<img src="'.$imageURL.'" alt="" ';
+        $T->set_var('imageurl',$imageURL);
+        $T->set_var('slidecounter',$slideCounter);
+
         if ( $images['caption'] != '' ) {
+            $T->set_var('caption',$images['caption']);
+
             $retval .= 'title="#slider-'.$rand.'-slide'.$slideCounter.'-caption"';
-            $captionHTML .= '<div id="slider-'.$rand.'-slide'.$slideCounter.'-caption"  class="nivo-html-caption">' . LB;
-            if ( isset($images['link']) && $images['link'] != '' ) {
-                $captionHTML .= '<a href="'.$images['link'].'">' . LB;
-            }
-            $captionHTML .= $images['caption'] . LB;
-            if ( isset($images['link']) && $images['link'] != '' ) {
-                $captionHTML .= '</a>' . LB;
-            }
-            $captionHTML .= '</div>' . LB;
         }
-        $retval .= '>' . LB;
+        $T->set_var('link',$images['link']);
+        $T->parse('i', 'images',true);
+        $T->parse('c', 'captions',true);
         $slideCounter++;
     }
-    $retval .= '</div>' . LB;
-    $retval .= $captionHTML;
-    $retval .= '</div>' . LB;
 
-    $retval .= '
-<script type="text/javascript">
-$(window).load(function() {
-$(\'#slider-'.$rand.'\').nivoSlider({
-';
+    $T->set_block('widget', 'options', 'o');
+
     foreach ($dataArray['options'] as $option => $value ) {
+        $optionLine = '';
+        $T->unset_var('option');
         if ( isset($optionTypeArray[$option]) ) {
             if ( $optionTypeArray[$option]['map'] == '' ) continue;
             if ( isset($optionTypeArray[$option]['valid']) ) {
@@ -314,29 +336,30 @@ $(\'#slider-'.$rand.'\').nivoSlider({
                     $value = $optionTypeArray[$option]['default'];
                 }
             }
-            if ( $last > 0 ) $retval .= ',' . LB;
-            $retval .= $optionTypeArray[$option]['map'] . ": ";
+            if ( $last > 0 ) $optionLine .= ',';
+            $optionLine .= $optionTypeArray[$option]['map'] . ": ";
             switch ($optionTypeArray[$option]['type']) {
                 case 's' :
-                    $retval .= "'" . $value . "'";
+                    $optionLine .= "'" . $value . "'";
                     break;
                 case 'b' :
-                    $retval .= $value == 0 ? 'false' : 'true';
+                    $optionLine .= $value == 0 ? 'false' : 'true';
                     break;
                 case 'n' :
-                    $retval .= $value;
+                    $optionLine .= $value;
                     break;
                 default :
-                    $retval .= "'" . $value ."'";
+                    $optionLine .= "'" . $value ."'";
                     break;
             }
             $last++;
+            $T->set_var('option',$optionLine);
+            $T->parse('o', 'options',true);
         }
     }
-    $retval .= LB;
-    $retval .= '});' . LB;
-    $retval .= '});' . LB;
-    $retval .= '</script>' . LB;
+
+    $T->parse('output','widget');
+    $retval = $T->finish($T->get_var('output'));
 
     return $retval;
 }
@@ -436,6 +459,7 @@ function WIDGET_springMenu($dataArray)
     $rand = rand(1,1000);
     $slideCounter = 1;
     $retval = '';
+    $templateFile = 'spring-menu.thtml';
 
     // define the JS we need for this theme..
     $outputHandle = outputHandler::getInstance();
@@ -443,32 +467,46 @@ function WIDGET_springMenu($dataArray)
     $outputHandle->addLinkScript($_CONF['site_url'].'/javascript/addons/accordion-image-menu/jquery.accordionImageMenu.min.js');
     $outputHandle->addLinkStyle( $_CONF['site_url'].'/javascript/addons/accordion-image-menu/accordionImageMenu.css');
 
-    $retval .= '<div class="spring-menu">';
-    $retval .= '<div id="springmenu_'.$rand.'" class="aim">';
+    $T = new Template($_CONF['path_layout'].'/widgets');
+
+    if ( isset($dataArray['template'] ) ) {
+        $templateFile = $dataArray['template'];
+    }
+
+    $T->set_file('widget', $templateFile);
+    $T->set_var('rand',$rand);
+
+    $T->set_block('widget', 'images', 'i');
 
     foreach ($dataArray['images'] as $images ) {
+        $T->unset_var('link');
+        $T->unset_var('image');
+        $T->unset_var('slidecounter');
         if ( isset($images['link']) && $images['link'] != '' ) {
-            $retval .= '<a href="'.$images['link'].'">';
+            $T->set_var('link',$images['link']);
         }
-        $retval .= '<img src="'.$images['image'].'" alt="" />' ;
-        if ( isset($images['link']) && $images['link'] != '' ) {
-            $retval .= '</a>';
-        }
+        $imageURL = str_replace( "%site_url%", $_CONF['site_url'], $images['image'] );
+        $T->set_var('image',$imageURL);
+        $T->set_var('slidecounter',$slideCounter);
+        $T->parse('i', 'images',true);
         $slideCounter++;
     }
-    $retval .= '</div>';
-    $retval .= '</div>';
 
-    $retval .= '<script type="text/javascript">$(document).ready(function(){';
-    $retval .= '   $(\'#springmenu_'.$rand.'\').AccordionImageMenu({';
+    $last = 0;
+    $T->set_block('widget', 'options', 'o');
     foreach ($dataArray['options'] as $option => $value ) {
-        $retval .= "'".$option."'" . ": " . "'".$value . "',";
+        $optionLine = '';
+        if ( $last > 0 ) $optionLine .= ',';
+        $optionLine .= "'".$option."'" . ": " . "'".$value . "'";
+        $T->set_var('optionvalue',$optionLine);
+        $T->parse('o', 'options',true);
+        $last++;
     }
-    $retval .= '}); });</script>';
+    $T->parse('output','widget');
+    $retval = $T->finish($T->get_var('output'));
 
     return $retval;
 }
-
 
 /*
  * replaces mooslide()
@@ -479,6 +517,7 @@ function WIDGET_tabslide( $dataArray )
     global $_CONF,$_TABLES;
 
     $retval = '';
+    $templateFile = 'tab-slider.thtml';
 
     $id = rand(1,1000);
 
@@ -518,34 +557,45 @@ function WIDGET_tabslide( $dataArray )
         return '';
     }
     ksort($pages);
-    $retval .= '<div id="slidertabs_'.$id.'" class="tab-slider">';
-    $retval .= '<ul>';
+
+    $T = new Template($_CONF['path_layout'].'/widgets');
+    if ( isset($dataArray['template'] ) ) {
+        $templateFile = $dataArray['template'];
+    }
+    $T->set_file('widget', $templateFile);
+
+    $T->set_var('rand',$id);
+
+    $T->set_block('widget', 'tabs', 't');
+
     foreach ( $pages as $page ) {
         extract($page);
-        $retval .= '<li><a href="#'.$sp_id.'">'.stripslashes($title).'</a></li>';
+        $T->set_var('sp_id',$sp_id);
+        $T->set_var('title',stripslashes($title));
+        $T->parse('t', 'tabs',true);
     }
-    $retval .= '</ul>';
+
+    $T->set_block('widget', 'slide_content', 's');
     foreach ($pages as $page) {
         extract($page);
-        $retval .= '<div id="'.$sp_id.'">';
-        $retval .= $content;
-        $retval .= '</div>';
+        $T->set_var('sp_id',$sp_id);
+        $T->set_var('content',$content);
+        $T->parse('s', 'slide_content',true);
     }
-    $retval .= '</div><div style="clear:both;"></div>';
 
-    $retval .= '<script type="text/javascript">$(document).ready(function(){';
-    $retval .= '$("div#slidertabs_'.$id.'").sliderTabs({';
-
+    $T->set_block('widget', 'optionvalues', 'o');
     foreach ($dataArray['options'] as $option => $value ) {
         if ( is_numeric($value) ) {
-            $retval .= $option . ": " . $value . ",";
+            $T->set_var('optionline', $option . ": " . $value . ",");
         } else {
-            $retval .= $option . ": " . "'".$value . "',";
+            $T->set_var('optionline', $option . ": " . "'".$value . "',");
         }
+        $T->parse('o','optionvalues',true);
     }
 
-    $retval .= '}); ';
-    $retval .= ' });</script>';
+    $T->parse('output','widget');
+    $retval = $T->finish($T->get_var('output'));
+
     return $retval;
 }
 

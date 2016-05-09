@@ -1,0 +1,31 @@
+<div id="slidertabs_{rand}" class="tab-slider">
+	<ul>
+
+<!-- BEGIN tabs -->
+		<li>
+			<a href="#{sp_id}">{title}</a>
+		</li>
+<!-- END tabs -->
+
+	</ul>
+
+<!-- BEGIN slide_content -->
+	<div id="{sp_id}">
+		{content}
+	</div>
+<!-- END slide_content -->
+
+</div>
+
+<div style="clear:both;"></div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("div#slidertabs_{rand}").sliderTabs(
+		{
+<!-- BEGIN optionvalues -->
+			{optionline}
+<!-- END optionvalues -->
+		});
+	});
+</script>
