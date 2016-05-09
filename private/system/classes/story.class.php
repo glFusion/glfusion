@@ -145,6 +145,7 @@ class Story
     var $_fullname;
     var $_photo;
     var $_email;
+    var $_about;
     var $_topic;
     var $_alternate_topic;
     var $_imageurl;
@@ -214,6 +215,7 @@ class Story
            'alternate_topic' => 0,
            'access' => 0,
            'photo' => 0,
+           'about' => 0,
            'email' => 0
          );
     /**
@@ -420,6 +422,9 @@ class Story
         if (array_key_exists('fullname', $story)) {
             $this->_fullname = $story['fullname'];
          }
+         if (array_key_exists('about',$story)) {
+            $this->_about = $story['about'];
+        }
 
         // Overwrite the date with the timestamp.
         $this->_date = $story['unixdate'];
@@ -461,10 +466,10 @@ class Story
 
         if (!empty($sid) && (($mode == 'edit') || ($mode == 'view') || ($mode == 'clone'))) {
             $sql = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, UNIX_TIMESTAMP(s.expire) as expireunix, UNIX_TIMESTAMP(s.comment_expire) as cmt_expire_unix, "
-                . "u.username, u.fullname, u.photo, u.email, t.topic, t.imageurl " . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, {$_TABLES['topics']} AS t " . "WHERE (s.uid = u.uid) AND (s.tid = t.tid) AND (sid = '$sid')";
+                . "u.username, u.fullname, u.photo, u.email, p.about,p.uid, t.topic, t.imageurl " . "FROM {$_TABLES['stories']} AS s, {$_TABLES['userinfo']} AS p, {$_TABLES['users']} AS u, {$_TABLES['topics']} AS t " . "WHERE (s.uid = u.uid) AND (s.uid = p.uid) AND (s.tid = t.tid) AND (sid = '$sid')";
         } elseif (!empty($sid) && ($mode == 'moderate')) {
             $sql = 'SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, '
-                . 'u.username, u.fullname, u.photo, u.email, t.topic, t.imageurl, t.group_id, ' . 't.perm_owner, t.perm_group, t.perm_members, t.perm_anon ' . 'FROM ' . $_TABLES['storysubmission'] . ' AS s, ' . $_TABLES['users'] . ' AS u, ' . $_TABLES['topics'] . ' AS t WHERE (s.uid = u.uid) AND' . ' (s.tid = t.tid) AND (sid = \'' . $sid . '\')';
+            . 'u.username, u.fullname, u.photo, u.email, up.about, up.uid, t.topic, t.imageurl, t.group_id, ' . 't.perm_owner, t.perm_group, t.perm_members, t.perm_anon ' . 'FROM ' . $_TABLES['storysubmission'] . ' AS s, ' . $_TABLES['userinfo'] . ' AS up, '.$_TABLES['users'].' AS u, ' . $_TABLES['topics'] . ' AS t WHERE (s.uid = u.uid) AND (s.uid = up.uid) AND' . ' (s.tid = t.tid) AND (sid = \'' . $sid . '\')';
         } elseif ($mode == 'edit') {
             $this->_sid = COM_makesid();
             $this->_old_sid = $this->_sid;

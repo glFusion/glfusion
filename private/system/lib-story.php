@@ -162,6 +162,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             $article->set_var( 'contributedby_author', $authorname );
 
             $photo = '';
+            $photo_raw = '';
             if ($_CONF['allow_user_photo'] == 1) {
                 $authphoto = $story->DisplayElements('photo');
                 if (empty($authphoto)) {
@@ -169,7 +170,10 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 }
                 $photo = USER_getPhoto($story->DisplayElements('uid'), $authphoto,
                                        $story->DisplayElements('email'));
+                $photo_raw = USER_getPhoto($story->DisplayElements('uid'), $authphoto,
+                                       $story->DisplayElements('email'),64,0);
             }
+            $article->set_var('author_photo_raw',$photo_raw);
             if (!empty($photo)) {
                 $article->set_var('contributedby_photo', $photo);
                 $article->set_var('author_photo', $photo);
@@ -183,8 +187,8 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 $article->set_var ('author_photo', '');
                 $article->set_var ('camera_icon', '');
             }
+            $article->set_var('author_about', $story->DisplayElements('about'));
         }
-
         $topicname = $story->DisplayElements('topic');
         if ( $story->DisplayElements('alternate_tid')  != NULL ) {
             $alttopic = DB_getItem( $_TABLES['topics'], 'topic', "tid = '".DB_escapeString($story->DisplayElements('alternate_tid'))."'" );
@@ -263,6 +267,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         }
 
         if(( $index == 'n' ) || ( $index == 'p' )) {
+$article->set_var('article_full',true);
             if( empty( $bodytext )) {
                 $article->set_var( 'story_introtext', $introtext );
                 $article->set_var( 'story_text_no_br', $introtext );
@@ -1663,7 +1668,7 @@ function service_get_story($args, &$output, &$svc_msg)
 
         $sql
         = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, UNIX_TIMESTAMP(s.expire) as expireunix, "
-            . "u.username, u.fullname, u.photo, u.email, t.topic, t.imageurl " . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, {$_TABLES['topics']} AS t " . "WHERE (s.uid = u.uid) AND (s.tid = t.tid)" . COM_getPermSQL('AND', $_USER['uid'], 2, 's') . $order . $limit;
+            . "u.username, u.fullname, u.photo, u.email, p.about, p.uid, t.topic, t.imageurl " . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, {$_TABLES['userinfo']} AS p, {$_TABLES['topics']} AS t " . "WHERE (s.uid = u.uid) AND (s.uid = p.uid) AND (s.tid = t.tid)" . COM_getPermSQL('AND', $_USER['uid'], 2, 's') . $order . $limit;
         $result = DB_query($sql);
 
         $count = 0;

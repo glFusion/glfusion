@@ -1581,7 +1581,7 @@ function savepreferences($A)
             DB_delete($_TABLES['subscriptions'],'sub_id',(int) $subid);
         }
     }
-
+    CACHE_remove_instance('story');
     PLG_userInfoChanged ($_USER['uid']);
 }
 

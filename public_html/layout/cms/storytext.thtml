@@ -13,7 +13,7 @@
 			<li>
 				{lang_posted_in} <a href="{story_topic_url}">{story_topic_name}</a>
 {!if story_alternate_topic_name}
-					, <a href="{alt_story_topic_url}">{story_alternate_topic_name}</a>
+				, <a href="{alt_story_topic_url}">{story_alternate_topic_name}</a>
 {!endif}
 			</li>
 {!if comments_url}
@@ -56,13 +56,28 @@
 	</p>
 {!endif}
 
+{!if article_full}
+{!if author_about}
+	<hr>
+	<article class="uk-comment">
+		<header class="uk-comment-header tm-comment-header uk-margin-top">
+			<img class="uk-comment-avatar tm-comment-avatar uk-hidden-small" src="{author_photo_raw}" width="50" height="50" alt="">
+			<h4 class="uk-comment-title tm-comment-title">{lang_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</h4>
+			<div class="">
+				{author_about}
+			</div>
+		</header>
+	</article>
+{!endif}
+{!endif}
+
 	<div class="uk-clearfix"></div>
 
-{# social buttons would go here #}
+	{# social buttons would go here #}
 
 	<div class="tm-article-footer">
 {!if page_selector}
-        <p>{page_selector}</p>
+		<p>{page_selector}</p>
 {!endif}
 {!if trackbacks_count}
 		{trackbacks_with_count}
