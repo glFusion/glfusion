@@ -279,21 +279,22 @@ function WIDGET_slider( $dataArray )
     $retval .= '<div id="slider-'.$rand.'" class="nivoSlider">' . LB;
 
     foreach ($dataArray['images'] as $images ) {
-        if ( isset($images['link']) && $images['link'] != '' ) {
-            $retval .= '<a href="'.$images['link'].'">' . LB;
-        }
         $imageURL = str_replace( "%site_url%", $_CONF['site_url'], $images['image'] );
 
         $retval .= '<img src="'.$imageURL.'" alt="" ';
         if ( $images['caption'] != '' ) {
             $retval .= 'title="#slider-'.$rand.'-slide'.$slideCounter.'-caption"';
             $captionHTML .= '<div id="slider-'.$rand.'-slide'.$slideCounter.'-caption"  class="nivo-html-caption">' . LB;
-            $captionHTML .= '<a href="'.$images['link'].'">' . LB;
+            if ( isset($images['link']) && $images['link'] != '' ) {
+                $captionHTML .= '<a href="'.$images['link'].'">' . LB;
+            }
             $captionHTML .= $images['caption'] . LB;
+            if ( isset($images['link']) && $images['link'] != '' ) {
+                $captionHTML .= '</a>' . LB;
+            }
             $captionHTML .= '</div>' . LB;
         }
         $retval .= '>' . LB;
-        if (isset($images['link']) && $images['link'] != '' ) $retval .= '</a>' . LB;
         $slideCounter++;
     }
     $retval .= '</div>' . LB;
@@ -816,15 +817,4 @@ EOW;
     $display = str_replace('{noOpera}',$LANG_WIDGETS['noOpera'] , $display);
     return $display;
 }
-
-
-
-
-
-
-
-
-
-
-
 ?>
