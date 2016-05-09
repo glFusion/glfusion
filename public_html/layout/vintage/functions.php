@@ -60,6 +60,9 @@ if ( file_exists($_CONF['path_layout'] .'custom.css') ) {
 // MAKE SURE TO CLEAR BROWSER & C.T.L. CACHE when activating/deactivating
 // $outputHandle->addScriptFile($_CONF['path_layout'].'js/chronometer.js');
 
+// Media Player
+$outputHandle->addScriptFile($_CONF['path_html'].'javascript/addons/mediaplayer/mediaelement-and-player.min.js');
+$outputHandle->addCSSFile($_CONF['path_html'] .'javascript/addons/mediaplayer/mediaelementplayer.css');
 
 function theme_getToolTipStyle()
 {
