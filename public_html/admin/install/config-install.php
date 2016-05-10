@@ -387,7 +387,7 @@ function install_config($site_url)
     $c->add('htmlfilter_default','p,b,a,i,strong,em,br','text',7,5,NULL,30,true);
     $c->add('htmlfilter_comment','p,b,a,i,strong,em,br,tt,hr,li,ol,ul,code,pre','text',7,5,NULL,35,TRUE);
     $c->add('htmlfilter_story','div[class],h1,h2,h3,pre,br,p[style],b[style],s,strong[style],i[style],em[style],u[style],strike,a[style|href|title|target],ol[style|class],ul[style|class],li[style|class],hr[style],blockquote[style],img[style|alt|title|width|height|src|align],table[style|width|bgcolor|align|cellspacing|cellpadding|border],tr[style],td[style],th[style],tbody,thead,caption,col,colgroup,span[style|class],sup,sub','text',7,5,NULL,40,TRUE);
-    $c->add('htmlfilter_root','div[style|class],span[style|class],table,tr,td,th','text',7,5,NULL,50,TRUE);
+    $c->add('htmlfilter_root','div[style|class],span[style|class],table,tr,td,th,img[src|width|height|class|style]','text',7,5,NULL,50,TRUE);
 
     $c->add('fs_censoring', NULL, 'fieldset', 7, 6, NULL, 0, TRUE);
     $c->add('censormode',1,'select',7,6,23,10,TRUE);
