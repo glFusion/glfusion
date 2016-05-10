@@ -1008,7 +1008,11 @@ class Story
         }
 
         $this->_tid = COM_applyFilter($array['tid']);
-        $this->_alternate_tid = COM_applyFilter($array['altnerate_tid']);
+        if ( isset($array['alternate_tid'] ) ) {
+            $this->_alternate_tid = COM_applyFilter($array['altnerate_tid']);
+        } else {
+            $this->_alternate_tid = '';
+        }
 
         if (empty($this->_title) || empty($this->_introtext)) {
             return STORY_EMPTY_REQUIRED_FIELDS;
