@@ -1,6 +1,8 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.0 (Unreleased)
+  - Added FileMan CKEditor plugin to handle uploading / managing media.
+  - Removed FileManager CKEditor plugin
   - Updated widgets (slider/rotator, tab-slider, spring-menu, and UIKIT slider) to use templates.
   - Added feature to pass custom template file to widgets.
   - Updated Media Element to v2.21.2
