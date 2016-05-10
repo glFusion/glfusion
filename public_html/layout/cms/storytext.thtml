@@ -58,6 +58,7 @@
 
 {!!if {story_display} == 'article' !!}
 {!if author_about}
+<div class="uk-clearfix"></div>
 	<hr>
 	<article class="uk-comment tm-about-author">
 		<header class="uk-comment-header tm-about-author-header uk-margin-top">
