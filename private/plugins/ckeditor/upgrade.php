@@ -89,6 +89,43 @@ function ckeditor_upgrade()
 
         case '1.0.3' :
 
+        case '1.0.4' :
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+            // switched to fileman
+            $c->del('filemanager_fileroot','ckeditor');
+            $c->del('filemanager_show_confirmation','ckeditor');
+            $c->del('filemanager_search_box','ckeditor');
+            $c->del('filemanager_file_sorting','ckeditor');
+            $c->del('filemanager_chars_only_latin','ckeditor');
+            $c->del('filemanager_show_thumbs','ckeditor');
+            $c->del('filemanager_generate_thumbnails','ckeditor');
+            $c->del('fs_filemanager_upload','ckeditor');
+            $c->del('filemanager_upload_restrictions','ckeditor');
+            $c->del('filemanager_upload_overwrite','ckeditor');
+            $c->del('filemanager_upload_images_only','ckeditor');
+            $c->del('filemanager_upload_file_size_limit','ckeditor');
+            $c->del('filemanager_unallowed_files','ckeditor');
+            $c->del('filemanager_unallowed_dirs', 'ckeditor');
+            $c->del('filemanager_unallowed_files_regexp','ckeditor');
+            $c->del('filemanager_unallowed_dirs_regexp','ckeditor');
+            $c->del('fs_filemanager_images','ckeditor');
+            $c->del('filemanager_images_ext','ckeditor');
+            $c->del('fs_filemanager_videos','ckeditor');
+            $c->del('filemanager_show_video_player','ckeditor');
+            $c->del('filemanager_videos_ext','ckeditor');
+            $c->del('filemanager_videos_player_width','ckeditor');
+            $c->del('filemanager_videos_player_height','ckeditor');
+            $c->del('fs_filemanager_audios','ckeditor');
+            $c->del('filemanager_show_audio_player','ckeditor');
+            $c->del('filemanager_audios_ext','ckeditor');
+            $c->del('fs_filemanager_editor','ckeditor');
+            $c->del('filemanager_edit_enabled','ckeditor');
+            $c->del('filemanager_edit_linenumbers','ckeditor');
+            $c->del('filemanager_edit_linewrapping','ckeditor');
+            $c->del('filemanager_edit_codehighlight','ckeditor');
+            $c->del('filemanager_edit_editext','ckeditor');
+
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_CK_CONF['pi_version']."',pi_gl_version='".$_CK_CONF['gl_version']."' WHERE pi_name='ckeditor' LIMIT 1");
             break;
