@@ -413,8 +413,10 @@ function PAGE_edit($sp_id, $action = '', $editor = '',$preview_content = '')
                 $A['sp_php'] = 0;
             }
         }
-        $preview_content = SP_render_content ($A['sp_content'], $A['sp_php']);
-        $preview_title = isset($A['sp_title']) ? $A['sp_title'] : '';
+        // do not set preview until user has requested - this will allow
+        // editing pages with PHP errors
+//        $preview_content = SP_render_content ($A['sp_content'], $A['sp_php']);
+//        $preview_title = isset($A['sp_title']) ? $A['sp_title'] : '';
 
 
     } elseif ($action == 'edit') {
