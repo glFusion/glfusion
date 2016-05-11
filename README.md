@@ -1,5 +1,7 @@
 ## glFusion CMS
 
+[![Join the chat at https://gitter.im/glFusion/glfusion](https://badges.gitter.im/glFusion/glfusion.svg)](https://gitter.im/glFusion/glfusion?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 glFusion CMS is a content management and publishing system. It can be utilized as a content publishing system, a collaboration system, and even an application development framework. Regardless how you use it, glFusion CMS provides all the tools necessary to quickly create and maintain a content driven web site. glFusion CMS also provides a rich application development environment.
 
 glFusion CMS is well organized and provides a very powerful system that is extremely easy to use. glFusion CMS powers everything from personal blogs, to high volume community discussion sites, and almost everything in between.
