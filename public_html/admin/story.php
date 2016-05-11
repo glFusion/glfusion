@@ -995,6 +995,10 @@ switch ($action) {
 
     case 'clone':
         if (!empty($sid)) {
+            SEC_setCookie ($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral('advancededitor'),
+                           time() + 1200, $_CONF['cookie_path'],
+                           $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
+
             $pageTitle = $LANG24[5];
             $pageBody .= STORY_edit($sid, $action);
         } else {
