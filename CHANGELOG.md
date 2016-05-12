@@ -1,6 +1,9 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.0 (Unreleased)
+  - Media Gallery - moved allow html from global config option to a per album config option
+  - Enhanced auto tag upload to support template files.
+  - Fixed error where advanced editor token was not set when cloning a story
   - Added FileMan CKEditor plugin to handle uploading / managing media.
   - Removed FileManager CKEditor plugin
   - Updated widgets (slider/rotator, tab-slider, spring-menu, and UIKIT slider) to use templates.
