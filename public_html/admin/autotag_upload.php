@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Automated autotag installer                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -118,7 +118,6 @@ function processAutotagUpload()
     if ( $rc == -1 ) {
         // no xml file found
         _pi_deleteDir($_CONF['path_data'].$tmp);
-//        return _at_errorBox('Unable to locate the autotag XML file');
         return _at_errorBox(sprintf($LANG32[49],$autotagData['glfusionversion']));
     }
 
@@ -145,6 +144,7 @@ function processAutotagUpload()
     }
 
     // check to see if an auto tag already exists...
+    // removed so we can update existing auto tags
 /*
     $result = DB_query("SELECT * FROM {$_TABLES['autotags']} WHERE tag='".DB_escapeString($autotagData['id'])."'");
     if ( DB_numRows($result) > 0 ) {
@@ -252,14 +252,26 @@ function post_uploadProcess() {
         $errorMessage = '<h2>'.$LANG32[42].'</h2>'.$LANG32[43].$permErrorList.'<br />'.$LANG32[44];
         _pi_deleteDir($tmp);
         return _at_errorBox($errorMessage);
-    } else {
-        $tag    = DB_escapeString($autotagData['id']);
-        $desc   = DB_escapeString($autotagData['description']);
-        $is_enabled = 1;
-        $is_function = 1;
-        $replacement = '';
-        DB_query("REPLACE INTO {$_TABLES['autotags']} (tag,description,is_enabled,is_function,replacement) VALUES ('".$tag."','".$desc."',".$is_enabled.",".$is_function.",'')");
     }
+    // copy template files, if any
+    if ( isset($autotagData['template']) && is_array($autotagData['template']) ) {
+        foreach ($autotagData['template'] AS $filename ) {
+            $rc = _pi_file_copy($tmp.'/'.$filename, $_CONF['path_system'].'autotags/');
+            if ( $rc === false ) {
+                @unlink ($_CONF['path_system'].$autotagData['id'].'.class.php');
+                $errorMessage = '<h2>'.$LANG32[42].'</h2>'.$LANG32[43].$permErrorList.'<br />'.$LANG32[44];
+                _pi_deleteDir($tmp);
+                return _at_errorBox($errorMessage);
+            }
+        }
+    }
+    $tag    = DB_escapeString($autotagData['id']);
+    $desc   = DB_escapeString($autotagData['description']);
+    $is_enabled = 1;
+    $is_function = 1;
+    $replacement = '';
+    DB_query("REPLACE INTO {$_TABLES['autotags']} (tag,description,is_enabled,is_function,replacement) VALUES ('".$tag."','".$desc."',".$is_enabled.",".$is_function.",'')");
+
     _pi_deleteDir($tmp);
 
     CTL_clearCache();
@@ -334,6 +346,9 @@ function _at_startElementHandler ($parser,$name,$attrib) {
         case 'MAINTAINER' :
             $state = 'maintainer';
             break;
+        case 'TEMPLATE' :
+            $state = 'template';
+            break;
     }
 }
 
@@ -380,6 +395,9 @@ function _at_characterDataHandler ($parser, $data) {
             break;
         case 'database' :
             $autotagData['database'] = $data;
+            break;
+        case 'template' :
+            $autotagData['template'][] = $data;
             break;
     }
 }
