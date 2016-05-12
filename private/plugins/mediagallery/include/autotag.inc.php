@@ -95,6 +95,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
         $alt            = 0;
         $link_src       = 'disp';
         $classes        = '';
+        $nosize         = 0;
 
         if ( $align != '' ) {
             $aSet = 1;
@@ -172,8 +173,12 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                     $skip++;
                 } elseif ( substr($part,0,6) == 'class:' ) {
                     $a = explode (':', $part );
-                    $classes = preg_split("/[\s:]+/", $part);
-                    $classes = $a[1];
+                    $c = explode(',',$a[1]);
+                    foreach ($c AS $class ) $classes .= ' '.$class;
+                    $skip++;
+                } elseif ( substr($part,0,7) == 'nosize:' ) {
+                    $a = explode (':', $part );
+                    $nosize = $a[1];
                     $skip++;
                 } elseif ( substr($part,0,8) == 'linksrc:' ) {
                     $a = explode (':',$part);
@@ -1481,7 +1486,11 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                         $newwidth = round($mediaSize[0] / $ratio);
                     }
                 }
-                $album_image = '<img class="'.$classes.'" src="' . $media_thumbnail . '" ' . $alttag . ' style="width:' . $newwidth . 'px;height:' . $newheight . 'px;border:none;" />';
+                $album_image = '<img class="'.$classes.'" src="' . $media_thumbnail . '" ' . $alttag . ' style=';
+                if ( $nosize == 0 ) {
+                    $album_image .= '"width:' . $newwidth . 'px;height:' . $newheight . 'px;';
+                }
+                $album_image .= 'border:none;" />';
 
                 $tagtext = $album_image;
                 $link = '';
