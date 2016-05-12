@@ -44,12 +44,18 @@ function _template_set_root($root) {
     }
 
     foreach ($root as $r) {
+
         if (substr($r, -1) == '/') {
             $r = substr($r, 0, -1);
         }
         if ( strpos($r,"plugins") != 0 ) {
             $p = str_replace($_CONF['path'],$_CONF['path_themes'] . $_USER['theme'] . '/', $r);
             $x = str_replace("/templates", "",$p);
+            $retval[] = $x;
+        }
+        if ( strpos($r,"autotags") != 0 ) {
+            $p = str_replace($_CONF['path'],$_CONF['path_themes'] . $_USER['theme'] . '/', $r);
+            $x = str_replace("/system", "",$p);
             $retval[] = $x;
         }
         if ( $r != '' ) {
@@ -104,7 +110,6 @@ function glfusion_SecurityCheck() {
     if ( file_exists($_CONF['path_html'] . 'admin/install/') ) {
         $msg .= $LANG01[500].'<br />';
     }
-
     if ( $_SYSTEM['rootdebug'] ) {
         $msg .= $LANG01[501].'<br />';
     }
@@ -473,36 +478,5 @@ function _checkVersion()
     }
 
     return array($glFusionUpToDate,$pluginsUpToDate,$pluginData);
-}
-
-if (!function_exists('array_replace_recursive')) {
-    function array_replace_recursive($array, $array1) {
-        function recurse($array, $array1) {
-            foreach ($array1 as $key => $value) {
-                // create new key in $array, if it is empty or not an array
-                if (!isset($array[$key]) || (isset($array[$key]) && !is_array($array[$key]))) {
-                    $array[$key] = array();
-                }
-                // overwrite the value in the base array
-                if (is_array($value)) {
-                    $value = recurse($array[$key], $value);
-                }
-                $array[$key] = $value;
-            }
-            return $array;
-        }
-        // handle the arguments, merge one by one
-        $args = func_get_args();
-        $array = $args[0];
-        if (!is_array($array)) {
-            return $array;
-        }
-        for ($i = 1; $i < count($args); $i++) {
-            if (is_array($args[$i])) {
-                $array = recurse($array, $args[$i]);
-            }
-        }
-        return $array;
-    }
 }
 ?>
