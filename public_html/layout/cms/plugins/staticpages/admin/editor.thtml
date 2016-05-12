@@ -64,7 +64,7 @@
 					<button id="std" type="button" class="uk-button uk-button-success" value="{html_editor}"  onclick="woff('sp_content');$('#visual').attr('class','uk-button');$('#std').attr('class','uk-button uk-button-success')">{html_editor}</button>
 				</div>
 {!endif}
-				<textarea class="uk-form-width-large fixed-font" id="sp_content" name="sp_content" rows="24" style="width:100%;">{sp_content}</textarea>
+				<textarea class="uk-form-width-large texteditor" id="sp_content" name="sp_content" rows="24" style="width:100%;">{sp_content}</textarea>
 				<div class="uk-text-small uk-text-muted">{lang_allowedhtml}</div>
 			</li>
 
