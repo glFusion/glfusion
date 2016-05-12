@@ -6,6 +6,7 @@
 	}">
 
 	<ul class="uk-slideshow">
+
 <!-- BEGIN images -->
 		<li>
 			<img src="{imageurl}" alt="" >
@@ -20,6 +21,15 @@
 {!endif}
 		</li>
 <!-- END images -->
+
+<!-- BEGIN pages -->
+		<li>
+			<div class="uk-panel uk-panel-box uk-panel-box-primary">
+				{slide}
+			</div>
+		</li>
+<!-- END pages -->
+
 	</ul>
 
 	<a href="" class="uk-slidenav uk-slidenav-contrast uk-slidenav-previous" data-uk-slideshow-item="previous">
