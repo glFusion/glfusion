@@ -143,66 +143,73 @@ function change(what) {
       </td>
     </tr>
     <tr class="pluginRow1">
+      <td  style="width:30%;" class="mgAdminAlignRight">{lang_enable_html}</td>
+      <td style="text-align:left;">
+        {html_select}
+      </td>
+    </tr>
+
+    <tr class="pluginRow2">
       <td  style="width:30%;" class="mgAdminAlignRight">{lang_image_skin}</td>
       <td style="text-align:left;">
         {skin_select}
       </td>
     </tr>
-    <tr class="pluginRow2">
+    <tr class="pluginRow1">
       <td  style="width:30%;" class="mgAdminAlignRight">{lang_display_skin}</td>
       <td style="text-align:left;">
         {dskin_select}
       </td>
     </tr>
-    <tr class="pluginRow1">
+    <tr class="pluginRow2">
       <td  style="width:30%;" class="mgAdminAlignRight">{lang_album_skin}</td>
       <td style="text-align:left;">
         {askin_select}
       </td>
     </tr>
-    <tr class="pluginRow2">
+    <tr class="pluginRow1">
       <td style="width:30%;" class="mgAdminAlignRight">{lang_albums_first}</td>
       <td style="text-align:left;">
         {afirst_select}
       </td>
     </tr>
-    <tr class="pluginRow1">
+    <tr class="pluginRow2">
       <td style="width:30%;" class="mgAdminAlignRight">{lang_tn_size}</td>
       <td style="text-align:left;">
         {tn_size_select}
       </td>
     </tr>
-    <tr class="pluginRow2">
+    <tr class="pluginRow1">
       <td style="width:30%;" class="mgAdminAlignRight">{lang_tnwidth}</td>
       <td style="text-align:left;">
         {tnwidth_input}
       </td>
     </tr>
-    <tr class="pluginRow1">
+    <tr class="pluginRow2">
       <td style="width:30%;" class="mgAdminAlignRight">{lang_tnheight}</td>
       <td style="text-align:left;">
         {tnheight_input}
       </td>
     </tr>
-    <tr class="pluginRow2">
+    <tr class="pluginRow1">
       <td style="width:30%;" class="mgAdminAlignRight">{lang_av_play_options}</td>
       <td style="text-align:left;">
         {playback_type}
       </td>
     </tr>
-    <tr class="pluginRow1">
+    <tr class="pluginRow2">
       <td style="width:30%;" class="mgAdminAlignRight">{lang_ss_enable}</td>
       <td style="text-align:left;">
         {ss_select}
       </td>
     </tr>
-    <tr class="pluginRow2">
+    <tr class="pluginRow1">
       <td style="width:30%;" class="mgAdminAlignRight">{lang_rows}</td>
       <td style="text-align:left;">
         {rows_input}
       </td>
     </tr>
-    <tr class="pluginRow1">
+    <tr class="pluginRow2">
       <td style="width:30%;" class="mgAdminAlignRight">{lang_columns}</td>
       <td style="text-align:left;">
         {columns_input}

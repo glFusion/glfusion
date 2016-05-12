@@ -40,74 +40,67 @@
         </td>
       </tr>
       <tr class="pluginRow2">
-        <td style="width:50%;" class="mgAdminAlignRight">{lang_htmlallowed}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="radio" name="htmlallowed" value="0" {ha_no_checked} />{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="htmlallowed" value="1" {ha_yes_checked} />{lang_yes}
-        </td>
-      </tr>
-      <tr class="pluginRow1">
         <td  style="width:50%;" class="mgAdminAlignRight">{lang_usage_tracking}</td>
         <td class="mgAdminAlignLeft">
           <input type="radio" name="usagetracking" value="0" {ut_no_checked} />{lang_no}&nbsp;&nbsp;
           <input type="radio" name="usagetracking" value="1" {ut_yes_checked} />{lang_yes}
         </td>
       </tr>
-      <tr class="pluginRow2">
+      <tr class="pluginRow1">
         <td  style="width:50%;" class="mgAdminAlignRight">{lang_whatsnew}</td>
         <td class="mgAdminAlignLeft">
           <input type="radio" name="whatsnew" value="0" {wn_no_checked} />{lang_no}&nbsp;&nbsp;
           <input type="radio" name="whatsnew" value="1" {wn_yes_checked} />{lang_yes}
         </td>
       </tr>
-      <tr class="pluginRow1">
+      <tr class="pluginRow2">
         <td  style="width:50%;" class="mgAdminAlignRight">{lang_wn_length}</td>
         <td class="mgAdminAlignLeft">
           <input type="text" maxlength="2" size="2" name="wn_length" value="{wn_length}" />&nbsp;{lang_characters}
         </td>
       </tr>
-      <tr class="pluginRow2">
+      <tr class="pluginRow1">
         <td  style="width:50%;" class="mgAdminAlignRight">{lang_wn_time}</td>
         <td class="mgAdminAlignLeft">
           {wn_time_select}
         </td>
       </tr>
-      <tr class="pluginRow1">
+      <tr class="pluginRow2">
         <td  style="width:50%;" class="mgAdminAlignRight">{lang_preserve_filename}</td>
         <td class="mgAdminAlignLeft">
           <input type="radio" name="preserve_filename" value="0" {pf_no_checked} />{lang_no}&nbsp;&nbsp;
           <input type="radio" name="preserve_filename" value="1" {pf_yes_checked} />{lang_yes}
         </td>
       </tr>
-      <tr class="pluginRow2">
+      <tr class="pluginRow1">
         <td  style="width:50%;" class="mgAdminAlignRight">{lang_discard_originals}</td>
         <td class="mgAdminAlignLeft">
           <input type="radio" name="discard_originals" value="0" {do_no_checked} />{lang_no}&nbsp;&nbsp;
           <input type="radio" name="discard_originals" value="1" {do_yes_checked} />{lang_yes}
         </td>
       </tr>
-      <tr class="pluginRow1">
+      <tr class="pluginRow2">
         <td  style="width:50%;" class="mgAdminAlignRight">{lang_verbose}</td>
         <td class="mgAdminAlignLeft">
           <input type="radio" name="verbose" value="0" {verbose_no_checked} />{lang_no}&nbsp;&nbsp;
           <input type="radio" name="verbose" value="1" {verbose_yes_checked} />{lang_yes}
         </td>
       </tr>
-      <tr class="pluginRow2">
+      <tr class="pluginRow1">
         <td  style="width:50%;" class="mgAdminAlignRight">{lang_dwnc}</td>
         <td class="mgAdminAlignLeft">
           <input type="radio" name="dwnc" value="0" {dwnc_no_checked} />{lang_no}&nbsp;&nbsp;
           <input type="radio" name="dwnc" value="1" {dwnc_yes_checked} />{lang_yes}
         </td>
       </tr>
-      <tr class="pluginRow1">
+      <tr class="pluginRow2">
         <td  style="width:50%;" class="mgAdminAlignRight">{lang_profile_hook}</td>
         <td class="mgAdminAlignLeft">
           <input type="radio" name="profile_hook" value="0" {ph_no_checked} />{lang_no}&nbsp;&nbsp;
           <input type="radio" name="profile_hook" value="1" {ph_yes_checked} />{lang_yes}
         </td>
       </tr>
-      <tr class="pluginRow2">
+      <tr class="pluginRow1">
         <td  style="width:50%;" class="mgAdminAlignRight">{lang_postcard_retention}</td>
         <td class="mgAdminAlignLeft">
           <input type="text" maxlength="2" size="2" name="postcard_retention" value="{postcard_retention}" />

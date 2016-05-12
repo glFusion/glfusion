@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Album editing administration                                             |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -144,6 +144,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         $A['enable_shutterfly'] = $_MG_CONF['ad_enable_shutterfly'];
         $A['enable_views']      = $_MG_CONF['ad_enable_views'];
         $A['enable_keywords']   = $_MG_CONF['ad_enable_keywords'];
+        $A['enable_html']       = 0;
         $A['display_album_desc'] = $_MG_CONF['ad_display_album_desc'];
         $A['enable_album_views'] = $_MG_CONF['ad_enable_album_views'];
         $A['image_skin']        = $_MG_CONF['ad_image_skin'];
@@ -269,6 +270,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     $sf_select      = '<input type="checkbox" name="enable_shutterfly" value="1" ' . ($A['enable_shutterfly'] ? ' checked="checked"' : '') . '/>';
     $views_select   = '<input type="checkbox" name="enable_views" value="1" ' . ($A['enable_views'] ? ' checked="checked"' : '') . '/>';
     $keywords_select = '<input type="checkbox" name="enable_keywords" value="1" ' . ($A['enable_keywords'] ? ' checked="checked"' : '') . '/>';
+    $html_select    = '<input type="checkbox" name="enable_html" value="1" ' . ($A['enable_html'] ? ' checked="checked"' : '') . '/>';
     $sort_select    = '<input type="checkbox" name="enable_sort" value="1" ' . ($A['enable_sort'] ? ' checked="checked"' : '') . '/>';
     $rss_select     = '<input type="checkbox" name="enable_rss" value="1" ' . ($A['enable_rss'] ? ' checked="checked"' : '') . '/>';
 
@@ -634,6 +636,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         'sf_select'             => $sf_select,
         'views_select'          => $views_select,
         'keywords_select'       => $keywords_select,
+        'html_select'           => $html_select,
         'album_views_select'    => $album_views_select,
         'display_album_desc_select' => $display_album_desc_select,
         'sort_select'           => $sort_select,
@@ -704,6 +707,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         'lang_album_cover'      => $LANG_MG01['album_cover'],
         'lang_enable_views'     => $LANG_MG01['enable_views'],
         'lang_enable_keywords'  => $LANG_MG01['enable_keywords'],
+        'lang_enable_html'      => $LANG_MG01['htmlallowed'],
         'lang_enable_album_views'=> $LANG_MG01['enable_album_views'],
         'lang_enable_sort'      => $LANG_MG01['enable_sort'],
         'lang_enable_rss'       => $LANG_MG01['enable_rss'],
@@ -724,7 +728,8 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         'lang_theme_select'		=> $LANG_MG01['album_theme'],
     ));
 
-    if ( $_MG_CONF['htmlallowed'] == 1 ) {
+    if ( $A['enable_html'] == 1 ) {
+//    if ( $_MG_CONF['htmlallowed'] == 1 ) {
         $T->set_var('allowed_html',COM_allowedHTML(SEC_getUserPermissions(),false,'mediagallery','album_title'));
     }
 
@@ -749,13 +754,13 @@ function MG_quickCreate( $parent, $title, $desc='' ) {
 
     $album = new mgAlbum();
 
-    if ($_MG_CONF['htmlallowed'] == 1 ) {
+//    if ($_MG_CONF['htmlallowed'] == 1 ) {
         $album->title       = $title;
         $album->description = $desc;
-    } else {
-        $album->title       = htmlspecialchars(strip_tags(COM_checkWords($title)));
-        $album->description = htmlspecialchars(strip_tags(COM_checkWords($desc)));
-    }
+//    } else {
+//        $album->title       = htmlspecialchars(strip_tags(COM_checkWords($title)));
+//        $album->description = htmlspecialchars(strip_tags(COM_checkWords($desc)));
+//    }
     if ($album->title == "" ) {
         return -1;
     }
@@ -867,7 +872,13 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
         $old_tn_attached    = 0;
     }
 
-    if ($_MG_CONF['htmlallowed'] == 1 ) {
+    if ( isset($_POST['enable_html']) ) {
+        $album->enable_html     = COM_applyFilter($_POST['enable_html'],true);
+    } else {
+        $album->enable_html = 0;
+    }
+
+    if ($album->enable_html == 1 ) {
         $album->title       = COM_checkHTML(COM_killJS($_POST['album_name']));
         $album->description = COM_checkHTML(COM_killJS($_POST['album_desc']));
     } else {

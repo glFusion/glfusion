@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Remote Media routines                                                    |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -455,7 +455,8 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
         COM_errorLog("MG Upload: Building SQL and preparing to enter database");
     }
 
-    if ($_MG_CONF['htmlallowed'] != 1 ) {
+    if ($MG_albums[$albumId]->enable_html != 1 ) {
+//    if ($_MG_CONF['htmlallowed'] != 1 ) {
         $media_desc     = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($description)))));
         $media_caption  = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($caption)))));
         $media_keywords = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($keywords)))));

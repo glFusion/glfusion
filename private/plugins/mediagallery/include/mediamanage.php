@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Media Management administration routines                                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -326,7 +326,7 @@ function MG_imageAdmin( $album_id, $page, $actionURL = '' ) {
 
 
 function MG_saveMedia( $album_id, $actionURL = '' ) {
-    global $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG03, $_POST;
+    global $_USER, $_CONF, $_TABLES, $MG_albums, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG03, $_POST;
 
     // check permissions...
 
@@ -359,7 +359,7 @@ function MG_saveMedia( $album_id, $actionURL = '' ) {
     for ( $i=0; $i < $numItems; $i++ ) {
         $media_title_safe = substr($media[$i]['title'],0,254);
 
-        if ($_MG_CONF['htmlallowed'] != 1 ) {
+        if ($MG_albums[$album_id]->enable_html != 1 ) {
             $media_title = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords($media_title_safe))));
             $media_desc = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords($media[$i]['description']))));
         } else {
@@ -1184,7 +1184,7 @@ function MG_mediaResetViews( $album_id, $media_id, $mqueue ) {
 }
 
 function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
-    global $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG03, $_POST, $_FILES;
+    global $_USER, $_CONF, $_TABLES, $MG_albums, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG03, $_POST, $_FILES;
 
     $back = COM_applyFilter($_POST['rpath']);
     if ( $back != '' ) {
@@ -1250,7 +1250,8 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
 		$remote_url = '';
 	}
 
-    if ( $_MG_CONF['htmlallowed'] ) {
+//    if ( $_MG_CONF['htmlallowed'] ) {
+    if ($MG_albums[$album_id]->enable_html ) {
         $media_title    = COM_checkWords($_POST['media_title']);
         $media_desc     = COM_checkWords($_POST['media_desc']);
     } else {

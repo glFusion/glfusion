@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Watermark admin functions                                                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -188,11 +188,7 @@ function MG_watermarkSave( $actionURL = '' ) {
     for ( $i=0; $i < $numItems; $i++ ) {
         $media_title_safe = substr($media[$i]['title'],0,254);
 
-        if ($_MG_CONF['htmlallowed'] != 1 ) {
-            $media_title = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords($media_title_safe))));
-        } else {
-            $media_title = DB_escapeString(COM_checkHTML($media_title_safe));
-        }
+        $media_title = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords($media_title_safe))));
         $wid = $media[$i]['wid'];
         $sql = "UPDATE {$_TABLES['mg_watermarks']} SET description='" . $media_title . "' WHERE wm_id='" . DB_escapeString($media[$i]['wid']) . "'";
         DB_query($sql);
@@ -403,11 +399,7 @@ function MG_watermarkUploadSave() {
             } else {
                 chmod($wm_filename, 0644);
                 $media_title_safe = substr($description,0,254);
-                if ($_MG_CONF['htmlallowed'] != 1 ) {
-                    $media_title = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($media_title_safe)))));
-                } else {
-                    $media_title = DB_escapeString(htmlspecialchars(COM_checkHTML(COM_checkWords(COM_killJS($media_title_safe)))));
-                }
+                $media_title = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($media_title_safe)))));
 
                 $saveFileName = DB_escapeString($uid . '_' .$filename);
                 $sql = "INSERT INTO {$_TABLES['mg_watermarks']} (wm_id,owner_id,filename,description)

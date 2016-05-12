@@ -196,7 +196,12 @@ function mediagallery_upgrade()
         case "1.6.9" :
         case '1.6.10':
         case '2.0.0' :
-            // no db / config changes.
+        case '2.0.1' :
+            DB_query("ALTER TABLE {$_TABLES['mg_albums']} ADD `enable_html` TINYINT(4) NOT NULL DEFAULT '0' AFTER `enable_keywords`;",1);
+            if ($_MG_CONF['htmlallowed'] == 1 ) {
+                DB_query("UPDATE {$_TABLES['mg_albums'] SET enable_html=1",1);
+            }
+
         default :
             if ( $_DB_dbms != 'mssql' ) {
                 // we missed media_keywords field somewhere along the way...

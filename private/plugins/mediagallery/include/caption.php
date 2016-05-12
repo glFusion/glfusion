@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Batch caption editing routines                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -263,7 +263,7 @@ function MG_batchCaptionEdit( $album_id, $start, $actionURL = '' ) {
 
 
 function MG_batchCaptionSave( $album_id, $start, $actionURL ) {
-    global $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01;
+    global $_USER, $_CONF, $_TABLES, $MG_albums, $_MG_CONF, $LANG_MG00, $LANG_MG01;
 
     $media_title = array();
     $media_desc  = array();
@@ -282,7 +282,8 @@ function MG_batchCaptionSave( $album_id, $start, $actionURL ) {
         } else {
             $tablename = $_TABLES['mg_media'];
         }
-        if ( $_MG_CONF['htmlallowed'] ) {
+        if ( $MG_albums[$album_id]->enable_html ) {
+//        if ( $_MG_CONF['htmlallowed'] ) {
             $title    = DB_escapeString(COM_checkWords($media_title[$i]));
             $desc     = DB_escapeString(COM_checkWords($media_desc[$i]));
         } else {

@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | Set configuration options for Media Gallery Plugin.                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2015 by the following authors:                        |
+// | Copyright (C) 2005-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -744,7 +744,7 @@ function MG_saveConfig( ) {
     DB_save($_TABLES['mg_config'],"config_name, config_value","'displayblocks',         '$displayblocks'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'usage_tracking',        '$usage_tracking'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'dfid',                  '$dfid'");
-    DB_save($_TABLES['mg_config'],"config_name, config_value","'htmlallowed',           '$htmlallowed'");
+//    DB_save($_TABLES['mg_config'],"config_name, config_value","'htmlallowed',           '$htmlallowed'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'whatsnew',              '$whatsnew'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'jpg_orig_quality',      '$orig_jpg_quality'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'jpg_quality',           '$jpg_quality'");

@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | Administer Media Gallery categories.                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2015 by the following authors:                        |
+// | Copyright (C) 2005-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -107,9 +107,9 @@ function MG_editCategory( $cat_id, $mode ) {
         'gltoken'               => SEC_createToken(),
     ));
 
-    if ( $_MG_CONF['htmlallowed'] == 1 ) {
-        $T->set_var('allowed_html',COM_allowedHTML(SEC_getUserPermissions(),false,'mediagallery','category_title'));
-    }
+//    if ( $_MG_CONF['htmlallowed'] == 1 ) {
+//        $T->set_var('allowed_html',COM_allowedHTML(SEC_getUserPermissions(),false,'mediagallery','category_title'));
+//    }
 
     $T->parse('output', 'admin');
     $retval .= $T->finish($T->get_var('output'));
@@ -122,13 +122,13 @@ function MG_saveCategory( $cat_id ) {
 
     $A['cat_id']        = COM_applyFilter($_POST['cat_id'],true);
 
-    if ($_MG_CONF['htmlallowed'] == 1 ) {
-        $A['cat_name']          = DB_escapeString(COM_checkHTML(COM_killJS($_POST['cat_name'])));
-        $A['cat_description']   = DB_escapeString(COM_checkHTML(COM_killJS($_POST['cat_desc'])));
-    } else {
+//    if ($_MG_CONF['htmlallowed'] == 1 ) {
+//        $A['cat_name']          = DB_escapeString(COM_checkHTML(COM_killJS($_POST['cat_name'])));
+//        $A['cat_description']   = DB_escapeString(COM_checkHTML(COM_killJS($_POST['cat_desc'])));
+//    } else {
         $A['cat_name']          = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($_POST['cat_name'])))));
         $A['cat_description']   = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($_POST['cat_desc'])))));
-    }
+//    }
 
     if ($A['cat_name'] == "" ) {
         return(MG_errorHandler( $LANG_MG01['category_error'] ));

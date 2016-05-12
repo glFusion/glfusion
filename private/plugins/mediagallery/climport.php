@@ -7,7 +7,7 @@
 // |                                                                          |
 // | Command Line media import utility                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -672,7 +672,8 @@ function _MG_getFile( $filename, $file, $albums, $caption = '', $description = '
             $atttn = 1;
         }
 
-        if ($_MG_CONF['htmlallowed'] != 1 ) {
+        if ($MG_albums[$albums]->enable_html != 1 ) {
+//        if ($_MG_CONF['htmlallowed'] != 1 ) {
             $media_desc     = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($description)))));
             $media_caption  = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($caption)))));
             $media_keywords = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($keywords)))));

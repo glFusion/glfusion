@@ -2,7 +2,7 @@
 // +--------------------------------------------------------------------------+
 // | Media Gallery Plugin - glFusion CMS                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Translator:                                                              |
@@ -184,7 +184,7 @@ $LANG_MG01 = array (
     'displayblock_prompt'       => 'Display glFusion Blocks',
     'displayblock_help'         => 'Select whether to display the left / right / both or none of the glFusion blocks while in Media Gallery',
     'static_sort_help'          => 'This will overwrite any manual sorting that you have completed.',
-    'htmlallowed'               => 'Allow HTML in titles',
+    'htmlallowed'               => 'Allow HTML in titles / descriptions',
     'whatsnew'                  => 'Enable Whats New listing in glFusion',
     'dfid'                      => 'Date Format',
     'general_options'           => 'General Options',
