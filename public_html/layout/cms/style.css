@@ -1872,3 +1872,8 @@ margin-right:5px;
 .tm-admin-save ul li {
 padding-bottom:5px;
 }
+
+/* headlines auto tag */
+.tm-headline > img {
+  width: 100%;
+}
