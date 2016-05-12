@@ -1243,7 +1243,11 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                     $newwidth = $width;
                     $newheight = $height;
                 }
-                $album_image = '<img src="' . $tnImage . '" ' . $alttag . ' style="width:' . $newwidth . 'px;height:' . $newheight . 'px;border:none;" />';
+                $album_image = '<img src="' . $tnImage . '" ' . $alttag . ' style="';
+                if ( $nosize == 0 && $height != -1 && $width != -1 ) {
+                    $album_image .= 'width:' . $newwidth . 'px;height:' . $newheight . 'px;';
+                }
+                $album_image .= 'border:none;" />';
 
                 $tagtext = $album_image;
                 if ( $linkID == 0 ) {
@@ -1487,7 +1491,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                     }
                 }
                 $album_image = '<img class="'.$classes.'" src="' . $media_thumbnail . '" ' . $alttag . ' style=';
-                if ( $nosize == 0 ) {
+                if ( $nosize == 0 && $height != -1 && $width != -1 ) {
                     $album_image .= '"width:' . $newwidth . 'px;height:' . $newheight . 'px;';
                 }
                 $album_image .= 'border:none;" />';
