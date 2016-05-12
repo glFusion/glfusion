@@ -17,6 +17,7 @@ v1.6.0 (Unreleased)
   - Updated menu system - implemented SmartMenus which is much more flexible and supports multi level menus
   - Added editor save options as sticky button on right side of screen
   - Media Gallery - Added class parameter to auto tags
+  - Media Gallery - Allow height / width auto tag parameters to be -1 which disables including width/height on image (useful when using a class to drive look and feel)
   - Fixed issue where newly created forums, that have no posts, would display an invalid last update date
   - Improved error checking on URL parameters in admin lists
   - Removed Are You a Human CAPTCHA option (service has shutdown)
@@ -25,7 +26,7 @@ v1.6.0 (Unreleased)
   - Media Gallery - fixed issue where search results were pointing to wrong URL if media gallery installed in a different directory that default
   - Media Gallery - fixed display error in search results for CMS theme
   - Added footer.js to the jQuery based themes
-  - Updated UIKIT to v2.26.2
+  - Updated UIKIT to v2.26.3
   - Several code modernization updates to better support PHP v7.
   - Significant work on MP4 playback and media handling, including improved player and attached thumbnail features
   - New Vimeo auto tag
