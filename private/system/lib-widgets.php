@@ -147,7 +147,7 @@ function WIDGET_autotranslations($header=0) {
 
 function WIDGET_UIKITslider( $dataArray )
 {
-    global $_CONF;
+    global $_CONF, $_TABLES;
 
     $optionTypeArray = array(
         'animation' => 's',         // Defines the preferred transition between items.
@@ -208,34 +208,66 @@ function WIDGET_UIKITslider( $dataArray )
         }
     }
 
-    $T->set_block('widget', 'images', 'i');
     $T->set_block('widget', 'dotnav', 'd');
+    $T->set_block('widget', 'pages', 'p');
+    $T->set_block('widget', 'images', 'i');
 
-    foreach ($dataArray['images'] as $images ) {
-        $T->unset_var('imageurl');
-        $T->unset_var('slidecounter');
-        $T->unset_var('link');
-        $T->unset_var('caption');
+    $page_ids = array();
 
-        $imageURL = str_replace( "%site_url%", $_CONF['site_url'], $images['image'] );
+    // static page mode
+    if (isset($dataArray['pages']) && is_array($dataArray['pages']) ) {
+        $page_ids = $dataArray['pages'];
 
-        $T->set_var('imageurl',$imageURL);
-        $T->set_var('slidecounter',$slideCounter);
+	    $sql = "SELECT sp_id, sp_content, sp_php, sp_title FROM {$_TABLES['staticpage']} WHERE sp_id in ("
+	         . implode(', ', array_map(create_function('$a','return "\'" . htmlspecialchars($a) . "\'";'), $page_ids))
+	         . ')' . COM_getPermSQL('AND');
 
-        $first++;
-        $retval .= '>';
-        if (isset($images['caption']) && $images['caption'] != '' ) {
-            if ( isset($images['link']) && $images['link'] != '' ) {
-                $T->set_var('link',$images['link']);
-            }
-            if ( isset($images['caption']) && $images['caption'] != '' ) {
-                $T->set_var('caption',$images['caption']);
-            }
-        }
-        $T->parse('i', 'images',true);
-        $T->parse('d', 'dotnav',true);
-        $slideCounter++;
+	    $res = DB_query($sql);
+	    $pages = array();
+	    for ($i = 0; $A = DB_fetchArray($res); ++$i) {
+	        $content = SP_render_content($A['sp_content'], $A['sp_php']);
+	        $title = htmlspecialchars($A['sp_title']);
+	        $order = array_search($A['sp_id'],$page_ids); // find proper order
+	        $pages[$order] = array('sp_id' => $A['sp_id'],'content' => $content, 'title' => $title, 'index' => $order+1);
+
+	        $T->set_var('slide',$content);
+            $T->set_var('slidecounter',$slideCounter);
+
+            $T->parse('p', 'pages',true);
+            $T->parse('d', 'dotnav',true);
+            $slideCounter++;
+	    }
     }
+
+    if ( isset($dataArray['images']) ) {
+        $T->set_block('widget', 'images', 'i');
+        foreach ($dataArray['images'] as $images ) {
+            $T->unset_var('imageurl');
+            $T->unset_var('slidecounter');
+            $T->unset_var('link');
+            $T->unset_var('caption');
+
+            $imageURL = str_replace( "%site_url%", $_CONF['site_url'], $images['image'] );
+
+            $T->set_var('imageurl',$imageURL);
+            $T->set_var('slidecounter',$slideCounter);
+
+            $first++;
+            $retval .= '>';
+            if (isset($images['caption']) && $images['caption'] != '' ) {
+                if ( isset($images['link']) && $images['link'] != '' ) {
+                    $T->set_var('link',$images['link']);
+                }
+                if ( isset($images['caption']) && $images['caption'] != '' ) {
+                    $T->set_var('caption',$images['caption']);
+                }
+            }
+            $T->parse('i', 'images',true);
+            $T->parse('d', 'dotnav',true);
+            $slideCounter++;
+        }
+    }
+
     $T->parse('output','widget');
     $retval = $T->finish($T->get_var('output'));
 
