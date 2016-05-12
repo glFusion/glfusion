@@ -26,6 +26,7 @@ set of styles.
 	background: #fff url(images/bg_content.jpg) repeat-x 0 0;
 }
 
+
 /*
 * tm-container is the primary wrapper for the content area. This excludes
 * the header / footer (see tm-nav* and tm-footer* styles)
@@ -38,7 +39,7 @@ set of styles.
 }
 .tm-container h2 {
 	font-size: 20px !important;
-	margin: 0px 0px 10px !important;
+	margin: 0px 0px 10px;
 }
 .tm-container h3 {
 	font-size: 18px !important;
