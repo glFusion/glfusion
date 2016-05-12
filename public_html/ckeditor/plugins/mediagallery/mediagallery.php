@@ -6,7 +6,7 @@
 // |                                                                          |
 // | CKeditor plugin to allow easy insertion of Media Gallery auto tags.      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2006-2015 by the following authors:                        |
+// | Copyright (C) 2006-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -373,6 +373,7 @@ $T->set_var(array(
     'lang_bottom'           => $LANG_mgMB['bottom'],
     'destination'           => ($_mgMB_CONF['enable_dest'] == 1 ? '<p>' . $LANG_mgMB['destination'] . '&nbsp;&nbsp;<select name="dest"><option value="story">' . $LANG_mgMB['story'] . '</option><option value="block">' . $LANG_mgMB['block'] . '</option></select>' : ''),
     'lang_select_album'     => $LANG_mgMB['select_album'],
+    'lang_class'            => $LANG_mgMB['class'],
 ));
 
 if ( $total_media == 0 ) {

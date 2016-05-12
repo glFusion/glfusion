@@ -159,20 +159,21 @@
 				<hr noshade>
 
 				<div class="uk-overflow-container">
+
 					<table class="uk-table">
 						<tr>
 							<td class="uk-text-right">
 								{lang_width}
 							</td>
 							<td>
-								<input type="text" name="width" size="3" maxlength="3" value="{width}">&nbsp;px
+								<input type="text" name="width" size="4" maxlength="4" value="{width}">&nbsp;px
 							</td>
 
 							<td class="uk-text-right">
 								{lang_height}
 							</td>
 							<td>
-								<input type="text" name="height" size="3" maxlength="3" value="{height}">&nbsp;px
+								<input type="text" name="height" size="4" maxlength="4" value="{height}">&nbsp;px
 							</td>
 
 							<td class="uk-text-right">
@@ -185,7 +186,6 @@
 									<option value="1"{border_yes}>{lang_yes}</option>
 								</select>
 							</td>
-
 						</tr>
 						<tr>
 							<td class="uk-text-right">
@@ -267,19 +267,22 @@
 									<option value="bottom">{lang_bottom}</option>
 								</select>
 							</td>
+							<td class="uk-text-right">{lang_class}</td>
+							<td>
+								<input type="text" name="classes">
+							</td>
 						</tr>
-
 						<tr><td style="text-align:right;">{lang_caption}</td><td colspan="7"><input type="text" name="caption" size="80" maxlength="120" value="{caption}"></td></tr>
 
 					</table>
 				</div>
 			</fieldset>
-{!if bottom_pagination}
+			{!if bottom_pagination}
 			<fieldset>
 				<legend>{lang_navigation}</legend>
 				{bottom_pagination}
 			</fieldset>
-{!endif}
+			{!endif}
 			<div class="uk-margin">
 				<button class="uk-button uk-button-primary" name="button" value="{lang_insert}" onClick="return insertImage(this.form);">{lang_insert}</button>
 				<button class="uk-button uk-button-danger" name="cancel" value="{lang_cancel}" onClick="javascript:window.close();">{lang_cancel}</button>

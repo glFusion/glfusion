@@ -6,7 +6,7 @@
 // |                                                                          |
 // | PHP Language definitions                                                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2014 by the following authors:                             |
+// | Copyright (C) 2014-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -74,5 +74,6 @@ $LANG_mgMB = array (
     'alturl'            => 'Alt URL',
     'playall'           => 'playall',
     'link_src'          => 'Link Src',
+    'class'             => 'Class',
 );
 ?>
