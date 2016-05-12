@@ -1,4 +1,4 @@
-/*! UIkit 2.26.2 | http://www.getuikit.com | (c) 2014 YOOtheme | MIT License */
+/*! UIkit 2.26.3 | http://www.getuikit.com | (c) 2014 YOOtheme | MIT License */
 (function(addon) {
 
     var component;
@@ -510,7 +510,7 @@
 
         }
     });
-    
+
     function getModal(lightbox) {
 
         if (modal) {
@@ -548,9 +548,17 @@
             modal.content.html('');
         });
 
+        var resizeCache = {w: window.innerWidth, h:window.innerHeight};
+
         UI.$win.on('load resize orientationchange', UI.Utils.debounce(function(e){
-            if (modal.is(':visible') && !UI.Utils.isFullscreen()) modal.lightbox.fitSize();
-        }.bind(this), 100));
+
+            if (resizeCache.w !== window.innerWidth && modal.is(':visible') && !UI.Utils.isFullscreen()) {
+                modal.lightbox.fitSize();
+            }
+
+            resizeCache = {w: window.innerWidth, h:window.innerHeight};
+
+        }, 100));
 
         modal.lightbox = lightbox;
 
