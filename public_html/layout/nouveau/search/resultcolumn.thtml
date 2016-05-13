@@ -1,3 +1,0 @@
-{# begin {templatelocation} #}
-<td class="alignleft">{data}</td>
-{# end {templatelocation} #}

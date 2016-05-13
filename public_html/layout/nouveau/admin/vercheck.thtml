@@ -1,8 +1,0 @@
-<div>
-  <h1>{statusmsg}</h1>
-  <div style="float:left;">
-    <img src='{alerticon}' style="padding-right:5px;padding-left:5px;" alt=''/>
-  </div>
-  <span>{statustext}</span>
-</div>
-<div style="clear:both;"></div>

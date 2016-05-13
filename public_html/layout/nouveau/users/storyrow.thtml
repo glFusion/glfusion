@@ -1,6 +1,0 @@
-{# begin {templatelocation} #}
-<tr>
-	<td>{row_number} {story_title}</td>
-	<td align="right">{story_date}</td>
-</tr>
-{# end {templatelocation} #}

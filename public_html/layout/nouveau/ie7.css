@@ -1,8 +1,0 @@
-/* IE 7 ONLY LAYOUT  STYLESHEET*************************************************
-This file only contains CSS fixes for the IE 7 browser. For regular style info use style.css
-NOTE: paths specified below are relative to this file
- */
-
-#gl_mooticker ul {
-  margin:0 0 5px 120px;
-}

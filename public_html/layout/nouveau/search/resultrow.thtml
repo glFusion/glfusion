@@ -1,5 +1,0 @@
-{# begin {templatelocation} #}
-                                <tr class="pluginRow{cssid}">
-                                    {data_cols}
-                                </tr>
-{# end {templatelocation} #}

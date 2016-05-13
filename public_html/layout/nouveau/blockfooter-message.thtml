@@ -1,9 +1,0 @@
-{# begin {templatelocation} #}
-    </div>
-</div>
-<script type="text/javascript">
-	var fx = new Fx.Styles('msgbox', { duration: 3000 });
-	fx.addEvent('onComplete',function () { $('msgbox').setStyle('display', 'none'); });
-	fx.start.delay(5000, fx, { 'opacity' : 0 });
-</script>
-{# end {templatelocation} #}

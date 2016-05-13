@@ -1,6 +1,0 @@
-{# begin {templatelocation} #}
-<tr>
-	<td>{row_number} {comment_title}</td>
-	<td align="right">{comment_date}</td>
-</tr>
-{# end {templatelocation} #}
