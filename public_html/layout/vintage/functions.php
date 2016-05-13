@@ -5,7 +5,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2010-2015 by the following authors:
+*  Copyright (C) 2010-2016 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -15,7 +15,9 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-$themeAPI = 2;
+$themeAPI = 3;
+$_SYSTEM['framework'] = 'legacy';
+
 $_SYSTEM['disable_mootools'] = true;
 $_IMAGE_TYPE = 'png';
 
