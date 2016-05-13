@@ -614,6 +614,8 @@ if (file_exists($_CONF['path_layout'] . 'custom/functions.php') ) {
     require_once $_CONF['path_layout'] . 'functions.php';
 }
 
+if (!isset($_SYSTEM['framework']) ) $_SYSTEM['framework'] = 'legacy';
+
 // ensure XHTML constant is defined to avoid problems elsewhere
 
 if (!defined('XHTML')) {
@@ -7301,14 +7303,9 @@ if ( is_array($_PLUGINS) ) {
     $_PLUGINS = array_values($_PLUGINS);
 }
 
-if ( @file_exists($_CONF['path_language'].'custom') ) {
-    $langfilespec = $_CONF['path_language'].'custom/'. $_CONF['language'] . '*.php';
-    $langfiles = @glob($langfilespec, GLOB_NOESCAPE|GLOB_NOSORT);
-    if (@is_array($langfiles)) {
-        foreach($langfiles as $langfile) {
-            include_once $langfile;
-        }
-    }
+// load custom language file if it exists...
+if ( @file_exists($_CONF['path_language'].'custom/'.$_CONF['language'].'.php') ) {
+    include_once $_CONF['path_language'].'custom/'.$_CONF['language'].'.php';
 }
 
 if ( isset($_SYSTEM['maintenance_mode']) && $_SYSTEM['maintenance_mode'] == 1 ) {
