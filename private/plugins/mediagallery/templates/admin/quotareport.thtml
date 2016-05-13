@@ -1,42 +1,49 @@
 {# begin {templatelocation} #}
-<form name="quotareport" action="{site_admin_url}/quotareport.php" method="post">
-  <table width="100%" border="0" cellspacing="0" cellpadding="5">
-    <tr>
-      <td>{lang_quota} >=</td>
-      <td><input type="text" name="quota" value="{quota}" size="3" />&nbsp;Mb</td>
-      <td rowspan="2" style="vertical-align:middle;"><input type="submit" value="{lang_go}" name="go"></td>
-    </tr>
+<form class="uk-form uk-form-horizontal" name="quotareport" action="{site_admin_url}/quotareport.php" method="post">
+	<div class="uk-panel uk-panel-box uk-panel-box-primary">
+		<div class="uk-form-row">
+			<label class="uk-form-label uk-text-right">{lang_quota} >= </label>
+			<div class="uk-form-controls">
+				<input class="uk-form-width-small" type="text" name="quota" value="{quota}">&nbsp;Mb
+				<button class="uk-button uk-button-success" type="submit" value="{lang_go}" name="go">{lang_go}</button>
+			</div>
+		</div>
+	</div>
+</form>
 
-  </table>
-</form>
-<form name="quotaedit" action="{site_admin_url}/quotareport.php" method="post">
-  <table width="100%" border="0" cellspacing="0" cellpadding="5">
-	<thead>
+<form class="uk-form uk-form-horizontal" name="quotaedit" action="{site_admin_url}/quotareport.php" method="post">
+	<table class="uk-table uk-table-striped uk-table-hover">
 		<tr>
-		    <th>&nbsp;</th>
+			<th>&nbsp;</th>
 			<th>{lang_username}</th>
-			<th>{lang_active}</th>
-			<th>{lang_quota}</th>
-			<th>{lang_used}</th>
+			<th class="uk-text-center">{lang_active}</th>
+			<th class="uk-text-right">{lang_quota}</th>
+			<th class="uk-text-right">{lang_used}</th>
 		</tr>
-	</thead>
-	<tbody>
-  <!-- BEGIN UserRow -->
-  <tr class="pluginRow{rowclass}">
-    <td align="center"><input type="checkbox" value="{uid}" name="uid[]"></td>
-    <td align="left">{username}</td>
-    <td align="center">{active}</td>
-    <td align="right">{quota}</td>
-    <td align="right">{used}</td>
-  </tr>
-  <!-- END UserRow -->
-  <tr>
-    <td colspan="5">{lang_batch_update} <input type="text" size="3" name="bquota" value=""></td>
-  </tr>
-  <tr>
-    <td colspan="5" align="center"><input type="submit" value="{lang_update}" name="mode"></td>
-  </tr>
-</table>
+		<!-- BEGIN UserRow -->
+		<tr>
+			<td class="uk-text-center"><input type="checkbox" value="{uid}" name="uid[]"></td>
+			<td class="uk-text-left">{username}</td>
+			<td class="uk-text-center">{active}</td>
+			<td class="uk-text-right">{quota}</td>
+			<td class="uk-text-right">{used}</td>
+		</tr>
+		<!-- END UserRow -->
+	</table>
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label">{lang_batch_update}</label>
+		<div class="uk-form-controls">
+			<input class="uk-form-width-small" type="text" name="bquota" value="">
+		</div>
+	</div>
+
+	<div class="uk-form-row uk-text-center">
+		<button class="uk-button uk-button-primary" type="submit" value="{lang_update}" name="mode">{lang_update}</button>
+	</div>
 </form>
-<center>{pagenav}</center>
+
+<div class="uk-text-center">
+	{pagenav}
+</div>
 {# end {templatelocation} #}

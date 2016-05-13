@@ -1,27 +1,23 @@
 {# begin {templatelocation} #}
-{block_start}
-{admin_menu}
-<form action="{phpself}" method="post">
-<table width="100%" border="0" cellspacing="0" cellpadding="3" class="plugin" style="margin-top:10px;">
-    <tr>
-        <td class="pluginAlert pluginMediumText" style="padding:10px;">{deletenote1}</td>
-    </tr>
-    <tr>
-       <td class="pluginCellText pluginCellFill" style="text-align:center;padding:10px;">
-            <input type="hidden" name="type" value="{type}" />
-            <input type="hidden" name="confirm" value="1" />
-            <input type="hidden" name="id" value="{id}" />
-            <input type="hidden" name="mode" value="delcat">
-            {deletenote2}
-       </td>
-     </tr>
-     <tr>
-       <td class="pluginCellText pluginCellFill" style="text-align:center;padding:10px;">
-            <input type="submit" name="delcatconfirm" value="{LANG_DELETE}" />&nbsp;
-            <input type="submit" name="cancel" value="{LANG_CANCEL}"/>
-       </td>
-    </tr>
- </table>
-</form>
-{block_end}
+<div class="uk-panel uk-panel-box">
+  <div class="uk-panel-title">
+    {lang_title}
+  </div>
+  <form class="uk-form"action="{s_form_action}" method="post">
+    <input type="hidden" name="type" value="{type}">
+    <input type="hidden" name="confirm" value="1">
+    <input type="hidden" name="id" value="{id}">
+    <input type="hidden" name="mode" value="{mode}">
+
+    <div class="uk-alert uk-alert-warning uk-text-center uk-width-1-1 uk-text-large">
+        {deletenote1}<br>{deletenote2}
+    </div>
+    <div class="uk-form-row">
+      <div class="uk-form-controls uk-text-center">
+        <button class="uk-button uk-button-danger" type="submit" name="{submit_button}" value="{LANG_DELETE}">{LANG_DELETE}</button>
+        <button class="uk-button uk-button-primary" type="submit" name="cancel" value="{LANG_CANCEL}">{LANG_CANCEL}</button>
+      </div>
+    </div>
+  </form>
+</div>
 {# end {templatelocation} #}

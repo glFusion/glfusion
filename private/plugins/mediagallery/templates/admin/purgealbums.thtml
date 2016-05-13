@@ -1,53 +1,51 @@
 {# begin {templatelocation} #}
 <script type="text/javascript">
-//<![CDATA[
-function doCheckAll()
-{
-  with (document.purgealbums) {
-    for (var i=0; i < elements.length; i++ ) {
-      if (elements[i].type == 'checkbox')
-        elements[i].checked = true;
+    //<![CDATA[
+    function doCheckAll()
+    {
+        with (document.purgealbums) {
+            for (var i=0; i < elements.length; i++ ) {
+                if (elements[i].type == 'checkbox')
+                elements[i].checked = true;
+            }
+        }
     }
-  }
-}
-function doUnCheckAll()
-{
-  with (document.purgealbums) {
-    for (var i=0; i < elements.length; i++ ) {
-      if (elements[i].type == 'checkbox')
-        elements[i].checked = false;
+    function doUnCheckAll()
+    {
+        with (document.purgealbums) {
+            for (var i=0; i < elements.length; i++ ) {
+                if (elements[i].type == 'checkbox')
+                elements[i].checked = false;
+            }
+        }
     }
-  }
-}
-//]]>
+    //]]>
 </script>
-<form name="purgealbums" method="post" action="{s_form_action}">
-  <table width="100%" border="0" cellspacing="0" cellpadding="5">
-    <tr>
-      <th align="left" style="width:20px;">{lang_select}</th>
-      <th align="center">{lang_album_title}</th>
-      <th align="center">{lang_username}</th>
-      <th align="center">{lang_last_login}</th>
-    </tr>
-    <!-- BEGIN UserRow -->
-    <tr class="pluginRow{rowclass}">
-      <td align="center">{select}</td>
-      <td align="left">{title}</td>
-      <td align="left">{owner}</td>
-      <td align="left">{lastlogin}</td>
-    </tr>
-    <!-- END UserRow -->
-    <tr>
-      <td colspan="2" align="left">
-        <input onclick="javascript:doCheckAll()" type="button" value="{lang_checkall}" />
-        <input onclick="javascript:doUnCheckAll()" type="button" value="{lang_uncheckall}" />
-      </td>
-    </tr>
-  </table>
-<div style="text-align:center;">
-<input type="submit" value="{lang_delete}"  name="mode" />
-<input type="submit" value="{lang_cancel}" name="mode" />
-<input type="reset"  value="{lang_reset}"  name="mode" />
-</div>
+<form class="uk-form uk-form-horizontal" name="purgealbums" method="post" action="{s_form_action}">
+    <table class="uk-table uk-table-striped uk-table-hover">
+        <tr>
+            <th class="uk-text-center uk-width-1-5">{lang_select}</th>
+            <th>{lang_album_title}</th>
+            <th>{lang_username}</th>
+            <th>{lang_last_login}</th>
+        </tr>
+        <!-- BEGIN UserRow -->
+        <tr>
+            <td class="uk-text-center">{select}</td>
+            <td>{title}</td>
+            <td>{owner}</td>
+            <td>{lastlogin}</td>
+        </tr>
+        <!-- END UserRow -->
+    </table>
+    <div class="uk-text-left uk-margin">
+        <button class="uk-button uk-button-small" onclick="javascript:doCheckAll();return false;" type="button" value="{lang_checkall}">{lang_checkall}</button>
+        <button class="uk-button uk-button-small" onclick="javascript:doUnCheckAll();return false;" type="button" value="{lang_uncheckall}">{lang_uncheckall}</button>
+    </div>
+    <div class="uk-text-center uk-margin">
+        <button class="uk-button uk-button-danger" type="submit" value="{lang_delete}"  name="mode">{lang_delete}</button>
+        <button class="uk-button uk-button-primary" type="submit" value="{lang_cancel}" name="mode">{lang_cancel}</button>
+        <button class="uk-button uk-button-success" type="reset"  value="{lang_reset}"  name="mode">{lang_reset}</button>
+    </div>
 </form>
 {# end {templatelocation} #}

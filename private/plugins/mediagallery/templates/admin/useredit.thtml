@@ -1,31 +1,24 @@
 {# begin {templatelocation} #}
-<form method="post" action="{s_form_action}" name="mg_useredit_form" ENCTYPE="multipart/form-data">
-<input type="hidden" name="uid" value="{uid}">
-  <table width="100%" border="0" cellspacing="0" cellpadding="5">
-    <tr>
-      <th colspan="2" width="100%">
-        {lang_user_edit} - {username}
-      </th>
-    </tr>
+<h3>{lang_user_edit} - {username}</h3>
+<form class="uk-form uk-form-horizontal" method="post" action="{s_form_action}" name="mg_useredit_form" ENCTYPE="multipart/form-data">
+	<input type="hidden" name="uid" value="{uid}">
 
-    <tr class="pluginRow1">
-      <td class="required" width="40%" class="mgAdminAlignRight">{lang_active}</td>
-      <td class="mgAdminAlignLeft">
-        {active}
-      </td>
-    </tr>
-    <tr class="pluginRow2">
-      <td class="required" width="40%" class="mgAdminAlignRight">{lang_quota}</td>
-      <td class="mgAdminAlignLeft">
-        <input type="text" maxlength="4" size="4" name="quota" value="{quota}" align="right" />&nbsp;Mb&nbsp;&nbsp;{lang_unlimited}
-      </td>
-    </tr>
-  </table>
-<br />
-<div style="text-align:center;">
-<input type="submit" value="{lang_save}"   name="mode">
-<input type="submit" value="{lang_cancel}" name="mode">
-<input type="reset"  value="{lang_reset}"  name="mode">
-</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label">{lang_active}</label>
+		<div class="uk-form-controls">
+			{active}
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label">{lang_quota}</label>
+		<div class="uk-form-controls">
+			<input class="uk-form-width-small" type="text" maxlength="4" name="quota" value="{quota}">&nbsp;Mb&nbsp;&nbsp;{lang_unlimited}
+		</div>
+	</div>
+	<div class="uk-form-row uk-text-center uk-margin">
+		<button class="uk-button uk-button-primary" type="submit" value="{lang_save}"   name="mode">{lang_save}</button>
+		<button class="uk-button uk-button-danger" input type="submit" value="{lang_cancel}" name="mode">{lang_cancel}</button>
+		<button class="uk-button uk-button-success" type="reset"  value="{lang_reset}"  name="mode">{lang_reset}</button>
+	</div>
 </form>
 {# end {templatelocation} #}

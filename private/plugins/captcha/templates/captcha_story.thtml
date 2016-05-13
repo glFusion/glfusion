@@ -1,7 +1,5 @@
 {# begin {templatelocation} #}
 {!if recaptcha}
-<tr>
-    <td align="center" colspan="2">
 <script type="text/javascript">
 //<![CDATA[
 var RecaptchaOptions = {
@@ -9,14 +7,15 @@ var RecaptchaOptions = {
 };
 //]]>
 </script>
-        {recaptcha}
-        <input type="text" name="validation_field" value="" style="display:none;">
-    </td>
-</tr>
+<div class="uk-form-row uk-margin-top uk-vertical-align">
+  <label class="uk-form-label uk-vertical-align-middle">{lang_are_you_human}</label>
+  <div class="uk-form-controls">
+   {recaptcha}
+    <input type="text" name="validation_field" value="" style="display:none;">
+    <input type="hidden" name="csid" value="{csid}">
+  </div>
+</div>
 {!else}
-<tr>
-    <td>&nbsp;</td>
-    <td>
 <script type="text/javascript">
 //<![CDATA[
 var counter = 0;
@@ -41,16 +40,16 @@ function new_captcha()
 }
 //]]>
 </script>
-        <div style="width:170px;margin:10px 0;">
-            <img style="border:1px solid #ccc;margin-bottom:5px;" src="{captcha_image}" id="captcha_image" border="0" alt="{lang_alt}" title="{lang_alt}" /><br />
-            <input style="border:1px solid #ccc;" type="text" id="captcha" name="captcha" size="20" maxlength="6" value="{lang_captcha_help}" title="{lang_captcha_help}" onfocus="if (this.value=='{lang_captcha_help}')this.value='';" onblur="if(this.value=='')this.value='{lang_captcha_help}';" />
-            <input type="text" name="validation_field" value="" style="display:none;">
-            <a href="javascript:new_captcha();" style="text-decoration:none;">
-                <img style="vertical-align:middle; width:22px; height:22px;" src="{site_url}/captcha/reload.png" alt="{lang_reload}" title="{lang_reload}" />
-            </a>
-            <input type="hidden" name="csid" value="{csid}" />
-        </div>
-    </td>
-</tr>
+<div class="uk-form-row">
+  <label class="uk-form-label" for="captcha">{lang_are_you_human}</label>
+  <div class="uk-form-controls">
+    <img id="captcha_image" src="{captcha_image}" alt="{lang_alt}" style="padding:5px;"><br/>
+    <input style="border:1px solid #ccc;" type="text" id="captcha" name="captcha" size="20" maxlength="6" value="{lang_captcha_help}" title="{lang_captcha_help}" onfocus="if (this.value=='{lang_captcha_help}')this.value='';" onblur="if(this.value=='')this.value='{lang_captcha_help}';" />
+    <a href="javascript:new_captcha();" style="text-decoration:none;">
+      <img style="vertical-align:middle; width:22px; height:22px;" src="{site_url}/captcha/reload.png" alt="{lang_reload}" title="{lang_reload}" />
+    </a>
+    <input type="hidden" name="csid" value="{csid}" />
+  </div>
+</div>
 {!endif}
 {# end {templatelocation} #}

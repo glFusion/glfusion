@@ -1,28 +1,11 @@
 {# begin {templatelocation} #}
-<span style="{float}padding:3px;{margin-right}width:{framewidth}px;{border}text-align:center;">
-  <span id="slideshowContainer{ss_count}" class="slideshowContainer" style="float:left;text-align:center;vertical-align:middle;margin:5px;width:{maxwidth}px;height:{maxheight}px;position:relative;">
+<div style="{float}padding:3px;{margin-right}width:{framewidth}px;{border}text-align:center;">
+  <div class="tcycle" style="float:left;text-align:center;vertical-align:middle;margin:5px;width:{maxwidth}px;height:{maxheight}px;position:relative;">
     {pics}
-  </span>
-  <script type="text/javascript">
-    window.addEvent('load',function(){
-        var obj{ss_count} = {
-            wait: {delay},
-            effect: 'fade',
-            duration: 1000,
-            loop: true,
-            thumbnails: false,
-            backgroundSlider: false
-            {!if sslink}
-              ,onClick: function(i){ window.location = "{sslink}" }
-            {!endif}
-        }
-        show{ss_count} = new SlideShow('slideshowContainer{ss_count}','slideshowThumbnail{ss_count}',obj{ss_count});
-        show{ss_count}.play();
-    });
-  </script>
-  <span style="clear:both;"></span>
-  <span style="width: {width}px; text-align: center;font-style: italic;font-size: smaller;text-indent: 0;">
+  </div>
+  <div style="clear:both;"></div>
+  <div style="width: {width}px; text-align: center;font-style: italic;font-size: smaller;text-indent: 0;">
     {caption}
-  </span>
-</span>
+  </div>
+</div>
 {# end {templatelocation} #}

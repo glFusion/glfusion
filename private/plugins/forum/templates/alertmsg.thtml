@@ -1,14 +1,6 @@
 {# begin {templatelocation} #}
-<div class="forumpost">
-  <table width="99%" border="0" cellspacing="0" cellpadding="0" style="margin:5px;border:1px solid #CCC;">
-    <tr>
-      <td class="pluginTitle" style="padding:10px;"><img src="{site_url}/forum/images/alert_warning.gif" alt="" style="vertical-align:middle" />&nbsp;{alert_title}</td>
-    </tr>
-    <tr>
-      <td class="pluginCellText" style="padding:15px 20px 0px 20px;text-align:center;">{alert_message}
-	  <div style="padding:10px;">{prompt}</div></td>
-    </tr>
-  </table>
+<div class="uk-alert uk-alert-danger" data-uk-alert>
+<a href="" class="uk-alert-close uk-close"></a>
+<p>{alert_message}</p>
 </div>
-<br/>
 {# end {templatelocation} #}

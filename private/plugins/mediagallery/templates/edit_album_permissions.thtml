@@ -1,76 +1,64 @@
 {# begin {templatelocation} #}
-  <table width="100%" border="0" cellspacing="0" cellpadding="5">
-    <tr>
-      <th style="width:100%;" colspan="2">
-        {lang_uploads}
-      </th>
-    </tr>
-    <tr class="pluginRow1">
-      <td style="width:40%;text-align:right;">{lang_member_upload}</td>
-      <td style="text-align:left;">
-        {uploads}
-      </td>
-    </tr>
-    <tr class="pluginRow2">
-      <td style="width:40%;" align="right">{lang_moderate_album}</td>
-      <td style="text-align:left;">
-        {moderate}
-      </td>
-    </tr>
-    <tr class="pluginRow1">
-      <td style="width:40%;text-align:right;">{lang_mod_group}</td>
-      <td style="text-align:left;">
-        {mod_dropdown}
-      </td>
-    </tr>
-    <tr class="pluginRow1">
-      <td style="width:40%;text-align:right;">{lang_email_mods_on_submission}</td>
-      <td style="text-align:left;">
-        {email_mod_select}
-      </td>
-    </tr>
-  </table>
-  <br />
-  <table width="100%" border="0" cellspacing="0" cellpadding="5">
-    <tr>
-      <th colspan="2" style="width:100%;">
-        {lang_accessrights}
-      </th>
-    </tr>
 
-    <tr class="pluginRow1">
-      <td style="width:40%;text-align:right;">{lang_owner}</td>
-      <td style="text-align:left;">
-        {owner_select}
-      </td>
-    </tr>
-    <tr class="pluginRow2">
-      <td style="width:40%;text-align:right;">{lang_group}</td>
-      <td style="text-align:left;">
-        {group_dropdown}
-      </td>
-    </tr>
-    <tr class="pluginRow1">
-      <td style="white-space:nowrap;" colspan="2">
-        {lang_permissions}
-      </td>
-    </tr>
-    <tr class="pluginRow2">
-      <td colspan="2" style="text-align:center;">
-        {lang_perm_key} {permissions_editor}
-      </td>
-    </tr>
-    <tr class="pluginRow1">
-      <td style="width:40%;text-align:right;">{lang_hidden}</td>
-      <td style="text-align:left;">
-        {hidden}
-      </td>
-    </tr>
-    <tr class="pluginRow2">
-      <td style="width:40%;text-align:right;">{lang_force_child_update}</td>
-      <td style="text-align:left;">
-        {force_child_update}
-      </td>
-    </tr>
-  </table>
+        <div class="uk-form-row">
+            <label class="uk-form-label">{lang_member_upload}</label>
+            <div class="uk-form-controls">
+                {uploads}
+            </div>
+        </div>
+
+        <div class="uk-form-row">
+            <label class="uk-form-label">{lang_moderate_album}</label>
+            <div class="uk-form-controls">
+                {moderate}
+            </div>
+        </div>
+
+        <div class="uk-form-row">
+            <label class="uk-form-label">{lang_mod_group}</label>
+            <div class="uk-form-controls">
+                {mod_dropdown}
+            </div>
+        </div>
+        <div class="uk-form-row">
+            <label class="uk-form-label">{lang_email_mods_on_submission}</label>
+            <div class="uk-form-controls">
+                {email_mod_select}
+            </div>
+        </div>
+
+<h3>{lang_accessrights}</h3>
+
+        <div class="uk-form-row">
+            <label class="uk-form-label">{lang_owner}</label>
+            <div class="uk-form-controls">
+                {owner_select}
+            </div>
+        </div>
+        <div class="uk-form-row">
+            <label class="uk-form-label">{lang_group}</label>
+            <div class="uk-form-controls">
+                {group_select}
+            </div>
+        </div>
+
+<h3>{lang_permissions}</h3>
+
+{lang_perm_key}
+{permissions_editor}
+
+        <div class="uk-form-row">
+            <label class="uk-form-label">{lang_hidden}</label>
+            <div class="uk-form-controls">
+                {hidden}
+            </div>
+        </div>
+
+        <div class="uk-form-row">
+            <label class="uk-form-label">{lang_force_child_update}</label>
+            <div class="uk-form-controls">
+                {force_child_update}
+            </div>
+        </div>
+
   {# end {templatelocation} #}

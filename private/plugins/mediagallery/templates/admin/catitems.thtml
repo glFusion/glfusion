@@ -1,33 +1,33 @@
 {# begin {templatelocation} #}
-    <table width="100%" border="0" cellspacing="0" cellpadding="5">
-      <tr>
+<table class="uk-table uk-table-striped uk-table-hover">
+    <tr>
         <th>{lang_select}</th>
         <th>{lang_catid}</th>
         <th>{lang_cat_name}</th>
         <th>{lang_cat_description}</th>
-      </tr>
-      <!-- BEGIN catRow -->
-      <tr class="pluginRow{row_class}">
-        <td align="center">
-          <input type="checkbox" name="sel[]" value="{cat_id}">
-          <input type="hidden" name="cat_id[]" value="{cat_id}">
+    </tr>
+    <!-- BEGIN catRow -->
+    <tr>
+        <td class="uk-text-center">
+            <input type="checkbox" name="sel[]" value="{cat_id}">
+            <input type="hidden" name="cat_id[]" value="{cat_id}">
         </td>
-        <td align="center">
-    	  {edit_cat_id}
+        <td class="uk-text-center">
+            {edit_cat_id}
         </td>
-        <td align="left">
-          {cat_name}
+        <td class="uk-text-center">
+            {cat_name}
         </td>
-        <td align="left">
-    	  {cat_description}
+        <td class="uk-text-left">
+            {cat_description}
         </td>
-      </tr>
-      <!-- END catRow -->
-      <tr>
-        <td colspan="4" align="left">
-          <input onClick=doCheckAll() type="button" value="{lang_checkall}" />
-          <input onClick=doUnCheckAll() type="button" value="{lang_uncheckall}" />
+    </tr>
+    <!-- END catRow -->
+    <tr>
+        <td colspan="4" class="uk-text-left">
+            <button class="uk-button uk-button-small" onClick="doCheckAll();return false;" value="{lang_checkall}">{lang_checkall}</button>
+            <button class="uk-button uk-button-small" onClick="doUnCheckAll();return false;" value="{lang_uncheckall}">{lang_uncheckall}</button>
         </td>
-      </tr>
-    </table>
+    </tr>
+</table>
 {# end {templatelocation} #}

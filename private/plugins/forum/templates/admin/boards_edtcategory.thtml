@@ -1,53 +1,37 @@
 {# begin {templatelocation} #}
 {block_start}
 {admin_menu}
-{status_text}
-<form action="{phpself}" method="post">
-  <table width="100%" border="0" cellspacing="1" cellpadding="0" style="margin-top:10px;" class="plugin">
-    <tr>
-      <td class="pluginTitle" style="padding-left:10px;">{title}</td>
-    </tr>
-    <tr>
-      <td class="pluginCellSubTitle" style="padding:0px;">
-        <table width="100%" border="0" cellspacing="1" cellpadding="0">
-          <tr>
-            <td style="width:110px;" class="pluginCellSubTitle">{LANG_NAME}</td>
-            <td class="pluginCellText pluginCellFill" style="white-space:nowrap;">
-              <input type="text" name="name" value="{catname}" size="70" />
-            </td>
-          </tr>
-          <tr>
-            <td class="pluginCellSubTitle" style="white-space:nowrap;">{LANG_ORDER}&nbsp;</td>
-            <td class="pluginCellText pluginCellFill" style="white-space:nowrap;width:25px;">
-              <input type="text" name="catorder" value="{catorder}" size="5" />
-            </td>
-          </tr>
-          <tr>
-            <td class="pluginCellSubTitle">{LANG_DESCRIPTION}</td>
-            <td class="pluginCellText pluginCellFill">
-              <input type="text" name="dscp" value="{catdscp}" size="70" />
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-    <tr>
-      <td class="pluginCellSubTitle aligncenter">
-        <table width="100%" border="0" cellspacing="1" cellpadding="3">
-          <tr>
-            <td>
-              <input type="hidden" name="type" value="category" />
-              <input type="hidden" name="id" value="{id}" />
-              <input type="hidden" name="confirm" value="{confirm}" />
-              <input type="hidden" name="mode" value="{mode}" />
-              <input type="submit" name="submit" value="{LANG_SAVE}" />&nbsp;
-              <input type="submit" name="cancel" value="{LANG_CANCEL}"/>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-</form>
 {block_end}
+
+{status_text}
+
+<form class="uk-form uk-form-horizontal" action="{s_form_action}" method="post">
+	<input type="hidden" name="type" value="category">
+	<input type="hidden" name="id" value="{id}">
+	<input type="hidden" name="confirm" value="{confirm}">
+	<input type="hidden" name="mode" value="{mode}">
+
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="name">{LANG_NAME}</label>
+		<div class="uk-form-controls">
+			<input class="required uk-form-width-large" type="text" maxlength="70" id="name" name="name" value="{catname}">
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="catorder">{LANG_ORDER}</label>
+		<div class="uk-form-controls">
+			<input class="required" type="text" maxlength="5" id="catorder" name="catorder" value="{catorder}">
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="dscp">{LANG_DESCRIPTION}</label>
+		<div class="uk-form-controls">
+			<input class="required uk-form-width-large" type="text" maxlength="70" id="dscp" name="dscp" value="{catdscp}">
+		</div>
+	</div>
+
+	<button class="uk-button uk-button-success" type="submit" name="submit" value="{LANG_SAVE}" />{LANG_SAVE}</button>
+	<button class="uk-button uk-button-danger cancel" type="submit" name="cancel" value="{LANG_CANCEL}">{LANG_CANCEL}</button>
+
+</form>
 {# end {templatelocation} #}

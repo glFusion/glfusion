@@ -1,27 +1,33 @@
 {# begin {templatelocation} #}
-<div class="block-box">
-  <h2>{title}</h2>
-  <div class="admin-menu">
-    <img src="{site_url}/images/mediagallery.png" class="admin-menu-icon" alt=""/>
-    <div class="admin-menu-items">
-      <a href="{true_site_admin_url}" class="admin-menu-item">{$LANG_ADMIN[admin_home]}</a>
+<h3>{title}</h3>
+<nav class="uk-navbar tm-admin-navbar">
+    <ul class="uk-navbar-nav uk-hidden-small">
+      <li><a href="{site_admin_url}/plugins/mediagallery/index.php">Media Gallery Admin</a></li>
+      <li><a href="{true_site_admin_url}">{$LANG_ADMIN[admin_home]}</a></li>
+    </ul>
+
+    <div class="uk-navbar-content uk-visible-small">{$LANG01[menu]}</div>
+
+    <div class="uk-button-dropdown uk-navbar-content uk-navbar-flip uk-visible-small" data-uk-dropdown="{mode:'click'}">
+        <a class="uk-navbar-toggle"></a>
+        <div class="uk-dropdown">
+            <ul class="uk-nav uk-nav-dropdown">
+                <li><a href="{true_site_admin_url}">{$LANG_ADMIN[admin_home]}</a></li>
+            </ul>
+        </div>
     </div>
-    <div class="admin-menu-text">
-      {$LANG_MG00[instructions]}
-    </div>
-    <div class="clearboth"></div>
-  </div>
+</nav>
+<div class="uk-alert" data-uk-alert>
+  <a class="uk-alert-close uk-close"></a>
+  <p>{$LANG_MG00[instructions]}</p>
 </div>
-<table width="100%" cellspacing="0" cellpadding="0">
-<tr>
-  <td style="vertical-align:top;width:75%;">
-     {admin_body}
-     <br />
-     <br />
-  </td>
-  <td class="plugin" style="vertical-align:top;">
-	{mg_navigation}
-  </td>
-  </tr>
-</table>
+
+<div class="uk-grid uk-margin">
+    <div class="uk-width-medium-3-4">
+        {admin_body}
+    </div>
+    <div class="uk-width-medium-1-4">
+        {mg_navigation}
+    </div>
+</div>
 {# end {templatelocation} #}

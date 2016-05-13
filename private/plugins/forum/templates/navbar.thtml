@@ -1,26 +1,19 @@
 {# begin {templatelocation} #}
-<div class="forumpost">
-  <div>
-    {menu}
-  </div>
-  <table class="forum-navbar">
-    <tr>
-      <td style="padding-right:5px;">{navmenu}</td>
-	</tr>
-    <tr>
-      <td style="padding-right:5px;">
-        <table style="width:100%;padding:2px;">
-          <tr>
-            <td style="white-space:nowrap;">
-              {search_forum}
-            </td>
-            <td style="width:30%;white-space:nowrap;" class="alignright">
-              {select_forum}
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
+<div class="uk-grid uk-margin">
+	<div class="uk-width-1-1">
+		<div class="uk-margin">
+			{navmenu}
+		</div>
+	</div>
 </div>
+<div class="uk-grid uk-margin-bottom">
+	<div class="uk-width-1-2">
+		{search_forum}
+	</div>
+	<div class="uk-width-1-2">
+		{select_forum}
+	</div>
+</div>
+<div class="uk-clearfix"></div>
+
 {# end {templatelocation} #}

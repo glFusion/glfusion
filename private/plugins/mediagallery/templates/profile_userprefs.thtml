@@ -1,18 +1,20 @@
 {# begin {templatelocation} #}
 <div id="pe_mgprefs" class="jsenabled_hide">
-  <fieldset style="margin-top:10px;"><legend>{lang_mg_prefs}</legend>
-    <div class="notes" style="width:250px;">
-      <h4>{lang_mgprefs_help_title}</h4>
-      {lang_mgprefs_help}
+  <fieldset data-uk-margin>
+    <legend>{lang_mg_prefs}</legend>
+    <div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin">
+       {lang_mgprefs_help}
     </div>
-    <table class="inputTable">
-      <!-- BEGIN prefRow -->
-      <tr>
-        <td style="width:100px;"><label>{lang_prompt}:</label></td>
-        <td>{input_field}</td>
-      </tr>
-      <!-- END prefRow -->
-    </table>
+<div class="uk-panel uk-panel-box">
+    <!-- BEGIN prefRow -->
+      <div class="uk-form-row">
+        <label class="uk-form-label">{lang_prompt}</label>
+        <div class="uk-form-controls">
+          {input_field}
+        </div>
+      </div>
+    <!-- END prefRow -->
+</div>
   </fieldset>
 </div>
 {# end {templatelocation} #}

@@ -1,5 +1,6 @@
-<div style="width:{width}px;margin:0 auto;">
-  <video width="{width}" height="{height}"
+{# begin {templatelocation} #}
+<div class="uk-responsive-width uk-responsive-height" style="width:{width}px;margin:0 auto;">
+  <video class="uk-responsive-width" width="{width}" height="{height}"
 {!if thumbnail}
   poster="{thumbnail}"
 {!endif}

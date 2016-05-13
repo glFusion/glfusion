@@ -1,70 +1,62 @@
 {# begin {templatelocation} #}
-<br />
-{lang_static_sort_help}
-<br />
-<form name="staticsort" method="post" action="{s_form_action}">
-<div>
-  <table width="100%" border="0" cellspacing="0" cellpadding="5">
-    <tr>
-      <th colspan="2" style="width:100%;">
-        {lang_sort_options}
-      </th>
-    </tr>
-    <tr class="pluginRow1">
-      <td class="mgAdminAlignRight required" style="width:50%;">{lang_media_capture_time}</td>
-      <td class="mgAdminAlignLeft">
-		<input type="radio" name="sortyby" value="0" />
-      </td>
-    </tr>
-    <tr class="pluginRow2">
-      <td class="mgAdminAlignRight required" style="width:50%;">{lang_media_upload_time}</td>
-      <td class="mgAdminAlignLeft">
-		<input type="radio" name="sortyby" value="1" />
-      </td>
-    </tr>
-    <tr class="pluginRow1">
-      <td class="mgAdminAlignRight required" style="width:50%;">{lang_media_title}</td>
-      <td class="mgAdminAlignLeft">
-		<input type="radio" name="sortyby" value="2" />
-      </td>
-    </tr>
-    <tr class="pluginRow2">
-      <td class="mgAdminAlignRight required" style="width:50%;">{lang_media_filename}</td>
-      <td class="mgAdminAlignLeft">
-		<input type="radio" name="sortyby" value="3" />
-      </td>
-    </tr>
-    <tr class="pluginRow1">
-      <td class="mgAdminAlignRight required" style="width:50%;">{lang_rating}</td>
-      <td class="mgAdminAlignLeft">
-		<input type="radio" name="sortyby" value="4" />
-      </td>
-    </tr>
-    <tr>
-      <th colspan="2">
-        {lang_order_options}
-      </th>
-    </tr>
-    <tr class="pluginRow1">
-      <td class="mgAdminAlignRight required" style="width:50%;">{lang_ascending}</td>
-      <td class="mgAdminAlignLeft">
-		<input type="radio" name="sortorder" value="0" />
-      </td>
-    </tr>
-    <tr class="pluginRow2">
-      <td class="mgAdminAlignRight required" style="width:50%;">{lang_descending}</td>
-      <td class="mgAdminAlignLeft">
-		<input type="radio" name="sortorder" value="1" />
-      </td>
-    </tr>
-  </table>
-<br />
-<div style="text-align:center;">
-<input type="hidden" name="action" value="staticsort" />
-<input type="hidden" name="album_id" value="{album_id}" />
-<input type="submit" name="mode" value="{lang_save}" />
-<input type="submit" name="mode" value="{lang_cancel}" />
+<div class="uk-panel uk-panel-box uk-panel-box-primary">
+	{lang_static_sort_help}
 </div>
-</div>
+<form class="uk-form uk-form-horizontal" name="staticsort" method="post" action="{s_form_action}">
+	<input type="hidden" name="action" value="staticsort" />
+	<input type="hidden" name="album_id" value="{album_id}" />
+	<fieldset>
+		<legend>{lang_sort_options}</legend>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_media_capture_time}</label>
+			<div class="uk-form-controls">
+				<input type="radio" name="sortyby" value="0">
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_media_upload_time}</label>
+			<div class="uk-form-controls">
+				<input type="radio" name="sortyby" value="1">
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_media_title}</label>
+			<div class="uk-form-controls">
+				<input type="radio" name="sortyby" value="2">
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_media_filename}</label>
+			<div class="uk-form-controls">
+				<input type="radio" name="sortyby" value="3">
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_rating}</label>
+			<div class="uk-form-controls">
+				<input type="radio" name="sortyby" value="4">
+			</div>
+		</div>
+	</fieldset>
+	<fieldset>
+		<legend>{lang_order_options}</legend>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_ascending}</label>
+			<div class="uk-form-controls">
+				<input type="radio" name="sortorder" value="1">
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_descending}</label>
+			<div class="uk-form-controls">
+				<input type="radio" name="sortorder" value="1">
+			</div>
+		</div>
+	</fieldset>
+
+	<div class="uk-margin">
+		<button class="uk-button uk-button-primary" type="submit" name="mode" value="{lang_save}">{lang_save}</button>
+		<button class="uk-button" type="submit" name="mode" value="{lang_cancel}">{lang_cancel}</button>
+	</div>
 </form>
 {# end {templatelocation} #}

@@ -1,44 +1,38 @@
 {# begin {templatelocation} #}
-<br />
-<form method="post" action="{s_form_action}" name="mg_static_album_sort" ENCTYPE="multipart/form-data">
-  <div class="plugin">
-  <table width="100%" border="0" cellspacing="0" cellpadding="5">
-    <tr class="pluginRow1">
-      <td class="required" width="50%" class="mgAdminAlignRight">{lang_starting_album}</td>
-      <td class="mgAdminAlignLeft">
-        {album_select}
-      </td>
-    </tr>
-    <tr class="pluginRow2">
-      <td class="required" width="50%" class="mgAdminAlignRight">{lang_sort_by}</td>
-      <td class="mgAdminAlignLeft">
-        {sort_field_select}
-      </td>
-    </tr>
-    <tr class="pluginRow1">
-      <td class="required" width="50%" class="mgAdminAlignRight">{lang_ascending}</td>
-      <td class="mgAdminAlignLeft">
-		<input type="radio" name="sortorder" value="0" CHECKED>
-      </td>
-    </tr>
-    <tr class="pluginRow2">
-      <td class="required" width="50%" class="mgAdminAlignRight">{lang_descending}</td>
-      <td class="mgAdminAlignLeft">
-		<input type="radio" name="sortorder" value="1">
-      </td>
-    </tr>
-    <tr class="pluginRow1">
-      <td class="required" width="50%" class="mgAdminAlignRight">{lang_process_subs}</td>
-      <td class="mgAdminAlignLeft">
-		<input type="checkbox" name="processsub" value="1">
-      </td>
-    </tr>
-  </table>
-  </div>
-<br />
-<center>
-<input type="submit" value="{lang_save}"  name="mode">
-<input type="submit" value="{lang_cancel}" name="mode">
-</center>
+<form class="uk-form uk-form-horizontal" method="post" action="{s_form_action}" name="mg_static_album_sort" ENCTYPE="multipart/form-data">
+	<div class="uk-form-row">
+		<label class="uk-form-label">{lang_starting_album}</label>
+		<div class="uk-form-controls">
+			{album_select}
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label">{lang_sort_by}</label>
+		<div class="uk-form-controls">
+			{sort_field_select}
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label">{lang_ascending}</label>
+		<div class="uk-form-controls">
+			<input type="radio" name="sortorder" value="0" CHECKED>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label">{lang_descending}</label>
+		<div class="uk-form-controls">
+			<input type="radio" name="sortorder" value="1">
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label">{lang_process_subs}</label>
+		<div class="uk-form-controls">
+			<input type="checkbox" name="processsub" value="1">
+		</div>
+	</div>
+	<div class="uk-form-row uk-text-center">
+		<button class="uk-button uk-button-primary" type="submit" value="{lang_save}"  name="mode">{lang_save}</button>
+		<button class="uk-button" type="submit" value="{lang_cancel}" name="mode">{lang_cancel}</button>
+	</div>
 </form>
 {# end {templatelocation} #}

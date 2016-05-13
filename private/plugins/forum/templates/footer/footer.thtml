@@ -1,17 +1,16 @@
 {# begin {templatelocation} #}
-{forum_time}
-<div style="background:transparent; border: 1px solid #C8DAF7;">
-<table style="border-collapse: separate; border-spacing: 1px;" class="forum-pluginFooter">
-    <tr>
-        <td style="width:50%;">
-            {forum_legend}
-        </td>
-        <td class="alignright" style="width:50%;">
-            {forum_rules}
-        </td>
-    </tr>
- </table>
-{forum_whosonline}
+<div class="tm-forum-footer uk-margin uk-clearfix">
+    <div class="uk-text-muted">{forum_time}</div>
+    <div class="uk-panel uk-panel-box uk-panel-box-primary">
+        <div class="uk-grid">
+            <div class="uk-width-medium-3-4">
+                {forum_legend}
+            </div>
+            <div class="uk-width-medium-1-4">
+                {forum_rules}
+            </div>
+        </div>
+    </div>
+    {forum_whosonline}
 </div>
-<br />
 {# end {templatelocation} #}

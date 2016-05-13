@@ -1,3 +1,10 @@
 {# begin {templatelocation} #}
-<td style="width:{width}%"><strong>{category_name} {category_count}</strong></td>
+<div class="uk-width-medium-1-{link_cols}">
+	<span class="uk-text-bold">
+	    <a href="{category_link}">{category_name}</a> {category_count}
+	</span>
+	<div class="uk-panel">
+		{category_description}
+	</div>
+</div>
 {# end {templatelocation} #}

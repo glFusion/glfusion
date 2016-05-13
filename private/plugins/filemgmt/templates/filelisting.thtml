@@ -1,44 +1,42 @@
 {# begin {templatelocation} #}
-{block_header}
-<table style="width:100%;background-color:#FFF;border:0px;margin-top:15px;">
-    <tr>
-        <td style="width:100%;text-align:left;">
-            <table style="width:100%;">
-                <tr>
-                    <td>{category_path_link}</td>
-                </tr>
-                {!if category_records}
-                <tr>
-                    <td style="width:100%;">
-                        <table style="border-collapse: collaspe;">
-                          <tr>
-                            {category_records}
-{final_end_row}
-                        </table>
-                    </td>
-                </tr>
-                {!endif}
-                <tr>
-                    <td style="width:100%;">{sort_menu}</td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="width:100%;text-align:left;">
-            <table style="border-collapse: collaspe;width:100%;">
-                <tr>
-                    <td style="width:100%;padding:5px;">{listing_heading}</td>
-                </tr>
-                    {filelisting_records}
-                <tr>
-                    <td style="padding:10px;">{page_navigation}</td>
-                </tr>
-            </table>
-         </td>
-    </tr>
+
+
+<table style="width:100%;">
+
+  <tr>
+    <td colspan="2">{category_path_link}</td>
+  </tr>
+
+{!if category_records}
+ <tr>
+   <td colspan="2">
+     {category_records}
+   </td>
+ </tr>
+{!endif}
+
+{sort_menu}
+
+  <tr>
+    <td colspan="2" style="width:100%;text-align:left;">
+      {listing_heading}
+    </td>
+  </tr>
+
+  <tr>
+    <td colspan="2">
+      <table style="width:100%;">
+        {filelisting_records}
+      </table>
+    </td>
+  </tr>
+
+  <tr>
+    <td colspan="2" style="padding:10px;">{page_navigation}</td>
+  </tr>
+
 </table>
 <br />
 {comment_records}
-{block_footer}
+
 {# end {templatelocation} #}

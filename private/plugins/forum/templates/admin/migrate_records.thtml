@@ -1,9 +1,11 @@
 {# begin {templatelocation} #}
-<tr class="pluginRow{cssid}">
-    <td width="5%"><input type="checkbox" name="cb_chkentry[]" value="{sid}" /></td>
+<tr>
+    <td width="5%">
+    <input type="checkbox" name="cb_chkentry[]" value="{sid}">
+    </td>
     <td width="15%">{topic}</td>
     <td width="45%"><a href="{story_link}">{story_title}</a></td>
     <td width="25%" style="white-space:nowrap;">{date}</td>
-    <td class="aligncenter" width="10%">{num_comments}</td>
+    <td class="uk-text-center" width="10%">{num_comments}</td>
 </tr>
 {# end {templatelocation} #}

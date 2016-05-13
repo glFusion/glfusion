@@ -1,15 +1,12 @@
 {# begin {templatelocation} #}
-<form style="display:inline" action="{site_admin_url}/plugins/calendar/index.php?batchadmin=x" method="post">
-    <div>
-        <div>
-            <input type="hidden" name="batchadmin" value="x" />
-            <input type="hidden" name="usr_time" value="{usr_time}" />
-            {lang_text_start} <input class="aligncenter" type="text" name="usr_time" value="{usr_time}" size="3" />
-            {lang_text_end}
-        </div>
-        <div style="text-align:right;margin-top:-10px;">
-            <input type="submit" name="submit" value="{lang_updatelist}" />
-        </div>
+<form class="uk-form uk-form-horizontal" action="{site_admin_url}/plugins/calendar/index.php?batchadmin=x" method="post">
+    <input type="hidden" name="batchadmin" value="x">
+    <input type="hidden" name="usr_time" value="{usr_time}">
+    {lang_text_start} <input class="uk-text-center" type="text" name="usr_time" value="{usr_time}" size="3">
+    {lang_text_end}
+
+    <div class="uk-text-right">
+        <button class="uk-button uk-button-primary" type="submit" name="submit" value="{lang_updatelist}">{lang_updatelist}</button>
     </div>
 </form>
 {# end {templatelocation} #}

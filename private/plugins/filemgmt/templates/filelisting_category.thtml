@@ -1,8 +1,17 @@
 {# begin {templatelocation} #}
-{new_table_row}
-<td  style="vertical-align:top;width:{tablewidth};">{category_link}</td>
-<td style="vertical-align:top;text-align:left;" class="alignleft">
-    <a href="{site_url}/filemgmt/viewcat.php?cid={cid}"><b>{category_name}</b></a>&nbsp;{num_files}&nbsp;{files_waiting_submission}<br />{subcategories}
-</td>
-{end_of_row}
+  <tr>
+{!if category_link}
+    <td>{category_link}</td>
+    <td style="vertical-align:top;text-align:left;" class="uk-text-left">
+{!else}
+    <td colspan="2" style="vertical-align:top;text-align:left;" class="uk-text-left">
+{!endif}
+      <a href="{site_url}/filemgmt/viewcat.php?cid={cid}">
+        <b>{category_name}</b>
+      </a>&nbsp;{num_files}&nbsp;{files_waiting_submission}<br />
+
+      {subcategories}
+
+    </td>
+  </tr>
 {# end {templatelocation} #}

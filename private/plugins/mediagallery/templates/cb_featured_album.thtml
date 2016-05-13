@@ -1,45 +1,35 @@
 {# begin {templatelocation} #}
-<div class="block-center">
-    <table style="border:none;" cellpadding="0" cellspacing="0">
-        <tr>
-            <td class="h2topic">
-              <h2>{featured_album}</h2>
-            </td>
-        </tr>
-    </table>
-    <table width="100%" border="0" cellspacing="2" cellpadding="3">
-      <tr>
-        <td style="vertical-align:middle;text-align:center;width:100%;">
-          <table cellspacing="0" cellpadding="0" style="margin:0px auto;border:none;width:100%;">
-            <tr>
-              <td style="width:100%;">
-                <table style="width:100%;border:none;" cellspacing="0" cellpadding="0">
-                  <tr>
-                  <td style="vertical-align:top;text-align:center;width:{column_width}px;">
-    				<div class="out" style="width:{border_width}px">
-    				<div class="in2">
-    				<div class="in">
-    				<a href="{u_viewalbum}"><img src="{album_last_image}" {media_size}  style="border:none;" alt="" /></a>
-    				</div></div></div>
-    				</td>
-    				<td style="vertical-align:top;width:40%;text-align:left;"><br />
-                      <span style="font-weight:bold;">{album_title}</span> ({subalbum_media_count})
-                      <br /><br />
-                      {album_desc}
-                      <br /><br />
-                      <span style="font-weight:bold;">{updated_prompt}</span> {album_last_update}
-                    </td>
-                    <td style="vertical-align:top;text-align:left;"><br />
-                      <span style="font-weight:bold;">{lang_subalbums}</span> {subalbumcount}<br />&nbsp;<div class="pluginSmallText">{saulstart}{subalbumlist}{saulend}</div>
-                    </td>
-                    </tr>
-                    </table>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-    <br />
+<div class="uk-panel">
+	<div class="uk-panel-title">{featured_album}</div>
+	<div class="uk-grid uk-text-left">
+		<div class="uk-width-medium-1-5 uk-text-left">
+			<a href="{u_viewalbum}">
+			<img class="uk-thumbnail" src="{album_last_image}" {media_size}></a>
+		</div>
+{!if lang_subalbums}
+		<div class="uk-width-medium-3-5">
+{!else}
+		<div class="uk-width-medium-4-5">
+{!endif}
+			<div class="uk-text-left uk-clearfix">
+				<h1 class="uk-article-title">{album_title} ({subalbum_media_count})</h1>
+				<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-remove">
+					<li>{updated_prompt} {album_last_update}</li>
+				</ul>
+			</div>
+
+			<div class="uk-text-left">
+				{album_desc}
+			</div>
+		</div>
+{!if lang_subalbums}
+		<div class="uk-width-medium-1-5 uk-text-left">
+			<h3>{lang_subalbums} {subalbumcount}</h3>
+			<ul class="uk-list uk-text-truncate">
+				{subalbumlist}
+			</ul>
+		</div>
+{!endif}
+	</div>
 </div>
 {# end {templatelocation} #}

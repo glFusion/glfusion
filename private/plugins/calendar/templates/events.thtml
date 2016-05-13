@@ -1,8 +1,10 @@
 {# begin {templatelocation} #}
+<div class="uk-panel uk-panel-box">
 {!if lang_addevent}
-  [ <a href="{site_url}/calendar/index.php?op=add&amp;type=calendar{calendar_mode}" rel="nofollow">{lang_addevent}</a> ]
+    [ <a href="{site_url}/calendar/index.php?op=add&amp;type=calendar&amp;{calendar_mode}" rel="nofollow">{lang_addevent}</a> ]
 {!endif}
-[ <a href="{site_url}/calendar/index.php{calendar_mode}">{lang_backtocalendar}</a> ]<br /><br />
-<h1>{lang_month} {event_year}</h1>
-{event_details}
+    [ <a href="{site_url}/calendar/index.php?{calendar_mode}">{lang_backtocalendar}</a> ]<br /><br />
+    <h2>{lang_month} {event_year}</h2>
+    {event_details}
+</div>
 {# end {templatelocation} #}

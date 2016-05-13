@@ -1,95 +1,77 @@
 {# begin {templatelocation} #}
 {block_start}
 {admin_menu}
-<form action="{s_form_action}" method="post" style="margin:0px;">
+{block_end}
+{status_text}
+<h3>{title}</h3>
+<form id="forum" class="uk-form uk-form-horizontal" action="{s_form_action}" method="post">
   <input type="hidden" name="id" value="{id}">
   <input type="hidden" name="mode" value="{mode}">
   <input type="hidden" name="category" value="{category_id}">
+  <div class="uk-form-row">
+    <label class="uk-form-label" for="name">{LANG_NAME}</label>
+    <div class="uk-form-controls">
+      <input class="required uk-form-width-large" type="text" id="name" name="name" value="{forum_name}">
+    </div>
+  </div>
+  <div class="uk-form-row">
+    <label class="uk-form-label" for="dscp">{LANG_DESCRIPTION}</label>
+    <div class="uk-form-controls">
+      <input class="required uk-form-width-large" type="text" id="dscp" name="dscp" value="{forum_dscp}">
+    </div>
+  </div>
 
-  <table cellspacing="1" cellpadding="0" style="width:100%;border:none;margin-top:10px;" class="plugin">
-    <tr>
-      <td class="pluginTitle" style="padding-left:10px;">{title}</td>
-    </tr>
-    <tr>
-      <td class="pluginCellSubTitle" style="padding:0px;">
-        <table style="width:100%;border:none;" cellspacing="1" cellpadding="0">
-          <tr>
-            <td style="width:180px;" class="pluginCellSubTitle">{lang_category}</td>
-            <td class="pluginCellText pluginCellFill" style="white-space:nowrap;">
-              {cat_select}
-            </td>
-          </tr>
-          <tr>
-            <td style="width:180px;" class="pluginCellSubTitle">{LANG_NAME}</td>
-            <td class="pluginCellText pluginCellFill" style="white-space:nowrap;">
-              <input type="text" name="name" size="80" value="{forum_name}" />
-            </td>
-          </tr>
-          <tr>
-            <td class="pluginCellSubTitle">{LANG_DESCRIPTION}</td>
-            <td class="pluginCellText pluginCellFill">
-              <input type="text" name="dscp" value="{forum_dscp}" size="80" />
-            </td>
-          </tr>
+  <div class="uk-form-row">
+    <label class="uk-form-label" for="order">Display After</label>
+    <div class="uk-form-controls">
+        <select name="order" id="order">
+        {order_list}
+        </select>
+    </div>
+  </div>
 
-          <tr>
-            <td class="pluginCellSubTitle">Display After</td>
-            <td class="pluginCellText pluginCellFill">
-                <select name="order" id="order">
-                {order_list}
-                </select>
-            </td>
-          </tr>
 
-          <tr>
-            <td class="pluginCellSubTitle">{LANG_GROUPACCESS}</td>
-            <td class="pluginCellText pluginCellFill">
-              <select name="privgroup" id="privgroup">{grouplist}</select>
-            </td>
-          </tr>
-          <tr>
-            <td class="pluginCellSubTitle">{LANG_ATTACHACCESS}</td>
-            <td class="pluginCellText pluginCellFill">
-              <select name="attachmentgroup" id="attachmentgroup">{attachmentgrouplist}</select>
-            </td>
-          </tr>
-          <tr>
-            <td class="pluginCellSubTitle">{LANG_readonly}</td>
-            <td class="pluginCellText pluginCellFill">
-              <input type="checkbox" name="is_readonly" value="1" {chk_readonly} />
-              <span style="padding-left:20px;">{LANG_readonlydscp}</span>
-            </td>
-          </tr>
-          <tr>
-            <td class="pluginCellSubTitle">{LANG_hidden}</td>
-            <td class="pluginCellText pluginCellFill">
-              <input type="checkbox" name="is_hidden" value="1" {chk_hidden} />
-              <span style="padding-left:20px;">{LANG_hiddendscp}</span>
-            </td>
-          </tr>
-          <tr>
-            <td class="pluginCellSubTitle">{LANG_hideposts}</td>
-            <td class="pluginCellText pluginCellFill">
-              <input type="checkbox" name="no_newposts" value="1" {chk_newposts} />
-              <span style="padding-left:20px;">{LANG_hidepostsdscp}</span>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-    <tr>
-      <td class="pluginCellSubTitle">
-        <table style="width:100%;border:none;" cellspacing="1" cellpadding="3">
-          <tr>
-            <td class="aligncenter">
-              <input type="submit" name="submit" value="{LANG_SAVE}">&nbsp;
-              <input type="submit" name="cancel" value="{LANG_CANCEL}">
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
+  <div class="uk-form-row">
+    <label class="uk-form-label" for="privgroup">{LANG_GROUPACCESS}</label>
+    <div class="uk-form-controls">
+      <select name="privgroup" id="privgroup">{grouplist}</select>
+    </div>
+  </div>
+  <div class="uk-form-row">
+    <label class="uk-form-label" for="attachmentgroup">{LANG_ATTACHACCESS}</label>
+    <div class="uk-form-controls">
+      <select name="attachmentgroup" id="attachmentgroup">{attachmentgrouplist}</select>
+    </div>
+  </div>
+  <div class="uk-form-row">
+    <label class="uk-form-label" for="is_readonly">{LANG_readonly}</label>
+    <div class="uk-form-controls">
+      <input type="checkbox" id="is_readonly" name="is_readonly" value="1" {chk_readonly}>
+      <span>{LANG_readonlydscp}</span>
+    </div>
+  </div>
+  <div class="uk-form-row">
+    <label class="uk-form-label" for="is_hidden">{LANG_hidden}</label>
+    <div class="uk-form-controls">
+      <input type="checkbox" id="is_hidden" name="is_hidden" value="1" {chk_hidden}>
+      <span>{LANG_hiddendscp}</span>
+    </div>
+  </div>
+  <div class="uk-form-row">
+    <label class="uk-form-label" for="no_newposts">{LANG_hideposts}</label>
+    <div class="uk-form-controls">
+      <input type="checkbox" id="no_newposts" name="no_newposts" value="1" {chk_newposts}>
+      <span>{LANG_hidepostsdscp}</span>
+    </div>
+  </div>
+  <div class="uk-form-row">
+    <div class="uk-form-controls">
+      <button class="uk-button uk-button-primary" type="submit" name="submit" value="{LANG_SAVE}">{LANG_SAVE}</button>
+      <button class="uk-button uk-button-danger cancel" type="submit" name="cancel" value="{LANG_CANCEL}">{LANG_CANCEL}</button>
+    </div>
+  </div>
 </form>
-{block_end}
+<script>
+$("#forum").validate();
+</script>
 {# end {templatelocation} #}

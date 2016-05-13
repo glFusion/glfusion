@@ -1,283 +1,287 @@
-{!if iframe}
-    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-    <head>
-    <title></title>
-    <meta http-equiv="Content-Type" content="text/html; charset={charset}" />
-    <link rel="stylesheet" type="text/css" href="{csslink}" />
-    <script type="text/javascript">
-    var site_url = '{site_url}';
-    </script>
-    <script type="text/javascript" src="{site_url}/forum/javascript/ajax_bookmark.js"></script>
-    <script type="text/javascript" src="{site_url}/forum/javascript/ajax_rate.js"></script>
-    </head>
-    <body class="sitebody">
-{!endif}
 {# begin {templatelocation} #}
+{!if iframe}
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr">
+	<head>
+		<meta charset="{charset}">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>{$LANG_GF02[msg145]}</title>
+		<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+		<link rel="apple-touch-icon-precomposed" href="images/apple-touch-icon.png">
+		<link rel="stylesheet" type="text/css" href="{csslink}">
+		{css-header}
+	</head>
+	<body class="sitebody">
+{!endif}
 {!if full}
-    <script type="text/javascript">
-        var site_url = '{site_url}';
-    </script>
-    <script type="text/javascript" src="{site_url}/forum/javascript/ajax_bookmark.js"></script>
-    <script type="text/javascript" src="{site_url}/forum/javascript/ajax_rate.js"></script>
-    <div class="forumpost">
-      <table style="width:100%;margin:2px;padding-right:10px;">
-        <tr>
-          <td>{navbreadcrumbsimg}{rssfeed}</td>
-          <td class="alignleft" style="width:95%;white-space:nowrap;">
-            &nbsp;<a href="{site_url}/forum/index.php">{forum_home}</a>&nbsp;&#62;&nbsp;
-            <a href="{site_url}/forum/index.php?cat={cat_id}">{cat_name}</a>&nbsp;&#62;&nbsp;
-            <a href="{site_url}/forum/index.php?forum={forum_id}">{forum_name}</a>
-          </td>
-          <td rowspan="2" class="alignright" style="width:100%;white-space:nowrap">
-            <a href="{newtopiclink}" rel="nofollow">{newtopiclinkimg}</a>
-          </td>
-          <td rowspan="2" class="alignright" style="padding-left:5px;width:100%;white-space:nowrap;">
-            <a href="{replytopiclink}" rel="nofollow">{replytopiclinkimg}</a>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2" style="padding-bottom:5px;">
-            {navtopicimg}&nbsp;<b><a href="viewtopic.php?showtopic={topic_id}">{subject}</a></b>
-          </td>
-        </tr>
-      </table>
-
-      <table style="width:100%;" class="pluginCellTitle alignleft">
-        <tr>
-          <td class="pluginBreadCrumbs alignleft" style="padding-left:5px;white-space:nowrap;">
-           {pagenavigation}
-          </td>
-          <td style="width:90%;white-space:nowrap;" class="alignright pluginBreadCrumbs">
-    {!if notifylink}
-              <a href="{notifylink}" rel="nofollow">{LANG_notify}</a>
-    {!else}
-              &nbsp;
-    {!endif}
-          </td>
-          <td class="pluginBreadCrumbs" style="white-space:nowrap;">
-            &nbsp;|&nbsp;
-          </td>
-          <td class="pluginBreadCrumbs" style="padding-right:10px;white-space:nowrap;">
-    {!if printlink}
-            <a href="{printlink}" rel="nofollow">{LANG_print}</a>
-    {!else}
-            &nbsp;
-    {!endif}
-          </td>
-        </tr>
-      </table>
+		<script type="text/javascript">
+			var site_url = '{site_url}';
+		</script>
+		<script type="text/javascript" src="{site_url}/forum/javascript/ajax_bookmark.js"></script>
+		<script type="text/javascript" src="{site_url}/forum/javascript/ajax_rate.js"></script>
 {!endif}
+		<script>
+			$(document).ready(function(){
+				$("#subscribe-link").click(function(e){
+					e.preventDefault();
+					$.ajax({type: "POST",
+						dataType: "json",
+						url: "{site_url}/forum/ajax_controller.php",
+						data: { id: $("#forum_id").val(), action: $("#suboption").val(), topic_id: $("#topic_id").val(), notify_id : $("#notify_id").val() },
+						success: function(data) {
+							var result = $.parseJSON(data["json"]);
+							$("#suboption").prop('value', result.subOption);
+							$("#subscribe-icon").prop('class',result.icon);
+							$("#subscribe-text").html(result.label);
+							$.UIkit.notify("<i class='uk-icon-check'></i>&nbsp;" + result.statusMessage, {timeout: 3000,pos:'top-center'});
+						}
+					});
+				});
+				$('.tm-forum-bookmark').click(function(e) {
+					var id = e.target.id.substr(2);
+					$.ajax({type: "POST",
+						dataType: "json",
+						url: "{site_url}/forum/ajax_controller.php",
+						data: {id : id, action: 'bookmark' },
+						success: function(data) {
+							var result = $.parseJSON(data["json"]);
+							if ( result.bookmark_image == 'open' ) {
+								var star = 'uk-icon-star-o';
+								var old  = 'uk=icon-star';
+							} else {
+								var star = 'uk-icon-star';
+								var old = 'uk-icon-star-o';
+							}
+							$('#bm' + result.id).removeClass(old);
+							$('#bm' + result.id).addClass(star);
+						}
+					});
+				});
+			});
+		</script>
+		<div class="tm-forum-wrapper uk-margin-bottom">
+{!if full}
+			<div class="uk-grid">
+				<div class="uk-width-medium-1-1">
+					<ul class="uk-breadcrumb uk-margin-remove">
+			            <li><i class="uk-icon-home"></i></li>
+						<li><a href="{site_url}/forum/index.php">{forum_home}</a></li>
+						<li><a href="{site_url}/forum/index.php?cat={cat_id}">{cat_name}</a></li>
+						<li class="uk-active"><a href="{site_url}/forum/index.php?forum={forum_id}">{forum_name}</a></li>
+					</ul>
+				</div>
+			</div>
 
-  <table style="width:100%;border-collapse: separate; border-spacing: 1px;" class="pluginSolidOutline alignleft">
+{# subject went here #}
+			<div class="uk-grid uk-margin-small-top">
+				<div class="uk-width-1-1 uk-margin-small">
 
-{!if error_msg}
-  <div class="pluginAlert"">{error_msg}</div>
+					<div class="uk-align-left uk-text-left uk-margin-small" style="padding-top:10px;">
+{!if newtopiclink}
+						<a href="{newtopiclink}" rel="nofollow" class="uk-button uk-button-small uk-button-primary">
+							<i class="uk-icon-file-o"></i>&nbsp;&nbsp;{LANG_newtopic}
+						</a>
 {!endif}
+{!if replytopiclink}
+						<a href="{replytopiclink}" rel="nofollow" class="uk-button uk-button-small uk-button-success">
+							<i class="uk-icon-mail-reply"></i>&nbsp;&nbsp;{LANG_reply}
+						</a>
+{!endif}
+                        <div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
+                            <button class="uk-button uk-button-small"><i class="uk-icon-cog"></i>&nbsp;<i class="uk-icon-caret-down"></i></button>
+                            <div class="uk-dropdown uk-dropdown-small">
+                                <ul class="uk-nav uk-nav-dropdown">
+                                    <li><a href="{printlink}" rel="nofollow" target="_blank"><i class="uk-icon-print"></i>&nbsp;{$LANG_GF01[PRINTABLE]}</a></li>
+{!if notifylink}
+            						<li>
+            							<a id="subscribe-link" href="{notifylink}" rel="nofollow">
+            								<input type="hidden" id="forum_id" value="{forum}">
+			            					<input type="hidden" id="suboption" value="{suboption}">
+            								<input type="hidden" id="topic_id" value="{topic_id}">
+            								<input type="hidden" id="notify_id" value="{notify_id}">
+{!if topic_subscribed}
+        								<i id="subscribe-icon" class="uk-icon-bookmark" title="{LANG_notify}"></i>&nbsp;<span id="subscribe-text">{LANG_notify}</span>
+{!else}
+        								<i id="subscribe-icon" class="uk-icon-bookmark-o" title="{LANG_notify}"></i>&nbsp;<span id="subscribe-text">{LANG_notify}</span>
+{!endif}
+            							</a>
+			            			</li>
+{!endif}
+                                </ul>
+                            </div>
+
+                        </div>
+
+					</div> {# end of reply link #}
+
+					<div class="uk-text-small uk-align-right uk-text-right uk-margin-small">
+						{pagenavigation}
+					</div>
+					<div class="uk-text-small uk-align-right uk-text-right uk-margin-small" style="padding-top:5px;">
+						{num_posts} posts :: Page {page} of {num_pages}
+					</div>
+				</div> {# end of width-1-1 #}
+			</div> {# end of grid #}
+			<div class="uk-clearfix"></div>
+{!endif} {# end of full #}
 
 {!if iframe}
-    <tr class="pluginHeader" style="display:{show_previewheader};">
-        <td colspan="2" style="padding:5px 0px 5px 10px;">{$LANG_GF02[msg145]}</td>
-    </tr>
+			<div class="topic-navigation">
+				&nbsp;<strong>{$LANG_GF02[msg145]}</strong>
+			</div>
 {!endif}
 
-  {# start of the topics #}
+			{# start of the topics #}
 
-  <!-- BEGIN topicrow -->
+			<!-- BEGIN topicrow -->
 
-    <tr class="pluginRow{csscode}">
-      <td style="padding-left:6px; padding-right:6px;">
-        <table style="width:100%;">
-          <tr>
-            <td style="width:8px;" class="aligncenter">
-              <a href="{site_url}/forum/viewtopic.php?topic={topic_id}#{topic_id}">
-                <img src="{site_url}/forum/images/icon_minipost.gif" alt="{$LANG_GF01[PERMLINK]}" title="{$LANG_GF01[PERMLINK]}"/>
-              </a>
-            </td>
-            <td>
-              {$LANG_GF01[BY]} {userlink} ({onlinestatus})&nbsp;{$LANG_GF01[ON3]}&nbsp;{posted_date}&nbsp;{read_msg}&nbsp;{locked_icon}
-              <span id="forumbookmark{topic_id}" style="padding-left:10px;">
-                <a href="#" onclick="ajax_toggleForumBookmark({topic_id});return false;">
-                  {bookmark_icon}
-                </a>
-              </span>
-            </td>
-            <td class="alignright">
-              <div style="vertical-align:top; padding-top:2px;" class="alignright">
-                {mod_functions}
-              </div>
-            </td>
-          </tr>
-        </table>
-      </td>
-      <td style="height:30px;padding-left:6px; padding-right:6px;">
-        {userlink}{topic_post_link_begin}{topic_post_link_end}
-      </td>
-    </tr>
-
-
-{!if xxxx}
-  {!if preview_topic_subject}
-    <tr class="pluginRow{csscode}">
-      <td style="padding-left:6px; padding-right:6px;">
-        <strong>&nbsp;{preview_topic_subject}</strong>
-      </td>
-      <td style="padding:0px 6px 5px 6px;">
-        {userlink}
-      </td>
-    </tr>
-  {!endif}
+{!!if {csscode} == 2 !!}
+{!!set panelrow "uk-panel-box-secondary" !!}
+{!else}
+{!!set panelrow "" !!}
 {!endif}
 
-    <tr class="pluginRow{csscode}">
-      <td style="width:100%;vertical-align:top; padding:6px;" class="pluginRow{csscode}">
-        <div style="{comment_minheight};">
-          {topic_comment}
-        </div>
-        <div style="clear:both;"></div>
-        {attachments}
-        {!if sig}
-        <div class="forum-signature" style="min-height:45px;padding-top:10px;">
-          {sig}<br/>
-          {remote_ip}
-        </div>
-        {!endif}
-      </td>
-      <td style="vertical-align:top; padding:6px;white-space:nowrap;">
-        <div>
-          {user_level}<br/>
-          {user_levelname}
-        </div>
-        <div>
-          {magical_image}
-    	  {vote_html}
-          <div style="padding-top:3px;">{avatar}</div>
-          {member_badge}
-          <p>
+			<a id="{topic_id}"></a>
+			<div class="uk-panel-box uk-margin-bottom {panelrow}">
+				<div class="uk-grid">
+					<div class="uk-width-1-1">
+
+						<div class="uk-align-left uk-text-left uk-text-large uk-margin-bottom-remove">
+							<a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}">{prefix}{subject}</a>
+						</div>
+
+						<div class="uk-align-right uk-text-right uk-margin-bottom-remove">
+							{mod_functions}
+						</div>
+						<div class="uk-clearfix"></div>
+						<div class="forum_author_line uk-margin-bottom">
+							<a href="{site_url}/forum/viewtopic.php?topic={topic_id}#{topic_id}">
+								<i class="uk-icon-comment-o" title="permalink"></i>
+							</a>
+							{$LANG_GF01[BY]} {userlink} ({onlinestatus})&nbsp;<span class="uk-text-small">{$LANG_GF01[ON3]}&nbsp;{posted_date}&nbsp;{read_msg}&nbsp;{locked_icon}</span>
+{!if bookmark_icon}
+{!if bookmarked}
+							<i class="tm-forum-bookmark uk-icon-star" id="bm{topic_id}"></i>
+{!else}
+							<i class="tm-forum-bookmark uk-icon-star-o" id="bm{topic_id}"></i>
+{!endif}
+{!endif}
+						</div> {# end of forum_author_line #}
+						<div class="uk-grid">
+							<div class="uk-width-medium-8-10 uk-width-small-10-10" style="padding-right:10px;">
+								<div class="uk-text-break topic_comment_area">
+									<div>{topic_comment}</div>
+									<div class="uk-clearfix">{attachments}</div>
+{!if sig}
+									<div class="uk-text-muted uk-clearfix" style="overflow:hidden;">
+										<hr style="width:50%;" class="uk-align-left uk-text-left uk-clearfix">
+										<div style="clear:both;"></div>{sig}
+									</div> {# end of signature #}
+{!endif}
+								</div> {# end of comment area #}
+							</div> {# end of 8-10 #}
+
+							{# end of comment area 8/10 #}
+							{# meta stuff #}
+
+							<!-- start of the user meta -->
+							<div class="uk-width-medium-2-10 uk-hidden-small uk-align-center uk-text-center" style="border-left:1px solid #ccc;">
+								<div class="uk-thumbnail uk-overlay-toggle">
+									<div class="uk-overlay">
+										{avatar}
+										<div class="uk-overlay-area">
+											<div class="uk-overlay-area-content">
+{!if profilelink}
+												<a href="{profilelink}" rel="nofollow">
+													<i class="uk-icon-user"></i>
+												</a>
+												&nbsp;
+{!endif}
+{!if emaillink}
+												<a href="{emaillink}" rel="nofollow">
+													<i class="uk-icon-envelope" title="{LANG_email}"></i>
+												</a>
+												&nbsp;
+{!endif}
+{!if websitelink}
+												<a href="{websitelink}" rel="nofollow">
+													<i class="uk-icon-home" title="{LANG_website}"></i>
+												</a>
+{!endif}
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<h4 class="uk-margin-bottom-remove">
+									<a href="{profilelink}" class="authorname">
+										<b>{user_name}</b>
+									</a>
+								</h4>
+								<a id="18270"></a>
+								<div>{member_badge}</div>
+								<div class="uk-text-muted uk-text-small">
+									{magical_image}
+									{vote_html}<br>
 {!if regdate}
-          <strong>{$LANG_GF01[REGISTERED]}: </strong>{regdate}
+									{$LANG_GF01[REGISTERED]}:: {regdate}<br>
 {!endif}
 {!if numposts}
-          <strong>{$LANG_GF01[POSTS]}: </strong>{numposts}<br/>
+									{$LANG_GF01[POSTS]}: {numposts}<br>
 {!endif}
-    	  {grade}
-{!if location}
-          <strong>{$LANG_GF04[label_location]}: </strong>{location}<br/>
+								</div>
+							</div>
+						</div>
+						<div class="uk-grid">
+							<div class="uk-width-medium-8-10 uk-width-small-1-1 uk-text-right" style="padding-right:10px;">
+								<div class="bottom_meta">
+{!if editlink}
+									<a href="{editlink}" rel="nofollow" class="uk-button uk-button-mini uk-button-primary">
+										<i class="uk-icon-edit"></i>&nbsp;{$LANG_GF01[EDITICON]}
+									</a>
 {!endif}
-          {ipaddress}
-          </p>
-        </div>
-        <div style="background:transparent; width:110px; height:1px;"></div>
-      </td>
-    </tr>
-
-{!if full}
-    <tr class="pluginRow{csscode}">
-      <td style="padding-left:6px; padding-right:6px;">
-        <table style="width:100%;">
-          <tr>
-            <td style="white-space:nowrap;">
-              <table>
-                <tr>
-                  {!if profilelink}
-                  <td style="padding-right:3px;"><a href="{profilelink}" rel="nofollow">{profilelinkimg}</a></td>
-                  {!else}
-                    <td>&nbsp;</td>
-                  {!endif}
-                  {!if emaillink}
-                    <td style="padding-right:3px;"><a href="{emaillink}" rel="nofollow">{emaillinkimg}</a></td>
-                  {!else}
-                    <td>&nbsp;</td>
-                  {!endif}
-                  {!if websitelink}
-                    <td style="padding-right:3px;"><a href="{websitelink}" rel="nofollow">{websitelinkimg}</a></td>
-                  {!else}
-                    <td>&nbsp;</td>
-                  {!endif}
-                  {!if pmlink}
-                    <td style="padding-right:3px;"><a href="{pmlink}" rel="nofollow">{pmlinkimg}</a></td>
-                  {!else}
-                    <td>&nbsp;</td>
-                  {!endif}
-                </tr>
-              </table>
-            </td>
-            <td class="alignright" style="float:right;white-space:nowrap;">
-              <table>
-                <tr>
-                  {!if editlink}
-                    <td style="padding-right:3px;"><a href="{editlink}" rel="nofollow">{editlinkimg}</a></td>
-                  {!else}
-                    <td>&nbsp;</td>
-                  {!endif}
-                  {!if quotelink}
-                    <td><a href="{quotelink}" rel="nofollow">{quotelinkimg}</a></td>
-                  {!else}
-                    <td>&nbsp;</td>
-                  {!endif}
-                </tr>
-              </table>
-            </td>
-          </tr>
-        </table>
-      </td>
-      <td style="height:30px;">
-        <div class="top-link">
-          <a href="#top">
-            <img src="{site_url}/forum/images/top.png" alt="{$LANG_GF01[back2top]}" title="{$LANG_GF01[back2top]}" />
-          </a>
-        </div>
-      </td>
-    </tr>
+{!if quotelink}
+									<a href="{quotelink}" rel="nofollow" class="uk-button uk-button-mini uk-button-primary">
+										<i class="uk-icon-mail-reply"></i>&nbsp;{$LANG_GF01[QUOTEICON]}
+									</a>
 {!endif}
-{!if full}
-    <tr>
+								</div> {# end of bottom meta #}
+							</div> {# end of bottom line 1/1 #}
+						</div> {# end of uk-grid #2 #}
+					</div> {# end of uk-margin 1 - 1 #}
+				</div> {# end of uk-grid main #}
+			</div> {# end of panel #}
 
-      <td colspan="2" class="pluginSolidOutline">
-        <div style="background:transparent;width:1px;height:10px;display:{show_topicrule}"></div>
-      </td>
-    </tr>
-{!endif}
-    <!-- END topicrow -->
+			<!-- END topicrow -->
 
-  </table>
-
-  {# end of the topics #}
 {!if iframe}
-      <table style="width:100%;padding:4px;">
-        <tr>
-          <td class="aligncenter" style="white-space:nowrap;">{pagenavigation}</td>
-        </tr>
-      </table>
-    </body>
-    </html>
+			<div class="topic-footer-pagination">
+				{pagenavigation}
+			</div>
+		</body>
+	</html>
 {!else}
-  {# topic footer #}
-  {!if full}
-    <table style="border-collapse: separate; border-spacing: 1px;padding:2px;width:100%;">
-      <tr>
-        <td class="alignleft" style="width:95%;height:24px;white-space:nowrap;padding-left:6px;">
-          {page_generated_time}
-        </td>
-        <td style="white-space:nowrap;">
-          <table style="width:100%;">
-            <tr>
-              <td><a href="{newtopiclink}" rel="nofollow">{newtopiclinkimg}</a></td>
-              <td><a href="{replytopiclink}" rel="nofollow">{replytopiclinkimg}</a></td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-    <br />
-  </div>
-  {!endif}
-
-    <table style="padding:2px;width:100%;">
-      <tr>
-        <td class="aligncenter" style="white-space:nowrap;">{pagenavigation}</td>
-      </tr>
-    </table>
-    <br />
+	<div class="uk-width-1-1 uk-margin-small uk-clearfix">
+		<div class="uk-align-left uk-text-left uk-margin-small">
+{!if newtopiclink}
+			<a href="{newtopiclink}" rel="nofollow" class="uk-button uk-button-small uk-button-primary">
+				<i class="uk-icon-file-o"></i>&nbsp;&nbsp;{LANG_newtopic}
+			</a>
 {!endif}
+{!if replytopiclink}
+			<a href="{replytopiclink}" rel="nofollow" class="uk-button uk-button-small uk-button-success">
+				<i class="uk-icon-mail-reply"></i>&nbsp;&nbsp;{LANG_reply}
+			</a>
+{!endif}
+		</div> <!-- end of reply link -->
+
+		<div class="uk-text-small uk-align-right uk-text-right uk-margin-small">
+			{num_posts} posts :: Page {page} of {num_pages}
+			{pagenavigation}
+		</div>
+	</div> <!-- end of width-1-1 -->
+
+	<div class="uk-clear"></div>
+</div> <!-- main wrapper -->
+{!endif} {# else frame #}
 {# end {templatelocation} #}

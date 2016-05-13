@@ -1,74 +1,121 @@
 {# begin {templatelocation} #}
+
 {!if error_msg}
-  <div class="pluginAlert"">{error_msg}</div>
+  <div class="uk-alert-danger">{error_msg}</div>
 {!endif}
-<table style="width:100%;border-collapse: collaspe; border-spacing: 1px;" class="pluginSolidOutline alignleft">
-  <tr class="pluginHeader">
-      <td colspan="2" style="padding:5px 0px 5px 10px;">{lang_postpreview}</td>
-  </tr>
-  <tr class="pluginRow{csscode}">
-    <td style="padding-left:6px; padding-right:6px;">
-      <table style="width:100%;">
-        <tr>
-          <td style="width:8px;" class="aligncenter">
-            <a href="{site_url}/forum/viewtopic.php?topic={topic_id}#{topic_id}">
-              <img src="{site_url}/forum/images/icon_minipost.gif" alt="{$LANG_GF01[PERMLINK]}" title="{$LANG_GF01[PERMLINK]}"/>
+
+<div class="forum-wrapper"> <!-- main wrapper -->
+
+    <div class="topic-navigation">
+        <h2 class="uk-margin-small">{lang_postpreview}</h2>
+    </div>
+
+    <div class="clear"></div>
+
+  <div class="uk-panel-box uk-margin-bottom uk-panel-box-primary">
+    <div class="uk-grid">
+      <div class="uk-width-1-1">
+
+        <div class="uk-align-left uk-text-left uk-text-large uk-margin-bottom-remove">
+          <a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}">{prefix}{subject}</a>
+        </div>
+
+        <div class="uk-align-right uk-text-right uk-margin-bottom-remove">
+          {mod_functions}
+        </div>
+<div class="uk-clearfix"></div>
+        <div class="forum_author_line uk-margin-bottom">
+          <a href="{site_url}/forum/viewtopic.php?topic={topic_id}#{topic_id}">
+            <i class="uk-icon-comment-o" title="permalink"></i>
+          </a>
+          {$LANG_GF01[BY]} {userlink} ({onlinestatus})&nbsp;<span class="uk-text-small">{$LANG_GF01[ON3]}&nbsp;{posted_date}&nbsp;{read_msg}&nbsp;{locked_icon}</span>
+          <span id="forumbookmark{topic_id}">
+            <a href="#" onclick="ajax_toggleForumBookmark({topic_id});return false;">
+              {bookmark_icon}
             </a>
-          </td>
-          <td>
-            {$LANG_GF01[BY]} {userlink} ({onlinestatus})&nbsp;{$LANG_GF01[ON3]}&nbsp;{posted_date}&nbsp;{read_msg}&nbsp;{locked_icon}
-            <span id="forumbookmark{topic_id}" style="padding-left:10px;">
-              <a href="#" onclick="ajax_toggleForumBookmark({topic_id});return false;">
-                {bookmark_icon}
+          </span>
+        </div> {# end of forum_author_line #}
+
+        <div class="uk-grid">
+          <div class="uk-width-medium-8-10 uk-width-small-10-10" style="padding-right:10px;">
+            <div class="uk-text-break topic_comment_area">
+              <div>{topic_comment}</div>
+              <div class="uk-clearfix">{attachments}</div>
+{!if sig}
+
+              <div class="uk-text-muted uk-clearfix" style="overflow:hidden;">
+                <hr style="width:50%;" class="uk-align-left uk-text-left uk-clearfix">
+                <div style="clear:both;"></div>{sig}
+              </div> {# end of signature #}
+{!endif}
+            </div> {# end of comment area #}
+          </div> {# end of 8-10 #}
+{# end of comment area 8/10 #}
+{# meta stuff #}
+          <div class="uk-width-medium-2-10 uk-hidden-small uk-align-center" style="border-left:1px solid #ccc;">
+            <div class="meta-goes-here uk-text-center">
+          	  <div class="uk-thumbnail uk-hidden-small">
+          	    {avatar}
+          	  </div>
+          	  <div class="uk-text-muted uk-text-small">
+                {user_level}<br>
+                {user_levelname}
+          	  </div>
+
+          	  <div class="uk-text-muted uk-text-small">
+          	    {magical_image}
+          	    {vote_html}
+              </div>
+
+              <div  class="uk-text-muted uk-text-small">
+                {member_badge}
+              </div>
+              <div  class="uk-text-muted uk-text-small uk-margin-remove">
+{!if regdate}
+                <strong>{$LANG_GF01[REGISTERED]}: </strong>{regdate}
+{!endif}
+{!if numposts}
+                <strong>{$LANG_GF01[POSTS]}: </strong>{numposts}<br/>
+{!endif}
+                {grade}
+{!if location}
+                <strong>{$LANG_GF04[label_location]}: </strong>{location}<br/>
+{!endif}
+{!if ipaddress}
+                {ipaddress}<br>
+                {remote_ip}
+{!endif}
+              </div>
+            </div> {#end of meta #}
+{# end of meta #}
+          </div> {# end of 2 of 10 #}
+{# bottom line #}
+          <div class="uk-width-medium-8-10 uk-width-small-1-1 uk-text-right" style="padding-right:10px;">
+            <div class="bottom_meta">
+{!if editlink}
+              <a href="{editlink}" rel="nofollow" class="uk-button uk-button-mini uk-button-primary">
+                <i class="uk-icon-edit"></i>&nbsp;Edit
               </a>
-            </span>
-          </td>
-          <td class="alignright">
-            <div style="vertical-align:top; padding-top:2px;" class="alignright">
-              {mod_functions}
-            </div>
-          </td>
-        </tr>
-      </table>
-    </td>
-    <td style="height:30px;padding-left:6px; padding-right:6px;">
-      {userlink}{topic_post_link_begin}{topic_post_link_end}
-    </td>
-  </tr>
-  <tr class="pluginRow{csscode}">
-    <td style="width:100%;vertical-align:top; padding:6px;" class="pluginRow{csscode}">
-      <div style="{comment_minheight};">
-        {topic_comment}
-      </div>
-      <div style="clear:both;"></div>
-      {attachments}
-      {!if sig}
-      <div class="forum-signature" style="min-height:45px;padding-top:10px;">
-        {sig}<br/>
-        {remote_ip}
-      </div>
-      {!endif}
-    </td>
-    <td style="vertical-align:top; padding:6px;white-space:nowrap;">
-      <div>
-        {user_level}<br/>
-        {user_levelname}
-      </div>
-      <div>
-        {magical_image}
-  	  {vote_html}
-        <div style="padding-top:3px;">{avatar}</div>
-        {member_badge}
-        <p>
-        {regdate}
-        {numposts}<br/>
-  	  {grade}
-        {location}<br/>
-        {ipaddress}
-        </p>
-      </div>
-      <div style="background:transparent; width:110px; height:1px;"></div>
-    </td>
-  </tr>
-</table>
+{!endif}
+{!if quotelink}
+              <a href="{quotelink}" rel="nofollow" class="uk-button uk-button-mini uk-button-primary">
+                <i class="uk-icon-mail-reply"></i>&nbsp;Quote
+              </a>
+{!endif}
+            </div> {# end of bottom meta #}
+          </div> {# end of bottom line 1/1 #}
+
+        </div> {# end of uk-grid #2 #}
+      </div> {# end of uk-margin 1 - 1 #}
+    </div> {# end of uk-grid main #]
+  </div> {# end of panel #}
+</div>
+
+
+    <div class="clear"></div>
+
+    <div class="topic-divider">
+        <span></span>
+    </div>
+</div>
 {# end {templatelocation} #}

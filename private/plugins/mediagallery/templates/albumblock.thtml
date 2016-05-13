@@ -1,13 +1,14 @@
 {# begin {templatelocation} #}
+<div class="uk-margin">
 {start_block_useralbums}
-<div class="plugin">
-<table style="border:none;width:100%;">
+<table class="uk-table uk-table-striped uk-table-condensed">
   <tr>
-  <th>{lang_thumbnail}</th><th>{lang_album}</th>
-  <th>{lang_album_description}</th>
+    <th>{lang_thumbnail}</th>
+    <th>{lang_album}</th>
+    <th>{lang_album_description}</th>
   </tr>
   {useralbum_row}
 </table>
-</div>
 {end_block}
+</div>
 {# end {templatelocation} #}

@@ -1,37 +1,35 @@
 {# begin {templatelocation} #}
 <script type="text/javascript">
-//<![CDATA[
-function doCheckAll()
-{
-  with (document.sessions) {
-    for (var i=0; i < elements.length; i++ ) {
-      if (elements[i].type == 'checkbox')
-        elements[i].checked = true;
-    }
-  }
-}
-
-function doUnCheckAll()
-{
-  with (document.sessions) {
-    for (var i=0; i < elements.length; i++ ) {
-      if (elements[i].type == 'checkbox')
-        elements[i].checked = false;
-    }
-  }
-}
-//]]>
+	//<![CDATA[
+	function doCheckAll()
+	{
+		with (document.sessions) {
+			for (var i=0; i < elements.length; i++ ) {
+				if (elements[i].type == 'checkbox')
+				elements[i].checked = true;
+			}
+		}
+	}
+	function doUnCheckAll()
+	{
+		with (document.sessions) {
+			for (var i=0; i < elements.length; i++ ) {
+				if (elements[i].type == 'checkbox')
+				elements[i].checked = false;
+			}
+		}
+	}
+	//]]>
 </script>
-<p>&nbsp;</p>
-<form name="sessions" method="post" action="{s_form_action}">
-{noitems}
-{sessitems}
-<p>&nbsp;</p>
-<div style="text-align:center;">
-<input type="hidden" name="action" value="sessions" />
-<input type="submit" name="mode"   value="{lang_save}" />
-<input type="submit" name="mode"   value="{lang_cancel}" />
-<input type="submit" name="mode"   value="{lang_delete}" />
-</div>
+<form class="uk-form uk-form-horizontal" name="sessions" method="post" action="{s_form_action}">
+	{noitems}
+	{sessitems}
+
+	<div class="uk-text-center uk-margin">
+		<input type="hidden" name="action" value="sessions">
+		<button class="uk-button uk-button-primary" type="submit" name="mode"   value="{lang_save}">{lang_save}</button>
+		<button class="uk-button" type="submit" name="mode"   value="{lang_cancel}">{lang_cancel}</button>
+		<button class="uk-button uk-button-danger" type="submit" name="mode"   value="{lang_delete}">{lang_delete}</button>
+	</div>
 </form>
 {# end {templatelocation} #}

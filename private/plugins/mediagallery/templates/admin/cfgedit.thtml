@@ -1,516 +1,475 @@
 {# begin {templatelocation} #}
-<noscript><div class="pluginAlert" style="padding:10px;">{no_javascript_warning}</div></noscript>
 <script type="text/javascript" src="{site_url}/js/admin_editor.js"></script>
 {configuration_check}
 {!if feedback}
 <span class="info">{feedback}</span>
 {!endif}
-<div id="pe_navbar" class="jsenabled_show" style="display:none">{navbar}</div>
-<div style="clear:both;"></div>
-<form method="post" action="{s_form_action}" name="mg_config_form" enctype="multipart/form-data" id="mg_config_form">
 
-<div id="pe_general">
-    <table width="100%" border="0" cellspacing="0" cellpadding="5">
-      <tr>
-        <th colspan="2">
-          {lang_general_options}
-        </th>
-      </tr>
-      <tr class="pluginRow1">
-        <td style="width:50%;" class="mgAdminAlignRight">{lang_gallery_only}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="radio" name="gallery_only" value="0" {gallery_only_no_checked} />{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="gallery_only" value="1" {gallery_only_yes_checked} />{lang_yes}
-        </td>
-      </tr>
+<form class="uk-form uk-form-horizontal" method="post" action="{s_form_action}" name="mg_config_form" enctype="multipart/form-data" id="mg_config_form">
+    <input type="hidden" name="{gltoken_name}" value="{gltoken}">
+    <ul class="uk-tab uk-margin" data-uk-tab="{connect:'#mg_admin_options'}">
+        <li><a href="#">{lang_general_options}</a></li>
+        <li><a href="#">{lang_display_options}</a></li>
+        <li><a href="#">{lang_batch_options}</a></li>
+        <li><a href="#">{lang_userpref_options}</a></li>
+        <li><a href="#">{lang_graphics_options}</a></li>
+    </ul>
+    <ul id="mg_admin_options" class="uk-switcher">
+        <li>
+            <fieldset>
+                <legend>{lang_general_options}</legend>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_gallery_only}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="radio" name="gallery_only" value="0" {gallery_only_no_checked}><div class="uk-form-help-inline">{lang_no}</div>
+                        <input type="radio" name="gallery_only" value="1" {gallery_only_yes_checked}><div class="uk-form-help-inline">{lang_yes}</div>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_index_all}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="radio" name="index_all" value="0" {index_all_no_checked}><div class="uk-form-help-inline">{lang_no}</div>
+                        <input type="radio" name="index_all" value="1" {index_all_yes_checked}><div class="uk-form-help-inline">{lang_yes}</div>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_loginrequired}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="radio" name="loginrequired" value="0" {lr_no_checked}><div class="uk-form-help-inline">{lang_no}</div>
+                        <input type="radio" name="loginrequired" value="1" {lr_yes_checked}><div class="uk-form-help-inline">{lang_yes}</div>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_usage_tracking}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="radio" name="usagetracking" value="0" {ut_no_checked}><div class="uk-form-help-inline">{lang_no}</div>
+                        <input type="radio" name="usagetracking" value="1" {ut_yes_checked}><div class="uk-form-help-inline">{lang_yes}</div>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_whatsnew}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="radio" name="whatsnew" value="0" {wn_no_checked}><div class="uk-form-help-inline">{lang_no}</div>
+                        <input type="radio" name="whatsnew" value="1" {wn_yes_checked}><div class="uk-form-help-inline">{lang_yes}</div>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_wn_length}</label>
+                    <div class="uk-form-controls">
+                        <input type="text" maxlength="2" size="2" name="wn_length" value="{wn_length}">&nbsp;{lang_characters}
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_wn_time}</label>
+                    <div class="uk-form-controls">
+                        {wn_time_select}
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_preserve_filename}</label>
+                    <div class="uk-form-controls  uk-form-controls-text">
+                        <input type="radio" name="preserve_filename" value="0" {pf_no_checked}><div class="uk-form-help-inline">{lang_no}</div>
+                        <input type="radio" name="preserve_filename" value="1" {pf_yes_checked}><div class="uk-form-help-inline">{lang_yes}</div>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_discard_originals}</label>
+                    <div class="uk-form-controls  uk-form-controls-text">
+                        <input type="radio" name="discard_originals" value="0" {do_no_checked}><div class="uk-form-help-inline">{lang_no}</div>
+                        <input type="radio" name="discard_originals" value="1" {do_yes_checked}><div class="uk-form-help-inline">{lang_yes}</div>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_verbose}</label>
+                    <div class="uk-form-controls  uk-form-controls-text">
+                        <input type="radio" name="verbose" value="0" {verbose_no_checked}><div class="uk-form-help-inline">{lang_no}</div>
+                        <input type="radio" name="verbose" value="1" {verbose_yes_checked}><div class="uk-form-help-inline">{lang_yes}</div>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_dwnc}</label>
+                    <div class="uk-form-controls  uk-form-controls-text">
+                        <input type="radio" name="dwnc" value="0" {dwnc_no_checked}><div class="uk-form-help-inline">{lang_no}</div>
+                        <input type="radio" name="dwnc" value="1" {dwnc_yes_checked}><div class="uk-form-help-inline">{lang_yes}</div>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_profile_hook}</label>
+                    <div class="uk-form-controls  uk-form-controls-text">
+                        <input type="radio" name="profile_hook" value="0" {ph_no_checked}><div class="uk-form-help-inline">{lang_no}</div>
+                        <input type="radio" name="profile_hook" value="1" {ph_yes_checked}><div class="uk-form-help-inline">{lang_yes}</div>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_postcard_retention}</label>
+                    <div class="uk-form-controls">
+                        <input type="text" maxlength="2" size="2" name="postcard_retention" value="{postcard_retention}">
+                    </div>
+                </div>
+            </fieldset>
 
-      <tr class="pluginRow2">
-        <td style="width:50%;" class="mgAdminAlignRight">{lang_index_all}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="radio" name="index_all" value="0" {index_all_no_checked} />{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="index_all" value="1" {index_all_yes_checked} />{lang_yes}
-        </td>
-      </tr>
+            <fieldset class="uk-margin-top">
+                <legend>{lang_auto_tag_defaults}</legend>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_border}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="radio" name="at_border" value="0" {at_border_no_checked}><div class="uk-form-help-inline">{lang_no}</div>
+                        <input type="radio" name="at_border" value="1" {at_border_yes_checked}><div class="uk-form-help-inline">{lang_yes}</div>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_alignment}</label>
+                    <div class="uk-form-controls">
+                        {at_align_select}
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_width}</label>
+                    <div class="uk-form-controls">
+                        <input type="text" name="at_width" maxlength="3" size="3" value="{at_width}">
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_height}</label>
+                    <div class="uk-form-controls">
+                        <input type="text" name="at_height" maxlength="3" size="3" value="{at_height}">
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_source}</label>
+                    <div class="uk-form-controls">
+                        {at_src_select}
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_autoplay}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="radio" name="at_autoplay" value="0" {at_autoplay_no_checked}><div class="uk-form-help-inline">{lang_no}</div>
+                        <input type="radio" name="at_autoplay" value="1" {at_autoplay_yes_checked}><div class="uk-form-help-inline">{lang_yes}</div>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_link_to_media}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="radio" name="at_enable_link" value="0" {at_enable_link_no_checked}><div class="uk-form-help-inline">{lang_no}</div>
+                        <input type="radio" name="at_enable_link" value="1" {at_enable_link_yes_checked}><div class="uk-form-help-inline">{lang_yes}</div>
+                        <input type="radio" name="at_enable_link" value="2" {at_enable_link_lb_checked}><div class="uk-form-help-inline">{$LANG_MG01['lightbox']}</div>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_ss_delay}</label>
+                    <div class="uk-form-controls">
+                        <input type="text" name="at_delay" maxlength="2" size="2" value="{at_delay}">
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_show_titles}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="radio" name="at_showtitle" value="0" {at_showtitle_no_checked}><div class="uk-form-help-inline">{lang_no}</div>
+                        <input type="radio" name="at_showtitle" value="1" {at_showtitle_yes_checked}><div class="uk-form-help-inline">{lang_yes}</div>
+                    </div>
+                </div>
+            </fieldset>
+        </li>
 
-      <tr class="pluginRow1">
-        <td style="width:50%;" class="mgAdminAlignRight">{lang_loginrequired}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="radio" name="loginrequired" value="0" {lr_no_checked} />{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="loginrequired" value="1" {lr_yes_checked} />{lang_yes}
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_usage_tracking}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="radio" name="usagetracking" value="0" {ut_no_checked} />{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="usagetracking" value="1" {ut_yes_checked} />{lang_yes}
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_whatsnew}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="radio" name="whatsnew" value="0" {wn_no_checked} />{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="whatsnew" value="1" {wn_yes_checked} />{lang_yes}
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_wn_length}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" maxlength="2" size="2" name="wn_length" value="{wn_length}" />&nbsp;{lang_characters}
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_wn_time}</td>
-        <td class="mgAdminAlignLeft">
-          {wn_time_select}
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_preserve_filename}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="radio" name="preserve_filename" value="0" {pf_no_checked} />{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="preserve_filename" value="1" {pf_yes_checked} />{lang_yes}
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_discard_originals}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="radio" name="discard_originals" value="0" {do_no_checked} />{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="discard_originals" value="1" {do_yes_checked} />{lang_yes}
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_verbose}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="radio" name="verbose" value="0" {verbose_no_checked} />{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="verbose" value="1" {verbose_yes_checked} />{lang_yes}
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_dwnc}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="radio" name="dwnc" value="0" {dwnc_no_checked} />{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="dwnc" value="1" {dwnc_yes_checked} />{lang_yes}
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_profile_hook}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="radio" name="profile_hook" value="0" {ph_no_checked} />{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="profile_hook" value="1" {ph_yes_checked} />{lang_yes}
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_postcard_retention}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" maxlength="2" size="2" name="postcard_retention" value="{postcard_retention}" />
-        </td>
-      </tr>
-      <tr>
-        <th colspan="2">
-          {lang_auto_tag_defaults}
-        </th>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_border}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="radio" name="at_border" value="0" {at_border_no_checked} />{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="at_border" value="1" {at_border_yes_checked} />{lang_yes}
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_alignment}</td>
-        <td class="mgAdminAlignLeft">
-          {at_align_select}
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_width}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" name="at_width" maxlength="3" size="3" value="{at_width}" />
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_height}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" name="at_height" maxlength="3" size="3" value="{at_height}" />
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_source}</td>
-        <td class="mgAdminAlignLeft">
-          {at_src_select}
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_autoplay}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="radio" name="at_autoplay" value="0" {at_autoplay_no_checked} />{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="at_autoplay" value="1" {at_autoplay_yes_checked} />{lang_yes}
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_link_to_media}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="radio" name="at_enable_link" value="0" {at_enable_link_no_checked} />{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="at_enable_link" value="1" {at_enable_link_yes_checked} />{lang_yes}&nbsp;&nbsp;
-          <input type="radio" name="at_enable_link" value="2" {at_enable_link_lb_checked} />{$LANG_MG01['lightbox']}
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_ss_delay}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" name="at_delay" maxlength="2" size="2" value="{at_delay}" />
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_show_titles}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="radio" name="at_showtitle" value="0" {at_showtitle_no_checked} />{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="at_showtitle" value="1" {at_showtitle_yes_checked} />{lang_yes}
-        </td>
-      </tr>
-    </table>
-</div>
+        <li>
+            <fieldset>
+                <legend>{lang_display_options}</legend>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_dfid}</label>
+                    <div class="uk-form-controls">
+                        {dfidselect}
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_displayblock}</label>
+                    <div class="uk-form-controls">
+                        {displayblock}
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_album_columns}</label>
+                    <div class="uk-form-controls">
+                        <input type="text" maxlength="1" size="2" name="albumdisplaycolumns" value="{album_display_columns}">
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_album_rows}</label>
+                    <div class="uk-form-controls">
+                        <input type="text" maxlength="3" size="3" name="albumdisplayrows" value="{album_display_rows}">
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_subalbum_select}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="radio" name="subalbum_select" value="0" {sa_no_checked}><div class="uk-form-help-inline">{lang_no}</div>
+                        <input type="radio" name="subalbum_select" value="1" {sa_yes_checked}><div class="uk-form-help-inline">{lang_yes}</div>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_theme_select}</label>
+                    <div class="uk-form-controls">
+                        {theme_select}
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_album_skin}</label>
+                    <div class="uk-form-controls">
+                        {skin_select}
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_orig_jpg_quality}</label>
+                    <div class="uk-form-controls">
+                        <input type="text" maxlength="3" size="3" name="orig_jpg_quality" value="{orig_jpg_quality}">
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_jpg_quality}</label>
+                    <div class="uk-form-controls">
+                        <input type="text" maxlength="3" size="3" name="jpg_quality" value="{jpg_quality}">
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_tn_jpg_quality}</label>
+                    <div class="uk-form-controls">
+                        <input type="text" maxlength="3" size="3" name="tn_jpg_quality" value="{tn_jpg_quality}">
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_gallery_tn_size}</label>
+                    <div class="uk-form-controls">
+                        {gallery_tn_size_select}
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_tnheight}</label>
+                    <div class="uk-form-controls">
+                        {gallery_tnheight_input}
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_tnwidth}</label>
+                    <div class="uk-form-controls">
+                        {gallery_tnwidth_input}
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_emid}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="radio" name="emid" value="0" {emid_no_checked}><div class="uk-form-help-inline">{lang_no}</div>
+                        <input type="radio" name="emid" value="1" {emid_yes_checked}><div class="uk-form-help-inline">{lang_yes}</div>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_fip}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="radio" name="fip" value="0" {fip_no_checked}><div class="uk-form-help-inline">{lang_no}</div>
+                        <input type="radio" name="fip" value="1" {fip_yes_checked}><div class="uk-form-help-inline">{lang_yes}</div>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_cmtbar}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="radio" name="cmtbar" value="0" {cmtbar_no_checked}><div class="uk-form-help-inline">{lang_no}</div>
+                        <input type="radio" name="cmtbar" value="1" {cmtbar_yes_checked}><div class="uk-form-help-inline">{lang_yes}</div>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_seperator}</label>
+                    <div class="uk-form-controls">
+                        <input type="text" maxlength="3" size="3" name="seperator" value="{seperator}">
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_flv}</label>
+                    <div class="uk-form-controls">
+                        {flv_select}
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_custom_image_height}</label>
+                    <div class="uk-form-controls">
+                        <input type="text" maxlength="4" size="4" name="custom_image_height" value="{custom_image_height}">
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_custom_image_width}</label>
+                    <div class="uk-form-controls">
+                        <input type="text" maxlength="4" size="4" name="custom_image_width" value="{custom_image_width}">
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_popup_from_album}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="checkbox" name="popupfromalbum" value="1" {popupfromalbum_selected}>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_autotag_caption}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="checkbox" name="autotag_caption" value="1" {autotag_caption_selected}>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_random_size}</label>
+                    <div class="uk-form-controls">
+                        <input type="text" maxlength="3" size="3" name="random_width" value="{random_width}">
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_random_skin}</label>
+                    <div class="uk-form-controls">
+                        {rskin_select}
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_truncate_breadcrumb}</label>
+                    <div class="uk-form-controls">
+                        <input type="text" maxlength="3" size="3" name="truncate_breadcrumb" value="{truncate_breadcrumb}">
+                    </div>
+                </div>
+            </fieldset>
 
-<div id="pe_display"  class="jsenabled_hide">
+            <fieldset class="uk-margin-top">
+                <legend>{lang_search_result_options}</legend>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_search_columns}</label>
+                    <div class="uk-form-controls">
+                        <input type="text" maxlength="2" size="2" name="search_columns" value="{search_columns}">
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_search_rows}</label>
+                    <div class="uk-form-controls">
+                        <input type="text" maxlength="2" size="2" name="search_rows" value="{search_rows}">
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_search_av_playback}</label>
+                    <div class="uk-form-controls">
+                        {search_playback_type}
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_search_views}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="radio" name="search_enable_views" value="0" {search_enable_views_no_checked}><div class="uk-form-help-inline">{lang_no}</div>
+                        <input type="radio" name="search_enable_views" value="1" {search_enable_views_yes_checked}><div class="uk-form-help-inline">{lang_yes}</div>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_search_rating}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="radio" name="search_enable_rating" value="0" {search_enable_rating_no_checked}><div class="uk-form-help-inline">{lang_no}</div>
+                        <input type="radio" name="search_enable_rating" value="1" {search_enable_rating_yes_checked}><div class="uk-form-help-inline">{lang_yes}</div>
+                    </div>
+                </div>
+            </fieldset>
+        </li>
 
-    <table width="100%" border="0" cellspacing="0" cellpadding="5">
-      <tr>
-        <th colspan="2">
-          {lang_display_options}
-        </th>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_dfid}</td>
-        <td class="mgAdminAlignLeft">
-          {dfidselect}
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_displayblock}</td>
-        <td class="mgAdminAlignLeft">
-          {displayblock}
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_album_columns}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" maxlength="1" size="2" name="albumdisplaycolumns" value="{album_display_columns}" />
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_album_rows}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" maxlength="3" size="3" name="albumdisplayrows" value="{album_display_rows}" />
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_subalbum_select}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="radio" name="subalbum_select" value="0" {sa_no_checked} />{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="subalbum_select" value="1" {sa_yes_checked} />{lang_yes}
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_theme_select}</td>
-        <td class="mgAdminAlignLeft">
-          {theme_select}
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_album_skin}</td>
-        <td class="mgAdminAlignLeft">
-          {skin_select}
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_orig_jpg_quality}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" maxlength="3" size="3" name="orig_jpg_quality" value="{orig_jpg_quality}" />
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_jpg_quality}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" maxlength="3" size="3" name="jpg_quality" value="{jpg_quality}" />
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_tn_jpg_quality}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" maxlength="3" size="3" name="tn_jpg_quality" value="{tn_jpg_quality}" />
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_gallery_tn_size}</td>
-        <td class="mgAdminAlignLeft">
-          {gallery_tn_size_select}
-        </td>
-      </tr>
+        <li>
+            <fieldset>
+                <legend>{lang_batch_options}</legend>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_refresh_rate}</label>
+                    <div class="uk-form-controls">
+                        <input type="text" maxlength="4" size="4" name="refresh_rate" value="{refresh_rate}">
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_item_limit}</label>
+                    <div class="uk-form-controls">
+                        <input type="text" maxlength="4" size="4" name="item_limit" value="{item_limit}">
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_time_limit}</label>
+                    <div class="uk-form-controls">
+                        <input type="text" maxlength="4" size="4" name="time_limit" value="{time_limit}">
+                    </div>
+                </div>
+            </fieldset>
+        </li>
+        <li>
+            <fieldset>
+                <legend>{lang_userpref_options}</legend>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_display_rows_enabled}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="checkbox" name="up_display_rows_enabled" value="1" {up_dr_selected}>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_display_columns_enabled}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="checkbox" name="up_display_columns_enabled" value="1" {up_dc_selected}>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_av_playback_enabled}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="checkbox" name="up_av_playback_enabled" value="1" {up_playback_selected}>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_thumbnail_size_enabled}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="checkbox" name="up_thumbnail_size_enabled" value="1" {up_tn_size_selected}>
+                    </div>
+                </div>
 
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_tnheight}</td>
-        <td class="mgAdminAlignLeft">
-          {gallery_tnheight_input}
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_tnwidth}</td>
-        <td class="mgAdminAlignLeft">
-          {gallery_tnwidth_input}
-        </td>
-      </tr>
+            </fieldset>
+        </li>
 
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_emid}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="radio" name="emid" value="0" {emid_no_checked} />{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="emid" value="1" {emid_yes_checked} />{lang_yes}
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_fip}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="radio" name="fip" value="0" {fip_no_checked} />{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="fip" value="1" {fip_yes_checked} />{lang_yes}
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_cmtbar}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="radio" name="cmtbar" value="0" {cmtbar_no_checked} />{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="cmtbar" value="1" {cmtbar_yes_checked} />{lang_yes}
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_seperator}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" maxlength="3" size="3" name="seperator" value="{seperator}" />
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_flv}</td>
-        <td class="mgAdminAlignLeft">
-          {flv_select}
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_custom_image_height}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" maxlength="4" size="4" name="custom_image_height" value="{custom_image_height}" />
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_custom_image_width}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" maxlength="4" size="4" name="custom_image_width" value="{custom_image_width}" />
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_popup_from_album}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="checkbox" name="popupfromalbum" value="1" {popupfromalbum_selected} />
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_autotag_caption}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="checkbox" name="autotag_caption" value="1" {autotag_caption_selected} />
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_random_size}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" maxlength="3" size="3" name="random_width" value="{random_width}" />
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_random_skin}</td>
-        <td class="mgAdminAlignLeft">
-          {rskin_select}
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_truncate_breadcrumb}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" maxlength="3" size="3" name="truncate_breadcrumb" value="{truncate_breadcrumb}" />
-        </td>
-      </tr>
-      <tr>
-        <th colspan="2">
-          {lang_search_result_options}
-        </th>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_search_columns}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" maxlength="2" size="2" name="search_columns" value="{search_columns}" />
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_search_rows}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" maxlength="2" size="2" name="search_rows" value="{search_rows}" />
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_search_av_playback}</td>
-        <td class="mgAdminAlignLeft">
-          {search_playback_type}
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_search_views}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="radio" name="search_enable_views" value="0" {search_enable_views_no_checked} />{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="search_enable_views" value="1" {search_enable_views_yes_checked} />{lang_yes}
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_search_rating}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="radio" name="search_enable_rating" value="0" {search_enable_rating_no_checked} />{lang_no}&nbsp;&nbsp;
-          <input type="radio" name="search_enable_rating" value="1" {search_enable_rating_yes_checked} />{lang_yes}
-        </td>
-      </tr>
+        <li>
+            <fieldset>
+                <legend>{lang_graphics_options}</legend>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_ffmpeg_enable}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="checkbox" name="enable_ffmpeg" value="1" {ffmpeg_selected}>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_ffmpeg_path}</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-form-width-large" type="text" maxlength="255"name="ffmpeg_path" value="{ffmpeg_path}">
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_zip_enable}</label>
+                    <div class="uk-form-controls uk-form-controls-text">
+                        <input type="checkbox" name="enable_zip" value="1" {zip_selected}>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_zip_path}</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-form-width-large" type="text" maxlength="255"name="zip_path" value="{zip_path}">
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_tmp_path}</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-form-width-large" type="text" maxlength="255"name="tmp_path" value="{tmp_path}">
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label">{lang_ftp_path}</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-form-width-large" type="text" maxlength="255"name="ftp_path" value="{ftp_path}">
+                    </div>
+                </div>
 
-    </table>
-</div>
+            </fieldset>
+        </li>
+    </ul>
 
-<div id="pe_batch" class="jsenabled_hide">
-
-    <table width="100%" border="0" cellspacing="0" cellpadding="5">
-      <tr>
-        <th colspan="2">
-          {lang_batch_options}
-        </th>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_refresh_rate}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" maxlength="4" size="4" name="refresh_rate" value="{refresh_rate}" />
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_item_limit}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" maxlength="4" size="4" name="item_limit" value="{item_limit}" />
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_time_limit}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" maxlength="4" size="4" name="time_limit" value="{time_limit}" />
-        </td>
-      </tr>
-    </table>
-
-</div>
-
-<div id="pe_userprefs"  class="jsenabled_hide">
-
-    <table width="100%" border="0" cellspacing="0" cellpadding="5">
-      <tr>
-        <th colspan="2">
-          {lang_userpref_options}
-        </th>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_display_rows_enabled}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="checkbox" name="up_display_rows_enabled" value="1" {up_dr_selected} />
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_display_columns_enabled}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="checkbox" name="up_display_columns_enabled" value="1" {up_dc_selected} />
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_av_playback_enabled}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="checkbox" name="up_av_playback_enabled" value="1" {up_playback_selected} />
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:50%;" class="mgAdminAlignRight">{lang_thumbnail_size_enabled}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="checkbox" name="up_thumbnail_size_enabled" value="1" {up_tn_size_selected} />
-        </td>
-      </tr>
-    </table>
-
-</div>
-
-<div id="pe_graphics" class="jsenabled_hide">
-
-    <table width="100%" border="0" cellspacing="0" cellpadding="5">
-      <tr>
-        <th colspan="2">
-          {lang_graphics_options}
-        </th>
-      </tr>
-
-      <tr class="pluginRow1">
-        <td  style="width:40%;" class="mgAdminAlignRight">{lang_ffmpeg_enable}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="checkbox" name="enable_ffmpeg" value="1" {ffmpeg_selected} />
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:40%;" class="mgAdminAlignRight">{lang_ffmpeg_path}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" dir="ltr" maxlength="255" size="50" name="ffmpeg_path" value="{ffmpeg_path}" />
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:40%;" class="mgAdminAlignRight">{lang_zip_enable}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="checkbox" name="enable_zip" value="1" {zip_selected} />
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:40%;" class="mgAdminAlignRight">{lang_zip_path}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" dir="ltr" maxlength="255" size="50" name="zip_path" value="{zip_path}" />
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:40%;" class="mgAdminAlignRight">{lang_tmp_path}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" dir="ltr" maxlength="255" size="50" name="tmp_path" value="{tmp_path}" />
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:40%;" class="mgAdminAlignRight">{lang_ftp_path}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" dir="ltr" maxlength="255" size="50" name="ftp_path" value="{ftp_path}" />
-        </td>
-      </tr>
-    </table>
-</div>
-
-<div style="text-align:center;">
-<input type="hidden" name="{gltoken_name}" value="{gltoken}" />
-<input type="submit" value="{lang_save}" name="save" />
-<input type="submit" value="{lang_cancel}" name="cancel" />
-<input type="reset" value="{lang_reset}" name="mode" />
-</div>
+    <div class="uk-text-center uk-margin">
+        <button class="uk-button uk-button-primary" type="submit" value="{lang_save}" name="save">{lang_save}</button>
+        <button class="uk-button" type="submit" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
+        <button class="uk-button" type="reset" value="{lang_reset}" name="mode">{lang_reset}</button>
+    </div>
 </form>
-{# JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor #}
-<script type="text/javascript">
-//<![CDATA[
-var el;
-el=document.getElementsByTagName('div');
-for(i=0;i<el.length;i++){
-        if(el[i].className == 'jsenabled_show'){
-                el[i].style.display = '';
-        } else if(el[i].className == 'jsenabled_hide'){
-                el[i].style.display = 'none';
-        }
-}
-//]]>
-</script>
 {# end {templatelocation} #}

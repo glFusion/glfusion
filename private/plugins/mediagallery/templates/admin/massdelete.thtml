@@ -1,23 +1,10 @@
 {# begin {templatelocation} #}
-<form name="galselect" method="post" action="{s_form_action}">
- <div class="plugin">
-  <table width="100%" border="0" cellspacing="0" cellpadding="5">
-    <tr>
-      <th width="100%">
-        {lang_batch_delete}
-      </th>
-    </tr>
-    <tr class="pluginRow1">
-      <td align="left">
-        {album_list}
-      </td>
-    </tr>
-  </table>
-  </div>
-<br />
-<center>
-<input type="submit" name="mode"   value="{lang_delete}"  onclick="return confirm('{lang_delete_confirm}');" />
-<input type="submit" name="mode"   value="{lang_cancel}" />
-</center>
+<form class="uk-form uk-form-horizontal" name="galselect" method="post" action="{s_form_action}">
+	<h3>{lang_batch_delete}</h3>
+	{album_list}
+	<div class="uk-text-center">
+		<button class="uk-button uk-button-danger" type="submit" name="mode"   value="{lang_delete}"  onclick="return confirm('{lang_delete_confirm}');">{lang_delete}</button>
+		<button class="uk-button" type="submit" name="mode"   value="{lang_cancel}">{lang_cancel}</button>
+	</div>
 </form>
 {# end {templatelocation} #}

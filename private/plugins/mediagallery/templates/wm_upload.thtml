@@ -1,39 +1,30 @@
 {# begin {templatelocation} #}
-{lang_wmupload_help}
-<br /><br />
-<form method="post" enctype="multipart/form-data" name="watermarkupload" action="{s_form_action}">
-<div>
-{max_file_size}
-<input type="hidden" name="album_id" value="0" />
-<input type="hidden" name="action" value="{action}" />
-    <table width="100%" border="0" cellspacing="0" cellpadding="5">
-      <tr>
-        <th colspan="2" style="width:100%;">
-          {lang_watermark_upload}
-        </th>
-      </tr>
-      <tr class="pluginRow1">
-        <td class="required mgAdminAlignRight" style="width:20%;">{lang_file}</td>
-        <td class="mgAdminAlignLeft">
-		  {max_file_size}
-	      <input type="file" dir="ltr" name="newmedia[]" size="45" />
-	    </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td class="mgAdminAlignRight required" style="width:20%;">{lang_description}</td>
-        <td class="mgAdminAlignLeft">
-		  <textarea name="description[]" cols="45" rows="2"></textarea>
-	    </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td colspan="2" class="mgAdminAlignLeft required" style="width:50%;">{public}</td>
-      </tr>
-    </table>
-
-<div style="text-align:center;">
-  <input type="submit" value="{lang_save}" name="mode" />
-  <input type="submit" value="{lang_cancel}" name="mode" />
+<div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin">
+    {lang_wmupload_help}
 </div>
-</div>
+<form class="uk-form uk-form-horizontal" method="post" enctype="multipart/form-data" name="watermarkupload" action="{s_form_action}">
+    {max_file_size}
+    <input type="hidden" name="album_id" value="0">
+    <input type="hidden" name="action" value="{action}">
+    <div class="uk-form-row">
+        <label class="uk-form-label">{lang_file}</label>
+        <div class="uk-form-controls">
+            {max_file_size}
+            <input type="file" dir="ltr" name="newmedia[]" size="45">
+        </div>
+    </div>
+    <div class="uk-form-row">
+        <label class="uk-form-label">{lang_description}</label>
+        <div class="uk-form-controls">
+            <textarea name="description[]" cols="45" rows="2"></textarea>
+        </div>
+    </div>
+    <div class="uk-form-row">
+        <label class="uk-form-label">{public}</label>
+    </div>
+    <div class="uk-text-center">
+        <button class="uk-button uk-button-primary" type="submit" value="{lang_save}" name="mode">{lang_save}</button>
+        <button class="uk-button" type="submit" value="{lang_cancel}" name="mode">{lang_cancel}</button>
+    </div>
 </form>
 {# end {templatelocation} #}

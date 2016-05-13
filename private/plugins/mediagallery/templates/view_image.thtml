@@ -1,108 +1,162 @@
 {# begin {templatelocation} #}
 <script type="text/javascript">
-//<![CDATA[
-function popitup(url)
-{
-    newwindow=window.open(url,'name','height=600,width=450,resizable=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes');
-    if (window.focus) {newwindow.focus()}
-    return false;
-}
-//]]>
+    //<![CDATA[
+    function popitup(url)
+    {
+        newwindow=window.open(url,'name','height=600,width=450,resizable=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes');
+        if (window.focus) {newwindow.focus()}
+        return false;
+    }
+    //]]>
 </script>
 {lbslideshow}
-<table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:0px auto;">
-  <tr>
-    <td class="pluginCellTitle" style="text-align:left;" colspan="2">
-      <span style="font-weight:bold;">{album_title}</span></td>
-    <td class="pluginCellTitle" align="right">
-      <form name="mgsearch" id="mgsearch" method="post" action="{site_url}/search.php" style="margin:0;padding:0">
-      <div>
-      <input type="text" name="keywords" value="{keywords}"/>
-      <input type="hidden" name="mode" value="search"/>
-      <input type="hidden" name="swhere" value="0"/>
-      <input type="submit" value="{lang_search}"/>
-      </div>
-      </form>
-    </td>
-  </tr>
-  <tr class="pluginLinks" style="vertical-align:middle;">
-    <td colspan="4" style="vertical-align:middle;padding:2px 5px 2px 5px;">
-    <span style="float:left;vertical-align:middle;">{birdseed}</span>
-     </td>
-  </tr>
-  <tr class="pluginRow2">
-    <td style="width:50%;text-align:left;padding:2px 5px 2px 5px;" colspan="2">
-      {!if slide_show}
-      {slide_show}&nbsp;&nbsp;
-      {!endif}
-      {!if postcard_link}
-      {postcard_link}
-      {!endif}
-    </td>
-    <td style="width:50%;text-align:right;white-space:nowrap;padding:2px 5px 2px 0px;">{pagination}</td>
-  </tr>
-</table>
-<div class="mgPluginMI">
-<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0px auto;">
-  <tr>
-    <td align="center" colspan="3" class="pluginLinks" style="height:23px;font-weight:bold;vertical-align:middle;">
-        {media_title}
-    </td>
-  </tr>
-  <tr>
-    <td align="center" style="width:100%;" colspan="3">
-      <br/>
-      {image_detail}
-      <br/>
-    </td>
-  </tr>
-</table>
+
+<nav class="uk-navbar uk-margin-bottom">
+    <div class="uk-navbar-content uk-text-truncate">
+        <span class="uk-text-truncate">{album_title}</span>
+    </div>
+    <div class="uk-navbar-content uk-navbar-flip uk-hidden-small">
+        <form method="get" action="{site_url}/search.php" class="uk-form uk-search uk-margin-remove uk-display-inline-block" style="display: inline-block !important;">
+            <input type="search" class="uk-search uk-search-field" placeholder="{$LANG09[10]}" autocomplete="off" name="keywords">
+            {#      <input type="text" name="keywords" value="{keywords}"> #}
+            <input type="hidden" name="mode" value="search">
+            <input type="hidden" name="swhere" value="0">
+        </form>
+    </div>
+</nav>
+
+<div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin-remove">
+    <div class="uk-grid uk-margin-remove">
+        <div class="uk-width-1-1">
+            <ul class="uk-breadcrumb">
+                {birdseed_ul}
+            </ul>
+        </div>
+    </div>
+    <div class="uk-grid uk-margin-remove">
+        <div class="uk-width-1-2 uk-vertical-align">
+{!if slide_show}
+            <div class="uk-vertical-align-middle">{slide_show}&nbsp;&nbsp;</div>
+{!endif}
+{!if postcard_link}
+            <div class="uk-vertical-align-middle">{postcard_link}</div>
+{!endif}
+        </div>
+        <div class="uk-width-1-2 uk-vertical-align">
+            <div class="uk-align-right uk-vertical-align-middle">{pagination}</div>
+        </div>
+    </div>
 </div>
-<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0px auto;">
-  <tr class="pluginRow1">
-    <td align="center" style="width:100%;" colspan="3">{media_desc}</td>
-  </tr>
-  <tr class="pluginRow2">
-    <td style="width:33%;vertical-align:top;">&nbsp;&nbsp;{media_number}
-      <br/>&nbsp;&nbsp;{media_id}<br/>
-      {getid3}{media_properties}{getid3end}
-    </td>
-    <td align="center" style="vertical-align:middle;width:34%;">
-      {media_time}<br/>
-      {lang_comments} {media_comments}
-      {lang_views} {media_views}
-      {rating_box}
-      <div class="pluginSmallText"><span style="font-weight:bold;">{lang_keywords}</span> {media_keywords}</div>
-      <div><a href="#" onclick="return popitup('{property}')">{lang_property}</a></div>
-      <div>{edit_item}</div>
-    </td>
-    <td style="width:33%;text-align:right;vertical-align:top;white-space:nowrap;">
-      <span style="font-weight:bold;">{lang_uploaded_by}:</span>&nbsp;{owner_username}&nbsp;&nbsp;<br/><br/>
-      {download}
-      {shutterfly_submit}&nbsp;
-    </td>
-  </tr>
-  <tr class="pluginRow2">
-    <td align="center" colspan="3">{exif_info}</td>
-  </tr>
-</table>
-<table width="100%" cellspacing="0" border="0" cellpadding="0">
-<tr>
-<td style="text-align:right;white-space:nowrap;">{jumpbox}</td>
-</tr>
-</table>
+
+<div class="uk-panel uk-panel-box uk-text-center uk-margin-top">
+
+    <div class="uk-align-center">
+        {media_title}
+    </div>
+
+    <div class="uk-thumbnail">
+{!if media_link_start}
+    {media_link_start}
+{!endif}
+        <img src="{raw_image}">
+{!if media_link_end}
+    {media_link_end}
+{!endif}
+    </div>
+    <div class="uk-thumbnail-caption uk-text-center">
+        {media_desc}
+    </div>
+</div>
+
+<div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin-top">
+    <div class="uk-grid">
+        <div class="uk-width-1-4">
+            {media_number}
+            <div>{lang_comments} {media_comments}</div>
+            <div>{lang_views} {media_views}</div>
+        </div>
+        <div class="uk-width-2-4 uk-text-center">
+            <div>{media_time}</div>
+            <div class="uk-hidden-small">{rating_box}</div>
+            <div><span class="uk-text-bold">{lang_keywords}</span> {media_keywords}</div>
+            <div><a href="#" onclick="return popitup('{property}')">{lang_property}</a></div>
+            <div>{edit_item}</div>
+        </div>
+        <div class="uk-width-1-4 uk-text-right">
+            <span class="uk-text-bold">{lang_uploaded_by}:</span>&nbsp;{owner_username}&nbsp;&nbsp;<br/><br/>
+            {download}
+            {shutterfly_submit}&nbsp;
+            <i class="uk-align-right uk-icon-button uk-icon-small uk-icon-info" data-uk-modal="{target: '#metadata'}"></i>
+        </div>
+    </div>
+</div>
+<hr>
+
+<div class="uk-align-right">
+    {jumpbox}
+</div>
+
+
+<div id="metadata" class="uk-modal">
+    <div class="uk-modal-dialog">
+        <a class="uk-modal-close uk-close"></a>
+        <h3 class="uk-modal-header">{$LANG_MG03[media_properties]}</h3>
+        <table class="uk-table">
+            <tr>
+                <td>{$LANG_MG03[media_id]}</td>
+                <td>{media_id}</td>
+            </tr>
+            {!if getid3}
+            <tr>
+                <td>{$LANG_MG03[media_properties]}</td>
+                <td>{media_properties}</td>
+            </tr>
+            {!endif}
+            <tr>
+                <td>{$LANG_MG01[date]}</td>
+                <td>{media_time}</td>
+            </tr>
+            <tr>
+                <td>{lang_comments}</td>
+                <td>{media_comments}</td>
+            </tr>
+            <tr>
+                <td>{$LANG_MG03[views]}</td>
+                <td>{media_views}</td>
+            </tr>
+            {!if media_keywords}
+            <tr>
+                <td>{lang_keywords}</td>
+                <td>{media_keywords}</td>
+            </tr>
+            {!endif}
+            <tr>
+                <td>{lang_uploaded_by}</td>
+                <td>{owner_username}</td>
+            </tr>
+            {!if download}
+            <tr>
+                <td>{$LANG_MG03[download}}</td>
+                <td>{download}</td>
+            </tr>
+            {!endif}
+            {exif_info}
+        </table>
+        <div>{edit_item}</div>
+    </div>
+</div>
 {# JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor #}
 <script type="text/javascript">
-//<![CDATA[
-var el;
-el=document.getElementsByTagName('span');
-for(i=0;i<el.length;i++){
-    if(el[i].className == 'jsenabled_show'){
-        el[i].style.display = '';
-    } else if(el[i].className == 'jsenabled_hide'){
-        el[i].style.display = 'none';
+    //<![CDATA[
+    var el;
+    el=document.getElementsByTagName('span');
+    for(i=0;i<el.length;i++){
+        if(el[i].className == 'jsenabled_show'){
+            el[i].style.display = '';
+        } else if(el[i].className == 'jsenabled_hide'){
+            el[i].style.display = 'none';
+        }
     }
-}
-//]]>
+    //]]>
 </script>
 {# end {templatelocation} #}

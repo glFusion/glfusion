@@ -3,9 +3,11 @@
 
 {category_dropdown}
 {category_navigation}
-<br />
 
-<div class="aligncenter">[ <a href="{site_url}/links/index.php?mode=submit&amp;cid={cid_encoded}">{lang_addalink}</a> ]</div>
+<div class="uk-text-center">
+    [ <a href="{site_url}/links/index.php?mode=submit&amp;cid={cid_encoded}">{lang_addalink}</a> ]
+</div>
+
 {category_links}
 {page_navigation}
 

@@ -1,37 +1,45 @@
 {# begin {templatelocation} #}
-<form action="{site_url}/links/index.php" method="post">
-    <table class="width_and_padding">
-        <tr>
-            <td class="alignright_10"><b>{lang_title}:</b></td>
-            <td><input type="text" size="48" maxlength="96" name="title" value="{title}" /></td>
-        </tr>
-        <tr>
-            <td class="alignright"><b>{lang_link}:</b></td>
-            <td><input type="text" dir="ltr" size="48" maxlength="{max_url_length}" name="url" value="{url}" /></td>
-        </tr>
-        <tr>
-            <td class="alignright"><b>{lang_category}:</b></td>
-            <td>
-                <select name="categorydd">
-                    {link_category_options}
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td class="alignright_top"><b>{lang_description}:</b></td>
-            <td><textarea name="description" rows="8" cols="30" class="linkswidth_90">{description}</textarea></td>
-        </tr>
-        {captcha}
-        <tr>
-            <td class="aligncenter" colspan="2">{lang_htmlnotallowed}</td>
-        </tr>
-        <tr>
-            <td class="aligncenter" colspan="2">
-                <input type="hidden" name="mode" value="{lang_submit}" />
-                <input type="hidden" name="type" value="links" />
-                <input type="submit" value="{lang_submit}" />
-            </td>
-        </tr>
-    </table>
+<form class="uk-form" action="{site_url}/links/index.php" method="post">
+    <input type="hidden" name="mode" value="{lang_submit}">
+    <input type="hidden" name="type" value="links">
+
+    <div class="uk-form-row">
+        <label class="uk-form-label">{lang_title}</label>
+        <div class="uk-form-controls">
+            <input class="uk-form-width-large" type="text" maxlength="96" name="title" value="{title}">
+        </div>
+    </div>
+    <div class="uk-form-row">
+        <label class="uk-form-label">{lang_link}</label>
+        <div class="uk-form-controls">
+            <input class="uk-form-width-large" type="text" maxlength="{max_url_length}" name="url" value="{url}">
+        </div>
+    </div>
+    <div class="uk-form-row">
+        <label class="uk-form-label">{lang_category}</label>
+        <div class="uk-form-controls">
+            <select name="categorydd">
+                {link_category_options}
+            </select>
+        </div>
+    </div>
+    <div class="uk-form-row">
+        <label class="uk-form-label">{lang_description}</label>
+        <div class="uk-form-controls">
+            <textarea class="uk-form-width-large" name="description" rows="8" cols="30">{description}</textarea>
+        </div>
+    </div>
+
+    {captcha}
+
+    <div class="uk-form-row">
+        <div class="uk-alert uk-alert-danger">
+            {lang_htmlnotallowed}
+        </div>
+    </div>
+
+    <div class="uk-form-row uk-text-center">
+        <button class="uk-button uk-button-primary" type="submit" value="{lang_submit}">{lang_submit}</button>
+    </div>
 </form>
 {# end {templatelocation} #}

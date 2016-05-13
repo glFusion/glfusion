@@ -1,4 +1,8 @@
 {# begin {templatelocation} #}
-<td style="width:{width}%"><a href="{category_link}">{category_name}</a> {category_count}<br />
-{category_description}</td>
+<div class="uk-width-medium-1-{link_cols}">
+	<a href="{category_link}">{category_name}</a> {category_count}
+	<div class="uk-panel">
+		{category_description}
+	</div>
+</div>
 {# end {templatelocation} #}

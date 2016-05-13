@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
-<h3>{link_category}</h3>
-<ul class="top10links">
-  {link_details}
+<h2 class="uk-h2">{link_category}</h2>
+<ul class="uk-list">
+	{link_details}
 </ul>
 {# end {templatelocation} #}

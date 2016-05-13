@@ -1,33 +1,31 @@
 {# begin {templatelocation} #}
 {parent_album}
-<form name="sortalbum" method="post" action="{s_form_action}">
-  <div>
-  <table width="100%" border="0" cellspacing="0" cellpadding="5">
-    <tr>
-      <th style="text-align:left;">{lang_album_name_desc}</th>
-      <th>{lang_count}</th>
-      <th>{lang_order}</th>
-    </tr>
-    <!-- BEGIN AlbumRow -->
-    <tr class="pluginRow{row_class}">
-      <td style="width:80%;height:25px;">{album_title}</td>
-      <td style="text-align:center;">{media_count}</td>
-      <td style="text-align:right">
-        <input type="text" name="seq[]" value="{album_order}" size="4" />
-        <input type="hidden" name="aid[]" value="{album_id}" />
-      </td>
-    </tr>
-    <!-- END AlbumRow -->
-  </table>
-<br />
-<div style="text-align:center;">
-<input type="hidden" name="parent_id" value="{parent_id}" />
-<input type="hidden" name="action" value="albumsort" />
-<input type="hidden" name="album_id" value="0" />
-<input type="submit" name="mode" value="{lang_save}" />
-<input type="submit" name="mode" value="{lang_cancel}" />
-<input type="reset"  name="mode" value="{lang_reset}" />
-</div>
-</div>
+<form class="uk-form uk-form-horizontal" name="sortalbum" method="post" action="{s_form_action}">
+	<input type="hidden" name="parent_id" value="{parent_id}">
+	<input type="hidden" name="action" value="albumsort">
+	<input type="hidden" name="album_id" value="0">
+	<table class="uk-table uk-table-hover">
+		<tr>
+			<th>{lang_album_name_desc}</th>
+			<th>{lang_count}</th>
+			<th>{lang_order}</th>
+		</tr>
+		<!-- BEGIN AlbumRow -->
+		<tr>
+			<td style="width:80%;height:25px;">{album_title}</td>
+			<td style="text-align:center;">{media_count}</td>
+			<td style="text-align:right">
+				<input type="text" name="seq[]" value="{album_order}" size="4">
+				<input type="hidden" name="aid[]" value="{album_id}">
+			</td>
+		</tr>
+		<!-- END AlbumRow -->
+	</table>
+
+	<div class="uk-text-center">
+		<button class="uk-button uk-button-success" type="submit" name="mode" value="{lang_save}">{lang_save}</button>
+		<button class="uk-button" type="submit" name="mode" value="{lang_cancel}">{lang_cancel}</button>
+		<button class="uk-button" type="reset"  name="mode" value="{lang_reset}">{lang_reset}</button>
+	</div>
 </form>
 {# end {templatelocation} #}

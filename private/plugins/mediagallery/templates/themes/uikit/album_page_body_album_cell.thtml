@@ -1,0 +1,9 @@
+{# begin {templatelocation} #}
+<a name="{media_id}"></a>
+<figure class="uk-overlay uk-overlay-hover uk-thumbnail">
+	{media_item_thumbnail}
+{!if album_title}
+	<figcaption class="uk-overlay-panel uk-overlay-background uk-overlay-bottom uk-overlay-fade">{lang_album} {album_title}</figcaption>
+{!endif}
+</figure>
+{# end {templatelocation} #}

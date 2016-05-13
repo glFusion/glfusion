@@ -1,7 +1,5 @@
 {# begin {templatelocation} #}
-<table class="forum-pluginFooter">
-    <tr>
-        <td class="forum-time aligncenter">&nbsp;{message}</td>
-    </tr>
-</table>
+<div class="uk-text-muted uk-margin-small">
+{message}
+</div>
 {# end {templatelocation} #}

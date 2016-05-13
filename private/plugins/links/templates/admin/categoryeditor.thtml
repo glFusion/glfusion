@@ -1,74 +1,73 @@
 {# begin {templatelocation} #}
-<p>{instructions}</p>
-<br style="clear:both" />
-    <form action="{site_admin_url}/plugins/links/category.php" method="post">
-        <table class="categoryeditor">
-            <tr>
-                <td class="cat-parent">{lang_parent}</td>
-                <td><select name="pid">{category_options}</select></td>
-            </tr>
-            <tr>
-                <td class="alignright">{lang_category}</td>
-                <td><input type="text" name="category" size="32" maxlength="32" value="{category_value}" /></td>
-            </tr>
-            <tr>
-                <td class="alignright">{lang_cid}</td>
-                <td><input type="text" name="cid" size="32" maxlength="32" value="{cid_value}" /></td>
-            </tr>
-            <tr>
-                <td class=alignright">{lang_description}</td>
-                <td><input type="text" name="description" size="50" maxlength="255" value="{description_value}" /></td>
-            </tr>
-            <tr>
-                <td class="alignright">{lang_topic}</td>
-                <td>{topic_selection}<td>
-            </tr>
-            <tr>
-                <td colspan="2"><div class="horizontal-line"></div></td>
-            </tr>
-            <tr>
-                <td colspan="2"><b>{lang_accessrights}</b></td>
-            </tr>
-            <tr>
-                <td class="alignright">{lang_owner}:</td>
-                <td>{owner_name}<input type="hidden" name="owner_id" value="{cat_ownerid}" /></td>
-            </tr>
-            <tr>
-                <td class="alignright">{lang_group}:</td>
-                <td>
-                    {group_dropdown}
-                </td>
-            <tr>
-            <tr>
-                <td colspan="2"><b>{lang_permissions}</b></td>
-            </tr>
-            <tr>
-                <td colspan="2"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>{lang_permissionskey}</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    {permissions_editor}
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>{lang_lockmsg}<td>
-            </tr>
-            <tr><td>&nbsp;</td></tr>
-            <tr>
-                <td colspan="2">
-                    <input type="hidden" value="{old_cid_value}" name="old_cid" />
-                    <input type="submit" value="{lang_save}" name="save" />
-                    <input type="submit" value="{lang_cancel}" name="cancel" />
-                    {delete_option}
-                    <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
-                </td>
-            </tr>
-        </table>
-    </form>
+<div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin">
+	{instructions}
+</div>
+<form class="uk-form uk-form-horizontal" action="{site_admin_url}/plugins/links/category.php" method="post">
+	<input type="hidden" value="{old_cid_value}" name="old_cid">
+	<input type="hidden" name="{gltoken_name}" value="{gltoken}">
+
+	<div class="uk-form-row">
+		<label for="pid" class="uk-form-label">{lang_parent}</label>
+		<div class="uk-form-controls">
+			<select id="pid" name="pid">
+				{category_options}
+			</select>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label for="category" class="uk-form-label">{lang_category}</label>
+		<div class="uk-form-controls">
+			<input class="uk-form-width-large" type="text" id="category" name="category" maxlength="32" value="{category_value}">
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label for="cid" class="uk-form-label">{lang_cid}</label>
+		<div class="uk-form-controls">
+			<input class="uk-form-width-medium" type="text" id="cid" name="cid" maxlength="32" value="{cid_value}">
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label for="description" class="uk-form-label">{lang_description}</label>
+		<div class="uk-form-controls">
+			<input class="uk-form-width-large" type="text" id="description" name="description" maxlength="255" value="{description_value}">
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label for="topic" class="uk-form-label">{lang_topic}</label>
+		<div class="uk-form-controls">
+			{topic_selection}
+		</div>
+	</div>
+	<fieldset class="uk-margin">
+		<legend>{lang_accessrights}</legend>
+		<div class="uk-form-row">
+			<label for="owner_id" class="uk-form-label">{lang_owner}</label>
+			<div class="uk-form-controls">
+				{owner_name}<input type="hidden" name="owner_id" value="{cat_ownerid}">
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label for="group_id" class="uk-form-label">{lang_group}</label>
+			<div class="uk-form-controls">
+				{group_dropdown}
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_permissions}</label>
+			<div class="uk-form-controls">
+				{permissions_editor}
+			</div>
+		</div>
+		<div class="uk-alert uk-alert-primary">
+			{lang_lockmsg}
+		</div>
+	</fieldset>
+	<div class="uk-form-row uk-text-center">
+		<button class="uk-button uk-button-primary" type="submit" value="{lang_save}" name="save">{lang_save}</button>
+		<button class="uk-button" type="submit" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
+{!if delete_option}
+		<button class="uk-button uk-button-danger" type="submit" value="{$LANG_ADMIN[delete]}" name="delete" onclick="return confirm('{delete_confirm_msg}');">{$LANG_ADMIN[delete]}</button>
+{!endif}
+	</div>
+</form>
 {# end {templatelocation} #}

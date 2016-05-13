@@ -1,4 +1,6 @@
 {# begin {templatelocation} #}
+<div style="width:{width}px;margin:0 auto;">
+
 <script type="text/javascript">
 	var flashvars = {};
     var params = {
@@ -25,5 +27,6 @@
 		<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
 	</a>
   </div>
+</div>
 </div>
 {# end {templatelocation} #}

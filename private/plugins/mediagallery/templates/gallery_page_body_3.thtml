@@ -1,31 +1,25 @@
 {# begin {templatelocation} #}
-<table cellpadding="0" cellspacing="0" style="width:100%;border:none;margin:0px auto;">
-    <!-- BEGIN AlbumRow -->
-    <tr>
-    <!-- BEGIN AlbumColumn -->
-      <td style="width:{column_width};vertical-align:top;">
-        <div class="mgPluginMI">
-		<table cellspacing="0" cellpadding="0" style="width:100%;border:none;margin:0px auto;">
-		  <tr style="height:196px;">
-			<td align="center" style="vertical-align:middle;padding:0;">
-              {media_item_thumbnail}
-			</td>
-		  </tr>
-		  <tr>
-			<td align="center" style="vertical-align:top;">
-			  <div><span style="font-weight:bold;">{album_title}</span> ({subalbum_media_count})</div>
-              <div style="padding:5px;"><span class="pluginSmallText">{album_desc}</span></div>
-              <div><span style="font-weight:bold;">{updated_prompt}</span> {album_last_update}</div>
-              <div>{subalbumlist}</div>
-            </td>
-          </tr>
-		</table>
-		</div>
-      </td>
-    <!-- END AlbumColumn -->
-    </tr>
-    <!-- END AlbumRow -->
-</table>
-<div class="pluginRow2" style="vertical-align:middle;padding:5px;text-align:center;">{bottom_pagination}</div>
-<br />
+
+<ul class="wallpapers uk-grid uk-grid-width-small-1-2 uk-grid-width-medium-1-2 uk-grid-width-large-1-3" data-uk-grid-margin>
+  <!-- BEGIN AlbumRow -->
+  <!-- BEGIN AlbumColumn -->
+
+  <li>
+    <figure class="thumbnail shadow min-250 uk-img-preserve">
+
+        {media_item_thumbnail}
+
+      <figcaption class="thumbnail-details">
+        <div class="inner">
+            <h2 class="thumbnail-title uk-comment-title uk-text-center uk-text-truncate">{album_title}</h2>
+  		</div>
+	</figcaption>
+	</figure>
+</li>
+
+  <!-- END AlbumColumn -->
+  <!-- END AlbumRow -->
+</ul>
+
+<div>{bottom_pagination}</div>
 {# end {templatelocation} #}

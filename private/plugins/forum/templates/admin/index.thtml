@@ -1,70 +1,61 @@
 {# begin {templatelocation} #}
 {block_start}
 {admin_menu}
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:5px;">
-  <tr>
-    <td class="pluginCellTitle alignleft">{statsmsg}</td>
-  </tr>
-</table>
-<table width="100%" border="0" cellspacing="1" cellpadding="3" class="pluginSolidOutline">
-  <tr class="pluginRow1">
-    <td width="80%" style="padding:5px;">{totalcatsmsg}</td>
-    <td style="padding-left:20px;">{totalcats}</td>
-  </tr>
-  <tr class="pluginRow2">
-    <td style="padding:5px;">{totalforumsmsg}</td>
-    <td style="padding-left:20px;">{totalforums}</td>
-  </tr>
-  <tr class="pluginRow1">
-    <td style="padding:5px;">{totaltopicsmsg}</td>
-    <td style="padding-left:20px;">{totaltopics}</td>
-  </tr>
-  <tr class="pluginRow2">
-    <td style="padding:5px;">{totalpostsmsg}</td>
-    <td style="padding-left:20px;">{totalposts}</td>
-  </tr>
-  <tr class="pluginRow1">
-    <td style="padding:5px;">{totalviewsmsg}</td>
-    <td style="padding-left:20px;">{totalviews}</td>
-  </tr>
-</table>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-  <tr>
-    <td class="pluginCellTitle alignleft">{avgpmsg}</td>
-  </tr>
-</table>
-<table width="100%" border="0" cellspacing="1" cellpadding="3" class="pluginSolidOutline">
-  <tr class="pluginRow1">
-    <td width="80%" style="padding:5px;">{category}</td>
-    <td style="padding-left:20px;">{avgcposts}</td>
-  </tr>
-  <tr class="pluginRow2">
-    <td style="padding:5px;">{forum}</td>
-    <td style="padding-left:20px;">{avgfposts}</td>
-  </tr>
-  <tr class="pluginRow1">
-    <td style="padding:5px;">{topic}</td>
-    <td style="padding-left:20px;">{avgtposts}</td>
-  </tr>
-</table>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-  <tr>
-    <td class="pluginCellTitle alignleft">{avgvmsg}</td>
-  </tr>
-</table>
-<table width="100%" border="0" cellspacing="1" cellpadding="3" class="pluginSolidOutline">
-  <tr class="pluginRow1">
-    <td width="80%" style="padding:5px;">{category}</td>
-    <td style="padding-left:20px;">{avgcviews}</td>
-  </tr>
-  <tr class="pluginRow2">
-    <td style="padding:5px;">{forum}</td>
-    <td style="padding-left:20px;">{avgfviews}</td>
-  </tr>
-  <tr class="pluginRow1">
-    <td style="padding:5px;">{topic}</td>
-    <td style="padding-left:20px;">{avgtviews}</td>
-  </tr>
-</table>
 {block_end}
+<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed">
+  <tr>
+    <th colspan="2" class="uk-text">{statsmsg}</th>
+  </tr>
+  <tr>
+    <td>{totalcatsmsg}</td>
+    <td class="uk-text-right">{totalcats}</td>
+  </tr>
+
+  <tr>
+    <td>{totalforumsmsg}</td>
+    <td class="uk-text-right">{totalforums}</td>
+  </tr>
+  <tr>
+    <td>{totaltopicsmsg}</td>
+    <td class="uk-text-right">{totaltopics}</td>
+  </tr>
+  <tr>
+    <td>{totalpostsmsg}</td>
+    <td class="uk-text-right">{totalposts}</td>
+  </tr>
+  <tr>
+    <td>{totalviewsmsg}</td>
+    <td class="uk-text-right">{totalviews}</td>
+  </tr>
+  <tr>
+    <th colspan="2">{avgpmsg}</th>
+  </tr>
+  <tr>
+    <td>{category}</td>
+    <td class="uk-text-right">{avgcposts}</td>
+  </tr>
+  <tr>
+    <td>{forum}</td>
+    <td class="uk-text-right">{avgfposts}</td>
+  </tr>
+  <tr>
+    <td>{topic}</td>
+    <td class="uk-text-right">{avgtposts}</td>
+  </tr>
+  <tr>
+    <th colspan="2">{avgvmsg}</th>
+  </tr>
+  <tr>
+    <td>{category}</td>
+    <td class="uk-text-right">{avgcviews}</td>
+  </tr>
+  <tr>
+    <td>{forum}</td>
+    <td class="uk-text-right">{avgfviews}</td>
+  </tr>
+  <tr>
+    <td>{topic}</td>
+    <td class="uk-text-right">{avgtviews}</td>
+  </tr>
+</table>
 {# end {templatelocation} #}

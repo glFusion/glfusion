@@ -3,301 +3,396 @@
 {wysiwyg}
 {!endif}
 <div class="forumpost">
-  <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:2px;">
-    <tr>
-      <td><img src="{navbreadcrumbsimg}" alt=""/></td>
-      <td class="alignleft" width="100%" style="white-space:nowrap;">
-        &nbsp;
-        <a href="{site_url}/forum/index.php">
-          {forum_home}
-        </a>
-        &nbsp;&#62;&nbsp;
-        <a href="{site_url}/forum/index.php">
-          {cat_name}
-        </a>&nbsp;&#62;&nbsp;
-        <a href="{site_url}/forum/index.php?forum={forum_id}">
-          {forum_name}
-        </a>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2" style="padding-bottom:5px;">
-        <img src="{navtopicimg}" alt=""/>&nbsp;<b>
+	<div class="uk-grid">
+		<div class="uk-width-1-1">
+			<ul class="uk-breadcrumb uk-margin-remove">
+				<li><i class="uk-icon-home"></i></li>
+				<li><a href="{site_url}/forum/index.php">{forum_home}</a></li>
+				<li><a href="{site_url}/forum/index.php?cat={cat_id}"">{cat_name}</a></li>
+				<li class="uk-active"><a href="{site_url}/forum/index.php?forum={forum_id}">{forum_name}</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="uk-grid uk-margin-top-remove">
+		<div class="uk-width-3-4">
+			<div class="uk-align-left uk-margin-small">
+				<span class="uk-text-large">
 {!if topic_id}
-        <a href="viewtopic.php?showtopic={topic_id}">
+					<a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}">{subject}</a>
+{!else}
+					{subject}
 {!endif}
-        {subject}
-{!if topic_id}
-        </a>
+				</span>
+			</div>
+		</div>
+	</div>
+	<div class="uk-grid uk-margin-top-remove">
+		<div class="uk-width-1-1">
+{!if preview_post}
+			{preview_post}
 {!endif}
-        </b>
-      </td>
-    </tr>
-  </table>
-
-  {preview_post}
 
 {!if html_mode}
 {!else}
-  <script type="text/javascript">
-  // Helpline messages
-  b_help = "{LANG_bhelp}";
-  i_help = "{LANG_ihelp}";
-  u_help = "{LANG_uhelp}";
-  q_help = "{LANG_qhelp}";
-  c_help = "{LANG_chelp}";
-  l_help = "{LANG_lhelp}";
-  o_help = "{LANG_ohelp}";
+			<script type="text/javascript">
+				/* Helpline messages */
+				b_help = "{LANG_bhelp}";
+				i_help = "{LANG_ihelp}";
+				u_help = "{LANG_uhelp}";
+				q_help = "{LANG_qhelp}";
+				c_help = "{LANG_chelp}";
+				l_help = "{LANG_lhelp}";
+				o_help = "{LANG_ohelp}";
 {!if allow_img_bbcode}
-  p_help = "{LANG_phelp}";
+				p_help = "{LANG_phelp}";
 {!endif}
-  w_help = "{LANG_whelp}";
-  a_help = "{LANG_ahelp}";
-  s_help = "{LANG_shelp}";
-  f_help = "{LANG_fhelp}";
-  h_help = "{LANG_hhelp}";
-  t_help = "{LANG_thelp}";
-  e_help = "{LANG_ehelp}";
-  </script>
-
-  <script type="text/javascript" src="{site_url}/forum/javascript/createtopic.js"></script>
-  <script type="text/javascript">
-      var site_url = '{site_url}';
-      $(window).load(function() {
-        $( "#toggleV" ).click(function() {
-        $( "#smileys" ).slideToggle( "fast" );
-      });
-      $("#smileys").hide();
-      });
-  </script>
+				w_help = "{LANG_whelp}";
+				a_help = "{LANG_ahelp}";
+				s_help = "{LANG_shelp}";
+				f_help = "{LANG_fhelp}";
+				h_help = "{LANG_hhelp}";
+				t_help = "{LANG_thelp}";
+				e_help = "{LANG_ehelp}";
+			</script>
+			<script type="text/javascript" src="{site_url}/forum/javascript/createtopic.js"></script>
+			<script type="text/javascript">
+				var site_url = '{site_url}';
+				$(window).load(function() {
+					$( "#toggleV" ).click(function() {
+						$( "#smileys" ).slideToggle( "fast" );return false;
+					});
+					$("#smileys").hide();
+				});
+			</script>
 {!endif}
-<script type="text/javascript" src="{site_url}/forum/javascript/ajax_deletefile.js"></script>
+			<script type="text/javascript" src="{site_url}/forum/javascript/ajax_deletefile.js"></script>
 
 {!if error_msg}
-  <div class="pluginAlert"">{error_msg}</div>
+			<div class="uk-alert uk-alert-danger" data-uk-alert>
+				<a href="" class="uk-alert-close uk-close"></a>
+				<p>{error_msg}</p>
+			</div>
 {!endif}
-
-  <form action="{form_action}" method="post" enctype="multipart/form-data" name="forumpost" style="margin:0px;">
-    <input type="hidden" name="forum" value="{forum_id}"/>
-    <input type="hidden" name="id" value="{hidden_id}"/>
+			<h2 class="uk-margin-small">{post_message}</h2>
+			<div class="uk-panel uk-panel-box">
+				<form  class="uk-form uk-form-horizontal" id="forumpost" name="forumpost" action="{form_action}" method="post" enctype="multipart/form-data">
+					<input type="hidden" name="forum" value="{forum_id}">
+					<input type="hidden" name="id" value="{hidden_id}">
 {!if hidden_modedit}
-    <input type="hidden" name="modedit" value="{hidden_modedit}"/>
+					<input type="hidden" name="modedit" value="{hidden_modedit}">
 {!endif}
-    <input type="hidden" name="mode" value="{save_button}" />
-    <input type="hidden" name="action" value="{hidden_action}"/>
-    <input type="hidden" name="editpost" value="{hidden_editpost}"/>
-    <input type="hidden" name="editpid" value="{hidden_editpid}"/>
-    <input type="hidden" name="editid" value="{hidden_editid}"/>
-    <input type="hidden" name="page" value="{page}"/>
-    <input type="hidden" name="uniqueid" value="{uniqueid}"/>
-    <input type="hidden" name="referer" value="{referer}"/>
-    <input type="hidden" name="postmode" value="{postmode}" />
-    <input type="hidden" name="{token_name}" value="{token}"/>
-
+					<input type="hidden" name="mode" value="{save_button}" >
+					<input type="hidden" name="action" value="{hidden_action}">
+					<input type="hidden" name="editpost" value="{hidden_editpost}">
+					<input type="hidden" name="editpid" value="{hidden_editpid}">
+					<input type="hidden" name="editid" value="{hidden_editid}">
+					<input type="hidden" name="page" value="{page}">
+					<input type="hidden" name="uniqueid" value="{uniqueid}">
+					<input type="hidden" name="referer" value="{referer}">
+					<input type="hidden" name="postmode" value="{postmode}" >
+					<input type="hidden" name="{token_name}" value="{token}">
 {!if anonymous_user}
-    <table width="100%" border="0" cellspacing="1" cellpadding="4" class="pluginSolidOutline alignleft">
-      <tr>
-        <td colspan="2" class="pluginCellSubTitle" width="120px">&nbsp;<b>{post_message}</b></td>
-      </tr>
-      <tr>
-        <td class="pluginCellSubTitle" width="20%">&nbsp;{LANG_NAME}</td>
-        <td class="pluginCellText pluginCellFill">
-          <input type="text" name="name" value="{name}" size="40" maxlength="50" tabindex="1"/>
-          &nbsp;&nbsp;
-        </td>
-      </tr>
+					<div class="uk-form-row uk-margin-small">
 
-      <tr>
-{!endif}
-
-{!if member_user}
-    <table width="100%" border="0" cellspacing="1" cellpadding="3" class="pluginSolidOutline alignleft">
-      <tr>
-        <td colspan="2" class="pluginCellSubTitle" width="120px">&nbsp;<b>{post_message}</b></td>
-      </tr>
-      <tr>
-        <td class="pluginCellSubTitle">
-          &nbsp;{LANG_NAME}
-          <div style="background:transparent; width:110px; height:1px;"></div>
-        </td>
-        <td class="pluginCellText pluginCellFill" width="90%">
-          <input type="hidden" name="name" size="35" value="{username}"/>{username}
-        </td>
-      </tr>
-{!endif}
-
+						<label class="uk-form-label" for="name">{LANG_NAME}</label>
+						<div class="uk-form-controls">
+							<input type="text" id="name" name="name" value="{name}" maxlength="50" tabindex="1">
 {!if LANG_MOOD}
-      <tr>
-        <td class="pluginCellSubTitle">&nbsp;{LANG_MOOD}</td>
-        <td class="pluginCellText pluginCellFill"><select name="mood" style="width:150px; text-indent: 0px;" tabindex="2">{moodoptions}</select></td>
-      </tr>
+							<div class="uk-form-controls uk-align-right">
+								<span class="uk-text-bold">{LANG_MOOD}</span>
+								<select  id="mood" name="mood">{moodoptions}</select>
+							</div>
 {!endif}
-      <tr>
-        <td class="pluginCellSubTitle">&nbsp;{LANG_SUBJECT}:</td>
-        <td class="pluginCellText pluginCellFill">
-          <input type="text" name="subject" value="{subject}" id="subject" tabindex="5" size="70"/>
-        </td>
-      </tr>
+
+						</div>
+					</div>
+{!endif}
+{!if member_user}
+					<div class="uk-form-row uk-margin-small">
+						<label class="uk-form-label" for="name">{LANG_NAME}</label>
+						<div class="uk-form-controls">
+							<input type="hidden" id="name" name="name" size="35" value="{username}">{username}
+{!if LANG_MOOD}
+							<div class="uk-form-controls uk-align-right">
+								<span class="uk-text-bold">{LANG_MOOD}</span>
+								<select  id="mood" name="mood">{moodoptions}</select>
+							</div>
+{!endif}
+						</div>
+					</div>
+{!endif}
+					<div class="uk-form-row uk-margin-small">
+						<label class="uk-form-label" for="subject">{LANG_SUBJECT}</label>
+						<div class="uk-form-controls">
+							<input class="uk-width-2-3" type="text" id="subject" name="subject" value="{subject}" tabindex="5">
+						</div>
+					</div>
+{!if wysiwyg}
+					<div class="uk-form-row uk-margin-small">
+						<input class="uk-button" type="button" value="{visual_editor}" onclick="won('comment')">
+						<input class="uk-button" type="button" value="{html_editor}"  onclick="woff('comment')">
+					</div>
+{!endif}
 
 {!if html_mode}
 {!else}
-      <tr>
-        <td class="pluginCellSubTitle">&nbsp;{LANG_code}:</td>
-        <td class="pluginCellText pluginCellFill" style="line-height:100%;">&nbsp;
-        <input class="button2" type="button" title="{$LANG_GF01[b_help]}" onclick="bbstyle(0)" style="font-weight: bold; width: 30px;" value=" B " name="addbbcode0" accesskey="b"/>
-        <input class="button2" type="button" title="{$LANG_GF01[i_help]}" onclick="bbstyle(2)" style="font-style: italic; width: 30px;" value=" i " name="addbbcode2" accesskey="i"/>
-        <input class="button2" type="button" title="{$LANG_GF01[u_help]}" onclick="bbstyle(4)" style="text-decoration: underline; width: 30px;" value=" u " name="addbbcode4" accesskey="u"/>
-        <input class="button2" type="button" title="{$LANG_GF01[q_help]}" onclick="bbstyle(6)" style="width: 50px;" value="Quote" name="addbbcode6" accesskey="q"/>
-        <input class="button2" type="button" title="{$LANG_GF01[c_help]}" onclick="bbstyle(8)" style="width: 40px;" value="Code" name="addbbcode8" accesskey="c"/>
-        <input class="button2" type="button" title="{$LANG_GF01[l_help]}" onclick="bbstyle(10)" style="width: 40px;" value="List" name="addbbcode10" accesskey="l"/>
-        <input class="button2" type="button" title="{$LANG_GF01[o_help]}" onclick="bbstyle(12)" style="width: 40px;" value="List=" name="addbbcode12" accesskey="o"/>
-        <input class="button2" type="button" title="{$LANG_GF01[e_help]}" onclick="bbstyle(-1)" style="width: 40px;" value="[*]" name="addlitsitem" accesskey="t"/>
+					<div class="uk-form-row">
+						<div class="uk-form-row uk-margin-small">
+							<button class="uk-button uk-icon-bold uk-icon-mini" onclick="bbstyle(0);return false;" title="{$LANG_GF01[b_help]}"></button>
+							<button class="uk-button uk-icon-italic uk-icon-mini" onclick="bbstyle(2);return false;" title="{$LANG_GF01[i_help]}"></button>
+							<button class="uk-button uk-icon-underline uk-icon-mini" onclick="bbstyle(4);return false;" title="{$LANG_GF01[u_help]}"></button>
+							<button class="uk-button uk-icon-quote-right uk-icon-mini" onclick="bbstyle(6);return false;" title="{$LANG_GF01[q_help]}"></button>
+							<button class="uk-button uk-icon-code uk-icon-mini" onclick="bbstyle(8);return false;" title="{$LANG_GF01[c_help]}"></button>
+							<button class="uk-button uk-icon-list-ul uk-icon-mini" onclick="bbstyle(10);return false;" title="{$LANG_GF01[l_help]}"></button>
+							<button class="uk-button uk-icon-list-ol uk-icon-mini" onclick="bbstyle(12);return false;" title="{$LANG_GF01[o_help]}"></button>
+							<button class="uk-button uk-icon-list uk-icon-mini" onclick="bbstyle(-1);return false;" title="{$LANG_GF01[e_help]}"></button>
 {!if allow_img_bbcode}
-        <input class="button2" type="button" title="{$LANG_GF01[p_help]}" onclick="bbstyle(15)" style="width: 40px;" value="Img" name="addbbcode15" accesskey="p"/>
+							<button class="uk-button uk-icon-image uk-icon-mini" onclick="bbstyle(15);return false;" title="{$LANG_GF01[p_help]}"></button>
 {!endif}
-        <input class="button2" type="button" title="{$LANG_GF01[t_help]}" onclick="bbstyle(19)" style="width: 40px;"  value="File" name="addbbcode19"  accesskey="t"/>
-        <input class="button2" type="button" title="{$LANG_GF01[w_help]}" onclick="bbstyle(17)" style="width: 40px;" value="URL" name="addbbcode17" accesskey="w"/>
+							<button class="uk-button uk-icon-file-archive-o uk-icon-mini" onclick="bbstyle(19);return false;" title="{$LANG_GF01[t_help]}"></button>
+							<button class="uk-button uk-icon-link uk-icon-mini" onclick="bbstyle(17);return false;" title="{$LANG_GF01[w_help]}"></button>
 {!if smiley_enabled}
-        <input class="button2" type="button" title="{$LANG_GF01[smiley]}" style="text-decoration: none; width: 60px;" value="{$LANG_GF01[smiley]}" name="toggleV" id="toggleV" />
+							<button class="uk-button uk-icon-smile-o uk-icon-mini" name="toggleV" id="toggleV" title="{$LANG_GF01[smiley]}"></button>
 {!endif}
-        <input class="button2" type="button" title="{$LANG_GF01[h_help]}" name="help" value="Help?" style="text-align:center; width:5em;" onclick="poptastic('{site_url}/forum/bbcode.html');"/>
+							<div class="uk-button-dropdown uk-margin-remove" data-uk-dropdown="{mode:'click'}">
+								<button class="uk-button" onclick="return false;">Font&nbsp;<i class="uk-icon-caret-down"></i></button>
+								<div class="uk-dropdown uk-dropdown-small">
+									<ul class="uk-nav uk-nav-dropdown">
+										<li style="font-size:7px;"><a href="javascript:void(0);" onclick="bbfontstyle('[size=7]','[/size]');return false;">{LANG_tiny}</a></li>
+										<li style="font-size:9px;"><a href="javascript:void(0);" onclick="bbfontstyle('[size=9]','[/size]');return false;">{LANG_small}</a></li>
+										<li style="font-size:12px;"><a href="javascript:void(0);" onclick="bbfontstyle('[size=12]','[/size]');return false;">{LANG_normal}</a></li>
+										<li style="font-size:18px;"><a href="javascript:void(0);" onclick="bbfontstyle('[size=18]','[/size]');return false;">{LANG_large}</a></li>
+										<li style="font-size:24px;"><a href="javascript:void(0);" onclick="bbfontstyle('[size=24]','[/size]');return false;">{LANG_huge}</a></li>
+									</ul>
+								</div>
+							</div>
 
-        <div style="padding-top:8px;padding-left:5px;">{LANG_fontsize}:&nbsp;
-        <select title="{LANG_fontsize}:: [size=9]small text[/size]" onchange="bbfontstyle('[size=' + this.form.addbbcode20.options[this.form.addbbcode20.selectedIndex].value + ']', '[/size]');this.form.addbbcode20.selectedIndex = 2;" name="addbbcode20">
-          <option value="7">{LANG_tiny}</option>
-          <option value="9">{LANG_small}</option>
-          <option selected="selected" value="12">{LANG_normal}</option>
-          <option value="18">{LANG_large}</option>
-          <option value="24">{LANG_huge}</option>
-        </select>
-        &nbsp;{LANG_fontcolor}:
-        <select title="{LANG_fontcolor}::[color=orange]text[/color]" name="addbbcode18" onchange="bbfontstyle('[color=' + this.form.addbbcode18.options[this.form.addbbcode18.selectedIndex].value + ']', '[/color]')">
-          <option style="color:black;" value="#">{LANG_default}</option>
-          <option style="color:darkred;" value="darkred">{LANG_dkred}</option>
-          <option style="color:red;" value="red">{LANG_red}</option>
-          <option style="color:orange;" value="orange">{LANG_orange}</option>
-          <option style="color:brown;" value="brown">{LANG_brown}</option>
-          <option style="color:yellow;" value="yellow">{LANG_yellow}</option>
-          <option style="color:green;" value="green">{LANG_green}</option>
-          <option style="color:olive;" value="olive">{LANG_olive}</option>
-          <option style="color:cyan;" value="cyan">{LANG_cyan}</option>
-          <option style="color:blue;" value="blue">{LANG_blue}</option>
-          <option style="color:darkblue;" value="darkblue">{LANG_dkblue}</option>
-          <option style="color:indigo;" value="indigo">{LANG_indigo}</option>
-          <option style="color:violet;" value="violet">{LANG_violet}</option>
-          <option style="color:white;" value="white">{LANG_white}</option>
-          <option style="color:black;" value="black">{LANG_black}</option>
-        </select>
-        </div>
-        </td>
-      </tr>
-      {bbcode_buttons}
+							<div class="uk-button-dropdown uk-margin-remove"  data-uk-dropdown="{mode:'click'}">
+								<button class="uk-button" onclick="return false;">Color&nbsp;<i class="uk-icon-caret-down"></i></button>
+								<div class="uk-dropdown uk-dropdown-small">
+									<ul class="uk-nav uk-nav-dropdown">
+										<li style="color:#000;"><a href="javascript:void(0);" onclick="bbfontstyle('[color=black]','[/color]');return false;">{LANG_default}</a></li>
+										<li style="color:#8b0000;"><a href="javascript:void(0);" onclick="bbfontstyle('[color=darkred]','[/color]');return false;">{LANG_dkred}</a></li>
+										<li style="color:red;"><a href="javascript:void(0);" onclick="bbfontstyle('[color=red]','[/color]');return false;">{LANG_red}</a></li>
+										<li style="color:orange;"><a href="javascript:void(0);" onclick="bbfontstyle('[color=orange]','[/color]');return false;">{LANG_orange}</a></li>
+										<li style="color:brown;"><a href="javascript:void(0);" onclick="bbfontstyle('[color=brown]','[/color]');return false;">{LANG_brown}</a></li>
+										<li style="color:yellow;"><a href="javascript:void(0);" onclick="bbfontstyle('[color=yellow]','[/color]');return false;">{LANG_yellow}</a></li>
+										<li style="color:green;"><a href="javascript:void(0);" onclick="bbfontstyle('[color=green]','[/color]');return false;">{LANG_green}</a></li>
+										<li style="color:olive;"><a href="javascript:void(0);" onclick="bbfontstyle('[color=olive]','[/color]');return false;">{LANG_olive}</a></li>
+										<li style="color:cyan;"><a href="javascript:void(0);" onclick="bbfontstyle('[color=cyan]','[/color]');return false;">{LANG_cyan}</a></li>
+										<li style="color:blue;"><a href="javascript:void(0);" onclick="bbfontstyle('[color=blue]','[/color]');return false;">{LANG_blue}</a></li>
+										<li style="color:darkblue;"><a href="javascript:void(0);" onclick="bbfontstyle('[color=darkblue]','[/color]');return false;">{LANG_dkblue}</a></li>
+										<li style="color:indigo;"><a href="javascript:void(0);" onclick="bbfontstyle('[color=indigo]','[/color]');return false;">{LANG_indigo}</a></li>
+										<li style="color:violet;"><a href="javascript:void(0);" onclick="bbfontstyle('[color=violet]','[/color]');return false;">{LANG_violet}</a></li>
+										<li style="color:white;"><a href="javascript:void(0);" onclick="bbfontstyle('[color=white]','[/color]');return false;">{LANG_white}</a></li>
+										<li style="color:black;"><a href="javascript:void(0);" onclick="bbfontstyle('[color=black]','[/color]');return false;">{LANG_black}</a></li>
+									</ul>
+								</div>
+							</div>
+							<button class="uk-button uk-icon-question uk-icon-mini" data-uk-modal="{target:'#bbc-help'}" title="{$LANG_GF01[h_help]}" onclick="return false;"></button>
+						</div>
 {!endif}
-      <tr>
-        <td colspan="2" class="pluginCellText pluginCellFill" style="padding-left: 5px;">
-          {!if smilies}
-          {!if html_mode}
-          {!else}
-            <div style="width:95%; padding:10px; clear:both;display:none;" id="smileys">
-              {smilies}
-            </div>
-            {!endif}
-          {!endif}
-{!if wysiwyg}
-            <div>
-            <input type="button" value="{visual_editor}" onclick="won('comment')"/>
-            <input type="button" value="{html_editor}"  onclick="woff('comment')"/>
-            </div>
+{!if smilies}
+{!if html_mode}
+{!else}
+						<div id="smileys" class="uk-form-row uk-clearfix" style="display:none;">
+							<div class="uk-panel uk-margin-bottom">{smilies}</div>
+						</div>
 {!endif}
-          <textarea name="comment" id="comment" rows="20" cols="45" tabindex="6" class="post" style="width:99%" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);">{comment}</textarea>
-        </td>
-      </tr>
+{!endif}
+						<textarea name="comment" id="comment" rows="20" cols="45" tabindex="6" class="post" style="width:99%" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);">{comment}</textarea>
+					</div>
 {!if use_attachments}
-      <tr>
-        <td class="pluginCellSubTitle" style="vertical-align:top;padding-top:10px;">
-          {LANG_attachments}
-         <div class="pluginTinyText">{LANG_maxattachments}</div>
-        </td>
+					<div class="uk-form-row">
+						<label class="uk-form-label">{LANG_attachments}<br><div class="uk-text-small uk-text-muted">{LANG_maxattachments}</div></label>
+						<div class="uk-form-controls">
 
-        <td class="pluginCellText pluginCellFill" style="padding-left: 5px;">
-          <div id="divforumfile">
-            {attachments}
-            <table style="display:{show_attachments};">
+							<div id="divforumfile" style="display:{show_attachments};">
+								{attachments}
 {!loop fcounter}
-              <tr>
-                <td style="padding:5px;">
-                  <input type="file" name="file_forum{fcounter__loopvar}" size="40"/>
-                </td>
-                <td style="padding-left:10px;display:{show_filemgmt_option};">
-                  <input type="checkbox" name="chk_usefilemgmt{fcounter__loopvar}" value="1" onclick="elementShowHide('filemgmtoption{fcounter__loopvar}','toggle');"/>&nbsp;{LANG_usefilemgmt}
-                </td>
-              </tr>
-              <tr id="filemgmtoption{fcounter__loopvar}" style="display:none;">
-                <td style="padding-left:5px;">{LANG_description}:<br/>
-                  <textarea name="filemgmt_desc{fcounter__loopvar}" cols="40" rows="3"></textarea>
-                </td>
-                <td style="vertical-align:top;padding-left:10px;">
-        {!if LANG_category}
-                  {LANG_category}:&nbsp;
-                  <select name="filemgmtcat{fcounter__loopvar}">
-                    {filemgmt_category_options}
-                  </select>
-        {!endif}
-                </td>
-              </tr>
+								<input type="file" name="file_forum{fcounter__loopvar}" size="40"><br>
 {!endloop}
-            </table>
-          </div>
-        </td>
-      </tr>
+							</div>
+						</div>
+					</div>
 {!endif}
-      {captcha}
-      <tr>
-        <td class="pluginCellSubTitle">&nbsp;{LANG_OPTIONS}</td>
-        <td class="pluginCellText pluginCellFill">
-          <table width="100%" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-              <td style="width:20%;white-space:nowrap;padding-right:5px;display:{hide_notify};">{notify_prompt}</td>
-              <td style="width:20%;">{mode_prompt}</td>
-              <td style="width:20%;">{locked_prompt}</td>
-              <td style="width:20%;">{sticky_prompt}</td>
-              <td style="width:20%;">{edit_prompt}</td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <td class="pluginCellSubTitle">&nbsp;{$LANG_GF01[features]}</td>
-        <td class="pluginCellText pluginCellFill">
-          <table width="100%" border="0" cellspacing="0" cellpadding="5">
-            <tr>
-              <td style="vertical-align:middle;text-align:left;">{bbcode_prompt}</td>
+
+					{captcha}
+
+					<div class="uk-form-row uk-margin-small">
+						<label class="uk-form-label">{LANG_OPTIONS}</label>
+						<div class="uk-form-controls">
+							<div class="uk-grid">
+								<div class="uk-width-1-4">
+									<p>
+										<label for="notify">{$LANG_GF02[msg38]}</label>
+										<input type="checkbox" id="notify" name="notify" value="on" {notify_val}>
+									</p>
+								</div>
+								<div class="uk-width-1-4">
+									<p>
+										<label for="postmode_switch">{postmode_msg}</label>
+										<input type="checkbox" id="postmode_switch" name="postmode_switch" value="1">
+										<input type="hidden" name="postmode" value="{postmode}">
+									</p>
+								</div>
+{!if sticky-prompt}
+								<div class="uk-width-1-4">
+									<p>
+										<label for="sticky_switch">{$LANG_GF02[msg61]}</label>
+										<input type="checkbox" id="sticky_switch" name="sticky_switch" {sticky_val} value="1">
+									</p>
+								</div>
+{!endif}
+								<div class="uk-width-1-4">
+									<p>
+										<label for="silentedit">{$LANG_GF02[msg190]}</label>
+										<input type="checkbox" id="silentedit" name="silentedit" {edit_val} value="1">
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="uk-form-row">
+						<label class="uk-form-label">{$LANG_GF01[features]}</label>
+						<div class="uk-form-controls">
+							<div class="uk-grid">
+								<div class="uk-width-1-4">
+									<p>
+										<label for="disable_bbcode">{$LANG_GF01[disable_bbcode]}</label>
+										<input type="checkbox" id="disable_bbcode" name="disable_bbcode" value="1" {disable_bbcode_val}>
+									</p>
+								</div>
 {!if smilies_prompt}
-              <td style="vertical-align:middle;text-align:left;">{smilies_prompt}</td>
+								<div class="uk-width-1-4">
+									<p>
+										<label for="disable_smilies">{$LANG_GF01[disable_smilies]}</label>
+										<input type="checkbox" id="disable_smilies" name="disable_smilies" value="1" {disable_smilies_val}>
+									</p>
+								</div>
 {!endif}
-              <td style="vertical-align:middle;text-align:left;">{urlparse_prompt}</td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <td class="pluginCellSubTitle" style="padding:15px 5px 15px 10px; vertical-align:center;">{LANG_SUBMIT}</td>
-        <td class="pluginCellText pluginCellFill alignright">
-          <table border="0" cellspacing="0" cellpadding="0" style="float:right;">
-            <tr>
-              <td><input type="submit" name="preview" id="preview" value="{LANG_PREVIEW}" tabindex="7"/></td>
-              <td style="padding-left:6px;padding-right:6px;">
-                <input type="submit" name="{save_button}" id="{save_button}" value="{LANG_SUBMIT}" tabindex="8"/>
-              </td>
-              <td style="padding-left:6px;padding-right:6px;">
-                <input type="submit" name="cancel" value="{$LANG_GF01[CANCEL]}" tabindex="9" onclick="return confirm('{$LANG_GF01[cancel_confirm]}');"/>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-  </form>
+								<div class="uk-width-1-4">
+									<p>
+										<label for="disable_urlparse">{$LANG_GF01[disable_urlparse]}</label>
+										<input type="checkbox" id="disable_urlparse" name="disable_urlparse" value="1" {disable_urlparse_val}>
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="uk-form-row">
+						<button class="uk-button uk-button-primary" type="submit" name="preview" id="preview" value="{LANG_PREVIEW}" tabindex="7">{LANG_PREVIEW}</button>
+						<button class="uk-button uk-button-success" type="submit" name="{save_button}" id="{save_button}" value="{LANG_SUBMIT}" tabindex="8">{LANG_SUBMIT}</button>
+						<button class="uk-button uk-button-danger" type="submit" name="cancel" value="{$LANG_GF01[CANCEL]}" tabindex="9" onclick="return confirm('{$LANG_GF01[cancel_confirm]}');">{$LANG_GF01[CANCEL]}</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
-<br/>
+
+<div id="bbc-help" class="uk-modal">
+	<div class="uk-modal-dialog">
+		<a class="uk-modal-close uk-close"></a>
+		<table class="uk-table tm-table">
+			<tr>
+				<th>BBCode</th>
+				<th>Effect</th>
+			</tr>
+			<tr>
+				<td>[b]bolded text[/b]</td>
+				<td><strong>bolded text</strong></td>
+			</tr>
+			<tr>
+				<td>[i]italicized text[/i]</td>
+				<td style="font-style: italic;">italicized text</td>
+			</tr>
+			<tr>
+				<td>[u]underlined text[/u]</td>
+				<td style="text-decoration:underline;">underlined text</td>
+			</tr>
+			<tr>
+				<td>[s]strikethrough text[/s]</td>
+				<td style="text-decoration:line-through;">strikethrough text</td>
+			</tr>
+			<tr>
+				<td>[img]http://www.glfusion.org/images/code.png[/img]<br><br>
+				[img h=32 w=45]http://www.glfusion.org/images/help.png[/img]</td>
+				<td>
+					<img src="{layout_url}/images/code.png" alt="" title=""><br>
+					<img style="width:45px; height:32px;" src="{layout_url}/images/help.png" alt="" title="">
+				</td>
+			</tr>
+			<tr>
+				<td>[url=http://www.glfusion.org]glFusion.org[/url]<br><br>
+					[url]http://www.glfusion.org[/url]
+				</td>
+				<td>
+					<a href="http://www.glfusion.org" title="http://www.glfusion.org">glFusion.org</a><br><br><a href="http://www.glfusion.org">http://www.glfusion.org</a>
+				</td>
+			</tr>
+			<tr>
+				<td>[quote]quoted text[/quote]</td>
+				<td>
+					<blockquote>
+						<p>quoted text</p>
+					</blockquote>
+				</td>
+			</tr>
+			<tr>
+				<td>[code]monospaced text[/code]</td>
+				<td>
+					<div style="font-family:monospace; font-size:12px; color:#0000cc; border:1px solid:D0D0D0; background:#fafafa; height:20px;margin:5px;">monospaced text</div>
+				</td>
+			</tr>
+			<tr>
+				<td>[size=16]Your Text[/size]</td>
+				<td style="font-size:16px;">Your Text</td>
+			</tr>
+			<tr>
+				<td>[color=red]Red Text[/color]<br><br>
+					[color=#FF0000]Red Text[/color]<br>
+				</td>
+				<td style="color:red;">Red Text</td>
+			</tr>
+			<tr class="pluginRow1">
+				<td>[list]<br>
+					[*]List item 1<br>
+					[*]List item 2<br>
+					[/list]<br>
+					<br>
+					[list=1]<br>
+					[*]List item 1<br>
+					[*]List item 2<br>
+				[/list]</td>
+				<td>
+					<ul class="uk-list">
+						<li>List item 1</li>
+						<li>List item 2</li>
+					</ul>
+					<ol class="ul-list">
+						<li>List item 1</li>
+						<li>List item 2</li>
+					</ol>
+				</td>
+			</tr>
+			<tr>
+				<td>To enter a backslash (\) in your post, just enter the \</td>
+				<td>\ <- backslash</td>
+			</tr>
+			<tr>
+				<td>[file]1[/file]<br><br>
+					If file attachments are enabled, and you upload an image, you can include a thumbnail of the image in the post by using the [file]#[/file] tags. The # is the number of the upload (1 is the first upload, 2 the second...).<br><br>
+					This will add a thumbnail of the uploaded image into the post with a link to the original image. If you would like the original image to open in a 'lightbox' use the following syntax:<br><br>
+				[file lightbox=1]#[/file]</td>
+				<td>
+					<img src="{layout_url}/images/lock.png" alt="" title="">
+				</td>
+			</tr>
+		</table>
+
+	</div>
+</div>
+
 {# end {templatelocation} #}

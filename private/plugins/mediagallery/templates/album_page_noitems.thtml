@@ -1,9 +1,3 @@
 {# begin {templatelocation} #}
-<table border="0" width="100%" cellpadding="5" style="margin:0px auto;">
-    <tr>
-        <td align="center" style="width:100%">
-          {lang_no_image}
-        </td>
-    </tr>
-</table>
+    {lang_no_image}
 {# end {templatelocation} #}

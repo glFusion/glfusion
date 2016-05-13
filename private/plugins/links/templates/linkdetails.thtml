@@ -1,6 +1,12 @@
 {# begin {templatelocation} #}
-<li>
-  <strong>{link_html}</strong> ({link_hits}) {edit_icon} {link_broken}<br />
-  {link_description}
+<li class="uk-margin">
+	<span class="uk-text-bold">{link_html}</span> ({link_hits})
+{!if edit_icon}
+	<a href="{edit_url}"><i class="uk-icon-edit"></i></a>
+{!endif}
+	{link_broken}
+	<div class="uk-panel">
+		{link_description}
+	</div>
 </li>
 {# end {templatelocation} #}

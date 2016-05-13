@@ -1,7 +1,11 @@
 {# begin {templatelocation} #}
-                                            <tr class="pluginRow{rowclass}">
-                                                <td style="text-align:center;width:125px">{album_begin_href}{album_cover}{album_end_href}</td>
-                                                <td style="width:35%;text-align:left;vertical-align:middle;">{album_title}</td>
-                                                <td style="width:45%;text-align:left;vertical-align:middle;">{album_desc}</td>
-                                            </tr>
+<tr>
+<td class="uk-text-center" style="vertical-align:middle;">
+{album_begin_href}
+<img class="uk-thumbnail" src="{album_cover_thumb}" height="{album_cover_height}" width="{album_cover_width}">
+{album_end_href}
+</td>
+    <td style="width:35%;text-align:left;vertical-align:middle;">{album_title}</td>
+    <td style="width:45%;text-align:left;vertical-align:middle;">{album_desc}</td>
+</tr>
 {# end {templatelocation} #}

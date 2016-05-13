@@ -1,14 +1,20 @@
-<div align="center">
-  <div id="pix">
-    <br style="clear:both">
-<table border="0">
-<!-- BEGIN ImageRow -->
-<tr>
-<!-- BEGIN ImageColumn -->
-<td><table><tr><td style="height:100px;">{thumbnail}</td></tr><tr><td style="text-align:center;">{checkbox}</td></tr></table></td>
-<!-- END ImageColumn -->
-</tr>
-<!-- END ImageRow -->
-</table>
-  </div>
+<div class="uk-panel uk-panel-box uk-text-center">
+	<div id="pix">
+		<br style="clear:both">
+		<ul class="uk-grid uk-grid-width-small-1-4 uk-grid-width-medium-1-4 uk-grid-width-large-1-4 uk-text-center" data-uk-grid-margin>
+			<!-- BEGIN ImageRow -->
+			<!-- BEGIN ImageColumn -->
+			<li class="uk-text-center">
+				<figure class="uk-thumbnail">
+					<img src="{raw_thumb}" alt="">
+					<figcaption class="uk-thumbnail-caption">{title}</figcaption>
+				</figure>
+				<div class="uk-margin">
+					<input type="radio" name="thumbnail" value="{media_id}">
+				</div>
+			</li>
+			<!-- END ImageColumn -->
+			<!-- END ImageRow -->
+		</ul>
+	</div>
 </div>

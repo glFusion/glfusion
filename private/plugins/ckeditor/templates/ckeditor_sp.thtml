@@ -13,6 +13,9 @@
                 language: '{iso_lang}'
          } );
 
+        instance.config.protectedSource.push(/<i[^>]*><\/i>/g);
+        instance.config.protectedSource.push( /<\/i[\s\S]*?\>/g );
+
          return instance;
     }
 

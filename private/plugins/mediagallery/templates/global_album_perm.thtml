@@ -1,64 +1,62 @@
 {# begin {templatelocation} #}
-<form name="globalperm" enctype="multipart/form-data"  method="post" action="{s_form_action}">
-<div>
-<input type="hidden" name="action" value="{action}" />
-<input type="hidden" name="album_id" value="0" />
-<input type="hidden" name="admin_menu" value="{admin_menu}" />
-{lang_global_perm_help}
-<br /><br />
-  <table width="100%" border="0" cellspacing="0" cellpadding="5">
-    <tr>
-      <th>
-        {lang_attribute}
-      </th>
-      <th align="left">
-        {lang_value}
-      </th>
-      <th>
-        {lang_update}
-      </th>
-    </tr>
-    <tr class="pluginRow1">
-      <td class="mgAdminAlignRight">{lang_group}</td>
-      <td class="mgAdminAlignLeft" style="vertical-align:middle;">{group_select}</td>
-      <td class="mgAdminAlignLeft"><input type="checkbox" name="group_active" value="1" /></td>
-    </tr>
-    <tr class="pluginRow2">
-      <td class="mgAdminAlignRight">{lang_permissions}</td>
-      <td class="mgAdminAlignLeft" style="vertical-align:middle;">
-        <br /><br />
-   	    {lang_perm_key}
-   	    <br /><br />
-        <div style="clear:both;">{permissions_editor}</div>
-        <br /><br />
-      </td>
-      <td class="mgAdminAlignLeft"><input type="checkbox" name="perm_active" value="1" /></td>
-    </tr>
-    <tr class="pluginRow1">
-     <td class="mgAdminAlignRight">{lang_member_upload}</td>
-     <td class="mgAdminAlignLeft" style="vertical-align:middle;"><input type="checkbox" name="member_upload" value="1" /></td>
-     <td class="mgAdminAlignLeft"><input type="checkbox" name="upload_active" value="1" /></td>
-    </tr>
-    <tr class="pluginRow2">
-      <td class="mgAdminAlignRight">{lang_moderate_album}</td>
-      <td class="mgAdminAlignLeft" style="vertical-align:middle;"><input type="checkbox" name="moderation" value="1" /></td>
-      <td class="mgAdminAlignLeft"><input type="checkbox" name="moderate_active" value="1" /></td>
-    </tr>
-    <tr class="pluginRow1">
-      <td class="mgAdminAlignRight">{lang_mod_group}</td>
-      <td class="mgAdminAlignLeft" style="vertical-align:middle;">{mod_group_select}</td>
-      <td class="mgAdminAlignLeft"><input type="checkbox" name="mod_group_active" value="1" /></td>
-    </tr>
-    <tr class="pluginRow2">
-      <td class="mgAdminAlignRight">{lang_email_mods_on_submission}</td>
-      <td class="mgAdminAlignLeft" style="vertical-align:middle;"><input type="checkbox" name="email_mod" value="1" /></td>
-      <td class="mgAdminAlignLeft"><input type="checkbox" name="email_mod_active" value="1" /></td>
-    </tr>
-  </table>
-<div style="text-align:center;">
-  <input type="submit" value="{lang_save}" name="mode" />
-  <input type="submit" value="{lang_cancel}" name="mode" />
-</div>
-</div>
+<form class="uk-form" name="globalperm" enctype="multipart/form-data"  method="post" action="{s_form_action}">
+    <input type="hidden" name="action" value="{action}">
+    <input type="hidden" name="album_id" value="0">
+    <input type="hidden" name="admin_menu" value="{admin_menu}">
+
+    <div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin">
+        {lang_global_perm_help}
+    </div>
+    <table class="uk-table uk-table-striped uk-table-hover">
+        <tr>
+            <th class="uk-width-1-4">
+                {lang_attribute}
+            </th>
+            <th class="uk-width-2-4">
+                {lang_value}
+            </th>
+            <th class="uk-width-1-4 uk-text-center">
+                {lang_update}
+            </th>
+        </tr>
+        <tr>
+            <td>{lang_group}</td>
+            <td>{group_select}</td>
+            <td class="uk-text-center">
+                <input type="checkbox" name="group_active" value="1">
+            </td>
+        </tr>
+        <tr class="uk-table-middle">
+            <td>{lang_permissions}</td>
+            <td>
+                {permissions_editor}
+            </td>
+            <td class="uk-text-center"><input type="checkbox" name="perm_active" value="1"></td>
+        </tr>
+        <tr class="uk-table-middle">
+            <td>{lang_member_upload}</td>
+            <td><input type="checkbox" name="member_upload" value="1"></td>
+            <td class="uk-text-center"><input type="checkbox" name="upload_active" value="1"></td>
+        </tr>
+        <tr class="uk-table-middle">
+            <td>{lang_moderate_album}</td>
+            <td><input type="checkbox" name="moderation" value="1"></td>
+            <td class="uk-text-center"><input type="checkbox" name="moderate_active" value="1"></td>
+        </tr>
+        <tr class="uk-table-middle">
+            <td>{lang_mod_group}</td>
+            <td>{mod_group_select}</td>
+            <td class="uk-text-center"><input type="checkbox" name="mod_group_active" value="1"></td>
+        </tr>
+        <tr class="uk-table-middle">
+            <td>{lang_email_mods_on_submission}</td>
+            <td><input type="checkbox" name="email_mod" value="1"></td>
+            <td class="uk-text-center"><input type="checkbox" name="email_mod_active" value="1"></td>
+        </tr>
+    </table>
+    <div class="uk-text-center">
+        <button class="uk-button uk-button-success" type="submit" value="{lang_save}" name="mode">{lang_save}</button>
+        <button class="uk-button" type="submit" value="{lang_cancel}" name="mode">{lang_cancel}</button>
+    </div>
 </form>
 {# end {templatelocation} #}

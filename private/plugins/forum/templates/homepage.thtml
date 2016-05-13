@@ -1,47 +1,45 @@
 {# begin {templatelocation} #}
 <div class="forumpost">
- <!-- BEGIN catrows -->
-  <table width="100%" cellspacing="0" cellpadding="0" style="border:none;margin:2px;padding-right:15px;" class="pluginHeader">
-    <tr class="pluginLinks" style="vertical-align: middle; height:25px;">
-      <td style="height:18px;width:10px;">{forumindeximg}</td>
-      <td class="pluginHeader alignleft" style="width:95%;white-space:nowrap;font-size:larger;">&nbsp;{birdseed}</td>
-{!if newpostslink}
-      <td class="pluginButton" style="white-space:nowrap;">[&nbsp;<a {newpostslink}{LANG_newposts}</a>&nbsp;]</td>
-{!endif}
-      <td>&nbsp;</td>
-{!if markreadlink}
-      <td class="pluginButton" style="white-space:nowrap;">[&nbsp;<a {markreadlink}{LANG_markread}</a>&nbsp;]</td>
-{!endif}
-    </tr>
-  </table>
-  <table width="100%" cellspacing="1" cellpadding="3" class="pluginSolidOutline" style="border:none;margin-bottom:10px;">
-    <tr>
-      <td class="pluginCellTitle alignleft" colspan="2">{cat_desc}</td>
-      <td class="pluginCellTitle aligntop" style="width:5%;">{LANGGF01_TOPICS}</td>
-      <td class="pluginCellTitle aligntop" style="width:5%;">{LANGGF01_POSTS}</td>
-      <td class="pluginCellTitle aligntop" style="width:25%;">{LANGGF01_LASTPOST}</td>
-    </tr>
-  <!-- BEGIN forumrows -->
-    <tr class="pluginRollOut pluginLinks" onmouseover="className='pluginRollOver pluginLinks';" onmouseout="className='pluginRollOut pluginLinks';">
-      <td style="width:25px;vertical-align:top;">{folderimg}</td>
-      <td class="alignleft pluginCellText" style="width:60%;vertical-align:top;" onmouseover="this.style.cursor='pointer';" onclick="window.location.href='index.php?forum={forum_id}'; this.style.cursor='pointer';">
-        <a class="pluginLinks" style="text-decoration:none;" href="index.php?forum={forum_id}">
-          {forum_name}
-        </a>
-        <div style="text-align:left">
-          {forum_desc}
-        </div>
-        {moderator}
-      </td>
-      <td class="aligncenter pluginCellText" style="width:5%;vertical-align:top;">{topics}</td>
-      <td class="aligncenter pluginCellText" style="width:5%;vertical-align:top;">{posts}</td>
-      <td class="alignleft pluginCellText" style="width:5%;vertical-align:top;white-space:nowrap;" onmouseover="this.style.cursor='pointer';" onclick="window.location.href='viewtopic.php?showtopic={topic_id}&amp;lastpost=true#{lastpostid}'; this.style.cursor='pointer';">
-        {lastpostmsgDate}<br />{lastpostmsgTopic}<br/>{lastpostmsgBy}
-      </td>
-    </tr>
-  <!-- END forumrows -->
-  </table>
-<!-- END catrows -->
+	<!-- BEGIN catrows -->
+	<h3 class="uk-h3 uk-float-left uk-margin-bottom" style="margin:0;">
+		<i class="uk-icon-folder-o"></i>&nbsp;{birdseed}
+	</h3>
+	{!if markreadlink}
+	<a href="{site_url}/forum/index.php?op=markallread&amp;cat_id={cat_id}" class="uk-float-right uk-button uk-margin-bottom">{LANG_markread}</a>
+	{!endif}
+	<div class="uk-clearfix"></div>
+	<ul class="topiclist tm-forum-header">
+		<li class="header">
+			<dl class="icon">
+				<dt>{cat_desc}</dt>
+				<dd class="topics uk-hidden-small">{LANGGF01_TOPICS}</dd>
+				<dd class="posts uk-hidden-small">{LANGGF01_POSTS}</dd>
+				<dd class="lastpost">{LANGGF01_LASTPOST}</dd>
+			</dl>
+		</li>
+	</ul>
+	<ul class="topiclist forums">
+		<!-- BEGIN forumrows -->
+		<li class="row">
+			<dl class="icon" style="background-image: url({folder_icon}); background-repeat: no-repeat;">
+				<dt title="{folder_msg}" onmouseover="this.style.cursor='pointer';" onclick="window.location.href='{site_url}/forum/index.php?forum={forum_id}'; this.style.cursor='pointer';">
+					<a class="forumtitle" href="{site_url}/forum/index.php?forum={forum_id}">{forum_name}</a>
+					<div class="uk-text-left uk-text-medium">
+						{forum_desc}
+					</div>
+				</dt>
+				<dd class="topics uk-hidden-small">{topics}</dd>
+				<dd class="posts uk-hidden-small">{posts}</dd>
+				<dd class="lastpost" onmouseover="this.style.cursor='pointer';" onclick="window.location.href='viewtopic.php?showtopic={topic_id}&amp;lastpost=true#{lastpostid}'; this.style.cursor='pointer';">
+					{lastpostmsgBy}<br>
+					{lastPostDate}<br>
+					{lastpostmsgTopic}
+				</dd>
+			</dl>
+		</li>
+		<!-- END forumrows -->
+	</ul>
+	<div class="uk-margin"></div>
+	<!-- END catrows -->
 </div>
-<br/>
 {# end {templatelocation} #}

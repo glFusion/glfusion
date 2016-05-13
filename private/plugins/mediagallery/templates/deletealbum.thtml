@@ -1,32 +1,30 @@
 {# begin {templatelocation} #}
-<span style="font-weight:bold;">{lang_edit_title}</span>
-<p>
-<form method="post" action="{s_form_action}">
-<input type="hidden" name="album_id" value="{album_id}">
-<input type="hidden" name="action" value="confalbum">
-<table cellpadding="3" cellspacing="1" border="0">
-  <tr>
-    <td style="width:15%;text-align:right;">
-      <span style="font-weight:bold;">{lang_title}</span>
-    </td>
-    <td colspan="2">{album_title}</td>
-  </tr>
-  <tr>
-    <td style="width:15%;text-align:right;"><span style="font-weight:bold;">{lang_description}</span></td>
-    <td colspan="2" rowspan="3" style="vertical-align:top;">{album_desc}</td>
-  </tr>
-  <tr><td colspan="3">&nbsp;</td></tr>
-  <tr><td colspan="3">&nbsp;</td></tr>
-  <tr>
-    <td style="width:15%;text-align:right;"><span style="font-weight:bold;">{lang_move_all_media}</span></td>
-	<td colspan="2">{select_destination}</td>
-  </tr>
-  <tr>
-    <td colspan="2" style="text-align:center;">
-      <input type="submit" name="mode" value={lang_delete}>
-	  <input type="submit" name="mode" value={lang_cancel}>
-	</td>
-  </tr>
-</table>
+<h3 class="uk-h3">{lang_edit_title}</h3>
+<form class="uk-form uk-form-horizontal" method="post" action="{s_form_action}">
+	<input type="hidden" name="album_id" value="{album_id}">
+	<input type="hidden" name="action" value="confalbum">
+	<div class="uk-form-row">
+		<label class="uk-form-label">{lang_title}</label>
+		<div class="uk-form-controls">
+			{album_title}
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label">{lang_description}</label>
+		<div class="uk-form-controls">
+			{album_desc}
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label">{lang_move_all_media}</label>
+		<div class="uk-form-controls">
+			{select_destination}
+		</div>
+	</div>
+
+	<div class="uk-form-row">
+		<button class="uk-button uk-button-danger" type="submit" name="mode" value="{lang_delete}">{lang_delete}</button>
+		<button class="uk-button" type="submit" name="mode" value="{lang_cancel}">{lang_cancel}</button>
+	</div>
 </form>
 {# end {templatelocation} #}

@@ -1,137 +1,101 @@
 {# begin {templatelocation} #}
 {META}
 <script type="text/javascript">
-//<![CDATA[
-var refresh;
+	//<![CDATA[
+	var refresh;
 
-var ticker = {REFRESH_RATE};
-var label_next = "{L_NEXT}";
-var label = "{L_PROCESSING}";
+	var ticker = {REFRESH_RATE};
+	var label_next = "{L_NEXT}";
+	var label = "{L_PROCESSING}";
 
-// update the button description/status
-function updateButton()
-{
-	if ( ticker >= 0)
-	{
-		if ( ticker == 0 )
-		{
-			document.form_batch_progress.submit_button.value = label;
-			document.form_batch_progress.submit_button.disabled = true;
-		}
-		else
-		{
-			document.form_batch_progress.submit_button.value = label_next + " (" + ticker + ")";
-
-			ticker--;;
-			refresh = setTimeout("updateButton()", 1000);
+	// update the button description/status
+	function updateButton() {
+		if ( ticker >= 0) {
+			if ( ticker == 0 ) {
+				document.form_batch_progress.submit_button.value = label;
+				document.form_batch_progress.submit_button.disabled = true;
+			} else {
+					document.getElementById('submit_button').innerHTML = label_next + " (" + ticker + ")";
+					ticker--;;
+					refresh = setTimeout("updateButton()", 1000);
+			}
 		}
 	}
-}
 //]]>
 </script>
+<h2>{L_BATCH}</h2>
+<h3>{L_BATCH_PROCESS}</h3>
 
-<div style="text-align:center;"><h1>{L_BATCH}</h1></div>
-<form name="form_batch_progress" method="post" action="{S_BATCH_ACTION}">
-<div class="mgPluginMI" style="text-align:center;">
-<table width="90%" cellspacing="1" cellpadding="2" border="0" style="margin:0px auto;">
-	<tr>
-		<td class="pluginCellTitle" align="center"><span style="font-weight:bold;">{L_BATCH_PROCESS}</span></td>
-	</tr>
-	<tr class="pluginRow1">
-		<td align="center">
-			<br />{PROCESSING_MESSAGES}<br />
-		</td>
-	</tr>
-	<tr class="pluginRow1">
-		<td align="center">
-			<table width="100%" style="margin:0px auto;" cellspacing="1" cellpadding="1">
-				<tr>
-					<td colspan="3">&nbsp;</td>
-				</tr>
-				<tr class="pluginRow2">
-					<td colspan="2" style="while-space:nowrap;" align="left">
-						<b>{L_STATUS}</b>
-					</td>
-					<td width="200"  style="while-space:nowrap;" align="center">
-						<span style="font-weight:bold;">{SESSION_PERCENT}</span><br />
-						{SESSION_PERCENT_BOX}
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	<tr class="pluginRow1">
-		<td align="center">
-			<table width="100%" style="margin:0px auto;" cellspacing="1" cellpadding="1">
-				<tr>
-					<td align="center" colspan="2"><b>{L_PROCESSING_DETAILS}</b></td>
-				</tr>
-				<tr class="pluginRow2">
-					<td style="while-space:nowrap;" align="left">{L_TOTAL_ITEMS}</td>
-					<td style="while-space:nowrap;" align="right">{TOTAL_ITEMS}</td>
-				</tr>
-				<tr class="pluginRow1">
-					<td style="while-space:nowrap;" align="left">{L_ITEMS_PROCESSED}</td>
-					<td style="while-space:nowrap;" align="right">{ITEMS_PROCESSED}</td>
-				</tr>
-				<tr class="pluginRow2">
-					<td style="while-space:nowrap;" align="left">{L_ITEMS_REMAINING}</td>
-					<td style="while-space:nowrap;" align="right">{ITEMS_REMAINING}</td>
-				</tr>
-				<tr class="pluginRow1">
-					<td style="while-space:nowrap;" align="left">{L_POSTS_LAST_CYCLE}</td>
-					<td style="while-space:nowrap;" align="right">{POST_LIMIT}</td>
-				</tr>
-				<tr class="pluginRow2">
-					<td style="while-space:nowrap;" align="left">{L_ITEM_RATE}</td>
-					<td style="while-space:nowrap;" align="right">{ITEM_RATE}</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
+<form class="uk-form uk-form-horizontal" name="form_batch_progress" method="post" action="{S_BATCH_ACTION}">
+{!if PROCESSING_MESSAGES}
+	<div class="uk-alert">
+		{PROCESSING_MESSAGES}
+	</div>
+{!endif}
+	<fieldset>
+		<legend>{L_STATUS}</legend>
+		<div class="uk-form-row">
+			<label class="uk-form-label"></label>
+			<div class="uk-form-controls">
+				<div class="uk-progress">
+					<div class="uk-progress-bar" style="width: {PERCENT_COMPLETE}%;">{SESSION_PERCENT}</div>
+				</div>
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{L_TOTAL_ITEMS}</label>
+			<div class="uk-form-controls">
+				{TOTAL_ITEMS}
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{L_ITEMS_PROCESSED}</label>
+			<div class="uk-form-controls">
+				{ITEMS_PROCESSED}
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{L_ITEMS_REMAINING}</label>
+			<div class="uk-form-controls">
+				{ITEMS_REMAINING}
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{L_ITEM_RATE}</label>
+			<div class="uk-form-controls">
+				{ITEM_RATE}
+			</div>
+		</div>
+	</fieldset>
 
-	<tr class="pluginRow1">
-		<td align="center">
-			<table width="100%" style="margin:0px auto;" cellspacing="1" cellpadding="1">
-				<tr>
-					<td align="center" colspan="2"><b>{L_ACTIVE_PARAMETERS}</b></td>
-				</tr>
-				<tr class="pluginRow2">
-					<td style="while-space:nowrap;" align="left">{L_TIME_LIMIT}</td>
-					<td style="while-space:nowrap;" align="right">{TIME_LIMIT}</td>
-				</tr>
-				<tr class="pluginRow1">
-					<td style="while-space:nowrap;" align="left">{L_REFRESH_RATE}</td>
-					<td style="while-space:nowrap;" align="right">
-						<input type="text" name="refresh_rate" value="{REFRESH_RATE}" size="3" align="right" />
-					</td>
-				</tr>
-				<tr class="pluginRow2">
-					<td style="while-space:nowrap;" align="left">{L_ITEMS_PER_CYCLE}</td>
-					<td style="while-space:nowrap;" align="right">
-						<input type="text" name="item_limit" value="{ITEM_LIMIT}" size="3" align="right" />
-					</td>
-				</tr>
-				<tr class="pluginRow1">
-					<td colspan="2" style="while-space:nowrap;" align="left">&nbsp;</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-
-	<tr>
-		<td align="center">
-			<input class="mainoption" type="submit" name="submit_button" value="{L_NEXT}" onclick="javascript:ticker=0" />&nbsp;
-			&nbsp;&nbsp;&nbsp;
-			<input class="mainoption" type="submit" name="cancel_button" value="{L_CANCEL}" />
-			    <script type="text/javascript"><!--
-				updateButton();
+	<fieldset class="uk-margin-top">
+		<legend>{L_ACTIVE_PARAMETERS}</legend>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{L_TIME_LIMIT}</label>
+			<div class="uk-form-controls">
+				{TIME_LIMIT}
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{L_REFRESH_RATE}</label>
+			<div class="uk-form-controls">
+				<input class="uk-form-width-small" type="text" name="refresh_rate" value="{REFRESH_RATE}">
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{L_ITEMS_PER_CYCLE}</label>
+			<div class="uk-form-controls">
+				<input class="uk-form-width-small" type="text" name="item_limit" value="{ITEM_LIMIT}">
+			</div>
+		</div>
+	</fieldset>
+	<div class="uk-text-center uk-margin">
+		<button class="uk-button uk-button-primary" type="submit" name="submit_button" id="submit_button" value="{L_NEXT}" onclick="javascript:ticker=0">{L_NEXT}</button>
+		<button class="uk-button" type="submit" name="cancel_button" value="{L_CANCEL}">{L_CANCEL}</button>
+		<script type="text/javascript"><!--
+			updateButton();
 			//-->
-			</script>
-
-		</td>
-	</tr>
-</table>
-</div>
+		</script>
+	</div>
 </form>
 {# end {templatelocation} #}

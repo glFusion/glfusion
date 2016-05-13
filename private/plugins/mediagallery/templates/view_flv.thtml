@@ -1,3 +1,5 @@
 {# begin {templatelocation} #}
+<div class="uk-text-center uk-width-1-1 uk-align-center">
 	{flv_player}
+</div>
 {# end {templatelocation} #}

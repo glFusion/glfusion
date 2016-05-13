@@ -1,26 +1,21 @@
 {# begin {templatelocation} #}
-<div class="forumpost">
-  {navmenu}
-
-  <h1>{LANG_TITLE}</h1>
-
-  <table style="width:100%;border-collapse: collaspe; border-spacing: 1px;padding:3px;margin-top:0px;margin-bottom:10px;" class="plugin">
-
-    <tr class="aligncenter">
-      <td class="pluginBreadCrumbs pluginCellTitle" style="padding:2px 0px 2px 5px;"><a href="{form_action}&amp;order=1&amp;prevorder={prevorder}&amp;direction={direction}&amp;page={page}{op}">{LANG_Heading1}</a></td>
-      <td class="pluginBreadCrumbs pluginCellTitle" style="padding:2px 0px 2px 5px;"><a href="{form_action}&amp;order=2&amp;prevorder={prevorder}&amp;direction={direction}&amp;page={page}{op}">{LANG_Heading2}</a></td>
-      <td class="pluginBreadCrumbs pluginCellTitle" style="padding:2px 0px 2px 5px;"><a href="{form_action}&amp;order=3&amp;prevorder={prevorder}&amp;direction={direction}&amp;page={page}{op}">{LANG_Heading3}</a></td>
-      <td class="pluginBreadCrumbs pluginCellTitle" style="padding:2px 0px 2px 5px;"><a href="{form_action}&amp;order=4&amp;prevorder={prevorder}&amp;direction={direction}&amp;page={page}{op}">{LANG_Heading4}</a></td>
-    </tr>
+{navmenu}
+<h2 class="uk-margin-top">{LANG_TITLE}</h2>
+<table class="uk-table tm-table uk-table-hover uk-table-striped uk-table-condensed tm-forum-table">
+<tr class="uk-text-center">
+  <th><a href="{form_action}&amp;order=1&amp;prevorder={prevorder}&amp;direction={direction}&amp;page={page}{op}">{LANG_Heading1}</a></th>
+  <th><a href="{form_action}&amp;order=2&amp;prevorder={prevorder}&amp;direction={direction}&amp;page={page}{op}">{LANG_Heading2}</a></th>
+  <th><a href="{form_action}&amp;order=3&amp;prevorder={prevorder}&amp;direction={direction}&amp;page={page}{op}">{LANG_Heading3}</a></th>
+  <th><a href="{form_action}&amp;order=4&amp;prevorder={prevorder}&amp;direction={direction}&amp;page={page}{op}">{LANG_Heading4}</a></th>
+</tr>
 <!-- BEGIN reportrow -->
-    <tr class="pluginRow{csscode}">
-      <td style="text-align:left;padding:5px;">{post_start_ahref}{post_subject}{post_end_ahref}</td>
-      <td style="width:2%;white-space:nowrap;text-align:center;">{post_replies}</td>
-      <td style="width:2%;white-space:nowrap;text-align:center;">{post_views}</td>
-      <td style="width:5%;text-align:left;padding-left:5px;white-space:nowrap;">{post_date}</td>
-    </tr>
+<tr>
+  <td>{post_start_ahref}{post_subject}{post_end_ahref}</td>
+  <td class="uk-text-center">{post_replies}</td>
+  <td class="uk-text-center">{post_views}</td>
+  <td>{post_date}</td>
+</tr>
 <!-- END reportrow -->
-  </table>
-  <a href="{returnlink}">{LANG_return}</a>
-</div>
+</table>
+<a href="{returnlink}">{LANG_return}</a>
 {# end {templatelocation} #}

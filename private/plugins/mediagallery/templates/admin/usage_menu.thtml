@@ -1,33 +1,32 @@
 {# begin {templatelocation} #}
-<form method="post" action="{s_form_action}">
-<table width="100%" cellpadding="3" cellspacing="1" border="0">
-  <tr>
-    <td colspan="2">&nbsp;</td>
-  </tr>
-  <tr>
-    <td style="width:30%;text-align:right;">
-      <span style="font-weight:bold;">{lang_select_date}</span>
-  </td>
-  <td align="left">
-    {month_select}&nbsp;
-	{day_select}&nbsp;
-	{year_select}&nbsp;&nbsp;
-	<input type="checkbox" name="alldates" /><span style="font-weight:bold;">{lang_all_dates}</span>
-  </td>
-</tr>
-<tr>
-  <td align="right">
-    <span style="font-weight:bold;">{lang_select_user}</span>
-  </td>
-  <td align="left">
-    {user_select}
-  </td>
-</tr>
-<tr>
-  <td colspan="2" align="center">
-    <input type="submit" name="mode" value="{lang_submit}" />
-  </td>
-</tr>
-</table>
+<form class="uk-form uk-form-horizontal" method="post" action="{s_form_action}">
+	<table class="uk-table">
+		<tr>
+			<td colspan="2">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width:30%;text-align:right;">
+				<span class="uk-text-bold">{lang_select_date}</span>
+			</td>
+			<td>
+				{month_select}&nbsp;
+				{day_select}&nbsp;
+				{year_select}&nbsp;&nbsp;
+				<input type="checkbox" name="alldates">&nbsp;<span class="uk-text-bold">{lang_all_dates}</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="uk-text-right">
+				<span class="uk-text-bold">{lang_select_user}</span>
+			</td>
+			<td>
+				{user_select}
+			</td>
+		</tr>
+	</table>
+	<div class="uk-margin uk-text-center">
+		<button class="uk-button uk-button-primary" type="submit" name="mode" value="{lang_submit}">{lang_submit}</button>
+	</div>
+
 </form>
 {# end {templatelocation} #}

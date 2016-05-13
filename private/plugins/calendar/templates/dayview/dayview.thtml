@@ -1,73 +1,131 @@
 {# begin {templatelocation} #}
-<div id="cal-header">
-<div id="cal-day"><b>{lang_day}</b></div>
-<div id="cal-week"><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=week" rel="nofollow">{lang_week}</a></div>
-<div id="cal-month"><a href="{site_url}/calendar/index.php?mode={mode}" rel="nofollow">{lang_month}</a></div>
+<div class="uk-panel uk-panel-box uk-margin-remove">
+    <div class="uk-grid uk-margin">
+        <div class="uk-width-medium-1-3 uk-text-center">
+            <span class="uk-text-bold">{lang_day}</span>
+        </div>
+        <div class="uk-width-medium-1-3 uk-text-center">
+            <a href="{site_url}/calendar/index.php?mode={mode}&amp;view=week" rel="nofollow">{lang_week}</a>
+        </div>
+        <div class="uk-width-medium-1-3 uk-text-center">
+            <a href="{site_url}/calendar/index.php?mode={mode}" rel="nofollow">{lang_month}</a>
+        </div>
+    </div>
 </div>
-<br />
-<div id="cal-header1">
-<div id="cal-dayx-cur">
-<p><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day&amp;month={prevmonth}&amp;day={prevday}&amp;year={prevyear}">&lt;&lt;</a>&nbsp;&nbsp;{currentday}&nbsp;&nbsp;<a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day&amp;month={nextmonth}&amp;day={nextday}&amp;year={nextyear}" rel="nofollow">&gt;&gt;</a></p>
+<div class="uk-panel">
+    <div class="uk-text-muted">
+        <a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day&amp;month={prevmonth}&amp;day={prevday}&amp;year={prevyear}">&lt;&lt;</a>&nbsp;&nbsp;{currentday}&nbsp;&nbsp;<a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day&amp;month={nextmonth}&amp;day={nextday}&amp;year={nextyear}" rel="nofollow">&gt;&gt;</a>
+    </div>
+    <div>
+        {calendar_title} {calendar_toggle}
+    </div>
 </div>
-<div id="cal-dayx-subcur">{calendar_title}
-{calendar_toggle}</div>
-<div id="cal-dayx-weekevent">
-<p>{lang_week} {week_num}</p>
-</div>
-<div id="alldayevt">
-<p>{allday_events}</p>
-</div>
-</div>
+<table class="uk-table uk-table-striped uk-table-hover">
+    <tr>
+        <td>
+            {lang_week} {week_num}
+        </td>
+        <td>
+            {allday_events}
+        </td>
+    </tr>
+    <tr>
+        <td>{0_hour}</td>
+        <td>{0_cols}</td>
+    </tr>
+    <tr>
+        <td>{1_hour}</td>
+        <td>{1_cols}</td>
+    </tr>
+    <tr>
+        <td>{2_hour}</td>
+        <td>{2_cols}</td>
+    </tr>
+    <tr>
+        <td>{3_hour}</td>
+        <td>{3_cols}</td>
+    </tr>
+    <tr>
+        <td>{4_hour}</td>
+        <td>{4_cols}</td>
+    </tr>
+    <tr>
+        <td>{5_hour}</td>
+        <td>{5_cols}</td>
+    </tr>
+    <tr>
+        <td>{6_hour}</td>
+        <td>{6_cols}</td>
+    </tr>
+    <tr>
+        <td>{7_hour}</td>
+        <td>{7_cols}</td>
+    </tr>
+    <tr>
+        <td>{8_hour}</td>
+        <td>{8_cols}</td>
+    </tr>
+    <tr>
+        <td>{9_hour}</td>
+        <td>{9_cols}</td>
+    </tr>
+    <tr>
+        <td>{10_hour}</td>
+        <td>{10_cols}</td>
+    </tr>
+    <tr>
+        <td>{11_hour}</td>
+        <td>{11_cols}</td>
+    </tr>
+    <tr>
+        <td>{12_hour}</td>
+        <td>{12_cols}</td>
+    </tr>
+    <tr>
+        <td>{13_hour}</td>
+        <td>{13_cols}</td>
+    </tr>
+    <tr>
+        <td>{14_hour}</td>
+        <td>{14_cols}</td>
+    </tr>
+    <tr>
+        <td>{15_hour}</td>
+        <td>{15_cols}</td>
+    </tr>
+    <tr>
+        <td>{16_hour}</td>
+        <td>{16_cols}</td>
+    </tr>
+    <tr>
+        <td>{17_hour}</td>
+        <td>{17_cols}</td>
+    </tr>
+    <tr>
+        <td>{18_hour}</td>
+        <td>{18_cols}</td>
+    </tr>
+    <tr>
+        <td>{19_hour}</td>
+        <td>{19_cols}</td>
+    </tr>
+    <tr>
+        <td>{20_hour}</td>
+        <td>{20_cols}</td>
+    </tr>
+    <tr>
+        <td>{21_hour}</td>
+        <td>{21_cols}</td>
+    </tr>
+    <tr>
+        <td>{22_hour}</td>
+        <td>{22_cols}</td>
+    </tr>
+    <tr>
+        <td>{23_hour}</td>
+        <td>{23_cols}</td>
+    </tr>
 
-<div class="alignleft">{0_hour}</div>
-{0_cols}
-<div class="alignleft">{1_hour}</div>
-{1_cols}
-<div class="alignleft">{2_hour}</div>
-{2_cols}
-<div class="alignleft">{3_hour}</div>
-{3_cols}
-<div class="alignleft">{4_hour}</div>
-{4_cols}
-<div class="alignleft">{5_hour}</div>
-{5_cols}
-<div class="alignleft">{6_hour}</div>
-{6_cols}
-<div class="alignleft">{7_hour}</div>
-{7_cols}
-<div class="alignleft">{8_hour}</div>
-{8_cols}
-<div class="alignleft">{9_hour}</div>
-{9_cols}
-<div class="alignleft">{10_hour}</div>
-{10_cols}
-<div class="alignleft">{11_hour}</div>
-{11_cols}
-<div class="alignleft">{12_hour}</div>
-{12_cols}
-<div class="alignleft">{13_hour}</div>
-{13_cols}
-<div class="alignleft">{14_hour}</div>
-{14_cols}
-<div class="alignleft">{15_hour}</div>
-{15_cols}
-<div class="alignleft">{16_hour}</div>
-{16_cols}
-<div class="alignleft">{17_hour}</div>
-{17_cols}
-<div class="alignleft">{18_hour}</div>
-{18_cols}
-<div class="alignleft">{19_hour}</div>
-{19_cols}
-<div class="alignleft">{20_hour}</div>
-{20_cols}
-<div class="alignleft">{21_hour}</div>
-{21_cols}
-<div class="alignleft">{22_hour}</div>
-{22_cols}
-<div class="alignleft">{23_hour}</div>
-{23_cols}
-
-<br />
+</table>
 {quickadd_form}
 {# end {templatelocation} #}
