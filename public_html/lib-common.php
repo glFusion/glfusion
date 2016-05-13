@@ -287,7 +287,6 @@ $_PLUGINS     = array();
 $_PLUGIN_INFO = array();
 
 while ($A = DB_fetchArray($result)) {
-    if ( $A['pi_name'] == 'ban' ) continue;
     $_PLUGINS[] = $A['pi_name'];
     $_PLUGIN_INFO[$A['pi_name']] = $A['pi_version'];
 }
