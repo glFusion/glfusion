@@ -98,7 +98,7 @@ function CUSTOM_js() {
 
     $js = array();
 
-// MAKE SURE TO CLEAR BROWSER & C.T.L. CACHE when activating/deactivating
+// MAKE SURE TO CLEAR BROWSER & Template CACHE when activating/deactivating
 
     $js[] = $_CONF['path_html'] .'javascript/mootools/gl_moochronometer.js';
 
@@ -148,7 +148,7 @@ function CUSTOM_runScheduledTask() {
 
 /**
 * Example of custom function that can be used to handle a login error.
-* Only active with custom registration mode enabled
+* Only active with custom registration mode enabled in configuration
 * Used if you have a custom front page and need to trap and reformat any error messages
 * This example redirects to the front page with a extra passed variable plus the message
 * Note: Message could be a string but in this case maps to $MESSAGE[81] as a default - edit in language file
@@ -201,9 +201,11 @@ function CUSTOM_templateSetVars ($templatename, &$template)
     - See notes below in the custom function about the template changes
 */
 
-/* Create any new records in additional tables you may have added  */
-/* Update any fields in the core GL tables for this user as needed */
-/* Called when user is first created */
+/* ------ REMOVE COMMENTS TO ENABLE Custom Membership...
+
+// Create any new records in additional tables you may have added
+// Update any fields in the core GL tables for this user as needed
+// Called when user is first created
 function CUSTOM_userCreate ($uid)
 {
     global $_CONF, $_TABLES;
@@ -238,12 +240,12 @@ function CUSTOM_userDelete($uid)
     return true;
 }
 
-/* Called from users.php - when user is displaying a member profile.
- * This function can now return any extra fields that need to be shown.
- * Output is then replaced in {customfields} -- This variable needs to be added
- * to your templates
- * Template: path_layout/users/profile/profile.thtml
- */
+// Called from users.php - when user is displaying a member profile.
+// This function can now return any extra fields that need to be shown.
+// Output is then replaced in {customfields} -- This variable needs to be added
+// to your templates
+// Template: path_layout/users/profile/profile.thtml
+
 function CUSTOM_userDisplay($uid)
 {
     global $_CONF, $_TABLES;
@@ -258,16 +260,16 @@ function CUSTOM_userDisplay($uid)
 }
 
 
-/* Function called when editing user profile. */
-/* Called from usersettings.php - when user is eding their own profile  */
-/* and from admin/user.php when admin is editing a member profile  */
-/* This function can now return any extra fields that need to be shown for editing */
-/* Output is then replaced in {customfields} -- This variable needs to be added to your templates */
-/* User: path_layout/preferences/profile.thtml and Admin: path_layout/admin/user/edituser.thtml */
+// Function called when editing user profile.
+// Called from usersettings.php - when user is eding their own profile
+// and from admin/user.php when admin is editing a member profile
+// This function can now return any extra fields that need to be shown for editing
+// Output is then replaced in {customfields} -- This variable needs to be added to your templates
+// User: path_layout/preferences/profile.thtml and Admin: path_layout/admin/user/edituser.thtml
 
-/* This example shows adding the Cookie Timeout setting and extra text field */
-/* As noted: You need to add the {customfields} template variable. */
-/* For the edituser.thtml - maybe it would be added about the {group_edit} variable. */
+// This example shows adding the Cookie Timeout setting and extra text field
+// As noted: You need to add the {customfields} template variable.
+// For the edituser.thtml - maybe it would be added about the {group_edit} variable.
 
 function CUSTOM_userEdit($uid)
 {
@@ -291,8 +293,8 @@ function CUSTOM_userEdit($uid)
     return $retval;
 }
 
-/* Function called when saving the user profile. */
-/* This function can now update any extra fields  */
+// Function called when saving the user profile.
+// This function can now update any extra fields
 function CUSTOM_userSave($uid)
 {
     global $_CONF, $_TABLES;
@@ -308,6 +310,7 @@ function CUSTOM_userSave($uid)
     }
 }
 
+  ------ END REMOVE COMMENTS TO ENABLE Custom Membership... */
 
 /**
 * Main Form used for Custom membership when member is registering
@@ -319,6 +322,9 @@ function CUSTOM_userSave($uid)
 * @return   string          HTML for the registration form
 *
 */
+
+/* ------ REMOVE COMMENTS TO ENABLE Custom User Form
+
 function CUSTOM_userForm ($msg = '')
 {
     global $_CONF, $_TABLES, $LANG04;
@@ -382,6 +388,8 @@ function CUSTOM_userForm ($msg = '')
 
     return $retval;
 }
+
+  ------ END REMOVE COMMENTS TO ENABLE Custom User Form --- */
 
 /**
 * glFusion is about to create a new user or edit an existing user.
