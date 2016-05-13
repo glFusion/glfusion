@@ -1,0 +1,75 @@
+.forum-signature {
+  width: 600px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.forumpost ul {
+  list-style-position: outside;
+  margin-left: 15px;
+  padding-left: 15px;
+  list-style: disc;
+  vertical-align: middle;
+}
+.forumpost li {
+  margin: 0px;
+  padding: 0px;
+}
+.top-link {
+  float:right;
+}
+.top-link img {
+  padding-right:5px;
+  vertical-align:middle;
+}
+.forum-pluginBG {
+  width:100%;
+  padding:1px;
+  background:#4D77CC;
+  color:#FEFEFE;
+  border: 1px solid #CCC;
+  margin-bottom:10px;
+  border-collapse:collapse;
+}
+.forum-navbar {
+  width:100%;
+  border-collapse: separate; border-spacing: 1px;
+}
+.forum-pluginFooter {
+  background:#4D77CC;
+  color:#FFF;
+  width:100%;
+  padding:5px;
+  border-collapse: separate;
+  border-spacing: 2px;
+}
+.forum-pluginFooter-msgs {
+  background:transparent;
+  color:#FFF;
+}
+.forum-pluginCellText {
+  color:#FFF;
+  font-weight:400;
+}
+.forum-pluginLinks A:link {
+  color:#000;
+  font-style:normal;
+  font-weight:400;
+  text-decoration:underline;
+}
+.forum-pluginLinks A:hover {
+  color:#000;
+  font-style:normal;
+  font-weight:400;
+  text-decoration:underline;
+}
+.forum-pluginLinks {
+  color:#FFF;
+  font-style:normal;
+  font-weight:400;
+  text-decoration:underline;
+}
+.forum-time {
+  font-size:.9em;
+  color:#FFF;
+}
