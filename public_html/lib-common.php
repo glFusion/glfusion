@@ -1124,9 +1124,6 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_file( array(
         'header'        => 'header.thtml',
         'footer'        => 'footer.thtml',
-//        'menuitem'      => 'menuitem.thtml',
-//        'menuitem_last' => 'menuitem_last.thtml',
-//        'menuitem_none' => 'menuitem_none.thtml',
         'leftblocks'    => 'leftblocks.thtml',
         'rightblocks'   => 'rightblocks.thtml',
     ));
