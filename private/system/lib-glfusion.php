@@ -61,8 +61,8 @@ function _template_set_root($root) {
         if ( $r != '' ) {
             $retval[] = $r . '/custom';
             $retval[] = $r;
-            if ( $_USER['theme'] != 'vintage' ) {
-                $retval[] = $_CONF['path_themes'] . 'vintage/' .substr($r, strlen($_CONF['path_layout']));
+            if ( $_USER['theme'] != 'cms' ) {
+                $retval[] = $_CONF['path_themes'] . 'cms/' .substr($r, strlen($_CONF['path_layout']));
             }
         }
     }
