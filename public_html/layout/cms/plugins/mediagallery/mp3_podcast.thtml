@@ -1,6 +1,0 @@
-{# begin {templatelocation} #}
- <audio controls>
-  <source src="{mp3_file}" type="audio/mpeg">
-Your browser does not support the audio element.
-</audio>
-{# end {templatelocation} #}

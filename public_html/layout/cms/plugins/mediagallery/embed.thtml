@@ -1,5 +1,0 @@
-{# begin {templatelocation} #}
-<div class="video [vimeo, widescreen]">
-{embed_string}
-</div>
-{# end {templatelocation} #}

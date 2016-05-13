@@ -1,3 +1,0 @@
-{# begin {templatelocation} #}
-<div>{event_entry}</div>
-{# end {templatelocation} #}

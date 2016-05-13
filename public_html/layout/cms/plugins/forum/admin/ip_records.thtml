@@ -1,6 +1,0 @@
-{# begin {templatelocation} #}
-<tr>
-    <td>{ip}</td>
-    <td>[&nbsp;<A HREF="{phpself}?op=unban&amp;ip={ip}">{unban}</a>&nbsp;]</td>
-</tr>
-{# end {templatelocation} #}

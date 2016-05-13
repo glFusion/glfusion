@@ -1,5 +1,0 @@
-{# begin {templatelocation} #}
-<div class="uk-panel uk-panel-box uk-margin">
-    <h3>{lang_no_cat}</h3>
-</div>
-{# end {templatelocation} #}

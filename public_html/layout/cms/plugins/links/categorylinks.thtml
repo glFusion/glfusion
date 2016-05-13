@@ -1,6 +1,0 @@
-{# begin {templatelocation} #}
-<h2 class="uk-h2">{link_category}</h2>
-<ul class="uk-list">
-	{link_details}
-</ul>
-{# end {templatelocation} #}

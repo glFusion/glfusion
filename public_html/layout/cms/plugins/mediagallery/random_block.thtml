@@ -1,7 +1,0 @@
-{# begin {templatelocation} #}
-<div class="mgPluginMI">
-  <img src="{media_thumbnail_img}" class="uk-thumbnail">
-  <div class="uk-text-small uk-text-center">{media_title}</div>
-  <div class="uk-text-muted uk-text-center"><a href="{url_album}">{lang_browse_album}</a></div>
-</div>
-{# end {templatelocation} #}

@@ -1,9 +1,0 @@
-{# begin {templatelocation} #}
-<div class="uk-align-left uk-margin uk-hidden-small">
-    <form class="uk-form uk-search" id="searchbox" method="get" action="{site_url}/forum/index.php" onsubmit="return (this.query.value != '');">
-        <input type="hidden" name="op" value="search"/>
-        <input type="hidden" name="forum" value="{forum}"/>
-        <input type="search" class="uk-search" placeholder="{search}" name="query">
-    </form>
-</div>
-{# end {templatelocation} #}

@@ -1,6 +1,0 @@
-{# begin {templatelocation} #}
-<div class="uk-alert uk-alert-danger" data-uk-alert>
-<a href="" class="uk-alert-close uk-close"></a>
-<p>{alert_message}</p>
-</div>
-{# end {templatelocation} #}

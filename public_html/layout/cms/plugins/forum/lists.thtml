@@ -1,9 +1,0 @@
-{# begin {templatelocation} #}
-{navbar}
-<div class="uk-margin"></div>
-{list_data}
-<script type="text/javascript">
-    var site_url = '{site_url}';
-</script>
-<script type="text/javascript" src="{site_url}/forum/javascript/ajax_bookmark.js"></script>
-{# end {templatelocation} #}

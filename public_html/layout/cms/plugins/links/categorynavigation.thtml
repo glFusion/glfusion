@@ -1,6 +1,0 @@
-{# begin {templatelocation} #}
-<h3 class="uk-h3">{lang_categories}</h3>
-<div class="uk-grid uk-margin">
-    {category_row}
-</div>
-{# end {templatelocation} #}

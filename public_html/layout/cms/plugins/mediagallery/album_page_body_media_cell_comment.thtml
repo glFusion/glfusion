@@ -1,3 +1,0 @@
-{# begin {templatelocation} #}
-{lang_comments} {media_comments_count}
-{# end {templatelocation} #}

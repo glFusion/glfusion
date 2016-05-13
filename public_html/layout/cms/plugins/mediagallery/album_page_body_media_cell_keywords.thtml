@@ -1,3 +1,0 @@
-{# begin {templatelocation} #}
-<span class="uk-text-small"><span class="uk-text-bold">{lang_keywords}</span> {media_keywords}</span>
-{# end {templatelocation} #}

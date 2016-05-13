@@ -1,5 +1,0 @@
-{# begin {templatelocation} #}
-<form class="uk-form" method="post" action="index.php">
-    <button class="uk-button" type="submit" name="action" value="{lang_mastercal}">{lang_mastercal}</button>
-</form>
-{# end {templatelocation} #}

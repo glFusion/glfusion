@@ -1,4 +1,0 @@
-{# begin {templatelocation} #}
-<h2 class="uk-h2">{lang_upload_media}</h2>
-
-{# end {templatelocation} #}
