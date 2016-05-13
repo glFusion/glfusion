@@ -1,6 +1,10 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.0 (Unreleased)
+  - Implemented $_SYSTEM['framework'] variable to identify UI framework (e.g. uikit, legacy, bootstrap, etc.)
+  - Removed MooTools based Nouveau theme (available as download at glfusion.org)
+  - All bundled plugins now use UIKIT based templates
+  - Moved plugin's non-UIKIT based templates to the plugins/ folder in the vintage theme
   - Media Gallery - moved allow html from global config option to a per album config option
   - Enhanced auto tag upload to support template files.
   - Fixed error where advanced editor token was not set when cloning a story
