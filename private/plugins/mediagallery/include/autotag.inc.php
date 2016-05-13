@@ -393,7 +393,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                         }
                     }
                     // determine height / width and aspect
-                    if ( ($width == 'auto' || $width == 0 ) && $row['media_resolution_x'] > 0 && $row['media_resolution_y'] > 0 ) {
+                    if ( ($width == 'auto' || $width == 0 || $width == -1 || $height == -1) && $row['media_resolution_x'] > 0 && $row['media_resolution_y'] > 0 ) {
                         $videoheight = $row['media_resolution_y'];
                         $videowidth  = $row['media_resolution_x'];
                     } else {
